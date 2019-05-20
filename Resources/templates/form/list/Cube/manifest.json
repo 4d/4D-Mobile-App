@@ -1,0 +1,10 @@
+{
+  "type": "listform",
+  "name": "Cube",
+  "fields": {
+    "count": 3
+  },
+  "sdk": {
+    "name": "AnimatedCollectionViewLayout"
+  }
+}

@@ -1,0 +1,100 @@
+{
+	"destination": "detailScreen",
+	"inheritedForm": "panel_template",
+	"width": 600,
+	"height": 110,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"Text5": {
+					"type": "text",
+					"top": 11,
+					"left": 10,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Bundle ID"
+				},
+				"02_bundle": {
+					"type": "input",
+					"top": 11,
+					"left": 120,
+					"width": 177,
+					"height": 17,
+					"sizingX": "grow",
+					"dataSource": "Form:C1466.itune.applicationBundleID",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"Text4": {
+					"type": "text",
+					"top": 40,
+					"left": 10,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Copyright"
+				},
+				"30_copyright": {
+					"type": "input",
+					"top": 40,
+					"left": 120,
+					"width": 308,
+					"height": 17,
+					"sizingX": "grow",
+					"dataSource": "Form:C1466.product.copyright",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"Text7": {
+					"type": "text",
+					"top": 77,
+					"left": 10,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Contact"
+				},
+				"40_contacts": {
+					"type": "input",
+					"top": 77,
+					"left": 120,
+					"width": 308,
+					"height": 17,
+					"sizingX": "grow",
+					"dataSource": "Form:C1466.itune.contact",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				}
+			}
+		}
+	]
+}

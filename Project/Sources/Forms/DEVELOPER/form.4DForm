@@ -1,0 +1,128 @@
+{
+	"destination": "detailScreen",
+	"inheritedForm": "panel_template",
+	"width": 960,
+	"height": 81,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onDataChange"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"02_team.border": {
+					"type": "rectangle",
+					"top": 28,
+					"left": 488,
+					"width": 449,
+					"height": 33,
+					"stroke": "#C4C4C4"
+				},
+				"01_name.border": {
+					"type": "rectangle",
+					"top": 28,
+					"left": 16,
+					"width": 344,
+					"height": 33,
+					"stroke": "#C4C4C4"
+				},
+				"01_name.label": {
+					"type": "text",
+					"top": 5,
+					"left": 16,
+					"width": 90,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:name"
+				},
+				"01_name": {
+					"type": "input",
+					"top": 36,
+					"left": 23,
+					"width": 329,
+					"height": 17,
+					"dataSource": "Form:C1466.developer.name",
+					"tooltip": ":xliff:devNameTip",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"dragging": "none"
+				},
+				"20_team.label": {
+					"type": "text",
+					"top": 5,
+					"left": 488,
+					"width": 90,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:orgTeam"
+				},
+				"02_team.help": {
+					"type": "button",
+					"top": 5,
+					"left": 915,
+					"width": 22,
+					"height": 22,
+					"visibility": "hidden",
+					"tooltip": ":xliff:showAccount",
+					"style": "help",
+					"method": "ObjectMethods/02_team.help.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"02_team": {
+					"type": "input",
+					"top": 36,
+					"left": 530,
+					"width": 395,
+					"height": 17,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"placeholder": ":xliff:none",
+					"method": "ObjectMethods/02_team.4dm",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"02_team.popup.border": {
+					"type": "rectangle",
+					"top": 28,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"fill": "transparent",
+					"stroke": "#C4C4C4"
+				},
+				"teamPopup": {
+					"type": "button",
+					"top": 28,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"icon": "/RESOURCES/images/common/down.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"method": "ObjectMethods/teamPopup.4dm",
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		}
+	]
+}

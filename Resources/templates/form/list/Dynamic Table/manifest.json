@@ -1,0 +1,10 @@
+{
+  "type": "listform",
+  "name": "Dynamic Table",
+  "fields": {
+    "count": 2
+  },
+  "tags": {
+    "___LISTFORMTYPE___": "Table"
+  }
+}

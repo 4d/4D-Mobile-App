@@ -1,0 +1,5 @@
+{
+	"name": "asset",
+	"type": "choice",
+	"children": ["colorset", "imageset","folder"]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "listform",
+  "name": "Vertical Cards",
+  "fields": {
+    "count": 3
+  },
+  "tags": {
+    "___LISTFORMTYPE___": "Table"
+  }
+}

@@ -1,0 +1,140 @@
+{
+	"destination": "detailScreen",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerBreak": 180,
+	"markerFooter": 180,
+	"events": [
+		"onLoad",
+		"onTimer",
+		"onBoundVariableChange"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "842pt",
+		"paperHeight": "595pt"
+	},
+	"pages": [
+		{
+			"objects": {
+				"background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 410,
+					"height": 180,
+					"sizingY": "grow",
+					"fill": "automatic",
+					"stroke": "transparent"
+				},
+				"cancel": {
+					"type": "button",
+					"top": 140,
+					"left": 178,
+					"width": 96,
+					"height": 20,
+					"visibility": "hidden",
+					"sizingY": "move",
+					"shortcutKey": "[Esc]",
+					"text": ":xliff:cancel",
+					"method": "ObjectMethods/cancel.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"ok": {
+					"type": "button",
+					"top": 140,
+					"left": 294,
+					"width": 96,
+					"height": 20,
+					"visibility": "hidden",
+					"sizingY": "move",
+					"shortcutKey": "[Return]",
+					"text": ":xliff:ok",
+					"defaultButton": true,
+					"method": "ObjectMethods/ok.4dm",
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		},
+		{
+			"objects": {
+				"additional": {
+					"type": "input",
+					"top": 73,
+					"left": 10,
+					"width": 400,
+					"height": 54,
+					"sizingY": "grow",
+					"textAlign": "center",
+					"fontTheme": "additional",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"showSelection": true,
+					"dragging": "none",
+					"dropping": "none"
+				},
+				"title": {
+					"type": "input",
+					"top": 20,
+					"left": 10,
+					"width": 390,
+					"height": 33,
+					"textAlign": "center",
+					"fontTheme": "main",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"dragging": "none",
+					"dropping": "none"
+				},
+				"progress": {
+					"type": "spinner",
+					"top": 125,
+					"left": 105,
+					"width": 194,
+					"height": 40,
+					"sizingY": "move"
+				},
+				"option": {
+					"type": "checkbox",
+					"top": 143,
+					"left": 22,
+					"width": 140,
+					"height": 15,
+					"visibility": "hidden",
+					"sizingY": "move",
+					"dataSource": "Form:C1466.option.value",
+					"text": "Check Box",
+					"focusable": false,
+					"events": [
+						"onClick"
+					]
+				},
+				"help": {
+					"type": "button",
+					"top": 139,
+					"left": 22,
+					"width": 22,
+					"height": 22,
+					"visibility": "hidden",
+					"sizingY": "move",
+					"style": "help",
+					"method": "ObjectMethods/help.4dm",
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		}
+	]
+}

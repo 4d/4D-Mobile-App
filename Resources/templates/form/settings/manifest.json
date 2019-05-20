@@ -1,0 +1,5 @@
+{
+  "name": "settings",
+  "type": "folder",
+  "children": ["form/settings/main","form/settings/account", "form/settings/server"]
+}

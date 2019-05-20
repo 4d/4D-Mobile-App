@@ -1,0 +1,139 @@
+{
+	"destination": "detailScreen",
+	"inheritedForm": "panel_template",
+	"width": 960,
+	"height": 100,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"source_local": {
+					"type": "radio",
+					"top": 5,
+					"left": 54,
+					"width": 410,
+					"height": 22,
+					"text": ":xliff:currentDataFile",
+					"focusable": false,
+					"radioGroup": "Group8",
+					"method": "ObjectMethods/source_local.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"source_server": {
+					"type": "radio",
+					"top": 33,
+					"left": 54,
+					"width": 410,
+					"height": 22,
+					"text": ":xliff:productionServer",
+					"focusable": false,
+					"radioGroup": "Group8",
+					"method": "ObjectMethods/source_server.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"doNotGenerate": {
+					"type": "checkbox",
+					"top": 5,
+					"left": 486,
+					"width": 391,
+					"height": 21,
+					"dataSource": "Form:C1466.dataSource.doNotGenerateDataAtEachBuild",
+					"text": ":xliff:doNotGenerateDataAtEachBuild",
+					"focusable": false,
+					"method": "ObjectMethods/doNotGenerate.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"generate": {
+					"type": "button",
+					"top": 32,
+					"left": 508,
+					"width": 142,
+					"height": 22,
+					"text": ":xliff:generate",
+					"iconFrames": 4,
+					"style": "roundedBevel",
+					"method": "ObjectMethods/generate.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"serverStatus": {
+					"type": "button",
+					"top": 62,
+					"left": 77,
+					"width": 207,
+					"height": 22,
+					"visibility": "hidden",
+					"stroke": "#808080",
+					"text": ":xliff:theWebServerIsRunning",
+					"icon": "/RESOURCES/images/light_on.png",
+					"textPlacement": "right",
+					"style": "custom",
+					"method": "ObjectMethods/serverStatus.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"serverInTest": {
+					"type": "spinner",
+					"top": 64,
+					"left": 72,
+					"width": 25,
+					"height": 19,
+					"visibility": "hidden"
+				},
+				"serverInTest.label": {
+					"type": "text",
+					"top": 65,
+					"left": 91,
+					"width": 337,
+					"height": 17,
+					"visibility": "hidden",
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:checkingServerAvailability"
+				},
+				"dataGeneration": {
+					"type": "spinner",
+					"top": 34,
+					"left": 659,
+					"width": 20,
+					"height": 19,
+					"visibility": "hidden"
+				},
+				"dataGeneration.label": {
+					"type": "text",
+					"top": 35,
+					"left": 680,
+					"width": 237,
+					"height": 17,
+					"visibility": "hidden",
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:dataSetGeneration"
+				}
+			}
+		}
+	]
+}

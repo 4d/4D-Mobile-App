@@ -1,0 +1,301 @@
+{
+	"destination": "detailScreen",
+	"memorizeGeometry": true,
+	"inheritedForm": "panel_template",
+	"width": 960,
+	"height": 370,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		{
+			"objects": {
+				"empty": {
+					"type": "text",
+					"top": 40,
+					"left": 30,
+					"width": 543,
+					"height": 17,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ".Select an action to display its parameters"
+				}
+			}
+		},
+		{
+			"objects": {
+				"05_property_type.border": {
+					"type": "rectangle",
+					"top": 157,
+					"left": 488,
+					"width": 204,
+					"height": 33,
+					"visibility": "hidden",
+					"stroke": "#C4C4C4"
+				},
+				"05_property_type.popup.border": {
+					"type": "rectangle",
+					"top": 157,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"fill": "transparent",
+					"stroke": "#C4C4C4"
+				},
+				"01_Parameters.border": {
+					"type": "rectangle",
+					"top": 5,
+					"left": 16,
+					"width": 451,
+					"height": 320,
+					"visibility": "hidden",
+					"fill": "transparent",
+					"stroke": "#AAAAAA"
+				},
+				"01_property_type.select.border": {
+					"type": "rectangle",
+					"top": 28,
+					"left": 488,
+					"width": 204,
+					"height": 33,
+					"visibility": "hidden",
+					"stroke": "#C4C4C4"
+				},
+				"02_property_name": {
+					"type": "input",
+					"top": 36,
+					"left": 495,
+					"width": 189,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "ACTIONS_PARAMS_UI .parameter.name",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"dragging": "none"
+				},
+				"01_Parameters": {
+					"type": "listbox",
+					"top": 7,
+					"left": 17,
+					"width": 448,
+					"height": 317,
+					"visibility": "hidden",
+					"resizingMode": "legacy",
+					"listboxType": "collection",
+					"hideFocusRing": true,
+					"movableRows": false,
+					"hideSystemHighlight": true,
+					"rowHeight": "20px",
+					"showHeaders": false,
+					"dataSource": "ACTIONS_PARAMS_UI .action.parameters",
+					"currentItemSource": "ACTIONS_PARAMS_UI .parameter",
+					"currentItemPositionSource": "ACTIONS_PARAMS_UI .index",
+					"selectedItemsSource": "ACTIONS_PARAMS_UI .selected",
+					"metaSource": "ACTIONS_PARAMS_UI (\"meta\")",
+					"selectionMode": "single",
+					"scrollbarHorizontal": "hidden",
+					"horizontalLineStroke": "transparent",
+					"rowFillSource": "ACTIONS_PARAMS_UI (\"background\").color",
+					"textAlign": "left",
+					"verticalAlign": "middle",
+					"method": "ObjectMethods/01_Parameters.4dm",
+					"events": [
+						"onDisplayDetail",
+						"onLosingFocus",
+						"onGettingFocus",
+						"onSelectionChange"
+					],
+					"columns": [
+						{
+							"name": "names",
+							"dataSource": "This:C1470.name",
+							"width": 433,
+							"minWidth": 10,
+							"maxWidth": 32000,
+							"enterable": false,
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"events": [
+								"onDoubleClick",
+								"onDataChange"
+							],
+							"header": {
+								"name": "Header1",
+								"text": "Header1",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							},
+							"footer": {
+								"name": "Footer1",
+								"timeFormat": "hh_mm_ss",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						}
+					]
+				},
+				"parameters.add": {
+					"type": "button",
+					"top": 331,
+					"left": 16,
+					"width": 28,
+					"height": 28,
+					"visibility": "hidden",
+					"icon": "/RESOURCES/images/common/plus.png",
+					"iconFrames": 4,
+					"popupPlacement": "separated",
+					"style": "bevel",
+					"method": "ObjectMethods/parameters.add.4dm",
+					"events": [
+						"onClick",
+						"onAlternateClick"
+					]
+				},
+				"parameters.remove": {
+					"type": "button",
+					"top": 331,
+					"left": 43,
+					"width": 28,
+					"height": 28,
+					"visibility": "hidden",
+					"icon": "/RESOURCES/images/common/minus.png",
+					"iconFrames": 4,
+					"style": "bevel",
+					"method": "ObjectMethods/parameters.remove.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"01_property_type.select.border1": {
+					"type": "rectangle",
+					"top": 90,
+					"left": 488,
+					"width": 204,
+					"height": 33,
+					"visibility": "hidden",
+					"stroke": "#C4C4C4"
+				},
+				"03_property_label": {
+					"type": "input",
+					"top": 98,
+					"left": 495,
+					"width": 189,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "ACTIONS_PARAMS_UI .parameter.label",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"dragging": "none"
+				},
+				"01_property_type.select.border2": {
+					"type": "rectangle",
+					"top": 90,
+					"left": 734,
+					"width": 204,
+					"height": 33,
+					"visibility": "hidden",
+					"stroke": "#C4C4C4"
+				},
+				"04_property_shortLabel": {
+					"type": "input",
+					"top": 98,
+					"left": 741,
+					"width": 189,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "ACTIONS_PARAMS_UI .parameter.shortLabel",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"dragging": "none"
+				},
+				"05_property_type": {
+					"type": "input",
+					"top": 165,
+					"left": 527,
+					"width": 157,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "ACTIONS_PARAMS_UI .parameter.type",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"dragging": "none"
+				},
+				"02_property_name.label": {
+					"type": "text",
+					"top": 7,
+					"left": 488,
+					"width": 140,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:name"
+				},
+				"02_property_name.label1": {
+					"type": "text",
+					"top": 68,
+					"left": 488,
+					"width": 140,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:label"
+				},
+				"02_property_name.label2": {
+					"type": "text",
+					"top": 68,
+					"left": 734,
+					"width": 140,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:shortLabel"
+				},
+				"02_property_name.label3": {
+					"type": "text",
+					"top": 135,
+					"left": 488,
+					"width": 140,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:type"
+				},
+				"05_property_type.popup": {
+					"type": "button",
+					"top": 157,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"icon": "/RESOURCES/images/common/down.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"method": "ObjectMethods/05_property_type.popup.4dm",
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		}
+	]
+}

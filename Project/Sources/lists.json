@@ -1,0 +1,13 @@
+{
+	"empty": {
+		"lineHeight": 18,
+		"editable": true,
+		"items": [
+			{
+				"text": "",
+				"ref": 1,
+				"editable": true
+			}
+		]
+	}
+}

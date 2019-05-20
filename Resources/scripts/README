@@ -1,0 +1,17 @@
+
+# echoStatus
+
+Simple bash script to launch passed command and display in output the status code.
+
+# sudo-askpass
+
+ask administrator password to execute administration command,
+like fixing xcode path
+
+# xcodeprojstep
+
+convert to old plist format, used in xcode project
+
+# colorjuicer
+
+extract colors from image

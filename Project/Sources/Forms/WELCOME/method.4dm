@@ -1,0 +1,113 @@
+  // ----------------------------------------------------
+  // Form method : WELCOME - (4D Mobile App)
+  // ID[15416DA1E1EA420FA0EA9C61C7BC8156]
+  // Created #2-3-2018 by Vincent de Lachaux
+  // ----------------------------------------------------
+  // Declarations
+C_BOOLEAN:C305($Boo_geometry)
+C_LONGINT:C283($Lon_;$Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_i;$Lon_left)
+C_LONGINT:C283($Lon_middle;$Lon_right;$Lon_top;$Lon_width)
+C_TEXT:C284($Dir_root;$Txt_template)
+
+  // ----------------------------------------------------
+  // Initialisations
+$Lon_formEvent:=Form event:C388
+
+  // ----------------------------------------------------
+
+Case of 
+		  //______________________________________________________
+	: ($Lon_formEvent=On Load:K2:1)
+		
+		ARRAY PICTURE:C279($tPic_;4)
+		ARRAY TEXT:C222($tTxt_;4)
+		
+		$Dir_root:=Get 4D folder:C485(Current resources folder:K5:16)+Convert path POSIX to system:C1107("images/welcome/")
+		
+		READ PICTURE FILE:C678($Dir_root+"structure.png";$tPic_{1})
+		READ PICTURE FILE:C678($Dir_root+"design.png";$tPic_{2})
+		READ PICTURE FILE:C678($Dir_root+"generateAndTest.png";$tPic_{3})
+		READ PICTURE FILE:C678($Dir_root+"deploy.png";$tPic_{4})
+		
+		$Txt_template:="<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"
+		$Txt_template:=$Txt_template+"{title}"
+		$Txt_template:=$Txt_template+"</span>"
+		$Txt_template:=$Txt_template+"<br/>"
+		$Txt_template:=$Txt_template+"<span style='font-size: 13pt;font-weight: normal'>"
+		$Txt_template:=$Txt_template+"{description}"
+		$Txt_template:=$Txt_template+"</span></span>"
+		
+		For ($Lon_i;1;4;1)
+			
+			$tTxt_{$Lon_i}:=str_localized (New collection:C1472($Txt_template;"wel_title_"+String:C10($Lon_i);"wel_description_"+String:C10($Lon_i)))
+			
+		End for 
+		
+		  //%W-518.1
+		COPY ARRAY:C226($tPic_;(OBJECT Get pointer:C1124(Object named:K67:5;"icons"))->)
+		COPY ARRAY:C226($tTxt_;(OBJECT Get pointer:C1124(Object named:K67:5;"texts"))->)
+		  //%W+518.1
+		
+		ui_BEST_SIZE (New object:C1471(\
+			"widgets";New collection:C1472("doNotShowAgain")))
+		
+		ui_BEST_SIZE (New object:C1471(\
+			"widgets";New collection:C1472("continue");\
+			"alignment";Align center:K42:3))
+		
+		$Boo_geometry:=True:C214
+		
+		SET TIMER:C645(-1)
+		  //______________________________________________________
+	: ($Lon_formEvent=On Bound Variable Change:K2:52)
+		
+		$Boo_geometry:=True:C214
+		
+		  //______________________________________________________
+	: ($Lon_formEvent=On Unload:K2:2)
+		
+		  //______________________________________________________
+	: ($Lon_formEvent=On Timer:K2:25)
+		SET TIMER:C645(0)
+		
+		$Boo_geometry:=True:C214
+		
+		  //______________________________________________________
+	Else 
+		
+		ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+		
+		  //______________________________________________________
+End case 
+
+If ($Boo_geometry)
+	
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_width;$Lon_height)
+	$Lon_middle:=$Lon_width\2
+	
+	OBJECT SET COORDINATES:C1248(*;"background";0;0;$Lon_width;$Lon_height)
+	
+	OBJECT GET COORDINATES:C663(*;"title";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+	OBJECT SET COORDINATES:C1248(*;"title";0;$Lon_top;$Lon_width;$Lon_bottom)
+	
+	OBJECT GET COORDINATES:C663(*;"subtitle";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+	OBJECT SET COORDINATES:C1248(*;"subtitle";0;$Lon_top;$Lon_width;$Lon_bottom)
+	
+	OBJECT GET COORDINATES:C663(*;"list";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+	$Lon_width:=$Lon_right-$Lon_left
+	$Lon_left:=$Lon_middle-($Lon_width\2)
+	$Lon_right:=$Lon_left+$Lon_width
+	OBJECT SET COORDINATES:C1248(*;"list";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+	
+	OBJECT GET COORDINATES:C663(*;"doNotShowAgain";$Lon_;$Lon_top;$Lon_right;$Lon_bottom)
+	$Lon_width:=$Lon_right-$Lon_
+	$Lon_right:=$Lon_left+$Lon_width
+	OBJECT SET COORDINATES:C1248(*;"doNotShowAgain";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+	
+	OBJECT GET COORDINATES:C663(*;"continue";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+	$Lon_width:=$Lon_right-$Lon_left
+	$Lon_left:=$Lon_middle-($Lon_width\2)
+	$Lon_right:=$Lon_left+$Lon_width
+	OBJECT SET COORDINATES:C1248(*;"continue";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+	
+End if 

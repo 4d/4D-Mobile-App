@@ -1,0 +1,7 @@
+{
+  "type": "listform",
+  "name": "Simple Collection",
+  "fields": {
+    "count": 3
+  }
+}

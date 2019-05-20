@@ -1,0 +1,37 @@
+{
+  "type": "detailform",
+  "name": "Visual Contact",
+   "fields": {
+    "count": 3,
+      "max": 0
+       },
+  "assets": {
+    "mandatory": false,
+    "format": "png",
+    "target": "___TABLE___/Detail",
+    "size": {
+      "width": 22,
+      "height": 22
+    }
+  },
+  "tags": {
+    "___DETAILFORMTYPE___": "Bare"
+  },
+  "storyboard": "Sources/Forms/Tables/___TABLE___/___TABLE___DetailsForm.storyboard",
+  "elements": [{
+      "name": "field",
+      "tagInterfix": "FD",
+      "xpath": "/document/scenes/scene[2]/objects/viewController/view[1]/subviews/scrollView/subviews/view[1]/subviews/view[2]/subviews/stackView[1]/subviews/stackView[1]",
+      "idCount": 15
+    },
+    {
+      "name": "asset",
+      "tagInterfix": "AS",
+      "xpath": "/document/resources/image[1]",
+      "idCount": 0,
+      "tags": {
+        "mandatories": [ {"tag": "___FIELD_ICON___", "key": "field.detailIcon", "rules": ["notEmpty"]}]
+      }
+    }
+  ]
+}

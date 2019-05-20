@@ -1,0 +1,174 @@
+{
+	"destination": "detailScreen",
+	"memorizeGeometry": true,
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onTimer",
+		"onBoundVariableChange"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		{
+			"objects": {
+				"picker.down": {
+					"type": "button",
+					"top": 9,
+					"left": 859,
+					"width": 53,
+					"height": 16,
+					"visibility": "hidden",
+					"shortcutKey": "[down arrow]",
+					"text": "Down",
+					"focusable": false,
+					"events": [
+						"onClick"
+					]
+				},
+				"picker.up": {
+					"type": "button",
+					"top": 9,
+					"left": 917,
+					"width": 37,
+					"height": 16,
+					"visibility": "hidden",
+					"shortcutKey": "[up arrow]",
+					"text": "Up",
+					"focusable": false,
+					"events": [
+						"onClick"
+					]
+				},
+				"_background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 190,
+					"sizingX": "grow",
+					"fill": "#F4F4F6",
+					"stroke": "transparent"
+				},
+				"panel.1": {
+					"type": "subform",
+					"top": 69,
+					"left": 0,
+					"width": 970,
+					"height": 121,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
+					"method": "ObjectMethods/panel.1.4dm",
+					"events": [
+						"onLosingFocus"
+					]
+				}
+			}
+		},
+		{
+			"objects": {
+				"title.label.1": {
+					"type": "text",
+					"top": 45,
+					"left": 15,
+					"width": 72,
+					"height": 19,
+					"stroke": "#39525E",
+					"fontFamily": ".SF NS Text",
+					"fontSize": 16,
+					"text": "Product"
+				},
+				"UI": {
+					"type": "input",
+					"top": 5,
+					"left": 920,
+					"width": 44,
+					"height": 14,
+					"visibility": "hidden",
+					"dataSourceTypeHint": "object",
+					"stroke": "#FF0000",
+					"fontFamily": ".SF NS Text",
+					"fontSize": 11,
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "dotted",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"dragging": "none",
+					"dropping": "none"
+				},
+				"Line": {
+					"type": "line",
+					"top": 0,
+					"left": 16,
+					"height": 190,
+					"visibility": "hidden",
+					"stroke": "#FF6347",
+					"strokeWidth": 0.1,
+					"strokeDashArray": "1 1"
+				},
+				"picker.close": {
+					"type": "button",
+					"top": 78,
+					"left": 844,
+					"width": 83,
+					"height": 46,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"shortcutKey": "[Esc]",
+					"display": false,
+					"method": "ObjectMethods/picker.close.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"picker": {
+					"type": "subform",
+					"top": 60,
+					"left": 624,
+					"width": 200,
+					"height": 100,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"detailForm": "PICTURE_GRID",
+					"focusable": false,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
+					"method": "ObjectMethods/picker.4dm"
+				},
+				"help.1": {
+					"type": "button",
+					"top": 44,
+					"left": 88,
+					"width": 21,
+					"height": 22,
+					"visibility": "hidden",
+					"sizingX": "move",
+					"style": "help",
+					"method": "ObjectMethods/help.1.4dm",
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		}
+	]
+}

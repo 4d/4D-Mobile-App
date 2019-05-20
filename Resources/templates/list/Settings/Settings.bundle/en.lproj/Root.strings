@@ -1,0 +1,22 @@
+/* A single strings file, whose title is specified in your preferences schema. The strings files provide the localized content to display to the user for each of your preferences. */
+
+/* Title for Version Field */
+"kFullVersionTitle" = "Version";
+
+/* Title for UUID Field */
+"kUUIDTitle" = "UUID";
+
+/* Title for IDE Version Field */
+"kIDEVersionTitle" = "IDE Version";
+
+/* Title for SDK Version Field */
+"kSDKVersionTitle" = "SDK Version";
+
+/* Title for About Pane */
+"kAboutPaneTitle" = "About";
+
+/* Title for Advanced Option Group */
+"kAdvancedOptionGroupTitle" = "Advanced Option";
+
+/* Title for Reset Switch */
+"kFactoryResetTitle" = "Reset app data";

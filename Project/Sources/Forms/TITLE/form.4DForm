@@ -1,0 +1,88 @@
+{
+	"destination": "detailScreen",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer",
+		"onBoundVariableChange"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "842pt",
+		"paperHeight": "595pt"
+	},
+	"pages": [
+		{
+			"objects": {
+				"_background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 49,
+					"sizingX": "grow",
+					"stroke": "transparent"
+				},
+				"_bottom": {
+					"type": "line",
+					"top": 49,
+					"left": 0,
+					"width": 970,
+					"sizingX": "grow",
+					"stroke": "#DCDCDC"
+				}
+			}
+		},
+		{
+			"objects": {
+				"icon": {
+					"type": "picture",
+					"top": 8,
+					"left": 14,
+					"width": 32,
+					"height": 32,
+					"pictureFormat": "scaled",
+					"picture": "/RESOURCES/images/toolbar/general.png"
+				},
+				"title": {
+					"type": "text",
+					"top": 12,
+					"left": 52,
+					"width": 89,
+					"height": 25,
+					"stroke": "#1EAAF1",
+					"fontFamily": ".SF NS Text",
+					"fontSize": 20,
+					"fontWeight": "bold",
+					"text": ":xliff:page_general"
+				},
+				"comment": {
+					"type": "text",
+					"top": 16,
+					"left": 146,
+					"width": 810,
+					"height": 17,
+					"sizingX": "grow",
+					"stroke": "#696969",
+					"text": "Lorem ipsum"
+				},
+				"Line": {
+					"type": "line",
+					"top": 0,
+					"left": 16,
+					"height": 50,
+					"visibility": "hidden",
+					"stroke": "#FF6347",
+					"strokeDashArray": "1 1"
+				}
+			}
+		}
+	]
+}

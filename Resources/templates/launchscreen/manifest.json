@@ -1,0 +1,56 @@
+{
+  "name": "launchscreen",
+  "type": "ls",
+  "assets": {
+    "background": {
+      "type": "background",
+      "target": "LS",
+      "format": "png",
+      "name":"LS.Bg",
+      "sizes": {
+        "universal1x": {
+          "width": 768,
+          "height": 1004
+        },
+        "universal2x": {
+          "width": 640,
+          "height": 960
+        },
+        "universal3x": {
+          "width": 640,
+          "height": 1136
+        },
+        "ipad": {
+          "width": 768,
+          "height": 1024
+        },
+        "iphone1x": {
+          "width": 640,
+          "height": 960
+        },
+        "iphone2x": {
+          "width": 750,
+          "height": 1334
+        },
+        "iphone3x": {
+          "width": 1242,
+          "height": 2208
+        },
+        "iphone2436h3x": {
+          "width": 1125,
+          "height": 2436
+        }
+      }
+    },
+    "center": {
+      "type": "imageset",
+      "target": "LS",
+      "format": "png",
+      "name":"LS.Center",
+      "size": {
+        "width": 76,
+        "height": 76
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+	"name": "navigation",
+	"type": "choice",
+	"default": "tabbar",
+	"tag": "navigationType",
+  "storyboard": "Sources/Forms/Navigation/MainNavigation.storyboard"
+}

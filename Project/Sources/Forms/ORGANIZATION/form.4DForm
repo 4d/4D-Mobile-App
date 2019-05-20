@@ -1,0 +1,124 @@
+{
+	"destination": "detailScreen",
+	"inheritedForm": "panel_template",
+	"width": 960,
+	"height": 81,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"30_identifier.border": {
+					"type": "rectangle",
+					"top": 28,
+					"left": 488,
+					"width": 450,
+					"height": 33,
+					"stroke": "#C4C4C4"
+				},
+				"10_name.border": {
+					"type": "rectangle",
+					"top": 28,
+					"left": 16,
+					"width": 451,
+					"height": 33,
+					"stroke": "#C4C4C4"
+				},
+				"10_name.label": {
+					"type": "text",
+					"top": 5,
+					"left": 16,
+					"width": 90,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:name"
+				},
+				"30_identifier.label": {
+					"type": "text",
+					"top": 5,
+					"left": 488,
+					"width": 190,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:orgIdentifier"
+				},
+				"10_name": {
+					"type": "input",
+					"top": 36,
+					"left": 23,
+					"width": 436,
+					"height": 17,
+					"dataSource": "Form:C1466.organization.name",
+					"tooltip": ":xliff:orgNameTip",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"30_identifier": {
+					"type": "input",
+					"top": 36,
+					"left": 495,
+					"width": 435,
+					"height": 17,
+					"dataSource": "Form:C1466.organization.id",
+					"tooltip": ":xliff:appBundleIDTip",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"10_name.help": {
+					"type": "button",
+					"top": 5,
+					"left": 444,
+					"width": 22,
+					"height": 22,
+					"visibility": "hidden",
+					"style": "help",
+					"method": "ObjectMethods/10_name.help.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"30_identifier.help": {
+					"type": "button",
+					"top": 5,
+					"left": 915,
+					"width": 22,
+					"height": 22,
+					"visibility": "hidden",
+					"style": "help",
+					"method": "ObjectMethods/30_identifier.help.4dm",
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		}
+	]
+}

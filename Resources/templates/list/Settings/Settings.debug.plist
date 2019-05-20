@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>log.showThreadName</key>
+	<true/>
+	<key>log.showLevel</key>
+	<true/>
+	<key>log.showFileNames</key>
+	<true/>
+	<key>log.showLineNumbers</key>
+	<true/>
+	<key>log.showFunctionName</key>
+	<true/>
+	<key>log.showDate</key>
+	<true/>
+	<key>log.showLogIdentifier</key>
+	<false/>
+	<key>log.writeToFile</key>
+	<string>debug.log</string>
+	<key>resetDefaults</key>
+	<false/>
+	<key>auth.logout.atStart</key>
+	<false/>
+</dict>
+</plist>

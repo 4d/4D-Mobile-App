@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Display the exit status of the command passed as input.
+
+read CMD
+set -- $CMD
+
+$CMD
+
+status=$?
+
+if [ "$status" -eq "0" ]; then
+  echo $status
+else
+  >&2 echo $status
+fi

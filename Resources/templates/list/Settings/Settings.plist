@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>server.url.scheme</key>
+	<string>___SERVER_URL_SCHEME___</string>
+	<key>server.url</key>
+	<string>___SERVER_URL___</string>
+	<key>server.url.port</key>
+	<real>___SERVER_PORT___</real>
+	<key>server.url.portHTTPS</key>
+	<real>___SERVER_HTTPS_PORT___</real>
+	<key>server.urls</key>
+	<string>___SERVER_URLS___</string>
+	<key>auth.login.form</key>
+	<___SERVER_AUTHENTIFICATION_EMAIL___/>
+	<key>auth.reloadData</key>
+	<___SERVER_AUTHENTIFICATION_RELOAD_DATA___/>
+	<key>server.trust</key>
+	<true/>
+	<key>log.writeToFile</key>
+	<string>debug.log</string>
+	<key>log.formatter</key>
+	<string>emoticon</string>
+	<key>formatter.locale</key>
+	<string>preferred</string>
+	<key>uuid</key>
+	<string>___SETTING_UUID___</string>
+	<key>crash.server.url</key>
+	<string>https://bugs.4d.fr/</string>
+</dict>
+</plist>

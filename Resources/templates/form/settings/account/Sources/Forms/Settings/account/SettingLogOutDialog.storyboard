@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="3k7-Pa-5sD">
+    <device id="retina3_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Dialog Form-->
+        <scene sceneID="TXc-QB-a1e">
+            <objects>
+                <viewController id="3k7-Pa-5sD" customClass="DialogForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XUb-NT-1hz"/>
+                        <viewControllerLayoutGuide type="bottom" id="23F-dQ-b1k"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ceX-C9-0iI">
+                        <rect key="frame" x="0.0" y="0.0" width="371" height="166"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you sure you want to log out ?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8mX-Hn-Puh">
+                                <rect key="frame" x="10" y="17" width="351" height="25"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="21"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vds-no-Gaz" customClass="AnimatableButton" customModule="IBAnimatable">
+                                <rect key="frame" x="120" y="112" width="130" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="EhI-eL-0La"/>
+                                    <constraint firstAttribute="width" constant="130" id="WIv-gt-Tnp"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <state key="normal" title="CANCEL">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="cancelAction:" destination="3k7-Pa-5sD" eventType="touchDown" id="SRa-ja-QLA"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zmv-KV-Sin" customClass="LoadingButton" customModule="QMobileUI">
+                                <rect key="frame" x="120" y="67" width="130" height="34"/>
+                                <color key="backgroundColor" red="0.9712347388" green="0.4039914906" blue="0.36551615599999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="130" id="UgF-0b-LWN"/>
+                                    <constraint firstAttribute="height" constant="34" id="yad-5M-ups"/>
+                                </constraints>
+                                <state key="normal" title="Log Out"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="okAction:" destination="3k7-Pa-5sD" eventType="touchDown" id="jDu-lJ-utb"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="8mX-Hn-Puh" secondAttribute="trailing" constant="10" id="2Ro-5v-QRr"/>
+                            <constraint firstItem="23F-dQ-b1k" firstAttribute="top" secondItem="vds-no-Gaz" secondAttribute="bottom" constant="20" id="9Q5-6K-ggH"/>
+                            <constraint firstItem="vds-no-Gaz" firstAttribute="centerX" secondItem="ceX-C9-0iI" secondAttribute="centerX" id="beI-96-rA4"/>
+                            <constraint firstItem="8mX-Hn-Puh" firstAttribute="leading" secondItem="ceX-C9-0iI" secondAttribute="leading" constant="10" id="dGf-lF-jHu"/>
+                            <constraint firstItem="8mX-Hn-Puh" firstAttribute="top" secondItem="XUb-NT-1hz" secondAttribute="bottom" constant="17" id="hcM-QC-ULQ"/>
+                            <constraint firstItem="zmv-KV-Sin" firstAttribute="centerX" secondItem="ceX-C9-0iI" secondAttribute="centerX" id="n1C-LI-kAK"/>
+                            <constraint firstItem="vds-no-Gaz" firstAttribute="top" secondItem="zmv-KV-Sin" secondAttribute="bottom" constant="11" id="ufG-7b-Jad"/>
+                        </constraints>
+                    </view>
+                    <value key="contentSizeForViewInPopover" type="size" width="371" height="166"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="371" height="166"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="_modalWidth" value="threeQuarters"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="_modalHeight" value="quarter"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="6"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="string" keyPath="_presentationAnimationType" value="cover(bottom)"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="_dismissalAnimationType" value="cover(top)"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                            <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="dismissOnTap" value="NO"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="cancelButton" destination="vds-no-Gaz" id="6Ox-8T-EnD"/>
+                        <outlet property="message" destination="8mX-Hn-Puh" id="m32-Dc-Fja"/>
+                        <outlet property="okButton" destination="zmv-KV-Sin" id="oCS-AH-KNv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KDQ-A8-thp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-671" y="-143"/>
+        </scene>
+    </scenes>
+</document>

@@ -1,0 +1,225 @@
+{
+	"destination": "detailScreen",
+	"windowMinWidth": 970,
+	"windowMinHeight": 860,
+	"formSizeAnchor": "__background",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onActivate",
+		"onDataChange",
+		"onCloseBox",
+		"onUnload",
+		"onTimer",
+		"onResize"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		{
+			"objects": {
+				"__background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"fill": "#F4F4F6",
+					"stroke": "transparent"
+				},
+				"ribbon": {
+					"type": "subform",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 140,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"detailForm": "RIBBON",
+					"focusable": false,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
+					"method": "ObjectMethods/ribbon.4dm"
+				},
+				"description": {
+					"type": "subform",
+					"top": 140,
+					"left": 0,
+					"width": 970,
+					"height": 50,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"dataSourceTypeHint": "text",
+					"detailForm": "TITLE",
+					"focusable": false,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable"
+				}
+			}
+		},
+		{
+			"objects": {
+				"project": {
+					"type": "subform",
+					"top": 190,
+					"left": 0,
+					"width": 954,
+					"height": 685,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"detailForm": "PROJECT",
+					"scrollbarVertical": "visible",
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
+					"scrollbarHorizontal": "hidden"
+				},
+				"message.back": {
+					"type": "picture",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"pictureFormat": "tiled",
+					"picture": "/RESOURCES/images/common/back.png"
+				},
+				"message.button": {
+					"type": "button",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"display": false
+				},
+				"message": {
+					"type": "subform",
+					"top": 109,
+					"left": 280,
+					"width": 410,
+					"height": 180,
+					"visibility": "hidden",
+					"detailForm": "MESSAGE",
+					"focusable": false,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
+					"method": "ObjectMethods/message.4dm"
+				},
+				"debug.focus": {
+					"type": "input",
+					"top": 20,
+					"left": 822,
+					"width": 114,
+					"height": 14,
+					"dataSource": "OBJECT Get name:C1087(Object with focus:K67:3)",
+					"stroke": "#FFFFFF",
+					"textAlign": "right",
+					"fontFamily": "Monaco",
+					"fontSize": 9,
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"debug.buildNumber": {
+					"type": "input",
+					"top": 2,
+					"left": 895,
+					"width": 46,
+					"height": 12,
+					"visibility": "hidden",
+					"sizingX": "move",
+					"dataSource": "commonValues.version",
+					"stroke": "#FFFFFF",
+					"textAlign": "center",
+					"fontFamily": ".SF NS Text",
+					"fontSize": 9,
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"dragging": "none",
+					"dropping": "none",
+					"events": [
+						"onClick"
+					]
+				},
+				"debug.localization": {
+					"type": "subform",
+					"top": 4,
+					"left": 822,
+					"width": 45,
+					"height": 20,
+					"sizingX": "move",
+					"dataSourceTypeHint": "number",
+					"detailForm": "LOCALIZATION",
+					"focusable": false,
+					"hideFocusRing": true,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable"
+				}
+			}
+		},
+		{
+			"objects": {
+				"welcome": {
+					"type": "subform",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"dataSourceTypeHint": "number",
+					"detailForm": "WELCOME",
+					"focusable": false,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
+					"borderStyle": "sunken",
+					"method": "ObjectMethods/welcome.4dm"
+				}
+			}
+		}
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
+}

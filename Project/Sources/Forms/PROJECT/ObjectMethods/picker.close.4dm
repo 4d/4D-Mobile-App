@@ -1,0 +1,1 @@
+CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"pickerHide";(OBJECT Get pointer:C1124(Object named:K67:5;"picker"))->)

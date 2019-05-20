@@ -1,0 +1,298 @@
+{
+	"destination": "detailScreen",
+	"inheritedForm": "panel_template",
+	"width": 450,
+	"height": 1030,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer",
+		"onResize"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"50_screenshots.border": {
+					"type": "rectangle",
+					"top": 617,
+					"left": 118,
+					"width": 312,
+					"height": 401,
+					"fill": "transparent",
+					"stroke": "#AAAAAA"
+				},
+				"Rectangle": {
+					"type": "rectangle",
+					"top": 48,
+					"left": 118,
+					"width": 90,
+					"height": 90,
+					"fill": "transparent",
+					"stroke": "#AAAAAA"
+				},
+				"Text": {
+					"type": "text",
+					"top": 11,
+					"left": 10,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "App Name"
+				},
+				"01_name": {
+					"type": "input",
+					"top": 11,
+					"left": 120,
+					"width": 159,
+					"height": 17,
+					"dataSource": "Form:C1466.itune.productName",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"icon": {
+					"type": "input",
+					"top": 52,
+					"left": 122,
+					"width": 81,
+					"height": 81,
+					"dataSource": "Form:C1466.itune.icon",
+					"dataSourceTypeHint": "picture",
+					"fill": "transparent",
+					"borderStyle": "dotted",
+					"hideFocusRing": true,
+					"pictureFormat": "proportionalCenter",
+					"dragging": "none",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"Button": {
+					"type": "button",
+					"top": 78,
+					"left": 223,
+					"width": 80,
+					"height": 20,
+					"text": "Browse…",
+					"events": [
+						"onClick"
+					]
+				},
+				"10_decription": {
+					"type": "input",
+					"top": 148,
+					"left": 120,
+					"width": 293,
+					"height": 209,
+					"sizingX": "grow",
+					"dataSource": "Form:C1466.itune.description",
+					"hideFocusRing": true,
+					"scrollbarVertical": "automatic",
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"12_primaryCategory": {
+					"type": "dropdown",
+					"top": 374,
+					"left": 228,
+					"width": 200,
+					"height": 20,
+					"sizingX": "grow",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"13_secondaryCategory": {
+					"type": "dropdown",
+					"top": 414,
+					"left": 228,
+					"width": 200,
+					"height": 20,
+					"sizingX": "grow",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"20_keywords": {
+					"type": "listbox",
+					"top": 454,
+					"left": 119,
+					"width": 205,
+					"height": 112,
+					"resizingMode": "legacy",
+					"listboxType": "collection",
+					"hideFocusRing": true,
+					"sortable": false,
+					"movableRows": false,
+					"rowHeight": "20px",
+					"showHeaders": false,
+					"dataSource": "Form:C1466.itune.keyworkds",
+					"scrollbarHorizontal": "hidden",
+					"scrollbarVertical": "automatic",
+					"horizontalLineStroke": "transparent",
+					"verticalLineStroke": "transparent",
+					"events": [
+						"onClick",
+						"onDataChange",
+						"onSelectionChange",
+						"onHeaderClick"
+					],
+					"columns": [
+						{
+							"name": "Column1",
+							"dataSource": "This:C1470.value",
+							"width": 310,
+							"minWidth": 10,
+							"maxWidth": 32000,
+							"events": [
+								"onClick",
+								"onDataChange"
+							],
+							"header": {
+								"name": "Header1",
+								"text": "Header1"
+							},
+							"footer": {
+								"name": "Footer1",
+								"timeFormat": "hh_mm_ss"
+							}
+						}
+					]
+				},
+				"50_screenshots": {
+					"type": "input",
+					"top": 618,
+					"left": 119,
+					"width": 311,
+					"height": 399,
+					"dataSourceTypeHint": "picture",
+					"fill": "#FFB6C1",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"scrollbarHorizontal": "visible",
+					"dragging": "none",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"Text3": {
+					"type": "text",
+					"top": 48,
+					"left": 10,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Icons"
+				},
+				"Text6": {
+					"type": "text",
+					"top": 148,
+					"left": 10,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Description"
+				},
+				"Text1": {
+					"type": "text",
+					"top": 454,
+					"left": 10,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Keywords"
+				},
+				"Text2": {
+					"type": "text",
+					"top": 377,
+					"left": 10,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Categories"
+				},
+				"3D Button": {
+					"type": "button",
+					"top": 571,
+					"left": 117,
+					"width": 26,
+					"height": 26,
+					"fontFamily": ".SF NS Text",
+					"fontSize": 18,
+					"text": "+",
+					"style": "bevel",
+					"events": [
+						"onClick"
+					]
+				},
+				"3D Button1": {
+					"type": "button",
+					"top": 571,
+					"left": 149,
+					"width": 26,
+					"height": 26,
+					"fontFamily": ".SF NS Text",
+					"fontSize": 18,
+					"text": "-",
+					"style": "bevel",
+					"events": [
+						"onClick"
+					]
+				},
+				"Text8": {
+					"type": "text",
+					"top": 617,
+					"left": 10,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Screenshots"
+				},
+				"Text4": {
+					"type": "text",
+					"top": 377,
+					"left": 118,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Primary"
+				},
+				"Text5": {
+					"type": "text",
+					"top": 417,
+					"left": 118,
+					"width": 90,
+					"height": 17,
+					"textAlign": "right",
+					"text": "Secondary"
+				},
+				"construction": {
+					"type": "picture",
+					"top": 650,
+					"left": 118,
+					"width": 306,
+					"height": 350,
+					"pictureFormat": "scaled",
+					"picture": "Images/construction.gif"
+				}
+			}
+		}
+	]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "listform",
+  "name": "Visual Table",
+  "fields": {
+    "count": 3
+  },
+  "tags": {
+    "___LISTFORMTYPE___": "Table"
+  }
+}

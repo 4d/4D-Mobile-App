@@ -1,0 +1,38 @@
+{
+  "type": "navigation",
+  "name": "list",
+  "storyboard": "Sources/Forms/Navigation/MainNavigation.storyboard",
+  "elements": [{
+      "name": "scene",
+      "tagInterfix": "SN",
+      "xpath": "/document/scenes/scene[1]",
+      "idCount": 2
+    },
+    {
+      "name": "cell",
+      "tagInterfix": "CL",
+      "xpath": "/document/scenes/scene[3]/objects/tableViewController[1]/tableView[1]/sections/tableViewSection/cells/tableViewCell[1]",
+      "idCount": 8
+    },
+    {
+      "name": "asset",
+      "tagInterfix": "AS",
+      "xpath": "/document/resources/image[1]",
+      "idCount": 0
+    }
+  ],
+  "shortLabel": false,
+  "tagtypes": ["___TABLE___", "navigation","storyboardID"],
+  "assets": {
+    "format": "png",
+    "target": "MainNavigation",
+    "size": {
+      "width": 25,
+      "height": 25
+    }
+  },
+  "table": {
+		"min": 1,
+		"max": 1024
+  }
+}

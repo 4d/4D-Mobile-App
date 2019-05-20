@@ -1,0 +1,41 @@
+{
+  "type": "navigation",
+  "name": "tabbar",
+  "sources": "Sources/Forms/Navigation/",
+  "storyboard": "Sources/Forms/Navigation/MainNavigation.storyboard",
+  "elements": [{
+      "name": "scene",
+      "tagInterfix": "SN",
+      "xpath": "/document/scenes/scene[1]",
+      "idCount": 3
+    },
+    {
+      "name": "segue",
+      "tagInterfix": "SG",
+      "xpath": "/document/scenes/scene[3]/objects/tabBarController/connections/segue[1]",
+      "idCount": 1,
+      "insertMode": "iteration"
+    },
+    {
+      "name": "asset",
+      "tagInterfix": "AS",
+      "xpath": "/document/resources/image[1]",
+      "idCount": 0
+    }
+  ],
+  "tagtypes": ["___TABLE___", "navigation","storyboardID"],
+  "shortLabel": true,
+  "assets": {
+    "mandatory": true,
+    "format": "png",
+    "target": "MainNavigation",
+    "size": {
+      "width": 25,
+      "height": 25
+    }
+  },
+  "table": {
+		"min": 1,
+		"max": 5
+  }
+}

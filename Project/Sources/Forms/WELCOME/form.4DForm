@@ -1,0 +1,194 @@
+{
+	"destination": "detailScreen",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer",
+		"onBoundVariableChange"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "842pt",
+		"paperHeight": "595pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"stroke": "transparent"
+				},
+				"continue": {
+					"type": "button",
+					"top": 727,
+					"left": 435,
+					"width": 100,
+					"height": 22,
+					"text": ":xliff:continue",
+					"defaultButton": true,
+					"method": "ObjectMethods/continue.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"doNotShowAgain": {
+					"type": "checkbox",
+					"top": 671,
+					"left": 284,
+					"width": 211,
+					"height": 17,
+					"text": ":xliff:doNotShowAgain",
+					"stroke": "#696969",
+					"focusable": false,
+					"method": "ObjectMethods/doNotShowAgain.4dm",
+					"events": [
+						"onLoad",
+						"onClick"
+					]
+				},
+				"title": {
+					"type": "text",
+					"top": 56,
+					"left": 0,
+					"width": 970,
+					"height": 58,
+					"sizingX": "grow",
+					"stroke": "#696969",
+					"textAlign": "center",
+					"fontFamily": ".SF NS Text",
+					"fontSize": 48,
+					"text": ":xliff:wel_title"
+				},
+				"subtitle": {
+					"type": "text",
+					"top": 172,
+					"left": 0,
+					"width": 970,
+					"height": 69,
+					"sizingX": "grow",
+					"stroke": "#696969",
+					"textAlign": "center",
+					"fontFamily": ".SF NS Text",
+					"fontSize": 14,
+					"text": ":xliff:wel_subtitle"
+				},
+				"list": {
+					"type": "listbox",
+					"top": 271,
+					"left": 284,
+					"width": 402,
+					"height": 380,
+					"resizingMode": "legacy",
+					"focusable": false,
+					"sortable": false,
+					"movableRows": false,
+					"hideExtraBlankRows": true,
+					"rowHeight": "5em",
+					"showHeaders": false,
+					"selectionMode": "none",
+					"scrollbarHorizontal": "hidden",
+					"scrollbarVertical": "hidden",
+					"horizontalLineStroke": "transparent",
+					"verticalLineStroke": "transparent",
+					"fill": "transparent",
+					"verticalAlign": "middle",
+					"fontFamily": ".SF NS Text",
+					"fontSize": 14,
+					"borderStyle": "none",
+					"columns": [
+						{
+							"name": "icons",
+							"dataSourceTypeHint": "picture",
+							"width": 80,
+							"minWidth": 80,
+							"maxWidth": 80,
+							"resizable": false,
+							"enterable": false,
+							"pictureFormat": "truncatedCenter",
+							"truncateMode": "none",
+							"verticalAlign": "middle",
+							"fontFamily": ".SF NS Text",
+							"fontSize": 14,
+							"header": {
+								"name": "Header1",
+								"text": "Header1",
+								"verticalAlign": "middle",
+								"fontFamily": ".SF NS Text",
+								"fontSize": 14
+							},
+							"footer": {
+								"name": "Footer1",
+								"timeFormat": "hh_mm_ss",
+								"verticalAlign": "middle",
+								"fontFamily": ".SF NS Text",
+								"fontSize": 14
+							}
+						},
+						{
+							"name": "texts",
+							"width": 10,
+							"minWidth": 10,
+							"maxWidth": 10,
+							"resizable": false,
+							"enterable": false,
+							"styledText": true,
+							"contextMenu": "none",
+							"wordwrap": "normal",
+							"truncateMode": "none",
+							"verticalAlign": "middle",
+							"fontFamily": ".SF NS Text",
+							"fontSize": 14,
+							"header": {
+								"name": "Header2",
+								"text": "Header2",
+								"verticalAlign": "middle",
+								"fontFamily": ".SF NS Text",
+								"fontSize": 14
+							},
+							"footer": {
+								"name": "Footer2",
+								"timeFormat": "hh_mm_ss",
+								"verticalAlign": "middle",
+								"fontFamily": ".SF NS Text",
+								"fontSize": 14
+							}
+						}
+					]
+				},
+				"automatic_font": {
+					"type": "input",
+					"top": 7,
+					"left": 6,
+					"width": 107,
+					"height": 17,
+					"visibility": "hidden",
+					"stroke": "#FF6600",
+					"fill": "transparent",
+					"borderStyle": "dotted",
+					"enterable": false,
+					"hideFocusRing": true,
+					"dragging": "none",
+					"dropping": "none",
+					"method": "ObjectMethods/automatic_font.4dm",
+					"events": [
+						"onLoad"
+					]
+				}
+			}
+		}
+	]
+}

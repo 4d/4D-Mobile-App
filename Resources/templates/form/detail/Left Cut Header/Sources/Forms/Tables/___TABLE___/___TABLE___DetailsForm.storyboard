@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="iJQ-uW-weF">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Details Form-->
+        <scene sceneID="yB9-mH-XoX">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="JvF-J0-saY" customClass="___TABLE___DetailsForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wpZ-Qk-3Dz"/>
+                        <viewControllerLayoutGuide type="bottom" id="OWH-Kx-apU"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Nrk-ZL-sTh">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3O6-va-UAL">
+                                <rect key="frame" x="0.0" y="64" width="414" height="672"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bFz-vh-DGF">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="555"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8SR-d9-WJW" customClass="AnimatableImageView" customModule="IBAnimatable">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="290"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_1___" value="___FIELD_1_BINDING_TYPE___"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </imageView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yDw-PK-66K">
+                                                <rect key="frame" x="0.0" y="206" width="414" height="174"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="174" id="OnX-hl-DyM"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mKJ-9Y-JGx">
+                                                <rect key="frame" x="0.0" y="292" width="414" height="750"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;___FIELD_2_LABEL___&gt;" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GIL-zE-21l">
+                                                        <rect key="frame" x="19" y="-29" width="263" height="58.333333333333336"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
+                                                        <color key="textColor" red="0.16525508580000001" green="0.16525508580000001" blue="0.16525508580000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_2___" value="___FIELD_2_BINDING_TYPE___"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;___FIELD_3_LABEL___&gt;" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GUJ-F6-p9H">
+                                                        <rect key="frame" x="19" y="37.333333333333314" width="377" height="27.333333333333329"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="23"/>
+                                                        <color key="textColor" name="BackgroundColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_3___" value="___FIELD_3_BINDING_TYPE___"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="JRS-63-nL7">
+                                                        <rect key="frame" x="12" y="88" width="390" height="95"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-001">
+                                                                <rect key="frame" x="0.0" y="0.0" width="390" height="95"/>
+                                                                <subviews>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-002" customClass="AnimatableView" customModule="IBAnimatable">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="390" height="95"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-003" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
+                                                                                <rect key="frame" x="12" y="18" width="366" height="24.666666666666671"/>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="21"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="imagePadding">
+                                                                                        <integer key="value" value="0"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                    <userDefinedRuntimeAttribute type="image" keyPath="image" value="___FIELD_ICON___"/>
+                                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="imageContextTemplate" value="YES"/>
+                                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="imageAspectFit" value="NO"/>
+                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="imagePosition" value="left"/>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </label>
+                                                                            <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_LABEL___&gt;" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-004">
+                                                                                <rect key="frame" x="12" y="52.333333333333314" width="366" height="22"/>
+                                                                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                                                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD___" value="___FIELD_BINDING_TYPE___"/>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </label>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" red="0.9807066941624365" green="0.9807066941624365" blue="0.9807066941624365" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstItem="TAG-FD-003" firstAttribute="leading" secondItem="TAG-FD-002" secondAttribute="leading" constant="12" id="TAG-FD-005"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="TAG-FD-003" secondAttribute="trailing" constant="12" id="TAG-FD-006"/>
+                                                                            <constraint firstItem="TAG-FD-003" firstAttribute="top" secondItem="TAG-FD-002" secondAttribute="top" constant="18" id="TAG-FD-007"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="TAG-FD-004" secondAttribute="bottom" constant="20.670000000000002" id="TAG-FD-008"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="TAG-FD-004" secondAttribute="trailing" constant="12" id="TAG-FD-009"/>
+                                                                            <constraint firstItem="TAG-FD-004" firstAttribute="leading" secondItem="TAG-FD-002" secondAttribute="leading" constant="12" id="TAG-FD-010"/>
+                                                                            <constraint firstItem="TAG-FD-004" firstAttribute="top" secondItem="TAG-FD-003" secondAttribute="bottom" constant="10" id="TAG-FD-011"/>
+                                                                        </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                                                                <real key="value" value="0.10000000000000001"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="point" keyPath="shadowOffset">
+                                                                                <point key="value" x="0.0" y="3"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                                                                <color key="value" red="0.42425444159999998" green="0.42425444159999998" blue="0.42425444159999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" red="0.8072057423857868" green="0.8072057423857868" blue="0.8072057423857868" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                <real key="value" value="0.10000000000000001"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="16"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </view>
+                                                                </subviews>
+                                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <constraints>
+                                                                    <constraint firstItem="TAG-FD-002" firstAttribute="leading" secondItem="TAG-FD-001" secondAttribute="leading" id="TAG-FD-012"/>
+                                                                    <constraint firstItem="TAG-FD-002" firstAttribute="top" secondItem="TAG-FD-001" secondAttribute="top" id="TAG-FD-013"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="TAG-FD-002" secondAttribute="bottom" id="TAG-FD-014"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="TAG-FD-002" secondAttribute="trailing" id="TAG-FD-015"/>
+                                                                </constraints>
+                                                            </stackView>
+                                                        </subviews>
+                                                        <color key="backgroundColor" red="0.96854287390000005" green="0.96868163350000003" blue="0.96851247549999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="leading" secondItem="JRS-63-nL7" secondAttribute="leading" id="B3b-Hj-Liz"/>
+                                                            <constraint firstAttribute="top" secondItem="JRS-63-nL7" secondAttribute="top" id="Dn2-a2-by2"/>
+                                                        </constraints>
+                                                    </stackView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="JRS-63-nL7" firstAttribute="leading" secondItem="JRS-63-nL7" secondAttribute="leading" id="Dxp-9e-zf4"/>
+                                                    <constraint firstAttribute="trailing" secondItem="GUJ-F6-p9H" secondAttribute="trailing" constant="18" id="Jcf-bE-ami"/>
+                                                    <constraint firstAttribute="trailing" secondItem="GIL-zE-21l" secondAttribute="trailing" constant="132" id="Jkg-Cf-k6p"/>
+                                                    <constraint firstItem="GUJ-F6-p9H" firstAttribute="leading" secondItem="mKJ-9Y-JGx" secondAttribute="leading" constant="19" id="Ms3-U9-C1I"/>
+                                                    <constraint firstItem="GIL-zE-21l" firstAttribute="top" secondItem="mKJ-9Y-JGx" secondAttribute="top" constant="-29" id="VZN-b3-tI9"/>
+                                                    <constraint firstItem="JRS-63-nL7" firstAttribute="top" secondItem="GUJ-F6-p9H" secondAttribute="bottom" constant="23.329999999999998" id="X2f-ts-rqi"/>
+                                                    <constraint firstItem="GIL-zE-21l" firstAttribute="leading" secondItem="mKJ-9Y-JGx" secondAttribute="leading" constant="19" id="Xu7-7z-st0"/>
+                                                    <constraint firstAttribute="trailing" secondItem="JRS-63-nL7" secondAttribute="trailing" constant="12" id="Z4j-Xd-TGb"/>
+                                                    <constraint firstItem="GUJ-F6-p9H" firstAttribute="top" secondItem="GIL-zE-21l" secondAttribute="bottom" constant="8" id="bCa-62-Rwe"/>
+                                                    <constraint firstItem="JRS-63-nL7" firstAttribute="top" secondItem="JRS-63-nL7" secondAttribute="top" id="eYn-xU-VYm"/>
+                                                    <constraint firstAttribute="bottom" secondItem="JRS-63-nL7" secondAttribute="bottom" constant="567" id="ksj-iy-Eu8"/>
+                                                    <constraint firstItem="JRS-63-nL7" firstAttribute="leading" secondItem="mKJ-9Y-JGx" secondAttribute="leading" constant="12" id="sRW-Z9-xyW"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="mKJ-9Y-JGx" secondAttribute="trailing" id="0dp-Gk-5Gq"/>
+                                            <constraint firstItem="mKJ-9Y-JGx" firstAttribute="top" secondItem="yDw-PK-66K" secondAttribute="bottom" constant="-88" id="0up-fL-9UU"/>
+                                            <constraint firstAttribute="trailing" secondItem="8SR-d9-WJW" secondAttribute="trailing" id="7Fk-9d-kfx"/>
+                                            <constraint firstAttribute="trailing" secondItem="yDw-PK-66K" secondAttribute="trailing" id="Ppq-Ub-plk"/>
+                                            <constraint firstAttribute="bottom" secondItem="mKJ-9Y-JGx" secondAttribute="bottom" constant="-487" id="XXZ-ln-k8a"/>
+                                            <constraint firstItem="yDw-PK-66K" firstAttribute="leading" secondItem="bFz-vh-DGF" secondAttribute="leading" id="gLa-0n-WwS"/>
+                                            <constraint firstItem="8SR-d9-WJW" firstAttribute="leading" secondItem="bFz-vh-DGF" secondAttribute="leading" id="soQ-Vk-WrO"/>
+                                            <constraint firstItem="mKJ-9Y-JGx" firstAttribute="top" secondItem="8SR-d9-WJW" secondAttribute="bottom" constant="2" id="t0R-08-3yT"/>
+                                            <constraint firstItem="mKJ-9Y-JGx" firstAttribute="top" secondItem="bFz-vh-DGF" secondAttribute="top" constant="292" id="v6F-iw-Lcw"/>
+                                            <constraint firstItem="mKJ-9Y-JGx" firstAttribute="leading" secondItem="bFz-vh-DGF" secondAttribute="leading" id="ynL-Ss-obe"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="bFz-vh-DGF" secondAttribute="bottom" id="42x-4f-NNs"/>
+                                    <constraint firstAttribute="trailing" secondItem="bFz-vh-DGF" secondAttribute="trailing" id="JMs-EL-Dju"/>
+                                    <constraint firstItem="bFz-vh-DGF" firstAttribute="leading" secondItem="3O6-va-UAL" secondAttribute="leading" id="L0D-fd-Xft"/>
+                                    <constraint firstItem="bFz-vh-DGF" firstAttribute="top" secondItem="3O6-va-UAL" secondAttribute="top" id="o8Y-xv-dVt"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="bFz-vh-DGF" secondAttribute="width" id="0qa-aN-Rh2"/>
+                            <constraint firstItem="8SR-d9-WJW" firstAttribute="top" relation="lessThanOrEqual" secondItem="wpZ-Qk-3Dz" secondAttribute="bottom" id="3h7-fV-bhK"/>
+                            <constraint firstItem="8SR-d9-WJW" firstAttribute="top" secondItem="wpZ-Qk-3Dz" secondAttribute="bottom" priority="750" id="7vc-Mi-jzX"/>
+                            <constraint firstAttribute="bottom" secondItem="3O6-va-UAL" secondAttribute="bottom" id="CVg-RZ-KSj"/>
+                            <constraint firstItem="3O6-va-UAL" firstAttribute="leading" secondItem="Nrk-ZL-sTh" secondAttribute="leading" id="IBE-6l-Ozb"/>
+                            <constraint firstAttribute="trailing" secondItem="3O6-va-UAL" secondAttribute="trailing" id="PhB-Ji-Zv7"/>
+                            <constraint firstItem="3O6-va-UAL" firstAttribute="top" secondItem="wpZ-Qk-3Dz" secondAttribute="bottom" id="x1a-0k-krs"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="rwI-Lo-bNI" userLabel="Navigation Bar">
+                        <barButtonItem key="leftBarButtonItem" image="previous" id="7yQ-vE-JQs" userLabel="PreviousPage Button Item">
+                            <color key="tintColor" name="ForegroundColor"/>
+                            <connections>
+                                <action selector="previousPage:" destination="JvF-J0-saY" id="SQf-bt-OXe"/>
+                            </connections>
+                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="next" id="kR7-Kg-uGf" userLabel="NextRecord Button Item">
+                                <color key="tintColor" name="ForegroundColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="bindTo.table.hasNext" value="enabled"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="nextRecord:" destination="JvF-J0-saY" id="fwN-Lo-wd2"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="previous" id="QLz-43-5WW" userLabel="PreviousRecord Button Item">
+                                <color key="tintColor" name="ForegroundColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="bindTo.table.hasPrevious" value="enabled"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="previousRecord:" destination="JvF-J0-saY" id="n7K-4R-lJR"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="actions" value="___ENTITY_ACTIONS___"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="contentView" destination="yDw-PK-66K" id="Yd1-Hp-IJ4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9xL-mF-5f6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2008.6956521739132" y="355.43478260869568"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="keq-Gh-578">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="iJQ-uW-weF" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Kda-O0-f46">
+                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" name="BackgroundColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="JvF-J0-saY" kind="relationship" relationship="rootViewController" id="xf2-oo-Jq1"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vbt-jo-3TQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1365" y="357"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="___FIELD_ICON___" width="16" height="16"/>
+        <image name="next" width="22" height="22"/>
+        <image name="previous" width="22" height="22"/>
+        <namedColor name="BackgroundColor">
+            <color red="0.38431372549999998" green="0.7725490196" blue="0.67450980390000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ForegroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </namedColor>
+    </resources>
+</document>

@@ -1,0 +1,10 @@
+{
+  "dataClasses": [{
+    "name": "___TABLE___",
+    "className": "___TABLE___",
+    "collectionName": "___TABLE___Collection",
+    "scope": "public",
+    "dataURI": "/rest/___TABLE___",
+    "attributes": [{}]
+  }]
+}

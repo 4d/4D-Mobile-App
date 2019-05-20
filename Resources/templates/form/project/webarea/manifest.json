@@ -1,0 +1,8 @@
+{
+  "type": "projectform",
+  "name": "WebArea",
+  "description": {
+    "tags": ["___NAME___", "___URL___"]
+  },
+  "storyboard": "Sources/Forms/___NAME___Form.storyboard"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "listform",
+  "name": "Horizontal Cards",
+  "fields": {
+    "count": 3
+  },
+  "sdk": {
+    "name": "AnimatedCollectionViewLayout"
+  }
+}

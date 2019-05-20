@@ -1,0 +1,337 @@
+{
+	"destination": "detailScreen",
+	"inheritedForm": "panel_template",
+	"width": 960,
+	"height": 338,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		{
+			"objects": {
+				"empty": {
+					"type": "text",
+					"top": 40,
+					"left": 30,
+					"width": 543,
+					"height": 17,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:selectATableToDisplayItsFields"
+				}
+			}
+		},
+		{
+			"objects": {
+				"01_fields.label": {
+					"type": "text",
+					"top": 5,
+					"left": 17,
+					"width": 72,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:fields"
+				},
+				"01_fields.border": {
+					"type": "rectangle",
+					"top": 27,
+					"left": 16,
+					"width": 922,
+					"height": 291,
+					"sizingY": "grow",
+					"fill": "transparent",
+					"stroke": "#AAAAAA"
+				},
+				"01_fields": {
+					"type": "listbox",
+					"top": 29,
+					"left": 17,
+					"width": 919,
+					"height": 288,
+					"visibility": "hidden",
+					"sizingY": "grow",
+					"resizingMode": "legacy",
+					"hideFocusRing": true,
+					"sortable": false,
+					"movableRows": false,
+					"hideSystemHighlight": true,
+					"rowHeight": "32px",
+					"showHeaders": false,
+					"selectionMode": "single",
+					"scrollbarHorizontal": "hidden",
+					"horizontalLineStroke": "transparent",
+					"verticalLineStroke": "#DBDBDB",
+					"fill": "#FFFFFF",
+					"textAlign": "left",
+					"verticalAlign": "middle",
+					"borderStyle": "none",
+					"method": "ObjectMethods/01_fields.4dm",
+					"events": [
+						"onClick",
+						"onDisplayDetail",
+						"onDoubleClick",
+						"onLosingFocus",
+						"onGettingFocus",
+						"onDataChange",
+						"onSelectionChange",
+						"onMouseEnter",
+						"onMouseLeave",
+						"onMouseMove"
+					],
+					"columns": [
+						{
+							"name": "IDs",
+							"width": 20,
+							"minWidth": 20,
+							"maxWidth": 20,
+							"resizable": false,
+							"enterable": false,
+							"visibility": "hidden",
+							"truncateMode": "none",
+							"stroke": "#FF9300",
+							"fill": "#FFFFFF",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"fontFamily": ".SF NS Text",
+							"fontSize": 10,
+							"events": [
+								"onDataChange"
+							],
+							"header": {
+								"name": "Header4",
+								"text": "Header4",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
+							},
+							"footer": {
+								"name": "Footer4",
+								"timeFormat": "hh_mm_ss",
+								"fill": "#FFFFFF",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						},
+						{
+							"name": "fields",
+							"width": 250,
+							"minWidth": 250,
+							"maxWidth": 250,
+							"enterable": false,
+							"fill": "#FFFFFF",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"events": [
+								"onDataChange"
+							],
+							"header": {
+								"name": "Header5",
+								"text": ".Tables",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
+							},
+							"footer": {
+								"name": "Footer5",
+								"timeFormat": "hh_mm_ss",
+								"fill": "#FFFFFF",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						},
+						{
+							"name": "icons",
+							"dataSourceTypeHint": "picture",
+							"width": 60,
+							"minWidth": 60,
+							"maxWidth": 60,
+							"resizable": false,
+							"enterable": false,
+							"pictureFormat": "truncatedCenter",
+							"fill": "#FFFFFF",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"events": [
+								"onClick"
+							],
+							"method": "ObjectMethods/icons.4dm",
+							"header": {
+								"name": "Header1",
+								"text": ".Icons",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
+							},
+							"footer": {
+								"name": "Footer1",
+								"timeFormat": "hh_mm_ss",
+								"fill": "#FFFFFF",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						},
+						{
+							"name": "shortLabels",
+							"width": 215,
+							"minWidth": 215,
+							"maxWidth": 215,
+							"resizable": false,
+							"fill": "#FFFFFF",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"events": [
+								"onDoubleClick"
+							],
+							"method": "ObjectMethods/shortLabels.4dm",
+							"header": {
+								"name": "Header3",
+								"text": ".Short Labels",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
+							},
+							"footer": {
+								"name": "Footer3",
+								"timeFormat": "hh_mm_ss",
+								"fill": "#FFFFFF",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						},
+						{
+							"name": "labels",
+							"width": 215,
+							"minWidth": 215,
+							"maxWidth": 215,
+							"resizable": false,
+							"fill": "#FFFFFF",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"events": [
+								"onDoubleClick"
+							],
+							"method": "ObjectMethods/labels.4dm",
+							"header": {
+								"name": "Header2",
+								"text": ".Labels",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
+							},
+							"footer": {
+								"name": "Footer2",
+								"timeFormat": "hh_mm_ss",
+								"fill": "#FFFFFF",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						},
+						{
+							"name": "formats",
+							"width": 164,
+							"minWidth": 10,
+							"maxWidth": 32000,
+							"styledText": true,
+							"contextMenu": "none",
+							"requiredList": {
+								"$ref": "/SOURCES/lists.json#/empty"
+							},
+							"fill": "#FFFFFF",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"events": [
+								"onClick",
+								"onAlternateClick",
+								"onBeforeDataEntry"
+							],
+							"method": "ObjectMethods/formats.4dm",
+							"header": {
+								"name": "Header6",
+								"text": "Header6",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							},
+							"footer": {
+								"name": "Footer6",
+								"timeFormat": "hh_mm_ss",
+								"fill": "#FFFFFF",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						}
+					]
+				},
+				"iconGrid": {
+					"type": "subform",
+					"top": 356,
+					"left": 38,
+					"width": 95,
+					"height": 14,
+					"visibility": "hidden",
+					"sizingX": "move",
+					"focusable": false,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
+					"borderStyle": "system"
+				},
+				"icons.label": {
+					"type": "text",
+					"top": 5,
+					"left": 267,
+					"width": 60,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:icons"
+				},
+				"labels.label": {
+					"type": "text",
+					"top": 5,
+					"left": 541,
+					"width": 133,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:longLabels"
+				},
+				"shorts.label": {
+					"type": "text",
+					"top": 5,
+					"left": 327,
+					"width": 133,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:shortLabels"
+				},
+				"format.label": {
+					"type": "text",
+					"top": 5,
+					"left": 756,
+					"width": 155,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:formatters"
+				}
+			}
+		}
+	]
+}

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Ogb-fa-BrX">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+        <array key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--___TABLE_LABEL___-->
+        <scene sceneID="5Za-8D-3bM">
+            <objects>
+                <collectionViewController id="zhh-qx-xYL" customClass="___TABLE___ListForm" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="jDR-e3-zbF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="pes-5K-EYY">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="___TABLE___" id="NvA-KT-0ao">
+                                <rect key="frame" x="0.0" y="0.0" width="148" height="171"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="148" height="171"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cUi-DI-sAU">
+                                            <rect key="frame" x="0.0" y="0.0" width="148" height="171"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_1___" value="___FIELD_1_BINDING_TYPE___"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </imageView>
+                                        <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YrC-0M-SNl">
+                                            <rect key="frame" x="0.0" y="0.0" width="148" height="171"/>
+                                            <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                        </view>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_2_LABEL___" textAlignment="natural" lineBreakMode="clip" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qqf-rd-qyu">
+                                            <rect key="frame" x="11" y="65.5" width="126" height="47"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_2___" value="___FIELD_2_BINDING_TYPE___"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_3_LABEL___" textAlignment="natural" lineBreakMode="clip" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4y3-jp-HPY">
+                                            <rect key="frame" x="10" y="120.5" width="128" height="40.5"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_3___" value="___FIELD_3_BINDING_TYPE___"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="trailingMargin" secondItem="4y3-jp-HPY" secondAttribute="trailing" constant="2" id="5sE-Vl-0Eh"/>
+                                    <constraint firstItem="4y3-jp-HPY" firstAttribute="leading" secondItem="NvA-KT-0ao" secondAttribute="leadingMargin" constant="2" id="DwU-BJ-zhZ"/>
+                                    <constraint firstAttribute="bottom" secondItem="YrC-0M-SNl" secondAttribute="bottom" id="E92-m5-lc6"/>
+                                    <constraint firstAttribute="bottom" secondItem="cUi-DI-sAU" secondAttribute="bottom" id="HLe-6I-pgP"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="4y3-jp-HPY" secondAttribute="bottom" constant="2" id="JeN-oV-vVd"/>
+                                    <constraint firstItem="YrC-0M-SNl" firstAttribute="top" secondItem="NvA-KT-0ao" secondAttribute="top" id="OCZ-Hx-L0I"/>
+                                    <constraint firstItem="YrC-0M-SNl" firstAttribute="leading" secondItem="NvA-KT-0ao" secondAttribute="leading" id="S9x-zg-8YM"/>
+                                    <constraint firstAttribute="trailing" secondItem="cUi-DI-sAU" secondAttribute="trailing" id="VjG-8R-B8O"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="Qqf-rd-qyu" secondAttribute="trailing" constant="3" id="d9k-u6-vju"/>
+                                    <constraint firstItem="cUi-DI-sAU" firstAttribute="top" secondItem="NvA-KT-0ao" secondAttribute="top" id="emf-Um-Vdc"/>
+                                    <constraint firstAttribute="trailing" secondItem="YrC-0M-SNl" secondAttribute="trailing" id="ihk-64-7Li"/>
+                                    <constraint firstItem="cUi-DI-sAU" firstAttribute="leading" secondItem="NvA-KT-0ao" secondAttribute="leading" id="jkQ-IV-FoJ"/>
+                                    <constraint firstItem="4y3-jp-HPY" firstAttribute="top" secondItem="Qqf-rd-qyu" secondAttribute="bottom" constant="8" id="ovF-ZD-ihL"/>
+                                    <constraint firstItem="Qqf-rd-qyu" firstAttribute="leading" secondItem="NvA-KT-0ao" secondAttribute="leadingMargin" constant="3" id="x9m-4D-Lha"/>
+                                </constraints>
+                                <size key="customSize" width="148" height="171"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="actions" value="___ENTITY_ACTIONS___"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="touch.zoomScale">
+                                        <real key="value" value="0.95999999999999996"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="TmP-Gk-7ej" kind="show" identifier="showDetails" customClass="___LIST_TO_DETAIL_TRANSITION___" customModule="IBAnimatable" id="gh0-O0-9uL"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="zhh-qx-xYL" id="1wg-YJ-fBf"/>
+                            <outlet property="delegate" destination="zhh-qx-xYL" id="K2o-sE-fFY"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" title="___TABLE_LABEL___" id="HcW-CV-UPc">
+                        <barButtonItem key="leftBarButtonItem" image="previous" id="ghW-GP-x4C" userLabel="PreviousPage Button Item">
+                            <color key="tintColor" name="ForegroundColor"/>
+                            <connections>
+                                <action selector="previousPage:" destination="zhh-qx-xYL" id="1zk-Aq-3yo"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="searchableField" value="___SEARCHABLE_FIELD___"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="sortField" value="___SORT_FIELD___"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="showSectionBar" value="NO"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="actions" value="___TABLE_ACTIONS___"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="searchBar" destination="eqo-z7-dF4" id="ZJt-km-6cn"/>
+                    </connections>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fFw-Ke-NsU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchBar contentMode="redraw" id="eqo-z7-dF4">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <textInputTraits key="textInputTraits"/>
+                </searchBar>
+            </objects>
+            <point key="canvasLocation" x="373.91304347826087" y="116.57608695652175"/>
+        </scene>
+        <!--___TABLE___DetailsForm-->
+        <scene sceneID="pzT-Ts-eNA">
+            <objects>
+                <viewControllerPlaceholder storyboardName="___TABLE___DetailsForm" id="TmP-Gk-7ej" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZA2-Ia-mDc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="956" y="112"/>
+        </scene>
+        <!--___TABLE_SHORT_LABEL___-->
+        <scene sceneID="43G-ax-Y26">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ogb-fa-BrX" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="___TABLE_SHORT_LABEL___" image="___TABLE_ICON___" selectedImage="___TABLE_ICON___" id="65z-ho-M8H"/>
+                    <toolbarItems/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="06B-nF-C5E">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" name="BackgroundColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" name="ForegroundColor"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="zhh-qx-xYL" kind="relationship" relationship="rootViewController" id="1sa-x6-x1q"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d9P-ml-O9s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-361" y="112"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="___TABLE_ICON___" width="25" height="25"/>
+        <image name="previous" width="16" height="16"/>
+        <namedColor name="BackgroundColor">
+            <color red="1" green="0.35294117650000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ForegroundColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </namedColor>
+    </resources>
+</document>

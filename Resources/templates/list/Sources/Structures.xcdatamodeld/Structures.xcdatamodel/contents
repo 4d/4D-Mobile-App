@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13240" systemVersion="" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="___TABLE___" representedClassName="___TABLE___" syncable="YES" codeGenerationType="class"/>
+    <elements>
+        <element name="___TABLE___" positionX="-28422" positionY="-12393" width="128" height="133"/>
+    </elements>
+</model>

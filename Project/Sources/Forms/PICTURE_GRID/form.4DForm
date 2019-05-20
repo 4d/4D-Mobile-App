@@ -1,0 +1,140 @@
+{
+	"destination": "detailScreen",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer",
+		"onBoundVariableChange"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "842pt",
+		"paperHeight": "595pt"
+	},
+	"pages": [
+		{
+			"objects": {
+				"cancel": {
+					"type": "button",
+					"top": 69,
+					"left": 114,
+					"width": 66,
+					"height": 16,
+					"shortcutKey": "[Esc]",
+					"text": "Escape",
+					"focusable": false,
+					"method": "ObjectMethods/cancel.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 200,
+					"height": 100,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"stroke": "#FFFFFF"
+				},
+				"prompt.background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 200,
+					"height": 23,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"fill": "#FFFACD",
+					"stroke": "transparent"
+				},
+				"NoPicture": {
+					"type": "text",
+					"top": 31,
+					"left": 10,
+					"width": 181,
+					"height": 17,
+					"sizingX": "grow",
+					"stroke": "#808080",
+					"textAlign": "center",
+					"text": "..."
+				},
+				"selection": {
+					"type": "rectangle",
+					"top": 63,
+					"left": 46,
+					"width": 36,
+					"height": 29,
+					"visibility": "hidden",
+					"fill": "#E7F8FF",
+					"stroke": "transparent"
+				},
+				"prompt": {
+					"type": "text",
+					"top": 3,
+					"left": 10,
+					"width": 190,
+					"height": 17,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"stroke": "#696969",
+					"text": "Sample Text:"
+				}
+			}
+		},
+		{
+			"objects": {
+				"list": {
+					"type": "listbox",
+					"top": 0,
+					"left": 0,
+					"width": 200,
+					"height": 100,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"resizingMode": "legacy",
+					"focusable": false,
+					"hideFocusRing": true,
+					"sortable": false,
+					"movableRows": false,
+					"rowHeight": "20px",
+					"showHeaders": false,
+					"selectionMode": "none",
+					"scrollbarHorizontal": "hidden",
+					"horizontalLineStroke": "transparent",
+					"verticalLineStroke": "transparent",
+					"fill": "transparent",
+					"textAlign": "center",
+					"verticalAlign": "middle",
+					"borderStyle": "none",
+					"method": "ObjectMethods/list.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave",
+						"onMouseMove",
+						"onScroll"
+					],
+					"columns": []
+				},
+				"prompt.bottom.line": {
+					"type": "line",
+					"top": 22,
+					"left": 0,
+					"width": 200,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"stroke": "#C0C0C0"
+				}
+			}
+		}
+	]
+}

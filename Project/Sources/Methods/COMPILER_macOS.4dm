@@ -1,0 +1,80 @@
+//%attributes = {"invisible":true}
+If (False:C215)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(unzip ;$0)
+	C_OBJECT:C1216(unzip ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(storyboard ;$0)
+	C_OBJECT:C1216(storyboard ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(plist ;$0)
+	C_OBJECT:C1216(plist ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(plist_toObject ;$0)
+	C_TEXT:C284(plist_toObject ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(simulator ;$0)
+	C_OBJECT:C1216(simulator ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(provisioningProfiles ;$0)
+	C_OBJECT:C1216(provisioningProfiles ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(git ;$0)
+	C_OBJECT:C1216(git ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(Xcode ;$0)
+	C_OBJECT:C1216(Xcode ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(Xcode_CheckInstall ;$0)
+	C_OBJECT:C1216(Xcode_CheckInstall ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(sdk ;$0)
+	C_OBJECT:C1216(sdk ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(XcodeProj ;$0)
+	C_OBJECT:C1216(XcodeProj ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(XcodeProjInject ;$0)
+	C_OBJECT:C1216(XcodeProjInject ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(asset ;$0)
+	C_OBJECT:C1216(asset ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(color ;$0)
+	C_OBJECT:C1216(color ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(device ;$0)
+	C_OBJECT:C1216(device ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(certificate ;$0)
+	C_OBJECT:C1216(certificate ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(teamId ;$0)
+	C_OBJECT:C1216(teamId ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(xloc ;$0)
+	C_OBJECT:C1216(xloc ;$1)
+	
+	  //__________________________________________________
+	C_OBJECT:C1216(capabilities ;$0)
+	C_OBJECT:C1216(capabilities ;$1)
+	
+End if 

@@ -1,0 +1,44 @@
+{
+	"destination": "detailScreen",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload"
+	],
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "842pt",
+		"paperHeight": "595pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"languages": {
+					"type": "button",
+					"top": 0,
+					"left": 0,
+					"width": 39,
+					"height": 18,
+					"fontFamily": ".SF NS Text",
+					"fontSize": 10,
+					"stroke": "#FFFFFF",
+					"text": "en",
+					"popupPlacement": "linked",
+					"style": "custom",
+					"method": "ObjectMethods/languages.4dm",
+					"events": [
+						"onLoad",
+						"onClick",
+						"onUnload"
+					]
+				}
+			}
+		}
+	]
+}

@@ -1,0 +1,27 @@
+{
+  "type": "detailform",
+  "name": "Visual Contact",
+  "fields": {
+    "count": 7
+  },
+  "assets": {
+    "mandatory": false,
+    "format": "png",
+    "target": "___TABLE___/Detail",
+    "size": {
+      "width": 22,
+      "height": 22
+    }
+  },
+  "byTable": true,
+  "tags": {
+    "___DETAILFORMTYPE___": "Bare"
+  },
+  "description": {
+    "tags": ["___PRODUCT___", "___DETAILFORMTYPE___",
+      "___TABLE___", "___TABLE_SHORT_LABEL__", "___TABLE_ICON___",
+      "___FIELD_1___TYPE___", "___FIELD_1___", "___FIELD_1_LABEL___"
+    ]
+  },
+  "storyboard": "Sources/Forms/Tables/___TABLE___DetailsForm.storyboard"
+}

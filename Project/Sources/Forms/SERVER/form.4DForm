@@ -1,0 +1,195 @@
+{
+	"destination": "detailScreen",
+	"inheritedForm": "panel_template",
+	"width": 960,
+	"height": 141,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"02_prodURL.label": {
+					"type": "text",
+					"top": 5,
+					"left": 16,
+					"width": 344,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:productionUrl"
+				},
+				"Text1": {
+					"type": "text",
+					"top": 238,
+					"left": 7,
+					"width": 136,
+					"height": 17,
+					"textAlign": "right",
+					"text": ".Test URL"
+				},
+				"01_testURL": {
+					"type": "input",
+					"top": 238,
+					"left": 160,
+					"width": 270,
+					"height": 17,
+					"dataSource": "Form:C1466.server.urls.test",
+					"focusable": false,
+					"enterable": false,
+					"hideFocusRing": true,
+					"placeholder": "127.0.0.1",
+					"dragging": "none",
+					"method": "ObjectMethods/01_testURL.4dm",
+					"events": [
+						"onLoad",
+						"onDataChange"
+					]
+				},
+				"test.alert": {
+					"type": "button",
+					"top": 106,
+					"left": 144,
+					"width": 20,
+					"height": 20,
+					"style": "custom",
+					"events": [
+						"onClick"
+					]
+				},
+				"testUrl.status": {
+					"type": "button",
+					"top": 240,
+					"left": 422,
+					"width": 11,
+					"height": 11,
+					"icon": "/RESOURCES/images/light_off.png",
+					"style": "custom",
+					"method": "ObjectMethods/testUrl.status.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"02_prodURL.border": {
+					"type": "rectangle",
+					"top": 28,
+					"left": 16,
+					"width": 344,
+					"height": 33,
+					"stroke": "#C4C4C4"
+				},
+				"02_prodURL": {
+					"type": "input",
+					"top": 36,
+					"left": 23,
+					"width": 329,
+					"height": 17,
+					"dataSource": "Form:C1466.server.urls.production",
+					"tooltip": ":xliff:productionURLTip",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"placeholder": "https://mycompany.com/mobile",
+					"dragging": "none",
+					"method": "ObjectMethods/02_prodURL.4dm",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"03_email": {
+					"type": "checkbox",
+					"top": 97,
+					"left": 14,
+					"width": 344,
+					"height": 18,
+					"text": ":xliff:requiresAnEmailToConnect",
+					"method": "ObjectMethods/03_email.4dm",
+					"events": [
+						"onLoad",
+						"onClick"
+					]
+				},
+				"02_prodURL.label1": {
+					"type": "text",
+					"top": 70,
+					"left": 16,
+					"width": 344,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:authentication"
+				},
+				"authenticationMethod": {
+					"type": "button",
+					"top": 96,
+					"left": 487,
+					"width": 130,
+					"height": 20,
+					"visibility": "hidden",
+					"text": ":xliff:edit...",
+					"method": "ObjectMethods/authenticationMethod.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"02_prodURL.label2": {
+					"type": "text",
+					"top": 70,
+					"left": 487,
+					"width": 344,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:authenticationMethod"
+				},
+				"webSettings": {
+					"type": "button",
+					"top": 34,
+					"left": 487,
+					"width": 130,
+					"height": 20,
+					"text": ":xliff:edit...",
+					"method": "ObjectMethods/webSettings.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"02_prodURL.label3": {
+					"type": "text",
+					"top": 5,
+					"left": 487,
+					"width": 344,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:webServerSettings"
+				},
+				"prodURL.alert": {
+					"type": "button",
+					"top": 34,
+					"left": 364,
+					"width": 20,
+					"height": 20,
+					"style": "custom",
+					"method": "ObjectMethods/prodURL.alert.4dm",
+					"events": [
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				}
+			}
+		}
+	]
+}

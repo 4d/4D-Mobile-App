@@ -1,0 +1,205 @@
+{
+	"destination": "detailScreen",
+	"windowSizingX": "fixed",
+	"windowMinHeight": 200,
+	"width": 450,
+	"height": 430,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onTimer"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "842pt",
+		"paperHeight": "595pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"_background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 450,
+					"height": 383,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"fill": "automatic",
+					"stroke": "transparent"
+				},
+				"List Box": {
+					"type": "listbox",
+					"top": 36,
+					"left": 0,
+					"width": 450,
+					"height": 347,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"resizingMode": "legacy",
+					"listboxType": "collection",
+					"hideFocusRing": true,
+					"movableRows": false,
+					"rowHeight": "20px",
+					"showHeaders": false,
+					"dataSource": "Form:C1466.fields",
+					"currentItemSource": "Form:C1466.current",
+					"currentItemPositionSource": "Form:C1466.position",
+					"selectedItemsSource": "Form:C1466.selected",
+					"selectionMode": "none",
+					"scrollbarHorizontal": "hidden",
+					"scrollbarVertical": "automatic",
+					"horizontalLineStroke": "transparent",
+					"verticalLineStroke": "transparent",
+					"borderStyle": "none",
+					"events": [
+						"onClick",
+						"onDataChange",
+						"onSelectionChange",
+						"onHeaderClick"
+					],
+					"columns": [
+						{
+							"name": "_airbag",
+							"width": 10,
+							"minWidth": 10,
+							"maxWidth": 10,
+							"resizable": false,
+							"enterable": false,
+							"truncateMode": "none",
+							"events": [
+								"onClick",
+								"onDataChange"
+							],
+							"header": {
+								"name": "Header4",
+								"text": "Header4"
+							},
+							"footer": {
+								"name": "Footer4",
+								"timeFormat": "hh_mm_ss"
+							}
+						},
+						{
+							"name": "published",
+							"dataSource": "This:C1470.published",
+							"dataSourceTypeHint": "boolean",
+							"width": 30,
+							"minWidth": 30,
+							"maxWidth": 30,
+							"resizable": false,
+							"controlType": "checkbox",
+							"header": {
+								"name": "Header3",
+								"text": "Header3"
+							},
+							"footer": {
+								"name": "Footer3",
+								"timeFormat": "hh_mm_ss"
+							}
+						},
+						{
+							"name": "icon",
+							"dataSource": "This:C1470.icon",
+							"dataSourceTypeHint": "picture",
+							"width": 25,
+							"minWidth": 25,
+							"maxWidth": 25,
+							"resizable": false,
+							"enterable": false,
+							"pictureFormat": "truncatedCenter",
+							"header": {
+								"name": "Header2",
+								"text": "Header2"
+							},
+							"footer": {
+								"name": "Footer2",
+								"timeFormat": "hh_mm_ss"
+							}
+						},
+						{
+							"name": "name",
+							"dataSource": "This:C1470.name",
+							"width": 433,
+							"minWidth": 10,
+							"maxWidth": 32000,
+							"resizable": false,
+							"enterable": false,
+							"events": [
+								"onClick"
+							],
+							"header": {
+								"name": "Header1",
+								"text": "Header3"
+							},
+							"footer": {
+								"name": "Footer1",
+								"timeFormat": "hh_mm_ss"
+							}
+						}
+					]
+				},
+				"cancel": {
+					"type": "button",
+					"top": 398,
+					"left": 221,
+					"width": 104,
+					"height": 22,
+					"sizingX": "move",
+					"sizingY": "move",
+					"action": "cancel",
+					"text": ":xliff:cancel",
+					"method": "ObjectMethods/cancel.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"ok": {
+					"type": "button",
+					"top": 398,
+					"left": 345,
+					"width": 85,
+					"height": 22,
+					"sizingX": "move",
+					"sizingY": "move",
+					"action": "accept",
+					"text": ":xliff:ok",
+					"defaultButton": true,
+					"events": [
+						"onClick"
+					]
+				},
+				"_bottomLine": {
+					"type": "line",
+					"top": 383,
+					"left": 0,
+					"width": 450,
+					"sizingX": "grow",
+					"sizingY": "move",
+					"stroke": "#DCDCDC"
+				},
+				"title": {
+					"type": "text",
+					"top": 9,
+					"left": 14,
+					"width": 358,
+					"height": 17,
+					"text": ":xliff:relatedTable"
+				},
+				"_topLine": {
+					"type": "line",
+					"top": 34,
+					"left": 0,
+					"width": 450,
+					"sizingX": "grow",
+					"stroke": "#DCDCDC"
+				}
+			}
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "detailForm",
+	"type": "tablesForms",
+	"default": "Simple List",
+	"userChoiceTag": "detail",
+	"mandatory": [
+		"template.svg",
+		"manifest.json",
+		"Sources/Forms/Tables/___TABLE___/___TABLE___DetailsForm.storyboard",
+		"Sources/Forms/Tables/___TABLE___/___TABLE___DetailsForm.swift"
+	],
+  "storyboard": "Sources/Forms/Tables/___TABLE___/___TABLE___DetailsForm.storyboard"
+}

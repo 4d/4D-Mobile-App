@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+
+  <file datatype="plaintext" original="Undefined" source-language="en" target-language="es">
+    <header>
+      <prop-group name="Xliff-Editor.4dbase">
+        <prop-group prop-type="version">2.0</prop-group>
+        <prop prop-type="version">2.0</prop>
+      </prop-group>
+    </header>
+    <body>
+      <group resname="labels">
+        <trans-unit id="iT11dZ9uZSlQXmCrvzlmng" resname="fieldToUseForSearch">
+          <source>Field to use for search</source>
+          <target>Campo a utilizar para buscar</target>
+        </trans-unit>
+        <trans-unit id="TbslRq9u1ubfYE7ZCk4AWQ" resname="fieldToUseAsSection">
+          <source>Field to use as Section</source>
+          <target>Campo a utilizar como sección</target>
+        </trans-unit>
+        <trans-unit id="Tg65Q/ga3rtoychWKq3UXg" resname="titleField">
+          <source>Title</source>
+          <target>Título</target>
+        </trans-unit>
+        <trans-unit id="L0sD3CuDNnpBzII2t0gaQw" resname="subtitleField">
+          <source>Subtitle</source>
+          <target>Subtítulo</target>
+        </trans-unit>
+        <trans-unit id="OSeRHaXQ2+nw0GHeBBaezA" resname="pictureField">
+          <source>Picture</source>
+          <target>Imagen</target>
+        </trans-unit>
+        <trans-unit id="ntGkv49lzxZ8InKeLNAKKQ" resname="field[n]">
+          <source>Field </source>
+          <target>Campo </target>
+        </trans-unit>
+        <trans-unit id="GblGUuEoS4ziaHmNDHrXbg" resname="picture">
+          <source>Picture</source>
+          <target>Imagen</target>
+        </trans-unit>
+        <trans-unit id="tyCJXX5TntR4a6fmFrMV6Q" resname="footer">
+          <source>Footer Field</source>
+          <target>Pie de página</target>
+        </trans-unit>
+        <trans-unit id="3gVVdJ+c0YXEeaKyJDubYQ" resname="multiCriteriaSearch">
+          <source>Multi-criteria Search</source>
+          <target>Búsqueda multicriterio</target>
+        </trans-unit>
+      </group>
+      <group resname="tips">
+        <trans-unit id="bAuAn/0OUWvB0AEQk0sq3g" resname="dropHereAFieldThatMustBe_">
+          <source>Drop here a field that must be of type </source>
+          <target>Suelte aquí un campo que debe ser de tipo </target>
+          <note>Warning: ends with a space</note>
+        </trans-unit>
+        <trans-unit id="b7pThvBGwVWQmH9j5YdctA" resname="_or_">
+          <source> or </source>
+          <target> o </target>
+          <note>Warning: starts and ends with a space</note>
+        </trans-unit>
+        <trans-unit id="HFJ9nxSjtEjqXJNue0V+8Q" resname="dropHereAFieldWhoseTypeMustNotBe_">
+          <source>Drop here a field that must not be of type </source>
+          <target>Suelte aquí un campo que no debe ser del tipo </target>
+          <note>Warning: ends with a space</note>
+        </trans-unit>
+        <trans-unit id="jPV5pOsnrXVUTB/Gpl86Ug" resname="thisFieldIsOptional">
+          <source>This field is not required</source>
+          <target>Este campo no se requiere</target>
+        </trans-unit>
+        <trans-unit id="G4184Cl2S3W1jaHXQ1cBBw" resname="searchBoxTips">
+          <source>If you drop a field here, a search box will be displayed at the top of the page.</source>
+          <target>Si suelta un campo aquí, se mostrará un cuadro de búsqueda en la parte superior de la página.</target>
+        </trans-unit>
+        <trans-unit id="aHtzeChDu8oM5naWPp+PWg" resname="sectionTips">
+          <source>If you fill in this area, the field value will be used to arrange the list.</source>
+          <target>Si rellena este campo, se utilizará el valor del campo para organizar la lista.</target>
+        </trans-unit>
+        <trans-unit id="+6uYSXBWJxcPZVLfsNBKLA" resname="theFieldTypeMustBe_">
+          <source>The field type must be </source>
+          <target>El tipo de campo debe ser </target>
+          <note>Warning: ends with a space</note>
+        </trans-unit>
+        <trans-unit id="Rj8Kkm+iDTq+XP9PJJ1oEg" resname="theFieldTypeMustNotBe_">
+          <source>The field type must not be </source>
+          <target>El tipo de campo no debe ser </target>
+          <note>Warning: ends with a space</note>
+        </trans-unit>
+        <trans-unit id="naDy7QgwrE2dX2XLBRIK1w" resname="thisFieldAcceptsSeveralValues">
+          <source>This field accepts several values</source>
+          <target>Este campo acepta valores varios</target>
+        </trans-unit>
+        <trans-unit id="CW+PLeoDB+QPfvMbmTP4BA" resname="dropHereAFieldOfAnyType">
+          <source>Drop here a field of any type</source>
+          <target>Solta aquí un campo de cualquier tipo</target>
+        </trans-unit>
+      </group>
+      <group resname="menus">
+        <trans-unit id="Cn9Te3NkzXqDxmOm9x3JSA" resname="removeAllFields">
+          <source>Remove all fields</source>
+          <target>Eliminar todos los campos</target>
+        </trans-unit>
+        <trans-unit id="PFT6lKs7YZufen25AsYnMQ" resname="removeField">
+          <source>Remove "{field}"</source>
+          <target>Quitar "{field}"</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+
+</xliff>

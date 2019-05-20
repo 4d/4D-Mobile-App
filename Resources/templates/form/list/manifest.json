@@ -1,0 +1,13 @@
+{
+	"name": "listForm",
+	"type": "tablesForms",
+	"default": "Simple Table",
+	"userChoiceTag": "list",
+	"mandatory": [
+		"template.svg",
+		"manifest.json",
+		"Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.storyboard",
+		"Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.swift"
+	],
+  "storyboard": "Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.storyboard"
+}

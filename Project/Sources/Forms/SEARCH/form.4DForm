@@ -1,0 +1,107 @@
+{
+	"destination": "detailScreen",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerBreak": 21,
+	"markerFooter": 21,
+	"events": [
+		"onLoad",
+		"onBoundVariableChange"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"button": {
+					"type": "button",
+					"top": 0,
+					"left": 0,
+					"width": 193,
+					"height": 21,
+					"sizingX": "grow",
+					"display": false,
+					"method": "ObjectMethods/button.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"border": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 193,
+					"height": 21,
+					"sizingX": "grow",
+					"fill": "transparent",
+					"stroke": "#CCCCCC",
+					"borderRadius": 5
+				},
+				"box": {
+					"type": "input",
+					"top": 2,
+					"left": 85,
+					"width": 105,
+					"height": 17,
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"dragging": "none",
+					"method": "ObjectMethods/box.4dm",
+					"events": [
+						"onLoad",
+						"onLosingFocus",
+						"onGettingFocus",
+						"onUnload",
+						"onAfterEdit"
+					]
+				},
+				"glass": {
+					"type": "picture",
+					"top": 3,
+					"left": 70,
+					"width": 14,
+					"height": 14,
+					"pictureFormat": "truncatedTopLeft",
+					"picture": "/RESOURCES/Images/glass.png"
+				},
+				"close": {
+					"type": "button",
+					"top": 6,
+					"left": 182,
+					"width": 8,
+					"height": 8,
+					"visibility": "hidden",
+					"sizingX": "move",
+					"icon": "/RESOURCES/images/close.png",
+					"style": "custom",
+					"method": "ObjectMethods/close.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"placeholder": {
+					"type": "input",
+					"top": 37,
+					"left": 0,
+					"width": 90,
+					"height": 17,
+					"visibility": "hidden",
+					"stroke": "#FF0000",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "dotted",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"dragging": "none"
+				}
+			}
+		}
+	]
+}

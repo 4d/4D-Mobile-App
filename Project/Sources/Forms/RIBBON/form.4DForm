@@ -1,0 +1,415 @@
+{
+	"destination": "detailScreen",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer",
+		"onBoundVariableChange",
+		"onPageChange"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "842pt",
+		"paperHeight": "595pt"
+	},
+	"pages": [
+		{
+			"objects": {
+				"background": {
+					"type": "rectangle",
+					"top": 40,
+					"left": 0,
+					"width": 970,
+					"height": 99,
+					"sizingX": "grow",
+					"stroke": "transparent"
+				},
+				"top": {
+					"type": "line",
+					"top": 39,
+					"left": 0,
+					"width": 970,
+					"sizingX": "grow",
+					"stroke": "#DCDCDC"
+				},
+				"toolbar.background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 39,
+					"sizingX": "grow",
+					"fill": "#00A0E8",
+					"stroke": "transparent"
+				},
+				"tab": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 100,
+					"height": 41,
+					"stroke": "transparent"
+				},
+				"bottom": {
+					"type": "line",
+					"top": 139,
+					"left": 0,
+					"width": 970,
+					"sizingX": "grow",
+					"stroke": "#DCDCDC"
+				},
+				"section": {
+					"type": "button",
+					"top": 0,
+					"left": 0,
+					"width": 100,
+					"height": 40,
+					"fontWeight": "bold",
+					"text": ":xliff:sections",
+					"style": "custom",
+					"method": "ObjectMethods/section.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"build": {
+					"type": "button",
+					"top": 0,
+					"left": 101,
+					"width": 100,
+					"height": 40,
+					"fontWeight": "bold",
+					"stroke": "#FFFFFF",
+					"text": ":xliff:build",
+					"style": "custom",
+					"method": "ObjectMethods/build.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"Line": {
+					"type": "line",
+					"top": 0,
+					"left": 16,
+					"height": 139,
+					"visibility": "hidden",
+					"stroke": "#FF6347",
+					"strokeDashArray": "1 1"
+				},
+				"swith.background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 948,
+					"width": 22,
+					"height": 40,
+					"sizingX": "move",
+					"stroke": "transparent"
+				},
+				"switch.button": {
+					"type": "button",
+					"top": 0,
+					"left": 948,
+					"width": 22,
+					"height": 40,
+					"sizingX": "move",
+					"icon": "/RESOURCES/images/toolbar/reduce.png",
+					"style": "custom",
+					"method": "ObjectMethods/switch.button.4dm",
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		},
+		{
+			"objects": {
+				"101": {
+					"type": "radio",
+					"top": 53,
+					"left": 16,
+					"width": 91,
+					"height": 72,
+					"stroke": "#696969",
+					"text": ":xliff:page_general",
+					"icon": "/RESOURCES/images/toolbar/general-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"radioGroup": "Group15",
+					"method": "ObjectMethods/101.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"102": {
+					"type": "radio",
+					"top": 53,
+					"left": 114,
+					"width": 91,
+					"height": 72,
+					"stroke": "#696969",
+					"text": ":xliff:page_structure",
+					"icon": "/RESOURCES/images/toolbar/structure-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"radioGroup": "Group15",
+					"method": "ObjectMethods/102.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"104": {
+					"type": "radio",
+					"top": 53,
+					"left": 332,
+					"width": 91,
+					"height": 72,
+					"stroke": "#696969",
+					"text": ":xliff:page_main",
+					"icon": "/RESOURCES/images/toolbar/main-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"radioGroup": "Group15",
+					"method": "ObjectMethods/104.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"105": {
+					"type": "radio",
+					"top": 53,
+					"left": 431,
+					"width": 91,
+					"height": 72,
+					"stroke": "#696969",
+					"text": ":xliff:page_views",
+					"icon": "/RESOURCES/images/toolbar/views-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"radioGroup": "Group15",
+					"method": "ObjectMethods/105.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"103": {
+					"type": "radio",
+					"top": 53,
+					"left": 213,
+					"width": 111,
+					"height": 72,
+					"stroke": "#696969",
+					"text": ":xliff:page_properties",
+					"icon": "/RESOURCES/images/toolbar/properties-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"radioGroup": "Group15",
+					"method": "ObjectMethods/103.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"106": {
+					"type": "radio",
+					"top": 53,
+					"left": 530,
+					"width": 91,
+					"height": 72,
+					"stroke": "#696969",
+					"text": ":xliff:page_deployment",
+					"icon": "/RESOURCES/images/toolbar/deployment-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"radioGroup": "Group15",
+					"method": "ObjectMethods/106.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"107": {
+					"type": "radio",
+					"top": 53,
+					"left": 629,
+					"width": 91,
+					"height": 72,
+					"stroke": "#696969",
+					"text": ":xliff:page_data",
+					"icon": "/RESOURCES/images/toolbar/Data-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"radioGroup": "Group15",
+					"method": "ObjectMethods/107.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"108": {
+					"type": "radio",
+					"top": 53,
+					"left": 726,
+					"width": 91,
+					"height": 72,
+					"visibility": "hidden",
+					"stroke": "#696969",
+					"text": ":xliff:page_actions",
+					"icon": "/RESOURCES/images/toolbar/actions-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"radioGroup": "Group15",
+					"method": "ObjectMethods/108.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				}
+			}
+		},
+		{
+			"objects": {
+				"151": {
+					"type": "button",
+					"top": 53,
+					"left": 16,
+					"width": 111,
+					"height": 72,
+					"tooltip": ":xliff:bRunTip",
+					"stroke": "#696969",
+					"text": ":xliff:mnuBuild",
+					"icon": "/RESOURCES/images/toolbar/generate-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"method": "ObjectMethods/151.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					]
+				},
+				"152": {
+					"type": "button",
+					"top": 53,
+					"left": 252,
+					"width": 111,
+					"height": 72,
+					"stroke": "#696969",
+					"text": ":xliff:project",
+					"icon": "/RESOURCES/images/toolbar/project-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"method": "ObjectMethods/152.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave",
+						"onLongClick"
+					]
+				},
+				"201": {
+					"type": "button",
+					"top": 53,
+					"left": 134,
+					"width": 111,
+					"height": 72,
+					"tooltip": ":xliff:deviceList",
+					"stroke": "#696969",
+					"text": ":xliff:unknown",
+					"icon": "/RESOURCES/images/toolbar/test-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"method": "ObjectMethods/201.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave",
+						"onLongClick"
+					]
+				},
+				"152.PopUp": {
+					"type": "button",
+					"top": 105,
+					"left": 350,
+					"width": 11,
+					"height": 16,
+					"popupPlacement": "linked",
+					"textPlacement": "right",
+					"style": "custom",
+					"method": "ObjectMethods/152.PopUp.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"153": {
+					"type": "button",
+					"top": 53,
+					"left": 370,
+					"width": 111,
+					"height": 72,
+					"tooltip": ":xliff:bInstallTip",
+					"stroke": "#696969",
+					"text": ":xliff:install",
+					"icon": "/RESOURCES/images/toolbar/install-white-32.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"method": "ObjectMethods/153.4dm",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave",
+						"onLongClick"
+					]
+				},
+				"201.PopUp": {
+					"type": "button",
+					"top": 105,
+					"left": 231,
+					"width": 11,
+					"height": 16,
+					"popupPlacement": "linked",
+					"textPlacement": "right",
+					"style": "custom",
+					"method": "ObjectMethods/201.PopUp.4dm",
+					"events": [
+						"onClick"
+					]
+				}
+			}
+		}
+	]
+}

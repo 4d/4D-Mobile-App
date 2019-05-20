@@ -1,0 +1,67 @@
+{
+	"destination": "detailScreen",
+	"rightMargin": 20,
+	"bottomMargin": 20,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer"
+	],
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"Rectangle": {
+					"type": "rectangle",
+					"top": 20,
+					"left": 19,
+					"width": 211,
+					"height": 91,
+					"stroke": "#808080",
+					"borderRadius": 8
+				},
+				"Text": {
+					"type": "text",
+					"top": 38,
+					"left": 40,
+					"width": 176,
+					"height": 22,
+					"stroke": "#000000",
+					"fontFamily": ".SF NS Text",
+					"fontSize": 18,
+					"text": "Hello World !"
+				},
+				"Check Box": {
+					"type": "checkbox",
+					"top": 74,
+					"left": 40,
+					"width": 169,
+					"height": 17,
+					"text": "I'm happy to see that",
+					"stroke": "#000000",
+					"events": [
+						"onClick"
+					]
+				},
+				"Picture3": {
+					"type": "picture",
+					"top": 49,
+					"left": 3,
+					"width": 17,
+					"height": 33,
+					"pictureFormat": "scaled",
+					"picture": "Images/Picture3.png"
+				}
+			}
+		}
+	]
+}

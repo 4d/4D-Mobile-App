@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Ogb-fa-BrX">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue-Medium</string>
+        </array>
+        <array key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--List Form-->
+        <scene sceneID="skp-Bg-beV">
+            <objects>
+                <tableViewController id="Dxc-Bl-At2" userLabel="List Form" customClass="___TABLE___ListForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="400" sectionHeaderHeight="28" sectionFooterHeight="28" id="Re1-1g-DVP" customClass="AnimatableTableView" customModule="IBAnimatable">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.9370439403553299" green="0.9370439403553299" blue="0.9370439403553299" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="___TABLE___" rowHeight="400" id="LNn-VU-5br" customClass="AnimatableTableViewCell" customModule="IBAnimatable">
+                                <rect key="frame" x="0.0" y="28" width="375" height="400"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LNn-VU-5br" id="bUw-MO-Pjd">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RZb-24-oJb" customClass="AnimatableImageView" customModule="IBAnimatable">
+                                            <rect key="frame" x="20" y="10" width="335" height="380"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_1___" value="___FIELD_1_BINDING_TYPE___"/>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <integer key="value" value="12"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </imageView>
+                                        <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tbc-j2-aCT" customClass="AnimatableView" customModule="IBAnimatable">
+                                            <rect key="frame" x="20" y="10" width="335" height="380"/>
+                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <integer key="value" value="12"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </view>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_2_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P7g-KH-GWM">
+                                            <rect key="frame" x="42" y="23" width="290" height="26.5"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="22"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_2___" value="___FIELD_2_BINDING_TYPE___"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_3_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L5u-VJ-B9W">
+                                            <rect key="frame" x="42" y="55.5" width="290" height="26"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="22"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_3___" value="___FIELD_3_BINDING_TYPE___"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="Tbc-j2-aCT" secondAttribute="bottom" constant="10" id="0zW-mM-Tf3"/>
+                                        <constraint firstItem="L5u-VJ-B9W" firstAttribute="leading" secondItem="bUw-MO-Pjd" secondAttribute="leadingMargin" constant="26" id="15F-yY-bpu"/>
+                                        <constraint firstItem="P7g-KH-GWM" firstAttribute="top" secondItem="bUw-MO-Pjd" secondAttribute="topMargin" constant="12" id="5xy-3j-A0L"/>
+                                        <constraint firstItem="Tbc-j2-aCT" firstAttribute="leading" secondItem="bUw-MO-Pjd" secondAttribute="leading" constant="20" id="7gR-RK-cSo"/>
+                                        <constraint firstAttribute="trailing" secondItem="RZb-24-oJb" secondAttribute="trailing" constant="20" id="Bjg-hL-8hl"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="P7g-KH-GWM" secondAttribute="trailing" constant="27" id="FF3-sO-Hw9"/>
+                                        <constraint firstItem="L5u-VJ-B9W" firstAttribute="top" secondItem="P7g-KH-GWM" secondAttribute="bottom" constant="6" id="JFA-qI-EtT"/>
+                                        <constraint firstItem="RZb-24-oJb" firstAttribute="leading" secondItem="bUw-MO-Pjd" secondAttribute="leading" constant="20" id="OK0-zM-Fqk"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="L5u-VJ-B9W" secondAttribute="trailing" constant="27" id="Vxf-FG-4LL"/>
+                                        <constraint firstAttribute="bottom" secondItem="RZb-24-oJb" secondAttribute="bottom" constant="10" id="Whg-Nd-eps"/>
+                                        <constraint firstItem="RZb-24-oJb" firstAttribute="top" secondItem="bUw-MO-Pjd" secondAttribute="top" constant="10" id="cBc-EN-kN1"/>
+                                        <constraint firstItem="P7g-KH-GWM" firstAttribute="leading" secondItem="bUw-MO-Pjd" secondAttribute="leadingMargin" constant="26" id="fIP-Ue-xVU"/>
+                                        <constraint firstItem="Tbc-j2-aCT" firstAttribute="top" secondItem="bUw-MO-Pjd" secondAttribute="top" constant="10" id="iDf-ZV-Dxr"/>
+                                        <constraint firstAttribute="trailing" secondItem="Tbc-j2-aCT" secondAttribute="trailing" constant="20" id="r5P-wV-tmg"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="fillColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="actions" value="___ENTITY_ACTIONS___"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="touch.zoomScale">
+                                        <real key="value" value="0.95999999999999996"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="TmP-Gk-7ej" kind="showDetail" identifier="showDetails" customClass="___LIST_TO_DETAIL_TRANSITION___" customModule="IBAnimatable" id="lRt-3I-ZEi"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Dxc-Bl-At2" id="Nbk-b7-Ogd"/>
+                            <outlet property="delegate" destination="Dxc-Bl-At2" id="k5f-vV-EBw"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="___TABLE_LABEL___" id="Md6-BR-hjc">
+                        <barButtonItem key="leftBarButtonItem" image="previous" id="oNP-za-8R3" userLabel="PreviousPage Button Item">
+                            <color key="tintColor" name="ForegroundColor"/>
+                            <connections>
+                                <action selector="previousPage:" destination="Dxc-Bl-At2" id="1zk-Aq-3yo"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="searchableField" value="___SEARCHABLE_FIELD___"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="sortField" value="___SORT_FIELD___"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="showSectionBar" value="NO"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="actions" value="___TABLE_ACTIONS___"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="searchBar" destination="eqo-z7-dF9" id="ZJt-km-6cn"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jfs-ds-X4z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchBar contentMode="redraw" id="eqo-z7-dF9">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <textInputTraits key="textInputTraits"/>
+                </searchBar>
+            </objects>
+            <point key="canvasLocation" x="513.04347826086962" y="111.68478260869566"/>
+        </scene>
+        <!--___TABLE___DetailsForm-->
+        <scene sceneID="pzT-Ts-eNA">
+            <objects>
+                <viewControllerPlaceholder storyboardName="___TABLE___DetailsForm" id="TmP-Gk-7ej" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZA2-Ia-mDc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1185" y="112"/>
+        </scene>
+        <!--___TABLE_SHORT_LABEL___-->
+        <scene sceneID="43G-ax-Y26">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ogb-fa-BrX" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="___TABLE_SHORT_LABEL___" image="___TABLE_ICON___" selectedImage="___TABLE_ICON___" id="65z-ho-M8H"/>
+                    <toolbarItems/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="06B-nF-C5E">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" name="BackgroundColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" name="ForegroundColor"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Dxc-Bl-At2" kind="relationship" relationship="rootViewController" id="h9W-QC-Suo"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d9P-ml-O9s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-361" y="112"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="___TABLE_ICON___" width="25" height="25"/>
+        <image name="previous" width="22" height="22"/>
+        <namedColor name="BackgroundColor">
+            <color red="0.3843137254901961" green="0.77254901960784317" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ForegroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </namedColor>
+    </resources>
+</document>

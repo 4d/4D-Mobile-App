@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4eh-02-poz">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--___TABLE___ListForm-->
+        <scene sceneID="TAG-SN-001">
+            <objects>
+                <viewControllerPlaceholder storyboardName="___TABLE___ListForm" id="TAG-ID-SEG" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TAG-SN-002" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="250" y="-193"/>
+        </scene>
+        <!--SettingsForm-->
+        <scene sceneID="ntA-3V-FRb">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SettingsForm" id="Jpt-7r-ah6" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e9h-pu-pLc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="213" y="-472"/>
+        </scene>
+        <!--___NAVIGATION_TITLE___-->
+        <scene sceneID="aBr-l2-r47">
+            <objects>
+                <tableViewController id="BMX-mI-pDc" customClass="MainNavigation" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="___NAVIGATION_TABLE_ROW_HEIGHT___" sectionHeaderHeight="28" sectionFooterHeight="28" id="TaI-LT-l6C">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <sections>
+                            <tableViewSection id="heq-5j-jgf">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="___NAVIGATION_TABLE_ROW_HEIGHT___" id="TAG-CL-001">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="___NAVIGATION_TABLE_ROW_HEIGHT___"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TAG-CL-001" id="TAG-CL-002">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="___NAVIGATION_TABLE_ROW_HEIGHT___"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___TABLE_LABEL___" textAlignment="___TABLE_LABEL_ALIGNMENT___" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-CL-003" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="66" width="343" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" name="BackgroundColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="image" keyPath="image" value="___TABLE_ICON___"/>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="imagePosition" value="left"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="imageContextTemplate" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="imageAspectFit" value="NO"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="imagePadding">
+                                                            <integer key="value" value="0"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="TAG-CL-003" firstAttribute="centerY" secondItem="TAG-CL-002" secondAttribute="centerY" id="TAG-CL-004"/>
+                                                <constraint firstItem="TAG-CL-003" firstAttribute="centerX" secondItem="TAG-CL-002" secondAttribute="centerX" id="TAG-CL-005"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="TAG-CL-003" secondAttribute="trailing" constant="8" id="TAG-CL-007"/>
+                                                <constraint firstItem="TAG-CL-003" firstAttribute="leading" secondItem="TAG-CL-002" secondAttribute="leadingMargin" constant="8" id="TAG-CL-008"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="TAG-ID-SEG" kind="show" customClass="___NAVIGATION_TRANSITION___" customModule="IBAnimatable" id="TAG-CL-006"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="BMX-mI-pDc" id="Djc-ib-M4v"/>
+                            <outlet property="delegate" destination="BMX-mI-pDc" id="5Aw-jR-DgD"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="___NAVIGATION_TITLE___" id="4Hp-Pp-pV1">
+                        <barButtonItem key="rightBarButtonItem" image="settings" id="dtt-NE-tQK">
+                            <color key="tintColor" name="ForegroundColor"/>
+                            <connections>
+                                <segue destination="Jpt-7r-ah6" kind="showDetail" id="cUY-Ib-sQn"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WTu-bY-2vF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-364" y="-214"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="3uw-1m-kMt">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4eh-02-poz" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Vvc-vU-Z5z">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" name="BackgroundColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" name="ForegroundColor"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BMX-mI-pDc" kind="relationship" relationship="rootViewController" id="tKG-vf-01y"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fou-GW-KPG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1151" y="-213"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="___TABLE_ICON___" width="32" height="32"/>
+        <image name="settings" width="22" height="22"/>
+        <namedColor name="BackgroundColor">
+            <color red="0.74117647058823533" green="0.83529411764705885" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ForegroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </namedColor>
+    </resources>
+</document>
