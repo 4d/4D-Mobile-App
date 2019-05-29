@@ -13,7 +13,7 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "method.4dm",
+	"method": "ACTIONS_PARAMS_Handler ",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -90,10 +90,10 @@
 				},
 				"01_Parameters": {
 					"type": "listbox",
-					"top": 7,
+					"top": 6,
 					"left": 17,
-					"width": 448,
-					"height": 257,
+					"width": 449,
+					"height": 258,
 					"visibility": "hidden",
 					"resizingMode": "legacy",
 					"listboxType": "collection",
@@ -113,13 +113,15 @@
 					"rowFillSource": "ACTIONS_PARAMS_UI (\"background\").color",
 					"textAlign": "left",
 					"verticalAlign": "middle",
-					"method": "ObjectMethods/01_Parameters.4dm",
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onDisplayDetail",
 						"onLosingFocus",
 						"onGettingFocus",
 						"onSelectionChange"
 					],
+					"focusable": true,
+					"borderStyle": "none",
 					"columns": [
 						{
 							"name": "names",
@@ -160,7 +162,7 @@
 					"iconFrames": 4,
 					"popupPlacement": "separated",
 					"style": "bevel",
-					"method": "ObjectMethods/parameters.add.4dm",
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onClick",
 						"onAlternateClick"
@@ -176,7 +178,7 @@
 					"icon": "/RESOURCES/images/common/minus.png",
 					"iconFrames": 4,
 					"style": "bevel",
-					"method": "ObjectMethods/parameters.remove.4dm",
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					]
@@ -290,7 +292,7 @@
 					"icon": "/RESOURCES/images/common/down.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ObjectMethods/05_property_type.popup.4dm",
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					]
