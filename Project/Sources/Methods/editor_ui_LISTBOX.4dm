@@ -53,7 +53,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-  //If (Asserted(ui_listboxGetDataSource ($Txt_listbox)="arrays";"This method can't apply to a selection or collection listbox"))
+  // WARNING: This method can't apply to a selection or collection listbox
 
 OBJECT SET RGB COLORS:C628(*;$Txt_listbox;Foreground color:K23:1;$Lon_backgroundColor;$Lon_backgroundColor)
 
@@ -87,7 +87,6 @@ For ($Lon_i;1;LISTBOX Get number of rows:C915(*;$Txt_listbox);1)
 		
 	End if 
 End for 
-  //End if 
 
   // ----------------------------------------------------
   // Return

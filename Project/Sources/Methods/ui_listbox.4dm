@@ -144,12 +144,6 @@ Case of
 			This:C1470.name;Num:C11($Obj_params.property)))
 		
 		  //______________________________________________________
-	: ($Txt_action="datasource")
-		
-		$Obj_out:=New object:C1471(\
-			"datasource";ui_listboxGetDataSource (This:C1470.name))
-		
-		  //______________________________________________________
 	: ($Txt_action="popup")
 		
 		$Lon_left:=This:C1470.cellCoordinates.left

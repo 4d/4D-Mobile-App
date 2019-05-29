@@ -59,10 +59,10 @@
 				},
 				"01_fields": {
 					"type": "listbox",
-					"top": 29,
+					"top": 28,
 					"left": 17,
-					"width": 919,
-					"height": 288,
+					"width": 920,
+					"height": 289,
 					"visibility": "hidden",
 					"sizingY": "grow",
 					"resizingMode": "legacy",
@@ -333,5 +333,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

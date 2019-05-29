@@ -29,8 +29,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Txt_currentPage:=String:C10(Form:C1466.currentPage)
 	
 	  //$Lon_pageNumber:=6\
-				//+Num(Bool(featuresFlags._100174))\
-				//+Num(Bool(featuresFlags._103505))
+						//+Num(Bool(featuresFlags._100174))\
+						//+Num(Bool(featuresFlags._103505))
 	$Lon_pageNumber:=7\
 		+Num:C11(Bool:C1537(featuresFlags._103505))
 	
@@ -225,7 +225,7 @@ If (Length:C16($Txt_page)>0)
 			If (Bool:C1537(featuresFlags.actionWithParameters))
 				
 				$Obj_geometry.panels.push(New object:C1471(\
-					"title";".Action Parameters";\
+					"title";Get localized string:C991("page_action_params");\
 					"form";"ACTIONS_PARAMS"))
 				
 			End if 

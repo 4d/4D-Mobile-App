@@ -259,7 +259,6 @@ ui.listbox:=Formula:C1597(New object:C1471(\
 "getCell";Formula:C1597(ui_listbox ("cell"));\
 "getCellPosition";Formula:C1597(ui_listbox ("cellPosition"));\
 "getCellCoordinates";Formula:C1597(ui_listbox ("cellCoordinates"));\
-"getDatasource";Formula:C1597(ui_listbox ("datasource"));\
 "getScrollbar";Formula:C1597(ui_listbox ("scrollbar"));\
 "setScrollbar";Formula:C1597(OBJECT SET SCROLLBAR:C843(*;This:C1470.name;Num:C11($1);Num:C11($2)));\
 "getProperty";Formula:C1597(ui_listbox ("property";New object:C1471("property";$1)));\

@@ -68,10 +68,10 @@
 				},
 				"01_tables": {
 					"type": "listbox",
-					"top": 35,
+					"top": 34,
 					"left": 17,
-					"width": 449,
-					"height": 551,
+					"width": 450,
+					"height": 552,
 					"resizingMode": "legacy",
 					"hideFocusRing": true,
 					"sortable": false,
@@ -163,10 +163,10 @@
 				},
 				"02_fields": {
 					"type": "listbox",
-					"top": 35,
+					"top": 34,
 					"left": 489,
-					"width": 448,
-					"height": 551,
+					"width": 449,
+					"height": 552,
 					"resizingMode": "legacy",
 					"hideFocusRing": true,
 					"sortable": false,
@@ -349,5 +349,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

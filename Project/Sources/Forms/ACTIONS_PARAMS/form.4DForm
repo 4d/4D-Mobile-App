@@ -3,7 +3,7 @@
 	"memorizeGeometry": true,
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 370,
+	"height": 310,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -32,7 +32,7 @@
 					"sizingX": "grow",
 					"stroke": "#808080",
 					"textAlign": "left",
-					"text": ".Select an action to display its parameters"
+					"text": ":xliff:selectAnActionToDisplayItsParameters"
 				}
 			}
 		},
@@ -61,7 +61,7 @@
 					"top": 5,
 					"left": 16,
 					"width": 451,
-					"height": 320,
+					"height": 260,
 					"visibility": "hidden",
 					"fill": "transparent",
 					"stroke": "#AAAAAA"
@@ -93,7 +93,7 @@
 					"top": 7,
 					"left": 17,
 					"width": 448,
-					"height": 317,
+					"height": 257,
 					"visibility": "hidden",
 					"resizingMode": "legacy",
 					"listboxType": "collection",
@@ -151,7 +151,7 @@
 				},
 				"parameters.add": {
 					"type": "button",
-					"top": 331,
+					"top": 271,
 					"left": 16,
 					"width": 28,
 					"height": 28,
@@ -168,7 +168,7 @@
 				},
 				"parameters.remove": {
 					"type": "button",
-					"top": 331,
+					"top": 271,
 					"left": 43,
 					"width": 28,
 					"height": 28,
@@ -297,5 +297,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

@@ -78,10 +78,10 @@
 				},
 				"01_available": {
 					"type": "listbox",
-					"top": 28,
+					"top": 27,
 					"left": 17,
-					"width": 436,
-					"height": 311,
+					"width": 437,
+					"height": 312,
 					"resizingMode": "legacy",
 					"hideFocusRing": true,
 					"sortable": false,
@@ -168,10 +168,10 @@
 				},
 				"02_displayed": {
 					"type": "listbox",
-					"top": 28,
+					"top": 27,
 					"left": 501,
-					"width": 435,
-					"height": 311,
+					"width": 436,
+					"height": 312,
 					"resizingMode": "legacy",
 					"hideFocusRing": true,
 					"sortable": false,
@@ -395,5 +395,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

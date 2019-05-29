@@ -44,8 +44,8 @@ End if
 If (False:C215)
 	
 	  //______________________________________________________
-	C_TEXT:C284(ui_listboxGetDataSource ;$0)
-	C_TEXT:C284(ui_listboxGetDataSource ;$1)
+	  //C_TEXT(ui_listboxGetDataSource ;$0)
+	  //C_TEXT(ui_listboxGetDataSource ;$1)
 	
 	  //______________________________________________________
 	C_TEXT:C284(ui_listboxPopUp ;$0)

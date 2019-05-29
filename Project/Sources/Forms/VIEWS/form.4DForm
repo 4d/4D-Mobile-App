@@ -79,7 +79,9 @@
 					"left": 18,
 					"height": 110,
 					"visibility": "hidden",
-					"stroke": "#C0C0C0"
+					"stroke": "#C0C0C0",
+					"width": 0,
+					"startPoint": "topLeft"
 				},
 				"next.limit": {
 					"type": "line",
@@ -88,7 +90,9 @@
 					"height": 110,
 					"visibility": "hidden",
 					"sizingX": "move",
-					"stroke": "#C0C0C0"
+					"stroke": "#C0C0C0",
+					"width": 0,
+					"startPoint": "topLeft"
 				},
 				"noPublishedTable": {
 					"type": "button",
@@ -151,7 +155,9 @@
 					"left": 19,
 					"width": 921,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC"
+					"stroke": "#DCDCDC",
+					"height": 0,
+					"startPoint": "topLeft"
 				},
 				"tab.selector": {
 					"type": "rectangle",
@@ -221,10 +227,10 @@
 				},
 				"01_fields": {
 					"type": "listbox",
-					"top": 185,
+					"top": 184,
 					"left": 19,
-					"width": 438,
-					"height": 465,
+					"width": 439,
+					"height": 466,
 					"visibility": "hidden",
 					"sizingY": "grow",
 					"resizingMode": "legacy",
@@ -377,9 +383,15 @@
 					"left": 19,
 					"width": 921,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC"
+					"stroke": "#DCDCDC",
+					"height": 0,
+					"startPoint": "topLeft"
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }
