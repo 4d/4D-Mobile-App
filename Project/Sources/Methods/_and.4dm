@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-Boolean := ***_and*** ( Param_1 ; … ; N )
- -> Param_1 ; … ; N (Object)
-________________________________________________________
-
-*/
 C_BOOLEAN:C305($0)
 C_OBJECT:C1216(${1})
 

@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***panel_OPEN*** ( index )
- -> index (Long Integer)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_OPEN
   // Database: 4D Mobile Express

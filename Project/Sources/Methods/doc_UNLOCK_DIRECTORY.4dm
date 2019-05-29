@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***doc_UNLOCK_DIRECTORY*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_UNLOCK_DIRECTORY
   // Database: 4D Mobile Express

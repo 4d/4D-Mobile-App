@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***ui_BEST_SIZE*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_BEST_SIZE
   // Database: 4D Mobile App

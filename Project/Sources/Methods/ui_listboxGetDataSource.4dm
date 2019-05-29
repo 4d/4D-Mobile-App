@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-dataSource := ***ui_getListboxDataSource*** ( name )
- -> name (Text) -  listbox widget name
- <- dataSource (Text) -  "arrays" | "currentSelection" | "nammedSelection" | "collection" | blank (widget not found)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_listboxGetDataSource
   // Database: 4D Mobile App

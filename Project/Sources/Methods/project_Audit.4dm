@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-audit := ***project_Audit*** ( in )
- -> in (Object)
- <- audit (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_Audit
   // Database: 4D Mobile App

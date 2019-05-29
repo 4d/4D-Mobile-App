@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***err_PUSH*** ( container ; message ; type )
- -> container (Object)
- -> message (Text)
- -> type (Long Integer) -  errors by default
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : err_PUSH
   // Database: 4D Mobile App

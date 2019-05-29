@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-out := ***publishedTableList*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : publishedTableList
   // Database: 4D Mobile App

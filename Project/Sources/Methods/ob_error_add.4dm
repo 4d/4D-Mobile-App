@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-***ob_error_add*** ( out ; message )
- -> out (Object)
- -> message (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ob_error_add
   // Database: 4D Mobile App

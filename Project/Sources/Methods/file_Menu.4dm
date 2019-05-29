@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***file_Menu*** ( bar )
- -> bar (Text)
-________________________________________________________
-
-*/
 C_TEXT:C284($1)
 
 C_TEXT:C284($Mnu_bar;$Mnu_file;$Mnu_project)

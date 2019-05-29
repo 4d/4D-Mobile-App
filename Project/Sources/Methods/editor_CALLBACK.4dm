@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***editor_CALLBACK*** ( selector ; in )
- -> selector (Text)
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_CALLBACK
   // Database: 4D Mobile Express

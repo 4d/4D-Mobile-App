@@ -1,9 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Long Integer := ***SOURCE_OBJECTS_HANDLER***
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : DATA_OBJECTS_HANDLER
   // Database: 4D Mobile Express
@@ -94,14 +89,14 @@ Case of
 		OBJECT SET VISIBLE:C603(*;"dataGeneration@";True:C214)
 		
 		  //CALL WORKER(Form.$worker;"dataSet";New object(\
-			//"caller";$Obj_form.window;\
-			//"action";"create";\
-			//"eraseIfExists";True;\
-			//"project";$Obj_project;\
-			//"digest";True;\
-			//"key";$File_key;\
-			//"dataSet";Bool(featuresFlags._101725);\
-			//"picture";Not(Bool(featuresFlags._97117))))
+						//"caller";$Obj_form.window;\
+						//"action";"create";\
+						//"eraseIfExists";True;\
+						//"project";$Obj_project;\
+						//"digest";True;\
+						//"key";$File_key;\
+						//"dataSet";Bool(featuresFlags._101725);\
+						//"picture";Not(Bool(featuresFlags._97117))))
 		CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
 			"caller";$Obj_form.window;\
 			"action";"create";\

@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***tmpl_REORDER*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : tmpl_REORDER
   // Database: 4D Mobile App

@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***views_CANCEL*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : tmpl_REMOVE
   // Database: 4D Mobile App

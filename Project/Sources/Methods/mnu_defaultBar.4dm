@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-bar := ***mnu_defaultBar***
- <- bar (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : mnu_defaultBar
   // Database: 4D Mobile App

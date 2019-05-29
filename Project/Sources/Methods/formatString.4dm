@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-formated := ***formatString*** ( selector ; string )
- -> selector (Text)
- -> string (Text)
- <- formated (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : formatString
   // Database: 4D Mobile Express

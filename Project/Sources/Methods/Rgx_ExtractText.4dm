@@ -1,15 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-error := ***Rgx_ExtractText*** ( pattern ; target ; groups ; resultArray ; options )
- -> pattern (Text) -  Regular expression
- -> target (Text) -  Target text
- -> groups (Text) -  Group numbers to extract ("" | "1"  | "1 3")
- -> resultArray (Pointer) -  One or two dimensional array of extracted segments
- -> options (Long Integer) -  (optional) Regular expression flags
- <- error (Long Integer) -  Error result
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Method : Rgx_ExtractText
   // Created 28/09/07 by Vincent de Lachaux

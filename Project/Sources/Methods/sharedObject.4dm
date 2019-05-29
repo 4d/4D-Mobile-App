@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***sharedObject*** ( src ; shared )
- -> src (Object)
- -> shared (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : sharedObject
   // Database: v14

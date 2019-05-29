@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***env_Database_setting*** ( selector )
- -> selector (Text)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : env_Database_setting
   // Database: 4D Mobile Express

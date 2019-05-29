@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-attributes := ***xml_attributes*** ( node )
- -> node (Text)
- <- attributes (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : xml_attributes
   // Database: 4DPop XLIFF 2

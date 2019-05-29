@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-result := ***WEB_Test*** ( in )
- -> in (Object)
- <- result (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : WEB_Test
   // Database: 4D Mobile Express

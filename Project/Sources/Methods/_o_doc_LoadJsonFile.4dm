@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-object := ***doc_LoadJsonFile*** ( path )
- -> path (Text)
- <- object (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_LoadJsonFile
   // Database: 4D Mobile App

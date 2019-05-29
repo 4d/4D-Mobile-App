@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***panel_GOTO*** ( panel )
- -> panel (Long Integer) -  Next open panel if not passed
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_GOTO
   // Database: 4D Mobile Express

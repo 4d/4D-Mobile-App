@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-expanded := ***doc_Expand_path*** ( posix )
- -> posix (Text)
- <- expanded (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_Expand_path
   // Database: 4D Mobile App

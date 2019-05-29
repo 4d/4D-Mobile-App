@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***editor_MESSAGES*** ( selector ; form ; in )
- -> selector (Text)
- -> form (Object)
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_MESSAGES
   // Database: 4D Mobile App
@@ -96,10 +88,10 @@ Case of
 		Else 
 			
 			  // DO_MESSAGE (New object(\
-				"action";"show";\
-				"type";"alert";\
-				"title";"noDevices";\
-				"additional";""))
+								"action";"show";\
+								"type";"alert";\
+								"title";"noDevices";\
+								"additional";""))
 			
 		End if 
 		
@@ -231,7 +223,7 @@ Case of
 							"type";"confirm";\
 							"title";"projectCreationSuccessful";\
 							"additional";"wouldYouLikeToRevealInFinder";\
-							"okFormula";New formula:C1597(SHOW ON DISK:C922(String:C10($Obj_in.param.path)))))
+							"okFormula";Formula:C1597(SHOW ON DISK:C922(String:C10($Obj_in.param.path)))))
 						
 					End if 
 					

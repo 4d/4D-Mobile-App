@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-out := ***Xcode_CheckInstall*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : Xcode_CheckInstall
   // Database: 4D Mobile Express

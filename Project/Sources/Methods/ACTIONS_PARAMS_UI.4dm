@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***ACTIONS_PARAMS_UI*** ( action )
- -> action (Text)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ACTIONS_PARAMS_UI
   // Database: 4D Mobile App

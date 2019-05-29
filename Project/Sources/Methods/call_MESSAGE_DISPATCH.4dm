@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***call_MESSAGE_DISPATCH*** ( message )
- -> message (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : call_MESSAGE_DISPATCH
   // Database: 4D Mobile Express

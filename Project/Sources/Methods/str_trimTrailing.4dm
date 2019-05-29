@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-trimmed := ***str_trimTrailing*** ( toTrim ; trim )
- -> toTrim (Text)
- -> trim (Text)
- <- trimmed (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_trimTrailing
   // Database: 4D Mobile App

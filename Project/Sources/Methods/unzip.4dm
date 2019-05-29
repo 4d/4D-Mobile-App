@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-result := ***unzip*** ( param )
- -> param (Object)
- <- result (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : unzip
   // Database: 4D Mobile Express

@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-Pattern := ***rgx_Options*** ( Options )
- -> Options (Long Integer)
- <- Pattern (Text)
--
-*/
   // ----------------------------------------------------
   // Method : rgx_Options
   // Created 28/09/07 by Vincent

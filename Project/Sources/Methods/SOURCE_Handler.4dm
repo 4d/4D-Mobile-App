@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***SOURCE_Handler*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : SOURCE_Handler
   // Database: 4D Mobile App
@@ -57,10 +50,10 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		$Obj_form.ui.help:=Get localized string:C991("help_source")
 		
 		  // Define form methods
-		$Obj_form.ui.testServer:=New formula:C1597(SOURCE_Handler (New object:C1471(\
+		$Obj_form.ui.testServer:=Formula:C1597(SOURCE_Handler (New object:C1471(\
 			"action";"checkingServerConfiguration")))
 		
-		$Obj_form.ui.remote:=New formula:C1597(String:C10(Form:C1466.dataSource.source)="server")
+		$Obj_form.ui.remote:=Formula:C1597(String:C10(Form:C1466.dataSource.source)="server")
 		
 	End if 
 	

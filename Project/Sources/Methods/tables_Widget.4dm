@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Picture := ***tables_Widget*** ( dataModel ; params )
- -> dataModel (Object)
- -> params (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : tables_Widget
   // Database: 4D Mobile Express

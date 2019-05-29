@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***editor_RESUME*** ( selector ; params )
- -> selector (Text)
- -> params (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_RESUME
   // Database: 4D Mobile Express
@@ -248,7 +241,7 @@ Case of
 			  //  // Port conflict? or certificates are missing?
 			  //$Dir_database:=Get 4D folder(Database folder;*)
 			  //If (Test path name($Dir_database+"cert.pem")#Is a document)\
-				| (Test path name($Dir_database+"key.pem")#Is a document)
+								| (Test path name($Dir_database+"key.pem")#Is a document)
 			
 			  //$Txt_message:=Get localized string("checkThatTheCertificatesAreProperlyInstalled")
 			  // Else

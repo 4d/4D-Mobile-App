@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***search_HANDLER*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : search_HANDLER
   // Database: 4D Mobile Express

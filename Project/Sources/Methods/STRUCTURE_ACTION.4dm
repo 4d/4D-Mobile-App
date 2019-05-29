@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***STRUCTURE_ACTION*** ( form )
- -> form (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : STRUCTURE_ACTION
   // Database: 4D Mobile App

@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-equal := ***str_equal*** ( string ; string )
- -> string (Text)
- -> string (Text)
- <- equal (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_equal
   // Database: development

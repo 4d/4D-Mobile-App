@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***STRUCTURE_CALLBACK*** ( catalog )
- -> catalog (Collection)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : STRUCTURE_CALLBACK
   // Database: 4D Mobile App
@@ -155,8 +149,8 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 										If (Bool:C1537(featuresFlags.withNewFieldProperties))
 											
 											$Boo_unsynchronizedField:=_or (\
-												New formula:C1597($oo.name#$c[0].name);\
-												New formula:C1597($oo.fieldType#$c[0].fieldType))
+												Formula:C1597($oo.name#$c[0].name);\
+												Formula:C1597($oo.fieldType#$c[0].fieldType))
 											
 										Else 
 											
@@ -219,8 +213,8 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 															If (Bool:C1537(featuresFlags.withNewFieldProperties))
 																
 																$Boo_unsynchronizedField:=_or (\
-																	New formula:C1597($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name);\
-																	New formula:C1597($oo[$t].fieldType#$Obj_relatedDataClass.field[$Lon_fieldIndx].fieldType))
+																	Formula:C1597($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name);\
+																	Formula:C1597($oo[$t].fieldType#$Obj_relatedDataClass.field[$Lon_fieldIndx].fieldType))
 																
 															Else 
 																
@@ -325,7 +319,7 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 					"cancel";"reviewing";\
 					"cancelAction";"page_structure";\
 					"ok";"update";\
-					"okFormula";New formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"syncDataModel"))))
+					"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"syncDataModel"))))
 				
 			End if 
 			

@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-update := ***PROJECT_HANDLER*** ( in )
- -> in (Object)
- <- update (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : PROJECT_HANDLER
   // Database: 4D Mobile Express

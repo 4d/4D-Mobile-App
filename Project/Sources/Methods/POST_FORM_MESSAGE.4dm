@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-***POST_FORM_MESSAGE*** ( message )
- -> message (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : POST_FORM_MESSAGE
   // Database: 4D Mobile Express

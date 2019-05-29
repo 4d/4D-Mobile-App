@@ -1,9 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Object := ***project_Defaults***
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_Defaults
   // Database: 4D Mobile Express

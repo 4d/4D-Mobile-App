@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***catalog*** ( action ; in )
- -> action (Text) -  datastore | fields
- -> in (Object)
- <- out (Object) -  Success {fields {errors} {warnings}}
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : catalog
   // Database: 4D Mobile App

@@ -1,29 +1,23 @@
 //%attributes = {}
-/*
-***test_*** ( t )
- -> t (Text)
-________________________________________________________
-
-*/
 C_TEXT:C284($t)
 C_OBJECT:C1216($o)
 
 TRY 
 
   //%W-518.7
-ASSERT:C1129(Not:C34(_and (New formula:C1597(Not:C34(Undefined:C82($o)));New formula:C1597($o.test#Null:C1517)));"_and")
+ASSERT:C1129(Not:C34(_and (Formula:C1597(Not:C34(Undefined:C82($o)));Formula:C1597($o.test#Null:C1517)));"_and")
 
 $o:=New object:C1471
 
-ASSERT:C1129(Not:C34(_and (New formula:C1597(Not:C34(Undefined:C82($o)));New formula:C1597($o.test#Null:C1517)));"_and")
+ASSERT:C1129(Not:C34(_and (Formula:C1597(Not:C34(Undefined:C82($o)));Formula:C1597($o.test#Null:C1517)));"_and")
 
 $o:=New object:C1471(\
 "test";"hello world")
 
-ASSERT:C1129(_and (New formula:C1597(Not:C34(Undefined:C82($o)));New formula:C1597($o.test#Null:C1517));"_and")
+ASSERT:C1129(_and (Formula:C1597(Not:C34(Undefined:C82($o)));Formula:C1597($o.test#Null:C1517));"_and")
   //%W+518.7
 
-ASSERT:C1129(_choose (2;New formula:C1597($o.test*0);New formula:C1597($o.test*1);New formula:C1597($o.test*2);New formula:C1597($o.test*3)).call()=($o.test*2);"_choose")
+ASSERT:C1129(_choose (2;Formula:C1597($o.test*0);Formula:C1597($o.test*1);Formula:C1597($o.test*2);Formula:C1597($o.test*3)).call()=($o.test*2);"_choose")
 
 ASSERT:C1129(_bool ("true"))
 ASSERT:C1129(Not:C34(_bool ("false")))

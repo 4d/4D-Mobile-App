@@ -1,13 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-out := ***Process_tags*** ( in ; tags ; types )
- -> in (Text)
- -> tags (Object)
- -> types (Collection)
- <- out (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : Process_tags
   // Database: 4D Mobile Express

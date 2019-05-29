@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-folder := ***doc_Folder*** ( pathname ; options )
- -> pathname (Text)
- -> options (Object)
- <- folder (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_Folder
   // Database: 4D Mobile App

@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***project_BUILD*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_BUILD
   // Database: 4D Mobile Express
@@ -105,15 +99,15 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 				"title";"theProductFolderAlreadyExist";\
 				"additional";"allContentWillBeReplaced";\
 				"okAction";JSON Stringify:C1217($Obj_ok);\
-				"cancelFormula";New formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"build_stop"))))
+				"cancelFormula";Formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"build_stop"))))
 			
 		Else 
 			
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-				"action";"safeDelete";\
-				"path";$Obj_in.path))
+								"action";"safeDelete";\
+								"path";$Obj_in.path))
 			  // End if
 			
 		End if 
@@ -173,8 +167,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 							"additional";New collection:C1472("doYouAllow4dMobileToModifyStructure";"4dProductName");\
 							"option";New object:C1471("title";"rememberMyChoice";"value";False:C215);\
 							"ok";"allow";\
-							"cancelFormula";New formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"build_stop"));\
-							"okFormula";New formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"allowStructureModification";Form:C1466.option))))
+							"cancelFormula";Formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"build_stop"));\
+							"okFormula";Formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"allowStructureModification";Form:C1466.option))))
 						
 					End if 
 				End if 
@@ -282,10 +276,10 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 									"type";"confirm";\
 									"title";"theStructureOfTheProductionServerIsNotOptimizedForThisProject";\
 									"additional";"youMustUpdateTheStructureOfTheProductionServer";\
-									"help";New formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment");*));\
-									"cancelFormula";New formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"build_stop"));\
+									"help";Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment");*));\
+									"cancelFormula";Formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"build_stop"));\
 									"ok";Get localized string:C991("continue");\
-									"okFormula";New formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"ignoreServerStructureAdjustement"))))
+									"okFormula";Formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"ignoreServerStructureAdjustement"))))
 								
 							Else 
 								
@@ -295,10 +289,10 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 									"type";"confirm";\
 									"title";"theStructureOfTheProductionServerIsNotOptimizedForThisProject";\
 									"additional";"youMustUpdateTheStructureOfTheProductionServer";\
-									"help";New formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment");*));\
-									"cancelFormula";New formula:C1597(This:C1470.choice:="cancel");\
+									"help";Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment");*));\
+									"cancelFormula";Formula:C1597(This:C1470.choice:="cancel");\
 									"ok";Get localized string:C991("continue");\
-									"okFormula";New formula:C1597(This:C1470.choice:="ignore"))
+									"okFormula";Formula:C1597(This:C1470.choice:="ignore"))
 								
 								WAIT_FORM_MESSAGE ($o)
 								

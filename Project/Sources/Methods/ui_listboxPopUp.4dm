@@ -1,14 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-choice := ***ui_listboxPopUp*** ( name ; pop ; column ; row )
- -> name (Text) -  listbox widget name
- -> pop (Text) -  menu reference
- -> column (Long Integer)
- -> row (Long Integer)
- <- choice (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_listboxPopUp
   // Database: 4D Mobile App

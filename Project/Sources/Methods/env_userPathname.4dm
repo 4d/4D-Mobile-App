@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-path := ***env_userPathname*** ( selector )
- -> selector (Text) -  "home" | "library" | "logs" | ...
- <- path (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : env_userPath
   // Database: 4D Mobile Express

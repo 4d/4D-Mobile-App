@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***panel_COLLAPSE_EXPAND*** ( index )
- -> index (Long Integer)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_COLLAPSE_EXPAND
   // Database: 4D Mobile Express

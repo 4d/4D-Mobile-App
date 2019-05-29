@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-pathname := ***env_System_path*** ( selector ; POSIX )
- -> selector (Text) -  "boot"
- -> POSIX (Boolean)
- <- pathname (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : env_System_path
   // Database: 4D Mobile Express

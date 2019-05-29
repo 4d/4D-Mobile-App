@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***DATA_Handler*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : DATA_Handler
   // Database: 4D Mobile App
@@ -64,13 +57,13 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		$Obj_context.help:=Get localized string:C991("help_properties")
 		
 		  // Define form methods
-		$Obj_context.listboxUI:=New formula:C1597(DATA_Handler (New object:C1471(\
+		$Obj_context.listboxUI:=Formula:C1597(DATA_Handler (New object:C1471(\
 			"action";"listboxUI")))
 		
-		$Obj_context.listBackground:=New formula:C1597(DATA_Handler (New object:C1471(\
+		$Obj_context.listBackground:=Formula:C1597(DATA_Handler (New object:C1471(\
 			"action";"background")))
 		
-		$Obj_context.text:=New formula:C1597(DATA_Handler (New object:C1471(\
+		$Obj_context.text:=Formula:C1597(DATA_Handler (New object:C1471(\
 			"action";"meta-infos")))
 		
 	End if 

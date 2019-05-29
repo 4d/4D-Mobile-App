@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-info := ***COMPONENT_Infos*** ( entryPoint )
- -> entryPoint (Text)
- <- info (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : COMPONENT_Infos
   // Database: 4D Mobile App

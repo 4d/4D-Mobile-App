@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Object := ***ui_form*** ( action ; params )
- -> action (Text)
- -> params (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_form
   // Database: 4D Mobile App

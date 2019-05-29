@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-result := ***xml_findByName*** ( elementRef ; nameToFind )
- -> elementRef (Text)
- -> nameToFind (Text)
- <- result (Collection)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : xml_findByName
   // Database: 4D Mobile App

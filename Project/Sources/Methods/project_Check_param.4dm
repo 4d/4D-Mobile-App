@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***project_Check_param*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_Check_param
   // Database: 4D Mobile Express
@@ -71,7 +64,7 @@ Case of
 			"type";"alert";\
 			"title";"theProductNameIsMandatory";\
 			"additional";"pleaseGiveNameToYourProduct";\
-			"okFormula";New formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
+			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
 		
 		  //______________________________________________________
 	: (OB Get:C1224($o;"dataModel";Is object:K8:27)=Null:C1517)\
@@ -85,7 +78,7 @@ Case of
 			"type";"alert";\
 			"title";"noPublishedTable";\
 			"additional";"youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication";\
-			"okFormula";New formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
+			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
 		
 		  //______________________________________________________
 	: ($o.main.order=Null:C1517)\
@@ -99,7 +92,7 @@ Case of
 			"type";"alert";\
 			"title";"noTableDefinedInTheMainMenu";\
 			"additional";"youMustSetAtLeastOneTableIntoTheMainMenu";\
-			"okFormula";New formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
+			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
 		
 		  //______________________________________________________
 	Else 

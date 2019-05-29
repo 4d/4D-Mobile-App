@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-throwAssert := ***dev_Matrix***
- <- throwAssert (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : dev_Matrix
   // Database: 4D Mobile App

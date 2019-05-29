@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***_w_actions*** ( action ; context )
- -> action (Text)
- -> context (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : actions
   // Database: 4D Mobile App
@@ -128,7 +120,7 @@ Case of
 			
 			For each ($o;$o.folders)
 				
-				If (_and (New formula:C1597($o.files#Null:C1517);New formula:C1597($o.files.length>0);New formula:C1597($o.files.extract("fullName").indexOf("manifest.json")#-1)))
+				If (_and (Formula:C1597($o.files#Null:C1517);Formula:C1597($o.files.length>0);Formula:C1597($o.files.extract("fullName").indexOf("manifest.json")#-1)))
 					
 					$oo:=JSON Parse:C1218(Document to text:C1236($o.parentFolder+$o.name+Folder separator:K24:12+"manifest.json"))
 					

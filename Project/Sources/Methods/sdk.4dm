@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-result := ***sdk*** ( param )
- -> param (Object)
- <- result (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : sdk
   // Database: 4D Mobile Express

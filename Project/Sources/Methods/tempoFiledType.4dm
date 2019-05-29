@@ -1,10 +1,4 @@
 //%attributes = {}
-/*
-Long Integer := ***tempoFiledType*** ( Param_1 )
- -> Param_1 (Long Integer)
-________________________________________________________
-
-*/
 C_LONGINT:C283($0)
 C_LONGINT:C283($1)
 

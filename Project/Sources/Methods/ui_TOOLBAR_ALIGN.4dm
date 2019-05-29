@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***RIBBON_ALIGN_BUTTON*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_TOOLBAR_ALIGN
   // Database: 4D Mobile App

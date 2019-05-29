@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Object := ***ui_window*** ( action )
- -> action (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_window
   // Database: 4D Mobile App

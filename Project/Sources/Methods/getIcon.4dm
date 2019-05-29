@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-p := ***getIcon*** ( icon ; type )
- -> icon (Text) -  icon path
- -> type (Text) -  to use if separate directory for tableIcons/fieldIcons/actionIcons
- <- p (Picture)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : getIcon
   // Database: 4D Mobile App

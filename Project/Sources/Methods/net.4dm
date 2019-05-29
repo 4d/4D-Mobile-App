@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***net*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : net
   // Database: 4D Mobile App

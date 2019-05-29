@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-target := ***ob_deepMerge*** ( target ; source )
- -> target (Object)
- -> source (Object)
- <- target (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ob_deepMerge
   // Database: 4D Mobile Express

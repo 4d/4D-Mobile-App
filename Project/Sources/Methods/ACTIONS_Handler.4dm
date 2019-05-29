@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***ACTIONS_Handler*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ACTIONS_Handler
   // Database: 4D Mobile App
@@ -70,9 +63,9 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		ob_createPath ($Obj_context;"constraints.rules";Is collection:K8:32)
 		
 		  // Define form member methods
-		$Obj_context.load:=New formula:C1597(ACTIONS_Handler (New object:C1471("action";"load")))
-		$Obj_context.listUI:=New formula:C1597(ACTIONS_UI ("listUI"))
-		$Obj_context.meta:=New formula:C1597(ACTIONS_UI ("meta"))
+		$Obj_context.load:=Formula:C1597(ACTIONS_Handler (New object:C1471("action";"load")))
+		$Obj_context.listUI:=Formula:C1597(ACTIONS_UI ("listUI"))
+		$Obj_context.meta:=Formula:C1597(ACTIONS_UI ("meta"))
 		
 	End if 
 	
@@ -103,8 +96,8 @@ Case of
 				
 				  // Set the initial display
 				If (_and (\
-					New formula:C1597(Form:C1466.dataModel#Null:C1517);\
-					New formula:C1597(Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))))
+					Formula:C1597(Form:C1466.dataModel#Null:C1517);\
+					Formula:C1597(Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))))
 					
 					$Obj_form.actions.show()
 					$Obj_form.noPublishedTable.hide()
@@ -143,14 +136,14 @@ Case of
 				End if 
 				
 				$Obj_form.removeAction.setEnabled(_and (\
-					New formula:C1597($Obj_context.index#Null:C1517);\
-					New formula:C1597($Obj_context.index#0)))
+					Formula:C1597($Obj_context.index#Null:C1517);\
+					Formula:C1597($Obj_context.index#0)))
 				
 				ARRAY TEXT:C222($tTxt_;0x0000)
 				METHOD GET PATHS:C1163(Path database method:K72:2;$tTxt_;*)
 				$b:=(Find in array:C230($tTxt_;METHOD Get path:C1164(Path database method:K72:2;"onMobileAppAction"))>0)
 				$Obj_form.databaseMethod.setTitle(Get localized string:C991(Choose:C955($b;"edit...";"create...")))
-				$Obj_form.databaseMethod.setEnabled($b | _and (New formula:C1597(Form:C1466.actions#Null:C1517);New formula:C1597(Form:C1466.actions.length>0)))
+				$Obj_form.databaseMethod.setEnabled($b | _and (Formula:C1597(Form:C1466.actions#Null:C1517);Formula:C1597(Form:C1466.actions.length>0)))
 				ui_ALIGN_ON_BEST_SIZE (Align right:K42:4;$Obj_form.databaseMethod.name;"actionMethod.label")
 				
 				  //______________________________________________________

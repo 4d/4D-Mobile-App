@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-OK := ***dev_assert*** ( in )
- -> in (Object)
- <- OK (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : dev_assert
   // Database: 4D Mobile App

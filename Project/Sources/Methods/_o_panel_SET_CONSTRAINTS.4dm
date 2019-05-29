@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***panel_SET_CONSTRAINTS*** ( constraints )
- -> constraints (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_SET_CONSTRAINTS
   // Database: 4D Mobile Express

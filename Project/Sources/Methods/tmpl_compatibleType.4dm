@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-accepted := ***tmpl_compatibleType*** ( types ; type )
- -> types (Collection) - Collection des types
- -> type (Long Integer) - type à tester
- <- accepted (Boolean) - vrai si compatible
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : tmpl_compatibleType
   // Database: 4D Mobile App

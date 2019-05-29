@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***project_SKIN*** ( skin )
- -> skin (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_SKIN
   // Database: 4D Mobile Express

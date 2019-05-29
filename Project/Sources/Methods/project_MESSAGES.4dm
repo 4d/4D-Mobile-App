@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***project_MESSAGES*** ( selector ; form ; in )
- -> selector (Text)
- -> form (Object)
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_MESSAGES
   // Database: 4D Mobile App

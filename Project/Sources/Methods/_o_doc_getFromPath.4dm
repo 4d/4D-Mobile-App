@@ -1,13 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-result := ***_o_doc_getFromPath*** ( selector ; path ; separator )
- -> selector (Text) -  "parent" | "fullName" | "shortName" | "extension" | "volume"
- -> path (Text)
- -> separator (Text) -  If omitted, the separator used is the current platform separator.
- <- result (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Method :  _o_doc_getFromPath
   // Created 20/05/10 by Vincent de Lachaux

@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-catalog := ***doc_catalog*** ( root ; filter )
- -> root (Text)
- -> filter (Text)
- <- catalog (Collection)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_catalog
   // Database: 4D Mobile Express

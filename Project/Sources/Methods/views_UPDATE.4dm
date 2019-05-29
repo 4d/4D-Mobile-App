@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***views_UPDATE*** ( formFamilly )
- -> formFamilly (Text) -  "list" | "detail"
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : views_UPDATE
   // Database: 4D Mobile App

@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-trimmed := ***str_trimLeading*** ( toTrim ; trim )
- -> toTrim (Text)
- -> trim (Text)
- <- trimmed (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_trimLeading
   // Database: 4D Mobile App

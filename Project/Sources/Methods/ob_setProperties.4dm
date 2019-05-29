@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***ob_setProperties*** ( in ; properties )
- -> in (Object)
- -> properties (Object) - {"name1";"value1";…;"nameN";"valueN"}
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ob_setProperties
   // Database: 4D Mobile App

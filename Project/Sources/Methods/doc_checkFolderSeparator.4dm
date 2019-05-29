@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***doc_ValidateFinalFolderSeparato*** ( in )
- -> in (Text)
- <- out (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_checkFolderSeparator
   // Database: 4D Mobile App

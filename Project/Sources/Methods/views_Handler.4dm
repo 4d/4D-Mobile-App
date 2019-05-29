@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***views_Handler*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : views_Handler
   // Database: 4D Mobile Express
@@ -70,10 +63,10 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"selectorList";ui.button("tab.list");\
 		"selectorDetail";ui.button("tab.detail");\
 		"selectors";ui.static("tab.@");\
-		"drag";New formula:C1597(tmpl_On_drag_over );\
-		"drop";New formula:C1597(tmpl_ON_DROP );\
-		"cancel";New formula:C1597(tmpl_REMOVE );\
-		"tips";New formula:C1597(tmpl_TIPS ))
+		"drag";Formula:C1597(tmpl_On_drag_over );\
+		"drop";Formula:C1597(tmpl_ON_DROP );\
+		"cancel";Formula:C1597(tmpl_REMOVE );\
+		"tips";Formula:C1597(tmpl_TIPS ))
 	
 	$Obj_context:=$Obj_form.$
 	
@@ -83,23 +76,23 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		ob_createPath ($Obj_context;"constraints.rules";Is collection:K8:32)
 		
 		$Obj_context.constraints.rules.push(New object:C1471(\
-			"formula";New formula:C1597(views_Handler (New object:C1471(\
+			"formula";Formula:C1597(views_Handler (New object:C1471(\
 			"action";"geometry")))))
 		
 		  // Define form member methods
 		
 		  // Selected table ID as string, empty if none
-		$Obj_context.tableNum:=New formula:C1597(String:C10(This:C1470.tableNumber))
+		$Obj_context.tableNum:=Formula:C1597(String:C10(This:C1470.tableNumber))
 		
 		  // The form type according to the selected tab
-		$Obj_context.typeForm:=New formula:C1597(Choose:C955(Num:C11(This:C1470.selector)=2;"detail";"list"))
+		$Obj_context.typeForm:=Formula:C1597(Choose:C955(Num:C11(This:C1470.selector)=2;"detail";"list"))
 		
 		  // Update selected tab
-		$Obj_context.setTab:=New formula:C1597(views_Handler (New object:C1471(\
+		$Obj_context.setTab:=Formula:C1597(views_Handler (New object:C1471(\
 			"action";"setTab")))
 		
 		  // Update geometry
-		$Obj_context.setGeometry:=New formula:C1597(views_Handler (New object:C1471(\
+		$Obj_context.setGeometry:=Formula:C1597(views_Handler (New object:C1471(\
 			"action";"geometry")))
 		
 	End if 

@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***ui_ALIGN_ON_BEST_SIZE*** ( alignment ; objectName ; Param_3 ; … ; N )
- -> alignment (Long Integer)
- -> objectName (Text) -  Object name
- -> Param_3 ; … ; N (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_ALIGN_ON_BEST_SIZE
   // Database: runtime

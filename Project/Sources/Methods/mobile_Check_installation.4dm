@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***mobile_Check_installation*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : mobile_Check_installation
   // Database: 4D Mobile Express

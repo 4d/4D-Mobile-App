@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***ob_getByPath*** ( in ; path )
- -> in (Object)
- -> path (Text)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ob_getByPath
   // Database: 4D Mobile App

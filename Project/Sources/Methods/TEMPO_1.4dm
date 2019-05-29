@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***TEMPO_1*** ( pathname )
- -> pathname (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : TEMPO_1
   // Database: 4D Mobile App

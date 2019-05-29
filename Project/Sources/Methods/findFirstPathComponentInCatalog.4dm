@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-result := ***doc_catalogFirstPath*** ( catalog )
- -> catalog (Collection)
- <- result (Collection)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_catalogFirstPath
   // Database: 4D Mobile App

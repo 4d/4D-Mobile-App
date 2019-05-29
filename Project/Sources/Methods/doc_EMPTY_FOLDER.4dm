@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-***doc_EMPTY_FOLDER*** ( pathname ; ignore )
- -> pathname (Text)
- -> ignore (Collection)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_EMPTY_FOLDER
   // Database: 4D Mobile Express

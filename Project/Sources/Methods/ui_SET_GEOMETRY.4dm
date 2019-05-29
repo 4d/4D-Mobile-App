@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***ui_SET_GEOMETRY*** ( constraints )
- -> constraints (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_SET_GEOMETRY
   // Database: 4D Mobile Express

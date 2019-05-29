@@ -1,13 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***object_MOVE*** ( object ; reference ; alignment ; offset )
- -> object (Text)
- -> reference (Text)
- -> alignment (Long Integer)
- -> offset (Long Integer)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_MOVE
   // Database: 4D Mobile Express

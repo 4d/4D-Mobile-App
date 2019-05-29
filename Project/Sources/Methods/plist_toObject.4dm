@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-plist := ***plist_toObject*** ( plist )
- -> plist (Text)
- <- plist (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : plist_toObject
   // Database: 4D Mobile Express

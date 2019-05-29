@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-relativePath := ***doc_Relative_path*** ( pathname ; directory )
- -> pathname (Text) -  Path to test
- -> directory (Text) -  Reference directory (database folder if omitted)
- <- relativePath (Text) -  Relative path into the reference, same as input if not relative
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_Relative_path
   // Database: 4D Mobile App

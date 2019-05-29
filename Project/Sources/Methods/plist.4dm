@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***plist*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : plist
   // Database: 4D Mobile Express

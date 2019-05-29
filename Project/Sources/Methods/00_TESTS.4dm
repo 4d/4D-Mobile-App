@@ -1,11 +1,4 @@
 //%attributes = {}
-/*
-***00_TESTS*** ( Param_1 ; Param_2 )
- -> Param_1 (Long Integer)
- -> Param_2 (Long Integer)
-________________________________________________________
-
-*/
 C_BOOLEAN:C305($b;$Boo_reset)
 C_LONGINT:C283($i;$Lon_build;$Lon_error;$Lon_result;$Lon_type;$Lon_value)
 C_LONGINT:C283($Lon_x)
@@ -322,7 +315,7 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$Obj_formula:=New formula:C1597(1+2)
+		$Obj_formula:=Formula:C1597(1+2)
 		
 		$Obj_new:=New object:C1471(\
 			"f";$Obj_formula)
@@ -331,32 +324,32 @@ Case of
 		
 		$Lon_value:=10
 		$Obj_new:=New object:C1471(\
-			"f";New formula:C1597($Lon_value))
+			"f";Formula:C1597($Lon_value))
 		$Lon_value:=20
 		
 		$Lon_result:=$Obj_new.f()  // returns 10
 		
 		  //$Obj_new:=New object("formula";New formula($1+$2))
 		$Obj_new:=New object:C1471(\
-			"f";New formula from string:C1601("$1+$2"))
+			"f";Formula from string:C1601("$1+$2"))
 		$Lon_result:=$Obj_new.f(10;20)  // returns 30
 		
 		$Txt_ormula:=Request:C163("Please type a formula")
 		
 		If (ok=1)
 			
-			$Obj_formula:=New formula from string:C1601($Txt_ormula)
+			$Obj_formula:=Formula from string:C1601($Txt_ormula)
 			ALERT:C41("Result = "+String:C10($Obj_formula.call()))
 			
 		End if 
 		
 		  //$Obj_formula:=New formula from string(Uppercase($1))
-		$Obj_formula:=New formula from string:C1601("Uppercase:C13($1)")
+		$Obj_formula:=Formula from string:C1601("Uppercase:C13($1)")
 		$Txt_result:=$Obj_formula.call(Null:C1517;"hello")  // returns "HELLO"
 		
 		$Obj_new:=New object:C1471(\
 			"value";50)
-		$Obj_formula:=New formula:C1597(This:C1470.value*2)
+		$Obj_formula:=Formula:C1597(This:C1470.value*2)
 		$Lon_result:=$Obj_formula.call($Obj_new)  // returns 100
 		
 		  //________________________________________
@@ -473,7 +466,7 @@ Case of
 		$t:=Parse formula:C1576("CALL FORM($Obj_in.caller;\"project_BUILD\";$Obj_in)";4)
 		
 		$oo:=Build Exposed Datastore:C1598
-		$o:=New formula:C1597(project_BUILD ($oo))
+		$o:=Formula:C1597(project_BUILD ($oo))
 		OB GET PROPERTY NAMES:C1232($o;$tTxt_)
 		
 		  //________________________________________

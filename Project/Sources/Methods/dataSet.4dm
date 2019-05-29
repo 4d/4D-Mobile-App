@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***dataDump*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : dataSet
   // Database: 4D Mobile Express

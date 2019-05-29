@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-result := ***provisioningProfiles*** ( param )
- -> param (Object)
- <- result (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : provisioningProfiles
   // Database: 4D Mobile App

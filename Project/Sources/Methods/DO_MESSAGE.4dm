@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"incapable"}
-/*
-***DO_MESSAGE*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : DO_MESSAGE
   // Database: 4D Mobile Express

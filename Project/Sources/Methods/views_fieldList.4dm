@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***views_fieldList*** ( tableNumber ; Param_2 )
- -> tableNumber (Text)
- -> Param_2 (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : views_fieldList
   // Database: 4D Mobile App

@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-transparent := ***pic_isTransparent*** ( image )
- -> image (Picture)
- <- transparent (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : pic_isTransparent
   // Database: 4D Mobile Express

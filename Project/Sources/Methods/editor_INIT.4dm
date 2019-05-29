@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Object := ***editor_INIT*** ( panel )
- -> panel (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_INIT
   // Database: 4D Mobile Express

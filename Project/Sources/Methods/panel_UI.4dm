@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***panel_UI*** ( UISettings )
- -> UISettings (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_UI
   // Database: 4D Mobile Express

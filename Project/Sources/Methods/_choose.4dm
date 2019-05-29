@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-Object := ***_choose*** ( Param_1 ; Param_2 ; … ; N )
- -> Param_1 (Long Integer)
- -> Param_2 ; … ; N (Object)
-________________________________________________________
-
-*/
 C_OBJECT:C1216($0)
 C_LONGINT:C283($1)
 C_OBJECT:C1216(${2})

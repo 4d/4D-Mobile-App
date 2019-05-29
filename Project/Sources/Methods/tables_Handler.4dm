@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***tables_Handler*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : tables_Handler
   // Database: 4D Mobile Express

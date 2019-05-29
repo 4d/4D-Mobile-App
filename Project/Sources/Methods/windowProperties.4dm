@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-properties := ***windowProperties*** ( window )
- -> window (Long Integer)
- <- properties (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : windowProperties
   // Database: 4D Mobile App

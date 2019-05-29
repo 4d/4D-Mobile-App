@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***ui_SET_ENABLED*** ( widget ; enabled )
- -> widget (Text)
- -> enabled (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_SET_ENABLED
   // Database: 4D Mobile App

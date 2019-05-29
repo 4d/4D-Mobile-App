@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-result := ***Xcode*** ( param )
- -> param (Object)
- <- result (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : Xcode
   // Database: 4D Mobile Express

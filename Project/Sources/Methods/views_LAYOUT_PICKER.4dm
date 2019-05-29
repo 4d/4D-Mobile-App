@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***views_LAYOUT_PICKER*** ( typeForm )
- -> typeForm (Text) -  "list" or "detail"
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : views_LAYOUT_PICKER
   // Database: 4D Mobile Express

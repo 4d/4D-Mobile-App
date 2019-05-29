@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-Long Integer := ***Rgx_MatchText*** ( Param_1 ; Target ; Array ; Options )
- -> Param_1 (Text)
- -> Target (Text)
- -> Array (Pointer)
- -> Options (Long Integer)
--
-*/
   // ----------------------------------------------------
   // Method : Rgx_MatchText
   // Created 28/09/07 by Vincent

@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Boolean := ***_bool*** ( Param_1 )
- -> Param_1 (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : _bool
   // Database: 4D Mobile App

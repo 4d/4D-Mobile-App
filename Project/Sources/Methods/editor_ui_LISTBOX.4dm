@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***editor_ui_LISTBOX*** ( listbox ; withFocus )
- -> listbox (Text)
- -> withFocus (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_ui_LISTBOX
   // Database: 4D Mobile Express

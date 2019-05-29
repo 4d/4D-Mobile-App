@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-t := ***doc_resolveAlias*** ( Param_1 )
- -> Param_1 (Texte)
- <- t (Texte)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Method : doc_resolveAlias
   // Created 02/06/10 by Vincent de Lachaux

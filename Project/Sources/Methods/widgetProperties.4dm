@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-properties := ***widgetProperties*** ( widget )
- -> widget (Text)
- <- properties (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : widgetProperties
   // Database: 4D Mobile App

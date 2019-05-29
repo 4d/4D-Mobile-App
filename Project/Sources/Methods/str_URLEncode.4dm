@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-out := ***str_URLEncode*** ( in )
- -> in (Text) -  String to encode
- <- out (Text) -  Encoded string
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_URLEncode
   // Database: 4D Mobile App

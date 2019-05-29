@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-result := ***Pathname*** ( info ; param )
- -> info (Text)
- -> param (Object)
- <- result (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : Pathname
   // Database: 4D Mobile Express

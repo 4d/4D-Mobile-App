@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***LOG_EVENT*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : LOG_EVENT
   // Database: 4D Mobile Express

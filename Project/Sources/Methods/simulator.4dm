@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***Simulator*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : simulator
   // Database: 4D Mobile Express

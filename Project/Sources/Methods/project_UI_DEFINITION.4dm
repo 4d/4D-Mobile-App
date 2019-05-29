@@ -1,11 +1,5 @@
 //%attributes = {"invisible":true}
-/*
-***project_UI_DEFINITION*** ( panels )
- -> panels (Collection)
-________________________________________________________
-
-*/
-  // ----------------------------------------------------
+  /// ----------------------------------------------------
   // Project method : project_UI_DEFINITION
   // Database: 4D Mobile Express
   // ID[38A72415F5D34F62A3B62016B961F0EE]

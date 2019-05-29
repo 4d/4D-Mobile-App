@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true,"shared":true}
-/*
-***C_OPEN_MOBILE_PROJECT*** ( project )
- -> project (Text) -  {project file path}
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : C_OPEN_MOBILE_PROJECT
   // Database: 4D Mobile Express

@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-Long Integer := ***str_cmpVersion*** ( target ; reference ; separator )
- -> target (Text) -  Version to test
- -> reference (Text) -  Reference version
- -> separator (Text) -  optional - "." if omitted
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_cmpVersion
   // Database: development

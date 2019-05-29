@@ -1,13 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-Long Integer := ***Rgx_SubstituteText*** ( pattern ; replacement ; target ; options )
- -> pattern (Text)
- -> replacement (Text)
- -> target (Pointer)
- -> options (Long Integer)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Method : Rgx_SubstituteText
   // Created 28/09/07 by Vincent

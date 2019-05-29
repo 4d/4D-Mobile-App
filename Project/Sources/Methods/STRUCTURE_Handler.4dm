@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***STRUCTURE_Handler*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : STRUCTURE_Handler
   // Database: 4D Mobile Express
@@ -68,7 +61,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	If (OB Is empty:C1297($Obj_context))
 		
 		  // Define locales functions
-		$Obj_context.catalog:=New formula:C1597(editor_Catalog )
+		$Obj_context.catalog:=Formula:C1597(editor_Catalog )
 		
 	End if 
 	

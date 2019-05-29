@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***panel_INIT*** ( definition )
- -> definition (Object) -  Definition of the panels
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_INIT
   // Database: 4D Mobile Express

@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-preferences := ***editor_Preferences*** ( in )
- -> in (Object)
- <- preferences (Object)
-________________________________________________________
-
-*/
-  // ----------------------------------------------------
   // Project method : editor_Preferences
   // Database: 4D Mobile App
   // ID[D3B9FB0808EE47F79518B159B704340F]

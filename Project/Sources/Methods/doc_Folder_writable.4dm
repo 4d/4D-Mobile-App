@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***doc_Folder_writable*** ( root )
- -> root (Text)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_Folder_writable
   // Database: 4D Mobile App

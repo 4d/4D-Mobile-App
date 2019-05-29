@@ -1,13 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-string := ***str_date*** ( entrypoint ; date ; hour )
- -> entrypoint (Text)
- -> date (Date)
- -> hour (Time)
- <- string (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_date
   // Database: 4D Mobile App

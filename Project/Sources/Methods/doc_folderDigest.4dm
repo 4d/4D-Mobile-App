@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-digest := ***doc_folderDigest*** ( tgt )
- -> tgt (Text)
- <- digest (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_folderDigest
   // Database: 4D Mobile Express

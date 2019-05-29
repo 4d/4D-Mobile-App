@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-string := ***str_localized*** ( strings )
- -> strings (Collection)
- <- string (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_localized
   // Database: 4D Mobile Express

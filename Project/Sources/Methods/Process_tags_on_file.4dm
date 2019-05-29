@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***Process_tags_on_file*** ( tgt ; tags ; types )
- -> tgt (Text)
- -> tags (Object)
- -> types (Collection)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : Process_tags_on_file
   // Database: 4D Mobile Express

@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-out := ***Rgx_match*** ( in )
- -> in (Object) -  { pattern , target }
- <- out (Object) -  { success , match: [ { data , position , length } , … ] }
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : Rgx_match alias Rgx_MatchText
   // Database: 4D Mobile App
@@ -42,7 +35,8 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	$Obj_in:=$1  // { pattern , target }
 	
 	  // Default values
-	$Obj_out:=New object:C1471("success";False:C215)
+	$Obj_out:=New object:C1471(\
+		"success";False:C215)
 	
 	$Lon_start:=1
 	
@@ -60,7 +54,8 @@ Else
 End if 
 
   // ----------------------------------------------------
-If ($Obj_in.pattern#Null:C1517) & ($Obj_in.target#Null:C1517)
+If ($Obj_in.pattern#Null:C1517)\
+ & ($Obj_in.target#Null:C1517)
 	
 	If ($Obj_in.start#Null:C1517)
 		
@@ -87,7 +82,11 @@ If ($Obj_in.pattern#Null:C1517) & ($Obj_in.target#Null:C1517)
 				
 				For ($Lon_i;0;$Lon_size;1)
 					
-					$Obj_value:=New object:C1471("data";Substring:C12($Obj_in.target;$tLon_positions{$Lon_i};$tLon_lengths{$Lon_i});"position";$tLon_positions{$Lon_i};"length";$tLon_lengths{$Lon_i})
+					$Obj_value:=New object:C1471(\
+						"data";Substring:C12($Obj_in.target;\
+						$tLon_positions{$Lon_i};$tLon_lengths{$Lon_i});\
+						"position";$tLon_positions{$Lon_i};\
+						"length";$tLon_lengths{$Lon_i})
 					
 					If ($tLon_lengths{$Lon_i}=0)
 						
@@ -101,7 +100,6 @@ If ($Obj_in.pattern#Null:C1517) & ($Obj_in.target#Null:C1517)
 					End if 
 					
 					  //If ($Boo_match)
-					
 					If ($Obj_out.match=Null:C1517)
 						
 						$Obj_out.match:=New collection:C1472
@@ -116,9 +114,9 @@ If ($Obj_in.pattern#Null:C1517) & ($Obj_in.target#Null:C1517)
 						
 					End if 
 					
-					  //Else 
+					  // Else
 					  //$Lon_i:=$Lon_size+1
-					  //End if 
+					  // End if
 					
 				End for 
 				

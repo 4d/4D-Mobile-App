@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***BUILD*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : BUILD
   // Database: 4D Mobile App

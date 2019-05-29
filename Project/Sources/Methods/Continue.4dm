@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-noError := ***Continue***
- <- noError (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : Continue
   // ID[059593008F9741E1A807F101AD2FCD26]

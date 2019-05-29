@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***main_Handler*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : main_Handler
   // Database: 4D Mobile Express
@@ -67,16 +60,16 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	If (OB Is empty:C1297($Obj_context))
 		
 		  // Define form methods
-		$Obj_context.order:=New formula:C1597(main_Handler (New object:C1471(\
+		$Obj_context.order:=Formula:C1597(main_Handler (New object:C1471(\
 			"action";"order")))
 		
-		$Obj_context.insert:=New formula:C1597(main_Handler (New object:C1471(\
+		$Obj_context.insert:=Formula:C1597(main_Handler (New object:C1471(\
 			"action";"add";\
 			"id";$1;\
 			"name";$2;\
 			"row";$3)))
 		
-		$Obj_context.append:=New formula:C1597(main_Handler (New object:C1471(\
+		$Obj_context.append:=Formula:C1597(main_Handler (New object:C1471(\
 			"action";"add";\
 			"id";$1;\
 			"name";$2)))

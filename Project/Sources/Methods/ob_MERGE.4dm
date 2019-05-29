@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***ob_MERGE*** ( target ; model )
- -> target (Object)
- -> model (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ob_MERGE
   // Database: 4D Mobile App

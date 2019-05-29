@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***WAIT_FORM_MESSAGE*** ( message )
- -> message (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : WAIT_FORM_MESSAGE
   // Database: 4D Mobile App

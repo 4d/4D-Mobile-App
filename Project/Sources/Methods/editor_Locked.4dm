@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-locked := ***editor_LOCKING*** ( Param_1 ; … ; N )
- -> Param_1 ; … ; N (Text)
- <- locked (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_Locked
   // Database: 4D Mobile Express

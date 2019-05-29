@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Text := ***turn_field_name*** ( Param_1 )
- -> Param_1 (Pointer)
-________________________________________________________
-
-*/
 C_TEXT:C284($0)
 C_POINTER:C301($1)
 

@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***PROJECT_UI_ALERT*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_UI_ALERT
   // Database: 4D Mobile Express

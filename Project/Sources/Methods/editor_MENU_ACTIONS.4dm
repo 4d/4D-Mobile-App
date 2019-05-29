@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***editor_MENU_ACTIONS*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_MENU_ACTIONS
   // Database: 4D Mobile Express
@@ -354,7 +348,7 @@ Case of
 			"title";"updateTheProject";\
 			"additional";"aBackupWillBeCreatedIntoTheProjectFolder";\
 			"ok";"update";\
-			"okFormula";New formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"syncDataModel"))))
+			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"syncDataModel"))))
 		
 		  //______________________________________________________
 	: ($Mnu_choice="_installCertificats")

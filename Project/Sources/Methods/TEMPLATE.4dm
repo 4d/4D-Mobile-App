@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-***TEMPLATE*** ( input )
- -> input (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : TEMPLATE
   // Database: 4D Mobile Express

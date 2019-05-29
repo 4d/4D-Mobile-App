@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***ACTIONS_PARAMS_Handler*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ACTIONS_PARAMS_Handler
   // Database: 4D Mobile App
@@ -62,8 +55,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		ob_createPath ($Obj_context;"constraints")
 		
 		  // Define form member methods
-		$Obj_context.listUI:=New formula:C1597(ACTIONS_PARAMS_UI ("listUI"))
-		$Obj_context.meta:=New formula:C1597(ACTIONS_PARAMS_UI ("meta"))
+		$Obj_context.listUI:=Formula:C1597(ACTIONS_PARAMS_UI ("listUI"))
+		$Obj_context.meta:=Formula:C1597(ACTIONS_PARAMS_UI ("meta"))
 		
 	End if 
 	

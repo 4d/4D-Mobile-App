@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-wrappedText := ***str_wordWrap*** ( toWrap ; maxColumns )
- -> toWrap (Text)
- -> maxColumns (Long Integer)
- <- wrappedText (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_wordWrap
   // Database: 4D Mobile App

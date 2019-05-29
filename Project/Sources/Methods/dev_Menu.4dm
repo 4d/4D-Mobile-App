@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***dev_Menu*** ( bar )
- -> bar (Text)
-________________________________________________________
-
-*/
 C_TEXT:C284($1)
 
 C_LONGINT:C283($Lon_i;$Lon_pageNumber)

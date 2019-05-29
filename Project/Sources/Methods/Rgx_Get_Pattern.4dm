@@ -1,13 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-Buffer := ***Rgx_Get_Pattern*** ( Pattern_Name ; Path ; Param_3 )
- -> Pattern_Name (Text)
- -> Path (Text)
- -> Param_3 (Pointer)
- <- Buffer (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Method : Rgx_Get_Pattern
   // Created 16/12/05 by Vincent de Lachaux

@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-absolutePath := ***doc_Absolute_path*** ( pathname ; directory )
- -> pathname (Text) -  Path to be treated
- -> directory (Text) -  Reference directory (database folder if omitted)
- <- absolutePath (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_Absolute_path
   // Database: 4D Mobile App

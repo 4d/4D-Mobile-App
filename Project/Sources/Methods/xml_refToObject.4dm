@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-result := ***xml_refToObject*** ( rootReference ; references )
- -> rootReference (Text)
- -> references (Boolean)
- <- result (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : xml_refToObject
   // Database: 4D Mobile Express

@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-number := ***panel_Count***
- <- number (Long Integer) - number of panels into the form
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_Count
   // Database: 4D Mobile Express

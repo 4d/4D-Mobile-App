@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***project_SAVE*** ( project )
- -> project (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_SAVE
   // Database: 4D Mobile Express

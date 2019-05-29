@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***panel_SET_FOCUS*** ( object )
- -> object (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_SET_FOCUS
   // Database: 4D Mobile Express

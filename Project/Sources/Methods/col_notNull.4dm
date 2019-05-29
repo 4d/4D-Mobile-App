@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***col_notNull*** ( Param_1 )
- -> Param_1 (Object)
-________________________________________________________
-
-*/
   // Ignore null values (use with .filter)
 C_OBJECT:C1216($1)
 

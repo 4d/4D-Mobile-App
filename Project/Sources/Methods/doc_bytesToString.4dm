@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-result := ***doc_bytesToString*** ( bytes ; param )
- -> bytes (Real)
- -> param (Object) -  {"unit":"o|B",\r"places": >=0,\r"requestedUnit": "G|M|K|O"}
- <- result (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_bytesToString
   // Alias : Tool_gTxt_BytesToString

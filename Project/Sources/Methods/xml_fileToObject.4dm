@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-result := ***xml_fileToObject*** ( pathname ; references )
- -> pathname (Text)
- -> references (Boolean)
- <- result (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : xml_fileToObject
   // Database: 4D Mobile Express

@@ -1,13 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-pathExist := ***ob_testPath*** ( in ; property ; Param_3 ; … ; N )
- -> in (Object)
- -> property (Text)
- -> Param_3 ; … ; N (Text)
- <- pathExist (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ob_testPath
   // Database: 4D Mobile App

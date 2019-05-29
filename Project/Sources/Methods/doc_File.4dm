@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-file := ***doc_File*** ( pathname ; options )
- -> pathname (Text)
- -> options (Object)
- <- file (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_File
   // Database: 4D Mobile App

@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"incapable"}
-/*
-out := ***fields_LIST*** ( tableNumber )
- -> tableNumber (Text)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : fields_LIST
   // Database: 4D Mobile App

@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-o := ***editor_LoadIcons*** ( in )
- -> in (Object)
- <- o (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_LoadIcons
   // Database: 4D Mobile App

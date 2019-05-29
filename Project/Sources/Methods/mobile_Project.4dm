@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-out := ***mobile_Project*** ( in )
- -> in (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : mobile_Project
   // Database: 4D Mobile Express
@@ -291,10 +284,10 @@ If ($Obj_in.create)
 	  //#ACI0098572 [
 	  //$Obj_out.sdk:=sdk (New object(//"action";"install";//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";//"target";$Obj_in.path;// "cache";env_userPath ("cacheSdk")))
 	  //$Obj_out.sdk:=sdk (New object(\
-				//"action";"install";\
-				//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
-				//"target";$Obj_in.path;\
-				//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
+						//"action";"install";\
+						//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+						//"target";$Obj_in.path;\
+						//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
@@ -427,14 +420,14 @@ If ($Obj_in.create)
 			
 			  // Generate if not exist
 			  //$Obj_out.dump:=dataSet (New object(\
-								//"action";"create";\
-								//"project";$Obj_project;\
-								//"digest";True;\
-								//"dataSet";Bool(featuresFlags._101725);\
-								//"key";$File_;\
-								//"caller";$Obj_in.caller;\
-								//"verbose";$Boo_verbose;\
-								//"picture";Not(Bool(featuresFlags._97117))))
+												//"action";"create";\
+												//"project";$Obj_project;\
+												//"digest";True;\
+												//"dataSet";Bool(featuresFlags._101725);\
+												//"key";$File_;\
+												//"caller";$Obj_in.caller;\
+												//"verbose";$Boo_verbose;\
+												//"picture";Not(Bool(featuresFlags._97117))))
 			$Obj_out.dump:=dataSet (New object:C1471(\
 				"action";"create";\
 				"project";$Obj_project;\
@@ -991,7 +984,7 @@ If ($Obj_out.success)
 					"type";"confirm";\
 					"title";"archiveCreationSuccessful";\
 					"additional";"wouldYouLikeToRevealInFinder";\
-					"okFormula";New formula:C1597(SHOW ON DISK:C922(String:C10($File_)))))
+					"okFormula";Formula:C1597(SHOW ON DISK:C922(String:C10($File_)))))
 				
 			Else 
 				

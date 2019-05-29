@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-***ui_INSERT_TEXT*** ( in )
- -> in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_INSERT
   // Database: 4D Mobile App

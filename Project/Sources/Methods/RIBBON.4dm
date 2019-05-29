@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***RIBBON*** ( button )
- -> button (Long Integer)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : RIBBON
   // Database: 4D Mobile App

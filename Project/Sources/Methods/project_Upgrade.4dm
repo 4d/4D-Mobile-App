@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-upgraded := ***project_Upgrade*** ( project )
- -> project (Object)
- <- upgraded (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_Upgrade
   // Database: 4D Mobile App

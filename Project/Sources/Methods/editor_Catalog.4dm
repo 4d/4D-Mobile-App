@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-catalog := ***editor_Catalog*** ( property )
- -> property (Text)
- <- catalog (Collection)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_Catalog
   // Database: 4D Mobile App

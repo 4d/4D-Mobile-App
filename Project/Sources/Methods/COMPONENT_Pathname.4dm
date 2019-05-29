@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-path := ***COMPONENT_Pathname*** ( target )
- -> target (Text)
- <- path (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : COMPONENT_Pathname
   // Database: 4D Mobile App

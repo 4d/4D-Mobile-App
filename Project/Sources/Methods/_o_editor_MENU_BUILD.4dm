@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***editor_MENU_BUILD*** ( choice )
- -> choice (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_MENU_BUILD
   // Database: 4D Mobile Express

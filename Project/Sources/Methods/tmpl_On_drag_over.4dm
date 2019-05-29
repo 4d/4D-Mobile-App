@@ -1,9 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Long Integer := ***tmpl_On_drag_over***
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : tmpl_On_drag_over
   // Database: 4D Mobile App
@@ -53,8 +48,8 @@ If (Length:C16(This:C1470.$.current)>0)
 			If (Bool:C1537(featuresFlags.withNewFieldProperties))
 				
 				If (_or (\
-					New formula:C1597($t="all");\
-					New formula:C1597(tmpl_compatibleType ($c;$o.fieldType))))
+					Formula:C1597($t="all");\
+					Formula:C1597(tmpl_compatibleType ($c;$o.fieldType))))
 					
 					$0:=0
 					
@@ -64,8 +59,8 @@ If (Length:C16(This:C1470.$.current)>0)
 				
 				  //#MARK_TO_OPTIMIZE
 				If (_or (\
-					New formula:C1597($t="all");\
-					New formula:C1597(tmpl_compatibleType ($c;structure (New object:C1471(\
+					Formula:C1597($t="all");\
+					Formula:C1597(tmpl_compatibleType ($c;structure (New object:C1471(\
 					"action";"tmplType";\
 					"value";Num:C11($o.type))).value))))
 					
@@ -89,8 +84,8 @@ If (Length:C16(This:C1470.$.current)>0)
 					  //#MARK_TODO - Il doit y avoir des widget action qui ne sont pas compatible avec tous les types
 					
 					If (_or (\
-						New formula:C1597($o.target=Null:C1517);\
-						New formula:C1597(String:C10($o.target)="widget")))
+						Formula:C1597($o.target=Null:C1517);\
+						Formula:C1597(String:C10($o.target)="widget")))
 						
 						$0:=0
 						

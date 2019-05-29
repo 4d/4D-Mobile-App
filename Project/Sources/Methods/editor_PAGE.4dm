@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***editor_PAGE*** ( page )
- -> page (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : editor_PAGE
   // Database: 4D Mobile Express
@@ -35,8 +29,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Txt_currentPage:=String:C10(Form:C1466.currentPage)
 	
 	  //$Lon_pageNumber:=6\
-		//+Num(Bool(featuresFlags._100174))\
-		//+Num(Bool(featuresFlags._103505))
+				//+Num(Bool(featuresFlags._100174))\
+				//+Num(Bool(featuresFlags._103505))
 	$Lon_pageNumber:=7\
 		+Num:C11(Bool:C1537(featuresFlags._103505))
 	

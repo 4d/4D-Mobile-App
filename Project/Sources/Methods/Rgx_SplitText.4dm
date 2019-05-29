@@ -1,19 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-Long Integer := ***Rgx_SplitText*** ( Param_1 ; Target ; Param_3 ; Options )
- -> Param_1 (Text)
- -> Target (Text)
- -> Param_3 (Pointer)
- -> Options (Long Integer)
--
-Splits the target into segments separated by matches of the specified regular expression.
-If grouping parentheses are used in the pattern, then the text of all matched groups in the pattern are also added to the segment list.
-Parameter patternText is the regular expression to be matched.
-Parameter targetText is the target text variable.
-Split segments are returned in the splitSegments array.
-Parameter regexFlags specifies a set of flags that control the matching operation.
-Use the regex options constants by combining them with bitwise "or".
-*/
   // ----------------------------------------------------
   // Method : Rgx_SplitText
   // Created 27/09/07 by Vincent de Lachaux

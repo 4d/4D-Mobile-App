@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-formEvent := ***panel_Form_common*** ( Param_1 ; … ; N )
- -> Param_1 ; … ; N (Long Integer)
- <- formEvent (Long Integer)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_Form_common
   // Database: 4D Mobile Express

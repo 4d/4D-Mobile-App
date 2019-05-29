@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-out := ***intoSingleQuotationMark*** ( in )
- -> in (Text)
- <- out (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_singleQuoted
   // Database: 4D Mobile Express

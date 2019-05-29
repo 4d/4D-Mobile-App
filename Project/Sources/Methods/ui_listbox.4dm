@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***ui_listbox*** ( action ; params )
- -> action (Text)
- -> params (Object)
- <- out (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ui_listbox
   // Database: 4D Mobile App

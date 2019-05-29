@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***CATCH*** ( errors )
- -> errors (Collection)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : CATCH
   // ID[0B2F351611D34984A8FCDB08E2E5F5A4]

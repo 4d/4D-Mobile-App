@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-project := ***project_Load*** ( pathname )
- -> pathname (Text)
- <- project (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_Load
   // Database: 4D Mobile Express

@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-valid := ***rest_isValidField*** ( field )
- -> field (Object)
- <- valid (Boolean)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : rest_isValidField
   // Database: 4D Mobile Express

@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-subform := ***panel_Find_by_name*** ( panel ; index )
- -> panel (Text)
- -> index (Pointer)
- <- subform (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_Find_by_name
   // Database: 4D Mobile Express

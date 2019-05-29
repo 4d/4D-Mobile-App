@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***macros*** ( in )
- -> in (Text)
- <- out (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : macros
   // Database: 4D Mobile Express

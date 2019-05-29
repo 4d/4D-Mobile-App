@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-out := ***views_preview*** ( in ; form )
- -> in (Text)
- -> form (Object)
- <- out (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : views_preview
   // Database: 4D Mobile Express
@@ -324,7 +316,7 @@ Case of
 									If (Asserted:C1132(OK=1))
 										
 										DOM SET XML ATTRIBUTE:C866($Dom_field;\
-											"stroke-dasharray";"none")  // ;"assigned";True)\
+											"stroke-dasharray";"none")  // ;"assigned";True)											\
 											
 										If ($Boo_multivalued)
 											

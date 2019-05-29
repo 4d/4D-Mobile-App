@@ -1,13 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-in := ***ob_createPath*** ( in ; path ; type )
- -> in (Object)
- -> path (Text)
- -> type (Long Integer)
- <- in (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ob_createPath
   // Database: 4D Mobile App

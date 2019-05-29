@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-formated := ***str_format*** ( selector ; string )
- -> selector (Text)
- -> string (Text)
- <- formated (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_format
   // Database: 4D Mobile App

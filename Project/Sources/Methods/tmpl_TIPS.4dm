@@ -1,10 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***views_TIPS*** ( form )
- -> form (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : tmpl_TIPS
   // Database: 4D Mobile App

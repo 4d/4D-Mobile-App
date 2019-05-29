@@ -1,9 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Long Integer := ***ACTIONS_PARAMS_OBJECTS_HANDLER***
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : ACTIONS_PARAMS_OBJECTS_HANDLER
   // Database: 4D Mobile Express

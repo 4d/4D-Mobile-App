@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-/*
-out := ***str_URLDecode*** ( in )
- -> in (Text) -  String to decode
- <- out (Text) -  Decoded string
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : str_URLDecode
   // Database: 4D Mobile App

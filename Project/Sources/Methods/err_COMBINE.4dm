@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-***err_COMBINE*** ( source ; target ; type )
- -> source (Object)
- -> target (Object)
- -> type (Long Integer) -  errors by default
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : err_COMBINE
   // Database: 4D Mobile App

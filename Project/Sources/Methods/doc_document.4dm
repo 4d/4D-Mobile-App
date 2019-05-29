@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-document := ***doc_document*** ( document )
- -> document (Object)
- <- document (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : doc_document
   // Database: 4D Mobile App

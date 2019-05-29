@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-result := ***Check_entry*** ( param )
- -> param (Object)
- <- result (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : Check_entry
   // Database: 4D Mobile Express

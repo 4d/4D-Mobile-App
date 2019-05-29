@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-fix := ***project_Fix*** ( in )
- -> in (Object)
- <- fix (Object)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : project_Fix
   // Database: 4D Mobile App

@@ -1,9 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-Text := ***tmpl_cancel***
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : tmpl_cancel
   // Database: 4D Mobile App

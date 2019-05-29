@@ -1,10 +1,4 @@
 //%attributes = {}
-/*
-***00_NEW*** ( entryPoint )
- -> entryPoint (Text)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method: 00_NEW
   // Database: 4D Mobile Express

@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true,"shared":true,"preemptive":"capable"}
-/*
-out := ***mobileUnit*** ( in ; in )
- -> in (Text)
- -> in (Object)
- <- out (Object)
-________________________________________________________
-Internal API for unit tests
-*/
   // ----------------------------------------------------
   // Project method : mobileUnit
   // Database: 4D Mobile Express
@@ -65,7 +57,7 @@ Case of
 		C_OBJECT:C1216(err)
 		
 		$Obj_out:=New object:C1471(\
-			"errors";New formula:C1597(err);\
+			"errors";Formula:C1597(err);\
 			"tests";New collection:C1472)
 		
 		$o:=New signal:C1641
@@ -76,7 +68,7 @@ Case of
 			
 			For each ($t;$o.result)
 				
-				$Obj_out.tests.push(New formula from string:C1601($t))
+				$Obj_out.tests.push(Formula from string:C1601($t))
 				
 			End for each 
 			
@@ -92,7 +84,7 @@ Case of
 	: ($Txt_in="featuresFlags")
 		
 		$Obj_out:=New object:C1471(\
-			"features";New formula:C1597(featuresFlags))
+			"features";Formula:C1597(featuresFlags))
 		
 		  //______________________________________________________
 	: ($Txt_in="loadProject")

@@ -1,10 +1,4 @@
 //%attributes = {}
-/*
-***unitTestSuites*** ( Param_1 )
- -> Param_1 (Object)
-________________________________________________________
-
-*/
 C_OBJECT:C1216($1)
 
 ARRAY TEXT:C222($tTxt_tests;0)

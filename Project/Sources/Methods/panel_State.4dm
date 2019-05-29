@@ -1,11 +1,4 @@
 //%attributes = {"invisible":true}
-/*
-panels := ***panel_State*** ( panels )
- -> panels (Collection)
- <- panels (Collection)
-________________________________________________________
-
-*/
   // ----------------------------------------------------
   // Project method : panel_State
   // Database: 4D Mobile Express
