@@ -53,41 +53,41 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (Asserted:C1132(ui_listboxGetDataSource ($Txt_listbox)="arrays";"This method can't apply to a selection or collection listbox"))
+  //If (Asserted(ui_listboxGetDataSource ($Txt_listbox)="arrays";"This method can't apply to a selection or collection listbox"))
+
+OBJECT SET RGB COLORS:C628(*;$Txt_listbox;Foreground color:K23:1;$Lon_backgroundColor;$Lon_backgroundColor)
+
+If ($Boo_withFocus)
 	
-	OBJECT SET RGB COLORS:C628(*;$Txt_listbox;Foreground color:K23:1;$Lon_backgroundColor;$Lon_backgroundColor)
+	OBJECT SET RGB COLORS:C628(*;$Txt_listbox+".border";ui.selectedColor;Background color none:K23:10)
 	
-	If ($Boo_withFocus)
-		
-		OBJECT SET RGB COLORS:C628(*;$Txt_listbox+".border";ui.selectedColor;Background color none:K23:10)
-		
-	Else 
-		
-		OBJECT SET RGB COLORS:C628(*;$Txt_listbox+".border";ui.backgroundUnselectedColor;Background color none:K23:10)
-		
-	End if 
+Else 
 	
-	For ($Lon_i;1;LISTBOX Get number of rows:C915(*;$Txt_listbox);1)
+	OBJECT SET RGB COLORS:C628(*;$Txt_listbox+".border";ui.backgroundUnselectedColor;Background color none:K23:10)
+	
+End if 
+
+For ($Lon_i;1;LISTBOX Get number of rows:C915(*;$Txt_listbox);1)
+	
+	If ($Ptr_me->{$Lon_i})
 		
-		If ($Ptr_me->{$Lon_i})
+		If ($Boo_withFocus)
 			
-			If ($Boo_withFocus)
-				
-				LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$Lon_i;ui.backgroundSelectedColor;lk background color:K53:25)
-				
-			Else 
-				
-				LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$Lon_i;ui.alternateSelectedColor;lk background color:K53:25)
-				
-			End if 
+			LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$Lon_i;ui.backgroundSelectedColor;lk background color:K53:25)
 			
 		Else 
 			
-			LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$Lon_i;$Lon_backgroundColor;lk background color:K53:25)
+			LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$Lon_i;ui.alternateSelectedColor;lk background color:K53:25)
 			
 		End if 
-	End for 
-End if 
+		
+	Else 
+		
+		LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$Lon_i;$Lon_backgroundColor;lk background color:K53:25)
+		
+	End if 
+End for 
+  //End if 
 
   // ----------------------------------------------------
   // Return

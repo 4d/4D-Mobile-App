@@ -38,7 +38,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	Else 
 		
-		$Dir_default:=_o_Pathname ("projects")
+		$Dir_default:=Storage:C1525.database.projects.platformPath
 		
 		$Txt_projectName:=Select document:C905($Dir_default;commonValues.extension;Get localized string:C991("mess_openProject");Package open:K24:8+Use sheet window:K24:11)
 		
@@ -69,7 +69,7 @@ If (OK=1)
 	$Obj_form.$worker:="4D Mobile ("+String:C10($Win_hdl)+")"
 	CALL WORKER:C1389(String:C10($Obj_form.$worker);"COMPILER_COMPONENT")
 	
-	If (Structure file:C489=Structure file:C489(*))
+	If (Storage:C1525.database.isMatrix)
 		
 		DIALOG:C40("EDITOR";$Obj_form)
 		

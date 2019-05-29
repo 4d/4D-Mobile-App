@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : Pathname
-  // Database: 4D Mobile Express
+  // pathname: 4D Mobile Express
   // ID[824D04E637FD404DAA6AA7E8518EC924]
   // Created #26-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -49,21 +49,21 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 			
 			Use (Storage:C1525.path)
 				
-				Storage:C1525.path.database:=Get 4D folder:C485(Database folder:K5:14;*)
+				Storage:C1525.path.pathname:=Get 4D folder:C485(Database folder:K5:14;*)
 				
 			End use 
 			
-			Storage:C1525.database:=New shared object:C1526
+			Storage:C1525.pathname:=New shared object:C1526
 			
-			Use (Storage:C1525.database)
+			Use (Storage:C1525.pathname)
 				
 				For each ($Txt_property;$Obj_path)
 					
-					Storage:C1525.database[$Txt_property]:=$Obj_path[$Txt_property]
+					Storage:C1525.pathname[$Txt_property]:=$Obj_path[$Txt_property]
 					
 				End for each 
 				
-				Storage:C1525.database.resources:=Get 4D folder:C485(Current resources folder:K5:16;*)
+				Storage:C1525.pathname.resources:=Get 4D folder:C485(Current resources folder:K5:16;*)
 				
 			End use 
 		End use 
@@ -76,17 +76,17 @@ Case of
 		  //______________________________________________________
 	: ($Txt_info="databasePreferences")
 		
-		If (Storage:C1525.path.databasePreferences=Null:C1517)
+		If (Storage:C1525.path.pathnamePreferences=Null:C1517)
 			
 			Use (Storage:C1525.path)
 				
-				Storage:C1525.path.databasePreferences:=Get 4D folder:C485(Active 4D Folder:K5:10)\
-					+Path to object:C1547(Storage:C1525.path.database).name+Folder separator:K24:12
+				Storage:C1525.path.pathnamePreferences:=Get 4D folder:C485(Active 4D Folder:K5:10)\
+					+Path to object:C1547(Storage:C1525.path.pathname).name+Folder separator:K24:12
 				
 			End use 
 		End if 
 		
-		$Txt_result:=Storage:C1525.path.databasePreferences
+		$Txt_result:=Storage:C1525.path.pathnamePreferences
 		
 		  //______________________________________________________
 	: ($Txt_info="projects")
@@ -95,7 +95,7 @@ Case of
 			
 			Use (Storage:C1525.path)
 				
-				Storage:C1525.path.projects:=Storage:C1525.path.database+"Mobile Projects"+Folder separator:K24:12
+				Storage:C1525.path.projects:=Storage:C1525.path.pathname+"Mobile Projects"+Folder separator:K24:12
 				
 			End use 
 		End if 
@@ -110,7 +110,7 @@ Case of
 			
 			Use (Storage:C1525.path)
 				
-				Storage:C1525.path.products:=Storage:C1525.database.parentFolder+Storage:C1525.database.name+" - Mobile"+Folder separator:K24:12
+				Storage:C1525.path.products:=Storage:C1525.pathname.parentFolder+Storage:C1525.pathname.name+" - Mobile"+Folder separator:K24:12
 				
 			End use 
 		End if 
@@ -306,7 +306,7 @@ Case of
 		$Txt_result:=Object to path:C1548(New object:C1471(\
 			"name";"mobile";\
 			"isFolder";True:C214;\
-			"parentFolder";Storage:C1525.database.resources))
+			"parentFolder";Storage:C1525.pathname.resources))
 		
 		  //#redmine:100498
 		If (Test path name:C476($Txt_result)#Is a folder:K24:2)
@@ -315,7 +315,7 @@ Case of
 			$Txt_result:=Object to path:C1548(New object:C1471(\
 				"name";"mobile";\
 				"isFolder";False:C215;\
-				"parentFolder";Storage:C1525.database.resources))
+				"parentFolder";Storage:C1525.pathname.resources))
 			
 			$Txt_result:=doc_resolveAlias ($Txt_result)
 			

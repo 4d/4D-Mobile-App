@@ -46,6 +46,10 @@ Else
 	
 End if 
 
+$o:=New signal:C1641
+CALL WORKER:C1389(1;"INIT";$o)
+$o.wait()
+
   // ================================================================================================================================
   //                                                            COMMON VALUES
   // ================================================================================================================================
@@ -93,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  //commonValues.build:="1.0.0"
 	  //commonValues.developmentRegion:="en"
 	  //commonValues.storyboard:=New object(\
-		"LaunchScreen";"LaunchScreen";\
-		"Main";"Main";\
-		"backgroundColor";"white")
+						"LaunchScreen";"LaunchScreen";\
+						"Main";"Main";\
+						"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -407,7 +411,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags.withWidgetActions:=featuresFlags._8858  // Enable widget actions
 	featuresFlags.withClasses:=featuresFlags._8858  // work with ui.classes
 	
-	featuresFlags.with:=New formula:C1597(Bool:C1537(featuresFlags["_"+String:C10($1)]))
+	featuresFlags.with:=Formula:C1597(Bool:C1537(featuresFlags["_"+String:C10($1)]))
 	
 End if 
 

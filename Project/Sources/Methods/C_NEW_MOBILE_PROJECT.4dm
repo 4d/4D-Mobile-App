@@ -158,7 +158,7 @@ If (Bool:C1537(OK))
 		$Obj_form.$worker:="4D Mobile ("+String:C10($Win_hdl)+")"
 		CALL WORKER:C1389(String:C10($Obj_form.$worker);"COMPILER_COMPONENT")
 		
-		If (Structure file:C489=Structure file:C489(*))
+		If (Storage:C1525.database.isMatrix)
 			
 			DIALOG:C40("EDITOR";$Obj_form)
 			CLOSE WINDOW:C154($Win_hdl)

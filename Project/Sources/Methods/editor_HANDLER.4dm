@@ -63,7 +63,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Load:K2:1)
 				
-				OBJECT SET VISIBLE:C603(*;"debug.@";Structure file:C489=Structure file:C489(*))
+				OBJECT SET VISIBLE:C603(*;"debug.@";Bool:C1537(Storage:C1525.database.isMatrix))
 				
 				$o:=ui.tips
 				$o.enable()

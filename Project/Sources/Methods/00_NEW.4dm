@@ -66,8 +66,6 @@ Case of
 			
 		Else 
 			
-			COMPILER_COMPONENT 
-			
 			$Obj_root:=Folder:C1567("/PACKAGE/Mobile Projects")
 			$Obj_root.create()
 			
@@ -113,7 +111,7 @@ Case of
 				"project";$o.platformPath;\
 				"file";$o)
 			
-			If (Structure file:C489=Structure file:C489(*))
+			If (Storage:C1525.database.isMatrix)
 				
 				DIALOG:C40("EDITOR";$Obj_form)
 				
@@ -131,12 +129,14 @@ Case of
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_declarations")
 		
+		COMPILER_COMPONENT 
+		
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_init")
 		
 		$t:=mnu_defaultBar 
 		
-		If (Structure file:C489=Structure file:C489(*))
+		If (Storage:C1525.database.isMatrix)
 			
 			file_Menu ($t)
 			dev_Menu ($t)

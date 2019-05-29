@@ -39,7 +39,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	End if 
 	
 	$Boo_plus:=Macintosh option down:C545
-	$Boo_dev:=Macintosh command down:C546 & (Structure file:C489=Structure file:C489(*))
+	$Boo_dev:=Macintosh command down:C546 & Storage:C1525.database.isMatrix
 	
 	  // Autosave
 	project_SAVE 
@@ -167,7 +167,7 @@ If ($Boo_plus)
 						APPEND MENU ITEM:C411($Mnu_app;$Txt_buffer)
 						SET MENU ITEM PARAMETER:C1004($Mnu_app;-1;"_app"+JSON Stringify:C1217($Obj_app))
 						
-						If (Structure file:C489=Structure file:C489(*)) & False:C215
+						If (Storage:C1525.database.isMatrix) & False:C215
 							
 							  // provoque une erreur si mobile est un alias 
 							

@@ -1,4 +1,13 @@
 //%attributes = {"invisible":true}
+C_OBJECT:C1216(database ;$0)
+C_TEXT:C284(database ;$1)
+C_OBJECT:C1216(database ;$2)
+
+
+C_OBJECT:C1216(INIT ;$1)
+
+
+
   //__________________________________________________
 C_OBJECT:C1216(publishedTableList ;$0)
 C_OBJECT:C1216(publishedTableList ;$1)

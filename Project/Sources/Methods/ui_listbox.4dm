@@ -139,12 +139,15 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="property")
 		
-		$Obj_out:=New object:C1471("value";LISTBOX Get property:C917(*;This:C1470.name;Num:C11($Obj_params.property)))
+		$Obj_out:=New object:C1471(\
+			"value";LISTBOX Get property:C917(*;\
+			This:C1470.name;Num:C11($Obj_params.property)))
 		
 		  //______________________________________________________
 	: ($Txt_action="datasource")
 		
-		$Obj_out:=New object:C1471("datasource";ui_listboxGetDataSource (This:C1470.name))
+		$Obj_out:=New object:C1471(\
+			"datasource";ui_listboxGetDataSource (This:C1470.name))
 		
 		  //______________________________________________________
 	: ($Txt_action="popup")
@@ -154,7 +157,10 @@ Case of
 		
 		CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
 		
-		$Obj_out:=New object:C1471("choice";Dynamic pop up menu:C1006($Obj_params.menu;"";$Lon_left;$Lon_bottom))
+		$Obj_out:=New object:C1471(\
+			"choice";Dynamic pop up menu:C1006($Obj_params.menu;\
+			"";$Lon_left;\
+			$Lon_bottom))
 		
 		If (Not:C34(Bool:C1537($Obj_params.keep)))
 			

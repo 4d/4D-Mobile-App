@@ -67,8 +67,6 @@ Case of
 		00_OPEN ("_declarations")
 		00_OPEN ("_init")
 		
-		COMPILER_COMPONENT 
-		
 		If (Shift down:C543)  // Select project
 			
 			$Txt_entryPoint:=Select document:C905(Get 4D folder:C485(Database folder:K5:14)+"Mobile Projects"+Folder separator:K24:12;".4dmobileapp";"";Package open:K24:8+Alias selection:K24:10)
@@ -117,12 +115,14 @@ Case of
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_declarations")
 		
+		COMPILER_COMPONENT 
+		
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_init")
 		
 		$t:=mnu_defaultBar 
 		
-		If (Structure file:C489=Structure file:C489(*))
+		If (Storage:C1525.database.isMatrix)
 			
 			file_Menu ($t)
 			dev_Menu ($t)

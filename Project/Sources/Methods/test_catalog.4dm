@@ -18,7 +18,7 @@ ASSERT:C1129($o.errors.length=1)
 ASSERT:C1129($o.errors[0]="Table not found \"Command\"")
 
   //_____________________________________________________________
-If (Structure file:C489=Structure file:C489(*))
+If (Storage:C1525.database.isMatrix)
 	
 	$o:=catalog ("fields";New object:C1471(\
 		"tableName";"Commands"))
