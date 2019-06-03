@@ -39,7 +39,16 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_form:=New object:C1471("window";Current form window:C827;"form";editor_INIT ;"productName";"10_name";"productNameAlert";"name.alert";"productVersion";"11_version";"productID";"id";"productCopyright";"30_copyright";"icon";"icon";"iconAlert";"icon.alert")
+	$Obj_form:=New object:C1471(\
+		"window";Current form window:C827;\
+		"form";editor_INIT ;\
+		"productName";"10_name";\
+		"productNameAlert";"name.alert";\
+		"productVersion";"11_version";\
+		"productID";"id";\
+		"productCopyright";"30_copyright";\
+		"icon";"icon";\
+		"iconAlert";"icon.alert")
 	
 Else 
 	
@@ -66,9 +75,12 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				PRODUCT_Handler (New object:C1471("action";"checkName";"value";Form:C1466.product.name))
+				PRODUCT_Handler (New object:C1471(\
+					"action";"checkName";\
+					"value";Form:C1466.product.name))
 				
-				PRODUCT_Handler (New object:C1471("action";"loadIcon"))
+				PRODUCT_Handler (New object:C1471(\
+					"action";"loadIcon"))
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Bound Variable Change:K2:52)
@@ -93,7 +105,8 @@ Case of
 		
 		If ($Obj_form.form.assets=Null:C1517)
 			
-			$Obj_form.form.assets:=New object:C1471("root";Form:C1466.$project.root+Convert path POSIX to system:C1107("Assets.xcassets/AppIcon.appiconset/"))
+			$Obj_form.form.assets:=New object:C1471(\
+				"root";Form:C1466.$project.root+Convert path POSIX to system:C1107("Assets.xcassets/AppIcon.appiconset/"))
 			
 			CREATE FOLDER:C475($Obj_form.form.assets.root;*)
 			
@@ -109,7 +122,8 @@ Case of
 			End if 
 		End if 
 		
-		PRODUCT_Handler (New object:C1471("action";"displayIcon"))
+		PRODUCT_Handler (New object:C1471(\
+			"action";"displayIcon"))
 		
 		  //=========================================================
 	: ($Obj_in.action="displayIcon")  // Display the selected icon
@@ -130,11 +144,16 @@ Case of
 				
 			End if 
 			
-			project_UI_ALERT (New object:C1471("target";$Obj_form.iconAlert;"reset";True:C214))
+			project_UI_ALERT (New object:C1471(\
+				"target";$Obj_form.iconAlert;\
+				"reset";True:C214))
 			
 		Else 
 			
-			project_UI_ALERT (New object:C1471("target";$Obj_form.iconAlert;"type";"alert";"tips";".The icon is mandatory."))  //#MARK_LOCALIZE
+			project_UI_ALERT (New object:C1471(\
+				"target";$Obj_form.iconAlert;\
+				"type";"alert";\
+				"tips";".The icon is mandatory."))  //#MARK_LOCALIZE
 			
 		End if 
 		
@@ -162,15 +181,25 @@ Case of
 			
 		Else 
 			
-			$Obj_in.path:=Object to path:C1548(New object:C1471("parentFolder";$Obj_in.path;"name";"Contents";"isFolder";True:C214))
+			$Obj_in.path:=Object to path:C1548(New object:C1471(\
+				"parentFolder";$Obj_in.path;\
+				"name";"Contents";\
+				"isFolder";True:C214))
 			
 			If (Test path name:C476($Obj_in.path)=Is a folder:K24:2)
 				
-				$File_:=Object to path:C1548(New object:C1471("parentFolder";$Obj_in.path;"name";"Info";"isFolder";False:C215;"extension";".plist"))
+				$File_:=Object to path:C1548(New object:C1471(\
+					"parentFolder";$Obj_in.path;\
+					"name";"Info";\
+					"isFolder";False:C215;\
+					"extension";".plist"))
 				
 				If (Test path name:C476($File_)=Is a document:K24:1)
 					
-					$Obj_in.path:=Object to path:C1548(New object:C1471("parentFolder";$Obj_in.path;"name";"Resources";"isFolder";True:C214))
+					$Obj_in.path:=Object to path:C1548(New object:C1471(\
+						"parentFolder";$Obj_in.path;\
+						"name";"Resources";\
+						"isFolder";True:C214))
 					
 					If (Test path name:C476($Obj_in.path)=Is a folder:K24:2)
 						
@@ -208,7 +237,9 @@ Case of
 		
 		If (Picture size:C356($Pic_icon)>0)
 			
-			PRODUCT_Handler (New object:C1471("action";"setIcon";"image";$Pic_icon))
+			PRODUCT_Handler (New object:C1471(\
+				"action";"setIcon";\
+				"image";$Pic_icon))
 			
 		End if 
 		
@@ -220,7 +251,8 @@ Case of
 		  // Check size {
 		PICTURE PROPERTIES:C457($Pic_buffer;$Lon_width;$Lon_height)
 		
-		If ($Lon_width>1024) | ($Lon_height>1024)
+		If ($Lon_width>1024)\
+			 | ($Lon_height>1024)
 			
 			CREATE THUMBNAIL:C679($Pic_buffer;$Pic_buffer;1024;1024;Scaled to fit prop centered:K6:6)
 			PICTURE PROPERTIES:C457($Pic_buffer;$Lon_width;$Lon_height)
@@ -237,6 +269,7 @@ Case of
 		If (Test path name:C476($Obj_form.form.assets.root+"Contents.json")#Is a document:K24:1)
 			
 			If (Test path name:C476($Obj_form.form.assets.root)#Is a folder:K24:2)
+				
 				CREATE FOLDER:C475($Obj_form.form.assets.root;*)
 				
 			End if 
@@ -286,7 +319,8 @@ Case of
 		  // Update form picture
 		(ui.pointer($Obj_form.icon))->:=$Pic_buffer
 		
-		PRODUCT_Handler (New object:C1471("action";"displayIcon"))
+		PRODUCT_Handler (New object:C1471(\
+			"action";"displayIcon"))
 		
 		  //=========================================================
 	: ($Obj_in.action="openIconFolder")  // Open the product icons foledr
@@ -301,51 +335,71 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_length=0) & ($Lon_formEvent=On After Edit:K2:43)
+			: ($Lon_length=0)\
+				 & ($Lon_formEvent=On After Edit:K2:43)
 				
 				  // NOTHING MORE TO DO
 				
 				  //______________________________________________________
 			: ($Lon_length=0)
 				
-				project_UI_ALERT (New object:C1471("target";$Obj_form.productNameAlert;"type";"alert";"tips";".Product Name cannot be empty"))  //#MARK_LOCALIZE
+				project_UI_ALERT (New object:C1471(\
+					"target";$Obj_form.productNameAlert;\
+					"type";"alert";\
+					"tips";".Product Name cannot be empty"))  //#MARK_LOCALIZE
 				
 				  //%W-533.1
 				  //______________________________________________________
 			: (Position:C15($Obj_in.value[[1]];"\\!@#$%^&*-+=123456789")>0)
 				  //%W+533.1
 				
-				project_UI_ALERT (New object:C1471("target";$Obj_form.productNameAlert;"type";"alert";"tips";".Avoid Special Character or Numbers on the first Letter (!@#$%^&*-+=123456789)"))  //#MARK_LOCALIZE
+				project_UI_ALERT (New object:C1471(\
+					"target";$Obj_form.productNameAlert;\
+					"type";"alert";\
+					"tips";".Avoid Special Character or Numbers on the first Letter (!@#$%^&*-+=123456789)"))  //#MARK_LOCALIZE
 				
 				  //______________________________________________________
-			: ($Lon_length<2) & ($Lon_formEvent=On After Edit:K2:43)
+			: ($Lon_length<2)\
+				 & ($Lon_formEvent=On After Edit:K2:43)
 				
 				  // NOTHING MORE TO DO
 				
 				  //______________________________________________________
 			: ($Lon_length<2)
 				
-				project_UI_ALERT (New object:C1471("target";$Obj_form.productNameAlert;"type";"alert";"tips";".Product Name cannot be fewer than 2 Characters."))  //#MARK_LOCALIZE
+				project_UI_ALERT (New object:C1471(\
+					"target";$Obj_form.productNameAlert;\
+					"type";"alert";\
+					"tips";".Product Name cannot be fewer than 2 Characters."))  //#MARK_LOCALIZE
 				
 				  //______________________________________________________
 			: ($Lon_length>50)
 				
-				project_UI_ALERT (New object:C1471("target";$Obj_form.productNameAlert;"type";"alert";"tips";".Product Name cannot exceed 50 Characters."))  //#MARK_LOCALIZE
+				project_UI_ALERT (New object:C1471(\
+					"target";$Obj_form.productNameAlert;\
+					"type";"alert";\
+					"tips";".Product Name cannot exceed 50 Characters."))  //#MARK_LOCALIZE
 				
 				  //______________________________________________________
 			: ($Lon_length>23)
 				
-				project_UI_ALERT (New object:C1471("target";$Obj_form.productNameAlert;"type";"warning";"tips";".Product Name should be around 23 Characters or less."))  //#MARK_LOCALIZE
+				project_UI_ALERT (New object:C1471(\
+					"target";$Obj_form.productNameAlert;\
+					"type";"warning";\
+					"tips";".Product Name should be around 23 Characters or less."))  //#MARK_LOCALIZE
 				
 				  //______________________________________________________
 			Else 
 				
-				project_UI_ALERT (New object:C1471("target";$Obj_form.productNameAlert;"reset";True:C214))
+				project_UI_ALERT (New object:C1471(\
+					"target";$Obj_form.productNameAlert;\
+					"reset";True:C214))
 				
 				  //______________________________________________________
 		End case 
 		
 		  //=========================================================
+		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")

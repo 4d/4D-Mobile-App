@@ -115,7 +115,6 @@
 					"verticalAlign": "middle",
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
-						"onDisplayDetail",
 						"onLosingFocus",
 						"onGettingFocus",
 						"onSelectionChange"
@@ -234,7 +233,7 @@
 					"width": 157,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "ACTIONS_PARAMS_UI .parameter.type",
+					"dataSource": "Get localized string:C991(String:C10(ACTIONS_PARAMS_UI .parameter.format))",
 					"focusable": false,
 					"fill": "transparent",
 					"borderStyle": "none",
@@ -281,7 +280,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:type"
+					"text": ":xliff:formatters"
 				},
 				"05_property_type.popup": {
 					"type": "button",
@@ -296,6 +295,39 @@
 					"events": [
 						"onClick"
 					]
+				},
+				"06_variable_default.border": {
+					"type": "rectangle",
+					"top": 157,
+					"left": 734,
+					"width": 204,
+					"height": 33,
+					"visibility": "hidden",
+					"stroke": "#C4C4C4"
+				},
+				"06_variable_default": {
+					"type": "input",
+					"top": 165,
+					"left": 741,
+					"width": 189,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "ACTIONS_PARAMS_UI .parameter.default",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"dragging": "none"
+				},
+				"06_variable_default.label": {
+					"type": "text",
+					"top": 135,
+					"left": 734,
+					"width": 140,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ".default value",
+					"visibility": "hidden"
 				}
 			}
 		}

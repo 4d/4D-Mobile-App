@@ -127,7 +127,7 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"method": "ObjectMethods/message.4dm"
+					"method": "editor_OBJECTS_HANDLER"
 				},
 				"debug.focus": {
 					"type": "input",

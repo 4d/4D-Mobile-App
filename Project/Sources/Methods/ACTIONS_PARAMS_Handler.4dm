@@ -38,8 +38,10 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"$";editor_INIT ;\
 		"form";ui.form("editor_CALLBACK").get();\
 		"noSelection";ui.static("empty");\
-		"withSelection";ui.group(New collection:C1472("@parameters@";"@property@"));\
-		"properties";ui.group("@property@");\
+		"withSelection";ui.group(New collection:C1472("@parameters@";"@property@";"@variable@"));\
+		"field";ui.group(New collection:C1472("@parameters@";"@property@"));\
+		"variable";ui.group("@variable@");\
+		"properties";ui.group(New collection:C1472("@property@";"@variable@"));\
 		"parameters";ui.listbox("01_Parameters");\
 		"add";ui.button("parameters.add");\
 		"remove";ui.button("parameters.remove");\
@@ -95,7 +97,6 @@ Case of
 					$Obj_form.noSelection.hide()
 					$Obj_form.withSelection.show()
 					
-					
 					If ($Obj_context.parameter=Null:C1517)
 						
 						$Obj_form.remove.disable()
@@ -106,6 +107,15 @@ Case of
 						$Obj_form.remove.enable()
 						$Obj_form.properties.show()
 						
+						If ($Obj_context.parameter.fieldNumber#Null:C1517)  //variable
+							
+							$Obj_form.variable.hide()
+							
+						Else 
+							
+							$Obj_form.variable.show()
+							
+						End if 
 					End if 
 				End if 
 				
