@@ -93,10 +93,10 @@ Case of
 		
 		  //Else 
 		  //ui_TOOLBAR_ALIGN (New object(\
-			"widgets";New collection("101";"102";"103";"104";"105";"106");\
-			"start";$Obj_form.start;\
-			"minWidth";$Obj_form.minWidth;\
-			"gap";$Obj_form.gap))
+						"widgets";New collection("101";"102";"103";"104";"105";"106");\
+						"start";$Obj_form.start;\
+						"minWidth";$Obj_form.minWidth;\
+						"gap";$Obj_form.gap))
 		  //End if 
 		
 		SET TIMER:C645(-1)
@@ -160,10 +160,10 @@ Case of
 					  //Else 
 					
 					  //ui_TOOLBAR_ALIGN (New object(\
-						"widgets";New collection("101";"102";"103";"104";"105";"106");\
-						"start";$Obj_form.start;\
-						"minWidth";$Obj_form.minWidth;\
-						"gap";$Obj_form.gap))
+												"widgets";New collection("101";"102";"103";"104";"105";"106");\
+												"start";$Obj_form.start;\
+												"minWidth";$Obj_form.minWidth;\
+												"gap";$Obj_form.gap))
 					
 					  //End if 
 					
@@ -177,12 +177,12 @@ Case of
 						"gap";$Obj_form.gap))
 					
 					  // Place the popup icons
-					$Obj_widget:=widgetProperties ("201.PopUp")
-					$Obj_widget.left:=widgetProperties ("201").right-13
+					$Obj_widget:=_o_widgetProperties ("201.PopUp")
+					$Obj_widget.left:=_o_widgetProperties ("201").right-13
 					OBJECT SET COORDINATES:C1248(*;"201.PopUp";$Obj_widget.left;$Obj_widget.top;$Obj_widget.left+$Obj_widget.width;$Obj_widget.top+$Obj_widget.height)
 					
-					$Obj_widget:=widgetProperties ("152.PopUp")
-					$Obj_widget.left:=widgetProperties ("152").right-13
+					$Obj_widget:=_o_widgetProperties ("152.PopUp")
+					$Obj_widget.left:=_o_widgetProperties ("152").right-13
 					OBJECT SET COORDINATES:C1248(*;"152.PopUp";$Obj_widget.left;$Obj_widget.top;$Obj_widget.left+$Obj_widget.width;$Obj_widget.top+$Obj_widget.height)
 					
 					  //………………………………………………………………………………………

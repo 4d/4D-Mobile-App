@@ -166,8 +166,24 @@
 					"events": [
 						"onDataChange"
 					]
+				},
+				"Button": {
+					"type": "button",
+					"text": "Button",
+					"top": 445,
+					"left": 29,
+					"width": 118,
+					"height": 35,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button.4dm"
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

@@ -9,12 +9,6 @@
 			"MAIN"
 		]
 	},
-	"WEB (Server)": {
-		"methods": [
-			"COMPILER_WEB",
-			"WEB_Test"
-		]
-	},
 	"tools": {
 		"groups": [
 			"methods"
@@ -23,28 +17,35 @@
 			"Check_entry"
 		]
 	},
-	"backend": {
+	"STRUCTURE": {
 		"methods": [
-			"Process_tags",
-			"http_NO_ERROR",
-			"Rest",
-			"TEMPLATE",
-			"COMPILER_backend",
-			"Process_tags_on_file",
-			"net",
-			"xloc",
-			"structure",
-			"formatString",
-			"getIcon",
-			"formatters",
-			"checkQueryFilter",
-			"dataSet",
-			"dump",
-			"templates",
-			"actions",
-			"catalog",
-			"findFirstPathComponentInCatalog",
-			"dataModel"
+			"structure_REPAIR",
+			"STRUCTURE_OBJECTS_HANDLER",
+			"structure_FIELD_LIST",
+			"COMPILER_STRUCTURES",
+			"STRUCTURE_TIPS",
+			"STRUCTURE_Handler",
+			"STRUCTURE_ACTION",
+			"STRUCTURE_CALLBACK",
+			"STRUCTURE_UPDATE",
+			"structure_TABLE_LIST"
+		],
+		"forms": [
+			"RELATED",
+			"STRUCTURE"
+		]
+	},
+	"col": {
+		"methods": [
+			"COMPILER_col",
+			"col_findObject",
+			"col_replaceString",
+			"test_colObj_distinct",
+			"test_col",
+			"col_distinctObject",
+			"col_valueToObject",
+			"col_notNull",
+			"col_formula"
 		]
 	},
 	"macOS": {
@@ -69,39 +70,6 @@
 			"Xcode",
 			"XcodeProj",
 			"Xcode_CheckInstall"
-		]
-	},
-	"STRUCTURE": {
-		"methods": [
-			"structure_REPAIR",
-			"STRUCTURE_OBJECTS_HANDLER",
-			"structure_FIELD_LIST",
-			"COMPILER_STRUCTURES",
-			"STRUCTURE_TIPS",
-			"STRUCTURE_Handler",
-			"STRUCTURE_ACTION",
-			"STRUCTURE_CALLBACK",
-			"STRUCTURE_UPDATE",
-			"structure_TABLE_LIST"
-		],
-		"forms": [
-			"RELATED",
-			"STRUCTURE"
-		]
-	},
-	"widgets": {
-		"groups": [
-			"Search",
-			"Picture grid",
-			"Message",
-			"Localization"
-		]
-	},
-	"mobile": {
-		"methods": [
-			"mobile_Check_installation",
-			"COMPILER_mobile",
-			"mobile_Project"
 		]
 	},
 	"Search": {
@@ -130,6 +98,45 @@
 			"env_Component_availabe"
 		]
 	},
+	"backend": {
+		"methods": [
+			"Process_tags",
+			"http_NO_ERROR",
+			"Rest",
+			"TEMPLATE",
+			"COMPILER_backend",
+			"Process_tags_on_file",
+			"net",
+			"xloc",
+			"structure",
+			"formatString",
+			"getIcon",
+			"formatters",
+			"checkQueryFilter",
+			"dataSet",
+			"dump",
+			"templates",
+			"actions",
+			"catalog",
+			"findFirstPathComponentInCatalog",
+			"dataModel"
+		]
+	},
+	"mobile": {
+		"methods": [
+			"mobile_Check_installation",
+			"COMPILER_mobile",
+			"mobile_Project"
+		]
+	},
+	"widgets": {
+		"groups": [
+			"Search",
+			"Picture grid",
+			"Message",
+			"Localization"
+		]
+	},
 	"ui": {
 		"methods": [
 			"ui_MOVE",
@@ -138,14 +145,11 @@
 			"windowProperties",
 			"ui_BEST_SIZE",
 			"COMPILER_ui",
-			"ui_menu",
 			"ui_ALIGN_ON_BEST_SIZE",
 			"ui_listbox",
-			"ui_window",
 			"ui_SET_ENABLED",
 			"ui_listboxPopUp",
 			"ui_CLASSES",
-			"widgetProperties",
 			"ui_form",
 			"ui_widget",
 			"ui_SET_GEOMETRY"
@@ -196,11 +200,10 @@
 	},
 	"lib": {
 		"groups": [
-			"WEB (Server)",
 			"tools",
+			"col",
 			"ui",
 			"doc",
-			"col",
 			"rgx (thread-safe)",
 			"str",
 			"panel",
@@ -212,7 +215,8 @@
 			"pic",
 			"ob_error",
 			"xml (thread-safe)",
-			"env (thread-safe)"
+			"env (thread-safe)",
+			"WEB (Server)"
 		],
 		"methods": [
 			"LOG_EVENT",
@@ -229,6 +233,11 @@
 			"win_CLOSE",
 			"menu_window",
 			"menu_goToPage"
+		]
+	},
+	"Picture grid": {
+		"forms": [
+			"PICTURE_GRID"
 		]
 	},
 	"[PROJECT]": {
@@ -252,24 +261,6 @@
 		],
 		"forms": [
 			"PROJECT"
-		]
-	},
-	"Picture grid": {
-		"forms": [
-			"PICTURE_GRID"
-		]
-	},
-	"col": {
-		"methods": [
-			"COMPILER_col",
-			"col_findObject",
-			"col_replaceString",
-			"test_colObj_distinct",
-			"test_col",
-			"col_distinctObject",
-			"col_valueToObject",
-			"col_notNull",
-			"col_formula"
 		]
 	},
 	"rgx (thread-safe)": {
@@ -564,6 +555,15 @@
 			"COMPILER_xml"
 		]
 	},
+	"classes": {
+		"methods": [
+			"widget",
+			"window",
+			"menu",
+			"database",
+			"COMPILER_classes"
+		]
+	},
 	"SERVER": {
 		"methods": [
 			"SERVER_Handler",
@@ -587,6 +587,7 @@
 			"_o_Pathname",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
+			"_o_widgetProperties",
 			"_o_panel_SET_CONSTRAINTS",
 			"_o_env_userPath",
 			"tempoFiledType"
@@ -605,11 +606,6 @@
 			"COMPILER_env"
 		]
 	},
-	"Localization": {
-		"forms": [
-			"LOCALIZATION"
-		]
-	},
 	"ACTIONS_PARAMS": {
 		"methods": [
 			"COMPILER_ACTIONS_PARAMS",
@@ -619,6 +615,17 @@
 		],
 		"forms": [
 			"ACTIONS_PARAMS"
+		]
+	},
+	"WEB (Server)": {
+		"methods": [
+			"COMPILER_WEB",
+			"WEB_Test"
+		]
+	},
+	"Localization": {
+		"forms": [
+			"LOCALIZATION"
 		]
 	},
 	"[EDITOR]": {
@@ -650,8 +657,8 @@
 	},
 	"_[COMPONENT]": {
 		"groups": [
-			"backend",
 			"macOS",
+			"backend",
 			"mobile",
 			"[PROJECT]",
 			"[PANELS]",

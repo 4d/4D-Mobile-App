@@ -13,7 +13,7 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "method.4dm",
+	"method": "ACTIONS_Handler",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",

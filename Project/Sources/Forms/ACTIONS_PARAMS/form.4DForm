@@ -121,6 +121,7 @@
 					],
 					"focusable": true,
 					"borderStyle": "none",
+					"sortable": false,
 					"columns": [
 						{
 							"name": "names",
@@ -326,7 +327,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ".default value",
+					"text": ":xliff:defaultValue",
 					"visibility": "hidden"
 				}
 			}

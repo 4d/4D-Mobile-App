@@ -336,7 +336,10 @@ Case of
 											"name";formatString ("field-name";$Obj_table[$t].name);\
 											"label";$Obj_table[$t].label;\
 											"shortLabel";$Obj_table[$t].shortLabel;\
-											"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType))
+											"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
+											"defaultField";"")
+										
+										$o.defaultField:=$o.name
 										
 										Case of 
 												
@@ -346,25 +349,12 @@ Case of
 												$o.format:="dateMedium"
 												
 												  //……………………………………………………………………
-											: ($o.type="string")\
-												 | ($o.type="text")
-												
-												  //$o.format:="textArea"
-												
-												  //……………………………………………………………………
 											: ($o.type="time")
 												
 												$o.format:="hour"
 												
 												  //……………………………………………………………………
-											Else 
-												
-												  //$o.format:="dateShort"
-												
-												  //……………………………………………………………………
 										End case 
-										
-										$o.defaultField:=$o.name
 										
 										$c.push($o)
 										

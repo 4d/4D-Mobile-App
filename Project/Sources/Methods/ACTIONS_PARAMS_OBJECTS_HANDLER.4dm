@@ -11,10 +11,10 @@
   // Declarations
 C_LONGINT:C283($0)
 
-C_LONGINT:C283($Lon_parameters)
+C_LONGINT:C283($i;$Lon_parameters)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_menu;$Obj_table)
-C_COLLECTION:C1488($c)
+C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_menu;$Obj_current;$Obj_table)
+C_COLLECTION:C1488($c;$cc)
 
 If (False:C215)
 	C_LONGINT:C283(ACTIONS_PARAMS_OBJECTS_HANDLER ;$0)
@@ -57,7 +57,7 @@ Case of
 		  //==================================================
 	: ($Obj_form.form.currentWidget=$Obj_form.parameters.name)  // Parameters listbox
 		
-		$Obj_form.parameters.get()
+		  //$Obj_form.parameters.get()
 		
 		Case of 
 				
@@ -93,62 +93,104 @@ Case of
 		  //==================================================
 	: ($Obj_form.form.currentWidget=$Obj_form.typeMenu.name)  // Types choice
 		
-		$Obj_menu:=ui.menu()
+		$Obj_menu:=menu 
+		
+		$Obj_current:=$Obj_context.parameter  //current parameter
+		$t:=String:C10($Obj_current.format)  //current format
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_context.parameter.type="string")
+			: ($Obj_current.defaultField=Null:C1517)  // User parameter
 				
-				$Obj_menu.append(":xliff:_text";"null";$Obj_context.parameter.format=Null:C1517)
+				$o:=menu 
+				$o.append(":xliff:_text";"text")
+				$o.line()
+				$o.append(":xliff:name";"name";$t="name")
+				$o.append(":xliff:_mail";"email";$t="email")
+				$o.append(":xliff:_phone";"phone";$t="phone")
+				$o.append(":xliff:account";"account";$t="account")
+				$o.append(":xliff:password";"password";$t="password")
+				$o.append(":xliff:_url";"url";$t="url")
+				$o.append(":xliff:zipCode";"zipCode";$t="zipCode")
+				$Obj_menu.appendMenu(":xliff:_text";$o)
+				
+				$o:=menu 
+				$o.append(":xliff:number";"number")
+				$o.line()
+				$o.append(":xliff:scientific";"scientific";$t="scientific")
+				$o.append(":xliff:_percent";"percent";$t="percent")
+				$o.append(":xliff:energy";"energy";$t="energy")
+				$o.append(":xliff:mass";"mass";$t="mass")
+				$Obj_menu.appendMenu(":xliff:number";$o)
+				
+				$o:=menu 
+				$o.append(":xliff:_mediumDate";"dateMedium";$t="dateMedium")
+				$o.append(":xliff:_shortDate";"dateShort";$t="dateShort")
+				$o.append(":xliff:_longDate";"dateLong";$t="dateLong")
+				$Obj_menu.appendMenu(":xliff:date";$o)
+				
+				$o:=menu 
+				$o.append(":xliff:hour";"hour";$t="hour")
+				$o.append(":xliff:_duration";"duration";$t="duration")
+				$Obj_menu.appendMenu(":xliff:time";$o)
+				
 				$Obj_menu.line()
-				$Obj_menu.append(":xliff:textArea";"textArea";String:C10($Obj_context.parameter.format)="textArea")
-				$Obj_menu.append(":xliff:name";"name";String:C10($Obj_context.parameter.format)="name")
-				$Obj_menu.append(":xliff:_mail";"email";String:C10($Obj_context.parameter.forma)="email")
-				$Obj_menu.append(":xliff:_phone";"phone";String:C10($Obj_context.parameter.format)="phone")
-				$Obj_menu.append(":xliff:account";"account";String:C10($Obj_context.parameter.format)="account")
-				$Obj_menu.append(":xliff:password";"password";String:C10($Obj_context.parameter.format)="password")
-				$Obj_menu.append(":xliff:_url";"url";String:C10($Obj_context.parameter.format)="url")
-				$Obj_menu.append(":xliff:zipCode";"zipCode";String:C10($Obj_context.parameter.format)="zipCode")
+				$Obj_menu.append(":xliff:boolean";"bool")
+				$Obj_menu.append(":xliff:_restImage";"image")
 				
 				  //______________________________________________________
-			: ($Obj_context.parameter.type="date")
+			: ($Obj_current.type="string")
 				
-				$Obj_menu.append(":xliff:_mediumDate";"dateMedium";String:C10($Obj_context.parameter.format)="dateMedium")
-				$Obj_menu.append(":xliff:_shortDate";"dateShort";String:C10($Obj_context.parameter.format)="dateShort")
-				$Obj_menu.append(":xliff:_longDate";"dateLong";String:C10($Obj_context.parameter.format)="dateLong")
-				
-				  //______________________________________________________
-			: ($Obj_context.parameter.type="number")
-				
-				$Obj_menu.append(":xliff:number";"null";$Obj_context.parameter.format=Null:C1517)
+				$Obj_menu.append(":xliff:_text";"null";$Obj_current.format=Null:C1517)
 				$Obj_menu.line()
-				$Obj_menu.append(":xliff:scientific";"scientific";String:C10($Obj_context.parameter.format)="scientific")
-				$Obj_menu.append(":xliff:_percent";"percent";String:C10($Obj_context.parameter.format)="percent")
-				$Obj_menu.append(":xliff:energy";"energy";String:C10($Obj_context.parameter.format)="energy")
-				$Obj_menu.append(":xliff:mass";"mass";String:C10($Obj_context.parameter.format)="mass")
-				$Obj_menu.append(":xliff:_spellOut";"spellOut";String:C10($Obj_context.parameter.format)="spellOut")
+				$Obj_menu.append(":xliff:textArea";"textArea";$t="textArea")
+				$Obj_menu.append(":xliff:name";"name";$t="name")
+				$Obj_menu.append(":xliff:_mail";"email";$t="mail")
+				$Obj_menu.append(":xliff:_phone";"phone";$t="phone")
+				$Obj_menu.append(":xliff:account";"account";$t="account")
+				$Obj_menu.append(":xliff:password";"password";$t="password")
+				$Obj_menu.append(":xliff:_url";"url";$t="url")
+				$Obj_menu.append(":xliff:zipCode";"zipCode";$t="zipCode")
 				
 				  //______________________________________________________
-			: ($Obj_context.parameter.type="time")
+			: ($Obj_current.type="date")
 				
-				$Obj_menu.append(":xliff:hour";"hour";String:C10($Obj_context.parameter.format)="hour")
-				$Obj_menu.append(":xliff:_duration";"duration";String:C10($Obj_context.parameter.format)="duration")
-				
-				  //______________________________________________________
-			: ($Obj_context.parameter.type="bool")
-				
-				$Obj_menu.append(":xliff:boolean";"null";$Obj_context.parameter.format=Null:C1517)
+				$Obj_menu.append(":xliff:_mediumDate";"dateMedium";$t="dateMedium")
+				$Obj_menu.append(":xliff:_shortDate";"dateShort";$t="dateShort")
+				$Obj_menu.append(":xliff:_longDate";"dateLong";$t="dateLong")
 				
 				  //______________________________________________________
-			: ($Obj_context.parameter.type="image")
+			: ($Obj_current.type="number")
 				
-				$Obj_menu.append(":xliff:_restImage";"null";$Obj_context.parameter.format=Null:C1517)
+				$Obj_menu.append(":xliff:number";"null";$Obj_current.format=Null:C1517)
+				$Obj_menu.line()
+				$Obj_menu.append(":xliff:scientific";"scientific";$t="scientific")
+				$Obj_menu.append(":xliff:_percent";"percent";$t="percent")
+				$Obj_menu.append(":xliff:energy";"energy";$t="energy")
+				$Obj_menu.append(":xliff:mass";"mass";$t="mass")
+				$Obj_menu.append(":xliff:_spellOut";"spellOut";$t="spellOut")
+				
+				  //______________________________________________________
+			: ($Obj_current.type="time")
+				
+				$Obj_menu.append(":xliff:hour";"hour";$t="hour")
+				$Obj_menu.append(":xliff:_duration";"duration";$t="duration")
+				
+				  //______________________________________________________
+			: ($Obj_current.type="bool")
+				
+				$Obj_menu.append(":xliff:boolean";"null";$Obj_current.format=Null:C1517)
+				
+				  //______________________________________________________
+			: ($Obj_current.type="image")
+				
+				$Obj_menu.append(":xliff:_restImage";"null";$Obj_current.format=Null:C1517)
 				
 				  //______________________________________________________
 			Else 
 				
-				$Obj_menu.append(":xliff:standard";"null";$Obj_context.parameter.format=Null:C1517)
+				$Obj_menu.append(":xliff:standard";"null";$Obj_current.format=Null:C1517)
 				
 				  //______________________________________________________
 		End case 
@@ -156,18 +198,75 @@ Case of
 		  // Position according to the box
 		$o:=$Obj_form.typeBorder.getCoordinates()
 		$Obj_menu.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom)
-		$Obj_menu.clear()
 		
 		If (Length:C16($Obj_menu.choice)#0)
 			
 			If ($Obj_menu.choice="null")
 				
-				OB REMOVE:C1226($Obj_context.parameter;"format")
+				OB REMOVE:C1226($Obj_current;"format")
 				
 			Else 
 				
-				$Obj_context.parameter.format:=$Obj_menu.choice
+				$Obj_current.format:=$Obj_menu.choice
 				
+				If ($Obj_current.defaultField=Null:C1517)  // User parameter
+					
+					$t:=$Obj_current.format
+					
+					Case of 
+							
+							  //______________________________________________________
+						: ($t="text")\
+							 | ($t="name")\
+							 | ($t="email")\
+							 | ($t="phone")\
+							 | ($t="account")\
+							 | ($t="password")\
+							 | ($t="url")\
+							 | ($t="zipCode")
+							
+							$Obj_current.type:="text"
+							
+							  //______________________________________________________
+						: ($t="number")\
+							 | ($t="scientific")\
+							 | ($t="percent")\
+							 | ($t="energy")\
+							 | ($t="mass")
+							
+							$Obj_current.type:="number"
+							
+							  //______________________________________________________
+						: ($t="dateMedium")\
+							 | ($t="dateShort")\
+							 | ($t="dateLong")
+							
+							$Obj_current.type:="date"
+							
+							  //______________________________________________________
+						: ($t="hour")\
+							 | ($t="duration")
+							
+							$Obj_current.type:="time"
+							
+							  //______________________________________________________
+						: ($t="bool")
+							
+							$Obj_current.type:="bool"
+							
+							  //______________________________________________________
+						: ($t="image")
+							
+							$Obj_current.type:="image"
+							
+							  //______________________________________________________
+						Else 
+							
+							  // A "Case of" statement should never omit "Else"
+							  //______________________________________________________
+					End case 
+					
+				End if 
 			End if 
 			
 			project.save()
@@ -187,33 +286,40 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Alternative Click:K2:36)  //
 				
-				$Obj_menu:=ui.menu()
+				$Obj_menu:=menu 
 				$Obj_menu.append(".New parameter";"new")
 				
 				$Obj_table:=Form:C1466.dataModel[String:C10($Obj_context.action.tableNumber)]
 				
 				$c:=New collection:C1472
 				
-				For each ($t;$Obj_table)
+				If ($Obj_context.action.parameters=Null:C1517)
 					
-					If (Storage:C1525.ƒ.isField($t))
+					For each ($t;$Obj_table)
 						
-						Case of 
+						If (Storage:C1525.ƒ.isField($t))
+							
+							$Obj_table[$t].fieldNumber:=Num:C11($t)
+							$c.push($Obj_table[$t])
+							
+						End if 
+					End for each 
+					
+				Else 
+					
+					For each ($t;$Obj_table)
+						
+						If (Storage:C1525.ƒ.isField($t))
+							
+							If ($Obj_context.action.parameters.query("fieldNumber = :1";Num:C11($t)).length=0)
 								
-								  //______________________________________________________
-							: ($Obj_context.action.parameters=Null:C1517)
-								
+								$Obj_table[$t].fieldNumber:=Num:C11($t)
 								$c.push($Obj_table[$t])
 								
-								  //______________________________________________________
-							: ($Obj_context.action.parameters.query("fieldNumber = :1";Num:C11($t)).length=0)
-								
-								$c.push($Obj_table[$t])
-								
-								  //______________________________________________________
-						End case 
-					End if 
-				End for each 
+							End if 
+						End if 
+					End for each 
+				End if 
 				
 				If ($c.length>0)
 					
@@ -227,64 +333,121 @@ Case of
 				End if 
 				
 				$Obj_menu.popup()
-				$Obj_menu.clear()
 				
 				$t:=String:C10($Obj_menu.choice)
 				
-				Case of 
-						
-						  //______________________________________________________
-					: (Length:C16($t)=0)
-						
-						  // <NOTHING MORE TO DO>
-						
-						  //______________________________________________________
-					: ($t="new")  // Add a user parameter
-						
-						  //______________________________________________________
-					Else   // Add a field
-						
-						  //$c:=$c.query("fieldNumber = :1";Num($t))
-						
-						  //$o:=New object(\
-							"fieldNumber";$c[0].fieldNumber;\
-							"name";formatString ("field-name";$c[0].name);\
-							"label";$c[0].label;\
-							"shortLabel";$c[0].shortLabel;\
-							"type";Choose($c[0].fieldType=Is time;"time";$c[0].fieldType))
-						
-						  // Case of
-						  //  //……………………………………………………………………
-						  //: ($o.type="date")
-						
-						  //$o.format:="dateMedium"
-						
-						  //  //……………………………………………………………………
-						  //: ($o.type="string")\
-							| ($o.type="text")
-						
-						  //  //$o.format:="textArea"
-						
-						  //  //……………………………………………………………………
-						  //: ($o.type="time")
-						
-						  //$o.format:="hour"
-						
-						  //  //……………………………………………………………………
-						  // Else
-						
-						  //  //$o.format:="dateShort"
-						
-						  //  //……………………………………………………………………
-						  // End case
-						
-						  //$o.defaultField:=$o.name
-						
-						  //______________________________________________________
-				End case 
-				
 				  //______________________________________________________
 		End case 
+		
+		If (Length:C16($t)>0)
+			
+			Case of 
+					
+					  //______________________________________________________
+				: ($t="new")  // Add a user parameter
+					
+					If ($Obj_context.action.parameters#Null:C1517)
+						
+						Repeat 
+							
+							$i:=$i+1
+							
+							$c:=$Obj_context.action.parameters.query("name=:1";"parameter"+String:C10($i))
+							
+							If ($c.length=0)
+								
+								$t:="parameter"+String:C10($i)
+								
+							End if 
+						Until ($c.length=0)
+						
+					Else 
+						
+						$t:="parameter"
+						
+					End if 
+					
+					$o:=New object:C1471(\
+						"name";$t;\
+						"label";"";\
+						"shortLabel";"";\
+						"type";Null:C1517;\
+						"default";Null:C1517)
+					
+					  //______________________________________________________
+				Else   // Add a field
+					
+					$c:=$c.query("fieldNumber = :1";Num:C11($t))
+					
+					$o:=New object:C1471(\
+						"fieldNumber";$c[0].fieldNumber;\
+						"name";formatString ("field-name";$c[0].name);\
+						"label";$c[0].label;\
+						"shortLabel";$c[0].shortLabel;\
+						"type";Null:C1517;\
+						"defaultField";"")
+					
+					$o.defaultField:=$o.name
+					
+					$cc:=New collection:C1472
+					$cc[Is integer 64 bits:K8:25]:="number"
+					$cc[Is alpha field:K8:1]:="string"
+					$cc[Is integer:K8:5]:="number"
+					$cc[Is longint:K8:6]:="number"
+					$cc[Is picture:K8:10]:="image"
+					$cc[Is boolean:K8:9]:="bool"
+					$cc[Is float:K8:26]:="number"
+					$cc[Is text:K8:3]:="string"
+					$cc[Is real:K8:4]:="number"
+					$cc[Is time:K8:8]:="time"
+					$cc[Is date:K8:7]:="date"
+					
+					$o.type:=$cc[$c[0].fieldType]
+					
+					ASSERT:C1129($o.type#Null:C1517)
+					
+					Case of 
+							
+							  //……………………………………………………………………
+						: ($o.type="date")
+							
+							$o.format:="dateMedium"
+							
+							  //……………………………………………………………………
+						: ($o.type="time")
+							
+							$o.format:="hour"
+							
+							  //……………………………………………………………………
+					End case 
+					
+					  //______________________________________________________
+			End case 
+			
+			$Obj_context:=ob_createPath ($Obj_context;"action.parameters";Is collection:K8:32)
+			$Obj_context.action.parameters.push($o)
+			$Obj_form.parameters.select($Obj_form.parameters.rowsNumber())
+			
+			project.save()
+			
+		End if 
+		
+		
+		  //==================================================
+	: ($Obj_form.form.currentWidget=$Obj_form.remove.name)  // Remove action button
+		
+		$i:=$Obj_context.action.parameters.indexOf($Obj_context.parameter)
+		$Obj_context.action.parameters.remove($i)
+		
+		  //$Obj_context.parameter:=Null
+		$Obj_context.parameter:=New object:C1471
+		$Obj_context.selected:=New collection:C1472
+		$Obj_context.index:=0
+		
+		$Obj_form.form.refresh()
+		
+		project.save()
+		
 		
 		  //==================================================
 	Else 

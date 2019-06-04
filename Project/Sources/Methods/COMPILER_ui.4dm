@@ -2,8 +2,8 @@
 If (False:C215)
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(widgetProperties ;$0)
-	C_TEXT:C284(widgetProperties ;$1)
+	C_OBJECT:C1216(_o_widgetProperties ;$0)
+	C_TEXT:C284(_o_widgetProperties ;$1)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(windowProperties ;$0)
@@ -25,9 +25,9 @@ If (False:C215)
 	C_OBJECT:C1216(ui_listbox ;$2)
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(ui_menu ;$0)
-	C_TEXT:C284(ui_menu ;$1)
-	C_OBJECT:C1216(ui_menu ;$2)
+	  //C_OBJECT(ui_menu;$0)
+	  //C_TEXT(ui_menu;$1)
+	  //C_OBJECT(ui_menu;$2)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(ui_widget ;$0)
@@ -35,8 +35,8 @@ If (False:C215)
 	C_OBJECT:C1216(ui_widget ;$2)
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(ui_window ;$0)
-	C_TEXT:C284(ui_window ;$1)
+	  //C_OBJECT(ui_window;$0)
+	  //C_TEXT(ui_window;$1)
 	
 	  //______________________________________________________
 End if 

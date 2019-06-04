@@ -30,6 +30,6 @@ COPY ARRAY:C226($tLon_check;(OBJECT Get pointer:C1124(Object named:K67:5;"Column
 COPY ARRAY:C226($tTxt_check;(OBJECT Get pointer:C1124(Object named:K67:5;"Column2"))->)
   //%W+518.1
 
-ui:=New object:C1471
-ui_CLASSES 
-Form:C1466.window:=ui.window.get()
+  //ui:=New object
+  //ui_CLASSES 
+Form:C1466.window:=window   //ui.window.get()

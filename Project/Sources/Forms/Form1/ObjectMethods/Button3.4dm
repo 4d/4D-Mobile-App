@@ -3,7 +3,7 @@ C_OBJECT:C1216($Obj_widget;$Obj_window)
 
 $Obj_window:=windowProperties (Open form window:C675("UI";Pop up form window:K39:11+0x8000))
 
-$Obj_widget:=widgetProperties 
+$Obj_widget:=widget   //widgetProperties 
 
 $Lon_left:=$Obj_widget.window.right
 $Lon_top:=$Obj_widget.window.bottom-($Obj_widget.height/2)-($Obj_window.height/2)

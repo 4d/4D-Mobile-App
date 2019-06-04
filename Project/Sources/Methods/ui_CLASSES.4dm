@@ -35,22 +35,22 @@ ui.tips:=New object:C1471(\
 )
 
   // ============================= WINDOW =============================
-ui.window:=New object:C1471(\
-"reference";Current form window:C827;\
-"process";Window process:C446(This:C1470.reference);\
-"title";Null:C1517;\
-"type";Null:C1517;\
-"frontmost";Null:C1517;\
-"next";Null:C1517;\
-"coordinates";Null:C1517;\
-"screen";Null:C1517;\
-"get";Formula:C1597(ui_window );\
-"isFrontmost";Formula:C1597(Frontmost window:C447=This:C1470.reference);\
-"getType";Formula:C1597(Window kind:C445(This:C1470.reference));\
-"getTitle";Formula:C1597(Get window title:C450(This:C1470.reference));\
-"getNext";Formula:C1597(Next window:C448(This:C1470.reference));\
-"getCoordinates";Formula:C1597(ui_window ("coordinates"));\
-"setTitle";Formula:C1597(SET WINDOW TITLE:C213($1;This:C1470.reference))\
+  //ui.window:=New object(\
+"reference";Current form window;\
+"process";Window process(This.reference);\
+"title";Null;\
+"type";Null;\
+"frontmost";Null;\
+"next";Null;\
+"coordinates";Null;\
+"screen";Null;\
+"get";Formula(ui_window );\
+"isFrontmost";Formula(Frontmost window=This.reference);\
+"getType";Formula(Window kind(This.reference));\
+"getTitle";Formula(Get window title(This.reference));\
+"getNext";Formula(Next window(This.reference));\
+"getCoordinates";Formula(ui_window ("coordinates"));\
+"setTitle";Formula(SET WINDOW TITLE($1;This.reference))\
 )
 
   // ============================= FORMS =============================
@@ -74,17 +74,17 @@ ui.form:=Formula:C1597(New object:C1471(\
 ui.boolean:=Formula from string:C1601("C_BOOLEAN:C305((OBJECT Get pointer:C1124(Object named:K67:5;$1))->)")
 
   // ============================ MENU =============================
-ui.menu:=Formula:C1597(New object:C1471(\
+  //ui.menu:=Formula(New object(\
 "_is";"menu";\
-"ref";Create menu:C408;\
+"ref";Create menu;\
 "choice";"";\
-"append";Formula:C1597(ui_menu ("append";New object:C1471("item";String:C10($1);"param";String:C10($2);"mark";Bool:C1537($3))));\
-"line";Formula:C1597(APPEND MENU ITEM:C411(This:C1470.ref;"-"));\
-"clear";Formula:C1597(RELEASE MENU:C978(This:C1470.ref));\
-"count";Formula:C1597(Count menu items:C405(This:C1470.ref));\
-"disable";Formula:C1597(DISABLE MENU ITEM:C150(This:C1470.ref;Choose:C955(Count parameters:C259=1;$1;-1)));\
-"delete";Formula:C1597(DELETE MENU ITEM:C413(This:C1470.ref;Choose:C955(Count parameters:C259=1;$1;-1)));\
-"popup";Formula:C1597(ui_menu ("popup";New object:C1471("default";$1;"x";$2;"y";$3)))\
+"append";Formula(ui_menu ("append";New object("item";String($1);"param";String($2);"mark";Bool($3))));\
+"line";Formula(APPEND MENU ITEM(This.ref;"-"));\
+"clear";Formula(RELEASE MENU(This.ref));\
+"count";Formula(Count menu items(This.ref));\
+"disable";Formula(DISABLE MENU ITEM(This.ref;Choose(Count parameters=1;$1;-1)));\
+"delete";Formula(DELETE MENU ITEM(This.ref;Choose(Count parameters=1;$1;-1)));\
+"popup";Formula(ui_menu ("popup";New object("default";$1;"x";$2;"y";$3)))\
 ))
 
   // ============================ STATIC ============================

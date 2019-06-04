@@ -120,23 +120,23 @@ Case of
 					"placeholder";Get localized string:C991("search"))
 				
 				  // Positioning the search filters [
-				$o:=widgetProperties ($Obj_form.tableList+".label")
+				$o:=_o_widgetProperties ($Obj_form.tableList+".label")
 				$o.right:=$o.left+$o.bestWidth
 				OBJECT SET COORDINATES:C1248(*;$Obj_form.tableList+".label";$o.left;$o.top;$o.right;$o.bottom)
 				
 				$Lon_shift:=$o.right+10
 				
-				$o:=widgetProperties ($Obj_form.tableFilter)
+				$o:=_o_widgetProperties ($Obj_form.tableFilter)
 				$o.left:=$Lon_shift
 				OBJECT SET COORDINATES:C1248(*;$Obj_form.tableFilter;$o.left;$o.top;$o.right;$o.bottom)
 				
-				$o:=widgetProperties ($Obj_form.fieldList+".label")
+				$o:=_o_widgetProperties ($Obj_form.fieldList+".label")
 				$o.right:=$o.left+$o.bestWidth
 				OBJECT SET COORDINATES:C1248(*;$Obj_form.fieldList+".label";$o.left;$o.top;$o.right;$o.bottom)
 				
 				$Lon_shift:=$o.right+10
 				
-				$o:=widgetProperties ($Obj_form.fieldFilter)
+				$o:=_o_widgetProperties ($Obj_form.fieldFilter)
 				$o.left:=$Lon_shift
 				OBJECT SET COORDINATES:C1248(*;$Obj_form.fieldFilter;$o.left;$o.top;$o.right;$o.bottom)
 				  //]
