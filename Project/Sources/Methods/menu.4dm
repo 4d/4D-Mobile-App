@@ -1,4 +1,5 @@
 //%attributes = {"invisible":true}
+  // Manipulate menus as objects to make code more readable
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
@@ -6,6 +7,7 @@ C_OBJECT:C1216($2)
 C_LONGINT:C283($i)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o)
+C_COLLECTION:C1488($c)
 
 If (False:C215)
 	C_OBJECT:C1216(menu ;$0)
@@ -18,34 +20,27 @@ If (This:C1470=Null:C1517)
 	$o:=New object:C1471(\
 		"ref";Create menu:C408;\
 		"choice";"";\
-		"autoclose";Choose:C955(Count parameters:C259=0;True:C214;Position:C15("autoclose";String:C10($1))>0);\
-		"append";Formula:C1597(menu ("append";New object:C1471("item";String:C10($1);"param";String:C10($2);"mark";Bool:C1537($3))));\
-		"appendMenu";Formula:C1597(menu ("append";New object:C1471("item";String:C10($1);"menu";$2)));\
-		"line";Formula:C1597(APPEND MENU ITEM:C411(This:C1470.ref;"-"));\
+		"autoRelease";True:C214;\
+		"metacharacters";False:C215;\
+		"append";Formula:C1597(menu ("append";Choose:C955(Value type:C1509($2)=Is text:K8:3;New object:C1471("item";$1;"param";$2;"mark";$3);New object:C1471("item";String:C10($1);"menu";$2))));\
+		"insert";Formula:C1597(menu ("insert";Choose:C955(Value type:C1509($3)=Is text:K8:3;New object:C1471("item";$1;"after";Num:C11($2);"param";String:C10($3);"mark";$4);New object:C1471("item";String:C10($1);"after";Num:C11($2);"menu";$3))));\
+		"line";Formula:C1597(menu ("line"));\
 		"release";Formula:C1597(RELEASE MENU:C978(This:C1470.ref));\
 		"count";Formula:C1597(Count menu items:C405(This:C1470.ref));\
 		"disable";Formula:C1597(DISABLE MENU ITEM:C150(This:C1470.ref;Choose:C955(Count parameters:C259=1;$1;-1)));\
 		"delete";Formula:C1597(DELETE MENU ITEM:C413(This:C1470.ref;Choose:C955(Count parameters:C259=1;$1;-1)));\
-		"popup";Formula:C1597(menu ("popup";New object:C1471("default";$1;"x";$2;"y";$3)));\
+		"popup";Formula:C1597(menu ("popup";New object:C1471("default";String:C10($1);"xCoord";Num:C11($2);"yCoord";Num:C11($3))));\
 		"cleanup";Formula:C1597(menu ("cleanup"))\
 		)
 	
-	  //$o:=New object(\
-		"ref";Create menu;\
-		"choice";"";\
-		"autoclose";Choose(Count parameters=0;True;Position("autoclose";String($1))>0);\
-		"line";Formula(APPEND MENU ITEM(This.ref;"-"));\
-		"release";Formula(RELEASE MENU(This.ref));\
-		"count";Formula(Count menu items(This.ref));\
-		"disable";Formula(DISABLE MENU ITEM(This.ref;Choose(Count parameters=1;$1;-1)));\
-		"delete";Formula(DELETE MENU ITEM(This.ref;Choose(Count parameters=1;$1;-1)));\
-		"popup";Formula(menu ("popup";New object("default";$1;"x";$2;"y";$3)));\
-		"cleanup";Formula(menu ("cleanup"));\
-		"appendItem";Formula(menu ("append";New object("item";String($1);"param";String($2);"mark";Bool($3))));\
-		"appendMenu";Formula(menu ("append";New object("item";String($1);"menu";$2)))\
-		)
-	
-	  //$o.append:=Choose(Value type($2)=Is text;$o.appendItem($1;$2;$3);$o.appendMenu($1;$2))
+	If (Count parameters:C259=1)
+		
+		$c:=Split string:C1554(String:C10($1);";")
+		
+		$o.autoRelease:=($c.indexOf("keepReference")=-1)
+		$o.metacharacters:=($c.indexOf("displayMetacharacters")#-1)
+		
+	End if 
 	
 Else 
 	
@@ -54,31 +49,87 @@ Else
 	Case of 
 			
 			  //______________________________________________________
-			  //: ($1="appendItem")
+		: ($1="line")
 			
-			  //APPEND MENU ITEM($o.ref;String($2.item))
-			  //SET MENU ITEM PARAMETER($o.ref;-1;String($2.param))
-			  //SET MENU ITEM MARK($o.ref;-1;Char(18)*Num($2.mark))
-			
-			  //  //______________________________________________________
-			  //: ($1="appendMenu")
-			
-			  //APPEND MENU ITEM($o.ref;String($2.item);$2.menu.ref)
-			  //RELEASE MENU($2.menu.ref)
+			APPEND MENU ITEM:C411($o.ref;"-")
 			
 			  //______________________________________________________
 		: ($1="append")
 			
-			If ($2.menu#Null:C1517)
+			ASSERT:C1129(Length:C16($2.item)>0)
+			
+			If ($2.menu#Null:C1517)  // Submenu
 				
-				APPEND MENU ITEM:C411($o.ref;String:C10($2.item);$2.menu.ref)
-				RELEASE MENU:C978($2.menu.ref)
+				If ($o.metacharacters)
+					
+					APPEND MENU ITEM:C411($o.ref;$2.item;$2.menu.ref)
+					
+				Else 
+					
+					APPEND MENU ITEM:C411($o.ref;$2.item;$2.menu.ref;*)
+					
+				End if 
 				
-			Else 
+				If ($2.menu.autoRelease)
+					
+					RELEASE MENU:C978($2.menu.ref)
+					
+				End if 
 				
-				APPEND MENU ITEM:C411($o.ref;String:C10($2.item))
+			Else   // Item
+				
+				If ($o.metacharacters)
+					
+					APPEND MENU ITEM:C411($o.ref;$2.item)
+					
+				Else 
+					
+					APPEND MENU ITEM:C411($o.ref;$2.item;*)
+					
+				End if 
+				
 				SET MENU ITEM PARAMETER:C1004($o.ref;-1;String:C10($2.param))
-				SET MENU ITEM MARK:C208($o.ref;-1;Char:C90(18)*Num:C11($2.mark))
+				SET MENU ITEM MARK:C208($o.ref;-1;Char:C90(18)*Num:C11(Bool:C1537($2.mark)))
+				
+			End if 
+			
+			  //______________________________________________________
+		: ($1="insert")
+			
+			ASSERT:C1129(Length:C16($2.item)>0)
+			
+			If ($2.menu#Null:C1517)  // Submenu
+				
+				If ($o.metacharacters)
+					
+					INSERT MENU ITEM:C412($o.ref;$2.after;$2.item;$2.menu.ref)
+					
+				Else 
+					
+					INSERT MENU ITEM:C412($o.ref;$2.after;$2.item;$2.menu.ref;*)
+					
+				End if 
+				
+				If ($2.menu.autoRelease)
+					
+					RELEASE MENU:C978($2.menu.ref)
+					
+				End if 
+				
+			Else   // Item
+				
+				If ($o.metacharacters)
+					
+					INSERT MENU ITEM:C412($o.ref;$2.after;$2.item)
+					
+				Else 
+					
+					INSERT MENU ITEM:C412($o.ref;$2.after;$2.item;*)
+					
+				End if 
+				
+				SET MENU ITEM PARAMETER:C1004($o.ref;-1;String:C10($2.param))
+				SET MENU ITEM MARK:C208($o.ref;-1;Char:C90(18)*Num:C11(Bool:C1537($2.mark)))
 				
 			End if 
 			
@@ -87,17 +138,19 @@ Else
 			
 			$o.cleanup()
 			
-			If ($2.x#Null:C1517)
+			If ($2.xCoord#Null:C1517)
 				
-				$o.choice:=Dynamic pop up menu:C1006($o.ref;String:C10($2.default);Num:C11($2.x);Num:C11($2.y))
+				$o.choice:=Dynamic pop up menu:C1006($o.ref;$2.default;$2.xCoord;$2.yCoord)
 				
 			Else 
 				
-				$o.choice:=Dynamic pop up menu:C1006($o.ref;String:C10($2.default))
+				$o.choice:=Dynamic pop up menu:C1006($o.ref;$2.default)
 				
 			End if 
 			
-			If ($o.autoclose)
+			$o.selected:=(Length:C16(String:C10($o.choice))>0)
+			
+			If ($o.autoRelease)
 				
 				$o.release()
 				

@@ -238,7 +238,14 @@ End case
 
   // ----------------------------------------------------
   // Return
-$0:=$Obj_out
+Case of 
+	: (Undefined:C82($Obj_out))
+	: ($Obj_out=Null:C1517)
+	: (Value type:C1509(($Obj_out=Null:C1517))=Is undefined:K8:13)
+	Else 
+		$0:=$Obj_out
+End case 
+
 
   // ----------------------------------------------------
   // End

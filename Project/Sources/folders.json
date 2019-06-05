@@ -10,6 +10,9 @@
 		]
 	},
 	"tools": {
+		"groups": [
+			"methods"
+		],
 		"methods": [
 			"Check_entry"
 		]
@@ -186,6 +189,7 @@
 	"devMenu": {
 		"methods": [
 			"dev_Menu",
+			"menu_component",
 			"file_Menu",
 			"menu_product",
 			"menu_file",
@@ -271,6 +275,13 @@
 			"Rgx_SubstituteText",
 			"Rgx_match",
 			"Rgx_ExtractText"
+		]
+	},
+	"methods": {
+		"methods": [
+			"methods_export",
+			"COMPILER_methods",
+			"methods_import_once"
 		]
 	},
 	"str": {

@@ -104,61 +104,61 @@ Case of
 			: ($Obj_current.defaultField=Null:C1517)  // User parameter
 				
 				$o:=menu 
-				$o.append(":xliff:_text";"text")
+				$o.append(":xliff:text";"text")
 				$o.line()
 				$o.append(":xliff:name";"name";$t="name")
-				$o.append(":xliff:_mail";"email";$t="email")
-				$o.append(":xliff:_phone";"phone";$t="phone")
+				$o.append(":xliff:email";"email";$t="email")
+				$o.append(":xliff:phone";"phone";$t="phone")
 				$o.append(":xliff:account";"account";$t="account")
 				$o.append(":xliff:password";"password";$t="password")
-				$o.append(":xliff:_url";"url";$t="url")
+				$o.append(":xliff:url";"url";$t="url")
 				$o.append(":xliff:zipCode";"zipCode";$t="zipCode")
-				$Obj_menu.appendMenu(":xliff:_text";$o)
+				$Obj_menu.append(":xliff:text";$o)
 				
 				$o:=menu 
 				$o.append(":xliff:number";"number")
 				$o.line()
 				$o.append(":xliff:scientific";"scientific";$t="scientific")
-				$o.append(":xliff:_percent";"percent";$t="percent")
+				$o.append(":xliff:percent";"percent";$t="percent")
 				$o.append(":xliff:energy";"energy";$t="energy")
 				$o.append(":xliff:mass";"mass";$t="mass")
-				$Obj_menu.appendMenu(":xliff:number";$o)
+				$Obj_menu.append(":xliff:number";$o)
 				
 				$o:=menu 
-				$o.append(":xliff:_mediumDate";"dateMedium";$t="dateMedium")
-				$o.append(":xliff:_shortDate";"dateShort";$t="dateShort")
-				$o.append(":xliff:_longDate";"dateLong";$t="dateLong")
-				$Obj_menu.appendMenu(":xliff:date";$o)
+				$o.append(":xliff:dateMedium";"dateMedium";$t="dateMedium")
+				$o.append(":xliff:dateShort";"dateShort";$t="dateShort")
+				$o.append(":xliff:dateLong";"dateLong";$t="dateLong")
+				$Obj_menu.append(":xliff:date";$o)
 				
 				$o:=menu 
 				$o.append(":xliff:hour";"hour";$t="hour")
-				$o.append(":xliff:_duration";"duration";$t="duration")
-				$Obj_menu.appendMenu(":xliff:time";$o)
+				$o.append(":xliff:duration";"duration";$t="duration")
+				$Obj_menu.append(":xliff:time";$o)
 				
 				$Obj_menu.line()
-				$Obj_menu.append(":xliff:boolean";"bool")
-				$Obj_menu.append(":xliff:_restImage";"image")
+				$Obj_menu.append(":xliff:bool";"bool")
+				$Obj_menu.append(":xliff:image";"image")
 				
 				  //______________________________________________________
 			: ($Obj_current.type="string")
 				
-				$Obj_menu.append(":xliff:_text";"null";$Obj_current.format=Null:C1517)
+				$Obj_menu.append(":xliff:text";"null";$Obj_current.format=Null:C1517)
 				$Obj_menu.line()
 				$Obj_menu.append(":xliff:textArea";"textArea";$t="textArea")
 				$Obj_menu.append(":xliff:name";"name";$t="name")
-				$Obj_menu.append(":xliff:_mail";"email";$t="mail")
-				$Obj_menu.append(":xliff:_phone";"phone";$t="phone")
+				$Obj_menu.append(":xliff:email";"email";$t="email")
+				$Obj_menu.append(":xliff:phone";"phone";$t="phone")
 				$Obj_menu.append(":xliff:account";"account";$t="account")
 				$Obj_menu.append(":xliff:password";"password";$t="password")
-				$Obj_menu.append(":xliff:_url";"url";$t="url")
+				$Obj_menu.append(":xliff:url";"url";$t="url")
 				$Obj_menu.append(":xliff:zipCode";"zipCode";$t="zipCode")
 				
 				  //______________________________________________________
 			: ($Obj_current.type="date")
 				
-				$Obj_menu.append(":xliff:_mediumDate";"dateMedium";$t="dateMedium")
-				$Obj_menu.append(":xliff:_shortDate";"dateShort";$t="dateShort")
-				$Obj_menu.append(":xliff:_longDate";"dateLong";$t="dateLong")
+				$Obj_menu.append(":xliff:dateMedium";"dateMedium";$t="dateMedium")
+				$Obj_menu.append(":xliff:dateShort";"dateShort";$t="dateShort")
+				$Obj_menu.append(":xliff:dateLong";"dateLong";$t="dateLong")
 				
 				  //______________________________________________________
 			: ($Obj_current.type="number")
@@ -166,26 +166,26 @@ Case of
 				$Obj_menu.append(":xliff:number";"null";$Obj_current.format=Null:C1517)
 				$Obj_menu.line()
 				$Obj_menu.append(":xliff:scientific";"scientific";$t="scientific")
-				$Obj_menu.append(":xliff:_percent";"percent";$t="percent")
+				$Obj_menu.append(":xliff:percent";"percent";$t="percent")
 				$Obj_menu.append(":xliff:energy";"energy";$t="energy")
 				$Obj_menu.append(":xliff:mass";"mass";$t="mass")
-				$Obj_menu.append(":xliff:_spellOut";"spellOut";$t="spellOut")
+				$Obj_menu.append(":xliff:spellOut";"spellOut";$t="spellOut")
 				
 				  //______________________________________________________
 			: ($Obj_current.type="time")
 				
 				$Obj_menu.append(":xliff:hour";"hour";$t="hour")
-				$Obj_menu.append(":xliff:_duration";"duration";$t="duration")
+				$Obj_menu.append(":xliff:duration";"duration";$t="duration")
 				
 				  //______________________________________________________
 			: ($Obj_current.type="bool")
 				
-				$Obj_menu.append(":xliff:boolean";"null";$Obj_current.format=Null:C1517)
+				$Obj_menu.append(":xliff:bool";"null";$Obj_current.format=Null:C1517)
 				
 				  //______________________________________________________
 			: ($Obj_current.type="image")
 				
-				$Obj_menu.append(":xliff:_restImage";"null";$Obj_current.format=Null:C1517)
+				$Obj_menu.append(":xliff:image";"null";$Obj_current.format=Null:C1517)
 				
 				  //______________________________________________________
 			Else 
@@ -199,7 +199,7 @@ Case of
 		$o:=$Obj_form.typeBorder.getCoordinates()
 		$Obj_menu.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom)
 		
-		If (Length:C16($Obj_menu.choice)#0)
+		If ($Obj_menu.selected)
 			
 			If ($Obj_menu.choice="null")
 				
@@ -216,8 +216,7 @@ Case of
 					Case of 
 							
 							  //______________________________________________________
-						: ($t="text")\
-							 | ($t="name")\
+						: ($t="name")\
 							 | ($t="email")\
 							 | ($t="phone")\
 							 | ($t="account")\
@@ -228,8 +227,7 @@ Case of
 							$Obj_current.type:="text"
 							
 							  //______________________________________________________
-						: ($t="number")\
-							 | ($t="scientific")\
+						: ($t="scientific")\
 							 | ($t="percent")\
 							 | ($t="energy")\
 							 | ($t="mass")
@@ -250,19 +248,10 @@ Case of
 							$Obj_current.type:="time"
 							
 							  //______________________________________________________
-						: ($t="bool")
-							
-							$Obj_current.type:="bool"
-							
-							  //______________________________________________________
-						: ($t="image")
-							
-							$Obj_current.type:="image"
-							
-							  //______________________________________________________
 						Else 
 							
-							  // A "Case of" statement should never omit "Else"
+							$Obj_current.type:=$t
+							
 							  //______________________________________________________
 					End case 
 					

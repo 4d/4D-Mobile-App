@@ -234,7 +234,7 @@
 					"width": 157,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Get localized string:C991(String:C10(ACTIONS_PARAMS_UI .parameter.format))",
+					"dataSource": "Get localized string:C991(Choose:C955(ACTIONS_PARAMS_UI .parameter.format=Null:C1517;\"none\";String:C10(ACTIONS_PARAMS_UI .parameter.format)))",
 					"focusable": false,
 					"fill": "transparent",
 					"borderStyle": "none",

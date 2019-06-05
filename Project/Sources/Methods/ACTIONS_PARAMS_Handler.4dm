@@ -59,7 +59,6 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		  // Define form member methods
 		$Obj_context.listUI:=Formula:C1597(ACTIONS_PARAMS_UI ("listUI"))
 		$Obj_context.meta:=Formula:C1597(ACTIONS_PARAMS_UI ("meta"))
-		$Obj_context.formatLabel:=Formula:C1597(ACTIONS_PARAMS_Handler (New object:C1471("action";"formatLabel")))
 		
 	End if 
 	
@@ -134,9 +133,9 @@ Case of
 		$Obj_out:=$Obj_form
 		
 		  //=========================================================
-	: ($Obj_in.action="formatLabel")
+	: ($Obj_in.action="xxxx")
 		
-		  //$t:=String($Obj_context.parameter.format)
+		  //
 		
 		  //=========================================================
 	Else 
@@ -146,9 +145,17 @@ Case of
 		  //=========================================================
 End case 
 
+
   // ----------------------------------------------------
   // Return
-$0:=$Obj_out
+Case of 
+	: (Undefined:C82($Obj_out))
+	: ($Obj_out=Null:C1517)
+	: (Value type:C1509(($Obj_out=Null:C1517))=Is undefined:K8:13)
+	Else 
+		$0:=$Obj_out
+End case 
+
 
   // ----------------------------------------------------
   // End
