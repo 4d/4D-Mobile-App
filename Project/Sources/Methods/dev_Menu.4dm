@@ -90,34 +90,5 @@ $Mnu_dev:=Create menu:C408
 APPEND MENU ITEM:C411($Mnu_dev;"00_TESTS")
 SET MENU ITEM METHOD:C982($Mnu_dev;-1;"00_TESTS")
 
-APPEND MENU ITEM:C411($Mnu_dev;"(-")
-
-APPEND MENU ITEM:C411($Mnu_dev;"Build component")
-SET MENU ITEM METHOD:C982($Mnu_dev;-1;"menu_component")
-SET MENU ITEM PARAMETER:C1004($Mnu_dev;-1;"build")
-
-APPEND MENU ITEM:C411($Mnu_dev;"Increment build component")
-SET MENU ITEM METHOD:C982($Mnu_dev;-1;"menu_component")
-SET MENU ITEM PARAMETER:C1004($Mnu_dev;-1;"increment")
-
-APPEND MENU ITEM:C411($Mnu_dev;"Deploy component")
-SET MENU ITEM METHOD:C982($Mnu_dev;-1;"menu_component")
-SET MENU ITEM PARAMETER:C1004($Mnu_dev;-1;"deploy")
-
-APPEND MENU ITEM:C411($Mnu_dev;"(-")
-
-If (env_userPathname ("home").file(".p4settings").exists)
-	
-	APPEND MENU ITEM:C411($Mnu_dev;"P4 component")
-	SET MENU ITEM METHOD:C982($Mnu_dev;-1;"menu_component")
-	SET MENU ITEM PARAMETER:C1004($Mnu_dev;-1;"p4")
-	
-End if 
-
-APPEND MENU ITEM:C411($Mnu_dev;"(-")
-APPEND MENU ITEM:C411($Mnu_dev;"Update SDK")
-SET MENU ITEM METHOD:C982($Mnu_dev;-1;"menu_component")
-SET MENU ITEM PARAMETER:C1004($Mnu_dev;-1;"updateSDK")
-
 APPEND MENU ITEM:C411($Mnu_bar;"Dev";$Mnu_dev)
 RELEASE MENU:C978($Mnu_dev)
