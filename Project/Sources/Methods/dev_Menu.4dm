@@ -64,20 +64,6 @@ SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"reveal")
 APPEND MENU ITEM:C411($Mnu_bar;"Product";$Mnu_product)
 RELEASE MENU:C978($Mnu_product)
 
-$Mnu_method:=Create menu:C408
-
-APPEND MENU ITEM:C411($Mnu_method;"Export methods")
-SET MENU ITEM METHOD:C982($Mnu_method;-1;"methods_export")
-
-  //APPEND MENU ITEM($Mnu_method;"Method Import")
-  //SET MENU ITEM METHOD($Mnu_method;-1;"methods_import") // XXX not implemented with new export
-
-APPEND MENU ITEM:C411($Mnu_method;"Import one method")
-SET MENU ITEM METHOD:C982($Mnu_method;-1;"methods_import_once")
-
-APPEND MENU ITEM:C411($Mnu_bar;"Method";$Mnu_method)
-RELEASE MENU:C978($Mnu_method)
-
 $Mnu_window:=Create menu:C408
 
 APPEND MENU ITEM:C411($Mnu_window;"Close")
