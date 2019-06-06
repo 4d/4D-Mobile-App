@@ -59,8 +59,6 @@ Case of
 		  //==================================================
 	: ($Obj_form.form.currentWidget=$Obj_form.actions.name)  // Actions listbox
 		
-		
-		
 		Case of 
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Getting Focus:K2:7)
@@ -188,6 +186,8 @@ Case of
 						If (Length:C16($t)>0)
 							
 							$Obj_context.current.tableNumber:=Num:C11($t)
+							
+							$Obj_form.form.refresh()
 							
 							project.save()
 							
@@ -346,7 +346,7 @@ Case of
 												  //……………………………………………………………………
 											: ($o.type="date")
 												
-												$o.format:="dateMedium"
+												$o.format:="dateShort"
 												
 												  //……………………………………………………………………
 											: ($o.type="time")
@@ -388,8 +388,8 @@ Case of
 							
 						End if 
 						
-						$Obj_form.actions.select(Form:C1466.actions.length)
-						OBJECT SET SCROLL POSITION:C906(*;$Obj_form.actions.name;Form:C1466.actions.length)
+						$Obj_form.actions.focus()
+						$Obj_form.actions.reveal($Obj_form.actions.rowsNumber())
 						
 						$Obj_form.form.refresh()
 						
@@ -412,16 +412,21 @@ Case of
 				
 				$l:=Form:C1466.actions.count()+1
 				
-				Form:C1466.actions.push(New object:C1471(\
+				$o:=New object:C1471(\
 					"name";"action_"+String:C10($l);\
 					"scope";"table";\
 					"shortLabel";"action_"+String:C10($l);\
 					"label";"action_"+String:C10($l);\
-					"$icon";$p))
+					"$icon";$p)
 				
-				$Obj_form.actions.select(Form:C1466.actions.length)
+				Form:C1466.actions.push($o)
+				Form:C1466.actions:=Form:C1466.actions
 				
-				EDIT ITEM:C870(*;$Obj_form.name;Form:C1466.actions.length)
+				$Obj_form.actions.focus()
+				$Obj_form.actions.reveal($Obj_form.actions.rowsNumber())
+				
+				  //warning edit stop code execution
+				  //EDIT ITEM(*;$Obj_form.name;Form.actions.length)
 				
 				$Obj_form.form.refresh()
 				

@@ -13,7 +13,7 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_formEvent;$Lon_parameters)
-C_OBJECT:C1216($Obj_context;$Obj_form;$Obj_in;$Obj_out)
+C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_in;$Obj_out)
 
 If (False:C215)
 	C_OBJECT:C1216(ACTIONS_PARAMS_Handler ;$0)
@@ -38,6 +38,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"$";editor_INIT ;\
 		"form";ui.form("editor_CALLBACK").get();\
 		"noSelection";ui.static("empty");\
+		"noAction";ui.static("noAction");\
+		"noTable";ui.static("noTable");\
 		"withSelection";ui.group(New collection:C1472("@parameters@";"@property@";"@variable@"));\
 		"field";ui.group(New collection:C1472("@parameters@";"@property@"));\
 		"variable";ui.group("@variable@");\
@@ -58,7 +60,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 		  // Define form member methods
 		$Obj_context.listUI:=Formula:C1597(ACTIONS_PARAMS_UI ("listUI"))
-		$Obj_context.meta:=Formula:C1597(ACTIONS_PARAMS_UI ("meta"))
+		  //$Obj_context.meta:=Formula(ACTIONS_PARAMS_UI ("meta"))
 		
 	End if 
 	
@@ -87,34 +89,67 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)  // Refresh UI
 				
-				If ($Obj_context.action=Null:C1517)
+				ASSERT:C1129(Not:C34(Shift down:C543))
+				
+				$o:=$Obj_form
+				
+				If (Form:C1466.actions=Null:C1517)\
+					 | (Num:C11(Form:C1466.actions.length)=0)  //no actions
 					
-					$Obj_form.noSelection.show()
-					$Obj_form.withSelection.hide()
+					$o.noAction.show()
+					$o.noSelection.hide()
+					$o.noTable.hide()
+					$o.withSelection.hide()
 					
 				Else 
 					
-					$Obj_form.noSelection.hide()
-					$Obj_form.withSelection.show()
+					$o.noAction.hide()
 					
-					If ($Obj_context.parameter=Null:C1517)
+					If ($Obj_context.action=Null:C1517)  // No action selected
 						
-						$Obj_form.remove.disable()
-						$Obj_form.properties.hide()
+						$o.noSelection.show()
+						$o.noTable.hide()
+						$o.withSelection.hide()
 						
 					Else 
 						
-						$Obj_form.remove.enable()
-						$Obj_form.properties.show()
+						$Obj_context.action.parameters:=$Obj_context.action.parameters
 						
-						If ($Obj_context.parameter.fieldNumber#Null:C1517)  //variable
+						$o.noSelection.hide()
+						$o.withSelection.show()
+						
+						If ($Obj_context.action.tableNumber=Null:C1517)  // No target table
 							
-							$Obj_form.variable.hide()
+							$o.noTable.show()
+							$o.properties.hide()
+							$o.remove.disable()
+							$o.add.disable()
 							
 						Else 
 							
-							$Obj_form.variable.show()
+							$o.noTable.hide()
+							$o.add.enable()
 							
+							If ($Obj_context.parameter=Null:C1517)  // No current parameter
+								
+								$o.remove.disable()
+								$o.properties.hide()
+								
+							Else 
+								
+								$o.remove.enable()
+								$o.properties.show()
+								
+								If ($Obj_context.parameter.fieldNumber=Null:C1517)  // Variable
+									
+									$o.variable.show()
+									
+								Else 
+									
+									$o.variable.hide()
+									
+								End if 
+							End if 
 						End if 
 					End if 
 				End if 
@@ -145,17 +180,15 @@ Case of
 		  //=========================================================
 End case 
 
-
   // ----------------------------------------------------
   // Return
 Case of 
-	: (Undefined:C82($Obj_out))
+		  //: (Undefined($Obj_out))
 	: ($Obj_out=Null:C1517)
-	: (Value type:C1509(($Obj_out=Null:C1517))=Is undefined:K8:13)
+		  //: (Value type(($Obj_out=Null))=Is undefined)
 	Else 
 		$0:=$Obj_out
 End case 
-
 
   // ----------------------------------------------------
   // End

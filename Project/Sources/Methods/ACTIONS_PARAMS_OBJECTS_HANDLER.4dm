@@ -12,12 +12,12 @@
 C_LONGINT:C283($0)
 
 C_LONGINT:C283($i;$Lon_parameters)
-C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_menu;$Obj_current;$Obj_table)
+C_TEXT:C284($t;$tt)
+C_OBJECT:C1216($o;$Obj_context;$Obj_current;$Obj_form;$Obj_menu;$Obj_table)
 C_COLLECTION:C1488($c;$cc)
 
 If (False:C215)
-	C_LONGINT:C283(ACTIONS_PARAMS_OBJECTS_HANDLER ;$0)
+	C_LONGINT:C283(ACTIONS_PARAMS_OBJECTS_HANDLER )
 End if 
 
   // ----------------------------------------------------
@@ -48,11 +48,6 @@ End if
 
   // ----------------------------------------------------
 Case of 
-		
-		  //==================================================
-	: ($Obj_form.form.event=On Display Detail:K2:22)
-		
-		  // Should not!
 		
 		  //==================================================
 	: ($Obj_form.form.currentWidget=$Obj_form.parameters.name)  // Parameters listbox
@@ -104,40 +99,40 @@ Case of
 			: ($Obj_current.defaultField=Null:C1517)  // User parameter
 				
 				$o:=menu 
-				$o.append(":xliff:text";"text")
+				$o.append(":xliff:text";"text";False:C215)
 				$o.line()
-				$o.append(":xliff:name";"name";$t="name")
-				$o.append(":xliff:email";"email";$t="email")
-				$o.append(":xliff:phone";"phone";$t="phone")
-				$o.append(":xliff:account";"account";$t="account")
-				$o.append(":xliff:password";"password";$t="password")
-				$o.append(":xliff:url";"url";$t="url")
-				$o.append(":xliff:zipCode";"zipCode";$t="zipCode")
-				$Obj_menu.append(":xliff:text";$o)
+				$o.append(":xliff:name";"name";Bool:C1537($t="name"))
+				$o.append(":xliff:email";"email";Bool:C1537($t="email"))
+				$o.append(":xliff:phone";"phone";Bool:C1537($t="phone"))
+				$o.append(":xliff:account";"account";Bool:C1537($t="account"))
+				$o.append(":xliff:password";"password";Bool:C1537($t="password"))
+				$o.append(":xliff:url";"url";Bool:C1537($t="url"))
+				$o.append(":xliff:zipCode";"zipCode";Bool:C1537($t="zipCode"))
+				$Obj_menu.append(":xliff:text";$o;False:C215)
 				
 				$o:=menu 
-				$o.append(":xliff:number";"number")
+				$o.append(":xliff:number";"number";False:C215)
 				$o.line()
-				$o.append(":xliff:scientific";"scientific";$t="scientific")
-				$o.append(":xliff:percent";"percent";$t="percent")
-				$o.append(":xliff:energy";"energy";$t="energy")
-				$o.append(":xliff:mass";"mass";$t="mass")
-				$Obj_menu.append(":xliff:number";$o)
+				$o.append(":xliff:scientific";"scientific";Bool:C1537($t="scientific"))
+				$o.append(":xliff:percent";"percent";Bool:C1537($t="percent"))
+				$o.append(":xliff:energy";"energy";Bool:C1537($t="energy"))
+				$o.append(":xliff:mass";"mass";Bool:C1537($t="mass"))
+				$Obj_menu.append(":xliff:number";$o;False:C215)
 				
 				$o:=menu 
-				$o.append(":xliff:dateMedium";"dateMedium";$t="dateMedium")
-				$o.append(":xliff:dateShort";"dateShort";$t="dateShort")
-				$o.append(":xliff:dateLong";"dateLong";$t="dateLong")
-				$Obj_menu.append(":xliff:date";$o)
+				$o.append(":xliff:dateMedium";"dateMedium";Bool:C1537($t="dateMedium"))
+				$o.append(":xliff:dateShort";"dateShort";Bool:C1537($t="dateShort"))
+				$o.append(":xliff:dateLong";"dateLong";Bool:C1537($t="dateLong"))
+				$Obj_menu.append(":xliff:date";$o;False:C215)
 				
 				$o:=menu 
-				$o.append(":xliff:hour";"hour";$t="hour")
-				$o.append(":xliff:duration";"duration";$t="duration")
-				$Obj_menu.append(":xliff:time";$o)
+				$o.append(":xliff:hour";"hour";Bool:C1537($t="hour"))
+				$o.append(":xliff:duration";"duration";Bool:C1537($t="duration"))
+				$Obj_menu.append(":xliff:time";$o;False:C215)
 				
 				$Obj_menu.line()
-				$Obj_menu.append(":xliff:bool";"bool")
-				$Obj_menu.append(":xliff:image";"image")
+				$Obj_menu.append(":xliff:bool";"bool";False:C215)
+				$Obj_menu.append(":xliff:image";"image";False:C215)
 				
 				  //______________________________________________________
 			: ($Obj_current.type="string")
@@ -270,89 +265,107 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Clicked:K2:4)  // Add a user parameter
 				
-				$t:="new"
+				$Obj_menu:=New object:C1471(\
+					"selected";True:C214;\
+					"choice";"new")
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Alternative Click:K2:36)  //
 				
 				$Obj_menu:=menu 
-				$Obj_menu.append(".New parameter";"new")
+				$Obj_menu.append(":xliff:addParameter";"new")
 				
-				$Obj_table:=Form:C1466.dataModel[String:C10($Obj_context.action.tableNumber)]
-				
-				$c:=New collection:C1472
-				
-				If ($Obj_context.action.parameters=Null:C1517)
+				If ($Obj_context.action.tableNumber#Null:C1517)
 					
-					For each ($t;$Obj_table)
+					$Obj_table:=Form:C1466.dataModel[String:C10($Obj_context.action.tableNumber)]
+					
+					$c:=New collection:C1472
+					
+					If ($Obj_context.action.parameters=Null:C1517)
 						
-						If (Storage:C1525.ƒ.isField($t))
+						For each ($t;$Obj_table)
 							
-							$Obj_table[$t].fieldNumber:=Num:C11($t)
-							$c.push($Obj_table[$t])
-							
-						End if 
-					End for each 
-					
-				Else 
-					
-					For each ($t;$Obj_table)
-						
-						If (Storage:C1525.ƒ.isField($t))
-							
-							If ($Obj_context.action.parameters.query("fieldNumber = :1";Num:C11($t)).length=0)
+							If (Storage:C1525.ƒ.isField($t))
 								
 								$Obj_table[$t].fieldNumber:=Num:C11($t)
 								$c.push($Obj_table[$t])
 								
 							End if 
-						End if 
-					End for each 
+						End for each 
+						
+					Else 
+						
+						For each ($t;$Obj_table)
+							
+							If (Storage:C1525.ƒ.isField($t))
+								
+								If ($Obj_context.action.parameters.query("fieldNumber = :1";Num:C11($t)).length=0)
+									
+									$Obj_table[$t].fieldNumber:=Num:C11($t)
+									$c.push($Obj_table[$t])
+									
+								End if 
+							End if 
+						End for each 
+					End if 
+					
+					If ($c.length>0)
+						
+						$Obj_menu.line()
+						
+						For each ($o;$c)
+							
+							$Obj_menu.append($o.name;String:C10($o.fieldNumber))
+							
+						End for each 
+					End if 
+					
+				Else 
+					
+					  // No table affected to action
+					
 				End if 
 				
-				If ($c.length>0)
-					
-					$Obj_menu.line()
-					
-					For each ($o;$c)
-						
-						$Obj_menu.append($o.name;String:C10($o.fieldNumber))
-						
-					End for each 
-				End if 
-				
-				$Obj_menu.popup()
-				
-				$t:=String:C10($Obj_menu.choice)
+				$o:=$Obj_form.add.getCoordinates()
+				$Obj_menu.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom)
 				
 				  //______________________________________________________
 		End case 
 		
-		If (Length:C16($t)>0)
+		If ($Obj_menu.selected)
 			
 			Case of 
 					
 					  //______________________________________________________
-				: ($t="new")  // Add a user parameter
+				: ($Obj_menu.choice="new")  // Add a user parameter
+					
+					$tt:=Get localized string:C991("newParameter")
 					
 					If ($Obj_context.action.parameters#Null:C1517)
 						
-						Repeat 
+						If ($Obj_context.action.parameters.query("name=:1";$tt).length=0)
 							
-							$i:=$i+1
+							$t:=$tt
 							
-							$c:=$Obj_context.action.parameters.query("name=:1";"parameter"+String:C10($i))
+						Else 
 							
-							If ($c.length=0)
+							Repeat 
 								
-								$t:="parameter"+String:C10($i)
+								$i:=$i+1
 								
-							End if 
-						Until ($c.length=0)
-						
+								$c:=$Obj_context.action.parameters.query("name=:1";$tt+String:C10($i))
+								
+								If ($c.length=0)
+									
+									$t:=$tt+String:C10($i)
+									
+								End if 
+							Until ($c.length=0)
+							
+						End if 
 					Else 
 						
-						$t:="parameter"
+						$t:=$tt
 						
 					End if 
 					
@@ -366,7 +379,7 @@ Case of
 					  //______________________________________________________
 				Else   // Add a field
 					
-					$c:=$c.query("fieldNumber = :1";Num:C11($t))
+					$c:=$c.query("fieldNumber = :1";Num:C11($Obj_menu.choice))
 					
 					$o:=New object:C1471(\
 						"fieldNumber";$c[0].fieldNumber;\
@@ -415,12 +428,14 @@ Case of
 			
 			$Obj_context:=ob_createPath ($Obj_context;"action.parameters";Is collection:K8:32)
 			$Obj_context.action.parameters.push($o)
-			$Obj_form.parameters.select($Obj_form.parameters.rowsNumber())
+			$Obj_form.parameters.focus()
+			$Obj_form.parameters.reveal($Obj_form.parameters.rowsNumber())
+			
+			$Obj_form.form.refresh()
 			
 			project.save()
 			
 		End if 
-		
 		
 		  //==================================================
 	: ($Obj_form.form.currentWidget=$Obj_form.remove.name)  // Remove action button
@@ -428,15 +443,15 @@ Case of
 		$i:=$Obj_context.action.parameters.indexOf($Obj_context.parameter)
 		$Obj_context.action.parameters.remove($i)
 		
-		  //$Obj_context.parameter:=Null
 		$Obj_context.parameter:=New object:C1471
 		$Obj_context.selected:=New collection:C1472
 		$Obj_context.index:=0
 		
+		$Obj_context.parameter:=$Obj_context.parameter
+		
 		$Obj_form.form.refresh()
 		
 		project.save()
-		
 		
 		  //==================================================
 	Else 

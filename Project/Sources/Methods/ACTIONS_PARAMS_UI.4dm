@@ -91,6 +91,33 @@ Case of
 		End if 
 		
 		  //______________________________________________________
+	: ($Txt_action="format")  // display format according to format or type
+		
+		$Obj_out:=New object:C1471
+		
+		If ($Obj_context.parameter.format=Null:C1517)
+			
+			If ($Obj_context.parameter.type="string")
+				
+				$Obj_out:=New object:C1471(\
+					"value";Get localized string:C991("text"))
+				
+			Else 
+				
+				  // Use type
+				$Obj_out:=New object:C1471(\
+					"value";Get localized string:C991(Choose:C955($Obj_context.parameter.type=Null:C1517;"none";$Obj_context.parameter.type)))
+				
+			End if 
+			
+		Else 
+			
+			$Obj_out:=New object:C1471(\
+				"value";Get localized string:C991($Obj_context.parameter.format))
+			
+		End if 
+		
+		  //______________________________________________________
 	: ($Txt_action="meta")  // <Meta info expression>
 		
 		  // Default values

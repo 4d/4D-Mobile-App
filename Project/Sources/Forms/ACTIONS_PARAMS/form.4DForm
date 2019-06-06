@@ -24,15 +24,27 @@
 			"objects": {
 				"empty": {
 					"type": "text",
-					"top": 40,
-					"left": 30,
-					"width": 543,
-					"height": 17,
+					"top": 6,
+					"left": 16,
+					"width": 449,
+					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"stroke": "#808080",
 					"textAlign": "left",
 					"text": ":xliff:selectAnActionToDisplayItsParameters"
+				},
+				"noAction": {
+					"type": "text",
+					"top": 6,
+					"left": 16,
+					"width": 449,
+					"height": 16,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": "Create an action to be able to add parameters"
 				}
 			}
 		},
@@ -160,13 +172,14 @@
 					"visibility": "hidden",
 					"icon": "/RESOURCES/images/common/plus.png",
 					"iconFrames": 4,
-					"popupPlacement": "separated",
 					"style": "bevel",
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onClick",
 						"onAlternateClick"
-					]
+					],
+					"popupPlacement": "separated",
+					"focusable": false
 				},
 				"parameters.remove": {
 					"type": "button",
@@ -234,7 +247,7 @@
 					"width": 157,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Get localized string:C991(Choose:C955(ACTIONS_PARAMS_UI .parameter.format=Null:C1517;\"none\";String:C10(ACTIONS_PARAMS_UI .parameter.format)))",
+					"dataSource": "ACTIONS_PARAMS_UI (\"format\").value",
 					"focusable": false,
 					"fill": "transparent",
 					"borderStyle": "none",
@@ -329,6 +342,18 @@
 					"textAlign": "left",
 					"text": ":xliff:defaultValue",
 					"visibility": "hidden"
+				},
+				"noTable": {
+					"type": "text",
+					"top": 10,
+					"left": 28,
+					"width": 360,
+					"height": 16,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"stroke": "#ff0000",
+					"textAlign": "left",
+					"text": "No target table defined"
 				}
 			}
 		}

@@ -38,7 +38,7 @@
 					"left": 17,
 					"width": 920,
 					"height": 240,
-					"visibility": "hidden",
+					"visibility": "visible",
 					"resizingMode": "legacy",
 					"listboxType": "collection",
 					"hideFocusRing": true,

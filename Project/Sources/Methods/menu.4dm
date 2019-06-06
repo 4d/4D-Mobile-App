@@ -17,21 +17,55 @@ End if
 
 If (This:C1470=Null:C1517)
 	
+	  //$o:=New object(\
+		"ref";Create menu;\
+		"_is";"menu";\
+		"choice";"";\
+		"autoRelease";True;\
+		"metacharacters";False;\
+		"append";Formula(menu ("append";Choose(Value type($2)=Is text;New object("item";$1;"param";$2;"mark";$3);New object("item";String($1);"menu";$2))));\
+		"insert";Formula(menu ("insert";Choose(Value type($3)=Is text;New object("item";$1;"after";Num($2);"param";String($3);"mark";$4);New object("item";String($1);"after";Num($2);"menu";$3))));\
+		"line";Formula(menu ("line"));\
+		"release";Formula(RELEASE MENU(This.ref));\
+		"count";Formula(Count menu items(This.ref));\
+		"disable";Formula(DISABLE MENU ITEM(This.ref;Choose(Count parameters=1;$1;-1)));\
+		"delete";Formula(DELETE MENU ITEM(This.ref;Choose(Count parameters=1;$1;-1)));\
+		"popup";Formula(menu ("popup";New object("default";String($1);"xCoord";Num($2);"yCoord";Num($3))));\
+		"cleanup";Formula(menu ("cleanup"))\
+		)
+	
 	$o:=New object:C1471(\
+		"_is";"menu";\
 		"ref";Create menu:C408;\
+		"selected";False:C215;\
 		"choice";"";\
 		"autoRelease";True:C214;\
-		"metacharacters";False:C215;\
-		"append";Formula:C1597(menu ("append";Choose:C955(Value type:C1509($2)=Is text:K8:3;New object:C1471("item";$1;"param";$2;"mark";$3);New object:C1471("item";String:C10($1);"menu";$2))));\
-		"insert";Formula:C1597(menu ("insert";Choose:C955(Value type:C1509($3)=Is text:K8:3;New object:C1471("item";$1;"after";Num:C11($2);"param";String:C10($3);"mark";$4);New object:C1471("item";String:C10($1);"after";Num:C11($2);"menu";$3))));\
-		"line";Formula:C1597(menu ("line"));\
-		"release";Formula:C1597(RELEASE MENU:C978(This:C1470.ref));\
-		"count";Formula:C1597(Count menu items:C405(This:C1470.ref));\
-		"disable";Formula:C1597(DISABLE MENU ITEM:C150(This:C1470.ref;Choose:C955(Count parameters:C259=1;$1;-1)));\
-		"delete";Formula:C1597(DELETE MENU ITEM:C413(This:C1470.ref;Choose:C955(Count parameters:C259=1;$1;-1)));\
-		"popup";Formula:C1597(menu ("popup";New object:C1471("default";String:C10($1);"xCoord";Num:C11($2);"yCoord";Num:C11($3))));\
-		"cleanup";Formula:C1597(menu ("cleanup"))\
+		"metacharacters";False:C215\
 		)
+	
+	$o.append:=Formula:C1597(\
+		menu ("append";\
+		Choose:C955(Value type:C1509($2)=Is object:K8:27;New object:C1471("item";String:C10($1);"menu";$2);Choose:C955(Count parameters:C259=3;New object:C1471("item";String:C10($1);"param";$2;"mark";Bool:C1537($3));New object:C1471("item";String:C10($1);"param";$2;"mark";False:C215)))\
+		))
+	
+	$o.insert:=Formula:C1597(\
+		menu ("insert";\
+		Choose:C955(Value type:C1509($3)=Is object:K8:27;New object:C1471("item";String:C10($1);"after";Num:C11($2);"menu";$3);New object:C1471("item";String:C10($1);"after";Num:C11($2);"param";$3;"mark";Bool:C1537($4)))\
+		))
+	
+	$o.line:=Formula:C1597(menu ("line"))
+	
+	$o.release:=Formula:C1597(RELEASE MENU:C978(This:C1470.ref))
+	
+	$o.count:=Formula:C1597(Count menu items:C405(This:C1470.ref))
+	
+	$o.disable:=Formula:C1597(DISABLE MENU ITEM:C150(This:C1470.ref;Choose:C955(Count parameters:C259=1;Num:C11($1);-1)))
+	
+	$o.delete:=Formula:C1597(DELETE MENU ITEM:C413(This:C1470.ref;Choose:C955(Count parameters:C259=1;Num:C11($1);-1)))
+	
+	$o.popup:=Formula:C1597(menu ("popup";New object:C1471("default";String:C10($1);"xCoord";Num:C11($2);"yCoord";Num:C11($3))))
+	
+	$o.cleanup:=Formula:C1597(menu ("cleanup"))
 	
 	If (Count parameters:C259=1)
 		
@@ -89,7 +123,7 @@ Else
 				End if 
 				
 				SET MENU ITEM PARAMETER:C1004($o.ref;-1;String:C10($2.param))
-				SET MENU ITEM MARK:C208($o.ref;-1;Char:C90(18)*Num:C11(Bool:C1537($2.mark)))
+				SET MENU ITEM MARK:C208($o.ref;-1;Char:C90(18)*Num:C11($2.mark))
 				
 			End if 
 			
@@ -129,7 +163,7 @@ Else
 				End if 
 				
 				SET MENU ITEM PARAMETER:C1004($o.ref;-1;String:C10($2.param))
-				SET MENU ITEM MARK:C208($o.ref;-1;Char:C90(18)*Num:C11(Bool:C1537($2.mark)))
+				SET MENU ITEM MARK:C208($o.ref;-1;Char:C90(18)*Num:C11($2.mark))
 				
 			End if 
 			

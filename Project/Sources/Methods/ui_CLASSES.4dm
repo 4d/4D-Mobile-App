@@ -271,6 +271,7 @@ ui.listbox:=Formula:C1597(New object:C1471(\
 "select";Formula:C1597(LISTBOX SELECT ROW:C912(*;This:C1470.name;Num:C11($1);lk replace selection:K53:1));\
 "selectAll";Formula:C1597(LISTBOX SELECT ROW:C912(*;This:C1470.name;0;lk replace selection:K53:1));\
 "deselect";Formula:C1597(LISTBOX SELECT ROW:C912(*;This:C1470.name;0;lk remove from selection:K53:3));\
+"reveal";Formula:C1597(ui_listbox ("show";New object:C1471("row";Num:C11($1))));\
 "popup";Formula:C1597(ui_listbox ("popup";$1))\
 ))
 

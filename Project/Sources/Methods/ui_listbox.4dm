@@ -163,6 +163,12 @@ Case of
 		End if 
 		
 		  //______________________________________________________
+	: ($Txt_action="show")
+		
+		LISTBOX SELECT ROW:C912(*;This:C1470.name;Num:C11($Obj_params.row);lk replace selection:K53:1)
+		OBJECT SET SCROLL POSITION:C906(*;This:C1470.name;Num:C11($Obj_params.row))
+		
+		  //______________________________________________________
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Txt_action+"\"")
