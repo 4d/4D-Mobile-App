@@ -515,6 +515,16 @@ If (Length:C16($Txt_cmd)>0)
 				$Obj_out.error:=$Obj_out.error+$Txt_out
 				
 			End if 
+			
+			If (String:C10($Obj_in.format)="openstep")
+				
+				If (Position:C15("libswiftCore.dylib";$Obj_out.error)>0)
+					
+					$Obj_out.error:="Please update your OS or download the swift 5 runtime: \nhttps://support.apple.com/kb/DL1998?locale=en_US\n\n\nCause:\n"+$Obj_out.error
+					
+				End if 
+			End if 
+			
 		End if 
 	End if 
 End if 
