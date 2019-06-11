@@ -59,6 +59,64 @@ $Obj_result:=capabilities (New object:C1471("action";"inject";"target";$Folder_t
 ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
 
 
+  // FIND
+
+$Obj_projfile:=New object:C1471()
+
+$Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
+ASSERT:C1129(Not:C34($Obj_result.success);"Must found nothing "+JSON Stringify:C1217($Obj_result))
+If (Value type:C1509($Obj_result.capabilities)=Is collection:K8:32)
+	ASSERT:C1129($Obj_result.capabilities.length=0;"Must found nothing")
+End if 
+
+$Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214))))
+$Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
+ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
+
+ASSERT:C1129($Obj_result.capabilities.length=2;"Must found all capabilities")  // capabilities + templates
+
+$Obj_projfile.actions:=New collection:C1472(\
+New object:C1471(\
+"name";"action_1";"scope";"table";"shortLabel";"action_1";"label";"action_1";"$icon";"[object Picture]";"tableNumber";5;"icon";"actions 2/Locate-map.svg");\
+New object:C1471(\
+"icon";"actions/Edit.svg";"$icon";"[object Picture]";"tableNumber";5;"scope";"currentRecord";"name";"editAllTypes";"shortLabel";"Edit…";"label";"Edit…";"parameters";\
+New collection:C1472(\
+New object:C1471(\
+"fieldNumber";1;"name";"iD";"label";"Id";"shortLabel";"Id";"type";"number";"defaultField";"iD");\
+New object:C1471(\
+"fieldNumber";2;"name";"alphaField";"label";"Alpha Field";"shortLabel";"Alpha Field";"type";"string";"defaultField";"alphaField");\
+New object:C1471(\
+"fieldNumber";3;"name";"textField";"label";"Text Field";"shortLabel";"Text Field";"type";"string";"defaultField";"textField");\
+New object:C1471(\
+"fieldNumber";4;"name";"dateField";"label";"Date Field";"shortLabel";"Date Field";"type";"date";"defaultField";"dateField";"format";"dateShort");\
+New object:C1471(\
+"fieldNumber";5;"name";"timeField";"label";"Time Field";"shortLabel";"Time Field";"type";"time";"defaultField";"timeField";"format";"hour");\
+New object:C1471(\
+"fieldNumber";6;"name";"booleanField";"label";"Boolean Field";"shortLabel";"Boolean Field";"type";"bool";"defaultField";"booleanField");\
+New object:C1471(\
+"fieldNumber";7;"name";"integerField";"label";"Integer Field";"shortLabel";"Integer Field";"type";"number";"defaultField";"integerField");\
+New object:C1471(\
+"fieldNumber";8;"name";"longIntegerField";"label";"Long Integer Field";"shortLabel";"Long Integer Field";"type";"number";"defaultField";"longIntegerField");\
+New object:C1471(\
+"fieldNumber";9;"name";"integer64BitsField";"label";"Integer 64 Bits Field";"shortLabel";"Integer 64 Bits Field";"type";"number";"defaultField";"integer64BitsField");\
+New object:C1471(\
+"fieldNumber";10;"name";"realField";"label";"Real Field";"shortLabel";"Real Field";"type";"number";"defaultField";"realField");\
+New object:C1471(\
+"fieldNumber";11;"name";"floatField";"label";"Float Field";"shortLabel";"Float Field";"type";"number";"defaultField";"floatField");\
+New object:C1471(\
+"fieldNumber";13;"name";"pictureField";"label";"Picture Field";"shortLabel";"Picture Field";"type";"image";"capabilities";New object:C1471("photo";True:C214);"defaultField";"pictureField"))))
+
+$Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
+ASSERT:C1129($Obj_result.success;"Nothing to found inject"+JSON Stringify:C1217($Obj_result))
+
+ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates
+
+  // natify found objects
+For each ($Obj_projfile;$Obj_result.capabilities)
+	$Obj_result:=capabilities (New object:C1471("action";"natify";"value";$Obj_projfile))
+	ASSERT:C1129($Obj_result.success;"Must success to get map capabilities"+JSON Stringify:C1217($Obj_result))
+	ASSERT:C1129(Value type:C1509($Obj_result.info)=Is collection:K8:32;"Must return an info plist modification for map:"+JSON Stringify:C1217($Obj_result))
+End for each 
   //_____________________________________________________________
   // Teardown
 If (Shift down:C543)
