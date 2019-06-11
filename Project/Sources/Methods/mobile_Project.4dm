@@ -35,16 +35,34 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	  // NO PARAMETERS REQUIRED
 	$Boo_dev:=Not:C34(Is compiled mode:C492)
 	
+	$Obj_cache:=env_userPathname ("cache")
+	$Obj_cache.create()
+	
 	  // Optional parameters
 	If ($Lon_parameters>=1)
 		
 		$Obj_in:=$1
 		
-		If (Asserted:C1132($Obj_in.project#Null:C1517))
+		If ($Boo_dev)
 			
-			$Obj_project:=$Obj_in.project
+			  // Cache the last build for debug purpose
+			ob_writeToDocument ($Obj_in;$Obj_cache.file("lastBuild.4dmobile").platformPath;True:C214)
 			
 		End if 
+		
+	Else 
+		
+		If ($Boo_dev)
+			
+			  // IF no parameters, load from previous launched file
+			If (commonValues=Null:C1517)
+				COMPONENT_INIT 
+			End if 
+			
+			$Obj_in:=JSON Parse:C1218($Obj_cache.file("lastBuild.4dmobile").getText())
+			
+		End if 
+		
 	End if 
 	  //}
 	
@@ -60,13 +78,10 @@ Else
 End if 
 
   // ----------------------------------------------------
-$Obj_cache:=env_userPathname ("cache")
-$Obj_cache.create()
 
-If ($Boo_dev)
+If (Asserted:C1132($Obj_in.project#Null:C1517))
 	
-	  // Cache the last build for debug purpose
-	ob_writeToDocument ($Obj_in;$Obj_cache.file("lastBuild.4dmobile").platformPath;True:C214)
+	$Obj_project:=$Obj_in.project
 	
 End if 
 
@@ -284,10 +299,10 @@ If ($Obj_in.create)
 	  //#ACI0098572 [
 	  //$Obj_out.sdk:=sdk (New object(//"action";"install";//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";//"target";$Obj_in.path;// "cache";env_userPath ("cacheSdk")))
 	  //$Obj_out.sdk:=sdk (New object(\
-						//"action";"install";\
-						//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
-						//"target";$Obj_in.path;\
-						//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
+								//"action";"install";\
+								//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+								//"target";$Obj_in.path;\
+								//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
@@ -420,14 +435,14 @@ If ($Obj_in.create)
 			
 			  // Generate if not exist
 			  //$Obj_out.dump:=dataSet (New object(\
-												//"action";"create";\
-												//"project";$Obj_project;\
-												//"digest";True;\
-												//"dataSet";Bool(featuresFlags._101725);\
-												//"key";$File_;\
-												//"caller";$Obj_in.caller;\
-												//"verbose";$Boo_verbose;\
-												//"picture";Not(Bool(featuresFlags._97117))))
+																//"action";"create";\
+																//"project";$Obj_project;\
+																//"digest";True;\
+																//"dataSet";Bool(featuresFlags._101725);\
+																//"key";$File_;\
+																//"caller";$Obj_in.caller;\
+																//"verbose";$Boo_verbose;\
+																//"picture";Not(Bool(featuresFlags._97117))))
 			$Obj_out.dump:=dataSet (New object:C1471(\
 				"action";"create";\
 				"project";$Obj_project;\
