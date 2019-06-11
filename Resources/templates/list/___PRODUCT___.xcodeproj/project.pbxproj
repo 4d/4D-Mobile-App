@@ -295,6 +295,7 @@
 				48FDD0DF1E94FA1000EEDE31 /* Embed Frameworks */,
 				D9BA4A381EC4A6D9001A997B /* Copy Frameworks */,
 				4820D4CE1FEBAA0C00B13855 /* swiftlint */,
+				4889AD1322AFAE1800323519 /* carthage outdated */,
 			);
 			buildRules = (
 			);
@@ -410,6 +411,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n  if [ -f \"${PROJECT_DIR}/.swiftlint.yml\" ]; then\n    swiftlint\n  else\n    echo \"SwiftLint config file do not exist\"\n  fi\nelse\n  echo \"SwiftLint not installed, download it from https://github.com/realm/SwiftLint to check your code\"\nfi";
+		};
+		4889AD1322AFAE1800323519 /* carthage outdated */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "carthage outdated";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which carthage >/dev/null; then\n  if [ -f \"${PROJECT_DIR}/Cartfile\" ]; then\n    carthage outdated --xcode-warnings\n  fi\nfi\n";
 		};
 		D9BA4A381EC4A6D9001A997B /* Copy Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
