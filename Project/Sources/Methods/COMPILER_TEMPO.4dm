@@ -4,6 +4,10 @@
 C_OBJECT:C1216(INIT ;$1)
 
 
+C_OBJECT:C1216(svg ;$0)
+C_TEXT:C284(svg ;$1)
+C_OBJECT:C1216(svg ;$2)
+
 
   //__________________________________________________
 C_OBJECT:C1216(publishedTableList ;$0)

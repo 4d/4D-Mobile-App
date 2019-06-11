@@ -82,7 +82,7 @@ _menuObject_ [object] := ***menu*** {(_param_ [text])}
 
 ### Delete a menu item>*menuObject*.**delete** ( {item (number)} ) -> [menuObject]
 
-- _item_ is the menu item number to disable - last item added if omitted
+- _item_ is the menu item number to delete - last item added if omitted
 
 ### Display menu as popup>*menuObject*.**popup** ( {_default_ [text] {; _xCoord_ [number] ; _yCoord_ [number }} ) -> [menuObject]
 

@@ -15,8 +15,8 @@ C_OBJECT:C1216($1)
 C_BOOLEAN:C305($Boo_append)
 C_LONGINT:C283($Lon_i;$Lon_index;$Lon_parameters)
 C_TEXT:C284($Dir_;$Txt_buffer;$Txt_fieldID;$Txt_tableID)
-C_OBJECT:C1216($Obj_buffer;$Obj_field;$Obj_formatter;$Obj_in;$Obj_out;$Obj_resources;$Obj_resource;$Obj_result)
-C_COLLECTION:C1488($Col_buffer)
+C_OBJECT:C1216($o;$Obj_field;$Obj_formatter;$Obj_in;$Obj_out;$Obj_resources;$Obj_resource;$Obj_result)
+C_COLLECTION:C1488($c)
 
 If (False:C215)
 	C_OBJECT:C1216(formatters ;$0)
@@ -88,12 +88,12 @@ Case of
 		  // Others formatter
 		If (Bool:C1537(featuresFlags.withNewFieldProperties))
 			
-			For each ($Col_buffer;$Obj_resources.fieldBindingTypes.filter("col_formula";"$1.result:=(Value type:C1509($1.value)=42)");1)
+			For each ($c;$Obj_resources.fieldBindingTypes.filter("col_formula";"$1.result:=(Value type:C1509($1.value)=42)");1)
 				
 				  // Keep only formats with defined name
-				$Col_buffer:=$Col_buffer.filter("col_formula";"$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
+				$c:=$c.filter("col_formula";"$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
 				
-				For each ($Obj_formatter;$Col_buffer)
+				For each ($Obj_formatter;$c)
 					
 					$Txt_buffer:=String:C10($Obj_formatter.name)
 					
@@ -108,12 +108,12 @@ Case of
 			
 		Else 
 			
-			For each ($Col_buffer;$Obj_resources._o_fieldBindingTypes.filter("col_formula";"$1.result:=(Value type:C1509($1.value)=42)");1)
+			For each ($c;$Obj_resources._o_fieldBindingTypes.filter("col_formula";"$1.result:=(Value type:C1509($1.value)=42)");1)
 				
 				  // Keep only formats with defined name
-				$Col_buffer:=$Col_buffer.filter("col_formula";"$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
+				$c:=$c.filter("col_formula";"$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
 				
-				For each ($Obj_formatter;$Col_buffer)
+				For each ($Obj_formatter;$c)
 					
 					$Txt_buffer:=String:C10($Obj_formatter.name)
 					
@@ -151,55 +151,52 @@ Case of
 			
 			$Obj_out.formatters:=New collection:C1472
 			
-			$Obj_resources:=doc_Folder (_o_Pathname ("host_formatters"))
+			$Obj_resources:=COMPONENT_Pathname ("host_formatters")
 			
 			If ($Obj_resources.exists)
 				
-				$Col_buffer:=New collection:C1472
+				$c:=New collection:C1472
 				
 				If (Bool:C1537(featuresFlags.withNewFieldProperties))
 					
-					$Col_buffer[Is alpha field:K8:1]:="text"
-					$Col_buffer[Is boolean:K8:9]:="boolean"
-					$Col_buffer[Is integer:K8:5]:="integer"
-					$Col_buffer[Is longint:K8:6]:="integer"
-					$Col_buffer[Is integer 64 bits:K8:25]:="integer"
-					$Col_buffer[Is real:K8:4]:="real"
-					$Col_buffer[Is float:K8:26]:="float"
-					$Col_buffer[Is date:K8:7]:="date"
-					$Col_buffer[Is time:K8:8]:="time"
-					$Col_buffer[Is text:K8:3]:="text"
-					$Col_buffer[Is picture:K8:10]:="picture"
+					$c[Is alpha field:K8:1]:="text"
+					$c[Is boolean:K8:9]:="boolean"
+					$c[Is integer:K8:5]:="integer"
+					$c[Is longint:K8:6]:="integer"
+					$c[Is integer 64 bits:K8:25]:="integer"
+					$c[Is real:K8:4]:="real"
+					$c[Is float:K8:26]:="float"
+					$c[Is date:K8:7]:="date"
+					$c[Is time:K8:8]:="time"
+					$c[Is text:K8:3]:="text"
+					$c[Is picture:K8:10]:="picture"
 					
 				Else 
 					
-					$Col_buffer[1]:="boolean"
-					$Col_buffer[3]:="integer"
-					$Col_buffer[4]:="integer"
-					$Col_buffer[5]:="integer"
-					$Col_buffer[6]:="real"
-					$Col_buffer[7]:="float"
-					$Col_buffer[8]:="date"
-					$Col_buffer[9]:="time"
-					$Col_buffer[10]:="text"
-					$Col_buffer[12]:="picture"
+					$c[1]:="boolean"
+					$c[3]:="integer"
+					$c[4]:="integer"
+					$c[5]:="integer"
+					$c[6]:="real"
+					$c[7]:="float"
+					$c[8]:="date"
+					$c[9]:="time"
+					$c[10]:="text"
+					$c[12]:="picture"
 					
 				End if 
 				
-				For each ($Obj_formatter;$Obj_resources.folders)
+				For each ($Obj_formatter;$Obj_resources.folders())
 					
-					$Lon_index:=$Obj_formatter.files.extract("fullName").indexOf("manifest.json")
-					
-					If ($Lon_index#-1)
+					If ($Obj_formatter.file("manifest.json").exists)
 						
-						  // Use formatter folder name instead of manifest.name [
-						$Obj_buffer:=JSON Parse:C1218(Document to text:C1236($Obj_formatter.files[$Lon_index].nativePath))
+						$o:=JSON Parse:C1218($Obj_formatter.file("manifest.json").getText())
 						
-						If ($Obj_buffer.type#Null:C1517)
+						If ($o.type#Null:C1517)
 							
-							If (Value type:C1509($Obj_buffer.type)=Is collection:K8:32)
+							If (Value type:C1509($o.type)=Is collection:K8:32)
 								
-								If ($Obj_buffer.type.indexOf($Col_buffer[$Obj_in.type])#-1)
+								If ($o.type.indexOf($c[$Obj_in.type])#-1)
 									
 									$Obj_out.formatters.push(New object:C1471("name";$Obj_formatter.name))
 									
@@ -207,15 +204,14 @@ Case of
 								
 							Else 
 								
-								If ($Obj_buffer.type=$Col_buffer[$Obj_in.type])
+								If ($o.type=$c[$Obj_in.type])
 									
 									$Obj_out.formatters.push(New object:C1471("name";$Obj_formatter.name))
 									
 								End if 
+								
 							End if 
 						End if 
-						  //]
-						
 					End if 
 				End for each 
 			End if 

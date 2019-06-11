@@ -38,7 +38,21 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_form:=New object:C1471("window";Current form window:C827;"form";editor_INIT ;"fieldList";"01_fields";"ids";"IDs";"fields";"fields";"icons";"icons";"iconColumn";3;"labels";"labels";"labelColumn";5;"shortLabels";"shortLabels";"shortlabelColumn";4;"formats";"formats";"formatColumn";6;"iconGrid";"iconGrid")
+	$Obj_form:=New object:C1471(\
+		"window";Current form window:C827;\
+		"form";editor_INIT ;\
+		"fieldList";"01_fields";\
+		"ids";"IDs";\
+		"fields";"fields";\
+		"icons";"icons";\
+		"iconColumn";3;\
+		"labels";"labels";\
+		"labelColumn";5;\
+		"shortLabels";"shortLabels";\
+		"shortlabelColumn";4;\
+		"formats";"formats";\
+		"formatColumn";6;\
+		"iconGrid";"iconGrid")
 	
 	$Obj_context:=$Obj_form.form
 	
@@ -74,7 +88,8 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				fields_Handler (New object:C1471("action";"update"))
+				fields_Handler (New object:C1471(\
+					"action";"update"))
 				
 				  // Preload the icons
 				CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"fieldIcons")
@@ -170,7 +185,8 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="fieldIcons")  // Call back from widget
 		
-		If ($Obj_in.item>0) & ($Obj_in.item<=$Obj_in.pathnames.length)
+		If ($Obj_in.item>0)\
+			 & ($Obj_in.item<=$Obj_in.pathnames.length)
 			
 			  // Update data model
 			fields_Handler (New object:C1471("action";"field";"row";$Obj_in.row)).icon:=$Obj_in.pathnames[$Obj_in.item-1]

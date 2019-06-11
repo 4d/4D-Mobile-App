@@ -7,7 +7,7 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($Boo_horizontal;$Boo_vertical)
 C_LONGINT:C283($i;$Lon_bottom;$Lon_column;$Lon_left;$Lon_right;$Lon_row)
 C_LONGINT:C283($Lon_top)
-C_OBJECT:C1216($o;$Obj_out)
+C_OBJECT:C1216($o;$o)
 
 If (False:C215)
 	C_OBJECT:C1216(listbox ;$0)
@@ -149,7 +149,7 @@ Else
 			  //______________________________________________________
 		: ($1="property")
 			
-			$Obj_out:=New object:C1471(\
+			$o:=New object:C1471(\
 				"value";LISTBOX Get property:C917(*;\
 				$o.name;Num:C11($2.property)))
 			
@@ -161,7 +161,7 @@ Else
 			
 			CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
 			
-			$Obj_out:=New object:C1471(\
+			$o:=New object:C1471(\
 				"choice";Dynamic pop up menu:C1006($2.menu;\
 				"";$Lon_left;\
 				$Lon_bottom))

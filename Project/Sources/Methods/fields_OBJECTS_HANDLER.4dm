@@ -14,9 +14,9 @@ C_LONGINT:C283($0)
 C_LONGINT:C283($Lon_;$Lon_bottom;$Lon_column;$Lon_formEvent;$Lon_left;$Lon_parameters)
 C_LONGINT:C283($Lon_right;$Lon_row;$Lon_top;$Lon_x;$Lon_y)
 C_POINTER:C301($Ptr_me)
-C_TEXT:C284($Mnu_choice;$Mnu_pop;$Txt_;$Txt_current;$Txt_me)
-C_OBJECT:C1216($Obj_buffer;$Obj_context;$Obj_field;$Obj_form;$Obj_picker)
-C_COLLECTION:C1488($Col_buffer)
+C_TEXT:C284($t;$Txt_current;$Txt_me)
+C_OBJECT:C1216($o;$Obj_context;$Obj_field;$Obj_form;$Obj_menu;$Obj_picker)
+C_COLLECTION:C1488($c)
 
 If (False:C215)
 	C_LONGINT:C283(fields_OBJECTS_HANDLER ;$0)
@@ -41,7 +41,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 	
-	$Obj_form:=fields_Handler (New object:C1471("action";"init"))
+	$Obj_form:=fields_Handler (New object:C1471(\
+		"action";"init"))
 	
 	$Obj_context:=$Obj_form.form
 	
@@ -60,12 +61,15 @@ Case of
 		LISTBOX GET CELL POSITION:C971(*;$Txt_me;$Lon_column;$Lon_row)
 		
 		Case of 
+				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Selection Change:K2:29) | ($Lon_formEvent=On Clicked:K2:4)
+			: ($Lon_formEvent=On Selection Change:K2:29)\
+				 | ($Lon_formEvent=On Clicked:K2:4)
 				
 				editor_ui_LISTBOX ($Txt_me)
 				
 				Case of 
+						
 						  //______________________________________________________
 					: ($Lon_formEvent=On Selection Change:K2:29)
 						
@@ -87,7 +91,9 @@ Case of
 						
 						$Obj_picker:=(ui.pointer($Obj_form.iconGrid))->
 						
-						$Obj_field:=fields_Handler (New object:C1471("action";"field";"row";$Lon_row))
+						$Obj_field:=fields_Handler (New object:C1471(\
+							"action";"field";\
+							"row";$Lon_row))
 						
 						If ($Obj_field.icon#Null:C1517)
 							
@@ -116,11 +122,6 @@ Case of
 						
 						  // Display selector
 						CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"pickerShow";$Obj_picker)
-						
-						  //______________________________________________________
-					Else 
-						
-						  //
 						
 						  //______________________________________________________
 				End case 
@@ -181,7 +182,8 @@ Case of
 				editor_ui_LISTBOX ($Txt_me;False:C215)
 				
 				  //______________________________________________________
-			: (editor_Locked ) | ($Lon_row=0)
+			: (editor_Locked )\
+				 | ($Lon_row=0)
 				
 				  // NOTHING MORE TO DO
 				
@@ -190,14 +192,12 @@ Case of
 				
 				editor_ui_LISTBOX ($Txt_me)
 				
-				  //If ($Lon_row#0)
-				
-				If ($Lon_column=$Obj_form.labelColumn) | ($Lon_column=$Obj_form.shortlabelColumn)
+				If ($Lon_column=$Obj_form.labelColumn)\
+					 | ($Lon_column=$Obj_form.shortlabelColumn)
 					
 					EDIT ITEM:C870($Ptr_me->;$Ptr_me->)
 					
 				End if 
-				  //End if 
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Before Data Entry:K2:39)
@@ -206,10 +206,12 @@ Case of
 					
 					$0:=-1
 					
-					$Mnu_pop:=Create menu:C408
+					$Obj_menu:=menu 
 					
 					  // Get the field definition [
-					$Obj_field:=fields_Handler (New object:C1471("action";"field";"row";$Lon_row))
+					$Obj_field:=fields_Handler (New object:C1471(\
+						"action";"field";\
+						"row";$Lon_row))
 					
 					  // Get current format
 					If ($Obj_field.format=Null:C1517)
@@ -221,6 +223,7 @@ Case of
 							
 						Else 
 							
+							  //#OLD_MECHANISM
 							$Txt_current:=commonValues.defaultFieldBindingTypes[$Obj_field.type]
 							
 						End if 
@@ -239,60 +242,60 @@ Case of
 						End if 
 					End if 
 					
-					For each ($Obj_buffer;formatters (New object:C1471("action";"getByType";"type";Choose:C955(Bool:C1537(featuresFlags.withNewFieldProperties);$Obj_field.fieldType;$Obj_field.type))).formatters)
+					For each ($o;formatters (New object:C1471(\
+						"action";"getByType";\
+						"type";Choose:C955(Bool:C1537(featuresFlags.withNewFieldProperties);\
+						$Obj_field.fieldType;$Obj_field.type))).formatters)
 						
-						$Txt_:=String:C10($Obj_buffer.name)
+						$t:=String:C10($o.name)
 						
-						If ($Txt_="-")
+						If ($t="-")
 							
-							APPEND MENU ITEM:C411($Mnu_pop;"-")
+							$Obj_menu.line()
 							
 						Else 
 							
-							APPEND MENU ITEM:C411($Mnu_pop;str_localized (New collection:C1472("_"+$Txt_)))
-							SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;$Txt_)
-							SET MENU ITEM MARK:C208($Mnu_pop;-1;ui.checkMark*Num:C11($Txt_=$Txt_current))
+							$Obj_menu.append(str_localized (New collection:C1472("_"+$t));$t;$Txt_current=$t)
 							
 						End if 
 					End for each 
 					
-					  //If (Bool(featuresFlags._100990))
+					  // Append user formatters if any
+					$c:=formatters (New object:C1471(\
+						"action";"getByType";\
+						"host";True:C214;\
+						"type";Num:C11(Choose:C955(Bool:C1537(featuresFlags.withNewFieldProperties);\
+						$Obj_field.fieldType;$Obj_field.type)))).formatters
 					
-					  // Append user formatters if any {
-					$Col_buffer:=formatters (New object:C1471("action";"getByType";"host";True:C214;"type";Num:C11(Choose:C955(Bool:C1537(featuresFlags.withNewFieldProperties);$Obj_field.fieldType;$Obj_field.type)))).formatters
-					
-					If ($Col_buffer.length>0)
+					If ($c.length>0)
 						
-						APPEND MENU ITEM:C411($Mnu_pop;"-")
+						$Obj_menu.line()
 						
-						For each ($Obj_buffer;$Col_buffer)
+						For each ($o;$c)
 							
-							APPEND MENU ITEM:C411($Mnu_pop;$Obj_buffer.name)
-							SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"/"+$Obj_buffer.name)
-							SET MENU ITEM MARK:C208($Mnu_pop;-1;ui.checkMark*Num:C11($Txt_current=("/"+$Obj_buffer.name)))
+							$Obj_menu.append($o.name;"/"+$o.name;$Txt_current=("/"+$o.name))
 							
 						End for each 
 					End if 
-					  //}
 					
-					  //End if 
+					LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.fieldList;$Lon_column;$Lon_row;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+					CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
+					$Obj_menu.popup("";$Lon_left;$Lon_bottom)
 					
-					$Mnu_choice:=ui_listboxPopUp ($Obj_form.fieldList;$Mnu_pop;$Lon_column;$Lon_row)
-					
-					If (Length:C16($Mnu_choice)#0)
+					If ($Obj_menu.selected)
 						
 						  // Update data model
-						$Obj_field.format:=$Mnu_choice
+						$Obj_field.format:=$Obj_menu.choice
 						
 						  // Update me
-						If ($Mnu_choice[[1]]="/")
+						If ($Obj_menu.choice[[1]]="/")
 							
 							  // User resources
-							$Ptr_me->{$Lon_row}:=Substring:C12($Mnu_choice;2)
+							$Ptr_me->{$Lon_row}:=Substring:C12($Obj_menu.choice;2)
 							
 						Else 
 							
-							$Ptr_me->{$Lon_row}:=str_localized (New collection:C1472("_"+$Mnu_choice))
+							$Ptr_me->{$Lon_row}:=str_localized (New collection:C1472("_"+$Obj_menu.choice))
 							
 						End if 
 					End if 
@@ -308,9 +311,12 @@ Case of
 			: ($Lon_formEvent=On Data Change:K2:15)
 				
 				  // Update data model
-				If ($Lon_column=$Obj_form.labelColumn) | ($Lon_column=$Obj_form.shortlabelColumn)
+				If ($Lon_column=$Obj_form.labelColumn)\
+					 | ($Lon_column=$Obj_form.shortlabelColumn)
 					
-					$Obj_field:=fields_Handler (New object:C1471("action";"field";"row";$Lon_row))
+					$Obj_field:=fields_Handler (New object:C1471(\
+						"action";"field";\
+						"row";$Lon_row))
 					
 					$Obj_field[Choose:C955($Lon_column=$Obj_form.labelColumn;"label";"shortLabel")]:=$Ptr_me->{$Lon_row}
 					
