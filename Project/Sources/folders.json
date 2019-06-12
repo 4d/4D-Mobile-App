@@ -53,25 +53,6 @@
 			"WEB_Test"
 		]
 	},
-	"_[COMPONENT]": {
-		"groups": [
-			"[EDITOR]",
-			"deliver",
-			"[PANELS]",
-			"[PROJECT]",
-			"mobile",
-			"macOS",
-			"backend"
-		],
-		"methods": [
-			"COMPONENT_Pathname",
-			"BUILD",
-			"COMPILER_COMPONENT",
-			"COMPONENT_DEFINE_TOOLS",
-			"COMPONENT_INIT",
-			"COMPONENT_Infos"
-		]
-	},
 	"VIEWS": {
 		"methods": [
 			"views_OBJECTS_HANDLER",
@@ -93,6 +74,25 @@
 			"VIEWS"
 		]
 	},
+	"_[COMPONENT]": {
+		"groups": [
+			"[EDITOR]",
+			"deliver",
+			"[PANELS]",
+			"[PROJECT]",
+			"macOS",
+			"backend",
+			"mobile"
+		],
+		"methods": [
+			"COMPONENT_Pathname",
+			"BUILD",
+			"COMPILER_COMPONENT",
+			"COMPONENT_DEFINE_TOOLS",
+			"COMPONENT_INIT",
+			"COMPONENT_Infos"
+		]
+	},
 	"__o_OBSOLETES": {
 		"methods": [
 			"_o_editor_MENU_BUILD",
@@ -101,7 +101,6 @@
 			"_o_macros",
 			"EDITOR_MENU_SIMULATOR",
 			"_o_rest_isValidField",
-			"_o_widgetProperties",
 			"_o_env_System_path",
 			"TEMPO_1",
 			"_o_Pathname",
@@ -137,12 +136,12 @@
 	},
 	"classes": {
 		"methods": [
-			"listbox",
 			"widget",
 			"window",
 			"menu",
 			"database",
-			"COMPILER_classes"
+			"COMPILER_classes",
+			"listbox"
 		]
 	},
 	"Localization": {
@@ -561,39 +560,6 @@
 			"ui_SET_GEOMETRY"
 		]
 	},
-	"mobile": {
-		"methods": [
-			"mobile_Check_installation",
-			"COMPILER_mobile",
-			"mobile_Project"
-		]
-	},
-	"widgets": {
-		"groups": [
-			"Localization",
-			"Message",
-			"Picture grid",
-			"Search"
-		]
-	},
-	"STRUCTURE": {
-		"methods": [
-			"structure_REPAIR",
-			"STRUCTURE_OBJECTS_HANDLER",
-			"structure_FIELD_LIST",
-			"COMPILER_STRUCTURES",
-			"STRUCTURE_TIPS",
-			"STRUCTURE_Handler",
-			"STRUCTURE_ACTION",
-			"STRUCTURE_CALLBACK",
-			"STRUCTURE_UPDATE",
-			"structure_TABLE_LIST"
-		],
-		"forms": [
-			"RELATED",
-			"STRUCTURE"
-		]
-	},
 	"col": {
 		"methods": [
 			"COMPILER_col",
@@ -653,6 +619,39 @@
 			"catalog",
 			"findFirstPathComponentInCatalog",
 			"dataModel"
+		]
+	},
+	"mobile": {
+		"methods": [
+			"mobile_Check_installation",
+			"COMPILER_mobile",
+			"mobile_Project"
+		]
+	},
+	"widgets": {
+		"groups": [
+			"Localization",
+			"Message",
+			"Picture grid",
+			"Search"
+		]
+	},
+	"STRUCTURE": {
+		"methods": [
+			"structure_REPAIR",
+			"STRUCTURE_OBJECTS_HANDLER",
+			"structure_FIELD_LIST",
+			"COMPILER_STRUCTURES",
+			"STRUCTURE_TIPS",
+			"STRUCTURE_Handler",
+			"STRUCTURE_ACTION",
+			"STRUCTURE_CALLBACK",
+			"STRUCTURE_UPDATE",
+			"structure_TABLE_LIST"
+		],
+		"forms": [
+			"RELATED",
+			"STRUCTURE"
 		]
 	},
 	"FIELDS": {

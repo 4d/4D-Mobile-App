@@ -116,35 +116,15 @@ Case of
 				End if 
 				
 				  // Initialize the search widget
-				(ui.pointer("search"))->:=New object:C1471(\
-					"placeholder";Get localized string:C991("search"))
+				widget ("search").setValue(New object:C1471(\
+					"placeholder";Get localized string:C991("search")))
 				
-				  // Positioning the search filters [
-				$o:=_o_widgetProperties ($Obj_form.tableList+".label")
-				$o.right:=$o.left+$o.bestWidth
-				OBJECT SET COORDINATES:C1248(*;$Obj_form.tableList+".label";$o.left;$o.top;$o.right;$o.bottom)
+				  // Position search filters based on the language of the label
+				widget ($Obj_form.tableFilter).moveHorizontally(widget ($Obj_form.tableList+".label").bestSize().coordinates.right+10)
+				widget ($Obj_form.fieldFilter).moveHorizontally(widget ($Obj_form.fieldList+".label").bestSize().coordinates.right+10)
 				
-				$Lon_shift:=$o.right+10
-				
-				$o:=_o_widgetProperties ($Obj_form.tableFilter)
-				$o.left:=$Lon_shift
-				OBJECT SET COORDINATES:C1248(*;$Obj_form.tableFilter;$o.left;$o.top;$o.right;$o.bottom)
-				
-				$o:=_o_widgetProperties ($Obj_form.fieldList+".label")
-				$o.right:=$o.left+$o.bestWidth
-				OBJECT SET COORDINATES:C1248(*;$Obj_form.fieldList+".label";$o.left;$o.top;$o.right;$o.bottom)
-				
-				$Lon_shift:=$o.right+10
-				
-				$o:=_o_widgetProperties ($Obj_form.fieldFilter)
-				$o.left:=$Lon_shift
-				OBJECT SET COORDINATES:C1248(*;$Obj_form.fieldFilter;$o.left;$o.top;$o.right;$o.bottom)
-				  //]
-				
-				  // Align checkbox & help according to the localization
-				ui_BEST_SIZE (New object:C1471(\
-					"widgets";New collection:C1472($Obj_form.allow;$Obj_form.allowHelp);\
-					"minimumWidth";22))
+				  // Align checkbox & help according to the translation
+				widget ($Obj_form.allowHelp).moveHorizontally(widget ($Obj_form.allow).bestSize().coordinates.right+5)
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)

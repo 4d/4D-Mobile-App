@@ -263,7 +263,8 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:tables"
+					"text": ":xliff:tables",
+					"borderStyle": "none"
 				},
 				"02_fields.label": {
 					"type": "text",
@@ -273,7 +274,8 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:fields"
+					"text": ":xliff:fields",
+					"borderStyle": "none"
 				},
 				"tables.filter": {
 					"type": "input",

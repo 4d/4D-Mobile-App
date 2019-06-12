@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="123">
+﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="125">
 	<com.4d>
 		<deployment>
 			<options/>
@@ -18,7 +18,8 @@
 		</interface>
 		<server>
 			<network>
-				<options publication_name="4D Mobile Express" publish_at_startup="true" use_legacy_network_layer="false"/>
+				<options publication_name="4D Mobile App" publish_at_startup="false" use_legacy_network_layer="false"/>
+				<sso/>
 			</network>
 		</server>
 		<web>

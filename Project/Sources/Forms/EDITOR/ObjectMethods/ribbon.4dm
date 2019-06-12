@@ -88,10 +88,10 @@ Case of
 			: ($Lon_formEvent=152)  // Project
 				
 				  // Get button coordinates
-				EXECUTE METHOD IN SUBFORM:C1085("ribbon";"widgetProperties";$o;"152")
+				EXECUTE METHOD IN SUBFORM:C1085("ribbon";"widget";$o;"152")
 				editor_MENU_ACTIONS (New object:C1471(\
-					"x";$o.window.left;\
-					"y";$o.window.top+$o.height))
+					"x";$o.windowCoordinates.left;\
+					"y";$o.windowCoordinates.top+$o.coordinates.height))
 				
 				  //…………………………………………………………………………………………………
 			: ($Lon_formEvent=153)  // Install

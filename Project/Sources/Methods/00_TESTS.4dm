@@ -22,24 +22,6 @@ $cc:=New collection:C1472
 
 Case of 
 		
-		  //________________________________________
-	: (True:C214)
-		
-		  //$o:=COMPONENT_Pathname ("host")
-		
-		$o:=Folder:C1567(fk resources folder:K87:11).folder("toto")
-		$o.create()
-		$oo:=$o.createAlias($o.parent;"alias")
-		$o.delete()
-		
-		If ($oo.original=Null:C1517)
-			
-			ALERT:C41("Plus là !")
-			
-		End if 
-		
-		$o:=COMPONENT_Pathname ("host")
-		$o:=COMPONENT_Pathname ("host_forms")
 		
 		  //________________________________________
 	: (True:C214)

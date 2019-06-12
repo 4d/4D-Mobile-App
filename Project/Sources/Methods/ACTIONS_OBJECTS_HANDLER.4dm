@@ -120,28 +120,32 @@ Case of
 						  //…………………………………………………………………………………………………………
 					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.icon].number)  // Open the fields icons picker
 						
-						$o:=$Obj_form.iconGrid.pointer()->
-						
-						$o.item:=$o.pathnames.indexOf(String:C10($Obj_context.current.icon))
-						$o.item:=$o.item+1  // Widget work with array
-						
-						$o.row:=$Obj_form.actions.row
-						
-						$o.left:=$Obj_form.actions.cellCoordinates.right
-						$o.top:=34
-						
-						$o.action:="actionIcons"
-						
-						$o.background:=0x00FFFFFF
-						$o.backgroundStroke:=ui.strokeColor
-						$o.promptColor:=0x00FFFFFF
-						$o.promptBackColor:=ui.strokeColor
-						$o.hidePromptSeparator:=True:C214
-						$o.forceRedraw:=True:C214
-						$o.prompt:=str_localized (New collection:C1472("chooseAnIconForTheAction";String:C10($Obj_context.current.name)))
-						
-						  // Display selector
-						$Obj_form.form.call(New object:C1471("parameters";New collection:C1472("pickerShow";$o)))
+						If ($Obj_context.current#Null:C1517)
+							
+							$o:=$Obj_form.iconGrid.pointer()->
+							
+							$o.item:=$o.pathnames.indexOf(String:C10($Obj_context.current.icon))
+							$o.item:=$o.item+1  // Widget work with array
+							
+							$o.row:=$Obj_form.actions.row
+							
+							$o.left:=$Obj_form.actions.cellCoordinates.right
+							$o.top:=34
+							
+							$o.action:="actionIcons"
+							
+							$o.background:=0x00FFFFFF
+							$o.backgroundStroke:=ui.strokeColor
+							$o.promptColor:=0x00FFFFFF
+							$o.promptBackColor:=ui.strokeColor
+							$o.hidePromptSeparator:=True:C214
+							$o.forceRedraw:=True:C214
+							$o.prompt:=str_localized (New collection:C1472("chooseAnIconForTheAction";String:C10($Obj_context.current.name)))
+							
+							  // Display selector
+							$Obj_form.form.call(New object:C1471("parameters";New collection:C1472("pickerShow";$o)))
+							
+						End if 
 						
 						  //…………………………………………………………………………………………………………
 				End case 
@@ -333,13 +337,13 @@ Case of
 										
 										$o:=New object:C1471(\
 											"fieldNumber";$cc[0].fieldNumber;\
-											"name";formatString ("field-name";$Obj_table[$t].name);\
+											"name";str_format ("uperCamelCase";$Obj_table[$t].name);\
 											"label";$Obj_table[$t].label;\
 											"shortLabel";$Obj_table[$t].shortLabel;\
 											"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
 											"defaultField";"")
 										
-										$o.defaultField:=$o.name
+										$o.defaultField:=formatString ("field-name";$Obj_table[$t].name)
 										
 										Case of 
 												

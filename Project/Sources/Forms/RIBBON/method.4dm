@@ -4,9 +4,9 @@
   // Created #30-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
-C_LONGINT:C283($Lon_device;$Lon_formEvent;$Lon_page)
+C_LONGINT:C283($l;$Lon_device;$Lon_formEvent;$Lon_page)
 C_TEXT:C284($File_plist)
-C_OBJECT:C1216($Obj_form;$Obj_page;$Obj_widget;$Obj_simulator)
+C_OBJECT:C1216($o;$Obj_form;$Obj_page;$Obj_simulator)
 
   // ----------------------------------------------------
   // Initialisations
@@ -40,14 +40,9 @@ $Obj_form.pages.push(New object:C1471(\
 $Obj_form.pages.push(New object:C1471(\
 "name";"deployment";\
 "button";"106"))
-
-  //If (Bool(featuresFlags._100174))
-
 $Obj_form.pages.push(New object:C1471(\
 "name";"data";\
 "button";"107"))
-
-  //End if 
 
 If (Bool:C1537(featuresFlags._103505))
 	
@@ -68,9 +63,6 @@ Case of
 		OBJECT SET ENABLED:C1123(*;$Obj_form.install;False:C215)
 		OBJECT SET ENABLED:C1123(*;$Obj_form.simulator;False:C215)
 		
-		  //If (Bool(featuresFlags._100174))
-		  //OBJECT SET VISIBLE(*;"107";True)
-		
 		If (Bool:C1537(featuresFlags._103505))
 			
 			OBJECT SET VISIBLE:C603(*;"108";True:C214)
@@ -90,14 +82,6 @@ Case of
 				"gap";$Obj_form.gap))
 			
 		End if 
-		
-		  //Else 
-		  //ui_TOOLBAR_ALIGN (New object(\
-						"widgets";New collection("101";"102";"103";"104";"105";"106");\
-						"start";$Obj_form.start;\
-						"minWidth";$Obj_form.minWidth;\
-						"gap";$Obj_form.gap))
-		  //End if 
 		
 		SET TIMER:C645(-1)
 		
@@ -133,8 +117,6 @@ Case of
 					  //………………………………………………………………………………………
 				: ($Lon_page=1)
 					
-					  //If (Bool(featuresFlags._100174))
-					
 					OBJECT SET VISIBLE:C603(*;"107";True:C214)
 					
 					If (Bool:C1537(featuresFlags._103505))
@@ -157,16 +139,6 @@ Case of
 						
 					End if 
 					
-					  //Else 
-					
-					  //ui_TOOLBAR_ALIGN (New object(\
-												"widgets";New collection("101";"102";"103";"104";"105";"106");\
-												"start";$Obj_form.start;\
-												"minWidth";$Obj_form.minWidth;\
-												"gap";$Obj_form.gap))
-					
-					  //End if 
-					
 					  //………………………………………………………………………………………
 				: ($Lon_page=2)
 					
@@ -177,13 +149,13 @@ Case of
 						"gap";$Obj_form.gap))
 					
 					  // Place the popup icons
-					$Obj_widget:=_o_widgetProperties ("201.PopUp")
-					$Obj_widget.left:=_o_widgetProperties ("201").right-13
-					OBJECT SET COORDINATES:C1248(*;"201.PopUp";$Obj_widget.left;$Obj_widget.top;$Obj_widget.left+$Obj_widget.width;$Obj_widget.top+$Obj_widget.height)
+					$o:=widget ("201.PopUp")
+					$l:=widget ("201").coordinates.right-13
+					$o.setCoordinates($l;$o.coordinates.top;$l+$o.coordinates.width;$o.coordinates.top+$o.coordinates.height)
 					
-					$Obj_widget:=_o_widgetProperties ("152.PopUp")
-					$Obj_widget.left:=_o_widgetProperties ("152").right-13
-					OBJECT SET COORDINATES:C1248(*;"152.PopUp";$Obj_widget.left;$Obj_widget.top;$Obj_widget.left+$Obj_widget.width;$Obj_widget.top+$Obj_widget.height)
+					$o:=widget ("152.PopUp")
+					$l:=widget ("152").coordinates.right-13
+					$o.setCoordinates($l;$o.coordinates.top;$l+$o.coordinates.width;$o.coordinates.top+$o.coordinates.height)
 					
 					  //………………………………………………………………………………………
 			End case 
@@ -245,16 +217,7 @@ Case of
 			End if 
 		End if 
 		
-		
-		  // ASSERT(Not(Shift down)) #ASK VDL, maybe a Trace
-		
-		  // Button build & run
-		
-		
-		
-		
 		OBJECT SET ENABLED:C1123(*;$Obj_form.build;Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project))
-		
 		OBJECT SET ENABLED:C1123(*;$Obj_form.install;Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project) & Bool:C1537(Form:C1466.status.teamId))
 		
 		  //______________________________________________________

@@ -45,8 +45,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"removeAction";ui.button("actions.remove");\
 		"databaseMethod";ui.button("actionMethod");\
 		"actions";ui.listbox("actions");\
-		"noPublishedTable";ui.widget("noPublishedTable");\
-		"iconGrid";ui.widget("iconGrid");\
+		"noPublishedTable";widget ("noPublishedTable");\
+		"iconGrid";widget ("iconGrid");\
 		"name";"names";\
 		"icon";"icons";\
 		"shortLabel";"shorts";\

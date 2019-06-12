@@ -34,25 +34,6 @@ ui.tips:=New object:C1471(\
 "defaultDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;720))\
 )
 
-  // ============================= WINDOW =============================
-  //ui.window:=New object(\
-"reference";Current form window;\
-"process";Window process(This.reference);\
-"title";Null;\
-"type";Null;\
-"frontmost";Null;\
-"next";Null;\
-"coordinates";Null;\
-"screen";Null;\
-"get";Formula(ui_window );\
-"isFrontmost";Formula(Frontmost window=This.reference);\
-"getType";Formula(Window kind(This.reference));\
-"getTitle";Formula(Get window title(This.reference));\
-"getNext";Formula(Next window(This.reference));\
-"getCoordinates";Formula(ui_window ("coordinates"));\
-"setTitle";Formula(SET WINDOW TITLE($1;This.reference))\
-)
-
   // ============================= FORMS =============================
 ui.form:=Formula:C1597(New object:C1471(\
 "_is";"form";\
@@ -72,20 +53,6 @@ ui.form:=Formula:C1597(New object:C1471(\
 
   // Typing a checkbox dynamic as a boolean
 ui.boolean:=Formula from string:C1601("C_BOOLEAN:C305((OBJECT Get pointer:C1124(Object named:K67:5;$1))->)")
-
-  // ============================ MENU =============================
-  //ui.menu:=Formula(New object(\
-"_is";"menu";\
-"ref";Create menu;\
-"choice";"";\
-"append";Formula(ui_menu ("append";New object("item";String($1);"param";String($2);"mark";Bool($3))));\
-"line";Formula(APPEND MENU ITEM(This.ref;"-"));\
-"clear";Formula(RELEASE MENU(This.ref));\
-"count";Formula(Count menu items(This.ref));\
-"disable";Formula(DISABLE MENU ITEM(This.ref;Choose(Count parameters=1;$1;-1)));\
-"delete";Formula(DELETE MENU ITEM(This.ref;Choose(Count parameters=1;$1;-1)));\
-"popup";Formula(ui_menu ("popup";New object("default";$1;"x";$2;"y";$3)))\
-))
 
   // ============================ STATIC ============================
 ui.static:=Formula:C1597(New object:C1471(\
@@ -115,30 +82,32 @@ ui.group:=Formula:C1597(New object:C1471(\
 ))
 
   // ============================ WIDGETS ============================
-ui.widget:=Formula:C1597(New object:C1471(\
+  //ui.widget:=Formula(New object(\
 "_is";"widget";\
 "name";$1;\
-"coordinates";Null:C1517;\
-"windowCoordinates";Null:C1517;\
-"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name));\
-"hide";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;False:C215));\
-"show";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;True:C214));\
-"setVisible";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;Bool:C1537($1)));\
-"enabled";Formula:C1597(OBJECT Get enabled:C1079(*;This:C1470.name));\
-"enable";Formula:C1597(OBJECT SET ENABLED:C1123(*;This:C1470.name;True:C214));\
-"disable";Formula:C1597(OBJECT SET ENABLED:C1123(*;This:C1470.name;False:C215));\
-"setEnabled";Formula:C1597(OBJECT SET ENABLED:C1123(*;This:C1470.name;Bool:C1537($1)));\
-"focused";Formula:C1597(This:C1470.name=OBJECT Get name:C1087(Object with focus:K67:3));\
-"focus";Formula:C1597(GOTO OBJECT:C206(*;This:C1470.name));\
-"pointer";Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name));\
-"value";Formula:C1597((This:C1470.pointer())->);\
-"clear";Formula:C1597(CLEAR VARIABLE:C89((This:C1470.pointer())->));\
-"enterable";Formula:C1597(OBJECT Get enterable:C1067(*;This:C1470.name));\
-"setEnterable";Formula:C1597(OBJECT SET ENTERABLE:C238(*;This:C1470.name;Bool:C1537($1)));\
-"getCoordinates";Formula:C1597(ui_widget ("coordinates"));\
-"bestSize";Formula:C1597(ui_widget ("alignOnBestSize";New object:C1471("alignment";$1)));\
-"setCoordinates";Formula:C1597(ui_widget ("setCoordinates";New object:C1471("left";$1;"top";$2;"right";$3;"bottom";$4)))\
+"coordinates";Null;\
+"windowCoordinates";Null;\
+"visible";Formula(OBJECT Get visible(*;This.name));\
+"hide";Formula(OBJECT SET VISIBLE(*;This.name;False));\
+"show";Formula(OBJECT SET VISIBLE(*;This.name;True));\
+"setVisible";Formula(OBJECT SET VISIBLE(*;This.name;Bool($1)));\
+"enabled";Formula(OBJECT Get enabled(*;This.name));\
+"enable";Formula(OBJECT SET ENABLED(*;This.name;True));\
+"disable";Formula(OBJECT SET ENABLED(*;This.name;False));\
+"setEnabled";Formula(OBJECT SET ENABLED(*;This.name;Bool($1)));\
+"focused";Formula(This.name=OBJECT Get name(Object with focus));\
+"focus";Formula(GOTO OBJECT(*;This.name));\
+"pointer";Formula(OBJECT Get pointer(Object named;This.name));\
+"value";Formula((This.pointer())->);\
+"clear";Formula(CLEAR VARIABLE((This.pointer())->));\
+"enterable";Formula(OBJECT Get enterable(*;This.name));\
+"setEnterable";Formula(OBJECT SET ENTERABLE(*;This.name;Bool($1)));\
+"getCoordinates";Formula(ui_widget ("coordinates"));\
+"bestSize";Formula(ui_widget ("alignOnBestSize";New object("alignment";$1)));\
+"setCoordinates";Formula(ui_widget ("setCoordinates";New object("left";$1;"top";$2;"right";$3;"bottom";$4)))\
 ))
+
+ui.widget:=Formula:C1597(widget ($1))
 
   // ============================ BUTTONS ============================
 ui.button:=Formula:C1597(New object:C1471(\

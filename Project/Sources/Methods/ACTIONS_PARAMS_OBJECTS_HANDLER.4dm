@@ -383,13 +383,13 @@ Case of
 					
 					$o:=New object:C1471(\
 						"fieldNumber";$c[0].fieldNumber;\
-						"name";formatString ("field-name";$c[0].name);\
+						"name";str_format ("uperCamelCase";$c[0].name);\
 						"label";$c[0].label;\
 						"shortLabel";$c[0].shortLabel;\
 						"type";Null:C1517;\
 						"defaultField";"")
 					
-					$o.defaultField:=$o.name
+					$o.defaultField:=formatString ("field-name";$c[0].name)
 					
 					$cc:=New collection:C1472
 					$cc[Is integer 64 bits:K8:25]:="number"

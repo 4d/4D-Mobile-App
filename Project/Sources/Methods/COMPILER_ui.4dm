@@ -2,8 +2,8 @@
 If (False:C215)
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(_o_widgetProperties ;$0)
-	C_TEXT:C284(_o_widgetProperties ;$1)
+	  //C_OBJECT(_o_widgetProperties ;$0)
+	  //C_TEXT(_o_widgetProperties ;$1)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(windowProperties ;$0)

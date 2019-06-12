@@ -37,7 +37,9 @@
 					"left": 0,
 					"width": 970,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC"
+					"stroke": "#DCDCDC",
+					"height": 0,
+					"startPoint": "topLeft"
 				},
 				"toolbar.background": {
 					"type": "rectangle",
@@ -63,7 +65,9 @@
 					"left": 0,
 					"width": 970,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC"
+					"stroke": "#DCDCDC",
+					"height": 0,
+					"startPoint": "topLeft"
 				},
 				"section": {
 					"type": "button",
@@ -105,7 +109,9 @@
 					"height": 139,
 					"visibility": "hidden",
 					"stroke": "#FF6347",
-					"strokeDashArray": "1 1"
+					"strokeDashArray": "1 1",
+					"width": 0,
+					"startPoint": "topLeft"
 				},
 				"swith.background": {
 					"type": "rectangle",
@@ -372,7 +378,9 @@
 					"method": "ObjectMethods/152.PopUp.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"icon": "/RESOURCES/images/common/down.png",
+					"iconFrames": 4
 				},
 				"153": {
 					"type": "button",
@@ -407,9 +415,15 @@
 					"method": "ObjectMethods/201.PopUp.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"icon": "/RESOURCES/images/common/down.png",
+					"iconFrames": 4
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }
