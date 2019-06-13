@@ -1,0 +1,36 @@
+{
+	"formats" : {
+		"string" : [
+				"name",
+				"email",
+				"phone",
+				"account",
+				"password",
+				"url",
+				"zipCode",
+				"textArea"
+			],
+		"number" : [
+				"scientific",
+				"percent",
+				"energy",
+				"mass",
+				"spellOut"
+			],
+		"date" : [
+				"dateMedium",
+				"dateShort",
+				"dateLong"
+			],
+		"time" : [
+				"hour",
+				"duration"
+			],
+		"bool" : [
+				"bool"
+			],
+		"image" : [
+				"image"
+			]
+		}
+}

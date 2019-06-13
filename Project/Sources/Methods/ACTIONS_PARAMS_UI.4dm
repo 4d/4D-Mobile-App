@@ -12,9 +12,8 @@
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 
-C_BOOLEAN:C305($Boo_withFocus)
-C_LONGINT:C283($Lon_backgroundColor;$Lon_parameters)
-C_TEXT:C284($Txt_action)
+C_LONGINT:C283($Lon_parameters)
+C_TEXT:C284($t;$Txt_action)
 C_OBJECT:C1216($Obj_context;$Obj_form;$Obj_out)
 
 If (False:C215)
@@ -93,29 +92,22 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="format")  // display format according to format or type
 		
-		$Obj_out:=New object:C1471
-		
-		If ($Obj_context.parameter.format=Null:C1517)
+		If (String:C10($Obj_context.parameter.format)="")
 			
-			If ($Obj_context.parameter.type="string")
-				
-				$Obj_out:=New object:C1471(\
-					"value";Get localized string:C991("text"))
-				
-			Else 
-				
-				  // Use type
-				$Obj_out:=New object:C1471(\
-					"value";Get localized string:C991(Choose:C955($Obj_context.parameter.type=Null:C1517;"none";$Obj_context.parameter.type)))
-				
-			End if 
+			$t:=Choose:C955($Obj_context.parameter.type="string";\
+				"text";\
+				String:C10($Obj_context.parameter.type))
 			
 		Else 
 			
-			$Obj_out:=New object:C1471(\
-				"value";Get localized string:C991($Obj_context.parameter.format))
+			$t:=Choose:C955($Obj_context.parameter.format#$Obj_context.parameter.type;\
+				"f_"+String:C10($Obj_context.parameter.format);\
+				String:C10($Obj_context.parameter.type))
 			
 		End if 
+		
+		$Obj_out:=New object:C1471(\
+			"value";Get localized string:C991($t))
 		
 		  //______________________________________________________
 	: ($Txt_action="meta")  // <Meta info expression>

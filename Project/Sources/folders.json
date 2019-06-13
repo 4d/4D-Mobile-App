@@ -136,6 +136,7 @@
 	},
 	"classes": {
 		"methods": [
+			"group",
 			"widget",
 			"window",
 			"menu",

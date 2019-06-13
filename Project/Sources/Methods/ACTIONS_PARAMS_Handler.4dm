@@ -40,16 +40,22 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"noSelection";ui.static("empty");\
 		"noAction";ui.static("noAction");\
 		"noTable";ui.static("noTable");\
-		"withSelection";ui.group(New collection:C1472("@parameters@";"@property@";"@variable@"));\
-		"field";ui.group(New collection:C1472("@parameters@";"@property@"));\
+		"withSelection";ui.group("@parameters@;@property@;@variable@");\
+		"field";ui.group("@parameters@;@property@");\
 		"variable";ui.group("@variable@");\
-		"properties";ui.group(New collection:C1472("@property@";"@variable@"));\
+		"properties";ui.group("@property@;@variable@");\
+		"number";ui.group("@number@");\
 		"parameters";ui.listbox("01_Parameters");\
 		"add";ui.button("parameters.add");\
 		"remove";ui.button("parameters.remove");\
 		"typeMenu";ui.button("05_property_type.popup");\
-		"typeBorder";ui.static("05_property_type.border")\
+		"typeBorder";ui.static("05_property_type.border");\
+		"dynamic";ui.group("02_property_name;02_property_mandatory;03_property_label;04_property_shortLabel;06_property_placeholder;07_variable_default;09_property_constraint_number_min;10_property_constraint_number_max")\
 		)
+	
+	  //"min";ui.widget("09_property_constraint_number_min");\
+				//"max";ui.widget("10_property_constraint_number_max");\
+				
 	
 	$Obj_context:=$Obj_form.$
 	
@@ -89,7 +95,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)  // Refresh UI
 				
-				ASSERT:C1129(Not:C34(Shift down:C543))
+				  //ASSERT(Not(Shift down))
 				
 				$o:=$Obj_form
 				
@@ -140,19 +146,20 @@ Case of
 								$o.remove.enable()
 								$o.properties.show()
 								
-								If ($Obj_context.parameter.fieldNumber=Null:C1517)  // Variable
-									
-									$o.variable.show()
-									
-								Else 
-									
-									$o.variable.hide()
-									
-								End if 
+								$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
+								$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
+								
 							End if 
 						End if 
 					End if 
 				End if 
+				
+				  //______________________________________________________
+				  //: ($Lon_formEvent=On Data Change)
+				
+				  //project.save()
+				
+				  //BEEP
 				
 				  //______________________________________________________
 		End case 

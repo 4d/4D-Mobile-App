@@ -52,7 +52,7 @@
 			"objects": {
 				"05_property_type.border": {
 					"type": "rectangle",
-					"top": 157,
+					"top": 152,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -61,12 +61,13 @@
 				},
 				"05_property_type.popup.border": {
 					"type": "rectangle",
-					"top": 157,
+					"top": 152,
 					"left": 488,
 					"width": 33,
 					"height": 33,
 					"fill": "transparent",
-					"stroke": "#C4C4C4"
+					"stroke": "#C4C4C4",
+					"visibility": "hidden"
 				},
 				"01_Parameters.border": {
 					"type": "rectangle",
@@ -78,7 +79,7 @@
 					"fill": "transparent",
 					"stroke": "#AAAAAA"
 				},
-				"01_property_type.select.border": {
+				"02_property_name.border": {
 					"type": "rectangle",
 					"top": 28,
 					"left": 488,
@@ -98,7 +99,11 @@
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
-					"dragging": "none"
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"dragging": "none",
+					"events": [
+						"onDataChange"
+					]
 				},
 				"01_Parameters": {
 					"type": "listbox",
@@ -196,7 +201,7 @@
 						"onClick"
 					]
 				},
-				"01_property_type.select.border1": {
+				"03_property_label.border": {
 					"type": "rectangle",
 					"top": 90,
 					"left": 488,
@@ -216,9 +221,13 @@
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
-					"dragging": "none"
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"dragging": "none",
+					"events": [
+						"onDataChange"
+					]
 				},
-				"01_property_type.select.border2": {
+				"04_property_shortLabel.border": {
 					"type": "rectangle",
 					"top": 90,
 					"left": 734,
@@ -238,11 +247,15 @@
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
-					"dragging": "none"
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"dragging": "none",
+					"events": [
+						"onDataChange"
+					]
 				},
 				"05_property_type": {
 					"type": "input",
-					"top": 165,
+					"top": 160,
 					"left": 527,
 					"width": 157,
 					"height": 17,
@@ -258,15 +271,16 @@
 				},
 				"02_property_name.label": {
 					"type": "text",
-					"top": 7,
+					"top": 5,
 					"left": 488,
 					"width": 140,
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:name"
+					"text": ":xliff:name",
+					"visibility": "hidden"
 				},
-				"02_property_name.label1": {
+				"03_property_label.label": {
 					"type": "text",
 					"top": 68,
 					"left": 488,
@@ -274,9 +288,10 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:label"
+					"text": ":xliff:label",
+					"visibility": "hidden"
 				},
-				"02_property_name.label2": {
+				"04_property_shortLabel.label": {
 					"type": "text",
 					"top": 68,
 					"left": 734,
@@ -284,21 +299,23 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:shortLabel"
+					"text": ":xliff:shortLabel",
+					"visibility": "hidden"
 				},
-				"02_property_name.label3": {
+				"05_property_type.label": {
 					"type": "text",
-					"top": 135,
+					"top": 130,
 					"left": 488,
 					"width": 140,
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:formatters"
+					"text": ":xliff:formatters",
+					"visibility": "hidden"
 				},
 				"05_property_type.popup": {
 					"type": "button",
-					"top": 157,
+					"top": 152,
 					"left": 488,
 					"width": 33,
 					"height": 33,
@@ -308,21 +325,22 @@
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
-					]
+					],
+					"visibility": "hidden"
 				},
-				"06_variable_default.border": {
+				"07_variable_default.border": {
 					"type": "rectangle",
-					"top": 157,
-					"left": 734,
+					"top": 214,
+					"left": 488,
 					"width": 204,
 					"height": 33,
 					"visibility": "hidden",
 					"stroke": "#C4C4C4"
 				},
-				"06_variable_default": {
+				"07_variable_default": {
 					"type": "input",
-					"top": 165,
-					"left": 741,
+					"top": 222,
+					"left": 495,
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
@@ -330,12 +348,16 @@
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
-					"dragging": "none"
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"dragging": "none",
+					"events": [
+						"onDataChange"
+					]
 				},
-				"06_variable_default.label": {
+				"07_variable_default.label": {
 					"type": "text",
-					"top": 135,
-					"left": 734,
+					"top": 192,
+					"left": 488,
 					"width": 140,
 					"height": 17,
 					"stroke": "#696969",
@@ -354,8 +376,153 @@
 					"stroke": "#ff0000",
 					"textAlign": "left",
 					"text": "No target table defined"
+				},
+				"02_property_mandatory": {
+					"type": "checkbox",
+					"text": ":xliff:mandatory",
+					"top": 35,
+					"left": 734,
+					"width": 128,
+					"height": 18,
+					"events": [
+						"onClick"
+					],
+					"dataSource": "ACTIONS_PARAMS_UI .parameter.mandatory",
+					"focusable": true,
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"visibility": "hidden"
+				},
+				"06_property_placeholder.border": {
+					"type": "rectangle",
+					"top": 152,
+					"left": 734,
+					"width": 204,
+					"height": 33,
+					"visibility": "hidden",
+					"stroke": "#C4C4C4"
+				},
+				"06_property_placeholder": {
+					"type": "input",
+					"top": 160,
+					"left": 741,
+					"width": 189,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "ACTIONS_PARAMS_UI .parameter.placeholder",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"dragging": "none",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"06_property_placeholder.label": {
+					"type": "text",
+					"top": 130,
+					"left": 734,
+					"width": 140,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:placeholder",
+					"visibility": "hidden"
+				},
+				"09_property_constraint_number_min.border": {
+					"type": "rectangle",
+					"top": 214,
+					"left": 734,
+					"width": 93,
+					"height": 33,
+					"visibility": "hidden",
+					"stroke": "#C4C4C4"
+				},
+				"09_property_constraint_number_min": {
+					"type": "input",
+					"top": 222,
+					"left": 741,
+					"width": 78,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "ACTIONS_PARAMS_UI .parameter.min",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"entryFilter": "&\"0-9;.;-\"",
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"dataSourceTypeHint": "number",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"09_property_constraint_number_min.label": {
+					"type": "text",
+					"top": 192,
+					"left": 734,
+					"width": 93,
+					"height": 16,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:minimum",
+					"visibility": "hidden"
+				},
+				"10_property_constraint_number_max.border": {
+					"type": "rectangle",
+					"top": 214,
+					"left": 845,
+					"width": 93,
+					"height": 33,
+					"visibility": "hidden",
+					"stroke": "#C4C4C4"
+				},
+				"10_property_constraint_number_max": {
+					"type": "input",
+					"top": 222,
+					"left": 852,
+					"width": 78,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "ACTIONS_PARAMS_UI .parameter.max",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"entryFilter": "&\"0-9;.;,;-\"",
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"dataSourceTypeHint": "number",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"10_property_constraint_number_max.label": {
+					"type": "text",
+					"top": 192,
+					"left": 845,
+					"width": 93,
+					"height": 16,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:maximum",
+					"visibility": "hidden"
 				}
-			}
+			},
+			"entryOrder": [
+				"01_Parameters",
+				"02_property_name",
+				"02_property_mandatory",
+				"03_property_label",
+				"04_property_shortLabel",
+				"05_property_type.popup",
+				"05_property_type",
+				"06_property_placeholder",
+				"07_variable_default",
+				"09_property_constraint_number_min",
+				"10_property_constraint_number_max",
+				"parameters.add",
+				"parameters.remove"
+			]
 		}
 	],
 	"$4d": {

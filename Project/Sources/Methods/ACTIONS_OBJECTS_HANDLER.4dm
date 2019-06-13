@@ -341,9 +341,8 @@ Case of
 											"label";$Obj_table[$t].label;\
 											"shortLabel";$Obj_table[$t].shortLabel;\
 											"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
-											"defaultField";"")
-										
-										$o.defaultField:=formatString ("field-name";$Obj_table[$t].name)
+											"defaultField";formatString ("field-name";$Obj_table[$t].name);\
+											"mandatory";Bool:C1537($cc[0].mandatory))
 										
 										Case of 
 												

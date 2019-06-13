@@ -71,7 +71,25 @@ If (This:C1470._is=Null:C1517)
 		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)))\
 		)
 	
-	$o.getCoordinates()
+	  //$o.getCoordinates()
+	OBJECT GET COORDINATES:C663(*;$o.name;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+	
+	$o.coordinates:=New object:C1471(\
+		"left";$Lon_left;\
+		"top";$Lon_top;\
+		"right";$Lon_right;\
+		"bottom";$Lon_bottom;\
+		"width";$Lon_right-$Lon_left;\
+		"height";$Lon_bottom-$Lon_top)
+	
+	CONVERT COORDINATES:C1365($Lon_left;$Lon_top;XY Current form:K27:5;XY Current window:K27:6)
+	CONVERT COORDINATES:C1365($Lon_right;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
+	
+	$o.windowCoordinates:=New object:C1471(\
+		"left";$Lon_left;\
+		"top";$Lon_top;\
+		"right";$Lon_right;\
+		"bottom";$Lon_bottom)
 	
 	OBJECT GET BEST SIZE:C717(*;$o.name;$Lon_width;$Lon_height)
 	$o.bestWidth:=$Lon_width
@@ -203,7 +221,7 @@ Else
 			
 			If (Value type:C1509($o.name)=Is collection:K8:32)  // Group
 				
-				For each ($o;This:C1470.name)
+				For each ($t;$o.name)
 					
 					OBJECT SET VISIBLE:C603(*;$t;False:C215)
 					
@@ -254,7 +272,7 @@ Else
 			
 			If (Value type:C1509($o.name)=Is collection:K8:32)  // Group
 				
-				For each ($o;This:C1470.name)
+				For each ($o;$o.name)
 					
 					OBJECT SET ENABLED:C1123(*;$t;False:C215)
 					
@@ -300,7 +318,8 @@ Else
 		 | ($1="setCoordinates")\
 		 | ($1="bestSize")
 		
-		  // Update object coordinates
+		  // Update coordinates
+		
 		$o.coordinates:=New object:C1471(\
 			"left";$Lon_left;\
 			"top";$Lon_top;\

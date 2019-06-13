@@ -132,8 +132,8 @@
 				"debug.focus": {
 					"type": "input",
 					"top": 20,
-					"left": 822,
-					"width": 114,
+					"left": 691,
+					"width": 245,
 					"height": 14,
 					"dataSource": "OBJECT Get name:C1087(Object with focus:K67:3)",
 					"stroke": "#FFFFFF",

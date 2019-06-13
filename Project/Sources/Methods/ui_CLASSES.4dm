@@ -71,41 +71,7 @@ ui.static:=Formula:C1597(New object:C1471(\
 "setCoordinates";Formula:C1597(ui_widget ("setCoordinates";New object:C1471("left";$1;"top";$2;"right";$3;"bottom";$4)))\
 ))
 
-  // ============================ GROUP ============================
-ui.group:=Formula:C1597(New object:C1471(\
-"_is";"group";\
-"name";$1;\
-"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name));\
-"hide";Formula:C1597(ui_widget ("hide"));\
-"show";Formula:C1597(ui_widget ("show"));\
-"setVisible";Formula:C1597(ui_widget ("setVisible";New object:C1471("visible";Bool:C1537($1))))\
-))
-
-  // ============================ WIDGETS ============================
-  //ui.widget:=Formula(New object(\
-"_is";"widget";\
-"name";$1;\
-"coordinates";Null;\
-"windowCoordinates";Null;\
-"visible";Formula(OBJECT Get visible(*;This.name));\
-"hide";Formula(OBJECT SET VISIBLE(*;This.name;False));\
-"show";Formula(OBJECT SET VISIBLE(*;This.name;True));\
-"setVisible";Formula(OBJECT SET VISIBLE(*;This.name;Bool($1)));\
-"enabled";Formula(OBJECT Get enabled(*;This.name));\
-"enable";Formula(OBJECT SET ENABLED(*;This.name;True));\
-"disable";Formula(OBJECT SET ENABLED(*;This.name;False));\
-"setEnabled";Formula(OBJECT SET ENABLED(*;This.name;Bool($1)));\
-"focused";Formula(This.name=OBJECT Get name(Object with focus));\
-"focus";Formula(GOTO OBJECT(*;This.name));\
-"pointer";Formula(OBJECT Get pointer(Object named;This.name));\
-"value";Formula((This.pointer())->);\
-"clear";Formula(CLEAR VARIABLE((This.pointer())->));\
-"enterable";Formula(OBJECT Get enterable(*;This.name));\
-"setEnterable";Formula(OBJECT SET ENTERABLE(*;This.name;Bool($1)));\
-"getCoordinates";Formula(ui_widget ("coordinates"));\
-"bestSize";Formula(ui_widget ("alignOnBestSize";New object("alignment";$1)));\
-"setCoordinates";Formula(ui_widget ("setCoordinates";New object("left";$1;"top";$2;"right";$3;"bottom";$4)))\
-))
+ui.group:=Formula:C1597(group ($1))
 
 ui.widget:=Formula:C1597(widget ($1))
 
