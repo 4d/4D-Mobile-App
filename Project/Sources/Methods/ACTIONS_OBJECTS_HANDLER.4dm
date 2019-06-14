@@ -14,7 +14,7 @@ C_LONGINT:C283($0)
 C_BOOLEAN:C305($Boo_edit)
 C_LONGINT:C283($i;$l;$Lon_parameters)
 C_PICTURE:C286($p)
-C_TEXT:C284($Mnu_delete;$Mnu_edit;$Mnu_pop;$t)
+C_TEXT:C284($Mnu_delete;$Mnu_edit;$Mnu_pop;$t;$tt)
 C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_table)
 C_COLLECTION:C1488($c;$cc;$Col_fields)
 
@@ -60,6 +60,7 @@ Case of
 	: ($Obj_form.form.currentWidget=$Obj_form.actions.name)  // Actions listbox
 		
 		Case of 
+				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Getting Focus:K2:7)
 				
@@ -88,7 +89,7 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Double Clicked:K2:5)
 				
-				$Obj_form.actions.get()
+				$Obj_form.actions.update()
 				
 				Case of 
 						
@@ -113,7 +114,7 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Clicked:K2:4)
 				
-				$Obj_form.actions.get()
+				$Obj_form.actions.update()
 				
 				Case of 
 						
@@ -143,7 +144,9 @@ Case of
 							$o.prompt:=str_localized (New collection:C1472("chooseAnIconForTheAction";String:C10($Obj_context.current.name)))
 							
 							  // Display selector
-							$Obj_form.form.call(New object:C1471("parameters";New collection:C1472("pickerShow";$o)))
+							$Obj_form.form.call(New object:C1471(\
+								"parameters";New collection:C1472("pickerShow";\
+								$o)))
 							
 						End if 
 						
@@ -155,7 +158,7 @@ Case of
 				
 				$0:=-1  // Reject data entry
 				
-				$Obj_form.actions.get()
+				$Obj_form.actions.update()
 				
 				Case of 
 						
@@ -202,6 +205,8 @@ Case of
 						
 						  // Display scope menu
 						$Mnu_pop:=Create menu:C408
+						
+						$i:=Num:C11(String:C10($Obj_context.current.style)="destructive")  // Skip table for a suppression
 						
 						Repeat 
 							
@@ -256,10 +261,12 @@ Case of
 			
 			APPEND MENU ITEM:C411($Mnu_pop;"-")
 			
-			APPEND MENU ITEM:C411($Mnu_pop;":xliff:editActionFor";$Mnu_edit)
+			APPEND MENU ITEM:C411($Mnu_pop;":xliff:editActionFor";$Mnu_edit;1)
+			
 			RELEASE MENU:C978($Mnu_edit)
 			
-			APPEND MENU ITEM:C411($Mnu_pop;":xliff:deleteActionFor";$Mnu_delete)
+			APPEND MENU ITEM:C411($Mnu_pop;":xliff:deleteActionFor";$Mnu_delete;1)
+			
 			RELEASE MENU:C978($Mnu_delete)
 			
 			For each ($t;Form:C1466.dataModel)
@@ -278,10 +285,11 @@ Case of
 			If (Length:C16($t)#0)
 				
 				Case of 
+						
 						  //______________________________________________________
 					: ($t="new")
 						
-						$Obj_form.form.event:=On Clicked:K2:4  //default action
+						$Obj_form.form.event:=On Clicked:K2:4  // Default action
 						
 						  //______________________________________________________
 					Else 
@@ -303,17 +311,31 @@ Case of
 							READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Edit.svg").platformPath;$p)
 							CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
 							
+							$tt:="edit"+str (formatString ("label";$Obj_table.name)).uperCamelCase()
+							
+							Repeat 
+								
+								$c:=Form:C1466.actions.query("name=:1";$tt)
+								
+								If ($c.length>0)
+									
+									$i:=$i+1+Num:C11($i=0)
+									$tt:="edit"+str (formatString ("label";$Obj_table.name)).uperCamelCase()+String:C10($i)
+									
+								End if 
+							Until ($c.length=0)
+							
 							Form:C1466.actions.push(New object:C1471(\
 								"icon";"actions/Edit.svg";\
 								"$icon";$p;\
 								"tableNumber";Num:C11($t);\
 								"scope";"currentRecord";\
-								"name";"edit"+str_format ("uperCamelCase";formatString ("label";$Obj_table.name));\
+								"name";$tt;\
 								"shortLabel";Get localized string:C991("edit...");\
 								"label";Get localized string:C991("edit...");\
 								"parameters";$c))
 							
-							  //Parameters               Description
+							  // Parameters               Description
 							  //  name                    Action ID
 							  //  short label             Displayed short label in iOS app
 							  //  long label              Displayed long label in iOS app
@@ -330,6 +352,7 @@ Case of
 							For each ($t;$Obj_table)
 								
 								Case of 
+										
 										  //______________________________________________________
 									: (Storage:C1525.ƒ.isField($t))
 										
@@ -337,7 +360,7 @@ Case of
 										
 										$o:=New object:C1471(\
 											"fieldNumber";$cc[0].fieldNumber;\
-											"name";str_format ("uperCamelCase";$Obj_table[$t].name);\
+											"name";str ($Obj_table[$t].name).uperCamelCase();\
 											"label";$Obj_table[$t].label;\
 											"shortLabel";$Obj_table[$t].shortLabel;\
 											"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
@@ -345,6 +368,13 @@ Case of
 											"mandatory";Bool:C1537($cc[0].mandatory))
 										
 										Case of 
+												
+												  //……………………………………………………………………
+											: ($cc[0].fieldType=Is integer:K8:5)\
+												 | ($cc[0].fieldType=Is longint:K8:6)\
+												 | ($cc[0].fieldType=Is integer 64 bits:K8:25)
+												
+												$o.format:="integer"
 												
 												  //……………………………………………………………………
 											: ($o.type="date")
@@ -380,12 +410,27 @@ Case of
 							READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Delete.svg").platformPath;$p)
 							CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
 							
+							$tt:="delete"+str (formatString ("label";$Obj_table.name)).uperCamelCase()
+							
+							Repeat 
+								
+								$c:=Form:C1466.actions.query("name=:1";$tt)
+								
+								If ($c.length>0)
+									
+									$i:=$i+1+Num:C11($i=0)
+									$tt:="delete"+str (formatString ("label";$Obj_table.name)).uperCamelCase()+String:C10($i)
+									
+								End if 
+							Until ($c.length=0)
+							
 							Form:C1466.actions.push(New object:C1471(\
+								"style";"destructive";\
 								"icon";"actions/Delete.svg";\
 								"$icon";$p;\
 								"tableNumber";Num:C11($t);\
 								"scope";"currentRecord";\
-								"name";"delete"+str_format ("uperCamelCase";formatString ("label";$Obj_table.name));\
+								"name";$tt;\
 								"shortLabel";Get localized string:C991("remove");\
 								"label";Get localized string:C991("remove")))
 							
@@ -428,7 +473,7 @@ Case of
 				$Obj_form.actions.focus()
 				$Obj_form.actions.reveal($Obj_form.actions.rowsNumber())
 				
-				  //warning edit stop code execution
+				  // Warning edit stop code execution
 				  //EDIT ITEM(*;$Obj_form.name;Form.actions.length)
 				
 				$Obj_form.form.refresh()
@@ -524,6 +569,7 @@ Case of
 		METHOD OPEN PATH:C1213($tTxt_{0};*)
 		
 		  //==================================================
+		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown widget: \""+$Obj_form.form.currentWidget+"\"")

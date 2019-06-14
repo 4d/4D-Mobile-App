@@ -61,6 +61,11 @@ Else
 	Case of 
 			
 			  //______________________________________________________
+		: ($o=Null:C1517)
+			
+			ASSERT:C1129(False:C215;"This method must be called from an member method")
+			
+			  //______________________________________________________
 		: ($1="line")
 			
 			APPEND MENU ITEM:C411($o.ref;"-")

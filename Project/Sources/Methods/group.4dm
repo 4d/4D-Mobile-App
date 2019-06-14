@@ -1,12 +1,11 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : group
-  // Database: 4D Mobile App
   // ID[06338504CDA64E6CB0202CAA502897EC]
   // Created #12-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
-  //
+  // Part of the UI classes to manage objects groups
   // ----------------------------------------------------
   // Declarations
 C_OBJECT:C1216($0)
@@ -41,15 +40,19 @@ If (This:C1470._is=Null:C1517)
 		"enable";Formula:C1597(widget ("enable"));\
 		"disable";Formula:C1597(widget ("disable"));\
 		"setEnabled";Formula:C1597(widget ("setEnabled";New object:C1471("visible";Bool:C1537($1))));\
-		"isInTheGroup";Formula:C1597(This:C1470.name.indexOf(String:C10($1))#-1)\
+		"include";Formula:C1597(This:C1470.name.indexOf(String:C10($1))#-1)\
 		)
-	
 	
 Else 
 	
 	$o:=This:C1470
 	
 	Case of 
+			
+			  //______________________________________________________
+		: ($o=Null:C1517)
+			
+			ASSERT:C1129(False:C215;"This method must be called from an member method")
 			
 			  //______________________________________________________
 		: ($1="xxxxx")

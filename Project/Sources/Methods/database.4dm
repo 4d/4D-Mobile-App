@@ -124,6 +124,11 @@ Else
 	Case of 
 			
 			  //______________________________________________________
+		: ($o=Null:C1517)
+			
+			ASSERT:C1129(False:C215;"This method must be called from an member method")
+			
+			  //______________________________________________________
 		: ($1="methodExists")
 			
 			$o.exists:=False:C215

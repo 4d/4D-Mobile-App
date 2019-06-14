@@ -134,7 +134,9 @@
 					"events": [
 						"onLosingFocus",
 						"onGettingFocus",
-						"onSelectionChange"
+						"onDrop",
+						"onSelectionChange",
+						"onBeginDragOver"
 					],
 					"focusable": true,
 					"borderStyle": "none",

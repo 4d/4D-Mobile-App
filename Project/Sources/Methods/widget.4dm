@@ -1,21 +1,21 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : widget
-  // Database: 4D Mobile App
   // ID[1D8DF52FA8C64D7789AF867877A06A13]
   // Created #12-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
-  //
+  // Part of the UI classes to manage widgets
   // ----------------------------------------------------
   // Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_LONGINT:C283($Lon_bottom;$Lon_height;$Lon_left;$Lon_right;$Lon_top;$Lon_width)
+C_LONGINT:C283($Lon_bottom;$Lon_height;$Lon_horizontal;$Lon_left;$Lon_right;$Lon_top)
+C_LONGINT:C283($Lon_type;$Lon_vertical;$Lon_width)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o)
+C_OBJECT:C1216($o;$Obj_params)
 
 If (False:C215)
 	C_OBJECT:C1216(widget ;$0)
@@ -66,34 +66,11 @@ If (This:C1470._is=Null:C1517)
 		"resizeHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("right";$1)));\
 		"moveVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("top";$1)));\
 		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
-		"bestWidth";0;\
-		"bestHeight";0;\
-		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)))\
+		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)));\
+		"forceNumeric";Formula:C1597(widget ("forceNumeric"))\
 		)
 	
-	  //$o.getCoordinates()
-	OBJECT GET COORDINATES:C663(*;$o.name;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-	
-	$o.coordinates:=New object:C1471(\
-		"left";$Lon_left;\
-		"top";$Lon_top;\
-		"right";$Lon_right;\
-		"bottom";$Lon_bottom;\
-		"width";$Lon_right-$Lon_left;\
-		"height";$Lon_bottom-$Lon_top)
-	
-	CONVERT COORDINATES:C1365($Lon_left;$Lon_top;XY Current form:K27:5;XY Current window:K27:6)
-	CONVERT COORDINATES:C1365($Lon_right;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
-	
-	$o.windowCoordinates:=New object:C1471(\
-		"left";$Lon_left;\
-		"top";$Lon_top;\
-		"right";$Lon_right;\
-		"bottom";$Lon_bottom)
-	
-	OBJECT GET BEST SIZE:C717(*;$o.name;$Lon_width;$Lon_height)
-	$o.bestWidth:=$Lon_width
-	$o.bestHeight:=$Lon_height
+	$o.getCoordinates()
 	
 Else 
 	
@@ -102,7 +79,41 @@ Else
 	Case of 
 			
 			  //______________________________________________________
-		: ($1="getCoordinates")
+		: ($o=Null:C1517)
+			
+			ASSERT:C1129(False:C215;"This method must be called from an member method")
+			
+			  //______________________________________________________
+		: ($1="update")  // Update widget definition based on the widget type
+			
+			$o.getCoordinates()
+			
+			$Lon_type:=OBJECT Get type:C1300(*;$o.name)
+			
+			Case of 
+					
+					  //…………………………………………………………………………………………………
+				: ($Lon_type=Object type picture input:K79:5)
+					
+					$o.getScrollPosition()
+					$o.getDimensions()
+					
+					  //…………………………………………………………………………………………………
+				: ($Lon_type=Object type listbox:K79:8)
+					
+					$o.getDefinition()
+					$o.getCell()
+					
+					  //…………………………………………………………………………………………………
+				Else 
+					
+					ASSERT:C1129(False:C215;"Non implemented for: "+String:C10($o._is))
+					
+					  // ----------------------------------------
+			End case 
+			
+			  //______________________________________________________
+		: ($1="getCoordinates")  // Update widget coordinates
 			
 			OBJECT GET COORDINATES:C663(*;$o.name;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 			
@@ -166,7 +177,37 @@ Else
 			OBJECT SET COORDINATES:C1248(*;$o.name;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 			
 			  //______________________________________________________
-		: ($1="bestSize")
+		: ($1="getScrollPosition")
+			
+			OBJECT GET SCROLL POSITION:C1114(*;$o.name;$Lon_vertical;$Lon_horizontal)
+			
+			$o.scroll:=New object:C1471(\
+				"vertical";$Lon_vertical;\
+				"horizontal";$Lon_horizontal)
+			
+			  //______________________________________________________
+		: ($1="setScrollPosition")
+			
+			If ($2.vertical#Null:C1517)
+				
+				$Lon_vertical:=Num:C11($Obj_params.vertical)
+				
+			End if 
+			
+			If ($2.horizontal#Null:C1517)
+				
+				$Lon_horizontal:=Num:C11($Obj_params.horizontal)
+				
+			End if 
+			
+			OBJECT SET SCROLL POSITION:C906(*;$o.name;$Lon_vertical;$Lon_horizontal;*)
+			
+			$o.scroll:=New object:C1471(\
+				"vertical";$Lon_vertical;\
+				"horizontal";$Lon_horizontal)
+			
+			  //______________________________________________________
+		: ($1="bestSize")  // Resize the widget to its best size
 			
 			OBJECT GET COORDINATES:C663(*;$o.name;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 			
@@ -305,6 +346,12 @@ Else
 		: ($1="setValue")
 			
 			($o.pointer())->:=$2.value
+			
+			
+			  //______________________________________________________
+		: ($1="forceNumeric")
+			
+			EXECUTE FORMULA:C63("C_REAL:C285((OBJECT Get pointer:C1124(Object named:K67:5;$o.name))->)")
 			
 			  //______________________________________________________
 		Else 

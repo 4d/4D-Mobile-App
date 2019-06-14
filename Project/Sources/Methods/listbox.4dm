@@ -1,5 +1,13 @@
 //%attributes = {"invisible":true}
-  // Manipulate menus as objects to make code more readable
+  // ----------------------------------------------------
+  // Project method : listbox
+  // ID[A1E9ABBDE36648929AAA54FCE6CD1B6A]
+  // Created #14-6-2019 by Vincent de Lachaux
+  // ----------------------------------------------------
+  // Description:
+  // Part of the UI classes to manage listboxes
+  // ----------------------------------------------------
+  // Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
@@ -7,7 +15,8 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($Boo_horizontal;$Boo_vertical)
 C_LONGINT:C283($i;$Lon_bottom;$Lon_column;$Lon_left;$Lon_right;$Lon_row)
 C_LONGINT:C283($Lon_top)
-C_OBJECT:C1216($o;$o)
+C_TEXT:C284($t)
+C_OBJECT:C1216($o)
 
 If (False:C215)
 	C_OBJECT:C1216(listbox ;$0)
@@ -15,11 +24,14 @@ If (False:C215)
 	C_OBJECT:C1216(listbox ;$2)
 End if 
 
-If (This:C1470=Null:C1517)
+  // ----------------------------------------------------
+If (This:C1470._is=Null:C1517)
+	
+	$t:=String:C10($1)
 	
 	$o:=New object:C1471(\
-		"_is";"listbox";\
-		"name";String:C10($1);\
+		"_is";Current method name:C684;\
+		"name";$t;\
 		"column";Null:C1517;\
 		"row";Null:C1517;\
 		"cellCoordinates";Null:C1517;\
@@ -37,16 +49,22 @@ If (This:C1470=Null:C1517)
 		"focused";Formula:C1597(This:C1470.name=OBJECT Get name:C1087(Object with focus:K67:3));\
 		"focus";Formula:C1597(GOTO OBJECT:C206(*;This:C1470.name));\
 		"pointer";Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name));\
-		"get";Formula:C1597(ui_widget ("get"));\
-		"getCoordinates";Formula:C1597(ui_widget ("coordinates"));\
-		"setCoordinates";Formula:C1597(ui_widget ("setCoordinates";New object:C1471("left";$1;"top";$2;"right";$3;"bottom";$4)));\
-		"getDefinition";Formula:C1597(listbox );\
-		"getCell";Formula:C1597(listbox ("cell"));\
-		"getCellPosition";Formula:C1597(listbox ("cellPosition"));\
-		"getCellCoordinates";Formula:C1597(listbox ("cellCoordinates"));\
-		"getScrollbar";Formula:C1597(listbox ("scrollbar"));\
+		"update";Formula:C1597(widget ("update"));\
+		"coordinates";Null:C1517;\
+		"windowCoordinates";Null:C1517;\
+		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\
+		"setCoordinates";Formula:C1597(widget ("setCoordinates";New object:C1471("left";$1;"top";$2;"right";$3;"bottom";$4)));\
+		"moveHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("left";$1)));\
+		"resizeHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("right";$1)));\
+		"moveVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("top";$1)));\
+		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
+		"getDefinition";Formula:C1597(listbox ("getDefinition"));\
+		"getCell";Formula:C1597(listbox ("getCell"));\
+		"getCellPosition";Formula:C1597(listbox ("getCellPosition"));\
+		"getCellCoordinates";Formula:C1597(listbox ("getCellCoordinates"));\
+		"getScrollbar";Formula:C1597(listbox ("getScrollbar"));\
 		"setScrollbar";Formula:C1597(OBJECT SET SCROLLBAR:C843(*;This:C1470.name;Num:C11($1);Num:C11($2)));\
-		"getProperty";Formula:C1597(listbox ("property";New object:C1471("property";$1)));\
+		"getProperty";Formula:C1597(listbox ("getProperty";New object:C1471("property";$1)));\
 		"setProperty";Formula:C1597(LISTBOX SET PROPERTY:C1440(*;This:C1470.name;$1;$2));\
 		"rowsNumber";Formula:C1597(LISTBOX Get number of rows:C915(*;This:C1470.name));\
 		"deleteRow";Formula:C1597(LISTBOX DELETE ROWS:C914(*;This:C1470.name;$1;1));\
@@ -56,9 +74,11 @@ If (This:C1470=Null:C1517)
 		"select";Formula:C1597(LISTBOX SELECT ROW:C912(*;This:C1470.name;Num:C11($1);lk replace selection:K53:1));\
 		"selectAll";Formula:C1597(LISTBOX SELECT ROW:C912(*;This:C1470.name;0;lk replace selection:K53:1));\
 		"deselect";Formula:C1597(LISTBOX SELECT ROW:C912(*;This:C1470.name;0;lk remove from selection:K53:3));\
-		"reveal";Formula:C1597(listbox ("show";New object:C1471("row";Num:C11($1))));\
+		"reveal";Formula:C1597(listbox ("reveal";New object:C1471("row";Num:C11($1))));\
 		"popup";Formula:C1597(listbox ("popup";$1))\
 		)
+	
+	$o.getCoordinates()
 	
 Else 
 	
@@ -67,12 +87,17 @@ Else
 	Case of 
 			
 			  //______________________________________________________
+		: ($o=Null:C1517)
+			
+			ASSERT:C1129(False:C215;"This method must be called from an member method")
+			
+			  //______________________________________________________
 		: (OBJECT Get type:C1300(*;String:C10($o.name))#Object type listbox:K79:8)
 			
 			ASSERT:C1129(False:C215;"The widget \""+String:C10($o.name)+"\" is not a listbox!")
 			
 			  //______________________________________________________
-		: (Length:C16($1)=0)  // Definition
+		: ($1="getDefinition")  // Listbox structure
 			
 			ARRAY BOOLEAN:C223($tBoo_ColsVisible;0x0000)
 			ARRAY POINTER:C280($tPtr_ColVars;0x0000)
@@ -109,13 +134,7 @@ Else
 			$o.getScrollbar()
 			
 			  //______________________________________________________
-		: ($1="cell")
-			
-			$o.getCellPosition()
-			$o.getCellCoordinates()
-			
-			  //______________________________________________________
-		: ($1="scrollbar")
+		: ($1="getScrollbar")  // Scroolbar status
 			
 			OBJECT GET SCROLLBAR:C1076(*;$o.name;$Boo_horizontal;$Boo_vertical)
 			
@@ -124,14 +143,20 @@ Else
 				"horizontal";$Boo_horizontal)
 			
 			  //______________________________________________________
-		: ($1="cellPosition")
+		: ($1="getCell")  // Current cell
+			
+			$o.getCellPosition()
+			$o.getCellCoordinates()
+			
+			  //______________________________________________________
+		: ($1="getCellPosition")  // Current cell indexes
 			
 			LISTBOX GET CELL POSITION:C971(*;$o.name;$Lon_column;$Lon_row)
 			$o.column:=$Lon_column
 			$o.row:=$Lon_row
 			
 			  //______________________________________________________
-		: ($1="cellCoordinates")
+		: ($1="getCellCoordinates")  // Current cell coordinates
 			
 			LISTBOX GET CELL COORDINATES:C1330(*;$o.name;Num:C11($o.column);Num:C11($o.row);$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 			
@@ -147,14 +172,14 @@ Else
 			$o.cellCoordinates.bottom:=$Lon_bottom
 			
 			  //______________________________________________________
-		: ($1="property")
+		: ($1="getProperty")  // Returns a property value from the list
 			
 			$o:=New object:C1471(\
 				"value";LISTBOX Get property:C917(*;\
 				$o.name;Num:C11($2.property)))
 			
 			  //______________________________________________________
-		: ($1="popup")
+		: ($1="popup")  // Display a pop-up menu at the right place based on the current cell
 			
 			$Lon_left:=$o.cellCoordinates.left
 			$Lon_bottom:=$o.cellCoordinates.bottom
@@ -173,7 +198,7 @@ Else
 			End if 
 			
 			  //______________________________________________________
-		: ($1="show")
+		: ($1="reveal")  // Reveal the current row
 			
 			LISTBOX SELECT ROW:C912(*;$o.name;Num:C11($2.row);lk replace selection:K53:1)
 			OBJECT SET SCROLL POSITION:C906(*;$o.name;Num:C11($2.row))
@@ -187,4 +212,9 @@ Else
 	End case 
 End if 
 
+  // ----------------------------------------------------
+  // Return
 $0:=$o
+
+  // ----------------------------------------------------
+  // End

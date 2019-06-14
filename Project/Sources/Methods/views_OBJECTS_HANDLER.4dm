@@ -201,7 +201,7 @@ Case of
 				$o:=($Obj_form.fields.pointer())->{$Obj_form.fieldList.row}
 				  //%W+533.3
 				
-				  // Put into the conatianer
+				  // Put into the container
 				VARIABLE TO BLOB:C532($o;$x)
 				APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field";$x)
 				SET BLOB SIZE:C606($x;0)

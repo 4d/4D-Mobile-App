@@ -53,10 +53,9 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"dynamic";ui.group("02_property_name;02_property_mandatory;03_property_label;04_property_shortLabel;06_property_placeholder;07_variable_default;09_property_constraint_number_min;10_property_constraint_number_max")\
 		)
 	
-	  //"min";ui.widget("09_property_constraint_number_min");\
-				//"max";ui.widget("10_property_constraint_number_max");\
+	  // "min";ui.widget("09_property_constraint_number_min");\
+				// "max";ui.widget("10_property_constraint_number_max");\
 				
-	
 	$Obj_context:=$Obj_form.$
 	
 	If (OB Is empty:C1297($Obj_context))
@@ -66,6 +65,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 		  // Define form member methods
 		$Obj_context.listUI:=Formula:C1597(ACTIONS_PARAMS_UI ("listUI"))
+		
 		  //$Obj_context.meta:=Formula(ACTIONS_PARAMS_UI ("meta"))
 		
 	End if 
@@ -92,15 +92,17 @@ Case of
 				  // This trick remove the horizontal gap
 				$Obj_form.parameters.setScrollbar(0;2)
 				
+				  //button ("02_property_mandatory").forceBoolean()
+				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)  // Refresh UI
 				
-				  //ASSERT(Not(Shift down))
+				  // ASSERT(Not(Shift down))
 				
 				$o:=$Obj_form
 				
 				If (Form:C1466.actions=Null:C1517)\
-					 | (Num:C11(Form:C1466.actions.length)=0)  //no actions
+					 | (Num:C11(Form:C1466.actions.length)=0)  // No actions
 					
 					$o.noAction.show()
 					$o.noSelection.hide()
@@ -147,19 +149,13 @@ Case of
 								$o.properties.show()
 								
 								$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
+								
 								$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
 								
 							End if 
 						End if 
 					End if 
 				End if 
-				
-				  //______________________________________________________
-				  //: ($Lon_formEvent=On Data Change)
-				
-				  //project.save()
-				
-				  //BEEP
 				
 				  //______________________________________________________
 		End case 
@@ -180,6 +176,7 @@ Case of
 		  //
 		
 		  //=========================================================
+		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
@@ -189,13 +186,11 @@ End case
 
   // ----------------------------------------------------
   // Return
-Case of 
-		  //: (Undefined($Obj_out))
-	: ($Obj_out=Null:C1517)
-		  //: (Value type(($Obj_out=Null))=Is undefined)
-	Else 
-		$0:=$Obj_out
-End case 
+If ($Obj_out#Null:C1517)
+	
+	$0:=$Obj_out
+	
+End if 
 
   // ----------------------------------------------------
   // End

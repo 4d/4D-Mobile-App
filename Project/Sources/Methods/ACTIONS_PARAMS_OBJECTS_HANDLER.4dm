@@ -79,6 +79,57 @@ Case of
 				  // <NOTHING MORE TO DO>
 				
 				  //______________________________________________________
+			: ($Obj_form.form.event=On Begin Drag Over:K2:44)
+				
+				$o:=New object:C1471(\
+					"old";$Obj_context.index)
+				
+				  // Put into the container
+				VARIABLE TO BLOB:C532($o;$x)
+				APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.parameter";$x)
+				SET BLOB SIZE:C606($x;0)
+				
+				  //______________________________________________________
+			: ($Obj_form.form.event=On Drop:K2:12)
+				
+				  // Get the pastboard
+				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter";$x)
+				
+				If (Bool:C1537(OK))
+					
+					BLOB TO VARIABLE:C533($x;$o)
+					SET BLOB SIZE:C606($x;0)
+					
+					$o.new:=Drop position:C608
+					
+				End if 
+				
+				If ($o.old#$o.new)
+					
+					$Obj_current:=$Obj_context.action.parameters[$o.old-1]
+					
+					If ($o.new=-1)  // After the last line
+						
+						$Obj_context.action.parameters.push($Obj_current)
+						$Obj_context.action.parameters.remove($o.old-1)
+						
+					Else 
+						
+						$Obj_context.action.parameters.insert($o.new-1;$Obj_current)
+						
+						If ($o.new<$o.old)
+							
+							$Obj_context.action.parameters.remove($o.old)
+							
+						Else 
+							
+							$Obj_context.action.parameters.remove($o.old-1)
+							
+						End if 
+					End if 
+				End if 
+				
+				  //______________________________________________________
 			Else 
 				
 				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.event)+")")
@@ -307,7 +358,7 @@ Case of
 					
 					$o:=New object:C1471(\
 						"fieldNumber";$c[0].fieldNumber;\
-						"name";str_format ("uperCamelCase";$c[0].name);\
+						"name";str ($c[0].name).uperCamelCase();\
 						"label";$c[0].label;\
 						"shortLabel";$c[0].shortLabel;\
 						"defaultField";formatString ("field-name";$c[0].name);\
@@ -374,7 +425,7 @@ Case of
 		project.save()
 		
 		  //==================================================
-	: ($Obj_form.dynamic.isInTheGroup($Obj_form.form.currentWidget))
+	: ($Obj_form.dynamic.include($Obj_form.form.currentWidget))  // Dynamic widgets
 		
 		project.save()
 		

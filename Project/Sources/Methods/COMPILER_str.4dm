@@ -2,6 +2,11 @@
 If (False:C215)
 	
 	  //_____________________________
+	C_OBJECT:C1216(str ;$0)
+	C_TEXT:C284(str ;$1)
+	C_TEXT:C284(str ;$2)
+	
+	  //_____________________________
 	C_LONGINT:C283(str_cmpVersion ;$0)
 	C_TEXT:C284(str_cmpVersion ;$1)
 	C_TEXT:C284(str_cmpVersion ;$2)

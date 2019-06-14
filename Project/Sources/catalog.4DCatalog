@@ -85,7 +85,7 @@
 		<field name="Time field" uuid="505B7F2428274109A670F43568CAC3B1" type="9" never_null="true" id="5"/>
 		<field name="Boolean field" uuid="AFB2F104888E48629FC8B7D392A1B6C8" type="1" never_null="true" id="6"/>
 		<field name="Integer field" uuid="A4A8E631C2E74FC78F74CCEA70B97434" type="3" never_null="true" id="7"/>
-		<field name="Long Integer field" uuid="71E3A10C4FE043E5A2230A1784DA66A5" type="4" never_null="true" id="8"/>
+		<field name="Long Integer field" uuid="71E3A10C4FE043E5A2230A1784DA66A5" type="4" not_null="true" never_null="true" id="8"/>
 		<field name="Integer 64 bits field" uuid="2CC2C111C8D545C6AA13A913EF2479CD" type="5" never_null="true" id="9"/>
 		<field name="Real field" uuid="B0CB7E633ED345988C72A673FD91BCD5" type="6" never_null="true" id="10"/>
 		<field name="Float field" uuid="63842CD3095442BFA3F5B5F58BFF20B7" type="6" never_null="true" id="11"/>

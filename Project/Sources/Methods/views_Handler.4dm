@@ -384,7 +384,7 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="scroll-table")
 		
-		$o:=$Obj_form.tableWidget.get()
+		$o:=$Obj_form.tableWidget.update()
 		
 		If (String:C10($Obj_in.direction)="next")
 			
@@ -404,7 +404,7 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="geometry")
 		
-		$o:=$obj_form.tableWidget.get()
+		$o:=$obj_form.tableWidget.update()
 		
 		If ($o.dimensions.width>$o.coordinates.width)
 			

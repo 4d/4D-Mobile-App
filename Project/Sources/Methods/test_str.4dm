@@ -4,6 +4,47 @@ C_TEXT:C284($Txt_in;$Txt_out)
 
 TRY 
 
+$Txt_in:="The principle of the XLIFF norm drives to determine a language source in which "\
++"are written all the strings. This language will be the reference language (the "\
++"one from which will be done all the translations). The second language is the "\
++"language said target Who will be used for the dialogs, warnings, prints… This is "\
++"the language of the user."
+
+$Txt_out:="The principle of the XLIFF norm drives to determine a language source in which "\
++"\rare written all the strings. This language will be the reference language (the "\
++"\rone from which will be done all the translations). The second language is the "\
++"\rlanguage said target Who will be used for the dialogs, warnings, prints… This "\
++"\ris the language of the user."
+
+ASSERT:C1129(str ("").trim()="")
+ASSERT:C1129(str ("       Hello World").trimTrailing()="Hello World")
+ASSERT:C1129(str ("Hello World       ").trimLeading()="Hello World")
+ASSERT:C1129(str ("HELLO WORLD").trimLeading()="HELLO WORLD")
+ASSERT:C1129(str ("       Hello world          ").trim()="Hello World")
+
+ASSERT:C1129(str ("").trim("_")="")
+ASSERT:C1129(str ("_____Hello World").trimTrailing("_")="Hello World")
+ASSERT:C1129(str ("Hello World_____").trimLeading("_")="Hello World")
+ASSERT:C1129(str ("HELLO WORLD").trimLeading("_")="HELLO WORLD")
+ASSERT:C1129(str ("_____Hello world_____").trim("_")="Hello World")
+
+ASSERT:C1129(str ($Txt_in).wordWrap()=$Txt_out)
+
+$Txt_in:="ćĉčċçḉȼ"+"ĆĈČĊÇḈȻ"
+ASSERT:C1129(Length:C16($Txt_in)=Length:C16(str ($Txt_in).unaccented()))
+
+ASSERT:C1129(str_trim ("")="")
+ASSERT:C1129(str_trimTrailing ("       Hello World")="Hello World")
+ASSERT:C1129(str_trimLeading ("Hello World       ")="Hello World")
+ASSERT:C1129(str_trimLeading ("HELLO WORLD")="HELLO WORLD")
+ASSERT:C1129(str_trim ("       Hello world          ")="Hello World")
+
+ASSERT:C1129(str_trim ("";"_")="")
+ASSERT:C1129(str_trimTrailing ("_____Hello World";"_")="Hello World")
+ASSERT:C1129(str_trimLeading ("Hello World_____";"_")="Hello World")
+ASSERT:C1129(str_trimLeading ("HELLO WORLD";"_")="HELLO WORLD")
+ASSERT:C1129(str_trim ("_____Hello world_____";"_")="Hello World")
+
 ASSERT:C1129(str_cmpVersion ("9.0";"9.1.2")=-1)
 ASSERT:C1129(str_cmpVersion ("9.1.2";"9.0")=1)
 ASSERT:C1129(str_cmpVersion ("9.1.2";"9.1.2")=0)
@@ -19,17 +60,6 @@ ASSERT:C1129(str_cmpVersion ("9 0";"9 1 2";" ")=-1)
 ASSERT:C1129(str_cmpVersion ("9 1 2";"9 0";" ")=1)
 ASSERT:C1129(str_cmpVersion ("9/1/2";"9/0";"/")=1)
 
-ASSERT:C1129(str_trim ("")="")
-ASSERT:C1129(str_trimTrailing ("       Hello World")="Hello World")
-ASSERT:C1129(str_trimLeading ("Hello World       ")="Hello World")
-ASSERT:C1129(str_trimLeading ("HELLO WORLD")="HELLO WORLD")
-ASSERT:C1129(str_trim ("       Hello world          ")="Hello World")
-
-ASSERT:C1129(str_trim ("";"_")="")
-ASSERT:C1129(str_trimTrailing ("_____Hello World";"_")="Hello World")
-ASSERT:C1129(str_trimLeading ("Hello World_____";"_")="Hello World")
-ASSERT:C1129(str_trimLeading ("HELLO WORLD";"_")="HELLO WORLD")
-ASSERT:C1129(str_trim ("_____Hello world_____";"_")="Hello World")
 
 $Txt_in:="The principle of the XLIFF norm drives to determine a language source in which "\
 +"are written all the strings. This language will be the reference language (the "\

@@ -70,7 +70,7 @@ Case of
 			
 		Else 
 			
-			$Txt_formated:=Lowercase:C14($Txt_formated)
+			$Txt_formated:=Lowercase:C14($Txt_string)
 			
 		End if 
 		

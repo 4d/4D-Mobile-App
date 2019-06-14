@@ -1,36 +1,37 @@
 {
 	"formats" : {
 		"string" : [
-				"name",
-				"email",
-				"phone",
-				"account",
-				"password",
-				"url",
-				"zipCode",
-				"textArea"
-			],
+			"name",
+			"email",
+			"phone",
+			"account",
+			"password",
+			"url",
+			"zipCode",
+			"textArea"
+		],
 		"number" : [
-				"scientific",
-				"percent",
-				"energy",
-				"mass",
-				"spellOut"
+			"integer",
+			"scientific",
+			"percent",
+			"energy",
+			"mass",
+			"spellOut"
 			],
 		"date" : [
-				"dateMedium",
-				"dateShort",
-				"dateLong"
-			],
+			"dateMedium",
+			"dateShort",
+			"dateLong"
+		],
 		"time" : [
-				"hour",
-				"duration"
-			],
+			"hour",
+			"duration"
+		],
 		"bool" : [
-				"bool"
-			],
+			"bool"
+		],
 		"image" : [
-				"image"
-			]
-		}
+			"image"
+		]
+	}
 }
