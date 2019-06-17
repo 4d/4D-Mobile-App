@@ -116,8 +116,10 @@ Case of
 				End if 
 				
 				  // Initialize the search widget
-				widget ("search").setValue(New object:C1471(\
-					"placeholder";Get localized string:C991("search")))
+				  //widget ("search").setValue(New object(\
+					//"placeholder";Get localized string("search")))
+				(widget ("search").pointer())->:=New object:C1471(\
+					"placeholder";Get localized string:C991("search"))
 				
 				  // Position search filters based on the language of the label
 				widget ($Obj_form.tableFilter).moveHorizontally(widget ($Obj_form.tableList+".label").bestSize().coordinates.right+10)

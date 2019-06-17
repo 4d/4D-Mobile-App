@@ -40,7 +40,6 @@ If (This:C1470._is=Null:C1517)
 		"focus";Formula:C1597(GOTO OBJECT:C206(*;This:C1470.name));\
 		"pointer";Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name));\
 		"value";Formula:C1597((This:C1470.pointer())->);\
-		"setValue";Formula:C1597((This:C1470.pointer())->:=Num:C11($1));\
 		"coordinates";Null:C1517;\
 		"windowCoordinates";Null:C1517;\
 		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\
@@ -59,6 +58,8 @@ If (This:C1470._is=Null:C1517)
 		"setColors";Formula:C1597(OBJECT SET RGB COLORS:C628(*;This:C1470.name;$1;$2));\
 		"forceBoolean";Formula:C1597(button ("forceBoolean"))\
 		)
+	
+	  //"setValue";Formula((This.pointer())->:=Num($1));
 	
 Else 
 	
