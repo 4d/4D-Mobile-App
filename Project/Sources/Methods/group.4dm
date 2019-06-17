@@ -31,7 +31,7 @@ If (This:C1470._is=Null:C1517)
 	End if 
 	
 	$o:=New object:C1471(\
-		"_is";Current method name:C684;\
+		"_is";"group";\
 		"name";$c;\
 		"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name[0]));\
 		"hide";Formula:C1597(widget ("hide"));\

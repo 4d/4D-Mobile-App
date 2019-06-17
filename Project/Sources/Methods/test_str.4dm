@@ -4,18 +4,8 @@ C_TEXT:C284($Txt_in;$Txt_out)
 
 TRY 
 
-$Txt_in:="The principle of the XLIFF norm drives to determine a language source in which "\
-+"are written all the strings. This language will be the reference language (the "\
-+"one from which will be done all the translations). The second language is the "\
-+"language said target Who will be used for the dialogs, warnings, prints… This is "\
-+"the language of the user."
-
-$Txt_out:="The principle of the XLIFF norm drives to determine a language source in which "\
-+"\rare written all the strings. This language will be the reference language (the "\
-+"\rone from which will be done all the translations). The second language is the "\
-+"\rlanguage said target Who will be used for the dialogs, warnings, prints… This "\
-+"\ris the language of the user."
-
+  // ============================================
+  // trim()
 ASSERT:C1129(str ("").trim()="")
 ASSERT:C1129(str ("       Hello World").trimTrailing()="Hello World")
 ASSERT:C1129(str ("Hello World       ").trimLeading()="Hello World")
@@ -28,10 +18,61 @@ ASSERT:C1129(str ("Hello World_____").trimLeading("_")="Hello World")
 ASSERT:C1129(str ("HELLO WORLD").trimLeading("_")="HELLO WORLD")
 ASSERT:C1129(str ("_____Hello world_____").trim("_")="Hello World")
 
+  // ============================================
+  // wordWrap()
+$Txt_in:="The principle of the XLIFF norm drives to determine a language source in which "\
++"are written all the strings. This language will be the reference language (the "\
++"one from which will be done all the translations). The second language is the "\
++"language said target Who will be used for the dialogs, warnings, prints… This is "\
++"the language of the user."
+
+$Txt_out:="The principle of the XLIFF norm drives to determine a language source in which "\
++"\rare written all the strings. This language will be the reference language (the "\
++"\rone from which will be done all the translations). The second language is the "\
++"\rlanguage said target Who will be used for the dialogs, warnings, prints… This "\
++"\ris the language of the user."
+
 ASSERT:C1129(str ($Txt_in).wordWrap()=$Txt_out)
 
+  // ============================================
+  // uperCamelCase()
+ASSERT:C1129(str ("").uperCamelCase()="")
+
+$Txt_in:="CategoryIDElement"
+$Txt_out:=str ("Category ID Element").uperCamelCase()
+For ($i;1;Length:C16($Txt_in);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('CategoryIDElement')")
+	
+End for 
+
+$Txt_out:=str ("Category_ID_element").uperCamelCase()
+For ($i;1;Length:C16($Txt_in);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('CategoryIDElement')")
+	
+End for 
+
+$Txt_out:=str ("Category ID Element").uperCamelCase()
+For ($i;1;Length:C16($Txt_in);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('Category ID Element')")
+	
+End for 
+
+$Txt_in:="Category"
+$Txt_out:=str ("category").uperCamelCase()
+For ($i;1;Length:C16($Txt_in);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('Category')")
+	
+End for 
+
+  // ============================================
+  // unaccented()
 $Txt_in:="ćĉčċçḉȼ"+"ĆĈČĊÇḈȻ"
 ASSERT:C1129(Length:C16($Txt_in)=Length:C16(str ($Txt_in).unaccented()))
+
 
 ASSERT:C1129(str_trim ("")="")
 ASSERT:C1129(str_trimTrailing ("       Hello World")="Hello World")

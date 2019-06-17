@@ -38,7 +38,8 @@ If (This:C1470._is=Null:C1517)
 		"trim";Formula:C1597(str ("trim";String:C10($1)).value);\
 		"trimTrailing";Formula:C1597(str ("trimTrailing";String:C10($1)).value);\
 		"trimLeading";Formula:C1597(str ("trimLeading";String:C10($1)).value);\
-		"wordWrap";Formula:C1597(str ("wordWrap";String:C10($1)).value)\
+		"wordWrap";Formula:C1597(str ("wordWrap";String:C10($1)).value);\
+		"spaceSeparated";Formula:C1597(str ("spaceSeparated").value)\
 		)
 	
 Else 
@@ -54,36 +55,40 @@ Else
 			ASSERT:C1129(False:C215;"This method must be called from an member method")
 			
 			  //______________________________________________________
-		: ($1="uperCamelCase")
+		: ($1="uperCamelCase")  // Returns name as upper camelcase
 			
-			If (Length:C16(This:C1470.value)>2)
-				
-				GET TEXT KEYWORDS:C1141(This:C1470.value;$tTxt_keywords)
-				$c:=New collection:C1472
-				
-				For ($i;1;Size of array:C274($tTxt_keywords);1)
+			If (Length:C16(This:C1470.value)>0)
+				If (Length:C16(This:C1470.value)>2)
 					
-					$tTxt_keywords{$i}:=Lowercase:C14($tTxt_keywords{$i})
-					$tTxt_keywords{$i}[[1]]:=Uppercase:C13($tTxt_keywords{$i}[[1]])
+					$t:=This:C1470.spaceSeparated()
 					
-					$c.push($tTxt_keywords{$i})
+					GET TEXT KEYWORDS:C1141($t;$tTxt_keywords)
+					$c:=New collection:C1472
 					
-				End for 
-				
-				$o:=New object:C1471(\
-					"value";$c.join())
-				
-			Else 
-				
-				$o:=New object:C1471(\
-					"value";Lowercase:C14(This:C1470.value))
-				
+					For ($i;1;Size of array:C274($tTxt_keywords);1)
+						
+						$tTxt_keywords{$i}:=Lowercase:C14($tTxt_keywords{$i})
+						$tTxt_keywords{$i}[[1]]:=Uppercase:C13($tTxt_keywords{$i}[[1]])
+						
+						$c.push($tTxt_keywords{$i})
+						
+					End for 
+					
+					$o.value:=$c.join()
+					
+				Else 
+					
+					$o.value:=Lowercase:C14(This:C1470.value)
+					
+				End if 
 			End if 
 			
 			  //______________________________________________________
-		: ($1="lowerCamelCase")
+		: ($1="lowerCamelCase")  // Returns name as lower camelcase
 			
-			GET TEXT KEYWORDS:C1141(This:C1470.value;$tTxt_keywords)
+			$t:=This:C1470.spaceSeparated()
+			
+			GET TEXT KEYWORDS:C1141($t;$tTxt_keywords)
 			$c:=New collection:C1472
 			
 			For ($i;1;Size of array:C274($tTxt_keywords);1)
@@ -100,12 +105,43 @@ Else
 				
 			End for 
 			
-			$o:=New object:C1471(\
-				"value";$c.join())
+			$o.value:=$c.join()
+			
+			  //______________________________________________________
+		: ($1="spaceSeparated")  // Returns underscored name & camelcase (lower or upper) name as space separated
+			
+			$t:=Replace string:C233(This:C1470.value;"_";" ")
+			
+			$c:=New collection:C1472
+			COLLECTION TO ARRAY:C1562(Split string:C1554($t;"");$tTxt_keywords)
+			
+			$t:=Lowercase:C14($t)
+			
+			$l:=1
+			
+			For ($i;2;Size of array:C274($tTxt_keywords);1)
+				
+				If (Character code:C91($tTxt_keywords{$i})#Character code:C91($t[[$i]]))  // Cesure
+					
+					$c.push(Substring:C12($t;$l;$i-$l))
+					$l:=$i
+					
+				End if 
+			End for 
+			
+			$c.push(Substring:C12($t;$l))
+			
+			For each ($t;$c)
+				
+				$Txt_result:=$Txt_result+Uppercase:C13($t[[1]])+Lowercase:C14(Substring:C12($t;2))+" "
+				
+			End for each 
+			
+			$o.value:=$Txt_result
 			
 			  //______________________________________________________
 		: ($1="trimLeading")\
-			 | ($1="trimTrailing")
+			 | ($1="trimTrailing")  // Trims leading or trailing spaces
 			
 			If (Length:C16($2)>0)
 				
@@ -145,11 +181,10 @@ Else
 				End if 
 			End if 
 			
-			$o:=New object:C1471(\
-				"value";$Txt_result)
+			$o.value:=$Txt_result
 			
 			  //______________________________________________________
-		: ($1="trim")
+		: ($1="trim")  // Trims leading & trailing spaces
 			
 			If (Length:C16($2)>0)
 				
@@ -182,11 +217,10 @@ Else
 				
 			End if 
 			
-			$o:=New object:C1471(\
-				"value";$Txt_result)
+			$o.value:=$Txt_result
 			
 			  //______________________________________________________
-		: ($1="wordWrap")
+		: ($1="wordWrap")  // Returns a word wrapped text based on the line length given in $1 (default is 80 characters)
 			
 			If (Num:C11($1)#0)
 				
@@ -228,18 +262,16 @@ Else
 				End if 
 			Until (Not:C34($b))
 			
-			$o:=New object:C1471(\
-				"value";$Txt_result)
+			$o.value:=$Txt_result
 			
 			  //______________________________________________________
-		: ($1="unaccented")
+		: ($1="unaccented")  // Replace accented characters with non accented one
+			
+			  // XXX not very efficient
 			
 			$t:=This:C1470.value
 			
 			If (Length:C16($t)>0)
-				
-				  // Replace accented characters with non accented one.
-				  // XXX not very efficient
 				
 				$Txt_filtered:="ÀÁÂÃÄÅ"
 				
@@ -359,8 +391,7 @@ Else
 				
 			End if 
 			
-			$o:=New object:C1471(\
-				"value";$t)
+			$o.value:=$t
 			
 			  //______________________________________________________
 		Else 

@@ -38,7 +38,7 @@ If (This:C1470._is=Null:C1517)
 	End if 
 	
 	$o:=New object:C1471(\
-		"_is";Current method name:C684;\
+		"_is";"widget";\
 		"name";$t;\
 		"type";OBJECT Get type:C1300(*;$t);\
 		"action";OBJECT Get action:C1457(*;$t);\

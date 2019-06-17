@@ -312,7 +312,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:formatters",
+					"text": ":xliff:formatter",
 					"visibility": "hidden"
 				},
 				"05_property_type.popup": {

@@ -26,7 +26,7 @@ End if
 If (This:C1470._is=Null:C1517)
 	
 	$o:=New object:C1471(\
-		"_is";Current method name:C684;\
+		"_is";"picture";\
 		"name";$1;\
 		"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name));\
 		"hide";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;False:C215));\
@@ -75,11 +75,15 @@ Else
 			  //______________________________________________________
 		: ($1="getDimensions")
 			
-			PICTURE PROPERTIES:C457(($o.pointer())->;$Lon_width;$Lon_height)
-			
-			$o.dimensions:=New object:C1471(\
-				"width";$Lon_width;\
-				"height";$Lon_height)
+			If (Not:C34(Is nil pointer:C315($o.pointer())))
+				
+				PICTURE PROPERTIES:C457(($o.pointer())->;$Lon_width;$Lon_height)
+				
+				$o.dimensions:=New object:C1471(\
+					"width";$Lon_width;\
+					"height";$Lon_height)
+				
+			End if 
 			
 			  //______________________________________________________
 		: ($1="getAttribute")

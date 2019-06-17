@@ -468,8 +468,6 @@ Case of
 					"$icon";$p)
 				
 				Form:C1466.actions.push($o)
-				Form:C1466.actions:=Form:C1466.actions
-				
 				$Obj_form.actions.focus()
 				$Obj_form.actions.reveal($Obj_form.actions.rowsNumber())
 				
@@ -477,7 +475,6 @@ Case of
 				  //EDIT ITEM(*;$Obj_form.name;Form.actions.length)
 				
 				$Obj_form.form.refresh()
-				
 				project.save()
 				
 				  //______________________________________________________

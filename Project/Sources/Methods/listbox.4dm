@@ -30,7 +30,7 @@ If (This:C1470._is=Null:C1517)
 	$t:=String:C10($1)
 	
 	$o:=New object:C1471(\
-		"_is";Current method name:C684;\
+		"_is";"listbox";\
 		"name";$t;\
 		"column";Null:C1517;\
 		"row";Null:C1517;\

@@ -600,7 +600,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //
@@ -1305,7 +1305,7 @@ Case of
 			
 			If (Bool:C1537(commonValues.stampField.indexed))
 				
-				DOCUMENT:="CREATE INDEX "+String:C10(commonValues.stampField.name)+"_"+str_format ("lowerCamelCase";$t)+" ON ["+$t+"] ("+String:C10(commonValues.stampField.name)+");"
+				DOCUMENT:="CREATE INDEX "+String:C10(commonValues.stampField.name)+"_"+str ($t).lowerCamelCase()+" ON ["+$t+"] ("+String:C10(commonValues.stampField.name)+");"
 				
 			End if 
 			

@@ -406,16 +406,20 @@ Case of
 		
 		$o:=$obj_form.tableWidget.update()
 		
-		If ($o.dimensions.width>$o.coordinates.width)
+		If ($o.dimensions.width#Null:C1517)\
+			 & ($o.coordinates.width#Null:C1517)
 			
-			$Obj_form.tablePrevious.setVisible($o.scroll.horizontal>0)
-			$Obj_form.tableNext.setVisible(($o.scroll.horizontal+$o.coordinates.width)<$o.dimensions.width)
-			
-		Else 
-			
-			$Obj_form.tablePrevious.hide()
-			$Obj_form.tableNext.hide()
-			
+			If ($o.dimensions.width>$o.coordinates.width)
+				
+				$Obj_form.tablePrevious.setVisible($o.scroll.horizontal>0)
+				$Obj_form.tableNext.setVisible(($o.scroll.horizontal+$o.coordinates.width)<$o.dimensions.width)
+				
+			Else 
+				
+				$Obj_form.tablePrevious.hide()
+				$Obj_form.tableNext.hide()
+				
+			End if 
 		End if 
 		
 		  //=========================================================

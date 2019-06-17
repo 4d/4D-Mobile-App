@@ -17,7 +17,7 @@ End if
 If (This:C1470=Null:C1517)
 	
 	$o:=New shared object:C1526(\
-		"_is";Current method name:C684;\
+		"_is";"database";\
 		"structure";File:C1566(Structure file:C489(*);fk platform path:K87:2);\
 		"isCompiled";Is compiled mode:C492(*);\
 		"isInterpreted";Not:C34(Is compiled mode:C492(*));\
