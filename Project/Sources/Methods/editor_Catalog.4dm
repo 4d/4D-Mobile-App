@@ -48,7 +48,7 @@ Case of
 		  //______________________________________________________
 	: (Form:C1466=Null:C1517)
 		
-		ASSERT:C1129(False:C215;"Oops, this method must be called from a form!")
+		ASSERT:C1129(False:C215;"OOPS, this method must be called from a form")
 		
 		  //______________________________________________________
 	: (ob_testPath (Form:C1466;"$project";"$catalog"))

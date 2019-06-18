@@ -210,7 +210,6 @@ Case of
 			Else 
 				
 				$Obj_current.format:=$Obj_menu.choice
-				$Obj_current.type:=$Obj_current.format
 				
 				If ($Obj_current.defaultField=Null:C1517)  // User parameter
 					

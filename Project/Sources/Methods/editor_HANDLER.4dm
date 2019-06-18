@@ -168,7 +168,7 @@ Case of
 					"target";"panel.";\
 					"method";"UI_SET_GEOMETRY"))
 				
-				  // Center message {
+				  // Center message
 				OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_width;$Lon_height)
 				$Lon_middle:=$Lon_width\2
 				
@@ -178,11 +178,9 @@ Case of
 				$Lon_right:=$Lon_left+$Lon_width
 				
 				OBJECT SET COORDINATES:C1248(*;$Obj_form.message;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-				  //}
 				
-				  // Center the greeting screen {
+				  // Center the greeting screen
 				(OBJECT Get pointer:C1124(Object named:K67:5;$Obj_form.greeting))->:=1+(OBJECT Get pointer:C1124(Object named:K67:5;$Obj_form.greeting))->
-				  //}
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)

@@ -44,7 +44,19 @@
 					"sizingX": "grow",
 					"stroke": "#808080",
 					"textAlign": "left",
-					"text": "Create an action to be able to add parameters"
+					"text": ":xliff:createAnActionToBeAbleToAddParameters"
+				},
+				"deleteAction": {
+					"type": "text",
+					"top": 6,
+					"left": 16,
+					"width": 449,
+					"height": 16,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:deleteActionDoesNotUseParameter"
 				}
 			}
 		},
@@ -95,7 +107,7 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "ACTIONS_PARAMS_UI .parameter.name",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.name",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
@@ -119,15 +131,15 @@
 					"hideSystemHighlight": true,
 					"rowHeight": "20px",
 					"showHeaders": false,
-					"dataSource": "ACTIONS_PARAMS_UI .action.parameters",
-					"currentItemSource": "ACTIONS_PARAMS_UI .parameter",
-					"currentItemPositionSource": "ACTIONS_PARAMS_UI .index",
-					"selectedItemsSource": "ACTIONS_PARAMS_UI .selected",
-					"metaSource": "ACTIONS_PARAMS_UI (\"meta\")",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.action.parameters",
+					"currentItemSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter",
+					"currentItemPositionSource": "Form:C1466.$dialog.ACTIONS_PARAMS.index",
+					"selectedItemsSource": "Form:C1466.$dialog.ACTIONS_PARAMS.selected",
+					"metaSource": "Form:C1466.$dialog.ACTIONS_PARAMS.metaInfo(This:C1470)",
 					"selectionMode": "single",
 					"scrollbarHorizontal": "hidden",
 					"horizontalLineStroke": "transparent",
-					"rowFillSource": "ACTIONS_PARAMS_UI (\"background\").color",
+					"rowFillSource": "Form:C1466.$dialog.ACTIONS_PARAMS.backgroundColor(This:C1470)",
 					"textAlign": "left",
 					"verticalAlign": "middle",
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
@@ -219,7 +231,7 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "ACTIONS_PARAMS_UI .parameter.label",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.label",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
@@ -245,7 +257,7 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "ACTIONS_PARAMS_UI .parameter.shortLabel",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.shortLabel",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
@@ -262,7 +274,7 @@
 					"width": 157,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "ACTIONS_PARAMS_UI (\"format\").value",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.formatLabel()",
 					"focusable": false,
 					"fill": "transparent",
 					"borderStyle": "none",
@@ -312,7 +324,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:formatter",
+					"text": ":xliff:format",
 					"visibility": "hidden"
 				},
 				"05_property_type.popup": {
@@ -346,7 +358,7 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "ACTIONS_PARAMS_UI .parameter.default",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.default",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
@@ -389,7 +401,7 @@
 					"events": [
 						"onClick"
 					],
-					"dataSource": "ACTIONS_PARAMS_UI .parameter.mandatory",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.mandatory",
 					"focusable": true,
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"visibility": "hidden"
@@ -410,7 +422,7 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "ACTIONS_PARAMS_UI .parameter.placeholder",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.placeholder",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
@@ -447,7 +459,7 @@
 					"width": 78,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "ACTIONS_PARAMS_UI .parameter.min",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.min",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
@@ -486,7 +498,7 @@
 					"width": 78,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "ACTIONS_PARAMS_UI .parameter.max",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.max",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
@@ -508,6 +520,24 @@
 					"textAlign": "left",
 					"text": ":xliff:maximum",
 					"visibility": "hidden"
+				},
+				"00_field_comment": {
+					"type": "input",
+					"left": 86,
+					"top": 277,
+					"width": 379,
+					"height": 17,
+					"enterable": true,
+					"focusable": false,
+					"contextMenu": "automatic",
+					"fill": "transparent",
+					"stroke": "#808080",
+					"borderStyle": "none",
+					"visibility": "hidden",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.comment()",
+					"textAlign": "right",
+					"hideFocusRing": true,
+					"fontStyle": "normal"
 				}
 			},
 			"entryOrder": [
@@ -523,7 +553,8 @@
 				"09_property_constraint_number_min",
 				"10_property_constraint_number_max",
 				"parameters.add",
-				"parameters.remove"
+				"parameters.remove",
+				"00_field_comment"
 			]
 		}
 	],

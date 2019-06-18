@@ -206,8 +206,6 @@ Case of
 						  // Display scope menu
 						$Mnu_pop:=Create menu:C408
 						
-						$i:=Num:C11(String:C10($Obj_context.current.style)="destructive")  // Skip table for a suppression
-						
 						Repeat 
 							
 							$i:=$i+1
@@ -221,6 +219,12 @@ Case of
 								If (String:C10($Obj_context.current.scope)=$t)
 									
 									SET MENU ITEM MARK:C208($Mnu_pop;-1;Char:C90(18))
+									
+								End if 
+								
+								If ($i=1) & (String:C10($Obj_context.current.style)="destructive")
+									
+									DISABLE MENU ITEM:C150($Mnu_pop;-1)
 									
 								End if 
 							End if 

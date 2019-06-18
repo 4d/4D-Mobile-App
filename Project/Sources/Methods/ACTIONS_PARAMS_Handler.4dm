@@ -41,7 +41,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"noAction";ui.static("noAction");\
 		"noTable";ui.static("noTable");\
 		"withSelection";ui.group("@parameters@;@property@;@variable@");\
-		"field";ui.group("@parameters@;@property@");\
+		"field";ui.group("@_field_@");\
 		"variable";ui.group("@variable@");\
 		"properties";ui.group("@property@;@variable@");\
 		"number";ui.group("@number@");\
@@ -50,15 +50,14 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"remove";ui.button("parameters.remove");\
 		"typeMenu";ui.button("05_property_type.popup");\
 		"typeBorder";ui.static("05_property_type.border");\
-		"dynamic";ui.group("02_property_name;02_property_mandatory;03_property_label;04_property_shortLabel;06_property_placeholder;07_variable_default;09_property_constraint_number_min;10_property_constraint_number_max")\
+		"dynamic";ui.group("02_property_name;02_property_mandatory;03_property_label;04_property_shortLabel;06_property_placeholder;07_variable_default;09_property_constraint_number_min;10_property_constraint_number_max");\
+		"deleteAction";ui.static("deleteAction")\
 		)
 	
-	  // "min";ui.widget("09_property_constraint_number_min");\
-				// "max";ui.widget("10_property_constraint_number_max");\
-				
 	$Obj_context:=$Obj_form.$
 	
-	If (OB Is empty:C1297($Obj_context))
+	If (OB Is empty:C1297($Obj_context))\
+		 | (Shift down:C543 & (Structure file:C489=Structure file:C489(*)))  // First load
 		
 		  // Constraints definition
 		ob_createPath ($Obj_context;"constraints")
@@ -66,7 +65,11 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		  // Define form member methods
 		$Obj_context.listUI:=Formula:C1597(ACTIONS_PARAMS_UI ("listUI"))
 		
-		  //$Obj_context.meta:=Formula(ACTIONS_PARAMS_UI ("meta"))
+		$Obj_context.formatLabel:=Formula:C1597(ACTIONS_PARAMS_UI ("formatLabel").value)
+		$Obj_context.comment:=Formula:C1597(ACTIONS_PARAMS_UI ("comment").value)
+		
+		$Obj_context.backgroundColor:=Formula:C1597(ACTIONS_PARAMS_UI ("backgroundColor";$1).color)
+		$Obj_context.metaInfo:=Formula:C1597(ACTIONS_PARAMS_UI ("metaInfo";$1))
 		
 	End if 
 	
@@ -97,17 +100,20 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)  // Refresh UI
 				
-				  // ASSERT(Not(Shift down))
+				ASSERT:C1129(Not:C34(Shift down:C543))
 				
 				$o:=$Obj_form
+				
+				$o.noSelection.hide()
+				$o.noTable.hide()
+				$o.withSelection.hide()
+				$o.deleteAction.hide()
+				$o.properties.hide()
 				
 				If (Form:C1466.actions=Null:C1517)\
 					 | (Num:C11(Form:C1466.actions.length)=0)  // No actions
 					
 					$o.noAction.show()
-					$o.noSelection.hide()
-					$o.noTable.hide()
-					$o.withSelection.hide()
 					
 				Else 
 					
@@ -116,43 +122,48 @@ Case of
 					If ($Obj_context.action=Null:C1517)  // No action selected
 						
 						$o.noSelection.show()
-						$o.noTable.hide()
 						$o.withSelection.hide()
 						
 					Else 
 						
-						$Obj_context.action.parameters:=$Obj_context.action.parameters
-						
-						$o.noSelection.hide()
-						$o.withSelection.show()
-						
-						If ($Obj_context.action.tableNumber=Null:C1517)  // No target table
+						If (String:C10($Obj_context.action.style)="destructive")
 							
-							$o.noTable.show()
-							$o.properties.hide()
-							$o.remove.disable()
-							$o.add.disable()
+							$o.noSelection.hide()
+							$o.deleteAction.show()
 							
 						Else 
 							
-							$o.noTable.hide()
-							$o.add.enable()
+							$Obj_context.action.parameters:=$Obj_context.action.parameters
 							
-							If ($Obj_context.parameter=Null:C1517)  // No current parameter
+							$o.withSelection.show()
+							
+							If ($Obj_context.action.tableNumber=Null:C1517)  // No target table
 								
+								$o.noTable.show()
 								$o.remove.disable()
-								$o.properties.hide()
+								$o.add.disable()
 								
 							Else 
 								
-								$o.remove.enable()
-								$o.properties.show()
+								$o.add.enable()
 								
-								$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
-								
-								$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
-								
+								If ($Obj_context.parameter=Null:C1517)  // No current parameter
+									
+									$o.remove.disable()
+									
+								Else 
+									
+									$o.remove.enable()
+									$o.properties.show()
+									
+									$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
+									$o.field.setVisible($Obj_context.parameter.fieldNumber#Null:C1517)  // If field
+									
+									$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
+									
+								End if 
 							End if 
+							
 						End if 
 					End if 
 				End if 

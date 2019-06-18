@@ -51,7 +51,7 @@ Case of
 		  //______________________________________________________
 	: (This:C1470=Null:C1517)
 		
-		ASSERT:C1129(False:C215;"This method must be called from an member method")
+		ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
 		
 		  //______________________________________________________
 	: ($Txt_action="get")

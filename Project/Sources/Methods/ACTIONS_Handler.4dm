@@ -57,15 +57,23 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	
 	$Obj_context:=$Obj_form.$
 	
-	If (OB Is empty:C1297($Obj_context))  // First load
+	If (OB Is empty:C1297($Obj_context))\
+		 | (Shift down:C543 & (Structure file:C489=Structure file:C489(*)))  // First load
 		
 		  // Constraints definition
 		ob_createPath ($Obj_context;"constraints.rules";Is collection:K8:32)
 		
 		  // Define form member methods
-		$Obj_context.load:=Formula:C1597(ACTIONS_Handler (New object:C1471("action";"load")))
+		$Obj_context.load:=Formula:C1597(ACTIONS_Handler (New object:C1471(\
+			"action";"load")))
+		
 		$Obj_context.listUI:=Formula:C1597(ACTIONS_UI ("listUI"))
-		$Obj_context.meta:=Formula:C1597(ACTIONS_UI ("meta"))
+		
+		$Obj_context.tableName:=Formula:C1597(ACTIONS_UI ("tableName";$1).value)
+		$Obj_context.scopeLabel:=Formula:C1597(ACTIONS_UI ("scopeLabel";$1).value)
+		
+		$Obj_context.background:=Formula:C1597(ACTIONS_UI ("background";$1).color)
+		$Obj_context.meta:=Formula:C1597(ACTIONS_UI ("meta";$1))
 		
 	End if 
 	
@@ -130,7 +138,6 @@ Case of
 				If (Form:C1466.$dialog.ACTIONS_PARAMS#Null:C1517)
 					
 					Form:C1466.$dialog.ACTIONS_PARAMS.action:=$Obj_context.current
-					
 					$obj_form.form.call("refreshActionParameters")
 					
 				End if 

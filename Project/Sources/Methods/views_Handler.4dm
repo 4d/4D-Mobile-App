@@ -404,10 +404,9 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="geometry")
 		
-		$o:=$obj_form.tableWidget.update()
-		
-		If ($o.dimensions.width#Null:C1517)\
-			 & ($o.coordinates.width#Null:C1517)
+		If (Not:C34(Is nil pointer:C315($obj_form.tableWidget.pointer())))
+			
+			$o:=$obj_form.tableWidget.update()
 			
 			If ($o.dimensions.width>$o.coordinates.width)
 				

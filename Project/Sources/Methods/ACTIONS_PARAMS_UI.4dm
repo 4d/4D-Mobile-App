@@ -11,47 +11,71 @@
   // Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
+C_OBJECT:C1216($2)
 
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($t;$Txt_action)
-C_OBJECT:C1216($Obj_context;$Obj_form;$Obj_out)
+C_BOOLEAN:C305($b)
+C_LONGINT:C283($l)
+C_TEXT:C284($t)
+C_OBJECT:C1216($o;$Obj_context;$Obj_form)
 
 If (False:C215)
 	C_OBJECT:C1216(ACTIONS_PARAMS_UI ;$0)
 	C_TEXT:C284(ACTIONS_PARAMS_UI ;$1)
+	C_OBJECT:C1216(ACTIONS_PARAMS_UI ;$2)
 End if 
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
-	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Txt_action:=$1
-		
-	End if 
-	
-	$Obj_form:=ACTIONS_PARAMS_Handler (New object:C1471(\
-		"action";"init"))
-	
-	$Obj_context:=$Obj_form.$
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
 
   // ----------------------------------------------------
 Case of 
 		
 		  //______________________________________________________
-	: ($Txt_action="listUI")  // Colors UI according to focus
+	: ($1="comment")  // Comment associated with the parameter linked to a field
+		
+		$o:=Form:C1466.$dialog.ACTIONS_PARAMS
+		
+		If (Num:C11($o.parameter.fieldNumber)#0)  // One parameter slected
+			
+			If (Num:C11($o.action.tableNumber)#0)
+				
+				$o:=New object:C1471(\
+					"value";Replace string:C233(Get localized string:C991("thisParameterIsLinkedToTheField");"{field}";String:C10(Form:C1466.dataModel[String:C10($o.action.tableNumber)][String:C10($o.parameter.fieldNumber)].name)))
+				
+			End if 
+			
+		Else 
+			
+			$o:=New object:C1471(\
+				"value";"")
+			
+		End if 
+		
+		  //______________________________________________________
+	: ($1="formatLabel")  // display format according to format or type
+		
+		$o:=Form:C1466.$dialog.ACTIONS_PARAMS.parameter
+		
+		If (Length:C16(String:C10($o.format))=0)
+			
+			  // Take type
+			$t:=Choose:C955($o.type="string";"text";String:C10($o.type))
+			
+		Else 
+			
+			  // Prefer format
+			$t:=Choose:C955($o.format#$o.type;"f_"+String:C10($o.format);String:C10($o.type))
+			
+		End if 
+		
+		$o:=New object:C1471(\
+			"value";Get localized string:C991($t))
+		
+		  //______________________________________________________
+	: ($1="listUI")  // Colors UI according to focus
+		
+		$Obj_form:=ACTIONS_PARAMS_Handler (New object:C1471(\
+			"action";"init"))
 		
 		If ($Obj_form.form.focusedWidget=$Obj_form.parameters.name)\
 			 & (Form event:C388=On Getting Focus:K2:7)
@@ -67,72 +91,56 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_action="background")  // <Background Color Expression>
+	: ($1="backgroundColor")  // <Background Color Expression>
 		
-		$Obj_out:=New object:C1471(\
+		$o:=New object:C1471(\
 			"color";0x00FFFFFF)  // Default is white
 		
-		If ($Obj_context.parameter#Null:C1517)
+		If (Num:C11(Form:C1466.$dialog.ACTIONS_PARAMS.index)#0)
 			
-			If (ob_equal ($Obj_context.parameter;This:C1470))  // Selected
+			$Obj_form:=ACTIONS_PARAMS_Handler (New object:C1471(\
+				"action";"init"))
+			
+			$b:=($Obj_form.form.focusedWidget=$Obj_form.parameters.name)
+			
+			If (ob_equal (Form:C1466.$dialog.ACTIONS_PARAMS.parameter;$2))  // Selected row
 				
-				If ($Obj_form.form.focusedWidget=$Obj_form.parameters.name)
-					
-					  // Focused
-					$Obj_out.color:=ui.backgroundSelectedColor
-					
-				Else 
-					
-					$Obj_out.color:=ui.alternateSelectedColor
-					
-				End if 
+				$o.color:=Choose:C955($b;ui.backgroundSelectedColor;ui.alternateSelectedColor)
+				
+			Else 
+				
+				$l:=Choose:C955($b;ui.highlightColor;ui.highlightColorNoFocus)
+				$o.color:=Choose:C955($b;$l;0x00FFFFFF)
+				
 			End if 
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_action="format")  // display format according to format or type
-		
-		If (String:C10($Obj_context.parameter.format)="")
-			
-			$t:=Choose:C955($Obj_context.parameter.type="string";\
-				"text";\
-				String:C10($Obj_context.parameter.type))
-			
-		Else 
-			
-			$t:=Choose:C955($Obj_context.parameter.format#$Obj_context.parameter.type;\
-				"f_"+String:C10($Obj_context.parameter.format);\
-				String:C10($Obj_context.parameter.type))
-			
-		End if 
-		
-		$Obj_out:=New object:C1471(\
-			"value";Get localized string:C991($t))
-		
-		  //______________________________________________________
-	: ($Txt_action="meta")  // <Meta info expression>
+	: ($1="metaInfo")  // <Meta info expression>
 		
 		  // Default values
-		$Obj_out:=New object:C1471(\
+		$o:=New object:C1471(\
 			"stroke";"black";\
 			"fontWeight";"normal")
 		
 		  // Mark duplicate names
-		ob_createPath ($Obj_out;"cell.names")
-		$Obj_out.cell.names.stroke:=Choose:C955($Obj_context.action.parameters.indices("name = :1";This:C1470.name).length>1;ui.errorRGB;"black")
+		ob_createPath ($o;"cell.names")
+		$o.cell.names.stroke:=Choose:C955(Form:C1466.$dialog.ACTIONS_PARAMS.action.parameters.indices("name = :1";$2.name).length>1;ui.errorRGB;"black")
 		
 		  //______________________________________________________
 	Else 
 		
+		ASSERT:C1129(False:C215;"Unknown entry point: \""+$1+"\"")
+		
 		  // Return the context object
-		$Obj_out:=$Obj_context
+		$o:=$Obj_context
 		
 		  //______________________________________________________
 End case 
 
   // ----------------------------------------------------
   // Return
-$0:=$Obj_out
+$0:=$o
 
   // ----------------------------------------------------
   // End

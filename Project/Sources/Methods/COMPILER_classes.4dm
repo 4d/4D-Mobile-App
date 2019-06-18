@@ -37,6 +37,11 @@ If (False:C215)
 	C_OBJECT:C1216(static ;$2)
 	
 	  //______________________________________________________
+	C_OBJECT:C1216(subform ;$0)
+	C_TEXT:C284(subform ;$1)
+	C_OBJECT:C1216(subform ;$2)
+	
+	  //______________________________________________________
 	C_OBJECT:C1216(thermometer ;$0)
 	C_TEXT:C284(thermometer ;$1)
 	C_OBJECT:C1216(thermometer ;$2)

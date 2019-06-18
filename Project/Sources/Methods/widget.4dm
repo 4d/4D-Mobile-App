@@ -54,6 +54,8 @@ If (This:C1470._is=Null:C1517)
 		"focus";Formula:C1597(GOTO OBJECT:C206(*;This:C1470.name));\
 		"pointer";Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name));\
 		"value";Formula:C1597((This:C1470.pointer())->);\
+		"setValue";Formula:C1597(widget ("setValue";New object:C1471("value";$1)));\
+		"touch";Formula:C1597(widget ("touch"));\
 		"clear";Formula:C1597(CLEAR VARIABLE:C89((This:C1470.pointer())->));\
 		"enterable";Formula:C1597(OBJECT Get enterable:C1067(*;This:C1470.name));\
 		"setEnterable";Formula:C1597(OBJECT SET ENTERABLE:C238(*;This:C1470.name;Bool:C1537($1)));\
@@ -69,8 +71,6 @@ If (This:C1470._is=Null:C1517)
 		"forceNumeric";Formula:C1597(widget ("forceNumeric"))\
 		)
 	
-	  //"setValue";Formula((This.pointer())->:=Num($1));
-	
 	$o.getCoordinates()
 	
 Else 
@@ -82,7 +82,7 @@ Else
 			  //______________________________________________________
 		: ($o=Null:C1517)
 			
-			ASSERT:C1129(False:C215;"This method must be called from an member method")
+			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
 			
 			  //______________________________________________________
 		: ($1="update")  // Update widget definition based on the widget type
@@ -106,11 +106,16 @@ Else
 					$o.getCell()
 					
 					  //…………………………………………………………………………………………………
+				: ($Lon_type=Object type subform:K79:40)
+					
+					$o.getSubform()
+					
+					  //…………………………………………………………………………………………………
 				Else 
 					
 					ASSERT:C1129(False:C215;"Non implemented for: "+String:C10($o._is))
 					
-					  // ----------------------------------------
+					  //…………………………………………………………………………………………………
 			End case 
 			
 			  //______________________________________________________
@@ -348,6 +353,10 @@ Else
 			
 			($o.pointer())->:=$2.value
 			
+			  //______________________________________________________
+		: ($1="touch")
+			
+			($o.pointer())->:=($o.pointer())->
 			
 			  //______________________________________________________
 		: ($1="forceNumeric")

@@ -25,6 +25,33 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
+		C_POINTER:C301($r)
+		$o:=New object:C1471("pointer";$r)
+		
+		If ($o.pointer#Null:C1517)
+			If (Value type:C1509($o.pointer)=Is pointer:K8:14)
+				ASSERT:C1129(Is nil pointer:C315($o.pointer))
+			End if 
+		End if 
+		
+		$o.pointer:=""
+		If ($o.pointer#Null:C1517)
+			If (Value type:C1509($o.pointer)=Is pointer:K8:14)
+				ASSERT:C1129(Is nil pointer:C315($o.pointer))
+			End if 
+		End if 
+		
+		$o.pointer:=->$t
+		If ($o.pointer#Null:C1517)
+			If (Value type:C1509($o.pointer)=Is pointer:K8:14)
+				ASSERT:C1129(Not:C34(Is nil pointer:C315($o.pointer)))
+			End if 
+		End if 
+		
+		
+		  //________________________________________
+	: (True:C214)
+		
 		$o:=Folder:C1567(fk desktop folder:K87:19).file("project.4dmobileapp")
 		
 		If ($o.exists)
