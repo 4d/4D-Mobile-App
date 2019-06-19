@@ -48,10 +48,15 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"parameters";ui.listbox("01_Parameters");\
 		"add";ui.button("parameters.add");\
 		"remove";ui.button("parameters.remove");\
-		"typeMenu";ui.button("05_property_type.popup");\
-		"typeBorder";ui.static("05_property_type.border");\
-		"dynamic";ui.group("02_property_name;02_property_mandatory;03_property_label;04_property_shortLabel;06_property_placeholder;07_variable_default;09_property_constraint_number_min;10_property_constraint_number_max");\
-		"deleteAction";ui.static("deleteAction")\
+		"format";ui.button("05_property_type.popup");\
+		"formatBorder";ui.static("05_property_type.border");\
+		"linked";ui.group("02_property_name;03_property_label;04_property_shortLabel;06_property_placeholder;07_variable_default");\
+		"deleteAction";ui.static("deleteAction");\
+		"mandatory";ui.button("02_property_mandatory");\
+		"min";ui.button("09_property_constraint_number_min");\
+		"max";ui.button("10_property_constraint_number_max");\
+		"default";UI.widget("07_variable_default");\
+		"withDefault";UI.group("@_default@")\
 		)
 	
 	$Obj_context:=$Obj_form.$
@@ -104,11 +109,17 @@ Case of
 				
 				$o:=$Obj_form
 				
+				  //If ($Obj_context.parameter=Null)
+				
+				  //$Obj_form.parameters.select(1)
+				
+				  //End if 
+				
+				
 				$o.noSelection.hide()
 				$o.noTable.hide()
 				$o.withSelection.hide()
 				$o.deleteAction.hide()
-				$o.properties.hide()
 				
 				If (Form:C1466.actions=Null:C1517)\
 					 | (Num:C11(Form:C1466.actions.length)=0)  // No actions
@@ -133,9 +144,9 @@ Case of
 							
 						Else 
 							
-							$Obj_context.action.parameters:=$Obj_context.action.parameters
-							
 							$o.withSelection.show()
+							
+							
 							
 							If ($Obj_context.action.tableNumber=Null:C1517)  // No target table
 								
@@ -149,20 +160,91 @@ Case of
 								
 								If ($Obj_context.parameter=Null:C1517)  // No current parameter
 									
+									$o.properties.hide()
 									$o.remove.disable()
 									
 								Else 
 									
-									$o.remove.enable()
-									$o.properties.show()
-									
-									$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
-									$o.field.setVisible($Obj_context.parameter.fieldNumber#Null:C1517)  // If field
-									
-									$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
-									
+									If ($Obj_context.action.parameters.length>0)
+										
+										$o.remove.enable()
+										$o.properties.show()
+										
+										$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
+										$o.field.setVisible($Obj_context.parameter.fieldNumber#Null:C1517)  // If field
+										
+										$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
+										
+										$o.mandatory.setValue(ACTIONS_PARAMS_UI ("mandatory").value)
+										$o.min.setValue(ACTIONS_PARAMS_UI ("min").value)
+										$o.max.setValue(ACTIONS_PARAMS_UI ("max").value)
+										
+										  //$o.default.setFilter("")
+										
+										$o.withDefault.show()
+										
+										Case of 
+												
+												  //______________________________________________________
+											: ($Obj_context.parameter.type="number")
+												
+												Case of 
+														
+														  //……………………………………………………………………………………………………
+													: ($Obj_context.parameter.format="integer")
+														
+														$o.default.setFilter("&9")
+														
+														  //……………………………………………………………………………………………………
+													: ($Obj_context.parameter.format="percent")
+														
+														$o.default.setFilter("&\"0-9;%;.;,;-;\"")
+														
+														  //……………………………………………………………………………………………………
+													: ($Obj_context.parameter.format="spellOut")
+														
+														$o.default.setFilter("")
+														
+														  //……………………………………………………………………………………………………
+													Else 
+														
+														$o.default.setFilter("&\"0-9;.;,;-;\"")
+														
+														  //……………………………………………………………………………………………………
+												End case 
+												
+												  //______________________________________________________
+											: ($Obj_context.parameter.type="date")
+												
+												$o.default.setFilter("&\"0-9;/;-;\"")
+												
+												  //______________________________________________________
+											: ($Obj_context.parameter.type="time")
+												
+												$o.default.setFilter("&\"0-9;:\"")
+												
+												  //______________________________________________________
+											: ($Obj_context.parameter.type="text")
+												
+												$o.default.setFilter("")
+												
+												  //______________________________________________________
+											Else 
+												
+												$o.withDefault.hide()
+												
+												  //______________________________________________________
+										End case 
+										
+									Else 
+										
+										$o.properties.hide()
+										$o.remove.disable()
+										
+									End if 
 								End if 
 							End if 
+							
 							
 						End if 
 					End if 

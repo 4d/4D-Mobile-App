@@ -362,14 +362,36 @@ Case of
 										
 										$cc:=$Col_fields.query("name = :1";$Obj_table[$t].name)
 										
-										$o:=New object:C1471(\
-											"fieldNumber";$cc[0].fieldNumber;\
-											"name";str ($Obj_table[$t].name).uperCamelCase();\
-											"label";$Obj_table[$t].label;\
-											"shortLabel";$Obj_table[$t].shortLabel;\
-											"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
-											"defaultField";formatString ("field-name";$Obj_table[$t].name);\
-											"mandatory";Bool:C1537($cc[0].mandatory))
+										If (featuresFlags.with("allowPictureAsActionParameters"))
+											
+											$o:=New object:C1471(\
+												"fieldNumber";$cc[0].fieldNumber;\
+												"name";str ($Obj_table[$t].name).uperCamelCase();\
+												"label";$Obj_table[$t].label;\
+												"shortLabel";$Obj_table[$t].shortLabel;\
+												"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
+												"defaultField";formatString ("field-name";$Obj_table[$t].name))
+											
+										Else 
+											
+											If ($cc[0].fieldType#Is picture:K8:10)
+												
+												$o:=New object:C1471(\
+													"fieldNumber";$cc[0].fieldNumber;\
+													"name";str ($Obj_table[$t].name).uperCamelCase();\
+													"label";$Obj_table[$t].label;\
+													"shortLabel";$Obj_table[$t].shortLabel;\
+													"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
+													"defaultField";formatString ("field-name";$Obj_table[$t].name))
+												
+											End if 
+										End if 
+										
+										If (Bool:C1537($cc[0].mandatory))
+											
+											$o.rules:=New collection:C1472("mandatory")
+											
+										End if 
 										
 										Case of 
 												

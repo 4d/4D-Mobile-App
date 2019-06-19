@@ -59,6 +59,8 @@ If (This:C1470._is=Null:C1517)
 		"clear";Formula:C1597(CLEAR VARIABLE:C89((This:C1470.pointer())->));\
 		"enterable";Formula:C1597(OBJECT Get enterable:C1067(*;This:C1470.name));\
 		"setEnterable";Formula:C1597(OBJECT SET ENTERABLE:C238(*;This:C1470.name;Bool:C1537($1)));\
+		"filter";Formula:C1597(OBJECT Get filter:C1073(*;This:C1470.name));\
+		"setFilter";Formula:C1597(OBJECT SET FILTER:C235(*;This:C1470.name;String:C10($1)));\
 		"coordinates";Null:C1517;\
 		"windowCoordinates";Null:C1517;\
 		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\
@@ -351,7 +353,16 @@ Else
 			  //______________________________________________________
 		: ($1="setValue")
 			
-			($o.pointer())->:=$2.value
+			If (Is nil pointer:C315($o.pointer()))
+				
+				  // Linked widget
+				ASSERT:C1129(False:C215;"setValue () can not be used for a widget linked to an expression!")
+				
+			Else 
+				
+				($o.pointer())->:=$2.value
+				
+			End if 
 			
 			  //______________________________________________________
 		: ($1="touch")

@@ -138,7 +138,7 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.typeMenu.name)  // Format choice
+	: ($Obj_form.form.currentWidget=$Obj_form.format.name)  // Format choice
 		
 		$Obj_menu:=menu 
 		
@@ -147,11 +147,22 @@ Case of
 		
 		$Obj_formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
 		
+		If (featuresFlags.with("allowPictureAsActionParameters"))
+			
+			  // Add picture formats
+			  // Note: When flag will be integrated, update the file "/RESOURCES/actionParameters.json" by adding::
+			  // ,
+			  // "image" : []
+			
+			$Obj_formats.image:=New collection:C1472()
+			
+		End if 
+		
 		If ($Obj_current.defaultField=Null:C1517)  // User parameter
 			
 			For each ($Txt_type;$Obj_formats)
 				
-				If ($Obj_formats[$Txt_type].length>1)
+				If ($Obj_formats[$Txt_type].length>0)
 					
 					$o:=menu 
 					
@@ -198,7 +209,7 @@ Case of
 		End if 
 		
 		  // Position according to the box
-		$o:=$Obj_form.typeBorder.getCoordinates()
+		$o:=$Obj_form.formatBorder.getCoordinates()
 		$Obj_menu.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom)
 		
 		If ($Obj_menu.selected)
@@ -223,6 +234,18 @@ Case of
 							
 						End if 
 					End for each 
+					
+					If ($l=-1)
+						
+						$Obj_current.type:=$Obj_current.format
+						
+					End if 
+				End if 
+				
+				If ($Obj_form.default.focused())
+					
+					GOTO OBJECT:C206(*;"")
+					
 				End if 
 			End if 
 			
@@ -347,8 +370,7 @@ Case of
 						"name";$t;\
 						"label";Get localized string:C991("addParameter");\
 						"shortLabel";Get localized string:C991("addParameter");\
-						"type";"string";\
-						"mandatory";False:C215)
+						"type";"string")
 					
 					  //______________________________________________________
 				Else   // Add a field
@@ -360,8 +382,13 @@ Case of
 						"name";str ($c[0].name).uperCamelCase();\
 						"label";$c[0].label;\
 						"shortLabel";$c[0].shortLabel;\
-						"defaultField";formatString ("field-name";$c[0].name);\
-						"mandatory";Bool:C1537($c[0].mandatory))
+						"defaultField";formatString ("field-name";$c[0].name))
+					
+					If (Bool:C1537($c[0].mandatory))
+						
+						$o.rules:=New collection:C1472("mandatory")
+						
+					End if 
 					
 					$cc:=New collection:C1472
 					$cc[Is integer 64 bits:K8:25]:="number"
@@ -414,17 +441,124 @@ Case of
 		$i:=$Obj_context.action.parameters.indexOf($Obj_context.parameter)
 		$Obj_context.action.parameters.remove($i)
 		
-		$Obj_context.parameter:=Null:C1517
-		$Obj_context.selected:=New collection:C1472
-		$Obj_context.index:=0
+		$i:=$i+1  // Collection index to listbox index
 		
-		$Obj_context.parameter:=$Obj_context.parameter
+		If ($i<=$Obj_form.parameters.rowsNumber())
+			
+			$Obj_form.parameters.select($i)
+			
+		Else 
+			
+			$Obj_form.parameters.deselect()
+			
+		End if 
 		
 		$Obj_form.form.refresh()
 		project.save()
 		
 		  //==================================================
-	: ($Obj_form.dynamic.include($Obj_form.form.currentWidget))  // Dynamic widgets
+	: ($Obj_form.form.currentWidget=$Obj_form.mandatory.name)  // Mandatory checkbox
+		
+		If (($Obj_form.mandatory.pointer())->)  // Checked
+			
+			ob_createPath ($Obj_context.parameter;"rules";Is collection:K8:32)
+			
+			If ($Obj_context.parameter.rules.indexOf("mandatory")=-1)
+				
+				$Obj_context.parameter.rules.push("mandatory")
+				
+			End if 
+			
+		Else 
+			
+			If ($Obj_context.parameter.rules#Null:C1517)
+				
+				$l:=$Obj_context.parameter.rules.indexOf("mandatory")
+				
+				If ($l#-1)
+					
+					$Obj_context.parameter.rules.remove($l)
+					
+				End if 
+				
+				If ($Obj_context.parameter.rules.length=0)
+					
+					OB REMOVE:C1226($Obj_context.parameter;"rules")
+					
+				End if 
+			End if 
+		End if 
+		
+		project.save()
+		
+		  //==================================================
+	: ($Obj_form.form.currentWidget=$Obj_form.min.name)\
+		 | ($Obj_form.form.currentWidget=$Obj_form.max.name)  // Minimum & Maximum
+		
+		$o:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.min.name;$Obj_form.min;$Obj_form.max)
+		$t:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.min.name;"min";"max")
+		
+		If (Length:C16($o.value())>0)
+			
+			If ($Obj_context.parameter.rules#Null:C1517)
+				
+				For ($i;0;$Obj_context.parameter.rules.length-1;1)
+					
+					If (Value type:C1509($Obj_context.parameter.rules[$i])=Is object:K8:27)
+						
+						If ($Obj_context.parameter.rules[$i][$t]#Null:C1517)
+							
+							$Obj_context.parameter.rules[$i][$t]:=Num:C11($o.value())
+							$i:=MAXLONG:K35:2-1
+							
+						End if 
+					End if 
+				End for 
+				
+				If ($i#MAXLONG:K35:2)
+					
+					$Obj_context.parameter.rules.push(New object:C1471(\
+						$t;Num:C11($o.value())))
+					
+				End if 
+				
+			Else 
+				
+				ob_createPath ($Obj_context.parameter;"rules";Is collection:K8:32)
+				$Obj_context.parameter.rules.push(New object:C1471(\
+					$t;Num:C11($o.value())))
+				
+			End if 
+			
+		Else 
+			
+			If ($Obj_context.parameter.rules#Null:C1517)
+				
+				For ($i;0;$Obj_context.parameter.rules.length-1;1)
+					
+					If (Value type:C1509($Obj_context.parameter.rules[$i])=Is object:K8:27)
+						
+						If ($Obj_context.parameter.rules[$i][$t]#Null:C1517)
+							
+							$Obj_context.parameter.rules.remove($i)
+							$i:=MAXLONG:K35:2-1
+							
+						End if 
+					End if 
+				End for 
+				
+				If ($Obj_context.parameter.rules.length=0)
+					
+					OB REMOVE:C1226($Obj_context.parameter;"rules")
+					
+				End if 
+			End if 
+		End if 
+		
+		project.save()
+		
+		  //==================================================
+	: ($Obj_form.linked.include($Obj_form.form.currentWidget))  // Linked widgets
 		
 		project.save()
 		

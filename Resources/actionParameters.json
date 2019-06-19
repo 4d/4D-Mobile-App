@@ -14,8 +14,6 @@
 			"integer",
 			"scientific",
 			"percent",
-			"energy",
-			"mass",
 			"spellOut"
 			],
 		"date" : [
@@ -24,14 +22,9 @@
 			"dateLong"
 		],
 		"time" : [
-			"hour",
 			"duration"
 		],
 		"bool" : [
-			"bool"
-		],
-		"image" : [
-			"image"
 		]
 	}
 }

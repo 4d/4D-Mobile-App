@@ -16,7 +16,8 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($l)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form)
+C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_params)
+C_COLLECTION:C1488($c)
 
 If (False:C215)
 	C_OBJECT:C1216(ACTIONS_PARAMS_UI ;$0)
@@ -26,21 +27,59 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
+$Obj_params:=Form:C1466.$dialog.ACTIONS_PARAMS
 
   // ----------------------------------------------------
 Case of 
 		
 		  //______________________________________________________
+	: ($1="min")\
+		 | ($1="max")  // Return the min or max rule value as string
+		
+		$o:=$Obj_params.parameter
+		
+		If ($o.rules#Null:C1517)
+			
+			$c:=$o.rules.extract($1)
+			
+			If ($c.length>0)
+				
+				$t:=String:C10($c[0])
+				
+			End if 
+		End if 
+		
+		$o:=New object:C1471(\
+			"value";$t)
+		
+		  //______________________________________________________
+	: ($1="mandatory")  // Return the mandatory rule value as boolean
+		
+		$o:=$Obj_params.parameter
+		
+		If ($o.rules#Null:C1517)
+			
+			$b:=($o.rules.countValues("mandatory")>0)
+			
+		End if 
+		
+		$o:=New object:C1471(\
+			"value";$b)
+		
+		  //______________________________________________________
 	: ($1="comment")  // Comment associated with the parameter linked to a field
 		
-		$o:=Form:C1466.$dialog.ACTIONS_PARAMS
+		$o:=$Obj_params
 		
 		If (Num:C11($o.parameter.fieldNumber)#0)  // One parameter slected
 			
 			If (Num:C11($o.action.tableNumber)#0)
 				
 				$o:=New object:C1471(\
-					"value";Replace string:C233(Get localized string:C991("thisParameterIsLinkedToTheField");"{field}";String:C10(Form:C1466.dataModel[String:C10($o.action.tableNumber)][String:C10($o.parameter.fieldNumber)].name)))
+					"value";Replace string:C233(Get localized string:C991("thisParameterIsLinkedToTheField");\
+					"{field}";\
+					String:C10(Form:C1466.dataModel[String:C10($o.action.tableNumber)][String:C10($o.parameter.fieldNumber)].name))\
+					)
 				
 			End if 
 			
@@ -54,7 +93,7 @@ Case of
 		  //______________________________________________________
 	: ($1="formatLabel")  // display format according to format or type
 		
-		$o:=Form:C1466.$dialog.ACTIONS_PARAMS.parameter
+		$o:=$Obj_params.parameter
 		
 		If (Length:C16(String:C10($o.format))=0)
 			
@@ -96,14 +135,14 @@ Case of
 		$o:=New object:C1471(\
 			"color";0x00FFFFFF)  // Default is white
 		
-		If (Num:C11(Form:C1466.$dialog.ACTIONS_PARAMS.index)#0)
+		If (Num:C11($Obj_params.index)#0)
 			
 			$Obj_form:=ACTIONS_PARAMS_Handler (New object:C1471(\
 				"action";"init"))
 			
 			$b:=($Obj_form.form.focusedWidget=$Obj_form.parameters.name)
 			
-			If (ob_equal (Form:C1466.$dialog.ACTIONS_PARAMS.parameter;$2))  // Selected row
+			If (ob_equal ($Obj_params.parameter;$2))  // Selected row
 				
 				$o.color:=Choose:C955($b;ui.backgroundSelectedColor;ui.alternateSelectedColor)
 				
@@ -125,7 +164,7 @@ Case of
 		
 		  // Mark duplicate names
 		ob_createPath ($o;"cell.names")
-		$o.cell.names.stroke:=Choose:C955(Form:C1466.$dialog.ACTIONS_PARAMS.action.parameters.indices("name = :1";$2.name).length>1;ui.errorRGB;"black")
+		$o.cell.names.stroke:=Choose:C955($Obj_params.action.parameters.indices("name = :1";$2.name).length>1;ui.errorRGB;"black")
 		
 		  //______________________________________________________
 	Else 

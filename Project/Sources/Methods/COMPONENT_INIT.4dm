@@ -94,12 +94,12 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // iOS simulator time out
 	commonValues.simulatorTimeout:=10000
 	
-	  //commonValues.build:="1.0.0"
-	  //commonValues.developmentRegion:="en"
-	  //commonValues.storyboard:=New object(\
-						"LaunchScreen";"LaunchScreen";\
-						"Main";"Main";\
-						"backgroundColor";"white")
+	  // CommonValues.build:="1.0.0"
+	  // CommonValues.developmentRegion:="en"
+	  // CommonValues.storyboard:=New object(\
+		"LaunchScreen";"LaunchScreen";\
+		"Main";"Main";\
+		"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -236,6 +236,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 			ui.typeIcons[Num:C11(Replace string:C233($o.name;"field_";""))]:=$p
 			
 		End for each 
+		
 		  // ======================================================= ]
 		
 		ui.fieldIcons:=New collection:C1472
@@ -273,7 +274,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 			
 			ui.selectedColor:=0x00034B6D
 			ui.alternateSelectedColor:=0x00C1C1FF  // 0x00E7F8FF
-			ui.backgroundSelectedColor:=Highlight text background color:K23:5  //0x004BA6F8
+			ui.backgroundSelectedColor:=Highlight text background color:K23:5  // 0x004BA6F8
 			ui.backgroundUnselectedColor:=Highlight text background color:K23:5  // 0x005A5A5A
 			
 			ui.selectedFillColor:="darkgray"
@@ -314,7 +315,6 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		ui.alert:="🚫"
 		ui.warning:="❗"
 		
-		
 		  // Only for data pannel [
 		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/user.png").platformPath;$p)
 		ui.user:=$p
@@ -346,7 +346,8 @@ $Lon_version:=Num:C11(Application version:C493)
 
 If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	
-	featuresFlags:=New object:C1471
+	featuresFlags:=New object:C1471(\
+		"with";Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))])))
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | TOOLS |
@@ -396,7 +397,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags._103850:=featuresFlags._101637  //  [MOBILE] Reload data from iOS with N-1 relation (Generate core data model with real relation)
 	featuresFlags._103411:=($Lon_version>=1750)  //   [MOBILE] Incremental synchronization
 	featuresFlags._103505:=($Lon_version>=1750)  //   [MOBILE] Add, Update and Save Actions
-	featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  //  Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds) 
+	featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  //  Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
 	featuresFlags.withRecursiveLink:=True:C214  //                       Enable recursive link management
 	
 	  // ________________________________________________________________________________________________________________________________
@@ -407,11 +408,11 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags._98145:=($Lon_version>=1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
-	featuresFlags.withWidgetActions:=featuresFlags._8858  // Enable widget actions
-	featuresFlags.withClasses:=featuresFlags._8858  // work with ui.classes
+	featuresFlags._98145:=($Lon_version>=1750)  //                   Replace, for data structure access, EXPORT STRUCTURE by ds
+	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
+	featuresFlags.withClasses:=featuresFlags._8858  //               Work with ui.classes
 	
-	featuresFlags.with:=Formula:C1597(Bool:C1537(featuresFlags["_"+String:C10($1)]))
+	featuresFlags.allowPictureAsActionParameters:=featuresFlags._8858  // #107932 - [Mobile] Allow to use picture as action parameters
 	
 End if 
 
@@ -526,8 +527,9 @@ If (Bool:C1537(featuresFlags.withNewFieldProperties))
 	commonValues.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
 	commonValues.defaultFieldBindingTypes[Is text:K8:3]:="text"
 	commonValues.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
-	  //commonValues.defaultFieldBindingTypes[Is BLOB]:="blob"
-	  //commonValues.defaultFieldBindingTypes[Is object]:="object"
+	
+	  // CommonValues.defaultFieldBindingTypes[Is BLOB]:="blob"
+	  // CommonValues.defaultFieldBindingTypes[Is object]:="object"
 	
 End if 
 

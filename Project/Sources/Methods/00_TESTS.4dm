@@ -1,11 +1,12 @@
 //%attributes = {}
 C_BOOLEAN:C305($b;$Boo_reset)
-C_LONGINT:C283($i;$Lon_build;$Lon_error;$Lon_result;$Lon_type;$Lon_value)
-C_LONGINT:C283($Lon_x)
+C_LONGINT:C283($i;$l;$Lon_build;$Lon_error;$Lon_result;$Lon_type)
+C_LONGINT:C283($Lon_value;$Lon_x)
 C_PICTURE:C286($p;$Pic_file;$Pic_scaled)
+C_POINTER:C301($r)
 C_REAL:C285($Num_)
 C_TEXT:C284($Dir_root;$File_;$t;$tt;$Txt_in;$Txt_ormula)
-C_TEXT:C284($Txt_result;$Txt_url)
+C_TEXT:C284($Txt_result)
 C_OBJECT:C1216($o;$Obj_folder;$Obj_formula;$Obj_new;$Obj_out;$Obj_result)
 C_OBJECT:C1216($Obj_target;$Obj_template;$oo;$ooo)
 C_COLLECTION:C1488($c;$cc;$Col_2;$Col_forms;$Col_host)
@@ -19,13 +20,30 @@ COMPONENT_INIT
 $tt:=""
 $cc:=New collection:C1472
 
-
 Case of 
 		
 		  //________________________________________
 	: (True:C214)
 		
-		C_POINTER:C301($r)
+		
+		$c:=New collection:C1472(New object:C1471("min";5);"mandatory")
+		$l:=$c.indexOf("mandatory")
+		$l:=$c.countValues("mandatory")
+		$b:=($c.countValues("mandatory")>0)
+		
+		$cc:=$c.extract("min")
+		$b:=($cc.length>0)
+		
+		
+		
+		$l:=$c.count("min")
+		$b:=($l>0)
+		
+		
+		
+		  //________________________________________
+	: (True:C214)
+		
 		$o:=New object:C1471("pointer";$r)
 		
 		If ($o.pointer#Null:C1517)
@@ -47,7 +65,6 @@ Case of
 				ASSERT:C1129(Not:C34(Is nil pointer:C315($o.pointer)))
 			End if 
 		End if 
-		
 		
 		  //________________________________________
 	: (True:C214)

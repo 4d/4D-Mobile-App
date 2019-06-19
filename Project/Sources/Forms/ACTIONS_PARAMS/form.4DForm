@@ -401,10 +401,11 @@
 					"events": [
 						"onClick"
 					],
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.mandatory",
+					"dataSource": "",
 					"focusable": true,
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"dataSourceTypeHint": "boolean"
 				},
 				"06_property_placeholder.border": {
 					"type": "rectangle",
@@ -459,17 +460,17 @@
 					"width": 78,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.min",
+					"dataSource": "",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
 					"dragging": "none",
-					"entryFilter": "&\"0-9;.;-\"",
+					"entryFilter": "&\"0-9;.;,;-\"",
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
-					"dataSourceTypeHint": "number",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"dataSourceTypeHint": "text"
 				},
 				"09_property_constraint_number_min.label": {
 					"type": "text",
@@ -498,14 +499,14 @@
 					"width": 78,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.max",
+					"dataSource": "",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
 					"dragging": "none",
 					"entryFilter": "&\"0-9;.;,;-\"",
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
-					"dataSourceTypeHint": "number",
+					"dataSourceTypeHint": "text",
 					"events": [
 						"onDataChange"
 					]

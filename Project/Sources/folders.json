@@ -1,583 +1,96 @@
 ﻿{
-	"MAIN": {
+	"DEVELOPER": {
 		"methods": [
-			"main_OBJECTS_HANDLER",
-			"COMPILER_main",
-			"main_Handler"
+			"DEVELOPER_OBJECTS_HANDLER",
+			"DEVELOPER_Handler",
+			"COMPILER_DEVELOPER"
 		],
 		"forms": [
-			"MAIN"
-		]
-	},
-	"tools": {
-		"groups": [
-			"methods"
-		],
-		"methods": [
-			"Check_entry"
-		]
-	},
-	"STRUCTURE": {
-		"methods": [
-			"structure_REPAIR",
-			"STRUCTURE_OBJECTS_HANDLER",
-			"structure_FIELD_LIST",
-			"COMPILER_STRUCTURES",
-			"STRUCTURE_TIPS",
-			"STRUCTURE_Handler",
-			"STRUCTURE_ACTION",
-			"STRUCTURE_CALLBACK",
-			"STRUCTURE_UPDATE",
-			"structure_TABLE_LIST"
-		],
-		"forms": [
-			"RELATED",
-			"STRUCTURE"
-		]
-	},
-	"col": {
-		"methods": [
-			"COMPILER_col",
-			"col_findObject",
-			"col_replaceString",
-			"test_colObj_distinct",
-			"test_col",
-			"col_distinctObject",
-			"col_valueToObject",
-			"col_notNull",
-			"col_formula"
-		]
-	},
-	"macOS": {
-		"methods": [
-			"XcodeProjInject",
-			"asset",
-			"simulator",
-			"plist_toObject",
-			"COMPILER_macOS",
-			"device",
-			"color",
-			"storyboard",
-			"teamId",
-			"unzip",
-			"capabilities",
-			"sdk",
-			"provisioningProfiles",
-			"plist",
-			"test_capabilities",
-			"certificate",
-			"git",
-			"Xcode",
-			"XcodeProj",
-			"Xcode_CheckInstall"
-		]
-	},
-	"Search": {
-		"methods": [
-			"COMPILER_search",
-			"Search_OBJECTS_HANDLER",
-			"search_HANDLER"
-		],
-		"forms": [
-			"SEARCH"
-		]
-	},
-	"FIELDS": {
-		"methods": [
-			"COMPILER_fields",
-			"fields_Handler",
-			"fields_LIST",
-			"fields_OBJECTS_HANDLER"
-		],
-		"forms": [
-			"FIELDS"
-		]
-	},
-	"env (not thread-safe)": {
-		"methods": [
-			"env_Component_availabe"
-		]
-	},
-	"backend": {
-		"methods": [
-			"Process_tags",
-			"http_NO_ERROR",
-			"Rest",
-			"TEMPLATE",
-			"COMPILER_backend",
-			"Process_tags_on_file",
-			"net",
-			"xloc",
-			"structure",
-			"formatString",
-			"getIcon",
-			"formatters",
-			"checkQueryFilter",
-			"dataSet",
-			"dump",
-			"templates",
-			"actions",
-			"catalog",
-			"findFirstPathComponentInCatalog",
-			"dataModel"
-		]
-	},
-	"mobile": {
-		"methods": [
-			"mobile_Check_installation",
-			"COMPILER_mobile",
-			"mobile_Project"
-		]
-	},
-	"widgets": {
-		"groups": [
-			"Search",
-			"Picture grid",
-			"Message",
-			"Localization"
-		]
-	},
-	"ui": {
-		"methods": [
-			"ui_MOVE",
-			"ui_colorScheme",
-			"ui_TOOLBAR_ALIGN",
-			"windowProperties",
-			"ui_BEST_SIZE",
-			"COMPILER_ui",
-			"ui_ALIGN_ON_BEST_SIZE",
-			"ui_listbox",
-			"ui_SET_ENABLED",
-			"ui_listboxPopUp",
-			"ui_CLASSES",
-			"ui_form",
-			"ui_widget",
-			"ui_SET_GEOMETRY"
-		]
-	},
-	"ACTIONS": {
-		"methods": [
-			"ACTIONS_OBJECTS_HANDLER",
-			"ACTIONS_UI",
-			"COMPILER_ACTIONS",
-			"ACTIONS_Handler"
-		],
-		"forms": [
-			"ACTIONS"
-		]
-	},
-	"doc": {
-		"methods": [
-			"doc_folderDigest",
-			"doc_Relative_path",
-			"doc_bytesToString",
-			"doc_resolveAlias",
-			"bench_doc",
-			"doc_Folder_writable",
-			"COMPILER_doc",
-			"doc_File",
-			"doc_catalog",
-			"doc_document",
-			"doc_checkFolderSeparator",
-			"doc_Absolute_path",
-			"doc_EMPTY_FOLDER",
-			"doc_UNLOCK_DIRECTORY",
-			"doc_Expand_path",
-			"test_doc",
-			"doc_Folder"
-		]
-	},
-	"TABLES": {
-		"methods": [
-			"tables_OBJECTS_HANDLER",
-			"COMPILER_tables",
-			"tables_Widget",
-			"tables_Handler"
-		],
-		"forms": [
-			"TABLES"
-		]
-	},
-	"lib": {
-		"groups": [
-			"tools",
-			"col",
-			"ui",
-			"doc",
-			"rgx (thread-safe)",
-			"str",
-			"panel",
-			"mnu",
-			"ob",
-			"err",
-			"_",
-			"dev",
-			"pic",
-			"ob_error",
-			"xml (thread-safe)",
-			"env (thread-safe)",
-			"WEB (Server)"
-		],
-		"methods": [
-			"LOG_EVENT",
-			"call_MESSAGE_DISPATCH"
-		]
-	},
-	"devMenu": {
-		"methods": [
-			"dev_Menu",
-			"file_Menu",
-			"menu_product",
-			"menu_file",
-			"win_CLOSE",
-			"menu_window",
-			"menu_goToPage"
-		]
-	},
-	"Picture grid": {
-		"forms": [
-			"PICTURE_GRID"
-		]
-	},
-	"[PROJECT]": {
-		"methods": [
-			"project_Defaults",
-			"PROJECT_OBJECT_HANDLER",
-			"project_MESSAGES",
-			"project_Load",
-			"project_Upgrade",
-			"project_UI_ALERT",
-			"COMPILER_project",
-			"project_Check_param",
-			"project_UI_DEFINITION",
-			"project_BUILD",
-			"project_SKIN",
-			"project_CLASSES",
-			"project_SAVE",
-			"project_Fix",
-			"PROJECT_HANDLER",
-			"project_Audit"
-		],
-		"forms": [
-			"PROJECT"
-		]
-	},
-	"rgx (thread-safe)": {
-		"methods": [
-			"rgx_Options",
-			"test_Rgx",
-			"rgx_NO_ERROR",
-			"Rgx_Get_Pattern",
-			"Compiler_Rgx",
-			"Rgx_SplitText",
-			"Rgx_MatchText",
-			"Rgx_SubstituteText",
-			"Rgx_match",
-			"Rgx_ExtractText"
-		]
-	},
-	"methods": {},
-	"[PANELS]": {
-		"groups": [
-			"MAIN",
-			"STRUCTURE",
-			"FIELDS",
-			"ACTIONS",
-			"TABLES",
-			"SOURCE",
-			"ORGANIZATION",
-			"PRODUCT",
-			"DATA",
-			"SERVER",
-			"ACTIONS_PARAMS",
-			"VIEWS",
 			"DEVELOPER"
 		]
 	},
-	"str": {
+	"VIEWS": {
 		"methods": [
-			"str_trim",
-			"str_INSERT",
-			"COMPILER_str",
-			"str_singleQuoted",
-			"str_localized",
-			"str_cmpVersion",
-			"str_URLEncode",
-			"str_URLDecode",
-			"str",
-			"str_format",
-			"str_date",
-			"str_wordWrap",
-			"str_equal",
-			"str_trimLeading",
-			"str_trimTrailing",
-			"test_str"
-		]
-	},
-	"panel": {
-		"methods": [
-			"panel_State",
-			"panel_INIT",
-			"panel_UI",
-			"panel_GOTO",
-			"panel_Count",
-			"COMPILER_panel",
-			"panel_Find_by_name",
-			"panel_COLLAPSE_EXPAND",
-			"panel_SET_FOCUS",
-			"panel_Form_common",
-			"panel_Objects",
-			"panel_TOUCH",
-			"panel_OPEN",
-			"panel_REFRESH"
+			"views_OBJECTS_HANDLER",
+			"tmpl_REMOVE",
+			"views_UPDATE",
+			"tmpl_TIPS",
+			"tmpl_compatibleType",
+			"tmpl_On_drag_over",
+			"tmpl_REORDER",
+			"views_preview",
+			"tmpl_ON_DROP",
+			"views_Handler",
+			"tmpl_cancel",
+			"COMPILER_views",
+			"views_fieldList",
+			"views_LAYOUT_PICKER"
 		],
 		"forms": [
-			"panel_template"
+			"VIEWS"
 		]
 	},
-	"SOURCE": {
-		"methods": [
-			"SOURCE_Handler",
-			"SOURCE_OBJECTS_HANDLER",
-			"COMPILER_SOURCE"
-		],
-		"forms": [
-			"SOURCE"
-		]
-	},
-	"ORGANIZATION": {
-		"methods": [
-			"COMPILER_ORGANIZATION",
-			"ORGANIZATION_OBJECTS_HANDLER",
-			"ORGANIZATION_Handler"
-		],
-		"forms": [
-			"ORGANIZATION"
-		]
-	},
-	"mnu": {
-		"methods": [
-			"mnu_defaultBar",
-			"COMPILER_mnu"
-		]
-	},
-	"PRODUCT": {
-		"methods": [
-			"PRODUCT_Handler",
-			"PRODUCT_OBJECTS_HANDLER",
-			"COMPILER_PRODUCT"
-		],
-		"forms": [
-			"PRODUCT"
-		]
-	},
-	"ob": {
-		"methods": [
-			"ob_noError",
-			"ob_parseDocument",
-			"ob_setProperties",
-			"ob_createPath",
-			"ob_MERGE",
-			"ob_testPath",
-			"ob_findProperty",
-			"ob_inHierarchy",
-			"sharedCollection",
-			"test_ob",
-			"ob_writeToDocument",
-			"sharedObject",
-			"COMPILER_ob",
-			"ob_deepMerge",
-			"ob_getByPath",
-			"ob_removeProperty",
-			"ob_equal"
-		]
-	},
-	"err": {
-		"methods": [
-			"FINALLY",
-			"TRY",
-			"hideError",
-			"noError",
-			"COMPILER_err",
-			"keepError",
-			"THROW",
-			"err_COMBINE",
-			"err_PUSH",
-			"CATCH",
-			"Continue"
-		]
-	},
-	"_": {
-		"methods": [
-			"test_",
-			"COMPILER__",
-			"_and",
-			"_bool",
-			"_choose",
-			"_or"
-		]
-	},
-	"_TEMPO": {
-		"tables": [
-			"Commands",
-			"NOT EXPOSED",
-			"NAME WITH SPACE",
-			"ALL_TYPES",
-			"Employes",
-			"Service",
-			"とてもとても長いフィールド",
-			"Table_2",
-			"Only primary key",
-			"NO FIELDS",
-			"Themes",
-			"Table_1",
-			"Table_3",
-			"__DeletedRecords"
-		],
-		"methods": [
-			"4DPop_TEST_Macros"
-		]
-	},
-	"Message": {
-		"methods": [
-			"COMPILER_message",
-			"POST_FORM_MESSAGE",
-			"WAIT_FORM_MESSAGE",
-			"DO_MESSAGE"
-		],
-		"forms": [
-			"MESSAGE"
-		]
-	},
-	"dev": {
-		"methods": [
-			"dev_assert",
-			"dev_Matrix",
-			"COMPILER_dev"
-		]
-	},
-	"DATA": {
-		"methods": [
-			"DATA_OBJECTS_HANDLER",
-			"COMPILER_DATA",
-			"DATA_Handler"
-		],
-		"forms": [
-			"DATA"
-		]
-	},
-	"__IN WORKS": {
+	"_[COMPONENT]": {
 		"groups": [
-			"devMenu"
+			"[EDITOR]",
+			"deliver",
+			"[PANELS]",
+			"[PROJECT]",
+			"macOS",
+			"mobile",
+			"backend"
 		],
 		"methods": [
-			"01_LASTBUILD",
-			"00_NEW",
-			"importData",
-			"killWorker",
-			"00_TESTS",
-			"_w_actions",
-			"00_OPEN"
-		],
-		"forms": [
-			"LAUNCHSCREEN",
-			"UI",
-			"00_TESTS",
-			"Form1",
-			"APP_STORE",
-			"_w_VIEWS",
-			"NO_PUBLISHED_TABLES",
-			"ITUNE"
+			"COMPONENT_Pathname",
+			"BUILD",
+			"COMPILER_COMPONENT",
+			"COMPONENT_DEFINE_TOOLS",
+			"COMPONENT_INIT",
+			"COMPONENT_Infos"
 		]
 	},
-	"_[API]": {
+	"[EDITOR]": {
 		"methods": [
-			"C_NEW_MOBILE_PROJECT",
-			"COMPILER_API",
-			"C_OPEN_MOBILE_PROJECT",
-			"mobileUnit"
-		]
-	},
-	"4dUnit": {
-		"tables": [
-			"UNIT_0",
-			"UNIT_1",
-			"UNIT_2",
-			"UNIT_3"
-		],
-		"methods": [
-			"test_structureCatalog",
-			"test_catalog",
-			"test_structure"
-		]
-	},
-	"deliver": {
-		"methods": [
-			"itunes_altool",
-			"itunes_transporter",
-			"itunes_lookup",
-			"COMPILER_deliver"
-		]
-	},
-	"pic": {
-		"methods": [
-			"COMPILER_pic",
-			"pic_isTransparent"
-		]
-	},
-	"ob_error": {
-		"methods": [
-			"ob_error_add",
-			"ob_warning_add",
-			"ob_error_has",
-			"ob_error_string",
-			"ob_error_combine",
-			"test_ob_error",
-			"COMPILER_ob_error"
-		]
-	},
-	"xml (thread-safe)": {
-		"methods": [
-			"xml_findElement",
-			"xml_encode",
-			"xml_refToObject",
-			"xml_attributes",
-			"xml_NO_ERROR",
-			"xml_elementToObject",
-			"xml_fileToObject",
-			"xml_findByName",
-			"COMPILER_xml"
-		]
-	},
-	"classes": {
-		"methods": [
-			"subform",
-			"button",
-			"picture",
-			"widget",
-			"window",
-			"menu",
-			"database",
-			"COMPILER_classes",
-			"group",
-			"thermometer",
-			"listbox",
-			"static"
-		]
-	},
-	"SERVER": {
-		"methods": [
-			"SERVER_Handler",
-			"COMPILER_SERVER",
-			"SERVER_OBJECTS_HANDLER"
+			"editor_OBJECTS_HANDLER",
+			"editor_PROJECT_AUDIT",
+			"editor_MENU_ACTIONS",
+			"COMPILER_editor",
+			"editor_INIT",
+			"editor_LoadIcons",
+			"editor_ui_LISTBOX",
+			"editor_MESSAGES",
+			"editor_Locked",
+			"editor_CALLBACK",
+			"RIBBON",
+			"EDITOR_ON_ACTIVATE",
+			"editor_RESUME",
+			"editor_PAGE",
+			"editor_Catalog",
+			"editor_HANDLER",
+			"editor_Preferences"
 		],
 		"forms": [
-			"SERVER"
+			"TITLE",
+			"WELCOME",
+			"RIBBON",
+			"EDITOR"
 		]
 	},
-	"Localization": {
+	"WEB (Server)": {
+		"methods": [
+			"COMPILER_WEB",
+			"WEB_Test"
+		]
+	},
+	"ACTIONS_PARAMS": {
+		"methods": [
+			"COMPILER_ACTIONS_PARAMS",
+			"ACTIONS_PARAMS_UI",
+			"ACTIONS_PARAMS_Handler",
+			"ACTIONS_PARAMS_OBJECTS_HANDLER"
+		],
 		"forms": [
-			"LOCALIZATION"
+			"ACTIONS_PARAMS"
 		]
 	},
 	"__o_OBSOLETES": {
@@ -611,98 +124,591 @@
 			"COMPILER_env"
 		]
 	},
-	"ACTIONS_PARAMS": {
+	"Localization": {
+		"forms": [
+			"LOCALIZATION"
+		]
+	},
+	"SERVER": {
 		"methods": [
-			"COMPILER_ACTIONS_PARAMS",
-			"ACTIONS_PARAMS_UI",
-			"ACTIONS_PARAMS_Handler",
-			"ACTIONS_PARAMS_OBJECTS_HANDLER"
+			"SERVER_Handler",
+			"COMPILER_SERVER",
+			"SERVER_OBJECTS_HANDLER"
 		],
 		"forms": [
-			"ACTIONS_PARAMS"
+			"SERVER"
 		]
 	},
-	"WEB (Server)": {
+	"classes": {
 		"methods": [
-			"COMPILER_WEB",
-			"WEB_Test"
+			"button",
+			"picture",
+			"widget",
+			"window",
+			"menu",
+			"subform",
+			"database",
+			"COMPILER_classes",
+			"group",
+			"thermometer",
+			"listbox",
+			"static"
 		]
 	},
-	"[EDITOR]": {
+	"ob_error": {
 		"methods": [
-			"editor_OBJECTS_HANDLER",
-			"editor_PROJECT_AUDIT",
-			"editor_MENU_ACTIONS",
-			"COMPILER_editor",
-			"editor_INIT",
-			"editor_LoadIcons",
-			"editor_ui_LISTBOX",
-			"editor_MESSAGES",
-			"editor_Locked",
-			"editor_CALLBACK",
-			"RIBBON",
-			"EDITOR_ON_ACTIVATE",
-			"editor_RESUME",
-			"editor_PAGE",
-			"editor_Catalog",
-			"editor_HANDLER",
-			"editor_Preferences"
+			"ob_error_add",
+			"ob_warning_add",
+			"ob_error_has",
+			"ob_error_string",
+			"ob_error_combine",
+			"test_ob_error",
+			"COMPILER_ob_error"
+		]
+	},
+	"xml (thread-safe)": {
+		"methods": [
+			"xml_findElement",
+			"xml_encode",
+			"xml_refToObject",
+			"xml_attributes",
+			"xml_NO_ERROR",
+			"xml_elementToObject",
+			"xml_fileToObject",
+			"xml_findByName",
+			"COMPILER_xml"
+		]
+	},
+	"pic": {
+		"methods": [
+			"COMPILER_pic",
+			"pic_isTransparent"
+		]
+	},
+	"deliver": {
+		"methods": [
+			"itunes_altool",
+			"itunes_transporter",
+			"itunes_lookup",
+			"COMPILER_deliver"
+		]
+	},
+	"4dUnit": {
+		"tables": [
+			"UNIT_0",
+			"UNIT_1",
+			"UNIT_2",
+			"UNIT_3"
 		],
-		"forms": [
-			"TITLE",
-			"WELCOME",
-			"RIBBON",
-			"EDITOR"
+		"methods": [
+			"test_structureCatalog",
+			"test_catalog",
+			"test_structure"
 		]
 	},
-	"_[COMPONENT]": {
+	"__TEMPO": {
 		"groups": [
-			"macOS",
-			"backend",
-			"mobile",
-			"[PROJECT]",
-			"[PANELS]",
-			"deliver",
-			"[EDITOR]"
+			"devMenu"
 		],
 		"methods": [
-			"COMPONENT_Pathname",
-			"BUILD",
-			"COMPILER_COMPONENT",
-			"COMPONENT_DEFINE_TOOLS",
-			"COMPONENT_INIT",
-			"COMPONENT_Infos"
-		]
-	},
-	"VIEWS": {
-		"methods": [
-			"views_OBJECTS_HANDLER",
-			"tmpl_REMOVE",
-			"views_UPDATE",
-			"tmpl_TIPS",
-			"tmpl_compatibleType",
-			"tmpl_On_drag_over",
-			"tmpl_REORDER",
-			"views_preview",
-			"tmpl_ON_DROP",
-			"views_Handler",
-			"tmpl_cancel",
-			"COMPILER_views",
-			"views_fieldList",
-			"views_LAYOUT_PICKER"
+			"01_LASTBUILD",
+			"importData",
+			"killWorker",
+			"_w_actions"
 		],
 		"forms": [
-			"VIEWS"
+			"LAUNCHSCREEN",
+			"UI",
+			"00_TESTS",
+			"Form1",
+			"APP_STORE",
+			"_w_VIEWS",
+			"NO_PUBLISHED_TABLES",
+			"ITUNE"
 		]
 	},
-	"DEVELOPER": {
+	"_[API]": {
 		"methods": [
-			"DEVELOPER_OBJECTS_HANDLER",
-			"DEVELOPER_Handler",
-			"COMPILER_DEVELOPER"
+			"C_NEW_MOBILE_PROJECT",
+			"COMPILER_API",
+			"C_OPEN_MOBILE_PROJECT",
+			"mobileUnit"
+		]
+	},
+	"DATA": {
+		"methods": [
+			"DATA_OBJECTS_HANDLER",
+			"COMPILER_DATA",
+			"DATA_Handler"
 		],
 		"forms": [
-			"DEVELOPER"
+			"DATA"
+		]
+	},
+	"dev": {
+		"methods": [
+			"dev_assert",
+			"dev_Matrix",
+			"COMPILER_dev"
+		]
+	},
+	"_TEMPO": {
+		"tables": [
+			"Commands",
+			"NOT EXPOSED",
+			"NAME WITH SPACE",
+			"ALL_TYPES",
+			"Employes",
+			"Service",
+			"とてもとても長いフィールド",
+			"Table_2",
+			"Only primary key",
+			"NO FIELDS",
+			"Themes",
+			"Table_1",
+			"Table_3",
+			"__DeletedRecords"
+		],
+		"methods": [
+			"4DPop_TEST_Macros"
+		]
+	},
+	"_": {
+		"methods": [
+			"test_",
+			"COMPILER__",
+			"_and",
+			"_bool",
+			"_choose",
+			"_or"
+		]
+	},
+	"Message": {
+		"methods": [
+			"COMPILER_message",
+			"POST_FORM_MESSAGE",
+			"WAIT_FORM_MESSAGE",
+			"DO_MESSAGE"
+		],
+		"forms": [
+			"MESSAGE"
+		]
+	},
+	"err": {
+		"methods": [
+			"FINALLY",
+			"TRY",
+			"hideError",
+			"noError",
+			"COMPILER_err",
+			"keepError",
+			"THROW",
+			"err_COMBINE",
+			"err_PUSH",
+			"CATCH",
+			"Continue"
+		]
+	},
+	"ob": {
+		"methods": [
+			"ob_noError",
+			"ob_parseDocument",
+			"ob_setProperties",
+			"ob_createPath",
+			"ob_MERGE",
+			"ob_testPath",
+			"ob_findProperty",
+			"ob_inHierarchy",
+			"sharedCollection",
+			"test_ob",
+			"ob_writeToDocument",
+			"sharedObject",
+			"COMPILER_ob",
+			"ob_deepMerge",
+			"ob_getByPath",
+			"ob_removeProperty",
+			"ob_equal"
+		]
+	},
+	"PRODUCT": {
+		"methods": [
+			"PRODUCT_Handler",
+			"PRODUCT_OBJECTS_HANDLER",
+			"COMPILER_PRODUCT"
+		],
+		"forms": [
+			"PRODUCT"
+		]
+	},
+	"ORGANIZATION": {
+		"methods": [
+			"COMPILER_ORGANIZATION",
+			"ORGANIZATION_OBJECTS_HANDLER",
+			"ORGANIZATION_Handler"
+		],
+		"forms": [
+			"ORGANIZATION"
+		]
+	},
+	"mnu": {
+		"methods": [
+			"mnu_defaultBar",
+			"COMPILER_mnu"
+		]
+	},
+	"SOURCE": {
+		"methods": [
+			"SOURCE_Handler",
+			"SOURCE_OBJECTS_HANDLER",
+			"COMPILER_SOURCE"
+		],
+		"forms": [
+			"SOURCE"
+		]
+	},
+	"panel": {
+		"methods": [
+			"panel_State",
+			"panel_INIT",
+			"panel_UI",
+			"panel_GOTO",
+			"panel_Count",
+			"COMPILER_panel",
+			"panel_Find_by_name",
+			"panel_COLLAPSE_EXPAND",
+			"panel_SET_FOCUS",
+			"panel_Form_common",
+			"panel_Objects",
+			"panel_TOUCH",
+			"panel_OPEN",
+			"panel_REFRESH"
+		],
+		"forms": [
+			"panel_template"
+		]
+	},
+	"[PANELS]": {
+		"groups": [
+			"DEVELOPER",
+			"VIEWS",
+			"SERVER",
+			"DATA",
+			"PRODUCT",
+			"ORGANIZATION",
+			"SOURCE",
+			"TABLES",
+			"STRUCTURE",
+			"FIELDS",
+			"MAIN"
+		]
+	},
+	"str": {
+		"methods": [
+			"str_trim",
+			"str_INSERT",
+			"COMPILER_str",
+			"str_singleQuoted",
+			"str_localized",
+			"str_cmpVersion",
+			"str_URLEncode",
+			"str_URLDecode",
+			"str",
+			"str_format",
+			"str_date",
+			"str_wordWrap",
+			"str_equal",
+			"str_trimLeading",
+			"str_trimTrailing",
+			"test_str"
+		]
+	},
+	"methods": {},
+	"rgx (thread-safe)": {
+		"methods": [
+			"rgx_Options",
+			"test_Rgx",
+			"rgx_NO_ERROR",
+			"Rgx_Get_Pattern",
+			"Compiler_Rgx",
+			"Rgx_SplitText",
+			"Rgx_MatchText",
+			"Rgx_SubstituteText",
+			"Rgx_match",
+			"Rgx_ExtractText"
+		]
+	},
+	"[PROJECT]": {
+		"methods": [
+			"project_Defaults",
+			"PROJECT_OBJECT_HANDLER",
+			"project_MESSAGES",
+			"project_Load",
+			"project_Upgrade",
+			"project_UI_ALERT",
+			"COMPILER_project",
+			"project_Check_param",
+			"project_UI_DEFINITION",
+			"project_BUILD",
+			"project_SKIN",
+			"project_CLASSES",
+			"project_SAVE",
+			"project_Fix",
+			"PROJECT_HANDLER",
+			"project_Audit"
+		],
+		"forms": [
+			"PROJECT"
+		]
+	},
+	"Picture grid": {
+		"forms": [
+			"PICTURE_GRID"
+		]
+	},
+	"devMenu": {
+		"methods": [
+			"dev_Menu",
+			"file_Menu",
+			"menu_product",
+			"menu_file",
+			"win_CLOSE",
+			"menu_window",
+			"menu_goToPage"
+		]
+	},
+	"lib": {
+		"groups": [
+			"WEB (Server)",
+			"env (thread-safe)",
+			"ob_error",
+			"xml (thread-safe)",
+			"pic",
+			"dev",
+			"_",
+			"err",
+			"ob",
+			"mnu",
+			"panel",
+			"str",
+			"rgx (thread-safe)",
+			"doc",
+			"ui",
+			"col",
+			"tools"
+		],
+		"methods": [
+			"LOG_EVENT",
+			"call_MESSAGE_DISPATCH"
+		]
+	},
+	"TABLES": {
+		"methods": [
+			"tables_OBJECTS_HANDLER",
+			"COMPILER_tables",
+			"tables_Widget",
+			"tables_Handler"
+		],
+		"forms": [
+			"TABLES"
+		]
+	},
+	"doc": {
+		"methods": [
+			"doc_folderDigest",
+			"doc_Relative_path",
+			"doc_bytesToString",
+			"doc_resolveAlias",
+			"bench_doc",
+			"doc_Folder_writable",
+			"COMPILER_doc",
+			"doc_File",
+			"doc_catalog",
+			"doc_document",
+			"doc_checkFolderSeparator",
+			"doc_Absolute_path",
+			"doc_EMPTY_FOLDER",
+			"doc_UNLOCK_DIRECTORY",
+			"doc_Expand_path",
+			"test_doc",
+			"doc_Folder"
+		]
+	},
+	"ACTIONS": {
+		"methods": [
+			"ACTIONS_OBJECTS_HANDLER",
+			"ACTIONS_UI",
+			"COMPILER_ACTIONS",
+			"ACTIONS_Handler"
+		],
+		"forms": [
+			"ACTIONS"
+		]
+	},
+	"ui": {
+		"methods": [
+			"ui_MOVE",
+			"ui_colorScheme",
+			"ui_TOOLBAR_ALIGN",
+			"windowProperties",
+			"ui_BEST_SIZE",
+			"COMPILER_ui",
+			"ui_ALIGN_ON_BEST_SIZE",
+			"ui_listbox",
+			"ui_SET_ENABLED",
+			"ui_listboxPopUp",
+			"ui_CLASSES",
+			"ui_form",
+			"ui_widget",
+			"ui_SET_GEOMETRY"
+		]
+	},
+	"macOS": {
+		"methods": [
+			"XcodeProjInject",
+			"asset",
+			"simulator",
+			"plist_toObject",
+			"COMPILER_macOS",
+			"device",
+			"color",
+			"storyboard",
+			"teamId",
+			"unzip",
+			"capabilities",
+			"sdk",
+			"provisioningProfiles",
+			"plist",
+			"test_capabilities",
+			"certificate",
+			"git",
+			"Xcode",
+			"XcodeProj",
+			"Xcode_CheckInstall"
+		]
+	},
+	"col": {
+		"methods": [
+			"COMPILER_col",
+			"col_findObject",
+			"col_replaceString",
+			"test_colObj_distinct",
+			"test_col",
+			"col_distinctObject",
+			"col_valueToObject",
+			"col_notNull",
+			"col_formula"
+		]
+	},
+	"STRUCTURE": {
+		"methods": [
+			"structure_REPAIR",
+			"STRUCTURE_OBJECTS_HANDLER",
+			"structure_FIELD_LIST",
+			"COMPILER_STRUCTURES",
+			"STRUCTURE_TIPS",
+			"STRUCTURE_Handler",
+			"STRUCTURE_ACTION",
+			"STRUCTURE_CALLBACK",
+			"STRUCTURE_UPDATE",
+			"structure_TABLE_LIST"
+		],
+		"forms": [
+			"RELATED",
+			"STRUCTURE"
+		]
+	},
+	"widgets": {
+		"groups": [
+			"Localization",
+			"Message",
+			"Picture grid",
+			"Search"
+		]
+	},
+	"mobile": {
+		"methods": [
+			"mobile_Check_installation",
+			"COMPILER_mobile",
+			"mobile_Project"
+		]
+	},
+	"backend": {
+		"methods": [
+			"Process_tags",
+			"http_NO_ERROR",
+			"Rest",
+			"TEMPLATE",
+			"COMPILER_backend",
+			"Process_tags_on_file",
+			"net",
+			"xloc",
+			"structure",
+			"formatString",
+			"getIcon",
+			"formatters",
+			"checkQueryFilter",
+			"dataSet",
+			"dump",
+			"templates",
+			"actions",
+			"catalog",
+			"findFirstPathComponentInCatalog",
+			"dataModel"
+		]
+	},
+	"FIELDS": {
+		"methods": [
+			"COMPILER_fields",
+			"fields_Handler",
+			"fields_LIST",
+			"fields_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"FIELDS"
+		]
+	},
+	"env (not thread-safe)": {
+		"methods": [
+			"env_Component_availabe"
+		]
+	},
+	"Search": {
+		"methods": [
+			"COMPILER_search",
+			"Search_OBJECTS_HANDLER",
+			"search_HANDLER"
+		],
+		"forms": [
+			"SEARCH"
+		]
+	},
+	"tools": {
+		"groups": [
+			"methods"
+		],
+		"methods": [
+			"Check_entry"
+		]
+	},
+	"MAIN": {
+		"methods": [
+			"main_OBJECTS_HANDLER",
+			"COMPILER_main",
+			"main_Handler"
+		],
+		"forms": [
+			"MAIN"
+		]
+	},
+	"__IN WORKS": {
+		"groups": [
+			"ACTIONS_PARAMS",
+			"ACTIONS"
+		],
+		"methods": [
+			"00_NEW",
+			"00_TESTS",
+			"00_OPEN"
 		]
 	},
 	"trash": {}
