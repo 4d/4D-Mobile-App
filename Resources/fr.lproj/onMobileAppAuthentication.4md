@@ -1,5 +1,4 @@
-﻿  //%attributes = {"lang":"fr"}
-C_OBJET:C1216($0;$response)
+﻿C_OBJET:C1216($0;$response)
 C_OBJET:C1216($1;$request)
 
 $request:=$1  // Informations fournies par l'application mobile

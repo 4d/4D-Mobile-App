@@ -1,4 +1,3 @@
-//%attributes = {"lang":"fr"}
 <!--#4DCODE  
   ARRAY TEXT:C222(t;0)
   COLLECTION TO ARRAY:C1562($4DEVAL($1);t)  
