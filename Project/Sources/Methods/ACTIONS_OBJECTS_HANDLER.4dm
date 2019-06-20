@@ -11,11 +11,11 @@
   // Declarations
 C_LONGINT:C283($0)
 
-C_BOOLEAN:C305($Boo_edit)
 C_LONGINT:C283($i;$l;$Lon_parameters)
 C_PICTURE:C286($p)
-C_TEXT:C284($Mnu_delete;$Mnu_edit;$Mnu_pop;$t;$tt)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_table)
+C_TEXT:C284($Mnu_pop;$t)
+C_OBJECT:C1216($o;$Obj_add;$Obj_context;$Obj_delete;$Obj_edit;$Obj_form)
+C_OBJECT:C1216($Obj_popup;$Obj_table;$oo)
 C_COLLECTION:C1488($c;$cc;$Col_fields)
 
 If (False:C215)
@@ -69,6 +69,8 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Losing Focus:K2:8)
 				
+				  //#TO_DO: Add a flag to differentiate the loss of focus from the list
+				  // of the focus loss of the cell edition
 				  //$Obj_context.listUI()
 				
 				  //______________________________________________________
@@ -171,40 +173,28 @@ Case of
 						$0:=0
 						
 						  //……………………………………………………………………………………………………
-					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.table].number)
+					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.table].number)  // Display published table menu
 						
-						  // Display published table menu
-						$Mnu_pop:=Create menu:C408
+						$Obj_popup:=menu 
 						
 						For each ($t;Form:C1466.dataModel)
 							
-							APPEND MENU ITEM:C411($Mnu_pop;Form:C1466.dataModel[$t].name)
-							SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;$t)
+							$Obj_popup.append(Form:C1466.dataModel[$t].name;$t;Num:C11($Obj_context.current.tableNumber)=Num:C11($t))
 							
-							If (Num:C11($Obj_context.current.tableNumber)=Num:C11($t))
-								
-								SET MENU ITEM MARK:C208($Mnu_pop;-1;Char:C90(18))
-								
-							End if 
 						End for each 
 						
-						$t:=$Obj_form.actions.popup(New object:C1471("menu";$Mnu_pop)).choice
-						
-						If (Length:C16($t)>0)
+						If ($Obj_form.actions.popup($Obj_popup).selected)
 							
-							$Obj_context.current.tableNumber:=Num:C11($t)
-							
+							$Obj_context.current.tableNumber:=Num:C11($Obj_popup.choice)
 							$Obj_form.form.refresh()
-							
 							project.save()
 							
 						End if 
 						
 						  //……………………………………………………………………………………………………
-					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.scope].number)
+					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.scope].number)  // Display scope menu
 						
-						  // Display scope menu
-						$Mnu_pop:=Create menu:C408
+						$Obj_popup:=menu 
 						
 						Repeat 
 							
@@ -213,29 +203,30 @@ Case of
 							
 							If (Bool:C1537(OK))
 								
-								APPEND MENU ITEM:C411($Mnu_pop;":xliff:"+$t)
-								SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;$t)
+								$Obj_popup.append(":xliff:"+$t;$t;String:C10($Obj_context.current.scope)=$t)
 								
-								If (String:C10($Obj_context.current.scope)=$t)
-									
-									SET MENU ITEM MARK:C208($Mnu_pop;-1;Char:C90(18))
-									
-								End if 
-								
-								If ($i=1) & (String:C10($Obj_context.current.style)="destructive")
-									
-									DISABLE MENU ITEM:C150($Mnu_pop;-1)
-									
-								End if 
+								Case of 
+										
+										  // .............................
+									: ($i=1)\
+										 & (String:C10($Obj_context.current.preset)="suppression")
+										
+										$Obj_popup.disable()
+										
+										  // .............................
+									: ($i=2)\
+										 & (String:C10($Obj_context.current.preset)="adding")
+										
+										$Obj_popup.disable()
+										
+										  // .............................
+								End case 
 							End if 
 						Until (OK=0)
 						
-						$t:=$Obj_form.actions.popup(New object:C1471("menu";$Mnu_pop)).choice
-						
-						If (Length:C16($t)>0)
+						If ($Obj_form.actions.popup($Obj_popup).selected)
 							
-							$Obj_context.current.scope:=$t
-							
+							$Obj_context.current.scope:=$Obj_popup.choice
 							project.save()
 							
 						End if 
@@ -252,104 +243,143 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.addAction.name)
+	: ($Obj_form.form.currentWidget=$Obj_form.add.name)
 		
 		If ($Obj_form.form.event=On Alternative Click:K2:36)
 			
-			$Mnu_edit:=Create menu:C408
-			$Mnu_delete:=Create menu:C408
+			$Obj_popup:=menu .append(":xliff:newAction";"new").line()
 			
-			$Mnu_pop:=Create menu:C408
-			APPEND MENU ITEM:C411($Mnu_pop;":xliff:newAction")
-			SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"new")
+			$Obj_add:=menu 
 			
-			APPEND MENU ITEM:C411($Mnu_pop;"-")
+			$Obj_popup.append(":xliff:addActionFor";$Obj_add)
 			
-			APPEND MENU ITEM:C411($Mnu_pop;":xliff:editActionFor";$Mnu_edit;1)
+			$Obj_edit:=menu 
 			
-			RELEASE MENU:C978($Mnu_edit)
+			$Obj_popup.append(":xliff:editActionFor";$Obj_edit)
 			
-			APPEND MENU ITEM:C411($Mnu_pop;":xliff:deleteActionFor";$Mnu_delete;1)
+			$Obj_delete:=menu 
 			
-			RELEASE MENU:C978($Mnu_delete)
+			$Obj_popup.append(":xliff:deleteActionFor";$Obj_delete)
 			
 			For each ($t;Form:C1466.dataModel)
 				
-				APPEND MENU ITEM:C411($Mnu_edit;Form:C1466.dataModel[$t].name)
-				SET MENU ITEM PARAMETER:C1004($Mnu_edit;-1;"edit_"+$t)
-				
-				APPEND MENU ITEM:C411($Mnu_delete;Form:C1466.dataModel[$t].name)
-				SET MENU ITEM PARAMETER:C1004($Mnu_delete;-1;"delete_"+$t)
+				$Obj_add.append(Form:C1466.dataModel[$t].name;"add_"+$t)
+				$Obj_edit.append(Form:C1466.dataModel[$t].name;"edit_"+$t)
+				$Obj_delete.append(Form:C1466.dataModel[$t].name;"delete_"+$t)
 				
 			End for each 
 			
-			$t:=Dynamic pop up menu:C1006($Mnu_pop)
-			RELEASE MENU:C978($Mnu_pop)
+			$o:=$Obj_form.add.getCoordinates()
 			
-			If (Length:C16($t)#0)
-				
-				Case of 
-						
-						  //______________________________________________________
-					: ($t="new")
-						
-						$Obj_form.form.event:=On Clicked:K2:4  // Default action
-						
-						  //______________________________________________________
-					Else 
-						
-						  // create edit/delete action:
-						
-						$Boo_edit:=($t="edit_@")
-						$t:=Replace string:C233($t;"edit_";"")
-						$t:=Replace string:C233($t;"delete_";"")
-						
-						ob_createPath (Form:C1466;"actions";Is collection:K8:32)
-						
-						$Obj_table:=Form:C1466.dataModel[$t]
-						
-						If ($Boo_edit)
+			$Obj_popup.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom)
+			
+			CLEAR VARIABLE:C89($o)
+			
+			Case of 
+					
+					  //______________________________________________________
+				: (Not:C34($Obj_popup.selected))
+					
+					  //______________________________________________________
+				: ($Obj_popup.choice="new")
+					
+					$Obj_form.form.event:=On Clicked:K2:4  // Default action
+					
+					  //______________________________________________________
+				Else 
+					
+					$t:=$Obj_popup.choice
+					
+					$Obj_popup.edit:=($t="edit_@")
+					$Obj_popup.delete:=($t="delete_@")
+					$Obj_popup.add:=($t="add_@")
+					
+					$t:=Replace string:C233($t;"edit_";"")
+					$t:=Replace string:C233($t;"delete_";"")
+					$t:=Replace string:C233($t;"add_";"")
+					$Obj_popup.table:=$t
+					$Obj_popup.tableNumber:=Num:C11($t)
+					
+					Case of 
 							
-							$c:=New collection:C1472
+							  //……………………………………………………………………
+						: ($Obj_popup.edit)
 							
+							$Obj_popup.preset:="edition"
+							$Obj_popup.prefix:="edit"
+							$Obj_popup.icon:="actions/Edit.svg"
+							$Obj_popup.scope:="currentRecord"
+							$Obj_popup.label:=Get localized string:C991("edit...")
 							READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Edit.svg").platformPath;$p)
-							CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
 							
-							$tt:="edit"+str (formatString ("label";$Obj_table.name)).uperCamelCase()
+							  //……………………………………………………………………
+						: ($Obj_popup.add)
 							
-							Repeat 
-								
-								$c:=Form:C1466.actions.query("name=:1";$tt)
-								
-								If ($c.length>0)
-									
-									$i:=$i+1+Num:C11($i=0)
-									$tt:="edit"+str (formatString ("label";$Obj_table.name)).uperCamelCase()+String:C10($i)
-									
-								End if 
-							Until ($c.length=0)
+							$Obj_popup.preset:="adding"
+							$Obj_popup.prefix:="add"
+							$Obj_popup.icon:="actions 2/Add.svg"
+							$Obj_popup.scope:="table"
+							$Obj_popup.label:=Get localized string:C991("add...")
+							READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions 2/Add.svg").platformPath;$p)
 							
-							Form:C1466.actions.push(New object:C1471(\
-								"icon";"actions/Edit.svg";\
-								"$icon";$p;\
-								"tableNumber";Num:C11($t);\
-								"scope";"currentRecord";\
-								"name";$tt;\
-								"shortLabel";Get localized string:C991("edit...");\
-								"label";Get localized string:C991("edit...");\
-								"parameters";$c))
+							  //……………………………………………………………………
+						: ($Obj_popup.delete)
 							
-							  // Parameters               Description
-							  //  name                    Action ID
-							  //  short label             Displayed short label in iOS app
-							  //  long label              Displayed long label in iOS app
-							  //  type                    Type selection will define the displayed keyboard/picker and format in the iOS app
-							  //  input constraint        Define a specific input value range for example
-							  //  choice list             Define a choice list (same principle as formatter using json with key value correspondance)
-							  //  placeholder             Define placeholder to be displayed in iOS app
-							  //  mandatory fields        Define if field is mandatory => fields followed by a star or red fields border in iOS app
-							  //  default(field)          Default value definition
-							  //  format                  Display/Enter format
+							$Obj_popup.preset:="suppression"
+							$Obj_popup.prefix:="delete"
+							$Obj_popup.icon:="actions/Delete.svg"
+							$Obj_popup.scope:="currentRecord"
+							$Obj_popup.label:=Get localized string:C991("remove")
+							READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Delete.svg").platformPath;$p)
+							
+							  //……………………………………………………………………
+					End case 
+					
+					CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
+					
+					$Obj_table:=Form:C1466.dataModel[$Obj_popup.table]
+					
+					  // Generate a unique name
+					$t:=str (formatString ("label";$Obj_table.name)).uperCamelCase()
+					
+					$Obj_popup.name:=$Obj_popup.prefix+$t
+					
+					Repeat 
+						
+						$c:=Form:C1466.actions.query("name=:1";$Obj_popup.name)
+						
+						If ($c.length>0)
+							
+							$i:=$i+1+Num:C11($i=0)
+							$Obj_popup.name:=$Obj_popup.prefix+$t+String:C10($i)
+							
+						End if 
+					Until ($c.length=0)
+					
+					  // Ensure the action collection exists
+					ob_createPath (Form:C1466;"actions";Is collection:K8:32)
+					
+					$o:=New object:C1471(\
+						"preset";$Obj_popup.preset;\
+						"icon";$Obj_popup.icon;\
+						"$icon";$p;\
+						"tableNumber";$Obj_popup.tableNumber;\
+						"scope";$Obj_popup.scope;\
+						"name";$Obj_popup.name;\
+						"shortLabel";$Obj_popup.label;\
+						"label";$Obj_popup.label)
+					
+					Case of 
+							
+							  //……………………………………………………………………
+						: ($Obj_popup.delete)
+							
+							$o.style:="destructive"
+							
+							  //……………………………………………………………………
+						Else 
+							
+							$o.parameters:=New collection:C1472
 							
 							$Col_fields:=catalog ("fields";New object:C1471("tableName";$Obj_table.name)).fields
 							
@@ -364,19 +394,24 @@ Case of
 										
 										If (featuresFlags.with("allowPictureAsActionParameters"))
 											
-											$o:=New object:C1471(\
+											$oo:=New object:C1471(\
 												"fieldNumber";$cc[0].fieldNumber;\
 												"name";str ($Obj_table[$t].name).uperCamelCase();\
 												"label";$Obj_table[$t].label;\
 												"shortLabel";$Obj_table[$t].shortLabel;\
-												"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
-												"defaultField";formatString ("field-name";$Obj_table[$t].name))
+												"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType))
+											
+											If ($Obj_popup.edit)
+												
+												$oo.defaultField:=formatString ("field-name";$Obj_table[$t].name)
+												
+											End if 
 											
 										Else 
 											
 											If ($cc[0].fieldType#Is picture:K8:10)
 												
-												$o:=New object:C1471(\
+												$oo:=New object:C1471(\
 													"fieldNumber";$cc[0].fieldNumber;\
 													"name";str ($Obj_table[$t].name).uperCamelCase();\
 													"label";$Obj_table[$t].label;\
@@ -389,10 +424,11 @@ Case of
 										
 										If (Bool:C1537($cc[0].mandatory))
 											
-											$o.rules:=New collection:C1472("mandatory")
+											$oo.rules:=New collection:C1472("mandatory")
 											
 										End if 
 										
+										  // Preset formats
 										Case of 
 												
 												  //……………………………………………………………………
@@ -400,22 +436,17 @@ Case of
 												 | ($cc[0].fieldType=Is longint:K8:6)\
 												 | ($cc[0].fieldType=Is integer 64 bits:K8:25)
 												
-												$o.format:="integer"
+												$oo.format:="integer"
 												
 												  //……………………………………………………………………
-											: ($o.type="date")
+											: ($oo.type="date")
 												
-												$o.format:="dateShort"
-												
-												  //……………………………………………………………………
-											: ($o.type="time")
-												
-												$o.format:="hour"
+												$oo.format:="shortDate"
 												
 												  //……………………………………………………………………
 										End case 
 										
-										$c.push($o)
+										$o.parameters.push($oo)
 										
 										  //______________________________________________________
 									: (Value type:C1509($Obj_table[$t])#Is object:K8:27)
@@ -431,93 +462,63 @@ Case of
 								End case 
 							End for each 
 							
-						Else 
-							
-							READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Delete.svg").platformPath;$p)
-							CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
-							
-							$tt:="delete"+str (formatString ("label";$Obj_table.name)).uperCamelCase()
-							
-							Repeat 
-								
-								$c:=Form:C1466.actions.query("name=:1";$tt)
-								
-								If ($c.length>0)
-									
-									$i:=$i+1+Num:C11($i=0)
-									$tt:="delete"+str (formatString ("label";$Obj_table.name)).uperCamelCase()+String:C10($i)
-									
-								End if 
-							Until ($c.length=0)
-							
-							Form:C1466.actions.push(New object:C1471(\
-								"style";"destructive";\
-								"icon";"actions/Delete.svg";\
-								"$icon";$p;\
-								"tableNumber";Num:C11($t);\
-								"scope";"currentRecord";\
-								"name";$tt;\
-								"shortLabel";Get localized string:C991("remove");\
-								"label";Get localized string:C991("remove")))
-							
-						End if 
-						
-						$Obj_form.actions.focus()
-						$Obj_form.actions.reveal($Obj_form.actions.rowsNumber())
-						
-						$Obj_form.form.refresh()
-						
-						project.save()
-						
-						  //______________________________________________________
-				End case 
-			End if 
+							  //……………………………………………………………………
+					End case 
+					
+					  //______________________________________________________
+			End case 
 		End if 
 		
-		Case of 
+		If ($Obj_form.form.event=On Clicked:K2:4)
+			
+			  // Ensure the action collection exists
+			ob_createPath (Form:C1466;"actions";Is collection:K8:32)
+			
+			READ PICTURE FILE:C678(ui.noIcon;$p)
+			CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
+			
+			  // Generate a unique name
+			$l:=Form:C1466.actions.count()+1
+			$t:="action_"+String:C10($l)
+			
+			Repeat 
 				
-				  //______________________________________________________
-			: ($Obj_form.form.event=On Clicked:K2:4)
+				$c:=Form:C1466.actions.query("name=:1";$t)
 				
-				ob_createPath (Form:C1466;"actions";Is collection:K8:32)
-				
-				READ PICTURE FILE:C678(ui.noIcon;$p)
-				CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
-				
-				$l:=Form:C1466.actions.count()+1
-				
-				$o:=New object:C1471(\
-					"name";"action_"+String:C10($l);\
-					"scope";"table";\
-					"shortLabel";"action_"+String:C10($l);\
-					"label";"action_"+String:C10($l);\
-					"$icon";$p)
-				
-				Form:C1466.actions.push($o)
-				$Obj_form.actions.focus()
-				$Obj_form.actions.reveal($Obj_form.actions.rowsNumber())
-				
-				  // Warning edit stop code execution
-				  //EDIT ITEM(*;$Obj_form.name;Form.actions.length)
-				
-				$Obj_form.form.refresh()
-				project.save()
-				
-				  //______________________________________________________
-			: ($Obj_form.form.event=On Alternative Click:K2:36)
-				
-				  // <NOTHING MORE TO DO>
-				
-				  //______________________________________________________
-			Else 
-				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.event)+")")
-				
-				  //______________________________________________________
-		End case 
+				If ($c.length>0)
+					
+					$l:=$l+1
+					$t:="action_"+String:C10($l)
+					
+				End if 
+			Until ($c.length=0)
+			
+			$o:=New object:C1471(\
+				"name";$t;\
+				"scope";"table";\
+				"shortLabel";$t;\
+				"label";$t;\
+				"$icon";$p)
+			
+		End if 
+		
+		If ($o#Null:C1517)  // An action was created
+			
+			Form:C1466.actions.push($o)
+			
+			$Obj_form.actions.focus()
+			$Obj_form.actions.reveal($Obj_form.actions.rowsNumber())
+			
+			  // Warning edit stop code execution
+			  //EDIT ITEM(*;$Obj_form.name;Form.actions.length)
+			
+			$Obj_form.form.refresh()
+			project.save()
+			
+		End if 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.removeAction.name)
+	: ($Obj_form.form.currentWidget=$Obj_form.remove.name)
 		
 		Case of 
 				
@@ -545,7 +546,6 @@ Case of
 				End if 
 				
 				$Obj_form.form.refresh()
-				
 				project.save()
 				
 				  //______________________________________________________

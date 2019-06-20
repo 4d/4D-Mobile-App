@@ -25,6 +25,16 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
+		GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+		
+		
+		
+		
+		
+		
+		  //________________________________________
+	: (True:C214)
+		
 		
 		$c:=New collection:C1472(New object:C1471("min";5);"mandatory")
 		$l:=$c.indexOf("mandatory")

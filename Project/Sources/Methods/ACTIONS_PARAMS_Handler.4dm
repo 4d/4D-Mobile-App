@@ -13,6 +13,7 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_formEvent;$Lon_parameters)
+C_TEXT:C284($t)
 C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_in;$Obj_out)
 
 If (False:C215)
@@ -100,21 +101,12 @@ Case of
 				  // This trick remove the horizontal gap
 				$Obj_form.parameters.setScrollbar(0;2)
 				
-				  //button ("02_property_mandatory").forceBoolean()
-				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)  // Refresh UI
 				
 				ASSERT:C1129(Not:C34(Shift down:C543))
 				
 				$o:=$Obj_form
-				
-				  //If ($Obj_context.parameter=Null)
-				
-				  //$Obj_form.parameters.select(1)
-				
-				  //End if 
-				
 				
 				$o.noSelection.hide()
 				$o.noTable.hide()
@@ -146,11 +138,10 @@ Case of
 							
 							$o.withSelection.show()
 							
-							
-							
 							If ($Obj_context.action.tableNumber=Null:C1517)  // No target table
 								
 								$o.noTable.show()
+								$o.properties.hide()
 								$o.remove.disable()
 								$o.add.disable()
 								
@@ -179,61 +170,62 @@ Case of
 										$o.min.setValue(ACTIONS_PARAMS_UI ("min").value)
 										$o.max.setValue(ACTIONS_PARAMS_UI ("max").value)
 										
-										  //$o.default.setFilter("")
-										
-										$o.withDefault.show()
+										$o.withDefault.setVisible(String:C10($Obj_context.action.preset)#"edition")
 										
 										Case of 
 												
-												  //______________________________________________________
+												  //……………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="number")
 												
 												Case of 
 														
-														  //……………………………………………………………………………………………………
-													: ($Obj_context.parameter.format="integer")
+														  // .......................................
+													: (String:C10($Obj_context.parameter.format)="integer")
 														
-														$o.default.setFilter("&9")
+														$o.default.setFilter(Is integer:K8:5)
 														
-														  //……………………………………………………………………………………………………
-													: ($Obj_context.parameter.format="percent")
+														  // .......................................
+													: (String:C10($Obj_context.parameter.format)="percent")
 														
-														$o.default.setFilter("&\"0-9;%;.;,;-;\"")
+														GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+														$o.default.setFilter("&\"0-9;%"+$t+";.;-;+;:-\"")
 														
-														  //……………………………………………………………………………………………………
-													: ($Obj_context.parameter.format="spellOut")
+														  // .......................................
+													: (String:C10($Obj_context.parameter.format)="spellOut")
 														
-														$o.default.setFilter("")
+														$o.default.setFilter(Is text:K8:3)
 														
-														  //……………………………………………………………………………………………………
+														  // .......................................
 													Else 
 														
-														$o.default.setFilter("&\"0-9;.;,;-;\"")
+														$o.default.setFilter(Is real:K8:4)
 														
-														  //……………………………………………………………………………………………………
+														  // .......................................
 												End case 
 												
-												  //______________________________________________________
+												  //……………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="date")
 												
-												$o.default.setFilter("&\"0-9;/;-;\"")
+												$o.default.setFilter(Is date:K8:7)
 												
-												  //______________________________________________________
+												  // #TO_DO : Should accept "today", "yesterday", "tomorrow"
+												
+												  //……………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="time")
 												
-												$o.default.setFilter("&\"0-9;:\"")
+												$o.default.setFilter(Is time:K8:8)
 												
-												  //______________________________________________________
+												  //……………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="text")
 												
-												$o.default.setFilter("")
+												$o.default.setFilter(Is text:K8:3)
 												
-												  //______________________________________________________
+												  //……………………………………………………………………………………………………………………
 											Else 
 												
 												$o.withDefault.hide()
 												
-												  //______________________________________________________
+												  //……………………………………………………………………………………………………………………
 										End case 
 										
 									Else 
@@ -244,7 +236,6 @@ Case of
 									End if 
 								End if 
 							End if 
-							
 							
 						End if 
 					End if 

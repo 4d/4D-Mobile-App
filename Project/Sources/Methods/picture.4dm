@@ -39,9 +39,9 @@ If (This:C1470._is=Null:C1517)
 		"focused";Formula:C1597(This:C1470.name=OBJECT Get name:C1087(Object with focus:K67:3));\
 		"focus";Formula:C1597(GOTO OBJECT:C206(*;This:C1470.name));\
 		"pointer";Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name));\
-		"value";Formula:C1597((This:C1470.pointer())->);\
+		"value";Formula:C1597(widget ("value").value);\
 		"setValue";Formula:C1597(widget ("setValue";New object:C1471("value";$1)));\
-		"clear";Formula:C1597(CLEAR VARIABLE:C89((This:C1470.pointer())->));\
+		"clear";Formula:C1597(widget ("clear"));\
 		"enterable";Formula:C1597(OBJECT Get enterable:C1067(*;This:C1470.name));\
 		"setEnterable";Formula:C1597(OBJECT SET ENTERABLE:C238(*;This:C1470.name;Bool:C1537($1)));\
 		"update";Formula:C1597(widget ("update"));\
@@ -73,23 +73,28 @@ Else
 			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
 			
 			  //______________________________________________________
-		: ($1="getDimensions")
-			
-			If (Not:C34(Is nil pointer:C315($o.pointer())))
-				
-				PICTURE PROPERTIES:C457(($o.pointer())->;$Lon_width;$Lon_height)
-				
-				$o.dimensions:=New object:C1471(\
-					"width";$Lon_width;\
-					"height";$Lon_height)
-				
-			End if 
-			
-			  //______________________________________________________
 		: ($1="getAttribute")
 			
 			SVG GET ATTRIBUTE:C1056(*;$o.name;$2.id;$2.attribute;$t)
 			$o[$2.attribute]:=$t
+			
+			  //______________________________________________________
+		: (Is nil pointer:C315($o.pointer()))
+			
+			  // =============================================================================
+			  // ALL THE METHODS BELOW ARE NOT APPLICABLE TO A WIDGET RELATED TO AN EXPRESSION
+			  // =============================================================================
+			
+			ASSERT:C1129(False:C215;"member method \""+$1+"()\" can not be used for a widget linked to an expression!")
+			
+			  //______________________________________________________
+		: ($1="getDimensions")
+			
+			PICTURE PROPERTIES:C457(($o.pointer())->;$Lon_width;$Lon_height)
+			
+			$o.dimensions:=New object:C1471(\
+				"width";$Lon_width;\
+				"height";$Lon_height)
 			
 			  //______________________________________________________
 		Else 

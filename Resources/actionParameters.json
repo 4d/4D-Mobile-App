@@ -17,9 +17,9 @@
 			"spellOut"
 			],
 		"date" : [
-			"dateShort",
-			"dateMedium",
-			"dateLong"
+			"shortDate",
+			"mediumDate",
+			"longDate"
 		],
 		"time" : [
 			"duration"

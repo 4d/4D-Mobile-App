@@ -186,14 +186,23 @@ Else
 			
 			CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
 			
-			$o:=New object:C1471(\
-				"choice";Dynamic pop up menu:C1006($2.menu;\
-				"";$Lon_left;\
-				$Lon_bottom))
-			
-			If (Not:C34(Bool:C1537($2.keep)))
+			If ($2.menu#Null:C1517)
 				
-				RELEASE MENU:C978($2.menu)
+				$o:=New object:C1471(\
+					"choice";Dynamic pop up menu:C1006($2.menu;\
+					"";$Lon_left;\
+					$Lon_bottom))
+				
+				If (Not:C34(Bool:C1537($2.keep)))
+					
+					RELEASE MENU:C978($2.menu)
+					
+				End if 
+				
+			Else 
+				
+				  // Object menu
+				$o:=$2.popup("";$Lon_left;$Lon_bottom)
 				
 			End if 
 			

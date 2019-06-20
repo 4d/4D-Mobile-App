@@ -158,7 +158,18 @@ Case of
 			
 		End if 
 		
-		If ($Obj_current.defaultField=Null:C1517)  // User parameter
+		If ($Obj_context.action.preset#Null:C1517)  // Preset actions
+			
+			$Obj_menu.append(":xliff:byDefault";"null";$Obj_current.format=Null:C1517)
+			$Obj_menu.line()
+			
+			For each ($Txt_format;$Obj_formats[$Obj_current.type])
+				
+				$Obj_menu.append(":xliff:f_"+$Txt_format;$Txt_format;$t=$Txt_format)
+				
+			End for each 
+			
+		Else 
 			
 			For each ($Txt_type;$Obj_formats)
 				
@@ -185,27 +196,6 @@ Case of
 					
 				End if 
 			End for each 
-			
-			  // ----------------------------------------
-			
-		Else 
-			
-			If ($Obj_formats[$Obj_current.type].length>1)
-				
-				$Obj_menu.append(":xliff:byDefault";"null";$Obj_current.format=Null:C1517)
-				$Obj_menu.line()
-				
-				For each ($Txt_format;$Obj_formats[$Obj_current.type])
-					
-					$Obj_menu.append(":xliff:f_"+$Txt_format;$Txt_format;$t=$Txt_format)
-					
-				End for each 
-				
-			Else 
-				
-				$Obj_menu.append(":xliff:"+$Obj_current.type;$Txt_format;$t=$Txt_format)
-				
-			End if 
 		End if 
 		
 		  // Position according to the box
@@ -556,6 +546,9 @@ Case of
 		End if 
 		
 		project.save()
+		
+		
+		
 		
 		  //==================================================
 	: ($Obj_form.linked.include($Obj_form.form.currentWidget))  // Linked widgets

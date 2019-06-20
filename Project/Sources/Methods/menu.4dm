@@ -41,7 +41,7 @@ If (This:C1470=Null:C1517)
 		"count";Formula:C1597(Count menu items:C405(This:C1470.ref));\
 		"disable";Formula:C1597(DISABLE MENU ITEM:C150(This:C1470.ref;Choose:C955(Count parameters:C259=1;Num:C11($1);-1)));\
 		"delete";Formula:C1597(DELETE MENU ITEM:C413(This:C1470.ref;Choose:C955(Count parameters:C259=1;Num:C11($1);-1)));\
-		"popup";Formula:C1597(menu ("popup";New object:C1471("default";String:C10($1);"xCoord";Num:C11($2);"yCoord";Num:C11($3))));\
+		"popup";Formula:C1597(menu ("popup";Choose:C955(Count parameters:C259=1;New object:C1471("default";String:C10($1));New object:C1471("default";String:C10($1);"xCoord";Num:C11($2);"yCoord";Num:C11($3)))));\
 		"cleanup";Formula:C1597(menu ("cleanup"))\
 		)
 	

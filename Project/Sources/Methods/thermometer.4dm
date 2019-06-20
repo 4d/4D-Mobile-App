@@ -37,9 +37,9 @@ If (This:C1470._is=Null:C1517)
 		"focused";Formula:C1597(This:C1470.name=OBJECT Get name:C1087(Object with focus:K67:3));\
 		"focus";Formula:C1597(GOTO OBJECT:C206(*;This:C1470.name));\
 		"pointer";Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name));\
-		"value";Formula:C1597((This:C1470.pointer())->);\
+		"value";Formula:C1597(widget ("value").value);\
 		"setValue";Formula:C1597(widget ("setValue";New object:C1471("value";$1)));\
-		"clear";Formula:C1597(CLEAR VARIABLE:C89((This:C1470.pointer())->));\
+		"clear";Formula:C1597(widget ("clear"));\
 		"enterable";Formula:C1597(OBJECT Get enterable:C1067(*;This:C1470.name));\
 		"setEnterable";Formula:C1597(OBJECT SET ENTERABLE:C238(*;This:C1470.name;Bool:C1537($1)));\
 		"coordinates";Null:C1517;\

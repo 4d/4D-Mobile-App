@@ -12,8 +12,8 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_LONGINT:C283($Lon_bottom;$Lon_height;$Lon_horizontal;$Lon_left;$Lon_right;$Lon_top)
-C_LONGINT:C283($Lon_type;$Lon_vertical;$Lon_width)
+C_LONGINT:C283($l;$Lon_bottom;$Lon_height;$Lon_horizontal;$Lon_left;$Lon_right)
+C_LONGINT:C283($Lon_top;$Lon_type;$Lon_vertical;$Lon_width)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o;$Obj_params)
 
@@ -53,14 +53,14 @@ If (This:C1470._is=Null:C1517)
 		"focused";Formula:C1597(This:C1470.name=OBJECT Get name:C1087(Object with focus:K67:3));\
 		"focus";Formula:C1597(GOTO OBJECT:C206(*;This:C1470.name));\
 		"pointer";Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name));\
-		"value";Formula:C1597((This:C1470.pointer())->);\
+		"value";Formula:C1597(widget ("value").value);\
 		"setValue";Formula:C1597(widget ("setValue";New object:C1471("value";$1)));\
 		"touch";Formula:C1597(widget ("touch"));\
-		"clear";Formula:C1597(CLEAR VARIABLE:C89((This:C1470.pointer())->));\
+		"clear";Formula:C1597(widget ("clear"));\
 		"enterable";Formula:C1597(OBJECT Get enterable:C1067(*;This:C1470.name));\
 		"setEnterable";Formula:C1597(OBJECT SET ENTERABLE:C238(*;This:C1470.name;Bool:C1537($1)));\
 		"filter";Formula:C1597(OBJECT Get filter:C1073(*;This:C1470.name));\
-		"setFilter";Formula:C1597(OBJECT SET FILTER:C235(*;This:C1470.name;String:C10($1)));\
+		"setFilter";Formula:C1597(widget ("setFilter";New object:C1471(Choose:C955(Value type:C1509($1)=Is text:K8:3;"user";"format");$1)));\
 		"coordinates";Null:C1517;\
 		"windowCoordinates";Null:C1517;\
 		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\
@@ -351,28 +351,93 @@ Else
 			End if 
 			
 			  //______________________________________________________
-		: ($1="setValue")
+		: ($1="setFilter")
 			
-			If (Is nil pointer:C315($o.pointer()))
+			If (Bool:C1537($2.user))
 				
-				  // Linked widget
-				ASSERT:C1129(False:C215;"setValue () can not be used for a widget linked to an expression!")
+				  // User format
+				OBJECT SET FILTER:C235(*;$o.name;String:C10($2.user))
 				
 			Else 
 				
-				($o.pointer())->:=$2.value
+				  // Predefined formats
+				$l:=Num:C11($2.format)
 				
+				Case of 
+						
+						  //………………………………………………………………………
+					: ($l=Is text:K8:3)
+						
+						OBJECT SET FILTER:C235(*;$o.name;"")
+						
+						  //………………………………………………………………………
+					: ($l=Is integer:K8:5)\
+						 | ($l=Is longint:K8:6)\
+						 | ($l=Is integer 64 bits:K8:25)
+						
+						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;-;+;:-<\"")
+						
+						  //………………………………………………………………………
+					: ($l=Is real:K8:4)\
+						 | ($l=Is float:K8:26)
+						
+						GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;"+$t+";.;-;+;:-<\"")
+						
+						  //………………………………………………………………………
+					: ($l=Is time:K8:8)
+						
+						GET SYSTEM FORMAT:C994(Time separator:K60:11;$t)
+						OBJECT SET FILTER:C235(*;$o.name;Replace string:C233("&\"0-9;%;:\"";"%";$t))
+						
+						  //………………………………………………………………………
+					: ($l=Is date:K8:7)
+						
+						GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
+						OBJECT SET FILTER:C235(*;$o.name;Replace string:C233("&\"0-9;%;-;/\"";"%";$t))
+						
+						  //………………………………………………………………………
+					Else 
+						
+						OBJECT SET FILTER:C235(*;$o.name;"")
+						
+						  //………………………………………………………………………
+				End case 
 			End if 
 			
 			  //______________________________________________________
-		: ($1="touch")
+		: (Is nil pointer:C315($o.pointer()))
 			
-			($o.pointer())->:=($o.pointer())->
+			  // =============================================================================
+			  // ALL THE METHODS BELOW ARE NOT APPLICABLE TO A WIDGET RELATED TO AN EXPRESSION
+			  // =============================================================================
+			
+			ASSERT:C1129(False:C215;"member method \""+$1+"()\" can not be used for a widget linked to an expression!")
 			
 			  //______________________________________________________
 		: ($1="forceNumeric")
 			
 			EXECUTE FORMULA:C63("C_REAL:C285((OBJECT Get pointer:C1124(Object named:K67:5;$o.name))->)")
+			
+			  //______________________________________________________
+		: ($1="value")
+			
+			$o:=New object:C1471("value";($o.pointer())->)
+			
+			  //______________________________________________________
+		: ($1="setValue")
+			
+			($o.pointer())->:=$2.value
+			
+			  //______________________________________________________
+		: ($1="clear")
+			
+			CLEAR VARIABLE:C89((This:C1470.pointer())->)
+			
+			  //______________________________________________________
+		: ($1="touch")
+			
+			($o.pointer())->:=($o.pointer())->
 			
 			  //______________________________________________________
 		Else 
@@ -387,7 +452,6 @@ Else
 		 | ($1="bestSize")
 		
 		  // Update coordinates
-		
 		$o.coordinates:=New object:C1471(\
 			"left";$Lon_left;\
 			"top";$Lon_top;\

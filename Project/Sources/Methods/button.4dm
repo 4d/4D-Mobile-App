@@ -39,8 +39,9 @@ If (This:C1470._is=Null:C1517)
 		"focused";Formula:C1597(This:C1470.name=OBJECT Get name:C1087(Object with focus:K67:3));\
 		"focus";Formula:C1597(GOTO OBJECT:C206(*;This:C1470.name));\
 		"pointer";Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name));\
-		"value";Formula:C1597((This:C1470.pointer())->);\
+		"value";Formula:C1597(widget ("value").value);\
 		"setValue";Formula:C1597(widget ("setValue";New object:C1471("value";$1)));\
+		"clear";Formula:C1597(widget ("clear"));\
 		"coordinates";Null:C1517;\
 		"windowCoordinates";Null:C1517;\
 		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\

@@ -41,8 +41,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Obj_form:=New object:C1471(\
 		"$";editor_INIT ;\
 		"form";ui.form("editor_CALLBACK").get();\
-		"addAction";ui.button("actions.add");\
-		"removeAction";ui.button("actions.remove");\
+		"add";ui.button("actions.add");\
+		"remove";ui.button("actions.remove");\
 		"databaseMethod";ui.button("actionMethod");\
 		"actions";ui.listbox("actions");\
 		"noPublishedTable";ui.widget("noPublishedTable");\
@@ -110,7 +110,7 @@ Case of
 					$Obj_form.actions.show()
 					$Obj_form.noPublishedTable.hide()
 					
-					$Obj_form.addAction.enable()
+					$Obj_form.add.enable()
 					$Obj_form.databaseMethod.enable()
 					
 					$Obj_form.actions.focus()
@@ -120,7 +120,7 @@ Case of
 					$Obj_form.actions.hide()
 					$Obj_form.noPublishedTable.show()
 					
-					$Obj_form.addAction.disable()
+					$Obj_form.add.disable()
 					$Obj_form.databaseMethod.disable()
 					
 				End if 
@@ -137,12 +137,21 @@ Case of
 				  // Update parameters panel if any
 				If (Form:C1466.$dialog.ACTIONS_PARAMS#Null:C1517)
 					
-					Form:C1466.$dialog.ACTIONS_PARAMS.action:=$Obj_context.current
+					If ($Obj_context.selected.length>0)
+						
+						Form:C1466.$dialog.ACTIONS_PARAMS.action:=$Obj_context.current
+						
+					Else 
+						
+						Form:C1466.$dialog.ACTIONS_PARAMS.action:=Null:C1517
+						
+					End if 
+					
 					$obj_form.form.call("refreshActionParameters")
 					
 				End if 
 				
-				$Obj_form.removeAction.setEnabled(_and (\
+				$Obj_form.remove.setEnabled(_and (\
 					Formula:C1597($Obj_context.index#Null:C1517);\
 					Formula:C1597($Obj_context.index#0)))
 				
@@ -245,6 +254,7 @@ End case
 
   // ----------------------------------------------------
   // Return
+  //%W-518.7
 Case of 
 	: (Undefined:C82($Obj_out))
 	: ($Obj_out=Null:C1517)
@@ -252,6 +262,7 @@ Case of
 	Else 
 		$0:=$Obj_out
 End case 
+  //%W+518.7
 
 
   // ----------------------------------------------------

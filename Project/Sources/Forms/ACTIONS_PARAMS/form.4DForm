@@ -4,10 +4,10 @@
 	"inheritedForm": "panel_template",
 	"width": 960,
 	"height": 310,
-	"markerHeader": 15,
+	"markerHeader": 5,
 	"markerBody": 200,
-	"markerBreak": 220,
-	"markerFooter": 240,
+	"markerBreak": 264,
+	"markerFooter": 270,
 	"events": [
 		"onLoad",
 		"onUnload",

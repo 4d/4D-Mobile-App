@@ -288,7 +288,9 @@ Case of
 						$Obj_field.format:=$Obj_menu.choice
 						
 						  // Update me
+						  //%W-533.1
 						If ($Obj_menu.choice[[1]]="/")
+							  //%W+533.1
 							
 							  // User resources
 							$Ptr_me->{$Lon_row}:=Substring:C12($Obj_menu.choice;2)
