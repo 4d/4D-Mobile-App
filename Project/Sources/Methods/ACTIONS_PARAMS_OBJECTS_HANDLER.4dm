@@ -199,9 +199,7 @@ Case of
 		End if 
 		
 		  // Position according to the box
-		$Obj_menu.popup("";$Obj_form.formatBorder.getCoordinates())
-		
-		If ($Obj_menu.selected)
+		If ($Obj_menu.popup("";$Obj_form.formatBorder.getCoordinates()).selected)
 			
 			If ($Obj_menu.choice="null")
 				
@@ -219,22 +217,28 @@ Case of
 						
 						If ($l#-1)
 							
-							$Obj_current.type:=Choose:C955($Txt_type="string";"text";$Txt_type)
+							$t:=Choose:C955($Txt_type="string";"text";$Txt_type)
 							
 						End if 
 					End for each 
 					
 					If ($l=-1)
 						
-						$Obj_current.type:=$Obj_current.format
+						$t:=$Obj_current.format
 						
 					End if 
-				End if 
-				
-				If ($Obj_form.default.focused())
 					
-					GOTO OBJECT:C206(*;"")
-					
+					If ($Obj_current.type#$t)  // The type is changed
+						
+						$Obj_current.type:=$t
+						OB REMOVE:C1226($Obj_current;"default")
+						
+						If ($Obj_form.default.focused())
+							
+							GOTO OBJECT:C206(*;"")
+							
+						End if 
+					End if 
 				End if 
 			End if 
 			
@@ -546,8 +550,46 @@ Case of
 		
 		project.save()
 		
+		  //==================================================
+	: ($Obj_form.form.currentWidget=$Obj_form.default.name)  //default value
+		
+		$o:=$Obj_context.parameter
+		
+		If (Length:C16(String:C10($o.default))>0)
+			
+			Case of 
+					  //______________________________________________________
+				: ($o.type="number")
+					
+					$o.default:=Num:C11($o.default)
+					
+					  //______________________________________________________
+					  //: ($o.type="date")
+					
+					  //format
+					
+					  //______________________________________________________
+					  //: ($o.type="time")
+					
+					  //format
+					
+					
+					  //______________________________________________________
+				Else 
+					
+					$o.default:=String:C10($o.default)
+					
+					  //______________________________________________________
+			End case 
+			
+		Else 
+			
+			OB REMOVE:C1226($o;"default")
+			
+		End if 
 		
 		
+		project.save()
 		
 		  //==================================================
 	: ($Obj_form.linked.include($Obj_form.form.currentWidget))  // Linked widgets
