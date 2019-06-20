@@ -206,9 +206,9 @@ Case of
 												  //……………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="date")
 												
-												$o.default.setFilter(Is date:K8:7)
-												
-												  // #TO_DO : Should accept "today", "yesterday", "tomorrow"
+												  // Should accept "today", "yesterday", "tomorrow"
+												GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
+												$o.default.setFilter(Replace string:C233("&\"0-9;%;-;/;a;d;e;m;o;r-t;w;y\"";"%";$t))
 												
 												  //……………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="time")

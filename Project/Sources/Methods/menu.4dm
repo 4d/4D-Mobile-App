@@ -45,8 +45,6 @@ If (This:C1470=Null:C1517)
 		"cleanup";Formula:C1597(menu ("cleanup"))\
 		)
 	
-	
-	
 	If (Count parameters:C259>=1)
 		
 		$c:=Split string:C1554(String:C10($1);";")
