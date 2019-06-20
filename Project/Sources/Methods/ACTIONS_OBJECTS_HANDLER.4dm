@@ -528,6 +528,8 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Clicked:K2:4)
 				
+				GOTO OBJECT:C206(*;"")
+				
 				$l:=Form:C1466.actions.indexOf($Obj_context.current)
 				
 				If ($l#-1)
