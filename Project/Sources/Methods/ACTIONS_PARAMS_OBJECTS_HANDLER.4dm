@@ -158,7 +158,7 @@ Case of
 			
 		End if 
 		
-		If ($Obj_context.action.preset#Null:C1517)  // Preset actions
+		If ($Obj_current.fieldNumber#Null:C1517)  // Action linked to a field
 			
 			$Obj_menu.append(":xliff:byDefault";"null";$Obj_current.format=Null:C1517)
 			$Obj_menu.line()
@@ -199,8 +199,7 @@ Case of
 		End if 
 		
 		  // Position according to the box
-		$o:=$Obj_form.formatBorder.getCoordinates()
-		$Obj_menu.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom)
+		$Obj_menu.popup("";$Obj_form.formatBorder.getCoordinates())
 		
 		If ($Obj_menu.selected)
 			

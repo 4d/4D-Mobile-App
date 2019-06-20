@@ -41,9 +41,11 @@ If (This:C1470=Null:C1517)
 		"count";Formula:C1597(Count menu items:C405(This:C1470.ref));\
 		"disable";Formula:C1597(DISABLE MENU ITEM:C150(This:C1470.ref;Choose:C955(Count parameters:C259=1;Num:C11($1);-1)));\
 		"delete";Formula:C1597(DELETE MENU ITEM:C413(This:C1470.ref;Choose:C955(Count parameters:C259=1;Num:C11($1);-1)));\
-		"popup";Formula:C1597(menu ("popup";Choose:C955(Count parameters:C259=1;New object:C1471("default";String:C10($1));New object:C1471("default";String:C10($1);"xCoord";Num:C11($2);"yCoord";Num:C11($3)))));\
+		"popup";Formula:C1597(menu ("popup";Choose:C955(Count parameters:C259=1;New object:C1471("default";String:C10($1));Choose:C955(Value type:C1509($2)=Is object:K8:27;New object:C1471("default";String:C10($1);"ref";$2);New object:C1471("default";String:C10($1);"xCoord";$2;"yCoord";$3)))));\
 		"cleanup";Formula:C1597(menu ("cleanup"))\
 		)
+	
+	
 	
 	If (Count parameters:C259>=1)
 		
@@ -155,14 +157,21 @@ Else
 			
 			$o.cleanup()
 			
-			If ($2.xCoord#Null:C1517)
+			If ($2.ref#Null:C1517)  // Object menu
 				
-				$o.choice:=Dynamic pop up menu:C1006($o.ref;$2.default;$2.xCoord;$2.yCoord)
+				$o.choice:=Dynamic pop up menu:C1006($o.ref;$2.default;Num:C11($2.ref.windowCoordinates.left);Num:C11($2.ref.windowCoordinates.bottom))
 				
 			Else 
 				
-				$o.choice:=Dynamic pop up menu:C1006($o.ref;$2.default)
-				
+				If ($2.xCoord#Null:C1517)
+					
+					$o.choice:=Dynamic pop up menu:C1006($o.ref;$2.default;Num:C11($2.xCoord);Num:C11($2.yCoord))
+					
+				Else 
+					
+					$o.choice:=Dynamic pop up menu:C1006($o.ref;$2.default)
+					
+				End if 
 			End if 
 			
 			$o.selected:=(Length:C16(String:C10($o.choice))>0)

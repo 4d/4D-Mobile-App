@@ -344,17 +344,20 @@ Case of
 					
 					$Obj_popup.name:=$Obj_popup.prefix+$t
 					
-					Repeat 
+					If (Form:C1466.actions#Null:C1517)
 						
-						$c:=Form:C1466.actions.query("name=:1";$Obj_popup.name)
-						
-						If ($c.length>0)
+						Repeat 
 							
-							$i:=$i+1+Num:C11($i=0)
-							$Obj_popup.name:=$Obj_popup.prefix+$t+String:C10($i)
+							$c:=Form:C1466.actions.query("name=:1";$Obj_popup.name)
 							
-						End if 
-					Until ($c.length=0)
+							If ($c.length>0)
+								
+								$i:=$i+1+Num:C11($i=0)
+								$Obj_popup.name:=$Obj_popup.prefix+$t+String:C10($i)
+								
+							End if 
+						Until ($c.length=0)
+					End if 
 					
 					  // Ensure the action collection exists
 					ob_createPath (Form:C1466;"actions";Is collection:K8:32)

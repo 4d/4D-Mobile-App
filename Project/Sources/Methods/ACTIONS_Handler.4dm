@@ -135,7 +135,7 @@ Case of
 			: ($Lon_formEvent=On Timer:K2:25)  // Refresh UI
 				
 				  // Update parameters panel if any
-				If (Form:C1466.$dialog.ACTIONS_PARAMS#Null:C1517)
+				If ($Obj_context.selected#Null:C1517)
 					
 					If ($Obj_context.selected.length>0)
 						
