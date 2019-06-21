@@ -41,6 +41,7 @@
 						"onSelectionChange",
 						"onHeaderClick"
 					],
+					"movableRows": false,
 					"columns": [
 						{
 							"name": "Column1",

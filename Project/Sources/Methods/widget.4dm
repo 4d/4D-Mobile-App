@@ -363,19 +363,16 @@ Else
 				  // Predefined formats
 				$l:=Num:C11($2.format)
 				
+				  // tips add the range ";:-<" to allow semicolon characters
+				
 				Case of 
-						
-						  //………………………………………………………………………
-					: ($l=Is text:K8:3)
-						
-						OBJECT SET FILTER:C235(*;$o.name;"")
 						
 						  //………………………………………………………………………
 					: ($l=Is integer:K8:5)\
 						 | ($l=Is longint:K8:6)\
 						 | ($l=Is integer 64 bits:K8:25)
 						
-						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;-;+\"")
+						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;-;+;:-<\"")
 						
 						  //………………………………………………………………………
 					: ($l=Is real:K8:4)\
@@ -388,18 +385,18 @@ Else
 					: ($l=Is time:K8:8)
 						
 						GET SYSTEM FORMAT:C994(Time separator:K60:11;$t)
-						OBJECT SET FILTER:C235(*;$o.name;Replace string:C233("&\"0-9;%;:\"";"%";$t))
+						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;"+$t+";:\"")
 						
 						  //………………………………………………………………………
 					: ($l=Is date:K8:7)
 						
 						GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
-						OBJECT SET FILTER:C235(*;$o.name;Replace string:C233("&\"0-9;%;-;/\"";"%";$t))
+						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;"+$t+";-;/\"")
 						
 						  //………………………………………………………………………
 					Else 
 						
-						OBJECT SET FILTER:C235(*;$o.name;"")
+						OBJECT SET FILTER:C235(*;$o.name;"")  // Text as default
 						
 						  //………………………………………………………………………
 				End case 

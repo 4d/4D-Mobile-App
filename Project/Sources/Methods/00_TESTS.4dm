@@ -17,26 +17,24 @@ ARRAY TEXT:C222($tTxt_;0)
 
 COMPONENT_INIT 
 
-$tt:=""
-$cc:=New collection:C1472
-
 Case of 
 		
 		  //________________________________________
 	: (True:C214)
 		
-		GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
-		
-		
-		
-		
-		
+		$o:=menu .append("test")
+		$o.shortcut("T";Shift key mask:K16:3)
+		$o.method("tempo")
+		$o.icon("images/fieldsIcons/field_25.png")
+		$o.popup()
 		
 		  //________________________________________
 	: (True:C214)
 		
+		$c:=New collection:C1472(New object:C1471(\
+			"min";5);\
+			"mandatory")
 		
-		$c:=New collection:C1472(New object:C1471("min";5);"mandatory")
 		$l:=$c.indexOf("mandatory")
 		$l:=$c.countValues("mandatory")
 		$b:=($c.countValues("mandatory")>0)
@@ -44,35 +42,43 @@ Case of
 		$cc:=$c.extract("min")
 		$b:=($cc.length>0)
 		
-		
-		
 		$l:=$c.count("min")
 		$b:=($l>0)
-		
-		
 		
 		  //________________________________________
 	: (True:C214)
 		
-		$o:=New object:C1471("pointer";$r)
+		$o:=New object:C1471(\
+			"pointer";$r)
 		
 		If ($o.pointer#Null:C1517)
+			
 			If (Value type:C1509($o.pointer)=Is pointer:K8:14)
+				
 				ASSERT:C1129(Is nil pointer:C315($o.pointer))
+				
 			End if 
 		End if 
 		
 		$o.pointer:=""
+		
 		If ($o.pointer#Null:C1517)
+			
 			If (Value type:C1509($o.pointer)=Is pointer:K8:14)
+				
 				ASSERT:C1129(Is nil pointer:C315($o.pointer))
+				
 			End if 
 		End if 
 		
 		$o.pointer:=->$t
+		
 		If ($o.pointer#Null:C1517)
+			
 			If (Value type:C1509($o.pointer)=Is pointer:K8:14)
+				
 				ASSERT:C1129(Not:C34(Is nil pointer:C315($o.pointer)))
+				
 			End if 
 		End if 
 		
@@ -87,11 +93,11 @@ Case of
 			$b:=project_Upgrade ($o)
 			
 		End if 
+		
 		  //________________________________________
 	: (True:C214)
 		
 		If (False:C215)
-			
 			$o:=New object:C1471
 			
 			ASSERT:C1129(Not:C34(Bool:C1537($o.error)))  // False
@@ -110,7 +116,6 @@ Case of
 			$o.error:="Hello world"
 			ASSERT:C1129(Not:C34(Undefined:C82($o.error)))  // False
 			  //%W+518.7
-			
 		End if 
 		
 		  //________________________________________
@@ -173,12 +178,15 @@ Case of
 		
 		$c:=Folder:C1567($Dir_root;fk platform path:K87:2).files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
 		$cc:=New collection:C1472.resize($c.length)
+		
 		For each ($t;$c)
+			
 			READ PICTURE FILE:C678($t;$p)
 			CREATE THUMBNAIL:C679($p;$p;50;50;Scaled to fit:K6:2)
 			$cc[$i]:=$p
 			$c[$i]:=Replace string:C233($t;$Dir_root;"")
 			$i:=$i+1
+			
 		End for each 
 		
 		$Txt_result:=String:C10(Milliseconds:C459-$Lon_x)+"\r"
@@ -189,11 +197,15 @@ Case of
 		$cc:=New collection:C1472
 		DOCUMENT LIST:C474($Dir_root;$tTxt_;Absolute path:K24:14+Recursive parsing:K24:13+Ignore invisible:K24:16)
 		ARRAY TO COLLECTION:C1563($c;$tTxt_)
+		
 		For each ($t;$c)
+			
 			READ PICTURE FILE:C678($t;$p)
 			CREATE THUMBNAIL:C679($p;$p;50;50;Scaled to fit:K6:2)
 			$cc.push($p)
+			
 		End for each 
+		
 		$c:=$c.map("col_replaceString";$Dir_root;"")
 		
 		$Txt_result:=$Txt_result+String:C10(Milliseconds:C459-$Lon_x)
@@ -405,12 +417,14 @@ Case of
 				
 				  // ----------------------------------------
 				  // ----------------------------------------
+				  //----------------------------------------
 			: (Test path name:C476($Dir_root)=Is a folder:K24:2)
 				
 				LAUNCH EXTERNAL PROCESS:C811("mv "+str_singleQuoted (Convert path system to POSIX:C1106($Dir_root))+" "+str_singleQuoted (Convert path system to POSIX:C1106($File_)))
 				
 				  // ----------------------------------------
 				  // ----------------------------------------
+				  //----------------------------------------
 			: (Test path name:C476($File_)=Is a folder:K24:2)
 				
 				LAUNCH EXTERNAL PROCESS:C811("mv "+str_singleQuoted (Convert path system to POSIX:C1106($File_))+" "+str_singleQuoted (Convert path system to POSIX:C1106($Dir_root)))
@@ -418,6 +432,8 @@ Case of
 				  // ----------------------------------------
 				
 				  // ----------------------------------------
+				
+				  //----------------------------------------
 		End case 
 		
 		  //________________________________________

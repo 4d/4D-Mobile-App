@@ -11,9 +11,9 @@
   // Declarations
 C_LONGINT:C283($0)
 
-C_LONGINT:C283($i;$l;$Lon_parameters)
+C_LONGINT:C283($i;$l)
 C_PICTURE:C286($p)
-C_TEXT:C284($Mnu_pop;$t)
+C_TEXT:C284($t)
 C_OBJECT:C1216($o;$Obj_add;$Obj_context;$Obj_delete;$Obj_edit;$Obj_form)
 C_OBJECT:C1216($Obj_popup;$Obj_table;$oo)
 C_COLLECTION:C1488($c;$cc;$Col_fields)
@@ -24,29 +24,10 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
+$Obj_form:=ACTIONS_Handler (New object:C1471(\
+"action";"init"))
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
-	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		  // <NONE>
-		
-	End if 
-	
-	$Obj_form:=ACTIONS_Handler (New object:C1471(\
-		"action";"init"))
-	
-	$Obj_context:=$Obj_form.$
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$Obj_context:=$Obj_form.$
 
   // ----------------------------------------------------
 Case of 
@@ -69,12 +50,25 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Losing Focus:K2:8)
 				
-				  //#TO_DO: Add a flag to differentiate the loss of focus from the list
-				  // of the focus loss of the cell edition
-				  //$Obj_context.listUI()
+				If (Bool:C1537($Obj_context.$edit))
+					
+					  // Loss after cell edition
+					OB REMOVE:C1226($Obj_context;"$cellEdition")
+					
+				Else 
+					
+					$Obj_context.listUI()
+					
+				End if 
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Selection Change:K2:29)
+				
+				$Obj_context.$current:=$Obj_context.current
+				
+				  // Update parameters panel if any
+				Form:C1466.$dialog.ACTIONS_PARAMS.action:=$Obj_context.$current
+				$Obj_form.form.call("selectParameters")
 				
 				$Obj_form.form.refresh()
 				
@@ -164,15 +158,17 @@ Case of
 				
 				Case of 
 						
-						  //……………………………………………………………………………………………………
+						  //…………………………………………………………………………………………………………………………………………
 					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.name].number)\
 						 | ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.shortLabel].number)\
 						 | ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.label].number)
 						
-						  // Allow direct entry
-						$0:=0
+						  // Put an edit flag to manage loss of focus
+						$Obj_context.$cellEdition:=True:C214
 						
-						  //……………………………………………………………………………………………………
+						$0:=0  // Allow direct entry
+						
+						  //…………………………………………………………………………………………………………………………………………
 					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.table].number)  // Display published table menu
 						
 						$Obj_popup:=menu 
@@ -191,7 +187,7 @@ Case of
 							
 						End if 
 						
-						  //……………………………………………………………………………………………………
+						  //…………………………………………………………………………………………………………………………………………
 					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.scope].number)  // Display scope menu
 						
 						$Obj_popup:=menu 
@@ -207,19 +203,19 @@ Case of
 								
 								Case of 
 										
-										  // .............................
+										  //________________________________________
 									: ($i=1)\
-										 & (String:C10($Obj_context.current.preset)="suppression")
+										 & (String:C10($Obj_context.current.preset)="suppression")  // Table
 										
 										$Obj_popup.disable()
 										
-										  // .............................
+										  //________________________________________
 									: ($i=2)\
-										 & (String:C10($Obj_context.current.preset)="adding")
+										 & (String:C10($Obj_context.current.preset)="adding")  // Current entity
 										
 										$Obj_popup.disable()
 										
-										  // .............................
+										  //________________________________________
 								End case 
 							End if 
 						Until (OK=0)
@@ -231,7 +227,7 @@ Case of
 							
 						End if 
 						
-						  //……………………………………………………………………………………………………
+						  //…………………………………………………………………………………………………………………………………………
 				End case 
 				
 				  //______________________________________________________
@@ -359,9 +355,6 @@ Case of
 						Until ($c.length=0)
 					End if 
 					
-					  // Ensure the action collection exists
-					ob_createPath (Form:C1466;"actions";Is collection:K8:32)
-					
 					$o:=New object:C1471(\
 						"preset";$Obj_popup.preset;\
 						"icon";$Obj_popup.icon;\
@@ -474,27 +467,28 @@ Case of
 		
 		If ($Obj_form.form.event=On Clicked:K2:4)
 			
-			  // Ensure the action collection exists
-			ob_createPath (Form:C1466;"actions";Is collection:K8:32)
-			
 			READ PICTURE FILE:C678(ui.noIcon;$p)
 			CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
 			
-			  // Generate a unique name
-			$l:=Form:C1466.actions.count()+1
 			$t:="action_"+String:C10($l)
 			
-			Repeat 
+			If (Form:C1466.actions#Null:C1517)
 				
-				$c:=Form:C1466.actions.query("name=:1";$t)
+				  // Generate a unique name
+				$l:=Form:C1466.actions.count()+1
 				
-				If ($c.length>0)
+				Repeat 
 					
-					$l:=$l+1
-					$t:="action_"+String:C10($l)
+					$c:=Form:C1466.actions.query("name=:1";$t)
 					
-				End if 
-			Until ($c.length=0)
+					If ($c.length>0)
+						
+						$l:=$l+1
+						$t:="action_"+String:C10($l)
+						
+					End if 
+				Until ($c.length=0)
+			End if 
 			
 			$o:=New object:C1471(\
 				"name";$t;\
@@ -507,16 +501,22 @@ Case of
 		
 		If ($o#Null:C1517)  // An action was created
 			
+			  // Ensure the action collection exists
+			ob_createPath (Form:C1466;"actions";Is collection:K8:32)
 			Form:C1466.actions.push($o)
 			
 			$Obj_form.actions.focus()
 			$Obj_form.actions.reveal($Obj_form.actions.rowsNumber())
 			
-			  // Warning edit stop code execution
+			Form:C1466.$dialog.ACTIONS_PARAMS.action:=$o
+			
+			  // Warning edit stop code execution -> must be delegate
 			  //EDIT ITEM(*;$Obj_form.name;Form.actions.length)
 			
 			$Obj_form.form.refresh()
 			project.save()
+			
+			$Obj_form.form.call("selectParameters")
 			
 		End if 
 		
@@ -548,6 +548,10 @@ Case of
 						$Obj_form.actions.select(Num:C11($Obj_context.index))
 						
 					End if 
+					
+					Form:C1466.$dialog.ACTIONS_PARAMS.action:=$Obj_context.current
+					$Obj_form.form.call("selectParameters")
+					
 				End if 
 				
 				$Obj_form.form.refresh()
@@ -597,7 +601,6 @@ Case of
 		METHOD OPEN PATH:C1213($tTxt_{0};*)
 		
 		  //==================================================
-		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown widget: \""+$Obj_form.form.currentWidget+"\"")

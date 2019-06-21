@@ -663,7 +663,7 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="refreshActionParameters")  // Update ACTIONS PARAMERS panel
+	: ($Txt_selector="refreshParameters")  // Update ACTIONS PARAMERS panel
 		
 		If ($Obj_form.currentForm=$Obj_form.project)
 			
@@ -673,6 +673,21 @@ Case of
 			If (Length:C16($Txt_panel)>0)
 				
 				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;"panel_REFRESH")
+				
+			End if 
+		End if 
+		
+		  //______________________________________________________
+	: ($Txt_selector="selectParameters")  // Update ACTIONS PARAMERS panel
+		
+		If ($Obj_form.currentForm=$Obj_form.project)
+			
+			  // Pass to target panel
+			$Txt_panel:=panel_Find_by_name ($Obj_form.actionParameters)
+			
+			If (Length:C16($Txt_panel)>0)
+				
+				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;"ACTIONS_PARAMS_Handler";*;New object:C1471("action";"refresh"))
 				
 			End if 
 		End if 

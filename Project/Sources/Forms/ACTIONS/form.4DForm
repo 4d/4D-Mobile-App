@@ -73,7 +73,7 @@
 						{
 							"name": "names",
 							"dataSource": "This:C1470.name",
-							"width": 100,
+							"width": 140,
 							"minWidth": 10,
 							"maxWidth": 420,
 							"textAlign": "left",
@@ -203,7 +203,7 @@
 						{
 							"name": "scopes",
 							"dataSource": "Form:C1466.$dialog.ACTIONS.scopeLabel(This:C1470)",
-							"width": 159,
+							"width": 10,
 							"minWidth": 10,
 							"maxWidth": 200,
 							"resizable": false,
@@ -233,7 +233,7 @@
 				"icons.label": {
 					"type": "text",
 					"top": 11,
-					"left": 117,
+					"left": 157,
 					"width": 72,
 					"height": 17,
 					"stroke": "#696969",
@@ -283,7 +283,7 @@
 				"tables.label": {
 					"type": "text",
 					"top": 11,
-					"left": 592,
+					"left": 632,
 					"width": 60,
 					"height": 17,
 					"stroke": "#696969",
@@ -293,7 +293,7 @@
 				"scopes.label": {
 					"type": "text",
 					"top": 11,
-					"left": 761,
+					"left": 801,
 					"width": 60,
 					"height": 17,
 					"stroke": "#696969",
@@ -345,7 +345,7 @@
 				"labels.label": {
 					"type": "text",
 					"top": 11,
-					"left": 377,
+					"left": 417,
 					"width": 133,
 					"height": 17,
 					"stroke": "#696969",
@@ -355,7 +355,7 @@
 				"shorts.label": {
 					"type": "text",
 					"top": 11,
-					"left": 178,
+					"left": 218,
 					"width": 133,
 					"height": 17,
 					"stroke": "#696969",

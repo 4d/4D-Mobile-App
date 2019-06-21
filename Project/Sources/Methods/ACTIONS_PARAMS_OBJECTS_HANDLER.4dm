@@ -11,7 +11,8 @@
   // Declarations
 C_LONGINT:C283($0)
 
-C_LONGINT:C283($i;$l;$Lon_parameters)
+C_BLOB:C604($x)
+C_LONGINT:C283($i;$l)
 C_TEXT:C284($t;$tt;$Txt_format;$Txt_label;$Txt_type)
 C_OBJECT:C1216($o;$Obj_context;$Obj_current;$Obj_form;$Obj_formats;$Obj_menu)
 C_OBJECT:C1216($Obj_table)
@@ -23,37 +24,16 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
+$Obj_form:=ACTIONS_PARAMS_Handler (New object:C1471(\
+"action";"init"))
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
-	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		  // <NONE>
-		
-	End if 
-	
-	$Obj_form:=ACTIONS_PARAMS_Handler (New object:C1471(\
-		"action";"init"))
-	
-	$Obj_context:=$Obj_form.$
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$Obj_context:=$Obj_form.$
 
   // ----------------------------------------------------
 Case of 
 		
 		  //==================================================
 	: ($Obj_form.form.currentWidget=$Obj_form.parameters.name)  // Parameters listbox
-		
-		  //$Obj_form.parameters.get()
 		
 		Case of 
 				
@@ -66,6 +46,7 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Selection Change:K2:29)
 				
+				$Obj_context.$current:=$Obj_context.parameter
 				$Obj_form.form.refresh()
 				
 				  //______________________________________________________
@@ -88,6 +69,11 @@ Case of
 				VARIABLE TO BLOB:C532($o;$x)
 				APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.parameter";$x)
 				SET BLOB SIZE:C606($x;0)
+				
+				  //______________________________________________________
+			: ($Obj_form.form.event=On Drag Over:K2:13)
+				
+				$0:=-1
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Drop:K2:12)
@@ -551,28 +537,57 @@ Case of
 		project.save()
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.default.name)  //default value
+	: ($Obj_form.form.currentWidget=$Obj_form.default.name)  // Default value
 		
 		$o:=$Obj_context.parameter
 		
 		If (Length:C16(String:C10($o.default))>0)
 			
 			Case of 
+					
 					  //______________________________________________________
 				: ($o.type="number")
 					
 					$o.default:=Num:C11($o.default)
 					
 					  //______________________________________________________
-					  //: ($o.type="date")
+				: ($o.type="date")
 					
-					  //format
+					If (Match regex:C1019("[ademorstwy]+";String:C10($o.default);1))
+						
+						If (Position:C15("today";$o.default)>0)
+							
+							$o.default:="today"
+							
+						Else 
+							
+							If (Position:C15("yesterday";$o.default)>0)
+								
+								$o.default:="yesterday"
+								
+							Else 
+								
+								
+								If (Position:C15("tomorrow";$o.default)>0)
+									
+									$o.default:="tomorrow"
+									
+								Else 
+									
+								End if 
+							End if 
+						End if 
+						
+					Else 
+						
+						$o.default:=String:C10(Date:C102($o.default))
+						
+					End if 
 					
 					  //______________________________________________________
 					  //: ($o.type="time")
 					
-					  //format
-					
+					  // Format
 					
 					  //______________________________________________________
 				Else 
@@ -587,7 +602,6 @@ Case of
 			OB REMOVE:C1226($o;"default")
 			
 		End if 
-		
 		
 		project.save()
 		

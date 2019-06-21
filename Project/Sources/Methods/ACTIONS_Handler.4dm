@@ -13,7 +13,7 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($b)
-C_LONGINT:C283($Lon_formEvent;$Lon_parameters)
+C_LONGINT:C283($l;$Lon_formEvent;$Lon_parameters)
 C_PICTURE:C286($p)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_in;$Obj_out;$Path_internal)
@@ -113,6 +113,22 @@ Case of
 					$Obj_form.add.enable()
 					$Obj_form.databaseMethod.enable()
 					
+					If (_and (\
+						Formula:C1597(Form:C1466.actions#Null:C1517);\
+						Formula:C1597(Form:C1466.actions.length>0)))
+						
+						  // Select last used action or the first one
+						If ($Obj_context.$current#Null:C1517)
+							
+							$l:=Form:C1466.actions.indexOf($Obj_context.$current)
+							
+						End if 
+						
+						$Obj_form.actions.select($l+1)
+						$Obj_form.form.call("selectParameters")
+						
+					End if 
+					
 					$Obj_form.actions.focus()
 					
 				Else 
@@ -135,21 +151,8 @@ Case of
 			: ($Lon_formEvent=On Timer:K2:25)  // Refresh UI
 				
 				  // Update parameters panel if any
-				If ($Obj_context.selected#Null:C1517)
-					
-					If ($Obj_context.selected.length>0)
-						
-						Form:C1466.$dialog.ACTIONS_PARAMS.action:=$Obj_context.current
-						
-					Else 
-						
-						Form:C1466.$dialog.ACTIONS_PARAMS.action:=Null:C1517
-						
-					End if 
-					
-					$obj_form.form.call("refreshActionParameters")
-					
-				End if 
+				Form:C1466.$dialog.ACTIONS_PARAMS.action:=$Obj_context.current
+				$Obj_form.form.call("refreshParameters")
 				
 				$Obj_form.remove.setEnabled(_and (\
 					Formula:C1597($Obj_context.index#Null:C1517);\
@@ -242,7 +245,8 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="icons")  // Preload the icons
 		
-		($Obj_form.iconGrid.pointer())->:=editor_LoadIcons (ob_setProperties ($Obj_in;New object:C1471("target";"actionIcons")))
+		($Obj_form.iconGrid.pointer())->:=editor_LoadIcons (ob_setProperties ($Obj_in;New object:C1471(\
+			"target";"actionIcons")))
 		
 		  //=========================================================
 	Else 
@@ -256,14 +260,24 @@ End case
   // Return
   //%W-518.7
 Case of 
+		
+		  //________________________________________
 	: (Undefined:C82($Obj_out))
+		
+		  //________________________________________
 	: ($Obj_out=Null:C1517)
+		
+		  //________________________________________
 	: (Value type:C1509(($Obj_out=Null:C1517))=Is undefined:K8:13)
+		
+		  //________________________________________
 	Else 
+		
 		$0:=$Obj_out
+		
+		  //________________________________________
 End case 
   //%W+518.7
-
 
   // ----------------------------------------------------
   // End

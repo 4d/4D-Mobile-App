@@ -142,11 +142,12 @@
 					"rowFillSource": "Form:C1466.$dialog.ACTIONS_PARAMS.backgroundColor(This:C1470)",
 					"textAlign": "left",
 					"verticalAlign": "middle",
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"method": "ObjectMethods/01_Parameters.4dm",
 					"events": [
 						"onLosingFocus",
 						"onGettingFocus",
 						"onDrop",
+						"onDragOver",
 						"onSelectionChange",
 						"onBeginDragOver"
 					],

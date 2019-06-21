@@ -18,6 +18,10 @@ _menuObject_ [object] := ***menu*** {(_param_ [text])}
 .append()     | Appends new menu item to the menu
 .insert()     | Inserts new menu item into the menu
 .line()       | Appends a menu line to the menu
+.method()     | Sets the 4D project method associated with a menu item
+.action()     | Associates a standard action with a menu item
+.shortcut()   | Sets the shortcut key associated with a menu item
+.icon()       | Sets the icon associated with a menu item
 .remove()     | Deletes the menu item
 .release()    | Removes the menu from memory
 .count()      | Returns the number of menu items present in the menu 
@@ -64,6 +68,35 @@ _menuObject_ [object] := ***menu*** {(_param_ [text])}
 
 >*menuObject*.**line** () -> [menuObject]
 
+### Set a project method
+
+>*menuObject*.**method** ( _methodName_ [text] {; _item_ [number]}) -> [menuObject]
+
+- _methodName_ is the name of a 4D project method
+- _item_ is the menu item number - last item added if omitted
+
+### Set a standard action
+
+>*menuObject*.**action** ( _action_ [text/number] {; _item_ [number]}) -> [menuObject]
+
+- _action_ is the standard action to associate to the menu item (use 4D constants)
+- _item_ is the menu item number - last item added if omitted
+
+### Define a shortcut
+
+>*menuObject*.**shortcut** ( _key_ [text/number] {; _modifier_ {; _item_ [number]}}) -> [menuObject]
+
+- _key_ is the letter or the character code
+- _modifier_ is the modifier to associate - Ctrl/Cmd by default (use 4D constants)
+- _item_ is the menu item number - last item added if omitted
+
+### Associate an icon
+
+>*menuObject*.**icon** ( _path_ [text] {; _item_ [number]}) -> [menuObject]
+
+- _path_ is the relative POSIX path of the file to use into the resources folder
+- _item_ is the menu item number - last item added if omitted
+
 ### Remove menu from memory
 
 >*menuObject*.**release** ()
@@ -86,9 +119,13 @@ _menuObject_ [object] := ***menu*** {(_param_ [text])}
 
 ### Display menu as popup>*menuObject*.**popup** ( {_default_ [text] {; _xCoord_ [number] ; _yCoord_ [number }} ) -> [menuObject]
 
+or
+
+>*menuObject*.**popup** ( _default_ [text] ; _widget_ [object] ) -> [menuObject]
+
 - _default_ is the parameter of item selected by default
 - _xCoord_ & _yCoord_ are the X & Y coordinates who specify of the top left corner of the pop-up menu to be displayed
-
+- _widget_ is a widget object to use as reference to display the popup
 
 
 ## Sample code

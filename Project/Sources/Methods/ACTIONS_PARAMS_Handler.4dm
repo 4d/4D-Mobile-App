@@ -12,7 +12,7 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_formEvent;$Lon_parameters)
+C_LONGINT:C283($l;$Lon_formEvent;$Lon_parameters)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_in;$Obj_out)
 
@@ -63,7 +63,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Obj_context:=$Obj_form.$
 	
 	If (OB Is empty:C1297($Obj_context))\
-		 | (Shift down:C543 & (Structure file:C489=Structure file:C489(*)))  // First load
+		 | (Structure file:C489=Structure file:C489(*))  // First load
 		
 		  // Constraints definition
 		ob_createPath ($Obj_context;"constraints")
@@ -162,6 +162,7 @@ Case of
 										$o.properties.show()
 										
 										$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
+										
 										$o.field.setVisible($Obj_context.parameter.fieldNumber#Null:C1517)  // If field
 										
 										$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
@@ -174,58 +175,52 @@ Case of
 										
 										Case of 
 												
-												  //……………………………………………………………………………………………………………………
+												  //…………………………………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="number")
 												
 												Case of 
 														
-														  // .......................................
+														  //________________________________________
 													: (String:C10($Obj_context.parameter.format)="integer")
 														
 														$o.default.setFilter(Is integer:K8:5)
 														
-														  // .......................................
-													: (String:C10($Obj_context.parameter.format)="percent")
-														
-														GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
-														$o.default.setFilter("&\"0-9;%"+$t+";.;-;+;:-\"")
-														
-														  // .......................................
+														  //________________________________________
 													: (String:C10($Obj_context.parameter.format)="spellOut")
 														
 														$o.default.setFilter(Is text:K8:3)
 														
-														  // .......................................
+														  //________________________________________
 													Else 
 														
 														$o.default.setFilter(Is real:K8:4)
 														
-														  // .......................................
+														  //________________________________________
 												End case 
 												
-												  //……………………………………………………………………………………………………………………
+												  //…………………………………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="date")
 												
 												  // Should accept "today", "yesterday", "tomorrow"
 												GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
 												$o.default.setFilter(Replace string:C233("&\"0-9;%;-;/;a;d;e;m;o;r-t;w;y\"";"%";$t))
 												
-												  //……………………………………………………………………………………………………………………
+												  //…………………………………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="time")
 												
 												$o.default.setFilter(Is time:K8:8)
 												
-												  //……………………………………………………………………………………………………………………
+												  //…………………………………………………………………………………………………………………………………………
 											: ($Obj_context.parameter.type="text")
 												
 												$o.default.setFilter(Is text:K8:3)
 												
-												  //……………………………………………………………………………………………………………………
+												  //…………………………………………………………………………………………………………………………………………
 											Else 
 												
 												$o.withDefault.hide()
 												
-												  //……………………………………………………………………………………………………………………
+												  //…………………………………………………………………………………………………………………………………………
 										End case 
 										
 									Else 
@@ -236,7 +231,6 @@ Case of
 									End if 
 								End if 
 							End if 
-							
 						End if 
 					End if 
 				End if 
@@ -255,12 +249,23 @@ Case of
 		$Obj_out:=$Obj_form
 		
 		  //=========================================================
-	: ($Obj_in.action="xxxx")
+	: ($Obj_in.action="refresh")
 		
-		  //
+		If ($Obj_context.action#Null:C1517)
+			
+			If ($Obj_context.action.parameters#Null:C1517)\
+				 & (Num:C11($Obj_context.action.parameters.length)#0)
+				
+				  // Select the first one
+				$Obj_form.parameters.select(1)
+				$Obj_context.parameter:=$Obj_context.parameters[0]
+				
+			End if 
+		End if 
+		
+		$Obj_form.form.refresh()
 		
 		  //=========================================================
-		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
