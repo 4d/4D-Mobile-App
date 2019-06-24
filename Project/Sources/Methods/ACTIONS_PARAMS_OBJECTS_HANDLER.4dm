@@ -407,7 +407,7 @@ Case of
 			$Obj_context:=ob_createPath ($Obj_context;"action.parameters";Is collection:K8:32)
 			$Obj_context.action.parameters.push($o)
 			$Obj_form.parameters.focus()
-			$Obj_form.parameters.reveal($Obj_form.parameters.rowsNumber())
+			$Obj_form.parameters.reveal($Obj_form.parameters.rowsNumber()+Num:C11($Obj_form.parameters.rowsNumber()=0))
 			
 			$Obj_form.form.refresh()
 			project.save()
@@ -541,69 +541,90 @@ Case of
 		
 		$o:=$Obj_context.parameter
 		
-		If (Length:C16(String:C10($o.default))>0)
-			
-			Case of 
+		Case of 
+				
+				  //______________________________________________________
+			: ($Obj_form.form.event=On After Edit:K2:43)
+				
+				If (Length:C16(Get edited text:C655)=0)
 					
-					  //______________________________________________________
-				: ($o.type="number")
+					OB REMOVE:C1226($o;"default")
 					
-					$o.default:=Num:C11($o.default)
+				End if 
+				
+				  //______________________________________________________
+			: ($Obj_form.form.event=On Data Change:K2:15)
+				
+				If (Length:C16(String:C10($o.default))>0)
 					
-					  //______________________________________________________
-				: ($o.type="date")
-					
-					If (Match regex:C1019("[ademorstwy]+";String:C10($o.default);1))
-						
-						If (Position:C15("today";$o.default)>0)
+					Case of 
 							
-							$o.default:="today"
+							  //______________________________________________________
+						: ($o.type="number")
 							
-						Else 
+							$o.default:=Num:C11($o.default)
 							
-							If (Position:C15("yesterday";$o.default)>0)
+							  //______________________________________________________
+						: ($o.type="date")
+							
+							If (Match regex:C1019("(?m-si)^(?:today|tomorrow|yesterday)$";String:C10($o.default);1))
 								
-								$o.default:="yesterday"
+								$o.default:=String:C10($o.default)
 								
 							Else 
 								
-								
-								If (Position:C15("tomorrow";$o.default)>0)
+								If (Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$";String:C10($o.default);1))
 									
-									$o.default:="tomorrow"
+									$o.default:=String:C10(Date:C102($o.default))
 									
 								Else 
 									
+									BEEP:C151
+									OB REMOVE:C1226($o;"default")
+									$Obj_form.default.focus()
+									
 								End if 
 							End if 
-						End if 
-						
-					Else 
-						
-						$o.default:=String:C10(Date:C102($o.default))
-						
-					End if 
+							
+							  //______________________________________________________
+						: ($o.type="bool")
+							
+							If (Match regex:C1019("(?m-is)^(?:true|false)$";String:C10($o.default);1))
+								
+								  // $o.default:=Bool($o.default="true")
+								
+							Else 
+								
+								BEEP:C151
+								OB REMOVE:C1226($o;"default")
+								$Obj_form.default.focus()
+								
+								
+							End if 
+							
+							  //______________________________________________________
+							  //: ($o.type="time")
+							
+							  // Format
+							
+							  //______________________________________________________
+						Else 
+							
+							$o.default:=String:C10($o.default)
+							
+							  //______________________________________________________
+					End case 
 					
-					  //______________________________________________________
-					  //: ($o.type="time")
-					
-					  // Format
-					
-					  //______________________________________________________
 				Else 
 					
-					$o.default:=String:C10($o.default)
+					OB REMOVE:C1226($o;"default")
 					
-					  //______________________________________________________
-			End case 
-			
-		Else 
-			
-			OB REMOVE:C1226($o;"default")
-			
-		End if 
-		
-		project.save()
+				End if 
+				
+				project.save()
+				
+				  //______________________________________________________
+		End case 
 		
 		  //==================================================
 	: ($Obj_form.linked.include($Obj_form.form.currentWidget))  // Linked widgets

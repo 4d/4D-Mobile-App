@@ -16,7 +16,7 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($l)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_params)
+C_OBJECT:C1216($file;$o;$Obj_context;$Obj_form;$Obj_params)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -31,6 +31,197 @@ $Obj_params:=Form:C1466.$dialog.ACTIONS_PARAMS
 
   // ----------------------------------------------------
 Case of 
+		
+		  //______________________________________________________
+	: ($1="refresh")  // Update the panel UI according to the selection
+		
+		ASSERT:C1129(Not:C34(Shift down:C543))
+		
+		$o:=$2.form
+		$Obj_context:=$o.$
+		
+		$o.noSelection.hide()
+		$o.noTable.hide()
+		$o.withSelection.hide()
+		$o.deleteAction.hide()
+		
+		If (Form:C1466.actions=Null:C1517)\
+			 | (Num:C11(Form:C1466.actions.length)=0)  // No actions
+			
+			$o.noAction.show()
+			
+		Else 
+			
+			$o.noAction.hide()
+			
+			If ($Obj_context.action=Null:C1517)  // No action selected
+				
+				$o.noSelection.show()
+				$o.withSelection.hide()
+				
+			Else 
+				
+				If (String:C10($Obj_context.action.style)="destructive")
+					
+					$o.noSelection.hide()
+					$o.deleteAction.show()
+					
+				Else 
+					
+					$o.withSelection.show()
+					
+					If ($Obj_context.action.tableNumber=Null:C1517)  // No target table
+						
+						$o.noTable.show()
+						$o.properties.hide()
+						$o.remove.disable()
+						$o.add.disable()
+						
+					Else 
+						
+						$o.add.enable()
+						
+						If ($Obj_context.parameter=Null:C1517)  // No current parameter
+							
+							$o.properties.hide()
+							$o.remove.disable()
+							
+						Else 
+							
+							If ($Obj_context.action.parameters.length>0)
+								
+								$o.remove.enable()
+								$o.properties.show()
+								
+								$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
+								
+								$o.field.setVisible($Obj_context.parameter.fieldNumber#Null:C1517)  // If field
+								
+								$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
+								
+								$o.mandatory.setValue(ACTIONS_PARAMS_UI ("mandatory").value)
+								$o.min.setValue(ACTIONS_PARAMS_UI ("min").value)
+								$o.max.setValue(ACTIONS_PARAMS_UI ("max").value)
+								
+								  //$o.withDefault.setVisible(String($Obj_context.action.preset)#"edition")
+								
+								If (String:C10($Obj_context.action.preset)#"edition")
+									
+									If (featuresFlags.with("parameterListOfValues"))  // Watch if a formatter is assigned to the field
+										
+										OB REMOVE:C1226($Obj_context;"formatters")
+										
+										$t:=String:C10(Form:C1466.dataModel[String:C10($Obj_context.action.tableNumber)][String:C10($Obj_context.parameter.fieldNumber)].format)
+										
+										If (Length:C16($t)>0)
+											
+											If ($t[[1]]="/")
+												
+												  // User
+												$file:=COMPONENT_Pathname ("host_formatters").file(Substring:C12($t;2)+"/manifest.json")
+												
+												If ($file.exists)
+													
+													$Obj_context.formatters:=JSON Parse:C1218($file.getText())
+													
+												End if 
+												
+											Else 
+												
+												  // Embedded
+												
+											End if 
+										End if 
+										
+										If ($Obj_context.formatters#Null:C1517) & False:C215
+											
+										Else 
+											
+											$o.withDefault.show()
+											
+										End if 
+									End if 
+									
+								Else 
+									
+									$o.withDefault.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)
+									
+								End if 
+								
+								If ($o.withDefault.visible())
+									
+									If ($Obj_context.formatters#Null:C1517) & False:C215
+										
+									Else 
+										
+										Case of 
+												
+												  //…………………………………………………………………………………………………………………………………………
+											: ($Obj_context.parameter.type="number")
+												
+												Case of 
+														
+														  //________________________________________
+													: (String:C10($Obj_context.parameter.format)="integer")
+														
+														$o.default.setFilter(Is integer:K8:5)
+														
+														  //________________________________________
+													: (String:C10($Obj_context.parameter.format)="spellOut")
+														
+														$o.default.setFilter(Is text:K8:3)
+														
+														  //________________________________________
+													Else 
+														
+														$o.default.setFilter(Is real:K8:4)
+														
+														  //________________________________________
+												End case 
+												
+												  //…………………………………………………………………………………………………………………………………………
+											: ($Obj_context.parameter.type="date")
+												
+												  // Should accept "today", "yesterday", "tomorrow"
+												GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
+												$o.default.setFilter(Replace string:C233("&\"0-9;%;-;/;a;d;e;m;o;r-t;w;y\"";"%";$t))
+												
+												  //…………………………………………………………………………………………………………………………………………
+											: ($Obj_context.parameter.type="time")
+												
+												$o.default.setFilter(Is time:K8:8)
+												
+												  //…………………………………………………………………………………………………………………………………………
+											: ($Obj_context.parameter.type="string")
+												
+												$o.default.setFilter(Is text:K8:3)
+												
+												  //…………………………………………………………………………………………………………………………………………
+											: ($Obj_context.parameter.type="bool")
+												
+												$o.default.setFilter("&\"a;e;f;l;r-u\"")
+												
+												  //…………………………………………………………………………………………………………………………………………
+											Else 
+												
+												$o.withDefault.hide()
+												
+												  //…………………………………………………………………………………………………………………………………………
+										End case 
+									End if 
+								End if 
+								
+							Else 
+								
+								$o.properties.hide()
+								$o.remove.disable()
+								
+							End if 
+						End if 
+					End if 
+				End if 
+			End if 
+		End if 
 		
 		  //______________________________________________________
 	: ($1="min")\
@@ -167,6 +358,7 @@ Case of
 		$o.cell.names.stroke:=Choose:C955($Obj_params.action.parameters.indices("name = :1";$2.name).length>1;ui.errorRGB;"black")
 		
 		  //______________________________________________________
+		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$1+"\"")

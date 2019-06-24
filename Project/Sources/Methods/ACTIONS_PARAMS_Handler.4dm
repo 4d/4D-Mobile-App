@@ -12,9 +12,8 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($l;$Lon_formEvent;$Lon_parameters)
-C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_in;$Obj_out)
+C_LONGINT:C283($Lon_formEvent;$Lon_parameters)
+C_OBJECT:C1216($Obj_context;$Obj_form;$Obj_in;$Obj_out)
 
 If (False:C215)
 	C_OBJECT:C1216(ACTIONS_PARAMS_Handler ;$0)
@@ -60,6 +59,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"withDefault";UI.group("@_default@")\
 		)
 	
+	  //"boolDefault";UI.group("@_bool@")
+	
 	$Obj_context:=$Obj_form.$
 	
 	If (OB Is empty:C1297($Obj_context))\
@@ -76,6 +77,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 		$Obj_context.backgroundColor:=Formula:C1597(ACTIONS_PARAMS_UI ("backgroundColor";$1).color)
 		$Obj_context.metaInfo:=Formula:C1597(ACTIONS_PARAMS_UI ("metaInfo";$1))
+		
+		$Obj_context.update:=Formula:C1597(ACTIONS_PARAMS_UI ("refresh";New object:C1471("form";$1)))
 		
 	End if 
 	
@@ -104,136 +107,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)  // Refresh UI
 				
-				ASSERT:C1129(Not:C34(Shift down:C543))
-				
-				$o:=$Obj_form
-				
-				$o.noSelection.hide()
-				$o.noTable.hide()
-				$o.withSelection.hide()
-				$o.deleteAction.hide()
-				
-				If (Form:C1466.actions=Null:C1517)\
-					 | (Num:C11(Form:C1466.actions.length)=0)  // No actions
-					
-					$o.noAction.show()
-					
-				Else 
-					
-					$o.noAction.hide()
-					
-					If ($Obj_context.action=Null:C1517)  // No action selected
-						
-						$o.noSelection.show()
-						$o.withSelection.hide()
-						
-					Else 
-						
-						If (String:C10($Obj_context.action.style)="destructive")
-							
-							$o.noSelection.hide()
-							$o.deleteAction.show()
-							
-						Else 
-							
-							$o.withSelection.show()
-							
-							If ($Obj_context.action.tableNumber=Null:C1517)  // No target table
-								
-								$o.noTable.show()
-								$o.properties.hide()
-								$o.remove.disable()
-								$o.add.disable()
-								
-							Else 
-								
-								$o.add.enable()
-								
-								If ($Obj_context.parameter=Null:C1517)  // No current parameter
-									
-									$o.properties.hide()
-									$o.remove.disable()
-									
-								Else 
-									
-									If ($Obj_context.action.parameters.length>0)
-										
-										$o.remove.enable()
-										$o.properties.show()
-										
-										$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
-										
-										$o.field.setVisible($Obj_context.parameter.fieldNumber#Null:C1517)  // If field
-										
-										$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
-										
-										$o.mandatory.setValue(ACTIONS_PARAMS_UI ("mandatory").value)
-										$o.min.setValue(ACTIONS_PARAMS_UI ("min").value)
-										$o.max.setValue(ACTIONS_PARAMS_UI ("max").value)
-										
-										$o.withDefault.setVisible(String:C10($Obj_context.action.preset)#"edition")
-										
-										Case of 
-												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_context.parameter.type="number")
-												
-												Case of 
-														
-														  //________________________________________
-													: (String:C10($Obj_context.parameter.format)="integer")
-														
-														$o.default.setFilter(Is integer:K8:5)
-														
-														  //________________________________________
-													: (String:C10($Obj_context.parameter.format)="spellOut")
-														
-														$o.default.setFilter(Is text:K8:3)
-														
-														  //________________________________________
-													Else 
-														
-														$o.default.setFilter(Is real:K8:4)
-														
-														  //________________________________________
-												End case 
-												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_context.parameter.type="date")
-												
-												  // Should accept "today", "yesterday", "tomorrow"
-												GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
-												$o.default.setFilter(Replace string:C233("&\"0-9;%;-;/;a;d;e;m;o;r-t;w;y\"";"%";$t))
-												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_context.parameter.type="time")
-												
-												$o.default.setFilter(Is time:K8:8)
-												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_context.parameter.type="text")
-												
-												$o.default.setFilter(Is text:K8:3)
-												
-												  //…………………………………………………………………………………………………………………………………………
-											Else 
-												
-												$o.withDefault.hide()
-												
-												  //…………………………………………………………………………………………………………………………………………
-										End case 
-										
-									Else 
-										
-										$o.properties.hide()
-										$o.remove.disable()
-										
-									End if 
-								End if 
-							End if 
-						End if 
-					End if 
-				End if 
+				$Obj_context.update($Obj_form)
 				
 				  //______________________________________________________
 		End case 

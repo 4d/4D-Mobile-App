@@ -366,8 +366,10 @@
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
 					"events": [
-						"onDataChange"
-					]
+						"onDataChange",
+						"onAfterEdit"
+					],
+					"textAlign": "left"
 				},
 				"07_variable_default.label": {
 					"type": "text",

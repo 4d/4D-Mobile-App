@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-		"LaunchScreen";"LaunchScreen";\
-		"Main";"Main";\
-		"backgroundColor";"white")
+				"LaunchScreen";"LaunchScreen";\
+				"Main";"Main";\
+				"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -413,6 +413,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags.withClasses:=featuresFlags._8858  //               Work with ui.classes
 	
 	featuresFlags.allowPictureAsActionParameters:=featuresFlags._8858  // #107932 - [Mobile] Allow to use picture as action parameters
+	featuresFlags.parameterListOfValues:=featuresFlags._8858  // Manage formatters as list of values
 	
 End if 
 

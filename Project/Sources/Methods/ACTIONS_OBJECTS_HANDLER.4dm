@@ -386,63 +386,67 @@ Case of
 										  //______________________________________________________
 									: (Storage:C1525.ƒ.isField($t))
 										
-										$cc:=$Col_fields.query("name = :1";$Obj_table[$t].name)
-										
-										If (featuresFlags.with("allowPictureAsActionParameters"))
+										If ($Obj_table[$t].name#$Obj_table.primaryKey)  // DO NOT ADD A PRIMARY KEY
 											
-											$oo:=New object:C1471(\
-												"fieldNumber";$cc[0].fieldNumber;\
-												"name";str ($Obj_table[$t].name).uperCamelCase();\
-												"label";$Obj_table[$t].label;\
-												"shortLabel";$Obj_table[$t].shortLabel;\
-												"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType))
+											$cc:=$Col_fields.query("name = :1";$Obj_table[$t].name)
 											
-											If ($Obj_popup.edit)
-												
-												$oo.defaultField:=formatString ("field-name";$Obj_table[$t].name)
-												
-											End if 
-											
-										Else 
-											
-											If ($cc[0].fieldType#Is picture:K8:10)
+											If (featuresFlags.with("allowPictureAsActionParameters"))
 												
 												$oo:=New object:C1471(\
 													"fieldNumber";$cc[0].fieldNumber;\
 													"name";str ($Obj_table[$t].name).uperCamelCase();\
 													"label";$Obj_table[$t].label;\
 													"shortLabel";$Obj_table[$t].shortLabel;\
-													"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
-													"defaultField";formatString ("field-name";$Obj_table[$t].name))
+													"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType))
+												
+												If ($Obj_popup.edit)
+													
+													$oo.defaultField:=formatString ("field-name";$Obj_table[$t].name)
+													
+												End if 
+												
+											Else 
+												
+												If ($cc[0].fieldType#Is picture:K8:10)
+													
+													$oo:=New object:C1471(\
+														"fieldNumber";$cc[0].fieldNumber;\
+														"name";str ($Obj_table[$t].name).uperCamelCase();\
+														"label";$Obj_table[$t].label;\
+														"shortLabel";$Obj_table[$t].shortLabel;\
+														"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
+														"defaultField";formatString ("field-name";$Obj_table[$t].name))
+													
+												End if 
+											End if 
+											
+											If (Bool:C1537($cc[0].mandatory))
+												
+												$oo.rules:=New collection:C1472("mandatory")
 												
 											End if 
-										End if 
-										
-										If (Bool:C1537($cc[0].mandatory))
 											
-											$oo.rules:=New collection:C1472("mandatory")
+											  // Preset formats
+											Case of 
+													
+													  //……………………………………………………………………
+												: ($cc[0].fieldType=Is integer:K8:5)\
+													 | ($cc[0].fieldType=Is longint:K8:6)\
+													 | ($cc[0].fieldType=Is integer 64 bits:K8:25)
+													
+													$oo.format:="integer"
+													
+													  //……………………………………………………………………
+												: ($oo.type="date")
+													
+													$oo.format:="shortDate"
+													
+													  //……………………………………………………………………
+											End case 
+											
+											$o.parameters.push($oo)
 											
 										End if 
-										
-										  // Preset formats
-										Case of 
-												
-												  //……………………………………………………………………
-											: ($cc[0].fieldType=Is integer:K8:5)\
-												 | ($cc[0].fieldType=Is longint:K8:6)\
-												 | ($cc[0].fieldType=Is integer 64 bits:K8:25)
-												
-												$oo.format:="integer"
-												
-												  //……………………………………………………………………
-											: ($oo.type="date")
-												
-												$oo.format:="shortDate"
-												
-												  //……………………………………………………………………
-										End case 
-										
-										$o.parameters.push($oo)
 										
 										  //______________________________________________________
 									: (Value type:C1509($Obj_table[$t])#Is object:K8:27)
@@ -506,7 +510,7 @@ Case of
 			Form:C1466.actions.push($o)
 			
 			$Obj_form.actions.focus()
-			$Obj_form.actions.reveal($Obj_form.actions.rowsNumber())
+			$Obj_form.actions.reveal($Obj_form.actions.rowsNumber()+Num:C11($Obj_form.actions.rowsNumber()=0))
 			
 			Form:C1466.$dialog.ACTIONS_PARAMS.action:=$o
 			
