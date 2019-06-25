@@ -20,9 +20,9 @@ C_TEXT:C284($Txt_action)
 C_OBJECT:C1216($Obj_out;$Obj_params)
 
 If (False:C215)
-	C_OBJECT:C1216(ui_listbox ;$0)
-	C_TEXT:C284(ui_listbox ;$1)
-	C_OBJECT:C1216(ui_listbox ;$2)
+	C_OBJECT:C1216(_o_ui_listbox ;$0)
+	C_TEXT:C284(_o_ui_listbox ;$1)
+	C_OBJECT:C1216(_o_ui_listbox ;$2)
 End if 
 
   // ----------------------------------------------------
@@ -101,8 +101,8 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="cell")
 		
-		This:C1470.getCellPosition()
-		This:C1470.getCellCoordinates()
+		This:C1470.cellPosition()
+		This:C1470.cellCoordinates()
 		
 		  //______________________________________________________
 	: ($Txt_action="scrollbar")

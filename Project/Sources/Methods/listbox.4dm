@@ -34,7 +34,7 @@ If (This:C1470._is=Null:C1517)
 		"name";$t;\
 		"column";Null:C1517;\
 		"row";Null:C1517;\
-		"cellCoordinates";Null:C1517;\
+		"cellBox";Null:C1517;\
 		"definition";Null:C1517;\
 		"columns";Null:C1517;\
 		"scrollbar";Null:C1517;\
@@ -60,8 +60,8 @@ If (This:C1470._is=Null:C1517)
 		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
 		"getDefinition";Formula:C1597(listbox ("getDefinition"));\
 		"getCell";Formula:C1597(listbox ("getCell"));\
-		"getCellPosition";Formula:C1597(listbox ("getCellPosition"));\
-		"getCellCoordinates";Formula:C1597(listbox ("getCellCoordinates"));\
+		"cellPosition";Formula:C1597(listbox ("cellPosition"));\
+		"cellCoordinates";Formula:C1597(listbox ("cellCoordinates"));\
 		"getScrollbar";Formula:C1597(listbox ("getScrollbar"));\
 		"setScrollbar";Formula:C1597(OBJECT SET SCROLLBAR:C843(*;This:C1470.name;Num:C11($1);Num:C11($2)));\
 		"getProperty";Formula:C1597(listbox ("getProperty";New object:C1471("property";$1)));\
@@ -145,31 +145,31 @@ Else
 			  //______________________________________________________
 		: ($1="getCell")  // Current cell
 			
-			$o.getCellPosition()
-			$o.getCellCoordinates()
+			$o.cellPosition()
+			$o.cellCoordinates()
 			
 			  //______________________________________________________
-		: ($1="getCellPosition")  // Current cell indexes
+		: ($1="cellPosition")  // Current cell indexes
 			
 			LISTBOX GET CELL POSITION:C971(*;$o.name;$Lon_column;$Lon_row)
 			$o.column:=$Lon_column
 			$o.row:=$Lon_row
 			
 			  //______________________________________________________
-		: ($1="getCellCoordinates")  // Current cell coordinates
+		: ($1="cellCoordinates")  // Current cell coordinates
 			
 			LISTBOX GET CELL COORDINATES:C1330(*;$o.name;Num:C11($o.column);Num:C11($o.row);$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 			
-			If ($o.cellCoordinates=Null:C1517)
+			If ($o.cellBox=Null:C1517)
 				
-				$o.cellCoordinates:=New object:C1471
+				$o.cellBox:=New object:C1471
 				
 			End if 
 			
-			$o.cellCoordinates.left:=$Lon_left
-			$o.cellCoordinates.top:=$Lon_top
-			$o.cellCoordinates.right:=$Lon_right
-			$o.cellCoordinates.bottom:=$Lon_bottom
+			$o.cellBox.left:=$Lon_left
+			$o.cellBox.top:=$Lon_top
+			$o.cellBox.right:=$Lon_right
+			$o.cellBox.bottom:=$Lon_bottom
 			
 			  //______________________________________________________
 		: ($1="getProperty")  // Returns a property value from the list
@@ -181,8 +181,8 @@ Else
 			  //______________________________________________________
 		: ($1="popup")  // Display a pop-up menu at the right place based on the current cell
 			
-			$Lon_left:=$o.cellCoordinates.left
-			$Lon_bottom:=$o.cellCoordinates.bottom
+			$Lon_left:=$o.cellBox.left
+			$Lon_bottom:=$o.cellBox.bottom
 			
 			CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
 			

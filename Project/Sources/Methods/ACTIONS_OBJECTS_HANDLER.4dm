@@ -126,7 +126,7 @@ Case of
 							
 							$o.row:=$Obj_form.actions.row
 							
-							$o.left:=$Obj_form.actions.cellCoordinates.right
+							$o.left:=$Obj_form.actions.cellBox.right
 							$o.top:=34
 							
 							$o.action:="actionIcons"
@@ -182,6 +182,7 @@ Case of
 						If ($Obj_form.actions.popup($Obj_popup).selected)
 							
 							$Obj_context.current.tableNumber:=Num:C11($Obj_popup.choice)
+							
 							$Obj_form.form.refresh()
 							project.save()
 							

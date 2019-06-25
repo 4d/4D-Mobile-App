@@ -68,7 +68,7 @@ Case of
 			: ($Obj_form.form.event=On Begin Drag Over:K2:44)
 				
 				$o:=New object:C1471(\
-					"old";$Obj_context.index)
+					"src";$Obj_context.index)
 				
 				  // Put into the container
 				VARIABLE TO BLOB:C532($o;$x)
@@ -78,6 +78,7 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Drag Over:K2:13)  // Manage drag & &drop cursor
 				
+				  // Get the pastboard
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter";$x)
 				
 				If (Bool:C1537(OK))
@@ -85,26 +86,52 @@ Case of
 					BLOB TO VARIABLE:C533($x;$o)
 					SET BLOB SIZE:C606($x;0)
 					
-					$o.new:=Drop position:C608
+					$o.tgt:=Drop position:C608
 					
-					If ($o.new=-1)  // After the last line
+					If ($o.tgt=-1)  // After the last line
 						
-						LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.parameters.name;1;$Obj_form.parameters.rowsNumber();$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-						$Lon_top:=$Lon_bottom
+						If ($o.src#$Obj_form.parameters.rowsNumber())  // Not if the source was the last line
+							
+							LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.parameters.name;1;$Obj_form.parameters.rowsNumber();$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+							$Lon_top:=$Lon_bottom
+							
+							$Obj_form.dropCursor.setCoordinates($Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+							$Obj_form.dropCursor.show()
+							
+						Else 
+							
+							  // Reject drop
+							$Obj_form.dropCursor.hide()
+							$0:=-1
+							
+						End if 
 						
 					Else 
 						
-						LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.parameters.name;1;$o.new;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-						$Lon_bottom:=$Lon_top
-						
+						If ($o.src#$o.tgt)\
+							 & ($o.tgt#($o.src+1))  // Not the same or the next one
+							
+							LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.parameters.name;1;$o.tgt;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+							$Lon_bottom:=$Lon_top
+							
+							$Obj_form.dropCursor.setCoordinates($Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+							
+							$Obj_form.dropCursor.show()
+							
+						Else 
+							
+							  // Reject drop
+							$Obj_form.dropCursor.hide()
+							$0:=-1
+							
+						End if 
 					End if 
-					
-					$Obj_form.dropCursor.setCoordinates($Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-					$Obj_form.dropCursor.show()
 					
 				Else 
 					
+					  // Reject drop
 					$Obj_form.dropCursor.hide()
+					$0:=-1
 					
 				End if 
 				
@@ -119,30 +146,30 @@ Case of
 					BLOB TO VARIABLE:C533($x;$o)
 					SET BLOB SIZE:C606($x;0)
 					
-					$o.new:=Drop position:C608
+					$o.tgt:=Drop position:C608
 					
 				End if 
 				
-				If ($o.old#$o.new)
+				If ($o.src#$o.tgt)
 					
-					$Obj_current:=$Obj_context.action.parameters[$o.old-1]
+					$Obj_current:=$Obj_context.action.parameters[$o.src-1]
 					
-					If ($o.new=-1)  // After the last line
+					If ($o.tgt=-1)  // After the last line
 						
 						$Obj_context.action.parameters.push($Obj_current)
-						$Obj_context.action.parameters.remove($o.old-1)
+						$Obj_context.action.parameters.remove($o.src-1)
 						
 					Else 
 						
-						$Obj_context.action.parameters.insert($o.new-1;$Obj_current)
+						$Obj_context.action.parameters.insert($o.tgt-1;$Obj_current)
 						
-						If ($o.new<$o.old)
+						If ($o.tgt<$o.src)
 							
-							$Obj_context.action.parameters.remove($o.old)
+							$Obj_context.action.parameters.remove($o.src)
 							
 						Else 
 							
-							$Obj_context.action.parameters.remove($o.old-1)
+							$Obj_context.action.parameters.remove($o.src-1)
 							
 						End if 
 					End if 
@@ -426,7 +453,7 @@ Case of
 							  //……………………………………………………………………
 						: ($o.type="date")
 							
-							$o.format:="dateMedium"
+							$o.format:="mediumDate"
 							
 							  //……………………………………………………………………
 						: ($o.type="time")

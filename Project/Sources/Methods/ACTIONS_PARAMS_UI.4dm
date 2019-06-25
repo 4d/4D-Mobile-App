@@ -16,7 +16,7 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($l)
 C_TEXT:C284($t)
-C_OBJECT:C1216($file;$o;$Obj_context;$Obj_form;$Obj_params)
+C_OBJECT:C1216($o;$Obj_action;$Obj_form;$Obj_parameter)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -26,19 +26,14 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-  // Initialisations
-$Obj_params:=Form:C1466.$dialog.ACTIONS_PARAMS
-
-  // ----------------------------------------------------
 Case of 
 		
 		  //______________________________________________________
 	: ($1="refresh")  // Update the panel UI according to the selection
 		
-		ASSERT:C1129(Not:C34(Shift down:C543))
+		ASSERT:C1129(Not:C34(Macintosh option down:C545))
 		
-		$o:=$2.form
-		$Obj_context:=$o.$
+		$o:=$2  // The form definition
 		
 		$o.noSelection.hide()
 		$o.noTable.hide()
@@ -54,14 +49,17 @@ Case of
 			
 			$o.noAction.hide()
 			
-			If ($Obj_context.action=Null:C1517)  // No action selected
+			$Obj_action:=This:C1470.action
+			$Obj_parameter:=This:C1470.parameter
+			
+			If ($Obj_action=Null:C1517)  // No action selected
 				
 				$o.noSelection.show()
 				$o.withSelection.hide()
 				
 			Else 
 				
-				If (String:C10($Obj_context.action.style)="destructive")
+				If (String:C10($Obj_action.style)="destructive")
 					
 					$o.noSelection.hide()
 					$o.deleteAction.show()
@@ -70,7 +68,7 @@ Case of
 					
 					$o.withSelection.show()
 					
-					If ($Obj_context.action.tableNumber=Null:C1517)  // No target table
+					If ($Obj_action.tableNumber=Null:C1517)  // No target table
 						
 						$o.noTable.show()
 						$o.properties.hide()
@@ -81,93 +79,81 @@ Case of
 						
 						$o.add.enable()
 						
-						If ($Obj_context.parameter=Null:C1517)  // No current parameter
+						If ($Obj_parameter=Null:C1517)  // No current parameter
 							
 							$o.properties.hide()
 							$o.remove.disable()
 							
 						Else 
 							
-							If ($Obj_context.action.parameters.length>0)
+							If ($Obj_action.parameters.length>0)
 								
 								$o.remove.enable()
 								$o.properties.show()
 								
-								$o.variable.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)  // If variable
+								$o.variable.setVisible($Obj_parameter.fieldNumber=Null:C1517)  // If variable
 								
-								$o.field.setVisible($Obj_context.parameter.fieldNumber#Null:C1517)  // If field
+								$o.field.setVisible($Obj_parameter.fieldNumber#Null:C1517)  // If field
 								
-								$o.number.setVisible(String:C10($Obj_context.parameter.type)="number")
+								$o.number.setVisible(String:C10($Obj_parameter.type)="number")
 								
 								$o.mandatory.setValue(ACTIONS_PARAMS_UI ("mandatory").value)
 								$o.min.setValue(ACTIONS_PARAMS_UI ("min").value)
 								$o.max.setValue(ACTIONS_PARAMS_UI ("max").value)
 								
-								  //$o.withDefault.setVisible(String($Obj_context.action.preset)#"edition")
+								  //$o.withDefault.setVisible(String($Obj_action.preset)#"edition")
 								
-								If (String:C10($Obj_context.action.preset)#"edition")
+								If (String:C10($Obj_action.preset)#"edition")
 									
-									If (featuresFlags.with("parameterListOfValues"))  // Watch if a formatter is assigned to the field
-										
-										OB REMOVE:C1226($Obj_context;"formatters")
-										
-										$t:=String:C10(Form:C1466.dataModel[String:C10($Obj_context.action.tableNumber)][String:C10($Obj_context.parameter.fieldNumber)].format)
-										
-										If (Length:C16($t)>0)
-											
-											If ($t[[1]]="/")
-												
-												  // User
-												$file:=COMPONENT_Pathname ("host_formatters").file(Substring:C12($t;2)+"/manifest.json")
-												
-												If ($file.exists)
-													
-													$Obj_context.formatters:=JSON Parse:C1218($file.getText())
-													
-												End if 
-												
-											Else 
-												
-												  // Embedded
-												
-											End if 
-										End if 
-										
-										If ($Obj_context.formatters#Null:C1517) & False:C215
-											
-										Else 
-											
-											$o.withDefault.show()
-											
-										End if 
-									End if 
+									  //If (featuresFlags.with("parameterListOfValues"))  // Watch if a formatter is assigned to the field
+									  // OB REMOVE(This;"formatters")
+									  //$t:=String(Form.dataModel[String($Obj_action.tableNumber)][String($Obj_parameter.fieldNumber)].format)
+									  //If (Length($t)>0)
+									  //If ($t[[1]]="/")
+									  //  // User
+									  //$file:=COMPONENT_Pathname ("host_formatters").file(Substring($t;2)+"/manifest.json")
+									  //If ($file.exists)
+									  //This.formatters:=JSON Parse($file.getText())
+									  // End if
+									  // Else
+									  //  // Embedded
+									  // End if
+									  // End if
+									  // If (This.formatters#Null) & False
+									  //  //#PENDING
+									  // Else
+									  //$o.withDefault.show()
+									  // End if
+									  // End if
+									
+									$o.withDefault.show()
 									
 								Else 
 									
-									$o.withDefault.setVisible($Obj_context.parameter.fieldNumber=Null:C1517)
+									$o.withDefault.setVisible($Obj_parameter.fieldNumber=Null:C1517)
 									
 								End if 
 								
 								If ($o.withDefault.visible())
 									
-									If ($Obj_context.formatters#Null:C1517) & False:C215
+									If (This:C1470.formatters#Null:C1517) & False:C215
 										
 									Else 
 										
 										Case of 
 												
 												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_context.parameter.type="number")
+											: ($Obj_parameter.type="number")
 												
 												Case of 
 														
 														  //________________________________________
-													: (String:C10($Obj_context.parameter.format)="integer")
+													: (String:C10($Obj_parameter.format)="integer")
 														
 														$o.default.setFilter(Is integer:K8:5)
 														
 														  //________________________________________
-													: (String:C10($Obj_context.parameter.format)="spellOut")
+													: (String:C10($Obj_parameter.format)="spellOut")
 														
 														$o.default.setFilter(Is text:K8:3)
 														
@@ -180,31 +166,31 @@ Case of
 												End case 
 												
 												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_context.parameter.type="date")
+											: ($Obj_parameter.type="date")
 												
 												  // Should accept "today", "yesterday", "tomorrow"
 												GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
 												$o.default.setFilter(Replace string:C233("&\"0-9;%;-;/;a;d;e;m;o;r-t;w;y\"";"%";$t))
 												
 												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_context.parameter.type="time")
+											: ($Obj_parameter.type="time")
 												
 												$o.default.setFilter(Is time:K8:8)
 												
 												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_context.parameter.type="string")
+											: ($Obj_parameter.type="string")
 												
 												$o.default.setFilter(Is text:K8:3)
 												
 												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_context.parameter.type="bool")
+											: ($Obj_parameter.type="bool")
 												
 												$o.default.setFilter("&\"a;e;f;l;r-u\"")
 												
 												  //…………………………………………………………………………………………………………………………………………
-											Else 
+											: ($Obj_parameter.type="image")
 												
-												$o.withDefault.hide()
+												$o.withDefault.hide()  // No default value
 												
 												  //…………………………………………………………………………………………………………………………………………
 										End case 
@@ -227,11 +213,11 @@ Case of
 	: ($1="min")\
 		 | ($1="max")  // Return the min or max rule value as string
 		
-		$o:=$Obj_params.parameter
+		$Obj_parameter:=This:C1470.parameter
 		
-		If ($o.rules#Null:C1517)
+		If ($Obj_parameter.rules#Null:C1517)
 			
-			$c:=$o.rules.extract($1)
+			$c:=$Obj_parameter.rules.extract($1)
 			
 			If ($c.length>0)
 				
@@ -246,11 +232,11 @@ Case of
 		  //______________________________________________________
 	: ($1="mandatory")  // Return the mandatory rule value as boolean
 		
-		$o:=$Obj_params.parameter
+		$Obj_parameter:=This:C1470.parameter
 		
-		If ($o.rules#Null:C1517)
+		If ($Obj_parameter.rules#Null:C1517)
 			
-			$b:=($o.rules.countValues("mandatory")>0)
+			$b:=($Obj_parameter.rules.countValues("mandatory")>0)
 			
 		End if 
 		
@@ -260,16 +246,17 @@ Case of
 		  //______________________________________________________
 	: ($1="comment")  // Comment associated with the parameter linked to a field
 		
-		$o:=$Obj_params
+		$Obj_action:=This:C1470.action
+		$Obj_parameter:=This:C1470.parameter
 		
-		If (Num:C11($o.parameter.fieldNumber)#0)  // One parameter slected
+		If (Num:C11($Obj_parameter.fieldNumber)#0)  // One parameter slected
 			
-			If (Num:C11($o.action.tableNumber)#0)
+			If (Num:C11($Obj_action.tableNumber)#0)
 				
 				$o:=New object:C1471(\
 					"value";Replace string:C233(Get localized string:C991("thisParameterIsLinkedToTheField");\
 					"{field}";\
-					String:C10(Form:C1466.dataModel[String:C10($o.action.tableNumber)][String:C10($o.parameter.fieldNumber)].name))\
+					String:C10(Form:C1466.dataModel[String:C10($Obj_action.tableNumber)][String:C10($Obj_parameter.fieldNumber)].name))\
 					)
 				
 			End if 
@@ -284,17 +271,17 @@ Case of
 		  //______________________________________________________
 	: ($1="formatLabel")  // display format according to format or type
 		
-		$o:=$Obj_params.parameter
+		$Obj_parameter:=This:C1470.parameter
 		
-		If (Length:C16(String:C10($o.format))=0)
+		If (Length:C16(String:C10($Obj_parameter.format))=0)
 			
 			  // Take type
-			$t:=Choose:C955($o.type="string";"text";String:C10($o.type))
+			$t:=Choose:C955($Obj_parameter.type="string";"text";String:C10($Obj_parameter.type))
 			
 		Else 
 			
 			  // Prefer format
-			$t:=Choose:C955($o.format#$o.type;"f_"+String:C10($o.format);String:C10($o.type))
+			$t:=Choose:C955($Obj_parameter.format#$Obj_parameter.type;"f_"+String:C10($Obj_parameter.format);String:C10($Obj_parameter.type))
 			
 		End if 
 		
@@ -308,7 +295,7 @@ Case of
 			"action";"init"))
 		
 		If ($Obj_form.form.focusedWidget=$Obj_form.parameters.name)\
-			 & (Form event:C388=On Getting Focus:K2:7)
+			  // & (Form event=On Getting Focus)
 			
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget+".border";ui.selectedColor;Background color none:K23:10)
@@ -326,14 +313,14 @@ Case of
 		$o:=New object:C1471(\
 			"color";0x00FFFFFF)  // Default is white
 		
-		If (Num:C11($Obj_params.index)#0)
+		If (Num:C11(This:C1470.index)#0)
 			
 			$Obj_form:=ACTIONS_PARAMS_Handler (New object:C1471(\
 				"action";"init"))
 			
 			$b:=($Obj_form.form.focusedWidget=$Obj_form.parameters.name)
 			
-			If (ob_equal ($Obj_params.parameter;$2))  // Selected row
+			If (ob_equal (This:C1470.parameter;$2))  // Selected row
 				
 				$o.color:=Choose:C955($b;ui.backgroundSelectedColor;ui.alternateSelectedColor)
 				
@@ -355,16 +342,13 @@ Case of
 		
 		  // Mark duplicate names
 		ob_createPath ($o;"cell.names")
-		$o.cell.names.stroke:=Choose:C955($Obj_params.action.parameters.indices("name = :1";$2.name).length>1;ui.errorRGB;"black")
+		$o.cell.names.stroke:=Choose:C955(This:C1470.action.parameters.indices("name = :1";$2.name).length>1;ui.errorRGB;"black")
 		
 		  //______________________________________________________
 		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$1+"\"")
-		
-		  // Return the context object
-		$o:=$Obj_context
 		
 		  //______________________________________________________
 End case 

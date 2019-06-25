@@ -19,9 +19,9 @@ C_TEXT:C284($t;$Txt_action)
 C_OBJECT:C1216($Obj_params)
 
 If (False:C215)
-	C_OBJECT:C1216(ui_widget ;$0)
-	C_TEXT:C284(ui_widget ;$1)
-	C_OBJECT:C1216(ui_widget ;$2)
+	C_OBJECT:C1216(_o_ui_widget ;$0)
+	C_TEXT:C284(_o_ui_widget ;$1)
+	C_OBJECT:C1216(_o_ui_widget ;$2)
 End if 
 
   // ----------------------------------------------------

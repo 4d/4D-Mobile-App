@@ -79,7 +79,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		$Obj_context.backgroundColor:=Formula:C1597(ACTIONS_PARAMS_UI ("backgroundColor";$1).color)
 		$Obj_context.metaInfo:=Formula:C1597(ACTIONS_PARAMS_UI ("metaInfo";$1))
 		
-		$Obj_context.update:=Formula:C1597(ACTIONS_PARAMS_UI ("refresh";New object:C1471("form";$1)))
+		$Obj_context.update:=Formula:C1597(ACTIONS_PARAMS_UI ("refresh";$1))
 		
 	End if 
 	

@@ -192,7 +192,7 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Begin Drag Over:K2:44)
 				
-				$Obj_form.fieldList.getCellPosition()
+				$Obj_form.fieldList.cellPosition()
 				
 				  //LISTBOX GET CELL POSITION(*;$Obj_form.form.currentWidget;$Lon_column;$Lon_row)
 				

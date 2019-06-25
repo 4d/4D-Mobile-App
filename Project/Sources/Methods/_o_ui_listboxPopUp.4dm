@@ -20,11 +20,11 @@ C_LONGINT:C283($Lon_top)
 C_TEXT:C284($Mnu_choice;$Mnu_pop;$Txt_name)
 
 If (False:C215)
-	C_TEXT:C284(ui_listboxPopUp ;$0)
-	C_TEXT:C284(ui_listboxPopUp ;$1)
-	C_TEXT:C284(ui_listboxPopUp ;$2)
-	C_LONGINT:C283(ui_listboxPopUp ;$3)
-	C_LONGINT:C283(ui_listboxPopUp ;$4)
+	C_TEXT:C284(_o_ui_listboxPopUp ;$0)
+	C_TEXT:C284(_o_ui_listboxPopUp ;$1)
+	C_TEXT:C284(_o_ui_listboxPopUp ;$2)
+	C_LONGINT:C283(_o_ui_listboxPopUp ;$3)
+	C_LONGINT:C283(_o_ui_listboxPopUp ;$4)
 End if 
 
   // ----------------------------------------------------

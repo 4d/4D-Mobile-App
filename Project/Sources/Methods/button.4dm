@@ -50,7 +50,7 @@ If (This:C1470._is=Null:C1517)
 		"resizeHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("right";$1)));\
 		"moveVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("top";$1)));\
 		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
-		"bestSize";Formula:C1597(ui_widget ("alignOnBestSize";New object:C1471("alignment";$1)));\
+		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)));\
 		"title";Formula:C1597(OBJECT Get title:C1068(*;This:C1470.name));\
 		"setTitle";Formula:C1597(OBJECT SET TITLE:C194(*;This:C1470.name;String:C10($1)));\
 		"format";Formula:C1597(OBJECT Get format:C894(*;This:C1470.name));\
