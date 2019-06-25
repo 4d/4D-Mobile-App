@@ -12,7 +12,7 @@
 C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
-C_LONGINT:C283($i;$l)
+C_LONGINT:C283($i;$l;$Lon_bottom;$Lon_left;$Lon_right;$Lon_top)
 C_TEXT:C284($t;$tt;$Txt_format;$Txt_label;$Txt_type)
 C_OBJECT:C1216($o;$Obj_context;$Obj_current;$Obj_form;$Obj_formats;$Obj_menu)
 C_OBJECT:C1216($Obj_table)
@@ -60,6 +60,11 @@ Case of
 				  // <NOTHING MORE TO DO>
 				
 				  //______________________________________________________
+			: ($Obj_form.form.event=On Mouse Leave:K2:34)
+				
+				$Obj_form.dropCursor.hide()
+				
+				  //______________________________________________________
 			: ($Obj_form.form.event=On Begin Drag Over:K2:44)
 				
 				$o:=New object:C1471(\
@@ -71,9 +76,37 @@ Case of
 				SET BLOB SIZE:C606($x;0)
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Drag Over:K2:13)
+			: ($Obj_form.form.event=On Drag Over:K2:13)  // Manage drag & &drop cursor
 				
-				$0:=-1
+				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter";$x)
+				
+				If (Bool:C1537(OK))
+					
+					BLOB TO VARIABLE:C533($x;$o)
+					SET BLOB SIZE:C606($x;0)
+					
+					$o.new:=Drop position:C608
+					
+					If ($o.new=-1)  // After the last line
+						
+						LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.parameters.name;1;$Obj_form.parameters.rowsNumber();$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+						$Lon_top:=$Lon_bottom
+						
+					Else 
+						
+						LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.parameters.name;1;$o.new;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+						$Lon_bottom:=$Lon_top
+						
+					End if 
+					
+					$Obj_form.dropCursor.setCoordinates($Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+					$Obj_form.dropCursor.show()
+					
+				Else 
+					
+					$Obj_form.dropCursor.hide()
+					
+				End if 
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Drop:K2:12)
@@ -114,6 +147,8 @@ Case of
 						End if 
 					End if 
 				End if 
+				
+				OBJECT SET VISIBLE:C603(*;"dropCursor";False:C215)
 				
 				  //______________________________________________________
 			Else 
@@ -598,7 +633,6 @@ Case of
 								BEEP:C151
 								OB REMOVE:C1226($o;"default")
 								$Obj_form.default.focus()
-								
 								
 							End if 
 							

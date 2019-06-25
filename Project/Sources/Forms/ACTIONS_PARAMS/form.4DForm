@@ -149,6 +149,7 @@
 						"onDrop",
 						"onDragOver",
 						"onSelectionChange",
+						"onMouseLeave",
 						"onBeginDragOver"
 					],
 					"focusable": true,
@@ -542,6 +543,17 @@
 					"textAlign": "right",
 					"hideFocusRing": true,
 					"fontStyle": "normal"
+				},
+				"dropCursor": {
+					"type": "line",
+					"top": 358,
+					"left": 16,
+					"width": 450,
+					"height": 0,
+					"strokeWidth": 2,
+					"stroke": "#1e90ff",
+					"visibility": "hidden",
+					"startPoint": "topLeft"
 				}
 			},
 			"entryOrder": [
