@@ -617,27 +617,38 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Data Change:K2:15)
 				
-				If (Length:C16(String:C10($o.default))>0)
+				$t:=$Obj_form.default.value()
+				
+				If (Length:C16(String:C10($t))>0)
 					
 					Case of 
 							
 							  //______________________________________________________
 						: ($o.type="number")
 							
-							$o.default:=Num:C11($o.default)
+							If ($o.format="spellOut")
+								
+								$o.default:=$t
+								
+							Else 
+								
+								$o.default:=Num:C11($t)
+								
+							End if 
 							
 							  //______________________________________________________
 						: ($o.type="date")
 							
-							If (Match regex:C1019("(?m-si)^(?:today|tomorrow|yesterday)$";String:C10($o.default);1))
+							
+							If (Match regex:C1019("(?m-si)^(?:today|tomorrow|yesterday)$";$t;1))
 								
-								$o.default:=String:C10($o.default)
+								$o.default:=$t
 								
 							Else 
 								
-								If (Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$";String:C10($o.default);1))
+								If (Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$";$t;1))
 									
-									$o.default:=String:C10(Date:C102($o.default))
+									$o.default:=String:C10(Date:C102($t))
 									
 								Else 
 									
@@ -651,9 +662,9 @@ Case of
 							  //______________________________________________________
 						: ($o.type="bool")
 							
-							If (Match regex:C1019("(?m-is)^(?:true|false)$";String:C10($o.default);1))
+							If (Match regex:C1019("(?m-is)^(?:true|false|0|1)$";$t;1))
 								
-								  // $o.default:=Bool($o.default="true")
+								$o.default:=Bool:C1537(($t="true") | ($t="1"))
 								
 							Else 
 								
@@ -664,14 +675,14 @@ Case of
 							End if 
 							
 							  //______________________________________________________
-							  //: ($o.type="time")
+						: ($o.type="time")
 							
-							  // Format
+							$o.default:=$t
 							
 							  //______________________________________________________
 						Else 
 							
-							$o.default:=String:C10($o.default)
+							$o.default:=$t
 							
 							  //______________________________________________________
 					End case 

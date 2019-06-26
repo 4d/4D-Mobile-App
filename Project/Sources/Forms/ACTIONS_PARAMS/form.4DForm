@@ -360,7 +360,7 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.default",
+					"dataSource": "",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,

@@ -57,7 +57,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"max";ui.button("10_property_constraint_number_max");\
 		"default";UI.widget("07_variable_default");\
 		"withDefault";UI.group("@_default@");\
-		"dropCursor";ui.static("dropCursor")\
+		"dropCursor";ui.static("dropCursor");\
+		"placeholder";ui.widget("@_placeholder@")\
 		)
 	
 	  //"boolDefault";UI.group("@_bool@")

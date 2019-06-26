@@ -101,30 +101,9 @@ Case of
 								$o.min.setValue(ACTIONS_PARAMS_UI ("min").value)
 								$o.max.setValue(ACTIONS_PARAMS_UI ("max").value)
 								
-								  //$o.withDefault.setVisible(String($Obj_action.preset)#"edition")
+								$o.placeholder.show()
 								
 								If (String:C10($Obj_action.preset)#"edition")
-									
-									  //If (featuresFlags.with("parameterListOfValues"))  // Watch if a formatter is assigned to the field
-									  // OB REMOVE(This;"formatters")
-									  //$t:=String(Form.dataModel[String($Obj_action.tableNumber)][String($Obj_parameter.fieldNumber)].format)
-									  //If (Length($t)>0)
-									  //If ($t[[1]]="/")
-									  //  // User
-									  //$file:=COMPONENT_Pathname ("host_formatters").file(Substring($t;2)+"/manifest.json")
-									  //If ($file.exists)
-									  //This.formatters:=JSON Parse($file.getText())
-									  // End if
-									  // Else
-									  //  // Embedded
-									  // End if
-									  // End if
-									  // If (This.formatters#Null) & False
-									  //  //#PENDING
-									  // Else
-									  //$o.withDefault.show()
-									  // End if
-									  // End if
 									
 									$o.withDefault.show()
 									
@@ -136,65 +115,75 @@ Case of
 								
 								If ($o.withDefault.visible())
 									
-									If (This:C1470.formatters#Null:C1517) & False:C215
-										
-									Else 
-										
-										Case of 
+									$o.default.setValue(String:C10($Obj_parameter.default))
+									
+									Case of 
+											
+											  //…………………………………………………………………………………………………………………………………………
+										: ($Obj_parameter.type="number")
+											
+											Case of 
+													
+													  //________________________________________
+												: (String:C10($Obj_parameter.format)="integer")
+													
+													$o.default.setFilter(Is integer:K8:5)
+													
+													  //________________________________________
+												: (String:C10($Obj_parameter.format)="spellOut")
+													
+													$o.default.setFilter(Is text:K8:3)
+													
+													  //________________________________________
+												Else 
+													
+													$o.default.setFilter(Is real:K8:4)
+													
+													  //________________________________________
+											End case 
+											
+											  //…………………………………………………………………………………………………………………………………………
+										: ($Obj_parameter.type="date")
+											
+											  // Should accept "today", "yesterday", "tomorrow"
+											GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
+											$o.default.setFilter(Replace string:C233("&\"0-9;%;-;/;a;d;e;m;o;r-t;w;y\"";"%";$t))
+											
+											  //…………………………………………………………………………………………………………………………………………
+										: ($Obj_parameter.type="time")
+											
+											$o.default.setFilter(Is time:K8:8)
+											
+											  //…………………………………………………………………………………………………………………………………………
+										: ($Obj_parameter.type="string")
+											
+											$o.default.setFilter(Is text:K8:3)
+											
+											  //…………………………………………………………………………………………………………………………………………
+										: ($Obj_parameter.type="bool")
+											
+											If ($Obj_parameter.default#Null:C1517)
 												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_parameter.type="number")
+												$o.default.setValue(Choose:C955($Obj_parameter.default;"true";"false"))
 												
-												Case of 
-														
-														  //________________________________________
-													: (String:C10($Obj_parameter.format)="integer")
-														
-														$o.default.setFilter(Is integer:K8:5)
-														
-														  //________________________________________
-													: (String:C10($Obj_parameter.format)="spellOut")
-														
-														$o.default.setFilter(Is text:K8:3)
-														
-														  //________________________________________
-													Else 
-														
-														$o.default.setFilter(Is real:K8:4)
-														
-														  //________________________________________
-												End case 
+											Else 
 												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_parameter.type="date")
+												$o.default.setValue("")
 												
-												  // Should accept "today", "yesterday", "tomorrow"
-												GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
-												$o.default.setFilter(Replace string:C233("&\"0-9;%;-;/;a;d;e;m;o;r-t;w;y\"";"%";$t))
-												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_parameter.type="time")
-												
-												$o.default.setFilter(Is time:K8:8)
-												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_parameter.type="string")
-												
-												$o.default.setFilter(Is text:K8:3)
-												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_parameter.type="bool")
-												
-												$o.default.setFilter("&\"a;e;f;l;r-u\"")
-												
-												  //…………………………………………………………………………………………………………………………………………
-											: ($Obj_parameter.type="image")
-												
-												$o.withDefault.hide()  // No default value
-												
-												  //…………………………………………………………………………………………………………………………………………
-										End case 
-									End if 
+											End if 
+											
+											  // Should accept "true", "false", 0 or 1
+											$o.default.setFilter("&\"0;1;a;e;f;l;r-u\"")
+											
+											$o.placeholder.hide()  // No placeholder
+											
+											  //…………………………………………………………………………………………………………………………………………
+										: ($Obj_parameter.type="image")
+											
+											$o.withDefault.hide()  // No default value
+											
+											  //…………………………………………………………………………………………………………………………………………
+									End case 
 								End if 
 								
 							Else 

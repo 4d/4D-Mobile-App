@@ -22,6 +22,18 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
+		  //{
+		  //"fieldNumber": 6,
+		  //"name": "BooleanField",
+		  //"label": "Boolean Field",
+		  //"shortLabel": "Boolean Field",
+		  //"type": "bool",
+		  //"choiceList":["false","true"]
+		  //}
+		
+		  //________________________________________
+	: (True:C214)
+		
 		$o:=menu .append("test")
 		$o.shortcut("T";Shift key mask:K16:3)
 		$o.method("tempo")

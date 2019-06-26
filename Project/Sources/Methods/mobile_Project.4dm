@@ -17,9 +17,10 @@ C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_dev;$Boo_OK;$Boo_verbose)
 C_LONGINT:C283($Lon_parameters;$Lon_start)
-C_TEXT:C284($File_;$Txt_buffer)
-C_OBJECT:C1216($o;$Obj_cache;$Obj_in;$Obj_out;$Obj_project;$Obj_result_build)
-C_OBJECT:C1216($Obj_result_device;$Obj_server;$Obj_tags;$Obj_template)
+C_TEXT:C284($File_;$t;$Txt_buffer)
+C_OBJECT:C1216($o;$Obj_cache;$Obj_dataModel;$Obj_in;$Obj_manifest;$Obj_out)
+C_OBJECT:C1216($Obj_project;$Obj_result_build;$Obj_result_device;$Obj_server;$Obj_tags;$Obj_template)
+C_OBJECT:C1216($oo;$Path_manifest)
 
 If (False:C215)
 	C_OBJECT:C1216(mobile_Project ;$0)
@@ -42,6 +43,52 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	If ($Lon_parameters>=1)
 		
 		$Obj_in:=$1
+		
+		  //***********************************************************************************************
+		If (featuresFlags.with("parameterListOfValues"))
+			
+			  // Add choice lists if any to action parameters
+			
+			If ($Obj_in.project.actions#Null:C1517)
+				
+				$Obj_dataModel:=$Obj_in.project.dataModel
+				
+				For each ($o;$Obj_in.project.actions)
+					
+					If ($o.parameters#Null:C1517)
+						
+						For each ($oo;$o.parameters)
+							
+							If ($oo.fieldNumber#Null:C1517)  //linked to a field
+								
+								$t:=String:C10($Obj_dataModel[String:C10($o.tableNumber)][String:C10($oo.fieldNumber)].format)
+								
+								If (Length:C16($t)>0)
+									
+									If ($t[[1]]="/")
+										
+										  // User
+										$Path_manifest:=COMPONENT_Pathname ("host_formatters").file(Substring:C12($t;2)+"/manifest.json")
+										
+										If ($Path_manifest.exists)
+											
+											$Obj_manifest:=JSON Parse:C1218($Path_manifest.getText())
+											
+										End if 
+										
+									Else 
+										
+										  // Embedded
+										
+									End if 
+								End if 
+							End if 
+						End for each 
+					End if 
+				End for each 
+			End if 
+		End if 
+		  //***********************************************************************************************
 		
 		If ($Boo_dev)
 			
@@ -158,7 +205,7 @@ If ($Obj_in.create)
 			End if 
 		End for each 
 	End if 
-	  //End if 
+	  //End if
 	
 	  //===============================================================
 	
@@ -299,10 +346,10 @@ If ($Obj_in.create)
 	  //#ACI0098572 [
 	  //$Obj_out.sdk:=sdk (New object(//"action";"install";//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";//"target";$Obj_in.path;// "cache";env_userPath ("cacheSdk")))
 	  //$Obj_out.sdk:=sdk (New object(\
-								//"action";"install";\
-								//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
-								//"target";$Obj_in.path;\
-								//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
+				//"action";"install";\
+				//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+				//"target";$Obj_in.path;\
+				//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
@@ -429,20 +476,20 @@ If ($Obj_in.create)
 				End if 
 			End if 
 			
-			  //Else 
+			  //Else
 			  //$File_:=Null
-			  //End if 
+			  //End if
 			
 			  // Generate if not exist
 			  //$Obj_out.dump:=dataSet (New object(\
-																//"action";"create";\
-																//"project";$Obj_project;\
-																//"digest";True;\
-																//"dataSet";Bool(featuresFlags._101725);\
-																//"key";$File_;\
-																//"caller";$Obj_in.caller;\
-																//"verbose";$Boo_verbose;\
-																//"picture";Not(Bool(featuresFlags._97117))))
+								//"action";"create";\
+								//"project";$Obj_project;\
+								//"digest";True;\
+								//"dataSet";Bool(featuresFlags._101725);\
+								//"key";$File_;\
+								//"caller";$Obj_in.caller;\
+								//"verbose";$Boo_verbose;\
+								//"picture";Not(Bool(featuresFlags._97117))))
 			$Obj_out.dump:=dataSet (New object:C1471(\
 				"action";"create";\
 				"project";$Obj_project;\
@@ -469,7 +516,7 @@ If ($Obj_in.create)
 		
 		  //If (Not(featuresFlags._102457))
 		  //TEMPO_1 ($Obj_in.path)  //#TEMPO_FIX
-		  //End if 
+		  //End if
 		
 		  // Update core data model
 		$Obj_out.coreData:=dataModel (New object:C1471(\
@@ -479,7 +526,6 @@ If ($Obj_in.create)
 			"relationship";Bool:C1537(featuresFlags._103850);\
 			"path";$Obj_in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
 		ob_error_combine ($Obj_out;$Obj_out.coreData)
-		
 		
 		  // ----------------------------------------------------
 		  // Others (maybe move to templates, main management
