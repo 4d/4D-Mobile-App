@@ -1,6 +1,6 @@
 //%attributes = {}
 C_LONGINT:C283($i)
-C_TEXT:C284($Txt_in;$Txt_out)
+C_TEXT:C284($t;$Txt_in;$Txt_out)
 
 TRY 
 
@@ -40,6 +40,7 @@ ASSERT:C1129(str ("").uperCamelCase()="")
 
 $Txt_in:="CategoryIDElement"
 $Txt_out:=str ("Category ID Element").uperCamelCase()
+
 For ($i;1;Length:C16($Txt_in);1)
 	
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('CategoryIDElement')")
@@ -47,6 +48,7 @@ For ($i;1;Length:C16($Txt_in);1)
 End for 
 
 $Txt_out:=str ("Category_ID_element").uperCamelCase()
+
 For ($i;1;Length:C16($Txt_in);1)
 	
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('CategoryIDElement')")
@@ -54,6 +56,7 @@ For ($i;1;Length:C16($Txt_in);1)
 End for 
 
 $Txt_out:=str ("Category ID Element").uperCamelCase()
+
 For ($i;1;Length:C16($Txt_in);1)
 	
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('Category ID Element')")
@@ -62,6 +65,7 @@ End for
 
 $Txt_in:="Category"
 $Txt_out:=str ("category").uperCamelCase()
+
 For ($i;1;Length:C16($Txt_in);1)
 	
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('Category')")
@@ -69,10 +73,79 @@ For ($i;1;Length:C16($Txt_in);1)
 End for 
 
   // ============================================
+  // length
+ASSERT:C1129(str ("").length=0)
+ASSERT:C1129(str ("Hello world").length=Length:C16("Hello world"))
+
+  // ============================================
+  // isStyled()
+ASSERT:C1129(Not:C34(str ("Hello world").isStyled()))
+ASSERT:C1129(Not:C34(str ("xxx\r\nyyy").isStyled()))
+ASSERT:C1129(str ("<SPAN STYLE=\"font-family: DESDEMONA\">Hello world</SPAN>").isStyled())
+ASSERT:C1129(str ("<span style=\"text-align:left;font-family:'Segoe UI';font-size:9pt;color:#009900\">This is the word <span style=\"color:#D81E05\">red</span></span>").isStyled())
+
+  // ============================================
+  // isBoolean()
+ASSERT:C1129(str ("true").isBoolean())
+ASSERT:C1129(str ("True").isBoolean())
+ASSERT:C1129(str ("false").isBoolean())
+ASSERT:C1129(str ("False").isBoolean())
+ASSERT:C1129(Not:C34(str ("hello").isBoolean()))
+
+  // ============================================
+  // isDate()
+ASSERT:C1129(str ("1/1/01").isDate())
+ASSERT:C1129(str ("01/12/2015").isDate())
+ASSERT:C1129(str (String:C10(Current date:C33)).isDate())
+ASSERT:C1129(Not:C34(str ("1/1").isDate()))
+ASSERT:C1129(Not:C34(str ("hello").isDate()))
+
+  // ============================================
+  // isNum()
+GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+ASSERT:C1129(str ("100").isNum())
+ASSERT:C1129(str ("+1").isNum())
+ASSERT:C1129(str ("-10").isNum())
+ASSERT:C1129(str ("12"+$t+"5").isNum())
+ASSERT:C1129(str (String:C10(Pi:K30:1)).isNum())
+ASSERT:C1129(Not:C34(str ("1/1").isNum()))
+ASSERT:C1129(Not:C34(str ("hello").isNum()))
+
+  // ============================================
+  // isTime()
+GET SYSTEM FORMAT:C994(Time separator:K60:11;$t)
+ASSERT:C1129(str ("12"+$t+"50").isTime())
+ASSERT:C1129(str ("0"+$t+"0"+$t+"30").isTime())
+ASSERT:C1129(str (String:C10(Current time:C178)).isTime())
+ASSERT:C1129(Not:C34(str ("-10").isTime()))
+ASSERT:C1129(Not:C34(str (String:C10(Pi:K30:1)).isTime()))
+ASSERT:C1129(Not:C34(str ("1/1").isTime()))
+ASSERT:C1129(Not:C34(str ("hello").isTime()))
+
+  // ============================================
+  // match()
+ASSERT:C1129(str ("today").match("(?m-si)^(?:today|tomorrow|yesterday)$"))
+ASSERT:C1129(str ("tomorrow").match("(?m-si)^(?:today|tomorrow|yesterday)$"))
+ASSERT:C1129(str ("Hello world").match("h|Hello"))
+ASSERT:C1129(Not:C34(str ("Hello world").match("(?m-si)^(?:today|tomorrow|yesterday)$")))
+
+  // ============================================
   // unaccented()
 $Txt_in:="ćĉčċçḉȼ"+"ĆĈČĊÇḈȻ"
-ASSERT:C1129(Length:C16($Txt_in)=Length:C16(str ($Txt_in).unaccented()))
+$Txt_out:=str ($Txt_in).unaccented()
+ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
 
+For ($i;1;7;1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("c");"unaccented()")
+	
+End for 
+
+For ($i;8;14;1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("C");"unaccented()")
+	
+End for 
 
 ASSERT:C1129(str_trim ("")="")
 ASSERT:C1129(str_trimTrailing ("       Hello World")="Hello World")
@@ -100,7 +173,6 @@ ASSERT:C1129(str_cmpVersion ("9";"9.0.1")=-1)
 ASSERT:C1129(str_cmpVersion ("9 0";"9 1 2";" ")=-1)
 ASSERT:C1129(str_cmpVersion ("9 1 2";"9 0";" ")=1)
 ASSERT:C1129(str_cmpVersion ("9/1/2";"9/0";"/")=1)
-
 
 $Txt_in:="The principle of the XLIFF norm drives to determine a language source in which "\
 +"are written all the strings. This language will be the reference language (the "\

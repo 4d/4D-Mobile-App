@@ -91,9 +91,8 @@ Case of
 								$o.remove.enable()
 								$o.properties.show()
 								
-								$o.variable.setVisible($Obj_parameter.fieldNumber=Null:C1517)  // If variable
-								
-								$o.field.setVisible($Obj_parameter.fieldNumber#Null:C1517)  // If field
+								$o.variable.setVisible($Obj_parameter.fieldNumber=Null:C1517)  // User parameter
+								$o.field.setVisible($Obj_parameter.fieldNumber#Null:C1517)  // Linked to a field
 								
 								$o.number.setVisible(String:C10($Obj_parameter.type)="number")
 								
@@ -101,19 +100,17 @@ Case of
 								$o.min.setValue(ACTIONS_PARAMS_UI ("min").value)
 								$o.max.setValue(ACTIONS_PARAMS_UI ("max").value)
 								
-								$o.placeholder.show()
+								$o.placeholder.setVisible($Obj_parameter.type#"bool")
 								
-								If (String:C10($Obj_action.preset)#"edition")
+								If ($Obj_parameter.type#"image")
 									
-									$o.withDefault.show()
-									
-								Else 
-									
-									$o.withDefault.setVisible($Obj_parameter.fieldNumber=Null:C1517)
+									$b:=Choose:C955(String:C10($Obj_action.preset)#"edition";True:C214;($Obj_parameter.fieldNumber=Null:C1517))
 									
 								End if 
 								
-								If ($o.withDefault.visible())
+								If ($b)
+									
+									$o.withDefault.show()
 									
 									$o.default.setValue(String:C10($Obj_parameter.default))
 									
@@ -164,26 +161,23 @@ Case of
 											
 											If ($Obj_parameter.default#Null:C1517)
 												
-												$o.default.setValue(Choose:C955($Obj_parameter.default;"true";"false"))
-												
-											Else 
-												
-												$o.default.setValue("")
-												
+												If (Value type:C1509($Obj_parameter.default)=Is boolean:K8:9)
+													
+													$o.default.setValue(Choose:C955($Obj_parameter.default;"true";"false"))
+													
+												End if 
 											End if 
 											
 											  // Should accept "true", "false", 0 or 1
 											$o.default.setFilter("&\"0;1;a;e;f;l;r-u\"")
 											
-											$o.placeholder.hide()  // No placeholder
-											
-											  //…………………………………………………………………………………………………………………………………………
-										: ($Obj_parameter.type="image")
-											
-											$o.withDefault.hide()  // No default value
-											
 											  //…………………………………………………………………………………………………………………………………………
 									End case 
+									
+								Else 
+									
+									$o.withDefault.hide()
+									
 								End if 
 								
 							Else 
@@ -334,7 +328,6 @@ Case of
 		$o.cell.names.stroke:=Choose:C955(This:C1470.action.parameters.indices("name = :1";$2.name).length>1;ui.errorRGB;"black")
 		
 		  //______________________________________________________
-		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$1+"\"")

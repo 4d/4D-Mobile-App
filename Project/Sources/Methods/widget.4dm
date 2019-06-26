@@ -60,7 +60,7 @@ If (This:C1470._is=Null:C1517)
 		"enterable";Formula:C1597(OBJECT Get enterable:C1067(*;This:C1470.name));\
 		"setEnterable";Formula:C1597(OBJECT SET ENTERABLE:C238(*;This:C1470.name;Bool:C1537($1)));\
 		"filter";Formula:C1597(OBJECT Get filter:C1073(*;This:C1470.name));\
-		"setFilter";Formula:C1597(widget ("setFilter";New object:C1471(Choose:C955(Value type:C1509($1)=Is text:K8:3;"value";"format");$1)));\
+		"setFilter";Formula:C1597(widget ("setFilter";New object:C1471(Choose:C955(Value type:C1509($1)=Is text:K8:3;"value";"format");$1;"separator";$2)));\
 		"coordinates";Null:C1517;\
 		"windowCoordinates";Null:C1517;\
 		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\
@@ -372,26 +372,47 @@ Else
 						 | ($l=Is longint:K8:6)\
 						 | ($l=Is integer 64 bits:K8:25)
 						
-						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;-;+;:-<\"")
+						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;-;+\"")
 						
 						  //………………………………………………………………………
 					: ($l=Is real:K8:4)\
 						 | ($l=Is float:K8:26)
 						
-						GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+						$t:=String:C10($2.separator)
+						
+						If (Length:C16($t)=0)
+							
+							GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+							
+						End if 
+						
 						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;"+$t+";.;-;+\"")
 						
 						  //………………………………………………………………………
 					: ($l=Is time:K8:8)
 						
-						GET SYSTEM FORMAT:C994(Time separator:K60:11;$t)
+						$t:=String:C10($2.separator)
+						
+						If (Length:C16($t)=0)
+							
+							GET SYSTEM FORMAT:C994(Time separator:K60:11;$t)
+							
+						End if 
+						
 						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;"+$t+";:\"")
 						
 						  //………………………………………………………………………
 					: ($l=Is date:K8:7)
 						
-						GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
-						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;"+$t+";-;/\"")
+						$t:=String:C10($2.separator)
+						
+						If (Length:C16($t)=0)
+							
+							GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
+							
+						End if 
+						
+						OBJECT SET FILTER:C235(*;$o.name;"&\"0-9;"+$t+";/\"")
 						
 						  //………………………………………………………………………
 					Else 

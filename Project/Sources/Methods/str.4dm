@@ -32,6 +32,7 @@ If (This:C1470._is=Null:C1517)
 	$o:=New object:C1471(\
 		"_is";Current method name:C684;\
 		"value";$1;\
+		"length";0;\
 		"uperCamelCase";Formula:C1597(str ("uperCamelCase").value);\
 		"lowerCamelCase";Formula:C1597(str ("lowerCamelCase").value);\
 		"unaccented";Formula:C1597(str ("unaccented").value);\
@@ -39,8 +40,16 @@ If (This:C1470._is=Null:C1517)
 		"trimTrailing";Formula:C1597(str ("trimTrailing";String:C10($1)).value);\
 		"trimLeading";Formula:C1597(str ("trimLeading";String:C10($1)).value);\
 		"wordWrap";Formula:C1597(str ("wordWrap";String:C10($1)).value);\
-		"spaceSeparated";Formula:C1597(str ("spaceSeparated").value)\
+		"spaceSeparated";Formula:C1597(str ("spaceSeparated").value);\
+		"isStyled";Formula:C1597(str ("isStyled").value);\
+		"isBoolean";Formula:C1597(str ("isBoolean").value);\
+		"isDate";Formula:C1597(str ("isDate").value);\
+		"isNum";Formula:C1597(str ("isNum").value);\
+		"isTime";Formula:C1597(str ("isTime").value);\
+		"match";Formula:C1597(str ("match";String:C10($1)).value)\
 		)
+	
+	$o.length:=Length:C16($o.value)
 	
 Else 
 	
@@ -392,6 +401,56 @@ Else
 			End if 
 			
 			$o.value:=$t
+			
+			  //______________________________________________________
+		: ($1="isStyled")  // Returns True if text is styled
+			
+			  //#BYPASS THREAD-SAFE COMPATIBILITY
+			  //$Txt_filtered:=Replace string(String(This.value);"\r\n";"\r")
+			  //$Txt_result:=$Txt_filtered
+			  //$Txt_filtered:=ST Get plain text($Txt_filtered)
+			  //$Txt_result:=ST Get text($Txt_result)
+			
+			$t:=DOCUMENT  // Retain the value of the system variable
+			
+			DOCUMENT:=Replace string:C233(String:C10(This:C1470.value);"\r\n";"\r")
+			EXECUTE FORMULA:C63("DOCUMENT:=:C1092(DOCUMENT)")
+			$Txt_filtered:=DOCUMENT
+			
+			DOCUMENT:=Replace string:C233(String:C10(This:C1470.value);"\r\n";"\r")
+			EXECUTE FORMULA:C63("DOCUMENT:=:C1116(DOCUMENT)")
+			$Txt_result:=DOCUMENT
+			
+			DOCUMENT:=$t  // Restore the value of the system variable
+			
+			$o.value:=($Txt_result#$Txt_filtered)
+			
+			  //______________________________________________________
+		: ($1="isBoolean")  // Returns True if text is "T/true" or "F/false"
+			
+			$o.value:=Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$";String:C10(This:C1470.value);1)
+			
+			  //______________________________________________________
+		: ($1="isDate")  // Returns True if the text is a date string (DOES NOT CHECK IF THE DATE IS VALID)
+			
+			$o.value:=Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$";String:C10(This:C1470.value);1)
+			
+			  //______________________________________________________
+		: ($1="isNum")  // Returns True if text is a numeric
+			
+			GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+			$o.value:=Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$t+"\\d+)?$";String:C10(This:C1470.value);1)
+			
+			  //______________________________________________________
+		: ($1="isTime")  // Returns True if text is a time string (DOES NOT CHECK IF THE TIME IS VALID)
+			
+			GET SYSTEM FORMAT:C994(Time separator:K60:11;$t)
+			$o.value:=Match regex:C1019("(?m-si)^\\d+:\\d+(?:"+$t+"\\d+)?$";String:C10(This:C1470.value);1)
+			
+			  //______________________________________________________
+		: ($1="match")  // Returns True if text match given pattern
+			
+			$o.value:=Match regex:C1019($2;String:C10(This:C1470.value);1)
 			
 			  //______________________________________________________
 		Else 

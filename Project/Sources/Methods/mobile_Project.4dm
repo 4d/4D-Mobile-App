@@ -48,7 +48,6 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		If (featuresFlags.with("parameterListOfValues"))
 			
 			  // Add choice lists if any to action parameters
-			
 			If ($Obj_in.project.actions#Null:C1517)
 				
 				$Obj_dataModel:=$Obj_in.project.dataModel
@@ -74,18 +73,39 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 											
 											$Obj_manifest:=JSON Parse:C1218($Path_manifest.getText())
 											
+											If ($Obj_manifest.choiceList#Null:C1517)
+												
+												$oo.choiceList:=$Obj_manifest.choiceList
+												
+											End if 
 										End if 
 										
 									Else 
 										
-										  // Embedded
+										$Obj_manifest:=JSON Parse:C1218(Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"resources.json")).definitions
 										
+										If ($Obj_manifest[$t].choiceList#Null:C1517)
+											
+											$oo.choiceList:=$Obj_manifest[$t].choiceList
+											
+										End if 
 									End if 
 								End if 
 							End if 
 						End for each 
 					End if 
 				End for each 
+			End if 
+			
+			If (Bool:C1537(featuresFlags._8858))  // Debug mode
+				
+				$t:=System folder:C487(Desktop:K41:16)+Convert path POSIX to system:C1107("DEV/")
+				
+				If (Test path name:C476($t)=Is a folder:K24:2)
+					
+					TEXT TO DOCUMENT:C1237($t+"project.actions.json";JSON Stringify:C1217($Obj_in.project.actions;*))
+					
+				End if 
 			End if 
 		End if 
 		  //***********************************************************************************************
@@ -346,10 +366,10 @@ If ($Obj_in.create)
 	  //#ACI0098572 [
 	  //$Obj_out.sdk:=sdk (New object(//"action";"install";//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";//"target";$Obj_in.path;// "cache";env_userPath ("cacheSdk")))
 	  //$Obj_out.sdk:=sdk (New object(\
-				//"action";"install";\
-				//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
-				//"target";$Obj_in.path;\
-				//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
+						//"action";"install";\
+						//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+						//"target";$Obj_in.path;\
+						//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
@@ -482,14 +502,14 @@ If ($Obj_in.create)
 			
 			  // Generate if not exist
 			  //$Obj_out.dump:=dataSet (New object(\
-								//"action";"create";\
-								//"project";$Obj_project;\
-								//"digest";True;\
-								//"dataSet";Bool(featuresFlags._101725);\
-								//"key";$File_;\
-								//"caller";$Obj_in.caller;\
-								//"verbose";$Boo_verbose;\
-								//"picture";Not(Bool(featuresFlags._97117))))
+												//"action";"create";\
+												//"project";$Obj_project;\
+												//"digest";True;\
+												//"dataSet";Bool(featuresFlags._101725);\
+												//"key";$File_;\
+												//"caller";$Obj_in.caller;\
+												//"verbose";$Boo_verbose;\
+												//"picture";Not(Bool(featuresFlags._97117))))
 			$Obj_out.dump:=dataSet (New object:C1471(\
 				"action";"create";\
 				"project";$Obj_project;\
