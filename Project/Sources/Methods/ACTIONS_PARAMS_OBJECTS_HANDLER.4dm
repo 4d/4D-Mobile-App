@@ -639,7 +639,7 @@ Case of
 								
 								If (Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$";$t;1))
 									
-									$o.default:=String:C10(Date:C102($t))
+									$o.default:=String:C10(Date:C102($t);Internal date short:K1:7)
 									
 								Else 
 									
