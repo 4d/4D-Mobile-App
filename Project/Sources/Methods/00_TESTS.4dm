@@ -22,18 +22,13 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		  //$o:=environment   //dd/MM/yy. - dd/MM/y
-		If (Formula:C1597(process ).call().isPreemptif)
-			
-		Else 
-			
-			If (Formula:C1597(process ).call().isCooperatif)
-				
-			Else 
-				
-			End if 
-		End if 
+		$c:=Split string:C1554("unchecked";"").distinct().sort()
 		
+		$cc:=str ("unchecked").distinctLetters()
+		$t:=str ("unchecked").distinctLetters(";")
+		
+		$cc:=str ("").distinctLetters()
+		$t:=str ("").distinctLetters(";")
 		
 		  //________________________________________
 	: (True:C214)

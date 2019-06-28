@@ -653,22 +653,46 @@ Case of
 							  //______________________________________________________
 						: ($o.type="bool")
 							
-							If (Match regex:C1019("(?m-is)^(?:true|false)$";$t;1))
+							If (String:C10($o.format)="check")
 								
-								$o.default:=Bool:C1537($t="true")
-								
-							Else 
-								
-								If (Match regex:C1019("(?m-is)^(?:0|1)$";$t;1))
+								If (Match regex:C1019("(?m-is)^(?:checked|unchecked)$";$t;1))
 									
-									$o.default:=Num:C11($t)
+									$o.default:=Bool:C1537($t="checked")
 									
 								Else 
 									
-									BEEP:C151
-									OB REMOVE:C1226($o;"default")
-									$Obj_form.default.focus()
+									If (Match regex:C1019("(?m-is)^(?:0|1)$";String:C10(Num:C11($t));1))
+										
+										$o.default:=Num:C11($t)
+										
+									Else 
+										
+										BEEP:C151
+										OB REMOVE:C1226($o;"default")
+										$Obj_form.default.focus()
+										
+									End if 
+								End if 
+								
+							Else 
+								
+								If (Match regex:C1019("(?m-is)^(?:true|false)$";$t;1))
 									
+									$o.default:=Bool:C1537($t="true")
+									
+								Else 
+									
+									If (Match regex:C1019("(?m-is)^(?:0|1)$";String:C10(Num:C11($t));1))
+										
+										$o.default:=Num:C11($t)
+										
+									Else 
+										
+										BEEP:C151
+										OB REMOVE:C1226($o;"default")
+										$Obj_form.default.focus()
+										
+									End if 
 								End if 
 							End if 
 							

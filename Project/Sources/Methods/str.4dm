@@ -47,7 +47,8 @@ If (This:C1470._is=Null:C1517)
 		"isNum";Formula:C1597(str ("isNum").value);\
 		"isTime";Formula:C1597(str ("isTime").value);\
 		"match";Formula:C1597(str ("match";New object:C1471("pattern";$1)).value);\
-		"fixedLength";Formula:C1597(str ("fixedLength";New object:C1471("length";$1;"filler";$2;"alignment";$3)).value)\
+		"fixedLength";Formula:C1597(str ("fixedLength";New object:C1471("length";$1;"filler";$2;"alignment";$3)).value);\
+		"distinctLetters";Formula:C1597(str ("letters";New object:C1471("delimiter";$1)).value)\
 		)
 	
 	$o.length:=Length:C16($o.value)
@@ -63,6 +64,21 @@ Else
 		: (This:C1470=Null:C1517)
 			
 			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
+			
+			  //______________________________________________________
+		: ($1="letters")  // Returns the list of distinct letters of the string…
+			
+			$c:=Split string:C1554(This:C1470.value;"").distinct().sort()
+			
+			If ($2.delimiter#Null:C1517)  // …as string if delimiter is passed
+				
+				$o.value:=$c.join(String:C10($2.delimiter))
+				
+			Else   // …as collection
+				
+				$o.value:=$c
+				
+			End if 
 			
 			  //______________________________________________________
 		: ($1="fixedLength")  // Returns value as fixed length string

@@ -159,6 +159,17 @@ For ($i;8;14;1)
 End for 
 
   // ============================================
+  // distinctLetters()
+ASSERT:C1129(New collection:C1472("c";"d";"e";"h";"k";"n";"u").equal(str ("unchecked").distinctLetters()))
+ASSERT:C1129(str ("unchecked").distinctLetters(";")="c;d;e;h;k;n;u")
+
+ASSERT:C1129(str ("").distinctLetters().length=0)
+ASSERT:C1129(str ("").distinctLetters(";")="")
+
+
+
+
+  // ============================================
 ASSERT:C1129(str_trim ("")="")
 ASSERT:C1129(str_trimTrailing ("       Hello World")="Hello World")
 ASSERT:C1129(str_trimLeading ("Hello World       ")="Hello World")
@@ -227,7 +238,5 @@ For ($i;8;14;1)
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=67)
 	
 End for 
-
-TRACE:C157
 
 FINALLY 

@@ -159,17 +159,35 @@ Case of
 											  //…………………………………………………………………………………………………………………………………………
 										: ($Obj_parameter.type="bool")
 											
-											If ($Obj_parameter.default#Null:C1517)
+											If (String:C10($Obj_parameter.format)="check")
 												
-												If (Value type:C1509($Obj_parameter.default)=Is boolean:K8:9)
+												If ($Obj_parameter.default#Null:C1517)
 													
-													$o.default.setValue(Choose:C955($Obj_parameter.default;"true";"false"))
-													
+													If (Value type:C1509($Obj_parameter.default)=Is boolean:K8:9)
+														
+														$o.default.setValue(Choose:C955($Obj_parameter.default;"checked";"unchecked"))
+														
+													End if 
 												End if 
+												
+												  // Should accept "checked", "unchecked", 0 or 1
+												$o.default.setFilter("&\"0;1;"+str ("unchecked").distinctLetters(";")+"\"")
+												
+											Else 
+												
+												If ($Obj_parameter.default#Null:C1517)
+													
+													If (Value type:C1509($Obj_parameter.default)=Is boolean:K8:9)
+														
+														$o.default.setValue(Choose:C955($Obj_parameter.default;"true";"false"))
+														
+													End if 
+												End if 
+												
+												  // Should accept "true", "false", 0 or 1
+												$o.default.setFilter("&\"0;1;"+str ("truefalse").distinctLetters(";")+"\"")
+												
 											End if 
-											
-											  // Should accept "true", "false", 0 or 1
-											$o.default.setFilter("&\"0;1;a;e;f;l;r-u\"")
 											
 											  //…………………………………………………………………………………………………………………………………………
 									End case 
