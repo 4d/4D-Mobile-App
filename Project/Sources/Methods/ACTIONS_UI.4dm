@@ -72,19 +72,19 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($1="background")  // <Background Color Expression>
+	: ($1="backgroundColor")  // <Background Color Expression>
 		
 		$o:=New object:C1471(\
 			"color";0x00FFFFFF)
 		
-		If (Num:C11(Form:C1466.$dialog.ACTIONS.index)#0)
+		If (Num:C11(This:C1470.index)#0)
 			
 			$Obj_form:=ACTIONS_Handler (New object:C1471(\
 				"action";"init"))
 			
 			$b:=($Obj_form.form.focusedWidget=$Obj_form.actions.name)
 			
-			If (ob_equal (Form:C1466.$dialog.ACTIONS.current;$2))  // Selected row
+			If (ob_equal (This:C1470.current;$2))  // Selected row
 				
 				$o.color:=Choose:C955($b;ui.backgroundSelectedColor;ui.alternateSelectedColor)
 				
@@ -97,7 +97,7 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($1="meta")  // <Meta info expression>
+	: ($1="metaInfo")  // <Meta info expression>
 		
 		  // Default values
 		$o:=New object:C1471(\

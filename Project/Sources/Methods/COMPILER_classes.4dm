@@ -12,6 +12,11 @@ If (False:C215)
 	C_OBJECT:C1216(database ;$2)
 	
 	  //______________________________________________________
+	C_OBJECT:C1216(environment ;$0)
+	C_TEXT:C284(environment ;$1)
+	C_OBJECT:C1216(environment ;$2)
+	
+	  //______________________________________________________
 	C_OBJECT:C1216(group ;$0)
 	C_TEXT:C284(group ;$1)
 	C_OBJECT:C1216(group ;$2)
@@ -27,6 +32,11 @@ If (False:C215)
 	C_OBJECT:C1216(menu ;$2)
 	
 	  //______________________________________________________
+	C_OBJECT:C1216(process ;$0)
+	C_TEXT:C284(process ;$1)
+	C_OBJECT:C1216(process ;$2)
+	
+	  //______________________________________________________
 	C_OBJECT:C1216(picture ;$0)
 	C_TEXT:C284(picture ;$1)
 	C_OBJECT:C1216(picture ;$2)
@@ -35,6 +45,11 @@ If (False:C215)
 	C_OBJECT:C1216(static ;$0)
 	C_TEXT:C284(static ;$1)
 	C_OBJECT:C1216(static ;$2)
+	
+	  //______________________________________________________
+	C_OBJECT:C1216(str ;$0)
+	C_TEXT:C284(str ;$1)
+	C_OBJECT:C1216(str ;$2)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(subform ;$0)

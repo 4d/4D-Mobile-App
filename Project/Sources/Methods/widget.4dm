@@ -70,6 +70,7 @@ If (This:C1470._is=Null:C1517)
 		"moveVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("top";$1)));\
 		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
 		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)));\
+		"setColors";Formula:C1597(widget ("setColors";New object:C1471("foreground";$1;"background";$2;"altBackgrnd";$3)));\
 		"forceNumeric";Formula:C1597(widget ("forceNumeric"))\
 		)
 	
@@ -421,6 +422,34 @@ Else
 						
 						  //………………………………………………………………………
 				End case 
+			End if 
+			
+			  //______________________________________________________
+		: ($1="setColors")
+			
+			If (Value type:C1509($2.foreground)=Is text:K8:3)
+				
+				If ($2.altBackgrnd#Null:C1517)
+					
+					OBJECT SET RGB COLORS:C628(*;$o.name;String:C10($2.foreground);String:C10($2.background);String:C10($2.altBackgrnd))
+					
+				Else 
+					
+					OBJECT SET RGB COLORS:C628(*;$o.name;String:C10($2.foreground);String:C10($2.background))
+					
+				End if 
+				
+			Else 
+				
+				If ($2.altBackgrnd#Null:C1517)
+					
+					OBJECT SET RGB COLORS:C628(*;$o.name;Num:C11($2.foreground);Num:C11($2.background);Num:C11($2.altBackgrnd))
+					
+				Else 
+					
+					OBJECT SET RGB COLORS:C628(*;$o.name;Num:C11($2.foreground);Num:C11($2.background))
+					
+				End if 
 			End if 
 			
 			  //______________________________________________________

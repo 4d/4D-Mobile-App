@@ -72,8 +72,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		$Obj_context.tableName:=Formula:C1597(ACTIONS_UI ("tableName";$1).value)
 		$Obj_context.scopeLabel:=Formula:C1597(ACTIONS_UI ("scopeLabel";$1).value)
 		
-		$Obj_context.background:=Formula:C1597(ACTIONS_UI ("background";$1).color)
-		$Obj_context.meta:=Formula:C1597(ACTIONS_UI ("meta";$1))
+		$Obj_context.backgroundColor:=Formula:C1597(ACTIONS_UI ("backgroundColor";$1).color)
+		$Obj_context.metaInfo:=Formula:C1597(ACTIONS_UI ("metaInfo";$1))
 		
 	End if 
 	

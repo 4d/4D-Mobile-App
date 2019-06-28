@@ -130,6 +130,17 @@ ASSERT:C1129(str ("Hello world").match("h|Hello"))
 ASSERT:C1129(Not:C34(str ("Hello world").match("(?m-si)^(?:today|tomorrow|yesterday)$")))
 
   // ============================================
+  // fixedLength()
+ASSERT:C1129(str ("").fixedLength(5;"0")="00000")
+ASSERT:C1129(str ("").fixedLength(5)="*****")
+ASSERT:C1129(str ("75").fixedLength(5;"0")="75000")
+ASSERT:C1129(str ("750").fixedLength(5;"0")="75000")
+ASSERT:C1129(str ("75013").fixedLength(5;"0")="75013")
+ASSERT:C1129(str ("75").fixedLength(5;"_";Align right:K42:4)="___75")
+ASSERT:C1129(str ("75").fixedLength(10;Null:C1517;Align right:K42:4)="********75")
+ASSERT:C1129(str ("75,1").fixedLength(5;"0")="75,10")
+
+  // ============================================
   // unaccented()
 $Txt_in:="ćĉčċçḉȼ"+"ĆĈČĊÇḈȻ"
 $Txt_out:=str ($Txt_in).unaccented()
@@ -147,6 +158,7 @@ For ($i;8;14;1)
 	
 End for 
 
+  // ============================================
 ASSERT:C1129(str_trim ("")="")
 ASSERT:C1129(str_trimTrailing ("       Hello World")="Hello World")
 ASSERT:C1129(str_trimLeading ("Hello World       ")="Hello World")
@@ -159,6 +171,7 @@ ASSERT:C1129(str_trimLeading ("Hello World_____";"_")="Hello World")
 ASSERT:C1129(str_trimLeading ("HELLO WORLD";"_")="HELLO WORLD")
 ASSERT:C1129(str_trim ("_____Hello world_____";"_")="Hello World")
 
+  // ============================================
 ASSERT:C1129(str_cmpVersion ("9.0";"9.1.2")=-1)
 ASSERT:C1129(str_cmpVersion ("9.1.2";"9.0")=1)
 ASSERT:C1129(str_cmpVersion ("9.1.2";"9.1.2")=0)
@@ -174,6 +187,7 @@ ASSERT:C1129(str_cmpVersion ("9 0";"9 1 2";" ")=-1)
 ASSERT:C1129(str_cmpVersion ("9 1 2";"9 0";" ")=1)
 ASSERT:C1129(str_cmpVersion ("9/1/2";"9/0";"/")=1)
 
+  // ============================================
 $Txt_in:="The principle of the XLIFF norm drives to determine a language source in which "\
 +"are written all the strings. This language will be the reference language (the "\
 +"one from which will be done all the translations). The second language is the "\
@@ -188,12 +202,14 @@ $Txt_out:="The principle of the XLIFF norm drives to determine a language source
 
 ASSERT:C1129(str_wordWrap ($Txt_in)=$Txt_out)
 
+  // ============================================
 $Txt_in:=str_URLEncode ("'Command Name' != '_@'")
 ASSERT:C1129($Txt_in="%27Command%20Name%27%20%21%3D%20%27_%40%27")
 
 $Txt_out:=str_URLDecode ($Txt_in)
 ASSERT:C1129($Txt_out="'Command Name' != '_@'")
 
+  // ============================================
 $Txt_in:="ćĉčċçḉȼ"+"ĆĈČĊÇḈȻ"
 
 $Txt_out:=str_format ("replace-accent";$Txt_in)
@@ -211,5 +227,7 @@ For ($i;8;14;1)
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=67)
 	
 End for 
+
+TRACE:C157
 
 FINALLY 

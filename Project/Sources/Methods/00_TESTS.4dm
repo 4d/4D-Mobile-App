@@ -22,14 +22,17 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		  //{
-		  //"fieldNumber": 6,
-		  //"name": "BooleanField",
-		  //"label": "Boolean Field",
-		  //"shortLabel": "Boolean Field",
-		  //"type": "bool",
-		  //"choiceList":["false","true"]
-		  //}
+		  //$o:=environment   //dd/MM/yy. - dd/MM/y
+		If (Formula:C1597(process ).call().isPreemptif)
+			
+		Else 
+			
+			If (Formula:C1597(process ).call().isCooperatif)
+				
+			Else 
+				
+			End if 
+		End if 
 		
 		
 		  //________________________________________

@@ -551,7 +551,7 @@
 					"width": 450,
 					"height": 0,
 					"strokeWidth": 2,
-					"stroke": "#1e90ff",
+					"stroke": "#ff0000",
 					"visibility": "hidden",
 					"startPoint": "topLeft"
 				}

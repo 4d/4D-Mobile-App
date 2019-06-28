@@ -106,6 +106,9 @@ Case of
 				  // This trick remove the horizontal gap
 				$Obj_form.parameters.setScrollbar(0;2)
 				
+				  // Set colors
+				$Obj_form.dropCursor.setColors(Highlight menu background color:K23:7)
+				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)  // Refresh UI
 				

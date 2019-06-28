@@ -10,7 +10,7 @@
   // Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
-C_TEXT:C284($2)
+C_OBJECT:C1216($2)
 
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($i;$l;$Lon_length;$Lon_position)
@@ -23,30 +23,31 @@ ARRAY TEXT:C222($tTxt_keywords;0)
 If (False:C215)
 	C_OBJECT:C1216(str ;$0)
 	C_TEXT:C284(str ;$1)
-	C_TEXT:C284(str ;$2)
+	C_OBJECT:C1216(str ;$2)
 End if 
 
   // ----------------------------------------------------
 If (This:C1470._is=Null:C1517)
 	
 	$o:=New object:C1471(\
-		"_is";Current method name:C684;\
+		"_is";"str";\
 		"value";$1;\
 		"length";0;\
 		"uperCamelCase";Formula:C1597(str ("uperCamelCase").value);\
 		"lowerCamelCase";Formula:C1597(str ("lowerCamelCase").value);\
 		"unaccented";Formula:C1597(str ("unaccented").value);\
-		"trim";Formula:C1597(str ("trim";String:C10($1)).value);\
-		"trimTrailing";Formula:C1597(str ("trimTrailing";String:C10($1)).value);\
-		"trimLeading";Formula:C1597(str ("trimLeading";String:C10($1)).value);\
-		"wordWrap";Formula:C1597(str ("wordWrap";String:C10($1)).value);\
+		"trim";Formula:C1597(str ("trim";New object:C1471("pattern";$1)).value);\
+		"trimTrailing";Formula:C1597(str ("trimTrailing";New object:C1471("pattern";$1)).value);\
+		"trimLeading";Formula:C1597(str ("trimLeading";New object:C1471("pattern";$1)).value);\
+		"wordWrap";Formula:C1597(str ("wordWrap";New object:C1471("length";$1)).value);\
 		"spaceSeparated";Formula:C1597(str ("spaceSeparated").value);\
 		"isStyled";Formula:C1597(str ("isStyled").value);\
 		"isBoolean";Formula:C1597(str ("isBoolean").value);\
 		"isDate";Formula:C1597(str ("isDate").value);\
 		"isNum";Formula:C1597(str ("isNum").value);\
 		"isTime";Formula:C1597(str ("isTime").value);\
-		"match";Formula:C1597(str ("match";String:C10($1)).value)\
+		"match";Formula:C1597(str ("match";New object:C1471("pattern";$1)).value);\
+		"fixedLength";Formula:C1597(str ("fixedLength";New object:C1471("length";$1;"filler";$2;"alignment";$3)).value)\
 		)
 	
 	$o.length:=Length:C16($o.value)
@@ -64,9 +65,38 @@ Else
 			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
 			
 			  //______________________________________________________
-		: ($1="uperCamelCase")  // Returns name as upper camelcase
+		: ($1="fixedLength")  // Returns value as fixed length string
+			
+			$l:=Num:C11($2.length)
+			ASSERT:C1129($l>0)
+			
+			If ($2.filler#Null:C1517)
+				
+				$t:=String:C10($2.filler)
+				
+			Else 
+				
+				  // Default is space
+				$t:="*"
+				
+			End if 
+			
+			If (Num:C11($2.alignment)=Align right:K42:4)
+				
+				$o.value:=Substring:C12(($t*($l-This:C1470.length))+This:C1470.value;1;$l)
+				
+			Else 
+				
+				  // Default is left
+				$o.value:=Substring:C12(This:C1470.value+($t*$l);1;$l)
+				
+			End if 
+			
+			  //______________________________________________________
+		: ($1="uperCamelCase")  // Returns value as upper camelcase
 			
 			If (Length:C16(This:C1470.value)>0)
+				
 				If (Length:C16(This:C1470.value)>2)
 					
 					$t:=This:C1470.spaceSeparated()
@@ -93,7 +123,7 @@ Else
 			End if 
 			
 			  //______________________________________________________
-		: ($1="lowerCamelCase")  // Returns name as lower camelcase
+		: ($1="lowerCamelCase")  // Returns value as lower camelcase
 			
 			$t:=This:C1470.spaceSeparated()
 			
@@ -117,7 +147,7 @@ Else
 			$o.value:=$c.join()
 			
 			  //______________________________________________________
-		: ($1="spaceSeparated")  // Returns underscored name & camelcase (lower or upper) name as space separated
+		: ($1="spaceSeparated")  // Returns underscored value & camelcase (lower or upper) value as space separated
 			
 			$t:=Replace string:C233(This:C1470.value;"_";" ")
 			
@@ -152,10 +182,10 @@ Else
 		: ($1="trimLeading")\
 			 | ($1="trimTrailing")  // Trims leading or trailing spaces
 			
-			If (Length:C16($2)>0)
+			If ($2.pattern#Null:C1517)
 				
 				$Txt_pattern:="(?m-si)^(TRIM*)"
-				$Txt_pattern:=Replace string:C233($Txt_pattern;"TRIM";$2;*)
+				$Txt_pattern:=Replace string:C233($Txt_pattern;"TRIM";String:C10($2.pattern);*)
 				
 			Else 
 				
@@ -195,10 +225,10 @@ Else
 			  //______________________________________________________
 		: ($1="trim")  // Trims leading & trailing spaces
 			
-			If (Length:C16($2)>0)
+			If ($2.pattern#Null:C1517)
 				
 				$Txt_pattern:="(?m-si)^(TRIM*)"
-				$Txt_pattern:=Replace string:C233($Txt_pattern;"TRIM";$2;*)
+				$Txt_pattern:=Replace string:C233($Txt_pattern;"TRIM";String:C10($2.pattern);*)
 				
 			Else 
 				
@@ -229,11 +259,12 @@ Else
 			$o.value:=$Txt_result
 			
 			  //______________________________________________________
-		: ($1="wordWrap")  // Returns a word wrapped text based on the line length given in $1 (default is 80 characters)
+		: ($1="wordWrap")  // Returns a word wrapped text based on the line length given (default is 80 characters)
 			
-			If (Num:C11($1)#0)
+			If ($2.length#Null:C1517)
 				
-				$l:=Num:C11($2)
+				$l:=Num:C11($2.length)
+				ASSERT:C1129($l>0)
 				
 			Else 
 				
@@ -403,29 +434,6 @@ Else
 			$o.value:=$t
 			
 			  //______________________________________________________
-		: ($1="isStyled")  // Returns True if text is styled
-			
-			  //#BYPASS THREAD-SAFE COMPATIBILITY
-			  //$Txt_filtered:=Replace string(String(This.value);"\r\n";"\r")
-			  //$Txt_result:=$Txt_filtered
-			  //$Txt_filtered:=ST Get plain text($Txt_filtered)
-			  //$Txt_result:=ST Get text($Txt_result)
-			
-			$t:=DOCUMENT  // Retain the value of the system variable
-			
-			DOCUMENT:=Replace string:C233(String:C10(This:C1470.value);"\r\n";"\r")
-			EXECUTE FORMULA:C63("DOCUMENT:=:C1092(DOCUMENT)")
-			$Txt_filtered:=DOCUMENT
-			
-			DOCUMENT:=Replace string:C233(String:C10(This:C1470.value);"\r\n";"\r")
-			EXECUTE FORMULA:C63("DOCUMENT:=:C1116(DOCUMENT)")
-			$Txt_result:=DOCUMENT
-			
-			DOCUMENT:=$t  // Restore the value of the system variable
-			
-			$o.value:=($Txt_result#$Txt_filtered)
-			
-			  //______________________________________________________
 		: ($1="isBoolean")  // Returns True if text is "T/true" or "F/false"
 			
 			$o.value:=Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$";String:C10(This:C1470.value);1)
@@ -450,7 +458,22 @@ Else
 			  //______________________________________________________
 		: ($1="match")  // Returns True if text match given pattern
 			
-			$o.value:=Match regex:C1019($2;String:C10(This:C1470.value);1)
+			$o.value:=Match regex:C1019(String:C10($2.pattern);String:C10(This:C1470.value);1)
+			
+			  //______________________________________________________
+			  //: (Formula(process ).call().isPreemptif)
+			
+			  //_4D THROW ERROR(New object("component";"CLAS";"code";1;"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";"something";"my bug"))
+			
+			  //______________________________________________________
+		: ($1="isStyled")  // Returns True if text is styled
+			
+			  //#BYPASS THREAD-SAFE COMPATIBILITY
+			$t:=Replace string:C233(String:C10(This:C1470.value);"\r\n";"\r")
+			$Txt_filtered:=Formula from string:C1601(":C1092($1)").call(Null:C1517;$t)
+			$Txt_result:=Formula from string:C1601(":C1116($1)").call(Null:C1517;$t)
+			
+			$o.value:=($Txt_result#$Txt_filtered)
 			
 			  //______________________________________________________
 		Else 

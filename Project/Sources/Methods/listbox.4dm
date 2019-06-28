@@ -58,6 +58,7 @@ If (This:C1470._is=Null:C1517)
 		"resizeHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("right";$1)));\
 		"moveVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("top";$1)));\
 		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
+		"setColors";Formula:C1597(widget ("setColors";New object:C1471("foreground";$1;"background";$2;"altBackgrnd";$3)));\
 		"getDefinition";Formula:C1597(listbox ("getDefinition"));\
 		"getCell";Formula:C1597(listbox ("getCell"));\
 		"cellPosition";Formula:C1597(listbox ("cellPosition"));\

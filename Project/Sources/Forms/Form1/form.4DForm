@@ -258,6 +258,34 @@
 						3
 					],
 					"fill": "transparent"
+				},
+				"Radio Button": {
+					"type": "radio",
+					"text": "On",
+					"top": 481,
+					"left": 570,
+					"width": 85,
+					"height": 26,
+					"events": [
+						"onClick"
+					],
+					"dataSource": "Form:C1466.radio",
+					"dataSourceTypeHint": "boolean",
+					"radioGroup": "radio"
+				},
+				"Radio Button1": {
+					"type": "radio",
+					"text": "Off",
+					"top": 481,
+					"left": 675,
+					"width": 85,
+					"height": 26,
+					"events": [
+						"onClick"
+					],
+					"dataSource": "Not:C34(Form:C1466.radio)",
+					"dataSourceTypeHint": "boolean",
+					"radioGroup": "radio"
 				}
 			}
 		}

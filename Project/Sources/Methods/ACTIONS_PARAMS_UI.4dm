@@ -278,7 +278,7 @@ Case of
 			"action";"init"))
 		
 		If ($Obj_form.form.focusedWidget=$Obj_form.parameters.name)\
-			  // & (Form event=On Getting Focus)
+			 & (Form event:C388=On Getting Focus:K2:7)
 			
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget+".border";ui.selectedColor;Background color none:K23:10)

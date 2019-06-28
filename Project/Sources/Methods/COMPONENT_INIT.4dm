@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-				"LaunchScreen";"LaunchScreen";\
-				"Main";"Main";\
-				"backgroundColor";"white")
+						"LaunchScreen";"LaunchScreen";\
+						"Main";"Main";\
+						"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -340,7 +340,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 End if 
 
   // ================================================================================================================================
-  //                                                          FEATURS FLAGS
+  //                                                          FEATURES FLAGS
   // ================================================================================================================================
 $Lon_version:=Num:C11(Application version:C493)
 
@@ -414,6 +414,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	
 	featuresFlags.allowPictureAsActionParameters:=featuresFlags._8858  // #107932 - [Mobile] Allow to use picture as action parameters
 	featuresFlags.parameterListOfValues:=featuresFlags._8858  // Manage formatters as list of values
+	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
 	
 End if 
 
@@ -510,9 +511,7 @@ End if
   // ________________________________________________________________________________________________________________________________
 featuresFlags.actionWithParameters:=featuresFlags._105413  //    [MOBILE] Actions with parameters
 
-  //]
-
-If (Bool:C1537(featuresFlags.withNewFieldProperties))
+If (featuresFlags.with("withNewFieldProperties"))
 	
 	  //#REMINDER: delete entry into resource.json
 	
@@ -531,6 +530,16 @@ If (Bool:C1537(featuresFlags.withNewFieldProperties))
 	
 	  // CommonValues.defaultFieldBindingTypes[Is BLOB]:="blob"
 	  // CommonValues.defaultFieldBindingTypes[Is object]:="object"
+	
+End if 
+
+If (Bool:C1537(featuresFlags.with("accentColors")))
+	
+	  //ui.selectedColor:=Highlight menu background color
+	  //ui.highlightColor:=Highlight menu background color
+	
+	  //ui.backgroundSelectedColor:=Highlight menu background color // 0x004BA6F8
+	  //ui.backgroundUnselectedColor:=Background color none // 0x005A5A5A
 	
 End if 
 
