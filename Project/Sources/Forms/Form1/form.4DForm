@@ -179,9 +179,9 @@
 				"Button": {
 					"type": "button",
 					"text": "Button",
-					"top": 445,
-					"left": 29,
-					"width": 118,
+					"top": 618,
+					"left": 31,
+					"width": 172,
 					"height": 35,
 					"events": [
 						"onClick"
@@ -190,9 +190,9 @@
 				},
 				"Button1": {
 					"type": "button",
-					"text": "Button",
-					"top": 509,
-					"left": 27,
+					"text": "Button Button Button Button",
+					"top": 608,
+					"left": 223,
 					"width": 125,
 					"height": 55,
 					"events": [

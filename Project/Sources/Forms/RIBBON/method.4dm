@@ -4,94 +4,91 @@
   // Created #30-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
-C_LONGINT:C283($l;$Lon_device;$Lon_formEvent;$Lon_page)
-C_TEXT:C284($File_plist)
-C_OBJECT:C1216($o;$Obj_form;$Obj_page;$Obj_simulator)
+C_LONGINT:C283($l)
+C_OBJECT:C1216($form;$o)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
-
-$Obj_form:=New object:C1471(\
+$form:=New object:C1471(\
+"event";Form event:C388;\
 "pages";New collection:C1472;\
-"build";"151";\
-"simulator";"201";\
+"switch";ui.button("switch.button");\
+"build";ui.button("151");\
+"simulator";ui.button("201");\
 "project";"152";\
-"install";"153";\
+"install";ui.button("153");\
 "start";16;\
 "minWidth";110;\
 "gap";7)
 
-$Obj_form.pages.push(New object:C1471(\
+$form.pages.push(New object:C1471(\
 "name";"general";\
 "button";"101"))
-$Obj_form.pages.push(New object:C1471(\
+
+$form.pages.push(New object:C1471(\
 "name";"structure";\
 "button";"102"))
-$Obj_form.pages.push(New object:C1471(\
+
+$form.pages.push(New object:C1471(\
 "name";"properties";\
 "button";"103"))
-$Obj_form.pages.push(New object:C1471(\
+
+$form.pages.push(New object:C1471(\
 "name";"main";\
 "button";"104"))
-$Obj_form.pages.push(New object:C1471(\
+
+$form.pages.push(New object:C1471(\
 "name";"views";\
 "button";"105"))
-$Obj_form.pages.push(New object:C1471(\
+
+$form.pages.push(New object:C1471(\
 "name";"deployment";\
 "button";"106"))
-$Obj_form.pages.push(New object:C1471(\
+
+$form.pages.push(New object:C1471(\
 "name";"data";\
 "button";"107"))
 
 If (Bool:C1537(featuresFlags._103505))
 	
-	$Obj_form.pages.push(New object:C1471(\
+	$form.pages.push(New object:C1471(\
 		"name";"actions";\
 		"button";"108"))
 	
+	$form.sectionButtons:=ui.group("101;102;107;108;103;104;105;106")
+	
+Else 
+	
+	$form.sectionButtons:=ui.group("101;102;107;103;104;105;106")
+	
 End if 
+
+$form.buildButtons:=ui.group("151;201;152;153")
 
   // ----------------------------------------------------
 
 Case of 
 		
 		  //______________________________________________________
-	: ($Lon_formEvent=On Load:K2:1)
+	: ($form.event=On Load:K2:1)
 		
-		OBJECT SET ENABLED:C1123(*;$Obj_form.build;False:C215)
-		OBJECT SET ENABLED:C1123(*;$Obj_form.install;False:C215)
-		OBJECT SET ENABLED:C1123(*;$Obj_form.simulator;False:C215)
+		$form.build.disable()
+		$form.install.disable()
+		$form.simulator.disable()
 		
-		If (Bool:C1537(featuresFlags._103505))
-			
-			OBJECT SET VISIBLE:C603(*;"108";True:C214)
-			
-			ui_TOOLBAR_ALIGN (New object:C1471(\
-				"widgets";New collection:C1472("101";"102";"107";"108";"103";"104";"105";"106");\
-				"start";$Obj_form.start;\
-				"minWidth";$Obj_form.minWidth;\
-				"gap";$Obj_form.gap))
-			
-		Else 
-			
-			ui_TOOLBAR_ALIGN (New object:C1471(\
-				"widgets";New collection:C1472("101";"102";"107";"103";"104";"105";"106");\
-				"start";$Obj_form.start;\
-				"minWidth";$Obj_form.minWidth;\
-				"gap";$Obj_form.gap))
-			
-		End if 
+		OBJECT SET VISIBLE:C603(*;"108";Bool:C1537(featuresFlags._103505))
+		
+		$form.sectionButtons.distributeHorizontally($form)
 		
 		SET TIMER:C645(-1)
 		
 		  //______________________________________________________
-	: ($Lon_formEvent=On Unload:K2:2)
+	: ($form.event=On Unload:K2:2)
 		
 		  //
 		
 		  //______________________________________________________
-	: ($Lon_formEvent=On Timer:K2:25)
+	: ($form.event=On Timer:K2:25)
 		
 		SET TIMER:C645(0)
 		
@@ -99,62 +96,38 @@ Case of
 			
 			Form:C1466.initialized:=New collection:C1472(1)
 			
-			Form:C1466.pages:=$Obj_form.pages
+			Form:C1466.pages:=$form.pages
 			
 		End if 
 		
 		  //______________________________________________________
-	: ($Lon_formEvent=On Page Change:K2:54)
+	: ($form.event=On Page Change:K2:54)
 		
-		$Lon_page:=FORM Get current page:C276(*)
+		$l:=FORM Get current page:C276(*)
 		
-		If (Form:C1466.initialized.indexOf($Lon_page)=-1)
+		If (Form:C1466.initialized.indexOf($l)=-1)
 			
-			Form:C1466.initialized.push($Lon_page)
+			Form:C1466.initialized.push($l)
 			
 			Case of 
 					
 					  //………………………………………………………………………………………
-				: ($Lon_page=1)
+				: ($l=1)
 					
-					OBJECT SET VISIBLE:C603(*;"107";True:C214)
-					
-					If (Bool:C1537(featuresFlags._103505))
-						
-						OBJECT SET VISIBLE:C603(*;"108";True:C214)
-						
-						ui_TOOLBAR_ALIGN (New object:C1471(\
-							"widgets";New collection:C1472("101";"102";"107";"108";"103";"104";"105";"106");\
-							"start";$Obj_form.start;\
-							"minWidth";$Obj_form.minWidth;\
-							"gap";$Obj_form.gap))
-						
-					Else 
-						
-						ui_TOOLBAR_ALIGN (New object:C1471(\
-							"widgets";New collection:C1472("101";"102";"107";"103";"104";"105";"106");\
-							"start";$Obj_form.start;\
-							"minWidth";$Obj_form.minWidth;\
-							"gap";$Obj_form.gap))
-						
-					End if 
+					$form.sectionButtons.distributeHorizontally($form)
 					
 					  //………………………………………………………………………………………
-				: ($Lon_page=2)
+				: ($l=2)
 					
-					ui_TOOLBAR_ALIGN (New object:C1471(\
-						"widgets";New collection:C1472("151";"201";"152";"153");\
-						"start";$Obj_form.start;\
-						"minWidth";$Obj_form.minWidth;\
-						"gap";$Obj_form.gap))
+					$form.buildButtons.distributeHorizontally($form)
 					
 					  // Place the popup icons
-					$o:=widget ("201.PopUp")
 					$l:=widget ("201").coordinates.right-13
+					$o:=widget ("201.PopUp")
 					$o.setCoordinates($l;$o.coordinates.top;$l+$o.coordinates.width;$o.coordinates.top+$o.coordinates.height)
 					
-					$o:=widget ("152.PopUp")
 					$l:=widget ("152").coordinates.right-13
+					$o:=widget ("152.PopUp")
 					$o.setCoordinates($l;$o.coordinates.top;$l+$o.coordinates.width;$o.coordinates.top+$o.coordinates.height)
 					
 					  //………………………………………………………………………………………
@@ -162,13 +135,13 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Lon_formEvent=On Bound Variable Change:K2:52)
+	: ($form.event=On Bound Variable Change:K2:52)
 		
-		OBJECT SET FORMAT:C236(*;"switch.button";";#images/toolbar/"+Choose:C955(Form:C1466.state="open";"reduce";"expand")+".png")
+		$form.switch.setFormat(";#images/toolbar/"+Choose:C955(Form:C1466.state="open";"reduce";"expand")+".png")
 		
-		For each ($Obj_page;$Obj_form.pages)
+		For each ($o;$form.pages)
 			
-			(OBJECT Get pointer:C1124(Object named:K67:5;$Obj_page.button))->:=Num:C11($Obj_page.name=Form:C1466.page)
+			(OBJECT Get pointer:C1124(Object named:K67:5;$o.button))->:=Num:C11($o.name=Form:C1466.page)
 			
 		End for each 
 		
@@ -177,53 +150,45 @@ Case of
 			  // Update device button
 			If (Form:C1466.devices.length>0)
 				
-				OBJECT SET ENABLED:C1123(*;$Obj_form.simulator;True:C214)
+				$form.simulator.enable()
 				
 				  // Get the default simulator
-				$File_plist:=_o_env_userPath ("preferences")+"com.apple.iphonesimulator.plist"
+				$o:=env_userPathname ("preferences";"com.apple.iphonesimulator.plist")
 				
-				If (Test path name:C476($File_plist)#Is a document:K24:1)
+				If (Not:C34($o.exists))
 					
 					simulator (New object:C1471(\
 						"action";"fixdefault"))
 					
 				End if 
 				
-				If (Test path name:C476($File_plist)=Is a document:K24:1)
+				If ($o.exists)
 					
-					$Obj_simulator:=plist (New object:C1471(\
+					$o:=plist (New object:C1471(\
 						"action";"object";\
-						"domain";Convert path system to POSIX:C1106($File_plist)))
+						"domain";$o.path))
 					
-					If ($Obj_simulator.success)
+					If ($o.success)
 						
 						  // Keep the current device identifier
-						Form:C1466.CurrentDeviceUDID:=$Obj_simulator.value.CurrentDeviceUDID
+						Form:C1466.CurrentDeviceUDID:=$o.value.CurrentDeviceUDID
 						
 						  // Display the current device name
-						$Lon_device:=Form:C1466.devices.extract("udid").indexOf(Form:C1466.CurrentDeviceUDID)
+						$l:=Form:C1466.devices.extract("udid").indexOf(Form:C1466.CurrentDeviceUDID)
+						$form.simulator.setTitle(Choose:C955($l=-1;Get localized string:C991("unknown");Form:C1466.devices[$l].name))
 						
-						If ($Lon_device#-1)
-							
-							OBJECT SET TITLE:C194(*;$Obj_form.simulator;Form:C1466.devices[$Lon_device].name)
-							
-						Else 
-							
-							OBJECT SET TITLE:C194(*;$Obj_form.simulator;Get localized string:C991("unknown"))
-							
-						End if 
 					End if 
 				End if 
 			End if 
 		End if 
 		
-		OBJECT SET ENABLED:C1123(*;$Obj_form.build;Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project))
-		OBJECT SET ENABLED:C1123(*;$Obj_form.install;Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project) & Bool:C1537(Form:C1466.status.teamId))
+		$form.build.setEnabled(Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project))
+		$form.install.setEnabled(Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project) & Bool:C1537(Form:C1466.status.teamId))
 		
 		  //______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+		ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($form.event)+")")
 		
 		  //______________________________________________________
 End case 

@@ -1,1 +1,0 @@
-RIBBON (Num:C11(OBJECT Get name:C1087(Object current:K67:2)))

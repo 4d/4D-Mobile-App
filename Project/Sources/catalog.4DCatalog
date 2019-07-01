@@ -239,9 +239,9 @@
 		</field>
 		<primary_key field_name="ID" field_uuid="4CFBF70BA0304CFF9391AAC9ABC6752A"/>
 		<table_extra input_form="Input" output_form="Output">
-			<editor_table_info displayable_fields_count="4">
+			<editor_table_info displayable_fields_count="5">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="229" top="444.9453125" width="141.015625" height="127.515625"/>
+				<coordinates left="229" top="444.9453125" width="145.22265625" height="151.52734375"/>
 			</editor_table_info>
 		</table_extra>
 	</table>

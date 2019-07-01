@@ -16,8 +16,8 @@ C_LONGINT:C283($Lon_parameters)
 C_PICTURE:C286($Pic_buffer;$Pic_icon)
 C_TEXT:C284($Dir_root;$Mnu_app;$Mnu_choice;$Mnu_pop;$Txt_buffer;$Txt_path)
 C_TEXT:C284($Txt_UDID)
-C_OBJECT:C1216($o;$Obj_app;$Obj_could;$Obj_in;$Obj_project)
-C_OBJECT:C1216($Obj_result;$Obj_simulator;$Path_build;$Path_product)
+C_OBJECT:C1216($o;$Obj_app;$Obj_could;$Obj_in;$Obj_project;$Obj_result)
+C_OBJECT:C1216($Obj_simulator;$Path_build;$Path_product)
 
 If (False:C215)
 	C_OBJECT:C1216(editor_MENU_ACTIONS ;$1)
@@ -169,7 +169,7 @@ If ($Boo_plus)
 						
 						If (Storage:C1525.database.isMatrix) & False:C215
 							
-							  // provoque une erreur si mobile est un alias 
+							  // provoque une erreur si mobile est un alias
 							
 							  // XXX Could not do that in real app, resource folder must not be modified
 							  // ASK for SET MENU ITEM ICON with absolute path
@@ -364,12 +364,12 @@ Case of
 		  //______________________________________________________
 	: ($Mnu_choice="_openDiagnosticReports")
 		
-		SHOW ON DISK:C922(env_userPathname ("logs").file("DiagnosticReports").platformPath)
+		SHOW ON DISK:C922(env_userPathname ("logs";"DiagnosticReports").platformPath)
 		
 		  //______________________________________________________
 	: ($Mnu_choice="_openLogs")
 		
-		$o:=env_userPathname ("logs").folder("CoreSimulator")
+		$o:=env_userPathname ("logs";"CoreSimulator/")
 		
 		$Obj_simulator:=simulator (New object:C1471(\
 			"action";"default"))

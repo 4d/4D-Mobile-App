@@ -23,24 +23,18 @@ End if
   // Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+$Lon_formEvent:=Form event:C388
+
+$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
+
+  // Optional parameters
+If ($Lon_parameters>=1)
 	
-	  // Required parameters
 	$Lon_button:=$1
-	
-	  // Optional parameters
-	If ($Lon_parameters>=2)
-		
-		  // <NONE>
-		
-	End if 
-	
-	$Lon_formEvent:=Form event:C388
-	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 	
 Else 
 	
-	ABORT:C156
+	$Lon_button:=Num:C11($Txt_me)
 	
 End if 
 

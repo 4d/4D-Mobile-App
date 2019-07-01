@@ -18,6 +18,16 @@ ARRAY TEXT:C222($tTxt_;0)
 COMPONENT_INIT 
 
 Case of 
+		  //________________________________________
+	: (True:C214)
+		
+		$c:=New collection:C1472(Get 4D folder:C485(Current resources folder:K5:16);Get 4D folder:C485(Database folder:K5:14))
+		
+		$c:=$c.map("col_formula";"$1.result:=Convert path system to POSIX:C1106($1.value)")
+		
+		$c:=New collection:C1472(Get 4D folder:C485(Current resources folder:K5:16);Get 4D folder:C485(Database folder:K5:14))
+		$cc:=$c.map("col_method";Formula:C1597($1.result:=Convert path system to POSIX:C1106($1.value)))
+		
 		
 		  //________________________________________
 	: (True:C214)
@@ -446,13 +456,6 @@ Case of
 				
 				  //----------------------------------------
 		End case 
-		
-		  //________________________________________
-	: (True:C214)
-		
-		$c:=New collection:C1472(Get 4D folder:C485(Current resources folder:K5:16);Get 4D folder:C485(Database folder:K5:14))
-		
-		$c:=$c.map("col_formula";"$1.result:=Convert path system to POSIX:C1106($1.value)")
 		
 		  //________________________________________
 	: (True:C214)

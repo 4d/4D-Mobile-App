@@ -1,7 +1,7 @@
 //%attributes = {}
 C_OBJECT:C1216($o;$Obj_content;$Obj_result)
 
-$o:=env_userPathname ("cache").file("lastBuild.4dmobile")
+$o:=env_userPathname ("cache";"lastBuild.4dmobile")
 
 If ($o.exists)
 	

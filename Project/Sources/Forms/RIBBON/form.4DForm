@@ -153,7 +153,7 @@
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
 					"radioGroup": "Group15",
-					"method": "ObjectMethods/101.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -173,7 +173,7 @@
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
 					"radioGroup": "Group15",
-					"method": "ObjectMethods/102.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -193,7 +193,7 @@
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
 					"radioGroup": "Group15",
-					"method": "ObjectMethods/104.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -213,7 +213,7 @@
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
 					"radioGroup": "Group15",
-					"method": "ObjectMethods/105.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -233,7 +233,7 @@
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
 					"radioGroup": "Group15",
-					"method": "ObjectMethods/103.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -253,7 +253,7 @@
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
 					"radioGroup": "Group15",
-					"method": "ObjectMethods/106.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -273,7 +273,7 @@
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
 					"radioGroup": "Group15",
-					"method": "ObjectMethods/107.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -294,7 +294,7 @@
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
 					"radioGroup": "Group15",
-					"method": "ObjectMethods/108.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -318,7 +318,7 @@
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
-					"method": "ObjectMethods/151.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -337,7 +337,7 @@
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
-					"method": "ObjectMethods/152.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -395,7 +395,7 @@
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
-					"method": "ObjectMethods/153.4dm",
+					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",

@@ -13,7 +13,7 @@ C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($b;$Boo_OK)
 C_LONGINT:C283($l;$Lon_parameters;$Win_target)
-C_TEXT:C284($Dir_tgt;$File_digest;$t;$tt)
+C_TEXT:C284($Dir_tgt;$t;$tt)
 C_OBJECT:C1216($o;$Obj_cancel;$Obj_in;$Obj_ok;$Obj_project)
 C_COLLECTION:C1488($c)
 
@@ -75,11 +75,11 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 				
 				  // Check if the project was modified by another application
 				  // Compare to the signature of the sources folder
-				$File_digest:=_o_env_userPath ("cache")+$Obj_project.$project.product
+				$o:=env_userPathname ("cache";$Obj_project.$project.product)
 				
-				If (Test path name:C476($File_digest)=Is a document:K24:1)
+				If ($o.exists)
 					
-					$Boo_OK:=(doc_folderDigest ($Dir_tgt+"Sources"+Folder separator:K24:12)=Document to text:C1236($File_digest))
+					$Boo_OK:=(doc_folderDigest ($Dir_tgt+"Sources"+Folder separator:K24:12)=$o.getText())
 					
 				End if 
 			End if 
@@ -106,8 +106,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-												"action";"safeDelete";\
-												"path";$Obj_in.path))
+				"action";"safeDelete";\
+				"path";$Obj_in.path))
 			  // End if
 			
 		End if 

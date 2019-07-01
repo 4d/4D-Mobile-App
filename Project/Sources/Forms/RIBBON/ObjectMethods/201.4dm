@@ -87,7 +87,7 @@ Case of
 							  // …Set default simulator
 							$Obj_simulator:=plist (New object:C1471(\
 								"action";"write";\
-								"domain";Convert path system to POSIX:C1106(_o_env_userPath ("preferences")+"com.apple.iphonesimulator.plist");\
+								"domain";env_userPathname ("preferences";"com.apple.iphonesimulator.plist").path;\
 								"key";"CurrentDeviceUDID";\
 								"value";$Mnu_choice))
 							

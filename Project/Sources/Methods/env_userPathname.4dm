@@ -13,14 +13,16 @@
   // Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
+C_TEXT:C284($2)
 
 C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Txt_selector)
+C_TEXT:C284($Txt_append;$Txt_selector)
 C_OBJECT:C1216($Obj_path)
 
 If (False:C215)
 	C_OBJECT:C1216(env_userPathname ;$0)
 	C_TEXT:C284(env_userPathname ;$1)
+	C_TEXT:C284(env_userPathname ;$2)
 End if 
 
   // ----------------------------------------------------
@@ -35,7 +37,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	  // Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		$Txt_append:=$2
 		
 	End if 
 	
@@ -110,6 +112,21 @@ Case of
 		
 		  //______________________________________________________
 End case 
+
+If (Length:C16($Txt_append)>0)
+	
+	If ($Txt_append[[Length:C16($Txt_append)]]="/")
+		
+		  // Append folder
+		$Obj_path:=$Obj_path.folder($Txt_append)
+		
+	Else 
+		
+		  // Append file
+		$Obj_path:=$Obj_path.file($Txt_append)
+		
+	End if 
+End if 
 
   // ----------------------------------------------------
   // Return

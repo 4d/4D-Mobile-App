@@ -50,6 +50,7 @@ End if
 
   // ----------------------------------------------------
 If ($Col_types.every("col_formula";"$1.result:=($1.value>=0)"))
+	  //If ($Col_types.every("col_method";Formula($1.result:=($1.value>=0))))
 	
 	  // One of them
 	$Boo_accepted:=($Col_types.indexOf($Lon_type)#-1)
@@ -58,6 +59,7 @@ Else
 	
 	  // None of them
 	$Boo_accepted:=($Col_types.filter("col_formula";"$1.result:=($1.value="+String:C10(-$Lon_type)+")").length=0)
+	  //$Boo_accepted:=($Col_types.filter("col_method";Formula($1.result:=($1.value=+String(-$Lon_type)))).length=0)
 	
 End if 
 

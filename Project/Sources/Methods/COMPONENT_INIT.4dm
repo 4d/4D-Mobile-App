@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-						"LaunchScreen";"LaunchScreen";\
-						"Main";"Main";\
-						"backgroundColor";"white")
+								"LaunchScreen";"LaunchScreen";\
+								"Main";"Main";\
+								"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -404,16 +404,15 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  //                                                             | 17R6 |
 	  // ________________________________________________________________________________________________________________________________
 	featuresFlags._105413:=($Lon_version>=1760)  //  [MOBILE] Actions with parameters
+	featuresFlags.parameterListOfValues:=True:C214  //     Manage field formatters as list of values for parameters
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
 	  // ________________________________________________________________________________________________________________________________
 	featuresFlags._98145:=($Lon_version>=1750)  //                   Replace, for data structure access, EXPORT STRUCTURE by ds
 	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
-	featuresFlags.withClasses:=featuresFlags._8858  //               Work with ui.classes
 	
 	featuresFlags.allowPictureAsActionParameters:=featuresFlags._8858  // #107932 - [Mobile] Allow to use picture as action parameters
-	featuresFlags.parameterListOfValues:=featuresFlags._8858  // Manage formatters as list of values
 	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
 	
 End if 

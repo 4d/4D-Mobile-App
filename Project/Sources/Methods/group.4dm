@@ -40,7 +40,8 @@ If (This:C1470._is=Null:C1517)
 		"enable";Formula:C1597(widget ("enable"));\
 		"disable";Formula:C1597(widget ("disable"));\
 		"setEnabled";Formula:C1597(widget ("setEnabled";New object:C1471("visible";Bool:C1537($1))));\
-		"include";Formula:C1597(This:C1470.name.indexOf(String:C10($1))#-1)\
+		"include";Formula:C1597(This:C1470.name.indexOf(String:C10($1))#-1);\
+		"distributeHorizontally";Formula:C1597(widget ("distributeHorizontally";$1))\
 		)
 	
 Else 

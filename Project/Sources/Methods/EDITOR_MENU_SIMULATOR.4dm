@@ -38,7 +38,7 @@ End if
 $Mnu_pop:=Create menu:C408
 
   // Get the default simulator [
-$Path_plist:=env_userPathname ("preferences").file("com.apple.iphonesimulator.plist")
+$Path_plist:=env_userPathname ("preferences";"com.apple.iphonesimulator.plist")
 
 If ($Path_plist.exists)
 	

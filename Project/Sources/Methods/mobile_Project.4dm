@@ -75,8 +75,28 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 											
 											If ($Obj_manifest.choiceList#Null:C1517)
 												
-												$oo.choiceList:=$Obj_manifest.choiceList
-												
+												If ($oo.type="bool")  // Kep only 2 values
+													
+													Case of 
+															  //______________________________________________________
+														: (Value type:C1509($Obj_manifest.choiceList)=Is collection:K8:32)
+															
+															$Obj_manifest.choiceList.resize(2)
+															$oo.choiceList:=$Obj_manifest.choiceList
+															
+															  //______________________________________________________
+														: (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
+															
+															$oo.choiceList:=New collection:C1472($Obj_manifest.choiceList["0"];$Obj_manifest.choiceList["1"])
+															
+															  //______________________________________________________
+														Else 
+															
+															  // IGNORE
+															
+															  //______________________________________________________
+													End case 
+												End if 
 											End if 
 										End if 
 										
@@ -96,42 +116,31 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 					End if 
 				End for each 
 			End if 
+			  //***********************************************************************************************
 			
-			If (Bool:C1537(featuresFlags._8858))  // Debug mode
+			If ($Boo_dev)
 				
-				$t:=System folder:C487(Desktop:K41:16)+Convert path POSIX to system:C1107("DEV/")
+				  // Cache the last build for debug purpose
+				ob_writeToDocument ($Obj_in;$Obj_cache.file("lastBuild.4dmobile").platformPath;True:C214)
 				
-				If (Test path name:C476($t)=Is a folder:K24:2)
+			End if 
+			
+		Else 
+			
+			If ($Boo_dev)
+				
+				  // IF no parameters, load from previous launched file
+				If (commonValues=Null:C1517)
 					
-					TEXT TO DOCUMENT:C1237($t+"project.actions.json";JSON Stringify:C1217($Obj_in.project.actions;*))
+					COMPONENT_INIT 
 					
 				End if 
+				
+				$Obj_in:=JSON Parse:C1218($Obj_cache.file("lastBuild.4dmobile").getText())
+				
 			End if 
 		End if 
-		  //***********************************************************************************************
-		
-		If ($Boo_dev)
-			
-			  // Cache the last build for debug purpose
-			ob_writeToDocument ($Obj_in;$Obj_cache.file("lastBuild.4dmobile").platformPath;True:C214)
-			
-		End if 
-		
-	Else 
-		
-		If ($Boo_dev)
-			
-			  // IF no parameters, load from previous launched file
-			If (commonValues=Null:C1517)
-				COMPONENT_INIT 
-			End if 
-			
-			$Obj_in:=JSON Parse:C1218($Obj_cache.file("lastBuild.4dmobile").getText())
-			
-		End if 
-		
 	End if 
-	  //}
 	
 	$Obj_out:=New object:C1471(\
 		"success";True:C214)
@@ -366,10 +375,10 @@ If ($Obj_in.create)
 	  //#ACI0098572 [
 	  //$Obj_out.sdk:=sdk (New object(//"action";"install";//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";//"target";$Obj_in.path;// "cache";env_userPath ("cacheSdk")))
 	  //$Obj_out.sdk:=sdk (New object(\
-						//"action";"install";\
-						//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
-						//"target";$Obj_in.path;\
-						//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
+															//"action";"install";\
+															//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+															//"target";$Obj_in.path;\
+															//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
@@ -502,14 +511,14 @@ If ($Obj_in.create)
 			
 			  // Generate if not exist
 			  //$Obj_out.dump:=dataSet (New object(\
-												//"action";"create";\
-												//"project";$Obj_project;\
-												//"digest";True;\
-												//"dataSet";Bool(featuresFlags._101725);\
-												//"key";$File_;\
-												//"caller";$Obj_in.caller;\
-												//"verbose";$Boo_verbose;\
-												//"picture";Not(Bool(featuresFlags._97117))))
+																													//"action";"create";\
+																													//"project";$Obj_project;\
+																													//"digest";True;\
+																													//"dataSet";Bool(featuresFlags._101725);\
+																													//"key";$File_;\
+																													//"caller";$Obj_in.caller;\
+																													//"verbose";$Boo_verbose;\
+																													//"picture";Not(Bool(featuresFlags._97117))))
 			$Obj_out.dump:=dataSet (New object:C1471(\
 				"action";"create";\
 				"project";$Obj_project;\
@@ -721,8 +730,7 @@ If ($Obj_out.success)
 					"exportPath";Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12);\
 					"archivePath";Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12+$Obj_project.$project.product+".xcarchive")))
 				
-				$File_:=_o_env_userPath ("cache")+"lastExportArchive.xlog"
-				TEXT TO DOCUMENT:C1237($File_;String:C10($Obj_result_build.out))
+				env_userPathname ("cache";"lastExportArchive.xlog").setText(String:C10($Obj_result_build.out))
 				
 				ob_error_combine ($Obj_out;$Obj_result_build)
 				

@@ -8,6 +8,7 @@ If (False:C215)  //#THREAD-SAFE
 	  //______________________________________________________
 	C_OBJECT:C1216(env_userPathname ;$0)
 	C_TEXT:C284(env_userPathname ;$1)
+	C_TEXT:C284(env_userPathname ;$2)
 	
 	  //______________________________________________________
 End if 
