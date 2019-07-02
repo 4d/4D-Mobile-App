@@ -469,7 +469,7 @@ Else
 		: ($1="isTime")  // Returns True if text is a time string (DOES NOT CHECK IF THE TIME IS VALID)
 			
 			GET SYSTEM FORMAT:C994(Time separator:K60:11;$t)
-			$o.value:=Match regex:C1019("(?m-si)^\\d+:\\d+(?:"+$t+"\\d+)?$";String:C10(This:C1470.value);1)
+			$o.value:=Match regex:C1019("(?m-si)^\\d+"+$t+"\\d+(?:"+$t+"\\d+)?$";String:C10(This:C1470.value);1)
 			
 			  //______________________________________________________
 		: ($1="match")  // Returns True if text match given pattern

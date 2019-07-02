@@ -127,7 +127,7 @@ Case of
 													  //________________________________________
 												: (String:C10($Obj_parameter.format)="spellOut")
 													
-													$o.default.setFilter(Is text:K8:3)
+													$o.default.setFilter(Is integer:K8:5)
 													
 													  //________________________________________
 												Else 

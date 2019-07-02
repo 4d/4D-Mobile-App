@@ -21,6 +21,14 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
+		$c:=str ("todayyesterdaytomorrow").distinctLetters()
+		
+		GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
+		$t:="&\"0-9;"+$t+";-;/;"+str ("todayyesterdaytomorrow").distinctLetters(";")+"\""
+		
+		  //________________________________________
+	: (True:C214)
+		
 		$c:=New collection:C1472(Get 4D folder:C485(Current resources folder:K5:16);Get 4D folder:C485(Database folder:K5:14))
 		
 		$c:=$c.map("col_formula";"$1.result:=Convert path system to POSIX:C1106($1.value)")
