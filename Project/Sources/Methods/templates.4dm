@@ -435,67 +435,67 @@ Case of
 				  // Manage actions
 				  // ======
 				
-				If (Bool:C1537(featuresFlags._103505))
-					Case of 
+				  //If (Bool(featuresFlags._103505))
+				Case of 
+						
+						  //----------------------------------------
+					: (String:C10($Obj_template.userChoiceTag)="list")
+						
+						  // get action on table
+						$Col_actions:=actions ("form";New object:C1471(\
+							"project";$Obj_in.project;\
+							"table";$Obj_table.originalName;\
+							"tableNumber";$Obj_table.tableNumber;\
+							"scope";"table"\
+							)).actions
+						
+						If ($Col_actions.length>0)
 							
-							  //----------------------------------------
-						: (String:C10($Obj_template.userChoiceTag)="list")
+							$Obj_table.tableActions:=JSON Stringify:C1217(New object:C1471(\
+								"actions";$Col_actions))
 							
-							  // get action on table
-							$Col_actions:=actions ("form";New object:C1471(\
-								"project";$Obj_in.project;\
-								"table";$Obj_table.originalName;\
-								"tableNumber";$Obj_table.tableNumber;\
-								"scope";"table"\
-								)).actions
+						End if 
+						
+						$Col_actions:=actions ("form";New object:C1471(\
+							"project";$Obj_in.project;\
+							"table";$Obj_table.originalName;\
+							"tableNumber";$Obj_table.tableNumber;\
+							"scope";"currentRecord"\
+							)).actions
+						
+						If ($Col_actions.length>0)
 							
-							If ($Col_actions.length>0)
-								
-								$Obj_table.tableActions:=JSON Stringify:C1217(New object:C1471(\
-									"actions";$Col_actions))
-								
-							End if 
+							$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
+								"actions";$Col_actions))
 							
-							$Col_actions:=actions ("form";New object:C1471(\
-								"project";$Obj_in.project;\
-								"table";$Obj_table.originalName;\
-								"tableNumber";$Obj_table.tableNumber;\
-								"scope";"currentRecord"\
-								)).actions
+						End if 
+						
+						  // XXX selection actions
+						  //----------------------------------------
+					: (String:C10($Obj_template.userChoiceTag)="detail")
+						
+						$Col_actions:=actions ("form";New object:C1471(\
+							"project";$Obj_in.project;\
+							"table";$Obj_table.originalName;\
+							"tableNumber";$Obj_table.tableNumber;\
+							"scope";"currentRecord"\
+							)).actions
+						
+						If ($Col_actions.length>0)
 							
-							If ($Col_actions.length>0)
-								
-								$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
-									"actions";$Col_actions))
-								
-							End if 
+							$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
+								"actions";$Col_actions))
 							
-							  // XXX selection actions
-							  //----------------------------------------
-						: (String:C10($Obj_template.userChoiceTag)="detail")
-							
-							$Col_actions:=actions ("form";New object:C1471(\
-								"project";$Obj_in.project;\
-								"table";$Obj_table.originalName;\
-								"tableNumber";$Obj_table.tableNumber;\
-								"scope";"currentRecord"\
-								)).actions
-							
-							If ($Col_actions.length>0)
-								
-								$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
-									"actions";$Col_actions))
-								
-							End if 
-							
-							  //----------------------------------------
-						Else 
-							
-							ASSERT:C1129(dev_assert ;"Unknown form type "+String:C10(String:C10($Obj_template.userChoiceTag)))
-							
-							  //----------------------------------------
-					End case 
-				End if 
+						End if 
+						
+						  //----------------------------------------
+					Else 
+						
+						ASSERT:C1129(dev_assert ;"Unknown form type "+String:C10(String:C10($Obj_template.userChoiceTag)))
+						
+						  //----------------------------------------
+				End case 
+				  //End if 
 				
 				  // ======
 				  // Manage type an others
@@ -558,11 +558,11 @@ Case of
 		  //For each ($Obj_table;$Obj_in.tags.tables)
 		  //$Obj_in.tags.table:=$Obj_table
 		  //$Obj_buffer:=TEMPLATE (New object(\
-															"source";$Obj_template.source;\
-															"target";$Obj_in.path;\
-															"tags";$Obj_in.tags;\
-															"caller";$Obj_in.caller;\
-															"catalog";doc_catalog ($Obj_template.source)))
+																		"source";$Obj_template.source;\
+																		"target";$Obj_in.path;\
+																		"tags";$Obj_in.tags;\
+																		"caller";$Obj_in.caller;\
+																		"catalog";doc_catalog ($Obj_template.source)))
 		  //$Obj_out.tables.push($Obj_buffer)
 		  //ob_error_combine ($Obj_out;$Obj_buffer)
 		  //If (Bool($Obj_in.projfile.success))  // valid project file
@@ -570,10 +570,10 @@ Case of
 		  //$Txt_buffer:=formatString ("table-name";$Obj_table.name)
 		  //  // Feature #97239 "Add JSON to project" : maybe do it near core data dump or just read an option ? (because could be optionnal)
 		  //$Obj_out.project:=XcodeProj (New object(\
-															"action";"addTableJSON";\
-															"proj";$Obj_in.projfile.value;\
-															"uuid";$Obj_template.parent.parent.uuid;\
-															"table";$Txt_buffer))
+																		"action";"addTableJSON";\
+																		"proj";$Obj_in.projfile.value;\
+																		"uuid";$Obj_template.parent.parent.uuid;\
+																		"table";$Txt_buffer))
 		  //  // XXX find a better way to get uuid from main template? recursively find it instead of $Obj_template.parent.parent.uuid
 		  //If (Not(Bool($Obj_out.project.success)))
 		  //ob_error_combine ($Obj_out;$Obj_out.project)
@@ -987,15 +987,16 @@ Case of
 			$Obj_in.projfile.mustSave:=True:C214  // project modified
 			
 		End if 
-		If (Bool:C1537(featuresFlags._103505))
-			
-			$Obj_out.storyboard:=storyboard (New object:C1471(\
-				"action";"listform";\
-				"template";$Obj_template;\
-				"target";$Obj_in.path;\
-				"tags";$Obj_in.tags))
-			
-		End if 
+		
+		  //If (Bool(featuresFlags._103505))
+		
+		$Obj_out.storyboard:=storyboard (New object:C1471(\
+			"action";"listform";\
+			"template";$Obj_template;\
+			"target";$Obj_in.path;\
+			"tags";$Obj_in.tags))
+		
+		  //End if 
 		
 		  //________________________________________
 	: (String:C10($Obj_template.type)="detailform")
@@ -1348,12 +1349,12 @@ If ((String:C10($Obj_template.type)="main"))
 			  //  // * Formatters.strings file has been generated, add it
 			  //If (Length(String($Obj_out.formatters.target))>0)
 			  //$Obj_out.formatters:=XcodeProjInject (New object(\
-																				"path";$Obj_out.formatters.target;\
-																				"mapping";$Obj_out.projfile.mapping;\
-																				"proj";$Obj_out.projfile.value;\
-																				"target";$Obj_in.path;\
-																				"types";New collection();\
-																				"uuid";$Obj_in.template.uuid))
+																								"path";$Obj_out.formatters.target;\
+																								"mapping";$Obj_out.projfile.mapping;\
+																								"proj";$Obj_out.projfile.value;\
+																								"target";$Obj_in.path;\
+																								"types";New collection();\
+																								"uuid";$Obj_in.template.uuid))
 			  //End if 
 			  //End if 
 			

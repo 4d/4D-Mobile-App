@@ -106,14 +106,13 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-				"action";"safeDelete";\
-				"path";$Obj_in.path))
+								"action";"safeDelete";\
+								"path";$Obj_in.path))
 			  // End if
 			
 		End if 
 		
-		If ($Boo_OK)\
-			 & (Bool:C1537(featuresFlags._103411))
+		If ($Boo_OK)  // & (Bool(featuresFlags._103411))
 			
 			  // Verify the structure
 			$c:=New collection:C1472

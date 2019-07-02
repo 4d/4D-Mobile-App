@@ -28,11 +28,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	  // NO PARAMETERS REQUIRED
 	$Txt_currentPage:=String:C10(Form:C1466.currentPage)
 	
-	  //$Lon_pageNumber:=6\
-								//+Num(Bool(featuresFlags._100174))\
-								//+Num(Bool(featuresFlags._103505))
-	$Lon_pageNumber:=7\
-		+Num:C11(Bool:C1537(featuresFlags._103505))
+	$Lon_pageNumber:=8
 	
 	ARRAY TEXT:C222($tTxt_pages;$Lon_pageNumber)
 	$tTxt_pages{1}:="general"
@@ -41,17 +37,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$tTxt_pages{4}:="main"
 	$tTxt_pages{5}:="views"
 	$tTxt_pages{6}:="deployment"
-	
-	  //If (Bool(featuresFlags._100174))
-	
 	$tTxt_pages{7}:="data"
-	
-	If (Bool:C1537(featuresFlags._103505))
-		
-		$tTxt_pages{8}:="actions"
-		
-	End if 
-	  //End if 
+	$tTxt_pages{8}:="actions"
 	
 	  // Optional parameters
 	If ($Lon_parameters>=1)
@@ -220,7 +207,6 @@ If (Length:C16($Txt_page)>0)
 			$Obj_geometry.panels.push(New object:C1471(\
 				"form";"ACTIONS";\
 				"noTitle";True:C214))
-			
 			
 			If (Bool:C1537(featuresFlags.actionWithParameters))
 				

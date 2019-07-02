@@ -251,11 +251,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							"queryEncode";True:C214;\
 							"query";$Obj_query))
 						
-						If (Bool:C1537(featuresFlags._103411))
-							If (Value type:C1509($Obj_rest.response)=Is object:K8:27)
-								$Obj_rest.globalStamp:=$Obj_rest.response.__GlobalStamp  // XXX check table name in https://project.4d.com/issues/90770
-							End if 
+						  //If (Bool(featuresFlags._103411))
+						If (Value type:C1509($Obj_rest.response)=Is object:K8:27)
+							$Obj_rest.globalStamp:=$Obj_rest.response.__GlobalStamp  // XXX check table name in https://project.4d.com/issues/90770
 						End if 
+						  //End if 
 						
 						$Obj_result[$Obj_table.name]:=$Obj_rest
 						ob_error_combine ($Obj_out;$Obj_rest)

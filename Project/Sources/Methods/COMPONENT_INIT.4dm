@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-										"LaunchScreen";"LaunchScreen";\
-										"Main";"Main";\
-										"backgroundColor";"white")
+												"LaunchScreen";"LaunchScreen";\
+												"Main";"Main";\
+												"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -393,12 +393,12 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R5 |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags._101637:=($Lon_version>=1750)  //   [MOBILE] Display n-1 relations
-	featuresFlags._103850:=featuresFlags._101637  //  [MOBILE] Reload data from iOS with N-1 relation (Generate core data model with real relation)
-	featuresFlags._103411:=($Lon_version>=1750)  //   [MOBILE] Incremental synchronization
-	featuresFlags._103505:=($Lon_version>=1750)  //   [MOBILE] Add, Update and Save Actions
+	  //featuresFlags._101637:=($Lon_version>=1750)  //   [MOBILE] Display n-1 relations
+	  //featuresFlags._103850:=featuresFlags._101637  //  [MOBILE] Reload data from iOS with N-1 relation (Generate core data model with real relation)
+	  //featuresFlags._103411:=($Lon_version>=1750)  //   [MOBILE] Incremental synchronization
+	  //featuresFlags._103505:=($Lon_version>=1750)  //   [MOBILE] Add, Update and Save Actions
 	featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  //  Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
-	featuresFlags.withRecursiveLink:=True:C214  //                       Enable recursive link management
+	  //featuresFlags.withRecursiveLink:=True  //                       Enable recursive link management
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R6 |

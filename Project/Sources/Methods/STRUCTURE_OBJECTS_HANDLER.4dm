@@ -336,8 +336,7 @@ Case of
 							
 							If ($Lon_row>0)
 								
-								If ($Lon_column=3)\
-									 & (Bool:C1537(featuresFlags._101637))
+								If ($Lon_column=3)  // & (Bool(featuresFlags._101637))
 									
 									  //#MARK_TO_OPTIMIZE
 									$o:=structure (New object:C1471(\

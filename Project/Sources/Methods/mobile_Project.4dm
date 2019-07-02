@@ -375,10 +375,10 @@ If ($Obj_in.create)
 	  //#ACI0098572 [
 	  //$Obj_out.sdk:=sdk (New object(//"action";"install";//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";//"target";$Obj_in.path;// "cache";env_userPath ("cacheSdk")))
 	  //$Obj_out.sdk:=sdk (New object(\
-															//"action";"install";\
-															//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
-															//"target";$Obj_in.path;\
-															//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
+																	//"action";"install";\
+																	//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+																	//"target";$Obj_in.path;\
+																	//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
@@ -511,14 +511,14 @@ If ($Obj_in.create)
 			
 			  // Generate if not exist
 			  //$Obj_out.dump:=dataSet (New object(\
-																													//"action";"create";\
-																													//"project";$Obj_project;\
-																													//"digest";True;\
-																													//"dataSet";Bool(featuresFlags._101725);\
-																													//"key";$File_;\
-																													//"caller";$Obj_in.caller;\
-																													//"verbose";$Boo_verbose;\
-																													//"picture";Not(Bool(featuresFlags._97117))))
+																																	//"action";"create";\
+																																	//"project";$Obj_project;\
+																																	//"digest";True;\
+																																	//"dataSet";Bool(featuresFlags._101725);\
+																																	//"key";$File_;\
+																																	//"caller";$Obj_in.caller;\
+																																	//"verbose";$Boo_verbose;\
+																																	//"picture";Not(Bool(featuresFlags._97117))))
 			$Obj_out.dump:=dataSet (New object:C1471(\
 				"action";"create";\
 				"project";$Obj_project;\
@@ -548,11 +548,17 @@ If ($Obj_in.create)
 		  //End if
 		
 		  // Update core data model
+		  //$Obj_out.coreData:=dataModel (New object(\
+			//"action";"xcdatamodel";\
+			//"dataModel";$Obj_project.dataModel;\
+			//"flat";False;\
+			//"relationship";Bool(featuresFlags._103850);\
+			//"path";$Obj_in.path+"Sources"+Folder separator+"Structures.xcdatamodeld"))
 		$Obj_out.coreData:=dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\
 			"flat";False:C215;\
-			"relationship";Bool:C1537(featuresFlags._103850);\
+			"relationship";True:C214;\
 			"path";$Obj_in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
 		ob_error_combine ($Obj_out;$Obj_out.coreData)
 		
@@ -561,19 +567,19 @@ If ($Obj_in.create)
 		  // ----------------------------------------------------
 		
 		  // Generate action asset
-		If (Bool:C1537(featuresFlags._103505))
-			
-			$Obj_out.actionAssets:=actions ("assets";New object:C1471("project";$Obj_project;"target";$Obj_in.path))
-			ob_error_combine ($Obj_out;$Obj_out.actionAssets)
-			
-		End if 
+		  //If (Bool(featuresFlags._103505))
 		
-		If (Bool:C1537(featuresFlags._103505))
-			
-			$Obj_out.actionAssets:=actions ("assets";New object:C1471("project";$Obj_project;"target";$Obj_in.path))
-			ob_error_combine ($Obj_out;$Obj_out.actionAssets)
-			
-		End if 
+		$Obj_out.actionAssets:=actions ("assets";New object:C1471("project";$Obj_project;"target";$Obj_in.path))
+		ob_error_combine ($Obj_out;$Obj_out.actionAssets)
+		
+		  //End if 
+		
+		  //If (Bool(featuresFlags._103505))
+		
+		$Obj_out.actionAssets:=actions ("assets";New object:C1471("project";$Obj_project;"target";$Obj_in.path))
+		ob_error_combine ($Obj_out;$Obj_out.actionAssets)
+		
+		  //End if 
 		
 		  // Manage app capabilities
 		If (Bool:C1537(featuresFlags._105413))

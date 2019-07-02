@@ -26,7 +26,22 @@ If (This:C1470._is=Null:C1517)
 	
 	$o:=New object:C1471(\
 		"_is";"environment";\
-		"currency";"";\
+		"currencySymbol";Null:C1517;\
+		"decimalSeparator";Null:C1517;\
+		"thousandSeparator";Null:C1517;\
+		"dateSeparator";Null:C1517;\
+		"dateDayPosition";Null:C1517;\
+		"dateMonthPosition";Null:C1517;\
+		"dateYearPosition";Null:C1517;\
+		"dateLongPattern";Null:C1517;\
+		"dateMediumPattern";Null:C1517;\
+		"dateShortPattern";Null:C1517;\
+		"timeSeparator";Null:C1517;\
+		"timeAMLabel";Null:C1517;\
+		"timePMLabel";Null:C1517;\
+		"timeLongPattern";Null:C1517;\
+		"timeMediumPattern";Null:C1517;\
+		"timeShortPattern";Null:C1517;\
 		"update";Formula:C1597(environment ("update"))\
 		)
 	
@@ -80,7 +95,7 @@ Else
 			$o.timeSeparator:=$t
 			
 			GET SYSTEM FORMAT:C994(System time AM label:K60:15;$t)
-			$o.timeAMLbel:=$t
+			$o.timeAMLabel:=$t
 			
 			GET SYSTEM FORMAT:C994(System time PM label:K60:16;$t)
 			$o.timePMLabel:=$t

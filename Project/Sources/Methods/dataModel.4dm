@@ -198,24 +198,24 @@ Case of
 							
 						End if 
 						
-						If (Bool:C1537(featuresFlags._103411))
+						  //If (Bool(featuresFlags._103411))
+						
+						If (Length:C16(String:C10($Obj_table.slave))>0)
 							
-							If (Length:C16(String:C10($Obj_table.slave))>0)
-								
-								  // Only accessible via relations
-								$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-									"key";"slave";\
-									"value";String:C10($Obj_table.slave))
-								
-							End if 
-							
-							  // Has or not the global stamp fields
+							  // Only accessible via relations
 							$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-								"key";"globalStamp";\
-								"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";\
-								"table";$Obj_table.name;"field";commonValues.stampField.name)).value);"YES";"NO"))
+								"key";"slave";\
+								"value";String:C10($Obj_table.slave))
 							
 						End if 
+						
+						  // Has or not the global stamp fields
+						$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
+							"key";"globalStamp";\
+							"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";\
+							"table";$Obj_table.name;"field";commonValues.stampField.name)).value);"YES";"NO"))
+						
+						  //End if 
 						
 						If (OK=1)
 							

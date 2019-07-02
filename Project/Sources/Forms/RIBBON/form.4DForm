@@ -286,7 +286,7 @@
 					"left": 726,
 					"width": 91,
 					"height": 72,
-					"visibility": "hidden",
+					"visibility": "visible",
 					"stroke": "#696969",
 					"text": ":xliff:page_actions",
 					"icon": "/RESOURCES/images/toolbar/actions-white-32.png",

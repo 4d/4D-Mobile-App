@@ -201,7 +201,7 @@ Case of
 											End if 
 											
 											  //…………………………………………………………………………………………………
-										: (Not:C34(Bool:C1537(featuresFlags._101637)))
+											  //: (Not(Bool(featuresFlags._101637)))
 											
 											  // <NOTHING MORE TO DO>
 											
@@ -212,17 +212,17 @@ Case of
 											
 											If ($Obj_catalog[$Obj_field.relatedDataClass]#Null:C1517)
 												
-												If ($Obj_field.relatedDataClass#$Txt_table)\
-													 | Bool:C1537(featuresFlags.withRecursiveLink)  // Recursive link
-													
-													$Obj_table.field.push(New object:C1471(\
-														"name";$Txt_field;\
-														"inverseName";$Obj_field.inverseName;\
-														"type";-1;\
-														"relatedDataClass";$Obj_field.relatedDataClass;\
-														"relatedTableNumber";$Obj_catalog[$Obj_field.relatedDataClass].getInfo().tableNumber))
-													
-												End if 
+												  //If ($Obj_field.relatedDataClass#$Txt_table)\
+													 | Bool(featuresFlags.withRecursiveLink)  // Recursive link
+												
+												$Obj_table.field.push(New object:C1471(\
+													"name";$Txt_field;\
+													"inverseName";$Obj_field.inverseName;\
+													"type";-1;\
+													"relatedDataClass";$Obj_field.relatedDataClass;\
+													"relatedTableNumber";$Obj_catalog[$Obj_field.relatedDataClass].getInfo().tableNumber))
+												
+												  //End if 
 											End if 
 											
 											  //…………………………………………………………………………………………………
@@ -600,7 +600,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //
@@ -1044,9 +1044,9 @@ Case of
 		ON ERR CALL:C155($Txt_methodCalledOnError)  //    =================]
 		
 		  //______________________________________________________
-	: (Not:C34(Bool:C1537(featuresFlags._103411)))
+		  //: (Not(Bool(featuresFlags._103411)))
 		
-		ASSERT:C1129(False:C215;"Not implemented: \""+$Obj_in.action+"\"")
+		  //ASSERT(False;"Not implemented: \""+$Obj_in.action+"\"")
 		
 		  //______________________________________________________
 	: ($Obj_in.action="verify@")

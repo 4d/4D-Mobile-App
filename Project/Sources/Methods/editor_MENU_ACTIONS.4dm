@@ -510,11 +510,18 @@ Case of
 		
 		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 		
+		  //dataModel (New object(\
+			//"action";"xcdatamodel";\
+			//"dataModel";$Obj_project.dataModel;\
+			//"flat";False;\
+			//"relationship";Bool(featuresFlags._103850);\
+			//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
+			//"path";$Txt_path))
 		dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\
 			"flat";False:C215;\
-			"relationship";Bool:C1537(featuresFlags._103850);\
+			"relationship";True:C214;\
 			"dataSet";dataSet (New object:C1471("action";"readCatalog";"project";$Obj_project)).catalog;\
 			"path";$Txt_path))
 		

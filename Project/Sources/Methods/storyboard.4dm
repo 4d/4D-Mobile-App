@@ -400,30 +400,30 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					End if 
 				End if 
 				
-				If (Bool:C1537(featuresFlags._103505))
+				  //If (Bool(featuresFlags._103505))
+				
+				If (Length:C16($Txt_buffer)=0)  // there is element defined so we need to read here
 					
-					If (Length:C16($Txt_buffer)=0)  // there is element defined so we need to read here
-						
-						$Txt_buffer:=Document to text:C1236($File_)
-						
-					End if 
+					$Txt_buffer:=Document to text:C1236($File_)
 					
-					If (Length:C16($Txt_buffer)>0)
+				End if 
+				
+				If (Length:C16($Txt_buffer)>0)
+					
+					If ($Obj_in.tags.table.recordActions#Null:C1517)
 						
-						If ($Obj_in.tags.table.recordActions#Null:C1517)
+						$Txt_cmd:="___ENTITY_ACTIONS___"
+						
+						If (Position:C15($Txt_cmd;$Txt_buffer)=0)
 							
-							$Txt_cmd:="___ENTITY_ACTIONS___"
+							ob_warning_add ($Obj_out;"Detail template storyboard '"+$File_+"'do not countains action tag "+$Txt_cmd)
 							
-							If (Position:C15($Txt_cmd;$Txt_buffer)=0)
-								
-								ob_warning_add ($Obj_out;"Detail template storyboard '"+$File_+"'do not countains action tag "+$Txt_cmd)
-								
-								  // XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
-								
-							End if 
+							  // XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
+							
 						End if 
 					End if 
 				End if 
+				  //End if 
 				
 				  // Try to determine if must duplicate or not element
 				  // elements are specified or 0 is set as "infinite" representation or if  max > count or one of them defined to 0

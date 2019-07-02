@@ -49,19 +49,19 @@ $form.pages.push(New object:C1471(\
 "name";"data";\
 "button";"107"))
 
-If (Bool:C1537(featuresFlags._103505))
-	
-	$form.pages.push(New object:C1471(\
-		"name";"actions";\
-		"button";"108"))
-	
-	$form.sectionButtons:=ui.group("101;102;107;108;103;104;105;106")
-	
-Else 
-	
-	$form.sectionButtons:=ui.group("101;102;107;103;104;105;106")
-	
-End if 
+  //If (Bool(featuresFlags._103505))
+
+$form.pages.push(New object:C1471(\
+"name";"actions";\
+"button";"108"))
+
+$form.sectionButtons:=ui.group("101;102;107;108;103;104;105;106")
+
+  //Else 
+
+  //$form.sectionButtons:=ui.group("101;102;107;103;104;105;106")
+
+  //End if 
 
 $form.buildButtons:=ui.group("151;201;152;153")
 
@@ -76,7 +76,7 @@ Case of
 		$form.install.disable()
 		$form.simulator.disable()
 		
-		OBJECT SET VISIBLE:C603(*;"108";Bool:C1537(featuresFlags._103505))
+		  //OBJECT SET VISIBLE(*;"108";Bool(featuresFlags._103505))
 		
 		$form.sectionButtons.distributeHorizontally($form)
 		
