@@ -1,7 +1,6 @@
 {
 	"formats" : {
 		"string" : [
-			"name",
 			"email",
 			"phone",
 			"account",

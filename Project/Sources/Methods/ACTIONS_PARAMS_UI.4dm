@@ -16,7 +16,7 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($l)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_action;$Obj_form;$Obj_parameter;$rgx)
+C_OBJECT:C1216($form;$o;$Obj_action;$Obj_parameter;$rgx)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -30,8 +30,6 @@ Case of
 		
 		  //______________________________________________________
 	: ($1="refresh")  // Update the panel UI according to the selection
-		
-		ASSERT:C1129(Not:C34(Macintosh option down:C545))
 		
 		$o:=$2  // The form definition
 		
@@ -305,19 +303,19 @@ Case of
 		  //______________________________________________________
 	: ($1="listUI")  // Colors UI according to focus
 		
-		$Obj_form:=ACTIONS_PARAMS_Handler (New object:C1471(\
+		$form:=ACTIONS_PARAMS_Handler (New object:C1471(\
 			"action";"init"))
 		
-		If ($Obj_form.form.focusedWidget=$Obj_form.parameters.name)\
+		If ($form.form.focusedWidget=$form.parameters.name)\
 			 & (Form event:C388=On Getting Focus:K2:7)
 			
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget+".border";ui.selectedColor;Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
+			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget+".border";ui.selectedColor;Background color none:K23:10)
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget+".border";ui.backgroundUnselectedColor;Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
+			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget+".border";ui.backgroundUnselectedColor;Background color none:K23:10)
 			
 		End if 
 		
@@ -329,10 +327,10 @@ Case of
 		
 		If (Num:C11(This:C1470.index)#0)
 			
-			$Obj_form:=ACTIONS_PARAMS_Handler (New object:C1471(\
+			$form:=ACTIONS_PARAMS_Handler (New object:C1471(\
 				"action";"init"))
 			
-			$b:=($Obj_form.form.focusedWidget=$Obj_form.parameters.name)
+			$b:=($form.form.focusedWidget=$form.parameters.name)
 			
 			If (ob_equal (This:C1470.parameter;$2))  // Selected row
 				

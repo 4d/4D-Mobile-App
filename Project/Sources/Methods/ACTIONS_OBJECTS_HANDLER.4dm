@@ -408,7 +408,7 @@ Case of
 												
 											Else 
 												
-												If ($cc[0].fieldType#Is picture:K8:10)
+												If ($cc[0].valueType#"image")
 													
 													$oo:=New object:C1471(\
 														"fieldNumber";$cc[0].fieldNumber;\
@@ -418,35 +418,42 @@ Case of
 														"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType);\
 														"defaultField";formatString ("field-name";$Obj_table[$t].name))
 													
+												Else 
+													
+													CLEAR VARIABLE:C89($oo)
+													
 												End if 
 											End if 
 											
-											If (Bool:C1537($cc[0].mandatory))
+											If ($oo#Null:C1517)
 												
-												$oo.rules:=New collection:C1472("mandatory")
+												If (Bool:C1537($cc[0].mandatory))
+													
+													$oo.rules:=New collection:C1472("mandatory")
+													
+												End if 
+												
+												  // Preset formats
+												Case of 
+														
+														  //……………………………………………………………………
+													: ($cc[0].fieldType=Is integer:K8:5)\
+														 | ($cc[0].fieldType=Is longint:K8:6)\
+														 | ($cc[0].fieldType=Is integer 64 bits:K8:25)
+														
+														$oo.format:="integer"
+														
+														  //……………………………………………………………………
+													: ($oo.type="date")
+														
+														$oo.format:="shortDate"
+														
+														  //……………………………………………………………………
+												End case 
+												
+												$o.parameters.push($oo)
 												
 											End if 
-											
-											  // Preset formats
-											Case of 
-													
-													  //……………………………………………………………………
-												: ($cc[0].fieldType=Is integer:K8:5)\
-													 | ($cc[0].fieldType=Is longint:K8:6)\
-													 | ($cc[0].fieldType=Is integer 64 bits:K8:25)
-													
-													$oo.format:="integer"
-													
-													  //……………………………………………………………………
-												: ($oo.type="date")
-													
-													$oo.format:="shortDate"
-													
-													  //……………………………………………………………………
-											End case 
-											
-											$o.parameters.push($oo)
-											
 										End if 
 										
 										  //______________________________________________________
