@@ -18,8 +18,8 @@
 			],
 		"date" : [
 			"shortDate",
-			"mediumDate",
-			"longDate"
+			"longDate",
+			"fullDate"
 		],
 		"time" : [
 			"duration"
