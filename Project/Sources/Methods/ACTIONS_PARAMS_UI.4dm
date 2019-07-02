@@ -16,7 +16,7 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($l)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_action;$Obj_form;$Obj_parameter)
+C_OBJECT:C1216($o;$Obj_action;$Obj_form;$Obj_parameter;$rgx)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -144,7 +144,20 @@ Case of
 											
 											  // Should accept "today", "yesterday", "tomorrow"
 											GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
-											$o.default.setFilter(Replace string:C233("&\"0-9;%;-;/;a;d;e;m;o;r-t;w;y\"";"%";$t))
+											$o.default.setFilter("&\"0-9;"+$t+";-;/;"+str ("todayyesterdaytomorrow").distinctLetters(";")+"\"")
+											
+											If (Position:C15(String:C10($o.default.value());"todayyesterdaytomorrow")=0)
+												
+												$rgx:=Rgx_match (New object:C1471(\
+													"pattern";"(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$";\
+													"target";$o.default.value()))
+												
+												If ($rgx.success)
+													
+													$o.default.setValue(String:C10(Add to date:C393(!00-00-00!;Num:C11($rgx.match[3].data);Num:C11($rgx.match[2].data);Num:C11($rgx.match[1].data))))
+													
+												End if 
+											End if 
 											
 											  //…………………………………………………………………………………………………………………………………………
 										: ($Obj_parameter.type="time")

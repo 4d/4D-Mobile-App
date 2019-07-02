@@ -17,6 +17,7 @@ C_TEXT:C284($t;$tt;$Txt_format;$Txt_label;$Txt_type)
 C_OBJECT:C1216($o;$Obj_context;$Obj_current;$Obj_form;$Obj_formats;$Obj_menu)
 C_OBJECT:C1216($Obj_table)
 C_COLLECTION:C1488($c;$cc)
+C_DATE:C307($d)
 
 If (False:C215)
 	C_LONGINT:C283(ACTIONS_PARAMS_OBJECTS_HANDLER ;$0)
@@ -76,7 +77,7 @@ Case of
 				SET BLOB SIZE:C606($x;0)
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Drag Over:K2:13)  // Manage drag & &drop cursor
+			: ($Obj_form.form.event=On Drag Over:K2:13)  // Manage drag & drop cursor
 				
 				  // Get the pastboard
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter";$x)
@@ -639,7 +640,9 @@ Case of
 								
 								If (Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$";$t;1))
 									
-									$o.default:=String:C10(Date:C102($t);Internal date short:K1:7)
+									  // Use internal REST date format
+									$d:=Date:C102($t)
+									$o.default:=String:C10(Day of:C23($d);"00!")+String:C10(Month of:C24($d);"00!")+String:C10(Year of:C25($d);"0000")
 									
 								Else 
 									
