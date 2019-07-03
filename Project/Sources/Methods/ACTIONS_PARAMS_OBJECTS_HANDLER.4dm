@@ -326,9 +326,20 @@ Case of
 							
 							If (Storage:C1525.ƒ.isField($t))
 								
-								$Obj_table[$t].fieldNumber:=Num:C11($t)
-								$c.push($Obj_table[$t])
-								
+								If (featuresFlags.with("allowPictureAsActionParameters"))
+									
+									$Obj_table[$t].fieldNumber:=Num:C11($t)
+									$c.push($Obj_table[$t])
+									
+								Else 
+									
+									If ($Obj_table[$t].fieldType#Is picture:K8:10)
+										
+										$Obj_table[$t].fieldNumber:=Num:C11($t)
+										$c.push($Obj_table[$t])
+										
+									End if 
+								End if 
 							End if 
 						End for each 
 						
@@ -340,9 +351,20 @@ Case of
 								
 								If ($Obj_context.action.parameters.query("fieldNumber = :1";Num:C11($t)).length=0)
 									
-									$Obj_table[$t].fieldNumber:=Num:C11($t)
-									$c.push($Obj_table[$t])
-									
+									If (featuresFlags.with("allowPictureAsActionParameters"))
+										
+										$Obj_table[$t].fieldNumber:=Num:C11($t)
+										$c.push($Obj_table[$t])
+										
+									Else 
+										
+										If ($Obj_table[$t].fieldType#Is picture:K8:10)
+											
+											$Obj_table[$t].fieldNumber:=Num:C11($t)
+											$c.push($Obj_table[$t])
+											
+										End if 
+									End if 
 								End if 
 							End if 
 						End for each 
