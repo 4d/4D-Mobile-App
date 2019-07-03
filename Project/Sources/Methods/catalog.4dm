@@ -110,18 +110,7 @@ Case of
 						: ($Obj_table[$Txt_field].kind="storage")  // Field
 							
 							$o:=OB Copy:C1225($Obj_table[$Txt_field])
-							
-							If (Bool:C1537(featuresFlags.withNewFieldProperties))
-								
-								$o.typeLegacy:=$o.fieldType
-								
-							Else 
-								
-								GET FIELD PROPERTIES:C258(Num:C11($Obj_table.getInfo().tableNumber);$o.fieldNumber;$l)
-								$o.typeLegacy:=$l
-								
-							End if 
-							
+							$o.typeLegacy:=$o.fieldType
 							$Obj_out.fields.push($o)
 							
 							  //______________________________________________________
@@ -208,20 +197,11 @@ Case of
 							$o:=OB Copy:C1225($Obj_table[$Txt_field])
 							$o.path:=$o.name
 							
-							If (Bool:C1537(featuresFlags.withNewFieldProperties))
-								
-								  // #TEMPO [
-								$o.valueType:=$o.type
-								$o.type:=tempoFiledType ($o.fieldType)
-								$o.typeLegacy:=$o.fieldType
-								  //]
-								
-							Else 
-								
-								GET FIELD PROPERTIES:C258(Num:C11($Obj_table.getInfo().tableNumber);$o.fieldNumber;$l)
-								$o.typeLegacy:=$l
-								
-							End if 
+							  // #TEMPO [
+							$o.valueType:=$o.type
+							$o.type:=tempoFiledType ($o.fieldType)
+							$o.typeLegacy:=$o.fieldType
+							  //]
 							
 							$Obj_out.fields.push($o)
 							

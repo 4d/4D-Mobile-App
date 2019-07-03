@@ -74,15 +74,8 @@ If (Asserted:C1132($o.success))
 	
 	ASSERT:C1129($o.type=4)
 	
-	If (Bool:C1537(featuresFlags.withNewFieldProperties))
-		
-		ASSERT:C1129($o.fieldType=Is longint:K8:6)
-		
-	Else 
-		
-		ASSERT:C1129($o.typeLegacy=Is longint:K8:6)
-		
-	End if 
+	ASSERT:C1129($o.fieldType=Is longint:K8:6)
+	
 End if 
 
   //_____________________________________________________________
@@ -115,15 +108,8 @@ If (Asserted:C1132($o.success))
 	ASSERT:C1129($o.path="r_1.Field_1_2")
 	
 	ASSERT:C1129($o.type=3)
-	If (Bool:C1537(featuresFlags.withNewFieldProperties))
-		
-		ASSERT:C1129($o.fieldType=Is integer:K8:5)
-		
-	Else 
-		
-		ASSERT:C1129($o.typeLegacy=Is integer:K8:5)
-		
-	End if 
+	ASSERT:C1129($o.fieldType=Is integer:K8:5)
+	
 End if 
 
   //_____________________________________________________________
@@ -143,15 +129,8 @@ If (Asserted:C1132($o.success))
 	ASSERT:C1129($o.path="r_2.Field_1_2")
 	
 	ASSERT:C1129($o.type=3)
-	If (Bool:C1537(featuresFlags.withNewFieldProperties))
-		
-		ASSERT:C1129($o.fieldType=Is integer:K8:5)
-		
-	Else 
-		
-		ASSERT:C1129($o.typeLegacy=Is integer:K8:5)
-		
-	End if 
+	ASSERT:C1129($o.fieldType=Is integer:K8:5)
+	
 End if 
 
   //_____________________________________________________________
@@ -184,15 +163,8 @@ If (Asserted:C1132($o.success))
 	ASSERT:C1129($o.path="r_1.r_1_2.Field_2_3")
 	
 	ASSERT:C1129($o.type=1)
-	If (Bool:C1537(featuresFlags.withNewFieldProperties))
-		
-		ASSERT:C1129($o.fieldType=Is boolean:K8:9)
-		
-	Else 
-		
-		ASSERT:C1129($o.typeLegacy=Is boolean:K8:9)
-		
-	End if 
+	ASSERT:C1129($o.fieldType=Is boolean:K8:9)
+	
 End if 
 
   //_____________________________________________________________
@@ -226,15 +198,8 @@ If (Asserted:C1132($o.success))
 	ASSERT:C1129($o.path="r_1.r_1_2.r_2_3.Field_3_2")
 	
 	ASSERT:C1129($o.type=12)
-	If (Bool:C1537(featuresFlags.withNewFieldProperties))
-		
-		ASSERT:C1129($o.fieldType=Is picture:K8:10)
-		
-	Else 
-		
-		ASSERT:C1129($o.typeLegacy=Is picture:K8:10)
-		
-	End if 
+	ASSERT:C1129($o.fieldType=Is picture:K8:10)
+	
 End if 
 
   //_____________________________________________________________
@@ -255,15 +220,8 @@ If (Asserted:C1132($o.success))
 	ASSERT:C1129($o.path="r_2.r_1_2.r_2_3.Field_3_2")
 	
 	ASSERT:C1129($o.type=12)
-	If (Bool:C1537(featuresFlags.withNewFieldProperties))
-		
-		ASSERT:C1129($o.fieldType=Is picture:K8:10)
-		
-	Else 
-		
-		ASSERT:C1129($o.typeLegacy=Is picture:K8:10)
-		
-	End if 
+	ASSERT:C1129($o.fieldType=Is picture:K8:10)
+	
 End if 
 
   //=============================================================

@@ -124,31 +124,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						Else 
 							
 							  // set default value according to type (here type from 4d structure)
-							If (featuresFlags.withNewFieldProperties)
+							If ($Obj_field.fieldType<commonValues.defaultFieldBindingTypes.length)
 								
-								If ($Obj_field.fieldType<commonValues.defaultFieldBindingTypes.length)
-									
-									$Obj_out.bindingType:=commonValues.defaultFieldBindingTypes[$Obj_in.field.fieldType]
-									$Obj_out.success:=(Length:C16(String:C10($Obj_out.bindingType))>0)
-									
-								Else 
-									
-									ob_error_add ($Obj_out;"No default format for type '"+String:C10($Obj_field.fieldType)+"'")
-									
-								End if 
+								$Obj_out.bindingType:=commonValues.defaultFieldBindingTypes[$Obj_in.field.fieldType]
+								$Obj_out.success:=(Length:C16(String:C10($Obj_out.bindingType))>0)
 								
 							Else 
 								
-								If ($Obj_field.type<commonValues.defaultFieldBindingTypes.length)
-									
-									$Obj_out.bindingType:=commonValues.defaultFieldBindingTypes[$Obj_in.field.type]
-									$Obj_out.success:=(Length:C16(String:C10($Obj_out.bindingType))>0)
-									
-								Else 
-									
-									ob_error_add ($Obj_out;"No default format for type '"+String:C10($Obj_field.type)+"'")
-									
-								End if 
+								ob_error_add ($Obj_out;"No default format for type '"+String:C10($Obj_field.fieldType)+"'")
 								
 							End if 
 						End if 

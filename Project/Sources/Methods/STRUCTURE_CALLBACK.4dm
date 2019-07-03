@@ -131,35 +131,16 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 									
 									$oo:=$Obj_tableModel[$t]
 									
-									If (Bool:C1537(featuresFlags.withNewFieldProperties))
-										
-										$c:=$Col_catalog[$Lon_tableIndx].field.query("fieldNumber = :1";$Lon_fieldNumber)
-										$Boo_unsynchronized:=$c.length=0  // True if field doesn't exist anymore
-										
-									Else 
-										
-										$Lon_fieldIndx:=$Col_catalog[$Lon_tableIndx].field.extract("id").indexOf($Lon_fieldNumber)
-										$Boo_unsynchronizedField:=($Lon_fieldIndx=-1)  // True if field doesn't exist anymore
-										
-									End if 
+									$c:=$Col_catalog[$Lon_tableIndx].field.query("fieldNumber = :1";$Lon_fieldNumber)
+									$Boo_unsynchronized:=$c.length=0  // True if field doesn't exist anymore
 									
 									If (Not:C34($Boo_unsynchronizedField))
 										
 										  // Check field name & type
-										If (Bool:C1537(featuresFlags.withNewFieldProperties))
-											
-											$Boo_unsynchronizedField:=_or (\
-												Formula:C1597($oo.name#$c[0].name);\
-												Formula:C1597($oo.fieldType#$c[0].fieldType))
-											
-										Else 
-											
-											$Boo_unsynchronizedField:=(\
-												($oo.name#$Col_catalog[$Lon_tableIndx].field[$Lon_fieldIndx].name)\
-												 | ($oo.type#$Col_catalog[$Lon_tableIndx].field[$Lon_fieldIndx].type)\
-												)
-											
-										End if 
+										$Boo_unsynchronizedField:=_or (\
+											Formula:C1597($oo.name#$c[0].name);\
+											Formula:C1597($oo.fieldType#$c[0].fieldType))
+										
 									End if 
 									
 									If ($Boo_unsynchronizedField)
@@ -210,20 +191,10 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 														If (Not:C34($Boo_unsynchronizedField))
 															
 															  // Check field name & type
-															If (Bool:C1537(featuresFlags.withNewFieldProperties))
-																
-																$Boo_unsynchronizedField:=_or (\
-																	Formula:C1597($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name);\
-																	Formula:C1597($oo[$t].fieldType#$Obj_relatedDataClass.field[$Lon_fieldIndx].fieldType))
-																
-															Else 
-																
-																$Boo_unsynchronizedField:=(\
-																	($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name)\
-																	 | ($oo[$t].type#$Obj_relatedDataClass.field[$Lon_fieldIndx].type)\
-																	)
-																
-															End if 
+															$Boo_unsynchronizedField:=_or (\
+																Formula:C1597($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name);\
+																Formula:C1597($oo[$t].fieldType#$Obj_relatedDataClass.field[$Lon_fieldIndx].fieldType))
+															
 														End if 
 														
 														If ($Boo_unsynchronizedField)

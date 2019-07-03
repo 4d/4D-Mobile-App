@@ -37,7 +37,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Lon_formEvent:=Form event:C388
+	$Lon_formEvent:=Form event code:C388
 	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 	
@@ -217,16 +217,7 @@ Case of
 					If ($Obj_field.format=Null:C1517)
 						
 						  // Default value
-						If (Bool:C1537(featuresFlags.withNewFieldProperties))
-							
-							$Txt_current:=commonValues.defaultFieldBindingTypes[$Obj_field.fieldType]
-							
-						Else 
-							
-							  //#OLD_MECHANISM
-							$Txt_current:=commonValues.defaultFieldBindingTypes[$Obj_field.type]
-							
-						End if 
+						$Txt_current:=commonValues.defaultFieldBindingTypes[$Obj_field.fieldType]
 						
 					Else 
 						
@@ -244,8 +235,7 @@ Case of
 					
 					For each ($o;formatters (New object:C1471(\
 						"action";"getByType";\
-						"type";Choose:C955(Bool:C1537(featuresFlags.withNewFieldProperties);\
-						$Obj_field.fieldType;$Obj_field.type))).formatters)
+						"type";$Obj_field.fieldType)).formatters)
 						
 						$t:=String:C10($o.name)
 						
@@ -264,8 +254,7 @@ Case of
 					$c:=formatters (New object:C1471(\
 						"action";"getByType";\
 						"host";True:C214;\
-						"type";Num:C11(Choose:C955(Bool:C1537(featuresFlags.withNewFieldProperties);\
-						$Obj_field.fieldType;$Obj_field.type)))).formatters
+						"type";Num:C11($Obj_field.fieldType))).formatters
 					
 					If ($c.length>0)
 						

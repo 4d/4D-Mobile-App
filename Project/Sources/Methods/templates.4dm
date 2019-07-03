@@ -377,32 +377,16 @@ Case of
 					
 					If (Length:C16(String:C10($Obj_table.sortField))=0)
 						
-						If (featuresFlags.withNewFieldProperties)
+						  // and if no search field find the first one sortable in diplayed field
+						For each ($Obj_field;$Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
 							
-							  // and if no search field find the first one sortable in diplayed field
-							For each ($Obj_field;$Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
+							If (($Obj_field.fieldType#Is picture:K8:10)\
+								 & ($Obj_field.fieldType#-1))  // not image or not defined
 								
-								If (($Obj_field.fieldType#Is picture:K8:10)\
-									 & ($Obj_field.fieldType#-1))  // not image or not defined
-									
-									$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
-									
-								End if 
-							End for each 
-							
-						Else 
-							
-							  // and if no search field find the first one sortable in diplayed field
-							For each ($Obj_field;$Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
+								$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
 								
-								If (($Obj_field.type#12)\
-									 & ($Obj_field.type#-1))  // not image or not defined
-									
-									$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
-									
-								End if 
-							End for each 
-						End if 
+							End if 
+						End for each 
 					End if 
 					
 					  // XXX maybe if not in displayable fields, go for not displayable fields?
@@ -558,11 +542,11 @@ Case of
 		  //For each ($Obj_table;$Obj_in.tags.tables)
 		  //$Obj_in.tags.table:=$Obj_table
 		  //$Obj_buffer:=TEMPLATE (New object(\
-																		"source";$Obj_template.source;\
-																		"target";$Obj_in.path;\
-																		"tags";$Obj_in.tags;\
-																		"caller";$Obj_in.caller;\
-																		"catalog";doc_catalog ($Obj_template.source)))
+																					"source";$Obj_template.source;\
+																					"target";$Obj_in.path;\
+																					"tags";$Obj_in.tags;\
+																					"caller";$Obj_in.caller;\
+																					"catalog";doc_catalog ($Obj_template.source)))
 		  //$Obj_out.tables.push($Obj_buffer)
 		  //ob_error_combine ($Obj_out;$Obj_buffer)
 		  //If (Bool($Obj_in.projfile.success))  // valid project file
@@ -570,10 +554,10 @@ Case of
 		  //$Txt_buffer:=formatString ("table-name";$Obj_table.name)
 		  //  // Feature #97239 "Add JSON to project" : maybe do it near core data dump or just read an option ? (because could be optionnal)
 		  //$Obj_out.project:=XcodeProj (New object(\
-																		"action";"addTableJSON";\
-																		"proj";$Obj_in.projfile.value;\
-																		"uuid";$Obj_template.parent.parent.uuid;\
-																		"table";$Txt_buffer))
+																					"action";"addTableJSON";\
+																					"proj";$Obj_in.projfile.value;\
+																					"uuid";$Obj_template.parent.parent.uuid;\
+																					"table";$Txt_buffer))
 		  //  // XXX find a better way to get uuid from main template? recursively find it instead of $Obj_template.parent.parent.uuid
 		  //If (Not(Bool($Obj_out.project.success)))
 		  //ob_error_combine ($Obj_out;$Obj_out.project)
@@ -1349,12 +1333,12 @@ If ((String:C10($Obj_template.type)="main"))
 			  //  // * Formatters.strings file has been generated, add it
 			  //If (Length(String($Obj_out.formatters.target))>0)
 			  //$Obj_out.formatters:=XcodeProjInject (New object(\
-																								"path";$Obj_out.formatters.target;\
-																								"mapping";$Obj_out.projfile.mapping;\
-																								"proj";$Obj_out.projfile.value;\
-																								"target";$Obj_in.path;\
-																								"types";New collection();\
-																								"uuid";$Obj_in.template.uuid))
+																												"path";$Obj_out.formatters.target;\
+																												"mapping";$Obj_out.projfile.mapping;\
+																												"proj";$Obj_out.projfile.value;\
+																												"target";$Obj_in.path;\
+																												"types";New collection();\
+																												"uuid";$Obj_in.template.uuid))
 			  //End if 
 			  //End if 
 			

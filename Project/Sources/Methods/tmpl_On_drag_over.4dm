@@ -45,28 +45,12 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 			$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
 			
-			If (Bool:C1537(featuresFlags.withNewFieldProperties))
+			If (_or (\
+				Formula:C1597($t="all");\
+				Formula:C1597(tmpl_compatibleType ($c;$o.fieldType))))
 				
-				If (_or (\
-					Formula:C1597($t="all");\
-					Formula:C1597(tmpl_compatibleType ($c;$o.fieldType))))
-					
-					$0:=0
-					
-				End if 
+				$0:=0
 				
-			Else 
-				
-				  //#MARK_TO_OPTIMIZE
-				If (_or (\
-					Formula:C1597($t="all");\
-					Formula:C1597(tmpl_compatibleType ($c;structure (New object:C1471(\
-					"action";"tmplType";\
-					"value";Num:C11($o.type))).value))))
-					
-					$0:=0
-					
-				End if 
 			End if 
 			
 		Else   // Action area

@@ -9,7 +9,9 @@
   //
   // ----------------------------------------------------
   // Declarations
+
 C_BOOLEAN:C305($Boo_Repeat)
+
 C_LONGINT:C283($Lon_index;$Lon_parameters;$Win_hdl)
 C_TEXT:C284($t;$Txt_buffer;$Txt_onErrCallMethod;$Txt_projectName)
 C_OBJECT:C1216($o;$Obj_form;$Obj_path;$Obj_project;$Obj_root)
@@ -115,13 +117,6 @@ If (Bool:C1537(OK))
 		
 		  // Unique application name [
 		$Obj_project:=JSON Parse:C1218($t)
-		
-		If (Bool:C1537(featuresFlags.withNewFieldProperties))
-			
-			  //#REMINDER: Update default project version
-			$Obj_project.info.version:=4
-			
-		End if 
 		
 		If ($Obj_project.product.name#Null:C1517)
 			

@@ -129,20 +129,12 @@ For each ($Txt_tableNumber;$Obj_dataModel)
 							$Obj_field:=$Obj_table[$Txt_field]
 							
 							$Obj_field.name:=$Obj_catalog.field[$Lon_fieldIndx].name
+							$Obj_field.fieldType:=$Obj_catalog.field[$Lon_fieldIndx].fieldType
 							
-							If (Bool:C1537(featuresFlags.withNewFieldProperties))
-								
-								$Obj_field.fieldType:=$Obj_catalog.field[$Lon_fieldIndx].fieldType
-								
-								  // #TEMPO [
-								$Obj_field.type:=$Obj_catalog.field[$Lon_fieldIndx].fieldType
-								  //]
-								
-							Else 
-								
-								$Obj_field.type:=$Obj_catalog.field[$Lon_fieldIndx].type
-								
-							End if 
+							  // #TEMPO [
+							$Obj_field.type:=$Obj_catalog.field[$Lon_fieldIndx].fieldType
+							  //]
+							
 						End if 
 						
 						  //______________________________________________________
@@ -205,20 +197,12 @@ For each ($Txt_tableNumber;$Obj_dataModel)
 												
 												  // Update…
 												$Obj_field[$t].name:=$Obj_relatedDataClass.field[$Lon_indx].name
+												$Obj_field[$t].fieldType:=$Obj_relatedDataClass.field[$Lon_indx].fieldType
 												
-												If (Bool:C1537(featuresFlags.withNewFieldProperties))
-													
-													$Obj_field[$t].fieldType:=$Obj_relatedDataClass.field[$Lon_indx].fieldType
-													
-													  // #TEMPO [
-													$Obj_field[$t].type:=$Obj_relatedDataClass.field[$Lon_indx].fieldType
-													  //]
-													
-												Else 
-													
-													$Obj_field[$t].type:=$Obj_relatedDataClass.field[$Lon_indx].type
-													
-												End if 
+												  // #TEMPO [
+												$Obj_field[$t].type:=$Obj_relatedDataClass.field[$Lon_indx].fieldType
+												  //]
+												
 											End if 
 											
 											  //…………………………………………………………………………………………

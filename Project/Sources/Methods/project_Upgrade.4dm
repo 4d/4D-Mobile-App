@@ -235,117 +235,113 @@ End if
   //=====================================================================
   //                    NEW FIELD DESCRIPTION
   //=====================================================================
-
-If (Bool:C1537(featuresFlags.withNewFieldProperties))
+If (Num:C11($Obj_project.info.version)<4)
 	
-	If (Num:C11($Obj_project.info.version)<4)
-		
-		  // Remap field type
+	  // Remap field type
+	
+	If (Value type:C1509($Obj_project.dataModel)=Is object:K8:27)
 		
 		If (Value type:C1509($Obj_project.dataModel)=Is object:K8:27)
 			
-			If (Value type:C1509($Obj_project.dataModel)=Is object:K8:27)
+			  // Update dataModel to be compliant with ds
+			
+			$Col_fieldTypes:=New collection:C1472
+			$Col_fieldTypes[0]:=Is alpha field:K8:1
+			$Col_fieldTypes[1]:=Is boolean:K8:9
+			$Col_fieldTypes[3]:=Is integer:K8:5
+			$Col_fieldTypes[4]:=Is longint:K8:6
+			$Col_fieldTypes[5]:=Is integer 64 bits:K8:25
+			$Col_fieldTypes[6]:=Is real:K8:4
+			$Col_fieldTypes[7]:=Is float:K8:26
+			$Col_fieldTypes[8]:=Is date:K8:7
+			$Col_fieldTypes[9]:=Is time:K8:8
+			$Col_fieldTypes[10]:=Is text:K8:3
+			$Col_fieldTypes[12]:=Is picture:K8:10
+			$Col_fieldTypes[18]:=Is BLOB:K8:12
+			$Col_fieldTypes[21]:=Is object:K8:27
+			
+			$Col_types:=New collection:C1472
+			$Col_types[Is alpha field:K8:1]:="string"
+			$Col_types[Is boolean:K8:9]:="bool"
+			$Col_types[Is integer:K8:5]:="number"
+			$Col_types[Is longint:K8:6]:="number"
+			$Col_types[Is integer 64 bits:K8:25]:="number"
+			$Col_types[Is real:K8:4]:="number"
+			$Col_types[Is float:K8:26]:="number"
+			$Col_types[Is date:K8:7]:="date"
+			$Col_types[Is time:K8:8]:="time"  // WARNING: for ds it's a number, but I think we must do the distinguo
+			$Col_types[Is text:K8:3]:="string"
+			$Col_types[Is picture:K8:10]:="image"
+			$Col_types[Is BLOB:K8:12]:="blob"
+			$Col_types[Is object:K8:27]:="object"
+			
+			$Obj_catalog:=Build Exposed Datastore:C1598
+			
+			For each ($Txt_tableNumber;$Obj_project.dataModel)
 				
-				  // Update dataModel to be compliant with ds
+				$Obj_table:=$Obj_project.dataModel[$Txt_tableNumber]
 				
-				$Col_fieldTypes:=New collection:C1472
-				$Col_fieldTypes[0]:=Is alpha field:K8:1
-				$Col_fieldTypes[1]:=Is boolean:K8:9
-				$Col_fieldTypes[3]:=Is integer:K8:5
-				$Col_fieldTypes[4]:=Is longint:K8:6
-				$Col_fieldTypes[5]:=Is integer 64 bits:K8:25
-				$Col_fieldTypes[6]:=Is real:K8:4
-				$Col_fieldTypes[7]:=Is float:K8:26
-				$Col_fieldTypes[8]:=Is date:K8:7
-				$Col_fieldTypes[9]:=Is time:K8:8
-				$Col_fieldTypes[10]:=Is text:K8:3
-				$Col_fieldTypes[12]:=Is picture:K8:10
-				$Col_fieldTypes[18]:=Is BLOB:K8:12
-				$Col_fieldTypes[21]:=Is object:K8:27
-				
-				$Col_types:=New collection:C1472
-				$Col_types[Is alpha field:K8:1]:="string"
-				$Col_types[Is boolean:K8:9]:="bool"
-				$Col_types[Is integer:K8:5]:="number"
-				$Col_types[Is longint:K8:6]:="number"
-				$Col_types[Is integer 64 bits:K8:25]:="number"
-				$Col_types[Is real:K8:4]:="number"
-				$Col_types[Is float:K8:26]:="number"
-				$Col_types[Is date:K8:7]:="date"
-				$Col_types[Is time:K8:8]:="time"  // WARNING: for ds it's a number, but I think we must do the distinguo
-				$Col_types[Is text:K8:3]:="string"
-				$Col_types[Is picture:K8:10]:="image"
-				$Col_types[Is BLOB:K8:12]:="blob"
-				$Col_types[Is object:K8:27]:="object"
-				
-				$Obj_catalog:=Build Exposed Datastore:C1598
-				
-				For each ($Txt_tableNumber;$Obj_project.dataModel)
+				For each ($t;$Obj_table)
 					
-					$Obj_table:=$Obj_project.dataModel[$Txt_tableNumber]
-					
-					For each ($t;$Obj_table)
-						
-						Case of 
+					Case of 
+							
+							  //______________________________________________________
+						: ($ƒ.isField($t))
+							
+							$Obj_table[$t].fieldNumber:=$Obj_table[$t].id
+							$Obj_table[$t].fieldType:=$Col_fieldTypes[$Obj_table[$t].type]
+							$Obj_table[$t].type:=$Col_types[$Obj_table[$t].fieldType]
+							
+							  //______________________________________________________
+						: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
+							
+							  // <NOTHING MORE TO DO>
+							  //________________________________________
+						: ($ƒ.isRelatedDataClass($Obj_table[$t]))
+							
+							If ($Obj_table[$t].relatedTableNumber=Null:C1517)
 								
-								  //______________________________________________________
-							: ($ƒ.isField($t))
+								$Obj_table[$t].relatedTableNumber:=$Obj_catalog[$Obj_table[$t].relatedDataClass].getInfo().tableNumber
 								
-								$Obj_table[$t].fieldNumber:=$Obj_table[$t].id
-								$Obj_table[$t].fieldType:=$Col_fieldTypes[$Obj_table[$t].type]
-								$Obj_table[$t].type:=$Col_types[$Obj_table[$t].fieldType]
+							End if 
+							
+							If ($Obj_table[$t].inverseName=Null:C1517)
 								
-								  //______________________________________________________
-							: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
+								$Obj_table[$t].inverseName:=$Obj_catalog[$obj_table.name][$t].inverseName
 								
-								  // <NOTHING MORE TO DO>
-								  //________________________________________
-							: ($ƒ.isRelatedDataClass($Obj_table[$t]))
+							End if 
+							
+							For each ($tt;$Obj_table[$t])
 								
-								If ($Obj_table[$t].relatedTableNumber=Null:C1517)
+								If ($ƒ.isField($tt))
 									
-									$Obj_table[$t].relatedTableNumber:=$Obj_catalog[$Obj_table[$t].relatedDataClass].getInfo().tableNumber
+									$Obj_table[$t][$tt].fieldNumber:=$Obj_table[$t][$tt].id
 									
-								End if 
-								
-								If ($Obj_table[$t].inverseName=Null:C1517)
+									$l:=$Obj_table[$t][$tt].type
 									
-									$Obj_table[$t].inverseName:=$Obj_catalog[$obj_table.name][$t].inverseName
-									
-								End if 
-								
-								For each ($tt;$Obj_table[$t])
-									
-									If ($ƒ.isField($tt))
+									If ($l=10)
 										
-										$Obj_table[$t][$tt].fieldNumber:=$Obj_table[$t][$tt].id
-										
-										$l:=$Obj_table[$t][$tt].type
-										
-										If ($l=10)
-											
-											  //#WARNING - COMPILER TYPES THE FIRST PARAMETER AS POINTER
-											  //GET FIELD PROPERTIES($Obj_table[$t].relatedTableNumber;$Obj_table[$t][$tt].id;$l)
-											GET FIELD PROPERTIES:C258(Num:C11($Obj_table[$t].relatedTableNumber);$Obj_table[$t][$tt].id;$l)
-											
-										End if 
-										
-										$Obj_table[$t][$tt].fieldType:=$Col_fieldTypes[$l]
-										$Obj_table[$t][$tt].type:=$Col_types[$Obj_table[$t][$tt].fieldType]
+										  //#WARNING - COMPILER TYPES THE FIRST PARAMETER AS POINTER
+										  //GET FIELD PROPERTIES($Obj_table[$t].relatedTableNumber;$Obj_table[$t][$tt].id;$l)
+										GET FIELD PROPERTIES:C258(Num:C11($Obj_table[$t].relatedTableNumber);$Obj_table[$t][$tt].id;$l)
 										
 									End if 
-								End for each 
-								
-								  //______________________________________________________
-						End case 
-					End for each 
+									
+									$Obj_table[$t][$tt].fieldType:=$Col_fieldTypes[$l]
+									$Obj_table[$t][$tt].type:=$Col_types[$Obj_table[$t][$tt].fieldType]
+									
+								End if 
+							End for each 
+							
+							  //______________________________________________________
+					End case 
 				End for each 
-			End if 
-			
-			$Obj_project.info.version:=4
-			$Boo_upgraded:=True:C214
-			
+			End for each 
 		End if 
+		
+		$Obj_project.info.version:=4
+		$Boo_upgraded:=True:C214
+		
 	End if 
 End if 
 

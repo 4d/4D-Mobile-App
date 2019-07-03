@@ -266,17 +266,7 @@ Case of
 										If (Value type:C1509($Obj_table[$tTxt_fields{$Lon_field}])=Is object:K8:27)
 											
 											$Txt_buffer:=String:C10($Obj_table[$tTxt_fields{$Lon_field}].name)
-											
-											If (Bool:C1537(featuresFlags.withNewFieldProperties))
-												
-												$Lon_type:=$Obj_table[$tTxt_fields{$Lon_field}].fieldType
-												
-											Else 
-												
-												$Lon_type:=$Obj_table[$tTxt_fields{$Lon_field}].type
-												$Boo_4dType:=False:C215
-												
-											End if 
+											$Lon_type:=$Obj_table[$tTxt_fields{$Lon_field}].fieldType
 											
 										Else 
 											
@@ -367,15 +357,7 @@ Case of
 																	
 																End if 
 																
-																If (Bool:C1537(featuresFlags.withNewFieldProperties))
-																	
-																	$Lon_type:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].fieldType
-																	
-																Else 
-																	
-																	$Lon_type:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].type
-																	
-																End if 
+																$Lon_type:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].fieldType
 																
 																  // CLEAN call this method with $Lon_type not converted, and do a method which support that?
 																dataModel (New object:C1471(\
@@ -405,7 +387,7 @@ Case of
 												
 												If (Length:C16($Txt_inverseName)=0)
 													
-													If (featuresFlags.withNewFieldProperties) & dev_Matrix 
+													If (dev_Matrix )
 														
 														ASSERT:C1129(False:C215;"Missing inverseName")
 														
@@ -696,24 +678,11 @@ Case of
 									  // Create the inverse field
 									If ($Obj_relationTable[$Obj_field.name]=Null:C1517)
 										
-										If (Bool:C1537(featuresFlags.withNewFieldProperties))
-											
-											$Obj_relationTable[$Obj_field.name]:=New object:C1471(\
-												"kind";$Obj_field.kind;\
-												"type";$Obj_field.fieldType;\
-												"inverseName";$Txt_relationName;\
-												"relatedDataClass";$Obj_field.relatedDataClass)
-											
-										Else 
-											
-											$Obj_relationTable[$Obj_field.name]:=New object:C1471(\
-												"kind";$Obj_field.kind;\
-												"type";$Obj_field.type;\
-												"inverseName";$Txt_relationName;\
-												"relatedDataClass";$Obj_field.relatedDataClass)
-											
-										End if 
-										
+										$Obj_relationTable[$Obj_field.name]:=New object:C1471(\
+											"kind";$Obj_field.kind;\
+											"type";$Obj_field.fieldType;\
+											"inverseName";$Txt_relationName;\
+											"relatedDataClass";$Obj_field.relatedDataClass)
 									End if 
 									
 									$Obj_relationTable[$Obj_field.name].inverseName:=$Txt_relationName
@@ -819,30 +788,7 @@ Case of
 		
 		$Dom_attribute:=$Obj_in.dom
 		$Dom_userInfo:=$Obj_in.domUserInfo
-		
-		If (Bool:C1537(featuresFlags.withNewFieldProperties))
-			
-			  // Already in 4d type comparable
-			$Lon_type:=$Obj_in.fieldType
-			
-		Else 
-			
-			$Lon_type:=$Obj_in.type
-			
-			If (Not:C34(Bool:C1537($Obj_in["4d"]))\
-				 & ($Lon_type>0))
-				
-				$Obj_buffer:=structure (New object:C1471(\
-					"action";"tmplType";\
-					"value";$Lon_type))
-				
-				If ($Obj_buffer.success)
-					
-					$Lon_type:=$Obj_buffer.value
-					
-				End if 
-			End if 
-		End if 
+		$Lon_type:=$Obj_in.fieldType
 		
 		Case of 
 				
@@ -1158,21 +1104,10 @@ Case of
 						  //………………………………………………………………………………………………………………………
 					: (Match regex:C1019("(?m-si)^\\d+$";$Txt_field;1;*))
 						
-						If (Bool:C1537(featuresFlags.withNewFieldProperties))
+						If ($Obj_buffer[$Txt_field].fieldType=Is picture:K8:10)
 							
-							If ($Obj_buffer[$Txt_field].fieldType=Is picture:K8:10)
-								
-								$Obj_out.fields.push($Obj_buffer[$Txt_field])
-								
-							End if 
+							$Obj_out.fields.push($Obj_buffer[$Txt_field])
 							
-						Else 
-							
-							If ($Obj_buffer[$Txt_field].type=Choose:C955(Bool:C1537(featuresFlags.withNewFieldProperties);3;12))  // if image
-								
-								$Obj_out.fields.push($Obj_buffer[$Txt_field])
-								
-							End if 
 						End if 
 						
 						  //………………………………………………………………………………………………………………………
@@ -1185,27 +1120,13 @@ Case of
 							
 							If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldNumber;1;*))  // fieldNumber
 								
-								If (Bool:C1537(featuresFlags.withNewFieldProperties))
+								If ($Obj_buffer[$Txt_field][$Txt_fieldNumber].fieldType=Is picture:K8:10)  // if image
 									
-									If ($Obj_buffer[$Txt_field][$Txt_fieldNumber].fieldType=Is picture:K8:10)  // if image
-										
-										$Obj_field:=OB Copy:C1225($Obj_buffer[$Txt_field][$Txt_fieldNumber])
-										$Obj_field.relatedDataClass:=$Obj_buffer[$Txt_field].relatedDataClass  // copy it only if wanted to index picture on this table
-										$Obj_field.relatedField:=$Txt_field
-										$Obj_out.fields.push($Obj_field)
-										
-									End if 
+									$Obj_field:=OB Copy:C1225($Obj_buffer[$Txt_field][$Txt_fieldNumber])
+									$Obj_field.relatedDataClass:=$Obj_buffer[$Txt_field].relatedDataClass  // copy it only if wanted to index picture on this table
+									$Obj_field.relatedField:=$Txt_field
+									$Obj_out.fields.push($Obj_field)
 									
-								Else 
-									
-									If ($Obj_buffer[$Txt_field][$Txt_fieldNumber].type=Choose:C955(Bool:C1537(featuresFlags.withNewFieldProperties);3;12))  // if image
-										
-										$Obj_field:=OB Copy:C1225($Obj_buffer[$Txt_field][$Txt_fieldNumber])
-										$Obj_field.relatedDataClass:=$Obj_buffer[$Txt_field].relatedDataClass  // copy it only if wanted to index picture on this table
-										$Obj_field.relatedField:=$Txt_field
-										$Obj_out.fields.push($Obj_field)
-										
-									End if 
 								End if 
 								
 							Else 

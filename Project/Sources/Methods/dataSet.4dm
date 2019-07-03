@@ -253,19 +253,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 										  //……………………………………………………………………………………………………………
 									: (Match regex:C1019("(?m-si)^\\d+$";$Txt_value;1;*))  // fieldNumber
 										
-										If (Bool:C1537(featuresFlags.withNewFieldProperties))
-											
-											$Obj_field:=New object:C1471(\
-												"id";$Obj_table[$Txt_value].id;\
-												"type";$Obj_table[$Txt_value].fielType)
-											
-										Else 
-											
-											$Obj_field:=New object:C1471(\
-												"id";$Obj_table[$Txt_value].id;\
-												"type";$Obj_table[$Txt_value].type)
-											
-										End if 
+										$Obj_field:=New object:C1471(\
+											"id";$Obj_table[$Txt_value].id;\
+											"type";$Obj_table[$Txt_value].fielType)
 										
 										$Col_fields.push($Obj_field)
 										
@@ -278,19 +268,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 												
 												If (Match regex:C1019("(?m-si)^\\d+$";$Txt_ID;1;*))  // related fieldNumber
 													
-													If (Bool:C1537(featuresFlags.withNewFieldProperties))
-														
-														$Obj_field:=New object:C1471(\
-															"id";$Obj_table[$Txt_value][$Txt_ID].id;\
-															"type";$Obj_table[$Txt_value][$Txt_ID].fielType)
-														
-													Else 
-														
-														$Obj_field:=New object:C1471(\
-															"id";$Obj_table[$Txt_value][$Txt_ID].id;\
-															"type";$Obj_table[$Txt_value][$Txt_ID].type)
-														
-													End if 
+													$Obj_field:=New object:C1471(\
+														"id";$Obj_table[$Txt_value][$Txt_ID].id;\
+														"type";$Obj_table[$Txt_value][$Txt_ID].fielType)
 													
 													$Col_fields.push($Obj_field)
 													

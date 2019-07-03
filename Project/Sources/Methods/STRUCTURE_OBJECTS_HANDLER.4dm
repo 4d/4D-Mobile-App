@@ -34,7 +34,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Lon_formEvent:=Form event:C388
+	$Lon_formEvent:=Form event code:C388
 	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 	
@@ -351,16 +351,8 @@ Case of
 										For each ($Obj_related;$o.fields)
 											
 											$Obj_related.published:=($Obj_dataModel[String:C10($Obj_related.fieldNumber)]#Null:C1517)
+											$Obj_related.icon:=UI.fieldIcons[$Obj_related.fieldType]
 											
-											If (Bool:C1537(featuresFlags.withNewFieldProperties))
-												
-												$Obj_related.icon:=UI.fieldIcons[$Obj_related.fieldType]
-												
-											Else 
-												
-												$Obj_related.icon:=ui.typeIcons[$Obj_related.type]
-												
-											End if 
 										End for each 
 										
 										$Win_hdl:=Open form window:C675("RELATED";Sheet form window:K39:12;*)
@@ -410,13 +402,9 @@ Case of
 																"label";formatString ("label";$Obj_related.name);\
 																"shortLabel";formatString ("label";$Obj_related.name);\
 																"type";$Obj_related.type;\
-																"relatedTableNumber";$Obj_related.relatedTableNumber)
+																"relatedTableNumber";$Obj_related.relatedTableNumber;\
+																"fieldType";$Obj_related.fieldType)
 															
-															If (Bool:C1537(featuresFlags.withNewFieldProperties))
-																
-																$Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber].fieldType:=$Obj_related.fieldType
-																
-															End if 
 														End if 
 														
 													Else 

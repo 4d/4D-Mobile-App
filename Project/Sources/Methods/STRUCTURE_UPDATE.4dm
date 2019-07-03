@@ -172,35 +172,19 @@ Else
 							
 							For each ($Obj_related;$o.fields)
 								
-								If (Bool:C1537(featuresFlags.withNewFieldProperties))
+								If ($Obj_related.fieldType>=0)
 									
-									If ($Obj_related.fieldType>=0)
-										
-										$Obj_table[$Obj_field.name][String:C10($Obj_related.fieldNumber)]:=New object:C1471(\
-											"name";$Obj_related.name;\
-											"label";formatString ("label";$Obj_related.name);\
-											"shortLabel";formatString ("label";$Obj_related.name);\
-											"fieldType";$Obj_related.fieldType;\
-											"relatedTableNumber";$o.relatedTableNumber)
-										
-										  // #TEMPO [
-										$Obj_table[$Obj_field.name][String:C10($Obj_related.fieldNumber)].type:=$Obj_related.type
-										  //]
-										
-									End if 
+									$Obj_table[$Obj_field.name][String:C10($Obj_related.fieldNumber)]:=New object:C1471(\
+										"name";$Obj_related.name;\
+										"label";formatString ("label";$Obj_related.name);\
+										"shortLabel";formatString ("label";$Obj_related.name);\
+										"fieldType";$Obj_related.fieldType;\
+										"relatedTableNumber";$o.relatedTableNumber)
 									
-								Else 
+									  // #TEMPO [
+									$Obj_table[$Obj_field.name][String:C10($Obj_related.fieldNumber)].type:=$Obj_related.type
+									  //]
 									
-									If ($Obj_related.type>=0)
-										
-										$Obj_table[$Obj_field.name][String:C10($Obj_related.fieldNumber)]:=New object:C1471(\
-											"name";$Obj_related.name;\
-											"label";formatString ("label";$Obj_related.name);\
-											"shortLabel";formatString ("label";$Obj_related.name);\
-											"type";$Obj_related.type;\
-											"relatedTableNumber";$o.relatedTableNumber)
-										
-									End if 
 								End if 
 							End for each 
 						End if 
@@ -209,27 +193,16 @@ Else
 					Else 
 						
 						  // Add the field to data model
-						If (Bool:C1537(featuresFlags.withNewFieldProperties))
-							
-							$Obj_table[$Txt_fieldNumber]:=New object:C1471(\
-								"name";$Obj_field.name;\
-								"label";formatString ("label";$Obj_field.name);\
-								"shortLabel";formatString ("label";$Obj_field.name);\
-								"fieldType";$Obj_field.fieldType)
-							
-							  // #TEMPO [
-							$Obj_table[$Txt_fieldNumber].type:=$Obj_field.type
-							  //]
-							
-						Else 
-							
-							$Obj_table[$Txt_fieldNumber]:=New object:C1471(\
-								"name";$Obj_field.name;\
-								"label";formatString ("label";$Obj_field.name);\
-								"shortLabel";formatString ("label";$Obj_field.name);\
-								"type";$Obj_field.type)
-							
-						End if 
+						$Obj_table[$Txt_fieldNumber]:=New object:C1471(\
+							"name";$Obj_field.name;\
+							"label";formatString ("label";$Obj_field.name);\
+							"shortLabel";formatString ("label";$Obj_field.name);\
+							"fieldType";$Obj_field.fieldType)
+						
+						  // #TEMPO [
+						$Obj_table[$Txt_fieldNumber].type:=$Obj_field.type
+						  //]
+						
 						  //………………………………………………………………………………………………………
 				End case 
 				

@@ -328,22 +328,11 @@ Case of
 				
 				$c:=New collection:C1472
 				
-				If (Bool:C1537(featuresFlags.withNewFieldProperties))
+				For each ($i;$o.fields.extract("fieldType"))
 					
-					For each ($i;$o.fields.extract("fieldType"))
-						
-						$c.push(ui.fieldIcons[$i])
-						
-					End for each 
+					$c.push(ui.fieldIcons[$i])
 					
-				Else 
-					
-					For each ($i;$o.fields.extract("type"))
-						
-						$c.push(ui.typeIcons[$i])
-						
-					End for each 
-				End if 
+				End for each 
 				
 				COLLECTION TO ARRAY:C1562($c;($Obj_form.icons.pointer())->)
 				

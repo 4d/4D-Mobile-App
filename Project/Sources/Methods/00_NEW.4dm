@@ -85,19 +85,8 @@ Case of
 			
 			  // Create the project {
 			$o:=Folder:C1567("/RESOURCES/default project").copyTo($Obj_root;$Txt_projectName;fk overwrite:K87:5).file("project.4dmobileapp")
-			
 			$t:=$o.getText()
 			PROCESS 4D TAGS:C816($t;$t)
-			
-			If (Bool:C1537(featuresFlags.withNewFieldProperties))
-				
-				  //#REMINDER: Update default project version
-				$Obj_project:=JSON Parse:C1218($t)
-				$Obj_project.info.version:=4
-				$t:=JSON Stringify:C1217($Obj_project;*)
-				
-			End if 
-			
 			$o.setText($t)
 			
 			  // Open the project editor

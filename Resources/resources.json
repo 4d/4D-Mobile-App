@@ -11,21 +11,6 @@
         "description",
         "shortDescription"
     ],
-    "defaultFieldBindingTypes": [
-        null,
-        "falseOrTrue",
-        null,
-        "integer",
-        "integer",
-        "integer",
-        "real",
-        "real",
-        "mediumDate",
-        "mediumTime",
-        "text",
-        null,
-        "restImage"
-    ],
     "definitions": {
         "falseOrTrue": {
             "binding": "localizedText",

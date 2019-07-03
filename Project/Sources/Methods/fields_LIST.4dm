@@ -148,16 +148,8 @@ If ($Obj_out.success)
 						
 					Else 
 						
-						If (Bool:C1537(featuresFlags.withNewFieldProperties))
-							
-							$t:=str_localized (New collection:C1472("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])))
-							
-						Else 
-							
-							  // Old
-							$t:=str_localized (New collection:C1472("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.type])))
-							
-						End if 
+						$t:=str_localized (New collection:C1472("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])))
+						
 					End if 
 					
 					$Obj_out.formats.push($t)
@@ -189,21 +181,10 @@ If ($Obj_out.success)
 							$Obj_out.ids.push($Obj_field.id)
 							$Obj_out.names.push($Obj_field.name)
 							$Obj_out.paths.push($Txt_table+"."+$Obj_field.name)
-							
-							If (Bool:C1537(featuresFlags.withNewFieldProperties))
-								
-								$Obj_out.types.push($Obj_field.fieldType)
-								
-							Else 
-								
-								$Obj_out.types.push($Obj_field.type)
-								
-							End if 
-							
+							$Obj_out.types.push($Obj_field.fieldType)
 							$Obj_out.labels.push($Obj_field.label)
 							$Obj_out.shortLabels.push($Obj_field.shortLabel)
 							$Obj_out.iconPaths.push(String:C10($Obj_field.icon))
-							
 							$Obj_out.icons.push(getIcon (String:C10($Obj_field.icon)))
 							$Obj_out.formatColors[$Obj_out.formats.length]:=Foreground color:K23:1
 							
@@ -231,18 +212,10 @@ If ($Obj_out.success)
 								
 							Else 
 								
-								If (Bool:C1537(featuresFlags.withNewFieldProperties))
-									
-									ASSERT:C1129(commonValues.defaultFieldBindingTypes.length>($Obj_field.fieldType-1))
-									
-									$t:=str_localized (New collection:C1472("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])))
-									
-								Else 
-									
-									  // Old
-									$t:=str_localized (New collection:C1472("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.type])))
-									
-								End if 
+								ASSERT:C1129(commonValues.defaultFieldBindingTypes.length>($Obj_field.fieldType-1))
+								
+								$t:=str_localized (New collection:C1472("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])))
+								
 							End if 
 							
 							$Obj_out.formats.push($t)

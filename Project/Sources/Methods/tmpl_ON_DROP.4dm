@@ -44,35 +44,16 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 		Else 
 			
-			If (Bool:C1537(featuresFlags.withNewFieldProperties))
-				
-				$b:=tmpl_compatibleType ($c;$o.fieldType)
-				
-			Else 
-				
-				  //#MARK_TO_OPTIMIZE
-				$b:=tmpl_compatibleType ($c;structure (New object:C1471(\
-					"action";"tmplType";\
-					"value";Num:C11($o.type))).value)
-				
-			End if 
+			  // Check the type compatibility
+			$b:=tmpl_compatibleType ($c;$o.fieldType)
+			
 		End if 
 		
 		If ($b)
 			
-			If (Bool:C1537(featuresFlags.withNewFieldProperties))
-				
-				$Obj_field:=New object:C1471(\
-					"name";$o.path;\
-					"id";$o.fieldNumber)
-				
-			Else 
-				
-				$Obj_field:=New object:C1471(\
-					"name";$o.path;\
-					"id";$o.id)
-				
-			End if 
+			$Obj_field:=New object:C1471(\
+				"name";$o.path;\
+				"id";$o.fieldNumber)
 			
 			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:bind";$t)
 			Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tTxt_results)
@@ -90,12 +71,7 @@ If (Length:C16(This:C1470.$.current)>0)
 				
 			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				
-				  //#98105 - Multi-criteria Search
-				  //If (Bool(featuresFlags._98105))
-				
 				SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multi-criteria";$Txt_isOfClass)
-				
-				  //End if
 				
 				If ($Txt_isOfClass="true")  // Search on several fields - append to the field list if any
 					
@@ -115,8 +91,6 @@ If (Length:C16(This:C1470.$.current)>0)
 					
 					If (Value type:C1509($Obj_target[$t])=Is collection:K8:32)
 						
-						  //#104976 - [BUG] Add related field in searchBar for Multi-criteria search
-						  //If ($Obj_target[$t].extract("id").indexOf($o.id)=-1)
 						If ($Obj_target[$t].extract("name").indexOf($o.path)=-1)
 							
 							  // Append field

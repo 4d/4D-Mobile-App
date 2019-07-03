@@ -213,17 +213,7 @@ Case of
 				SVG_SET_SHAPE_RENDERING ($t;"crispEdges")
 				SVG_SET_VIEWPORT_FILL ($t;SVG_Color_RGB_from_long (ui.backgroundSelectedColor))
 				SVG_New_rect ($t;0.5;0;20;20;0;0;"none";SVG_Color_RGB_from_long (ui.backgroundSelectedColor))
-				
-				If (Bool:C1537(featuresFlags.withNewFieldProperties))
-					
-					SVG_New_embedded_image ($t;ui.fieldIcons[$o.fieldType];2;2)
-					
-				Else 
-					
-					SVG_New_embedded_image ($t;ui.typeIcons[$o.type];2;2)
-					
-				End if 
-				
+				SVG_New_embedded_image ($t;ui.fieldIcons[$o.fieldType];2;2)
 				SVG_New_text ($t;$o.path+" ";20;2;"Sans-serif";13)
 				
 				SVG EXPORT TO PICTURE:C1017($t;$p;Own XML data source:K45:18)

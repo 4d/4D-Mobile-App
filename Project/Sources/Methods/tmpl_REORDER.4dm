@@ -140,15 +140,8 @@ If (Asserted:C1132(Test path name:C476($File_)=Is a document:K24:1))
 										
 										If ($o.success)
 											
-											If (Bool:C1537(featuresFlags.withNewFieldProperties))
-												
-												$Boo_accepted:=tmpl_compatibleType ($c;$o.fieldType)
-												
-											Else 
-												
-												$Boo_accepted:=tmpl_compatibleType ($c;$o.typeLegacy)
-												
-											End if 
+											$Boo_accepted:=tmpl_compatibleType ($c;$o.fieldType)
+											
 										End if 
 									End if 
 								End for each 

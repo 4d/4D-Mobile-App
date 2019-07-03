@@ -86,46 +86,23 @@ Case of
 		End for each 
 		
 		  // Others formatter
-		If (Bool:C1537(featuresFlags.withNewFieldProperties))
+		For each ($c;$Obj_resources.fieldBindingTypes.filter("col_formula";"$1.result:=(Value type:C1509($1.value)=42)");1)
 			
-			For each ($c;$Obj_resources.fieldBindingTypes.filter("col_formula";"$1.result:=(Value type:C1509($1.value)=42)");1)
+			  // Keep only formats with defined name
+			$c:=$c.filter("col_formula";"$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
+			
+			For each ($Obj_formatter;$c)
 				
-				  // Keep only formats with defined name
-				$c:=$c.filter("col_formula";"$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
+				$Txt_buffer:=String:C10($Obj_formatter.name)
 				
-				For each ($Obj_formatter;$c)
+				If (Length:C16($Txt_buffer)>0)\
+					 & ($Txt_buffer#"-")
 					
-					$Txt_buffer:=String:C10($Obj_formatter.name)
+					$Obj_out.formatters[$Txt_buffer]:=$Obj_formatter
 					
-					If (Length:C16($Txt_buffer)>0)\
-						 & ($Txt_buffer#"-")
-						
-						$Obj_out.formatters[$Txt_buffer]:=$Obj_formatter
-						
-					End if 
-				End for each 
+				End if 
 			End for each 
-			
-		Else 
-			
-			For each ($c;$Obj_resources._o_fieldBindingTypes.filter("col_formula";"$1.result:=(Value type:C1509($1.value)=42)");1)
-				
-				  // Keep only formats with defined name
-				$c:=$c.filter("col_formula";"$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
-				
-				For each ($Obj_formatter;$c)
-					
-					$Txt_buffer:=String:C10($Obj_formatter.name)
-					
-					If (Length:C16($Txt_buffer)>0)\
-						 & ($Txt_buffer#"-")
-						
-						$Obj_out.formatters[$Txt_buffer]:=$Obj_formatter
-						
-					End if 
-				End for each 
-			End for each 
-		End if 
+		End for each 
 		
 		  // Host formatters
 		$Obj_resources:=doc_Folder (_o_Pathname ("host_formatters"))
@@ -157,34 +134,17 @@ Case of
 				
 				$c:=New collection:C1472
 				
-				If (Bool:C1537(featuresFlags.withNewFieldProperties))
-					
-					$c[Is alpha field:K8:1]:="text"
-					$c[Is boolean:K8:9]:="boolean"
-					$c[Is integer:K8:5]:="integer"
-					$c[Is longint:K8:6]:="integer"
-					$c[Is integer 64 bits:K8:25]:="integer"
-					$c[Is real:K8:4]:="real"
-					$c[Is float:K8:26]:="float"
-					$c[Is date:K8:7]:="date"
-					$c[Is time:K8:8]:="time"
-					$c[Is text:K8:3]:="text"
-					$c[Is picture:K8:10]:="picture"
-					
-				Else 
-					
-					$c[1]:="boolean"
-					$c[3]:="integer"
-					$c[4]:="integer"
-					$c[5]:="integer"
-					$c[6]:="real"
-					$c[7]:="float"
-					$c[8]:="date"
-					$c[9]:="time"
-					$c[10]:="text"
-					$c[12]:="picture"
-					
-				End if 
+				$c[Is alpha field:K8:1]:="text"
+				$c[Is boolean:K8:9]:="boolean"
+				$c[Is integer:K8:5]:="integer"
+				$c[Is longint:K8:6]:="integer"
+				$c[Is integer 64 bits:K8:25]:="integer"
+				$c[Is real:K8:4]:="real"
+				$c[Is float:K8:26]:="float"
+				$c[Is date:K8:7]:="date"
+				$c[Is time:K8:8]:="time"
+				$c[Is text:K8:3]:="text"
+				$c[Is picture:K8:10]:="picture"
 				
 				For each ($Obj_formatter;$Obj_resources.folders())
 					
@@ -221,15 +181,8 @@ Case of
 			$Obj_resources:=JSON Parse:C1218(Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"resources.json"))
 			$Obj_resources:=JSON Resolve pointers:C1478($Obj_resources).value
 			
-			If (Bool:C1537(featuresFlags.withNewFieldProperties))
-				
-				$Obj_out.formatters:=$Obj_resources.fieldBindingTypes[$Obj_in.type]
-				
-			Else 
-				
-				$Obj_out.formatters:=$Obj_resources._o_fieldBindingTypes[$Obj_in.type]
-				
-			End if 
+			$Obj_out.formatters:=$Obj_resources.fieldBindingTypes[$Obj_in.type]
+			
 		End if 
 		
 		  //______________________________________________________

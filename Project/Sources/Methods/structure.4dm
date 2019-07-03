@@ -88,13 +88,6 @@ Case of
 			
 			$Obj_out.value:=New collection:C1472
 			
-			If (Not:C34(Bool:C1537(featuresFlags.withNewFieldProperties)))
-				
-				  // We exclude object fields and blob fields
-				$Col_types:=New collection:C1472("bool";Null:C1517;"word";"long";"long64";"number";Null:C1517;"date";"duration";"string";Null:C1517;"image")
-				
-			End if 
-			
 			$Boo_oneTable:=($Obj_in.name#Null:C1517) | ($Obj_in.tableNumber#Null:C1517)
 			
 			For each ($Txt_table;$Obj_catalog) Until ($Boo_find)
@@ -170,34 +163,18 @@ Case of
 											
 											  // storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
 											
-											If (Bool:C1537(featuresFlags.withNewFieldProperties))
+											If ($Obj_field.fieldType#Is object:K8:27)\
+												 & ($Obj_field.fieldType#Is BLOB:K8:12)\
+												 & ($Obj_field.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
 												
-												If ($Obj_field.fieldType#Is object:K8:27)\
-													 & ($Obj_field.fieldType#Is BLOB:K8:12)\
-													 & ($Obj_field.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
-													
-													  // #TEMPO [
-													$Obj_field.id:=$Obj_field.fieldNumber
-													$Obj_field.valueType:=$Obj_field.type
-													$Obj_field.type:=tempoFiledType ($Obj_field.fieldType)
-													  //]
-													
-													$Obj_table.field.push($Obj_field)
-													
-												End if 
+												  // #TEMPO [
+												$Obj_field.id:=$Obj_field.fieldNumber
+												$Obj_field.valueType:=$Obj_field.type
+												$Obj_field.type:=tempoFiledType ($Obj_field.fieldType)
+												  //]
 												
-											Else 
+												$Obj_table.field.push($Obj_field)
 												
-												$Lon_type:=$Col_types.indexOf($Obj_field.type)+1
-												
-												If ($Lon_type>0)
-													
-													$Obj_table.field.push(New object:C1471(\
-														"id";$Obj_field.fieldNumber;\
-														"name";$Txt_field;\
-														"type";$Lon_type))
-													
-												End if 
 											End if 
 											
 											  //…………………………………………………………………………………………………
@@ -213,7 +190,7 @@ Case of
 											If ($Obj_catalog[$Obj_field.relatedDataClass]#Null:C1517)
 												
 												  //If ($Obj_field.relatedDataClass#$Txt_table)\
-													 | Bool(featuresFlags.withRecursiveLink)  // Recursive link
+																										 | Bool(featuresFlags.withRecursiveLink)  // Recursive link
 												
 												$Obj_table.field.push(New object:C1471(\
 													"name";$Txt_field;\
@@ -319,25 +296,10 @@ Case of
 					
 					$Obj_out.tableNumber:=$Lon_tableNumber
 					$Obj_out.tableName:=Table name:C256($Lon_tableNumber)
-					
-					If (Bool:C1537(featuresFlags.withNewFieldProperties))
-						
-						$Obj_out.fieldNumber:=$Obj_field.fieldNumber
-						$Obj_out.name:=Field name:C257($Lon_tableNumber;$Obj_field.fieldNumber)
-						$Obj_out.fieldType:=$Obj_field.fieldType
-						
-						$Obj_out.type:=tempoFiledType ($Obj_field.fieldType)
-						
-					Else 
-						
-						$Obj_out.fieldNumber:=$Obj_field.id
-						$Obj_out.name:=Field name:C257($Lon_tableNumber;$Obj_field.id)
-						$Obj_out.type:=$Obj_field.type  // ds type
-						
-						GET FIELD PROPERTIES:C258($Lon_tableNumber;$Obj_field.id;$Lon_type)
-						$Obj_out.typeLegacy:=$Lon_type  // 4D type
-						
-					End if 
+					$Obj_out.fieldNumber:=$Obj_field.fieldNumber
+					$Obj_out.name:=Field name:C257($Lon_tableNumber;$Obj_field.fieldNumber)
+					$Obj_out.fieldType:=$Obj_field.fieldType
+					$Obj_out.type:=tempoFiledType ($Obj_field.fieldType)
 					
 				Else 
 					
@@ -393,31 +355,16 @@ Case of
 								$Obj_field:=$Col_fields[$Lon_indx]
 								
 								$Obj_out.path:=$Obj_in.path
-								
 								$Obj_out.tableName:=Table name:C256($Lon_tableNumber)
 								$Obj_out.tableNumber:=$Lon_tableNumber
+								$Obj_out.fieldNumber:=$Obj_field.fieldNumber
+								$Obj_out.name:=Field name:C257($Lon_tableNumber;$Obj_field.fieldNumber)
+								$Obj_out.fieldType:=$Obj_field.fieldType
 								
-								If (Bool:C1537(featuresFlags.withNewFieldProperties))
-									
-									$Obj_out.fieldNumber:=$Obj_field.fieldNumber
-									$Obj_out.name:=Field name:C257($Lon_tableNumber;$Obj_field.fieldNumber)
-									$Obj_out.fieldType:=$Obj_field.fieldType
-									
-									  // #TEMPO [
-									$Obj_out.valueType:=$Obj_field.type
-									$Obj_out.type:=tempoFiledType ($Obj_field.fieldType)
-									  //]
-									
-								Else 
-									
-									$Obj_out.fieldNumber:=$Obj_field.id
-									$Obj_out.name:=Field name:C257($Lon_tableNumber;$Obj_field.id)
-									$Obj_out.type:=$Obj_field.type  // ds type
-									
-									GET FIELD PROPERTIES:C258($Lon_tableNumber;$Obj_field.id;$Lon_type)
-									$Obj_out.typeLegacy:=$Lon_type  // 4D type
-									
-								End if 
+								  // #TEMPO [
+								$Obj_out.valueType:=$Obj_field.type
+								$Obj_out.type:=tempoFiledType ($Obj_field.fieldType)
+								  //]
 								
 							Else 
 								
@@ -455,13 +402,6 @@ Case of
 		
 		$Obj_field:=$Obj_catalog[$Obj_in.table][$Obj_in.relatedEntity]
 		
-		If (Not:C34(Bool:C1537(featuresFlags.withNewFieldProperties)))
-			
-			  // We exclude object fields and blob fields
-			$Col_types:=New collection:C1472("bool";Null:C1517;"word";"long";"long64";"number";Null:C1517;"date";"duration";"string";Null:C1517;"image")
-			
-		End if 
-		
 		Case of 
 				
 				  //…………………………………………………………………………………………………
@@ -495,37 +435,20 @@ Case of
 							  //___________________________________________
 						: ($o.kind="storage")
 							
-							If (Bool:C1537(featuresFlags.withNewFieldProperties))
+							If ($o.fieldType#Is object:K8:27)\
+								 & ($o.fieldType#Is BLOB:K8:12)\
+								 & ($o.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
 								
-								If ($o.fieldType#Is object:K8:27)\
-									 & ($o.fieldType#Is BLOB:K8:12)\
-									 & ($o.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
-									
-									  // #TEMPO [
-									  //$o.id:=$o.fieldNumber
-									$o.valueType:=$o.type
-									
-									$o.type:=tempoFiledType ($o.fieldType)
-									
-									$o.relatedTableNumber:=$Obj_out.relatedTableNumber
-									
-									$Obj_out.fields.push($o)
-									
-								End if 
+								  // #TEMPO [
+								  //$o.id:=$o.fieldNumber
+								$o.valueType:=$o.type
 								
-							Else 
+								$o.type:=tempoFiledType ($o.fieldType)
 								
-								$Lon_type:=$Col_types.indexOf($Obj_relatedDataClass[$Txt_field].type)+1
+								$o.relatedTableNumber:=$Obj_out.relatedTableNumber
 								
-								If ($Lon_type>0)
-									
-									$Obj_out.fields.push(New object:C1471(\
-										"name";$Obj_relatedDataClass[$Txt_field].name;\
-										"type";$Lon_type;\
-										"fieldNumber";$Obj_relatedDataClass[$Txt_field].fieldNumber;\
-										"relatedTableNumber";$Obj_out.relatedTableNumber))
-									
-								End if 
+								$Obj_out.fields.push($o)
+								
 							End if 
 							
 							  //___________________________________________
@@ -600,7 +523,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //
@@ -714,29 +637,15 @@ Case of
 				$Obj_out.success:=True:C214
 				
 				  // Format as other fields
-				If (Bool:C1537(featuresFlags.withNewFieldProperties))
-					
-					  //#REMINDER: Change id -> fieldNumber
-					
-					$Obj_out.value:=New object:C1471(\
-						"id";$Obj_field.fieldNumber;\
-						"name";$Obj_field.name;\
-						"label";formatString ("label";$Obj_field.name);\
-						"shortLabel";formatString ("label";$Obj_field.name);\
-						"fieldType";$Obj_field.fieldType)
-					
-				Else 
-					
-					$Obj_out.value:=New object:C1471(\
-						"id";$Obj_field.fieldNumber;\
-						"name";$Obj_field.name;\
-						"label";formatString ("label";$Obj_field.name);\
-						"shortLabel";formatString ("label";$Obj_field.name);\
-						"type";structure (New object:C1471(\
-						"action";"entityType";\
-						"value";$Obj_field.type)).value)
-					
-				End if 
+				
+				  //#REMINDER: Change id -> fieldNumber
+				$Obj_out.value:=New object:C1471(\
+					"id";$Obj_field.fieldNumber;\
+					"name";$Obj_field.name;\
+					"label";formatString ("label";$Obj_field.name);\
+					"shortLabel";formatString ("label";$Obj_field.name);\
+					"fieldType";$Obj_field.fieldType)
+				
 			End if 
 		End if 
 		

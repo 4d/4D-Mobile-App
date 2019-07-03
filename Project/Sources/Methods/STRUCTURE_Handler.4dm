@@ -356,17 +356,7 @@ Case of
 				End if 
 				
 				APPEND TO ARRAY:C911(($Obj_in.published)->;$Lon_published)
-				
-				If (Bool:C1537(featuresFlags.withNewFieldProperties))
-					
-					APPEND TO ARRAY:C911(($Obj_in.icons)->;UI.fieldIcons[8858])
-					
-				Else 
-					
-					APPEND TO ARRAY:C911(($Obj_in.icons)->;ui.typeIcons[8858])
-					
-				End if 
-				
+				APPEND TO ARRAY:C911(($Obj_in.icons)->;UI.fieldIcons[8858])
 				APPEND TO ARRAY:C911(($Obj_in.fields)->;$Obj_in.field.name)
 				
 				LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;Size of array:C274(($Obj_in.fields)->);Underline:K14:4)
@@ -379,17 +369,7 @@ Case of
 					$Lon_published:=Num:C11(Form:C1466.dataModel[String:C10($Obj_in.table.tableNumber)][String:C10($Obj_in.field.id)]#Null:C1517)
 					
 					APPEND TO ARRAY:C911(($Obj_in.published)->;$Lon_published)
-					
-					If (Bool:C1537(featuresFlags.withNewFieldProperties))
-						
-						APPEND TO ARRAY:C911(($Obj_in.icons)->;UI.fieldIcons[$Obj_in.field.fieldType])
-						
-					Else 
-						
-						APPEND TO ARRAY:C911(($Obj_in.icons)->;ui.typeIcons[$Obj_in.field.type])
-						
-					End if 
-					
+					APPEND TO ARRAY:C911(($Obj_in.icons)->;ui.typeIcons[$Obj_in.field.type])
 					APPEND TO ARRAY:C911(($Obj_in.fields)->;$Obj_in.field.name)
 					
 				End if 

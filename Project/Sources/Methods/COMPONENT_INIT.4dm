@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-												"LaunchScreen";"LaunchScreen";\
-												"Main";"Main";\
-												"backgroundColor";"white")
+														"LaunchScreen";"LaunchScreen";\
+														"Main";"Main";\
+														"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -154,7 +154,21 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	End if 
 	  //]
 	
-	commonValues.defaultFieldBindingTypes:=JSON Parse:C1218(File:C1566("/RESOURCES/resources.json").getText()).defaultFieldBindingTypes
+	  //commonValues.defaultFieldBindingTypes:=JSON Parse(File("/RESOURCES/resources.json").getText()).defaultFieldBindingTypes
+	
+	commonValues.defaultFieldBindingTypes:=New collection:C1472
+	commonValues.defaultFieldBindingTypes[Is alpha field:K8:1]:="text"
+	commonValues.defaultFieldBindingTypes[Is boolean:K8:9]:="falseOrTrue"
+	commonValues.defaultFieldBindingTypes[Is integer:K8:5]:="integer"
+	commonValues.defaultFieldBindingTypes[Is longint:K8:6]:="integer"
+	commonValues.defaultFieldBindingTypes[Is integer 64 bits:K8:25]:="integer"
+	commonValues.defaultFieldBindingTypes[Is real:K8:4]:="real"
+	commonValues.defaultFieldBindingTypes[Is float:K8:26]:="real"
+	commonValues.defaultFieldBindingTypes[Is date:K8:7]:="mediumDate"
+	commonValues.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
+	commonValues.defaultFieldBindingTypes[Is text:K8:3]:="text"
+	commonValues.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
+	
 	
 	  // XXX check table & filed names in https://project.4d.com/issues/90770
 	commonValues.deletedRecordsTable:=New object:C1471(\
@@ -397,7 +411,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  //featuresFlags._103850:=featuresFlags._101637  //  [MOBILE] Reload data from iOS with N-1 relation (Generate core data model with real relation)
 	  //featuresFlags._103411:=($Lon_version>=1750)  //   [MOBILE] Incremental synchronization
 	  //featuresFlags._103505:=($Lon_version>=1750)  //   [MOBILE] Add, Update and Save Actions
-	featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  //  Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
+	  //featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  //  Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
 	  //featuresFlags.withRecursiveLink:=True  //                       Enable recursive link management
 	
 	  // ________________________________________________________________________________________________________________________________
@@ -405,6 +419,11 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	featuresFlags._105413:=($Lon_version>=1760)  //  [MOBILE] Actions with parameters
 	featuresFlags.parameterListOfValues:=True:C214  //     Manage field formatters as list of values for parameters
+	
+	  // ________________________________________________________________________________________________________________________________
+	  //                                                             |  18  |
+	  // ________________________________________________________________________________________________________________________________
+	featuresFlags.oneToManyRelations:=featuresFlags._8858
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
@@ -509,28 +528,6 @@ End if
   //                                                             | ALIAS |
   // ________________________________________________________________________________________________________________________________
 featuresFlags.actionWithParameters:=featuresFlags._105413  //    [MOBILE] Actions with parameters
-
-If (featuresFlags.with("withNewFieldProperties"))
-	
-	  //#REMINDER: delete entry into resource.json
-	
-	commonValues.defaultFieldBindingTypes:=New collection:C1472
-	commonValues.defaultFieldBindingTypes[Is alpha field:K8:1]:="text"
-	commonValues.defaultFieldBindingTypes[Is boolean:K8:9]:="falseOrTrue"
-	commonValues.defaultFieldBindingTypes[Is integer:K8:5]:="integer"
-	commonValues.defaultFieldBindingTypes[Is longint:K8:6]:="integer"
-	commonValues.defaultFieldBindingTypes[Is integer 64 bits:K8:25]:="integer"
-	commonValues.defaultFieldBindingTypes[Is real:K8:4]:="real"
-	commonValues.defaultFieldBindingTypes[Is float:K8:26]:="real"
-	commonValues.defaultFieldBindingTypes[Is date:K8:7]:="mediumDate"
-	commonValues.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
-	commonValues.defaultFieldBindingTypes[Is text:K8:3]:="text"
-	commonValues.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
-	
-	  // CommonValues.defaultFieldBindingTypes[Is BLOB]:="blob"
-	  // CommonValues.defaultFieldBindingTypes[Is object]:="object"
-	
-End if 
 
 If (Bool:C1537(featuresFlags.with("accentColors")))
 	
