@@ -102,7 +102,7 @@ If (Asserted:C1132($o.success))
 						End if 
 					End for 
 					
-					ASSERT:C1129($o.value[0].field.length=8)
+					ASSERT:C1129($o.value[0].field.length=10)
 					
 					$c:=$o.value[0].field.extract("name")
 					
