@@ -314,9 +314,9 @@
 		<field name="__PrimaryKey" uuid="192F6D39CD3C4A31B961E9770F1BDB74" type="10" limiting_length="255" id="5"/>
 		<primary_key field_name="ID" field_uuid="49D455C57E4C41EAB9A0CC1241B91CA9"/>
 		<table_extra input_form="" output_form="">
-			<editor_table_info fields_ordering="1" displayable_fields_count="6">
+			<editor_table_info fields_ordering="1" displayable_fields_count="5">
 				<color red="249" green="130" blue="127" alpha="255"/>
-				<coordinates left="240" top="40" width="120" height="167.33203125"/>
+				<coordinates left="240" top="40" width="152.6796875" height="161.81640625"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
