@@ -211,9 +211,9 @@ Case of
 						"action";"field";\
 						"row";$Lon_row))
 					
+					$Obj_menu:=menu 
+					
 					If (Num:C11($Obj_field.id)#0)
-						
-						$Obj_menu:=menu 
 						
 						  // Get current format
 						If ($Obj_field.format=Null:C1517)
@@ -269,34 +269,54 @@ Case of
 							End for each 
 						End if 
 						
-						LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.fieldList;$Lon_column;$Lon_row;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-						CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
-						$Obj_menu.popup("";$Lon_left;$Lon_bottom)
+					Else 
 						
-						If ($Obj_menu.selected)
+						If ($Obj_field.format=Null:C1517)
 							
-							  // Update data model
-							$Obj_field.format:=$Obj_menu.choice
+							  // Default value
+							$Txt_current:="inline"
 							
-							  // Update me
-							  //%W-533.1
-							If ($Obj_menu.choice[[1]]="/")
-								  //%W+533.1
+						Else 
+							
+							If (Value type:C1509($Obj_field.format)=Is object:K8:27)
 								
-								  // User resources
-								$Ptr_me->{$Lon_row}:=Substring:C12($Obj_menu.choice;2)
+								$Txt_current:=String:C10($Obj_field.format.name)
 								
 							Else 
 								
-								$Ptr_me->{$Lon_row}:=str_localized (New collection:C1472("_"+$Obj_menu.choice))
+								  // Internal
+								$Txt_current:=$Obj_field.format
 								
 							End if 
 						End if 
 						
-					Else 
+						$Obj_menu.append(".In line";"inline";$Txt_current="inline")
+						$Obj_menu.append(".New page";"blank";$Txt_current="blank")
 						
-						  // NO FORMATTERS
+					End if 
+					
+					LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.fieldList;$Lon_column;$Lon_row;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+					CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
+					$Obj_menu.popup("";$Lon_left;$Lon_bottom)
+					
+					If ($Obj_menu.selected)
 						
+						  // Update data model
+						$Obj_field.format:=$Obj_menu.choice
+						
+						  // Update me
+						  //%W-533.1
+						If ($Obj_menu.choice[[1]]="/")
+							  //%W+533.1
+							
+							  // User resources
+							$Ptr_me->{$Lon_row}:=Substring:C12($Obj_menu.choice;2)
+							
+						Else 
+							
+							$Ptr_me->{$Lon_row}:=str_localized (New collection:C1472("_"+$Obj_menu.choice))
+							
+						End if 
 					End if 
 					
 					GOTO OBJECT:C206(*;$Obj_form.fieldList)
