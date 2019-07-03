@@ -123,8 +123,16 @@ Case of
 			
 		Else 
 			
-			$Obj_out:=Form:C1466.dataModel[String:C10($Obj_context.tableNumber)][String:C10($Lon_fieldNumber)]
-			
+			If ($Lon_fieldNumber#0)
+				
+				$Obj_out:=Form:C1466.dataModel[String:C10($Obj_context.tableNumber)][String:C10($Lon_fieldNumber)]
+				
+			Else 
+				
+				  // Take the name 
+				$Obj_out:=Form:C1466.dataModel[String:C10($Obj_context.tableNumber)][String:C10($Col_buffer[0])]
+				
+			End if 
 		End if 
 		  //%W+533.3
 		
@@ -209,6 +217,8 @@ Case of
 				
 			End if 
 			  //%W+533.3
+			
+			ui.saveProject()
 			
 		End if 
 		

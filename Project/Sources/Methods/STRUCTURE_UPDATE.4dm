@@ -190,6 +190,14 @@ Else
 						End if 
 						
 						  //………………………………………………………………………………………………………
+					: ($Lon_type=-2)  // 1 -> N relation
+						
+						$Obj_table[$Obj_field.name]:=New object:C1471(\
+							"relatedEntities";$Obj_field.relatedDataClass;\
+							"relatedTableNumber";$Obj_field.relatedTableNumber;\
+							"inverseName";$Obj_field.inverseName)
+						
+						  //………………………………………………………………………………………………………
 					Else 
 						
 						  // Add the field to data model
@@ -216,6 +224,15 @@ Else
 					: ($Lon_type=-1)  // N -> 1 relation
 						
 						  // Remove all related fields
+						If ($Obj_table[$o.name]#Null:C1517)
+							
+							OB REMOVE:C1226($Obj_table;$o.name)
+							
+						End if 
+						
+						  //………………………………………………………………………………………………………
+					: ($Lon_type=-2)  // 1 -> N relation
+						
 						If ($Obj_table[$o.name]#Null:C1517)
 							
 							OB REMOVE:C1226($Obj_table;$o.name)

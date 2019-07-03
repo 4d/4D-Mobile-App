@@ -206,89 +206,97 @@ Case of
 					
 					$0:=-1
 					
-					$Obj_menu:=menu 
-					
 					  // Get the field definition [
 					$Obj_field:=fields_Handler (New object:C1471(\
 						"action";"field";\
 						"row";$Lon_row))
 					
-					  // Get current format
-					If ($Obj_field.format=Null:C1517)
+					If (Num:C11($Obj_field.id)#0)
 						
-						  // Default value
-						$Txt_current:=commonValues.defaultFieldBindingTypes[$Obj_field.fieldType]
+						$Obj_menu:=menu 
 						
-					Else 
-						
-						If (Value type:C1509($Obj_field.format)=Is object:K8:27)
+						  // Get current format
+						If ($Obj_field.format=Null:C1517)
 							
-							$Txt_current:=String:C10($Obj_field.format.name)
+							  // Default value
+							$Txt_current:=commonValues.defaultFieldBindingTypes[$Obj_field.fieldType]
 							
 						Else 
 							
-							  // Internal
-							$Txt_current:=$Obj_field.format
-							
+							If (Value type:C1509($Obj_field.format)=Is object:K8:27)
+								
+								$Txt_current:=String:C10($Obj_field.format.name)
+								
+							Else 
+								
+								  // Internal
+								$Txt_current:=$Obj_field.format
+								
+							End if 
 						End if 
-					End if 
-					
-					For each ($o;formatters (New object:C1471(\
-						"action";"getByType";\
-						"type";$Obj_field.fieldType)).formatters)
 						
-						$t:=String:C10($o.name)
+						For each ($o;formatters (New object:C1471(\
+							"action";"getByType";\
+							"type";$Obj_field.fieldType)).formatters)
+							
+							$t:=String:C10($o.name)
+							
+							If ($t="-")
+								
+								$Obj_menu.line()
+								
+							Else 
+								
+								$Obj_menu.append(str_localized (New collection:C1472("_"+$t));$t;$Txt_current=$t)
+								
+							End if 
+						End for each 
 						
-						If ($t="-")
+						  // Append user formatters if any
+						$c:=formatters (New object:C1471(\
+							"action";"getByType";\
+							"host";True:C214;\
+							"type";Num:C11($Obj_field.fieldType))).formatters
+						
+						If ($c.length>0)
 							
 							$Obj_menu.line()
 							
-						Else 
-							
-							$Obj_menu.append(str_localized (New collection:C1472("_"+$t));$t;$Txt_current=$t)
-							
+							For each ($o;$c)
+								
+								$Obj_menu.append($o.name;"/"+$o.name;$Txt_current=("/"+$o.name))
+								
+							End for each 
 						End if 
-					End for each 
-					
-					  // Append user formatters if any
-					$c:=formatters (New object:C1471(\
-						"action";"getByType";\
-						"host";True:C214;\
-						"type";Num:C11($Obj_field.fieldType))).formatters
-					
-					If ($c.length>0)
 						
-						$Obj_menu.line()
+						LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.fieldList;$Lon_column;$Lon_row;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+						CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
+						$Obj_menu.popup("";$Lon_left;$Lon_bottom)
 						
-						For each ($o;$c)
+						If ($Obj_menu.selected)
 							
-							$Obj_menu.append($o.name;"/"+$o.name;$Txt_current=("/"+$o.name))
+							  // Update data model
+							$Obj_field.format:=$Obj_menu.choice
 							
-						End for each 
-					End if 
-					
-					LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.fieldList;$Lon_column;$Lon_row;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-					CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
-					$Obj_menu.popup("";$Lon_left;$Lon_bottom)
-					
-					If ($Obj_menu.selected)
-						
-						  // Update data model
-						$Obj_field.format:=$Obj_menu.choice
-						
-						  // Update me
-						  //%W-533.1
-						If ($Obj_menu.choice[[1]]="/")
-							  //%W+533.1
-							
-							  // User resources
-							$Ptr_me->{$Lon_row}:=Substring:C12($Obj_menu.choice;2)
-							
-						Else 
-							
-							$Ptr_me->{$Lon_row}:=str_localized (New collection:C1472("_"+$Obj_menu.choice))
-							
+							  // Update me
+							  //%W-533.1
+							If ($Obj_menu.choice[[1]]="/")
+								  //%W+533.1
+								
+								  // User resources
+								$Ptr_me->{$Lon_row}:=Substring:C12($Obj_menu.choice;2)
+								
+							Else 
+								
+								$Ptr_me->{$Lon_row}:=str_localized (New collection:C1472("_"+$Obj_menu.choice))
+								
+							End if 
 						End if 
+						
+					Else 
+						
+						  // NO FORMATTERS
+						
 					End if 
 					
 					GOTO OBJECT:C206(*;$Obj_form.fieldList)
@@ -329,11 +337,11 @@ Case of
 		  //==================================================
 End case 
 
-If (Bool:C1537(featuresFlags._8858))
-	
-	ui.saveProject()
-	
-End if 
+  //If (Bool(featuresFlags._8858))
+
+  //ui.saveProject()
+
+  //End if 
 
   // ----------------------------------------------------
   // Return

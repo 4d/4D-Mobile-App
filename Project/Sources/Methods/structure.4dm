@@ -189,9 +189,6 @@ Case of
 											
 											If ($Obj_catalog[$Obj_field.relatedDataClass]#Null:C1517)
 												
-												  //If ($Obj_field.relatedDataClass#$Txt_table)\
-																										 | Bool(featuresFlags.withRecursiveLink)  // Recursive link
-												
 												$Obj_table.field.push(New object:C1471(\
 													"name";$Txt_field;\
 													"inverseName";$Obj_field.inverseName;\
@@ -199,7 +196,6 @@ Case of
 													"relatedDataClass";$Obj_field.relatedDataClass;\
 													"relatedTableNumber";$Obj_catalog[$Obj_field.relatedDataClass].getInfo().tableNumber))
 												
-												  //End if 
 											End if 
 											
 											  //…………………………………………………………………………………………………
@@ -207,7 +203,16 @@ Case of
 											
 											  // 1 -> N relation attribute (reference to an entity selection)
 											
-											  // <NOT YET  MANAGED>
+											If (featuresFlags.with("oneToManyRelations"))
+												
+												$Obj_table.field.push(New object:C1471(\
+													"name";$Txt_field;\
+													"inverseName";$Obj_field.inverseName;\
+													"type";-2;\
+													"relatedDataClass";$Obj_field.relatedDataClass;\
+													"relatedTableNumber";$Obj_catalog[$Obj_field.relatedDataClass].getInfo().tableNumber))
+												
+											End if 
 											
 											  //…………………………………………………………………………………………………
 									End case 
@@ -523,7 +528,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																																																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //

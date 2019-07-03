@@ -362,6 +362,15 @@ Case of
 				LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;Size of array:C274(($Obj_in.fields)->);Underline:K14:4)
 				
 				  //…………………………………………………………………………………………………
+			: ($Obj_in.field.type=-2)  // 1 -> N relation
+				
+				$Lon_published:=Num:C11(Form:C1466.dataModel[String:C10($Obj_in.table.tableNumber)][String:C10($Obj_in.field.name)]#Null:C1517)
+				
+				APPEND TO ARRAY:C911(($Obj_in.published)->;$Lon_published)
+				APPEND TO ARRAY:C911(($Obj_in.icons)->;UI.fieldIcons[8859])
+				APPEND TO ARRAY:C911(($Obj_in.fields)->;$Obj_in.field.name)
+				
+				  //…………………………………………………………………………………………………
 			Else 
 				
 				If ($Obj_in.field.type<=ui.typeIcons.length)

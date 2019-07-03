@@ -13,7 +13,7 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 
 C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Dir_formats;$t;$Txt_field;$Txt_table;$Txt_tableNumber)
+C_TEXT:C284($Dir_formats;$t;$Txt_field;$t;$Txt_tableNumber)
 C_OBJECT:C1216($ƒ;$Obj_field;$Obj_out;$Obj_table)
 
 If (False:C215)
@@ -79,15 +79,15 @@ If ($Obj_out.success)
 		
 		$Obj_table:=Form:C1466.dataModel[$Txt_tableNumber]
 		
-		For each ($Txt_table;$Obj_table)
+		For each ($t;$Obj_table)
 			
 			Case of 
 					
 					  //……………………………………………………………………………………………………………
-				: ($ƒ.isField($Txt_table))
+				: ($ƒ.isField($t))
 					
-					$Obj_field:=$Obj_table[$Txt_table]
-					$Obj_field.id:=Num:C11($Txt_table)
+					$Obj_field:=$Obj_table[$t]
+					$Obj_field.id:=Num:C11($t)
 					
 					  // ***********************************
 					  // ***********************************
@@ -155,32 +155,32 @@ If ($Obj_out.success)
 					$Obj_out.formats.push($t)
 					
 					  //……………………………………………………………………………………………………………
-				: (Value type:C1509($Obj_table[$Txt_table])#Is object:K8:27)
+				: (Value type:C1509($Obj_table[$t])#Is object:K8:27)
 					
 					  // <NOTHING MORE TO DO>
 					
 					  //……………………………………………………………………………………………………………
-				: ($ƒ.isRelatedDataClass($Obj_table[$Txt_table]))
+				: ($ƒ.isRelatedDataClass($Obj_table[$t]))
 					
-					For each ($Txt_field;$Obj_table[$Txt_table])
+					For each ($Txt_field;$Obj_table[$t])
 						
 						If ($ƒ.isField($Txt_field))
 							
-							$Obj_field:=$Obj_table[$Txt_table][$Txt_field]
+							$Obj_field:=$Obj_table[$t][$Txt_field]
 							$Obj_field.id:=Num:C11($Txt_field)
 							
 							  // ***********************************
 							  // ***********************************
 							$Obj_out.tableNumbers.push(structure (New object:C1471(\
 								"action";"tableNumber";\
-								"name";$Obj_table[$Txt_table].relatedDataClass)).tableNumber)
+								"name";$Obj_table[$t].relatedDataClass)).tableNumber)
 							
 							  // ***********************************
 							  // ***********************************
 							
 							$Obj_out.ids.push($Obj_field.id)
 							$Obj_out.names.push($Obj_field.name)
-							$Obj_out.paths.push($Txt_table+"."+$Obj_field.name)
+							$Obj_out.paths.push($t+"."+$Obj_field.name)
 							$Obj_out.types.push($Obj_field.fieldType)
 							$Obj_out.labels.push($Obj_field.label)
 							$Obj_out.shortLabels.push($Obj_field.shortLabel)
@@ -222,6 +222,49 @@ If ($Obj_out.success)
 							
 						End if 
 					End for each 
+					
+					
+					  //……………………………………………………………………………………………………………
+				: ($Obj_table[$t].relatedEntities#Null:C1517)
+					
+					$Obj_field:=$Obj_table[$t]
+					$Obj_field.id:=Num:C11($t)
+					
+					  // ***********************************
+					  // ***********************************
+					$Obj_out.tableNumbers.push(Num:C11($Txt_tableNumber))
+					
+					  // ***********************************
+					  // ***********************************
+					
+					$Obj_out.ids.push(Null:C1517)
+					$Obj_out.names.push($t)
+					$Obj_out.paths.push($t)
+					$Obj_out.types.push(-2)
+					
+					If (String:C10($Obj_field.label)="")
+						
+						$Obj_field.label:=formatString ("label";$t)
+						
+					End if 
+					
+					$Obj_out.labels.push($Obj_field.label)
+					
+					If (String:C10($Obj_field.shortLabel)="")
+						
+						$Obj_field.shortLabel:=$Obj_field.label
+						
+					End if 
+					
+					$Obj_out.shortLabels.push($Obj_field.shortLabel)
+					$Obj_out.iconPaths.push(String:C10($Obj_field.icon))
+					
+					$Obj_out.icons.push(getIcon (String:C10($Obj_field.icon)))
+					
+					$Obj_out.formatColors[$Obj_out.formats.length]:=Foreground color:K23:1
+					
+					$Obj_out.formats.push(Null:C1517)
+					
 					
 					  //……………………………………………………………………………………………………………
 			End case 

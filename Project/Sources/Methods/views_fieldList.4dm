@@ -105,6 +105,27 @@ If ($Obj_out.success)
 					End for each 
 					
 					  //……………………………………………………………………………………………………………
+				: ($Obj_table[$t].relatedEntities#Null:C1517)
+					
+					If (Form:C1466.$dialog.VIEWS.typeForm()="detail")
+						
+						$o:=OB Copy:C1225($Obj_table[$t])
+						
+						$o.name:=$t
+						$o.fieldType:=8859
+						
+						  // #TEMPO [
+						$o.id:=0
+						$o.fieldNumber:=0
+						  //]
+						
+						$o.path:=$t
+						
+						$Obj_out.fields.push($o)
+						
+					End if 
+					
+					  //……………………………………………………………………………………………………………
 			End case 
 		End for each 
 		

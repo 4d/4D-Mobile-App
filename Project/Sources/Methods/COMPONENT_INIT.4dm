@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-														"LaunchScreen";"LaunchScreen";\
-														"Main";"Main";\
-														"backgroundColor";"white")
+																"LaunchScreen";"LaunchScreen";\
+																"Main";"Main";\
+																"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -423,7 +423,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  18  |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags.oneToManyRelations:=featuresFlags._8858
+	featuresFlags.oneToManyRelations:=($Lon_version>=1800)
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |

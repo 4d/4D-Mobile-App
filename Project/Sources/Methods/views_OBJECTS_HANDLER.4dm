@@ -396,6 +396,9 @@ Case of
 				$Obj_context.selector:=1+Num:C11($Obj_form.form.currentWidget=$Obj_form.selectorDetail.name)
 				$Obj_context.setTab()
 				
+				  // Update field list
+				$Obj_context.update:=True:C214
+				
 				  //$Obj_context.actions:=_w_actions ("getList";$Obj_context).actions
 				
 				OB REMOVE:C1226($Obj_context;"manifest")
