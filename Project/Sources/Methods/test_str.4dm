@@ -166,6 +166,27 @@ ASSERT:C1129(str ("unchecked").distinctLetters(";")="c;d;e;h;k;n;u")
 ASSERT:C1129(str ("").distinctLetters().length=0)
 ASSERT:C1129(str ("").distinctLetters(";")="")
 
+  // ============================================
+  // equal()
+ASSERT:C1129(str ("Hello world").equal("Hello world"))
+ASSERT:C1129(Not:C34(str ("Hello world").equal("HELLO WORLD")))
+ASSERT:C1129(Not:C34(str ("HELLO WORLD").equal("Hello world")))
+ASSERT:C1129(Not:C34(str ("Hello world").equal("Hello world!")))
+ASSERT:C1129(str ("").equal(""))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

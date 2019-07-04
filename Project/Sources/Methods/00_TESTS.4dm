@@ -18,13 +18,24 @@ ARRAY TEXT:C222($tTxt_;0)
 COMPONENT_INIT 
 
 Case of 
+		
 		  //________________________________________
 	: (True:C214)
 		
-		$c:=str ("todayyesterdaytomorrow").distinctLetters()
+		$o:=db .exposedDatastore()
+		$o:=db ("object;blob").exposedDatastore()
 		
-		GET SYSTEM FORMAT:C994(Date separator:K60:10;$t)
-		$t:="&\"0-9;"+$t+";-;/;"+str ("todayyesterdaytomorrow").distinctLetters(";")+"\""
+		$o:=db ("object;blob")
+		
+		$oo:=$o.table("Commands")
+		$oo:=$o.table(5)
+		$oo:=$o.table(55)
+		$oo:=$o.table("hello")
+		$oo:=$o.table("Table_1")
+		$oo:=$o.table("Table_3")
+		
+		$oo:=$o.field("Commands";4)
+		$oo:=$o.field("Commands";"theme")
 		
 		  //________________________________________
 	: (True:C214)
@@ -35,27 +46,6 @@ Case of
 		
 		$c:=New collection:C1472(Get 4D folder:C485(Current resources folder:K5:16);Get 4D folder:C485(Database folder:K5:14))
 		$cc:=$c.map("col_method";Formula:C1597($1.result:=Convert path system to POSIX:C1106($1.value)))
-		
-		
-		  //________________________________________
-	: (True:C214)
-		
-		$c:=Split string:C1554("unchecked";"").distinct().sort()
-		
-		$cc:=str ("unchecked").distinctLetters()
-		$t:=str ("unchecked").distinctLetters(";")
-		
-		$cc:=str ("").distinctLetters()
-		$t:=str ("").distinctLetters(";")
-		
-		  //________________________________________
-	: (True:C214)
-		
-		$o:=menu .append("test")
-		$o.shortcut("T";Shift key mask:K16:3)
-		$o.method("tempo")
-		$o.icon("images/fieldsIcons/field_25.png")
-		$o.popup()
 		
 		  //________________________________________
 	: (True:C214)
@@ -109,18 +99,6 @@ Case of
 				ASSERT:C1129(Not:C34(Is nil pointer:C315($o.pointer)))
 				
 			End if 
-		End if 
-		
-		  //________________________________________
-	: (True:C214)
-		
-		$o:=Folder:C1567(fk desktop folder:K87:19).file("project.4dmobileapp")
-		
-		If ($o.exists)
-			
-			$o:=JSON Parse:C1218($o.getText())
-			$b:=project_Upgrade ($o)
-			
 		End if 
 		
 		  //________________________________________

@@ -195,6 +195,7 @@
 						"onSelectionChange",
 						"onRowMove"
 					],
+					"movableRows": true,
 					"columns": [
 						{
 							"name": "main_ids",

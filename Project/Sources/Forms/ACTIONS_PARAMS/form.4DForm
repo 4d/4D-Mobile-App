@@ -155,6 +155,8 @@
 					"focusable": true,
 					"borderStyle": "none",
 					"sortable": false,
+					"dragging": "custom",
+					"dropping": "custom",
 					"columns": [
 						{
 							"name": "names",

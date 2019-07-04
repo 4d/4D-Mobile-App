@@ -132,9 +132,15 @@
 					"width": 200,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"stroke": "#C0C0C0"
+					"stroke": "#C0C0C0",
+					"height": 0,
+					"startPoint": "topLeft"
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

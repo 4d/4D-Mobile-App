@@ -48,7 +48,8 @@ If (This:C1470._is=Null:C1517)
 		"isTime";Formula:C1597(str ("isTime").value);\
 		"match";Formula:C1597(str ("match";New object:C1471("pattern";$1)).value);\
 		"fixedLength";Formula:C1597(str ("fixedLength";New object:C1471("length";$1;"filler";$2;"alignment";$3)).value);\
-		"distinctLetters";Formula:C1597(str ("letters";New object:C1471("delimiter";$1)).value)\
+		"distinctLetters";Formula:C1597(str ("distinctLetters";New object:C1471("delimiter";$1)).value);\
+		"equal";Formula:C1597(str ("equal";New object:C1471("with";$1)).value)\
 		)
 	
 	$o.length:=Length:C16($o.value)
@@ -66,7 +67,12 @@ Else
 			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
 			
 			  //______________________________________________________
-		: ($1="letters")  // Returns the list of distinct letters of the string…
+		: ($1="equal")  // Returns True if the string passed is exactly the same as the value.
+			
+			$o.value:=New collection:C1472(This:C1470.value).equal(New collection:C1472($2.with);ck diacritical:K85:3)
+			
+			  //______________________________________________________
+		: ($1="distinctLetters")  // Returns the list of distinct letters of the string…
 			
 			$c:=Split string:C1554(This:C1470.value;"").distinct().sort()
 			
