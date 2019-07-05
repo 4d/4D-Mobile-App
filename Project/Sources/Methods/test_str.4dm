@@ -1,8 +1,22 @@
 //%attributes = {}
 C_LONGINT:C283($i)
 C_TEXT:C284($t;$Txt_in;$Txt_out)
+C_OBJECT:C1216($o)
 
 TRY 
+
+$o:=str 
+ASSERT:C1129(Length:C16($o.value)=0)
+ASSERT:C1129($o.length=0)
+
+$o.setText("hello world")
+ASSERT:C1129($o.value="hello world")
+ASSERT:C1129($o.length=11)
+
+$o.setText(Pi:K30:1)
+GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+ASSERT:C1129($o.value=Replace string:C233("3.14159265359";".";$t))
+ASSERT:C1129($o.length=(12+Length:C16($t)))
 
   // ============================================
   // trim()
@@ -38,12 +52,22 @@ ASSERT:C1129(str ($Txt_in).wordWrap()=$Txt_out)
   // uperCamelCase()
 ASSERT:C1129(str ("").uperCamelCase()="")
 
+$o:=str ("Category ID Element")
+
 $Txt_in:="CategoryIDElement"
-$Txt_out:=str ("Category ID Element").uperCamelCase()
+$Txt_out:=$o.uperCamelCase()
 
 For ($i;1;Length:C16($Txt_in);1)
 	
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('CategoryIDElement')")
+	
+End for 
+
+$Txt_out:=$o.uperCamelCase()
+
+For ($i;1;Length:C16($Txt_in);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('Category ID Element')")
 	
 End for 
 
@@ -52,14 +76,6 @@ $Txt_out:=str ("Category_ID_element").uperCamelCase()
 For ($i;1;Length:C16($Txt_in);1)
 	
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('CategoryIDElement')")
-	
-End for 
-
-$Txt_out:=str ("Category ID Element").uperCamelCase()
-
-For ($i;1;Length:C16($Txt_in);1)
-	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]);"uperCamelCase('Category ID Element')")
 	
 End for 
 
@@ -160,11 +176,13 @@ End for
 
   // ============================================
   // distinctLetters()
-ASSERT:C1129(New collection:C1472("c";"d";"e";"h";"k";"n";"u").equal(str ("unchecked").distinctLetters()))
-ASSERT:C1129(str ("unchecked").distinctLetters(";")="c;d;e;h;k;n;u")
+$o:=str ("unchecked")
+ASSERT:C1129(New collection:C1472("c";"d";"e";"h";"k";"n";"u").equal($o.distinctLetters()))
+ASSERT:C1129($o.distinctLetters(";")="c;d;e;h;k;n;u")
 
-ASSERT:C1129(str ("").distinctLetters().length=0)
-ASSERT:C1129(str ("").distinctLetters(";")="")
+$o:=str ("")
+ASSERT:C1129($o.distinctLetters().length=0)
+ASSERT:C1129($o.distinctLetters(";")="")
 
   // ============================================
   // equal()
@@ -174,34 +192,28 @@ ASSERT:C1129(Not:C34(str ("HELLO WORLD").equal("Hello world")))
 ASSERT:C1129(Not:C34(str ("Hello world").equal("Hello world!")))
 ASSERT:C1129(str ("").equal(""))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // ============================================
+  // encode()
+ASSERT:C1129(str ("'Command Name' != '_@'").encode()="%27Command%20Name%27%20%21%3D%20%27_%40%27")
 
   // ============================================
-ASSERT:C1129(str_trim ("")="")
-ASSERT:C1129(str_trimTrailing ("       Hello World")="Hello World")
-ASSERT:C1129(str_trimLeading ("Hello World       ")="Hello World")
-ASSERT:C1129(str_trimLeading ("HELLO WORLD")="HELLO WORLD")
-ASSERT:C1129(str_trim ("       Hello world          ")="Hello World")
+  // decode()
+ASSERT:C1129(str ("%27Command%20Name%27%20%21%3D%20%27_%40%27").decode()="'Command Name' != '_@'")
 
-ASSERT:C1129(str_trim ("";"_")="")
-ASSERT:C1129(str_trimTrailing ("_____Hello World";"_")="Hello World")
-ASSERT:C1129(str_trimLeading ("Hello World_____";"_")="Hello World")
-ASSERT:C1129(str_trimLeading ("HELLO WORLD";"_")="HELLO WORLD")
-ASSERT:C1129(str_trim ("_____Hello world_____";"_")="Hello World")
+  // ============================================
+  // contains()
+$o:=str ("Hello World")
+ASSERT:C1129($o.contains("Hello"))
+ASSERT:C1129($o.contains("WORLD"))
+ASSERT:C1129(Not:C34($o.contains("toto")))
+ASSERT:C1129($o.contains("Hello";True:C214))
+ASSERT:C1129(Not:C34($o.contains("WORLD";True:C214)))
+
+  // ============================================
+
+  // ============================================
+
+  // ============================================
 
   // ============================================
 ASSERT:C1129(str_cmpVersion ("9.0";"9.1.2")=-1)
@@ -218,28 +230,6 @@ ASSERT:C1129(str_cmpVersion ("9";"9.0.1")=-1)
 ASSERT:C1129(str_cmpVersion ("9 0";"9 1 2";" ")=-1)
 ASSERT:C1129(str_cmpVersion ("9 1 2";"9 0";" ")=1)
 ASSERT:C1129(str_cmpVersion ("9/1/2";"9/0";"/")=1)
-
-  // ============================================
-$Txt_in:="The principle of the XLIFF norm drives to determine a language source in which "\
-+"are written all the strings. This language will be the reference language (the "\
-+"one from which will be done all the translations). The second language is the "\
-+"language said target Who will be used for the dialogs, warnings, prints… This is "\
-+"the language of the user."
-
-$Txt_out:="The principle of the XLIFF norm drives to determine a language source in which "\
-+"\rare written all the strings. This language will be the reference language (the "\
-+"\rone from which will be done all the translations). The second language is the "\
-+"\rlanguage said target Who will be used for the dialogs, warnings, prints… This "\
-+"\ris the language of the user."
-
-ASSERT:C1129(str_wordWrap ($Txt_in)=$Txt_out)
-
-  // ============================================
-$Txt_in:=str_URLEncode ("'Command Name' != '_@'")
-ASSERT:C1129($Txt_in="%27Command%20Name%27%20%21%3D%20%27_%40%27")
-
-$Txt_out:=str_URLDecode ($Txt_in)
-ASSERT:C1129($Txt_out="'Command Name' != '_@'")
 
   // ============================================
 $Txt_in:="ćĉčċçḉȼ"+"ĆĈČĊÇḈȻ"
