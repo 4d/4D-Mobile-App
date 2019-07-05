@@ -30,10 +30,16 @@ End if
   // ----------------------------------------------------
 If (This:C1470._is=Null:C1517)
 	
+	If (Count parameters:C259>=1)
+		
+		$t:=$1
+		
+	End if 
+	
 	$o:=New object:C1471(\
 		"_is";"str";\
-		"value";String:C10($1);\
-		"length";0;\
+		"value";$t;\
+		"length";Length:C16($t);\
 		"setText";Formula:C1597(str ("setText";New object:C1471("value";String:C10($1))));\
 		"uperCamelCase";Formula:C1597(str ("uperCamelCase").value);\
 		"lowerCamelCase";Formula:C1597(str ("lowerCamelCase").value);\
@@ -55,11 +61,9 @@ If (This:C1470._is=Null:C1517)
 		"equal";Formula:C1597(str ("equal";New object:C1471("with";$1)).value);\
 		"encode";Formula:C1597(str ("encode").value);\
 		"decode";Formula:C1597(str ("decode").value);\
-		"quoted";Formula:C1597("\""+This:C1470.value+"\"");\
-		"singleQuoted";Formula:C1597("'"+This:C1470.value+"'")\
+		"quoted";Formula:C1597("\""+String:C10(This:C1470.value)+"\"");\
+		"singleQuoted";Formula:C1597("'"+String:C10(This:C1470.value)+"'")\
 		)
-	
-	$o.length:=Length:C16($o.value)
 	
 Else 
 	
