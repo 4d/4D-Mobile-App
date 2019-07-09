@@ -676,7 +676,7 @@ Case of
 									
 									For each ($Obj_device;$Obj_.devices[$Txt_key])
 										
-										If (String:C10($Obj_device.availability)="(available)")\
+										If ((String:C10($Obj_device.availability)="(available)") | (Bool:C1537($Obj_device.isAvailable)))\
 											 & ((String:C10($Obj_device.name)="iPhone@")\
 											 | (String:C10($Obj_device.name)="iPad@"))
 											
