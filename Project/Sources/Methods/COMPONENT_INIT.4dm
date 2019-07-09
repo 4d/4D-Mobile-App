@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-																"LaunchScreen";"LaunchScreen";\
-																"Main";"Main";\
-																"backgroundColor";"white")
+																		"LaunchScreen";"LaunchScreen";\
+																		"Main";"Main";\
+																		"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -522,6 +522,18 @@ If ($Obj_preferences.features#Null:C1517)  // Update feature flags with the loca
 			
 		End if 
 	End for each 
+End if 
+
+  // ________________________________________________________________________________________________________________________________
+  //                                         | common value modifications according to flag |
+  // ________________________________________________________________________________________________________________________________
+
+If (Bool:C1537(featuresFlags._108874))  // Temporary force to use Xcode 11
+	
+	commonValues.xCodeVersion:="11.0"
+	commonValues.iosDeploymentTarget:="13.0"
+	commonValues.swift.Version:="5.1"
+	
 End if 
 
   // ________________________________________________________________________________________________________________________________
