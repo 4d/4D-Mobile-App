@@ -316,7 +316,7 @@ Case of
 										  // <NOTHING MORE TO DO>
 										
 										  //………………………………………………………………………………………………………………………
-									: ($ƒ.isRelatedDataClass($Obj_table[$tTxt_fields{$Lon_field}]))
+									: ($ƒ.isRelation($Obj_table[$tTxt_fields{$Lon_field}]))
 										
 										$Txt_relationName:=$tTxt_fields{$Lon_field}
 										
@@ -409,7 +409,7 @@ Case of
 												End if 
 												
 												  // relation mode
-												If (String:C10($Obj_table[$Txt_relationName].kind)="relatedEntities")  // to N
+												If ($ƒ.isRelationToMany($Obj_table[$Txt_relationName]))  // to N
 													
 													  // we must have {type:TABLENAMESelection,relatedDataClass:TABLENAME}
 													
@@ -520,6 +520,11 @@ Case of
 												  //__________________________________
 										End case 
 										
+										  //……………………………………………………………………………………………………………
+									: ($Obj_table[$tTxt_fields{$Lon_field}].relatedEntities#Null:C1517)  // XXX do not edit here without care
+										
+										ASSERT:C1129(False:C215;"Must not be here if relatedDataClass correctly filled")
+										
 										  //………………………………………………………………………………………………………………………
 									Else 
 										
@@ -600,6 +605,10 @@ Case of
 					: ((Value type:C1509($Obj_table[$tTxt_fields{$Lon_field}])=Is object:K8:27))
 						
 						$Txt_relationName:=$tTxt_fields{$Lon_field}  // link name (or primaryKey, etc...)
+						
+						If ($Obj_table[$Txt_relationName].relatedEntities#Null:C1517)
+							$Obj_table[$Txt_relationName].relatedDataClass:=$Obj_table[$Txt_relationName].relatedEntities
+						End if 
 						
 						If ($Obj_table[$Txt_relationName].relatedDataClass#Null:C1517)  // Is is a link?
 							

@@ -11,18 +11,30 @@ If (Storage:C1525.ƒ=Null:C1517)\
 		Use (Storage:C1525.ƒ)
 			
 			  // Return true if the passed string is a numeric
-			Storage:C1525.ƒ.isNumeric:=New formula:C1597(Match regex:C1019("(?m-si)^\\d+$";$1;1;*))
+			Storage:C1525.ƒ.isNumeric:=Formula:C1597(Match regex:C1019("(?m-si)^\\d+$";$1;1;*))
 			
-			Storage:C1525.ƒ.isField:=New formula:C1597(This:C1470.isNumeric($1))
-			Storage:C1525.ƒ.isRelatedDataClass:=New formula:C1597($1.relatedDataClass#Null:C1517)
+			Storage:C1525.ƒ.isField:=Formula:C1597(This:C1470.isNumeric($1))
+			Storage:C1525.ƒ.isRelatedDataClass:=Formula:C1597($1.relatedDataClass#Null:C1517)
+			
+			If (Bool:C1537(featuresFlags.oneToManyRelations))
+				
+				Storage:C1525.ƒ.isRelationToMany:=Formula:C1597($1.relatedEntities#Null:C1517)  // #109019 String($1.kind)="relatedEntities" ?
+				Storage:C1525.ƒ.isRelation:=Formula:C1597((This:C1470.isRelatedDataClass($1)) | (This:C1470.isRelationToMany($1)))
+				
+			Else 
+				
+				Storage:C1525.ƒ.isRelationToMany:=Formula:C1597(False:C215)
+				Storage:C1525.ƒ.isRelation:=Formula:C1597(This:C1470.isRelatedDataClass($1))
+				
+			End if 
 			
 			  // Tests
-			Storage:C1525.ƒ.action:=New formula:C1597(New object:C1471(\
+			Storage:C1525.ƒ.action:=Formula:C1597(New object:C1471(\
 				"action";$1))
 			
-			Storage:C1525.ƒ.structureCatalog:=New formula:C1597(structure (This:C1470.action("catalog")))
+			Storage:C1525.ƒ.structureCatalog:=Formula:C1597(structure (This:C1470.action("catalog")))
 			
-			Storage:C1525.ƒ.tableCatalog:=New formula:C1597(structure (New object:C1471(\
+			Storage:C1525.ƒ.tableCatalog:=Formula:C1597(structure (New object:C1471(\
 				"action";"catalog";\
 				"name";$1)))
 			

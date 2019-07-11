@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-																		"LaunchScreen";"LaunchScreen";\
-																		"Main";"Main";\
-																		"backgroundColor";"white")
+																						"LaunchScreen";"LaunchScreen";\
+																						"Main";"Main";\
+																						"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -225,8 +225,6 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		"storyboardLaunchScreen";commonValues.infoPlist.storyboard.LaunchScreen;\
 		"storyboardMain";commonValues.infoPlist.storyboard.Main;\
 		"urlScheme";commonValues.urlScheme)
-	
-	COMPONENT_DEFINE_TOOLS 
 	
 	  // ================================================================================================================================
 	  //                                                           ONLY UI PROCESS
@@ -423,7 +421,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  18  |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags.oneToManyRelations:=($Lon_version>=1800)
+	featuresFlags._105431:=($Lon_version>=1800)  //  [MOBILE] Display 1-n relations
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
@@ -525,8 +523,16 @@ If ($Obj_preferences.features#Null:C1517)  // Update feature flags with the loca
 End if 
 
   // ________________________________________________________________________________________________________________________________
-  //                                         | common value modifications according to flag |
+  //                                                             | ALIAS |
   // ________________________________________________________________________________________________________________________________
+featuresFlags.actionWithParameters:=featuresFlags._105413  //    [MOBILE] Actions with parameters
+featuresFlags.oneToManyRelations:=featuresFlags._105431  //    [MOBILE] Display 1-n relations
+
+  // ________________________________________________________________________________________________________________________________
+  //                                                         | AFTER FLAGS |
+  // ________________________________________________________________________________________________________________________________
+
+COMPONENT_DEFINE_TOOLS 
 
 If (Bool:C1537(featuresFlags._108874))  // Temporary force to use Xcode 11
 	
@@ -535,11 +541,6 @@ If (Bool:C1537(featuresFlags._108874))  // Temporary force to use Xcode 11
 	commonValues.swift.Version:="5.1"
 	
 End if 
-
-  // ________________________________________________________________________________________________________________________________
-  //                                                             | ALIAS |
-  // ________________________________________________________________________________________________________________________________
-featuresFlags.actionWithParameters:=featuresFlags._105413  //    [MOBILE] Actions with parameters
 
 If (Bool:C1537(featuresFlags.with("accentColors")))
 	

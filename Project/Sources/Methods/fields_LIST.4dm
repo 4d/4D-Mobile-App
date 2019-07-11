@@ -224,7 +224,7 @@ If ($Obj_out.success)
 					
 					
 					  //……………………………………………………………………………………………………………
-				: ($Obj_table[$Txt_table].relatedEntities#Null:C1517)
+				: ($ƒ.isRelationToMany($Obj_table[$Txt_table]))
 					
 					$Obj_field:=$Obj_table[$Txt_table]
 					$Obj_field.id:=Num:C11($Txt_table)

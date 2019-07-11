@@ -105,7 +105,7 @@ If ($Obj_out.success)
 					End for each 
 					
 					  //……………………………………………………………………………………………………………
-				: ($Obj_table[$t].relatedEntities#Null:C1517)
+				: ($ƒ.isRelationToMany($Obj_table[$t]))
 					
 					If (Form:C1466.$dialog.VIEWS.typeForm()="detail")
 						
