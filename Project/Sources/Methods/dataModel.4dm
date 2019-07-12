@@ -1188,7 +1188,7 @@ Case of
 							
 							  //……………………………………………………………………………………………………………
 							  //: ($Obj_dataModel[$Obj_in.tableNumber][$Txt_value].relatedDataClass#Null)  // relatedDataClass
-						: ($ƒ.isRelatedToOne($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))
+						: ($ƒ.isRelationToOne($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))
 							
 							For each ($t;$Obj_dataModel[$Obj_in.tableNumber][$Txt_value])
 								

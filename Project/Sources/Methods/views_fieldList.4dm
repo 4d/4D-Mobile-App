@@ -84,7 +84,7 @@ If ($Obj_out.success)
 					  // <NOTHING MORE TO DO>
 					
 					  //……………………………………………………………………………………………………………
-				: ($ƒ.isRelatedToOne($Obj_table[$t]))
+				: ($ƒ.isRelationToOne($Obj_table[$t]))
 					
 					For each ($tt;$Obj_table[$t])
 						

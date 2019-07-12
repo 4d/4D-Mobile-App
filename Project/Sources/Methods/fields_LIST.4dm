@@ -159,7 +159,7 @@ If ($Obj_out.success)
 					  // <NOTHING MORE TO DO>
 					
 					  //……………………………………………………………………………………………………………
-				: ($ƒ.isRelatedToOne($Obj_table[$Txt_table]))
+				: ($ƒ.isRelationToOne($Obj_table[$Txt_table]))
 					
 					For each ($Txt_field;$Obj_table[$Txt_table])
 						
