@@ -462,7 +462,7 @@ Case of
 										  // <NOTHING MORE TO DO>
 										
 										  //______________________________________________________
-									: (Storage:C1525.ƒ.isRelatedDataClass($Obj_table[$t]))
+									: (Storage:C1525.ƒ.isRelation($Obj_table[$t]))
 										
 										  //
 										

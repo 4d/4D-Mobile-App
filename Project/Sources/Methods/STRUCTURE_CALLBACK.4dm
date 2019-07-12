@@ -156,7 +156,7 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 									  // <NOTHING MORE TO DO>
 									
 									  //______________________________________________________
-								: ($ƒ.isRelatedDataClass($Obj_tableModel[$t]))  // N -> 1 relation
+								: ($ƒ.isRelatedToOne($Obj_tableModel[$t]))  // N -> 1 relation
 									
 									$c:=$Col_catalog[$Lon_tableIndx].field.extract("name")
 									$Lon_indx:=$c.indexOf($t)

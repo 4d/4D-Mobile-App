@@ -143,7 +143,7 @@ For each ($Txt_tableNumber;$Obj_dataModel)
 						  // <NOTHING MORE TO DO>
 						
 						  //______________________________________________________
-					: ($ƒ.isRelatedDataClass($Obj_table[$Txt_field]))  // N -> 1 relation
+					: ($ƒ.isRelatedToOne($Obj_table[$Txt_field]))  // N -> 1 relation
 						
 						$c:=$Col_fields.extract("name")
 						$Lon_indx:=$c.indexOf($Txt_field)
@@ -242,7 +242,7 @@ For each ($Txt_tableNumber;$Obj_dataModel)
 						  // <NOTHING MORE TO DO>
 						
 						  //______________________________________________________
-					: ($ƒ.isRelatedDataClass($Obj_table[$Txt_field]))  // N -> 1 relation
+					: ($ƒ.isRelatedToOne($Obj_table[$Txt_field]))  // N -> 1 relation
 						
 						$Boo_found:=True:C214
 						

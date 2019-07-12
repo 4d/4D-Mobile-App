@@ -297,7 +297,7 @@ If (Num:C11($Obj_project.info.version)<4)
 							
 							  // <NOTHING MORE TO DO>
 							  //________________________________________
-						: ($ƒ.isRelatedDataClass($Obj_table[$t]))
+						: ($ƒ.isRelatedToOne($Obj_table[$t]))
 							
 							If ($Obj_table[$t].relatedTableNumber=Null:C1517)
 								

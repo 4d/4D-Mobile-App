@@ -119,7 +119,7 @@ Else
 					  // <NOTHING MORE TO DO>
 					
 					  //………………………………………………………………………………………………………
-				: ($ƒ.isRelatedDataClass($Obj_table[$t]))  // N -> 1 relation
+				: ($ƒ.isRelatedToOne($Obj_table[$t]))  // N -> 1 relation
 					
 					$Boo_found:=(String:C10($o.name)=$t) & (Num:C11($o.published)#2)  // Not mixed
 					
@@ -272,7 +272,7 @@ Else
 				  //………………………………………………………………………………………………………
 			: (Value type:C1509($Obj_table[$t])=Is object:K8:27)
 				
-				$Boo_found:=$ƒ.isRelatedDataClass($Obj_table[$t])
+				$Boo_found:=$ƒ.isRelatedToOne($Obj_table[$t])
 				
 				  //………………………………………………………………………………………………………
 		End case 

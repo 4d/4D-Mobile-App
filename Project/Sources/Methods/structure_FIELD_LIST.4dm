@@ -106,7 +106,7 @@ If ($Lon_row>0)
 					
 					If (Position:C15($Obj_context.fieldFilter;$Obj_field.name)>0)
 						
-						If ($ƒ.isRelatedDataClass($Obj_field))
+						If ($ƒ.isRelatedToOne($Obj_field))
 							
 							  //#MARK_TO_OPTIMIZE
 							$Obj_:=structure (New object:C1471(\
@@ -185,7 +185,7 @@ If ($Lon_row>0)
 				
 				For each ($Obj_field;$Obj_table.field)
 					
-					If ($ƒ.isRelatedDataClass($Obj_field))
+					If ($ƒ.isRelatedToOne($Obj_field))
 						
 						  //#MARK_TO_OPTIMIZE
 						$Obj_:=structure (New object:C1471(\
