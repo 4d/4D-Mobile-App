@@ -201,6 +201,12 @@ If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file p
 				
 				$Txt_buffer:="___FIELD_"+String:C10($Lon_i)
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"___";$Obj_field.name)
+				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_NAME___";xml_encode (String:C10($Obj_field.originalName)))
+				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL___";xml_encode ($Obj_field.label))
+				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_SHORT_LABEL___";xml_encode (String:C10($Obj_field.shortLabel)))
+				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_BINDING_TYPE___";String:C10($Obj_field.bindingType))
+				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_ICON___";xml_encode (String:C10($Obj_field.detailIcon)))
+				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL_ALIGNMENT___";String:C10($Obj_field.labelAlignment))
 				
 			End for each 
 			
@@ -257,7 +263,7 @@ If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file p
 				
 				$Txt_buffer:="___FIELD"
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"___";$Obj_tags.field.name)
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_NAME___";xml_encode (String:C10($Obj_field.originalName)))
+				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_NAME___";xml_encode (String:C10($Obj_tags.field.originalName)))
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL___";xml_encode ($Obj_tags.field.label))
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_SHORT_LABEL___";xml_encode (String:C10($Obj_tags.field.shortLabel)))
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_BINDING_TYPE___";String:C10($Obj_tags.field.bindingType))
