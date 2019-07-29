@@ -10,7 +10,7 @@ C_OBJECT:C1216($form;$o)
   // ----------------------------------------------------
   // Initialisations
 $form:=New object:C1471(\
-"event";Form event:C388;\
+"event";Form event code:C388;\
 "pages";New collection:C1472;\
 "switch";ui.button("switch.button");\
 "build";ui.button("151");\
@@ -175,8 +175,16 @@ Case of
 						
 						  // Display the current device name
 						$l:=Form:C1466.devices.extract("udid").indexOf(Form:C1466.CurrentDeviceUDID)
-						$form.simulator.setTitle(Choose:C955($l=-1;Get localized string:C991("unknown");Form:C1466.devices[$l].name))
 						
+						If ($l=-1)
+							
+							$form.simulator.setTitle(Get localized string:C991("unknown"))
+							
+						Else 
+							
+							$form.simulator.setTitle(Form:C1466.devices[$l].name)
+							
+						End if 
 					End if 
 				End if 
 			End if 

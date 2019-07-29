@@ -47,6 +47,7 @@ If (This:C1470._is=Null:C1517)
 		"trim";Formula:C1597(str ("trim";New object:C1471("pattern";$1)).value);\
 		"trimTrailing";Formula:C1597(str ("trimTrailing";New object:C1471("pattern";$1)).value);\
 		"trimLeading";Formula:C1597(str ("trimLeading";New object:C1471("pattern";$1)).value);\
+		"toNum";Formula:C1597(str ("filter";New object:C1471("as";"numeric")).value);\
 		"wordWrap";Formula:C1597(str ("wordWrap";New object:C1471("length";$1)).value);\
 		"spaceSeparated";Formula:C1597(str ("spaceSeparated").value);\
 		"isStyled";Formula:C1597(str ("isStyled").value);\
@@ -380,6 +381,49 @@ Else
 					End if 
 					
 					$o.value:=$Txt_result
+					
+					  //______________________________________________________
+				: ($1="filter")  //
+					
+					Case of 
+							
+							  //…………………………………………………………………………………
+						: (String:C10($2.as)="numeric")
+							
+							$Txt_pattern:="(?m-si)^\\D*([+-]?\\d+\\{thousand}?\\d*\\{decimal}?\\d?)\\s?\\D*$"
+							
+							$Txt_filtered:=This:C1470.value
+							
+							GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+							$Txt_pattern:=Replace string:C233($Txt_pattern;"{decimal}";$t)
+							
+							If ($t#".")
+								
+								$Txt_filtered:=Replace string:C233($Txt_filtered;".";$t)
+								
+							End if 
+							
+							GET SYSTEM FORMAT:C994(Thousand separator:K60:2;$t)
+							$Txt_pattern:=Replace string:C233($Txt_pattern;"{thousand}";$t)
+							
+							If (Match regex:C1019($Txt_pattern;$Txt_filtered;1;$Lon_position;$Lon_length;*))
+								
+								$Txt_result:=$Txt_result+Substring:C12($Txt_filtered;1;$Lon_length)
+								$Txt_filtered:=Delete string:C232($Txt_filtered;1;$Lon_length)
+								
+							Else 
+								
+								If (Length:C16($Txt_filtered)>0)
+									
+									$Txt_result:=$Txt_result+$Txt_filtered
+									
+								End if 
+							End if 
+							
+							  //…………………………………………………………………………………
+					End case 
+					
+					$o.value:=Num:C11($Txt_result)
 					
 					  //______________________________________________________
 				: ($1="wordWrap")  // Returns a word wrapped text based on the line length given (default is 80 characters)

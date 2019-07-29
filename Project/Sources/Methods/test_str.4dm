@@ -210,6 +210,14 @@ ASSERT:C1129($o.contains("Hello";True:C214))
 ASSERT:C1129(Not:C34($o.contains("WORLD";True:C214)))
 
   // ============================================
+  // toNum()
+ASSERT:C1129(str ("12.5").toNum()=12.5)
+ASSERT:C1129(str ("12,5").toNum()=12.5)
+ASSERT:C1129(str ("12 500").toNum()=12500)
+ASSERT:C1129(str ("test 25").toNum()=25)
+ASSERT:C1129(str ("+0003,14").toNum()=3.14)
+ASSERT:C1129(str ("-3.14000").toNum()=-3.14)
+ASSERT:C1129(str ("hello world").toNum()=0)
 
   // ============================================
 
