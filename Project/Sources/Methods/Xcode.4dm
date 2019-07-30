@@ -522,7 +522,16 @@ Case of
 		$Obj_param.action:="find"
 		$Obj_param.type:="xcworkspace"
 		$Obj_result:=Xcode ($Obj_param)
-		$File_subpath:="Carthage/Checkouts"  // XXX later could be a parameter
+		
+		  // path of the sources?
+		Case of 
+			: (Length:C16(String:C10($Obj_param.from))>0)
+				$File_subpath:=$Obj_param.from
+			: (Length:C16(String:C10(commonValues.thirdParthSources))>0)
+				$File_subpath:=commonValues.thirdParthSources
+			Else 
+				$File_subpath:="Carthage/Checkouts"
+		End case 
 		
 		If ($Obj_result.success)
 			

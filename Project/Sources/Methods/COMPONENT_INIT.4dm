@@ -226,6 +226,8 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		"storyboardMain";commonValues.infoPlist.storyboard.Main;\
 		"urlScheme";commonValues.urlScheme)
 	
+	commonValues.thirdParthSources:="Carthage/Checkouts"
+	
 	  // ================================================================================================================================
 	  //                                                           ONLY UI PROCESS
 	  // ================================================================================================================================
