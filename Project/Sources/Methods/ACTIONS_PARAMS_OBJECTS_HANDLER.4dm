@@ -12,12 +12,12 @@
 C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
-C_LONGINT:C283($i;$l;$Lon_bottom;$Lon_left;$Lon_right;$Lon_top)
+C_DATE:C307($d)
+C_LONGINT:C283($i;$l)
 C_TEXT:C284($t;$tt;$Txt_format;$Txt_label;$Txt_type)
 C_OBJECT:C1216($o;$Obj_context;$Obj_current;$Obj_form;$Obj_formats;$Obj_menu)
-C_OBJECT:C1216($Obj_table)
+C_OBJECT:C1216($Obj_table;$Obj_widget)
 C_COLLECTION:C1488($c;$cc)
-C_DATE:C307($d)
 
 If (False:C215)
 	C_LONGINT:C283(ACTIONS_PARAMS_OBJECTS_HANDLER ;$0)
@@ -36,6 +36,8 @@ Case of
 		  //==================================================
 	: ($Obj_form.form.currentWidget=$Obj_form.parameters.name)  // Parameters listbox
 		
+		$Obj_widget:=$Obj_form.parameters
+		
 		Case of 
 				
 				  //______________________________________________________
@@ -53,10 +55,10 @@ Case of
 				  //______________________________________________________
 			: (editor_Locked )
 				
-				  // <NOTHING MORE TO DO>
+				$0:=-1
 				
 				  //______________________________________________________
-			: ($Obj_form.parameters.row=0)
+			: ($Obj_widget.row=0)
 				
 				  // <NOTHING MORE TO DO>
 				
@@ -91,12 +93,13 @@ Case of
 					
 					If ($o.tgt=-1)  // After the last line
 						
-						If ($o.src#$Obj_form.parameters.rowsNumber())  // Not if the source was the last line
+						If ($o.src#$Obj_widget.rowsNumber())  // Not if the source was the last line
 							
-							LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.parameters.name;1;$Obj_form.parameters.rowsNumber();$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-							$Lon_top:=$Lon_bottom
+							$o:=$Obj_widget.cellCoordinates(1;$Obj_widget.rowsNumber()).cellBox
+							$o.top:=$o.bottom
+							$o.right:=$Obj_widget.coordinates.right
 							
-							$Obj_form.dropCursor.setCoordinates($Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+							$Obj_form.dropCursor.setCoordinates($o.left;$o.top;$o.right;$o.bottom)
 							$Obj_form.dropCursor.show()
 							
 						Else 
@@ -112,11 +115,11 @@ Case of
 						If ($o.src#$o.tgt)\
 							 & ($o.tgt#($o.src+1))  // Not the same or the next one
 							
-							LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.parameters.name;1;$o.tgt;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-							$Lon_bottom:=$Lon_top
+							$o:=$Obj_widget.cellCoordinates(1;$o.tgt).cellBox
+							$o.top:=$o.bottom
+							$o.right:=$Obj_widget.coordinates.right
 							
-							$Obj_form.dropCursor.setCoordinates($Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-							
+							$Obj_form.dropCursor.setCoordinates($o.left;$o.top;$o.right;$o.bottom)
 							$Obj_form.dropCursor.show()
 							
 						Else 
@@ -176,7 +179,7 @@ Case of
 					End if 
 				End if 
 				
-				OBJECT SET VISIBLE:C603(*;"dropCursor";False:C215)
+				$Obj_form.dropCursor.hide()
 				
 				  //______________________________________________________
 			Else 

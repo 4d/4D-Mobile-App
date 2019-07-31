@@ -62,7 +62,7 @@ If (This:C1470._is=Null:C1517)
 		"getDefinition";Formula:C1597(listbox ("getDefinition"));\
 		"getCell";Formula:C1597(listbox ("getCell"));\
 		"cellPosition";Formula:C1597(listbox ("cellPosition"));\
-		"cellCoordinates";Formula:C1597(listbox ("cellCoordinates"));\
+		"cellCoordinates";Formula:C1597(listbox ("cellCoordinates";New object:C1471("column";$1;"row";$2)));\
 		"getScrollbar";Formula:C1597(listbox ("getScrollbar"));\
 		"setScrollbar";Formula:C1597(OBJECT SET SCROLLBAR:C843(*;This:C1470.name;Num:C11($1);Num:C11($2)));\
 		"getProperty";Formula:C1597(listbox ("getProperty";New object:C1471("property";$1)));\
@@ -157,9 +157,12 @@ Else
 			$o.row:=$Lon_row
 			
 			  //______________________________________________________
-		: ($1="cellCoordinates")  // Current cell coordinates
+		: ($1="cellCoordinates")  // Current or given cell coordinates
 			
-			LISTBOX GET CELL COORDINATES:C1330(*;$o.name;Num:C11($o.column);Num:C11($o.row);$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+			$Lon_column:=Num:C11(Choose:C955($2.column#Null:C1517;$2.column;$o.column))
+			$Lon_row:=Num:C11(Choose:C955($2.row#Null:C1517;$2.row;$o.row))
+			
+			LISTBOX GET CELL COORDINATES:C1330(*;$o.name;$Lon_column;$Lon_row;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 			
 			If ($o.cellBox=Null:C1517)
 				

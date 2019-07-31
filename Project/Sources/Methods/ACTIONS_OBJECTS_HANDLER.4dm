@@ -11,11 +11,12 @@
   // Declarations
 C_LONGINT:C283($0)
 
-C_LONGINT:C283($i;$l)
+C_BLOB:C604($x)
+C_LONGINT:C283($i;$l;$Lon_bottom;$Lon_left;$Lon_right;$Lon_top)
 C_PICTURE:C286($p)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_add;$Obj_context;$Obj_delete;$Obj_edit;$Obj_form)
-C_OBJECT:C1216($Obj_popup;$Obj_table;$oo)
+C_OBJECT:C1216($o;$Obj_add;$Obj_context;$Obj_current;$Obj_delete;$Obj_edit)
+C_OBJECT:C1216($Obj_form;$Obj_popup;$Obj_table;$Obj_widget;$oo)
 C_COLLECTION:C1488($c;$cc;$Col_fields)
 
 If (False:C215)
@@ -39,6 +40,8 @@ Case of
 		
 		  //==================================================
 	: ($Obj_form.form.currentWidget=$Obj_form.actions.name)  // Actions listbox
+		
+		$Obj_widget:=$Obj_form.actions
 		
 		Case of 
 				
@@ -78,29 +81,148 @@ Case of
 				$0:=-1
 				
 				  //______________________________________________________
-			: ($Obj_form.actions.row=0)
+			: ($Obj_widget.row=0)
 				
 				  // <NOTHING MORE TO DO>
 				
 				  //______________________________________________________
+			: ($Obj_form.form.event=On Mouse Leave:K2:34)
+				
+				$Obj_form.dropCursor.hide()
+				
+				  //______________________________________________________
+			: ($Obj_form.form.event=On Begin Drag Over:K2:44)
+				
+				$o:=New object:C1471(\
+					"src";$Obj_context.index)
+				
+				  // Put into the container
+				VARIABLE TO BLOB:C532($o;$x)
+				APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.action";$x)
+				SET BLOB SIZE:C606($x;0)
+				
+				  //______________________________________________________
+			: ($Obj_form.form.event=On Drag Over:K2:13)  // Manage drag & drop cursor
+				
+				  // Get the pastboard
+				GET PASTEBOARD DATA:C401("com.4d.private.ios.action";$x)
+				
+				If (Bool:C1537(OK))
+					
+					BLOB TO VARIABLE:C533($x;$o)
+					SET BLOB SIZE:C606($x;0)
+					
+					$o.tgt:=Drop position:C608
+					
+					If ($o.tgt=-1)  // After the last line
+						
+						If ($o.src#$Obj_widget.rowsNumber())  // Not if the source was the last line
+							
+							$o:=$Obj_widget.cellCoordinates(1;$Obj_widget.rowsNumber()).cellBox
+							$o.top:=$o.bottom
+							$o.right:=$Obj_widget.coordinates.right
+							
+							$Obj_form.dropCursor.setCoordinates($o.left;$o.top;$o.right;$o.bottom)
+							$Obj_form.dropCursor.show()
+							
+						Else 
+							
+							  // Reject drop
+							$Obj_form.dropCursor.hide()
+							$0:=-1
+							
+						End if 
+						
+					Else 
+						
+						If ($o.src#$o.tgt)\
+							 & ($o.tgt#($o.src+1))  // Not the same or the next one
+							
+							$o:=$Obj_widget.cellCoordinates(1;$o.tgt).cellBox
+							$o.top:=$o.bottom
+							$o.right:=$Obj_widget.coordinates.right
+							
+							$Obj_form.dropCursor.setCoordinates($o.left;$o.top;$o.right;$o.bottom)
+							$Obj_form.dropCursor.show()
+							
+						Else 
+							
+							  // Reject drop
+							$Obj_form.dropCursor.hide()
+							$0:=-1
+							
+						End if 
+					End if 
+					
+				Else 
+					
+					  // Reject drop
+					$Obj_form.dropCursor.hide()
+					$0:=-1
+					
+				End if 
+				
+				  //______________________________________________________
+			: ($Obj_form.form.event=On Drop:K2:12)
+				
+				  // Get the pastboard
+				GET PASTEBOARD DATA:C401("com.4d.private.ios.action";$x)
+				
+				If (Bool:C1537(OK))
+					
+					BLOB TO VARIABLE:C533($x;$o)
+					SET BLOB SIZE:C606($x;0)
+					
+					$o.tgt:=Drop position:C608
+					
+				End if 
+				
+				If ($o.src#$o.tgt)
+					
+					$Obj_current:=Form:C1466.actions[$o.src-1]
+					
+					If ($o.tgt=-1)  // After the last line
+						
+						Form:C1466.actions.push($Obj_current)
+						Form:C1466.actions.remove($o.src-1)
+						
+					Else 
+						
+						Form:C1466.actions.insert($o.tgt-1;$Obj_current)
+						
+						If ($o.tgt<$o.src)
+							
+							Form:C1466.actions.remove($o.src)
+							
+						Else 
+							
+							Form:C1466.actions.remove($o.src-1)
+							
+						End if 
+					End if 
+				End if 
+				
+				$Obj_form.dropCursor.hide()
+				
+				  //______________________________________________________
 			: ($Obj_form.form.event=On Double Clicked:K2:5)
 				
-				$Obj_form.actions.update()
+				$Obj_widget.update()
 				
 				Case of 
 						
 						  //…………………………………………………………………………………………………………
-					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.name].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.name].number)
 						
 						EDIT ITEM:C870(*;$Obj_form.name;Num:C11($Obj_context.index))
 						
 						  //…………………………………………………………………………………………………………
-					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.shortLabel].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabel].number)
 						
 						EDIT ITEM:C870(*;$Obj_form.shortLabel;Num:C11($Obj_context.index))
 						
 						  //…………………………………………………………………………………………………………
-					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.label].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.label].number)
 						
 						EDIT ITEM:C870(*;$Obj_form.label;Num:C11($Obj_context.index))
 						
@@ -110,12 +232,12 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Clicked:K2:4)
 				
-				$Obj_form.actions.update()
+				$Obj_widget.update()
 				
 				Case of 
 						
 						  //…………………………………………………………………………………………………………
-					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.icon].number)  // Open the fields icons picker
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.icon].number)  // Open the fields icons picker
 						
 						If ($Obj_context.current#Null:C1517)
 							
@@ -124,9 +246,9 @@ Case of
 							$o.item:=$o.pathnames.indexOf(String:C10($Obj_context.current.icon))
 							$o.item:=$o.item+1  // Widget work with array
 							
-							$o.row:=$Obj_form.actions.row
+							$o.row:=$Obj_widget.row
 							
-							$o.left:=$Obj_form.actions.cellBox.right
+							$o.left:=$Obj_widget.cellBox.right
 							$o.top:=34
 							
 							$o.action:="actionIcons"
@@ -154,14 +276,14 @@ Case of
 				
 				$0:=-1  // Reject data entry
 				
-				$Obj_form.actions.update()
+				$Obj_widget.update()
 				
 				Case of 
 						
 						  //…………………………………………………………………………………………………………………………………………
-					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.name].number)\
-						 | ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.shortLabel].number)\
-						 | ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.label].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.name].number)\
+						 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabel].number)\
+						 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.label].number)
 						
 						  // Put an edit flag to manage loss of focus
 						$Obj_context.$cellEdition:=True:C214
@@ -169,7 +291,7 @@ Case of
 						$0:=0  // Allow direct entry
 						
 						  //…………………………………………………………………………………………………………………………………………
-					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.table].number)  // Display published table menu
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.table].number)  // Display published table menu
 						
 						$Obj_popup:=menu 
 						
@@ -179,7 +301,7 @@ Case of
 							
 						End for each 
 						
-						If ($Obj_form.actions.popup($Obj_popup).selected)
+						If ($Obj_widget.popup($Obj_popup).selected)
 							
 							$Obj_context.current.tableNumber:=Num:C11($Obj_popup.choice)
 							
@@ -189,7 +311,7 @@ Case of
 						End if 
 						
 						  //…………………………………………………………………………………………………………………………………………
-					: ($Obj_form.actions.column=$Obj_form.actions.columns[$Obj_form.scope].number)  // Display scope menu
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.scope].number)  // Display scope menu
 						
 						$Obj_popup:=menu 
 						
@@ -221,7 +343,7 @@ Case of
 							End if 
 						Until (OK=0)
 						
-						If ($Obj_form.actions.popup($Obj_popup).selected)
+						If ($Obj_widget.popup($Obj_popup).selected)
 							
 							$Obj_context.current.scope:=$Obj_popup.choice
 							project.save()
@@ -267,7 +389,6 @@ Case of
 			End for each 
 			
 			$o:=$Obj_form.add.getCoordinates()
-			
 			$Obj_popup.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom)
 			
 			CLEAR VARIABLE:C89($o)

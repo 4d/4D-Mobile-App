@@ -47,6 +47,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"actions";ui.listbox("actions");\
 		"noPublishedTable";ui.widget("noPublishedTable");\
 		"iconGrid";ui.widget("iconGrid");\
+		"dropCursor";ui.static("dropCursor");\
 		"name";"names";\
 		"icon";"icons";\
 		"shortLabel";"shorts";\
@@ -140,6 +141,9 @@ Case of
 					$Obj_form.databaseMethod.disable()
 					
 				End if 
+				
+				  // Set colors
+				$Obj_form.dropCursor.setColors(Highlight menu background color:K23:7)
 				
 				  // Preload the icons
 				$Obj_form.form.call("actionIcons")

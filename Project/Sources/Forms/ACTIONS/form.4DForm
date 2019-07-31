@@ -66,9 +66,15 @@
 						"onDoubleClick",
 						"onLosingFocus",
 						"onGettingFocus",
+						"onDrop",
+						"onDragOver",
 						"onSelectionChange",
-						"onBeforeDataEntry"
+						"onMouseLeave",
+						"onBeforeDataEntry",
+						"onBeginDragOver"
 					],
+					"dragging": "custom",
+					"dropping": "custom",
 					"columns": [
 						{
 							"name": "names",
@@ -376,6 +382,17 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"borderStyle": "dotted"
+				},
+				"dropCursor": {
+					"type": "line",
+					"top": 164,
+					"left": 30,
+					"width": 30,
+					"height": 0,
+					"strokeWidth": 2,
+					"stroke": "#ff0000",
+					"visibility": "hidden",
+					"startPoint": "topLeft"
 				}
 			}
 		}
