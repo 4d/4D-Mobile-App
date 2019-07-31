@@ -1,198 +1,118 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : color
-  // Database: 4D Mobile Express
-  // Created #13-11-2017 by Eric Marchand
+  // ID[830BCBA0AA804B61AD2FEE71815E4B63]
+  // Created #31-7-2019 by Vincent de Lachaux
   // ----------------------------------------------------
-
+  // Description:
+  // WIP
+  // ----------------------------------------------------
   // Declarations
 C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
+C_TEXT:C284($1)
+C_OBJECT:C1216($2)
 
-C_BOOLEAN:C305($Bool_errorInOut)
-C_LONGINT:C283($Lon_parameters)
-C_OBJECT:C1216($Obj_in;$Obj_out)
-C_TEXT:C284($Txt_cmd;$Txt_in;$Txt_out;$Txt_error;$Txt_buffer)
+C_TEXT:C284($t)
+C_OBJECT:C1216($o)
 
 If (False:C215)
 	C_OBJECT:C1216(color ;$0)
-	C_OBJECT:C1216(color ;$1)
+	C_TEXT:C284(color ;$1)
+	C_OBJECT:C1216(color ;$2)
 End if 
 
   // ----------------------------------------------------
-  // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (This:C1470._is=Null:C1517)
 	
-	  // Required parameters
-	$Obj_in:=$1
+	$o:=New object:C1471(\
+		"_is";"color";\
+		"color";0;\
+		"_rgb";Formula:C1597(color ("_rgb"));\
+		"_hex";Formula:C1597(color ("_hex"))\
+		)
 	
-	  // Optional parameters
-	If ($Lon_parameters>=2)
+	If (Count parameters:C259>=1)
 		
-		  // <NONE>
+		$o.type:=$1
 		
+		If (Count parameters:C259>=2)
+			
+			Case of 
+					
+					  //______________________________________________________
+				: ($1="4dColor")  // 4-byte Long Integer (format 0x00rrggbb)
+					
+					$o.color:=Num:C11($2.value)
+					
+					  //______________________________________________________
+				: ($1="CSS color name")  // Standard CSS2 color name.
+					
+					$o.name:=String:C10($2.value)
+					
+					  //______________________________________________________
+				: ($1="CSS hex color")  // "#rrggbb
+					
+					  // rr = red component of the color
+					  // gg = green component of the color
+					  // bb = blue component of the color
+					
+					$o.hex:=String:C10($2.value)
+					
+					  //______________________________________________________
+				Else 
+					
+					  // A "Case of" statement should never omit "Else"
+					  //______________________________________________________
+			End case 
+		End if 
 	End if 
 	
-	$Obj_out:=New object:C1471(\
-		"success";False:C215)
+	$o._rgb()
+	$o._hex()
 	
 Else 
 	
-	ABORT:C156
+	$o:=This:C1470
 	
+	Case of 
+			
+			  //______________________________________________________
+		: ($o=Null:C1517)
+			
+			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
+			
+			  //______________________________________________________
+		: ($1="_rgb")
+			
+			If ($o.color#Null:C1517)
+				
+				$o.rgb:=Replace string:C233("rgb({r},{g},{b})";"{r}";String:C10(($o.color & 0x00FF0000) >> 16))
+				$o.rgb:=Replace string:C233($o.rgb;"{g}";String:C10(($o.color & 0xFF00) >> 8))
+				$o.rgb:=Replace string:C233($o.rgb;"{b}";String:C10(($o.color & 0x00FF)))
+				
+			End if 
+			
+			  //______________________________________________________
+		: ($1="_hex")
+			
+			If ($o.color#Null:C1517)
+				
+				$o.hex:="#"+Substring:C12(String:C10($o.color+0x01000000;"&x");5)
+				
+			End if 
+			
+			  //______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215;"Unknown entry point: \""+$1+"\"")
+			
+			  //______________________________________________________
+	End case 
 End if 
 
   // ----------------------------------------------------
-Case of 
-		
-		  //______________________________________________________
-	: ($Obj_in.action=Null:C1517)
-		
-		ASSERT:C1129(False:C215)
-		
-		  //______________________________________________________
-	: ($Obj_in.action="juicer")
-		
-		$Txt_cmd:=str_singleQuoted (Convert path system to POSIX:C1106(_o_Pathname ("scripts")+"colorjuicer"))
-		
-		If ($Obj_in.posix=Null:C1517)
-			
-			If ($Obj_in.path#Null:C1517)
-				
-				$Obj_in.posix:=Convert path system to POSIX:C1106($Obj_in.path)
-				
-			End if 
-		End if 
-		
-		If ($Obj_in.posix#Null:C1517)
-			
-			$Txt_cmd:=$Txt_cmd+" -i "+str_singleQuoted ($Obj_in.posix)
-			
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
-			
-			If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
-				
-				$Bool_errorInOut:=(Position:C15("error:";$Txt_out)>0)
-				If (Not:C34($Bool_errorInOut))
-					
-					If (Position:C15("{";$Txt_out)=1)  // Check JSON (not really safe but better than nothing)
-						
-						$Obj_out.success:=True:C214
-						$Obj_out.value:=JSON Parse:C1218($Txt_out)
-						$Obj_out.value.space:="srgb"
-						
-					Else 
-						
-						$Obj_out.success:=False:C215
-						$Obj_out.errors:=New collection:C1472("No color")  // maybe white or black
-						$Obj_out.out:=$Txt_out
-						
-					End if 
-					
-				Else 
-					  // out return an error message
-					$Obj_out.success:=False:C215
-					ob_error_add ($Obj_out;$Txt_out)
-					
-				End if 
-				
-				If ((Length:C16($Txt_error)>0))  // add always error from command output if any, but do not presume if success or not
-					ob_error_add ($Obj_out;$Txt_error)
-				End if 
-				
-			End if 
-			
-		Else 
-			
-			$Obj_out.errors:=New collection:C1472("path or posix must be defined")
-			
-		End if 
-		
-		  //______________________________________________________
-	: ($Obj_in.action="contrast")
-		
-		If (Value type:C1509($Obj_in.color)=Is object:K8:27)
-			
-			  // luminance
-			$Obj_out.luma:=1-(((0.299*$Obj_in.color.red)+(0.587*$Obj_in.color.green)+(0.114*$Obj_in.color.blue))/255)
-			
-			If ($Obj_out.luma<0.5)
-				
-				$Obj_out.value:=New object:C1471(\
-					"space";"gray";\
-					"white";0)  // bright colors - black font
-				
-				$Obj_out.name:="black"
-				
-			Else 
-				
-				$Obj_out.value:=New object:C1471(\
-					"space";"gray";\
-					"white";255)  // dark colors - white font
-				
-				$Obj_out.name:="white"
-				
-			End if 
-			
-			$Obj_out.success:=True:C214
-			
-		Else 
-			
-			$Obj_out.errors:=New collection:C1472("color must be defined")
-			
-		End if 
-		
-		  //______________________________________________________
-	: ($Obj_in.action="rgbtohex")
-		
-		Case of 
-				
-				  // ----------------------------------------
-			: (Value type:C1509($Obj_in.color)=Is object:K8:27)
-				
-				Case of 
-						
-						  // ........................................
-					: (Value type:C1509($Obj_in.color.white)=Is real:K8:4)
-						
-						$Txt_buffer:=Replace string:C233(String:C10($Obj_in.color.white;"&x");"0x00";"")
-						$Obj_out.value:="#"+$Txt_buffer+$Txt_buffer+$Txt_buffer
-						$Obj_out.success:=True:C214
-						
-						  // ........................................
-					: ((Value type:C1509($Obj_in.color.red)=Is real:K8:4)\
-						 & (Value type:C1509($Obj_in.color.green)=Is real:K8:4)\
-						 & (Value type:C1509($Obj_in.color.blue)=Is real:K8:4))
-						
-						$Obj_out.value:="#"+Replace string:C233(String:C10($Obj_in.color.red;"&x");"0x00";"")+Replace string:C233(String:C10($Obj_in.color.green;"&x");"0x00";"")+Replace string:C233(String:C10($Obj_in.color.blue;"&x");"0x00";"")
-						
-						$Obj_out.success:=True:C214
-						
-						  // ........................................
-					Else 
-						
-						$Obj_out.errors:=New collection:C1472("No red,blue,green or white defined")
-						
-						  // ........................................
-				End case 
-				
-				  // : (Value type($Obj_in.color)=Is string var) > parse rgb format
-				  // ----------------------------------------
-			Else 
-				
-				$Obj_out.errors:=New collection:C1472("No color in parameters")
-				
-				  // ----------------------------------------
-		End case 
-		
-		  //________________________________________
-End case 
-
-  // ----------------------------------------------------
   // Return
-$0:=$Obj_out
+$0:=$o
 
   // ----------------------------------------------------
   // End

@@ -563,34 +563,6 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$File_:="Macintosh HD:Users:emarchand:Desktop:29389355_240017419901501_1863532102952157184_o.png"
-		
-		  //$File_:="Macintosh HD:Users:emarchand:Desktop:29357026_240017413234835_5873329680920084480_o.png"
-		$i:=64
-		READ PICTURE FILE:C678($File_;$Pic_file)
-		CREATE THUMBNAIL:C679($Pic_file;$Pic_scaled;$i;$i)  // This change result of algo..., let tools scale using argument
-		$File_:=Temporary folder:C486+Generate UUID:C1066+".png"
-		WRITE PICTURE FILE:C680($File_;$Pic_scaled;".png")
-		
-		$Obj_out:=New object:C1471
-		$Obj_out.theme:=New object:C1471
-		$Obj_out.theme.BackgroundColor:=color (New object:C1471(\
-			"action";"juicer";\
-			"path";$File_))
-		$Obj_out.theme.BackgroundColor.name:="BackgroundColor"
-		$Obj_out.theme.ForegroundColor:=color (New object:C1471(\
-			"action";"contrast";\
-			"color";$Obj_out.theme.BackgroundColor.value))
-		$Obj_out.theme.ForegroundColor.name:="ForegroundColor"
-		$Obj_out.theme.BackgroundColorHex:=color (New object:C1471(\
-			"action";"rgbtohex";\
-			"color";$Obj_out.theme.BackgroundColor.value))
-		
-		SHOW ON DISK:C922($File_)
-		
-		  //________________________________________
-	: (True:C214)
-		
 		$t:="Bundle 4 Dé ö aze äapp ?"
 		
 		Rgx_SubstituteText ("[ÂÃÄÅ]";"A";->$t;0)

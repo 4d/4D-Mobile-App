@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-																						"LaunchScreen";"LaunchScreen";\
-																						"Main";"Main";\
-																						"backgroundColor";"white")
+																								"LaunchScreen";"LaunchScreen";\
+																								"Main";"Main";\
+																								"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
@@ -322,6 +322,17 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 			
 		End if 
 		  //]
+		
+		ui.colors:=New object:C1471
+		ui.colors.strokeColor:=color ("4dColor";New object:C1471("value";ui.strokeColor))
+		ui.colors.highlightColor:=color ("4dColor";New object:C1471("value";ui.highlightColor))
+		ui.colors.highlightColorNoFocus:=color ("4dColor";New object:C1471("value";ui.highlightColorNoFocus))
+		ui.colors.selectedColor:=color ("4dColor";New object:C1471("value";ui.selectedColor))
+		ui.colors.alternateSelectedColor:=color ("4dColor";New object:C1471("value";ui.alternateSelectedColor))
+		ui.colors.backgroundSelectedColor:=color ("4dColor";New object:C1471("value";ui.backgroundSelectedColor))
+		ui.colors.backgroundUnselectedColor:=color ("4dColor";New object:C1471("value";ui.backgroundUnselectedColor))
+		ui.colors.errorColor:=color ("4dColor";New object:C1471("value";ui.errorColor))
+		ui.colors.warningColor:=color ("4dColor";New object:C1471("value";ui.warningColor))
 		
 		ui.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
 		ui.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath

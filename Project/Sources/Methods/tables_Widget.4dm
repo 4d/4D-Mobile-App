@@ -54,10 +54,10 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	$kLon_iconWidth:=80
 	$kLon_offset:=5
 	
-	$kTxt_selectedFill:=SVG_Color_RGB_from_long (ui.backgroundSelectedColor)
+	$kTxt_selectedFill:=ui.colors.backgroundSelectedColor.hex  //SVG_Color_RGB_from_long (ui.backgroundSelectedColor)
 	$kTxt_unselectedFill:="white"
 	
-	$kTxt_selectedStroke:=SVG_Color_RGB_from_long (ui.strokeColor)
+	$kTxt_selectedStroke:=ui.colors.strokeColor.hex  //SVG_Color_RGB_from_long (ui.strokeColor)
 	$kTxt_unselectedStroke:="dimgray"
 	
 	$kTxt_selectedFontColor:="dimgray"  // "white"

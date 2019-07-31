@@ -45,8 +45,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_out:=New object:C1471(\
-		"success";True:C214)
+	$Obj_out:=New object:C1471("success";True:C214)
 	
 Else 
 	
@@ -262,15 +261,7 @@ Case of
 						: ($Lon_i<$Lon_count)
 							
 							  // /  Create a dummy fields to replace in template
-							$Obj_field:=New object:C1471(\
-								"name";"";\
-								"originalName";"";\
-								"label";"";\
-								"shortLabel";"";\
-								"bindingType";"unknown";\
-								"type";-1;\
-								"fieldType";-1;\
-								"icon";"")
+							$Obj_field:=New object:C1471("name";"";"originalName";"";"label";"";"shortLabel";"";"bindingType";"unknown";"type";-1;"fieldType";-1;"icon";"")
 							
 							  // ----------------------------------------
 						Else 
@@ -294,15 +285,7 @@ Case of
 					
 					While ($Obj_table.fields.length<$Lon_count)
 						
-						$Obj_field:=New object:C1471(\
-							"name";"";\
-							"originalName";"";\
-							"label";"";\
-							"shortLabel";"";\
-							"bindingType";"unknown";\
-							"type";-1;\
-							"fieldType";-1;\
-							"icon";"")
+						$Obj_field:=New object:C1471("name";"";"originalName";"";"label";"";"shortLabel";"";"bindingType";"unknown";"type";-1;"fieldType";-1;"icon";"")
 						$Obj_table.fields.push($Obj_field)
 						
 					End while 
@@ -380,8 +363,7 @@ Case of
 						  // and if no search field find the first one sortable in diplayed field
 						For each ($Obj_field;$Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
 							
-							If (($Obj_field.fieldType#Is picture:K8:10)\
-								 & ($Obj_field.fieldType#-1))  // not image or not defined
+							If (($Obj_field.fieldType#Is picture:K8:10) & ($Obj_field.fieldType#-1))  // not image or not defined
 								
 								$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
 								
@@ -426,31 +408,19 @@ Case of
 					: (String:C10($Obj_template.userChoiceTag)="list")
 						
 						  // get action on table
-						$Col_actions:=actions ("form";New object:C1471(\
-							"project";$Obj_in.project;\
-							"table";$Obj_table.originalName;\
-							"tableNumber";$Obj_table.tableNumber;\
-							"scope";"table"\
-							)).actions
+						$Col_actions:=actions ("form";New object:C1471("project";$Obj_in.project;"table";$Obj_table.originalName;"tableNumber";$Obj_table.tableNumber;"scope";"table")).actions
 						
 						If ($Col_actions.length>0)
 							
-							$Obj_table.tableActions:=JSON Stringify:C1217(New object:C1471(\
-								"actions";$Col_actions))
+							$Obj_table.tableActions:=JSON Stringify:C1217(New object:C1471("actions";$Col_actions))
 							
 						End if 
 						
-						$Col_actions:=actions ("form";New object:C1471(\
-							"project";$Obj_in.project;\
-							"table";$Obj_table.originalName;\
-							"tableNumber";$Obj_table.tableNumber;\
-							"scope";"currentRecord"\
-							)).actions
+						$Col_actions:=actions ("form";New object:C1471("project";$Obj_in.project;"table";$Obj_table.originalName;"tableNumber";$Obj_table.tableNumber;"scope";"currentRecord")).actions
 						
 						If ($Col_actions.length>0)
 							
-							$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
-								"actions";$Col_actions))
+							$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471("actions";$Col_actions))
 							
 						End if 
 						
@@ -458,17 +428,11 @@ Case of
 						  //----------------------------------------
 					: (String:C10($Obj_template.userChoiceTag)="detail")
 						
-						$Col_actions:=actions ("form";New object:C1471(\
-							"project";$Obj_in.project;\
-							"table";$Obj_table.originalName;\
-							"tableNumber";$Obj_table.tableNumber;\
-							"scope";"currentRecord"\
-							)).actions
+						$Col_actions:=actions ("form";New object:C1471("project";$Obj_in.project;"table";$Obj_table.originalName;"tableNumber";$Obj_table.tableNumber;"scope";"currentRecord")).actions
 						
 						If ($Col_actions.length>0)
 							
-							$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
-								"actions";$Col_actions))
+							$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471("actions";$Col_actions))
 							
 						End if 
 						
@@ -541,23 +505,14 @@ Case of
 		  //  // For each table inject embedded json
 		  //For each ($Obj_table;$Obj_in.tags.tables)
 		  //$Obj_in.tags.table:=$Obj_table
-		  //$Obj_buffer:=TEMPLATE (New object(\
-																					"source";$Obj_template.source;\
-																					"target";$Obj_in.path;\
-																					"tags";$Obj_in.tags;\
-																					"caller";$Obj_in.caller;\
-																					"catalog";doc_catalog ($Obj_template.source)))
+		  //$Obj_buffer:=TEMPLATE (New object(																					"source";$Obj_template.source;																					"target";$Obj_in.path;																					"tags";$Obj_in.tags;																					"caller";$Obj_in.caller;																					"catalog";doc_catalog ($Obj_template.source)))
 		  //$Obj_out.tables.push($Obj_buffer)
 		  //ob_error_combine ($Obj_out;$Obj_buffer)
 		  //If (Bool($Obj_in.projfile.success))  // valid project file
 		  //$Obj_in.projfile.mustSave:=True  // project modified
 		  //$Txt_buffer:=formatString ("table-name";$Obj_table.name)
 		  //  // Feature #97239 "Add JSON to project" : maybe do it near core data dump or just read an option ? (because could be optionnal)
-		  //$Obj_out.project:=XcodeProj (New object(\
-																					"action";"addTableJSON";\
-																					"proj";$Obj_in.projfile.value;\
-																					"uuid";$Obj_template.parent.parent.uuid;\
-																					"table";$Txt_buffer))
+		  //$Obj_out.project:=XcodeProj (New object(																					"action";"addTableJSON";																					"proj";$Obj_in.projfile.value;																					"uuid";$Obj_template.parent.parent.uuid;																					"table";$Txt_buffer))
 		  //  // XXX find a better way to get uuid from main template? recursively find it instead of $Obj_template.parent.parent.uuid
 		  //If (Not(Bool($Obj_out.project.success)))
 		  //ob_error_combine ($Obj_out;$Obj_out.project)
@@ -571,10 +526,7 @@ Case of
 		
 		  // The project contains useless folders if the feature is actived, some remove it
 		
-		$Obj_out.project:=XcodeProj (New object:C1471(\
-			"action";"removeTableJSON";\
-			"proj";$Obj_in.projfile.value;\
-			"uuid";$Obj_template.parent.parent.uuid))
+		$Obj_out.project:=XcodeProj (New object:C1471("action";"removeTableJSON";"proj";$Obj_in.projfile.value;"uuid";$Obj_template.parent.parent.uuid))
 		
 		  //End if 
 		
@@ -608,12 +560,7 @@ Case of
 				  // ----------------------------------------
 		End case 
 		
-		$Obj_out.template:=TEMPLATE (New object:C1471(\
-			"source";$Obj_template.source;\
-			"target";$Obj_in.path;\
-			"tags";$Obj_in.tags;\
-			"caller";$Obj_in.caller;\
-			"catalog";$Col_catalog))
+		$Obj_out.template:=TEMPLATE (New object:C1471("source";$Obj_template.source;"target";$Obj_in.path;"tags";$Obj_in.tags;"caller";$Obj_in.caller;"catalog";$Col_catalog))
 		
 		$Obj_out.capabilities:=$Obj_template.capabilities
 		
@@ -631,23 +578,18 @@ Case of
 		  // Update Assets
 		If (String:C10($Obj_template.assets.source)#"")
 			
-			$Obj_out.assets:=TEMPLATE (New object:C1471(\
-				"source";$Obj_template.assets.source;\
-				"target";$Obj_template.assets.target;\
-				"catalog";doc_catalog ($Obj_template.assets.source)))
+			$Obj_out.assets:=TEMPLATE (New object:C1471("source";$Obj_template.assets.source;"target";$Obj_template.assets.target;"catalog";doc_catalog ($Obj_template.assets.source)))
 			
 			ob_error_combine ($Obj_out;$Obj_out.assets)
 			
 			  // Temporary or by default take app icon, later could be customizable by UI, and must be managed like AppIcon
 			
-			$Obj_out.theme:=New object:C1471(\
-				"success";False:C215)
+			$Obj_out.theme:=New object:C1471("success";False:C215)
 			
 			$File_:=$Obj_template.assets.source+"AppIcon.appiconset"+Folder separator:K24:12+"ios-marketing1024.png"
 			$Lon_:=commonValues.theme.colorjuicer.scale
 			
-			If (($Lon_#1024)\
-				 & ($Lon_>0))
+			If (($Lon_#1024) & ($Lon_>0))
 				
 				READ PICTURE FILE:C678($File_;$Pic_file)
 				CREATE THUMBNAIL:C679($Pic_file;$Pic_scaled;$Lon_;$Lon_)  // This change result of algo..., let tools scale using argument
@@ -656,7 +598,7 @@ Case of
 				
 			End if 
 			
-			$Obj_color:=color (New object:C1471(\
+			$Obj_color:=colors (New object:C1471(\
 				"action";"juicer";\
 				"path";$File_))
 			
@@ -665,14 +607,9 @@ Case of
 				$Obj_out.theme.BackgroundColor:=$Obj_color.value
 				$Obj_out.theme.BackgroundColor.name:="BackgroundColor"
 				
-				$Obj_out.theme.BackgroundColor.asset:=asset (New object:C1471(\
-					"action";"create";\
-					"target";$Obj_template.assets.target+"NavigationBar"+Folder separator:K24:12;\
-					"type";"colorset";\
-					"space";$Obj_out.theme.BackgroundColor.space;\
-					"tags";$Obj_out.theme.BackgroundColor))
+				$Obj_out.theme.BackgroundColor.asset:=asset (New object:C1471("action";"create";"target";$Obj_template.assets.target+"NavigationBar"+Folder separator:K24:12;"type";"colorset";"space";$Obj_out.theme.BackgroundColor.space;"tags";$Obj_out.theme.BackgroundColor))
 				
-				$Obj_color:=color (New object:C1471(\
+				$Obj_color:=colors (New object:C1471(\
 					"action";"contrast";\
 					"color";$Obj_out.theme.BackgroundColor))
 				
@@ -681,20 +618,14 @@ Case of
 					$Obj_out.theme.ForegroundColor:=$Obj_color.value
 					$Obj_out.theme.ForegroundColor.name:="ForegroundColor"
 					
-					$Obj_out.theme.ForegroundColor.asset:=asset (New object:C1471(\
-						"action";"create";\
-						"target";$Obj_template.assets.target+"NavigationBar"+Folder separator:K24:12;\
-						"type";"colorset";\
-						"space";$Obj_out.theme.ForegroundColor.space;\
-						"tags";$Obj_out.theme.ForegroundColor))
+					$Obj_out.theme.ForegroundColor.asset:=asset (New object:C1471("action";"create";"target";$Obj_template.assets.target+"NavigationBar"+Folder separator:K24:12;"type";"colorset";"space";$Obj_out.theme.ForegroundColor.space;"tags";$Obj_out.theme.ForegroundColor))
 					
 					$Obj_out.theme.success:=True:C214
 					
 				End if 
 			End if 
 			
-			If (($Lon_#1024)\
-				 & ($Lon_>0))
+			If (($Lon_#1024) & ($Lon_>0))
 				
 				DELETE DOCUMENT:C159($File_)  // delete scaled files
 				
@@ -708,11 +639,7 @@ Case of
 	: (String:C10($Obj_template.type)="navigation")
 		
 		  // Get navigation tables as tag
-		$Obj_in.tags.navigationTables:=dataModel (New object:C1471(\
-			"action";"tableCollection";\
-			"dataModel";$Obj_in.project.dataModel;\
-			"tag";True:C214;\
-			"tables";$Obj_in.project.main.order)).tables
+		$Obj_in.tags.navigationTables:=dataModel (New object:C1471("action";"tableCollection";"dataModel";$Obj_in.project.dataModel;"tag";True:C214;"tables";$Obj_in.project.main.order)).tables
 		
 		  // Compute table row height, not very responsive. Check if possible with storyboard
 		$Lon_i:=$Obj_in.tags.navigationTables.length
@@ -766,11 +693,7 @@ Case of
 		End for each 
 		
 		  // Modify storyboards with navigation tables
-		$Obj_out.storyboard:=storyboard (New object:C1471(\
-			"action";"navigation";\
-			"template";$Obj_template;\
-			"target";$Obj_in.path;\
-			"tags";$Obj_in.tags))
+		$Obj_out.storyboard:=storyboard (New object:C1471("action";"navigation";"template";$Obj_template;"target";$Obj_in.path;"tags";$Obj_in.tags))
 		
 		If (Not:C34($Obj_out.storyboard.success))
 			
@@ -825,14 +748,7 @@ Case of
 								
 								DOM CLOSE XML:C722($Svg_root)
 								
-								$Obj_buffer:=asset (New object:C1471(\
-									"action";"create";\
-									"type";"imageset";\
-									"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-									"source";$File_;\
-									"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
-									"format";$Obj_template.assets.format;\
-									"size";$Obj_template.assets.size))
+								$Obj_buffer:=asset (New object:C1471("action";"create";"type";"imageset";"tags";New object:C1471("name";"Main"+$Obj_table.name);"source";$File_;"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;"format";$Obj_template.assets.format;"size";$Obj_template.assets.size))
 								$Obj_out.assets.push($Obj_buffer)
 								ob_error_combine ($Obj_out;$Obj_buffer)
 								
@@ -844,14 +760,7 @@ Case of
 					
 					$File_icon:=Choose:C955(Position:C15("/";$Obj_table.icon)=1;$Dir_hostRoot+Replace string:C233($Obj_table.icon;"/";Folder separator:K24:12);$Dir_root+Replace string:C233($Obj_table.icon;"/";Folder separator:K24:12))
 					
-					$Obj_buffer:=asset (New object:C1471(\
-						"action";"create";\
-						"type";"imageset";\
-						"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-						"source";$File_icon;\
-						"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
-						"format";$Obj_template.assets.format;\
-						"size";$Obj_template.assets.size))
+					$Obj_buffer:=asset (New object:C1471("action";"create";"type";"imageset";"tags";New object:C1471("name";"Main"+$Obj_table.name);"source";$File_icon;"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;"format";$Obj_template.assets.format;"size";$Obj_template.assets.size))
 					$Obj_out.assets.push($Obj_buffer)
 					ob_error_combine ($Obj_out;$Obj_buffer)
 					
@@ -859,8 +768,7 @@ Case of
 			End for each 
 		End if 
 		
-		$Obj_out.tags:=New object:C1471(\
-			"navigationTables";$Obj_in.tags.navigationTables)  // Tag to transmit
+		$Obj_out.tags:=New object:C1471("navigationTables";$Obj_in.tags.navigationTables)  // Tag to transmit
 		
 		  //________________________________________
 	: (String:C10($Obj_template.type)="ls")
@@ -892,10 +800,9 @@ Case of
 						$File_:=Get 4D folder:C485(Current resources folder:K5:16)+"images"+Folder separator:K24:12+"monochrome.svg"
 						
 						  // Inject color on background if defined
-						If ((Bool:C1537(commonValues.launchScreen.useThemeColor))\
-							 & (Value type:C1509($Obj_in.theme.BackgroundColor)=Is object:K8:27))
+						If ((Bool:C1537(commonValues.launchScreen.useThemeColor)) & (Value type:C1509($Obj_in.theme.BackgroundColor)=Is object:K8:27))
 							
-							$Obj_buffer:=color (New object:C1471(\
+							$Obj_buffer:=colors (New object:C1471(\
 								"action";"rgbtohex";\
 								"color";$Obj_in.theme.BackgroundColor))
 							
@@ -914,8 +821,7 @@ Case of
 								
 								If (Asserted:C1132(OK=1;"Failed to parse: "+$File_))
 									
-									DOM SET XML ATTRIBUTE:C866(DOM Find XML element:C864($Svg_root;"/svg/rect");\
-										"fill";$Obj_in.tags.launchScreenBackgroundColor)
+									DOM SET XML ATTRIBUTE:C866(DOM Find XML element:C864($Svg_root;"/svg/rect");"fill";$Obj_in.tags.launchScreenBackgroundColor)
 									
 									$File_:=Temporary folder:C486+Generate UUID:C1066+".svg"
 									DOM EXPORT TO FILE:C862($Svg_root;$File_)
@@ -938,15 +844,7 @@ Case of
 					
 					$Obj_buffer:=$Obj_template.assets[$tTxt_keys{$Lon_i}]
 					
-					$Obj_out.assets[$tTxt_keys{$Lon_i}]:=asset (New object:C1471(\
-						"action";"create";\
-						"source";$File_;\
-						"target";$Obj_template.parent.assets.target+$Obj_buffer.target+Folder separator:K24:12;\
-						"tags";New object:C1471("name";$Obj_buffer.name);\
-						"type";$Obj_buffer.type;\
-						"format";$Obj_buffer.format;\
-						"size";$Obj_buffer.size;\
-						"sizes";$Obj_buffer.sizes))
+					$Obj_out.assets[$tTxt_keys{$Lon_i}]:=asset (New object:C1471("action";"create";"source";$File_;"target";$Obj_template.parent.assets.target+$Obj_buffer.target+Folder separator:K24:12;"tags";New object:C1471("name";$Obj_buffer.name);"type";$Obj_buffer.type;"format";$Obj_buffer.format;"size";$Obj_buffer.size;"sizes";$Obj_buffer.sizes))
 					
 					ob_error_combine ($Obj_out;$Obj_out.assets[$tTxt_keys{$Lon_i}])
 					
@@ -961,12 +859,7 @@ Case of
 			
 			$Obj_out.success:=False:C215
 			
-			$Obj_out.project:=XcodeProjInject (New object:C1471(\
-				"node";$Obj_out.template;\
-				"mapping";$Obj_in.projfile.mapping;\
-				"proj";$Obj_in.projfile.value;\
-				"target";$Obj_in.path;\
-				"uuid";$Obj_template.parent.parent.uuid))
+			$Obj_out.project:=XcodeProjInject (New object:C1471("node";$Obj_out.template;"mapping";$Obj_in.projfile.mapping;"proj";$Obj_in.projfile.value;"target";$Obj_in.path;"uuid";$Obj_template.parent.parent.uuid))
 			
 			$Obj_in.projfile.mustSave:=True:C214  // project modified
 			
@@ -974,11 +867,7 @@ Case of
 		
 		  //If (Bool(featuresFlags._103505))
 		
-		$Obj_out.storyboard:=storyboard (New object:C1471(\
-			"action";"listform";\
-			"template";$Obj_template;\
-			"target";$Obj_in.path;\
-			"tags";$Obj_in.tags))
+		$Obj_out.storyboard:=storyboard (New object:C1471("action";"listform";"template";$Obj_template;"target";$Obj_in.path;"tags";$Obj_in.tags))
 		
 		  //End if 
 		
@@ -1031,8 +920,7 @@ Case of
 			  // Fill missing information for detail template only
 			If (Value type:C1509($Obj_template.assets)#Is object:K8:27)
 				
-				$Obj_template.assets:=New object:C1471(\
-					"format";"png")
+				$Obj_template.assets:=New object:C1471("format";"png")
 				
 			End if 
 			
@@ -1088,15 +976,7 @@ Case of
 								
 								DOM CLOSE XML:C722($Svg_root)
 								
-								$Obj_out.assets.push(asset (New object:C1471(\
-									"action";"create";\
-									"type";"imageset";\
-									"tags";New object:C1471("name";$Obj_in.tags.table.name+"Detail"+$Obj_field.name);\
-									"source";$File_;\
-									"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));\
-									"/";Folder separator:K24:12)+Folder separator:K24:12;\
-									"format";$Obj_template.assets.format;\
-									"size";$Obj_template.assets.size)))
+								$Obj_out.assets.push(asset (New object:C1471("action";"create";"type";"imageset";"tags";New object:C1471("name";$Obj_in.tags.table.name+"Detail"+$Obj_field.name);"source";$File_;"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));"/";Folder separator:K24:12)+Folder separator:K24:12;"format";$Obj_template.assets.format;"size";$Obj_template.assets.size)))
 								
 							End if 
 						End if 
@@ -1106,15 +986,7 @@ Case of
 					
 					$File_icon:=Choose:C955(Position:C15("/";$Obj_field.icon)=1;$Dir_hostRoot+Replace string:C233($Obj_field.icon;"/";Folder separator:K24:12);$Dir_root+Folder separator:K24:12+Replace string:C233($Obj_field.icon;"/";Folder separator:K24:12))
 					
-					$Obj_buffer:=asset (New object:C1471(\
-						"action";"create";\
-						"type";"imageset";\
-						"tags";New object:C1471("name";$Obj_in.tags.table.name+"Detail"+$Obj_field.name);\
-						"source";$File_icon;\
-						"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));\
-						"/";Folder separator:K24:12)+Folder separator:K24:12;\
-						"format";$Obj_template.assets.format;\
-						"size";$Obj_template.assets.size))
+					$Obj_buffer:=asset (New object:C1471("action";"create";"type";"imageset";"tags";New object:C1471("name";$Obj_in.tags.table.name+"Detail"+$Obj_field.name);"source";$File_icon;"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));"/";Folder separator:K24:12)+Folder separator:K24:12;"format";$Obj_template.assets.format;"size";$Obj_template.assets.size))
 					$Obj_out.assets.push($Obj_buffer)
 					ob_error_combine ($Obj_out;$Obj_buffer)
 					
@@ -1123,21 +995,9 @@ Case of
 		End if 
 		
 		  // Standard code to copy template (not done before tags replacement, that's why nothing is done in first case of)
-		$Obj_out.template:=TEMPLATE (New object:C1471(\
-			"source";$Obj_template.source;\
-			"target";$Obj_in.path;\
-			"tags";$Obj_in.tags;\
-			"caller";$Obj_in.caller;\
-			"catalog";doc_catalog ($Obj_template.source;JSON Stringify:C1217(commonValues.template.exclude))))
+		$Obj_out.template:=TEMPLATE (New object:C1471("source";$Obj_template.source;"target";$Obj_in.path;"tags";$Obj_in.tags;"caller";$Obj_in.caller;"catalog";doc_catalog ($Obj_template.source;JSON Stringify:C1217(commonValues.template.exclude))))
 		
-		$Obj_out.project:=XcodeProjInject (\
-			New object:C1471(\
-			"node";$Obj_out.template;\
-			"mapping";$Obj_in.projfile.mapping;\
-			"proj";$Obj_in.projfile.value;\
-			"target";$Obj_in.path;\
-			"uuid";ob_inHierarchy ($Obj_template;"uuid").uuid\
-			))
+		$Obj_out.project:=XcodeProjInject (New object:C1471("node";$Obj_out.template;"mapping";$Obj_in.projfile.mapping;"proj";$Obj_in.projfile.value;"target";$Obj_in.path;"uuid";ob_inHierarchy ($Obj_template;"uuid").uuid))
 		
 		ob_error_combine ($Obj_out;$Obj_out.project)
 		
@@ -1145,11 +1005,7 @@ Case of
 		
 		  // Try to manage template element duplication
 		
-		$Obj_out.storyboard:=storyboard (New object:C1471(\
-			"action";"detailform";\
-			"template";$Obj_template;\
-			"target";$Obj_in.path;\
-			"tags";$Obj_in.tags))
+		$Obj_out.storyboard:=storyboard (New object:C1471("action";"detailform";"template";$Obj_template;"target";$Obj_in.path;"tags";$Obj_in.tags))
 		
 		If (Not:C34($Obj_out.storyboard.success))  // just in case no errors is generated and success is false
 			
@@ -1170,14 +1026,7 @@ End case
 
 If (Bool:C1537($Obj_template.inject))
 	
-	$Obj_out.project:=XcodeProjInject (\
-		New object:C1471(\
-		"node";$Obj_out.template;\
-		"mapping";$Obj_in.projfile.mapping;\
-		"proj";$Obj_in.projfile.value;\
-		"target";$Obj_in.path;\
-		"uuid";ob_inHierarchy ($Obj_template;"uuid").uuid\
-		))
+	$Obj_out.project:=XcodeProjInject (New object:C1471("node";$Obj_out.template;"mapping";$Obj_in.projfile.mapping;"proj";$Obj_in.projfile.value;"target";$Obj_in.path;"uuid";ob_inHierarchy ($Obj_template;"uuid").uuid))
 	
 End if 
 
@@ -1189,10 +1038,7 @@ If (Value type:C1509($Obj_template.sdk)=Is object:K8:27)
 	
 	If (Length:C16(String:C10($Obj_template.sdk.name))>0)
 		
-		$Obj_out.sdk:=sdk (New object:C1471(\
-			"action";"installAdditionnalSDK";\
-			"template";$Obj_template;\
-			"target";$Obj_in.path))
+		$Obj_out.sdk:=sdk (New object:C1471("action";"installAdditionnalSDK";"template";$Obj_template;"target";$Obj_in.path))
 		ob_error_combine ($Obj_out;$Obj_out.sdk)
 		
 	End if 
@@ -1203,14 +1049,10 @@ End if
   // ----------------------------------------------------
 If ($Obj_in.projfile=Null:C1517)
 	
-	$Obj_in.projfile:=XcodeProj (New object:C1471(\
-		"action";"read";\
-		"path";$Obj_in.path))
+	$Obj_in.projfile:=XcodeProj (New object:C1471("action";"read";"path";$Obj_in.path))
 	ob_error_combine ($Obj_out;$Obj_in.projfile)
 	
-	XcodeProj (New object:C1471(\
-		"action";"mapping";\
-		"projObject";$Obj_in.projfile))
+	XcodeProj (New object:C1471("action";"mapping";"projObject";$Obj_in.projfile))
 	
 	  // no return, mapping is added to projfile
 	
@@ -1274,10 +1116,7 @@ If ((String:C10($Obj_template.type)="main"))
 		
 		If (Test path name:C476(String:C10($Obj_in.project.$project.root)+$Txt_buffer)=Is a folder:K24:2)
 			
-			$Obj_buffer:=New object:C1471(\
-				"template";New object:C1471("name";\
-				"project"+$Txt_buffer;"inject";\
-				True:C214))
+			$Obj_buffer:=New object:C1471("template";New object:C1471("name";"project"+$Txt_buffer;"inject";True:C214))
 			$Obj_buffer.template.source:=$Obj_in.project.$project.root+$Txt_buffer+Folder separator:K24:12
 			$Obj_buffer.template.parent:=$Obj_template
 			$Obj_buffer.project:=$Obj_in.project
@@ -1292,53 +1131,31 @@ If ((String:C10($Obj_template.type)="main"))
 	  // /    Inject all SDK
 	If (String:C10($Obj_template.sdk.frameworks)#"")
 		
-		$Obj_out.sdk:=sdk (New object:C1471(\
-			"action";"inject";\
-			"projfile";$Obj_out.projfile;\
-			"folder";$Obj_template.sdk.frameworks;\
-			"target";$Obj_in.path))
+		$Obj_out.sdk:=sdk (New object:C1471("action";"inject";"projfile";$Obj_out.projfile;"folder";$Obj_template.sdk.frameworks;"target";$Obj_in.path))
 		
 		ob_error_combine ($Obj_out;$Obj_out.sdk)
 		
 	End if 
 	
 	  // Add data from formatters definition
-	$Obj_out.formatters:=formatters (New object:C1471(\
-		"action";"extract";\
-		"formatters";$Obj_in.formatters;\
-		"dataModel";$Obj_in.project.dataModel))
+	$Obj_out.formatters:=formatters (New object:C1471("action";"extract";"formatters";$Obj_in.formatters;"dataModel";$Obj_in.project.dataModel))
 	
 	If ($Obj_out.formatters.success)
 		
 		  // pass the collection of formatters and generate it
-		$Obj_out.formatters:=formatters (New object:C1471(\
-			"action";"generate";\
-			"formatters";$Obj_out.formatters.formatters;\
-			"tags";$Obj_in.tags;\
-			"target";$Obj_in.path))
+		$Obj_out.formatters:=formatters (New object:C1471("action";"generate";"formatters";$Obj_out.formatters.formatters;"tags";$Obj_in.tags;"target";$Obj_in.path))
 		
 		If ($Obj_out.formatters.success)
 			
 			  //If (Bool(featuresFlags._100990))
 			
 			  // Add all files provided
-			$Obj_buffer:=XcodeProjInject (New object:C1471(\
-				"node";$Obj_out.formatters;\
-				"mapping";$Obj_out.projfile.mapping;\
-				"proj";$Obj_out.projfile.value;\
-				"target";$Obj_in.path;\
-				"uuid";$Obj_in.template.uuid))
+			$Obj_buffer:=XcodeProjInject (New object:C1471("node";$Obj_out.formatters;"mapping";$Obj_out.projfile.mapping;"proj";$Obj_out.projfile.value;"target";$Obj_in.path;"uuid";$Obj_in.template.uuid))
 			
 			  //Else 
 			  //  // * Formatters.strings file has been generated, add it
 			  //If (Length(String($Obj_out.formatters.target))>0)
-			  //$Obj_out.formatters:=XcodeProjInject (New object(\
-																												"path";$Obj_out.formatters.target;\
-																												"mapping";$Obj_out.projfile.mapping;\
-																												"proj";$Obj_out.projfile.value;\
-																												"target";$Obj_in.path;\
-																												"types";New collection();\
-																												"uuid";$Obj_in.template.uuid))
+			  //$Obj_out.formatters:=XcodeProjInject (New object(																												"path";$Obj_out.formatters.target;																												"mapping";$Obj_out.projfile.mapping;																												"proj";$Obj_out.projfile.value;																												"target";$Obj_in.path;																												"types";New collection();																												"uuid";$Obj_in.template.uuid))
 			  //End if 
 			  //End if 
 			
@@ -1350,11 +1167,7 @@ If ((String:C10($Obj_template.type)="main"))
 	  // /  Save project file if has been modified
 	If (Bool:C1537($Obj_out.projfile.mustSave))
 		
-		$Obj_out.projfile:=XcodeProj (New object:C1471(\
-			"action";"write";\
-			"object";$Obj_out.projfile.value;\
-			"project";$Obj_in.tags.product;\
-			"path";$Obj_out.projfile.path))
+		$Obj_out.projfile:=XcodeProj (New object:C1471("action";"write";"object";$Obj_out.projfile.value;"project";$Obj_in.tags.product;"path";$Obj_out.projfile.path))
 		
 		  // PRODUCT tag for PBXProject could be removed by write process
 		Process_tags_on_file ($Obj_out.projfile.path;$Obj_out.projfile.path;$Obj_in.tags;New collection:C1472("project.pbxproj"))
