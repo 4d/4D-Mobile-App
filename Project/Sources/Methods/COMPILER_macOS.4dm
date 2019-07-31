@@ -54,8 +54,8 @@ If (False:C215)
 	C_OBJECT:C1216(asset ;$1)
 	
 	  //__________________________________________________
-	C_OBJECT:C1216(color ;$0)
-	C_OBJECT:C1216(color ;$1)
+	C_OBJECT:C1216(colors ;$0)
+	C_OBJECT:C1216(colors ;$1)
 	
 	  //__________________________________________________
 	C_OBJECT:C1216(device ;$0)
@@ -78,7 +78,7 @@ If (False:C215)
 	C_OBJECT:C1216(capabilities ;$1)
 	
 	  //__________________________________________________
-	C_OBJECT:C1216(swiftPM ;$0)
-	C_OBJECT:C1216(swiftPM ;$1)
+	C_OBJECT:C1216(swiftPM;$0)
+	C_OBJECT:C1216(swiftPM;$1)
 	
 End if 
