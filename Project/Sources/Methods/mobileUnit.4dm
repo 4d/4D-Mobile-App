@@ -145,7 +145,7 @@ Case of
 		 | ($Txt_in="xcodeProj")\
 		 | ($Txt_in="plist")\
 		 | ($Txt_in="asset")\
-		 | ($Txt_in="color")\
+		 | ($Txt_in="colors")\
 		 | ($Txt_in="provisioningProfiles")\
 		 | ($Txt_in="simulator")\
 		 | ($Txt_in="dataSet")\
@@ -163,6 +163,7 @@ Case of
 		 | ($Txt_in="device")\
 		 | ($Txt_in="checkQueryFilter")\
 		 | ($Txt_in="teamId")\
+		 | ($Txt_in="swiftPM")\
 		 | ($Txt_in="certificate")
 		
 		EXECUTE METHOD:C1007($Txt_in;$Obj_out;$Obj_in)
