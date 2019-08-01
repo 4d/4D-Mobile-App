@@ -123,27 +123,27 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 			End if 
 			  //***********************************************************************************************
 			
-			If ($Boo_dev)
+		End if 
+		If ($Boo_dev)
+			
+			  // Cache the last build for debug purpose
+			ob_writeToDocument ($Obj_in;$Obj_cache.file("lastBuild.4dmobile").platformPath;True:C214)
+			
+		End if 
+		
+	Else 
+		
+		If ($Boo_dev)
+			
+			  // IF no parameters, load from previous launched file
+			If (commonValues=Null:C1517)
 				
-				  // Cache the last build for debug purpose
-				ob_writeToDocument ($Obj_in;$Obj_cache.file("lastBuild.4dmobile").platformPath;True:C214)
+				COMPONENT_INIT 
 				
 			End if 
 			
-		Else 
+			$Obj_in:=JSON Parse:C1218($Obj_cache.file("lastBuild.4dmobile").getText())
 			
-			If ($Boo_dev)
-				
-				  // IF no parameters, load from previous launched file
-				If (commonValues=Null:C1517)
-					
-					COMPONENT_INIT 
-					
-				End if 
-				
-				$Obj_in:=JSON Parse:C1218($Obj_cache.file("lastBuild.4dmobile").getText())
-				
-			End if 
 		End if 
 	End if 
 	
@@ -380,10 +380,10 @@ If ($Obj_in.create)
 	  //#ACI0098572 [
 	  //$Obj_out.sdk:=sdk (New object(//"action";"install";//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";//"target";$Obj_in.path;// "cache";env_userPath ("cacheSdk")))
 	  //$Obj_out.sdk:=sdk (New object(\
-																			//"action";"install";\
-																			//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
-																			//"target";$Obj_in.path;\
-																			//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
+																							//"action";"install";\
+																							//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+																							//"target";$Obj_in.path;\
+																							//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
@@ -516,14 +516,14 @@ If ($Obj_in.create)
 			
 			  // Generate if not exist
 			  //$Obj_out.dump:=dataSet (New object(\
-																																					//"action";"create";\
-																																					//"project";$Obj_project;\
-																																					//"digest";True;\
-																																					//"dataSet";Bool(featuresFlags._101725);\
-																																					//"key";$File_;\
-																																					//"caller";$Obj_in.caller;\
-																																					//"verbose";$Boo_verbose;\
-																																					//"picture";Not(Bool(featuresFlags._97117))))
+																																													//"action";"create";\
+																																													//"project";$Obj_project;\
+																																													//"digest";True;\
+																																													//"dataSet";Bool(featuresFlags._101725);\
+																																													//"key";$File_;\
+																																													//"caller";$Obj_in.caller;\
+																																													//"verbose";$Boo_verbose;\
+																																													//"picture";Not(Bool(featuresFlags._97117))))
 			$Obj_out.dump:=dataSet (New object:C1471(\
 				"action";"create";\
 				"project";$Obj_project;\
@@ -554,11 +554,11 @@ If ($Obj_in.create)
 		
 		  // Update core data model
 		  //$Obj_out.coreData:=dataModel (New object(\
-						//"action";"xcdatamodel";\
-						//"dataModel";$Obj_project.dataModel;\
-						//"flat";False;\
-						//"relationship";Bool(featuresFlags._103850);\
-						//"path";$Obj_in.path+"Sources"+Folder separator+"Structures.xcdatamodeld"))
+												//"action";"xcdatamodel";\
+												//"dataModel";$Obj_project.dataModel;\
+												//"flat";False;\
+												//"relationship";Bool(featuresFlags._103850);\
+												//"path";$Obj_in.path+"Sources"+Folder separator+"Structures.xcdatamodeld"))
 		$Obj_out.coreData:=dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\
@@ -714,7 +714,7 @@ If ($Obj_out.success)
 				"allowProvisioningDeviceRegistration";True:C214;\
 				"archivePath";Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12+$Obj_project.$project.product+".xcarchive")))
 			
-			$Obj_cache.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out))
+			$Obj_cache.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out);"UTF-8";Document with LF:K24:22)
 			
 			ob_error_combine ($Obj_out;$Obj_result_build)
 			
@@ -741,7 +741,7 @@ If ($Obj_out.success)
 					"exportPath";Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12);\
 					"archivePath";Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12+$Obj_project.$project.product+".xcarchive")))
 				
-				env_userPathname ("cache";"lastExportArchive.xlog").setText(String:C10($Obj_result_build.out))
+				env_userPathname ("cache";"lastExportArchive.xlog").setText(String:C10($Obj_result_build.out);"UTF-8";Document with LF:K24:22)
 				
 				ob_error_combine ($Obj_out;$Obj_result_build)
 				
@@ -781,7 +781,7 @@ If ($Obj_out.success)
 			
 			ob_error_combine ($Obj_out;$Obj_result_build)
 			
-			$Obj_cache.file("lastBuild.xlog").setText(String:C10($Obj_result_build.out))
+			$Obj_cache.file("lastBuild.xlog").setText(String:C10($Obj_result_build.out);"UTF-8";Document with LF:K24:22)
 			
 			  // Some times Xcode method failed to get app path, maybe if already builded and nothing to do???
 			If ($Obj_result_build.app=Null:C1517)
