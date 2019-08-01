@@ -105,7 +105,7 @@ Case of
 						End if 
 						
 						  //----------------------------------------
-					: (String:C10($Obj_buffer.name)="Carthage")
+					: (String:C10($Obj_buffer.name)=commonValues.thirdParty)
 						
 						  // Ignore sdk
 						  //----------------------------------------
@@ -137,7 +137,7 @@ Case of
 		  //$File_buffer:=Convert path system to POSIX($File_buffer)  //  Manage posix mapping
 		$File_buffer:="/"+Replace string:C233($File_buffer;Folder separator:K24:12;"/")  // Manage posix mapping
 		
-		If (Position:C15("/Carthage/";$File_buffer)=0)  // ignore carthage file, will be injected by sdk
+		If (Position:C15("/"+commonValues.thirdParty+"/";$File_buffer)=0)  // ignore thirdparty file, will be injected by sdk"
 			
 			  ///  Look up for parent node
 			$Txt_parentpath:=""

@@ -123,7 +123,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						
 						  // Check if we can just move a cached sdk from previous build
 						  // efficient only if same disk volume
-						$Txt_buffer:=_o_env_userPath ("cache")+".sdk"+Folder separator:K24:12+"Carthage"
+						$Txt_buffer:=_o_env_userPath ("cache")+".sdk"+Folder separator:K24:12+commonValues.thirdParty
 						
 						If (Test path name:C476($Txt_buffer)=Is a folder:K24:2)
 							
@@ -351,7 +351,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				$Obj_.isFolder:=True:C214  // Ensure ensure end separator
 				$Obj_param.path:=Object to path:C1548($Obj_)
 				
-				If (Test path name:C476($Obj_param.path+"Carthage")=Is a folder:K24:2)  // well known sdk path
+				If (Test path name:C476($Obj_param.path+commonValues.thirdParty)=Is a folder:K24:2)  // well known sdk path
 					
 					$Txt_buffer:=_o_env_userPath ("cache")
 					
@@ -369,7 +369,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						
 					End if 
 					
-					$Txt_cmd:="mv -f "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_param.path+"Carthage"))\
+					$Txt_cmd:="mv -f "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_param.path+commonValues.thirdParty))\
 						+" "+str_singleQuoted (Convert path system to POSIX:C1106($Txt_buffer))
 					
 					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)

@@ -527,10 +527,11 @@ Case of
 		Case of 
 			: (Length:C16(String:C10($Obj_param.from))>0)
 				$File_subpath:=$Obj_param.from
-			: (Length:C16(String:C10(commonValues.thirdParthSources))>0)
-				$File_subpath:=commonValues.thirdParthSources
+			: (Length:C16(String:C10(commonValues.thirdPartySources))>0)
+				$File_subpath:=commonValues.thirdPartySources
 			Else 
 				$File_subpath:="Carthage/Checkouts"
+				ASSERT:C1129(False:C215;"Must have defined commonValues.thirdPartySources")
 		End case 
 		
 		If ($Obj_result.success)
