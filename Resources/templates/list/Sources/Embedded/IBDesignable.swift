@@ -40,6 +40,36 @@ class ListFormTable: QMobileUI.ListFormTable {
         }
     }
 
+    /// Add search bar in place of navigation bar title
+    @IBInspectable open override var searchableAsTitle: Bool {
+        get {
+            return super.searchableAsTitle
+        }
+        set {
+            super.searchableAsTitle = newValue
+        }
+    }
+
+    /// Keep search bar if scrolling
+    @IBInspectable open override var searchableWhenScrolling: Bool {
+        get {
+            return super.searchableWhenScrolling
+        }
+        set {
+            super.searchableWhenScrolling = newValue
+        }
+    }
+
+    /// Hide navigation bar when searching
+    @IBInspectable open override var searchableHideNavigation: Bool {
+        get {
+            return super.searchableHideNavigation
+        }
+        set {
+            super.searchableHideNavigation = newValue
+        }
+    }
+
     @IBOutlet open override var searchBar: UISearchBar! {
         get {
             return super.searchBar
@@ -86,6 +116,36 @@ class ListFormCollection: QMobileUI.ListFormCollection {
         }
         set {
             super.searchableField = newValue
+        }
+    }
+
+    /// Add search bar in place of navigation bar title
+    @IBInspectable open override var searchableAsTitle: Bool {
+        get {
+            return super.searchableAsTitle
+        }
+        set {
+            super.searchableAsTitle = newValue
+        }
+    }
+
+    /// Keep search bar if scrolling
+    @IBInspectable open override var searchableWhenScrolling: Bool {
+        get {
+            return super.searchableWhenScrolling
+        }
+        set {
+            super.searchableWhenScrolling = newValue
+        }
+    }
+
+    /// Hide navigation bar when searching
+    @IBInspectable open override var searchableHideNavigation: Bool {
+        get {
+            return super.searchableHideNavigation
+        }
+        set {
+            super.searchableHideNavigation = newValue
         }
     }
 
