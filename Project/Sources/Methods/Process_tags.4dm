@@ -16,7 +16,7 @@ C_COLLECTION:C1488($3)
 
 C_LONGINT:C283($Lon_i;$Lon_parameters)
 C_TEXT:C284($Txt_in;$Txt_out;$Txt_buffer)
-C_OBJECT:C1216($Obj_table;$Obj_tags;$Obj_field)
+C_OBJECT:C1216($Obj_table;$Obj_tags;$Obj_field;$Obj_element)
 C_COLLECTION:C1488($Col_types)
 
 ARRAY TEXT:C222($tTxt_types;0)
@@ -302,27 +302,40 @@ If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file p
 	
 	If (Find in array:C230($tTxt_types;"storyboardID")>0)  // Dispatch storyboard id in TAG-<interfix>-<position>
 		
-		If (Length:C16(String:C10($Obj_tags.tagInterfix))>0)
+		If (Length:C16(String:C10($Obj_tags.tagInterfix))>0)  // only one element defined directly at root tag level
+			$Obj_element:=New object:C1471()
+			$Obj_element.tagInterfix:=$Obj_tags.tagInterfix  // no obcopy to avoid recursivity
+			$Obj_element.storyboardIDs:=$Obj_tags.storyboardIDs
+			$Obj_tags.storyboardID:=New collection:C1472($Obj_element)
+		End if 
+		
+		If (Value type:C1509($Obj_tags.storyboardID)=Is collection:K8:32)  // we have a collection of storyboard ids to replace
 			
-			If (Value type:C1509($Obj_tags.storyboardIDs)=Is collection:K8:32)
+			For each ($Obj_element;$Obj_tags.storyboardID)
 				
-				For ($Lon_i;0;$Obj_tags.storyboardIDs.length-1;1)
+				If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
 					
-					$Txt_buffer:=String:C10($Lon_i+1;"##000")
-					$Txt_out:=Replace string:C233($Txt_out;"TAG-"+$Obj_tags.tagInterfix+"-"+$Txt_buffer;$Obj_tags.storyboardIDs[$Lon_i])
+					If (Value type:C1509($Obj_element.storyboardIDs)=Is collection:K8:32)
+						
+						For ($Lon_i;0;$Obj_element.storyboardIDs.length-1;1)
+							
+							$Txt_buffer:=String:C10($Lon_i+1;"##000")
+							$Txt_out:=Replace string:C233($Txt_out;"TAG-"+$Obj_element.tagInterfix+"-"+$Txt_buffer;$Obj_element.storyboardIDs[$Lon_i])
+							
+						End for 
+						
+					Else 
+						
+						ASSERT:C1129(dev_Matrix ;"storyboardID tag replacement asked but not collection of it provided for "+String:C10($Obj_element.tagInterfix))
+						
+					End if 
 					
-				End for 
-				
-			Else 
-				
-				ASSERT:C1129(dev_Matrix ;"storyboardID tag replacement asked but not collection of it provided")
-				
-			End if 
-			
-		Else 
-			
-			ASSERT:C1129(dev_Matrix ;"When replacing storyboard id no tag interfix provided (TAG-interfix-position)")
-			
+				Else 
+					
+					ASSERT:C1129(dev_Matrix ;"When replacing storyboard id no tag interfix provided (TAG-interfix-position)")
+					
+				End if 
+			End for each 
 		End if 
 	End if 
 End if 

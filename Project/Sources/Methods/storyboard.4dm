@@ -493,7 +493,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								  // - randoms ids
 								If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
 									
-									$Obj_in.tags.tagInterfix:=$Obj_element.tagInterfix
+									C_OBJECT:C1216($Obj_storyboardID)
+									$Obj_storyboardID:=New object:C1471()
+									$Obj_storyboardID.tagInterfix:=$Obj_element.tagInterfix
+									
+									If ($Obj_in.tags.storyboardID=Null:C1517)
+										$Obj_in.tags.storyboardID:=New collection:C1472()
+									End if 
+									$Obj_in.tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
+									
 									
 									$Lon_ids:=Num:C11($Obj_element.idCount)  // define id count allow to speed up and pass that
 									
@@ -518,7 +526,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									End if 
 									
 									$Obj_element.idCount:=$Lon_ids  // as a result purpose
-									$Obj_in.tags.storyboardIDs:=storyboard (New object:C1471("action";"randomIds";"length";$Lon_ids)).value
+									$Obj_storyboardID.storyboardIDs:=storyboard (New object:C1471("action";"randomIds";"length";$Lon_ids)).value
 									
 								End if 
 								
