@@ -27,6 +27,6 @@
 	<key>uuid</key>
 	<string>___SETTING_UUID___</string>
 	<key>crash.server.url</key>
-	<string>https://bugs.4d.fr/</string>
+	<string>https://bugs.4d.fr</string>
 </dict>
 </plist>
