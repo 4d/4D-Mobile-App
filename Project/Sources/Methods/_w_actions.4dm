@@ -180,60 +180,60 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="preview")
 		
-		$Svg_root:=SVG_New 
+		  //$Svg_root:=SVG_New 
 		
-		$Obj_target:=Form:C1466[$Obj_context.typeForm()][$Obj_context.tableNum()]
+		  //$Obj_target:=Form[$Obj_context.typeForm()][$Obj_context.tableNum()]
 		
-		If ($Obj_target.actions#Null:C1517)
-			
-			$Dir_actions:=_o_Pathname ("host_actions")
-			
-			For each ($o;$Obj_target.actions)
-				
-				If ($o.icon#Null:C1517)
-					
-					If (String:C10($o.icon)[[1]]="/")  // User action
-						
-						$t:=$Dir_actions+Convert path POSIX to system:C1107(Delete string:C232($o.icon;1;1))
-						
-						If (Test path name:C476($t)#Is a document:K24:1)
-							
-							$t:=$File_noIcon
-							
-						End if 
-						
-					Else   // Embedded action
-						
-						$t:=Get 4D folder:C485(Current resources folder:K5:16)+"images"+Folder separator:K24:12+"actions"+Folder separator:K24:12+$o.icon
-						
-						If (Test path name:C476($t)#Is a document:K24:1)
-							
-							$t:=$File_noIcon
-							
-						End if 
-					End if 
-					
-				Else 
-					
-					$t:=$File_noIcon
-					
-				End if 
-				
-				READ PICTURE FILE:C678($t;$p)
-				CREATE THUMBNAIL:C679($p;$p;24;24)
-				SVG_SET_ID (SVG_New_embedded_image ($Svg_root;$p;$l;0);String:C10($o.name))
-				
-				$l:=$l+26
-				
-			End for each 
-			
-		Else 
-			
-			  // <NOTHING MORE TO DO>
-			
-		End if 
+		  //If ($Obj_target.actions#Null)
 		
-		SVG EXPORT TO PICTURE:C1017($Svg_root;$p;Own XML data source:K45:18)
+		  //$Dir_actions:=_o_Pathname ("host_actions")
+		
+		  //For each ($o;$Obj_target.actions)
+		
+		  //If ($o.icon#Null)
+		
+		  //If (String($o.icon)[[1]]="/")  // User action
+		
+		  //$t:=$Dir_actions+Convert path POSIX to system(Delete string($o.icon;1;1))
+		
+		  //If (Test path name($t)#Is a document)
+		
+		  //$t:=$File_noIcon
+		
+		  //End if 
+		
+		  //Else   // Embedded action
+		
+		  //$t:=Get 4D folder(Current resources folder)+"images"+Folder separator+"actions"+Folder separator+$o.icon
+		
+		  //If (Test path name($t)#Is a document)
+		
+		  //$t:=$File_noIcon
+		
+		  //End if 
+		  //End if 
+		
+		  //Else 
+		
+		  //$t:=$File_noIcon
+		
+		  //End if 
+		
+		  //READ PICTURE FILE($t;$p)
+		  //CREATE THUMBNAIL($p;$p;24;24)
+		  //SVG_SET_ID (SVG_New_embedded_image ($Svg_root;$p;$l;0);String($o.name))
+		
+		  //$l:=$l+26
+		
+		  //End for each 
+		
+		  //Else 
+		
+		  //  // <NOTHING MORE TO DO>
+		
+		  //End if 
+		
+		  //SVG EXPORT TO PICTURE($Svg_root;$p;Own XML data source)
 		$Obj_out.pict:=$p
 		
 		  //______________________________________________________

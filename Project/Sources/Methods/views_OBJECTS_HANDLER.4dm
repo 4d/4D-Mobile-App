@@ -14,8 +14,8 @@ C_LONGINT:C283($0)
 C_BLOB:C604($x)
 C_LONGINT:C283($Lon_parameters)
 C_PICTURE:C286($p)
-C_TEXT:C284($t;$Txt_tableNumber;$Txt_template;$Txt_typeForm)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form)
+C_TEXT:C284($Txt_tableNumber;$Txt_template;$Txt_typeForm)
+C_OBJECT:C1216($o;$Obj_context;$Obj_current;$Obj_form)
 
 If (False:C215)
 	C_LONGINT:C283(views_OBJECTS_HANDLER ;$0)
@@ -198,25 +198,21 @@ Case of
 				
 				  // Get the dragged field
 				  //%W-533.3
-				$o:=($Obj_form.fields.pointer())->{$Obj_form.fieldList.row}
+				$Obj_current:=($Obj_form.fields.pointer())->{$Obj_form.fieldList.row}
 				  //%W+533.3
 				
 				  // Put into the container
-				VARIABLE TO BLOB:C532($o;$x)
+				VARIABLE TO BLOB:C532($Obj_current;$x)
 				APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field";$x)
 				SET BLOB SIZE:C606($x;0)
 				
 				  // Create the drag icon
-				SVG_SET_OPTIONS (SVG_Get_options  ?+ 12)
-				$t:=SVG_New 
-				SVG_SET_TEXT_RENDERING ($t;"geometricPrecision")
-				SVG_SET_SHAPE_RENDERING ($t;"crispEdges")
-				SVG_SET_VIEWPORT_FILL ($t;SVG_Color_RGB_from_long (ui.backgroundSelectedColor))
-				SVG_New_rect ($t;0.5;0;20;20;0;0;"none";SVG_Color_RGB_from_long (ui.backgroundSelectedColor))
-				SVG_New_embedded_image ($t;ui.fieldIcons[$o.fieldType];2;2)
-				SVG_New_text ($t;$o.path+" ";20;2;"Sans-serif";13)
-				
-				SVG EXPORT TO PICTURE:C1017($t;$p;Own XML data source:K45:18)
+				$o:=svg (JSON Stringify:C1217(New object:C1471("viewport-fill";ui.colors.backgroundSelectedColor.hex)))
+				$o.rect(0.5;0;20;20;New object:C1471(svg foreground color;"none";svg background color;ui.colors.backgroundSelectedColor.hex))
+				$o.imageEmbedded(ui.fieldIcons[$Obj_current.fieldType];2;2)
+				$o.textArea($Obj_current.path+" ";20;2;New object:C1471("font-size";13))
+				$p:=$o.get("picture")
+				$o.close()
 				SET DRAG ICON:C1272($p)
 				
 				editor_ui_LISTBOX ($Obj_form.form.currentWidget)
@@ -413,16 +409,16 @@ Case of
 				If ($Obj_context.selector#(1+Num:C11($Obj_form.form.currentWidget=$Obj_form.selectorDetail.name)))
 					
 					  // Highlights
-					$o:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.selectorList.name;$Obj_form.selectorList;$Obj_form.selectorDetail)
-					$o.setColors(ui.selectedColor;Background color none:K23:10)
+					$Obj_current:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.selectorList.name;$Obj_form.selectorList;$Obj_form.selectorDetail)
+					$Obj_current.setColors(ui.selectedColor;Background color none:K23:10)
 					
 				End if 
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Mouse Leave:K2:34)
 				
-				$o:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.selectorList.name;$Obj_form.selectorList;$Obj_form.selectorDetail)
-				$o.setColors(Foreground color:K23:1;Background color none:K23:10)
+				$Obj_current:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.selectorList.name;$Obj_form.selectorList;$Obj_form.selectorDetail)
+				$Obj_current.setColors(Foreground color:K23:1;Background color none:K23:10)
 				
 				  //______________________________________________________
 		End case 

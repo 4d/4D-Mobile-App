@@ -79,7 +79,9 @@
 					"left": 18,
 					"height": 110,
 					"visibility": "hidden",
-					"stroke": "#C0C0C0"
+					"stroke": "#C0C0C0",
+					"width": 0,
+					"startPoint": "topLeft"
 				},
 				"next.limit": {
 					"type": "line",
@@ -88,7 +90,9 @@
 					"height": 110,
 					"visibility": "hidden",
 					"sizingX": "move",
-					"stroke": "#C0C0C0"
+					"stroke": "#C0C0C0",
+					"width": 0,
+					"startPoint": "topLeft"
 				},
 				"noPublishedTable": {
 					"type": "button",
@@ -151,7 +155,9 @@
 					"left": 19,
 					"width": 921,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC"
+					"stroke": "#DCDCDC",
+					"height": 0,
+					"startPoint": "topLeft"
 				},
 				"tab.selector": {
 					"type": "rectangle",
@@ -187,7 +193,7 @@
 					"dataSourceTypeHint": "picture",
 					"focusable": false,
 					"fill": "transparent",
-					"borderStyle": "none",
+					"borderStyle": "solid",
 					"enterable": false,
 					"hideFocusRing": true,
 					"contextMenu": "none",
@@ -378,7 +384,9 @@
 					"left": 19,
 					"width": 921,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC"
+					"stroke": "#DCDCDC",
+					"height": 0,
+					"startPoint": "topLeft"
 				},
 				"01_fields.label1": {
 					"type": "text",
@@ -522,5 +530,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

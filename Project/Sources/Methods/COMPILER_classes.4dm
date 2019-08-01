@@ -67,6 +67,11 @@ If (False:C215)
 	C_OBJECT:C1216(subform ;$2)
 	
 	  //______________________________________________________
+	C_OBJECT:C1216(svg ;$0)
+	C_TEXT:C284(svg ;$1)
+	C_OBJECT:C1216(svg ;$2)
+	
+	  //______________________________________________________
 	C_OBJECT:C1216(thermometer ;$0)
 	C_TEXT:C284(thermometer ;$1)
 	C_OBJECT:C1216(thermometer ;$2)
