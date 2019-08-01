@@ -606,7 +606,7 @@ Case of
 						
 						$Txt_relationName:=$tTxt_fields{$Lon_field}  // link name (or primaryKey, etc...)
 						
-						If ($Obj_table[$Txt_relationName].relatedEntities#Null:C1517)
+						If ($Obj_table[$Txt_relationName].relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
 							$Obj_table[$Txt_relationName].relatedDataClass:=$Obj_table[$Txt_relationName].relatedEntities
 						End if 
 						
