@@ -1,0 +1,7 @@
+<scene sceneID="TAG-SN-002">
+	<objects>
+		<viewControllerPlaceholder storyboardName="___NAME___" id="TAG-SN-001" sceneMemberID="viewController"/>
+		<placeholder placeholderIdentifier="IBFirstResponder" id="TAG-SN-003" userLabel="First Responder" sceneMemberID="firstResponder"/>
+	</objects>
+    <point key="canvasLocation" x="2778" y="-33"/>
+</scene>
