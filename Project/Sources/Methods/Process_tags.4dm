@@ -173,6 +173,20 @@ Case of   // According to type replace the tag
 	: (Find in array:C230($tTxt_types;"script")>0)
 		
 		$Txt_out:=Replace string:C233($Txt_out;"___MINIMUM_XCODE_VERSION___";String:C10($Obj_tags.xCodeVersion))
+		  //______________________________________________________
+	: (Find in array:C230($tTxt_types;"automatic")>0)
+		
+		For each ($Txt_buffer;$Obj_tags)
+			
+			Case of 
+				: (Value type:C1509($Obj_tags[$Txt_buffer])=Is collection:K8:32)
+					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";JSON Stringify:C1217($Obj_tags[$Txt_buffer]))
+				: (Value type:C1509($Obj_tags[$Txt_buffer])=Is object:K8:27)
+					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";JSON Stringify:C1217($Obj_tags[$Txt_buffer]))
+				Else 
+					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";String:C10($Obj_tags[$Txt_buffer]))
+			End case 
+		End for each 
 		
 		  //______________________________________________________
 	Else 
@@ -300,46 +314,48 @@ If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file p
 			  //______________________________________________________
 	End case 
 	
-	If (Find in array:C230($tTxt_types;"storyboardID")>0)  // Dispatch storyboard id in TAG-<interfix>-<position>
+	
+End if 
+  //]
+
+If (Find in array:C230($tTxt_types;"storyboardID")>0)  // Dispatch storyboard id in TAG-<interfix>-<position>
+	
+	If (Length:C16(String:C10($Obj_tags.tagInterfix))>0)  // only one element defined directly at root tag level
+		$Obj_element:=New object:C1471()
+		$Obj_element.tagInterfix:=$Obj_tags.tagInterfix  // no obcopy to avoid recursivity
+		$Obj_element.storyboardIDs:=$Obj_tags.storyboardIDs
+		$Obj_tags.storyboardID:=New collection:C1472($Obj_element)
+	End if 
+	
+	If (Value type:C1509($Obj_tags.storyboardID)=Is collection:K8:32)  // we have a collection of storyboard ids to replace
 		
-		If (Length:C16(String:C10($Obj_tags.tagInterfix))>0)  // only one element defined directly at root tag level
-			$Obj_element:=New object:C1471()
-			$Obj_element.tagInterfix:=$Obj_tags.tagInterfix  // no obcopy to avoid recursivity
-			$Obj_element.storyboardIDs:=$Obj_tags.storyboardIDs
-			$Obj_tags.storyboardID:=New collection:C1472($Obj_element)
-		End if 
-		
-		If (Value type:C1509($Obj_tags.storyboardID)=Is collection:K8:32)  // we have a collection of storyboard ids to replace
+		For each ($Obj_element;$Obj_tags.storyboardID)
 			
-			For each ($Obj_element;$Obj_tags.storyboardID)
+			If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
 				
-				If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
+				If (Value type:C1509($Obj_element.storyboardIDs)=Is collection:K8:32)
 					
-					If (Value type:C1509($Obj_element.storyboardIDs)=Is collection:K8:32)
+					For ($Lon_i;0;$Obj_element.storyboardIDs.length-1;1)
 						
-						For ($Lon_i;0;$Obj_element.storyboardIDs.length-1;1)
-							
-							$Txt_buffer:=String:C10($Lon_i+1;"##000")
-							$Txt_out:=Replace string:C233($Txt_out;"TAG-"+$Obj_element.tagInterfix+"-"+$Txt_buffer;$Obj_element.storyboardIDs[$Lon_i])
-							
-						End for 
+						$Txt_buffer:=String:C10($Lon_i+1;"##000")
+						$Txt_out:=Replace string:C233($Txt_out;"TAG-"+$Obj_element.tagInterfix+"-"+$Txt_buffer;$Obj_element.storyboardIDs[$Lon_i])
 						
-					Else 
-						
-						ASSERT:C1129(dev_Matrix ;"storyboardID tag replacement asked but not collection of it provided for "+String:C10($Obj_element.tagInterfix))
-						
-					End if 
+					End for 
 					
 				Else 
 					
-					ASSERT:C1129(dev_Matrix ;"When replacing storyboard id no tag interfix provided (TAG-interfix-position)")
+					ASSERT:C1129(dev_Matrix ;"storyboardID tag replacement asked but not collection of it provided for "+String:C10($Obj_element.tagInterfix))
 					
 				End if 
-			End for each 
-		End if 
+				
+			Else 
+				
+				ASSERT:C1129(dev_Matrix ;"When replacing storyboard id no tag interfix provided (TAG-interfix-position)")
+				
+			End if 
+		End for each 
 	End if 
 End if 
-  //]
 
   // ----------------------------------------------------
   // Return

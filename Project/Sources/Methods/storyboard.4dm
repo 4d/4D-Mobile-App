@@ -532,7 +532,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 								  // Process tags on the element
 								DOM EXPORT TO VAR:C863($Obj_element.xmlId;$Txt_buffer)
-								$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
+								$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform"))
 								
 								  // Insert node for this element
 								
@@ -953,6 +953,114 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				$Obj_out.errors:=New collection:C1472("path not defined or do not exist")
 				
 			End if 
+			
+			  //______________________________________________________
+		: ($Obj_in.action="addScene")
+			
+			ASSERT:C1129(Length:C16(String:C10($Obj_in.name))>0)
+			
+			  // Have a DOM or load a new DOM
+			
+			  //If (String($Obj_in.file))
+			  //  $Obj_in.dom:= DOM Parse
+			  //End if
+			
+			If (Length:C16(String:C10($Obj_in.dom))>0)
+				
+				$Obj_out.dom:=$Obj_in.dom  // edit inline
+				
+				  // Create a new scene
+				$Col_:=storyboard (New object:C1471("action";"randomIds";"length";3)).value
+				$Obj_tag:=New object:C1471("name";String:C10($Obj_in.name);"tagInterfix";"SN";"storyboardIDs";$Col_)
+				$Obj_out.scene:=storyboard (New object:C1471("action";"scene";"tags";$Obj_tag))
+				If ($Obj_out.scene.success)
+					
+					  // inject into <scenes>
+					$Obj_out.domScenes:=DOM Find XML element:C864($Obj_in.dom;"document/scenes")
+					
+					If ($Obj_out.domScenes#"00000000000000000000000000000000")
+						
+						$Obj_out.success:=True:C214
+						$Obj_out.domScene:=DOM Append XML element:C1082($Obj_out.domScenes;$Obj_out.scene.dom)
+						
+						  // Create a connection
+						If (Bool:C1537($Obj_in.connection))
+							
+							  // Find main viewController DOM (ex: <scene sceneID="fK0-6P-J5Y"><objects> <viewController>
+							$Obj_out.domVC:=DOM Find XML element:C864($Obj_in.dom;"document/scenes/scene[2]/objects/viewController")
+							
+							If ($Obj_out.domVC#"00000000000000000000000000000000")
+								
+								  // Find its <connections> children
+								$Obj_out.domConnections:=DOM Find XML element:C864($Obj_out.domVC;"<connections>")
+								If ($Obj_out.domConnections="00000000000000000000000000000000")
+									$Obj_out.domConnections:=DOM Create XML element:C865($Obj_out.domVC;"connections")
+								End if 
+								
+								  // Create a segue with First random id as SCENE ID is destination id
+								$Col_:=New collection:C1472($Col_[0];storyboard (New object:C1471("action";"randomId")).value)
+								$Obj_tag:=New object:C1471("name";String:C10($Obj_in.name);"kind";"show";"tagInterfix";"SG";"storyboardIDs";$Col_)
+								$Obj_out.segue:=storyboard (New object:C1471("action";"segue";"tags";$Obj_tag))
+								
+								  // Inject it into <connections>
+								$Obj_out.domSegue:=DOM Append XML element:C1082($Obj_out.domConnections;$Obj_out.segue.dom)
+								
+							Else 
+								
+								$Obj_out.success:=False:C215
+								ob_error_add ($Obj_out;"Cannot find view controller to add connection on "+String:C10($Obj_in.name))
+								
+							End if 
+							
+						End if 
+						
+					End if 
+				Else 
+					
+					ob_error_add ($Obj_out;"Cannot read scene template")
+					
+				End if 
+				
+			Else 
+				
+				ob_error_add ($Obj_out;"No dom element to edit when adding a scene")
+				
+			End if 
+			
+			  //______________________________________________________
+		: ($Obj_in.action="scene")
+			
+			$Obj_element:=COMPONENT_Pathname ("templates").folder("relation").file("storyboardScene.xml")
+			
+			If ($Obj_element.exists)
+				
+				If (Value type:C1509($Obj_in.tags)=Is object:K8:27)
+					
+					ASSERT:C1129($Obj_in.tags.storyboardIDs.length=3)
+					
+					$Txt_buffer:=$Obj_element.getText()
+					$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("automatic";"storyboardID"))
+					$Obj_out.dom:=DOM Parse XML variable:C720($Txt_buffer)
+					$Obj_out.success:=True:C214
+					
+				Else 
+					$Obj_out.dom:=DOM Parse XML source:C719($Obj_element.platformPath)
+					$Obj_out.success:=True:C214
+				End if 
+			End if 
+			
+			  //______________________________________________________
+		: ($Obj_in.action="segue")
+			
+			$Txt_buffer:="<segue destination=\"TAG-SG-001\" kind=\"___KIND___\" identifier=\"___NAME___\" id=\"TAG-SG-002\"/>"
+			
+			If (Value type:C1509($Obj_in.tags)=Is object:K8:27)
+				ASSERT:C1129($Obj_in.tags.storyboardIDs.length=2)
+				$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("automatic";"storyboardID"))
+			End if 
+			
+			$Obj_out.dom:=DOM Parse XML variable:C720($Txt_buffer)
+			$Obj_out.success:=True:C214
 			
 			  //______________________________________________________
 		: ($Obj_in.action="version")

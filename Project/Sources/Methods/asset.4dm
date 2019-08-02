@@ -15,6 +15,7 @@ C_PICTURE:C286($Pic_buffer;$Pic_icon)
 C_TEXT:C284($Dir_buffer;$Dir_source;$File_source;$Txt_buffer;$Txt_name;$Txt_value)
 C_OBJECT:C1216($Obj_;$Obj_buffer;$Obj_file;$Obj_formatter;$Obj_image;$Obj_in)
 C_OBJECT:C1216($Obj_out;$Obj_path;$Obj_template)
+C_OBJECT:C1216($Folder_buffer)
 
 If (False:C215)
 	C_OBJECT:C1216(asset ;$0)
@@ -257,15 +258,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 							End if 
 							
-							$Txt_buffer:=_o_Pathname ("templates")+"asset"+Folder separator:K24:12+$Obj_in.type+Folder separator:K24:12+$Obj_in.format+Folder separator:K24:12
-							$Obj_out.success:=Test path name:C476($Txt_buffer)=Is a folder:K24:2
+							$Folder_buffer:=COMPONENT_Pathname ("templates").folder("asset").folder($Obj_in.type).folder($Obj_in.format)
+							$Txt_buffer:=$Folder_buffer.platformPath
+							$Obj_out.success:=$Folder_buffer.exists
 							
 							  // ........................................
 						: ($Obj_in.type="colorset")
 							
 							If ($Obj_in.space#Null:C1517)
 								
-								$Txt_buffer:=_o_Pathname ("templates")+"asset"+Folder separator:K24:12+$Obj_in.type+Folder separator:K24:12+$Obj_in.space+Folder separator:K24:12
+								$Folder_buffer:=COMPONENT_Pathname ("templates").folder("asset").folder($Obj_in.type).folder($Obj_in.space)
+								$Txt_buffer:=$Folder_buffer.platformPath
 								
 								If ($Obj_in.tags.alpha=Null:C1517)
 									
@@ -273,7 +276,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									
 								End if 
 								
-								$Obj_out.success:=Test path name:C476($Txt_buffer)=Is a folder:K24:2
+								$Obj_out.success:=$Folder_buffer.exists
 								
 							Else 
 								
@@ -285,8 +288,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							  // ........................................
 						: ($Obj_in.type="dataset")
 							
-							$Txt_buffer:=_o_Pathname ("templates")+"asset"+Folder separator:K24:12+$Obj_in.type+Folder separator:K24:12
-							$Obj_out.success:=Test path name:C476($Txt_buffer)=Is a folder:K24:2
+							$Folder_buffer:=COMPONENT_Pathname ("templates").folder("asset").folder($Obj_in.type)
+							$Txt_buffer:=$Folder_buffer.platformPath
+							$Obj_out.success:=$Folder_buffer.exists
 							
 							If ($Obj_in.tags.filename=Null:C1517)
 								
@@ -297,8 +301,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							  // ........................................
 						: ($Obj_in.type="folder")
 							
-							$Txt_buffer:=_o_Pathname ("templates")+"asset"+Folder separator:K24:12+$Obj_in.type+Folder separator:K24:12
-							$Obj_out.success:=Test path name:C476($Txt_buffer)=Is a folder:K24:2
+							$Folder_buffer:=COMPONENT_Pathname ("templates").folder("asset").folder($Obj_in.type)
+							$Txt_buffer:=$Folder_buffer.platformPath
+							$Obj_out.success:=$Folder_buffer.exists
 							
 							  // ........................................
 						Else 
@@ -309,9 +314,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							  // ........................................
 					End case 
 					
-					$Obj_buffer:=Path to object:C1547($Txt_buffer)
-					$Obj_buffer.isFolder:=True:C214
-					$Txt_buffer:=Object to path:C1548($Obj_buffer)
+					  //$Obj_buffer:=Path to object($Txt_buffer)
+					  //$Obj_buffer.isFolder:=True
+					  //$Txt_buffer:=Object to path($Obj_buffer)
 					
 					If ($Obj_out.success)
 						

@@ -85,8 +85,8 @@
 			"deliver",
 			"[PANELS]",
 			"[PROJECT]",
-			"mobile",
 			"macOS",
+			"mobile",
 			"backend"
 		],
 		"methods": [
@@ -481,9 +481,9 @@
 	},
 	"TABLES": {
 		"methods": [
-			"tables_Widget",
 			"tables_OBJECTS_HANDLER",
 			"COMPILER_tables",
+			"tables_Widget",
 			"tables_Handler"
 		],
 		"forms": [
@@ -540,19 +540,44 @@
 			"ui_SET_GEOMETRY"
 		]
 	},
-	"mobile": {
+	"macOS": {
 		"methods": [
-			"mobile_Check_installation",
-			"COMPILER_mobile",
-			"mobile_Project"
+			"test_storyboard_link",
+			"XcodeProjInject",
+			"asset",
+			"simulator",
+			"plist_toObject",
+			"COMPILER_macOS",
+			"device",
+			"storyboard",
+			"test_storyboard_scene",
+			"teamId",
+			"unzip",
+			"capabilities",
+			"sdk",
+			"provisioningProfiles",
+			"plist",
+			"test_capabilities",
+			"certificate",
+			"git",
+			"Xcode",
+			"XcodeProj",
+			"Xcode_CheckInstall",
+			"test_storyboard_segue"
 		]
 	},
-	"widgets": {
-		"groups": [
-			"Localization",
-			"Message",
-			"Picture grid",
-			"Search"
+	"col": {
+		"methods": [
+			"COMPILER_col",
+			"col_findObject",
+			"col_replaceString",
+			"test_colObj_distinct",
+			"col_method",
+			"test_col",
+			"col_distinctObject",
+			"col_valueToObject",
+			"col_notNull",
+			"col_formula"
 		]
 	},
 	"STRUCTURE": {
@@ -573,41 +598,19 @@
 			"STRUCTURE"
 		]
 	},
-	"col": {
+	"mobile": {
 		"methods": [
-			"COMPILER_col",
-			"col_findObject",
-			"col_replaceString",
-			"test_colObj_distinct",
-			"col_method",
-			"test_col",
-			"col_distinctObject",
-			"col_valueToObject",
-			"col_notNull",
-			"col_formula"
+			"mobile_Check_installation",
+			"COMPILER_mobile",
+			"mobile_Project"
 		]
 	},
-	"macOS": {
-		"methods": [
-			"XcodeProjInject",
-			"asset",
-			"simulator",
-			"plist_toObject",
-			"COMPILER_macOS",
-			"device",
-			"storyboard",
-			"teamId",
-			"unzip",
-			"capabilities",
-			"sdk",
-			"provisioningProfiles",
-			"plist",
-			"test_capabilities",
-			"certificate",
-			"git",
-			"Xcode",
-			"XcodeProj",
-			"Xcode_CheckInstall"
+	"widgets": {
+		"groups": [
+			"Localization",
+			"Message",
+			"Picture grid",
+			"Search"
 		]
 	},
 	"backend": {
