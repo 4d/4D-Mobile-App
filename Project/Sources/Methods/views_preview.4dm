@@ -20,7 +20,7 @@ C_TEXT:C284($Dom_;$Dom_buffer;$Dom_cancel;$Dom_field;$Dom_g;$Dom_label)
 C_TEXT:C284($Dom_multivalued;$Dom_new;$Dom_root;$Dom_tabs;$Dom_template;$Dom_use)
 C_TEXT:C284($t;$Txt_field;$Txt_form;$Txt_in;$Txt_index;$Txt_name)
 C_TEXT:C284($Txt_out;$Txt_typeForm)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_target;$Path_root)
+C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_target;$Path_root;$svg)
 C_COLLECTION:C1488($Col_assigned;$Col_bind;$Col_form)
 
 If (False:C215)
@@ -100,8 +100,6 @@ Case of
 					  // We assume that our templates are OK !
 					$Boo_OK:=$Path_root.exists
 					
-					  //$o:=JSON Parse($Path_root.file("manifest.json").getText())
-					
 				End if 
 				
 				OBJECT SET TITLE:C194(*;"preview.label";$Txt_form)
@@ -129,8 +127,6 @@ Case of
 							
 						End if 
 						  //]
-						
-						  //$Obj_context.manifest:=$Obj_manifest
 						
 						  // Zoom factor
 						DOM SET XML ATTRIBUTE:C866($Dom_root;\
@@ -316,7 +312,7 @@ Case of
 									If (Asserted:C1132(OK=1))
 										
 										DOM SET XML ATTRIBUTE:C866($Dom_field;\
-											"stroke-dasharray";"none")  // ;"assigned";True)																						\
+											"stroke-dasharray";"none")  // ;"assigned";True)											\
 											
 										If ($Boo_multivalued)
 											
@@ -439,22 +435,25 @@ Case of
 						End if 
 					End if 
 					
+					SVG EXPORT TO PICTURE:C1017($Dom_root;($Obj_form.preview.pointer())->;Own XML data source:K45:18)
+					
 				Else 
 					
 					$Obj_form.form.call("pickerHide")
 					
 					$Obj_form.preview.getCoordinates()
 					
-					$Dom_root:=SVG_New ($Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height)
+					$svg:=svg .dimensions($Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height)
 					
-					SVG_SET_FONT_COLOR (SVG_New_textArea ($Dom_root;\
-						Replace string:C233(Get localized string:C991("theTemplateIsMissingOrInvalid");"{tmpl}";$Path_root.name);\
-						0;20;$Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height;\
-						"sans-serif";14;Plain:K14:1;Align center:K42:3);"red")
+					$svg.textArea(Replace string:C233(Get localized string:C991("theTemplateIsMissingOrInvalid");"{tmpl}";$Path_root.name);0;20;New object:C1471(\
+						"width";$Obj_form.preview.coordinates.width-20;\
+						"font-size";14;\
+						"fill";ui.colors.errorColor.hex;\
+						"text-align";"center"))
+					
+					($Obj_form.preview.pointer())->:=$svg.get("picture")
 					
 				End if 
-				
-				SVG EXPORT TO PICTURE:C1017($Dom_root;($Obj_form.preview.pointer())->;Own XML data source:K45:18)
 				
 			Else 
 				

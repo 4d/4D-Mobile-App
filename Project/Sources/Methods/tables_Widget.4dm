@@ -18,7 +18,7 @@ C_LONGINT:C283($kLon_cellHeight;$kLon_cellWidth;$kLon_iconWidth;$kLon_maxChar;$k
 C_LONGINT:C283($Lon_x;$Lon_y)
 C_TEXT:C284($Dom_table;$kTxt_selectedFill;$kTxt_selectedStroke;$Txt_defaultForm;$Txt_name;$Txt_table)
 C_TEXT:C284($Txt_type)
-C_OBJECT:C1216($file;$o;$Obj_dataModel;$Obj_params;$Path_hostRoot;$Path_root)
+C_OBJECT:C1216($file;$svg;$Obj_dataModel;$Obj_params;$Path_hostRoot;$Path_root)
 
 If (False:C215)
 	C_PICTURE:C286(tables_Widget ;$0)
@@ -47,8 +47,8 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	$kLon_iconWidth:=80
 	$kLon_offset:=5
 	
-	$kTxt_selectedFill:=ui.colors.backgroundSelectedColor.hex  // SVG_Color_RGB_from_long (ui.backgroundSelectedColor)
-	$kTxt_selectedStroke:=ui.colors.strokeColor.hex  // SVG_Color_RGB_from_long (ui.strokeColor)
+	$kTxt_selectedFill:=ui.colors.backgroundSelectedColor.hex
+	$kTxt_selectedStroke:=ui.colors.strokeColor.hex
 	
 	$kLon_maxChar:=18
 	
@@ -62,7 +62,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-$o:=svg ("{\"viewport-fill\":\"none\"}")
+$svg:=svg   //.attributes(New object("viewport-fill";"none"))
 
 If ($Obj_dataModel#Null:C1517)
 	
@@ -78,21 +78,18 @@ If ($Obj_dataModel#Null:C1517)
 		
 		$Boo_selected:=($Txt_table=String:C10($Obj_params.tableNumber))
 		
-		  // Create a table group. Default fill according to selected status
-		$Dom_table:=$o.group(New object:C1471(\
-			svg id;$Txt_table;\
-			svg background color;Choose:C955($Boo_selected;$kTxt_selectedFill;"none"))).lastCreatedObject
+		  // Create a table group. filled according to selected status
+		$Dom_table:=$svg.group($Txt_table)\
+			.fill(Choose:C955($Boo_selected;$kTxt_selectedFill;"white")).lastCreatedObject
 		
 		  // Background
-		$o.rect($Lon_x;$Lon_y;$kLon_cellWidth;$kLon_cellHeight;New object:C1471(\
-			svg target;$Dom_table;\
-			svg foreground color;Choose:C955($Boo_selected;$kTxt_selectedFill;"none")))
+		$svg.rect($Lon_x;$Lon_y;$kLon_cellWidth;$kLon_cellHeight;New object:C1471("target";$Dom_table))\
+			.stroke(Choose:C955($Boo_selected;$kTxt_selectedFill;"none"))
 		
 		  // Border & reactive 'button'
-		$o.rect($Lon_x+1;$Lon_y+1;$kLon_cellWidth;$kLon_cellHeight;New object:C1471(\
-			svg target;$Dom_table;\
-			svg foreground color;Choose:C955($Boo_selected;$kTxt_selectedStroke;"none");\
-			svg background opacity;5))
+		$svg.rect($Lon_x+1;$Lon_y+1;$kLon_cellWidth;$kLon_cellHeight;New object:C1471("target";$Dom_table))\
+			.stroke(Choose:C955($Boo_selected;$kTxt_selectedStroke;"none"))\
+			.fill("white";"opacity";5)
 		
 		  // Put the icon [
 		If (Form:C1466[$Txt_type][$Txt_table].form=Null:C1517)
@@ -124,12 +121,11 @@ If ($Obj_dataModel#Null:C1517)
 			End if 
 		End if 
 		
-		$o.image($file;New object:C1471(\
-			svg target;$Dom_table;\
+		$svg.image($file;New object:C1471(\
+			"target";$Dom_table;\
 			"left";$Lon_x+($kLon_cellWidth/2)-($kLon_iconWidth/2);\
-			"top";$Lon_y+5;\
-			"width";$kLon_iconWidth;\
-			"height";$kLon_iconWidth))
+			"top";$Lon_y+5))\
+			.dimensions($kLon_iconWidth)
 		
 		  // Avoid too long name
 		$Txt_name:=$Obj_dataModel[$Txt_table].shortLabel
@@ -140,28 +136,20 @@ If ($Obj_dataModel#Null:C1517)
 			
 		End if 
 		
-		$o.textArea($Txt_name;$Lon_x;$kLon_cellHeight-20;New object:C1471(\
+		$svg.textArea($Txt_name;$Lon_x;$kLon_cellHeight-20;New object:C1471(\
 			"width";$kLon_cellWidth;\
 			"height";14;\
-			svg background color;Choose:C955($Boo_selected;"dimgray";"dimgray");\
-			svg text alignment;"center"))
+			"fill";Choose:C955($Boo_selected;"dimgray";"dimgray");\
+			"text-align";"center"))
 		
 		$Lon_x:=$Lon_x+$kLon_cellWidth+$kLon_offset
 		
 	End for each 
 End if 
 
-If (ui.debugMode)
-	
-	TEXT TO DOCUMENT:C1237(System folder:C487(Desktop:K41:16)+"DEV"+Folder separator:K24:12+"table.svg";$o.get("xml"))
-	
-End if 
-
   // ----------------------------------------------------
   // Return
-$0:=$o.get("picture")
-
-$o.close()
+$0:=$svg.get("picture")
 
   // ----------------------------------------------------
   // End

@@ -14,9 +14,9 @@ C_TEXT:C284($1)
 C_BOOLEAN:C305($Boo_OK)
 C_LONGINT:C283($i;$kLon_cellHeight;$kLon_cellWidth;$kLon_iconWidth;$Lon_index;$Lon_parameters)
 C_PICTURE:C286($p)
-C_TEXT:C284($Dom_buffer;$Svg_root;$t;$Txt_processingInstruction;$Txt_typeForm)
+C_TEXT:C284($Dom_buffer;$t;$Txt_processingInstruction;$Txt_typeForm)
 C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_manifest;$Obj_picker;$Path_component)
-C_OBJECT:C1216($Path_database;$Path_template)
+C_OBJECT:C1216($Path_database;$Path_template;$svg)
 C_COLLECTION:C1488($Col_forms;$Col_host)
 
 ARRAY TEXT:C222($tTxt_forms;0)
@@ -160,29 +160,29 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			  // Use the media
 			READ PICTURE FILE:C678($Path_template.parent.file("layoutIconx2.png").platformPath;$p)
 			
-			SVG_SET_OPTIONS (SVG_Get_options  ?- 12)
-			$Svg_root:=SVG_New ($kLon_cellWidth;$kLon_cellHeight)
-			SVG_SET_TEXT_RENDERING ($Svg_root;"geometricPrecision")
-			SVG_New_embedded_image ($Svg_root;$p;-10;0)
+			$svg:=svg .dimensions($kLon_cellWidth;$kLon_cellHeight)
 			
-			If ($tTxt_forms{$i}[[1]]="/")
-				
-				SVG_SET_FONT_COLOR (SVG_New_textArea ($Svg_root;Delete string:C232($tTxt_forms{$i};1;1);0;$kLon_cellHeight-20;$kLon_cellWidth;-1;"sans-serif";-1;-1;Align center:K42:3);"dimgray")
-				
-			Else 
-				
-				SVG_SET_FONT_COLOR (SVG_New_textArea ($Svg_root;$tTxt_forms{$i};0;$kLon_cellHeight-20;$kLon_cellWidth;-1;"sans-serif";-1;-1;Align center:K42:3);"dimgray")
-				
+			$svg.embedPicture($p;-10;0)
+			
+			$t:=$tTxt_forms{$i}
+			
+			If ($t[[1]]="/")
+				$t:=Delete string:C232($t;1;1)
 			End if 
 			
-			$p:=SVG_Export_to_picture ($Svg_root;Own XML data source:K45:18)
+			$svg.textArea($t;0;$kLon_cellHeight-20;New object:C1471(\
+				"width";$kLon_cellWidth;\
+				"fill";"dimgray";\
+				"text-align";"center"))
+			
+			$p:=$svg.get("picture")
 			
 		Else 
 			
 			  // Create from the template
 			PROCESS 4D TAGS:C816($Path_template.getText();$t)
 			
-			$Svg_root:=DOM Parse XML variable:C720($t)
+			$t:=DOM Parse XML variable:C720($t)
 			
 			If (OK=1)
 				
@@ -194,11 +194,11 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 						+"file://localhost"+Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16);*)+"templates/template.css"\
 						+"\""
 					
-					$Dom_buffer:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($Svg_root);XML processing instruction:K45:9;$Txt_processingInstruction)
+					$Dom_buffer:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($t);XML processing instruction:K45:9;$Txt_processingInstruction)
 					
 				End if 
 				
-				SVG EXPORT TO PICTURE:C1017($Svg_root;$p;Own XML data source:K45:18)
+				SVG EXPORT TO PICTURE:C1017($t;$p;Own XML data source:K45:18)
 				CREATE THUMBNAIL:C679($p;$p;$kLon_cellWidth;$kLon_cellHeight)
 				
 			End if 

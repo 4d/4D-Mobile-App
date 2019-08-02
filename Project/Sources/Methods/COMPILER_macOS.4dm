@@ -78,7 +78,7 @@ If (False:C215)
 	C_OBJECT:C1216(capabilities ;$1)
 	
 	  //__________________________________________________
-	C_OBJECT:C1216(swiftPM;$0)
-	C_OBJECT:C1216(swiftPM;$1)
+	C_OBJECT:C1216(swiftPM ;$0)
+	C_OBJECT:C1216(swiftPM ;$1)
 	
 End if 
