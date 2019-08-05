@@ -89,7 +89,7 @@ If ($Obj_dataModel#Null:C1517)
 		  // Border & reactive 'button'
 		$svg.rect($Lon_x+1;$Lon_y+1;$kLon_cellWidth;$kLon_cellHeight;New object:C1471("target";$Dom_table))\
 			.stroke(Choose:C955($Boo_selected;$kTxt_selectedStroke;"none"))\
-			.fill("white";"opacity";5)
+			.fill("white";5)
 		
 		  // Put the icon [
 		If (Form:C1466[$Txt_type][$Txt_table].form=Null:C1517)
@@ -136,11 +136,10 @@ If ($Obj_dataModel#Null:C1517)
 			
 		End if 
 		
-		$svg.textArea($Txt_name;$Lon_x;$kLon_cellHeight-20;New object:C1471(\
-			"width";$kLon_cellWidth;\
-			"height";14;\
-			"fill";Choose:C955($Boo_selected;"dimgray";"dimgray");\
-			"text-align";"center"))
+		$svg.textArea($Txt_name;$Lon_x;$kLon_cellHeight-20)\
+			.dimensions($kLon_cellWidth;14)\
+			.fill(Choose:C955($Boo_selected;"dimgray";"dimgray"))\
+			.attribute("text-align";"center")
 		
 		$Lon_x:=$Lon_x+$kLon_cellWidth+$kLon_offset
 		

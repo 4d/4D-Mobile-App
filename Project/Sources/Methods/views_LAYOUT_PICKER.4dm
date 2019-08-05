@@ -170,10 +170,10 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				$t:=Delete string:C232($t;1;1)
 			End if 
 			
-			$svg.textArea($t;0;$kLon_cellHeight-20;New object:C1471(\
-				"width";$kLon_cellWidth;\
-				"fill";"dimgray";\
-				"text-align";"center"))
+			$svg.textArea($t;0;$kLon_cellHeight-20)\
+				.dimensions($kLon_cellWidth)\
+				.fill("dimgray")\
+				.attribute("text-align";"center")
 			
 			$p:=$svg.get("picture")
 			

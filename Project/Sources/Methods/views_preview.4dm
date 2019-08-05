@@ -20,7 +20,7 @@ C_TEXT:C284($Dom_;$Dom_buffer;$Dom_cancel;$Dom_field;$Dom_g;$Dom_label)
 C_TEXT:C284($Dom_multivalued;$Dom_new;$Dom_root;$Dom_tabs;$Dom_template;$Dom_use)
 C_TEXT:C284($t;$Txt_field;$Txt_form;$Txt_in;$Txt_index;$Txt_name)
 C_TEXT:C284($Txt_out;$Txt_typeForm)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_target;$Path_root;$svg)
+C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_target;$Path_root)
 C_COLLECTION:C1488($Col_assigned;$Col_bind;$Col_form)
 
 If (False:C215)
@@ -312,7 +312,7 @@ Case of
 									If (Asserted:C1132(OK=1))
 										
 										DOM SET XML ATTRIBUTE:C866($Dom_field;\
-											"stroke-dasharray";"none")  // ;"assigned";True)											\
+											"stroke-dasharray";"none")  // ;"assigned";True)\
 											
 										If ($Boo_multivalued)
 											
@@ -443,15 +443,12 @@ Case of
 					
 					$Obj_form.preview.getCoordinates()
 					
-					$svg:=svg .dimensions($Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height)
-					
-					$svg.textArea(Replace string:C233(Get localized string:C991("theTemplateIsMissingOrInvalid");"{tmpl}";$Path_root.name);0;20;New object:C1471(\
-						"width";$Obj_form.preview.coordinates.width-20;\
-						"font-size";14;\
-						"fill";ui.colors.errorColor.hex;\
-						"text-align";"center"))
-					
-					($Obj_form.preview.pointer())->:=$svg.get("picture")
+					($Obj_form.preview.pointer())->:=svg .dimensions($Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height)\
+						.textArea(Replace string:C233(Get localized string:C991("theTemplateIsMissingOrInvalid");"{tmpl}";$Path_root.name);0;200)\
+						.dimensions($Obj_form.preview.coordinates.width-20)\
+						.fill(ui.colors.errorColor.hex)\
+						.attributes(New object:C1471("font-size";14;"text-align";"center"))\
+						.get("picture")
 					
 				End if 
 				

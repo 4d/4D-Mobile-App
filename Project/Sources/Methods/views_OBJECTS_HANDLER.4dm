@@ -207,7 +207,7 @@ Case of
 				SET BLOB SIZE:C606($x;0)
 				
 				  // Create the drag icon
-				$p:=svg .embedPicture(ui.fieldIcons[$Obj_current.fieldType];2;2).textArea($Obj_current.path+" ";20;2;New object:C1471("font-size";13)).get("picture")
+				$p:=svg .embedPicture(ui.fieldIcons[$Obj_current.fieldType];2;2).textArea($Obj_current.path+" ";20;2).attribute("font-size";13).get("picture")
 				SET DRAG ICON:C1272($p)
 				
 				editor_ui_LISTBOX ($Obj_form.form.currentWidget)

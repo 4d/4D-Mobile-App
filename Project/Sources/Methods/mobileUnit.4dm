@@ -135,6 +135,15 @@ Case of
 			
 		End if 
 		
+		  //______________________________________________________
+	: ($Txt_in="featuresFlags")
+		
+		  // see if a feature is activated and exist
+		$Obj_out:=New object:C1471(\
+			"value";featuresFlags["_"+String:C10($Obj_in.value)])
+		
+		$Obj_out.success:=($Obj_out.value#Null:C1517)
+		
 		  //________________________________________
 	: (Not:C34(Asserted:C1132(Is macOS:C1572;"Command unavailable for this operating system")))
 		
@@ -229,15 +238,6 @@ Case of
 					  //…………………………………………………………………………………………………………………………
 			End case 
 		End if 
-		
-		  //______________________________________________________
-	: ($Txt_in="featuresFlags")
-		
-		  // see if a feature is activated and exist
-		$Obj_out:=New object:C1471(\
-			"value";featuresFlags["_"+String:C10($Obj_in.value)])
-		
-		$Obj_out.success:=($Obj_out.value#Null:C1517)
 		
 		  //______________________________________________________
 	Else 
