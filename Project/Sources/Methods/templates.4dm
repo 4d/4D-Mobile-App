@@ -16,7 +16,8 @@ C_BOOLEAN:C305($Boo_withIcons)
 C_LONGINT:C283($Lon_;$Lon_count;$Lon_i;$Lon_ii;$Lon_parameters)
 C_PICTURE:C286($Pic_file;$Pic_scaled)
 C_POINTER:C301($Ptr_)
-C_TEXT:C284($Dir_hostRoot;$Dir_root;$File_;$File_icon;$Svg_root;$Txt_buffer)
+C_OBJECT:C1216($Dir_hostRoot;$Dir_root;$File_icon;$File_manifest)
+C_TEXT:C284($File_;$Svg_root;$Txt_buffer)
 C_TEXT:C284($Txt_template;$Txt_tableNumber)
 C_OBJECT:C1216($Obj_userChoice;$Obj_buffer;$Obj_field;$Obj_in;$Obj_out;$Obj_path;$Obj_color)
 C_OBJECT:C1216($Obj_table;$Obj_navigationTable;$Obj_tableList;$Obj_tableModel;$Obj_template;$Obj_dataModel)
@@ -738,8 +739,8 @@ Case of
 		
 		If ($Boo_withIcons)
 			
-			$Dir_root:=_o_Pathname ("tableIcons")+Folder separator:K24:12
-			$Dir_hostRoot:=_o_Pathname ("host_tableIcons")  // +Folder separator
+			$Dir_root:=COMPONENT_Pathname ("fieldIcons")
+			$Dir_hostRoot:=COMPONENT_Pathname ("host_fieldIcons")
 			
 			  // If avigation need asset, create it
 			$Obj_out.assets:=New collection:C1472  // result of asset operations
@@ -798,13 +799,17 @@ Case of
 					
 				Else 
 					
-					$File_icon:=Choose:C955(Position:C15("/";$Obj_table.icon)=1;$Dir_hostRoot+Replace string:C233($Obj_table.icon;"/";Folder separator:K24:12);$Dir_root+Replace string:C233($Obj_table.icon;"/";Folder separator:K24:12))
+					If (Position:C15("/";$Obj_field.icon)=1)
+						$File_icon:=$Dir_hostRoot.file(Substring:C12($Obj_field.icon;2))
+					Else 
+						$File_icon:=$Dir_root.file($Obj_field.icon)
+					End if 
 					
 					$Obj_buffer:=asset (New object:C1471(\
 						"action";"create";\
 						"type";"imageset";\
 						"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-						"source";$File_icon;\
+						"source";$File_icon.platformPath;\
 						"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
 						"format";$Obj_template.assets.format;\
 						"size";$Obj_template.assets.size))
@@ -977,8 +982,8 @@ Case of
 		
 		If ($Boo_withIcons)
 			
-			$Dir_root:=_o_Pathname ("fieldIcons")
-			$Dir_hostRoot:=_o_Pathname ("host_fieldIcons")  // +Folder separator
+			$Dir_root:=COMPONENT_Pathname ("fieldIcons")
+			$Dir_hostRoot:=COMPONENT_Pathname ("host_fieldIcons")
 			
 			  // If need asset, create it
 			$Obj_out.assets:=New collection:C1472  // result of asset operations
@@ -1059,13 +1064,17 @@ Case of
 					
 				Else 
 					
-					$File_icon:=Choose:C955(Position:C15("/";$Obj_field.icon)=1;$Dir_hostRoot+Replace string:C233($Obj_field.icon;"/";Folder separator:K24:12);$Dir_root+Folder separator:K24:12+Replace string:C233($Obj_field.icon;"/";Folder separator:K24:12))
+					If (Position:C15("/";$Obj_field.icon)=1)
+						$File_icon:=$Dir_hostRoot.file(Substring:C12($Obj_field.icon;2))
+					Else 
+						$File_icon:=$Dir_root.file($Obj_field.icon)
+					End if 
 					
 					$Obj_buffer:=asset (New object:C1471(\
 						"action";"create";\
 						"type";"imageset";\
 						"tags";New object:C1471("name";$Obj_in.tags.table.name+"Detail"+$Obj_field.name);\
-						"source";$File_icon;\
+						"source";$File_icon.platformPath;\
 						"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));\
 						"/";Folder separator:K24:12)+Folder separator:K24:12;\
 						"format";$Obj_template.assets.format;\
@@ -1180,14 +1189,14 @@ If (Value type:C1509($Obj_template.children)=Is collection:K8:32)
 	For each ($Txt_template;$Obj_template.children)
 		
 		  // Read its manifest
-		$File_:=_o_Pathname ("templates")+Convert path POSIX to system:C1107($Txt_template)+Folder separator:K24:12+"manifest.json"
+		$File_manifest:=COMPONENT_Pathname ("templates").folder($Txt_template).file("manifest.json")
 		
 		$Obj_buffer:=OB Copy:C1225($Obj_in)
 		
-		If (Test path name:C476($File_)=Is a document:K24:1)
+		If ($File_manifest.exists)
 			
 			  // Load the manifest
-			$Obj_buffer.template:=JSON Parse:C1218(Document to text:C1236($File_))
+			$Obj_buffer.template:=JSON Parse:C1218($File_manifest.getText())
 			
 		Else 
 			
@@ -1195,7 +1204,7 @@ If (Value type:C1509($Obj_template.children)=Is collection:K8:32)
 			
 		End if 
 		
-		$Obj_buffer.template.source:=_o_Pathname ("templates")+Convert path POSIX to system:C1107($Txt_template)+Folder separator:K24:12
+		$Obj_buffer.template.source:=COMPONENT_Pathname ("templates").folder($Txt_template).platformPath
 		$Obj_buffer.template.parent:=$Obj_template
 		
 		$Obj_buffer.projfile:=$Obj_in.projfile  // do not want a copy
