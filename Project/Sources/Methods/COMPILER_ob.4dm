@@ -75,4 +75,8 @@ If (False:C215)
 	C_TEXT:C284(ob_removeProperty ;$2)
 	
 	  //__________________________________________________
+	C_OBJECT:C1216(ob_parseFile ;$0)
+	C_OBJECT:C1216(ob_parseFile ;$1)
+	
+	  //__________________________________________________
 End if 

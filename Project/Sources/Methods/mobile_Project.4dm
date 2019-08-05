@@ -18,9 +18,9 @@ C_OBJECT:C1216($1)
 C_BOOLEAN:C305($Boo_dev;$Boo_OK;$Boo_verbose)
 C_LONGINT:C283($Lon_parameters;$Lon_start)
 C_TEXT:C284($File_;$t;$Txt_buffer)
-C_OBJECT:C1216($o;$Obj_cache;$Obj_dataModel;$Obj_in;$Obj_manifest;$Obj_out)
+C_OBJECT:C1216($Obj_action;$Dir_template;$Obj_cache;$Obj_dataModel;$Obj_in;$Obj_manifest;$Obj_out)
 C_OBJECT:C1216($Obj_project;$Obj_result_build;$Obj_result_device;$Obj_server;$Obj_tags;$Obj_template)
-C_OBJECT:C1216($oo;$Path_manifest)
+C_OBJECT:C1216($Obj_parameters;$Path_manifest)
 
 If (False:C215)
 	C_OBJECT:C1216(mobile_Project ;$0)
@@ -52,15 +52,15 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 				
 				$Obj_dataModel:=$Obj_in.project.dataModel
 				
-				For each ($o;$Obj_in.project.actions)
+				For each ($Obj_action;$Obj_in.project.actions)
 					
-					If ($o.parameters#Null:C1517)
+					If ($Obj_action.parameters#Null:C1517)
 						
-						For each ($oo;$o.parameters)
+						For each ($Obj_parameters;$Obj_action.parameters)
 							
-							If ($oo.fieldNumber#Null:C1517)  //linked to a field
+							If ($Obj_parameters.fieldNumber#Null:C1517)  //linked to a field
 								
-								$t:=String:C10($Obj_dataModel[String:C10($o.tableNumber)][String:C10($oo.fieldNumber)].format)
+								$t:=String:C10($Obj_dataModel[String:C10($Obj_action.tableNumber)][String:C10($Obj_parameters.fieldNumber)].format)
 								
 								If (Length:C16($t)>0)
 									
@@ -75,19 +75,19 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 											
 											If ($Obj_manifest.choiceList#Null:C1517)
 												
-												If ($oo.type="bool")  // Kep only 2 values
+												If ($Obj_parameters.type="bool")  // Kep only 2 values
 													
 													Case of 
 															  //______________________________________________________
 														: (Value type:C1509($Obj_manifest.choiceList)=Is collection:K8:32)
 															
 															$Obj_manifest.choiceList.resize(2)
-															$oo.choiceList:=$Obj_manifest.choiceList
+															$Obj_parameters.choiceList:=$Obj_manifest.choiceList
 															
 															  //______________________________________________________
 														: (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
 															
-															$oo.choiceList:=New collection:C1472($Obj_manifest.choiceList["0"];$Obj_manifest.choiceList["1"])
+															$Obj_parameters.choiceList:=New collection:C1472($Obj_manifest.choiceList["0"];$Obj_manifest.choiceList["1"])
 															
 															  //______________________________________________________
 														Else 
@@ -99,7 +99,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 													
 												Else 
 													
-													$oo.choiceList:=$Obj_manifest.choiceList
+													$Obj_parameters.choiceList:=$Obj_manifest.choiceList
 													
 												End if 
 											End if 
@@ -111,7 +111,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 										
 										If ($Obj_manifest[$t].choiceList#Null:C1517)
 											
-											$oo.choiceList:=$Obj_manifest[$t].choiceList
+											$Obj_parameters.choiceList:=$Obj_manifest[$t].choiceList
 											
 										End if 
 									End if 
@@ -142,7 +142,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 				
 			End if 
 			
-			$Obj_in:=JSON Parse:C1218($Obj_cache.file("lastBuild.4dmobile").getText())
+			$Obj_in:=ob_parseFile ($Obj_cache.file("lastBuild.4dmobile"))
 			
 		End if 
 	End if 
@@ -361,29 +361,28 @@ If ($Obj_in.create)
 	$Obj_out.path:=$Obj_in.path
 	CREATE FOLDER:C475($Obj_in.path;*)
 	
-	$o:=COMPONENT_Pathname ("templates").folder($Obj_in.template)
+	$Dir_template:=COMPONENT_Pathname ("templates").folder($Obj_in.template)
 	
-	If (Asserted:C1132($o.file("manifest.json").exists))
+	If (Asserted:C1132($Dir_template.file("manifest.json").exists))
 		
-		$Obj_template:=JSON Parse:C1218($o.file("manifest.json").getText())
+		$Obj_template:=ob_parseFile ($Dir_template.file("manifest.json")).value
 		
 	End if 
 	
 	ASSERT:C1129($Obj_template.assets.path#Null:C1517)
 	ASSERT:C1129($Obj_template.sdk.version#Null:C1517)
 	
-	$Obj_template.source:=$o.platformPath
-	
+	$Obj_template.source:=$Dir_template.platformPath
 	$Obj_template.assets.target:=$Obj_in.path+Convert path POSIX to system:C1107($Obj_template.assets.path)+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
 	$Obj_template.assets.source:=_o_Pathname ("projects")+$Obj_project.$project.product+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
 	
 	  //#ACI0098572 [
 	  //$Obj_out.sdk:=sdk (New object(//"action";"install";//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";//"target";$Obj_in.path;// "cache";env_userPath ("cacheSdk")))
 	  //$Obj_out.sdk:=sdk (New object(\
-																							//"action";"install";\
-																							//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
-																							//"target";$Obj_in.path;\
-																							//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
+																									//"action";"install";\
+																									//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+																									//"target";$Obj_in.path;\
+																									//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
@@ -516,14 +515,14 @@ If ($Obj_in.create)
 			
 			  // Generate if not exist
 			  //$Obj_out.dump:=dataSet (New object(\
-																																													//"action";"create";\
-																																													//"project";$Obj_project;\
-																																													//"digest";True;\
-																																													//"dataSet";Bool(featuresFlags._101725);\
-																																													//"key";$File_;\
-																																													//"caller";$Obj_in.caller;\
-																																													//"verbose";$Boo_verbose;\
-																																													//"picture";Not(Bool(featuresFlags._97117))))
+																																																	//"action";"create";\
+																																																	//"project";$Obj_project;\
+																																																	//"digest";True;\
+																																																	//"dataSet";Bool(featuresFlags._101725);\
+																																																	//"key";$File_;\
+																																																	//"caller";$Obj_in.caller;\
+																																																	//"verbose";$Boo_verbose;\
+																																																	//"picture";Not(Bool(featuresFlags._97117))))
 			$Obj_out.dump:=dataSet (New object:C1471(\
 				"action";"create";\
 				"project";$Obj_project;\
@@ -554,11 +553,11 @@ If ($Obj_in.create)
 		
 		  // Update core data model
 		  //$Obj_out.coreData:=dataModel (New object(\
-												//"action";"xcdatamodel";\
-												//"dataModel";$Obj_project.dataModel;\
-												//"flat";False;\
-												//"relationship";Bool(featuresFlags._103850);\
-												//"path";$Obj_in.path+"Sources"+Folder separator+"Structures.xcdatamodeld"))
+															//"action";"xcdatamodel";\
+															//"dataModel";$Obj_project.dataModel;\
+															//"flat";False;\
+															//"relationship";Bool(featuresFlags._103850);\
+															//"path";$Obj_in.path+"Sources"+Folder separator+"Structures.xcdatamodeld"))
 		$Obj_out.coreData:=dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\

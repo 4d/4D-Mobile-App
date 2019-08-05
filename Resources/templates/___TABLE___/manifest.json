@@ -1,3 +1,3 @@
 {
-  "children": ["json", "form/list", "form/detail"]
+  "children": ["form/list", "form/detail"]
 }

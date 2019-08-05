@@ -16,8 +16,8 @@ C_BOOLEAN:C305($Boo_withIcons)
 C_LONGINT:C283($Lon_;$Lon_count;$Lon_i;$Lon_ii;$Lon_parameters)
 C_PICTURE:C286($Pic_file;$Pic_scaled)
 C_POINTER:C301($Ptr_)
-C_OBJECT:C1216($Dir_hostRoot;$Dir_root;$File_icon;$File_manifest)
-C_TEXT:C284($File_;$Svg_root;$Txt_buffer)
+C_OBJECT:C1216($Dir_hostRoot;$Dir_root;$File_icon;$File_manifest;$File_)
+C_TEXT:C284($Svg_root;$Txt_buffer)
 C_TEXT:C284($Txt_template;$Txt_tableNumber)
 C_OBJECT:C1216($Obj_userChoice;$Obj_buffer;$Obj_field;$Obj_in;$Obj_out;$Obj_path;$Obj_color)
 C_OBJECT:C1216($Obj_table;$Obj_navigationTable;$Obj_tableList;$Obj_tableModel;$Obj_template;$Obj_dataModel)
@@ -155,23 +155,22 @@ Case of
 			
 			  // Get template path
 			$Txt_buffer:=Choose:C955(Length:C16(String:C10($Obj_tableList.form))>0;$Obj_tableList.form;$Obj_template.default)  // use default if not defined
-			$Txt_buffer:=$Obj_template.source+$Txt_buffer+Folder separator:K24:12
-			$Obj_path:=Path to object:C1547($Txt_buffer)
 			
-			  //%W-533.1
-			If ($Obj_path.name[[1]]="/")  // custom form
-				  //%W+533.1
+			If ($Txt_buffer[[1]]="/")  // custom form
 				
-				$Obj_path.name:=Delete string:C232($Obj_path.name;1;1)
-				$Obj_path.parentFolder:=_o_Pathname ("host_"+$Obj_template.userChoiceTag+"Forms")
-				$Txt_buffer:=Object to path:C1548($Obj_path)
+				$Txt_buffer:=Delete string:C232($Txt_buffer;1;1)
+				$Obj_path:=COMPONENT_Pathname ("host_"+$Obj_template.userChoiceTag+"Forms").folder($Txt_buffer)
+				
+			Else 
+				
+				$Obj_path:=Folder:C1567($Obj_template.source;fk platform path:K87:2).folder($Txt_buffer)
 				
 			End if 
 			
-			  // Load the manifest
-			$File_:=$Txt_buffer+"manifest.json"
+			  // Load the manifest file
 			$Obj_buffer:=OB Copy:C1225($Obj_in)
-			$Obj_buffer.template:=ob_parseDocument ($File_)
+			$File_:=$Obj_path.file("manifest.json")
+			$Obj_buffer.template:=ob_parseFile ($File_)
 			
 			If ($Obj_buffer.template.success)  // the template existe or not
 				
@@ -510,7 +509,7 @@ Case of
 				$Obj_in.tags.table:=$Obj_table
 				
 				  // Process the template
-				$Obj_buffer.template.source:=$Txt_buffer
+				$Obj_buffer.template.source:=$Obj_path.platformPath
 				$Obj_buffer.template.parent:=$Obj_template.parent  // or $Obj_template?
 				$Obj_buffer.tags:=$Obj_in.tags  // has been modifyed since clone
 				$Obj_buffer.projfile:=$Obj_in.projfile  // do not want a copy
@@ -604,22 +603,22 @@ Case of
 			$Obj_out.theme:=New object:C1471(\
 				"success";False:C215)
 			
-			$File_:=$Obj_template.assets.source+"AppIcon.appiconset"+Folder separator:K24:12+"ios-marketing1024.png"
+			$File_:=Folder:C1567($Obj_template.assets.source).folder("AppIcon.appiconset").file("ios-marketing1024.png")
 			$Lon_:=commonValues.theme.colorjuicer.scale
 			
 			If (($Lon_#1024)\
 				 & ($Lon_>0))
 				
-				READ PICTURE FILE:C678($File_;$Pic_file)
+				READ PICTURE FILE:C678($File_.platformPath;$Pic_file)
 				CREATE THUMBNAIL:C679($Pic_file;$Pic_scaled;$Lon_;$Lon_)  // This change result of algo..., let tools scale using argument
-				$File_:=Temporary folder:C486+Generate UUID:C1066
-				WRITE PICTURE FILE:C680($File_;$Pic_scaled;".png")
+				$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066)
+				WRITE PICTURE FILE:C680($File_.platformPath;$Pic_scaled;".png")
 				
 			End if 
 			
 			$Obj_color:=colors (New object:C1471(\
 				"action";"juicer";\
-				"path";$File_))
+				"posix";$File_.path))
 			
 			If ($Obj_color.success)
 				
@@ -657,7 +656,7 @@ Case of
 			If (($Lon_#1024)\
 				 & ($Lon_>0))
 				
-				DELETE DOCUMENT:C159($File_)  // delete scaled files
+				$File_.delete()  // delete scaled files
 				
 			End if 
 			
@@ -752,13 +751,13 @@ Case of
 					If ($Obj_table.shortLabel#Null:C1517)  //#################################
 						
 						  // Generate asset using first table letter
-						$File_:=Get 4D folder:C485(Current resources folder:K5:16)+"images"+Folder separator:K24:12+"missingIcon.svg"
+						$File_:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
 						
-						If (Asserted:C1132(Test path name:C476($File_)=Is a document:K24:1;"Missing ressources: "+$File_))
+						If (Asserted:C1132($File_.exists;"Missing ressources: "+$File_.path))
 							
-							$Svg_root:=DOM Parse XML source:C719($File_)
+							$Svg_root:=DOM Parse XML source:C719($File_.platformPath)
 							
-							If (Asserted:C1132(OK=1;"Failed to parse: "+$File_))
+							If (Asserted:C1132(OK=1;"Failed to parse: "+$File_.path))
 								
 								$Txt_buffer:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_table.shortLabel;$Obj_table.label)
 								
@@ -777,8 +776,8 @@ Case of
 								
 								DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$Txt_buffer)
 								
-								$File_:=Temporary folder:C486+Generate UUID:C1066+".svg"
-								DOM EXPORT TO FILE:C862($Svg_root;$File_)
+								$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".svg")
+								DOM EXPORT TO FILE:C862($Svg_root;$File_.platformPath)
 								
 								DOM CLOSE XML:C722($Svg_root)
 								
@@ -786,7 +785,7 @@ Case of
 									"action";"create";\
 									"type";"imageset";\
 									"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-									"source";$File_;\
+									"source";$File_.platformPath;\
 									"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
 									"format";$Obj_template.assets.format;\
 									"size";$Obj_template.assets.size))
@@ -799,10 +798,10 @@ Case of
 					
 				Else 
 					
-					If (Position:C15("/";$Obj_field.icon)=1)
-						$File_icon:=$Dir_hostRoot.file(Substring:C12($Obj_field.icon;2))
+					If (Position:C15("/";$Obj_table.icon)=1)
+						$File_icon:=$Dir_hostRoot.file(Substring:C12($Obj_table.icon;2))
 					Else 
-						$File_icon:=$Dir_root.file($Obj_field.icon)
+						$File_icon:=$Dir_root.file($Obj_table.icon)
 					End if 
 					
 					$Obj_buffer:=asset (New object:C1471(\
@@ -845,12 +844,12 @@ Case of
 					: ($tTxt_keys{$Lon_i}="center")
 						
 						  // Temporary or by default take app icon, later could be customizable by UI, and must be managed like AppIcon
-						$File_:=$Obj_template.parent.assets.source+"AppIcon.appiconset"+Folder separator:K24:12+"ios-marketing1024.png"
+						$File_:=Folder:C1567($Obj_template.parent.assets.source;fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
 						
 						  //________________________________________
 					: ($tTxt_keys{$Lon_i}="background")
 						
-						$File_:=Get 4D folder:C485(Current resources folder:K5:16)+"images"+Folder separator:K24:12+"monochrome.svg"
+						$File_:=Folder:C1567(fk resources folder:K87:11).folder("images").file("monochrome.svg")
 						
 						  // Inject color on background if defined
 						If ((Bool:C1537(commonValues.launchScreen.useThemeColor))\
@@ -869,17 +868,17 @@ Case of
 						
 						If (String:C10($Obj_in.tags.launchScreenBackgroundColor)#"")
 							
-							If (Asserted:C1132(Test path name:C476($File_)=Is a document:K24:1;"Missing ressources: "+$File_))
+							If (Asserted:C1132($File_.exists;"Missing ressources: "+$File_.path))
 								
-								$Svg_root:=DOM Parse XML source:C719($File_)
+								$Svg_root:=DOM Parse XML source:C719($File_.platformPath)
 								
-								If (Asserted:C1132(OK=1;"Failed to parse: "+$File_))
+								If (Asserted:C1132(OK=1;"Failed to parse: "+$File_.path))
 									
 									DOM SET XML ATTRIBUTE:C866(DOM Find XML element:C864($Svg_root;"/svg/rect");\
 										"fill";$Obj_in.tags.launchScreenBackgroundColor)
 									
-									$File_:=Temporary folder:C486+Generate UUID:C1066+".svg"
-									DOM EXPORT TO FILE:C862($Svg_root;$File_)
+									$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".svg")
+									DOM EXPORT TO FILE:C862($Svg_root;$File_.platformPath)
 									
 									DOM CLOSE XML:C722($Svg_root)
 									
@@ -890,18 +889,18 @@ Case of
 						  //________________________________________
 					Else 
 						
-						$File_:=""
+						$File_:=Null:C1517
 						
 						  //________________________________________
 				End case 
 				
-				If (Length:C16($File_)#0)
+				If ($File_#Null:C1517)
 					
 					$Obj_buffer:=$Obj_template.assets[$tTxt_keys{$Lon_i}]
 					
 					$Obj_out.assets[$tTxt_keys{$Lon_i}]:=asset (New object:C1471(\
 						"action";"create";\
-						"source";$File_;\
+						"source";$File_.platformPath;\
 						"target";$Obj_template.parent.assets.target+$Obj_buffer.target+Folder separator:K24:12;\
 						"tags";New object:C1471("name";$Obj_buffer.name);\
 						"type";$Obj_buffer.type;\
@@ -1007,13 +1006,13 @@ Case of
 				If (Length:C16(String:C10($Obj_field.icon))=0)  // no icon defined
 					
 					  // Generate asset using first table letter
-					$File_:=Get 4D folder:C485(Current resources folder:K5:16)+"images"+Folder separator:K24:12+"missingIcon.svg"
+					$File_:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
 					
-					If (Asserted:C1132(Test path name:C476($File_)=Is a document:K24:1;"Missing ressources: "+$File_))
+					If (Asserted:C1132($File_.exists;"Missing ressources: "+$File_.path))
 						
-						$Svg_root:=DOM Parse XML source:C719($File_)
+						$Svg_root:=DOM Parse XML source:C719($File_.platformPath)
 						
-						If (Asserted:C1132(OK=1;"Failed to parse: "+$File_))
+						If (Asserted:C1132(OK=1;"Failed to parse: "+$File_.path))
 							
 							$Txt_buffer:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_field.shortLabel;$Obj_field.label)
 							
@@ -1043,8 +1042,8 @@ Case of
 								
 								DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$Txt_buffer)
 								
-								$File_:=Temporary folder:C486+Generate UUID:C1066+".svg"
-								DOM EXPORT TO FILE:C862($Svg_root;$File_)
+								$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".svg")
+								DOM EXPORT TO FILE:C862($Svg_root;$File_.platformPath)
 								
 								DOM CLOSE XML:C722($Svg_root)
 								
@@ -1052,7 +1051,7 @@ Case of
 									"action";"create";\
 									"type";"imageset";\
 									"tags";New object:C1471("name";$Obj_in.tags.table.name+"Detail"+$Obj_field.name);\
-									"source";$File_;\
+									"source";$File_.platformPath;\
 									"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));\
 									"/";Folder separator:K24:12)+Folder separator:K24:12;\
 									"format";$Obj_template.assets.format;\
