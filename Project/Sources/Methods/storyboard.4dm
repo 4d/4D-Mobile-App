@@ -141,26 +141,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			End case 
 			
 			  //______________________________________________________
-		: ($Obj_in.action="randomId")
+		: ($Obj_in.action="randomId")  // Return one random id for storyboard xml element
 			
 			$Txt_buffer:=Generate UUID:C1066
 			$Txt_buffer:=Substring:C12($Txt_buffer;1;3)+"-"+Substring:C12($Txt_buffer;4;2)+"-"+Substring:C12($Txt_buffer;7;3)
 			
-			  //If ($Obj_in.exclude#Null)
-			  // If (collection_containsText ($Obj_in.exclude;$Txt_buffer))
-			  //$Obj_out:=storyboard (New object("action";"attributelist";"path";$Obj_in.path;"attribute";"id"))
-			  // Else
-			  // $Obj_out.value:=$Txt_buffer
-			  // $Obj_out.success:=True
-			  // End if1
-			  // Else
 			$Obj_out.value:=$Txt_buffer
 			$Obj_out.success:=True:C214
 			
-			  // End if
-			
 			  //______________________________________________________
-		: ($Obj_in.action="randomIds")
+		: ($Obj_in.action="randomIds")  // Return `length` random id for storyboard xml element
 			
 			$Obj_out.value:=New collection:C1472
 			
@@ -174,6 +164,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			End for 
 			
 			  // XXX maybe add a list of forbidden id from current storyboard, then check if collection have distinct element
+			  // storyboard (New object("action";"attributelist";"path";$Obj_in.path;"attribute";"id"))
 			  // and do a while value.count < $Obj_in.length
 			
 			  //______________________________________________________

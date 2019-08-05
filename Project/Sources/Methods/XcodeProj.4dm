@@ -632,23 +632,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			End if 
 			
 			  //______________________________________________________
-		: ($Obj_in.action="removeTableJSON")
-			
-			  // Temporary remove old table json folders in project
-			
-			$Obj_objects:=$Obj_in.proj.objects
-			ASSERT:C1129($Obj_in.uuid.json#Null:C1517)
-			
-			OB GET PROPERTY NAMES:C1232($Obj_in.uuid.json;$tTxt_keys)
-			
-			For ($Lon_i;1;Size of array:C274($tTxt_keys);1)
-				$Txt_formType:=$tTxt_keys{$Lon_i}
-				
-				OB REMOVE:C1226($Obj_objects;$Obj_in.uuid.json[$tTxt_keys{$Lon_i}])
-				
-			End for 
-			
-			  //______________________________________________________
 		: ($Obj_in.action="addTableJSON")
 			
 			If (($Obj_in.proj#Null:C1517) & ($Obj_in.table#Null:C1517) & ($Obj_in.uuid#Null:C1517))

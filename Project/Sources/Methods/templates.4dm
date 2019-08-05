@@ -532,43 +532,6 @@ Case of
 		  // Do nothing here, do not remove or tag will be replaced
 		  // The TEMPLATE method is called later after replacing some tag
 		
-		  //______________________________________________________
-	: (String:C10($Obj_template.name)="embeddedjson")  // to remove with tag _101725, removeTableJSON also, and template edited to remove  $Obj_template.parent.parent.uuid node
-		
-		  // If (Not(Bool(featuresFlags._101725)))
-		  //$Obj_out.tables:=New collection
-		  //ASSERT(Not(Bool(featuresFlags._101637));"Code to inject embedded json will not work with relation")  // XXX Will failed now, no more tables in tags, use dataModel
-		  //  // For each table inject embedded json
-		  //For each ($Obj_table;$Obj_in.tags.tables)
-		  //$Obj_in.tags.table:=$Obj_table
-		  //$Obj_buffer:=TEMPLATE (New object("source";$Obj_template.source;"target";$Obj_in.path;"tags";$Obj_in.tags;"caller";$Obj_in.caller;"catalog";doc_catalog ($Obj_template.source)))
-		  //$Obj_out.tables.push($Obj_buffer)
-		  //ob_error_combine ($Obj_out;$Obj_buffer)
-		  //If (Bool($Obj_in.projfile.success))  // valid project file
-		  //$Obj_in.projfile.mustSave:=True  // project modified
-		  //$Txt_buffer:=formatString ("table-name";$Obj_table.name)
-		  //  // Feature #97239 "Add JSON to project" : maybe do it near core data dump or just read an option ? (because could be optionnal)
-		  //$Obj_out.project:=XcodeProj (New object("action";"addTableJSON";"proj";$Obj_in.projfile.value;"uuid";$Obj_template.parent.parent.uuid;"table";$Txt_buffer))
-		  //  // XXX find a better way to get uuid from main template? recursively find it instead of $Obj_template.parent.parent.uuid
-		  //If (Not(Bool($Obj_out.project.success)))
-		  //ob_error_combine ($Obj_out;$Obj_out.project)
-		  // End if
-		  // Else
-		  //ob_error_add ($Obj_out;"No valid project file to edit in resource folder")
-		  // ASSERT(dev_Matrix ;"No valid project file to edit")
-		  // End if
-		  // End for each
-		  // Else
-		
-		  // The project contains useless folders if the feature is actived, some remove it
-		
-		$Obj_out.project:=XcodeProj (New object:C1471(\
-			"action";"removeTableJSON";\
-			"proj";$Obj_in.projfile.value;\
-			"uuid";$Obj_template.parent.parent.uuid))
-		
-		  // End if
-		
 		  //________________________________________
 	Else 
 		
