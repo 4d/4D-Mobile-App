@@ -540,32 +540,26 @@ Case of
 		Case of 
 				
 				  // ----------------------------------------
-				  //----------------------------------------
 			: (Value type:C1509($Obj_in.exclude)=Is text:K8:3)
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source;$Obj_in.exclude)
 				
 				  // ----------------------------------------
-				  //----------------------------------------
 			: (Value type:C1509($Obj_in.exclude)=Is collection:K8:32)
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source;JSON Stringify:C1217($Obj_in.exclude))
 				
 				  // ----------------------------------------
-				  //----------------------------------------
 			: (String:C10($Obj_template.type)="main")
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source;"*")
 				
 				  // ----------------------------------------
-				  //----------------------------------------
 			Else 
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source)
 				
 				  // ----------------------------------------
-				
-				  //----------------------------------------
 		End case 
 		
 		$Obj_out.template:=TEMPLATE (New object:C1471(\
@@ -1248,7 +1242,7 @@ If ((String:C10($Obj_template.type)="main"))
 		End if 
 	End if 
 	
-	  // /    Inject all SDK
+	  ///    Inject all SDK
 	If (String:C10($Obj_template.sdk.frameworks)#"")
 		
 		$Obj_out.sdk:=sdk (New object:C1471(\
@@ -1299,7 +1293,7 @@ If ((String:C10($Obj_template.type)="main"))
 	
 	ob_error_combine ($Obj_out;$Obj_out.formatters)
 	
-	  // /  Save project file if has been modified
+	  ///  Save project file if has been modified
 	If (Bool:C1537($Obj_out.projfile.mustSave))
 		
 		$Obj_out.projfile:=XcodeProj (New object:C1471(\

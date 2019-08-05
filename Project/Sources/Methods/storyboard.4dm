@@ -14,8 +14,8 @@ C_OBJECT:C1216($1)
 C_BOOLEAN:C305($Boo_buffer)
 C_LONGINT:C283($Lon_i;$Lon_ii;$Lon_parameters;$Lon_ids;$Lon_length)
 C_TEXT:C284($Dom_;$Dom_root);
-C_TEXT:C284($File_;$Txt_buffer;$Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
-C_OBJECT:C1216($Obj_color;$Obj_in;$Obj_out;$Obj_element;$Obj_table;$Obj_field;$Obj_tag)
+C_TEXT:C284($Txt_buffer;$Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+C_OBJECT:C1216($File_;$Obj_color;$Obj_in;$Obj_out;$Obj_element;$Obj_table;$Obj_field;$Obj_tag)
 C_COLLECTION:C1488($Col_)
 
 If (False:C215)
@@ -191,9 +191,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			$File_:=$Obj_in.template.source+Convert path POSIX to system:C1107(String:C10($Obj_in.template.storyboard))  // maybe a list of files later, or doc_catalog
+			$File_:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))  // maybe a list of files later, or doc_catalog
 			
-			$Dom_root:=DOM Parse XML source:C719($File_)
+			$Dom_root:=DOM Parse XML source:C719($File_.platformPath)
 			
 			  // Look up first all the elements. Dom could be modifyed
 			
@@ -203,8 +203,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					$Obj_element.xmlId:=xml_findElement ($Dom_root;$Obj_element.xpath).reference
 					
-					ASSERT:C1129($Obj_element.xmlId#"00000000000000000000000000000000";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_)
-					ASSERT:C1129($Obj_element.xmlId#"";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_)
+					ASSERT:C1129($Obj_element.xmlId#"00000000000000000000000000000000";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
+					ASSERT:C1129($Obj_element.xmlId#"";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
 					
 				Else 
 					
@@ -217,8 +217,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							$Obj_element.xmlId:=DOM Find XML element by ID:C1010($Dom_root;"TAG-"+$Obj_element.tagInterfix+"-001")
 							
-							ASSERT:C1129($Obj_element.xmlId#"00000000000000000000000000000000";"Root element with id 'TAG-"+$Obj_element.tagInterfix+"-001' not found for file "+$File_)
-							ASSERT:C1129($Obj_element.xmlId#"";"Root element with id 'TAG-"+$Obj_element.tagInterfix+"-001' not found for file "+$File_)
+							ASSERT:C1129($Obj_element.xmlId#"00000000000000000000000000000000";"Root element with id 'TAG-"+$Obj_element.tagInterfix+"-001' not found for file "+$File_.path)
+							ASSERT:C1129($Obj_element.xmlId#"";"Root element with id 'TAG-"+$Obj_element.tagInterfix+"-001' not found for file "+$File_.path)
 							
 							  //----------------------------------------
 						: ($Lon_length>0)
@@ -228,7 +228,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							  //----------------------------------------
 						Else 
 							
-							ASSERT:C1129(False:C215;"No xpath defined for template file "+$File_+" to find element "+JSON Stringify:C1217($Obj_element))
+							ASSERT:C1129(False:C215;"No xpath defined for template file "+$File_.path+" to find element "+JSON Stringify:C1217($Obj_element))
 							
 							  //----------------------------------------
 					End case 
@@ -333,8 +333,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			DOM CLOSE XML:C722($Dom_root)
 			$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("navigation.storyboard"))
 			
-			$File_:=$Obj_in.target+Convert path POSIX to system:C1107(String:C10($Obj_in.template.storyboard))
-			TEXT TO DOCUMENT:C1237($File_;$Txt_buffer;"UTF-8";Document with CRLF:K24:20)
+			$File_:=Folder:C1567($Obj_in.target;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
+			$File_.setText($Txt_buffer;"UTF-8";Document with CRLF:K24:20)
 			
 			$Obj_out.format:=storyboard (New object:C1471(\
 				"action";"format";\
@@ -351,11 +351,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			$File_:=$Obj_in.template.source+Convert path POSIX to system:C1107(String:C10($Obj_in.template.storyboard))
+			$File_:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
 			
-			If (Test path name:C476($File_)=Is a document:K24:1)
+			If ($File_.exists)
 				
-				$Dom_root:=DOM Parse XML source:C719($File_)
+				$Dom_root:=DOM Parse XML source:C719($File_.platformPath)
 				
 				If ($Obj_in.template.elements=Null:C1517)  // element not defined, try to compute it?
 					
@@ -378,7 +378,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 				If (Length:C16($Txt_buffer)=0)  // there is element defined so we need to read here
 					
-					$Txt_buffer:=Document to text:C1236($File_)
+					$Txt_buffer:=$File_.getText()
 					
 				End if 
 				
@@ -390,7 +390,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If (Position:C15($Txt_cmd;$Txt_buffer)=0)
 							
-							ob_warning_add ($Obj_out;"Detail template storyboard '"+$File_+"'do not countains action tag "+$Txt_cmd)
+							ob_warning_add ($Obj_out;"Detail template storyboard '"+$File_.path+"'do not countains action tag "+$Txt_cmd)
 							
 							  // XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
 							
@@ -421,7 +421,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 							End if 
 							
-							ASSERT:C1129($Obj_element.xmlId#"";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_)
+							ASSERT:C1129($Obj_element.xmlId#"";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
 							
 						Else 
 							
@@ -442,7 +442,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										
 									End if 
 									
-									ASSERT:C1129($Obj_element.xmlId#"";"Root element with id 'TAG-"+String:C10($Obj_element.tagInterfix)+"-001' not found for file "+$File_)
+									ASSERT:C1129($Obj_element.xmlId#"";"Root element with id 'TAG-"+String:C10($Obj_element.tagInterfix)+"-001' not found for file "+$File_.path)
 									
 									  //----------------------------------------
 								: ($Lon_length>0)
@@ -452,7 +452,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									  //----------------------------------------
 								Else 
 									
-									ASSERT:C1129(False:C215;"No tag interfix defined for element "+JSON Stringify:C1217($Obj_element)+" (TAG->tagInterfix>-001). Alternatively you can defined node xpath for template file "+$File_+" to find the xml element in storyboard.")
+									ASSERT:C1129(False:C215;"No tag interfix defined for element "+JSON Stringify:C1217($Obj_element)+" (TAG->tagInterfix>-001). Alternatively you can defined node xpath for template file "+$File_.path+" to find the xml element in storyboard.")
 									
 									  //----------------------------------------
 							End case 
@@ -601,8 +601,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("storyboard";"___TABLE___"))
 					$Txt_buffer:=Replace string:C233($Txt_buffer;"<userDefinedRuntimeAttribute type=\"image\" keyPath=\"image\"/>";"")  // Remove useless empty image
 					
-					$File_:=$Obj_in.target+Convert path POSIX to system:C1107(Process_tags (String:C10($Obj_in.template.storyboard);$Obj_in.tags;New collection:C1472("filename")))
-					TEXT TO DOCUMENT:C1237($File_;$Txt_buffer;"UTF-8";Document with CRLF:K24:20)
+					$File_:=Folder:C1567($Obj_in.target;fk platform path:K87:2).file(Process_tags (String:C10($Obj_in.template.storyboard);$Obj_in.tags;New collection:C1472("filename")))
+					$File_.setText($Txt_buffer;"UTF-8";Document with CRLF:K24:20)
 					
 					storyboard (New object:C1471(\
 						"action";"format";\
@@ -629,11 +629,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			$File_:=$Obj_in.template.source+Convert path POSIX to system:C1107(String:C10($Obj_in.template.storyboard))
+			$File_:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
 			
-			If (Test path name:C476($File_)=Is a document:K24:1)
+			If ($File_.exists)
 				
-				$Txt_buffer:=Document to text:C1236($File_)
+				$Txt_buffer:=$File_.getText()
 				
 				If (Length:C16($Txt_buffer)>0)  // a custom template or not well described one (do not warn about it but we could read by reading file)
 					
@@ -647,7 +647,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							If (Position:C15($Txt_cmd;$Txt_buffer)=0)
 								
-								ob_warning_add ($Obj_out;"List template storyboard '"+$File_+"'do not countains action tag "+$Txt_cmd)
+								ob_warning_add ($Obj_out;"List template storyboard '"+$File_.path+"'do not countains action tag "+$Txt_cmd)
 								
 								  // XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
 								
@@ -670,18 +670,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			If (Test path name:C476(String:C10($Obj_in.path))=Is a folder:K24:2)
 				
 				ARRAY TEXT:C222($DocumentPaths_at;0x0000)
-				DOCUMENT LIST:C474($Obj_in.path;$DocumentPaths_at;Recursive parsing:K24:13)
+				DOCUMENT LIST:C474($Obj_in.path;$DocumentPaths_at;Recursive parsing:K24:13)  // TODO replace by Folder
 				
 				$Obj_out.files:=New collection:C1472
 				
 				For ($Lon_i;1;Size of array:C274($DocumentPaths_at);1)
 					
-					$File_:=$Obj_in.path+$DocumentPaths_at{$Lon_i}
+					$File_:=Folder:C1567($Obj_in.path;fk platform path:K87:2).file($DocumentPaths_at{$Lon_i})
 					
-					If (Path to object:C1547($File_).extension=".storyboard")
+					If ($File_.extension=".storyboard")
 						
 						  // read file
-						$Dom_root:=DOM Parse XML source:C719($File_)
+						$Dom_root:=DOM Parse XML source:C719($File_.platformPath)
 						
 						  // find named colors
 						ARRAY TEXT:C222($tDom_dicts;0x0000)
@@ -756,11 +756,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							End for 
 							
 							  // write if there is one named colors (could also do it only if one attribute change)
-							doc_UNLOCK_DIRECTORY (New object:C1471(\
-								"path";Path to object:C1547($File_).parentFolder))
-							DOM EXPORT TO FILE:C862($Dom_root;$File_)
+							doc_UNLOCK_DIRECTORY (New object:C1471("path";$File_.parent.platformPath))
+							DOM EXPORT TO FILE:C862($Dom_root;$File_.platformPath)
 							DOM CLOSE XML:C722($Dom_root)
-							$Obj_out.files.push($File_)
+							$Obj_out.files.push($File_.platformPath)
 							
 							storyboard (New object:C1471(\
 								"action";"format";\
@@ -792,10 +791,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					$File_:=$Obj_in.path+$DocumentPaths_at{$Lon_i}
 					
-					If (Path to object:C1547($File_).extension=".storyboard")
+					If ($File_.extension=".storyboard")
 						
 						  // read file
-						$Dom_root:=DOM Parse XML source:C719($File_)
+						$Dom_root:=DOM Parse XML source:C719($File_.platformPath)
 						$Boo_buffer:=False:C215
 						
 						  // find named colors
@@ -853,9 +852,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						  // write if there is one modification
 						If ($Boo_buffer)
 							
-							DOM EXPORT TO FILE:C862($Dom_root;$File_)
+							DOM EXPORT TO FILE:C862($Dom_root;$File_.platformPath)
 							DOM CLOSE XML:C722($Dom_root)
-							$Obj_out.files.push($File_)
+							$Obj_out.files.push($File_.platformPath)
 							
 							storyboard (New object:C1471(\
 								"action";"format";\
@@ -879,71 +878,85 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			  // Reformat storyboard document to follow xcode rules (line ending, attributes order, add missing resources)
 			
-			If (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)
-				
-				  // Use temp file because inplace command do not reformat
-				$File_:=Temporary folder:C486+Generate UUID:C1066+".storyboard"
-				COPY DOCUMENT:C541($Obj_in.path;$File_)
-				
-				$Txt_cmd:="ibtool --upgrade "+str_singleQuoted (Convert path system to POSIX:C1106($File_))+" --write "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_in.path))
-				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
-				
-				If (Asserted:C1132(Ok=1;"LEP failed: "+$Txt_cmd))
+			If (Value type:C1509($Obj_in.path)=Is text:K8:3)
+				If (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)
 					
-					$Obj_out.success:=True:C214
+					ASSERT:C1129(dev_Matrix ;"Must not be string, now File")  // Deprecated, maybe be test ...
+					$Obj_in.path:=File:C1566($Obj_in.path;fk platform path:K87:2)
 					
-					If (Length:C16($Txt_out)>0)
+				End if 
+			End if 
+			
+			Case of 
+				: ($Obj_in.path=Null:C1517)
+					
+					$Obj_out.errors:=New collection:C1472("path not defined")
+					
+				: ($Obj_in.path.exists)
+					
+					  // Use temp file because inplace command do not reformat
+					$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".storyboard")
+					$Obj_in.path.copyTo($Obj_in.path)
+					
+					$Txt_cmd:="ibtool --upgrade "+str_singleQuoted ($File_.path)+" --write "+str_singleQuoted ($Obj_in.path.path)
+					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+					
+					If (Asserted:C1132(Ok=1;"LEP failed: "+$Txt_cmd))
 						
-						$File_:=Temporary folder:C486+Generate UUID:C1066+"ibtool.plist"
-						TEXT TO DOCUMENT:C1237($File_;$Txt_out)
-						$Obj_out:=plist (New object:C1471(\
-							"action";"object";\
-							"domain";Convert path system to POSIX:C1106($File_)))
-						DELETE DOCUMENT:C159($File_)
+						$Obj_out.success:=True:C214
 						
-						If (($Obj_out.success)\
-							 & ($Obj_out.value#Null:C1517))
+						If (Length:C16($Txt_out)>0)
 							
-							  // errors
-							Case of 
-									
-									  //----------------------------------------
-								: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is collection:K8:32)
-									
-									$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.document.errors"]
-									
-									  //----------------------------------------
-								: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is object:K8:27)
-									
-									$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.document.errors"])
-									
-									  //----------------------------------------
-								: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is collection:K8:32)
-									
-									$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.errors"]
-									
-									  //----------------------------------------
-								: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is object:K8:27)
-									
-									$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.errors"])
-									
-									  //----------------------------------------
-							End case 
+							$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
+							$File_.setText($Txt_out)
+							$Obj_out:=plist (New object:C1471(\
+								"action";"object";\
+								"domain";$File_.path))
+							$File_.delete()
 							
-							If (Value type:C1509($Obj_out.errors)=Is collection:K8:32)
+							If (($Obj_out.success)\
+								 & ($Obj_out.value#Null:C1517))
 								
-								$Obj_out.success:=$Obj_out.errors.length=0
+								  // errors
+								Case of 
+										
+										  //----------------------------------------
+									: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is collection:K8:32)
+										
+										$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.document.errors"]
+										
+										  //----------------------------------------
+									: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is object:K8:27)
+										
+										$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.document.errors"])
+										
+										  //----------------------------------------
+									: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is collection:K8:32)
+										
+										$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.errors"]
+										
+										  //----------------------------------------
+									: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is object:K8:27)
+										
+										$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.errors"])
+										
+										  //----------------------------------------
+								End case 
 								
+								If (Value type:C1509($Obj_out.errors)=Is collection:K8:32)
+									
+									$Obj_out.success:=$Obj_out.errors.length=0
+									
+								End if 
 							End if 
 						End if 
 					End if 
-				End if 
-				
-			Else 
-				
-				$Obj_out.errors:=New collection:C1472("path not defined or do not exist")
-				
-			End if 
+					
+				Else 
+					
+					$Obj_out.errors:=New collection:C1472("path do not exist")
+					
+			End case 
 			
 			  //______________________________________________________
 		: ($Obj_in.action="addScene")
@@ -1064,12 +1077,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 				If (Length:C16($Txt_out)>0)
 					
-					$File_:=Temporary folder:C486+Generate UUID:C1066+"ibtool.plist"
-					TEXT TO DOCUMENT:C1237($File_;$Txt_out)
+					$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
+					$File_.setText($Txt_out)
 					$Obj_out:=plist (New object:C1471(\
 						"action";"object";\
-						"domain";Convert path system to POSIX:C1106($File_)))
-					DELETE DOCUMENT:C159($File_)
+						"domain";$File_.path))
+					$File_.delete()
 					
 					If (($Obj_out.success)\
 						 & ($Obj_out.value#Null:C1517))
