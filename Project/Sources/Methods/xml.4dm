@@ -28,22 +28,26 @@ If (This:C1470._is=Null:C1517)
 	$o:=New object:C1471(\
 		"_is";"xml";\
 		"root";Formula:C1597(xml ("root"));\
+		"create";Formula:C1597(xml ("create";New object:C1471("name";$1)));\
 		"parent";Formula:C1597(xml ("parent"));\
 		"firstChild";Formula:C1597(xml ("firstChild"));\
 		"lastChild";Formula:C1597(xml ("lastChild"));\
 		"nextSibling";Formula:C1597(xml ("nextSibling"));\
 		"previousSibling";Formula:C1597(xml ("previousSibling"));\
 		"find";Formula:C1597(xml ("find";New object:C1471("xpath";$1)));\
+		"findMany";Formula:C1597(xml ("findMany";New object:C1471("xpath";$1)));\
 		"findById";Formula:C1597(xml ("findById";New object:C1471("id";$1)));\
+		"findByName";Formula:C1597(xml ("findByName";New object:C1471("name";$1)));\
 		"append";Formula:C1597(xml ("append";New object:C1471("element";$1)));\
 		"insertAt";Formula:C1597(xml ("insertAt";New object:C1471("element";$1;"childIndex";$2)));\
 		"insertFirst";Formula:C1597(xml ("insertAt";New object:C1471("element";$1;"childIndex";1)));\
 		"attributes";Formula:C1597(xml ("attributes"));\
+		"getAttribute";Formula:C1597(xml ("getAttribute";New object:C1471("name";$1)));\
+		"removeAttribute";Formula:C1597(xml ("removeAttribute";New object:C1471("attribName";$1)));\
 		"toObject";Formula:C1597(xml ("toObject"));\
 		"setName";Formula:C1597(xml ("setName";New object:C1471("name";$1)));\
-		"export";Formula:C1597(xml ("export"));\
 		"remove";Formula:C1597(xml ("remove"));\
-		"removeAttribute";Formula:C1597(xml ("removeAttribute";New object:C1471("attribName";$1)));\
+		"export";Formula:C1597(xml ("export"));\
 		"save";Formula:C1597(xml ("save";$1));\
 		"close";Formula:C1597(xml ("close"));\
 		"errors";New collection:C1472\
@@ -183,13 +187,13 @@ Else
 				: ($1="remove")
 					
 					DOM REMOVE XML ELEMENT:C869($o.elementRef)
-					$0.success:=Bool:C1537(OK)
+					$o.success:=Bool:C1537(OK)
 					
 					  //=================================================================
 				: ($1="removeAttribute")
 					
 					DOM REMOVE XML ATTRIBUTE:C1084($o.elementRef;$2.attribName)
-					$0.success:=Bool:C1537(OK)
+					$o.success:=Bool:C1537(OK)
 					
 					  //=================================================================
 				: ($1="setName")
@@ -198,16 +202,26 @@ Else
 					$o.success:=Bool:C1537(OK)
 					
 					  //=================================================================
+				: ($1="getAttribute")
+					
+					DOM GET XML ATTRIBUTE BY NAME:C728($o.elementRef;$2.name;$tt)
+					
+					$o:=New object:C1471("value";$tt;"success";Bool:C1537(OK))
+					
+					  //=================================================================
+				: ($1="attributes")
+					
+					$o:=xml_attributes ($o.elementRef)
+					
+					  //=================================================================
 				: ($1="export")
 					
 					DOM EXPORT TO VAR:C863($o.elementRef;$tt)
 					$o.success:=Bool:C1537(OK)
 					$o.variable:=$tt
 					
-					  //=================================================================
-				: ($1="attributes")
-					
-					$o:=xml_attributes ($o.elementRef)
+					  // alternative new object
+					  //$o:=New object("variable";$tt;"success";Bool(OK))
 					
 					  //=================================================================
 				: ($1="toObject")
@@ -223,6 +237,37 @@ Else
 				: ($1="find")
 					
 					$t:=xml_findElement ($o.elementRef;$2.xpath).reference
+					
+					  //=================================================================
+				: ($1="findMany")
+					
+					ARRAY TEXT:C222($tDom_dicts;0x0000)
+					$tDom_dicts{0}:=DOM Find XML element:C864($o.elementRef;$2.xpath;$tDom_dicts)
+					
+					$o:=New object:C1471("elements";New collection:C1472;"success";Bool:C1537(OK))
+					
+					This:C1470._is:=Null:C1517
+					C_LONGINT:C283($Lon_ii)
+					For ($Lon_ii;1;Size of array:C274($tDom_dicts);1)
+						$o.elements.push(xml ($tDom_dicts{$Lon_ii}))
+					End for 
+					This:C1470._is:="_xml"
+					
+					  //=================================================================
+				: ($1="findByName")
+					
+					$o:=New object:C1471("elements";New collection:C1472;"parent";$o;"success";True:C214)
+					
+					This:C1470._is:=Null:C1517
+					For each ($tt;xml_findByName ($o.parent.elementRef;$2.name))
+						$o.elements.push(xml ($tt))
+					End for each 
+					This:C1470._is:="_xml"
+					
+					  //=================================================================
+				: ($1="create")
+					
+					$t:=DOM Create XML element:C865($o.elementRef;$2.name)
 					
 					  //=================================================================
 				: ($1="parent")
@@ -257,12 +302,50 @@ Else
 					  //=================================================================
 				: ($1="append")
 					
-					$t:=DOM Append XML element:C1082($o.elementRef;$2.element)
+					Case of 
+						: (Value type:C1509($2.element)=Is object:K8:27)
+							
+							If ($2.element.elementRef#Null:C1517)  // could check also _is xml
+								$t:=DOM Append XML element:C1082($o.elementRef;$2.element.elementRef)
+								
+							Else 
+								
+								$o.errors.push("Invalid xml object reference passed")
+							End if 
+							
+						: (Length:C16(String:C10($2.element))=32)
+							
+							$t:=DOM Append XML element:C1082($o.elementRef;$2.element)
+							
+						Else 
+							
+							$o.errors.push("Invalid element reference passed")
+							
+					End case 
 					
 					  //=================================================================
 				: ($1="insertAt")
 					
-					$t:=DOM Insert XML element:C1083($o.elementRef;$2.element;$2.childIndex)
+					Case of 
+						: (Value type:C1509($2.element)=Is object:K8:27)
+							
+							If ($2.element.elementRef#Null:C1517)  // could check also _is xml
+								$t:=DOM Insert XML element:C1083($o.elementRef;$2.element.elementRef;$2.childIndex)
+							Else 
+								
+								$o.errors.push("Invalid xml object reference passed")
+								
+							End if 
+							
+						: (Length:C16(String:C10($2.element))=32)
+							
+							$t:=DOM Insert XML element:C1083($o.elementRef;$2.element;$2.childIndex)
+							
+						Else 
+							
+							$o.errors.push("Invalid element reference passed")
+							
+					End case 
 					
 					  //=================================================================
 				Else 

@@ -8,6 +8,11 @@ $xml:=xml ("create";New object:C1471("root";"document"))
 ASSERT:C1129($xml.success)
 $xml.close()
 
+  // Create by parsing
+C_OBJECT:C1216($xml)
+$xml:=xml ("parse";New object:C1471("variable";"<html><header></header><body></body></html>"))
+ASSERT:C1129($xml.success)
+$xml.close()
 
   // Create from file
 C_OBJECT:C1216($folder)
@@ -36,6 +41,16 @@ ASSERT:C1129($scene.elementRef=Null:C1517)
   // root
 ASSERT:C1129($scenes.root().elementRef=$xml.elementRef;"Failed to get root of dom element")
 
+
+  // browsing
+C_OBJECT:C1216($element;$result)
+$result:=$scenes.findByName("scene")
+ASSERT:C1129(Num:C11($result.elements.length)=3)
+
+$result:=$xml.findMany("document/scenes/scene")
+ASSERT:C1129(Num:C11($result.elements.length)=3)
+
+  // final close
 $xml.close()
 
 

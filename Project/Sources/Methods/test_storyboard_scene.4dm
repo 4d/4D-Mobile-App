@@ -17,10 +17,10 @@ ASSERT:C1129($Obj_out.success;JSON Stringify:C1217($Obj_out))
 
 If ($Obj_out.success)
 	
-	DOM EXPORT TO VAR:C863($Obj_out.dom;$Txt_buffer)
+	$Txt_buffer:=$Obj_out.dom.export().variable
 	ASSERT:C1129(Length:C16($Txt_buffer)>0)
 	
-	DOM CLOSE XML:C722($Obj_out.dom)
+	$Obj_out.dom.close()
 End if 
 
   // Get a dom for a scene with tag already replaced
@@ -33,13 +33,13 @@ ASSERT:C1129($Obj_out.success;JSON Stringify:C1217($Obj_out))
 
 If ($Obj_out.success)
 	
-	DOM EXPORT TO VAR:C863($Obj_out.dom;$Txt_buffer)
+	$Txt_buffer:=$Obj_out.dom.export().variable
 	ASSERT:C1129(Length:C16($Txt_buffer)>0)
 	
 	ASSERT:C1129(Position:C15("AListForm";$Txt_buffer)>0)
 	ASSERT:C1129(Position:C15("TAG-SN";$Txt_buffer)=0)
 	
-	DOM CLOSE XML:C722($Obj_out.dom)
+	$Obj_out.dom.close()
 End if 
 
 FINALLY 

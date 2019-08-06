@@ -13,7 +13,7 @@ C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_buffer)
 C_LONGINT:C283($Lon_i;$Lon_ii;$Lon_parameters;$Lon_ids;$Lon_length)
-C_TEXT:C284($Dom_;$Dom_root);
+C_OBJECT:C1216($Dom_;$Dom_child;$Dom_root);
 C_TEXT:C284($Txt_buffer;$Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 C_OBJECT:C1216($File_;$Obj_color;$Obj_in;$Obj_out;$Obj_element;$Obj_table;$Obj_field;$Obj_tag)
 C_COLLECTION:C1488($Col_)
@@ -193,7 +193,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			$File_:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))  // maybe a list of files later, or doc_catalog
 			
-			$Dom_root:=DOM Parse XML source:C719($File_.platformPath)
+			$Dom_root:=xml ("load";$File_)
 			
 			  // Look up first all the elements. Dom could be modifyed
 			
@@ -201,7 +201,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 				If (Length:C16(String:C10($Obj_element.xpath))>0)
 					
-					$Obj_element.xmlId:=xml_findElement ($Dom_root;$Obj_element.xpath).reference
+					$Obj_element.xmlId:=$Dom_root.find($Obj_element.xpath).elementRef
 					
 					ASSERT:C1129($Obj_element.xmlId#"00000000000000000000000000000000";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
 					ASSERT:C1129($Obj_element.xmlId#"";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
@@ -215,7 +215,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							  //----------------------------------------
 						: ($Lon_length=2)
 							
-							$Obj_element.xmlId:=DOM Find XML element by ID:C1010($Dom_root;"TAG-"+$Obj_element.tagInterfix+"-001")
+							$Obj_element.xmlId:=$Dom_root.findById("TAG-"+$Obj_element.tagInterfix+"-001").elementRef
 							
 							ASSERT:C1129($Obj_element.xmlId#"00000000000000000000000000000000";"Root element with id 'TAG-"+$Obj_element.tagInterfix+"-001' not found for file "+$File_.path)
 							ASSERT:C1129($Obj_element.xmlId#"";"Root element with id 'TAG-"+$Obj_element.tagInterfix+"-001' not found for file "+$File_.path)
@@ -269,13 +269,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							  // idCount, not defined, try to count into storyboard
 							$Lon_ids:=0
-							$Dom_:=$Obj_element.xmlId
+							$Dom_:=xml ($Obj_element.xmlId)  // 001 must be encapsulated node
 							
-							While ($Dom_#"00000000000000000000000000000000")
-								
+							$Dom_child:=$Dom_
+							
+							While ($Dom_child.success)
 								$Lon_ids:=$Lon_ids+1
-								$Dom_:=DOM Find XML element by ID:C1010($Obj_element.xmlId;"TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
-								
+								$Dom_child:=$Dom_.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
 							End while 
 							
 							If ($Lon_ids=1)
@@ -291,7 +291,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					End if 
 					
 					  // Insert after processing tags
-					DOM EXPORT TO VAR:C863($Obj_element.xmlId;$Txt_buffer)
+					$Txt_buffer:=xml ($Obj_element.xmlId).export().variable
 					$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;$Obj_in.template.tagtypes)
 					
 					If (Length:C16(String:C10($Obj_element.insertMode))=0)
@@ -305,32 +305,30 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							  // ----------------------------------------
 						: $Obj_element.insertMode="append"
 							
-							$Dom_:=DOM Append XML element:C1082($Obj_element.xmlIdParent;DOM Parse XML variable:C720($Txt_buffer))
+							$Dom_:=xml ($Obj_element.xmlIdParent).append(xml_parse ($Txt_buffer))
 							
 							  // ----------------------------------------
 						: $Obj_element.insertMode="first"
 							
-							$Dom_:=DOM Insert XML element:C1083($Obj_element.xmlIdParent;DOM Parse XML variable:C720($Txt_buffer);1)
+							$Dom_:=xml ($Obj_element.xmlIdParent).insertFirst(xml_parse ($Txt_buffer))
 							
 							  // ----------------------------------------
 						: $Obj_element.insertMode="iteration"
 							
-							$Dom_:=DOM Insert XML element:C1083($Obj_element.xmlIdParent;DOM Parse XML variable:C720($Txt_buffer);$Lon_ii)
-							
-							  // ----------------------------------------
+							$Dom_:=xml ($Obj_element.xmlIdParent).insertAt(xml_parse ($Txt_buffer);$Lon_ii)
 							
 							  //----------------------------------------
 					End case 
 				End for each 
 				
 				  // Remove originals template element
-				DOM REMOVE XML ELEMENT:C869($Obj_element.xmlId)
+				xml ($Obj_element.xmlId).remove()
 				
 			End for each 
 			
 			  // Save file at destination after replacing tags
-			DOM EXPORT TO VAR:C863($Dom_root;$Txt_buffer)
-			DOM CLOSE XML:C722($Dom_root)
+			$Txt_buffer:=$Dom_root.export().variable
+			$Dom_root.close()
 			$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("navigation.storyboard"))
 			
 			$File_:=Folder:C1567($Obj_in.target;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
@@ -355,11 +353,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If ($File_.exists)
 				
-				$Dom_root:=DOM Parse XML source:C719($File_.platformPath)
+				$Dom_root:=xml ("load";$File_)
 				
 				If ($Obj_in.template.elements=Null:C1517)  // element not defined, try to compute it?
 					
-					DOM EXPORT TO VAR:C863($Dom_root;$Txt_buffer)  // or $Txt_buffer:=Document to text($File_)
+					$Txt_buffer:=$Dom_root.export().variable
 					ARRAY TEXT:C222($tTxt_result;0)
 					
 					If (Rgx_ExtractText ("TAG-(.?.?)-001";$Txt_buffer;"1";->$tTxt_result)=0)
@@ -413,7 +411,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If (Length:C16(String:C10($Obj_element.xpath))>0)
 							
-							$Obj_element.xmlId:=xml_findElement ($Dom_root;$Obj_element.xpath).reference
+							$Obj_element.xmlId:=$Dom_root.find($Obj_element.xpath).elementRef
 							
 							If ($Obj_element.xmlId="00000000000000000000000000000000")  // Num( ) = 0 ? or = a dom constant for invalid node
 								
@@ -434,7 +432,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									
 									  // if "AS" document/resources and read children, to find ___FIELD_ICON___ ?? (no id for image, let ibtool fix that for the moment)
 									
-									$Obj_element.xmlId:=DOM Find XML element by ID:C1010($Dom_root;"TAG-"+String:C10($Obj_element.tagInterfix)+"-001")  // work only because element use it as xml id (sceneID will not work)
+									$Obj_element.xmlId:=$Dom_root.findById("TAG-"+String:C10($Obj_element.tagInterfix)+"-001").elementRef  // work only because element use it as xml id (sceneID will not work)
 									
 									If ($Obj_element.xmlId="00000000000000000000000000000000")
 										
@@ -460,7 +458,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If (Length:C16(String:C10($Obj_element.xmlId))>0)
 							
-							$Obj_element.xmlIdParent:=DOM Get parent XML element:C923($Obj_element.xmlId)  // will failed if empty or wrong XXX add check
+							$Obj_element.xmlIdParent:=xml ($Obj_element.xmlId).parent().elementRef  // will failed if empty or wrong XXX add check
 							
 						End if 
 					End for each 
@@ -500,12 +498,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										
 										  // idCount, not defined, try to count into storyboard
 										$Lon_ids:=0
-										$Dom_:=$Obj_element.xmlId
-										
-										While ($Dom_#"00000000000000000000000000000000")
+										$Dom_:=xml ($Obj_element.xmlId)
+										$Dom_child:=$Dom_
+										While ($Dom_child.success)
 											
 											$Lon_ids:=$Lon_ids+1
-											$Dom_:=DOM Find XML element by ID:C1010($Obj_element.xmlId;"TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
+											$Dom_child:=$Dom_.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
 											
 										End while 
 										
@@ -553,19 +551,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										  // ----------------------------------------
 									: $Obj_element.insertMode="append"
 										
-										$Dom_:=DOM Append XML element:C1082($Obj_element.xmlIdParent;DOM Parse XML variable:C720($Txt_buffer))
+										$Dom_:=xml ($Obj_element.xmlIdParent).append(xml_parse ($Txt_buffer))
 										
 										  // ----------------------------------------
 									: $Obj_element.insertMode="first"
 										
-										$Dom_:=DOM Insert XML element:C1083($Obj_element.xmlIdParent;DOM Parse XML variable:C720($Txt_buffer);1)
+										$Dom_:=xml ($Obj_element.xmlIdParent).insertFirst(xml_parse ($Txt_buffer))
 										
 										  // ----------------------------------------
 									: $Obj_element.insertMode="iteration"
 										
-										$Dom_:=DOM Insert XML element:C1083($Obj_element.xmlIdParent;DOM Parse XML variable:C720($Txt_buffer);$Lon_ii)
-										
-										  // ----------------------------------------
+										$Dom_:=xml ($Obj_element.xmlIdParent).insertAt(xml_parse ($Txt_buffer);$Lon_ii)
 										
 										  //----------------------------------------
 								End case 
@@ -597,7 +593,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				  // Save file at destination after replacing tags
 				If ($Boo_buffer)
 					
-					DOM EXPORT TO VAR:C863($Dom_root;$Txt_buffer)
+					$Txt_buffer:=$Dom_root.export().variable
 					$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("storyboard";"___TABLE___"))
 					$Txt_buffer:=Replace string:C233($Txt_buffer;"<userDefinedRuntimeAttribute type=\"image\" keyPath=\"image\"/>";"")  // Remove useless empty image
 					
@@ -610,7 +606,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 				End if 
 				
-				DOM CLOSE XML:C722($Dom_root)
+				$Dom_root.close()
 				
 				$Obj_out.success:=True:C214
 				
@@ -681,84 +677,81 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					If ($File_.extension=".storyboard")
 						
 						  // read file
-						$Dom_root:=DOM Parse XML source:C719($File_.platformPath)
+						$Dom_root:=xml ("load";$File_)
 						
 						  // find named colors
-						ARRAY TEXT:C222($tDom_dicts;0x0000)
-						$tDom_dicts{0}:=DOM Find XML element:C864($Dom_root;"document/resources/namedColor";$tDom_dicts)
-						
-						If (Size of array:C274($tDom_dicts)>0)
+						$Boo_buffer:=False:C215
+						For each ($Dom_;$Dom_root.findMany("document/resources/namedColor"))
 							
-							For ($Lon_ii;1;Size of array:C274($tDom_dicts);1)
+							  // get color name
+							$Txt_buffer:=$Dom_.getAttribute("name").value
+							
+							If ($Obj_in.theme[$Txt_buffer]#Null:C1517)
 								
-								  // get color name
-								DOM GET XML ATTRIBUTE BY NAME:C728($tDom_dicts{$Lon_ii};"name";$Txt_buffer)
-								
-								If ($Obj_in.theme[$Txt_buffer]#Null:C1517)
+								If (Value type:C1509($Obj_in.theme[$Txt_buffer])=Is object:K8:27)
 									
-									If (Value type:C1509($Obj_in.theme[$Txt_buffer])=Is object:K8:27)
-										
-										  // get color xml child
-										$Dom_:=DOM Get first child XML element:C723($tDom_dicts{$Lon_ii})
-										
-										$Obj_color:=$Obj_in.theme[$Txt_buffer]
-										
-										  // recreate node
-										DOM REMOVE XML ELEMENT:C869($Dom_)
-										$Dom_:=DOM Create XML element:C865($tDom_dicts{$Lon_ii};"color")
-										
-										Case of 
+									  // get color xml child
+									$Dom_child:=$Dom_.firstChild()
+									
+									$Obj_color:=$Obj_in.theme[$Txt_buffer]
+									
+									  // recreate node
+									$Dom_child.remove()
+									$Dom_child:=$Dom_.create("color")
+									
+									Case of 
+											
+											  //______________________________________________________
+										: ($Obj_color.space="gray")
+											
+											If ($Obj_color.alpha=Null:C1517)
 												
-												  //______________________________________________________
-											: ($Obj_color.space="gray")
+												$Obj_color.alpha:=1
 												
-												If ($Obj_color.alpha=Null:C1517)
-													
-													$Obj_color.alpha:=1
-													
-												End if 
+											End if 
+											
+											$Dom_child.setAttributes(New object:C1471(\
+												"white";String:C10($Obj_color.white);\
+												"alpha";String:C10($Obj_color.alpha);\
+												"colorSpace";"custom";\
+												"customColorSpace";"genericGamma22GrayColorSpace"))
+											
+											  //______________________________________________________
+										: ($Obj_color.space="srgb")
+											
+											If ($Obj_color.alpha=Null:C1517)
 												
-												DOM SET XML ATTRIBUTE:C866($Dom_;\
-													"white";String:C10($Obj_color.white);\
-													"alpha";String:C10($Obj_color.alpha);\
-													"colorSpace";"custom";\
-													"customColorSpace";"genericGamma22GrayColorSpace")
+												$Obj_color.alpha:=255
 												
-												  //______________________________________________________
-											: ($Obj_color.space="srgb")
-												
-												If ($Obj_color.alpha=Null:C1517)
-													
-													$Obj_color.alpha:=255
-													
-												End if 
-												
-												DOM SET XML ATTRIBUTE:C866($Dom_;\
-													"alpha";String:C10($Obj_color.alpha/255;"&xml");\
-													"red";String:C10($Obj_color.red/255;"&xml");\
-													"green";String:C10($Obj_color.green/255;"&xml");\
-													"blue";String:C10($Obj_color.blue/255;"&xml");\
-													"colorSpace";"custom";\
-													"customColorSpace";"sRGB")
-												
-												  // ----------------------------------------
-												  //----------------------------------------
-											Else 
-												
-												ASSERT:C1129("Unknown color space "+$Obj_color.space)
-												
-												  // ----------------------------------------
-												
-												  //----------------------------------------
-										End case 
-									End if 
+											End if 
+											
+											$Dom_child.setAttributes(New object:C1471(\
+												"alpha";String:C10($Obj_color.alpha/255;"&xml");\
+												"red";String:C10($Obj_color.red/255;"&xml");\
+												"green";String:C10($Obj_color.green/255;"&xml");\
+												"blue";String:C10($Obj_color.blue/255;"&xml");\
+												"colorSpace";"custom";\
+												"customColorSpace";"sRGB"))
+											
+											  //----------------------------------------
+										Else 
+											
+											ASSERT:C1129("Unknown color space "+$Obj_color.space)
+											
+											  // ----------------------------------------
+											
+											  //----------------------------------------
+									End case 
 								End if 
-							End for 
+							End if 
+						End for each 
+						
+						If ($Boo_buffer)
 							
 							  // write if there is one named colors (could also do it only if one attribute change)
 							doc_UNLOCK_DIRECTORY (New object:C1471("path";$File_.parent.platformPath))
-							DOM EXPORT TO FILE:C862($Dom_root;$File_.platformPath)
-							DOM CLOSE XML:C722($Dom_root)
+							$Dom_root.save($File_)
+							$Dom_root.close()
 							$Obj_out.files.push($File_.platformPath)
 							
 							storyboard (New object:C1471(\
@@ -789,60 +782,53 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 				For ($Lon_i;1;Size of array:C274($DocumentPaths_at);1)
 					
-					$File_:=$Obj_in.path+$DocumentPaths_at{$Lon_i}
+					$File_:=Folder:C1567($Obj_in.path;fk platform path:K87:2).file($DocumentPaths_at{$Lon_i})
 					
 					If ($File_.extension=".storyboard")
 						
 						  // read file
-						$Dom_root:=DOM Parse XML source:C719($File_.platformPath)
+						$Dom_root:=xml ("load";$File_)
 						$Boo_buffer:=False:C215
 						
-						  // find named colors
-						ARRAY TEXT:C222($tDom_dicts;0x0000)
-						$tDom_dicts{0}:=DOM Find XML element:C864($Dom_root;"document/resources/image";$tDom_dicts)
-						
-						If (Size of array:C274($tDom_dicts)>0)
+						  // find named colors 
+						For each ($Dom_;$Dom_root.findMany("document/resources/image").elements)
 							
 							$Col_:=New collection:C1472
 							
-							For ($Lon_ii;1;Size of array:C274($tDom_dicts);1)
+							  // get  name
+							$Txt_buffer:=$Dom_.getAttribute("name").value
+							
+							If (Length:C16($Txt_buffer)=0)
 								
-								  // get  name
-								DOM GET XML ATTRIBUTE BY NAME:C728($tDom_dicts{$Lon_ii};"name";$Txt_buffer)
+								$Dom_.remove()
+								$Boo_buffer:=True:C214
 								
-								If (Length:C16($Txt_buffer)=0)
+							Else 
+								
+								If ($Col_.indexOf($Txt_buffer)>-1)
 									
-									DOM REMOVE XML ELEMENT:C869($tDom_dicts{$Lon_ii})
 									$Boo_buffer:=True:C214
 									
 								Else 
 									
-									If ($Col_.indexOf($Txt_buffer)>-1)
-										
-										DOM REMOVE XML ELEMENT:C869($tDom_dicts{$Lon_ii})
-										$Boo_buffer:=True:C214
-										
-									Else 
-										
-										$Col_.push($Txt_buffer)
-										
-									End if 
+									$Col_.push($Txt_buffer)
+									
 								End if 
-							End for 
-						End if 
+							End if 
+						End for each 
 						
 						  // Remove empty value attribute of userDefinedRuntimeAttribute with type image
-						For each ($Dom_;xml_findByName ($Dom_root;"userDefinedRuntimeAttribute");1)
+						For each ($Dom_;$Dom_root.findByName("userDefinedRuntimeAttribute").elements;1)
 							
 							C_OBJECT:C1216($Obj_attributes)
-							$Obj_attributes:=xml_attributes ($Dom_)
+							$Obj_attributes:=$Dom_.attributes()
 							
 							If (String:C10($Obj_attributes.type)="image")
 								
 								If ($Obj_attributes.value#Null:C1517)\
 									 & (Length:C16(String:C10($Obj_attributes.value))=0)
 									
-									DOM REMOVE XML ATTRIBUTE:C1084($Dom_;"value")
+									$Dom_.removeAttribute("value")
 									$Boo_buffer:=True:C214
 									
 								End if 
@@ -852,8 +838,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						  // write if there is one modification
 						If ($Boo_buffer)
 							
-							DOM EXPORT TO FILE:C862($Dom_root;$File_.platformPath)
-							DOM CLOSE XML:C722($Dom_root)
+							$Dom_root.save($File_)
+							$Dom_root.close()
 							$Obj_out.files.push($File_.platformPath)
 							
 							storyboard (New object:C1471(\
@@ -963,13 +949,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			ASSERT:C1129(Length:C16(String:C10($Obj_in.name))>0)
 			
-			  // Have a DOM or load a new DOM
-			
-			  //If (String($Obj_in.file))
-			  //  $Obj_in.dom:= DOM Parse
-			  //End if
-			
-			If (Length:C16(String:C10($Obj_in.dom))>0)
+			If (Value type:C1509($Obj_in.dom)=Is object:K8:27)
 				
 				$Obj_out.dom:=$Obj_in.dom  // edit inline
 				
@@ -980,25 +960,25 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				If ($Obj_out.scene.success)
 					
 					  // inject into <scenes>
-					$Obj_out.domScenes:=DOM Find XML element:C864($Obj_in.dom;"document/scenes")
+					$Obj_out.domScenes:=$Obj_in.dom.find("document/scenes")
 					
-					If ($Obj_out.domScenes#"00000000000000000000000000000000")
+					If ($Obj_out.domScenes.success)
 						
 						$Obj_out.success:=True:C214
-						$Obj_out.domScene:=DOM Append XML element:C1082($Obj_out.domScenes;$Obj_out.scene.dom)
+						$Obj_out.domScene:=$Obj_out.domScenes.append($Obj_out.scene.dom)
 						
 						  // Create a connection
 						If (Bool:C1537($Obj_in.connection))
 							
 							  // Find main viewController DOM (ex: <scene sceneID="fK0-6P-J5Y"><objects> <viewController>
-							$Obj_out.domVC:=DOM Find XML element:C864($Obj_in.dom;"document/scenes/scene[2]/objects/viewController")
+							$Obj_out.domVC:=$Obj_in.dom.find("document/scenes/scene[2]/objects/viewController")
 							
-							If ($Obj_out.domVC#"00000000000000000000000000000000")
+							If ($Obj_out.domVC.success)
 								
 								  // Find its <connections> children
-								$Obj_out.domConnections:=DOM Find XML element:C864($Obj_out.domVC;"<connections>")
-								If ($Obj_out.domConnections="00000000000000000000000000000000")
-									$Obj_out.domConnections:=DOM Create XML element:C865($Obj_out.domVC;"connections")
+								$Obj_out.domConnections:=$Obj_out.domVC.find("connections")
+								If (Not:C34($Obj_out.domConnections.success))
+									$Obj_out.domConnections:=$Obj_out.domVC.create("connections")
 								End if 
 								
 								  // Create a segue with First random id as SCENE ID is destination id
@@ -1007,7 +987,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								$Obj_out.segue:=storyboard (New object:C1471("action";"segue";"tags";$Obj_tag))
 								
 								  // Inject it into <connections>
-								$Obj_out.domSegue:=DOM Append XML element:C1082($Obj_out.domConnections;$Obj_out.segue.dom)
+								$Obj_out.domSegue:=$Obj_out.domConnections.append($Obj_out.segue.dom)
 								
 							Else 
 								
@@ -1044,11 +1024,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					$Txt_buffer:=$Obj_element.getText()
 					$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("automatic";"storyboardID"))
-					$Obj_out.dom:=DOM Parse XML variable:C720($Txt_buffer)
+					$Obj_out.dom:=xml_parse ($Txt_buffer)
 					$Obj_out.success:=True:C214
 					
 				Else 
-					$Obj_out.dom:=DOM Parse XML source:C719($Obj_element.platformPath)
+					$Obj_out.dom:=xml ("load";$Obj_element)
 					$Obj_out.success:=True:C214
 				End if 
 			End if 
@@ -1063,7 +1043,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("automatic";"storyboardID"))
 			End if 
 			
-			$Obj_out.dom:=DOM Parse XML variable:C720($Txt_buffer)
+			$Obj_out.dom:=xml_parse ($Txt_buffer)
 			$Obj_out.success:=True:C214
 			
 			  //______________________________________________________
