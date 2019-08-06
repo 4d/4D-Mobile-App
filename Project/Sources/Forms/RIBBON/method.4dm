@@ -121,15 +121,6 @@ Case of
 					
 					$form.buildButtons.distributeHorizontally($form)
 					
-					  // Place the popup icons
-					$l:=widget ("201").coordinates.right-13
-					$o:=widget ("201.PopUp")
-					$o.setCoordinates($l;$o.coordinates.top;$l+$o.coordinates.width;$o.coordinates.top+$o.coordinates.height)
-					
-					$l:=widget ("152").coordinates.right-13
-					$o:=widget ("152.PopUp")
-					$o.setCoordinates($l;$o.coordinates.top;$l+$o.coordinates.width;$o.coordinates.top+$o.coordinates.height)
-					
 					  //………………………………………………………………………………………
 			End case 
 		End if 

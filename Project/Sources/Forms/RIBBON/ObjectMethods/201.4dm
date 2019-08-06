@@ -11,7 +11,7 @@ C_OBJECT:C1216($Obj_device;$Obj_result;$Obj_simulator)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 $Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 
@@ -29,8 +29,7 @@ Case of
 		RIBBON (Num:C11(OBJECT Get name:C1087(Object current:K67:2)))
 		
 		  //______________________________________________________
-	: ($Lon_formEvent=On Clicked:K2:4)\
-		 | ($Lon_formEvent=On Long Click:K2:37)
+	: ($Lon_formEvent=On Clicked:K2:4)
 		
 		If (Form:C1466.devices.length>0)
 			

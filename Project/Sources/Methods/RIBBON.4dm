@@ -23,7 +23,7 @@ End if
   // Initialisations
 $Lon_parameters:=Count parameters:C259
 
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 
 $Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 
@@ -157,8 +157,7 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Lon_formEvent=On Clicked:K2:4)\
-		 | ($Lon_formEvent=On Long Click:K2:37)
+	: ($Lon_formEvent=On Clicked:K2:4)
 		
 		Case of 
 				

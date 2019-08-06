@@ -94,6 +94,8 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
+					"dragging": "none",
+					"dropping": "none",
 					"columns": [
 						{
 							"name": "tables",

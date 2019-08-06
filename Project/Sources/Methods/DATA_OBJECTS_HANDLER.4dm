@@ -39,7 +39,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Lon_formEvent:=Form event:C388
+	$Lon_formEvent:=Form event code:C388
 	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 	
@@ -194,7 +194,7 @@ Case of
 					Get localized string:C991("operators");\
 					"⬇")
 				
-				SVG EXPORT TO PICTURE:C1017(DOM Parse XML variable:C720($t);$Ptr_me->;Own XML data source:K45:18)
+				$Ptr_me->:=svg ("parse";New object:C1471("variable";$t)).get("picture")
 				
 				OBJECT SET VISIBLE:C603(*;$Txt_me;False:C215)
 				

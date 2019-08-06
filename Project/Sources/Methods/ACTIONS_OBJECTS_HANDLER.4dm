@@ -139,7 +139,7 @@ Case of
 							 & ($o.tgt#($o.src+1))  // Not the same or the next one
 							
 							$o:=$Obj_widget.cellCoordinates(1;$o.tgt).cellBox
-							$o.top:=$o.bottom
+							$o.bottom:=$o.top
 							$o.right:=$Obj_widget.coordinates.right
 							
 							$Obj_form.dropCursor.setCoordinates($o.left;$o.top;$o.right;$o.bottom)

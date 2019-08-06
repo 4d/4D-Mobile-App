@@ -2,13 +2,13 @@
 C_BOOLEAN:C305($b;$Boo_reset)
 C_LONGINT:C283($i;$l;$Lon_build;$Lon_error;$Lon_result;$Lon_type)
 C_LONGINT:C283($Lon_value;$Lon_x)
-C_PICTURE:C286($p;$Pic_file;$Pic_scaled)
+C_PICTURE:C286($p)
 C_POINTER:C301($r)
 C_REAL:C285($Num_)
 C_TEXT:C284($Dir_root;$File_;$t;$tt;$Txt_in;$Txt_ormula)
 C_TEXT:C284($Txt_result)
-C_OBJECT:C1216($o;$Obj_folder;$Obj_formula;$Obj_new;$Obj_out;$Obj_result)
-C_OBJECT:C1216($Obj_target;$Obj_template;$oo;$ooo)
+C_OBJECT:C1216($o;$Obj_folder;$Obj_formula;$Obj_new;$Obj_result;$Obj_target)
+C_OBJECT:C1216($Obj_template;$oo;$ooo;$svg)
 C_COLLECTION:C1488($c;$cc;$Col_2;$Col_forms;$Col_host)
 
 ARRAY TEXT:C222($tTxt_;0)
@@ -18,6 +18,30 @@ ARRAY TEXT:C222($tTxt_;0)
 COMPONENT_INIT 
 
 Case of 
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$t:=File:C1566("/RESOURCES/queryWidget.svg").getText()
+		
+		PROCESS 4D TAGS:C816($t;$t;\
+			ui.selectedFillColor;\
+			Get localized string:C991("fields");\
+			Get localized string:C991("comparators");\
+			Get localized string:C991("operators");\
+			"⬇")
+		
+		$svg:=svg ("parse";New object:C1471("variable";$t))
+		$svg.show()
+		$svg.close()
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$svg:=svg ("load";File:C1566("/RESOURCES/templates/form/list/Vertical Cards/template.svg"))
+		$t:=$svg.findId("cookery")
+		$svg.show()
+		$svg.close()
 		
 		  //________________________________________
 	: (True:C214)

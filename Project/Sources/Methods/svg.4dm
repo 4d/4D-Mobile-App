@@ -45,49 +45,121 @@ If (This:C1470._is=Null:C1517)
 		"position";Formula:C1597(svg ("set";New object:C1471("what";"position";"x";$1;"y";$2;"unit";$3)));\
 		"dimensions";Formula:C1597(svg ("set";New object:C1471("what";"dimensions";"width";$1;"height";$2;"unit";$3)));\
 		"fill";Formula:C1597(svg ("set";New object:C1471("what";"fill";"color";$1;"opacity";$2)));\
-		"stroke";Formula:C1597(svg ("set";New object:C1471("what";"stroke";"color";$1;"opacity";$2)));\
-		"font";Formula:C1597(svg ("set";New object:C1471("what";"font";"font";$1;"size";$2)));\
+		"stroke";Formula:C1597(svg (Choose:C955(Value type:C1509($1)=Is object:K8:27;"stroke";"set");Choose:C955(Value type:C1509($1)=Is object:K8:27;$1;New object:C1471("what";"stroke";"color";$1;"opacity";$2))));\
+		"font";Formula:C1597(svg (Choose:C955(Value type:C1509($1)=Is object:K8:27;"font";"set");Choose:C955(Value type:C1509($1)=Is object:K8:27;$1;New object:C1471("what";"font";"font";$1;"size";$2))));\
 		"attribute";Formula:C1597(svg ("set";New object:C1471("what";"attribute";"key";$1;"value";$2)));\
 		"attributes";Formula:C1597(svg ("set";New object:C1471("what";"attributes";"options";$1)));\
 		"get";Formula:C1597(svg ("get";Choose:C955(Value type:C1509($2)=Is boolean:K8:9;New object:C1471("what";String:C10($1);"keep";Bool:C1537($2);"options";$3);New object:C1471("what";String:C10($1);"options";$2)))[$1]);\
+		"findId";Formula:C1597(svg ("findId";New object:C1471("id";$1)).value);\
 		"show";Formula:C1597(svg ("show"));\
 		"errors";New collection:C1472\
 		)
 	
-	$t:=DOM Create XML Ref:C861("svg";"http://www.w3.org/2000/svg")
-	
-	If (Bool:C1537(OK))
+	If (Count parameters:C259>=1)
 		
-		$o.root:=$t
+		$c:=Split string:C1554($1;";")  // Optional text enumeration semicolons separated
 		
-		DOM SET XML ATTRIBUTE:C866($t;\
-			"xmlns:xlink";"http://www.w3.org/1999/xlink")
-		
-		DOM SET XML DECLARATION:C859($t;"UTF-8";True:C214)
-		XML SET OPTIONS:C1090($t;XML indentation:K45:34;Choose:C955(Is compiled mode:C492;XML no indentation:K45:36;XML with indentation:K45:35))
-		
-		$t:=DOM Create XML element:C865($o.root;"def")
-		
+		Case of 
+				
+				  //______________________________________________________
+			: ($c.indexOf("parse")#-1)  // Parse a given BLOB or Text type variable containing an SVG structure
+				
+				If ($2.variable#Null:C1517)  // Variable to parse
+					
+					If (Value type:C1509($2.variable)=Is BLOB:K8:12)
+						
+						$x:=$2.variable
+						$t:=DOM Parse XML variable:C720($x)
+						
+					Else 
+						
+						$tt:=String:C10($2.variable)
+						$t:=DOM Parse XML variable:C720($tt)
+						
+					End if 
+					
+					If (Bool:C1537(OK))
+						
+						$o.root:=$t
+						
+					End if 
+					
+				Else 
+					
+					$o.errors.push("Missing variable to parse.")
+					
+				End if 
+				
+				  //______________________________________________________
+			: ($c.indexOf("load")#-1)  // Parse a document containing an SVG structure
+				
+				If ($2#Null:C1517)  // File to load
+					
+					If (Bool:C1537($2.isFile) & Bool:C1537($2.exists))  // File to load
+						
+						$t:=DOM Parse XML source:C719($2.platformPath)
+						
+						If (Bool:C1537(OK))
+							
+							$o.root:=$t
+							
+						End if 
+						
+					Else 
+						
+						$o.errors.push("File not found: "+String:C10($2.platformPath))
+						
+					End if 
+					
+				Else 
+					
+					$o.errors.push("Missing document to load.")
+					
+				End if 
+				
+				  //______________________________________________________
+		End case 
 	End if 
 	
-	$o.success:=($o.root#Null:C1517)
+	If ($o.root=Null:C1517)\
+		 & ($o.errors.length=0)  // Create a default SVG structure
+		
+		$t:=DOM Create XML Ref:C861("svg";"http://www.w3.org/2000/svg")
+		
+		If (Bool:C1537(OK))
+			
+			$o.root:=$t
+			
+			DOM SET XML ATTRIBUTE:C866($t;\
+				"xmlns:xlink";"http://www.w3.org/1999/xlink")
+			
+			DOM SET XML DECLARATION:C859($t;"UTF-8";True:C214)
+			XML SET OPTIONS:C1090($t;XML indentation:K45:34;Choose:C955(Is compiled mode:C492;XML no indentation:K45:36;XML with indentation:K45:35))
+			
+			$t:=DOM Create XML element:C865($o.root;"def")
+			
+			If (Bool:C1537(OK))
+				
+				  // Default values
+				DOM SET XML ATTRIBUTE:C866($o.root;\
+					"viewport-fill";"none";\
+					"fill";"none";\
+					"stroke";"black";\
+					"font-family";"'lucida grande',sans-serif";\
+					"font-size";12;\
+					"text-rendering";"geometricPrecision";\
+					"shape-rendering";"crispEdges";\
+					"preserveAspectRatio";"none")
+				
+			End if 
+		End if 
+	End if 
+	
+	$o.success:=Bool:C1537(OK) & ($o.root#Null:C1517)
 	
 	If ($o.success)
 		
-		  // Default values
-		DOM SET XML ATTRIBUTE:C866($o.root;\
-			"viewport-fill";"none";\
-			"fill";"none";\
-			"stroke";"black";\
-			"font-family";"'lucida grande',sans-serif";\
-			"font-size";12;\
-			"text-rendering";"geometricPrecision";\
-			"shape-rendering";"crispEdges";\
-			"preserveAspectRatio";"none")
-		
-		If (Count parameters:C259>=1)
-			
-			$c:=Split string:C1554($1;";")
+		If ($c.length>0)
 			
 			For each ($t;$c)
 				
@@ -128,17 +200,13 @@ If (This:C1470._is=Null:C1517)
 						End if 
 						
 						  //______________________________________________________
-					Else 
-						
-						  // A "Case of" statement should never omit "Else"
-						  //______________________________________________________
 				End case 
 			End for each 
 		End if 
 		
 	Else 
 		
-		$o.errors.push("Failed to create SVG tree.")
+		$o.errors.push("Failed to create SVG structure.")
 		
 	End if 
 	
@@ -151,7 +219,7 @@ Else
 		If ($o.root=Null:C1517)
 			
 			$o.success:=False:C215
-			$o.errors.push("The SVG tree is not valid.")
+			$o.errors.push("The SVG structure is not valid.")
 			
 		Else 
 			
@@ -159,7 +227,92 @@ Else
 			$oo:=$2.options
 			$Txt_object:=String:C10($2.what)
 			
+			  // Find the target
 			Case of 
+					
+					  //______________________________________________________
+				: ($1="new")
+					
+					$Dom_target:=Choose:C955($oo.target#Null:C1517;String:C10($oo.target);$o.root)
+					
+					  //______________________________________________________
+				: ($1="set")
+					
+					If ($oo.target=Null:C1517)
+						
+						If ($o.lastCreatedObject=Null:C1517)
+							
+							  // Target is the canvas
+							$Dom_target:=$o.root
+							
+						Else 
+							
+							$Dom_target:=$o.lastCreatedObject
+							
+						End if 
+						
+					Else 
+						
+						$Dom_target:=$oo.target
+						
+					End if 
+					
+					  //______________________________________________________
+				: (New collection:C1472("stroke";"font").indexOf($1)#-1)
+					
+					If ($2.target=Null:C1517)
+						
+						If ($o.lastCreatedObject=Null:C1517)
+							
+							  // Target is the canvas
+							$Dom_target:=$o.root
+							
+						Else 
+							
+							$Dom_target:=$o.lastCreatedObject
+							
+						End if 
+						
+					Else 
+						
+						$Dom_target:=$2.target
+						
+					End if 
+					
+					  //______________________________________________________
+			End case 
+			
+			Case of 
+					
+					  //=================================================================
+				: ($1="findId")
+					
+					$o:=New object:C1471
+					
+					This:C1470.success:=False:C215
+					
+					If ($2.id#Null:C1517) & (Length:C16(String:C10($2.id))>0)
+						
+						$t:=DOM Find XML element by ID:C1010(This:C1470.root;String:C10($2.id))
+						
+						If (Bool:C1537(OK))
+							
+							This:C1470.success:=True:C214
+							$o.value:=$t
+							
+						Else 
+							
+							$o.value:="0"*32
+							This:C1470.errors.push("id \""+String:C10($2.id)+"\" not found.")
+							
+						End if 
+						
+					Else 
+						
+						$o.value:="0"*32
+						This:C1470.errors.push("id to search is missing.")
+						
+					End if 
 					
 					  //=================================================================
 				: ($1="get")
@@ -188,7 +341,7 @@ Else
 							Else 
 								
 								$o.picture:=Null:C1517
-								$o.errors.push("Failed to convert SVG tree as picture.")
+								$o.errors.push("Failed to convert SVG structure as picture.")
 								
 							End if 
 							
@@ -213,7 +366,7 @@ Else
 							Else 
 								
 								$o.xml:=Null:C1517
-								$o.errors.push("Failed to export SVG tree as XML.")
+								$o.errors.push("Failed to export SVG structure as XML.")
 								
 							End if 
 							
@@ -251,8 +404,6 @@ Else
 					
 					  //=================================================================
 				: ($1="new")
-					
-					$Dom_target:=Choose:C955($oo.target#Null:C1517;String:C10($oo.target);$o.root)
 					
 					OK:=0
 					
@@ -468,7 +619,8 @@ Else
 								
 								If ($c.indexOf($t)=-1)
 									
-									If ($t#"") & ($oo[$t]#Null:C1517)
+									If (Length:C16($t)#0)\
+										 & ($oo[$t]#Null:C1517)
 										
 										DOM SET XML ATTRIBUTE:C866($o.lastCreatedObject;\
 											$t;$oo[$t])
@@ -479,33 +631,237 @@ Else
 										$o.errors.push("Invalid values pair for an attribute.")
 										
 									End if 
-									
 								End if 
 							End for each 
 						End if 
 					End if 
 					
 					  //=================================================================
-				: ($1="set")
+				: ($1="stroke")
 					
-					If ($oo.target=Null:C1517)
+					If ($2.color#Null:C1517)
 						
-						If ($o.lastCreatedObject=Null:C1517)
+						DOM SET XML ATTRIBUTE:C866($Dom_target;\
+							"stroke";String:C10($2.color))
+						
+					End if 
+					
+					If (OK=1)\
+						 & ($2.opacity#Null:C1517)
+						
+						DOM SET XML ATTRIBUTE:C866($Dom_target;\
+							"stroke-opacity";Num:C11($2.opacity)/100)
+						
+					End if 
+					
+					If (OK=1)\
+						 & ($2.width#Null:C1517)
+						
+						DOM SET XML ATTRIBUTE:C866($Dom_target;\
+							"stroke-width";Num:C11($2.width))
+						
+					End if 
+					
+					If (OK=1)\
+						 & ($2.dasharray#Null:C1517)
+						
+						DOM SET XML ATTRIBUTE:C866($Dom_target;\
+							"stroke-dasharray";String:C10($2.dasharray))
+						
+					End if 
+					
+					$o.success:=Bool:C1537(OK)
+					
+					  //=================================================================
+				: ($1="font")
+					
+					If ($2.font#Null:C1517)
+						
+						DOM SET XML ATTRIBUTE:C866($Dom_target;\
+							"font-family";String:C10($2.font))
+						
+					End if 
+					
+					If (OK=1)\
+						 & ($2.size#Null:C1517)
+						
+						DOM SET XML ATTRIBUTE:C866($Dom_target;\
+							"font-size";Num:C11($2.size))
+						
+					End if 
+					
+					If (OK=1)\
+						 & ($2.color#Null:C1517)
+						
+						DOM SET XML ATTRIBUTE:C866($Dom_target;\
+							"fill";String:C10($2.color))
+						
+					End if 
+					
+					If (OK=1)\
+						 & ($2.opacity#Null:C1517)
+						
+						DOM SET XML ATTRIBUTE:C866($Dom_target;\
+							"fill-opacity";Num:C11($2.opacity)/100)
+						
+					End if 
+					
+					If (OK=1)\
+						 & ($2.style#Null:C1517)
+						
+						$i:=Num:C11($2.style)
+						
+						If ($i=0)  // Plain
 							
-							  // Target is the canvas
-							$Dom_target:=$o.root
+							DOM SET XML ATTRIBUTE:C866($Dom_target;\
+								"text-decoration";"none";\
+								"font-style";"normal";\
+								"font-weight";"normal")
 							
 						Else 
 							
-							$Dom_target:=$o.lastCreatedObject
+							If ($i>=8)  // Line-through
+								
+								DOM SET XML ATTRIBUTE:C866($Dom_target;\
+									"text-decoration";"line-through")
+								$i:=$i-8
+								
+							End if 
+							
+							If (OK=1)\
+								 & ($i>=4)  // Underline
+								
+								DOM SET XML ATTRIBUTE:C866($Dom_target;\
+									"text-decoration";"underline")
+								$i:=$i-4
+								
+							End if 
+							
+							If (OK=1)\
+								 & ($i>=2)  // Italic
+								
+								DOM SET XML ATTRIBUTE:C866($Dom_target;\
+									"font-style";"italic")
+								$i:=$i-2
+								
+							End if 
+							
+							If (OK=1)\
+								 & ($i=1)  // Bold
+								
+								DOM SET XML ATTRIBUTE:C866($Dom_target;\
+									"font-weight";"bold")
+								
+							End if 
+						End if 
+					End if 
+					
+					If (OK=1)\
+						 & ($2.alignment#Null:C1517)
+						
+						DOM GET XML ELEMENT NAME:C730($Dom_target;$t)
+						
+						If (OK=1)
+							
+							$i:=Num:C11($2.alignment)
+							
+							Case of 
+									
+									  //…………………………………………………………………………………………
+								: ($i=Align center:K42:3)
+									
+									If ($t="textArea")
+										
+										DOM SET XML ATTRIBUTE:C866($Dom_target;\
+											"text-align";"center")
+										
+									Else 
+										
+										DOM SET XML ATTRIBUTE:C866($Dom_target;\
+											"text-anchor";"middle")
+										
+									End if 
+									
+									  //…………………………………………………………………………………………
+								: ($i=Align right:K42:4)
+									
+									If ($t="textArea")
+										
+										DOM SET XML ATTRIBUTE:C866($Dom_target;\
+											"text-align";"end")
+										
+									Else 
+										
+										DOM SET XML ATTRIBUTE:C866($Dom_target;\
+											"text-anchor";"end")
+										
+									End if 
+									
+									  //…………………………………………………………………………………………
+								: ($i=Align left:K42:2)\
+									 | ($i=Align default:K42:1)
+									
+									If ($t="textArea")
+										
+										DOM SET XML ATTRIBUTE:C866($Dom_target;\
+											"text-align";"start")
+										
+									Else 
+										
+										DOM SET XML ATTRIBUTE:C866($Dom_target;\
+											"text-anchor";"start")
+										
+									End if 
+									
+									  //…………………………………………………………………………………………
+								: ($i=5)\
+									 & ($t="textArea")
+									
+									DOM SET XML ATTRIBUTE:C866($Dom_target;\
+										"text-align";"justify")
+									
+									  //…………………………………………………………………………………………
+								Else 
+									
+									If ($t="textArea")
+										
+										DOM SET XML ATTRIBUTE:C866($Dom_target;\
+											"text-align";"inherit")
+										
+									Else 
+										
+										DOM SET XML ATTRIBUTE:C866($Dom_target;\
+											"text-anchor";"inherit")
+										
+									End if 
+									
+									  //…………………………………………………………………………………………
+							End case 
+						End if 
+					End if 
+					
+					If (OK=1)\
+						 & ($2.rendering#Null:C1517)
+						
+						$t:=String:C10($2.rendering)
+						OK:=Num:C11(New collection:C1472("auto";"optimizeSpeed";"optimizeLegibility";"geometricPrecision";"inherit").indexOf($t)#-1)
+						
+						If (OK=1)
+							
+							DOM SET XML ATTRIBUTE:C866($Dom_target;\
+								"text-rendering";$t)
+							
+						Else 
+							
+							$o.errors.push("Unknown value ("+$t+") for text-rendering.")
 							
 						End if 
-						
-					Else 
-						
-						$Dom_target:=$oo.target
-						
 					End if 
+					
+					$o.success:=Bool:C1537(OK)
+					
+					  //=================================================================
+				: ($1="set")
 					
 					Case of 
 							
@@ -516,13 +872,12 @@ Else
 								
 								If ($2.value#Null:C1517)
 									
-									
 									DOM SET XML ATTRIBUTE:C866($Dom_target;\
 										String:C10($2.key);$2.value)
 									
 								Else 
 									
-									  // Remove ? 
+									  // Remove ?
 									
 								End if 
 								
@@ -542,7 +897,7 @@ Else
 								
 								If ($t#"target")
 									
-									If ($t#"")
+									If (Length:C16($t)#0)
 										
 										If ($oo[$t]#Null:C1517)
 											
@@ -551,7 +906,7 @@ Else
 											
 										Else 
 											
-											  // Remove ? 
+											  // Remove ?
 											
 										End if 
 										
@@ -706,42 +1061,14 @@ Else
 							  //______________________________________________________
 						: ($2.what="stroke")
 							
-							If ($2.color#Null:C1517)
-								
-								DOM SET XML ATTRIBUTE:C866($Dom_target;\
-									"stroke";String:C10($2.color))
-								
-							End if 
-							
-							If (OK=1)\
-								 & ($2.opacity#Null:C1517)
-								
-								DOM SET XML ATTRIBUTE:C866($Dom_target;\
-									"stroke-opacity";Num:C11($2.opacity)/100)
-								
-							End if 
-							
-							$o.success:=Bool:C1537(OK)
+							$2.target:=$Dom_target
+							$o:=svg ("stroke";$2)
 							
 							  //______________________________________________________
 						: ($2.what="font")
 							
-							If ($2.font#Null:C1517)
-								
-								DOM SET XML ATTRIBUTE:C866($Dom_target;\
-									"font-family";String:C10($2.font))
-								
-							End if 
-							
-							If (OK=1)\
-								 & ($2.size#Null:C1517)
-								
-								DOM SET XML ATTRIBUTE:C866($Dom_target;\
-									"font-size";Num:C11($2.size))
-								
-							End if 
-							
-							$o.success:=Bool:C1537(OK)
+							$2.target:=$Dom_target
+							$o:=svg ("font";$2)
 							
 							  //______________________________________________________
 						Else 
@@ -761,9 +1088,9 @@ Else
 		End if 
 	End if 
 	
-	If (Not:C34($o.success))
+	If (Not:C34(This:C1470.success))
 		
-		$o.errors.push($1+" "+String:C10($2.what)+" failed")
+		This:C1470.errors.push($1+" "+String:C10($2.what)+" failed")
 		
 	End if 
 End if 

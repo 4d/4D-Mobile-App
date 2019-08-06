@@ -341,9 +341,9 @@
 					"events": [
 						"onClick",
 						"onMouseEnter",
-						"onMouseLeave",
-						"onLongClick"
-					]
+						"onMouseLeave"
+					],
+					"popupPlacement": "linked"
 				},
 				"201": {
 					"type": "button",
@@ -362,25 +362,9 @@
 					"events": [
 						"onClick",
 						"onMouseEnter",
-						"onMouseLeave",
-						"onLongClick"
-					]
-				},
-				"152.PopUp": {
-					"type": "button",
-					"top": 105,
-					"left": 350,
-					"width": 11,
-					"height": 16,
-					"popupPlacement": "linked",
-					"textPlacement": "right",
-					"style": "custom",
-					"method": "ObjectMethods/152.PopUp.4dm",
-					"events": [
-						"onClick"
+						"onMouseLeave"
 					],
-					"icon": "/RESOURCES/images/common/down.png",
-					"iconFrames": 4
+					"popupPlacement": "linked"
 				},
 				"153": {
 					"type": "button",
@@ -402,22 +386,6 @@
 						"onMouseLeave",
 						"onLongClick"
 					]
-				},
-				"201.PopUp": {
-					"type": "button",
-					"top": 105,
-					"left": 231,
-					"width": 11,
-					"height": 16,
-					"popupPlacement": "linked",
-					"textPlacement": "right",
-					"style": "custom",
-					"method": "ObjectMethods/201.PopUp.4dm",
-					"events": [
-						"onClick"
-					],
-					"icon": "/RESOURCES/images/common/down.png",
-					"iconFrames": 4
 				}
 			}
 		}
