@@ -1,5 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
 
+TRY 
 
 C_OBJECT:C1216($Obj_in;$Obj_out;$File_)
 C_TEXT:C284($Txt_buffer)
@@ -25,3 +26,5 @@ If (Shift down:C543)
 End if 
 
 DOM CLOSE XML:C722($Obj_in.dom)
+
+FINALLY 

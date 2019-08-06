@@ -1,4 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
+
+TRY 
+
 C_OBJECT:C1216($Obj_in;$Obj_out)
 C_COLLECTION:C1488($Col_ids)
 
@@ -38,3 +41,5 @@ If ($Obj_out.success)
 	
 	DOM CLOSE XML:C722($Obj_out.dom)
 End if 
+
+FINALLY 

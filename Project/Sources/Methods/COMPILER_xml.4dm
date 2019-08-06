@@ -37,4 +37,9 @@ If (False:C215)
 	C_TEXT:C284(xml_findElement ;$2)
 	
 	  //____________________________________
+	C_OBJECT:C1216(xml ;$0)
+	C_TEXT:C284(xml ;$1)
+	C_OBJECT:C1216(xml ;$2)
+	
+	  //____________________________________
 End if 
