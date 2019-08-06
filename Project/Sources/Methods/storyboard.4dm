@@ -665,14 +665,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If (Test path name:C476(String:C10($Obj_in.path))=Is a folder:K24:2)
 				
-				ARRAY TEXT:C222($DocumentPaths_at;0x0000)
-				DOCUMENT LIST:C474($Obj_in.path;$DocumentPaths_at;Recursive parsing:K24:13)  // TODO replace by Folder
-				
 				$Obj_out.files:=New collection:C1472
 				
-				For ($Lon_i;1;Size of array:C274($DocumentPaths_at);1)
-					
-					$File_:=Folder:C1567($Obj_in.path;fk platform path:K87:2).file($DocumentPaths_at{$Lon_i})
+				For each ($File_;Folder:C1567($Obj_in.path;fk platform path:K87:2).files(fk recursive:K87:7))
 					
 					If ($File_.extension=".storyboard")
 						
@@ -681,7 +676,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						  // find named colors
 						$Boo_buffer:=False:C215
-						For each ($Dom_;$Dom_root.findMany("document/resources/namedColor"))
+						For each ($Dom_;$Dom_root.findMany("document/resources/namedColor").elements)
 							
 							  // get color name
 							$Txt_buffer:=$Dom_.getAttribute("name").value
@@ -760,7 +755,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 						End if 
 					End if 
-				End for 
+				End for each 
 				
 			Else 
 				
@@ -775,14 +770,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If (Test path name:C476(String:C10($Obj_in.path))=Is a folder:K24:2)
 				
-				ARRAY TEXT:C222($DocumentPaths_at;0x0000)
-				DOCUMENT LIST:C474($Obj_in.path;$DocumentPaths_at;Recursive parsing:K24:13)
-				
 				$Obj_out.files:=New collection:C1472
 				
-				For ($Lon_i;1;Size of array:C274($DocumentPaths_at);1)
-					
-					$File_:=Folder:C1567($Obj_in.path;fk platform path:K87:2).file($DocumentPaths_at{$Lon_i})
+				For each ($File_;Folder:C1567($Obj_in.path;fk platform path:K87:2).files(fk recursive:K87:7))
 					
 					If ($File_.extension=".storyboard")
 						
@@ -818,10 +808,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						End for each 
 						
 						  // Remove empty value attribute of userDefinedRuntimeAttribute with type image
-						For each ($Dom_;$Dom_root.findByName("userDefinedRuntimeAttribute").elements;1)
+						For each ($Dom_;$Dom_root.findByName("userDefinedRuntimeAttribute").elements)
 							
 							C_OBJECT:C1216($Obj_attributes)
-							$Obj_attributes:=$Dom_.attributes()
+							$Obj_attributes:=$Dom_.attributes().attributes
 							
 							If (String:C10($Obj_attributes.type)="image")
 								
@@ -851,7 +841,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					$Obj_out.success:=True:C214
 					
-				End for 
+				End for each 
 				
 			Else 
 				
@@ -882,7 +872,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					  // Use temp file because inplace command do not reformat
 					$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".storyboard")
-					$Obj_in.path.copyTo($Obj_in.path)
+					$Obj_in.path.copyTo($File_.parent;$File_.name)
 					
 					$Txt_cmd:="ibtool --upgrade "+str_singleQuoted ($File_.path)+" --write "+str_singleQuoted ($Obj_in.path.path)
 					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)

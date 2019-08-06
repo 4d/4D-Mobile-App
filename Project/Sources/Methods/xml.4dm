@@ -49,8 +49,7 @@ If (This:C1470._is=Null:C1517)
 		"remove";Formula:C1597(xml ("remove"));\
 		"export";Formula:C1597(xml ("export"));\
 		"save";Formula:C1597(xml ("save";$1));\
-		"close";Formula:C1597(xml ("close"));\
-		"errors";New collection:C1472\
+		"close";Formula:C1597(xml ("close"))\
 		)
 	
 	Case of 
@@ -70,7 +69,7 @@ If (This:C1470._is=Null:C1517)
 				
 			Else 
 				
-				$o.errors.push("No valid root name definied to create.")
+				$o.errors:=New collection:C1472("No valid root name definied to create.")
 				
 			End if 
 			
@@ -91,7 +90,7 @@ If (This:C1470._is=Null:C1517)
 				
 			Else 
 				
-				$o.errors.push("No valid file to load.")
+				$o.errors:=New collection:C1472("No valid file to load.")
 				
 			End if 
 			
@@ -120,7 +119,7 @@ If (This:C1470._is=Null:C1517)
 				
 			Else 
 				
-				$o.errors.push("No valid variable to parse.")
+				$o.errors:=New collection:C1472("No valid variable to parse.")
 				
 			End if 
 			
@@ -130,9 +129,9 @@ If (This:C1470._is=Null:C1517)
 			
 			Case of 
 				: (Length:C16($t)#32)
-					$o.errors.push("Invalid length for xml element reference: "+$t)
+					$o.errors:=New collection:C1472("Invalid length for xml element reference: "+$t)
 				: ($t="00000000000000000000000000000000")
-					$o.errors.push("Invalid element. Not found")
+					$o.errors:=New collection:C1472("Invalid element. Not found")
 				Else 
 					$o.elementRef:=$t
 			End case 
@@ -150,7 +149,7 @@ Else
 		If ($o.elementRef=Null:C1517)
 			
 			$o.success:=False:C215
-			$o.errors.push("The DOM tree is not valid.")
+			$o.errors:=New collection:C1472("The DOM tree is not valid.")
 			
 		Else 
 			
@@ -211,7 +210,8 @@ Else
 					  //=================================================================
 				: ($1="attributes")
 					
-					$o:=xml_attributes ($o.elementRef)
+					$o:=New object:C1471("attributes";xml_attributes ($o.elementRef);"success";True:C214)
+					  // use a level because could have an attribute named success...
 					
 					  //=================================================================
 				: ($1="export")
@@ -310,7 +310,7 @@ Else
 								
 							Else 
 								
-								$o.errors.push("Invalid xml object reference passed")
+								$o.errors:=New collection:C1472("Invalid xml object reference passed")
 							End if 
 							
 						: (Length:C16(String:C10($2.element))=32)
@@ -319,7 +319,7 @@ Else
 							
 						Else 
 							
-							$o.errors.push("Invalid element reference passed")
+							$o.errors:=New collection:C1472("Invalid element reference passed")
 							
 					End case 
 					
@@ -333,7 +333,7 @@ Else
 								$t:=DOM Insert XML element:C1083($o.elementRef;$2.element.elementRef;$2.childIndex)
 							Else 
 								
-								$o.errors.push("Invalid xml object reference passed")
+								$o.errors:=New collection:C1472("Invalid xml object reference passed")
 								
 							End if 
 							
@@ -343,7 +343,7 @@ Else
 							
 						Else 
 							
-							$o.errors.push("Invalid element reference passed")
+							$o.errors:=New collection:C1472("Invalid element reference passed")
 							
 					End case 
 					
@@ -366,6 +366,9 @@ Else
 	
 	If (Not:C34($o.success))
 		
+		If ($o.errors=Null:C1517)
+			$o.errors:=New collection:C1472()
+		End if 
 		$o.errors.push(String:C10($1)+" failed")
 		
 	End if 
