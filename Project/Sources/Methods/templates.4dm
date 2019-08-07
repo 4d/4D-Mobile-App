@@ -944,20 +944,19 @@ Case of
 		
 		  // Need asset?
 		$Boo_withIcons:=Bool:C1537($Obj_template.assets.mandatory)
-		
 		If (Not:C34($Boo_withIcons))
 			
-			For each ($Obj_field;$Obj_in.tags.table.detailFields)
+			For each ($Obj_field;$Obj_in.tags.table.detailFields) Until ($Boo_withIcons)
 				
 				If (String:C10($Obj_field.icon)#"")
 					
 					$Boo_withIcons:=True:C214
-					$Lon_ii:=MAXLONG:K35:2-1  // break
 					
 				End if 
 			End for each 
 		End if 
 		
+		  // Create by field icon alignment or icon name
 		For each ($Obj_field;$Obj_in.tags.table.detailFields)
 			
 			If ($Boo_withIcons)
@@ -973,6 +972,7 @@ Case of
 			End if 
 		End for each 
 		
+		  // Create the icons
 		If ($Boo_withIcons)
 			
 			$Dir_root:=COMPONENT_Pathname ("fieldIcons")
@@ -981,18 +981,13 @@ Case of
 			  // If need asset, create it
 			$Obj_out.assets:=New collection:C1472  // result of asset operations
 			
-			  // Fill missing information for detail template only
+			
 			If (Value type:C1509($Obj_template.assets)#Is object:K8:27)
-				
-				$Obj_template.assets:=New object:C1471(\
-					"format";"png")
-				
+				$Obj_template.assets:=New object:C1471("format";"png")  // Fill missing information for detail template only
 			End if 
 			
 			If ($Obj_template.assets.target=Null:C1517)
-				
 				$Obj_template.assets.target:="___TABLE___/Detail"  // Default path for detail template resource
-				
 			End if 
 			
 			For each ($Obj_field;$Obj_in.tags.table.detailFields)
@@ -1011,24 +1006,15 @@ Case of
 							$Txt_buffer:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_field.shortLabel;$Obj_field.label)
 							
 							Case of 
-									
-									  // ----------------------------------------
 									  // ----------------------------------------
 								: (Length:C16($Txt_buffer)>0)
-									
 									  // Take first letter
 									$Txt_buffer:=Uppercase:C13($Txt_buffer[[1]])
-									
-									  // ----------------------------------------
 									  // ----------------------------------------
 								: (Length:C16($Obj_field.name)>0)
-									
 									  //%W-533.1
 									$Txt_buffer:=Uppercase:C13($Obj_field.name[[1]])
 									  //%W+533.1
-									
-									  // ----------------------------------------
-									
 									  // ----------------------------------------
 							End case 
 							
@@ -1055,12 +1041,12 @@ Case of
 						End if 
 					End if 
 					
-				Else 
+				Else   // There is an icon defined
 					
 					If (Position:C15("/";$Obj_field.icon)=1)
-						$File_icon:=$Dir_hostRoot.file(Substring:C12($Obj_field.icon;2))
+						$File_icon:=$Dir_hostRoot.file(Substring:C12($Obj_field.icon;2))  // custom icon
 					Else 
-						$File_icon:=$Dir_root.file($Obj_field.icon)
+						$File_icon:=$Dir_root.file($Obj_field.icon)  // product icon
 					End if 
 					
 					$Obj_buffer:=asset (New object:C1471(\
@@ -1098,7 +1084,7 @@ Case of
 		
 		$Obj_in.projfile.mustSave:=True:C214  // project modified
 		
-		  // Try to manage template element duplication
+		  // Manage template elements duplication
 		
 		$Obj_out.storyboard:=storyboard (New object:C1471(\
 			"action";"detailform";\
