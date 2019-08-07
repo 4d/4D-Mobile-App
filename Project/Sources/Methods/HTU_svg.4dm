@@ -62,10 +62,16 @@ Case of
 		End if 
 		
 		  // Create a group with id "test" & keep its reference
-		$t:=$svg.group("test").lastCreatedObject
+		$t:=$svg.group("test").latest
 		
 		  // Create a rounded square into the group
-		$svg.rect(0;0;New object:C1471("target";$t;"rx";5))\
+		  //$svg.rect(0;0;New object("target";$t;"rx";5))\
+			.dimensions(50)\
+			.fill("yellow")\
+			.stroke("blue")\
+			.position(20;40)
+		
+		$svg.roundedRect(0;0;New object:C1471("target";$t))\
 			.dimensions(50)\
 			.fill("yellow")\
 			.stroke("blue")\
@@ -86,6 +92,10 @@ Case of
 				.position(120;100)
 			
 		End if 
+		
+		ASSERT:C1129($t=$svg.findById("test"))
+		ASSERT:C1129($svg.findByPath("svg/rect").length=3)
+		ASSERT:C1129(Value type:C1509($svg.findByPath("svg/g/rect"))=Is text:K8:3)
 		
 		  //______________________________________________________
 	: (True:C214)
@@ -121,6 +131,9 @@ End case
   // Otherwise, the reference and the memory are automatically purged
 $p:=$svg.get("picture";True:C214)
 $t:=$svg.get("xml";True:C214)
+
+$svg.save("text";Folder:C1567(fk desktop folder:K87:19).file("test svg.xml");True:C214)
+$svg.save("picture";Folder:C1567(fk desktop folder:K87:19).file("test svg.png";True:C214))
 
   // show() call the command SVGTool_SHOW_IN_VIEWER if the component 4D SVG is available
 $svg.show()

@@ -286,6 +286,13 @@
 					"dataSource": "Not:C34(Form:C1466.radio)",
 					"dataSourceTypeHint": "boolean",
 					"radioGroup": "radio"
+				},
+				"Input": {
+					"type": "input",
+					"left": 453,
+					"top": 606,
+					"width": 202,
+					"height": 17
 				}
 			}
 		}

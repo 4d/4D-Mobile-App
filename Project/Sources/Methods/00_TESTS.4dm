@@ -22,6 +22,24 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
+		$svg:=svg   //("load";Folder(fk desktop folder).file("DEV/export.svg"))
+		$t:=$svg.rect(10;10;100;50).latest
+		ASSERT:C1129($t=$svg.find("svg/rect"))
+		  //$svg.save("text";Folder(fk desktop folder).file("DEV/export.xml"))  //;True)  //;".jpg")//;True)
+		  //$svg.close()
+		
+		$svg.save("text";Folder:C1567(fk desktop folder:K87:19).file("test svg.xml");True:C214)
+		$svg.save("picture";Folder:C1567(fk desktop folder:K87:19).file("test svg.png"))
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$svg:=svg ("load";File:C1566("/RESOURCES/templates/form/list/Vertical Cards/template.svg"))
+		$svg.save("picture";Folder:C1567(fk desktop folder:K87:19).file("DEV/export.png"))
+		
+		  //________________________________________
+	: (True:C214)
+		
 		$t:=File:C1566("/RESOURCES/queryWidget.svg").getText()
 		
 		PROCESS 4D TAGS:C816($t;$t;\
@@ -39,7 +57,7 @@ Case of
 	: (True:C214)
 		
 		$svg:=svg ("load";File:C1566("/RESOURCES/templates/form/list/Vertical Cards/template.svg"))
-		$t:=$svg.findId("cookery")
+		$t:=$svg.findById("cookery")
 		$svg.show()
 		$svg.close()
 		

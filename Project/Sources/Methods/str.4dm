@@ -15,7 +15,7 @@ C_OBJECT:C1216($2)
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($i;$l;$Lon_length;$Lon_position)
-C_TEXT:C284($t;$Txt_filtered;$Txt_pattern;$Txt_result)
+C_TEXT:C284($t;$tt;$Txt_filtered;$Txt_pattern;$Txt_result)
 C_OBJECT:C1216($o)
 C_COLLECTION:C1488($c)
 
@@ -474,116 +474,43 @@ Else
 					  //______________________________________________________
 				: ($1="unaccented")  // Replace accented characters with non accented one
 					
-					  // XXX not very efficient
-					
 					$t:=This:C1470.value
 					
 					If (Length:C16($t)>0)
 						
-						$Txt_filtered:="ÀÁÂÃÄÅ"
+						  // Special cases
+						$t:=Replace string:C233($t;"ȼ";"c";*)
+						$t:=Replace string:C233($t;"Ȼ";"C";*)
+						$t:=Replace string:C233($t;"ð";"o";*)
+						$t:=Replace string:C233($t;"n̈";"n";*)
+						$t:=Replace string:C233($t;"N̈";"N";*)
 						
-						For ($i;1;Length:C16($Txt_filtered);1)
+						$tt:="abcdefghijklmnopqrstuvwxyz"
+						
+						For ($i;1;Length:C16($tt);1)
 							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"A";*)
+							$l:=0
 							
+							Repeat 
+								
+								$l:=Position:C15($tt[[$i]];$t;$l+1)
+								
+								If ($l>0)
+									
+									If (Position:C15($t[[$l]];Uppercase:C13($t[[$l]];*);*)>0)
+										
+										$t[[$l]]:=Uppercase:C13($t[[$l]])
+										
+									Else 
+										
+										$t[[$l]]:=Lowercase:C14($t[[$l]])
+										
+									End if 
+								End if 
+							Until ($l=0)
 						End for 
 						
-						$Txt_filtered:="àáâãäå"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"a";*)
-							
-						End for 
-						
-						$Txt_filtered:="ÈÉÊË"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"E";*)
-							
-						End for 
-						
-						$Txt_filtered:="èéêë"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"e";*)
-							
-						End for 
-						
-						$Txt_filtered:="ÌÍÎÏ"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"I";*)
-							
-						End for 
-						
-						$Txt_filtered:="ÒÓÔÕÖ"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"O";*)
-							
-						End for 
-						
-						$Txt_filtered:="ðòóôõö"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"o";*)
-							
-						End for 
-						
-						$Txt_filtered:="ÙÚÛÜ"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"U";*)
-							
-						End for 
-						
-						$Txt_filtered:="ùúûü"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"u";*)
-							
-						End for 
-						
-						$Txt_filtered:="ćĉčċçḉȼ"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"c";*)
-							
-						End for 
-						
-						$Txt_filtered:="ĆĈČĊÇḈȻȻ"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"C";*)
-							
-						End for 
-						
-						$Txt_filtered:="ŃǸŇÑṄŅṆṊṈN̈"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"N";*)
-							
-						End for 
-						
-						$Txt_filtered:="ņńǹňñṅṇṋṉn̈"
-						
-						For ($i;1;Length:C16($Txt_filtered);1)
-							
-							$t:=Replace string:C233($t;$Txt_filtered[[$i]];"n";*)
-							
-						End for 
-						
+						  // Miscellaneous
 						$t:=Replace string:C233($t;"ß";"ss";*)
 						$t:=Replace string:C233($t;"Æ";"AE";*)
 						$t:=Replace string:C233($t;"æ";"ae";*)

@@ -80,7 +80,7 @@ If ($Obj_dataModel#Null:C1517)
 		
 		  // Create a table group. filled according to selected status
 		$Dom_table:=$svg.group($Txt_table)\
-			.fill(Choose:C955($Boo_selected;$kTxt_selectedFill;"white")).lastCreatedObject
+			.fill(Choose:C955($Boo_selected;$kTxt_selectedFill;"white")).latest
 		
 		  // Background
 		$svg.rect($Lon_x;$Lon_y;$kLon_cellWidth;$kLon_cellHeight;New object:C1471("target";$Dom_table))\

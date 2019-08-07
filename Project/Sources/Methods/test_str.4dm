@@ -1,6 +1,6 @@
 //%attributes = {}
 C_LONGINT:C283($i)
-C_TEXT:C284($t;$Txt_in;$Txt_out)
+C_TEXT:C284($t;$tt;$Txt_in;$Txt_out)
 C_OBJECT:C1216($o)
 
 TRY 
@@ -158,19 +158,135 @@ ASSERT:C1129(str ("75,1").fixedLength(5;"0")="75,10")
 
   // ============================================
   // unaccented()
-$Txt_in:="ćĉčċçḉȼ"+"ĆĈČĊÇḈȻ"
+$t:="àáâãäå"
+$tt:="ÀÁÂÃÄÅ"
+$Txt_in:=$t+$tt
 $Txt_out:=str ($Txt_in).unaccented()
 ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
 
-For ($i;1;7;1)
+For ($i;1;Length:C16($t);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("a");"unaccented()")
+	
+End for 
+
+For ($i;Length:C16($t)+1;Length:C16($Txt_out);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("A");"unaccented()")
+	
+End for 
+
+$t:="èéêë"
+$tt:="ÈÉÊË"
+$Txt_in:=$t+$tt
+$Txt_out:=str ($Txt_in).unaccented()
+ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+
+For ($i;1;Length:C16($t);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("e");"unaccented()")
+	
+End for 
+
+For ($i;Length:C16($t)+1;Length:C16($Txt_out);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("E");"unaccented()")
+	
+End for 
+
+$t:=""
+$tt:="ÌÍÎÏ"
+$Txt_in:=$t+$tt
+$Txt_out:=str ($Txt_in).unaccented()
+ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+
+For ($i;1;Length:C16($t);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("i");"unaccented()")
+	
+End for 
+
+For ($i;Length:C16($t)+1;Length:C16($Txt_out);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("I");"unaccented()")
+	
+End for 
+
+$t:="ðòóôõö"
+$tt:="ÒÓÔÕÖ"
+$Txt_in:=$t+$tt
+$Txt_out:=str ($Txt_in).unaccented()
+ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+
+For ($i;1;Length:C16($t);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("o");"unaccented()")
+	
+End for 
+
+For ($i;Length:C16($t)+1;Length:C16($Txt_out);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("O");"unaccented()")
+	
+End for 
+
+$t:="ùúûü"
+$tt:="ÙÚÛÜ"
+$Txt_in:=$t+$tt
+$Txt_out:=str ($Txt_in).unaccented()
+ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+
+For ($i;1;Length:C16($t);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("u");"unaccented()")
+	
+End for 
+
+For ($i;Length:C16($t)+1;Length:C16($Txt_out);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("U");"unaccented()")
+	
+End for 
+
+$t:="ćĉčċçḉȼ"
+$tt:="ĆĈČĊÇḈȻ"
+$Txt_in:=$t+$tt
+$Txt_out:=str ($Txt_in).unaccented()
+ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+
+For ($i;1;Length:C16($t);1)
 	
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("c");"unaccented()")
 	
 End for 
 
-For ($i;8;14;1)
+For ($i;Length:C16($t)+1;Length:C16($Txt_out);1)
 	
 	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("C");"unaccented()")
+	
+End for 
+
+  // WARNING: Special case for n̈ & N̈
+  // LENGTH IS ONE MORE FOR THESE 2 CHAR
+$t:="ņńǹňñṅṇṋṉn̈"
+$tt:="ŃǸŇÑṄŅṆṊṈN̈"
+$Txt_in:=$t+$tt
+$Txt_out:=str ($Txt_in).unaccented()
+
+  //ASSERT(Length($Txt_in)=Length($Txt_out))
+ASSERT:C1129(Length:C16($Txt_in)-2=Length:C16($Txt_out))
+
+  //For ($i;1;Length($t);1)
+For ($i;1;Length:C16($t)-1;1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("n");"unaccented()")
+	
+End for 
+
+  //For ($i;Length($t)+1;Length($Txt_out);1)
+For ($i;Length:C16($t);Length:C16($Txt_out);1)
+	
+	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("N");"unaccented()")
 	
 End for 
 
