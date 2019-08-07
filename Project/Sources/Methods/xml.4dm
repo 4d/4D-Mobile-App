@@ -43,7 +43,10 @@ If (This:C1470._is=Null:C1517)
 		"insertFirst";Formula:C1597(xml ("insertAt";New object:C1471("element";$1;"childIndex";1)));\
 		"attributes";Formula:C1597(xml ("attributes"));\
 		"getAttribute";Formula:C1597(xml ("getAttribute";New object:C1471("name";$1)));\
+		"setAttribute";Formula:C1597(xml ("setAttribute";New object:C1471("name";$1;"value";$2)));\
+		"setAttributes";Formula:C1597(xml ("setAttributes";$1));\
 		"removeAttribute";Formula:C1597(xml ("removeAttribute";New object:C1471("attribName";$1)));\
+		"setOption";Formula:C1597(xml ("setOption";New object:C1471("selector";$1;"value";$2)));\
 		"toObject";Formula:C1597(xml ("toObject"));\
 		"setName";Formula:C1597(xml ("setName";New object:C1471("name";$1)));\
 		"remove";Formula:C1597(xml ("remove"));\
@@ -201,6 +204,21 @@ Else
 					$o.success:=Bool:C1537(OK)
 					
 					  //=================================================================
+				: ($1="setAttribute")
+					
+					DOM SET XML ATTRIBUTE:C866($o.elementRef;$2.name;$2.value)
+					$o:=New object:C1471("success";Bool:C1537(OK))
+					
+					  //=================================================================
+				: ($1="setAttributes")
+					
+					For each ($tt;$2)
+						DOM SET XML ATTRIBUTE:C866($o.elementRef;$tt;$2[$tt])
+					End for each 
+					
+					$o:=New object:C1471("success";Bool:C1537(OK))
+					
+					  //=================================================================
 				: ($1="getAttribute")
 					
 					DOM GET XML ATTRIBUTE BY NAME:C728($o.elementRef;$2.name;$tt)
@@ -212,6 +230,13 @@ Else
 					
 					$o:=New object:C1471("attributes";xml_attributes ($o.elementRef);"success";True:C214)
 					  // use a level because could have an attribute named success...
+					
+					  //=================================================================
+				: ($1="setOption")
+					
+					XML SET OPTIONS:C1090($o.elementRef;$2.selector;$2.value)
+					
+					$o:=New object:C1471("success";True:C214)
 					
 					  //=================================================================
 				: ($1="export")

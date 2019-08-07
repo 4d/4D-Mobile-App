@@ -14,9 +14,10 @@ C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_search)
 C_LONGINT:C283($Lon_i;$Lon_parameters;$Lon_x)
-C_TEXT:C284($Dom_fileRef;$Dom_group;$Dom_root;$File_path;$File_subpath;$Txt_buffer)
+C_TEXT:C284($File_subpath;$Txt_buffer)
 C_TEXT:C284($Txt_cmd;$Txt_error;$Txt_in;$Txt_name;$Txt_newPath;$Txt_out)
-C_OBJECT:C1216($Obj_buffer;$Obj_param;$Obj_path;$Obj_result;$Obj_version)
+C_OBJECT:C1216($Obj_buffer;$Obj_param;$Obj_path;$Obj_result;$Obj_version;$File_path)
+C_OBJECT:C1216($Dom_fileRef;$Dom_root;$Dom_group;$Dom_child)
 C_COLLECTION:C1488($Col_folder;$Col_paths)
 
 ARRAY TEXT:C222($tTxt_folders;0)
@@ -536,11 +537,11 @@ Case of
 		
 		If ($Obj_result.success)
 			
-			$File_path:=$Obj_result.path
+			$File_path:=Folder:C1567($Obj_result.path;fk platform path:K87:2)
 			
 		End if 
 		
-		If (Length:C16($File_path)>0)
+		If ($File_path#Null:C1517)
 			
 			$Col_paths:=New collection:C1472
 			
@@ -633,21 +634,20 @@ Case of
 				End for each 
 			End if 
 			
-			$File_path:=$File_path+Folder separator:K24:12+"contents.xcworkspacedata"
-			$Txt_buffer:=Document to text:C1236($File_path)
-			$Dom_root:=DOM Parse XML variable:C720($Txt_buffer)
+			$File_path:=$File_path.file("contents.xcworkspacedata")
+			$Dom_root:=xml ("load";$File_path)
 			
-			If (OK=1)
+			If ($Dom_root.success)
 				
-				$Dom_group:=DOM Find XML element:C864($Dom_root;"Workspace/Group")
+				$Dom_group:=$Dom_root.find("Workspace/Group")
 				
 				  // Remove current group children if any
-				$Txt_buffer:=DOM Get first child XML element:C723($Dom_group)
+				$Dom_child:=$Dom_group.firstChild()
 				
-				While (OK=1)
+				While ($Dom_child.success)
 					
-					DOM REMOVE XML ELEMENT:C869($Txt_buffer)
-					$Txt_buffer:=DOM Get first child XML element:C723($Dom_group)
+					$Dom_child.remove()
+					$Dom_child:=$Dom_group.firstChild()
 					
 				End while 
 				
@@ -655,15 +655,14 @@ Case of
 				For each ($Txt_buffer;$Col_paths)
 					
 					  // create a link in xml under third party group
-					$Dom_fileRef:=DOM Create XML element:C865($Dom_group;"FileRef")
-					DOM SET XML ATTRIBUTE:C866($Dom_fileRef;\
-						"location";$Txt_buffer)
+					$Dom_fileRef:=$Dom_group.create("FileRef")
+					$Dom_fileRef.setAttribute("location";$Txt_buffer)
 					
 				End for each 
 				
-				XML SET OPTIONS:C1090($Dom_root;XML indentation:K45:34;XML with indentation:K45:35)
-				DOM EXPORT TO FILE:C862($Dom_root;$File_path)
-				DOM CLOSE XML:C722($Dom_root)
+				$Dom_root.setOption(XML indentation:K45:34;XML with indentation:K45:35)
+				$Dom_root.save($File_path)
+				$Dom_root.close()
 				
 			End if 
 		End if 
