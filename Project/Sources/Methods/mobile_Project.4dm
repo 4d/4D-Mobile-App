@@ -142,7 +142,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 				
 			End if 
 			
-			$Obj_in:=ob_parseFile ($Obj_cache.file("lastBuild.4dmobile"))
+			$Obj_in:=ob_parseFile ($Obj_cache.file("lastBuild.4dmobile")).value
 			
 		End if 
 	End if 
@@ -379,10 +379,10 @@ If ($Obj_in.create)
 	  //#ACI0098572 [
 	  //$Obj_out.sdk:=sdk (New object(//"action";"install";//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";//"target";$Obj_in.path;// "cache";env_userPath ("cacheSdk")))
 	  //$Obj_out.sdk:=sdk (New object(\
-																									//"action";"install";\
-																									//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
-																									//"target";$Obj_in.path;\
-																									//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
+																											//"action";"install";\
+																											//"file";Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+																											//"target";$Obj_in.path;\
+																											//"cache";Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")))
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
@@ -515,14 +515,14 @@ If ($Obj_in.create)
 			
 			  // Generate if not exist
 			  //$Obj_out.dump:=dataSet (New object(\
-																																																	//"action";"create";\
-																																																	//"project";$Obj_project;\
-																																																	//"digest";True;\
-																																																	//"dataSet";Bool(featuresFlags._101725);\
-																																																	//"key";$File_;\
-																																																	//"caller";$Obj_in.caller;\
-																																																	//"verbose";$Boo_verbose;\
-																																																	//"picture";Not(Bool(featuresFlags._97117))))
+																																																					//"action";"create";\
+																																																					//"project";$Obj_project;\
+																																																					//"digest";True;\
+																																																					//"dataSet";Bool(featuresFlags._101725);\
+																																																					//"key";$File_;\
+																																																					//"caller";$Obj_in.caller;\
+																																																					//"verbose";$Boo_verbose;\
+																																																					//"picture";Not(Bool(featuresFlags._97117))))
 			$Obj_out.dump:=dataSet (New object:C1471(\
 				"action";"create";\
 				"project";$Obj_project;\
@@ -553,11 +553,11 @@ If ($Obj_in.create)
 		
 		  // Update core data model
 		  //$Obj_out.coreData:=dataModel (New object(\
-															//"action";"xcdatamodel";\
-															//"dataModel";$Obj_project.dataModel;\
-															//"flat";False;\
-															//"relationship";Bool(featuresFlags._103850);\
-															//"path";$Obj_in.path+"Sources"+Folder separator+"Structures.xcdatamodeld"))
+																		//"action";"xcdatamodel";\
+																		//"dataModel";$Obj_project.dataModel;\
+																		//"flat";False;\
+																		//"relationship";Bool(featuresFlags._103850);\
+																		//"path";$Obj_in.path+"Sources"+Folder separator+"Structures.xcdatamodeld"))
 		$Obj_out.coreData:=dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\

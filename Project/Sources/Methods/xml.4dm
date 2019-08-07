@@ -305,17 +305,30 @@ Else
 					Case of 
 						: (Value type:C1509($2.element)=Is object:K8:27)
 							
-							If ($2.element.elementRef#Null:C1517)  // could check also _is xml
-								$t:=DOM Append XML element:C1082($o.elementRef;$2.element.elementRef)
-								
-							Else 
-								
-								$o.errors:=New collection:C1472("Invalid xml object reference passed")
-							End if 
+							Case of 
+								: ($2.element.elementRef#Null:C1517)  // could check also _is xml
+									
+									$t:=DOM Append XML element:C1082($o.elementRef;$2.element.elementRef)
+									
+								: ((Bool:C1537($2.element.isFile)) & ($2.element.platformPath#Null:C1517))  // is file?
+									
+									$t:=DOM Append XML element:C1082($o.elementRef;DOM Parse XML source:C719($2.element.platformPath))
+									
+								Else 
+									
+									$o.errors:=New collection:C1472("Invalid object reference passed")
+									
+							End case 
 							
-						: (Length:C16(String:C10($2.element))=32)
+						: (Value type:C1509($2.element)=Is text:K8:3)
 							
-							$t:=DOM Append XML element:C1082($o.elementRef;$2.element)
+							$tt:=$2.element
+							$t:=DOM Append XML element:C1082($o.elementRef;DOM Parse XML variable:C720($tt))
+							
+						: (Value type:C1509($2.element)=Is BLOB:K8:12)
+							
+							$x:=$2.element
+							$t:=DOM Append XML element:C1082($o.elementRef;DOM Parse XML variable:C720($x))
 							
 						Else 
 							
@@ -329,17 +342,30 @@ Else
 					Case of 
 						: (Value type:C1509($2.element)=Is object:K8:27)
 							
-							If ($2.element.elementRef#Null:C1517)  // could check also _is xml
-								$t:=DOM Insert XML element:C1083($o.elementRef;$2.element.elementRef;$2.childIndex)
-							Else 
-								
-								$o.errors:=New collection:C1472("Invalid xml object reference passed")
-								
-							End if 
+							Case of 
+								: ($2.element.elementRef#Null:C1517)  // could check also _is xml
+									
+									$t:=DOM Insert XML element:C1083($o.elementRef;$2.element.elementRef;$2.childIndex)
+									
+								: ((Bool:C1537($2.element.isFile)) & ($2.element.platformPath#Null:C1517))  // is file?
+									
+									$t:=DOM Insert XML element:C1083($o.elementRef;DOM Parse XML source:C719($2.element.platformPath);$2.childIndex)
+									
+								Else 
+									
+									$o.errors:=New collection:C1472("Invalid object reference passed")
+									
+							End case 
 							
-						: (Length:C16(String:C10($2.element))=32)
+						: (Value type:C1509($2.element)=Is text:K8:3)
 							
-							$t:=DOM Insert XML element:C1083($o.elementRef;$2.element;$2.childIndex)
+							$tt:=$2.element
+							$t:=DOM Insert XML element:C1083($o.elementRef;DOM Parse XML variable:C720($tt);$2.childIndex)
+							
+						: (Value type:C1509($2.element)=Is BLOB:K8:12)
+							
+							$x:=$2.element
+							$t:=DOM Insert XML element:C1083($o.elementRef;DOM Parse XML variable:C720($x);$2.childIndex)
 							
 						Else 
 							

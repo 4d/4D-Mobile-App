@@ -193,152 +193,166 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			$File_:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))  // maybe a list of files later, or doc_catalog
 			
-			$Dom_root:=xml ("load";$File_)
-			
-			  // Look up first all the elements. Dom could be modifyed
-			
-			For each ($Obj_element;$Obj_in.template.elements)
+			If ($File_.exists)
 				
-				If (Length:C16(String:C10($Obj_element.xpath))>0)
+				$Dom_root:=xml ("load";$File_)
+				
+				  // Look up first all the elements. Dom could be modifyed
+				
+				For each ($Obj_element;$Obj_in.template.elements)
 					
-					$Obj_element.xmlId:=$Dom_root.find($Obj_element.xpath).elementRef
+					If (Length:C16(String:C10($Obj_element.xpath))>0)
+						
+						$Obj_element.dom:=$Dom_root.find($Obj_element.xpath)
+						
+						If (Not:C34($Obj_element.dom.success))
+							$Obj_element.dom:=Null:C1517
+							ASSERT:C1129(False:C215;"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
+						End if 
+						
+					Else 
+						
+						$Lon_length:=Length:C16(String:C10($Obj_element.tagInterfix))
+						
+						Case of 
+								
+								  //----------------------------------------
+							: ($Lon_length=2)
+								$Obj_element.dom:=$Dom_root.findById("TAG-"+$Obj_element.tagInterfix+"-001")
+								If (Not:C34($Obj_element.dom.success))
+									$Obj_element.dom:=Null:C1517
+									ASSERT:C1129(False:C215;"Root element with id 'TAG-"+$Obj_element.tagInterfix+"-001' not found for file "+$File_.path)
+								End if 
+								
+								  //----------------------------------------
+							: ($Lon_length>0)
+								
+								ASSERT:C1129(False:C215;"Element 'tagInterfix' defined in manifest.json "+$Obj_element.tagInterfix+" must have exactly two caracters")
+								
+								  //----------------------------------------
+							Else 
+								
+								ASSERT:C1129(False:C215;"No xpath defined for template file "+$File_.path+" to find element "+JSON Stringify:C1217($Obj_element))
+								
+								  //----------------------------------------
+						End case 
+					End if 
 					
-					ASSERT:C1129($Obj_element.xmlId#"00000000000000000000000000000000";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
-					ASSERT:C1129($Obj_element.xmlId#"";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
+					If ($Obj_element.dom#Null:C1517)
+						$Obj_element.domParent:=$Obj_element.dom.parent()
+					End if 
 					
-				Else 
-					
-					$Lon_length:=Length:C16(String:C10($Obj_element.tagInterfix))
-					
-					Case of 
-							
-							  //----------------------------------------
-						: ($Lon_length=2)
-							
-							$Obj_element.xmlId:=$Dom_root.findById("TAG-"+$Obj_element.tagInterfix+"-001").elementRef
-							
-							ASSERT:C1129($Obj_element.xmlId#"00000000000000000000000000000000";"Root element with id 'TAG-"+$Obj_element.tagInterfix+"-001' not found for file "+$File_.path)
-							ASSERT:C1129($Obj_element.xmlId#"";"Root element with id 'TAG-"+$Obj_element.tagInterfix+"-001' not found for file "+$File_.path)
-							
-							  //----------------------------------------
-						: ($Lon_length>0)
-							
-							ASSERT:C1129(False:C215;"Element 'tagInterfix' defined in manifest.json "+$Obj_element.tagInterfix+" must have exactly two caracters")
-							
-							  //----------------------------------------
-						Else 
-							
-							ASSERT:C1129(False:C215;"No xpath defined for template file "+$File_.path+" to find element "+JSON Stringify:C1217($Obj_element))
-							
-							  //----------------------------------------
-					End case 
-				End if 
+				End for each 
 				
-				$Obj_element.xmlIdParent:=DOM Get parent XML element:C923($Obj_element.xmlId)  // XXX add check on id
-				
-			End for each 
-			
-			  // For each table create a storyboard id shared by all xml elements
-			
-			For each ($Obj_table;$Obj_in.tags.navigationTables)
-				
-				$Obj_table.segueDestinationId:=storyboard (New object:C1471("action";"randomId")).value
-				
-			End for each 
-			
-			  // For each element... (scene, cell, ...)
-			For each ($Obj_element;$Obj_in.template.elements)
-				
-				  // ... and table
-				$Lon_ii:=0
+				  // For each table create a storyboard id shared by all xml elements
 				
 				For each ($Obj_table;$Obj_in.tags.navigationTables)
 					
-					$Lon_ii:=$Lon_ii+1  // pos
+					$Obj_table.segueDestinationId:=storyboard (New object:C1471("action";"randomId")).value
 					
-					  // set tags
-					$Obj_in.tags.table:=$Obj_table
-					
-					If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
-						
-						$Obj_in.tags.tagInterfix:=$Obj_element.tagInterfix
-						
-						$Lon_ids:=Num:C11($Obj_element.idCount)
-						
-						If ($Lon_ids=0)
-							
-							  // idCount, not defined, try to count into storyboard
-							$Lon_ids:=0
-							$Dom_:=xml ($Obj_element.xmlId)  // 001 must be encapsulated node
-							
-							$Dom_child:=$Dom_
-							
-							While ($Dom_child.success)
-								$Lon_ids:=$Lon_ids+1
-								$Dom_child:=$Dom_.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
-							End while 
-							
-							If ($Lon_ids=1)
-								
-								$Lon_ids:=32
-								
-							End if 
-						End if 
-						
-						$Obj_element.idCount:=$Lon_ids
-						$Obj_in.tags.storyboardIDs:=storyboard (New object:C1471("action";"randomIds";"length";$Lon_ids)).value
-						
-					End if 
-					
-					  // Insert after processing tags
-					$Txt_buffer:=xml ($Obj_element.xmlId).export().variable
-					$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;$Obj_in.template.tagtypes)
-					
-					If (Length:C16(String:C10($Obj_element.insertMode))=0)
-						
-						$Obj_element.insertMode:="append"
-						
-					End if 
-					
-					Case of 
-							
-							  // ----------------------------------------
-						: $Obj_element.insertMode="append"
-							
-							$Dom_:=xml ($Obj_element.xmlIdParent).append(xml_parse ($Txt_buffer))
-							
-							  // ----------------------------------------
-						: $Obj_element.insertMode="first"
-							
-							$Dom_:=xml ($Obj_element.xmlIdParent).insertFirst(xml_parse ($Txt_buffer))
-							
-							  // ----------------------------------------
-						: $Obj_element.insertMode="iteration"
-							
-							$Dom_:=xml ($Obj_element.xmlIdParent).insertAt(xml_parse ($Txt_buffer);$Lon_ii)
-							
-							  //----------------------------------------
-					End case 
 				End for each 
 				
-				  // Remove originals template element
-				xml ($Obj_element.xmlId).remove()
+				  // For each element... (scene, cell, ...)
+				For each ($Obj_element;$Obj_in.template.elements)
+					
+					If ($Obj_element.dom#Null:C1517)
+						  // ... and table
+						$Lon_ii:=0
+						
+						For each ($Obj_table;$Obj_in.tags.navigationTables)
+							
+							$Lon_ii:=$Lon_ii+1  // pos
+							
+							  // set tags
+							$Obj_in.tags.table:=$Obj_table
+							
+							If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
+								
+								$Obj_in.tags.tagInterfix:=$Obj_element.tagInterfix
+								
+								$Lon_ids:=Num:C11($Obj_element.idCount)
+								
+								If ($Lon_ids=0)
+									
+									  // idCount, not defined, try to count into storyboard
+									$Lon_ids:=0
+									$Dom_:=$Obj_element.dom  // 001 must be encapsulated node
+									
+									$Dom_child:=$Dom_
+									
+									While ($Dom_child.success)
+										$Lon_ids:=$Lon_ids+1
+										$Dom_child:=$Dom_.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
+									End while 
+									
+									If ($Lon_ids=1)
+										
+										$Lon_ids:=32
+										
+									End if 
+								End if 
+								
+								$Obj_element.idCount:=$Lon_ids
+								$Obj_in.tags.storyboardIDs:=storyboard (New object:C1471("action";"randomIds";"length";$Lon_ids)).value
+								
+							End if 
+							
+							  // Insert after processing tags
+							$Txt_buffer:=$Obj_element.dom.export().variable
+							$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;$Obj_in.template.tagtypes)
+							
+							If (Length:C16(String:C10($Obj_element.insertMode))=0)
+								
+								$Obj_element.insertMode:="append"
+								
+							End if 
+							
+							Case of 
+									
+									  // ----------------------------------------
+								: $Obj_element.insertMode="append"
+									
+									$Dom_:=$Obj_element.domParent.append($Txt_buffer)
+									
+									  // ----------------------------------------
+								: $Obj_element.insertMode="first"
+									
+									$Dom_:=$Obj_element.domParent.insertFirst($Txt_buffer)
+									
+									  // ----------------------------------------
+								: $Obj_element.insertMode="iteration"
+									
+									$Dom_:=$Obj_element.domParent.insertAt($Txt_buffer;$Lon_ii)
+									
+									  //----------------------------------------
+							End case 
+						End for each 
+						
+						  // Remove originals template element
+						$Obj_element.dom.remove()
+					End if 
+					
+				End for each 
 				
-			End for each 
-			
-			  // Save file at destination after replacing tags
-			$Txt_buffer:=$Dom_root.export().variable
-			$Dom_root.close()
-			$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("navigation.storyboard"))
-			
-			$File_:=Folder:C1567($Obj_in.target;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
-			$File_.setText($Txt_buffer;"UTF-8";Document with CRLF:K24:20)
-			
-			$Obj_out.format:=storyboard (New object:C1471(\
-				"action";"format";\
-				"path";$File_))
-			
-			$Obj_out.success:=True:C214  // XXX maybe better error managing
+				  // Save file at destination after replacing tags
+				$Txt_buffer:=$Dom_root.export().variable
+				$Dom_root.close()
+				$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("navigation.storyboard"))
+				
+				$File_:=Folder:C1567($Obj_in.target;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
+				$File_.setText($Txt_buffer;"UTF-8";Document with CRLF:K24:20)
+				
+				$Obj_out.format:=storyboard (New object:C1471(\
+					"action";"format";\
+					"path";$File_))
+				
+				$Obj_out.success:=True:C214  // XXX maybe better error managing
+				
+			Else   // Not a document
+				
+				ASSERT:C1129(dev_Matrix ;"Missing "+$Obj_in.action+" storyboard")
+				
+			End if 
 			
 			  //______________________________________________________
 		: ($Obj_in.action="detailform")
@@ -355,7 +369,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 				$Dom_root:=xml ("load";$File_)
 				
-				If ($Obj_in.template.elements=Null:C1517)  // element not defined, try to compute it?
+				If ($Obj_in.template.elements=Null:C1517)
+					  // Elements not defined in manifest, try to compute it using storyboard XMLs
 					
 					$Txt_buffer:=$Dom_root.export().variable
 					ARRAY TEXT:C222($tTxt_result;0)
@@ -372,15 +387,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					End if 
 				End if 
 				
-				  //If (Bool(featuresFlags._103505))
-				
 				If (Length:C16($Txt_buffer)=0)  // there is element defined so we need to read here
 					
 					$Txt_buffer:=$File_.getText()
 					
 				End if 
 				
-				If (Length:C16($Txt_buffer)>0)
+				If (Length:C16($Txt_buffer)>0)  // a little check on record action if needed to inject it
 					
 					If ($Obj_in.tags.table.recordActions#Null:C1517)
 						
@@ -395,7 +408,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						End if 
 					End if 
 				End if 
-				  //End if 
 				
 				  // Try to determine if must duplicate or not element
 				  // elements are specified or 0 is set as "infinite" representation or if  max > count or one of them defined to 0
@@ -409,19 +421,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					  // Look up first all the elements. Dom could be modifyed
 					For each ($Obj_element;$Obj_in.template.elements)
 						
-						If (Length:C16(String:C10($Obj_element.xpath))>0)
+						If (Length:C16(String:C10($Obj_element.xpath))>0)  // look up with xpath
 							
-							$Obj_element.xmlId:=$Dom_root.find($Obj_element.xpath).elementRef
-							
-							If ($Obj_element.xmlId="00000000000000000000000000000000")  // Num( ) = 0 ? or = a dom constant for invalid node
-								
-								$Obj_element.xmlId:=""
-								
+							$Obj_element.dom:=$Dom_root.find($Obj_element.xpath)
+							If (Not:C34($Obj_element.dom.success))
+								$Obj_element.dom:=Null:C1517
+								ASSERT:C1129(False:C215;"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
 							End if 
 							
-							ASSERT:C1129($Obj_element.xmlId#"";"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
-							
-						Else 
+						Else   // or look up with id TAG-INTERFIX-001
 							
 							$Lon_length:=Length:C16(String:C10($Obj_element.tagInterfix))
 							
@@ -431,16 +439,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								: ($Lon_length=2)
 									
 									  // if "AS" document/resources and read children, to find ___FIELD_ICON___ ?? (no id for image, let ibtool fix that for the moment)
-									
-									$Obj_element.xmlId:=$Dom_root.findById("TAG-"+String:C10($Obj_element.tagInterfix)+"-001").elementRef  // work only because element use it as xml id (sceneID will not work)
-									
-									If ($Obj_element.xmlId="00000000000000000000000000000000")
-										
-										$Obj_element.xmlId:=""
-										
+									$Obj_element.dom:=$Dom_root.findById("TAG-"+String:C10($Obj_element.tagInterfix)+"-001")
+									If (Not:C34($Obj_element.dom.success))
+										$Obj_element.dom:=Null:C1517
+										ASSERT:C1129(False:C215;"Root element with id 'TAG-"+String:C10($Obj_element.tagInterfix)+"-001' not found for file "+$File_.path)
 									End if 
-									
-									ASSERT:C1129($Obj_element.xmlId#"";"Root element with id 'TAG-"+String:C10($Obj_element.tagInterfix)+"-001' not found for file "+$File_.path)
 									
 									  //----------------------------------------
 								: ($Lon_length>0)
@@ -456,17 +459,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							End case 
 						End if 
 						
-						If (Length:C16(String:C10($Obj_element.xmlId))>0)
-							
-							$Obj_element.xmlIdParent:=xml ($Obj_element.xmlId).parent().elementRef  // will failed if empty or wrong XXX add check
-							
+						If ($Obj_element.dom#Null:C1517)
+							$Obj_element.domParent:=$Obj_element.dom.parent()
 						End if 
+						
 					End for each 
 					
 					  // For each element... (scene, cell, ...)
 					For each ($Obj_element;$Obj_in.template.elements)
 						
-						If (Length:C16(String:C10($Obj_element.xmlId))>0)
+						If ($Obj_element.dom#Null:C1517)  // if valid element
 							
 							  // ... and fields
 							$Lon_ii:=Num:C11($Obj_in.template.fields.count)  // Start at first element, not in header
@@ -498,7 +500,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										
 										  // idCount, not defined, try to count into storyboard
 										$Lon_ids:=0
-										$Dom_:=xml ($Obj_element.xmlId)
+										$Dom_:=$Obj_element.dom
 										$Dom_child:=$Dom_
 										While ($Dom_child.success)
 											
@@ -520,8 +522,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								End if 
 								
 								  // Process tags on the element
-								DOM EXPORT TO VAR:C863($Obj_element.xmlId;$Txt_buffer)
-								$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform"))
+								$Txt_buffer:=$Obj_element.dom.export().variable
+								$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
 								
 								  // Insert node for this element
 								
@@ -551,40 +553,25 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										  // ----------------------------------------
 									: $Obj_element.insertMode="append"
 										
-										$Dom_:=xml ($Obj_element.xmlIdParent).append(xml_parse ($Txt_buffer))
+										$Dom_:=$Obj_element.domParent.append($Txt_buffer)
 										
 										  // ----------------------------------------
 									: $Obj_element.insertMode="first"
 										
-										$Dom_:=xml ($Obj_element.xmlIdParent).insertFirst(xml_parse ($Txt_buffer))
+										$Dom_:=$Obj_element.domParent.insertFirst($Txt_buffer)
 										
 										  // ----------------------------------------
 									: $Obj_element.insertMode="iteration"
 										
-										$Dom_:=xml ($Obj_element.xmlIdParent).insertAt(xml_parse ($Txt_buffer);$Lon_ii)
+										$Dom_:=$Obj_element.domParent.insertAt($Txt_buffer;$Lon_ii)
 										
 										  //----------------------------------------
 								End case 
 								
-								  // Check if some xml element must be added after
-								  //If((Num($Obj_element.modulo)>0) & (Value type($Obj_element.xmlIds)=Is collection))
-								
-								  //For each ($Txt_buffer;$Obj_element.xmlIds)
-								
-								  //If ($Lon_ii % $Obj_element.modulo)
-								  //DOM EXPORT TO VAR($Txt_buffer;$Txt_buffer)
-								  //$Dom_:=DOM Append XML element(DOM Get parent XML element($Obj_element.xmlId);DOM Parse XML variable($Txt_buffer))
-								
-								  // End if
-								
-								  // End for each
-								
-								  // End if
-								
 							End for each 
 							
-							  // Remove originals template element
-							DOM REMOVE XML ELEMENT:C869($Obj_element.xmlId)
+							  // Remove original template duplicated element
+							$Obj_element.dom.remove()
 							
 						End if 
 					End for each 
@@ -612,7 +599,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			Else   // Not a document
 				
-				ASSERT:C1129(dev_Matrix ;"Missing detail form storyboard")
+				ASSERT:C1129(dev_Matrix ;"Missing "+$Obj_in.action+" storyboard")
 				
 			End if 
 			
@@ -656,7 +643,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			Else   // Not a document
 				
-				ASSERT:C1129(dev_Matrix ;"Missing list form storyboard")
+				ASSERT:C1129(dev_Matrix ;"Missing "+$Obj_in.action+" storyboard")
 				
 			End if 
 			
@@ -1014,7 +1001,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					$Txt_buffer:=$Obj_element.getText()
 					$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("automatic";"storyboardID"))
-					$Obj_out.dom:=xml_parse ($Txt_buffer)
+					$Obj_out.dom:=xml ("parse";New object:C1471("variable";$Txt_buffer))
 					$Obj_out.success:=True:C214
 					
 				Else 
@@ -1033,7 +1020,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("automatic";"storyboardID"))
 			End if 
 			
-			$Obj_out.dom:=xml_parse ($Txt_buffer)
+			$Obj_out.dom:=xml ("parse";New object:C1471("variable";$Txt_buffer))
 			$Obj_out.success:=True:C214
 			
 			  //______________________________________________________
