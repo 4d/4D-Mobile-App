@@ -597,7 +597,7 @@ Case of
 			$Obj_out.theme:=New object:C1471(\
 				"success";False:C215)
 			
-			$File_:=Folder:C1567($Obj_template.assets.source).folder("AppIcon.appiconset").file("ios-marketing1024.png")
+			$File_:=Folder:C1567($Obj_template.assets.source;fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
 			$Lon_:=commonValues.theme.colorjuicer.scale
 			
 			If (($Lon_#1024)\

@@ -488,11 +488,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									$Obj_storyboardID:=New object:C1471()
 									$Obj_storyboardID.tagInterfix:=$Obj_element.tagInterfix
 									
-									If ($Obj_in.tags.storyboardID=Null:C1517)
-										$Obj_in.tags.storyboardID:=New collection:C1472()
-									End if 
-									$Obj_in.tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
-									
+									  //If ($Obj_in.tags.storyboardID=Null)
+									$Obj_in.tags.storyboardID:=New collection:C1472($Obj_storyboardID)
+									  //End if 
+									  //$Obj_in.tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
+									  // WARNING: deactivated, do not work because not shared according to field
 									
 									$Lon_ids:=Num:C11($Obj_element.idCount)  // define id count allow to speed up and pass that
 									
