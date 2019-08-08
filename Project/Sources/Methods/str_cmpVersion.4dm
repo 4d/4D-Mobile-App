@@ -14,7 +14,7 @@
   // -  1 if $1 is more recent than $2
   // - -1 if $1 is less recent than $2
   // ----------------------------------------------------
-  // #THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($0)

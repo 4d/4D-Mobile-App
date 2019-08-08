@@ -3,6 +3,9 @@
 
 C_OBJECT:C1216(INIT ;$1)
 
+C_OBJECT:C1216(CALL_MAIN_PROCESS ;$1)
+C_TEXT:C284(CALL_MAIN_PROCESS ;$2)
+
   //__________________________________________________
 C_OBJECT:C1216(publishedTableList ;$0)
 C_OBJECT:C1216(publishedTableList ;$1)

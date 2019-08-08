@@ -8,7 +8,7 @@
   // Description:
   // Returns a URL decoded string
   // ----------------------------------------------------
-  // #THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Declarations
 C_TEXT:C284($0)

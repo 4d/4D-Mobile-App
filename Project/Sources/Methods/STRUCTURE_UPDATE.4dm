@@ -132,7 +132,13 @@ Else
 					  //………………………………………………………………………………………………………
 				: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
 					
+					$Boo_found:=(String:C10($o.name)=$t)
 					
+					If ($Boo_found)
+						
+						$Obj_field:=$Obj_currentTable.field[$Obj_currentTable.field.extract("name").indexOf($t)]
+						
+					End if 
 					
 					  //………………………………………………………………………………………………………
 			End case 

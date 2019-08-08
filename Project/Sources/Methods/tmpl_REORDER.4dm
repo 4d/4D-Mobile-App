@@ -187,10 +187,10 @@ If (Asserted:C1132(Test path name:C476($File_)=Is a document:K24:1))
 												
 												  // Target is multi-criteria
 												
-												  //#TO_DO Verify the type & remove incompatible if any
+												  //#MARK_TODO Verify the type & remove incompatible if any
 												For each ($o;$Obj_in.target.searchableField)
 													
-													  // #TO_DO
+													  // #MARK_TODO
 													
 												End for each 
 												
@@ -213,7 +213,7 @@ If (Asserted:C1132(Test path name:C476($File_)=Is a document:K24:1))
 											  // Target is multi-criteria -> don't modify if exist
 											If ($Lon_keyType=Is null:K8:31)
 												
-												  // #TO_DO Verify the type
+												  // #MARK_TODO Verify the type
 												
 												$Obj_cache.searchableField:=$Obj_in.target.searchableField
 												

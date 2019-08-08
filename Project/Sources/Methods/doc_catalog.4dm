@@ -5,7 +5,7 @@
   // ID[8328FC3981DB45DC9CFEF6A39E8F4473]
   // Created 12-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------
-  // #THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Description:
   // Returns a folder catalog as a collection

@@ -3,7 +3,7 @@
   // Method :  _o_doc_getFromPath
   // Created 20/05/10 by Vincent de Lachaux
   // ----------------------------------------------------
-  // #THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Description
   //

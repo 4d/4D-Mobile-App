@@ -5,7 +5,7 @@
   // ----------------------------------------------------
   // Description:
   // Manipulate SVG as objects
-  // THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Declarations
 C_OBJECT:C1216($0)
@@ -17,7 +17,7 @@ C_LONGINT:C283($i)
 C_PICTURE:C286($p)
 C_REAL:C285($Num_height;$Num_width)
 C_TEXT:C284($Dom_;$Dom_target;$t;$tt;$Txt_object)
-C_OBJECT:C1216($file;$o;$oo)
+C_OBJECT:C1216($file;$o;$oo;$signal)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -525,15 +525,24 @@ Else
 					  //=================================================================
 				: ($1="show")
 					
-					  //ARRAY TEXT($tTxt_components;0x0000)
-					  //COMPONENT LIST($tTxt_components)  //#NOT_THREAD_SAFE
-					  //$o.success:=(Find in array($tTxt_components;"4D SVG")>0)
-					  //If ($o.success)
-					EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER";*;$o.root)
+					$signal:=New signal:C1641("CALL_MAIN_PROCESS")
+					CALL WORKER:C1389(1;"CALL_MAIN_PROCESS";$signal;"listOfLoadedComponents")
 					
-					  // Else
-					  //$o.errors.push("The component \"4D SVG\" is not avaiable.")
-					  // End if
+					$o.success:=False:C215
+					
+					If ($signal.wait(1))
+						
+						If ($signal.value.indexOf("4D SVG")#-1)
+							
+							$o.success:=True:C214
+							EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER";*;$o.root)
+							
+						Else 
+							
+							$o.errors.push("The component \"4D SVG\" is not avaiable.")
+							
+						End if 
+					End if 
 					
 					  //=================================================================
 				: ($1="close")

@@ -396,7 +396,7 @@ Case of
 		  // End case
 		  //OBJECT SET FORMAT(*;"testUrl.status";";"+$Txt_resources)
 		  //OBJECT SET HELP TIP(*;"testUrl.status";$Txt_tip)
-		  //#TO_DO - Register the server status into the form object to check before build
+		  //#MARK_TODO - Register the server status into the form object to check before build
 		
 		  //=========================================================
 	: ($Obj_in.action="localization")

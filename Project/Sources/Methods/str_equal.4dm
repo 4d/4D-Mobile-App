@@ -8,7 +8,7 @@
   // Description:
   // Tests if two strings are strictly identical
   // ----------------------------------------------------
-  // #THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($0)

@@ -227,7 +227,7 @@ Case of
 	: ($Txt_selector="coreData")
 		
 		  //If (Length($Txt_string)>0)
-		  //  //#TO_DO - Remove the forbidden at beginning characters
+		  //  //#MARK_TODO - Remove the forbidden at beginning characters
 		  //  // First character in lowercase
 		  //$Txt_string[[1]]:=Lowercase($Txt_string[[1]])
 		  //  // Remove space {

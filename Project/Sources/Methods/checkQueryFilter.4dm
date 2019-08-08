@@ -8,7 +8,7 @@
   // Description:
   // Check query filter
   // ----------------------------------------------------
-  // #THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Declarations
 C_OBJECT:C1216($0)

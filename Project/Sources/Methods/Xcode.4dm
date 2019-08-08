@@ -958,7 +958,7 @@ Case of
 				  //$Obj_result.success:=True
 				  // Else
 				  //$Obj_result.error:=$Txt_error
-				  // #TO_DO maybe add $error to a detail panel of error message?
+				  // #MARK_TODO maybe add $error to a detail panel of error message?
 				  // ALERT("Failed to set Xcode Tool Path")
 				  //CALL FORM($Obj_param.caller;"LOG_EVENT";New object("message";"Failed to set Xcode Tool Path: "+$Txt_error;"importance";Warning message))
 				  // End if

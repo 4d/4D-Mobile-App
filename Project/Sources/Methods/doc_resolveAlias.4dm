@@ -3,7 +3,7 @@
   // Method : doc_resolveAlias
   // Created 02/06/10 by Vincent de Lachaux
   // ----------------------------------------------------
-  // #THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Description
   // Give a file path, return the full path if it's an alias

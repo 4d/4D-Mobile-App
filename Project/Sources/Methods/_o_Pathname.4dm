@@ -210,7 +210,7 @@ Case of
 				
 				Storage:C1525.path[$Txt_info]:=Get 4D folder:C485(Current resources folder:K5:16)\
 					+"images"+Folder separator:K24:12\
-					+"tableIcons"  // #TO_DO add Folder separator, check all caller
+					+"tableIcons"  // #MARK_TODO add Folder separator, check all caller
 				
 			End use 
 		End if 
@@ -348,7 +348,7 @@ Case of
 		
 		$Txt_result:=_o_Pathname ("host")\
 			+"medias"+Folder separator:K24:12\
-			+"icons"  // #TO_DO add Folder separator, check all caller
+			+"icons"  // #MARK_TODO add Folder separator, check all caller
 		
 		  //______________________________________________________
 	: ($Txt_info="host_formatters")

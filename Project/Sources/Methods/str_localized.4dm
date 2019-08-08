@@ -14,7 +14,7 @@
   // If the localized string contains variable elements "{xxx}",
   // they are replaced by the next members of the collection
   // ----------------------------------------------------
-  // #THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Declarations
 C_TEXT:C284($0)

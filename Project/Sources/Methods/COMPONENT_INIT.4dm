@@ -94,13 +94,6 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // iOS simulator time out
 	commonValues.simulatorTimeout:=10000
 	
-	  // CommonValues.build:="1.0.0"
-	  // CommonValues.developmentRegion:="en"
-	  // CommonValues.storyboard:=New object(\
-																												"LaunchScreen";"LaunchScreen";\
-																												"Main";"Main";\
-																												"backgroundColor";"white")
-	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\
 		"build";"1.0.0";\
@@ -125,7 +118,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	
 	commonValues.lastBuild:=Num:C11(COMPONENT_Infos ("componentBuild"))
 	
-	If ($Lon_lastBuild#commonValues.lastBuild) | $Boo_reset
+	If (commonValues.lastBuild#$Lon_lastBuild) | $Boo_reset
 		
 		  // Invalid the cache
 		$o:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")

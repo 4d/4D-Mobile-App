@@ -8,7 +8,7 @@
   // Description:
   // Returns a URL encoded string
   // ----------------------------------------------------
-  // #THREAD_SAFE
+  // #THREAD-SAFE
   // ----------------------------------------------------
   // Modified 4-10-2018 by Vincent de Lachaux
   // Remove "=" and space to get the same result as:
