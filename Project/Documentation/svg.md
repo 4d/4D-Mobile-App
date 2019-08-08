@@ -16,8 +16,16 @@ _svgObject_ [object] := ***svg*** {(_param_ [text] { ; _options_ [object] } )}
   
 - _svgObject_ returned object containing the XML reference in memory and associated member methods.
 
-Default values for a created SVG structure are: 
-`"viewport-fill"="none"` `"fill"="none"` `"stroke"="black"` `"font-family"="'lucida grande','segoe UI',sans-serif"` `"font-size"=12` `"text-rendering"="geometricPrecision"` `"shape-rendering"="crispEdges"` `"preserveAspectRatio"="none"`
+Default values for a created SVG structure are:
+
+>`"viewport-fill"="none"`    
+>`"fill"="none"`    
+>`"stroke"="black"`    
+>`"font-family"="'lucida grande','segoe UI',sans-serif"`    
+>`"font-size"=12`    
+>`"text-rendering"="geometricPrecision"`    
+>`"shape-rendering"="crispEdges"`    
+>`"preserveAspectRatio"="none"`
 
 ## Properties
 
@@ -36,10 +44,10 @@ Default values for a created SVG structure are:
 
 **Notes**: 
 
-* If a setting member method is called before the creation of an object in the canvas, the target is canvas itself, otherwise the target is the last created object. Where appropriate, the target of the method can be given (see above)
-* Remember that you can still add unmanaged attributes for the moment with the member methods attribute() or attributes() (see above)
-* Remember that you can always use DOM XML commands to manipulate the SVG tree (*root*) or object (*latest*)
-* Except utility methods, all member methods return the _svgObject_ so methods could be chained
+>* If a setting member method is called before the creation of an object in the canvas, the target is canvas itself, otherwise the target is the last created object. Where appropriate, the target of the method can be given (see above)
+>* Remember that you can still add unmanaged attributes for the moment with the member methods attribute() or attributes() (see above)
+>* Remember that you can always use DOM XML commands to manipulate the SVG tree (*root*) or object (*latest*)
+>* Except utility methods, all member methods return the _svgObject_ so methods could be chained
 
 ## Member methods
 

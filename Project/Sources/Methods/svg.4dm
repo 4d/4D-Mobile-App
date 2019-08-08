@@ -55,7 +55,7 @@ If (This:C1470._is=Null:C1517)  // Constructor
 		"attribute";Formula:C1597(svg ("set";New object:C1471("what";"attribute";"key";$1;"value";$2)));\
 		"attributes";Formula:C1597(svg ("set";New object:C1471("what";"attributes";"options";$1)));\
 		"get";Formula:C1597(svg ("get";Choose:C955(Value type:C1509($2)=Is boolean:K8:9;New object:C1471("what";String:C10($1);"keep";Bool:C1537($2);"options";$3);New object:C1471("what";String:C10($1);"options";$2)))[$1]);\
-		"save";Formula:C1597(svg ("save";New object:C1471("what";$1;"file";$2;Choose:C955(Value type:C1509($3)=Is boolean:K8:9;"keep";"codec");$3;Choose:C955($1="picture";"keep";"dummy");$4)));\
+		"save";Formula:C1597(svg ("save";Choose:C955(Value type:C1509($1)=Is object:K8:27;New object:C1471("file";$1;"keep";$2);New object:C1471("what";$1;"file";$2;Choose:C955(Value type:C1509($3)=Is boolean:K8:9;"keep";"codec");$3;Choose:C955(Value type:C1509($4)=Is boolean:K8:9;"keep";"ghost");$4))));\
 		"findByPath";Formula:C1597(svg ("findByPath";New object:C1471("xPath";$1;"option";$2)).value);\
 		"findById";Formula:C1597(svg ("findById";New object:C1471("id";$1)).value);\
 		"show";Formula:C1597(svg ("show"))\
@@ -449,6 +449,12 @@ Else
 							$o.errors.push("Null object pathname")
 							
 							  //______________________________________________________
+						: ($2.what=Null:C1517)  // Into the original file
+							
+							$2.what:=Choose:C955(New collection:C1472(".svg";".xml";".txt").indexOf($file.extension)#-1;"text";"picture")
+							$o:=svg ("save";$2)
+							
+							  //______________________________________________________
 						: ($Txt_object="picture")
 							
 							  // Turn_around #ACI0093875
@@ -501,7 +507,8 @@ Else
 					
 					If ($o.success)
 						
-						If ($o.autoClose)\
+						If ($o.root#Null:C1517)\
+							 & ($o.autoClose)\
 							 & (Not:C34(Bool:C1537($2.keep)))
 							
 							DOM CLOSE XML:C722($o.root)

@@ -478,12 +478,43 @@ Else
 					
 					If (Length:C16($t)>0)
 						
-						  // Special cases
+						  // Specific cases
 						$t:=Replace string:C233($t;"ȼ";"c";*)
 						$t:=Replace string:C233($t;"Ȼ";"C";*)
-						$t:=Replace string:C233($t;"ð";"o";*)
+						
+						$t:=Replace string:C233($t;"Ð";"D";*)
+						$t:=Replace string:C233($t;"Đ";"D";*)
+						$t:=Replace string:C233($t;"đ";"d";*)
+						
+						
+						$t:=Replace string:C233($t;"Ħ";"H";*)
+						$t:=Replace string:C233($t;"ħ";"h";*)
+						
+						$t:=Replace string:C233($t;"ı";"i";*)
+						
+						$t:=Replace string:C233($t;"Ŀ";"L";*)
+						$t:=Replace string:C233($t;"Ŀ";"L";*)
+						$t:=Replace string:C233($t;"ŀ";"l";*)
+						$t:=Replace string:C233($t;"Ł";"L";*)
+						$t:=Replace string:C233($t;"ł";"l";*)
+						
+						
+						$t:=Replace string:C233($t;"Ŋ";"N";*)
+						$t:=Replace string:C233($t;"ŋ";"n";*)
+						$t:=Replace string:C233($t;"ŉ";"n";*)
 						$t:=Replace string:C233($t;"n̈";"n";*)
 						$t:=Replace string:C233($t;"N̈";"N";*)
+						
+						
+						$t:=Replace string:C233($t;"Ø";"O";*)
+						$t:=Replace string:C233($t;"ð";"o";*)
+						$t:=Replace string:C233($t;"ø";"o";*)
+						
+						$t:=Replace string:C233($t;"Þ";"P";*)
+						$t:=Replace string:C233($t;"þ";"p";*)
+						
+						$t:=Replace string:C233($t;"Ŧ";"T";*)
+						$t:=Replace string:C233($t;"ŧ";"t";*)
 						
 						$tt:="abcdefghijklmnopqrstuvwxyz"
 						
