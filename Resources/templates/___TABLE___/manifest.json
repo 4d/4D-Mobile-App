@@ -1,3 +1,12 @@
 {
-  "children": ["form/list", "form/detail"]
+  "children": [
+    "form/list",
+    "form/detail"
+  ],
+  "detailform": {
+    "storyboard": "Sources/Forms/Tables/___TABLE___/___TABLE___DetailsForm.storyboard"
+  },
+  "listform": {
+    "storyboard": "Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.storyboard"
+  }
 }

@@ -187,11 +187,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If ($Obj_in.template.storyboard=Null:C1517)
 				
-				$Obj_in.template.storyboard:="Sources/Forms/Navigation/MainNavigation.storyboard"  // TODO try to get on parent template
+				$Obj_in.template.storyboard:=$Obj_in.template.parent[$Obj_in.action].storyboard
 				
 			End if 
 			
-			$File_:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))  // maybe a list of files later, or doc_catalog
+			$File_:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
 			
 			If ($File_.exists)
 				
@@ -272,22 +272,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 								$Lon_ids:=Num:C11($Obj_element.idCount)
 								
-								If ($Lon_ids=0)
+								If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
 									
-									  // idCount, not defined, try to count into storyboard
+									$Dom_child:=$Obj_element.dom  // 001 must be encapsulated node
 									$Lon_ids:=0
-									$Dom_:=$Obj_element.dom  // 001 must be encapsulated node
-									
-									$Dom_child:=$Dom_
-									
 									While ($Dom_child.success)
 										$Lon_ids:=$Lon_ids+1
-										$Dom_child:=$Dom_.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
+										$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
 									End while 
 									
 									If ($Lon_ids=1)
 										
-										$Lon_ids:=32
+										$Lon_ids:=32  // default value if not found
 										
 									End if 
 								End if 
@@ -359,7 +355,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If ($Obj_in.template.storyboard=Null:C1517)  // set default path if not defined
 				
-				$Obj_in.template.storyboard:="Sources/Forms/Tables/___TABLE___/___TABLE___DetailsForm.storyboard"  // TODO try to get this info from parent manifest file
+				$Obj_in.template.storyboard:=$Obj_in.template.parent[$Obj_in.action].storyboard
 				
 			End if 
 			
@@ -496,17 +492,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									
 									$Lon_ids:=Num:C11($Obj_element.idCount)  // define id count allow to speed up and pass that
 									
-									If ($Lon_ids=0)
-										
-										  // idCount, not defined, try to count into storyboard
+									If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
+										$Dom_child:=$Obj_element.dom
 										$Lon_ids:=0
-										$Dom_:=$Obj_element.dom
-										$Dom_child:=$Dom_
 										While ($Dom_child.success)
-											
 											$Lon_ids:=$Lon_ids+1
-											$Dom_child:=$Dom_.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
-											
+											$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
 										End while 
 										
 										If ($Lon_ids=1)
@@ -608,7 +599,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If ($Obj_in.template.storyboard=Null:C1517)  // set default path if not defined
 				
-				$Obj_in.template.storyboard:="Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.storyboard"  // TODO try to get this info from parent manifest file
+				$Obj_in.template.storyboard:=$Obj_in.template.parent[$Obj_in.action].storyboard
 				
 			End if 
 			

@@ -1,10 +1,16 @@
 {
-  "type":"main",
+  "type": "main",
   "sdk": {
     "version": "1.0",
     "frameworks": "Carthage/Build/iOS/"
   },
-  "children": ["form/navigation", "___TABLE___", "launchscreen", "form/settings", "form/login"],
+  "children": [
+    "form/navigation",
+    "___TABLE___",
+    "launchscreen",
+    "form/settings",
+    "form/login"
+  ],
   "uuid": {
     "tableFormsGroup": "481A0B201E896AB600E6B84C",
     "sources": "48861A151E8953B800C1A97C",
@@ -17,5 +23,8 @@
   "assets": {
     "name": "Assets.xcassets",
     "path": "Resources"
+  },
+  "navigation": {
+    "storyboard": "Sources/Forms/Navigation/MainNavigation.storyboard"
   }
 }
