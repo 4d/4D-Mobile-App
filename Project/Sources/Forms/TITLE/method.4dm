@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Form method : TITLE - (4D Mobile App)
   // ID[92DED2A5CB2248A3AA5B14A594D33CFF]
-  // Created #31-1-2018 by Vincent de Lachaux
+  // Created 31-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_;$Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_left;$Lon_right)
@@ -10,7 +10,7 @@ C_TEXT:C284($Txt_page)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 
   // ----------------------------------------------------
 

@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : listbox
   // ID[A1E9ABBDE36648929AAA54FCE6CD1B6A]
-  // Created #14-6-2019 by Vincent de Lachaux
+  // Created 14-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Part of the UI classes to manage listboxes

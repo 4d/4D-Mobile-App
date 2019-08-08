@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : XcodeProj
-  // Created #2017 by Eric Marchand
+  // Created 2017 by Eric Marchand
   // ----------------------------------------------------
   // Description: Edit Xcode project file
 

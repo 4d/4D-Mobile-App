@@ -3,7 +3,7 @@
   // Project method : PRODUCT_OBJECTS_HANDLER
   // Database: 4D Mobile Express
   // ID[E7502D1D082344F79071FA4C79EAAC92]
-  // Created #11-9-2017 by Vincent de Lachaux
+  // Created 11-9-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -36,7 +36,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Lon_formEvent:=Form event:C388
+	$Lon_formEvent:=Form event code:C388
 	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 	

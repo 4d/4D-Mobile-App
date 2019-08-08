@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : picture
   // ID[A5B8514D9DB54C3EA3C6BA61D269FE67]
-  // Created #14-6-2019 by Vincent de Lachaux
+  // Created 14-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Part of the UI classes to manage picture widget

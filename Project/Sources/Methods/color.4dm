@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : color
   // ID[830BCBA0AA804B61AD2FEE71815E4B63]
-  // Created #31-7-2019 by Vincent de Lachaux
+  // Created 31-7-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // WIP

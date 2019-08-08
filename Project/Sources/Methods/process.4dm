@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : process
   // ID[95A9C48322674708AFC2C26C4F571CD4]
-  // Created #27-6-2019 by Vincent de Lachaux
+  // Created 27-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

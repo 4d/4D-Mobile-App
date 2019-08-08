@@ -3,7 +3,7 @@
   // Project method : actions
   // Database: 4D Mobile App
   // ID[66E9AA75F234494E96C5C0514F05D6C4]
-  // Created #7-3-2019 by Vincent de Lachaux
+  // Created 7-3-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

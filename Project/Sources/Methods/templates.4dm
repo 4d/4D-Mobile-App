@@ -3,7 +3,7 @@
   // Project method : templates
   // Database: 4D Mobile Express
   // ID[9D729EF8EA04RC9E92BEF068I8B6CA17]
-  // Created #9-11-2017 by Vincent de Lachaux
+  // Created 9-11-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // - Manage template and its children

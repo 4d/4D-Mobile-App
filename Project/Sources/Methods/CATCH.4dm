@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : CATCH
   // ID[0B2F351611D34984A8FCDB08E2E5F5A4]
-  // Created #10-3-2017 by Vincent de Lachaux
+  // Created 10-3-2017 by Vincent de Lachaux
   // ----------------------------------------------------
 C_COLLECTION:C1488($1)
 

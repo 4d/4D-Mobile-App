@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : ob_parseDocument
   // Database: 4D Mobile App
-  // Created #15-7-2018 by Eric Marchand
+  // Created 15-7-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Parse a document to an object.

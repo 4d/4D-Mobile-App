@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : col_replaceString
   // Database: 4D Mobile App
-  // Created #26-7-2018 by Eric Marchabd
+  // Created 26-7-2018 by Eric Marchabd
   // ----------------------------------------------------
   // Description:
   // Convert replace string.
@@ -15,9 +15,9 @@ C_TEXT:C284($2)
 C_TEXT:C284($3)
 
 If (False:C215)
-	C_OBJECT:C1216(col_replaceString;$1)
-	C_TEXT:C284(col_replaceString;$2)
-	C_TEXT:C284(col_replaceString;$3)
+	C_OBJECT:C1216(col_replaceString ;$1)
+	C_TEXT:C284(col_replaceString ;$2)
+	C_TEXT:C284(col_replaceString ;$3)
 End if 
 
   // ----------------------------------------------------

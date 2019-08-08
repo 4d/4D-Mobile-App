@@ -3,7 +3,7 @@
   // Project method : views_preview
   // Database: 4D Mobile Express
   // ID[C76CC05CD44641EC92AE0C413664247C]
-  // Created #5-12-2017 by Vincent de Lachaux
+  // Created 5-12-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -312,7 +312,7 @@ Case of
 									If (Asserted:C1132(OK=1))
 										
 										DOM SET XML ATTRIBUTE:C866($Dom_field;\
-											"stroke-dasharray";"none")  // ;"assigned";True)\
+											"stroke-dasharray";"none")  // ;"assigned";True)											\
 											
 										If ($Boo_multivalued)
 											

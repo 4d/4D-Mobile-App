@@ -3,7 +3,7 @@
   // Project method : editor_MESSAGES
   // Database: 4D Mobile App
   // ID[FBCD164D418F4DC18E4AEE9871391F89]
-  // Created #10-1-2019 by Vincent de Lachaux
+  // Created 10-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Management of messages addressed to the main form
@@ -88,10 +88,10 @@ Case of
 		Else 
 			
 			  // DO_MESSAGE (New object(\
-								"action";"show";\
-								"type";"alert";\
-								"title";"noDevices";\
-								"additional";""))
+												"action";"show";\
+												"type";"alert";\
+												"title";"noDevices";\
+												"additional";""))
 			
 		End if 
 		

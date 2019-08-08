@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : static
   // ID[20AD4B700F0549EFA4FC0E20C0C6731F]
-  // Created #14-6-2019 by Vincent de Lachaux
+  // Created 14-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

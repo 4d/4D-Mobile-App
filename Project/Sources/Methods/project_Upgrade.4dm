@@ -3,7 +3,7 @@
   // Project method : project_Upgrade
   // Database: 4D Mobile App
   // ID[4496D76DCBC74F1AA92340B61399720D]
-  // Created #31-8-2018 by Eric Marchand
+  // Created 31-8-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Version check & update

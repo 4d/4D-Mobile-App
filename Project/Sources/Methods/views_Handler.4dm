@@ -3,7 +3,7 @@
   // Project method : views_Handler
   // Database: 4D Mobile Express
   // ID[2A03E5F862194815A6AA36A409731C5C]
-  // Created #26-10-2017 by Vincent de Lachaux
+  // Created 26-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

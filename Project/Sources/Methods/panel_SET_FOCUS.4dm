@@ -3,7 +3,7 @@
   // Project method : panel_SET_FOCUS
   // Database: 4D Mobile Express
   // ID[E4416EA7A7C542C391AB613FAB3A67BF]
-  // Created #12-5-2017 by Vincent de Lachaux
+  // Created 12-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
 

@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Form method : MESSAGE - (4D Mobile Express)
   // ID[F362D3E200984FF7AFD3F7FD4B4311BC]
-  // Created #30-6-2017 by Vincent de Lachaux
+  // Created 30-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_left;$Lon_right;$Lon_top)
@@ -10,7 +10,7 @@ C_TEXT:C284($Txt_key)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 
   // ----------------------------------------------------
 

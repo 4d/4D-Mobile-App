@@ -3,7 +3,7 @@
   // Project method : macros
   // Database: 4D Mobile Express
   // ID[2FB4F4541BFC4C7F910600716696D754]
-  // Created #11-8-2017 by Vincent de Lachaux
+  // Created 11-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Process <macro> tags and  xliff

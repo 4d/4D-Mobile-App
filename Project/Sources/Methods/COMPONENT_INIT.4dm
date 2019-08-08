@@ -3,7 +3,7 @@
   // Project method : COMPONENT_INIT
   // Database: 4D Mobile Express
   // ID[F84912DC921C45C49366AD32CAA443C7]
-  // Created #15-9-2017 by Vincent de Lachaux
+  // Created 15-9-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // #THREAD-SAFE
   // ----------------------------------------------------
@@ -97,9 +97,9 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // CommonValues.build:="1.0.0"
 	  // CommonValues.developmentRegion:="en"
 	  // CommonValues.storyboard:=New object(\
-																										"LaunchScreen";"LaunchScreen";\
-																										"Main";"Main";\
-																										"backgroundColor";"white")
+																												"LaunchScreen";"LaunchScreen";\
+																												"Main";"Main";\
+																												"backgroundColor";"white")
 	
 	  // Info.plist
 	commonValues.infoPlist:=New object:C1471(\

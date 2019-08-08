@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Object method : PRODUCT.icon.action - (4D Mobile Express)
   // ID[FC490923A2D04B2CA229058157C7460D]
-  // Created #24-5-2017 by Vincent de Lachaux
+  // Created 24-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_formEvent)
@@ -10,7 +10,7 @@ C_TEXT:C284($Mnu_main;$Txt_choice;$Txt_me)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 $Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 

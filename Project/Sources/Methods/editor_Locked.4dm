@@ -3,7 +3,7 @@
   // Project method : editor_Locked
   // Database: 4D Mobile Express
   // ID[F95449718D5844D687507CB9F44CE8B4]
-  // Created #21-12-2017 by Vincent de Lachaux
+  // Created 21-12-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

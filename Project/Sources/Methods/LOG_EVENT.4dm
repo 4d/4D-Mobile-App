@@ -3,7 +3,7 @@
   // Project method : LOG_EVENT
   // Database: 4D Mobile Express
   // ID[96B758353E7C46B2AC1896B15D9C0058]
-  // Created #14-9-2017 by Vincent de Lachaux
+  // Created 14-9-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

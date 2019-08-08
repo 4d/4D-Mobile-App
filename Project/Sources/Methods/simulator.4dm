@@ -3,7 +3,7 @@
   // Project method : simulator
   // Database: 4D Mobile Express
   // ID[99B8916684A94F25B8BE366E2FF87552]
-  // Created #27-6-2017 by Vincent de Lachaux
+  // Created 27-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // ----------------------------------------------------

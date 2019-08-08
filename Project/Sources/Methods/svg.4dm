@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : svg
-  // Created #11-6-2019 by Vincent de Lachaux
+  // Created 11-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Manipulate SVG as objects

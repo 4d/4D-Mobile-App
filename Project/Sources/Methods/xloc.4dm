@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : xloc
-  // Created #2018 by Eric Marchand
+  // Created 2018 by Eric Marchand
   // ----------------------------------------------------
   // Description: All about Xcode localization file
   //

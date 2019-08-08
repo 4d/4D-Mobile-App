@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : str
   // ID[69A5F0B04405480CA4218A430C3322D9]
-  // Created #14-6-2019 by Vincent de Lachaux
+  // Created 14-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

@@ -3,7 +3,7 @@
   // Project method : structure_REPAIR
   // Database: 4D Mobile App
   // ID[56E1D9BCC2274EB9A67DBE09D54B6636]
-  // Created #18-1-2019 by Vincent de Lachaux
+  // Created 18-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -222,6 +222,10 @@ For each ($Txt_tableNumber;$Obj_dataModel)
 						End if 
 						
 						  //______________________________________________________
+					: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
+						
+						
+						  //______________________________________________________
 				End case 
 			End for each 
 			
@@ -243,6 +247,11 @@ For each ($Txt_tableNumber;$Obj_dataModel)
 						
 						  //______________________________________________________
 					: ($ƒ.isRelationToOne($Obj_table[$Txt_field]))  // N -> 1 relation
+						
+						$Boo_found:=True:C214
+						
+						  //______________________________________________________
+					: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
 						
 						$Boo_found:=True:C214
 						

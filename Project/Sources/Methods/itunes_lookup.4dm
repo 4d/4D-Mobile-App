@@ -3,7 +3,7 @@
   // Project method : itunes_lookup
   // Database: 4D Mobile Express
   // ID[96B756353E7C46B2ACE896B1RD9C0058]
-  // Created #11-12-2017 by Eric Marchand
+  // Created 11-12-2017 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Itunes store web service search api

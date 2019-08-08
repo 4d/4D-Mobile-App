@@ -3,7 +3,7 @@
   // Project method : panel_UI
   // Database: 4D Mobile Express
   // ID[87678F8FC386485E9EBD815F82C945EA]
-  // Created #12-5-2017 by Vincent de Lachaux
+  // Created 12-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
 

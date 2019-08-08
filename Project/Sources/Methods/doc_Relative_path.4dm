@@ -3,7 +3,7 @@
   // Project method : doc_Relative_path
   // Database: 4D Mobile App
   // ID[F4814664202B48FFB36D9D3F6928D848]
-  // Created #15-10-2018 by Vincent de Lachaux
+  // Created 15-10-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Return the relative path into a reference directory

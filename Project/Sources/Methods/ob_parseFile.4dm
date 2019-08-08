@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : ob_parseFile
   // Database: 4D Mobile App
-  // Created #05-8-2018 by Eric Marchand
+  // Created 05-8-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Parse a File to an object.

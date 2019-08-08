@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : db
   // ID[688E4624BD3B4182AB62DD632AD26182]
-  // Created #4-7-2019 by Vincent de Lachaux
+  // Created 4-7-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

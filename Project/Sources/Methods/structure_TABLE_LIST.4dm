@@ -3,7 +3,7 @@
   // Project method : structure_TABLE_LIST
   // Database: 4D Mobile App
   // ID[805CAE4EB6024C04B45995284E0877F4]
-  // Created #1-2-2018 by Vincent de Lachaux
+  // Created 1-2-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Object method : RIBBON.201 - (4D Mobile App)
   // ID[6815D0201FC24AF6A6763A5CFDD4B233]
-  // Created #31-1-2018 by Vincent de Lachaux
+  // Created 31-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_bottom;$Lon_formEvent;$Lon_left;$Lon_right;$Lon_top)

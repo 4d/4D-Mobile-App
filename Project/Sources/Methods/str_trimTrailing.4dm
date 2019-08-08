@@ -3,7 +3,7 @@
   // Project method : str_trimTrailing
   // Database: 4D Mobile App
   // ID[B5D9DE30480B450FB1A8B09A8C8DCC85]
-  // Created #8-6-2018 by Vincent de Lachaux
+  // Created 8-6-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

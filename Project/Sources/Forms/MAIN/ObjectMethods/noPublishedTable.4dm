@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Object method : NO_PUBLISHED_TABLES.3D Button - (4D Mobile App)
   // ID[7A86CE71B87543D2B34CEB786B737641]
-  // Created #2-2-2018 by Vincent de Lachaux
+  // Created 2-2-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_left;$Lon_right;$Lon_top)
@@ -11,7 +11,7 @@ C_TEXT:C284($Txt_me)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 $Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 

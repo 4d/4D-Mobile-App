@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : ob_error_add
   // Database: 4D Mobile App
-  // Created #02-08-2017 by Eric Marchand
+  // Created 02-08-2017 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Add error to object

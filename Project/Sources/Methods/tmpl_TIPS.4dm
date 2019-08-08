@@ -3,7 +3,7 @@
   // Project method : tmpl_TIPS
   // Database: 4D Mobile App
   // ID[0DDE6FCC7CBA406BB7A1D3ED14E73E97]
-  // Created #6-9-2018 by Vincent de Lachaux
+  // Created 6-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Show tips based on the overflowed object

@@ -3,7 +3,7 @@
   // Project method : EDITOR_ON_ACTIVATE
   // Database: 4D Mobile Express
   // ID[7D3910538F974FEEBA93C0AFF2216728]
-  // Created #17-8-2017 by Vincent de Lachaux
+  // Created 17-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Action to performe when the editor is activated

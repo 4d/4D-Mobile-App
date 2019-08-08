@@ -3,7 +3,7 @@
   // Project method : tmpl_cancel
   // Database: 4D Mobile App
   // ID[AF4AA705A14B4633B8B95F5D6B685850]
-  // Created #12-9-2018 by Vincent de Lachaux
+  // Created 12-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Return the cancel button picture used in the SVG templates

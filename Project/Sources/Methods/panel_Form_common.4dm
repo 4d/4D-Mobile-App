@@ -3,7 +3,7 @@
   // Project method : panel_Form_common
   // Database: 4D Mobile Express
   // ID[5F674D01A17C4030B5D09AE0352A3681]
-  // Created #12-5-2017 by Vincent de Lachaux
+  // Created 12-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
 C_LONGINT:C283($0)
@@ -42,7 +42,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		End for 
 	End if 
 	
-	$Lon_formEvent:=Form event:C388
+	$Lon_formEvent:=Form event code:C388
 	
 Else 
 	

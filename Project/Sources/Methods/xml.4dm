@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : xml
-  // Created #06-8-2019 by Marchand Eric
+  // Created 06-8-2019 by Marchand Eric
   // ----------------------------------------------------
   // Description:
   // Manipulate XML as objects

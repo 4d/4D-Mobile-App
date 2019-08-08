@@ -3,7 +3,7 @@
   // Project method : ACTIONS_UI
   // Database: 4D Mobile App
   // ID[F5B35B27DE504EA3BF5697976B967FB5]
-  // Created #13-3-2019 by Vincent de Lachaux
+  // Created 13-3-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -59,7 +59,7 @@ Case of
 			"action";"init"))
 		
 		If ($Obj_form.form.focusedWidget=$Obj_form.actions.name)\
-			 & (Form event:C388=On Getting Focus:K2:7)
+			 & (Form event code:C388=On Getting Focus:K2:7)
 			
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget+".border";ui.selectedColor;Background color none:K23:10)

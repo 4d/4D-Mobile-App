@@ -3,7 +3,7 @@
   // Project method : project_UI_ALERT
   // Database: 4D Mobile Express
   // ID[ACDDE8AE2FFC4989ADC083AF98BE31E1]
-  // Created #10-8-2017 by Vincent de Lachaux
+  // Created 10-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

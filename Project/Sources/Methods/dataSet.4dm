@@ -3,7 +3,7 @@
   // Project method : dataSet
   // Database: 4D Mobile Express
   // ID[BC6566132D8B51458EE1B40856D08E06]
-  // Created #08-3-2018 by Eric Marchand
+  // Created 08-3-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // data set management

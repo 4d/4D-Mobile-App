@@ -3,7 +3,7 @@
   // Project method : DO_MESSAGE
   // Database: 4D Mobile Express
   // ID[D57C4FF31B0C49C98965D4645A31B3B1]
-  // Created #3-7-2017 by Vincent de Lachaux
+  // Created 3-7-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
 C_OBJECT:C1216($1)

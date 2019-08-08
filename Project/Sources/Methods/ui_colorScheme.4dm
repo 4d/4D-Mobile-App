@@ -3,7 +3,7 @@
   // Project method : ui_colorScheme
   // Database: 4D Mobile App
   // ID[D3B9FB0808EE47E79518C159B704340F]
-  // Created #17-1-2019 by Eric Marchand
+  // Created 17-1-2019 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Get information about OS color scheme

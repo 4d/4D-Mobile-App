@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : formatters
-  // Created #2018 by Eric Marchand
+  // Created 2018 by Eric Marchand
   // ----------------------------------------------------
   // Description: Manage data formatters
   //  * action = extract: from data model get a list of formatters

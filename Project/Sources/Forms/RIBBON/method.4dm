@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Form method : RIBBON - (4D Mobile App)
   // ID[8B32DFD842F7463C9AE0CFD578EAC514]
-  // Created #30-1-2018 by Vincent de Lachaux
+  // Created 30-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($l)

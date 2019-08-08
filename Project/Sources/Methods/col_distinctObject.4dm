@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : col_distinctObject
   // Database: 4D Mobile App
-  // Created #21-8-2018 by Eric Marchand
+  // Created 21-8-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Used with reduce to return only distinct objects.

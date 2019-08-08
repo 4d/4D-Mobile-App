@@ -3,7 +3,7 @@
   // Project method : sharedCollection
   // Database: v14
   // ID[8826EB3FBC534F3090D85F3BD509B7E6]
-  // Created #4-2-2019 by Vincent de Lachaux
+  // Created 4-2-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

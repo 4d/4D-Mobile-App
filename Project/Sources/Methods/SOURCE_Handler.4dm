@@ -3,7 +3,7 @@
   // Project method : SOURCE_Handler
   // Database: 4D Mobile App
   // ID[C28D0503938C4984BE97B6552461F324]
-  // Created #4-10-2018 by Vincent de Lachaux
+  // Created 4-10-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

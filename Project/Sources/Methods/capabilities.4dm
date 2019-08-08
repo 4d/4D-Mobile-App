@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : capabilities
-  // Created #2019 by Eric Marchand
+  // Created 2019 by Eric Marchand
   // ----------------------------------------------------
   // Description: Edit projects files to add capabilities
   // - iOS Xcode project : entitlements or Info.plist
@@ -354,19 +354,19 @@ Case of
 					"MKDirectionsApplicationSupportedModes";$Obj_in.mapModes))
 				
 				  // collection(\
-					"MKDirectionsModeBike";\
-					"MKDirectionsModeBus";\
-					"MKDirectionsModeCar";\
-					"MKDirectionsModeFerry";\
-					"MKDirectionsModeOther";\
-					"MKDirectionsModePedestrian";\
-					"MKDirectionsModePlane";\
-					"MKDirectionsModeRideShare";\
-					"MKDirectionsModeStreetCar";\
-					"MKDirectionsModeSubway";\
-					"MKDirectionsModeTaxi";\
-					"MKDirectionsModeTrain"\
-					)
+										"MKDirectionsModeBike";\
+										"MKDirectionsModeBus";\
+										"MKDirectionsModeCar";\
+										"MKDirectionsModeFerry";\
+										"MKDirectionsModeOther";\
+										"MKDirectionsModePedestrian";\
+										"MKDirectionsModePlane";\
+										"MKDirectionsModeRideShare";\
+										"MKDirectionsModeStreetCar";\
+										"MKDirectionsModeSubway";\
+										"MKDirectionsModeTaxi";\
+										"MKDirectionsModeTrain"\
+										)
 				
 			End if 
 		End if 

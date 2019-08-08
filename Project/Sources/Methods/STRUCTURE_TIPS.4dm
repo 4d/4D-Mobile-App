@@ -3,7 +3,7 @@
   // Project method : STRUCTURE_TIPS
   // Database: 4D Mobile App
   // ID[1ACA778192DD48D4898BC23D5CF6FAFC]
-  // Created #31-1-2019 by Vincent de Lachaux
+  // Created 31-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

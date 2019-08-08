@@ -3,7 +3,7 @@
   // Project method : panel_Objects
   // Database: 4D Mobile Express
   // ID[B68517EA8DD94B4FB2C87ECF876A1F2F]
-  // Created #10-8-2017 by Vincent de Lachaux
+  // Created 10-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Returns a collection of the panels of the current form

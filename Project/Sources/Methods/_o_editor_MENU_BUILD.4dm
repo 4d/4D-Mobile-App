@@ -3,7 +3,7 @@
   // Project method : editor_MENU_BUILD
   // Database: 4D Mobile Express
   // ID[A4B34AA7AA3641ACBB84988DBDB07BED]
-  // Created #6-10-2017 by Vincent de Lachaux
+  // Created 6-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -34,7 +34,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Lon_formEvent:=Form event:C388
+	$Lon_formEvent:=Form event code:C388
 	
 	$Obj_project:=(OBJECT Get pointer:C1124(Object named:K67:5;"project"))->
 	

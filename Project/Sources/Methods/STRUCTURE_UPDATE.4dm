@@ -3,7 +3,7 @@
   // Project method : STRUCTURE_UPDATE
   // Database: 4D Mobile App
   // ID[5478941602C842A7B3FCBC8097348516]
-  // Created #23-1-2019 by Vincent de Lachaux
+  // Created 23-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Updating the data model and project dependencies
@@ -128,6 +128,11 @@ Else
 						$Obj_field:=$Obj_currentTable.field[$Obj_currentTable.field.extract("name").indexOf($t)]
 						
 					End if 
+					
+					  //………………………………………………………………………………………………………
+				: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
+					
+					
 					
 					  //………………………………………………………………………………………………………
 			End case 
@@ -272,7 +277,7 @@ Else
 				  //………………………………………………………………………………………………………
 			: (Value type:C1509($Obj_table[$t])=Is object:K8:27)
 				
-				$Boo_found:=$ƒ.isRelationToOne($Obj_table[$t])
+				$Boo_found:=$ƒ.isRelation($Obj_table[$t])
 				
 				  //………………………………………………………………………………………………………
 		End case 

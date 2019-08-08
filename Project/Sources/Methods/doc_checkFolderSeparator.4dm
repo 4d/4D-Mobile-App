@@ -3,7 +3,7 @@
   // Project method : doc_checkFolderSeparator
   // Database: 4D Mobile App
   // ID[5CFF35FDEC5D4EE3A96409A2AA6D6A4C]
-  // Created #25-6-2018 by Vincent de Lachaux
+  // Created 25-6-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Checks if the last character of a pathname is a folder separator,

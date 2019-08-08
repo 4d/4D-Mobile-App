@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : thermometer
   // ID[CE6119C95A784B9182E22995CBB3A470]
-  // Created #14-6-2019 by Vincent de Lachaux
+  // Created 14-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Part of the UI classes to manage thermometers

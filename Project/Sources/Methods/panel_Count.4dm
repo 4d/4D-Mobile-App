@@ -3,7 +3,7 @@
   // Project method : panel_Count
   // Database: 4D Mobile Express
   // ID[8F15843F50E74326BFE2E6117CA0A57E]
-  // Created #12-5-2017 by Vincent de Lachaux
+  // Created 12-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Returns the number of panels of the form

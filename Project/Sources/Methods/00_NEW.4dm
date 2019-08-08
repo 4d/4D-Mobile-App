@@ -3,7 +3,7 @@
   // Project method: 00_NEW
   // Database: 4D Mobile Express
   // ID[2A0199468FC24025903500DE13DD6E63]
-  // Created #11-5-2017 by Vincent de Lachaux
+  // Created 11-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description
   //

@@ -3,7 +3,7 @@
   // Project method : ob_setProperties
   // Database: 4D Mobile App
   // ID[B00EFC0F8600415A91DD6D2CE6536318]
-  // Created #15-4-2019 by Vincent de Lachaux
+  // Created 15-4-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

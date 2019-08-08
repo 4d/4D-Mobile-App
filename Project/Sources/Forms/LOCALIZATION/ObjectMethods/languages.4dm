@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Object method : LOCALIZATION.languages - (4D Mobile App)
   // ID[C3077E92EBF34389A816518E40AEE8B1]
-  // Created #17-10-2018 by Vincent de Lachaux
+  // Created 17-10-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_formEvent)
@@ -9,7 +9,7 @@ C_TEXT:C284($Mnu_popup;$t;$Txt_me)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 $Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 
   // ----------------------------------------------------

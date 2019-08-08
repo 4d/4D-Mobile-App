@@ -3,7 +3,7 @@
   // Project method : DATA_Handler
   // Database: 4D Mobile App
   // ID[68574C7BCD7A4D5FA9CC3284DAEF4F51]
-  // Created #25-9-2018 by Vincent de Lachaux
+  // Created 25-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -425,7 +425,7 @@ Case of
 	: ($Obj_in.action="listboxUI")
 		
 		If ($Obj_form.focus=$Obj_form.list)\
-			 & (Form event:C388=On Getting Focus:K2:7)
+			 & (Form event code:C388=On Getting Focus:K2:7)
 			
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.list;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.list+".border";ui.selectedColor;Background color none:K23:10)

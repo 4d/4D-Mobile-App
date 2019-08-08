@@ -3,7 +3,7 @@
   // Project method : doc_LoadJsonFile
   // Database: 4D Mobile App
   // ID[0FE8A1B89C074B549AA9E97999C60305]
-  // Created #9-2-2018 by Vincent de Lachaux
+  // Created 9-2-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

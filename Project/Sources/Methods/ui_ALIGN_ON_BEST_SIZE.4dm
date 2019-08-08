@@ -3,7 +3,7 @@
   // Project method : ui_ALIGN_ON_BEST_SIZE
   // Database: runtime
   // ID[C4F630C70E63475A8F5DEA93FE611F72]
-  // Created #8-6-2016 by Vincent de Lachaux
+  // Created 8-6-2016 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

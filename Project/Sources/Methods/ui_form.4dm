@@ -3,7 +3,7 @@
   // Project method : ui_form
   // Database: 4D Mobile App
   // ID[C3D3F74CB1554257A2F5466A1220206E]
-  // Created #15-4-2019 by Vincent de Lachaux
+  // Created 15-4-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -67,7 +67,7 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="event")
 		
-		This:C1470.event:=Form event:C388
+		This:C1470.event:=Form event code:C388
 		
 		  //______________________________________________________
 	: ($Txt_action="current")

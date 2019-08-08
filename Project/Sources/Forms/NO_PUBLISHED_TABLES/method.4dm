@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Form method : NO_PUBLISHED_TABLES - (4D Mobile Express)
   // ID[1AECDC85637440138F487FA4FF795352]
-  // Created #8-1-2018 by Vincent de Lachaux
+  // Created 8-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_formEvent)
@@ -9,7 +9,7 @@ C_TEXT:C284($Txt_buffer)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 
   // ----------------------------------------------------
 

@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : XcodeProjInject
-  // Created #2018 by Eric Marchand
+  // Created 2018 by Eric Marchand
   // ----------------------------------------------------
   // Description: Edit Xcode project file with recursivity
 

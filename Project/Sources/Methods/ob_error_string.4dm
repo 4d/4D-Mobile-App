@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : ob_error_string
   // Database: 4D Mobile App
-  // Created #21-01-2019 by Eric Marchand
+  // Created 21-01-2019 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Try to convert errors to strings

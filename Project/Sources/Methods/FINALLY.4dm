@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : FINALLY
   // ID[60889CD973B541919706019315ECEAA7]
-  // Created #18-5-2017 by Vincent de Lachaux
+  // Created 18-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
 C_TEXT:C284($1)
 

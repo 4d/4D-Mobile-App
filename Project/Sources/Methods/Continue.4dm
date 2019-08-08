@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : Continue
   // ID[059593008F9741E1A807F101AD2FCD26]
-  // Created #18-5-2017 by Vincent de Lachaux
+  // Created 18-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
 C_BOOLEAN:C305($0)
 

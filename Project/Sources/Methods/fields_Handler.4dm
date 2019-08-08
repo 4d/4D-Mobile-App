@@ -3,7 +3,7 @@
   // Project method : fields_Handler
   // Database: 4D Mobile Express
   // ID[BF3981E8AF72452DB0171AEDA52AF625]
-  // Created #26-10-2017 by Vincent de Lachaux
+  // Created 26-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

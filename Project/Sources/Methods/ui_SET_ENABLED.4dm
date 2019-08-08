@@ -3,7 +3,7 @@
   // Project method : ui_SET_ENABLED
   // Database: 4D Mobile App
   // ID[D060CD6A3D444F4FA21E790326938909]
-  // Created #20-11-2018 by Vincent de Lachaux
+  // Created 20-11-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Some objects, like 3D buttons, are not graphically enabled/disabled correctly.

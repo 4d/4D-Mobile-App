@@ -3,7 +3,7 @@
   // Project method : TEMPLATE
   // Database: 4D Mobile Express
   // ID[9D7291F8EA044C9C92BEF06808B65A17]
-  // Created #21-6-2017 by Vincent de Lachaux
+  // Created 21-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // -

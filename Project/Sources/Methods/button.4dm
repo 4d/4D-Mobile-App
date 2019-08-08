@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : button
   // ID[CD66153575D146F2A622EAE200B9EA5A]
-  // Created #14-6-2019 by Vincent de Lachaux
+  // Created 14-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Part of the UI classes to manage buttons

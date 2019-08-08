@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Object method : EDITOR.Subform - (4D Mobile App)
   // ID[B259C0E7CB8C44798B0168C4A59E531B]
-  // Created #2-3-2018 by Vincent de Lachaux
+  // Created 2-3-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_formEvent)
@@ -10,7 +10,7 @@ C_TEXT:C284($Txt_me)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 $Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 

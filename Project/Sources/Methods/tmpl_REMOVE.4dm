@@ -3,12 +3,12 @@
   // Project method : tmpl_REMOVE
   // Database: 4D Mobile App
   // ID[77787A83B9A048FCBA802902156129C9]
-  // Created #25-4-2018 by Vincent de Lachaux
+  // Created 25-4-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
   // ----------------------------------------------------
-  // Modified #4-9-2018 by Vincent de Lachaux
+  // Modified 4-9-2018 by Vincent de Lachaux
   // #98105 - Multi-criteria Search
   // ----------------------------------------------------
   // Declarations

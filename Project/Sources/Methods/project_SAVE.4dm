@@ -3,7 +3,7 @@
   // Project method : project_SAVE
   // Database: 4D Mobile Express
   // ID[6AFFE5642DDA4B78AE743AABFCA0C23A]
-  // Created #21-8-2017 by Vincent de Lachaux
+  // Created 21-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Save the Object named "project" to path Form.project.

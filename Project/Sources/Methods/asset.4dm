@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : asset
-  // Created #2017 by Eric Marchand
+  // Created 2017 by Eric Marchand
   // ----------------------------------------------------
   // Description: Create, Edit Xcode asset
   // ----------------------------------------------------

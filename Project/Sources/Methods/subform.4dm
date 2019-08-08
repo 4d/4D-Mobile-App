@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : subform
   // ID[AEE640685DEE4A069F99DEB49DDD5AC0]
-  // Created #18-6-2019 by Vincent de Lachaux
+  // Created 18-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

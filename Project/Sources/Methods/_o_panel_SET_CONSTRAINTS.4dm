@@ -3,7 +3,7 @@
   // Project method : panel_SET_CONSTRAINTS
   // Database: 4D Mobile Express
   // ID[6BD14A4A80B84D009542A2F5A3027A55]
-  // Created #23-5-2017 by Vincent de Lachaux
+  // Created 23-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

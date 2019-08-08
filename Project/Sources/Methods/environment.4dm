@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : environment
   // ID[A7A5542087B347E18B3D00D01B2D17F5]
-  // Created #27-6-2019 by Vincent de Lachaux
+  // Created 27-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

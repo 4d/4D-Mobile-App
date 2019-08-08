@@ -3,7 +3,7 @@
   // Project method : dump
   // Database: 4D Mobile Express
   // ID[BC6599132D8B41458EE1B30856D08E06]
-  // Created #27-6-2017 by Eric Marchand
+  // Created 27-6-2017 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // dump rest info

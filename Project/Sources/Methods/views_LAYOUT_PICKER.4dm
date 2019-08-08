@@ -3,7 +3,7 @@
   // Project method : views_LAYOUT_PICKER
   // Database: 4D Mobile Express
   // ID[F73301CBEEE042CEAD2D2D1CEBB4C9E5]
-  // Created #11-1-2018 by Vincent de Lachaux
+  // Created 11-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

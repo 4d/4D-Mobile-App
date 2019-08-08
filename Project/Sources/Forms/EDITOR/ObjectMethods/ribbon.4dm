@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Object method : EDITOR.ribbon - (4D Mobile App)
   // ID[9A9D18DB5AF848868EA589C98401AEA2]
-  // Created #30-1-2018 by Vincent de Lachaux
+  // Created 30-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($Boo_shiftDown)
@@ -13,7 +13,7 @@ C_OBJECT:C1216($o)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 $Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 $Boo_shiftDown:=Shift down:C543

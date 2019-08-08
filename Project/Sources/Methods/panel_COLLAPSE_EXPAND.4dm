@@ -3,7 +3,7 @@
   // Project method : panel_COLLAPSE_EXPAND
   // Database: 4D Mobile Express
   // ID[52BEDFA602124A318595C4062F3E7CC0]
-  // Created #10-5-2017 by Vincent de Lachaux
+  // Created 10-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
 C_LONGINT:C283($1)

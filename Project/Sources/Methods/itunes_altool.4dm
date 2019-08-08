@@ -3,7 +3,7 @@
   // Project method : itunes_altool
   // Database: 4D Mobile Express
   // ID[97B746353E7C46B5ACE496B1RD9C0051]
-  // Created #20-12-2017 by Eric Marchand
+  // Created 20-12-2017 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // https://help.apple.com/itc/apploader/#/apdATD1E53-D1E1A1303-D1E53A1126

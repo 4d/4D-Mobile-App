@@ -3,7 +3,7 @@
   // Project method : str_URLDecode
   // Database: 4D Mobile App
   // ID[4B76CDB37A7D433F8391D2CCB6C5627F]
-  // Created #4-10-2018 by Vincent de Lachaux
+  // Created 4-10-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Returns a URL decoded string

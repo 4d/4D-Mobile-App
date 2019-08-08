@@ -3,7 +3,7 @@
   // Project method : STRUCTURE_CALLBACK
   // Database: 4D Mobile App
   // ID[5CEB938EFFBB4CB9A0436B50327B0EAD]
-  // Created #18-1-2019 by Vincent de Lachaux
+  // Created 18-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Check structure for missing table or fields used in the data model
@@ -259,6 +259,11 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 											
 										End if 
 									End if 
+									
+									  //______________________________________________________
+								: ($ƒ.isRelationToMany($Obj_tableModel[$t]))  // 1 -> N relation
+									
+									  //#TO_DO
 									
 									  //______________________________________________________
 							End case 

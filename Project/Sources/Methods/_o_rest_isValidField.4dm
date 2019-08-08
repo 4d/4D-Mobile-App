@@ -3,7 +3,7 @@
   // Project method : rest_isValidField
   // Database: 4D Mobile Express
   // ID[0F0D6B3602C94E3BA39832C6C701DEA9]
-  // Created #30-8-2017 by Vincent de Lachaux
+  // Created 30-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Check if a field is available thru the REST API

@@ -3,7 +3,7 @@
   // Project method : PROJECT_HANDLER
   // Database: 4D Mobile Express
   // ID[AF22D4902A9B46CDA9555BD5A14C9AF7]
-  // Created #1-9-2017 by Vincent de Lachaux
+  // Created 1-9-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -52,7 +52,7 @@ Case of
 		  //=========================================================
 	: ($Obj_in=Null:C1517)  // Form method
 		
-		$Lon_formEvent:=Form event:C388
+		$Lon_formEvent:=Form event code:C388
 		
 		  // ----------------------------------------------------
 		Case of 

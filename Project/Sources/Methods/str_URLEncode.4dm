@@ -3,14 +3,14 @@
   // Project method : str_URLEncode
   // Database: 4D Mobile App
   // ID[1E29AECDCAA045C9A3194F772CEA4500]
-  // Created #4-10-2018 by Vincent de Lachaux
+  // Created 4-10-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Returns a URL encoded string
   // ----------------------------------------------------
   // #THREAD_SAFE
   // ----------------------------------------------------
-  // Modified #4-10-2018 by Vincent de Lachaux
+  // Modified 4-10-2018 by Vincent de Lachaux
   // Remove "=" and space to get the same result as:
   // https:// Www.urlencoder.org
   // ----------------------------------------------------

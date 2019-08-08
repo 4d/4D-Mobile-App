@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Form method : PICTURE_GRID - (4D Mobile Express)
   // ID[D6D5F74D117A474096110381EDD30111]
-  // Created #26-10-2017 by Vincent de Lachaux
+  // Created 26-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($Boo_display;$Boo_horizontal;$Boo_redraw;$Boo_vertical)
@@ -18,7 +18,7 @@ ARRAY PICTURE:C279($tPic_data;0)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 
   // ----------------------------------------------------
   // Default values

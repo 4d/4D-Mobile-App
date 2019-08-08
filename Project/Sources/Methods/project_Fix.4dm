@@ -3,7 +3,7 @@
   // Project method : project_Fix
   // Database: 4D Mobile App
   // ID[534F9A527DA04E99B71444FEF1C97A15]
-  // Created #30-8-2018 by Vincent de Lachaux
+  // Created 30-8-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

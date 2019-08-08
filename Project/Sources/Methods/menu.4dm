@@ -1,9 +1,8 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : menu
-  // Database: 4D Mobile App
   // ID[7F62512A7B7C487C97E780DCE95400AB]
-  // Created #11-6-2019 by Vincent de Lachaux
+  // Created 11-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Manipulate menus as objects to make code more readable

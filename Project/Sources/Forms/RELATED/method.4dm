@@ -1,14 +1,14 @@
   // ----------------------------------------------------
   // Form method : RELATED - (4D Mobile App)
   // ID[FC51239B819F405287A5D751167C2CE3]
-  // Created #12-12-2018 by Vincent de Lachaux
+  // Created 12-12-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_formEvent)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 
   // ----------------------------------------------------
 

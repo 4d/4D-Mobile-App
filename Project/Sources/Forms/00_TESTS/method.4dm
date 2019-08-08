@@ -1,14 +1,14 @@
   // ----------------------------------------------------
   // Form method : STRUCTURE - (4D Mobile Express)
   // ID[99073C1E67D944ADB348D0F388F15231]
-  // Created #4-8-2017 by Vincent de Lachaux
+  // Created 4-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_formEvent)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 
   // ----------------------------------------------------
 

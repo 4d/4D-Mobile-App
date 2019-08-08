@@ -3,7 +3,7 @@
   // Project method : str_wordWrap
   // Database: 4D Mobile App
   // ID[D741AFED7862440FB86FEB940D250D33]
-  // Created #8-6-2018 by Vincent de Lachaux
+  // Created 8-6-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

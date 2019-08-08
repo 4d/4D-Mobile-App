@@ -3,7 +3,7 @@
   // Project method : tmpl_On_drag_over
   // Database: 4D Mobile App
   // ID[F8470C01095D4B8AAE2190A7941AABDF]
-  // Created #6-9-2018 by Vincent de Lachaux
+  // Created 6-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

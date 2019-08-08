@@ -3,7 +3,7 @@
   // Project method : windowProperties
   // Database: 4D Mobile App
   // ID[1AF1AC299496490C8E1BBF55DBF3EB41]
-  // Created #29-1-2019 by Vincent de Lachaux
+  // Created 29-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Return properties of a window

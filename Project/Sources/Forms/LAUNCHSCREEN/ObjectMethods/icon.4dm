@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Object method : PRODUCT.icon - (4D Mobile Express)
   // ID[C46E89253C914A9FB9E6C65E0250E050]
-  // Created #24-5-2017 by Vincent de Lachaux
+  // Created 24-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_formEvent)
@@ -10,7 +10,7 @@ C_TEXT:C284($Txt_me)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 $Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 
@@ -36,8 +36,8 @@ Case of
 	: ($Lon_formEvent=On After Edit:K2:43)
 		
 		  //appiconSet (New object(\
-			"do";"set";\
-			"image";$Ptr_me->))
+						"do";"set";\
+						"image";$Ptr_me->))
 		
 		  //______________________________________________________
 	: ($Lon_formEvent=On Double Clicked:K2:5)

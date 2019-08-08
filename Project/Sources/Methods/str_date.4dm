@@ -3,7 +3,7 @@
   // Project method : str_date
   // Database: 4D Mobile App
   // ID[9B02BB49FB2F459891FEA4B3176DC081]
-  // Created #30-1-2019 by Vincent de Lachaux
+  // Created 30-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Date to string

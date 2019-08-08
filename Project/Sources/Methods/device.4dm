@@ -3,7 +3,7 @@
   // Project method : device
   // Database: 4D Mobile Express
   // ID[94544ADDC4DD4700BE3FF62AAE2E5D2F]
-  // Created #27-6-2017 by Eric Marchand
+  // Created 27-6-2017 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // ----------------------------------------------------

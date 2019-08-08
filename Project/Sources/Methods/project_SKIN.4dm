@@ -3,7 +3,7 @@
   // Project method : project_SKIN
   // Database: 4D Mobile Express
   // ID[B90401BEDC9A4549941B7E4978430FFE]
-  // Created #16-6-2017 by Vincent de Lachaux
+  // Created 16-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
 C_OBJECT:C1216($1)

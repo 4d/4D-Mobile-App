@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : THROW
   // ID[C0A2A993242342CC9DF5E2C7F733283E]
-  // Created #18-5-2017 by Vincent de Lachaux
+  // Created 18-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
 C_OBJECT:C1216($1)
 

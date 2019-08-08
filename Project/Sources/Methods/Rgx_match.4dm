@@ -3,7 +3,7 @@
   // Project method : Rgx_match alias Rgx_MatchText
   // Database: 4D Mobile App
   // ID[4FCCB6B6140F4B4593ABA2FADDB4C3A8]
-  // Created #5-9-2018 by Vincent de Lachaux
+  // Created 5-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

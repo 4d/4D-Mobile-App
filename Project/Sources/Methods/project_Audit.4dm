@@ -3,7 +3,7 @@
   // Project method : project_Audit
   // Database: 4D Mobile App
   // ID[93767D0FCF2340DB88335AB3B117AA44]
-  // Created #24-8-2018 by Vincent de Lachaux
+  // Created 24-8-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

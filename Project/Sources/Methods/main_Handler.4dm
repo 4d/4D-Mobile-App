@@ -3,7 +3,7 @@
   // Project method : main_Handler
   // Database: 4D Mobile Express
   // ID[04B71BD2C4E54E2BA14CC82ED37FDCB3]
-  // Created #31-10-2017 by Vincent de Lachaux
+  // Created 31-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -40,7 +40,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Obj_form:=New object:C1471(\
 		"window";Current form window:C827;\
 		"ui";editor_INIT ;\
-		"event";Form event:C388;\
+		"event";Form event code:C388;\
 		"me";OBJECT Get name:C1087(Object current:K67:2);\
 		"focus";OBJECT Get name:C1087(Object with focus:K67:3);\
 		"tables";ui.listbox("01_available");\

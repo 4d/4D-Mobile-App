@@ -2,7 +2,7 @@
   // Project method : editor_Preferences
   // Database: 4D Mobile App
   // ID[D3B9FB0808EE47F79518B159B704340F]
-  // Created #5-2-2018 by Vincent de Lachaux
+  // Created 5-2-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

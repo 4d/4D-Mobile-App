@@ -3,7 +3,7 @@
   // Project method : ui_listboxPopUp
   // Database: 4D Mobile App
   // ID[1ED8CFA6205545E69F146592DD632D76]
-  // Created #12-3-2019 by Vincent de Lachaux
+  // Created 12-3-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // 

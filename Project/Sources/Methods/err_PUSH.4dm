@@ -3,7 +3,7 @@
   // Project method : err_PUSH
   // Database: 4D Mobile App
   // ID[2BF58939C6654B88BCD34A20C97DDB76]
-  // Created #7-2-2019 by Vincent de Lachaux
+  // Created 7-2-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

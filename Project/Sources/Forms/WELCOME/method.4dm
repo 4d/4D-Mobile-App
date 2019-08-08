@@ -1,7 +1,7 @@
   // ----------------------------------------------------
   // Form method : WELCOME - (4D Mobile App)
   // ID[15416DA1E1EA420FA0EA9C61C7BC8156]
-  // Created #2-3-2018 by Vincent de Lachaux
+  // Created 2-3-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($Boo_geometry)
@@ -11,7 +11,7 @@ C_TEXT:C284($Dir_root;$Txt_template)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event:C388
+$Lon_formEvent:=Form event code:C388
 
   // ----------------------------------------------------
 

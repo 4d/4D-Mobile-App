@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : xml_encode
   // Database: 4D Mobile Express
-  // Created #21-11-2017 by Eric Marchand
+  // Created 21-11-2017 by Eric Marchand
   // ----------------------------------------------------
   // Description:
 

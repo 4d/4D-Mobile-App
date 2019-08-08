@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : sdk
   // Database: 4D Mobile Express
-  // Created #21-8-2017 by Eric Marchand
+  // Created 21-8-2017 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   //

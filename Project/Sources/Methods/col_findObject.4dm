@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : col_findObject
   // Database: 4D Mobile App
-  // Created #21-8-2018 by Eric Marchand
+  // Created 21-8-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Find object using ob_equal in collection of objects.

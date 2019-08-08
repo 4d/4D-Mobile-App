@@ -3,7 +3,7 @@
   // Project method : tmpl_compatibleType
   // Database: 4D Mobile App
   // ID[65F3645D18C04D849BF87223A26F3364]
-  // Created #12-9-2018 by Vincent de Lachaux
+  // Created 12-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

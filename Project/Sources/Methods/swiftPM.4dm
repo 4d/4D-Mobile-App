@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : swiftPM
-  // Created #2019 by Eric Marchand
+  // Created 2019 by Eric Marchand
   // ----------------------------------------------------
   // Description: Call swift package manager function
 

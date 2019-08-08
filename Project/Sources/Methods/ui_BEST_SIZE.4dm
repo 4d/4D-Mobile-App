@@ -3,7 +3,7 @@
   // Project method : ui_BEST_SIZE
   // Database: 4D Mobile App
   // ID[87FD2330815449B992747C8102C3BE5E]
-  // Created #17-10-2018 by Vincent de Lachaux
+  // Created 17-10-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

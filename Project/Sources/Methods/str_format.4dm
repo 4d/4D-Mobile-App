@@ -3,7 +3,7 @@
   // Project method : str_format
   // Database: 4D Mobile App
   // ID[DD9BFFB6CA314863B05F3EB12C73391E]
-  // Created #4-12-2018 by Vincent de Lachaux
+  // Created 4-12-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

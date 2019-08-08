@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : colors
   // Database: 4D Mobile Express
-  // Created #13-11-2017 by Eric Marchand
+  // Created 13-11-2017 by Eric Marchand
   // ----------------------------------------------------
 
   // Declarations

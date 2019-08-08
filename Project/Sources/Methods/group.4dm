@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : group
   // ID[06338504CDA64E6CB0202CAA502897EC]
-  // Created #12-6-2019 by Vincent de Lachaux
+  // Created 12-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Part of the UI classes to manage objects groups

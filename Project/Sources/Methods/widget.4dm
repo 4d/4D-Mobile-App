@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : widget
   // ID[1D8DF52FA8C64D7789AF867877A06A13]
-  // Created #12-6-2019 by Vincent de Lachaux
+  // Created 12-6-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Part of the UI classes to manage widgets

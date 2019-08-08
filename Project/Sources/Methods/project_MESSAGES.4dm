@@ -3,7 +3,7 @@
   // Project method : project_MESSAGES
   // Database: 4D Mobile App
   // ID[289212F4F0EE41A1BA699256DA276FD1]
-  // Created #10-1-2019 by Vincent de Lachaux
+  // Created 10-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Management of messages addressed to PROJECT form or its subforms

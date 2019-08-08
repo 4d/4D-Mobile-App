@@ -3,7 +3,7 @@
   // Project method : ob_createPath
   // Database: 4D Mobile App
   // ID[DB7D702D7871447A85665BA027992DB3]
-  // Created #14-1-2019 by Vincent de Lachaux
+  // Created 14-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

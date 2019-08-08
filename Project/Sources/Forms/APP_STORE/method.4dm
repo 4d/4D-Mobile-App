@@ -1,7 +1,7 @@
   //  // ----------------------------------------------------
   //  // Form method : APP_STORE - (4D Mobile Express)
   //  // ID[A63D06DA6DD14DA4AF0C5E1DC4D2DADC]
-  //  // Created #12-5-2017 by Vincent de Lachaux
+  //  // Created 12-5-2017 by Vincent de Lachaux
   //  // ----------------------------------------------------
   //  // Declarations
   //C_LONGINT($Lon_formEvent;$Lon_i;$Lon_x)

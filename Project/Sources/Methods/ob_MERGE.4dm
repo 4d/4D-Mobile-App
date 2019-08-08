@@ -3,7 +3,7 @@
   // Project method : ob_MERGE
   // Database: 4D Mobile App
   // ID[30A5CD6BFBC3423AAFBF097521C3A034]
-  // Created #23-5-2018 by Vincent de Lachaux
+  // Created 23-5-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Add the missing properties of the model to the target

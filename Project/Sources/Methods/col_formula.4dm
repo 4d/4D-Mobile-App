@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : col_formula
   // Database: 4D Mobile App
-  // Created #27-7-2018 by Eric Marchand
+  // Created 27-7-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Use formula on each element.

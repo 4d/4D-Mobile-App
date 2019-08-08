@@ -3,7 +3,7 @@
   // Project method : env_Database_setting
   // Database: 4D Mobile Express
   // ID[33966321E2DE470E8A359A94EB152664]
-  // Created #23-8-2017 by Vincent de Lachaux
+  // Created 23-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

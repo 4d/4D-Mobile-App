@@ -3,7 +3,7 @@
   // Project method : ui_isES
   // Database: 4D Mobile App
   // ID[6EFB59D3FBE54A3D86C077D7582997C8]
-  // Created #27-9-2018 by Vincent de Lachaux
+  // Created 27-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Definition of UI Classes

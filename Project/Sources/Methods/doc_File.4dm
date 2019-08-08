@@ -3,7 +3,7 @@
   // Project method : doc_File
   // Database: 4D Mobile App
   // ID[E4BCA07C239A4A898B5AFF446D5CCD08]
-  // Created #12-7-2018 by Vincent de Lachaux
+  // Created 12-7-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   // Waiting for File command !

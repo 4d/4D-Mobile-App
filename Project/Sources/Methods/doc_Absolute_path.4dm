@@ -3,7 +3,7 @@
   // Project method : doc_Absolute_path
   // Database: 4D Mobile App
   // ID[8A5E48E09B044D7986B07E1540F01211]
-  // Created #22-10-2018 by Vincent de Lachaux
+  // Created 22-10-2018 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

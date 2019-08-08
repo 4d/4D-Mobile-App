@@ -3,7 +3,7 @@
   // Project method : Pathname
   // pathname: 4D Mobile Express
   // ID[824D04E637FD404DAA6AA7E8518EC924]
-  // Created #26-6-2017 by Vincent de Lachaux
+  // Created 26-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

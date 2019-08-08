@@ -2,7 +2,7 @@
   // ----------------------------------------------------
   // Project method : col_valueToObject
   // Database: 4D Mobile App
-  // Created #26-7-2018 by Eric Marchand
+  // Created 26-7-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:
   // Convert value to object with value as attribute, and second parameter as key.

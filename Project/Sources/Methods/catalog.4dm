@@ -3,7 +3,7 @@
   // Project method : catalog
   // Database: 4D Mobile App
   // ID[0A02376FAA54403A995124AC0945593D]
-  // Created #6-2-2019 by Vincent de Lachaux
+  // Created 6-2-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //

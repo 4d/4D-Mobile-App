@@ -3,7 +3,7 @@
   // Project method : dataModel
   // Database: 4D Mobile Express
   // ID[66DCDF904F5B4EBAB7B0CD7FE481ED86]
-  // Created #17-10-2017 by Vincent de Lachaux
+  // Created 17-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -1175,8 +1175,7 @@ Case of
 					Case of 
 							
 							  //……………………………………………………………………………………………………………
-							  //: (Match regex("(?m-si)^\\d+$";$Txt_value;1;*))  // fieldNumber
-						: ($ƒ.isField($Txt_value))
+						: ($ƒ.isField($Txt_value))  // fieldNumber
 							
 							$Obj_field:=OB Copy:C1225($Obj_dataModel[$Obj_in.tableNumber][$Txt_value])
 							$Obj_field.path:=$Obj_field.name
@@ -1187,8 +1186,7 @@ Case of
 						: (Value type:C1509($Obj_dataModel[$Obj_in.tableNumber][$Txt_value])#Is object:K8:27)
 							
 							  //……………………………………………………………………………………………………………
-							  //: ($Obj_dataModel[$Obj_in.tableNumber][$Txt_value].relatedDataClass#Null)  // relatedDataClass
-						: ($ƒ.isRelationToOne($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))
+						: ($ƒ.isRelationToOne($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))  // relatedDataClass
 							
 							For each ($t;$Obj_dataModel[$Obj_in.tableNumber][$Txt_value])
 								
@@ -1201,6 +1199,11 @@ Case of
 									
 								End if 
 							End for each 
+							
+							  //……………………………………………………………………………………………………………
+						: ($ƒ.isRelationToMany($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))  // relatedEntities
+							
+							
 							
 							  //……………………………………………………………………………………………………………
 					End case 
