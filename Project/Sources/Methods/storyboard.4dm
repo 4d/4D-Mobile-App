@@ -850,7 +850,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					  // Use temp file because inplace command do not reformat
 					$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".storyboard")
-					$Obj_in.path.copyTo($File_.parent;$File_.name)
+					$Obj_in.path.copyTo($File_.parent;$File_.name+$File_.extension)
 					
 					$Txt_cmd:="ibtool --upgrade "+str_singleQuoted ($File_.path)+" --write "+str_singleQuoted ($Obj_in.path.path)
 					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
