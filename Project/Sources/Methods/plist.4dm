@@ -371,7 +371,7 @@ Case of
 			
 			If ($format="openstep")
 				
-				$Txt_cmd:=str_singleQuoted (Convert path system to POSIX:C1106(_o_Pathname ("scripts")+"xprojstep"))
+				$Txt_cmd:=str_singleQuoted (COMPONENT_Pathname ("scripts").file("xprojstep").path)
 				
 				If (String:C10($Obj_in.project)#"")
 					  //$Txt_cmd:=$Txt_cmd+" --projectName "+singleQuote ($Obj_in.project)

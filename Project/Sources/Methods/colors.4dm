@@ -55,7 +55,7 @@ Case of
 		  //______________________________________________________
 	: ($Obj_in.action="juicer")
 		
-		$Txt_cmd:=str_singleQuoted (Convert path system to POSIX:C1106(_o_Pathname ("scripts")+"colorjuicer"))
+		$Txt_cmd:=str_singleQuoted (COMPONENT_Pathname ("scripts").file("colorjuicer").path)
 		
 		If ($Obj_in.posix=Null:C1517)
 			

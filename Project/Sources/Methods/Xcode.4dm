@@ -933,7 +933,7 @@ Case of
 			
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE";str_localized (New collection:C1472("4dMobileWantsToMakeChanges";"4dProductName")))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE";Get localized string:C991("enterYourPasswordToAllowThis"))
-			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS";Convert path system to POSIX:C1106(_o_Pathname ("scripts")+"sudo-askpass"))
+			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS";COMPONENT_Pathname ("scripts").file("sudo-askpass").path))
 			
 			LAUNCH EXTERNAL PROCESS:C811("sudo -A /usr/bin/xcode-select -s "+str_singleQuoted ($Txt_newPath);$Txt_in;$Txt_out;$Txt_error)
 			
@@ -1321,7 +1321,7 @@ Case of
 			
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE";str_localized (New collection:C1472("4dMobileWantsToMakeChanges";"4dProductName")))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE";Get localized string:C991("enterYourPasswordToAllowThis"))
-			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS";Convert path system to POSIX:C1106(_o_Pathname ("scripts")+"sudo-askpass"))
+			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS";COMPONENT_Pathname ("scripts").file("sudo-askpass").path))
 			
 			$Txt_cmd:="sudo -A "+$Txt_cmd
 			
@@ -1348,7 +1348,7 @@ Case of
 	: ($Obj_param.action="checkFirstLaunchStatus")  // Check if any First Launch tasks need to be performed.
 		
 		$Txt_in:="xcodebuild -checkFirstLaunchStatus"
-		$Txt_cmd:=str_singleQuoted (Convert path system to POSIX:C1106(_o_Pathname ("scripts")+"echoStatus"))
+		$Txt_cmd:=str_singleQuoted (COMPONENT_Pathname ("scripts").file("echoStatus").path)
 		
 		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 		
