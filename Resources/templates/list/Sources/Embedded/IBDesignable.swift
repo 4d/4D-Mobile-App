@@ -22,6 +22,15 @@ class ListFormTable: QMobileUI.ListFormTable {
         }
     }
 
+    @IBInspectable open override var sectionFieldFormatter: String? {
+        get {
+            return super.sectionFieldFormatter
+        }
+        set {
+            super.sectionFieldFormatter = newValue
+        }
+    }
+
     @IBInspectable open override var selectedSegueIdentifier: String {
         get {
             return super.selectedSegueIdentifier
@@ -98,6 +107,15 @@ class ListFormCollection: QMobileUI.ListFormCollection {
         }
         set {
             super.sectionFieldname = newValue
+        }
+    }
+
+    @IBInspectable open override var sectionFieldFormatter: String? {
+        get {
+            return super.sectionFieldFormatter
+        }
+        set {
+            super.sectionFieldFormatter = newValue
         }
     }
 
