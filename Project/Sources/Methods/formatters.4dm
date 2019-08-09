@@ -14,8 +14,8 @@ C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_append)
 C_LONGINT:C283($Lon_i;$Lon_index;$Lon_parameters)
-C_TEXT:C284($Dir_;$Txt_buffer;$Txt_fieldID;$Txt_tableID)
-C_OBJECT:C1216($o;$Obj_field;$Obj_formatter;$Obj_in;$Obj_out;$Obj_resources;$Obj_resource;$Obj_result)
+C_TEXT:C284($Txt_buffer;$Txt_fieldID;$Txt_tableID)
+C_OBJECT:C1216($Dir_;$o;$Obj_field;$Obj_formatter;$Obj_in;$Obj_out;$Obj_resources;$Obj_resource;$Obj_result)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -61,7 +61,7 @@ Case of
 		  //______________________________________________________
 	: ($Obj_in.action="getByName")
 		
-		$Obj_resources:=JSON Parse:C1218(Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"resources.json"))
+		$Obj_resources:=ob_parseFile (Folder:C1567(fk resources folder:K87:11).file("resources.json")).value
 		
 		  // Formatter definitions
 		$Obj_out.formatters:=$Obj_resources.definitions
@@ -105,17 +105,18 @@ Case of
 		End for each 
 		
 		  // Host formatters
-		$Obj_resources:=doc_Folder (_o_Pathname ("host_formatters"))
+		$Obj_resources:=COMPONENT_Pathname ("host_formatters")
 		
-		For each ($Obj_resource;$Obj_resources.folders)
+		For each ($Obj_resource;$Obj_resources.folders())
 			
-			$Lon_index:=$Obj_resource.files.extract("fullName").indexOf("manifest.json")
+			$Obj_formatter:=ob_parseFile ($Obj_resource.file("manifest.json"))
 			
-			If ($Lon_index#-1)
+			If ($Obj_formatter.success)
 				
-				$Obj_formatter:=JSON Parse:C1218(Document to text:C1236($Obj_resource.files[$Lon_index].nativePath;"UTF-8"))
+				$Obj_formatter:=$Obj_formatter.value
 				$Obj_formatter.isHost:=True:C214
-				$Obj_formatter.path:=$Obj_resource.files[$Lon_index].parentFolder
+				$Obj_formatter.path:=$Obj_resource.platformPath
+				$Obj_formatter.folder:=$Obj_resource
 				$Obj_out.formatters["/"+$Obj_resource.name]:=$Obj_formatter
 				
 			End if 
@@ -280,12 +281,12 @@ Case of
 							
 							For each ($Txt_buffer;New collection:C1472("Sources";"Resources"))  // Only Sources and "Resources" folder are imported
 								
-								$Dir_:=_o_Pathname ("host_formatters")+$Obj_formatter.name+Folder separator:K24:12+$Txt_buffer+Folder separator:K24:12
+								$Dir_:=COMPONENT_Pathname ("host_formatters").folder($Obj_formatter.name).folder($Txt_buffer)
 								
-								If (Test path name:C476($Dir_)=Is a folder:K24:2)
+								If ($Dir_.exists)
 									
 									$Obj_result:=TEMPLATE (New object:C1471(\
-										"source";$Dir_;\
+										"source";$Dir_.platformPath;\
 										"tags";$Obj_in.tags;\
 										"target";$Obj_in.target+$Txt_buffer+Folder separator:K24:12))
 									
