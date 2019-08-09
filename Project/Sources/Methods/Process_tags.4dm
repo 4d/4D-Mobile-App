@@ -239,6 +239,7 @@ If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file p
 			
 			$Txt_out:=Replace string:C233($Txt_out;"___SEARCHABLE_FIELD___";String:C10($Obj_table.searchableField))
 			$Txt_out:=Replace string:C233($Txt_out;"___SECTION_FIELD___";String:C10($Obj_table.sectionField))
+			$Txt_out:=Replace string:C233($Txt_out;"___SECTION_FIELD_BINDING_TYPE___";String:C10($Obj_table.sectionFieldBindingType))
 			$Txt_out:=Replace string:C233($Txt_out;"___SHOW_SECTION___";String:C10($Obj_table.showSection))
 			$Txt_out:=Replace string:C233($Txt_out;"___SORT_FIELD___";String:C10($Obj_table.sortField))
 			

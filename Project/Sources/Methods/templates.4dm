@@ -418,13 +418,15 @@ Case of
 				If ($Obj_tableList.sectionField#Null:C1517)
 					
 					$Obj_table.sectionField:=formatString ("field-name";String:C10($Obj_tableList.sectionField.name))
-					
-					  // BUG 101752
-					  // Get format of section field
-					  //If (Value type($Obj_in.project.dataModel[String($Obj_table.id)][String($Obj_tableList.sectionField.id)].format)=Is text)
-					  //$Obj_formatter:=$Obj_in.formatters[$Obj_in.project.dataModel[String($Obj_table.id)][String($Obj_tableList.sectionField.id)].format]
-					  // End if
-					
+					$Obj_table.sectionFieldBindingType:=""
+					  // Get format of section field$Obj_tableList
+					If ($Obj_tableModel[String:C10($Obj_tableList.sectionField.id)]#Null:C1517)
+						$Obj_field:=New object:C1471  // maybe get other info from  $Obj_tableList.fields
+						$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[String:C10($Obj_tableList.sectionField.id)])
+						
+						$Obj_table.sectionFieldBindingType:=storyboard (New object:C1471("action";"fieldBinding";"field";$Obj_field;"formatters";$Obj_in.formatters)).bindingType
+						
+					End if 
 				End if 
 				
 				$Obj_table.showSection:="NO"  // show or not the section bar at right
