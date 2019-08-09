@@ -65,10 +65,21 @@ If (Form:C1466[$Txt_formFamilly]#Null:C1517)
 					
 					If ($c.length=1)
 						
-						If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
+						If (Num:C11($Obj_field.id)=0)  // 1 - N relation
 							
-							$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+							If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.name)]=Null:C1517)
+								
+								$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+								
+							End if 
 							
+						Else 
+							
+							If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
+								
+								$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+								
+							End if 
 						End if 
 						
 					Else 

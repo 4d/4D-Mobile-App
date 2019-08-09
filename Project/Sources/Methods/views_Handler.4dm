@@ -40,7 +40,33 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_form:=New object:C1471("$";editor_INIT ;"form";ui.form("editor_CALLBACK").get();"tableWidget";ui.picture("tables");"tableNext";ui.static("next@");"tablePrevious";ui.static("previous@");"tableButtonNext";ui.button("next");"tableButtonPrevious";ui.button("previous");"tablist";ui.button("tab.list");"tabdetail";ui.button("tab.detail");"tabSelector";ui.widget("tab.selector");"noPublishedTable";ui.widget("noPublishedTable");"fieldList";ui.listbox("01_fields");"fieldGroup";ui.static("01_fields@");"preview";ui.picture("preview");"previewGroup";ui.static("preview@");"fields";ui.widget("fields");"ids";ui.widget("field_ids");"icons";ui.widget("icons");"names";ui.widget("names");"selectorList";ui.button("tab.list");"selectorDetail";ui.button("tab.detail");"selectors";ui.static("tab.@");"drag";Formula:C1597(tmpl_On_drag_over );"drop";Formula:C1597(tmpl_ON_DROP );"cancel";Formula:C1597(tmpl_REMOVE );"tips";Formula:C1597(tmpl_TIPS ))
+	$Obj_form:=New object:C1471(\
+		"$";editor_INIT ;\
+		"form";ui.form("editor_CALLBACK").get();\
+		"tableWidget";ui.picture("tables");\
+		"tableNext";ui.static("next@");\
+		"tablePrevious";ui.static("previous@");\
+		"tableButtonNext";ui.button("next");\
+		"tableButtonPrevious";ui.button("previous");\
+		"tablist";ui.button("tab.list");\
+		"tabdetail";ui.button("tab.detail");\
+		"tabSelector";ui.widget("tab.selector");\
+		"noPublishedTable";ui.widget("noPublishedTable");\
+		"fieldList";ui.listbox("01_fields");\
+		"fieldGroup";ui.static("01_fields@");\
+		"preview";ui.picture("preview");\
+		"previewGroup";ui.static("preview@");\
+		"fields";ui.widget("fields");\
+		"ids";ui.widget("field_ids");\
+		"icons";ui.widget("icons");\
+		"names";ui.widget("names");\
+		"selectorList";ui.button("tab.list");\
+		"selectorDetail";ui.button("tab.detail");\
+		"selectors";ui.static("tab.@");\
+		"drag";Formula:C1597(tmpl_On_drag_over );\
+		"drop";Formula:C1597(tmpl_ON_DROP );\
+		"cancel";Formula:C1597(tmpl_REMOVE );\
+		"tips";Formula:C1597(tmpl_TIPS ))
 	
 	$Obj_context:=$Obj_form.$
 	
@@ -49,7 +75,9 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		  // Constraints definition
 		ob_createPath ($Obj_context;"constraints.rules";Is collection:K8:32)
 		
-		$Obj_context.constraints.rules.push(New object:C1471("formula";Formula:C1597(views_Handler (New object:C1471("action";"geometry")))))
+		$Obj_context.constraints.rules.push(New object:C1471(\
+			"formula";Formula:C1597(views_Handler (New object:C1471("action";\
+			"geometry")))))
 		
 		  // Define form member methods
 		
@@ -60,10 +88,12 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		$Obj_context.typeForm:=Formula:C1597(Choose:C955(Num:C11(This:C1470.selector)=2;"detail";"list"))
 		
 		  // Update selected tab
-		$Obj_context.setTab:=Formula:C1597(views_Handler (New object:C1471("action";"setTab")))
+		$Obj_context.setTab:=Formula:C1597(views_Handler (New object:C1471(\
+			"action";"setTab")))
 		
 		  // Update geometry
-		$Obj_context.setGeometry:=Formula:C1597(views_Handler (New object:C1471("action";"geometry")))
+		$Obj_context.setGeometry:=Formula:C1597(views_Handler (New object:C1471(\
+			"action";"geometry")))
 		
 	End if 
 	
@@ -129,7 +159,8 @@ Case of
 					  // Select the first table if any
 					OB GET PROPERTY NAMES:C1232($Obj_dataModel;$tTxt_tables)
 					
-					If (Length:C16($Obj_context.tableNum())=0) | (Find in array:C230($tTxt_tables;$Obj_context.tableNum())=-1)
+					If (Length:C16($Obj_context.tableNum())=0)\
+						 | (Find in array:C230($tTxt_tables;$Obj_context.tableNum())=-1)
 						
 						If (Size of array:C274($tTxt_tables)>0)
 							
@@ -210,7 +241,8 @@ Case of
 						  //$Obj_form.previewGroup.hide()
 						  //CLEAR VARIABLE(($Obj_form.preview.pointer())->)
 						
-						If (Length:C16($Obj_context.tableNum())>0) & ($Obj_dataModel[$Obj_context.tableNum()]#Null:C1517)
+						If (Length:C16($Obj_context.tableNum())>0)\
+							 & ($Obj_dataModel[$Obj_context.tableNum()]#Null:C1517)
 							
 							$t:=String:C10(Form:C1466[$Txt_form][$Obj_context.tableNum()].form)
 							
@@ -383,7 +415,8 @@ Case of
 		$Obj_form.fieldGroup.show()
 		$Obj_form.previewGroup.show()
 		
-		If ($Obj_in.item>0) & ($Obj_in.item<=$Obj_in.pathnames.length)
+		If ($Obj_in.item>0)\
+			 & ($Obj_in.item<=$Obj_in.pathnames.length)
 			
 			$Txt_table:=$Obj_context.tableNum()
 			
@@ -408,12 +441,15 @@ Case of
 							  //______________________________________________________
 						: ($Obj_context[$Txt_table]=Null:C1517)
 							
-							$Obj_context[$Txt_table]:=New object:C1471($Obj_in.selector;New object:C1471($t;$Obj_in.target))
+							$Obj_context[$Txt_table]:=New object:C1471(\
+								$Obj_in.selector;New object:C1471($t;\
+								$Obj_in.target))
 							
 							  //______________________________________________________
 						: ($Obj_context[$Txt_table][$Obj_in.selector]=Null:C1517)
 							
-							$Obj_context[$Txt_table][$Obj_in.selector]:=New object:C1471($t;$Obj_in.target)
+							$Obj_context[$Txt_table][$Obj_in.selector]:=New object:C1471(\
+								$t;$Obj_in.target)
 							
 							  //______________________________________________________
 						Else 
@@ -557,14 +593,16 @@ Case of
 			If (Length:C16($Obj_context.tableNum())>0)
 				
 				  // Restore current selected background
-				SVG SET ATTRIBUTE:C1055(*;$Obj_form.tableWidget.name;$Obj_context.tableNumber;"fill";ui.unselectedFillColor)
+				SVG SET ATTRIBUTE:C1055(*;$Obj_form.tableWidget.name;$Obj_context.tableNumber;\
+					"fill";ui.unselectedFillColor)
 				
 			End if 
 			
 			$Obj_context.tableNumber:=$Obj_in.table
 			
 			  // Select the item
-			SVG SET ATTRIBUTE:C1055(*;$Obj_form.tableWidget.name;$Obj_context.tableNumber;"fill";ui.selectedColorFill)
+			SVG SET ATTRIBUTE:C1055(*;$Obj_form.tableWidget.name;$Obj_context.tableNumber;\
+				"fill";ui.selectedColorFill)
 			
 			$Obj_context.update:=True:C214
 			$Obj_context.picker:=(String:C10(Form:C1466[$Obj_context.typeForm()][$Obj_context.tableNumber].form)="")
@@ -578,7 +616,8 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="refreshViews")
 		
-		If (Length:C16($Obj_context.tableNum())>0) & ($Obj_dataModel[$Obj_context.tableNum()]#Null:C1517)
+		If (Length:C16($Obj_context.tableNum())>0)\
+			 & ($Obj_dataModel[$Obj_context.tableNum()]#Null:C1517)
 			
 			  // Redraw
 			$Obj_context.draw:=True:C214

@@ -155,14 +155,14 @@ Case of
 								
 							End if 
 							
-							  //If ($Obj_target.fields=Null)
-							  //$Col_form:=New collection
-							  //$Col_assigned:=New collection
-							  //Else 
-							  //  // Keep a copy of the already affected fields
-							  //$Col_form:=$Obj_target.fields.copy()
-							  //$Col_assigned:=$Col_form.extract("name";"name";"id";"id")//$Col_form.filter("col_notNull")
-							  //End if 
+							If ($Obj_target.fields=Null:C1517)
+								$Col_form:=New collection:C1472
+								$Col_assigned:=New collection:C1472
+							Else 
+								  // Keep a copy of the already affected fields
+								$Col_form:=$Obj_target.fields.copy()
+								$Col_assigned:=$Col_form.extract("name";"name";"id";"id")  //$Col_form.filter("col_notNull")
+							End if 
 							
 							  // Get the template for multivalued fields reference, if exist
 							$Dom_template:=DOM Find XML element by ID:C1010($Dom_root;"f")
@@ -296,6 +296,16 @@ Case of
 												
 												$Txt_name:=$Obj_target.fields[$Lon_index].name
 												
+												If (Num:C11($Obj_target.fields[$Lon_index].id)=0)  // 1-N relation
+													
+													
+													
+												Else 
+													
+													
+													
+													
+												End if 
 											End if 
 										End if 
 									End if 
@@ -308,7 +318,7 @@ Case of
 									If (Asserted:C1132(OK=1))
 										
 										DOM SET XML ATTRIBUTE:C866($Dom_field;\
-											"stroke-dasharray";"none")  // ;"assigned";True)																						\
+											"stroke-dasharray";"none")  // ;"assigned";True)																																	\
 											
 										If ($Boo_multivalued)
 											

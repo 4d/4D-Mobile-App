@@ -40,6 +40,7 @@ If (This:C1470._is=Null:C1517)  // Constructor
 		"xml";Null:C1517;\
 		"origin";Null:C1517;\
 		"file";Null:C1517;\
+		"pocessingInstruction";Formula:C1597(svg ("pocessingInstruction";New object:C1471("value";$1)));\
 		"close";Formula:C1597(svg ("close"));\
 		"group";Formula:C1597(svg ("new";New object:C1471("what";"group";"id";$1;"options";$2)));\
 		"rect";Formula:C1597(svg ("new";Choose:C955(Count parameters:C259=3;New object:C1471("what";"rect";"x";$1;"y";$2;"options";$3);New object:C1471("what";"rect";"x";$1;"y";$2;"width";$3;"height";$4;"options";$5))));\
@@ -545,6 +546,23 @@ Else
 					End if 
 					
 					  //=================================================================
+				: ($1="pocessingInstruction")
+					
+					If ($2.value#Null:C1517)
+						
+						$t:=String:C10($2.value)
+						$t:=DOM Append XML child node:C1080($o.root;XML processing instruction:K45:9;$t)
+						
+					Else 
+						
+						$o.errors.push("Missing instruction to set.")
+						OK:=0
+						
+					End if 
+					
+					$o.success:=Bool:C1537(OK)
+					
+					  //=================================================================
 				: ($1="close")
 					
 					DOM CLOSE XML:C722($o.root)
@@ -1017,7 +1035,7 @@ Else
 									
 								Else 
 									
-									  // Remove ?
+									DOM REMOVE XML ATTRIBUTE:C1084($Dom_target;$2.key)
 									
 								End if 
 								
@@ -1046,7 +1064,7 @@ Else
 											
 										Else 
 											
-											  // Remove ?
+											DOM REMOVE XML ATTRIBUTE:C1084($Dom_target;$t)
 											
 										End if 
 										
