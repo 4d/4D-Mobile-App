@@ -59,7 +59,7 @@ Case of
 		  //______________________________________________________
 	: ($Mnu_choice="reveal")
 		
-		SHOW ON DISK:C922(_o_Pathname ("products")+$Obj_project.product.name+Folder separator:K24:12)
+		SHOW ON DISK:C922(COMPONENT_Pathname ("products").folder($Obj_project.product.name).platformPath)
 		
 		  //______________________________________________________
 	Else 

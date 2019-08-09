@@ -65,7 +65,7 @@ Case of
 		
 		If (String:C10($Obj_project.product.name)#"")
 			
-			$Dir_product:=_o_Pathname ("products")+$Obj_project.product.name+Folder separator:K24:12
+			$Dir_product:=COMPONENT_Pathname ("products").folder($Obj_project.product.name).platformPath
 			$Dir_build:=$Dir_product+"build"+Folder separator:K24:12
 			$Dir_app:=$Dir_build+Convert path POSIX to system:C1107("Build/Products/Debug-iphonesimulator/")+$Obj_project.$project.product+".app"
 			

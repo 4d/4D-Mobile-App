@@ -123,7 +123,7 @@ If (Bool:C1537(OK))
 			$Txt_buffer:=$Obj_project.product.name
 			
 			$Obj_path:=New object:C1471(\
-				"parentFolder";_o_Pathname ("products");\
+				"parentFolder";COMPONENT_Pathname ("products").platformPath;\
 				"isFolder";True:C214;\
 				"name";$Txt_buffer)
 			

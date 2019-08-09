@@ -61,7 +61,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 		$Obj_project.organization.identifier:=$Obj_project.organization.id+"."+str ($Obj_project.product.name).uperCamelCase()
 		$Obj_project.product.bundleIdentifier:=formatString ("bundleApp";$Obj_project.organization.id+"."+$Obj_project.product.name)
 		
-		$Dir_tgt:=_o_Pathname ("products")+$Obj_project.product.name+Folder separator:K24:12
+		$Dir_tgt:=COMPONENT_Pathname ("products").folder($Obj_project.product.name).platformPath
 		
 		$Obj_in.path:=$Dir_tgt
 		
@@ -106,8 +106,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-												"action";"safeDelete";\
-												"path";$Obj_in.path))
+																"action";"safeDelete";\
+																"path";$Obj_in.path))
 			  // End if
 			
 		End if 
