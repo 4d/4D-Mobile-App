@@ -117,6 +117,7 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="searchableField" value="___SEARCHABLE_FIELD___"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="sortField" value="___SORT_FIELD___"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="sectionFieldname" value="___SECTION_FIELD___"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="sectionFieldFormatter" value="___SECTION_FIELD_BINDING_TYPE___"/>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="showSectionBar" value="NO"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="actions" value="___TABLE_ACTIONS___"/>
                     </userDefinedRuntimeAttributes>
