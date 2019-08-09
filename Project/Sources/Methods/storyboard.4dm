@@ -461,21 +461,24 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 					End for each 
 					
-					  // For each element... (scene, cell, ...)
-					For each ($Obj_element;$Obj_in.template.elements)
+					
+					  // ... and fields
+					$Lon_ii:=Num:C11($Obj_in.template.fields.count)  // Start at first element, not in header
+					
+					For each ($Obj_field;$Obj_in.tags.table.detailFields;Num:C11($Obj_in.template.fields.count))
 						
-						If ($Obj_element.dom#Null:C1517)  // if valid element
+						$Lon_ii:=$Lon_ii+1  // pos
+						
+						  // Set tags:
+						  // - field
+						$Obj_in.tags.field:=$Obj_field
+						
+						$Obj_in.tags.storyboardID:=New collection:C1472
+						
+						  // For each element... (scene, cell, ...)
+						For each ($Obj_element;$Obj_in.template.elements)
 							
-							  // ... and fields
-							$Lon_ii:=Num:C11($Obj_in.template.fields.count)  // Start at first element, not in header
-							
-							For each ($Obj_field;$Obj_in.tags.table.detailFields;Num:C11($Obj_in.template.fields.count))
-								
-								$Lon_ii:=$Lon_ii+1  // pos
-								
-								  // Set tags:
-								  // - field
-								$Obj_in.tags.field:=$Obj_field
+							If ($Obj_element.dom#Null:C1517)  // if valid element
 								
 								  // - randoms ids
 								If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
@@ -484,11 +487,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									$Obj_storyboardID:=New object:C1471()
 									$Obj_storyboardID.tagInterfix:=$Obj_element.tagInterfix
 									
-									  //If ($Obj_in.tags.storyboardID=Null)
-									$Obj_in.tags.storyboardID:=New collection:C1472($Obj_storyboardID)
-									  //End if 
-									  //$Obj_in.tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
-									  // WARNING: deactivated, do not work because not shared according to field
+									$Obj_in.tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
 									
 									$Lon_ids:=Num:C11($Obj_element.idCount)  // define id count allow to speed up and pass that
 									
@@ -559,11 +558,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										  //----------------------------------------
 								End case 
 								
-							End for each 
-							
-							  // Remove original template duplicated element
+								
+							End if 
+						End for each 
+						
+					End for each 
+					
+					  // Remove original template duplicated element
+					For each ($Obj_element;$Obj_in.template.elements)
+						If ($Obj_element.dom#Null:C1517)
 							$Obj_element.dom.remove()
-							
 						End if 
 					End for each 
 				End if 
