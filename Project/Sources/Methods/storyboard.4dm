@@ -15,7 +15,7 @@ C_BOOLEAN:C305($Boo_buffer)
 C_LONGINT:C283($Lon_i;$Lon_ii;$Lon_parameters;$Lon_ids;$Lon_length)
 C_OBJECT:C1216($Dom_;$Dom_child;$Dom_root);
 C_TEXT:C284($Txt_buffer;$Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
-C_OBJECT:C1216($File_;$Obj_color;$Obj_in;$Obj_out;$Obj_element;$Obj_table;$Obj_field;$Obj_tag)
+C_OBJECT:C1216($File_;$Obj_color;$Obj_in;$Obj_out;$Obj_element;$Obj_table;$Obj_field;$Obj_tag;$Obj_storyboardID)
 C_COLLECTION:C1488($Col_)
 
 If (False:C215)
@@ -240,6 +240,32 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If ($Obj_element.dom#Null:C1517)
 						$Obj_element.domParent:=$Obj_element.dom.parent()
+						
+						$Lon_ids:=Num:C11($Obj_element.idCount)
+						
+						If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
+							
+							$Dom_child:=$Obj_element.dom  // 001 must be encapsulated node
+							$Lon_ids:=0
+							While ($Dom_child.success)
+								$Lon_ids:=$Lon_ids+1
+								$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
+							End while 
+							
+							If ($Lon_ids=1)
+								
+								$Lon_ids:=32  // default value if not found
+								
+							End if 
+						End if 
+						
+						$Obj_element.idCount:=$Lon_ids
+						
+						If (Length:C16(String:C10($Obj_element.insertMode))=0)
+							
+							$Obj_element.insertMode:="append"
+							
+						End if 
 					End if 
 					
 				End for each 
@@ -269,39 +295,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
 								
 								$Obj_in.tags.tagInterfix:=$Obj_element.tagInterfix
-								
-								$Lon_ids:=Num:C11($Obj_element.idCount)
-								
-								If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
-									
-									$Dom_child:=$Obj_element.dom  // 001 must be encapsulated node
-									$Lon_ids:=0
-									While ($Dom_child.success)
-										$Lon_ids:=$Lon_ids+1
-										$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
-									End while 
-									
-									If ($Lon_ids=1)
-										
-										$Lon_ids:=32  // default value if not found
-										
-									End if 
-								End if 
-								
-								$Obj_element.idCount:=$Lon_ids
-								$Obj_in.tags.storyboardIDs:=storyboard (New object:C1471("action";"randomIds";"length";$Lon_ids)).value
+								$Obj_in.tags.storyboardIDs:=storyboard (New object:C1471("action";"randomIds";"length";$Obj_element.idCount)).value
 								
 							End if 
 							
 							  // Insert after processing tags
 							$Txt_buffer:=$Obj_element.dom.export().variable
 							$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;$Obj_in.template.tagtypes)
-							
-							If (Length:C16(String:C10($Obj_element.insertMode))=0)
-								
-								$Obj_element.insertMode:="append"
-								
-							End if 
 							
 							Case of 
 									
@@ -360,15 +360,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			End if 
 			
 			$File_:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
+			$Dom_root:=xml ("load";$File_)
 			
-			If ($File_.exists)
+			If ($Dom_root.success)
 				
-				$Dom_root:=xml ("load";$File_)
+				$Txt_buffer:=$File_.getText()
 				
 				If ($Obj_in.template.elements=Null:C1517)
 					  // Elements not defined in manifest, try to compute it using storyboard XMLs
 					
-					$Txt_buffer:=$Dom_root.export().variable
+					  //$Txt_buffer:=$Dom_root.export().variable
 					ARRAY TEXT:C222($tTxt_result;0)
 					
 					If (Rgx_ExtractText ("TAG-(.?.?)-001";$Txt_buffer;"1";->$tTxt_result)=0)
@@ -381,12 +382,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						$Obj_in.template.elements:=$Col_
 						
 					End if 
-				End if 
-				
-				If (Length:C16($Txt_buffer)=0)  // there is element defined so we need to read here
-					
-					$Txt_buffer:=$File_.getText()
-					
 				End if 
 				
 				If (Length:C16($Txt_buffer)>0)  // a little check on record action if needed to inject it
@@ -457,10 +452,50 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If ($Obj_element.dom#Null:C1517)
 							$Obj_element.domParent:=$Obj_element.dom.parent()
+							
+							  // - define id count allow to speed up and pass that
+							$Lon_ids:=Num:C11($Obj_element.idCount)
+							
+							If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
+								$Dom_child:=$Obj_element.dom
+								$Lon_ids:=0
+								While ($Dom_child.success)
+									$Lon_ids:=$Lon_ids+1
+									$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
+								End while 
+								
+								If ($Lon_ids=1)
+									
+									$Lon_ids:=32  // default value if not found
+									
+								End if 
+							End if 
+							
+							$Obj_element.idCount:=$Lon_ids  // as a result purpose
+							
+							  // - Check how to insert new node (ie. the insertMode)
+							If (Length:C16(String:C10($Obj_element.insertMode))=0)
+								
+								$Obj_element.insertMode:="append"
+								
+							End if 
+							
+							  // - Check if there is some mandatories tags before inserting
+							If (Value type:C1509($Obj_element.tags.mandatories)=Is collection:K8:32)
+								
+								For each ($Obj_tag;$Obj_element.tags.mandatories)
+									
+									If (String:C10($Obj_in.tags[String:C10($Obj_tag.key)])="")  // support not empty rules now
+										
+										$Obj_element.insertMode:="none"  // do not insert
+										
+									End if 
+								End for each 
+							End if 
+							
 						End if 
 						
 					End for each 
-					
 					
 					  // ... and fields
 					$Lon_ii:=Num:C11($Obj_in.template.fields.count)  // Start at first element, not in header
@@ -483,31 +518,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								  // - randoms ids
 								If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
 									
-									C_OBJECT:C1216($Obj_storyboardID)
-									$Obj_storyboardID:=New object:C1471()
-									$Obj_storyboardID.tagInterfix:=$Obj_element.tagInterfix
+									$Obj_storyboardID:=New object:C1471(\
+										"tagInterfix";$Obj_element.tagInterfix;\
+										"storyboardIDs";storyboard (New object:C1471("action";"randomIds";"length";$Obj_element.idCount)).value)
 									
 									$Obj_in.tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
-									
-									$Lon_ids:=Num:C11($Obj_element.idCount)  // define id count allow to speed up and pass that
-									
-									If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
-										$Dom_child:=$Obj_element.dom
-										$Lon_ids:=0
-										While ($Dom_child.success)
-											$Lon_ids:=$Lon_ids+1
-											$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
-										End while 
-										
-										If ($Lon_ids=1)
-											
-											$Lon_ids:=32  // default value if not found
-											
-										End if 
-									End if 
-									
-									$Obj_element.idCount:=$Lon_ids  // as a result purpose
-									$Obj_storyboardID.storyboardIDs:=storyboard (New object:C1471("action";"randomIds";"length";$Lon_ids)).value
 									
 								End if 
 								
@@ -516,28 +531,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
 								
 								  // Insert node for this element
-								
-								  // - Check how to insert new node (ie. the insertMode)
-								If (Length:C16(String:C10($Obj_element.insertMode))=0)
-									
-									$Obj_element.insertMode:="append"
-									
-								End if 
-								
-								  // - Check if there is some mandatories tags before inserting
-								If (Value type:C1509($Obj_element.tags.mandatories)=Is collection:K8:32)
-									
-									For each ($Obj_tag;$Obj_element.tags.mandatories)
-										
-										If (String:C10($Obj_in.tags[String:C10($Obj_tag.key)])="")  // support not empty rules now
-											
-											$Obj_element.insertMode:="none"  // do not insert
-											
-										End if 
-									End for each 
-								End if 
-								
-								  // - Do insert in dom
 								Case of 
 										
 										  // ----------------------------------------
@@ -557,11 +550,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										
 										  //----------------------------------------
 								End case 
-								
-								
 							End if 
 						End for each 
-						
 					End for each 
 					
 					  // Remove original template duplicated element
@@ -594,7 +584,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			Else   // Not a document
 				
-				ASSERT:C1129(dev_Matrix ;"Missing "+$Obj_in.action+" storyboard")
+				ASSERT:C1129(dev_Matrix ;"Missing or not decodable "+$Obj_in.action+" storyboard")
 				
 			End if 
 			
