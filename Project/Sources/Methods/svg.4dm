@@ -40,26 +40,31 @@ If (This:C1470._is=Null:C1517)  // Constructor
 		"xml";Null:C1517;\
 		"origin";Null:C1517;\
 		"file";Null:C1517;\
-		"pocessingInstruction";Formula:C1597(svg ("pocessingInstruction";New object:C1471("value";$1)));\
 		"close";Formula:C1597(svg ("close"));\
+		"styleSheet";Formula:C1597(svg ("styleSheet";$1));\
 		"group";Formula:C1597(svg ("new";New object:C1471("what";"group";"id";$1;"options";$2)));\
 		"rect";Formula:C1597(svg ("new";Choose:C955(Count parameters:C259=3;New object:C1471("what";"rect";"x";$1;"y";$2;"options";$3);New object:C1471("what";"rect";"x";$1;"y";$2;"width";$3;"height";$4;"options";$5))));\
 		"roundedRect";Formula:C1597(svg ("new";Choose:C955(Count parameters:C259=3;New object:C1471("what";"rect";"rx";10;"x";$1;"y";$2;"options";$3);New object:C1471("what";"rect";"rx";10;"x";$1;"y";$2;"width";$3;"height";$4;"options";$5))));\
 		"image";Formula:C1597(svg ("new";New object:C1471("what";"image";"url";$1;"options";$2)));\
 		"textArea";Formula:C1597(svg ("new";New object:C1471("what";"textArea";"text";$1;"x";Num:C11($2);"y";Num:C11($3);"options";$4)));\
 		"embedPicture";Formula:C1597(svg ("new";New object:C1471("what";"embedPicture";"image";$1;"x";Num:C11($2);"y";Num:C11($3);"options";$4)));\
-		"position";Formula:C1597(svg ("set";New object:C1471("what";"position";"x";$1;"y";$2;"unit";$3)));\
-		"dimensions";Formula:C1597(svg ("set";New object:C1471("what";"dimensions";"width";$1;"height";$2;"unit";$3)));\
-		"fill";Formula:C1597(svg ("set";New object:C1471("what";"fill";"color";$1;"opacity";$2)));\
-		"stroke";Formula:C1597(svg (Choose:C955(Value type:C1509($1)=Is object:K8:27;"stroke";"set");Choose:C955(Value type:C1509($1)=Is object:K8:27;$1;New object:C1471("what";"stroke";"color";$1;"opacity";$2))));\
-		"font";Formula:C1597(svg (Choose:C955(Value type:C1509($1)=Is object:K8:27;"font";"set");Choose:C955(Value type:C1509($1)=Is object:K8:27;$1;New object:C1471("what";"font";"font";$1;"size";$2))));\
-		"attribute";Formula:C1597(svg ("set";New object:C1471("what";"attribute";"key";$1;"value";$2)));\
-		"attributes";Formula:C1597(svg ("set";New object:C1471("what";"attributes";"options";$1)));\
+		"setPosition";Formula:C1597(svg ("set";New object:C1471("what";"position";"x";$1;"y";$2;"unit";$3)));\
+		"setDimensions";Formula:C1597(svg ("set";New object:C1471("what";"dimensions";"width";$1;"height";$2;"unit";$3)));\
+		"setFill";Formula:C1597(svg ("set";New object:C1471("what";"fill";"color";$1;"opacity";$2)));\
+		"setStroke";Formula:C1597(svg (Choose:C955(Value type:C1509($1)=Is object:K8:27;"stroke";"set");Choose:C955(Value type:C1509($1)=Is object:K8:27;$1;New object:C1471("what";"stroke";"color";$1;"opacity";$2))));\
+		"setFont";Formula:C1597(svg (Choose:C955(Value type:C1509($1)=Is object:K8:27;"font";"set");Choose:C955(Value type:C1509($1)=Is object:K8:27;$1;New object:C1471("what";"font";"font";$1;"size";$2))));\
+		"setVisible";Formula:C1597(svg ("set";New object:C1471("what";"visible";"visibility";$1;"options";Choose:C955(Value type:C1509($2)=Is text:K8:3;New object:C1471("target";$2);$2))));\
+		"setAttribute";Formula:C1597(svg ("set";New object:C1471("what";"attribute";"key";$1;"value";$2;"options";Choose:C955(Value type:C1509($3)=Is text:K8:3;New object:C1471("target";$3);$3))));\
+		"setAttributes";Formula:C1597(svg ("set";New object:C1471("what";"attributes";"options";$1)));\
+		"getPicture";Formula:C1597(svg ("get";Choose:C955(Value type:C1509($1)=Is boolean:K8:9;New object:C1471("what";"picture";"keep";Bool:C1537($1);"options";$2);New object:C1471("what";"picture";"options";$1))).picture);\
+		"getText";Formula:C1597(svg ("get";Choose:C955(Value type:C1509($1)=Is boolean:K8:9;New object:C1471("what";"xml";"keep";Bool:C1537($1);"options";$2);New object:C1471("what";"xml";"options";$1))).xml);\
 		"get";Formula:C1597(svg ("get";Choose:C955(Value type:C1509($2)=Is boolean:K8:9;New object:C1471("what";String:C10($1);"keep";Bool:C1537($2);"options";$3);New object:C1471("what";String:C10($1);"options";$2)))[$1]);\
+		"savePicture";Formula:C1597(svg ("save";Choose:C955(Value type:C1509($1)=Is object:K8:27;New object:C1471("file";$1;"keep";$2);New object:C1471("what";"picture";"file";$1;Choose:C955(Value type:C1509($2)=Is boolean:K8:9;"keep";"codec");$2;Choose:C955(Value type:C1509($3)=Is boolean:K8:9;"keep";"ghost");$3))));\
+		"saveText";Formula:C1597(svg ("save";Choose:C955(Value type:C1509($1)=Is object:K8:27;New object:C1471("file";$1;"keep";$2);New object:C1471("what";"text";"file";$1;Choose:C955(Value type:C1509($2)=Is boolean:K8:9;"keep";"codec");$2;Choose:C955(Value type:C1509($3)=Is boolean:K8:9;"keep";"ghost");$3))));\
 		"save";Formula:C1597(svg ("save";Choose:C955(Value type:C1509($1)=Is object:K8:27;New object:C1471("file";$1;"keep";$2);New object:C1471("what";$1;"file";$2;Choose:C955(Value type:C1509($3)=Is boolean:K8:9;"keep";"codec");$3;Choose:C955(Value type:C1509($4)=Is boolean:K8:9;"keep";"ghost");$4))));\
 		"findByPath";Formula:C1597(svg ("findByPath";New object:C1471("xPath";$1;"option";$2)).value);\
 		"findById";Formula:C1597(svg ("findById";New object:C1471("id";$1)).value);\
-		"show";Formula:C1597(svg ("show"))\
+		"showInViewer";Formula:C1597(svg ("showInViewer"))\
 		)
 	
 	If (Count parameters:C259>=1)
@@ -450,7 +455,7 @@ Else
 							$o.errors.push("Null object pathname")
 							
 							  //______________________________________________________
-						: ($2.what=Null:C1517)  // Into the original file
+						: ($2.what=Null:C1517)  // Into the original or the latest saved file
 							
 							$2.what:=Choose:C955(New collection:C1472(".svg";".xml";".txt").indexOf($file.extension)#-1;"text";"picture")
 							$o:=svg ("save";$2)
@@ -486,7 +491,7 @@ Else
 						: ($Txt_object="text")
 							
 							  // Turn_around #ACI0093875
-							  //DOM EXPORT TO FILE($o.root;$Txt_pathname)
+							  //DOM EXPORT TO FILE($o.root;$file.platformPath)
 							DOM EXPORT TO VAR:C863($o.root;$t)
 							$t:=Replace string:C233($t;" xmlns=\"\"";"")
 							$o.success:=Bool:C1537(OK)
@@ -494,10 +499,6 @@ Else
 							If ($o.success)
 								
 								$file.setText($t)
-								
-							End if 
-							
-							If ($o.success)
 								
 								$o.xml:=$t
 								
@@ -524,7 +525,7 @@ Else
 					End if 
 					
 					  //=================================================================
-				: ($1="show")
+				: ($1="showInViewer")
 					
 					$signal:=New signal:C1641("CALL_MAIN_PROCESS")
 					CALL WORKER:C1389(1;"CALL_MAIN_PROCESS";$signal;"listOfLoadedComponents")
@@ -546,21 +547,18 @@ Else
 					End if 
 					
 					  //=================================================================
-				: ($1="pocessingInstruction")
+				: ($1="styleSheet")
 					
-					If ($2.value#Null:C1517)
+					$o.success:=$2.exists
+					
+					If ($o.success)
 						
-						$t:=String:C10($2.value)
-						$t:=DOM Append XML child node:C1080($o.root;XML processing instruction:K45:9;$t)
-						
-					Else 
-						
-						$o.errors.push("Missing instruction to set.")
-						OK:=0
+						$t:=Convert path system to POSIX:C1106($2.platformPath;*)
+						$t:="xml-stylesheet type=\"text/css\" href=\"file://localhost"+$t+"\""
+						$t:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($o.root);XML processing instruction:K45:9;$t)
+						$o.success:=Bool:C1537(OK)
 						
 					End if 
-					
-					$o.success:=Bool:C1537(OK)
 					
 					  //=================================================================
 				: ($1="close")
@@ -1022,6 +1020,14 @@ Else
 				: ($1="set")
 					
 					Case of 
+							
+							  //______________________________________________________
+						: ($2.what="visible")
+							
+							DOM SET XML ATTRIBUTE:C866($Dom_target;\
+								"visibility";Choose:C955(Bool:C1537($2.visibility);"visible";"hidden"))
+							
+							$o.success:=Bool:C1537(OK)
 							
 							  //______________________________________________________
 						: ($2.what="attribute")

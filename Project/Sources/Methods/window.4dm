@@ -16,7 +16,8 @@ End if
 If (This:C1470=Null:C1517)
 	
 	$o:=New object:C1471(\
-		"ref";"window";\
+		"_is";"window";\
+		"reference";Current form window:C827;\
 		"process";Null:C1517;\
 		"title";Null:C1517;\
 		"type";Null:C1517;\
@@ -25,15 +26,15 @@ If (This:C1470=Null:C1517)
 		"coordinates";Null:C1517;\
 		"screen";Null:C1517;\
 		"get";Formula:C1597(window );\
-		"isFrontmost";Formula:C1597(Frontmost window:C447=This:C1470.ref);\
-		"getType";Formula:C1597(Window kind:C445(This:C1470.ref));\
-		"getTitle";Formula:C1597(Get window title:C450(This:C1470.ref));\
-		"getNext";Formula:C1597(Next window:C448(This:C1470.ref));\
+		"isFrontmost";Formula:C1597(Frontmost window:C447=This:C1470.reference);\
+		"getType";Formula:C1597(Window kind:C445(This:C1470.reference));\
+		"getTitle";Formula:C1597(Get window title:C450(This:C1470.reference));\
+		"getNext";Formula:C1597(Next window:C448(This:C1470.reference));\
 		"getCoordinates";Formula:C1597(window ("coordinates"));\
-		"setTitle";Formula:C1597(SET WINDOW TITLE:C213($1;This:C1470.ref))\
+		"setTitle";Formula:C1597(SET WINDOW TITLE:C213($1;This:C1470.reference))\
 		)
 	
-	$o.process:=Window process:C446($o.ref)
+	$o.process:=Window process:C446($o.reference)
 	$o.title:=$o.getTitle()
 	$o.type:=$o.getType()
 	$o.frontmost:=$o.isFrontmost()

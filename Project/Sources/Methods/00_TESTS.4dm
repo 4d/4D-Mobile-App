@@ -23,7 +23,7 @@ Case of
 	: (True:C214)
 		
 		$svg:=svg ("load";Folder:C1567(fk desktop folder:K87:19).file("DEV/test svg.svg"))
-		$svg.rect(150;125;100;50).fill("yellow")
+		$svg.rect(150;125;100;50).setFill("yellow")
 		  //$svg.save(Folder(fk desktop folder).file("DEV/test svg (copy).svg"))
 		$svg.save()
 		
@@ -36,14 +36,14 @@ Case of
 		  //$svg.save("text";Folder(fk desktop folder).file("DEV/export.xml"))  //;True)  //;".jpg")//;True)
 		  //$svg.close()
 		
-		$svg.save("text";Folder:C1567(fk desktop folder:K87:19).file("test svg.xml");True:C214)
-		$svg.save("picture";Folder:C1567(fk desktop folder:K87:19).file("test svg.png"))
+		$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("test svg.xml");True:C214)
+		$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("test svg.png"))
 		
 		  //________________________________________
 	: (True:C214)
 		
 		$svg:=svg ("load";File:C1566("/RESOURCES/templates/form/list/Vertical Cards/template.svg"))
-		$svg.save("picture";Folder:C1567(fk desktop folder:K87:19).file("DEV/export.png"))
+		$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/export.png"))
 		
 		  //________________________________________
 	: (True:C214)
@@ -58,7 +58,7 @@ Case of
 			"⬇")
 		
 		$svg:=svg ("parse";New object:C1471("variable";$t))
-		$svg.show()
+		$svg.showInViewer()
 		$svg.close()
 		
 		  //________________________________________
@@ -66,7 +66,7 @@ Case of
 		
 		$svg:=svg ("load";File:C1566("/RESOURCES/templates/form/list/Vertical Cards/template.svg"))
 		$t:=$svg.findById("cookery")
-		$svg.show()
+		$svg.showInViewer()
 		$svg.close()
 		
 		  //________________________________________

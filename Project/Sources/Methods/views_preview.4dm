@@ -14,14 +14,12 @@ C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
 C_BOOLEAN:C305($Boo_first;$Boo_multivalued;$Boo_OK)
-C_LONGINT:C283($i;$Lon_index;$Lon_parameters;$Lon_tab;$Lon_width;$Lon_y)
-C_LONGINT:C283($Lon_yOffset)
-C_TEXT:C284($Dom_;$Dom_buffer;$Dom_cancel;$Dom_field;$Dom_g;$Dom_label)
-C_TEXT:C284($Dom_multivalued;$Dom_new;$Dom_root;$Dom_tabs;$Dom_template;$Dom_use)
-C_TEXT:C284($t;$Txt_field;$Txt_form;$Txt_in;$Txt_index;$Txt_name)
-C_TEXT:C284($Txt_out;$Txt_typeForm)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_target;$Path_root)
-C_COLLECTION:C1488($Col_assigned;$Col_bind;$Col_form)
+C_LONGINT:C283($i;$Lon_index;$Lon_parameters;$Lon_width;$Lon_y;$Lon_yOffset)
+C_TEXT:C284($Dom_field;$Dom_multivalued;$Dom_new;$Dom_template;$Dom_use;$t)
+C_TEXT:C284($tt;$Txt_field;$Txt_in;$Txt_index;$Txt_name;$Txt_out)
+C_TEXT:C284($Txt_typeForm)
+C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_target;$Path_root;$svg)
+C_COLLECTION:C1488($c)
 
 If (False:C215)
 	C_TEXT:C284(views_preview ;$0)
@@ -67,111 +65,79 @@ Case of
 		
 		If (Length:C16($Obj_context.tableNum())>0)
 			
-			$Txt_form:=String:C10(Form:C1466[$Txt_typeForm][$Obj_context.tableNum()].form)
+			$t:=String:C10(Form:C1466[$Txt_typeForm][$Obj_context.tableNum()].form)  // Form name
 			
-			If (Length:C16($Txt_form)>0)\
-				 & ($Txt_form#"null")
+			If (Length:C16($t)>0)\
+				 & ($t#"null")
 				
-				If (Position:C15("/";$Txt_form)=1)
+				If (Position:C15("/";$t)=1)
 					
 					  // Host database resources
-					$Txt_form:=Delete string:C232($Txt_form;1;1)
+					$t:=Delete string:C232($t;1;1)
 					
-					$Path_root:=COMPONENT_Pathname ("host_"+$Txt_typeForm+"Forms").folder($Txt_form)
+					$Path_root:=COMPONENT_Pathname ("host_"+$Txt_typeForm+"Forms").folder($t)
 					
 					$Boo_OK:=$Path_root.exists
 					
 					If ($Boo_OK)
 						
-						  // Verify the validity
+						  // Verify the structure validity
 						$o:=JSON Parse:C1218(COMPONENT_Pathname ($Txt_typeForm+"Forms").file("manifest.json").getText())
 						
-						For each ($t;$o.mandatory) While ($Boo_OK)
+						For each ($tt;$o.mandatory) While ($Boo_OK)
 							
-							$Boo_OK:=$Path_root.file($t).exists
+							$Boo_OK:=$Path_root.file($tt).exists
 							
 						End for each 
 					End if 
 					
 				Else 
 					
-					$Path_root:=COMPONENT_Pathname ($Txt_typeForm+"Forms").folder($Txt_form)
+					$Path_root:=COMPONENT_Pathname ($Txt_typeForm+"Forms").folder($t)
 					
-					  // We assume that our templates are OK !
+					  // We assume that our templates are OK!
 					$Boo_OK:=$Path_root.exists
 					
 				End if 
 				
-				OBJECT SET TITLE:C194(*;"preview.label";$Txt_form)
+				OBJECT SET TITLE:C194(*;"preview.label";$t)
 				
 				If ($Boo_OK)
 					
 					  // Load the template
 					PROCESS 4D TAGS:C816($Path_root.file("template.svg").getText();$t)
 					
-					$Dom_root:=DOM Parse XML variable:C720($t)
+					$svg:=svg ("parse";New object:C1471("variable";$t)).setAttribute("transform";"scale(0.95)")
 					
-					If (Asserted:C1132(OK=1))
+					If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
 						
-						XML SET OPTIONS:C1090($Dom_root;XML indentation:K45:34;XML no indentation:K45:36)
+						  // Add the style sheet
+						$svg.styleSheet(COMPONENT_Pathname ("templates").file("template.css"))
 						
-						  // Add the css reference [
-						If (Asserted:C1132(COMPONENT_Pathname ("templates").file("template.css").exists))
-							
-							  //<?xml-stylesheet href="file://localhost/Users/vdl/Desktop/monstyle.css" type="text/css"?>
-							$t:="file://localhost"+Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16);*)+"templates/template.css"
-							$t:="xml-stylesheet type=\"text/css\" href=\""+$t+"\""
-							$Dom_buffer:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($Dom_root);XML processing instruction:K45:9;$t)
-							
-							ASSERT:C1129(OK=1)
-							
-						End if 
-						  //]
+						  // Update values if any
+						$t:=$svg.findById("cookery")
 						
-						  // Zoom factor
-						DOM SET XML ATTRIBUTE:C866($Dom_root;\
-							"transform";"scale(0.95)")
-						
-						  // Update values if any [
-						$Dom_buffer:=DOM Find XML element by ID:C1010($Dom_root;"cookery")
-						
-						If (Asserted:C1132(OK=1;"Missing cookery element"))
+						If (Asserted:C1132($svg.success;"Missing cookery element"))
 							
-							$o:=xml_attributes ($Dom_buffer)
+							$o:=xml_attributes ($t)
 							
-							  // Get the bindind definition {
+							  // Get the bindind definition
 							If (Asserted:C1132($o["ios:values"]#Null:C1517))
 								
-								$Col_bind:=Split string:C1554($o["ios:values"];",";sk trim spaces:K86:2)
-								
-							End if 
-							  //}
-							
-							$Obj_target:=Form:C1466[$Txt_typeForm][$Obj_context.tableNumber]
-							
-							If ($Obj_target=Null:C1517)
-								
-								$Obj_target:=New object:C1471
+								$c:=Split string:C1554(String:C10($o["ios:values"]);",";sk trim spaces:K86:2)
 								
 							End if 
 							
-							If ($Obj_target.fields=Null:C1517)
-								$Col_form:=New collection:C1472
-								$Col_assigned:=New collection:C1472
-							Else 
-								  // Keep a copy of the already affected fields
-								$Col_form:=$Obj_target.fields.copy()
-								$Col_assigned:=$Col_form.extract("name";"name";"id";"id")  //$Col_form.filter("col_notNull")
-							End if 
+							$Obj_target:=Choose:C955(Form:C1466[$Txt_typeForm][$Obj_context.tableNumber]=Null:C1517;New object:C1471;Form:C1466[$Txt_typeForm][$Obj_context.tableNumber])
 							
 							  // Get the template for multivalued fields reference, if exist
-							$Dom_template:=DOM Find XML element by ID:C1010($Dom_root;"f")
-							$Boo_multivalued:=(OK=1)
+							$Dom_template:=$svg.findById("f")
+							$Boo_multivalued:=($svg.success)
 							
 							If ($Boo_multivalued)
 								
 								  // Get the main group reference
-								$Dom_multivalued:=DOM Find XML element by ID:C1010($Dom_root;"multivalued")
+								$Dom_multivalued:=$svg.findById("multivalued")
 								
 								  // Get the vertical offset
 								$o:=xml_attributes ($Dom_template)
@@ -183,18 +149,18 @@ Case of
 									
 								End if 
 								
-								For each ($Txt_field;$Col_bind)
+								For each ($Txt_field;$c)
 									
-									$Dom_buffer:=DOM Find XML element by ID:C1010($Dom_root;$Txt_field)
+									$t:=$svg.findById($Txt_field)
 									
-									If (OK=1)
+									If ($svg.success)
 										
 										  // Get position
-										$Dom_g:=DOM Get parent XML element:C923($Dom_buffer)
+										$tt:=DOM Get parent XML element:C923($t)
 										
 										If (Asserted:C1132(OK=1))
 											
-											DOM GET XML ATTRIBUTE BY NAME:C728($Dom_g;"transform";$t)
+											DOM GET XML ATTRIBUTE BY NAME:C728($tt;"transform";$t)
 											$Lon_y:=Num:C11(Replace string:C233($t;"translate(0,";""))
 											
 										End if 
@@ -219,23 +185,23 @@ Case of
 												"transform";"translate(0,"+String:C10($Lon_y)+")")
 											
 											  // Set label
-											$Dom_:=DOM Find XML element by ID:C1010($Dom_new;"f.label")
-											DOM SET XML ATTRIBUTE:C866($Dom_;\
+											$tt:=DOM Find XML element by ID:C1010($Dom_new;"f.label")
+											DOM SET XML ATTRIBUTE:C866($tt;\
 												"id";$Txt_field+".label")
-											DOM GET XML ELEMENT VALUE:C731($Dom_;$t)
-											DOM SET XML ELEMENT VALUE:C868($Dom_;Get localized string:C991($t)+$Txt_index)
+											DOM GET XML ELEMENT VALUE:C731($tt;$t)
+											DOM SET XML ELEMENT VALUE:C868($tt;Get localized string:C991($t)+$Txt_index)
 											
 											  // Set id, bind & default label
-											$Dom_:=DOM Find XML element by ID:C1010($Dom_new;"f")
+											$tt:=DOM Find XML element by ID:C1010($Dom_new;"f")
 											
-											DOM SET XML ATTRIBUTE:C866($Dom_;\
+											DOM SET XML ATTRIBUTE:C866($tt;\
 												"id";$Txt_field;\
 												"ios:bind";"fields["+String:C10(Num:C11($Txt_field)-1)+"]";\
 												"ios:label";Get localized string:C991("field[n]")+" "+$Txt_index)
 											
 											  // Set cancel id
-											$Dom_:=DOM Find XML element by ID:C1010($Dom_new;"f.cancel")
-											DOM SET XML ATTRIBUTE:C866($Dom_;\
+											$tt:=DOM Find XML element by ID:C1010($Dom_new;"f.cancel")
+											DOM SET XML ATTRIBUTE:C866($tt;\
 												"id";$Txt_field+".cancel")
 											
 											  // Append object to the preview
@@ -248,13 +214,13 @@ Case of
 								End for each 
 							End if 
 							
-							  // Valorize the fields [
-							For each ($Txt_field;$Col_bind)
+							  // Valorize the fields
+							For each ($t;$c)
 								
 								CLEAR VARIABLE:C89($Txt_name)
 								
 								  // Find the binded element
-								$Dom_field:=DOM Find XML element by ID:C1010($Dom_root;$Txt_field)
+								$Dom_field:=$svg.findById($t)
 								
 								  // Get the field bind
 								$o:=xml_attributes ($Dom_field)
@@ -298,12 +264,7 @@ Case of
 												
 												If (Num:C11($Obj_target.fields[$Lon_index].id)=0)  // 1-N relation
 													
-													
-													
-												Else 
-													
-													
-													
+													$svg.setAttribute("font-style";"italic";$svg.findById($t+".label"))
 													
 												End if 
 											End if 
@@ -313,28 +274,25 @@ Case of
 								
 								If (Length:C16($Txt_name)>0)
 									
-									$Dom_field:=DOM Find XML element by ID:C1010($Dom_root;$Txt_field)
-									
 									If (Asserted:C1132(OK=1))
 										
-										DOM SET XML ATTRIBUTE:C866($Dom_field;\
-											"stroke-dasharray";"none")  // ;"assigned";True)																																	\
-											
+										$svg.setAttribute("stroke-dasharray";"none";$Dom_field)
+										
 										If ($Boo_multivalued)
 											
 											  // Make it visible & mark as affected
-											DOM SET XML ATTRIBUTE:C866(DOM Get parent XML element:C923($Dom_field);\
+											$svg.setAttributes(New object:C1471("target";DOM Get parent XML element:C923($Dom_field);\
 												"visibility";"visible";\
-												"class";"affected")
+												"class";"affected"))
 											
 										End if 
 										
-										$Dom_label:=DOM Find XML element by ID:C1010($Dom_root;$Txt_field+".label")
+										$tt:=$svg.findById($t+".label")
 										
-										If (Asserted:C1132(OK=1))
+										If (Asserted:C1132($svg.success))
 											
-											  // Truncate & set a tips if necessary
-											$Lon_width:=Num:C11(xml_attributes ($Dom_label).width)
+											  // Truncate & set tips if necessary
+											$Lon_width:=Num:C11(xml_attributes ($tt).width)
 											
 											If ($Lon_width>0)
 												
@@ -342,24 +300,21 @@ Case of
 												
 												If (Length:C16($Txt_name)>($Lon_width))
 													
-													DOM SET XML ATTRIBUTE:C866($Dom_label;\
-														"tips";$Txt_name)
-													
+													$svg.setAttribute("tips";$Txt_name;$tt)
 													$Txt_name:=Substring:C12($Txt_name;1;$Lon_width)+"…"
 													
 												End if 
 											End if 
 											
-											DOM SET XML ELEMENT VALUE:C868($Dom_label;$Txt_name)
+											DOM SET XML ELEMENT VALUE:C868($tt;$Txt_name)
 											
 										End if 
 										
-										$Dom_cancel:=DOM Find XML element by ID:C1010($Dom_root;$Txt_field+".cancel")
+										$tt:=$svg.findById($t+".cancel")
 										
-										If (OK=1)
+										If ($svg.success)
 											
-											DOM SET XML ATTRIBUTE:C866($Dom_cancel;\
-												"visibility";"visible")
+											$svg.setVisible(True:C214;$tt)
 											
 										End if 
 									End if 
@@ -368,7 +323,6 @@ Case of
 								$Lon_index:=$Lon_index+1
 								
 							End for each 
-							  //]
 							
 							If ($Boo_multivalued)
 								
@@ -385,63 +339,45 @@ Case of
 											  // We have found the first non affected field
 											$Boo_first:=True:C214
 											
-											  // Make it visible
-											DOM SET XML ATTRIBUTE:C866($tDom_{$i};\
-												"visibility";"visible")
+											  // Make it visible to allow drag and drop
+											$svg.setVisible(True:C214;$tDom_{$i})
 											
 										Else 
 											
-											  // Hide the others…
-											DOM SET XML ATTRIBUTE:C866($tDom_{$i};\
-												"visibility";"hidden")
+											  // Hide the other ones
+											$svg.setVisible(False:C215;$tDom_{$i})
 											
 										End if 
 									End if 
 								End for 
 							End if 
 							
-							  // Tabs --------------------------------------------------------------------------- [
-							$Dom_tabs:=DOM Find XML element by ID:C1010($Dom_root;"tabs")
+							  // Tabs
+							$t:=$svg.findById("tabs")
 							
-							If (OK=1)
+							If ($svg.success)
+								
+								CLEAR VARIABLE:C89($Lon_index)
 								
 								Repeat 
 									
-									$Dom_:=DOM Find XML element by ID:C1010($Dom_root;"tab-"+String:C10($Lon_tab))
+									$tt:=$svg.findById("tab-"+String:C10($Lon_index))
 									
-									If (OK=1)
+									If ($svg.success)
 										
-										DOM SET XML ATTRIBUTE:C866($Dom_;\
-											"visibility";Choose:C955(Num:C11($Obj_context.tabIndex)=$Lon_tab;\
-											"visible";"hidden"))
+										$svg.setVisible(Num:C11($Obj_context.tabIndex)=$Lon_index;$tt)
 										
 									End if 
 									
-									$Lon_tab:=$Lon_tab+1
+									$Lon_index:=$Lon_index+1
 									
 								Until (OK=0)
 							End if 
-							
-							  // --------------------------------------------------------------------------------- ]
-							
 						End if 
-						  //]
 						
-						If (Bool:C1537(ui.debugMode))
-							
-							  // Save project
-							project.save()
-							
-							DOM EXPORT TO VAR:C863($Dom_root;$t)
-							$Dom_:=DOM Parse XML variable:C720($t)
-							XML SET OPTIONS:C1090($Dom_;XML indentation:K45:34;XML with indentation:K45:35)
-							DOM EXPORT TO FILE:C862($Dom_;System folder:C487(Desktop:K41:16)+"DEV"+Folder separator:K24:12+"view.svg")
-							DOM CLOSE XML:C722($Dom_)
-							
-						End if 
+						($Obj_form.preview.pointer())->:=$svg.getPicture()
+						
 					End if 
-					
-					SVG EXPORT TO PICTURE:C1017($Dom_root;($Obj_form.preview.pointer())->;Own XML data source:K45:18)
 					
 				Else 
 					
@@ -449,12 +385,12 @@ Case of
 					
 					$Obj_form.preview.getCoordinates()
 					
-					($Obj_form.preview.pointer())->:=svg .dimensions($Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height)\
+					($Obj_form.preview.pointer())->:=svg .setsetDimensions($Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height)\
 						.textArea(Replace string:C233(Get localized string:C991("theTemplateIsMissingOrInvalid");"{tmpl}";$Path_root.name);0;200)\
-						.dimensions($Obj_form.preview.coordinates.width-20)\
-						.fill(ui.colors.errorColor.hex)\
-						.attributes(New object:C1471("font-size";14;"text-align";"center"))\
-						.get("picture")
+						.setDimensions($Obj_form.preview.coordinates.width-20)\
+						.setFill(ui.colors.errorColor.hex)\
+						.setAttributes(New object:C1471("font-size";14;"text-align";"center"))\
+						.getPicture()
 					
 				End if 
 				

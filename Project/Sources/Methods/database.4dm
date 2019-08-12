@@ -14,7 +14,7 @@ If (False:C215)
 	C_OBJECT:C1216(database ;$2)
 End if 
 
-If (This:C1470=Null:C1517)
+If (This:C1470._is=Null:C1517)
 	
 	$o:=New shared object:C1526(\
 		"_is";"database";\
@@ -40,10 +40,8 @@ If (This:C1470=Null:C1517)
 	
 	Use ($o)
 		
-		  //$o.isProject:=($o.structure.extension=".4DProject")
-		  //$o.isDatabase:=Not($o.isProject)
-		$o.isDatabase:=($o.structure.extension=".4dbase")
-		$o.isProject:=Not:C34($o.isDatabase)  // .4DProject or .4DZ
+		$o.isProject:=Bool:C1537(Get database parameter:C643(113))
+		$o.isDatabase:=Not:C34($o.isProject)
 		
 		$l:=Get database parameter:C643(User param value:K37:94;$t)
 		
@@ -55,12 +53,14 @@ If (This:C1470=Null:C1517)
 				  // <NOTHING MORE TO DO>
 				
 				  //______________________________________________________
-			: ($t="{@}")
+			: ($t="{@")\
+				 & ($t="@}")  // json object
 				
 				$o.parameters:=JSON Parse:C1218($t)
 				
 				  //______________________________________________________
-			: ($t="[@]")
+			: ($t="[@")\
+				 & ($t="@]")  // json array
 				
 				ARRAY TEXT:C222($tTxt_values;0x0000)
 				JSON PARSE ARRAY:C1219($t;$tTxt_values)

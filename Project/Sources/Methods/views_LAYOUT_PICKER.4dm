@@ -160,7 +160,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			  // Use the media
 			READ PICTURE FILE:C678($Path_template.parent.file("layoutIconx2.png").platformPath;$p)
 			
-			$svg:=svg .dimensions($kLon_cellWidth;$kLon_cellHeight)
+			$svg:=svg .setDimensions($kLon_cellWidth;$kLon_cellHeight)
 			
 			$svg.embedPicture($p;-10;0)
 			
@@ -171,11 +171,11 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			End if 
 			
 			$svg.textArea($t;0;$kLon_cellHeight-20)\
-				.dimensions($kLon_cellWidth)\
-				.fill("dimgray")\
-				.attribute("text-align";"center")
+				.setDimensions($kLon_cellWidth)\
+				.setFill("dimgray")\
+				.setAttribute("text-align";"center")
 			
-			$p:=$svg.get("picture")
+			$p:=$svg.getPicture()
 			
 		Else 
 			

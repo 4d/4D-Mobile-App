@@ -194,7 +194,7 @@ Case of
 					Get localized string:C991("operators");\
 					"⬇")
 				
-				$Ptr_me->:=svg ("parse";New object:C1471("variable";$t)).get("picture")
+				$Ptr_me->:=svg ("parse";New object:C1471("variable";$t)).getPicture()
 				
 				OBJECT SET VISIBLE:C603(*;$Txt_me;False:C215)
 				

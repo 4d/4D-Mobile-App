@@ -133,7 +133,7 @@
 					"stroke": "#1E90FF",
 					"fontFamily": "monaco",
 					"fontSize": 10,
-					"focusable": false,
+					"focusable": true,
 					"fill": "transparent",
 					"borderStyle": "solid",
 					"enterable": false,
@@ -293,6 +293,18 @@
 					"top": 606,
 					"width": 202,
 					"height": 17
+				},
+				"Button2": {
+					"type": "button",
+					"text": "Button",
+					"top": 518,
+					"left": 790,
+					"width": 159,
+					"height": 35,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button2.4dm"
 				}
 			}
 		}

@@ -80,16 +80,16 @@ If ($Obj_dataModel#Null:C1517)
 		
 		  // Create a table group. filled according to selected status
 		$Dom_table:=$svg.group($Txt_table)\
-			.fill(Choose:C955($Boo_selected;$kTxt_selectedFill;"white")).latest
+			.setFill(Choose:C955($Boo_selected;$kTxt_selectedFill;"white")).latest
 		
 		  // Background
 		$svg.rect($Lon_x;$Lon_y;$kLon_cellWidth;$kLon_cellHeight;New object:C1471("target";$Dom_table))\
-			.stroke(Choose:C955($Boo_selected;$kTxt_selectedFill;"none"))
+			.setStroke(Choose:C955($Boo_selected;$kTxt_selectedFill;"none"))
 		
 		  // Border & reactive 'button'
 		$svg.rect($Lon_x+1;$Lon_y+1;$kLon_cellWidth;$kLon_cellHeight;New object:C1471("target";$Dom_table))\
-			.stroke(Choose:C955($Boo_selected;$kTxt_selectedStroke;"none"))\
-			.fill("white";5)
+			.setStroke(Choose:C955($Boo_selected;$kTxt_selectedStroke;"none"))\
+			.setFill("white";5)
 		
 		  // Put the icon [
 		If (Form:C1466[$Txt_type][$Txt_table].form=Null:C1517)
@@ -125,7 +125,7 @@ If ($Obj_dataModel#Null:C1517)
 			"target";$Dom_table;\
 			"left";$Lon_x+($kLon_cellWidth/2)-($kLon_iconWidth/2);\
 			"top";$Lon_y+5))\
-			.dimensions($kLon_iconWidth)
+			.setDimensions($kLon_iconWidth)
 		
 		  // Avoid too long name
 		$Txt_name:=$Obj_dataModel[$Txt_table].shortLabel
@@ -137,9 +137,9 @@ If ($Obj_dataModel#Null:C1517)
 		End if 
 		
 		$svg.textArea($Txt_name;$Lon_x;$kLon_cellHeight-20)\
-			.dimensions($kLon_cellWidth;14)\
-			.fill(Choose:C955($Boo_selected;"dimgray";"dimgray"))\
-			.attribute("text-align";"center")
+			.setDimensions($kLon_cellWidth;14)\
+			.setFill(Choose:C955($Boo_selected;"dimgray";"dimgray"))\
+			.setAttribute("text-align";"center")
 		
 		$Lon_x:=$Lon_x+$kLon_cellWidth+$kLon_offset
 		
@@ -148,7 +148,7 @@ End if
 
   // ----------------------------------------------------
   // Return
-$0:=$svg.get("picture")
+$0:=$svg.getPicture()
 
   // ----------------------------------------------------
   // End

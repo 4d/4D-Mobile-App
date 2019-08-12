@@ -227,7 +227,6 @@ If ($Obj_out.success)
 				: ($ƒ.isRelationToMany($Obj_table[$Txt_table]))
 					
 					$Obj_field:=$Obj_table[$Txt_table]
-					$Obj_field.id:=Num:C11($Txt_table)
 					
 					  // ***********************************
 					  // ***********************************

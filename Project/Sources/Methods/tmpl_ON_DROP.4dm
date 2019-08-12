@@ -52,8 +52,17 @@ If (Length:C16(This:C1470.$.current)>0)
 		If ($b)
 			
 			$Obj_field:=New object:C1471(\
-				"name";$o.path;\
-				"id";$o.fieldNumber)
+				"name";$o.path)
+			
+			If (Num:C11($o.fieldNumber)#0)
+				
+				$Obj_field.id:=$o.fieldNumber
+				
+			Else 
+				
+				  // Relation
+				
+			End if 
 			
 			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:bind";$t)
 			Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tTxt_results)
@@ -73,7 +82,7 @@ If (Length:C16(This:C1470.$.current)>0)
 				
 				SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multi-criteria";$Txt_isOfClass)
 				
-				If ($Txt_isOfClass="true")  // Search on several fields - append to the field list if any
+				If (_bool ($Txt_isOfClass))  // Search on several fields - append to the field list if any
 					
 					If (Value type:C1509($Obj_target[$t])#Is collection:K8:32)
 						
@@ -102,6 +111,7 @@ If (Length:C16(This:C1470.$.current)>0)
 				Else 
 					
 					$Obj_target[$t]:=$Obj_field
+					
 				End if 
 			End if 
 			
@@ -115,28 +125,28 @@ If (Length:C16(This:C1470.$.current)>0)
 		
 	Else 
 		
-		  //If (Bool(featuresFlags._103505))
+		  // If (Bool(featuresFlags._103505))
 		  //SVG GET ATTRIBUTE(*;This.preview;This.$.current;"4D-isOfClass-action";$Txt_isOfClass)
 		  //If ($Txt_isOfClass="true")
 		  //SVG GET ATTRIBUTE(*;This.preview.name;This.$.current;"ios:bind";$t)
 		  //Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tTxt_results)
 		  //If (Size of array($tTxt_results)=2)  // List of fields
 		  //GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
-		  //If (Bool(OK))
+		  // If (Bool(OK))
 		  //BLOB TO VARIABLE($x;$o)
 		  //SET BLOB SIZE($x;0)
 		  //OB REMOVE($o;"target")
 		  //For each ($t;$o)
 		  //If ($t[[1]]="$")
 		  //OB REMOVE($o;$t)
-		  //End if
-		  //End for each
+		  // End if
+		  // End for each
 		  //ob_createPath ($Obj_target;"fieldsActions";Is collection)
 		  //$Obj_target.fieldsActions[Num($tTxt_results{2})]:=$o
-		  //End if
-		  //End if
-		  //End if
-		  //End if
+		  // End if
+		  // End if
+		  // End if
+		  // End if
 		
 	End if 
 End if 
