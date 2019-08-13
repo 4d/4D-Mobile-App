@@ -211,7 +211,6 @@ Case of
 					Case of 
 							
 							  // ----------------------------------------
-							  //----------------------------------------
 						: ($Obj_field.id#Null:C1517)
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
@@ -260,7 +259,6 @@ Case of
 							End if 
 							
 							  // ----------------------------------------
-							  //----------------------------------------
 						: ($Lon_i<$Lon_count)
 							
 							  // /  Create a dummy fields to replace in template
@@ -275,14 +273,11 @@ Case of
 								"icon";"")
 							
 							  // ----------------------------------------
-							  //----------------------------------------
 						Else 
 							
 							$Obj_field:=Null:C1517
 							
 							  // ----------------------------------------
-							
-							  //----------------------------------------
 					End case 
 					
 					If ($Obj_field#Null:C1517)
@@ -325,26 +320,21 @@ Case of
 					Case of 
 							
 							  // ----------------------------------------
-							  //----------------------------------------
 						: (Value type:C1509($Obj_tableList.searchableField)=Is object:K8:27)
 							
 							$Obj_table.searchableField:=formatString ("field-name";String:C10($Obj_tableList.searchableField.name))
 							
 							  // ----------------------------------------
-							  //----------------------------------------
 						: (Value type:C1509($Obj_tableList.searchableField)=Is collection:K8:32)
 							
 							$Obj_table.searchableField:=$Obj_tableList.searchableField.extract("name").map("col_formula";"$1.result:=formatString (\"field-name\";String:C10($1.value))").join(",")
 							
 							  // ----------------------------------------
-							  //----------------------------------------
 						: (Value type:C1509($Obj_tableList.searchableField)=Is text:K8:3)
 							
 							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.searchableField))
 							
 							  // ----------------------------------------
-							
-							  //----------------------------------------
 					End case 
 					
 					  // Else
@@ -362,26 +352,21 @@ Case of
 					Case of 
 							
 							  // ----------------------------------------
-							  //----------------------------------------
 						: (Value type:C1509($Obj_tableList.sortField)=Is object:K8:27)
 							
 							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.sortField.name))
 							
 							  // ----------------------------------------
-							  //----------------------------------------
 						: (Value type:C1509($Obj_tableList.sortField)=Is collection:K8:32)
 							
 							$Obj_table.sortField:=$Obj_tableList.sortField.extract("name").map("col_formula";"$1.result:=formatString (\"field-name\";String:C10($1.value))").join(",")
 							
 							  // ----------------------------------------
-							  //----------------------------------------
 						: (Value type:C1509($Obj_tableList.sortField)=Is text:K8:3)
 							
 							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.sortField))
 							
 							  // ----------------------------------------
-							
-							  //----------------------------------------
 					End case 
 					
 				Else 
@@ -419,8 +404,10 @@ Case of
 					
 					$Obj_table.sectionField:=formatString ("field-name";String:C10($Obj_tableList.sectionField.name))
 					$Obj_table.sectionFieldBindingType:=""
+					
 					  // Get format of section field$Obj_tableList
 					If ($Obj_tableModel[String:C10($Obj_tableList.sectionField.id)]#Null:C1517)
+						
 						$Obj_field:=New object:C1471  // maybe get other info from  $Obj_tableList.fields
 						$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[String:C10($Obj_tableList.sectionField.id)])
 						
@@ -946,6 +933,7 @@ Case of
 		
 		  // Need asset?
 		$Boo_withIcons:=Bool:C1537($Obj_template.assets.mandatory)
+		
 		If (Not:C34($Boo_withIcons))
 			
 			For each ($Obj_field;$Obj_in.tags.table.detailFields) Until ($Boo_withIcons)
@@ -983,13 +971,17 @@ Case of
 			  // If need asset, create it
 			$Obj_out.assets:=New collection:C1472  // result of asset operations
 			
-			
 			If (Value type:C1509($Obj_template.assets)#Is object:K8:27)
-				$Obj_template.assets:=New object:C1471("format";"png")  // Fill missing information for detail template only
+				
+				$Obj_template.assets:=New object:C1471(\
+					"format";"png")  // Fill missing information for detail template only
+				
 			End if 
 			
 			If ($Obj_template.assets.target=Null:C1517)
+				
 				$Obj_template.assets.target:="___TABLE___/Detail"  // Default path for detail template resource
+				
 			End if 
 			
 			For each ($Obj_field;$Obj_in.tags.table.detailFields)
@@ -1008,12 +1000,16 @@ Case of
 							$Txt_buffer:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_field.shortLabel;$Obj_field.label)
 							
 							Case of 
+									
 									  // ----------------------------------------
 								: (Length:C16($Txt_buffer)>0)
+									
 									  // Take first letter
 									$Txt_buffer:=Uppercase:C13($Txt_buffer[[1]])
+									
 									  // ----------------------------------------
 								: (Length:C16($Obj_field.name)>0)
+									
 									  //%W-533.1
 									$Txt_buffer:=Uppercase:C13($Obj_field.name[[1]])
 									  //%W+533.1
