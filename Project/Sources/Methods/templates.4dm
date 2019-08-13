@@ -257,6 +257,31 @@ Case of
 								$Obj_tableModel:=$Obj_dataModel[$Txt_tableNumber]
 								
 							End if 
+							  // ----------------------------------------
+						: ($Obj_field.name#Null:C1517)  // ie. relation
+							
+							$Obj_field:=OB Copy:C1225($Obj_field)
+							$Obj_field.originalName:=$Obj_field.name
+							
+							$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[$Obj_field.name])
+							
+							  // Format name for the tag
+							$Obj_field.name:=formatString ("field-name";$Obj_field.originalName)
+							
+							If ($Obj_field.label=Null:C1517)
+								
+								$Obj_field.label:=formatString ("label";$Obj_field.originalName)
+								
+							End if 
+							
+							If ($Obj_field.shortLabel=Null:C1517)
+								
+								$Obj_field.shortLabel:=formatString ("label";$Obj_field.originalName)
+								
+							End if 
+							
+							  // Set binding type according to field information
+							  //$Obj_field.bindingType:=storyboard (New object("action";"fieldBinding";"field";$Obj_field;"formatters";$Obj_in.formatters)).bindingType
 							
 							  // ----------------------------------------
 						: ($Lon_i<$Lon_count)

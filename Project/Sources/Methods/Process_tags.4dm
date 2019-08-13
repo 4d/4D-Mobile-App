@@ -288,19 +288,6 @@ If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file p
 				
 			End if 
 			
-			If ($Obj_tags.relation#Null:C1517)
-				
-				$Txt_buffer:="___RELATION"
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"___";$Obj_tags.relation.name)
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_NAME___";xml_encode (String:C10($Obj_tags.relation.originalName)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL___";xml_encode ($Obj_tags.relation.label))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_SHORT_LABEL___";xml_encode (String:C10($Obj_tags.relation.shortLabel)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_ICON___";xml_encode (String:C10($Obj_tags.relation.detailIcon)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL_ALIGNMENT___";String:C10($Obj_tags.relation.labelAlignment))
-				  // $Txt_out:=Replace string($Txt_out;$Txt_buffer+"_INVERSE___";String($Obj_tags.relation.inverseName))
-				
-			End if 
-			
 			  //______________________________________________________
 		: (Find in array:C230($tTxt_types;"navigation")>0)  // MainNavigation.storyboard
 			
@@ -314,7 +301,6 @@ If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file p
 			
 			  //______________________________________________________
 	End case 
-	
 	
 End if 
   //]
