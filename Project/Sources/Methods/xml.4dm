@@ -46,6 +46,8 @@ If (This:C1470._is=Null:C1517)
 		"setAttribute";Formula:C1597(xml ("setAttribute";New object:C1471("name";$1;"value";$2)));\
 		"setAttributes";Formula:C1597(xml ("setAttributes";$1));\
 		"removeAttribute";Formula:C1597(xml ("removeAttribute";New object:C1471("attribName";$1)));\
+		"getValue";Formula:C1597(xml ("getValue"));\
+		"setValue";Formula:C1597(xml ("setValue";New object:C1471("value";$1)));\
 		"setOption";Formula:C1597(xml ("setOption";New object:C1471("selector";$1;"value";$2)));\
 		"toObject";Formula:C1597(xml ("toObject"));\
 		"setName";Formula:C1597(xml ("setName";New object:C1471("name";$1)));\
@@ -230,6 +232,18 @@ Else
 					
 					$o:=New object:C1471("attributes";xml_attributes ($o.elementRef);"success";True:C214)
 					  // use a level because could have an attribute named success...
+					
+					  //=================================================================
+				: ($1="getValue")
+					
+					DOM GET XML ELEMENT VALUE:C731($o.elementRef;$tt)  // HERE only text, variant will be better 
+					$o:=New object:C1471("success";Bool:C1537(OK);"value";$tt)
+					
+					  //=================================================================
+				: ($1="setValue")
+					
+					DOM SET XML ELEMENT VALUE:C868($o.elementRef;$2.value)
+					$o:=New object:C1471("success";Bool:C1537(OK))
 					
 					  //=================================================================
 				: ($1="setOption")
