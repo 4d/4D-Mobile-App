@@ -12,7 +12,7 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_buffer)
-C_LONGINT:C283($Lon_i;$Lon_ii;$Lon_parameters;$Lon_ids;$Lon_length)
+C_LONGINT:C283($Lon_i;$Lon_j;$Lon_parameters;$Lon_ids;$Lon_length)
 C_OBJECT:C1216($Dom_;$Dom_child;$Dom_root);
 C_TEXT:C284($Txt_buffer;$Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 C_OBJECT:C1216($File_;$Obj_color;$Obj_in;$Obj_out;$Obj_element;$Obj_table;$Obj_field;$Obj_tag;$Obj_storyboardID)
@@ -246,7 +246,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If ($Obj_element.dom#Null:C1517)
 						
-						$Obj_element.domParent:=$Obj_element.dom.parent()
+						$Obj_element.insertInto:=$Obj_element.dom.parent()
 						
 						$Lon_ids:=Num:C11($Obj_element.idCount)
 						
@@ -293,11 +293,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					If ($Obj_element.dom#Null:C1517)
 						
 						  // ... and table
-						$Lon_ii:=0
+						$Lon_j:=0
 						
 						For each ($Obj_table;$Obj_in.tags.navigationTables)
 							
-							$Lon_ii:=$Lon_ii+1  // pos
+							$Lon_j:=$Lon_j+1  // pos
 							
 							  // set tags
 							$Obj_in.tags.table:=$Obj_table
@@ -318,17 +318,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									  // ----------------------------------------
 								: $Obj_element.insertMode="append"
 									
-									$Dom_:=$Obj_element.domParent.append($Txt_buffer)
+									$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
 									
 									  // ----------------------------------------
 								: $Obj_element.insertMode="first"
 									
-									$Dom_:=$Obj_element.domParent.insertFirst($Txt_buffer)
+									$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
 									
 									  // ----------------------------------------
 								: $Obj_element.insertMode="iteration"
 									
-									$Dom_:=$Obj_element.domParent.insertAt($Txt_buffer;$Lon_ii)
+									$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
 									
 									  // ----------------------------------------
 							End case 
@@ -468,7 +468,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If ($Obj_element.dom#Null:C1517)
 							
-							$Obj_element.domParent:=$Obj_element.dom.parent()  // define where to insert
+							$Obj_element.insertInto:=$Obj_element.dom.parent()  // define where to insert
 							
 							  // - define id count allow to speed up and pass that
 							$Lon_ids:=Num:C11($Obj_element.idCount)
@@ -521,15 +521,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					  // 1- element
 					$Obj_element:=New object:C1471(\
 						"dom";xml ("load";COMPONENT_Pathname ("templates").folder("relation").file("storyboardButton.xml"));\
-						"idCount";2;\
+						"idCount";6;\
 						"tagInterfix";"RL";\
 						"insertMode";"append")
-					$Obj_element.domParent:=$Obj_in.template.elements[0].domParent  // #TO_DO 109516 : check domParent must be first main stackview, not random one element
+					$Obj_element.insertInto:=$Obj_in.template.elements[0].insertInto  // #TO_DO 109516 : check insertInto must be first main stackview, not random one element
 					$Obj_in.template.relationElements.push($Obj_element)
 					
 					  // 2- scene
 					$Obj_element:=New object:C1471(\
-						"domParent";$Dom_root.find("document/scenes");\
+						"insertInto";$Dom_root.find("document/scenes");\
 						"dom";xml ("load";COMPONENT_Pathname ("templates").folder("relation").file("storyboardScene.xml"));\
 						"idCount";3;\
 						"tagInterfix";"SN";\
@@ -545,31 +545,22 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					  // only one, TAG-SN-001 is from scene, the viewController to open on transition
 					
 					  // find the VC (XXX make a loop, a better xpath?)
-					$Obj_element.domParent:=$Dom_root.find("document/scenes/scene[2]/objects/viewController")
 					
-					If (Not:C34($Obj_element.domParent.success))
+					$Obj_element.insertInto:=$Dom_root.find("document/scenes/scene[2]/objects/viewController")
+					
+					If (Not:C34($Obj_element.insertInto.success))
 						
-						$Obj_element.domParent:=$Dom_root.find("document/scenes/scene[1]/objects/viewController")
+						$Obj_element.insertInto:=$Dom_root.find("document/scenes/scene[1]/objects/viewController")
 						
-						If (Not:C34($Obj_element.domParent.success))
+						If (Not:C34($Obj_element.insertInto.success))
 							
-							$Obj_element.domParent:=$Dom_root.find("document/scenes/scene[0]/objects/viewController")
+							$Obj_element.insertInto:=$Dom_root.find("document/scenes/scene[0]/objects/viewController")
 							
 						End if 
 					End if 
 					
-					If ($Obj_element.domParent.success)
-						
-						  // Find its <connections> children
-						$Obj_element.domConnections:=$Obj_element.domParent.find("connections")
-						
-						If (Not:C34($Obj_element.domConnections.success))
-							
-							$Obj_element.domConnections:=$Obj_element.domParent.create("connections")
-							
-						End if 
-						
-						$Obj_element.domParent:=$Obj_element.domConnections
+					If ($Obj_element.insertInto.success)
+						$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
 						$Obj_element.dom:=xml ("parse";New object:C1471(\
 							"variable";"<segue destination=\"TAG-SN-001\" kind=\"show\" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"))
 						$Obj_in.template.relationElements.push($Obj_element)
@@ -584,11 +575,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					  // START browser fields
 					
 					  // ... and fields
-					$Lon_ii:=Num:C11($Obj_in.template.fields.count)  // Start at first element, not in header
+					$Lon_j:=Num:C11($Obj_in.template.fields.count)  // Start at first element, not in header
 					
 					For each ($Obj_field;$Obj_in.tags.table.detailFields;Num:C11($Obj_in.template.fields.count))
 						
-						$Lon_ii:=$Lon_ii+1  // pos
+						$Lon_j:=$Lon_j+1  // pos
 						
 						  // Set tags:
 						  // - field
@@ -637,21 +628,19 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										  // ----------------------------------------
 									: $Obj_element.insertMode="append"
 										
-										$Dom_:=$Obj_element.domParent.append($Txt_buffer)
+										$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
 										
 										  // ----------------------------------------
 									: $Obj_element.insertMode="first"
 										
-										$Dom_:=$Obj_element.domParent.insertFirst($Txt_buffer)
+										$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
 										
 										  // ----------------------------------------
 									: $Obj_element.insertMode="iteration"
 										
-										$Dom_:=$Obj_element.domParent.insertAt($Txt_buffer;$Lon_ii)
+										$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
 										
 										  // ----------------------------------------
-										
-										  //----------------------------------------
 								End case 
 							End if 
 						End for each 
@@ -818,14 +807,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 												"customColorSpace";"sRGB"))
 											
 											  // ----------------------------------------
-											  //----------------------------------------
 										Else 
 											
 											ASSERT:C1129("Unknown color space "+$Obj_color.space)
 											
 											  // ----------------------------------------
-											
-											  //----------------------------------------
 									End case 
 								End if 
 							End if 
