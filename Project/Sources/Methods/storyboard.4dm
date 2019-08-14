@@ -185,6 +185,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			  //______________________________________________________
 		: ($Obj_in.action="navigation")
 			
+			$Obj_out.doms:=New collection:C1472()
+			
 			If ($Obj_in.template.storyboard=Null:C1517)
 				
 				$Obj_in.template.storyboard:=$Obj_in.template.parent[$Obj_in.action].storyboard
@@ -313,6 +315,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							$Txt_buffer:=$Obj_element.dom.export().variable
 							$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;$Obj_in.template.tagtypes)
 							
+							$Dom_:=Null:C1517
+							
 							Case of 
 									
 									  // ----------------------------------------
@@ -332,6 +336,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									
 									  // ----------------------------------------
 							End case 
+							
+							If ($Dom_#Null:C1517)
+								ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+							End if 
+							
+							$Obj_out.doms.push($Dom_)
+							
 						End for each 
 						
 						  // Remove originals template element
@@ -352,16 +363,19 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					"action";"format";\
 					"path";$File_))
 				
-				$Obj_out.success:=True:C214  // XXX maybe better error managing
+				$Obj_out.success:=True:C214  // XXX maybe better error managing, take into account all "doms"
 				
 			Else   // Not a document
 				
 				ASSERT:C1129(dev_Matrix ;"Missing "+$Obj_in.action+" storyboard")
+				$Obj_out.errors:=New collection:C1472("Missing "+$Obj_in.action+" storyboard")
 				
 			End if 
 			
 			  //______________________________________________________
 		: ($Obj_in.action="detailform")
+			
+			$Obj_out.doms:=New collection:C1472()
 			
 			If ($Obj_in.template.storyboard=Null:C1517)  // set default path if not defined
 				
@@ -623,6 +637,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;$Col_)
 								
 								  // Insert node for this element
+								$Dom_:=Null:C1517
 								Case of 
 										
 										  // ----------------------------------------
@@ -642,6 +657,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										
 										  // ----------------------------------------
 								End case 
+								
+								If ($Dom_#Null:C1517)
+									ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+								End if 
+								
+								$Obj_out.doms.push($Dom_)
+								
 							End if 
 						End for each 
 					End for each 
@@ -677,7 +699,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					$File_:=Folder:C1567($Obj_in.target;fk platform path:K87:2).file(Process_tags (String:C10($Obj_in.template.storyboard);$Obj_in.tags;New collection:C1472("filename")))
 					$File_.setText($Txt_buffer;"UTF-8";Document with CRLF:K24:20)
 					
-					storyboard (New object:C1471(\
+					$Obj_out.format:=storyboard (New object:C1471(\
 						"action";"format";\
 						"path";$File_))
 					
@@ -685,11 +707,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 				$Dom_root.close()
 				
-				$Obj_out.success:=True:C214
+				$Obj_out.success:=True:C214  // XXX maybe better error managing, take into account all "doms"
 				
 			Else   // Not a document
 				
 				ASSERT:C1129(dev_Matrix ;"Missing or not decodable "+$Obj_in.action+" storyboard")
+				
+				$Obj_out.errors:=New collection:C1472("Template "+$File_.path+" not decodable or available")
+				$Obj_out.success:=False:C215
 				
 			End if 
 			

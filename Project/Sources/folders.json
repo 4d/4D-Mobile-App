@@ -424,6 +424,7 @@
 			"COMPILER_ob",
 			"ob_deepMerge",
 			"ob_getByPath",
+			"ob_removeFormula",
 			"ob_removeProperty",
 			"ob_equal"
 		]

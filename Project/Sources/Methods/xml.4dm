@@ -99,7 +99,7 @@ If (This:C1470._is=Null:C1517)
 				
 			Else 
 				
-				$o.errors:=New collection:C1472("No valid file to load.")
+				$o.errors:=New collection:C1472("No valid file to load: "+String:C10($2.path))
 				
 			End if 
 			
@@ -111,6 +111,7 @@ If (This:C1470._is=Null:C1517)
 				  // TRY (
 				C_TEXT:C284($Txt_methodOnError)
 				$Txt_methodOnError:=Method called on error:C704
+				xml_ERROR:=0
 				ON ERR CALL:C155("xml_NO_ERROR")
 				
 				If (Value type:C1509($2.variable)=Is BLOB:K8:12)
@@ -138,6 +139,8 @@ If (This:C1470._is=Null:C1517)
 				ON ERR CALL:C155($Txt_methodOnError)
 				  // }
 				
+				$o.variable:=$2.variable
+				
 			Else 
 				
 				$o.errors:=New collection:C1472("No valid variable to parse.")
@@ -159,7 +162,7 @@ If (This:C1470._is=Null:C1517)
 					  //----------------------------------------
 				: ($t="00000000000000000000000000000000")
 					
-					$o.errors:=New collection:C1472("Invalid element. Not found")
+					$o.errors:=New collection:C1472("Invalid XML element.")
 					
 					  //----------------------------------------
 				Else 
@@ -193,13 +196,13 @@ Else
 			Case of 
 					
 					  //=================================================================
-				: ($1="close")
+				: ($1="close")  /// Close the current XML element
 					
 					DOM CLOSE XML:C722($o.elementRef)
 					$o.elementRef:=Null:C1517
 					
 					  //=================================================================
-				: ($1="save")
+				: ($1="save")  /// Save the current XML element to a `File`
 					
 					Case of 
 							
@@ -422,6 +425,7 @@ Else
 					  // TRY (
 					C_TEXT:C284($Txt_methodOnError)
 					$Txt_methodOnError:=Method called on error:C704
+					xml_ERROR:=0
 					ON ERR CALL:C155("xml_NO_ERROR")
 					
 					Case of 
@@ -472,13 +476,19 @@ Else
 					
 					  // } CATCH {
 					If (xml_ERROR#0)
-						$o.errors:=New collection:C1472("Failed to parse XML: "+String:C10(xml_ERROR))
+						$t:="00000000000000000000000000000000"  // we want to return a success false node, maybe use another... like blank
 					End if 
 					ON ERR CALL:C155($Txt_methodOnError)
 					  // }
 					
 					  //=================================================================
 				: ($1="insertAt")
+					
+					  // TRY (
+					C_TEXT:C284($Txt_methodOnError)
+					$Txt_methodOnError:=Method called on error:C704
+					xml_ERROR:=0
+					ON ERR CALL:C155("xml_NO_ERROR")
 					
 					Case of 
 							
@@ -526,6 +536,13 @@ Else
 							  //----------------------------------------
 					End case 
 					
+					  // } CATCH {
+					If (xml_ERROR#0)
+						$t:="00000000000000000000000000000000"  // we want to return a success false node, maybe use another... like blank
+					End if 
+					ON ERR CALL:C155($Txt_methodOnError)
+					  // }
+					
 					  //=================================================================
 				Else 
 					
@@ -552,8 +569,16 @@ Else
 			
 		End if 
 		
-		$o.errors.push(String:C10($1)+" failed")
-		
+		If (xml_ERROR#0)
+			  // } CATCH {
+			$o.errors:=New collection:C1472("Failed to parse XML: "+String:C10(xml_ERROR))
+			If ($2.element#Null:C1517)  // append/insert
+				$o.variable:=$2.element
+			End if 
+			  // }
+		Else 
+			$o.errors.push(String:C10($1)+" failed")
+		End if 
 	End if 
 End if 
 

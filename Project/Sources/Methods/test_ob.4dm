@@ -154,5 +154,20 @@ $o:=New object:C1471("uuid";"Generate UUID";"level";New collection:C1472(New obj
 $Obj_2:=ob_findProperty ($o;"dummy")
 ASSERT:C1129(Not:C34($Obj_2.success);"Must not found in collection")
 
+
+  // ======================================================================= ob_removeFormula
+
+$o:=New object:C1471("attribute";"value";"formula";Formula:C1597(1+1))
+ARRAY TEXT:C222($arrNames;0)
+ARRAY LONGINT:C221($arrTypes;0)
+OB GET PROPERTY NAMES:C1232($o;$arrNames;$arrTypes)
+ASSERT:C1129(Size of array:C274($arrNames)=2)
+
+ob_removeFormula ($o)
+OB GET PROPERTY NAMES:C1232($o;$arrNames;$arrTypes)
+ASSERT:C1129(Size of array:C274($arrNames)=1)
+ASSERT:C1129($o.attribute="value")
+ASSERT:C1129($o.formula=Null:C1517)
+
 FINALLY 
 
