@@ -604,13 +604,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						If (Num:C11($Obj_field.id)=0)  // relation to N field
 							
 							$Col_elements:=$Obj_in.template.relationElements
-							$Col_:=New collection:C1472("___TABLE___";"detailform";"storyboardID";"automatic")
-							$Obj_in.tags.name:=String:C10($Obj_field.relatedEntities)+"ListForm"  // XXX use maybe specific TAG name, not ___NAME___ to to make issue
 							
 						Else 
 							
 							$Col_elements:=$Obj_in.template.elements
-							$Col_:=New collection:C1472("___TABLE___";"detailform";"storyboardID")
 							
 						End if 
 						
@@ -634,7 +631,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 								  // Process tags on the element
 								$Txt_buffer:=$Obj_element.dom.export().variable
-								$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;$Col_)
+								$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
 								
 								  // Insert node for this element
 								$Dom_:=Null:C1517

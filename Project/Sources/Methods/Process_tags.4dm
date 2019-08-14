@@ -174,15 +174,15 @@ Case of   // According to type replace the tag
 		
 		$Txt_out:=Replace string:C233($Txt_out;"___MINIMUM_XCODE_VERSION___";String:C10($Obj_tags.xCodeVersion))
 		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"automatic")>0)
+	: (Find in array:C230($tTxt_types;"automatic")>0)  /// if pass a restricted tag object this add all keys
 		
 		For each ($Txt_buffer;$Obj_tags)
 			
 			Case of 
 				: (Value type:C1509($Obj_tags[$Txt_buffer])=Is collection:K8:32)
-					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";JSON Stringify:C1217($Obj_tags[$Txt_buffer]))
+					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";xml_encode (JSON Stringify:C1217($Obj_tags[$Txt_buffer])))
 				: (Value type:C1509($Obj_tags[$Txt_buffer])=Is object:K8:27)
-					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";JSON Stringify:C1217($Obj_tags[$Txt_buffer]))
+					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";xml_encode (JSON Stringify:C1217($Obj_tags[$Txt_buffer])))
 				Else 
 					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";String:C10($Obj_tags[$Txt_buffer]))
 			End case 
@@ -284,7 +284,12 @@ If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file p
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_BINDING_TYPE___";String:C10($Obj_tags.field.bindingType))
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_ICON___";xml_encode (String:C10($Obj_tags.field.detailIcon)))
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL_ALIGNMENT___";String:C10($Obj_tags.field.labelAlignment))
-				  // $Txt_out:=Replace string($Txt_out;$Txt_buffer+"_INVERSE___";String($Obj_tags.field.inverseName))  // if use field as relation, remove this line if use ($Obj_tags.relation#Null)
+				
+				If ($Obj_tags.field.id=Null:C1517)
+					  // $Txt_out:=Replace string($Txt_out;$Txt_buffer+"_INVERSE___";String($Obj_tags.field.inverseName))  // if use field as relation, remove this line if use ($Obj_tags.relation#Null)
+					$Txt_out:=Replace string:C233($Txt_out;"___DESTINATION___";formatString ("table-name";String:C10($Obj_tags.field.relatedEntities)+"ListForm"))  // ?? if isRelationToMany change check this line 
+					
+				End if 
 				
 			End if 
 			
