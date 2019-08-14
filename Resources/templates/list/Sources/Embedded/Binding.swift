@@ -19,7 +19,7 @@ extension UIImageView {
         get {
             return nil
         }
-        set { // swiflint:disable:this unused_setter_value
+        set { // swiftlint:disable:this unused_setter_value
             // customize behaviour when binding on nothing
             self.image = UIImage(named: "unbinded")
         }
@@ -34,7 +34,7 @@ extension UILabel {
         get {
             return nil
         }
-        set { // swiflint:disable:this unused_setter_value
+        set { // swiftlint:disable:this unused_setter_value
             // customize behaviour when binding on nothing
             // by default text is removed
             self.text = ""
