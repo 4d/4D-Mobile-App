@@ -15,7 +15,7 @@
   // Declarations
 C_COLLECTION:C1488($1)
 
-C_BOOLEAN:C305($Boo_unsynchronized;$Boo_unsynchronizedField;$Boo_unsynchronizedTable)
+C_BOOLEAN:C305($Boo__unsynchronized;$Boo_unsynchronizedField;$Boo_unsynchronizedTable)
 C_LONGINT:C283($Lon_fieldIndx;$Lon_fieldNumber;$Lon_indx;$Lon_parameters;$Lon_relatedTableIndx;$Lon_tableIndx)
 C_LONGINT:C283($Lon_tableNumber;$Win_current)
 C_TEXT:C284($File_cache;$t;$Txt_digest;$Txt_tableNumber)
@@ -132,14 +132,13 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 									$oo:=$Obj_tableModel[$t]
 									
 									$c:=$Col_catalog[$Lon_tableIndx].field.query("fieldNumber = :1";$Lon_fieldNumber)
-									$Boo_unsynchronized:=$c.length=0  // True if field doesn't exist anymore
+									  //$Boo__unsynchronized:=($c.length=0)  // True if field doesn't exist anymore
+									$Boo_unsynchronizedField:=($c.length=0)  // True if field doesn't exist anymore
 									
 									If (Not:C34($Boo_unsynchronizedField))
 										
 										  // Check field name & type
-										$Boo_unsynchronizedField:=_or (\
-											Formula:C1597($oo.name#$c[0].name);\
-											Formula:C1597($oo.fieldType#$c[0].fieldType))
+										$Boo_unsynchronizedField:=($oo.name#$c[0].name) | ($oo.fieldType#$c[0].fieldType)
 										
 									End if 
 									
@@ -191,9 +190,7 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 														If (Not:C34($Boo_unsynchronizedField))
 															
 															  // Check field name & type
-															$Boo_unsynchronizedField:=_or (\
-																Formula:C1597($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name);\
-																Formula:C1597($oo[$t].fieldType#$Obj_relatedDataClass.field[$Lon_fieldIndx].fieldType))
+															$Boo_unsynchronizedField:=($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name) | ($oo[$t].fieldType#$Obj_relatedDataClass.field[$Lon_fieldIndx].fieldType)
 															
 														End if 
 														
@@ -273,7 +270,7 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 				
 				If ($Boo_unsynchronizedTable)
 					
-					$Boo_unsynchronized:=True:C214
+					$Boo__unsynchronized:=True:C214
 					$Col_unsynchronizedTableFields[$Lon_tableNumber]:=$Col_unsynchronizedFields  // Empty collection if the table is no more available
 					
 				End if 
@@ -281,7 +278,7 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 			End for each 
 		End if 
 		
-		If ($Boo_unsynchronized)
+		If ($Boo__unsynchronized)
 			
 			  // Display alert only one time
 			If (Not:C34(editor_Locked ))
@@ -344,7 +341,7 @@ Else
 End if 
 
   // Keep the current structure
-If (Not:C34($Boo_unsynchronized))\
+If (Not:C34($Boo__unsynchronized))\
  | (Form:C1466.$catalog=Null:C1517)
 	
 	Form:C1466.$catalog:=$Col_catalog
@@ -352,16 +349,16 @@ If (Not:C34($Boo_unsynchronized))\
 End if 
 
   // Store the status
-Form:C1466.structure.unsynchronized:=$Boo_unsynchronized
+Form:C1466.structure.unsynchronized:=$Boo__unsynchronized
 
 If (Form:C1466.status=Null:C1517)
 	
 	Form:C1466.status:=New object:C1471(\
-		"dataModel";Not:C34($Boo_unsynchronized))
+		"dataModel";Not:C34($Boo__unsynchronized))
 	
 Else 
 	
-	Form:C1466.status.dataModel:=Not:C34($Boo_unsynchronized)
+	Form:C1466.status.dataModel:=Not:C34($Boo__unsynchronized)
 	
 End if 
 

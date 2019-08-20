@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="126">
+﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="127">
 	<com.4d>
 		<deployment>
 			<options/>
@@ -29,7 +29,7 @@
 						<host id="0" name="default"/>
 					</hosts>
 				</configuration>
-				<rest launch_at_startup="false"/>
+				<rest/>
 				<webservices>
 					<server name="A_WebService"/>
 				</webservices>

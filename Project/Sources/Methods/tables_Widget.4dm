@@ -62,7 +62,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-$svg:=svg   //.attributes(New object("viewport-fill";"none"))
+$svg:=svg 
 
 If ($Obj_dataModel#Null:C1517)
 	

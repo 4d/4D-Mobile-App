@@ -204,135 +204,144 @@ If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
 									If ($Obj_in.target=$Obj_in.form.fieldList)
 										
 										$l:=$Obj_table.field.extract("name").indexOf((ui.pointer($Obj_in.form.fields))->{$Lon_row})
-										$Obj_field:=$Obj_table.field[$l]
 										
-										$l:=$Col_catalog.extract("tableNumber").indexOf($Obj_table.tableNumber)
-										$c:=$Col_catalog[$l].field
-										
-										Case of 
-												
-												  //______________________________________________________
-											: ($Obj_field.type=-1)  // N -> 1 relation
-												
-												$l:=$Col_catalog.extract("tableNumber").indexOf($Obj_field.relatedTableNumber)
-												
-												If ($l=-1)  // Not found into the current catalog
+										If ($l#-1)
+											
+											$Obj_field:=$Obj_table.field[$l]
+											
+											$l:=$Col_catalog.extract("tableNumber").indexOf($Obj_table.tableNumber)
+											$c:=$Col_catalog[$l].field
+											
+											Case of 
 													
-													$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedTableNameIsNoLongerAvailable";$Obj_field.relatedDataClass))
+													  //______________________________________________________
+												: ($Obj_field.type=-1)  // N -> 1 relation
 													
-												Else 
+													$l:=$Col_catalog.extract("tableNumber").indexOf($Obj_field.relatedTableNumber)
 													
-													If (str_equal ($Obj_field.relatedDataClass;$Col_catalog[$l].name))
+													If ($l=-1)  // Not found into the current catalog
 														
-														  // Check related datamodel
-														$l:=$Col_catalog.extract("name").indexOf($Obj_field.relatedDataClass)
-														
-														If ($l=-1)
-															
-															$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedTableNameIsNoLongerAvailable";$Obj_field.relatedDataClass))
-															
-														Else 
-															
-															$Obj_dataModel:=Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][$Obj_field.name]
-															
-															$l:=$Col_catalog.extract("tableNumber").indexOf($Obj_field.relatedTableNumber)
-															$Col_fields:=$Col_catalog[$l].field
-															
-															If ($Obj_dataModel#Null:C1517)
-																
-																$c:=New collection:C1472
-																
-																For each ($t;$Obj_dataModel)
-																	
-																	Case of 
-																			
-																			  //…………………………………………………………………………………………
-																		: (Match regex:C1019("(?m-si)^\\d+$";$t;1;*))  // fieldNumber
-																			
-																			If ($Col_fields.extract("id").indexOf(Num:C11($t))=-1)
-																				
-																				$c.push($Obj_dataModel[$t].name)
-																				
-																			Else 
-																				
-																				  //
-																				
-																			End if 
-																			
-																			  //…………………………………………………………………………………………
-																		: ((Value type:C1509($Obj_relatedDataClass[$t])#Is object:K8:27))
-																			
-																			  // <NOTHING MORE TO DO>
-																			
-																			  //…………………………………………………………………………………………
-																		Else 
-																			
-																			  // NOT YET MANAGED
-																			
-																			  //…………………………………………………………………………………………
-																	End case 
-																End for each 
-																
-																If ($c.length>0)
-																	
-																	If ($c.length=1)
-																		
-																		$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedFieldNameIsNoLongerAvailable";$c[0]))
-																		
-																	Else 
-																		
-																		  // Include list
-																		$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedFieldsNamesAreNoLongerAvailable";$c.join(", ")))
-																		
-																	End if 
-																End if 
-																
-															Else 
-																
-																$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelationNameIsNoLongerAvailable";$Obj_field.name))
-																
-															End if 
-														End if 
+														$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedTableNameIsNoLongerAvailable";$Obj_field.relatedDataClass))
 														
 													Else 
 														
-														$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedTableOldWasRenamedToNew";$Obj_field.relatedDataClass;$Col_catalog[$l].name))
-														
+														If (str_equal ($Obj_field.relatedDataClass;$Col_catalog[$l].name))
+															
+															  // Check related datamodel
+															$l:=$Col_catalog.extract("name").indexOf($Obj_field.relatedDataClass)
+															
+															If ($l=-1)
+																
+																$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedTableNameIsNoLongerAvailable";$Obj_field.relatedDataClass))
+																
+															Else 
+																
+																$Obj_dataModel:=Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][$Obj_field.name]
+																
+																$l:=$Col_catalog.extract("tableNumber").indexOf($Obj_field.relatedTableNumber)
+																$Col_fields:=$Col_catalog[$l].field
+																
+																If ($Obj_dataModel#Null:C1517)
+																	
+																	$c:=New collection:C1472
+																	
+																	For each ($t;$Obj_dataModel)
+																		
+																		Case of 
+																				
+																				  //…………………………………………………………………………………………
+																			: (Match regex:C1019("(?m-si)^\\d+$";$t;1;*))  // fieldNumber
+																				
+																				If ($Col_fields.extract("id").indexOf(Num:C11($t))=-1)
+																					
+																					$c.push($Obj_dataModel[$t].name)
+																					
+																				Else 
+																					
+																					  //
+																					
+																				End if 
+																				
+																				  //…………………………………………………………………………………………
+																			: ((Value type:C1509($Obj_relatedDataClass[$t])#Is object:K8:27))
+																				
+																				  // <NOTHING MORE TO DO>
+																				
+																				  //…………………………………………………………………………………………
+																			Else 
+																				
+																				  // NOT YET MANAGED
+																				
+																				  //…………………………………………………………………………………………
+																		End case 
+																	End for each 
+																	
+																	If ($c.length>0)
+																		
+																		If ($c.length=1)
+																			
+																			$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedFieldNameIsNoLongerAvailable";$c[0]))
+																			
+																		Else 
+																			
+																			  // Include list
+																			$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedFieldsNamesAreNoLongerAvailable";$c.join(", ")))
+																			
+																		End if 
+																	End if 
+																	
+																Else 
+																	
+																	$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelationNameIsNoLongerAvailable";$Obj_field.name))
+																	
+																End if 
+															End if 
+															
+														Else 
+															
+															$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedTableOldWasRenamedToNew";$Obj_field.relatedDataClass;$Col_catalog[$l].name))
+															
+														End if 
 													End if 
-												End if 
-												
-												  //______________________________________________________
-											Else 
-												
-												$l:=$c.extract("id").indexOf($Obj_field.id)
-												
-												Case of 
-														
-														  //……………………………………………………………………………………………………………………
-													: ($l=-1)  // Not found into the current catalog
-														
-														$Txt_tips:=ui.alert+str_localized (New collection:C1472("theFieldNameIsNoLongerAvailable";$Obj_field.name))
-														
-														  //……………………………………………………………………………………………………………………
-													: ($Obj_field.type#$c[$l].type)  // Type mismatch
-														
-														$Txt_tips:=ui.alert+Get localized string:C991("theFieldTypeWasModified")
-														
-														  //……………………………………………………………………………………………………………………
-													: ($Obj_field.name#$c[$l].name)  // Name mismatch
-														
-														$Txt_tips:=ui.alert+str_localized (New collection:C1472("theFieldOldWasRenamedToNew";$Obj_field.name;$c[$l].name))
-														
-														  //……………………………………………………………………………………………………………………
-													Else   // Field is OK
-														
-														  // <NOTHING MORE TO DO>
-														
-														  //……………………………………………………………………………………………………………………
-												End case 
-												
-												  //______________________________________________________
-										End case 
+													
+													  //______________________________________________________
+												Else 
+													
+													$l:=$c.extract("id").indexOf($Obj_field.id)
+													
+													Case of 
+															
+															  //……………………………………………………………………………………………………………………
+														: ($l=-1)  // Not found into the current catalog
+															
+															$Txt_tips:=ui.alert+str_localized (New collection:C1472("theFieldNameIsNoLongerAvailable";$Obj_field.name))
+															
+															  //……………………………………………………………………………………………………………………
+														: ($Obj_field.type#$c[$l].type)  // Type mismatch
+															
+															$Txt_tips:=ui.alert+Get localized string:C991("theFieldTypeWasModified")
+															
+															  //……………………………………………………………………………………………………………………
+														: ($Obj_field.name#$c[$l].name)  // Name mismatch
+															
+															$Txt_tips:=ui.alert+str_localized (New collection:C1472("theFieldOldWasRenamedToNew";$Obj_field.name;$c[$l].name))
+															
+															  //……………………………………………………………………………………………………………………
+														Else   // Field is OK
+															
+															  // <NOTHING MORE TO DO>
+															
+															  //……………………………………………………………………………………………………………………
+													End case 
+													
+													  //______________________________________________________
+											End case 
+											
+										Else 
+											
+											  // A "If" statement should never omit "Else" 
+											
+										End if 
 									End if 
 								End if 
 							End if 

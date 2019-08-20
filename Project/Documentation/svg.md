@@ -35,7 +35,7 @@ _svgObject_ [object] := ***svg*** {(_param_ [text] { ; _options_ [object] } )}
 *latest*     | The XML reference of the last created object using a creation member method                    | Null
 *success*    | A boolean that indicates whether a member method call was successfully executed                |
 *errors*     | A collection of textual descriptions of encountered errors                                     | [ ]
-*autoClose*  | A boolean that indicates whether the xml tree should be closed a `get()` or `save()` call      | True 
+*autoClose*  | A boolean that indicates whether the xml tree should be closed after a call to one of the `getPicture ()`, `getText ()`, `savePicture ()`, `saveText ()`, or `save ()` member methods      | True 
 *picture*    | The image generated of the last `get ("picture")` call                                         | Null
 *xml*        | The XML text generated from the last `get ("xml")` call                                        | Null
 *origin*     | The object pathname of a file initially loaded                                                 | Null
@@ -80,7 +80,7 @@ _svgObject_ [object] := ***svg*** {(_param_ [text] { ; _options_ [object] } )}
 -------------      |-------------
 `savePicture()`    | Save the SVG structure as `picture` file (Also populates the *picture* property if success).
 `saveText()`       | Save the SVG structure as `text` file (Also populates the *xml* property if success).
-`save()`           | Save the SVG structure into the loaded file (Also populates the *picture* or *xml* property if success).
+`save()`           | Saves the SVG into the initially loaded file or the last created file by calling `savePicture()`or `saveText()`member methods (Also populates the *picture* or *xml* property if success).
 `close()`          | Releases the XML tree from the memory.
 
 

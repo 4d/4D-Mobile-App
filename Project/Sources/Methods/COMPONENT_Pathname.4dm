@@ -77,7 +77,7 @@ Case of
 		  //______________________________________________________
 	: ($Txt_target="host")  // 'mobile' folder
 		
-		$o:=Folder:C1567(fk resources folder:K87:11;*)
+		$o:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16;*);fk platform path:K87:2)
 		
 		If ($o.file("mobile").exists)  // Could be an alias
 			
