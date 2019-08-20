@@ -51,6 +51,7 @@ If (This:C1470._is=Null:C1517)
 		"setOption";Formula:C1597(xml ("setOption";New object:C1471("selector";$1;"value";$2)));\
 		"toObject";Formula:C1597(xml ("toObject"));\
 		"setName";Formula:C1597(xml ("setName";New object:C1471("name";$1)));\
+		"getName";Formula:C1597(xml ("getName"));\
 		"remove";Formula:C1597(xml ("remove"));\
 		"export";Formula:C1597(xml ("export"));\
 		"save";Formula:C1597(xml ("save";$1));\
@@ -240,6 +241,13 @@ Else
 				: ($1="setName")
 					
 					DOM SET XML ELEMENT NAME:C867($o.elementRef;$2.name)
+					$o.success:=Bool:C1537(OK)
+					
+					  //=================================================================
+				: ($1="getName")
+					
+					DOM GET XML ELEMENT NAME:C730($o.elementRef;$tt)
+					$o.name:=$tt
 					$o.success:=Bool:C1537(OK)
 					
 					  //=================================================================

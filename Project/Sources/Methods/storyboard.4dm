@@ -544,7 +544,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						"idCount";6;\
 						"tagInterfix";"RL";\
 						"insertMode";"append")
-					$Obj_element.insertInto:=$Obj_in.template.elements[0].insertInto  // #TO_DO 109516 : check insertInto must be first main stackview, not random one element
+					  // Must be inserted into a stack view (with a subviews as intermediate)
+					C_OBJECT:C1216($Obj_)
+					For each ($Obj_;$Obj_in.template.elements) Until ($Obj_element.insertInto#Null:C1517)
+						If ($Obj_.insertInto.parent().getName().name="stackView")
+							$Obj_element.insertInto:=$Obj_.insertInto
+						End if 
+					End for each 
 					$Obj_in.template.relationElements.push($Obj_element)
 					
 					  // 2- scene
@@ -989,6 +995,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					If (Asserted:C1132(Ok=1;"LEP failed: "+$Txt_cmd))
 						
 						$Obj_out.success:=True:C214
+						$File_.delete()  // delete temporary file
 						
 						If (Length:C16($Txt_out)>0)
 							
@@ -997,7 +1004,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							$Obj_out:=plist (New object:C1471(\
 								"action";"object";\
 								"domain";$File_.path))
-							$File_.delete()
+							$File_.delete()  // delete temporary file
 							
 							If (($Obj_out.success)\
 								 & ($Obj_out.value#Null:C1517))
@@ -1040,6 +1047,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					  // ----------------------------------------
 				Else 
 					
+					$File_.delete()  // delete temporary file
 					$Obj_out.errors:=New collection:C1472("path do not exist")
 					
 					  // ----------------------------------------
