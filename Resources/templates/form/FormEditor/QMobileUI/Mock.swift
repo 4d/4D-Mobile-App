@@ -43,7 +43,7 @@ public class Record: NSObject {
 
 public extension UIView {
 
-    public var bindTo: BindTo {
+    var bindTo: BindTo {
         return BindTo(record: Record(store: [:]))
     }
 }
