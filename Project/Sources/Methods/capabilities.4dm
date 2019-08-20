@@ -341,6 +341,13 @@ Case of
 			End if 
 		End if 
 		
+		If (Bool:C1537($Obj_in.signInWithOS))
+			
+			$Obj_out.entitlements.push(New object:C1471(\
+				"com.apple.developer.applesignin";New collection:C1472("Default")))
+			
+		End if 
+		
 		If (Bool:C1537($Obj_in.map))
 			
 			$Obj_out.info.push(New object:C1471(\

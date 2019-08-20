@@ -1,0 +1,8 @@
+{
+  "type": "login",
+  "name": "signinwithapple",
+  "inject": true,
+  "capabilities": {
+        "signInWithOS": true
+    }
+}
