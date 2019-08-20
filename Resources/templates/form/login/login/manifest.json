@@ -1,0 +1,5 @@
+{
+  "type": "login",
+  "name": "login",
+  "inject": true
+}

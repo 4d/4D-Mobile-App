@@ -1,4 +1,7 @@
 {
-  "name": "login",
-  "inject": true
+	"name": "login",
+	"type": "choice",
+	"default": "login",
+	"tag": "loginType",
+    "storyboard": "Sources/Forms/Login/LoginForm.storyboard"
 }
