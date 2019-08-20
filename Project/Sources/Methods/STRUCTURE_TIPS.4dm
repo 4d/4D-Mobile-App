@@ -14,7 +14,7 @@ C_OBJECT:C1216($1)
 C_LONGINT:C283($l;$Lon_field;$Lon_fieldNumber;$Lon_parameters;$Lon_row;$Lon_tableNumber)
 C_LONGINT:C283($Lon_x;$Lon_y)
 C_TEXT:C284($t;$Txt_;$Txt_name;$Txt_tips)
-C_OBJECT:C1216($Obj_dataModel;$Obj_field;$Obj_in;$Obj_relatedDataClass;$Obj_table)
+C_OBJECT:C1216($Obj_dataModel;$Obj_field;$Obj_form;$Obj_in;$Obj_relatedDataClass;$Obj_table)
 C_COLLECTION:C1488($c;$Col_catalog;$Col_desynchronized;$Col_fields)
 
 If (False:C215)
@@ -45,6 +45,8 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 		
 	End if 
 	
+	$Obj_form:=$Obj_in.form
+	
 Else 
 	
 	ABORT:C156
@@ -69,11 +71,11 @@ If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
 		
 		$Col_catalog:=editor_Catalog 
 		
-		$l:=Find in array:C230((ui.pointer($Obj_in.form.tableList))->;True:C214)
+		$l:=Find in array:C230((ui.pointer($Obj_form.tableList))->;True:C214)
 		
 		If ($l#-1)
 			
-			$t:=(ui.pointer($Obj_in.form.tables))->{$l}  // Table name
+			$t:=(ui.pointer($Obj_form.tables))->{$l}  // Table name
 			$l:=$Col_catalog.extract("name").indexOf($t)
 			
 			If ($l#-1)
@@ -115,7 +117,7 @@ If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
 									  //                                 TABLE LIST
 									  //======================================================================
 									
-									If ($Obj_in.target=$Obj_in.form.tableList)
+									If ($Obj_in.target=$Obj_form.tableList)
 										
 										If ($Col_desynchronized.length=1)
 											
@@ -201,9 +203,9 @@ If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
 									  //                               FIELD LIST
 									  //======================================================================
 									
-									If ($Obj_in.target=$Obj_in.form.fieldList)
+									If ($Obj_in.target=$Obj_form.fieldList)
 										
-										$l:=$Obj_table.field.extract("name").indexOf((ui.pointer($Obj_in.form.fields))->{$Lon_row})
+										$l:=$Obj_table.field.extract("name").indexOf((ui.pointer($Obj_form.fields))->{$Lon_row})
 										
 										If ($l#-1)
 											
@@ -339,23 +341,74 @@ If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
 											
 										Else 
 											
-											  // A "If" statement should never omit "Else" 
+											  // A "If" statement should never omit "Else"
 											
 										End if 
 									End if 
 								End if 
 							End if 
 							
-						Else   // Table catalog is OK
+						Else 
 							
-							  // <NOTHING MORE TO DO>
+							  // Table catalog is OK - Display useful informations if any
 							
+							$Obj_dataModel:=Form:C1466.dataModel
+							
+							Case of 
+									
+									  //______________________________________________________
+								: ($Obj_in.target=$Obj_form.fieldList)
+									
+									$Obj_field:=$Obj_table.field[$Lon_row-1]
+									
+									Case of 
+											
+											  //…………………………………………………………………………………………………
+										: ($Obj_field.type=-1)  // N -> 1 relation
+											
+											  // Display related dataclass name
+											$Txt_tips:=str_localized (New collection:C1472("linkedTable";$Obj_field.relatedDataClass))
+											
+											  //…………………………………………………………………………………………………
+										: ($Obj_field.type=-2)  // 1 -> N relation
+											
+											If ($Obj_dataModel[String:C10($Obj_field.relatedTableNumber)]=Null:C1517)
+												
+												If (Bool:C1537((ui.pointer($Obj_form.published))->{$Lon_row}))
+													
+													  // Display error
+													$Txt_tips:=ui.alert+str_localized (New collection:C1472("theLinkedTableIsNotPublished";$Obj_field.relatedDataClass))
+													
+												Else 
+													
+													  // Display related dataclass name and unpublished status
+													$Txt_tips:=ui.warning+str_localized (New collection:C1472("linkedTable";$Obj_field.relatedDataClass;" ("+Get localized string:C991("unpublished")+")"))
+													
+												End if 
+												
+											Else 
+												
+												  // Display related dataclass name
+												$Txt_tips:=str_localized (New collection:C1472("linkedTable";$Obj_field.relatedDataClass))
+												
+											End if 
+											
+											  //…………………………………………………………………………………………………
+									End case 
+									
+									  //______________________________________________________
+							End case 
 						End if 
 					End if 
 				End if 
 			End if 
 		End if 
 	End if 
+	
+Else 
+	
+	  // No unsynchronized Table or Field
+	
 End if 
 
 OBJECT SET HELP TIP:C1181(*;$Obj_in.target;$Txt_tips)

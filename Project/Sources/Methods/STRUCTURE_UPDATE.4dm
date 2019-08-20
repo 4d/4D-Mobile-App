@@ -305,6 +305,13 @@ Else
 	End if 
 End if 
 
+  // Update field list
+structure_FIELD_LIST ($Obj_form)
+
+STRUCTURE_TIPS (New object:C1471(\
+"target";$Obj_form.fieldList;\
+"form";$Obj_form))
+
   // Save project
 ui.saveProject()
 

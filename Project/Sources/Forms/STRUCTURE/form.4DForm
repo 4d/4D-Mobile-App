@@ -13,7 +13,7 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "method.4dm",
+	"method": "STRUCTURE_Handler",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -33,7 +33,7 @@
 					"shortcutAccel": true,
 					"text": "⌘ f",
 					"focusable": false,
-					"method": "ObjectMethods/search.shortcut.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					]
@@ -48,10 +48,15 @@
 					"shortcutKey": " ",
 					"text": "space",
 					"focusable": false,
-					"method": "ObjectMethods/space.shortcut.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
-					]
+					],
+					"shortcutAccel": true,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"display": true
 				}
 			}
 		},
@@ -84,7 +89,7 @@
 					"horizontalLineStroke": "transparent",
 					"verticalLineStroke": "transparent",
 					"borderStyle": "none",
-					"method": "ObjectMethods/01_tables.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick",
 						"onLosingFocus",
@@ -131,7 +136,7 @@
 					"iconFrames": 4,
 					"popupPlacement": "linked",
 					"style": "custom",
-					"method": "ObjectMethods/action.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					]
@@ -148,7 +153,7 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"method": "ObjectMethods/search.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onLosingFocus",
 						"onGettingFocus"
@@ -180,7 +185,7 @@
 					"horizontalLineStroke": "transparent",
 					"verticalLineStroke": "transparent",
 					"borderStyle": "none",
-					"method": "ObjectMethods/02_fields.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick",
 						"onLosingFocus",
@@ -205,7 +210,7 @@
 							"events": [
 								"onDataChange"
 							],
-							"method": "ObjectMethods/published.4dm",
+							"method": "STRUCTURE_OBJECTS_HANDLER",
 							"header": {
 								"name": "Header1"
 							},
@@ -297,7 +302,7 @@
 					"multiline": "no",
 					"dragging": "none",
 					"dropping": "none",
-					"method": "ObjectMethods/tables.filter.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					]
@@ -320,7 +325,7 @@
 					"multiline": "no",
 					"dragging": "none",
 					"dropping": "none",
-					"method": "ObjectMethods/fields.filter.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					]
@@ -334,7 +339,7 @@
 					"dataSource": "Form:C1466.allowStructureAdjustments",
 					"text": ":xliff:allowToMakeTheStructureAdjustments",
 					"stroke": "#696969",
-					"method": "ObjectMethods/allowStructureAjustment.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					]
@@ -346,7 +351,7 @@
 					"width": 22,
 					"height": 22,
 					"style": "help",
-					"method": "ObjectMethods/allowStructureAjustment.help.4dm",
+					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					]
