@@ -106,9 +106,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If ($Obj_out.format#Null:C1517)
 						
-						$Obj_out.bindingType:=Choose:C955(Length:C16(String:C10($Obj_out.format.binding))>0;\
-							String:C10($Obj_out.format.binding)+","+String:C10($Obj_out.format.name);\
-							String:C10($Obj_out.format.name))
+						If ((Length:C16(String:C10($Obj_out.format.binding))=0) | (String:C10($Obj_out.format.binding)=String:C10($Obj_out.format.name)))
+							
+							$Obj_out.bindingType:=String:C10($Obj_out.format.name)
+							
+						Else 
+							
+							$Obj_out.bindingType:=String:C10($Obj_out.format.binding)+","+String:C10($Obj_out.format.name)
+							
+						End if 
 						
 						$Obj_out.success:=True:C214
 						
