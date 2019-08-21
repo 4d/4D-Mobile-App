@@ -423,7 +423,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  //                                                             | 17R6 |
 	  // ________________________________________________________________________________________________________________________________
 	featuresFlags._105413:=($Lon_version>=1760)  //  [MOBILE] Actions with parameters
-	featuresFlags.parameterListOfValues>=1760  //     Manage field formatters as list of values for parameters
+	featuresFlags.parameterListOfValues:=featuresFlags._105413  //     Manage field formatters as list of values for parameters
 	featuresFlags.allowPictureAsActionParameters:=featuresFlags._105413  // #107932 - [Mobile] Allow to use picture as action parameters
 	
 	  // ________________________________________________________________________________________________________________________________
