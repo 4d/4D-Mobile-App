@@ -144,7 +144,7 @@ Case of
 	: ($Obj_in.action="init")
 		
 		  // Return the form objects definition
-		$Obj_out:=$Obj_form
+		$0:=$Obj_form
 		
 		  //=========================================================
 	: ($Obj_in.action="tableList")
@@ -271,7 +271,7 @@ Case of
 		
 		$c:=$Obj_context.catalog().query("tableNumber = :1";$Obj_table.tableNumber)
 		
-		$Obj_out:=New object:C1471(\
+		$0:=New object:C1471(\
 			"name";$c[0].name;\
 			"label";formatString ("label";$c[0].name);\
 			"shortLabel";formatString ("label";$c[0].name);\
@@ -287,7 +287,7 @@ Case of
 		$l:=Find in array:C230((ui.pointer($Obj_form.tableList))->;True:C214)
 		LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$l;Bold:K14:2)
 		
-		ob_createPath (Form:C1466;"dataModel").dataModel[String:C10($Obj_table.tableNumber)]:=$Obj_out
+		ob_createPath (Form:C1466;"dataModel").dataModel[String:C10($Obj_table.tableNumber)]:=$0
 		
 		  //=========================================================
 	: ($Obj_in.action="geometry")
@@ -410,7 +410,7 @@ End case
 
   // ----------------------------------------------------
   // Return
-$0:=$Obj_out
+  //$0:=$Obj_out
 
   // ----------------------------------------------------
   // End
