@@ -424,7 +424,8 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	featuresFlags._105413:=($Lon_version>=1760)  //  [MOBILE] Actions with parameters
 	featuresFlags.parameterListOfValues:=True:C214  //     Manage field formatters as list of values for parameters
-	
+	featuresFlags.allowPictureAsActionParameters:=featuresFlags._105413  // #107932 - [Mobile] Allow to use picture as action parameters
+
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  18  |
 	  // ________________________________________________________________________________________________________________________________
@@ -436,7 +437,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags._98145:=($Lon_version>=1750)  //                   Replace, for data structure access, EXPORT STRUCTURE by ds
 	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
 	
-	featuresFlags.allowPictureAsActionParameters:=featuresFlags._8858  // #107932 - [Mobile] Allow to use picture as action parameters
+	
 	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
 	
 End if 
