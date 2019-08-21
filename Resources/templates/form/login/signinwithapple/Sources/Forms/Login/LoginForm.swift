@@ -33,10 +33,21 @@ open class LoginForm: QMobileUI.LoginForm {
     
     func setupSOAppleSignIn() {
         let btnAuthorization = ASAuthorizationAppleIDButton()
-        btnAuthorization.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
-        btnAuthorization.center = self.view.center
+        btnAuthorization.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        btnAuthorization.cornerRadius = 22
+        
         btnAuthorization.addTarget(self, action: #selector(actionHandleAppleSignin), for: .touchUpInside)
         self.view.addSubview(btnAuthorization)
+        
+        btnAuthorization.translatesAutoresizingMaskIntoConstraints = false
+        if let seperatorView = self.view.viewWithTag(539), let loginView = self.view.viewWithTag(109) {
+            NSLayoutConstraint.activate([
+                btnAuthorization.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                btnAuthorization.bottomAnchor.constraint(equalTo: seperatorView.topAnchor, constant: -10),
+                btnAuthorization.widthAnchor.constraint(equalTo: loginView.widthAnchor),
+                btnAuthorization.heightAnchor.constraint(equalTo: loginView.heightAnchor)
+            ])
+        }
     }
     
     private func performExistingAccountSetupFlows() {

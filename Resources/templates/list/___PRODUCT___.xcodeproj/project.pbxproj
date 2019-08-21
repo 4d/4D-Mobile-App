@@ -588,6 +588,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "___PRODUCT___.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"DEBUG_INFORMATION_FORMAT[sdk=*]" = "dwarf-with-dsym";
 				"DEBUG_INFORMATION_FORMAT[sdk=iphonesimulator*]" = dwarf;
@@ -621,6 +622,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "___PRODUCT___.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "___DEVELOPMENT_TEAM___";
 				ENABLE_BITCODE = "___ENABLE_BITCODE___";
@@ -693,7 +695,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "___PRODUCT_BUNDLE_IDENTIFIER___";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = ___SWIFT_VERSION___;
+				SWIFT_VERSION = "___SWIFT_VERSION___";
 				TARGETED_DEVICE_FAMILY = "___TARGETED_DEVICE_FAMILY___";
 				TEST_TARGET_NAME = "___PRODUCT___";
 			};
