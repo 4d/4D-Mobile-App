@@ -267,7 +267,6 @@ If ($Lon_row>0)
 								
 								LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;Size of array:C274($Ptr_fields->);lk inherited:K53:26;lk font color:K53:24)
 								
-								
 							End if 
 							
 							  //…………………………………………………………………………
@@ -282,6 +281,13 @@ If ($Lon_row>0)
 							$Boo_error:=(Find in array:C230($tLon_fieldID;$Obj_field.id)>0) | ($tLon_fieldID{0}=-1)
 							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;Size of array:C274($Ptr_fields->);Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
 							
+							If ($Obj_field.name=$Obj_table.primaryKey)
+								
+								  // Highlight primary key
+								LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;Size of array:C274($Ptr_fields->);Bold:K14:2)
+								
+							End if 
+							
 							  //…………………………………………………………………………
 					End case 
 				End for each 
@@ -294,6 +300,7 @@ End if
   // Disable field publication if the table is missing
 OBJECT SET ENTERABLE:C238($Ptr_published->;Not:C34(editor_Locked ))
 
+ASSERT:C1129(Not:C34(Shift down:C543))
   // Sort if any
 If ($Obj_context.fieldSortByName)
 	

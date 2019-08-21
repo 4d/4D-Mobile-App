@@ -62,6 +62,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 		  // Define locales functions
 		$Obj_context.catalog:=Formula:C1597(editor_Catalog )
+		$Obj_context.setHelpTip:=Formula:C1597(STRUCTURE_TIPS (New object:C1471("target";$1;"form";$2)))
 		
 	End if 
 	

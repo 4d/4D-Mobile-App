@@ -11,9 +11,9 @@
   // Declarations
 C_BOOLEAN:C305($Boo_value)
 C_LONGINT:C283($i;$l;$Lon_bottom;$Lon_button;$Lon_column;$Lon_formEvent)
-C_LONGINT:C283($Lon_height;$Lon_left;$Lon_number;$Lon_parameters;$Lon_published;$Lon_right)
-C_LONGINT:C283($Lon_row;$Lon_targetBottom;$Lon_targetTop;$Lon_top;$Lon_unpublished;$Lon_vOffset)
-C_LONGINT:C283($Lon_width;$Lon_x;$Win_hdl)
+C_LONGINT:C283($Lon_height;$Lon_left;$Lon_number;$Lon_published;$Lon_right;$Lon_row)
+C_LONGINT:C283($Lon_targetBottom;$Lon_targetTop;$Lon_top;$Lon_unpublished;$Lon_vOffset;$Lon_width)
+C_LONGINT:C283($Lon_x;$Win_hdl)
 C_POINTER:C301($Ptr_;$Ptr_me;$Ptr_published)
 C_TEXT:C284($Mnu_choice;$Mnu_main;$t;$Txt_fieldNumber;$Txt_me)
 C_OBJECT:C1216($o;$Obj_context;$Obj_dataModel;$Obj_form;$Obj_related)
@@ -21,33 +21,14 @@ C_COLLECTION:C1488($c;$Col_published)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
+$Lon_formEvent:=Form event code:C388
+$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
+$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
-	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		  // <NONE>
-		
-	End if 
-	
-	$Lon_formEvent:=Form event code:C388
-	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
-	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
-	
-	$Obj_form:=STRUCTURE_Handler (New object:C1471(\
-		"action";"init"))
-	
-	$Obj_context:=$Obj_form.form
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$Obj_form:=STRUCTURE_Handler (New object:C1471(\
+"action";"init"))
+
+$Obj_context:=$Obj_form.form
 
   // ----------------------------------------------------
 Case of 
@@ -55,7 +36,6 @@ Case of
 		  //==================================================
 	: ($Txt_me=$Obj_form.allow)
 		
-		  // Save project
 		ui.saveProject()
 		
 		  //==================================================
@@ -158,9 +138,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Move:K2:35)
 				
-				STRUCTURE_TIPS (New object:C1471(\
-					"target";$Txt_me;\
-					"form";$Obj_form))
+				$Obj_context.setHelpTip($Txt_me;$Obj_form)
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Leave:K2:34)
@@ -436,13 +414,17 @@ Case of
 											
 											($Obj_form.publishedPtr)->{$Lon_row}:=$Lon_published
 											
-											STRUCTURE_UPDATE ($Obj_form)
-											
-											  // Save project
-											ui.saveProject()
-											
 										End if 
+										
+									Else 
+										
+										  // Invert published status
+										($Obj_form.publishedPtr)->{$Lon_row}:=1-($Obj_form.publishedPtr)->{$Lon_row}
+										
 									End if 
+									
+									STRUCTURE_UPDATE ($Obj_form)
+									
 								End if 
 							End if 
 						End if 
@@ -490,9 +472,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Move:K2:35)
 				
-				STRUCTURE_TIPS (New object:C1471(\
-					"target";$Txt_me;\
-					"form";$Obj_form))
+				$Obj_context.setHelpTip($Txt_me;$Obj_form)
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Leave:K2:34)
@@ -830,11 +810,9 @@ Case of
 		  //==================================================
 End case 
 
-If (Bool:C1537(featuresFlags._8858))
-	
-	ui.saveProject()
-	
-End if 
+  //If (Bool(featuresFlags._8858))
+  //ui.saveProject()
+  //End if 
 
   // ----------------------------------------------------
   // Return

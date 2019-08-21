@@ -12,7 +12,7 @@
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_found)
-C_LONGINT:C283($Lon_indx;$Lon_parameters;$Lon_type)
+C_LONGINT:C283($Lon_indx;$Lon_type)
 C_TEXT:C284($t;$Txt_fieldNumber;$Txt_tableNumber)
 C_OBJECT:C1216($ƒ;$o;$Obj_context;$Obj_currentTable;$Obj_dataModel;$Obj_field)
 C_OBJECT:C1216($Obj_form;$Obj_related;$Obj_table)
@@ -24,35 +24,20 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+If (Count parameters:C259>=1)
 	
-	  // Required parameters
-	
-	  // Default values
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Obj_form:=$1
-		
-	Else 
-		
-		$Obj_form:=STRUCTURE_Handler (New object:C1471(\
-			"action";"init"))
-		
-	End if 
-	
-	$Obj_context:=$Obj_form.form
-	
-	$ƒ:=Storage:C1525.ƒ
+	$Obj_form:=$1
 	
 Else 
 	
-	ABORT:C156
+	$Obj_form:=STRUCTURE_Handler (New object:C1471(\
+		"action";"init"))
 	
 End if 
+
+$Obj_context:=$Obj_form.form
+
+$ƒ:=Storage:C1525.ƒ
 
   // ----------------------------------------------------
 $Obj_dataModel:=Form:C1466.dataModel
@@ -308,11 +293,8 @@ End if
   // Update field list
 structure_FIELD_LIST ($Obj_form)
 
-STRUCTURE_TIPS (New object:C1471(\
-"target";$Obj_form.fieldList;\
-"form";$Obj_form))
+$Obj_context.setHelpTip($Obj_form.fieldList;$Obj_form)
 
-  // Save project
 ui.saveProject()
 
   // ----------------------------------------------------

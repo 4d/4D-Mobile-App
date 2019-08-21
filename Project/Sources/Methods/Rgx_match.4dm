@@ -83,8 +83,7 @@ If ($Obj_in.pattern#Null:C1517)\
 				For ($Lon_i;0;$Lon_size;1)
 					
 					$Obj_value:=New object:C1471(\
-						"data";Substring:C12($Obj_in.target;\
-						$tLon_positions{$Lon_i};$tLon_lengths{$Lon_i});\
+						"data";Substring:C12($Obj_in.target;$tLon_positions{$Lon_i};$tLon_lengths{$Lon_i});\
 						"position";$tLon_positions{$Lon_i};\
 						"length";$tLon_lengths{$Lon_i})
 					

@@ -14,7 +14,7 @@ C_OBJECT:C1216($1)
 C_LONGINT:C283($l;$Lon_field;$Lon_fieldNumber;$Lon_parameters;$Lon_row;$Lon_tableNumber)
 C_LONGINT:C283($Lon_x;$Lon_y)
 C_TEXT:C284($t;$Txt_;$Txt_name;$Txt_tips)
-C_OBJECT:C1216($Obj_dataModel;$Obj_field;$Obj_form;$Obj_in;$Obj_relatedDataClass;$Obj_table)
+C_OBJECT:C1216($Obj_dataModel;$Obj_field;$Obj_form;$Obj_relatedDataClass;$Obj_table)
 C_COLLECTION:C1488($c;$Col_catalog;$Col_desynchronized;$Col_fields)
 
 If (False:C215)
@@ -31,21 +31,14 @@ $Lon_parameters:=Count parameters:C259
 If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$Obj_in:=$1
+	ASSERT:C1129($1.target#Null:C1517)
+	ASSERT:C1129($1.form#Null:C1517)
 	
-	ASSERT:C1129($Obj_in.target#Null:C1517)
-	ASSERT:C1129($Obj_in.target#Null:C1517)
+	$Obj_form:=$1.form
 	
-	  // Default values
-	
-	  // Optional parameters
-	If ($Lon_parameters>=2)
-		
-		  // <NONE>
-		
-	End if 
-	
-	$Obj_form:=$Obj_in.form
+	  // Get the list box column and row to know what cell the user hovers
+	GET MOUSE:C468($Lon_x;$Lon_y;$l)
+	LISTBOX GET CELL POSITION:C971(*;$1.target;$Lon_x;$Lon_y;$l;$Lon_row)
 	
 Else 
 	
@@ -54,70 +47,56 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
+If ($Lon_row#0)
 	
-	GET MOUSE:C468($Lon_x;$Lon_y;$l)
+	$Obj_table:=This:C1470.currentTable
 	
-	  // Get the list box column and row to know what cell the user hovers
-	LISTBOX GET CELL POSITION:C971(*;$Obj_in.target;$Lon_x;$Lon_y;$l;$Lon_row)
-	
-	If ($Lon_row=0)
+	If ($Obj_table#Null:C1517)
 		
-		  // No item hovered
+		$Col_catalog:=This:C1470.catalog()
 		
-	Else 
-		
-		  // ASSERT(Not(Shift down)) #ASK VDL, maybe a Trace
-		
-		$Col_catalog:=editor_Catalog 
-		
-		$l:=Find in array:C230((ui.pointer($Obj_form.tableList))->;True:C214)
+		$l:=$Col_catalog.extract("name").indexOf($Obj_table.name)
 		
 		If ($l#-1)
 			
-			$t:=(ui.pointer($Obj_form.tables))->{$l}  // Table name
-			$l:=$Col_catalog.extract("name").indexOf($t)
+			$Obj_table:=$Col_catalog[$l]
 			
-			If ($l#-1)
+			ASSERT:C1129(Not:C34(Shift down:C543))
+			
+			If ($Obj_table=Null:C1517)
 				
-				$Obj_table:=$Col_catalog[$l]
+				$Txt_tips:=ui.alert+Get localized string:C991("theTableIsNoLongerAvailable")
 				
-				If ($Obj_table=Null:C1517)
+			Else 
+				
+				If (Num:C11($Obj_table.tableNumber)=0)
 					
-					$Txt_tips:=ui.alert+Get localized string:C991("theTableIsNoLongerAvailable")
+					  // NOT FOUND INTO THE CURRENT CATALOG
+					$Txt_tips:=ui.alert+str_localized (New collection:C1472("theTableNameIsNoLongerAvailable";$Obj_table.name))
 					
 				Else 
 					
-					If (Num:C11($Obj_table.tableNumber)=0)
+					$Col_desynchronized:=Form:C1466.$dialog.unsynchronizedTableFields
+					
+					If ($Col_desynchronized.length>$Obj_table.tableNumber)
 						
-						  // NOT FOUND INTO THE CURRENT CATALOG
-						$Txt_tips:=ui.alert+str_localized (New collection:C1472("theTableNameIsNoLongerAvailable";$Obj_table.name))
+						$Col_desynchronized:=$Col_desynchronized[$Obj_table.tableNumber]
 						
-					Else 
-						
-						$Col_desynchronized:=Form:C1466.$dialog.unsynchronizedTableFields
-						
-						If ($Col_desynchronized.length>$Obj_table.tableNumber)
+						If ($Col_desynchronized=Null:C1517)  // Table catalog is OK
 							
-							$Col_desynchronized:=$Col_desynchronized[$Obj_table.tableNumber]
+							  // <NOTHING MORE TO DO>
 							
-							If ($Col_desynchronized=Null:C1517)  // Table catalog is OK
+						Else 
+							
+							If ($Col_desynchronized.length=0)  // Not found into the current catalog
 								
-								  // <NOTHING MORE TO DO>
+								$Txt_tips:=ui.alert+str_localized (New collection:C1472("theTableNameIsNoLongerAvailable";$Obj_table.name))
 								
 							Else 
 								
-								If ($Col_desynchronized.length=0)  // Not found into the current catalog
-									
-									$Txt_tips:=ui.alert+str_localized (New collection:C1472("theTableNameIsNoLongerAvailable";$Obj_table.name))
-									
-								Else 
-									
-									  //======================================================================
-									  //                                 TABLE LIST
-									  //======================================================================
-									
-									If ($Obj_in.target=$Obj_form.tableList)
+								Case of 
+										  //______________________________________________________
+									: ($1.target=$Obj_form.tableList)  // TABLE LIST
 										
 										If ($Col_desynchronized.length=1)
 											
@@ -197,13 +176,9 @@ If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
 											$Txt_tips:=ui.alert+str_localized (New collection:C1472("someFieldsAreMissingOrWasModified";Substring:C12($t;1;Length:C16($t)-2)))
 											
 										End if 
-									End if 
-									
-									  //======================================================================
-									  //                               FIELD LIST
-									  //======================================================================
-									
-									If ($Obj_in.target=$Obj_form.fieldList)
+										
+										  //______________________________________________________
+									: ($1.target=$Obj_form.fieldList)  // FIELD LIST
 										
 										$l:=$Obj_table.field.extract("name").indexOf((ui.pointer($Obj_form.fields))->{$Lon_row})
 										
@@ -344,74 +319,118 @@ If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
 											  // A "If" statement should never omit "Else"
 											
 										End if 
-									End if 
-								End if 
+										
+										  //______________________________________________________
+								End case 
 							End if 
-							
-						Else 
-							
-							  // Table catalog is OK - Display useful informations if any
-							
-							$Obj_dataModel:=Form:C1466.dataModel
-							
-							Case of 
-									
-									  //______________________________________________________
-								: ($Obj_in.target=$Obj_form.fieldList)
-									
-									$Obj_field:=$Obj_table.field[$Lon_row-1]
-									
-									Case of 
+						End if 
+						
+					Else 
+						
+						  // TABLE CATALOG IS OK - DISPLAY USEFUL INFORMATIONS IF ANY
+						
+						$Obj_dataModel:=Form:C1466.dataModel
+						
+						Case of 
+								
+								  //______________________________________________________
+							: ($1.target=$Obj_form.fieldList)
+								
+								$Obj_field:=$Obj_table.field[$Lon_row-1]
+								
+								Case of 
+										
+										  //…………………………………………………………………………………………………
+									: ($Obj_field.type=-1)  // N -> 1 relation
+										
+										  // Related dataclass name
+										$Txt_tips:=str ("nTo1Relation").localized($Obj_field.relatedDataClass)
+										
+										If ($Obj_field.relatedDataClass=$Obj_table.name)  // Recursive link
 											
-											  //…………………………………………………………………………………………………
-										: ($Obj_field.type=-1)  // N -> 1 relation
+											  // Recursive link
+											$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("recursive")+")"
 											
-											  // Display related dataclass name
-											$Txt_tips:=str_localized (New collection:C1472("linkedTable";$Obj_field.relatedDataClass))
+										End if 
+										
+										  //…………………………………………………………………………………………………
+									: ($Obj_field.type=-2)  // 1 -> N relation
+										
+										If ($Obj_dataModel[String:C10($Obj_field.relatedTableNumber)]=Null:C1517)
 											
-											  //…………………………………………………………………………………………………
-										: ($Obj_field.type=-2)  // 1 -> N relation
-											
-											If ($Obj_dataModel[String:C10($Obj_field.relatedTableNumber)]=Null:C1517)
+											If (Bool:C1537((ui.pointer($Obj_form.published))->{$Lon_row}))
 												
-												If (Bool:C1537((ui.pointer($Obj_form.published))->{$Lon_row}))
-													
-													  // Display error
-													$Txt_tips:=ui.alert+str_localized (New collection:C1472("theLinkedTableIsNotPublished";$Obj_field.relatedDataClass))
-													
-												Else 
-													
-													  // Display related dataclass name and unpublished status
-													$Txt_tips:=ui.warning+str_localized (New collection:C1472("linkedTable";$Obj_field.relatedDataClass;" ("+Get localized string:C991("unpublished")+")"))
-													
-												End if 
+												  // Error
+												  //$Txt_tips:=ui.alert+str_localized (New collection("theLinkedTableIsNotPublished";$Obj_field.relatedDataClass))
+												$Txt_tips:=ui.alert+str ("theLinkedTableIsNotPublished").localized($Obj_field.relatedDataClass)
 												
 											Else 
 												
-												  // Display related dataclass name
-												$Txt_tips:=str_localized (New collection:C1472("linkedTable";$Obj_field.relatedDataClass))
+												$Txt_tips:=str ("1toNRelation").localized($Obj_field.relatedDataClass)
 												
+												If ($Obj_field.relatedDataClass=$Obj_table.name)
+													
+													  // Recursive link
+													$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("recursive")+")"
+													
+												Else 
+													
+													  // Unpublished related dataclass
+													$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("unpublished")+")"
+													
+												End if 
 											End if 
 											
-											  //…………………………………………………………………………………………………
-									End case 
-									
-									  //______________________________________________________
-							End case 
-						End if 
+										Else 
+											
+											  // Related dataclass name
+											$Txt_tips:=str ("1toNRelation").localized($Obj_field.relatedDataClass)
+											
+											If ($Obj_field.relatedDataClass=$Obj_table.name)  // Recursive link
+												
+												  // Recursive link
+												$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("recursive")+")"
+												
+											End if 
+										End if 
+										
+										  //…………………………………………………………………………………………………
+									Else 
+										
+										If ($Obj_field.name=$Obj_table.primaryKey)
+											
+											$Txt_tips:=Get localized string:C991("primaryKey")
+											
+										End if 
+										
+										  //…………………………………………………………………………………………………
+								End case 
+								
+								  //______________________________________________________
+						End case 
 					End if 
 				End if 
 			End if 
+			
+		Else 
+			
+			  // TABLE NOT IN CATALOG
+			
 		End if 
+		
+	Else 
+		
+		  // NO TABLE SELECTED
+		
 	End if 
 	
 Else 
 	
-	  // No unsynchronized Table or Field
+	  // NO ITEM HOVERED
 	
 End if 
 
-OBJECT SET HELP TIP:C1181(*;$Obj_in.target;$Txt_tips)
+OBJECT SET HELP TIP:C1181(*;$1.target;$Txt_tips)
 
   // ----------------------------------------------------
   // Return

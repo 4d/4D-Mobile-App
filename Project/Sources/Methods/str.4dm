@@ -63,7 +63,8 @@ If (This:C1470._is=Null:C1517)
 		"encode";Formula:C1597(str ("encode").value);\
 		"decode";Formula:C1597(str ("decode").value);\
 		"quoted";Formula:C1597("\""+String:C10(This:C1470.value)+"\"");\
-		"singleQuoted";Formula:C1597("'"+String:C10(This:C1470.value)+"'")\
+		"singleQuoted";Formula:C1597("'"+String:C10(This:C1470.value)+"'");\
+		"localized";Formula:C1597(str ("localized";New object:C1471("substitution";$1)).value)\
 		)
 	
 Else 
@@ -584,6 +585,47 @@ Else
 				: ($1="match")  // Returns True if text match given pattern
 					
 					$o.value:=Match regex:C1019(String:C10($2.pattern);String:C10(This:C1470.value);1)
+					
+					  //______________________________________________________
+				: ($1="localized")  // Returns the localized string & made replacement if any
+					
+					$t:=Get localized string:C991(This:C1470.value)
+					$o.value:=Choose:C955(OK=1;$t;This:C1470.value)  // Revert if no localization
+					
+					If ($2.substitution#Null:C1517)
+						
+						If (Value type:C1509($2.substitution)=Is collection:K8:32)
+							
+							Repeat 
+								
+								$b:=$i<$2.substitution.length
+								
+								If ($b)
+									
+									$b:=Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})";$o.value;1;$Lon_position;$Lon_length)
+									
+									If ($b)
+										
+										$t:=Get localized string:C991($2.substitution[$i])
+										$t:=Choose:C955(OK=1;$t;$2.substitution[$i])
+										$o.value:=Replace string:C233($o.value;Substring:C12($o.value;$Lon_position;$Lon_length);$t)
+										$i:=$i+1
+										
+									End if 
+								End if 
+							Until (Not:C34($b))
+							
+						Else 
+							
+							If (Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})";$o.value;1;$Lon_position;$Lon_length))
+								
+								$t:=Get localized string:C991(String:C10($2.substitution))
+								$t:=Choose:C955(OK=1;$t;String:C10($2.substitution))
+								$o.value:=Replace string:C233($o.value;Substring:C12($o.value;$Lon_position;$Lon_length);$t)
+								
+							End if 
+						End if 
+					End if 
 					
 					  //______________________________________________________
 					  //: (Formula(process ).call().isPreemptif)
