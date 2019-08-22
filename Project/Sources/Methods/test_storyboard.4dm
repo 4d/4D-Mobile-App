@@ -36,7 +36,13 @@ $Obj_tags:=New object:C1471("table";New object:C1471("name";"tablename";"fields"
 $Folder_test:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).folder("testdetailform")
 $Folder_test.create()
 
-For each ($Folder_template;Folder:C1567(fk resources folder:K87:11).folder("templates").folder("form").folder("detail").folders())
+C_COLLECTION:C1488($Col_templates)
+$Col_templates:=Folder:C1567(fk resources folder:K87:11).folder("templates").folder("form").folder("detail").folders()
+If (Folder:C1567(fk resources folder:K87:11).folder("mobile").folder("form").folder("detail").exists)
+	$Col_templates.combine(Folder:C1567(fk resources folder:K87:11).folder("mobile").folder("form").folder("detail").folders())
+End if 
+
+For each ($Folder_template;$Col_templates)
 	
 	$Obj_template:=ob_parseFile ($Folder_template.file("manifest.json")).value
 	$Obj_template.source:=$Folder_template.platformPath
