@@ -25,6 +25,7 @@
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD___" value="relation"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="relationName" value="___FIELD___"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="imageContextTemplate" value="YES"/>
                     </userDefinedRuntimeAttributes>
                 </button>
             </subviews>
