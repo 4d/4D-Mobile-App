@@ -298,13 +298,24 @@ Case of
 					$Obj_field:=$Col_fields[$Lon_indx]
 					
 					$Obj_out.path:=$Obj_in.path
-					
 					$Obj_out.tableNumber:=$Lon_tableNumber
 					$Obj_out.tableName:=Table name:C256($Lon_tableNumber)
-					$Obj_out.fieldNumber:=$Obj_field.fieldNumber
-					$Obj_out.name:=Field name:C257($Lon_tableNumber;$Obj_field.fieldNumber)
-					$Obj_out.fieldType:=$Obj_field.fieldType
-					$Obj_out.type:=tempoFiledType ($Obj_field.fieldType)
+					
+					If ($Obj_field.type=-2)  //1 to N relation
+						
+						$Obj_out.fieldType:=8859
+						$Obj_out.type:=-2
+						$Obj_out.relatedDataClass:=$Obj_field.relatedDataClass
+						$Obj_out.relatedTableNumber:=$Obj_field.relatedTableNumber
+						
+					Else 
+						
+						$Obj_out.fieldNumber:=$Obj_field.fieldNumber
+						$Obj_out.fieldType:=$Obj_field.fieldType
+						$Obj_out.name:=Field name:C257($Lon_tableNumber;$Obj_field.fieldNumber)
+						$Obj_out.type:=tempoFiledType ($Obj_field.fieldType)
+						
+					End if 
 					
 				Else 
 					
@@ -533,7 +544,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																																																																																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //

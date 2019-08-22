@@ -335,6 +335,21 @@ Case of
 				
 				COLLECTION TO ARRAY:C1562($c;($Obj_form.icons.pointer())->)
 				
+				  // Highlight errors
+				For ($i;1;Size of array:C274(($Obj_form.fields.pointer())->);1)
+					
+					$o:=($Obj_form.fields.pointer())->{$i}
+					
+					If ($o.fieldType=8859)  // 1-N
+						
+						If ($Obj_dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)
+							
+							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList.name;$i;ui.errorColor;lk font color:K53:24)
+							
+						End if 
+					End if 
+				End for 
+				
 				$Obj_form.fieldGroup.show()
 				$Obj_form.previewGroup.show()
 				

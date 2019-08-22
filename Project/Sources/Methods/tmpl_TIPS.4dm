@@ -9,16 +9,18 @@
   // Show tips based on the overflowed object
   // ----------------------------------------------------
   // Declarations
-C_BOOLEAN:C305($Boo_buildTips)
+C_BOOLEAN:C305($b)
 C_LONGINT:C283($Lon_type)
-C_TEXT:C284($Txt_bind;$Txt_buffer;$Txt_templateTips;$Txt_tips)
-C_OBJECT:C1216($Obj_field;$Obj_rgx;$Obj_target)
-C_COLLECTION:C1488($Col_types)
+C_TEXT:C284($t;$Txt_bind;$Txt_templateTips;$Txt_tips)
+C_OBJECT:C1216($o;$Obj_field;$Obj_target)
+C_COLLECTION:C1488($c)
 
   // ----------------------------------------------------
 
   // Tips added for truncated names (cf.views_preview)
 SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current+".label";"tips";$Txt_tips)
+
+ASSERT:C1129(Not:C34(Shift down:C543))
 
 If (Length:C16($Txt_tips)#0)
 	
@@ -30,53 +32,54 @@ Else
 	
 	$Obj_target:=Form:C1466[This:C1470.$.typeForm()][This:C1470.$.tableNumber]
 	
-	$Obj_rgx:=Rgx_match (New object:C1471(\
+	$o:=Rgx_match (New object:C1471(\
 		"pattern";"(?mi-s)(\\w+)\\[(\\d+)]";\
 		"target";$Txt_bind))
 	
-	If ($Obj_rgx.success)  // List of fields
+	If ($o.success)  // List of fields
 		
-		$Boo_buildTips:=(Num:C11($Obj_rgx.match[2].data)>=$Obj_target[$Obj_rgx.match[1].data].length)
+		$b:=(Num:C11($o.match[2].data)>=$Obj_target[$o.match[1].data].length)
 		
-		If (Not:C34($Boo_buildTips))
+		If (Not:C34($b))
 			
-			$Boo_buildTips:=($Obj_target[$Obj_rgx.match[1].data][Num:C11($Obj_rgx.match[2].data)]=Null:C1517)
+			$b:=($Obj_target[$o.match[1].data][Num:C11($o.match[2].data)]=Null:C1517)
 			
 		End if 
 		
 	Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 		
-		$Boo_buildTips:=($Obj_target[$Txt_bind]=Null:C1517)
+		$b:=($Obj_target[$Txt_bind]=Null:C1517)
 		
 	End if 
 	
-	If ($Boo_buildTips)
+	If ($b)
 		
 		  // Get a tips value into the template
 		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current+".label";"ios:tips";$Txt_templateTips)
 		
 		  // Tips adds according to template informations
-		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$Txt_buffer)
+		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$t)
 		
-		If ($Txt_buffer="all")
+		If ($t="all")
 			
 			$Txt_tips:=Get localized string:C991("dropHereAFieldOfAnyType")
 			
 		Else 
 			
-			$Col_types:=Split string:C1554($Txt_buffer;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
+			  // Get the accepted types
+			$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
 			
-			If ($Col_types.every("col_formula";"$1.result:=($1.value>=0)"))
+			If ($c.every("col_formula";"$1.result:=($1.value>=0)"))
 				
-				If ($Col_types.indexOf(Is integer:K8:5)#-1)\
-					 & ($Col_types.indexOf(Is longint:K8:6)#-1)\
-					 & ($Col_types.indexOf(Is integer 64 bits:K8:25)#-1)\
-					 & ($Col_types.indexOf(Is real:K8:4)#-1)\
-					 & ($Col_types.indexOf(Is float:K8:26)#-1)
+				If ($c.indexOf(Is integer:K8:5)#-1)\
+					 & ($c.indexOf(Is longint:K8:6)#-1)\
+					 & ($c.indexOf(Is integer 64 bits:K8:25)#-1)\
+					 & ($c.indexOf(Is real:K8:4)#-1)\
+					 & ($c.indexOf(Is float:K8:26)#-1)
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=Get localized string:C991(Choose:C955(Length:C16($Txt_templateTips)=0;"dropHereAFieldThatMustBe_";"theFieldTypeMustBe_"))+Get localized string:C991("number")
+						$Txt_tips:=str (Choose:C955(Length:C16($Txt_templateTips)=0;"dropHereAFieldThatMustBe_";"theFieldTypeMustBe_")).localized("number")
 						
 					Else 
 						
@@ -85,20 +88,20 @@ Else
 						
 					End if 
 					
-					$Col_types.remove($Col_types.indexOf(Is integer:K8:5))
-					$Col_types.remove($Col_types.indexOf(Is longint:K8:6))
-					$Col_types.remove($Col_types.indexOf(Is integer 64 bits:K8:25))
-					$Col_types.remove($Col_types.indexOf(Is real:K8:4))
-					$Col_types.remove($Col_types.indexOf(Is float:K8:26))
+					$c.remove($c.indexOf(Is integer:K8:5))
+					$c.remove($c.indexOf(Is longint:K8:6))
+					$c.remove($c.indexOf(Is integer 64 bits:K8:25))
+					$c.remove($c.indexOf(Is real:K8:4))
+					$c.remove($c.indexOf(Is float:K8:26))
 					
 				End if 
 				
-				If ($Col_types.indexOf(Is alpha field:K8:1)#-1)\
-					 & ($Col_types.indexOf(Is text:K8:3)#-1)
+				If ($c.indexOf(Is alpha field:K8:1)#-1)\
+					 & ($c.indexOf(Is text:K8:3)#-1)
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=Get localized string:C991(Choose:C955(Length:C16($Txt_templateTips)=0;"dropHereAFieldThatMustBe_";"theFieldTypeMustBe_"))+Get localized string:C991("text")
+						$Txt_tips:=str (Choose:C955(Length:C16($Txt_templateTips)=0;"dropHereAFieldThatMustBe_";"theFieldTypeMustBe_")).localized("text")
 						
 					Else 
 						
@@ -107,17 +110,17 @@ Else
 						
 					End if 
 					
-					$Col_types.remove($Col_types.indexOf(Is alpha field:K8:1))
-					$Col_types.remove($Col_types.indexOf(Is text:K8:3))
+					$c.remove($c.indexOf(Is alpha field:K8:1))
+					$c.remove($c.indexOf(Is text:K8:3))
 					
 				End if 
 				
 				  // One of them
-				For each ($Lon_type;$Col_types)
+				For each ($Lon_type;$c)
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=Get localized string:C991(Choose:C955(Length:C16($Txt_templateTips)=0;"dropHereAFieldThatMustBe_";"theFieldTypeMustBe_"))+ui.typeNames[$Lon_type]
+						$Txt_tips:=str (Choose:C955(Length:C16($Txt_templateTips)=0;"dropHereAFieldThatMustBe_";"theFieldTypeMustBe_")).localized(ui.typeNames[$Lon_type])
 						
 					Else 
 						
@@ -130,13 +133,13 @@ Else
 			Else 
 				
 				  // None of them
-				For each ($Lon_type;$Col_types)
+				For each ($Lon_type;$c)
 					
 					$Lon_type:=Abs:C99($Lon_type)
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=Get localized string:C991(Choose:C955(Length:C16($Txt_templateTips)=0;"dropHereAFieldWhoseTypeMustNotBe_";"theFieldTypeMustNotBe_"))+ui.typeNames[$Lon_type]
+						$Txt_tips:=str (Choose:C955(Length:C16($Txt_templateTips)=0;"dropHereAFieldWhoseTypeMustNotBe_";"theFieldTypeMustNotBe_")).localized(ui.typeNames[$Lon_type])
 						
 					Else 
 						
@@ -156,9 +159,9 @@ Else
 		
 	Else 
 		
-		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multi-criteria";$Txt_buffer)
+		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multi-criteria";$t)
 		
-		If ($Txt_buffer="true")  // Search on several fields - append to the field list if any
+		If ($t="true")  // Search on several fields - append to the field list if any
 			
 			If (Value type:C1509($Obj_target[$Txt_bind])=Is collection:K8:32)
 				
@@ -182,24 +185,53 @@ Else
 		End if 
 	End if 
 	
-	If ($Boo_buildTips)
+	If ($b)
 		
 		If (Length:C16($Txt_tips)>0)
 			
-			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"class";$Txt_buffer)
+			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"class";$t)
 			
-			If (Position:C15("optional";$Txt_buffer;*)>0)
+			If (Position:C15("optional";$t;*)>0)
 				
 				$Txt_tips:=$Txt_tips+"\r • "+Get localized string:C991("thisFieldIsOptional")
 				
 			End if 
 			
-			If (Position:C15("multi-criteria";$Txt_buffer;*)>0)
+			If (Position:C15("multi-criteria";$t;*)>0)
 				
 				$Txt_tips:=$Txt_tips+"\r • "+Get localized string:C991("thisFieldAcceptsSeveralValues")
 				
 			End if 
 		End if 
+	End if 
+End if 
+
+If (Length:C16($Txt_tips)=0)
+	
+	  // Get the fields definition
+	SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:data";$t)
+	
+	If (Length:C16($t)>0)
+		
+		$o:=JSON Parse:C1218($t)
+		
+		Case of 
+				  //______________________________________________________
+			: ($o.fieldType=8859)  // 1-N relation
+				
+				$Txt_tips:=".This field will allow you to navigate to list of "+$o.relatedEntities
+				
+				  //______________________________________________________
+			: (False:C215)
+				
+				  //______________________________________________________
+			Else 
+				
+				  // A "Case of" statement should never omit "Else"
+				
+				  //______________________________________________________
+		End case 
+		
 	End if 
 End if 
 

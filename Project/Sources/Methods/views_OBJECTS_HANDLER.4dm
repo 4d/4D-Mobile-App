@@ -12,10 +12,11 @@
 C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
+C_BOOLEAN:C305($b)
 C_LONGINT:C283($Lon_parameters)
 C_PICTURE:C286($p)
 C_TEXT:C284($Txt_tableNumber;$Txt_template;$Txt_typeForm)
-C_OBJECT:C1216($o;$Obj_context;$Obj_current;$Obj_form)
+C_OBJECT:C1216($Obj_context;$Obj_current;$Obj_form)
 
 If (False:C215)
 	C_LONGINT:C283(views_OBJECTS_HANDLER ;$0)
@@ -194,21 +195,32 @@ Case of
 				
 				$Obj_form.fieldList.cellPosition()
 				
-				  //LISTBOX GET CELL POSITION(*;$Obj_form.form.currentWidget;$Lon_column;$Lon_row)
-				
 				  // Get the dragged field
 				  //%W-533.3
 				$Obj_current:=($Obj_form.fields.pointer())->{$Obj_form.fieldList.row}
 				  //%W+533.3
 				
-				  // Put into the container
-				VARIABLE TO BLOB:C532($Obj_current;$x)
-				APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field";$x)
-				SET BLOB SIZE:C606($x;0)
+				$b:=($Obj_current.fieldType#8859)  // Not 1-N relation
 				
-				  // Create the drag icon
-				$p:=svg .embedPicture(ui.fieldIcons[$Obj_current.fieldType];2;2).textArea($Obj_current.path+" ";20;2).setAttribute("font-size";13).getPicture()
-				SET DRAG ICON:C1272($p)
+				If (Not:C34($b))
+					
+					  // 1-N relation with published related data class
+					$b:=(Form:C1466.dataModel[String:C10($Obj_current.relatedTableNumber)]#Null:C1517)
+					
+				End if 
+				
+				If ($b)
+					
+					  // Put into the container
+					VARIABLE TO BLOB:C532($Obj_current;$x)
+					APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field";$x)
+					SET BLOB SIZE:C606($x;0)
+					
+					  // Create the drag icon
+					$p:=svg .embedPicture(ui.fieldIcons[$Obj_current.fieldType];2;2).textArea($Obj_current.path+" ";20;2).setAttribute("font-size";13).getPicture()
+					SET DRAG ICON:C1272($p)
+					
+				End if 
 				
 				editor_ui_LISTBOX ($Obj_form.form.currentWidget)
 				
@@ -338,6 +350,11 @@ Case of
 				$Obj_form.fieldList.focus()
 				
 				  //______________________________________________________
+			: ($Obj_form.form.event=On Drag Over:K2:13)
+				
+				$0:=$Obj_form.drag()
+				
+				  //______________________________________________________
 			: ($Obj_form.form.event=On Mouse Enter:K2:33)
 				
 				ui.tips.enable()
@@ -347,11 +364,6 @@ Case of
 			: ($Obj_form.form.event=On Mouse Leave:K2:34)
 				
 				ui.tips.defaultDelay()
-				
-				  //______________________________________________________
-			: ($Obj_form.form.event=On Drag Over:K2:13)
-				
-				$0:=$Obj_form.drag()
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Mouse Move:K2:35)

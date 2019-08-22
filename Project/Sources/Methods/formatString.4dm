@@ -94,7 +94,7 @@ Case of
 					
 				End if 
 				
-				  // Capitalize fisrt letter of words
+				  // Capitalize first letter of words
 				GET TEXT KEYWORDS:C1141($Txt_string;$tTxt_keywords)
 				
 				For ($Lon_i;1;Size of array:C274($tTxt_keywords);1)

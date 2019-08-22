@@ -51,18 +51,20 @@ If (Length:C16(This:C1470.$.current)>0)
 		
 		If ($b)
 			
-			$Obj_field:=New object:C1471(\
+			  //$Obj_field:=New object(\
 				"name";$o.path)
+			  //If (Num($o.fieldNumber)#0)
+			  //$Obj_field.id:=$o.fieldNumber
+			  //Else 
+			  //$Obj_field.relatedTableNumber:=$o.relatedTableNumber
+			  //$Obj_field.relatedDataClass:=$o.relatedEntities
+			  //$Obj_field.type:=-2
+			  //$Obj_field.fieldType:=$o.fieldType
+			  //End if 
 			
-			If (Num:C11($o.fieldNumber)#0)
-				
-				$Obj_field.id:=$o.fieldNumber
-				
-			Else 
-				
-				  // Relation
-				
-			End if 
+			$Obj_field:=$o
+			$Obj_field.name:=$o.path
+			
 			
 			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:bind";$t)
 			Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tTxt_results)

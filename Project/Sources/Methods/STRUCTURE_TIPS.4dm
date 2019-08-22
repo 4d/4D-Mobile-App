@@ -72,7 +72,7 @@ If ($Lon_row#0)
 				If (Num:C11($Obj_table.tableNumber)=0)
 					
 					  // NOT FOUND INTO THE CURRENT CATALOG
-					$Txt_tips:=ui.alert+str_localized (New collection:C1472("theTableNameIsNoLongerAvailable";$Obj_table.name))
+					$Txt_tips:=ui.alert+str ("theTableNameIsNoLongerAvailable").localized($Obj_table.name)
 					
 				Else 
 					
@@ -90,7 +90,7 @@ If ($Lon_row#0)
 							
 							If ($Col_desynchronized.length=0)  // Not found into the current catalog
 								
-								$Txt_tips:=ui.alert+str_localized (New collection:C1472("theTableNameIsNoLongerAvailable";$Obj_table.name))
+								$Txt_tips:=ui.alert+str ("theTableNameIsNoLongerAvailable").localized($Obj_table.name)
 								
 							Else 
 								
@@ -139,7 +139,7 @@ If ($Lon_row#0)
 												$Lon_tableNumber:=$Obj_table.tableNumber
 												$Lon_fieldNumber:=Num:C11($Col_desynchronized[0])
 												$Txt_name:=Field name:C257($Lon_tableNumber;$Lon_fieldNumber)
-												$Txt_tips:=ui.alert+str_localized (New collection:C1472("theFieldNameIsMissingOrWasModified";$Txt_name))
+												$Txt_tips:=ui.alert+str ("theFieldNameIsMissingOrWasModified").localized($Txt_name)
 												
 											End if 
 											
@@ -173,7 +173,7 @@ If ($Lon_row#0)
 												End if 
 											End for 
 											
-											$Txt_tips:=ui.alert+str_localized (New collection:C1472("someFieldsAreMissingOrWasModified";Substring:C12($t;1;Length:C16($t)-2)))
+											$Txt_tips:=ui.alert+str ("someFieldsAreMissingOrWasModified").localized(Substring:C12($t;1;Length:C16($t)-2))
 											
 										End if 
 										
@@ -198,18 +198,19 @@ If ($Lon_row#0)
 													
 													If ($l=-1)  // Not found into the current catalog
 														
-														$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedTableNameIsNoLongerAvailable";$Obj_field.relatedDataClass))
+														$Txt_tips:=ui.alert+str ("theRelatedTableNameIsNoLongerAvailable").localized($Obj_field.relatedDataClass)
 														
 													Else 
 														
-														If (str_equal ($Obj_field.relatedDataClass;$Col_catalog[$l].name))
+														  //If (str_equal ($Obj_field.relatedDataClass;$Col_catalog[$l].name))
+														If (str ($Obj_field.relatedDataClass).equal($Col_catalog[$l].name))
 															
 															  // Check related datamodel
 															$l:=$Col_catalog.extract("name").indexOf($Obj_field.relatedDataClass)
 															
 															If ($l=-1)
 																
-																$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedTableNameIsNoLongerAvailable";$Obj_field.relatedDataClass))
+																$Txt_tips:=ui.alert+str ("theRelatedTableNameIsNoLongerAvailable").localized($Obj_field.relatedDataClass)
 																
 															Else 
 																
@@ -257,26 +258,26 @@ If ($Lon_row#0)
 																		
 																		If ($c.length=1)
 																			
-																			$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedFieldNameIsNoLongerAvailable";$c[0]))
+																			$Txt_tips:=ui.alert+str ("theRelatedFieldNameIsNoLongerAvailable").localized($c[0])
 																			
 																		Else 
 																			
 																			  // Include list
-																			$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedFieldsNamesAreNoLongerAvailable";$c.join(", ")))
+																			$Txt_tips:=ui.alert+str ("theRelatedFieldsNamesAreNoLongerAvailable").localized($c.join(", "))
 																			
 																		End if 
 																	End if 
 																	
 																Else 
 																	
-																	$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelationNameIsNoLongerAvailable";$Obj_field.name))
+																	$Txt_tips:=ui.alert+str ("theRelationNameIsNoLongerAvailable").localized($Obj_field.name)
 																	
 																End if 
 															End if 
 															
 														Else 
 															
-															$Txt_tips:=ui.alert+str_localized (New collection:C1472("theRelatedTableOldWasRenamedToNew";$Obj_field.relatedDataClass;$Col_catalog[$l].name))
+															$Txt_tips:=ui.alert+str ("theRelatedTableOldWasRenamedToNew").localized(New collection:C1472($Obj_field.relatedDataClass;$Col_catalog[$l].name))
 															
 														End if 
 													End if 
@@ -291,7 +292,7 @@ If ($Lon_row#0)
 															  //……………………………………………………………………………………………………………………
 														: ($l=-1)  // Not found into the current catalog
 															
-															$Txt_tips:=ui.alert+str_localized (New collection:C1472("theFieldNameIsNoLongerAvailable";$Obj_field.name))
+															$Txt_tips:=ui.alert+str ("theFieldNameIsNoLongerAvailable").localized($Obj_field.name)
 															
 															  //……………………………………………………………………………………………………………………
 														: ($Obj_field.type#$c[$l].type)  // Type mismatch
@@ -361,7 +362,6 @@ If ($Lon_row#0)
 											If (Bool:C1537((ui.pointer($Obj_form.published))->{$Lon_row}))
 												
 												  // Error
-												  //$Txt_tips:=ui.alert+str_localized (New collection("theLinkedTableIsNotPublished";$Obj_field.relatedDataClass))
 												$Txt_tips:=ui.alert+str ("theLinkedTableIsNotPublished").localized($Obj_field.relatedDataClass)
 												
 											Else 

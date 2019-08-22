@@ -189,6 +189,8 @@ Else
 					: ($Lon_type=-2)  // 1 -> N relation
 						
 						$Obj_table[$Obj_field.name]:=New object:C1471(\
+							"label";formatString ("label";str ("listOf").localized($Obj_field.name));\
+							"shortLabel";formatString ("label";$Obj_field.name);\
 							"relatedEntities";$Obj_field.relatedDataClass;\
 							"relatedTableNumber";$Obj_field.relatedTableNumber;\
 							"inverseName";$Obj_field.inverseName)

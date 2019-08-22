@@ -107,7 +107,9 @@ Case of
 					  // Load the template
 					PROCESS 4D TAGS:C816($Path_root.file("template.svg").getText();$t)
 					
-					$svg:=svg ("parse";New object:C1471("variable";$t)).setAttribute("transform";"scale(0.95)")
+					$svg:=svg ("parse";New object:C1471(\
+						"variable";$t)).setAttribute("transform";\
+						"scale(0.95)")
 					
 					If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
 						
@@ -258,13 +260,27 @@ Case of
 										
 										If ($Lon_index<$Obj_target.fields.length)
 											
-											If ($Obj_target.fields[$Lon_index]#Null:C1517)
+											$o:=$Obj_target.fields[$Lon_index]
+											
+											If ($o#Null:C1517)
 												
-												$Txt_name:=$Obj_target.fields[$Lon_index].name
+												$Txt_name:=$o.name
+												$svg.setAttribute("ios:data";JSON Stringify:C1217($o);New object:C1471(\
+													"target";$Dom_field))
 												
-												If (Num:C11($Obj_target.fields[$Lon_index].id)=0)  // 1-N relation
+												If (Num:C11($o.id)=0)  // 1-N relation
 													
-													$svg.setAttribute("font-style";"italic";$svg.findById($t+".label"))
+													$tt:=$svg.findById($t+".label")
+													
+													If (Form:C1466.datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)\
+														 | (Value type:C1509(Form:C1466.datamodel[String:C10($o.relatedTableNumber)])=Is undefined:K8:13)
+														
+														$Txt_name:=ui.alert+" "+$Txt_name
+														$svg.setAttribute("fill";"red";$tt)
+														
+													End if 
+													
+													$svg.setAttribute("font-style";"italic";$tt)
 													
 												End if 
 											End if 
@@ -373,6 +389,12 @@ Case of
 									
 								Until (OK=0)
 							End if 
+						End if 
+						
+						If (Bool:C1537(featuresFlags.with("_8858")))
+							
+							$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg");True:C214)
+							
 						End if 
 						
 						($Obj_form.preview.pointer())->:=$svg.getPicture()

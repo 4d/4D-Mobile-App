@@ -36,11 +36,11 @@
 					"hideFocusRing": true,
 					"contextMenu": "none",
 					"dragging": "none",
-					"method": "ObjectMethods/tables.4dm",
 					"events": [
 						"onClick",
 						"onScroll"
-					]
+					],
+					"method": "views_OBJECTS_HANDLER"
 				},
 				"previous": {
 					"type": "button",
@@ -52,10 +52,10 @@
 					"icon": "/RESOURCES/images/toolbar/previous-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ObjectMethods/previous.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "views_OBJECTS_HANDLER"
 				},
 				"next": {
 					"type": "button",
@@ -68,10 +68,10 @@
 					"icon": "/RESOURCES/images/toolbar/next-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ObjectMethods/next.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "views_OBJECTS_HANDLER"
 				},
 				"previous.limit": {
 					"type": "line",
@@ -125,12 +125,12 @@
 					"textPlacement": "left",
 					"style": "custom",
 					"radioGroup": "Group10",
-					"method": "ObjectMethods/tab.list.4dm",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"method": "views_OBJECTS_HANDLER"
 				},
 				"tab.detail": {
 					"type": "radio",
@@ -142,12 +142,12 @@
 					"text": ":xliff:detailsForms",
 					"style": "custom",
 					"radioGroup": "Group10",
-					"method": "ObjectMethods/tab.detail.4dm",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"method": "views_OBJECTS_HANDLER"
 				},
 				"Line2": {
 					"type": "line",
@@ -200,7 +200,6 @@
 					"scrollbarVertical": "automatic",
 					"dragging": "none",
 					"dropping": "custom",
-					"method": "ObjectMethods/preview.4dm",
 					"events": [
 						"onClick",
 						"onDrop",
@@ -209,7 +208,8 @@
 						"onMouseLeave",
 						"onMouseMove",
 						"onBeginDragOver"
-					]
+					],
+					"method": "ObjectMethods/preview.4dm"
 				},
 				"preview.label": {
 					"type": "text",
@@ -248,7 +248,6 @@
 					"textAlign": "left",
 					"verticalAlign": "middle",
 					"borderStyle": "none",
-					"method": "ObjectMethods/01_fields.4dm",
 					"events": [
 						"onClick",
 						"onLosingFocus",
@@ -256,6 +255,7 @@
 						"onSelectionChange",
 						"onBeginDragOver"
 					],
+					"method": "ObjectMethods/01_fields.4dm",
 					"columns": [
 						{
 							"name": "fields",

@@ -15,7 +15,7 @@ C_OBJECT:C1216($2)
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($i;$l;$Lon_length;$Lon_position)
-C_TEXT:C284($t;$tt;$Txt_filtered;$Txt_pattern;$Txt_result)
+C_TEXT:C284($t;$tt;$Txt_filtered;$Txt_pattern;$Txt_result;$Txt_separator)
 C_OBJECT:C1216($o)
 C_COLLECTION:C1488($c)
 
@@ -64,7 +64,8 @@ If (This:C1470._is=Null:C1517)
 		"decode";Formula:C1597(str ("decode").value);\
 		"quoted";Formula:C1597("\""+String:C10(This:C1470.value)+"\"");\
 		"singleQuoted";Formula:C1597("'"+String:C10(This:C1470.value)+"'");\
-		"localized";Formula:C1597(str ("localized";New object:C1471("substitution";$1)).value)\
+		"localized";Formula:C1597(str ("localized";New object:C1471("substitution";$1)).value);\
+		"concat";Formula:C1597(str ("concat";New object:C1471("item";$1;"separator";$2)).value)\
 		)
 	
 Else 
@@ -487,7 +488,6 @@ Else
 						$t:=Replace string:C233($t;"Đ";"D";*)
 						$t:=Replace string:C233($t;"đ";"d";*)
 						
-						
 						$t:=Replace string:C233($t;"Ħ";"H";*)
 						$t:=Replace string:C233($t;"ħ";"h";*)
 						
@@ -499,13 +499,11 @@ Else
 						$t:=Replace string:C233($t;"Ł";"L";*)
 						$t:=Replace string:C233($t;"ł";"l";*)
 						
-						
 						$t:=Replace string:C233($t;"Ŋ";"N";*)
 						$t:=Replace string:C233($t;"ŋ";"n";*)
 						$t:=Replace string:C233($t;"ŉ";"n";*)
 						$t:=Replace string:C233($t;"n̈";"n";*)
 						$t:=Replace string:C233($t;"N̈";"N";*)
-						
 						
 						$t:=Replace string:C233($t;"Ø";"O";*)
 						$t:=Replace string:C233($t;"ð";"o";*)
@@ -608,6 +606,15 @@ Else
 										
 										$t:=Get localized string:C991($2.substitution[$i])
 										$t:=Choose:C955(OK=1;$t;$2.substitution[$i])
+										
+										If (Position:C15("</span>";$o.value)>0)  // Multistyle
+											
+											$t:=Replace string:C233($t;"&";"&amp;")
+											$t:=Replace string:C233($t;"<";"&lt;")
+											$t:=Replace string:C233($t;">";"&gt;")
+											
+										End if 
+										
 										$o.value:=Replace string:C233($o.value;Substring:C12($o.value;$Lon_position;$Lon_length);$t)
 										$i:=$i+1
 										
@@ -621,6 +628,15 @@ Else
 								
 								$t:=Get localized string:C991(String:C10($2.substitution))
 								$t:=Choose:C955(OK=1;$t;String:C10($2.substitution))
+								
+								If (Position:C15("</span>";$o.value)>0)  // Multistyle
+									
+									$t:=Replace string:C233($t;"&";"&amp;")
+									$t:=Replace string:C233($t;"<";"&lt;")
+									$t:=Replace string:C233($t;">";"&gt;")
+									
+								End if 
+								
 								$o.value:=Replace string:C233($o.value;Substring:C12($o.value;$Lon_position;$Lon_length);$t)
 								
 							End if 
@@ -628,9 +644,64 @@ Else
 					End if 
 					
 					  //______________________________________________________
+				: ($1="concat")  // Concatenates the values ​​given to the original string
+					
+					$o.value:=This:C1470.value
+					
+					If ($2.item#Null:C1517)
+						
+						If ($2.separator=Null:C1517)
+							
+							  // Default is space
+							$Txt_separator:=Char:C90(Space:K15:42)
+							
+						Else 
+							
+							$Txt_separator:=String:C10($2.separator)
+							
+						End if 
+						
+						If (Value type:C1509($2.item)=Is collection:K8:32)
+							
+							For each ($tt;$2.item)
+								
+								$t:=Get localized string:C991(String:C10($tt))
+								$t:=Choose:C955(OK=1;$t;String:C10($tt))
+								
+								If (Position:C15($Txt_separator;$t)#1) & (Position:C15($Txt_separator;$o.value)#Length:C16($o.value))
+									
+									$o.value:=$o.value+$Txt_separator
+									
+								End if 
+								
+								$o.value:=$o.value+$t
+								
+							End for each 
+							
+						Else 
+							
+							$t:=Get localized string:C991(String:C10($2.item))
+							$t:=Choose:C955(OK=1;$t;String:C10($2.item))
+							
+							If (Position:C15($Txt_separator;$t)#1) & (Position:C15($Txt_separator;$o.value)#Length:C16($o.value))
+								
+								$o.value:=$o.value+$Txt_separator
+								
+							End if 
+							
+							$o.value:=$o.value+$t
+							
+						End if 
+					End if 
+					
+					  //______________________________________________________
 					  //: (Formula(process ).call().isPreemptif)
 					
-					  //_4D THROW ERROR(New object("component";"CLAS";"code";1;"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";"something";"my bug"))
+					  //_4D THROW ERROR(New object(\
+						"component";"CLAS";\
+						"code";1;\
+						"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
+						"something";"my bug"))
 					
 					  //______________________________________________________
 				: ($1="isStyled")  // Returns True if text is styled

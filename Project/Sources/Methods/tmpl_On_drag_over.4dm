@@ -30,30 +30,47 @@ If (Length:C16(This:C1470.$.current)>0)
 	  // Accept drag if the object is dropable
 	SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-droppable";$Txt_isOfClass)
 	
-	If (_bool ($Txt_isOfClass))  // Template
+	If ($Txt_isOfClass="true")  // Template
 		
 		  // Accept drag if a field is drag over
 		GET PASTEBOARD DATA:C401("com.4d.private.ios.field";$x)
 		
 		If (Bool:C1537(OK))
 			
+			
+			ASSERT:C1129(Not:C34(Shift down:C543))
+			
 			BLOB TO VARIABLE:C533($x;$o)
 			SET BLOB SIZE:C606($x;0)
 			
-			  // Accept drag if the type match with the source
-			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$t)
-			
-			$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
-			
-			If (_or (\
-				Formula:C1597($t="all");\
-				Formula:C1597(tmpl_compatibleType ($c;$o.fieldType))))
+			If ($o.fieldType#8859)  // Not 1-N relation
 				
-				$0:=0
+				  // Accept drag if the type match with the source
+				SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$t)
 				
+				$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
+				
+				If (_or (\
+					Formula:C1597($t="all");\
+					Formula:C1597(tmpl_compatibleType ($c;$o.fieldType))))
+					
+					$0:=0
+					
+				End if 
+				
+			Else 
+				
+				  // Accept only on multi-valued fields
+				SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multivalued";$Txt_isOfClass)
+				
+				If ($Txt_isOfClass="true")
+					
+					$0:=0
+					
+				End if 
 			End if 
 			
-		Else   // Action area
+		Else   // Action area (WIP)
 			
 			If (Bool:C1537(featuresFlags.withWidgetActions))
 				

@@ -22,12 +22,6 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$t:=str ("1toNRelation").localized(New collection:C1472("linkedTable";"ZZZ"))
-		$t:=str ("1toNRelation").localized("linkedTable")
-		
-		  //________________________________________
-	: (True:C214)
-		
 		$svg:=svg ("load";Folder:C1567(fk desktop folder:K87:19).file("DEV/test svg.svg"))
 		$svg.rect(150;125;100;50).setFill("yellow")
 		  //$svg.save(Folder(fk desktop folder).file("DEV/test svg (copy).svg"))

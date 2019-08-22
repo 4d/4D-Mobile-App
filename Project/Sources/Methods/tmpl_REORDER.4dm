@@ -140,8 +140,15 @@ If (Asserted:C1132(Test path name:C476($File_)=Is a document:K24:1))
 										
 										If ($o.success)
 											
-											$Boo_accepted:=tmpl_compatibleType ($c;$o.fieldType)
-											
+											If ($o.type=-2)  // 1-N relation
+												
+												$Boo_accepted:=Split string:C1554(String:C10($Obj_attributes.class);" ").indexOf("multivalued")#-1
+												
+											Else 
+												
+												$Boo_accepted:=tmpl_compatibleType ($c;$o.fieldType)
+												
+											End if 
 										End if 
 									End if 
 								End for each 

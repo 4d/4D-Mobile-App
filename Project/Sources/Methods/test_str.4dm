@@ -336,6 +336,11 @@ ASSERT:C1129(str ("-3.14000").toNum()=-3.14)
 ASSERT:C1129(str ("hello world").toNum()=0)
 
   // ============================================
+  // concat()
+ASSERT:C1129(str ("Hello").concat("world")="Hello world")
+ASSERT:C1129(str ("Hello").concat("world";"_")="Hello_world")
+ASSERT:C1129(str ("Hello").concat(New collection:C1472("AAA";"NNN";"ZZZ"))="Hello AAA NNN ZZZ")
+ASSERT:C1129(str ("Hello").concat(New collection:C1472("AAA";"NNN";"ZZZ");", ")="Hello, AAA, NNN, ZZZ")
 
   // ============================================
 
