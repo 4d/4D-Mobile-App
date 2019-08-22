@@ -80,6 +80,39 @@
 			"COMPILER_env"
 		]
 	},
+	"STRUCTURE": {
+		"methods": [
+			"structure_REPAIR",
+			"STRUCTURE_OBJECTS_HANDLER",
+			"structure_FIELD_LIST",
+			"COMPILER_STRUCTURES",
+			"STRUCTURE_TIPS",
+			"STRUCTURE_Handler",
+			"STRUCTURE_ACTION",
+			"STRUCTURE_CALLBACK",
+			"STRUCTURE_UPDATE",
+			"structure_TABLE_LIST"
+		],
+		"forms": [
+			"RELATED",
+			"STRUCTURE"
+		]
+	},
+	"mobile": {
+		"methods": [
+			"mobile_Check_installation",
+			"COMPILER_mobile",
+			"mobile_Project"
+		]
+	},
+	"widgets": {
+		"groups": [
+			"Search",
+			"Picture grid",
+			"Message",
+			"Localization"
+		]
+	},
 	"backend": {
 		"methods": [
 			"Process_tags",
@@ -102,39 +135,6 @@
 			"catalog",
 			"findFirstPathComponentInCatalog",
 			"dataModel"
-		]
-	},
-	"mobile": {
-		"methods": [
-			"mobile_Check_installation",
-			"COMPILER_mobile",
-			"mobile_Project"
-		]
-	},
-	"widgets": {
-		"groups": [
-			"Search",
-			"Picture grid",
-			"Message",
-			"Localization"
-		]
-	},
-	"STRUCTURE": {
-		"methods": [
-			"structure_REPAIR",
-			"STRUCTURE_OBJECTS_HANDLER",
-			"structure_FIELD_LIST",
-			"COMPILER_STRUCTURES",
-			"STRUCTURE_TIPS",
-			"STRUCTURE_Handler",
-			"STRUCTURE_ACTION",
-			"STRUCTURE_CALLBACK",
-			"STRUCTURE_UPDATE",
-			"structure_TABLE_LIST"
-		],
-		"forms": [
-			"RELATED",
-			"STRUCTURE"
 		]
 	},
 	"ui": {
@@ -262,31 +262,15 @@
 			"PICTURE_GRID"
 		]
 	},
-	"col": {
-		"methods": [
-			"COMPILER_col",
-			"col_findObject",
-			"col_replaceString",
-			"test_colObj_distinct",
-			"col_method",
-			"test_col",
-			"col_distinctObject",
-			"col_valueToObject",
-			"col_notNull",
-			"col_formula"
-		]
-	},
 	"macOS": {
 		"methods": [
 			"XcodeProjInject",
 			"asset",
 			"simulator",
 			"plist_toObject",
-			"test_storyboard_link",
 			"COMPILER_macOS",
 			"device",
 			"storyboard",
-			"test_storyboard_scene",
 			"teamId",
 			"unzip",
 			"capabilities",
@@ -301,8 +285,21 @@
 			"colors",
 			"test_swiftPM",
 			"XcodeProj",
-			"Xcode_CheckInstall",
-			"test_storyboard_segue"
+			"Xcode_CheckInstall"
+		]
+	},
+	"col": {
+		"methods": [
+			"COMPILER_col",
+			"col_findObject",
+			"col_replaceString",
+			"test_colObj_distinct",
+			"col_method",
+			"test_col",
+			"col_distinctObject",
+			"col_valueToObject",
+			"col_notNull",
+			"col_formula"
 		]
 	},
 	"rgx (thread-safe)": {
@@ -422,9 +419,9 @@
 			"ob_writeToDocument",
 			"sharedObject",
 			"COMPILER_ob",
+			"ob_removeFormula",
 			"ob_deepMerge",
 			"ob_getByPath",
-			"ob_removeFormula",
 			"ob_removeProperty",
 			"ob_equal"
 		]
@@ -582,9 +579,13 @@
 			"UNIT_3"
 		],
 		"methods": [
+			"test_storyboard",
+			"unitTestSuites",
+			"test_reconcile",
 			"test_structureCatalog",
 			"test_catalog",
-			"test_structure"
+			"test_structure",
+			"mobileUnit4D"
 		]
 	},
 	"deliver": {
@@ -629,8 +630,8 @@
 	},
 	"_[COMPONENT]": {
 		"groups": [
-			"backend",
 			"mobile",
+			"backend",
 			"[PROJECT]",
 			"macOS",
 			"[PANELS]",

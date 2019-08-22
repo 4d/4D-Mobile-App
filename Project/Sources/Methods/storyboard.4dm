@@ -389,7 +389,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			$File_:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
+			C_OBJECT:C1216($Folder_template)
+			$Folder_template:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2)
+			$File_:=$Folder_template.file(String:C10($Obj_in.template.storyboard))
 			$Dom_root:=xml ("load";$File_)
 			
 			If ($Dom_root.success)
@@ -538,12 +540,82 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					$Obj_in.template.relationElements:=New collection:C1472()
 					
+					C_OBJECT:C1216($Folder_relation)
+					$Folder_relation:=COMPONENT_Pathname ("templates").folder("relation")
+					
+					C_OBJECT:C1216($Dom_relation)
+					
+					Case of 
+						: (Length:C16(String:C10($Obj_in.template.relationXPath))>0)
+							
+							$Dom_relation:=$Dom_root.find(String:C10($Obj_in.template.relationXPath))
+							$Dom_relation.isDefault:=False:C215
+							$Dom_relation.doNotClose:=True:C214
+							
+						: ($Folder_template.file("relationButton.xml").exists)
+							
+							$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xml"))
+							$Dom_relation.isDefault:=False:C215
+							
+						: ($Folder_template.file("relationButton.xib").exists)
+							
+							$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xib")).find("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+							$Dom_relation.isDefault:=False:C215
+							
+						Else 
+							
+							$Dom_relation:=$Obj_element.dom.findById("TAG-RL-001")  // try by tag in storyboard
+							
+							If (Not:C34($Dom_relation.success))  // else us default one
+								
+								$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xib")).find("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+								  //$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml")) 
+								$Dom_relation.isDefault:=True:C214
+								
+							Else 
+								
+								$Dom_relation.isDefault:=False:C215
+								$Dom_relation.doNotClose:=True:C214
+								
+							End if 
+							
+					End case 
+					
 					  // 1- element
 					$Obj_element:=New object:C1471(\
-						"dom";xml ("load";COMPONENT_Pathname ("templates").folder("relation").file("storyboardButton.xml"));\
+						"dom";$Dom_relation;\
 						"idCount";6;\
 						"tagInterfix";"RL";\
 						"insertMode";"append")
+					
+					If (Num:C11($Obj_in.template.relationIdCount)>0)  // defined by designer, YES!
+						
+						$Obj_element.idCount:=Num:C11($Obj_in.template.relationIdCount)
+						
+					Else   // not defined, we an check
+						
+						If (Not:C34($Dom_relation.isDefault))  // fix id count if not defined by reading dom
+							
+							$Dom_child:=$Obj_element.dom
+							$Lon_ids:=0
+							
+							While ($Dom_child.success)
+								
+								$Lon_ids:=$Lon_ids+1
+								$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
+								
+							End while 
+							
+							If ($Lon_ids=1)
+								
+								$Lon_ids:=32  // default value if not found
+								
+							End if 
+						End if 
+						
+						$Obj_element.idCount:=$Lon_ids  // as a result purpose
+					End if 
+					
 					  // Must be inserted into a stack view (with a subviews as intermediate)
 					C_OBJECT:C1216($Obj_)
 					For each ($Obj_;$Obj_in.template.elements) Until ($Obj_element.insertInto#Null:C1517)
@@ -556,7 +628,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					  // 2- scene
 					$Obj_element:=New object:C1471(\
 						"insertInto";$Dom_root.find("document/scenes");\
-						"dom";xml ("load";COMPONENT_Pathname ("templates").folder("relation").file("storyboardScene.xml"));\
+						"dom";xml ("load";$Folder_relation.file("storyboardScene.xml"));\
 						"idCount";3;\
 						"tagInterfix";"SN";\
 						"insertMode";"append")
@@ -568,22 +640,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						"insertMode";"append"\
 						)
 					
-					  // only one, TAG-SN-001 is from scene, the viewController to open on transition
-					
-					  // find the VC (XXX make a loop, a better xpath?)
-					
-					$Obj_element.insertInto:=$Dom_root.find("document/scenes/scene[2]/objects/viewController")
-					
-					If (Not:C34($Obj_element.insertInto.success))
+					$Lon_j:=3
+					Repeat 
 						
-						$Obj_element.insertInto:=$Dom_root.find("document/scenes/scene[1]/objects/viewController")
+						$Obj_element.insertInto:=$Dom_root.find("document/scenes/scene["+String:C10($Lon_j)+"]/objects/viewController")
+						$Lon_j:=$Lon_j-1
 						
-						If (Not:C34($Obj_element.insertInto.success))
-							
-							$Obj_element.insertInto:=$Dom_root.find("document/scenes/scene[0]/objects/viewController")
-							
-						End if 
-					End if 
+					Until ($Obj_element.insertInto.success | ($Lon_j<0))
 					
 					If ($Obj_element.insertInto.success)
 						$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
@@ -594,7 +657,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					Else 
 						
 						  // Invalid relation
-						ASSERT:C1129(True:C214;"Cannot add relation on this template. Cannot find viewController")
+						ASSERT:C1129(dev_Matrix ;"Cannot add relation on this template. Cannot find viewController: "+JSON Stringify:C1217($Obj_element))
 						
 					End if 
 					
@@ -691,9 +754,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					For each ($Obj_element;$Obj_in.template.relationElements)
 						
 						If ($Obj_element.dom#Null:C1517)
-							
-							$Obj_element.dom.close()
-							
+							If (Not:C34(Bool:C1537($Obj_element.dom.doNotClose)))  // do not close if in global storyboard, if external file or string must be closed
+								$Obj_element.dom.getRoot().close())
+							End if 
 						End if 
 					End for each 
 				End if 
@@ -1054,127 +1117,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			End case 
 			
 			  //______________________________________________________
-		: ($Obj_in.action="addScene")
-			
-			ASSERT:C1129(Length:C16(String:C10($Obj_in.name))>0)
-			
-			If (Value type:C1509($Obj_in.dom)=Is object:K8:27)
-				
-				$Obj_out.dom:=$Obj_in.dom  // edit inline
-				
-				  // Create a new scene
-				$Col_:=storyboard (New object:C1471("action";"randomIds";"length";3)).value
-				$Obj_tag:=New object:C1471(\
-					"name";String:C10($Obj_in.name);\
-					"tagInterfix";"SN";\
-					"storyboardIDs";$Col_)
-				$Obj_out.scene:=storyboard (New object:C1471(\
-					"action";"scene";\
-					"tags";$Obj_tag))
-				
-				If ($Obj_out.scene.success)
-					
-					  // inject into <scenes>
-					$Obj_out.domScenes:=$Obj_in.dom.find("document/scenes")
-					
-					If ($Obj_out.domScenes.success)
-						
-						$Obj_out.success:=True:C214
-						$Obj_out.domScene:=$Obj_out.domScenes.append($Obj_out.scene.dom)
-						
-						  // Create a connection
-						If (Bool:C1537($Obj_in.connection))
-							
-							  // Find main viewController DOM (ex: <scene sceneID="fK0-6P-J5Y"><objects> <viewController>
-							$Obj_out.domVC:=$Obj_in.dom.find("document/scenes/scene[2]/objects/viewController")
-							
-							If ($Obj_out.domVC.success)
-								
-								  // Find its <connections> children
-								$Obj_out.domConnections:=$Obj_out.domVC.find("connections")
-								
-								If (Not:C34($Obj_out.domConnections.success))
-									
-									$Obj_out.domConnections:=$Obj_out.domVC.create("connections")
-									
-								End if 
-								
-								  // Create a segue with First random id as SCENE ID is destination id
-								$Col_:=New collection:C1472($Col_[0];storyboard (New object:C1471(\
-									"action";"randomId")).value)
-								$Obj_tag:=New object:C1471(\
-									"name";String:C10($Obj_in.name);\
-									"kind";"show";\
-									"tagInterfix";"SG";\
-									"storyboardIDs";$Col_)
-								$Obj_out.segue:=storyboard (New object:C1471(\
-									"action";"segue";\
-									"tags";$Obj_tag))
-								
-								  // Inject it into <connections>
-								$Obj_out.domSegue:=$Obj_out.domConnections.append($Obj_out.segue.dom)
-								
-							Else 
-								
-								$Obj_out.success:=False:C215
-								ob_error_add ($Obj_out;"Cannot find view controller to add connection on "+String:C10($Obj_in.name))
-								
-							End if 
-						End if 
-					End if 
-					
-				Else 
-					
-					ob_error_add ($Obj_out;"Cannot read scene template")
-					
-				End if 
-				
-			Else 
-				
-				ob_error_add ($Obj_out;"No dom element to edit when adding a scene")
-				
-			End if 
-			
-			  //______________________________________________________
-		: ($Obj_in.action="scene")
-			
-			$Obj_element:=COMPONENT_Pathname ("templates").folder("relation").file("storyboardScene.xml")
-			
-			If ($Obj_element.exists)
-				
-				If (Value type:C1509($Obj_in.tags)=Is object:K8:27)
-					
-					ASSERT:C1129($Obj_in.tags.storyboardIDs.length=3)
-					
-					$Txt_buffer:=$Obj_element.getText()
-					$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("automatic";"storyboardID"))
-					$Obj_out.dom:=xml ("parse";New object:C1471(\
-						"variable";$Txt_buffer))
-					$Obj_out.success:=True:C214
-					
-				Else 
-					
-					$Obj_out.dom:=xml ("load";$Obj_element)
-					$Obj_out.success:=True:C214
-					
-				End if 
-			End if 
-			
-			  //______________________________________________________
-		: ($Obj_in.action="segue")
-			
-			$Txt_buffer:="<segue destination=\"TAG-SG-001\" kind=\"___KIND___\" identifier=\"___NAME___\" id=\"TAG-SG-002\"/>"
-			
-			If (Value type:C1509($Obj_in.tags)=Is object:K8:27)
-				
-				ASSERT:C1129($Obj_in.tags.storyboardIDs.length=2)
-				$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("automatic";"storyboardID"))
-				
-			End if 
-			
-			$Obj_out.dom:=xml ("parse";New object:C1471(\
-				"variable";$Txt_buffer))
-			$Obj_out.success:=True:C214
 			
 			  //______________________________________________________
 		: ($Obj_in.action="version")
