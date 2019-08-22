@@ -45,6 +45,11 @@ ASSERT:C1129($Obj_result.success;"Must success to get home capabilities"+JSON St
 ASSERT:C1129(Value type:C1509($Obj_result.entitlements)=Is collection:K8:32;"Must return an entitlements plist modification for home:"+JSON Stringify:C1217($Obj_result))
 ASSERT:C1129(Value type:C1509($Obj_result.info)=Is collection:K8:32;"Must return an info plist modification for map:"+JSON Stringify:C1217($Obj_result))
 
+$Obj_result:=capabilities (New object:C1471("action";"natify";"signInWithOS";True:C214))
+ASSERT:C1129($Obj_result.success;"Must success to get signInWithOS capabilities"+JSON Stringify:C1217($Obj_result))
+ASSERT:C1129(Value type:C1509($Obj_result.entitlements)=Is collection:K8:32;"Must return an entitlements plist modification for signInWithOS:"+JSON Stringify:C1217($Obj_result))
+ASSERT:C1129(Value type:C1509($Obj_result.entitlements[0])=Is object:K8:27;"Must return an entitlements plist modification for signInWithOS:"+JSON Stringify:C1217($Obj_result))
+ASSERT:C1129($Obj_result.info.length=0;"Must found nothing")
 
   // WRITE
 
@@ -55,6 +60,10 @@ ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_r
 
 
 $Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214))))
+$Obj_result:=capabilities (New object:C1471("action";"inject";"target";$Folder_target.platformPath;"tags";New object:C1471("product";"___PRODUCT___");"value";$Obj_projfile))
+ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
+
+$Obj_projfile:=New object:C1471("capabilities";New object:C1471("signInWithOS";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214))))
 $Obj_result:=capabilities (New object:C1471("action";"inject";"target";$Folder_target.platformPath;"tags";New object:C1471("product";"___PRODUCT___");"value";$Obj_projfile))
 ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
 
@@ -74,6 +83,16 @@ $Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfil
 ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
 
 ASSERT:C1129($Obj_result.capabilities.length=2;"Must found all capabilities")  // capabilities + templates
+
+$Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214));New object:C1471("capabilities";New object:C1471("signInWithOS";True:C214))))
+$Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
+ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
+ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates
+
+$Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214)));"newobject";New object:C1471("capabilities";New object:C1471("signInWithOS";True:C214)))
+$Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
+ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
+ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates + newobject
 
 $Obj_projfile.actions:=New collection:C1472(\
 New object:C1471(\
@@ -109,7 +128,7 @@ New object:C1471(\
 $Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
 ASSERT:C1129($Obj_result.success;"Nothing to found inject"+JSON Stringify:C1217($Obj_result))
 
-ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates
+ASSERT:C1129($Obj_result.capabilities.length=4;"Must found all capabilities")  // capabilities + templates
 
   // natify found objects
 For each ($Obj_projfile;$Obj_result.capabilities)
