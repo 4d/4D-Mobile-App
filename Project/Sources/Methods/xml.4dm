@@ -33,8 +33,8 @@ If (This:C1470._is=Null:C1517)
 		"lastChild";Formula:C1597(xml ("lastChild"));\
 		"nextSibling";Formula:C1597(xml ("nextSibling"));\
 		"previousSibling";Formula:C1597(xml ("previousSibling"));\
-		"find";Formula:C1597(xml ("find";New object:C1471("xpath";$1)));\
-		"findOrCreate";Formula:C1597(xml ("findOrCreate";New object:C1471("xpath";$1)));\
+		"findByXPath";Formula:C1597(xml ("findByXPath";New object:C1471("xpath";$1)));\
+		"findOrCreate";Formula:C1597(xml ("findOrCreate";New object:C1471("element";$1)));\
 		"findMany";Formula:C1597(xml ("findMany";New object:C1471("xpath";$1)));\
 		"findById";Formula:C1597(xml ("findById";New object:C1471("id";$1)));\
 		"findByName";Formula:C1597(xml ("findByName";New object:C1471("name";$1)));\
@@ -333,7 +333,7 @@ Else
 					$t:=DOM Find XML element by ID:C1010($o.elementRef;$2.id)
 					
 					  //=================================================================
-				: ($1="find")
+				: ($1="findByXPath")
 					
 					$t:=xml_findElement ($o.elementRef;$2.xpath).reference
 					
@@ -341,15 +341,16 @@ Else
 				: ($1="findOrCreate")
 					
 					$t:=$o.elementRef
-					$o:=xml_findElement ($t;$2.xpath)  // a new $o will be created after, $t filled
+					DOM GET XML ELEMENT NAME:C730($t;$tt)
 					
+					$o:=xml_findElement ($t;$tt+"/"+$2.element)  // a new $o will be created after, $t filled
 					If ($o.success)
 						
 						$t:=$o.reference
 						
 					Else 
 						
-						$t:=DOM Create XML element:C865($t;$2.xpath)  // Will work only with simple xpath ie. subnode name
+						$t:=DOM Create XML element:C865($t;$2.element)  // Will work only with simple xpath ie. subnode name
 						
 					End if 
 					

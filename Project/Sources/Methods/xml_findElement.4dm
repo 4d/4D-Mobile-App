@@ -51,7 +51,7 @@ xml_ERROR:=0
   //) {
 
 $Obj_result.reference:=DOM Find XML element:C864($Dom_reference;$Txt_xpath)
-$Obj_result.success:=((OK=1) & (xml_ERROR#0) & \
+$Obj_result.success:=((OK=1) & (xml_ERROR=0) & \
 ($Obj_result.reference#"00000000000000000000000000000000") & ($Obj_result.reference#""))
 
   // } CATCH {

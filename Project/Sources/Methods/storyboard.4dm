@@ -211,7 +211,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If (Length:C16(String:C10($Obj_element.xpath))>0)
 						
-						$Obj_element.dom:=$Dom_root.find($Obj_element.xpath)
+						$Obj_element.dom:=$Dom_root.findByXPath($Obj_element.xpath)
 						
 						If (Not:C34($Obj_element.dom.success))
 							
@@ -446,7 +446,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If (Length:C16(String:C10($Obj_element.xpath))>0)  // look up with xpath
 							
-							$Obj_element.dom:=$Dom_root.find($Obj_element.xpath)
+							$Obj_element.dom:=$Dom_root.findByXPath($Obj_element.xpath)
 							
 							If (Not:C34($Obj_element.dom.success))
 								
@@ -548,7 +548,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					Case of 
 						: (Length:C16(String:C10($Obj_in.template.relationXPath))>0)
 							
-							$Dom_relation:=$Dom_root.find(String:C10($Obj_in.template.relationXPath))
+							$Dom_relation:=$Dom_root.findByXPath(String:C10($Obj_in.template.relationXPath))
 							$Dom_relation.isDefault:=False:C215
 							$Dom_relation.doNotClose:=True:C214
 							
@@ -559,7 +559,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 						: ($Folder_template.file("relationButton.xib").exists)
 							
-							$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xib")).find("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+							$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 							$Dom_relation.isDefault:=False:C215
 							
 						Else 
@@ -568,7 +568,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							If (Not:C34($Dom_relation.success))  // else us default one
 								
-								$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xib")).find("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+								$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 								  //$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml")) 
 								$Dom_relation.isDefault:=True:C214
 								
@@ -627,7 +627,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					  // 2- scene
 					$Obj_element:=New object:C1471(\
-						"insertInto";$Dom_root.find("document/scenes");\
+						"insertInto";$Dom_root.findByXPath("document/scenes");\
 						"dom";xml ("load";$Folder_relation.file("storyboardScene.xml"));\
 						"idCount";3;\
 						"tagInterfix";"SN";\
@@ -643,7 +643,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					$Lon_j:=3
 					Repeat 
 						
-						$Obj_element.insertInto:=$Dom_root.find("document/scenes/scene["+String:C10($Lon_j)+"]/objects/viewController")
+						$Obj_element.insertInto:=$Dom_root.findByXPath("document/scenes/scene["+String:C10($Lon_j)+"]/objects/viewController")
 						$Lon_j:=$Lon_j-1
 						
 					Until ($Obj_element.insertInto.success | ($Lon_j<0))

@@ -28,13 +28,13 @@ ASSERT:C1129($value.variable#Null:C1517;"Failed to export")  // Must dump data i
   // find 
   /// find ok
 C_OBJECT:C1216($scenes)
-$scenes:=$xml.find("/document/scenes")
+$scenes:=$xml.findByXPath("/document/scenes")
 ASSERT:C1129($scenes.success;"Failed to find xml element")
 ASSERT:C1129($scenes.elementRef#"00000000000000000000000000000000")
 ASSERT:C1129($scenes.elementRef#Null:C1517)
   /// find ko
 C_OBJECT:C1216($scene)
-$scene:=$xml.find("/document/scene")
+$scene:=$xml.findByXPath("/document/scene")
 ASSERT:C1129(Not:C34($scene.success);"Must failed to find invalid value")
 ASSERT:C1129($scene.elementRef=Null:C1517)
 
