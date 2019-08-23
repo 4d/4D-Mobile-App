@@ -12,7 +12,7 @@
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b)
 C_TEXT:C284($t;$Txt_isOfClass)
-C_OBJECT:C1216($o;$Obj_field;$Obj_target)
+C_OBJECT:C1216($o;$o;$Obj_target)
 C_COLLECTION:C1488($c)
 
 ARRAY TEXT:C222($tTxt_results;0)
@@ -51,20 +51,8 @@ If (Length:C16(This:C1470.$.current)>0)
 		
 		If ($b)
 			
-			  //$Obj_field:=New object(\
-				"name";$o.path)
-			  //If (Num($o.fieldNumber)#0)
-			  //$Obj_field.id:=$o.fieldNumber
-			  //Else 
-			  //$Obj_field.relatedTableNumber:=$o.relatedTableNumber
-			  //$Obj_field.relatedDataClass:=$o.relatedEntities
-			  //$Obj_field.type:=-2
-			  //$Obj_field.fieldType:=$o.fieldType
-			  //End if 
-			
-			$Obj_field:=$o
-			$Obj_field.name:=$o.path
-			
+			  //$Obj_field:=$o
+			$o.name:=$o.path
 			
 			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:bind";$t)
 			Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tTxt_results)
@@ -78,7 +66,7 @@ If (Length:C16(This:C1470.$.current)>0)
 					
 				End if 
 				
-				$Obj_target[$tTxt_results{1}][Num:C11($tTxt_results{2})]:=$Obj_field  //$o
+				$Obj_target[$tTxt_results{1}][Num:C11($tTxt_results{2})]:=$o  //$o
 				
 			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				
@@ -95,7 +83,7 @@ If (Length:C16(This:C1470.$.current)>0)
 							
 						Else 
 							
-							$Obj_target[$t]:=$Obj_field
+							$Obj_target[$t]:=$o
 							
 						End if 
 					End if 
@@ -105,14 +93,14 @@ If (Length:C16(This:C1470.$.current)>0)
 						If ($Obj_target[$t].extract("name").indexOf($o.path)=-1)
 							
 							  // Append field
-							$Obj_target[$t].push($Obj_field)
+							$Obj_target[$t].push($o)
 							
 						End if 
 					End if 
 					
 				Else 
 					
-					$Obj_target[$t]:=$Obj_field
+					$Obj_target[$t]:=$o
 					
 				End if 
 			End if 

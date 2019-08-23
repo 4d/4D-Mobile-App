@@ -59,6 +59,10 @@
 	height: auto;
 }
 
+.error {
+	fill: red
+}
+
 .picture {
 		fill: white;
 		fill-opacity: 0.8;

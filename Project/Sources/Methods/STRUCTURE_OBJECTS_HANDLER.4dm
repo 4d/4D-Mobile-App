@@ -418,9 +418,17 @@ Case of
 										
 									Else 
 										
-										  // Invert published status
-										($Obj_form.publishedPtr)->{$Lon_row}:=1-($Obj_form.publishedPtr)->{$Lon_row}
 										
+										If (Macintosh command down:C546 | Shift down:C543)
+											
+											
+											
+										Else 
+											
+											  // Invert published status
+											($Obj_form.publishedPtr)->{$Lon_row}:=1-($Obj_form.publishedPtr)->{$Lon_row}
+											
+										End if 
 									End if 
 									
 									STRUCTURE_UPDATE ($Obj_form)

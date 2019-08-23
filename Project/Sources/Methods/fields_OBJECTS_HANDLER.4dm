@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
-  // Project method : fields_OBJECTS_HANDLER
+  // Project method : FIELDS_OBJECTS_HANDLER
   // Database: 4D Mobile Express
   // ID[DE1DC030CB2B497BA1A42C0D39E7CE09]
   // Created 18-12-2017 by Vincent de Lachaux
@@ -15,11 +15,12 @@ C_LONGINT:C283($Lon_;$Lon_bottom;$Lon_column;$Lon_formEvent;$Lon_left;$Lon_param
 C_LONGINT:C283($Lon_right;$Lon_row;$Lon_top;$Lon_x;$Lon_y)
 C_POINTER:C301($Ptr_me)
 C_TEXT:C284($t;$Txt_current;$Txt_me)
-C_OBJECT:C1216($o;$Obj_context;$Obj_field;$Obj_form;$Obj_menu;$Obj_picker)
+C_OBJECT:C1216($menu;$o;$Obj_context;$Obj_field;$Obj_form;$Obj_menu)
+C_OBJECT:C1216($Obj_picker)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_LONGINT:C283(fields_OBJECTS_HANDLER ;$0)
+	C_LONGINT:C283(FIELDS_OBJECTS_HANDLER ;$0)
 End if 
 
   // ----------------------------------------------------
@@ -41,10 +42,10 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 	
-	$Obj_form:=fields_Handler (New object:C1471(\
+	$Obj_form:=FIELDS_Handler (New object:C1471(\
 		"action";"init"))
 	
-	$Obj_context:=$Obj_form.form
+	$Obj_context:=$Obj_form.$
 	
 Else 
 	
@@ -91,7 +92,7 @@ Case of
 						
 						$Obj_picker:=(ui.pointer($Obj_form.iconGrid))->
 						
-						$Obj_field:=fields_Handler (New object:C1471(\
+						$Obj_field:=FIELDS_Handler (New object:C1471(\
 							"action";"field";\
 							"row";$Lon_row))
 						
@@ -207,7 +208,7 @@ Case of
 					$0:=-1
 					
 					  // Get the field definition [
-					$Obj_field:=fields_Handler (New object:C1471(\
+					$Obj_field:=FIELDS_Handler (New object:C1471(\
 						"action";"field";\
 						"row";$Lon_row))
 					
@@ -253,10 +254,7 @@ Case of
 						End for each 
 						
 						  // Append user formatters if any
-						$c:=formatters (New object:C1471(\
-							"action";"getByType";\
-							"host";True:C214;\
-							"type";Num:C11($Obj_field.fieldType))).formatters
+						$c:=formatters (New object:C1471("action";"getByType";"host";True:C214;"type";Num:C11($Obj_field.fieldType))).formatters
 						
 						If ($c.length>0)
 							
@@ -333,7 +331,7 @@ Case of
 				If ($Lon_column=$Obj_form.labelColumn)\
 					 | ($Lon_column=$Obj_form.shortlabelColumn)
 					
-					$Obj_field:=fields_Handler (New object:C1471(\
+					$Obj_field:=FIELDS_Handler (New object:C1471(\
 						"action";"field";\
 						"row";$Lon_row))
 					
@@ -350,18 +348,37 @@ Case of
 		End case 
 		
 		  //==================================================
+	: ($Txt_me=$Obj_form.filter.name)
+		
+		Case of 
+				
+				  //______________________________________________________
+			: ($Lon_formEvent=On Clicked:K2:4)
+				
+				$menu:=menu 
+				$menu.append(":xliff:fieldsAndRelations";"0";$Obj_context.selector=0)
+				$menu.append(":xliff:fieldsOnly";"1";$Obj_context.selector=1)
+				$menu.append(":xliff:relationOnly";"2";$Obj_context.selector=2)
+				
+				$o:=$Obj_form.filter.getCoordinates()
+				
+				If ($menu.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom).selected)
+					
+					$Obj_context.selector:=Num:C11($menu.choice)
+					$Obj_context.refresh()
+					
+				End if 
+				
+				  //______________________________________________________
+		End case 
+		
+		  //==================================================
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown object: \""+$Txt_me+"\"")
 		
 		  //==================================================
 End case 
-
-  //If (Bool(featuresFlags._8858))
-
-  //ui.saveProject()
-
-  //End if 
 
   // ----------------------------------------------------
   // Return

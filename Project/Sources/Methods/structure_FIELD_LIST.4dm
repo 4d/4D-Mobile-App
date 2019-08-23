@@ -300,7 +300,8 @@ End if
   // Disable field publication if the table is missing
 OBJECT SET ENTERABLE:C238($Ptr_published->;Not:C34(editor_Locked ))
 
-ASSERT:C1129(Not:C34(Shift down:C543))
+  //ASSERT(Not(Shift down))
+
   // Sort if any
 If ($Obj_context.fieldSortByName)
 	

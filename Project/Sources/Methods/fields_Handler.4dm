@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
-  // Project method : fields_Handler
+  // Project method : FIELDS_Handler
   // Database: 4D Mobile Express
   // ID[BF3981E8AF72452DB0171AEDA52AF625]
   // Created 26-10-2017 by Vincent de Lachaux
@@ -19,50 +19,60 @@ C_OBJECT:C1216($o;$Obj_context;$Obj_dataModel;$Obj_form;$Obj_in;$Obj_out)
 C_COLLECTION:C1488($Col_buffer)
 
 If (False:C215)
-	C_OBJECT:C1216(fields_Handler ;$0)
-	C_OBJECT:C1216(fields_Handler ;$1)
+	C_OBJECT:C1216(FIELDS_Handler ;$0)
+	C_OBJECT:C1216(FIELDS_Handler ;$1)
 End if 
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+  // NO PARAMETERS REQUIRED
+
+  // Optional parameters
+If (Count parameters:C259>=1)
 	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Obj_in:=$1
-		
-	End if 
-	
-	$Obj_form:=New object:C1471(\
-		"window";Current form window:C827;\
-		"form";editor_INIT ;\
-		"fieldList";"01_fields";\
-		"ids";"IDs";\
-		"fields";"fields";\
-		"icons";"icons";\
-		"iconColumn";3;\
-		"labels";"labels";\
-		"labelColumn";5;\
-		"shortLabels";"shortLabels";\
-		"shortlabelColumn";4;\
-		"formats";"formats";\
-		"formatColumn";6;\
-		"iconGrid";"iconGrid")
-	
-	$Obj_context:=$Obj_form.form
-	
-	$Obj_context.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
-	
-Else 
-	
-	ABORT:C156
+	$Obj_in:=$1
 	
 End if 
+
+$Obj_form:=New object:C1471(\
+"window";Current form window:C827;\
+"$";editor_INIT ;\
+"form";ui.form("editor_CALLBACK").get();\
+"fieldList";"01_fields";\
+"ids";"IDs";\
+"fields";"fields";\
+"icons";"icons";\
+"iconColumn";3;\
+"labels";"labels";\
+"labelColumn";5;\
+"shortLabels";"shortLabels";\
+"shortlabelColumn";4;\
+"formats";"formats";\
+"formatColumn";6;\
+"iconGrid";"iconGrid";\
+"filter";ui.button("filter");\
+"init";Formula:C1597(FIELDS_Handler (New object:C1471("action";"init")))\
+)
+
+$Obj_context:=$Obj_form.$
+
+If (OB Is empty:C1297($Obj_context))\
+ | (Shift down:C543 & (Structure file:C489=Structure file:C489(*)))  // First load
+	
+	$Obj_context.selector:=0  //Fields & relations
+	
+	  // Constraints definition
+	ob_createPath ($Obj_context;"constraints.rules";Is collection:K8:32)
+	
+	  // Define form member methods
+	$Obj_context.refresh:=Formula:C1597(SET TIMER:C645(-1))
+	
+	$Obj_context.update:=Formula:C1597(FIELDS_Handler (New object:C1471("action";"update")))
+	
+End if 
+
+$Obj_context.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
 
   // ----------------------------------------------------
 Case of 
@@ -82,17 +92,15 @@ Case of
 				  // This trick remove the horizontal gap
 				OBJECT SET SCROLLBAR:C843(*;$Obj_form.fieldList;0;2)
 				
-				  // Constraints definition
-				$Obj_context.constraints:=New object:C1471
+				  // Preload the icons
+				CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"fieldIcons")
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				fields_Handler (New object:C1471(\
-					"action";"update"))
+				$Obj_form.filter.setTitle(Get localized string:C991(Choose:C955(Num:C11($Obj_context.selector);"fieldsAndRelations";"fieldsOnly";"relationOnly")))
 				
-				  // Preload the icons
-				CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"fieldIcons")
+				$Obj_context.update()
 				
 				  //______________________________________________________
 		End case 
@@ -140,6 +148,8 @@ Case of
 	: ($Obj_in.action="update")  // Display published tables according to data model
 		
 		$o:=fields_LIST (String:C10($Obj_context.tableNumber))
+		
+		
 		
 		If ($o.success)
 			
@@ -197,7 +207,7 @@ Case of
 			 & ($Obj_in.item<=$Obj_in.pathnames.length)
 			
 			  // Update data model
-			fields_Handler (New object:C1471("action";"field";"row";$Obj_in.row)).icon:=$Obj_in.pathnames[$Obj_in.item-1]
+			FIELDS_Handler (New object:C1471("action";"field";"row";$Obj_in.row)).icon:=$Obj_in.pathnames[$Obj_in.item-1]
 			
 			  // Update UI
 			$r:=ui.pointer($Obj_form.icons)

@@ -66,8 +66,7 @@ Case of
 		Case of 
 				
 				  //……………………………………………………………………………………………
-			: (String:C10($Obj_in.action)="tableIcons")\
-				 | (String:C10($Obj_in.action)="fieldIcons")
+			: (String:C10($Obj_in.action)="tableIcons") | (String:C10($Obj_in.action)="fieldIcons")
 				
 				$Lon_width:=$Lon_width-5
 				$Lon_height:=$Lon_height-5
@@ -235,7 +234,7 @@ Case of
 					  //……………………………………………………………………………………………
 				: (String:C10($Obj_in.action)="fieldIcons")
 					
-					fields_Handler ($Obj_in)
+					FIELDS_Handler ($Obj_in)
 					
 					  //……………………………………………………………………………………………
 				: (String:C10($Obj_in.action)="forms")
@@ -254,8 +253,7 @@ Case of
 		  //______________________________________________________
 	: ($Txt_selector="projectAudit")  // Verify the project integrity
 		
-		PROJECT_HANDLER (New object:C1471(\
-			"action";$Txt_selector))
+		PROJECT_HANDLER (New object:C1471("action";$Txt_selector))
 		
 		  //______________________________________________________
 	: ($Txt_selector="projectFixErrors")  // Fix the project errors
@@ -279,11 +277,9 @@ Case of
 			
 		Else 
 			
-			main_Handler (New object:C1471(\
-				"action";"update"))
+			main_Handler (New object:C1471("action";"update"))
 			
-			main_Handler (New object:C1471(\
-				"action";"order"))
+			main_Handler (New object:C1471("action";"order"))
 			
 		End if 
 		
@@ -303,8 +299,7 @@ Case of
 			
 		Else 
 			
-			tables_Handler (New object:C1471(\
-				"action";"update"))
+			tables_Handler (New object:C1471("action";"update"))
 			
 		End if 
 		
@@ -324,8 +319,7 @@ Case of
 			
 		Else 
 			
-			tables_Handler (New object:C1471(\
-				"action";"icons"))
+			tables_Handler (New object:C1471("action";"icons"))
 			
 		End if 
 		
@@ -345,7 +339,7 @@ Case of
 			
 		Else 
 			
-			fields_Handler (New object:C1471(\
+			FIELDS_Handler (New object:C1471(\
 				"action";"update"))
 			
 		End if 
@@ -366,7 +360,7 @@ Case of
 			
 		Else 
 			
-			fields_Handler (New object:C1471(\
+			FIELDS_Handler (New object:C1471(\
 				"action";"icons"))
 			
 		End if 
@@ -387,8 +381,7 @@ Case of
 			
 		Else 
 			
-			ACTIONS_Handler (New object:C1471(\
-				"action";"icons"))
+			ACTIONS_Handler (New object:C1471("action";"icons"))
 			
 		End if 
 		
@@ -408,8 +401,7 @@ Case of
 			
 		Else 
 			
-			SOURCE_Handler (New object:C1471(\
-				"action";"dataset"))
+			SOURCE_Handler (New object:C1471("action";"dataset"))
 			
 		End if 
 		
@@ -429,8 +421,7 @@ Case of
 			
 		Else 
 			
-			DATA_Handler (New object:C1471(\
-				"action";"update"))
+			DATA_Handler (New object:C1471("action";"update"))
 			
 		End if 
 		
@@ -450,8 +441,7 @@ Case of
 			
 		Else 
 			
-			SOURCE_Handler (New object:C1471(\
-				"action";$Txt_selector))
+			SOURCE_Handler (New object:C1471("action";$Txt_selector))
 			
 		End if 
 		
@@ -473,16 +463,13 @@ Case of
 			
 			If ($Obj_in.success)
 				
-				DEVELOPER_Handler (New object:C1471(\
-					"action";$Txt_selector;\
-					"value";$Obj_in.value))
+				DEVELOPER_Handler (New object:C1471("action";$Txt_selector;"value";$Obj_in.value))
 				
 			End if 
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="tableList")\
-		 | ($Txt_selector="fieldList")
+	: ($Txt_selector="tableList") | ($Txt_selector="fieldList")
 		
 		If ($Obj_form.currentForm=$Obj_form.project)
 			
@@ -497,9 +484,7 @@ Case of
 			
 		Else 
 			
-			STRUCTURE_Handler (New object:C1471(\
-				"action";$Txt_selector;\
-				"value";$Obj_in))
+			STRUCTURE_Handler (New object:C1471("action";$Txt_selector;"value";$Obj_in))
 			
 		End if 
 		
@@ -513,8 +498,7 @@ Case of
 				  //…………………………………………………………………………………………………………
 			: ($Txt_panel=$Obj_form.structure)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Obj_in.panel;"structure_Handler";*;New object:C1471(\
-					"action";$Txt_selector))
+				EXECUTE METHOD IN SUBFORM:C1085($Obj_in.panel;"structure_Handler";*;New object:C1471("action";$Txt_selector))
 				
 				  //…………………………………………………………………………………………………………
 		End case 
@@ -528,9 +512,7 @@ Case of
 			
 			  // Resize the current panel
 			OBJECT MOVE:C664(*;$Txt_panel;0;0;0;$Obj_in.offset)
-			EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;"structure_Handler";*;New object:C1471(\
-				"action";"geometry";\
-				"target";$Obj_in.panel))
+			EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;"structure_Handler";*;New object:C1471("action";"geometry";"target";$Obj_in.panel))
 			
 			  // Move all the following panels
 			For ($Lon_i;$Lon_index+1;panel_Count ;1)
@@ -579,14 +561,12 @@ Case of
 						: ($Obj_in.panel="TABLES")
 							
 							  // Set the selected table
-							tables_Handler (New object:C1471(\
-								"action";"select";\
-								"tableNumber";Num:C11($Obj_in.table)))
+							tables_Handler (New object:C1471("action";"select";"tableNumber";Num:C11($Obj_in.table)))
 							
 							If ($Obj_in.field#Null:C1517)  // Select field
 								
 								  // Set the selected field
-								fields_Handler (New object:C1471(\
+								FIELDS_Handler (New object:C1471(\
 									"action";"select";\
 									"fieldNumber";Num:C11($Obj_in.field)))
 								
@@ -657,8 +637,7 @@ Case of
 			
 		Else 
 			
-			views_Handler (New object:C1471(\
-				"action";$Txt_selector))
+			views_Handler (New object:C1471("action";$Txt_selector))
 			
 		End if 
 		
@@ -708,8 +687,7 @@ Case of
 			
 		Else 
 			
-			SERVER_Handler (New object:C1471(\
-				"action";"authenticationMethod"))
+			SERVER_Handler (New object:C1471("action";"authenticationMethod"))
 			
 		End if 
 		
@@ -729,8 +707,7 @@ Case of
 			
 		Else 
 			
-			SOURCE_Handler (New object:C1471(\
-				"action";$Txt_selector;"response";$Obj_in))
+			SOURCE_Handler (New object:C1471("action";$Txt_selector;"response";$Obj_in))
 			
 		End if 
 		

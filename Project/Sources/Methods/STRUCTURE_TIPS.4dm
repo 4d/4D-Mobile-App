@@ -12,7 +12,7 @@
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($l;$Lon_field;$Lon_fieldNumber;$Lon_parameters;$Lon_row;$Lon_tableNumber)
-C_LONGINT:C283($Lon_x;$Lon_y)
+C_LONGINT:C283($Lon_x;$Lon_y;$Lon_column)
 C_TEXT:C284($t;$Txt_;$Txt_name;$Txt_tips)
 C_OBJECT:C1216($Obj_dataModel;$Obj_field;$Obj_form;$Obj_relatedDataClass;$Obj_table)
 C_COLLECTION:C1488($c;$Col_catalog;$Col_desynchronized;$Col_fields)
@@ -38,7 +38,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
 	  // Get the list box column and row to know what cell the user hovers
 	GET MOUSE:C468($Lon_x;$Lon_y;$l)
-	LISTBOX GET CELL POSITION:C971(*;$1.target;$Lon_x;$Lon_y;$l;$Lon_row)
+	LISTBOX GET CELL POSITION:C971(*;$1.target;$Lon_x;$Lon_y;$Lon_column;$Lon_row)
 	
 Else 
 	
@@ -61,7 +61,7 @@ If ($Lon_row#0)
 			
 			$Obj_table:=$Col_catalog[$l]
 			
-			ASSERT:C1129(Not:C34(Shift down:C543))
+			  //ASSERT(Not(Shift down))
 			
 			If ($Obj_table=Null:C1517)
 				
@@ -335,6 +335,11 @@ If ($Lon_row#0)
 						Case of 
 								
 								  //______________________________________________________
+							: ($1.target=$Obj_form.tableList)
+								
+								  //
+								
+								  //______________________________________________________
 							: ($1.target=$Obj_form.fieldList)
 								
 								$Obj_field:=$Obj_table.field[$Lon_row-1]
@@ -351,6 +356,17 @@ If ($Lon_row#0)
 											
 											  // Recursive link
 											$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("recursive")+")"
+											
+										End if 
+										
+										If ($Lon_column=1)
+											
+											$Txt_tips:=$Txt_tips+"\r• "+str ("youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere").localized(Choose:C955($Obj_form.publishedPtr->{$Lon_row}#0;"disable";"enable"))
+											
+											
+										Else 
+											
+											$Txt_tips:=$Txt_tips+"\r• "+Get localized string:C991("clickHereToSelectThePublishedFields")
 											
 										End if 
 										

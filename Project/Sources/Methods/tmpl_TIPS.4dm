@@ -216,22 +216,29 @@ If (Length:C16($Txt_tips)=0)
 		$o:=JSON Parse:C1218($t)
 		
 		Case of 
+				
 				  //______________________________________________________
 			: ($o.fieldType=8859)  // 1-N relation
 				
-				$Txt_tips:=".This field will allow you to navigate to list of "+$o.relatedEntities
-				
-				  //______________________________________________________
-			: (False:C215)
+				If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)
+					
+					$Txt_tips:=ui.alert+str ("theLinkedTableIsNotPublished")\
+						.localized($o.relatedEntities)
+					
+				Else 
+					
+					$Txt_tips:=str ("thisFieldWillAllowYouToNavigateToListOf")\
+						.localized($o.relatedEntities)
+					
+				End if 
 				
 				  //______________________________________________________
 			Else 
 				
-				  // A "Case of" statement should never omit "Else"
+				  //$Txt_tips:=$o.label
 				
 				  //______________________________________________________
 		End case 
-		
 	End if 
 End if 
 

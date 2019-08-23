@@ -264,24 +264,22 @@ Case of
 											
 											If ($o#Null:C1517)
 												
-												$Txt_name:=$o.name
-												$svg.setAttribute("ios:data";JSON Stringify:C1217($o);New object:C1471(\
-													"target";$Dom_field))
+												  // Keep the field  description for the needs of UI
+												$svg.setAttribute("ios:data";JSON Stringify:C1217($o);$Dom_field)
 												
-												If (Num:C11($o.id)=0)  // 1-N relation
+												$Txt_name:=$o.name
+												
+												If ($o.fieldType=8859)  // 1-N relation
 													
 													$tt:=$svg.findById($t+".label")
 													
-													If (Form:C1466.datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)\
-														 | (Value type:C1509(Form:C1466.datamodel[String:C10($o.relatedTableNumber)])=Is undefined:K8:13)
-														
-														$Txt_name:=ui.alert+" "+$Txt_name
-														$svg.setAttribute("fill";"red";$tt)
-														
-													End if 
-													
 													$svg.setAttribute("font-style";"italic";$tt)
 													
+													If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
+														
+														$svg.setAttribute("class";String:C10(xml_attributes ($tt).class)+" error";$tt)
+														
+													End if 
 												End if 
 											End if 
 										End if 

@@ -37,16 +37,6 @@
 		},
 		{
 			"objects": {
-				"01_fields.label": {
-					"type": "text",
-					"top": 5,
-					"left": 17,
-					"width": 72,
-					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:fields"
-				},
 				"01_fields.border": {
 					"type": "rectangle",
 					"top": 27,
@@ -80,7 +70,6 @@
 					"textAlign": "left",
 					"verticalAlign": "middle",
 					"borderStyle": "none",
-					"method": "ObjectMethods/01_fields.4dm",
 					"events": [
 						"onClick",
 						"onDisplayDetail",
@@ -93,6 +82,7 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
+					"method": "FIELDS_OBJECTS_HANDLER",
 					"columns": [
 						{
 							"name": "IDs",
@@ -169,7 +159,6 @@
 							"events": [
 								"onClick"
 							],
-							"method": "ObjectMethods/icons.4dm",
 							"header": {
 								"name": "Header1",
 								"text": ".Icons",
@@ -183,7 +172,8 @@
 								"fill": "#FFFFFF",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"method": "FIELDS_OBJECTS_HANDLER"
 						},
 						{
 							"name": "shortLabels",
@@ -197,7 +187,6 @@
 							"events": [
 								"onDoubleClick"
 							],
-							"method": "ObjectMethods/shortLabels.4dm",
 							"header": {
 								"name": "Header3",
 								"text": ".Short Labels",
@@ -211,7 +200,8 @@
 								"fill": "#FFFFFF",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"method": "FIELDS_OBJECTS_HANDLER"
 						},
 						{
 							"name": "labels",
@@ -225,7 +215,6 @@
 							"events": [
 								"onDoubleClick"
 							],
-							"method": "ObjectMethods/labels.4dm",
 							"header": {
 								"name": "Header2",
 								"text": ".Labels",
@@ -239,7 +228,8 @@
 								"fill": "#FFFFFF",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"method": "FIELDS_OBJECTS_HANDLER"
 						},
 						{
 							"name": "formats",
@@ -330,6 +320,25 @@
 					"stroke": "#696969",
 					"textAlign": "left",
 					"text": ":xliff:formatters"
+				},
+				"filter": {
+					"type": "button",
+					"top": 5,
+					"left": 16,
+					"width": 237,
+					"height": 17,
+					"icon": "/RESOURCES/images/common/down.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"events": [
+						"onClick"
+					],
+					"method": "fields_OBJECTS_HANDLER",
+					"focusable": false,
+					"textPlacement": "right",
+					"stroke": "#696969",
+					"text": " ",
+					"textDecoration": "underline"
 				}
 			}
 		}

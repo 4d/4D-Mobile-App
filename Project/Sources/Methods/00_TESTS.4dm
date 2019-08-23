@@ -22,14 +22,6 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$svg:=svg ("load";Folder:C1567(fk desktop folder:K87:19).file("DEV/test svg.svg"))
-		$svg.rect(150;125;100;50).setFill("yellow")
-		  //$svg.save(Folder(fk desktop folder).file("DEV/test svg (copy).svg"))
-		$svg.save()
-		
-		  //________________________________________
-	: (True:C214)
-		
 		$svg:=svg   //("load";Folder(fk desktop folder).file("DEV/export.svg"))
 		$t:=$svg.rect(10;10;100;50).latest
 		ASSERT:C1129($t=$svg.find("svg/rect"))

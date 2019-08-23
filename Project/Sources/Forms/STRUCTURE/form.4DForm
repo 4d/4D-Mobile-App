@@ -174,16 +174,11 @@
 					"left": 489,
 					"width": 449,
 					"height": 552,
-					"resizingMode": "legacy",
 					"hideFocusRing": true,
-					"sortable": false,
-					"movableRows": false,
 					"hideSystemHighlight": true,
 					"rowHeight": "32px",
 					"showHeaders": false,
 					"scrollbarHorizontal": "hidden",
-					"horizontalLineStroke": "transparent",
-					"verticalLineStroke": "transparent",
 					"borderStyle": "none",
 					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
@@ -195,6 +190,9 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
+					"movableRows": false,
+					"horizontalLineStroke": "transparent",
+					"verticalLineStroke": "transparent",
 					"columns": [
 						{
 							"name": "published",

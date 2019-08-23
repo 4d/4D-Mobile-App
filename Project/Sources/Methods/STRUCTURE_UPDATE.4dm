@@ -48,7 +48,7 @@ $Txt_tableNumber:=String:C10($Obj_currentTable.tableNumber)
 $Col_published:=New collection:C1472
 ARRAY TO COLLECTION:C1563($Col_published;($Obj_form.publishedPtr)->;"published";(ui.pointer($Obj_form.fields))->;"name")
 
-If ($Col_published.extract("published").indexOf(1)=-1)\
+If ($Col_published.extract("published").countValues(0)=$Col_published.length)\
  & ($Col_published.extract("published").indexOf(2)=-1)\
  & (Length:C16(String:C10($Obj_context.fieldFilter))=0)\
  & (Not:C34(Bool:C1537($Obj_context.fieldFilterPublished)))
