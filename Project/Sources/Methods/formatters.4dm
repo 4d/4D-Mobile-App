@@ -106,22 +106,22 @@ Case of
 		
 		  // Host formatters
 		$Obj_resources:=COMPONENT_Pathname ("host_formatters")
-		
-		For each ($Obj_resource;$Obj_resources.folders())
-			
-			$Obj_formatter:=ob_parseFile ($Obj_resource.file("manifest.json"))
-			
-			If ($Obj_formatter.success)
+		If ($Obj_resources.exists)
+			For each ($Obj_resource;$Obj_resources.folders())
 				
-				$Obj_formatter:=$Obj_formatter.value
-				$Obj_formatter.isHost:=True:C214
-				$Obj_formatter.path:=$Obj_resource.platformPath
-				$Obj_formatter.folder:=$Obj_resource
-				$Obj_out.formatters["/"+$Obj_resource.name]:=$Obj_formatter
+				$Obj_formatter:=ob_parseFile ($Obj_resource.file("manifest.json"))
 				
-			End if 
-		End for each 
-		
+				If ($Obj_formatter.success)
+					
+					$Obj_formatter:=$Obj_formatter.value
+					$Obj_formatter.isHost:=True:C214
+					$Obj_formatter.path:=$Obj_resource.platformPath
+					$Obj_formatter.folder:=$Obj_resource
+					$Obj_out.formatters["/"+$Obj_resource.name]:=$Obj_formatter
+					
+				End if 
+			End for each 
+		End if 
 		  //______________________________________________________
 	: ($Obj_in.action="getByType")
 		
