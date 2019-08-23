@@ -285,7 +285,7 @@ If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file p
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_ICON___";xml_encode (String:C10($Obj_tags.field.detailIcon)))
 				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL_ALIGNMENT___";String:C10($Obj_tags.field.labelAlignment))
 				
-				If ($Obj_tags.field.id=Null:C1517)
+				If (Num:C11($Obj_tags.field.id)=0)
 					  // $Txt_out:=Replace string($Txt_out;$Txt_buffer+"_INVERSE___";String($Obj_tags.field.inverseName))  // if use field as relation, remove this line if use ($Obj_tags.relation#Null)
 					$Txt_out:=Replace string:C233($Txt_out;"___DESTINATION___";formatString ("table-name";String:C10($Obj_tags.field.relatedEntities)+"ListForm"))  // ?? if isRelationToMany change check this line 
 					

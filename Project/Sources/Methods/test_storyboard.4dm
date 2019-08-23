@@ -24,10 +24,10 @@ New object:C1471("name";"field 4";"id";4);\
 New object:C1471("name";"field 5";"id";5);\
 New object:C1471("name";"field 6";"id";6);\
 New object:C1471("name";"field 7";"id";7);\
-New object:C1471("name";"relation 1");\
+New object:C1471("name";"relation 1";"relatedEntities";"TableRelated1");\
 New object:C1471("name";"field 5";"id";5);\
-New object:C1471("name";"relation 2");\
-New object:C1471("name";"relation 1");\
+New object:C1471("name";"relation 2";"relatedEntities";"TableRelated2");\
+New object:C1471("name";"relation 1";"relatedEntities";"TableRelated1");\
 New object:C1471("name";"field 3";"id";3))
 $Lon_relationCount:=3
 $Lon_fieldCount:=$Col_fields.length-$Lon_relationCount
