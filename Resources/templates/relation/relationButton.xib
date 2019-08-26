@@ -29,7 +29,7 @@
                     </userDefinedRuntimeAttributes>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="TAG-RL-006" firstAttribute="top" secondItem="TAG-RL-001" secondAttribute="top" constant="8" id="TAG-RL-002"/>
                 <constraint firstAttribute="trailing" secondItem="TAG-RL-006" secondAttribute="trailing" constant="8" id="TAG-RL-003"/>
