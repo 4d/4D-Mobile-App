@@ -11,7 +11,7 @@
         <!--Login Form-->
         <scene sceneID="xNh-aW-8bd">
             <objects>
-                <viewController id="C0B-5k-v9X" customClass="LoginForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="C0B-5k-v9X" customClass="LoginForm" customModule="test" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mQf-Qc-O8K">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

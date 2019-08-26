@@ -31,7 +31,7 @@ open class LoginForm: QMobileUI.LoginForm {
     }
     /// Called when the view is about to made visible. Default does nothing
     open override func onWillAppear(_ animated: Bool) {
-        setupSOAppleSignIn()
+        setupAppleSignInButton()
     }
     /// Called when the view has been fully transitioned onto the screen. Default does nothing
     open override func onDidAppear(_ animated: Bool) {
@@ -44,14 +44,14 @@ open class LoginForm: QMobileUI.LoginForm {
     open override func onDidDisappear(_ animated: Bool) {
     }
     
-    func setupSOAppleSignIn() {
+    func setupAppleSignInButton() {
         let btnAuthorization = ASAuthorizationAppleIDButton()
-        btnAuthorization.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        btnAuthorization.frame = CGRect()
         btnAuthorization.cornerRadius = loginButton.normalCornerRadius
-
-        btnAuthorization.addTarget(self, action: #selector(actionHandleAppleSignin(_:)), for: .touchUpInside)
+        
+        btnAuthorization.addTarget(self, action: #selector(handleAppleSignInButtonPress(_:)), for: .touchUpInside)
         self.view.addSubview(btnAuthorization)
-
+        
         btnAuthorization.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             btnAuthorization.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -72,55 +72,96 @@ open class LoginForm: QMobileUI.LoginForm {
         authorizationController.performRequests()
     }
     
-    @objc func actionHandleAppleSignin(_ sender: ASAuthorizationAppleIDButton) {
+    @objc func handleAppleSignInButtonPress(_ sender: ASAuthorizationAppleIDButton) {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
-        let request = appleIDProvider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        let authorizationAppleIDRequest = appleIDProvider.createRequest()
+        authorizationAppleIDRequest.requestedScopes = [.fullName, .email]
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [authorizationAppleIDRequest])
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
         btnAuthorization = sender
     }
     
+    private func setupAppleIDCredentialObserver(userID: String) {
+        let authorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
+        
+        authorizationAppleIDProvider.getCredentialState(forUserID: userID) { (credentialState: ASAuthorizationAppleIDProvider.CredentialState, error: Error?) in
+            // Getting credential state is only possible on a real device, so forget it on emulators
+            if let error = error {
+                print("Getting credential state returned an error: \(error)")
+                return
+            }
+            switch (credentialState) {
+            case .authorized:
+                //User is authorized to continue using your app
+                break
+            case .revoked:
+                //User has revoked access to your app
+//                self.logout()
+                break
+            case .notFound:
+                //User is not found, meaning that the user never signed in through Apple ID
+                break
+            default: break
+            }
+        }
+    }
+    
+    private func registerForAppleIDSessionChanges() {
+        let notificationCenter = NotificationCenter.default
+        let sessionNotificationName = ASAuthorizationAppleIDProvider.credentialRevokedNotification
+        
+        let _ = notificationCenter.addObserver(forName: sessionNotificationName, object: nil, queue: nil) { (notification: Notification) in
+            //Sign user out
+//            self.logout()
+        }
+    }
+    
 }
+
+// MARK: - ASAuthorizationControllerDelegate
 
 extension LoginForm: ASAuthorizationControllerDelegate {
     
     // ASAuthorizationControllerDelegate function for authorization failed
-    
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        print("\(error)")
+        print("Authorization returned an error: \(error.localizedDescription)")
     }
     
     // ASAuthorizationControllerDelegate function for successful authorization
-    
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        registerForAppleIDSessionChanges()
         
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            handle(appleIDCredential: appleIDCredential)
+            setupAppleIDCredentialObserver(userID: appleIDCredential.user)
+            handleAppleIDCredential(appleIDCredential: appleIDCredential)
         case let passwordCredential as ASPasswordCredential:
-            handle(passwordCredential: passwordCredential)
+            setupAppleIDCredentialObserver(userID: passwordCredential.user)
+            handlePasswordCredential(passwordCredential: passwordCredential)
         default: break
         }
     }
     
 }
 
+// MARK: - ASAuthorizationControllerPresentationContextProviding
 
 extension LoginForm: ASAuthorizationControllerPresentationContextProviding {
     
-    //For present window
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
     }
     
 }
 
+// MARK: - Authentication
+
 extension LoginForm {
     
-    private func handle(appleIDCredential: ASAuthorizationAppleIDCredential) {
+    private func handleAppleIDCredential(appleIDCredential: ASAuthorizationAppleIDCredential) {
         
         let email: String = appleIDCredential.email ?? ""
         let userId = appleIDCredential.user
@@ -132,7 +173,22 @@ extension LoginForm {
         parameters?["firstname"] = firstname
         parameters?["lastname"] = lastname
         
-        APIManager.instance.authentificate(login: email, parameters: parameters) {  [weak self] result in
+        authentificate(login: email, parameters: parameters)
+    }
+    
+    private func handlePasswordCredential(passwordCredential: ASPasswordCredential) {
+        
+        let appleUsername = passwordCredential.user
+        let applePassword = passwordCredential.password
+        
+        var parameters: [String: Any]? = nil
+        parameters?["password"] = applePassword
+        
+        authentificate(login: appleUsername, parameters: parameters)
+    }
+    
+    private func authentificate(login: String, parameters: [String: Any]?) {
+        let _ = APIManager.instance.authentificate(login: email, parameters: parameters) {  [weak self] result in
             
             guard let this = self else { return }
             
@@ -148,17 +204,12 @@ extension LoginForm {
         }
     }
     
-    private func handle(passwordCredential: ASPasswordCredential) {
-        let appleUsername = passwordCredential.user
-        let applePassword = passwordCredential.password
-        // For the purpose of this demo app, show the password credential as an alert.
-        DispatchQueue.main.async {
-            let message = "The app has received your selected credential from the keychain. \n\n Username: \(appleUsername)\n Password: \(applePassword)"
-            let alertController = UIAlertController(title: "Keychain Credential Received",
-                                                    message: message,
-                                                    preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        }
-    }
+//    private func logout() {
+//        _ = APIManager.instance.logout { result in
+//            logger.info("Logout \(result)")
+//
+//            self.performTransition()
+//        }
+//    }
+    
 }
