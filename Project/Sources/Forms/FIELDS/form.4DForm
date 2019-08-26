@@ -327,18 +327,18 @@
 					"left": 16,
 					"width": 237,
 					"height": 17,
-					"icon": "/RESOURCES/images/common/down.png",
-					"iconFrames": 4,
+					"icon": "/RESOURCES/images/filter.png",
+					"iconFrames": 1,
 					"style": "custom",
 					"events": [
 						"onClick"
 					],
 					"method": "fields_OBJECTS_HANDLER",
 					"focusable": false,
-					"textPlacement": "right",
 					"stroke": "#696969",
 					"text": " ",
-					"textDecoration": "underline"
+					"textDecoration": "underline",
+					"textPlacement": "right"
 				}
 			}
 		}

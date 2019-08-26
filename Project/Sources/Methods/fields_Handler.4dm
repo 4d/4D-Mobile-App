@@ -147,58 +147,64 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="update")  // Display published tables according to data model
 		
-		$o:=fields_LIST (String:C10($Obj_context.tableNumber))
-		
-		
-		
-		If ($o.success)
+		If (This:C1470=Null:C1517)
 			
-			COLLECTION TO ARRAY:C1562($o.ids;(ui.pointer($Obj_form.ids))->)
-			COLLECTION TO ARRAY:C1562($o.paths;(ui.pointer($Obj_form.fields))->)
-			COLLECTION TO ARRAY:C1562($o.labels;(ui.pointer($Obj_form.labels))->)
-			COLLECTION TO ARRAY:C1562($o.shortLabels;(ui.pointer($Obj_form.shortLabels))->)
-			COLLECTION TO ARRAY:C1562($o.icons;(ui.pointer($Obj_form.icons))->)
-			COLLECTION TO ARRAY:C1562($o.formats;(ui.pointer($Obj_form.formats))->)
+			$Obj_context.update()
 			
-			For ($i;0;$o.formatColors.length-1;1)
+		Else 
+			
+			$o:=fields_LIST (String:C10($Obj_context.tableNumber))
+			
+			If ($o.success)
 				
-				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.formats;$i+1;$o.formatColors[$i];lk font color:K53:24)
+				COLLECTION TO ARRAY:C1562($o.ids;(ui.pointer($Obj_form.ids))->)
+				COLLECTION TO ARRAY:C1562($o.paths;(ui.pointer($Obj_form.fields))->)
+				COLLECTION TO ARRAY:C1562($o.labels;(ui.pointer($Obj_form.labels))->)
+				COLLECTION TO ARRAY:C1562($o.shortLabels;(ui.pointer($Obj_form.shortLabels))->)
+				COLLECTION TO ARRAY:C1562($o.icons;(ui.pointer($Obj_form.icons))->)
+				COLLECTION TO ARRAY:C1562($o.formats;(ui.pointer($Obj_form.formats))->)
 				
-			End for 
-			
-			LISTBOX SORT COLUMNS:C916(*;$Obj_form.fieldList;2;>)
-			
-			If (Num:C11($o.count)=0)
+				For ($i;0;$o.formatColors.length-1;1)
+					
+					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.formats;$i+1;$o.formatColors[$i];lk font color:K53:24)
+					
+				End for 
+				
+				LISTBOX SORT COLUMNS:C916(*;$Obj_form.fieldList;2;>)
+				
+				If (Num:C11($o.count)=0)
+					
+					OBJECT SET VISIBLE:C603(*;"empty";True:C214)
+					OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;False:C215)
+					
+				Else 
+					
+					OBJECT SET VISIBLE:C603(*;"empty";False:C215)
+					OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;True:C214)
+					
+				End if 
+				
+			Else 
+				
+				CLEAR VARIABLE:C89((ui.pointer($Obj_form.ids))->)
+				CLEAR VARIABLE:C89((ui.pointer($Obj_form.fields))->)
+				CLEAR VARIABLE:C89((ui.pointer($Obj_form.labels))->)
+				CLEAR VARIABLE:C89((ui.pointer($Obj_form.shortLabels))->)
+				CLEAR VARIABLE:C89((ui.pointer($Obj_form.icons))->)
+				CLEAR VARIABLE:C89((ui.pointer($Obj_form.formats))->)
 				
 				OBJECT SET VISIBLE:C603(*;"empty";True:C214)
 				OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;False:C215)
 				
-			Else 
-				
-				OBJECT SET VISIBLE:C603(*;"empty";False:C215)
-				OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;True:C214)
-				
 			End if 
 			
-		Else 
+			editor_Locked ($Obj_form.labels;$Obj_form.shortLabels;$Obj_form.formats)
 			
-			CLEAR VARIABLE:C89((ui.pointer($Obj_form.ids))->)
-			CLEAR VARIABLE:C89((ui.pointer($Obj_form.fields))->)
-			CLEAR VARIABLE:C89((ui.pointer($Obj_form.labels))->)
-			CLEAR VARIABLE:C89((ui.pointer($Obj_form.shortLabels))->)
-			CLEAR VARIABLE:C89((ui.pointer($Obj_form.icons))->)
-			CLEAR VARIABLE:C89((ui.pointer($Obj_form.formats))->)
-			
-			OBJECT SET VISIBLE:C603(*;"empty";True:C214)
-			OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;False:C215)
+			$Obj_context.current:=0
+			LISTBOX SELECT ROW:C912(*;$Obj_form.fieldList;0;lk remove from selection:K53:3)
+			editor_ui_LISTBOX ($Obj_form.fieldList)
 			
 		End if 
-		
-		editor_Locked ($Obj_form.labels;$Obj_form.shortLabels;$Obj_form.formats)
-		
-		$Obj_context.current:=0
-		LISTBOX SELECT ROW:C912(*;$Obj_form.fieldList;0;lk remove from selection:K53:3)
-		editor_ui_LISTBOX ($Obj_form.fieldList)
 		
 		  //=========================================================
 	: ($Obj_in.action="fieldIcons")  // Call back from widget

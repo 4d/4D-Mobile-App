@@ -360,9 +360,7 @@ Case of
 				$menu.append(":xliff:fieldsOnly";"1";$Obj_context.selector=1)
 				$menu.append(":xliff:relationOnly";"2";$Obj_context.selector=2)
 				
-				$o:=$Obj_form.filter.getCoordinates()
-				
-				If ($menu.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom).selected)
+				If ($menu.popup("";$Obj_form.filter.getCoordinates()).selected)
 					
 					$Obj_context.selector:=Num:C11($menu.choice)
 					$Obj_context.refresh()

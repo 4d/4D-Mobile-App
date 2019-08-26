@@ -54,8 +54,6 @@ If ($Obj_out.success)
 	
 	If ($Obj_out.success)
 		
-		  //$Dir_root:=Pathname ("fieldIcons")+Folder separator
-		  //$Dir_hostRoot:=Pathname ("host_fieldIcons")
 		$Dir_formats:=_o_Pathname ("host_formatters")
 		
 		$Obj_out.ids:=New collection:C1472
@@ -84,7 +82,8 @@ If ($Obj_out.success)
 			Case of 
 					
 					  //……………………………………………………………………………………………………………
-				: ($ƒ.isField($Txt_table))
+				: ($ƒ.isField($Txt_table))\
+					 & (Num:C11(This:C1470.selector)<2)
 					
 					$Obj_field:=$Obj_table[$Txt_table]
 					$Obj_field.id:=Num:C11($Txt_table)
@@ -118,7 +117,6 @@ If ($Obj_out.success)
 					$Obj_out.shortLabels.push($Obj_field.shortLabel)
 					$Obj_out.iconPaths.push(String:C10($Obj_field.icon))
 					$Obj_out.icons.push(getIcon (String:C10($Obj_field.icon)))
-					
 					$Obj_out.formatColors[$Obj_out.formats.length]:=Foreground color:K23:1
 					
 					If ($Obj_field.format#Null:C1517)
@@ -127,8 +125,6 @@ If ($Obj_out.success)
 						If ($Obj_field.format[[1]]="/")  // User resources
 							
 							$t:=Substring:C12($Obj_field.format;2)
-							
-							  //$t:=$Dir_formats+$t+Folder separator
 							
 							If (Not:C34(formatters (New object:C1471(\
 								"action";"isValid";\
@@ -140,14 +136,14 @@ If ($Obj_out.success)
 							
 						Else 
 							
-							$t:=str_localized (New collection:C1472("_"+$Obj_field.format))
+							$t:=str ("_"+$Obj_field.format).localized()
 							
 						End if 
 						  //%W+533.1
 						
 					Else 
 						
-						$t:=str_localized (New collection:C1472("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])))
+						$t:=str ("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
 						
 					End if 
 					
@@ -157,6 +153,11 @@ If ($Obj_out.success)
 				: (Value type:C1509($Obj_table[$Txt_table])#Is object:K8:27)
 					
 					  // <NOTHING MORE TO DO>
+					
+					  //……………………………………………………………………………………………………………
+				: (Num:C11(This:C1470.selector)=1)
+					
+					  // Fields only
 					
 					  //……………………………………………………………………………………………………………
 				: ($ƒ.isRelationToOne($Obj_table[$Txt_table]))
@@ -204,16 +205,14 @@ If ($Obj_out.success)
 									
 								Else 
 									
-									$t:=str_localized (New collection:C1472("_"+$Obj_field.format))
+									$t:=str ("_"+$Obj_field.format).localized()
 									
 								End if 
 								  //%W+533.1
 								
 							Else 
 								
-								ASSERT:C1129(commonValues.defaultFieldBindingTypes.length>($Obj_field.fieldType-1))
-								
-								$t:=str_localized (New collection:C1472("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])))
+								$t:=str ("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
 								
 							End if 
 							
@@ -221,7 +220,6 @@ If ($Obj_out.success)
 							
 						End if 
 					End for each 
-					
 					
 					  //……………………………………………………………………………………………………………
 				: ($ƒ.isRelationToMany($Obj_table[$Txt_table]))
@@ -256,13 +254,9 @@ If ($Obj_out.success)
 					
 					$Obj_out.shortLabels.push($Obj_field.shortLabel)
 					$Obj_out.iconPaths.push(String:C10($Obj_field.icon))
-					
 					$Obj_out.icons.push(getIcon (String:C10($Obj_field.icon)))
-					
 					$Obj_out.formatColors[$Obj_out.formats.length]:=Foreground color:K23:1
-					
 					$Obj_out.formats.push(Null:C1517)
-					
 					
 					  //……………………………………………………………………………………………………………
 			End case 
