@@ -18,7 +18,6 @@ ARRAY TEXT:C222($tTxt_;0)
 COMPONENT_INIT 
 
 Case of 
-		
 		  //________________________________________
 	: (True:C214)
 		

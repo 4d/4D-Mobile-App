@@ -115,9 +115,7 @@ For each ($Obj_panel;$Obj_definition.panels)
 		
 		OBJECT GET COORDINATES:C663(*;$Txt_help;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 		$Lon_height:=$Lon_bottom-$Lon_top
-		
 		$Lon_top:=$Lon_vOffset+30
-		
 		$Lon_bottom:=$Lon_top+$Lon_height
 		OBJECT SET COORDINATES:C1248(*;$Txt_help;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 		

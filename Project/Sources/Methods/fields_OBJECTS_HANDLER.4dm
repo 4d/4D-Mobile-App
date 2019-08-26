@@ -175,11 +175,13 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Getting Focus:K2:7)
 				
+				  //$Obj_form.filter.show()
 				editor_ui_LISTBOX ($Txt_me;True:C214)
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Losing Focus:K2:8)
 				
+				  //$Obj_form.filter.hide()
 				editor_ui_LISTBOX ($Txt_me;False:C215)
 				
 				  //______________________________________________________
@@ -288,8 +290,7 @@ Case of
 							End if 
 						End if 
 						
-						$Obj_menu.append(".In line";"inline";$Txt_current="inline")
-						$Obj_menu.append(".New page";"blank";$Txt_current="blank")
+						$Obj_menu.append(":xliff:#NA";"").disable()
 						
 					End if 
 					
@@ -355,12 +356,12 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Clicked:K2:4)
 				
-				$menu:=menu 
-				$menu.append(":xliff:fieldsAndRelations";"0";$Obj_context.selector=0)
-				$menu.append(":xliff:fieldsOnly";"1";$Obj_context.selector=1)
-				$menu.append(":xliff:relationOnly";"2";$Obj_context.selector=2)
+				$menu:=menu \
+					.append(":xliff:fieldsAndRelations";"0";$Obj_context.selector=0)\
+					.append(":xliff:fieldsOnly";"1";$Obj_context.selector=1)\
+					.append(":xliff:relationOnly";"2";$Obj_context.selector=2)
 				
-				If ($menu.popup("";$Obj_form.filter.getCoordinates()).selected)
+				If ($menu.popup().selected)
 					
 					$Obj_context.selector:=Num:C11($menu.choice)
 					$Obj_context.refresh()

@@ -97,6 +97,12 @@ Case of
 		  //______________________________________________________
 	Else 
 		
+		  // Verify the dataModel integrity
+		$Obj_dataModel:=$Obj_in.project.dataModel
+		
+		
+		
+		
 		$Obj_out.success:=True:C214  // no error
 		
 		  //______________________________________________________

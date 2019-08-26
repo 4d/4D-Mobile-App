@@ -52,6 +52,7 @@ $Obj_form:=New object:C1471(\
 "formatColumn";6;\
 "iconGrid";"iconGrid";\
 "filter";ui.button("filter");\
+"filterLabel";ui.static("filter.label");\
 "init";Formula:C1597(FIELDS_Handler (New object:C1471("action";"init")))\
 )
 
@@ -98,8 +99,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				$Obj_form.filter.setTitle(Get localized string:C991(Choose:C955(Num:C11($Obj_context.selector);"fieldsAndRelations";"fieldsOnly";"relationOnly")))
-				
+				$Obj_form.filterLabel.setTitle(Get localized string:C991(Choose:C955(Num:C11($Obj_context.selector);"fieldsAndRelations";"fieldsOnly";"relationOnly")))
 				$Obj_context.update()
 				
 				  //______________________________________________________
@@ -164,8 +164,9 @@ Case of
 				COLLECTION TO ARRAY:C1562($o.icons;(ui.pointer($Obj_form.icons))->)
 				COLLECTION TO ARRAY:C1562($o.formats;(ui.pointer($Obj_form.formats))->)
 				
-				For ($i;0;$o.formatColors.length-1;1)
+				For ($i;0;$o.ids.length-1;1)
 					
+					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fields;$i+1;$o.nameColors[$i];lk font color:K53:24)
 					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.formats;$i+1;$o.formatColors[$i];lk font color:K53:24)
 					
 				End for 

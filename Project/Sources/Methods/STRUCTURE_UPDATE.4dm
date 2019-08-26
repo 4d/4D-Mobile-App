@@ -296,7 +296,6 @@ End if
 structure_FIELD_LIST ($Obj_form)
 
 $Obj_context.setHelpTip($Obj_form.fieldList;$Obj_form)
-
 ui.saveProject()
 
   // ----------------------------------------------------

@@ -323,22 +323,28 @@
 				},
 				"filter": {
 					"type": "button",
-					"top": 5,
-					"left": 16,
-					"width": 237,
-					"height": 17,
-					"icon": "/RESOURCES/images/filter.png",
-					"iconFrames": 1,
+					"top": 2,
+					"left": 237,
+					"width": 25,
+					"height": 22,
+					"icon": "/RESOURCES/images/action.png",
+					"iconFrames": 4,
+					"popupPlacement": "linked",
 					"style": "custom",
 					"events": [
 						"onClick"
 					],
-					"method": "fields_OBJECTS_HANDLER",
-					"focusable": false,
+					"method": "fields_OBJECTS_HANDLER"
+				},
+				"filter.label": {
+					"type": "text",
+					"top": 5,
+					"left": 16,
+					"width": 133,
+					"height": 17,
 					"stroke": "#696969",
-					"text": " ",
-					"textDecoration": "underline",
-					"textPlacement": "right"
+					"textAlign": "left",
+					"text": ":xliff:shortLabels"
 				}
 			}
 		}

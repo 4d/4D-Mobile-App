@@ -65,6 +65,7 @@ If ($Obj_out.success)
 		$Obj_out.types:=New collection:C1472
 		$Obj_out.formats:=New collection:C1472
 		$Obj_out.formatColors:=New collection:C1472
+		$Obj_out.nameColors:=New collection:C1472
 		
 		  // ***********************************
 		  // ***********************************
@@ -84,6 +85,9 @@ If ($Obj_out.success)
 					  //……………………………………………………………………………………………………………
 				: ($ƒ.isField($Txt_table))\
 					 & (Num:C11(This:C1470.selector)<2)
+					
+					$Obj_out.formatColors.push(Foreground color:K23:1)
+					$Obj_out.nameColors.push(Foreground color:K23:1)
 					
 					$Obj_field:=$Obj_table[$Txt_table]
 					$Obj_field.id:=Num:C11($Txt_table)
@@ -117,7 +121,6 @@ If ($Obj_out.success)
 					$Obj_out.shortLabels.push($Obj_field.shortLabel)
 					$Obj_out.iconPaths.push(String:C10($Obj_field.icon))
 					$Obj_out.icons.push(getIcon (String:C10($Obj_field.icon)))
-					$Obj_out.formatColors[$Obj_out.formats.length]:=Foreground color:K23:1
 					
 					If ($Obj_field.format#Null:C1517)
 						
@@ -166,6 +169,9 @@ If ($Obj_out.success)
 						
 						If ($ƒ.isField($Txt_field))
 							
+							$Obj_out.formatColors.push(Foreground color:K23:1)
+							$Obj_out.nameColors.push(Foreground color:K23:1)
+							
 							$Obj_field:=$Obj_table[$Txt_table][$Txt_field]
 							$Obj_field.id:=Num:C11($Txt_field)
 							
@@ -186,7 +192,6 @@ If ($Obj_out.success)
 							$Obj_out.shortLabels.push($Obj_field.shortLabel)
 							$Obj_out.iconPaths.push(String:C10($Obj_field.icon))
 							$Obj_out.icons.push(getIcon (String:C10($Obj_field.icon)))
-							$Obj_out.formatColors[$Obj_out.formats.length]:=Foreground color:K23:1
 							
 							If ($Obj_field.format#Null:C1517)
 								
@@ -224,6 +229,9 @@ If ($Obj_out.success)
 					  //……………………………………………………………………………………………………………
 				: ($ƒ.isRelationToMany($Obj_table[$Txt_table]))
 					
+					$Obj_out.formatColors.push(Foreground color:K23:1)
+					$Obj_out.nameColors.push(Foreground color:K23:1)
+					
 					$Obj_field:=$Obj_table[$Txt_table]
 					
 					  // ***********************************
@@ -255,7 +263,14 @@ If ($Obj_out.success)
 					$Obj_out.shortLabels.push($Obj_field.shortLabel)
 					$Obj_out.iconPaths.push(String:C10($Obj_field.icon))
 					$Obj_out.icons.push(getIcon (String:C10($Obj_field.icon)))
-					$Obj_out.formatColors[$Obj_out.formats.length]:=Foreground color:K23:1
+					
+					
+					If (Form:C1466.dataModel[String:C10($Obj_field.relatedTableNumber)]=Null:C1517)
+						
+						$Obj_out.nameColors[$Obj_out.names.length-1]:=ui.errorColor  // Missing or invalid
+						
+					End if 
+					
 					$Obj_out.formats.push(Null:C1517)
 					
 					  //……………………………………………………………………………………………………………

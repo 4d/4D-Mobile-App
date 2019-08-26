@@ -119,7 +119,9 @@
 					"visibility": "hidden",
 					"stroke": "#FF6347",
 					"strokeWidth": 0.1,
-					"strokeDashArray": "1 1"
+					"strokeDashArray": "1 1",
+					"width": 0,
+					"startPoint": "topLeft"
 				},
 				"picker.close": {
 					"type": "button",
@@ -170,5 +172,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }
