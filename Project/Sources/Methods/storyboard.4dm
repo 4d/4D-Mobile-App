@@ -538,7 +538,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						End if 
 					End for each 
 					
-					$Obj_in.template.relationElements:=New collection:C1472()
+					If ($Obj_in.template.relation=Null:C1517)
+						$Obj_in.template.relation:=New object:C1471()
+					End if 
+					$Obj_in.template.relation.elements:=New collection:C1472()
 					
 					C_OBJECT:C1216($Folder_relation)
 					$Folder_relation:=COMPONENT_Pathname ("templates").folder("relation")
@@ -546,9 +549,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					C_OBJECT:C1216($Dom_relation)
 					
 					Case of 
-						: (Length:C16(String:C10($Obj_in.template.relationXPath))>0)
+						: (Length:C16(String:C10($Obj_in.template.relation.xpath))>0)
 							
-							$Dom_relation:=$Dom_root.findByXPath(String:C10($Obj_in.template.relationXPath))
+							$Dom_relation:=$Dom_root.findByXPath(String:C10($Obj_in.template.relation.xpath))
 							$Dom_relation.isDefault:=False:C215
 							$Dom_relation.doNotClose:=True:C214
 							
@@ -588,9 +591,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						"tagInterfix";"RL";\
 						"insertMode";"append")
 					
-					If (Num:C11($Obj_in.template.relationIdCount)>0)  // defined by designer, YES!
+					If (Num:C11($Obj_in.template.relation.idCount)>0)  // defined by designer, YES!
 						
-						$Obj_element.idCount:=Num:C11($Obj_in.template.relationIdCount)
+						$Obj_element.idCount:=Num:C11($Obj_in.template.relation.idCount)
 						
 					Else   // not defined, we an check
 						
@@ -623,7 +626,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							$Obj_element.insertInto:=$Obj_.insertInto
 						End if 
 					End for each 
-					$Obj_in.template.relationElements.push($Obj_element)
+					$Obj_in.template.relation.elements.push($Obj_element)
 					
 					  // 2- scene
 					$Obj_element:=New object:C1471(\
@@ -632,7 +635,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						"idCount";3;\
 						"tagInterfix";"SN";\
 						"insertMode";"append")
-					$Obj_in.template.relationElements.push($Obj_element)
+					$Obj_in.template.relation.elements.push($Obj_element)
 					
 					  // 3- connection
 					$Obj_element:=New object:C1471("idCount";1;\
@@ -652,7 +655,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
 						$Obj_element.dom:=xml ("parse";New object:C1471(\
 							"variable";"<segue destination=\"TAG-SN-001\" kind=\"show\" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"))
-						$Obj_in.template.relationElements.push($Obj_element)
+						$Obj_in.template.relation.elements.push($Obj_element)
 						
 					Else 
 						
@@ -678,7 +681,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If (Num:C11($Obj_field.id)=0)  // relation to N field
 							
-							$Col_elements:=$Obj_in.template.relationElements
+							$Col_elements:=$Obj_in.template.relation.elements
 							
 						Else 
 							
@@ -751,7 +754,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					End for each 
 					
 					  // close relation elements dom elements
-					For each ($Obj_element;$Obj_in.template.relationElements)
+					For each ($Obj_element;$Obj_in.template.relation.elements)
 						
 						If ($Obj_element.dom#Null:C1517)
 							If (Not:C34(Bool:C1537($Obj_element.dom.doNotClose)))  // do not close if in global storyboard, if external file or string must be closed

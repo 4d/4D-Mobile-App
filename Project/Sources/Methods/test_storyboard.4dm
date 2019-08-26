@@ -53,7 +53,7 @@ For each ($Folder_template;$Col_templates)
 	
 	$Obj_result:=storyboard (New object:C1471("action";"detailform";"template";$Obj_template;"tags";$Obj_tags;"target";$Folder_test.file($Folder_template.name+".storyboard").platformPath))
 	
-	$Lon_duplicateExpected:=($Obj_template.relationElements.length*$Lon_relationCount)+($Obj_template.elements.length*($Lon_fieldCount-Num:C11($Obj_template.fields.count)))
+	$Lon_duplicateExpected:=($Obj_template.relation.elements.length*$Lon_relationCount)+($Obj_template.elements.length*($Lon_fieldCount-Num:C11($Obj_template.fields.count)))
 	ASSERT:C1129($Lon_relationMinPosition>Num:C11($Obj_template.fields.count);"Change Lon_relationMinPosition and add new fields if template has more field in headers")
 	
 	ASSERT:C1129(Bool:C1537($Obj_result.success);$Obj_template.name+": "+JSON Stringify:C1217($Obj_result))
