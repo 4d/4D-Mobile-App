@@ -98,6 +98,7 @@ Case of
 	Else 
 		
 		  // Verify the dataModel integrity
+		C_OBJECT:C1216($Obj_dataModel)
 		$Obj_dataModel:=$Obj_in.project.dataModel
 		
 		
