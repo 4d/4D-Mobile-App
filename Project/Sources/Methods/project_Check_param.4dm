@@ -13,7 +13,8 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_parameters)
-C_OBJECT:C1216($o;$Obj_in;$Obj_out)
+C_TEXT:C284($t;$tt)
+C_OBJECT:C1216($ƒ;$o;$Obj_in;$Obj_out)
 
 If (False:C215)
 	C_OBJECT:C1216(project_Check_param ;$0)
@@ -62,7 +63,7 @@ Case of
 		DO_MESSAGE (New object:C1471(\
 			"action";"show";\
 			"type";"alert";\
-			"title";"theProductNameIsMandatory";\
+			"title";ui.alert+" "+Get localized string:C991("theProductNameIsMandatory");\
 			"additional";"pleaseGiveNameToYourProduct";\
 			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
 		
@@ -76,7 +77,7 @@ Case of
 		DO_MESSAGE (New object:C1471(\
 			"action";"show";\
 			"type";"alert";\
-			"title";"noPublishedTable";\
+			"title";ui.alert+" "+Get localized string:C991("noPublishedTable");\
 			"additional";"youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication";\
 			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
 		
@@ -90,21 +91,69 @@ Case of
 		DO_MESSAGE (New object:C1471(\
 			"action";"show";\
 			"type";"alert";\
-			"title";"noTableDefinedInTheMainMenu";\
+			"title";ui.alert+" "+Get localized string:C991("noTableDefinedInTheMainMenu");\
 			"additional";"youMustSetAtLeastOneTableIntoTheMainMenu";\
 			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
 		
 		  //______________________________________________________
 	Else 
 		
-		  // Verify the dataModel integrity
-		C_OBJECT:C1216($Obj_dataModel)
-		$Obj_dataModel:=$Obj_in.project.dataModel
-		
-		
-		
-		
 		$Obj_out.success:=True:C214  // no error
+		
+		  // Verify the dataModel integrity
+		$o:=$Obj_in.project.dataModel
+		$ƒ:=Storage:C1525.ƒ
+		
+		For each ($t;$o)
+			
+			For each ($tt;$o[$t])
+				
+				Case of 
+						
+						  //………………………………………………………………………………………………………
+					: ($ƒ.isField($tt))
+						
+						  //
+						
+						  //………………………………………………………………………………………………………
+					: (Value type:C1509($o[$t][$tt])#Is object:K8:27)
+						
+						  // <NOTHING MORE TO DO>
+						
+						  //………………………………………………………………………………………………………
+					: ($ƒ.isRelationToOne($o[$t][$tt]))  // N -> 1 relation
+						
+						  //
+						
+						  //………………………………………………………………………………………………………
+					: ($ƒ.isRelationToMany($o[$t][$tt]))  // 1 -> N relation
+						
+						If (Value type:C1509($o[String:C10($o[$t][$tt].relatedTableNumber)])=Is undefined:K8:13)
+							
+							$Obj_out.success:=False:C215
+							$Obj_out:=ob_createPath ($Obj_out;"errors";Is collection:K8:32)
+							$Obj_out.errors.push(str ("theLinkedTableIsNotPublished").localized($o[$t][$tt].relatedEntities))
+							
+						End if 
+						  //………………………………………………………………………………………………………
+				End case 
+				
+			End for each 
+		End for each 
+		
+		If (Not:C34($Obj_out.success))
+			
+			$o:=New object:C1471(\
+				"page";"structure")
+			
+			DO_MESSAGE (New object:C1471(\
+				"action";"show";\
+				"type";"alert";\
+				"title";ui.alert+" "+Get localized string:C991("theDefinitionOfTheStructureIsInconsistent");\
+				"additional";"- "+$Obj_out.errors.join("\r- ")+"\r\r\r"+Get localized string:C991("youMustFixItBeforeBuildingTheApplication");\
+				"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
+			
+		End if 
 		
 		  //______________________________________________________
 End case 

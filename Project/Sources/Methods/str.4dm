@@ -66,6 +66,7 @@ If (This:C1470._is=Null:C1517)
 		"singleQuoted";Formula:C1597("'"+String:C10(This:C1470.value)+"'");\
 		"localized";Formula:C1597(str ("localized";New object:C1471("substitution";$1)).value);\
 		"concat";Formula:C1597(str ("concat";New object:C1471("item";$1;"separator";$2)).value);\
+		"occurrences";Formula:C1597(Split string:C1554(This:C1470.value;String:C10($1);sk trim spaces:K86:2).length-1);\
 		"common";Formula:C1597(str ("common";New object:C1471("with";$1;"diacritical";Bool:C1537($2))).value)\
 		)
 	
@@ -732,10 +733,10 @@ Else
 					  //: (Formula(process ).call().isPreemptif)
 					
 					  //_4D THROW ERROR(New object(\
-												"component";"CLAS";\
-												"code";1;\
-												"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
-												"something";"my bug"))
+																								"component";"CLAS";\
+																								"code";1;\
+																								"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
+																								"something";"my bug"))
 					
 					  //______________________________________________________
 				: ($1="isStyled")  // Returns True if text is styled

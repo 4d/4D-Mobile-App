@@ -343,6 +343,13 @@ ASSERT:C1129(str ("Hello").concat(New collection:C1472("AAA";"NNN";"ZZZ"))="Hell
 ASSERT:C1129(str ("Hello").concat(New collection:C1472("AAA";"NNN";"ZZZ");", ")="Hello, AAA, NNN, ZZZ")
 
   // ============================================
+  // occurrences()
+$t:="The Split string command returns a collection of strings, created by splitting stringToSplit into substrings at the boundaries specified by the separator parameter."
+ASSERT:C1129(str ($t).occurrences("string")=4)
+ASSERT:C1129(str ($t).occurrences("s")=14)
+ASSERT:C1129(str ($t).occurrences(" ")=22)
+ASSERT:C1129(str ($t).occurrences("hello")=0)
+ASSERT:C1129(str ($t).occurrences("\r")=0)
 
   // ============================================
 ASSERT:C1129(str_cmpVersion ("9.0";"9.1.2")=-1)

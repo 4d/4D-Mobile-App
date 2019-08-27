@@ -1,92 +1,1 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!--Translation file.
-  This file is distributed under the same license as the product package.-->
-<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
-
-  <file datatype="plaintext" original="Undefined" source-language="en" target-language="es">
-    <header>
-      <prop-group name="Xliff-Editor.4dbase">
-        <prop prop-type="version">2.0</prop>
-      </prop-group>
-    </header>
-    <body>
-      <group resname="Errors">
-        <trans-unit id="rsac4QerO/Yu5rHH1mQ0tA" resname="theTemplateIsMissingOrInvalid">
-          <source>The template "{tmpl}" is missing or invalid</source>
-          <target>Falta la plantilla "{tmpl}" o es inválida</target>
-        </trans-unit>
-        <trans-unit id="N3herDi6NW+t2kIuyjNt6A" resname="theTemplateIsMissing">
-          <source>The template "{tmpl}" is missing.</source>
-          <target>La plantilla "{tmpl}" falta.</target>
-        </trans-unit>
-        <trans-unit id="bBQuhy+qioOU30PgsSt3rw" resname="theTemplateIsInvalid">
-          <source>The template "{tmpl}" is invalid.</source>
-          <target>La plantilla "{tmpl}" no es válida.</target>
-        </trans-unit>
-        <trans-unit id="Ntziy+/6IKor0xsBBU7ITQ" resname="someTemplatesAreMissingOrInvalid">
-          <source>Some templates are missing or invalid.</source>
-          <target>Faltan algunas plantillas o son inválidas.</target>
-        </trans-unit>
-        <trans-unit id="boAgL5KJeH/e9RbohQkF3g" resname="someIconsAreMissingOrInvalid">
-          <source>Some icons are missing or invalid.</source>
-          <target>Faltan algunos iconos o son inválidos.</target>
-        </trans-unit>
-        <trans-unit id="BA8doassoJpNBBCDL8JfxA" resname="someResourcesAreMissingOrInvalid">
-          <source>Some resources are missing or invalid.</source>
-          <target>Faltan algunos recursos o no son válidos.</target>
-        </trans-unit>
-        <trans-unit id="cE74Yghv+fjWOxigmRRuHA" resname="theTableIconIsMissing">
-          <source>The table icon "{icon}" is missing.</source>
-          <target>Falta el icono de tabla "{icon}".</target>
-        </trans-unit>
-        <trans-unit id="kgu2Zpnmvc3grUPoaT9oeQ" resname="theFieldIconIsMissing">
-          <source>The field icon "{icon}" is missing.</source>
-          <target>Falta el icono de campo "{icon}".</target>
-        </trans-unit>
-        <trans-unit id="DzG5o/k8MLxtlK241sBA4g" resname="theFormatterIsMissingOrInvalid">
-          <source>The format "{formatter}" is missing or invalid.</source>
-          <target>El formato "{formatter}" falta o no es válido.</target>
-        </trans-unit>
-        <trans-unit id="SucD315615ij82O/T+XE3g" resname="someFormattersAreMissingOrInvalid">
-          <source>Some formats are missing or invalid.</source>
-          <target>Faltan algunos formatos o no son válidos.</target>
-        </trans-unit>
-        <trans-unit id="3/V0JM30b2fl0XkhnBBK/g" resname="theFilterForTheTableIsNotValid">
-          <source>The filter for the "{tableName}" table is not valid.</source>
-          <target>El filtro de la tabla "{tableName}" no es válido.</target>
-        </trans-unit>
-        <trans-unit id="Aqp6nOh9Z6HmUK9IWnbsfQ" resname="someFiltersAreNotValidatedOrInvalid">
-          <source>Some filters are not validated or invalid.</source>
-          <target>Algunos filtros no se han validado o no son válidos.</target>
-        </trans-unit>
-      </group>
-      <group resname="Messages">
-        <trans-unit id="LQeNlEbk5pMfXCljSkquRg" resname="doYouWantToFixYourProjectByUsingTheDefaultTemplates">
-          <source>Do you want to fix project by using the default templates?</source>
-          <target>¿Desea reparar el proyecto usando las plantillas por defecto?</target>
-        </trans-unit>
-        <trans-unit id="uqbDxrhTRVficnh3OYNsgw" resname="doYouWantToFixYourProjectByUsingTheDefaultIcons">
-          <source>Do you want to fix project by using the default icons?</source>
-          <target>¿Desea reparar el proyecto usando los iconos por defecto?</target>
-        </trans-unit>
-        <trans-unit id="P3xST1SHglB1wYu439rwKg" resname="doYouWantToFixYourProjectByUsingTheDefaultResources">
-          <source>Do you want to fix project by using the default resources?</source>
-          <target>¿Desea reparar el proyecto usando los recursos por defecto?</target>
-        </trans-unit>
-        <trans-unit id="ATET5ogypqKl3CrpJrx44w" resname="doYouWantToFixYourProjectByUsingTheDefaultFormatter">
-          <source>Do you want to fix project by using the default formats?</source>
-          <target>¿Desea corregir el proyecto utilizando los formatos predeterminados?</target>
-        </trans-unit>
-        <trans-unit id="f8NqufPfItzC6DujbO3kmQ" resname="wouldYouLikeToRemoveTheFilterToFixYourProject">
-          <source>Would you like to remove the filter to fix your project?</source>
-          <target>¿Desea eliminar el filtro para arreglar su proyecto?</target>
-        </trans-unit>
-        <trans-unit id="qqNvZiLTP68d+4mfiOwj0g" resname="wouldYouLikeToRemoveTheInvalidOrNotValidatedFilters">
-          <source>Would you like to remove the invalid or not validated filters?</source>
-          <target>¿Desea eliminar los filtros no válidos o no validados?</target>
-        </trans-unit>
-      </group>
-    </body>
-  </file>
-
-</xliff>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?><!--Translation file.  This file is distributed under the same license as the product package.--><xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">  <file datatype="plaintext" original="Undefined" source-language="en" target-language="es">    <header>      <prop-group name="Xliff-Editor.4dbase">        <prop prop-type="version">2.0</prop>      </prop-group>    </header>    <body>      <group resname="Errors">        <trans-unit id="rsac4QerO/Yu5rHH1mQ0tA" resname="theTemplateIsMissingOrInvalid">          <source>The template "{tmpl}" is missing or invalid</source>          <target>Falta la plantilla "{tmpl}" o es inválida</target>        </trans-unit>        <trans-unit id="N3herDi6NW+t2kIuyjNt6A" resname="theTemplateIsMissing">          <source>The template "{tmpl}" is missing.</source>          <target>La plantilla "{tmpl}" falta.</target>        </trans-unit>        <trans-unit id="bBQuhy+qioOU30PgsSt3rw" resname="theTemplateIsInvalid">          <source>The template "{tmpl}" is invalid.</source>          <target>La plantilla "{tmpl}" no es válida.</target>        </trans-unit>        <trans-unit id="Ntziy+/6IKor0xsBBU7ITQ" resname="someTemplatesAreMissingOrInvalid">          <source>Some templates are missing or invalid.</source>          <target>Faltan algunas plantillas o son inválidas.</target>        </trans-unit>        <trans-unit id="boAgL5KJeH/e9RbohQkF3g" resname="someIconsAreMissingOrInvalid">          <source>Some icons are missing or invalid.</source>          <target>Faltan algunos iconos o son inválidos.</target>        </trans-unit>        <trans-unit id="BA8doassoJpNBBCDL8JfxA" resname="someResourcesAreMissingOrInvalid">          <source>Some resources are missing or invalid.</source>          <target>Faltan algunos recursos o no son válidos.</target>        </trans-unit>        <trans-unit id="cE74Yghv+fjWOxigmRRuHA" resname="theTableIconIsMissing">          <source>The table icon "{icon}" is missing.</source>          <target>Falta el icono de tabla "{icon}".</target>        </trans-unit>        <trans-unit id="kgu2Zpnmvc3grUPoaT9oeQ" resname="theFieldIconIsMissing">          <source>The field icon "{icon}" is missing.</source>          <target>Falta el icono de campo "{icon}".</target>        </trans-unit>        <trans-unit id="DzG5o/k8MLxtlK241sBA4g" resname="theFormatterIsMissingOrInvalid">          <source>The format "{formatter}" is missing or invalid.</source>          <target>El formato "{formatter}" falta o no es válido.</target>        </trans-unit>        <trans-unit id="SucD315615ij82O/T+XE3g" resname="someFormattersAreMissingOrInvalid">          <source>Some formats are missing or invalid.</source>          <target>Faltan algunos formatos o no son válidos.</target>        </trans-unit>        <trans-unit id="3/V0JM30b2fl0XkhnBBK/g" resname="theFilterForTheTableIsNotValid">          <source>The filter for the "{tableName}" table is not valid.</source>          <target>El filtro de la tabla "{tableName}" no es válido.</target>        </trans-unit>        <trans-unit id="Aqp6nOh9Z6HmUK9IWnbsfQ" resname="someFiltersAreNotValidatedOrInvalid">          <source>Some filters are not validated or invalid.</source>          <target>Algunos filtros no se han validado o no son válidos.</target>        </trans-unit>      </group>      <group resname="Messages">        <trans-unit id="LQeNlEbk5pMfXCljSkquRg" resname="doYouWantToFixYourProjectByUsingTheDefaultTemplates">          <source>Do you want to fix project by using the default templates?</source>          <target>¿Desea reparar el proyecto usando las plantillas por defecto?</target>        </trans-unit>        <trans-unit id="uqbDxrhTRVficnh3OYNsgw" resname="doYouWantToFixYourProjectByUsingTheDefaultIcons">          <source>Do you want to fix project by using the default icons?</source>          <target>¿Desea reparar el proyecto usando los iconos por defecto?</target>        </trans-unit>        <trans-unit id="P3xST1SHglB1wYu439rwKg" resname="doYouWantToFixYourProjectByUsingTheDefaultResources">          <source>Do you want to fix project by using the default resources?</source>          <target>¿Desea reparar el proyecto usando los recursos por defecto?</target>        </trans-unit>        <trans-unit id="ATET5ogypqKl3CrpJrx44w" resname="doYouWantToFixYourProjectByUsingTheDefaultFormatter">          <source>Do you want to fix project by using the default formats?</source>          <target>¿Desea corregir el proyecto utilizando los formatos predeterminados?</target>        </trans-unit>        <trans-unit id="f8NqufPfItzC6DujbO3kmQ" resname="wouldYouLikeToRemoveTheFilterToFixYourProject">          <source>Would you like to remove the filter to fix your project?</source>          <target>¿Desea eliminar el filtro para arreglar su proyecto?</target>        </trans-unit>        <trans-unit id="qqNvZiLTP68d+4mfiOwj0g" resname="wouldYouLikeToRemoveTheInvalidOrNotValidatedFilters">          <source>Would you like to remove the invalid or not validated filters?</source>          <target>¿Desea eliminar los filtros no válidos o no validados?</target>        </trans-unit>        <trans-unit id="+EcFUibbdBAvHbvETiZbnQ" resname="theDefinitionOfTheStructureIsInconsistent">          <source>The definition of the structure is inconsistent</source>          <target state="new">The definition of the structure is inconsistent</target>        </trans-unit>        <trans-unit id="8/bk3QvhY+ScZfjJN6CHOw" resname="youMustFixItBeforeBuildingTheApplication">          <source>You must fix it before building the application.</source>          <target state="new">You must fix it before building the application.</target>        </trans-unit>      </group>    </body>  </file></xliff>
