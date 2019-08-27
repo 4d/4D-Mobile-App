@@ -630,6 +630,19 @@ Case of
 				"label";$t;\
 				"$icon";$p)
 			
+			  // Auto define the target table if only one is published
+			$i:=0
+			For each ($t;Form:C1466.dataModel) While ($i<2)
+				
+				$i:=$i+1
+				
+			End for each 
+			
+			If ($i=1)
+				
+				$o.tableNumber:=Num:C11($t)
+				
+			End if 
 		End if 
 		
 		If ($o#Null:C1517)  // An action was created
