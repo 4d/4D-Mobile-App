@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "keyboardDismiss-16x16.png",
+      "filename" : "keyboardDismiss.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "keyboardDismiss-32x32.png",
+      "filename" : "keyboardDismiss@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "keyboardDismiss-48x48.png",
+      "filename" : "keyboardDismiss@3x.png",
       "scale" : "3x"
     }
   ],
