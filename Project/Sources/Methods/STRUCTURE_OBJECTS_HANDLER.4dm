@@ -418,7 +418,6 @@ Case of
 										
 									Else 
 										
-										
 										If (Macintosh command down:C546 | Shift down:C543)
 											
 											

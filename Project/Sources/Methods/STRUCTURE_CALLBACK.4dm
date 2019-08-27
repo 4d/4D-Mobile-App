@@ -88,12 +88,6 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 				
 				$Obj_tableModel:=$Obj_dataModel[$Txt_tableNumber]
 				
-				  //If ($Obj_tableModel=Null)
-				
-				  // NOTHING MORE TO DO - The table is not used in the project
-				
-				  //Else 
-				
 				  // Reset unsynchronized table flag
 				CLEAR VARIABLE:C89($Boo_unsynchronizedTable)
 				
@@ -274,7 +268,6 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 					$Col_unsynchronizedTableFields[$Lon_tableNumber]:=$Col_unsynchronizedFields  // Empty collection if the table is no more available
 					
 				End if 
-				  //End if 
 			End for each 
 		End if 
 		

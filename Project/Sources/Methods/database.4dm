@@ -53,14 +53,12 @@ If (This:C1470._is=Null:C1517)
 				  // <NOTHING MORE TO DO>
 				
 				  //______________________________________________________
-			: ($t="{@")\
-				 & ($t="@}")  // json object
+			: (Match regex:C1019("(?m-si)^\\{.*\\}$";$t;1))  // json object
 				
 				$o.parameters:=JSON Parse:C1218($t)
 				
 				  //______________________________________________________
-			: ($t="[@")\
-				 & ($t="@]")  // json array
+			: (Match regex:C1019("(?m-si)^\\[.*\\]$";$t;1))  // json array
 				
 				ARRAY TEXT:C222($tTxt_values;0x0000)
 				JSON PARSE ARRAY:C1219($t;$tTxt_values)

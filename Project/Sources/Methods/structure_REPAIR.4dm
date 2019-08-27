@@ -14,8 +14,7 @@
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($Boo_found)
-C_LONGINT:C283($Lon_fieldIndx;$Lon_indx;$Lon_parameters;$Lon_relatedTableIndx;$Lon_tableIndx;$Lon_tableNumber)
-C_LONGINT:C283($Win_current)
+C_LONGINT:C283($Lon_fieldIndx;$Lon_indx;$Lon_relatedTableIndx;$Lon_tableIndx;$Lon_tableNumber;$Win_current)
 C_TEXT:C284($t;$Txt_field;$Txt_tableNumber)
 C_OBJECT:C1216($ƒ;$o;$Obj_cache;$Obj_catalog;$Obj_dataModel;$Obj_datastore)
 C_OBJECT:C1216($Obj_field;$Obj_project;$Obj_relatedDataClass;$Obj_table;$oo)
@@ -25,42 +24,23 @@ C_COLLECTION:C1488($Col_tableToRemove)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
+$Win_current:=Current form window:C827
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
-	
-	  // <NO PARAMETERS REQUIRED>
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		  // <NONE>
-		
-	End if 
-	
-	$Win_current:=Current form window:C827
-	
-	$Obj_project:=(ui.pointer("project"))->
-	ASSERT:C1129($Obj_project#Null:C1517)
-	
-	$Col_catalog:=editor_Catalog 
-	
-	$Obj_datastore:=catalog ("datastore").datastore
-	
-	$Col_tableID:=$Col_catalog.extract("tableNumber")
-	
-	$Col_tableToRemove:=New collection:C1472
-	
-	$ƒ:=Storage:C1525.ƒ
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$Obj_project:=(ui.pointer("project"))->
+ASSERT:C1129($Obj_project#Null:C1517)
+
+$Col_catalog:=editor_Catalog 
+
+$Obj_datastore:=catalog ("datastore").datastore
+
+$Col_tableID:=$Col_catalog.extract("tableNumber")
+
+$Col_tableToRemove:=New collection:C1472
+
+$ƒ:=Storage:C1525.ƒ
 
   // ----------------------------------------------------
-  // Make a Backup of the project & catalog [
+  // Make a Backup of the project & catalog
 $o:=File:C1566(Form:C1466.project;fk platform path:K87:2)  // Project.4dmobileapp
 
 $oo:=$o.parent.folder(Replace string:C233(Get localized string:C991("replacedFiles");"{stamp}";str_date ("stamp")))
@@ -70,7 +50,6 @@ $o.copyTo($oo)
 
 $o:=$o.parent.file("catalog.json")
 $o.copyTo($oo)
-  //]
 
   // Check the tables
 $Obj_dataModel:=$Obj_project.dataModel
@@ -224,7 +203,6 @@ For each ($Txt_tableNumber;$Obj_dataModel)
 						  //______________________________________________________
 					: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
 						
-						
 						  //______________________________________________________
 				End case 
 			End for each 
@@ -317,6 +295,8 @@ $o.setText(JSON Stringify:C1217($Obj_cache;*))
 STRUCTURE_Handler (New object:C1471(\
 "action";"update";\
 "project";$Obj_project))
+
+project_REPAIR ($Obj_project)
 
   // Save project
 CALL FORM:C1391($Win_current;"project_SAVE")

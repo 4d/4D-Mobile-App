@@ -179,7 +179,7 @@ If (This:C1470._is=Null:C1517)  // Constructor
 				Case of 
 						
 						  //______________________________________________________
-					: ($t="{@}")
+					: (Match regex:C1019("(?m-si)^\\{.*\\}$";$t;1))  // json object
 						
 						$oo:=JSON Parse:C1218($t)
 						
