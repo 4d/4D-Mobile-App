@@ -23,7 +23,8 @@ open class LoginForm: QMobileUI.LoginForm {
     
     weak var delegate: LoginFormDelegate?
     
-    var btnAuthorization: ASAuthorizationAppleIDButton? = nil
+    lazy var btnAuthorization = ASAuthorizationAppleIDButton()
+
     
     // MARK: Event
     /// Called after the view has been loaded. Default does nothing
@@ -44,11 +45,13 @@ open class LoginForm: QMobileUI.LoginForm {
     open override func onDidDisappear(_ animated: Bool) {
     }
     
+    // MARK: - ASAuthorizationAppleIDButton
+    
     func setupAppleSignInButton() {
-        let btnAuthorization = ASAuthorizationAppleIDButton()
+
+        setupViewWithTrait(traitCollection: self.traitCollection)
         btnAuthorization.frame = CGRect()
         btnAuthorization.cornerRadius = loginButton.normalCornerRadius
-        
         btnAuthorization.addTarget(self, action: #selector(handleAppleSignInButtonPress(_:)), for: .touchUpInside)
         self.view.addSubview(btnAuthorization)
         
@@ -60,6 +63,25 @@ open class LoginForm: QMobileUI.LoginForm {
             btnAuthorization.heightAnchor.constraint(equalTo: loginButton.heightAnchor)
         ])
     }
+    
+    override open func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {}
+
+    override open func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        // Trait collection will change. Use this one so you know what the state is changing to.
+        setupViewWithTrait(traitCollection: newCollection)
+    }
+    
+    private func setupViewWithTrait(traitCollection: UITraitCollection) {
+        if traitCollection.userInterfaceStyle == .dark {
+            btnAuthorization = ASAuthorizationAppleIDButton(type: .signIn, style: .white)
+            loginTextField.textColor = .white
+        } else {
+            btnAuthorization = ASAuthorizationAppleIDButton(type: .signIn, style: .black)
+            loginTextField.textColor = .black
+        }
+    }
+    
+    // MARK: - ASAuthorizationController
     
     private func performExistingAccountSetupFlows() {
         // Prepare requests for both Apple ID and password providers.

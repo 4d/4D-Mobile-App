@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="C0B-5k-v9X">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="C0B-5k-v9X">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -28,7 +28,6 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="88G-gj-SrO"/>
                                 </constraints>
-                                <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="send" textContentType="email"/>
                                 <connections>
@@ -59,7 +58,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cyT-WZ-v1r" userLabel="Separator">
                                         <rect key="frame" x="0.0" y="19" width="247" height="1"/>
-                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="247" id="2JK-Uh-ncG"/>
                                             <constraint firstAttribute="height" constant="1" id="57g-PX-DBd"/>
@@ -73,7 +72,7 @@
                                             <constraint firstAttribute="height" constant="24" id="Hmr-TW-JmD"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                        <color key="textColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" systemColor="systemGrayColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -93,7 +92,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="DOM-Sj-n8X" firstAttribute="top" relation="greaterThanOrEqual" secondItem="gaL-oV-qeM" secondAttribute="bottom" constant="20" id="9UH-dO-6h4"/>
                             <constraint firstItem="cxT-y1-JyU" firstAttribute="leading" secondItem="kc2-Y8-C9o" secondAttribute="leading" constant="64" id="MVr-Ym-Pev"/>
@@ -116,7 +115,7 @@
                         <outlet property="bottomLayoutConstraint" destination="oiz-X4-CpO" id="YhM-5a-TOL"/>
                         <outlet property="loginButton" destination="cxT-y1-JyU" id="BxF-3i-U12"/>
                         <outlet property="loginTextField" destination="gaL-oV-qeM" id="7KV-CX-Cej"/>
-                        <segue destination="ZaI-U0-SQT" kind="showDetail" identifier="logged" customClass="PresentFadeSegue" customModule="IBAnimatable" id="adK-tr-izi"/>
+                        <segue destination="ZaI-U0-SQT" kind="presentation" identifier="logged" customClass="PresentFadeSegue" customModule="IBAnimatable" modalPresentationStyle="fullScreen" id="adK-tr-izi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YHQ-rz-vq2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -126,7 +125,9 @@
         <!--MainNavigation-->
         <scene sceneID="KRI-OQ-AOt">
             <objects>
-                <viewControllerPlaceholder storyboardName="MainNavigation" id="ZaI-U0-SQT" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="MainNavigation" id="ZaI-U0-SQT" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="n0l-Q2-TtW"/>
+                </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="smt-GL-mPW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="616" y="76"/>
