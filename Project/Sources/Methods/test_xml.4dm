@@ -41,7 +41,6 @@ ASSERT:C1129($scene.elementRef=Null:C1517)
   // root
 ASSERT:C1129($scenes.root().elementRef=$xml.elementRef;"Failed to get root of dom element")
 
-
   // browsing
 C_OBJECT:C1216($element;$result)
 $result:=$scenes.findByName("scene")
@@ -49,6 +48,12 @@ ASSERT:C1129(Num:C11($result.elements.length)=3)
 
 $result:=$xml.findMany("document/scenes/scene")
 ASSERT:C1129(Num:C11($result.elements.length)=3)
+
+  // findOrCreate
+C_OBJECT:C1216($parent)
+$parent:=$result.elements[0]
+$result:=$parent.findOrCreate("eric")
+ASSERT:C1129($result.elementRef=$parent.findOrCreate("eric").elementRef;"Must not recreate a new node with findOrCreate")
 
   // final close
 $xml.close()

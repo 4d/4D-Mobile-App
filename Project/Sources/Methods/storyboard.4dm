@@ -651,10 +651,35 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 					Until ($Obj_element.insertInto.success | ($Lon_j<0))
 					
+					
+					If ($Obj_in.template.relation.transition=Null:C1517)
+						$Obj_in.template.relation.transition:=New object:C1471()
+					End if 
+					If (Length:C16(String:C10($Obj_in.template.relation.transition.kind))=0)
+						$Obj_in.template.relation.transition.kind:="show"
+						  // else check type?
+					End if 
+					
+					$Txt_buffer:="<segue destination=\"TAG-SN-001\""
+					
+					If ($Obj_in.template.relation.transition.customClass#Null:C1517)
+						$Txt_buffer:=$Txt_buffer+" customClass=\""+String:C10($Obj_in.template.relation.transition.customClass)+"\""
+					End if 
+					If ($Obj_in.template.relation.transition.customModule#Null:C1517)
+						$Txt_buffer:=$Txt_buffer+" customModule=\""+String:C10($Obj_in.template.relation.transition.customModule)+"\""
+					End if 
+					If ($Obj_in.template.relation.transition.modalPresentationStyle#Null:C1517)
+						$Txt_buffer:=$Txt_buffer+" modalPresentationStyle=\""+String:C10($Obj_in.template.relation.transition.modalPresentationStyle)+"\""
+					End if 
+					If ($Obj_in.template.relation.transition.modalTransitionStyle#Null:C1517)
+						$Txt_buffer:=$Txt_buffer+" modalTransitionStyle=\""+String:C10($Obj_in.template.relation.transition.modalTransitionStyle)+"\""
+					End if 
+					$Txt_buffer:=$Txt_buffer+" kind=\""+String:C10($Obj_in.template.relation.transition.kind)+"\""
+					$Txt_buffer:=$Txt_buffer+" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"
+					
 					If ($Obj_element.insertInto.success)
 						$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
-						$Obj_element.dom:=xml ("parse";New object:C1471(\
-							"variable";"<segue destination=\"TAG-SN-001\" kind=\"show\" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"))
+						$Obj_element.dom:=xml ("parse";New object:C1471("variable";$Txt_buffer))
 						$Obj_in.template.relation.elements.push($Obj_element)
 						
 					Else 
