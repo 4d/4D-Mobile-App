@@ -358,6 +358,7 @@ Case of
 			: ($Obj_form.form.event=On Mouse Enter:K2:33)
 				
 				ui.tips.enable()
+				ui.tips.setDuration(ui.tips.delay*2)
 				ui.tips.instantly()
 				
 				  //______________________________________________________

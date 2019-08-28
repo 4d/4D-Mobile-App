@@ -390,8 +390,7 @@ Case of
 					
 				End if 
 				
-				$o:=$Obj_form.add.getCoordinates()
-				$Obj_menu.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom)
+				$Obj_menu.popup("";$Obj_form.add.getCoordinates())
 				
 				  //______________________________________________________
 		End case 

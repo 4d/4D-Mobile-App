@@ -405,7 +405,7 @@ Case of
 					
 					$Obj_form.preview.getCoordinates()
 					
-					($Obj_form.preview.pointer())->:=svg .setsetDimensions($Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height)\
+					($Obj_form.preview.pointer())->:=svg .setDimensions($Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height)\
 						.textArea(Replace string:C233(Get localized string:C991("theTemplateIsMissingOrInvalid");"{tmpl}";$Path_root.name);0;200)\
 						.setDimensions($Obj_form.preview.coordinates.width-20)\
 						.setFill(ui.colors.errorColor.hex)\

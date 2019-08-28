@@ -12,7 +12,7 @@
 C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
-C_LONGINT:C283($i;$l;$Lon_bottom;$Lon_left;$Lon_right;$Lon_top)
+C_LONGINT:C283($i;$l)
 C_PICTURE:C286($p)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o;$Obj_add;$Obj_context;$Obj_current;$Obj_delete;$Obj_edit)
@@ -388,8 +388,7 @@ Case of
 				
 			End for each 
 			
-			$o:=$Obj_form.add.getCoordinates()
-			$Obj_popup.popup("";$o.windowCoordinates.left;$o.windowCoordinates.bottom)
+			$Obj_popup.popup("";$Obj_form.add.getCoordinates())
 			
 			CLEAR VARIABLE:C89($o)
 			

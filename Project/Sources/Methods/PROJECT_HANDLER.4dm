@@ -151,6 +151,7 @@ Case of
 		End if 
 		
 		Form:C1466.status.project:=$Obj_in.audit.success
+		Form:C1466.audit:=$Obj_in.audit
 		
 		  // Update UI
 		CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"tableProperties")

@@ -11,9 +11,9 @@
   // Declarations
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($l;$Lon_field;$Lon_fieldNumber;$Lon_parameters;$Lon_row;$Lon_tableNumber)
-C_LONGINT:C283($Lon_x;$Lon_y;$Lon_column)
-C_TEXT:C284($t;$Txt_;$Txt_name;$Txt_tips)
+C_LONGINT:C283($l;$Lon_column;$Lon_field;$Lon_fieldNumber;$Lon_row;$Lon_tableNumber)
+C_LONGINT:C283($Lon_x;$Lon_y)
+C_TEXT:C284($t;$tt;$Txt_name;$Txt_tips)
 C_OBJECT:C1216($Obj_dataModel;$Obj_field;$Obj_form;$Obj_relatedDataClass;$Obj_table)
 C_COLLECTION:C1488($c;$Col_catalog;$Col_desynchronized;$Col_fields)
 
@@ -26,9 +26,7 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
 	ASSERT:C1129($1.target#Null:C1517)
@@ -151,17 +149,17 @@ If ($Lon_row#0)
 													
 													  // RELATED DATA CLASS
 													
-													For each ($Txt_;$Col_desynchronized[$Lon_field])
+													For each ($tt;$Col_desynchronized[$Lon_field])
 														
 														  //
 														
 													End for each 
 													
-													If ($Col_desynchronized[$Lon_field][$Txt_].length>0)
+													If ($Col_desynchronized[$Lon_field][$tt].length>0)
 														
-														$Lon_x:=$Obj_table.field.extract("name").indexOf($Txt_)
+														$Lon_x:=$Obj_table.field.extract("name").indexOf($tt)
 														
-														$l:=Num:C11($Col_desynchronized[$Lon_field][$Txt_][0])
+														$l:=Num:C11($Col_desynchronized[$Lon_field][$tt][0])
 														$t:=$t+Field name:C257(Num:C11($Obj_table.field[$Lon_x].relatedTableNumber);$l)+", "
 														
 													End if 
@@ -342,7 +340,8 @@ If ($Lon_row#0)
 								  //______________________________________________________
 							: ($1.target=$Obj_form.fieldList)
 								
-								$Obj_field:=$Obj_table.field[$Lon_row-1]
+								$l:=$Obj_table.field.extract("name").indexOf((ui.pointer($Obj_form.fields))->{$Lon_row})
+								$Obj_field:=$Obj_table.field[$l]
 								
 								Case of 
 										
@@ -362,7 +361,6 @@ If ($Lon_row#0)
 										If ($Lon_column=1)
 											
 											$Txt_tips:=$Txt_tips+"\r• "+str ("youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere").localized(Choose:C955($Obj_form.publishedPtr->{$Lon_row}#0;"disable";"enable"))
-											
 											
 										Else 
 											

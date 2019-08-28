@@ -13,7 +13,7 @@ C_TEXT:C284($1)
 C_BOOLEAN:C305($2)
 
 C_BOOLEAN:C305($Boo_withFocus)
-C_LONGINT:C283($Lon_backgroundColor;$Lon_i;$Lon_parameters)
+C_LONGINT:C283($i;$Lon_backgroundColor;$Lon_parameters)
 C_POINTER:C301($Ptr_me)
 C_TEXT:C284($Txt_listbox)
 
@@ -55,35 +55,19 @@ End if
   // ----------------------------------------------------
   // WARNING: This method can't apply to a selection or collection listbox
 
-OBJECT SET RGB COLORS:C628(*;$Txt_listbox;Foreground color:K23:1;$Lon_backgroundColor;$Lon_backgroundColor)
+OBJECT SET RGB COLORS:C628(*;$Txt_listbox;Foreground color:K23:1)
 
-If ($Boo_withFocus)
-	
-	OBJECT SET RGB COLORS:C628(*;$Txt_listbox+".border";ui.selectedColor;Background color none:K23:10)
-	
-Else 
-	
-	OBJECT SET RGB COLORS:C628(*;$Txt_listbox+".border";ui.backgroundUnselectedColor;Background color none:K23:10)
-	
-End if 
+OBJECT SET RGB COLORS:C628(*;$Txt_listbox+".border";Choose:C955($Boo_withFocus;ui.selectedColor;ui.backgroundUnselectedColor))
 
-For ($Lon_i;1;LISTBOX Get number of rows:C915(*;$Txt_listbox);1)
+For ($i;1;LISTBOX Get number of rows:C915(*;$Txt_listbox);1)
 	
-	If ($Ptr_me->{$Lon_i})
+	If ($Ptr_me->{$i})
 		
-		If ($Boo_withFocus)
-			
-			LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$Lon_i;ui.backgroundSelectedColor;lk background color:K53:25)
-			
-		Else 
-			
-			LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$Lon_i;ui.alternateSelectedColor;lk background color:K53:25)
-			
-		End if 
+		LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$i;Choose:C955($Boo_withFocus;ui.backgroundSelectedColor;ui.alternateSelectedColor);lk background color:K53:25)
 		
 	Else 
 		
-		LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$Lon_i;$Lon_backgroundColor;lk background color:K53:25)
+		LISTBOX SET ROW COLOR:C1270(*;$Txt_listbox;$i;$Lon_backgroundColor;lk background color:K53:25)
 		
 	End if 
 End for 

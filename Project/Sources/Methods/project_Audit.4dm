@@ -12,11 +12,11 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($Boo_detail;$Boo_filter;$Boo_formatter;$Boo_icon;$Boo_list;$Boo_OK)
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Dir_fieldIcons;$Dir_root;$Dir_tableIcons;$Dir_template;$Txt_fieldID;$Txt_file)
-C_TEXT:C284($Txt_form;$Txt_format;$Txt_icon;$Txt_tableID)
-C_OBJECT:C1216($Obj_audit;$Obj_dataModel;$Obj_detail;$Obj_in;$Obj_list)
+C_BOOLEAN:C305($Boo_OK)
+C_TEXT:C284($t;$tt;$Txt_fieldNumber;$Txt_tableNumber)
+C_OBJECT:C1216($file;$Obj_audit;$Obj_context;$Obj_dataModel;$Obj_detail;$Obj_in)
+C_OBJECT:C1216($Obj_list;$Path_detailForms;$Path_fieldIcons;$Path_formaters;$Path_listForms;$Path_tableIcons)
+C_OBJECT:C1216($Path_template)
 
 If (False:C215)
 	C_OBJECT:C1216(project_Audit ;$0)
@@ -25,25 +25,22 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
 	$Obj_in:=$1
 	
 	  // Default values
-	
-	  // Optional parameters
-	If ($Lon_parameters>=2)
-		
-		  // <NONE>
-		
-	End if 
-	
 	$Obj_audit:=New object:C1471(\
 		"success";True:C214;\
 		"errors";New collection:C1472)
+	
+	$Obj_context:=New object:C1471(\
+		"list";True:C214;\
+		"detail";True:C214;\
+		"icons";True:C214;\
+		"formatters";True:C214;\
+		"filters";True:C214)
 	
 	  // Allow passing value for test purpose. Normal behaviour is form
 	$Obj_dataModel:=Choose:C955(Value type:C1509($Obj_in.dataModel)=Is object:K8:27;$Obj_in.dataModel;Form:C1466.dataModel)
@@ -52,19 +49,11 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
 	If ($Obj_in.target#Null:C1517)
 		
-		$Boo_list:=($Obj_in.target.indexOf("lists")#-1)
-		$Boo_detail:=($Obj_in.target.indexOf("details")#-1)
-		$Boo_icon:=($Obj_in.target.indexOf("icons")#-1)
-		$Boo_formatter:=($Obj_in.target.indexOf("formatters")#-1)
-		$Boo_filter:=($Obj_in.target.indexOf("filters")#-1)
-		
-	Else 
-		
-		$Boo_list:=True:C214
-		$Boo_detail:=True:C214
-		$Boo_icon:=True:C214
-		$Boo_formatter:=True:C214
-		$Boo_filter:=True:C214
+		$Obj_context.list:=($Obj_in.target.indexOf("lists")#-1)
+		$Obj_context.detail:=($Obj_in.target.indexOf("details")#-1)
+		$Obj_context.icons:=($Obj_in.target.indexOf("icons")#-1)
+		$Obj_context.formatters:=($Obj_in.target.indexOf("formatters")#-1)
+		$Obj_context.filters:=($Obj_in.target.indexOf("filters")#-1)
 		
 	End if 
 	
@@ -78,160 +67,180 @@ End if
 If ($Obj_dataModel#Null:C1517)
 	
 	  // Load manifest values
-	$Obj_audit.list:=ob_parseDocument (_o_Pathname ("listForms")+"manifest.json").value
-	$Obj_audit.detail:=ob_parseDocument (_o_Pathname ("detailForms")+"manifest.json").value
+	$file:=COMPONENT_Pathname ("listForms").file("manifest.json")
 	
-	For each ($Txt_tableID;$Obj_dataModel)
+	If ($file.exists)
 		
-		If ($Boo_list)  // USER LIST FORMS
+		$Obj_context.listManifest:=JSON Parse:C1218($file.getText())
+		
+	End if 
+	
+	$file:=COMPONENT_Pathname ("detailForms").file("manifest.json")
+	
+	If ($file.exists)
+		
+		$Obj_context.detailManifest:=JSON Parse:C1218($file.getText())
+		
+	End if 
+	
+	$Path_listForms:=COMPONENT_Pathname ("host_listForms")
+	$Path_detailForms:=COMPONENT_Pathname ("host_detailForms")
+	$Path_tableIcons:=COMPONENT_Pathname ("host_tableIcons")
+	$Path_fieldIcons:=COMPONENT_Pathname ("host_fieldIcons")
+	$Path_formaters:=COMPONENT_Pathname ("host_formatters")
+	
+	For each ($Txt_tableNumber;$Obj_dataModel)
+		
+		If ($Obj_context.list)
 			
-			$Dir_root:=_o_Pathname ("host_listForms")
+			$t:=String:C10($Obj_list[$Txt_tableNumber].form)
 			
-			$Txt_form:=String:C10($Obj_list[$Txt_tableID].form)
-			
-			If (Position:C15("/";$Txt_form)=1)  // Host database resources
+			If (Position:C15("/";$t)=1)
 				
-				$Txt_form:=Delete string:C232($Txt_form;1;1)
+				$t:=Delete string:C232($t;1;1)
 				
-				$Dir_template:=Object to path:C1548(New object:C1471(\
-					"name";$Txt_form;\
-					"parentFolder";$Dir_root;\
-					"isFolder";True:C214))
+				$Path_template:=$Path_listForms.folder($t)
+				$Boo_OK:=$Path_template.exists
 				
-				If (Test path name:C476($Dir_template)=Is a folder:K24:2)
+				If ($Boo_OK)
 					
-					$Boo_OK:=True:C214
-					
-					For each ($Txt_file;$Obj_audit.list.mandatory) While ($Boo_OK)
+					For each ($tt;$Obj_context.listManifest.mandatory) While ($Boo_OK)
 						
-						$Boo_OK:=(Test path name:C476($Dir_template+Convert path POSIX to system:C1107($Txt_file))#-43)
+						$Boo_OK:=$Path_template.file($tt).exists
 						
 					End for each 
 					
 					If (Not:C34($Boo_OK))
 						
-						  // Invalid template
+						  //======================================================
+						  //                   INVALID TEMPLATE
+						  //======================================================
+						
 						$Obj_audit.success:=False:C215
 						$Obj_audit.errors.push(New object:C1471(\
 							"type";"template";\
 							"tab";"list";\
-							"message";Replace string:C233(Get localized string:C991("theTemplateIsInvalid");"{tmpl}";$Txt_form);\
-							"table";$Txt_tableID))
+							"message";str ("theTemplateIsInvalid").localized($t);\
+							"table";$Txt_tableNumber))
 						
 					End if 
 					
 				Else 
 					
-					  // Missing template
+					  //======================================================
+					  //                   MISSING TEMPLATE
+					  //======================================================
+					
 					$Obj_audit.success:=False:C215
 					$Obj_audit.errors.push(New object:C1471(\
 						"type";"template";\
 						"tab";"list";\
-						"message";Replace string:C233(Get localized string:C991("theTemplateIsMissing");"{tmpl}";$Txt_form);\
-						"table";$Txt_tableID))
+						"message";str ("theTemplateIsMissing").localized($t);\
+						"table";$Txt_tableNumber))
 					
 				End if 
 			End if 
 		End if 
 		
-		If ($Boo_detail)  // USER DETAIL FORMS
+		If ($Obj_context.detail)
 			
-			$Dir_root:=_o_Pathname ("host_detailForms")
+			$t:=String:C10($Obj_detail[$Txt_tableNumber].form)
 			
-			$Txt_form:=String:C10($Obj_detail[$Txt_tableID].form)
-			
-			If (Position:C15("/";$Txt_form)=1)  // Host database resources
+			If (Position:C15("/";$t)=1)
 				
-				$Txt_form:=Delete string:C232($Txt_form;1;1)
+				$t:=Delete string:C232($t;1;1)
 				
-				$Dir_template:=Object to path:C1548(New object:C1471(\
-					"name";$Txt_form;\
-					"parentFolder";$Dir_root;\
-					"isFolder";True:C214))
+				$Path_template:=$Path_detailForms.folder($t)
+				$Boo_OK:=$Path_template.exists
 				
-				If (Test path name:C476($Dir_template)=Is a folder:K24:2)
+				If ($Boo_OK)
 					
-					$Boo_OK:=True:C214
-					
-					For each ($Txt_file;$Obj_audit.detail.mandatory) While ($Boo_OK)
+					For each ($tt;$Obj_context.detailManifest.mandatory) While ($Boo_OK)
 						
-						$Boo_OK:=(Test path name:C476($Dir_template+Convert path POSIX to system:C1107($Txt_file))#-43)
+						$Boo_OK:=$Path_template.file($tt).exists
 						
 					End for each 
 					
 					If (Not:C34($Boo_OK))
 						
-						  // Invalid template
+						  //======================================================
+						  //                   INVALID TEMPLATE
+						  //======================================================
+						
 						$Obj_audit.success:=False:C215
 						$Obj_audit.errors.push(New object:C1471(\
 							"type";"template";\
 							"tab";"detail";\
-							"message";Replace string:C233(Get localized string:C991("theTemplateIsInvalid");"{tmpl}";$Txt_form);\
-							"table";$Txt_tableID))
+							"message";str ("theTemplateIsInvalid").localized($t);\
+							"table";$Txt_tableNumber))
 						
 					End if 
 					
 				Else 
 					
-					  // Missing template
+					  //======================================================
+					  //                   MISSING TEMPLATE
+					  //======================================================
+					
 					$Obj_audit.success:=False:C215
 					$Obj_audit.errors.push(New object:C1471(\
 						"type";"template";\
 						"tab";"detail";\
-						"message";Replace string:C233(Get localized string:C991("theTemplateIsMissing");"{tmpl}";$Txt_form);\
-						"table";$Txt_tableID))
+						"message";str ("theTemplateIsMissing").localized($t);\
+						"table";$Txt_tableNumber))
 					
 				End if 
 			End if 
 		End if 
 		
-		If ($Boo_icon)  // USER ICONS
+		If ($Obj_context.icons)
 			
-			$Dir_tableIcons:=_o_Pathname ("host_tableIcons")+Folder separator:K24:12
-			$Dir_fieldIcons:=_o_Pathname ("host_fieldIcons")+Folder separator:K24:12
+			$t:=String:C10($Obj_dataModel[$Txt_tableNumber].icon)
 			
-			$Txt_icon:=String:C10($Obj_dataModel[$Txt_tableID].icon)
-			
-			If (Position:C15("/";$Txt_icon)=1)  // Host database resources
+			If (Position:C15("/";$t)=1)  // Host database resources
 				
-				  //#107182 - Custom icons (in subfolder) are invalidated with project audit and ui refresh
-				  //$Txt_icon:=Delete string($Txt_icon;1;1)
-				$Txt_icon:=Replace string:C233(Delete string:C232($Txt_icon;1;1);"/";Folder separator:K24:12)
+				$Boo_OK:=$Path_tableIcons.file(Delete string:C232($t;1;1)).exists
 				
-				If (Test path name:C476($Dir_tableIcons+$Txt_icon)#Is a document:K24:1)
+				If (Not:C34($Boo_OK))
 					
-					  // Missing table icon
+					  //======================================================
+					  //                  MISSING TABLE ICON
+					  //======================================================
+					
 					$Obj_audit.success:=False:C215
 					$Obj_audit.errors.push(New object:C1471(\
 						"type";"icon";\
 						"panel";"TABLES";\
-						"message";Replace string:C233(Get localized string:C991("theTableIconIsMissing");"{icon}";$Txt_icon);\
-						"table";$Txt_tableID;\
+						"message";str ("theTableIconIsMissing").localized(Delete string:C232($t;1;1));\
+						"table";$Txt_tableNumber;\
 						"tab";"tableProperties"))
 					
 				End if 
 			End if 
 			
-			For each ($Txt_fieldID;$Obj_dataModel[$Txt_tableID])
+			For each ($Txt_fieldNumber;$Obj_dataModel[$Txt_tableNumber])
 				
-				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldID;1;*))
+				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldNumber;1;*))
 					
-					$Txt_icon:=String:C10($Obj_dataModel[$Txt_tableID][$Txt_fieldID].icon)
+					$t:=String:C10($Obj_dataModel[$Txt_tableNumber][$Txt_fieldNumber].icon)
 					
-					If (Position:C15("/";$Txt_icon)=1)  // Host database resources
+					If (Position:C15("/";$t)=1)  // Host resources
 						
-						$Txt_icon:=Delete string:C232($Txt_icon;1;1)
+						$Boo_OK:=$Path_fieldIcons.file(Delete string:C232($t;1;1)).exists
 						
-						If (Test path name:C476($Dir_fieldIcons+$Txt_icon)#Is a document:K24:1)
+						If (Not:C34($Boo_OK))
 							
-							  // Missing field icon
+							  //======================================================
+							  //                  MISSING FIELD ICON
+							  //======================================================
+							
 							$Obj_audit.success:=False:C215
 							$Obj_audit.errors.push(New object:C1471(\
 								"type";"icon";\
 								"panel";"TABLES";\
-								"message";Replace string:C233(Get localized string:C991("theFieldIconIsMissing");"{icon}";$Txt_icon);\
-								"table";$Txt_tableID;\
-								"field";$Txt_fieldID))
+								"message";str ("theFieldIconIsMissing").localized(Delete string:C232($t;1;1));\
+								"table";$Txt_tableNumber;\
+								"field";$Txt_fieldNumber))
 							
 						End if 
 					End if 
@@ -239,31 +248,32 @@ If ($Obj_dataModel#Null:C1517)
 			End for each 
 		End if 
 		
-		If ($Boo_formatter)  // USER FORMATTERS
+		If ($Obj_context.formatters)
 			
-			$Dir_root:=_o_Pathname ("host_formatters")
-			
-			For each ($Txt_fieldID;$Obj_dataModel[$Txt_tableID])
+			For each ($Txt_fieldNumber;$Obj_dataModel[$Txt_tableNumber])
 				
-				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldID;1;*))
+				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldNumber;1;*))
 					
-					$Txt_format:=String:C10($Obj_dataModel[$Txt_tableID][$Txt_fieldID].format)
+					$t:=String:C10($Obj_dataModel[$Txt_tableNumber][$Txt_fieldNumber].format)
 					
-					If (Position:C15("/";$Txt_format)=1)  // Host database resources
+					If (Position:C15("/";$t)=1)  // Host resources
 						
-						$Txt_format:=Replace string:C233(Delete string:C232($Txt_format;1;1);"/";Folder separator:K24:12)
+						$Boo_OK:=$Path_formaters.folder(Delete string:C232($t;1;1)).exists\
+							 & $Path_formaters.folder(Delete string:C232($t;1;1)).file("manifest.json").exists
 						
-						If (Test path name:C476($Dir_root+$Txt_format)#Is a folder:K24:2)\
-							 | (Test path name:C476($Dir_root+$Txt_format+Folder separator:K24:12+"manifest.json")#Is a document:K24:1)
+						If (Not:C34($Boo_OK))
 							
-							  // Missing formatter
+							  //======================================================
+							  //              MISSING OR INVALID FORMATTER
+							  //======================================================
+							
 							$Obj_audit.success:=False:C215
 							$Obj_audit.errors.push(New object:C1471(\
 								"type";"formatter";\
 								"panel";"TABLES";\
-								"message";Replace string:C233(Get localized string:C991("theFormatterIsMissingOrInvalid");"{formatter}";$Txt_format);\
-								"table";$Txt_tableID;\
-								"field";$Txt_fieldID))
+								"message";str ("theFormatterIsMissingOrInvalid").localized(Delete string:C232($t;1;1));\
+								"table";$Txt_tableNumber;\
+								"field";$Txt_fieldNumber))
 							
 						End if 
 					End if 
@@ -271,26 +281,26 @@ If ($Obj_dataModel#Null:C1517)
 			End for each 
 		End if 
 		
-		If ($Boo_filter)  // QUERY FILTERS
+		If ($Obj_context.filters)
 			
-			If ($Obj_dataModel[$Txt_tableID].filter#Null:C1517)
+			If ($Obj_dataModel[$Txt_tableNumber].filter#Null:C1517)
 				
-				If (Not:C34(Bool:C1537($Obj_dataModel[$Txt_tableID].filter.validated)))
+				If (Not:C34(Bool:C1537($Obj_dataModel[$Txt_tableNumber].filter.validated)))
 					
-					  // Invalid filter
+					  //======================================================
+					  //                   INVALID FILTER
+					  //======================================================
+					
 					$Obj_audit.success:=False:C215
 					$Obj_audit.errors.push(New object:C1471(\
 						"type";"filter";\
 						"panel";"DATA";\
-						"message";Replace string:C233(Get localized string:C991("theFilterForTheTableIsNotValid");"{tableName}";String:C10($Obj_dataModel[$Txt_tableID].name));\
-						"table";$Txt_tableID))
+						"message";str ("theFilterForTheTableIsNotValid").localized(String:C10($Obj_dataModel[$Txt_tableNumber].name));\
+						"table";$Txt_tableNumber))
 					
 				End if 
 			End if 
 		End if 
-		
-		  // ==================================================================================================================================
-		
 	End for each 
 End if 
 

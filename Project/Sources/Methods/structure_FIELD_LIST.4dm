@@ -13,11 +13,12 @@
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_error;$Boo_found)
-C_LONGINT:C283($Lon_colum;$Lon_parameters;$Lon_row)
-C_POINTER:C301($Ptr_fields;$Ptr_icons;$Ptr_published)
+C_LONGINT:C283($i;$Lon_colum;$Lon_parameters;$Lon_row)
+C_POINTER:C301($Ptr_fields;$Ptr_icons;$Ptr_list;$Ptr_published)
+C_TEXT:C284($t)
 C_OBJECT:C1216($ƒ;$Obj_;$Obj_context;$Obj_dataModel;$Obj_field;$Obj_form)
 C_OBJECT:C1216($Obj_table)
-C_COLLECTION:C1488($Col_)
+C_COLLECTION:C1488($Col_;$Col_selected)
 
 ARRAY LONGINT:C221($tLon_fieldID;0)
 
@@ -65,6 +66,19 @@ If (Size of array:C274($Ptr_fields->)>0)
 	
 End if 
 
+  // Keep the selection
+$Ptr_list:=ui.pointer($Obj_form.fieldList)
+$Col_selected:=New collection:C1472
+
+For ($i;1;LISTBOX Get number of rows:C915(*;$Obj_form.fieldList);1)
+	
+	If ($Ptr_list->{$i})
+		
+		$Col_selected.push($Ptr_fields->{$i})
+		
+	End if 
+End for 
+
 LISTBOX GET CELL POSITION:C971(*;$Obj_form.tableList;$Lon_colum;$Lon_row)
 
 $Ptr_icons:=ui.pointer($Obj_form.icons)
@@ -101,6 +115,7 @@ If ($Lon_row>0)
 		End if 
 		
 		Case of 
+				
 				  //______________________________________________________
 			: (Length:C16(String:C10($Obj_context.fieldFilter))>0)\
 				 & (Bool:C1537($Obj_context.fieldFilterPublished))
@@ -237,7 +252,6 @@ If ($Lon_row>0)
 							
 						End if 
 					End if 
-					
 				End for each 
 				
 				  //______________________________________________________
@@ -300,8 +314,6 @@ End if
   // Disable field publication if the table is missing
 OBJECT SET ENTERABLE:C238($Ptr_published->;Not:C34(editor_Locked ))
 
-  //ASSERT(Not(Shift down))
-
   // Sort if any
 If ($Obj_context.fieldSortByName)
 	
@@ -309,26 +321,41 @@ If ($Obj_context.fieldSortByName)
 	
 End if 
 
-  // Select the current field if any [
-$Lon_row:=Find in array:C230($Ptr_fields->;String:C10($Obj_context.fieldName))
+  // Restore the selection
+LISTBOX SELECT ROW:C912(*;$Obj_form.fieldList;0;lk remove from selection:K53:3)
 
-If ($Lon_row>0)
+If ($Col_selected.length>0)
 	
-	LISTBOX SELECT ROW:C912(*;$Obj_form.fieldList;$Lon_row;lk replace selection:K53:1)
-	OBJECT SET SCROLL POSITION:C906(*;$Obj_form.fieldList;$Lon_row)
+	For each ($t;$Col_selected)
+		
+		$Lon_row:=Find in array:C230($Ptr_fields->;$t)
+		
+		If ($Lon_row>0)
+			
+			LISTBOX SELECT ROW:C912(*;$Obj_form.fieldList;$Lon_row;lk add to selection:K53:2)
+			
+		End if 
+	End for each 
 	
-	  // Keep the selected field
-	$Obj_context.fieldName:=$Ptr_fields->{$Lon_row}
+	$Lon_row:=Find in array:C230($Ptr_fields->;String:C10($Obj_context.fieldName))
+	
+	If ($Lon_row>0)
+		
+		OBJECT SET SCROLL POSITION:C906(*;$Obj_form.fieldList;$Lon_row)
+		
+	Else 
+		
+		OBJECT SET SCROLL POSITION:C906(*;$Obj_form.fieldList)
+		OB REMOVE:C1226($Obj_context;"fieldName")
+		
+	End if 
 	
 Else 
 	
-	LISTBOX SELECT ROW:C912(*;$Obj_form.fieldList;0;lk remove from selection:K53:3)
 	OBJECT SET SCROLL POSITION:C906(*;$Obj_form.fieldList)
-	
 	OB REMOVE:C1226($Obj_context;"fieldName")
 	
 End if 
-  //]
 
 SET TIMER:C645(-1)
 

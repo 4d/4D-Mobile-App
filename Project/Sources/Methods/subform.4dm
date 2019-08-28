@@ -63,7 +63,7 @@ If (This:C1470._is=Null:C1517)
 		"setSubform";Formula:C1597(subform ("setSubform";New object:C1471("detail";String:C10($1);"list";String:C10($2);"table";$3)))\
 		)
 	
-	$o.update()
+	$o.getSubform()
 	
 Else 
 	

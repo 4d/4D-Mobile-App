@@ -139,7 +139,8 @@
 					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false
 				},
 				"search": {
 					"type": "subform",
@@ -190,9 +191,10 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
-					"movableRows": false,
 					"horizontalLineStroke": "transparent",
 					"verticalLineStroke": "transparent",
+					"movableRows": false,
+					"fill": "automatic",
 					"columns": [
 						{
 							"name": "published",
