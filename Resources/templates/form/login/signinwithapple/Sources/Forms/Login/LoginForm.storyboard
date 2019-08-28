@@ -115,7 +115,7 @@
                         <outlet property="bottomLayoutConstraint" destination="oiz-X4-CpO" id="YhM-5a-TOL"/>
                         <outlet property="loginButton" destination="cxT-y1-JyU" id="BxF-3i-U12"/>
                         <outlet property="loginTextField" destination="gaL-oV-qeM" id="7KV-CX-Cej"/>
-                        <segue destination="ZaI-U0-SQT" kind="presentation" identifier="logged" customClass="PresentFadeSegue" customModule="IBAnimatable" modalPresentationStyle="fullScreen" id="adK-tr-izi"/>
+                        <segue destination="ZaI-U0-SQT" kind="presentation" identifier="logged" modalPresentationStyle="fullScreen" id="adK-tr-izi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YHQ-rz-vq2" userLabel="First Responder" sceneMemberID="firstResponder"/>

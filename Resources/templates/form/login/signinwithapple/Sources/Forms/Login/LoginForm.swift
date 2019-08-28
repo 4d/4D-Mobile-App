@@ -32,6 +32,9 @@ open class LoginForm: QMobileUI.LoginForm {
     }
     /// Called when the view is about to made visible. Default does nothing
     open override func onWillAppear(_ animated: Bool) {
+//        let defaults = UserDefaults.standard
+//        defaults.set(nil, forKey: "userID")
+        registerForAppleIDSessionChanges()
         setupAppleSignInButton()
     }
     /// Called when the view has been fully transitioned onto the screen. Default does nothing
@@ -117,11 +120,11 @@ open class LoginForm: QMobileUI.LoginForm {
             }
             switch (credentialState) {
             case .authorized:
+                self.saveUserID(userID: userID)
                 //User is authorized to continue using your app
                 break
             case .revoked:
                 //User has revoked access to your app
-//                self.logout()
                 break
             case .notFound:
                 //User is not found, meaning that the user never signed in through Apple ID
@@ -137,8 +140,14 @@ open class LoginForm: QMobileUI.LoginForm {
         
         let _ = notificationCenter.addObserver(forName: sessionNotificationName, object: nil, queue: nil) { (notification: Notification) in
             //Sign user out
+            print("hello")
 //            self.logout()
         }
+    }
+    
+    fileprivate func saveUserID(userID: String) {
+        let defaults = UserDefaults.standard
+        defaults.set(userID, forKey: "userID")
     }
     
 }
@@ -154,7 +163,7 @@ extension LoginForm: ASAuthorizationControllerDelegate {
     
     // ASAuthorizationControllerDelegate function for successful authorization
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        registerForAppleIDSessionChanges()
+//        registerForAppleIDSessionChanges()
         
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
@@ -225,13 +234,5 @@ extension LoginForm {
             }
         }
     }
-    
-//    private func logout() {
-//        _ = APIManager.instance.logout { result in
-//            logger.info("Logout \(result)")
-//
-//            self.performTransition()
-//        }
-//    }
     
 }
