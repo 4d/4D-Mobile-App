@@ -53,7 +53,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="3">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="428" top="410.76171875" width="121" height="104.33203125"/>
+				<coordinates left="428" top="410" width="121" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -174,7 +174,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="3">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="663.296875" top="225.27734375" width="204" height="104.33203125"/>
+				<coordinates left="663.296875" top="225" width="204" height="124.35546875"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -192,7 +192,7 @@
 		<table_extra input_form="" output_form="">
 			<editor_table_info displayable_fields_count="3">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="1039.30078125" top="417" width="140" height="104.33203125"/>
+				<coordinates left="1039.30078125" top="410" width="140" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -222,7 +222,7 @@
 		<table_extra input_form="" output_form="">
 			<editor_table_info fields_ordering="1" displayable_fields_count="1">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="428" top="225.27734375" width="107.8515625" height="64.09765625"/>
+				<coordinates left="428" top="225" width="107.8515625" height="64.09765625"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -283,7 +283,7 @@
 		<table_extra input_form="" output_form="">
 			<editor_table_info displayable_fields_count="4">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="665" top="417" width="140" height="141.06640625"/>
+				<coordinates left="665" top="410" width="140" height="141.06640625"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -316,7 +316,7 @@
 		<table_extra>
 			<editor_table_info fields_ordering="1" displayable_fields_count="6">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="240" top="40" width="120" height="167.33203125"/>
+				<coordinates left="209.52734375" top="0" width="173.7578125" height="169.47265625"/>
 			</editor_table_info>
 		</table_extra>
 	</table>

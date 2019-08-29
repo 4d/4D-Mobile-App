@@ -14,12 +14,10 @@ C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 C_COLLECTION:C1488($3)
 
-C_LONGINT:C283($Lon_i;$Lon_parameters)
-C_TEXT:C284($Txt_in;$Txt_out;$Txt_buffer)
-C_OBJECT:C1216($Obj_table;$Obj_tags;$Obj_field;$Obj_element)
-C_COLLECTION:C1488($Col_types)
-
-ARRAY TEXT:C222($tTxt_types;0)
+C_LONGINT:C283($i;$Lon_parameters)
+C_TEXT:C284($t;$Txt_in;$Txt_out)
+C_OBJECT:C1216($o;$Obj_element;$Obj_field;$Obj_table;$Obj_tags)
+C_COLLECTION:C1488($Col_newStrings;$Col_oldStrings;$Col_types)
 
 If (False:C215)
 	C_TEXT:C284(Process_tags ;$0)
@@ -32,25 +30,23 @@ End if
   // Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=3;"Missing parameter"))
 	
 	  // Required parameters
 	$Txt_in:=$1
+	$Obj_tags:=$2
+	$Col_types:=$3
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
+	If ($Lon_parameters>=4)
 		
-		$Obj_tags:=$2
+		  // <NONE>
 		
-		If ($Lon_parameters>=3)
-			
-			$Col_types:=$3
-			
-			  //col_TO_TEXT_ARRAY ($Col_types;->$tTxt_types)
-			COLLECTION TO ARRAY:C1562($Col_types;$tTxt_types)
-			
-		End if 
 	End if 
+	
+	$Obj_table:=$Obj_tags.table
+	
+	$o:=str   // Class
 	
 Else 
 	
@@ -59,264 +55,415 @@ Else
 End if 
 
   // ----------------------------------------------------
-$Txt_out:=$Txt_in
-$Obj_table:=$Obj_tags.table
 
 Case of   // According to type replace the tag
 		
 		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"swift")>0)
+	: ($Col_types.indexOf("swift")#-1)  // Sources file header (*.swift)
 		
-		  // Sources file header (*.swift)
-		$Txt_out:=Replace string:C233($Txt_out;"___DATE___";String:C10($Obj_tags.date))
-		$Txt_out:=Replace string:C233($Txt_out;"___FULLUSERNAME___";String:C10($Obj_tags.fullname))
-		$Txt_out:=Replace string:C233($Txt_out;"___PACKAGENAME___";String:C10($Obj_tags.packageName))
-		$Txt_out:=Replace string:C233($Txt_out;"___COPYRIGHT___";String:C10($Obj_tags.copyright))
+		$Col_oldStrings:=New collection:C1472(\
+			"___DATE___";\
+			"___FULLUSERNAME___";\
+			"___PACKAGENAME___";\
+			"___COPYRIGHT___")
+		
+		$Col_newStrings:=New collection:C1472(\
+			$Obj_tags.date;\
+			$Obj_tags.fullname;\
+			$Obj_tags.packageName;\
+			$Obj_tags.copyright)
 		
 		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"Info.plist")>0)
+	: ($Col_types.indexOf("Info.plist")#-1)
 		
 		  // The following file could be edited using /usr/libexec/PListBuddy, plutil or default
 		  // Info.plist
-		$Txt_out:=Replace string:C233($Txt_out;"___DEVELOPMENT_REGION___";String:C10($Obj_tags.developmentRegion))
-		$Txt_out:=Replace string:C233($Txt_out;"___PROJECT_DISPLAY_NAME___";String:C10($Obj_tags.displayName))
-		$Txt_out:=Replace string:C233($Txt_out;"___VERSION___";String:C10($Obj_tags.version))
-		$Txt_out:=Replace string:C233($Txt_out;"___BUILD_NUMBER___";String:C10($Obj_tags.build))
-		$Txt_out:=Replace string:C233($Txt_out;"___STORYBOARD_LAUNCH_SCREEN___";String:C10($Obj_tags.storyboardLaunchScreen))
-		$Txt_out:=Replace string:C233($Txt_out;"___STORYBOARD_MAIN___";String:C10($Obj_tags.storyboardMain))
-		$Txt_out:=Replace string:C233($Txt_out;"___URL_SCHEME___";String:C10($Obj_tags.urlScheme))
 		
-		$Txt_out:=Replace string:C233($Txt_out;"___COMPONENT_BUILD___";String:C10($Obj_tags.componentBuild))
-		$Txt_out:=Replace string:C233($Txt_out;"___IDE_VERSION___";String:C10($Obj_tags.ideVersion))
-		$Txt_out:=Replace string:C233($Txt_out;"___IDE_BUILD_VERSION___";String:C10($Obj_tags.ideBuildVersion))
-		$Txt_out:=Replace string:C233($Txt_out;"___SDK_VERSION___";String:C10($Obj_tags.sdkVersion))
+		$Col_oldStrings:=New collection:C1472(\
+			"___DEVELOPMENT_REGION___";\
+			"___PROJECT_DISPLAY_NAME___";\
+			"___VERSION___";\
+			"___BUILD_NUMBER___";\
+			"___STORYBOARD_LAUNCH_SCREEN___";\
+			"___STORYBOARD_MAIN___";\
+			"___URL_SCHEME___";\
+			"___COMPONENT_BUILD___";\
+			"___IDE_VERSION___";\
+			"___IDE_BUILD_VERSION___";\
+			"___SDK_VERSION___")
 		
-		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"settings")>0)
-		
-		$Txt_out:=Replace string:C233($Txt_out;"___SERVER_URL___";String:C10($Obj_tags.prodUrl))
-		$Txt_out:=Replace string:C233($Txt_out;"___SERVER_PORT___";String:C10($Obj_tags.serverPort))
-		$Txt_out:=Replace string:C233($Txt_out;"___SERVER_URL_SCHEME___";String:C10($Obj_tags.serverScheme))
-		$Txt_out:=Replace string:C233($Txt_out;"___SERVER_HTTPS_PORT___";String:C10($Obj_tags.serverHTTPSPort))
-		$Txt_out:=Replace string:C233($Txt_out;"___SERVER_URLS___";String:C10($Obj_tags.serverUrls))
-		
-		  // has login form
-		$Txt_out:=Replace string:C233($Txt_out;"___SERVER_AUTHENTIFICATION_EMAIL___";String:C10($Obj_tags.serverAuthenticationEmail))
-		$Txt_out:=Replace string:C233($Txt_out;"___SERVER_AUTHENTIFICATION_RELOAD_DATA___";String:C10($Obj_tags.serverAuthenticationReloadData))
-		
-		  // An unique UUID created for a new generated app
-		$Txt_out:=Replace string:C233($Txt_out;"___SETTING_UUID___";Generate UUID:C1066)
+		$Col_newStrings:=New collection:C1472(\
+			$Obj_tags.developmentRegion;\
+			$Obj_tags.displayName;\
+			$Obj_tags.version;\
+			$Obj_tags.build;\
+			$Obj_tags.storyboardLaunchScreen;\
+			$Obj_tags.storyboardMain;\
+			$Obj_tags.urlScheme;\
+			$Obj_tags.componentBuild;\
+			$Obj_tags.ideVersion;\
+			$Obj_tags.ideBuildVersion;\
+			$Obj_tags.sdkVersion)
 		
 		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"asset")>0)
+	: ($Col_types.indexOf("settings")#-1)
 		
-		$Txt_out:=Replace string:C233($Txt_out;"___NAME___";String:C10($Obj_tags.name))
-		$Txt_out:=Replace string:C233($Txt_out;"___FILE_NAME___";String:C10($Obj_tags.fileName))
-		$Txt_out:=Replace string:C233($Txt_out;"___UTI___";String:C10($Obj_tags.uti))
-		$Txt_out:=Replace string:C233($Txt_out;"___RED___";String:C10($Obj_tags.red))
-		$Txt_out:=Replace string:C233($Txt_out;"___BLUE___";String:C10($Obj_tags.blue))
-		$Txt_out:=Replace string:C233($Txt_out;"___GREEN___";String:C10($Obj_tags.green))
-		$Txt_out:=Replace string:C233($Txt_out;"___WHITE___";String:C10($Obj_tags.white))
-		$Txt_out:=Replace string:C233($Txt_out;"___ALPHA___";String:C10($Obj_tags.alpha))
+		$Col_oldStrings:=New collection:C1472(\
+			"___SERVER_URL___";\
+			"___SERVER_PORT___";\
+			"___SERVER_URL_SCHEME___";\
+			"___SERVER_HTTPS_PORT___";\
+			"___SERVER_URLS___";\
+			"___SERVER_AUTHENTIFICATION_EMAIL___";\
+			"___SERVER_AUTHENTIFICATION_RELOAD_DATA___";\
+			"___SETTING_UUID___")
+		
+		$Col_newStrings:=New collection:C1472(\
+			$Obj_tags.prodUrl;\
+			$Obj_tags.serverPort;\
+			$Obj_tags.serverScheme;\
+			$Obj_tags.serverHTTPSPort;\
+			$Obj_tags.serverUrls;\
+			$Obj_tags.serverAuthenticationEmail;\
+			$Obj_tags.serverAuthenticationReloadData;\
+			Generate UUID:C1066)  // An unique UUID created for a new generated app
 		
 		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"project.pbxproj")>0)
+	: ($Col_types.indexOf("asset")#-1)
 		
-		  // project.pbxproj
-		$Txt_out:=Replace string:C233($Txt_out;"___PRODUCT___";String:C10($Obj_tags.product))
-		$Txt_out:=Replace string:C233($Txt_out;"___PRODUCT_BUNDLE_IDENTIFIER___";String:C10($Obj_tags.bundleIdentifier))
-		$Txt_out:=Replace string:C233($Txt_out;"___ORGANIZATION___";String:C10($Obj_tags.company))
-		$Txt_out:=Replace string:C233($Txt_out;"___IPHONEOS_DEPLOYMENT_TARGET___";String:C10($Obj_tags.iosDeploymentTarget))
-		$Txt_out:=Replace string:C233($Txt_out;"___SWIFT_VERSION___";String:C10($Obj_tags.swiftVersion))
-		$Txt_out:=Replace string:C233($Txt_out;"___ENABLE_ON_DEMAND_RESOURCES___";String:C10($Obj_tags.onDemandResources))
-		$Txt_out:=Replace string:C233($Txt_out;"___ENABLE_BITCODE___";String:C10($Obj_tags.bitcode))
-		$Txt_out:=Replace string:C233($Txt_out;"___TARGETED_DEVICE_FAMILY___";String:C10($Obj_tags.targetedDeviceFamily))
-		$Txt_out:=Replace string:C233($Txt_out;"___OTHER_SWIFT_FLAGS_DEBUG___";String:C10($Obj_tags.swiftFlagsDebug))
-		$Txt_out:=Replace string:C233($Txt_out;"___OTHER_SWIFT_FLAGS_RELEASE___";String:C10($Obj_tags.swiftFlagsRelease))
-		$Txt_out:=Replace string:C233($Txt_out;"___SWIFT_OPTIMIZATION_LEVEL_DEBUG___";String:C10($Obj_tags.swiftOptimizationLevelDebug))
-		$Txt_out:=Replace string:C233($Txt_out;"___SWIFT_OPTIMIZATION_LEVEL_RELEASE___";String:C10($Obj_tags.swiftOptimizationLevelRelease))
-		$Txt_out:=Replace string:C233($Txt_out;"___SWIFT_COMPILATION_MODE_DEBUG___";String:C10($Obj_tags.swiftCompilationModeDebug))
-		$Txt_out:=Replace string:C233($Txt_out;"___SWIFT_COMPILATION_MODE_RELEASE___";String:C10($Obj_tags.swiftCompilationModeRelease))
+		$Col_oldStrings:=New collection:C1472(\
+			"___NAME___";\
+			"___FILE_NAME___";\
+			"___UTI___";\
+			"___RED___";\
+			"___BLUE___";\
+			"___GREEN___";\
+			"___WHITE___";\
+			"___ALPHA___")
+		
+		$Col_newStrings:=New collection:C1472(\
+			$Obj_tags.name;\
+			$Obj_tags.fileName;\
+			$Obj_tags.uti;\
+			$Obj_tags.red;\
+			$Obj_tags.blue;\
+			$Obj_tags.green;\
+			$Obj_tags.white;\
+			$Obj_tags.alpha)
+		
+		  //______________________________________________________
+	: ($Col_types.indexOf("project.pbxproj")#-1)  // project.pbxproj
+		
+		$Col_oldStrings:=New collection:C1472(\
+			"___PRODUCT___";\
+			"___PRODUCT_BUNDLE_IDENTIFIER___";\
+			"___ORGANIZATION___";\
+			"___IPHONEOS_DEPLOYMENT_TARGET___";\
+			"___SWIFT_VERSION___";\
+			"___ENABLE_ON_DEMAND_RESOURCES___";\
+			"___ENABLE_BITCODE___";\
+			"___TARGETED_DEVICE_FAMILY___";\
+			"___OTHER_SWIFT_FLAGS_DEBUG___";\
+			"___OTHER_SWIFT_FLAGS_RELEASE___";\
+			"___SWIFT_OPTIMIZATION_LEVEL_DEBUG___";\
+			"___SWIFT_OPTIMIZATION_LEVEL_RELEASE___";\
+			"___SWIFT_COMPILATION_MODE_DEBUG___";\
+			"___SWIFT_COMPILATION_MODE_RELEASE___")
+		
+		$Col_newStrings:=New collection:C1472(\
+			$Obj_tags.product;\
+			$Obj_tags.bundleIdentifier;\
+			$Obj_tags.company;\
+			$Obj_tags.iosDeploymentTarget;\
+			$Obj_tags.swiftVersion;\
+			$Obj_tags.onDemandResources;\
+			$Obj_tags.bitcode;\
+			$Obj_tags.targetedDeviceFamily;\
+			$Obj_tags.swiftFlagsDebug;\
+			$Obj_tags.swiftFlagsRelease;\
+			$Obj_tags.swiftOptimizationLevelDebug;\
+			$Obj_tags.swiftOptimizationLevelRelease;\
+			$Obj_tags.swiftCompilationModeDebug;\
+			$Obj_tags.swiftCompilationModeRelease)
 		
 		If (String:C10($Obj_tags.teamId)#"")
 			
-			$Txt_out:=Replace string:C233($Txt_out;"___DEVELOPMENT_TEAM___";$Obj_tags.teamId)
+			$Col_oldStrings.push("___DEVELOPMENT_TEAM___")
+			$Col_newStrings.push($Obj_tags.teamId)
 			
 		Else 
 			
 			  // Remove the keys
-			$Txt_out:=Replace string:C233($Txt_out;"DevelopmentTeam = \"___DEVELOPMENT_TEAM___\";";"")
-			$Txt_out:=Replace string:C233($Txt_out;"DEVELOPMENT_TEAM = \"___DEVELOPMENT_TEAM___\";";"")
+			$Col_oldStrings.push("DevelopmentTeam = \"___DEVELOPMENT_TEAM___\";")
+			$Col_newStrings.push(Null:C1517)
+			
+			$Col_oldStrings.push("DEVELOPMENT_TEAM = \"___DEVELOPMENT_TEAM___\";")
+			$Col_newStrings.push(Null:C1517)
 			
 		End if 
 		
 		  // **************************** TEMPORARY ****************************
 		  // * all table files swift and storyboard must added to project      *
 		  // *******************************************************************
-		$Txt_out:=Replace string:C233($Txt_out;"___TABLE___";String:C10($Obj_table.name))
+		$Col_oldStrings.push("___TABLE___")
+		$Col_newStrings.push($Obj_table.name)
 		
 		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"filename")>0)
+	: ($Col_types.indexOf("filename")#-1)
 		
-		$Txt_out:=Replace string:C233($Txt_out;"___PRODUCT___";String:C10($Obj_tags.product))
-		$Txt_out:=Replace string:C233($Txt_out;"___TABLE___";String:C10($Obj_table.name))
-		$Txt_out:=Replace string:C233($Txt_out;"___NAME___";String:C10($Obj_tags.name))
+		$Col_oldStrings:=New collection:C1472(\
+			"___PRODUCT___";\
+			"___TABLE___";\
+			"___NAME___")
+		
+		$Col_newStrings:=New collection:C1472(\
+			$Obj_tags.product;\
+			$Obj_table.name;\
+			$Obj_tags.name)
 		
 		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"navigation.storyboard")>0)
+	: ($Col_types.indexOf("navigation.storyboard")#-1)
 		
-		$Txt_out:=Replace string:C233($Txt_out;"___NAVIGATION_TRANSITION___";String:C10($Obj_tags.navigationTransition))
-		$Txt_out:=Replace string:C233($Txt_out;"___NAVIGATION_TITLE___";String:C10($Obj_tags.navigationTitle))
-		$Txt_out:=Replace string:C233($Txt_out;"___NAVIGATION_TABLE_ROW_HEIGHT___";String:C10($Obj_tags.navigationRowHeight))
+		$Col_oldStrings:=New collection:C1472(\
+			"___NAVIGATION_TRANSITION___";\
+			"___NAVIGATION_TITLE___";\
+			"___NAVIGATION_TABLE_ROW_HEIGHT___")
+		
+		$Col_newStrings:=New collection:C1472(\
+			$Obj_tags.navigationTransition;\
+			$Obj_tags.navigationTitle;\
+			$Obj_tags.navigationRowHeight)
 		
 		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"script")>0)
+	: ($Col_types.indexOf("script")#-1)
 		
-		$Txt_out:=Replace string:C233($Txt_out;"___MINIMUM_XCODE_VERSION___";String:C10($Obj_tags.xCodeVersion))
+		$Col_oldStrings:=New collection:C1472(\
+			"___MINIMUM_XCODE_VERSION___")
+		
+		$Col_newStrings:=New collection:C1472(\
+			$Obj_tags.xCodeVersion)
+		
 		  //______________________________________________________
-	: (Find in array:C230($tTxt_types;"automatic")>0)  /// if pass a restricted tag object this add all keys
+	: ($Col_types.indexOf("automatic")#-1)  // if pass a restricted tag object this add all keys
 		
-		For each ($Txt_buffer;$Obj_tags)
+		$Col_oldStrings:=New collection:C1472
+		$Col_newStrings:=New collection:C1472
+		
+		For each ($t;$Obj_tags)
+			
+			$Col_oldStrings.push("___"+Uppercase:C13($t)+"___")
 			
 			Case of 
-				: (Value type:C1509($Obj_tags[$Txt_buffer])=Is collection:K8:32)
-					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";xml_encode (JSON Stringify:C1217($Obj_tags[$Txt_buffer])))
-				: (Value type:C1509($Obj_tags[$Txt_buffer])=Is object:K8:27)
-					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";xml_encode (JSON Stringify:C1217($Obj_tags[$Txt_buffer])))
+					
+					  //________________________________________
+				: (Value type:C1509($Obj_tags[$t])=Is collection:K8:32)
+					
+					$Col_newStrings.push($o.setText(JSON Stringify:C1217($Obj_tags[$t])).xmlEncode())
+					
+					  //________________________________________
+				: (Value type:C1509($Obj_tags[$t])=Is object:K8:27)
+					
+					$Col_newStrings.push($o.setText(JSON Stringify:C1217($Obj_tags[$t])).xmlEncode())
+					
+					  //________________________________________
 				Else 
-					$Txt_out:=Replace string:C233($Txt_out;"___"+Uppercase:C13($Txt_buffer)+"___";String:C10($Obj_tags[$Txt_buffer]))
+					
+					$Col_newStrings.push($Obj_tags[$t])
+					
+					  //________________________________________
 			End case 
 		End for each 
 		
 		  //______________________________________________________
 	Else 
 		
-		$Txt_out:=Replace string:C233($Txt_out;"___PRODUCT___";String:C10($Obj_tags.product))
+		$Col_oldStrings:=New collection:C1472(\
+			"___PRODUCT___")
+		
+		$Col_newStrings:=New collection:C1472(\
+			$Obj_tags.product)
 		
 		  //______________________________________________________
 End case 
 
   //___TABLE___ FILES [
-If (Find in array:C230($tTxt_types;"___TABLE___")>0)  // ___TABLE___.* or file part
+If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 	
-	$Txt_out:=Replace string:C233($Txt_out;"___TABLE___";$Obj_table.name)
+	$Col_oldStrings.push("___TABLE___")
+	$Col_newStrings.push($Obj_table.name)
 	
 	Case of 
 			
 			  //______________________________________________________
-		: (Find in array:C230($tTxt_types;"swift")>0)  //___TABLE___.swift
+		: ($Col_types.indexOf("swift")#-1)  //___TABLE___.swift
 			
-			$Txt_out:=Replace string:C233($Txt_out;"___DETAILFORMTYPE___";String:C10($Obj_tags.detailFormType))
-			$Txt_out:=Replace string:C233($Txt_out;"___LISTFORMTYPE___";String:C10($Obj_tags.listFormType))
+			$Col_oldStrings\
+				.push("___DETAILFORMTYPE___")\
+				.push("___LISTFORMTYPE___")
+			
+			$Col_newStrings\
+				.push($Obj_tags.detailFormType)\
+				.push($Obj_tags.listFormType)
 			
 			For each ($Obj_field;$Obj_table.fields)
 				
-				$Lon_i:=$Lon_i+1
+				$i:=$i+1
+				$t:="___FIELD_"+String:C10($i)
 				
-				$Txt_buffer:="___FIELD_"+String:C10($Lon_i)
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"___";$Obj_field.name)
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_NAME___";xml_encode (String:C10($Obj_field.originalName)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL___";xml_encode ($Obj_field.label))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_SHORT_LABEL___";xml_encode (String:C10($Obj_field.shortLabel)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_BINDING_TYPE___";String:C10($Obj_field.bindingType))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_ICON___";xml_encode (String:C10($Obj_field.detailIcon)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL_ALIGNMENT___";String:C10($Obj_field.labelAlignment))
+				$Col_oldStrings\
+					.push($t+"___")\
+					.push($t+"_NAME___")\
+					.push($t+"_LABEL___")\
+					.push($t+"_SHORT_LABEL___")\
+					.push($t+"_BINDING_TYPE___")\
+					.push($t+"_ICON___")\
+					.push($t+"_LABEL_ALIGNMENT___")
+				
+				$Col_newStrings\
+					.push($Obj_field.name)\
+					.push($o.setText($Obj_field.originalName).xmlEncode())\
+					.push($o.setText($Obj_field.label).xmlEncode())\
+					.push($o.setText($Obj_field.shortLabel).xmlEncode())\
+					.push($Obj_field.bindingType)\
+					.push($o.setText($Obj_field.detailIcon).xmlEncode())\
+					.push($Obj_field.labelAlignment)
 				
 			End for each 
 			
 			  //______________________________________________________
-		: (Find in array:C230($tTxt_types;"storyboard")>0)  //___TABLE___XXX.storyboard
+		: ($Col_types.indexOf("storyboard")#-1)  //___TABLE___XXX.storyboard
 			
-			$Txt_buffer:=String:C10($Obj_table.navigationTransition)
+			$t:=String:C10($Obj_table.navigationTransition)
 			
-			If (Length:C16($Txt_buffer)=0)
+			If (Length:C16($t)=0)
 				
-				$Txt_buffer:=String:C10($Obj_tags.navigationTransition)  // the default one
+				$t:=String:C10($Obj_tags.navigationTransition)  // the default one
 				
 			End if 
 			
-			$Txt_out:=Replace string:C233($Txt_out;"___LIST_TO_DETAIL_TRANSITION___";$Txt_buffer)
+			$Col_oldStrings\
+				.push("___LIST_TO_DETAIL_TRANSITION___")\
+				.push("___SEARCHABLE_FIELD___")\
+				.push("___SECTION_FIELD___")\
+				.push("___SECTION_FIELD_BINDING_TYPE___")\
+				.push("___SHOW_SECTION___")\
+				.push("___SORT_FIELD___")\
+				.push("___PRODUCT___")\
+				.push("___TABLE_NUMBER___")\
+				.push("___TABLE_NAME___")\
+				.push("___TABLE_LABEL___")\
+				.push("___TABLE_SHORT_LABEL___")\
+				.push("___TABLE_ICON___")\
+				.push("___TABLE_ACTIONS___")\
+				.push("___ENTITY_ACTIONS___")
 			
-			$Txt_out:=Replace string:C233($Txt_out;"___SEARCHABLE_FIELD___";String:C10($Obj_table.searchableField))
-			$Txt_out:=Replace string:C233($Txt_out;"___SECTION_FIELD___";String:C10($Obj_table.sectionField))
-			$Txt_out:=Replace string:C233($Txt_out;"___SECTION_FIELD_BINDING_TYPE___";String:C10($Obj_table.sectionFieldBindingType))
-			$Txt_out:=Replace string:C233($Txt_out;"___SHOW_SECTION___";String:C10($Obj_table.showSection))
-			$Txt_out:=Replace string:C233($Txt_out;"___SORT_FIELD___";String:C10($Obj_table.sortField))
-			
-			$Txt_out:=Replace string:C233($Txt_out;"___PRODUCT___";String:C10($Obj_tags.product))
-			
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_NUMBER___";String:C10($Obj_table.tableNumber))
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_NAME___";xml_encode (String:C10($Obj_table.originalName)))
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_LABEL___";xml_encode (String:C10($Obj_table.label)))
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_SHORT_LABEL___";xml_encode (String:C10($Obj_table.shortLabel)))
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_ICON___";xml_encode (String:C10($Obj_table.navigationIcon)))
-			
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_ACTIONS___";xml_encode (String:C10($Obj_table.tableActions)))
-			$Txt_out:=Replace string:C233($Txt_out;"___ENTITY_ACTIONS___";xml_encode (String:C10($Obj_table.recordActions)))
-			
-			  //$Txt_out:=Replace string($Txt_out;"___SELECTION_ACTIONS___";xml_encode (String($Obj_table.selectionActions)))
+			$Col_newStrings\
+				.push($t)\
+				.push($Obj_table.searchableField)\
+				.push($Obj_table.sectionField)\
+				.push($Obj_table.sectionFieldBindingType)\
+				.push($Obj_table.showSection)\
+				.push($Obj_table.sortField)\
+				.push($Obj_tags.product)\
+				.push($Obj_table.tableNumber)\
+				.push($o.setText($Obj_table.originalName).xmlEncode())\
+				.push($o.setText($Obj_table.label).xmlEncode())\
+				.push($o.setText($Obj_table.shortLabel).xmlEncode())\
+				.push($o.setText($Obj_table.navigationIcon).xmlEncode())\
+				.push($o.setText($Obj_table.tableActions).xmlEncode())\
+				.push($o.setText($Obj_table.recordActions).xmlEncode())
 			
 			For each ($Obj_field;$Obj_table.fields)
 				
-				$Lon_i:=$Lon_i+1
+				$i:=$i+1
+				$t:="___FIELD_"+String:C10($i)
 				
-				$Txt_buffer:="___FIELD_"+String:C10($Lon_i)
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"___";$Obj_field.name)
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_NAME___";xml_encode (String:C10($Obj_field.originalName)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL___";xml_encode (String:C10($Obj_field.label)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_SHORT_LABEL___";xml_encode (String:C10($Obj_field.shortLabel)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_BINDING_TYPE___";String:C10($Obj_field.bindingType))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_ICON___";xml_encode (String:C10($Obj_field.detailIcon)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL_ALIGNMENT___";String:C10($Obj_field.labelAlignment))
+				$Col_oldStrings\
+					.push($t+"___")\
+					.push($t+"_NAME___")\
+					.push($t+"_LABEL___")\
+					.push($t+"_SHORT_LABEL___")\
+					.push($t+"_BINDING_TYPE___")\
+					.push($t+"_ICON___")\
+					.push($t+"_LABEL_ALIGNMENT___")
+				
+				$Col_newStrings\
+					.push($Obj_field.name)\
+					.push($o.setText($Obj_field.originalName).xmlEncode())\
+					.push($o.setText($Obj_field.label).xmlEncode())\
+					.push($o.setText($Obj_field.shortLabel).xmlEncode())\
+					.push($Obj_field.bindingType)\
+					.push($o.setText($Obj_field.detailIcon).xmlEncode())\
+					.push($Obj_field.labelAlignment)
 				
 			End for each 
 			
 			  //______________________________________________________
-		: (Find in array:C230($tTxt_types;"detailform")>0)  //___TABLE___DetailsForm.storyboard
+		: ($Col_types.indexOf("detailform")#-1)  //___TABLE___DetailsForm.storyboard
 			
 			If ($Obj_tags.field#Null:C1517)
 				
-				$Txt_buffer:="___FIELD"
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"___";$Obj_tags.field.name)
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_NAME___";xml_encode (String:C10($Obj_tags.field.originalName)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL___";xml_encode ($Obj_tags.field.label))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_SHORT_LABEL___";xml_encode (String:C10($Obj_tags.field.shortLabel)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_BINDING_TYPE___";String:C10($Obj_tags.field.bindingType))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_ICON___";xml_encode (String:C10($Obj_tags.field.detailIcon)))
-				$Txt_out:=Replace string:C233($Txt_out;$Txt_buffer+"_LABEL_ALIGNMENT___";String:C10($Obj_tags.field.labelAlignment))
+				$t:="___FIELD"
+				
+				$Col_oldStrings\
+					.push($t+"___")\
+					.push($t+"_NAME___")\
+					.push($t+"_LABEL___")\
+					.push($t+"_SHORT_LABEL___")\
+					.push($t+"_BINDING_TYPE___")\
+					.push($t+"_ICON___")\
+					.push($t+"_LABEL_ALIGNMENT___")
+				
+				$Col_newStrings\
+					.push($Obj_tags.field.name)\
+					.push($o.setText($Obj_tags.field.originalName).xmlEncode())\
+					.push($o.setText($Obj_tags.field.label).xmlEncode())\
+					.push($o.setText($Obj_tags.field.shortLabel).xmlEncode())\
+					.push($Obj_tags.field.bindingType)\
+					.push($o.setText($Obj_tags.field.detailIcon).xmlEncode())\
+					.push($Obj_tags.field.labelAlignment)
 				
 				If (Num:C11($Obj_tags.field.id)=0)
-					  // $Txt_out:=Replace string($Txt_out;$Txt_buffer+"_INVERSE___";String($Obj_tags.field.inverseName))  // if use field as relation, remove this line if use ($Obj_tags.relation#Null)
-					$Txt_out:=Replace string:C233($Txt_out;"___DESTINATION___";formatString ("table-name";String:C10($Obj_tags.field.relatedEntities)+"ListForm"))  // ?? if isRelationToMany change check this line 
+					
+					  // If use field as relation, remove these lines if use ($Obj_tags.relation#Null)
+					$Col_oldStrings.push("___DESTINATION___")
+					$Col_newStrings.push(formatString ("table-name";String:C10($Obj_tags.field.relatedEntities)+"ListForm"))
 					
 				End if 
-				
 			End if 
 			
 			  //______________________________________________________
-		: (Find in array:C230($tTxt_types;"navigation")>0)  // MainNavigation.storyboard
+		: ($Col_types.indexOf("navigation")#-1)  // MainNavigation.storyboard
 			
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_NAME___";xml_encode (String:C10($Obj_table.originalName)))
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_LABEL___";xml_encode (String:C10($Obj_table.label)))
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_SHORT_LABEL___";xml_encode (String:C10($Obj_table.shortLabel)))
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_ICON___";xml_encode (String:C10($Obj_table.navigationIcon)))
-			$Txt_out:=Replace string:C233($Txt_out;"___TABLE_LABEL_ALIGNMENT___";String:C10($Obj_table.labelAlignment))
+			$Col_oldStrings\
+				.push("___TABLE_NAME___")\
+				.push("___TABLE_LABEL___")\
+				.push("___TABLE_SHORT_LABEL___")\
+				.push("___TABLE_ICON___")\
+				.push("___TABLE_LABEL_ALIGNMENT___")\
+				.push("TAG-ID-SEG")
 			
-			$Txt_out:=Replace string:C233($Txt_out;"TAG-ID-SEG";$Obj_table.segueDestinationId)
+			$Col_newStrings\
+				.push($o.setText($Obj_table.originalName).xmlEncode())\
+				.push($o.setText($Obj_table.label).xmlEncode())\
+				.push($o.setText($Obj_table.shortLabel).xmlEncode())\
+				.push($o.setText($Obj_table.navigationIcon).xmlEncode())\
+				.push($Obj_table.labelAlignment)\
+				.push($Obj_table.segueDestinationId)
 			
 			  //______________________________________________________
 	End case 
-	
 End if 
   //]
 
-If (Find in array:C230($tTxt_types;"storyboardID")>0)  // Dispatch storyboard id in TAG-<interfix>-<position>
+If ($Col_types.indexOf("storyboardID")#-1)  // Dispatch storyboard id in TAG-<interfix>-<position>
 	
 	If (Length:C16(String:C10($Obj_tags.tagInterfix))>0)  // only one element defined directly at root tag level
-		$Obj_element:=New object:C1471()
-		$Obj_element.tagInterfix:=$Obj_tags.tagInterfix  // no obcopy to avoid recursivity
-		$Obj_element.storyboardIDs:=$Obj_tags.storyboardIDs
-		$Obj_tags.storyboardID:=New collection:C1472($Obj_element)
+		
+		$Obj_tags.storyboardID:=New collection:C1472(New object:C1471(\
+			"tagInterfix";$Obj_tags.tagInterfix;\
+			"storyboardIDs";$Obj_tags.storyboardIDs))
+		
 	End if 
 	
 	If (Value type:C1509($Obj_tags.storyboardID)=Is collection:K8:32)  // we have a collection of storyboard ids to replace
@@ -327,10 +474,10 @@ If (Find in array:C230($tTxt_types;"storyboardID")>0)  // Dispatch storyboard id
 				
 				If (Value type:C1509($Obj_element.storyboardIDs)=Is collection:K8:32)
 					
-					For ($Lon_i;0;$Obj_element.storyboardIDs.length-1;1)
+					For ($i;0;$Obj_element.storyboardIDs.length-1;1)
 						
-						$Txt_buffer:=String:C10($Lon_i+1;"##000")
-						$Txt_out:=Replace string:C233($Txt_out;"TAG-"+$Obj_element.tagInterfix+"-"+$Txt_buffer;$Obj_element.storyboardIDs[$Lon_i])
+						$Col_oldStrings.push("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($i+1;"##000"))
+						$Col_newStrings.push($Obj_element.storyboardIDs[$i])
 						
 					End for 
 					
@@ -348,6 +495,9 @@ If (Find in array:C230($tTxt_types;"storyboardID")>0)  // Dispatch storyboard id
 		End for each 
 	End if 
 End if 
+
+  // Make replacements
+$Txt_out:=$o.setText($Txt_in).replace($Col_oldStrings;$Col_newStrings)
 
   // ----------------------------------------------------
   // Return

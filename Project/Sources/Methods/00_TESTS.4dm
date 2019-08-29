@@ -22,23 +22,6 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$c:=New collection:C1472(1;2;3;4;5;6;7;8;9;10)
-		
-		For each ($l;$c)
-			
-			If (($l%2)#0)
-				
-				$c.remove($i)
-				
-			End if 
-			
-			$i:=$i+1
-			
-		End for each 
-		
-		  //________________________________________
-	: (True:C214)
-		
 		$svg:=svg   //("load";Folder(fk desktop folder).file("DEV/export.svg"))
 		$t:=$svg.rect(10;10;100;50).latest
 		ASSERT:C1129($t=$svg.find("svg/rect"))

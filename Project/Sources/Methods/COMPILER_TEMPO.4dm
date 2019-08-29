@@ -1,6 +1,5 @@
 //%attributes = {"invisible":true}
 
-
 C_OBJECT:C1216(INIT ;$1)
 
 C_OBJECT:C1216(CALL_MAIN_PROCESS ;$1)

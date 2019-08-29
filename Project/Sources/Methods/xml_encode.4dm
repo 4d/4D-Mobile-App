@@ -49,6 +49,7 @@ If (Length:C16($Txt_in)=0)
 	$Txt_out:=$Txt_in
 	
 Else 
+	
 	  // XXX maybe find a 4D method or better ways to xml encode
 	
 	  // Use DOM api to encode XML

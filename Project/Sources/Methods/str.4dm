@@ -40,34 +40,36 @@ If (This:C1470._is=Null:C1517)
 		"_is";"str";\
 		"value";$t;\
 		"length";Length:C16($t);\
-		"setText";Formula:C1597(str ("setText";New object:C1471("value";String:C10($1))));\
-		"uperCamelCase";Formula:C1597(str ("uperCamelCase").value);\
-		"lowerCamelCase";Formula:C1597(str ("lowerCamelCase").value);\
-		"unaccented";Formula:C1597(str ("unaccented").value);\
-		"trim";Formula:C1597(str ("trim";New object:C1471("pattern";$1)).value);\
-		"trimTrailing";Formula:C1597(str ("trimTrailing";New object:C1471("pattern";$1)).value);\
-		"trimLeading";Formula:C1597(str ("trimLeading";New object:C1471("pattern";$1)).value);\
-		"toNum";Formula:C1597(str ("filter";New object:C1471("as";"numeric")).value);\
-		"wordWrap";Formula:C1597(str ("wordWrap";New object:C1471("length";$1)).value);\
-		"spaceSeparated";Formula:C1597(str ("spaceSeparated").value);\
+		"common";Formula:C1597(str ("common";New object:C1471("with";$1;"diacritical";Bool:C1537($2))).value);\
+		"concat";Formula:C1597(str ("concat";New object:C1471("item";$1;"separator";$2)).value);\
+		"contains";Formula:C1597(str ("contains";New object:C1471("pattern";String:C10($1);"diacritical";Bool:C1537($2))).value);\
+		"distinctLetters";Formula:C1597(str ("distinctLetters";New object:C1471("delimiter";$1)).value);\
+		"equal";Formula:C1597(str ("equal";New object:C1471("with";$1)).value);\
+		"fixedLength";Formula:C1597(str ("fixedLength";New object:C1471("length";$1;"filler";$2;"alignment";$3)).value);\
 		"isStyled";Formula:C1597(str ("isStyled").value);\
 		"isBoolean";Formula:C1597(str ("isBoolean").value);\
 		"isDate";Formula:C1597(str ("isDate").value);\
 		"isNum";Formula:C1597(str ("isNum").value);\
 		"isTime";Formula:C1597(str ("isTime").value);\
-		"contains";Formula:C1597(str ("contains";New object:C1471("pattern";String:C10($1);"diacritical";Bool:C1537($2))).value);\
-		"match";Formula:C1597(str ("match";New object:C1471("pattern";$1)).value);\
-		"fixedLength";Formula:C1597(str ("fixedLength";New object:C1471("length";$1;"filler";$2;"alignment";$3)).value);\
-		"distinctLetters";Formula:C1597(str ("distinctLetters";New object:C1471("delimiter";$1)).value);\
-		"equal";Formula:C1597(str ("equal";New object:C1471("with";$1)).value);\
-		"encode";Formula:C1597(str ("encode").value);\
-		"decode";Formula:C1597(str ("decode").value);\
-		"quoted";Formula:C1597("\""+String:C10(This:C1470.value)+"\"");\
-		"singleQuoted";Formula:C1597("'"+String:C10(This:C1470.value)+"'");\
 		"localized";Formula:C1597(str ("localized";New object:C1471("substitution";$1)).value);\
-		"concat";Formula:C1597(str ("concat";New object:C1471("item";$1;"separator";$2)).value);\
+		"lowerCamelCase";Formula:C1597(str ("lowerCamelCase").value);\
+		"match";Formula:C1597(str ("match";New object:C1471("pattern";$1)).value);\
 		"occurrences";Formula:C1597(Split string:C1554(This:C1470.value;String:C10($1);sk trim spaces:K86:2).length-1);\
-		"common";Formula:C1597(str ("common";New object:C1471("with";$1;"diacritical";Bool:C1537($2))).value)\
+		"quoted";Formula:C1597("\""+String:C10(This:C1470.value)+"\"");\
+		"replace";Formula:C1597(str ("replace";New object:C1471("old";$1;"new";$2)).value);\
+		"setText";Formula:C1597(str ("setText";New object:C1471("value";String:C10($1))));\
+		"singleQuoted";Formula:C1597("'"+String:C10(This:C1470.value)+"'");\
+		"spaceSeparated";Formula:C1597(str ("spaceSeparated").value);\
+		"toNum";Formula:C1597(str ("filter";New object:C1471("as";"numeric")).value);\
+		"trim";Formula:C1597(str ("trim";New object:C1471("pattern";$1)).value);\
+		"trimTrailing";Formula:C1597(str ("trimTrailing";New object:C1471("pattern";$1)).value);\
+		"trimLeading";Formula:C1597(str ("trimLeading";New object:C1471("pattern";$1)).value);\
+		"unaccented";Formula:C1597(str ("unaccented").value);\
+		"uperCamelCase";Formula:C1597(str ("uperCamelCase").value);\
+		"urlEncode";Formula:C1597(str ("urlEncode").value);\
+		"urlDecode";Formula:C1597(str ("urlDecode").value);\
+		"wordWrap";Formula:C1597(str ("wordWrap";New object:C1471("length";$1)).value);\
+		"xmlEncode";Formula:C1597(str ("xmlEncode").value)\
 		)
 	
 Else 
@@ -109,7 +111,7 @@ Else
 					End if 
 					
 					  //______________________________________________________
-				: ($1="encode")  // Returns a URL encoded string
+				: ($1="urlEncode")  // Returns a URL encoded string
 					
 					  // List of safe characters
 					$t:="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:/.?_-$(){}~&"
@@ -137,7 +139,7 @@ Else
 					End if 
 					
 					  //______________________________________________________
-				: ($1="decode")  // Returns a URL decoded string
+				: ($1="urlDecode")  // Returns a URL decoded string
 					
 					SET BLOB SIZE:C606($x;This:C1470.length+1;0)
 					
@@ -531,10 +533,12 @@ Else
 									
 									If (Position:C15($t[[$l]];Uppercase:C13($t[[$l]];*);*)>0)
 										
+										  // UPPERCASE
 										$t[[$l]]:=Uppercase:C13($t[[$l]])
 										
 									Else 
 										
+										  // lowercase
 										$t[[$l]]:=Lowercase:C14($t[[$l]])
 										
 									End if 
@@ -670,7 +674,8 @@ Else
 								$t:=Get localized string:C991(String:C10($tt))
 								$t:=Choose:C955(OK=1;$t;String:C10($tt))
 								
-								If (Position:C15($Txt_separator;$t)#1) & (Position:C15($Txt_separator;$o.value)#Length:C16($o.value))
+								If (Position:C15($Txt_separator;$t)#1)\
+									 & (Position:C15($Txt_separator;$o.value)#Length:C16($o.value))
 									
 									$o.value:=$o.value+$Txt_separator
 									
@@ -685,7 +690,8 @@ Else
 							$t:=Get localized string:C991(String:C10($2.item))
 							$t:=Choose:C955(OK=1;$t;String:C10($2.item))
 							
-							If (Position:C15($Txt_separator;$t)#1) & (Position:C15($Txt_separator;$o.value)#Length:C16($o.value))
+							If (Position:C15($Txt_separator;$t)#1)\
+								 & (Position:C15($Txt_separator;$o.value)#Length:C16($o.value))
 								
 								$o.value:=$o.value+$Txt_separator
 								
@@ -694,6 +700,59 @@ Else
 							$o.value:=$o.value+$t
 							
 						End if 
+					End if 
+					
+					  //______________________________________________________
+				: ($1="replace")  // Returns the string after replacements 
+					
+					$o.value:=This:C1470.value
+					
+					If (Value type:C1509($2.old)=Is collection:K8:32)
+						
+						For each ($t;$2.old)
+							
+							If (Asserted:C1132($i<$2.new.length;"oops"))
+								
+								$o.value:=Replace string:C233($o.value;$t;Choose:C955($2.new[$i]=Null:C1517;"";String:C10($2.new[$i])))
+								
+							End if 
+							
+							$i:=$i+1
+							
+						End for each 
+						
+					Else 
+						
+						$o.value:=Replace string:C233($o.value;String:C10($2.old);Choose:C955($2.new=Null:C1517;"";String:C10($2.new)))
+						
+					End if 
+					
+					  //______________________________________________________
+				: ($1="xmlEncode")  // Returns a XML encoded string
+					
+					$o.value:=This:C1470.value
+					
+					  // Use DOM api to encode XML
+					$t:=DOM Create XML Ref:C861("r")
+					
+					If (OK=1)
+						
+						DOM SET XML ATTRIBUTE:C866($t;"v";$o.value)
+						
+						If (OK=1)
+							
+							DOM EXPORT TO VAR:C863($t;$tt)
+							
+							If (OK=1)  // Extract from result
+								
+								$tt:=Substring:C12($tt;Position:C15("v=\"";$tt)+3)
+								$o.value:=Substring:C12($tt;1;Length:C16($tt)-4)
+								
+							End if 
+						End if 
+						
+						DOM CLOSE XML:C722($t)
+						
 					End if 
 					
 					  //______________________________________________________
@@ -708,16 +767,15 @@ Else
 					  //$Boo_diacritical:=Bool($2.diacritical)
 					
 					  //If ($Col_1.length>$Col_2.length)
-					
 					  //For each ($Txt_word;$Col_2)
 					
 					  //$t:=Choose(Length($o.value)>0;$o.value+" "+$Txt_word;$Txt_word)
 					  //$Lon_position:=Choose($Boo_diacritical;Position($t;$Txt_1;*);Position($t;$Txt_1))
 					  //$o.value:=Choose($Lon_position>0;$t;"")
 					
-					  //End for each 
+					  // End for each
 					
-					  //Else 
+					  // Else
 					
 					  //For each ($Txt_word;$Col_1)
 					
@@ -725,18 +783,17 @@ Else
 					  //$Lon_position:=Choose($Boo_diacritical;Position($t;$Txt_2;*);Position($t;$Txt_2))
 					  //$o.value:=Choose($Lon_position>0;$t;"")
 					
-					  //End for each 
-					  //End if 
-					
+					  // End for each
+					  // End if
 					
 					  //______________________________________________________
 					  //: (Formula(process ).call().isPreemptif)
 					
 					  //_4D THROW ERROR(New object(\
-																								"component";"CLAS";\
-																								"code";1;\
-																								"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
-																								"something";"my bug"))
+																		"component";"CLAS";\
+																		"code";1;\
+																		"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
+																		"something";"my bug"))
 					
 					  //______________________________________________________
 				: ($1="isStyled")  // Returns True if text is styled
