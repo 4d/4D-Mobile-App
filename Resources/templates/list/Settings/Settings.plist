@@ -28,5 +28,9 @@
 	<string>___SETTING_UUID___</string>
 	<key>crash.server.url</key>
 	<string>https://bugs.4d.fr</string>
+	<key>ui.presentation.fullScreen</key>
+	<true/>
+	<key>application.services</key>
+	</array>
 </dict>
 </plist>
