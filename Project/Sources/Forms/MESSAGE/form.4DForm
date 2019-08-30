@@ -1,7 +1,5 @@
 ﻿{
 	"destination": "detailScreen",
-	"rightMargin": 0,
-	"bottomMargin": 0,
 	"markerBreak": 180,
 	"markerFooter": 180,
 	"events": [
@@ -76,9 +74,7 @@
 					"borderStyle": "none",
 					"enterable": false,
 					"hideFocusRing": true,
-					"showSelection": true,
-					"dragging": "none",
-					"dropping": "none"
+					"showSelection": true
 				},
 				"title": {
 					"type": "input",
@@ -88,14 +84,13 @@
 					"height": 33,
 					"textAlign": "center",
 					"fontTheme": "main",
-					"focusable": false,
 					"fill": "transparent",
 					"borderStyle": "none",
 					"enterable": false,
 					"hideFocusRing": true,
-					"contextMenu": "none",
 					"dragging": "none",
-					"dropping": "none"
+					"dropping": "none",
+					"showSelection": true
 				},
 				"progress": {
 					"type": "spinner",
@@ -140,5 +135,7 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"rightMargin": 0,
+	"bottomMargin": 0
 }

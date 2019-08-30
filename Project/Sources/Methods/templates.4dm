@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : templates
-  // Database: 4D Mobile Express
   // ID[9D729EF8EA04RC9E92BEF068I8B6CA17]
   // Created 9-11-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -13,15 +12,14 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_withIcons)
-C_LONGINT:C283($Lon_;$Lon_count;$Lon_i;$Lon_ii;$Lon_parameters)
+C_LONGINT:C283($i;$l;$Lon_count;$Lon_parameters)
 C_PICTURE:C286($Pic_file;$Pic_scaled)
-C_POINTER:C301($Ptr_)
-C_OBJECT:C1216($Dir_hostRoot;$Dir_root;$File_icon;$File_manifest;$File_)
-C_TEXT:C284($Svg_root;$Txt_buffer)
-C_TEXT:C284($Txt_template;$Txt_tableNumber)
-C_OBJECT:C1216($Obj_userChoice;$Obj_buffer;$Obj_field;$Obj_in;$Obj_out;$Obj_path;$Obj_color)
-C_OBJECT:C1216($Obj_table;$Obj_navigationTable;$Obj_tableList;$Obj_tableModel;$Obj_template;$Obj_dataModel)
-C_COLLECTION:C1488($Col_catalog;$Col_path;$Col_actions)
+C_TEXT:C284($Svg_root;$t;$Txt_tableNumber;$Txt_template;$Txt_type)
+C_OBJECT:C1216($file;$folder;$o;$Obj_color;$Obj_dataModel;$Obj_field)
+C_OBJECT:C1216($Obj_in;$Obj_navigationTable;$Obj_out;$Obj_table;$Obj_tableList;$Obj_tableModel)
+C_OBJECT:C1216($Obj_template;$Obj_userChoice;$oo;$Path_hostRoot;$Path_icon;$Path_manifest)
+C_OBJECT:C1216($Path_root)
+C_COLLECTION:C1488($Col_actions;$Col_catalog;$Col_path)
 
 If (False:C215)
 	C_OBJECT:C1216(templates ;$0)
@@ -71,44 +69,46 @@ ASSERT:C1129(Value type:C1509($Obj_template.source)=Is text:K8:3)
   // ----------------------------------------------------
 
   // First template with recursivety else just copy the files
+$Txt_type:=String:C10($Obj_template.type)
+
 Case of 
 		
 		  //________________________________________
-	: (String:C10($Obj_template.type)="folder")
+	: ($Txt_type="folder")
 		
 		  // Do not inject files
 		
 		  //______________________________________________________
-	: (String:C10($Obj_template.type)="choice")
+	: ($Txt_type="choice")
 		
 		  // Later must be a user choice by table Feature #93726, here we take default one
 		  // in Feature #93726 make it choice a byTable=True
-		$Txt_buffer:=$Obj_template.default
+		$t:=$Obj_template.default
 		
 		  // Check choice make by tag path
 		If (Length:C16(String:C10($Obj_template.tag))>0)
 			
 			If (Length:C16(String:C10($Obj_in.tags[$Obj_template.tag]))>0)
 				
-				$Txt_buffer:=$Obj_in.tags[$Obj_template.tag]
+				$t:=$Obj_in.tags[$Obj_template.tag]
 				
 			End if 
 		End if 
 		
-		$Txt_buffer:=$Obj_template.source+$Txt_buffer+Folder separator:K24:12
+		$t:=$Obj_template.source+$t+Folder separator:K24:12
 		
-		$Obj_buffer:=OB Copy:C1225($Obj_in)
+		$o:=OB Copy:C1225($Obj_in)
 		
-		$Obj_out.template:=ob_parseDocument ($Txt_buffer+"manifest.json")
+		$Obj_out.template:=ob_parseDocument ($t+"manifest.json")
 		
 		If ($Obj_out.template.success)
 			
-			$Obj_buffer.template:=$Obj_out.template.value
-			$Obj_buffer.template.source:=$Txt_buffer
-			$Obj_buffer.template.parent:=$Obj_template.parent  // or $Obj_template?
-			$Obj_buffer.projfile:=$Obj_in.projfile  // do not want a copy
+			$o.template:=$Obj_out.template.value
+			$o.template.source:=$t
+			$o.template.parent:=$Obj_template.parent  // or $Obj_template?
+			$o.projfile:=$Obj_in.projfile  // do not want a copy
 			
-			$Obj_out.template:=templates ($Obj_buffer)
+			$Obj_out.template:=templates ($o)  // <================================== RECURSIVE
 			
 		Else 
 			
@@ -117,12 +117,12 @@ Case of
 		End if 
 		
 		  //________________________________________
-	: (String:C10($Obj_template.type)="tablesForms")
+	: ($Txt_type="tablesForms")
 		
-		  // Manage root templates for all tables forms accordin to user choice
+		  // Manage root templates for all tables forms according to user choice
 		
 		  // Get the user choice information
-		$Obj_userChoice:=$Obj_in.project[String:C10($Obj_template.userChoiceTag)]  // list or defail from project
+		$Obj_userChoice:=$Obj_in.project[String:C10($Obj_template.userChoiceTag)]  // list or detail from project
 		
 		  // For each on tags here, maybe on data view instead?
 		$Obj_out.tables:=New collection:C1472
@@ -140,7 +140,7 @@ Case of
 			  // Get userChoice for one table
 			$Obj_tableList:=$Obj_userChoice[$Txt_tableNumber]
 			
-			If ($Obj_tableList=Null:C1517)  // no user choice, create it
+			If ($Obj_tableList=Null:C1517)  // No user choice, create it
 				
 				$Obj_tableList:=New object:C1471
 				
@@ -149,35 +149,37 @@ Case of
 			  // No fields defined by user in form, take all
 			If ($Obj_tableList.fields=Null:C1517)
 				
-				$Obj_tableList.fields:=dataModel (New object:C1471("action";"fieldCollection";"table";$Obj_tableModel)).fields
+				$Obj_tableList.fields:=dataModel (New object:C1471(\
+					"action";"fieldCollection";\
+					"table";$Obj_tableModel)).fields
 				
 			End if 
 			
 			  // Get template path
-			$Txt_buffer:=Choose:C955(Length:C16(String:C10($Obj_tableList.form))>0;$Obj_tableList.form;$Obj_template.default)  // use default if not defined
+			$t:=Choose:C955(Length:C16(String:C10($Obj_tableList.form))>0;String:C10($Obj_tableList.form);$Obj_template.default)  // Use default if not defined
 			
-			If ($Txt_buffer[[1]]="/")  // custom form
+			If ($t[[1]]="/")  // custom form
 				
-				$Txt_buffer:=Delete string:C232($Txt_buffer;1;1)
-				$Obj_path:=COMPONENT_Pathname ("host_"+$Obj_template.userChoiceTag+"Forms").folder($Txt_buffer)
+				$t:=Delete string:C232($t;1;1)
+				$folder:=COMPONENT_Pathname ("host_"+$Obj_template.userChoiceTag+"Forms").folder($t)
 				
 			Else 
 				
-				$Obj_path:=Folder:C1567($Obj_template.source;fk platform path:K87:2).folder($Txt_buffer)
+				$folder:=Folder:C1567($Obj_template.source;fk platform path:K87:2).folder($t)
 				
 			End if 
 			
 			  // Load the manifest file
-			$Obj_buffer:=OB Copy:C1225($Obj_in)
-			$File_:=$Obj_path.file("manifest.json")
-			$Obj_buffer.template:=ob_parseFile ($File_)
+			$o:=OB Copy:C1225($Obj_in)
+			$file:=$folder.file("manifest.json")
+			$o.template:=ob_parseFile ($file)
 			
-			If ($Obj_buffer.template.success)  // the template existe or not
+			If ($o.template.success)  // the template existe or not
 				
-				$Obj_buffer.template:=$Obj_buffer.template.value  // get the doc object
+				$o.template:=$o.template.value  // get the doc object
 				
 				  // Get expected field count
-				$Lon_count:=Num:C11($Obj_buffer.template.fields.count)
+				$Lon_count:=Num:C11($o.template.fields.count)
 				
 				  // Manage table info: the fields
 				$Obj_table:=OB Copy:C1225($Obj_tableModel)
@@ -202,15 +204,15 @@ Case of
 				  // The fields
 				$Obj_table.fields:=New collection:C1472
 				
-				$Lon_i:=0
+				$i:=0
 				
 				For each ($Obj_field;$Obj_tableList.fields)
 					
-					$Lon_i:=$Lon_i+1
+					$i:=$i+1
 					
 					Case of 
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 						: ($Obj_field.id#Null:C1517)
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
@@ -257,7 +259,8 @@ Case of
 								$Obj_tableModel:=$Obj_dataModel[$Txt_tableNumber]
 								
 							End if 
-							  // ----------------------------------------
+							
+							  //……………………………………………………………………………………………………………
 						: ($Obj_field.name#Null:C1517)  // ie. relation
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
@@ -283,8 +286,8 @@ Case of
 							  // Set binding type according to field information
 							  //$Obj_field.bindingType:=storyboard (New object("action";"fieldBinding";"field";$Obj_field;"formatters";$Obj_in.formatters)).bindingType
 							
-							  // ----------------------------------------
-						: ($Lon_i<$Lon_count)
+							  //……………………………………………………………………………………………………………
+						: ($i<$Lon_count)
 							
 							  // /  Create a dummy fields to replace in template
 							$Obj_field:=New object:C1471(\
@@ -297,12 +300,12 @@ Case of
 								"fieldType";-1;\
 								"icon";"")
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 						Else 
 							
 							$Obj_field:=Null:C1517
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 					End case 
 					
 					If ($Obj_field#Null:C1517)
@@ -344,22 +347,22 @@ Case of
 					  // If (Bool(featuresFlags._98105))
 					Case of 
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is object:K8:27)
 							
 							$Obj_table.searchableField:=formatString ("field-name";String:C10($Obj_tableList.searchableField.name))
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is collection:K8:32)
 							
 							$Obj_table.searchableField:=$Obj_tableList.searchableField.extract("name").map("col_formula";"$1.result:=formatString (\"field-name\";String:C10($1.value))").join(",")
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is text:K8:3)
 							
 							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.searchableField))
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 					End case 
 					
 					  // Else
@@ -376,22 +379,21 @@ Case of
 					
 					Case of 
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.sortField)=Is object:K8:27)
 							
 							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.sortField.name))
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.sortField)=Is collection:K8:32)
 							
 							$Obj_table.sortField:=$Obj_tableList.sortField.extract("name").map("col_formula";"$1.result:=formatString (\"field-name\";String:C10($1.value))").join(",")
 							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.sortField)=Is text:K8:3)
 							
 							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.sortField))
-							
-							  // ----------------------------------------
+							  //……………………………………………………………………………………………………………
 					End case 
 					
 				Else 
@@ -447,10 +449,9 @@ Case of
 				  // Manage actions
 				  // ======
 				
-				  // If (Bool(featuresFlags._103505))
 				Case of 
 						
-						  // ----------------------------------------
+						  //……………………………………………………………………………………………………………
 					: (String:C10($Obj_template.userChoiceTag)="list")
 						
 						  // get action on table
@@ -473,7 +474,7 @@ Case of
 						End if 
 						
 						  // XXX selection actions
-						  // ----------------------------------------
+						  //……………………………………………………………………………………………………………
 					: (String:C10($Obj_template.userChoiceTag)="detail")
 						
 						$Col_actions:=actions ("form";New object:C1471("project";$Obj_in.project;"table";$Obj_table.originalName;"tableNumber";$Obj_table.tableNumber;"scope";"currentRecord")).actions
@@ -485,22 +486,20 @@ Case of
 							
 						End if 
 						
-						  // ----------------------------------------
+						  //……………………………………………………………………………………………………………
 					Else 
 						
 						ASSERT:C1129(dev_assert ;"Unknown form type "+String:C10(String:C10($Obj_template.userChoiceTag)))
 						
-						  // ----------------------------------------
+						  //……………………………………………………………………………………………………………
 				End case 
-				
-				  // End if
 				
 				  // ======
 				  // Manage type an others
 				  // ======
 				
-				$Obj_in.tags.detailFormType:=String:C10($Obj_buffer.template.tags.___DETAILFORMTYPE___)  // XXX could do a generic insert of all $Obj_buffer.template.tags here
-				$Obj_in.tags.listFormType:=String:C10($Obj_buffer.template.tags.___LISTFORMTYPE___)
+				$Obj_in.tags.detailFormType:=String:C10($o.template.tags.___DETAILFORMTYPE___)  // XXX could do a generic insert of all $Obj_buffer.template.tags here
+				$Obj_in.tags.listFormType:=String:C10($o.template.tags.___LISTFORMTYPE___)
 				
 				$Obj_table.navigationIcon:=Null:C1517
 				
@@ -523,25 +522,25 @@ Case of
 				$Obj_in.tags.table:=$Obj_table
 				
 				  // Process the template
-				$Obj_buffer.template.source:=$Obj_path.platformPath
-				$Obj_buffer.template.parent:=$Obj_template.parent  // or $Obj_template?
-				$Obj_buffer.tags:=$Obj_in.tags  // has been modifyed since clone
-				$Obj_buffer.projfile:=$Obj_in.projfile  // do not want a copy
-				$Obj_buffer.exclude:=JSON Stringify:C1217(commonValues.template.exclude)
+				$o.template.source:=$folder.platformPath
+				$o.template.parent:=$Obj_template.parent  // or $Obj_template?
+				$o.tags:=$Obj_in.tags  // has been modifyed since clone
+				$o.projfile:=$Obj_in.projfile  // do not want a copy
+				$o.exclude:=JSON Stringify:C1217(commonValues.template.exclude)
 				
-				$Obj_out.template:=templates ($Obj_buffer)
+				$Obj_out.template:=templates ($o)  // <================================== RECURSIVE
 				ob_error_combine ($Obj_out;$Obj_out.template)
 				
 			Else   // cannot read the template
 				
-				ob_error_combine ($Obj_out;$Obj_buffer.template)
+				ob_error_combine ($Obj_out;$o.template)
 				$Obj_out.success:=False:C215
 				
 			End if 
 		End for each 
 		
 		  //______________________________________________________
-	: (String:C10($Obj_template.type)="detailform")
+	: ($Txt_type="detailform")
 		
 		  // Do nothing here, do not remove or tag will be replaced
 		  // The TEMPLATE method is called later after replacing some tag
@@ -553,35 +552,36 @@ Case of
 		
 		Case of 
 				
-				  // ----------------------------------------
+				  //……………………………………………………………………………………………………………
 			: (Value type:C1509($Obj_in.exclude)=Is text:K8:3)
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source;$Obj_in.exclude)
 				
-				  // ----------------------------------------
+				  //……………………………………………………………………………………………………………
 			: (Value type:C1509($Obj_in.exclude)=Is collection:K8:32)
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source;JSON Stringify:C1217($Obj_in.exclude))
 				
-				  // ----------------------------------------
-			: (String:C10($Obj_template.type)="main")
+				  //……………………………………………………………………………………………………………
+			: ($Txt_type="main")
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source;"*")
 				
-				  // ----------------------------------------
+				  //……………………………………………………………………………………………………………
 			Else 
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source)
 				
-				  // ----------------------------------------
+				  //……………………………………………………………………………………………………………
 		End case 
 		
-		$Obj_out.template:=TEMPLATE (New object:C1471(\
+		$Obj_out.template:=template (New object:C1471(\
 			"source";$Obj_template.source;\
 			"target";$Obj_in.path;\
 			"tags";$Obj_in.tags;\
 			"caller";$Obj_in.caller;\
-			"catalog";$Col_catalog))
+			"catalog";$Col_catalog\
+			))
 		
 		$Obj_out.capabilities:=$Obj_template.capabilities
 		
@@ -594,15 +594,16 @@ End case
 Case of 
 		
 		  //________________________________________
-	: (String:C10($Obj_template.type)="main")
+	: ($Txt_type="main")
 		
 		  // Update Assets
 		If (String:C10($Obj_template.assets.source)#"")
 			
-			$Obj_out.assets:=TEMPLATE (New object:C1471(\
+			$Obj_out.assets:=template (New object:C1471(\
 				"source";$Obj_template.assets.source;\
 				"target";$Obj_template.assets.target;\
-				"catalog";doc_catalog ($Obj_template.assets.source)))
+				"catalog";doc_catalog ($Obj_template.assets.source)\
+				))
 			
 			ob_error_combine ($Obj_out;$Obj_out.assets)
 			
@@ -611,22 +612,22 @@ Case of
 			$Obj_out.theme:=New object:C1471(\
 				"success";False:C215)
 			
-			$File_:=Folder:C1567($Obj_template.assets.source;fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
-			$Lon_:=commonValues.theme.colorjuicer.scale
+			$file:=Folder:C1567($Obj_template.assets.source;fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
+			$l:=commonValues.theme.colorjuicer.scale
 			
-			If (($Lon_#1024)\
-				 & ($Lon_>0))
+			If (($l#1024)\
+				 & ($l>0))
 				
-				READ PICTURE FILE:C678($File_.platformPath;$Pic_file)
-				CREATE THUMBNAIL:C679($Pic_file;$Pic_scaled;$Lon_;$Lon_)  // This change result of algo..., let tools scale using argument
-				$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066)
-				WRITE PICTURE FILE:C680($File_.platformPath;$Pic_scaled;".png")
+				READ PICTURE FILE:C678($file.platformPath;$Pic_file)
+				CREATE THUMBNAIL:C679($Pic_file;$Pic_scaled;$l;$l)  // This change result of algo..., let tools scale using argument
+				$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066)
+				WRITE PICTURE FILE:C680($file.platformPath;$Pic_scaled;".png")
 				
 			End if 
 			
 			$Obj_color:=colors (New object:C1471(\
 				"action";"juicer";\
-				"posix";$File_.path))
+				"posix";$file.path))
 			
 			If ($Obj_color.success)
 				
@@ -661,10 +662,10 @@ Case of
 				End if 
 			End if 
 			
-			If (($Lon_#1024)\
-				 & ($Lon_>0))
+			If (($l#1024)\
+				 & ($l>0))
 				
-				$File_.delete()  // delete scaled files
+				$file.delete()  // delete scaled files
 				
 			End if 
 			
@@ -673,29 +674,41 @@ Case of
 		End if 
 		
 		  //________________________________________
-	: (String:C10($Obj_template.type)="navigation")
+	: ($Txt_type="navigation")
 		
 		  // Get navigation tables as tag
-		$Obj_in.tags.navigationTables:=dataModel (New object:C1471("action";"tableCollection";"dataModel";$Obj_in.project.dataModel;"tag";True:C214;"tables";$Obj_in.project.main.order)).tables
+		$Obj_in.tags.navigationTables:=dataModel (New object:C1471(\
+			"action";"tableCollection";\
+			"dataModel";$Obj_in.project.dataModel;\
+			"tag";True:C214;\
+			"tables";$Obj_in.project.main.order)).tables
 		
 		  // Compute table row height, not very responsive. Check if possible with storyboard
-		$Lon_i:=$Obj_in.tags.navigationTables.length
+		$i:=$Obj_in.tags.navigationTables.length
 		
 		Case of 
 				
-			: $Lon_i>10
+				  //……………………………………………………………………………………
+			: ($i>10)
+				
 				$Obj_in.tags.navigationRowHeight:="-1"  // https://developer.apple.com/documentation/uikit/uitableviewautomaticdimension
-			: $Lon_i<3
+				
+				  //……………………………………………………………………………………
+			: ($i<3)
+				
 				$Obj_in.tags.navigationRowHeight:="300"
-			: $Lon_i<4
+				
+				  //……………………………………………………………………………………
+			: ($i<4)
+				
 				$Obj_in.tags.navigationRowHeight:="200"
 				
-				  //________________________________________
+				  //……………………………………………………………………………………
 			Else 
 				
-				$Obj_in.tags.navigationRowHeight:=String:C10(100+(100/$Lon_i))
+				$Obj_in.tags.navigationRowHeight:=String:C10(100+(100/$i))
 				
-				  //________________________________________
+				  //……………………………………………………………………………………
 		End case 
 		
 		  // need asset?
@@ -703,12 +716,12 @@ Case of
 		
 		If (Not:C34($Boo_withIcons))
 			
-			For each ($Obj_table;$Obj_in.tags.navigationTables)
+			For each ($Obj_table;$Obj_in.tags.navigationTables) Until ($Boo_withIcons)
 				
 				If (String:C10($Obj_table.icon)#"")
 					
 					$Boo_withIcons:=True:C214
-					$Lon_i:=MAXLONG:K35:2-1  // break
+					$i:=MAXLONG:K35:2-1  // break
 					
 				End if 
 			End for each 
@@ -734,7 +747,8 @@ Case of
 			"action";"navigation";\
 			"template";$Obj_template;\
 			"target";$Obj_in.path;\
-			"tags";$Obj_in.tags))
+			"tags";$Obj_in.tags\
+			))
 		
 		If (Not:C34($Obj_out.storyboard.success))
 			
@@ -746,8 +760,8 @@ Case of
 		
 		If ($Boo_withIcons)
 			
-			$Dir_root:=COMPONENT_Pathname ("fieldIcons")
-			$Dir_hostRoot:=COMPONENT_Pathname ("host_fieldIcons")
+			$Path_root:=COMPONENT_Pathname ("fieldIcons")
+			$Path_hostRoot:=COMPONENT_Pathname ("host_fieldIcons")
 			
 			  // If avigation need asset, create it
 			$Obj_out.assets:=New collection:C1472  // result of asset operations
@@ -756,72 +770,87 @@ Case of
 				
 				If (Length:C16(String:C10($Obj_table.icon))=0)  // no icon defined
 					
-					If ($Obj_table.shortLabel#Null:C1517)  //#################################
+					If ($Obj_table.shortLabel#Null:C1517)
+						
+						  //#################################
 						
 						  // Generate asset using first table letter
-						$File_:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
+						$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
 						
-						If (Asserted:C1132($File_.exists;"Missing ressources: "+$File_.path))
+						If (Asserted:C1132($file.exists;"Missing ressources: "+$file.path))
 							
-							$Svg_root:=DOM Parse XML source:C719($File_.platformPath)
+							$Svg_root:=DOM Parse XML source:C719($file.platformPath)
 							
-							If (Asserted:C1132(OK=1;"Failed to parse: "+$File_.path))
+							If (Asserted:C1132(OK=1;"Failed to parse: "+$file.path))
 								
-								$Txt_buffer:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_table.shortLabel;$Obj_table.label)
+								$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_table.shortLabel;$Obj_table.label)
 								
-								If (Length:C16($Txt_buffer)>0)
+								If (Length:C16($t)>0)
 									
 									  // Take first letter
-									$Txt_buffer:=Uppercase:C13($Txt_buffer[[1]])
+									$t:=Uppercase:C13($t[[1]])
 									
 								Else 
 									
 									  //%W-533.1
-									$Txt_buffer:=Uppercase:C13($Obj_table.name[[1]])  // 4D table names are not empty
+									$t:=Uppercase:C13($Obj_table.name[[1]])  // 4D table names are not empty
 									  //%W+533.1
 									
 								End if 
 								
-								DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$Txt_buffer)
+								DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$t)
 								
-								$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".svg")
-								DOM EXPORT TO FILE:C862($Svg_root;$File_.platformPath)
+								$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($Obj_in.project.product.bundleIdentifier+".svg")
+								$file.delete()
+								
+								DOM EXPORT TO FILE:C862($Svg_root;$file.platformPath)
 								
 								DOM CLOSE XML:C722($Svg_root)
 								
-								$Obj_buffer:=asset (New object:C1471(\
+								$o:=asset (New object:C1471(\
 									"action";"create";\
 									"type";"imageset";\
 									"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-									"source";$File_.platformPath;\
+									"source";$file.platformPath;\
 									"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
 									"format";$Obj_template.assets.format;\
-									"size";$Obj_template.assets.size))
-								$Obj_out.assets.push($Obj_buffer)
-								ob_error_combine ($Obj_out;$Obj_buffer)
+									"size";$Obj_template.assets.size\
+									))
+								
+								$Obj_out.assets.push($o)
+								ob_error_combine ($Obj_out;$o)
 								
 							End if 
 						End if 
-					End if   //#################################
+						
+						
+						  //#################################
+					End if 
 					
 				Else 
 					
 					If (Position:C15("/";$Obj_table.icon)=1)
-						$File_icon:=$Dir_hostRoot.file(Substring:C12($Obj_table.icon;2))
+						
+						  // User icon
+						$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_table.icon;2))
+						
 					Else 
-						$File_icon:=$Dir_root.file($Obj_table.icon)
+						
+						$Path_icon:=$Path_root.file($Obj_table.icon)
+						
 					End if 
 					
-					$Obj_buffer:=asset (New object:C1471(\
+					$o:=asset (New object:C1471(\
 						"action";"create";\
 						"type";"imageset";\
-						"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-						"source";$File_icon.platformPath;\
+						"tags";$o;\
+						"source";$Path_icon.platformPath;\
 						"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
 						"format";$Obj_template.assets.format;\
 						"size";$Obj_template.assets.size))
-					$Obj_out.assets.push($Obj_buffer)
-					ob_error_combine ($Obj_out;$Obj_buffer)
+					
+					$Obj_out.assets.push($o)
+					ob_error_combine ($Obj_out;$o)
 					
 				End if 
 			End for each 
@@ -831,7 +860,7 @@ Case of
 			"navigationTables";$Obj_in.tags.navigationTables)  // Tag to transmit
 		
 		  //________________________________________
-	: (String:C10($Obj_template.type)="ls")
+	: ($Txt_type="ls")
 		
 		  // Specific code for launch screen
 		If (Value type:C1509($Obj_template.assets)=Is object:K8:27)
@@ -843,50 +872,51 @@ Case of
 			ARRAY TEXT:C222($tTxt_keys;0x0000)
 			OB GET PROPERTY NAMES:C1232($Obj_template.assets;$tTxt_keys)
 			
-			For ($Lon_i;1;Size of array:C274($tTxt_keys);1)
+			For ($i;1;Size of array:C274($tTxt_keys);1)
 				
 				  // Hardcoding image path (maybe could do better)
 				Case of 
 						
 						  //________________________________________
-					: ($tTxt_keys{$Lon_i}="center")
+					: ($tTxt_keys{$i}="center")
 						
 						  // Temporary or by default take app icon, later could be customizable by UI, and must be managed like AppIcon
-						$File_:=Folder:C1567($Obj_template.parent.assets.source;fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
+						$file:=Folder:C1567($Obj_template.parent.assets.source;fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
 						
 						  //________________________________________
-					: ($tTxt_keys{$Lon_i}="background")
+					: ($tTxt_keys{$i}="background")
 						
-						$File_:=Folder:C1567(fk resources folder:K87:11).folder("images").file("monochrome.svg")
+						$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("monochrome.svg")
 						
 						  // Inject color on background if defined
 						If ((Bool:C1537(commonValues.launchScreen.useThemeColor))\
 							 & (Value type:C1509($Obj_in.theme.BackgroundColor)=Is object:K8:27))
 							
-							$Obj_buffer:=colors (New object:C1471(\
+							$o:=colors (New object:C1471(\
 								"action";"rgbtohex";\
-								"color";$Obj_in.theme.BackgroundColor))
+								"color";$Obj_in.theme.BackgroundColor\
+								))
 							
-							If ($Obj_buffer.success)
+							If ($o.success)
 								
-								$Obj_in.tags.launchScreenBackgroundColor:=$Obj_buffer.value
+								$Obj_in.tags.launchScreenBackgroundColor:=$o.value
 								
 							End if 
 						End if 
 						
 						If (String:C10($Obj_in.tags.launchScreenBackgroundColor)#"")
 							
-							If (Asserted:C1132($File_.exists;"Missing ressources: "+$File_.path))
+							If (Asserted:C1132($file.exists;"Missing ressources: "+$file.path))
 								
-								$Svg_root:=DOM Parse XML source:C719($File_.platformPath)
+								$Svg_root:=DOM Parse XML source:C719($file.platformPath)
 								
-								If (Asserted:C1132(OK=1;"Failed to parse: "+$File_.path))
+								If (Asserted:C1132(OK=1;"Failed to parse: "+$file.path))
 									
 									DOM SET XML ATTRIBUTE:C866(DOM Find XML element:C864($Svg_root;"/svg/rect");\
 										"fill";$Obj_in.tags.launchScreenBackgroundColor)
 									
-									$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".svg")
-									DOM EXPORT TO FILE:C862($Svg_root;$File_.platformPath)
+									$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".svg")
+									DOM EXPORT TO FILE:C862($Svg_root;$file.platformPath)
 									
 									DOM CLOSE XML:C722($Svg_root)
 									
@@ -897,33 +927,34 @@ Case of
 						  //________________________________________
 					Else 
 						
-						$File_:=Null:C1517
+						$file:=Null:C1517
 						
 						  //________________________________________
 				End case 
 				
-				If ($File_#Null:C1517)
+				If ($file#Null:C1517)
 					
-					$Obj_buffer:=$Obj_template.assets[$tTxt_keys{$Lon_i}]
+					$o:=$Obj_template.assets[$tTxt_keys{$i}]
 					
-					$Obj_out.assets[$tTxt_keys{$Lon_i}]:=asset (New object:C1471(\
+					$Obj_out.assets[$tTxt_keys{$i}]:=asset (New object:C1471(\
 						"action";"create";\
-						"source";$File_.platformPath;\
-						"target";$Obj_template.parent.assets.target+$Obj_buffer.target+Folder separator:K24:12;\
-						"tags";New object:C1471("name";$Obj_buffer.name);\
-						"type";$Obj_buffer.type;\
-						"format";$Obj_buffer.format;\
-						"size";$Obj_buffer.size;\
-						"sizes";$Obj_buffer.sizes))
+						"source";$file.platformPath;\
+						"target";$Obj_template.parent.assets.target+$o.target+Folder separator:K24:12;\
+						"tags";New object:C1471("name";$o.name);\
+						"type";$o.type;\
+						"format";$o.format;\
+						"size";$o.size;\
+						"sizes";$o.sizes\
+						))
 					
-					ob_error_combine ($Obj_out;$Obj_out.assets[$tTxt_keys{$Lon_i}])
+					ob_error_combine ($Obj_out;$Obj_out.assets[$tTxt_keys{$i}])
 					
 				End if 
 			End for 
 		End if 
 		
 		  //________________________________________
-	: (String:C10($Obj_template.type)="listform")
+	: ($Txt_type="listform")
 		
 		If ($Obj_out.template.success)  // we have copied the source in previous case of
 			
@@ -934,7 +965,8 @@ Case of
 				"mapping";$Obj_in.projfile.mapping;\
 				"proj";$Obj_in.projfile.value;\
 				"target";$Obj_in.path;\
-				"uuid";$Obj_template.parent.parent.uuid))
+				"uuid";$Obj_template.parent.parent.uuid\
+				))
 			
 			$Obj_in.projfile.mustSave:=True:C214  // project modified
 			
@@ -945,12 +977,13 @@ Case of
 			"action";"listform";\
 			"template";$Obj_template;\
 			"target";$Obj_in.path;\
-			"tags";$Obj_in.tags))
+			"tags";$Obj_in.tags\
+			))
 		
 		  // End if
 		
 		  //________________________________________
-	: (String:C10($Obj_template.type)="detailform")
+	: ($Txt_type="detailform")
 		
 		  // XXX factorize with navigation template code for image?
 		
@@ -990,8 +1023,8 @@ Case of
 		  // Create the icons
 		If ($Boo_withIcons)
 			
-			$Dir_root:=COMPONENT_Pathname ("fieldIcons")
-			$Dir_hostRoot:=COMPONENT_Pathname ("host_fieldIcons")
+			$Path_root:=COMPONENT_Pathname ("fieldIcons")
+			$Path_hostRoot:=COMPONENT_Pathname ("host_fieldIcons")
 			
 			  // If need asset, create it
 			$Obj_out.assets:=New collection:C1472  // result of asset operations
@@ -1014,39 +1047,40 @@ Case of
 				If (Length:C16(String:C10($Obj_field.icon))=0)  // no icon defined
 					
 					  // Generate asset using first table letter
-					$File_:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
+					$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
 					
-					If (Asserted:C1132($File_.exists;"Missing ressources: "+$File_.path))
+					If (Asserted:C1132($file.exists;"Missing ressources: "+$file.path))
 						
-						$Svg_root:=DOM Parse XML source:C719($File_.platformPath)
+						$Svg_root:=DOM Parse XML source:C719($file.platformPath)
 						
-						If (Asserted:C1132(OK=1;"Failed to parse: "+$File_.path))
+						If (Asserted:C1132(OK=1;"Failed to parse: "+$file.path))
 							
-							$Txt_buffer:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_field.shortLabel;$Obj_field.label)
+							$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_field.shortLabel;$Obj_field.label)
 							
 							Case of 
 									
-									  // ----------------------------------------
-								: (Length:C16($Txt_buffer)>0)
+									  //……………………………………………………………………………………………………………
+								: (Length:C16($t)>0)
 									
 									  // Take first letter
-									$Txt_buffer:=Uppercase:C13($Txt_buffer[[1]])
+									$t:=Uppercase:C13($t[[1]])
 									
-									  // ----------------------------------------
+									  //……………………………………………………………………………………………………………
 								: (Length:C16($Obj_field.name)>0)
 									
 									  //%W-533.1
-									$Txt_buffer:=Uppercase:C13($Obj_field.name[[1]])
+									$t:=Uppercase:C13($Obj_field.name[[1]])
 									  //%W+533.1
-									  // ----------------------------------------
+									
+									  //……………………………………………………………………………………………………………
 							End case 
 							
-							If (Length:C16($Txt_buffer)>0)  // Else no image for dummy fields
+							If (Length:C16($t)>0)  // Else no image for dummy fields
 								
-								DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$Txt_buffer)
+								DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$t)
 								
-								$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".svg")
-								DOM EXPORT TO FILE:C862($Svg_root;$File_.platformPath)
+								$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".svg")
+								DOM EXPORT TO FILE:C862($Svg_root;$file.platformPath)
 								
 								DOM CLOSE XML:C722($Svg_root)
 								
@@ -1054,9 +1088,8 @@ Case of
 									"action";"create";\
 									"type";"imageset";\
 									"tags";New object:C1471("name";$Obj_in.tags.table.name+"Detail"+$Obj_field.name);\
-									"source";$File_.platformPath;\
-									"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));\
-									"/";Folder separator:K24:12)+Folder separator:K24:12;\
+									"source";$file.platformPath;\
+									"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));"/";Folder separator:K24:12)+Folder separator:K24:12;\
 									"format";$Obj_template.assets.format;\
 									"size";$Obj_template.assets.size)))
 								
@@ -1066,30 +1099,26 @@ Case of
 					
 				Else   // There is an icon defined
 					
-					If (Position:C15("/";$Obj_field.icon)=1)
-						$File_icon:=$Dir_hostRoot.file(Substring:C12($Obj_field.icon;2))  // custom icon
-					Else 
-						$File_icon:=$Dir_root.file($Obj_field.icon)  // product icon
-					End if 
+					$Path_icon:=Choose:C955(Position:C15("/";$Obj_field.icon)=1;$Path_hostRoot.file(Substring:C12($Obj_field.icon;2));$Path_root.file($Obj_field.icon))  // custom icon // product icon
 					
-					$Obj_buffer:=asset (New object:C1471(\
+					$o:=asset (New object:C1471(\
 						"action";"create";\
 						"type";"imageset";\
 						"tags";New object:C1471("name";$Obj_in.tags.table.name+"Detail"+$Obj_field.name);\
-						"source";$File_icon.platformPath;\
-						"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));\
-						"/";Folder separator:K24:12)+Folder separator:K24:12;\
+						"source";$Path_icon.platformPath;\
+						"target";$Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags ($Obj_template.assets.target;$Obj_in.tags;New collection:C1472("filename"));"/";Folder separator:K24:12)+Folder separator:K24:12;\
 						"format";$Obj_template.assets.format;\
 						"size";$Obj_template.assets.size))
-					$Obj_out.assets.push($Obj_buffer)
-					ob_error_combine ($Obj_out;$Obj_buffer)
+					
+					$Obj_out.assets.push($o)
+					ob_error_combine ($Obj_out;$o)
 					
 				End if 
 			End for each 
 		End if 
 		
 		  // Standard code to copy template (not done before tags replacement, that's why nothing is done in first case of)
-		$Obj_out.template:=TEMPLATE (New object:C1471(\
+		$Obj_out.template:=template (New object:C1471(\
 			"source";$Obj_template.source;\
 			"target";$Obj_in.path;\
 			"tags";$Obj_in.tags;\
@@ -1191,34 +1220,33 @@ If (Value type:C1509($Obj_template.children)=Is collection:K8:32)
 	For each ($Txt_template;$Obj_template.children)
 		
 		  // Read its manifest
-		$File_manifest:=COMPONENT_Pathname ("templates").folder($Txt_template).file("manifest.json")
+		$Path_manifest:=COMPONENT_Pathname ("templates").folder($Txt_template).file("manifest.json")
 		
-		$Obj_buffer:=OB Copy:C1225($Obj_in)
+		$o:=OB Copy:C1225($Obj_in)
 		
-		If ($File_manifest.exists)
+		If ($Path_manifest.exists)
 			
 			  // Load the manifest
-			$Obj_buffer.template:=JSON Parse:C1218($File_manifest.getText())
+			$o.template:=JSON Parse:C1218($Path_manifest.getText())
 			
 		Else 
 			
-			$Obj_buffer.template:=New object:C1471
+			$o.template:=New object:C1471
 			
 		End if 
 		
-		$Obj_buffer.template.source:=COMPONENT_Pathname ("templates").folder($Txt_template).platformPath
-		$Obj_buffer.template.parent:=$Obj_template
+		$o.template.source:=COMPONENT_Pathname ("templates").folder($Txt_template).platformPath
+		$o.template.parent:=$Obj_template
+		$o.projfile:=$Obj_in.projfile  // do not want a copy
 		
-		$Obj_buffer.projfile:=$Obj_in.projfile  // do not want a copy
-		
-		$Obj_buffer:=templates ($Obj_buffer)  // Recursive
-		$Obj_out.children.push($Obj_buffer)
-		ob_error_combine ($Obj_out;$Obj_buffer)
+		$o:=templates ($o)  // <================================== RECURSIVE
+		$Obj_out.children.push($o)
+		ob_error_combine ($Obj_out;$o)
 		
 		  // transmit tags created
-		If (Value type:C1509($Obj_buffer.template.tags)=Is object:K8:27)
+		If (Value type:C1509($o.template.tags)=Is object:K8:27)
 			
-			$Obj_in.tags:=ob_deepMerge ($Obj_in.tags;$Obj_buffer.template.tags)
+			$Obj_in.tags:=ob_deepMerge ($Obj_in.tags;$o.template.tags)
 			
 		End if 
 	End for each 
@@ -1227,31 +1255,31 @@ End if
   // ----------------------------------------------------
   // Manage the project file for main template
   // ----------------------------------------------------
-If ((String:C10($Obj_template.type)="main"))
+If (($Txt_type="main"))
 	
 	  // / Possible files near the projet file
 	If (Value type:C1509($Obj_in.project.$project)=Is object:K8:27)
 		
-		$Txt_buffer:="main"  // XXX maybe later a list
+		$t:="main"  // XXX maybe later a list
 		
-		If (Test path name:C476(String:C10($Obj_in.project.$project.root)+$Txt_buffer)=Is a folder:K24:2)
+		If (Test path name:C476(String:C10($Obj_in.project.$project.root)+$t)=Is a folder:K24:2)
 			
-			$Obj_buffer:=New object:C1471(\
-				"template";New object:C1471("name";\
-				"project"+$Txt_buffer;"inject";\
-				True:C214))
-			$Obj_buffer.template.source:=$Obj_in.project.$project.root+$Txt_buffer+Folder separator:K24:12
-			$Obj_buffer.template.parent:=$Obj_template
-			$Obj_buffer.project:=$Obj_in.project
-			$Obj_buffer.path:=$Obj_in.path
-			$Obj_buffer.projfile:=$Obj_in.projfile  // do not want a copy
+			$o:=New object:C1471(\
+				"template";New object:C1471(\
+				"name";"project"+$t;\
+				"inject";True:C214;\
+				"source";$Obj_in.project.$project.root+$t+Folder separator:K24:12;\
+				"parent";$Obj_template);\
+				"project";$Obj_in.project;\
+				"path";$Obj_in.path;\
+				"projfile";$Obj_in.projfile)
 			
-			$Obj_out["project"+$Txt_buffer]:=templates ($Obj_buffer)
+			$Obj_out["project"+$t]:=templates ($o)  // <================================== RECURSIVE
 			
 		End if 
 	End if 
 	
-	  ///    Inject all SDK
+	  // /    Inject all SDK
 	If (String:C10($Obj_template.sdk.frameworks)#"")
 		
 		$Obj_out.sdk:=sdk (New object:C1471(\
@@ -1283,7 +1311,7 @@ If ((String:C10($Obj_template.type)="main"))
 			
 			  // If (Bool(featuresFlags._100990))
 			  // Add all files provided
-			$Obj_buffer:=XcodeProjInject (New object:C1471(\
+			$o:=XcodeProjInject (New object:C1471(\
 				"node";$Obj_out.formatters;\
 				"mapping";$Obj_out.projfile.mapping;\
 				"proj";$Obj_out.projfile.value;\
@@ -1302,7 +1330,7 @@ If ((String:C10($Obj_template.type)="main"))
 	
 	ob_error_combine ($Obj_out;$Obj_out.formatters)
 	
-	  ///  Save project file if has been modified
+	  // /  Save project file if has been modified
 	If (Bool:C1537($Obj_out.projfile.mustSave))
 		
 		$Obj_out.projfile:=XcodeProj (New object:C1471(\

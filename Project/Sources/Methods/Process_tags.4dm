@@ -65,13 +65,15 @@ Case of   // According to type replace the tag
 			"___DATE___";\
 			"___FULLUSERNAME___";\
 			"___PACKAGENAME___";\
-			"___COPYRIGHT___")
+			"___COPYRIGHT___"\
+			)
 		
 		$Col_newStrings:=New collection:C1472(\
 			$Obj_tags.date;\
 			$Obj_tags.fullname;\
 			$Obj_tags.packageName;\
-			$Obj_tags.copyright)
+			$Obj_tags.copyright\
+			)
 		
 		  //______________________________________________________
 	: ($Col_types.indexOf("Info.plist")#-1)
@@ -90,7 +92,8 @@ Case of   // According to type replace the tag
 			"___COMPONENT_BUILD___";\
 			"___IDE_VERSION___";\
 			"___IDE_BUILD_VERSION___";\
-			"___SDK_VERSION___")
+			"___SDK_VERSION___"\
+			)
 		
 		$Col_newStrings:=New collection:C1472(\
 			$Obj_tags.developmentRegion;\
@@ -103,7 +106,8 @@ Case of   // According to type replace the tag
 			$Obj_tags.componentBuild;\
 			$Obj_tags.ideVersion;\
 			$Obj_tags.ideBuildVersion;\
-			$Obj_tags.sdkVersion)
+			$Obj_tags.sdkVersion\
+			)
 		
 		  //______________________________________________________
 	: ($Col_types.indexOf("settings")#-1)
@@ -116,7 +120,8 @@ Case of   // According to type replace the tag
 			"___SERVER_URLS___";\
 			"___SERVER_AUTHENTIFICATION_EMAIL___";\
 			"___SERVER_AUTHENTIFICATION_RELOAD_DATA___";\
-			"___SETTING_UUID___")
+			"___SETTING_UUID___"\
+			)
 		
 		$Col_newStrings:=New collection:C1472(\
 			$Obj_tags.prodUrl;\
@@ -126,7 +131,8 @@ Case of   // According to type replace the tag
 			$Obj_tags.serverUrls;\
 			$Obj_tags.serverAuthenticationEmail;\
 			$Obj_tags.serverAuthenticationReloadData;\
-			Generate UUID:C1066)  // An unique UUID created for a new generated app
+			Generate UUID:C1066\
+			)
 		
 		  //______________________________________________________
 	: ($Col_types.indexOf("asset")#-1)
@@ -139,7 +145,8 @@ Case of   // According to type replace the tag
 			"___BLUE___";\
 			"___GREEN___";\
 			"___WHITE___";\
-			"___ALPHA___")
+			"___ALPHA___"\
+			)
 		
 		$Col_newStrings:=New collection:C1472(\
 			$Obj_tags.name;\
@@ -149,7 +156,8 @@ Case of   // According to type replace the tag
 			$Obj_tags.blue;\
 			$Obj_tags.green;\
 			$Obj_tags.white;\
-			$Obj_tags.alpha)
+			$Obj_tags.alpha\
+			)
 		
 		  //______________________________________________________
 	: ($Col_types.indexOf("project.pbxproj")#-1)  // project.pbxproj
@@ -168,7 +176,8 @@ Case of   // According to type replace the tag
 			"___SWIFT_OPTIMIZATION_LEVEL_DEBUG___";\
 			"___SWIFT_OPTIMIZATION_LEVEL_RELEASE___";\
 			"___SWIFT_COMPILATION_MODE_DEBUG___";\
-			"___SWIFT_COMPILATION_MODE_RELEASE___")
+			"___SWIFT_COMPILATION_MODE_RELEASE___"\
+			)
 		
 		$Col_newStrings:=New collection:C1472(\
 			$Obj_tags.product;\
@@ -184,7 +193,8 @@ Case of   // According to type replace the tag
 			$Obj_tags.swiftOptimizationLevelDebug;\
 			$Obj_tags.swiftOptimizationLevelRelease;\
 			$Obj_tags.swiftCompilationModeDebug;\
-			$Obj_tags.swiftCompilationModeRelease)
+			$Obj_tags.swiftCompilationModeRelease\
+			)
 		
 		If (String:C10($Obj_tags.teamId)#"")
 			
@@ -214,12 +224,14 @@ Case of   // According to type replace the tag
 		$Col_oldStrings:=New collection:C1472(\
 			"___PRODUCT___";\
 			"___TABLE___";\
-			"___NAME___")
+			"___NAME___"\
+			)
 		
 		$Col_newStrings:=New collection:C1472(\
 			$Obj_tags.product;\
 			$Obj_table.name;\
-			$Obj_tags.name)
+			$Obj_tags.name\
+			)
 		
 		  //______________________________________________________
 	: ($Col_types.indexOf("navigation.storyboard")#-1)
@@ -227,21 +239,25 @@ Case of   // According to type replace the tag
 		$Col_oldStrings:=New collection:C1472(\
 			"___NAVIGATION_TRANSITION___";\
 			"___NAVIGATION_TITLE___";\
-			"___NAVIGATION_TABLE_ROW_HEIGHT___")
+			"___NAVIGATION_TABLE_ROW_HEIGHT___"\
+			)
 		
 		$Col_newStrings:=New collection:C1472(\
 			$Obj_tags.navigationTransition;\
 			$Obj_tags.navigationTitle;\
-			$Obj_tags.navigationRowHeight)
+			$Obj_tags.navigationRowHeight\
+			)
 		
 		  //______________________________________________________
 	: ($Col_types.indexOf("script")#-1)
 		
 		$Col_oldStrings:=New collection:C1472(\
-			"___MINIMUM_XCODE_VERSION___")
+			"___MINIMUM_XCODE_VERSION___"\
+			)
 		
 		$Col_newStrings:=New collection:C1472(\
-			$Obj_tags.xCodeVersion)
+			$Obj_tags.xCodeVersion\
+			)
 		
 		  //______________________________________________________
 	: ($Col_types.indexOf("automatic")#-1)  // if pass a restricted tag object this add all keys
@@ -278,10 +294,12 @@ Case of   // According to type replace the tag
 	Else 
 		
 		$Col_oldStrings:=New collection:C1472(\
-			"___PRODUCT___")
+			"___PRODUCT___"\
+			)
 		
 		$Col_newStrings:=New collection:C1472(\
-			$Obj_tags.product)
+			$Obj_tags.product\
+			)
 		
 		  //______________________________________________________
 End case 
@@ -297,36 +315,40 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 			  //______________________________________________________
 		: ($Col_types.indexOf("swift")#-1)  //___TABLE___.swift
 			
-			$Col_oldStrings\
-				.push("___DETAILFORMTYPE___")\
-				.push("___LISTFORMTYPE___")
+			$Col_oldStrings.combine(New collection:C1472(\
+				"___DETAILFORMTYPE___";\
+				"___LISTFORMTYPE___"\
+				))
 			
-			$Col_newStrings\
-				.push($Obj_tags.detailFormType)\
-				.push($Obj_tags.listFormType)
+			$Col_newStrings.combine(New collection:C1472(\
+				$Obj_tags.detailFormType;\
+				$Obj_tags.listFormType\
+				))
 			
 			For each ($Obj_field;$Obj_table.fields)
 				
 				$i:=$i+1
 				$t:="___FIELD_"+String:C10($i)
 				
-				$Col_oldStrings\
-					.push($t+"___")\
-					.push($t+"_NAME___")\
-					.push($t+"_LABEL___")\
-					.push($t+"_SHORT_LABEL___")\
-					.push($t+"_BINDING_TYPE___")\
-					.push($t+"_ICON___")\
-					.push($t+"_LABEL_ALIGNMENT___")
+				$Col_oldStrings.combine(New collection:C1472(\
+					$t+"___";\
+					$t+"_NAME___";\
+					$t+"_LABEL___";\
+					$t+"_SHORT_LABEL___";\
+					$t+"_BINDING_TYPE___";\
+					$t+"_ICON___";\
+					$t+"_LABEL_ALIGNMENT___"\
+					))
 				
-				$Col_newStrings\
-					.push($Obj_field.name)\
-					.push($o.setText($Obj_field.originalName).xmlEncode())\
-					.push($o.setText($Obj_field.label).xmlEncode())\
-					.push($o.setText($Obj_field.shortLabel).xmlEncode())\
-					.push($Obj_field.bindingType)\
-					.push($o.setText($Obj_field.detailIcon).xmlEncode())\
-					.push($Obj_field.labelAlignment)
+				$Col_newStrings.combine(New collection:C1472(\
+					$Obj_field.name;\
+					$o.setText($Obj_field.originalName).xmlEncode();\
+					$o.setText($Obj_field.label).xmlEncode();\
+					$o.setText($Obj_field.shortLabel).xmlEncode();\
+					$Obj_field.bindingType;\
+					$o.setText($Obj_field.detailIcon).xmlEncode();\
+					$Obj_field.labelAlignment\
+					))
 				
 			End for each 
 			
@@ -341,60 +363,64 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 				
 			End if 
 			
-			$Col_oldStrings\
-				.push("___LIST_TO_DETAIL_TRANSITION___")\
-				.push("___SEARCHABLE_FIELD___")\
-				.push("___SECTION_FIELD___")\
-				.push("___SECTION_FIELD_BINDING_TYPE___")\
-				.push("___SHOW_SECTION___")\
-				.push("___SORT_FIELD___")\
-				.push("___PRODUCT___")\
-				.push("___TABLE_NUMBER___")\
-				.push("___TABLE_NAME___")\
-				.push("___TABLE_LABEL___")\
-				.push("___TABLE_SHORT_LABEL___")\
-				.push("___TABLE_ICON___")\
-				.push("___TABLE_ACTIONS___")\
-				.push("___ENTITY_ACTIONS___")
+			$Col_oldStrings.combine(New collection:C1472(\
+				"___LIST_TO_DETAIL_TRANSITION___";\
+				"___SEARCHABLE_FIELD___";\
+				"___SECTION_FIELD___";\
+				"___SECTION_FIELD_BINDING_TYPE___";\
+				"___SHOW_SECTION___";\
+				"___SORT_FIELD___";\
+				"___PRODUCT___";\
+				"___TABLE_NUMBER___";\
+				"___TABLE_NAME___";\
+				"___TABLE_LABEL___";\
+				"___TABLE_SHORT_LABEL___";\
+				"___TABLE_ICON___";\
+				"___TABLE_ACTIONS___";\
+				"___ENTITY_ACTIONS___"\
+				))
 			
-			$Col_newStrings\
-				.push($t)\
-				.push($Obj_table.searchableField)\
-				.push($Obj_table.sectionField)\
-				.push($Obj_table.sectionFieldBindingType)\
-				.push($Obj_table.showSection)\
-				.push($Obj_table.sortField)\
-				.push($Obj_tags.product)\
-				.push($Obj_table.tableNumber)\
-				.push($o.setText($Obj_table.originalName).xmlEncode())\
-				.push($o.setText($Obj_table.label).xmlEncode())\
-				.push($o.setText($Obj_table.shortLabel).xmlEncode())\
-				.push($o.setText($Obj_table.navigationIcon).xmlEncode())\
-				.push($o.setText($Obj_table.tableActions).xmlEncode())\
-				.push($o.setText($Obj_table.recordActions).xmlEncode())
+			$Col_newStrings.combine(New collection:C1472(\
+				$t;\
+				$Obj_table.searchableField;\
+				$Obj_table.sectionField;\
+				$Obj_table.sectionFieldBindingType;\
+				$Obj_table.showSection;\
+				$Obj_table.sortField;\
+				$Obj_tags.product;\
+				$Obj_table.tableNumber;\
+				$o.setText($Obj_table.originalName).xmlEncode();\
+				$o.setText($Obj_table.label).xmlEncode();\
+				$o.setText($Obj_table.shortLabel).xmlEncode();\
+				$o.setText($Obj_table.navigationIcon).xmlEncode();\
+				$o.setText($Obj_table.tableActions).xmlEncode();\
+				$o.setText($Obj_table.recordActions).xmlEncode()\
+				))
 			
 			For each ($Obj_field;$Obj_table.fields)
 				
 				$i:=$i+1
 				$t:="___FIELD_"+String:C10($i)
 				
-				$Col_oldStrings\
-					.push($t+"___")\
-					.push($t+"_NAME___")\
-					.push($t+"_LABEL___")\
-					.push($t+"_SHORT_LABEL___")\
-					.push($t+"_BINDING_TYPE___")\
-					.push($t+"_ICON___")\
-					.push($t+"_LABEL_ALIGNMENT___")
+				$Col_oldStrings.combine(New collection:C1472(\
+					$t+"___";\
+					$t+"_NAME___";\
+					$t+"_LABEL___";\
+					$t+"_SHORT_LABEL___";\
+					$t+"_BINDING_TYPE___";\
+					$t+"_ICON___";\
+					$t+"_LABEL_ALIGNMENT___"\
+					))
 				
-				$Col_newStrings\
-					.push($Obj_field.name)\
-					.push($o.setText($Obj_field.originalName).xmlEncode())\
-					.push($o.setText($Obj_field.label).xmlEncode())\
-					.push($o.setText($Obj_field.shortLabel).xmlEncode())\
-					.push($Obj_field.bindingType)\
-					.push($o.setText($Obj_field.detailIcon).xmlEncode())\
-					.push($Obj_field.labelAlignment)
+				$Col_newStrings.combine(New collection:C1472(\
+					$Obj_field.name;\
+					$o.setText($Obj_field.originalName).xmlEncode();\
+					$o.setText($Obj_field.label).xmlEncode();\
+					$o.setText($Obj_field.shortLabel).xmlEncode();\
+					$Obj_field.bindingType;\
+					$o.setText($Obj_field.detailIcon).xmlEncode();\
+					$Obj_field.labelAlignment\
+					))
 				
 			End for each 
 			
@@ -405,23 +431,25 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 				
 				$t:="___FIELD"
 				
-				$Col_oldStrings\
-					.push($t+"___")\
-					.push($t+"_NAME___")\
-					.push($t+"_LABEL___")\
-					.push($t+"_SHORT_LABEL___")\
-					.push($t+"_BINDING_TYPE___")\
-					.push($t+"_ICON___")\
-					.push($t+"_LABEL_ALIGNMENT___")
+				$Col_oldStrings.combine(New collection:C1472(\
+					$t+"___";\
+					$t+"_NAME___";\
+					$t+"_LABEL___";\
+					$t+"_SHORT_LABEL___";\
+					$t+"_BINDING_TYPE___";\
+					$t+"_ICON___";\
+					$t+"_LABEL_ALIGNMENT___"\
+					))
 				
-				$Col_newStrings\
-					.push($Obj_tags.field.name)\
-					.push($o.setText($Obj_tags.field.originalName).xmlEncode())\
-					.push($o.setText($Obj_tags.field.label).xmlEncode())\
-					.push($o.setText($Obj_tags.field.shortLabel).xmlEncode())\
-					.push($Obj_tags.field.bindingType)\
-					.push($o.setText($Obj_tags.field.detailIcon).xmlEncode())\
-					.push($Obj_tags.field.labelAlignment)
+				$Col_newStrings.combine(New collection:C1472(\
+					$Obj_tags.field.name;\
+					$o.setText($Obj_tags.field.originalName).xmlEncode();\
+					$o.setText($Obj_tags.field.label).xmlEncode();\
+					$o.setText($Obj_tags.field.shortLabel).xmlEncode();\
+					$Obj_tags.field.bindingType;\
+					$o.setText($Obj_tags.field.detailIcon).xmlEncode();\
+					$Obj_tags.field.labelAlignment\
+					))
 				
 				If (Num:C11($Obj_tags.field.id)=0)
 					
@@ -435,21 +463,23 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 			  //______________________________________________________
 		: ($Col_types.indexOf("navigation")#-1)  // MainNavigation.storyboard
 			
-			$Col_oldStrings\
-				.push("___TABLE_NAME___")\
-				.push("___TABLE_LABEL___")\
-				.push("___TABLE_SHORT_LABEL___")\
-				.push("___TABLE_ICON___")\
-				.push("___TABLE_LABEL_ALIGNMENT___")\
-				.push("TAG-ID-SEG")
+			$Col_oldStrings.combine(New collection:C1472(\
+				"___TABLE_NAME___";\
+				"___TABLE_LABEL___";\
+				"___TABLE_SHORT_LABEL___";\
+				"___TABLE_ICON___";\
+				"___TABLE_LABEL_ALIGNMENT___";\
+				"TAG-ID-SEG"\
+				))
 			
-			$Col_newStrings\
-				.push($o.setText($Obj_table.originalName).xmlEncode())\
-				.push($o.setText($Obj_table.label).xmlEncode())\
-				.push($o.setText($Obj_table.shortLabel).xmlEncode())\
-				.push($o.setText($Obj_table.navigationIcon).xmlEncode())\
-				.push($Obj_table.labelAlignment)\
-				.push($Obj_table.segueDestinationId)
+			$Col_newStrings.combine(New collection:C1472(\
+				$o.setText($Obj_table.originalName).xmlEncode();\
+				$o.setText($Obj_table.label).xmlEncode();\
+				$o.setText($Obj_table.shortLabel).xmlEncode();\
+				$o.setText($Obj_table.navigationIcon).xmlEncode();\
+				$Obj_table.labelAlignment;\
+				$Obj_table.segueDestinationId\
+				))
 			
 			  //______________________________________________________
 	End case 

@@ -39,8 +39,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_out:=New object:C1471(\
-		"success";False:C215)
+	$Obj_out:=New object:C1471("success";False:C215)
 	
 Else 
 	
@@ -72,8 +71,7 @@ Case of
 				
 				For each ($Obj_formatter;$Obj_out.formatters[$Txt_buffer])
 					
-					If (Length:C16(String:C10($Obj_formatter.name))>0)\
-						 & (String:C10($Obj_formatter.name)#"-")
+					If (Length:C16(String:C10($Obj_formatter.name))>0) & (String:C10($Obj_formatter.name)#"-")
 						
 						$Obj_out.formatters[String:C10($Obj_formatter.name)]:=$Obj_formatter
 						
@@ -95,8 +93,7 @@ Case of
 				
 				$Txt_buffer:=String:C10($Obj_formatter.name)
 				
-				If (Length:C16($Txt_buffer)>0)\
-					 & ($Txt_buffer#"-")
+				If (Length:C16($Txt_buffer)>0) & ($Txt_buffer#"-")
 					
 					$Obj_out.formatters[$Txt_buffer]:=$Obj_formatter
 					
@@ -189,8 +186,7 @@ Case of
 		  //______________________________________________________
 	: ($Obj_in.action="isValid")
 		
-		If (Test path name:C476($Obj_in.path)#Is a folder:K24:2)\
-			 | (Test path name:C476($Obj_in.path+"manifest.json")#Is a document:K24:1)
+		If (Test path name:C476($Obj_in.path)#Is a folder:K24:2) | (Test path name:C476($Obj_in.path+"manifest.json")#Is a document:K24:1)
 			
 			ob_error_add ($Obj_out;"Formatter missing or invalid")  // Missing or invalid
 			
@@ -285,7 +281,7 @@ Case of
 								
 								If ($Dir_.exists)
 									
-									$Obj_result:=TEMPLATE (New object:C1471(\
+									$Obj_result:=template (New object:C1471(\
 										"source";$Dir_.platformPath;\
 										"tags";$Obj_in.tags;\
 										"target";$Obj_in.target+$Txt_buffer+Folder separator:K24:12))
@@ -314,11 +310,7 @@ Case of
 							
 							If ($Obj_out.localized.indexOf($Obj_formatter.name)<0)
 								
-								$Obj_result:=xloc (New object:C1471("action";"create";\
-									"formatter";$Obj_formatter;\
-									"append";$Boo_append;\
-									"file";"Formatters";\
-									"target";$Obj_in.target+"Resources"+Folder separator:K24:12))
+								$Obj_result:=xloc (New object:C1471("action";"create";"formatter";$Obj_formatter;"append";$Boo_append;"file";"Formatters";"target";$Obj_in.target+"Resources"+Folder separator:K24:12))
 								
 								$Boo_append:=True:C214  // append next
 								
@@ -328,9 +320,7 @@ Case of
 								
 								  //If (Bool(featuresFlags._100990))
 								
-								$Obj_out.children.push(New object:C1471(\
-									"target";$Obj_result.target;\
-									"types";New collection:C1472("strings")))
+								$Obj_out.children.push(New object:C1471("target";$Obj_result.target;"types";New collection:C1472("strings")))
 								
 								  //Else 
 								  //$Obj_out.target:=$Obj_result.target  // XXX if multiple files replace by a collection
@@ -347,10 +337,7 @@ Case of
 							
 							If ($Obj_out.imageNamed.indexOf($Obj_formatter.name)<0)
 								
-								$Obj_result:=asset (New object:C1471("action";"formatter";\
-									"formatter";$Obj_formatter;\
-									"target";$Obj_in.target+"Resources"+Folder separator:K24:12+\
-									"Assets.xcassets"+Folder separator:K24:12+"Formatters"+Folder separator:K24:12))  // XXX path from? template?
+								$Obj_result:=asset (New object:C1471("action";"formatter";"formatter";$Obj_formatter;"target";$Obj_in.target+"Resources"+Folder separator:K24:12+"Assets.xcassets"+Folder separator:K24:12+"Formatters"+Folder separator:K24:12))  // XXX path from? template?
 								
 								ob_error_combine ($Obj_out;$Obj_result)
 								

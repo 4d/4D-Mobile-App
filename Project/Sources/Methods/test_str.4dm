@@ -376,6 +376,21 @@ ASSERT:C1129($o.setText("<").xmlEncode()="&lt;")
 ASSERT:C1129($o.setText(">").xmlEncode()=">")
 ASSERT:C1129($o.setText("<hello world>").xmlEncode()="&lt;hello world>")
 
+  // ============================================
+  // isJson(), isJsonArray(), isJsonObject()
+ASSERT:C1129($o.setText("{\"test\":1,\"test\":1}").isJson())
+ASSERT:C1129($o.setText("[1,2,{\"test\":1}]").isJson())
+ASSERT:C1129(Not:C34($o.setText("hello {world}").isJson()))
+
+ASSERT:C1129($o.setText("{\"test\":1,\"test\":1}").isJsonObject())
+ASSERT:C1129($o.setText("{\"test\":{\"test\":1}}").isJsonObject())
+ASSERT:C1129(Not:C34($o.setText("hello {world}").isJsonObject()))
+ASSERT:C1129(Not:C34($o.setText("[\"test\":1,\"test\":1]").isJsonObject()))
+
+ASSERT:C1129($o.setText("[1,2,3,null]").isJsonArray())
+ASSERT:C1129($o.setText("[1,2,{\"test\":1}]").isJsonArray())
+ASSERT:C1129(Not:C34($o.setText("[hello] {world}").isJsonArray()))
+ASSERT:C1129(Not:C34($o.setText("{\"test\":1,\"test\":1}").isJsonArray()))
 
   // ============================================
 ASSERT:C1129(str_cmpVersion ("9.0";"9.1.2")=-1)

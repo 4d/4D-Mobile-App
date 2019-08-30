@@ -49,6 +49,9 @@ If (This:C1470._is=Null:C1517)
 		"isStyled";Formula:C1597(str ("isStyled").value);\
 		"isBoolean";Formula:C1597(str ("isBoolean").value);\
 		"isDate";Formula:C1597(str ("isDate").value);\
+		"isJson";Formula:C1597(Match regex:C1019("(?msi)^(?:\\{.*\\})|(?:\\[.*\\])$";This:C1470.value;1));\
+		"isJsonArray";Formula:C1597(Match regex:C1019("(?msi)^\\[.*\\]$";This:C1470.value;1));\
+		"isJsonObject";Formula:C1597(Match regex:C1019("(?msi)^\\{.*\\}$";This:C1470.value;1));\
 		"isNum";Formula:C1597(str ("isNum").value);\
 		"isTime";Formula:C1597(str ("isTime").value);\
 		"localized";Formula:C1597(str ("localized";New object:C1471("substitution";$1)).value);\
@@ -790,10 +793,10 @@ Else
 					  //: (Formula(process ).call().isPreemptif)
 					
 					  //_4D THROW ERROR(New object(\
-																		"component";"CLAS";\
-																		"code";1;\
-																		"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
-																		"something";"my bug"))
+																														"component";"CLAS";\
+																														"code";1;\
+																														"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
+																														"something";"my bug"))
 					
 					  //______________________________________________________
 				: ($1="isStyled")  // Returns True if text is styled

@@ -13,7 +13,9 @@ C_COLLECTION:C1488($c;$cc;$Col_2;$Col_forms;$Col_host)
 
 ARRAY TEXT:C222($tTxt_;0)
 
-  // SHOW ON DISK(Folder(Temporary folder;fk platform path).platformPath)
+If (False:C215)
+	SHOW ON DISK:C922(Folder:C1567(Temporary folder:C486;fk platform path:K87:2).platformPath)
+End if 
 
 COMPONENT_INIT 
 
@@ -22,14 +24,10 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$svg:=svg   //("load";Folder(fk desktop folder).file("DEV/export.svg"))
-		$t:=$svg.rect(10;10;100;50).latest
-		ASSERT:C1129($t=$svg.find("svg/rect"))
-		  //$svg.save("text";Folder(fk desktop folder).file("DEV/export.xml"))  //;True)  //;".jpg")//;True)
-		  //$svg.close()
+		$o:=str ()
 		
-		$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("test svg.xml");True:C214)
-		$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("test svg.png"))
+		$t:="{\"test\":1,\"test\":1}"
+		$b:=$o.setText("{\"test\":1,\"test\":1}").isJson()
 		
 		  //________________________________________
 	: (True:C214)

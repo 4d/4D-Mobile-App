@@ -73,8 +73,8 @@ If (False:C215)
 	C_OBJECT:C1216(structure ;$1)
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(TEMPLATE ;$0)
-	C_OBJECT:C1216(TEMPLATE ;$1)
+	C_OBJECT:C1216(template ;$0)
+	C_OBJECT:C1216(template ;$1)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(templates ;$0)

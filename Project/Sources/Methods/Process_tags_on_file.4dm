@@ -14,7 +14,7 @@ C_TEXT:C284($2)
 C_OBJECT:C1216($3)
 C_COLLECTION:C1488($4)
 
-C_BLOB:C604($Blb_)
+C_BLOB:C604($x)
 C_LONGINT:C283($Lon_parameters)
 C_TEXT:C284($File_src;$File_tgt;$Txt_content)
 C_OBJECT:C1216($Obj_tags)
@@ -46,6 +46,12 @@ If (Asserted:C1132($Lon_parameters>=4;"Missing parameters: file, tags, types"))
 		
 	End if 
 	
+	If (Length:C16(String:C10($File_tgt))=0)
+		
+		$File_tgt:=$File_src  // edit in place
+		
+	End if 
+	
 Else 
 	
 	ABORT:C156
@@ -53,25 +59,21 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (Length:C16(String:C10($File_tgt))=0)
-	$File_tgt:=$File_src  // edit in place
-End if 
-
 If (Test path name:C476($File_src)=Is a document:K24:1)
 	
 	  // Replace variable into contents
 	  // ! without BOM
-	DOCUMENT TO BLOB:C525($File_src;$Blb_)
+	DOCUMENT TO BLOB:C525($File_src;$x)
 	
-	$Txt_content:=Process_tags (BLOB to text:C555($Blb_;UTF8 text without length:K22:17);$Obj_tags;$Col_types)
+	$Txt_content:=Process_tags (BLOB to text:C555($x;UTF8 text without length:K22:17);$Obj_tags;$Col_types)
 	
-	CLEAR VARIABLE:C89($Blb_)
+	CLEAR VARIABLE:C89($x)
 	
-	TEXT TO BLOB:C554($Txt_content;$Blb_;UTF8 text without length:K22:17)
+	TEXT TO BLOB:C554($Txt_content;$x;UTF8 text without length:K22:17)
 	
 	CREATE FOLDER:C475($File_tgt;*)
 	
-	BLOB TO DOCUMENT:C526($File_tgt;$Blb_)
+	BLOB TO DOCUMENT:C526($File_tgt;$x)
 	
 End if 
 
