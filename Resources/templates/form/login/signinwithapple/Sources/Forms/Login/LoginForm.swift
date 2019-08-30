@@ -25,7 +25,6 @@ open class LoginForm: QMobileUI.LoginForm {
 
     lazy var btnAuthorization = ASAuthorizationAppleIDButton()
 
-
     // MARK: Event
     /// Called after the view has been loaded. Default does nothing
     open override func onLoad() {
@@ -53,7 +52,7 @@ open class LoginForm: QMobileUI.LoginForm {
     }
     /// Function after launching login process.
     open override func onDidLogin(result: Result<AuthToken, APIError>) {
-        // Release the disability Sign In with Apple in case basic mail login failed
+        /// Release the disability of Sign In with Apple in case basic mail login failed
         switch result {
         case .success(let token):
             if !token.isValidToken {
@@ -63,10 +62,10 @@ open class LoginForm: QMobileUI.LoginForm {
             btnAuthorization.isEnabled = true
         }
     }
-    
+
     // MARK: - ASAuthorizationAppleIDButton
 
-    func setupAppleSignInButton() {
+    fileprivate func setupAppleSignInButton() {
 
         setupViewWithTrait(traitCollection: self.traitCollection)
         btnAuthorization.frame = CGRect()
@@ -86,13 +85,13 @@ open class LoginForm: QMobileUI.LoginForm {
     override open func traitCollectionDidChange (_ previousTraitCollection: UITraitCollection?) {}
 
     override open func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        // Trait collection will change. Use this one so you know what the state is changing to.
+        /// Trait collection will change. Use this one so you know what the state is changing to.
         setupViewWithTrait(traitCollection: newCollection)
     }
 
-    private func setupViewWithTrait(traitCollection: UITraitCollection) {
+    fileprivate func setupViewWithTrait(traitCollection: UITraitCollection) {
         if traitCollection.userInterfaceStyle == .dark {
-            btnAuthorization = ASAuthorizationAppleIDButton(type: .signIn, style: .white)
+            btnAuthorization = ASAuthorizationAppleIDButton(type: .signIn, style: .whiteOutline)
             loginTextField.textColor = .white
         } else {
             btnAuthorization = ASAuthorizationAppleIDButton(type: .signIn, style: .black)
@@ -102,11 +101,11 @@ open class LoginForm: QMobileUI.LoginForm {
 
     // MARK: - ASAuthorizationController
 
-    private func performExistingAccountSetupFlows() {
-        // Prepare requests for both Apple ID and password providers.
+    fileprivate func performExistingAccountSetupFlows() {
+        /// Prepare requests for both Apple ID and password providers.
         let requests = [ASAuthorizationAppleIDProvider().createRequest(), ASAuthorizationPasswordProvider().createRequest()]
 
-        // Create an authorization controller with the given requests.
+        /// Create an authorization controller with the given requests.
         let authorizationController = ASAuthorizationController(authorizationRequests: requests)
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
@@ -125,67 +124,24 @@ open class LoginForm: QMobileUI.LoginForm {
         btnAuthorization = sender
     }
 
-//    private func setupAppleIDCredentialObserver(userID: String) {
-//        let authorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
-//
-//        authorizationAppleIDProvider.getCredentialState(forUserID: userID) { (credentialState: ASAuthorizationAppleIDProvider.CredentialState, error: Error?) in
-//            // Getting credential state is only possible on a real device, so forget it on emulators
-//            if let error = error {
-//                print("Getting credential state returned an error: \(error)")
-//                return
-//            }
-//            switch credentialState {
-//            case .authorized:
-//                self.saveUserID(userID: userID)
-//                //User is authorized to continue using your app
-//                break
-//            case .revoked:
-//                //User has revoked access to your app
-//                break
-//            case .notFound:
-//                //User is not found, meaning that the user never signed in through Apple ID
-//                break
-//            default: break
-//            }
-//        }
-//    }
-
-//    private func registerForAppleIDSessionChanges() {
-//        let notificationCenter = NotificationCenter.default
-//        let sessionNotificationName = ASAuthorizationAppleIDProvider.credentialRevokedNotification
-//
-//        _ = notificationCenter.addObserver(forName: sessionNotificationName, object: nil, queue: nil) { (notification: Notification) in
-//            //Sign user out
-//            print("hello")
-//        }
-//    }
-
-    fileprivate func saveUserID(userID: String) {
-        let defaults = UserDefaults.standard
-        defaults.set(userID, forKey: "userID")
-    }
-
 }
 
 // MARK: - ASAuthorizationControllerDelegate
 
 extension LoginForm: ASAuthorizationControllerDelegate {
 
-    // ASAuthorizationControllerDelegate function for authorization failed
+    /// ASAuthorizationControllerDelegate function for authorization failed
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         print("Authorization returned an error: \(error.localizedDescription)")
     }
 
-    // ASAuthorizationControllerDelegate function for successful authorization
+    /// ASAuthorizationControllerDelegate function for successful authorization
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-//        registerForAppleIDSessionChanges()
 
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-//            setupAppleIDCredentialObserver(userID: appleIDCredential.user)
             handleAppleIDCredential(appleIDCredential: appleIDCredential)
         case let passwordCredential as ASPasswordCredential:
-//            setupAppleIDCredentialObserver(userID: passwordCredential.user)
             handlePasswordCredential(passwordCredential: passwordCredential)
         default: break
         }
@@ -207,7 +163,7 @@ extension LoginForm: ASAuthorizationControllerPresentationContextProviding {
 
 extension LoginForm {
 
-    private func handleAppleIDCredential(appleIDCredential: ASAuthorizationAppleIDCredential) {
+    fileprivate func handleAppleIDCredential(appleIDCredential: ASAuthorizationAppleIDCredential) {
 
         let email: String = appleIDCredential.email ?? ""
         let userId = appleIDCredential.user
@@ -218,24 +174,29 @@ extension LoginForm {
         parameters?["userId"] = userId
         parameters?["firstname"] = firstname
         parameters?["lastname"] = lastname
-        
+
         saveUserID(userID: userId)
         authentificate(login: email, parameters: parameters)
     }
 
-    private func handlePasswordCredential(passwordCredential: ASPasswordCredential) {
+    fileprivate func handlePasswordCredential(passwordCredential: ASPasswordCredential) {
 
         let appleUsername = passwordCredential.user
         let applePassword = passwordCredential.password
 
         var parameters: [String: Any]?
         parameters?["password"] = applePassword
-        
+
         saveUserID(userID: appleUsername)
         authentificate(login: appleUsername, parameters: parameters)
     }
 
-    private func authentificate(login: String, parameters: [String: Any]?) {
+    fileprivate func saveUserID(userID: String) {
+        let defaults = UserDefaults.standard
+        defaults.set(userID, forKey: "userID")
+    }
+
+    fileprivate func authentificate(login: String, parameters: [String: Any]?) {
         _ = APIManager.instance.authentificate(login: email, parameters: parameters) {  [weak self] result in
 
             guard let this = self else { return }

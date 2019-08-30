@@ -19,7 +19,7 @@ import Prephirences
 class SignInWithAppleCredentialStateService: NSObject {
 
     static var instance: SignInWithAppleCredentialStateService = SignInWithAppleCredentialStateService()
-    
+
     override init() { }
 
     /// KVC to provide your instance.
@@ -55,7 +55,7 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) {}
 
-    private func checkCredentialState() {
+    fileprivate func checkCredentialState() {
         let defaults = UserDefaults.standard
         if let userID = defaults.string(forKey: "userID") {
             setupAppleIDCredentialObserver(userID: userID, completionHandler: { result in
@@ -71,20 +71,20 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
                         logger.info("Credentials not found, user has never signed in through Apple IDApplication has been authenticated with.")
                     default: break
                     }
-                    
+
                 case .failure(let error):
                     logger.info("Getting credentials state returned an error: \(error)")
                     self.logoutRevokation()
                 }
-                
+
             })
         }
     }
 
     typealias CredentialStateCompletionHandler = ((Result<ASAuthorizationAppleIDProvider.CredentialState, Error>) -> Void)
-    private func setupAppleIDCredentialObserver(userID: String, completionHandler: @escaping CredentialStateCompletionHandler) {
+    fileprivate func setupAppleIDCredentialObserver(userID: String, completionHandler: @escaping CredentialStateCompletionHandler) {
         let authorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
-        // Getting credential state is only possible on a real device, so forget it on emulators
+        /// Getting credential state is only possible on a real device, so forget it on emulators
         authorizationAppleIDProvider.getCredentialState(forUserID: userID) { (credentialState: ASAuthorizationAppleIDProvider.CredentialState, error: Error?) in
 
             if let error = error {
@@ -96,20 +96,20 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
         }
     }
 
-    private func logoutRevokation() {
+    fileprivate func logoutRevokation() {
         _ = APIManager.instance.logout(token: Prephirences.Auth.Logout.token) { _ in
             Prephirences.Auth.Logout.token = nil
-            
+
             let defaults = UserDefaults.standard
             defaults.set(nil, forKey: "userID")
-                        
+
             if let viewController = UIApplication.topViewController {
                 self.logoutUI(nil, viewController)
             }
         }
     }
-    
-    func logoutUI(_ sender: Any? = nil, _ source: UIViewController) {
+
+    fileprivate func logoutUI(_ sender: Any? = nil, _ source: UIViewController) {
         foreground {
             /// XXX check that there is no issue with that, view controller cycle for instance
             if let destination = Main.instantiate() {
@@ -124,3 +124,4 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
         }
     }
 }
+
