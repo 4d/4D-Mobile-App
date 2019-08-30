@@ -24,6 +24,7 @@
                     </state>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD___" value="relation"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="relationTitleFormat" value="___FIELD_SHORT_LABEL___"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="relationName" value="___FIELD___"/>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="imageContextTemplate" value="YES"/>
                     </userDefinedRuntimeAttributes>
