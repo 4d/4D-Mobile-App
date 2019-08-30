@@ -56,7 +56,9 @@ End if
 
 $Obj_types:=New object:C1471(\
 "info";String:C10($Obj_in.target)+"Xcode"+Folder separator:K24:12+"Info.plist";\
+"settings";String:C10($Obj_in.target)+"Settings"+Folder separator:K24:12+"Settings.plist";\
 "entitlements";String:C10($Obj_in.target)+String:C10($Obj_in.tags.product)+".entitlements")
+
 
 Case of 
 		
@@ -186,6 +188,7 @@ Case of
 			"target";$Obj_in.target;\
 			"tags";$Obj_in.tags;\
 			"info";$Obj_in.info#Null:C1517;\
+			"settings";$Obj_in.settings#Null:C1517;\
 			"entitlements";$Obj_in.entitlements#Null:C1517))
 		
 		If ($Obj_out.success)
@@ -279,6 +282,21 @@ Case of
 				  // ----------------------------------------
 		End case 
 		
+		Case of 
+				
+				  // ----------------------------------------
+			: (Value type:C1509($Obj_in.settings)=Is collection:K8:32)
+				
+				$Obj_out.settings.combine($Obj_in.settings)
+				
+				  // ----------------------------------------
+			: (Value type:C1509($Obj_in.settings)=Is object:K8:27)
+				
+				$Obj_out.settings.push($Obj_in.settings)
+				
+				  // ----------------------------------------
+		End case 
+		
 		  // Manage simple properties
 		
 		If (Bool:C1537($Obj_in.home) | Bool:C1537($Obj_in.homekit))
@@ -348,6 +366,13 @@ Case of
 			
 		End if 
 		
+		If (Bool:C1537($Obj_in.settings))
+			
+			$Obj_out.settings.push(New object:C1471(\
+				"application.services";$Obj_in.services))
+			
+		End if 
+		
 		If (Bool:C1537($Obj_in.map))
 			
 			$Obj_out.info.push(New object:C1471(\
@@ -361,19 +386,19 @@ Case of
 					"MKDirectionsApplicationSupportedModes";$Obj_in.mapModes))
 				
 				  // collection(\
-										"MKDirectionsModeBike";\
-										"MKDirectionsModeBus";\
-										"MKDirectionsModeCar";\
-										"MKDirectionsModeFerry";\
-										"MKDirectionsModeOther";\
-										"MKDirectionsModePedestrian";\
-										"MKDirectionsModePlane";\
-										"MKDirectionsModeRideShare";\
-										"MKDirectionsModeStreetCar";\
-										"MKDirectionsModeSubway";\
-										"MKDirectionsModeTaxi";\
-										"MKDirectionsModeTrain"\
-										)
+																														"MKDirectionsModeBike";\
+																														"MKDirectionsModeBus";\
+																														"MKDirectionsModeCar";\
+																														"MKDirectionsModeFerry";\
+																														"MKDirectionsModeOther";\
+																														"MKDirectionsModePedestrian";\
+																														"MKDirectionsModePlane";\
+																														"MKDirectionsModeRideShare";\
+																														"MKDirectionsModeStreetCar";\
+																														"MKDirectionsModeSubway";\
+																														"MKDirectionsModeTaxi";\
+																														"MKDirectionsModeTrain"\
+																														)
 				
 			End if 
 		End if 

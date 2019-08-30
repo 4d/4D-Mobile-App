@@ -3,6 +3,9 @@
   "name": "signinwithapple",
   "inject": true,
   "capabilities": {
-        "signInWithOS": true
-    }
+        "signInWithOS": true,
+        "settings": {
+        	"application.services": ["SignInWithAppleCredentialStateService"]
+        }
+    }  
 }
