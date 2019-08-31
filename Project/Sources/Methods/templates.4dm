@@ -213,7 +213,7 @@ Case of
 					Case of 
 							
 							  //……………………………………………………………………………………………………………
-						: ($Obj_field.id#Null:C1517)
+						: (Num:C11($Obj_field.id)#0)
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							$Obj_field.originalName:=$Obj_field.name
