@@ -5,7 +5,9 @@
   "capabilities": {
         "signInWithOS": true,
         "settings": {
-        	"application.services": ["SignInWithAppleCredentialStateService"]
+        	"application.services": [
+        		"SignInWithAppleCredentialStateService"
+        	]
         }
     }  
 }

@@ -366,12 +366,6 @@ Case of
 			
 		End if 
 		
-		If (Bool:C1537($Obj_in.settings))
-			
-			$Obj_out.settings.push(New object:C1471(\
-				"application.services";$Obj_in.services))
-			
-		End if 
 		
 		If (Bool:C1537($Obj_in.map))
 			
