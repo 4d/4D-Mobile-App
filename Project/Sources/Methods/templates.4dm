@@ -1099,7 +1099,17 @@ Case of
 					
 				Else   // There is an icon defined
 					
-					$Path_icon:=Choose:C955(Position:C15("/";$Obj_field.icon)=1;$Path_hostRoot.file(Substring:C12($Obj_field.icon;2));$Path_root.file($Obj_field.icon))  // custom icon // product icon
+					If (Position:C15("/";$Obj_field.icon)=1)
+						
+						  // Custom icon
+						$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_field.icon;2))
+						
+					Else 
+						
+						  // Product icon
+						$Path_icon:=$Path_root.file($Obj_field.icon)
+						
+					End if 
 					
 					$o:=asset (New object:C1471(\
 						"action";"create";\
