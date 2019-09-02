@@ -3,8 +3,13 @@
 C_OBJECT:C1216($Obj_result;$Obj_projfile)
 C_OBJECT:C1216($Folder_target;$Folder_source)
 
+C_BOOLEAN:C305($Bool_shiftDown)
+$Bool_shiftDown:=Shift down:C543
+
   //_____________________________________________________________
-TRY 
+If (Not:C34($Bool_shiftDown))
+	TRY 
+End if 
 
   //_____________________________________________________________
   // Setup
@@ -16,6 +21,16 @@ End if
 $Folder_target.create()
 $Folder_source.copyTo($Folder_target)
 $Folder_target:=$Folder_target.folder("list")
+
+  // For test purpose, must have a real between <real></real> tags, etc.
+C_TEXT:C284($settingsContent;$settingsFilePath)
+$settingsFilePath:=$Folder_target.platformPath+Convert path POSIX to system:C1107("Settings/Settings.plist")
+$settingsContent:=Document to text:C1236($settingsFilePath)
+$settingsContent:=Replace string:C233($settingsContent;"___SERVER_PORT___";"80")
+$settingsContent:=Replace string:C233($settingsContent;"___SERVER_HTTPS_PORT___";"443")
+$settingsContent:=Replace string:C233($settingsContent;"___SERVER_AUTHENTIFICATION_EMAIL___";"false")
+$settingsContent:=Replace string:C233($settingsContent;"___SERVER_AUTHENTIFICATION_RELOAD_DATA___";"false")
+TEXT TO DOCUMENT:C1237($settingsFilePath;$settingsContent)
 
   //_____________________________________________________________
   // Test
@@ -51,13 +66,13 @@ ASSERT:C1129(Value type:C1509($Obj_result.entitlements)=Is collection:K8:32;"Mus
 ASSERT:C1129(Value type:C1509($Obj_result.entitlements[0])=Is object:K8:27;"Must return an entitlements plist modification for signInWithOS:"+JSON Stringify:C1217($Obj_result))
 ASSERT:C1129($Obj_result.info.length=0;"Must found nothing")
 
+
   // WRITE
 
 $Obj_projfile:=New object:C1471()
 
 $Obj_result:=capabilities (New object:C1471("action";"inject";"target";$Folder_target.platformPath;"tags";New object:C1471("product";"___PRODUCT___");"value";$Obj_projfile))
 ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
-
 
 $Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214))))
 $Obj_result:=capabilities (New object:C1471("action";"inject";"target";$Folder_target.platformPath;"tags";New object:C1471("product";"___PRODUCT___");"value";$Obj_projfile))
@@ -67,8 +82,13 @@ $Obj_projfile:=New object:C1471("capabilities";New object:C1471("signInWithOS";T
 $Obj_result:=capabilities (New object:C1471("action";"inject";"target";$Folder_target.platformPath;"tags";New object:C1471("product";"___PRODUCT___");"value";$Obj_projfile))
 ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
 
+$Obj_projfile:=New object:C1471("capabilities";New object:C1471("signInWithOS";True:C214;"settings";New object:C1471("application.services";New collection:C1472("SignInWithAppleCredentialStateService"))))
+$Obj_result:=capabilities (New object:C1471("action";"inject";"target";$Folder_target.platformPath;"tags";New object:C1471("product";"___PRODUCT___");"value";$Obj_projfile))
+ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
 
   // FIND
+
+C_LONGINT:C283($nbCapabilities)
 
 $Obj_projfile:=New object:C1471()
 
@@ -78,21 +98,51 @@ If (Value type:C1509($Obj_result.capabilities)=Is collection:K8:32)
 	ASSERT:C1129($Obj_result.capabilities.length=0;"Must found nothing")
 End if 
 
+
 $Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214))))
 $Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
 ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
+ASSERT:C1129($Obj_result.capabilities.length=2;"Must found all capabilities")  // capabilities + templates.capabilities
+$nbCapabilities:=0
+For each ($capabilities;$Obj_result.capabilities)
+	ARRAY TEXT:C222($arrProperties;0)
+	OB GET PROPERTY NAMES:C1232($capabilities;$arrProperties)
+	$nbCapabilities:=$nbCapabilities+Size of array:C274($arrProperties)
+End for each 
+ASSERT:C1129($nbCapabilities=3;"Must found all capabilities")  // map + home + contacts
 
-ASSERT:C1129($Obj_result.capabilities.length=2;"Must found all capabilities")  // capabilities + templates
+
+$Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214));New object:C1471("capabilities";New object:C1471("signInWithOS";True:C214))))
+$Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
+ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
+ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates.capabilities + template.capabilities
+$nbCapabilities:=0
+For each ($capabilities;$Obj_result.capabilities)
+	ARRAY TEXT:C222($arrProperties;0)
+	OB GET PROPERTY NAMES:C1232($capabilities;$arrProperties)
+	$nbCapabilities:=$nbCapabilities+Size of array:C274($arrProperties)
+End for each 
+ASSERT:C1129($nbCapabilities=4;"Must found all capabilities")  // map + home + contacts + signInWithOS
+
+
+$Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214)));"newobject";New object:C1471("capabilities";New object:C1471("signInWithOS";True:C214;"settings";New object:C1471("application.services";New collection:C1472("SignInWithAppleCredentialStateService")))))
+$Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
+ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
+ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates.capabilities + newobject
+$nbCapabilities:=0
+For each ($capabilities;$Obj_result.capabilities)
+	ARRAY TEXT:C222($arrProperties;0)
+	OB GET PROPERTY NAMES:C1232($capabilities;$arrProperties)
+	$nbCapabilities:=$nbCapabilities+Size of array:C274($arrProperties)
+End for each 
+ASSERT:C1129($nbCapabilities=5;"Must found all capabilities")  // map + home + contacts + signInWithOS + settings
+
 
 $Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214));New object:C1471("capabilities";New object:C1471("signInWithOS";True:C214))))
 $Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
 ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
 ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates
 
-$Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214)));"newobject";New object:C1471("capabilities";New object:C1471("signInWithOS";True:C214)))
-$Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
-ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
-ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates + newobject
 
 $Obj_projfile.actions:=New collection:C1472(\
 New object:C1471(\
@@ -138,11 +188,13 @@ For each ($Obj_projfile;$Obj_result.capabilities)
 End for each 
   //_____________________________________________________________
   // Teardown
-If (Shift down:C543)
+If ($Bool_shiftDown)
 	SHOW ON DISK:C922($Folder_target.platformPath)
 Else 
 	$Folder_target.delete(fk recursive:K87:7)
 End if 
 
   //_____________________________________________________________
-FINALLY 
+If (Not:C34($Bool_shiftDown))
+	FINALLY 
+End if 
