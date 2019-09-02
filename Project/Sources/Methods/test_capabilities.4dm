@@ -104,6 +104,7 @@ $Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfil
 ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
 ASSERT:C1129($Obj_result.capabilities.length=2;"Must found all capabilities")  // capabilities + templates.capabilities
 $nbCapabilities:=0
+C_OBJECT:C1216($capabilities)
 For each ($capabilities;$Obj_result.capabilities)
 	ARRAY TEXT:C222($arrProperties;0)
 	OB GET PROPERTY NAMES:C1232($capabilities;$arrProperties)
