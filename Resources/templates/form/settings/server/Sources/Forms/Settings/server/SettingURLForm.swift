@@ -28,7 +28,7 @@ open class SettingURLForm: QMobileUI.SettingURLForm {
     }
 
     // MARK: IBOutlet
-    @IBOutlet open override weak var serverURLTextField: UITextField! {
+    @IBOutlet open override var serverURLTextField: UITextField! {
         get {
             return super.serverURLTextField
         }
