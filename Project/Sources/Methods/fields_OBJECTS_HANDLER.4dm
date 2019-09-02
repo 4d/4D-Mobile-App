@@ -15,8 +15,7 @@ C_LONGINT:C283($Lon_;$Lon_bottom;$Lon_column;$Lon_formEvent;$Lon_left;$Lon_param
 C_LONGINT:C283($Lon_right;$Lon_row;$Lon_top;$Lon_x;$Lon_y)
 C_POINTER:C301($Ptr_me)
 C_TEXT:C284($t;$Txt_current;$Txt_me)
-C_OBJECT:C1216($menu;$o;$Obj_context;$Obj_field;$Obj_form;$Obj_menu)
-C_OBJECT:C1216($Obj_picker)
+C_OBJECT:C1216($o;$Obj_context;$Obj_field;$Obj_form;$Obj_menu;$Obj_picker)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -216,7 +215,25 @@ Case of
 					
 					$Obj_menu:=menu 
 					
-					If (Num:C11($Obj_field.id)#0)
+					If ($Obj_field.relatedEntities#Null:C1517)  //1-N relation
+						
+						  //If ($Obj_field.format=Null)
+						  //  // Default value
+						  //$Txt_current:="inline"
+						  //Else
+						  //If (Value type($Obj_field.format)=Is object)
+						  //$Txt_current:=String($Obj_field.format.name)
+						  //Else
+						  //  // Internal
+						  //$Txt_current:=$Obj_field.format
+						  //End if
+						  //End if
+						  //$Obj_menu.append(":xliff:#NA";"").disable()
+						
+						  // Allow direct entry for title format
+						$0:=0
+						
+					Else 
 						
 						  // Get current format
 						If ($Obj_field.format=Null:C1517)
@@ -269,57 +286,37 @@ Case of
 							End for each 
 						End if 
 						
-					Else 
+						LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.fieldList;$Lon_column;$Lon_row;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+						CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
+						$Obj_menu.popup("";$Lon_left;$Lon_bottom)
 						
-						If ($Obj_field.format=Null:C1517)
+						If ($Obj_menu.selected)
 							
-							  // Default value
-							$Txt_current:="inline"
+							  // Update data model
+							$Obj_field.format:=$Obj_menu.choice
 							
-						Else 
-							
-							If (Value type:C1509($Obj_field.format)=Is object:K8:27)
+							  // Update me
+							  //%W-533.1
+							If ($Obj_menu.choice[[1]]="/")
+								  //%W+533.1
 								
-								$Txt_current:=String:C10($Obj_field.format.name)
+								  // User resources
+								$Ptr_me->{$Lon_row}:=Substring:C12($Obj_menu.choice;2)
 								
 							Else 
 								
-								  // Internal
-								$Txt_current:=$Obj_field.format
+								$Ptr_me->{$Lon_row}:=str_localized (New collection:C1472("_"+$Obj_menu.choice))
 								
 							End if 
-						End if 
-						
-						$Obj_menu.append(":xliff:#NA";"").disable()
-						
-					End if 
-					
-					LISTBOX GET CELL COORDINATES:C1330(*;$Obj_form.fieldList;$Lon_column;$Lon_row;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-					CONVERT COORDINATES:C1365($Lon_left;$Lon_bottom;XY Current form:K27:5;XY Current window:K27:6)
-					$Obj_menu.popup("";$Lon_left;$Lon_bottom)
-					
-					If ($Obj_menu.selected)
-						
-						  // Update data model
-						$Obj_field.format:=$Obj_menu.choice
-						
-						  // Update me
-						  //%W-533.1
-						If ($Obj_menu.choice[[1]]="/")
-							  //%W+533.1
 							
-							  // User resources
-							$Ptr_me->{$Lon_row}:=Substring:C12($Obj_menu.choice;2)
-							
-						Else 
-							
-							$Ptr_me->{$Lon_row}:=str_localized (New collection:C1472("_"+$Obj_menu.choice))
+							  //$Ptr_me->{$Lon_row}:="🔽 "+$Ptr_me->{$Lon_row}
 							
 						End if 
+						
+						GOTO OBJECT:C206(*;$Obj_form.fieldList)
+						LISTBOX SELECT ROW:C912(*;$Obj_form.fieldList;$Lon_row;lk replace selection:K53:1)
+						
 					End if 
-					
-					GOTO OBJECT:C206(*;$Obj_form.fieldList)
-					LISTBOX SELECT ROW:C912(*;$Obj_form.fieldList;$Lon_row;lk replace selection:K53:1)
 					
 					editor_ui_LISTBOX ($Obj_form.fieldList)
 					
@@ -329,16 +326,26 @@ Case of
 			: ($Lon_formEvent=On Data Change:K2:15)
 				
 				  // Update data model
-				If ($Lon_column=$Obj_form.labelColumn)\
-					 | ($Lon_column=$Obj_form.shortlabelColumn)
-					
-					$Obj_field:=FIELDS_Handler (New object:C1471(\
-						"action";"field";\
-						"row";$Lon_row))
-					
-					$Obj_field[Choose:C955($Lon_column=$Obj_form.labelColumn;"label";"shortLabel")]:=$Ptr_me->{$Lon_row}
-					
-				End if 
+				
+				$Obj_field:=FIELDS_Handler (New object:C1471(\
+					"action";"field";\
+					"row";$Lon_row))
+				
+				Case of 
+						
+						  //………………………………………………………………………………………
+					: ($Lon_column=$Obj_form.labelColumn)\
+						 | ($Lon_column=$Obj_form.shortlabelColumn)
+						
+						$Obj_field[Choose:C955($Lon_column=$Obj_form.labelColumn;"label";"shortLabel")]:=$Ptr_me->{$Lon_row}
+						
+						  //………………………………………………………………………………………
+					: ($Lon_column=$Obj_form.formatColumn)
+						
+						$Obj_field.format:=ST Get plain text:C1092($Ptr_me->{$Lon_row})
+						
+						  //………………………………………………………………………………………
+				End case 
 				
 				  //______________________________________________________
 			Else 
@@ -349,24 +356,35 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.filter.name)
+	: ($Obj_form.form.currentWidget=$Obj_form.selectorFields.name)\
+		 | ($Obj_form.form.currentWidget=$Obj_form.selectorRelations.name)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Clicked:K2:4)
+			: ($Obj_form.form.event=On Clicked:K2:4)
 				
-				$menu:=menu \
-					.append(":xliff:fieldsAndRelations";"0";$Obj_context.selector=0)\
-					.append(":xliff:fieldsOnly";"1";$Obj_context.selector=1)\
-					.append(":xliff:relationOnly";"2";$Obj_context.selector=2)
+				  // Update tab
+				$Obj_context.selector:=Num:C11($Obj_form.form.currentWidget=$Obj_form.selectorRelations.name)
+				$Obj_context.setTab()
+				$Obj_context.update()
 				
-				If ($menu.popup().selected)
+				  //______________________________________________________
+			: ($Obj_form.form.event=On Mouse Enter:K2:33)
+				
+				If ($Obj_context.selector#(Num:C11($Obj_form.form.currentWidget=$Obj_form.selectorRelations.name)))
 					
-					$Obj_context.selector:=Num:C11($menu.choice)
-					$Obj_context.refresh()
+					  // Highlights
+					$o:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.selectorFields.name;$Obj_form.selectorFields;$Obj_form.selectorRelations)
+					$o.setColors(ui.selectedColor;Background color none:K23:10)
 					
 				End if 
+				
+				  //______________________________________________________
+			: ($Obj_form.form.event=On Mouse Leave:K2:34)
+				
+				$o:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.selectorFields.name;$Obj_form.selectorFields;$Obj_form.selectorRelations)
+				$o.setColors(Foreground color:K23:1;Background color none:K23:10)
 				
 				  //______________________________________________________
 		End case 

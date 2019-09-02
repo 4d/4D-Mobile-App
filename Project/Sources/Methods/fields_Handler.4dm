@@ -12,10 +12,12 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($i;$Lon_fieldNumber;$Lon_formEvent;$Lon_parameters)
+C_LONGINT:C283($i;$l;$Lon_fieldNumber;$Lon_formEvent)
 C_PICTURE:C286($p)
 C_POINTER:C301($r)
+C_TEXT:C284($t)
 C_OBJECT:C1216($o;$Obj_context;$Obj_dataModel;$Obj_form;$Obj_in;$Obj_out)
+C_OBJECT:C1216($oo)
 C_COLLECTION:C1488($Col_buffer)
 
 If (False:C215)
@@ -51,8 +53,10 @@ $Obj_form:=New object:C1471(\
 "formats";"formats";\
 "formatColumn";6;\
 "iconGrid";"iconGrid";\
-"filter";ui.button("filter");\
-"filterLabel";ui.static("filter.label");\
+"tabSelector";ui.widget("tab.selector");\
+"selectorFields";ui.button("tab.fields");\
+"selectorRelations";ui.button("tab.relations");\
+"selectors";ui.static("tab.@");\
 "init";Formula:C1597(FIELDS_Handler (New object:C1471("action";"init")))\
 )
 
@@ -61,7 +65,7 @@ $Obj_context:=$Obj_form.$
 If (OB Is empty:C1297($Obj_context))\
  | (Shift down:C543 & (Structure file:C489=Structure file:C489(*)))  // First load
 	
-	$Obj_context.selector:=0  //Fields & relations
+	$Obj_context.selector:=0  //Fields
 	
 	  // Constraints definition
 	ob_createPath ($Obj_context;"constraints.rules";Is collection:K8:32)
@@ -70,6 +74,9 @@ If (OB Is empty:C1297($Obj_context))\
 	$Obj_context.refresh:=Formula:C1597(SET TIMER:C645(-1))
 	
 	$Obj_context.update:=Formula:C1597(FIELDS_Handler (New object:C1471("action";"update")))
+	
+	  // Update selected tab
+	$Obj_context.setTab:=Formula:C1597(FIELDS_Handler (New object:C1471("action";"setTab")))
 	
 End if 
 
@@ -93,13 +100,19 @@ Case of
 				  // This trick remove the horizontal gap
 				OBJECT SET SCROLLBAR:C843(*;$Obj_form.fieldList;0;2)
 				
+				  // Place the tabs according to the localization
+				$l:=$Obj_form.selectorFields.bestSize(Align left:K42:2).coordinates.right+10
+				$Obj_form.selectorRelations.bestSize(Align left:K42:2).setCoordinates($l;Null:C1517;Null:C1517;Null:C1517)
+				
+				$Obj_context.setTab()
+				
 				  // Preload the icons
 				CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"fieldIcons")
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				$Obj_form.filterLabel.setTitle(Get localized string:C991(Choose:C955(Num:C11($Obj_context.selector);"fieldsAndRelations";"fieldsOnly";"relationOnly")))
+				  //$Obj_form.filterLabel.setTitle(Get localized string(Choose(Num($Obj_context.selector);"fieldsAndRelations";"fieldsOnly";"relationOnly")))
 				$Obj_context.update()
 				
 				  //______________________________________________________
@@ -137,7 +150,7 @@ Case of
 				
 			Else 
 				
-				  // Take the name 
+				  // Take the name
 				$Obj_out:=Form:C1466.dataModel[String:C10($Obj_context.tableNumber)][String:C10($Col_buffer[0])]
 				
 			End if 
@@ -146,6 +159,8 @@ Case of
 		
 		  //=========================================================
 	: ($Obj_in.action="update")  // Display published tables according to data model
+		
+		ASSERT:C1129(Not:C34(Shift down:C543))
 		
 		If (This:C1470=Null:C1517)
 			
@@ -175,15 +190,15 @@ Case of
 				
 				If (Num:C11($o.count)=0)
 					
-					OBJECT SET VISIBLE:C603(*;"empty";True:C214)
 					OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;False:C215)
 					
 				Else 
 					
-					OBJECT SET VISIBLE:C603(*;"empty";False:C215)
 					OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;True:C214)
 					
 				End if 
+				
+				OBJECT SET VISIBLE:C603(*;"empty";False:C215)
 				
 			Else 
 				
@@ -206,6 +221,18 @@ Case of
 			editor_ui_LISTBOX ($Obj_form.fieldList)
 			
 		End if 
+		
+		  //=========================================================
+	: ($Obj_in.action="setTab")  // UI for tabs
+		
+		OBJECT SET FONT STYLE:C166(*;$Obj_form.selectors.name;Plain:K14:1)
+		
+		$t:="selector"+Choose:C955(Num:C11($Obj_context.selector);"Fields";"Relations")
+		
+		OBJECT SET FONT STYLE:C166(*;$Obj_form[$t].name;Bold:K14:2)
+		$o:=$Obj_form[$t].getCoordinates().coordinates
+		$oo:=$Obj_form.tabSelector.getCoordinates()
+		$oo.setCoordinates($o.left;$oo.coordinates.top;$o.right;$oo.coordinates.bottom)
 		
 		  //=========================================================
 	: ($Obj_in.action="fieldIcons")  // Call back from widget

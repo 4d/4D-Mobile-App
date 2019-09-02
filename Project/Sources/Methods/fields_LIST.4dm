@@ -13,8 +13,8 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 
 C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Dir_formats;$t;$Txt_field;$Txt_table;$Txt_tableNumber)
-C_OBJECT:C1216($ƒ;$Obj_field;$Obj_out;$Obj_table)
+C_TEXT:C284($t;$tt;$Txt_field;$Txt_tableNumber)
+C_OBJECT:C1216($ƒ;$Obj_field;$Obj_out;$Obj_table;$o;$Path_formats)
 
 If (False:C215)
 	C_OBJECT:C1216(fields_LIST ;$0)
@@ -41,6 +41,8 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
 	$ƒ:=Storage:C1525.ƒ
 	
+	$o:=str ()
+	
 Else 
 	
 	ABORT:C156
@@ -54,7 +56,7 @@ If ($Obj_out.success)
 	
 	If ($Obj_out.success)
 		
-		$Dir_formats:=_o_Pathname ("host_formatters")
+		$Path_formats:=COMPONENT_Pathname ("host_formatters")
 		
 		$Obj_out.ids:=New collection:C1472
 		$Obj_out.names:=New collection:C1472
@@ -78,19 +80,19 @@ If ($Obj_out.success)
 		
 		$Obj_table:=Form:C1466.dataModel[$Txt_tableNumber]
 		
-		For each ($Txt_table;$Obj_table)
+		For each ($tt;$Obj_table)
 			
 			Case of 
 					
 					  //……………………………………………………………………………………………………………
-				: ($ƒ.isField($Txt_table))\
-					 & (Num:C11(This:C1470.selector)<2)
+				: ($ƒ.isField($tt))\
+					 & (Num:C11(This:C1470.selector)=0)
 					
 					$Obj_out.formatColors.push(Foreground color:K23:1)
 					$Obj_out.nameColors.push(Foreground color:K23:1)
 					
-					$Obj_field:=$Obj_table[$Txt_table]
-					$Obj_field.id:=Num:C11($Txt_table)
+					$Obj_field:=$Obj_table[$tt]
+					$Obj_field.id:=Num:C11($tt)
 					
 					  // ***********************************
 					  // ***********************************
@@ -131,7 +133,7 @@ If ($Obj_out.success)
 							
 							If (Not:C34(formatters (New object:C1471(\
 								"action";"isValid";\
-								"path";$Dir_formats+$t+Folder separator:K24:12)).success))
+								"format";$Path_formats.folder($t))).success))
 								
 								$Obj_out.formatColors[$Obj_out.formats.length]:=ui.errorColor  // Missing or invalid
 								
@@ -139,54 +141,50 @@ If ($Obj_out.success)
 							
 						Else 
 							
-							$t:=str ("_"+$Obj_field.format).localized()
+							$t:=$o.setText("_"+$Obj_field.format).localized()
 							
 						End if 
 						  //%W+533.1
 						
 					Else 
 						
-						$t:=str ("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
+						$t:=$o.setText("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
 						
 					End if 
 					
 					$Obj_out.formats.push($t)
 					
 					  //……………………………………………………………………………………………………………
-				: (Value type:C1509($Obj_table[$Txt_table])#Is object:K8:27)
+				: (Value type:C1509($Obj_table[$tt])#Is object:K8:27)
 					
 					  // <NOTHING MORE TO DO>
 					
 					  //……………………………………………………………………………………………………………
-				: (Num:C11(This:C1470.selector)=1)
+				: ($ƒ.isRelationToOne($Obj_table[$tt]))\
+					 & (Num:C11(This:C1470.selector)=0)
 					
-					  // Fields only
-					
-					  //……………………………………………………………………………………………………………
-				: ($ƒ.isRelationToOne($Obj_table[$Txt_table]))
-					
-					For each ($Txt_field;$Obj_table[$Txt_table])
+					For each ($Txt_field;$Obj_table[$tt])
 						
 						If ($ƒ.isField($Txt_field))
 							
 							$Obj_out.formatColors.push(Foreground color:K23:1)
 							$Obj_out.nameColors.push(Foreground color:K23:1)
 							
-							$Obj_field:=$Obj_table[$Txt_table][$Txt_field]
+							$Obj_field:=$Obj_table[$tt][$Txt_field]
 							$Obj_field.id:=Num:C11($Txt_field)
 							
 							  // ***********************************
 							  // ***********************************
 							$Obj_out.tableNumbers.push(structure (New object:C1471(\
 								"action";"tableNumber";\
-								"name";$Obj_table[$Txt_table].relatedDataClass)).tableNumber)
+								"name";$Obj_table[$tt].relatedDataClass)).tableNumber)
 							
 							  // ***********************************
 							  // ***********************************
 							
 							$Obj_out.ids.push($Obj_field.id)
 							$Obj_out.names.push($Obj_field.name)
-							$Obj_out.paths.push($Txt_table+"."+$Obj_field.name)
+							$Obj_out.paths.push($tt+"."+$Obj_field.name)
 							$Obj_out.types.push($Obj_field.fieldType)
 							$Obj_out.labels.push($Obj_field.label)
 							$Obj_out.shortLabels.push($Obj_field.shortLabel)
@@ -198,11 +196,11 @@ If ($Obj_out.success)
 								  //%W-533.1
 								If ($Obj_field.format[[1]]="/")  // User resources
 									
-									$t:=$Dir_formats+Substring:C12($Obj_field.format;2)+Folder separator:K24:12
+									$t:=Substring:C12($Obj_field.format;2)
 									
 									If (Not:C34(formatters (New object:C1471(\
 										"action";"isValid";\
-										"path";$t)).success))
+										"format";$Path_formats.folder($t))).success))
 										
 										$Obj_out.formatColors[$Obj_out.formats.length]:=ui.errorColor  // Missing or invalid
 										
@@ -210,14 +208,14 @@ If ($Obj_out.success)
 									
 								Else 
 									
-									$t:=str ("_"+$Obj_field.format).localized()
+									$t:=$o.setText("_"+$Obj_field.format).localized()
 									
 								End if 
 								  //%W+533.1
 								
 							Else 
 								
-								$t:=str ("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
+								$t:=$o.setText("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
 								
 							End if 
 							
@@ -227,12 +225,15 @@ If ($Obj_out.success)
 					End for each 
 					
 					  //……………………………………………………………………………………………………………
-				: ($ƒ.isRelationToMany($Obj_table[$Txt_table]))
+				: (Num:C11(This:C1470.selector)=0)
+					
+					  //……………………………………………………………………………………………………………
+				: ($ƒ.isRelationToMany($Obj_table[$tt]))  //&(Num(This.selector)=1)
 					
 					$Obj_out.formatColors.push(Foreground color:K23:1)
 					$Obj_out.nameColors.push(Foreground color:K23:1)
 					
-					$Obj_field:=$Obj_table[$Txt_table]
+					$Obj_field:=$Obj_table[$tt]
 					
 					  // ***********************************
 					  // ***********************************
@@ -242,13 +243,13 @@ If ($Obj_out.success)
 					  // ***********************************
 					
 					$Obj_out.ids.push(Null:C1517)
-					$Obj_out.names.push($Txt_table)
-					$Obj_out.paths.push($Txt_table)
+					$Obj_out.names.push($tt)
+					$Obj_out.paths.push($tt)
 					$Obj_out.types.push(-2)
 					
 					If (String:C10($Obj_field.label)="")
 						
-						$Obj_field.label:=formatString ("label";$Txt_table)
+						$Obj_field.label:=formatString ("label";$tt)
 						
 					End if 
 					
@@ -264,14 +265,13 @@ If ($Obj_out.success)
 					$Obj_out.iconPaths.push(String:C10($Obj_field.icon))
 					$Obj_out.icons.push(getIcon (String:C10($Obj_field.icon)))
 					
-					
 					If (Form:C1466.dataModel[String:C10($Obj_field.relatedTableNumber)]=Null:C1517)
 						
 						$Obj_out.nameColors[$Obj_out.names.length-1]:=ui.errorColor  // Missing or invalid
 						
 					End if 
 					
-					$Obj_out.formats.push(Null:C1517)
+					$Obj_out.formats.push($Obj_field.format)
 					
 					  //……………………………………………………………………………………………………………
 			End case 

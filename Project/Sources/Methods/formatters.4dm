@@ -186,10 +186,23 @@ Case of
 		  //______________________________________________________
 	: ($Obj_in.action="isValid")
 		
-		If (Test path name:C476($Obj_in.path)#Is a folder:K24:2) | (Test path name:C476($Obj_in.path+"manifest.json")#Is a document:K24:1)
+		If ($Obj_in.format#Null:C1517)
 			
-			ob_error_add ($Obj_out;"Formatter missing or invalid")  // Missing or invalid
+			If (Not:C34($Obj_in.format.exists))\
+				 | (Not:C34($Obj_in.format.file("manifest.json").exists))
+				
+				ob_error_add ($Obj_out;"Formatter missing or invalid")  // Missing or invalid
+				
+			End if 
 			
+		Else 
+			
+			If (Test path name:C476($Obj_in.path)#Is a folder:K24:2)\
+				 | (Test path name:C476($Obj_in.path+"manifest.json")#Is a document:K24:1)
+				
+				ob_error_add ($Obj_out;"Formatter missing or invalid")  // Missing or invalid
+				
+			End if 
 		End if 
 		
 		  //______________________________________________________

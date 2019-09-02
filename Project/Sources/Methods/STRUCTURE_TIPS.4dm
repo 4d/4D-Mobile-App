@@ -14,7 +14,7 @@ C_OBJECT:C1216($1)
 C_LONGINT:C283($l;$Lon_column;$Lon_field;$Lon_fieldNumber;$Lon_row;$Lon_tableNumber)
 C_LONGINT:C283($Lon_x;$Lon_y)
 C_TEXT:C284($t;$tt;$Txt_name;$Txt_tips)
-C_OBJECT:C1216($Obj_dataModel;$Obj_field;$Obj_form;$Obj_relatedDataClass;$Obj_table)
+C_OBJECT:C1216($o;$Obj_dataModel;$Obj_field;$Obj_form;$Obj_relatedDataClass;$Obj_table)
 C_COLLECTION:C1488($c;$Col_catalog;$Col_desynchronized;$Col_fields)
 
 If (False:C215)
@@ -38,6 +38,8 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	GET MOUSE:C468($Lon_x;$Lon_y;$l)
 	LISTBOX GET CELL POSITION:C971(*;$1.target;$Lon_x;$Lon_y;$Lon_column;$Lon_row)
 	
+	$o:=str ()  // init class
+	
 Else 
 	
 	ABORT:C156
@@ -59,7 +61,7 @@ If ($Lon_row#0)
 			
 			$Obj_table:=$Col_catalog[$l]
 			
-			  //ASSERT(Not(Shift down))
+			  // ASSERT(Not(Shift down))
 			
 			If ($Obj_table=Null:C1517)
 				
@@ -70,7 +72,7 @@ If ($Lon_row#0)
 				If (Num:C11($Obj_table.tableNumber)=0)
 					
 					  // NOT FOUND INTO THE CURRENT CATALOG
-					$Txt_tips:=ui.alert+str ("theTableNameIsNoLongerAvailable").localized($Obj_table.name)
+					$Txt_tips:=ui.alert+$o.setText("theTableNameIsNoLongerAvailable").localized($Obj_table.name)
 					
 				Else 
 					
@@ -88,11 +90,12 @@ If ($Lon_row#0)
 							
 							If ($Col_desynchronized.length=0)  // Not found into the current catalog
 								
-								$Txt_tips:=ui.alert+str ("theTableNameIsNoLongerAvailable").localized($Obj_table.name)
+								$Txt_tips:=ui.alert+$o.setText("theTableNameIsNoLongerAvailable").localized($Obj_table.name)
 								
 							Else 
 								
 								Case of 
+										
 										  //______________________________________________________
 									: ($1.target=$Obj_form.tableList)  // TABLE LIST
 										
@@ -137,7 +140,7 @@ If ($Lon_row#0)
 												$Lon_tableNumber:=$Obj_table.tableNumber
 												$Lon_fieldNumber:=Num:C11($Col_desynchronized[0])
 												$Txt_name:=Field name:C257($Lon_tableNumber;$Lon_fieldNumber)
-												$Txt_tips:=ui.alert+str ("theFieldNameIsMissingOrWasModified").localized($Txt_name)
+												$Txt_tips:=ui.alert+$o.setText("theFieldNameIsMissingOrWasModified").localized($Txt_name)
 												
 											End if 
 											
@@ -171,7 +174,7 @@ If ($Lon_row#0)
 												End if 
 											End for 
 											
-											$Txt_tips:=ui.alert+str ("someFieldsAreMissingOrWasModified").localized(Substring:C12($t;1;Length:C16($t)-2))
+											$Txt_tips:=ui.alert+$o.setText("someFieldsAreMissingOrWasModified").localized(Substring:C12($t;1;Length:C16($t)-2))
 											
 										End if 
 										
@@ -196,19 +199,19 @@ If ($Lon_row#0)
 													
 													If ($l=-1)  // Not found into the current catalog
 														
-														$Txt_tips:=ui.alert+str ("theRelatedTableNameIsNoLongerAvailable").localized($Obj_field.relatedDataClass)
+														$Txt_tips:=ui.alert+$o.setText("theRelatedTableNameIsNoLongerAvailable").localized($Obj_field.relatedDataClass)
 														
 													Else 
 														
 														  //If (str_equal ($Obj_field.relatedDataClass;$Col_catalog[$l].name))
-														If (str ($Obj_field.relatedDataClass).equal($Col_catalog[$l].name))
+														If ($o.setText($Obj_field.relatedDataClass).equal($Col_catalog[$l].name))
 															
 															  // Check related datamodel
 															$l:=$Col_catalog.extract("name").indexOf($Obj_field.relatedDataClass)
 															
 															If ($l=-1)
 																
-																$Txt_tips:=ui.alert+str ("theRelatedTableNameIsNoLongerAvailable").localized($Obj_field.relatedDataClass)
+																$Txt_tips:=ui.alert+$o.setText("theRelatedTableNameIsNoLongerAvailable").localized($Obj_field.relatedDataClass)
 																
 															Else 
 																
@@ -256,26 +259,26 @@ If ($Lon_row#0)
 																		
 																		If ($c.length=1)
 																			
-																			$Txt_tips:=ui.alert+str ("theRelatedFieldNameIsNoLongerAvailable").localized($c[0])
+																			$Txt_tips:=ui.alert+$o.setText("theRelatedFieldNameIsNoLongerAvailable").localized($c[0])
 																			
 																		Else 
 																			
 																			  // Include list
-																			$Txt_tips:=ui.alert+str ("theRelatedFieldsNamesAreNoLongerAvailable").localized($c.join(", "))
+																			$Txt_tips:=ui.alert+$o.setText("theRelatedFieldsNamesAreNoLongerAvailable").localized($c.join(", "))
 																			
 																		End if 
 																	End if 
 																	
 																Else 
 																	
-																	$Txt_tips:=ui.alert+str ("theRelationNameIsNoLongerAvailable").localized($Obj_field.name)
+																	$Txt_tips:=ui.alert+$o.setText("theRelationNameIsNoLongerAvailable").localized($Obj_field.name)
 																	
 																End if 
 															End if 
 															
 														Else 
 															
-															$Txt_tips:=ui.alert+str ("theRelatedTableOldWasRenamedToNew").localized(New collection:C1472($Obj_field.relatedDataClass;$Col_catalog[$l].name))
+															$Txt_tips:=ui.alert+$o.setText("theRelatedTableOldWasRenamedToNew").localized(New collection:C1472($Obj_field.relatedDataClass;$Col_catalog[$l].name))
 															
 														End if 
 													End if 
@@ -290,7 +293,7 @@ If ($Lon_row#0)
 															  //……………………………………………………………………………………………………………………
 														: ($l=-1)  // Not found into the current catalog
 															
-															$Txt_tips:=ui.alert+str ("theFieldNameIsNoLongerAvailable").localized($Obj_field.name)
+															$Txt_tips:=ui.alert+$o.setText("theFieldNameIsNoLongerAvailable").localized($Obj_field.name)
 															
 															  //……………………………………………………………………………………………………………………
 														: ($Obj_field.type#$c[$l].type)  // Type mismatch
@@ -341,64 +344,18 @@ If ($Lon_row#0)
 							: ($1.target=$Obj_form.fieldList)
 								
 								$l:=$Obj_table.field.extract("name").indexOf((ui.pointer($Obj_form.fields))->{$Lon_row})
-								$Obj_field:=$Obj_table.field[$l]
 								
-								Case of 
-										
-										  //…………………………………………………………………………………………………
-									: ($Obj_field.type=-1)  // N -> 1 relation
-										
-										  // Related dataclass name
-										$Txt_tips:=str ("nTo1Relation").localized($Obj_field.relatedDataClass)
-										
-										If ($Obj_field.relatedDataClass=$Obj_table.name)  // Recursive link
+								If ($l#-1)
+									
+									$Obj_field:=$Obj_table.field[$l]
+									
+									Case of 
 											
-											  // Recursive link
-											$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("recursive")+")"
-											
-										End if 
-										
-										If ($Lon_column=1)
-											
-											$Txt_tips:=$Txt_tips+"\r• "+str ("youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere").localized(Choose:C955($Obj_form.publishedPtr->{$Lon_row}#0;"disable";"enable"))
-											
-										Else 
-											
-											$Txt_tips:=$Txt_tips+"\r• "+Get localized string:C991("clickHereToSelectThePublishedFields")
-											
-										End if 
-										
-										  //…………………………………………………………………………………………………
-									: ($Obj_field.type=-2)  // 1 -> N relation
-										
-										If ($Obj_dataModel[String:C10($Obj_field.relatedTableNumber)]=Null:C1517)
-											
-											If (Bool:C1537((ui.pointer($Obj_form.published))->{$Lon_row}))
-												
-												  // Error
-												$Txt_tips:=ui.alert+str ("theLinkedTableIsNotPublished").localized($Obj_field.relatedDataClass)
-												
-											Else 
-												
-												$Txt_tips:=str ("1toNRelation").localized($Obj_field.relatedDataClass)
-												
-												If ($Obj_field.relatedDataClass=$Obj_table.name)
-													
-													  // Recursive link
-													$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("recursive")+")"
-													
-												Else 
-													
-													  // Unpublished related dataclass
-													$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("unpublished")+")"
-													
-												End if 
-											End if 
-											
-										Else 
+											  //…………………………………………………………………………………………………
+										: ($Obj_field.type=-1)  // N -> 1 relation
 											
 											  // Related dataclass name
-											$Txt_tips:=str ("1toNRelation").localized($Obj_field.relatedDataClass)
+											$Txt_tips:=$o.setText("nTo1Relation").localized($Obj_field.relatedDataClass)
 											
 											If ($Obj_field.relatedDataClass=$Obj_table.name)  // Recursive link
 												
@@ -406,19 +363,68 @@ If ($Lon_row#0)
 												$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("recursive")+")"
 												
 											End if 
-										End if 
-										
-										  //…………………………………………………………………………………………………
-									Else 
-										
-										If ($Obj_field.name=$Obj_table.primaryKey)
 											
-											$Txt_tips:=Get localized string:C991("primaryKey")
+											$Txt_tips:=$Txt_tips+"\r• "+Choose:C955($Lon_column=1;\
+												$o.setText("youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere").localized(Choose:C955($Obj_form.publishedPtr->{$Lon_row}#0;"disable";"enable"));\
+												Get localized string:C991("clickHereToSelectThePublishedFields"))
 											
-										End if 
-										
-										  //…………………………………………………………………………………………………
-								End case 
+											  //…………………………………………………………………………………………………
+										: ($Obj_field.type=-2)  // 1 -> N relation
+											
+											If ($Obj_dataModel[String:C10($Obj_field.relatedTableNumber)]=Null:C1517)
+												
+												If (Bool:C1537((ui.pointer($Obj_form.published))->{$Lon_row}))
+													
+													  // Error
+													$Txt_tips:=ui.alert+$o.setText("theLinkedTableIsNotPublished").localized($Obj_field.relatedDataClass)
+													
+												Else 
+													
+													$Txt_tips:=$o.setText("1toNRelation").localized($Obj_field.relatedDataClass)
+													
+													If ($Obj_field.relatedDataClass=$Obj_table.name)
+														
+														  // Recursive link
+														$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("recursive")+")"
+														
+													Else 
+														
+														  // Unpublished related dataclass
+														$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("unpublished")+")"
+														
+													End if 
+												End if 
+												
+											Else 
+												
+												  // Related dataclass name
+												$Txt_tips:=$o.setText("1toNRelation").localized($Obj_field.relatedDataClass)
+												
+												If ($Obj_field.relatedDataClass=$Obj_table.name)  // Recursive link
+													
+													  // Recursive link
+													$Txt_tips:=$Txt_tips+" ("+Get localized string:C991("recursive")+")"
+													
+												End if 
+											End if 
+											
+											  //…………………………………………………………………………………………………
+										Else 
+											
+											If ($Obj_field.name=$Obj_table.primaryKey)
+												
+												$Txt_tips:=Get localized string:C991("primaryKey")
+												
+											End if 
+											
+											  //…………………………………………………………………………………………………
+									End case 
+									
+								Else 
+									
+									  // SHOULD NOT, BUT COULD
+									
+								End if 
 								
 								  //______________________________________________________
 						End case 

@@ -155,7 +155,8 @@ If (Length:C16($Txt_page)>0)
 			
 			$Obj_geometry.panels.push(New object:C1471(\
 				"title";Get localized string:C991("fieldsProperties");\
-				"form";"FIELDS"))
+				"form";"FIELDS";\
+				"noTitle";True:C214))
 			
 			  //………………………………………………………………………………………
 		: ($Lon_page=4)

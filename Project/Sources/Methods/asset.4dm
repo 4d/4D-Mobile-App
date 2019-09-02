@@ -38,7 +38,8 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_out:=New object:C1471("success";False:C215)
+	$Obj_out:=New object:C1471(\
+		"success";False:C215)
 	
 Else 
 	
@@ -46,13 +47,11 @@ Else
 	
 End if 
 
-If (($Obj_in.path#Null:C1517) | ($Obj_in.posix#Null:C1517))
+If (($Obj_in.path=Null:C1517)\
+ & ($Obj_in.posix#Null:C1517))
 	
-	If ($Obj_in.path=Null:C1517)
-		
-		$Obj_in.path:=Convert path POSIX to system:C1107($Obj_in.posix)
-		
-	End if 
+	$Obj_in.path:=Convert path POSIX to system:C1107($Obj_in.posix)
+	
 End if 
 
   // ----------------------------------------------------
@@ -67,22 +66,22 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			Case of 
 					
-					  //----------------------------------------
+					  //…………………………………………………………………………………………………………
 				: (Length:C16(String:C10($Obj_in.path))=0)
 					
 					$Obj_out.path:=$Txt_buffer
 					
-					  //----------------------------------------
+					  // ----------------------------------------
 				: (Substring:C12($Obj_in.path;Length:C16($Obj_in.path);1)=Folder separator:K24:12)
 					
 					$Obj_out.path:=$Obj_in.path+$Txt_buffer
 					
-					  //----------------------------------------
+					  // ----------------------------------------
 				Else 
 					
 					$Obj_out.path:=$Obj_in.path+Folder separator:K24:12+$Txt_buffer
 					
-					  //----------------------------------------
+					  // ----------------------------------------
 			End case 
 			
 			$Obj_out.success:=True:C214
@@ -103,16 +102,21 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					$Obj_out.errors:=New collection:C1472("No formatter name defined."+JSON Stringify:C1217($Obj_in.formatter))
 					
 					  // ----------------------------------------
+					  //----------------------------------------
 				: (Length:C16(String:C10($Obj_in.target))=0)
 					
 					$Obj_out.errors:=New collection:C1472("No target defined when creating formatter asset.")
 					
 					  // ----------------------------------------
+					  //----------------------------------------
 				Else 
 					
 					If (Test path name:C476($Obj_in.target+$Obj_in.formatter.name)#Is a folder:K24:2)
 						
-						asset (New object:C1471("action";"create";"type";"folder";"target";$Obj_in.target+$Obj_in.formatter.name))
+						asset (New object:C1471(\
+							"action";"create";\
+							"type";"folder";\
+							"target";$Obj_in.target+$Obj_in.formatter.name))
 						
 					End if 
 					
@@ -122,16 +126,19 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					Case of 
 							
 							  // ........................................
+							  //........................................
 						: (Length:C16(String:C10($Obj_in.source))>0)
 							
 							$Dir_source:=$Obj_in.source  // specify the path as argument (useful for testing)
 							
 							  // ........................................
+							  //........................................
 						: (Length:C16(String:C10($Obj_in.assets.source))>0)
 							
 							$Dir_source:=$Obj_in.assets.source  // specify the source in formatter
 							
 							  // ........................................
+							  //........................................
 						: (Bool:C1537($Obj_formatter.isHost))  // with /, host formatters? XXX maybe find another way to identifiy it
 							
 							$Dir_source:=Choose:C955(Length:C16(String:C10($Obj_formatter.path))>0;$Obj_formatter.path;_o_Pathname ("host_formatters")+$Obj_formatter.name+Folder separator:K24:12)
@@ -139,11 +146,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							$Dir_source:=$Dir_source+"images"+Folder separator:K24:12
 							
 							  // ........................................
+							  //........................................
 						Else 
 							
 							$Dir_source:=_o_Pathname ("formatterImages")
 							
 							  // ........................................
+							
+							  //........................................
 					End case 
 					
 					  // Could create a choice list from pattern and file on disk
@@ -154,7 +164,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							ARRAY TEXT:C222($tTxt_documents;0x0000)
 							DOCUMENT LIST:C474($Dir_source;$tTxt_documents)
 							
-							$Obj_formatter.choiceList:=New object:C1471()
+							$Obj_formatter.choiceList:=New object:C1471(\
+								)
 							
 							For ($Lon_i;1;Size of array:C274($tTxt_documents);1)
 								
@@ -170,7 +181,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					End if 
 					
 					  // Create an image asset for each values
-					$Obj_buffer:=formatters (New object:C1471("action";"objectify";"value";$Obj_formatter.choiceList))
+					$Obj_buffer:=formatters (New object:C1471(\
+						"action";"objectify";\
+						"value";$Obj_formatter.choiceList))
 					
 					If ($Obj_buffer.success)
 						
@@ -182,7 +195,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							$File_source:=$Dir_source+$Obj_[$Txt_buffer]
 							
-							$Obj_buffer:=asset (New object:C1471("action";"create";"type";"imageset";"source";$File_source;"tags";New object:C1471("name";$Txt_value);"target";$Obj_in.target+$Obj_formatter.name+Folder separator:K24:12;"format";$Obj_formatter.assets.format;"size";$Obj_formatter.assets.size))
+							$Obj_buffer:=asset (New object:C1471(\
+								"action";"create";\
+								"type";"imageset";\
+								"source";$File_source;\
+								"tags";New object:C1471("name";$Txt_value);\
+								"target";$Obj_in.target+$Obj_formatter.name+Folder separator:K24:12;\
+								"format";$Obj_formatter.assets.format;\
+								"size";$Obj_formatter.assets.size))
 							
 							ob_error_combine ($Obj_out;$Obj_buffer)
 							
@@ -202,9 +222,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			  //______________________________________________________
 		: ($Obj_in.action="create")
 			
-			If (($Obj_in.tags=Null:C1517) & ($Obj_in.name#Null:C1517))
+			If (($Obj_in.tags=Null:C1517)\
+				 & ($Obj_in.name#Null:C1517))
 				
-				$Obj_in.tags:=New object:C1471("name";$Obj_in.name)
+				$Obj_in.tags:=New object:C1471(\
+					"name";$Obj_in.name)
 				
 			End if 
 			
@@ -231,7 +253,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					Case of 
 							
 							  // ........................................
-						: (($Obj_in.type="imageset") | ($Obj_in.type="background"))
+							  //........................................
+						: (($Obj_in.type="imageset")\
+							 | ($Obj_in.type="background"))
 							
 							If ($Obj_in.format=Null:C1517)
 								
@@ -244,6 +268,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							$Obj_out.success:=$Folder_buffer.exists
 							
 							  // ........................................
+							  //........................................
 						: ($Obj_in.type="colorset")
 							
 							If ($Obj_in.space#Null:C1517)
@@ -267,6 +292,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							End if 
 							
 							  // ........................................
+							  //........................................
 						: ($Obj_in.type="dataset")
 							
 							$Folder_buffer:=COMPONENT_Pathname ("templates").folder("asset").folder($Obj_in.type)
@@ -280,6 +306,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							End if 
 							
 							  // ........................................
+							  //........................................
 						: ($Obj_in.type="folder")
 							
 							$Folder_buffer:=COMPONENT_Pathname ("templates").folder("asset").folder($Obj_in.type)
@@ -287,12 +314,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							$Obj_out.success:=$Folder_buffer.exists
 							
 							  // ........................................
+							  //........................................
 						Else 
 							
 							$Obj_out.errors:=New collection:C1472("Unknown type "+String:C10($Obj_in.type))
 							$Obj_out.success:=False:C215
 							
 							  // ........................................
+							
+							  //........................................
 					End case 
 					
 					  //$Obj_buffer:=Path to object($Txt_buffer)
@@ -321,7 +351,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 								$Obj_path:=Path to object:C1547($Dir_buffer)
 								
-								asset (New object:C1471("action";"create";"type";"folder";"target";$Obj_path.parentFolder;"tags";New object:C1471("name";$Obj_path.name+$Obj_path.extension)))
+								asset (New object:C1471(\
+									"action";"create";\
+									"type";"folder";\
+									"target";$Obj_path.parentFolder;\
+									"tags";New object:C1471("name";$Obj_path.name+$Obj_path.extension)))
 								
 							End for 
 						End if 
@@ -343,6 +377,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							Case of 
 									
 									  // ........................................
+									  //........................................
 								: ($Obj_.images#Null:C1517)
 									
 									$Obj_out.errors:=New collection:C1472
@@ -356,7 +391,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 											
 											PICTURE PROPERTIES:C457($Pic_buffer;$Lon_width;$Lon_height)
 											
-											$Obj_in.size:=New object:C1471("width";$Lon_width;"height";$Lon_height)
+											$Obj_in.size:=New object:C1471(\
+												"width";$Lon_width;\
+												"height";$Lon_height)
 											
 										End if 
 										
@@ -557,7 +594,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 						End if 
 						
-						$Obj_:=New object:C1471("name";$Txt_name;"type";$Txt_buffer;"path";$Obj_in.path+Folder separator:K24:12+$tTxt_folder{$Lon_i})
+						$Obj_:=New object:C1471(\
+							"name";$Txt_name;\
+							"type";$Txt_buffer;\
+							"path";$Obj_in.path+Folder separator:K24:12+$tTxt_folder{$Lon_i})
 						
 						$Boo_:=True:C214
 						
@@ -582,9 +622,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							End if 
 						End if 
 						
-						If (Bool:C1537($Obj_in.recursive) & (Length:C16($Obj_.type)=0))
+						If (Bool:C1537($Obj_in.recursive)\
+							 & (Length:C16($Obj_.type)=0))
 							
-							$Obj_.children:=asset (New object:C1471("action";"list";"path";$Obj_.path;"contents";$Obj_in.contents;"recursive";$Obj_in.recursive;"filter";$Obj_in.filter))
+							$Obj_.children:=asset (New object:C1471(\
+								"action";"list";\
+								"path";$Obj_.path;\
+								"contents";$Obj_in.contents;\
+								"recursive";$Obj_in.recursive;\
+								"filter";$Obj_in.filter))
 							ob_error_combine ($Obj_out;$Obj_.children)
 							
 							If (Bool:C1537($Obj_.children.success))

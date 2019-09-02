@@ -2,7 +2,7 @@
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 338,
+	"height": 376,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -12,7 +12,6 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -21,9 +20,55 @@
 	"pages": [
 		{
 			"objects": {
+				"tab.fields": {
+					"type": "radio",
+					"top": 9,
+					"left": 19,
+					"width": 71,
+					"height": 16,
+					"text": ":xliff:fields",
+					"textPlacement": "left",
+					"style": "custom",
+					"radioGroup": "tabs",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					],
+					"method": "fields_OBJECTS_HANDLER",
+					"focusable": false,
+					"fontWeight": "bold"
+				},
+				"tab.relations": {
+					"type": "radio",
+					"top": 9,
+					"left": 90,
+					"width": 87,
+					"height": 16,
+					"text": ":xliff:relations",
+					"style": "custom",
+					"radioGroup": "tabs",
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					],
+					"method": "fields_OBJECTS_HANDLER",
+					"focusable": false,
+					"fontWeight": "bold"
+				},
+				"tab.selector": {
+					"type": "rectangle",
+					"top": 31,
+					"left": 19,
+					"width": 71,
+					"height": 5,
+					"fill": "#1AA1E5",
+					"stroke": "transparent"
+				},
 				"empty": {
 					"type": "text",
-					"top": 40,
+					"top": 75,
 					"left": 30,
 					"width": 543,
 					"height": 17,
@@ -39,7 +84,7 @@
 			"objects": {
 				"01_fields.border": {
 					"type": "rectangle",
-					"top": 27,
+					"top": 66,
 					"left": 16,
 					"width": 922,
 					"height": 291,
@@ -49,7 +94,7 @@
 				},
 				"01_fields": {
 					"type": "listbox",
-					"top": 28,
+					"top": 67,
 					"left": 17,
 					"width": 920,
 					"height": 289,
@@ -238,9 +283,6 @@
 							"maxWidth": 32000,
 							"styledText": true,
 							"contextMenu": "none",
-							"requiredList": {
-								"$ref": "/SOURCES/lists.json#/empty"
-							},
 							"fill": "#FFFFFF",
 							"textAlign": "left",
 							"verticalAlign": "middle",
@@ -268,7 +310,7 @@
 				},
 				"iconGrid": {
 					"type": "subform",
-					"top": 356,
+					"top": 436,
 					"left": 38,
 					"width": 95,
 					"height": 14,
@@ -283,7 +325,7 @@
 				},
 				"icons.label": {
 					"type": "text",
-					"top": 5,
+					"top": 46,
 					"left": 267,
 					"width": 60,
 					"height": 17,
@@ -293,7 +335,7 @@
 				},
 				"labels.label": {
 					"type": "text",
-					"top": 5,
+					"top": 46,
 					"left": 541,
 					"width": 133,
 					"height": 17,
@@ -303,7 +345,7 @@
 				},
 				"shorts.label": {
 					"type": "text",
-					"top": 5,
+					"top": 46,
 					"left": 327,
 					"width": 133,
 					"height": 17,
@@ -313,7 +355,7 @@
 				},
 				"format.label": {
 					"type": "text",
-					"top": 5,
+					"top": 46,
 					"left": 756,
 					"width": 155,
 					"height": 17,
@@ -321,30 +363,15 @@
 					"textAlign": "left",
 					"text": ":xliff:formatters"
 				},
-				"filter": {
-					"type": "button",
-					"top": 2,
-					"left": 237,
-					"width": 25,
-					"height": 22,
-					"icon": "/RESOURCES/images/action.png",
-					"iconFrames": 4,
-					"popupPlacement": "linked",
-					"style": "custom",
-					"events": [
-						"onClick"
-					],
-					"method": "fields_OBJECTS_HANDLER"
-				},
 				"filter.label": {
 					"type": "text",
-					"top": 5,
+					"top": 46,
 					"left": 16,
 					"width": 133,
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:shortLabels"
+					"text": ":xliff:fields"
 				}
 			}
 		}
@@ -352,5 +379,6 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"method": "FIELDS_Handler"
 }
