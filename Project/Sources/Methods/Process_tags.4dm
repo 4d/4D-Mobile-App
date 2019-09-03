@@ -335,6 +335,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$t+"_NAME___";\
 					$t+"_LABEL___";\
 					$t+"_SHORT_LABEL___";\
+					$t+"_FORMAT___";\
 					$t+"_BINDING_TYPE___";\
 					$t+"_ICON___";\
 					$t+"_LABEL_ALIGNMENT___"\
@@ -345,6 +346,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$o.setText($Obj_field.originalName).xmlEncode();\
 					$o.setText($Obj_field.label).xmlEncode();\
 					$o.setText($Obj_field.shortLabel).xmlEncode();\
+					$o.setText($Obj_field.format).xmlEncode();\
 					$Obj_field.bindingType;\
 					$o.setText($Obj_field.detailIcon).xmlEncode();\
 					$Obj_field.labelAlignment\
@@ -407,6 +409,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$t+"_NAME___";\
 					$t+"_LABEL___";\
 					$t+"_SHORT_LABEL___";\
+					$t+"_FORMAT___";\
 					$t+"_BINDING_TYPE___";\
 					$t+"_ICON___";\
 					$t+"_LABEL_ALIGNMENT___"\
@@ -417,6 +420,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$o.setText($Obj_field.originalName).xmlEncode();\
 					$o.setText($Obj_field.label).xmlEncode();\
 					$o.setText($Obj_field.shortLabel).xmlEncode();\
+					$o.setText($Obj_field.format).xmlEncode();\
 					$Obj_field.bindingType;\
 					$o.setText($Obj_field.detailIcon).xmlEncode();\
 					$Obj_field.labelAlignment\
@@ -436,6 +440,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$t+"_NAME___";\
 					$t+"_LABEL___";\
 					$t+"_SHORT_LABEL___";\
+					$t+"_FORMAT___";\
 					$t+"_BINDING_TYPE___";\
 					$t+"_ICON___";\
 					$t+"_LABEL_ALIGNMENT___"\
@@ -446,6 +451,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$o.setText($Obj_tags.field.originalName).xmlEncode();\
 					$o.setText($Obj_tags.field.label).xmlEncode();\
 					$o.setText($Obj_tags.field.shortLabel).xmlEncode();\
+					$o.setText($Obj_tags.field.format).xmlEncode();\
 					$Obj_tags.field.bindingType;\
 					$o.setText($Obj_tags.field.detailIcon).xmlEncode();\
 					$Obj_tags.field.labelAlignment\
