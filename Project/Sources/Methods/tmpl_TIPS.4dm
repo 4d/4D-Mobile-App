@@ -20,8 +20,6 @@ C_COLLECTION:C1488($c)
   // Tips added for truncated names (cf.views_preview)
 SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current+".label";"tips";$Txt_tips)
 
-ASSERT:C1129(Not:C34(Shift down:C543))
-
 If (Length:C16($Txt_tips)#0)
 	
 	$Txt_tips:="\""+$Txt_tips+"\""

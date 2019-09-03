@@ -72,7 +72,7 @@
 					"left": 30,
 					"width": 543,
 					"height": 17,
-					"visibility": "hidden",
+					"visibility": "visible",
 					"sizingX": "grow",
 					"stroke": "#808080",
 					"textAlign": "left",
@@ -101,19 +101,14 @@
 					"visibility": "hidden",
 					"sizingY": "grow",
 					"resizingMode": "legacy",
-					"hideFocusRing": true,
 					"sortable": false,
 					"movableRows": false,
-					"hideSystemHighlight": true,
 					"rowHeight": "32px",
 					"showHeaders": false,
 					"selectionMode": "single",
-					"scrollbarHorizontal": "hidden",
 					"horizontalLineStroke": "transparent",
 					"verticalLineStroke": "#DBDBDB",
 					"fill": "#FFFFFF",
-					"textAlign": "left",
-					"verticalAlign": "middle",
 					"borderStyle": "none",
 					"events": [
 						"onClick",
@@ -128,6 +123,9 @@
 						"onMouseMove"
 					],
 					"method": "FIELDS_OBJECTS_HANDLER",
+					"hideSystemHighlight": true,
+					"hideFocusRing": true,
+					"scrollbarHorizontal": "hidden",
 					"columns": [
 						{
 							"name": "IDs",
@@ -278,12 +276,9 @@
 						},
 						{
 							"name": "formats",
-							"width": 164,
+							"width": 70,
 							"minWidth": 10,
-							"maxWidth": 32000,
 							"styledText": true,
-							"contextMenu": "none",
-							"fill": "#FFFFFF",
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
@@ -304,7 +299,34 @@
 								"fill": "#FFFFFF",
 								"textAlign": "left",
 								"verticalAlign": "middle"
+							},
+							"contextMenu": "none",
+							"requiredList": {
+								"$ref": "/SOURCES/lists.json#/empty"
 							}
+						},
+						{
+							"header": {
+								"name": "Header7",
+								"text": "Header7"
+							},
+							"name": "titles",
+							"width": 164,
+							"minWidth": 10,
+							"styledText": false,
+							"contextMenu": "none",
+							"events": [
+								"onClick",
+								"onDoubleClick",
+								"onGettingFocus",
+								"onBeforeDataEntry"
+							],
+							"method": "FIELDS_OBJECTS_HANDLER ",
+							"footer": {
+								"name": "Footer7"
+							},
+							"verticalAlign": "middle",
+							"textAlign": "left"
 						}
 					]
 				},

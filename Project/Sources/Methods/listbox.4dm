@@ -16,7 +16,7 @@ C_BOOLEAN:C305($Boo_horizontal;$Boo_vertical)
 C_LONGINT:C283($i;$Lon_bottom;$Lon_column;$Lon_left;$Lon_right;$Lon_row)
 C_LONGINT:C283($Lon_top)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o)
+C_OBJECT:C1216($o;$oo)
 
 If (False:C215)
 	C_OBJECT:C1216(listbox ;$0)
@@ -76,7 +76,8 @@ If (This:C1470._is=Null:C1517)
 		"selectAll";Formula:C1597(LISTBOX SELECT ROW:C912(*;This:C1470.name;0;lk replace selection:K53:1));\
 		"deselect";Formula:C1597(LISTBOX SELECT ROW:C912(*;This:C1470.name;0;lk remove from selection:K53:3));\
 		"reveal";Formula:C1597(listbox ("reveal";New object:C1471("row";Num:C11($1))));\
-		"popup";Formula:C1597(listbox ("popup";$1))\
+		"popup";Formula:C1597(listbox ("popup";$1));\
+		"clear";Formula:C1597(listbox ("clear"))\
 		)
 	
 	$o.getCoordinates()
@@ -135,6 +136,23 @@ Else
 			$o.getScrollbar()
 			
 			  //______________________________________________________
+		: ($1="clear")
+			
+			$o.getDefinition()
+			
+			For each ($oo;$o.definition)
+				
+				CLEAR VARIABLE:C89(OBJECT Get pointer:C1124(Object named:K67:5;$oo.names)->)
+				
+			End for each 
+			
+			For each ($oo;$o.definition)
+				
+				CLEAR VARIABLE:C89(OBJECT Get pointer:C1124(Object named:K67:5;$oo.names)->)
+				
+			End for each 
+			
+			  //______________________________________________________
 		: ($1="getScrollbar")  // Scroolbar status
 			
 			OBJECT GET SCROLLBAR:C1076(*;$o.name;$Boo_horizontal;$Boo_vertical)
@@ -184,6 +202,8 @@ Else
 			
 			  //______________________________________________________
 		: ($1="popup")  // Display a pop-up menu at the right place based on the current cell
+			
+			$o.cellCoordinates()
 			
 			$Lon_left:=$o.cellBox.left
 			$Lon_bottom:=$o.cellBox.bottom

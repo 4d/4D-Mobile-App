@@ -52,7 +52,7 @@ If (This:C1470._is=Null:C1517)
 		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
 		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)));\
 		"title";Formula:C1597(OBJECT Get title:C1068(*;This:C1470.name));\
-		"setTitle";Formula:C1597(OBJECT SET TITLE:C194(*;This:C1470.name;String:C10($1)));\
+		"setTitle";Formula:C1597(widget ("setTitle";New object:C1471("title";String:C10($1))));\
 		"format";Formula:C1597(OBJECT Get format:C894(*;This:C1470.name));\
 		"setFormat";Formula:C1597(OBJECT SET FORMAT:C236(*;This:C1470.name;String:C10($1)));\
 		"helpTip";Formula:C1597(OBJECT Get help tip:C1182(*;This:C1470.name));\

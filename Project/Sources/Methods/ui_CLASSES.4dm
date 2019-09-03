@@ -18,17 +18,7 @@ ui.refresh:=Formula:C1597(SET TIMER:C645(-1))
 ui.saveProject:=Formula:C1597(CALL FORM:C1391(Current form window:C827;"project_SAVE"))  // should be project.save()
 
   // =========================== HELP TIPS ===========================
-ui.tips:=New object:C1471(\
-"enabled";(Get database parameter:C643(Tips enabled:K37:79)=1);\
-"delay";Get database parameter:C643(Tips delay:K37:80);\
-"duration";Get database parameter:C643(Tips duration:K37:81);\
-"enable";Formula:C1597(SET DATABASE PARAMETER:C642(Tips enabled:K37:79;1));\
-"disable";Formula:C1597(SET DATABASE PARAMETER:C642(Tips enabled:K37:79;0));\
-"instantly";Formula:C1597(SET DATABASE PARAMETER:C642(Tips delay:K37:80;1));\
-"setDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;$1));\
-"defaultDelay";Formula:C1597(SET DATABASE PARAMETER:C642(Tips delay:K37:80;45));\
-"defaultDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;720))\
-)
+ui.tips:=tips ()
 
   // ============================= FORMS =============================
 ui.form:=Formula:C1597(New object:C1471(\
@@ -38,6 +28,7 @@ ui.form:=Formula:C1597(New object:C1471(\
 "window";Current form window:C827;\
 "event";Null:C1517;\
 "currentWidget";Null:C1517;\
+"currentPtr";Null:C1517;\
 "focusedWidget";Null:C1517;\
 "refresh";Formula:C1597(SET TIMER:C645(-1));\
 "call";Formula:C1597(ui_form ("call";Choose:C955(Value type:C1509($1)=Is object:K8:27;$1;New object:C1471("parameters";$1))));\

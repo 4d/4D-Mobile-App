@@ -72,6 +72,7 @@ If (This:C1470._is=Null:C1517)
 		"distributeHorizontally";Formula:C1597(widget ("distributeHorizontally";$1));\
 		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)));\
 		"setColors";Formula:C1597(widget ("setColors";New object:C1471("foreground";$1;"background";$2;"altBackgrnd";$3)));\
+		"setTitle";Formula:C1597(widget ("setTitle";New object:C1471("title";String:C10($1))));\
 		"forceNumeric";Formula:C1597(widget ("forceNumeric"))\
 		)
 	
@@ -497,11 +498,19 @@ Else
 			End if 
 			
 			  //______________________________________________________
+		: ($1="setTitle")
+			
+			$t:=Get localized string:C991($2.title)
+			$t:=Choose:C955(OK=1;$t;$2.title)  // Revert if no localization
+			
+			OBJECT SET TITLE:C194(*;$o.name;$t)
+			
+			  //______________________________________________________
 		: (Is nil pointer:C315($o.pointer()))
 			
-			  // =============================================================================
-			  // ALL THE METHODS BELOW ARE NOT APPLICABLE TO A WIDGET RELATED TO AN EXPRESSION
-			  // =============================================================================
+			  // ========================================================================================
+			  // ALL THE METHODS BELOW ARE NOT APPLICABLE TO A STATIC OR WIDGET RELATED TO AN EXPRESSION
+			  // ========================================================================================
 			
 			ASSERT:C1129(False:C215;"member method \""+$1+"()\" can not be used for a widget linked to an expression!")
 			

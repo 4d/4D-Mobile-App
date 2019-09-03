@@ -37,9 +37,6 @@ If (Length:C16(This:C1470.$.current)>0)
 		
 		If (Bool:C1537(OK))
 			
-			
-			ASSERT:C1129(Not:C34(Shift down:C543))
-			
 			BLOB TO VARIABLE:C533($x;$o)
 			SET BLOB SIZE:C606($x;0)
 			

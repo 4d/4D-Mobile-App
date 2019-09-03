@@ -34,7 +34,7 @@ $Obj_context:=$Obj_form.$
 Case of 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.parameters.name)  // Parameters listbox
+	: ($Obj_form.form.current=$Obj_form.parameters.name)  // Parameters listbox
 		
 		$Obj_widget:=$Obj_form.parameters
 		
@@ -190,7 +190,7 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.format.name)  // Format choice
+	: ($Obj_form.form.current=$Obj_form.format.name)  // Format choice
 		
 		$Obj_menu:=menu 
 		
@@ -300,7 +300,7 @@ Case of
 		End if 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.add.name)  // Add action button
+	: ($Obj_form.form.current=$Obj_form.add.name)  // Add action button
 		
 		Case of 
 				
@@ -502,7 +502,7 @@ Case of
 		End if 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.remove.name)  // Remove action button
+	: ($Obj_form.form.current=$Obj_form.remove.name)  // Remove action button
 		
 		$i:=$Obj_context.action.parameters.indexOf($Obj_context.parameter)
 		$Obj_context.action.parameters.remove($i)
@@ -523,7 +523,7 @@ Case of
 		project.save()
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.mandatory.name)  // Mandatory checkbox
+	: ($Obj_form.form.current=$Obj_form.mandatory.name)  // Mandatory checkbox
 		
 		If (($Obj_form.mandatory.pointer())->)  // Checked
 			
@@ -558,11 +558,11 @@ Case of
 		project.save()
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.min.name)\
-		 | ($Obj_form.form.currentWidget=$Obj_form.max.name)  // Minimum & Maximum
+	: ($Obj_form.form.current=$Obj_form.min.name)\
+		 | ($Obj_form.form.current=$Obj_form.max.name)  // Minimum & Maximum
 		
-		$o:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.min.name;$Obj_form.min;$Obj_form.max)
-		$t:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.min.name;"min";"max")
+		$o:=Choose:C955($Obj_form.form.current=$Obj_form.min.name;$Obj_form.min;$Obj_form.max)
+		$t:=Choose:C955($Obj_form.form.current=$Obj_form.min.name;"min";"max")
 		
 		If (Length:C16($o.value())>0)
 			
@@ -624,7 +624,7 @@ Case of
 		project.save()
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.default.name)  // Default value
+	: ($Obj_form.form.current=$Obj_form.default.name)  // Default value
 		
 		$o:=$Obj_context.parameter
 		
@@ -749,14 +749,14 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.linked.include($Obj_form.form.currentWidget))  // Linked widgets
+	: ($Obj_form.linked.include($Obj_form.form.current))  // Linked widgets
 		
 		project.save()
 		
 		  //==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown widget: \""+String:C10($Obj_form.form.currentWidget)+"\"")
+		ASSERT:C1129(False:C215;"Unknown widget: \""+String:C10($Obj_form.form.current)+"\"")
 		
 		  //==================================================
 End case 

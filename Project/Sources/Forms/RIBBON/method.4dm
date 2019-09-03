@@ -169,7 +169,7 @@ Case of
 						
 						If ($l=-1)
 							
-							$form.simulator.setTitle(Get localized string:C991("unknown"))
+							$form.simulator.setTitle("unknown")
 							
 						Else 
 							

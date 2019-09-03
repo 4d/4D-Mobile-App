@@ -26,21 +26,21 @@ If (This:C1470._is=Null:C1517)
 	$o:=New object:C1471(\
 		"_is";"static";\
 		"name";$1;\
+		"coordinates";Null:C1517;\
+		"windowCoordinates";Null:C1517;\
+		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)));\
 		"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name));\
 		"hide";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;False:C215));\
 		"show";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;True:C214));\
 		"setVisible";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;Bool:C1537($1)));\
-		"coordinates";Null:C1517;\
-		"windowCoordinates";Null:C1517;\
+		"title";Formula:C1597(OBJECT Get title:C1068(*;This:C1470.name));\
+		"setTitle";Formula:C1597(widget ("setTitle";New object:C1471("title";String:C10($1))));\
 		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\
 		"setCoordinates";Formula:C1597(widget ("setCoordinates";New object:C1471("left";$1;"top";$2;"right";$3;"bottom";$4)));\
 		"moveHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("left";$1)));\
-		"resizeHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("right";$1)));\
 		"moveVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("top";$1)));\
+		"resizeHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("right";$1)));\
 		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
-		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)));\
-		"title";Formula:C1597(OBJECT Get title:C1068(*;This:C1470.name));\
-		"setTitle";Formula:C1597(OBJECT SET TITLE:C194(*;This:C1470.name;String:C10($1)));\
 		"setColors";Formula:C1597(widget ("setColors";New object:C1471("foreground";$1;"background";$2;"altBackgrnd";$3)))\
 		)
 	

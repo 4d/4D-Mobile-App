@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : STRUCTURE_TIPS
-  // Database: 4D Mobile App
   // ID[1ACA778192DD48D4898BC23D5CF6FAFC]
   // Created 31-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -60,8 +59,6 @@ If ($Lon_row#0)
 		If ($l#-1)
 			
 			$Obj_table:=$Col_catalog[$l]
-			
-			  // ASSERT(Not(Shift down))
 			
 			If ($Obj_table=Null:C1517)
 				

@@ -72,7 +72,8 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="current")
 		
-		This:C1470.currentWidget:=OBJECT Get name:C1087(Object current:K67:2)
+		This:C1470.current:=OBJECT Get name:C1087(Object current:K67:2)
+		This:C1470.currentPtr:=OBJECT Get pointer:C1124(Object current:K67:2)
 		
 		  //______________________________________________________
 	: ($Txt_action="focused")

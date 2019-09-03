@@ -165,7 +165,7 @@ Case of
 				ARRAY TEXT:C222($tTxt_;0x0000)
 				METHOD GET PATHS:C1163(Path database method:K72:2;$tTxt_;*)
 				$b:=(Find in array:C230($tTxt_;METHOD Get path:C1164(Path database method:K72:2;"onMobileAppAction"))>0)
-				$Obj_form.databaseMethod.setTitle(Get localized string:C991(Choose:C955($b;"edit...";"create...")))
+				$Obj_form.databaseMethod.setTitle(Choose:C955($b;"edit...";"create..."))
 				$Obj_form.databaseMethod.setEnabled($b | _and (Formula:C1597(Form:C1466.actions#Null:C1517);Formula:C1597(Form:C1466.actions.length>0)))
 				ui_ALIGN_ON_BEST_SIZE (Align right:K42:4;$Obj_form.databaseMethod.name;"actionMethod.label")
 				

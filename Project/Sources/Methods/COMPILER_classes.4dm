@@ -77,6 +77,11 @@ If (False:C215)
 	C_OBJECT:C1216(thermometer ;$2)
 	
 	  //______________________________________________________
+	C_OBJECT:C1216(tips ;$0)
+	C_TEXT:C284(tips ;$1)
+	C_OBJECT:C1216(tips ;$2)
+	
+	  //______________________________________________________
 	C_OBJECT:C1216(widget ;$0)
 	C_TEXT:C284(widget ;$1)
 	C_OBJECT:C1216(widget ;$2)

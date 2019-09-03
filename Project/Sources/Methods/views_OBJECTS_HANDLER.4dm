@@ -54,7 +54,7 @@ End if
 Case of 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.tableWidget.name)
+	: ($Obj_form.form.current=$Obj_form.tableWidget.name)
 		
 		$Txt_typeForm:=$Obj_context.typeForm()
 		
@@ -65,7 +65,7 @@ Case of
 				
 				OB REMOVE:C1226($Obj_context;"picker")
 				
-				$Txt_tableNumber:=SVG Find element ID by coordinates:C1054(*;$Obj_form.form.currentWidget;MOUSEX;MOUSEY)
+				$Txt_tableNumber:=SVG Find element ID by coordinates:C1054(*;$Obj_form.form.current;MOUSEX;MOUSEY)
 				$Txt_template:=String:C10(Form:C1466[$Txt_typeForm][$Txt_tableNumber].form)
 				
 				Case of 
@@ -121,13 +121,13 @@ Case of
 						If (Length:C16($Obj_context.tableNum())>0)
 							
 							  // Restore current selected background
-							SVG SET ATTRIBUTE:C1055(*;$Obj_form.form.currentWidget;$Obj_context.tableNumber;\
+							SVG SET ATTRIBUTE:C1055(*;$Obj_form.form.current;$Obj_context.tableNumber;\
 								"fill";ui.unselectedFillColor)
 							
 						End if 
 						
 						  // Select the item
-						SVG SET ATTRIBUTE:C1055(*;$Obj_form.form.currentWidget;$Txt_tableNumber;\
+						SVG SET ATTRIBUTE:C1055(*;$Obj_form.form.current;$Txt_tableNumber;\
 							"fill";ui.selectedColorFill)
 						
 						$Obj_context.draw:=True:C214
@@ -143,7 +143,7 @@ Case of
 						If (Length:C16($Obj_context.tableNum())>0)
 							
 							  // Unselect
-							SVG SET ATTRIBUTE:C1055(*;$Obj_form.form.currentWidget;$Obj_context.tableNumber;\
+							SVG SET ATTRIBUTE:C1055(*;$Obj_form.form.current;$Obj_context.tableNumber;\
 								"fill";ui.unselectedFillColor)
 							
 						End if 
@@ -180,7 +180,7 @@ Case of
 		editor_ui_LISTBOX ($Obj_form.fieldList.name)
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.fieldList.name)
+	: ($Obj_form.form.current=$Obj_form.fieldList.name)
 		
 		Case of 
 				
@@ -188,7 +188,7 @@ Case of
 			: ($Obj_form.form.event=On Clicked:K2:4)\
 				 | ($Obj_form.form.event=On Selection Change:K2:29)
 				
-				editor_ui_LISTBOX ($Obj_form.form.currentWidget)
+				editor_ui_LISTBOX ($Obj_form.form.current)
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Begin Drag Over:K2:44)
@@ -222,17 +222,17 @@ Case of
 					
 				End if 
 				
-				editor_ui_LISTBOX ($Obj_form.form.currentWidget)
+				editor_ui_LISTBOX ($Obj_form.form.current)
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Getting Focus:K2:7)
 				
-				editor_ui_LISTBOX ($Obj_form.form.currentWidget;True:C214)
+				editor_ui_LISTBOX ($Obj_form.form.current;True:C214)
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Losing Focus:K2:8)
 				
-				editor_ui_LISTBOX ($Obj_form.form.currentWidget;False:C215)
+				editor_ui_LISTBOX ($Obj_form.form.current;False:C215)
 				
 				  //______________________________________________________
 			Else 
@@ -314,9 +314,9 @@ Case of
 		  // End case
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.preview.name)
+	: ($Obj_form.form.current=$Obj_form.preview.name)
 		
-		$Obj_context.current:=SVG Find element ID by coordinates:C1054(*;$Obj_form.form.currentWidget;MOUSEX;MOUSEY)
+		$Obj_context.current:=SVG Find element ID by coordinates:C1054(*;$Obj_form.form.current;MOUSEX;MOUSEY)
 		
 		Case of 
 				
@@ -385,8 +385,8 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.selectorList.name)\
-		 | ($Obj_form.form.currentWidget=$Obj_form.selectorDetail.name)
+	: ($Obj_form.form.current=$Obj_form.selectorList.name)\
+		 | ($Obj_form.form.current=$Obj_form.selectorDetail.name)
 		
 		Case of 
 				
@@ -397,7 +397,7 @@ Case of
 				$Obj_form.form.call("pickerHide")
 				
 				  // Update tab detail/list
-				$Obj_context.selector:=1+Num:C11($Obj_form.form.currentWidget=$Obj_form.selectorDetail.name)
+				$Obj_context.selector:=1+Num:C11($Obj_form.form.current=$Obj_form.selectorDetail.name)
 				$Obj_context.setTab()
 				
 				  // Update field list
@@ -414,10 +414,10 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Mouse Enter:K2:33)
 				
-				If ($Obj_context.selector#(1+Num:C11($Obj_form.form.currentWidget=$Obj_form.selectorDetail.name)))
+				If ($Obj_context.selector#(1+Num:C11($Obj_form.form.current=$Obj_form.selectorDetail.name)))
 					
 					  // Highlights
-					$Obj_current:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.selectorList.name;$Obj_form.selectorList;$Obj_form.selectorDetail)
+					$Obj_current:=Choose:C955($Obj_form.form.current=$Obj_form.selectorList.name;$Obj_form.selectorList;$Obj_form.selectorDetail)
 					$Obj_current.setColors(ui.selectedColor;Background color none:K23:10)
 					
 				End if 
@@ -425,24 +425,24 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Mouse Leave:K2:34)
 				
-				$Obj_current:=Choose:C955($Obj_form.form.currentWidget=$Obj_form.selectorList.name;$Obj_form.selectorList;$Obj_form.selectorDetail)
+				$Obj_current:=Choose:C955($Obj_form.form.current=$Obj_form.selectorList.name;$Obj_form.selectorList;$Obj_form.selectorDetail)
 				$Obj_current.setColors(Foreground color:K23:1;Background color none:K23:10)
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.tableButtonNext.name)\
-		 | ($Obj_form.form.currentWidget=$Obj_form.tableButtonPrevious.name)
+	: ($Obj_form.form.current=$Obj_form.tableButtonNext.name)\
+		 | ($Obj_form.form.current=$Obj_form.tableButtonPrevious.name)
 		
 		views_Handler (New object:C1471(\
 			"action";"scroll-table";\
-			"direction";Choose:C955($Obj_form.form.currentWidget=$Obj_form.tableButtonPrevious.name;"previous";"next")))
+			"direction";Choose:C955($Obj_form.form.current=$Obj_form.tableButtonPrevious.name;"previous";"next")))
 		
 		  //==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown object: \""+$Obj_form.form.currentWidget+"\"")
+		ASSERT:C1129(False:C215;"Unknown object: \""+$Obj_form.form.current+"\"")
 		
 		  //==================================================
 End case 

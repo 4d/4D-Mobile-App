@@ -39,7 +39,7 @@ Case of
 		  // Should not!
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.actions.name)  // Actions listbox
+	: ($Obj_form.form.current=$Obj_form.actions.name)  // Actions listbox
 		
 		$Obj_widget:=$Obj_form.actions
 		
@@ -362,7 +362,7 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.add.name)
+	: ($Obj_form.form.current=$Obj_form.add.name)
 		
 		If ($Obj_form.form.event=On Alternative Click:K2:36)
 			
@@ -666,7 +666,7 @@ Case of
 		End if 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.remove.name)
+	: ($Obj_form.form.current=$Obj_form.remove.name)
 		
 		Case of 
 				
@@ -711,7 +711,7 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.form.currentWidget=$Obj_form.databaseMethod.name)
+	: ($Obj_form.form.current=$Obj_form.databaseMethod.name)
 		
 		  // Create/Open the "On Mobile Action" Database method
 		ARRAY TEXT:C222($tTxt_;0x0000)
@@ -748,7 +748,7 @@ Case of
 		  //==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown widget: \""+$Obj_form.form.currentWidget+"\"")
+		ASSERT:C1129(False:C215;"Unknown widget: \""+$Obj_form.form.current+"\"")
 		
 		  //==================================================
 End case 

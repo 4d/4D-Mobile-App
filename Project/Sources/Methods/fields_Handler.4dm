@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : FIELDS_Handler
-  // Database: 4D Mobile Express
   // ID[BF3981E8AF72452DB0171AEDA52AF625]
   // Created 26-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -41,23 +40,21 @@ $Obj_form:=New object:C1471(\
 "window";Current form window:C827;\
 "$";editor_INIT ;\
 "form";ui.form("editor_CALLBACK").get();\
-"fieldList";"01_fields";\
+"fieldList";ui.listbox("01_fields");\
 "ids";"IDs";\
-"fields";"fields";\
+"names";"fields";\
 "icons";"icons";\
-"iconColumn";3;\
 "labels";"labels";\
-"labelColumn";5;\
 "shortLabels";"shortLabels";\
-"shortlabelColumn";4;\
 "formats";"formats";\
-"formatColumn";6;\
+"titles";"titles";\
+"formatLabel";ui.static("format.label");\
 "iconGrid";"iconGrid";\
 "tabSelector";ui.widget("tab.selector");\
 "selectorFields";ui.button("tab.fields");\
 "selectorRelations";ui.button("tab.relations");\
 "selectors";ui.static("tab.@");\
-"init";Formula:C1597(FIELDS_Handler (New object:C1471("action";"init")))\
+"empty";ui.static("empty")\
 )
 
 $Obj_context:=$Obj_form.$
@@ -65,18 +62,25 @@ $Obj_context:=$Obj_form.$
 If (OB Is empty:C1297($Obj_context))\
  | (Shift down:C543 & (Structure file:C489=Structure file:C489(*)))  // First load
 	
-	$Obj_context.selector:=0  //Fields
-	
 	  // Constraints definition
 	ob_createPath ($Obj_context;"constraints.rules";Is collection:K8:32)
 	
+	  // Display fields by default
+	$Obj_context.selector:=0
+	
 	  // Define form member methods
 	$Obj_context.refresh:=Formula:C1597(SET TIMER:C645(-1))
-	
-	$Obj_context.update:=Formula:C1597(FIELDS_Handler (New object:C1471("action";"update")))
-	
-	  // Update selected tab
-	$Obj_context.setTab:=Formula:C1597(FIELDS_Handler (New object:C1471("action";"setTab")))
+	$Obj_context.update:=Formula:C1597(FIELDS_Handler (New object:C1471(\
+		"action";"update")))
+	$Obj_context.setTab:=Formula:C1597(FIELDS_Handler (New object:C1471(\
+		"action";"setTab")))
+	$Obj_context.setHelpTip:=Formula:C1597(FIELDS_TIPS (New object:C1471(\
+		"target";$1;\
+		"form";$2)))
+	$Obj_context.showPicker:=Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"pickerShow";$1))
+	$Obj_context.field:=Formula:C1597(FIELDS_Handler (New object:C1471(\
+		"action";"field";\
+		"row";$1)))
 	
 End if 
 
@@ -98,7 +102,7 @@ Case of
 			: ($Lon_formEvent=On Load:K2:1)
 				
 				  // This trick remove the horizontal gap
-				OBJECT SET SCROLLBAR:C843(*;$Obj_form.fieldList;0;2)
+				$Obj_form.fieldList.setScrollbar(0;2)
 				
 				  // Place the tabs according to the localization
 				$l:=$Obj_form.selectorFields.bestSize(Align left:K42:2).coordinates.right+10
@@ -112,7 +116,6 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				  //$Obj_form.filterLabel.setTitle(Get localized string(Choose(Num($Obj_context.selector);"fieldsAndRelations";"fieldsOnly";"relationOnly")))
 				$Obj_context.update()
 				
 				  //______________________________________________________
@@ -136,7 +139,7 @@ Case of
 		  //%W-533.3
 		$Lon_fieldNumber:=Num:C11((ui.pointer($Obj_form.ids))->{$Obj_in.row})
 		
-		$Col_buffer:=Split string:C1554((ui.pointer($Obj_form.fields))->{$Obj_in.row};".")
+		$Col_buffer:=Split string:C1554((ui.pointer($Obj_form.names))->{$Obj_in.row};".")
 		
 		If ($Col_buffer.length>1)  // RelatedDataclass
 			
@@ -160,8 +163,6 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="update")  // Display published tables according to data model
 		
-		ASSERT:C1129(Not:C34(Shift down:C543))
-		
 		If (This:C1470=Null:C1517)
 			
 			$Obj_context.update()
@@ -172,53 +173,42 @@ Case of
 			
 			If ($o.success)
 				
+				$Obj_form.empty.setTitle(Choose:C955($Obj_context.selector;"noFieldPublishedForThisTable";"noPublishedRelationForThisTable"))
+				
 				COLLECTION TO ARRAY:C1562($o.ids;(ui.pointer($Obj_form.ids))->)
-				COLLECTION TO ARRAY:C1562($o.paths;(ui.pointer($Obj_form.fields))->)
+				COLLECTION TO ARRAY:C1562($o.paths;(ui.pointer($Obj_form.names))->)
 				COLLECTION TO ARRAY:C1562($o.labels;(ui.pointer($Obj_form.labels))->)
 				COLLECTION TO ARRAY:C1562($o.shortLabels;(ui.pointer($Obj_form.shortLabels))->)
 				COLLECTION TO ARRAY:C1562($o.icons;(ui.pointer($Obj_form.icons))->)
 				COLLECTION TO ARRAY:C1562($o.formats;(ui.pointer($Obj_form.formats))->)
+				COLLECTION TO ARRAY:C1562($o.formats;(ui.pointer($Obj_form.titles))->)
 				
 				For ($i;0;$o.ids.length-1;1)
 					
-					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fields;$i+1;$o.nameColors[$i];lk font color:K53:24)
+					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.names;$i+1;$o.nameColors[$i];lk font color:K53:24)
 					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.formats;$i+1;$o.formatColors[$i];lk font color:K53:24)
 					
 				End for 
 				
-				LISTBOX SORT COLUMNS:C916(*;$Obj_form.fieldList;2;>)
+				LISTBOX SORT COLUMNS:C916(*;$Obj_form.fieldList.name;2;>)
 				
-				If (Num:C11($o.count)=0)
-					
-					OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;False:C215)
-					
-				Else 
-					
-					OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;True:C214)
-					
-				End if 
-				
-				OBJECT SET VISIBLE:C603(*;"empty";False:C215)
+				$Obj_form.fieldList.setVisible(Num:C11($o.count)>0)
 				
 			Else 
 				
-				CLEAR VARIABLE:C89((ui.pointer($Obj_form.ids))->)
-				CLEAR VARIABLE:C89((ui.pointer($Obj_form.fields))->)
-				CLEAR VARIABLE:C89((ui.pointer($Obj_form.labels))->)
-				CLEAR VARIABLE:C89((ui.pointer($Obj_form.shortLabels))->)
-				CLEAR VARIABLE:C89((ui.pointer($Obj_form.icons))->)
-				CLEAR VARIABLE:C89((ui.pointer($Obj_form.formats))->)
+				$Obj_form.empty.setTitle("selectATableToDisplayItsFields")
 				
-				OBJECT SET VISIBLE:C603(*;"empty";True:C214)
-				OBJECT SET VISIBLE:C603(*;$Obj_form.fieldList;False:C215)
+				$Obj_form.fieldList.clear()
+				$Obj_form.fieldList.hide()
 				
 			End if 
 			
-			editor_Locked ($Obj_form.labels;$Obj_form.shortLabels;$Obj_form.formats)
+			editor_Locked ($Obj_form.labels;$Obj_form.shortLabels;$Obj_form.formats;$Obj_form.titles)
 			
 			$Obj_context.current:=0
-			LISTBOX SELECT ROW:C912(*;$Obj_form.fieldList;0;lk remove from selection:K53:3)
-			editor_ui_LISTBOX ($Obj_form.fieldList)
+			$Obj_form.fieldList.deselect()
+			
+			editor_ui_LISTBOX ($Obj_form.fieldList.name)
 			
 		End if 
 		
@@ -234,6 +224,20 @@ Case of
 		$oo:=$Obj_form.tabSelector.getCoordinates()
 		$oo.setCoordinates($o.left;$oo.coordinates.top;$o.right;$oo.coordinates.bottom)
 		
+		If (Num:C11($Obj_context.selector)=1)  // relations
+			
+			$Obj_form.formatLabel.setTitle("titles")
+			OBJECT SET VISIBLE:C603(*;$Obj_form.formats;False:C215)
+			OBJECT SET VISIBLE:C603(*;$Obj_form.titles;True:C214)
+			
+		Else 
+			
+			$Obj_form.formatLabel.setTitle("formatters")
+			OBJECT SET VISIBLE:C603(*;$Obj_form.formats;True:C214)
+			OBJECT SET VISIBLE:C603(*;$Obj_form.titles;False:C215)
+			
+		End if 
+		
 		  //=========================================================
 	: ($Obj_in.action="fieldIcons")  // Call back from widget
 		
@@ -247,7 +251,6 @@ Case of
 			$r:=ui.pointer($Obj_form.icons)
 			
 			  //%W-533.3
-			
 			If ($Obj_in.pictures[$Obj_in.item-1]#Null:C1517)
 				
 				$p:=$Obj_in.pictures[$Obj_in.item-1]
@@ -262,7 +265,7 @@ Case of
 			End if 
 			  //%W+533.3
 			
-			ui.saveProject()
+			project.save()
 			
 		End if 
 		
