@@ -47,9 +47,26 @@
 		"groups": [
 			"devMenu"
 		],
+		"tables": [
+			"__DeletedRecords",
+			"ALL_TYPES",
+			"Commands",
+			"Employes",
+			"NAME WITH SPACE",
+			"NO FIELDS",
+			"NOT EXPOSED",
+			"Only primary key",
+			"Service",
+			"Table_1",
+			"Table_2",
+			"Table_3",
+			"Themes",
+			"とてもとても長いフィールド"
+		],
 		"methods": [
 			"_w_actions",
 			"01_LASTBUILD",
+			"4DPop_TEST_Macros",
 			"importData",
 			"killWorker"
 		],
@@ -92,26 +109,7 @@
 			"COMPONENT_Pathname"
 		]
 	},
-	"_TEMPO": {
-		"tables": [
-			"ALL_TYPES",
-			"Commands",
-			"Employes",
-			"NAME WITH SPACE",
-			"NO FIELDS",
-			"NOT EXPOSED",
-			"Only primary key",
-			"Service",
-			"Table_1",
-			"Table_2",
-			"Table_3",
-			"Themes",
-			"とてもとても長いフィールド"
-		],
-		"methods": [
-			"4DPop_TEST_Macros"
-		]
-	},
+	"(_TEMPO)": {},
 	"[EDITOR]": {
 		"methods": [
 			"COMPILER_editor",
@@ -383,10 +381,10 @@
 	"FIELDS": {
 		"methods": [
 			"COMPILER_fields",
+			"FIELDS_class",
 			"FIELDS_Handler",
 			"fields_LIST",
-			"FIELDS_OBJECTS_HANDLER",
-			"FIELDS_TIPS"
+			"FIELDS_OBJECTS_HANDLER"
 		],
 		"forms": [
 			"FIELDS"
@@ -730,5 +728,9 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {}
+	"trash": {
+		"groups": [
+			"(_TEMPO)"
+		]
+	}
 }

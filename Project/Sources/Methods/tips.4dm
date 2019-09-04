@@ -12,7 +12,6 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_TEXT:C284($t)
 C_OBJECT:C1216($o)
 
 If (False:C215)
@@ -29,13 +28,15 @@ If (This:C1470._is=Null:C1517)  // Constructor
 		"enabled";(Get database parameter:C643(Tips enabled:K37:79)=1);\
 		"delay";Get database parameter:C643(Tips delay:K37:80);\
 		"duration";Get database parameter:C643(Tips duration:K37:81);\
-		"enable";Formula:C1597(SET DATABASE PARAMETER:C642(Tips enabled:K37:79;1));\
-		"disable";Formula:C1597(SET DATABASE PARAMETER:C642(Tips enabled:K37:79;0));\
-		"instantly";Formula:C1597(SET DATABASE PARAMETER:C642(Tips delay:K37:80;1));\
-		"setDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;$1));\
 		"default";Formula:C1597(tips ("default"));\
 		"defaultDelay";Formula:C1597(SET DATABASE PARAMETER:C642(Tips delay:K37:80;45));\
-		"defaultDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;720))\
+		"defaultDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;720));\
+		"enable";Formula:C1597(SET DATABASE PARAMETER:C642(Tips enabled:K37:79;1));\
+		"disable";Formula:C1597(SET DATABASE PARAMETER:C642(Tips enabled:K37:79;0));\
+		"instantly";Formula:C1597(tips ("instantly";New object:C1471("duration";Num:C11($1))));\
+		"setDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;$1));\
+		"status";Formula:C1597(tips ("status"));\
+		"restore";Formula:C1597(tips ("restore"))\
 		)
 	
 Else 
@@ -43,14 +44,51 @@ Else
 	$o:=This:C1470
 	
 	Case of 
+			
 			  //______________________________________________________
 		: ($o=Null:C1517)
 			
 			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
 			
 			  //______________________________________________________
+		: ($1="status")
+			
+			$o.status:=New object:C1471(\
+				"enabled";Get database parameter:C643(Tips enabled:K37:79)=1;\
+				"delay";Get database parameter:C643(Tips delay:K37:80);\
+				"duration";Get database parameter:C643(Tips duration:K37:81))
+			
+			  //______________________________________________________
+		: ($1="restore")
+			
+			If ($o.status#Null:C1517)
+				
+				SET DATABASE PARAMETER:C642(Tips enabled:K37:79;Num:C11($o.status.enabled))
+				SET DATABASE PARAMETER:C642(Tips delay:K37:80;Num:C11($o.status.delay))
+				SET DATABASE PARAMETER:C642(Tips duration:K37:81;Num:C11($o.status.duration))
+				
+			Else 
+				
+				$o.default()
+				
+			End if 
+			
+			  //______________________________________________________
+		: ($1="instantly")
+			
+			SET DATABASE PARAMETER:C642(Tips enabled:K37:79;1)
+			SET DATABASE PARAMETER:C642(Tips delay:K37:80;1)
+			
+			If ($2.duration#Null:C1517)
+				
+				SET DATABASE PARAMETER:C642(Tips duration:K37:81;$2.duration)
+				
+			End if 
+			
+			  //______________________________________________________
 		: ($1="default")
 			
+			SET DATABASE PARAMETER:C642(Tips enabled:K37:79;1)
 			SET DATABASE PARAMETER:C642(Tips delay:K37:80;45)
 			SET DATABASE PARAMETER:C642(Tips duration:K37:81;720)
 			
@@ -61,7 +99,6 @@ Else
 			
 			  //______________________________________________________
 	End case 
-	
 End if 
 
   // ----------------------------------------------------

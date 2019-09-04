@@ -13,8 +13,8 @@ C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
 C_BOOLEAN:C305($Boo_horizontal;$Boo_vertical)
-C_LONGINT:C283($i;$Lon_bottom;$Lon_column;$Lon_left;$Lon_right;$Lon_row)
-C_LONGINT:C283($Lon_top)
+C_LONGINT:C283($i;$Lon_;$Lon_bottom;$Lon_column;$Lon_left;$Lon_right)
+C_LONGINT:C283($Lon_row;$Lon_top;$Lon_x;$Lon_y)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o;$oo)
 
@@ -170,7 +170,17 @@ Else
 			  //______________________________________________________
 		: ($1="cellPosition")  // Current cell indexes
 			
-			LISTBOX GET CELL POSITION:C971(*;$o.name;$Lon_column;$Lon_row)
+			If (Form event code:C388=On Clicked:K2:4)
+				
+				LISTBOX GET CELL POSITION:C971(*;$o.name;$Lon_column;$Lon_row)
+				
+			Else 
+				
+				GET MOUSE:C468($Lon_x;$Lon_y;$Lon_)
+				LISTBOX GET CELL POSITION:C971(*;$o.name;$Lon_x;$Lon_y;$Lon_column;$Lon_row)
+				
+			End if 
+			
 			$o.column:=$Lon_column
 			$o.row:=$Lon_row
 			

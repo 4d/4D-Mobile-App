@@ -27,7 +27,7 @@ ui.form:=Formula:C1597(New object:C1471(\
 "name";Current form name:C1298;\
 "window";Current form window:C827;\
 "event";Null:C1517;\
-"currentWidget";Null:C1517;\
+"current";Null:C1517;\
 "currentPtr";Null:C1517;\
 "focusedWidget";Null:C1517;\
 "refresh";Formula:C1597(SET TIMER:C645(-1));\

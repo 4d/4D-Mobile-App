@@ -38,9 +38,7 @@ Case of
 		  //==================================================
 	: ($Obj_form.form.current=$Obj_form.fieldList.name)
 		
-		$Obj_widget:=$Obj_form.fieldList
-		$Obj_widget.cellPosition()
-		$Obj_widget.update()
+		$Obj_widget:=$Obj_form.fieldList.update()
 		
 		Case of 
 				
@@ -49,6 +47,7 @@ Case of
 				 | ($Obj_form.form.event=On Clicked:K2:4)
 				
 				editor_ui_LISTBOX ($Obj_widget.name)
+				  //$Obj_context.setHelpTip($Obj_widget.name;$Obj_form)
 				
 				Case of 
 						
@@ -68,7 +67,7 @@ Case of
 						  // NO SELECTION
 						
 						  //______________________________________________________
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.icons].number)  // Open the fields icons picker
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.icons.name].number)  // Open the fields icons picker
 						
 						  // Get the current field
 						$Obj_widget.cellCoordinates()
@@ -77,12 +76,13 @@ Case of
 						$Obj_field:=$Obj_context.field($Obj_widget.row)
 						
 						  // Display the picker
-						$o:=(ui.pointer($Obj_form.iconGrid))->
+						$o:=$Obj_form.picker.pointer()->
 						
+						  // #MARK_TODO WIDGET WORK WITH ARRAY
 						If ($Obj_field.icon#Null:C1517)
 							
 							$o.item:=$o.pathnames.indexOf($Obj_field.icon)
-							$o.item:=$o.item+1  // Widget work with array
+							$o.item:=$o.item+1
 							
 						Else 
 							
@@ -110,7 +110,6 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Mouse Enter:K2:33)
 				
-				ui.tips.enable()
 				ui.tips.instantly()
 				
 				  //______________________________________________________
@@ -121,7 +120,7 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Mouse Leave:K2:34)
 				
-				ui.tips.defaultDelay()
+				ui.tips.default()
 				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Getting Focus:K2:7)
@@ -146,9 +145,9 @@ Case of
 				
 				editor_ui_LISTBOX ($Obj_widget.name)
 				
-				If ($Obj_widget.column=$Obj_widget.columns[$Obj_form.labels].number)\
-					 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabels].number)\
-					 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.titles].number)
+				If ($Obj_widget.column=$Obj_widget.columns[$Obj_form.labels.name].number)\
+					 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabels.name].number)\
+					 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.titles.name].number)
 					
 					EDIT ITEM:C870($Ptr_me->;$Ptr_me->)
 					
@@ -157,7 +156,7 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Before Data Entry:K2:39)
 				
-				If ($Obj_widget.column=$Obj_widget.columns[$Obj_form.formats].number)
+				If ($Obj_widget.column=$Obj_widget.columns[$Obj_form.formats.name].number)
 					
 					$0:=-1
 					
@@ -259,15 +258,15 @@ Case of
 				Case of 
 						
 						  //………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.labels].number)\
-						 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabels].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.labels.name].number)\
+						 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabels.name].number)
 						
 						  //%W-533.3
-						$Obj_field[Choose:C955($Obj_widget.column=$Obj_widget.columns[$Obj_form.labels].number;"label";"shortLabel")]:=$Ptr_me->{$Obj_widget.row}
+						$Obj_field[Choose:C955($Obj_widget.column=$Obj_widget.columns[$Obj_form.labels.name].number;"label";"shortLabel")]:=$Ptr_me->{$Obj_widget.row}
 						  //%W+533.3
 						
 						  //………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.titles].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.titles.name].number)
 						
 						  //%W-533.3
 						$Obj_field.format:=$Ptr_me->{$Obj_widget.row}

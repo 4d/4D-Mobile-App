@@ -259,7 +259,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:tables"
+					"text": ":xliff:names"
 				},
 				"noPublishedTable": {
 					"type": "button",
