@@ -24,8 +24,6 @@ End if
   // ----------------------------------------------------
 If (This:C1470._is=Null:C1517)  // Constructor
 	
-	$t:=String:C10($1)
-	
 	$o:=New object:C1471(\
 		"_is";"tips";\
 		"enabled";(Get database parameter:C643(Tips enabled:K37:79)=1);\
