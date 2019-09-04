@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4812B27C231FA24D00A30947 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4812B27B231FA24D00A30947 /* SceneDelegate.swift */; };
 		4827BAAB1F6BEE5400D171B9 /* Settings.debug.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4827BAAA1F6BEE5400D171B9 /* Settings.debug.plist */; };
 		486745042021EA110029924D /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486745032021EA110029924D /* Binding.swift */; };
 		48702B1E1E8D4DFA00C382FA /* AppDelegate+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48702B1D1E8D4DFA00C382FA /* AppDelegate+Services.swift */; };
@@ -50,6 +51,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4812B27B231FA24D00A30947 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		4827BAAA1F6BEE5400D171B9 /* Settings.debug.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.debug.plist; sourceTree = "<group>"; };
 		4854D8231E9679A2002FD151 /* LICENSES.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSES.md; sourceTree = "<group>"; };
 		486745032021EA110029924D /* Binding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			children = (
 				48D4817C1F6AD0BD0027DCB5 /* main.swift */,
 				48861A1C1E8953B800C1A97C /* AppDelegate.swift */,
+				4812B27B231FA24D00A30947 /* SceneDelegate.swift */,
 				481A0B311E896ED200E6B84C /* Services */,
 			);
 			path = Application;
@@ -434,6 +437,7 @@
 				48EDB1041F8E4FFF00057E69 /* Logger.swift in Sources */,
 				48861A1D1E8953B800C1A97C /* AppDelegate.swift in Sources */,
 				486745042021EA110029924D /* Binding.swift in Sources */,
+				4812B27C231FA24D00A30947 /* SceneDelegate.swift in Sources */,
 				D9A7FEA71EBC681F0068DC32 /* Structures.xcdatamodeld in Sources */,
 				488D2B091E9BCB7600A8CDCA /* IBDesignable.swift in Sources */,
 				48BB550D1F9F456E007EA862 /* MainNavigation.swift in Sources */,
