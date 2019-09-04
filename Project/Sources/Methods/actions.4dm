@@ -15,7 +15,8 @@ C_OBJECT:C1216($2)
 
 C_LONGINT:C283($Lon_parameters)
 C_TEXT:C284($t;$Txt_action)
-C_OBJECT:C1216($o;$Obj_action;$Obj_in;$Obj_out)
+C_OBJECT:C1216($o;$Obj_action;$Obj_parameters;$Obj_in;$Obj_out)
+C_BOOLEAN:C305($Boo_hasImage)
 
 If (False:C215)
 	C_OBJECT:C1216(actions ;$0)
@@ -50,6 +51,31 @@ End if
 
   // ----------------------------------------------------
 Case of 
+		
+		  //______________________________________________________
+	: ($Txt_action="capabilities")
+		
+		$Obj_out.capabilities:=New object:C1471("photo";False:C215)
+		
+		$Boo_hasImage:=False:C215
+		If (Value type:C1509($Obj_in.project.actions)=Is collection:K8:32)
+			For each ($Obj_action;$Obj_in.project.actions) Until ($Boo_hasImage)
+				If (Value type:C1509($Obj_action.parameters)=Is collection:K8:32)
+					For each ($Obj_parameters;$Obj_action.parameters) Until ($Boo_hasImage)
+						If ($Obj_parameters.type="image")
+							$Boo_hasImage:=True:C214
+						End if 
+					End for each 
+				End if 
+			End for each 
+		End if 
+		
+		If ($Boo_hasImage)
+			$Obj_out.capabilities.photo:=True:C214
+			$Obj_out.capabilities.camera:=True:C214
+		End if 
+		
+		$Obj_out.success:=True:C214
 		
 		  //______________________________________________________
 	: ($Txt_action="form")

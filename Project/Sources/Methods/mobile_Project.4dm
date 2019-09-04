@@ -510,10 +510,10 @@ If ($Obj_in.create)
 			"target";$Obj_in.path))
 		ob_error_combine ($Obj_out;$Obj_out.actionAssets)
 		
-		$Obj_out.actionAssets:=actions ("assets";New object:C1471(\
+		$Obj_out.actionCapabilities:=actions ("capabilities";New object:C1471(\
 			"project";$Obj_project;\
 			"target";$Obj_in.path))
-		ob_error_combine ($Obj_out;$Obj_out.actionAssets)
+		  //ob_error_combine ($Obj_out;$Obj_out.actionCapabilities)
 		
 		  // Manage app capabilities
 		If (Bool:C1537(featuresFlags._105413))
@@ -523,6 +523,7 @@ If ($Obj_in.create)
 				"value";New object:C1471(\
 				"common";commonValues;\
 				"project";$Obj_project;\
+				"action";$Obj_out.actionCapabilities;\
 				"templates";$Obj_out.template)))
 			ob_error_combine ($Obj_out;$Obj_out.capabilities)
 			
