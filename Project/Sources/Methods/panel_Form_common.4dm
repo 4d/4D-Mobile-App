@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : panel_Form_common
-  // Database: 4D Mobile Express
   // ID[5F674D01A17C4030B5D09AE0352A3681]
   // Created 12-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -120,11 +119,11 @@ Case of
 		  //______________________________________________________
 	: ($Lon_formEvent=On Getting Focus:K2:7)
 		
+		  // Show help button if any
 		$Txt_object:=OBJECT Get name:C1087(Object with focus:K67:3)
 		
 		If (OBJECT Get type:C1300(*;$Txt_object+".help")#Object type unknown:K79:1)
 			
-			  // Show help button
 			OBJECT SET VISIBLE:C603(*;$Txt_object+".help";True:C214)
 			
 		End if 
@@ -132,11 +131,11 @@ Case of
 		  //______________________________________________________
 	: ($Lon_formEvent=On Losing Focus:K2:8)
 		
+		  // Hide help button if any
 		$Txt_object:=OBJECT Get name:C1087(Object with focus:K67:3)
 		
 		If (OBJECT Get type:C1300(*;$Txt_object+".help")#Object type unknown:K79:1)
 			
-			  // Hide help button
 			OBJECT SET VISIBLE:C603(*;$Txt_object+".help";False:C215)
 			
 		End if 

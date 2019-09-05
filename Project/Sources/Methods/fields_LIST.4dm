@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"incapable"}
   // ----------------------------------------------------
   // Project method : fields_LIST
-  // Database: 4D Mobile App
   // ID[0F8855BDB0F7477397EEEE16B17EE729]
   // Created 28-3-2019 by Vincent de Lachaux
   // ----------------------------------------------------

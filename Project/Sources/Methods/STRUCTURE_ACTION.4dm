@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : STRUCTURE_ACTION
-  // Database: 4D Mobile App
   // ID[5A64EA882E6E427785DD1F014276EFDB]
   // Created 8-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------

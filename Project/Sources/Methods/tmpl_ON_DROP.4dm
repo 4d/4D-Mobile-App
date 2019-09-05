@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : tmpl_ON_DROP
-  // Database: 4D Mobile App
   // ID[FC685A0A360B4F518FF6B8E40D4BA148]
   // Created 6-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------

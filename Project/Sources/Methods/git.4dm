@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : git
-  // Database: 4D Mobile Express
   // Created 28-6-2017 by Eric Marchand
   // ----------------------------------------------------
   // Description:

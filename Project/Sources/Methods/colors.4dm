@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : colors
-  // Database: 4D Mobile Express
   // Created 13-11-2017 by Eric Marchand
   // ----------------------------------------------------
 

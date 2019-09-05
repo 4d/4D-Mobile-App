@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : ob_warning_add
-  // Database: 4D Mobile App
   // Created 01-10-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:

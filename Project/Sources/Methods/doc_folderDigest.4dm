@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : doc_folderDigest
-  // Database: 4D Mobile Express
   // ID[4A08879383544E8DB4F07174D19035A1]
   // Created 5-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------

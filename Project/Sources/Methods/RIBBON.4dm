@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : RIBBON
-  // Database: 4D Mobile App
   // ID[C18FAF21205D45159B317262630D79D2]
   // Created 30-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------

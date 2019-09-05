@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : views_Handler
-  // Database: 4D Mobile Express
   // ID[2A03E5F862194815A6AA36A409731C5C]
   // Created 26-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -21,8 +20,8 @@ C_COLLECTION:C1488($c;$Col_assigned)
 ARRAY TEXT:C222($tTxt_tables;0)
 
 If (False:C215)
-	C_OBJECT:C1216(views_Handler ;$0)
-	C_OBJECT:C1216(views_Handler ;$1)
+	C_OBJECT:C1216(VIEWS_Handler ;$0)
+	C_OBJECT:C1216(VIEWS_Handler ;$1)
 End if 
 
   // ----------------------------------------------------
@@ -76,7 +75,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		ob_createPath ($Obj_context;"constraints.rules";Is collection:K8:32)
 		
 		$Obj_context.constraints.rules.push(New object:C1471(\
-			"formula";Formula:C1597(views_Handler (New object:C1471("action";\
+			"formula";Formula:C1597(VIEWS_Handler (New object:C1471("action";\
 			"geometry")))))
 		
 		  // Define form member methods
@@ -88,11 +87,11 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		$Obj_context.typeForm:=Formula:C1597(Choose:C955(Num:C11(This:C1470.selector)=2;"detail";"list"))
 		
 		  // Update selected tab
-		$Obj_context.setTab:=Formula:C1597(views_Handler (New object:C1471(\
+		$Obj_context.setTab:=Formula:C1597(VIEWS_Handler (New object:C1471(\
 			"action";"setTab")))
 		
 		  // Update geometry
-		$Obj_context.setGeometry:=Formula:C1597(views_Handler (New object:C1471(\
+		$Obj_context.setGeometry:=Formula:C1597(VIEWS_Handler (New object:C1471(\
 			"action";"geometry")))
 		
 	End if 

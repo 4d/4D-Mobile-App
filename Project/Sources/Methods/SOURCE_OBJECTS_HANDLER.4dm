@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : DATA_OBJECTS_HANDLER
-  // Database: 4D Mobile Express
   // ID[DE1DC030CB2B497BA1A42C0D39E7CE09]
   // Created 18-12-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -89,14 +88,14 @@ Case of
 		OBJECT SET VISIBLE:C603(*;"dataGeneration@";True:C214)
 		
 		  //CALL WORKER(Form.$worker;"dataSet";New object(\
-									//"caller";$Obj_form.window;\
-									//"action";"create";\
-									//"eraseIfExists";True;\
-									//"project";$Obj_project;\
-									//"digest";True;\
-									//"key";$File_key;\
-									//"dataSet";Bool(featuresFlags._101725);\
-									//"picture";Not(Bool(featuresFlags._97117))))
+												//"caller";$Obj_form.window;\
+												//"action";"create";\
+												//"eraseIfExists";True;\
+												//"project";$Obj_project;\
+												//"digest";True;\
+												//"key";$File_key;\
+												//"dataSet";Bool(featuresFlags._101725);\
+												//"picture";Not(Bool(featuresFlags._97117))))
 		CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
 			"caller";$Obj_form.window;\
 			"action";"create";\

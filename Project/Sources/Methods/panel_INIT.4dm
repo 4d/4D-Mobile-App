@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : panel_INIT
-  // Database: 4D Mobile Express
   // ID[6C4D51233CB94D1790FD39B385FB494F]
   // Created 11-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------

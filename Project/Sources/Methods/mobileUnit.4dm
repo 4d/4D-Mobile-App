@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"shared":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : mobileUnit
-  // Database: 4D Mobile Express
   // ID[397F98984CE44B3CB94A856B86C833B1]
   // Created 21-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : ob_removeFormula
-  // Database: 4D Mobile App
   // Created 14-8-2019 by Eric Marchand
   // ----------------------------------------------------
   // Description:

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : getIcon
-  // Database: 4D Mobile App
   // ID[F5FA2667A3A443EC97EC7501B9B9D50C]
   // Created 28-3-2019 by Vincent de Lachaux
   // ----------------------------------------------------

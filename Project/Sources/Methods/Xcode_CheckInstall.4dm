@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : Xcode_CheckInstall
-  // Database: 4D Mobile Express
   // ID[5178EE9219FD423C896557C7E4ACD66C]
   // Created 29-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------

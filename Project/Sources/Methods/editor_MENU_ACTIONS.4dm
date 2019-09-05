@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : editor_MENU_ACTIONS
-  // Database: 4D Mobile Express
   // ID[33355C53F50040DCBCA10F30344DB3E7]
   // Created 6-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -511,12 +510,12 @@ Case of
 		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 		
 		  //dataModel (New object(\
-						//"action";"xcdatamodel";\
-						//"dataModel";$Obj_project.dataModel;\
-						//"flat";False;\
-						//"relationship";Bool(featuresFlags._103850);\
-						//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
-						//"path";$Txt_path))
+									//"action";"xcdatamodel";\
+									//"dataModel";$Obj_project.dataModel;\
+									//"flat";False;\
+									//"relationship";Bool(featuresFlags._103850);\
+									//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
+									//"path";$Txt_path))
 		dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\

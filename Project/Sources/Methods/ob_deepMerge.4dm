@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : ob_deepMerge
-  // Database: 4D Mobile Express
   // ----------------------------------------------------
   // Description:
   // Copy object properties from source to target

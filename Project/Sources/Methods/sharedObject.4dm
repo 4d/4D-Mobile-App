@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : sharedObject
-  // Database: v14
   // ID[2F1797A750894D62BAE334F4A6385106]
   // Created 4-2-2019 by Vincent de Lachaux
   // ----------------------------------------------------

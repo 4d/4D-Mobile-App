@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : xml_fileToObject
-  // Database: 4D Mobile Express
   // ID[0C9EE89768224AA19AEA2AFC14789A8E]
   // Created 2-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------

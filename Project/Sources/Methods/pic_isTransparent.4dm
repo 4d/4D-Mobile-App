@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : pic_isTransparent
-  // Database: 4D Mobile Express
   // ID[5293AD24049A4DA6BBC347722ED599E5]
   // Created 23-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------

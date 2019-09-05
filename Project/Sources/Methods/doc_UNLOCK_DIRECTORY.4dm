@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : doc_UNLOCK_DIRECTORY
-  // Database: 4D Mobile Express
   // ID[2E04A66F44A64A7DBF01F62967E4C2FB]
   // Created 6-7-2017 by Vincent de Lachaux
   // ----------------------------------------------------

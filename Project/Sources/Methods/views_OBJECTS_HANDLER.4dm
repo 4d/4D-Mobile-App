@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : views_OBJECTS_HANDLER
-  // Database: 4D Mobile Express
   // ID[D7D3A572E98F4D8BBDDCE96E1A322DAC]
   // Created 18-12-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -19,7 +18,7 @@ C_TEXT:C284($Txt_tableNumber;$Txt_template;$Txt_typeForm)
 C_OBJECT:C1216($Obj_context;$Obj_current;$Obj_form)
 
 If (False:C215)
-	C_LONGINT:C283(views_OBJECTS_HANDLER ;$0)
+	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER ;$0)
 End if 
 
   // ----------------------------------------------------
@@ -37,7 +36,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_form:=views_Handler (New object:C1471(\
+	$Obj_form:=VIEWS_Handler (New object:C1471(\
 		"action";"init"))
 	
 	$Obj_context:=$Obj_form.$
@@ -435,7 +434,7 @@ Case of
 	: ($Obj_form.form.current=$Obj_form.tableButtonNext.name)\
 		 | ($Obj_form.form.current=$Obj_form.tableButtonPrevious.name)
 		
-		views_Handler (New object:C1471(\
+		VIEWS_Handler (New object:C1471(\
 			"action";"scroll-table";\
 			"direction";Choose:C955($Obj_form.form.current=$Obj_form.tableButtonPrevious.name;"previous";"next")))
 		

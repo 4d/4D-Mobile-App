@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : str_equal
-  // Database: development
   // ID[DCF30A469D5E4218B85F194A77D16EFA]
   // Created 12-5-2015 by Vincent de Lachaux
   // ----------------------------------------------------

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : publishedTableList
-  // Database: 4D Mobile App
   // ID[892090D3E24D425C9269C91077BE4BCD]
   // Created 21-3-2019 by Vincent de Lachaux
   // ----------------------------------------------------

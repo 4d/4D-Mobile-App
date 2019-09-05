@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : Process_tags
-  // Database: 4D Mobile Express
   // ID[CF26D63F6DF3493D9224934C8492CD74]
   // Created 12-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------

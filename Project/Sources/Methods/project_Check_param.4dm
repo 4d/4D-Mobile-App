@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : project_Check_param
-  // Database: 4D Mobile Express
   // ID[79BFA3C24536452A892A486A32EC7437]
   // Created 28-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------

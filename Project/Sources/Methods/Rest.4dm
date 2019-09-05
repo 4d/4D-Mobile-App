@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : Rest
-  // Database: 4D Mobile Express
   // ID[D5FB3A273A2843E891119B6D8CABB97C]
   // Created 27-6-2017 by Eric Marchand
   // ----------------------------------------------------

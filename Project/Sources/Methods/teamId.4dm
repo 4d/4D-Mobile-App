@@ -2,7 +2,6 @@
 
   // ----------------------------------------------------
   // Project method : teamId
-  // Database: 4D Mobile App
   // Created by Eric Marchand
   // ----------------------------------------------------
   // Description:

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : COMPONENT_INIT
-  // Database: 4D Mobile Express
   // ID[F84912DC921C45C49366AD32CAA443C7]
   // Created 15-9-2017 by Vincent de Lachaux
   // ----------------------------------------------------

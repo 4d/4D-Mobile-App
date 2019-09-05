@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : tmpl_REORDER
-  // Database: 4D Mobile App
   // ID[D3DF454ABC0D4E68943727CD95C07675]
   // Created 26-4-2018 by Vincent de Lachaux
   // ----------------------------------------------------

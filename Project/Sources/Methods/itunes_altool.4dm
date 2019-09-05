@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : itunes_altool
-  // Database: 4D Mobile Express
   // ID[97B746353E7C46B5ACE496B1RD9C0051]
   // Created 20-12-2017 by Eric Marchand
   // ----------------------------------------------------

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : xml_findElement
-  // Database: 4D Mobile Express
   // ID[42201DC36CAD45BDB841D1B8A31AC0D0]
   // Created 1-8-2017 by Eric Marchand
   // ----------------------------------------------------

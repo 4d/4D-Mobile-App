@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : editor_RESUME
-  // Database: 4D Mobile Express
   // ID[ED02AB7186F243EC934AAF4A70A66505]
   // Created 4-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -241,7 +240,7 @@ Case of
 			  //  // Port conflict? or certificates are missing?
 			  //$Dir_database:=Get 4D folder(Database folder;*)
 			  //If (Test path name($Dir_database+"cert.pem")#Is a document)\
-												| (Test path name($Dir_database+"key.pem")#Is a document)
+																| (Test path name($Dir_database+"key.pem")#Is a document)
 			
 			  //$Txt_message:=Get localized string("checkThatTheCertificatesAreProperlyInstalled")
 			  // Else

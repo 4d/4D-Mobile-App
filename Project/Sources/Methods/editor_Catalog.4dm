@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : editor_Catalog
-  // Database: 4D Mobile App
   // ID[8D67858E8305469488DC634C018A859E]
   // Created 31-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------

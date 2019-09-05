@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : checkQueryFilter
-  // Database: 4D Mobile For iOS
   // ID[D5FB3A273A28435891119B6D8C1BB97C]
   // Created 04-10-2018 by Eric Marchand
   // ----------------------------------------------------

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : env_userPath
-  // Database: 4D Mobile Express
   // ID[AE12412FB8A447B186B1EB9ED2161714]
   // Created 21-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : ui_TOOLBAR_ALIGN
-  // Database: 4D Mobile App
   // ID[DE16575F729743C0B3CBD61072008DFE]
   // Created 14-6-2018 by Vincent de Lachaux
   // ----------------------------------------------------

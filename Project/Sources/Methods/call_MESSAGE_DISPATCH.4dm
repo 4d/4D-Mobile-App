@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : call_MESSAGE_DISPATCH
-  // Database: 4D Mobile Express
   // ID[2EA9710049454153B1F0AF42D2215894]
   // Created 15-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : WAIT_FORM_MESSAGE
-  // Database: 4D Mobile App
   // ID[E2B348F707724D33B2987738CBEFA828]
   // Created 10-4-2019 by Vincent de Lachaux
   // ----------------------------------------------------

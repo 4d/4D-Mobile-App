@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : project_CLASSES
-  // Database: 4D Mobile App
   // ID[CABB2CFFCEFB420CB329DC78497AFB8A]
   // Created 11-4-2019 by Vincent de Lachaux
   // ----------------------------------------------------

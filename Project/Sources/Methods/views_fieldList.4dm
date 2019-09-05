@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : views_fieldList
-  // Database: 4D Mobile App
   // ID[6CB8A40D701F4747A463177B92640A0E]
   // Created 28-3-2019 by Vincent de Lachaux
   // ----------------------------------------------------

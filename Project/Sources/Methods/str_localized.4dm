@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : str_localized
-  // Database: 4D Mobile Express
   // ID[1F8E6A001AB447E9AE074F87F3CF3227]
   // Created 7-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------

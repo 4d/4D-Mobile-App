@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : doc_catalogFirstPath
-  // Database: 4D Mobile App
   // ID[8328FC3981DB45DC9CFEF6A39E8F4473]
   // Created 04-06-2018 by Eric Marchand
   // ----------------------------------------------------

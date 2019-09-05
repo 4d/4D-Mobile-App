@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : xml_attributes
-  // Database: 4DPop XLIFF 2
   // ID[CA958A0431C849868A26DB018F13A02F]
   // Created 5-3-2018 by Vincent de Lachaux
   // ----------------------------------------------------

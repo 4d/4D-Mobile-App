@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : views_LAYOUT_PICKER
-  // Database: 4D Mobile Express
   // ID[F73301CBEEE042CEAD2D2D1CEBB4C9E5]
   // Created 11-1-2018 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -41,7 +40,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_form:=views_Handler (New object:C1471(\
+	$Obj_form:=VIEWS_Handler (New object:C1471(\
 		"action";"init"))
 	
 	$Obj_context:=$Obj_form.$

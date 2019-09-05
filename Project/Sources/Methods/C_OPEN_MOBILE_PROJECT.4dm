@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"shared":true}
   // ----------------------------------------------------
   // Project method : C_OPEN_MOBILE_PROJECT
-  // Database: 4D Mobile Express
   // ID[E0BBE7A463F54391B61C51274CA84C45]
   // Created 13-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : col_valueToObject
-  // Database: 4D Mobile App
   // Created 26-7-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:

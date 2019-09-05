@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : plist_toObject
-  // Database: 4D Mobile Express
   // ID[156E1073847B47D19113A97F9C700DDF]
   // Created 15-9-2017 by Vincent de Lachaux
   // ----------------------------------------------------

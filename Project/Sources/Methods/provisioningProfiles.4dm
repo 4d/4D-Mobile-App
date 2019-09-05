@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : provisioningProfiles
-  // Database: 4D Mobile App
   // Created by Eric Marchand
   // ----------------------------------------------------
   // Description:

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : str_URLEncode
-  // Database: 4D Mobile App
   // ID[1E29AECDCAA045C9A3194F772CEA4500]
   // Created 4-10-2018 by Vincent de Lachaux
   // ----------------------------------------------------

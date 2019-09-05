@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : project_BUILD
-  // Database: 4D Mobile Express
   // ID[7568C2BF25664764BE3D8F3E0B9EAEB0]
   // Created 4-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -106,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																"action";"safeDelete";\
-																"path";$Obj_in.path))
+																				"action";"safeDelete";\
+																				"path";$Obj_in.path))
 			  // End if
 			
 		End if 

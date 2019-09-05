@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : TEMPO_1
-  // Database: 4D Mobile App
   // ID[F2D312A2212D43599C43A56AC1C9BB53]
   // Created 26-6-2018 by Vincent de Lachaux
   // ----------------------------------------------------

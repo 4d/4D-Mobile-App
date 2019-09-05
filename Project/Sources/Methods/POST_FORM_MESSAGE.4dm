@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : POST_FORM_MESSAGE
-  // Database: 4D Mobile Express
   // ID[9EA6C0AFDD1E426C86CA28F644F30845]
   // Created 3-7-2017 by Vincent de Lachaux
   // ----------------------------------------------------

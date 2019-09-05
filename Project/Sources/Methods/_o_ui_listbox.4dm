@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : ui_listbox
-  // Database: 4D Mobile App
   // ID[FBE543BD1BC2456E9DC117830ADDAA1A]
   // Created 8-4-2019 by Vincent de Lachaux
   // ----------------------------------------------------

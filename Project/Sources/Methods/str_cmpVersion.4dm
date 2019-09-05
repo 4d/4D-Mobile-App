@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : str_cmpVersion
-  // Database: development
   // ID[DCF30A469D5E4218B85F193A77D16EFA]
   // Created 05-12-2017 by Eric Marchand
   // ----------------------------------------------------

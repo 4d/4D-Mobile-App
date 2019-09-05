@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : ACTIONS_PARAMS_Handler
-  // Database: 4D Mobile App
   // ID[3FB32AB369A0439BB4469E866D8C3C10]
   // Created 11-03-2019 by Vincent de Lachaux
   // ----------------------------------------------------

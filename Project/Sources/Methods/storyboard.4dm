@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : storyboard
-  // Database: 4D Mobile Express
   // Created 27-6-2017 by Eric Marchand
   // ----------------------------------------------------
   // Description:

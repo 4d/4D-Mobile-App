@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : DATA_Handler
-  // Database: 4D Mobile App
   // ID[68574C7BCD7A4D5FA9CC3284DAEF4F51]
   // Created 25-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------

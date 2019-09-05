@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : plist
-  // Database: 4D Mobile Express
   // ID[B8934F6DFF59468399DDA49E6FB2173F]
   // Created 29-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------

@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : xml_findByName
-  // Database: 4D Mobile App
   // ID[0C9EE897E822EAA19AEA2AFC14789A8E]
   // ----------------------------------------------------
   // Description:

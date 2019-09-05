@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : mnu_defaultBar
-  // Database: 4D Mobile App
   // ID[37E7CD9FBD464C9295C8DE97C6392851]
   // Created 18-3-2019 by Vincent de Lachaux
   // ----------------------------------------------------

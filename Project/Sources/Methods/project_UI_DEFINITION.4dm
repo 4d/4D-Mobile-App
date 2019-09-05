@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   /// ----------------------------------------------------
   // Project method : project_UI_DEFINITION
-  // Database: 4D Mobile Express
   // ID[38A72415F5D34F62A3B62016B961F0EE]
   // Created 10-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -43,18 +42,20 @@ End if
   // ----------------------------------------------------
 $Obj_geometry:=New object:C1471
 
-  //If (Caps lock down)
+  // If (Caps lock down)
   //  // Special colors
   //$Obj_geometry.ui:=New object("background";0x00ECF4FF;"line";0x00054F9F;"labels";0x006699CC)
-  //Else 
+  // Else
   //  // Default
   //$Obj_geometry.ui:=New object("background";0x00FFFFFF;"line";0x00AAAAAA)
-  //End if
+  // End if
 
 $Obj_geometry.ui:=New object:C1471
 
 If (ui.colorScheme.isDarkStyle)
+	
 	$Obj_geometry.ui.background:=Background color none:K23:10
+	
 End if 
 
 $Obj_geometry.panels:=$Col_panels

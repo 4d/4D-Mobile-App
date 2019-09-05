@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : editor_MENU_BUILD
-  // Database: 4D Mobile Express
   // ID[A4B34AA7AA3641ACBB84988DBDB07BED]
   // Created 6-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------

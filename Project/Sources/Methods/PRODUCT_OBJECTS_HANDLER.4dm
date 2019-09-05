@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : PRODUCT_OBJECTS_HANDLER
-  // Database: 4D Mobile Express
   // ID[E7502D1D082344F79071FA4C79EAAC92]
   // Created 11-9-2017 by Vincent de Lachaux
   // ----------------------------------------------------

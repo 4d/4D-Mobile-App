@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : ui_SET_GEOMETRY
-  // Database: 4D Mobile Express
   // ID[A01333ED1D654898BA99B7DCB0439E6A]
   // Created 15-5-2017 by Vincent de Lachaux
   // ----------------------------------------------------

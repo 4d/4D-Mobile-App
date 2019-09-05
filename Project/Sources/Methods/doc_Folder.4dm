@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : doc_Folder
-  // Database: 4D Mobile App
   // ID[590433DF7CDC4611A0FE5A7B2AE025E4]
   // Created 12-7-2018 by Vincent de Lachaux
   // ----------------------------------------------------

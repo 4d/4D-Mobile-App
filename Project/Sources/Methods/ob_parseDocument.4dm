@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : ob_parseDocument
-  // Database: 4D Mobile App
   // Created 15-7-2018 by Eric Marchand
   // ----------------------------------------------------
   // Description:

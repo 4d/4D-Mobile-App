@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : editor_ui_LISTBOX
-  // Database: 4D Mobile Express
   // ID[D73060B901234F998F527281594EC7B5]
   // Created 22-12-2017 by Vincent de Lachaux
   // ----------------------------------------------------

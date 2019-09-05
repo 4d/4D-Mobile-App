@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : Xcode
-  // Database: 4D Mobile Express
   // ID[CD89C14B0BE64405988542C627ED2C2E]
   // Created 27-6-2017 by Vincent de Lachaux
   // ----------------------------------------------------

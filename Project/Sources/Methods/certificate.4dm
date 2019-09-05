@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : certificate
-  // Database: 4D Mobile App
   // Created by Eric Marchand
   // ----------------------------------------------------
   // Description:

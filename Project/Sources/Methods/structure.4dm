@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : structure
-  // Database: 4D Mobile Express
   // ID[4D430254EBF34D71B0D7EED8A67D7A59]
   // Created 27-6-2017 by Eric Marchand
   // ----------------------------------------------------
@@ -544,7 +543,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																																																																																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //
