@@ -8,16 +8,14 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($l;$Lon_formEvent)
 C_PICTURE:C286($p)
-C_OBJECT:C1216($Obj_context;$Obj_form;$Obj_in;$Obj_out)
+C_OBJECT:C1216($ƒ;$Obj_form;$Obj_in)
 
 If (False:C215)
-	C_OBJECT:C1216(FIELDS_Handler ;$0)
-	C_OBJECT:C1216(FIELDS_Handler ;$1)
+	C_OBJECT:C1216(FIELDS_HANDLER ;$1)
 End if 
 
   // ----------------------------------------------------
@@ -32,10 +30,11 @@ If (Count parameters:C259>=1)
 	
 End if 
 
-$Obj_form:=FIELDS_class ("editor_CALLBACK")
-$Obj_context:=$Obj_form.$
+$Obj_form:=FIELDS_class ("editor_CALLBACK")  // Form definition
 
-$Obj_context.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
+$ƒ:=$Obj_form.$  // Current context
+
+$ƒ.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
 
   // ----------------------------------------------------
 Case of 
@@ -44,8 +43,6 @@ Case of
 	: ($Obj_in=Null:C1517)  // Form method
 		
 		$Lon_formEvent:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
-		
-		  //$Obj_dataModel:=Form.dataModel
 		
 		Case of 
 				
@@ -59,7 +56,7 @@ Case of
 				$l:=$Obj_form.selectorFields.bestSize(Align left:K42:2).coordinates.right+10
 				$Obj_form.selectorRelations.bestSize(Align left:K42:2).setCoordinates($l;Null:C1517;Null:C1517;Null:C1517)
 				
-				$Obj_context.setTab()
+				$ƒ.setTab()
 				
 				  // Preload the icons
 				CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"fieldIcons")
@@ -67,7 +64,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				$Obj_context.update()
+				$ƒ.update()
 				
 				  //______________________________________________________
 		End case 
@@ -78,14 +75,9 @@ Case of
 		ASSERT:C1129(False:C215;"Missing parameter \"action\"")
 		
 		  //=========================================================
-	: ($Obj_in.action="init")  // Return the form objects definition
-		
-		$Obj_out:=$Obj_form
-		
-		  //=========================================================
 	: ($Obj_in.action="update")  // Display published tables according to data model
 		
-		$Obj_context.update()
+		$ƒ.update()
 		
 		  //=========================================================
 	: ($Obj_in.action="fieldIcons")  // Call back from picker
@@ -94,7 +86,7 @@ Case of
 			 & ($Obj_in.item<=$Obj_in.pathnames.length)
 			
 			  // Update data model
-			$Obj_context.field($Obj_in.row).icon:=$Obj_in.pathnames[$Obj_in.item-1]
+			$ƒ.field($Obj_in.row).icon:=$Obj_in.pathnames[$Obj_in.item-1]
 			
 			  // Update UI
 			If ($Obj_in.pictures[$Obj_in.item-1]#Null:C1517)
@@ -127,7 +119,7 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="select")  // Set the selected field
 		
-		$Obj_context.currentFieldNumber:=Num:C11($Obj_in.fieldNumber)
+		$ƒ.currentFieldNumber:=Num:C11($Obj_in.fieldNumber)
 		
 		  //=========================================================
 	Else 
@@ -136,10 +128,6 @@ Case of
 		
 		  //=========================================================
 End case 
-
-  // ----------------------------------------------------
-  // Return
-$0:=$Obj_out
 
   // ----------------------------------------------------
   // End

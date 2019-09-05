@@ -7,8 +7,7 @@ If (False:C215)
 	C_OBJECT:C1216(FIELDS_class ;$2)
 	
 	  // ----------------------------------------------------
-	C_OBJECT:C1216(FIELDS_Handler ;$0)
-	C_OBJECT:C1216(FIELDS_Handler ;$1)
+	C_OBJECT:C1216(FIELDS_HANDLER ;$1)
 	
 	  // ----------------------------------------------------
 	C_OBJECT:C1216(fields_LIST ;$0)

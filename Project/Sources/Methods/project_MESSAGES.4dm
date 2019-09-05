@@ -170,7 +170,7 @@ Case of
 				: (String:C10($Obj_in.action)="forms")
 					
 					$Obj_in.action:=Choose:C955(Bool:C1537($Obj_in.onResize);"show";$Txt_selector)
-					views_Handler ($Obj_in)
+					VIEWS_Handler ($Obj_in)
 					
 					  //……………………………………………………………………………………………
 			End case 
@@ -234,12 +234,12 @@ Case of
 					  //……………………………………………………………………………………………
 				: (String:C10($Obj_in.action)="fieldIcons")
 					
-					FIELDS_Handler ($Obj_in)
+					FIELDS_HANDLER ($Obj_in)
 					
 					  //……………………………………………………………………………………………
 				: (String:C10($Obj_in.action)="forms")
 					
-					views_Handler ($Obj_in)
+					VIEWS_Handler ($Obj_in)
 					
 					  //……………………………………………………………………………………………
 				: (String:C10($Obj_in.action)="actionIcons")
@@ -339,7 +339,7 @@ Case of
 			
 		Else 
 			
-			FIELDS_Handler (New object:C1471(\
+			FIELDS_HANDLER (New object:C1471(\
 				"action";"update"))
 			
 		End if 
@@ -360,7 +360,7 @@ Case of
 			
 		Else 
 			
-			FIELDS_Handler (New object:C1471(\
+			FIELDS_HANDLER (New object:C1471(\
 				"action";"icons"))
 			
 		End if 
@@ -566,7 +566,7 @@ Case of
 							If ($Obj_in.field#Null:C1517)  // Select field
 								
 								  // Set the selected field
-								FIELDS_Handler (New object:C1471(\
+								FIELDS_HANDLER (New object:C1471(\
 									"action";"select";\
 									"fieldNumber";Num:C11($Obj_in.field)))
 								
@@ -617,7 +617,7 @@ Case of
 		Else 
 			
 			$Obj_in.action:=$Txt_selector
-			views_Handler ($Obj_in)
+			VIEWS_Handler ($Obj_in)
 			
 		End if 
 		
@@ -637,7 +637,7 @@ Case of
 			
 		Else 
 			
-			views_Handler (New object:C1471("action";$Txt_selector))
+			VIEWS_Handler (New object:C1471("action";$Txt_selector))
 			
 		End if 
 		

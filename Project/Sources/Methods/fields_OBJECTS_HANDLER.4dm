@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : FIELDS_OBJECTS_HANDLER
-  // Database: 4D Mobile Express
   // ID[DE1DC030CB2B497BA1A42C0D39E7CE09]
   // Created 18-12-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -27,8 +26,7 @@ End if
 
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 
-$Obj_form:=FIELDS_Handler (New object:C1471(\
-"action";"init"))
+$Obj_form:=FIELDS_class ("editor_CALLBACK")
 
 $Obj_context:=$Obj_form.$
 

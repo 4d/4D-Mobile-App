@@ -382,7 +382,7 @@
 		"methods": [
 			"COMPILER_fields",
 			"FIELDS_class",
-			"FIELDS_Handler",
+			"FIELDS_HANDLER",
 			"fields_LIST",
 			"FIELDS_OBJECTS_HANDLER"
 		],

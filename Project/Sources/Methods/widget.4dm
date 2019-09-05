@@ -480,8 +480,15 @@ Else
 					
 				Else 
 					
-					OBJECT SET RGB COLORS:C628(*;$o.name;String:C10($2.foreground);String:C10($2.background))
-					
+					If ($2.background#Null:C1517)
+						
+						OBJECT SET RGB COLORS:C628(*;$o.name;String:C10($2.foreground);String:C10($2.background))
+						
+					Else 
+						
+						OBJECT SET RGB COLORS:C628(*;$o.name;String:C10($2.foreground))
+						
+					End if 
 				End if 
 				
 			Else 
@@ -492,8 +499,15 @@ Else
 					
 				Else 
 					
-					OBJECT SET RGB COLORS:C628(*;$o.name;Num:C11($2.foreground);Num:C11($2.background))
-					
+					If ($2.background#Null:C1517)
+						
+						OBJECT SET RGB COLORS:C628(*;$o.name;Num:C11($2.foreground);Num:C11($2.background))
+						
+					Else 
+						
+						OBJECT SET RGB COLORS:C628(*;$o.name;Num:C11($2.foreground))
+						
+					End if 
 				End if 
 			End if 
 			
