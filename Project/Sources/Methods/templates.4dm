@@ -208,8 +208,6 @@ Case of
 				
 				For each ($Obj_field;$Obj_tableList.fields)
 					
-					$i:=$i+1
-					
 					Case of 
 							
 							  //……………………………………………………………………………………………………………
@@ -313,6 +311,9 @@ Case of
 						$Obj_table.fields.push($Obj_field)
 						
 					End if 
+					
+					$i:=$i+1
+					
 				End for each 
 				
 				  // /  If there is more fields in template than defined by user (ie. last fields not defined)
