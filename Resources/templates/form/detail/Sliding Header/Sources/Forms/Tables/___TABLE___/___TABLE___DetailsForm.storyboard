@@ -9,7 +9,7 @@
         <!--Details Form-->
         <scene sceneID="yB9-mH-XoX">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="JvF-J0-saY" customClass="___TABLE___DetailsForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="___TABLE___DetailsForm" automaticallyAdjustsScrollViewInsets="NO" id="JvF-J0-saY" customClass="___TABLE___DetailsForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wpZ-Qk-3Dz"/>
                         <viewControllerLayoutGuide type="bottom" id="OWH-Kx-apU"/>

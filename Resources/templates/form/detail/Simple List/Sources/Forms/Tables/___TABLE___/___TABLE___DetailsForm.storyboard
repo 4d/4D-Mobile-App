@@ -40,7 +40,7 @@
         <!--Details Form-->
         <scene sceneID="fK0-6P-J5Y">
             <objects>
-                <viewController id="fuA-6I-sTU" customClass="___TABLE___DetailsForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="___TABLE___DetailsForm" id="fuA-6I-sTU" customClass="___TABLE___DetailsForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7i1-qQ-Sbo"/>
                         <viewControllerLayoutGuide type="bottom" id="D8o-Fj-VKX"/>
