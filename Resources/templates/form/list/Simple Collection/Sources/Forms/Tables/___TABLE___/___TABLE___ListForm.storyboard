@@ -20,7 +20,7 @@
         <!--___TABLE_LABEL___-->
         <scene sceneID="5Za-8D-3bM">
             <objects>
-                <collectionViewController id="zhh-qx-xYL" customClass="___TABLE___ListForm" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="___TABLE___ListForm" id="zhh-qx-xYL" customClass="___TABLE___ListForm" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="jDR-e3-zbF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
