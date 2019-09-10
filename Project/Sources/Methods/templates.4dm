@@ -844,7 +844,7 @@ Case of
 					$o:=asset (New object:C1471(\
 						"action";"create";\
 						"type";"imageset";\
-						"tags";$o;\
+						"tags";New object:C1471("name";"Main"+$Obj_table.name);\
 						"source";$Path_icon.platformPath;\
 						"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
 						"format";$Obj_template.assets.format;\
