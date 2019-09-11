@@ -97,6 +97,32 @@ Case of
 		
 		$t:=$Obj_template.source+$t+Folder separator:K24:12
 		
+		  // check if Login is required
+		If (Bool:C1537($Obj_in.project.server.authentication.email))
+			
+			If (Length:C16(String:C10($Obj_template.projectTag))>0)  // custom login template ...
+				
+				If (Length:C16(String:C10($Obj_in.project[$Obj_template.projectTag]))>0)  // ...added in project.4dmobileapp file
+					
+					$t:=$Obj_in.project[$Obj_template.projectTag]
+					$t:=$Obj_template.source+$t+Folder separator:K24:12
+					
+				Else   // ...added in mobile/form/login directory
+					
+					C_TEXT:C284($customLoginDir)
+					ARRAY TEXT:C222($customLoginList;0)
+					
+					$customLoginDir:=COMPONENT_Pathname ("host_loginForms").platformPath
+					FOLDER LIST:C473($customLoginDir;$customLoginList)
+					If (Size of array:C274($customLoginList)>=1)
+						$t:=$customLoginDir+$customLoginList{Size of array:C274($customLoginList)}+Folder separator:K24:12
+					End if 
+				End if 
+			End if 
+		End if 
+		
+		
+		
 		$o:=OB Copy:C1225($Obj_in)
 		
 		$Obj_out.template:=ob_parseDocument ($t+"manifest.json")

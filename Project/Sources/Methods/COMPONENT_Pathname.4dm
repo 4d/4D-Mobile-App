@@ -133,6 +133,17 @@ Case of
 		End if 
 		
 		  //______________________________________________________
+	: ($Txt_target="host_loginForms")
+		
+		$o:=COMPONENT_Pathname ("host_forms")
+		
+		If ($o.exists)
+			
+			$Obj_path:=$o.folder("login")
+			
+		End if 
+		
+		  //______________________________________________________
 	: ($Txt_target="host_tableIcons")\
 		 | ($Txt_target="host_fieldIcons")\
 		 | ($Txt_target="host_actionIcons")
