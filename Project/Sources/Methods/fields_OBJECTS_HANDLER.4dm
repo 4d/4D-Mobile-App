@@ -246,31 +246,38 @@ Case of
 					
 				End if 
 				
+				$Obj_context.inEdition:=$Obj_widget
+				
 				  //______________________________________________________
 			: ($Obj_form.form.event=On Data Change:K2:15)
 				
-				  // Get the field definition
-				$Obj_field:=$Obj_context.field($Obj_widget.row)
+				  // Get the edited field definition
+				$Obj_field:=$Obj_context.field($Obj_context.inEdition.row)
 				
 				  // Update data model
 				Case of 
-						
 						  //………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.labels.name].number)\
-						 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabels.name].number)
+					: ($Ptr_me=$Obj_widget.columns[$Obj_form.titles.name].pointer)
 						
 						  //%W-533.3
-						$Obj_field[Choose:C955($Obj_widget.column=$Obj_widget.columns[$Obj_form.labels.name].number;"label";"shortLabel")]:=$Ptr_me->{$Obj_widget.row}
+						$Obj_field.format:=$Ptr_me->{$Obj_context.inEdition.row}
 						  //%W+533.3
 						
 						  //………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.titles.name].number)
+					: ($Ptr_me=$Obj_widget.columns[$Obj_form.labels.name].pointer)
 						
 						  //%W-533.3
-						$Obj_field.format:=$Ptr_me->{$Obj_widget.row}
+						$Obj_field.label:=$Ptr_me->{$Obj_context.inEdition.row}
 						  //%W+533.3
 						
 						  //………………………………………………………………………………………
+					: ($Ptr_me=$Obj_widget.columns[$Obj_form.shortLabels.name].pointer)
+						
+						  //%W-533.3
+						$Obj_field.shortLabel:=$Ptr_me->{$Obj_context.inEdition.row}
+						  //%W+533.3
+						
+						  //______________________________________________________
 				End case 
 				
 				project.save()

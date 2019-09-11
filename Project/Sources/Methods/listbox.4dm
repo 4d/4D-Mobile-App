@@ -129,7 +129,8 @@ Else
 			For ($i;1;Size of array:C274($tTxt_ColNames);1)
 				
 				$o.columns[$tTxt_ColNames{$i}]:=New object:C1471(\
-					"number";$i)
+					"number";$i;\
+					"pointer";$tPtr_ColVars{$i})
 				
 			End for 
 			

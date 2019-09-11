@@ -163,8 +163,6 @@ If ($Obj_project.info.ideVersion=Null:C1517)  // "1720"
 	End if 
 End if 
 
-  //If (Bool(featuresFlags._100174))
-
 If (Num:C11($Obj_project.info.version)<2)
 	
 	  // Add datasource property if any
@@ -192,7 +190,6 @@ If (Num:C11($Obj_project.info.version)<2)
 	$Boo_upgraded:=True:C214
 	
 End if 
-  //End if 
 
   //=====================================================================
   //                 REORGANIZATION FIX AND RENAMING

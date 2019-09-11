@@ -160,8 +160,7 @@
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
-								"onDoubleClick",
-								"onGettingFocus"
+								"onDoubleClick"
 							],
 							"method": "ObjectMethods/shortLabels.4dm",
 							"header": {

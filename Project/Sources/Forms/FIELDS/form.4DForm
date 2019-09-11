@@ -112,7 +112,6 @@
 					"borderStyle": "none",
 					"events": [
 						"onClick",
-						"onDoubleClick",
 						"onLosingFocus",
 						"onGettingFocus",
 						"onDataChange",
@@ -227,7 +226,8 @@
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
-								"onDoubleClick"
+								"onDoubleClick",
+								"onBeforeDataEntry"
 							],
 							"header": {
 								"name": "Header3",
@@ -255,7 +255,8 @@
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
-								"onDoubleClick"
+								"onDoubleClick",
+								"onBeforeDataEntry"
 							],
 							"header": {
 								"name": "Header2",
@@ -315,9 +316,7 @@
 							"styledText": false,
 							"contextMenu": "none",
 							"events": [
-								"onClick",
 								"onDoubleClick",
-								"onGettingFocus",
 								"onBeforeDataEntry"
 							],
 							"method": "FIELDS_OBJECTS_HANDLER ",
