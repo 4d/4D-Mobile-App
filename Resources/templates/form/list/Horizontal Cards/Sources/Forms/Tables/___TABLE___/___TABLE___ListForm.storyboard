@@ -128,6 +128,9 @@
                         <userDefinedRuntimeAttribute type="boolean" keyPath="showSectionBar" value="NO"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="animator" value="linearcard"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="actions" value="___TABLE_ACTIONS___"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="searchableAsTitle" value="NO"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="searchableWhenScrolling" value="NO"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="searchableHideNavigation" value="NO"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="searchBar" destination="eqo-z7-dF4" id="ZJt-km-6cn"/>
