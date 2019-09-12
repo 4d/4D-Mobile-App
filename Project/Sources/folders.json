@@ -110,6 +110,12 @@
 		]
 	},
 	"(_TEMPO)": {},
+	"(mnu)": {
+		"methods": [
+			"(COMPILER_mnu)",
+			"(mnu_defaultBar)"
+		]
+	},
 	"[EDITOR]": {
 		"methods": [
 			"COMPILER_editor",
@@ -398,7 +404,6 @@
 			"doc",
 			"env (thread-safe)",
 			"err",
-			"mnu",
 			"ob",
 			"ob_error",
 			"panel",
@@ -468,12 +473,6 @@
 		]
 	},
 	"methods": {},
-	"mnu": {
-		"methods": [
-			"COMPILER_mnu",
-			"mnu_defaultBar"
-		]
-	},
 	"mobile": {
 		"methods": [
 			"COMPILER_mobile",
@@ -730,7 +729,8 @@
 	},
 	"trash": {
 		"groups": [
-			"(_TEMPO)"
+			"(_TEMPO)",
+			"(mnu)"
 		]
 	}
 }

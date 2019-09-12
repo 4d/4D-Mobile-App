@@ -13,6 +13,7 @@ C_TEXT:C284($1)
 C_BOOLEAN:C305($Boo_debuglog)
 C_LONGINT:C283($Lon_parameters)
 C_TEXT:C284($File_project;$t;$Txt_entryPoint;$Txt_methodName;$Txt_projectName)
+C_OBJECT:C1216($o)
 
 If (False:C215)
 	C_TEXT:C284(00_OPEN ;$1)
@@ -119,17 +120,18 @@ Case of
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_init")
 		
-		$t:=mnu_defaultBar 
+		$o:=menu \
+			.append(":xliff:CommonMenuFile";menu .fileMenu())\
+			.append(":xliff:CommonMenuEdit";menu .editMenu())
 		
 		If (Storage:C1525.database.isMatrix)
 			
-			file_Menu ($t)
-			dev_Menu ($t)
+			file_Menu ($o.ref)
+			dev_Menu ($o.ref)
 			
 		End if 
 		
-		SET MENU BAR:C67($t)
-		RELEASE MENU:C978($t)
+		$o.setBar()
 		
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_deinit")

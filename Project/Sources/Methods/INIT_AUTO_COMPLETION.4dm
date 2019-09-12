@@ -40,6 +40,7 @@ If (False:C215)  // File & Folder
 	$b:=$o.hidden  // READ/WRITE - Return TRUE if the folder the flag system is set
 	$b:=$o.isAlias  // FALSE
 	$o:=$o.original  // Return the same folder object
+	
 	$o:=$o.parent  // Returns a parent folder object. If no parent, return a NULL object
 	
 	  // Create a sub folder object
@@ -128,10 +129,10 @@ If (False:C215)  // File & Folder
 	$b:=$o.isFolder  // FALSE
 	$b:=$o.hidden  // READ/WRITE - Return the system flag 'hidden'
 	$b:=$o.isAlias  // Returns TRUE if the filename exists and is an alias or shortcut or symbolic link
+	
 	$t:=$o.original  // For an alias or symbolic link, return the original file or folder object. Otherwise return the same file object. No error if original desn't exist, just returns null
+	
 	$o:=$o.parent  // Returns a parent folder object. If no parent, return a NULL object.
-	
-	
 	
 	  // Return the system image associated with the type with the nearest size
 	  //- $1: size of the picture
@@ -199,7 +200,6 @@ If (False:C215)  // File & Folder
 End if 
 
 If (False:C215)  // Collections
-	
 	$l:=$c.length
 	
 	$c.average()
@@ -240,7 +240,6 @@ If (False:C215)  // Collections
 	$c.sort()
 	$c.sum()
 	$c.unshift()
-	
 End if 
 
 If (False:C215)  // DataStore
@@ -261,11 +260,9 @@ If (False:C215)
 	  // DataClassAttribute
 	$o.kind()
 	$o.name()
-	
 End if 
 
 If (False:C215)  // Entity
-	
 	$o.clone()
 	$o.diff()
 	$o.drop()
@@ -285,11 +282,9 @@ If (False:C215)  // Entity
 	$o.touched()
 	$o.touchedAttributes()
 	$o.unlock()
-	
 End if 
 
 If (False:C215)  // EntitySelection
-	
 	$o.queryPath()
 	$o.queryPlan()
 	$o.add()

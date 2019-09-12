@@ -12,7 +12,7 @@ C_TEXT:C284($1)
 
 C_LONGINT:C283($Lon_parameters;$Win_hdl)
 C_TEXT:C284($t;$Txt_entryPoint;$Txt_projectName;$Txt_worker)
-C_OBJECT:C1216($o;$Obj_form;$Obj_root;$Obj_project)
+C_OBJECT:C1216($o;$Obj_form;$Obj_root)
 
 If (False:C215)
 	C_TEXT:C284(00_NEW ;$1)
@@ -60,7 +60,6 @@ Case of
 		00_NEW ("_init")
 		
 		If (False:C215)
-			
 			C_NEW_MOBILE_PROJECT 
 			
 		Else 
@@ -122,17 +121,18 @@ Case of
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_init")
 		
-		$t:=mnu_defaultBar 
+		$o:=menu \
+			.append(":xliff:CommonMenuFile";menu .fileMenu())\
+			.append(":xliff:CommonMenuEdit";menu .editMenu())
 		
 		If (Storage:C1525.database.isMatrix)
 			
-			file_Menu ($t)
-			dev_Menu ($t)
+			file_Menu ($o.ref)
+			dev_Menu ($o.ref)
 			
 		End if 
 		
-		SET MENU BAR:C67($t)
-		RELEASE MENU:C978($t)
+		$o.setBar()
 		
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_deinit")

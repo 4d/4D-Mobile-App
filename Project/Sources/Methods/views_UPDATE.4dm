@@ -12,7 +12,7 @@
 C_TEXT:C284($1)
 
 C_BOOLEAN:C305($b)
-C_LONGINT:C283($l;$Lon_parameters)
+C_LONGINT:C283($l)
 C_TEXT:C284($Txt_formFamilly;$Txt_table)
 C_OBJECT:C1216($o;$Obj_field;$Obj_target)
 C_COLLECTION:C1488($c;$Col_catalog;$Col_fields)
@@ -23,9 +23,7 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
 	$Txt_formFamilly:=$1  // "list" | "detail"
@@ -33,7 +31,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	  // Default values
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
+	If (Count parameters:C259>=2)
 		
 		  // <NONE>
 		
