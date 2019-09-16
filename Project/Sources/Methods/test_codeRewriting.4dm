@@ -1,4 +1,6 @@
 //%attributes = {}
+C_TEXT:C284($t;$tt)
+
 TRY 
 
 ASSERT:C1129(COMPONENT_Pathname ("databasePreferences").platformPath=_o_Pathname ("databasePreferences"))
@@ -52,5 +54,13 @@ ASSERT:C1129(_o_env_userPath ("derivedData")=env_userPathname ("derivedData").pl
 ASSERT:C1129(_o_env_userPath ("derivedData";True:C214)=env_userPathname ("derivedData").path)
 ASSERT:C1129(_o_env_userPath ("archives")=env_userPathname ("archives").platformPath)
 ASSERT:C1129(_o_env_userPath ("archives";True:C214)=env_userPathname ("archives").path)
+
+COMPONENT_INIT 
+$t:=_o_env_userPath ("cache")+".sdk"+Folder separator:K24:12+commonValues.thirdParty
+$tt:=env_userPathname ("cache").file(".sdk/"+commonValues.thirdParty).platformPath
+ASSERT:C1129($t=$tt)
+$t:=_o_env_userPath ("preferences")+"com.apple.iphonesimulator.plist"
+$tt:=env_userPathname ("preferences").file("com.apple.iphonesimulator.plist").platformPath
+ASSERT:C1129($t=$tt)
 
 FINALLY 

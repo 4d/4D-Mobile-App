@@ -38,22 +38,24 @@ If (This:C1470._is=Null:C1517)
 	
 	$o:=New object:C1471(\
 		"_is";"str";\
-		"value";$t;\
 		"length";Length:C16($t);\
+		"value";$t;\
 		"common";Formula:C1597(str ("common";New object:C1471("with";$1;"diacritical";Bool:C1537($2))).value);\
 		"concat";Formula:C1597(str ("concat";New object:C1471("item";$1;"separator";$2)).value);\
 		"contains";Formula:C1597(str ("contains";New object:C1471("pattern";String:C10($1);"diacritical";Bool:C1537($2))).value);\
 		"distinctLetters";Formula:C1597(str ("distinctLetters";New object:C1471("delimiter";$1)).value);\
 		"equal";Formula:C1597(str ("equal";New object:C1471("with";$1)).value);\
 		"fixedLength";Formula:C1597(str ("fixedLength";New object:C1471("length";$1;"filler";$2;"alignment";$3)).value);\
-		"isStyled";Formula:C1597(str ("isStyled").value);\
+		"insert";Formula:C1597(str ("insert";New object:C1471("value";String:C10($1);"begin";Num:C11($2);"end";Num:C11($3))));\
 		"isBoolean";Formula:C1597(str ("isBoolean").value);\
 		"isDate";Formula:C1597(str ("isDate").value);\
 		"isJson";Formula:C1597(Match regex:C1019("(?msi)^(?:\\{.*\\})|(?:\\[.*\\])$";This:C1470.value;1));\
 		"isJsonArray";Formula:C1597(Match regex:C1019("(?msi)^\\[.*\\]$";This:C1470.value;1));\
 		"isJsonObject";Formula:C1597(Match regex:C1019("(?msi)^\\{.*\\}$";This:C1470.value;1));\
 		"isNum";Formula:C1597(str ("isNum").value);\
+		"isStyled";Formula:C1597(str ("isStyled").value);\
 		"isTime";Formula:C1597(str ("isTime").value);\
+		"isUrl";Formula:C1597(str ("isUrl").value);\
 		"localized";Formula:C1597(str ("localized";New object:C1471("substitution";$1)).value);\
 		"lowerCamelCase";Formula:C1597(str ("lowerCamelCase").value);\
 		"match";Formula:C1597(str ("match";New object:C1471("pattern";$1)).value);\
@@ -65,12 +67,12 @@ If (This:C1470._is=Null:C1517)
 		"spaceSeparated";Formula:C1597(str ("spaceSeparated").value);\
 		"toNum";Formula:C1597(str ("filter";New object:C1471("as";"numeric")).value);\
 		"trim";Formula:C1597(str ("trim";New object:C1471("pattern";$1)).value);\
-		"trimTrailing";Formula:C1597(str ("trimTrailing";New object:C1471("pattern";$1)).value);\
 		"trimLeading";Formula:C1597(str ("trimLeading";New object:C1471("pattern";$1)).value);\
+		"trimTrailing";Formula:C1597(str ("trimTrailing";New object:C1471("pattern";$1)).value);\
 		"unaccented";Formula:C1597(str ("unaccented").value);\
 		"uperCamelCase";Formula:C1597(str ("uperCamelCase").value);\
-		"urlEncode";Formula:C1597(str ("urlEncode").value);\
 		"urlDecode";Formula:C1597(str ("urlDecode").value);\
+		"urlEncode";Formula:C1597(str ("urlEncode").value);\
 		"wordWrap";Formula:C1597(str ("wordWrap";New object:C1471("length";$1)).value);\
 		"xmlEncode";Formula:C1597(str ("xmlEncode").value)\
 		)
@@ -589,6 +591,15 @@ Else
 					$o.value:=Match regex:C1019("(?m-si)^\\d+"+$t+"\\d+(?:"+$t+"\\d+)?$";String:C10(This:C1470.value);1)
 					
 					  //______________________________________________________
+				: ($1="isUrl")  // Returns True if the text conforms to the URL grammar. (DOES NOT CHECK IF THE URL IS VALID)
+					
+					$o.value:=Match regex:C1019("(?m-si)^(?:(?:https?)://)?(?:localhost|127.0.0.1|(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3}"+\
+						")(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9"+\
+						"]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|"+\
+						"(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1"+\
+						"}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,}))))(?::\\d{2,5})?(?:/[^\\s]*)?$";String:C10(This:C1470.value);1)
+					
+					  //______________________________________________________
 				: ($1="match")  // Returns True if text match given pattern
 					
 					$o.value:=Match regex:C1019(String:C10($2.pattern);String:C10(This:C1470.value);1)
@@ -793,10 +804,10 @@ Else
 					  //: (Formula(process ).call().isPreemptif)
 					
 					  //_4D THROW ERROR(New object(\
-																														"component";"CLAS";\
-																														"code";1;\
-																														"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
-																														"something";"my bug"))
+												"component";"CLAS";\
+												"code";1;\
+												"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
+												"something";"my bug"))
 					
 					  //______________________________________________________
 				: ($1="isStyled")  // Returns True if text is styled
@@ -807,6 +818,41 @@ Else
 					$Txt_result:=Formula from string:C1601(":C1116($1)").call(Null:C1517;$t)
 					
 					$o.value:=($Txt_result#$Txt_filtered)
+					
+					  //______________________________________________________
+				: ($1="insert")  // Returns an object with string after insertion (value), and positions (begin & end)
+					
+					If ($2.end>$2.begin)  // True if text to replace
+						
+						  // Replace the selection with the string to insert
+						$o.value:=Substring:C12(This:C1470.value;1;$2.begin-1)+$2.value+Substring:C12(This:C1470.value;$2.end)
+						$o.begin:=$2.begin
+						$o.end:=$2.begin+Length:C16($2.value)
+						
+					Else 
+						
+						  // Insert the chain at the insertion point
+						$l:=Length:C16(This:C1470.value)  //keep the current size
+						$o.value:=Insert string:C231(This:C1470.value;$2.value;$2.begin)
+						
+						If ($2.begin=$l)
+							
+							  // We were at the end of the text and we stay
+							$l:=Length:C16(This:C1470.value)+1
+							
+						Else 
+							
+							  // The insertion point is translated from the length of the inserted string
+							$l:=$2.begin+Length:C16($2.value)
+							
+						End if 
+						
+						$o.begin:=$l
+						$o.end:=$l
+						
+					End if 
+					
+					
 					
 					  //______________________________________________________
 				Else 

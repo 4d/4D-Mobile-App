@@ -258,7 +258,7 @@ Case of
 							$o.promptBackColor:=ui.strokeColor
 							$o.hidePromptSeparator:=True:C214
 							$o.forceRedraw:=True:C214
-							$o.prompt:=str_localized (New collection:C1472("chooseAnIconForTheAction";String:C10($Obj_context.current.name)))
+							$o.prompt:=str .setText("chooseAnIconForTheAction").localized(String:C10($Obj_context.current.name))
 							
 							  // Display selector
 							$Obj_form.form.call(New object:C1471(\

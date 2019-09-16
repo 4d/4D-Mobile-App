@@ -208,14 +208,14 @@ Case of
 		If (Not:C34($Obj_out.success))
 			
 			  // Verify URL grammar
-			$Obj_out.success:=Check_entry (New object:C1471("type";"url";"value";$Obj_in.url)).success
+			$Obj_out.success:=str ($Obj_in.url).isUrl()
 			
 			If ($Obj_out.success)
 				
 				If (False:C215)  //#DISABLED
 					
 					  // HTTPS is mandatory
-					$Obj_out.success:=Check_entry (New object:C1471("type";"https";"value";$Obj_in.url)).success
+					$Obj_out.success:=Match regex:C1019("(?m-si)https://";$Obj_in.url;1)
 					
 					If (Not:C34($Obj_out.success))
 						
@@ -311,7 +311,7 @@ Case of
 						If (Num:C11(err.error)=-1)
 							
 							  // Port conflict ?
-							$Obj_out.configuration.message:=str_localized (New collection:C1472("someListeningPortsAreAlreadyUsed";String:C10($Obj_out.options.webPortID);String:C10($Obj_out.options.webHTTPSPortID)))
+							$Obj_out.configuration.message:=str .setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_out.options.webPortID);String:C10($Obj_out.options.webHTTPSPortID)))
 							
 						Else 
 							

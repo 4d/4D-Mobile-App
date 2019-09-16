@@ -18,9 +18,9 @@ C_TEXT:C284($Txt_filtered;$Txt_formated;$Txt_selector;$Txt_string)
 ARRAY TEXT:C222($tTxt_keywords;0)
 
 If (False:C215)
-	C_TEXT:C284(str_format ;$0)
-	C_TEXT:C284(str_format ;$1)
-	C_TEXT:C284(str_format ;$2)
+	C_TEXT:C284(_o_str_format ;$0)
+	C_TEXT:C284(_o_str_format ;$1)
+	C_TEXT:C284(_o_str_format ;$2)
 End if 
 
   // ----------------------------------------------------

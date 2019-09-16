@@ -52,10 +52,9 @@ Case of
 		  //______________________________________________________
 	: ($Txt_selector="bundleApp")
 		
-		$Txt_formated:=$Txt_string
-		
 		  // Replace accented characters with non accented one.
-		$Txt_formated:=str_format ("replace-accent";$Txt_formated)
+		$Txt_formated:=str ($Txt_string).unaccented()
+		
 		
 		  // Remove space, other accent, special characters
 		$Lon_error:=Rgx_SubstituteText ("[^a-zA-Z0-9\\.]";"-";->$Txt_formated;0)
@@ -126,7 +125,7 @@ Case of
 			$Txt_string:=Replace string:C233($Txt_string;".";" ")  // #98373
 			
 			  // Replace accented characters with non accented one.
-			$Txt_string:=str_format ("replace-accent";$Txt_string)  // #98381
+			$Txt_string:=str ($Txt_string).unaccented()  // #98381
 			
 			  // Remove space {
 			GET TEXT KEYWORDS:C1141($Txt_string;$tTxt_keywords)
@@ -182,7 +181,7 @@ Case of
 				$Txt_string:=Replace string:C233($Txt_string;".";" ")  // #98373
 				
 				  // Replace accented characters with non accented one.
-				$Txt_string:=str_format ("replace-accent";$Txt_string)
+				$Txt_string:=str ($Txt_string).unaccented()
 				
 				$Txt_string[[1]]:=Lowercase:C14($Txt_string[[1]])
 				

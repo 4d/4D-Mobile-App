@@ -194,7 +194,7 @@ Case of
 					  // Port conflict?
 					If (Num:C11(err.error)=-1)
 						
-						$Txt_message:=str_localized (New collection:C1472("someListeningPortsAreAlreadyUsed";String:C10($Obj_buffer.options.webPortID);String:C10($Obj_buffer.options.webHTTPSPortID)))
+						$Txt_message:=str .setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_buffer.options.webPortID);String:C10($Obj_buffer.options.webHTTPSPortID)))
 						
 					Else 
 						
@@ -218,7 +218,7 @@ Case of
 						
 						If (Num:C11(err.error)=-1)
 							
-							$Txt_message:=str_localized (New collection:C1472("someListeningPortsAreAlreadyUsed";String:C10($Obj_buffer.options.webPortID);String:C10($Obj_buffer.options.webHTTPSPortID)))
+							$Txt_message:=str .setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_buffer.options.webPortID);String:C10($Obj_buffer.options.webHTTPSPortID)))
 							
 						Else 
 							
@@ -240,7 +240,7 @@ Case of
 			  //  // Port conflict? or certificates are missing?
 			  //$Dir_database:=Get 4D folder(Database folder;*)
 			  //If (Test path name($Dir_database+"cert.pem")#Is a document)\
-																| (Test path name($Dir_database+"key.pem")#Is a document)
+																				| (Test path name($Dir_database+"key.pem")#Is a document)
 			
 			  //$Txt_message:=Get localized string("checkThatTheCertificatesAreProperlyInstalled")
 			  // Else

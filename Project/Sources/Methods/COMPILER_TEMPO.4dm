@@ -33,10 +33,6 @@ C_OBJECT:C1216(call_MESSAGE_DISPATCH ;$1)
 C_OBJECT:C1216(project_SKIN ;$1)
 
   //__________________________________________________
-C_OBJECT:C1216(Check_entry ;$0)
-C_OBJECT:C1216(Check_entry ;$1)
-
-  //__________________________________________________
 C_TEXT:C284(TURN_AROUND_Field_name ;$0)
 C_POINTER:C301(TURN_AROUND_Field_name ;$1)
 
@@ -50,9 +46,6 @@ C_OBJECT:C1216(unitTestSuites ;$1)
 C_BOOLEAN:C305(_o_rest_isValidField ;$0)
 C_OBJECT:C1216(_o_rest_isValidField ;$1)
 
-  // ----------------------------------------------------
-C_TEXT:C284(_o_macros ;$0)
-C_TEXT:C284(_o_macros ;$1)
 
   //______________________________________________________
 C_TEXT:C284(_o_env_System_path ;$0)

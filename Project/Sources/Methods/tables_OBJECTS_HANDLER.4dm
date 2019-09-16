@@ -105,7 +105,7 @@ Case of
 							$Obj_picker.promptBackColor:=ui.strokeColor
 							$Obj_picker.hidePromptSeparator:=True:C214
 							$Obj_picker.forceRedraw:=True:C214
-							$Obj_picker.prompt:=str_localized (New collection:C1472("chooseAnIconForTheTable";(ui.pointer($Obj_form.tables))->{$Lon_row}))
+							$Obj_picker.prompt:=str .setText("chooseAnIconForTheTable").localized((ui.pointer($Obj_form.tables))->{$Lon_row})
 							
 							  // Display selector
 							CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"pickerShow";$Obj_picker)

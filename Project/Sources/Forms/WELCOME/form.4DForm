@@ -8,8 +8,8 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
-		"onUnload",
 		"onTimer",
+		"onResize",
 		"onBoundVariableChange"
 	],
 	"method": "method.4dm",
@@ -92,14 +92,9 @@
 					"left": 284,
 					"width": 402,
 					"height": 380,
-					"resizingMode": "legacy",
 					"focusable": false,
-					"sortable": false,
-					"movableRows": false,
-					"hideExtraBlankRows": true,
 					"rowHeight": "5em",
 					"showHeaders": false,
-					"selectionMode": "none",
 					"scrollbarHorizontal": "hidden",
 					"scrollbarVertical": "hidden",
 					"horizontalLineStroke": "transparent",
@@ -109,6 +104,12 @@
 					"fontFamily": ".SF NS Text",
 					"fontSize": 14,
 					"borderStyle": "none",
+					"hideExtraBlankRows": true,
+					"movableRows": false,
+					"sortable": false,
+					"selectionMode": "none",
+					"resizingMode": "legacy",
+					"visibility": "visible",
 					"columns": [
 						{
 							"name": "icons",

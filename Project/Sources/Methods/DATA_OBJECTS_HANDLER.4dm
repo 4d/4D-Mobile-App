@@ -322,17 +322,10 @@ Case of
 							End if 
 						End if 
 						
-						$o:=New object:C1471(\
-							"widget";$Obj_form.filter;\
-							"target";String:C10($Obj_table.filter.string);\
-							"text";$Txt_choice;\
-							"begin";$Lon_begin;\
-							"end";$Lon_end)
-						
-						str_INSERT ($o)
-						
 						$Obj_table.filter.validated:=False:C215
-						$Obj_table.filter.string:=$o.target
+						
+						$o:=str (String:C10($Obj_table.filter.string)).insert($Txt_choice;$Lon_begin;$Lon_end)
+						$Obj_table.filter.string:=$o.value
 						
 						Form:C1466.dataModel[String:C10($Obj_table.tableNumber)].filter:=$Obj_table.filter
 						

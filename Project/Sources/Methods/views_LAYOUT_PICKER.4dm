@@ -132,7 +132,7 @@ $Obj_picker:=New object:C1471(\
 "promptBackColor";ui.strokeColor;\
 "hidePromptSeparator";True:C214;\
 "forceRedraw";True:C214;\
-"prompt";str_localized (New collection:C1472("selectAFormTemplateToUseAs";$Txt_typeForm));\
+"prompt";str .setText("selectAFormTemplateToUseAs").localized($Txt_typeForm);\
 "selector";$Txt_typeForm)
 
 For ($i;1;Size of array:C274($tTxt_forms);1)

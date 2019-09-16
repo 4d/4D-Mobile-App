@@ -10,7 +10,7 @@
   // Declarations
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_importance;$Lon_parameters)
+C_LONGINT:C283($Lon_importance)
 C_TEXT:C284($Txt_header)
 C_OBJECT:C1216($Obj_in)
 
@@ -20,21 +20,15 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
 	$Obj_in:=$1
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
-		
-		  // <NONE>
-		
-	End if 
+	  // <NONE>
 	
-	$Txt_header:=Choose:C955(Bool:C1537($Obj_in.header);$Obj_in.header;"[4D Mobile] ")
+	$Txt_header:=Choose:C955(Bool:C1537($Obj_in.header);$Obj_in.header;"["+Folder:C1567(fk database folder:K87:14).name+"] ")
 	$Lon_importance:=Choose:C955(Bool:C1537($Obj_in.importance);$Obj_in.importance;Warning message:K38:2)
 	
 Else 

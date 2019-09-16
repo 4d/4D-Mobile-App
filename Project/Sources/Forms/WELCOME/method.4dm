@@ -5,41 +5,39 @@
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($Boo_geometry)
-C_LONGINT:C283($Lon_;$Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_i;$Lon_left)
+C_LONGINT:C283($i;$l;$Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_left)
 C_LONGINT:C283($Lon_middle;$Lon_right;$Lon_top;$Lon_width)
-C_TEXT:C284($Dir_root;$Txt_template)
+C_OBJECT:C1216($str)
 
   // ----------------------------------------------------
   // Initialisations
 $Lon_formEvent:=Form event code:C388
 
   // ----------------------------------------------------
-
 Case of 
+		
 		  //______________________________________________________
 	: ($Lon_formEvent=On Load:K2:1)
 		
 		ARRAY PICTURE:C279($tPic_;4)
 		ARRAY TEXT:C222($tTxt_;4)
 		
-		$Dir_root:=Get 4D folder:C485(Current resources folder:K5:16)+Convert path POSIX to system:C1107("images/welcome/")
+		READ PICTURE FILE:C678(Folder:C1567("/RESOURCES/images/welcome/").file("structure.png").platformPath;$tPic_{1})
+		READ PICTURE FILE:C678(Folder:C1567("/RESOURCES/images/welcome/").file("design.png").platformPath;$tPic_{2})
+		READ PICTURE FILE:C678(Folder:C1567("/RESOURCES/images/welcome/").file("generateAndTest.png").platformPath;$tPic_{3})
+		READ PICTURE FILE:C678(Folder:C1567("/RESOURCES/images/welcome/").file("deploy.png").platformPath;$tPic_{4})
 		
-		READ PICTURE FILE:C678($Dir_root+"structure.png";$tPic_{1})
-		READ PICTURE FILE:C678($Dir_root+"design.png";$tPic_{2})
-		READ PICTURE FILE:C678($Dir_root+"generateAndTest.png";$tPic_{3})
-		READ PICTURE FILE:C678($Dir_root+"deploy.png";$tPic_{4})
+		$str:=str ("<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"\
+			+"{title}"\
+			+"</span>"\
+			+"<br/>"\
+			+"<span style='font-size: 13pt;font-weight: normal'>"\
+			+"{description}"\
+			+"</span></span>")
 		
-		$Txt_template:="<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"
-		$Txt_template:=$Txt_template+"{title}"
-		$Txt_template:=$Txt_template+"</span>"
-		$Txt_template:=$Txt_template+"<br/>"
-		$Txt_template:=$Txt_template+"<span style='font-size: 13pt;font-weight: normal'>"
-		$Txt_template:=$Txt_template+"{description}"
-		$Txt_template:=$Txt_template+"</span></span>"
-		
-		For ($Lon_i;1;4;1)
+		For ($i;1;4;1)
 			
-			$tTxt_{$Lon_i}:=str_localized (New collection:C1472($Txt_template;"wel_title_"+String:C10($Lon_i);"wel_description_"+String:C10($Lon_i)))
+			$tTxt_{$i}:=$str.localized(New collection:C1472("wel_title_"+String:C10($i);"wel_description_"+String:C10($i)))
 			
 		End for 
 		
@@ -58,8 +56,10 @@ Case of
 		$Boo_geometry:=True:C214
 		
 		SET TIMER:C645(-1)
+		
 		  //______________________________________________________
-	: ($Lon_formEvent=On Bound Variable Change:K2:52)
+	: ($Lon_formEvent=On Bound Variable Change:K2:52)\
+		 | ($Lon_formEvent=On Resize:K2:27)
 		
 		$Boo_geometry:=True:C214
 		
@@ -68,6 +68,7 @@ Case of
 		
 		  //______________________________________________________
 	: ($Lon_formEvent=On Timer:K2:25)
+		
 		SET TIMER:C645(0)
 		
 		$Boo_geometry:=True:C214
@@ -99,8 +100,8 @@ If ($Boo_geometry)
 	$Lon_right:=$Lon_left+$Lon_width
 	OBJECT SET COORDINATES:C1248(*;"list";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 	
-	OBJECT GET COORDINATES:C663(*;"doNotShowAgain";$Lon_;$Lon_top;$Lon_right;$Lon_bottom)
-	$Lon_width:=$Lon_right-$Lon_
+	OBJECT GET COORDINATES:C663(*;"doNotShowAgain";$l;$Lon_top;$Lon_right;$Lon_bottom)
+	$Lon_width:=$Lon_right-$l
 	$Lon_right:=$Lon_left+$Lon_width
 	OBJECT SET COORDINATES:C1248(*;"doNotShowAgain";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 	

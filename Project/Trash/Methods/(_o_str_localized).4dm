@@ -27,8 +27,8 @@ C_COLLECTION:C1488($Coll_strings)
 ARRAY TEXT:C222($tTxt_replacement;0)
 
 If (False:C215)
-	C_TEXT:C284(str_localized ;$0)
-	C_COLLECTION:C1488(str_localized ;$1)
+	C_TEXT:C284(_o_str_localized ;$0)
+	C_COLLECTION:C1488(_o_str_localized ;$1)
 End if 
 
   // ----------------------------------------------------

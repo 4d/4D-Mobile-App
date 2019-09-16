@@ -23,7 +23,6 @@
 			"_o_editor_MENU_BUILD",
 			"_o_env_System_path",
 			"_o_env_userPath",
-			"_o_macros",
 			"_o_panel_SET_CONSTRAINTS",
 			"_o_Pathname",
 			"_o_rest_isValidField",
@@ -109,13 +108,7 @@
 			"COMPONENT_Pathname"
 		]
 	},
-	"(_TEMPO)": {},
-	"(mnu)": {
-		"methods": [
-			"(COMPILER_mnu)",
-			"(mnu_defaultBar)"
-		]
-	},
+	"(__TRASH)": {},
 	"[EDITOR]": {
 		"methods": [
 			"COMPILER_editor",
@@ -250,6 +243,7 @@
 	"classes": {
 		"methods": [
 			"button",
+			"class",
 			"color",
 			"COMPILER_classes",
 			"database",
@@ -472,7 +466,6 @@
 			"MESSAGE"
 		]
 	},
-	"methods": {},
 	"mobile": {
 		"methods": [
 			"COMPILER_mobile",
@@ -616,9 +609,6 @@
 			"str_cmpVersion",
 			"str_date",
 			"str_equal",
-			"str_format",
-			"str_INSERT",
-			"str_localized",
 			"str_singleQuoted"
 		]
 	},
@@ -651,14 +641,7 @@
 			"TABLES"
 		]
 	},
-	"tools": {
-		"groups": [
-			"methods"
-		],
-		"methods": [
-			"Check_entry"
-		]
-	},
+	"tools": {},
 	"ui": {
 		"methods": [
 			"_o_ui_listbox",
@@ -729,8 +712,7 @@
 	},
 	"trash": {
 		"groups": [
-			"(_TEMPO)",
-			"(mnu)"
+			"(__TRASH)"
 		]
 	}
 }

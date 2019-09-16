@@ -18,18 +18,6 @@ If (False:C215)
 	C_TEXT:C284(str_equal ;$2)
 	
 	  //_____________________________
-	C_TEXT:C284(str_format ;$0)
-	C_TEXT:C284(str_format ;$1)
-	C_TEXT:C284(str_format ;$2)
-	
-	  //_____________________________
-	C_OBJECT:C1216(str_INSERT ;$1)
-	
-	  //_____________________________
-	C_TEXT:C284(str_localized ;$0)
-	C_COLLECTION:C1488(str_localized ;$1)
-	
-	  //_____________________________
 	C_TEXT:C284(str_singleQuoted ;$0)
 	C_TEXT:C284(str_singleQuoted ;$1)
 	

@@ -195,21 +195,30 @@ Case of
 					
 					If (Bool:C1537($Obj_in.param.manualInstallation))
 						
+						  //DISPLAY NOTIFICATION(Get localized string("4dProductName");\
+							str_localized (New collection("theApplicationHasBeenSuccessfullyGenerated";$Obj_in.param.project.product.name)))
+						
 						DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName");\
-							str_localized (New collection:C1472("theApplicationHasBeenSuccessfullyGenerated";$Obj_in.param.project.product.name)))
+							str ("theApplicationHasBeenSuccessfullyGenerated").localized($Obj_in.param.project.product.name))
 						
 					Else 
 						
+						  //DISPLAY NOTIFICATION(Get localized string("4dProductName");\
+							str_localized (New collection("theApplicationHasBeenSuccessfullyInstalled";$Obj_in.param.project.product.name)))
+						
 						DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName");\
-							str_localized (New collection:C1472("theApplicationHasBeenSuccessfullyInstalled";$Obj_in.param.project.product.name)))
+							str ("theApplicationHasBeenSuccessfullyInstalled").localized($Obj_in.param.project.product.name))
 						
 					End if 
 					
 					  //…………………………………………………………………………………………………………………………
 				Else 
 					
+					  //DISPLAY NOTIFICATION(Get localized string("4dProductName");\
+						str_localized (New collection("theApplicationHasBeenSuccessfullyGenerated";$Obj_in.param.project.product.name)))
+					
 					DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName");\
-						str_localized (New collection:C1472("theApplicationHasBeenSuccessfullyGenerated";$Obj_in.param.project.product.name)))
+						str ("theApplicationHasBeenSuccessfullyGenerated").localized($Obj_in.param.project.product.name))
 					
 					If (Bool:C1537($Obj_in.param.create)\
 						 & Not:C34(Bool:C1537($Obj_in.param.archive))\

@@ -16,8 +16,8 @@ C_TEXT:C284($Txt_pattern)
 C_OBJECT:C1216($Obj_param;$Obj_result)
 
 If (False:C215)
-	C_OBJECT:C1216(Check_entry ;$0)
-	C_OBJECT:C1216(Check_entry ;$1)
+	C_OBJECT:C1216(_o_Check_entry ;$0)
+	C_OBJECT:C1216(_o_Check_entry ;$1)
 End if 
 
   // ----------------------------------------------------

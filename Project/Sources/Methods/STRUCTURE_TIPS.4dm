@@ -300,7 +300,7 @@ If ($Lon_row#0)
 															  //……………………………………………………………………………………………………………………
 														: ($Obj_field.name#$c[$l].name)  // Name mismatch
 															
-															$Txt_tips:=ui.alert+str_localized (New collection:C1472("theFieldOldWasRenamedToNew";$Obj_field.name;$c[$l].name))
+															$Txt_tips:=ui.alert+$o.setText("theFieldOldWasRenamedToNew").localized($Obj_field.name;$c[$l].name)
 															
 															  //……………………………………………………………………………………………………………………
 														Else   // Field is OK

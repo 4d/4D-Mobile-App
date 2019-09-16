@@ -5,13 +5,11 @@
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_formEvent)
-C_POINTER:C301($Ptr_me;$Ptr_me->)
-C_TEXT:C284($Txt_me)
+C_POINTER:C301($Ptr_me)
 
   // ----------------------------------------------------
   // Initialisations
 $Lon_formEvent:=Form event code:C388
-$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 
   // ----------------------------------------------------

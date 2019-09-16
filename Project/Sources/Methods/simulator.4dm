@@ -11,8 +11,9 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_i;$Lon_parameters;$Lon_pid;$Lon_x)
-C_TEXT:C284($File_;$Txt_cmd;$Txt_error;$Txt_in;$Txt_key;$Txt_out;$Txt_methodOnErrorCall)
-C_OBJECT:C1216($Obj_;$Obj_device;$Obj_in;$Obj_out;$Obj_runtime)
+C_TEXT:C284($File_;$Txt_cmd;$Txt_error;$Txt_in;$Txt_key;$Txt_methodOnErrorCall)
+C_TEXT:C284($Txt_out)
+C_OBJECT:C1216($file;$o;$Obj_device;$Obj_in;$Obj_out;$Obj_runtime)
 C_COLLECTION:C1488($Col_runtimes)
 
 If (False:C215)
@@ -57,21 +58,21 @@ Case of
 		  //______________________________________________________
 	: ($Obj_in.action="default")  // Return the default simulator UDID
 		
-		$File_:=_o_env_userPath ("preferences")+"com.apple.iphonesimulator.plist"
+		$file:=env_userPathname ("preferences").file("com.apple.iphonesimulator.plist")
 		
 		Case of 
 				
 				  //----------------------------------------
-			: (Test path name:C476($File_)=Is a document:K24:1)
+			: ($file.exists)
 				
-				$Obj_:=plist (New object:C1471(\
+				$o:=plist (New object:C1471(\
 					"action";"object";\
-					"domain";Convert path system to POSIX:C1106($File_)))
+					"domain";$file.path))
 				
-				If ($Obj_.success)
+				If ($o.success)
 					
 					$Obj_out.success:=True:C214
-					$Obj_out.udid:=$Obj_.value.CurrentDeviceUDID
+					$Obj_out.udid:=$o.value.CurrentDeviceUDID
 					
 				End if 
 				
@@ -94,9 +95,10 @@ Case of
 		  //______________________________________________________
 	: ($Obj_in.action="fixdefault")
 		
-		$File_:=_o_env_userPath ("preferences")+"com.apple.iphonesimulator.plist"
+		$file:=env_userPathname ("preferences").file("com.apple.iphonesimulator.plist")
+		$Obj_out.success:=$file.exists
 		
-		If (Test path name:C476($File_)#Is a document:K24:1)
+		If (Not:C34($Obj_out.success))
 			
 			$Obj_out:=simulator (New object:C1471(\
 				"action";"devices";\
@@ -104,23 +106,23 @@ Case of
 			
 			If ($Obj_out.success)
 				
-				$Obj_:=Null:C1517
+				$o:=Null:C1517
 				
 				For each ($Obj_device;$Obj_out.devices)
 					
 					If ($Obj_device.name="iPhone@")  // Fix with only iphone
 						
-						If ($Obj_=Null:C1517)
+						If ($o=Null:C1517)
 							
-							$Obj_:=$Obj_device
+							$o:=$Obj_device
 							
 						Else 
 							
-							If (str_cmpVersion ($Obj_.runtime.version;$Obj_device.runtime.version)>-1)  // same or equal
+							If (str_cmpVersion ($o.runtime.version;$Obj_device.runtime.version)>-1)  // same or equal
 								
-								If ($Obj_.name<$Obj_device.name)  // iPhone X win
+								If ($o.name<$Obj_device.name)  // iPhone X win
 									
-									$Obj_:=$Obj_device
+									$o:=$Obj_device
 									
 								End if 
 							End if 
@@ -128,13 +130,13 @@ Case of
 					End if 
 				End for each 
 				
-				If ($Obj_#Null:C1517)
+				If ($o#Null:C1517)
 					
 					$Obj_out:=plist (New object:C1471(\
 						"action";"write";\
-						"domain";Convert path system to POSIX:C1106($File_);\
+						"domain";$file.path;\
 						"key";"CurrentDeviceUDID";\
-						"value";$Obj_.udid))
+						"value";$o.udid))
 					
 				Else 
 					
@@ -347,7 +349,6 @@ Case of
 			$Txt_cmd:="xcrun simctl shutdown all"
 			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 			
-			
 			If (simulator (New object:C1471("action";"isLaunched")).value)
 				
 				  // use applescript because kill will not remove all subprocess
@@ -458,15 +459,15 @@ Case of
 								
 								If (Test path name:C476($File_)=Is a document:K24:1)
 									
-									$Obj_:=plist (New object:C1471(\
+									$o:=plist (New object:C1471(\
 										"action";"object";\
 										"path";$File_))
 									
-									If ($Obj_.success)
+									If ($o.success)
 										
-										$Obj_.value.path:=$Obj_out.path+$tTxt_folders{$Lon_i}
+										$o.value.path:=$Obj_out.path+$tTxt_folders{$Lon_i}
 										
-										$Obj_out.metaData.push($Obj_.value)
+										$Obj_out.metaData.push($o.value)
 										
 									End if 
 								End if 
@@ -476,7 +477,8 @@ Case of
 				End if 
 			End if 
 			
-			$Obj_out.path:=_o_env_userPath ("simulators")+$Obj_in.device+Folder separator:K24:12+"data"+Folder separator:K24:12+"Containers"+Folder separator:K24:12+"Bundle"+Folder separator:K24:12+"Application"+Folder separator:K24:12
+			  //$Obj_out.path:=_o_env_userPath ("simulators")+$Obj_in.device+Folder separator+"data"+Folder separator+"Containers"+Folder separator+"Bundle"+Folder separator+"Application"+Folder separator
+			$Obj_out.path:=env_userPathname ("simulators").folder($Obj_in.device+"/data/Containers/Bundle/Application").platformPath
 			
 			If (Test path name:C476($Obj_out.path)=Is a folder:K24:2)
 				
@@ -494,26 +496,26 @@ Case of
 						
 						If (Test path name:C476($File_)=Is a document:K24:1)
 							
-							$Obj_:=plist (New object:C1471(\
+							$o:=plist (New object:C1471(\
 								"action";"object";\
 								"path";$File_))
 							
-							If ($Obj_.success)
+							If ($o.success)
 								
-								$Obj_.value.path:=$Obj_out.path+$tTxt_folders{$Lon_i}
-								$Obj_.value.appPath:=$Obj_.value.path+Folder separator:K24:12+$tTxt_subdir{1}
-								$Obj_.value.iconPath:=$Obj_.value.appPath+Folder separator:K24:12+String:C10($Obj_.value.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles[0])+"@2x.png"
+								$o.value.path:=$Obj_out.path+$tTxt_folders{$Lon_i}
+								$o.value.appPath:=$o.value.path+Folder separator:K24:12+$tTxt_subdir{1}
+								$o.value.iconPath:=$o.value.appPath+Folder separator:K24:12+String:C10($o.value.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles[0])+"@2x.png"
 								
-								$Obj_out.apps.push($Obj_.value)
+								$Obj_out.apps.push($o.value)
 								
 								If (Bool:C1537($Obj_in.data))
 									
 									  // Search associated metadata
-									$Lon_x:=$Obj_out.metaData.extract("MCMMetadataIdentifier").indexOf($Obj_.value["CFBundleIdentifier"])
+									$Lon_x:=$Obj_out.metaData.extract("MCMMetadataIdentifier").indexOf($o.value["CFBundleIdentifier"])
 									
 									If ($Lon_x#-1)
 										
-										$Obj_.value.metaData:=$Obj_out.metaData[$Lon_x]
+										$o.value.metaData:=$Obj_out.metaData[$Lon_x]
 										
 									End if 
 								End if 
@@ -546,14 +548,14 @@ Case of
 				ob_Lon_Error:=0
 				ON ERR CALL:C155("ob_noError")
 				
-				$Obj_:=JSON Parse:C1218($Txt_out)
+				$o:=JSON Parse:C1218($Txt_out)
 				
 				ON ERR CALL:C155($Txt_methodOnErrorCall)
 				
 				If (ob_Lon_Error=0)
 					
 					$Obj_out.success:=True:C214
-					$Obj_out.devicetypes:=$Obj_.devicetypes
+					$Obj_out.devicetypes:=$o.devicetypes
 					
 				Else 
 					
@@ -583,7 +585,7 @@ Case of
 				ob_Lon_Error:=0
 				ON ERR CALL:C155("ob_noError")
 				
-				$Obj_:=JSON Parse:C1218($Txt_out)
+				$o:=JSON Parse:C1218($Txt_out)
 				
 				ON ERR CALL:C155($Txt_methodOnErrorCall)
 				
@@ -593,7 +595,7 @@ Case of
 					
 					If ($Obj_in.name=Null:C1517)
 						
-						$Obj_out.runtimes:=$Obj_.runtimes
+						$Obj_out.runtimes:=$o.runtimes
 						
 					End if 
 					
@@ -625,7 +627,7 @@ Case of
 				ob_Lon_Error:=0
 				ON ERR CALL:C155("ob_noError")
 				
-				$Obj_:=JSON Parse:C1218($Txt_out)
+				$o:=JSON Parse:C1218($Txt_out)
 				
 				ON ERR CALL:C155($Txt_methodOnErrorCall)
 				
@@ -638,18 +640,18 @@ Case of
 							  //………………………………………………………………………………………
 						: ($Obj_in.filter=Null:C1517)
 							
-							$Obj_out.devices:=$Obj_.devices
+							$Obj_out.devices:=$o.devices
 							
 							  //………………………………………………………………………………………
 						: ($Obj_in.filter="booted")
 							
 							$Obj_out.devices:=New collection:C1472
 							
-							For each ($Txt_key;$Obj_.devices)
+							For each ($Txt_key;$o.devices)
 								
-								If (Value type:C1509($Obj_.devices[$Txt_key])=Is collection:K8:32)
+								If (Value type:C1509($o.devices[$Txt_key])=Is collection:K8:32)
 									
-									For each ($Obj_device;$Obj_.devices[$Txt_key])
+									For each ($Obj_device;$o.devices[$Txt_key])
 										
 										If (String:C10($Obj_device.state)="Booted")\
 											 & ((String:C10($Obj_device.name)="iPhone@")\
@@ -669,11 +671,11 @@ Case of
 							
 							$Obj_out.devices:=New collection:C1472
 							
-							For each ($Txt_key;$Obj_.devices)
+							For each ($Txt_key;$o.devices)
 								
-								If (Value type:C1509($Obj_.devices[$Txt_key])=Is collection:K8:32)
+								If (Value type:C1509($o.devices[$Txt_key])=Is collection:K8:32)
 									
-									For each ($Obj_device;$Obj_.devices[$Txt_key])
+									For each ($Obj_device;$o.devices[$Txt_key])
 										
 										If ((String:C10($Obj_device.availability)="(available)") | (Bool:C1537($Obj_device.isAvailable)))\
 											 & ((String:C10($Obj_device.name)="iPhone@")\

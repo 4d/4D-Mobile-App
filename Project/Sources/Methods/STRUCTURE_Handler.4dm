@@ -98,7 +98,7 @@ Case of
 					
 				Else 
 					
-					OBJECT SET TITLE:C194(*;$Obj_form.allow;str_localized (New collection:C1472("allowToMakeTheStructureAdjustments";"4dProductName")))
+					OBJECT SET TITLE:C194(*;$Obj_form.allow;str ("allowToMakeTheStructureAdjustments").localized("4dProductName"))
 					
 				End if 
 				

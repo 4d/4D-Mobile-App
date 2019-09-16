@@ -7,6 +7,8 @@
 C_LONGINT:C283($Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_left;$Lon_right;$Lon_top)
 C_LONGINT:C283($Lon_vOffset;$Lon_width)
 C_TEXT:C284($Txt_key)
+C_OBJECT:C1216($str)
+C_COLLECTION:C1488($c)
 
   // ----------------------------------------------------
   // Initialisations
@@ -52,6 +54,7 @@ Case of
 		OBJECT SET VISIBLE:C603(*;"option";False:C215)
 		OBJECT SET VISIBLE:C603(*;"help";False:C215)
 		  //}
+		$str:=str 
 		
 		For each ($Txt_key;Form:C1466)
 			
@@ -62,12 +65,12 @@ Case of
 					
 					If (Value type:C1509(Form:C1466.title)=Is collection:K8:32)
 						
-						(OBJECT Get pointer:C1124(Object named:K67:5;"title"))->:=str_localized (Form:C1466.title)
+						$c:=Form:C1466.title.copy()
+						(OBJECT Get pointer:C1124(Object named:K67:5;"title"))->:=str (str .setText($c[0]).localized()).concat($c.remove(0))
 						
 					Else 
 						
-						  // Convert string to collection
-						(OBJECT Get pointer:C1124(Object named:K67:5;"title"))->:=str_localized (New collection:C1472(Form:C1466.title))
+						(OBJECT Get pointer:C1124(Object named:K67:5;"title"))->:=str .setText(Form:C1466.title).localized()
 						
 					End if 
 					
@@ -76,12 +79,12 @@ Case of
 					
 					If (Value type:C1509(Form:C1466.additional)=Is collection:K8:32)
 						
-						(OBJECT Get pointer:C1124(Object named:K67:5;"additional"))->:=str_localized (Form:C1466.additional)
+						$c:=Form:C1466.additional.copy()
+						(OBJECT Get pointer:C1124(Object named:K67:5;"title"))->:=str (str .setText($c[0]).localized()).concat($c.remove(0))
 						
 					Else 
 						
-						  // Convert string to collection
-						(OBJECT Get pointer:C1124(Object named:K67:5;"additional"))->:=str_localized (New collection:C1472(Form:C1466.additional))
+						(OBJECT Get pointer:C1124(Object named:K67:5;"additional"))->:=str .setText(Form:C1466.additional).localized()
 						
 					End if 
 					
@@ -133,7 +136,7 @@ Case of
 					  //……………………………………………………………………………………………………………………
 				: ($Txt_key="option")
 					
-					OBJECT SET TITLE:C194(*;"option";str_localized (New collection:C1472(Form:C1466.option.title)))
+					OBJECT SET TITLE:C194(*;"option";str .setText(Form:C1466.option.title).localized())
 					OBJECT SET VISIBLE:C603(*;"option";True:C214)
 					
 					  //……………………………………………………………………………………………………………………
@@ -144,13 +147,15 @@ Case of
 					  //……………………………………………………………………………………………………………………
 				: ($Txt_key="ok")
 					
-					OBJECT SET TITLE:C194(*;"ok";str_localized (New collection:C1472(Form:C1466.ok)))
+					  //OBJECT SET TITLE(*;"ok";str_localized (New collection(Form.ok)))
+					OBJECT SET TITLE:C194(*;"ok";str .setText(Form:C1466.ok).localized())
 					OBJECT SET VISIBLE:C603(*;"ok";True:C214)
 					
 					  //……………………………………………………………………………………………………………………
 				: ($Txt_key="cancel")
 					
-					OBJECT SET TITLE:C194(*;"cancel";str_localized (New collection:C1472(Form:C1466.cancel)))
+					  //OBJECT SET TITLE(*;"cancel";str_localized (New collection(Form.cancel)))
+					OBJECT SET TITLE:C194(*;"cancel";str .setText(Form:C1466.cancel).localized())
 					OBJECT SET VISIBLE:C603(*;"cancel";True:C214)
 					
 					  //……………………………………………………………………………………………………………………
@@ -163,7 +168,6 @@ Case of
 		
 		If (Form:C1466.autostart#Null:C1517)  // Auto-launch
 			
-			  //CALL FORM(Current form window;Form.autostart.method;JSON Stringify(Form.autostart))
 			CALL FORM:C1391(Current form window:C827;Form:C1466.autostart.method;Form:C1466.autostart.action;Form:C1466.autostart.project)
 			
 			OB REMOVE:C1226(Form:C1466;"autostart")

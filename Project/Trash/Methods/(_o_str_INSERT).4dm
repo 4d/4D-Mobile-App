@@ -17,7 +17,7 @@ C_LONGINT:C283($Lon_parameters;$Lon_size)
 C_OBJECT:C1216($Obj_in;$Obj_out)
 
 If (False:C215)
-	C_OBJECT:C1216(str_INSERT ;$1)
+	C_OBJECT:C1216(_o_str_INSERT ;$1)
 End if 
 
   // ----------------------------------------------------

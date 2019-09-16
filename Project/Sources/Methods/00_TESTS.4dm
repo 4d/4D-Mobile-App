@@ -24,6 +24,32 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
+		$c:=New collection:C1472(1;2;3;4;5)
+		$cc:=$c.slice($c.length-1)
+		
+		$o:=class ("str";"test")
+		$oo:=$o.constructor()
+		
+		$c:=$o.distinctLetters()
+		$o.setText("hello world")
+		$t:=$o.lowerCamelCase()
+		
+		$o:=class ("svg";"test")
+		$oo:=$o.constructor()
+		$o.close()
+		
+		
+		$o:=class ("str";"test")
+		$oo:=$o.constructor()
+		
+		$o.setText("Hello world")
+		$t:=$o.insert(" great";6).value
+		$oo:=$o.insert("Vincent";7;MAXLONG:K35:2)
+		
+		
+		  //________________________________________
+	: (True:C214)
+		
 		$o:=menu .editMenu().popup()
 		
 		  //________________________________________
@@ -194,7 +220,7 @@ Case of
 	: (False:C215)
 		
 		GET FIELD PROPERTIES:C258(5;11;$Lon_type)
-		ASSERT:C1129($Lon_type=Is float:K8:26)
+		ASSERT:C1129($Lon_type=_o_Is float:K8:26)
 		
 		  //________________________________________
 	: (False:C215)

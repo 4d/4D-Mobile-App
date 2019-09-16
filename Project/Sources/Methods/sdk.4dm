@@ -122,7 +122,8 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						
 						  // Check if we can just move a cached sdk from previous build
 						  // efficient only if same disk volume
-						$Txt_buffer:=_o_env_userPath ("cache")+".sdk"+Folder separator:K24:12+commonValues.thirdParty
+						  //$Txt_buffer:=_o_env_userPath ("cache")+".sdk"+Folder separator+commonValues.thirdParty
+						$Txt_buffer:=env_userPathname ("cache").file(".sdk/"+commonValues.thirdParty).platformPath
 						
 						If (Test path name:C476($Txt_buffer)=Is a folder:K24:2)
 							
@@ -352,7 +353,8 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				
 				If (Test path name:C476($Obj_param.path+commonValues.thirdParty)=Is a folder:K24:2)  // well known sdk path
 					
-					$Txt_buffer:=_o_env_userPath ("cache")
+					  //$Txt_buffer:=_o_env_userPath ("cache")
+					$Txt_buffer:=env_userPathname ("cache").platformPath
 					
 					If (Test path name:C476($Txt_buffer)#Is a folder:K24:2)
 						

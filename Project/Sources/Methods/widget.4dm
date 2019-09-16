@@ -39,41 +39,42 @@ If (This:C1470._is=Null:C1517)
 	
 	$o:=New object:C1471(\
 		"_is";"widget";\
+		"coordinates";Null:C1517;\
 		"name";$t;\
-		"type";OBJECT Get type:C1300(*;$t);\
+		"windowCoordinates";Null:C1517;\
 		"action";OBJECT Get action:C1457(*;$t);\
-		"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name));\
+		"type";OBJECT Get type:C1300(*;$t);\
+		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)));\
+		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\
 		"hide";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;False:C215));\
-		"show";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;True:C214));\
+		"moveHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("left";$1)));\
+		"moveVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("top";$1)));\
+		"resizeHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("right";$1)));\
+		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
+		"setColors";Formula:C1597(widget ("setColors";New object:C1471("foreground";$1;"background";$2;"altBackgrnd";$3)));\
+		"setCoordinates";Formula:C1597(widget ("setCoordinates";New object:C1471("left";$1;"top";$2;"right";$3;"bottom";$4)));\
+		"setTitle";Formula:C1597(widget ("setTitle";New object:C1471("title";String:C10($1))));\
 		"setVisible";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;Bool:C1537($1)));\
-		"enabled";Formula:C1597(OBJECT Get enabled:C1079(*;This:C1470.name));\
+		"show";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;True:C214));\
+		"title";Formula:C1597(OBJECT Get title:C1068(*;This:C1470.name));\
+		"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name));\
+		"clear";Formula:C1597(widget ("clear"));\
 		"enable";Formula:C1597(OBJECT SET ENABLED:C1123(*;This:C1470.name;True:C214));\
+		"enabled";Formula:C1597(OBJECT Get enabled:C1079(*;This:C1470.name));\
+		"enterable";Formula:C1597(OBJECT Get enterable:C1067(*;This:C1470.name));\
 		"disable";Formula:C1597(OBJECT SET ENABLED:C1123(*;This:C1470.name;False:C215));\
-		"setEnabled";Formula:C1597(OBJECT SET ENABLED:C1123(*;This:C1470.name;Bool:C1537($1)));\
-		"focused";Formula:C1597(This:C1470.name=OBJECT Get name:C1087(Object with focus:K67:3));\
+		"distributeHorizontally";Formula:C1597(widget ("distributeHorizontally";$1));\
+		"filter";Formula:C1597(OBJECT Get filter:C1073(*;This:C1470.name));\
 		"focus";Formula:C1597(GOTO OBJECT:C206(*;This:C1470.name));\
+		"focused";Formula:C1597(This:C1470.name=OBJECT Get name:C1087(Object with focus:K67:3));\
+		"forceNumeric";Formula:C1597(widget ("forceNumeric"));\
 		"pointer";Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name));\
-		"value";Formula:C1597(widget ("value").value);\
+		"setEnabled";Formula:C1597(OBJECT SET ENABLED:C1123(*;This:C1470.name;Bool:C1537($1)));\
+		"setEnterable";Formula:C1597(OBJECT SET ENTERABLE:C238(*;This:C1470.name;Bool:C1537($1)));\
+		"setFilter";Formula:C1597(widget ("setFilter";New object:C1471(Choose:C955(Value type:C1509($1)=Is text:K8:3;"value";"format");$1;"separator";$2)));\
 		"setValue";Formula:C1597(widget ("setValue";New object:C1471("value";$1)));\
 		"touch";Formula:C1597(widget ("touch"));\
-		"clear";Formula:C1597(widget ("clear"));\
-		"enterable";Formula:C1597(OBJECT Get enterable:C1067(*;This:C1470.name));\
-		"setEnterable";Formula:C1597(OBJECT SET ENTERABLE:C238(*;This:C1470.name;Bool:C1537($1)));\
-		"filter";Formula:C1597(OBJECT Get filter:C1073(*;This:C1470.name));\
-		"setFilter";Formula:C1597(widget ("setFilter";New object:C1471(Choose:C955(Value type:C1509($1)=Is text:K8:3;"value";"format");$1;"separator";$2)));\
-		"coordinates";Null:C1517;\
-		"windowCoordinates";Null:C1517;\
-		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\
-		"setCoordinates";Formula:C1597(widget ("setCoordinates";New object:C1471("left";$1;"top";$2;"right";$3;"bottom";$4)));\
-		"moveHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("left";$1)));\
-		"resizeHorizontally";Formula:C1597(widget ("setCoordinates";New object:C1471("right";$1)));\
-		"moveVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("top";$1)));\
-		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
-		"distributeHorizontally";Formula:C1597(widget ("distributeHorizontally";$1));\
-		"bestSize";Formula:C1597(widget ("bestSize";New object:C1471("alignment";$1;"minWidth";$2;"maxWidth";$3)));\
-		"setColors";Formula:C1597(widget ("setColors";New object:C1471("foreground";$1;"background";$2;"altBackgrnd";$3)));\
-		"setTitle";Formula:C1597(widget ("setTitle";New object:C1471("title";String:C10($1))));\
-		"forceNumeric";Formula:C1597(widget ("forceNumeric"))\
+		"value";Formula:C1597(widget ("value").value)\
 		)
 	
 	$o.getCoordinates()
@@ -422,7 +423,7 @@ Else
 						
 						  //………………………………………………………………………
 					: ($l=Is real:K8:4)\
-						 | ($l=Is float:K8:26)
+						 | ($l=_o_Is float:K8:26)
 						
 						$t:=String:C10($2.separator)
 						

@@ -88,14 +88,14 @@ Case of
 		OBJECT SET VISIBLE:C603(*;"dataGeneration@";True:C214)
 		
 		  //CALL WORKER(Form.$worker;"dataSet";New object(\
-												//"caller";$Obj_form.window;\
-												//"action";"create";\
-												//"eraseIfExists";True;\
-												//"project";$Obj_project;\
-												//"digest";True;\
-												//"key";$File_key;\
-												//"dataSet";Bool(featuresFlags._101725);\
-												//"picture";Not(Bool(featuresFlags._97117))))
+															//"caller";$Obj_form.window;\
+															//"action";"create";\
+															//"eraseIfExists";True;\
+															//"project";$Obj_project;\
+															//"digest";True;\
+															//"key";$File_key;\
+															//"dataSet";Bool(featuresFlags._101725);\
+															//"picture";Not(Bool(featuresFlags._97117))))
 		CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
 			"caller";$Obj_form.window;\
 			"action";"create";\
@@ -184,7 +184,7 @@ Case of
 						If (Num:C11(err.error)=-1)
 							
 							  // Port conflict ?
-							$Obj_server.message:=str_localized (New collection:C1472("someListeningPortsAreAlreadyUsed";String:C10($Obj_server.options.webPortID);String:C10($Obj_server.options.webHTTPSPortID)))
+							$Obj_server.message:=str ("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_server.options.webPortID);String:C10($Obj_server.options.webHTTPSPortID)))
 							
 						Else 
 							
