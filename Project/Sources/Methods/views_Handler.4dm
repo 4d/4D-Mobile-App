@@ -62,6 +62,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"selectorList";ui.button("tab.list");\
 		"selectorDetail";ui.button("tab.detail");\
 		"selectors";ui.static("tab.@");\
+		"resources";ui.button("resources");\
 		"drag";Formula:C1597(tmpl_On_drag_over );\
 		"drop";Formula:C1597(tmpl_ON_DROP );\
 		"cancel";Formula:C1597(tmpl_REMOVE );\
@@ -122,7 +123,11 @@ Case of
 				
 				  // Place the tabs according to the localization
 				$Lon_offset:=$Obj_form.tablist.bestSize(Align left:K42:2).coordinates.right+10
-				$Obj_form.tabdetail.bestSize(Align left:K42:2).setCoordinates($Lon_offset;Null:C1517;Null:C1517;Null:C1517)
+				$Obj_form.tabdetail.bestSize(Align left:K42:2).setCoordinates($Lon_offset)
+				
+				  // Place the download button
+				$Obj_form.resources.setTitle(str ("seeFreeCommunityResources").localized("templates"))
+				$Obj_form.resources.bestSize(Align right:K42:4)
 				
 				$Obj_context.setTab()
 				

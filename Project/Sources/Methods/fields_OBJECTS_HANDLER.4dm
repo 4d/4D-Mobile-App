@@ -45,7 +45,6 @@ Case of
 				 | ($Obj_form.form.event=On Clicked:K2:4)
 				
 				editor_ui_LISTBOX ($Obj_widget.name)
-				  //$Obj_context.setHelpTip($Obj_widget.name;$Obj_form)
 				
 				Case of 
 						
@@ -256,6 +255,7 @@ Case of
 				
 				  // Update data model
 				Case of 
+						
 						  //………………………………………………………………………………………
 					: ($Ptr_me=$Obj_widget.columns[$Obj_form.titles.name].pointer)
 						
@@ -323,6 +323,11 @@ Case of
 				
 				  //______________________________________________________
 		End case 
+		
+		  //==================================================
+	: ($Obj_form.form.current=$Obj_form.resources.name)
+		
+		OPEN URL:C673(Get localized string:C991("doc_fornatters");*)
 		
 		  //==================================================
 	Else 

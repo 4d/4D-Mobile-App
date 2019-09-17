@@ -392,6 +392,24 @@
 					"stroke": "#696969",
 					"textAlign": "left",
 					"text": ":xliff:names"
+				},
+				"resources": {
+					"type": "button",
+					"top": 6,
+					"left": 758,
+					"width": 179,
+					"height": 22,
+					"visibility": "visible",
+					"sizingX": "fixed",
+					"style": "custom",
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"method": "FIELDS_OBJECTS_HANDLER",
+					"text": "__XXXX__",
+					"textDecoration": "underline",
+					"stroke": "#1BA1E5"
 				}
 			}
 		}

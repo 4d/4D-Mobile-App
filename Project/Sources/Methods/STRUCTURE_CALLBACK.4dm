@@ -183,7 +183,8 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 														If (Not:C34($Boo_unsynchronizedField))
 															
 															  // Check field name & type
-															$Boo_unsynchronizedField:=($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name) | ($oo[$t].fieldType#$Obj_relatedDataClass.field[$Lon_fieldIndx].fieldType)
+															$Boo_unsynchronizedField:=($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name)\
+																 | ($oo[$t].fieldType#$Obj_relatedDataClass.field[$Lon_fieldIndx].fieldType)
 															
 														End if 
 														

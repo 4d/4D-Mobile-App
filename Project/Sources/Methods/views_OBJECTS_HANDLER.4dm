@@ -439,6 +439,20 @@ Case of
 			"direction";Choose:C955($Obj_form.form.current=$Obj_form.tableButtonPrevious.name;"previous";"next")))
 		
 		  //==================================================
+	: ($Obj_form.form.current=$Obj_form.resources.name)
+		
+		If ($Obj_context.selector=1)
+			
+			OPEN URL:C673(Get localized string:C991("doc_listForm");*)
+			
+		Else 
+			
+			OPEN URL:C673(Get localized string:C991("doc_detailForm");*)
+			
+			
+		End if 
+		
+		  //==================================================
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown object: \""+$Obj_form.form.current+"\"")

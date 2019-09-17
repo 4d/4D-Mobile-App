@@ -220,7 +220,7 @@ Case of
 	: (False:C215)
 		
 		GET FIELD PROPERTIES:C258(5;11;$Lon_type)
-		ASSERT:C1129($Lon_type=_o_Is float:K8:26)
+		ASSERT:C1129($Lon_type=Is float:K8:26)
 		
 		  //________________________________________
 	: (False:C215)

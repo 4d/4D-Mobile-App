@@ -167,6 +167,24 @@
 					"height": 5,
 					"fill": "#1AA1E5",
 					"stroke": "transparent"
+				},
+				"resources": {
+					"type": "button",
+					"top": 6,
+					"left": 758,
+					"width": 179,
+					"height": 22,
+					"visibility": "visible",
+					"sizingX": "fixed",
+					"style": "custom",
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"method": "VIEWS_OBJECTS_HANDLER",
+					"text": "__XXXX__",
+					"textDecoration": "underline",
+					"stroke": "#1BA1E5"
 				}
 			}
 		},
