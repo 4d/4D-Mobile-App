@@ -57,7 +57,7 @@ Case of
 				$Obj_form.selectorRelations.bestSize(Align left:K42:2).setCoordinates($l;Null:C1517;Null:C1517;Null:C1517)
 				
 				  // Place the download button
-				$Obj_form.resources.setTitle(str ("seeFreeCommunityResources").localized(Lowercase:C14(Get localized string:C991("formatters"))))
+				$Obj_form.resources.setTitle(str ("downloadMoreResources").localized(Lowercase:C14(Get localized string:C991("formatters"))))
 				$Obj_form.resources.bestSize(Align right:K42:4)
 				
 				$ƒ.setTab()

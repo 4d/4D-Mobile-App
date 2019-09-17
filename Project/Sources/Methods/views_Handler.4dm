@@ -126,7 +126,7 @@ Case of
 				$Obj_form.tabdetail.bestSize(Align left:K42:2).setCoordinates($Lon_offset)
 				
 				  // Place the download button
-				$Obj_form.resources.setTitle(str ("seeFreeCommunityResources").localized("templates"))
+				$Obj_form.resources.setTitle(str ("downloadMoreResources").localized("templates"))
 				$Obj_form.resources.bestSize(Align right:K42:4)
 				
 				$Obj_context.setTab()
