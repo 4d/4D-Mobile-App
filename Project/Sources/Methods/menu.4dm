@@ -39,14 +39,15 @@ If (This:C1470=Null:C1517)
 		"append";Formula:C1597(menu ("append";Choose:C955(Value type:C1509($2)=Is object:K8:27;New object:C1471("item";String:C10($1);"menu";$2);New object:C1471("item";String:C10($1);"param";$2;"mark";Bool:C1537($3)))));\
 		"cleanup";Formula:C1597(menu ("cleanup"));\
 		"editMenu";Formula:C1597(menu ("editMenu"));\
-		"enable";Formula:C1597(ENABLE MENU ITEM:C149(This:C1470.ref;Choose:C955(Count parameters:C259=1;Num:C11($1);-1)));\
-		"delete";Formula:C1597(DELETE MENU ITEM:C413(This:C1470.ref;Choose:C955(Count parameters:C259=1;Num:C11($1);-1)));\
-		"disable";Formula:C1597(DISABLE MENU ITEM:C150(This:C1470.ref;Choose:C955(Count parameters:C259=1;Num:C11($1);-1)));\
+		"enable";Formula:C1597(menu ("enable";New object:C1471("item";$1)));\
+		"delete";Formula:C1597(menu ("delete";New object:C1471("item";$1)));\
+		"disable";Formula:C1597(menu ("disable";New object:C1471("item";$1)));\
 		"fileMenu";Formula:C1597(menu ("fileMenu"));\
-		"icon";Formula:C1597(SET MENU ITEM ICON:C984(This:C1470.ref;Choose:C955(Count parameters:C259=2;Num:C11($2);-1);"file:"+String:C10($1)));\
+		"icon";Formula:C1597(menu ("icon";New object:C1471("icon";$1;"item";$2)));\
 		"insert";Formula:C1597(menu ("insert";Choose:C955(Value type:C1509($3)=Is object:K8:27;New object:C1471("item";String:C10($1);"after";Num:C11($2);"menu";$3);New object:C1471("item";String:C10($1);"after";Num:C11($2);"param";$3;"mark";Bool:C1537($4)))));\
 		"line";Formula:C1597(menu ("line"));\
-		"method";Formula:C1597(SET MENU ITEM METHOD:C982(This:C1470.ref;Choose:C955(Count parameters:C259=2;Num:C11($2);-1);String:C10($1)));\
+		"loadBar";Formula:C1597(menu ("loadBar";New object:C1471("menu";$1)));\
+		"method";Formula:C1597(menu ("method";New object:C1471("method";String:C10($1);"item";$2)));\
 		"popup";Formula:C1597(menu ("popup";Choose:C955(Count parameters:C259=1;New object:C1471("default";String:C10($1));Choose:C955(Value type:C1509($2)=Is object:K8:27;New object:C1471("default";String:C10($1);"widget";$2);New object:C1471("default";String:C10($1);"xCoord";$2;"yCoord";$3)))));\
 		"setBar";Formula:C1597(menu ("setBar"));\
 		"shortcut";Formula:C1597(menu ("shortcut";New object:C1471("shortcut";$1;"modifier";Num:C11($2);"item";$3)))\
@@ -151,9 +152,29 @@ Else
 			$o.append(":xliff:CommonMenuItemShowClipboard").action(ak show clipboard:K76:58)
 			
 			  //______________________________________________________
+		: ($1="enable")
+			
+			ENABLE MENU ITEM:C149($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
+			
+			  //______________________________________________________
+		: ($1="delete")
+			
+			DELETE MENU ITEM:C413(This:C1470.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
+			
+			  //______________________________________________________
+		: ($1="disable")
+			
+			DISABLE MENU ITEM:C150($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
+			
+			  //______________________________________________________
 		: ($1="fileMenu")  // Default file menu
 			
 			$o.append(":xliff:CommonMenuItemQuit").action(ak quit:K76:61).shortcut("Q")
+			
+			  //______________________________________________________
+		: ($1="icon")
+			
+			SET MENU ITEM ICON:C984($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1);"file:"+String:C10($2.icon))
 			
 			  //______________________________________________________
 		: ($1="insert")
@@ -199,6 +220,11 @@ Else
 		: ($1="line")
 			
 			APPEND MENU ITEM:C411($o.ref;"-")
+			
+			  //______________________________________________________
+		: ($1="method")
+			
+			SET MENU ITEM METHOD:C982($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1);$2.method)
 			
 			  //______________________________________________________
 		: ($1="popup")

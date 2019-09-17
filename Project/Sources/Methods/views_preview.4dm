@@ -268,7 +268,7 @@ Case of
 												
 												$Txt_name:=$o.name
 												
-												If ($o.fieldType=8859)  // 1-N relation
+												If (Num:C11($o.fieldType)=8859)  // 1-N relation
 													
 													$tt:=$svg.findById($t+".label")
 													

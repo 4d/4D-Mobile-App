@@ -40,6 +40,13 @@
 					"action": "undo"
 				},
 				{
+					"title": ":xliff:CommonMenuRedo",
+					"shortcutShift": true,
+					"shortcutAccel": true,
+					"shortcutKey": "z",
+					"action": "redo"
+				},
+				{
 					"title": "(-",
 					"isSeparator": true
 				},
