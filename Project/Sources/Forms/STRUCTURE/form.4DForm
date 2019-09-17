@@ -52,7 +52,7 @@
 					"events": [
 						"onClick"
 					],
-					"shortcutAccel": true,
+					"shortcutAccel": false,
 					"shortcutControl": false,
 					"shortcutShift": false,
 					"shortcutAlt": false,

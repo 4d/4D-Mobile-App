@@ -87,7 +87,7 @@ Case of
 				
 			End if 
 			
-			$Obj_popup.shortcut(Char:C90(Space:K15:42);Command key mask:K16:1)
+			  //$Obj_popup.shortcut(Char(Space);Command key mask)
 			
 			If (editor_Locked )
 				
@@ -101,16 +101,19 @@ Case of
 			
 		End if 
 		
-		$Obj_popup.line()
-		
-		If (Count in array:C907($Ptr_published->;0)=0)
+		If (Count in array:C907($Ptr_me->;True:C214)#$Lon_number)
 			
-			$Obj_popup.append(":xliff:unpublishAll";"unpublishAll")
+			$Obj_popup.line()
 			
-		Else 
-			
-			$Obj_popup.append(":xliff:publishAll";"publishAll")
-			
+			If (Count in array:C907($Ptr_published->;0)=0)
+				
+				$Obj_popup.append(":xliff:unpublishAll";"unpublishAll")
+				
+			Else 
+				
+				$Obj_popup.append(":xliff:publishAll";"publishAll")
+				
+			End if 
 		End if 
 		
 		  //#93984
