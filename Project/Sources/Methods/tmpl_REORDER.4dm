@@ -40,11 +40,11 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	If (Position:C15("/";$Obj_in.form)=1)
 		
 		  // Host database resources
-		$Dir_root:=_o_Pathname ("host_"+$Obj_in.selector+"Forms")+Delete string:C232($Obj_in.form;1;1)
+		$Dir_root:=COMPONENT_Pathname ("host_"+$Obj_in.selector+"Forms").file(Delete string:C232($Obj_in.form;1;1)).platformPath
 		
 	Else 
 		
-		$Dir_root:=_o_Pathname ($Obj_in.selector+"Forms")+$Obj_in.form
+		$Dir_root:=COMPONENT_Pathname ($Obj_in.selector+"Forms").platformPath+$Obj_in.form
 		
 	End if 
 	

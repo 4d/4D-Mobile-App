@@ -79,7 +79,7 @@ Case of
 		Else 
 			
 			  // Default location
-			$File_key:=_o_Pathname ("key")
+			$File_key:=COMPONENT_Pathname ("key").platformPath
 			
 		End if 
 		  //End if 
@@ -87,15 +87,6 @@ Case of
 		(OBJECT Get pointer:C1124(Object named:K67:5;"dataGeneration"))->:=1
 		OBJECT SET VISIBLE:C603(*;"dataGeneration@";True:C214)
 		
-		  //CALL WORKER(Form.$worker;"dataSet";New object(\
-															//"caller";$Obj_form.window;\
-															//"action";"create";\
-															//"eraseIfExists";True;\
-															//"project";$Obj_project;\
-															//"digest";True;\
-															//"key";$File_key;\
-															//"dataSet";Bool(featuresFlags._101725);\
-															//"picture";Not(Bool(featuresFlags._97117))))
 		CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
 			"caller";$Obj_form.window;\
 			"action";"create";\

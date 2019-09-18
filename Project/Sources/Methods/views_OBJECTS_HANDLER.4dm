@@ -107,7 +107,7 @@ Case of
 						  //______________________________________________________
 					: ($Txt_tableNumber#$Obj_context.tableNum())\
 						 | (Length:C16($Txt_template)=0)\
-						 | (Test path name:C476(_o_Pathname ("listforms")+$Txt_template+Folder separator:K24:12)#Is a folder:K24:2)
+						 | (Not:C34(COMPONENT_Pathname ("listforms").folder($Txt_template).exists))
 						
 						If ($Txt_tableNumber#$Obj_context.tableNum())
 							

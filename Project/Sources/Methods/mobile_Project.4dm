@@ -342,11 +342,11 @@ If ($Obj_in.create)
 	
 	$Obj_template.source:=$Dir_template.platformPath
 	$Obj_template.assets.target:=$Obj_in.path+Convert path POSIX to system:C1107($Obj_template.assets.path)+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
-	$Obj_template.assets.source:=_o_Pathname ("projects")+$Obj_project.$project.product+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
+	$Obj_template.assets.source:=COMPONENT_Pathname ("projects").platformPath+$Obj_project.$project.product+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
 	
 	$Obj_out.sdk:=sdk (New object:C1471(\
 		"action";"install";\
-		"file";_o_Pathname ("sdk")+$Obj_template.sdk.version+".zip";\
+		"file";COMPONENT_Pathname ("sdk").platformPath+$Obj_template.sdk.version+".zip";\
 		"target";$Obj_in.path;\
 		"cache";Folder:C1567("/Library/Caches/com.4d.mobile/sdk").platformPath))
 	
@@ -447,7 +447,7 @@ If ($Obj_in.create)
 				
 			Else 
 				
-				$File_:=_o_Pathname ("key")
+				$File_:=COMPONENT_Pathname ("key").platformPath
 				
 				If (Test path name:C476($File_)#Is a document:K24:1)
 					

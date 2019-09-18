@@ -5,11 +5,10 @@ C_LONGINT:C283($Lon_value;$Lon_x)
 C_PICTURE:C286($p)
 C_POINTER:C301($r)
 C_REAL:C285($Num_)
-C_TEXT:C284($Dir_root;$File_;$t;$tt;$Txt_in;$Txt_ormula)
-C_TEXT:C284($Txt_result)
-C_OBJECT:C1216($o;$Obj_folder;$Obj_formula;$Obj_new;$Obj_result;$Obj_target)
-C_OBJECT:C1216($Obj_template;$oo;$ooo;$svg)
-C_COLLECTION:C1488($c;$cc;$Col_2;$Col_forms;$Col_host)
+C_TEXT:C284($Dir_root;$t;$tt;$Txt_in;$Txt_ormula;$Txt_result)
+C_OBJECT:C1216($folder;$o;$Obj_formula;$Obj_new;$Obj_result;$Obj_target)
+C_OBJECT:C1216($Obj_template;$oo;$ooo;$str;$svg)
+C_COLLECTION:C1488($c;$cc;$Col_2)
 
 ARRAY TEXT:C222($tTxt_;0)
 
@@ -38,14 +37,12 @@ Case of
 		$oo:=$o.constructor()
 		$o.close()
 		
-		
 		$o:=class ("str";"test")
 		$oo:=$o.constructor()
 		
 		$o.setText("Hello world")
 		$t:=$o.insert(" great";6).value
 		$oo:=$o.insert("Vincent";7;MAXLONG:K35:2)
-		
 		
 		  //________________________________________
 	: (True:C214)
@@ -220,7 +217,7 @@ Case of
 	: (False:C215)
 		
 		GET FIELD PROPERTIES:C258(5;11;$Lon_type)
-		ASSERT:C1129($Lon_type=Is float:K8:26)
+		ASSERT:C1129($Lon_type=_o_Is float:K8:26)
 		
 		  //________________________________________
 	: (False:C215)
@@ -230,48 +227,6 @@ Case of
 		  //$Boo_reset:=_o_doc_isAlias ($File_)
 		
 		$Boo_reset:=Folder:C1567(fk resources folder:K87:11).folder("sdk").folder("Versions").folder("Carthage").folder("Checkouts").folder("TRMosaicLayout").file("_Pods.xcodeproj").isAlias
-		
-		  //________________________________________
-	: (True:C214)
-		
-		$Dir_root:=_o_Pathname ("tableIcons")+Folder separator:K24:12
-		
-		$Lon_x:=Milliseconds:C459
-		
-		$c:=Folder:C1567($Dir_root;fk platform path:K87:2).files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
-		$cc:=New collection:C1472.resize($c.length)
-		
-		For each ($t;$c)
-			
-			READ PICTURE FILE:C678($t;$p)
-			CREATE THUMBNAIL:C679($p;$p;50;50;Scaled to fit:K6:2)
-			$cc[$i]:=$p
-			$c[$i]:=Replace string:C233($t;$Dir_root;"")
-			$i:=$i+1
-			
-		End for each 
-		
-		$Txt_result:=String:C10(Milliseconds:C459-$Lon_x)+"\r"
-		
-		$Lon_x:=Milliseconds:C459
-		
-		$c:=New collection:C1472
-		$cc:=New collection:C1472
-		DOCUMENT LIST:C474($Dir_root;$tTxt_;Absolute path:K24:14+Recursive parsing:K24:13+Ignore invisible:K24:16)
-		ARRAY TO COLLECTION:C1563($c;$tTxt_)
-		
-		For each ($t;$c)
-			
-			READ PICTURE FILE:C678($t;$p)
-			CREATE THUMBNAIL:C679($p;$p;50;50;Scaled to fit:K6:2)
-			$cc.push($p)
-			
-		End for each 
-		
-		$c:=$c.map("col_replaceString";$Dir_root;"")
-		
-		$Txt_result:=$Txt_result+String:C10(Milliseconds:C459-$Lon_x)
-		ALERT:C41($Txt_result)
 		
 		  //________________________________________
 	: (True:C214)
@@ -438,89 +393,12 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$t:="Simple Grid"
-		
-		$Dir_root:=_o_Pathname ("host_forms")+$t
-		$File_:=_o_Pathname ("host_detailForms")+$t
-		
-		Case of 
-				
-				  // ----------------------------------------
-				  // ----------------------------------------
-				  //----------------------------------------
-			: (Test path name:C476($Dir_root)=Is a folder:K24:2)
-				
-				LAUNCH EXTERNAL PROCESS:C811("mv "+str_singleQuoted (Convert path system to POSIX:C1106($Dir_root))+" "+str_singleQuoted (Convert path system to POSIX:C1106($File_)))
-				
-				  // ----------------------------------------
-				  // ----------------------------------------
-				  //----------------------------------------
-			: (Test path name:C476($File_)=Is a folder:K24:2)
-				
-				LAUNCH EXTERNAL PROCESS:C811("mv "+str_singleQuoted (Convert path system to POSIX:C1106($File_))+" "+str_singleQuoted (Convert path system to POSIX:C1106($Dir_root)))
-				
-				  // ----------------------------------------
-				
-				  // ----------------------------------------
-				
-				  //----------------------------------------
-		End case 
-		
-		  //________________________________________
-	: (True:C214)
-		
 		$t:="Hello .world"
 		
 		$Boo_reset:=$t%"world"  // True
 		$Boo_reset:=$t%"Hello"  // True
 		$Boo_reset:=$t%".world"  // False
 		$Boo_reset:=$t%"@.world"  // False
-		
-		  //________________________________________
-	: (True:C214)
-		
-		  //$Obj_result:=Folder("")
-		  //$Obj_out:=Path to object("")
-		  //$Obj_template:=Folder(Pathname ("host_listForms"))
-		  //$Obj_target:=doc_Folder (Pathname ("host_listForms"))
-		  //$Obj_new:=File(Pathname ("listForms"))
-		  //$Obj_buffer:=doc_File (Pathname ("listForms"))
-		
-		$Col_host:=New collection:C1472
-		$Dir_root:=_o_Pathname ("host_listForms")
-		
-		For each ($Obj_folder;doc_Folder ($Dir_root).folders)
-			
-			If ($Obj_folder.files.length>0) | ($Obj_folder.files.extract("fullName").indexOf("manifest.json")#-1) | ($Obj_folder.files.extract("fullName").indexOf("template.svg")#-1) | ($Obj_folder.folders.extract("fullName").indexOf("Sources")#-1)
-				
-				$Col_host.push("/"+$Obj_folder.fullName)
-				
-			End if 
-		End for each 
-		
-		$Col_forms:=New collection:C1472
-		
-		$Dir_root:=_o_Pathname ("listForms")
-		
-		For each ($Obj_folder;doc_Folder ($Dir_root).folders)
-			
-			If ($Obj_folder.files.length>0) | ($Obj_folder.files.extract("fullName").indexOf("manifest.json")#-1) | ($Obj_folder.files.extract("fullName").indexOf("template.svg")#-1) | ($Obj_folder.folders.extract("fullName").indexOf("Sources")#-1)
-				
-				$Col_forms.push($Obj_folder.fullName)
-				
-			End if 
-		End for each 
-		
-		$Col_forms.combine($Col_host)
-		
-		COLLECTION TO ARRAY:C1562($Col_forms;$tTxt_)
-		
-		$tTxt_{0}:=String:C10(JSON Parse:C1218(Document to text:C1236(_o_Pathname ("listforms")+"manifest.json")).default)
-		$tTxt_:=Find in array:C230($tTxt_;$tTxt_{0})
-		
-		For ($i;1;Size of array:C274($tTxt_);1)
-			
-		End for 
 		
 		  //________________________________________
 	: (True:C214)

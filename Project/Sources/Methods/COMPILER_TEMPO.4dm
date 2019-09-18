@@ -60,13 +60,3 @@ C_LONGINT:C283(00_TESTS ;$2)
 C_OBJECT:C1216(_w_actions ;$0)
 C_TEXT:C284(_w_actions ;$1)
 C_OBJECT:C1216(_w_actions ;$2)
-
-  //______________________________________________________
-C_TEXT:C284(_o_env_userPath ;$0)
-C_TEXT:C284(_o_env_userPath ;$1)
-C_BOOLEAN:C305(_o_env_userPath ;$2)
-
-  //______________________________________________________
-C_TEXT:C284(_o_Pathname ;$0)
-C_TEXT:C284(_o_Pathname ;$1)
-C_OBJECT:C1216(_o_Pathname ;$2)

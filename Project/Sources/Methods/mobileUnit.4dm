@@ -130,7 +130,7 @@ Case of
 			
 			$Obj_out:=New object:C1471(\
 				"success";True:C214;\
-				"value";_o_Pathname ($Obj_in.target))
+				"value";COMPONENT_Pathname ($Obj_in.target).platformPath)
 			
 		End if 
 		

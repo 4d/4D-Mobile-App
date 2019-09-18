@@ -13,7 +13,7 @@ C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_formEvent;$Lon_parameters)
 C_TEXT:C284($Txt_buffer;$Txt_format;$Txt_url)
-C_OBJECT:C1216($Obj_form;$Obj_in;$Obj_out;$Obj_result;$Obj_server)
+C_OBJECT:C1216($file;$Obj_form;$Obj_in;$Obj_out;$Obj_result;$Obj_server)
 
 If (False:C215)
 	C_OBJECT:C1216(SOURCE_Handler ;$0)
@@ -342,9 +342,11 @@ Case of
 				$Txt_url:="127.0.0.1:"+String:C10($Obj_server.options.webPortID)
 				
 				  // Test the key
-				$Txt_buffer:=_o_Pathname ("key")
+				  //$Txt_buffer:=_o_Pathname ("key")
 				
-				If (Test path name:C476($Txt_buffer)#Is a document:K24:1)
+				$file:=COMPONENT_Pathname ("key")
+				
+				If (Not:C34($file.exists))
 					
 					  // Generate the key
 					$Obj_result:=Rest (New object:C1471(\
@@ -355,7 +357,7 @@ Case of
 				End if 
 				
 				  // Make a call to verify
-				If (Test path name:C476($Txt_buffer)=Is a document:K24:1)
+				If ($file.exists)
 					
 					$Obj_result:=Rest (New object:C1471(\
 						"action";"request";\
@@ -363,7 +365,7 @@ Case of
 						"url";$Txt_url;\
 						"headers";New object:C1471(\
 						"X-MobileApp";"1";\
-						"Authorization";"Bearer "+Document to text:C1236($Txt_buffer))))
+						"Authorization";"Bearer "+$file.getText())))
 					
 					If ($Obj_result.__ERRORS#Null:C1517)
 						

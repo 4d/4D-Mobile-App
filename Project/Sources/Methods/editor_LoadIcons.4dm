@@ -11,10 +11,10 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($kLon_iconWidth;$Lon_parameters)
+C_LONGINT:C283($i;$kLon_iconWidth;$l;$Lon_parameters)
 C_PICTURE:C286($p)
-C_TEXT:C284($Dir_root;$File_)
-C_OBJECT:C1216($o;$Obj_in)
+C_TEXT:C284($t)
+C_OBJECT:C1216($folder;$o;$Obj_in)
 C_COLLECTION:C1488($Col_hostpathnames;$Col_pathnames;$Col_pictures)
 
 ARRAY TEXT:C222($tFile_icons;0)
@@ -57,13 +57,12 @@ Else
 End if 
 
   // ----------------------------------------------------
-  // INTERNAL RESOURCES ------------------------------ [
-$Col_pathnames:=New collection:C1472()
-$Col_pictures:=New collection:C1472()
+  //                INTERNAL RESOURCES
+  // ----------------------------------------------------
+$folder:=COMPONENT_Pathname ($Obj_in.target)
+$l:=Length:C16($folder.platformPath)
 
-$Dir_root:=_o_Pathname ($Obj_in.target)+Folder separator:K24:12
-DOCUMENT LIST:C474($Dir_root;$tFile_icons;Absolute path:K24:14+Recursive parsing:K24:13+Ignore invisible:K24:16)
-ARRAY TO COLLECTION:C1563($Col_pathnames;$tFile_icons)
+$Col_pathnames:=$folder.files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
 
 If (Bool:C1537($Obj_in.sort))
 	
@@ -71,31 +70,28 @@ If (Bool:C1537($Obj_in.sort))
 	
 End if 
 
-For each ($File_;$Col_pathnames)
+$Col_pictures:=New collection:C1472.resize($Col_pathnames.length)
+
+For each ($t;$Col_pathnames)
 	
-	  // Get the picture
-	READ PICTURE FILE:C678($File_;$p)
-	
+	READ PICTURE FILE:C678($t;$p)
 	CREATE THUMBNAIL:C679($p;$p;$kLon_iconWidth;$kLon_iconWidth;Scaled to fit:K6:2)
-	
-	$Col_pictures.push($p)
+	$Col_pictures[$i]:=$p
+	$Col_pathnames[$i]:=Replace string:C233(Delete string:C232($t;1;$l);Folder separator:K24:12;"/")  // Keep relative posix path
+	$i:=$i+1
 	
 End for each 
 
-  // Store relative path
-$Col_pathnames:=$Col_pathnames.map("col_replaceString";$Dir_root;"")
+  // ----------------------------------------------------
+  //                  USER RESOURCES
+  // ----------------------------------------------------
+$folder:=COMPONENT_Pathname ("host_"+$Obj_in.target)
 
-  // -------------------------------------------------- ]
-
-  // USER RESOURCES ----------------------------------- [
-$Dir_root:=_o_Pathname ("host_"+$Obj_in.target)+Folder separator:K24:12
-
-If (Test path name:C476($Dir_root)=Is a folder:K24:2)
+If ($folder.exists)
 	
-	DOCUMENT LIST:C474($Dir_root;$tFile_icons;Absolute path:K24:14+Recursive parsing:K24:13+Ignore invisible:K24:16)
+	$l:=Length:C16($folder.platformPath)
 	
-	$Col_hostpathnames:=New collection:C1472()
-	ARRAY TO COLLECTION:C1563($Col_hostpathnames;$tFile_icons)
+	$Col_hostpathnames:=$folder.files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
 	
 	If (Bool:C1537($Obj_in.sort))
 		
@@ -103,48 +99,36 @@ If (Test path name:C476($Dir_root)=Is a folder:K24:2)
 		
 	End if 
 	
-	For each ($File_;$Col_hostpathnames)
+	For each ($t;$Col_hostpathnames)
 		
-		  // Get the picture
-		READ PICTURE FILE:C678($File_;$p)
+		READ PICTURE FILE:C678($t;$p)
 		CREATE THUMBNAIL:C679($p;$p;$kLon_iconWidth;$kLon_iconWidth;Scaled to fit:K6:2)
 		$Col_pictures.push($p)
+		$Col_pathnames.push("/"+Replace string:C233(Delete string:C232($t;1;$l);Folder separator:K24:12;"/"))  // Keep relative posix path
 		
 	End for each 
-	
-	  // Store relative path with a separator at begining for host icones
-	$Col_hostpathnames:=$Col_hostpathnames.map("col_replaceString";$Dir_root;Folder separator:K24:12)
-	
-	  // Then add
-	$Col_pathnames:=$Col_pathnames.concat($Col_hostpathnames)
-	
 End if 
 
-  // Keep posix path
-$Col_pathnames:=$Col_pathnames.map("col_replaceString";Folder separator:K24:12;"/")  // Manage ourselve the conversion #100589
-
-  // -------------------------------------------------- ]
-
-  // Insert blank icon -------------------------------- [
+  // ----------------------------------------------------
+  //                 Insert blank icon
+  // ----------------------------------------------------
 READ PICTURE FILE:C678(ui.noIcon;$p)
 CREATE THUMBNAIL:C679($p;$p;$kLon_iconWidth-8;$kLon_iconWidth-8;Scaled to fit:K6:2)
 $Col_pathnames.insert(0;"")
 $Col_pictures.insert(0;$p)
-
-  // -------------------------------------------------- ]
 
 $o:=New object:C1471(\
 "celluleWidth";$kLon_iconWidth;\
 "maxColumns";40;\
 "offset";5;\
 "thumbnailWidth";$kLon_iconWidth;\
-"noPicture";Get localized string:C991("noMedia"))
-
-$o.pictures:=$Col_pictures
-$o.pathnames:=$Col_pathnames
+"noPicture";Get localized string:C991("noMedia");\
+"pictures";$Col_pictures;\
+"pathnames";$Col_pathnames)
 
   // ----------------------------------------------------
   // Return
 $0:=$o
+
   // ----------------------------------------------------
   // End

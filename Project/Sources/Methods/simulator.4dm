@@ -407,7 +407,7 @@ Case of
 		
 		If ($Obj_in.device#Null:C1517)
 			
-			$Obj_out.path:=_o_env_userPath ("simulators")+$Obj_in.device
+			$Obj_out.path:=env_userPathname ("simulators").platformPath+$Obj_in.device
 			
 			If (Bool:C1537($Obj_in.data))
 				
@@ -429,13 +429,13 @@ Case of
 		
 		If ($Obj_in.device#Null:C1517)
 			
-			$Obj_out.path:=_o_env_userPath ("simulators")+$Obj_in.device+Folder separator:K24:12+"data"+Folder separator:K24:12+"Containers"+Folder separator:K24:12+"Bundle"+Folder separator:K24:12+"Application"+Folder separator:K24:12
+			$Obj_out.path:=env_userPathname ("simulators").platformPath+$Obj_in.device+Folder separator:K24:12+"data"+Folder separator:K24:12+"Containers"+Folder separator:K24:12+"Bundle"+Folder separator:K24:12+"Application"+Folder separator:K24:12
 			
 			$Obj_out.apps:=New collection:C1472
 			
 			If (Bool:C1537($Obj_in.data))
 				
-				$Obj_out.path:=_o_env_userPath ("simulators")+$Obj_in.device+Folder separator:K24:12+"data"+Folder separator:K24:12+"Containers"+Folder separator:K24:12+"Data"+Folder separator:K24:12+"Application"+Folder separator:K24:12
+				$Obj_out.path:=env_userPathname ("simulators").platformPath+$Obj_in.device+Folder separator:K24:12+"data"+Folder separator:K24:12+"Containers"+Folder separator:K24:12+"Data"+Folder separator:K24:12+"Application"+Folder separator:K24:12
 				
 				$Obj_out.metaData:=New collection:C1472
 				

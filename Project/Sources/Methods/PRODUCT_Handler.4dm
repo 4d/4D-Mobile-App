@@ -273,7 +273,7 @@ Case of
 				
 			End if 
 			
-			COPY DOCUMENT:C541(_o_Pathname ("project⁩")+"Assets.xcassets"+Folder separator:K24:12+"AppIcon.appiconset"+Folder separator:K24:12+"Contents.json";$Obj_form.form.assets.root+"Contents.json")
+			COMPONENT_Pathname ("project").file("Assets.xcassets/AppIcon.appiconset/Contents.json").copyTo(Folder:C1567($Obj_form.form.assets.root;fk platform path:K87:2))
 			
 		End if 
 		

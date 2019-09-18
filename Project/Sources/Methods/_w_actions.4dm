@@ -14,8 +14,8 @@ C_OBJECT:C1216($2)
 
 C_LONGINT:C283($l;$Lon_parameters)
 C_PICTURE:C286($p)
-C_TEXT:C284($Dir_actions;$File_noIcon;$Svg_root;$t;$Txt_action;$Txt_type)
-C_OBJECT:C1216($o;$Obj_context;$Obj_out;$Obj_target;$oo)
+C_TEXT:C284($File_noIcon;$t;$Txt_action;$Txt_type)
+C_OBJECT:C1216($folder;$o;$Obj_context;$Obj_out;$oo)
 
 If (False:C215)
 	C_OBJECT:C1216(_w_actions ;$0)
@@ -58,7 +58,8 @@ Case of
 		
 		$Txt_type:=$Obj_context.typeForm()
 		
-		If ($Txt_type="detail") & (Bool:C1537(featuresFlags.withWidgetActions))
+		If ($Txt_type="detail")\
+			 & (Bool:C1537(featuresFlags.withWidgetActions))
 			
 			$Txt_type:=$Txt_type+"widget"
 			
@@ -75,7 +76,8 @@ Case of
 			
 			$oo:=JSON Parse:C1218(Document to text:C1236($o.parentFolder+$o.name+Folder separator:K24:12+"manifest.json"))
 			
-			If (Length:C16(String:C10($oo.target))=0) | (Position:C15(String:C10($oo.target);$Txt_type)>0)
+			If (Length:C16(String:C10($oo.target))=0)\
+				 | (Position:C15(String:C10($oo.target);$Txt_type)>0)
 				
 				$oo.name:=$o.fullName  // The name of the folder
 				
@@ -113,17 +115,19 @@ Case of
 		  //=======================
 		  //     User actions    //
 		  //=======================
-		$o:=doc_Folder (_o_Pathname ("host_actions"))
 		
-		If ($o.exists)
+		$folder:=COMPONENT_Pathname ("host_actions")
+		
+		If ($folder.exists)
 			
-			For each ($o;$o.folders)
+			For each ($o;$folder.folders())
 				
-				If (_and (Formula:C1597($o.files#Null:C1517);Formula:C1597($o.files.length>0);Formula:C1597($o.files.extract("fullName").indexOf("manifest.json")#-1)))
+				If (_and (Formula:C1597($o.files().length>0);Formula:C1597($o.files().extract("fullname").indexOf("manifest.json")#-1)))
 					
-					$oo:=JSON Parse:C1218(Document to text:C1236($o.parentFolder+$o.name+Folder separator:K24:12+"manifest.json"))
+					$oo:=JSON Parse:C1218($o.file("manifest.json").getText())
 					
-					If (Length:C16(String:C10($oo.target))=0) | (Position:C15(String:C10($oo.target);$Txt_type)>0)
+					If (Length:C16(String:C10($oo.target))=0)\
+						 | (Position:C15(String:C10($oo.target);$Txt_type)>0)
 						
 						$oo.name:=$o.fullName  // The name of the folder
 						
@@ -131,7 +135,7 @@ Case of
 							
 							$oo.icon:="/"+$o.fullName+"/"+$oo.icon
 							
-							$t:=$o.parentFolder+$o.name+Folder separator:K24:12+$oo.icon
+							$t:=$o.parent.platformPath+$o.name+Folder separator:K24:12+$oo.icon
 							
 							If (Test path name:C476($t)#Is a document:K24:1)
 								
@@ -179,44 +183,39 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="preview")
 		
-		  //$Svg_root:=SVG_New 
+		  //$Svg_root:=SVG_New
 		
 		  //$Obj_target:=Form[$Obj_context.typeForm()][$Obj_context.tableNum()]
 		
 		  //If ($Obj_target.actions#Null)
-		
 		  //$Dir_actions:=_o_Pathname ("host_actions")
 		
 		  //For each ($o;$Obj_target.actions)
 		
 		  //If ($o.icon#Null)
-		
 		  //If (String($o.icon)[[1]]="/")  // User action
-		
 		  //$t:=$Dir_actions+Convert path POSIX to system(Delete string($o.icon;1;1))
 		
 		  //If (Test path name($t)#Is a document)
-		
 		  //$t:=$File_noIcon
 		
-		  //End if 
+		  // End if
 		
 		  //Else   // Embedded action
 		
 		  //$t:=Get 4D folder(Current resources folder)+"images"+Folder separator+"actions"+Folder separator+$o.icon
 		
 		  //If (Test path name($t)#Is a document)
+		  //$t:=$File_noIcon
+		
+		  // End if
+		  // End if
+		
+		  // Else
 		
 		  //$t:=$File_noIcon
 		
-		  //End if 
-		  //End if 
-		
-		  //Else 
-		
-		  //$t:=$File_noIcon
-		
-		  //End if 
+		  // End if
 		
 		  //READ PICTURE FILE($t;$p)
 		  //CREATE THUMBNAIL($p;$p;24;24)
@@ -224,13 +223,13 @@ Case of
 		
 		  //$l:=$l+26
 		
-		  //End for each 
+		  // End for each
 		
-		  //Else 
+		  // Else
 		
 		  //  // <NOTHING MORE TO DO>
 		
-		  //End if 
+		  // End if
 		
 		  //SVG EXPORT TO PICTURE($Svg_root;$p;Own XML data source)
 		$Obj_out.pict:=$p
