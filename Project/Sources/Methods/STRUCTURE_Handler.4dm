@@ -364,7 +364,14 @@ Case of
 				  //…………………………………………………………………………………………………
 			: ($Obj_in.field.type=-2)  // 1 -> N relation
 				
+				  //*******************************************************************************************
 				$Lon_published:=Num:C11(Form:C1466.dataModel[String:C10($Obj_in.table.tableNumber)][String:C10($Obj_in.field.name)]#Null:C1517)
+				  //
+				  // C'EST FAUX SI LE LIEN A ÉTÉ RENOMMÉ
+				  // REGARDER DANS : Form.$dialog.unsynchronizedTableFields[String($Obj_in.table.tableNumber)]
+				  //
+				  //*******************************************************************************************
+				
 				
 				APPEND TO ARRAY:C911(($Obj_in.published)->;$Lon_published)
 				APPEND TO ARRAY:C911(($Obj_in.icons)->;UI.fieldIcons[8859])

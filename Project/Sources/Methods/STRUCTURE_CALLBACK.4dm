@@ -125,7 +125,6 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 									$oo:=$Obj_tableModel[$t]
 									
 									$c:=$Col_catalog[$Lon_tableIndx].field.query("fieldNumber = :1";$Lon_fieldNumber)
-									  //$Boo__unsynchronized:=($c.length=0)  // True if field doesn't exist anymore
 									$Boo_unsynchronizedField:=($c.length=0)  // True if field doesn't exist anymore
 									
 									If (Not:C34($Boo_unsynchronizedField))
@@ -254,7 +253,28 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 									  //______________________________________________________
 								: ($ƒ.isRelationToMany($Obj_tableModel[$t]))  // 1 -> N relation
 									
-									  //#MARK_TODO
+									$c:=$Col_catalog[$Lon_tableIndx].field.extract("name")
+									$Lon_indx:=$c.indexOf($t)
+									$Boo_unsynchronizedField:=($Lon_indx=-1)  // True if relation was deleted or renamed
+									
+									If (Not:C34($Boo_unsynchronizedField))
+										
+										  // Perform a diacritical comparison
+										$Boo_unsynchronizedField:=Not:C34(str_equal ($t;$c[$Lon_indx]))
+										
+									End if 
+									
+									If ($Boo_unsynchronizedField)
+										
+										$Boo_unsynchronizedTable:=True:C214
+										
+										  // Append an empty collection
+										If ($Col_unsynchronizedFields.indexOf($t)=-1)
+											
+											$Col_unsynchronizedFields.push(New object:C1471($t;New collection:C1472))
+											
+										End if 
+									End if 
 									
 									  //______________________________________________________
 							End case 

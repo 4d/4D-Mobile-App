@@ -315,122 +315,125 @@ Case of
 								
 								If ($Lon_column=3)  // & (Bool(featuresFlags._101637))
 									
-									  //#MARK_TO_OPTIMIZE
-									$o:=structure (New object:C1471(\
-										"action";"relatedCatalog";\
-										"table";String:C10($Obj_context.currentTable.name);\
-										"relatedEntity";$Obj_context.fieldName))
-									
-									If ($o.success)  // Open field picker
+									If (Not:C34(editor_Locked ))
 										
-										$Obj_dataModel:=Form:C1466.dataModel[String:C10($Obj_context.currentTable.tableNumber)][$o.relatedEntity]
+										  //#MARK_TO_OPTIMIZE
+										$o:=structure (New object:C1471(\
+											"action";"relatedCatalog";\
+											"table";String:C10($Obj_context.currentTable.name);\
+											"relatedEntity";$Obj_context.fieldName))
 										
-										For each ($Obj_related;$o.fields)
+										If ($o.success)  // Open field picker
 											
-											$Obj_related.published:=($Obj_dataModel[String:C10($Obj_related.fieldNumber)]#Null:C1517)
-											$Obj_related.icon:=UI.fieldIcons[$Obj_related.fieldType]
+											$Obj_dataModel:=Form:C1466.dataModel[String:C10($Obj_context.currentTable.tableNumber)][$o.relatedEntity]
 											
-										End for each 
-										
-										$Win_hdl:=Open form window:C675("RELATED";Sheet form window:K39:12;*)
-										DIALOG:C40("RELATED";$o)
-										
-										If ($o.success)  // Dialog was validated
+											For each ($Obj_related;$o.fields)
+												
+												$Obj_related.published:=($Obj_dataModel[String:C10($Obj_related.fieldNumber)]#Null:C1517)
+												$Obj_related.icon:=UI.fieldIcons[$Obj_related.fieldType]
+												
+											End for each 
 											
-											  // If at least one related field is published
-											If ($o.fields.extract("published").indexOf(True:C214)#-1)
+											$Win_hdl:=Open form window:C675("RELATED";Sheet form window:K39:12;*)
+											DIALOG:C40("RELATED";$o)
+											
+											If ($o.success)  // Dialog was validated
 												
-												$Obj_dataModel:=Form:C1466.dataModel[String:C10($Obj_context.currentTable.tableNumber)]
-												
-												If ($Obj_dataModel=Null:C1517)\
-													 | OB Is empty:C1297($Obj_dataModel)
+												  // If at least one related field is published
+												If ($o.fields.extract("published").indexOf(True:C214)#-1)
 													
-													$Obj_dataModel:=STRUCTURE_Handler (New object:C1471(\
-														"action";"addTable"))
+													$Obj_dataModel:=Form:C1466.dataModel[String:C10($Obj_context.currentTable.tableNumber)]
 													
-												End if 
-												
-												$Col_published:=New collection:C1472
-												
-												For each ($Obj_related;$o.fields)
+													If ($Obj_dataModel=Null:C1517)\
+														 | OB Is empty:C1297($Obj_dataModel)
+														
+														$Obj_dataModel:=STRUCTURE_Handler (New object:C1471(\
+															"action";"addTable"))
+														
+													End if 
 													
-													$Lon_number:=$Lon_number+1
-													$Txt_fieldNumber:=String:C10($Obj_related.fieldNumber)
+													$Col_published:=New collection:C1472
 													
-													If ($Obj_related.published)
+													For each ($Obj_related;$o.fields)
 														
-														$Col_published.push($Obj_related)
+														$Lon_number:=$Lon_number+1
+														$Txt_fieldNumber:=String:C10($Obj_related.fieldNumber)
 														
-														If ($Obj_dataModel[$Obj_context.fieldName]=Null:C1517)
+														If ($Obj_related.published)
 															
-															  // Create the relation
-															$Obj_dataModel[$Obj_context.fieldName]:=New object:C1471(\
-																"relatedDataClass";$o.relatedDataClass;\
-																"relatedTableNumber";$o.relatedTableNumber;\
-																"inverseName";$o.inverseName)
+															$Col_published.push($Obj_related)
 															
-														End if 
-														
-														If ($Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber]=Null:C1517)
-															
-															  // Create the field
-															$Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber]:=New object:C1471(\
-																"name";$Obj_related.name;\
-																"label";formatString ("label";$Obj_related.name);\
-																"shortLabel";formatString ("label";$Obj_related.name);\
-																"type";$Obj_related.type;\
-																"relatedTableNumber";$Obj_related.relatedTableNumber;\
-																"fieldType";$Obj_related.fieldType)
-															
-														End if 
-														
-													Else 
-														
-														  // Remove the field
-														If ($Obj_dataModel[$Obj_context.fieldName]#Null:C1517)
-															
-															If ($Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber]#Null:C1517)
+															If ($Obj_dataModel[$Obj_context.fieldName]=Null:C1517)
 																
-																OB REMOVE:C1226($Obj_dataModel[$Obj_context.fieldName];$Txt_fieldNumber)
+																  // Create the relation
+																$Obj_dataModel[$Obj_context.fieldName]:=New object:C1471(\
+																	"relatedDataClass";$o.relatedDataClass;\
+																	"relatedTableNumber";$o.relatedTableNumber;\
+																	"inverseName";$o.inverseName)
 																
 															End if 
+															
+															If ($Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber]=Null:C1517)
+																
+																  // Create the field
+																$Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber]:=New object:C1471(\
+																	"name";$Obj_related.name;\
+																	"label";formatString ("label";$Obj_related.name);\
+																	"shortLabel";formatString ("label";$Obj_related.name);\
+																	"type";$Obj_related.type;\
+																	"relatedTableNumber";$Obj_related.relatedTableNumber;\
+																	"fieldType";$Obj_related.fieldType)
+																
+															End if 
+															
+														Else 
+															
+															  // Remove the field
+															If ($Obj_dataModel[$Obj_context.fieldName]#Null:C1517)
+																
+																If ($Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber]#Null:C1517)
+																	
+																	OB REMOVE:C1226($Obj_dataModel[$Obj_context.fieldName];$Txt_fieldNumber)
+																	
+																End if 
+															End if 
+														End if 
+													End for each 
+													
+													  // Checkbox value
+													If ($Col_published.length>0)
+														
+														$Lon_published:=1
+														
+														If ($Col_published.length#$o.fields.length)
+															
+															$Lon_published:=2
+															
 														End if 
 													End if 
-												End for each 
-												
-												  // Checkbox value
-												If ($Col_published.length>0)
-													
-													$Lon_published:=1
-													
-													If ($Col_published.length#$o.fields.length)
-														
-														$Lon_published:=2
-														
-													End if 
 												End if 
+												
+												($Obj_form.publishedPtr)->{$Lon_row}:=$Lon_published
+												
 											End if 
-											
-											($Obj_form.publishedPtr)->{$Lon_row}:=$Lon_published
-											
-										End if 
-										
-									Else 
-										
-										If (Macintosh command down:C546 | Shift down:C543)
-											
-											
 											
 										Else 
 											
-											  // Invert published status
-											($Obj_form.publishedPtr)->{$Lon_row}:=1-($Obj_form.publishedPtr)->{$Lon_row}
-											
+											If (Macintosh command down:C546 | Shift down:C543)
+												
+												  //
+												
+											Else 
+												
+												  // Invert published status
+												($Obj_form.publishedPtr)->{$Lon_row}:=1-($Obj_form.publishedPtr)->{$Lon_row}
+												
+											End if 
 										End if 
+										
+										STRUCTURE_UPDATE ($Obj_form)
+										
 									End if 
-									
-									STRUCTURE_UPDATE ($Obj_form)
-									
 								End if 
 							End if 
 						End if 

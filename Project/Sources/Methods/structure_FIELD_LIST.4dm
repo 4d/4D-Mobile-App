@@ -12,7 +12,7 @@
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_error;$Boo_found)
-C_LONGINT:C283($i;$Lon_colum;$Lon_parameters;$Lon_row)
+C_LONGINT:C283($i;$l;$Lon_colum;$Lon_parameters;$Lon_row)
 C_POINTER:C301($Ptr_fields;$Ptr_icons;$Ptr_list;$Ptr_published)
 C_TEXT:C284($t)
 C_OBJECT:C1216($ƒ;$Obj_;$Obj_context;$Obj_dataModel;$Obj_field;$Obj_form)
@@ -266,38 +266,49 @@ If ($Lon_row>0)
 						"published";$Ptr_published;\
 						"icons";$Ptr_icons))
 					
+					$l:=Size of array:C274($Ptr_fields->)
+					
 					Case of 
 							
 							  //…………………………………………………………………………
 						: ($Obj_field.type=-2)  // 1 -> N relation
 							
-							If (Bool:C1537($Ptr_published->{Size of array:C274($Ptr_fields->)}))
+							If (Bool:C1537($Ptr_published->{$l}))
 								
-								$Boo_error:=($Obj_dataModel[String:C10($Obj_field.relatedTableNumber)]=Null:C1517)
-								LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;Size of array:C274($Ptr_fields->);Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
+								$l:=Form:C1466.$project.$catalog.extract("tableNumber").indexOf($Obj_field.relatedTableNumber)
+								$Boo_error:=($l=-1)
+								LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$l;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
 								
 							Else 
 								
-								LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;Size of array:C274($Ptr_fields->);lk inherited:K53:26;lk font color:K53:24)
+								LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$l;lk inherited:K53:26;lk font color:K53:24)
 								
 							End if 
 							
 							  //…………………………………………………………………………
 						: ($Obj_field.type=-1)
 							
-							$Boo_error:=(Find in array:C230($tLon_fieldID;$Obj_field.id)>0) | ($tLon_fieldID{0}=-1)
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;Size of array:C274($Ptr_fields->);Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
+							If (Bool:C1537($Ptr_published->{$l}))
+								
+								$Boo_error:=(Find in array:C230($tLon_fieldID;$Obj_field.id)>0) | ($tLon_fieldID{0}=-1)
+								LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$l;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
+								
+							Else 
+								
+								LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$l;lk inherited:K53:26;lk font color:K53:24)
+								
+							End if 
 							
 							  //…………………………………………………………………………
 						Else 
 							
 							$Boo_error:=(Find in array:C230($tLon_fieldID;$Obj_field.id)>0) | ($tLon_fieldID{0}=-1)
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;Size of array:C274($Ptr_fields->);Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
+							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$l;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
 							
 							If ($Obj_field.name=$Obj_table.primaryKey)
 								
 								  // Highlight primary key
-								LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;Size of array:C274($Ptr_fields->);Bold:K14:2)
+								LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;$l;Bold:K14:2)
 								
 							End if 
 							

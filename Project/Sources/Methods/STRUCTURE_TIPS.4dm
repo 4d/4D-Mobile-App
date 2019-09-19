@@ -178,6 +178,8 @@ If ($Lon_row#0)
 										  //______________________________________________________
 									: ($1.target=$Obj_form.fieldList)  // FIELD LIST
 										
+										
+										ASSERT:C1129(Not:C34(Shift down:C543))
 										$l:=$Obj_table.field.extract("name").indexOf((ui.pointer($Obj_form.fields))->{$Lon_row})
 										
 										If ($l#-1)
@@ -200,7 +202,6 @@ If ($Lon_row#0)
 														
 													Else 
 														
-														  //If (str_equal ($Obj_field.relatedDataClass;$Col_catalog[$l].name))
 														If ($o.setText($Obj_field.relatedDataClass).equal($Col_catalog[$l].name))
 															
 															  // Check related datamodel
@@ -279,6 +280,23 @@ If ($Lon_row#0)
 															
 														End if 
 													End if 
+													
+													
+													  //______________________________________________________
+												: ($Obj_field.type=-2)  // 1 -> N relation
+													
+													$l:=$c.extract("name").indexOf($Obj_field.name)
+													
+													Case of 
+															
+															  //……………………………………………………………………………………………………………………
+														: ($l=-1)  // Not found into the current catalog
+															
+															$Txt_tips:=ui.alert+$o.setText("theRelationNameIsNoLongerAvailable").localized($Obj_field.name)
+															
+															
+													End case 
+													
 													
 													  //______________________________________________________
 												Else 
