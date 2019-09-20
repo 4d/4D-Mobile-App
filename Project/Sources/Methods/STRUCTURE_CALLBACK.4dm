@@ -5,7 +5,8 @@
   // Created 18-1-2019 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
-  // Check structure for missing table or fields used in the data model
+  // Check the structure for the tables and fields used in the data model by
+  // comparing to the last valid version of the catalog.
   // ----------------------------------------------------
   //
   // EXECUTION SPACE IS THE FORM EDITOR
@@ -15,12 +16,11 @@
 C_COLLECTION:C1488($1)
 
 C_BOOLEAN:C305($Boo__unsynchronized;$Boo_unsynchronizedField;$Boo_unsynchronizedTable)
-C_LONGINT:C283($Lon_fieldIndx;$Lon_fieldNumber;$Lon_indx;$Lon_parameters;$Lon_relatedTableIndx;$Lon_tableIndx)
-C_LONGINT:C283($Lon_tableNumber;$Win_current)
-C_TEXT:C284($File_cache;$t;$Txt_digest;$Txt_tableNumber)
-C_OBJECT:C1216($ƒ;$o;$Obj_cache;$Obj_dataModel;$Obj_project;$Obj_relatedDataClass)
-C_OBJECT:C1216($Obj_structure;$Obj_tableModel;$oo)
-C_COLLECTION:C1488($c;$Col_catalog;$Col_unsynchronizedFields;$Col_unsynchronizedTableFields)
+C_LONGINT:C283($l)
+C_TEXT:C284($t;$tt;$Txt_table)
+C_OBJECT:C1216($file;$ƒ;$o;$Obj_cache;$Obj_dataModel;$Obj_project)
+C_OBJECT:C1216($Obj_structure;$Obj_tableCurrent;$Obj_tableModel;$str)
+C_COLLECTION:C1488($c;$cc;$Col_cachedCatalog;$Col_currentCatalog;$Col_unsynchronizedFields;$Col_unsynchronizedTableFields)
 
 If (False:C215)
 	C_COLLECTION:C1488(STRUCTURE_CALLBACK ;$1)
@@ -28,23 +28,15 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$Col_catalog:=$1
+	$Col_currentCatalog:=$1  // Current catalog
 	
 	  // Default values
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
-		
-		  // <NONE>
-		
-	End if 
-	
-	$Win_current:=Current form window:C827
+	  // <NONE>
 	
 	  // First run
 	$o:=Form:C1466
@@ -57,6 +49,8 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
 	$ƒ:=Storage:C1525.ƒ
 	
+	$str:=str ()
+	
 Else 
 	
 	ABORT:C156
@@ -64,28 +58,30 @@ Else
 End if 
 
   // ----------------------------------------------------
-  // Compare to last valid version
-$File_cache:=$Obj_project.$project.root+"catalog.json"
+  // Compare to cached catalog (the last valid)
+$file:=File:C1566($Obj_project.$project.root+"catalog.json";fk platform path:K87:2)
 
-$Txt_digest:=Generate digest:C1147(JSON Stringify:C1217($Col_catalog);SHA1 digest:K66:2)
-
-If (Test path name:C476($File_cache)=Is a document:K24:1)
+If ($file.exists)
 	
-	$Obj_cache:=JSON Parse:C1218(Document to text:C1236($File_cache))
+	$Obj_cache:=JSON Parse:C1218($file.getText())
+	
+	$Col_cachedCatalog:=$Obj_cache.structure.definition
 	
 	  // Has the structure been modified ?
-	If ($Txt_digest#String:C10($Obj_cache.structure.digest)) | (Bool:C1537(featuresFlags._8858))
+	If (Not:C34($Col_cachedCatalog.equal($Col_currentCatalog)))\
+		 | (Bool:C1537(featuresFlags._8858))
 		
 		$Col_unsynchronizedTableFields:=New collection:C1472
 		
-		  // Verify the datamodel
+		  // Verify the compliance of the data model with the current catalog
 		$Obj_dataModel:=$Obj_project.dataModel
 		
 		If ($Obj_dataModel#Null:C1517)
 			
-			For each ($Txt_tableNumber;$Obj_dataModel)
+			  // For each TABLE published
+			For each ($Txt_table;$Obj_dataModel)
 				
-				$Obj_tableModel:=$Obj_dataModel[$Txt_tableNumber]
+				$Obj_tableModel:=$Obj_dataModel[$Txt_table]
 				
 				  // Reset unsynchronized table flag
 				CLEAR VARIABLE:C89($Boo_unsynchronizedTable)
@@ -93,191 +89,177 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 				  // Create unsynchronized fields collection
 				$Col_unsynchronizedFields:=New collection:C1472
 				
-				  // Check that the table is defined in the structure
-				$Lon_tableNumber:=Num:C11($Txt_tableNumber)
+				  // Check that the table is defined in the current catalog
+				$c:=$Col_currentCatalog.query("tableNumber = :1";Num:C11($Txt_table))
 				
-				$Lon_tableIndx:=$Col_catalog.extract("tableNumber").indexOf($Lon_tableNumber)
-				$Boo_unsynchronizedTable:=($Lon_tableIndx=-1)  // True if the table doesn't exist anymore
+				$Boo_unsynchronizedTable:=($c.length=0)  // True if the table doesn't exist anymore
 				
 				If (Not:C34($Boo_unsynchronizedTable))
 					
-					  // Check table name & primary key
-					$Boo_unsynchronizedTable:=(\
-						($Col_catalog[$Lon_tableIndx].name#$Obj_tableModel.name)\
-						 | (String:C10($Col_catalog[$Lon_tableIndx].primaryKey)#$Obj_tableModel.primaryKey)\
-						)
+					$Obj_tableCurrent:=$c[0]
+					
+					  // Check TABLE NAME & PRIMARY KEY
+					$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel.name)\
+						 | ($Obj_tableCurrent.primaryKey#$Obj_tableModel.primaryKey)
 					
 					If (Not:C34($Boo_unsynchronizedTable))
 						
-						  // Check the fields
 						For each ($t;$Obj_tableModel)
 							
-							  // Reset unsynchronized field flag
-							CLEAR VARIABLE:C89($Boo_unsynchronizedField)
-							
-							$Lon_fieldNumber:=Num:C11($t)
-							
-							Case of 
+							If ($ƒ.isField($t))
+								
+								  // FIELD
+								
+								$o:=$Obj_tableModel[$t]
+								$c:=$Obj_tableCurrent.field.query("fieldNumber = :1";Num:C11($t))
+								
+								$Boo_unsynchronizedField:=_or (\
+									Formula:C1597($c.length=0);\
+									Formula:C1597($o.name#$c[0].name);\
+									Formula:C1597($o.fieldType#$c[0].fieldType)\
+									)
+								
+								If ($Boo_unsynchronizedField)
 									
-									  //______________________________________________________
-								: ($ƒ.isField($t))
+									  // THE FIELD IS NO LONGER AVAILABLE
+									  // OR IF THE NAME HAS BEEN CHANGED (diacritical)
 									
-									$oo:=$Obj_tableModel[$t]
+									$Boo_unsynchronizedTable:=True:C214
 									
-									$c:=$Col_catalog[$Lon_tableIndx].field.query("fieldNumber = :1";$Lon_fieldNumber)
-									$Boo_unsynchronizedField:=($c.length=0)  // True if field doesn't exist anymore
+									  // Append definition of faulty field
+									$Col_unsynchronizedFields.push($o)
 									
-									If (Not:C34($Boo_unsynchronizedField))
-										
-										  // Check field name & type
-										$Boo_unsynchronizedField:=($oo.name#$c[0].name) | ($oo.fieldType#$c[0].fieldType)
-										
-									End if 
+								End if 
+								
+							Else 
+								
+								If (Value type:C1509($Obj_tableModel[$t])=Is object:K8:27)
 									
-									If ($Boo_unsynchronizedField)
-										
-										$Boo_unsynchronizedTable:=True:C214
-										$Col_unsynchronizedFields.push($Lon_fieldNumber)
-										
-									End if 
+									  // RELATION
 									
-									  //______________________________________________________
-								: ((Value type:C1509($Obj_tableModel[$t])#Is object:K8:27))
+									$o:=$Obj_tableModel[$t]
+									$c:=$Obj_tableCurrent.field.query("name = :1";$t)
 									
-									  // <NOTHING MORE TO DO>
-									
-									  //______________________________________________________
-								: ($ƒ.isRelationToOne($Obj_tableModel[$t]))  // N -> 1 relation
-									
-									$c:=$Col_catalog[$Lon_tableIndx].field.extract("name")
-									$Lon_indx:=$c.indexOf($t)
-									$Boo_unsynchronizedField:=($Lon_indx=-1)  // True if relation was deleted or renamed
-									
-									If (Not:C34($Boo_unsynchronizedField))
-										
-										  // Perform a diacritical comparison
-										$Boo_unsynchronizedField:=Not:C34(str_equal ($t;$c[$Lon_indx]))
-										
-									End if 
-									
-									If (Not:C34($Boo_unsynchronizedField))
-										
-										$oo:=$Obj_tableModel[$t]
-										$Lon_relatedTableIndx:=$Col_catalog.extract("tableNumber").indexOf($oo.relatedTableNumber)
-										
-										If ($Lon_relatedTableIndx#-1)
+									Case of 
 											
-											$Obj_relatedDataClass:=$Col_catalog[$Lon_relatedTableIndx]
+											  //________________________________________
+										: ($ƒ.isRelationToOne($o))  // N -> 1 relation
 											
-											For each ($t;$oo)
+											$Boo_unsynchronizedField:=_or (\
+												Formula:C1597($c.length=0);\
+												Formula:C1597(Not:C34($str.setText($t).equal($c[0].name)))\
+												)
+											
+											If ($Boo_unsynchronizedField)
 												
-												Case of 
+												  // THE FIELD IS NO LONGER AVAILABLE
+												  // OR IF THE NAME HAS BEEN CHANGED (diacritical)
+												
+												$Boo_unsynchronizedTable:=True:C214
+												
+												  // Append with an empty collection
+												If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
+													
+													$Col_unsynchronizedFields.push(New object:C1471(\
+														"name";$t;"fields";New collection:C1472))
+													
+												End if 
+												
+											Else 
+												
+												  // Check related table catalog
+												$c:=$Col_currentCatalog.query("tableNumber = :1";$o.relatedTableNumber)
+												
+												If ($c.length=1)
+													
+													  // Check related data class catalog
+													For each ($tt;$o)
 														
-														  //…………………………………………………………………………………………
-													: ($ƒ.isField($t))
-														
-														$Lon_fieldIndx:=$Obj_relatedDataClass.field.extract("id").indexOf(Num:C11($t))
-														$Boo_unsynchronizedField:=($Lon_fieldIndx=-1)  // True if field doesn't exist anymore
-														
-														If (Not:C34($Boo_unsynchronizedField))
+														If ($ƒ.isField($tt))
 															
-															  // Check field name & type
-															$Boo_unsynchronizedField:=($oo[$t].name#$Obj_relatedDataClass.field[$Lon_fieldIndx].name)\
-																 | ($oo[$t].fieldType#$Obj_relatedDataClass.field[$Lon_fieldIndx].fieldType)
+															$l:=$c[0].field.extract("id").indexOf(Num:C11($tt))
 															
-														End if 
-														
-														If ($Boo_unsynchronizedField)
+															$Boo_unsynchronizedField:=_or (\
+																Formula:C1597($l=-1);\
+																Formula:C1597($o[$tt].name#$c[0].field[$l].name);\
+																Formula:C1597($o[$tt].fieldType#$c[0].field[$l].fieldType)\
+																)
 															
-															$Boo_unsynchronizedTable:=True:C214
-															
-															$Lon_indx:=$Col_unsynchronizedFields.indexOf($t)
-															
-															If ($Lon_indx=-1)
+															If ($Boo_unsynchronizedField)
 																
-																$Col_unsynchronizedFields.push(New object:C1471($t;New collection:C1472))
-																$Lon_indx:=$Col_unsynchronizedFields.length-1
+																  // TRUE IF THE FIELD IS NO LONGER AVAILABLE
+																  // OR IF THE NAME (non diacritical) OR TYPE HAS BEEN CHANGED
 																
+																$Boo_unsynchronizedTable:=True:C214
+																
+																$cc:=$Col_unsynchronizedFields.query("name= :1";$t)
+																
+																If ($cc.length=0)
+																	
+																	$Col_unsynchronizedFields.push(New object:C1471(\
+																		"name";$t;"fields";New collection:C1472(Num:C11($tt))))
+																	
+																Else 
+																	
+																	$cc[0].fields.push(Num:C11($tt))
+																	
+																End if 
 															End if 
 															
-															$Col_unsynchronizedFields[$Lon_indx][$t].push(Num:C11($t))
+														Else 
+															
+															  // NOT YET MANAGED
 															
 														End if 
+													End for each 
+													
+												Else 
+													
+													  // THE RELATED DATA CLASS IS MISSING
+													
+													$Boo_unsynchronizedField:=True:C214
+													$Boo_unsynchronizedTable:=True:C214
+													
+													  // Append with an empty collection
+													If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
 														
-														  //…………………………………………………………………………………………
-													: ((Value type:C1509($Obj_relatedDataClass[$t])#Is object:K8:27))
+														$Col_unsynchronizedFields.push(New object:C1471(\
+															$t;New collection:C1472))
 														
-														  // <NOTHING MORE TO DO>
-														
-														  //…………………………………………………………………………………………
-													Else 
-														
-														  // NOT YET MANAGED
-														
-														  //…………………………………………………………………………………………
-												End case 
-											End for each 
-											
-										Else 
-											
-											  // The related data class is not published anymore
-											$Boo_unsynchronizedField:=True:C214
-											$Boo_unsynchronizedTable:=True:C214
-											
-											  // Append an empty collection
-											If ($Col_unsynchronizedFields.indexOf($t)=-1)
-												
-												$Col_unsynchronizedFields.push(New object:C1471(\
-													$t;New collection:C1472))
-												
+													End if 
+													
+													  // Mark the related data class as missing
+													  // #BUG - si le lien a été renommé
+													$Col_unsynchronizedTableFields[$o.relatedTableNumber]:=New collection:C1472
+													
+												End if 
 											End if 
 											
-											  // Mark the related data class as missing
-											  // #BUG - si le lien a été renommé
-											$Col_unsynchronizedTableFields[$oo.relatedTableNumber]:=New collection:C1472
+											  //________________________________________
+										: ($ƒ.isRelationToMany($o))  // 1 -> N relation
 											
-										End if 
-										
-									Else 
-										
-										$Boo_unsynchronizedTable:=True:C214
-										
-										  // Append an empty collection
-										If ($Col_unsynchronizedFields.indexOf($t)=-1)
+											If (_or (\
+												Formula:C1597($c.length=0);\
+												Formula:C1597(Not:C34($str.setText($t).equal($c[0].name)))))
+												
+												  // THE FIELD IS NO LONGER AVAILABLE
+												  // OR IF THE NAME HAS BEEN CHANGED (diacritical)
+												
+												$Boo_unsynchronizedTable:=True:C214
+												
+												  // Append definition of faulty relation
+												If ($Col_unsynchronizedFields.indexOf($t)=-1)
+													
+													$Col_unsynchronizedFields.push(New object:C1471(\
+														$t;$o))
+													
+												End if 
+											End if 
 											
-											$Col_unsynchronizedFields.push(New object:C1471($t;New collection:C1472))
-											
-										End if 
-									End if 
-									
-									  //______________________________________________________
-								: ($ƒ.isRelationToMany($Obj_tableModel[$t]))  // 1 -> N relation
-									
-									$c:=$Col_catalog[$Lon_tableIndx].field.extract("name")
-									$Lon_indx:=$c.indexOf($t)
-									$Boo_unsynchronizedField:=($Lon_indx=-1)  // True if relation was deleted or renamed
-									
-									If (Not:C34($Boo_unsynchronizedField))
-										
-										  // Perform a diacritical comparison
-										$Boo_unsynchronizedField:=Not:C34(str_equal ($t;$c[$Lon_indx]))
-										
-									End if 
-									
-									If ($Boo_unsynchronizedField)
-										
-										$Boo_unsynchronizedTable:=True:C214
-										
-										  // Append an empty collection
-										If ($Col_unsynchronizedFields.indexOf($t)=-1)
-											
-											$Col_unsynchronizedFields.push(New object:C1471($t;New collection:C1472))
-											
-										End if 
-									End if 
-									
-									  //______________________________________________________
-							End case 
+											  //________________________________________
+									End case 
+								End if 
+							End if 
 						End for each 
 					End if 
 				End if 
@@ -285,7 +267,9 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 				If ($Boo_unsynchronizedTable)
 					
 					$Boo__unsynchronized:=True:C214
-					$Col_unsynchronizedTableFields[$Lon_tableNumber]:=$Col_unsynchronizedFields  // Empty collection if the table is no more available
+					
+					  // THE FIELD COLLECTION IS EMPTY IF THE TABLE IS MISSING
+					$Col_unsynchronizedTableFields[Num:C11($Txt_table)]:=$Col_unsynchronizedFields
 					
 				End if 
 			End for each 
@@ -297,7 +281,7 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 			If (Not:C34(editor_Locked ))
 				
 				POST_FORM_MESSAGE (New object:C1471(\
-					"target";$Win_current;\
+					"target";Current form window:C827;\
 					"action";"show";\
 					"type";"confirm";\
 					"title";"theDatabaseStructureWasModified";\
@@ -312,16 +296,16 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 		Else 
 			
 			  // Keep the current structure
-			Form:C1466.$catalog:=$Col_catalog
+			Form:C1466.$catalog:=$Col_currentCatalog
 			
 			  // The changes has no influence on the data model -> Update the cache
 			$Obj_structure:=Choose:C955($Obj_cache.structure=Null:C1517;New object:C1471;$Obj_cache.structure)
 			
-			$Obj_structure.definition:=$Col_catalog
-			$Obj_structure.digest:=$Txt_digest
+			$Obj_structure.definition:=$Col_currentCatalog
+			$Obj_structure.digest:=Generate digest:C1147(JSON Stringify:C1217($Col_currentCatalog);SHA1 digest:K66:2)
 			
 			$Obj_cache.structure:=$Obj_structure
-			TEXT TO DOCUMENT:C1237($File_cache;JSON Stringify:C1217($Obj_cache;*))
+			$file.setText(JSON Stringify:C1217($Obj_cache;*))
 			
 		End if 
 		
@@ -338,26 +322,24 @@ If (Test path name:C476($File_cache)=Is a document:K24:1)
 Else 
 	
 	  // Create the cache
-	If ($Col_catalog#Null:C1517)
-		
-		$Obj_structure:=New object:C1471
+	If ($Col_currentCatalog#Null:C1517)
 		
 		$Obj_cache:=New object:C1471(\
-			"structure";$Obj_structure)
+			"structure";New object:C1471(\
+			"definition";$Col_currentCatalog;\
+			"digest";Generate digest:C1147(JSON Stringify:C1217($Col_currentCatalog);SHA1 digest:K66:2)\
+			))
 		
-		$Obj_structure.definition:=$Col_catalog
-		$Obj_structure.digest:=$Txt_digest
-		
-		TEXT TO DOCUMENT:C1237($File_cache;JSON Stringify:C1217($Obj_cache;*))
+		$file.setText(JSON Stringify:C1217($Obj_cache;*))
 		
 	End if 
 End if 
 
-  // Keep the current structure
 If (Not:C34($Boo__unsynchronized))\
  | (Form:C1466.$catalog=Null:C1517)
 	
-	Form:C1466.$catalog:=$Col_catalog
+	  // Keep the current catalog
+	Form:C1466.$catalog:=$Col_currentCatalog
 	
 End if 
 
@@ -375,8 +357,10 @@ Else
 	
 End if 
 
-  //#106068 - [BUG] Delete table when published
-Form:C1466.$catalog:=$Col_catalog
+  //If (False)  // SEMBLE NE PAS ETRE COHERENT
+  //  //#106068 - [BUG] Delete table when published
+  //Form.$catalog:=$Col_currentCatalog
+  //End if 
 
   // Refresh UI
 STRUCTURE_Handler (New object:C1471(\
@@ -384,7 +368,7 @@ STRUCTURE_Handler (New object:C1471(\
 "project";$Obj_project))
 
   // Save project
-CALL FORM:C1391($Win_current;"project_SAVE")
+CALL FORM:C1391(Current form window:C827;"project_SAVE")
 
   // ----------------------------------------------------
   // Return

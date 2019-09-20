@@ -95,7 +95,7 @@ Else
 				
 				$Obj_widget.getDefinition()
 				
-				ASSERT:C1129(Not:C34(Shift down:C543))
+				  //ASSERT(Not(Shift down))
 				
 				Case of 
 						

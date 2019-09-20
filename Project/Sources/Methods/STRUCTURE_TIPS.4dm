@@ -39,6 +39,10 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	$o:=str ()  // init class
 	
+	C_COLLECTION:C1488($Col_unsynchronizedTableFields)
+	$Col_unsynchronizedTableFields:=Form:C1466.$dialog.unsynchronizedTableFields
+	ASSERT:C1129(Not:C34(Shift down:C543))
+	
 Else 
 	
 	ABORT:C156
@@ -46,7 +50,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-If ($Lon_row#0)
+If ($Lon_row#0) & False:C215
 	
 	$Obj_table:=This:C1470.currentTable
 	
@@ -54,11 +58,17 @@ If ($Lon_row#0)
 		
 		$Col_catalog:=This:C1470.catalog()
 		
-		$l:=$Col_catalog.extract("name").indexOf($Obj_table.name)
+		  //$l:=$Col_catalog.extract("name").indexOf($Obj_table.name)
 		
-		If ($l#-1)
+		$c:=$Col_catalog.query("name=:1";$Obj_table.name)
+		
+		  //If ($l#-1)
+		
+		If ($c.length>0)
 			
-			$Obj_table:=$Col_catalog[$l]
+			  //$Obj_table:=$Col_catalog[$l]
+			
+			$Obj_table:=$c[0]
 			
 			If ($Obj_table=Null:C1517)
 				
@@ -110,6 +120,11 @@ If ($Lon_row#0)
 												End for each 
 												
 												Case of 
+														
+														  //______________________________________________________
+													: (Value type:C1509($Col_desynchronized[0])=Is object:K8:27)  // 1 -> N relation
+														
+														$Txt_tips:=ui.alert+".The relation \""+$t+"\" is no more available"
 														
 														  //______________________________________________________
 													: ($Col_desynchronized[0][$t].length=0)  // the related table is no more available
@@ -450,6 +465,7 @@ If ($Lon_row#0)
 		Else 
 			
 			  // TABLE NOT IN CATALOG
+			$Txt_tips:=ui.alert+Get localized string:C991("theTableIsNoLongerAvailable")
 			
 		End if 
 		
