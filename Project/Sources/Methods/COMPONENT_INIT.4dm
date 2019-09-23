@@ -63,14 +63,14 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		"scale";64))
 	
 	  // minimum requierement
-	commonValues.xCodeVersion:="10.2"
-	commonValues.iosDeploymentTarget:="12.2"
+	commonValues.xCodeVersion:="11.0"
+	commonValues.iosDeploymentTarget:="13.0"
 	
 	commonValues.useXcodeDefaultPath:=True:C214
 	
 	  // Project config
 	commonValues.swift:=New object:C1471(\
-		"Version";"5.0";\
+		"Version";"5.1";\
 		"Flags";New object:C1471("Debug";"";"Release";"");\
 		"OptimizationLevel";New object:C1471(\
 		"Debug";"-Onone";\
@@ -540,14 +540,6 @@ featuresFlags.oneToManyRelations:=featuresFlags._105431  //    [MOBILE] Display 
   // ________________________________________________________________________________________________________________________________
 
 COMPONENT_DEFINE_TOOLS 
-
-If (Bool:C1537(featuresFlags._108874))  // Temporary force to use Xcode 11
-	
-	commonValues.xCodeVersion:="11.0"
-	commonValues.iosDeploymentTarget:="13.0"
-	commonValues.swift.Version:="5.1"
-	
-End if 
 
 If (Bool:C1537(featuresFlags.with("accentColors")))
 	
