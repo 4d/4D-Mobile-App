@@ -25,18 +25,18 @@ If (This:C1470._is=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
 		"_is";"tips";\
-		"enabled";(Get database parameter:C643(Tips enabled:K37:79)=1);\
-		"delay";Get database parameter:C643(Tips delay:K37:80);\
-		"duration";Get database parameter:C643(Tips duration:K37:81);\
 		"default";Formula:C1597(tips ("default"));\
 		"defaultDelay";Formula:C1597(SET DATABASE PARAMETER:C642(Tips delay:K37:80;45));\
 		"defaultDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;720));\
-		"enable";Formula:C1597(SET DATABASE PARAMETER:C642(Tips enabled:K37:79;1));\
+		"delay";Get database parameter:C643(Tips delay:K37:80);\
 		"disable";Formula:C1597(SET DATABASE PARAMETER:C642(Tips enabled:K37:79;0));\
+		"duration";Get database parameter:C643(Tips duration:K37:81);\
+		"enable";Formula:C1597(SET DATABASE PARAMETER:C642(Tips enabled:K37:79;1));\
+		"enabled";(Get database parameter:C643(Tips enabled:K37:79)=1);\
 		"instantly";Formula:C1597(tips ("instantly";New object:C1471("duration";Num:C11($1))));\
+		"restore";Formula:C1597(tips ("restore"));\
 		"setDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;$1));\
-		"status";Formula:C1597(tips ("status"));\
-		"restore";Formula:C1597(tips ("restore"))\
+		"status";Formula:C1597(tips ("status"))\
 		)
 	
 Else 

@@ -10,11 +10,10 @@
   // Declarations
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($Boo_unsynchronized)
-C_LONGINT:C283($l;$Lon_parameters;$Lon_row;$Lon_table)
+C_LONGINT:C283($i;$l)
 C_POINTER:C301($Ptr_fields;$Ptr_tables)
 C_OBJECT:C1216($Obj_context;$Obj_dataModel;$Obj_form;$Obj_table)
-C_COLLECTION:C1488($Col_catalog;$Col_unsynchronizedTableFields)
+C_COLLECTION:C1488($c;$Col_catalog)
 
 If (False:C215)
 	C_OBJECT:C1216(structure_TABLE_LIST ;$1)
@@ -22,21 +21,17 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
 	$Obj_form:=$1
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
-		
-		  // <NONE>
-		
-	End if 
+	  // <NONE>
 	
 	$Obj_context:=$Obj_form.form
+	
+	$Obj_dataModel:=Form:C1466.dataModel
 	
 Else 
 	
@@ -52,11 +47,9 @@ $Col_catalog:=$Obj_context.catalog()
 
 If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
 	
-	$Col_unsynchronizedTableFields:=Form:C1466.$dialog.unsynchronizedTableFields
+	$c:=Form:C1466.$dialog.unsynchronizedTableFields
 	
 End if 
-
-$Obj_dataModel:=Form:C1466.dataModel
 
 Case of 
 		
@@ -69,106 +62,37 @@ Case of
 	: (Length:C16(String:C10($Obj_context.tableFilter))>0)\
 		 & (Bool:C1537($Obj_context.tableFilterPublished))
 		
-		  //For each ($Obj_table;$Obj_cache.structure.definition)
 		For each ($Obj_table;$Col_catalog)
-			
-			CLEAR VARIABLE:C89($Boo_unsynchronized)
 			
 			If (Position:C15($Obj_context.tableFilter;$Obj_table.name)>0)\
 				 & ($Obj_dataModel[String:C10($Obj_table.tableNumber)]#Null:C1517)
 				
 				APPEND TO ARRAY:C911($Ptr_tables->;$Obj_table.name)
 				
-				$Lon_table:=$Lon_table+1
-				
-				If ($Col_unsynchronizedTableFields.length>$Obj_table.tableNumber)
-					
-					$Boo_unsynchronized:=($Col_unsynchronizedTableFields[$Obj_table.tableNumber]#Null:C1517)
-					
-				End if 
-				
-				If ($Boo_unsynchronized)
-					
-					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_table;ui.errorColor;lk font color:K53:24)
-					LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_table;Plain:K14:1)
-					
-				Else 
-					
-					  // Highlight published table name
-					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_table;lk inherited:K53:26;lk font color:K53:24)
-					LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_table;Choose:C955($Obj_dataModel[String:C10($Obj_table.tableNumber)]=Null:C1517;Plain:K14:1;Bold:K14:2))
-					
-				End if 
 			End if 
 		End for each 
 		
 		  //______________________________________________________
 	: (Length:C16(String:C10($Obj_context.tableFilter))>0)  // Filter by name
 		
-		  //For each ($Obj_table;$Obj_cache.structure.definition)
 		For each ($Obj_table;$Col_catalog)
-			
-			$Boo_unsynchronized:=False:C215
 			
 			If (Position:C15($Obj_context.tableFilter;$Obj_table.name)>0)
 				
 				APPEND TO ARRAY:C911($Ptr_tables->;$Obj_table.name)
 				
-				$Lon_table:=$Lon_table+1
-				
-				If ($Col_unsynchronizedTableFields.length>$Obj_table.tableNumber)
-					
-					$Boo_unsynchronized:=($Col_unsynchronizedTableFields[$Obj_table.tableNumber]#Null:C1517)
-					
-				End if 
-				
-				If ($Boo_unsynchronized)
-					
-					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_table;ui.errorColor;lk font color:K53:24)
-					LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_table;Plain:K14:1)
-					
-				Else 
-					
-					  // Highlight published table name
-					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_table;lk inherited:K53:26;lk font color:K53:24)
-					LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_table;Choose:C955($Obj_dataModel[String:C10($Obj_table.tableNumber)]=Null:C1517;Plain:K14:1;Bold:K14:2))
-					
-				End if 
 			End if 
 		End for each 
 		
 		  //______________________________________________________
 	: (Bool:C1537($Obj_context.tableFilterPublished))  // Filter published
 		
-		  //For each ($Obj_table;$Obj_cache.structure.definition)
 		For each ($Obj_table;$Col_catalog)
-			
-			$Boo_unsynchronized:=False:C215
 			
 			If ($Obj_dataModel[String:C10($Obj_table.tableNumber)]#Null:C1517)
 				
 				APPEND TO ARRAY:C911($Ptr_tables->;$Obj_table.name)
 				
-				$Lon_table:=$Lon_table+1
-				
-				If ($Col_unsynchronizedTableFields.length>$Obj_table.tableNumber)
-					
-					$Boo_unsynchronized:=($Col_unsynchronizedTableFields[$Obj_table.tableNumber]#Null:C1517)
-					
-				End if 
-				
-				If ($Boo_unsynchronized)
-					
-					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_table;ui.errorColor;lk font color:K53:24)
-					LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_table;Plain:K14:1)
-					
-				Else 
-					
-					  // Highlight published table name
-					LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_table;lk inherited:K53:26;lk font color:K53:24)
-					LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_table;Choose:C955($Obj_dataModel[String:C10($Obj_table.tableNumber)]=Null:C1517;Plain:K14:1;Bold:K14:2))
-					
-				End if 
 			End if 
 		End for each 
 		
@@ -177,35 +101,47 @@ Case of
 		
 		COLLECTION TO ARRAY:C1562($Col_catalog;$Ptr_tables->;"name")
 		
-		  //For each ($Obj_table;$Obj_cache.structure.definition)
-		For each ($Obj_table;$Col_catalog)
-			
-			$Boo_unsynchronized:=False:C215
-			
-			$Lon_table:=$Lon_table+1
-			
-			If ($Col_unsynchronizedTableFields.length>($Obj_table.tableNumber))
-				
-				$Boo_unsynchronized:=($Col_unsynchronizedTableFields[$Obj_table.tableNumber]#Null:C1517)
-				
-			End if 
-			
-			If ($Boo_unsynchronized)
-				
-				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_table;ui.errorColor;lk font color:K53:24)
-				LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_table;Plain:K14:1)
-				
-			Else 
-				
-				  // Highlight published table name
-				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_table;lk inherited:K53:26;lk font color:K53:24)
-				LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_table;Choose:C955($Obj_dataModel[String:C10($Obj_table.tableNumber)]=Null:C1517;Plain:K14:1;Bold:K14:2))
-				
-			End if 
-		End for each 
-		
 		  //______________________________________________________
 End case 
+
+  // ----------------------
+  //  HIGHLIGHT ERRORS
+  // ----------------------
+$c:=Form:C1466.$dialog.unsynchronizedTableFields
+
+$i:=0
+
+For each ($Obj_table;$Col_catalog)
+	
+	If (Find in array:C230($Ptr_tables->;$Obj_table.name)>0)
+		
+		$i:=$i+1
+		
+		Case of 
+				
+				  //______________________________________________________
+			: ($c.length<=$Obj_table.tableNumber)
+				
+				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$i;lk inherited:K53:26;lk font color:K53:24)
+				
+				  //______________________________________________________
+			: ($c[$Obj_table.tableNumber]#Null:C1517)
+				
+				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$i;ui.errorColor;lk font color:K53:24)
+				
+				  //______________________________________________________
+			Else 
+				
+				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$i;lk inherited:K53:26;lk font color:K53:24)
+				
+				  //______________________________________________________
+		End case 
+		
+		  // Highlight published table name
+		LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$i;Choose:C955($Obj_dataModel[String:C10($Obj_table.tableNumber)]=Null:C1517;Plain:K14:1;Bold:K14:2))
+		
+	End if 
+End for each 
 
   // Sort if any
 If (Bool:C1537($Obj_context.tableSortByName))
@@ -233,22 +169,15 @@ Else
 End if 
   //]
 
-  // Get the current table
-$Lon_row:=Find in array:C230($Ptr_tables->;String:C10($Obj_context.currentTable.name))
+  // Get the current table & update the field list
+$l:=Find in array:C230($Ptr_tables->;String:C10($Obj_context.currentTable.name))
 
-  // Update the field list
-$Ptr_fields:=ui.pointer($Obj_form.fields)
-
-If ($Lon_row>0)
+If ($l>0)
 	
-	LISTBOX SELECT ROW:C912(*;$Obj_form.tableList;$Lon_row;lk replace selection:K53:1)
-	OBJECT SET SCROLL POSITION:C906(*;$Obj_form.tableList;$Lon_row)
-	
-	  //If (Size of array($Ptr_fields->)=0)
+	LISTBOX SELECT ROW:C912(*;$Obj_form.tableList;$l;lk replace selection:K53:1)
+	OBJECT SET SCROLL POSITION:C906(*;$Obj_form.tableList;$l)
 	
 	structure_FIELD_LIST ($Obj_form)
-	
-	  //End if 
 	
 Else 
 	
@@ -257,7 +186,7 @@ Else
 	
 	OB REMOVE:C1226($Obj_context;"currentTable")
 	
-	CLEAR VARIABLE:C89($Ptr_fields->)
+	CLEAR VARIABLE:C89((ui.pointer($Obj_form.fields))->)
 	
 	SET TIMER:C645(-1)
 	

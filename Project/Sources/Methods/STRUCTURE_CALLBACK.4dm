@@ -100,7 +100,7 @@ If ($file.exists)
 					
 					  // Check TABLE NAME & PRIMARY KEY
 					$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel.name)\
-						 | ($Obj_tableCurrent.primaryKey#$Obj_tableModel.primaryKey)
+						 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel.primaryKey)
 					
 					If (Not:C34($Boo_unsynchronizedTable))
 						
@@ -116,7 +116,7 @@ If ($file.exists)
 								$Boo_unsynchronizedField:=_or (\
 									Formula:C1597($c.length=0);\
 									Formula:C1597($o.name#$c[0].name);\
-									Formula:C1597($o.fieldType#$c[0].fieldType)\
+									Formula:C1597($o.type#$c[0].type)\
 									)
 								
 								If ($Boo_unsynchronizedField)
@@ -141,7 +141,6 @@ If ($file.exists)
 									$c:=$Obj_tableCurrent.field.query("name = :1";$t)
 									
 									Case of 
-											
 											  //________________________________________
 										: ($ƒ.isRelationToOne($o))  // N -> 1 relation
 											
@@ -161,7 +160,8 @@ If ($file.exists)
 												If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
 													
 													$Col_unsynchronizedFields.push(New object:C1471(\
-														"name";$t;"fields";New collection:C1472))
+														"name";$t;\
+														"fields";New collection:C1472))
 													
 												End if 
 												
@@ -182,7 +182,7 @@ If ($file.exists)
 															$Boo_unsynchronizedField:=_or (\
 																Formula:C1597($l=-1);\
 																Formula:C1597($o[$tt].name#$c[0].field[$l].name);\
-																Formula:C1597($o[$tt].fieldType#$c[0].field[$l].fieldType)\
+																Formula:C1597($o[$tt].type#$c[0].field[$l].type)\
 																)
 															
 															If ($Boo_unsynchronizedField)
@@ -197,11 +197,11 @@ If ($file.exists)
 																If ($cc.length=0)
 																	
 																	$Col_unsynchronizedFields.push(New object:C1471(\
-																		"name";$t;"fields";New collection:C1472(Num:C11($tt))))
+																		"name";$t;"fields";New collection:C1472($o[$tt])))
 																	
 																Else 
 																	
-																	$cc[0].fields.push(Num:C11($tt))
+																	$cc[0].fields.push($o[$tt])
 																	
 																End if 
 															End if 
@@ -224,7 +224,7 @@ If ($file.exists)
 													If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
 														
 														$Col_unsynchronizedFields.push(New object:C1471(\
-															$t;New collection:C1472))
+															"name";$t;"fields";New collection:C1472))
 														
 													End if 
 													
@@ -250,8 +250,8 @@ If ($file.exists)
 												  // Append definition of faulty relation
 												If ($Col_unsynchronizedFields.indexOf($t)=-1)
 													
-													$Col_unsynchronizedFields.push(New object:C1471(\
-														$t;$o))
+													$o.name:=$t
+													$Col_unsynchronizedFields.push($o)
 													
 												End if 
 											End if 
@@ -295,7 +295,7 @@ If ($file.exists)
 			
 		Else 
 			
-			  // Keep the current structure
+			  // Keep the current catalog
 			Form:C1466.$catalog:=$Col_currentCatalog
 			
 			  // The changes has no influence on the data model -> Update the cache

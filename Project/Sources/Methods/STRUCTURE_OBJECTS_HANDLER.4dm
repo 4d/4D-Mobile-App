@@ -131,8 +131,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
 				
-				ui.tips.enable()
-				ui.tips.instantly()
+				ui.tips.instantly(100)
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Move:K2:35)
@@ -142,7 +141,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Leave:K2:34)
 				
-				ui.tips.defaultDelay()
+				ui.tips.default()
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Getting Focus:K2:7)
@@ -475,8 +474,7 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
 				
-				ui.tips.enable()
-				ui.tips.instantly()
+				ui.tips.instantly(100)
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Move:K2:35)
@@ -486,7 +484,8 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Leave:K2:34)
 				
-				ui.tips.defaultDelay()
+				OBJECT SET HELP TIP:C1181(*;$Txt_me;"")
+				ui.tips.default()
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Getting Focus:K2:7)

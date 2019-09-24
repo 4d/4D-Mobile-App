@@ -12,14 +12,12 @@
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_error;$Boo_found)
-C_LONGINT:C283($i;$i;$Lon_colum;$Lon_parameters;$Lon_row)
+C_LONGINT:C283($i;$Lon_colum;$Lon_row)
 C_POINTER:C301($Ptr_fields;$Ptr_icons;$Ptr_list;$Ptr_published)
 C_TEXT:C284($t)
 C_OBJECT:C1216($ƒ;$Obj_;$Obj_context;$Obj_dataModel;$Obj_field;$Obj_form)
 C_OBJECT:C1216($Obj_table)
 C_COLLECTION:C1488($c;$Col_;$Col_selected)
-
-  //ARRAY LONGINT($tLon_fieldID;0)
 
 If (False:C215)
 	C_OBJECT:C1216(structure_FIELD_LIST ;$1)
@@ -27,19 +25,13 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
 	$Obj_form:=$1
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
-		
-		  // <NONE>
-		
-	End if 
+	  // <NONE>
 	
 	$Obj_context:=$Obj_form.form
 	
@@ -89,6 +81,9 @@ CLEAR VARIABLE:C89($Ptr_icons->)
 
 If ($Lon_row>0)
 	
+	  //----------------------
+	  //  POPULATE THE LIST
+	  //----------------------
 	$Obj_table:=$Obj_context.currentTable
 	
 	If ($Obj_table#Null:C1517)
@@ -235,7 +230,9 @@ If ($Lon_row>0)
 				  //______________________________________________________
 		End case 
 		
-		  // Highlight errors
+		  //----------------------
+		  //  HIGHLIGHT ERRORS
+		  //----------------------
 		$c:=Form:C1466.$dialog.unsynchronizedTableFields
 		
 		$i:=0
@@ -249,40 +246,58 @@ If ($Lon_row>0)
 				Case of 
 						
 						  //______________________________________________________
+					: ($c.length<=$Obj_table.tableNumber)
+						
+						LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;lk inherited:K53:26;lk font color:K53:24)
+						
+						  //______________________________________________________
 					: ($Obj_field.type=-2)  // 1 -> N relation
 						
-						If (Bool:C1537($Ptr_published->{$i}))
+						$Boo_error:=_and (\
+							Formula:C1597($c[$Obj_table.tableNumber]#Null:C1517);\
+							Formula:C1597($c[$Obj_table.tableNumber].length=0)\
+							)
+						
+						If ($Boo_error)
 							
-							$Boo_error:=_and (\
-								Formula:C1597($c.length>$Obj_table.tableNumber);\
-								Formula:C1597($c[$Obj_table.tableNumber]#Null:C1517)\
-								)
-							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
+							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;ui.errorColor;lk font color:K53:24)
 							
 						Else 
 							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;lk inherited:K53:26;lk font color:K53:24)
+							If (Bool:C1537($Ptr_published->{$i}))
+								
+								$Boo_error:=($c[$Obj_table.tableNumber]#Null:C1517)
+								
+							End if 
+							
+							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
 							
 						End if 
 						
 						  //______________________________________________________
 					: ($Obj_field.type=-1)  // N -> 1 relation
 						
-						If (Bool:C1537($Ptr_published->{$i}))
+						$Boo_error:=_and (\
+							Formula:C1597($c[$Obj_table.tableNumber]#Null:C1517);\
+							Formula:C1597($c[$Obj_table.tableNumber].length=0)\
+							)
+						
+						If ($Boo_error)
 							
-							  // True if related table is missing or one of its published field is missing or modified
-							$Boo_error:=_and (\
-								Formula:C1597($c.length>$Obj_table.tableNumber);\
-								Formula:C1597($c[$Obj_table.tableNumber].length>0);\
-								Formula:C1597($c[$Obj_table.tableNumber].query("name = :1";$Obj_field.name).length>0)\
-								)
-							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
+							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;ui.errorColor;lk font color:K53:24)
 							
 						Else 
 							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;lk inherited:K53:26;lk font color:K53:24)
+							If (Bool:C1537($Ptr_published->{$i}))
+								
+								$Boo_error:=_and (\
+									Formula:C1597($c[$Obj_table.tableNumber].length>0);\
+									Formula:C1597($c[$Obj_table.tableNumber].query("name = :1";$Obj_field.name).length>0)\
+									)
+								
+							End if 
+							
+							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
 							
 						End if 
 						
@@ -290,22 +305,38 @@ If ($Lon_row>0)
 					Else   // Field
 						
 						$Boo_error:=_and (\
-							Formula:C1597($c.length>$Obj_table.tableNumber);\
-							Formula:C1597($c[$Obj_table.tableNumber].length>0);\
-							Formula:C1597($c[$Obj_table.tableNumber].query("name = :1";$Obj_field.name).length>0)\
+							Formula:C1597($c[$Obj_table.tableNumber]#Null:C1517);\
+							Formula:C1597($c[$Obj_table.tableNumber].length=0)\
 							)
+						
+						If ($Boo_error)
+							
+							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;ui.errorColor;lk font color:K53:24)
+							
+						Else 
+							
+							If (Bool:C1537($Ptr_published->{$i}))
+								
+								$Boo_error:=_and (\
+									Formula:C1597($c[$Obj_table.tableNumber]#Null:C1517);\
+									Formula:C1597($c[$Obj_table.tableNumber].length>0);\
+									Formula:C1597($c[$Obj_table.tableNumber].query("name = :1";$Obj_field.name).length>0)\
+									)
+								
+							End if 
+						End if 
 						
 						LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
 						
-						  // Highlight primary key
-						If ($Obj_field.name=$Obj_table.primaryKey)
-							
-							LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;$i;Bold:K14:2)
-							
-						End if 
-						
 						  //______________________________________________________
 				End case 
+				
+				  // Highlight primary key
+				If ($Obj_field.name=$Obj_table.primaryKey)
+					
+					LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;$i;Bold:K14:2)
+					
+				End if 
 			End if 
 		End for each 
 	End if 
