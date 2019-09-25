@@ -192,7 +192,7 @@ If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;
 										Else 
 											
 											  // Should not ?
-											$Txt_tips:=ui.alert+$str.setText("theRelationIsNoLongerAvailable").localized($c[0].name)
+											$Txt_tips:=ui.alert+$str.setText("theFieldIsMissingOrWasModified").localized($c[0].name)
 											
 										End if 
 									End if 

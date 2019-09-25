@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																				"action";"safeDelete";\
-																				"path";$Obj_in.path))
+																								"action";"safeDelete";\
+																								"path";$Obj_in.path))
 			  // End if
 			
 		End if 
@@ -162,7 +162,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 							"action";"show";\
 							"type";"confirm";\
 							"title";"someStructuralAdjustmentsAreNeeded";\
-							"additional";New collection:C1472("doYouAllow4dMobileToModifyStructure";"4dProductName");\
+							"additional";str .setText("doYouAllow4dMobileToModifyStructure").localized("4dProductName");\
 							"option";New object:C1471("title";"rememberMyChoice";"value";False:C215);\
 							"ok";"allow";\
 							"cancelFormula";Formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"build_stop"));\
