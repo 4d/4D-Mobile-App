@@ -142,7 +142,7 @@ ASSERT:C1129($nbCapabilities=5;"Must found all capabilities")  // map + home + c
 $Obj_projfile:=New object:C1471("capabilities";New object:C1471("map";True:C214;"home";True:C214);"templates";New collection:C1472(New object:C1471("capabilities";New object:C1471("contacts";True:C214));New object:C1471("capabilities";New object:C1471("signInWithOS";True:C214))))
 $Obj_result:=capabilities (New object:C1471("action";"find";"value";$Obj_projfile))
 ASSERT:C1129($Obj_result.success;"Nothing to inject"+JSON Stringify:C1217($Obj_result))
-ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates
+ASSERT:C1129($Obj_result.capabilities.length=3;"Must found all capabilities")  // capabilities + templates.capabilities + template.capabilities
 
 
 $Obj_projfile.actions:=New collection:C1472(\

@@ -97,30 +97,45 @@ Case of
 		
 		$t:=$Obj_template.source+$t+Folder separator:K24:12
 		
-		  // check if Login is required
-		If (Bool:C1537($Obj_in.project.server.authentication.email))
-			
-			If (Length:C16(String:C10($Obj_template.projectTag))>0)  // custom login template ...
-				
-				If (Length:C16(String:C10($Obj_in.project[$Obj_template.projectTag]))>0)  // ...added in project.4dmobileapp file
-					
-					$t:=$Obj_in.project[$Obj_template.projectTag]
-					$t:=$Obj_template.source+$t+Folder separator:K24:12
-					
-				Else   // ...added in mobile/form/login directory
-					
-					C_TEXT:C284($customLoginDir)
-					ARRAY TEXT:C222($customLoginList;0)
-					
-					$customLoginDir:=COMPONENT_Pathname ("host_loginForms").platformPath
-					FOLDER LIST:C473($customLoginDir;$customLoginList)
-					If (Size of array:C274($customLoginList)>=1)
-						$t:=$customLoginDir+$customLoginList{Size of array:C274($customLoginList)}+Folder separator:K24:12
-					End if 
-				End if 
-			End if 
-		End if 
 		
+		If (Length:C16(String:C10($Obj_template.projectTag))>0)
+			
+			C_TEXT:C284($templateName)
+			
+			$templateName:=String:C10($Obj_in.project[String:C10($Obj_template.projectTag)])
+			
+			If (Length:C16($templateName)>0)
+				
+				  // Check if begin with "/"
+				If (Position:C15("/";$templateName)>0)
+					
+					C_OBJECT:C1216($customDir)
+					
+					$customDir:=COMPONENT_Pathname ("host_"+String:C10($Obj_template.projectTag)+"Forms")
+					
+					$customDir:=$customDir.folder(Substring:C12($templateName;2;Length:C16($templateName)))
+					
+					If ($customDir.exists)
+						
+						$t:=$customDir.platformPath
+						
+						  // Else : cannot find custom template directory
+						
+					End if 
+					
+				Else 
+					
+					$t:=$Obj_template.source+$templateName+Folder separator:K24:12
+					
+				End if 
+				
+				  // Else : project file doesn't contain any custom template key
+				
+			End if 
+			
+			  // Else : no projectTag in template manifest
+			
+		End if 
 		
 		
 		$o:=OB Copy:C1225($Obj_in)
