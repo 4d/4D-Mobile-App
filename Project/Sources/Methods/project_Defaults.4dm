@@ -39,17 +39,14 @@ Else
 End if 
 
   // ----------------------------------------------------
-$Obj_default:=New object:C1471
-
-$Obj_default.create:=True:C214
-$Obj_default.build:=False:C215
-$Obj_default.run:=False:C215
-
-$Obj_default.sdk:="iphonesimulator"
-
-$Obj_default.template:="list"
-
-$Obj_default.testing:=False:C215
+$Obj_default:=New object:C1471(\
+"create";True:C214;\
+"build";False:C215;\
+"run";False:C215;\
+"sdk";"iphonesimulator";\
+"template";"list";\
+"testing";False:C215\
+)
 
   // Caller is the UI window reference
   // For an execution without UI editor_CALLBACK caller must be 0

@@ -45,12 +45,6 @@ CLEAR VARIABLE:C89($Ptr_tables->)
 
 $Col_catalog:=$Obj_context.catalog()
 
-If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
-	
-	$c:=Form:C1466.$dialog.unsynchronizedTableFields
-	
-End if 
-
 Case of 
 		
 		  //________________________________________

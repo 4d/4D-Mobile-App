@@ -12,31 +12,22 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_BOOLEAN:C305($Boo_found)
-C_LONGINT:C283($Lon_fieldIndx;$Lon_indx;$Lon_relatedTableIndx;$Lon_tableIndx;$Lon_tableNumber;$Win_current)
-C_TEXT:C284($t;$Txt_field;$Txt_tableNumber)
-C_OBJECT:C1216($ƒ;$o;$Obj_cache;$Obj_catalog;$Obj_dataModel;$Obj_datastore)
-C_OBJECT:C1216($Obj_field;$Obj_project;$Obj_relatedDataClass;$Obj_table;$oo)
-C_COLLECTION:C1488($c;$Col_catalog;$Col_fieldID;$Col_fields;$Col_relatedID;$Col_tableID)
-C_COLLECTION:C1488($Col_tableToRemove)
-
+C_LONGINT:C283($i;$Lon_published;$Lon_number2;$Win_current)
+C_TEXT:C284($t;$tt)
+C_OBJECT:C1216($catalog;$ƒ;$o;$Obj_cache;$Obj_dataModel;$Obj_datastore)
+C_OBJECT:C1216($Obj_field;$Obj_project;$Obj_table;$oo)
+C_COLLECTION:C1488($c)
 
   // ----------------------------------------------------
   // Initialisations
-$Win_current:=Current form window:C827
 
 $Obj_project:=(ui.pointer("project"))->
 ASSERT:C1129($Obj_project#Null:C1517)
 
-$Col_catalog:=editor_Catalog 
-
-$Obj_datastore:=catalog ("datastore").datastore
-
-$Col_tableID:=$Col_catalog.extract("tableNumber")
-
-$Col_tableToRemove:=New collection:C1472
-
 $ƒ:=Storage:C1525.ƒ
+
+$Obj_dataModel:=$Obj_project.dataModel
+$Obj_datastore:=catalog ("datastore").datastore
 
   // ----------------------------------------------------
   // Make a Backup of the project & catalog
@@ -50,213 +41,130 @@ $o.copyTo($oo)
 $o:=$o.parent.file("catalog.json")
 $o.copyTo($oo)
 
-  // Check the tables
-$Obj_dataModel:=$Obj_project.dataModel
-
-For each ($Txt_tableNumber;$Obj_dataModel)
+For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 	
-	$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
+	$c:=$Obj_project.$dialog.unsynchronizedTableFields[$i]
 	
-	If ($Obj_table=Null:C1517)
+	If ($c.length=0)
 		
-		  // NOTHING MORE TO DO - The table is not used in the project
+		  // THE TABLE DOESN'T EXIST ANYMORE
+		OB REMOVE:C1226($Obj_dataModel;String:C10($i))
 		
 	Else 
 		
-		  // Check that the table is defined in the structure
-		$Lon_tableNumber:=Num:C11($Txt_tableNumber)
+		  // Check the fields
 		
-		$Lon_tableIndx:=$Col_tableID.indexOf($Lon_tableNumber)
+		$Obj_table:=$Obj_dataModel[String:C10($i)]
 		
-		If ($Lon_tableIndx<0)
+		$Lon_published:=0
+		
+		For each ($t;$Obj_table)
 			
-			  // THE TABLE DOESN'T EXIST ANYMORE
-			$Col_tableToRemove.push($Txt_tableNumber)
-			
-		Else 
-			
-			$Obj_catalog:=$Col_catalog[$Lon_tableIndx]
-			$Col_fieldID:=$Obj_catalog.field.extract("id")
-			
-			  // Update…
-			$Obj_table.name:=$Obj_catalog.name
-			$Obj_table.primaryKey:=$Obj_catalog.primaryKey
-			
-			$Col_fields:=catalog ("table";New object:C1471(\
-				"tableName";$Obj_table.name;\
-				"datastore";$Obj_datastore)).fields
-			
-			  // Check the fields
-			For each ($Txt_field;$Obj_table)
-				
-				Case of 
+			Case of 
+					
+					  //______________________________________________________
+				: ($ƒ.isField($t))
+					
+					$Obj_field:=$Obj_table[$t]
+					
+					If ($c.query("name = :1";$Obj_field.name).length=1)
 						
-						  //______________________________________________________
-					: ($ƒ.isField($Txt_field))
+						OB REMOVE:C1226($Obj_table;String:C10($t))
 						
-						$Lon_fieldIndx:=$Col_fieldID.indexOf(Num:C11($Txt_field))
+					Else 
 						
-						If ($Lon_fieldIndx<0)
-							
-							  // THE FIELD DOESN'T EXIST ANYMORE
-							OB REMOVE:C1226($Obj_table;$Txt_field)
-							
-						Else 
-							
-							  // Update…
-							$Obj_field:=$Obj_table[$Txt_field]
-							
-							$Obj_field.name:=$Obj_catalog.field[$Lon_fieldIndx].name
-							$Obj_field.fieldType:=$Obj_catalog.field[$Lon_fieldIndx].fieldType
-							
-							  // #TEMPO [
-							$Obj_field.type:=$Obj_catalog.field[$Lon_fieldIndx].fieldType
-							  //]
-							
-						End if 
+						$Lon_published:=$Lon_published+1
 						
-						  //______________________________________________________
-					: ((Value type:C1509($Obj_table[$Txt_field])#Is object:K8:27))
+					End if 
+					
+					  //______________________________________________________
+				: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
+					
+					  // <NOTHING MORE TO DO>
+					
+					  //______________________________________________________
+				: ($ƒ.isRelationToOne($Obj_table[$t]))  // N -> 1 relation
+					
+					If ($Obj_datastore[$Obj_table[$t].relatedDataClass]=Null:C1517)
 						
-						  // <NOTHING MORE TO DO>
+						  // THE RELATED TABLE DOESN'T EXIST ANYMORE
+						OB REMOVE:C1226($Obj_table;String:C10($t))
 						
-						  //______________________________________________________
-					: ($ƒ.isRelationToOne($Obj_table[$Txt_field]))  // N -> 1 relation
+					Else 
 						
-						$c:=$Col_fields.extract("name")
-						$Lon_indx:=$c.indexOf($Txt_field)
+						$Lon_number2:=0
 						
-						If ($Lon_indx#-1)
+						For each ($tt;$Obj_table[$t])
 							
-							  // Perform a diacritical comparison
-							If (Not:C34(str_equal ($Txt_field;$c[$Lon_indx])))
-								
-								$Lon_indx:=-1
-								
-							End if 
-						End if 
-						
-						If ($Lon_indx<0)
-							
-							  // THE FIELD DOESN'T EXIST ANYMORE
-							OB REMOVE:C1226($Obj_table;$Txt_field)
-							
-						Else 
-							
-							  // Check related data class
-							$Obj_field:=$Obj_table[$Txt_field]
-							$Lon_relatedTableIndx:=$Col_tableID.indexOf($Obj_field.relatedTableNumber)
-							
-							If ($Lon_relatedTableIndx<0)
-								
-								  // THE RELATED DATA CLASS IS NOT PUBLISHED ANYMORE
-								OB REMOVE:C1226($Obj_table;$Txt_field)
-								
-							Else 
-								
-								$Obj_relatedDataClass:=$Col_catalog[$Lon_relatedTableIndx]
-								$Col_relatedID:=$Obj_relatedDataClass.field.extract("id")
-								
-								For each ($t;$Obj_field)
+							Case of 
 									
-									Case of 
-											
-											  //…………………………………………………………………………………………
-										: ($ƒ.isField($t))
-											
-											$Lon_indx:=$Col_relatedID.indexOf(Num:C11($t))
-											
-											If ($Lon_indx<0)
-												
-												  // THE FIELD DOESN'T EXIST ANYMORE
-												OB REMOVE:C1226($Obj_field;$t)
-												
-											Else 
-												
-												  // Update…
-												$Obj_field[$t].name:=$Obj_relatedDataClass.field[$Lon_indx].name
-												$Obj_field[$t].fieldType:=$Obj_relatedDataClass.field[$Lon_indx].fieldType
-												
-												  // #TEMPO [
-												$Obj_field[$t].type:=$Obj_relatedDataClass.field[$Lon_indx].fieldType
-												  //]
-												
-											End if 
-											
-											  //…………………………………………………………………………………………
-										: ((Value type:C1509($Obj_relatedDataClass[$t])#Is object:K8:27))
-											
-											  // <NOTHING MORE TO DO>
-											
-											  //…………………………………………………………………………………………
-										Else 
-											
-											  // NOT YET MANAGED
-											
-											  //…………………………………………………………………………………………
-									End case 
-								End for each 
-							End if 
+									  //…………………………………………………………………………
+								: ($ƒ.isField($tt))
+									
+									$Obj_field:=$Obj_table[$t][$tt]
+									
+									If ($c.extract("fields")[0].query("relatedTableNumber = :1 & name = :2";$Obj_field.relatedTableNumber;$Obj_field.name).length=1)
+										
+										OB REMOVE:C1226($Obj_table[$t];$tt)
+										
+									Else 
+										
+										$Lon_number2:=$Lon_number2+1
+										
+									End if 
+									
+									  //…………………………………………………………………………
+								: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
+									
+									  // <NOTHING MORE TO DO>
+									
+									  //…………………………………………………………………………
+								Else 
+									
+									  // NOT YET MANAGED
+									
+									  //…………………………………………………………………………
+							End case 
+						End for each 
+						
+						If ($Lon_number2=0)
+							
+							  // NO MORE PUBLISHED FIELDS FROM THE RELATED TABLE
+							OB REMOVE:C1226($Obj_table;$t)
+							
+						Else 
+							
+							$Lon_published:=$Lon_published+1
+							
 						End if 
+					End if 
+					
+					  //______________________________________________________
+				: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
+					
+					If ($Obj_datastore[$Obj_table[$t].relatedEntities]=Null:C1517)
 						
-						  //______________________________________________________
-					: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
+						  // THE RELATED TABLE DOESN'T EXIST ANYMORE
+						OB REMOVE:C1226($Obj_table;String:C10($t))
 						
-						  //______________________________________________________
-				End case 
-			End for each 
+					Else 
+						
+						$Lon_published:=$Lon_published+1
+						
+					End if 
+					
+					  //________________________________________
+			End case 
+		End for each 
+		
+		If ($Lon_published=0)
 			
-			For each ($Txt_field;$Obj_table) Until ($Boo_found)
-				
-				CLEAR VARIABLE:C89($Boo_found)
-				
-				Case of 
-						
-						  //______________________________________________________
-					: ($ƒ.isField($Txt_field))
-						
-						$Boo_found:=True:C214
-						
-						  //______________________________________________________
-					: ((Value type:C1509($Obj_table[$Txt_field])#Is object:K8:27))
-						
-						  // <NOTHING MORE TO DO>
-						
-						  //______________________________________________________
-					: ($ƒ.isRelationToOne($Obj_table[$Txt_field]))  // N -> 1 relation
-						
-						$Boo_found:=True:C214
-						
-						  //______________________________________________________
-					: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
-						
-						$Boo_found:=True:C214
-						
-						  //______________________________________________________
-				End case 
-			End for each 
+			  // NO MORE FIELDS PUBLISHED FOR THIS TABLE
+			OB REMOVE:C1226($Obj_dataModel;String:C10($i))
 			
-			If (Not:C34($Boo_found))
-				
-				$Col_tableToRemove.push(String:C10($Obj_catalog.tableNumber))
-				
-			End if 
 		End if 
 	End if 
-End for each 
-
-  // Remove remaining tables
-For each ($Txt_tableNumber;$Col_tableToRemove)
-	
-	OB REMOVE:C1226($Obj_dataModel;$Txt_tableNumber)
-	
-	  // Update main menu
-	main_Handler (New object:C1471(\
-		"action";"remove";\
-		"tableNumber";$Txt_tableNumber;\
-		"order";$Obj_project.main.order))
-	
-End for each 
+End for 
 
 If (OB Is empty:C1297($Obj_dataModel))
 	
@@ -298,6 +206,7 @@ STRUCTURE_Handler (New object:C1471(\
 project_REPAIR ($Obj_project)
 
   // Save project
+$Win_current:=Current form window:C827
 CALL FORM:C1391($Win_current;"project_SAVE")
 CALL FORM:C1391($Win_current;"editor_CALLBACK";"updateRibbon")
 
