@@ -46,7 +46,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="serverURLLabel" destination="Reh-Ow-8i3" id="cjD-qJ-HAU"/>
-                                            <segue destination="m4C-TK-4zi" kind="show" identifier="editServerURL" customClass="PresentSlideSegue" customModule="IBAnimatable" id="X1D-IN-tIh"/>
+                                            <segue destination="m4C-TK-4zi" kind="show" identifier="editServerURL" id="X1D-IN-tIh"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -64,7 +64,7 @@
                                                     <rect key="frame" x="161.5" y="7" width="52" height="30"/>
                                                     <state key="normal" title="Log out"/>
                                                     <connections>
-                                                        <segue destination="lCY-Sn-Tbh" kind="presentation" identifier="confirmLogOut" customClass="PresentOverCurrentContextSegue" customModule="IBAnimatable" id="s9w-7u-6cJ"/>
+                                                        <segue destination="lCY-Sn-Tbh" kind="presentation" identifier="confirmLogOut" id="s9w-7u-6cJ"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -93,7 +93,7 @@
                     </navigationItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <segue destination="kWN-Xb-iOH" kind="custom" identifier="logout" customClass="PresentFadeSegue" customModule="IBAnimatable" id="zu4-s3-Gjx"/>
+                        <segue destination="kWN-Xb-iOH" kind="custom" identifier="logout" id="zu4-s3-Gjx"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wkW-eN-8x2" userLabel="First Responder" sceneMemberID="firstResponder"/>
