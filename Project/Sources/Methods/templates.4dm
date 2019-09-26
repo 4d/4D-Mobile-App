@@ -107,7 +107,7 @@ Case of
 			If (Length:C16($templateName)>0)
 				
 				  // Check if begin with "/"
-				If (Position:C15("/";$templateName)>0)
+				If (Position:C15("/";$templateName)=1)
 					
 					C_OBJECT:C1216($customDir)
 					
