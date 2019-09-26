@@ -13,7 +13,7 @@ import AnimatedCollectionViewLayout
 @IBDesignable
 class ___TABLE___ListForm: ListFormCollection {
 
-    var navigationBarHeight = CGFloat()
+    var navigationBarHeight: CGFloat = 0
 
     // Do not edit name or override tableName
     public override var tableName: String {
