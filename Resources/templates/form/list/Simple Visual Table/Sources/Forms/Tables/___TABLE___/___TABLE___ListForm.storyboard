@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Ogb-fa-BrX">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Ogb-fa-BrX">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,38 +19,40 @@
         <scene sceneID="skp-Bg-beV">
             <objects>
                 <tableViewController storyboardIdentifier="___TABLE___ListForm" id="Dxc-Bl-At2" userLabel="List Form" customClass="___TABLE___ListForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="215" sectionHeaderHeight="28" sectionFooterHeight="28" id="Re1-1g-DVP" customClass="AnimatableTableView" customModule="IBAnimatable">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Re1-1g-DVP" customClass="AnimatableTableView" customModule="IBAnimatable">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="___TABLE___" rowHeight="216" id="LNn-VU-5br" customClass="AnimatableTableViewCell" customModule="IBAnimatable">
-                                <rect key="frame" x="0.0" y="28" width="414" height="216"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="___TABLE___" rowHeight="240" id="LNn-VU-5br" customClass="AnimatableTableViewCell" customModule="IBAnimatable">
+                                <rect key="frame" x="0.0" y="28" width="414" height="240"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LNn-VU-5br" id="bUw-MO-Pjd">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="215.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="240"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RZb-24-oJb">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="153.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="164"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="164" id="vlx-5d-PNh"/>
+                                            </constraints>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_1___" value="___FIELD_1_BINDING_TYPE___"/>
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tbc-j2-aCT">
-                                            <rect key="frame" x="0.0" y="141.5" width="414" height="74"/>
+                                            <rect key="frame" x="0.0" y="164" width="414" height="76"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_2_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P7g-KH-GWM">
-                                                    <rect key="frame" x="20" y="12" width="374" height="23.5"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_2_LABEL___" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P7g-KH-GWM">
+                                                    <rect key="frame" x="20" y="9" width="374" height="23.5"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
-                                                    <color key="textColor" red="0.2476998730964467" green="0.2476998730964467" blue="0.2476998730964467" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_2___" value="___FIELD_2_BINDING_TYPE___"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_3_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L5u-VJ-B9W">
-                                                    <rect key="frame" x="20" y="41.5" width="374" height="20.5"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_3_LABEL___" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L5u-VJ-B9W">
+                                                    <rect key="frame" x="20" y="38.5" width="374" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" name="BackgroundColor"/>
                                                     <nil key="highlightedColor"/>
@@ -61,12 +61,12 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstItem="P7g-KH-GWM" firstAttribute="leading" secondItem="Tbc-j2-aCT" secondAttribute="leading" constant="20" id="1Mw-Vy-fuX"/>
                                                 <constraint firstAttribute="trailing" secondItem="L5u-VJ-B9W" secondAttribute="trailing" constant="20" id="8PS-6X-Zaa"/>
-                                                <constraint firstItem="P7g-KH-GWM" firstAttribute="top" secondItem="Tbc-j2-aCT" secondAttribute="top" constant="12" id="C6U-GK-xg8"/>
-                                                <constraint firstAttribute="bottom" secondItem="L5u-VJ-B9W" secondAttribute="bottom" constant="12" id="fVT-3k-EvG"/>
+                                                <constraint firstItem="P7g-KH-GWM" firstAttribute="top" secondItem="Tbc-j2-aCT" secondAttribute="top" constant="9" id="C6U-GK-xg8"/>
+                                                <constraint firstAttribute="bottom" secondItem="L5u-VJ-B9W" secondAttribute="bottom" constant="17" id="fVT-3k-EvG"/>
                                                 <constraint firstItem="L5u-VJ-B9W" firstAttribute="top" secondItem="P7g-KH-GWM" secondAttribute="bottom" constant="6" id="j2T-1M-uTb"/>
                                                 <constraint firstAttribute="trailing" secondItem="P7g-KH-GWM" secondAttribute="trailing" constant="20" id="qVD-bL-uqO"/>
                                                 <constraint firstItem="L5u-VJ-B9W" firstAttribute="leading" secondItem="Tbc-j2-aCT" secondAttribute="leading" constant="20" id="zAt-f4-uBo"/>
@@ -79,9 +79,9 @@
                                         <constraint firstAttribute="bottom" secondItem="Tbc-j2-aCT" secondAttribute="bottom" id="5l6-o3-a56"/>
                                         <constraint firstItem="RZb-24-oJb" firstAttribute="top" secondItem="bUw-MO-Pjd" secondAttribute="top" id="6VH-Rd-w28"/>
                                         <constraint firstAttribute="trailing" secondItem="Tbc-j2-aCT" secondAttribute="trailing" id="R71-x8-fPb"/>
-                                        <constraint firstAttribute="bottom" secondItem="RZb-24-oJb" secondAttribute="bottom" constant="62" id="T33-SB-TR9"/>
                                         <constraint firstItem="Tbc-j2-aCT" firstAttribute="leading" secondItem="bUw-MO-Pjd" secondAttribute="leading" id="jiP-g8-Tdd"/>
                                         <constraint firstAttribute="trailing" secondItem="RZb-24-oJb" secondAttribute="trailing" id="n13-Ge-zUD"/>
+                                        <constraint firstItem="Tbc-j2-aCT" firstAttribute="top" secondItem="RZb-24-oJb" secondAttribute="bottom" id="tPs-mc-rcq"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -94,7 +94,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="TmP-Gk-7ej" kind="showDetail" identifier="showDetails" customClass="___LIST_TO_DETAIL_TRANSITION___" customModule="IBAnimatable" id="lRt-3I-ZEi"/>
+                                    <segue destination="TmP-Gk-7ej" kind="showDetail" identifier="showDetails" id="lRt-3I-ZEi"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -107,7 +107,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="___TABLE_LABEL___" id="Md6-BR-hjc">
+                    <navigationItem key="navigationItem" id="Md6-BR-hjc">
                         <barButtonItem key="leftBarButtonItem" image="previous" id="oNP-za-8R3" userLabel="PreviousPage Button Item">
                             <color key="tintColor" name="ForegroundColor"/>
                             <connections>
@@ -135,7 +135,7 @@
                     <textInputTraits key="textInputTraits"/>
                 </searchBar>
             </objects>
-            <point key="canvasLocation" x="513.04347826086962" y="111.68478260869566"/>
+            <point key="canvasLocation" x="513.04347826086962" y="111.16071428571428"/>
         </scene>
         <!--___TABLE___DetailsForm-->
         <scene sceneID="pzT-Ts-eNA">
@@ -155,13 +155,14 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="06B-nF-C5E">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
+                        <color key="tintColor" name="ForegroundColor"/>
                         <color key="barTintColor" name="BackgroundColor"/>
                         <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textColor" name="ForegroundColor"/>
                         </textAttributes>
                         <textAttributes key="largeTitleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" name="ForegroundColor"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>

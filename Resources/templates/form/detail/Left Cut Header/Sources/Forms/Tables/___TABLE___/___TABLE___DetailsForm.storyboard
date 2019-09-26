@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="iJQ-uW-weF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14835.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="iJQ-uW-weF">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14790.5"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="iOS 13.0 system colors" minToolsVersion="11.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+        <array key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Details Form-->
         <scene sceneID="yB9-mH-XoX">
@@ -15,14 +26,14 @@
                         <viewControllerLayoutGuide type="bottom" id="OWH-Kx-apU"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Nrk-ZL-sTh">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3O6-va-UAL">
-                                <rect key="frame" x="0.0" y="64" width="414" height="672"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bFz-vh-DGF">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="555"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="562.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8SR-d9-WJW" customClass="AnimatableImageView" customModule="IBAnimatable">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="290"/>
@@ -32,25 +43,24 @@
                                             </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yDw-PK-66K">
                                                 <rect key="frame" x="0.0" y="206" width="414" height="174"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="174" id="OnX-hl-DyM"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mKJ-9Y-JGx">
-                                                <rect key="frame" x="0.0" y="292" width="414" height="750"/>
+                                                <rect key="frame" x="0.0" y="292" width="414" height="757.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;___FIELD_2_LABEL___&gt;" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GIL-zE-21l">
-                                                        <rect key="frame" x="19" y="-29" width="263" height="58.333333333333336"/>
+                                                        <rect key="frame" x="19" y="-29" width="263" height="58.5"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
-                                                        <color key="textColor" red="0.16525508580000001" green="0.16525508580000001" blue="0.16525508580000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_2___" value="___FIELD_2_BINDING_TYPE___"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;___FIELD_3_LABEL___&gt;" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GUJ-F6-p9H">
-                                                        <rect key="frame" x="19" y="37.333333333333314" width="377" height="27.333333333333329"/>
+                                                        <rect key="frame" x="19" y="37.5" width="377" height="27.5"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="23"/>
                                                         <color key="textColor" name="BackgroundColor"/>
                                                         <nil key="highlightedColor"/>
@@ -59,16 +69,16 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="JRS-63-nL7">
-                                                        <rect key="frame" x="12" y="88" width="390" height="95"/>
+                                                        <rect key="frame" x="12" y="88.5" width="390" height="102"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-001">
-                                                                <rect key="frame" x="0.0" y="0.0" width="390" height="95"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="390" height="102"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-002" customClass="AnimatableView" customModule="IBAnimatable">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="390" height="95"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="390" height="102"/>
                                                                         <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-003" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
-                                                                                <rect key="frame" x="12" y="18" width="366" height="24.666666666666671"/>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-003" customClass="IconLabel" customModule="Tasks" customModuleProvider="target">
+                                                                                <rect key="frame" x="12" y="18" width="366" height="32"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="21"/>
                                                                                 <nil key="highlightedColor"/>
@@ -83,16 +93,16 @@
                                                                                 </userDefinedRuntimeAttributes>
                                                                             </label>
                                                                             <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_LABEL___&gt;" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-004">
-                                                                                <rect key="frame" x="12" y="52.333333333333314" width="366" height="22"/>
+                                                                                <rect key="frame" x="12" y="60" width="366" height="21.5"/>
                                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
-                                                                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <color key="textColor" cocoaTouchSystemColor="secondaryLabelColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                                 <userDefinedRuntimeAttributes>
                                                                                     <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD___" value="___FIELD_BINDING_TYPE___"/>
                                                                                 </userDefinedRuntimeAttributes>
                                                                             </label>
                                                                         </subviews>
-                                                                        <color key="backgroundColor" red="0.9807066941624365" green="0.9807066941624365" blue="0.9807066941624365" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <color key="backgroundColor" cocoaTouchSystemColor="secondarySystemBackgroundColor"/>
                                                                         <constraints>
                                                                             <constraint firstItem="TAG-FD-003" firstAttribute="leading" secondItem="TAG-FD-002" secondAttribute="leading" constant="12" id="TAG-FD-005"/>
                                                                             <constraint firstAttribute="trailing" secondItem="TAG-FD-003" secondAttribute="trailing" constant="12" id="TAG-FD-006"/>
@@ -110,10 +120,10 @@
                                                                                 <point key="value" x="0.0" y="3"/>
                                                                             </userDefinedRuntimeAttribute>
                                                                             <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
-                                                                                <color key="value" red="0.42425444159999998" green="0.42425444159999998" blue="0.42425444159999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <color key="value" cocoaTouchSystemColor="tertiaryLabelColor"/>
                                                                             </userDefinedRuntimeAttribute>
                                                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                                <color key="value" red="0.8072057423857868" green="0.8072057423857868" blue="0.8072057423857868" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <color key="value" cocoaTouchSystemColor="tertiaryLabelColor"/>
                                                                             </userDefinedRuntimeAttribute>
                                                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                                                 <real key="value" value="0.10000000000000001"/>
@@ -140,7 +150,7 @@
                                                         </constraints>
                                                     </stackView>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <constraints>
                                                     <constraint firstItem="JRS-63-nL7" firstAttribute="leading" secondItem="JRS-63-nL7" secondAttribute="leading" id="Dxp-9e-zf4"/>
                                                     <constraint firstAttribute="trailing" secondItem="GUJ-F6-p9H" secondAttribute="trailing" constant="18" id="Jcf-bE-ami"/>
@@ -180,7 +190,7 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="bFz-vh-DGF" secondAttribute="width" id="0qa-aN-Rh2"/>
                             <constraint firstItem="8SR-d9-WJW" firstAttribute="top" relation="lessThanOrEqual" secondItem="wpZ-Qk-3Dz" secondAttribute="bottom" id="3h7-fV-bhK"/>
@@ -236,7 +246,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="iJQ-uW-weF" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Kda-O0-f46">
-                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" name="BackgroundColor"/>
@@ -259,7 +269,7 @@
         <image name="next" width="22" height="22"/>
         <image name="previous" width="22" height="22"/>
         <namedColor name="BackgroundColor">
-            <color red="0.38431372549999998" green="0.7725490196" blue="0.67450980390000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.19215686274509805" green="0.51372549019607838" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="ForegroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

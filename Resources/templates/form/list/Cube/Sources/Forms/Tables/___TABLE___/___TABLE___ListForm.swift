@@ -13,9 +13,7 @@ import AnimatedCollectionViewLayout
 @IBDesignable
 class ___TABLE___ListForm: ListFormCollection {
 
-    var navigationBarHeight: CGFloat {
-        return UIApplication.shared.statusBarFrame.size.height + (self.navigationController?.navigationBar.frame.height ?? 0.0)
-    }
+    var navigationBarHeight = CGFloat()
 
     // Do not edit name or override tableName
     public override var tableName: String {
@@ -31,6 +29,7 @@ class ___TABLE___ListForm: ListFormCollection {
 
     override func onWillAppear(_ animated: Bool) {
         // Called when the view is about to made visible. Default does nothing
+        navigationBarHeight = UIApplication.shared.statusBarFrame.size.height + (self.navigationController?.navigationBar.frame.height ?? 0.0)
     }
 
     override func onDidAppear(_ animated: Bool) {

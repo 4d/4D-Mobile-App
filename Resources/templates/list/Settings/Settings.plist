@@ -29,7 +29,7 @@
 	<key>crash.server.url</key>
 	<string>https://bugs.4d.fr</string>
 	<key>ui.presentation.fullScreen</key>
-	<true/>
+	<false/>
 	<key>application.services</key>
 	<array/>
 </dict>

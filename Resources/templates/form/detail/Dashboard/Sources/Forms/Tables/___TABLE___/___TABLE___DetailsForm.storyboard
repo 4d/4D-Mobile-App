@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Y2J-Qb-nvx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Y2J-Qb-nvx">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+            <string>HelveticaNeue-Bold</string>
+        </array>
+        <array key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="xny-MY-O2Z">
@@ -12,7 +22,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Y2J-Qb-nvx" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yeb-5T-Sqp">
-                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" name="BackgroundColor"/>
@@ -38,19 +48,18 @@
                         <viewControllerLayoutGuide type="bottom" id="D8o-Fj-VKX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="g8H-lI-SA8">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="791.66666666666663"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="791.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m0K-2P-sXH">
-                                <rect key="frame" x="0.0" y="64" width="414" height="727.66666666666663"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="703.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q67-s8-oP4" customClass="AnimatableView" customModule="IBAnimatable">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="791.66666666666663"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="791.5"/>
                                         <subviews>
                                             <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_2_LABEL___&gt;" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jTs-fh-c3P">
                                                 <rect key="frame" x="10" y="117" width="394" height="31"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="26"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_2___" value="___FIELD_2_BINDING_TYPE___"/>
@@ -59,40 +68,44 @@
                                             <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_3_LABEL___&gt;" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K3b-0H-CG3">
                                                 <rect key="frame" x="10" y="153" width="394" height="31"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="26"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_3___" value="___FIELD_3_BINDING_TYPE___"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3TB-cE-fsK" customClass="AnimatableView" customModule="IBAnimatable">
-                                                <rect key="frame" x="10" y="225" width="189.33333333333334" height="169"/>
+                                                <rect key="frame" x="10" y="225" width="189" height="169"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="opY-pc-lA1" customClass="AnimatableView" customModule="IBAnimatable">
-                                                        <rect key="frame" x="0.0" y="0.0" width="189.33333333333334" height="169"/>
-                                                        <color key="backgroundColor" name="BackgroundColor"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="189" height="169"/>
+                                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                 <real key="value" value="12"/>
                                                             </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                <color key="value" systemColor="tertiaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                <real key="value" value="0.20000000000000001"/>
+                                                            </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_4_LABEL___&gt;" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uuo-Ph-flc">
-                                                        <rect key="frame" x="8" y="35" width="173.33333333333334" height="42"/>
+                                                        <rect key="frame" x="8" y="35" width="173" height="42"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
-                                                        <color key="textColor" name="ForegroundColor"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_4___" value="___FIELD_4_BINDING_TYPE___"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_4_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBY-DP-tUb" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="115" width="173.33333333333334" height="40"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_4_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBY-DP-tUb" customClass="IconLabel" customModule="Tasks" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="115" width="173" height="40"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="40" id="Cs2-DK-Hhc"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                                        <color key="textColor" name="ForegroundColor"/>
+                                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="imagePadding">
@@ -104,9 +117,9 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="imagePosition" value="left"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="flc-hP-Uuo">
-                                                        <rect key="frame" x="0.0" y="106" width="189.33333333333334" height="1"/>
-                                                        <color key="backgroundColor" name="ForegroundColor"/>
+                                                    <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="flc-hP-Uuo">
+                                                        <rect key="frame" x="16" y="106" width="157" height="1"/>
+                                                        <color key="backgroundColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="0pT-l9-ig4"/>
                                                         </constraints>
@@ -116,7 +129,7 @@
                                                 <constraints>
                                                     <constraint firstItem="opY-pc-lA1" firstAttribute="leading" secondItem="3TB-cE-fsK" secondAttribute="leading" id="0sK-l2-yzu"/>
                                                     <constraint firstItem="flc-hP-Uuo" firstAttribute="top" secondItem="Uuo-Ph-flc" secondAttribute="bottom" priority="250" constant="29" id="6ro-CC-b1l"/>
-                                                    <constraint firstAttribute="trailing" secondItem="flc-hP-Uuo" secondAttribute="trailing" id="NNU-L1-8fw"/>
+                                                    <constraint firstAttribute="trailing" secondItem="flc-hP-Uuo" secondAttribute="trailing" constant="16" id="NNU-L1-8fw"/>
                                                     <constraint firstItem="opY-pc-lA1" firstAttribute="top" secondItem="3TB-cE-fsK" secondAttribute="top" id="Ut8-x3-4B4"/>
                                                     <constraint firstAttribute="trailing" secondItem="Uuo-Ph-flc" secondAttribute="trailing" constant="8" id="X8r-VK-IKO"/>
                                                     <constraint firstItem="dBY-DP-tUb" firstAttribute="top" secondItem="flc-hP-Uuo" secondAttribute="bottom" constant="8" id="aGq-4G-eHR"/>
@@ -127,7 +140,7 @@
                                                     <constraint firstAttribute="trailing" secondItem="opY-pc-lA1" secondAttribute="trailing" id="iNP-VT-KsA"/>
                                                     <constraint firstAttribute="bottom" secondItem="dBY-DP-tUb" secondAttribute="bottom" constant="14" id="kWZ-yp-aeS"/>
                                                     <constraint firstAttribute="trailing" secondItem="dBY-DP-tUb" secondAttribute="trailing" constant="8" id="sEe-li-cHc"/>
-                                                    <constraint firstItem="flc-hP-Uuo" firstAttribute="leading" secondItem="3TB-cE-fsK" secondAttribute="leading" id="swp-I0-Hgu"/>
+                                                    <constraint firstItem="flc-hP-Uuo" firstAttribute="leading" secondItem="3TB-cE-fsK" secondAttribute="leading" constant="16" id="swp-I0-Hgu"/>
                                                     <constraint firstItem="dBY-DP-tUb" firstAttribute="leading" secondItem="3TB-cE-fsK" secondAttribute="leading" constant="8" id="tNr-Rb-Ey6"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
@@ -137,33 +150,38 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eg1-E3-Jd3" customClass="AnimatableView" customModule="IBAnimatable">
-                                                <rect key="frame" x="215.33333333333337" y="225" width="188.66666666666663" height="169"/>
+                                                <rect key="frame" x="215" y="225" width="189" height="169"/>
                                                 <subviews>
                                                     <view alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QL5-mI-5j5" customClass="AnimatableView" customModule="IBAnimatable">
-                                                        <rect key="frame" x="0.0" y="0.0" width="188.66666666666666" height="169"/>
-                                                        <color key="backgroundColor" name="BackgroundColor"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="189" height="169"/>
+                                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                 <real key="value" value="12"/>
                                                             </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                <color key="value" systemColor="tertiaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                <real key="value" value="0.20000000000000001"/>
+                                                            </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_5_LABEL___&gt;" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HV2-IO-EgY">
-                                                        <rect key="frame" x="8" y="35" width="172.66666666666666" height="42"/>
+                                                        <rect key="frame" x="8" y="35" width="173" height="42"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
-                                                        <color key="textColor" name="ForegroundColor"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_5___" value="___FIELD_5_BINDING_TYPE___"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_5_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHQ-hC-b9Y" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="115" width="172.66666666666666" height="40"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_5_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHQ-hC-b9Y" customClass="IconLabel" customModule="Tasks" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="115" width="173" height="40"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="40" id="pvi-0P-vpd"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                                        <color key="textColor" name="ForegroundColor"/>
+                                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="imagePadding">
@@ -175,9 +193,9 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="imagePosition" value="left"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Po5-oO-WZ5">
-                                                        <rect key="frame" x="0.0" y="106" width="188.66666666666666" height="1"/>
-                                                        <color key="backgroundColor" name="ForegroundColor"/>
+                                                    <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Po5-oO-WZ5">
+                                                        <rect key="frame" x="16" y="106" width="157" height="1"/>
+                                                        <color key="backgroundColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="kv0-VF-8uv"/>
                                                         </constraints>
@@ -185,7 +203,7 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstItem="Po5-oO-WZ5" firstAttribute="leading" secondItem="Eg1-E3-Jd3" secondAttribute="leading" id="2fR-wk-EkH"/>
+                                                    <constraint firstItem="Po5-oO-WZ5" firstAttribute="leading" secondItem="Eg1-E3-Jd3" secondAttribute="leading" constant="16" id="2fR-wk-EkH"/>
                                                     <constraint firstItem="QL5-mI-5j5" firstAttribute="top" secondItem="Eg1-E3-Jd3" secondAttribute="top" id="5uA-tN-CrO"/>
                                                     <constraint firstItem="Po5-oO-WZ5" firstAttribute="top" relation="greaterThanOrEqual" secondItem="HV2-IO-EgY" secondAttribute="bottom" constant="29" id="9rz-nC-e2e"/>
                                                     <constraint firstItem="HV2-IO-EgY" firstAttribute="leading" secondItem="Eg1-E3-Jd3" secondAttribute="leading" constant="8" id="Mga-NH-zAh"/>
@@ -194,7 +212,7 @@
                                                     <constraint firstItem="HV2-IO-EgY" firstAttribute="top" secondItem="Eg1-E3-Jd3" secondAttribute="top" constant="35" id="fYR-5c-Erf"/>
                                                     <constraint firstItem="LHQ-hC-b9Y" firstAttribute="leading" secondItem="Eg1-E3-Jd3" secondAttribute="leading" constant="8" id="gH6-uL-a9r"/>
                                                     <constraint firstAttribute="trailing" secondItem="QL5-mI-5j5" secondAttribute="trailing" id="k4b-CP-1t0"/>
-                                                    <constraint firstAttribute="trailing" secondItem="Po5-oO-WZ5" secondAttribute="trailing" id="qRI-gC-fyf"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Po5-oO-WZ5" secondAttribute="trailing" constant="16" id="qRI-gC-fyf"/>
                                                     <constraint firstItem="QL5-mI-5j5" firstAttribute="leading" secondItem="Eg1-E3-Jd3" secondAttribute="leading" id="qab-WI-TS2"/>
                                                     <constraint firstItem="LHQ-hC-b9Y" firstAttribute="top" secondItem="Po5-oO-WZ5" secondAttribute="bottom" constant="8" id="xJp-rA-Dbq"/>
                                                     <constraint firstAttribute="trailing" secondItem="LHQ-hC-b9Y" secondAttribute="trailing" constant="8" id="xub-OB-g92"/>
@@ -211,29 +229,34 @@
                                                 <subviews>
                                                     <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HBa-gJ-c6o" customClass="AnimatableView" customModule="IBAnimatable">
                                                         <rect key="frame" x="0.0" y="0.0" width="394" height="142"/>
-                                                        <color key="backgroundColor" name="BackgroundColor"/>
+                                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                 <real key="value" value="12"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                <color key="value" systemColor="tertiaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                <real key="value" value="0.20000000000000001"/>
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_6_LABEL___&gt;" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J84-6K-oym">
                                                         <rect key="frame" x="8" y="29" width="378" height="21"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
-                                                        <color key="textColor" name="ForegroundColor"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_6___" value="___FIELD_6_BINDING_TYPE___"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_6_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Go5-JV-sxK" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_6_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Go5-JV-sxK" customClass="IconLabel" customModule="Tasks" customModuleProvider="target">
                                                         <rect key="frame" x="8" y="88" width="378" height="40"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="40" id="Cis-1S-KNQ"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                                        <color key="textColor" name="ForegroundColor"/>
+                                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="imagePadding">
@@ -245,9 +268,9 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="imagePosition" value="left"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qj8-3J-anS">
-                                                        <rect key="frame" x="0.0" y="79" width="394" height="1"/>
-                                                        <color key="backgroundColor" name="ForegroundColor"/>
+                                                    <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qj8-3J-anS">
+                                                        <rect key="frame" x="16" y="79" width="362" height="1"/>
+                                                        <color key="backgroundColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="iOC-yX-Arh"/>
                                                         </constraints>
@@ -256,9 +279,9 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstItem="HBa-gJ-c6o" firstAttribute="top" secondItem="zYv-fk-3JJ" secondAttribute="top" id="3gA-o2-xUS"/>
-                                                    <constraint firstItem="qj8-3J-anS" firstAttribute="leading" secondItem="zYv-fk-3JJ" secondAttribute="leading" id="69k-b8-nz5"/>
+                                                    <constraint firstItem="qj8-3J-anS" firstAttribute="leading" secondItem="zYv-fk-3JJ" secondAttribute="leading" constant="16" id="69k-b8-nz5"/>
                                                     <constraint firstItem="HBa-gJ-c6o" firstAttribute="leading" secondItem="zYv-fk-3JJ" secondAttribute="leading" id="L6D-0s-Mk3"/>
-                                                    <constraint firstAttribute="trailing" secondItem="qj8-3J-anS" secondAttribute="trailing" id="RIr-W5-ajG"/>
+                                                    <constraint firstAttribute="trailing" secondItem="qj8-3J-anS" secondAttribute="trailing" constant="16" id="RIr-W5-ajG"/>
                                                     <constraint firstItem="Go5-JV-sxK" firstAttribute="leading" secondItem="zYv-fk-3JJ" secondAttribute="leading" constant="8" id="Rqo-sD-AuO"/>
                                                     <constraint firstItem="qj8-3J-anS" firstAttribute="top" secondItem="J84-6K-oym" secondAttribute="bottom" constant="29" id="SGH-Le-svQ"/>
                                                     <constraint firstItem="J84-6K-oym" firstAttribute="top" secondItem="zYv-fk-3JJ" secondAttribute="top" constant="29" id="SaO-2R-gGn"/>
@@ -277,7 +300,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Dsd-rc-MVS" customClass="AnimatableImageView" customModule="IBAnimatable">
-                                                <rect key="frame" x="162.66666666666666" y="20" width="88" height="88"/>
+                                                <rect key="frame" x="163" y="20" width="88" height="88"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="88" id="KJz-vl-jGk"/>
                                                     <constraint firstAttribute="height" constant="88" id="T51-g0-oG0"/>
@@ -294,31 +317,30 @@
                                                 </userDefinedRuntimeAttributes>
                                             </imageView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="qeg-lN-2j4">
-                                                <rect key="frame" x="10" y="566" width="394" height="145.66666666666663"/>
+                                                <rect key="frame" x="10" y="566" width="394" height="145.5"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-001">
-                                                        <rect key="frame" x="0.0" y="0.0" width="394" height="145.66666666666666"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="394" height="145.5"/>
                                                         <subviews>
                                                             <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-002" customClass="AnimatableView" customModule="IBAnimatable">
-                                                                <rect key="frame" x="0.0" y="0.0" width="394" height="145.66666666666666"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="394" height="145.5"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;___FIELD_LABEL___&gt;" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-003">
-                                                                        <rect key="frame" x="8" y="29" width="378" height="24.666666666666671"/>
+                                                                        <rect key="frame" x="8" y="29" width="378" height="24.5"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
-                                                                        <color key="textColor" name="ForegroundColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                         <userDefinedRuntimeAttributes>
                                                                             <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD___" value="___FIELD_BINDING_TYPE___"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </label>
-                                                                    <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_LABEL___" lineBreakMode="clip" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-004" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
-                                                                        <rect key="frame" x="8" y="91.666666666666629" width="378" height="40"/>
+                                                                    <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_LABEL___" lineBreakMode="clip" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-004" customClass="IconLabel" customModule="Tasks" customModuleProvider="target">
+                                                                        <rect key="frame" x="8" y="91.5" width="378" height="40"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="40" id="TAG-FD-005"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                                                        <color key="textColor" name="ForegroundColor"/>
+                                                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                         <userDefinedRuntimeAttributes>
                                                                             <userDefinedRuntimeAttribute type="number" keyPath="imagePadding">
@@ -330,21 +352,21 @@
                                                                             <userDefinedRuntimeAttribute type="string" keyPath="imagePosition" value="left"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </label>
-                                                                    <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-006">
-                                                                        <rect key="frame" x="0.0" y="82.666666666666629" width="394" height="1"/>
-                                                                        <color key="backgroundColor" name="ForegroundColor"/>
+                                                                    <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-006">
+                                                                        <rect key="frame" x="16" y="82.5" width="362" height="1"/>
+                                                                        <color key="backgroundColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="1" id="TAG-FD-007"/>
                                                                         </constraints>
                                                                     </view>
                                                                 </subviews>
-                                                                <color key="backgroundColor" name="BackgroundColor"/>
+                                                                <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
                                                                     <constraint firstItem="TAG-FD-003" firstAttribute="top" secondItem="TAG-FD-002" secondAttribute="top" constant="29" id="TAG-FD-008"/>
                                                                     <constraint firstItem="TAG-FD-003" firstAttribute="leading" secondItem="TAG-FD-002" secondAttribute="leading" constant="8" id="TAG-FD-009"/>
                                                                     <constraint firstAttribute="trailing" secondItem="TAG-FD-003" secondAttribute="trailing" constant="8" id="TAG-FD-010"/>
-                                                                    <constraint firstItem="TAG-FD-006" firstAttribute="leading" secondItem="TAG-FD-002" secondAttribute="leading" id="TAG-FD-011"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="TAG-FD-006" secondAttribute="trailing" id="TAG-FD-012"/>
+                                                                    <constraint firstItem="TAG-FD-006" firstAttribute="leading" secondItem="TAG-FD-002" secondAttribute="leading" constant="16" id="TAG-FD-011"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="TAG-FD-006" secondAttribute="trailing" constant="16" id="TAG-FD-012"/>
                                                                     <constraint firstItem="TAG-FD-004" firstAttribute="leading" secondItem="TAG-FD-002" secondAttribute="leading" constant="8" id="TAG-FD-013"/>
                                                                     <constraint firstItem="TAG-FD-006" firstAttribute="top" secondItem="TAG-FD-003" secondAttribute="bottom" constant="29" id="TAG-FD-014"/>
                                                                     <constraint firstItem="TAG-FD-004" firstAttribute="top" secondItem="TAG-FD-006" secondAttribute="bottom" constant="8" id="TAG-FD-015"/>
@@ -354,6 +376,12 @@
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                         <real key="value" value="12"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                        <color key="value" systemColor="tertiaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                        <real key="value" value="0.20000000000000001"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
@@ -374,7 +402,7 @@
                                                 </constraints>
                                             </stackView>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.24928616751269039" green="0.24928616751269039" blue="0.24928616751269039" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
                                             <constraint firstItem="qeg-lN-2j4" firstAttribute="leading" secondItem="qeg-lN-2j4" secondAttribute="leading" id="1Js-SD-S9G"/>
                                             <constraint firstAttribute="trailing" secondItem="jTs-fh-c3P" secondAttribute="trailing" constant="10" id="1fe-Jn-7ft"/>
@@ -416,7 +444,7 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.24928616749999999" green="0.24928616749999999" blue="0.24928616749999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="q67-s8-oP4" firstAttribute="width" secondItem="g8H-lI-SA8" secondAttribute="width" id="1sy-93-GME"/>
                             <constraint firstItem="m0K-2P-sXH" firstAttribute="leading" secondItem="g8H-lI-SA8" secondAttribute="leading" id="3Ak-GG-0Dm"/>
@@ -473,7 +501,7 @@
         <image name="next" width="22" height="22"/>
         <image name="previous" width="22" height="22"/>
         <namedColor name="BackgroundColor">
-            <color red="0.38431372549999998" green="0.7725490196" blue="0.67450980390000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.19215686274509805" green="0.51372549019607838" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="ForegroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

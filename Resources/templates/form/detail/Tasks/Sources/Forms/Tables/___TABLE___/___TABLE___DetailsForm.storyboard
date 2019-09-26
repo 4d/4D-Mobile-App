@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Y2J-Qb-nvx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14835.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Y2J-Qb-nvx">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14790.5"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="iOS 13.0 system colors" minToolsVersion="11.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+            <string>HelveticaNeue-Bold</string>
+            <string>HelveticaNeue-Medium</string>
+        </array>
+        <array key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="xny-MY-O2Z">
@@ -12,7 +24,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Y2J-Qb-nvx" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yeb-5T-Sqp">
-                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" name="BackgroundColor"/>
@@ -38,28 +50,28 @@
                         <viewControllerLayoutGuide type="bottom" id="D8o-Fj-VKX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="g8H-lI-SA8">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m0K-2P-sXH">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="24" width="414" height="838"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q67-s8-oP4" customClass="AnimatableView" customModule="IBAnimatable">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="395.33333333333331"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="396.5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3TB-cE-fsK">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="111"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="111.5"/>
                                                 <subviews>
                                                     <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_1_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fqd-rd-Gnq" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
-                                                        <rect key="frame" x="12" y="25" width="390" height="22.666666666666671"/>
+                                                        <rect key="frame" x="12" y="25" width="390" height="23"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="19"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="psl-XW-vg6">
-                                                        <rect key="frame" x="12" y="61.666666666666664" width="171.33333333333334" height="24.333333333333336"/>
+                                                        <rect key="frame" x="12" y="62" width="171.5" height="24.5"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mkr-aW-KPv" customClass="AnimatableView">
-                                                                <rect key="frame" x="0.0" y="0.0" width="171.33333333333334" height="24.333333333333332"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="171.5" height="24.5"/>
                                                                 <color key="backgroundColor" red="0.65484327080000004" green="0.65493953230000002" blue="0.65482211109999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -68,7 +80,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
                                                             <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_1_LABEL___&gt;" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RwR-gj-GMQ">
-                                                                <rect key="frame" x="5" y="4.0000000000000071" width="161.33333333333334" height="16.333333333333332"/>
+                                                                <rect key="frame" x="5" y="4" width="161.5" height="16.5"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -77,7 +89,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                         </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstItem="RwR-gj-GMQ" firstAttribute="top" secondItem="psl-XW-vg6" secondAttribute="top" constant="4" id="1ZK-wh-1oI"/>
                                                             <constraint firstAttribute="trailing" secondItem="mkr-aW-KPv" secondAttribute="trailing" id="9K2-XB-gPZ"/>
@@ -90,7 +102,7 @@
                                                         </constraints>
                                                     </view>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" cocoaTouchSystemColor="secondarySystemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstItem="fqd-rd-Gnq" firstAttribute="top" secondItem="3TB-cE-fsK" secondAttribute="top" constant="25" id="758-8N-x26"/>
                                                     <constraint firstItem="psl-XW-vg6" firstAttribute="top" secondItem="fqd-rd-Gnq" secondAttribute="bottom" constant="14" id="ATG-oi-4gl"/>
@@ -102,15 +114,15 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hUu-JG-Unl">
-                                                <rect key="frame" x="0.0" y="112" width="414" height="125.66666666666669"/>
+                                                <rect key="frame" x="0.0" y="112.5" width="414" height="126"/>
                                                 <subviews>
                                                     <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="___FIELD_2_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMo-6D-Kn7" customClass="IconLabel" customModule="___PRODUCT___">
-                                                        <rect key="frame" x="12" y="11.000000000000002" width="390" height="22.666666666666671"/>
+                                                        <rect key="frame" x="12" y="11" width="390" height="23"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="19"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B8w-Mn-GGS" customClass="___TABLE___CustomProgressBarDetail" customModule="___PRODUCT___" customModuleProvider="target">
-                                                        <rect key="frame" x="13" y="45.666666666666657" width="68" height="68"/>
+                                                        <rect key="frame" x="13" y="46" width="68" height="68"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="68" id="GO5-hu-w7U"/>
@@ -134,19 +146,18 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_2_LABEL___&gt;" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vjF-6I-WfK">
-                                                        <rect key="frame" x="17" y="67.666666666666657" width="60" height="24"/>
+                                                        <rect key="frame" x="17" y="68" width="60" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="60" id="tZt-bc-V4q"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
-                                                        <color key="textColor" name="BackgroundColor"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_2___" value="integer"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" red="0.96854287390000005" green="0.96868163350000003" blue="0.96851247549999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" cocoaTouchSystemColor="secondarySystemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstItem="B8w-Mn-GGS" firstAttribute="top" secondItem="sMo-6D-Kn7" secondAttribute="bottom" constant="12" id="5sO-lO-2sZ"/>
                                                     <constraint firstItem="sMo-6D-Kn7" firstAttribute="top" secondItem="hUu-JG-Unl" secondAttribute="top" constant="11" id="JUv-yA-4r9"/>
@@ -159,17 +170,17 @@
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="mvb-S4-fmn">
-                                                <rect key="frame" x="12" y="257.66666666666669" width="390" height="57.666666666666686"/>
+                                                <rect key="frame" x="12" y="258.5" width="390" height="58"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-001">
-                                                        <rect key="frame" x="0.0" y="0.0" width="390" height="57.666666666666664"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="390" height="58"/>
                                                         <subviews>
                                                             <view alpha="0.20000000298023224" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-002">
                                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="1"/>
                                                                 <subviews>
                                                                     <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-003">
                                                                         <rect key="frame" x="60" y="0.0" width="270" height="1"/>
-                                                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="1" id="TAG-FD-004"/>
                                                                         </constraints>
@@ -185,7 +196,7 @@
                                                                 </constraints>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-010" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="9.0000000000000018" width="390" height="22.666666666666671"/>
+                                                                <rect key="frame" x="0.0" y="9" width="390" height="23"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="19"/>
                                                                 <nil key="highlightedColor"/>
@@ -200,7 +211,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_LABEL___&gt;" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-011">
-                                                                <rect key="frame" x="0.0" y="39.666666666666629" width="390" height="18"/>
+                                                                <rect key="frame" x="0.0" y="40" width="390" height="18"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
@@ -214,7 +225,7 @@
                                                 <color key="backgroundColor" red="0.96854287390000005" green="0.96868163350000003" blue="0.96851247549999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </stackView>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.96854287390000005" green="0.96868163350000003" blue="0.96851247549999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="secondarySystemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="hUu-JG-Unl" firstAttribute="top" secondItem="3TB-cE-fsK" secondAttribute="bottom" constant="1" id="1sE-Dv-evY"/>
                                             <constraint firstAttribute="trailing" secondItem="hUu-JG-Unl" secondAttribute="trailing" id="6Nk-c4-2VO"/>
@@ -227,11 +238,6 @@
                                             <constraint firstItem="3TB-cE-fsK" firstAttribute="leading" secondItem="q67-s8-oP4" secondAttribute="leading" id="h6C-dV-qRo"/>
                                             <constraint firstAttribute="bottom" secondItem="mvb-S4-fmn" secondAttribute="bottom" constant="80" id="jUe-d2-dP9"/>
                                         </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="12"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -243,7 +249,7 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.96854287385940552" green="0.96868163347244263" blue="0.96851247549057007" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="secondarySystemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="D8o-Fj-VKX" firstAttribute="top" secondItem="m0K-2P-sXH" secondAttribute="bottom" id="HON-aL-6iF"/>
                             <constraint firstItem="m0K-2P-sXH" firstAttribute="top" secondItem="7i1-qQ-Sbo" secondAttribute="bottom" constant="-64" id="Qaf-fD-bSi"/>

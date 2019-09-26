@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Y2J-Qb-nvx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14835.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Y2J-Qb-nvx">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14790.5"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="iOS 13.0 system colors" minToolsVersion="11.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue-Bold</string>
+            <string>HelveticaNeue-Medium</string>
+        </array>
+        <array key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="xny-MY-O2Z">
@@ -12,7 +24,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Y2J-Qb-nvx" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yeb-5T-Sqp">
-                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" name="BackgroundColor"/>
@@ -38,20 +50,20 @@
                         <viewControllerLayoutGuide type="bottom" id="D8o-Fj-VKX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="g8H-lI-SA8">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m0K-2P-sXH">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q67-s8-oP4" customClass="AnimatableView" customModule="IBAnimatable">
-                                        <rect key="frame" x="6" y="10" width="402" height="496"/>
+                                        <rect key="frame" x="6" y="10" width="402" height="433"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nsc-cy-DV2">
-                                                <rect key="frame" x="0.0" y="0.0" width="402" height="236"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="402" height="233"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l3D-zx-7LO" customClass="AnimatableImageView" customModule="IBAnimatable">
-                                                        <rect key="frame" x="0.0" y="0.0" width="402" height="236"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="402" height="251"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_1___" value="___FIELD_1_BINDING_TYPE___"/>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="blurOpacity">
@@ -61,7 +73,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </imageView>
                                                     <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t08-TI-WHe" customClass="AnimatableView" customModule="IBAnimatable">
-                                                        <rect key="frame" x="0.0" y="0.0" width="402" height="236"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="402" height="251"/>
                                                         <color key="backgroundColor" name="BackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -70,7 +82,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Dsd-rc-MVS" customClass="AnimatableImageView" customModule="IBAnimatable">
-                                                        <rect key="frame" x="161.66666666666666" y="28" width="78" height="78"/>
+                                                        <rect key="frame" x="162" y="28" width="78" height="78"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="78" id="4qS-kH-mtq"/>
                                                             <constraint firstAttribute="height" constant="78" id="n3e-vu-tsl"/>
@@ -87,7 +99,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </imageView>
                                                     <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_2_LABEL___&gt;" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t09-rc-7LO">
-                                                        <rect key="frame" x="8" y="109" width="386" height="28.666666666666657"/>
+                                                        <rect key="frame" x="8" y="109" width="386" height="29"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -96,7 +108,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_3_LABEL___&gt;" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QqQ-ey-YvY">
-                                                        <rect key="frame" x="8" y="141.66666666666666" width="386" height="26"/>
+                                                        <rect key="frame" x="8" y="142" width="386" height="26"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="22"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -108,7 +120,7 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstItem="QqQ-ey-YvY" firstAttribute="leading" secondItem="Nsc-cy-DV2" secondAttribute="leading" constant="8" id="73a-vJ-kRE"/>
-                                                    <constraint firstAttribute="bottom" secondItem="l3D-zx-7LO" secondAttribute="bottom" id="EO7-0k-DD5"/>
+                                                    <constraint firstAttribute="bottom" secondItem="l3D-zx-7LO" secondAttribute="bottom" constant="-18" id="EO7-0k-DD5"/>
                                                     <constraint firstItem="Dsd-rc-MVS" firstAttribute="top" secondItem="Nsc-cy-DV2" secondAttribute="top" constant="28" id="HAO-eW-rYu"/>
                                                     <constraint firstItem="l3D-zx-7LO" firstAttribute="top" secondItem="Nsc-cy-DV2" secondAttribute="top" id="K7w-RZ-C4B"/>
                                                     <constraint firstItem="l3D-zx-7LO" firstAttribute="leading" secondItem="Nsc-cy-DV2" secondAttribute="leading" id="KhU-T1-Xzl"/>
@@ -116,7 +128,7 @@
                                                     <constraint firstAttribute="trailing" secondItem="t08-TI-WHe" secondAttribute="trailing" id="Siq-8q-Rd6"/>
                                                     <constraint firstItem="t09-rc-7LO" firstAttribute="top" secondItem="Dsd-rc-MVS" secondAttribute="bottom" constant="3" id="VGp-7W-enG"/>
                                                     <constraint firstItem="t08-TI-WHe" firstAttribute="leading" secondItem="Nsc-cy-DV2" secondAttribute="leading" id="ds6-Ml-HUr"/>
-                                                    <constraint firstAttribute="bottom" secondItem="t08-TI-WHe" secondAttribute="bottom" id="gnx-hz-0Fo"/>
+                                                    <constraint firstAttribute="bottom" secondItem="t08-TI-WHe" secondAttribute="bottom" constant="-18" id="gnx-hz-0Fo"/>
                                                     <constraint firstAttribute="trailing" secondItem="t09-rc-7LO" secondAttribute="trailing" constant="8" id="owC-l0-cq4"/>
                                                     <constraint firstAttribute="trailing" secondItem="l3D-zx-7LO" secondAttribute="trailing" id="pBY-Oi-ER7"/>
                                                     <constraint firstItem="QqQ-ey-YvY" firstAttribute="top" secondItem="t09-rc-7LO" secondAttribute="bottom" constant="4" id="tkn-96-r85"/>
@@ -126,7 +138,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I78-1Y-6y1">
-                                                <rect key="frame" x="0.0" y="229" width="402" height="209"/>
+                                                <rect key="frame" x="0.0" y="226" width="402" height="149"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="vLn-4D-GNf">
                                                         <rect key="frame" x="12" y="20" width="378" height="109"/>
@@ -137,8 +149,8 @@
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-002" customClass="AnimatableView" customModule="IBAnimatable">
                                                                         <rect key="frame" x="0.0" y="0.0" width="378" height="109"/>
                                                                         <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-003" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
-                                                                                <rect key="frame" x="12" y="18" width="354" height="26.333333333333329"/>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-003" customClass="IconLabel" customModule="Tasks" customModuleProvider="target">
+                                                                                <rect key="frame" x="12" y="18" width="354" height="32"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="22"/>
                                                                                 <color key="textColor" name="BackgroundColor"/>
@@ -154,16 +166,16 @@
                                                                                 </userDefinedRuntimeAttributes>
                                                                             </label>
                                                                             <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="&lt;___FIELD_LABEL___&gt;" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-004">
-                                                                                <rect key="frame" x="12" y="54" width="354" height="34.333333333333343"/>
+                                                                                <rect key="frame" x="12" y="60" width="354" height="28.5"/>
                                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="21"/>
-                                                                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <color key="textColor" cocoaTouchSystemColor="secondaryLabelColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                                 <userDefinedRuntimeAttributes>
                                                                                     <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD___" value="___FIELD_BINDING_TYPE___"/>
                                                                                 </userDefinedRuntimeAttributes>
                                                                             </label>
                                                                         </subviews>
-                                                                        <color key="backgroundColor" red="0.98070669420000001" green="0.98070669420000001" blue="0.98070669420000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <color key="backgroundColor" cocoaTouchSystemColor="tertiarySystemBackgroundColor"/>
                                                                         <constraints>
                                                                             <constraint firstItem="TAG-FD-003" firstAttribute="leading" secondItem="TAG-FD-002" secondAttribute="leading" constant="12" id="TAG-FD-005"/>
                                                                             <constraint firstAttribute="trailing" secondItem="TAG-FD-003" secondAttribute="trailing" constant="12" id="TAG-FD-006"/>
@@ -181,10 +193,10 @@
                                                                                 <point key="value" x="0.0" y="3"/>
                                                                             </userDefinedRuntimeAttribute>
                                                                             <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
-                                                                                <color key="value" red="0.42425444159999998" green="0.42425444159999998" blue="0.42425444159999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <color key="value" cocoaTouchSystemColor="secondaryLabelColor"/>
                                                                             </userDefinedRuntimeAttribute>
                                                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                                <color key="value" red="0.80720574239999998" green="0.80720574239999998" blue="0.80720574239999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <color key="value" cocoaTouchSystemColor="secondaryLabelColor"/>
                                                                             </userDefinedRuntimeAttribute>
                                                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                                                 <real key="value" value="0.10000000000000001"/>
@@ -204,27 +216,27 @@
                                                                 </constraints>
                                                             </stackView>
                                                         </subviews>
-                                                        <color key="backgroundColor" red="0.96854287390000005" green="0.96868163350000003" blue="0.96851247549999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="top" secondItem="vLn-4D-GNf" secondAttribute="top" id="DAV-AZ-007"/>
                                                             <constraint firstAttribute="leading" secondItem="vLn-4D-GNf" secondAttribute="leading" id="DAV-AZ-008"/>
                                                         </constraints>
                                                     </stackView>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="vLn-4D-GNf" secondAttribute="trailing" constant="12" id="U2W-tQ-ClU"/>
-                                                    <constraint firstAttribute="bottom" secondItem="vLn-4D-GNf" secondAttribute="bottom" constant="80" id="Xfb-sZ-XZi"/>
+                                                    <constraint firstAttribute="bottom" secondItem="vLn-4D-GNf" secondAttribute="bottom" constant="20" id="Xfb-sZ-XZi"/>
                                                     <constraint firstItem="vLn-4D-GNf" firstAttribute="top" secondItem="I78-1Y-6y1" secondAttribute="top" constant="20" id="fL3-jz-yVg"/>
                                                     <constraint firstItem="vLn-4D-GNf" firstAttribute="leading" secondItem="I78-1Y-6y1" secondAttribute="leading" constant="12" id="kod-cB-E5R"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="I78-1Y-6y1" secondAttribute="bottom" constant="58" id="0mm-Uy-Dbz"/>
                                             <constraint firstItem="Nsc-cy-DV2" firstAttribute="leading" secondItem="q67-s8-oP4" secondAttribute="leading" id="7Mj-4s-VZZ"/>
-                                            <constraint firstItem="I78-1Y-6y1" firstAttribute="top" secondItem="q67-s8-oP4" secondAttribute="top" constant="229" id="9w3-kL-C3q"/>
+                                            <constraint firstItem="I78-1Y-6y1" firstAttribute="top" secondItem="q67-s8-oP4" secondAttribute="top" constant="226" id="9w3-kL-C3q"/>
                                             <constraint firstItem="I78-1Y-6y1" firstAttribute="top" secondItem="Nsc-cy-DV2" secondAttribute="bottom" constant="-7" id="AdO-vU-bvq"/>
                                             <constraint firstItem="I78-1Y-6y1" firstAttribute="leading" secondItem="q67-s8-oP4" secondAttribute="leading" id="Gdf-zT-8an"/>
                                             <constraint firstItem="Nsc-cy-DV2" firstAttribute="top" secondItem="q67-s8-oP4" secondAttribute="top" id="Ml3-vo-ByC"/>
@@ -247,7 +259,7 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.94933772208121825" green="0.94933772208121825" blue="0.94933772208121825" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="secondarySystemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="m0K-2P-sXH" secondAttribute="trailing" id="AXq-DX-K5x"/>
                             <constraint firstItem="m0K-2P-sXH" firstAttribute="leading" secondItem="g8H-lI-SA8" secondAttribute="leading" id="H9f-ay-R0r"/>
@@ -293,7 +305,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DmB-Uc-dHU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2036.9565217391305" y="110.05434782608697"/>
+            <point key="canvasLocation" x="2036.2318840579712" y="109.82142857142857"/>
         </scene>
     </scenes>
     <resources>
@@ -301,7 +313,7 @@
         <image name="next" width="22" height="22"/>
         <image name="previous" width="22" height="22"/>
         <namedColor name="BackgroundColor">
-            <color red="0.40599998831748962" green="0.75499999523162842" blue="0.77399998903274536" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.19215686274509805" green="0.51372549019607838" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="ForegroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
