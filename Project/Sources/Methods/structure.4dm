@@ -521,29 +521,38 @@ Case of
 						$Obj_out.fields:=New collection:C1472
 						
 						  // Get inverse name
-						$Obj_buffer:=structure (New object:C1471(\
-							"action";"inverseRelationName";\
-							"table";$Obj_in.table;\
-							"relation";$Obj_in.relation;\
-							"definition";$Obj_in.definition))
+						If (Length:C16(String:C10($Obj_field.inverseName))>0)
+							$Obj_buffer:=New object:C1471("value";$Obj_field.inverseName;"success";True:C214)
+						Else   // OBSOLETE normally
+							$Obj_buffer:=structure (New object:C1471(\
+								"action";"inverseRelationName";\
+								"table";$Obj_in.table;\
+								"relation";$Obj_in.relation;\
+								"definition";$Obj_in.definition))
+						End if 
 						
 						If ($Obj_buffer.success)
 							
-							$Obj_out.definition:=$Obj_buffer.definition  // cache purpose
+							$Obj_out.definition:=$Obj_buffer.definition  // cache purpose // OBSOLETE normally
 							
 							  // Get inverse table
 							$Obj_relatedDataClass:=$Obj_catalog[$Obj_field.relatedDataClass]
 							
-							$Obj_out.fields.push($Obj_relatedDataClass[$Obj_buffer.value])
-							$Obj_out.success:=($Obj_relatedDataClass[$Obj_buffer.value]#Null:C1517)
-							
+							C_OBJECT:C1216($o)
+							$o:=$Obj_relatedDataClass[$Obj_buffer.value]
+							$Obj_out.success:=($o#Null:C1517)
+							If ($Obj_out.success)
+								
+								$o.relatedTableNumber:=$Obj_relatedDataClass.getInfo().tableNumber
+								$Obj_out.fields.push($o)
+							End if 
 						Else 
 							
 							  // // FIXME #103848 TODO filter, must be the inverse of $Obj_in.field
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																																																																																																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //

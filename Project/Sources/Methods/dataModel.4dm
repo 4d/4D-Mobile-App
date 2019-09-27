@@ -81,8 +81,8 @@ Case of
 				DOM SET XML ATTRIBUTE:C866($Dom_model;\
 					"type";"com.apple.IDECoreDataModeler.DataModel";\
 					"documentVersion";"1.0";\
-					"lastSavedToolsVersion";"14460.32";\
-					"systemVersion";"18C54";\
+					"lastSavedToolsVersion";"14903";\
+					"systemVersion";"18G87";\
 					"minimumToolsVersion";"Automatic";\
 					"sourceLanguage";"Swift";\
 					"userDefinedModelVersionIdentifier";"")
@@ -469,10 +469,12 @@ Case of
 												  ///         without forgot the primaryKey
 												$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)].primaryKey
 												
-												If ($Col_fields.indexOf($Txt_buffer)<0)
-													
-													$Col_fields.push($Txt_buffer)
-													
+												If (Length:C16($Txt_buffer)>0)
+													If ($Col_fields.indexOf($Txt_buffer)<0)
+														
+														$Col_fields.push($Txt_buffer)
+														
+													End if 
 												End if 
 												
 												If ($Col_fields.length>0)
@@ -690,6 +692,7 @@ Case of
 											"kind";$Obj_field.kind;\
 											"type";$Obj_field.fieldType;\
 											"inverseName";$Txt_relationName;\
+											"relatedTableNumber";$Obj_field.relatedTableNumber;\
 											"relatedDataClass";$Obj_field.relatedDataClass)
 									End if 
 									
