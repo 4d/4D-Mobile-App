@@ -30,13 +30,7 @@
 		<field name="Comment" uuid="F9BBED0B0AF84E868A62DDD9F0B82E8E" type="10" never_null="true" id="9">
 			<field_extra position="9"/>
 		</field>
-		<field name="__GlobalStamp" uuid="5B265290FFD848679B73629DFEAEE244" type="5" id="23">
-			<field_extra position="10">
-				<editor_field_info>
-					<color red="216" green="30" blue="5" alpha="255"/>
-				</editor_field_info>
-			</field_extra>
-		</field>
+		<field name="__GlobalStamp" uuid="501862F4C19B42699963B626C8722E85" type="5" id="24"/>
 		<primary_key field_name="ID" field_uuid="A3A83460686047C694B467689032AAD8"/>
 		<table_extra input_form="input" output_form="output">
 			<editor_table_info fields_ordering="2" displayable_fields_count="11">
@@ -128,22 +122,22 @@
 		<field name="ID" uuid="0A26D100922E475A92C49657B6C02271" type="4" unique="true" autosequence="true" not_null="true" id="1">
 			<field_extra position="1"/>
 		</field>
-		<field name="Name" uuid="2DB718A64ACF4C41803A142CF8DB2493" type="10" limiting_length="255" never_null="true" id="2">
+		<field name="Name" uuid="2DB718A64ACF4C41803A142CF8DB2493" type="10" never_null="true" id="2">
 			<field_extra position="3"/>
 		</field>
 		<field name="ServiceID" uuid="88C84BC7D870430DB278E8BA49A8EB9D" type="4" never_null="true" id="3">
-			<field_extra position="4" visible="false"/>
+			<field_extra position="4"/>
 		</field>
 		<field name="managerID" uuid="E75E6ABE82C746F581998E13F6ED82CD" type="4" never_null="true" id="4">
 			<field_extra position="5"/>
 		</field>
-		<field name="Avatar" uuid="3B9DF20CCA7442878ADB63D714CB4C87" type="12" never_null="true" id="5"/>
+		<field name="Avatar" uuid="3B9DF20CCA7442878ADB63D714CB4C87" type="12" never_null="true" id="5" hide_in_REST="true"/>
 		<field name="__GlobalStamp" uuid="B7AD222132BA40B0AA61029B788464FC" type="5" id="6"/>
 		<primary_key field_name="ID" field_uuid="0A26D100922E475A92C49657B6C02271"/>
 		<table_extra input_form="Input" output_form="Output">
-			<editor_table_info displayable_fields_count="5">
+			<editor_table_info displayable_fields_count="6">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="14" top="673.00390625" width="114" height="146.33203125"/>
+				<coordinates left="15.34375" top="672.703125" width="148.73046875" height="175.3203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -561,6 +555,11 @@
 			<table_ref uuid="E0EF4D9E925848A8893B9926694CF58E" name="Table_2"/>
 		</field_ref>
 	</index>
+	<index kind="regular" uuid="2DD65906C15E40EDA51221B1A42BA2A7" type="7">
+		<field_ref uuid="2DB718A64ACF4C41803A142CF8DB2493" name="Name">
+			<table_ref uuid="F199D0D03F864B939EF3CD9CF9BC0F24" name="Employes"/>
+		</field_ref>
+	</index>
 	<index kind="regular" name="__DeletedRecords__Stamp" uuid="2E2BEEC36F4D430FBB853FA32316FF57" type="7">
 		<field_ref uuid="958ADD2AAC4A49AA867E6C05185BB8EF" name="__Stamp">
 			<table_ref uuid="5E605D96B5EC499F9D93017B4F6FC824" name="__DeletedRecords"/>
@@ -611,11 +610,6 @@
 			<table_ref uuid="6A24BB0C42844B26AA22357C0545137E" name="Table_1"/>
 		</field_ref>
 	</index>
-	<index kind="regular" name="__GlobalStamp_commands" uuid="809B6FF51D2848D48094E15912434DA0" type="7">
-		<field_ref uuid="5B265290FFD848679B73629DFEAEE244" name="__GlobalStamp">
-			<table_ref uuid="4AED578B39014B59AB3054B0278F6453" name="Commands"/>
-		</field_ref>
-	</index>
 	<index kind="regular" uuid="846B2AC9634646BD8026EE56940334E5" type="7">
 		<field_ref uuid="3446D143AA2B4BEFB57C38620EE2C14F" name="Field_3">
 			<table_ref uuid="30E13DEEB95C4BABA4D0449FDF2C55DC" name="Table_3"/>
@@ -624,6 +618,11 @@
 	<index kind="regular" uuid="8E421378BA7045A4953DB4E049B01123" type="7">
 		<field_ref uuid="49DB40D057134576A0784A05B556C07F" name="Field_4">
 			<table_ref uuid="19473CD8716E4AE3A637B9B88E664639" name="UNIT_0"/>
+		</field_ref>
+	</index>
+	<index kind="regular" name="__GlobalStamp_commands" uuid="943C95744F96409CB88F9F77ACD0700A" type="7">
+		<field_ref uuid="501862F4C19B42699963B626C8722E85" name="__GlobalStamp">
+			<table_ref uuid="4AED578B39014B59AB3054B0278F6453" name="Commands"/>
 		</field_ref>
 	</index>
 	<index kind="regular" unique_keys="true" uuid="A69F840ED60F4163A118DB2901544CB7" type="7">
@@ -694,11 +693,6 @@
 	<index kind="regular" name="__GlobalStamp_table_2" uuid="D5945CA68B54408993BD1F2DA3594712" type="7">
 		<field_ref uuid="63497E7F161442009B8F5F9417626F6A" name="__GlobalStamp">
 			<table_ref uuid="E0EF4D9E925848A8893B9926694CF58E" name="Table_2"/>
-		</field_ref>
-	</index>
-	<index kind="regular" uuid="DAF5B8C9B8F84CC7903C1CAA90C3B1AC" type="7">
-		<field_ref uuid="2DB718A64ACF4C41803A142CF8DB2493" name="Name">
-			<table_ref uuid="F199D0D03F864B939EF3CD9CF9BC0F24" name="Employes"/>
 		</field_ref>
 	</index>
 	<index kind="regular" name="__GlobalStamp_service" uuid="E1981ABC2795450BBD685503C84E1D15" type="7">

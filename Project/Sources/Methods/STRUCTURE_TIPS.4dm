@@ -11,7 +11,7 @@
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($l;$Lon_column;$Lon_row;$Lon_x;$Lon_y)
-C_TEXT:C284($t;$Txt_tips)
+C_TEXT:C284($Txt_tips)
 C_OBJECT:C1216($o;$Obj_dataModel;$Obj_field;$Obj_form;$Obj_table;$str)
 C_COLLECTION:C1488($c;$Col_catalog;$Col_desynchronized)
 
@@ -73,9 +73,9 @@ If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;
 			  // Restrict to the table
 			$Col_desynchronized:=$Col_desynchronized[$Obj_table.tableNumber]
 			
-			If ($Col_desynchronized=Null:C1517)  // Table catalog is OK
+			If ($Col_desynchronized=Null:C1517)
 				
-				  // <NOTHING MORE TO DO>
+				  // TABLE IS OK
 				
 			Else 
 				
@@ -148,59 +148,76 @@ If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;
 							  //______________________________________________________
 						: ($1.target=$Obj_form.fieldList)  // FIELD LIST
 							
-							$t:=(ui.pointer($Obj_form.fields))->{$Lon_row}
-							$c:=$Col_desynchronized.query("name = :1";$t)
+							  // Get the desynchronized item
+							$o:=$Col_desynchronized.query("name = :1";(ui.pointer($Obj_form.fields))->{$Lon_row}).pop()
 							
 							Case of 
 									
 									  //………………………………………………………………………………………………………………
-								: ($c.length=0)
+								: ($o.relatedEntities#Null:C1517)  // 1 -> N relation
 									
-									  //………………………………………………………………………………………………………………
-								: ($c.length=1)
-									
-									If ($c[0].fields#Null:C1517)
+									If ($o.missing)
 										
-										$c:=$c[0].fields.extract("name")
-										
-										Case of 
-												
-												  //…………………………………………………………………
-											: ($c.length=0)
-												
-												$Txt_tips:=ui.alert+$str.setText("theN1RelationIsNoMoreAvailable").localized($t)
-												
-												  //…………………………………………………………………
-											: ($c.length=1)
-												
-												$Txt_tips:=ui.alert+$str.setText("theFieldIsMissingOrWasModified").localized($c[0])
-												
-												  //…………………………………………………………………
-											Else 
-												
-												$Txt_tips:=ui.alert+$str.setText("theRelatedFieldsAreMissingOrWasModified").localized($c.join("\", \""))
-												
-												  //…………………………………………………………………
-										End case 
-										
-									Else 
-										
-										If ($c[0].relatedEntities#Null:C1517)
+										If ($o.missingRelatedDataclass)
 											
-											$Txt_tips:=ui.alert+$str.setText("theRelatedTableIsNoLongerAvailable").localized($c[0].relatedEntities)
+											$Txt_tips:=ui.alert+$str.setText("theRelatedTableIsNoLongerAvailable").localized($o.relatedEntities)
 											
 										Else 
 											
-											  // Should not ?
-											$Txt_tips:=ui.alert+$str.setText("theFieldIsMissingOrWasModified").localized($c[0].name)
+											$Txt_tips:=ui.alert+$str.setText("the1NRelationIsNoMoreAvailable").localized($o.name)
 											
 										End if 
 									End if 
 									
 									  //………………………………………………………………………………………………………………
+								: ($o.relatedDataClass#Null:C1517)  // N -> 1 relation
+									
+									If ($o.missing)
+										
+										If ($o.missingRelatedDataclass)
+											
+											$Txt_tips:=ui.alert+$str.setText("theRelatedTableIsNoLongerAvailable").localized($o.relatedDataClass)
+											
+										Else 
+											
+											$Txt_tips:=ui.alert+$str.setText("theN1RelationIsNoMoreAvailable").localized($o.name)
+											
+										End if 
+										
+									Else 
+										
+										  // Missing fields
+										If ($o.unsynchronizedFields.length=1)
+											
+											$Txt_tips:=ui.alert+$str.setText("theRelatedFieldIsMissingOrHasBeenModified").localized($o.unsynchronizedFields[0].name)
+											
+										Else 
+											
+											$Txt_tips:=ui.alert+$str.setText("theRelatedFieldsAreMissingOrWasModified").localized($o.unsynchronizedFields.extract("name").join("\", \""))
+											
+										End if 
+									End if 
+									
+									  //………………………………………………………………………………………………………………
+								: (Bool:C1537($o.missing))
+									
+									$Txt_tips:=ui.alert+$str.setText("theFieldIsMissing").localized()
+									
+									  //………………………………………………………………………………………………………………
+								: (Bool:C1537($o.nameMismatch))
+									
+									$Txt_tips:=ui.alert+$str.setText("theFieldWasRenamed").localized($o.current.name)
+									
+									  //………………………………………………………………………………………………………………
+								: (Bool:C1537($o.typeMismatch))
+									
+									$Txt_tips:=ui.alert+$str.setText("theFieldTypeWasModified").localized()
+									
+									  //………………………………………………………………………………………………………………
 								Else 
 									
-									  // A "Case of" statement should never omit "Else"
+									$Txt_tips:=ui.alert+$str.setText("theFieldIsMissingOrWasModified").localized($o)
+									
 									  //………………………………………………………………………………………………………………
 							End case 
 							
@@ -208,6 +225,11 @@ If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;
 					End case 
 				End if 
 			End if 
+			
+		Else 
+			
+			  // TABLE IS OK
+			
 		End if 
 		
 		If (Length:C16($Txt_tips)=0)

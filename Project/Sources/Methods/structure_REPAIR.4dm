@@ -12,11 +12,11 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_LONGINT:C283($i;$Lon_published;$Lon_number2;$Win_current)
+C_LONGINT:C283($i;$Lon_number2;$Lon_published;$Win_current)
 C_TEXT:C284($t;$tt)
 C_OBJECT:C1216($catalog;$ƒ;$o;$Obj_cache;$Obj_dataModel;$Obj_datastore)
 C_OBJECT:C1216($Obj_field;$Obj_project;$Obj_table;$oo)
-C_COLLECTION:C1488($c)
+C_COLLECTION:C1488($c;$cc)
 
   // ----------------------------------------------------
   // Initialisations
@@ -103,9 +103,19 @@ For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 									
 									$Obj_field:=$Obj_table[$t][$tt]
 									
-									If ($c.extract("fields")[0].query("relatedTableNumber = :1 & name = :2";$Obj_field.relatedTableNumber;$Obj_field.name).length=1)
+									$cc:=$c.extract("fields")
+									
+									If ($cc.length>0)
 										
-										OB REMOVE:C1226($Obj_table[$t];$tt)
+										If ($cc[0].query("relatedTableNumber = :1 & name = :2";$Obj_field.relatedTableNumber;$Obj_field.name).length=1)
+											
+											OB REMOVE:C1226($Obj_table[$t];$tt)
+											
+										Else 
+											
+											$Lon_number2:=$Lon_number2+1
+											
+										End if 
 										
 									Else 
 										

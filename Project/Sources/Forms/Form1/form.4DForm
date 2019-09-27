@@ -117,8 +117,6 @@
 					"height": 97,
 					"hideFocusRing": true,
 					"styledText": true,
-					"dragging": "none",
-					"dropping": "custom",
 					"events": [
 						"onDataChange"
 					]

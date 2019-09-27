@@ -17,7 +17,7 @@ C_POINTER:C301($Ptr_fields;$Ptr_icons;$Ptr_list;$Ptr_published)
 C_TEXT:C284($t)
 C_OBJECT:C1216($ƒ;$Obj_;$Obj_context;$Obj_dataModel;$Obj_field;$Obj_form)
 C_OBJECT:C1216($Obj_table)
-C_COLLECTION:C1488($c;$Col_;$Col_selected)
+C_COLLECTION:C1488($Col_desynchronized;$Col_selected)
 
 If (False:C215)
 	C_OBJECT:C1216(structure_FIELD_LIST ;$1)
@@ -81,9 +81,9 @@ CLEAR VARIABLE:C89($Ptr_icons->)
 
 If ($Lon_row>0)
 	
-	  //----------------------
+	  // ----------------------
 	  //  POPULATE THE LIST
-	  //----------------------
+	  // ----------------------
 	$Obj_table:=$Obj_context.currentTable
 	
 	If ($Obj_table#Null:C1517)
@@ -107,9 +107,7 @@ If ($Lon_row>0)
 							
 							If ($Obj_.success)
 								
-								$Col_:=$Obj_.value[0].field
-								
-								For each ($Obj_;$Col_) Until ($Boo_found)
+								For each ($Obj_;$Obj_.value[0].field) Until ($Boo_found)
 									
 									$Boo_found:=(Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][$Obj_field.name][String:C10($Obj_.id)]#Null:C1517)
 									
@@ -176,9 +174,7 @@ If ($Lon_row>0)
 						
 						If ($Obj_.success)
 							
-							$Col_:=$Obj_.value[0].field
-							
-							For each ($Obj_;$Col_) Until ($Boo_found)
+							For each ($Obj_;$Obj_.value[0].field) Until ($Boo_found)
 								
 								$Boo_found:=(Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][$Obj_field.name][String:C10($Obj_.id)]#Null:C1517)
 								
@@ -230,111 +226,41 @@ If ($Lon_row>0)
 				  //______________________________________________________
 		End case 
 		
-		  //----------------------
-		  //  HIGHLIGHT ERRORS
-		  //----------------------
-		$c:=Form:C1466.$dialog.unsynchronizedTableFields
+		  // ----------------------
+		  //       HIGHLIGHT
+		  // ----------------------
+		If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
+			
+			If (Form:C1466.$dialog.unsynchronizedTableFields.length>$Obj_table.tableNumber)
+				
+				$Col_desynchronized:=Form:C1466.$dialog.unsynchronizedTableFields[$Obj_table.tableNumber]
+				
+			End if 
+		End if 
 		
-		$i:=0
+		$Lon_row:=0
 		
 		For each ($Obj_field;$Obj_table.field)
 			
-			If (Find in array:C230($Ptr_fields->;$Obj_field.name)>0)
+			If (Find in array:C230($Ptr_fields->;$Obj_field.name)>0)  // In list
 				
-				$i:=$i+1
+				$Lon_row:=$Lon_row+1
 				
-				Case of 
-						
-						  //______________________________________________________
-					: ($c.length<=$Obj_table.tableNumber)
-						
-						LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;lk inherited:K53:26;lk font color:K53:24)
-						
-						  //______________________________________________________
-					: ($Obj_field.type=-2)  // 1 -> N relation
-						
-						$Boo_error:=_and (\
-							Formula:C1597($c[$Obj_table.tableNumber]#Null:C1517);\
-							Formula:C1597($c[$Obj_table.tableNumber].length=0)\
-							)
-						
-						If ($Boo_error)
-							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;ui.errorColor;lk font color:K53:24)
-							
-						Else 
-							
-							If (Bool:C1537($Ptr_published->{$i}))
-								
-								$Boo_error:=($c[$Obj_table.tableNumber]#Null:C1517)
-								
-							End if 
-							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
-							
-						End if 
-						
-						  //______________________________________________________
-					: ($Obj_field.type=-1)  // N -> 1 relation
-						
-						$Boo_error:=_and (\
-							Formula:C1597($c[$Obj_table.tableNumber]#Null:C1517);\
-							Formula:C1597($c[$Obj_table.tableNumber].length=0)\
-							)
-						
-						If ($Boo_error)
-							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;ui.errorColor;lk font color:K53:24)
-							
-						Else 
-							
-							If (Bool:C1537($Ptr_published->{$i}))
-								
-								$Boo_error:=_and (\
-									Formula:C1597($c[$Obj_table.tableNumber].length>0);\
-									Formula:C1597($c[$Obj_table.tableNumber].query("name = :1";$Obj_field.name).length>0)\
-									)
-								
-							End if 
-							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
-							
-						End if 
-						
-						  //______________________________________________________
-					Else   // Field
-						
-						$Boo_error:=_and (\
-							Formula:C1597($c[$Obj_table.tableNumber]#Null:C1517);\
-							Formula:C1597($c[$Obj_table.tableNumber].length=0)\
-							)
-						
-						If ($Boo_error)
-							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;ui.errorColor;lk font color:K53:24)
-							
-						Else 
-							
-							If (Bool:C1537($Ptr_published->{$i}))
-								
-								$Boo_error:=_and (\
-									Formula:C1597($c[$Obj_table.tableNumber]#Null:C1517);\
-									Formula:C1597($c[$Obj_table.tableNumber].length>0);\
-									Formula:C1597($c[$Obj_table.tableNumber].query("name = :1";$Obj_field.name).length>0)\
-									)
-								
-							End if 
-						End if 
-						
-						LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$i;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
-						
-						  //______________________________________________________
-				End case 
+				$Boo_error:=($Col_desynchronized#Null:C1517)
+				
+				If ($Boo_error)
+					
+					$Boo_error:=($Col_desynchronized.query("name = :1";$Obj_field.name).pop()#Null:C1517)\
+						 | ($Col_desynchronized.length=0)
+					
+				End if 
+				
+				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList;$Lon_row;Choose:C955($Boo_error;ui.errorColor;lk inherited:K53:26);lk font color:K53:24)
 				
 				  // Highlight primary key
 				If ($Obj_field.name=$Obj_table.primaryKey)
 					
-					LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;$i;Bold:K14:2)
+					LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;$Lon_row;Bold:K14:2)
 					
 				End if 
 			End if 

@@ -10,8 +10,8 @@
   // Declarations
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($i;$l)
-C_POINTER:C301($Ptr_fields;$Ptr_tables)
+C_LONGINT:C283($l;$Lon_row)
+C_POINTER:C301($Ptr_tables)
 C_OBJECT:C1216($Obj_context;$Obj_dataModel;$Obj_form;$Obj_table)
 C_COLLECTION:C1488($c;$Col_catalog)
 
@@ -103,36 +103,36 @@ End case
   // ----------------------
 $c:=Form:C1466.$dialog.unsynchronizedTableFields
 
-$i:=0
+$Lon_row:=0
 
 For each ($Obj_table;$Col_catalog)
 	
 	If (Find in array:C230($Ptr_tables->;$Obj_table.name)>0)
 		
-		$i:=$i+1
+		$Lon_row:=$Lon_row+1
 		
 		Case of 
 				
 				  //______________________________________________________
 			: ($c.length<=$Obj_table.tableNumber)
 				
-				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$i;lk inherited:K53:26;lk font color:K53:24)
+				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_row;lk inherited:K53:26;lk font color:K53:24)
 				
 				  //______________________________________________________
 			: ($c[$Obj_table.tableNumber]#Null:C1517)
 				
-				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$i;ui.errorColor;lk font color:K53:24)
+				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_row;ui.errorColor;lk font color:K53:24)
 				
 				  //______________________________________________________
 			Else 
 				
-				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$i;lk inherited:K53:26;lk font color:K53:24)
+				LISTBOX SET ROW COLOR:C1270(*;$Obj_form.tableList;$Lon_row;lk inherited:K53:26;lk font color:K53:24)
 				
 				  //______________________________________________________
 		End case 
 		
 		  // Highlight published table name
-		LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$i;Choose:C955($Obj_dataModel[String:C10($Obj_table.tableNumber)]=Null:C1517;Plain:K14:1;Bold:K14:2))
+		LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_row;Choose:C955($Obj_dataModel[String:C10($Obj_table.tableNumber)]=Null:C1517;Plain:K14:1;Bold:K14:2))
 		
 	End if 
 End for each 
