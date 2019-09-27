@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 C_TEXT:C284($Mnu_choice)
-C_OBJECT:C1216($Obj_project)
+C_OBJECT:C1216($Obj_project;$Obj_result)
 
 $Mnu_choice:=Get selected menu item parameter:C1005
 $Obj_project:=(OBJECT Get pointer:C1124(Object named:K67:5;"project"))->
@@ -75,6 +75,31 @@ Case of
 			"path";$Txt_path+"Structures.xcdatamodeld"))
 		
 		SHOW ON DISK:C922($Txt_path)
+		
+		  //______________________________________________________
+	: ($Mnu_choice="dataSet")
+		
+		dataSet (New object:C1471(\
+			"action";"erase";\
+			"project";$Obj_project))
+		
+		If (Not:C34(WEB Is server running:C1313))
+			WEB START SERVER:C617
+		End if 
+		
+		$Obj_result:=dataSet (New object:C1471(\
+			"action";"create";\
+			"project";$Obj_project;\
+			"digest";True:C214;\
+			"dataSet";True:C214;\
+			"key";COMPONENT_Pathname ("key").platformPath;\
+			"caller";Current form window:C827;\
+			"verbose";True:C214;\
+			"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+		
+		If (Not:C34($Obj_result.success))
+			
+		End if 
 		
 		  //______________________________________________________
 	Else 

@@ -1027,6 +1027,10 @@ Case of
 						
 						$Obj_buffer:=$Obj_in.table[$Txt_field]
 						
+						If ($Obj_buffer.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
+							$Obj_buffer.relatedDataClass:=$Obj_buffer.relatedEntities
+						End if 
+						
 						If ($Obj_buffer.relatedDataClass#Null:C1517)  // Is is a link?
 							
 							If ($Obj_out.expand.indexOf($Txt_field)<0)
