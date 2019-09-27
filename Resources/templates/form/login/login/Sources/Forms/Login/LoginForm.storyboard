@@ -42,7 +42,7 @@
                                     <constraint firstAttribute="height" constant="44" id="J0T-Qh-mKk"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                <state key="normal" title="Log In">
+                                <state key="normal" title="Log in">
                                     <color key="titleColor" name="ForegroundColor"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
