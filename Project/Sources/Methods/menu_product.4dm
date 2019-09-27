@@ -62,6 +62,21 @@ Case of
 		SHOW ON DISK:C922(COMPONENT_Pathname ("products").folder($Obj_project.product.name).platformPath)
 		
 		  //______________________________________________________
+	: ($Mnu_choice="xcdatamodel")
+		
+		C_TEXT:C284($Txt_path)
+		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
+		
+		dataModel (New object:C1471(\
+			"action";"xcdatamodel";\
+			"dataModel";$Obj_project.dataModel;\
+			"flat";False:C215;\
+			"relationship";True:C214;\
+			"path";$Txt_path+"Structures.xcdatamodeld"))
+		
+		SHOW ON DISK:C922($Txt_path)
+		
+		  //______________________________________________________
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown menu action ("+$Mnu_choice+")")

@@ -61,6 +61,12 @@ APPEND MENU ITEM:C411($Mnu_product;"Reveal in Finder")
 SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
 SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"reveal")
 
+APPEND MENU ITEM:C411($Mnu_product;"(-")
+
+APPEND MENU ITEM:C411($Mnu_product;"Generate core data model")
+SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
+SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"xcdatamodel")
+
 APPEND MENU ITEM:C411($Mnu_bar;"Product";$Mnu_product)
 RELEASE MENU:C978($Mnu_product)
 
