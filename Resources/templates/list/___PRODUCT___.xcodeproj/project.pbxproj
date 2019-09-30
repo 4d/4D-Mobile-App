@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		480F994C23425BEE00C1649D /* Structures.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 48431F822342125000C3F477 /* Structures.sqlite */; };
 		4812B27C231FA24D00A30947 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4812B27B231FA24D00A30947 /* SceneDelegate.swift */; };
 		4827BAAB1F6BEE5400D171B9 /* Settings.debug.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4827BAAA1F6BEE5400D171B9 /* Settings.debug.plist */; };
 		486745042021EA110029924D /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486745032021EA110029924D /* Binding.swift */; };
@@ -369,6 +370,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				480F994C23425BEE00C1649D /* Structures.sqlite in Resources */,
 				48A6EA3E2223E9500096E5DB /* Settings.bundle in Resources */,
 				4899BEB720B553CC002DA5D9 /* Main.storyboard in Resources */,
 				4827BAAB1F6BEE5400D171B9 /* Settings.debug.plist in Resources */,
