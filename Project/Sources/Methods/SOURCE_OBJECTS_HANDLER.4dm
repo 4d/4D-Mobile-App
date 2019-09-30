@@ -93,6 +93,7 @@ Case of
 			"eraseIfExists";True:C214;\
 			"project";$Obj_project;\
 			"digest";True:C214;\
+			"coreDataSet";Bool:C1537(featuresFlags._110882);\
 			"key";$File_key;\
 			"dataSet";True:C214;\
 			"picture";Not:C34(Bool:C1537(featuresFlags._97117))))

@@ -564,6 +564,22 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 						$Obj_out.path:=$File_
 						
+						If (Bool:C1537($Obj_in.coreDataSet) & $Obj_out.success)
+							
+							$Obj_out.coreData:=dataModel (New object:C1471(\
+								"action";"xcdatamodel";\
+								"dataModel";$Obj_dataModel;\
+								"flat";False:C215;\
+								"relationship";True:C214;\
+								"path";$File_+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))  // XXX maybe output in temp directory and pass it to coreDataSet
+							
+							$Obj_out.coreDataSet:=dataSet (New object:C1471(\
+								"action";"coreData";\
+								"removeAsset";True:C214;\
+								"path";$File_))
+							
+						End if 
+						
 						  // Generate a digest according to structure
 						If (Bool:C1537($Obj_in.digest) & $Obj_out.success)
 							

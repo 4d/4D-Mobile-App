@@ -499,12 +499,20 @@ If ($Obj_in.create)
 		
 		ob_error_combine ($Obj_out;$Obj_out.coreData)
 		
-		$Obj_out.coreDataSet:=dataSet (New object:C1471(\
-			"action";"coreData";\
-			"removeAsset";True:C214;\
-			"path";$Obj_in.path))
-		
-		ob_error_combine ($Obj_out;$Obj_out.coreDataSet)
+		If (Bool:C1537(featuresFlags._110882))
+			
+			  // ASSERT($Obj_out.coreData.success=True)
+			If (Folder:C1567($Obj_in.path;fk platform path:K87:2).folder("Resources").folder("Assets.xcassets").folder("Data").exists)  // If there JSON data (maybe use asset("action";"path"))
+				
+				$Obj_out.coreDataSet:=dataSet (New object:C1471(\
+					"action";"coreData";\
+					"removeAsset";True:C214;\
+					"path";$Obj_in.path))
+				
+				ob_error_combine ($Obj_out;$Obj_out.coreDataSet)
+				
+			End if 
+		End if 
 		
 		  // ----------------------------------------------------
 		  // Others (maybe move to templates, main management

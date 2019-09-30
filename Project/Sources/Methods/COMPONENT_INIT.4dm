@@ -155,7 +155,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	commonValues.defaultFieldBindingTypes[Is longint:K8:6]:="integer"
 	commonValues.defaultFieldBindingTypes[Is integer 64 bits:K8:25]:="integer"
 	commonValues.defaultFieldBindingTypes[Is real:K8:4]:="real"
-	commonValues.defaultFieldBindingTypes[Is float:K8:26]:="real"
+	commonValues.defaultFieldBindingTypes[_o_Is float:K8:26]:="real"
 	commonValues.defaultFieldBindingTypes[Is date:K8:7]:="mediumDate"
 	commonValues.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
 	commonValues.defaultFieldBindingTypes[Is text:K8:3]:="text"
@@ -262,7 +262,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		ui.typeNames[Is longint:K8:6]:=Get localized string:C991("longInteger")
 		ui.typeNames[Is integer 64 bits:K8:25]:=Get localized string:C991("integer64Bits")
 		ui.typeNames[Is real:K8:4]:=Get localized string:C991("real")
-		ui.typeNames[Is float:K8:26]:=Get localized string:C991("float")
+		ui.typeNames[_o_Is float:K8:26]:=Get localized string:C991("float")
 		ui.typeNames[Is boolean:K8:9]:=Get localized string:C991("boolean")
 		ui.typeNames[Is time:K8:8]:=Get localized string:C991("time")
 		ui.typeNames[Is date:K8:7]:=Get localized string:C991("date")
@@ -429,6 +429,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  //                                                             |  18  |
 	  // ________________________________________________________________________________________________________________________________
 	featuresFlags._105431:=($Lon_version>=1800)  //  [MOBILE] Display 1-n relations
+	featuresFlags._110882:=($Lon_version>=1800)  //  [MOBILE] Dump data into core data SQLLite database
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
