@@ -895,6 +895,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									  // recreate node
 									$Dom_child.remove()
 									$Dom_child:=$Dom_.create("color")
+									$Boo_buffer:=True:C214
 									
 									Case of 
 											
@@ -955,7 +956,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								"path";$File_))  // XXX to do it only one time, maybe do it in caller, using the "files"
 							
 						End if 
+						
+						$Obj_out.success:=True:C214  // we manage one file
+						
 					End if 
+					
 				End for each 
 				
 			Else 
@@ -1038,9 +1043,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								"path";$File_))  // XXX to do it only one time, maybe do it in caller, using the "files" and a "set" behaviour
 							
 						End if 
+						
+						$Obj_out.success:=True:C214  // we manage one file
+						
 					End if 
-					
-					$Obj_out.success:=True:C214
 					
 				End for each 
 				
