@@ -102,6 +102,43 @@ Case of
 		End if 
 		
 		  //______________________________________________________
+	: ($Mnu_choice="coreDataSet")
+		
+		C_TEXT:C284($Txt_path)
+		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
+		
+		$Obj_result:=dataModel (New object:C1471(\
+			"action";"xcdatamodel";\
+			"dataModel";$Obj_project.dataModel;\
+			"flat";False:C215;\
+			"relationship";True:C214;\
+			"path";$Txt_path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
+		
+		If (Not:C34(WEB Is server running:C1313))
+			WEB START SERVER:C617
+		End if 
+		
+		$Obj_result:=dataSet (New object:C1471(\
+			"action";"create";\
+			"project";$Obj_project;\
+			"digest";True:C214;\
+			"dataSet";True:C214;\
+			"path";$Txt_path;\
+			"key";COMPONENT_Pathname ("key").platformPath;\
+			"caller";Current form window:C827;\
+			"verbose";True:C214;\
+			"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+		
+		$Obj_result:=dataSet (New object:C1471(\
+			"action";"coreData";\
+			"removeAsset";True:C214;\
+			"caller";Current form window:C827;\
+			"verbose";True:C214;\
+			"path";$Txt_path))
+		
+		SHOW ON DISK:C922($Txt_path)
+		
+		  //______________________________________________________
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown menu action ("+$Mnu_choice+")")

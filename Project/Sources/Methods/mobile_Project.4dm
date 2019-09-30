@@ -499,6 +499,13 @@ If ($Obj_in.create)
 		
 		ob_error_combine ($Obj_out;$Obj_out.coreData)
 		
+		$Obj_out.coreDataSet:=dataSet (New object:C1471(\
+			"action";"coreData";\
+			"removeAsset";True:C214;\
+			"path";$Obj_in.path))
+		
+		ob_error_combine ($Obj_out;$Obj_out.coreDataSet)
+		
 		  // ----------------------------------------------------
 		  // Others (maybe move to templates, main management
 		  // ----------------------------------------------------

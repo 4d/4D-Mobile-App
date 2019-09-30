@@ -71,6 +71,10 @@ APPEND MENU ITEM:C411($Mnu_product;"Generate data set")
 SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
 SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"dataSet")
 
+APPEND MENU ITEM:C411($Mnu_product;"Generate core data set")
+SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
+SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"coreDataSet")
+
 APPEND MENU ITEM:C411($Mnu_bar;"Product";$Mnu_product)
 RELEASE MENU:C978($Mnu_product)
 

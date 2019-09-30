@@ -53,6 +53,7 @@
 /* Begin PBXFileReference section */
 		4812B27B231FA24D00A30947 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		4827BAAA1F6BEE5400D171B9 /* Settings.debug.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.debug.plist; sourceTree = "<group>"; };
+		48431F822342125000C3F477 /* Structures.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Structures.sqlite; sourceTree = "<group>"; };
 		4854D8231E9679A2002FD151 /* LICENSES.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSES.md; sourceTree = "<group>"; };
 		486745032021EA110029924D /* Binding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		48702B1D1E8D4DFA00C382FA /* AppDelegate+Services.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Services.swift"; sourceTree = "<group>"; };
@@ -120,6 +121,7 @@
 		481A0B081E89554C00E6B84C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				48431F812342121800C3F477 /* Structures */,
 				48861A261E8953B800C1A97C /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -158,6 +160,14 @@
 				48BB550C1F9F456E007EA862 /* MainNavigation.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		48431F812342121800C3F477 /* Structures */ = {
+			isa = PBXGroup;
+			children = (
+				48431F822342125000C3F477 /* Structures.sqlite */,
+			);
+			name = Structures;
 			sourceTree = "<group>";
 		};
 		48861A101E8953B800C1A97C = {

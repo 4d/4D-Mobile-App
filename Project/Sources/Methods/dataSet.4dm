@@ -622,6 +622,68 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 			End if 
 			
+			  //______________________________________________________
+		: ($Obj_in.action="coreData")
+			
+			$Txt_cmd:=str_singleQuoted (COMPONENT_Pathname ("scripts").file("coredataimport").path)
+			
+			If ($Obj_in.posix=Null:C1517)
+				
+				If ($Obj_in.path#Null:C1517)
+					
+					$Obj_in.posix:=Convert path system to POSIX:C1106($Obj_in.path)
+					
+				End if 
+			End if 
+			
+			If ($Obj_in.posix#Null:C1517)
+				
+				$Txt_cmd:=$Txt_cmd+" --asset "+str_singleQuoted ($Obj_in.posix+"Resources/Assets.xcassets")
+				$Txt_cmd:=$Txt_cmd+" --structure "+str_singleQuoted ($Obj_in.posix+"Sources/Structures.xcdatamodeld")
+				$Txt_cmd:=$Txt_cmd+" --output "+str_singleQuoted ($Obj_in.posix+"Resources")
+				
+				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+				
+				If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+					C_BOOLEAN:C305($Bool_errorInOut)
+					$Bool_errorInOut:=(Position:C15("[Error]";$Txt_out)>0)
+					If (Not:C34($Bool_errorInOut))
+						
+						$Obj_out.success:=True:C214
+						
+						If (Bool:C1537($Obj_in.removeAsset))
+							
+							Folder:C1567($Obj_in.posix+"Resources/Assets.xcassets/Data";fk posix path:K87:1).delete(Delete with contents:K24:24)
+							Folder:C1567($Obj_in.posix+"Resources/Assets.xcassets/Catalog";fk posix path:K87:1).delete(Delete with contents:K24:24)
+							
+						End if 
+						
+					Else 
+						C_TEXT:C284($line)
+						For each ($line;Split string:C1554($Txt_out;"\n"))
+							If (Position:C15("[Error]";$line)>0)
+								ob_error_add ($Obj_out;$line)
+							End if 
+						End for each 
+					End if 
+					
+				Else 
+					  // out return an error message
+					$Obj_out.success:=False:C215
+					ob_error_add ($Obj_out;$Txt_out)
+					
+				End if 
+				
+				If ((Length:C16($Txt_error)>0))  // add always error from command output if any, but do not presume if success or not
+					ob_error_add ($Obj_out;$Txt_error)
+				End if 
+				
+			Else 
+				
+				$Obj_out.errors:=New collection:C1472("path or posix must be defined")
+				
+			End if 
+			
 			  //________________________________________
 		Else 
 			
