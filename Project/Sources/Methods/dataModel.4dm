@@ -498,6 +498,7 @@ Case of
 													DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
 														"name";$Txt_fieldName;\
 														"attributeType";"Transformable";\
+														"valueTransformerName";"NSSecureUnarchiveFromData";\
 														"optional";"YES";\
 														"indexed";"NO";\
 														"syncable";"YES")
@@ -829,6 +830,9 @@ Case of
 				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
 					"attributeType";"Transformable")
 				
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
+					"valueTransformerName";"NSSecureUnarchiveFromData")
+				
 				$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
 					"key";"image";\
 					"value";"YES")
@@ -881,6 +885,9 @@ Case of
 				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
 					"attributeType";"Transformable")
 				
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
+					"valueTransformerName";"NSSecureUnarchiveFromData")
+				
 				  //________________________________________
 			: ($Lon_type=Is BLOB:K8:12)
 				
@@ -888,7 +895,7 @@ Case of
 					"attributeType";"Binary")
 				
 				  //________________________________________
-			: ($Lon_type=Is float:K8:26)
+			: ($Lon_type=_o_Is float:K8:26)
 				
 				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
 					"attributeType";"Float";\
