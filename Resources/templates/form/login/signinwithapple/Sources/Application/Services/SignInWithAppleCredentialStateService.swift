@@ -11,6 +11,7 @@ import QMobileUI
 import QMobileAPI
 import AuthenticationServices
 import Prephirences
+import DeviceKit
 
 /// A service which let us know if user has revoked credentials for this app.
 ///
@@ -19,6 +20,24 @@ import Prephirences
 class SignInWithAppleCredentialStateService: NSObject {
 
     static var instance: SignInWithAppleCredentialStateService = SignInWithAppleCredentialStateService()
+
+    fileprivate static let kPreferenceKey = "auth.signInWithApple.userID"
+    static var userId: String? {
+        get {
+            return preference.string(forKey: kPreferenceKey)
+        }
+        set {
+            if let newValue = newValue {
+                preference.set(newValue, forKey: kPreferenceKey)
+            } else {
+                preference.removeObject(forKey: kPreferenceKey)
+            }
+        }
+    }
+
+    fileprivate static var preference: KeychainPreferences {
+        return KeychainPreferences.sharedInstance
+    }
 
     override init() { }
 
@@ -56,8 +75,7 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) {}
 
     fileprivate func checkCredentialState() {
-        let defaults = UserDefaults.standard
-        if let userID = defaults.string(forKey: "userID") {
+        if let userID = SignInWithAppleCredentialStateService.userId {
             setupAppleIDCredentialObserver(userID: userID, completionHandler: { result in
                 switch result {
                 case .success(let credentialState):
@@ -82,17 +100,26 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
     }
 
     typealias CredentialStateCompletionHandler = ((Result<ASAuthorizationAppleIDProvider.CredentialState, Error>) -> Void)
+
     fileprivate func setupAppleIDCredentialObserver(userID: String, completionHandler: @escaping CredentialStateCompletionHandler) {
         let authorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
         /// Getting credential state is only possible on a real device, so forget it on emulators
-        authorizationAppleIDProvider.getCredentialState(forUserID: userID) { (credentialState: ASAuthorizationAppleIDProvider.CredentialState, error: Error?) in
 
-            if let error = error {
-                completionHandler(.failure(error))
-                return
+        /// Exclusively for testing on simulator
+        if Device.current.isSimulator {
+            logger.info("Credentials state cannot be checked on simulator.")
+//            completionHandler(.success(.authorized))
+            completionHandler(.success(.revoked)) // Exclusively for testing revokation
+        } else {
+            authorizationAppleIDProvider.getCredentialState(forUserID: userID) { (credentialState: ASAuthorizationAppleIDProvider.CredentialState, error: Error?) in
+
+                if let error = error {
+                    completionHandler(.failure(error))
+                    return
+                }
+
+                completionHandler(.success(credentialState))
             }
-
-            completionHandler(.success(credentialState))
         }
     }
 
@@ -100,8 +127,7 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
         _ = APIManager.instance.logout(token: Prephirences.Auth.Logout.token) { _ in
             Prephirences.Auth.Logout.token = nil
 
-            let defaults = UserDefaults.standard
-            defaults.set(nil, forKey: "userID")
+            SignInWithAppleCredentialStateService.userId = nil
 
             if let viewController = UIApplication.topViewController {
                 self.logoutUI(nil, viewController)
@@ -125,3 +151,19 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
     }
 }
 
+
+/*
+extension Prephirences.Auth {
+    public struct SignInWithApple: Prephirencable { // swiftlint:disable:this nesting
+        public static let parent = Auth.instance
+        public static var userId: String? {
+            get {
+                return instance["userId"] as? String
+            }
+            set {
+                mutableInstance?.set(newValue, forKey: "userId")
+            }
+        }
+    }
+}
+*/

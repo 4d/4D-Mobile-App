@@ -179,6 +179,7 @@ extension LoginForm {
         authentificate(login: email, parameters: parameters)
     }
 
+    // Sign in using an existing iCloud Keychain credential
     fileprivate func handlePasswordCredential(passwordCredential: ASPasswordCredential) {
 
         let appleUsername = passwordCredential.user
@@ -192,8 +193,7 @@ extension LoginForm {
     }
 
     fileprivate func saveUserID(userID: String) {
-        let defaults = UserDefaults.standard
-        defaults.set(userID, forKey: "userID")
+        SignInWithAppleCredentialStateService.userId = userID
     }
 
     fileprivate func authentificate(login: String, parameters: [String: Any]?) {
@@ -201,7 +201,6 @@ extension LoginForm {
 
             guard let this = self else { return }
 
-            // If success, transition (otherway to do that, ask a delegate to do it)
             switch result {
             case .success(let token):
                 if token.isValidToken {
