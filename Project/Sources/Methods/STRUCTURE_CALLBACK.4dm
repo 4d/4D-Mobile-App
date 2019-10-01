@@ -73,7 +73,10 @@ If ($file.exists)
 		$Col_unsynchronizedTableFields:=New collection:C1472
 		
 		  // Verify the compliance of the data model with the current catalog
-		$Obj_dataModel:=OB Copy:C1225($Obj_project.dataModel)
+		$Obj_dataModel:=Null:C1517
+		If ($Obj_project.dataModel#Null:C1517)
+			$Obj_dataModel:=OB Copy:C1225($Obj_project.dataModel)
+		End if 
 		
 		If ($Obj_dataModel#Null:C1517)
 			
