@@ -511,7 +511,24 @@ If ($Obj_in.create)
 				
 				ob_error_combine ($Obj_out;$Obj_out.coreDataSet)
 				
+				If (Bool:C1537($Obj_out.coreDataSet.success))
+					
+					dataSet (New object:C1471(\
+						"action";"coreDataAddToProject";\
+						"uuid";$Obj_template.uuid;\
+						"tags";$Obj_tags;\
+						"path";$Obj_in.path))
+				End if 
+			Else 
+				
+				dataSet (New object:C1471(\
+					"action";"coreDataAddToProject";\
+					"uuid";$Obj_template.uuid;\
+					"tags";$Obj_tags;\
+					"path";$Obj_in.path))
+				
 			End if 
+			
 		End if 
 		
 		  // ----------------------------------------------------

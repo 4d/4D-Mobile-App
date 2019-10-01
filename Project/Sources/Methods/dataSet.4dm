@@ -14,7 +14,7 @@ C_OBJECT:C1216($1)
 C_BOOLEAN:C305($Boo_verbose)
 C_LONGINT:C283($Lon_parameters;$Lon_pos;$Lon_i)
 C_TEXT:C284($File_;$Txt_cmd;$Txt_error;$Txt_in;$Txt_out;$Txt_assets;$Txt_value;$Txt_tableNumber;$Txt_ID)
-C_OBJECT:C1216($Obj_in;$Obj_out;$Obj_headers;$Obj_table;$Obj_field;$Obj_dataModel)
+C_OBJECT:C1216($Obj_in;$Obj_out;$Obj_headers;$Obj_table;$Obj_field;$Obj_dataModel;$Obj_file)
 C_COLLECTION:C1488($Col_fields;$Col_tables)
 
 If (False:C215)
@@ -698,6 +698,50 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 				$Obj_out.errors:=New collection:C1472("path or posix must be defined")
 				
+			End if 
+			  //________________________________________
+		: ($Obj_in.action="coreDataAddToProject")
+			
+			$Obj_file:=Folder:C1567($Obj_in.path;fk platform path:K87:2).folder("Resources").file("Structures.sqlite")
+			
+			If ($Obj_file.exists)
+				
+				$Obj_out.projfile:=XcodeProj (New object:C1471(\
+					"action";"read";\
+					"path";$Obj_in.path))
+				ob_error_combine ($Obj_out;$Obj_out.projfile)
+				
+				If (Bool:C1537($Obj_out.projfile.success))
+					
+					XcodeProj (New object:C1471(\
+						"action";"mapping";\
+						"projObject";$Obj_out.projfile))
+					
+					$Obj_out.inject:=XcodeProjInject (New object:C1471(\
+						"path";$Obj_file.platformPath;\
+						"types";New collection:C1472();\
+						"mapping";$Obj_out.projfile.mapping;\
+						"proj";$Obj_out.projfile.value;\
+						"uuid";$Obj_in.uuid;\
+						"target";$Obj_in.path\
+						))
+					ob_error_combine ($Obj_out;$Obj_out.inject)
+					
+					
+					If (Bool:C1537($Obj_out.inject.success))
+						
+						$Obj_out.projfile:=XcodeProj (New object:C1471(\
+							"action";"write";\
+							"object";$Obj_out.projfile.value;\
+							"project";$Obj_in.tags.product;\
+							"path";$Obj_out.projfile.path))
+						ob_error_combine ($Obj_out;$Obj_out.projfile)
+						
+						$Obj_out.success:=$Obj_out.projfile.success
+						
+					End if 
+					
+				End if 
 			End if 
 			
 			  //________________________________________

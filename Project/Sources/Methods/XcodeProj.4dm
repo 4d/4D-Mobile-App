@@ -1054,6 +1054,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					$Obj_out.sources:=True:C214
 					
 					  //________________________________________
+				: ($Obj_in.extension=".sqlite")
+					
+					$Obj_out.type:="file"
+					$Obj_out.resources:=True:C214
+					
+					  //________________________________________
 				: ($Obj_in.extension=".md")
 					
 					$Obj_out.type:="net.daringfireball.markdown"
@@ -1170,9 +1176,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					  //________________________________________
 				Else 
 					
-					ob_warning_add ($Obj_out;"Unknown type of file '"+String:C10($Obj_in.extension)+"'. Could not be added to final project")
-					ASSERT:C1129(dev_Matrix ;"Unknown type of file "+String:C10($Obj_in.extension))
-					$Obj_out.success:=False:C215
+					If (Bool:C1537($Obj_in.injectAlways))
+						
+						$Obj_out.type:="file"
+						$Obj_out.resources:=True:C214
+						
+					Else 
+						
+						ob_warning_add ($Obj_out;"Unknown type of file '"+String:C10($Obj_in.extension)+"'. Could not be added to final project")
+						ASSERT:C1129(dev_Matrix ;"Unknown type of file "+String:C10($Obj_in.extension))
+						$Obj_out.success:=False:C215
+						
+					End if 
 					
 					  //________________________________________
 			End case 
