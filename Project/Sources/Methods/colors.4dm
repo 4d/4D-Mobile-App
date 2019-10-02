@@ -76,19 +76,30 @@ Case of
 				$Bool_errorInOut:=(Position:C15("error:";$Txt_out)>0)
 				If (Not:C34($Bool_errorInOut))
 					
-					If (Position:C15("{";$Txt_out)=1)  // Check JSON (not really safe but better than nothing)
-						
-						$Obj_out.success:=True:C214
-						$Obj_out.value:=JSON Parse:C1218($Txt_out)
-						$Obj_out.value.space:="srgb"
-						
-					Else 
-						
-						$Obj_out.success:=False:C215
-						$Obj_out.errors:=New collection:C1472("No color")  // maybe white or black
-						$Obj_out.out:=$Txt_out
-						
-					End if 
+					Case of 
+							
+						: (Position:C15("{";$Txt_out)=1)  // Check JSON (not really safe but better than nothing)
+							
+							$Obj_out.value:=JSON Parse:C1218($Txt_out).main
+							
+							If ($Obj_out.value#Null:C1517)
+								
+								$Obj_out.success:=True:C214
+								$Obj_out.value.space:="srgb"
+								
+							Else 
+								
+								$Obj_out.errors:=New collection:C1472("No color")
+								
+							End if 
+							
+						Else 
+							
+							$Obj_out.success:=False:C215
+							$Obj_out.errors:=New collection:C1472("No color")  // maybe white or black
+							$Obj_out.out:=$Txt_out
+							
+					End case 
 					
 				Else 
 					  // out return an error message
