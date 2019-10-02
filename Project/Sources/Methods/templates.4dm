@@ -192,6 +192,8 @@ Case of
 				
 				$Obj_tableList.fields:=dataModel (New object:C1471(\
 					"action";"fieldCollection";\
+					"dataModel";$Obj_dataModel;\
+					"relation";($Obj_template.userChoiceTag="detail");\
 					"table";$Obj_tableModel)).fields
 				
 			End if 

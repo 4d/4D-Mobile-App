@@ -993,7 +993,27 @@ Case of
 							"name";$Obj_in.table[$Txt_field].name;\
 							"id";$Txt_field))  // TODO field.id change to fieldNumber
 						
-						  // add relation?
+						  //………………………………………………………………………………………………………………………
+					: ((Value type:C1509($Obj_in.table[$Txt_field])=Is object:K8:27))
+						
+						If (Bool:C1537($Obj_in.relation))
+							
+							If ($Obj_in.table[$Txt_field].relatedEntities#Null:C1517)  // To change if relatedEntities deleted and relatedDataClass already filled #109019
+								  // redmine #110927 : want to add relation 1-N if no field specified at all by user
+								  // Here we detect 1-N Relation, there is no "kind" or "type" to see it at this level...
+								
+								If ($Obj_in.dataModel[String:C10($Obj_in.table[$Txt_field].relatedTableNumber)]#Null:C1517)  // only if destination table published
+									
+									$Obj_out.fields.push(New object:C1471(\
+										"name";$Txt_field;\
+										"relatedDataClass";$Obj_in.table[$Txt_field].relatedEntities;\
+										"relatedTableNumber";$Obj_in.table[$Txt_field].relatedTableNumber;\
+										"fieldType";8859;\
+										"id";0))  // TODO field.id change to fieldNumber
+									
+								End if 
+							End if 
+						End if 
 						
 						  //………………………………………………………………………………………………………………………
 					Else 
