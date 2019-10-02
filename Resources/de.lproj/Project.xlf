@@ -636,11 +636,11 @@ This file is distributed under the same license as the product package.-->
         </trans-unit>
         <trans-unit id="6NlzKvx6ysPu9zzLEajOVA" resname="theFieldIsMissing">
           <source>The field is missing</source>
-          <target state="new">The field is missing</target>
+          <target>Das Feld fehlt</target>
         </trans-unit>
         <trans-unit id="wtbvZBvxCH3zu3ooBHSIFQ" resname="the1NRelationIsNoMoreAvailable">
           <source>The one to many relation "{name}" has been renamed or deleted</source>
-          <target state="new">The one to many relation "{name}" has been renamed or deleted</target>
+          <target>Die Eins zu Viele Relation "{name}" wurde umbenannt oder gelöscht</target>
         </trans-unit>
       </group>
       <group resname="Tables">
