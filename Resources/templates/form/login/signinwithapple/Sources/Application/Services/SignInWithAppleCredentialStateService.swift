@@ -86,7 +86,8 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
                         logger.info("Credentials revoked, user has revoked access to this app.")
                         self.logoutRevokation()
                     case .notFound:
-                        logger.info("Credentials not found, user has never signed in through Apple IDApplication has been authenticated with.")
+                        logger.info("Credentials not found, user has never signed in through Apple ID.")
+                        self.logoutRevokation()
                     default: break
                     }
 
@@ -103,13 +104,13 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
 
     fileprivate func setupAppleIDCredentialObserver(userID: String, completionHandler: @escaping CredentialStateCompletionHandler) {
         let authorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
-        /// Getting credential state is only possible on a real device, so forget it on emulators
+        /// Getting credential state is only possible on a real device
 
         /// Exclusively for testing on simulator
         if Device.current.isSimulator {
             logger.info("Credentials state cannot be checked on simulator.")
-//            completionHandler(.success(.authorized))
-            completionHandler(.success(.revoked)) // Exclusively for testing revokation
+            completionHandler(.success(.authorized))
+//            completionHandler(.success(.revoked)) // Exclusively for testing revokation
         } else {
             authorizationAppleIDProvider.getCredentialState(forUserID: userID) { (credentialState: ASAuthorizationAppleIDProvider.CredentialState, error: Error?) in
 
