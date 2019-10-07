@@ -126,8 +126,8 @@
 					"type": "text",
 					"top": 35,
 					"left": 680,
-					"width": 237,
-					"height": 17,
+					"width": 258,
+					"height": 46,
 					"visibility": "hidden",
 					"stroke": "#808080",
 					"textAlign": "left",
@@ -135,5 +135,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

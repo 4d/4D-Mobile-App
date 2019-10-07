@@ -65,24 +65,43 @@ Case of
 				  //…………………………………………………………………………………………………
 			: ($Lon_formEvent=151)  // Build & Run
 				
-				If (Not:C34(Bool:C1537(Form:C1466.build)))
-					
-					Form:C1466.build:=True:C214  // Stop reentrance
-					
-					  // Autosave
-					project_SAVE 
-					
-					$o:=(OBJECT Get pointer:C1124(Object named:K67:5;"project"))->
-					
-					BUILD (New object:C1471(\
-						"caller";Current form window:C827;\
-						"project";$o;\
-						"create";True:C214;\
-						"build";Not:C34($Boo_shiftDown);\
-						"run";Not:C34($Boo_shiftDown);\
-						"verbose";Bool:C1537(Form:C1466.verbose)))
-					
-				End if 
+				
+				Case of 
+						  //______________________________________________________
+					: (Bool:C1537(Form:C1466.dataSetGeneration))  // A dataset generation is in progress
+						
+						POST_FORM_MESSAGE (New object:C1471(\
+							"target";Current form window:C827;\
+							"action";"show";\
+							"type";"alert";\
+							"title";"itIsNotPossibleToBuildTheProject";\
+							"additional";"generationOfTheDatasetIsInProgress"))
+						
+						  //______________________________________________________
+					: (Bool:C1537(Form:C1466.build))
+						
+						  // The build is already underway
+						
+						  //______________________________________________________
+					Else 
+						
+						Form:C1466.build:=True:C214  // Stop reentrance
+						
+						  // Autosave
+						project_SAVE 
+						
+						$o:=(OBJECT Get pointer:C1124(Object named:K67:5;"project"))->
+						
+						BUILD (New object:C1471(\
+							"caller";Current form window:C827;\
+							"project";$o;\
+							"create";True:C214;\
+							"build";Not:C34($Boo_shiftDown);\
+							"run";Not:C34($Boo_shiftDown);\
+							"verbose";Bool:C1537(Form:C1466.verbose)))
+						
+						  //______________________________________________________
+				End case 
 				
 				  //…………………………………………………………………………………………………
 			: ($Lon_formEvent=152)  // Project

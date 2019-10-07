@@ -57,8 +57,6 @@ Case of
 		$Obj_project.dataSource:=Form:C1466.dataSource
 		$Obj_project.server:=Form:C1466.server
 		
-		  //If (Bool(featuresFlags._102457))
-		
 		If (Form:C1466.dataSource.source="server")
 			
 			$File_key:=doc_Absolute_path (Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath))
@@ -82,10 +80,11 @@ Case of
 			$File_key:=COMPONENT_Pathname ("key").platformPath
 			
 		End if 
-		  //End if 
 		
 		(OBJECT Get pointer:C1124(Object named:K67:5;"dataGeneration"))->:=1
 		OBJECT SET VISIBLE:C603(*;"dataGeneration@";True:C214)
+		
+		Form:C1466.$project.dataSetGeneration:=True:C214
 		
 		CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
 			"caller";$Obj_form.window;\

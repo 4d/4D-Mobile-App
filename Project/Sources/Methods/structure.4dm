@@ -552,7 +552,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																																																																																																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //
@@ -755,7 +755,7 @@ Case of
 		$Col_types[4]:=Is longint:K8:6
 		$Col_types[5]:=Is integer 64 bits:K8:25
 		$Col_types[6]:=Is real:K8:4
-		$Col_types[7]:=Is float:K8:26
+		$Col_types[7]:=_o_Is float:K8:26
 		$Col_types[8]:=Is date:K8:7
 		$Col_types[9]:=Is time:K8:8
 		$Col_types[10]:=Is text:K8:3

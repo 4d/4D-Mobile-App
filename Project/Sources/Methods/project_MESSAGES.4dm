@@ -387,6 +387,8 @@ Case of
 		  //______________________________________________________
 	: ($Txt_selector="dataSet")  // Dataset generation result
 		
+		OB REMOVE:C1226(Form:C1466.$project;"dataSetGeneration")
+		
 		If ($Obj_form.currentForm=$Obj_form.project)
 			
 			  // Pass to target panel

@@ -501,6 +501,14 @@ If ($Obj_in.create)
 		
 		If (Bool:C1537(featuresFlags._110882))
 			
+			If (Not:C34(Bool:C1537($Obj_project.dataSource.doNotGenerateDataAtEachBuild)))
+				
+				POST_FORM_MESSAGE (New object:C1471(\
+					"target";$Obj_in.caller;\
+					"additional";"dataSetGeneration"))
+				
+			End if 
+			
 			  // ASSERT($Obj_out.coreData.success=True)
 			If (Folder:C1567($Obj_in.path;fk platform path:K87:2).folder("Resources").folder("Assets.xcassets").folder("Data").exists)  // If there JSON data (maybe use asset("action";"path"))
 				
@@ -518,7 +526,9 @@ If ($Obj_in.create)
 						"uuid";$Obj_template.uuid;\
 						"tags";$Obj_tags;\
 						"path";$Obj_in.path))
+					
 				End if 
+				
 			Else 
 				
 				dataSet (New object:C1471(\
@@ -528,7 +538,6 @@ If ($Obj_in.create)
 					"path";$Obj_in.path))
 				
 			End if 
-			
 		End if 
 		
 		  // ----------------------------------------------------
