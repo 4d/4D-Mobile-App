@@ -112,7 +112,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // Data dump
 	commonValues.data:=New object:C1471(\
 		"dump";New object:C1471(\
-		"limit";10000;\
+		"limit";1000000;\
 		"page";1))
 	
 	commonValues.lastBuild:=Num:C11(COMPONENT_Infos ("componentBuild"))
