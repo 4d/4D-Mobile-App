@@ -32,6 +32,11 @@ If (False:C215)
 	C_OBJECT:C1216(environment ;$2)
 	
 	  //______________________________________________________
+	C_OBJECT:C1216(errors ;$0)
+	C_TEXT:C284(errors ;$1)
+	C_OBJECT:C1216(errors ;$2)
+	
+	  //______________________________________________________
 	C_OBJECT:C1216(group ;$0)
 	C_TEXT:C284(group ;$1)
 	C_OBJECT:C1216(group ;$2)

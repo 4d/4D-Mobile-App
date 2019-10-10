@@ -38,8 +38,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_out:=New object:C1471(\
-		"success";False:C215)
+	$Obj_out:=New object:C1471("success";False:C215)
 	
 	ASSERT:C1129($Obj_in.table#Null:C1517)  // XXX check not empty string
 	ASSERT:C1129($Obj_in.filter#Null:C1517)  // XXX check not empty string or change to object and change code to filter.string
@@ -68,25 +67,11 @@ If (Bool:C1537($Obj_in.rest))
 	
 	If (Bool:C1537($Obj_in.selection))
 		
-		$Obj_out:=Rest (New object:C1471(\
-			"action";"records";\
-			"table";$Obj_in.table;\
-			"url";$Obj_in.url;\
-			"handler";$Obj_in.handler;\
-			"queryEncode";True:C214;\
-			"query";New object:C1471("$filter";$Obj_in.filter.string)\
-			))
+		$Obj_out:=Rest (New object:C1471("action";"records";"table";$Obj_in.table;"url";$Obj_in.url;"handler";$Obj_in.handler;"queryEncode";True:C214;"query";New object:C1471("$filter";$Obj_in.filter.string)))
 		
 	Else 
 		
-		$Obj_out:=Rest (New object:C1471(\
-			"action";"records";\
-			"table";$Obj_in.table;\
-			"url";$Obj_in.url;\
-			"handler";$Obj_in.handler;\
-			"queryEncode";True:C214;\
-			"query";New object:C1471("$filter";$Obj_in.filter.string;"$limit";"1")\
-			))
+		$Obj_out:=Rest (New object:C1471("action";"records";"table";$Obj_in.table;"url";$Obj_in.url;"handler";$Obj_in.handler;"queryEncode";True:C214;"query";New object:C1471("$filter";$Obj_in.filter.string;"$limit";"1")))
 		
 	End if 
 	

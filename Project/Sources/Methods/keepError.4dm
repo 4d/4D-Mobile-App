@@ -12,8 +12,5 @@ err:=New object:C1471(\
 
 GET LAST ERROR STACK:C1015($tLon_codes;$tTxt_components;$tTxt_errors)
 
-ARRAY TO COLLECTION:C1563(err.stack;\
-$tLon_codes;"code";\
-$tTxt_components;"component";\
-$tTxt_errors;"error")
+ARRAY TO COLLECTION:C1563(err.stack;$tLon_codes;"code";$tTxt_components;"component";$tTxt_errors;"error")
 

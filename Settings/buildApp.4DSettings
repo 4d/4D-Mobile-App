@@ -25,7 +25,7 @@
     </CS>
     <BuildApplicationName>4D Mobile App</BuildApplicationName>
     <BuildMacDestFolder>::Build:</BuildMacDestFolder>
-    <BuildWinDestFolder>..\Builds</BuildWinDestFolder>
+    <BuildWinDestFolder>..\Build/</BuildWinDestFolder>
     <ArrayExcludedPluginName>
       <ItemsCount>0</ItemsCount>
     </ArrayExcludedPluginName>

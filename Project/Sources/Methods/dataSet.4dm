@@ -22,10 +22,6 @@ If (False:C215)
 	C_OBJECT:C1216(dataSet ;$1)
 End if 
 
-  //If (commonValues=Null)  // I think this is unnecessary #103781
-  //COMPONENT_INIT 
-  //End if 
-
   // ----------------------------------------------------
   // Initialisations
 $Lon_parameters:=Count parameters:C259
@@ -661,8 +657,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 				
 				If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+					
 					C_BOOLEAN:C305($Bool_errorInOut)
 					$Bool_errorInOut:=(Position:C15("[Error]";$Txt_out)>0)
+					
 					If (Not:C34($Bool_errorInOut))
 						
 						$Obj_out.success:=True:C214
@@ -675,10 +673,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						End if 
 						
 					Else 
+						
 						C_TEXT:C284($line)
+						
 						For each ($line;Split string:C1554($Txt_out;"\n"))
+							
 							If (Position:C15("[Error]";$line)>0)
+								
 								ob_error_add ($Obj_out;$line)
+								
 							End if 
 						End for each 
 					End if 
