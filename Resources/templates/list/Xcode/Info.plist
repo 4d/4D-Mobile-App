@@ -54,6 +54,25 @@
 	</dict>
 	<key>QDataStore</key>
 	<string>Structures</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+				<key>UIWindowSceneSessionRoleApplication</key>
+				<array>
+						<dict>
+								<key>UISceneConfigurationName</key>
+								<string>Default Configuration</string>
+								<key>UISceneDelegateClassName</key>
+								<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+								<key>UISceneStoryboardFile</key>
+								<string>___STORYBOARD_MAIN___</string>
+						</dict>
+				</array>
+		</dict>
+	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>___STORYBOARD_LAUNCH_SCREEN___</string>
 	<key>UIMainStoryboardFile</key>
