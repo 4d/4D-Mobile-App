@@ -99,6 +99,8 @@ Case of
 				
 				ui_SET_ENABLED ($Obj_form.generate;False:C215)
 				
+				OBJECT SET TITLE:C194(*;"dataGeneration.label";Replace string:C233(Get localized string:C991("dataSetGeneration");"\n\n";"\r"))
+				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				

@@ -19,6 +19,13 @@ COMPONENT_INIT
 
 Case of 
 		  //________________________________________
+	: (True:C214)
+		
+		$o:=lep 
+		$o.launch("/bin/ls -l";"/Users")
+		$o.launch("open";"/Applications/Calculator.app")
+		
+		  //________________________________________
 	: (True:C214)  // Unsandbox
 		
 		$o:=Folder:C1567(fk database folder:K87:14)

@@ -20,7 +20,7 @@
       <BuildServerApplication>False</BuildServerApplication>
       <BuildCSUpgradeable>False</BuildCSUpgradeable>
       <CurrentVers>1</CurrentVers>
-      <HardLink></HardLink>
+      <HardLink/>
       <LastDataPathLookup>ByAppName</LastDataPathLookup>
     </CS>
     <BuildApplicationName>4D Mobile App</BuildApplicationName>
@@ -38,7 +38,7 @@
     <Licenses>
       <ArrayLicenseMac>
         <ItemsCount>0</ItemsCount>
-     </ArrayLicenseMac>
+      </ArrayLicenseMac>
     </Licenses>
     <SignApplication>
       <MacSignature>False</MacSignature>

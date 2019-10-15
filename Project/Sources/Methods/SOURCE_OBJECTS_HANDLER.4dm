@@ -97,13 +97,13 @@ Case of
 			"dataSet";True:C214;\
 			"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
 		
-		If (Shift down:C543)
-			
-			SHOW ON DISK:C922(dataSet (New object:C1471(\
-				"action";"path";\
-				"project";New object:C1471("product";Form:C1466.product;"$project";Form:C1466.$project))).path)
-			
-		End if 
+		  //If (Shift down)
+		
+		  //SHOW ON DISK(dataSet (New object(\
+			"action";"path";\
+			"project";New object("product";Form.product;"$project";Form.$project))).path)
+		
+		  //End if 
 		
 		  //==================================================
 	: ($Txt_me=$Obj_form.doNotGenerate)
