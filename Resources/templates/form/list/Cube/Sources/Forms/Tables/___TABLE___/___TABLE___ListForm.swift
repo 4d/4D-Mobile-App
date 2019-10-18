@@ -13,8 +13,6 @@ import AnimatedCollectionViewLayout
 @IBDesignable
 class ___TABLE___ListForm: ListFormCollection {
 
-    var navigationBarHeight: CGFloat = 0
-
     // Do not edit name or override tableName
     public override var tableName: String {
         return "___TABLE___"
@@ -29,7 +27,7 @@ class ___TABLE___ListForm: ListFormCollection {
 
     override func onWillAppear(_ animated: Bool) {
         // Called when the view is about to made visible. Default does nothing
-        navigationBarHeight = UIApplication.shared.statusBarFrame.size.height + (self.navigationController?.navigationBar.frame.height ?? 0.0)
+        updateBarHeights()
     }
 
     override func onDidAppear(_ animated: Bool) {
@@ -47,9 +45,9 @@ class ___TABLE___ListForm: ListFormCollection {
     // MARK: - scroll
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let navigationBarHeight = self.navigationBarHeight
-        if scrollView.contentOffset.y >= -navigationBarHeight {
-            scrollView.contentOffset.y = -navigationBarHeight
+        let topBarHeights = self.topBarHeights
+        if scrollView.contentOffset.y >= -topBarHeights {
+            scrollView.contentOffset.y = -topBarHeights
         }
         if scrollView.contentOffset.x > 0, let originalBounds = refreshControl?.bounds {
             refreshControl?.bounds = originalBounds.with(x: -scrollView.contentOffset.x)
@@ -76,6 +74,44 @@ class ___TABLE___ListForm: ListFormCollection {
             layout.scrollDirection = .horizontal
         }
     }
+
+    // MARK: bar heights
+
+    var navigationBarHeight: CGFloat = .zero
+    var statusBarHeight: CGFloat = .zero
+    fileprivate var useSafeArea: Bool = false // use safe are or not to calcul laout size
+    var topBarHeights: CGFloat {
+        return navigationBarHeight + statusBarHeight
+    }
+    var barHeights: CGFloat {
+        if let tabBarController = tabBarController {
+            let tabBarHeights = tabBarController.tabBar.frame.size.height
+            return topBarHeights + tabBarHeights
+        }
+        return topBarHeights
+    }
+
+    fileprivate func updateBarHeights() {
+        statusBarHeight = UIApplication.shared.statusBarHeight
+        navigationBarHeight = self.navigationController?.navigationBar.frame.height ?? .zero
+    }
+
+    var wantedSize: CGSize {
+        let size = self.view.frame.size
+        if useSafeArea {
+            return size.inset(self.view.safeAreaInsets + self.additionalSafeAreaInsets)
+        }
+        return size.with(height: size.height - self.barHeights)
+    }
+}
+
+fileprivate extension UIEdgeInsets {
+    static func + (left: UIEdgeInsets, right: UIEdgeInsets) -> UIEdgeInsets {
+        return UIEdgeInsets(top: left.top + right.top,
+                            left: left.left + right.left,
+                            bottom: left.bottom + right.bottom,
+                            right: left.right + right.right)
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -90,12 +126,7 @@ extension ___TABLE___ListForm: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var size = self.view.frame.size
-        if let tabBarController = tabBarController {
-            size = CGSize(width: size.width,
-                          height: size.height - tabBarController.tabBar.frame.size.height - navigationBarHeight)
-        }
-        return size
+        return wantedSize
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -103,11 +134,11 @@ extension ___TABLE___ListForm: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return .zero
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return .zero
     }
 
 }
