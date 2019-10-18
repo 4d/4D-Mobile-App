@@ -42,6 +42,8 @@
 						"onHeaderClick"
 					],
 					"movableRows": false,
+					"method": "ObjectMethods/List Box.4dm",
+					"hideSystemHighlight": true,
 					"columns": [
 						{
 							"name": "Column1",
@@ -62,7 +64,8 @@
 							"footer": {
 								"name": "Footer1",
 								"timeFormat": "hh_mm_ss"
-							}
+							},
+							"enterable": true
 						},
 						{
 							"name": "Column2",
@@ -70,8 +73,8 @@
 							"minWidth": 10,
 							"maxWidth": 32000,
 							"events": [
-								"onClick",
-								"onDataChange"
+								"onDoubleClick",
+								"onLosingFocus"
 							],
 							"header": {
 								"name": "Header2",
@@ -80,7 +83,10 @@
 							"footer": {
 								"name": "Footer2",
 								"timeFormat": "hh_mm_ss"
-							}
+							},
+							"enterable": false,
+							"method": "ObjectMethods/Column2.4dm",
+							"truncateMode": "none"
 						}
 					]
 				},

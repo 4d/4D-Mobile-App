@@ -12,9 +12,11 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_LONGINT:C283($i;$l)
-C_TEXT:C284($t;$Txt_arguments;$Txt_command;$Txt_error;$Txt_input;$Txt_metaCharacters)
-C_TEXT:C284($Txt_output)
+C_BLOB:C604($Blb_input;$Blb_output)
+C_BOOLEAN:C305($b)
+C_LONGINT:C283($i;$l;$len;$Lon_pid;$pos)
+C_TEXT:C284($pattern;$t;$text;$Txt_arguments;$Txt_command;$Txt_error)
+C_TEXT:C284($Txt_metaCharacters)
 C_OBJECT:C1216($o;$oo)
 C_COLLECTION:C1488($c)
 
@@ -25,22 +27,72 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)  // Constructor
-	
-	If (Count parameters:C259>=1)
-		
-		$t:=String:C10($1)
-		
-	End if 
+If (This:C1470.$_is=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
-		"_is";"lep";\
+		"$_is";"lep";\
+		"launch";Formula:C1597(lep ("launch";New object:C1471("file";$1;"arguments";$2)));\
 		"reset";Formula:C1597(lep ("reset"));\
+		"setCharSet";Formula:C1597(lep ("setCharSet";New object:C1471("charSet";$1)));\
 		"setEnvironnementVariable";Formula:C1597(lep ("setEnvironnementVariable";New object:C1471("variables";$1)));\
-		"launch";Formula:C1597(lep ("launch";New object:C1471("file";$1;"arguments";$2)))\
+		"setOutputType";Formula:C1597(lep ("setOutputType";New object:C1471("type";Num:C11($1))));\
+		"$escape";Formula:C1597(lep ("$escape";New object:C1471("in";$1)).value)\
 		)
 	
 	$o.reset()
+	
+	If (Count parameters:C259>=1)
+		
+		For each ($t;Split string:C1554(String:C10($1);","))
+			
+			$c:=Split string:C1554($t;":")
+			
+			Case of 
+					
+					  //……………………………………………………………………
+				: ($c.length<2)
+					
+					$o.success:=False:C215
+					$o.errors.push("Missing value for the named parameter "+$c[0])
+					
+					  //……………………………………………………………………
+				: ($c[0]="charset")
+					
+					$o.charSet:=$c[1]
+					
+					  //……………………………………………………………………
+				: ($c[0]="output")
+					
+					$o.outputType:=Choose:C955($c[1]="blob";Is BLOB:K8:12;\
+						Choose:C955($c[1]="object";Is object:K8:27;\
+						Choose:C955($c[1]="numeric";Is real:K8:4;\
+						Choose:C955($c[1]="boolean";Is boolean:K8:9;Is text:K8:3))))
+					
+					  //……………………………………………………………………
+				: ($c[0]="directory")
+					
+					$o.environmentVariables["_4D_OPTION_CURRENT_DIRECTORY"]:=$c[1]
+					
+					  //……………………………………………………………………
+				: ($c[0]="blocking")
+					
+					$o.environmentVariables["_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"]:=Choose:C955($c[1]="true";"true";"false")
+					
+					  //……………………………………………………………………
+				: ($c[0]="console")
+					
+					$o.environmentVariables["_4D_OPTION_HIDE_CONSOLE"]:=Choose:C955($c[1]="true";"true";"false")
+					
+					  //……………………………………………………………………
+				Else 
+					
+					$o.success:=False:C215
+					$o.errors.push("Unknown named parameter: "+$c[0])
+					
+					  //……………………………………………………………………
+			End case 
+		End for each 
+	End if 
 	
 Else 
 	
@@ -62,13 +114,26 @@ Else
 			$o.inputStream:=Null:C1517
 			$o.outputStream:=Null:C1517
 			$o.errorStream:=Null:C1517
-			$o.pid:=Null:C1517
+			$o.pid:=0
+			
+			$o.outputType:=Is text:K8:3
+			$o.charSet:="UTF-8"
 			
 			$o.environmentVariables:=New object:C1471(\
 				"_4D_OPTION_CURRENT_DIRECTORY";"";\
 				"_4D_OPTION_HIDE_CONSOLE";"true";\
 				"_4D_OPTION_BLOCKING_EXTERNAL_PROCESS";"true"\
 				)
+			
+			  //______________________________________________________
+		: ($1="setCharSet")
+			
+			$o.charSet:=Choose:C955($2.charset=Null:C1517;"UTF-8";String:C10($2.charset))
+			
+			  //______________________________________________________
+		: ($1="setOutputType")
+			
+			$o.outputType:=$2.type
 			
 			  //______________________________________________________
 		: ($1="launch")
@@ -85,58 +150,32 @@ Else
 				  // Path must be POSIX
 				$Txt_command:=String:C10($2.file)
 				
-			End if 
-			
-			If ($2.arguments#Null:C1517)
-				
-				$Txt_arguments:=String:C10($2.arguments)
-				
-			End if 
-			
-			If (Is macOS:C1572)
-				
-				$Txt_metaCharacters:="\\!\"#$%&'()=~|<>?;*`[] "
-				
-				For ($i;1;Length:C16($Txt_metaCharacters);1)
-					
-					$t:=$Txt_metaCharacters[[$i]]
-					$l:=1
-					
-					Repeat 
+				Case of 
 						
-						$l:=Position:C15($t;$Txt_command;$l)
+						  //______________________________________________________
+					: ($Txt_command="shell")
 						
-						If ($l>0)
-							
-							If ($Txt_command[[$l+1]]#"-")
-								
-								$o.command:=$o.command+Substring:C12($Txt_command;1;$l-1)+"\\"+$t
-								$Txt_command:=Delete string:C232($Txt_command;1;$l)
-								$l:=1
-								
-							Else 
-								
-								$l:=$l+1
-								
-							End if 
-						End if 
-					Until ($l=0)
-					
-					$Txt_arguments:=Replace string:C233($Txt_arguments;$t;"\\"+$t;*)
-					
-				End for 
-				
-				$o.command:=$o.command+$Txt_command
-				
-			Else 
-				
-				$o.command:=$Txt_command
-				
+						$Txt_command:="/bin/sh"
+						
+						  //______________________________________________________
+					: ($Txt_command="bat")
+						
+						$Txt_command:="cmd.exe /C start /B"
+						
+						  //______________________________________________________
+					Else 
+						
+						  // A "Case of" statement should never omit "Else"
+						
+						  //______________________________________________________
+				End case 
 			End if 
 			
-			If (Length:C16($Txt_arguments)>0)
+			$o.command:=$o.$escape($Txt_command)
+			
+			If (Length:C16(String:C10($2.arguments))>0)
 				
-				$o.command:=$o.command+" "+$Txt_arguments
+				$o.command:=$o.command+" "+$o.$escape(String:C10($2.arguments))
 				
 			End if 
 			
@@ -146,16 +185,84 @@ Else
 				
 			End for each 
 			
-			LAUNCH EXTERNAL PROCESS:C811($o.command;$Txt_input;$Txt_output;$Txt_error)
+			Case of 
+					
+					  //……………………………………………………………………
+				: ($o.inputStream=Null:C1517)
+					
+					  // <NOTHING MORE TO DO>
+					
+					  //……………………………………………………………………
+				: (Value type:C1509($o.inputStream)=Is text:K8:3)\
+					 | (Value type:C1509($o.inputStream)=Is alpha field:K8:1)
+					
+					CONVERT FROM TEXT:C1011($o.inputStream;$o.charSet;$Blb_input)
+					
+					  //……………………………………………………………………
+				: (Value type:C1509($o.inputStream)=Is boolean:K8:9)
+					
+					CONVERT FROM TEXT:C1011(Choose:C955($o.inputStream;"true";"false");$o.charSet;$Blb_input)
+					
+					  //……………………………………………………………………
+				: (Value type:C1509($o.inputStream)=Is longint:K8:6)\
+					 | (Value type:C1509($o.inputStream)=Is integer:K8:5)\
+					 | (Value type:C1509($o.inputStream)=Is integer 64 bits:K8:25)\
+					 | (Value type:C1509($o.inputStream)=Is real:K8:4)
+					
+					CONVERT FROM TEXT:C1011(String:C10($o.inputStream;"&xml");$o.charSet;$Blb_input)
+					
+					  //……………………………………………………………………
+				Else 
+					
+					$Blb_output:=$o.inputStream  // Blob
+					
+					  //……………………………………………………………………
+			End case 
+			
+			LAUNCH EXTERNAL PROCESS:C811($o.command;$Blb_input;$Blb_output;$Txt_error;$Lon_pid)
 			
 			$o.success:=Bool:C1537(OK)
 			
 			If ($o.success)
 				
-				$o.outputStream:=$Txt_output
+				$o.pid:=$Lon_pid
+				
+				Case of 
+						
+						  //……………………………………………………………………
+					: ($o.outputType=Is text:K8:3)
+						
+						$o.outputStream:=Convert to text:C1012($Blb_output;$o.charSet)
+						
+						  //……………………………………………………………………
+					: ($o.outputType=Is object:K8:27)
+						
+						$o.outputStream:=JSON Parse:C1218(Convert to text:C1012($Blb_output;$o.charSet))
+						
+						  //……………………………………………………………………
+					: ($o.outputType=Is boolean:K8:9)
+						
+						$o.outputStream:=(Convert to text:C1012($Blb_output;$o.charSet)="true")
+						
+						  //……………………………………………………………………
+					: ($o.outputType=Is longint:K8:6)\
+						 | ($o.outputType=Is integer:K8:5)\
+						 | ($o.outputType=Is integer 64 bits:K8:25)\
+						 | ($o.outputType=Is real:K8:4)
+						
+						$o.outputStream:=Num:C11(Convert to text:C1012($Blb_output;$o.charSet))
+						
+						  //……………………………………………………………………
+					Else 
+						
+						$o.outputStream:=$Blb_output  // Blob
+						
+						  //……………………………………………………………………
+				End case 
 				
 			Else 
 				
+				$o.pid:=0
 				$o.errorStream:=$Txt_error
 				$o.errors.push($Txt_error)
 				
@@ -203,6 +310,97 @@ Else
 					
 					  //______________________________________________________
 			End case 
+			
+			  //______________________________________________________
+		: ($1="$escape")
+			
+			$o:=New object:C1471(\
+				"value";$2.in)
+			
+			If (Length:C16($2.in)=0)\
+				 | ($2.in="'@'")\
+				 | ($2.in="\"@\"")
+				
+				  // <EMPTY OR QUOTED>
+				
+			Else 
+				
+				If (Is macOS:C1572)
+					
+					  // Metacharacters to escape
+					$c:=Split string:C1554("\"#%&'=~<>;`]!";"")\
+						.push("\\\\")\
+						.push("\\|")\
+						.push("\\$")\
+						.push("\\(")\
+						.push("\\)")\
+						.push("\\[")\
+						.push("\\?")\
+						.push("\\*")\
+						.push("\\s")
+					
+					$pattern:="(?mi-s)(?:^'.*'$)|(?<!-.)({char})(?!(?:[-|]|grep))"
+					
+					For each ($t;$c)
+						
+						$text:=$2.in
+						$o.value:=""
+						
+						Repeat 
+							
+							$b:=Match regex:C1019(Replace string:C233($pattern;"{char}";$t);$text;1;$pos;$len)
+							
+							If ($b)
+								
+								If ($len#0)
+									
+									$o.value:=$o.value+Substring:C12($text;1;$pos-1)+"\\"+Substring:C12($text;$pos;1)
+									$text:=Substring:C12($text;$pos+$len)
+									
+								Else 
+									
+									$o.value:=$o.value+Substring:C12($text;1;$pos-1)+Substring:C12($text;$pos;1)
+									$text:=Substring:C12($text;$pos+1)
+									
+								End if 
+							End if 
+						Until (Not:C34($b))
+						
+						$o.value:=$o.value+$text
+						
+					End for each 
+					
+				Else 
+					
+					  //#TO_TEST
+					
+					$Txt_metaCharacters:="&|<>()%^\" "
+					
+					$text:=$2.in
+					
+					For ($i;1;Length:C16($Txt_metaCharacters);1)
+						
+						$t:=Substring:C12($Txt_metaCharacters;$i;1)
+						
+						If ((Position:C15($t;$text)#0))
+							
+							If ($text[[Length:C16($text)]]="\\")
+								
+								$o.value:="\""+$text+"\\\""
+								
+							Else 
+								
+								  // Quote
+								$o.value:="\""+$text+"\""
+								
+							End if 
+							
+							$i:=MAXLONG:K35:2
+							
+						End if 
+					End for 
+				End if 
+			End if 
 			
 			  //______________________________________________________
 		Else 

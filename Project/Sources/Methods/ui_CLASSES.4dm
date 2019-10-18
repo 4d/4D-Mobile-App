@@ -21,7 +21,7 @@ ui.tips:=tips ()
 
   // ============================= FORMS =============================
 ui.form:=Formula:C1597(New object:C1471(\
-"_is";"form";\
+"$_is";"form";\
 "callback";$1;\
 "name";Current form name:C1298;\
 "window";Current form window:C827;\

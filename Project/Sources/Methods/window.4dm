@@ -16,7 +16,7 @@ End if
 If (This:C1470=Null:C1517)
 	
 	$o:=New object:C1471(\
-		"_is";"window";\
+		"$_is";"window";\
 		"reference";Current form window:C827;\
 		"process";Null:C1517;\
 		"title";Null:C1517;\

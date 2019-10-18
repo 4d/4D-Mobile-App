@@ -205,6 +205,7 @@ Case of
 						If (Bool:C1537(featuresFlags._110882))
 							
 							$Obj_table:=$Obj_context.current
+							$Obj_table.dumpSize:="#na"
 							
 							If ($Obj_context.sqlite#Null:C1517)
 								
@@ -214,28 +215,27 @@ Case of
 									
 									$Lon_size:=$Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]  // Size of the data dump
 									
-									  // Add pictures size if anay
-									$Dir_picture:=asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12
-									$Obj_manifest:=ob_parseDocument ($Dir_picture+"manifest.json")
-									
-									If ($Obj_manifest.success)
+									If ($Lon_size>4096)
 										
-										$Lon_size:=$Lon_size+$Obj_manifest.value.contentSize
+										  // Add pictures size if anay
+										$Dir_picture:=asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12
+										$Obj_manifest:=ob_parseDocument ($Dir_picture+"manifest.json")
+										
+										If ($Obj_manifest.success)
+											
+											$Lon_size:=$Lon_size+$Obj_manifest.value.contentSize
+											
+										End if 
+										
+										$Obj_table.dumpSize:=doc_bytesToString ($Lon_size)
+										
+									Else 
+										
+										$Obj_table.dumpSize:="#na"
 										
 									End if 
 									
-									$Obj_table.dumpSize:=doc_bytesToString ($Lon_size)
-									
-								Else 
-									
-									$Obj_table.dumpSize:="#na"
-									
 								End if 
-								
-							Else 
-								
-								$Obj_table.dumpSize:="#na"
-								
 							End if 
 							
 						Else 
@@ -305,11 +305,11 @@ Case of
 		
 		If ($file.exists)
 			
-			$o:=lep .launch(COMPONENT_Pathname ("scripts").file("sqlite3_sizes.sh");$file.path)
+			$o:=lep ("output:object").launch(COMPONENT_Pathname ("scripts").file("sqlite3_sizes.sh");$file.path)
 			
 			If ($o.success)
 				
-				$Obj_context.sqlite:=JSON Parse:C1218(String:C10($o.outputStream))
+				$Obj_context.sqlite:=$o.outputStream
 				
 			End if 
 		End if 
@@ -354,17 +354,26 @@ Case of
 								
 								$Lon_size:=$Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]  // Size of the data dump
 								
-								  // Add pictures size if anay
-								$Dir_picture:=asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12
-								$Obj_manifest:=ob_parseDocument ($Dir_picture+"manifest.json")
-								
-								If ($Obj_manifest.success)
+								If ($Lon_size>4096)
 									
-									$Lon_size:=$Lon_size+$Obj_manifest.value.contentSize
+									  // Add pictures size if anay
+									$Dir_picture:=asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12
+									$Obj_manifest:=ob_parseDocument ($Dir_picture+"manifest.json")
+									
+									If ($Obj_manifest.success)
+										
+										$Lon_size:=$Lon_size+$Obj_manifest.value.contentSize
+										
+									End if 
+									
+									$o.tables[$Lon_index].dumpSize:=doc_bytesToString ($Lon_size)
+									
+									
+								Else 
+									
+									OB REMOVE:C1226($o.tables[$Lon_index];"dumpSize")
 									
 								End if 
-								
-								$o.tables[$Lon_index].dumpSize:=doc_bytesToString ($Lon_size)
 								
 							Else 
 								

@@ -21,9 +21,28 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$o:=lep 
-		$o.launch("/bin/ls -l";"/Users")
+		$o:=class ("lep")
+		$oo:=$o.constructor()
+		
+		$o:=lep ("blocking:false")
 		$o.launch("open";"/Applications/Calculator.app")
+		
+		If (True:C214)
+			
+			$o.launch("kill";String:C10($o.pid))
+			
+		Else 
+			
+			$o.launch("osascript -e";"'quit app \"Calculator.app\"'")
+			
+		End if 
+		
+		$c:=Split string:C1554($o.launch("/bin/ls -l";"/Users").outputStream;"\n")
+		
+		$o.reset()
+		$t:=$o.launch("ioreg -n IODisplayWrangler |grep -i IOPowerManagement").outputStream
+		
+		
 		
 		  //________________________________________
 	: (True:C214)  // Unsandbox

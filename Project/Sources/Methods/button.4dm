@@ -22,10 +22,10 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)
+If (This:C1470.$_is=Null:C1517)
 	
 	$o:=New object:C1471(\
-		"_is";"button";\
+		"$_is";"button";\
 		"name";$1;\
 		"action";OBJECT Get action:C1457(*;$t);\
 		"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name));\

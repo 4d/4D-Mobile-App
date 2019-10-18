@@ -22,10 +22,10 @@ C_BLOB:C604($x)
 C_TEXT:C284($t;$tt)
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)
+If (This:C1470.$_is=Null:C1517)
 	
 	$o:=New object:C1471(\
-		"_is";"xml";\
+		"$_is";"xml";\
 		"root";Formula:C1597(xml ("root"));\
 		"create";Formula:C1597(xml ("create";New object:C1471("name";$1)));\
 		"parent";Formula:C1597(xml ("parent"));\
@@ -364,7 +364,7 @@ Else
 						"elements";New collection:C1472;\
 						"success";Bool:C1537(OK))
 					
-					This:C1470._is:=Null:C1517
+					This:C1470.$_is:=Null:C1517
 					C_LONGINT:C283($Lon_ii)
 					
 					For ($Lon_ii;1;Size of array:C274($tDom_dicts);1)
@@ -373,7 +373,7 @@ Else
 						
 					End for 
 					
-					This:C1470._is:="_xml"
+					This:C1470.$_is:="_xml"
 					
 					  //=================================================================
 				: ($1="findByName")
@@ -383,7 +383,7 @@ Else
 						"parent";$o;\
 						"success";True:C214)
 					
-					This:C1470._is:=Null:C1517
+					This:C1470.$_is:=Null:C1517
 					
 					For each ($tt;xml_findByName ($o.parent.elementRef;$2.name))
 						
@@ -391,7 +391,7 @@ Else
 						
 					End for each 
 					
-					This:C1470._is:="_xml"
+					This:C1470.$_is:="_xml"
 					
 					  //=================================================================
 				: ($1="create")
@@ -562,9 +562,9 @@ Else
 			
 			If (Length:C16($t)>0)  // Result in a new node
 				
-				This:C1470._is:=Null:C1517
+				This:C1470.$_is:=Null:C1517
 				$o:=xml ($t)
-				This:C1470._is:="_xml"
+				This:C1470.$_is:="_xml"
 				
 			End if 
 		End if 

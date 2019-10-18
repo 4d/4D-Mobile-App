@@ -12,7 +12,6 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -139,5 +138,6 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"method": "SOURCE_Handler"
 }

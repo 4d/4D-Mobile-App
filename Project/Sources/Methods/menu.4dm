@@ -27,7 +27,7 @@ End if
 If (This:C1470=Null:C1517)
 	
 	$o:=New object:C1471(\
-		"_is";"menu";\
+		"$_is";"menu";\
 		"ref";Create menu:C408;\
 		"autoRelease";True:C214;\
 		"metacharacters";False:C215;\

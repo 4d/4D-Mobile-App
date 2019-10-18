@@ -22,7 +22,7 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)  // Constructor
+If (This:C1470.$_is=Null:C1517)  // Constructor
 	
 	If (Count parameters:C259>=1)
 		

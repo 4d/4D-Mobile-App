@@ -22,10 +22,10 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)
+If (This:C1470.$_is=Null:C1517)
 	
 	$o:=New object:C1471(\
-		"_is";"environment";\
+		"$_is";"environment";\
 		"currencySymbol";Null:C1517;\
 		"decimalSeparator";Null:C1517;\
 		"thousandSeparator";Null:C1517;\

@@ -21,10 +21,10 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)
+If (This:C1470.$_is=Null:C1517)
 	
 	$o:=New object:C1471(\
-		"_is";"thermometer";\
+		"$_is";"thermometer";\
 		"name";$1;\
 		"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name));\
 		"hide";Formula:C1597(OBJECT SET VISIBLE:C603(*;This:C1470.name;False:C215));\

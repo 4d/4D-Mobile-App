@@ -26,7 +26,7 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)
+If (This:C1470.$_is=Null:C1517)
 	
 	If (Count parameters:C259>=1)
 		
@@ -35,7 +35,7 @@ If (This:C1470._is=Null:C1517)
 	End if 
 	
 	$o:=New object:C1471(\
-		"_is";"str";\
+		"$_is";"str";\
 		"length";Length:C16($t);\
 		"value";$t;\
 		"common";Formula:C1597(str ("common";New object:C1471("with";$1;"diacritical";Bool:C1537($2))).value);\
@@ -771,10 +771,10 @@ Else
 					  //______________________________________________________
 					  //: (Formula(process ).call().isPreemptif)
 					  //_4D THROW ERROR(New object(\
-						"component";"CLAS";\
-						"code";1;\
-						"description";"The method "+String($1)+"() for class "+String(This._is)+" can't be called in preemptive mode";\
-						"something";"my bug"))
+																		"component";"CLAS";\
+																		"code";1;\
+						"description";"The method "+String($1)+"() for class "+String(This.$_is)+" can't be called in preemptive mode";\
+																		"something";"my bug"))
 					
 					  //______________________________________________________
 				: ($1="isStyled")  // Returns True if text is styled

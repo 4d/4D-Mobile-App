@@ -22,10 +22,10 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)  // Constructor
+If (This:C1470.$_is=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
-		"_is";"errors";\
+		"$_is";"errors";\
 		"stack";New collection:C1472;\
 		"current";"";\
 		"install";Formula:C1597(errors ("install";New object:C1471("method";String:C10($1))));\

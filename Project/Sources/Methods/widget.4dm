@@ -24,7 +24,7 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)
+If (This:C1470.$_is=Null:C1517)
 	
 	If (Count parameters:C259>=1)
 		
@@ -38,7 +38,7 @@ If (This:C1470._is=Null:C1517)
 	End if 
 	
 	$o:=New object:C1471(\
-		"_is";"widget";\
+		"$_is";"widget";\
 		"coordinates";Null:C1517;\
 		"name";$t;\
 		"windowCoordinates";Null:C1517;\

@@ -23,14 +23,14 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)
+If (This:C1470.$_is=Null:C1517)
 	
 	ASSERT:C1129(Count parameters:C259>0)
 	
 	$t:=String:C10($1)
 	
 	$o:=New object:C1471(\
-		"_is";"subform";\
+		"$_is";"subform";\
 		"name";$t;\
 		"type";OBJECT Get type:C1300(*;$t);\
 		"visible";Formula:C1597(OBJECT Get visible:C1075(*;This:C1470.name));\

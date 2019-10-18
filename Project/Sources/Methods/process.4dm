@@ -23,12 +23,12 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470._is=Null:C1517)
+If (This:C1470.$_is=Null:C1517)
 	
 	$t:=String:C10($1)
 	
 	$o:=New object:C1471(\
-		"_is";"process";\
+		"$_is";"process";\
 		"number";Choose:C955(Count parameters:C259=0;Current process:C322;Process number:C372($t));\
 		"name";"";\
 		"state";0;\
