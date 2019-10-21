@@ -177,11 +177,6 @@ Case of
 											End if 
 											
 											  //…………………………………………………………………………………………………
-											  //: (Not(Bool(featuresFlags._101637)))
-											
-											  // <NOTHING MORE TO DO>
-											
-											  //…………………………………………………………………………………………………
 										: ($Obj_field.kind="relatedEntity")
 											
 											  // N -> 1 relation attribute (reference to an entity)
@@ -552,7 +547,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																																																																																																																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //

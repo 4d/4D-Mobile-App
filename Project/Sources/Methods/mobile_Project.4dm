@@ -556,18 +556,14 @@ If ($Obj_in.create)
 		  //ob_error_combine ($Obj_out;$Obj_out.actionCapabilities)
 		
 		  // Manage app capabilities
-		If (Bool:C1537(featuresFlags._105413))
-			
-			$Obj_out.capabilities:=capabilities (\
-				New object:C1471("action";"inject";"target";$Obj_in.path;"tags";$Obj_tags;\
-				"value";New object:C1471(\
-				"common";commonValues;\
-				"project";$Obj_project;\
-				"action";$Obj_out.actionCapabilities;\
-				"templates";$Obj_out.template)))
-			ob_error_combine ($Obj_out;$Obj_out.capabilities)
-			
-		End if 
+		$Obj_out.capabilities:=capabilities (\
+			New object:C1471("action";"inject";"target";$Obj_in.path;"tags";$Obj_tags;\
+			"value";New object:C1471(\
+			"common";commonValues;\
+			"project";$Obj_project;\
+			"action";$Obj_out.actionCapabilities;\
+			"templates";$Obj_out.template)))
+		ob_error_combine ($Obj_out;$Obj_out.capabilities)
 		
 		  // ----------------------------------------------------
 		  // DEV FEATURES
@@ -1006,12 +1002,12 @@ If ($Obj_out.success)
 					POST_FORM_MESSAGE (New object:C1471(\
 						"type";"alert";\
 						"target";$Obj_in.caller;\
-						"additional";".Failed to launch device"))  //#MARK_LOCALIZE
+						"additional";"failedToLaunchTheSimulator"))
 					
 					If ($Boo_verbose)
 						
 						CALL FORM:C1391($Obj_in.caller;"LOG_EVENT";New object:C1471(\
-							"message";"Failed to launch device";\
+							"message";"Failed to launch simulator";\
 							"importance";Error message:K38:3))
 						
 					End if 

@@ -421,9 +421,9 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R6 |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags._105413:=($Lon_version>=1760)  //  [MOBILE] Actions with parameters
-	featuresFlags.parameterListOfValues:=featuresFlags._105413  //     Manage field formatters as list of values for parameters
-	featuresFlags.allowPictureAsActionParameters:=featuresFlags._105413  // #107932 - [Mobile] Allow to use picture as action parameters
+	  //featuresFlags._105413:=($Lon_version>=1760)  //  [MOBILE] Actions with parameters
+	  //featuresFlags.parameterListOfValues:=featuresFlags._105413  //     Manage field formatters as list of values for parameters
+	  //featuresFlags.allowPictureAsActionParameters:=featuresFlags._105413  // #107932 - [Mobile] Allow to use picture as action parameters
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  18  |
@@ -436,8 +436,6 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	featuresFlags._98145:=($Lon_version>=1750)  //                   Replace, for data structure access, EXPORT STRUCTURE by ds
 	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
-	
-	
 	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
 	
 End if 
@@ -533,7 +531,7 @@ End if
   // ________________________________________________________________________________________________________________________________
   //                                                             | ALIAS |
   // ________________________________________________________________________________________________________________________________
-featuresFlags.actionWithParameters:=featuresFlags._105413  //    [MOBILE] Actions with parameters
+  //featuresFlags.actionWithParameters:=featuresFlags._105413  //    [MOBILE] Actions with parameters
 featuresFlags.oneToManyRelations:=featuresFlags._105431  //    [MOBILE] Display 1-n relations
 
   // ________________________________________________________________________________________________________________________________

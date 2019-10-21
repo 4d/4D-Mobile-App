@@ -61,6 +61,7 @@ If (This:C1470.$_is=Null:C1517)
 		"quoted";Formula:C1597("\""+String:C10(This:C1470.value)+"\"");\
 		"replace";Formula:C1597(str ("replace";New object:C1471("old";$1;"new";$2)).value);\
 		"setText";Formula:C1597(str ("setText";New object:C1471("value";String:C10($1))));\
+		"shuffle";Formula:C1597(str ("shuffle";New object:C1471("length";$1)).value);\
 		"singleQuoted";Formula:C1597("'"+String:C10(This:C1470.value)+"'");\
 		"spaceSeparated";Formula:C1597(str ("spaceSeparated").value);\
 		"toNum";Formula:C1597(str ("filter";New object:C1471("as";"numeric")).value);\
@@ -112,6 +113,41 @@ Else
 						$o.value:=(Position:C15($2.pattern;This:C1470.value)#0)
 						
 					End if 
+					
+					  //______________________________________________________
+				: ($1="shuffle")
+					
+					$Txt_pattern:="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,?;.:/=+@#&([{§!)]}-_$€*`£"
+					
+					If (Length:C16(This:C1470.value)=0)
+						
+						$t:=$Txt_pattern*2
+						
+					Else 
+						
+						For each ($tt;Split string:C1554(This:C1470.value;""))
+							
+							If (Position:C15($tt;$Txt_pattern)>0)
+								
+								$t:=$t+$tt
+								
+							End if 
+						End for each 
+						
+						$t:=$t*2
+						
+					End if 
+					
+					$l:=Num:C11($2.length)
+					$Lon_length:=Choose:C955($l=0;Choose:C955(10>Length:C16($t);Length:C16($t);10);Choose:C955($l>Length:C16($t);Length:C16($t);$l))
+					
+					$l:=Length:C16($t)
+					
+					For ($i;1;$Lon_length;1)
+						
+						$o.value:=$o.value+$t[[(Random:C100%($l-1+1))+1]]
+						
+					End for 
 					
 					  //______________________________________________________
 				: ($1="urlEncode")  // Returns a URL encoded string
@@ -771,10 +807,10 @@ Else
 					  //______________________________________________________
 					  //: (Formula(process ).call().isPreemptif)
 					  //_4D THROW ERROR(New object(\
-																		"component";"CLAS";\
-																		"code";1;\
-						"description";"The method "+String($1)+"() for class "+String(This.$_is)+" can't be called in preemptive mode";\
-																		"something";"my bug"))
+																														"component";"CLAS";\
+																														"code";1;\
+																		"description";"The method "+String($1)+"() for class "+String(This.$_is)+" can't be called in preemptive mode";\
+																														"something";"my bug"))
 					
 					  //______________________________________________________
 				: ($1="isStyled")  // Returns True if text is styled

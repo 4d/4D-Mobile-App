@@ -18,6 +18,7 @@ End if
 COMPONENT_INIT 
 
 Case of 
+		
 		  //________________________________________
 	: (True:C214)
 		
@@ -42,6 +43,17 @@ Case of
 		$o.reset()
 		$t:=$o.launch("ioreg -n IODisplayWrangler |grep -i IOPowerManagement").outputStream
 		
+		  //________________________________________
+	: (True:C214)
+		
+		$t:=str ("").shuffle(5)
+		$t:=str ("").shuffle(10)
+		$t:=str ("").shuffle(15)
+		$t:=str ("").shuffle(20)
+		$t:=str ("").shuffle(30)
+		$t:=str ("").shuffle(40)
+		$t:=str .setText("Hello world").shuffle(100)
+		$t:=str .setText("Note: if a value being appended is a collection, the elements of the collection will be appended.").shuffle(15)
 		
 		
 		  //________________________________________

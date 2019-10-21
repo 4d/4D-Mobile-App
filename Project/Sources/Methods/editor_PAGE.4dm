@@ -208,13 +208,9 @@ If (Length:C16($Txt_page)>0)
 				"form";"ACTIONS";\
 				"noTitle";True:C214))
 			
-			If (Bool:C1537(featuresFlags.actionWithParameters))
-				
-				$Obj_geometry.panels.push(New object:C1471(\
-					"title";Get localized string:C991("page_action_params");\
-					"form";"ACTIONS_PARAMS"))
-				
-			End if 
+			$Obj_geometry.panels.push(New object:C1471(\
+				"title";Get localized string:C991("page_action_params");\
+				"form";"ACTIONS_PARAMS"))
 			
 			  //………………………………………………………………………………………
 		Else 
