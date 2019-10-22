@@ -10,7 +10,7 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_i;$Lon_parameters;$Lon_pid;$Lon_x)
+C_LONGINT:C283($Lon_i;$Lon_parameters;$Lon_pid;$Lon_x;$position)
 C_TEXT:C284($File_;$Txt_cmd;$Txt_error;$Txt_in;$Txt_key;$Txt_methodOnErrorCall)
 C_TEXT:C284($Txt_out)
 C_OBJECT:C1216($file;$o;$Obj_device;$Obj_in;$Obj_out;$Obj_runtime)
