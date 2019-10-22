@@ -585,6 +585,17 @@ Case of
 				ob_Lon_Error:=0
 				ON ERR CALL:C155("ob_noError")
 				
+				If (Position:C15("Install Started";$Txt_out)=1)
+					
+					$position:=Position:C15("{\n  \"runtimes\"";$Txt_out)
+					If ($position>0)
+						
+						$Txt_out:=Substring:C12($Txt_out;$position)
+						
+					End if 
+					
+				End if 
+				
 				$o:=JSON Parse:C1218($Txt_out)
 				
 				ON ERR CALL:C155($Txt_methodOnErrorCall)
@@ -626,6 +637,17 @@ Case of
 				
 				ob_Lon_Error:=0
 				ON ERR CALL:C155("ob_noError")
+				
+				If (Position:C15("Install Started";$Txt_out)=1)
+					
+					$position:=Position:C15("{\n  \"devices\"";$Txt_out)
+					If ($position>0)
+						
+						$Txt_out:=Substring:C12($Txt_out;$position)
+						
+					End if 
+					
+				End if 
 				
 				$o:=JSON Parse:C1218($Txt_out)
 				
