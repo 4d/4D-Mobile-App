@@ -45,7 +45,6 @@
 			"devMenu"
 		],
 		"tables": [
-			"__DeletedRecords",
 			"ALL_TYPES",
 			"Commands",
 			"Employes",

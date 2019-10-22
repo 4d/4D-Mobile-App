@@ -258,6 +258,7 @@ Case of
 						: ($Obj_table[$Txt_field].kind="relatedEntities")  // 1 -> N relation
 							
 							  // <NOT YET  MANAGED>
+							
 							  //______________________________________________________
 						Else 
 							
