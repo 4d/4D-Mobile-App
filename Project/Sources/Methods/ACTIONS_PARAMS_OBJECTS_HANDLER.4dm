@@ -198,17 +198,6 @@ Case of
 		
 		$Obj_formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
 		
-		If (featuresFlags.with("allowPictureAsActionParameters"))
-			
-			  // Add picture formats
-			  // Note: When flag will be integrated, update the file "/RESOURCES/actionParameters.json" by adding::
-			  // ,
-			  // "image" : []
-			
-			$Obj_formats.image:=New collection:C1472()
-			
-		End if 
-		
 		If ($Obj_current.fieldNumber#Null:C1517)  // Action linked to a field
 			
 			$Obj_menu.append(":xliff:byDefault";"null";$Obj_current.format=Null:C1517)
@@ -328,20 +317,9 @@ Case of
 							
 							If (Storage:C1525.ƒ.isField($t))
 								
-								If (featuresFlags.with("allowPictureAsActionParameters"))
-									
-									$Obj_table[$t].fieldNumber:=Num:C11($t)
-									$c.push($Obj_table[$t])
-									
-								Else 
-									
-									If ($Obj_table[$t].fieldType#Is picture:K8:10)
-										
-										$Obj_table[$t].fieldNumber:=Num:C11($t)
-										$c.push($Obj_table[$t])
-										
-									End if 
-								End if 
+								$Obj_table[$t].fieldNumber:=Num:C11($t)
+								$c.push($Obj_table[$t])
+								
 							End if 
 						End for each 
 						
@@ -353,20 +331,9 @@ Case of
 								
 								If ($Obj_context.action.parameters.query("fieldNumber = :1";Num:C11($t)).length=0)
 									
-									If (featuresFlags.with("allowPictureAsActionParameters"))
-										
-										$Obj_table[$t].fieldNumber:=Num:C11($t)
-										$c.push($Obj_table[$t])
-										
-									Else 
-										
-										If ($Obj_table[$t].fieldType#Is picture:K8:10)
-											
-											$Obj_table[$t].fieldNumber:=Num:C11($t)
-											$c.push($Obj_table[$t])
-											
-										End if 
-									End if 
+									$Obj_table[$t].fieldNumber:=Num:C11($t)
+									$c.push($Obj_table[$t])
+									
 								End if 
 							End if 
 						End for each 
@@ -462,7 +429,7 @@ Case of
 					$cc[Is longint:K8:6]:="number"
 					$cc[Is picture:K8:10]:="image"
 					$cc[Is boolean:K8:9]:="bool"
-					$cc[Is float:K8:26]:="number"
+					$cc[_o_Is float:K8:26]:="number"
 					$cc[Is text:K8:3]:="string"
 					$cc[Is real:K8:4]:="number"
 					$cc[Is time:K8:8]:="time"
