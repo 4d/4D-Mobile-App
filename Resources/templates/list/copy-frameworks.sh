@@ -34,6 +34,12 @@ do
   FRAMEWORK_EXECUTABLE_PATH="$FRAMEWORK_OUT/$FRAMEWORK_EXECUTABLE_NAME"
   SYMBOL_PATH=$(dirname "$FRAMEWORK")
 
+  if [ -z "$FRAMEWORK_EXECUTABLE_NAME" ]
+  then
+    echo "warning: $i - $FRAMEWORK skipped"
+    continue
+  fi
+ 
   echo "note: copy $FRAMEWORK_EXECUTABLE_NAME"
 
   ## do copy (replace)
