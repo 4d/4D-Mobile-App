@@ -30,15 +30,23 @@ for (( i = 0; i < ${SCRIPT_INPUT_FILE_COUNT}; i++ ))
 do
   FRAMEWORK="$(eval echo \${SCRIPT_INPUT_FILE_${i}})"
   FRAMEWORK_OUT="$(eval echo \${SCRIPT_OUTPUT_FILE_${i}})"
-  FRAMEWORK_EXECUTABLE_NAME=$(defaults read "$FRAMEWORK/Info.plist" CFBundleExecutable)
-  FRAMEWORK_EXECUTABLE_PATH="$FRAMEWORK_OUT/$FRAMEWORK_EXECUTABLE_NAME"
   SYMBOL_PATH=$(dirname "$FRAMEWORK")
+
+  // Read executable name
+  FRAMEWORK_EXECUTABLE_NAME=$(defaults read "$FRAMEWORK/Info.plist" CFBundleExecutable)
+
+  if [ -z "${FRAMEWORK_EXECUTABLE_NAME}" ]
+  then
+    FRAMEWORK_EXECUTABLE_NAME=$(/usr/libexec/PlistBuddy "$FRAMEWORK/Info.plist" -c "Print CFBundleExecutable")
+  fi
 
   if [ -z "$FRAMEWORK_EXECUTABLE_NAME" ]
   then
     echo "warning: $i - $FRAMEWORK skipped"
     continue
   fi
+
+  FRAMEWORK_EXECUTABLE_PATH="$FRAMEWORK_OUT/$FRAMEWORK_EXECUTABLE_NAME"
  
   echo "note: copy $FRAMEWORK_EXECUTABLE_NAME"
 
