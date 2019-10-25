@@ -60,6 +60,8 @@ End if
   // Compare to cached catalog (the last valid)
 $file:=File:C1566($Obj_project.$project.root+"catalog.json";fk platform path:K87:2)
 
+ASSERT:C1129(Shift down:C543)
+
 If ($file.exists)
 	
 	$Obj_cache:=JSON Parse:C1218($file.getText())
@@ -73,9 +75,11 @@ If ($file.exists)
 		$Col_unsynchronizedTableFields:=New collection:C1472
 		
 		  // Verify the compliance of the data model with the current catalog
-		$Obj_dataModel:=Null:C1517
+		  //$Obj_dataModel:=Null
 		If ($Obj_project.dataModel#Null:C1517)
+			
 			$Obj_dataModel:=OB Copy:C1225($Obj_project.dataModel)
+			
 		End if 
 		
 		If ($Obj_dataModel#Null:C1517)
@@ -114,7 +118,8 @@ If ($file.exists)
 								$o.current:=$Obj_tableCurrent.field.query("fieldNumber = :1";Num:C11($t)).pop()
 								$o.missing:=$o.current=Null:C1517
 								$o.nameMismatch:=$o.name#String:C10($o.current.name)
-								$o.typeMismatch:=$o.type#Num:C11($o.current.type)
+								  //$o.typeMismatch:=$o.type#Num($o.current.type)
+								$o.typeMismatch:=$o.fieldType#Num:C11($o.current.fieldType)
 								
 								If ($o.missing | $o.nameMismatch | $o.typeMismatch)
 									
