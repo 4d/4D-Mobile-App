@@ -169,6 +169,15 @@ Case of
 						
 						If ($l=-1)
 							
+							simulator (New object:C1471(\
+								"action";"getdefault"))
+							
+							$l:=Form:C1466.devices.extract("udid").indexOf(Form:C1466.CurrentDeviceUDID)
+							
+						End if 
+						
+						If ($l=-1)
+							
 							$form.simulator.setTitle("unknown")
 							
 						Else 

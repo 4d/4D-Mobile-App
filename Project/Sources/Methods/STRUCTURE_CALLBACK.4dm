@@ -60,8 +60,6 @@ End if
   // Compare to cached catalog (the last valid)
 $file:=File:C1566($Obj_project.$project.root+"catalog.json";fk platform path:K87:2)
 
-ASSERT:C1129(Shift down:C543)
-
 If ($file.exists)
 	
 	$Obj_cache:=JSON Parse:C1218($file.getText())

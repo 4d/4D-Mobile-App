@@ -93,6 +93,53 @@ Case of
 		End case 
 		
 		  //______________________________________________________
+	: ($Obj_in.action="getdefault")
+		
+		$Obj_out:=simulator (New object:C1471(\
+			"action";"devices";\
+			"filter";"available"))
+		
+		If ($Obj_out.success)
+			
+			For each ($Obj_device;$Obj_out.devices)
+				
+				If ($Obj_device.name="iPhone@")  // Fix with only iphone
+					
+					If ($o=Null:C1517)
+						
+						$o:=$Obj_device
+						
+					Else 
+						
+						If (str_cmpVersion ($o.runtime.version;$Obj_device.runtime.version)>-1)  // same or equal
+							
+							If ($o.name<$Obj_device.name)  // iPhone X win
+								
+								$o:=$Obj_device
+								
+							End if 
+						End if 
+					End if 
+				End if 
+			End for each 
+			
+			If ($o#Null:C1517)
+				
+				$Obj_out:=plist (New object:C1471(\
+					"action";"write";\
+					"domain";$file.path;\
+					"key";"CurrentDeviceUDID";\
+					"value";$o.udid))
+				
+			Else 
+				
+				$Obj_out.success:=False:C215
+				$Obj_out.errors:=New collection:C1472("No device to fix default simulator")
+				
+			End if 
+		End if 
+		
+		  //______________________________________________________
 	: ($Obj_in.action="fixdefault")
 		
 		$file:=env_userPathname ("preferences").file("com.apple.iphonesimulator.plist")
