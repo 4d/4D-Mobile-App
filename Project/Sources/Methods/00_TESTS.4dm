@@ -2,11 +2,10 @@
 C_BOOLEAN:C305($b;$Boo_reset)
 C_LONGINT:C283($l;$Lon_build;$Lon_error;$Lon_result;$Lon_type;$Lon_value)
 C_LONGINT:C283($Lon_x)
-C_POINTER:C301($r)
-C_REAL:C285($Num_)
+C_REAL:C285($Num_;$r)
 C_TEXT:C284($Dir_root;$t;$tt;$Txt_in;$Txt_ormula;$Txt_result)
-C_OBJECT:C1216($o;$Obj_formula;$Obj_new;$Obj_result;$Obj_target;$Obj_template)
-C_OBJECT:C1216($oo;$ooo;$svg)
+C_OBJECT:C1216($file;$o;$Obj_formula;$Obj_new;$Obj_result;$Obj_target)
+C_OBJECT:C1216($Obj_template;$oo;$ooo;$svg)
 C_COLLECTION:C1488($c;$cc;$Col_2)
 
 ARRAY TEXT:C222($tTxt_;0)
@@ -18,6 +17,16 @@ End if
 COMPONENT_INIT 
 
 Case of 
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$o:=_iw_Xcode 
+		
+		$file:=$o.defaultPath()
+		$Obj_result:=$o.toolsPath()
+		
+		  //$o.openAppStore()
 		
 		  //________________________________________
 	: (True:C214)
@@ -54,7 +63,6 @@ Case of
 		$t:=str ("").shuffle(40)
 		$t:=str .setText("Hello world").shuffle(100)
 		$t:=str .setText("Note: if a value being appended is a collection, the elements of the collection will be appended.").shuffle(15)
-		
 		
 		  //________________________________________
 	: (True:C214)  // Unsandbox

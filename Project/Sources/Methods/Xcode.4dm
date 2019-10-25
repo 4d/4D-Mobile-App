@@ -72,6 +72,7 @@ Case of
 		
 		$Obj_result:=Xcode (New object:C1471(\
 			"action";"defaultpath"))
+		
 		$Txt_buffer:=$Obj_result.path
 		
 		$Obj_result:=Xcode (New object:C1471(\

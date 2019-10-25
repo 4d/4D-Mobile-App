@@ -1,4 +1,8 @@
 //%attributes = {"invisible":true}
+C_OBJECT:C1216(_iw_Xcode ;$0)
+C_TEXT:C284(_iw_Xcode ;$1)
+C_OBJECT:C1216(_iw_Xcode ;$2)
+
 
 C_OBJECT:C1216(INIT ;$1)
 
