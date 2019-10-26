@@ -1,1 +1,1119 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?><!--Translation file.This file is distributed under the same license as the product package.--><xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">  <file datatype="x-STR#" original="undefined" source-language="en-US" target-language="pt">    <header>      <prop-group name="Xliff-Editor.4dbase">        <prop prop-type="version">2.0</prop>        <prop-group prop-type="version">2.0</prop-group>      </prop-group>    </header>    <body>      <group resname="Product">        <trans-unit id="2" resname="appNameTip">          <source>The product name is the name of your application as it will appear to customers in the store and should be similar to the name you enter later in iTunes Connect.The product name cannot be longer than 255 bytes and can be no fewer than 2 characters.</source>          <target>O nome do produto é o nome do seu aplicativo que será exibida aos clientes na loja e deve ser semelhante ao nome que você inserir mais tarde no iTunes Connect.O nome do produto não pode ser mais de 255 bytes e não pode ser menos de 2 caracteres.</target>        </trans-unit>        <trans-unit id="Flc/fRdL/keF/6c2Zw5Ebg" resname="appBundleIDTip">          <source>The product name and the organization identifier you enter are concatenated to create the bundle ID using reverse DNS.&#xD;The bundle ID must uniquely identify your application, so it's important to define the identifier of the organization by a unique string.</source>          <target>O nome do produto e o identificador de organização que você inserir são concatenados para criar o ID de pacote usando o DNS reverso.O ID de pacote deve identificar exclusivamente o seu aplicativo, por isso é importante definir o identificador da organização por uma sequência de caracteres única.</target>        </trans-unit>        <trans-unit id="7GQ/DwNPqTdzngVykxxguw" resname="appBundleID">          <source>ID</source>          <target>ID</target>        </trans-unit>        <trans-unit id="E7F5JYhVkTtRSXwrssagHg" resname="appCopyright">          <source>Copyright</source>          <target>Copyright</target>        </trans-unit>        <trans-unit id="0YWfXLJdsgB9Pz1JHpbUkQ" resname="appVersion">          <source>Version</source>          <target>Versão</target>        </trans-unit>        <trans-unit id="sU8MJ8OECVT5J8kifg+EZw" resname="appIcons">          <source>Icons</source>          <target>Icones</target>        </trans-unit>        <trans-unit id="WK0v8PNjVSfdxixYbOGWHw" resname="appIconsTip">          <source>Drop an image or application to use as your app icon.Click to see more options.</source>          <target>Solte uma imagem ou aplicativo para usar como o ícone do app.Clique para ver mais opções.</target>        </trans-unit>      </group>      <group resname="Images">        <trans-unit id="Gu+J5EfhnBOH6joEDMgbrg" resname="picSize">          <source>{w} x {h} pixels</source>          <target>{w} x {h} pixels</target>        </trans-unit>      </group>      <group resname="Organisation">        <trans-unit id="+WY0a3+CJlZa0D6a2PvIkw" resname="orgName">          <source>Name</source>          <target>Nome</target>        </trans-unit>        <trans-unit id="KY/9yNBanjCy65XLbxf5wA" resname="orgTeam">          <source>Team</source>          <target>Equipe</target>        </trans-unit>        <trans-unit id="YKKr910iIiDeTyx8ktPkWA" resname="orgNameTip">          <source>The organization name is an attribute of the Xcode project and is used throughout your project folder.For example, the organization name is used in both the source and header.</source>          <target>O nome da organização é um atributo do projeto Xcode e é usado em toda a sua pasta de projeto.Por exemplo, o nome da organização é usado na fonte e o cabeçalho.</target>        </trans-unit>        <trans-unit id="x45+UkJ1HsgQwv9zZLWiHA" resname="orgIdentifier">          <source>Identifier</source>          <target>Identificador</target>        </trans-unit>      </group>      <group resname="mnu">        <trans-unit id="dQCY5aWRLII57TWHdkJeFw" resname="mnuRunWithoutBuilding">          <source>Run</source>          <target>Executar</target>        </trans-unit>        <trans-unit id="" resname="mnuCreateWorkspace">          <source>Generate the project</source>          <target>Gerar o projeto</target>        </trans-unit>        <trans-unit id="" resname="mnuBuild">          <source>Build and Run</source>          <target>Gerar e executar</target>          <note>limited to 16 characters</note>        </trans-unit>        <trans-unit id="eX98UAD3TFUUu0iY1/XXZg" resname="mnuBuildAndRun">          <source>Generate and run</source>          <target>Gerar e executar</target>        </trans-unit>        <trans-unit id="qN7UmNkdE0Voat2TONNuqQ" resname="mnuProjectFolder">          <source>Open the project folder</source>          <target>Abrir a pasta do projeto</target>        </trans-unit>        <trans-unit id="/l+HaMVRxtnwBZHM5d5b+Q" resname="mnuProductFolder">          <source>Open the product folder</source>          <target>Abrir a pasta de produto</target>        </trans-unit>        <trans-unit id="RWTxlvyx0s+Q1itjnt9zkQ" resname="mnuOpenTheProjectWithXcode">          <source>Open the product with Xcode…</source>          <target>Abrir o projeto com o Xcode...</target>        </trans-unit>        <trans-unit id="W7aJDvlAOuu4dLn+p3QeKA" resname="browse">          <source>Browse…</source>          <target>Selecionar...</target>        </trans-unit>        <trans-unit id="f4CRvC+kRzt3Macgyknsgg" resname="showIconsFolder">          <source>Open the icons folder</source>          <target>Abrir a pasta de ícones</target>        </trans-unit>        <trans-unit id="w5B4zoJCPfBbxIag22Nxhw" resname="syncDataModel">          <source>Update the Data Model…</source>          <target>Atualize o modelo de dados...</target>        </trans-unit>        <trans-unit id="YNrlvO3LO5bEnyvM04VAMQ" resname="installTestCertificates">          <source>Install test certificates</source>          <target>Instalar certificados de teste</target>        </trans-unit>        <trans-unit id="2vF0fnkevlekWN5ZlUnDIA" resname="openSimulatorLogs">          <source>Open Simulator logs</source>          <target>Abrir os logs do simulador</target>        </trans-unit>        <trans-unit id="D10w3CW6+0/OGo6KjVQI6w" resname="openSimulatorDiagnosticReports">          <source>Open Simulator Diagnostic Reports</source>          <target>Abrir o relatório de diagnóstico do simulador</target>        </trans-unit>        <trans-unit id="VKKuimM+kn/lVJAh/FskNw" resname="openCurrentSimulatorFolder">          <source>Open Current Simulator Folder</source>          <target>Abrir a pasta atual do simulador</target>        </trans-unit>        <trans-unit id="C5+IaCe3veQijkNsKhetGQ" resname="openApplicationSimulatorFolder">          <source>Open Application Simulator Folder</source>          <target>Abrir a pasta do simulador de aplicativo</target>        </trans-unit>        <trans-unit id="mh+/Tt4nDek44BpYUhu3FA" resname="clearXcodeBuild">          <source>Clear Xcode Build</source>          <target>Limpar o build de Xcode </target>        </trans-unit>        <trans-unit id="rZ/x0ioG35Mi1aPGTHwudw" resname="openTheCacheFolder">          <source>Open the Cache folder</source>          <target>Abrir a pasta cache</target>        </trans-unit>        <trans-unit id="IayoIBs6ERxfIYtMZbLW7g" resname="verbose">          <source>Verbose</source>          <target>Verboso</target>        </trans-unit>      </group>      <group resname="Editor">        <trans-unit id="2A4HE0XGocrpmX5cXthn8A" resname="bRunTip">          <source>Build and run the application in the Simulator</source>          <target>Gerar e executar o aplicativo</target>        </trans-unit>        <trans-unit id="ktqpkefeRRNxbEr3mmc75Q" resname="bInstallTip">          <source>Build and install the application on the connected device</source>          <target>Gerar e instalar o aplicativo no dispositivo conectado</target>        </trans-unit>      </group>      <group resname="Server">        <trans-unit id="8mwP7ZLGA6RYFWze2XbW/g" resname="theWebServerIsShutDown">          <source>The Web Server is not started</source>          <target>O servidor Web está parado.</target>        </trans-unit>        <trans-unit id="fqZRR71Ed/LlqbrwyUO0Tg" resname="theTcpPortIdDefinedIntoTheUrlIsNotTheSameAsUsedByTheWebServer">          <source>The TCP port ID defined into the URL ({urlPort}) is not the same as used by the Web server ({currentPort})</source>          <target>O ID da porta TCP na URL ({urlPort}) não é o mesmo usado pelo servidor web ({currentPort})</target>        </trans-unit>        <trans-unit id="gJK2embRs7TsScF5VeBnwg" resname="youMustRestartTheServerToActivateThe4dMobileService">          <source>You must restart the web server to activate the 4D Mobile service.</source>          <target>Você deve reiniciar o servidor web para ativar o serviço 4D Mobile.</target>        </trans-unit>        <trans-unit id="L8HpJW8m4P+6RCJ4EtsqIQ" resname="4dMobileServiceIsDisabled">          <source>4D Mobile service is not enabled.</source>          <target>O serviço 4D Mobile não está habilitado.</target>        </trans-unit>        <trans-unit id="iu1Ayz2i1JDxVL7q3H0NCg" resname="theWebServerIsRunning">          <source>The Web Server is running</source>          <target>O servidor web está sendo executado</target>        </trans-unit>        <trans-unit id="RZgV/xt6GiuCguZxHHxRag" resname="theWebServerIsNotReachable">          <source>The Web server is not reachable.</source>          <target>O servidor web não é acessível.</target>        </trans-unit>        <trans-unit id="pi4dGCtD2uBwybCSl4nZYg" resname="productionURLTip">          <source>This URL will be used by mobile devices using the application.</source>          <target>Essa URL será usada por dispositivos móveis que usam o aplicativo.</target>        </trans-unit>        <trans-unit id="syL4k7dFB4LVRECMEozjMA" resname="productionUrl">          <source>Production URL</source>          <target>URL de produção</target>        </trans-unit>        <trans-unit id="uqBAX2WAZVaKQ6LL9VuJOA" resname="authentication">          <source>Authentication</source>          <target>Autenticação</target>        </trans-unit>        <trans-unit id="xj6cTM8sxO94uZpjxC3hNA" resname="requiresAnEmailToConnect">          <source>Login required</source>          <target>Login necessário</target>        </trans-unit>        <trans-unit id="LsWggHSVyCZIzyKnbhIdxw" resname="authenticationMethod">          <source>Authentication method</source>          <target>Método de autenticação</target>        </trans-unit>        <trans-unit id="2rBMzvlz2L7H4xFNAGUpvw" resname="theUrlNeedsToBeginWithHttps">          <source>The URL needs to begin with “https”</source>          <target>O URL deve começar com "https"</target>        </trans-unit>        <trans-unit id="E03WpBX2jrtvPnZ09ldY7w" resname="checkThatTheCertificatesAreProperlyInstalled">          <source>Check that the certificates are properly installed.</source>          <target>Verificar que os certificados estão instalados corretamente.</target>        </trans-unit>        <trans-unit id="aZN0VsYUGdmNQHuAkq97Wg" resname="httpsServerIsNotEnabledInWebConfigurationSettings">          <source>HTTPS Server Is Not Enabled in Web Configuration Settings.</source>          <target>O servidor HTTPS não está habilitado na configuração Web.</target>        </trans-unit>        <trans-unit id="yfkP3zyZiO4v43iu9UH9OQ" resname="webServerSettings">          <source>Web Server Settings</source>          <target>Configurações do servidor Web</target>        </trans-unit>        <trans-unit id="lE7lMIWfPMEckVR4jRHf7A" resname="theProductionUrlIsNotPopulated">          <source>The production URL is not populated.</source>          <target>A URL de produção não é preenchida.</target>        </trans-unit>        <trans-unit id="pOh+jYQja0KBHCFhN2+3Ng" resname="clickToFillItIn">          <source>Click here to populate it.</source>          <target>Clique aqui para preenchê-lo.</target>        </trans-unit>        <trans-unit id="h3KajHMnxGkSO7lu4NWs6w" resname="clickToStartIt">          <source>Click here to start it.</source>          <target>Clique aqui para iniciá-lo.</target>        </trans-unit>        <trans-unit id="pu/ZABSt+kbljoN/DNKV8A" resname="serverIsOnline">          <source>Server is online</source>          <target>O servidor está online</target>        </trans-unit>        <trans-unit id="n9LyFkH1Xhjspwi2BYzVMQ" resname="theServerIsNotReady">          <source>The Web Server is not ready</source>          <target>O servidor Web não está pronto</target>        </trans-unit>        <trans-unit id="ht9rElpVo+NhsWeAME9IOQ" resname="unauthorizedAccess">          <source>Unauthorized access</source>          <target>Acesso não autorizado</target>        </trans-unit>        <trans-unit id="o6C2namywpLFTnbajxSfAw" resname="maxNumberOfSessionsReached">          <source>The maximum number of sessions is reached</source>          <target>O número máximo de sessões foi alcançado</target>        </trans-unit>        <trans-unit id="A35v7IKYKMgPQL3lGVsf/w" resname="theRequestIsMalformed">          <source>The request is malformed</source>          <target>O pedido é malformado</target>        </trans-unit>        <trans-unit id="ymkHImCWARDpcl2xenvqJw" resname="theDatabaseMethodIsNotDefined">          <source>The database method "On 4D Mobile Authentication" is not defined</source>          <target>O método de base de dados "On 4D Mobile Authentication" não está definido</target>        </trans-unit>        <trans-unit id="4fTNb3VQaSfIJIxTTqAbdQ" resname="theDatabaseMethodHasFailed">          <source>The database method "On 4D Mobile Authentication" failed</source>          <target>O método de banco de dados "On 4D Mobile Authentication" falhou</target>        </trans-unit>        <trans-unit id="6LCVJWp68qZqTHbIvKhBnw" resname="theDatabaseMethodTookTooLongToExecute">          <source>The database method "On 4D Mobile Authentication" is too long to execute</source>          <target>O método de banco de dados "On 4D Mobile Authentication" é muito longo para executar</target>        </trans-unit>        <trans-unit id="wTv5LFd2Mcixu08ImlFBJg" resname="theKeyFileIsNotAvailable">          <source>The key file is not available.</source>          <target>O arquivo de chave não está disponível.</target>        </trans-unit>        <trans-unit id="rUkipNnUTLKUUj2rthavvQ" resname="clickHereToFindTheKeyFile">          <source>Click here to find the key file.</source>          <target>Clique aqui para encontrar o arquivo de chave.</target>        </trans-unit>        <trans-unit id="ib1E3xvZn4wBPR2aWASigw" resname="selectTheKeyFile">          <source>Select the key file</source>          <target>Selecione o arquivo da chave</target>        </trans-unit>        <trans-unit id="G46mmFGutWe706LSa+nHTg" resname="failedToGenerateAuthorizationKey">          <source>Failed to generate authorization key</source>          <target>Falha ao gerar a chave de autorização</target>        </trans-unit>        <trans-unit id="xb6O9Ar1QVwg1h6N65yu2g" resname="serverNotFound">          <source>Server not Found</source>          <target>Servidor não encontrado</target>        </trans-unit>        <trans-unit id="OwacehRmw196KcfYi+xKUA" resname="serviceUnavailable">          <source>Service Unavailable</source>          <target>Serviço indisponível</target>        </trans-unit>        <trans-unit id="m5Ue3VX9eEtuV3nuVJBsmw" resname="checkingServerAvailability">          <source>Checking server availability</source>          <target>Verificando a disponibilidade do servidor</target>        </trans-unit>        <trans-unit id="pB/ed09CIjqL7ZOVO/m5Hw" resname="makeSureThatTheKeyProvidedIsTheKeyOfTheServer">          <source>Make sure that the key provided is the key of the server.</source>          <target>Certifique-se de que a chave fornecida é a chave do servidor.</target>        </trans-unit>      </group>      <group resname="Common">        <trans-unit id="zvsuXgdhmzTyWETfWvmAWg" resname="none">          <source>&lt;none&gt;</source>          <target>&lt;Nenhum&gt;</target>        </trans-unit>        <trans-unit id="AlQg27FfCJ9jb5fOBVbLSA" resname="booted">          <source> (active)</source>          <target> (ativo)</target>        </trans-unit>        <trans-unit id="gO2RO72dNUvKOrDahvf7Wg" resname="sortByName">          <source>Sort by name</source>          <target>Ordenar por nome</target>        </trans-unit>        <trans-unit id="MRlOaSRYqtOWckMn7u2z2g" resname="defaultSort">          <source>Default sort</source>          <target>Ordem por padrão</target>        </trans-unit>        <trans-unit id="yYsOkE36YaxEtd44YTZhlQ" resname="icons">          <source>Icons</source>          <target>Icones</target>        </trans-unit>        <trans-unit id="+N2Mx1leCWwdDj5jxi9lbw" resname="noMedia">          <source>Folder is empty</source>          <target>A pasta está vazia</target>        </trans-unit>        <trans-unit id="yMb+uQCF7//SgPboAk3Qjw" resname="areYouSure">          <source>Are you sure?</source>          <target>Tem certeza?</target>        </trans-unit>        <trans-unit id="zqDrLnknDRw5z0pyHOdY8g" resname="title">          <source>Title</source>          <target>Título</target>        </trans-unit>        <trans-unit id="iiIuDZ8LVdGUrnwls4CAgA" resname="name">          <source>Name</source>          <target>Nome</target>        </trans-unit>        <trans-unit id="klU8I5sfq5wps70C7YOb0g" resname="selectedTables">          <source>Selected Tables</source>          <target>Tabelas selecionadas</target>        </trans-unit>        <trans-unit id="68+1yQKbPdo8Vwtqxa11ow" resname="noPublishedTable">          <source>Please, publish at least one field…</source>          <target>Por favor, publique pelo menos um campo...</target>        </trans-unit>        <trans-unit id="DjH0KVRkyDe6ci2lBmfftg" resname="doNotShowAgain">          <source>Do not show again</source>          <target>Não mostrar novamente</target>        </trans-unit>        <trans-unit id="5qUbC19ROoSzAy60mr+EJg" resname="shouldBe10CharOrLess">          <source>Short label should be 10 characters or less</source>          <target>A etiqueta curta deve ser de 10 caracteres ou menos</target>        </trans-unit>        <trans-unit id="K2E/8/B/Za/zykSirwsrzA" resname="shouldBe25CharOrLess">          <source>Long label should be 25 characters or less</source>          <target>A etiqueta longa deve ser de 25 caracteres ou menos</target>        </trans-unit>        <trans-unit id="5idjPjyoxZH+ZyycoVjW/g" resname="edit...">          <source>Edit…</source>          <target>Modificar...</target>        </trans-unit>        <trans-unit id="hopgEJ5HGSMxAk/+X5xCMw" resname="create...">          <source>Create…</source>          <target>Crie...</target>        </trans-unit>        <trans-unit id="Tf8ARjdmc1DY59yKgPXSMg" resname="formatters">          <source>Formats</source>          <target>Formatos</target>        </trans-unit>        <trans-unit id="cO5xOiSYEDRij/gCxJZCvA" resname="names">          <source>Names</source>          <target>Nomes</target>        </trans-unit>        <trans-unit id="uhZW2KJciDkA84Mv5FXY2w" resname="table">          <source>Table</source>          <target>Tabela</target>        </trans-unit>        <trans-unit id="Nh6k48ly/6ghIqk2JcQ3Zg" resname="remove">          <source>Remove</source>          <target>Remover</target>        </trans-unit>        <trans-unit id="Dneq3tCEz0G3lFqKMWJacg" resname="defaultValue">          <source>Default value</source>          <target>Valor padrão</target>        </trans-unit>        <trans-unit id="ZOVAOV+Akq1Ub73bpN8cpw" resname="byDefault">          <source>By default</source>          <target>Padrão</target>        </trans-unit>        <trans-unit id="M9kne/S+TFchwZ2eYMDwSw" resname="add...">          <source>Add…</source>          <target>Adicionar...</target>        </trans-unit>        <trans-unit id="nzMGIeAoNyVhS4GZngdZxg" resname="downloadMoreResources">          <source>Download more {resources}</source>          <target state="new">Download more {resources}</target>        </trans-unit>      </group>      <group resname="Pannels">        <trans-unit id="7k+yWCBxtI1lrsMfZW9a3g" resname="organization">          <source>Organization</source>          <target>Organização</target>        </trans-unit>        <trans-unit id="/R2Ui9q4c001s00J0ZgCbA" resname="product">          <source>Product</source>          <target>Produto</target>        </trans-unit>        <trans-unit id="k6T6D68Rr3M/SPs4W2O2gg" resname="developer">          <source>Developer</source>          <target>Programador</target>        </trans-unit>        <trans-unit id="jFGnLuS2i/obqn/1LeYddQ" resname="publishedStructure">          <source>Published Fields</source>          <target>Campos publicados</target>        </trans-unit>        <trans-unit id="tVPFfnEqKQwZZo+i0zkdQA" resname="server">          <source>4D Server</source>          <target>4D Server</target>        </trans-unit>        <trans-unit id="Nwm/yKkw6czXbette010Yg" resname="structure">          <source>Structure</source>          <target>Estrutura</target>        </trans-unit>        <trans-unit id="G3O2PzkEZsgC11X98duYGQ" resname="main">          <source>Main View</source>          <target>Vista principal</target>        </trans-unit>        <trans-unit id="LjoOGIaZDFHKk4teXIbBSQ" resname="tablesProperties">          <source>Table Properties</source>          <target>Propriedades de tabelas</target>        </trans-unit>        <trans-unit id="1Fk1BAaNtJvcsZoCOEvNIQ" resname="mainMenu">          <source>Main Menu</source>          <target>Menu principal</target>        </trans-unit>        <trans-unit id="Tfr3XbVkWgassBlVWvcgLg" resname="forms">          <source>Forms</source>          <target>Formulários</target>        </trans-unit>        <trans-unit id="0X45abAlNqyZWEV+zcXJjQ" resname="fieldsProperties">          <source>Field &amp; Relation Properties</source>          <target state="needs-review-translation">Propriedades de campos</target>        </trans-unit>        <trans-unit id="6oMKXPqVUh5cg3EDkbYm0Q" resname="data">          <source>Data</source>          <target>Dados</target>        </trans-unit>      </group>      <group resname="Developer">        <trans-unit id="7KRCGSes6Bd2cMaiRRa/CQ" resname="showAccount">          <source>Membership details</source>          <target>Detalhes da associação</target>        </trans-unit>        <trans-unit id="WwaEftpIbNgzp97vBdG0Ww" resname="devNameTip">          <source>The developer name is an attribute of the Xcode project and is used throughout your project folder.For example, the developer name is used in both the source and header.</source>          <target>O nome do desenvolvedor é um atributo do projeto Xcode e é usado em toda a sua pasta de projeto.Por exemplo, o nome do desenvolvedor é usado na fonte e o cabeçalho.</target>        </trans-unit>      </group>      <group resname="Structure">        <trans-unit id="LqVQX0vFKHQ6pL7BozzLvw" resname="tables">          <source>Tables</source>          <target>Tabelas</target>        </trans-unit>        <trans-unit id="7IXkDQgntlKCAlPyjyf0iA" resname="fields">          <source>Fields</source>          <target>Campos</target>        </trans-unit>        <trans-unit id="MmAA3v2V3PcF1z55UqwJhQ" resname="publish">          <source>Publish</source>          <target>Publicar</target>        </trans-unit>        <trans-unit id="CU72/AhtP/b461BnT0189g" resname="structName">          <source>Name</source>          <target>Nome</target>        </trans-unit>        <trans-unit id="zp4kT2sCieQejFW80bSw1A" resname="filteredBy">          <source>Filtered by:</source>          <target>Filtrado por:</target>        </trans-unit>        <trans-unit id="d+P+OuC/2gE7jNYXjtpG9Q" resname="onlyPublishedTables">          <source>Only published tables</source>          <target>Somente as tabelas publicadas</target>        </trans-unit>        <trans-unit id="7fi1kut1kkEM2lK+h8tktw" resname="published">          <source>Published</source>          <target>Publicado</target>        </trans-unit>        <trans-unit id="A7ryAcKSjNlsqAlYiStXKQ" resname="onlyPublishedFields">          <source>Only published fields</source>          <target>Apenas campos publicados</target>        </trans-unit>        <trans-unit id="G4MH6kCv2Or0AlLWNbl3uQ" resname="unpublish">          <source>Unpublish</source>          <target>Despublicar</target>        </trans-unit>        <trans-unit id="spMkFgq2/3xs8CHRZVXGZA" resname="unpublishAll">          <source>Unpublish all</source>          <target>Despublicar todo</target>        </trans-unit>        <trans-unit id="7D4TQC5HLtnyAyTZDyFoQA" resname="publishAll">          <source>Publish all</source>          <target>Publicar todo</target>        </trans-unit>        <trans-unit id="L8M0w3crLr8+B54YQ+YCmw" resname="sortByTableName">          <source>Sort by table name</source>          <target>Ordenar por nome de tabela</target>        </trans-unit>        <trans-unit id="a05OJYh0VsV+Y9OgfGmtBA" resname="sortByTableNumber">          <source>Default sort</source>          <target>Classificação padrão</target>        </trans-unit>        <trans-unit id="ByCc2le9UzkaZlehHa6HLA" resname="sortByFieldName">          <source>Sort by field name</source>          <target>Ordenar por nome do campo</target>        </trans-unit>        <trans-unit id="yY9M+czg/mbOTeCtNDclNg" resname="sortByFieldNumber">          <source>Default sort</source>          <target>Classificação padrão</target>        </trans-unit>        <trans-unit id="3gLqPKyxDuKmxacvkuDuow" resname="theFieldIsMissingOrWasModified">          <source>The field "{name}" is missing or was modified</source>          <target>O campo "{name}" está faltando ou foi modificado</target>        </trans-unit>        <trans-unit id="TTzr8UwCtWDUyaMNmcp9mw" resname="theFieldTypeWasModified">          <source>The field type was modified</source>          <target>O tipo de campo foi modificado</target>        </trans-unit>        <trans-unit id="4sBoBmWpCNeAZthVaCyK7w" resname="chooseAnIconForTheField">          <source>Choose an icon for the field "{field}"</source>          <target>Escolher um ícone para o campo "{field}"</target>        </trans-unit>        <trans-unit id="fLt7SQ095vwwFqsMwnOJ2A" resname="chooseAnIconForTheTable">          <source>Choose an icon for the table "{table}"</source>          <target>Escolher um ícone para a tabela "{table}"</target>        </trans-unit>        <trans-unit id="XhOuRwWq0b+GrXV+zszFKA" resname="relatedTable">          <source>Linked table "{entity}"</source>          <target>Tabela vinculada "{entity}"</target>        </trans-unit>        <trans-unit id="ripr4Oko/JbIvqlQ+VU+yw" resname="theRelatedTableIsNoLongerAvailable">          <source>The related table "{name}" is no longer available</source>          <target>A tabela relacionada "{name}" não está mais disponível</target>        </trans-unit>        <trans-unit id="6M+oJJw/e7D0njukUUxJiw" resname="theRelatedFieldIsMissingOrHasBeenModified">          <source>The related field "{name}" is missing or has been modified</source>          <target>O campo relacionado "{name}" não está mais disponível</target>        </trans-unit>        <trans-unit id="h/y8iCZCHRG2BkXPhz3HUw" resname="theRelatedFieldsAreMissingOrWasModified">          <source>The related fields ("{names}") are missing or have been changed</source>          <target state="needs-review-translation">Os campos relacionados "{names}" não estão mais disponíveis</target>        </trans-unit>        <trans-unit id="nCgE4Y7ntrGQ3FobZrehqA" resname="theRelationIsNoLongerAvailable">          <source>The relation "{name}" is no longer available</source>          <target>A relação "{name}" não está mais disponível</target>        </trans-unit>        <trans-unit id="I4KPWUBgEkExUHPK91+CSw" resname="theFieldWasRenamed">          <source>The field was renamed to "{name}"</source>          <target state="needs-review-translation">O campo "{old}" foi renomeado para "{new}"</target>        </trans-unit>        <trans-unit id="juUKaYTYW3oxw8/w4l9WgQ" resname="theTableIsNoLongerAvailable">          <source>The table "{name}" is no longer available</source>          <target>A tabela "{name}" não está mais disponível</target>        </trans-unit>        <trans-unit id="qSN/WPWEny3AkKjcLxpZGQ" resname="allowToMakeTheStructureAdjustments">          <source>Allow {product} to make the necessary structure adjustments for an optimised mobile data update</source>          <target>Permitir que {product} faça os ajustes de estrutura necessários para uma atualização otimizada de dados móveis</target>        </trans-unit>        <trans-unit id="gx2+DInxbW2d0z4QK9jNlw" resname="linkedTableNotPublished">          <source>Linked Table "{table}" (not published)</source>          <target state="new">Linked Table "{table}" (not published)</target>        </trans-unit>        <trans-unit id="JEvvGeG92a6teiCcVRrlJw" resname="linkedTable">          <source>Linked Table "{table}"</source>          <target state="new">Linked Table "{table}"</target>        </trans-unit>        <trans-unit id="0HVUg42XaSUn0XavRUseuA" resname="unpublished">          <source>unpublished</source>          <target state="new">unpublished</target>        </trans-unit>        <trans-unit id="0sSkLPm5+Ys+obVcsQqY/Q" resname="theLinkedTableIsNotPublished">          <source>The linked table "{name}" is not published</source>          <target state="new">The linked table "{name}" is not published</target>        </trans-unit>        <trans-unit id="y4IsBEgEZdjRi6HqXqm6CQ" resname="primaryKey">          <source>Primary key</source>          <target state="new">Primary key</target>        </trans-unit>        <trans-unit id="dX3Ss/8u4rHaZoG4nFmDnQ" resname="nTo1Relation">          <source>N - 1 relation to "{table}"</source>          <target state="new">N - 1 relation to "{table}"</target>        </trans-unit>        <trans-unit id="jkoCFX38p8gluslgVDHUNw" resname="1toNRelation">          <source>1-N relation to "{table}"</source>          <target state="new">1-N relation to "{table}"</target>        </trans-unit>        <trans-unit id="y+DpHbbO6W77fyZhHpW9aA" resname="recursive">          <source>recursive</source>          <target state="new">recursive</target>        </trans-unit>        <trans-unit id="40nupJ30iOwYCkW0YZswqQ" resname="clickHereToSelectThePublishedFields">          <source>Click here to select the published fields</source>          <target state="new">Click here to select the published fields</target>        </trans-unit>        <trans-unit id="Jx3ZDSxT6UzrUvmc1U9Zow" resname="youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere">          <source>You can {action} the publish of all related fields by clicking here.</source>          <target state="new">You can {action} the publish of all related fields by clicking here.</target>        </trans-unit>        <trans-unit id="OZ7Y+omr7bN0OXwVPovDZg" resname="theN1RelationIsNoMoreAvailable">          <source>The many to one relation "{name}" has been renamed or deleted</source>          <target state="new">The many to one relation "{name}" has been renamed or deleted</target>        </trans-unit>        <trans-unit id="ek5pOOkNZ158kcOkNARzkQ" resname="theFieldsAreMissingOrHaveBeenModified">          <source>The fields: "{names}" are missing or have been modified</source>          <target state="new">The fields: "{names}" are missing or have been modified</target>        </trans-unit>        <trans-unit id="xCmxfS5TrBLYrUGkFAu8nw" resname="someFieldsOrRelationsAreNoLongerAvailableOrWasModified">          <source>Some fields or relations ("{names}") are no longer available or was modified</source>          <target state="new">Some fields or relations ("{names}") are no longer available or was modified</target>        </trans-unit>        <trans-unit id="6NlzKvx6ysPu9zzLEajOVA" resname="theFieldIsMissing">          <source>The field is missing</source>          <target state="new">The field is missing</target>        </trans-unit>        <trans-unit id="wtbvZBvxCH3zu3ooBHSIFQ" resname="the1NRelationIsNoMoreAvailable">          <source>The one to many relation "{name}" has been renamed or deleted</source>          <target state="new">The one to many relation "{name}" has been renamed or deleted</target>        </trans-unit>      </group>      <group resname="Tables">        <trans-unit id="52aDiXDf5DZ1U9aunhon+A" resname="publishedTables">          <source>Published Tables</source>          <target>Tabelas publicadas</target>        </trans-unit>        <trans-unit id="jT7DvVnrQQehHs7+VfHSkQ" resname="longLabels">          <source>Long Labels</source>          <target>Etiquetas longas</target>        </trans-unit>        <trans-unit id="M3lDCs4GNnAcIDdNtW7ApA" resname="shortLabels">          <source>Short Labels</source>          <target>Rótulos curtos</target>        </trans-unit>        <trans-unit id="BUqzp8G4lApCGBL5gIURnQ" resname="inMenu">          <source>Menu Items</source>          <target>Itens de menu</target>        </trans-unit>      </group>      <group resname="Pages">        <trans-unit id="/fJan0cQRuK9C+n6bG9EwA" resname="page_general">          <source>General</source>          <target>Geral</target>        </trans-unit>        <trans-unit id="izbiPs6Tm1OI2ymt4LIrdQ" resname="page_structure">          <source>Structure</source>          <target>Estrutura</target>        </trans-unit>        <trans-unit id="lpUcOWpesrMF+/Cmq5UGLw" resname="page_views">          <source>Forms</source>          <target>Formulários</target>        </trans-unit>        <trans-unit id="0Ls3QCnzbAbMhbO7OzZSfw" resname="page_deployment">          <source>Publishing</source>          <target>Publicação</target>        </trans-unit>        <trans-unit id="9m5NNTpko5/noEQnkmn0iQ" resname="page_main">          <source>Main Menu</source>          <target>Menu principal</target>        </trans-unit>        <trans-unit id="84WeJ83BXFzgyzRu2ABtZw" resname="page_properties">          <source>Labels &amp; Icons</source>          <target>Rótulos e ícones</target>        </trans-unit>        <trans-unit id="RxeWJUvxqXTbJWfPXxnQZg" resname="comment_general">          <source>Enter your app's product information</source>          <target>Insira as informações principais do seu aplicativo</target>        </trans-unit>        <trans-unit id="w4o0uBLthGHLESDFXTOzXw" resname="comment_structure">          <source>Choose the tables and fields to be locally stored in the device</source>          <target>Escolha as tabelas e campos para ser armazenados localmente no dispositivo</target>        </trans-unit>        <trans-unit id="dc7DcTcAGMAVK8WbL1Z+wA" resname="comment_properties">          <source>Associate labels and icons to your tables / fields</source>          <target>Associar ícones e etiquetas para tabelas e campos</target>        </trans-unit>        <trans-unit id="OsoNlhxeLKmCB3E7TNKG5Q" resname="comment_main">          <source>Order your tables in the Tabbar</source>          <target>Ordenar suas tabelas no menú</target>        </trans-unit>        <trans-unit id="t5w7OAPDSQ8feyEvtCDqQw" resname="comment_views">          <source>Build list and detail forms for each table</source>          <target>Criar formulários de lista e detalhes para cada tabela</target>        </trans-unit>        <trans-unit id="bU5QgpXhZk/U4nD5tQ17og" resname="comment_deployment">          <source>Enter deployment informations</source>          <target>Conjunto de informações relacionadas com a implantação de produção</target>        </trans-unit>        <trans-unit id="M5YuZaeDeXm3gpn+O4x+Qg" resname="page_data">          <source>Data</source>          <target>Dados</target>        </trans-unit>        <trans-unit id="apTsCzGeHzrBq49cTIB3Wg" resname="comment_data">          <source>Embed filtered data for each table</source>          <target>Incorporar dados filtrados para cada tabela</target>        </trans-unit>        <trans-unit id="WFoZ867LrbgPdDsaWqrxjQ" resname="page_actions">          <source>Actions</source>          <target>Açoes</target>        </trans-unit>        <trans-unit id="JXlT7boeZCubDpSqQfYY7w" resname="comment_actions">          <source>Define actions for each table</source>          <target>Definir ações para cada tabela</target>        </trans-unit>        <trans-unit id="WSvR4VFaF+zKiBITJ8kL0Q" resname="page_action_params">          <source>Action Parameters</source>          <target>Parâmetros de ação</target>        </trans-unit>      </group>      <group resname="Views">        <trans-unit id="6LcbrfHOPz7e10+fXKipcQ" resname="selectAFormTemplateToUseAs">          <source>Select a template for a {formType} view</source>          <target>Selecione um modelo de formulário para usar como {formType}</target>        </trans-unit>        <trans-unit id="g+PZlXRAeMqEXAlSzS9X6Q" resname="listForms">          <source>List Forms</source>          <target>Lista de formulários</target>        </trans-unit>        <trans-unit id="oXgKQYR0PyM6dyAJ3A4T/g" resname="detailsForms">          <source>Details Forms</source>          <target>Formulários de detalhe</target>        </trans-unit>        <trans-unit id="Zu1+Tm2wqVnQOCIaKAioYw" resname="actions">          <source>Actions</source>          <target>Açoes</target>        </trans-unit>        <trans-unit id="1/JqkSA1Hf2w6ru+TVqB9g" resname="templates">          <source>templates</source>          <target state="new">templates</target>        </trans-unit>      </group>      <group resname="Fields">        <trans-unit id="1jvwZTgT0WIE2/R+QVhl5A" resname="selectATableToDisplayItsFields">          <source>Select a table to display its fields or relations</source>          <target state="needs-review-translation">Selecione uma tabela para mostrar seus campos</target>        </trans-unit>        <trans-unit id="F7JiUlAyzLWd+enjRl0mMw" resname="relations">          <source>Relations</source>          <target state="new">Relations</target>        </trans-unit>        <trans-unit id="URybk5Kj96WRb1R0HoeJCA" resname="titles">          <source>Titles</source>          <target state="new">Titles</target>        </trans-unit>        <trans-unit id="eEWJsdQP5p8yWJXCtAr7xA" resname="noFieldPublishedForThisTable">          <source>No field published for this table</source>          <target state="new">No field published for this table</target>        </trans-unit>        <trans-unit id="OCNOBo5DYKV2YLuqsmW8Vw" resname="noPublishedRelationForThisTable">          <source>No published relation for this table</source>          <target state="new">No published relation for this table</target>        </trans-unit>        <trans-unit id="kfs1+4HwA77sgG66PLnKtQ" resname="youCanInsertFieldNamesSurroundedByTheCharacter">          <source>You can insert field names surrounded by the '%' character</source>          <target state="new">You can insert field names surrounded by the '%' character</target>        </trans-unit>      </group>      <group resname="Main">        <trans-unit id="Ia0HuoEYIeZ4xeyWiDqqfg" resname="availableTables">          <source>Available Tables</source>          <target>Tabelas disponíveis</target>        </trans-unit>      </group>      <group resname="Welcome">        <trans-unit id="DS3l1K0gqnDt/4IY0ioZlw" resname="wel_title_1">          <source>Structure</source>          <target>Estrutura</target>        </trans-unit>        <trans-unit id="HWtKEggQ5P7eJmhZnKDTBg" resname="wel_description_1">          <source>Define a subset of your physical structure</source>          <target>Definir um subconjunto de sua estrutura física para replicar</target>        </trans-unit>        <trans-unit id="qMEWI32KtQ+D9lKWoqTrOw" resname="wel_title_2">          <source>Design</source>          <target>Desenho</target>        </trans-unit>        <trans-unit id="2yhkIdRfEVPEpJZIXtgGug" resname="wel_title_3">          <source>Generate &amp; Test</source>          <target>Gerar e testar</target>        </trans-unit>        <trans-unit id="8BsX+cT0NN5rs0OuQvYj1A" resname="wel_title_4">          <source>Deploy</source>          <target>Implantar</target>        </trans-unit>        <trans-unit id="sZz0jnV9vQlfi6/iUbajLA" resname="wel_description_2">          <source>Choose the layouts and the style of your app</source>          <target>Escolha o layout e o estilo do seu aplicativo em poucos passos</target>        </trans-unit>        <trans-unit id="XAlx0cpDHP6yXkNWzkJcGA" resname="wel_description_3">          <source>Create your Xcode project and test your app on any iPhone</source>          <target>Crie seu projeto Xcode em um único clique einicie seu aplicativo em qualquer dispositivo iPhone</target>        </trans-unit>        <trans-unit id="ybraH0Dn6IKVjiTy58Y+QQ" resname="wel_description_4">          <source>Choose an in-house or App Store deployment model</source>          <target>Escolha se você distribui seu aplicativo com AppStore ou em sua empresa</target>        </trans-unit>        <trans-unit id="vk1++U/rqp3WrUVgJHNMdg" resname="wel_title">          <source>Welcome to 4D for iOS</source>          <target>Bem-vindo ao 4D for iOS</target>        </trans-unit>        <trans-unit id="DpUH4asSx3PjgGi4QnxQug" resname="wel_subtitle">          <source>Extend your existing desktop or web applications to mobile.Easily create and deploy custom native iOS apps.</source>          <target>Estenda seus aplicativos de desktop ou web existentes para o celular.Crie e implemente facilmente aplicativos iOS nativos.</target>        </trans-unit>      </group>      <group resname="BindingTypes">        <trans-unit id="PU5Yhrjsvv3AmxNrj+sA8A" resname="_shortDate">          <source>Short date</source>          <target>Data abreviada</target>        </trans-unit>        <trans-unit id="lyrTnqgCODygDTMHj1R0jw" resname="_mediumDate">          <source>Date</source>          <target>Data</target>        </trans-unit>        <trans-unit id="FeW6VI9XuKuHQKRFMoDECQ" resname="_longDate">          <source>Long date</source>          <target>Data longa</target>        </trans-unit>        <trans-unit id="4mSrGj5s4cJOYNlDf8MpYw" resname="_fullDate">          <source>Full date</source>          <target>Data completa</target>        </trans-unit>        <trans-unit id="QIaMbIG9Rr1xBW9QRMCyMA" resname="_shortTime">          <source>Short time</source>          <target>Hora curta</target>        </trans-unit>        <trans-unit id="pFI0D3bAXkbZPdLOGk0VRw" resname="_mediumTime">          <source>Time</source>          <target>Hora</target>        </trans-unit>        <trans-unit id="EC0lxfXov5GbYCp3ZiOPFg" resname="_duration">          <source>Duration</source>          <target>Duração</target>        </trans-unit>        <trans-unit id="CKy/siSzftfHmllv5/H5ZA" resname="_noOrYes">          <source>"No" or "Yes"</source>          <target>"Sim" ou "Não"</target>        </trans-unit>        <trans-unit id="KwRcINmfxRv8cpI9e1CmPA" resname="_integer">          <source>Integer number</source>          <target>Número inteiro</target>        </trans-unit>        <trans-unit id="ZfgOh9KGNSiwfYdmVe3Tvw" resname="_decimal">          <source>Decimal number</source>          <target>Número decimal</target>        </trans-unit>        <trans-unit id="L94JWKVgeda6eEwwANFYvw" resname="_spellOut">          <source>Spell Out</source>          <target>Número em letras</target>        </trans-unit>        <trans-unit id="lfeH2tz3ItObI2uld31gTA" resname="_ordinal">          <source>Ordinal number</source>          <target>Número ordinal</target>        </trans-unit>        <trans-unit id="i/uakzQh/twRt4CbpFooEg" resname="_percent">          <source>Percentage</source>          <target>Porcentagem</target>        </trans-unit>        <trans-unit id="C19mT1XKs7b1DY3W8SbLRw" resname="_distance">          <source>Distance</source>          <target>Distância</target>        </trans-unit>        <trans-unit id="K0ZVM2+Bb+scIOGtdk9cwg" resname="_address">          <source>Adress</source>          <target>Endereço</target>        </trans-unit>        <trans-unit id="SqWNYCxyhpPUz8hKjQ3RlQ" resname="_phone">          <source>Phone Number</source>          <target>Número de telefone</target>        </trans-unit>        <trans-unit id="OmnAn1U+nvOXJWpKhBgrHg" resname="_mail">          <source>Mail address</source>          <target>Endereço de correio</target>        </trans-unit>        <trans-unit id="UewHtSze1BjX8DfGFeUkNQ" resname="_url">          <source>URL</source>          <target>URL</target>        </trans-unit>        <trans-unit id="3dYJlZQ9JfAInDDwRo8bRg" resname="_text">          <source>Text</source>          <target>Texto</target>        </trans-unit>        <trans-unit id="W5IUzXH6kyopFmdAOG8kVg" resname="_falseOrTrue">          <source>"False" or "True"</source>          <target>"Falso" ou "Verdadeiro"</target>        </trans-unit>        <trans-unit id="d38WOlf252/rnKVO/bCtOw" resname="_restImage">          <source>Image</source>          <target>Imagem</target>        </trans-unit>        <trans-unit id="pusOeBX8XRwFTzjoEX2hGA" resname="_real">          <source>Real number</source>          <target>Número real</target>        </trans-unit>        <trans-unit id="QnSc5xmkOH0oHVU2qZQjBw" resname="_currencyDollar">          <source>Currency $</source>          <target>Moeda $</target>        </trans-unit>        <trans-unit id="d85u095TbC9HBTiXC8VKMA" resname="_currencyEuro">          <source>Currency €</source>          <target>Moeda €</target>        </trans-unit>        <trans-unit id="bkNRMW8GaDxwVuc08Y8mpQ" resname="_currencyYen">          <source>Currency ¥</source>          <target>Moeda ¥</target>        </trans-unit>      </group>      <group resname="Data">        <trans-unit id="Zu2nG+YFXJJt1kjCHOVClA" resname="queryFilter">          <source>Filter query</source>          <target>Filtro de pesquisa</target>        </trans-unit>        <trans-unit id="r8Y2OHan9Y+SIavXuF3IVA" resname="options">          <source>Options</source>          <target>Opções</target>        </trans-unit>        <trans-unit id="7BKi1O3gnxnYsdFJp6FixQ" resname="embedDataIntoTheBuildedApplication">          <source>Embed data into the built application</source>          <target>Incorporar os dados no aplicativo</target>        </trans-unit>        <trans-unit id="kQSiUK7Bbh+voMf1nodYhA" resname="validate">          <source>Validate</source>          <target>Validar</target>        </trans-unit>        <trans-unit id="hKLfg7CYHsc/oQgjPZur3Q" resname="currentDataFile">          <source>Current data file</source>          <target>Arquivo de dados atual</target>        </trans-unit>        <trans-unit id="jo5ID3RhNN8g5tfQjx2dnw" resname="productionServer">          <source>Production server data file</source>          <target>Arquivo de dados do servidor de produção</target>        </trans-unit>        <trans-unit id="MaLfdvREnZ0xWbsICOEpnA" resname="doNotGenerateDataAtEachBuild">          <source>Do not regenerate data at each build</source>          <target>Não regenerar dados em cada compilação</target>        </trans-unit>        <trans-unit id="5wOA0G+FjpL0tUbV2WaWsQ" resname="generate">          <source>Regenerate now</source>          <target>Regenerar agora</target>        </trans-unit>        <trans-unit id="qxePQ2An7tAuLPa3IR7nFQ" resname="source">          <source>Data source</source>          <target>Fonte de dados</target>        </trans-unit>        <trans-unit id="+7v0NV922nvckyKlEDHcew" resname="properties">          <source>Properties</source>          <target>Propriedades</target>        </trans-unit>        <trans-unit id="Z8ZQtgDsijdCTCIxqQ27ZQ" resname="notValidatedFilter">          <source>Not validated filter</source>          <target>Filtro não validado</target>        </trans-unit>        <trans-unit id="Se56M/yic0etCDWlG5/rMA" resname="leaveBlankToNotFilterData">          <source> Leave blank for unfiltered data</source>          <target> Deixar em branco para dados não filtrados</target>        </trans-unit>        <trans-unit id="x+fvZ5eqyTVJGcNFeN5vIQ" resname="allDataWillBeIntegratedIntoTheApplication">          <source>All data will be embedded into the application</source>          <target>Todos os dados serão integrados no aplicativo</target>        </trans-unit>        <trans-unit id="Xlt30BgBEhmHawx+tQ0RKw" resname="theFilteredDataWillBeIntegratedIntoTheApplication">          <source>The filtered data will be embedded into the application</source>          <target>Os dados filtrados serão integrados no aplicativo</target>        </trans-unit>        <trans-unit id="E85kP+K3ohFeP1FMI6r+zg" resname="theDataWillBeFilteredAccordingToTheConnectedUserParameters">          <source>The data will be filtered according to the user's parameters</source>          <target>Os dados serão filtrados de acordo com os parâmetros do usuário</target>        </trans-unit>        <trans-unit id="lR3f1SC5YdGKXFi47PIgfg" resname="theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting">          <source>The filtered data will be loaded into the application upon connection</source>          <target>Os dados filtrados serão carregados no aplicativo após a conexão</target>        </trans-unit>        <trans-unit id="bXIQ4jH/vEDQsEtzVNFuUQ" resname="theFilterWillBeIgnored">          <source>The filter will be ignored</source>          <target>O filtro será ignorado</target>        </trans-unit>        <trans-unit id="PbgQgwMu8K4LQv7scZFYrA" resname="allDataWillBeLoadedIntoTheApplicationWhenConnecting">          <source>All data will be loaded into the application upon connection</source>          <target>Todos os dados serão carregados no aplicativo após a conexão</target>        </trans-unit>        <trans-unit id="ZJ+iTSNmC34jkRbeQkI1Qg" resname="editAuthenticationMethod">          <source>Edit authentication method…</source>          <target>Edite o método de autenticação...</target>        </trans-unit>        <trans-unit id="fab9Yi3c0kj1nfwJaYDgOw" resname="dataSize">          <source>Size</source>          <target>Tamanho</target>        </trans-unit>        <trans-unit id="uj/sf/HQm32GEVL3Smq/fg" resname="setTheServerUrl">          <source>Set the server URL</source>          <target>Definir a URL do servidor</target>        </trans-unit>        <trans-unit id="a/eW2Ql/HPi//NDWAZN7iw" resname="locateTheKey">          <source>Locate the key…</source>          <target>Localize a chave...</target>        </trans-unit>        <trans-unit id="hZKzK39Kz+F58z/8QGc8xw" resname="clickToGenerateADataset">          <source>Click to generate a dataset</source>          <target>Clique para gerar um conjunto de dados</target>        </trans-unit>        <trans-unit id="2I/jf3rQmMzAeXwcqaJ3MQ" resname="aDatasetWillBeGeneratedIfAnyAtEachBuild">          <source>A dataset will be generated, if any, at each build</source>          <target>Um conjunto de dados será gerado, se houver, em cada compilação</target>        </trans-unit>        <trans-unit id="LGkGpUSI4/G5RDq5PfJ6Kw" resname="theDataSourceIsNotReady">          <source>The data source is not ready</source>          <target>A fonte de dados não está pronta</target>        </trans-unit>        <trans-unit id="UlGb4IAAdDngDHT5CdBkyQ" resname="dataSetGeneration">          <source>Data set generationThis may take a few minutes…</source>          <target state="needs-review-translation">Geração de conjunto de dados</target>        </trans-unit>      </group>      <group resname="Actions">        <trans-unit id="ZJ88fqO1LSZAJlaER5yBkw" resname="scope">          <source>Scope</source>          <target>Escopo</target>        </trans-unit>        <trans-unit id="yd/il+xNmEjKu6GJ3BLM5A" resname="actionMethod">          <source>On Mobile App Action method</source>          <target>Método de ação</target>        </trans-unit>        <trans-unit id="oosy3Rrf+DGTNGFoN5sqyg" resname="chooseAnIconForTheAction">          <source>Choose an icon for the action "{action}"</source>          <target>Escolha um ícone para a ação "{action}"</target>        </trans-unit>        <trans-unit id="d0xwJDgqWJFNqkQ0f4Iusg" resname="scope_1" translate="no">          <source>table</source>        </trans-unit>        <trans-unit id="eG4sDuxfDpva+ZSWGcaMxw" resname="scope_2" translate="no">          <source>currentRecord</source>        </trans-unit>        <trans-unit id="HXbTXHPfNI78HtbhH2LiwQ" resname="currentRecord">          <source>Current entity</source>          <target>Entidade atual</target>        </trans-unit>        <trans-unit id="GSrT0ceKYaO0ss4XIwdf6Q" resname="currentSelection">          <source>Entity selection</source>          <target>Seleção de entidades</target>        </trans-unit>        <trans-unit id="WVT1lgagIqhzTDn3BQMK0Q" resname="label">          <source>Label</source>          <target>Etiqueta</target>        </trans-unit>        <trans-unit id="0tWbWAtnRHyPh86eBm44Uw" resname="shortLabel">          <source>Short label</source>          <target>Etiqueta curta</target>        </trans-unit>        <trans-unit id="G3BCIScJhJYnoiIMpUpmVw" resname="type">          <source>Type</source>          <target>Tipo</target>        </trans-unit>        <trans-unit id="T4fHkDtHNwu//XsIOT+jTQ" resname="selectAnActionToDisplayItsParameters">          <source>Select an action to display its parameters</source>          <target>Selecione uma ação para exibir seus parâmetros</target>        </trans-unit>        <trans-unit id="kQIAlsWTzLDCZRDyq1r0Fg" resname="editActionFor">          <source>Edit action for</source>          <target>Ação de edição para</target>        </trans-unit>        <trans-unit id="pP6FDgPfc2qc38/ZM+u0yA" resname="newAction">          <source>New action</source>          <target>Nova ação</target>        </trans-unit>        <trans-unit id="N8J0oFRYJ9VSLVLIY5Q8YQ" resname="deleteActionFor">          <source>Delete action for</source>          <target>Excluir ação para</target>        </trans-unit>        <trans-unit id="xk/zntuPwcBSyxLOORSlUg" resname="addParameter">          <source>New parameter</source>          <target>Novo parâmetro</target>        </trans-unit>        <trans-unit id="3qZVq5p0It8B+pEd8lcb2A" resname="newParameter" translate="no">          <source>newParameter</source>        </trans-unit>        <trans-unit id="YNHZrsNYOVVpJvtNYi6yWg" resname="format">          <source>Format</source>          <target>Formato</target>        </trans-unit>        <trans-unit id="CslBKGvKFgv0rTvrLfwxaA" resname="thisParameterIsLinkedToTheField">          <source>This parameter is linked to the "{field}" field</source>          <target>Este parâmetro está vinculado ao campo "{field}"</target>        </trans-unit>        <trans-unit id="HzfLddFHdci5bUulPmPPQg" resname="deleteActionDoesNotUseParameter">          <source>A delete action does not use parameter</source>          <target>Uma ação de exclusão não usa parâmetros</target>        </trans-unit>        <trans-unit id="pig4JOLzzzslQppOS2rGjg" resname="createAnActionToBeAbleToAddParameters">          <source>Create an action to be able to add parameters</source>          <target>Criar uma ação para poder adicionar parâmetros</target>        </trans-unit>        <trans-unit id="mCEEWI8ZYwzKG5ioWilt2A" resname="addActionFor">          <source>Add action for</source>          <target>Adicionar ação para</target>        </trans-unit>      </group>    </body>  </file></xliff>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!--Translation file.
+This file is distributed under the same license as the product package.-->
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+
+  <file datatype="x-STR#" original="undefined" source-language="en-US" target-language="pt">
+    <header>
+      <prop-group name="Xliff-Editor.4dbase">
+        <prop prop-type="version">2.0</prop>
+        <prop-group prop-type="version">2.0</prop-group>
+      </prop-group>
+    </header>
+    <body>
+      <group resname="Product">
+        <trans-unit id="2" resname="appNameTip">
+          <source>The product name is the name of your application as it will appear to customers in the store and should be similar to the name you enter later in iTunes Connect.
+The product name cannot be longer than 255 bytes and can be no fewer than 2 characters.</source>
+          <target>O nome do produto é o nome do seu aplicativo que será exibida aos clientes na loja e deve ser semelhante ao nome que você inserir mais tarde no iTunes Connect.
+O nome do produto não pode ser mais de 255 bytes e não pode ser menos de 2 caracteres.</target>
+        </trans-unit>
+        <trans-unit id="Flc/fRdL/keF/6c2Zw5Ebg" resname="appBundleIDTip">
+          <source>The product name and the organization identifier you enter are concatenated to create the bundle ID using reverse DNS.&#xD;The bundle ID must uniquely identify your application, so it's important to define the identifier of the organization by a unique string.</source>
+          <target>O nome do produto e o identificador de organização que você inserir são concatenados para criar o ID de pacote usando o DNS reverso.
+O ID de pacote deve identificar exclusivamente o seu aplicativo, por isso é importante definir o identificador da organização por uma sequência de caracteres única.</target>
+        </trans-unit>
+        <trans-unit id="7GQ/DwNPqTdzngVykxxguw" resname="appBundleID">
+          <source>ID</source>
+          <target>ID</target>
+        </trans-unit>
+        <trans-unit id="E7F5JYhVkTtRSXwrssagHg" resname="appCopyright">
+          <source>Copyright</source>
+          <target>Copyright</target>
+        </trans-unit>
+        <trans-unit id="0YWfXLJdsgB9Pz1JHpbUkQ" resname="appVersion">
+          <source>Version</source>
+          <target>Versão</target>
+        </trans-unit>
+        <trans-unit id="sU8MJ8OECVT5J8kifg+EZw" resname="appIcons">
+          <source>Icons</source>
+          <target>Icones</target>
+        </trans-unit>
+        <trans-unit id="WK0v8PNjVSfdxixYbOGWHw" resname="appIconsTip">
+          <source>Drop an image or application to use as your app icon.
+Click to see more options.</source>
+          <target>Solte uma imagem ou aplicativo para usar como o ícone do app.
+Clique para ver mais opções.</target>
+        </trans-unit>
+      </group>
+      <group resname="Images">
+        <trans-unit id="Gu+J5EfhnBOH6joEDMgbrg" resname="picSize">
+          <source>{w} x {h} pixels</source>
+          <target>{w} x {h} pixels</target>
+        </trans-unit>
+      </group>
+      <group resname="Organisation">
+        <trans-unit id="+WY0a3+CJlZa0D6a2PvIkw" resname="orgName">
+          <source>Name</source>
+          <target>Nome</target>
+        </trans-unit>
+        <trans-unit id="KY/9yNBanjCy65XLbxf5wA" resname="orgTeam">
+          <source>Team</source>
+          <target>Equipe</target>
+        </trans-unit>
+        <trans-unit id="YKKr910iIiDeTyx8ktPkWA" resname="orgNameTip">
+          <source>The organization name is an attribute of the Xcode project and is used throughout your project folder.
+For example, the organization name is used in both the source and header.</source>
+          <target>O nome da organização é um atributo do projeto Xcode e é usado em toda a sua pasta de projeto.
+Por exemplo, o nome da organização é usado na fonte e o cabeçalho.</target>
+        </trans-unit>
+        <trans-unit id="x45+UkJ1HsgQwv9zZLWiHA" resname="orgIdentifier">
+          <source>Identifier</source>
+          <target>Identificador</target>
+        </trans-unit>
+      </group>
+      <group resname="mnu">
+        <trans-unit id="dQCY5aWRLII57TWHdkJeFw" resname="mnuRunWithoutBuilding">
+          <source>Run</source>
+          <target>Executar</target>
+        </trans-unit>
+        <trans-unit id="" resname="mnuCreateWorkspace">
+          <source>Generate the project</source>
+          <target>Gerar o projeto</target>
+        </trans-unit>
+        <trans-unit id="" resname="mnuBuild">
+          <source>Build and Run</source>
+          <target>Gerar e executar</target>
+          <note>limited to 16 characters</note>
+        </trans-unit>
+        <trans-unit id="eX98UAD3TFUUu0iY1/XXZg" resname="mnuBuildAndRun">
+          <source>Generate and run</source>
+          <target>Gerar e executar</target>
+        </trans-unit>
+        <trans-unit id="qN7UmNkdE0Voat2TONNuqQ" resname="mnuProjectFolder">
+          <source>Open the project folder</source>
+          <target>Abrir a pasta do projeto</target>
+        </trans-unit>
+        <trans-unit id="/l+HaMVRxtnwBZHM5d5b+Q" resname="mnuProductFolder">
+          <source>Open the product folder</source>
+          <target>Abrir a pasta de produto</target>
+        </trans-unit>
+        <trans-unit id="RWTxlvyx0s+Q1itjnt9zkQ" resname="mnuOpenTheProjectWithXcode">
+          <source>Open the product with Xcode…</source>
+          <target>Abrir o projeto com o Xcode...</target>
+        </trans-unit>
+        <trans-unit id="W7aJDvlAOuu4dLn+p3QeKA" resname="browse">
+          <source>Browse…</source>
+          <target>Selecionar...</target>
+        </trans-unit>
+        <trans-unit id="f4CRvC+kRzt3Macgyknsgg" resname="showIconsFolder">
+          <source>Open the icons folder</source>
+          <target>Abrir a pasta de ícones</target>
+        </trans-unit>
+        <trans-unit id="w5B4zoJCPfBbxIag22Nxhw" resname="syncDataModel">
+          <source>Update the Data Model…</source>
+          <target>Atualize o modelo de dados...</target>
+        </trans-unit>
+        <trans-unit id="YNrlvO3LO5bEnyvM04VAMQ" resname="installTestCertificates">
+          <source>Install test certificates</source>
+          <target>Instalar certificados de teste</target>
+        </trans-unit>
+        <trans-unit id="2vF0fnkevlekWN5ZlUnDIA" resname="openSimulatorLogs">
+          <source>Open Simulator logs</source>
+          <target>Abrir os logs do simulador</target>
+        </trans-unit>
+        <trans-unit id="D10w3CW6+0/OGo6KjVQI6w" resname="openSimulatorDiagnosticReports">
+          <source>Open Simulator Diagnostic Reports</source>
+          <target>Abrir o relatório de diagnóstico do simulador</target>
+        </trans-unit>
+        <trans-unit id="VKKuimM+kn/lVJAh/FskNw" resname="openCurrentSimulatorFolder">
+          <source>Open Current Simulator Folder</source>
+          <target>Abrir a pasta atual do simulador</target>
+        </trans-unit>
+        <trans-unit id="C5+IaCe3veQijkNsKhetGQ" resname="openApplicationSimulatorFolder">
+          <source>Open Application Simulator Folder</source>
+          <target>Abrir a pasta do simulador de aplicativo</target>
+        </trans-unit>
+        <trans-unit id="mh+/Tt4nDek44BpYUhu3FA" resname="clearXcodeBuild">
+          <source>Clear Xcode Build</source>
+          <target>Limpar o build de Xcode </target>
+        </trans-unit>
+        <trans-unit id="rZ/x0ioG35Mi1aPGTHwudw" resname="openTheCacheFolder">
+          <source>Open the Cache folder</source>
+          <target>Abrir a pasta cache</target>
+        </trans-unit>
+        <trans-unit id="IayoIBs6ERxfIYtMZbLW7g" resname="verbose">
+          <source>Verbose</source>
+          <target>Verboso</target>
+        </trans-unit>
+      </group>
+      <group resname="Editor">
+        <trans-unit id="2A4HE0XGocrpmX5cXthn8A" resname="bRunTip">
+          <source>Build and run the application in the Simulator</source>
+          <target>Gerar e executar o aplicativo</target>
+        </trans-unit>
+        <trans-unit id="ktqpkefeRRNxbEr3mmc75Q" resname="bInstallTip">
+          <source>Build and install the application on the connected device</source>
+          <target>Gerar e instalar o aplicativo no dispositivo conectado</target>
+        </trans-unit>
+      </group>
+      <group resname="Server">
+        <trans-unit id="8mwP7ZLGA6RYFWze2XbW/g" resname="theWebServerIsShutDown">
+          <source>The Web Server is not started</source>
+          <target>O servidor Web está parado.</target>
+        </trans-unit>
+        <trans-unit id="fqZRR71Ed/LlqbrwyUO0Tg" resname="theTcpPortIdDefinedIntoTheUrlIsNotTheSameAsUsedByTheWebServer">
+          <source>The TCP port ID defined into the URL ({urlPort}) is not the same as used by the Web server ({currentPort})</source>
+          <target>O ID da porta TCP na URL ({urlPort}) não é o mesmo usado pelo servidor web ({currentPort})</target>
+        </trans-unit>
+        <trans-unit id="gJK2embRs7TsScF5VeBnwg" resname="youMustRestartTheServerToActivateThe4dMobileService">
+          <source>You must restart the web server to activate the 4D Mobile service.</source>
+          <target>Você deve reiniciar o servidor web para ativar o serviço 4D Mobile.</target>
+        </trans-unit>
+        <trans-unit id="L8HpJW8m4P+6RCJ4EtsqIQ" resname="4dMobileServiceIsDisabled">
+          <source>4D Mobile service is not enabled.</source>
+          <target>O serviço 4D Mobile não está habilitado.</target>
+        </trans-unit>
+        <trans-unit id="iu1Ayz2i1JDxVL7q3H0NCg" resname="theWebServerIsRunning">
+          <source>The Web Server is running</source>
+          <target>O servidor web está sendo executado</target>
+        </trans-unit>
+        <trans-unit id="RZgV/xt6GiuCguZxHHxRag" resname="theWebServerIsNotReachable">
+          <source>The Web server is not reachable.</source>
+          <target>O servidor web não é acessível.</target>
+        </trans-unit>
+        <trans-unit id="pi4dGCtD2uBwybCSl4nZYg" resname="productionURLTip">
+          <source>This URL will be used by mobile devices using the application.</source>
+          <target>Essa URL será usada por dispositivos móveis que usam o aplicativo.</target>
+        </trans-unit>
+        <trans-unit id="syL4k7dFB4LVRECMEozjMA" resname="productionUrl">
+          <source>Production URL</source>
+          <target>URL de produção</target>
+        </trans-unit>
+        <trans-unit id="uqBAX2WAZVaKQ6LL9VuJOA" resname="authentication">
+          <source>Authentication</source>
+          <target>Autenticação</target>
+        </trans-unit>
+        <trans-unit id="xj6cTM8sxO94uZpjxC3hNA" resname="requiresAnEmailToConnect">
+          <source>Login required</source>
+          <target>Login necessário</target>
+        </trans-unit>
+        <trans-unit id="LsWggHSVyCZIzyKnbhIdxw" resname="authenticationMethod">
+          <source>Authentication method</source>
+          <target>Método de autenticação</target>
+        </trans-unit>
+        <trans-unit id="2rBMzvlz2L7H4xFNAGUpvw" resname="theUrlNeedsToBeginWithHttps">
+          <source>The URL needs to begin with “https”</source>
+          <target>O URL deve começar com "https"</target>
+        </trans-unit>
+        <trans-unit id="E03WpBX2jrtvPnZ09ldY7w" resname="checkThatTheCertificatesAreProperlyInstalled">
+          <source>Check that the certificates are properly installed.</source>
+          <target>Verificar que os certificados estão instalados corretamente.</target>
+        </trans-unit>
+        <trans-unit id="aZN0VsYUGdmNQHuAkq97Wg" resname="httpsServerIsNotEnabledInWebConfigurationSettings">
+          <source>HTTPS Server Is Not Enabled in Web Configuration Settings.</source>
+          <target>O servidor HTTPS não está habilitado na configuração Web.</target>
+        </trans-unit>
+        <trans-unit id="yfkP3zyZiO4v43iu9UH9OQ" resname="webServerSettings">
+          <source>Web Server Settings</source>
+          <target>Configurações do servidor Web</target>
+        </trans-unit>
+        <trans-unit id="lE7lMIWfPMEckVR4jRHf7A" resname="theProductionUrlIsNotPopulated">
+          <source>The production URL is not populated.</source>
+          <target>A URL de produção não é preenchida.</target>
+        </trans-unit>
+        <trans-unit id="pOh+jYQja0KBHCFhN2+3Ng" resname="clickToFillItIn">
+          <source>Click here to populate it.</source>
+          <target>Clique aqui para preenchê-lo.</target>
+        </trans-unit>
+        <trans-unit id="h3KajHMnxGkSO7lu4NWs6w" resname="clickToStartIt">
+          <source>Click here to start it.</source>
+          <target>Clique aqui para iniciá-lo.</target>
+        </trans-unit>
+        <trans-unit id="pu/ZABSt+kbljoN/DNKV8A" resname="serverIsOnline">
+          <source>Server is online</source>
+          <target>O servidor está online</target>
+        </trans-unit>
+        <trans-unit id="n9LyFkH1Xhjspwi2BYzVMQ" resname="theServerIsNotReady">
+          <source>The Web Server is not ready</source>
+          <target>O servidor Web não está pronto</target>
+        </trans-unit>
+        <trans-unit id="ht9rElpVo+NhsWeAME9IOQ" resname="unauthorizedAccess">
+          <source>Unauthorized access</source>
+          <target>Acesso não autorizado</target>
+        </trans-unit>
+        <trans-unit id="o6C2namywpLFTnbajxSfAw" resname="maxNumberOfSessionsReached">
+          <source>The maximum number of sessions is reached</source>
+          <target>O número máximo de sessões foi alcançado</target>
+        </trans-unit>
+        <trans-unit id="A35v7IKYKMgPQL3lGVsf/w" resname="theRequestIsMalformed">
+          <source>The request is malformed</source>
+          <target>O pedido é malformado</target>
+        </trans-unit>
+        <trans-unit id="ymkHImCWARDpcl2xenvqJw" resname="theDatabaseMethodIsNotDefined">
+          <source>The database method "On 4D Mobile Authentication" is not defined</source>
+          <target>O método de base de dados "On 4D Mobile Authentication" não está definido</target>
+        </trans-unit>
+        <trans-unit id="4fTNb3VQaSfIJIxTTqAbdQ" resname="theDatabaseMethodHasFailed">
+          <source>The database method "On 4D Mobile Authentication" failed</source>
+          <target>O método de banco de dados "On 4D Mobile Authentication" falhou</target>
+        </trans-unit>
+        <trans-unit id="6LCVJWp68qZqTHbIvKhBnw" resname="theDatabaseMethodTookTooLongToExecute">
+          <source>The database method "On 4D Mobile Authentication" is too long to execute</source>
+          <target>O método de banco de dados "On 4D Mobile Authentication" é muito longo para executar</target>
+        </trans-unit>
+        <trans-unit id="wTv5LFd2Mcixu08ImlFBJg" resname="theKeyFileIsNotAvailable">
+          <source>The key file is not available.</source>
+          <target>O arquivo de chave não está disponível.</target>
+        </trans-unit>
+        <trans-unit id="rUkipNnUTLKUUj2rthavvQ" resname="clickHereToFindTheKeyFile">
+          <source>Click here to find the key file.</source>
+          <target>Clique aqui para encontrar o arquivo de chave.</target>
+        </trans-unit>
+        <trans-unit id="ib1E3xvZn4wBPR2aWASigw" resname="selectTheKeyFile">
+          <source>Select the key file</source>
+          <target>Selecione o arquivo da chave</target>
+        </trans-unit>
+        <trans-unit id="G46mmFGutWe706LSa+nHTg" resname="failedToGenerateAuthorizationKey">
+          <source>Failed to generate authorization key</source>
+          <target>Falha ao gerar a chave de autorização</target>
+        </trans-unit>
+        <trans-unit id="xb6O9Ar1QVwg1h6N65yu2g" resname="serverNotFound">
+          <source>Server not Found</source>
+          <target>Servidor não encontrado</target>
+        </trans-unit>
+        <trans-unit id="OwacehRmw196KcfYi+xKUA" resname="serviceUnavailable">
+          <source>Service Unavailable</source>
+          <target>Serviço indisponível</target>
+        </trans-unit>
+        <trans-unit id="m5Ue3VX9eEtuV3nuVJBsmw" resname="checkingServerAvailability">
+          <source>Checking server availability</source>
+          <target>Verificando a disponibilidade do servidor</target>
+        </trans-unit>
+        <trans-unit id="pB/ed09CIjqL7ZOVO/m5Hw" resname="makeSureThatTheKeyProvidedIsTheKeyOfTheServer">
+          <source>Make sure that the key provided is the key of the server.</source>
+          <target>Certifique-se de que a chave fornecida é a chave do servidor.</target>
+        </trans-unit>
+      </group>
+      <group resname="Common">
+        <trans-unit id="zvsuXgdhmzTyWETfWvmAWg" resname="none">
+          <source>&lt;none&gt;</source>
+          <target>&lt;Nenhum&gt;</target>
+        </trans-unit>
+        <trans-unit id="AlQg27FfCJ9jb5fOBVbLSA" resname="booted">
+          <source> (active)</source>
+          <target> (ativo)</target>
+        </trans-unit>
+        <trans-unit id="gO2RO72dNUvKOrDahvf7Wg" resname="sortByName">
+          <source>Sort by name</source>
+          <target>Ordenar por nome</target>
+        </trans-unit>
+        <trans-unit id="MRlOaSRYqtOWckMn7u2z2g" resname="defaultSort">
+          <source>Default sort</source>
+          <target>Ordem por padrão</target>
+        </trans-unit>
+        <trans-unit id="yYsOkE36YaxEtd44YTZhlQ" resname="icons">
+          <source>Icons</source>
+          <target>Icones</target>
+        </trans-unit>
+        <trans-unit id="+N2Mx1leCWwdDj5jxi9lbw" resname="noMedia">
+          <source>Folder is empty</source>
+          <target>A pasta está vazia</target>
+        </trans-unit>
+        <trans-unit id="yMb+uQCF7//SgPboAk3Qjw" resname="areYouSure">
+          <source>Are you sure?</source>
+          <target>Tem certeza?</target>
+        </trans-unit>
+        <trans-unit id="zqDrLnknDRw5z0pyHOdY8g" resname="title">
+          <source>Title</source>
+          <target>Título</target>
+        </trans-unit>
+        <trans-unit id="iiIuDZ8LVdGUrnwls4CAgA" resname="name">
+          <source>Name</source>
+          <target>Nome</target>
+        </trans-unit>
+        <trans-unit id="klU8I5sfq5wps70C7YOb0g" resname="selectedTables">
+          <source>Selected Tables</source>
+          <target>Tabelas selecionadas</target>
+        </trans-unit>
+        <trans-unit id="68+1yQKbPdo8Vwtqxa11ow" resname="noPublishedTable">
+          <source>Please, publish at least one field…</source>
+          <target>Por favor, publique pelo menos um campo...</target>
+        </trans-unit>
+        <trans-unit id="DjH0KVRkyDe6ci2lBmfftg" resname="doNotShowAgain">
+          <source>Do not show again</source>
+          <target>Não mostrar novamente</target>
+        </trans-unit>
+        <trans-unit id="5qUbC19ROoSzAy60mr+EJg" resname="shouldBe10CharOrLess">
+          <source>Short label should be 10 characters or less</source>
+          <target>A etiqueta curta deve ser de 10 caracteres ou menos</target>
+        </trans-unit>
+        <trans-unit id="K2E/8/B/Za/zykSirwsrzA" resname="shouldBe25CharOrLess">
+          <source>Long label should be 25 characters or less</source>
+          <target>A etiqueta longa deve ser de 25 caracteres ou menos</target>
+        </trans-unit>
+        <trans-unit id="5idjPjyoxZH+ZyycoVjW/g" resname="edit...">
+          <source>Edit…</source>
+          <target>Modificar...</target>
+        </trans-unit>
+        <trans-unit id="hopgEJ5HGSMxAk/+X5xCMw" resname="create...">
+          <source>Create…</source>
+          <target>Crie...</target>
+        </trans-unit>
+        <trans-unit id="Tf8ARjdmc1DY59yKgPXSMg" resname="formatters">
+          <source>Formats</source>
+          <target>Formatos</target>
+        </trans-unit>
+        <trans-unit id="cO5xOiSYEDRij/gCxJZCvA" resname="names">
+          <source>Names</source>
+          <target>Nomes</target>
+        </trans-unit>
+        <trans-unit id="uhZW2KJciDkA84Mv5FXY2w" resname="table">
+          <source>Table</source>
+          <target>Tabela</target>
+        </trans-unit>
+        <trans-unit id="Nh6k48ly/6ghIqk2JcQ3Zg" resname="remove">
+          <source>Remove</source>
+          <target>Remover</target>
+        </trans-unit>
+        <trans-unit id="Dneq3tCEz0G3lFqKMWJacg" resname="defaultValue">
+          <source>Default value</source>
+          <target>Valor padrão</target>
+        </trans-unit>
+        <trans-unit id="ZOVAOV+Akq1Ub73bpN8cpw" resname="byDefault">
+          <source>By default</source>
+          <target>Padrão</target>
+        </trans-unit>
+        <trans-unit id="M9kne/S+TFchwZ2eYMDwSw" resname="add...">
+          <source>Add…</source>
+          <target>Adicionar...</target>
+        </trans-unit>
+        <trans-unit id="nzMGIeAoNyVhS4GZngdZxg" resname="downloadMoreResources">
+          <source>Download more {resources}</source>
+          <target>Baixe mais {resources}</target>
+        </trans-unit>
+      </group>
+      <group resname="Pannels">
+        <trans-unit id="7k+yWCBxtI1lrsMfZW9a3g" resname="organization">
+          <source>Organization</source>
+          <target>Organização</target>
+        </trans-unit>
+        <trans-unit id="/R2Ui9q4c001s00J0ZgCbA" resname="product">
+          <source>Product</source>
+          <target>Produto</target>
+        </trans-unit>
+        <trans-unit id="k6T6D68Rr3M/SPs4W2O2gg" resname="developer">
+          <source>Developer</source>
+          <target>Programador</target>
+        </trans-unit>
+        <trans-unit id="jFGnLuS2i/obqn/1LeYddQ" resname="publishedStructure">
+          <source>Published Fields</source>
+          <target>Campos publicados</target>
+        </trans-unit>
+        <trans-unit id="tVPFfnEqKQwZZo+i0zkdQA" resname="server">
+          <source>4D Server</source>
+          <target>4D Server</target>
+        </trans-unit>
+        <trans-unit id="Nwm/yKkw6czXbette010Yg" resname="structure">
+          <source>Structure</source>
+          <target>Estrutura</target>
+        </trans-unit>
+        <trans-unit id="G3O2PzkEZsgC11X98duYGQ" resname="main">
+          <source>Main View</source>
+          <target>Vista principal</target>
+        </trans-unit>
+        <trans-unit id="LjoOGIaZDFHKk4teXIbBSQ" resname="tablesProperties">
+          <source>Table Properties</source>
+          <target>Propriedades de tabelas</target>
+        </trans-unit>
+        <trans-unit id="1Fk1BAaNtJvcsZoCOEvNIQ" resname="mainMenu">
+          <source>Main Menu</source>
+          <target>Menu principal</target>
+        </trans-unit>
+        <trans-unit id="Tfr3XbVkWgassBlVWvcgLg" resname="forms">
+          <source>Forms</source>
+          <target>Formulários</target>
+        </trans-unit>
+        <trans-unit id="0X45abAlNqyZWEV+zcXJjQ" resname="fieldsProperties">
+          <source>Field &amp; Relation Properties</source>
+          <target>Propriedades de campo e de relação</target>
+        </trans-unit>
+        <trans-unit id="6oMKXPqVUh5cg3EDkbYm0Q" resname="data">
+          <source>Data</source>
+          <target>Dados</target>
+        </trans-unit>
+      </group>
+      <group resname="Developer">
+        <trans-unit id="7KRCGSes6Bd2cMaiRRa/CQ" resname="showAccount">
+          <source>Membership details</source>
+          <target>Detalhes da associação</target>
+        </trans-unit>
+        <trans-unit id="WwaEftpIbNgzp97vBdG0Ww" resname="devNameTip">
+          <source>The developer name is an attribute of the Xcode project and is used throughout your project folder.
+For example, the developer name is used in both the source and header.</source>
+          <target>O nome do desenvolvedor é um atributo do projeto Xcode e é usado em toda a sua pasta de projeto.
+Por exemplo, o nome do desenvolvedor é usado na fonte e o cabeçalho.</target>
+        </trans-unit>
+      </group>
+      <group resname="Structure">
+        <trans-unit id="LqVQX0vFKHQ6pL7BozzLvw" resname="tables">
+          <source>Tables</source>
+          <target>Tabelas</target>
+        </trans-unit>
+        <trans-unit id="7IXkDQgntlKCAlPyjyf0iA" resname="fields">
+          <source>Fields</source>
+          <target>Campos</target>
+        </trans-unit>
+        <trans-unit id="MmAA3v2V3PcF1z55UqwJhQ" resname="publish">
+          <source>Publish</source>
+          <target>Publicar</target>
+        </trans-unit>
+        <trans-unit id="CU72/AhtP/b461BnT0189g" resname="structName">
+          <source>Name</source>
+          <target>Nome</target>
+        </trans-unit>
+        <trans-unit id="zp4kT2sCieQejFW80bSw1A" resname="filteredBy">
+          <source>Filtered by:</source>
+          <target>Filtrado por:</target>
+        </trans-unit>
+        <trans-unit id="d+P+OuC/2gE7jNYXjtpG9Q" resname="onlyPublishedTables">
+          <source>Only published tables</source>
+          <target>Somente as tabelas publicadas</target>
+        </trans-unit>
+        <trans-unit id="7fi1kut1kkEM2lK+h8tktw" resname="published">
+          <source>Published</source>
+          <target>Publicado</target>
+        </trans-unit>
+        <trans-unit id="A7ryAcKSjNlsqAlYiStXKQ" resname="onlyPublishedFields">
+          <source>Only published fields</source>
+          <target>Apenas campos publicados</target>
+        </trans-unit>
+        <trans-unit id="G4MH6kCv2Or0AlLWNbl3uQ" resname="unpublish">
+          <source>Unpublish</source>
+          <target>Despublicar</target>
+        </trans-unit>
+        <trans-unit id="spMkFgq2/3xs8CHRZVXGZA" resname="unpublishAll">
+          <source>Unpublish all</source>
+          <target>Despublicar todo</target>
+        </trans-unit>
+        <trans-unit id="7D4TQC5HLtnyAyTZDyFoQA" resname="publishAll">
+          <source>Publish all</source>
+          <target>Publicar todo</target>
+        </trans-unit>
+        <trans-unit id="L8M0w3crLr8+B54YQ+YCmw" resname="sortByTableName">
+          <source>Sort by table name</source>
+          <target>Ordenar por nome de tabela</target>
+        </trans-unit>
+        <trans-unit id="a05OJYh0VsV+Y9OgfGmtBA" resname="sortByTableNumber">
+          <source>Default sort</source>
+          <target>Classificação padrão</target>
+        </trans-unit>
+        <trans-unit id="ByCc2le9UzkaZlehHa6HLA" resname="sortByFieldName">
+          <source>Sort by field name</source>
+          <target>Ordenar por nome do campo</target>
+        </trans-unit>
+        <trans-unit id="yY9M+czg/mbOTeCtNDclNg" resname="sortByFieldNumber">
+          <source>Default sort</source>
+          <target>Classificação padrão</target>
+        </trans-unit>
+        <trans-unit id="3gLqPKyxDuKmxacvkuDuow" resname="theFieldNameIsMissingOrWasModified">
+          <source>The field "{name}" is missing or was modified</source>
+          <target>O campo "{name}" está faltando ou foi modificado</target>
+        </trans-unit>
+        <trans-unit id="Dlq5WP/j5vF0SjhS4BkayA" resname="someFieldsAreMissingOrWasModified">
+          <source>Some fields ({fields}) are no longer available or was modified</source>
+          <target>Alguns campos ({fields}) estão faltando ou foram modificados</target>
+        </trans-unit>
+        <trans-unit id="TTzr8UwCtWDUyaMNmcp9mw" resname="theFieldTypeWasModified">
+          <source>The field type was modified</source>
+          <target>O tipo de campo foi modificado</target>
+        </trans-unit>
+        <trans-unit id="4sBoBmWpCNeAZthVaCyK7w" resname="chooseAnIconForTheField">
+          <source>Choose an icon for the field "{field}"</source>
+          <target>Escolher um ícone para o campo "{field}"</target>
+        </trans-unit>
+        <trans-unit id="fLt7SQ095vwwFqsMwnOJ2A" resname="chooseAnIconForTheTable">
+          <source>Choose an icon for the table "{table}"</source>
+          <target>Escolher um ícone para a tabela "{table}"</target>
+        </trans-unit>
+        <trans-unit id="XhOuRwWq0b+GrXV+zszFKA" resname="relatedTable">
+          <source>Linked table "{entity}"</source>
+          <target>Tabela vinculada "{entity}"</target>
+        </trans-unit>
+        <trans-unit id="osVtrnzEf8jFoKHI2pfHdg" resname="theRelatedTableIsNoLongerAvailable">
+          <source>The related table is no longer available</source>
+          <target>A tabela relacionada não está mais disponível</target>
+        </trans-unit>
+        <trans-unit id="SzZHZtbLySSEV4APGr4uoQ" resname="someRelatedFieldsAreNoLongerAvailableOrWasModified">
+          <source>Some Related Fields are no longer available or was modified</source>
+          <target>Alguns campos relacionados não estão mais disponíveis ou foram modificados</target>
+        </trans-unit>
+        <trans-unit id="ripr4Oko/JbIvqlQ+VU+yw" resname="theRelatedTableNameIsNoLongerAvailable">
+          <source>The related table "{name}" is no longer available</source>
+          <target>A tabela relacionada "{name}" não está mais disponível</target>
+        </trans-unit>
+        <trans-unit id="6M+oJJw/e7D0njukUUxJiw" resname="theRelatedFieldNameIsNoLongerAvailable">
+          <source>The related field "{name}" is no longer available</source>
+          <target>O campo relacionado "{name}" não está mais disponível</target>
+        </trans-unit>
+        <trans-unit id="h/y8iCZCHRG2BkXPhz3HUw" resname="theRelatedFieldsNamesAreNoLongerAvailable">
+          <source>The related fields "{names}" are no longer available</source>
+          <target>Os campos relacionados "{names}" não estão mais disponíveis</target>
+        </trans-unit>
+        <trans-unit id="nCgE4Y7ntrGQ3FobZrehqA" resname="theRelationNameIsNoLongerAvailable">
+          <source>The relation "{name}" is no longer available</source>
+          <target>A relação "{name}" não está mais disponível</target>
+        </trans-unit>
+        <trans-unit id="MU5bicol8uvj6VDeGbiwwA" resname="theRelatedTableOldWasRenamedToNew">
+          <source>The related table "{old}" was renamed to "{new}"</source>
+          <target>A tabela relacionada "{old}" foi renomeada para "{new}"</target>
+        </trans-unit>
+        <trans-unit id="X+W4kavuuCaBEJkmen14AA" resname="theFieldNameIsNoLongerAvailable">
+          <source>The field "{name}" is no longer available</source>
+          <target>O campo "{name}" não está mais disponível</target>
+        </trans-unit>
+        <trans-unit id="I4KPWUBgEkExUHPK91+CSw" resname="theFieldOldWasRenamedToNew">
+          <source>The field "{old}" was renamed to "{new}"</source>
+          <target>O campo "{old}" foi renomeado para "{new}"</target>
+        </trans-unit>
+        <trans-unit id="juUKaYTYW3oxw8/w4l9WgQ" resname="theTableNameIsNoLongerAvailable">
+          <source>The table "{name}" is no longer available
+</source>
+          <target>A tabela "{name}" não está mais disponível
+</target>
+        </trans-unit>
+        <trans-unit id="OwBGuRU/TH4QjXkau+Y9ZQ" resname="theTableIsNoLongerAvailable">
+          <source>The table is no longer available
+</source>
+          <target>A tabela não está mais disponível
+</target>
+        </trans-unit>
+        <trans-unit id="qSN/WPWEny3AkKjcLxpZGQ" resname="allowToMakeTheStructureAdjustments">
+          <source>Allow {product} to make the necessary structure adjustments for an optimised mobile data update</source>
+          <target>Permitir que {product} faça os ajustes de estrutura necessários para uma atualização otimizada de dados móveis</target>
+        </trans-unit>
+        <trans-unit id="gx2+DInxbW2d0z4QK9jNlw" resname="linkedTableNotPublished">
+          <source>Linked Table "{table}" (not published)</source>
+          <target>Tabela relacionada "{table}" (não publicada)</target>
+        </trans-unit>
+        <trans-unit id="JEvvGeG92a6teiCcVRrlJw" resname="linkedTable">
+          <source>Linked Table "{table}"</source>
+          <target>Tabela relacionada "{table}"</target>
+        </trans-unit>
+        <trans-unit id="0HVUg42XaSUn0XavRUseuA" resname="unpublished">
+          <source>unpublished</source>
+          <target>não publicado</target>
+        </trans-unit>
+        <trans-unit id="0sSkLPm5+Ys+obVcsQqY/Q" resname="theLinkedTableIsNotPublished">
+          <source>The linked table "{table}" is not published</source>
+          <target>A tabela relacionada "{table}" não é publicada</target>
+        </trans-unit>
+        <trans-unit id="y4IsBEgEZdjRi6HqXqm6CQ" resname="primaryKey">
+          <source>Primary key</source>
+          <target>Chave primária</target>
+        </trans-unit>
+        <trans-unit id="dX3Ss/8u4rHaZoG4nFmDnQ" resname="nTo1Relation">
+          <source>N - 1 relation to "{table}"</source>
+          <target>Relação N-1 para "{table}"</target>
+        </trans-unit>
+        <trans-unit id="jkoCFX38p8gluslgVDHUNw" resname="1toNRelation">
+          <source>1-N relation to "{table}"</source>
+          <target>Relação 1-N para "{table}"</target>
+        </trans-unit>
+        <trans-unit id="y+DpHbbO6W77fyZhHpW9aA" resname="recursive">
+          <source>recursive</source>
+          <target>recursivo</target>
+        </trans-unit>
+        <trans-unit id="40nupJ30iOwYCkW0YZswqQ" resname="clickHereToSelectThePublishedFields">
+          <source>Click here to select the published fields</source>
+          <target>Clique aqui para selecionar campos publicados</target>
+        </trans-unit>
+        <trans-unit id="Jx3ZDSxT6UzrUvmc1U9Zow" resname="youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere">
+          <source>You can {action} the publish of all related fields by clicking here.</source>
+          <target>Você pode {action} a publicação de todos os campos associados clicando aqui.</target>
+        </trans-unit>
+      </group>
+      <group resname="Tables">
+        <trans-unit id="52aDiXDf5DZ1U9aunhon+A" resname="publishedTables">
+          <source>Published Tables</source>
+          <target>Tabelas publicadas</target>
+        </trans-unit>
+        <trans-unit id="jT7DvVnrQQehHs7+VfHSkQ" resname="longLabels">
+          <source>Long Labels</source>
+          <target>Etiquetas longas</target>
+        </trans-unit>
+        <trans-unit id="M3lDCs4GNnAcIDdNtW7ApA" resname="shortLabels">
+          <source>Short Labels</source>
+          <target>Rótulos curtos</target>
+        </trans-unit>
+        <trans-unit id="BUqzp8G4lApCGBL5gIURnQ" resname="inMenu">
+          <source>Menu Items</source>
+          <target>Itens de menu</target>
+        </trans-unit>
+      </group>
+      <group resname="Pages">
+        <trans-unit id="/fJan0cQRuK9C+n6bG9EwA" resname="page_general">
+          <source>General</source>
+          <target>Geral</target>
+        </trans-unit>
+        <trans-unit id="izbiPs6Tm1OI2ymt4LIrdQ" resname="page_structure">
+          <source>Structure</source>
+          <target>Estrutura</target>
+        </trans-unit>
+        <trans-unit id="lpUcOWpesrMF+/Cmq5UGLw" resname="page_views">
+          <source>Forms</source>
+          <target>Formulários</target>
+        </trans-unit>
+        <trans-unit id="0Ls3QCnzbAbMhbO7OzZSfw" resname="page_deployment">
+          <source>Publishing</source>
+          <target>Publicação</target>
+        </trans-unit>
+        <trans-unit id="9m5NNTpko5/noEQnkmn0iQ" resname="page_main">
+          <source>Main Menu</source>
+          <target>Menu principal</target>
+        </trans-unit>
+        <trans-unit id="84WeJ83BXFzgyzRu2ABtZw" resname="page_properties">
+          <source>Labels &amp; Icons</source>
+          <target>Rótulos e ícones</target>
+        </trans-unit>
+        <trans-unit id="RxeWJUvxqXTbJWfPXxnQZg" resname="comment_general">
+          <source>Enter your app's product information</source>
+          <target>Insira as informações principais do seu aplicativo</target>
+        </trans-unit>
+        <trans-unit id="w4o0uBLthGHLESDFXTOzXw" resname="comment_structure">
+          <source>Choose the tables and fields to be locally stored in the device</source>
+          <target>Escolha as tabelas e campos para ser armazenados localmente no dispositivo</target>
+        </trans-unit>
+        <trans-unit id="dc7DcTcAGMAVK8WbL1Z+wA" resname="comment_properties">
+          <source>Associate labels and icons to your tables / fields</source>
+          <target>Associar ícones e etiquetas para tabelas e campos</target>
+        </trans-unit>
+        <trans-unit id="OsoNlhxeLKmCB3E7TNKG5Q" resname="comment_main">
+          <source>Order your tables in the Tabbar</source>
+          <target>Ordenar suas tabelas no menú</target>
+        </trans-unit>
+        <trans-unit id="t5w7OAPDSQ8feyEvtCDqQw" resname="comment_views">
+          <source>Build list and detail forms for each table</source>
+          <target>Criar formulários de lista e detalhes para cada tabela</target>
+        </trans-unit>
+        <trans-unit id="bU5QgpXhZk/U4nD5tQ17og" resname="comment_deployment">
+          <source>Enter deployment informations</source>
+          <target>Conjunto de informações relacionadas com a implantação de produção</target>
+        </trans-unit>
+        <trans-unit id="M5YuZaeDeXm3gpn+O4x+Qg" resname="page_data">
+          <source>Data</source>
+          <target>Dados</target>
+        </trans-unit>
+        <trans-unit id="apTsCzGeHzrBq49cTIB3Wg" resname="comment_data">
+          <source>Embed filtered data for each table</source>
+          <target>Incorporar dados filtrados para cada tabela</target>
+        </trans-unit>
+        <trans-unit id="WFoZ867LrbgPdDsaWqrxjQ" resname="page_actions">
+          <source>Actions</source>
+          <target>Açoes</target>
+        </trans-unit>
+        <trans-unit id="JXlT7boeZCubDpSqQfYY7w" resname="comment_actions">
+          <source>Define actions for each table</source>
+          <target>Definir ações para cada tabela</target>
+        </trans-unit>
+        <trans-unit id="WSvR4VFaF+zKiBITJ8kL0Q" resname="page_action_params">
+          <source>Action Parameters</source>
+          <target>Parâmetros de ação</target>
+        </trans-unit>
+      </group>
+      <group resname="Views">
+        <trans-unit id="6LcbrfHOPz7e10+fXKipcQ" resname="selectAFormTemplateToUseAs">
+          <source>Select a template for a {formType} view</source>
+          <target>Selecione um modelo de formulário para usar como {formType}</target>
+        </trans-unit>
+        <trans-unit id="g+PZlXRAeMqEXAlSzS9X6Q" resname="listForms">
+          <source>List Forms</source>
+          <target>Lista de formulários</target>
+        </trans-unit>
+        <trans-unit id="oXgKQYR0PyM6dyAJ3A4T/g" resname="detailsForms">
+          <source>Details Forms</source>
+          <target>Formulários de detalhe</target>
+        </trans-unit>
+        <trans-unit id="Zu1+Tm2wqVnQOCIaKAioYw" resname="actions">
+          <source>Actions</source>
+          <target>Açoes</target>
+        </trans-unit>
+        <trans-unit id="1/JqkSA1Hf2w6ru+TVqB9g" resname="templates">
+          <source>templates</source>
+          <target>Modelos</target>
+        </trans-unit>
+      </group>
+      <group resname="Fields">
+        <trans-unit id="1jvwZTgT0WIE2/R+QVhl5A" resname="selectATableToDisplayItsFields">
+          <source>Select a table to display its fields or relations</source>
+          <target>Selecione uma tabela para exibir seus campos ou relações</target>
+        </trans-unit>
+        <trans-unit id="F7JiUlAyzLWd+enjRl0mMw" resname="relations">
+          <source>Relations</source>
+          <target>Relações</target>
+        </trans-unit>
+        <trans-unit id="URybk5Kj96WRb1R0HoeJCA" resname="titles">
+          <source>Titles</source>
+          <target>Títulos</target>
+        </trans-unit>
+        <trans-unit id="eEWJsdQP5p8yWJXCtAr7xA" resname="noFieldPublishedForThisTable">
+          <source>No field published for this table</source>
+          <target>Nenhum campo publicado para esta tabela</target>
+        </trans-unit>
+        <trans-unit id="OCNOBo5DYKV2YLuqsmW8Vw" resname="noPublishedRelationForThisTable">
+          <source>No published relation for this table</source>
+          <target>Nenhuma relação publicada para esta tabela</target>
+        </trans-unit>
+        <trans-unit id="kfs1+4HwA77sgG66PLnKtQ" resname="youCanInsertFieldNamesSurroundedByTheCharacter">
+          <source>You can insert field names surrounded by the '%' character</source>
+          <target>Você pode inserir nomes de campo cercados pelo caráter '%'</target>
+        </trans-unit>
+      </group>
+      <group resname="Main">
+        <trans-unit id="Ia0HuoEYIeZ4xeyWiDqqfg" resname="availableTables">
+          <source>Available Tables</source>
+          <target>Tabelas disponíveis</target>
+        </trans-unit>
+      </group>
+      <group resname="Welcome">
+        <trans-unit id="DS3l1K0gqnDt/4IY0ioZlw" resname="wel_title_1">
+          <source>Structure</source>
+          <target>Estrutura</target>
+        </trans-unit>
+        <trans-unit id="HWtKEggQ5P7eJmhZnKDTBg" resname="wel_description_1">
+          <source>Define a subset of your physical structure</source>
+          <target>Definir um subconjunto de sua estrutura física para replicar</target>
+        </trans-unit>
+        <trans-unit id="qMEWI32KtQ+D9lKWoqTrOw" resname="wel_title_2">
+          <source>Design</source>
+          <target>Desenho</target>
+        </trans-unit>
+        <trans-unit id="2yhkIdRfEVPEpJZIXtgGug" resname="wel_title_3">
+          <source>Generate &amp; Test</source>
+          <target>Gerar e testar</target>
+        </trans-unit>
+        <trans-unit id="8BsX+cT0NN5rs0OuQvYj1A" resname="wel_title_4">
+          <source>Deploy</source>
+          <target>Implantar</target>
+        </trans-unit>
+        <trans-unit id="sZz0jnV9vQlfi6/iUbajLA" resname="wel_description_2">
+          <source>Choose the layouts and the style of your app</source>
+          <target>Escolha o layout e o estilo do seu aplicativo em poucos passos</target>
+        </trans-unit>
+        <trans-unit id="XAlx0cpDHP6yXkNWzkJcGA" resname="wel_description_3">
+          <source>Create your Xcode project and test your app on any iPhone</source>
+          <target>Crie seu projeto Xcode em um único clique e
+inicie seu aplicativo em qualquer dispositivo iPhone</target>
+        </trans-unit>
+        <trans-unit id="ybraH0Dn6IKVjiTy58Y+QQ" resname="wel_description_4">
+          <source>Choose an in-house or App Store deployment model</source>
+          <target>Escolha se você distribui seu aplicativo com AppStore ou em sua empresa</target>
+        </trans-unit>
+        <trans-unit id="vk1++U/rqp3WrUVgJHNMdg" resname="wel_title">
+          <source>Welcome to 4D for iOS</source>
+          <target>Bem-vindo ao 4D for iOS</target>
+        </trans-unit>
+        <trans-unit id="DpUH4asSx3PjgGi4QnxQug" resname="wel_subtitle">
+          <source>Extend your existing desktop or web applications to mobile.
+
+Easily create and deploy custom native iOS apps.</source>
+          <target>Estenda seus aplicativos de desktop ou web existentes para o celular.
+
+Crie e implemente facilmente aplicativos iOS nativos.</target>
+        </trans-unit>
+      </group>
+      <group resname="BindingTypes">
+        <trans-unit id="PU5Yhrjsvv3AmxNrj+sA8A" resname="_shortDate">
+          <source>Short date</source>
+          <target>Data abreviada</target>
+        </trans-unit>
+        <trans-unit id="lyrTnqgCODygDTMHj1R0jw" resname="_mediumDate">
+          <source>Date</source>
+          <target>Data</target>
+        </trans-unit>
+        <trans-unit id="FeW6VI9XuKuHQKRFMoDECQ" resname="_longDate">
+          <source>Long date</source>
+          <target>Data longa</target>
+        </trans-unit>
+        <trans-unit id="4mSrGj5s4cJOYNlDf8MpYw" resname="_fullDate">
+          <source>Full date</source>
+          <target>Data completa</target>
+        </trans-unit>
+        <trans-unit id="QIaMbIG9Rr1xBW9QRMCyMA" resname="_shortTime">
+          <source>Short time</source>
+          <target>Hora curta</target>
+        </trans-unit>
+        <trans-unit id="pFI0D3bAXkbZPdLOGk0VRw" resname="_mediumTime">
+          <source>Time</source>
+          <target>Hora</target>
+        </trans-unit>
+        <trans-unit id="EC0lxfXov5GbYCp3ZiOPFg" resname="_duration">
+          <source>Duration</source>
+          <target>Duração</target>
+        </trans-unit>
+        <trans-unit id="CKy/siSzftfHmllv5/H5ZA" resname="_noOrYes">
+          <source>"No" or "Yes"</source>
+          <target>"Sim" ou "Não"</target>
+        </trans-unit>
+        <trans-unit id="KwRcINmfxRv8cpI9e1CmPA" resname="_integer">
+          <source>Integer number</source>
+          <target>Número inteiro</target>
+        </trans-unit>
+        <trans-unit id="ZfgOh9KGNSiwfYdmVe3Tvw" resname="_decimal">
+          <source>Decimal number</source>
+          <target>Número decimal</target>
+        </trans-unit>
+        <trans-unit id="L94JWKVgeda6eEwwANFYvw" resname="_spellOut">
+          <source>Spell Out</source>
+          <target>Número em letras</target>
+        </trans-unit>
+        <trans-unit id="lfeH2tz3ItObI2uld31gTA" resname="_ordinal">
+          <source>Ordinal number</source>
+          <target>Número ordinal</target>
+        </trans-unit>
+        <trans-unit id="i/uakzQh/twRt4CbpFooEg" resname="_percent">
+          <source>Percentage</source>
+          <target>Porcentagem</target>
+        </trans-unit>
+        <trans-unit id="C19mT1XKs7b1DY3W8SbLRw" resname="_distance">
+          <source>Distance</source>
+          <target>Distância</target>
+        </trans-unit>
+        <trans-unit id="K0ZVM2+Bb+scIOGtdk9cwg" resname="_address">
+          <source>Adress</source>
+          <target>Endereço</target>
+        </trans-unit>
+        <trans-unit id="SqWNYCxyhpPUz8hKjQ3RlQ" resname="_phone">
+          <source>Phone Number</source>
+          <target>Número de telefone</target>
+        </trans-unit>
+        <trans-unit id="OmnAn1U+nvOXJWpKhBgrHg" resname="_mail">
+          <source>Mail address</source>
+          <target>Endereço de correio</target>
+        </trans-unit>
+        <trans-unit id="UewHtSze1BjX8DfGFeUkNQ" resname="_url">
+          <source>URL</source>
+          <target>URL</target>
+        </trans-unit>
+        <trans-unit id="3dYJlZQ9JfAInDDwRo8bRg" resname="_text">
+          <source>Text</source>
+          <target>Texto</target>
+        </trans-unit>
+        <trans-unit id="W5IUzXH6kyopFmdAOG8kVg" resname="_falseOrTrue">
+          <source>"False" or "True"</source>
+          <target>"Falso" ou "Verdadeiro"</target>
+        </trans-unit>
+        <trans-unit id="d38WOlf252/rnKVO/bCtOw" resname="_restImage">
+          <source>Image</source>
+          <target>Imagem</target>
+        </trans-unit>
+        <trans-unit id="pusOeBX8XRwFTzjoEX2hGA" resname="_real">
+          <source>Real number</source>
+          <target>Número real</target>
+        </trans-unit>
+        <trans-unit id="QnSc5xmkOH0oHVU2qZQjBw" resname="_currencyDollar">
+          <source>Currency $</source>
+          <target>Moeda $</target>
+        </trans-unit>
+        <trans-unit id="d85u095TbC9HBTiXC8VKMA" resname="_currencyEuro">
+          <source>Currency €</source>
+          <target>Moeda €</target>
+        </trans-unit>
+        <trans-unit id="bkNRMW8GaDxwVuc08Y8mpQ" resname="_currencyYen">
+          <source>Currency ¥</source>
+          <target>Moeda ¥</target>
+        </trans-unit>
+      </group>
+      <group resname="Data">
+        <trans-unit id="Zu2nG+YFXJJt1kjCHOVClA" resname="queryFilter">
+          <source>Filter query</source>
+          <target>Filtro de pesquisa</target>
+        </trans-unit>
+        <trans-unit id="r8Y2OHan9Y+SIavXuF3IVA" resname="options">
+          <source>Options</source>
+          <target>Opções</target>
+        </trans-unit>
+        <trans-unit id="7BKi1O3gnxnYsdFJp6FixQ" resname="embedDataIntoTheBuildedApplication">
+          <source>Embed data into the built application</source>
+          <target>Incorporar os dados no aplicativo</target>
+        </trans-unit>
+        <trans-unit id="kQSiUK7Bbh+voMf1nodYhA" resname="validate">
+          <source>Validate</source>
+          <target>Validar</target>
+        </trans-unit>
+        <trans-unit id="hKLfg7CYHsc/oQgjPZur3Q" resname="currentDataFile">
+          <source>Current data file</source>
+          <target>Arquivo de dados atual</target>
+        </trans-unit>
+        <trans-unit id="jo5ID3RhNN8g5tfQjx2dnw" resname="productionServer">
+          <source>Production server data file</source>
+          <target>Arquivo de dados do servidor de produção</target>
+        </trans-unit>
+        <trans-unit id="MaLfdvREnZ0xWbsICOEpnA" resname="doNotGenerateDataAtEachBuild">
+          <source>Do not regenerate data at each build</source>
+          <target>Não regenerar dados em cada compilação</target>
+        </trans-unit>
+        <trans-unit id="5wOA0G+FjpL0tUbV2WaWsQ" resname="generate">
+          <source>Regenerate now</source>
+          <target>Regenerar agora</target>
+        </trans-unit>
+        <trans-unit id="qxePQ2An7tAuLPa3IR7nFQ" resname="source">
+          <source>Data source</source>
+          <target>Fonte de dados</target>
+        </trans-unit>
+        <trans-unit id="+7v0NV922nvckyKlEDHcew" resname="properties">
+          <source>Properties</source>
+          <target>Propriedades</target>
+        </trans-unit>
+        <trans-unit id="Z8ZQtgDsijdCTCIxqQ27ZQ" resname="notValidatedFilter">
+          <source>Not validated filter</source>
+          <target>Filtro não validado</target>
+        </trans-unit>
+        <trans-unit id="Se56M/yic0etCDWlG5/rMA" resname="leaveBlankToNotFilterData">
+          <source> Leave blank for unfiltered data</source>
+          <target> Deixar em branco para dados não filtrados</target>
+        </trans-unit>
+        <trans-unit id="x+fvZ5eqyTVJGcNFeN5vIQ" resname="allDataWillBeIntegratedIntoTheApplication">
+          <source>All data will be embedded into the application</source>
+          <target>Todos os dados serão integrados no aplicativo</target>
+        </trans-unit>
+        <trans-unit id="Xlt30BgBEhmHawx+tQ0RKw" resname="theFilteredDataWillBeIntegratedIntoTheApplication">
+          <source>The filtered data will be embedded into the application</source>
+          <target>Os dados filtrados serão integrados no aplicativo</target>
+        </trans-unit>
+        <trans-unit id="E85kP+K3ohFeP1FMI6r+zg" resname="theDataWillBeFilteredAccordingToTheConnectedUserParameters">
+          <source>The data will be filtered according to the user's parameters</source>
+          <target>Os dados serão filtrados de acordo com os parâmetros do usuário</target>
+        </trans-unit>
+        <trans-unit id="lR3f1SC5YdGKXFi47PIgfg" resname="theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting">
+          <source>The filtered data will be loaded into the application upon connection</source>
+          <target>Os dados filtrados serão carregados no aplicativo após a conexão</target>
+        </trans-unit>
+        <trans-unit id="bXIQ4jH/vEDQsEtzVNFuUQ" resname="theFilterWillBeIgnored">
+          <source>The filter will be ignored</source>
+          <target>O filtro será ignorado</target>
+        </trans-unit>
+        <trans-unit id="PbgQgwMu8K4LQv7scZFYrA" resname="allDataWillBeLoadedIntoTheApplicationWhenConnecting">
+          <source>All data will be loaded into the application upon connection</source>
+          <target>Todos os dados serão carregados no aplicativo após a conexão</target>
+        </trans-unit>
+        <trans-unit id="ZJ+iTSNmC34jkRbeQkI1Qg" resname="editAuthenticationMethod">
+          <source>Edit authentication method…</source>
+          <target>Edite o método de autenticação...</target>
+        </trans-unit>
+        <trans-unit id="fab9Yi3c0kj1nfwJaYDgOw" resname="dataSize">
+          <source>Size</source>
+          <target>Tamanho</target>
+        </trans-unit>
+        <trans-unit id="uj/sf/HQm32GEVL3Smq/fg" resname="setTheServerUrl">
+          <source>Set the server URL</source>
+          <target>Definir a URL do servidor</target>
+        </trans-unit>
+        <trans-unit id="a/eW2Ql/HPi//NDWAZN7iw" resname="locateTheKey">
+          <source>Locate the key…</source>
+          <target>Localize a chave...</target>
+        </trans-unit>
+        <trans-unit id="hZKzK39Kz+F58z/8QGc8xw" resname="clickToGenerateADataset">
+          <source>Click to generate a dataset</source>
+          <target>Clique para gerar um conjunto de dados</target>
+        </trans-unit>
+        <trans-unit id="2I/jf3rQmMzAeXwcqaJ3MQ" resname="aDatasetWillBeGeneratedIfAnyAtEachBuild">
+          <source>A dataset will be generated, if any, at each build</source>
+          <target>Um conjunto de dados será gerado, se houver, em cada compilação</target>
+        </trans-unit>
+        <trans-unit id="LGkGpUSI4/G5RDq5PfJ6Kw" resname="theDataSourceIsNotReady">
+          <source>The data source is not ready</source>
+          <target>A fonte de dados não está pronta</target>
+        </trans-unit>
+        <trans-unit id="UlGb4IAAdDngDHT5CdBkyQ" resname="dataSetGeneration">
+          <source>Data set generation</source>
+          <target>Geração de conjunto de dados</target>
+        </trans-unit>
+      </group>
+      <group resname="Actions">
+        <trans-unit id="ZJ88fqO1LSZAJlaER5yBkw" resname="scope">
+          <source>Scope</source>
+          <target>Escopo</target>
+        </trans-unit>
+        <trans-unit id="yd/il+xNmEjKu6GJ3BLM5A" resname="actionMethod">
+          <source>On Mobile App Action method</source>
+          <target>Método de ação</target>
+        </trans-unit>
+        <trans-unit id="oosy3Rrf+DGTNGFoN5sqyg" resname="chooseAnIconForTheAction">
+          <source>Choose an icon for the action "{action}"</source>
+          <target>Escolha um ícone para a ação "{action}"</target>
+        </trans-unit>
+        <trans-unit id="d0xwJDgqWJFNqkQ0f4Iusg" resname="scope_1" translate="no">
+          <source>table</source>
+        </trans-unit>
+        <trans-unit id="eG4sDuxfDpva+ZSWGcaMxw" resname="scope_2" translate="no">
+          <source>currentRecord</source>
+        </trans-unit>
+        <trans-unit id="HXbTXHPfNI78HtbhH2LiwQ" resname="currentRecord">
+          <source>Current entity</source>
+          <target>Entidade atual</target>
+        </trans-unit>
+        <trans-unit id="GSrT0ceKYaO0ss4XIwdf6Q" resname="currentSelection">
+          <source>Entity selection</source>
+          <target>Seleção de entidades</target>
+        </trans-unit>
+        <trans-unit id="WVT1lgagIqhzTDn3BQMK0Q" resname="label">
+          <source>Label</source>
+          <target>Etiqueta</target>
+        </trans-unit>
+        <trans-unit id="0tWbWAtnRHyPh86eBm44Uw" resname="shortLabel">
+          <source>Short label</source>
+          <target>Etiqueta curta</target>
+        </trans-unit>
+        <trans-unit id="G3BCIScJhJYnoiIMpUpmVw" resname="type">
+          <source>Type</source>
+          <target>Tipo</target>
+        </trans-unit>
+        <trans-unit id="T4fHkDtHNwu//XsIOT+jTQ" resname="selectAnActionToDisplayItsParameters">
+          <source>Select an action to display its parameters</source>
+          <target>Selecione uma ação para exibir seus parâmetros</target>
+        </trans-unit>
+        <trans-unit id="kQIAlsWTzLDCZRDyq1r0Fg" resname="editActionFor">
+          <source>Edit action for</source>
+          <target>Ação de edição para</target>
+        </trans-unit>
+        <trans-unit id="pP6FDgPfc2qc38/ZM+u0yA" resname="newAction">
+          <source>New action</source>
+          <target>Nova ação</target>
+        </trans-unit>
+        <trans-unit id="N8J0oFRYJ9VSLVLIY5Q8YQ" resname="deleteActionFor">
+          <source>Delete action for</source>
+          <target>Excluir ação para</target>
+        </trans-unit>
+        <trans-unit id="xk/zntuPwcBSyxLOORSlUg" resname="addParameter">
+          <source>New parameter</source>
+          <target>Novo parâmetro</target>
+        </trans-unit>
+        <trans-unit id="3qZVq5p0It8B+pEd8lcb2A" resname="newParameter" translate="no">
+          <source>newParameter</source>
+        </trans-unit>
+        <trans-unit id="YNHZrsNYOVVpJvtNYi6yWg" resname="format">
+          <source>Format</source>
+          <target>Formato</target>
+        </trans-unit>
+        <trans-unit id="CslBKGvKFgv0rTvrLfwxaA" resname="thisParameterIsLinkedToTheField">
+          <source>This parameter is linked to the "{field}" field</source>
+          <target>Este parâmetro está vinculado ao campo "{field}"</target>
+        </trans-unit>
+        <trans-unit id="HzfLddFHdci5bUulPmPPQg" resname="deleteActionDoesNotUseParameter">
+          <source>A delete action does not use parameter</source>
+          <target>Uma ação de exclusão não usa parâmetros</target>
+        </trans-unit>
+        <trans-unit id="pig4JOLzzzslQppOS2rGjg" resname="createAnActionToBeAbleToAddParameters">
+          <source>Create an action to be able to add parameters</source>
+          <target>Criar uma ação para poder adicionar parâmetros</target>
+        </trans-unit>
+        <trans-unit id="mCEEWI8ZYwzKG5ioWilt2A" resname="addActionFor">
+          <source>Add action for</source>
+          <target>Adicionar ação para</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+
+</xliff>
