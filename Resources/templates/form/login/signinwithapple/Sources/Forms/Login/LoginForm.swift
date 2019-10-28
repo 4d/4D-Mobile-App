@@ -10,18 +10,10 @@ import QMobileUI
 import QMobileAPI
 import AuthenticationServices
 
-/// Delegate for login form
-protocol LoginFormDelegate: NSObjectProtocol {
-    /// Result of login operation.
-    func didLogin(result: Result<AuthToken, APIError>) -> Bool
-}
-
 @IBDesignable
 open class LoginForm: QMobileUI.LoginForm {
 
     @IBOutlet weak var separatorView: UIView!
-
-    weak var delegate: LoginFormDelegate?
 
     lazy var btnAuthorization = ASAuthorizationAppleIDButton()
 
@@ -200,6 +192,9 @@ extension LoginForm {
         _ = APIManager.instance.authentificate(login: email, parameters: parameters) {  [weak self] result in
 
             guard let this = self else { return }
+
+            this.onDidLogin(result: result)
+            _ = this.delegate?.didLogin(result: result)
 
             switch result {
             case .success(let token):
