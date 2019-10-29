@@ -28,7 +28,7 @@ If (Asserted:C1132($o.success;"db .exposedDatastore()"))
 End if 
 
 $Obj_db:=db ("object;blob")
-ASSERT:C1129($Obj_db._is="db";"db (\"object;blob\")")
+ASSERT:C1129($Obj_db.$_is="db";"db (\"object;blob\")")
 ASSERT:C1129($Obj_db.datastore=Null:C1517;"db (\"object;blob\")")
 ASSERT:C1129(New collection:C1472("object";"blob").equal($Obj_db.exclude);"db (\"object;blob\")")
 

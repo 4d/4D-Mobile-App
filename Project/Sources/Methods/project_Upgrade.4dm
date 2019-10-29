@@ -48,17 +48,21 @@ If (Form:C1466#Null:C1517)
 		DELETE DOCUMENT:C159(Form:C1466.root+"cache.json")
 		
 	End if 
-	
-Else 
-	
-	  // A "If" statement should never omit "Else"
-	
 End if 
 
   // Create current information to compare
 $Obj_info:=New object:C1471
 
-$Obj_info.componentBuild:=String:C10(xml_fileToObject (Get 4D folder:C485(Database folder:K5:14)+"Info.plist").value.plist.dict.string[4].$)
+$o:=xml_fileToObject (Get 4D folder:C485(Database folder:K5:14)+"Info.plist").value.plist.dict
+
+$l:=$o.key.extract("$").indexOf("CFBundleVersion")
+
+If ($l#-1)
+	
+	$Obj_info.componentBuild:=String:C10($o.string[$l].$)
+	
+End if 
+
 $Obj_info.ideVersion:=String:C10(Application version:C493($Lon_build))
 $Obj_info.ideBuildVersion:=String:C10($Lon_build)
 
@@ -248,7 +252,7 @@ If (Num:C11($Obj_project.info.version)<4)
 			$Col_fieldTypes[4]:=Is longint:K8:6
 			$Col_fieldTypes[5]:=Is integer 64 bits:K8:25
 			$Col_fieldTypes[6]:=Is real:K8:4
-			$Col_fieldTypes[7]:=Is float:K8:26
+			$Col_fieldTypes[7]:=_o_Is float:K8:26
 			$Col_fieldTypes[8]:=Is date:K8:7
 			$Col_fieldTypes[9]:=Is time:K8:8
 			$Col_fieldTypes[10]:=Is text:K8:3
@@ -263,7 +267,7 @@ If (Num:C11($Obj_project.info.version)<4)
 			$Col_types[Is longint:K8:6]:="number"
 			$Col_types[Is integer 64 bits:K8:25]:="number"
 			$Col_types[Is real:K8:4]:="number"
-			$Col_types[Is float:K8:26]:="number"
+			$Col_types[_o_Is float:K8:26]:="number"
 			$Col_types[Is date:K8:7]:="date"
 			$Col_types[Is time:K8:8]:="time"  // WARNING: for ds it's a number, but I think we must do the distinguo
 			$Col_types[Is text:K8:3]:="string"
@@ -340,6 +344,55 @@ If (Num:C11($Obj_project.info.version)<4)
 		
 	End if 
 End if 
+
+
+If (Bool:C1537(featuresFlags.with("newDataModel")))
+	
+	  //=====================================================================
+	  //                    NEW DATA MODEL
+	  //=====================================================================
+	If (Num:C11($Obj_project.info.version)<5)
+		
+		If ($Obj_project.dataModel#Null:C1517)
+			
+			For each ($Txt_tableNumber;$Obj_project.dataModel)
+				
+				$Obj_table:=$Obj_project.dataModel[$Txt_tableNumber]
+				
+				$Obj_table[""]:=New object:C1471(\
+					"name";$Obj_table.name;\
+					"label";$Obj_table.label;\
+					"shortLabel";$Obj_table.shortLabel;\
+					"primaryKey";$Obj_table.primaryKey;\
+					"embedded";True:C214\
+					)
+				
+				If (Bool:C1537($Obj_table.embedded))
+					
+					$Obj_table[""].embedded:=True:C214
+					
+				End if 
+				
+				OB REMOVE:C1226($Obj_table;"name")
+				OB REMOVE:C1226($Obj_table;"label")
+				OB REMOVE:C1226($Obj_table;"shortLabel")
+				OB REMOVE:C1226($Obj_table;"primaryKey")
+				OB REMOVE:C1226($Obj_table;"embedded")
+				
+			End for each 
+		End if 
+		
+		  //*****************************
+		  //$Obj_project.info.version:=5
+		  //*****************************
+		$Boo_upgraded:=True:C214
+		
+	End if 
+	
+	
+	
+End if 
+
 
   // Set the current version
 $Obj_project.info.componentBuild:=$Obj_info.componentBuild

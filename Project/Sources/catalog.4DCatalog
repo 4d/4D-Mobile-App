@@ -536,7 +536,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="752D363866524EFEA4BA99D4614493C3" name_Nto1="$" name_1toN="$$" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="752D363866524EFEA4BA99D4614493C3" name_Nto1="$$$" name_1toN="$$" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
 		<related_field kind="source">
 			<field_ref uuid="C8BFA0F3AF484D53BE28A57224357568" name="ID">
 				<table_ref uuid="49B3FBDD5F7247559052EF4FA3386A5D" name="とてもとても長いフィールド"/>

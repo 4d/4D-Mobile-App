@@ -102,8 +102,17 @@ If ($file.exists)
 				Else 
 					
 					  // Check TABLE NAME & PRIMARY KEY
-					$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel.name)\
-						 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel.primaryKey)
+					If (Bool:C1537(featuresFlags.with("newDataModel")))
+						
+						$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel[""].name)\
+							 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel[""].primaryKey)
+						
+					Else 
+						
+						$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel.name)\
+							 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel.primaryKey)
+						
+					End if 
 					
 					If (Not:C34($Boo_unsynchronizedTable))
 						
@@ -115,8 +124,7 @@ If ($file.exists)
 								$o.current:=$Obj_tableCurrent.field.query("fieldNumber = :1";Num:C11($t)).pop()
 								$o.missing:=$o.current=Null:C1517
 								$o.nameMismatch:=$o.name#String:C10($o.current.name)
-								  //$o.typeMismatch:=$o.type#Num($o.current.type)
-								$o.typeMismatch:=$o.fieldType#Num:C11($o.current.fieldType)
+								$o.typeMismatch:=$o.type#$o.current.valueType
 								
 								If ($o.missing | $o.nameMismatch | $o.typeMismatch)
 									

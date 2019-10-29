@@ -438,6 +438,8 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
 	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
 	
+	featuresFlags.newDataModel:=(Folder:C1567(fk user preferences folder:K87:10).file("_vdl").exists) & (Structure file:C489=Structure file:C489(*))
+	
 End if 
 
 If ($Obj_preferences.features#Null:C1517)  // Update feature flags with the local preferences
