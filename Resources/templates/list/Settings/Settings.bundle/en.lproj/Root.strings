@@ -20,3 +20,9 @@
 
 /* Title for Reset Switch */
 "kFactoryResetTitle" = "Reset app data";
+
+/* Title for Send Feedback Group */
+"kSendFeedBackGroupTitle" = "Help & feedback";
+
+/* Title for Send Debug File Switch */
+"kFeedbackShowTitle" = "Send feedback";
