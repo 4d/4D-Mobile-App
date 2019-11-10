@@ -516,13 +516,9 @@ Por exemplo, o nome do desenvolvedor é usado na fonte e o cabeçalho.</target>
           <source>Default sort</source>
           <target>Classificação padrão</target>
         </trans-unit>
-        <trans-unit id="3gLqPKyxDuKmxacvkuDuow" resname="theFieldNameIsMissingOrWasModified">
+        <trans-unit id="3gLqPKyxDuKmxacvkuDuow" resname="theFieldIsMissingOrWasModified">
           <source>The field "{name}" is missing or was modified</source>
-          <target>O campo "{name}" está faltando ou foi modificado</target>
-        </trans-unit>
-        <trans-unit id="Dlq5WP/j5vF0SjhS4BkayA" resname="someFieldsAreMissingOrWasModified">
-          <source>Some fields ({fields}) are no longer available or was modified</source>
-          <target>Alguns campos ({fields}) estão faltando ou foram modificados</target>
+          <target/>
         </trans-unit>
         <trans-unit id="TTzr8UwCtWDUyaMNmcp9mw" resname="theFieldTypeWasModified">
           <source>The field type was modified</source>
@@ -540,53 +536,29 @@ Por exemplo, o nome do desenvolvedor é usado na fonte e o cabeçalho.</target>
           <source>Linked table "{entity}"</source>
           <target>Tabela vinculada "{entity}"</target>
         </trans-unit>
-        <trans-unit id="osVtrnzEf8jFoKHI2pfHdg" resname="theRelatedTableIsNoLongerAvailable">
-          <source>The related table is no longer available</source>
-          <target>A tabela relacionada não está mais disponível</target>
-        </trans-unit>
-        <trans-unit id="SzZHZtbLySSEV4APGr4uoQ" resname="someRelatedFieldsAreNoLongerAvailableOrWasModified">
-          <source>Some Related Fields are no longer available or was modified</source>
-          <target>Alguns campos relacionados não estão mais disponíveis ou foram modificados</target>
-        </trans-unit>
-        <trans-unit id="ripr4Oko/JbIvqlQ+VU+yw" resname="theRelatedTableNameIsNoLongerAvailable">
+        <trans-unit id="ripr4Oko/JbIvqlQ+VU+yw" resname="theRelatedTableIsNoLongerAvailable">
           <source>The related table "{name}" is no longer available</source>
-          <target>A tabela relacionada "{name}" não está mais disponível</target>
+          <target/>
         </trans-unit>
-        <trans-unit id="6M+oJJw/e7D0njukUUxJiw" resname="theRelatedFieldNameIsNoLongerAvailable">
-          <source>The related field "{name}" is no longer available</source>
-          <target>O campo relacionado "{name}" não está mais disponível</target>
+        <trans-unit id="6M+oJJw/e7D0njukUUxJiw" resname="theRelatedFieldIsMissingOrHasBeenModified">
+          <source>The related field "{name}" is missing or has been modified</source>
+          <target/>
         </trans-unit>
-        <trans-unit id="h/y8iCZCHRG2BkXPhz3HUw" resname="theRelatedFieldsNamesAreNoLongerAvailable">
-          <source>The related fields "{names}" are no longer available</source>
-          <target>Os campos relacionados "{names}" não estão mais disponíveis</target>
+        <trans-unit id="h/y8iCZCHRG2BkXPhz3HUw" resname="theRelatedFieldsAreMissingOrWasModified">
+          <source>The related fields ("{names}") are missing or have been changed</source>
+          <target/>
         </trans-unit>
-        <trans-unit id="nCgE4Y7ntrGQ3FobZrehqA" resname="theRelationNameIsNoLongerAvailable">
+        <trans-unit id="nCgE4Y7ntrGQ3FobZrehqA" resname="theRelationIsNoLongerAvailable">
           <source>The relation "{name}" is no longer available</source>
-          <target>A relação "{name}" não está mais disponível</target>
+          <target/>
         </trans-unit>
-        <trans-unit id="MU5bicol8uvj6VDeGbiwwA" resname="theRelatedTableOldWasRenamedToNew">
-          <source>The related table "{old}" was renamed to "{new}"</source>
-          <target>A tabela relacionada "{old}" foi renomeada para "{new}"</target>
+        <trans-unit id="I4KPWUBgEkExUHPK91+CSw" resname="theFieldWasRenamed">
+          <source>The field was renamed to "{name}"</source>
+          <target/>
         </trans-unit>
-        <trans-unit id="X+W4kavuuCaBEJkmen14AA" resname="theFieldNameIsNoLongerAvailable">
-          <source>The field "{name}" is no longer available</source>
-          <target>O campo "{name}" não está mais disponível</target>
-        </trans-unit>
-        <trans-unit id="I4KPWUBgEkExUHPK91+CSw" resname="theFieldOldWasRenamedToNew">
-          <source>The field "{old}" was renamed to "{new}"</source>
-          <target>O campo "{old}" foi renomeado para "{new}"</target>
-        </trans-unit>
-        <trans-unit id="juUKaYTYW3oxw8/w4l9WgQ" resname="theTableNameIsNoLongerAvailable">
-          <source>The table "{name}" is no longer available
-</source>
-          <target>A tabela "{name}" não está mais disponível
-</target>
-        </trans-unit>
-        <trans-unit id="OwBGuRU/TH4QjXkau+Y9ZQ" resname="theTableIsNoLongerAvailable">
-          <source>The table is no longer available
-</source>
-          <target>A tabela não está mais disponível
-</target>
+        <trans-unit id="juUKaYTYW3oxw8/w4l9WgQ" resname="theTableIsNoLongerAvailable">
+          <source>The table "{name}" is no longer available</source>
+          <target/>
         </trans-unit>
         <trans-unit id="qSN/WPWEny3AkKjcLxpZGQ" resname="allowToMakeTheStructureAdjustments">
           <source>Allow {product} to make the necessary structure adjustments for an optimised mobile data update</source>
@@ -605,7 +577,7 @@ Por exemplo, o nome do desenvolvedor é usado na fonte e o cabeçalho.</target>
           <target>não publicado</target>
         </trans-unit>
         <trans-unit id="0sSkLPm5+Ys+obVcsQqY/Q" resname="theLinkedTableIsNotPublished">
-          <source>The linked table "{table}" is not published</source>
+          <source>The linked table "{name}" is not published</source>
           <target>A tabela relacionada "{table}" não é publicada</target>
         </trans-unit>
         <trans-unit id="y4IsBEgEZdjRi6HqXqm6CQ" resname="primaryKey">
@@ -631,6 +603,26 @@ Por exemplo, o nome do desenvolvedor é usado na fonte e o cabeçalho.</target>
         <trans-unit id="Jx3ZDSxT6UzrUvmc1U9Zow" resname="youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere">
           <source>You can {action} the publish of all related fields by clicking here.</source>
           <target>Você pode {action} a publicação de todos os campos associados clicando aqui.</target>
+        </trans-unit>
+        <trans-unit id="OZ7Y+omr7bN0OXwVPovDZg" resname="theN1RelationIsNoMoreAvailable">
+          <source>The many to one relation "{name}" has been renamed or deleted</source>
+          <target/>
+        </trans-unit>
+        <trans-unit id="ek5pOOkNZ158kcOkNARzkQ" resname="theFieldsAreMissingOrHaveBeenModified">
+          <source>The fields: "{names}" are missing or have been modified</source>
+          <target/>
+        </trans-unit>
+        <trans-unit id="xCmxfS5TrBLYrUGkFAu8nw" resname="someFieldsOrRelationsAreNoLongerAvailableOrWasModified">
+          <source>Some fields or relations ("{names}") are no longer available or was modified</source>
+          <target/>
+        </trans-unit>
+        <trans-unit id="6NlzKvx6ysPu9zzLEajOVA" resname="theFieldIsMissing">
+          <source>The field is missing</source>
+          <target/>
+        </trans-unit>
+        <trans-unit id="wtbvZBvxCH3zu3ooBHSIFQ" resname="the1NRelationIsNoMoreAvailable">
+          <source>The one to many relation "{name}" has been renamed or deleted</source>
+          <target/>
         </trans-unit>
       </group>
       <group resname="Tables">
@@ -1026,7 +1018,9 @@ Crie e implemente facilmente aplicativos iOS nativos.</target>
           <target>A fonte de dados não está pronta</target>
         </trans-unit>
         <trans-unit id="UlGb4IAAdDngDHT5CdBkyQ" resname="dataSetGeneration">
-          <source>Data set generation</source>
+          <source>Data set generation
+
+This may take a few minutes…</source>
           <target>Geração de conjunto de dados</target>
         </trans-unit>
       </group>
