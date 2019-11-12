@@ -63,8 +63,8 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		"scale";64))
 	
 	  // minimum requierement
-	commonValues.xCodeVersion:="11.0"
-	commonValues.iosDeploymentTarget:="13.0"
+	commonValues.xCodeVersion:="11.2"
+	commonValues.iosDeploymentTarget:="13.2"
 	
 	commonValues.useXcodeDefaultPath:=True:C214
 	
@@ -438,7 +438,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
 	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
 	
-	featuresFlags.newDataModel:=(Folder:C1567(fk user preferences folder:K87:10).file("_vdl").exists) & (Structure file:C489=Structure file:C489(*))
+	featuresFlags.newDataModel:=False:C215  // (Folder(fk user preferences folder).file("_vdl").exists) & (Structure file=Structure file(*))
 	
 End if 
 
