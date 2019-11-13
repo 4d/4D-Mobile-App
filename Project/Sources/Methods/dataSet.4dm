@@ -694,7 +694,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				End if 
 				
 				If ((Length:C16($Txt_error)>0))  // add always error from command output if any, but do not presume if success or not
-					ob_error_add ($Obj_out;$Txt_error)
+					ob_warning_add ($Obj_out;$Txt_error)
 				End if 
 				
 			Else 
