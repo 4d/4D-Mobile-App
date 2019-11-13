@@ -4,9 +4,9 @@ C_LONGINT:C283($l;$Lon_build;$Lon_error;$Lon_result;$Lon_type;$Lon_value)
 C_LONGINT:C283($Lon_x)
 C_REAL:C285($Num_;$r)
 C_TEXT:C284($Dir_root;$t;$tt;$Txt_in;$Txt_ormula;$Txt_result)
-C_OBJECT:C1216($file;$o;$Obj_formula;$Obj_new;$Obj_result;$Obj_target)
-C_OBJECT:C1216($Obj_template;$oo;$ooo;$svg)
-C_COLLECTION:C1488($c;$cc;$Col_2)
+C_OBJECT:C1216($cc;$folder;$o;$Obj_formula;$Obj_new;$Obj_result)
+C_OBJECT:C1216($Obj_target;$Obj_template;$oo;$ooo;$svg)
+C_COLLECTION:C1488($c;$Col_2)
 
 ARRAY TEXT:C222($tTxt_;0)
 
@@ -19,17 +19,22 @@ COMPONENT_INIT
 Case of 
 		
 		  //________________________________________
-	: (True:C214)
+	: (False:C215)
 		
 		$o:=_iw_Xcode 
 		
-		$file:=$o.defaultPath()
-		$Obj_result:=$o.toolsPath()
+		$folder:=$o.defaultPath()
+		
+		$folder:=$o.toolsPath()
+		
+		$folder:=$o.path()
+		
+		  //  $c:=$o.paths()
 		
 		  //$o.openAppStore()
 		
 		  //________________________________________
-	: (True:C214)
+	: (False:C215)
 		
 		$o:=class ("lep")
 		$oo:=$o.constructor()
@@ -65,7 +70,7 @@ Case of
 		$t:=str .setText("Note: if a value being appended is a collection, the elements of the collection will be appended.").shuffle(15)
 		
 		  //________________________________________
-	: (True:C214)  // Unsandbox
+	: (False:C215)  // Unsandbox
 		
 		$o:=Folder:C1567(fk database folder:K87:14)
 		$oo:=Folder:C1567($o.platformPath;fk platform path:K87:2)
@@ -75,8 +80,8 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$c:=New collection:C1472(1;2;3;4;5)
-		$cc:=$c.slice($c.length-1)
+		  //$c:=New collection(1;2;3;4;5)
+		  //$cc:=$c.slice($c.length-1)
 		
 		$o:=class ("str";"test")
 		$oo:=$o.constructor()

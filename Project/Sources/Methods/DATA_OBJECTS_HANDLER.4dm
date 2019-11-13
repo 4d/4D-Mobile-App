@@ -82,7 +82,9 @@ Case of
 				
 				$Obj_context.lastIndex:=$Obj_context.index
 				
-				ui.refresh()
+				  //ui.refresh()
+				$Obj_context.current:=$Obj_context.tables[$Obj_context.index-1]
+				SET TIMER:C645(-1)
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
@@ -371,7 +373,17 @@ Case of
 			"filter";$Obj_table.filter))
 		
 		$Obj_table.filter:=$o.filter
-		Form:C1466.dataModel[String:C10($Obj_table.tableNumber)].filter:=$Obj_table.filter
+		
+		If (Bool:C1537(featuresFlags.with("newDataModel")))
+			
+			Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][""].filter:=$Obj_table.filter
+			
+		Else 
+			
+			$Obj_table.filter:=$o.filter
+			Form:C1466.dataModel[String:C10($Obj_table.tableNumber)].filter:=$Obj_table.filter
+			
+		End if 
 		
 		ui.saveProject()
 		ui.refresh()
@@ -382,14 +394,29 @@ Case of
 		  //==================================================
 	: ($Txt_me=$Obj_form.embedded)
 		
-		If (Bool:C1537($Obj_table.embedded))
+		If (Bool:C1537(featuresFlags.with("newDataModel")))
 			
-			Form:C1466.dataModel[String:C10($Obj_table.tableNumber)].embedded:=True:C214
+			If (Bool:C1537($Obj_table.embedded))
+				
+				Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][""].embedded:=True:C214
+				
+			Else 
+				
+				OB REMOVE:C1226(Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][""];"embedded")
+				
+			End if 
 			
 		Else 
 			
-			OB REMOVE:C1226(Form:C1466.dataModel[String:C10($Obj_table.tableNumber)];"embedded")
-			
+			If (Bool:C1537($Obj_table.embedded))
+				
+				Form:C1466.dataModel[String:C10($Obj_table.tableNumber)].embedded:=True:C214
+				
+			Else 
+				
+				OB REMOVE:C1226(Form:C1466.dataModel[String:C10($Obj_table.tableNumber)];"embedded")
+				
+			End if 
 		End if 
 		
 		ui.saveProject()
@@ -444,7 +471,15 @@ Case of
 				
 				$t:=Get edited text:C655
 				
-				$o:=Form:C1466.dataModel[String:C10($Obj_table.tableNumber)]
+				If (Bool:C1537(featuresFlags.with("newDataModel")))
+					
+					$o:=Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][""]
+					
+				Else 
+					
+					$o:=Form:C1466.dataModel[String:C10($Obj_table.tableNumber)]
+					
+				End if 
 				
 				If (Value type:C1509($o.filter)#Is object:K8:27)
 					

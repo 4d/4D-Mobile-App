@@ -94,10 +94,10 @@
 				},
 				"01_fields": {
 					"type": "listbox",
-					"top": 67,
+					"top": 68,
 					"left": 17,
-					"width": 920,
-					"height": 289,
+					"width": 919,
+					"height": 288,
 					"visibility": "hidden",
 					"sizingY": "grow",
 					"resizingMode": "legacy",

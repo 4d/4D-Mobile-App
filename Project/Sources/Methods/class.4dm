@@ -14,6 +14,7 @@ C_TEXT:C284($2)
 
 C_TEXT:C284($t)
 C_OBJECT:C1216($o)
+C_COLLECTION:C1488($c)
 
 If (False:C215)
 	C_OBJECT:C1216(class ;$0)
@@ -52,9 +53,20 @@ Else
 			
 			$o:=New object:C1471(\
 				"properties";New collection:C1472;\
-				"functions";New collection:C1472)
+				"functions";New collection:C1472;\
+				"fomulas";New collection:C1472)
+			
+			$c:=New collection:C1472
 			
 			For each ($t;This:C1470)
+				
+				$c.push($t)
+				
+			End for each 
+			
+			$c:=$c.orderBy(ck ascending:K85:9)
+			
+			For each ($t;$c)
 				
 				Case of 
 						
@@ -67,6 +79,7 @@ Else
 						If (JSON Stringify:C1217(This:C1470[$t])="\"[object Formula]\"")
 							
 							$o.functions.push($t)
+							$o.fomulas.push(This:C1470[$t].source)
 							
 						Else 
 							

@@ -67,14 +67,26 @@ If (Bool:C1537($Obj_in.rest))
 	
 	If (Bool:C1537($Obj_in.selection))
 		
-		$Obj_out:=Rest (New object:C1471("action";"records";"table";$Obj_in.table;"url";$Obj_in.url;"handler";$Obj_in.handler;"queryEncode";True:C214;"query";New object:C1471("$filter";$Obj_in.filter.string)))
+		$Obj_out:=Rest (New object:C1471(\
+			"action";"records";\
+			"table";$Obj_in.table;\
+			"url";$Obj_in.url;\
+			"handler";$Obj_in.handler;\
+			"queryEncode";True:C214;\
+			"query";New object:C1471("$filter";$Obj_in.filter.string)))
 		
 	Else 
 		
-		$Obj_out:=Rest (New object:C1471("action";"records";"table";$Obj_in.table;"url";$Obj_in.url;"handler";$Obj_in.handler;"queryEncode";True:C214;"query";New object:C1471("$filter";$Obj_in.filter.string;"$limit";"1")))
+		  // Limit to one - just check 
+		$Obj_out:=Rest (New object:C1471(\
+			"action";"records";\
+			"table";$Obj_in.table;\
+			"url";$Obj_in.url;\
+			"handler";$Obj_in.handler;\
+			"queryEncode";True:C214;\
+			"query";New object:C1471("$filter";$Obj_in.filter.string;"$limit";"1")))
 		
 	End if 
-	
 Else 
 	
 	$Txt_methodOnErrCall:=Method called on error:C704

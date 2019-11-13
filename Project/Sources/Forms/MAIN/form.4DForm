@@ -12,7 +12,6 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -78,10 +77,10 @@
 				},
 				"01_available": {
 					"type": "listbox",
-					"top": 27,
+					"top": 28,
 					"left": 17,
-					"width": 437,
-					"height": 312,
+					"width": 436,
+					"height": 311,
 					"resizingMode": "legacy",
 					"hideFocusRing": true,
 					"sortable": false,
@@ -168,10 +167,10 @@
 				},
 				"02_displayed": {
 					"type": "listbox",
-					"top": 27,
+					"top": 28,
 					"left": 501,
-					"width": 436,
-					"height": 312,
+					"width": 435,
+					"height": 311,
 					"resizingMode": "legacy",
 					"hideFocusRing": true,
 					"sortable": false,
@@ -400,5 +399,6 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"method": "main_Handler"
 }

@@ -168,7 +168,8 @@
 					"method": "ObjectMethods/help.1.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false
 				}
 			}
 		}

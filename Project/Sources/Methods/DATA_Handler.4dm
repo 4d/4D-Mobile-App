@@ -11,7 +11,7 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($Boo_withFocus)
+C_BOOLEAN:C305($b)
 C_LONGINT:C283($Lon_backgroundColor;$Lon_formEvent;$Lon_index;$Lon_parameters;$Lon_row;$Lon_size)
 C_TEXT:C284($Dir_picture;$Dir_root;$File_data;$t)
 C_OBJECT:C1216($file;$o;$Obj_table;$Obj_context;$Obj_form;$Obj_in)
@@ -57,17 +57,10 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		$Obj_context.help:=Get localized string:C991("help_properties")
 		
 		  // Define form methods
-		$Obj_context.listboxUI:=Formula:C1597(DATA_Handler (New object:C1471(\
-			"action";"listboxUI")))
-		
-		$Obj_context.listBackground:=Formula:C1597(DATA_Handler (New object:C1471(\
-			"action";"background")))
-		
-		$Obj_context.text:=Formula:C1597(DATA_Handler (New object:C1471(\
-			"action";"meta-infos")))
-		
-		$Obj_context.dumpSizes:=Formula:C1597(DATA_Handler (New object:C1471(\
-			"action";"dumpSizes")))
+		$Obj_context.listboxUI:=Formula:C1597(DATA_Handler (New object:C1471("action";"listboxUI")))
+		$Obj_context.listBackground:=Formula:C1597(DATA_Handler (New object:C1471("action";"background";"this";$1)))
+		$Obj_context.text:=Formula:C1597(DATA_Handler (New object:C1471("action";"meta-infos")))
+		$Obj_context.dumpSizes:=Formula:C1597(DATA_Handler (New object:C1471("action";"dumpSizes")))
 		
 	End if 
 	
@@ -461,27 +454,23 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="background")
 		
-		$Obj_out:=New object:C1471
+		$Obj_out:=New object:C1471(\
+			"color";0x00FFFFFF)
 		
 		If (Num:C11($Obj_context.index)#0)
 			
-			$Boo_withFocus:=($Obj_form.focus=$Obj_form.list)
+			$b:=($Obj_form.focus=$Obj_form.list)
 			
-			If ($Obj_context.current.name=This:C1470.name)
+			If ($Obj_context.current.name=$Obj_in.this.name)
 				
-				$Obj_out.color:=Choose:C955($Boo_withFocus;ui.backgroundSelectedColor;ui.alternateSelectedColor)
+				$Obj_out.color:=Choose:C955($b;ui.backgroundSelectedColor;ui.alternateSelectedColor)
 				
 			Else 
 				
-				$Lon_backgroundColor:=Choose:C955($Boo_withFocus;ui.highlightColor;ui.highlightColorNoFocus)
-				$Obj_out.color:=Choose:C955($Boo_withFocus;$Lon_backgroundColor;0x00FFFFFF)
+				$Lon_backgroundColor:=Choose:C955($b;ui.highlightColor;ui.highlightColorNoFocus)
+				$Obj_out.color:=Choose:C955($b;$Lon_backgroundColor;0x00FFFFFF)
 				
 			End if 
-			
-		Else 
-			
-			$Obj_out.color:=0x00FFFFFF
-			
 		End if 
 		
 		  //=========================================================
@@ -516,16 +505,15 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="listboxUI")
 		
-		If ($Obj_form.focus=$Obj_form.list)\
-			 & (Form event code:C388=On Getting Focus:K2:7)
+		If ($Obj_form.focus=$Obj_form.list)  // & (Form event code=On Getting Focus)
 			
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.list;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.list+".border";ui.selectedColor;Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*;$Obj_form.list+".border";ui.selectedColor)  //;Background color none)
 			
 		Else 
 			
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.list;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.list+".border";ui.backgroundUnselectedColor;Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*;$Obj_form.list+".border";ui.backgroundUnselectedColor)  //;Background color none)
 			
 		End if 
 		

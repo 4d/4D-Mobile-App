@@ -34,10 +34,10 @@
 				},
 				"actions": {
 					"type": "listbox",
-					"top": 34,
+					"top": 35,
 					"left": 17,
-					"width": 920,
-					"height": 240,
+					"width": 919,
+					"height": 239,
 					"visibility": "visible",
 					"resizingMode": "legacy",
 					"listboxType": "collection",

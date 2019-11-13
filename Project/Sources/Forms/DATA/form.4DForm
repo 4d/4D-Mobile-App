@@ -12,7 +12,6 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -31,10 +30,10 @@
 					"visibility": "hidden",
 					"text": ":xliff:editAuthenticationMethod",
 					"focusable": false,
-					"method": "ObjectMethods/authenticationMethod.options.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "DATA_OBJECTS_HANDLER"
 				},
 				"01_tables.border": {
 					"type": "rectangle",
@@ -67,10 +66,10 @@
 				},
 				"01_tables": {
 					"type": "listbox",
-					"top": 27,
+					"top": 28,
 					"left": 17,
-					"width": 437,
-					"height": 312,
+					"width": 436,
+					"height": 311,
 					"resizingMode": "legacy",
 					"listboxType": "collection",
 					"hideFocusRing": true,
@@ -87,14 +86,12 @@
 					"metaSource": "Form:C1466.$dialog.DATA.text.call()",
 					"selectionMode": "single",
 					"scrollbarHorizontal": "hidden",
-					"scrollbarVertical": "hidden",
+					"scrollbarVertical": "visible",
 					"horizontalLineStroke": "transparent",
 					"verticalLineStroke": "transparent",
-					"rowFillSource": "Form:C1466.$dialog.DATA.listBackground.call().color",
-					"textAlign": "left",
+					"rowFillSource": "Form:C1466.$dialog.DATA.listBackground(This:C1470).color",
 					"verticalAlign": "middle",
 					"borderStyle": "none",
-					"method": "ObjectMethods/01_tables.4dm",
 					"events": [
 						"onLosingFocus",
 						"onGettingFocus",
@@ -103,6 +100,8 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
+					"method": "DATA_OBJECTS_HANDLER",
+					"fill": "#FFFFFF",
 					"columns": [
 						{
 							"name": "table_names",
@@ -191,10 +190,10 @@
 					"dataSource": "Form:C1466.$dialog.DATA.current.embedded",
 					"text": ":xliff:embedDataIntoTheBuildedApplication",
 					"focusable": false,
-					"method": "ObjectMethods/embedded.options.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "DATA_OBJECTS_HANDLER"
 				},
 				"01_tables.label": {
 					"type": "text",
@@ -229,13 +228,13 @@
 					"placeholder": ":xliff:leaveBlankToNotFilterData",
 					"dragging": "none",
 					"dropping": "none",
-					"method": "ObjectMethods/02_filter.options.4dm",
 					"events": [
 						"onLosingFocus",
 						"onGettingFocus",
 						"onDataChange",
 						"onAfterEdit"
-					]
+					],
+					"method": "DATA_OBJECTS_HANDLER"
 				},
 				"query.options": {
 					"type": "input",
@@ -276,10 +275,10 @@
 					"height": 20,
 					"visibility": "hidden",
 					"text": ":xliff:validate",
-					"method": "ObjectMethods/validate.options.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "DATA_OBJECTS_HANDLER"
 				},
 				"enter.options": {
 					"type": "button",
@@ -290,10 +289,10 @@
 					"shortcutKey": "[Enter]",
 					"text": "Enter",
 					"focusable": false,
-					"method": "ObjectMethods/enter.options.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "DATA_OBJECTS_HANDLER"
 				},
 				"01_tables.label1": {
 					"type": "text",
@@ -311,5 +310,6 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"method": "DATA_Handler"
 }

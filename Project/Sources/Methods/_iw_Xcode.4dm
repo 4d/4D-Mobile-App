@@ -12,8 +12,9 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
+C_LONGINT:C283($l)
 C_TEXT:C284($Txt_cmd;$Txt_error;$Txt_in;$Txt_out)
-C_OBJECT:C1216($o)
+C_OBJECT:C1216($folder;$o;$Obj_result)
 
 If (False:C215)
 	C_OBJECT:C1216(_iw_Xcode ;$0)
@@ -31,7 +32,9 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"defaultPath";Formula:C1597(_iw_Xcode ("defaultPath").value);\
 		"path";Formula:C1597(_iw_Xcode ("path").value);\
 		"toolsPath";Formula:C1597(_iw_Xcode ("toolsPath").value);\
-		"isDefaultPath";Formula:C1597(_iw_Xcode ("isDefaultPath").value)\
+		"isDefaultPath";Formula:C1597(_iw_Xcode ("isDefaultPath").value);\
+		"paths";Formula:C1597(_iw_Xcode ("paths").value);\
+		"lastpath";Formula:C1597(_iw_Xcode ("lastpath").value)\
 		)
 	
 Else 
@@ -49,7 +52,7 @@ Else
 			  //______________________________________________________
 		: ($1="defaultPath")
 			
-			$o.value:=File:C1566("/Applications/Xcode.app")
+			$o.value:=Folder:C1567("/Applications/Xcode.app")
 			$o.success:=True:C214
 			
 			  //______________________________________________________
@@ -75,17 +78,95 @@ Else
 			  //______________________________________________________
 		: ($1="path")
 			
-			  // return by default the default path,
+			  // Return by default the default path,
 			  // and if not exist the tool path,
 			  // and if not exist one of the path found by spotlight. The last version.
 			
-			$o:=$o.defaultPath()
+			$folder:=$o.defaultPath()
 			
-			If ($o.exists)
+			If (Not:C34($folder.exists))
 				
-			Else 
+				$folder:=$o.toolsPath()
 				
-				  // A "If" statement should never omit "Else"
+				If ($folder.exists)
+					
+					$o.value:=$folder.value.parent.parent
+					
+				Else 
+					
+					$folder:=$o.lastpath()
+					
+				End if 
+			End if 
+			
+			  //______________________________________________________
+		: ($1="paths")
+			
+			  // Get all installed xcode using spotlight
+			
+			$Txt_cmd:="mdfind \"kMDItemCFBundleIdentifier == 'com.apple.dt.Xcode'\""
+			
+			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+			
+			If (Asserted:C1132(OK=1;"Get paths failed: "+$Txt_cmd))
+				
+				If ((Length:C16($Txt_error)=0)\
+					 & (Length:C16($Txt_out)#0))
+					
+					$o.value:=New collection:C1472
+					
+					Repeat 
+						
+						$l:=Position:C15("\n";$Txt_out)
+						
+						If ($l#0)
+							
+							$o.value.push(Folder:C1567(Substring:C12($Txt_out;1;$l-1)))
+							$Txt_out:=Substring:C12($Txt_out;$l+1)
+							
+						End if 
+					Until ($l=0)
+					
+					$o.success:=True:C214
+					
+				Else 
+					
+					$o.error:=Choose:C955(Length:C16($Txt_error)=0;"No Xcode installed";$Txt_error)
+					
+				End if 
+			End if 
+			
+			  //______________________________________________________
+		: ($1="lastpath")
+			
+			$o:=$o.paths()
+			
+			If ($o.success)
+				
+				  //For each ($folder;$o.value)
+				
+				  //$Obj_result:=Xcode (New object(\
+					"action";"version";\
+					"posix";$folder.path))
+				
+				  //If ($Obj_result.success)
+				
+				  //If (str_cmpVersion (String($Obj_result.version);$Txt_buffer)>=0)  // Equal or higher
+				
+				  //$o.value:=new object(\
+					"version";String($Obj_result.version);\
+					"";;;\
+					"";;;\
+					"";;\
+					)
+				  //$Obj_result.version:=$Txt_buffer
+				  //$Obj_result.posix:=$t
+				  //$Obj_result.path:=Convert path POSIX to system($Obj_result.posix)
+				  //$Obj_result.success:=True
+				
+				  //End if
+				  //End if
+				  //End for each
 				
 			End if 
 			

@@ -18,8 +18,8 @@ C_POINTER:C301($Ptr_field)
 C_TEXT:C284($Dom_attribute;$Dom_elements;$Dom_entity;$Dom_model;$Dom_node;$Dom_userInfo)
 C_TEXT:C284($File_;$t;$tt;$Txt_buffer;$Txt_field;$Txt_fieldName)
 C_TEXT:C284($Txt_fieldNumber;$Txt_inverseName;$Txt_relationName;$Txt_tableName;$Txt_tableNumber;$Txt_value)
-C_OBJECT:C1216($ƒ;$Obj_buffer;$Obj_dataModel;$Obj_field;$Obj_in;$Obj_out)
-C_OBJECT:C1216($Obj_path;$Obj_relationTable;$Obj_table)
+C_OBJECT:C1216($ƒ;$o;$Obj_buffer;$Obj_dataModel;$Obj_field;$Obj_in)
+C_OBJECT:C1216($Obj_out;$Obj_path;$Obj_relationTable;$Obj_table)
 C_COLLECTION:C1488($Col_fields;$Col_tables)
 
 ARRAY TEXT:C222($tTxt_fields;0)
@@ -172,7 +172,17 @@ Case of
 						$Lon_tableID:=Num:C11($tTxt_tables{$Lon_table})
 						$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
 						
-						$Txt_buffer:=$Obj_table.name  // Table name($Lon_tableID)
+						If (Bool:C1537(featuresFlags.with("newDataModel")))
+							
+							$Txt_buffer:=$Obj_table[""].name
+							
+						Else 
+							
+							  // Table name($Lon_tableID)
+							$Txt_buffer:=$Obj_table.name
+							
+						End if 
+						
 						$Txt_tableName:=formatString ("table-name";$Txt_buffer)
 						
 						$tTxt_entityValues{1}:=$Txt_tableName
@@ -214,7 +224,7 @@ Case of
 							"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";\
 							"table";$Obj_table.name;"field";commonValues.stampField.name)).value);"YES";"NO"))
 						
-						  //End if 
+						  //End if
 						
 						If (OK=1)
 							
@@ -242,7 +252,7 @@ Case of
 									
 								End if 
 							End if 
-							  //End if 
+							  //End if
 							
 							OB GET PROPERTY NAMES:C1232($Obj_table;$tTxt_fields)
 							
@@ -621,7 +631,10 @@ Case of
 								
 								$Obj_relationTable:=$Obj_dataModel[$tTxt_tables{$Lon_table2}]
 								
-								If ($Obj_relationTable.name=$Obj_table[$Txt_relationName].relatedDataClass)
+								$o:=Choose:C955(Bool:C1537(featuresFlags.with("newDataModel"));$Obj_relationTable[""];$Obj_relationTable)
+								  //$o:=$Obj_relationTable
+								
+								If ($o.name=$Obj_table[$Txt_relationName].relatedDataClass)
 									
 									$Boo_found:=True:C214
 									$Lon_table2:=MAXLONG:K35:2-1  // Break
@@ -633,18 +646,31 @@ Case of
 							
 							If (Not:C34($Boo_found))  // not found we must add a new table in model
 								
-								$Obj_relationTable:=New object:C1471(\
-									"name";$Obj_table[$Txt_relationName].relatedDataClass\
-									)
+								If (Bool:C1537(featuresFlags.with("newDataModel")))
+									
+									$Obj_relationTable:=New object:C1471(\
+										"";New object:C1471("name";$Obj_table[$Txt_relationName].relatedDataClass)\
+										)
+									$o:=$Obj_relationTable[""]
+									
+								Else 
+									
+									$Obj_relationTable:=New object:C1471(\
+										"name";$Obj_table[$Txt_relationName].relatedDataClass\
+										)
+									
+									$o:=$Obj_relationTable
+									
+								End if 
 								
 								$Obj_buffer:=structure (New object:C1471(\
 									"action";"tableInfo";\
-									"name";$Obj_relationTable.name))
+									"name";$o.name))
 								
 								If ($Obj_buffer.success)
 									
-									$Obj_relationTable.primaryKey:=$Obj_buffer.tableInfo.primaryKey
-									$Obj_relationTable.slave:=$Obj_table.name
+									$o.primaryKey:=$Obj_buffer.tableInfo.primaryKey
+									$o.slave:=$Obj_table.name
 									
 									$Lon_relatedTableID:=$Obj_buffer.tableInfo.tableNumber
 									APPEND TO ARRAY:C911($tTxt_tables;String:C10($Lon_relatedTableID))
@@ -654,7 +680,7 @@ Case of
 									
 								Else 
 									
-									ob_error_add ($Obj_out;"Unknown related table "+String:C10($Obj_relationTable.name))
+									ob_error_add ($Obj_out;"Unknown related table "+String:C10($o.name))
 									
 								End if 
 							End if 
@@ -1045,6 +1071,11 @@ Case of
 				Case of 
 						
 						  //………………………………………………………………………………………………………………………
+					: (Length:C16($Txt_field)=0)
+						
+						  // <NOTHING MORE TO DO>
+						
+						  //………………………………………………………………………………………………………………………
 					: (Match regex:C1019("(?m-si)^\\d+$";$Txt_field;1;*))
 						
 						$Obj_out.fields.push($Obj_in.table[$Txt_field].name)
@@ -1235,8 +1266,6 @@ Case of
 							
 							  //……………………………………………………………………………………………………………
 						: ($ƒ.isRelationToMany($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))  // relatedEntities
-							
-							
 							
 							  //……………………………………………………………………………………………………………
 					End case 

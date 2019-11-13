@@ -119,10 +119,10 @@
 				},
 				"01_Parameters": {
 					"type": "listbox",
-					"top": 6,
+					"top": 7,
 					"left": 17,
-					"width": 449,
-					"height": 258,
+					"width": 448,
+					"height": 257,
 					"visibility": "hidden",
 					"resizingMode": "legacy",
 					"listboxType": "collection",

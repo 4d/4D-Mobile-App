@@ -124,7 +124,17 @@ If ($file.exists)
 								$o.current:=$Obj_tableCurrent.field.query("fieldNumber = :1";Num:C11($t)).pop()
 								$o.missing:=$o.current=Null:C1517
 								$o.nameMismatch:=$o.name#String:C10($o.current.name)
-								$o.typeMismatch:=$o.type#$o.current.valueType
+								
+								If (Value type:C1509($o.type)=Is text:K8:3)
+									
+									  // Compare to value Type
+									$o.typeMismatch:=$o.type#$o.current.valueType
+									
+								Else 
+									
+									$o.typeMismatch:=$o.fieldType#$o.current.fieldType
+									
+								End if 
 								
 								If ($o.missing | $o.nameMismatch | $o.typeMismatch)
 									

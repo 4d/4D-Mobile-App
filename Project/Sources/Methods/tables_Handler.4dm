@@ -176,7 +176,15 @@ Case of
 			
 			  // Update data model
 			  //%W-533.3
-			Form:C1466.dataModel[$Ptr_ids->{$Obj_in.row}].icon:=$Obj_in.pathnames[$Obj_in.item-1]
+			If (Bool:C1537(featuresFlags.with("newDataModel")))
+				
+				Form:C1466.dataModel[$Ptr_ids->{$Obj_in.row}][""].icon:=$Obj_in.pathnames[$Obj_in.item-1]
+				
+			Else 
+				
+				Form:C1466.dataModel[$Ptr_ids->{$Obj_in.row}].icon:=$Obj_in.pathnames[$Obj_in.item-1]
+				
+			End if 
 			  //%W+533.3
 			
 			  // Update UI

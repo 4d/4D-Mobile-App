@@ -11,7 +11,7 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($l;$Lon_available;$Lon_formEvent;$Lon_i;$Lon_parameters;$Lon_published)
+C_LONGINT:C283($i;$l;$Lon_available;$Lon_event;$Lon_published)
 C_POINTER:C301($Ptr_IDs;$Ptr_mainIDs;$Ptr_mainNames;$Ptr_names)
 C_TEXT:C284($Txt_tableNumber)
 C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_in;$Obj_out)
@@ -23,76 +23,59 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+  // NO PARAMETERS REQUIRED
+
+  // Optional parameters
+If (Count parameters:C259>=1)
 	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Obj_in:=$1
-		
-	End if 
-	
-	$Obj_form:=New object:C1471(\
-		"window";Current form window:C827;\
-		"ui";editor_INIT ;\
-		"event";Form event code:C388;\
-		"me";OBJECT Get name:C1087(Object current:K67:2);\
-		"focus";OBJECT Get name:C1087(Object with focus:K67:3);\
-		"tables";ui.listbox("01_available");\
-		"tableNames";ui.widget("table_names");\
-		"tableNumbers";ui.widget("table_ids");\
-		"mains";ui.listbox("02_displayed");\
-		"mainNames";ui.widget("main_names");\
-		"mainNumbers";ui.widget("main_ids");\
-		"addOne";ui.button("b.add.one");\
-		"addAll";ui.button("b.add.all");\
-		"removeOne";ui.button("b.remove.one");\
-		"removeAll";ui.button("b.remove.all")\
-		)
-	
-	$Obj_context:=$Obj_form.ui
-	
-	If (OB Is empty:C1297($Obj_context))
-		
-		  // Define form methods
-		$Obj_context.order:=Formula:C1597(main_Handler (New object:C1471(\
-			"action";"order")))
-		
-		$Obj_context.insert:=Formula:C1597(main_Handler (New object:C1471(\
-			"action";"add";\
-			"id";$1;\
-			"name";$2;\
-			"row";$3)))
-		
-		$Obj_context.append:=Formula:C1597(main_Handler (New object:C1471(\
-			"action";"add";\
-			"id";$1;\
-			"name";$2)))
-		
-	End if 
-	
-Else 
-	
-	ABORT:C156
+	$Obj_in:=$1
 	
 End if 
 
+$Obj_form:=New object:C1471(\
+"window";Current form window:C827;\
+"ui";editor_INIT ;\
+"event";Form event code:C388;\
+"currentWidget";OBJECT Get name:C1087(Object current:K67:2);\
+"focusedWidget";OBJECT Get name:C1087(Object with focus:K67:3);\
+"tables";ui.listbox("01_available");\
+"tableNames";ui.widget("table_names");\
+"tableNumbers";ui.widget("table_ids");\
+"mains";ui.listbox("02_displayed");\
+"mainNames";ui.widget("main_names");\
+"mainNumbers";ui.widget("main_ids");\
+"addOne";ui.button("b.add.one");\
+"addAll";ui.button("b.add.all");\
+"removeOne";ui.button("b.remove.one");\
+"removeAll";ui.button("b.remove.all")\
+)
+
+$Obj_context:=$Obj_form.ui
+
+If (OB Is empty:C1297($Obj_context))\
+ | (Structure file:C489=Structure file:C489(*))
+	
+	  // Define form methods
+	$Obj_context.order:=Formula:C1597(main_Handler (New object:C1471("action";"order")))
+	$Obj_context.insert:=Formula:C1597(main_Handler (New object:C1471("action";"add";"id";$1;"name";$2;"row";$3)))
+	$Obj_context.append:=Formula:C1597(main_Handler (New object:C1471("action";"add";"id";$1;"name";$2)))
+	$Obj_context.UI:=Formula:C1597(main_Handler (New object:C1471("action";"update")))
+	$Obj_context.buttonsUI:=Formula:C1597(main_Handler (New object:C1471("action";"buttons")))
+	
+End if 
   // ----------------------------------------------------
 Case of 
 		
 		  //=========================================================
 	: ($Obj_in=Null:C1517)  // Form method
 		
-		$Lon_formEvent:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
+		$Lon_event:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Load:K2:1)
+			: ($Lon_event=On Load:K2:1)
 				
 				  // This trick remove the horizontal gap
 				$Obj_form.tables.setScrollbar(0;2)
@@ -100,13 +83,10 @@ Case of
 				
 				$Obj_context.constraints:=New object:C1471
 				
-				editor_INIT ("main")
-				
-				main_Handler (New object:C1471(\
-					"action";"update"))
+				$Obj_context.UI()
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Timer:K2:25)
+			: ($Lon_event=On Timer:K2:25)
 				
 				  //OB GET PROPERTY NAMES($Obj_dataModel;$tTxt_keys)
 				  //$Lon_count:=Size of array($tTxt_keys)
@@ -145,26 +125,53 @@ Case of
 		  // Available tables
 		If (Form:C1466.dataModel#Null:C1517)
 			
-			For each ($Txt_tableNumber;Form:C1466.dataModel)
+			If (Bool:C1537(featuresFlags.with("newDataModel")))
 				
-				APPEND TO ARRAY:C911($Ptr_names->;Form:C1466.dataModel[$Txt_tableNumber].label)
-				APPEND TO ARRAY:C911($Ptr_IDs->;$Txt_tableNumber)
+				For each ($Txt_tableNumber;Form:C1466.dataModel)
+					
+					APPEND TO ARRAY:C911($Ptr_names->;Form:C1466.dataModel[$Txt_tableNumber][""].label)
+					APPEND TO ARRAY:C911($Ptr_IDs->;$Txt_tableNumber)
+					
+				End for each 
 				
-			End for each 
+			Else 
+				
+				For each ($Txt_tableNumber;Form:C1466.dataModel)
+					
+					APPEND TO ARRAY:C911($Ptr_names->;Form:C1466.dataModel[$Txt_tableNumber].label)
+					APPEND TO ARRAY:C911($Ptr_IDs->;$Txt_tableNumber)
+					
+				End for each 
+			End if 
 		End if 
 		
 		OBJECT SET VISIBLE:C603(*;"noPublishedTable";Size of array:C274($Ptr_names->)=0)
 		
 		  // Selected tables
-		For each ($Txt_tableNumber;Form:C1466.main.order)
+		If (Bool:C1537(featuresFlags.with("newDataModel")))
 			
-			If (Form:C1466.dataModel[$Txt_tableNumber]#Null:C1517)
+			For each ($Txt_tableNumber;Form:C1466.main.order)
 				
-				APPEND TO ARRAY:C911($Ptr_mainIDs->;$Txt_tableNumber)
-				APPEND TO ARRAY:C911($Ptr_mainNames->;Form:C1466.dataModel[$Txt_tableNumber].label)
+				If (Form:C1466.dataModel[$Txt_tableNumber]#Null:C1517)
+					
+					APPEND TO ARRAY:C911($Ptr_mainIDs->;$Txt_tableNumber)
+					APPEND TO ARRAY:C911($Ptr_mainNames->;Form:C1466.dataModel[$Txt_tableNumber][""].label)
+					
+				End if 
+			End for each 
+			
+		Else 
+			
+			For each ($Txt_tableNumber;Form:C1466.main.order)
 				
-			End if 
-		End for each 
+				If (Form:C1466.dataModel[$Txt_tableNumber]#Null:C1517)
+					
+					APPEND TO ARRAY:C911($Ptr_mainIDs->;$Txt_tableNumber)
+					APPEND TO ARRAY:C911($Ptr_mainNames->;Form:C1466.dataModel[$Txt_tableNumber].label)
+					
+				End if 
+			End for each 
+		End if 
 		
 		If (editor_Locked )
 			
@@ -186,8 +193,7 @@ Case of
 			
 		End if 
 		
-		main_Handler (New object:C1471(\
-			"action";"buttons"))
+		$Obj_context.buttonsUI()
 		
 		  //=========================================================
 	: ($Obj_in.action="order")  // Update table order
@@ -196,14 +202,13 @@ Case of
 		
 		Form:C1466.main.order:=New collection:C1472
 		
-		For ($Lon_i;1;Size of array:C274($Ptr_mainIDs->);1)
+		For ($i;1;Size of array:C274($Ptr_mainIDs->);1)
 			
-			Form:C1466.main.order[$Lon_i-1]:=$Ptr_mainIDs->{$Lon_i}
+			Form:C1466.main.order[$i-1]:=$Ptr_mainIDs->{$i}
 			
 		End for 
 		
-		main_Handler (New object:C1471(\
-			"action";"buttons"))
+		$Obj_context.buttonsUI()
 		
 		  //=========================================================
 	: ($Obj_in.action="buttons")  // Manage activation/inactivation of the buttons
@@ -228,15 +233,15 @@ Case of
 		End if 
 		
 		  //=========================================================
-	: ($Lon_parameters<1)  // Error - All entry points below needs an object parameter
+	: (Count parameters:C259<1)  // Error - All entry points below needs an object parameter
 		
 		ASSERT:C1129(False:C215;"Missing parameter")
 		
 		  //=========================================================
 	: ($Obj_in.action="add")  // [panel] Add a table in the menu
 		
-		$Ptr_mainNames:=$Obj_form.mainNames.pointer()  //OBJECT Get pointer(Object named;$Obj_form.mainNames)
-		$Ptr_mainIDs:=$Obj_form.mainNumbers.pointer()  //OBJECT Get pointer(Object named;$Obj_form.mainNumbers)
+		$Ptr_mainNames:=$Obj_form.mainNames.pointer()
+		$Ptr_mainIDs:=$Obj_form.mainNumbers.pointer()
 		
 		  //#MARK_TODO - Check template limits @see manifest.json table.max
 		

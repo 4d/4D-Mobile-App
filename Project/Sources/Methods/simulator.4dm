@@ -127,7 +127,7 @@ Case of
 				
 				$Obj_out:=plist (New object:C1471(\
 					"action";"write";\
-					"domain";$file.path;\
+					"domain";env_userPathname ("preferences").file("com.apple.iphonesimulator.plist").path;\
 					"key";"CurrentDeviceUDID";\
 					"value";$o.udid))
 				

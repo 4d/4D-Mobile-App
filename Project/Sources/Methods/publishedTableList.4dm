@@ -14,7 +14,7 @@ C_OBJECT:C1216($1)
 C_LONGINT:C283($i;$Lon_parameters)
 C_PICTURE:C286($Pic_buffer)
 C_TEXT:C284($Dir_hostRoot;$Dir_root;$File_;$Txt_tableNumber)
-C_OBJECT:C1216($Obj_dataModel;$Obj_in;$Obj_out;$Obj_table)
+C_OBJECT:C1216($o;$Obj_dataModel;$Obj_in;$Obj_out;$Obj_table)
 
 If (False:C215)
 	C_OBJECT:C1216(publishedTableList ;$0)
@@ -57,76 +57,155 @@ If ($Obj_out.success)
 		
 		$Obj_out.tables:=New collection:C1472
 		
-		For each ($Txt_tableNumber;$Obj_dataModel)
+		If (Bool:C1537(featuresFlags.with("newDataModel")))
 			
-			$Obj_table:=New object:C1471(\
-				"tableNumber";Num:C11($Txt_tableNumber);\
-				"name";$Obj_dataModel[$Txt_tableNumber].name)
-			
-			If ($Obj_dataModel[$Txt_tableNumber].label=Null:C1517)
+			For each ($Txt_tableNumber;$Obj_dataModel)
 				
-				$Obj_dataModel[$Txt_tableNumber].label:=formatString ("label";$Obj_dataModel[$Txt_tableNumber].name)
+				$o:=$Obj_dataModel[$Txt_tableNumber][""]  // Table properties
 				
-			End if 
-			
-			$Obj_table.label:=$Obj_dataModel[$Txt_tableNumber].label
-			
-			If ($Obj_dataModel[$Txt_tableNumber].shortLabel=Null:C1517)
+				$Obj_table:=New object:C1471(\
+					"tableNumber";Num:C11($Txt_tableNumber);\
+					"name";$o.name)
 				
-				$Obj_dataModel[$Txt_tableNumber].shortLabel:=$Obj_dataModel[$Txt_tableNumber].label
-				
-			End if 
-			
-			$Obj_table.shortLabel:=$Obj_dataModel[$Txt_tableNumber].shortLabel
-			
-			If ($Obj_dataModel[$Txt_tableNumber].filter#Null:C1517)
-				
-				$Obj_table.filter:=Choose:C955(Value type:C1509($Obj_dataModel[$Txt_tableNumber].filter)=Is text:K8:3;New object:C1471(\
-					"string";$Obj_dataModel[$Txt_tableNumber].filter);\
-					$Obj_dataModel[$Txt_tableNumber].filter)
-				
-			End if 
-			
-			$Obj_table.embedded:=Bool:C1537($Obj_dataModel[$Txt_tableNumber].embedded)
-			
-			$Obj_table.iconPath:=String:C10($Obj_dataModel[$Txt_tableNumber].icon)
-			
-			If (Length:C16($Obj_table.iconPath)=0)
-				
-				$File_:=ui.noIcon
-				
-			Else 
-				
-				If (Position:C15("/";String:C10($Obj_dataModel[$Txt_tableNumber].icon))=1)  // User resource
+				If ($o.label=Null:C1517)
 					
-					$File_:=$Dir_hostRoot+Replace string:C233(String:C10($Obj_dataModel[$Txt_tableNumber].icon);"/";Folder separator:K24:12)
+					$o.label:=formatString ("label";$o.name)
 					
-					If (Test path name:C476($File_)#Is a document:K24:1)
-						
-						$File_:=ui.errorIcon
-						
-					End if 
+				End if 
+				
+				$Obj_table.label:=$o.label
+				
+				If ($o.shortLabel=Null:C1517)
+					
+					$o.shortLabel:=$o.label
+					
+				End if 
+				
+				$Obj_table.shortLabel:=$o.shortLabel
+				
+				If ($o.filter#Null:C1517)
+					
+					$Obj_table.filter:=Choose:C955(Value type:C1509($o.filter)=Is text:K8:3;New object:C1471(\
+						"string";$o.filter);\
+						$o.filter)
+					
+				End if 
+				
+				$Obj_table.embedded:=Bool:C1537($o.embedded)
+				
+				$Obj_table.iconPath:=String:C10($o.icon)
+				
+				If (Length:C16($Obj_table.iconPath)=0)
+					
+					$File_:=ui.noIcon
 					
 				Else 
 					
-					$File_:=$Dir_root+Replace string:C233(String:C10($Obj_dataModel[$Txt_tableNumber].icon);"/";Folder separator:K24:12)
-					
-					If (Test path name:C476($File_)#Is a document:K24:1)
+					If (Position:C15("/";String:C10($o.icon))=1)  // User resource
 						
-						$File_:=ui.noIcon
+						$File_:=$Dir_hostRoot+Replace string:C233(String:C10($o.icon);"/";Folder separator:K24:12)
 						
+						If (Test path name:C476($File_)#Is a document:K24:1)
+							
+							$File_:=ui.errorIcon
+							
+						End if 
+						
+					Else 
+						
+						$File_:=$Dir_root+Replace string:C233(String:C10($o.icon);"/";Folder separator:K24:12)
+						
+						If (Test path name:C476($File_)#Is a document:K24:1)
+							
+							$File_:=ui.noIcon
+							
+						End if 
 					End if 
 				End if 
-			End if 
+				
+				READ PICTURE FILE:C678($File_;$Pic_buffer)
+				
+				CREATE THUMBNAIL:C679($Pic_buffer;$Pic_buffer;24;24;Scaled to fit:K6:2)
+				$Obj_table.icon:=$Pic_buffer
+				
+				$Obj_out.tables.push($Obj_table)
+				
+			End for each 
 			
-			READ PICTURE FILE:C678($File_;$Pic_buffer)
+		Else 
 			
-			CREATE THUMBNAIL:C679($Pic_buffer;$Pic_buffer;24;24;Scaled to fit:K6:2)
-			$Obj_table.icon:=$Pic_buffer
+			For each ($Txt_tableNumber;$Obj_dataModel)
+				
+				$Obj_table:=New object:C1471(\
+					"tableNumber";Num:C11($Txt_tableNumber);\
+					"name";$Obj_dataModel[$Txt_tableNumber].name)
+				
+				If ($Obj_dataModel[$Txt_tableNumber].label=Null:C1517)
+					
+					$Obj_dataModel[$Txt_tableNumber].label:=formatString ("label";$Obj_dataModel[$Txt_tableNumber].name)
+					
+				End if 
+				
+				$Obj_table.label:=$Obj_dataModel[$Txt_tableNumber].label
+				
+				If ($Obj_dataModel[$Txt_tableNumber].shortLabel=Null:C1517)
+					
+					$Obj_dataModel[$Txt_tableNumber].shortLabel:=$Obj_dataModel[$Txt_tableNumber].label
+					
+				End if 
+				
+				$Obj_table.shortLabel:=$Obj_dataModel[$Txt_tableNumber].shortLabel
+				
+				If ($Obj_dataModel[$Txt_tableNumber].filter#Null:C1517)
+					
+					$Obj_table.filter:=Choose:C955(Value type:C1509($Obj_dataModel[$Txt_tableNumber].filter)=Is text:K8:3;New object:C1471(\
+						"string";$Obj_dataModel[$Txt_tableNumber].filter);\
+						$Obj_dataModel[$Txt_tableNumber].filter)
+					
+				End if 
+				
+				$Obj_table.embedded:=Bool:C1537($Obj_dataModel[$Txt_tableNumber].embedded)
+				
+				$Obj_table.iconPath:=String:C10($Obj_dataModel[$Txt_tableNumber].icon)
+				
+				If (Length:C16($Obj_table.iconPath)=0)
+					
+					$File_:=ui.noIcon
+					
+				Else 
+					
+					If (Position:C15("/";String:C10($Obj_dataModel[$Txt_tableNumber].icon))=1)  // User resource
+						
+						$File_:=$Dir_hostRoot+Replace string:C233(String:C10($Obj_dataModel[$Txt_tableNumber].icon);"/";Folder separator:K24:12)
+						
+						If (Test path name:C476($File_)#Is a document:K24:1)
+							
+							$File_:=ui.errorIcon
+							
+						End if 
+						
+					Else 
+						
+						$File_:=$Dir_root+Replace string:C233(String:C10($Obj_dataModel[$Txt_tableNumber].icon);"/";Folder separator:K24:12)
+						
+						If (Test path name:C476($File_)#Is a document:K24:1)
+							
+							$File_:=ui.noIcon
+							
+						End if 
+					End if 
+				End if 
+				
+				READ PICTURE FILE:C678($File_;$Pic_buffer)
+				
+				CREATE THUMBNAIL:C679($Pic_buffer;$Pic_buffer;24;24;Scaled to fit:K6:2)
+				$Obj_table.icon:=$Pic_buffer
+				
+				$Obj_out.tables.push($Obj_table)
+				
+			End for each 
 			
-			$Obj_out.tables.push($Obj_table)
-			
-		End for each 
+		End if 
 		
 	Else   // Old mechanism
 		
@@ -137,68 +216,137 @@ If ($Obj_out.success)
 		$Obj_out.iconPaths:=New collection:C1472
 		$Obj_out.icons:=New collection:C1472
 		
-		For each ($Txt_tableNumber;$Obj_dataModel)
+		If (Bool:C1537(featuresFlags.with("newDataModel")))
 			
-			$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
-			
-			$Obj_out.ids[$i]:=Num:C11($Txt_tableNumber)
-			$Obj_out.names[$i]:=$Obj_table.name
-			
-			If ($Obj_table.label=Null:C1517)
+			For each ($Txt_tableNumber;$Obj_dataModel)
 				
-				$Obj_table.label:=formatString ("label";$Obj_table.name)
+				$o:=$Obj_dataModel[$Txt_tableNumber][""]  // Table properties
 				
-			End if 
-			
-			$Obj_out.labels[$i]:=$Obj_table.label
-			
-			If ($Obj_table.shortLabel=Null:C1517)
+				$Obj_out.ids[$i]:=Num:C11($Txt_tableNumber)
+				$Obj_out.names[$i]:=$o.name
 				
-				$Obj_table.shortLabel:=$Obj_table.label
-				
-			End if 
-			
-			$Obj_out.shortLabels[$i]:=$Obj_table.shortLabel
-			
-			$Obj_out.iconPaths[$i]:=String:C10($Obj_table.icon)
-			
-			If (Length:C16($Obj_out.iconPaths[$i])=0)
-				
-				$File_:=ui.noIcon
-				
-			Else 
-				
-				If (Position:C15("/";String:C10($Obj_table.icon))=1)  // User resource
+				If ($o.label=Null:C1517)
 					
-					  //$File_:=$Dir_hostRoot+Replace string(String($Obj_table.icon);"/";Folder separator)
-					$File_:=$Dir_hostRoot+Replace string:C233(String:C10(Delete string:C232($Obj_table.icon;1;1));"/";Folder separator:K24:12)
+					$o.label:=formatString ("label";$o.name)
 					
-					If (Test path name:C476($File_)#Is a document:K24:1)
-						
-						$File_:=ui.errorIcon
-						
-					End if 
+				End if 
+				
+				$Obj_out.labels[$i]:=$o.label
+				
+				If ($o.shortLabel=Null:C1517)
+					
+					$o.shortLabel:=$o.label
+					
+				End if 
+				
+				$Obj_out.shortLabels[$i]:=$o.shortLabel
+				
+				$Obj_out.iconPaths[$i]:=String:C10($o.icon)
+				
+				If (Length:C16($Obj_out.iconPaths[$i])=0)
+					
+					$File_:=ui.noIcon
 					
 				Else 
 					
-					$File_:=$Dir_root+Replace string:C233(String:C10($Obj_table.icon);"/";Folder separator:K24:12)
-					
-					If (Test path name:C476($File_)#Is a document:K24:1)
+					If (Position:C15("/";String:C10($o.icon))=1)  // User resource
 						
-						$File_:=ui.noIcon
+						$File_:=$Dir_hostRoot+Replace string:C233(String:C10(Delete string:C232($o.icon;1;1));"/";Folder separator:K24:12)
 						
+						If (Test path name:C476($File_)#Is a document:K24:1)
+							
+							$File_:=ui.errorIcon
+							
+						End if 
+						
+					Else 
+						
+						$File_:=$Dir_root+Replace string:C233(String:C10($o.icon);"/";Folder separator:K24:12)
+						
+						If (Test path name:C476($File_)#Is a document:K24:1)
+							
+							$File_:=ui.noIcon
+							
+						End if 
 					End if 
 				End if 
-			End if 
+				
+				READ PICTURE FILE:C678($File_;$Pic_buffer)
+				
+				CREATE THUMBNAIL:C679($Pic_buffer;$Pic_buffer;24;24;Scaled to fit:K6:2)
+				$Obj_out.icons[$i]:=$Pic_buffer
+				
+				$i:=$i+1
+				
+			End for each 
 			
-			READ PICTURE FILE:C678($File_;$Pic_buffer)
 			
-			CREATE THUMBNAIL:C679($Pic_buffer;$Pic_buffer;24;24;Scaled to fit:K6:2)
-			$Obj_out.icons[$i]:=$Pic_buffer
+		Else 
 			
-			$i:=$i+1
+			For each ($Txt_tableNumber;$Obj_dataModel)
+				
+				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
+				
+				$Obj_out.ids[$i]:=Num:C11($Txt_tableNumber)
+				$Obj_out.names[$i]:=$Obj_table.name
+				
+				If ($Obj_table.label=Null:C1517)
+					
+					$Obj_table.label:=formatString ("label";$Obj_table.name)
+					
+				End if 
+				
+				$Obj_out.labels[$i]:=$Obj_table.label
+				
+				If ($Obj_table.shortLabel=Null:C1517)
+					
+					$Obj_table.shortLabel:=$Obj_table.label
+					
+				End if 
+				
+				$Obj_out.shortLabels[$i]:=$Obj_table.shortLabel
+				
+				$Obj_out.iconPaths[$i]:=String:C10($Obj_table.icon)
+				
+				If (Length:C16($Obj_out.iconPaths[$i])=0)
+					
+					$File_:=ui.noIcon
+					
+				Else 
+					
+					If (Position:C15("/";String:C10($Obj_table.icon))=1)  // User resource
+						
+						  //$File_:=$Dir_hostRoot+Replace string(String($Obj_table.icon);"/";Folder separator)
+						$File_:=$Dir_hostRoot+Replace string:C233(String:C10(Delete string:C232($Obj_table.icon;1;1));"/";Folder separator:K24:12)
+						
+						If (Test path name:C476($File_)#Is a document:K24:1)
+							
+							$File_:=ui.errorIcon
+							
+						End if 
+						
+					Else 
+						
+						$File_:=$Dir_root+Replace string:C233(String:C10($Obj_table.icon);"/";Folder separator:K24:12)
+						
+						If (Test path name:C476($File_)#Is a document:K24:1)
+							
+							$File_:=ui.noIcon
+							
+						End if 
+					End if 
+				End if 
+				
+				READ PICTURE FILE:C678($File_;$Pic_buffer)
+				
+				CREATE THUMBNAIL:C679($Pic_buffer;$Pic_buffer;24;24;Scaled to fit:K6:2)
+				$Obj_out.icons[$i]:=$Pic_buffer
+				
+				$i:=$i+1
+				
+			End for each 
 			
-		End for each 
+		End if 
 		
 		$Obj_out.count:=$i
 		

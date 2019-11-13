@@ -373,11 +373,18 @@ If (Bool:C1537(featuresFlags.with("newDataModel")))
 					
 				End if 
 				
+				If (Length:C16(String:C10($Obj_table.icon))>0)
+					
+					$Obj_table[""].icon:=$Obj_table.icon
+					
+				End if 
+				
 				OB REMOVE:C1226($Obj_table;"name")
 				OB REMOVE:C1226($Obj_table;"label")
 				OB REMOVE:C1226($Obj_table;"shortLabel")
 				OB REMOVE:C1226($Obj_table;"primaryKey")
 				OB REMOVE:C1226($Obj_table;"embedded")
+				OB REMOVE:C1226($Obj_table;"icon")
 				
 			End for each 
 		End if 
@@ -385,12 +392,31 @@ If (Bool:C1537(featuresFlags.with("newDataModel")))
 		  //*****************************
 		  //$Obj_project.info.version:=5
 		  //*****************************
-		$Boo_upgraded:=True:C214
+		  //$Boo_upgraded:=True
 		
 	End if 
 	
 	
-	
+	  //=====================================================================
+	  //                              MISCELLANEOUS
+	  //=====================================================================
+	If ($Obj_project.dataModel#Null:C1517)
+		
+		For each ($Txt_tableNumber;$Obj_project.dataModel)
+			
+			For each ($Txt_fieldID;$Obj_project.dataModel[$Txt_tableNumber])
+				
+				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldID;1;*))
+					
+					If (String:C10($Obj_project.dataModel[$Txt_tableNumber][$Txt_fieldID].icon)="")
+						
+						OB REMOVE:C1226($Obj_project.dataModel[$Txt_tableNumber][$Txt_fieldID];"icon")
+						
+					End if 
+				End if 
+			End for each 
+		End for each 
+	End if 
 End if 
 
 

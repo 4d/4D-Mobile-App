@@ -393,6 +393,23 @@ ASSERT:C1129(Not:C34($o.setText("[hello] {world}").isJsonArray()))
 ASSERT:C1129(Not:C34($o.setText("{\"test\":1,\"test\":1}").isJsonArray()))
 
   // ============================================
+  // versionCompare()
+ASSERT:C1129($o.setText("9.0").versionCompare("9.1.2")=-1)
+ASSERT:C1129($o.setText("9.1.2").versionCompare("9.0")=1)
+ASSERT:C1129($o.setText("9.1.2").versionCompare("9.1.2")=0)
+
+ASSERT:C1129($o.setText("9").versionCompare("9.0")=0)
+ASSERT:C1129($o.setText("9.0.0").versionCompare("9.0")=0)
+ASSERT:C1129($o.setText("9").versionCompare("9.0.0")=0)
+ASSERT:C1129($o.setText("9.0.0").versionCompare("9.0.0")=0)
+
+ASSERT:C1129($o.setText("9").versionCompare("9.0.1")=-1)
+
+ASSERT:C1129($o.setText("9 0").versionCompare("9 1 2";" ")=-1)
+ASSERT:C1129($o.setText("9 1 2").versionCompare("9 0";" ")=1)
+ASSERT:C1129($o.setText("9/1/2").versionCompare("9/0";"/")=1)
+
+  // ============================================
 ASSERT:C1129(str_cmpVersion ("9.0";"9.1.2")=-1)
 ASSERT:C1129(str_cmpVersion ("9.1.2";"9.0")=1)
 ASSERT:C1129(str_cmpVersion ("9.1.2";"9.1.2")=0)

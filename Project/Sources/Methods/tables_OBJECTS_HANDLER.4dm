@@ -202,14 +202,29 @@ Case of
 					
 					$Ptr_ids:=ui.pointer($Obj_form.ids)
 					
-					If ($Ptr_me=ui.pointer($Obj_form.labels))
+					If (Bool:C1537(featuresFlags.with("newDataModel")))
 						
-						$Obj_context.currentTable.label:=$Ptr_me->{$Lon_row}
+						If ($Ptr_me=ui.pointer($Obj_form.labels))
+							
+							$Obj_context.currentTable[""].label:=$Ptr_me->{$Lon_row}
+							
+						Else 
+							
+							$Obj_context.currentTable[""].shortLabel:=$Ptr_me->{$Lon_row}
+							
+						End if 
 						
 					Else 
 						
-						$Obj_context.currentTable.shortLabel:=$Ptr_me->{$Lon_row}
-						
+						If ($Ptr_me=ui.pointer($Obj_form.labels))
+							
+							$Obj_context.currentTable.label:=$Ptr_me->{$Lon_row}
+							
+						Else 
+							
+							$Obj_context.currentTable.shortLabel:=$Ptr_me->{$Lon_row}
+							
+						End if 
 					End if 
 				End if 
 				

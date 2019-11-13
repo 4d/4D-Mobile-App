@@ -35,10 +35,10 @@
 				},
 				"01_tables": {
 					"type": "listbox",
-					"top": 28,
+					"top": 29,
 					"left": 17,
-					"width": 920,
-					"height": 161,
+					"width": 919,
+					"height": 160,
 					"visibility": "hidden",
 					"hideFocusRing": true,
 					"sortable": false,
