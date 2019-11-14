@@ -25,10 +25,10 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470.$_is=Null:C1517)
+If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
-		"$_is";"db";\
+		"";"db";\
 		"deletedRecordsTable";"__DeletedRecords";\
 		"stampField";"__GlobalStamp";\
 		"exclude";New collection:C1472;\

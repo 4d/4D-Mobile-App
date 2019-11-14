@@ -56,8 +56,8 @@ Case of
 		This:C1470.getFocusedWidget()
 		
 		  // MOUSEX & MOUSEY are not updated during D&D events
-		If (This:C1470.event=On Drag Over:K2:13)\
-			 | (This:C1470.event=On Drop:K2:12)
+		If (This:C1470.eventCode=On Drag Over:K2:13)\
+			 | (This:C1470.eventCode=On Drop:K2:12)
 			
 			MOUSEX:=Drop position:C608(MOUSEY)
 			
@@ -66,7 +66,7 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="event")
 		
-		This:C1470.event:=Form event code:C388
+		This:C1470.eventCode:=Form event code:C388
 		
 		  //______________________________________________________
 	: ($Txt_action="current")
@@ -99,6 +99,7 @@ Case of
 			CALL FORM:C1391(This:C1470.window;This:C1470.callback;$Obj_params.parameters)
 			
 		End if 
+		
 		  //______________________________________________________
 	Else 
 		

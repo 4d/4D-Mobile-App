@@ -40,13 +40,13 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Getting Focus:K2:7)\
-				 | ($Obj_form.form.event=On Losing Focus:K2:8)
+			: ($Obj_form.form.eventCode=On Getting Focus:K2:7)\
+				 | ($Obj_form.form.eventCode=On Losing Focus:K2:8)
 				
 				$Obj_context.listUI()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Selection Change:K2:29)
+			: ($Obj_form.form.eventCode=On Selection Change:K2:29)
 				
 				$Obj_context.$current:=$Obj_context.parameter
 				$Obj_form.form.refresh()
@@ -62,12 +62,12 @@ Case of
 				  // <NOTHING MORE TO DO>
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Leave:K2:34)
+			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
 				
 				$Obj_form.dropCursor.hide()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Begin Drag Over:K2:44)
+			: ($Obj_form.form.eventCode=On Begin Drag Over:K2:44)
 				
 				$o:=New object:C1471(\
 					"src";$Obj_context.index)
@@ -78,7 +78,7 @@ Case of
 				SET BLOB SIZE:C606($x;0)
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Drag Over:K2:13)  // Manage drag & drop cursor
+			: ($Obj_form.form.eventCode=On Drag Over:K2:13)  // Manage drag & drop cursor
 				
 				  // Get the pastboard
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter";$x)
@@ -139,7 +139,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Drop:K2:12)
+			: ($Obj_form.form.eventCode=On Drop:K2:12)
 				
 				  // Get the pastboard
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter";$x)
@@ -183,7 +183,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.event)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.eventCode)+")")
 				
 				  //______________________________________________________
 		End case 
@@ -293,14 +293,14 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Clicked:K2:4)  // Add a user parameter
+			: ($Obj_form.form.eventCode=On Clicked:K2:4)  // Add a user parameter
 				
 				$Obj_menu:=New object:C1471(\
 					"selected";True:C214;\
 					"choice";"new")
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Alternative Click:K2:36)  // Display
+			: ($Obj_form.form.eventCode=On Alternative Click:K2:36)  // Display
 				
 				$Obj_menu:=menu 
 				$Obj_menu.append(":xliff:addParameter";"new")
@@ -597,7 +597,7 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On After Edit:K2:43)
+			: ($Obj_form.form.eventCode=On After Edit:K2:43)
 				
 				If (Length:C16(Get edited text:C655)=0)
 					
@@ -606,7 +606,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Data Change:K2:15)
+			: ($Obj_form.form.eventCode=On Data Change:K2:15)
 				
 				$t:=$Obj_form.default.value()
 				

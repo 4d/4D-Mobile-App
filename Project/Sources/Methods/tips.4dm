@@ -21,10 +21,10 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470.$_is=Null:C1517)  // Constructor
+If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
-		"$_is";"tips";\
+		"";"tips";\
 		"default";Formula:C1597(tips ("default"));\
 		"defaultDelay";Formula:C1597(SET DATABASE PARAMETER:C642(Tips delay:K37:80;45));\
 		"defaultDuration";Formula:C1597(SET DATABASE PARAMETER:C642(Tips duration:K37:81;720));\

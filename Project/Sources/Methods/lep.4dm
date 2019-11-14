@@ -27,10 +27,10 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470.$_is=Null:C1517)  // Constructor
+If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
-		"$_is";"lep";\
+		"";"lep";\
 		"launch";Formula:C1597(lep ("launch";New object:C1471("file";$1;"arguments";$2)));\
 		"reset";Formula:C1597(lep ("reset"));\
 		"setCharSet";Formula:C1597(lep ("setCharSet";New object:C1471("charSet";$1)));\
@@ -166,7 +166,6 @@ Else
 					Else 
 						
 						  // A "Case of" statement should never omit "Else"
-						
 						  //______________________________________________________
 				End case 
 			End if 

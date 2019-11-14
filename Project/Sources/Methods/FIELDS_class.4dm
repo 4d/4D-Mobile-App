@@ -26,7 +26,7 @@ End if
 
   // ----------------------------------------------------
 $Obj_form:=New object:C1471(\
-"$_is";"FIELDS_class";\
+"";"FIELDS_class";\
 "window";Current form window:C827;\
 "$";editor_INIT ;\
 "form";ui.form("editor_CALLBACK").get();\
@@ -95,7 +95,7 @@ Else
 				
 				$Obj_widget.getDefinition()
 				
-				  //ASSERT(Not(Shift down))
+				  // ASSERT(Not(Shift down))
 				
 				Case of 
 						

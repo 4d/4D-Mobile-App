@@ -41,15 +41,15 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Selection Change:K2:29)\
-				 | ($Obj_form.form.event=On Clicked:K2:4)
+			: ($Obj_form.form.eventCode=On Selection Change:K2:29)\
+				 | ($Obj_form.form.eventCode=On Clicked:K2:4)
 				
 				editor_ui_LISTBOX ($Obj_widget.name)
 				
 				Case of 
 						
 						  //______________________________________________________
-					: ($Obj_form.form.event=On Selection Change:K2:29)
+					: ($Obj_form.form.eventCode=On Selection Change:K2:29)
 						
 						  // <NOTHING MORE TO DO>
 						
@@ -105,29 +105,29 @@ Case of
 				End case 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Enter:K2:33)
+			: ($Obj_form.form.eventCode=On Mouse Enter:K2:33)
 				
 				ui.tips.instantly()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Move:K2:35)
+			: ($Obj_form.form.eventCode=On Mouse Move:K2:35)
 				
 				$Obj_context.setHelpTip($Obj_widget.name;$Obj_form)
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Leave:K2:34)
+			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
 				
 				ui.tips.default()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Getting Focus:K2:7)
+			: ($Obj_form.form.eventCode=On Getting Focus:K2:7)
 				
 				editor_ui_LISTBOX ($Obj_widget.name;True:C214)
 				
 				$Obj_context.setHelpTip($Obj_widget.name;$Obj_form)
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Losing Focus:K2:8)
+			: ($Obj_form.form.eventCode=On Losing Focus:K2:8)
 				
 				editor_ui_LISTBOX ($Obj_widget.name;False:C215)
 				
@@ -138,7 +138,7 @@ Case of
 				  // NOTHING MORE TO DO
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Double Clicked:K2:5)  // Edit current cell if any
+			: ($Obj_form.form.eventCode=On Double Clicked:K2:5)  // Edit current cell if any
 				
 				editor_ui_LISTBOX ($Obj_widget.name)
 				
@@ -151,7 +151,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Before Data Entry:K2:39)
+			: ($Obj_form.form.eventCode=On Before Data Entry:K2:39)
 				
 				If ($Obj_widget.column=$Obj_widget.columns[$Obj_form.formats.name].number)
 					
@@ -248,7 +248,7 @@ Case of
 				$Obj_context.inEdition:=$Obj_widget
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Data Change:K2:15)
+			: ($Obj_form.form.eventCode=On Data Change:K2:15)
 				
 				  // Get the edited field definition
 				$Obj_field:=$Obj_context.field($Obj_context.inEdition.row)
@@ -285,7 +285,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.event)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.eventCode)+")")
 				
 				  //______________________________________________________
 		End case 
@@ -297,7 +297,7 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Clicked:K2:4)
+			: ($Obj_form.form.eventCode=On Clicked:K2:4)
 				
 				  // Update tab
 				$Obj_context.selector:=Num:C11($Obj_form.form.current=$Obj_form.selectorRelations.name)
@@ -305,7 +305,7 @@ Case of
 				$Obj_context.update()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Enter:K2:33)
+			: ($Obj_form.form.eventCode=On Mouse Enter:K2:33)
 				
 				If ($Obj_context.selector#(Num:C11($Obj_form.form.current=$Obj_form.selectorRelations.name)))
 					
@@ -316,7 +316,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Leave:K2:34)
+			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
 				
 				$o:=Choose:C955($Obj_form.form.current=$Obj_form.selectorFields.name;$Obj_form.selectorFields;$Obj_form.selectorRelations)
 				$o.setColors(Foreground color:K23:1;Background color none:K23:10)

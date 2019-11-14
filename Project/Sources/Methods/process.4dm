@@ -23,12 +23,12 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470.$_is=Null:C1517)
+If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	$t:=String:C10($1)
 	
 	$o:=New object:C1471(\
-		"$_is";"process";\
+		"";"process";\
 		"number";Choose:C955(Count parameters:C259=0;Current process:C322;Process number:C372($t));\
 		"name";"";\
 		"state";0;\
@@ -85,7 +85,10 @@ Else
 			  //______________________________________________________
 		: ($o.isPreemptif)
 			
-			_4D THROW ERROR:C1520(New object:C1471("component";"CLAS";"code";1;"description";"The method "+String:C10($1)+"() for class "+String:C10($o._is)+" can't be called in preemptive mode"))
+			_4D THROW ERROR:C1520(New object:C1471(\
+				"component";"CLAS";\
+				"code";1;\
+				"description";"The method "+String:C10($1)+"() for class "+String:C10($o._is)+" can't be called in preemptive mode"))
 			
 			  //______________________________________________________
 		: ($1="hide")

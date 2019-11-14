@@ -23,7 +23,7 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470.$_is=Null:C1517)  // Constructor
+If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	If (Count parameters:C259>=1)
 		
@@ -76,7 +76,8 @@ Else
 						  //______________________________________________________
 					: (Value type:C1509(This:C1470[$t])=Is object:K8:27)
 						
-						If (JSON Stringify:C1217(This:C1470[$t])="\"[object Formula]\"")
+						  //If (JSON Stringify(This[$t])="\"[object Formula]\"")
+						If (This:C1470[$t].source#Null:C1517)
 							
 							$o.functions.push($t)
 							$o.fomulas.push(This:C1470[$t].source)

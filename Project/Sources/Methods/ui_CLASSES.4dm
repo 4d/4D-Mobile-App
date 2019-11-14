@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
-  // Project method : ui_isES
+  // Project method : ui_CLASSES
   // ID[6EFB59D3FBE54A3D86C077D7582997C8]
   // Created 27-9-2018 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -20,22 +20,7 @@ ui.saveProject:=Formula:C1597(CALL FORM:C1391(Current form window:C827;"project_
 ui.tips:=tips ()
 
   // ============================= FORMS =============================
-ui.form:=Formula:C1597(New object:C1471(\
-"$_is";"form";\
-"callback";$1;\
-"name";Current form name:C1298;\
-"window";Current form window:C827;\
-"event";Null:C1517;\
-"current";Null:C1517;\
-"currentPtr";Null:C1517;\
-"focusedWidget";Null:C1517;\
-"refresh";Formula:C1597(SET TIMER:C645(-1));\
-"call";Formula:C1597(ui_form ("call";Choose:C955(Value type:C1509($1)=Is object:K8:27;$1;New object:C1471("parameters";$1))));\
-"get";Formula:C1597(ui_form );\
-"getEvent";Formula:C1597(ui_form ("event"));\
-"getCurrentWidget";Formula:C1597(ui_form ("current"));\
-"getFocusedWidget";Formula:C1597(ui_form ("focused"))\
-))
+ui.form:=Formula:C1597(currentForm ($1))
 
   // ============================= WIDGETS =============================
 ui.static:=Formula:C1597(static ($1))

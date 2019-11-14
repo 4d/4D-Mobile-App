@@ -58,7 +58,7 @@ Case of
 		$t:=$o.launch("ioreg -n IODisplayWrangler |grep -i IOPowerManagement").outputStream
 		
 		  //________________________________________
-	: (True:C214)
+	: (False:C215)
 		
 		$t:=str ("").shuffle(5)
 		$t:=str ("").shuffle(10)

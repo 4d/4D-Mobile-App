@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="133">
+﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="134">
 	<com.4d>
 		<deployment>
 			<options/>
@@ -26,7 +26,7 @@
 			<standalone_server>
 				<configuration port_number="80">
 					<hosts>
-						<host id="0" name="default"/>
+						<host html_root="./WebFolder/" id="0" name="default"/>
 					</hosts>
 				</configuration>
 				<rest/>

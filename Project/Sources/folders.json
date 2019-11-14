@@ -243,6 +243,7 @@
 			"class",
 			"color",
 			"COMPILER_classes",
+			"currentForm",
 			"database",
 			"db",
 			"environment",
@@ -644,15 +645,11 @@
 	"tools": {},
 	"ui": {
 		"methods": [
-			"_o_ui_listbox",
-			"_o_ui_listboxPopUp",
-			"_o_ui_widget",
 			"COMPILER_ui",
 			"ui_ALIGN_ON_BEST_SIZE",
 			"ui_BEST_SIZE",
 			"ui_CLASSES",
 			"ui_colorScheme",
-			"ui_form",
 			"ui_MOVE",
 			"ui_SET_ENABLED",
 			"ui_SET_GEOMETRY",

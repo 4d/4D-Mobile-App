@@ -21,10 +21,10 @@ If (False:C215)
 End if 
 
   // ----------------------------------------------------
-If (This:C1470.$_is=Null:C1517)
+If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
-		"$_is";"static";\
+		"";"static";\
 		"coordinates";Null:C1517;\
 		"name";$1;\
 		"windowCoordinates";Null:C1517;\

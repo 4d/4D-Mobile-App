@@ -812,7 +812,7 @@ Else
 					  //_4D THROW ERROR(New object(\
 						"component";"CLAS";\
 						"code";1;\
-						"description";"The method "+String($1)+"() for class "+String(This.$_is)+" can't be called in preemptive mode";\
+						"description";"The method "+String($1)+"() for class "+String(This[""])+" can't be called in preemptive mode";\
 						"something";"my bug"))
 					
 					  //______________________________________________________

@@ -2,57 +2,8 @@
 If (False:C215)
 	
 	  //______________________________________________________
-	  //C_OBJECT(_o_widgetProperties ;$0)
-	  //C_TEXT(_o_widgetProperties ;$1)
-	
-	  //______________________________________________________
 	C_OBJECT:C1216(windowProperties ;$0)
 	C_LONGINT:C283(windowProperties ;$1)
-	
-	  //______________________________________________________
-End if 
-
-If (False:C215)
-	
-	  //______________________________________________________
-	C_OBJECT:C1216(ui_form ;$0)
-	C_TEXT:C284(ui_form ;$1)
-	C_OBJECT:C1216(ui_form ;$2)
-	
-	  //______________________________________________________
-	C_OBJECT:C1216(_o_ui_listbox ;$0)
-	C_TEXT:C284(_o_ui_listbox ;$1)
-	C_OBJECT:C1216(_o_ui_listbox ;$2)
-	
-	  //______________________________________________________
-	  //C_OBJECT(ui_menu;$0)
-	  //C_TEXT(ui_menu;$1)
-	  //C_OBJECT(ui_menu;$2)
-	
-	  //______________________________________________________
-	C_OBJECT:C1216(_o_ui_widget ;$0)
-	C_TEXT:C284(_o_ui_widget ;$1)
-	C_OBJECT:C1216(_o_ui_widget ;$2)
-	
-	  //______________________________________________________
-	  //C_OBJECT(ui_window;$0)
-	  //C_TEXT(ui_window;$1)
-	
-	  //______________________________________________________
-End if 
-
-If (False:C215)
-	
-	  //______________________________________________________
-	  //C_TEXT(ui_listboxGetDataSource ;$0)
-	  //C_TEXT(ui_listboxGetDataSource ;$1)
-	
-	  //______________________________________________________
-	C_TEXT:C284(_o_ui_listboxPopUp ;$0)
-	C_TEXT:C284(_o_ui_listboxPopUp ;$1)
-	C_TEXT:C284(_o_ui_listboxPopUp ;$2)
-	C_LONGINT:C283(_o_ui_listboxPopUp ;$3)
-	C_LONGINT:C283(_o_ui_listboxPopUp ;$4)
 	
 	  //______________________________________________________
 End if 

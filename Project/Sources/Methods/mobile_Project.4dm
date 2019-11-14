@@ -626,7 +626,7 @@ If ($Obj_in.create)
 		POST_FORM_MESSAGE (New object:C1471(\
 			"type";"alert";\
 			"target";$Obj_in.caller;\
-			"additional";".Failed to unzip sdk"))  //#MARK_LOCALIZE
+			"additional";"failedDecompressTheSdk"))
 		
 		If ($Boo_verbose)
 			
@@ -713,7 +713,7 @@ If ($Obj_out.success)
 				POST_FORM_MESSAGE (New object:C1471(\
 					"type";"alert";\
 					"target";$Obj_in.caller;\
-					"additional";".Failed to archive"))  //#MARK_LOCALIZE
+					"additional";"failedToArchive"))
 				
 			End if 
 			
@@ -1012,7 +1012,7 @@ If ($Obj_out.success)
 				POST_FORM_MESSAGE (New object:C1471(\
 					"type";"alert";\
 					"target";$Obj_in.caller;\
-					"additional";".Failed to open Simulator"))  //#MARK_LOCALIZE
+					"additional";"failedToOpenSimulator"))
 				
 				If ($Boo_verbose)
 					

@@ -15,7 +15,9 @@ C_OBJECT:C1216($2)
 
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($l)
-C_OBJECT:C1216($Obj_form;$o)
+C_PICTURE:C286($p)
+C_TEXT:C284($t)
+C_OBJECT:C1216($form;$o;$Path_internal;$Path_user)
 
 If (False:C215)
 	C_OBJECT:C1216(ACTIONS_UI ;$0)
@@ -28,6 +30,55 @@ End if
 
   // ----------------------------------------------------
 Case of 
+		
+		  //______________________________________________________
+	: ($1="load")  // Load project actions
+		
+		If (Form:C1466.actions#Null:C1517)
+			
+			$Path_internal:=COMPONENT_Pathname ("actionIcons")
+			$Path_user:=COMPONENT_Pathname ("host_actionIcons")
+			
+			  // Compute icons
+			For each ($o;Form:C1466.actions)
+				
+				$t:=String:C10($o.icon)
+				
+				Case of 
+						
+						  //……………………………………………………………………………
+					: (Length:C16($t)=0)
+						
+						READ PICTURE FILE:C678(ui.noIcon;$p)
+						
+						  //……………………………………………………………………………
+					: ($t[[1]]="/")
+						
+						$t:=Delete string:C232($t;1;1)
+						
+						If ($Path_user.file($t).exists)
+							
+							READ PICTURE FILE:C678($Path_user.file($t).platformPath;$p)
+							
+						Else 
+							
+							READ PICTURE FILE:C678(ui.errorIcon;$p)
+							
+						End if 
+						
+						  //……………………………………………………………………………
+					Else 
+						
+						READ PICTURE FILE:C678($Path_internal.file($t).platformPath;$p)
+						
+						  //……………………………………………………………………………
+				End case 
+				
+				CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
+				$o.$icon:=$p
+				
+			End for each 
+		End if 
 		
 		  //______________________________________________________
 	: ($1="tableName")  // Populate the table names' column
@@ -54,19 +105,19 @@ Case of
 		  //______________________________________________________
 	: ($1="listUI")  // Colors UI according to focus
 		
-		$Obj_form:=ACTIONS_Handler (New object:C1471(\
+		$form:=ACTIONS_Handler (New object:C1471(\
 			"action";"init"))
 		
-		If ($Obj_form.form.focusedWidget=$Obj_form.actions.name)\
+		If ($form.form.focusedWidget=$form.actions.name)\
 			 & (Form event code:C388=On Getting Focus:K2:7)
 			
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget+".border";ui.selectedColor;Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
+			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget+".border";ui.selectedColor;Background color none:K23:10)
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.form.focusedWidget+".border";ui.backgroundUnselectedColor;Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
+			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget+".border";ui.backgroundUnselectedColor;Background color none:K23:10)
 			
 		End if 
 		
@@ -78,10 +129,10 @@ Case of
 		
 		If (Num:C11(This:C1470.index)#0)
 			
-			$Obj_form:=ACTIONS_Handler (New object:C1471(\
+			$form:=ACTIONS_Handler (New object:C1471(\
 				"action";"init"))
 			
-			$b:=($Obj_form.form.focusedWidget=$Obj_form.actions.name)
+			$b:=($form.form.focusedWidget=$form.actions.name)
 			
 			If (ob_equal (This:C1470.current;$2))  // Selected row
 				

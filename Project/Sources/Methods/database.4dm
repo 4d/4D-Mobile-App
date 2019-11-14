@@ -14,10 +14,10 @@ If (False:C215)
 	C_OBJECT:C1216(database ;$2)
 End if 
 
-If (This:C1470.$_is=Null:C1517)
+If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	$o:=New shared object:C1526(\
-		"$_is";"database";\
+		"";"database";\
 		"structure";File:C1566(Structure file:C489(*);fk platform path:K87:2);\
 		"isCompiled";Is compiled mode:C492(*);\
 		"isInterpreted";Not:C34(Is compiled mode:C492(*));\

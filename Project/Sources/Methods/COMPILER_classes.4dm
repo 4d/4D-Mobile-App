@@ -2,6 +2,11 @@
 If (False:C215)
 	
 	  //______________________________________________________
+	C_OBJECT:C1216(button ;$0)
+	C_TEXT:C284(button ;$1)
+	C_OBJECT:C1216(button ;$2)
+	
+	  //______________________________________________________
 	C_OBJECT:C1216(class ;$0)
 	C_TEXT:C284(class ;$1)
 	C_TEXT:C284(class ;$2)
@@ -12,9 +17,9 @@ If (False:C215)
 	C_OBJECT:C1216(color ;$2)
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(button ;$0)
-	C_TEXT:C284(button ;$1)
-	C_OBJECT:C1216(button ;$2)
+	C_OBJECT:C1216(currentForm ;$0)
+	C_TEXT:C284(currentForm ;$1)
+	C_OBJECT:C1216(currentForm ;$2)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(database ;$0)
@@ -57,14 +62,14 @@ If (False:C215)
 	C_OBJECT:C1216(menu ;$2)
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(process ;$0)
-	C_TEXT:C284(process ;$1)
-	C_OBJECT:C1216(process ;$2)
-	
-	  //______________________________________________________
 	C_OBJECT:C1216(picture ;$0)
 	C_TEXT:C284(picture ;$1)
 	C_OBJECT:C1216(picture ;$2)
+	
+	  //______________________________________________________
+	C_OBJECT:C1216(process ;$0)
+	C_TEXT:C284(process ;$1)
+	C_OBJECT:C1216(process ;$2)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(static ;$0)

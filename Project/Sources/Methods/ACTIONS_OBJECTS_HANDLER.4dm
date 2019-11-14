@@ -14,10 +14,9 @@ C_BLOB:C604($x)
 C_LONGINT:C283($i;$l)
 C_PICTURE:C286($p)
 C_TEXT:C284($t)
-C_OBJECT:C1216($cc;$menu;$o;$Obj_add;$Obj_context;$Obj_current)
-C_OBJECT:C1216($Obj_delete;$Obj_edit;$Obj_field;$Obj_form;$Obj_table;$Obj_widget)
-C_OBJECT:C1216($oo)
-C_COLLECTION:C1488($c;$Col_fields)
+C_OBJECT:C1216($context;$form;$menu;$o;$Obj_add;$Obj_current)
+C_OBJECT:C1216($Obj_delete;$Obj_edit;$Obj_field;$Obj_table;$Obj_widget;$oo)
+C_COLLECTION:C1488($c;$cc;$Col_fields)
 
 If (False:C215)
 	C_LONGINT:C283(ACTIONS_OBJECTS_HANDLER ;$0)
@@ -25,55 +24,55 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Obj_form:=ACTIONS_Handler (New object:C1471(\
+$form:=ACTIONS_Handler (New object:C1471(\
 "action";"init"))
 
-$Obj_context:=$Obj_form.$
+$context:=$form[""]
 
   // ----------------------------------------------------
 Case of 
 		
 		  //==================================================
-	: ($Obj_form.form.event=On Display Detail:K2:22)
+	: ($form.form.eventCode=On Display Detail:K2:22)
 		
 		  // Should not!
 		
 		  //==================================================
-	: ($Obj_form.form.current=$Obj_form.actions.name)  // Actions listbox
+	: ($form.form.current=$form.actions.name)  // Actions listbox
 		
-		$Obj_widget:=$Obj_form.actions
+		$Obj_widget:=$form.actions
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Getting Focus:K2:7)
+			: ($form.form.eventCode=On Getting Focus:K2:7)
 				
-				$Obj_context.listUI()
+				$context.listUI()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Losing Focus:K2:8)
+			: ($form.form.eventCode=On Losing Focus:K2:8)
 				
-				If (Bool:C1537($Obj_context.$edit))
+				If (Bool:C1537($context.$edit))
 					
 					  // Loss after cell edition
-					OB REMOVE:C1226($Obj_context;"$cellEdition")
+					OB REMOVE:C1226($context;"$cellEdition")
 					
 				Else 
 					
-					$Obj_context.listUI()
+					$context.listUI()
 					
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Selection Change:K2:29)
+			: ($form.form.eventCode=On Selection Change:K2:29)
 				
-				$Obj_context.$current:=$Obj_context.current
+				$context.$current:=$context.current
 				
 				  // Update parameters panel if any
-				Form:C1466.$dialog.ACTIONS_PARAMS.action:=$Obj_context.$current
-				$Obj_form.form.call("selectParameters")
+				Form:C1466.$dialog.ACTIONS_PARAMS.action:=$context.$current
+				$form.form.call("selectParameters")
 				
-				$Obj_form.form.refresh()
+				$form.form.refresh()
 				
 				  //______________________________________________________
 			: (editor_Locked )
@@ -86,15 +85,15 @@ Case of
 				  // <NOTHING MORE TO DO>
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Leave:K2:34)
+			: ($form.form.eventCode=On Mouse Leave:K2:34)
 				
-				$Obj_form.dropCursor.hide()
+				$form.dropCursor.hide()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Begin Drag Over:K2:44)
+			: ($form.form.eventCode=On Begin Drag Over:K2:44)
 				
 				$o:=New object:C1471(\
-					"src";$Obj_context.index)
+					"src";$context.index)
 				
 				  // Put into the container
 				VARIABLE TO BLOB:C532($o;$x)
@@ -102,7 +101,7 @@ Case of
 				SET BLOB SIZE:C606($x;0)
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Drag Over:K2:13)  // Manage drag & drop cursor
+			: ($form.form.eventCode=On Drag Over:K2:13)  // Manage drag & drop cursor
 				
 				  // Get the pastboard
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.action";$x)
@@ -122,13 +121,13 @@ Case of
 							$o.top:=$o.bottom
 							$o.right:=$Obj_widget.coordinates.right
 							
-							$Obj_form.dropCursor.setCoordinates($o.left;$o.top;$o.right;$o.bottom)
-							$Obj_form.dropCursor.show()
+							$form.dropCursor.setCoordinates($o.left;$o.top;$o.right;$o.bottom)
+							$form.dropCursor.show()
 							
 						Else 
 							
 							  // Reject drop
-							$Obj_form.dropCursor.hide()
+							$form.dropCursor.hide()
 							$0:=-1
 							
 						End if 
@@ -142,13 +141,13 @@ Case of
 							$o.bottom:=$o.top
 							$o.right:=$Obj_widget.coordinates.right
 							
-							$Obj_form.dropCursor.setCoordinates($o.left;$o.top;$o.right;$o.bottom)
-							$Obj_form.dropCursor.show()
+							$form.dropCursor.setCoordinates($o.left;$o.top;$o.right;$o.bottom)
+							$form.dropCursor.show()
 							
 						Else 
 							
 							  // Reject drop
-							$Obj_form.dropCursor.hide()
+							$form.dropCursor.hide()
 							$0:=-1
 							
 						End if 
@@ -157,13 +156,13 @@ Case of
 				Else 
 					
 					  // Reject drop
-					$Obj_form.dropCursor.hide()
+					$form.dropCursor.hide()
 					$0:=-1
 					
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Drop:K2:12)
+			: ($form.form.eventCode=On Drop:K2:12)
 				
 				  // Get the pastboard
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.action";$x)
@@ -202,48 +201,48 @@ Case of
 					End if 
 				End if 
 				
-				$Obj_form.dropCursor.hide()
+				$form.dropCursor.hide()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Double Clicked:K2:5)
+			: ($form.form.eventCode=On Double Clicked:K2:5)
 				
 				$Obj_widget.update()
 				
 				Case of 
 						
 						  //…………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.name].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$form.name].number)
 						
-						EDIT ITEM:C870(*;$Obj_form.name;Num:C11($Obj_context.index))
-						
-						  //…………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabel].number)
-						
-						EDIT ITEM:C870(*;$Obj_form.shortLabel;Num:C11($Obj_context.index))
+						EDIT ITEM:C870(*;$form.name;Num:C11($context.index))
 						
 						  //…………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.label].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$form.shortLabel].number)
 						
-						EDIT ITEM:C870(*;$Obj_form.label;Num:C11($Obj_context.index))
+						EDIT ITEM:C870(*;$form.shortLabel;Num:C11($context.index))
+						
+						  //…………………………………………………………………………………………………………
+					: ($Obj_widget.column=$Obj_widget.columns[$form.label].number)
+						
+						EDIT ITEM:C870(*;$form.label;Num:C11($context.index))
 						
 						  //…………………………………………………………………………………………………………
 				End case 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Clicked:K2:4)
+			: ($form.form.eventCode=On Clicked:K2:4)
 				
 				$Obj_widget.update()
 				
 				Case of 
 						
 						  //…………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.icon].number)  // Open the fields icons picker
+					: ($Obj_widget.column=$Obj_widget.columns[$form.icon].number)  // Open the fields icons picker
 						
-						If ($Obj_context.current#Null:C1517)
+						If ($context.current#Null:C1517)
 							
-							$o:=$Obj_form.iconGrid.pointer()->
+							$o:=$form.iconGrid.pointer()->
 							
-							$o.item:=$o.pathnames.indexOf(String:C10($Obj_context.current.icon))
+							$o.item:=$o.pathnames.indexOf(String:C10($context.current.icon))
 							$o.item:=$o.item+1  // Widget work with array
 							
 							$o.row:=$Obj_widget.row
@@ -259,10 +258,10 @@ Case of
 							$o.promptBackColor:=ui.strokeColor
 							$o.hidePromptSeparator:=True:C214
 							$o.forceRedraw:=True:C214
-							$o.prompt:=str .setText("chooseAnIconForTheAction").localized(String:C10($Obj_context.current.name))
+							$o.prompt:=str .setText("chooseAnIconForTheAction").localized(String:C10($context.current.name))
 							
 							  // Display selector
-							$Obj_form.form.call(New object:C1471(\
+							$form.form.call(New object:C1471(\
 								"parameters";New collection:C1472("pickerShow";\
 								$o)))
 							
@@ -272,7 +271,7 @@ Case of
 				End case 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Before Data Entry:K2:39)
+			: ($form.form.eventCode=On Before Data Entry:K2:39)
 				
 				$0:=-1  // Reject data entry
 				
@@ -281,17 +280,17 @@ Case of
 				Case of 
 						
 						  //…………………………………………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.name].number)\
-						 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabel].number)\
-						 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.label].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$form.name].number)\
+						 | ($Obj_widget.column=$Obj_widget.columns[$form.shortLabel].number)\
+						 | ($Obj_widget.column=$Obj_widget.columns[$form.label].number)
 						
 						  // Put an edit flag to manage loss of focus
-						$Obj_context.$cellEdition:=True:C214
+						$context.$cellEdition:=True:C214
 						
 						$0:=0  // Allow direct entry
 						
 						  //…………………………………………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.table].number)  // Display published table menu
+					: ($Obj_widget.column=$Obj_widget.columns[$form.table].number)  // Display published table menu
 						
 						$menu:=menu 
 						
@@ -299,7 +298,7 @@ Case of
 							
 							For each ($t;Form:C1466.dataModel)
 								
-								$menu.append(Form:C1466.dataModel[$t][""].name;$t;Num:C11($Obj_context.current.tableNumber)=Num:C11($t))
+								$menu.append(Form:C1466.dataModel[$t][""].name;$t;Num:C11($context.current.tableNumber)=Num:C11($t))
 								
 							End for each 
 							
@@ -307,7 +306,7 @@ Case of
 							
 							For each ($t;Form:C1466.dataModel)
 								
-								$menu.append(Form:C1466.dataModel[$t].name;$t;Num:C11($Obj_context.current.tableNumber)=Num:C11($t))
+								$menu.append(Form:C1466.dataModel[$t].name;$t;Num:C11($context.current.tableNumber)=Num:C11($t))
 								
 							End for each 
 							
@@ -315,15 +314,15 @@ Case of
 						
 						If ($Obj_widget.popup($menu).selected)
 							
-							$Obj_context.current.tableNumber:=Num:C11($menu.choice)
+							$context.current.tableNumber:=Num:C11($menu.choice)
 							
-							$Obj_form.form.refresh()
+							$form.form.refresh()
 							project.save()
 							
 						End if 
 						
 						  //…………………………………………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.scope].number)  // Display scope menu
+					: ($Obj_widget.column=$Obj_widget.columns[$form.scope].number)  // Display scope menu
 						
 						$menu:=menu 
 						
@@ -334,19 +333,19 @@ Case of
 							
 							If (Bool:C1537(OK))
 								
-								$menu.append(":xliff:"+$t;$t;String:C10($Obj_context.current.scope)=$t)
+								$menu.append(":xliff:"+$t;$t;String:C10($context.current.scope)=$t)
 								
 								Case of 
 										
 										  //________________________________________
 									: ($i=1)\
-										 & (String:C10($Obj_context.current.preset)="suppression")  // Table
+										 & (String:C10($context.current.preset)="suppression")  // Table
 										
 										$menu.disable()
 										
 										  //________________________________________
 									: ($i=2)\
-										 & (String:C10($Obj_context.current.preset)="adding")  // Current entity
+										 & (String:C10($context.current.preset)="adding")  // Current entity
 										
 										$menu.disable()
 										
@@ -357,7 +356,7 @@ Case of
 						
 						If ($Obj_widget.popup($menu).selected)
 							
-							$Obj_context.current.scope:=$menu.choice
+							$context.current.scope:=$menu.choice
 							project.save()
 							
 						End if 
@@ -368,15 +367,15 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.event)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($form.form.eventCode)+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.form.current=$Obj_form.add.name)
+	: ($form.form.current=$form.add.name)
 		
-		If ($Obj_form.form.event=On Alternative Click:K2:36)
+		If ($form.form.eventCode=On Alternative Click:K2:36)
 			
 			$menu:=menu .append(":xliff:newAction";"new").line()
 			
@@ -414,7 +413,7 @@ Case of
 				
 			End if 
 			
-			$menu.popup("";$Obj_form.add.getCoordinates())
+			$menu.popup("";$form.add.getCoordinates())
 			
 			CLEAR VARIABLE:C89($o)
 			
@@ -426,7 +425,7 @@ Case of
 					  //______________________________________________________
 				: ($menu.choice="new")
 					
-					$Obj_form.form.event:=On Clicked:K2:4  // Default action
+					$form.form.eventCode:=On Clicked:K2:4  // Default action
 					
 					  //______________________________________________________
 				Else 
@@ -683,7 +682,7 @@ Case of
 			End case 
 		End if 
 		
-		If ($Obj_form.form.event=On Clicked:K2:4)
+		If ($form.form.eventCode=On Clicked:K2:4)
 			
 			READ PICTURE FILE:C678(ui.noIcon;$p)
 			CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
@@ -736,68 +735,68 @@ Case of
 			ob_createPath (Form:C1466;"actions";Is collection:K8:32)
 			Form:C1466.actions.push($o)
 			
-			$Obj_form.actions.focus()
-			$Obj_form.actions.reveal($Obj_form.actions.rowsNumber()+Num:C11($Obj_form.actions.rowsNumber()=0))
+			$form.actions.focus()
+			$form.actions.reveal($form.actions.rowsNumber()+Num:C11($form.actions.rowsNumber()=0))
 			
 			Form:C1466.$dialog.ACTIONS_PARAMS.action:=$o
 			
 			  // Warning edit stop code execution -> must be delegate
 			  //EDIT ITEM(*;$Obj_form.name;Form.actions.length)
 			
-			$Obj_form.form.refresh()
+			$form.form.refresh()
 			project.save()
 			
-			$Obj_form.form.call("selectParameters")
+			$form.form.call("selectParameters")
 			
 		End if 
 		
 		  //==================================================
-	: ($Obj_form.form.current=$Obj_form.remove.name)
+	: ($form.form.current=$form.remove.name)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Clicked:K2:4)
+			: ($form.form.eventCode=On Clicked:K2:4)
 				
 				GOTO OBJECT:C206(*;"")
 				
-				$l:=Form:C1466.actions.indexOf($Obj_context.current)
+				$l:=Form:C1466.actions.indexOf($context.current)
 				
 				If ($l#-1)
 					
 					Form:C1466.actions.remove($l;1)
 					
-					If (Num:C11($Obj_context.index)>$Obj_form.actions.rowsNumber())
+					If (Num:C11($context.index)>$form.actions.rowsNumber())
 						
-						$Obj_form.actions.deselect()
+						$form.actions.deselect()
 						
-						$Obj_context.index:=0
-						$Obj_context.current:=Null:C1517
+						$context.index:=0
+						$context.current:=Null:C1517
 						
 					Else 
 						
-						$Obj_form.actions.select(Num:C11($Obj_context.index))
+						$form.actions.select(Num:C11($context.index))
 						
 					End if 
 					
-					Form:C1466.$dialog.ACTIONS_PARAMS.action:=$Obj_context.current
-					$Obj_form.form.call("selectParameters")
+					Form:C1466.$dialog.ACTIONS_PARAMS.action:=$context.current
+					$form.form.call("selectParameters")
 					
 				End if 
 				
-				$Obj_form.form.refresh()
+				$form.form.refresh()
 				project.save()
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.event)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($form.form.eventCode)+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($Obj_form.form.current=$Obj_form.databaseMethod.name)
+	: ($form.form.current=$form.databaseMethod.name)
 		
 		  // Create/Open the "On Mobile Action" Database method
 		ARRAY TEXT:C222($tTxt_;0x0000)
@@ -834,7 +833,7 @@ Case of
 		  //==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown widget: \""+$Obj_form.form.current+"\"")
+		ASSERT:C1129(False:C215;"Unknown widget: \""+$form.form.current+"\"")
 		
 		  //==================================================
 End case 

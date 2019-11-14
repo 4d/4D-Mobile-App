@@ -47,15 +47,15 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Clicked:K2:4)\
-				 | ($Obj_form.event=On Selection Change:K2:29)
+			: ($Obj_form.eventCode=On Clicked:K2:4)\
+				 | ($Obj_form.eventCode=On Selection Change:K2:29)
 				
 				$Obj_context.buttonsUI()
 				
 				editor_ui_LISTBOX ($Obj_form.currentWidget)
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Double Clicked:K2:5)
+			: ($Obj_form.eventCode=On Double Clicked:K2:5)
 				
 				If ($row>0)
 					
@@ -72,7 +72,7 @@ Case of
 				editor_ui_LISTBOX ($Obj_form.currentWidget)
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Begin Drag Over:K2:44)
+			: ($Obj_form.eventCode=On Begin Drag Over:K2:44)
 				
 				$o:=New object:C1471(\
 					"name";($Obj_form.tableNames.pointer())->{$row};\
@@ -83,19 +83,19 @@ Case of
 				APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.table";$x)
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Getting Focus:K2:7)
+			: ($Obj_form.eventCode=On Getting Focus:K2:7)
 				
 				editor_ui_LISTBOX ($Obj_form.currentWidget;True:C214)
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Losing Focus:K2:8)
+			: ($Obj_form.eventCode=On Losing Focus:K2:8)
 				
 				editor_ui_LISTBOX ($Obj_form.currentWidget;False:C215)
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.event)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.eventCode)+")")
 				
 				  //______________________________________________________
 		End case 
@@ -108,15 +108,15 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Clicked:K2:4)\
-				 | ($Obj_form.event=On Selection Change:K2:29)
+			: ($Obj_form.eventCode=On Clicked:K2:4)\
+				 | ($Obj_form.eventCode=On Selection Change:K2:29)
 				
 				$Obj_context.buttonsUI()
 				
 				editor_ui_LISTBOX ($Obj_form.currentWidget)
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Row Moved:K2:32)
+			: ($Obj_form.eventCode=On Row Moved:K2:32)
 				
 				If (editor_Locked )
 					
@@ -133,7 +133,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Drag Over:K2:13)
+			: ($Obj_form.eventCode=On Drag Over:K2:13)
 				
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.table";$x)
 				
@@ -154,7 +154,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Drop:K2:12)
+			: ($Obj_form.eventCode=On Drop:K2:12)
 				
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.table";$x)
 				
@@ -189,19 +189,19 @@ Case of
 				editor_ui_LISTBOX ($Obj_form.currentWidget)
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Getting Focus:K2:7)
+			: ($Obj_form.eventCode=On Getting Focus:K2:7)
 				
 				editor_ui_LISTBOX ($Obj_form.currentWidget;True:C214)
 				
 				  //______________________________________________________
-			: ($Obj_form.event=On Losing Focus:K2:8)
+			: ($Obj_form.eventCode=On Losing Focus:K2:8)
 				
 				editor_ui_LISTBOX ($Obj_form.currentWidget;False:C215)
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.event)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.eventCode)+")")
 				
 				  //______________________________________________________
 		End case 

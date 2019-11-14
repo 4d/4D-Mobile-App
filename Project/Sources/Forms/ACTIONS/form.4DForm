@@ -336,7 +336,8 @@
 					"method": "ACTIONS_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false
 				},
 				"actionMethod.label": {
 					"type": "text",

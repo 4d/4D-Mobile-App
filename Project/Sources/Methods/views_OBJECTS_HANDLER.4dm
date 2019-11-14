@@ -60,7 +60,7 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Clicked:K2:4)
+			: ($Obj_form.form.eventCode=On Clicked:K2:4)
 				
 				OB REMOVE:C1226($Obj_context;"picker")
 				
@@ -163,7 +163,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Scroll:K2:57)
+			: ($Obj_form.form.eventCode=On Scroll:K2:57)
 				
 				  // Update geometry
 				$Obj_context.setGeometry()
@@ -171,7 +171,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.event)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.eventCode)+")")
 				
 				  //______________________________________________________
 		End case 
@@ -184,13 +184,13 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Clicked:K2:4)\
-				 | ($Obj_form.form.event=On Selection Change:K2:29)
+			: ($Obj_form.form.eventCode=On Clicked:K2:4)\
+				 | ($Obj_form.form.eventCode=On Selection Change:K2:29)
 				
 				editor_ui_LISTBOX ($Obj_form.form.current)
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Begin Drag Over:K2:44)
+			: ($Obj_form.form.eventCode=On Begin Drag Over:K2:44)
 				
 				$Obj_form.fieldList.cellPosition()
 				
@@ -224,19 +224,19 @@ Case of
 				editor_ui_LISTBOX ($Obj_form.form.current)
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Getting Focus:K2:7)
+			: ($Obj_form.form.eventCode=On Getting Focus:K2:7)
 				
 				editor_ui_LISTBOX ($Obj_form.form.current;True:C214)
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Losing Focus:K2:8)
+			: ($Obj_form.form.eventCode=On Losing Focus:K2:8)
 				
 				editor_ui_LISTBOX ($Obj_form.form.current;False:C215)
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.event)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.eventCode)+")")
 				
 				  //______________________________________________________
 		End case 
@@ -245,7 +245,7 @@ Case of
 		  //: ($Obj_form.form.currentWidget=$Obj_form.actionList)
 		  // Case of
 		  //  //______________________________________________________
-		  //: ($Obj_form.form.event=On Begin Drag Over)
+		  //: ($Obj_form.form.eventCode=On Begin Drag Over)
 		  //$o:=$Obj_context.currentAction
 		  //  // Put into the conatianer
 		  //VARIABLE TO BLOB($o;$x)
@@ -263,14 +263,14 @@ Case of
 		  //SVG EXPORT TO PICTURE($t;$p;Own XML data source)
 		  //SET DRAG ICON($p)
 		  // Else
-		  //ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.event)+")")
+		  //ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventCode)+")")
 		  //  //______________________________________________________
 		  // End case
 		  //==================================================
 		  //: ($Obj_form.form.currentWidget=$Obj_form.actionDrop)
 		  // Case of
 		  //  //______________________________________________________
-		  //: ($Obj_form.form.event=On Drag Over)
+		  //: ($Obj_form.form.eventCode=On Drag Over)
 		  //  // Accept drag if a field is drag over
 		  //GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
 		  // If (Bool(OK))
@@ -284,7 +284,7 @@ Case of
 		  // End if
 		  // End if
 		  //  //______________________________________________________
-		  //: ($Obj_form.form.event=On Drop)
+		  //: ($Obj_form.form.eventCode=On Drop)
 		  //  // Get the pastboard
 		  //GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
 		  // If (Bool(OK))
@@ -308,7 +308,7 @@ Case of
 		  // project.save()
 		  // End if
 		  // Else
-		  //ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.event)+")")
+		  //ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventCode)+")")
 		  //  //______________________________________________________
 		  // End case
 		
@@ -320,7 +320,7 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Clicked:K2:4)
+			: ($Obj_form.form.eventCode=On Clicked:K2:4)
 				
 				Case of 
 						
@@ -349,36 +349,36 @@ Case of
 				$Obj_form.fieldList.focus()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Drag Over:K2:13)
+			: ($Obj_form.form.eventCode=On Drag Over:K2:13)
 				
 				$0:=$Obj_form.drag()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Enter:K2:33)
+			: ($Obj_form.form.eventCode=On Mouse Enter:K2:33)
 				
 				ui.tips.enable()
 				ui.tips.setDuration(ui.tips.delay*2)
 				ui.tips.instantly()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Leave:K2:34)
+			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
 				
 				ui.tips.defaultDelay()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Move:K2:35)
+			: ($Obj_form.form.eventCode=On Mouse Move:K2:35)
 				
 				$Obj_form.tips()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Drop:K2:12)
+			: ($Obj_form.form.eventCode=On Drop:K2:12)
 				
 				$Obj_form.drop()
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.event)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.eventCode)+")")
 				
 				  //______________________________________________________
 		End case 
@@ -390,7 +390,7 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Clicked:K2:4)
+			: ($Obj_form.form.eventCode=On Clicked:K2:4)
 				
 				  // Hide picker if any
 				$Obj_form.form.call("pickerHide")
@@ -411,7 +411,7 @@ Case of
 				$Obj_form.form.refresh()
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Enter:K2:33)
+			: ($Obj_form.form.eventCode=On Mouse Enter:K2:33)
 				
 				If ($Obj_context.selector#(1+Num:C11($Obj_form.form.current=$Obj_form.selectorDetail.name)))
 					
@@ -422,7 +422,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Obj_form.form.event=On Mouse Leave:K2:34)
+			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
 				
 				$Obj_current:=Choose:C955($Obj_form.form.current=$Obj_form.selectorList.name;$Obj_form.selectorList;$Obj_form.selectorDetail)
 				$Obj_current.setColors(Foreground color:K23:1;Background color none:K23:10)

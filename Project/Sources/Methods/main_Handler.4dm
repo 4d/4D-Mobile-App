@@ -36,7 +36,7 @@ End if
 $Obj_form:=New object:C1471(\
 "window";Current form window:C827;\
 "ui";editor_INIT ;\
-"event";Form event code:C388;\
+"eventCode";Form event code:C388;\
 "currentWidget";OBJECT Get name:C1087(Object current:K67:2);\
 "focusedWidget";OBJECT Get name:C1087(Object with focus:K67:3);\
 "tables";ui.listbox("01_available");\
@@ -57,13 +57,24 @@ If (OB Is empty:C1297($Obj_context))\
  | (Structure file:C489=Structure file:C489(*))
 	
 	  // Define form methods
-	$Obj_context.order:=Formula:C1597(main_Handler (New object:C1471("action";"order")))
-	$Obj_context.insert:=Formula:C1597(main_Handler (New object:C1471("action";"add";"id";$1;"name";$2;"row";$3)))
-	$Obj_context.append:=Formula:C1597(main_Handler (New object:C1471("action";"add";"id";$1;"name";$2)))
-	$Obj_context.UI:=Formula:C1597(main_Handler (New object:C1471("action";"update")))
-	$Obj_context.buttonsUI:=Formula:C1597(main_Handler (New object:C1471("action";"buttons")))
+	$Obj_context.order:=Formula:C1597(main_Handler (New object:C1471(\
+		"action";"order")))
+	$Obj_context.insert:=Formula:C1597(main_Handler (New object:C1471(\
+		"action";"add";\
+		"id";$1;\
+		"name";$2;\
+		"row";$3)))
+	$Obj_context.append:=Formula:C1597(main_Handler (New object:C1471(\
+		"action";"add";\
+		"id";$1;\
+		"name";$2)))
+	$Obj_context.UI:=Formula:C1597(main_Handler (New object:C1471(\
+		"action";"update")))
+	$Obj_context.buttonsUI:=Formula:C1597(main_Handler (New object:C1471(\
+		"action";"buttons")))
 	
 End if 
+
   // ----------------------------------------------------
 Case of 
 		
@@ -315,7 +326,11 @@ End case
 
   // ----------------------------------------------------
   // Return
-$0:=$Obj_out
+If ($Obj_out#Null:C1517)
+	
+	$0:=$Obj_out
+	
+End if 
 
   // ----------------------------------------------------
   // End

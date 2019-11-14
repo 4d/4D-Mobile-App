@@ -10,7 +10,7 @@ C_OBJECT:C1216($form;$o)
   // ----------------------------------------------------
   // Initialisations
 $form:=New object:C1471(\
-"event";Form event code:C388;\
+"eventCode";Form event code:C388;\
 "pages";New collection:C1472;\
 "switch";ui.button("switch.button");\
 "build";ui.button("151");\
@@ -49,20 +49,11 @@ $form.pages.push(New object:C1471(\
 "name";"data";\
 "button";"107"))
 
-  //If (Bool(featuresFlags._103505))
-
 $form.pages.push(New object:C1471(\
 "name";"actions";\
 "button";"108"))
 
 $form.sectionButtons:=ui.group("101;102;107;108;103;104;105;106")
-
-  //Else 
-
-  //$form.sectionButtons:=ui.group("101;102;107;103;104;105;106")
-
-  //End if 
-
 $form.buildButtons:=ui.group("151;201;152;153")
 
   // ----------------------------------------------------
@@ -70,25 +61,23 @@ $form.buildButtons:=ui.group("151;201;152;153")
 Case of 
 		
 		  //______________________________________________________
-	: ($form.event=On Load:K2:1)
+	: ($form.eventCode=On Load:K2:1)
 		
 		$form.build.disable()
 		$form.install.disable()
 		$form.simulator.disable()
-		
-		  //OBJECT SET VISIBLE(*;"108";Bool(featuresFlags._103505))
 		
 		$form.sectionButtons.distributeHorizontally($form)
 		
 		SET TIMER:C645(-1)
 		
 		  //______________________________________________________
-	: ($form.event=On Unload:K2:2)
+	: ($form.eventCode=On Unload:K2:2)
 		
 		  //
 		
 		  //______________________________________________________
-	: ($form.event=On Timer:K2:25)
+	: ($form.eventCode=On Timer:K2:25)
 		
 		SET TIMER:C645(0)
 		
@@ -101,7 +90,7 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($form.event=On Page Change:K2:54)
+	: ($form.eventCode=On Page Change:K2:54)
 		
 		$l:=FORM Get current page:C276(*)
 		
@@ -126,7 +115,7 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($form.event=On Bound Variable Change:K2:52)
+	: ($form.eventCode=On Bound Variable Change:K2:52)
 		
 		$form.switch.setFormat(";#images/toolbar/"+Choose:C955(Form:C1466.state="open";"reduce";"expand")+".png")
 		
@@ -196,7 +185,7 @@ Case of
 		  //______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($form.event)+")")
+		ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($form.eventCode)+")")
 		
 		  //______________________________________________________
 End case 

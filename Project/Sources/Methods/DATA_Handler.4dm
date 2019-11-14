@@ -57,10 +57,15 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		$Obj_context.help:=Get localized string:C991("help_properties")
 		
 		  // Define form methods
-		$Obj_context.listboxUI:=Formula:C1597(DATA_Handler (New object:C1471("action";"listboxUI")))
-		$Obj_context.listBackground:=Formula:C1597(DATA_Handler (New object:C1471("action";"background";"this";$1)))
-		$Obj_context.text:=Formula:C1597(DATA_Handler (New object:C1471("action";"meta-infos")))
-		$Obj_context.dumpSizes:=Formula:C1597(DATA_Handler (New object:C1471("action";"dumpSizes")))
+		$Obj_context.listboxUI:=Formula:C1597(DATA_Handler (New object:C1471(\
+			"action";"listboxUI")))
+		$Obj_context.listBackground:=Formula:C1597(DATA_Handler (New object:C1471(\
+			"action";"background";\
+			"this";$1)))
+		$Obj_context.text:=Formula:C1597(DATA_Handler (New object:C1471(\
+			"action";"meta-infos")))
+		$Obj_context.dumpSizes:=Formula:C1597(DATA_Handler (New object:C1471(\
+			"action";"dumpSizes")))
 		
 	End if 
 	
@@ -227,7 +232,6 @@ Case of
 										$Obj_table.dumpSize:="#na"
 										
 									End if 
-									
 								End if 
 							End if 
 							
@@ -360,7 +364,6 @@ Case of
 									End if 
 									
 									$o.tables[$Lon_index].dumpSize:=doc_bytesToString ($Lon_size)
-									
 									
 								Else 
 									
@@ -508,12 +511,12 @@ Case of
 		If ($Obj_form.focus=$Obj_form.list)  // & (Form event code=On Getting Focus)
 			
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.list;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.list+".border";ui.selectedColor)  //;Background color none)
+			OBJECT SET RGB COLORS:C628(*;$Obj_form.list+".border";ui.selectedColor)  // ;Background color none)
 			
 		Else 
 			
 			OBJECT SET RGB COLORS:C628(*;$Obj_form.list;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*;$Obj_form.list+".border";ui.backgroundUnselectedColor)  //;Background color none)
+			OBJECT SET RGB COLORS:C628(*;$Obj_form.list+".border";ui.backgroundUnselectedColor)  // ;Background color none)
 			
 		End if 
 		
@@ -527,7 +530,11 @@ End case
 
   // ----------------------------------------------------
   // Return
-$0:=$Obj_out
+If ($Obj_out#Null:C1517)
+	
+	$0:=$Obj_out
+	
+End if 
 
   // ----------------------------------------------------
   // End
