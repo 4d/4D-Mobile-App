@@ -34,5 +34,6 @@
   "table": {
 		"min": 1,
 		"max": 1024
-  }
+  },
+  "inject": true
 }

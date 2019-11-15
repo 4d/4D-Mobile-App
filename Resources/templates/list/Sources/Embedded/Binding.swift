@@ -1,10 +1,9 @@
 //
 //  Binding.swift
-//  test
+//  ___PACKAGENAME___
 //
-//  Created by Eric Marchand on 31/01/2018.
-//  Copyright © 2018 My Company. All rights reserved.
-//
+//  Created by ___FULLUSERNAME___ on ___DATE___
+//  ___COPYRIGHT___
 
 import Foundation
 import UIKit
