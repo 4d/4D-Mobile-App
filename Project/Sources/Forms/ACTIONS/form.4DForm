@@ -270,7 +270,8 @@
 					"events": [
 						"onClick",
 						"onAlternateClick"
-					]
+					],
+					"focusable": true
 				},
 				"actions.remove": {
 					"type": "button",
@@ -284,7 +285,8 @@
 					"method": "ACTIONS_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false
 				},
 				"tables.label": {
 					"type": "text",

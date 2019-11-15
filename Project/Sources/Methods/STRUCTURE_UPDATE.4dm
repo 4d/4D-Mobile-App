@@ -87,6 +87,11 @@ Else
 			Case of 
 					
 					  //………………………………………………………………………………………………………
+				: (Length:C16($t)=0)
+					
+					  // <NOTHING MORE TO DO>
+					
+					  //………………………………………………………………………………………………………
 				: ($ƒ.isField($t))
 					
 					$Boo_found:=(String:C10($Obj_table[$t].name)=$o.name)

@@ -226,6 +226,9 @@ Case of   // According to type replace the tag
 			"___NAME___"\
 			)
 		
+		  //ASSERT($Obj_table.name=Null)
+		  //ASSERT($Obj_table[""].name=Null)
+		
 		$Col_newStrings:=New collection:C1472(\
 			$Obj_tags.product;\
 			$Obj_table.name;\
@@ -530,6 +533,8 @@ If ($Col_types.indexOf("storyboardID")#-1)  // Dispatch storyboard id in TAG-<in
 		End for each 
 	End if 
 End if 
+
+ASSERT:C1129($Col_oldStrings.length=$Col_newStrings.length)
 
   // Make replacements
 $Txt_out:=$o.setText($Txt_in).replace($Col_oldStrings;$Col_newStrings)

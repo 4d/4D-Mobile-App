@@ -481,8 +481,16 @@ Case of
 					
 					$Obj_table:=Form:C1466.dataModel[$menu.table]
 					
-					  // Generate a unique name
-					$t:=str (formatString ("label";$Obj_table.name)).uperCamelCase()
+					If (Bool:C1537(featuresFlags.with("newDataModel")))
+						
+						  // Generate a unique name
+						$t:=str (formatString ("label";$Obj_table[""].name)).uperCamelCase()
+						
+					Else 
+						
+						$t:=str (formatString ("label";$Obj_table.name)).uperCamelCase()
+						
+					End if 
 					
 					$menu.name:=$menu.prefix+$t
 					
@@ -802,6 +810,19 @@ Case of
 		ARRAY TEXT:C222($tTxt_;0x0000)
 		METHOD GET PATHS:C1163(Path database method:K72:2;$tTxt_;*)
 		$tTxt_{0}:=METHOD Get path:C1164(Path database method:K72:2;"onMobileAppAction")
+		
+		If (Macintosh option down:C545)\
+			 & (Structure file:C489=Structure file:C489(*))
+			
+			If (Find in array:C230($tTxt_;$tTxt_{0})>0)
+				
+				  // Delete to recreate.
+				  // WARNING: Generates an error if the method is open
+				File:C1566("/PACKAGE/Project/Sources/DatabaseMethods/onMobileAppAction.4dm").delete()
+				DELETE FROM ARRAY:C228($tTxt_;Find in array:C230($tTxt_;$tTxt_{0}))
+				
+			End if 
+		End if 
 		
 		  // Create method if not exist
 		If (Find in array:C230($tTxt_;$tTxt_{0})=-1)

@@ -11,13 +11,12 @@
 C_LONGINT:C283($0)
 
 C_BOOLEAN:C305($Boo_caret)
-C_LONGINT:C283($l;$Lon_;$Lon_begin;$Lon_column;$Lon_end;$Lon_formEvent)
-C_LONGINT:C283($Lon_parameters;$Lon_row;$Lon_x;$Lon_y)
+C_LONGINT:C283($Lon_;$Lon_begin;$Lon_column;$Lon_end;$Lon_formEvent;$Lon_parameters)
+C_LONGINT:C283($Lon_row;$Lon_x;$Lon_y)
 C_POINTER:C301($Ptr_me)
 C_TEXT:C284($Mnu_main;$Svg_id;$t;$Txt_choice;$Txt_me;$Txt_selection)
 C_TEXT:C284($Txt_tip)
-C_OBJECT:C1216($o;$Obj_context;$Obj_field;$Obj_form;$Obj_table)
-C_COLLECTION:C1488($Col_catalog)
+C_OBJECT:C1216($context;$form;$o;$Obj_table)
 
 If (False:C215)
 	C_LONGINT:C283(DATA_OBJECTS_HANDLER ;$0)
@@ -42,11 +41,11 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 	
-	$Obj_form:=DATA_Handler (New object:C1471(\
+	$form:=DATA_Handler (New object:C1471(\
 		"action";"init"))
 	
-	$Obj_context:=$Obj_form.ui
-	$Obj_table:=$Obj_context.current
+	$context:=$form.ui
+	$Obj_table:=$context.current
 	
 Else 
 	
@@ -58,14 +57,14 @@ End if
 Case of 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.list)
+	: ($Txt_me=$form.list)
 		
 		Case of 
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Getting Focus:K2:7)
 				
-				$Obj_context.listboxUI()
+				$context.listboxUI()
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
@@ -73,17 +72,17 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Losing Focus:K2:8)
 				
-				$Obj_context.listboxUI()
+				$context.listboxUI()
 				
-				$Obj_context.tables:=$Obj_context.tables
+				$context.tables:=$context.tables
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Selection Change:K2:29)
 				
-				$Obj_context.lastIndex:=$Obj_context.index
+				$context.lastIndex:=$context.index
 				
 				  //ui.refresh()
-				$Obj_context.current:=$Obj_context.tables[$Obj_context.index-1]
+				$context.current:=$context.tables[$context.index-Num:C11($context.index>0)]
 				SET TIMER:C645(-1)
 				
 				  //______________________________________________________
@@ -102,7 +101,7 @@ Case of
 				
 				If ($Lon_row#0)
 					
-					$o:=$Obj_context.tables[$Lon_row-1]
+					$o:=$context.tables[$Lon_row-1]
 					
 					If (Bool:C1537($o.embedded))\
 						 & (Not:C34(Bool:C1537($o.filter.parameters)))\
@@ -158,7 +157,7 @@ Case of
 					End if 
 				End if 
 				
-				OBJECT SET HELP TIP:C1181(*;$Obj_form.list;$Txt_tip)
+				OBJECT SET HELP TIP:C1181(*;$form.list;$Txt_tip)
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Mouse Leave:K2:34)
@@ -179,7 +178,7 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.queryWidget)
+	: ($Txt_me=$form.queryWidget)
 		
 		Case of 
 				
@@ -300,7 +299,7 @@ Case of
 					
 					If (Length:C16($Txt_choice)#0)
 						
-						GET HIGHLIGHT:C209(*;$Obj_form.filter;$Lon_begin;$Lon_end)
+						GET HIGHLIGHT:C209(*;$form.filter;$Lon_begin;$Lon_end)
 						
 						$Txt_selection:=Substring:C12($Obj_table.filter.string;$Lon_begin;$Lon_end-$Lon_begin)
 						$Boo_caret:=(Position:C15("{sel}";$Txt_choice)>0)
@@ -340,11 +339,11 @@ Case of
 							
 						End if 
 						
-						HIGHLIGHT TEXT:C210(*;$Obj_form.filter;$o.begin;$o.end)
+						HIGHLIGHT TEXT:C210(*;$form.filter;$o.begin;$o.end)
 						
-						$Obj_form.filter:=$Obj_form.filter
+						$form.filter:=$form.filter
 						
-						GOTO OBJECT:C206(*;$Obj_form.filter)
+						GOTO OBJECT:C206(*;$form.filter)
 						
 						ui.saveProject()
 						
@@ -363,10 +362,10 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.validate)\
-		 | ($Txt_me=$Obj_form.enter)
+	: ($Txt_me=$form.validate)\
+		 | ($Txt_me=$form.enter)
 		
-		GOTO OBJECT:C206(*;$Obj_form.list)
+		GOTO OBJECT:C206(*;$form.list)
 		
 		$o:=checkQueryFilter (New object:C1471(\
 			"table";$Obj_table.name;\
@@ -389,10 +388,10 @@ Case of
 		ui.refresh()
 		
 		Form:C1466.$project.status.project:=project_Audit (New object:C1471("target";New collection:C1472("filters"))).success
-		CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"updateRibbon")
+		CALL FORM:C1391($form.window;"editor_CALLBACK";"updateRibbon")
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.embedded)
+	: ($Txt_me=$form.embedded)
 		
 		If (Bool:C1537(featuresFlags.with("newDataModel")))
 			
@@ -423,7 +422,7 @@ Case of
 		ui.refresh()
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.filter)
+	: ($Txt_me=$form.filter)
 		
 		Case of 
 				
@@ -440,7 +439,7 @@ Case of
 				End if 
 				
 				  // Keep current filter definition
-				$Obj_context.currentFilter:=OB Copy:C1225($Obj_table.filter)
+				$context.currentFilter:=OB Copy:C1225($Obj_table.filter)
 				
 				ui.refresh()
 				
@@ -455,12 +454,12 @@ Case of
 				If (Length:C16($t)>0)
 					
 					ui.tips.instantly()
-					OBJECT SET HELP TIP:C1181(*;$Obj_form.filter;Get localized string:C991("notValidatedFilter"))
+					OBJECT SET HELP TIP:C1181(*;$form.filter;Get localized string:C991("notValidatedFilter"))
 					
 				Else 
 					
 					ui.tips.defaultDelay()
-					OBJECT SET HELP TIP:C1181(*;$Obj_form.filter;"")
+					OBJECT SET HELP TIP:C1181(*;$form.filter;"")
 					
 				End if 
 				
@@ -491,7 +490,7 @@ Case of
 					
 					$o.filter.string:=$t
 					
-					If ($t#$Obj_context.currentFilter.string)
+					If ($t#$context.currentFilter.string)
 						
 						$o.filter.validated:=False:C215
 						$o.filter.parameters:=False:C215
@@ -499,13 +498,13 @@ Case of
 						
 					Else 
 						
-						$o.filter.validated:=$Obj_context.currentFilter.validated
-						$o.filter.parameters:=$Obj_context.currentFilter.parameters
+						$o.filter.validated:=$context.currentFilter.validated
+						$o.filter.parameters:=$context.currentFilter.parameters
 						
-						If ($Obj_context.currentFilter.error#Null:C1517)
+						If ($context.currentFilter.error#Null:C1517)
 							
-							$o.filter.error:=$Obj_context.currentFilter.error
-							$o.filter.errors:=$Obj_context.currentFilter.errors
+							$o.filter.error:=$context.currentFilter.error
+							$o.filter.errors:=$context.currentFilter.errors
 							
 						Else 
 							
@@ -535,7 +534,7 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.method)
+	: ($Txt_me=$form.method)
 		
 		SERVER_Handler (New object:C1471(\
 			"action";"editAuthenticationMethod"))

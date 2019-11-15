@@ -17,9 +17,9 @@ C_TEXT:C284($Txt_cmd;$Txt_error;$Txt_in;$Txt_out)
 C_OBJECT:C1216($folder;$o;$Obj_result)
 
 If (False:C215)
-	C_OBJECT:C1216(_iw_Xcode ;$0)
-	C_TEXT:C284(_iw_Xcode ;$1)
-	C_OBJECT:C1216(_iw_Xcode ;$2)
+	C_OBJECT:C1216(_wip_Xcode ;$0)
+	C_TEXT:C284(_wip_Xcode ;$1)
+	C_OBJECT:C1216(_wip_Xcode ;$2)
 End if 
 
   // ----------------------------------------------------
@@ -29,12 +29,12 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"";"Xcode";\
 		"success";True:C214;\
 		"openAppStore";Formula:C1597(OPEN URL:C673(Get localized string:C991("appstore_xcode");*));\
-		"defaultPath";Formula:C1597(_iw_Xcode ("defaultPath").value);\
-		"path";Formula:C1597(_iw_Xcode ("path").value);\
-		"toolsPath";Formula:C1597(_iw_Xcode ("toolsPath").value);\
-		"isDefaultPath";Formula:C1597(_iw_Xcode ("isDefaultPath").value);\
-		"paths";Formula:C1597(_iw_Xcode ("paths").value);\
-		"lastpath";Formula:C1597(_iw_Xcode ("lastpath").value)\
+		"defaultPath";Formula:C1597(_wip_Xcode ("defaultPath").value);\
+		"path";Formula:C1597(_wip_Xcode ("path").value);\
+		"toolsPath";Formula:C1597(_wip_Xcode ("toolsPath").value);\
+		"isDefaultPath";Formula:C1597(_wip_Xcode ("isDefaultPath").value);\
+		"paths";Formula:C1597(_wip_Xcode ("paths").value);\
+		"lastpath";Formula:C1597(_wip_Xcode ("lastpath").value)\
 		)
 	
 Else 
@@ -146,19 +146,19 @@ Else
 				  //For each ($folder;$o.value)
 				
 				  //$Obj_result:=Xcode (New object(\
-					"action";"version";\
-					"posix";$folder.path))
+										"action";"version";\
+										"posix";$folder.path))
 				
 				  //If ($Obj_result.success)
 				
 				  //If (str_cmpVersion (String($Obj_result.version);$Txt_buffer)>=0)  // Equal or higher
 				
 				  //$o.value:=new object(\
-					"version";String($Obj_result.version);\
-					"";;;\
-					"";;;\
-					"";;\
-					)
+										"version";String($Obj_result.version);\
+										"";;;\
+										"";;;\
+										"";;\
+										)
 				  //$Obj_result.version:=$Txt_buffer
 				  //$Obj_result.posix:=$t
 				  //$Obj_result.path:=Convert path POSIX to system($Obj_result.posix)

@@ -84,7 +84,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 			  //________________________________________
 	End case 
 	
-	$str:=str ()  // init classe
+	$str:=str ()  // init class
 	
 Else 
 	

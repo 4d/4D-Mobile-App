@@ -13,7 +13,7 @@ C_OBJECT:C1216($1)
 
 C_LONGINT:C283($l;$Lon_formEvent;$Lon_parameters;$Lon_published;$Lon_shift)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_context;$Obj_dataModel;$Obj_field;$Obj_form;$Obj_in)
+C_OBJECT:C1216($o;$context;$Obj_dataModel;$Obj_field;$form;$Obj_in)
 C_OBJECT:C1216($Obj_out;$Obj_table)
 C_COLLECTION:C1488($c)
 
@@ -37,7 +37,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$Obj_form:=New object:C1471(\
+	$form:=New object:C1471(\
 		"window";Current form window:C827;\
 		"callback";"editor_CALLBACK";\
 		"form";editor_INIT ;\
@@ -55,13 +55,13 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"allow";"allowStructureAjustment";\
 		"allowHelp";"allowStructureAjustment.help")
 	
-	$Obj_context:=$Obj_form.form
+	$context:=$form.form
 	
-	If (OB Is empty:C1297($Obj_context))
+	If (OB Is empty:C1297($context))
 		
 		  // Define locales functions
-		$Obj_context.catalog:=Formula:C1597(editor_Catalog )
-		$Obj_context.setHelpTip:=Formula:C1597(STRUCTURE_TIPS (New object:C1471("target";$1;"form";$2)))
+		$context.catalog:=Formula:C1597(editor_Catalog )
+		$context.setHelpTip:=Formula:C1597(STRUCTURE_TIPS (New object:C1471("target";$1;"form";$2)))
 		
 	End if 
 	
@@ -92,26 +92,26 @@ Case of
 				
 				If (Bool:C1537(Form:C1466.allowStructureAdjustments))
 					
-					OBJECT SET VISIBLE:C603(*;$Obj_form.allow+"@";False:C215)
-					OBJECT MOVE:C664(*;$Obj_form.tableList+"@";0;0;0;20)
-					OBJECT MOVE:C664(*;$Obj_form.fieldList+"@";0;0;0;20)
+					OBJECT SET VISIBLE:C603(*;$form.allow+"@";False:C215)
+					OBJECT MOVE:C664(*;$form.tableList+"@";0;0;0;20)
+					OBJECT MOVE:C664(*;$form.fieldList+"@";0;0;0;20)
 					
 				Else 
 					
-					OBJECT SET TITLE:C194(*;$Obj_form.allow;str ("allowToMakeTheStructureAdjustments").localized("4dProductName"))
+					OBJECT SET TITLE:C194(*;$form.allow;str ("allowToMakeTheStructureAdjustments").localized("4dProductName"))
 					
 				End if 
 				
 				  // This trick remove the horizontal gap
-				OBJECT SET SCROLLBAR:C843(*;$Obj_form.fieldList;0;2)
-				OBJECT SET SCROLLBAR:C843(*;$Obj_form.tableList;0;2)
+				OBJECT SET SCROLLBAR:C843(*;$form.fieldList;0;2)
+				OBJECT SET SCROLLBAR:C843(*;$form.tableList;0;2)
 				
 				  // Constraints definition
-				$Obj_context.constraints:=New object:C1471
+				$context.constraints:=New object:C1471
 				
-				If (Num:C11($Obj_context.catalog().length)<=100)  // #TO_TEST with a fat structure
+				If (Num:C11($context.catalog().length)<=100)  // #TO_TEST with a fat structure
 					
-					structure_TABLE_LIST ($Obj_form)
+					structure_TABLE_LIST ($form)
 					
 				End if 
 				
@@ -120,17 +120,17 @@ Case of
 					"placeholder";Get localized string:C991("search")))
 				
 				  // Position search filters based on the language of the label
-				widget ($Obj_form.tableFilter).moveHorizontally(widget ($Obj_form.tableList+".label").bestSize().coordinates.right+10)
-				widget ($Obj_form.fieldFilter).moveHorizontally(widget ($Obj_form.fieldList+".label").bestSize().coordinates.right+10)
+				widget ($form.tableFilter).moveHorizontally(widget ($form.tableList+".label").bestSize().coordinates.right+10)
+				widget ($form.fieldFilter).moveHorizontally(widget ($form.fieldList+".label").bestSize().coordinates.right+10)
 				
 				  // Align checkbox & help according to the translation
-				widget ($Obj_form.allowHelp).moveHorizontally(widget ($Obj_form.allow).bestSize().coordinates.right+5)
+				widget ($form.allowHelp).moveHorizontally(widget ($form.allow).bestSize().coordinates.right+5)
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				editor_ui_LISTBOX ($Obj_form.tableList)
-				editor_ui_LISTBOX ($Obj_form.fieldList)
+				editor_ui_LISTBOX ($form.tableList)
+				editor_ui_LISTBOX ($form.fieldList)
 				
 				  //______________________________________________________
 		End case 
@@ -144,12 +144,12 @@ Case of
 	: ($Obj_in.action="init")
 		
 		  // Return the form objects definition
-		$0:=$Obj_form
+		$0:=$form
 		
 		  //=========================================================
 	: ($Obj_in.action="tableList")
 		
-		structure_TABLE_LIST ($Obj_form)
+		structure_TABLE_LIST ($form)
 		
 		  //=========================================================
 	: ($Obj_in.action="tableFilter")
@@ -157,14 +157,14 @@ Case of
 		Case of 
 				
 				  //………………………………………………………………………………………
-			: (Length:C16(String:C10($Obj_context.tableFilter))=0)\
-				 & (Not:C34(Bool:C1537($Obj_context.tableFilterPublished)))
+			: (Length:C16(String:C10($context.tableFilter))=0)\
+				 & (Not:C34(Bool:C1537($context.tableFilterPublished)))
 				
 				  // NOTHING MORE TO DO
 				
 				  //………………………………………………………………………………………
-			: (Length:C16(String:C10($Obj_context.tableFilter))>0)\
-				 & (Bool:C1537($Obj_context.tableFilterPublished))
+			: (Length:C16(String:C10($context.tableFilter))>0)\
+				 & (Bool:C1537($context.tableFilterPublished))
 				
 				$t:=Get localized string:C991("filteredBy")\
 					+Char:C90(Space:K15:42)\
@@ -174,7 +174,7 @@ Case of
 					+"</span>"
 				
 				  //………………………………………………………………………………………
-			: (Length:C16(String:C10($Obj_context.tableFilter))>0)
+			: (Length:C16(String:C10($context.tableFilter))>0)
 				
 				$t:=Get localized string:C991("filteredBy")\
 					+Char:C90(Space:K15:42)\
@@ -183,7 +183,7 @@ Case of
 					+"</span>"
 				
 				  //………………………………………………………………………………………
-			: (Bool:C1537($Obj_context.tableFilterPublished))
+			: (Bool:C1537($context.tableFilterPublished))
 				
 				$t:=Get localized string:C991("filteredBy")\
 					+Char:C90(Space:K15:42)\
@@ -194,24 +194,25 @@ Case of
 				  //………………………………………………………………………………………
 		End case 
 		
-		ST SET TEXT:C1115(*;$Obj_form.tableFilter;$t;ST Start text:K78:15;ST End text:K78:16)
+		ST SET TEXT:C1115(*;$form.tableFilter;$t;ST Start text:K78:15;ST End text:K78:16)
 		
 		  //=========================================================
 	: ($Obj_in.action="fieldList")
 		
-		$c:=$Obj_context.catalog().query("name = :1";String:C10($Obj_context.currentTable.name))
 		
-		If ($c.length=1)
+		$o:=$context.catalog().query("name = :1";String:C10($context.currentTable.name)).pop()
+		
+		If ($o=Null:C1517)
 			
-			$Obj_context.currentTable:=$c[0]
+			OB REMOVE:C1226($context;"currentTable")
 			
 		Else 
 			
-			OB REMOVE:C1226($Obj_context;"currentTable")
+			$context.currentTable:=$o
 			
 		End if 
 		
-		structure_FIELD_LIST ($Obj_form)
+		structure_FIELD_LIST ($form)
 		
 		  //=========================================================
 	: ($Obj_in.action="fieldFilter")
@@ -219,14 +220,14 @@ Case of
 		Case of 
 				
 				  //………………………………………………………………………………………
-			: (Length:C16(String:C10($Obj_context.fieldFilter))=0)\
-				 & (Not:C34(Bool:C1537($Obj_context.fieldFilterPublished)))
+			: (Length:C16(String:C10($context.fieldFilter))=0)\
+				 & (Not:C34(Bool:C1537($context.fieldFilterPublished)))
 				
 				  // NOTHING MORE TO DO
 				
 				  //………………………………………………………………………………………
-			: (Length:C16(String:C10($Obj_context.fieldFilter))>0)\
-				 & (Bool:C1537($Obj_context.fieldFilterPublished))
+			: (Length:C16(String:C10($context.fieldFilter))>0)\
+				 & (Bool:C1537($context.fieldFilterPublished))
 				
 				$t:=Get localized string:C991("filteredBy")\
 					+Char:C90(Space:K15:42)\
@@ -236,7 +237,7 @@ Case of
 					+"</span>"
 				
 				  //………………………………………………………………………………………
-			: (Length:C16(String:C10($Obj_context.fieldFilter))>0)
+			: (Length:C16(String:C10($context.fieldFilter))>0)
 				
 				$t:=Get localized string:C991("filteredBy")\
 					+Char:C90(Space:K15:42)\
@@ -245,7 +246,7 @@ Case of
 					+"</span>"
 				
 				  //………………………………………………………………………………………
-			: (Bool:C1537($Obj_context.fieldFilterPublished))
+			: (Bool:C1537($context.fieldFilterPublished))
 				
 				$t:=Get localized string:C991("filteredBy")\
 					+Char:C90(Space:K15:42)\
@@ -256,22 +257,22 @@ Case of
 				  //………………………………………………………………………………………
 		End case 
 		
-		ST SET TEXT:C1115(*;$Obj_form.fieldFilter;$t;ST Start text:K78:15;ST End text:K78:16)
+		ST SET TEXT:C1115(*;$form.fieldFilter;$t;ST Start text:K78:15;ST End text:K78:16)
 		
 		If (Bool:C1537($Obj_in.showIfNotEmpty))
 			
-			OBJECT SET VISIBLE:C603(*;$Obj_form.fieldFilter;Length:C16($t)>0)
+			OBJECT SET VISIBLE:C603(*;$form.fieldFilter;Length:C16($t)>0)
 			
 		End if 
 		
 		  //=========================================================
 	: ($Obj_in.action="addTable")
 		
-		$Obj_table:=$Obj_context.currentTable
+		$Obj_table:=$context.currentTable
 		
 		If (Bool:C1537(featuresFlags.with("newDataModel")))
 			
-			$o:=$Obj_context.catalog().query("tableNumber = :1";$Obj_table.tableNumber).pop()
+			$o:=$context.catalog().query("tableNumber = :1";$Obj_table.tableNumber).pop()
 			
 			  // Put internal properties into a substructure
 			$0:=New object:C1471(\
@@ -285,7 +286,7 @@ Case of
 			
 		Else 
 			
-			$c:=$Obj_context.catalog().query("tableNumber = :1";$Obj_table.tableNumber)
+			$c:=$context.catalog().query("tableNumber = :1";$Obj_table.tableNumber)
 			
 			$0:=New object:C1471(\
 				"name";$c[0].name;\
@@ -302,8 +303,8 @@ Case of
 			"tableNumber";String:C10($Obj_table.tableNumber)))
 		
 		  // Highlight the table name
-		$l:=Find in array:C230((ui.pointer($Obj_form.tableList))->;True:C214)
-		LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$l;Bold:K14:2)
+		$l:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
+		LISTBOX SET ROW FONT STYLE:C1268(*;$form.tableList;$l;Bold:K14:2)
 		
 		ob_createPath (Form:C1466;"dataModel").dataModel[String:C10($Obj_table.tableNumber)]:=$0
 		
@@ -337,8 +338,8 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="onLosingFocus")
 		
-		OBJECT SET VISIBLE:C603(*;$Obj_form.search;False:C215)
-		OBJECT SET VISIBLE:C603(*;$Obj_form.action;False:C215)
+		OBJECT SET VISIBLE:C603(*;$form.search;False:C215)
+		OBJECT SET VISIBLE:C603(*;$form.action;False:C215)
 		
 		  //=========================================================
 	: ($Obj_in.action="appendField")
@@ -377,7 +378,7 @@ Case of
 				APPEND TO ARRAY:C911(($Obj_in.icons)->;UI.fieldIcons[8858])
 				APPEND TO ARRAY:C911(($Obj_in.fields)->;$Obj_in.field.name)
 				
-				LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;Size of array:C274(($Obj_in.fields)->);Underline:K14:4)
+				LISTBOX SET ROW FONT STYLE:C1268(*;$form.fieldList;Size of array:C274(($Obj_in.fields)->);Underline:K14:4)
 				
 				  //…………………………………………………………………………………………………
 			: ($Obj_in.field.type=-2)  // 1 -> N relation
@@ -408,7 +409,7 @@ Case of
 					
 				End if 
 				
-				LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.fieldList;Size of array:C274(($Obj_in.fields)->);Plain:K14:1)
+				LISTBOX SET ROW FONT STYLE:C1268(*;$form.fieldList;Size of array:C274(($Obj_in.fields)->);Plain:K14:1)
 				
 				  //…………………………………………………………………………………………………
 		End case 
@@ -417,13 +418,13 @@ Case of
 	: ($Obj_in.action="update")
 		
 		  // Update ribbon
-		CALL FORM:C1391($Obj_form.window;$Obj_form.callback;"updateRibbon")
+		CALL FORM:C1391($form.window;$form.callback;"updateRibbon")
 		
 		  // Update structure dependencies, if any
-		CALL FORM:C1391($Obj_form.window;$Obj_form.callback;"tableList";$Obj_in.project)
-		CALL FORM:C1391($Obj_form.window;$Obj_form.callback;"fieldList";$Obj_in.project)
-		CALL FORM:C1391($Obj_form.window;$Obj_form.callback;"tableProperties";$Obj_in.project)
-		CALL FORM:C1391($Obj_form.window;$Obj_form.callback;"mainMenu")
+		CALL FORM:C1391($form.window;$form.callback;"tableList";$Obj_in.project)
+		CALL FORM:C1391($form.window;$form.callback;"fieldList";$Obj_in.project)
+		CALL FORM:C1391($form.window;$form.callback;"tableProperties";$Obj_in.project)
+		CALL FORM:C1391($form.window;$form.callback;"mainMenu")
 		
 		  //=========================================================
 	Else 

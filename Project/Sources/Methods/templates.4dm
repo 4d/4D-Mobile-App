@@ -226,7 +226,18 @@ Case of
 				
 				  // Manage table info: the fields
 				$Obj_table:=OB Copy:C1225($Obj_tableModel)
-				$Obj_table.originalName:=$Obj_table.name
+				
+				If (Bool:C1537(featuresFlags.with("newDataModel")))
+					
+					$Obj_table.originalName:=$Obj_table[""].name
+					
+				Else 
+					
+					  // #OLD
+					$Obj_table.originalName:=$Obj_table.name
+					
+				End if 
+				
 				$Obj_table.tableNumber:=$Txt_tableNumber
 				
 				  // Format name for the tag
@@ -549,7 +560,11 @@ Case of
 				
 				If (Value type:C1509($Obj_in.tags.navigationTables)=Is collection:K8:32)
 					
-					$Obj_navigationTable:=$Obj_in.tags.navigationTables.find("col_formula";"$1.result:=String:C10($1.value.originalName)=\""+$Obj_table.originalName+"\"")
+					If (Bool:C1537(featuresFlags.with("newDataModel")))
+						$Obj_navigationTable:=$Obj_in.tags.navigationTables.query("originalName = :1";String:C10($Obj_table.originalName)).pop()
+					Else 
+						$Obj_navigationTable:=$Obj_in.tags.navigationTables.find("col_formula";"$1.result:=String:C10($1.value.originalName)=\""+$Obj_table.originalName+"\"")
+					End if 
 					
 					If ($Obj_navigationTable#Null:C1517)
 						
@@ -608,6 +623,8 @@ Case of
 				
 				  //……………………………………………………………………………………………………………
 			: ($Txt_type="main")
+				
+				  //Folder($obj_template.source;fk platform path).files().extract("fullName")
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source;"*")
 				

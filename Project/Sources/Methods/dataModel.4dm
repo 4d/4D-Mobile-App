@@ -178,7 +178,7 @@ Case of
 							
 						Else 
 							
-							  // Table name($Lon_tableID)
+							  // #OLD
 							$Txt_buffer:=$Obj_table.name
 							
 						End if 
@@ -207,8 +207,6 @@ Case of
 							
 						End if 
 						
-						  //If (Bool(featuresFlags._103411))
-						
 						If (Length:C16(String:C10($Obj_table.slave))>0)
 							
 							  // Only accessible via relations
@@ -218,13 +216,18 @@ Case of
 							
 						End if 
 						
-						  // Has or not the global stamp fields
-						$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-							"key";"globalStamp";\
-							"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";\
-							"table";$Obj_table.name;"field";commonValues.stampField.name)).value);"YES";"NO"))
-						
-						  //End if
+						If (Bool:C1537(featuresFlags.with("newDataModel")))
+							
+							  // Has or not the global stamp fields
+							$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
+								"key";"globalStamp";\
+								"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";"table";$Obj_table[""].name;"field";commonValues.stampField.name)).value);"YES";"NO"))
+							
+						Else 
+							$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
+								"key";"globalStamp";\
+								"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";"table";$Obj_table.name;"field";commonValues.stampField.name)).value);"YES";"NO"))
+						End if 
 						
 						If (OK=1)
 							
@@ -235,8 +238,6 @@ Case of
 									"value";String:C10($Obj_table.primaryKey))
 								
 							End if 
-							
-							  //If (Bool(featuresFlags._100174))
 							
 							If ($Obj_table.filter#Null:C1517)  // Is filter is available?
 								
@@ -252,7 +253,6 @@ Case of
 									
 								End if 
 							End if 
-							  //End if
 							
 							OB GET PROPERTY NAMES:C1232($Obj_table;$tTxt_fields)
 							
@@ -270,7 +270,12 @@ Case of
 								Case of 
 										
 										  //………………………………………………………………………………………………………………………
-									: ($ƒ.isField($tTxt_fields{$Lon_field}))  // field if
+									: (Length:C16($tTxt_fields{$Lon_field})=0)  // Properties
+										
+										  // <NOTHING MORE TO DO>
+										
+										  //………………………………………………………………………………………………………………………
+									: ($ƒ.isField($tTxt_fields{$Lon_field}))
 										
 										If (Value type:C1509($Obj_table[$tTxt_fields{$Lon_field}])=Is object:K8:27)
 											
@@ -670,7 +675,12 @@ Case of
 								If ($Obj_buffer.success)
 									
 									$o.primaryKey:=$Obj_buffer.tableInfo.primaryKey
-									$o.slave:=$Obj_table.name
+									
+									If (Bool:C1537(featuresFlags.with("newDataModel")))
+										$o.slave:=$Obj_table[""].name
+									Else 
+										$o.slave:=$Obj_table.name
+									End if 
 									
 									$Lon_relatedTableID:=$Obj_buffer.tableInfo.tableNumber
 									APPEND TO ARRAY:C911($tTxt_tables;String:C10($Lon_relatedTableID))
@@ -699,12 +709,23 @@ Case of
 								End if 
 							End for 
 							
-							  // Get inverse field
-							$Obj_buffer:=structure (New object:C1471(\
-								"action";"inverseRelatedFields";\
-								"table";$Obj_table.name;\
-								"relation";$Txt_relationName;\
-								"definition";$Obj_in.definition))
+							If (Bool:C1537(featuresFlags.with("newDataModel")))
+								
+								  // Get inverse field
+								$Obj_buffer:=structure (New object:C1471(\
+									"action";"inverseRelatedFields";\
+									"table";$Obj_table[""].name;\
+									"relation";$Txt_relationName;\
+									"definition";$Obj_in.definition))
+								
+							Else 
+								
+								$Obj_buffer:=structure (New object:C1471(\
+									"action";"inverseRelatedFields";\
+									"table";$Obj_table.name;\
+									"relation";$Txt_relationName;\
+									"definition";$Obj_in.definition))
+							End if 
 							
 							If ($Obj_buffer.success)
 								
@@ -980,8 +1001,20 @@ Case of
 						
 						If (Bool:C1537($Obj_in.tag))  // for tag format name
 							
-							$Obj_table.originalName:=$Obj_table.name
-							$Obj_table.name:=formatString ("table-name";$Obj_table.name)
+							If (Bool:C1537(featuresFlags.with("newDataModel")))
+								
+								$Obj_table.originalName:=$Obj_table[""].name
+								$Obj_table.name:=formatString ("table-name";$Obj_table[""].name)
+								
+								
+							Else 
+								
+								$Obj_table.originalName:=$Obj_table.name
+								$Obj_table.name:=formatString ("table-name";$Obj_table.name)
+								
+							End if 
+							
+							
 							
 						End if 
 						

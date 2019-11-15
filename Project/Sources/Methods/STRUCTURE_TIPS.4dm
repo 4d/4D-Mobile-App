@@ -12,7 +12,7 @@ C_OBJECT:C1216($1)
 
 C_LONGINT:C283($l;$Lon_column;$Lon_row;$Lon_x;$Lon_y)
 C_TEXT:C284($Txt_tips)
-C_OBJECT:C1216($o;$Obj_dataModel;$Obj_field;$Obj_form;$Obj_table;$str)
+C_OBJECT:C1216($o;$Obj_dataModel;$Obj_field;$form;$Obj_table;$str)
 C_COLLECTION:C1488($c;$Col_catalog;$Col_desynchronized)
 
 If (False:C215)
@@ -30,7 +30,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	ASSERT:C1129($1.target#Null:C1517)
 	ASSERT:C1129($1.form#Null:C1517)
 	
-	$Obj_form:=$1.form
+	$form:=$1.form
 	
 	  // Get the list box column and row to know what cell the user hovers
 	GET MOUSE:C468($Lon_x;$Lon_y;$l)
@@ -51,14 +51,14 @@ End if
   // ----------------------------------------------------
 If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;"tables"))->))
 	
-	If ($1.target=$Obj_form.tableList)
+	If ($1.target=$form.tableList)
 		
 		$c:=$Col_catalog.query("name=:1";(OBJECT Get pointer:C1124(Object named:K67:5;"tables"))->{$Lon_row})
 		
 	Else 
 		
 		  // Get current table
-		$c:=$Col_catalog.query("name=:1";$Obj_form.form.currentTable.name)
+		$c:=$Col_catalog.query("name=:1";$form.form.currentTable.name)
 		
 	End if 
 	
@@ -88,7 +88,7 @@ If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;
 					Case of 
 							
 							  //______________________________________________________
-						: ($1.target=$Obj_form.tableList)  // TABLE LIST
+						: ($1.target=$form.tableList)  // TABLE LIST
 							
 							If ($Col_desynchronized.length=1)
 								
@@ -146,10 +146,10 @@ If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;
 							End if 
 							
 							  //______________________________________________________
-						: ($1.target=$Obj_form.fieldList)  // FIELD LIST
+						: ($1.target=$form.fieldList)  // FIELD LIST
 							
 							  // Get the desynchronized item
-							$o:=$Col_desynchronized.query("name = :1";(ui.pointer($Obj_form.fields))->{$Lon_row}).pop()
+							$o:=$Col_desynchronized.query("name = :1";(ui.pointer($form.fields))->{$Lon_row}).pop()
 							
 							Case of 
 									
@@ -241,14 +241,14 @@ If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;
 			Case of 
 					
 					  //______________________________________________________
-				: ($1.target=$Obj_form.tableList)
+				: ($1.target=$form.tableList)
 					
 					  //
 					
 					  //______________________________________________________
-				: ($1.target=$Obj_form.fieldList)
+				: ($1.target=$form.fieldList)
 					
-					$l:=$Obj_table.field.extract("name").indexOf((ui.pointer($Obj_form.fields))->{$Lon_row})
+					$l:=$Obj_table.field.extract("name").indexOf((ui.pointer($form.fields))->{$Lon_row})
 					
 					If ($l#-1)
 						
@@ -270,7 +270,7 @@ If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;
 								End if 
 								
 								$Txt_tips:=$Txt_tips+"\r- "+Choose:C955($Lon_column=1;\
-									$str.setText("youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere").localized(Choose:C955($Obj_form.publishedPtr->{$Lon_row}#0;"disable";"enable"));\
+									$str.setText("youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere").localized(Choose:C955($form.publishedPtr->{$Lon_row}#0;"disable";"enable"));\
 									Get localized string:C991("clickHereToSelectThePublishedFields"))
 								
 								  //…………………………………………………………………………………………………
@@ -278,7 +278,7 @@ If ($Lon_row>0)  // & ($Lon_row<=Size of array((OBJECT Get pointer(Object named;
 								
 								If ($Obj_dataModel[String:C10($Obj_field.relatedTableNumber)]=Null:C1517)
 									
-									If (Bool:C1537((ui.pointer($Obj_form.published))->{$Lon_row}))
+									If (Bool:C1537((ui.pointer($form.published))->{$Lon_row}))
 										
 										  // Error
 										$Txt_tips:=ui.alert+$str.setText("theLinkedTableIsNotPublished").localized($Obj_field.relatedDataClass)

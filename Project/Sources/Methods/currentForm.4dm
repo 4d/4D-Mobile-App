@@ -59,7 +59,7 @@ Else
 			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
 			
 			  //______________________________________________________
-		: (Length:C16(String:C10($1))=0)  // Update with current values
+		: (Count parameters:C259=0)  // Update with current values
 			
 			$o.getEvent()
 			$o.getCurrentWidget()

@@ -7,13 +7,21 @@ $response:=New object:C1471  // Informations returned to mobile application
 
 Case of 
 		
-	: ($request.action="action_2")
+	: ($request.action="addCommands")
 		
-		  // Insert here the code for the action "action_2"
+		  // Insert here the code for the action "Add…"
 		
-	: ($request.action="editAllTypes")
+	: ($request.action="editThemes")
 		
 		  // Insert here the code for the action "Edit…"
+		
+	: ($request.action="action_0")
+		
+		  // Insert here the code for the action "action_0"
+		
+	: ($request.action="action_5")
+		
+		  // Insert here the code for the action "action_5"
 		
 	Else 
 		

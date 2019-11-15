@@ -105,33 +105,52 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																								"action";"safeDelete";\
-																								"path";$Obj_in.path))
+																																"action";"safeDelete";\
+																																"path";$Obj_in.path))
 			  // End if
 			
 		End if 
 		
-		If ($Boo_OK)  // & (Bool(featuresFlags._103411))
+		If ($Boo_OK)
 			
 			  // Verify the structure
 			$c:=New collection:C1472
 			
-			For each ($t;$Obj_project.dataModel)
+			If (Bool:C1537(featuresFlags.with("newDataModel")))
 				
-				$c.push($Obj_project.dataModel[$t].name)
-				
-				For each ($tt;$Obj_project.dataModel[$t])
+				For each ($t;$Obj_project.dataModel)
 					
-					If (Value type:C1509($Obj_project.dataModel[$t][$tt])=Is object:K8:27)
+					$c.push($Obj_project.dataModel[$t][""].name)
+					
+					For each ($tt;$Obj_project.dataModel[$t])
 						
 						If ($Obj_project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
 							
 							$c.push($Obj_project.dataModel[$t][$tt].relatedDataClass)
 							
 						End if 
-					End if 
+					End for each 
 				End for each 
-			End for each 
+				
+			Else 
+				
+				For each ($t;$Obj_project.dataModel)
+					
+					$c.push($Obj_project.dataModel[$t].name)
+					
+					For each ($tt;$Obj_project.dataModel[$t])
+						
+						If (Value type:C1509($Obj_project.dataModel[$t][$tt])=Is object:K8:27)
+							
+							If ($Obj_project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
+								
+								$c.push($Obj_project.dataModel[$t][$tt].relatedDataClass)
+								
+							End if 
+						End if 
+					End for each 
+				End for each 
+			End if 
 			
 			If ($Obj_project.dataSource.source="local")
 				
