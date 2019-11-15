@@ -137,7 +137,7 @@ extension SignInWithAppleCredentialStateService: ApplicationService {
     }
 
     fileprivate func logoutUI(_ sender: Any? = nil, _ source: UIViewController) {
-        foreground {
+        DispatchQueue.main.async {
             /// XXX check that there is no issue with that, view controller cycle for instance
             if let destination = Main.instantiate() {
                 let identifier = "logout"

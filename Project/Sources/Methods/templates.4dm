@@ -612,6 +612,11 @@ Case of
 				$Col_catalog:=doc_catalog ($Obj_template.source;"*")
 				
 				  //……………………………………………………………………………………………………………
+			: (Bool:C1537($Obj_in.template.inject))
+				
+				$Col_catalog:=doc_catalog ($Obj_template.source;JSON Stringify:C1217(commonValues.template.exclude))
+				
+				  //……………………………………………………………………………………………………………
 			Else 
 				
 				$Col_catalog:=doc_catalog ($Obj_template.source)
