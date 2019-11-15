@@ -106,7 +106,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	
 	  // Exclude some file from copy
 	commonValues.template:=New object:C1471(\
-		"exclude";New collection:C1472("layoutIconx2.png";"manifest.json";"template.svg";\
+		"exclude";New collection:C1472("layoutIconx2.png";"manifest.json";"template.gif";"template.svg";\
 		"relationButton.xib";"README.md";"Package.swift";"Package.resolved";"Cartfile";"Cartfile.resolved"))
 	
 	  // Data dump
