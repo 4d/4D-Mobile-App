@@ -345,8 +345,7 @@ If (Num:C11($Obj_project.info.version)<4)
 	End if 
 End if 
 
-
-If (Bool:C1537(featuresFlags.with("newDataModel")))
+If (featuresFlags.with("newDataModel"))
 	
 	  //=====================================================================
 	  //                    NEW DATA MODEL
@@ -359,43 +358,42 @@ If (Bool:C1537(featuresFlags.with("newDataModel")))
 				
 				$Obj_table:=$Obj_project.dataModel[$Txt_tableNumber]
 				
-				$Obj_table[""]:=New object:C1471(\
-					"name";$Obj_table.name;\
-					"label";$Obj_table.label;\
-					"shortLabel";$Obj_table.shortLabel;\
-					"primaryKey";$Obj_table.primaryKey;\
-					"embedded";True:C214\
-					)
-				
-				If (Bool:C1537($Obj_table.embedded))
+				If ($Obj_table[""]=Null:C1517)
 					
-					$Obj_table[""].embedded:=True:C214
+					$Obj_table[""]:=New object:C1471(\
+						"name";$Obj_table.name;\
+						"label";$Obj_table.label;\
+						"shortLabel";$Obj_table.shortLabel;\
+						"primaryKey";$Obj_table.primaryKey\
+						)
+					
+					If (Bool:C1537($Obj_table.embedded))
+						
+						$Obj_table[""].embedded:=True:C214
+						
+					End if 
+					
+					If (Length:C16(String:C10($Obj_table.icon))>0)
+						
+						$Obj_table[""].icon:=$Obj_table.icon
+						
+					End if 
+					
+					OB REMOVE:C1226($Obj_table;"name")
+					OB REMOVE:C1226($Obj_table;"label")
+					OB REMOVE:C1226($Obj_table;"shortLabel")
+					OB REMOVE:C1226($Obj_table;"primaryKey")
+					OB REMOVE:C1226($Obj_table;"embedded")
+					OB REMOVE:C1226($Obj_table;"icon")
 					
 				End if 
-				
-				If (Length:C16(String:C10($Obj_table.icon))>0)
-					
-					$Obj_table[""].icon:=$Obj_table.icon
-					
-				End if 
-				
-				OB REMOVE:C1226($Obj_table;"name")
-				OB REMOVE:C1226($Obj_table;"label")
-				OB REMOVE:C1226($Obj_table;"shortLabel")
-				OB REMOVE:C1226($Obj_table;"primaryKey")
-				OB REMOVE:C1226($Obj_table;"embedded")
-				OB REMOVE:C1226($Obj_table;"icon")
-				
 			End for each 
 		End if 
 		
-		  //*****************************
-		  //$Obj_project.info.version:=5
-		  //*****************************
-		  //$Boo_upgraded:=True
+		$Obj_project.info.version:=5
+		$Boo_upgraded:=True:C214
 		
 	End if 
-	
 	
 	  //=====================================================================
 	  //                              MISCELLANEOUS
@@ -418,7 +416,6 @@ If (Bool:C1537(featuresFlags.with("newDataModel")))
 		End for each 
 	End if 
 End if 
-
 
   // Set the current version
 $Obj_project.info.componentBuild:=$Obj_info.componentBuild

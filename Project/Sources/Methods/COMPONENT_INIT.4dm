@@ -542,7 +542,7 @@ featuresFlags.oneToManyRelations:=featuresFlags._105431  //    [MOBILE] Display 
 
 COMPONENT_DEFINE_TOOLS 
 
-If (Bool:C1537(featuresFlags.with("accentColors")))
+If (featuresFlags.with("accentColors"))
 	
 	  //ui.selectedColor:=Highlight menu background color
 	  //ui.highlightColor:=Highlight menu background color

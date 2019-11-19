@@ -14,11 +14,10 @@ C_OBJECT:C1216($1)
 C_BOOLEAN:C305($Boo_withIcons)
 C_LONGINT:C283($i;$l;$Lon_count;$Lon_parameters)
 C_PICTURE:C286($Pic_file;$Pic_scaled)
-C_TEXT:C284($Svg_root;$t;$Txt_tableNumber;$Txt_template;$Txt_type)
+C_TEXT:C284($Svg_root;$t;$Txt_name;$Txt_tableNumber;$Txt_template;$Txt_type)
 C_OBJECT:C1216($file;$folder;$o;$Obj_color;$Obj_dataModel;$Obj_field)
 C_OBJECT:C1216($Obj_in;$Obj_navigationTable;$Obj_out;$Obj_table;$Obj_tableList;$Obj_tableModel)
-C_OBJECT:C1216($Obj_template;$Obj_userChoice;$oo;$Path_hostRoot;$Path_icon;$Path_manifest)
-C_OBJECT:C1216($Path_root)
+C_OBJECT:C1216($Obj_template;$Obj_userChoice;$Path_hostRoot;$Path_icon;$Path_manifest;$Path_root)
 C_COLLECTION:C1488($Col_actions;$Col_catalog;$Col_path)
 
 If (False:C215)
@@ -97,46 +96,46 @@ Case of
 		
 		$t:=$Obj_template.source+$t+Folder separator:K24:12
 		
-		
 		If (Length:C16(String:C10($Obj_template.projectTag))>0)
 			
-			C_TEXT:C284($templateName)
+			$Txt_name:=String:C10($Obj_in.project[String:C10($Obj_template.projectTag)])
 			
-			$templateName:=String:C10($Obj_in.project[String:C10($Obj_template.projectTag)])
-			
-			If (Length:C16($templateName)>0)
+			If (Length:C16($Txt_name)>0)
 				
 				  // Check if begin with "/"
-				If (Position:C15("/";$templateName)=1)
+				If (Position:C15("/";$Txt_name)=1)
 					
-					C_OBJECT:C1216($customDir)
+					$folder:=COMPONENT_Pathname ("host_"+String:C10($Obj_template.projectTag)+"Forms")
 					
-					$customDir:=COMPONENT_Pathname ("host_"+String:C10($Obj_template.projectTag)+"Forms")
+					$folder:=$folder.folder(Substring:C12($Txt_name;2;Length:C16($Txt_name)))
 					
-					$customDir:=$customDir.folder(Substring:C12($templateName;2;Length:C16($templateName)))
-					
-					If ($customDir.exists)
+					If ($folder.exists)
 						
-						$t:=$customDir.platformPath
+						$t:=$folder.platformPath
 						
-						  // Else : cannot find custom template directory
+					Else 
+						
+						  // Cannot find custom template directory
 						
 					End if 
 					
 				Else 
 					
-					$t:=$Obj_template.source+$templateName+Folder separator:K24:12
+					$t:=$Obj_template.source+$Txt_name+Folder separator:K24:12
 					
 				End if 
 				
-				  // Else : project file doesn't contain any custom template key
+			Else 
+				
+				  // Project file doesn't contain any custom template key
 				
 			End if 
 			
-			  // Else : no projectTag in template manifest
+		Else 
+			
+			  // No projectTag in template manifest
 			
 		End if 
-		
 		
 		$o:=OB Copy:C1225($Obj_in)
 		
@@ -217,46 +216,77 @@ Case of
 			$file:=$folder.file("manifest.json")
 			$o.template:=ob_parseFile ($file)
 			
-			If ($o.template.success)  // the template existe or not
+			If ($o.template.success)  // The template existe or not
 				
-				$o.template:=$o.template.value  // get the doc object
+				$o.template:=$o.template.value  // Get the doc object
 				
-				  // Get expected field count
-				$Lon_count:=Num:C11($o.template.fields.count)
-				
-				  // Manage table info: the fields
+				  // ==============================================================
+				  //                          TABLE INFOS
+				  // ==============================================================
 				$Obj_table:=OB Copy:C1225($Obj_tableModel)
 				
-				If (Bool:C1537(featuresFlags.with("newDataModel")))
+				If (featuresFlags.with("newDataModel"))
+					
+					$Obj_table.tableNumber:=$Txt_tableNumber
 					
 					$Obj_table.originalName:=$Obj_table[""].name
+					
+					  // Format name for the tag
+					$Obj_table.name:=formatString ("table-name";$Obj_table.originalName)
+					
+					If ($Obj_table[""].label=Null:C1517)
+						
+						$Obj_table.label:=formatString ("label";$Obj_table.originalName)
+						
+					Else 
+						
+						  // User label
+						$Obj_table.label:=$Obj_table[""].label
+						
+					End if 
+					
+					If ($Obj_table[""].shortLabel=Null:C1517)
+						
+						$Obj_table.shortLabel:=formatString ("label";$Obj_table.originalName)
+						
+					Else 
+						
+						  // User label
+						$Obj_table.shortLabel:=$Obj_table[""].shortLabel
+						
+					End if 
 					
 				Else 
 					
 					  // #OLD
 					$Obj_table.originalName:=$Obj_table.name
 					
+					$Obj_table.tableNumber:=$Txt_tableNumber
+					
+					  // Format name for the tag
+					$Obj_table.name:=formatString ("table-name";$Obj_table.originalName)
+					
+					If ($Obj_table.label=Null:C1517)
+						
+						$Obj_table.label:=formatString ("label";$Obj_table.originalName)
+						
+					End if 
+					
+					If ($Obj_table.shortLabel=Null:C1517)
+						
+						$Obj_table.shortLabel:=formatString ("label";$Obj_table.originalName)
+						
+					End if 
 				End if 
 				
-				$Obj_table.tableNumber:=$Txt_tableNumber
+				  // ==============================================================
+				  //                          FIELDS
+				  // ==============================================================
 				
-				  // Format name for the tag
-				$Obj_table.name:=formatString ("table-name";$Obj_table.originalName)
-				
-				If ($Obj_table.label=Null:C1517)
-					
-					$Obj_table.label:=formatString ("label";$Obj_table.originalName)
-					
-				End if 
-				
-				If ($Obj_table.shortLabel=Null:C1517)
-					
-					$Obj_table.shortLabel:=formatString ("label";$Obj_table.originalName)
-					
-				End if 
-				
-				  // The fields
 				$Obj_table.fields:=New collection:C1472
+				
+				  // Get expected field count
+				$Lon_count:=Num:C11($o.template.fields.count)
 				
 				$i:=0
 				
@@ -316,6 +346,7 @@ Case of
 						: ($Obj_field.name#Null:C1517)  // ie. relation
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
+							
 							$Obj_field.originalName:=$Obj_field.name
 							
 							$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[$Obj_field.name])
@@ -341,7 +372,7 @@ Case of
 							  //……………………………………………………………………………………………………………
 						: ($i<$Lon_count)
 							
-							  // /  Create a dummy fields to replace in template
+							  // Create a dummy fields to replace in template
 							$Obj_field:=New object:C1471(\
 								"name";"";\
 								"originalName";"";\
@@ -370,14 +401,14 @@ Case of
 					
 				End for each 
 				
-				  // /  If there is more fields in template than defined by user (ie. last fields not defined)
-				  // /  add dummy fields
-				
 				If ($Lon_count>0)
+					
+					  // If there is more fields in template than defined by user (ie. last fields not defined)
+					  // add dummy fields
 					
 					While ($Obj_table.fields.length<$Lon_count)
 						
-						$Obj_field:=New object:C1471(\
+						$Obj_table.fields.push(New object:C1471(\
 							"name";"";\
 							"originalName";"";\
 							"label";"";\
@@ -385,21 +416,17 @@ Case of
 							"bindingType";"unknown";\
 							"type";-1;\
 							"fieldType";-1;\
-							"icon";"")
-						$Obj_table.fields.push($Obj_field)
+							"icon";""))
 						
 					End while 
 				End if 
 				
 				  // ==============================================================
-				
-				  // ======
-				  // Manage search fields
-				  // ======
+				  //                     SEARCH FIELDS
+				  // ==============================================================
 				
 				If ($Obj_tableList.searchableField#Null:C1517)
 					
-					  // If (Bool(featuresFlags._98105))
 					Case of 
 							
 							  //……………………………………………………………………………………………………………
@@ -419,16 +446,11 @@ Case of
 							
 							  //……………………………………………………………………………………………………………
 					End case 
-					
-					  // Else
-					  //$Obj_table.searchableField:=formatString ("field-name";String($Obj_tableList.searchableField.name))
-					  // End if
-					
 				End if 
 				
-				  // ======
-				  // Manage sort fields
-				  // ======
+				  // ==============================================================
+				  //                        SORT FIELDS
+				  // ==============================================================
 				
 				If ($Obj_tableList.sortField#Null:C1517)
 					
@@ -448,6 +470,7 @@ Case of
 						: (Value type:C1509($Obj_tableList.sortField)=Is text:K8:3)
 							
 							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.sortField))
+							
 							  //……………………………………………………………………………………………………………
 					End case 
 					
@@ -478,9 +501,9 @@ Case of
 				  // XXX maybe primary key field?
 				  // End if
 				
-				  // ======
-				  // Manage section
-				  // ======
+				  // ==============================================================
+				  //                         SECTION
+				  // ==============================================================
 				
 				If ($Obj_tableList.sectionField#Null:C1517)
 					
@@ -493,16 +516,19 @@ Case of
 						$Obj_field:=New object:C1471  // maybe get other info from  $Obj_tableList.fields
 						$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[String:C10($Obj_tableList.sectionField.id)])
 						
-						$Obj_table.sectionFieldBindingType:=storyboard (New object:C1471("action";"fieldBinding";"field";$Obj_field;"formatters";$Obj_in.formatters)).bindingType
+						$Obj_table.sectionFieldBindingType:=storyboard (New object:C1471(\
+							"action";"fieldBinding";\
+							"field";$Obj_field;\
+							"formatters";$Obj_in.formatters)).bindingType
 						
 					End if 
 				End if 
 				
 				$Obj_table.showSection:="NO"  // show or not the section bar at right
 				
-				  // ======
-				  // Manage actions
-				  // ======
+				  // ==============================================================
+				  //                        ACTIONS
+				  // ==============================================================
 				
 				Case of 
 						
@@ -510,7 +536,11 @@ Case of
 					: (String:C10($Obj_template.userChoiceTag)="list")
 						
 						  // get action on table
-						$Col_actions:=actions ("form";New object:C1471("project";$Obj_in.project;"table";$Obj_table.originalName;"tableNumber";$Obj_table.tableNumber;"scope";"table")).actions
+						$Col_actions:=actions ("form";New object:C1471(\
+							"project";$Obj_in.project;\
+							"table";$Obj_table.originalName;\
+							"tableNumber";$Obj_table.tableNumber;\
+							"scope";"table")).actions
 						
 						If ($Col_actions.length>0)
 							
@@ -519,7 +549,11 @@ Case of
 							
 						End if 
 						
-						$Col_actions:=actions ("form";New object:C1471("project";$Obj_in.project;"table";$Obj_table.originalName;"tableNumber";$Obj_table.tableNumber;"scope";"currentRecord")).actions
+						$Col_actions:=actions ("form";New object:C1471(\
+							"project";$Obj_in.project;\
+							"table";$Obj_table.originalName;\
+							"tableNumber";$Obj_table.tableNumber;\
+							"scope";"currentRecord")).actions
 						
 						If ($Col_actions.length>0)
 							
@@ -532,7 +566,11 @@ Case of
 						  //……………………………………………………………………………………………………………
 					: (String:C10($Obj_template.userChoiceTag)="detail")
 						
-						$Col_actions:=actions ("form";New object:C1471("project";$Obj_in.project;"table";$Obj_table.originalName;"tableNumber";$Obj_table.tableNumber;"scope";"currentRecord")).actions
+						$Col_actions:=actions ("form";New object:C1471(\
+							"project";$Obj_in.project;\
+							"table";$Obj_table.originalName;\
+							"tableNumber";$Obj_table.tableNumber;\
+							"scope";"currentRecord")).actions
 						
 						If ($Col_actions.length>0)
 							
@@ -549,9 +587,9 @@ Case of
 						  //……………………………………………………………………………………………………………
 				End case 
 				
-				  // ======
-				  // Manage type an others
-				  // ======
+				  // ==============================================================
+				  //                       TYPE AN OTHERS
+				  // ==============================================================
 				
 				$Obj_in.tags.detailFormType:=String:C10($o.template.tags.___DETAILFORMTYPE___)  // XXX could do a generic insert of all $Obj_buffer.template.tags here
 				$Obj_in.tags.listFormType:=String:C10($o.template.tags.___LISTFORMTYPE___)
@@ -560,10 +598,15 @@ Case of
 				
 				If (Value type:C1509($Obj_in.tags.navigationTables)=Is collection:K8:32)
 					
-					If (Bool:C1537(featuresFlags.with("newDataModel")))
+					If (featuresFlags.with("newDataModel"))
+						
 						$Obj_navigationTable:=$Obj_in.tags.navigationTables.query("originalName = :1";String:C10($Obj_table.originalName)).pop()
+						
 					Else 
+						
+						  //#OLD
 						$Obj_navigationTable:=$Obj_in.tags.navigationTables.find("col_formula";"$1.result:=String:C10($1.value.originalName)=\""+$Obj_table.originalName+"\"")
+						
 					End if 
 					
 					If ($Obj_navigationTable#Null:C1517)
@@ -605,6 +648,7 @@ Case of
 		  // The TEMPLATE method is called later after replacing some tag
 		
 		  //________________________________________
+		
 	Else 
 		
 		  // Default template management code, a copy with tag replacement
@@ -674,15 +718,14 @@ Case of
 			ob_error_combine ($Obj_out;$Obj_out.assets)
 			
 			  // Temporary or by default take app icon, later could be customizable by UI, and must be managed like AppIcon
-			
 			$Obj_out.theme:=New object:C1471(\
 				"success";False:C215)
 			
 			$file:=Folder:C1567($Obj_template.assets.source;fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
 			$l:=commonValues.theme.colorjuicer.scale
 			
-			If (($l#1024)\
-				 & ($l>0))
+			If ($l#1024)\
+				 & ($l>0)
 				
 				READ PICTURE FILE:C678($file.platformPath;$Pic_file)
 				CREATE THUMBNAIL:C679($Pic_file;$Pic_scaled;$l;$l)  // This change result of algo..., let tools scale using argument
@@ -834,90 +877,176 @@ Case of
 			
 			For each ($Obj_table;$Obj_in.tags.navigationTables)
 				
-				If (Length:C16(String:C10($Obj_table.icon))=0)  // no icon defined
+				If (featuresFlags.with("newDataModel"))
 					
-					If ($Obj_table.shortLabel#Null:C1517)
+					If (Length:C16(String:C10($Obj_table[""].icon))=0)  // no icon defined
 						
-						  //#################################
-						
-						  // Generate asset using first table letter
-						$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
-						
-						If (Asserted:C1132($file.exists;"Missing ressources: "+$file.path))
+						If ($Obj_table[""].shortLabel#Null:C1517)
 							
-							$Svg_root:=DOM Parse XML source:C719($file.platformPath)
+							  // Generate asset using first table letter
+							$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
 							
-							If (Asserted:C1132(OK=1;"Failed to parse: "+$file.path))
+							If (Asserted:C1132($file.exists;"Missing ressources: "+$file.path))
 								
-								$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_table.shortLabel;$Obj_table.label)
+								$Svg_root:=DOM Parse XML source:C719($file.platformPath)
 								
-								If (Length:C16($t)>0)
+								If (Asserted:C1132(OK=1;"Failed to parse: "+$file.path))
 									
-									  // Take first letter
-									$t:=Uppercase:C13($t[[1]])
+									$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_table[""].shortLabel;$Obj_table[""].label)
 									
-								Else 
+									If (Length:C16($t)>0)
+										
+										  // Take first letter
+										$t:=Uppercase:C13($t[[1]])
+										
+									Else 
+										
+										  //%W-533.1
+										$t:=Uppercase:C13($Obj_table[""].name[[1]])  // 4D table names are not empty
+										  //%W+533.1
+										
+									End if 
 									
-									  //%W-533.1
-									$t:=Uppercase:C13($Obj_table.name[[1]])  // 4D table names are not empty
-									  //%W+533.1
+									DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$t)
+									
+									$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($Obj_in.project.product.bundleIdentifier+".svg")
+									$file.delete()
+									
+									DOM EXPORT TO FILE:C862($Svg_root;$file.platformPath)
+									
+									DOM CLOSE XML:C722($Svg_root)
+									
+									$o:=asset (New object:C1471(\
+										"action";"create";\
+										"type";"imageset";\
+										"tags";New object:C1471("name";"Main"+$Obj_table[""].name);\
+										"source";$file.platformPath;\
+										"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
+										"format";$Obj_template.assets.format;\
+										"size";$Obj_template.assets.size\
+										))
+									
+									$Obj_out.assets.push($o)
+									ob_error_combine ($Obj_out;$o)
 									
 								End if 
-								
-								DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$t)
-								
-								$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($Obj_in.project.product.bundleIdentifier+".svg")
-								$file.delete()
-								
-								DOM EXPORT TO FILE:C862($Svg_root;$file.platformPath)
-								
-								DOM CLOSE XML:C722($Svg_root)
-								
-								$o:=asset (New object:C1471(\
-									"action";"create";\
-									"type";"imageset";\
-									"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-									"source";$file.platformPath;\
-									"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
-									"format";$Obj_template.assets.format;\
-									"size";$Obj_template.assets.size\
-									))
-								
-								$Obj_out.assets.push($o)
-								ob_error_combine ($Obj_out;$o)
-								
 							End if 
 						End if 
 						
+					Else 
 						
-						  //#################################
+						If (Position:C15("/";$Obj_table[""].icon)=1)
+							
+							  // User icon
+							$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_table[""].icon;2))
+							
+						Else 
+							
+							$Path_icon:=$Path_root.file($Obj_table[""].icon)
+							
+						End if 
+						
+						$o:=asset (New object:C1471(\
+							"action";"create";\
+							"type";"imageset";\
+							"tags";New object:C1471("name";"Main"+$Obj_table[""].name);\
+							"source";$Path_icon.platformPath;\
+							"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
+							"format";$Obj_template.assets.format;\
+							"size";$Obj_template.assets.size))
+						
+						$Obj_out.assets.push($o)
+						ob_error_combine ($Obj_out;$o)
+						
 					End if 
 					
 				Else 
 					
-					If (Position:C15("/";$Obj_table.icon)=1)
+					If (Length:C16(String:C10($Obj_table.icon))=0)  // no icon defined
 						
-						  // User icon
-						$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_table.icon;2))
+						If ($Obj_table.shortLabel#Null:C1517)
+							
+							  //#################################
+							
+							  // Generate asset using first table letter
+							$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
+							
+							If (Asserted:C1132($file.exists;"Missing ressources: "+$file.path))
+								
+								$Svg_root:=DOM Parse XML source:C719($file.platformPath)
+								
+								If (Asserted:C1132(OK=1;"Failed to parse: "+$file.path))
+									
+									$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_table.shortLabel;$Obj_table.label)
+									
+									If (Length:C16($t)>0)
+										
+										  // Take first letter
+										$t:=Uppercase:C13($t[[1]])
+										
+									Else 
+										
+										  //%W-533.1
+										$t:=Uppercase:C13($Obj_table.name[[1]])  // 4D table names are not empty
+										  //%W+533.1
+										
+									End if 
+									
+									DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$t)
+									
+									$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($Obj_in.project.product.bundleIdentifier+".svg")
+									$file.delete()
+									
+									DOM EXPORT TO FILE:C862($Svg_root;$file.platformPath)
+									
+									DOM CLOSE XML:C722($Svg_root)
+									
+									$o:=asset (New object:C1471(\
+										"action";"create";\
+										"type";"imageset";\
+										"tags";New object:C1471("name";"Main"+$Obj_table.name);\
+										"source";$file.platformPath;\
+										"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
+										"format";$Obj_template.assets.format;\
+										"size";$Obj_template.assets.size\
+										))
+									
+									$Obj_out.assets.push($o)
+									ob_error_combine ($Obj_out;$o)
+									
+								End if 
+							End if 
+							
+							  //#################################
+							
+						End if 
 						
 					Else 
 						
-						$Path_icon:=$Path_root.file($Obj_table.icon)
+						If (Position:C15("/";$Obj_table.icon)=1)
+							
+							  // User icon
+							$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_table.icon;2))
+							
+						Else 
+							
+							$Path_icon:=$Path_root.file($Obj_table.icon)
+							
+						End if 
+						
+						$o:=asset (New object:C1471(\
+							"action";"create";\
+							"type";"imageset";\
+							"tags";New object:C1471("name";"Main"+$Obj_table.name);\
+							"source";$Path_icon.platformPath;\
+							"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
+							"format";$Obj_template.assets.format;\
+							"size";$Obj_template.assets.size))
+						
+						$Obj_out.assets.push($o)
+						ob_error_combine ($Obj_out;$o)
 						
 					End if 
-					
-					$o:=asset (New object:C1471(\
-						"action";"create";\
-						"type";"imageset";\
-						"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-						"source";$Path_icon.platformPath;\
-						"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
-						"format";$Obj_template.assets.format;\
-						"size";$Obj_template.assets.size))
-					
-					$Obj_out.assets.push($o)
-					ob_error_combine ($Obj_out;$o)
-					
 				End if 
 			End for each 
 		End if 

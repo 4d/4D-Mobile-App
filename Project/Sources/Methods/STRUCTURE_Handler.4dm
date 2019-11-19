@@ -61,7 +61,9 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 		  // Define locales functions
 		$context.catalog:=Formula:C1597(editor_Catalog )
-		$context.setHelpTip:=Formula:C1597(STRUCTURE_TIPS (New object:C1471("target";$1;"form";$2)))
+		$context.setHelpTip:=Formula:C1597(STRUCTURE_TIPS (New object:C1471(\
+			"target";$1;\
+			"form";$2)))
 		
 	End if 
 	
@@ -199,7 +201,6 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="fieldList")
 		
-		
 		$o:=$context.catalog().query("name = :1";String:C10($context.currentTable.name)).pop()
 		
 		If ($o=Null:C1517)
@@ -270,7 +271,7 @@ Case of
 		
 		$Obj_table:=$context.currentTable
 		
-		If (Bool:C1537(featuresFlags.with("newDataModel")))
+		If (featuresFlags.with("newDataModel"))
 			
 			$o:=$context.catalog().query("tableNumber = :1";$Obj_table.tableNumber).pop()
 			
@@ -385,12 +386,12 @@ Case of
 				
 				  //*******************************************************************************************
 				$Lon_published:=Num:C11(Form:C1466.dataModel[String:C10($Obj_in.table.tableNumber)][String:C10($Obj_in.field.name)]#Null:C1517)
+				
 				  //
 				  // C'EST FAUX SI LE LIEN A ÉTÉ RENOMMÉ
 				  // REGARDER DANS : Form.$dialog.unsynchronizedTableFields[String($Obj_in.table.tableNumber)]
 				  //
 				  //*******************************************************************************************
-				
 				
 				APPEND TO ARRAY:C911(($Obj_in.published)->;$Lon_published)
 				APPEND TO ARRAY:C911(($Obj_in.icons)->;UI.fieldIcons[8859])

@@ -11,11 +11,15 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($Boo_verbose)
-C_LONGINT:C283($Lon_parameters;$Lon_pos;$Lon_i)
-C_TEXT:C284($File_;$Txt_cmd;$Txt_error;$Txt_in;$Txt_out;$Txt_assets;$Txt_value;$Txt_tableNumber;$Txt_ID)
-C_OBJECT:C1216($Obj_in;$Obj_out;$Obj_headers;$Obj_table;$Obj_field;$Obj_dataModel;$Obj_file)
+C_BOOLEAN:C305($Boo_errorInOut;$Boo_verbose)
+C_LONGINT:C283($Lon_i;$Lon_parameters;$Lon_pos)
+C_TEXT:C284($cmd;$File_;$t;$Txt_assets;$Txt_error;$Txt_ID)
+C_TEXT:C284($Txt_in;$Txt_out;$Txt_tableNumber;$Txt_value)
+C_OBJECT:C1216($Obj_dataModel;$Obj_field;$Obj_file;$Obj_headers;$Obj_in;$Obj_out)
+C_OBJECT:C1216($Obj_table)
 C_COLLECTION:C1488($Col_fields;$Col_tables)
+
+ARRAY TEXT:C222($tTxt_documents;0)
 
 If (False:C215)
 	C_OBJECT:C1216(dataSet ;$0)
@@ -69,8 +73,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			
 			  //______________________________________________________
 		: ($Obj_in.action="path")
-			
-			  //If (Bool(featuresFlags._103112))
 			
 			Case of 
 					
@@ -145,28 +147,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					  //----------------------------------------
 			End case 
 			
-			  //Else 
-			  //Case of 
-			  //  //----------------------------------------
-			  //: (Value type($Obj_in.project)=Is object)
-			  //If (Asserted(Length(String($Obj_in.project.product.name))>0;"Project product name must not be empty"))
-			  //$Obj_out.path:=_o_Pathname ("dataSet")+$Obj_in.project.product.name+Folder separator
-			  //$Obj_out.success:=True
-			  //End if 
-			  //  //----------------------------------------
-			  //: (Value type($Obj_in.name)=Is text)
-			  //If (Asserted(Length(String($Obj_in.name))>0;"Project name must not be empty"))
-			  //$Obj_out.path:=_o_Pathname ("dataSet")+$Obj_in.name+Folder separator
-			  //$Obj_out.success:=True
-			  //End if 
-			  //  //----------------------------------------
-			  //Else 
-			  //$Obj_out.errors:=New collection("No product and project name to get data set path")
-			  //$Obj_out.success:=False
-			  //  //----------------------------------------
-			  //End case 
-			  //End if 
-			
 			  //______________________________________________________
 		: ($Obj_in.action="check")
 			
@@ -218,8 +198,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					
 				End if 
 			End if 
-			
-			  //$Obj_out.exists:=False
 			
 			  //______________________________________________________
 		: ($Obj_in.action="digest")
@@ -321,10 +299,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 				If (Test path name:C476($Obj_out.path)=Is a folder:K24:2)
 					
-					$Txt_cmd:="rm -Rf "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_out.path))
-					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+					$cmd:="rm -Rf "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_out.path))
+					LAUNCH EXTERNAL PROCESS:C811($cmd;$Txt_in;$Txt_out;$Txt_error)
 					
-					If (Asserted:C1132(OK=1;"erase path failed: "+$Txt_cmd))
+					If (Asserted:C1132(OK=1;"erase path failed: "+$cmd))
 						
 						If (Length:C16($Txt_error)#0)
 							
@@ -348,40 +326,33 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			
 			If ($Obj_out.success)
 				
-				Case of 
+				If (Test path name:C476($Obj_in.target)=Is a document:K24:1)
+					
+					$Obj_out.errors:=New collection:C1472("Destination "+$Obj_in.target+" is a document")
+					
+				Else 
+					
+					$cmd:="cp -R "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_out.path))+" "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_in.target))
+					LAUNCH EXTERNAL PROCESS:C811($cmd;$Txt_in;$Txt_out;$Txt_error)
+					
+					If (Asserted:C1132(OK=1;"copy failed: "+$cmd))
 						
-						  // ----------------------------------------
-					: (Test path name:C476($Obj_in.target)=Is a document:K24:1)
-						
-						$Obj_out.errors:=New collection:C1472("Destination "+$Obj_in.target+" is a document")
-						
-						  //: (Test path name($Obj_in.path)=Is a folder)
-						  // ----------------------------------------
-					Else 
-						
-						$Txt_cmd:="cp -R "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_out.path))+" "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_in.target))
-						LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
-						
-						If (Asserted:C1132(OK=1;"copy failed: "+$Txt_cmd))
+						If (Length:C16($Txt_error)#0)
 							
-							If (Length:C16($Txt_error)#0)
-								
-								$Obj_out.errors:=New collection:C1472($Txt_error)
-								
-							Else 
-								
-								$Obj_out.success:=True:C214
-								
-							End if 
+							$Obj_out.errors:=New collection:C1472($Txt_error)
 							
 						Else 
 							
-							$Obj_out.errors:=New collection:C1472("Unable to copy dataSet")
+							$Obj_out.success:=True:C214
 							
 						End if 
 						
-						  // ----------------------------------------
-				End case 
+					Else 
+						
+						$Obj_out.errors:=New collection:C1472("Unable to copy dataSet")
+						
+					End if 
+				End if 
 			End if 
 			
 			  //______________________________________________________
@@ -390,7 +361,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			If (($Obj_in.path=Null:C1517)\
 				 & (Value type:C1509($Obj_in.project)=Is object:K8:27))
 				
-				  // Check if we must erase if exit
+				  // Check if we must erase if exist
 				If (Bool:C1537($Obj_in.eraseIfExists))
 					
 					$Obj_out:=dataSet (New object:C1471(\
@@ -412,23 +383,24 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					"action";"path";\
 					"project";$Obj_in.project)).path
 				
-				CREATE FOLDER:C475($Obj_in.path;*)
-				
 			End if 
 			
 			$Obj_dataModel:=$Obj_in.dataModel
+			
 			If ($Obj_dataModel=Null:C1517)
+				
 				$Obj_dataModel:=$Obj_in.project.dataModel  // compatibility issue (try to pass dataModel)
+				
 			End if 
 			
-			If (Asserted:C1132(Test path name:C476($Obj_in.path)=Is a folder:K24:2))
+			  // Data set name
+			$File_:=$Obj_in.path
+			CREATE FOLDER:C475($File_;*)
+			
+			If (Asserted:C1132(Test path name:C476($File_)=Is a folder:K24:2))
 				
 				If (WEB Is server running:C1313 | (Length:C16(String:C10($Obj_in.url))>0))
 					
-					  // Data set name
-					$File_:=$Obj_in.path
-					
-					CREATE FOLDER:C475($File_;*)
 					
 					If ($Boo_verbose)
 						
@@ -463,13 +435,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					
 					If ($Obj_headers["X-MobileApp"]=Null:C1517)
 						
-						$Obj_headers["X-MobileApp"]:="1"  // help server to identify request type
+						$Obj_headers["X-MobileApp"]:="1"  // Help server to identify request type
 						
 					End if 
 					
 					$Obj_out.headers:=$Obj_headers
-					
-					  //If (Bool(featuresFlags._102457))
 					
 					  // Simply put file content in header (could instead encode/encrypt some information if key file allow it)
 					Case of 
@@ -482,12 +452,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							  //----------------------------------------
 						: (Test path name:C476($Obj_in.key)=Is a document:K24:1)
 							
-							$Obj_headers["Authorization"]:="Bearer "+Document to text:C1236($Obj_in.key)
+							$Obj_headers.Authorization:="Bearer "+Document to text:C1236($Obj_in.key)
 							
 							  //----------------------------------------
 						: (Length:C16(Path to object:C1547(String:C10($Obj_in.key)).parentFolder)=0)  // normal string
 							
-							$Obj_headers["Authorization"]:="Bearer "+$Obj_in.key
+							$Obj_headers.Authorization:="Bearer "+$Obj_in.key
 							
 							  //----------------------------------------
 						Else 
@@ -496,7 +466,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							
 							  //----------------------------------------
 					End case 
-					  //End if 
+					
 					
 					$Obj_out.catalog:=dump (New object:C1471(\
 						"action";"catalog";\
@@ -617,7 +587,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 				If (Test path name:C476($File_)=Is a folder:K24:2)
 					
-					ARRAY TEXT:C222($tTxt_documents;0)
 					DOCUMENT LIST:C474($File_;$tTxt_documents;Recursive parsing:K24:13+Absolute path:K24:14)
 					
 					For ($Lon_i;1;Size of array:C274($tTxt_documents);1)
@@ -637,31 +606,29 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			  //______________________________________________________
 		: ($Obj_in.action="coreData")
 			
-			$Txt_cmd:=str_singleQuoted (COMPONENT_Pathname ("scripts").file("coredataimport").path)
+			$cmd:=str_singleQuoted (COMPONENT_Pathname ("scripts").file("coredataimport").path)
 			
-			If ($Obj_in.posix=Null:C1517)
+			If ($Obj_in.posix=Null:C1517)\
+				 & ($Obj_in.path#Null:C1517)
 				
-				If ($Obj_in.path#Null:C1517)
-					
-					$Obj_in.posix:=Convert path system to POSIX:C1106($Obj_in.path)
-					
-				End if 
+				$Obj_in.posix:=Convert path system to POSIX:C1106($Obj_in.path)
+				
 			End if 
 			
 			If ($Obj_in.posix#Null:C1517)
 				
-				$Txt_cmd:=$Txt_cmd+" --asset "+str_singleQuoted ($Obj_in.posix+"Resources/Assets.xcassets")
-				$Txt_cmd:=$Txt_cmd+" --structure "+str_singleQuoted ($Obj_in.posix+"Sources/Structures.xcdatamodeld")
-				$Txt_cmd:=$Txt_cmd+" --output "+str_singleQuoted ($Obj_in.posix+"Resources")
+				$cmd:=$cmd\
+					+" --asset "+str_singleQuoted ($Obj_in.posix+"Resources/Assets.xcassets")\
+					+" --structure "+str_singleQuoted ($Obj_in.posix+"Sources/Structures.xcdatamodeld")\
+					+" --output "+str_singleQuoted ($Obj_in.posix+"Resources")
 				
-				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+				LAUNCH EXTERNAL PROCESS:C811($cmd;$Txt_in;$Txt_out;$Txt_error)
 				
-				If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+				If (Asserted:C1132(OK=1;"LEP failed: "+$cmd))
 					
-					C_BOOLEAN:C305($Bool_errorInOut)
-					$Bool_errorInOut:=(Position:C15("[Error]";$Txt_out)>0)
+					$Boo_errorInOut:=(Position:C15("[Error]";$Txt_out)>0)
 					
-					If (Not:C34($Bool_errorInOut))
+					If (Not:C34($Boo_errorInOut))
 						
 						$Obj_out.success:=True:C214
 						
@@ -674,19 +641,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 					Else 
 						
-						C_TEXT:C284($line)
-						
-						For each ($line;Split string:C1554($Txt_out;"\n"))
+						For each ($t;Split string:C1554($Txt_out;"\n"))
 							
-							If (Position:C15("[Error]";$line)>0)
+							If (Position:C15("[Error]";$t)>0)
 								
-								ob_error_add ($Obj_out;$line)
+								ob_error_add ($Obj_out;$t)
 								
 							End if 
 						End for each 
 					End if 
 					
 				Else 
+					
 					  // out return an error message
 					$Obj_out.success:=False:C215
 					ob_error_add ($Obj_out;$Txt_out)
@@ -705,7 +671,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			  //________________________________________
 		: ($Obj_in.action="coreDataAddToProject")
 			
-			$Obj_file:=Folder:C1567($Obj_in.path;fk platform path:K87:2).folder("Resources").file("Structures.sqlite")
+			$Obj_file:=Folder:C1567($Obj_in.path;fk platform path:K87:2).file("Resources/Structures.sqlite")
 			
 			If ($Obj_file.exists)
 				
@@ -729,7 +695,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						"target";$Obj_in.path\
 						))
 					ob_error_combine ($Obj_out;$Obj_out.inject)
-					
 					
 					If (Bool:C1537($Obj_out.inject.success))
 						

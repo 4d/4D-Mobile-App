@@ -373,7 +373,7 @@ Case of
 		
 		$Obj_table.filter:=$o.filter
 		
-		If (Bool:C1537(featuresFlags.with("newDataModel")))
+		If (featuresFlags.with("newDataModel"))
 			
 			Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][""].filter:=$Obj_table.filter
 			
@@ -393,7 +393,7 @@ Case of
 		  //==================================================
 	: ($Txt_me=$form.embedded)
 		
-		If (Bool:C1537(featuresFlags.with("newDataModel")))
+		If (featuresFlags.with("newDataModel"))
 			
 			If (Bool:C1537($Obj_table.embedded))
 				
@@ -470,7 +470,7 @@ Case of
 				
 				$t:=Get edited text:C655
 				
-				If (Bool:C1537(featuresFlags.with("newDataModel")))
+				If (featuresFlags.with("newDataModel"))
 					
 					$o:=Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][""]
 					

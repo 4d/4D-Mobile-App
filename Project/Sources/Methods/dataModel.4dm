@@ -172,7 +172,7 @@ Case of
 						$Lon_tableID:=Num:C11($tTxt_tables{$Lon_table})
 						$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
 						
-						If (Bool:C1537(featuresFlags.with("newDataModel")))
+						If (featuresFlags.with("newDataModel"))
 							
 							$Txt_buffer:=$Obj_table[""].name
 							
@@ -216,7 +216,7 @@ Case of
 							
 						End if 
 						
-						If (Bool:C1537(featuresFlags.with("newDataModel")))
+						If (featuresFlags.with("newDataModel"))
 							
 							  // Has or not the global stamp fields
 							$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
@@ -636,7 +636,7 @@ Case of
 								
 								$Obj_relationTable:=$Obj_dataModel[$tTxt_tables{$Lon_table2}]
 								
-								$o:=Choose:C955(Bool:C1537(featuresFlags.with("newDataModel"));$Obj_relationTable[""];$Obj_relationTable)
+								$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_relationTable[""];$Obj_relationTable)
 								  //$o:=$Obj_relationTable
 								
 								If ($o.name=$Obj_table[$Txt_relationName].relatedDataClass)
@@ -651,7 +651,7 @@ Case of
 							
 							If (Not:C34($Boo_found))  // not found we must add a new table in model
 								
-								If (Bool:C1537(featuresFlags.with("newDataModel")))
+								If (featuresFlags.with("newDataModel"))
 									
 									$Obj_relationTable:=New object:C1471(\
 										"";New object:C1471("name";$Obj_table[$Txt_relationName].relatedDataClass)\
@@ -676,7 +676,7 @@ Case of
 									
 									$o.primaryKey:=$Obj_buffer.tableInfo.primaryKey
 									
-									If (Bool:C1537(featuresFlags.with("newDataModel")))
+									If (featuresFlags.with("newDataModel"))
 										$o.slave:=$Obj_table[""].name
 									Else 
 										$o.slave:=$Obj_table.name
@@ -709,7 +709,7 @@ Case of
 								End if 
 							End for 
 							
-							If (Bool:C1537(featuresFlags.with("newDataModel")))
+							If (featuresFlags.with("newDataModel"))
 								
 								  // Get inverse field
 								$Obj_buffer:=structure (New object:C1471(\
@@ -1001,7 +1001,7 @@ Case of
 						
 						If (Bool:C1537($Obj_in.tag))  // for tag format name
 							
-							If (Bool:C1537(featuresFlags.with("newDataModel")))
+							If (featuresFlags.with("newDataModel"))
 								
 								$Obj_table.originalName:=$Obj_table[""].name
 								$Obj_table.name:=formatString ("table-name";$Obj_table[""].name)
@@ -1013,9 +1013,6 @@ Case of
 								$Obj_table.name:=formatString ("table-name";$Obj_table.name)
 								
 							End if 
-							
-							
-							
 						End if 
 						
 						$Obj_out.tables.push($Obj_table)

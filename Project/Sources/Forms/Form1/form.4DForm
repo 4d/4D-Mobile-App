@@ -300,15 +300,17 @@
 				},
 				"Button2": {
 					"type": "button",
-					"text": "Button",
-					"top": 518,
-					"left": 790,
-					"width": 159,
-					"height": 35,
+					"text": "Flat",
+					"top": 481,
+					"left": 901,
+					"width": 72,
+					"height": 22,
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/Button2.4dm"
+					"method": "ObjectMethods/Button2.4dm",
+					"style": "flat",
+					"stroke": "#808080"
 				}
 			}
 		}

@@ -54,15 +54,21 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="capabilities")
 		
-		$Obj_out.capabilities:=New object:C1471("photo";False:C215)
+		$Obj_out.capabilities:=New object:C1471(\
+			"photo";False:C215)
 		
-		$Boo_hasImage:=False:C215
 		If (Value type:C1509($Obj_in.project.actions)=Is collection:K8:32)
+			
 			For each ($Obj_action;$Obj_in.project.actions) Until ($Boo_hasImage)
+				
 				If (Value type:C1509($Obj_action.parameters)=Is collection:K8:32)
+					
 					For each ($Obj_parameters;$Obj_action.parameters) Until ($Boo_hasImage)
+						
 						If ($Obj_parameters.type="image")
+							
 							$Boo_hasImage:=True:C214
+							
 						End if 
 					End for each 
 				End if 
@@ -70,8 +76,10 @@ Case of
 		End if 
 		
 		If ($Boo_hasImage)
+			
 			$Obj_out.capabilities.photo:=True:C214
 			$Obj_out.capabilities.camera:=True:C214
+			
 		End if 
 		
 		$Obj_out.success:=True:C214

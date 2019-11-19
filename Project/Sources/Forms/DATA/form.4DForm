@@ -278,7 +278,10 @@
 					"events": [
 						"onClick"
 					],
-					"method": "DATA_OBJECTS_HANDLER"
+					"method": "DATA_OBJECTS_HANDLER",
+					"focusable": false,
+					"style": "regular",
+					"stroke": "automatic"
 				},
 				"enter.options": {
 					"type": "button",

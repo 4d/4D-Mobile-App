@@ -136,7 +136,7 @@ Case of
 		  // Available tables
 		If (Form:C1466.dataModel#Null:C1517)
 			
-			If (Bool:C1537(featuresFlags.with("newDataModel")))
+			If (featuresFlags.with("newDataModel"))
 				
 				For each ($Txt_tableNumber;Form:C1466.dataModel)
 					
@@ -159,7 +159,7 @@ Case of
 		OBJECT SET VISIBLE:C603(*;"noPublishedTable";Size of array:C274($Ptr_names->)=0)
 		
 		  // Selected tables
-		If (Bool:C1537(featuresFlags.with("newDataModel")))
+		If (featuresFlags.with("newDataModel"))
 			
 			For each ($Txt_tableNumber;Form:C1466.main.order)
 				

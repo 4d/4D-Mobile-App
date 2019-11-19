@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																																"action";"safeDelete";\
-																																"path";$Obj_in.path))
+																																				"action";"safeDelete";\
+																																				"path";$Obj_in.path))
 			  // End if
 			
 		End if 
@@ -116,7 +116,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  // Verify the structure
 			$c:=New collection:C1472
 			
-			If (Bool:C1537(featuresFlags.with("newDataModel")))
+			If (featuresFlags.with("newDataModel"))
 				
 				For each ($t;$Obj_project.dataModel)
 					

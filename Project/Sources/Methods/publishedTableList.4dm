@@ -57,7 +57,7 @@ If ($Obj_out.success)
 		
 		$Obj_out.tables:=New collection:C1472
 		
-		If (Bool:C1537(featuresFlags.with("newDataModel")))
+		If (featuresFlags.with("newDataModel"))
 			
 			For each ($Txt_tableNumber;$Obj_dataModel)
 				
@@ -216,7 +216,7 @@ If ($Obj_out.success)
 		$Obj_out.iconPaths:=New collection:C1472
 		$Obj_out.icons:=New collection:C1472
 		
-		If (Bool:C1537(featuresFlags.with("newDataModel")))
+		If (featuresFlags.with("newDataModel"))
 			
 			For each ($Txt_tableNumber;$Obj_dataModel)
 				

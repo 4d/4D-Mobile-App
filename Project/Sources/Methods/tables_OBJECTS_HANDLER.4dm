@@ -202,7 +202,7 @@ Case of
 					
 					$Ptr_ids:=ui.pointer($Obj_form.ids)
 					
-					If (Bool:C1537(featuresFlags.with("newDataModel")))
+					If (featuresFlags.with("newDataModel"))
 						
 						If ($Ptr_me=ui.pointer($Obj_form.labels))
 							

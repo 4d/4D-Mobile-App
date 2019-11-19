@@ -388,7 +388,7 @@ Case of
 							End if 
 						End if 
 						
-						If (Bool:C1537(featuresFlags.with("_8858")))
+						If (featuresFlags.with("_8858"))
 							
 							$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg");True:C214)
 							

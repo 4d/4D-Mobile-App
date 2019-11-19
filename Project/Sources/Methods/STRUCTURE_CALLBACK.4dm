@@ -102,7 +102,7 @@ If ($file.exists)
 				Else 
 					
 					  // Check TABLE NAME & PRIMARY KEY
-					If (Bool:C1537(featuresFlags.with("newDataModel")))
+					If (featuresFlags.with("newDataModel"))
 						
 						$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel[""].name)\
 							 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel[""].primaryKey)

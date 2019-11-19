@@ -11,6 +11,8 @@
 	},
 	"__IN WORKS": {
 		"methods": [
+			"_w_actions",
+			"_wip_Xcode",
 			"00_NEW",
 			"00_OPEN",
 			"00_TESTS"
@@ -45,6 +47,7 @@
 			"devMenu"
 		],
 		"tables": [
+			"__DeletedRecords",
 			"ALL_TYPES",
 			"Commands",
 			"Employes",
@@ -60,9 +63,7 @@
 			"とてもとても長いフィールド"
 		],
 		"methods": [
-			"_w_actions",
 			"01_LASTBUILD",
-			"4DPop_TEST_Macros",
 			"importData",
 			"killWorker"
 		],

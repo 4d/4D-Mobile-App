@@ -66,22 +66,22 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			Case of 
 					
-					  //…………………………………………………………………………………………………………
+					  //----------------------------------------
 				: (Length:C16(String:C10($Obj_in.path))=0)
 					
 					$Obj_out.path:=$Txt_buffer
 					
-					  // ----------------------------------------
+					  //----------------------------------------
 				: (Substring:C12($Obj_in.path;Length:C16($Obj_in.path);1)=Folder separator:K24:12)
 					
 					$Obj_out.path:=$Obj_in.path+$Txt_buffer
 					
-					  // ----------------------------------------
+					  //----------------------------------------
 				Else 
 					
 					$Obj_out.path:=$Obj_in.path+Folder separator:K24:12+$Txt_buffer
 					
-					  // ----------------------------------------
+					  //----------------------------------------
 			End case 
 			
 			$Obj_out.success:=True:C214
@@ -91,23 +91,21 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			Case of 
 					
-					  //…………………………………………………………………………………………………………………
+					  //----------------------------------------
 				: (Value type:C1509($Obj_in.formatter)#Is object:K8:27)
 					
 					$Obj_out.errors:=New collection:C1472("No formatter defined to create an xcode files")
 					
-					  //…………………………………………………………………………………………………………………
+					  //----------------------------------------
 				: (Length:C16(String:C10($Obj_in.formatter.name))=0)
 					
 					$Obj_out.errors:=New collection:C1472("No formatter name defined."+JSON Stringify:C1217($Obj_in.formatter))
 					
-					  // ----------------------------------------
 					  //----------------------------------------
 				: (Length:C16(String:C10($Obj_in.target))=0)
 					
 					$Obj_out.errors:=New collection:C1472("No target defined when creating formatter asset.")
 					
-					  // ----------------------------------------
 					  //----------------------------------------
 				Else 
 					
@@ -125,19 +123,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					  // Get path for formatter assets
 					Case of 
 							
-							  // ........................................
 							  //........................................
 						: (Length:C16(String:C10($Obj_in.source))>0)
 							
 							$Dir_source:=$Obj_in.source  // specify the path as argument (useful for testing)
 							
-							  // ........................................
 							  //........................................
 						: (Length:C16(String:C10($Obj_in.assets.source))>0)
 							
 							$Dir_source:=$Obj_in.assets.source  // specify the source in formatter
 							
-							  // ........................................
 							  //........................................
 						: (Bool:C1537($Obj_formatter.isHost))  // with /, host formatters? XXX maybe find another way to identifiy it
 							
@@ -145,13 +140,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							$Dir_source:=$Dir_source+"images"+Folder separator:K24:12
 							
-							  // ........................................
 							  //........................................
 						Else 
 							
 							$Dir_source:=COMPONENT_Pathname ("formatterImages").platformPath
-							
-							  // ........................................
 							
 							  //........................................
 					End case 
@@ -216,7 +208,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 					End if 
 					
-					  //…………………………………………………………………………………………………………………
+					  //----------------------------------------
 			End case 
 			
 			  //______________________________________________________
@@ -252,7 +244,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					Case of 
 							
-							  // ........................................
 							  //........................................
 						: (($Obj_in.type="imageset")\
 							 | ($Obj_in.type="background"))
@@ -267,7 +258,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							$Txt_buffer:=$Folder_buffer.platformPath
 							$Obj_out.success:=$Folder_buffer.exists
 							
-							  // ........................................
 							  //........................................
 						: ($Obj_in.type="colorset")
 							
@@ -291,7 +281,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 							End if 
 							
-							  // ........................................
 							  //........................................
 						: ($Obj_in.type="dataset")
 							
@@ -305,7 +294,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 							End if 
 							
-							  // ........................................
 							  //........................................
 						: ($Obj_in.type="folder")
 							
@@ -313,14 +301,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							$Txt_buffer:=$Folder_buffer.platformPath
 							$Obj_out.success:=$Folder_buffer.exists
 							
-							  // ........................................
 							  //........................................
 						Else 
 							
 							$Obj_out.errors:=New collection:C1472("Unknown type "+String:C10($Obj_in.type))
 							$Obj_out.success:=False:C215
-							
-							  // ........................................
 							
 							  //........................................
 					End case 
@@ -355,7 +340,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									"action";"create";\
 									"type";"folder";\
 									"target";$Obj_path.parentFolder;\
-									"tags";New object:C1471("name";$Obj_path.name+$Obj_path.extension)))
+									"tags";New object:C1471(\
+									"name";$Obj_path.name+$Obj_path.extension)))
 								
 							End for 
 						End if 
@@ -376,7 +362,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							Case of 
 									
-									  // ........................................
 									  //........................................
 								: ($Obj_.images#Null:C1517)
 									

@@ -502,8 +502,7 @@ If ($Obj_in.create)
 				
 			End if 
 			
-			  // ASSERT($Obj_out.coreData.success=True)
-			If (Folder:C1567($Obj_in.path;fk platform path:K87:2).folder("Resources").folder("Assets.xcassets").folder("Data").exists)  // If there JSON data (maybe use asset("action";"path"))
+			If (Folder:C1567($Obj_in.path;fk platform path:K87:2).folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
 				
 				$Obj_out.coreDataSet:=dataSet (New object:C1471(\
 					"action";"coreData";\
@@ -546,7 +545,6 @@ If ($Obj_in.create)
 		$Obj_out.actionCapabilities:=actions ("capabilities";New object:C1471(\
 			"project";$Obj_project;\
 			"target";$Obj_in.path))
-		  //ob_error_combine ($Obj_out;$Obj_out.actionCapabilities)
 		
 		  // Manage app capabilities
 		$Obj_out.capabilities:=capabilities (\

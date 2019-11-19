@@ -11,9 +11,7 @@
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($File_pathname)
-C_OBJECT:C1216($o;$Obj_project;$oo)
+C_OBJECT:C1216($file;$o;$Obj_project)
 
 If (False:C215)
 	C_OBJECT:C1216(project_Load ;$0)
@@ -22,15 +20,13 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$File_pathname:=$1
+	$file:=File:C1566($1;fk platform path:K87:2)
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
+	If (Count parameters:C259>=2)
 		
 		  // <NONE>
 		
@@ -42,21 +38,23 @@ Else
 	
 End if 
 
-  // --------------h--------------------------------------
-$Obj_project:=JSON Parse:C1218(Document to text:C1236($File_pathname))
-
-  // Upgrade project if necessary
-If (project_Upgrade ($Obj_project))
+  // ----------------------------------------------------
+If (Asserted:C1132($file.exists;"File not found: "+$file.path))
 	
-	  // If upgraded Keep a copy of the old project…
-	$o:=File:C1566($File_pathname;fk platform path:K87:2)
-	$oo:=$o.parent.folder(Replace string:C233(Get localized string:C991("convertedFiles");"{stamp}";str_date ("stamp")))
-	$oo.create()
-	$o.moveTo($oo)
+	$Obj_project:=JSON Parse:C1218($file.getText())
 	
-	  //… & immediately save
-	project_SAVE ($Obj_project)
-	
+	  // Upgrade project if necessary
+	If (project_Upgrade ($Obj_project))
+		
+		  // If upgraded Keep a copy of the old project…
+		$o:=$file.parent.folder(Replace string:C233(Get localized string:C991("convertedFiles");"{stamp}";str_date ("stamp")))
+		$o.create()
+		$file.moveTo($o)
+		
+		  //… & immediately save
+		project_SAVE ($Obj_project)
+		
+	End if 
 End if 
 
   // ----------------------------------------------------

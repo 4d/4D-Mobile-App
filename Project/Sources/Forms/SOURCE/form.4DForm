@@ -71,11 +71,12 @@
 					"height": 22,
 					"text": ":xliff:generate",
 					"iconFrames": 4,
-					"style": "roundedBevel",
+					"style": "regular",
 					"method": "ObjectMethods/generate.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false
 				},
 				"serverStatus": {
 					"type": "button",

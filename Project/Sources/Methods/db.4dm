@@ -186,7 +186,8 @@ Else
 					This:C1470.pushError($o;"Missing table identifier")
 					
 					  //______________________________________________________
-				: (Value type:C1509($2.table)=Is real:K8:4)
+				: (Value type:C1509($2.table)=Is longint:K8:6)\
+					 | (Value type:C1509($2.table)=Is real:K8:4)
 					
 					$c:=This:C1470.datastore.query("tableNumber = :1";$2.table)
 					
