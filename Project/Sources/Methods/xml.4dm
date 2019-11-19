@@ -31,6 +31,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"parent";Formula:C1597(xml ("parent"));\
 		"firstChild";Formula:C1597(xml ("firstChild"));\
 		"lastChild";Formula:C1597(xml ("lastChild"));\
+		"children";Formula:C1597(xml ("children";New object:C1471("recursive";$1)));\
 		"nextSibling";Formula:C1597(xml ("nextSibling"));\
 		"previousSibling";Formula:C1597(xml ("previousSibling"));\
 		"findByXPath";Formula:C1597(xml ("findByXPath";New object:C1471("xpath";$1)));\
@@ -274,11 +275,26 @@ Else
 					  //=================================================================
 				: ($1="getAttribute")
 					
+					  // TRY (
+					C_TEXT:C284($Txt_methodOnError)
+					$Txt_methodOnError:=Method called on error:C704
+					xml_ERROR:=0
+					ON ERR CALL:C155("xml_NO_ERROR")
+					  //) {
+					
 					DOM GET XML ATTRIBUTE BY NAME:C728($o.elementRef;$2.name;$tt)
 					
 					$o:=New object:C1471(\
 						"value";$tt;\
 						"success";Bool:C1537(OK))
+					
+					
+					  // } CATCH {
+					If (xml_ERROR#0)
+						$t:="00000000000000000000000000000000"  // we want to return a success false node, maybe use another... like blank
+					End if 
+					ON ERR CALL:C155($Txt_methodOnError)
+					  // }
 					
 					  //=================================================================
 				: ($1="attributes")
@@ -409,9 +425,31 @@ Else
 					$t:=DOM Get first child XML element:C723($o.elementRef)
 					
 					  //=================================================================
-				: ($1="lastChild")
+				: ($1="children")
 					
 					$t:=DOM Get last child XML element:C925($o.elementRef)
+					
+					ARRAY LONGINT:C221($typeArr;0)
+					ARRAY TEXT:C222($textArr;0)
+					C_LONGINT:C283($i)
+					C_OBJECT:C1216($child)
+					DOM GET XML CHILD NODES:C1081($o.elementRef;$typeArr;$textArr)
+					$t:=""
+					$o.elements:=New collection:C1472()
+					For ($i;1;Size of array:C274($typeArr);1)
+						If ($typeArr{$i}=11)
+							
+							This:C1470.$_is:=Null:C1517
+							$child:=xml ($textArr{$i})
+							$o.elements.push($child)
+							This:C1470.$_is:="_xml"
+							
+							If (Bool:C1537($2.recursive)
+								$o.elements.combine($child.children(True:C214).elements)  // XXX manage errors?
+							End if 
+							
+						End if 
+					End for 
 					
 					  //=================================================================
 				: ($1="nextSibling")
