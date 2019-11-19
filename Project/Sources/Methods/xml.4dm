@@ -425,27 +425,31 @@ Else
 					$t:=DOM Get first child XML element:C723($o.elementRef)
 					
 					  //=================================================================
-				: ($1="children")
+				: ($1="lastChild")
 					
 					$t:=DOM Get last child XML element:C925($o.elementRef)
+					  //=================================================================
+				: ($1="children")
 					
-					ARRAY LONGINT:C221($typeArr;0)
-					ARRAY TEXT:C222($textArr;0)
-					C_LONGINT:C283($i)
-					C_OBJECT:C1216($child)
-					DOM GET XML CHILD NODES:C1081($o.elementRef;$typeArr;$textArr)
+					ARRAY LONGINT:C221($tLon_types;0x0000)
+					ARRAY TEXT:C222($tTxt_refs;0x0000)
+					
+					DOM GET XML CHILD NODES:C1081($o.elementRef;$tLon_types;$tTxt_refs)
 					$t:=""
 					$o.elements:=New collection:C1472()
-					For ($i;1;Size of array:C274($typeArr);1)
-						If ($typeArr{$i}=11)
+					
+					C_LONGINT:C283($i)
+					For ($i;1;Size of array:C274($tLon_types);1)
+						If ($tLon_types{$i}=11)
 							
 							This:C1470.$_is:=Null:C1517
-							$child:=xml ($textArr{$i})
-							$o.elements.push($child)
+							C_OBJECT:C1216($Obj_child)
+							$Obj_child:=xml ($tTxt_refs{$i})
+							$o.elements.push($Obj_child)
 							This:C1470.$_is:="_xml"
 							
-							If (Bool:C1537($2.recursive)
-								$o.elements.combine($child.children(True:C214).elements)  // XXX manage errors?
+							If (Bool:C1537($2.recursive))
+								$o.elements.combine($Obj_child.children(True:C214).elements)  // XXX manage errors?
 							End if 
 							
 						End if 
