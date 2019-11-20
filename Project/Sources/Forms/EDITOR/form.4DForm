@@ -18,7 +18,6 @@
 		"onTimer",
 		"onResize"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -192,6 +191,22 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable"
+				},
+				"debug.option": {
+					"type": "checkbox",
+					"text": "newDataModel",
+					"top": 4,
+					"left": 694,
+					"width": 108,
+					"height": 15,
+					"events": [
+						"onLoad",
+						"onClick"
+					],
+					"focusable": false,
+					"method": "ObjectMethods/debug.option.4dm",
+					"dataSourceTypeHint": "boolean",
+					"stroke": "#ff0000"
 				}
 			}
 		},
@@ -221,5 +236,34 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"editor": {
+		"activeLayer": "default",
+		"layers": {
+			"default": {},
+			"message": {
+				"visible": false,
+				"objects": [
+					"message.back",
+					"message.button",
+					"message"
+				]
+			},
+			"debug": {
+				"objects": [
+					"debug.focus",
+					"debug.buildNumber",
+					"debug.localization",
+					"debug.option"
+				]
+			},
+			"View 3": {},
+			"View 4": {},
+			"View 5": {},
+			"View 6": {},
+			"View 7": {},
+			"View 8": {}
+		}
+	},
+	"method": "editor_HANDLER"
 }

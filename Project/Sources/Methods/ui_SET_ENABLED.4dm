@@ -56,7 +56,8 @@ If ($Boo_enabled)
 	Case of 
 			
 			  //______________________________________________________
-		: ($Lon_type=Object type 3D button:K79:17) | ($Lon_type=Object type push button:K79:16)
+		: ($Lon_type=Object type 3D button:K79:17)\
+			 | ($Lon_type=Object type push button:K79:16)
 			
 			OBJECT SET COLOR:C271(*;$Txt_widget;-(Black:K11:16+(256*Black:K11:16)))
 			
@@ -73,7 +74,8 @@ Else
 	Case of 
 			
 			  //______________________________________________________
-		: ($Lon_type=Object type 3D button:K79:17) | ($Lon_type=Object type push button:K79:16)
+		: ($Lon_type=Object type 3D button:K79:17)\
+			 | ($Lon_type=Object type push button:K79:16)
 			
 			OBJECT SET COLOR:C271(*;$Txt_widget;-(Dark grey:K11:12+(256*Dark grey:K11:12)))
 			

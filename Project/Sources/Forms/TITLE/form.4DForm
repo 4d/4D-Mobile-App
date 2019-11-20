@@ -36,7 +36,9 @@
 					"left": 0,
 					"width": 970,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC"
+					"stroke": "#DCDCDC",
+					"height": 0,
+					"startPoint": "topLeft"
 				}
 			}
 		},
@@ -79,10 +81,16 @@
 					"left": 16,
 					"height": 50,
 					"visibility": "hidden",
-					"stroke": "#FF6347",
-					"strokeDashArray": "1 1"
+					"stroke": "#1e90ff",
+					"strokeDashArray": "1 1",
+					"width": 0,
+					"startPoint": "topLeft"
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

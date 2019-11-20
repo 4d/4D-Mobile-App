@@ -3,7 +3,6 @@ C_OBJECT:C1216(_wip_Xcode ;$0)
 C_TEXT:C284(_wip_Xcode ;$1)
 C_OBJECT:C1216(_wip_Xcode ;$2)
 
-
 C_OBJECT:C1216(INIT ;$1)
 
 C_OBJECT:C1216(CALL_MAIN_PROCESS ;$1)
@@ -50,7 +49,6 @@ C_OBJECT:C1216(unitTestSuites ;$1)
 C_BOOLEAN:C305(_o_rest_isValidField ;$0)
 C_OBJECT:C1216(_o_rest_isValidField ;$1)
 
-
   //______________________________________________________
 C_TEXT:C284(_o_env_System_path ;$0)
 C_TEXT:C284(_o_env_System_path ;$1)
@@ -64,3 +62,6 @@ C_LONGINT:C283(00_TESTS ;$2)
 C_OBJECT:C1216(_w_actions ;$0)
 C_TEXT:C284(_w_actions ;$1)
 C_OBJECT:C1216(_w_actions ;$2)
+
+  //__________________________________________________
+C_OBJECT:C1216(updateFeaturesFlags ;$1)

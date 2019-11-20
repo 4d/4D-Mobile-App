@@ -222,10 +222,21 @@ If ($Obj_in.create)
 		
 		For each ($Txt_buffer;$Obj_project.dataModel)
 			
-			If (Not:C34(Bool:C1537($Obj_project.dataModel[$Txt_buffer].embedded)))
+			If (featuresFlags.with("newDataModel"))
 				
-				$Obj_project.server.authentication.reloadData:=True:C214
+				If (Not:C34(Bool:C1537($Obj_project.dataModel[$Txt_buffer][""].embedded)))
+					
+					$Obj_project.server.authentication.reloadData:=True:C214
+					
+				End if 
 				
+			Else 
+				
+				If (Not:C34(Bool:C1537($Obj_project.dataModel[$Txt_buffer].embedded)))
+					
+					$Obj_project.server.authentication.reloadData:=True:C214
+					
+				End if 
 			End if 
 		End for each 
 	End if 

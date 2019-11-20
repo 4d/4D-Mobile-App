@@ -108,7 +108,7 @@
 					"left": 16,
 					"height": 139,
 					"visibility": "hidden",
-					"stroke": "#FF6347",
+					"stroke": "#1e90ff",
 					"strokeDashArray": "1 1",
 					"width": 0,
 					"startPoint": "topLeft"

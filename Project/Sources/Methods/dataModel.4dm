@@ -216,26 +216,20 @@ Case of
 							
 						End if 
 						
-						If (featuresFlags.with("newDataModel"))
-							
-							  // Has or not the global stamp fields
-							$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-								"key";"globalStamp";\
-								"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";"table";$Obj_table[""].name;"field";commonValues.stampField.name)).value);"YES";"NO"))
-							
-						Else 
-							$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-								"key";"globalStamp";\
-								"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";"table";$Obj_table.name;"field";commonValues.stampField.name)).value);"YES";"NO"))
-						End if 
+						$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_table[""];$Obj_table)
+						
+						  // Has or not the global stamp fields
+						$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
+							"key";"globalStamp";\
+							"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";"table";$o.name;"field";commonValues.stampField.name)).value);"YES";"NO"))
 						
 						If (OK=1)
 							
-							If ($Obj_table.primaryKey#Null:C1517)
+							If ($o.primaryKey#Null:C1517)
 								
 								$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
 									"key";"primaryKey";\
-									"value";String:C10($Obj_table.primaryKey))
+									"value";String:C10($o.primaryKey))
 								
 							End if 
 							
@@ -481,8 +475,17 @@ Case of
 													End if 
 												End for 
 												
-												  ///         without forgot the primaryKey
-												$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)].primaryKey
+												  //without forgot the primaryKey
+												If (featuresFlags.with("newDataModel"))
+													
+													$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)][""].primaryKey
+													
+												Else 
+													
+													  //#OLD 
+													$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)].primaryKey
+													
+												End if 
 												
 												If (Length:C16($Txt_buffer)>0)
 													If ($Col_fields.indexOf($Txt_buffer)<0)
@@ -772,7 +775,9 @@ Case of
 			$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
 			OB GET PROPERTY NAMES:C1232($Obj_table;$tTxt_fields)
 			
-			If ($Obj_table.primaryKey#Null:C1517)
+			$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_table[""];$Obj_table)
+			
+			If ($o.primaryKey#Null:C1517)
 				
 				  // Find if primary key is in model
 				CLEAR VARIABLE:C89($Boo_found)
@@ -780,22 +785,22 @@ Case of
 				Case of 
 						
 						  //………………………………………………………………………………………………………………………
-					: (Value type:C1509($Obj_table.primaryKey)=Is object:K8:27)
+					: (Value type:C1509($o.primaryKey)=Is object:K8:27)
 						
 						  // Pass as object
-						$Txt_fieldName:=JSON Stringify:C1217($Obj_table.primaryKey)
+						$Txt_fieldName:=JSON Stringify:C1217($o.primaryKey)
 						
 						  //………………………………………………………………………………………………………………………
-					: (Value type:C1509($Obj_table.primaryKey)=Is text:K8:3)
+					: (Value type:C1509($o.primaryKey)=Is text:K8:3)
 						
-						$Txt_fieldName:=String:C10($Obj_table.primaryKey)
+						$Txt_fieldName:=String:C10($o.primaryKey)
 						
 						  //………………………………………………………………………………………………………………………
 					Else 
 						
 						$Obj_buffer:=structure (New object:C1471(\
 							"action";"tableInfo";\
-							"name";$Obj_table.name))
+							"name";$o.name))
 						
 						$Txt_fieldName:=Choose:C955($Obj_buffer.success;$Obj_buffer.tableInfo.primaryKey;"")
 						
@@ -821,7 +826,7 @@ Case of
 					
 					$Obj_buffer:=structure (New object:C1471(\
 						"action";"createField";\
-						"table";$Obj_table.name;\
+						"table";$o.name;\
 						"field";$Txt_fieldName))
 					
 					If ($Obj_buffer.success)
@@ -1087,7 +1092,7 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Obj_in.action="fieldNames")  // get field names for dump with table (model format) - CALLERS : dump
+	: ($Obj_in.action="fieldNames")  // Get field names for dump with table (model format) - CALLERS : dump
 		
 		$Obj_out.success:=($Obj_in.table#Null:C1517)
 		
@@ -1177,10 +1182,13 @@ Case of
 				End if 
 			End for each 
 			
-			If ((Length:C16(String:C10($Obj_in.table.primaryKey))>0) & \
-				($Obj_out.fields.indexOf(String:C10($Obj_in.table.primaryKey))<0))
+			$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_in.table[""];$Obj_in.table)
+			
+			  // Append the primaryKey if any
+			If ((Length:C16(String:C10($o.primaryKey))>0) & \
+				($Obj_out.fields.indexOf(String:C10($o.primaryKey))<0))
 				
-				$Obj_out.fields.push($Obj_in.table.primaryKey)
+				$Obj_out.fields.push($o.primaryKey)
 				
 			End if 
 			
@@ -1316,7 +1324,15 @@ Case of
 			
 			For each ($t;$Obj_dataModel)
 				
-				$Obj_out.values.push($Obj_dataModel[$t].name)
+				If (featuresFlags.with("newDataModel"))
+					
+					$Obj_out.values.push($Obj_dataModel[$t][""].name)
+					
+				Else 
+					
+					$Obj_out.values.push($Obj_dataModel[$t].name)
+					
+				End if 
 				
 				If (Bool:C1537($Obj_in.relation))
 					

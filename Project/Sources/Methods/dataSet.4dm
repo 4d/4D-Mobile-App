@@ -217,7 +217,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 						$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 						
-						If (Bool:C1537($Obj_table.embedded))
+						C_OBJECT:C1216($o)
+						$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_table[""];$Obj_table)
+						
+						If (Bool:C1537($o.embedded))
+							
 							$Col_fields:=New collection:C1472()
 							
 							For each ($Txt_value;$Obj_table)
@@ -261,7 +265,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							
 							$Col_tables.push(New object:C1471(\
 								"id";$Txt_tableNumber;\
-								"filter";$Obj_table.filter;\
+								"filter";$o.filter;\
 								"fields";$Col_fields))
 							
 						End if 

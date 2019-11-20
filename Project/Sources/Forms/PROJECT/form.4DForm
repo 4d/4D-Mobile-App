@@ -89,7 +89,7 @@
 					"stroke": "#39525E",
 					"fontFamily": ".SF NS Text",
 					"fontSize": 16,
-					"text": "Product"
+					"text": "Title"
 				},
 				"UI": {
 					"type": "input",
@@ -117,7 +117,7 @@
 					"left": 16,
 					"height": 190,
 					"visibility": "hidden",
-					"stroke": "#FF6347",
+					"stroke": "#1e90ff",
 					"strokeWidth": 0.1,
 					"strokeDashArray": "1 1",
 					"width": 0,
@@ -125,9 +125,9 @@
 				},
 				"picker.close": {
 					"type": "button",
-					"top": 78,
-					"left": 844,
-					"width": 83,
+					"top": 106,
+					"left": 113,
+					"width": 64,
 					"height": 46,
 					"visibility": "hidden",
 					"sizingX": "grow",
@@ -141,10 +141,10 @@
 				},
 				"picker": {
 					"type": "subform",
-					"top": 60,
-					"left": 624,
-					"width": 200,
-					"height": 100,
+					"top": 106,
+					"left": 36,
+					"width": 72,
+					"height": 46,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
