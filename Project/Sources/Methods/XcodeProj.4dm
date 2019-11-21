@@ -1174,6 +1174,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					$Obj_out.success:=False:C215
 					
 					  //________________________________________
+				: ($Obj_in.extension=".yml")
+					
+					$Obj_out.success:=False:C215
+					
+					  //________________________________________
 				Else 
 					
 					If (Bool:C1537($Obj_in.injectAlways))
