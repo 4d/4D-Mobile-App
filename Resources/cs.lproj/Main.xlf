@@ -298,6 +298,18 @@ Vložte prosím název nebo zrušte.</target>
           <source>Failed to launch the Simulator</source>
           <target>Simulátor se nepodařilo spustit</target>
         </trans-unit>
+      <trans-unit id="JsdJZ42YxywOUyleDw/U+g" resname="failedToOpenSimulator">
+          <source>Failed to open Simulator</source>
+          <target>Simulátor se nepodařilo otevřít</target>
+        </trans-unit>
+        <trans-unit id="uFV/rBlD4yOSl3n/T9ZL/Q" resname="failedDecompressTheSdk">
+          <source>Failed decompress the sdk</source>
+          <target>Nepodařilo se dekomprimovat sdk</target>
+        </trans-unit>
+        <trans-unit id="5/RXjWPFGhzatJ6oPmh3MQ" resname="failedToArchive">
+          <source>Failed to create archive</source>
+          <target>Nepodařilo se otevřít archiv</target>
+        </trans-unit>
       </group>
       <group resname="help-tips">
         <trans-unit id="qnDfKORzzNOgWKvcsamlMA" resname="deviceList">
