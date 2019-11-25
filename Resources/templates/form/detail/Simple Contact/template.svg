@@ -10,7 +10,7 @@
 		<g id="f" visibility="hidden" ios:dy="37">
 			<rect class="bg field" x="14" y="0" width="238" height="30"/>
 			<textArea id="f.label" class="label" x="14" y="8" width="238">field[n]</textArea>
-			<rect id="f" class="droppable field multivalued" x="14" y="0" width="238" height="30" stroke-dasharray="5,2" ios:type="-3"/>
+			<rect id="f" class="droppable field multivalued" x="14" y="0" width="238" height="30" stroke-dasharray="5,2" ios:type="all"/>
 			<use id="f.cancel" x="224" y="1" xlink:href="#cancel" visibility="hidden"/>
 		</g>
 	</defs>
@@ -49,7 +49,7 @@
 			<g transform="translate(0,133)">
 				<rect class="bg field" x="14" y="0" width="238" height="30"/>
 				<textArea id="f4.label" class="label" x="14" y="8" width="238">$4DEVAL(:C991("field[n]"))3</textArea>
-				<rect id="f4" class="droppable field multivalued" x="14" y="0" width="238" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[3]"/>
+				<rect id="f4" class="droppable field multivalued" x="14" y="0" width="238" height="30" stroke-dasharray="5,2" ios:type="all" ios:bind="fields[3]"/>
 				<use id="f4.cancel" x="224" y="1" xlink:href="#cancel" visibility="hidden"/>
 			</g>
 		</g>
