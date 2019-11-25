@@ -126,8 +126,17 @@ If ($Obj_dataModel#Null:C1517)
 			"top";$Lon_y+5))\
 			.setDimensions($kLon_iconWidth)
 		
-		  // Avoid too long name
-		$Txt_name:=$Obj_dataModel[$Txt_table].shortLabel
+		If (featuresFlags.with("newDataModel"))
+			
+			  // Avoid too long name
+			$Txt_name:=$Obj_dataModel[$Txt_table][""].shortLabel
+			
+		Else 
+			
+			$Txt_name:=$Obj_dataModel[$Txt_table].shortLabel
+			
+		End if 
+		
 		
 		If (Length:C16($Txt_name)>$kLon_maxChar)
 			
