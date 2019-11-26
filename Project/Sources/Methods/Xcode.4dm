@@ -1063,8 +1063,18 @@ Case of
 						
 					End if 
 					
-					  // Signing options (manual, automatic)
-					$Txt_buffer:=Choose:C955(Length:C16(String:C10($Obj_param.signingStyle))>0;$Txt_buffer+"<key>signingStyle</key>"+"\r\n"+"<string>"+$Obj_param.signingStyle+"</string>"+"\r\n";$Txt_buffer+"<key>signingStyle</key>"+"\r\n"+"<string>automatic</string>"+"\r\n")
+					  // Signing options
+					If (Length:C16(String:C10($Obj_param.signingStyle))>0)
+						
+						  // Manual
+						$Txt_buffer:=$Txt_buffer+"<key>signingStyle</key>"+"\r\n"+"<string>"+$Obj_param.signingStyle+"</string>"+"\r\n"
+						
+					Else 
+						
+						  // Automatic
+						$Txt_buffer:=$Txt_buffer+"<key>signingStyle</key>"+"\r\n"+"<string>automatic</string>"+"\r\n"
+						
+					End if 
 					
 					If (Length:C16(String:C10($Obj_param.signingCertificate))>0)
 						
