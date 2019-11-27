@@ -253,7 +253,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If ($Obj_element.dom#Null:C1517)
 						
-						$Obj_element.insertInto:=$Obj_element.dom.parent()
+						If ($Obj_element.insertInto=Null:C1517)
+							$Obj_element.insertInto:=$Obj_element.dom.parent()
+						End if 
 						
 						$Lon_ids:=Num:C11($Obj_element.idCount)
 						
@@ -416,19 +418,54 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				If ($Obj_in.template.elements=Null:C1517)
 					
 					  // Elements not defined in manifest, try to compute it using storyboard XMLs
-					
 					ARRAY TEXT:C222($tTxt_result;0)
 					
-					If (Rgx_ExtractText ("TAG-(.?.?)-001";$Txt_buffer;"1";->$tTxt_result)=0)
-						
-						$Col_:=New collection:C1472()
-						ARRAY TO COLLECTION:C1563($Col_;$tTxt_result)
-						$Col_:=$Col_.distinct()
-						$Col_:=$Col_.map("col_valueToObject";"tagInterfix")
-						
-						$Obj_in.template.elements:=$Col_
-						
-					End if 
+					Case of 
+							  // ----------------------------------------
+						: (Rgx_ExtractText ("TAG-(.?.?)-001";$Txt_buffer;"1";->$tTxt_result)=0)
+							
+							$Col_:=New collection:C1472()
+							ARRAY TO COLLECTION:C1563($Col_;$tTxt_result)
+							$Col_:=$Col_.distinct()
+							$Col_:=$Col_.map("col_valueToObject";"tagInterfix")
+							
+							$Obj_in.template.elements:=$Col_
+							
+							  // ----------------------------------------
+						: (Value type:C1509($Obj_in.template.elementsID)=Is collection:K8:32)  // alernative way not documented, declare id of elements
+							
+							$Col_:=New collection:C1472()
+							C_TEXT:C284($Txt_id)
+							For each ($Txt_id;$Obj_in.template.elementsID)
+								
+								$Obj_element:=New object:C1471()
+								$Obj_element.dom:=$Dom_root.findById($Txt_id)
+								$Obj_element.originalId:=$Txt_id
+								
+								$Obj_element:=storyboard_fix_id ($Obj_element).element
+								
+							End for each 
+							
+							$Obj_in.template.elements:=$Col_
+						Else 
+							
+							  // find by attributes? find by children kel value?
+							C_OBJECT:C1216($result)
+							$result:=$Dom_root.findByAttribute("userLabel";"stack")
+							If ($result.success)
+								If ($result.elements.length>0)  // Value type($result.elements)=Is collection)
+									
+									$Obj_element:=New object:C1471()
+									$Obj_element.dom:=$result.elements[0]
+									$Obj_element:=storyboard_fix_id ($Obj_element).element
+									
+									$Obj_in.template.elements:=New collection:C1472($Obj_element)
+									
+								End if 
+							End if 
+							
+					End case 
+					
 				End if 
 				
 				  // Try to determine if must duplicate or not element
@@ -440,56 +477,74 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					$Boo_buffer:=True:C214  // We found some element to duplicate, so we must write to file
 					
-					  // Look up first all the elements. Dom could be modifyed
+					If ($Obj_in.template.elements=Null:C1517)
+						$Obj_in.template.elements:=New collection:C1472()  // prevent errors, but there is issues maybe if we define count or max without elements...
+					End if 
+					
+					  // Look up first all the elements in Dom. Dom could be modifyed
 					For each ($Obj_element;$Obj_in.template.elements)
 						
-						If (Length:C16(String:C10($Obj_element.xpath))>0)  // look up with xpath
-							
-							$Obj_element.dom:=$Dom_root.findByXPath($Obj_element.xpath)
-							
-							If (Not:C34($Obj_element.dom.success))
+						Case of 
+							: ($Obj_element.dom#Null:C1517)
+								  // already found by construction, nothing to do
 								
-								$Obj_element.dom:=Null:C1517
-								ASSERT:C1129(False:C215;"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
+							: (Length:C16(String:C10($Obj_element.xpath))>0)  // look up with xpath
 								
-							End if 
-							
-						Else   // or look up with id TAG-INTERFIX-001
-							
-							$Lon_length:=Length:C16(String:C10($Obj_element.tagInterfix))
-							
-							Case of 
+								$Obj_element.dom:=$Dom_root.findByXPath($Obj_element.xpath)
+								
+								If ($Obj_element.dom.success)
 									
-									  // ----------------------------------------
-								: ($Lon_length=2)
-									
-									  // if "AS" document/resources and read children, to find ___FIELD_ICON___ ?? (no id for image, let ibtool fix that for the moment)
-									$Obj_element.dom:=$Dom_root.findById("TAG-"+String:C10($Obj_element.tagInterfix)+"-001")
-									
-									If (Not:C34($Obj_element.dom.success))
-										
-										$Obj_element.dom:=Null:C1517
-										ASSERT:C1129(False:C215;"Root element with id 'TAG-"+String:C10($Obj_element.tagInterfix)+"-001' not found for file "+$File_.path)
-										
+									If (Not:C34(Bool:C1537($Obj_in.template.isInternal)))  // to optimize, suppose our template do not need to have fix...
+										$Obj_element:=storyboard_fix_id ($Obj_element).element  // potentially fix subnodes if copy our storyboard to modify it
 									End if 
 									
-									  // ----------------------------------------
-								: ($Lon_length>0)
-									
-									ASSERT:C1129(False:C215;"Element 'tagInterfix' defined in manifest.json "+String:C10($Obj_element.tagInterfix)+" must have exactly two caracters.")
-									
-									  // ----------------------------------------
 								Else 
 									
-									ASSERT:C1129(False:C215;"No tag interfix defined for element "+JSON Stringify:C1217($Obj_element)+" (TAG->tagInterfix>-001). Alternatively you can defined node xpath for template file "+$File_.path+" to find the xml element in storyboard.")
+									$Obj_element.dom:=Null:C1517
+									ASSERT:C1129(False:C215;"Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
 									
-									  // ----------------------------------------
-							End case 
-						End if 
+								End if 
+								
+							Else   // or look up with id TAG-INTERFIX-001
+								
+								$Lon_length:=Length:C16(String:C10($Obj_element.tagInterfix))
+								
+								Case of 
+										
+										  // ----------------------------------------
+									: ($Lon_length=2)
+										
+										  // if "AS" document/resources and read children, to find ___FIELD_ICON___ ?? (no id for image, let ibtool fix that for the moment)
+										$Obj_element.dom:=$Dom_root.findById("TAG-"+String:C10($Obj_element.tagInterfix)+"-001")
+										
+										If (Not:C34($Obj_element.dom.success))
+											
+											$Obj_element.dom:=Null:C1517
+											ASSERT:C1129(False:C215;"Root element with id 'TAG-"+String:C10($Obj_element.tagInterfix)+"-001' not found for file "+$File_.path)
+											
+										End if 
+										
+										$Obj_element:=storyboard_fix_id ($Obj_element).element  // potentially fix subnodes
+										
+										  // ----------------------------------------
+									: ($Lon_length>0)
+										
+										ASSERT:C1129(False:C215;"Element 'tagInterfix' defined in manifest.json "+String:C10($Obj_element.tagInterfix)+" must have exactly two caracters.")
+										
+										  // ----------------------------------------
+									Else 
+										
+										ASSERT:C1129(False:C215;"No tag interfix defined for element "+JSON Stringify:C1217($Obj_element)+" (TAG->tagInterfix>-001). Alternatively you can defined node xpath for template file "+$File_.path+" to find the xml element in storyboard.")
+										
+										  // ----------------------------------------
+								End case 
+						End case 
 						
 						If ($Obj_element.dom#Null:C1517)
 							
-							$Obj_element.insertInto:=$Obj_element.dom.parent()  // define where to insert
+							If ($Obj_element.insertInto=Null:C1517)
+								$Obj_element.insertInto:=$Obj_element.dom.parent()  // define where to insert
+							End if 
 							
 							  // - define id count allow to speed up and pass that
 							$Lon_ids:=Num:C11($Obj_element.idCount)
@@ -621,7 +676,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					  // Must be inserted into a stack view (with a subviews as intermediate)
 					C_OBJECT:C1216($Obj_)
 					For each ($Obj_;$Obj_in.template.elements) Until ($Obj_element.insertInto#Null:C1517)
-						If ($Obj_.insertInto.parent().getName().name="stackView")
+						If (String:C10($Obj_.insertInto.parent().getName().name)="stackView")
 							$Obj_element.insertInto:=$Obj_.insertInto
 						End if 
 					End for each 
@@ -772,7 +827,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If ($Obj_element.dom#Null:C1517)
 							
-							$Obj_element.dom.remove()
+							If ($Obj_element.originalDom#Null:C1517)
+								$Obj_element.originalDom.remove()  // we have a memory virtual element, so delete the original
+							Else 
+								$Obj_element.dom.remove()
+							End if 
 							
 						End if 
 					End for each 

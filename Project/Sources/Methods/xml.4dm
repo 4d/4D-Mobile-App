@@ -39,6 +39,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"findMany";Formula:C1597(xml ("findMany";New object:C1471("xpath";$1)));\
 		"findById";Formula:C1597(xml ("findById";New object:C1471("id";$1)));\
 		"findByName";Formula:C1597(xml ("findByName";New object:C1471("name";$1)));\
+		"findByAttribute";Formula:C1597(xml ("findByAttribute";New object:C1471("name";$1;"value";$2;"nodeName";$3)));\
 		"append";Formula:C1597(xml ("append";New object:C1471("element";$1)));\
 		"insertAt";Formula:C1597(xml ("insertAt";New object:C1471("element";$1;"childIndex";$2)));\
 		"insertFirst";Formula:C1597(xml ("insertAt";New object:C1471("element";$1;"childIndex";1)));\
@@ -402,6 +403,24 @@ Else
 					This:C1470[""]:=Null:C1517
 					
 					For each ($tt;xml_findByName ($o.parent.elementRef;$2.name))
+						
+						$o.elements.push(xml ($tt))
+						
+					End for each 
+					
+					This:C1470[""]:="_xml"
+					
+					  //=================================================================
+				: ($1="findByAttribute")
+					
+					$o:=New object:C1471(\
+						"elements";New collection:C1472;\
+						"parent";$o;\
+						"success";True:C214)
+					
+					This:C1470[""]:=Null:C1517
+					
+					For each ($tt;xml_findByAttribute ($o.parent.elementRef;$2))
 						
 						$o.elements.push(xml ($tt))
 						

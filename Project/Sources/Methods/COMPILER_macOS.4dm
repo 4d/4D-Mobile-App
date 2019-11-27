@@ -10,6 +10,10 @@ If (False:C215)
 	C_OBJECT:C1216(storyboard ;$1)
 	
 	  //__________________________________________________
+	C_OBJECT:C1216(storyboard_fix_id ;$0)
+	C_OBJECT:C1216(storyboard_fix_id ;$1)
+	
+	  //__________________________________________________
 	C_OBJECT:C1216(plist ;$0)
 	C_OBJECT:C1216(plist ;$1)
 	

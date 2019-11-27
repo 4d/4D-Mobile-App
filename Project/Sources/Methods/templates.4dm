@@ -219,6 +219,7 @@ Case of
 			If ($o.template.success)  // The template existe or not
 				
 				$o.template:=$o.template.value  // Get the doc object
+				$o.template.isInternal:=Not:C34(Bool:C1537($t[[1]]="/"))
 				
 				  // ==============================================================
 				  //                          TABLE INFOS

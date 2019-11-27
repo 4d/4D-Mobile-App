@@ -23,6 +23,11 @@ If (False:C215)
 	C_TEXT:C284(xml_findByName ;$2)
 	
 	  //____________________________________
+	C_COLLECTION:C1488(xml_findByAttribute ;$0)
+	C_TEXT:C284(xml_findByAttribute ;$1)
+	C_OBJECT:C1216(xml_findByAttribute ;$2)
+	
+	  //____________________________________
 	C_OBJECT:C1216(xml_refToObject ;$0)
 	C_TEXT:C284(xml_refToObject ;$1)
 	C_BOOLEAN:C305(xml_refToObject ;$2)

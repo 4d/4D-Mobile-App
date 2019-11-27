@@ -32,6 +32,22 @@ $scenes:=$xml.findByXPath("/document/scenes")
 ASSERT:C1129($scenes.success;"Failed to find xml element")
 ASSERT:C1129($scenes.elementRef#"00000000000000000000000000000000")
 ASSERT:C1129($scenes.elementRef#Null:C1517)
+
+$result:=$scenes.findByAttribute("userLabel";"List Form")
+ASSERT:C1129(Num:C11($result.elements.length)=1)
+
+$result:=$scenes.findByAttribute("key";"backgroundColor")
+ASSERT:C1129(Num:C11($result.elements.length)=5)
+
+$result:=$scenes.findByAttribute("key";"backgroundColor";"color")  // add name speed up because we do not consult all attribute for all node
+ASSERT:C1129(Num:C11($result.elements.length)=5)
+
+$result:=$scenes.findByAttribute("key";"backgroundColor";"scene")
+ASSERT:C1129(Num:C11($result.elements.length)=0)
+
+$result:=$scenes.findById("Dxc-Bl-At2")
+ASSERT:C1129(Bool:C1537($result.success))
+
   /// find ko
 C_OBJECT:C1216($scene)
 $scene:=$xml.findByXPath("/document/scene")
@@ -51,7 +67,7 @@ ASSERT:C1129(Num:C11($result.elements.length)=3)
 
   // findOrCreate
 C_OBJECT:C1216($parent)
-$parent:=$result.elements[0]
+$parent:=$result.elements[0]  // /!\ need result from findMany
 $result:=$parent.findOrCreate("eric")
 ASSERT:C1129($result.elementRef=$parent.findOrCreate("eric").elementRef;"Must not recreate a new node with findOrCreate")
 
