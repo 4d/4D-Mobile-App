@@ -1,7 +1,7 @@
 {
 	"name": "detailForm",
 	"type": "tablesForms",
-	"default": "Simple List",
+	"default": "Blank Form",
 	"userChoiceTag": "detail",
 	"mandatory": [
 		"template.svg",

@@ -176,6 +176,8 @@ If (Num:C11($Obj_project.info.version)<2)
 			"source";"local";\
 			"doNotGenerateDataAtEachBuild";False:C215)
 		
+		$Boo_upgraded:=True:C214
+		
 	End if 
 	
 	If ($Obj_project.dataModel#Null:C1517)
@@ -188,17 +190,18 @@ If (Num:C11($Obj_project.info.version)<2)
 				
 			End if 
 		End for each 
+		
+		$Boo_upgraded:=True:C214
+		
 	End if 
 	
 	$Obj_project.info.version:=2
-	$Boo_upgraded:=True:C214
 	
 End if 
 
   //=====================================================================
   //                 REORGANIZATION FIX AND RENAMING
   //=====================================================================
-
 If (Num:C11($Obj_project.info.version)<3)
 	
 	If ($Obj_project.dataModel#Null:C1517)
@@ -226,10 +229,10 @@ If (Num:C11($Obj_project.info.version)<3)
 				
 			End if 
 		End for each 
+		
+		$Obj_project.info.version:=3
+		
 	End if 
-	
-	$Obj_project.info.version:=3
-	
 End if 
 
   //=====================================================================
@@ -388,11 +391,28 @@ If (featuresFlags.with("newDataModel"))
 					
 				End if 
 			End for each 
+			
+			$Boo_upgraded:=True:C214
+			
 		End if 
 		
 		$Obj_project.info.version:=5
-		$Boo_upgraded:=True:C214
 		
+	End if 
+	
+	  //=====================================================================
+	  //                     "Simple List" -> "Blank Form"
+	  //=====================================================================
+	If ($Obj_project.detail#Null:C1517)
+		
+		For each ($Txt_tableNumber;$Obj_project.detail)
+			
+			If (String:C10($Obj_project.detail[$Txt_tableNumber].form)="Simple List")
+				
+				$Obj_project.detail[$Txt_tableNumber].form:="Blank Form"
+				
+			End if 
+		End for each 
 	End if 
 	
 	  //=====================================================================
