@@ -308,6 +308,12 @@
 		<field name="__TableName" uuid="6E4CFA959C694D42A971EE40E2324C50" type="10" limiting_length="255" id="4"/>
 		<field name="__PrimaryKey" uuid="83BFA91605FA45B2AAD31697B4707DDE" type="10" limiting_length="255" id="5"/>
 		<primary_key field_name="ID" field_uuid="6AB99358EB564E5CB475DEE8E0B673F8"/>
+		<table_extra>
+			<editor_table_info fields_ordering="1" displayable_fields_count="6">
+				<color red="255" green="255" blue="255" alpha="0"/>
+				<coordinates left="240" top="40" width="120" height="167.33203125"/>
+			</editor_table_info>
+		</table_extra>
 	</table>
 	<relation uuid="558D9845ABB949E8B3E946F29688441A" name_Nto1="theme" name_1toN="commands" auto_load_Nto1="true" auto_load_1toN="false" foreign_key="false" state="1" integrity="reject">
 		<related_field kind="source">

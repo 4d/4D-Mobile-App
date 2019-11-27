@@ -11,11 +11,12 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($b)
+C_BLOB:C604($x)
+C_BOOLEAN:C305($b;$Boo_sqllite)
 C_LONGINT:C283($Lon_backgroundColor;$Lon_formEvent;$Lon_index;$Lon_parameters;$Lon_row;$Lon_size)
-C_TEXT:C284($Dir_picture;$Dir_root;$File_data;$t)
-C_OBJECT:C1216($file;$o;$Obj_table;$Obj_context;$Obj_form;$Obj_in)
-C_OBJECT:C1216($Obj_manifest;$Obj_out)
+C_TEXT:C284($Dir_root;$t)
+C_OBJECT:C1216($file;$o;$Obj_context;$Obj_form;$Obj_in;$Obj_out)
+C_OBJECT:C1216($Obj_table)
 
 If (False:C215)
 	C_OBJECT:C1216(DATA_Handler ;$0)
@@ -59,13 +60,21 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		  // Define form methods
 		$Obj_context.listboxUI:=Formula:C1597(DATA_Handler (New object:C1471(\
 			"action";"listboxUI")))
+		
 		$Obj_context.listBackground:=Formula:C1597(DATA_Handler (New object:C1471(\
 			"action";"background";\
 			"this";$1)))
+		
 		$Obj_context.text:=Formula:C1597(DATA_Handler (New object:C1471(\
 			"action";"meta-infos")))
+		
 		$Obj_context.dumpSizes:=Formula:C1597(DATA_Handler (New object:C1471(\
 			"action";"dumpSizes")))
+		
+		$Obj_context.refresh:=Formula:C1597(SET TIMER:C645(-1))
+		
+		$Obj_context.update:=Formula:C1597(DATA_Handler (New object:C1471(\
+			"action";"update")))
 		
 	End if 
 	
@@ -107,13 +116,7 @@ Case of
 					"alignment";Align right:K42:4;\
 					"factor";1))
 				
-				  // Declare check box as boolean
-				EXECUTE FORMULA:C63("C_BOOLEAN:C305((OBJECT Get pointer:C1124(Object named:K67:5;\"embedded.options\"))->)")
-				
-				$Obj_context.dumpSizes()
-				
-				DATA_Handler (New object:C1471(\
-					"action";"update"))
+				$Obj_context.update()
 				
 				GOTO OBJECT:C206(*;$Obj_form.list)
 				
@@ -123,9 +126,6 @@ Case of
 			: ($Lon_formEvent=On Timer:K2:25)
 				
 				ui.tips.enable()
-				
-				  // Redraw list
-				$Obj_context.tables:=$Obj_context.tables
 				
 				If ($Obj_context.current#Null:C1517)
 					
@@ -194,88 +194,14 @@ Case of
 						
 					End if 
 					
-					If (Bool:C1537($Obj_context.current.embedded))\
-						 & (Not:C34(Bool:C1537($Obj_context.current.filter.parameters)))
-						
-						$Dir_root:=dataSet (New object:C1471("action";"path";\
-							"project";New object:C1471("product";Form:C1466.product;"$project";Form:C1466.$project))).path
-						
-						If (Bool:C1537(featuresFlags._110882))
-							
-							$Obj_table:=$Obj_context.current
-							$Obj_table.dumpSize:="#na"
-							
-							If ($Obj_context.sqlite#Null:C1517)
-								
-								$t:=formatString ("table-name";$Obj_table.name)
-								
-								If ($Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]#Null:C1517)
-									
-									$Lon_size:=$Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]  // Size of the data dump
-									
-									If ($Lon_size>4096)
-										
-										  // Add pictures size if anay
-										$Dir_picture:=asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12
-										$Obj_manifest:=ob_parseDocument ($Dir_picture+"manifest.json")
-										
-										If ($Obj_manifest.success)
-											
-											$Lon_size:=$Lon_size+$Obj_manifest.value.contentSize
-											
-										End if 
-										
-										$Obj_table.dumpSize:=doc_bytesToString ($Lon_size)
-										
-									Else 
-										
-										$Obj_table.dumpSize:="#na"
-										
-									End if 
-								End if 
-							End if 
-							
-						Else 
-							
-							$File_data:=asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Data"+Folder separator:K24:12\
-								+$Obj_context.current.name+".dataset"+Folder separator:K24:12+$Obj_context.current.name+".data.json"
-							
-							If (Test path name:C476($File_data)=Is a document:K24:1)
-								
-								  // Get document size
-								$Lon_size:=Get document size:C479($File_data)
-								$Dir_picture:=$Dir_root+"Resources"
-								$Dir_picture:=asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$Obj_context.current.name+Folder separator:K24:12
-								$Obj_manifest:=ob_parseDocument ($Dir_picture+"manifest.json")
-								
-								If ($Obj_manifest.success)
-									
-									$Lon_size:=$Lon_size+$Obj_manifest.value.contentSize
-									
-								End if 
-								
-								$Obj_context.current.dumpSize:=doc_bytesToString ($Lon_size)
-								
-								  // XXX add image dump sizes
-								
-							Else 
-								
-								$Obj_context.current.dumpSize:=Get localized string:C991("#NA")
-								
-							End if 
-						End if 
-						
-					Else 
-						
-						OB REMOVE:C1226($Obj_context.current;"dumpSize")
-						
-					End if 
-					
 				Else 
 					
 					OBJECT SET VISIBLE:C603(*;"@.options";False:C215)
 					
 				End if 
+				
+				  // Redraw list
+				$Obj_context.tables:=$Obj_context.tables
 				
 				  //______________________________________________________
 		End case 
@@ -343,7 +269,9 @@ Case of
 					
 					If (Bool:C1537(featuresFlags._110882))
 						
-						If ($Obj_context.sqlite#Null:C1517)
+						$Boo_sqllite:=($Obj_context.sqlite#Null:C1517)
+						
+						If ($Boo_sqllite)
 							
 							$t:=formatString ("table-name";$Obj_table.name)
 							
@@ -353,13 +281,12 @@ Case of
 								
 								If ($Lon_size>4096)
 									
-									  // Add pictures size if anay
-									$Dir_picture:=asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12
-									$Obj_manifest:=ob_parseDocument ($Dir_picture+"manifest.json")
+									  // Add pictures size if any
+									$file:=Folder:C1567(asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12;fk platform path:K87:2).file("manifest.json")
 									
-									If ($Obj_manifest.success)
+									If ($file.exists)
 										
-										$Lon_size:=$Lon_size+$Obj_manifest.value.contentSize
+										$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).value.contentSize
 										
 									End if 
 									
@@ -367,7 +294,7 @@ Case of
 									
 								Else 
 									
-									OB REMOVE:C1226($o.tables[$Lon_index];"dumpSize")
+									$o.tables[$Lon_index].dumpSize:=Choose:C955($Lon_size>0;"< "+doc_bytesToString ($Lon_size);"#na")
 									
 								End if 
 								
@@ -379,34 +306,28 @@ Case of
 							
 						Else 
 							
-							$o.tables[$Lon_index].dumpSize:="#na"
+							$Boo_sqllite:=False:C215
 							
 						End if 
 						
-					Else 
+					End if 
+					
+					If (Not:C34($Boo_sqllite))
 						
-						$File_data:=$Dir_root+"Resources"+Folder separator:K24:12\
-							+"Assets.xcassets"+Folder separator:K24:12\
-							+"Data"+Folder separator:K24:12\
-							+$Obj_table.name+".dataset"+Folder separator:K24:12\
-							+$Obj_table.name+".data.json"
+						$file:=Folder:C1567($Dir_root;fk platform path:K87:2).file("Resources/Assets.xcassets/Data/"+$Obj_table.name+".dataset/"+$Obj_table.name+".data.json")
 						
-						If (Test path name:C476($File_data)=Is a document:K24:1)
+						If ($file.exists)
 							
 							  // Get document size
-							$Lon_size:=Get document size:C479($File_data)
+							$x:=$file.getContent()
+							$Lon_size:=BLOB size:C605($x)
+							SET BLOB SIZE:C606($x;0)
 							
-							  // If (Bool(featuresFlags._101725))
-							$Dir_picture:=$Dir_root+"Resources"+Folder separator:K24:12\
-								+"Assets.xcassets"+Folder separator:K24:12\
-								+"Pictures"+Folder separator:K24:12\
-								+$Obj_table.name+Folder separator:K24:12
+							$file:=Folder:C1567($Dir_root;fk platform path:K87:2).file("Resources/Assets.xcassets/Pictures/"+$Obj_table.name+"/manifest.json")
 							
-							$Obj_manifest:=ob_parseDocument ($Dir_picture+"manifest.json")
-							
-							If ($Obj_manifest.success)
+							If ($file.exists)
 								
-								$Lon_size:=$Lon_size+$Obj_manifest.value.contentSize
+								$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).value.contentSize
 								
 							End if 
 							
@@ -452,7 +373,12 @@ Case of
 			
 		End if 
 		
+		  // Redraw list
+		$Obj_context.tables:=$Obj_context.tables
+		
 		$Obj_context.listboxUI()
+		
+		SET TIMER:C645(-1)
 		
 		  //=========================================================
 	: ($Obj_in.action="background")

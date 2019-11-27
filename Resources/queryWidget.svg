@@ -4,17 +4,17 @@
     <g id="fields" transform="translate(1,2)">
       <rect fill="rgb(244,244,246)" height="22" stroke="rgb(196,196,196)" stroke-width="1" width="100" x="0" y="0"/>
       <textArea height="22" text-align="center" width="90" x="5" y="3">$4DEVAL($2)</textArea>
-      <textArea height="22" text-align="center" transform="translate(85,5)" width="10">$4DEVAL($5)</textArea>
+      <textArea height="22" text-align="center" font-size="24" transform="translate(85,12)" width="10">$4DEVAL($5)</textArea>
     </g>
     <g id="comparator" transform="translate(105,2)">
       <rect fill="rgb(244,244,246)" height="22" stroke="rgb(196,196,196)" stroke-width="1" width="110" x="0" y="0"/>
       <textArea height="22" text-align="center" width="100" x="5" y="3">$4DEVAL($3)</textArea>
-      <textArea height="22" text-align="center" transform="translate(95,5)" width="10">$4DEVAL($5)</textArea>
+      <textArea height="22" text-align="center" font-size="24" transform="translate(95,12)" width="10">$4DEVAL($5)</textArea>
     </g>
     <g id="operator" transform="translate(220,2)">
       <rect fill="rgb(244,244,246)" height="22" stroke="rgb(196,196,196)" stroke-width="1" width="100" x="0" y="0"/>
       <textArea height="22" text-align="center" width="90" x="5" y="3">$4DEVAL($4)</textArea>
-      <textArea height="22" text-align="center" transform="translate(85,5)" width="10">$4DEVAL($5)</textArea>
+      <textArea height="22" text-align="center" font-size="24" transform="translate(85,12)" width="10">$4DEVAL($5)</textArea>
     </g>
   </g>
 </svg>

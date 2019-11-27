@@ -118,169 +118,177 @@ If ($file.exists)
 						
 						For each ($t;$Obj_tableModel)
 							
-							If ($ƒ.isField($t))
+							If (Length:C16($t)>0)
 								
-								$o:=$Obj_tableModel[$t]
-								$o.current:=$Obj_tableCurrent.field.query("fieldNumber = :1";Num:C11($t)).pop()
-								$o.missing:=$o.current=Null:C1517
-								$o.nameMismatch:=$o.name#String:C10($o.current.name)
-								
-								If (Value type:C1509($o.type)=Is text:K8:3)
+								If ($ƒ.isField($t))
 									
-									  // Compare to value Type
-									$o.typeMismatch:=$o.type#$o.current.valueType
+									$o:=$Obj_tableModel[$t]
+									$o.current:=$Obj_tableCurrent.field.query("fieldNumber = :1";Num:C11($t)).pop()
+									$o.missing:=$o.current=Null:C1517
+									$o.nameMismatch:=$o.name#String:C10($o.current.name)
+									
+									If (Value type:C1509($o.type)=Is text:K8:3)
+										
+										  // Compare to value Type
+										$o.typeMismatch:=$o.type#$o.current.valueType
+										
+									Else 
+										
+										$o.typeMismatch:=$o.fieldType#$o.current.fieldType
+										
+									End if 
+									
+									If ($o.missing | $o.nameMismatch | $o.typeMismatch)
+										
+										  // THE FIELD IS NO LONGER AVAILABLE
+										  // OR THE NAME/TYPE HAS BEEN CHANGED
+										
+										$Boo_unsynchronizedTable:=True:C214
+										
+										  // Append faulty field
+										$Col_unsynchronizedFields.push($o)
+										
+									End if 
 									
 								Else 
 									
-									$o.typeMismatch:=$o.fieldType#$o.current.fieldType
-									
-								End if 
-								
-								If ($o.missing | $o.nameMismatch | $o.typeMismatch)
-									
-									  // THE FIELD IS NO LONGER AVAILABLE
-									  // OR THE NAME/TYPE HAS BEEN CHANGED
-									
-									$Boo_unsynchronizedTable:=True:C214
-									
-									  // Append faulty field
-									$Col_unsynchronizedFields.push($o)
-									
+									If (Value type:C1509($Obj_tableModel[$t])=Is object:K8:27)
+										
+										  // RELATION
+										
+										$o:=$Obj_tableModel[$t]
+										$o.current:=$Obj_tableCurrent.field.query("name = :1";$t).pop()
+										
+										Case of 
+												
+												  //________________________________________
+											: ($ƒ.isRelationToOne($o))  // N -> 1 relation
+												
+												$o.missing:=$o.current=Null:C1517
+												
+												If ($o.missing)
+													
+													  // Check the related dataclass availability
+													$o.missingRelatedDataclass:=$Col_currentCatalog.query("tableNumber = :1";Num:C11($o.relatedTableNumber)).pop()=Null:C1517
+													
+												Else 
+													
+													  // Diacritical equality of the name
+													$o.nameMismatch:=Not:C34($str.setText($t).equal($o.current.name))
+													
+												End if 
+												
+												If ($o.missing | Bool:C1537($o.nameMismatch))
+													
+													  // THE RELATION IS NO LONGER AVAILABLE
+													  // OR THE NAME HAS BEEN CHANGED
+													
+													$Boo_unsynchronizedTable:=True:C214
+													
+													  // Append faulty relation
+													If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
+														
+														$o.name:=$t
+														
+														$Col_unsynchronizedFields.push($o)
+														
+													End if 
+													
+												Else 
+													
+													  // Check related table catalog
+													$cc:=$Col_currentCatalog.query("tableNumber = :1";$o.relatedTableNumber).pop().field
+													
+													  // Check related data class catalog
+													For each ($tt;$o)
+														
+														If ($ƒ.isField($tt))
+															
+															$oo:=$o[$tt]
+															$oo.current:=$cc.query("fieldNumber = :1";Num:C11($tt)).pop()
+															$oo.missing:=$oo.current=Null:C1517
+															$oo.nameMismatch:=$oo.name#String:C10($oo.current.name)
+															$oo.typeMismatch:=$oo.type#Num:C11($oo.current.type)
+															
+															If ($oo.missing | $oo.nameMismatch | $oo.typeMismatch)
+																
+																  // TRUE IF THE RELATED FIELD IS NO LONGER AVAILABLE
+																  // OR IF THE NAME (non diacritical) OR TYPE HAS BEEN CHANGED
+																
+																$Boo_unsynchronizedTable:=True:C214
+																
+																If ($o.unsynchronizedFields=Null:C1517)
+																	
+																	$o.unsynchronizedFields:=New collection:C1472($oo)
+																	
+																Else 
+																	
+																	$o.unsynchronizedFields.push($oo)
+																	
+																End if 
+																
+																If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
+																	
+																	$o.name:=$t
+																	
+																	$Col_unsynchronizedFields.push($o)
+																	
+																End if 
+															End if 
+															
+														Else 
+															
+															  // NOT YET MANAGED
+															
+														End if 
+													End for each 
+												End if 
+												
+												  //________________________________________
+											: ($ƒ.isRelationToMany($o))  // 1 -> N relation
+												
+												$o.current:=$Obj_tableCurrent.field.query("name = :1";$t).pop()
+												
+												$o.missing:=$o.current=Null:C1517
+												
+												If ($o.missing)
+													
+													  // Check the related dataclass availability
+													$o.missingRelatedDataclass:=$Col_currentCatalog.query("tableNumber = :1";Num:C11($o.relatedTableNumber)).pop()=Null:C1517
+													
+												Else 
+													
+													  // Diacritical equality of the name
+													$o.nameMismatch:=Not:C34($str.setText($t).equal($o.current.name))
+													
+												End if 
+												
+												If ($o.missing | Bool:C1537($o.nameMismatch))
+													
+													  // THE RELATION IS NO LONGER AVAILABLE
+													  // OR IF THE NAME HAS BEEN CHANGED
+													
+													$Boo_unsynchronizedTable:=True:C214
+													
+													  // Append faulty relation
+													If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
+														
+														$o.name:=$t
+														
+														$Col_unsynchronizedFields.push($o)
+														
+													End if 
+												End if 
+												
+												  //________________________________________
+										End case 
+									End if 
 								End if 
 								
 							Else 
 								
-								If (Value type:C1509($Obj_tableModel[$t])=Is object:K8:27)
-									
-									  // RELATION
-									
-									$o:=$Obj_tableModel[$t]
-									$o.current:=$Obj_tableCurrent.field.query("name = :1";$t).pop()
-									
-									Case of 
-											
-											  //________________________________________
-										: ($ƒ.isRelationToOne($o))  // N -> 1 relation
-											
-											$o.missing:=$o.current=Null:C1517
-											
-											If ($o.missing)
-												
-												  // Check the related dataclass availability
-												$o.missingRelatedDataclass:=$Col_currentCatalog.query("tableNumber = :1";Num:C11($o.relatedTableNumber)).pop()=Null:C1517
-												
-											Else 
-												
-												  // Diacritical equality of the name
-												$o.nameMismatch:=Not:C34($str.setText($t).equal($o.current.name))
-												
-											End if 
-											
-											If ($o.missing | Bool:C1537($o.nameMismatch))
-												
-												  // THE RELATION IS NO LONGER AVAILABLE
-												  // OR THE NAME HAS BEEN CHANGED
-												
-												$Boo_unsynchronizedTable:=True:C214
-												
-												  // Append faulty relation
-												If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
-													
-													$o.name:=$t
-													
-													$Col_unsynchronizedFields.push($o)
-													
-												End if 
-												
-											Else 
-												
-												  // Check related table catalog
-												$cc:=$Col_currentCatalog.query("tableNumber = :1";$o.relatedTableNumber).pop().field
-												
-												  // Check related data class catalog
-												For each ($tt;$o)
-													
-													If ($ƒ.isField($tt))
-														
-														$oo:=$o[$tt]
-														$oo.current:=$cc.query("fieldNumber = :1";Num:C11($tt)).pop()
-														$oo.missing:=$oo.current=Null:C1517
-														$oo.nameMismatch:=$oo.name#String:C10($oo.current.name)
-														$oo.typeMismatch:=$oo.type#Num:C11($oo.current.type)
-														
-														If ($oo.missing | $oo.nameMismatch | $oo.typeMismatch)
-															
-															  // TRUE IF THE RELATED FIELD IS NO LONGER AVAILABLE
-															  // OR IF THE NAME (non diacritical) OR TYPE HAS BEEN CHANGED
-															
-															$Boo_unsynchronizedTable:=True:C214
-															
-															If ($o.unsynchronizedFields=Null:C1517)
-																
-																$o.unsynchronizedFields:=New collection:C1472($oo)
-																
-															Else 
-																
-																$o.unsynchronizedFields.push($oo)
-																
-															End if 
-															
-															If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
-																
-																$o.name:=$t
-																
-																$Col_unsynchronizedFields.push($o)
-																
-															End if 
-														End if 
-														
-													Else 
-														
-														  // NOT YET MANAGED
-														
-													End if 
-												End for each 
-											End if 
-											
-											  //________________________________________
-										: ($ƒ.isRelationToMany($o))  // 1 -> N relation
-											
-											$o.current:=$Obj_tableCurrent.field.query("name = :1";$t).pop()
-											
-											$o.missing:=$o.current=Null:C1517
-											
-											If ($o.missing)
-												
-												  // Check the related dataclass availability
-												$o.missingRelatedDataclass:=$Col_currentCatalog.query("tableNumber = :1";Num:C11($o.relatedTableNumber)).pop()=Null:C1517
-												
-											Else 
-												
-												  // Diacritical equality of the name
-												$o.nameMismatch:=Not:C34($str.setText($t).equal($o.current.name))
-												
-											End if 
-											
-											If ($o.missing | Bool:C1537($o.nameMismatch))
-												
-												  // THE RELATION IS NO LONGER AVAILABLE
-												  // OR IF THE NAME HAS BEEN CHANGED
-												
-												$Boo_unsynchronizedTable:=True:C214
-												
-												  // Append faulty relation
-												If ($Col_unsynchronizedFields.query("name= :1";$t).length=0)
-													
-													$o.name:=$t
-													
-													$Col_unsynchronizedFields.push($o)
-													
-												End if 
-											End if 
-											
-											  //________________________________________
-									End case 
-								End if 
+								  // PRIVATE PROPERTIES 
+								
 							End if 
 						End for each 
 					End if 

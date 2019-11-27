@@ -400,12 +400,12 @@ Case of
 				  //…………………………………………………………………………………………………
 			Else 
 				
-				If ($Obj_in.field.type<=ui.typeIcons.length)
+				If ($Obj_in.field.fieldType<=ui.fieldIcons.length)
 					
 					$Lon_published:=Num:C11(Form:C1466.dataModel[String:C10($Obj_in.table.tableNumber)][String:C10($Obj_in.field.id)]#Null:C1517)
 					
 					APPEND TO ARRAY:C911(($Obj_in.published)->;$Lon_published)
-					APPEND TO ARRAY:C911(($Obj_in.icons)->;ui.typeIcons[$Obj_in.field.type])
+					APPEND TO ARRAY:C911(($Obj_in.icons)->;ui.fieldIcons[$Obj_in.field.fieldType])
 					APPEND TO ARRAY:C911(($Obj_in.fields)->;$Obj_in.field.name)
 					
 				End if 

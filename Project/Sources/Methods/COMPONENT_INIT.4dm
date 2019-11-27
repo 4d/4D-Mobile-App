@@ -233,19 +233,6 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		ui.debugMode:=(Structure file:C489=Structure file:C489(*))  // True in matrix database
 		
 		  // Preload icons for field types [
-		
-		  // #OLD_MECHANISM =========================================
-		ui.typeIcons:=New collection:C1472
-		
-		For each ($o;Folder:C1567("/RESOURCES/images/fields").files())
-			
-			READ PICTURE FILE:C678($o.platformPath;$p)
-			ui.typeIcons[Num:C11(Replace string:C233($o.name;"field_";""))]:=$p
-			
-		End for each 
-		
-		  // ======================================================= ]
-		
 		ui.fieldIcons:=New collection:C1472
 		
 		For each ($o;Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))

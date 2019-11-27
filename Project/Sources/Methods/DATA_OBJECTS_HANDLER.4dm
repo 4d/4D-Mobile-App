@@ -14,9 +14,8 @@ C_BOOLEAN:C305($Boo_caret)
 C_LONGINT:C283($Lon_;$Lon_begin;$Lon_column;$Lon_end;$Lon_formEvent;$Lon_parameters)
 C_LONGINT:C283($Lon_row;$Lon_x;$Lon_y)
 C_POINTER:C301($Ptr_me)
-C_TEXT:C284($Mnu_main;$Svg_id;$t;$Txt_choice;$Txt_me;$Txt_selection)
-C_TEXT:C284($Txt_tip)
-C_OBJECT:C1216($context;$form;$o;$Obj_table)
+C_TEXT:C284($Svg_id;$t;$Txt_me;$Txt_selection;$Txt_tip)
+C_OBJECT:C1216($context;$form;$menu;$o;$Obj_table)
 
 If (False:C215)
 	C_LONGINT:C283(DATA_OBJECTS_HANDLER ;$0)
@@ -81,7 +80,6 @@ Case of
 				
 				$context.lastIndex:=$context.index
 				
-				  //ui.refresh()
 				$context.current:=$context.tables[$context.index-Num:C11($context.index>0)]
 				SET TIMER:C645(-1)
 				
@@ -192,7 +190,7 @@ Case of
 					Get localized string:C991("fields");\
 					Get localized string:C991("comparators");\
 					Get localized string:C991("operators");\
-					"⬇")
+					"🢓")
 				
 				$Ptr_me->:=svg ("parse";New object:C1471("variable";$t)).getPicture()
 				
@@ -203,7 +201,7 @@ Case of
 				
 				$Svg_id:=SVG Find element ID by coordinates:C1054(*;$Txt_me;MOUSEX;MOUSEY)
 				
-				$Mnu_main:=Create menu:C408
+				$menu:=menu 
 				
 				If (Length:C16($Svg_id)#0)
 					
@@ -221,15 +219,17 @@ Case of
 									
 									$t:=$o.path
 									
-									APPEND MENU ITEM:C411($Mnu_main;$t)
-									
 									If (Position:C15(" ";$t)>0)
 										
-										$t:="'"+$t+"'"
+										$menu.append($t;"'"+$t+"'")
+										
+									Else 
+										
+										$menu.append($t;$t)
 										
 									End if 
 									
-									SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;$t)
+									$menu.icon("Images/fieldsIcons/field_"+String:C10($o.typeLegacy;"00")+".png")
 									
 								End for each 
 							End if 
@@ -237,76 +237,51 @@ Case of
 							  //……………………………………………………………………………………………………………………………
 						: ($Svg_id="comparator")
 							
-							APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("equalTo"))
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"= ")
+							$menu.append(":xliff:equalTo";"= ")
+							$menu.append(":xliff:notEqualTo";"!= ")
+							$menu.line()
 							
-							APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("notEqualTo"))
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"!= ")
+							$menu.append("IS";"=== ")
+							$menu.append("IS NOT";"!== ")
+							$menu.line()
 							
-							APPEND MENU ITEM:C411($Mnu_main;"-")
+							$menu.append(":xliff:lessThan";"< ")
+							$menu.append(":xliff:greaterThan";"> ")
+							$menu.line()
 							
-							APPEND MENU ITEM:C411($Mnu_main;"IS")
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"=== ")
+							$menu.append(":xliff:lessThanOrEqualTo";"<= ")
+							$menu.append(":xliff:greaterThanOrEqualTo";">= ")
+							$menu.line()
 							
-							APPEND MENU ITEM:C411($Mnu_main;"IS NOT")
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"!== ")
-							
-							APPEND MENU ITEM:C411($Mnu_main;"-")
-							
-							APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("lessThan"))
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"< ")
-							
-							APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("greaterThan"))
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"> ")
-							
-							APPEND MENU ITEM:C411($Mnu_main;"-")
-							
-							APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("lessThanOrEqualTo"))
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"<= ")
-							
-							APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("greaterThanOrEqualTo"))
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;">= ")
-							
-							APPEND MENU ITEM:C411($Mnu_main;"-")
-							
-							APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("containsKeyword"))
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"% ")
+							$menu.append(":xliff:containsKeyword";"% ")
 							
 							  //……………………………………………………………………………………………………………………………
 						: ($Svg_id="operator")
 							
-							APPEND MENU ITEM:C411($Mnu_main;"AND")
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"& ")
+							$menu.append("AND";"& ")
+							$menu.append("OR";"| ")
+							$menu.line()
 							
-							APPEND MENU ITEM:C411($Mnu_main;"OR")
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"| ")
+							$menu.append("NOT";"NOT({sel})")
+							$menu.line()
 							
-							APPEND MENU ITEM:C411($Mnu_main;"-")
-							
-							APPEND MENU ITEM:C411($Mnu_main;"NOT")
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"NOT({sel})")
-							
-							APPEND MENU ITEM:C411($Mnu_main;"-")
-							
-							APPEND MENU ITEM:C411($Mnu_main;"(…)";*)
-							SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"({sel})")
+							$menu.append("(…)";"NOT(({sel}))")
 							
 							  //……………………………………………………………………………………………………………………………
 					End case 
 					
-					$Txt_choice:=Dynamic pop up menu:C1006($Mnu_main)
-					RELEASE MENU:C978($Mnu_main)
+					$menu.popup()
 					
-					If (Length:C16($Txt_choice)#0)
+					If ($menu.selected)
 						
 						GET HIGHLIGHT:C209(*;$form.filter;$Lon_begin;$Lon_end)
 						
-						$Txt_selection:=Substring:C12($Obj_table.filter.string;$Lon_begin;$Lon_end-$Lon_begin)
-						$Boo_caret:=(Position:C15("{sel}";$Txt_choice)>0)
+						$Txt_selection:=Substring:C12($Obj_table[""].filter.string;$Lon_begin;$Lon_end-$Lon_begin)
+						$Boo_caret:=(Position:C15("{sel}";$menu.choice)>0)
 						
 						If ($Boo_caret)
 							
-							$Txt_choice:=Replace string:C233($Txt_choice;"{sel}";$Txt_selection)
+							$menu.choice:=Replace string:C233($menu.choice;"{sel}";$Txt_selection)
 							
 						End if 
 						
@@ -325,10 +300,18 @@ Case of
 						
 						$Obj_table.filter.validated:=False:C215
 						
-						$o:=str (String:C10($Obj_table.filter.string)).insert($Txt_choice;$Lon_begin;$Lon_end)
+						$o:=str (String:C10($Obj_table.filter.string)).insert($menu.choice;$Lon_begin;$Lon_end)
 						$Obj_table.filter.string:=$o.value
 						
-						Form:C1466.dataModel[String:C10($Obj_table.tableNumber)].filter:=$Obj_table.filter
+						If (featuresFlags.with("newDataModel"))
+							
+							Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][""].filter:=$Obj_table.filter
+							
+						Else 
+							
+							Form:C1466.dataModel[String:C10($Obj_table.tableNumber)].filter:=$Obj_table.filter
+							
+						End if 
 						
 						If ($Boo_caret)\
 							 & (Length:C16($Txt_selection)=0)
@@ -347,8 +330,7 @@ Case of
 						
 						ui.saveProject()
 						
-						  // Redraw
-						ui.refresh()
+						$context.refresh()
 						
 					End if 
 				End if 
@@ -385,7 +367,7 @@ Case of
 		End if 
 		
 		ui.saveProject()
-		ui.refresh()
+		$context.refresh()
 		
 		Form:C1466.$project.status.project:=project_Audit (New object:C1471("target";New collection:C1472("filters"))).success
 		CALL FORM:C1391($form.window;"editor_CALLBACK";"updateRibbon")
@@ -419,7 +401,7 @@ Case of
 		End if 
 		
 		ui.saveProject()
-		ui.refresh()
+		$context.update()
 		
 		  //==================================================
 	: ($Txt_me=$form.filter)
@@ -441,12 +423,12 @@ Case of
 				  // Keep current filter definition
 				$context.currentFilter:=OB Copy:C1225($Obj_table.filter)
 				
-				ui.refresh()
+				$context.refresh()
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Losing Focus:K2:8)
 				
-				ui.refresh()
+				$context.refresh()
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Data Change:K2:15)
@@ -463,7 +445,7 @@ Case of
 					
 				End if 
 				
-				ui.refresh()
+				$context.refresh()
 				
 				  //______________________________________________________
 			: ($Lon_formEvent=On After Edit:K2:43)
@@ -523,7 +505,7 @@ Case of
 				End if 
 				
 				ui.saveProject()
-				ui.refresh()
+				$context.refresh()
 				
 				  //______________________________________________________
 			Else 

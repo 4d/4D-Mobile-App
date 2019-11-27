@@ -193,7 +193,8 @@
 					"events": [
 						"onClick"
 					],
-					"method": "DATA_OBJECTS_HANDLER"
+					"method": "DATA_OBJECTS_HANDLER",
+					"dataSourceTypeHint": "boolean"
 				},
 				"01_tables.label": {
 					"type": "text",
