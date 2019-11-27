@@ -442,11 +442,11 @@ Else
 					For ($i;1;Size of array:C274($tLon_types);1)
 						If ($tLon_types{$i}=11)
 							
-							This:C1470.$_is:=Null:C1517
+							This:C1470[""]:=Null:C1517
 							C_OBJECT:C1216($Obj_child)
 							$Obj_child:=xml ($tTxt_refs{$i})
 							$o.elements.push($Obj_child)
-							This:C1470.$_is:="_xml"
+							This:C1470[""]:="_xml"
 							
 							If (Bool:C1537($2.recursive))
 								$o.elements.combine($Obj_child.children(True:C214).elements)  // XXX manage errors?

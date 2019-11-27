@@ -55,6 +55,16 @@ $parent:=$result.elements[0]
 $result:=$parent.findOrCreate("eric")
 ASSERT:C1129($result.elementRef=$parent.findOrCreate("eric").elementRef;"Must not recreate a new node with findOrCreate")
 
+  // children
+C_OBJECT:C1216($children)
+$children:=$scenes.children()
+ASSERT:C1129($children.success;"Failed to get xml children")
+ASSERT:C1129($children.elements.length=3;"Incorrect number of children for xml node. Expected 3 but receive "+String:C10($children.elements.length))
+
+$children:=$scenes.children(True:C214)
+ASSERT:C1129($children.success;"Failed to get xml children recursively")
+ASSERT:C1129($children.elements.length=108;"Incorrect number of children for xml node. Expected 108 but receive "+String:C10($children.elements.length))
+
   // final close
 $xml.close()
 
