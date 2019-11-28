@@ -81,13 +81,19 @@ If ($Obj_result.children.success)
 	  // Find current max tag ID if already started to replace tags
 	$Txt_tagFullPrefix:=$Txt_tagPrefix+$Txt_tagInterfix+"-"
 	$Lon_ids:=0
-	$Dom_child:=New object:C1471("success";True:C214)
-	While ($Dom_child.success)
+	$Boo_haveWrongTag:=False:C215
+	For each ($Txt_tag;$Obj_nodeByIds)
 		
-		$Lon_ids:=$Lon_ids+1
-		$Dom_child:=$Obj_element.dom.findById($Txt_tagFullPrefix+String:C10($Lon_ids+1;"##000"))
+		If (Position:C15($Txt_tagFullPrefix;$Txt_tag)=1)
+			$Lon_current:=Num:C11(Replace string:C233($Txt_tag;$Txt_tagFullPrefix;""))
+			If ($Lon_current>$Lon_ids)
+				$Lon_ids:=$Lon_current
+			End if 
+		Else 
+			$Boo_haveWrongTag:=True:C214
+		End if 
 		
-	End while 
+	End for each 
 	
 	  // Look for wrong tags
 	$Obj_tagMapping:=New object:C1471()
@@ -108,10 +114,13 @@ If ($Obj_result.children.success)
 	End for each 
 	
 	  // Recreate a new node
-	$Obj_element.originalDom:=$Obj_element.dom  // store old one (useful to get parent or replace)
-	$Obj_element.insertInto:=$Obj_element.originalDom.parent()
-	$Obj_element.dom:=xml ("parse";New object:C1471("variable";$Txt_buffer))
-	$Obj_element.tagInterfix:=$Txt_tagInterfix
+	If ($Boo_haveWrongTag)  //or $Obj_tagMapping key size  OPTI: if we do nothing, do not return new node (just edit the current one and add idCount)
+		$Obj_element.originalDom:=$Obj_element.dom  // store old one (useful to get parent or replace)
+		$Obj_element.insertInto:=$Obj_element.originalDom.parent()
+		$Obj_element.dom:=xml ("parse";New object:C1471("variable";$Txt_buffer))
+		$Obj_element.tagInterfix:=$Txt_tagInterfix
+	End if 
+	
 	$Obj_element.idCount:=$Lon_ids  // TODO check if need +1 or -1 or not
 	$Obj_result.success:=Bool:C1537($Obj_element.dom.success)
 	
