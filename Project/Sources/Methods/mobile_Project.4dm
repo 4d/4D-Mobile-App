@@ -44,80 +44,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		$Obj_in:=$1
 		
 		  // Add choice lists if any to action parameters
-		If ($Obj_in.project.actions#Null:C1517)
-			
-			$Obj_dataModel:=$Obj_in.project.dataModel
-			
-			For each ($Obj_action;$Obj_in.project.actions)
-				
-				If ($Obj_action.parameters#Null:C1517)
-					
-					For each ($Obj_parameters;$Obj_action.parameters)
-						
-						If ($Obj_parameters.fieldNumber#Null:C1517)  // Linked to a field
-							
-							$t:=String:C10($Obj_dataModel[String:C10($Obj_action.tableNumber)][String:C10($Obj_parameters.fieldNumber)].format)
-							
-							If (Length:C16($t)>0)
-								
-								If ($t[[1]]="/")
-									
-									  // User
-									$Path_manifest:=COMPONENT_Pathname ("host_formatters").file(Substring:C12($t;2)+"/manifest.json")
-									
-									If ($Path_manifest.exists)
-										
-										$Obj_manifest:=JSON Parse:C1218($Path_manifest.getText())
-										
-										If ($Obj_manifest.choiceList#Null:C1517)
-											
-											If ($Obj_parameters.type="bool")  // Kep only 2 values
-												
-												Case of 
-														
-														  //______________________________________________________
-													: (Value type:C1509($Obj_manifest.choiceList)=Is collection:K8:32)
-														
-														$Obj_manifest.choiceList.resize(2)
-														$Obj_parameters.choiceList:=$Obj_manifest.choiceList
-														
-														  //______________________________________________________
-													: (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
-														
-														$Obj_parameters.choiceList:=New collection:C1472($Obj_manifest.choiceList["0"];$Obj_manifest.choiceList["1"])
-														
-														  //______________________________________________________
-													Else 
-														
-														  // IGNORE
-														
-														  //______________________________________________________
-												End case 
-												
-											Else 
-												
-												$Obj_parameters.choiceList:=$Obj_manifest.choiceList
-												
-											End if 
-										End if 
-									End if 
-									
-								Else 
-									
-									$Obj_manifest:=JSON Parse:C1218(Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"resources.json")).definitions
-									
-									If ($Obj_manifest[$t].choiceList#Null:C1517)
-										
-										$Obj_parameters.choiceList:=$Obj_manifest[$t].choiceList
-										
-									End if 
-								End if 
-							End if 
-						End if 
-					End for each 
-				End if 
-			End for each 
-		End if 
+		
+		actions ("addChoiceList";$Obj_in)
 		
 		If ($Boo_dev)
 			
