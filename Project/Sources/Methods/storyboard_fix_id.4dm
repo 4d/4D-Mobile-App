@@ -10,10 +10,11 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_parameters;$Lon_ids)
+C_LONGINT:C283($Lon_parameters;$Lon_ids;$Lon_current)
 C_OBJECT:C1216($Obj_element;$Obj_result)
 C_OBJECT:C1216($Obj_nodeByIds;$Obj_tag;$Obj_child;$Obj_tagMapping;$Dom_child)
 C_TEXT:C284($Txt_tagPrefix;$Txt_tagInterfix;$Txt_tagFullPrefix;$Txt_tag;$Txt_buffer)
+C_BOOLEAN:C305($Boo_haveWrongTag)
 
 If (False:C215)
 	C_OBJECT:C1216(storyboard_fix_id ;$0)
