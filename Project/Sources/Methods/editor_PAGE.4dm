@@ -145,6 +145,27 @@ If (Length:C16($Txt_page)>0)
 				"form";"STRUCTURE";\
 				"noTitle";True:C214))
 			
+/*
+POST_FORM_MESSAGE (New object(\
+"target";Current form window;\
+"action";"show";\
+"type";"confirm";\
+"title";"updateTheProject";\
+"additional";"aBackupWillBeCreatedIntoTheProjectFolder";\
+"ok";"update";\
+"okFormula";Formula(CALL FORM(Current form window;"editor_CALLBACK";"syncDataModel"))))
+*/
+			
+			If (featuresFlags.with("repairStructureMoreVisible"))
+				
+				If (editor_Locked )
+					
+					$Obj_geometry.actionFormula:=Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"syncDataModel"))
+					
+				End if 
+				
+			End if 
+			
 			  //………………………………………………………………………………………
 		: ($Lon_page=3)
 			
@@ -237,6 +258,8 @@ If (Length:C16($Txt_page)>0)
 			(OBJECT Get pointer:C1124(Object named:K67:5;"description"))->:=Form:C1466.currentPage
 			
 		End if 
+		
+		Form:C1466.$page:=$Obj_geometry
 		
 		EXECUTE METHOD IN SUBFORM:C1085("PROJECT";"panel_INIT";*;$Obj_geometry)
 		

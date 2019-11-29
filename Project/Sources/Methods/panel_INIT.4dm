@@ -168,6 +168,12 @@ For each ($Obj_panel;$Obj_definition.panels)
 	End if 
 End for each 
 
+If (featuresFlags.with("repairStructureMoreVisible"))
+	
+	CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"actionButton";$Obj_definition)
+	
+End if 
+
   // Finally place the background
 OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_width;$Lon_height)
 OBJECT SET COORDINATES:C1248(*;"_background";0;0;$Lon_width;$Lon_bottom)

@@ -53,6 +53,11 @@ End if
 Case of 
 		
 		  //______________________________________________________
+	: ($Txt_selector="actionButton")
+		
+		OBJECT SET VISIBLE:C603(*;"action";$Obj_in.actionFormula#Null:C1517)
+		
+		  //______________________________________________________
 	: ($Txt_selector="projectAuditResult")
 		
 		PROJECT_HANDLER (New object:C1471(\
@@ -87,10 +92,10 @@ Case of
 		Else 
 			
 			  //DO_MESSAGE (New object(\
-				"action";"show";\
-				"type";"alert";\
-				"title";"noDevices";\
-				"additional";""))
+												"action";"show";\
+												"type";"alert";\
+												"title";"noDevices";\
+												"additional";""))
 			
 		End if 
 		
@@ -196,7 +201,7 @@ Case of
 					If (Bool:C1537($Obj_in.param.manualInstallation))
 						
 						  //DISPLAY NOTIFICATION(Get localized string("4dProductName");\
-							str_localized (New collection("theApplicationHasBeenSuccessfullyGenerated";$Obj_in.param.project.product.name)))
+																					str_localized (New collection("theApplicationHasBeenSuccessfullyGenerated";$Obj_in.param.project.product.name)))
 						
 						DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName");\
 							str ("theApplicationHasBeenSuccessfullyGenerated").localized($Obj_in.param.project.product.name))
@@ -204,7 +209,7 @@ Case of
 					Else 
 						
 						  //DISPLAY NOTIFICATION(Get localized string("4dProductName");\
-							str_localized (New collection("theApplicationHasBeenSuccessfullyInstalled";$Obj_in.param.project.product.name)))
+																					str_localized (New collection("theApplicationHasBeenSuccessfullyInstalled";$Obj_in.param.project.product.name)))
 						
 						DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName");\
 							str ("theApplicationHasBeenSuccessfullyInstalled").localized($Obj_in.param.project.product.name))
@@ -215,7 +220,7 @@ Case of
 				Else 
 					
 					  //DISPLAY NOTIFICATION(Get localized string("4dProductName");\
-						str_localized (New collection("theApplicationHasBeenSuccessfullyGenerated";$Obj_in.param.project.product.name)))
+																		str_localized (New collection("theApplicationHasBeenSuccessfullyGenerated";$Obj_in.param.project.product.name)))
 					
 					DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName");\
 						str ("theApplicationHasBeenSuccessfullyGenerated").localized($Obj_in.param.project.product.name))

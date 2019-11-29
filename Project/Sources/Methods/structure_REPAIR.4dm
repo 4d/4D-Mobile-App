@@ -63,18 +63,42 @@ For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 			Case of 
 					
 					  //______________________________________________________
+				: (Length:C16($t)=0)
+					
+					  // <NOTHING MORE TO DO>
+					
+					  //______________________________________________________
 				: ($ƒ.isField($t))
 					
-					$Obj_field:=$Obj_table[$t]
+					$o:=$c.query("current.id = :1";Num:C11($t)).pop()
 					
-					If ($c.query("name = :1";$Obj_field.name).length=1)
+					If ($o=Null:C1517)  // Missing
 						
 						OB REMOVE:C1226($Obj_table;String:C10($t))
 						
 					Else 
 						
-						$Lon_published:=$Lon_published+1
-						
+						Case of 
+								
+								  //______________________________________________________
+							: ($o.missing)
+								
+								OB REMOVE:C1226($Obj_table;String:C10($t))
+								
+								  //______________________________________________________
+							: ($o.typeMismatch)
+								
+								OB REMOVE:C1226($Obj_table;String:C10($t))
+								
+								  //______________________________________________________
+							Else 
+								
+								  // Only name was modified: ACCEPT
+								$Obj_table[$t]:=$o.current.name
+								$Lon_published:=$Lon_published+1
+								
+								  //______________________________________________________
+						End case 
 					End if 
 					
 					  //______________________________________________________

@@ -425,7 +425,9 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
 	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
 	
-	featuresFlags.newDataModel:=($Lon_version>=1820)  //(Folder(fk user preferences folder).file("_vdl").exists) & (Structure file=Structure file(*))
+	featuresFlags.newDataModel:=($Lon_version>=1820)
+	
+	featuresFlags.repairStructureMoreVisible:=featuresFlags._8858  // make more visible the action repair structure
 	
 End if 
 

@@ -16,6 +16,9 @@ End if
 
 COMPONENT_INIT 
 
+$o:=Folder:C1567("/")
+$oo:=Folder:C1567(fk system folder:K87:13).parent
+
 Case of 
 		
 		  //________________________________________

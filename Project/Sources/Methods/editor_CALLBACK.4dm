@@ -64,7 +64,6 @@ Else
 	
 End if 
 
-
   // ----------------------------------------------------
 If ($Obj_form.currentForm=$Obj_form.editor)
 	
