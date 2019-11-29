@@ -948,7 +948,11 @@ Case of
 					
 					$Obj_buffer:=Xcode (New object:C1471(\
 						"action";"tools-path"))
-					$Obj_result.success:=$Obj_buffer.posix=$Txt_newPath
+					If ($Obj_buffer.posix=Null:C1517)
+						$Obj_result.success:=False:C215
+					Else 
+						$Obj_result.success:=$Obj_buffer.posix=$Txt_newPath
+					End if 
 					
 				End if 
 				

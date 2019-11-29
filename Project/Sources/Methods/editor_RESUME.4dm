@@ -112,7 +112,7 @@ Case of
 			
 		Else 
 			
-			If (Position:C15("User canceled. (-128)";$Obj_xcode.error)>0)
+			If (Position:C15("User canceled. (-128)";String:C10($Obj_xcode.error))>0)
 				
 				  // NOTHING MORE TO DO
 				
@@ -240,7 +240,7 @@ Case of
 			  //  // Port conflict? or certificates are missing?
 			  //$Dir_database:=Get 4D folder(Database folder;*)
 			  //If (Test path name($Dir_database+"cert.pem")#Is a document)\
-																								| (Test path name($Dir_database+"key.pem")#Is a document)
+																												| (Test path name($Dir_database+"key.pem")#Is a document)
 			
 			  //$Txt_message:=Get localized string("checkThatTheCertificatesAreProperlyInstalled")
 			  // Else
