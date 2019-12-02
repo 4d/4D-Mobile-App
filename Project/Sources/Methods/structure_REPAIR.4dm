@@ -88,13 +88,36 @@ For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 								  //______________________________________________________
 							: ($o.typeMismatch)
 								
-								OB REMOVE:C1226($Obj_table;String:C10($t))
+								  // Detect compatible types
+								Case of 
+										
+										  //……………………………………………………………………………………………………………………………………………………………………………
+									: (($o.fieldType=Is alpha field:K8:1) & ($o.current.fieldType=Is text:K8:3))\
+										 | (($o.fieldType=Is text:K8:3) & ($o.current.fieldType=Is alpha field:K8:1))  // String
+										
+										$Obj_table[$t].fieldType:=$o.current.fieldType
+										$Lon_published:=$Lon_published+1
+										
+										  //……………………………………………………………………………………………………………………………………………………………………………
+									: (($o.current.fieldType=Is integer:K8:5) | ($o.current.fieldType=Is longint:K8:6) | ($o.current.fieldType=Is integer 64 bits:K8:25) | ($o.current.fieldType=Is real:K8:4) | ($o.current.fieldType=_o_Is float:K8:26))\
+										 & (($o.fieldType=Is integer:K8:5) | ($o.fieldType=Is longint:K8:6) | ($o.fieldType=Is integer 64 bits:K8:25) | ($o.fieldType=Is real:K8:4) | ($o.fieldType=_o_Is float:K8:26))  // Numeric
+										
+										$Obj_table[$t].fieldType:=$o.current.fieldType
+										$Lon_published:=$Lon_published+1
+										
+										  //……………………………………………………………………………………………………………………………………………………………………………
+									Else 
+										
+										OB REMOVE:C1226($Obj_table;String:C10($t))
+										
+										  //……………………………………………………………………………………………………………………………………………………………………………
+								End case 
 								
 								  //______________________________________________________
 							Else 
 								
 								  // Only name was modified: ACCEPT
-								$Obj_table[$t]:=$o.current.name
+								$Obj_table[$t].name:=$o.current.name
 								$Lon_published:=$Lon_published+1
 								
 								  //______________________________________________________
