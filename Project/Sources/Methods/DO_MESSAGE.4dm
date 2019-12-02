@@ -41,81 +41,89 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (String:C10($Obj_in.action)="reset")
+If (OBJECT Get visible:C1075(*;"message"))
 	
-	(OBJECT Get pointer:C1124(Object named:K67:5;"message"))->:=New object:C1471
+	  // A message is already displayed: wait
+	CALL FORM:C1391(Current form window:C827;"DO_MESSAGE";$Obj_in)
 	
 Else 
 	
-	$Obj_message:=(OBJECT Get pointer:C1124(Object named:K67:5;"message"))->
-	
-	Case of 
-			
-			  //______________________________________________________
-		: ($Obj_in.action=Null:C1517)
-			
-			  // NOTHING MORE TO DO
-			
-			  //______________________________________________________
-		: ($Obj_in.action="show")
-			
-			  // Get help tips status
-			$o:=ui.tips
-			
-			$Obj_message:=ob_createPath ($Obj_message;"tips")
-			$Obj_message.tips:=$o
-			
-			$o.disable()
-			
-			OBJECT SET VISIBLE:C603(*;"message@";True:C214)
-			
-			  //______________________________________________________
-		: ($Obj_in.action="hide")
-			
-			  // Don't dismiss an alert or confirmation
-			If ($Obj_message.type#"alert")\
-				 & ($Obj_message.type#"confirm")
-				
-				OBJECT SET VISIBLE:C603(*;"message@";False:C215)
-				
-			End if 
-			
-			If ($Obj_message.tips.enabled)
-				
-				  // Restore help tips status
-				$o:=ui.tips
-				$o.enable()
-				$o.setDuration($Obj_message.tips.delay)
-				
-			End if 
-			
-			  //______________________________________________________
-		: ($Obj_in.action="reset")
-			
-			$Obj_in:=New object:C1471
-			
-			  //______________________________________________________
-		Else 
-			
-			ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
-			
-			  //______________________________________________________
-	End case 
-	
-	If ($Obj_message=Null:C1517)
+	If (String:C10($Obj_in.action)="reset")
 		
-		$Obj_message:=New object:C1471
+		(OBJECT Get pointer:C1124(Object named:K67:5;"message"))->:=New object:C1471
+		
+	Else 
+		
+		$Obj_message:=(OBJECT Get pointer:C1124(Object named:K67:5;"message"))->
+		
+		Case of 
+				
+				  //______________________________________________________
+			: ($Obj_in.action=Null:C1517)
+				
+				  // NOTHING MORE TO DO
+				
+				  //______________________________________________________
+			: ($Obj_in.action="show")
+				
+				  // Get help tips status
+				$o:=ui.tips
+				
+				$Obj_message:=ob_createPath ($Obj_message;"tips")
+				$Obj_message.tips:=$o
+				
+				$o.disable()
+				
+				OBJECT SET VISIBLE:C603(*;"message@";True:C214)
+				
+				  //______________________________________________________
+			: ($Obj_in.action="hide")
+				
+				  // Don't dismiss an alert or confirmation
+				If ($Obj_message.type#"alert")\
+					 & ($Obj_message.type#"confirm")
+					
+					OBJECT SET VISIBLE:C603(*;"message@";False:C215)
+					
+				End if 
+				
+				If ($Obj_message.tips.enabled)
+					
+					  // Restore help tips status
+					$o:=ui.tips
+					$o.enable()
+					$o.setDuration($Obj_message.tips.delay)
+					
+				End if 
+				
+				  //______________________________________________________
+			: ($Obj_in.action="reset")
+				
+				$Obj_in:=New object:C1471
+				
+				  //______________________________________________________
+			Else 
+				
+				ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
+				
+				  //______________________________________________________
+		End case 
+		
+		If ($Obj_message=Null:C1517)
+			
+			$Obj_message:=New object:C1471
+			
+		End if 
+		
+		For each ($Txt_keys;$Obj_in)
+			
+			$Obj_message[$Txt_keys]:=$Obj_in[$Txt_keys]
+			
+		End for each 
+		
+		(OBJECT Get pointer:C1124(Object named:K67:5;"message"))->:=$Obj_message
 		
 	End if 
-	
-	For each ($Txt_keys;$Obj_in)
-		
-		$Obj_message[$Txt_keys]:=$Obj_in[$Txt_keys]
-		
-	End for each 
-	
-	(OBJECT Get pointer:C1124(Object named:K67:5;"message"))->:=$Obj_message
-	
 End if 
 
   // ----------------------------------------------------
