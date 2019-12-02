@@ -45,9 +45,19 @@ Else
 	
 End if 
 
-$o:=New signal:C1641
-CALL WORKER:C1389(1;"INIT";$o)
+If (Storage:C1525.database=Null:C1517)
+	
+/* #ACI0099986
+$o:=New signal
+CALL WORKER(1;"INIT";$o)
 $o.wait()
+*/
+	$o:=New signal:C1641
+	CALL WORKER:C1389("$";"INIT";$o)
+	$o.wait()
+	KILL WORKER:C1390("$")
+	
+End if 
 
   // ================================================================================================================================
   //                                                            COMMON VALUES
