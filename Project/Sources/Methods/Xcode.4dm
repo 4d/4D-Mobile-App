@@ -1375,10 +1375,12 @@ Case of
 				
 			Else 
 				
-				$Obj_result.success:=True:C214
 				$Obj_result.out:=$Txt_out
 				
 			End if 
+			
+			$Obj_result.success:=($Obj_result.out="0\n")  // Success even if there is some error logs. Only check status.
+			
 		End if 
 		
 		  //______________________________________________________
