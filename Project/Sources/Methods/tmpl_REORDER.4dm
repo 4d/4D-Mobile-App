@@ -92,6 +92,7 @@ If (Asserted:C1132(Test path name:C476($File_)=Is a document:K24:1))
 				For each ($Txt_bind;$Col_bind)
 					
 					CLEAR VARIABLE:C89($Boo_accepted)
+					CLEAR VARIABLE:C89($Obj_field)
 					
 					  // Find the binded element
 					$Dom_field:=DOM Find XML element by ID:C1010($Dom_root;$Txt_bind)
