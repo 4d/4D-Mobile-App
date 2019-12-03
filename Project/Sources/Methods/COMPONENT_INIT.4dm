@@ -428,16 +428,15 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags._105431:=($Lon_version>=1800)  //  [MOBILE] Display 1-n relations
 	featuresFlags._110882:=($Lon_version>=1800)  //  [MOBILE] Dump data into core data SQLLite database
 	
+	featuresFlags.repairStructureMoreVisible:=True:C214
+	featuresFlags.newDataModel:=($Lon_version>=1820)
+	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
 	  // ________________________________________________________________________________________________________________________________
 	featuresFlags._98145:=($Lon_version>=1750)  //                   Replace, for data structure access, EXPORT STRUCTURE by ds
 	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
 	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
-	
-	featuresFlags.newDataModel:=($Lon_version>=1820)
-	
-	featuresFlags.repairStructureMoreVisible:=featuresFlags._8858  // make more visible the action repair structure
 	
 End if 
 

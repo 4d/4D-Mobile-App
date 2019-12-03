@@ -46,7 +46,7 @@
 			"objects": {
 				"icon": {
 					"type": "picture",
-					"top": 8,
+					"top": 9,
 					"left": 14,
 					"width": 32,
 					"height": 32,
@@ -55,7 +55,7 @@
 				},
 				"title": {
 					"type": "text",
-					"top": 12,
+					"top": 13,
 					"left": 52,
 					"width": 89,
 					"height": 25,
@@ -67,7 +67,7 @@
 				},
 				"comment": {
 					"type": "text",
-					"top": 16,
+					"top": 17,
 					"left": 146,
 					"width": 810,
 					"height": 17,
@@ -85,6 +85,23 @@
 					"strokeDashArray": "1 1",
 					"width": 0,
 					"startPoint": "topLeft"
+				},
+				"action": {
+					"type": "button",
+					"text": "Button",
+					"top": 16,
+					"left": 846,
+					"width": 102,
+					"height": 19,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"visibility": "visible",
+					"style": "regular",
+					"sizingX": "move",
+					"method": "ObjectMethods/action.4dm",
+					"stroke": "#ff0000"
 				}
 			}
 		}

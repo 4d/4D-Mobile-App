@@ -145,25 +145,31 @@ If (Length:C16($Txt_page)>0)
 				"form";"STRUCTURE";\
 				"noTitle";True:C214))
 			
-/*
-POST_FORM_MESSAGE (New object(\
-"target";Current form window;\
-"action";"show";\
-"type";"confirm";\
-"title";"updateTheProject";\
-"additional";"aBackupWillBeCreatedIntoTheProjectFolder";\
-"ok";"update";\
-"okFormula";Formula(CALL FORM(Current form window;"editor_CALLBACK";"syncDataModel"))))
-*/
 			
-			If (featuresFlags.with("repairStructureMoreVisible"))
+			$Obj_geometry.action:=New object:C1471(\
+				"title";"syncDataModel";\
+				"show";False:C215;\
+				"formula";Formula:C1597(POST_FORM_MESSAGE (New object:C1471(\
+				"target";Current form window:C827;\
+				"action";"show";\
+				"type";"confirm";\
+				"title";"updateTheProject";\
+				"additional";"aBackupWillBeCreatedIntoTheProjectFolder";\
+				"ok";"update";\
+				"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"syncDataModel")))))\
+				)
+			
+			If (Form:C1466.status.dataModel#Null:C1517)
 				
-				If (editor_Locked )
+				If (Bool:C1537(Form:C1466.status.dataModel))
 					
-					$Obj_geometry.actionFormula:=Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"syncDataModel"))
+					  // <NOTHING MORE TO DO>
+					
+				Else 
+					
+					$Obj_geometry.action.show:=True:C214
 					
 				End if 
-				
 			End if 
 			
 			  //………………………………………………………………………………………
@@ -252,10 +258,9 @@ POST_FORM_MESSAGE (New object(\
 			
 			Form:C1466.currentPage:=$tTxt_pages{$Lon_page}
 			
-			  //OBJECT SET TITLE(*;"hamburger";Get localized string("page_"+$tTxt_pages{$Lon_page}))
-			  //OBJECT SET FORMAT(*;"hamburger";";#images/toolbar/"+$tTxt_pages{$Lon_page}+"-24.png")
-			
 			(OBJECT Get pointer:C1124(Object named:K67:5;"description"))->:=Form:C1466.currentPage
+			
+			EXECUTE METHOD IN SUBFORM:C1085("description";"editor_description";*;$Obj_geometry)
 			
 		End if 
 		

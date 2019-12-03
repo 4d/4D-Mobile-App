@@ -92,14 +92,19 @@ For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 								Case of 
 										
 										  //……………………………………………………………………………………………………………………………………………………………………………
-									: (($o.fieldType=Is alpha field:K8:1) & ($o.current.fieldType=Is text:K8:3))\
+									: (($o.fieldType=Is alpha field:K8:1)\
+										 & ($o.current.fieldType=Is text:K8:3))\
 										 | (($o.fieldType=Is text:K8:3) & ($o.current.fieldType=Is alpha field:K8:1))  // String
 										
 										$Obj_table[$t].fieldType:=$o.current.fieldType
 										$Lon_published:=$Lon_published+1
 										
 										  //……………………………………………………………………………………………………………………………………………………………………………
-									: (($o.current.fieldType=Is integer:K8:5) | ($o.current.fieldType=Is longint:K8:6) | ($o.current.fieldType=Is integer 64 bits:K8:25) | ($o.current.fieldType=Is real:K8:4) | ($o.current.fieldType=_o_Is float:K8:26))\
+									: (($o.current.fieldType=Is integer:K8:5)\
+										 | ($o.current.fieldType=Is longint:K8:6)\
+										 | ($o.current.fieldType=Is integer 64 bits:K8:25)\
+										 | ($o.current.fieldType=Is real:K8:4)\
+										 | ($o.current.fieldType=_o_Is float:K8:26))\
 										 & (($o.fieldType=Is integer:K8:5) | ($o.fieldType=Is longint:K8:6) | ($o.fieldType=Is integer 64 bits:K8:25) | ($o.fieldType=Is real:K8:4) | ($o.fieldType=_o_Is float:K8:26))  // Numeric
 										
 										$Obj_table[$t].fieldType:=$o.current.fieldType
@@ -265,7 +270,11 @@ project_REPAIR ($Obj_project)
   // Save project
 $Win_current:=Current form window:C827
 CALL FORM:C1391($Win_current;"project_SAVE")
+
+  // Update UI
 CALL FORM:C1391($Win_current;"editor_CALLBACK";"updateRibbon")
+CALL FORM:C1391($Win_current;"editor_CALLBACK";"description";New object:C1471(\
+"show";False:C215))
 
   // ----------------------------------------------------
   // Return

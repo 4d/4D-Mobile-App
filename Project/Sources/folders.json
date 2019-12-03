@@ -112,6 +112,7 @@
 			"COMPILER_editor",
 			"editor_CALLBACK",
 			"editor_Catalog",
+			"editor_description",
 			"editor_HANDLER",
 			"editor_INIT",
 			"editor_LoadIcons",

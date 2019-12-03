@@ -287,7 +287,7 @@ If ($file.exists)
 								
 							Else 
 								
-								  // PRIVATE PROPERTIES 
+								  // PRIVATE PROPERTIES
 								
 							End if 
 						End for each 
@@ -386,6 +386,9 @@ Else
 	Form:C1466.status.dataModel:=Not:C34($Boo__unsynchronized)
 	
 End if 
+
+CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"description";New object:C1471(\
+"show";$Boo__unsynchronized))
 
   //If (False)  // SEMBLE NE PAS ETRE COHERENT
   //  //#106068 - [BUG] Delete table when published
