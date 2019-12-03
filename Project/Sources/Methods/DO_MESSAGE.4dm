@@ -41,7 +41,10 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (OBJECT Get visible:C1075(*;"message"))
+$Obj_message:=(OBJECT Get pointer:C1124(Object named:K67:5;"message"))->
+
+If (OBJECT Get visible:C1075(*;"message"))\
+ & (New collection:C1472("alert";"confirm").indexOf(String:C10($Obj_message.type))#-1)
 	
 	  // A message is already displayed: wait
 	CALL FORM:C1391(Current form window:C827;"DO_MESSAGE";$Obj_in)
@@ -53,8 +56,6 @@ Else
 		(OBJECT Get pointer:C1124(Object named:K67:5;"message"))->:=New object:C1471
 		
 	Else 
-		
-		$Obj_message:=(OBJECT Get pointer:C1124(Object named:K67:5;"message"))->
 		
 		Case of 
 				

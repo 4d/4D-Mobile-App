@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																																								"action";"safeDelete";\
-																																								"path";$Obj_in.path))
+																																												"action";"safeDelete";\
+																																												"path";$Obj_in.path))
 			  // End if
 			
 		End if 
@@ -124,10 +124,13 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					For each ($tt;$Obj_project.dataModel[$t])
 						
-						If ($Obj_project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
+						If (Length:C16($tt)>0)
 							
-							$c.push($Obj_project.dataModel[$t][$tt].relatedDataClass)
-							
+							If ($Obj_project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
+								
+								$c.push($Obj_project.dataModel[$t][$tt].relatedDataClass)
+								
+							End if 
 						End if 
 					End for each 
 				End for each 
