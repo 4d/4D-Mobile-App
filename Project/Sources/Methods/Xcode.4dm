@@ -674,7 +674,7 @@ Case of
 			
 			$Obj_result:=plist (New object:C1471(\
 				"action";"object";\
-				"domain";$Obj_result.folder.file("project.pbxproj").platformPath))
+				"domain";$Obj_result.folder.file("project.pbxproj").path))
 			
 		End if 
 		
@@ -687,15 +687,11 @@ Case of
 		
 		If ($Obj_result.success)
 			
-			$Txt_buffer:=$Obj_result.posix
-			
 			If ($Obj_param.object#Null:C1517)
-				
-				$Txt_buffer:=$Obj_result.file("project.pbxproj").platformPath
 				
 				$Obj_param.action:="fromobject"
 				$Obj_param.format:="openstep"
-				$Obj_param.domain:=$Txt_buffer
+				$Obj_param.domain:=$Obj_result.folder.file("project.pbxproj").path
 				
 				$Obj_result:=plist ($Obj_param)
 				
