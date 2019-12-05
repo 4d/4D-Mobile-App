@@ -233,17 +233,18 @@ Case of
 								
 							End if 
 							
-							If ($Obj_table.filter#Null:C1517)  // Is filter is available?
+							  //Development #113102
+							If ($o.filter#Null:C1517)  // Is filter is available?
 								
-								If (Bool:C1537($Obj_table.filter.validated))  // Is filter is validated?
+								If (Bool:C1537($o.filter.validated))  // Is filter is validated?
 									
 									$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
 										"key";"filter";\
-										"value";String:C10($Obj_table.filter.string))
+										"value";String:C10($o.filter.string))
 									
 								Else 
 									
-									ob_warning_add ($Obj_out;"Filter '"+String:C10($Obj_table.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
+									ob_warning_add ($Obj_out;"Filter '"+String:C10($o.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
 									
 								End if 
 							End if 
