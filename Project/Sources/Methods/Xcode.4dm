@@ -17,6 +17,7 @@ C_TEXT:C284($File_subpath;$Txt_buffer)
 C_TEXT:C284($Txt_cmd;$Txt_error;$Txt_in;$Txt_name;$Txt_newPath;$Txt_out)
 C_OBJECT:C1216($Obj_buffer;$Obj_param;$Obj_path;$Obj_result;$Obj_version;$File_path)
 C_OBJECT:C1216($Dom_fileRef;$Dom_root;$Dom_group;$Dom_child)
+C_OBJECT:C1216($folder;$subfolder)
 C_COLLECTION:C1488($Col_folder;$Col_paths)
 
 ARRAY TEXT:C222($tTxt_folders;0)
@@ -398,36 +399,33 @@ Case of
 		
 		If (Length:C16($Txt_buffer)>0)
 			
-			If (Substring:C12($Txt_buffer;Length:C16($Txt_buffer))#Folder separator:K24:12)
-				
-				$Txt_buffer:=$Txt_buffer+Folder separator:K24:12
-				
-			End if 
-			
 			If ($Obj_param.type#Null:C1517)
 				
-				If (Path to object:C1547($Txt_buffer).extension=("."+$Obj_param.type))
+				$folder:=Folder:C1567($Txt_buffer;fk platform path:K87:2)
+				
+				If ($folder.extension=("."+$Obj_param.type))
 					
 					$Obj_result.success:=True:C214
 					$Obj_result.path:=$Txt_buffer
-					$Obj_result.posix:=Convert path system to POSIX:C1106($Obj_result.path)
+					$Obj_result.posix:=$folder.path
+					$Obj_result.folder:=$folder
 					
 				Else 
 					
-					FOLDER LIST:C473($Txt_buffer;$tTxt_folders)
-					
-					For ($Lon_i;1;Size of array:C274($tTxt_folders);1)
-						
-						$Txt_name:=$tTxt_folders{$Lon_i}
-						
-						If (Path to object:C1547($Txt_name).extension=("."+$Obj_param.type))
+					If ($folder.exists)
+						  // Return last with wanted extension
+						For each ($subfolder;$folder.folders())  // .. to change add Until($Obj_result.success)
 							
-							$Obj_result.success:=True:C214
-							$Obj_result.path:=$Txt_buffer+$Txt_name
-							$Obj_result.posix:=Convert path system to POSIX:C1106($Obj_result.path)
-							
-						End if 
-					End for 
+							If ($subfolder.extension=("."+$Obj_param.type))
+								
+								$Obj_result.success:=True:C214
+								$Obj_result.path:=$subfolder.platformPath
+								$Obj_result.posix:=$subfolder.path
+								$Obj_result.folder:=$subfolder
+								
+							End if 
+						End for each 
+					End if 
 				End if 
 				
 			Else 
@@ -537,11 +535,7 @@ Case of
 		
 		If ($Obj_result.success)
 			
-			$File_path:=Folder:C1567($Obj_result.path;fk platform path:K87:2)
-			
-		End if 
-		
-		If ($File_path#Null:C1517)
+			$File_path:=$Obj_result.folder
 			
 			$Col_paths:=New collection:C1472
 			
@@ -609,6 +603,10 @@ Case of
 				
 				For each ($Txt_buffer;commonValues.xcworkspace.projects)
 					
+					If (Length:C16(String:C10(commonValues.xcworkspace.root))>0)
+						$Txt_buffer:=String:C10(commonValues.xcworkspace.root)+$Txt_buffer
+					End if 
+					
 					$Obj_result:=Xcode (New object:C1471(\
 						"action";"find";\
 						"type";"xcodeproj";\
@@ -616,11 +614,9 @@ Case of
 					
 					If ($Obj_result.success)
 						
-						$Obj_buffer:=Path to object:C1547($Obj_result.posix;Path is POSIX:K24:26)
-						
 						For each ($Txt_buffer;$Col_paths)
 							
-							If (Position:C15($Obj_buffer.name;$Txt_buffer)>0)
+							If (Position:C15($Obj_result.folder.name;$Txt_buffer)>0)
 								
 								$Col_paths.remove($Col_paths.indexOf($Txt_buffer))
 								
@@ -676,17 +672,9 @@ Case of
 		
 		If ($Obj_result.success)
 			
-			$Txt_buffer:=$Obj_result.posix
-			
-		End if 
-		
-		If (Length:C16($Txt_buffer)>0)
-			
-			$Txt_buffer:=$Txt_buffer+"/project.pbxproj"
-			
 			$Obj_result:=plist (New object:C1471(\
 				"action";"object";\
-				"domain";$Txt_buffer))
+				"domain";$Obj_result.folder.file("project.pbxproj").platformPath))
 			
 		End if 
 		
@@ -701,13 +689,9 @@ Case of
 			
 			$Txt_buffer:=$Obj_result.posix
 			
-		End if 
-		
-		If (Length:C16($Txt_buffer)>0)
-			
 			If ($Obj_param.object#Null:C1517)
 				
-				$Txt_buffer:=$Txt_buffer+"/project.pbxproj"
+				$Txt_buffer:=$Obj_result.file("project.pbxproj").platformPath
 				
 				$Obj_param.action:="fromobject"
 				$Obj_param.format:="openstep"
@@ -1425,8 +1409,7 @@ Case of
 				
 				If ($Obj_result.success)
 					
-					$Obj_path:=Path to object:C1547($Obj_result.path)
-					$Txt_buffer:=$Obj_path.name+$Obj_path.extension
+					$Txt_buffer:=$Obj_result.folder.fullName
 					$Txt_cmd:=$Txt_cmd+" -e 'close window \""+$Txt_buffer+"\"'"
 					
 				Else 

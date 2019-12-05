@@ -68,9 +68,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 				If ($Obj_out.success)
 					
-					$Txt_buffer:=$Obj_out.path+Folder separator:K24:12+"project.pbxproj"
-					$Obj_out:=plist (New object:C1471("action";"object";"path";$Txt_buffer))
-					$Obj_out.path:=$Txt_buffer
+					$Obj_file:=$Obj_out.folder.file("project.pbxproj")
+					$Obj_out:=plist (New object:C1471(\
+						"action";"object";\
+						"path";$Obj_file.platformPath))
+					$Obj_out.path:=$Obj_file.platformPath
 					
 				End if 
 				
@@ -96,7 +98,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If ($Obj_out.success)
 						
-						$Txt_buffer:=$Obj_out.path+"project.pbxproj"
+						$Txt_buffer:=$Obj_out.folder.file("project.pbxproj").platformPath
 						
 					End if 
 					
