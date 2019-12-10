@@ -13,9 +13,9 @@ C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_OK)
 C_TEXT:C284($t;$tt;$Txt_fieldNumber;$Txt_tableNumber)
-C_OBJECT:C1216($file;$Obj_audit;$Obj_context;$Obj_dataModel;$Obj_detail;$Obj_in)
-C_OBJECT:C1216($Obj_list;$Path_detailForms;$Path_fieldIcons;$Path_formaters;$Path_listForms;$Path_tableIcons)
-C_OBJECT:C1216($Path_template)
+C_OBJECT:C1216($context;$file;$o;$Obj_audit;$Obj_dataModel;$Obj_detail)
+C_OBJECT:C1216($Obj_in;$Obj_list;$Path_detailForms;$Path_fieldIcons;$Path_formaters;$Path_listForms)
+C_OBJECT:C1216($Path_tableIcons;$Path_template)
 
 If (False:C215)
 	C_OBJECT:C1216(project_Audit ;$0)
@@ -34,7 +34,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		"success";True:C214;\
 		"errors";New collection:C1472)
 	
-	$Obj_context:=New object:C1471(\
+	$context:=New object:C1471(\
 		"list";True:C214;\
 		"detail";True:C214;\
 		"icons";True:C214;\
@@ -48,11 +48,11 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	If ($Obj_in.target#Null:C1517)
 		
-		$Obj_context.list:=($Obj_in.target.indexOf("lists")#-1)
-		$Obj_context.detail:=($Obj_in.target.indexOf("details")#-1)
-		$Obj_context.icons:=($Obj_in.target.indexOf("icons")#-1)
-		$Obj_context.formatters:=($Obj_in.target.indexOf("formatters")#-1)
-		$Obj_context.filters:=($Obj_in.target.indexOf("filters")#-1)
+		$context.list:=($Obj_in.target.indexOf("lists")#-1)
+		$context.detail:=($Obj_in.target.indexOf("details")#-1)
+		$context.icons:=($Obj_in.target.indexOf("icons")#-1)
+		$context.formatters:=($Obj_in.target.indexOf("formatters")#-1)
+		$context.filters:=($Obj_in.target.indexOf("filters")#-1)
 		
 	End if 
 	
@@ -70,7 +70,7 @@ If ($Obj_dataModel#Null:C1517)
 	
 	If ($file.exists)
 		
-		$Obj_context.listManifest:=JSON Parse:C1218($file.getText())
+		$context.listManifest:=JSON Parse:C1218($file.getText())
 		
 	End if 
 	
@@ -78,7 +78,7 @@ If ($Obj_dataModel#Null:C1517)
 	
 	If ($file.exists)
 		
-		$Obj_context.detailManifest:=JSON Parse:C1218($file.getText())
+		$context.detailManifest:=JSON Parse:C1218($file.getText())
 		
 	End if 
 	
@@ -90,7 +90,7 @@ If ($Obj_dataModel#Null:C1517)
 	
 	For each ($Txt_tableNumber;$Obj_dataModel)
 		
-		If ($Obj_context.list)
+		If ($context.list)  // LIST FORM
 			
 			$t:=String:C10($Obj_list[$Txt_tableNumber].form)
 			
@@ -103,7 +103,7 @@ If ($Obj_dataModel#Null:C1517)
 				
 				If ($Boo_OK)
 					
-					For each ($tt;$Obj_context.listManifest.mandatory) While ($Boo_OK)
+					For each ($tt;$context.listManifest.mandatory) While ($Boo_OK)
 						
 						$Boo_OK:=$Path_template.file($tt).exists
 						
@@ -141,7 +141,7 @@ If ($Obj_dataModel#Null:C1517)
 			End if 
 		End if 
 		
-		If ($Obj_context.detail)
+		If ($context.detail)  // DETAIL FORM
 			
 			$t:=String:C10($Obj_detail[$Txt_tableNumber].form)
 			
@@ -154,7 +154,7 @@ If ($Obj_dataModel#Null:C1517)
 				
 				If ($Boo_OK)
 					
-					For each ($tt;$Obj_context.detailManifest.mandatory) While ($Boo_OK)
+					For each ($tt;$context.detailManifest.mandatory) While ($Boo_OK)
 						
 						$Boo_OK:=$Path_template.file($tt).exists
 						
@@ -192,13 +192,24 @@ If ($Obj_dataModel#Null:C1517)
 			End if 
 		End if 
 		
-		If ($Obj_context.icons)
+		If ($context.icons)  // ICONS
 			
-			$t:=String:C10($Obj_dataModel[$Txt_tableNumber].icon)
+			If (featuresFlags.with("newDataModel"))
+				
+				$t:=String:C10($Obj_dataModel[$Txt_tableNumber][""].icon)
+				
+			Else 
+				
+				  //old
+				$t:=String:C10($Obj_dataModel[$Txt_tableNumber].icon)
+				
+			End if 
 			
 			If (Position:C15("/";$t)=1)  // Host database resources
 				
-				$Boo_OK:=$Path_tableIcons.file(Delete string:C232($t;1;1)).exists
+				$t:=Delete string:C232($t;1;1)
+				
+				$Boo_OK:=$Path_tableIcons.file($t).exists
 				
 				If (Not:C34($Boo_OK))
 					
@@ -210,7 +221,7 @@ If ($Obj_dataModel#Null:C1517)
 					$Obj_audit.errors.push(New object:C1471(\
 						"type";"icon";\
 						"panel";"TABLES";\
-						"message";str ("theTableIconIsMissing").localized(Delete string:C232($t;1;1));\
+						"message";str ("theTableIconIsMissing").localized($t);\
 						"table";$Txt_tableNumber;\
 						"tab";"tableProperties"))
 					
@@ -225,7 +236,15 @@ If ($Obj_dataModel#Null:C1517)
 					
 					If (Position:C15("/";$t)=1)  // Host resources
 						
-						$Boo_OK:=$Path_fieldIcons.file(Delete string:C232($t;1;1)).exists
+						$t:=Delete string:C232($t;1;1)
+						
+						$Boo_OK:=$Path_fieldIcons.exists
+						
+						If ($Boo_OK)
+							
+							$Boo_OK:=$Path_fieldIcons.file($t).exists
+							
+						End if 
 						
 						If (Not:C34($Boo_OK))
 							
@@ -237,7 +256,7 @@ If ($Obj_dataModel#Null:C1517)
 							$Obj_audit.errors.push(New object:C1471(\
 								"type";"icon";\
 								"panel";"TABLES";\
-								"message";str ("theFieldIconIsMissing").localized(Delete string:C232($t;1;1));\
+								"message";str ("theFieldIconIsMissing").localized($t);\
 								"table";$Txt_tableNumber;\
 								"field";$Txt_fieldNumber))
 							
@@ -247,7 +266,7 @@ If ($Obj_dataModel#Null:C1517)
 			End for each 
 		End if 
 		
-		If ($Obj_context.formatters)
+		If ($context.formatters)  // FORMATTERS
 			
 			For each ($Txt_fieldNumber;$Obj_dataModel[$Txt_tableNumber])
 				
@@ -257,8 +276,9 @@ If ($Obj_dataModel#Null:C1517)
 					
 					If (Position:C15("/";$t)=1)  // Host resources
 						
-						$Boo_OK:=$Path_formaters.folder(Delete string:C232($t;1;1)).exists\
-							 & $Path_formaters.folder(Delete string:C232($t;1;1)).file("manifest.json").exists
+						$t:=Delete string:C232($t;1;1)
+						
+						$Boo_OK:=$Path_formaters.folder($t).file("manifest.json").exists
 						
 						If (Not:C34($Boo_OK))
 							
@@ -280,11 +300,13 @@ If ($Obj_dataModel#Null:C1517)
 			End for each 
 		End if 
 		
-		If ($Obj_context.filters)
+		If ($context.filters)  // FILTERS
 			
-			If ($Obj_dataModel[$Txt_tableNumber].filter#Null:C1517)
+			$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_dataModel[$Txt_tableNumber][""];$Obj_dataModel[$Txt_tableNumber])
+			
+			If ($o.filter#Null:C1517)
 				
-				If (Not:C34(Bool:C1537($Obj_dataModel[$Txt_tableNumber].filter.validated)))
+				If (Not:C34(Bool:C1537($o.filter.validated)))
 					
 					  //======================================================
 					  //                   INVALID FILTER
@@ -294,7 +316,7 @@ If ($Obj_dataModel#Null:C1517)
 					$Obj_audit.errors.push(New object:C1471(\
 						"type";"filter";\
 						"panel";"DATA";\
-						"message";str ("theFilterForTheTableIsNotValid").localized(String:C10($Obj_dataModel[$Txt_tableNumber].name));\
+						"message";str ("theFilterForTheTableIsNotValid").localized(String:C10($o.name));\
 						"table";$Txt_tableNumber))
 					
 				End if 

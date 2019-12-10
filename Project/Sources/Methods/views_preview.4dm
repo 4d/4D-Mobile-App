@@ -191,6 +191,7 @@ Case of
 												"id";$Txt_field+".label")
 											DOM GET XML ELEMENT VALUE:C731($tt;$t)
 											DOM SET XML ELEMENT VALUE:C868($tt;Get localized string:C991($t)+$Txt_index)
+											  //DOM SET XML ELEMENT VALUE($tt;".Drop a field here")
 											
 											  // Set id, bind & default label
 											$tt:=DOM Find XML element by ID:C1010($Dom_new;"f")
@@ -199,6 +200,11 @@ Case of
 												"id";$Txt_field;\
 												"ios:bind";"fields["+String:C10(Num:C11($Txt_field)-1)+"]";\
 												"ios:label";Get localized string:C991("field[n]")+" "+$Txt_index)
+											
+											  //DOM SET XML ATTRIBUTE($tt;\
+												"id";$Txt_field;\
+												"ios:bind";"fields["+String(Num($Txt_field)-1)+"]";\
+												"ios:label";".Drop a field here")
 											
 											  // Set cancel id
 											$tt:=DOM Find XML element by ID:C1010($Dom_new;"f.cancel")

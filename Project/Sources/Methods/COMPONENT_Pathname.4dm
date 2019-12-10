@@ -76,13 +76,13 @@ Case of
 		  //______________________________________________________
 	: ($Txt_target="host")  // 'mobile' folder
 		
-		$o:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16;*);fk platform path:K87:2)
+		$Obj_path:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16;*);fk platform path:K87:2)
 		
-		If ($o.file("mobile").exists)  // Could be an alias
+		If ($Obj_path.file("mobile").exists)  // Could be an alias
 			
-			If ($o.file("mobile").original#Null:C1517)
+			If ($Obj_path.file("mobile").original#Null:C1517)
 				
-				$Obj_path:=$o.file("mobile").original
+				$Obj_path:=$Obj_path.file("mobile").original
 				
 			Else 
 				
@@ -92,9 +92,9 @@ Case of
 			
 		Else 
 			
-			If ($o.folder("mobile").exists)
+			If ($Obj_path.folder("mobile").exists)
 				
-				$Obj_path:=$o.folder("mobile")
+				$Obj_path:=$Obj_path.folder("mobile")
 				
 			End if 
 		End if 
@@ -102,44 +102,44 @@ Case of
 		  //______________________________________________________
 	: ($Txt_target="host_forms")
 		
-		$o:=COMPONENT_Pathname ("host")
+		$Obj_path:=COMPONENT_Pathname ("host")
 		
-		If ($o.exists)
+		If ($Obj_path.exists)
 			
-			$Obj_path:=$o.folder("form")
+			$Obj_path:=$Obj_path.folder("form")
 			
 		End if 
 		
 		  //______________________________________________________
 	: ($Txt_target="host_listForms")
 		
-		$o:=COMPONENT_Pathname ("host_forms")
+		$Obj_path:=COMPONENT_Pathname ("host_forms")
 		
-		If ($o.exists)
+		If ($Obj_path.exists)
 			
-			$Obj_path:=$o.folder("list")
+			$Obj_path:=$Obj_path.folder("list")
 			
 		End if 
 		
 		  //______________________________________________________
 	: ($Txt_target="host_detailForms")
 		
-		$o:=COMPONENT_Pathname ("host_forms")
+		$Obj_path:=COMPONENT_Pathname ("host_forms")
 		
-		If ($o.exists)
+		If ($Obj_path.exists)
 			
-			$Obj_path:=$o.folder("detail")
+			$Obj_path:=$Obj_path.folder("detail")
 			
 		End if 
 		
 		  //______________________________________________________
 	: ($Txt_target="host_loginForms")
 		
-		$o:=COMPONENT_Pathname ("host_forms")
+		$Obj_path:=COMPONENT_Pathname ("host_forms")
 		
-		If ($o.exists)
+		If ($Obj_path.exists)
 			
-			$Obj_path:=$o.folder("login")
+			$Obj_path:=$Obj_path.folder("login")
 			
 		End if 
 		
@@ -148,22 +148,22 @@ Case of
 		 | ($Txt_target="host_fieldIcons")\
 		 | ($Txt_target="host_actionIcons")
 		
-		$o:=COMPONENT_Pathname ("host")
+		$Obj_path:=COMPONENT_Pathname ("host")
 		
-		If ($o.exists)
+		If ($Obj_path.exists)
 			
-			$Obj_path:=$o.folder("medias").folder("icons")
+			$Obj_path:=$Obj_path.folder("medias").folder("icons")
 			
 		End if 
 		
 		  //______________________________________________________
 	: ($Txt_target="host_formatters")
 		
-		$o:=COMPONENT_Pathname ("host")
+		$Obj_path:=COMPONENT_Pathname ("host")
 		
-		If ($o.exists)
+		If ($Obj_path.exists)
 			
-			$Obj_path:=$o.folder("formatters")
+			$Obj_path:=$Obj_path.folder("formatters")
 			
 		End if 
 		
