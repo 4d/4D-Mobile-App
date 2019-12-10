@@ -100,9 +100,17 @@ If ($Obj_dataModel#Null:C1517)
 			
 			If (Position:C15("/";String:C10(Form:C1466[$Txt_type][$Txt_table].form))=1)
 				
-				$file:=$Path_hostRoot.file(Delete string:C232(String:C10(Form:C1466[$Txt_type][$Txt_table].form);1;1)+"/layoutIconx2.png")
-				
-				If (Not:C34($file.exists))
+				If ($Path_hostRoot.exists)
+					
+					$file:=$Path_hostRoot.file(Delete string:C232(String:C10(Form:C1466[$Txt_type][$Txt_table].form);1;1)+"/layoutIconx2.png")
+					
+					If (Not:C34($file.exists))
+						
+						$file:=$Path_root.file("images/errorIcon.svg")
+						
+					End if 
+					
+				Else 
 					
 					$file:=$Path_root.file("images/errorIcon.svg")
 					

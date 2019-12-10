@@ -47,6 +47,7 @@ End if
 
   // ----------------------------------------------------
 $Ptr_fields:=ui.pointer($Obj_form.fields)
+$Col_selected:=New collection:C1472
 
 If (Size of array:C274($Ptr_fields->)>0)
 	
@@ -55,20 +56,18 @@ If (Size of array:C274($Ptr_fields->)>0)
 	  // Keep the selected field to restore the selection if necessary
 	$Obj_context.fieldName:=$Ptr_fields->{$Lon_row}
 	
-End if 
-
-  // Keep the selection
-$Ptr_list:=ui.pointer($Obj_form.fieldList)
-$Col_selected:=New collection:C1472
-
-For ($i;1;LISTBOX Get number of rows:C915(*;$Obj_form.fieldList);1)
+	  // Keep the selection
+	$Ptr_list:=ui.pointer($Obj_form.fieldList)
 	
-	If ($Ptr_list->{$i})
+	For ($i;1;LISTBOX Get number of rows:C915(*;$Obj_form.fieldList);1)
 		
-		$Col_selected.push($Ptr_fields->{$i})
-		
-	End if 
-End for 
+		If ($Ptr_list->{$i})
+			
+			$Col_selected.push($Ptr_fields->{$i})
+			
+		End if 
+	End for 
+End if 
 
 LISTBOX GET CELL POSITION:C971(*;$Obj_form.tableList;$Lon_colum;$Lon_row)
 
