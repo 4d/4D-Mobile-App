@@ -592,154 +592,169 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						End if 
 					End for each 
 					
-					If ($Obj_in.template.relation=Null:C1517)
-						$Obj_in.template.relation:=New object:C1471()
-					End if 
-					$Obj_in.template.relation.elements:=New collection:C1472()
+					C_BOOLEAN:C305($Boo_hasRelation)
+					$Boo_hasRelation:=False:C215
+					For each ($Obj_field;$Obj_in.tags.table.detailFields) Until ($Boo_hasRelation)
+						If (Num:C11($Obj_field.id)=0)  // relation to N field
+							$Boo_hasRelation:=True:C214
+						End if 
+					End for each 
 					
-					C_OBJECT:C1216($Folder_relation)
-					$Folder_relation:=COMPONENT_Pathname ("templates").folder("relation")
-					
-					C_OBJECT:C1216($Dom_relation)
-					
-					Case of 
-						: (Length:C16(String:C10($Obj_in.template.relation.xpath))>0)
-							
-							$Dom_relation:=$Dom_root.findByXPath(String:C10($Obj_in.template.relation.xpath))
-							$Dom_relation.isDefault:=False:C215
-							$Dom_relation.doNotClose:=True:C214
-							
-						: ($Folder_template.file("relationButton.xml").exists)
-							
-							$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xml"))
-							$Dom_relation.isDefault:=False:C215
-							
-						: ($Folder_template.file("relationButton.xib").exists)
-							
-							$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
-							$Dom_relation.isDefault:=False:C215
-							
-						Else 
-							
-							$Dom_relation:=$Obj_element.dom.findById("TAG-RL-001")  // try by tag in storyboard
-							
-							If (Not:C34($Dom_relation.success))  // else us default one
+					If ($Boo_hasRelation)  // opti: do relation part only if there is relation
+						
+						If ($Obj_in.template.relation=Null:C1517)
+							$Obj_in.template.relation:=New object:C1471()
+						End if 
+						$Obj_in.template.relation.elements:=New collection:C1472()
+						
+						C_OBJECT:C1216($Folder_relation)
+						$Folder_relation:=COMPONENT_Pathname ("templates").folder("relation")
+						
+						C_OBJECT:C1216($Dom_relation)
+						
+						Case of 
+							: (Length:C16(String:C10($Obj_in.template.relation.xpath))>0)
 								
-								$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
-								  //$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml")) 
-								$Dom_relation.isDefault:=True:C214
-								
-							Else 
-								
+								$Dom_relation:=$Dom_root.findByXPath(String:C10($Obj_in.template.relation.xpath))
 								$Dom_relation.isDefault:=False:C215
 								$Dom_relation.doNotClose:=True:C214
 								
+							: ($Folder_template.file("relationButton.xml").exists)
+								
+								$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xml"))
+								$Dom_relation.isDefault:=False:C215
+								
+							: ($Folder_template.file("relationButton.xib").exists)
+								
+								$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+								$Dom_relation.isDefault:=False:C215
+								
+							Else 
+								
+								$Dom_relation:=$Obj_element.dom.findById("TAG-RL-001")  // try by tag in storyboard
+								
+								If (Not:C34($Dom_relation.success))  // else us default one
+									
+									$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+									  //$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml")) 
+									$Dom_relation.isDefault:=True:C214
+									
+								Else 
+									
+									$Dom_relation.isDefault:=False:C215
+									$Dom_relation.doNotClose:=True:C214
+									
+								End if 
+								
+						End case 
+						
+						  // 1- element
+						$Obj_element:=New object:C1471(\
+							"dom";$Dom_relation;\
+							"idCount";6;\
+							"tagInterfix";"RL";\
+							"insertMode";"append")
+						
+						If (Num:C11($Obj_in.template.relation.idCount)>0)  // defined by designer, YES!
+							
+							$Obj_element.idCount:=Num:C11($Obj_in.template.relation.idCount)
+							
+						Else   // not defined, we an check
+							
+							If (Not:C34($Dom_relation.isDefault))  // fix id count if not defined by reading dom
+								
+								$Dom_child:=$Obj_element.dom
+								$Lon_ids:=0
+								
+								While ($Dom_child.success)
+									
+									$Lon_ids:=$Lon_ids+1
+									$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
+									
+								End while 
+								
+								If ($Lon_ids=1)
+									
+									$Lon_ids:=32  // default value if not found
+									
+								End if 
 							End if 
 							
-					End case 
-					
-					  // 1- element
-					$Obj_element:=New object:C1471(\
-						"dom";$Dom_relation;\
-						"idCount";6;\
-						"tagInterfix";"RL";\
-						"insertMode";"append")
-					
-					If (Num:C11($Obj_in.template.relation.idCount)>0)  // defined by designer, YES!
+							$Obj_element.idCount:=$Lon_ids  // as a result purpose
+						End if 
 						
-						$Obj_element.idCount:=Num:C11($Obj_in.template.relation.idCount)
-						
-					Else   // not defined, we an check
-						
-						If (Not:C34($Dom_relation.isDefault))  // fix id count if not defined by reading dom
-							
-							$Dom_child:=$Obj_element.dom
-							$Lon_ids:=0
-							
-							While ($Dom_child.success)
-								
-								$Lon_ids:=$Lon_ids+1
-								$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1;"##000"))
-								
-							End while 
-							
-							If ($Lon_ids=1)
-								
-								$Lon_ids:=32  // default value if not found
-								
+						  // Must be inserted into a stack view (with a subviews as intermediate)
+						C_OBJECT:C1216($Obj_)
+						For each ($Obj_;$Obj_in.template.elements) Until ($Obj_element.insertInto#Null:C1517)
+							If (String:C10($Obj_.insertInto.parent().getName().name)="stackView")
+								$Obj_element.insertInto:=$Obj_.insertInto
 							End if 
-						End if 
-						
-						$Obj_element.idCount:=$Lon_ids  // as a result purpose
-					End if 
-					
-					  // Must be inserted into a stack view (with a subviews as intermediate)
-					C_OBJECT:C1216($Obj_)
-					For each ($Obj_;$Obj_in.template.elements) Until ($Obj_element.insertInto#Null:C1517)
-						If (String:C10($Obj_.insertInto.parent().getName().name)="stackView")
-							$Obj_element.insertInto:=$Obj_.insertInto
-						End if 
-					End for each 
-					$Obj_in.template.relation.elements.push($Obj_element)
-					
-					  // 2- scene
-					$Obj_element:=New object:C1471(\
-						"insertInto";$Dom_root.findByXPath("document/scenes");\
-						"dom";xml ("load";$Folder_relation.file("storyboardScene.xml"));\
-						"idCount";3;\
-						"tagInterfix";"SN";\
-						"insertMode";"append")
-					$Obj_in.template.relation.elements.push($Obj_element)
-					
-					  // 3- connection
-					$Obj_element:=New object:C1471("idCount";1;\
-						"tagInterfix";"SG";\
-						"insertMode";"append"\
-						)
-					
-					$Lon_j:=3
-					Repeat 
-						
-						$Obj_element.insertInto:=$Dom_root.findByXPath("document/scenes/scene["+String:C10($Lon_j)+"]/objects/viewController")
-						$Lon_j:=$Lon_j-1
-						
-					Until ($Obj_element.insertInto.success | ($Lon_j<0))
-					
-					
-					If ($Obj_in.template.relation.transition=Null:C1517)
-						$Obj_in.template.relation.transition:=New object:C1471()
-					End if 
-					If (Length:C16(String:C10($Obj_in.template.relation.transition.kind))=0)
-						$Obj_in.template.relation.transition.kind:="show"
-						  // else check type?
-					End if 
-					
-					$Txt_buffer:="<segue destination=\"TAG-SN-001\""
-					
-					If ($Obj_in.template.relation.transition.customClass#Null:C1517)
-						$Txt_buffer:=$Txt_buffer+" customClass=\""+String:C10($Obj_in.template.relation.transition.customClass)+"\""
-					End if 
-					If ($Obj_in.template.relation.transition.customModule#Null:C1517)
-						$Txt_buffer:=$Txt_buffer+" customModule=\""+String:C10($Obj_in.template.relation.transition.customModule)+"\""
-					End if 
-					If ($Obj_in.template.relation.transition.modalPresentationStyle#Null:C1517)
-						$Txt_buffer:=$Txt_buffer+" modalPresentationStyle=\""+String:C10($Obj_in.template.relation.transition.modalPresentationStyle)+"\""
-					End if 
-					If ($Obj_in.template.relation.transition.modalTransitionStyle#Null:C1517)
-						$Txt_buffer:=$Txt_buffer+" modalTransitionStyle=\""+String:C10($Obj_in.template.relation.transition.modalTransitionStyle)+"\""
-					End if 
-					$Txt_buffer:=$Txt_buffer+" kind=\""+String:C10($Obj_in.template.relation.transition.kind)+"\""
-					$Txt_buffer:=$Txt_buffer+" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"
-					
-					If ($Obj_element.insertInto.success)
-						$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
-						$Obj_element.dom:=xml ("parse";New object:C1471("variable";$Txt_buffer))
+						End for each 
 						$Obj_in.template.relation.elements.push($Obj_element)
 						
-					Else 
+						  // 2- scene
+						$Obj_element:=New object:C1471(\
+							"insertInto";$Dom_root.findByXPath("document/scenes");\
+							"dom";xml ("load";$Folder_relation.file("storyboardScene.xml"));\
+							"idCount";3;\
+							"tagInterfix";"SN";\
+							"insertMode";"append")
+						$Obj_in.template.relation.elements.push($Obj_element)
 						
-						  // Invalid relation
-						ASSERT:C1129(dev_Matrix ;"Cannot add relation on this template. Cannot find viewController: "+JSON Stringify:C1217($Obj_element))
+						  // 3- connection
+						$Obj_element:=New object:C1471("idCount";1;\
+							"tagInterfix";"SG";\
+							"insertMode";"append"\
+							)
+						
+						  // find controller of where we inject relation element button
+						$Obj_element.insertInto:=$Obj_in.template.relation.elements[0].insertInto.parentWithName("viewController")
+						If (Not:C34($Obj_element.insertInto.success))  // find with old code
+							$Lon_j:=3
+							Repeat 
+								
+								$Obj_element.insertInto:=$Dom_root.findByXPath("document/scenes/scene["+String:C10($Lon_j)+"]/objects/viewController")
+								$Lon_j:=$Lon_j-1
+								
+							Until ($Obj_element.insertInto.success | ($Lon_j<0))
+						End if 
+						
+						If ($Obj_in.template.relation.transition=Null:C1517)
+							$Obj_in.template.relation.transition:=New object:C1471()
+						End if 
+						If (Length:C16(String:C10($Obj_in.template.relation.transition.kind))=0)
+							$Obj_in.template.relation.transition.kind:="show"
+							  // else check type?
+						End if 
+						
+						$Txt_buffer:="<segue destination=\"TAG-SN-001\""
+						
+						If ($Obj_in.template.relation.transition.customClass#Null:C1517)
+							$Txt_buffer:=$Txt_buffer+" customClass=\""+String:C10($Obj_in.template.relation.transition.customClass)+"\""
+						End if 
+						If ($Obj_in.template.relation.transition.customModule#Null:C1517)
+							$Txt_buffer:=$Txt_buffer+" customModule=\""+String:C10($Obj_in.template.relation.transition.customModule)+"\""
+						End if 
+						If ($Obj_in.template.relation.transition.modalPresentationStyle#Null:C1517)
+							$Txt_buffer:=$Txt_buffer+" modalPresentationStyle=\""+String:C10($Obj_in.template.relation.transition.modalPresentationStyle)+"\""
+						End if 
+						If ($Obj_in.template.relation.transition.modalTransitionStyle#Null:C1517)
+							$Txt_buffer:=$Txt_buffer+" modalTransitionStyle=\""+String:C10($Obj_in.template.relation.transition.modalTransitionStyle)+"\""
+						End if 
+						$Txt_buffer:=$Txt_buffer+" kind=\""+String:C10($Obj_in.template.relation.transition.kind)+"\""
+						$Txt_buffer:=$Txt_buffer+" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"
+						
+						If ($Obj_element.insertInto.success)
+							$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
+							$Obj_element.dom:=xml ("parse";New object:C1471("variable";$Txt_buffer))
+							$Obj_in.template.relation.elements.push($Obj_element)
+							
+						Else 
+							
+							  // Invalid relation
+							ASSERT:C1129(dev_Matrix ;"Cannot add relation on this template. Cannot find viewController: "+JSON Stringify:C1217($Obj_element))
+							
+						End if 
 						
 					End if 
 					

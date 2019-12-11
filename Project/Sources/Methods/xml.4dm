@@ -29,6 +29,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"root";Formula:C1597(xml ("root"));\
 		"create";Formula:C1597(xml ("create";New object:C1471("name";$1)));\
 		"parent";Formula:C1597(xml ("parent"));\
+		"parentWithName";Formula:C1597(xml ("parentWithName";New object:C1471("name";$1)));\
 		"firstChild";Formula:C1597(xml ("firstChild"));\
 		"lastChild";Formula:C1597(xml ("lastChild"));\
 		"children";Formula:C1597(xml ("children";New object:C1471("recursive";$1)));\
@@ -437,6 +438,24 @@ Else
 				: ($1="parent")
 					
 					$t:=DOM Get parent XML element:C923($o.elementRef)  // parentElementName, ...
+					
+					
+					  //=================================================================
+				: ($1="parentWithName")
+					
+					C_OBJECT:C1216($Obj_parent)
+					$Obj_parent:=This:C1470.parent()
+					$o:=$Obj_parent
+					If ($Obj_parent.success)
+						If ($2.name=$Obj_parent.getName().name)
+							$o:=$Obj_parent
+							
+						Else 
+							
+							$o:=$Obj_parent.parentWithName($2.name)
+							
+						End if 
+					End if 
 					
 					  //=================================================================
 				: ($1="firstChild")

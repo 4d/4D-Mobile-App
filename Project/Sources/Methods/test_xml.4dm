@@ -71,6 +71,20 @@ $parent:=$result.elements[0]  // /!\ need result from findMany
 $result:=$parent.findOrCreate("eric")
 ASSERT:C1129($result.elementRef=$parent.findOrCreate("eric").elementRef;"Must not recreate a new node with findOrCreate")
 
+  // parentWithName
+  // one level
+C_OBJECT:C1216($parentWithName)
+$parentWithName:=$result.parentWithName("scene")
+ASSERT:C1129($parentWithName.success)
+ASSERT:C1129($parentWithName.elementRef=$parent.elementRef)
+  // two levels (recursive)
+$parentWithName:=$result.parentWithName("scenes")
+ASSERT:C1129($parentWithName.success)
+ASSERT:C1129($parentWithName.elementRef=$parent.parent().elementRef)
+  //not found
+$parentWithName:=$result.parentWithName("unavailable")
+ASSERT:C1129(Not:C34($parentWithName.success))
+
   // children
 C_OBJECT:C1216($children)
 $children:=$scenes.children()
