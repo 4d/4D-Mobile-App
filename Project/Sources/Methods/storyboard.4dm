@@ -852,14 +852,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					End for each 
 					
 					  // close relation elements dom elements
-					For each ($Obj_element;$Obj_in.template.relation.elements)
+					If ($Boo_hasRelation)
 						
-						If ($Obj_element.dom#Null:C1517)
-							If (Not:C34(Bool:C1537($Obj_element.dom.doNotClose)))  // do not close if in global storyboard, if external file or string must be closed
-								$Obj_element.dom.root().close()
+						For each ($Obj_element;$Obj_in.template.relation.elements)
+							
+							If ($Obj_element.dom#Null:C1517)
+								If (Not:C34(Bool:C1537($Obj_element.dom.doNotClose)))  // do not close if in global storyboard, if external file or string must be closed
+									$Obj_element.dom.root().close()
+								End if 
 							End if 
-						End if 
-					End for each 
+						End for each 
+					End if 
+					
 				End if 
 				
 				  // Save file at destination after replacing tags
