@@ -1557,7 +1557,15 @@ If (($Txt_type="main"))
 End if 
 
   // ----------------------------------------------------
-  // Comptute status
+  // transmit capabilities
+  // ----------------------------------------------------
+
+If (Value type:C1509($Obj_out.template)=Is object:K8:27)
+	$Obj_out.template.capabilities:=$Obj_template.capabilities
+End if 
+
+  // ----------------------------------------------------
+  // Compute status
   // ----------------------------------------------------
 
 $Obj_out.success:=Not:C34(ob_error_has ($Obj_out))
