@@ -19,7 +19,7 @@ C_LONGINT:C283($Lon_parameters;$Lon_start)
 C_TEXT:C284($File_;$t;$Txt_buffer)
 C_OBJECT:C1216($Obj_action;$Dir_template;$Obj_cache;$Obj_dataModel;$Obj_in;$Obj_manifest;$Obj_out)
 C_OBJECT:C1216($Obj_project;$Obj_result_build;$Obj_result_device;$Obj_server;$Obj_tags;$Obj_template)
-C_OBJECT:C1216($Obj_parameters;$Path_manifest)
+C_OBJECT:C1216($Obj_parameters;$Path_manifest;$Folder_destination)
 
 If (False:C215)
 	C_OBJECT:C1216(mobile_Project ;$0)
@@ -50,7 +50,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		If ($Boo_dev)
 			
 			  // Cache the last build for debug purpose
-			ob_writeToDocument ($Obj_in;$Obj_cache.file("lastBuild.4dmobile").platformPath;True:C214)
+			ob_writeToFile ($Obj_in;$Obj_cache.file("lastBuild.4dmobile");True:C214)
 			
 		End if 
 		
@@ -124,8 +124,7 @@ If ($Obj_in.create)
 	  // We need to reload data after login?
 	If ($Obj_project.server.authentication=Null:C1517)
 		
-		$Obj_project.server.authentication:=New object:C1471(\
-			)
+		$Obj_project.server.authentication:=New object:C1471
 		
 	End if 
 	
@@ -259,7 +258,10 @@ If ($Obj_in.create)
 	
 	  // Target folder
 	$Obj_out.path:=$Obj_in.path
-	CREATE FOLDER:C475($Obj_in.path;*)
+	$Folder_destination:=Folder:C1567($Obj_in.path;fk platform path:K87:2)
+	$Folder_destination.create()
+	
+	ob_writeToFile ($Obj_in;$Folder_destination.file("project.4dmobile");True:C214)
 	
 	$Dir_template:=COMPONENT_Pathname ("templates").folder($Obj_in.template)
 	
@@ -441,7 +443,7 @@ If ($Obj_in.create)
 				
 			End if 
 			
-			If (Folder:C1567($Obj_in.path;fk platform path:K87:2).folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
+			If ($Folder_destination.folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
 				
 				$Obj_out.coreDataSet:=dataSet (New object:C1471(\
 					"action";"coreData";\

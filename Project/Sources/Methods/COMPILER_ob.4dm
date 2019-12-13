@@ -64,6 +64,12 @@ If (False:C215)
 	C_BOOLEAN:C305(ob_writeToDocument ;$3)
 	
 	  //__________________________________________________
+	C_OBJECT:C1216(ob_writeToFile ;$0)
+	C_OBJECT:C1216(ob_writeToFile ;$1)
+	C_OBJECT:C1216(ob_writeToFile ;$2)
+	C_BOOLEAN:C305(ob_writeToFile ;$3)
+	
+	  //__________________________________________________
 	C_OBJECT:C1216(ob_findProperty ;$0)
 	C_OBJECT:C1216(ob_findProperty ;$1)
 	C_TEXT:C284(ob_findProperty ;$2)
