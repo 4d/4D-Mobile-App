@@ -41,127 +41,137 @@ $o.copyTo($oo)
 $o:=$o.parent.file("catalog.json")
 $o.copyTo($oo)
 
+  // tableNumber starts to 1
 For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 	
 	$c:=$Obj_project.$dialog.unsynchronizedTableFields[$i]
 	
-	If ($c.length=0)
+	If ($c#Null:C1517)
 		
-		  // THE TABLE DOESN'T EXIST ANYMORE
-		OB REMOVE:C1226($Obj_dataModel;String:C10($i))
 		
-	Else 
-		
-		  // Check the fields
-		
-		$Obj_table:=$Obj_dataModel[String:C10($i)]
-		
-		$Lon_published:=0
-		
-		For each ($t;$Obj_table)
+		If ($c.length=0)
 			
-			Case of 
-					
-					  //______________________________________________________
-				: (Length:C16($t)=0)
-					
-					  // <NOTHING MORE TO DO>
-					
-					  //______________________________________________________
-				: ($ƒ.isField($t))
-					
-					$o:=$c.query("current.id = :1";Num:C11($t)).pop()
-					
-					If ($o=Null:C1517)  // Missing
+			  // THE TABLE DOESN'T EXIST ANYMORE
+			OB REMOVE:C1226($Obj_dataModel;String:C10($i))
+			
+		Else 
+			
+			  // Check the fields
+			
+			$Obj_table:=$Obj_dataModel[String:C10($i)]
+			
+			$Lon_published:=0
+			
+			For each ($t;$Obj_table)
+				
+				Case of 
 						
-						OB REMOVE:C1226($Obj_table;String:C10($t))
+						  //______________________________________________________
+					: (Length:C16($t)=0)
 						
-					Else 
+						  // <NOTHING MORE TO DO>
 						
-						Case of 
-								
-								  //______________________________________________________
-							: ($o.missing)
-								
-								OB REMOVE:C1226($Obj_table;String:C10($t))
-								
-								  //______________________________________________________
-							: ($o.typeMismatch)
-								
-								  // Detect compatible types
-								Case of 
-										
-										  //……………………………………………………………………………………………………………………………………………………………………………
-									: (($o.fieldType=Is alpha field:K8:1)\
-										 & ($o.current.fieldType=Is text:K8:3))\
-										 | (($o.fieldType=Is text:K8:3) & ($o.current.fieldType=Is alpha field:K8:1))  // String
-										
-										$Obj_table[$t].fieldType:=$o.current.fieldType
-										$Lon_published:=$Lon_published+1
-										
-										  //……………………………………………………………………………………………………………………………………………………………………………
-									: (($o.current.fieldType=Is integer:K8:5)\
-										 | ($o.current.fieldType=Is longint:K8:6)\
-										 | ($o.current.fieldType=Is integer 64 bits:K8:25)\
-										 | ($o.current.fieldType=Is real:K8:4)\
-										 | ($o.current.fieldType=_o_Is float:K8:26))\
-										 & (($o.fieldType=Is integer:K8:5) | ($o.fieldType=Is longint:K8:6) | ($o.fieldType=Is integer 64 bits:K8:25) | ($o.fieldType=Is real:K8:4) | ($o.fieldType=_o_Is float:K8:26))  // Numeric
-										
-										$Obj_table[$t].fieldType:=$o.current.fieldType
-										$Lon_published:=$Lon_published+1
-										
-										  //……………………………………………………………………………………………………………………………………………………………………………
-									Else 
-										
-										OB REMOVE:C1226($Obj_table;String:C10($t))
-										
-										  //……………………………………………………………………………………………………………………………………………………………………………
-								End case 
-								
-								  //______________________________________________________
-							Else 
-								
-								  // Only name was modified: ACCEPT
-								$Obj_table[$t].name:=$o.current.name
-								$Lon_published:=$Lon_published+1
-								
-								  //______________________________________________________
-						End case 
-					End if 
-					
-					  //______________________________________________________
-				: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
-					
-					  // <NOTHING MORE TO DO>
-					
-					  //______________________________________________________
-				: ($ƒ.isRelationToOne($Obj_table[$t]))  // N -> 1 relation
-					
-					If ($Obj_datastore[$Obj_table[$t].relatedDataClass]=Null:C1517)
+						  //______________________________________________________
+					: ($ƒ.isField($t))
 						
-						  // THE RELATED TABLE DOESN'T EXIST ANYMORE
-						OB REMOVE:C1226($Obj_table;String:C10($t))
+						$o:=$c.query("fieldNumber = :1";Num:C11($t)).pop()
 						
-					Else 
-						
-						$Lon_number2:=0
-						
-						For each ($tt;$Obj_table[$t])
+						If ($o=Null:C1517)  // NOT unsynchronized
+							
+							$Lon_published:=$Lon_published+1
+							
+						Else 
 							
 							Case of 
 									
-									  //…………………………………………………………………………
-								: ($ƒ.isField($tt))
+									  //______________________________________________________
+								: ($o.missing)
 									
-									$Obj_field:=$Obj_table[$t][$tt]
+									OB REMOVE:C1226($Obj_table;String:C10($t))
 									
-									$cc:=$c.extract("fields")
+									  //______________________________________________________
+								: ($o.typeMismatch)
 									
-									If ($cc.length>0)
-										
-										If ($cc[0].query("relatedTableNumber = :1 & name = :2";$Obj_field.relatedTableNumber;$Obj_field.name).length=1)
+									  // Detect compatible types
+									Case of 
 											
-											OB REMOVE:C1226($Obj_table[$t];$tt)
+											  //……………………………………………………………………………………………………………………………………………………………………………
+										: (($o.fieldType=Is alpha field:K8:1)\
+											 & ($o.current.fieldType=Is text:K8:3))\
+											 | (($o.fieldType=Is text:K8:3) & ($o.current.fieldType=Is alpha field:K8:1))  // String
+											
+											$Obj_table[$t].fieldType:=$o.current.fieldType
+											$Lon_published:=$Lon_published+1
+											
+											  //……………………………………………………………………………………………………………………………………………………………………………
+										: (($o.current.fieldType=Is integer:K8:5)\
+											 | ($o.current.fieldType=Is longint:K8:6)\
+											 | ($o.current.fieldType=Is integer 64 bits:K8:25)\
+											 | ($o.current.fieldType=Is real:K8:4)\
+											 | ($o.current.fieldType=_o_Is float:K8:26))\
+											 & (($o.fieldType=Is integer:K8:5) | ($o.fieldType=Is longint:K8:6) | ($o.fieldType=Is integer 64 bits:K8:25) | ($o.fieldType=Is real:K8:4) | ($o.fieldType=_o_Is float:K8:26))  // Numeric
+											
+											$Obj_table[$t].fieldType:=$o.current.fieldType
+											$Lon_published:=$Lon_published+1
+											
+											  //……………………………………………………………………………………………………………………………………………………………………………
+										Else 
+											
+											OB REMOVE:C1226($Obj_table;String:C10($t))
+											
+											  //……………………………………………………………………………………………………………………………………………………………………………
+									End case 
+									
+									  //______________________________________________________
+								Else 
+									
+									  // Only name was modified: ACCEPT
+									$Obj_table[$t].name:=$o.current.name
+									$Lon_published:=$Lon_published+1
+									
+									  //______________________________________________________
+							End case 
+						End if 
+						
+						  //______________________________________________________
+					: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
+						
+						  // <NOTHING MORE TO DO>
+						
+						  //______________________________________________________
+					: ($ƒ.isRelationToOne($Obj_table[$t]))  // N -> 1 relation
+						
+						If ($Obj_datastore[$Obj_table[$t].relatedDataClass]=Null:C1517)
+							
+							  // THE RELATED TABLE DOESN'T EXIST ANYMORE
+							OB REMOVE:C1226($Obj_table;String:C10($t))
+							
+						Else 
+							
+							$Lon_number2:=0
+							
+							For each ($tt;$Obj_table[$t])
+								
+								Case of 
+										
+										  //…………………………………………………………………………
+									: ($ƒ.isField($tt))
+										
+										$Obj_field:=$Obj_table[$t][$tt]
+										
+										$cc:=$c.extract("fields")
+										
+										If ($cc.length>0)
+											
+											If ($cc[0].query("relatedTableNumber = :1 & name = :2";$Obj_field.relatedTableNumber;$Obj_field.name).length=1)
+												
+												OB REMOVE:C1226($Obj_table[$t];$tt)
+												
+											Else 
+												
+												$Lon_number2:=$Lon_number2+1
+												
+											End if 
 											
 										Else 
 											
@@ -169,63 +179,61 @@ For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 											
 										End if 
 										
+										  //…………………………………………………………………………
+									: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
+										
+										  // <NOTHING MORE TO DO>
+										
+										  //…………………………………………………………………………
 									Else 
 										
-										$Lon_number2:=$Lon_number2+1
+										  // NOT YET MANAGED
 										
-									End if 
-									
-									  //…………………………………………………………………………
-								: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
-									
-									  // <NOTHING MORE TO DO>
-									
-									  //…………………………………………………………………………
-								Else 
-									
-									  // NOT YET MANAGED
-									
-									  //…………………………………………………………………………
-							End case 
-						End for each 
-						
-						If ($Lon_number2=0)
+										  //…………………………………………………………………………
+								End case 
+							End for each 
 							
-							  // NO MORE PUBLISHED FIELDS FROM THE RELATED TABLE
-							OB REMOVE:C1226($Obj_table;$t)
+							If ($Lon_number2=0)
+								
+								  // NO MORE PUBLISHED FIELDS FROM THE RELATED TABLE
+								OB REMOVE:C1226($Obj_table;$t)
+								
+							Else 
+								
+								$Lon_published:=$Lon_published+1
+								
+							End if 
+						End if 
+						
+						  //______________________________________________________
+					: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
+						
+						If ($Obj_datastore[$Obj_table[$t].relatedEntities]=Null:C1517)
+							
+							  // THE RELATED TABLE DOESN'T EXIST ANYMORE
+							OB REMOVE:C1226($Obj_table;String:C10($t))
 							
 						Else 
 							
 							$Lon_published:=$Lon_published+1
 							
 						End if 
-					End if 
-					
-					  //______________________________________________________
-				: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
-					
-					If ($Obj_datastore[$Obj_table[$t].relatedEntities]=Null:C1517)
 						
-						  // THE RELATED TABLE DOESN'T EXIST ANYMORE
-						OB REMOVE:C1226($Obj_table;String:C10($t))
-						
-					Else 
-						
-						$Lon_published:=$Lon_published+1
-						
-					End if 
-					
-					  //________________________________________
-			End case 
-		End for each 
-		
-		If ($Lon_published=0)
+						  //________________________________________
+				End case 
+			End for each 
 			
-			  // NO MORE FIELDS PUBLISHED FOR THIS TABLE
-			OB REMOVE:C1226($Obj_dataModel;String:C10($i))
-			
+			If ($Lon_published=0)
+				
+				  // NO MORE FIELDS PUBLISHED FOR THIS TABLE
+				OB REMOVE:C1226($Obj_dataModel;String:C10($i))
+				
+			End if 
 		End if 
+		
 	End if 
+	
+	
 End for 
 
 If (OB Is empty:C1297($Obj_dataModel))

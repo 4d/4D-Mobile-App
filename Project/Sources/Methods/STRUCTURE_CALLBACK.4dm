@@ -123,22 +123,26 @@ If ($file.exists)
 								If ($ƒ.isField($t))
 									
 									$o:=$Obj_tableModel[$t]
+									$o.fieldNumber:=Num:C11($t)
 									$o.current:=$Obj_tableCurrent.field.query("fieldNumber = :1";Num:C11($t)).pop()
 									$o.missing:=$o.current=Null:C1517
 									$o.nameMismatch:=$o.name#String:C10($o.current.name)
 									
-									If (Value type:C1509($o.type)=Is text:K8:3)
+									If (Not:C34($o.missing))
 										
-										  // Compare to value Type
-										$o.typeMismatch:=$o.type#$o.current.valueType
-										
-									Else 
-										
-										$o.typeMismatch:=$o.fieldType#$o.current.fieldType
-										
+										If (Value type:C1509($o.type)=Is text:K8:3)
+											
+											  // Compare to value Type
+											$o.typeMismatch:=$o.type#$o.current.valueType
+											
+										Else 
+											
+											$o.typeMismatch:=$o.fieldType#$o.current.fieldType
+											
+										End if 
 									End if 
 									
-									If ($o.missing | $o.nameMismatch | $o.typeMismatch)
+									If ($o.missing | $o.nameMismatch | Bool:C1537($o.typeMismatch))
 										
 										  // THE FIELD IS NO LONGER AVAILABLE
 										  // OR THE NAME/TYPE HAS BEEN CHANGED
@@ -287,7 +291,7 @@ If ($file.exists)
 								
 							Else 
 								
-								  // PRIVATE PROPERTIES
+								  // TABLE PROPERTIES
 								
 							End if 
 						End for each 
