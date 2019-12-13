@@ -25,7 +25,7 @@ O ID de pacote deve identificar exclusivamente o seu aplicativo, por isso é imp
         </trans-unit>
         <trans-unit id="7GQ/DwNPqTdzngVykxxguw" resname="appBundleID">
           <source>ID</source>
-          <target>ID</target>
+          <target>Nº</target>
         </trans-unit>
         <trans-unit id="E7F5JYhVkTtRSXwrssagHg" resname="appCopyright">
           <source>Copyright</source>
