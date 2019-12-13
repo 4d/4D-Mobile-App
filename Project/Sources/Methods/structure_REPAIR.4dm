@@ -48,7 +48,6 @@ For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 	
 	If ($c#Null:C1517)
 		
-		
 		If ($c.length=0)
 			
 			  // THE TABLE DOESN'T EXIST ANYMORE
@@ -57,9 +56,7 @@ For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 		Else 
 			
 			  // Check the fields
-			
 			$Obj_table:=$Obj_dataModel[String:C10($i)]
-			
 			$Lon_published:=0
 			
 			For each ($t;$Obj_table)
@@ -69,7 +66,7 @@ For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 						  //______________________________________________________
 					: (Length:C16($t)=0)
 						
-						  // <NOTHING MORE TO DO>
+						  // TABLE PROPERTIES
 						
 						  //______________________________________________________
 					: ($ƒ.isField($t))
@@ -281,6 +278,8 @@ CALL FORM:C1391($Win_current;"project_SAVE")
 
   // Update UI
 CALL FORM:C1391($Win_current;"editor_CALLBACK";"updateRibbon")
+CALL FORM:C1391($Win_current;"editor_CALLBACK";"refreshViews")
+CALL FORM:C1391($Win_current;"editor_CALLBACK";"pickerHide")
 CALL FORM:C1391($Win_current;"editor_CALLBACK";"description";New object:C1471(\
 "show";False:C215))
 

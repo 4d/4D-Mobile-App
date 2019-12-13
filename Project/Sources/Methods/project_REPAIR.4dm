@@ -49,7 +49,7 @@ If ($Obj_project.actions#Null:C1517)
 	$c[Is longint:K8:6]:="number"
 	$c[Is picture:K8:10]:="image"
 	$c[Is boolean:K8:9]:="bool"
-	$c[Is float:K8:26]:="number"
+	$c[_o_Is float:K8:26]:="number"
 	$c[Is text:K8:3]:="string"
 	$c[Is real:K8:4]:="number"
 	$c[Is time:K8:8]:="time"
@@ -135,6 +135,15 @@ End if
 |                                        FORMS                                              |
 =============================================================================================
 */
+
+For each ($o;Form:C1466.audit.errors)
+	
+	$Obj_project[$o.tab][$o.table]:=New object:C1471
+	
+End for each 
+
+OB REMOVE:C1226(Form:C1466;"audit")
+Form:C1466.status.project:=True:C214
 
 
 

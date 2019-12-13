@@ -325,6 +325,9 @@ If ($Obj_dataModel#Null:C1517)
 	End for each 
 End if 
 
+CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"description";New object:C1471(\
+"show";Not:C34($Obj_audit.success)))
+
   // ----------------------------------------------------
   // Return
 $0:=$Obj_audit

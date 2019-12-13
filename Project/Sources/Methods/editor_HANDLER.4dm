@@ -192,6 +192,7 @@ Case of
 					"target";"panel.";\
 					"method";"UI_SET_GEOMETRY"))
 				
+				
 				  //______________________________________________________
 			Else 
 				

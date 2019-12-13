@@ -10,7 +10,7 @@
   // Declarations
 C_TEXT:C284($1)
 
-C_LONGINT:C283($Lon_i;$Lon_page;$Lon_pageNumber;$Lon_parameters)
+C_LONGINT:C283($Lon_i;$Lon_page;$Lon_pageNumber;$Lon_parameters;$win)
 C_TEXT:C284($Mnu_main;$Txt_currentPage;$Txt_page)
 C_OBJECT:C1216($Obj_geometry)
 
@@ -43,6 +43,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	If ($Lon_parameters>=1)
 		
 		$Txt_page:=$1
+		$win:=Current form window:C827
 		
 		Case of 
 				
@@ -145,18 +146,17 @@ If (Length:C16($Txt_page)>0)
 				"form";"STRUCTURE";\
 				"noTitle";True:C214))
 			
-			
 			$Obj_geometry.action:=New object:C1471(\
 				"title";"syncDataModel";\
 				"show";False:C215;\
 				"formula";Formula:C1597(POST_FORM_MESSAGE (New object:C1471(\
-				"target";Current form window:C827;\
+				"target";$win;\
 				"action";"show";\
 				"type";"confirm";\
 				"title";"updateTheProject";\
 				"additional";"aBackupWillBeCreatedIntoTheProjectFolder";\
 				"ok";"update";\
-				"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"syncDataModel")))))\
+				"okFormula";Formula:C1597(CALL FORM:C1391($win;"editor_CALLBACK";"syncDataModel")))))\
 				)
 			
 			If (Form:C1466.status.dataModel#Null:C1517)
@@ -200,6 +200,32 @@ If (Length:C16($Txt_page)>0)
 				"form";"VIEWS";\
 				"noTitle";True:C214))
 			
+			$Obj_geometry.action:=New object:C1471(\
+				"title";".Repair the project";\
+				"show";False:C215;\
+				"formula";Formula:C1597(POST_FORM_MESSAGE (New object:C1471(\
+				"target";$win;\
+				"action";"show";\
+				"type";"confirm";\
+				"title";"updateTheProject";\
+				"additional";"aBackupWillBeCreatedIntoTheProjectFolder";\
+				"ok";"update";\
+				"okFormula";Formula:C1597(CALL FORM:C1391($win;"editor_CALLBACK";"syncDataModel")))))\
+				)
+			
+			If (Form:C1466.status.dataModel#Null:C1517)
+				
+				If (Bool:C1537(Form:C1466.status.project))
+					
+					  // <NOTHING MORE TO DO>
+					
+				Else 
+					
+					$Obj_geometry.action.show:=True:C214
+					
+				End if 
+			End if 
+			
 			  //………………………………………………………………………………………
 		: ($Lon_page=6)
 			
@@ -208,11 +234,9 @@ If (Length:C16($Txt_page)>0)
 				"form";"SERVER"))
 			
 			If (False:C215)
-				
 				$Obj_geometry.panels.push(New object:C1471(\
 					"title";"UI FOR DEMO PURPOSE";\
 					"form";"UI"))
-				
 			End if 
 			
 			  //………………………………………………………………………………………
@@ -252,15 +276,13 @@ If (Length:C16($Txt_page)>0)
 	If ($tTxt_pages{$Lon_page}#$Txt_currentPage)
 		
 		  // Hide picker if any
-		CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"pickerHide")
+		CALL FORM:C1391($win;"editor_CALLBACK";"pickerHide")
 		
 		If ($Lon_page>0)
 			
 			Form:C1466.currentPage:=$tTxt_pages{$Lon_page}
 			
 			(OBJECT Get pointer:C1124(Object named:K67:5;"description"))->:=Form:C1466.currentPage
-			
-			EXECUTE METHOD IN SUBFORM:C1085("description";"editor_description";*;$Obj_geometry)
 			
 		End if 
 		
@@ -271,6 +293,9 @@ If (Length:C16($Txt_page)>0)
 		SET TIMER:C645(-1)  // Set geometry
 		
 	End if 
+	
+	EXECUTE METHOD IN SUBFORM:C1085("description";"editor_description";*;$Obj_geometry)
+	
 End if 
 
   // ----------------------------------------------------
