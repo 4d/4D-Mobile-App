@@ -382,12 +382,20 @@ If (featuresFlags.with("newDataModel"))
 						
 					End if 
 					
+					  //#ACI0100305
+					If ($Obj_table.filter#Null:C1517)
+						
+						$Obj_table[""].filter:=$Obj_table.filter
+						
+					End if 
+					
 					OB REMOVE:C1226($Obj_table;"name")
 					OB REMOVE:C1226($Obj_table;"label")
 					OB REMOVE:C1226($Obj_table;"shortLabel")
 					OB REMOVE:C1226($Obj_table;"primaryKey")
 					OB REMOVE:C1226($Obj_table;"embedded")
 					OB REMOVE:C1226($Obj_table;"icon")
+					OB REMOVE:C1226($Obj_table;"filter")  //#ACI0100305
 					
 				End if 
 			End for each 
