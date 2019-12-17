@@ -513,16 +513,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 						C_BOOLEAN:C305($Bool_withPictures)
 						
-						If (featuresFlags.with("setImageDump"))
-							
-							$Bool_withPictures:=(Not:C34(Bool:C1537($Obj_in.project.dataSource.doNotExportImages)))
-							
-						End if 
-						
-						If (featuresFlags.with("97117"))
+						If (featuresFlags.with("97117"))  // Test purpose
 							
 							$Bool_withPictures:=(Bool:C1537($Obj_in.picture))
 							
+						Else 
+							
+							If (featuresFlags.with("setImageDump"))
+								
+								$Bool_withPictures:=(Not:C34(Bool:C1537($Obj_in.project.dataSource.doNotExportImages)))
+								
+							End if 
 						End if 
 						
 						If ($Bool_withPictures)
