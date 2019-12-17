@@ -512,18 +512,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						$Obj_out.success:=$Obj_out.catalog.success & $Obj_out.data.success
 						
 						C_BOOLEAN:C305($Bool_withPictures)
+						$Bool_withPictures:=True:C214
 						
-						If (featuresFlags.with("97117"))  // Test purpose
+						If ($Obj_in.picture#Null:C1517)
 							
-							$Bool_withPictures:=(Bool:C1537($Obj_in.picture))
+							$Bool_withPictures:=(Bool:C1537($Obj_in.picture))  // Test purpose
 							
 						Else 
 							
-							If (featuresFlags.with("setImageDump"))
-								
-								$Bool_withPictures:=(Not:C34(Bool:C1537($Obj_in.project.dataSource.doNotExportImages)))
-								
-							End if 
+							$Bool_withPictures:=(Not:C34(Bool:C1537($Obj_in.project.dataSource.doNotExportImages)))
+							
 						End if 
 						
 						If ($Bool_withPictures)

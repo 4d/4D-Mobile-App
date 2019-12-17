@@ -400,15 +400,30 @@ If ($Obj_in.create)
 				End if 
 			End if 
 			
-			$Obj_out.dump:=dataSet (New object:C1471(\
-				"action";"create";\
-				"project";$Obj_project;\
-				"digest";True:C214;\
-				"dataSet";True:C214;\
-				"key";$File_;\
-				"caller";$Obj_in.caller;\
-				"verbose";$Boo_verbose;\
-				"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+			If (featuresFlags.with("setImageDump"))
+				
+				$Obj_out.dump:=dataSet (New object:C1471(\
+					"action";"create";\
+					"project";$Obj_project;\
+					"digest";True:C214;\
+					"dataSet";True:C214;\
+					"key";$File_;\
+					"caller";$Obj_in.caller;\
+					"verbose";$Boo_verbose))
+				
+			Else 
+				
+				$Obj_out.dump:=dataSet (New object:C1471(\
+					"action";"create";\
+					"project";$Obj_project;\
+					"digest";True:C214;\
+					"dataSet";True:C214;\
+					"key";$File_;\
+					"caller";$Obj_in.caller;\
+					"verbose";$Boo_verbose;\
+					"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+				
+			End if 
 			
 			  //_97117 deactive picture dump for QA purpose 
 			
