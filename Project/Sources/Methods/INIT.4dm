@@ -60,3 +60,4 @@ If (Storage:C1525.database=Null:C1517)  // | (Structure file=Structure file(*))
 End if 
 
 $1.trigger()
+

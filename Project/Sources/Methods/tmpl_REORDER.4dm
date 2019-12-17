@@ -12,7 +12,7 @@ C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_accepted;$Boo_multiCriteria)
 C_LONGINT:C283($Lon_indx;$Lon_keyType;$Lon_parameters)
-C_TEXT:C284($Dir_root;$t;$Dom_field;$Dom_root;$File_;$Txt_bind)
+C_TEXT:C284($Dir_root;$Dom_field;$Dom_root;$File_;$t;$Txt_bind)
 C_OBJECT:C1216($o;$Obj_attributes;$Obj_cache;$Obj_field;$Obj_in)
 C_COLLECTION:C1488($c;$Col_affected;$Col_bind;$Col_catalog)
 

@@ -52,6 +52,7 @@ $o:=New signal
 CALL WORKER(1;"INIT";$o)
 $o.wait()
 */
+	
 	$o:=New signal:C1641
 	CALL WORKER:C1389("$";"INIT";$o)
 	$o.wait()
@@ -428,8 +429,8 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags._105431:=($Lon_version>=1800)  //  [MOBILE] Display 1-n relations
 	featuresFlags._110882:=($Lon_version>=1800)  //  [MOBILE] Dump data into core data SQLLite database
 	
-	featuresFlags.repairStructureMoreVisible:=True:C214
-	featuresFlags.newDataModel:=($Lon_version>=1820)
+	featuresFlags.repairStructureMoreVisible:=($Lon_version>=1820)
+	featuresFlags.newDataModel:=($Lon_version>=1800)
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
@@ -437,6 +438,8 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags._98145:=($Lon_version>=1750)  //                   Replace, for data structure access, EXPORT STRUCTURE by ds
 	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
 	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
+	
+	featuresFlags._113164:=($Lon_version>=1820)  // enable/disable image dump
 	
 End if 
 
@@ -532,7 +535,9 @@ End if
   //                                                             | ALIAS |
   // ________________________________________________________________________________________________________________________________
   //featuresFlags.actionWithParameters:=featuresFlags._105413  //    [MOBILE] Actions with parameters
-featuresFlags.oneToManyRelations:=featuresFlags._105431  //    [MOBILE] Display 1-n relations
+featuresFlags.oneToManyRelations:=featuresFlags._105431
+featuresFlags.setImageDump:=featuresFlags._113164
+
 
   // ________________________________________________________________________________________________________________________________
   //                                                         | AFTER FLAGS |

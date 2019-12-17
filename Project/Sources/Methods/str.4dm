@@ -807,22 +807,11 @@ Else
 					  //$o.value:=Choose($Lon_position>0;$t;"")
 					  // End for each
 					  // End if
-					  //______________________________________________________
-					  //: (Formula(process ).call().isPreemptif)
-					  //_4D THROW ERROR(New object(\
-						"component";"CLAS";\
-						"code";1;\
-						"description";"The method "+String($1)+"() for class "+String(This[""])+" can't be called in preemptive mode";\
-						"something";"my bug"))
 					
 					  //______________________________________________________
 				: ($1="isStyled")  // Returns True if text is styled
 					
-					  //#BYPASS THREAD-SAFE COMPATIBILITY
-					$t:=Replace string:C233(String:C10(This:C1470.value);"\r\n";"\r")
-					$Txt_filtered:=Formula from string:C1601(":C1092($1)").call(Null:C1517;$t)
-					$Txt_result:=Formula from string:C1601(":C1116($1)").call(Null:C1517;$t)
-					$o.value:=($Txt_result#$Txt_filtered)
+					$o.value:=Match regex:C1019("(?i-ms)<span [^>]*>";String:C10(This:C1470.value);1)
 					
 					  //______________________________________________________
 				: ($1="insert")  // Returns an object with string after insertion (value), and positions (begin & end)
@@ -904,6 +893,14 @@ Else
 								  //______________________________________________________
 						End case 
 					End for each 
+					
+					  //______________________________________________________
+					  //: (Formula(process ).call().isPreemptif)
+					  //_4D THROW ERROR(New object(\
+												"component";"CLAS";\
+												"code";1;\
+												"description";"The method "+String($1)+"() for class "+String(This[""])+" can't be called in preemptive mode";\
+												"something";"my bug"))
 					
 					  //______________________________________________________
 				Else 

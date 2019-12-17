@@ -487,6 +487,11 @@ Case of
 				  // <NOTHING MORE TO DO>
 				
 				  //______________________________________________________
+			: (Length:C16(String:C10($Obj_in.message))=0)
+				
+				  //
+				
+				  //______________________________________________________
 			: ($Obj_in.message="The request is mal formed")
 				
 				$Obj_out.message:=Get localized string:C991("theRequestIsMalformed")

@@ -72,7 +72,7 @@ Else
 					 & ($c.indexOf(Is longint:K8:6)#-1)\
 					 & ($c.indexOf(Is integer 64 bits:K8:25)#-1)\
 					 & ($c.indexOf(Is real:K8:4)#-1)\
-					 & ($c.indexOf(Is float:K8:26)#-1)
+					 & ($c.indexOf(_o_Is float:K8:26)#-1)
 					
 					If (Length:C16($Txt_tips)=0)
 						
@@ -89,7 +89,7 @@ Else
 					$c.remove($c.indexOf(Is longint:K8:6))
 					$c.remove($c.indexOf(Is integer 64 bits:K8:25))
 					$c.remove($c.indexOf(Is real:K8:4))
-					$c.remove($c.indexOf(Is float:K8:26))
+					$c.remove($c.indexOf(_o_Is float:K8:26))
 					
 				End if 
 				
@@ -215,7 +215,7 @@ If (Length:C16($Txt_tips)=0)
 		Case of 
 				
 				  //______________________________________________________
-			: ($o.fieldType=8859)  // 1-N relation
+			: (Num:C11($o.fieldType)=8859)  // 1-N relation
 				
 				If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)
 					

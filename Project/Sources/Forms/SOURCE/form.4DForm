@@ -2,7 +2,7 @@
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 100,
+	"height": 127,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -30,10 +30,10 @@
 					"text": ":xliff:currentDataFile",
 					"focusable": false,
 					"radioGroup": "Group8",
-					"method": "ObjectMethods/source_local.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "SOURCE_OBJECTS_HANDLER"
 				},
 				"source_server": {
 					"type": "radio",
@@ -44,39 +44,40 @@
 					"text": ":xliff:productionServer",
 					"focusable": false,
 					"radioGroup": "Group8",
-					"method": "ObjectMethods/source_server.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "SOURCE_OBJECTS_HANDLER"
 				},
 				"doNotGenerate": {
 					"type": "checkbox",
-					"top": 5,
+					"top": 33,
 					"left": 486,
 					"width": 391,
 					"height": 21,
 					"dataSource": "Form:C1466.dataSource.doNotGenerateDataAtEachBuild",
 					"text": ":xliff:doNotGenerateDataAtEachBuild",
 					"focusable": false,
-					"method": "ObjectMethods/doNotGenerate.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "SOURCE_OBJECTS_HANDLER",
+					"dataSourceTypeHint": "boolean"
 				},
 				"generate": {
 					"type": "button",
-					"top": 32,
+					"top": 60,
 					"left": 508,
 					"width": 142,
 					"height": 22,
 					"text": ":xliff:generate",
 					"iconFrames": 4,
 					"style": "regular",
-					"method": "ObjectMethods/generate.4dm",
 					"events": [
 						"onClick"
 					],
-					"focusable": false
+					"focusable": false,
+					"method": "SOURCE_OBJECTS_HANDLER"
 				},
 				"serverStatus": {
 					"type": "button",
@@ -90,10 +91,10 @@
 					"icon": "/RESOURCES/images/light_on.png",
 					"textPlacement": "right",
 					"style": "custom",
-					"method": "ObjectMethods/serverStatus.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "SOURCE_OBJECTS_HANDLER"
 				},
 				"serverInTest": {
 					"type": "spinner",
@@ -116,7 +117,7 @@
 				},
 				"dataGeneration": {
 					"type": "spinner",
-					"top": 34,
+					"top": 62,
 					"left": 659,
 					"width": 20,
 					"height": 19,
@@ -124,7 +125,7 @@
 				},
 				"dataGeneration.label": {
 					"type": "text",
-					"top": 35,
+					"top": 63,
 					"left": 680,
 					"width": 258,
 					"height": 46,
@@ -132,8 +133,31 @@
 					"stroke": "#808080",
 					"textAlign": "left",
 					"text": ":xliff:dataSetGeneration"
+				},
+				"doNotExportImages": {
+					"type": "checkbox",
+					"top": 5,
+					"left": 486,
+					"width": 391,
+					"height": 21,
+					"dataSource": "Form:C1466.dataSource.doNotExportImages",
+					"text": ":xliff:doNotExportImages",
+					"focusable": false,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"method": "SOURCE_OBJECTS_HANDLER"
 				}
-			}
+			},
+			"entryOrder": [
+				"source_local",
+				"source_server",
+				"serverStatus",
+				"doNotExportImages",
+				"doNotGenerate",
+				"generate"
+			]
 		}
 	],
 	"$4d": {

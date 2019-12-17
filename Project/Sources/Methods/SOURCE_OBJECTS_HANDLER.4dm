@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
-  // Project method : DATA_OBJECTS_HANDLER
+  // Project method : SOURCE_OBJECTS_HANDLER
   // ID[DE1DC030CB2B497BA1A42C0D39E7CE09]
   // Created 18-12-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -86,27 +86,45 @@ Case of
 		
 		Form:C1466.$project.dataSetGeneration:=True:C214
 		
-		CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
-			"caller";$Obj_form.window;\
-			"action";"create";\
-			"eraseIfExists";True:C214;\
-			"project";$Obj_project;\
-			"digest";True:C214;\
-			"coreDataSet";Bool:C1537(featuresFlags._110882);\
-			"key";$File_key;\
-			"dataSet";True:C214;\
-			"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+		If (featuresFlags.with("setImageDump"))
+			
+			CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
+				"caller";$Obj_form.window;\
+				"action";"create";\
+				"eraseIfExists";True:C214;\
+				"project";$Obj_project;\
+				"digest";True:C214;\
+				"coreDataSet";Bool:C1537(featuresFlags._110882);\
+				"key";$File_key;\
+				"dataSet";True:C214))
+			
+		Else 
+			
+			CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
+				"caller";$Obj_form.window;\
+				"action";"create";\
+				"eraseIfExists";True:C214;\
+				"project";$Obj_project;\
+				"digest";True:C214;\
+				"coreDataSet";Bool:C1537(featuresFlags._110882);\
+				"key";$File_key;\
+				"dataSet";True:C214;\
+				"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+			
+		End if 
 		
-		  //If (Shift down)
-		
-		  //SHOW ON DISK(dataSet (New object(\
+		  // If (Shift down)
+		  // SHOW ON DISK(dataSet (New object(\
 			"action";"path";\
-			"project";New object("product";Form.product;"$project";Form.$project))).path)
+			"project";New object(\
+			"product";Form.product;\
+			"$project";Form.$project))).path)
 		
-		  //End if 
+		  // End if
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.doNotGenerate)
+	: ($Txt_me=$Obj_form.doNotGenerate)\
+		 | ($Txt_me=$Obj_form.doNotExportImages)
 		
 		ui.saveProject()
 		ui.refresh()

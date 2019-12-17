@@ -41,6 +41,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"local";"source_local";\
 		"server";"source_server";\
 		"doNotGenerate";"doNotGenerate";\
+		"doNotExportImages";"doNotExportImages";\
 		"generate";"generate";\
 		"serverStatus";"serverStatus")
 	
@@ -92,8 +93,8 @@ Case of
 				ui_BEST_SIZE (New object:C1471(\
 					"widgets";New collection:C1472($Obj_form.doNotGenerate)))
 				
-				  // Declare check box as boolean
-				EXECUTE FORMULA:C63("C_BOOLEAN:C305((OBJECT Get pointer:C1124(Object named:K67:5;\"doNotGenerate\"))->)")
+				  // Declare check box as boolean (NO MORE NECESSARY IN JSON FORM)
+				  //EXECUTE FORMULA("C_BOOLEAN:C305((OBJECT Get pointer:C1124(Object named:K67:5;\"doNotGenerate\"))->)")
 				
 				$Obj_form.ui.testServer()
 				

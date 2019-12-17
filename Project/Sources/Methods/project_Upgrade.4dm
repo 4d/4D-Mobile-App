@@ -370,11 +370,18 @@ If (featuresFlags.with("newDataModel"))
 						"primaryKey";$Obj_table.primaryKey\
 						)
 					
+					OB REMOVE:C1226($Obj_table;"name")
+					OB REMOVE:C1226($Obj_table;"label")
+					OB REMOVE:C1226($Obj_table;"shortLabel")
+					OB REMOVE:C1226($Obj_table;"primaryKey")
+					
 					If (Bool:C1537($Obj_table.embedded))
 						
 						$Obj_table[""].embedded:=True:C214
 						
 					End if 
+					
+					OB REMOVE:C1226($Obj_table;"embedded")
 					
 					If (Length:C16(String:C10($Obj_table.icon))>0)
 						
@@ -382,21 +389,15 @@ If (featuresFlags.with("newDataModel"))
 						
 					End if 
 					
+					OB REMOVE:C1226($Obj_table;"icon")
+					
 					  //#ACI0100305
 					If ($Obj_table.filter#Null:C1517)
 						
 						$Obj_table[""].filter:=$Obj_table.filter
+						OB REMOVE:C1226($Obj_table;"filter")
 						
 					End if 
-					
-					OB REMOVE:C1226($Obj_table;"name")
-					OB REMOVE:C1226($Obj_table;"label")
-					OB REMOVE:C1226($Obj_table;"shortLabel")
-					OB REMOVE:C1226($Obj_table;"primaryKey")
-					OB REMOVE:C1226($Obj_table;"embedded")
-					OB REMOVE:C1226($Obj_table;"icon")
-					OB REMOVE:C1226($Obj_table;"filter")  //#ACI0100305
-					
 				End if 
 			End for each 
 			

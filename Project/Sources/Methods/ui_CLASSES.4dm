@@ -36,9 +36,3 @@ ui.listbox:=Formula:C1597(listbox ($1))
 ui.picture:=Formula:C1597(picture ($1))
 
 ui.thermometer:=Formula:C1597(thermometer ($1))
-
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End

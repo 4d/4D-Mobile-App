@@ -13,7 +13,7 @@ If (False:C215)
 	C_OBJECT:C1216(window ;$2)
 End if 
 
-If (This:C1470=Null:C1517)
+If (This:C1470[""]=Null:C1517)
 	
 	$o:=New object:C1471(\
 		"";"window";\

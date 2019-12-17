@@ -87,15 +87,30 @@ Case of
 			WEB START SERVER:C617
 		End if 
 		
-		$Obj_result:=dataSet (New object:C1471(\
-			"action";"create";\
-			"project";$Obj_project;\
-			"digest";True:C214;\
-			"dataSet";True:C214;\
-			"key";COMPONENT_Pathname ("key").platformPath;\
-			"caller";Current form window:C827;\
-			"verbose";True:C214;\
-			"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+		If (featuresFlags.with("setImageDump"))
+			
+			$Obj_result:=dataSet (New object:C1471(\
+				"action";"create";\
+				"project";$Obj_project;\
+				"digest";True:C214;\
+				"dataSet";True:C214;\
+				"key";COMPONENT_Pathname ("key").platformPath;\
+				"caller";Current form window:C827;\
+				"verbose";True:C214))
+			
+		Else 
+			
+			$Obj_result:=dataSet (New object:C1471(\
+				"action";"create";\
+				"project";$Obj_project;\
+				"digest";True:C214;\
+				"dataSet";True:C214;\
+				"key";COMPONENT_Pathname ("key").platformPath;\
+				"caller";Current form window:C827;\
+				"verbose";True:C214;\
+				"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+			
+		End if 
 		
 		If (Not:C34($Obj_result.success))
 			
@@ -118,16 +133,32 @@ Case of
 			WEB START SERVER:C617
 		End if 
 		
-		$Obj_result:=dataSet (New object:C1471(\
-			"action";"create";\
-			"project";$Obj_project;\
-			"digest";True:C214;\
-			"dataSet";True:C214;\
-			"path";$Txt_path;\
-			"key";COMPONENT_Pathname ("key").platformPath;\
-			"caller";Current form window:C827;\
-			"verbose";True:C214;\
-			"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+		If (featuresFlags.with("setImageDump"))
+			
+			$Obj_result:=dataSet (New object:C1471(\
+				"action";"create";\
+				"project";$Obj_project;\
+				"digest";True:C214;\
+				"dataSet";True:C214;\
+				"path";$Txt_path;\
+				"key";COMPONENT_Pathname ("key").platformPath;\
+				"caller";Current form window:C827;\
+				"verbose";True:C214))
+			
+		Else 
+			
+			$Obj_result:=dataSet (New object:C1471(\
+				"action";"create";\
+				"project";$Obj_project;\
+				"digest";True:C214;\
+				"dataSet";True:C214;\
+				"path";$Txt_path;\
+				"key";COMPONENT_Pathname ("key").platformPath;\
+				"caller";Current form window:C827;\
+				"verbose";True:C214;\
+				"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+			
+		End if 
 		
 		$Obj_result:=dataSet (New object:C1471(\
 			"action";"coreData";\

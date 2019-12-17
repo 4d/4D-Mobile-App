@@ -507,29 +507,59 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 						$Obj_out.success:=$Obj_out.catalog.success & $Obj_out.data.success
 						
-						If (Bool:C1537($Obj_in.picture))
+						If (featuresFlags.with("setImageDump"))
 							
-							If ($Boo_verbose)
+							If (Not:C34(Bool:C1537($Obj_in.project.dataSource.doNotExportImages)))
 								
-								CALL FORM:C1391($Obj_in.caller;"LOG_EVENT";New object:C1471(\
-									"message";"Dump Pictures";\
-									"importance";Information message:K38:1))
+								If ($Boo_verbose)
+									
+									CALL FORM:C1391($Obj_in.caller;"LOG_EVENT";New object:C1471(\
+										"message";"Dump Pictures";\
+										"importance";Information message:K38:1))
+									
+								End if 
+								
+								$Obj_out.picture:=dump (New object:C1471(\
+									"action";"pictures";\
+									"url";$Obj_in.url;\
+									"headers";$Obj_headers;\
+									"rest";True:C214;"cache";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
+									"dataSet";$Obj_in.dataSet;\
+									"debug";Bool:C1537($Obj_in.debug);\
+									"output";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator:K24:12+"Pictures");\
+									"dataModel";$Obj_dataModel))
+								ob_error_combine ($Obj_out;$Obj_out.picture)
+								
+								$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
 								
 							End if 
 							
-							$Obj_out.picture:=dump (New object:C1471(\
-								"action";"pictures";\
-								"url";$Obj_in.url;\
-								"headers";$Obj_headers;\
-								"rest";True:C214;"cache";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
-								"dataSet";$Obj_in.dataSet;\
-								"debug";Bool:C1537($Obj_in.debug);\
-								"output";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator:K24:12+"Pictures");\
-								"dataModel";$Obj_dataModel))
-							ob_error_combine ($Obj_out;$Obj_out.picture)
+						Else 
 							
-							$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
-							
+							If (Bool:C1537($Obj_in.picture))
+								
+								If ($Boo_verbose)
+									
+									CALL FORM:C1391($Obj_in.caller;"LOG_EVENT";New object:C1471(\
+										"message";"Dump Pictures";\
+										"importance";Information message:K38:1))
+									
+								End if 
+								
+								$Obj_out.picture:=dump (New object:C1471(\
+									"action";"pictures";\
+									"url";$Obj_in.url;\
+									"headers";$Obj_headers;\
+									"rest";True:C214;"cache";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
+									"dataSet";$Obj_in.dataSet;\
+									"debug";Bool:C1537($Obj_in.debug);\
+									"output";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator:K24:12+"Pictures");\
+									"dataModel";$Obj_dataModel))
+								ob_error_combine ($Obj_out;$Obj_out.picture)
+								
+								$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
+								
+							End if 
 						End if 
 						
 						$Obj_out.path:=$File_
