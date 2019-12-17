@@ -165,8 +165,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			End if 
 			
 			$Obj_dataModel:=$Obj_in.dataModel
+			
 			If ($Obj_dataModel=Null:C1517)
+				
 				$Obj_dataModel:=$Obj_in.project.dataModel  // compatibility issue (try to pass dataModel)
+				
 			End if 
 			
 			If ($Obj_out.success)
@@ -207,10 +210,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			$Obj_dataModel:=$Obj_in.dataModel
 			
 			Case of 
+					
+					  //----------------------------------------
 				: ($Obj_dataModel=Null:C1517)
 					
 					$Obj_out.errors:=New collection:C1472("dataModel must be defined to create dataSet digest")
 					
+					  //----------------------------------------
 				Else 
 					
 					For each ($Txt_tableNumber;$Obj_dataModel)
@@ -227,6 +233,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							For each ($Txt_value;$Obj_table)
 								
 								Case of 
+										
 										  //……………………………………………………………………………………………………………
 									: (Match regex:C1019("(?m-si)^\\d+$";$Txt_value;1;*))  // fieldNumber
 										
@@ -252,15 +259,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 													$Col_fields.push($Obj_field)
 													
 												End if 
-												
 											End for each 
-											
 										End if 
 										
+										  //........................................
 									Else 
 										
+										  //........................................
 								End case 
-								
 							End for each 
 							
 							$Col_tables.push(New object:C1471(\
@@ -269,7 +275,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 								"fields";$Col_fields))
 							
 						End if 
-						
 					End for each 
 					
 					  // Information needed to check data digest
@@ -281,6 +286,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					
 					$Obj_out.success:=True:C214
 					
+					  //----------------------------------------
 			End case 
 			
 			  //______________________________________________________
@@ -405,7 +411,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 				If (WEB Is server running:C1313 | (Length:C16(String:C10($Obj_in.url))>0))
 					
-					
 					If ($Boo_verbose)
 						
 						CALL FORM:C1391($Obj_in.caller;"LOG_EVENT";New object:C1471(\
@@ -471,7 +476,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							  //----------------------------------------
 					End case 
 					
-					
 					$Obj_out.catalog:=dump (New object:C1471(\
 						"action";"catalog";\
 						"url";$Obj_in.url;\
@@ -507,60 +511,68 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 						$Obj_out.success:=$Obj_out.catalog.success & $Obj_out.data.success
 						
+						C_BOOLEAN:C305($Bool_withPictures)
+						
 						If (featuresFlags.with("setImageDump"))
 							
-							If (Not:C34(Bool:C1537($Obj_in.project.dataSource.doNotExportImages)))
-								
-								If ($Boo_verbose)
-									
-									CALL FORM:C1391($Obj_in.caller;"LOG_EVENT";New object:C1471(\
-										"message";"Dump Pictures";\
-										"importance";Information message:K38:1))
-									
-								End if 
-								
-								$Obj_out.picture:=dump (New object:C1471(\
-									"action";"pictures";\
-									"url";$Obj_in.url;\
-									"headers";$Obj_headers;\
-									"rest";True:C214;"cache";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
-									"dataSet";$Obj_in.dataSet;\
-									"debug";Bool:C1537($Obj_in.debug);\
-									"output";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator:K24:12+"Pictures");\
-									"dataModel";$Obj_dataModel))
-								ob_error_combine ($Obj_out;$Obj_out.picture)
-								
-								$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
-								
-							End if 
+							$Bool_withPictures:=(Not:C34(Bool:C1537($Obj_in.project.dataSource.doNotExportImages)))
 							
-						Else 
-							
-							If (Bool:C1537($Obj_in.picture))
-								
-								If ($Boo_verbose)
-									
-									CALL FORM:C1391($Obj_in.caller;"LOG_EVENT";New object:C1471(\
-										"message";"Dump Pictures";\
-										"importance";Information message:K38:1))
-									
-								End if 
-								
-								$Obj_out.picture:=dump (New object:C1471(\
-									"action";"pictures";\
-									"url";$Obj_in.url;\
-									"headers";$Obj_headers;\
-									"rest";True:C214;"cache";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
-									"dataSet";$Obj_in.dataSet;\
-									"debug";Bool:C1537($Obj_in.debug);\
-									"output";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator:K24:12+"Pictures");\
-									"dataModel";$Obj_dataModel))
-								ob_error_combine ($Obj_out;$Obj_out.picture)
-								
-								$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
-								
-							End if 
 						End if 
+						
+						If (featuresFlags.with("97117"))
+							
+							$Bool_withPictures:=(Bool:C1537($Obj_in.picture))
+							
+						End if 
+						
+						If ($Bool_withPictures)
+							
+							If ($Boo_verbose)
+								
+								CALL FORM:C1391($Obj_in.caller;"LOG_EVENT";New object:C1471(\
+									"message";"Dump Pictures";\
+									"importance";Information message:K38:1))
+								
+							End if 
+							
+							$Obj_out.picture:=dump (New object:C1471(\
+								"action";"pictures";\
+								"url";$Obj_in.url;\
+								"headers";$Obj_headers;\
+								"rest";True:C214;"cache";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
+								"dataSet";$Obj_in.dataSet;\
+								"debug";Bool:C1537($Obj_in.debug);\
+								"output";$File_+Choose:C955(Bool:C1537($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator:K24:12+"Pictures");\
+								"dataModel";$Obj_dataModel))
+							ob_error_combine ($Obj_out;$Obj_out.picture)
+							
+							$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
+							
+						End if 
+						
+						  //If (Bool($Obj_in.picture))
+						  //If ($Boo_verbose)
+						  //CALL FORM($Obj_in.caller;"LOG_EVENT";New object(\
+							"message";"Dump Pictures";\
+							"importance";Information message))
+						
+						  // End if
+						
+						  //$Obj_out.picture:=dump (New object(\
+							"action";"pictures";\
+							"url";$Obj_in.url;\
+							"headers";$Obj_headers;\
+							"rest";True;"cache";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
+							"dataSet";$Obj_in.dataSet;\
+							"debug";Bool($Obj_in.debug);\
+							"output";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator+"Pictures");\
+							"dataModel";$Obj_dataModel))
+						
+						  //ob_error_combine ($Obj_out;$Obj_out.picture)
+						
+						  //$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
+						
+						  // End if
 						
 						$Obj_out.path:=$File_
 						
@@ -624,15 +636,20 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					DOCUMENT LIST:C474($File_;$tTxt_documents;Recursive parsing:K24:13+Absolute path:K24:14)
 					
 					For ($Lon_i;1;Size of array:C274($tTxt_documents);1)
+						
 						$Lon_pos:=Position:C15(".catalog.json";$tTxt_documents{$Lon_i})
+						
 						If ($Lon_pos>0)
+							
 							$Obj_out.catalog[Path to object:C1547(Path to object:C1547($tTxt_documents{$Lon_i}).name).name]:=ob_parseDocument ($tTxt_documents{$Lon_i}).value
+							
 						End if 
 					End for 
 					
 					$Obj_out.success:=True:C214
 					
 				End if 
+				
 			Else 
 				
 			End if 
@@ -694,7 +711,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				End if 
 				
 				If ((Length:C16($Txt_error)>0))  // add always error from command output if any, but do not presume if success or not
+					
 					ob_warning_add ($Obj_out;$Txt_error)
+					
 				End if 
 				
 			Else 
@@ -702,6 +721,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				$Obj_out.errors:=New collection:C1472("path or posix must be defined")
 				
 			End if 
+			
 			  //________________________________________
 		: ($Obj_in.action="coreDataAddToProject")
 			
@@ -742,7 +762,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						$Obj_out.success:=$Obj_out.projfile.success
 						
 					End if 
-					
 				End if 
 			End if 
 			
