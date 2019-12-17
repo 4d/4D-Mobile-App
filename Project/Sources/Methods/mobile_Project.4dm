@@ -421,11 +421,9 @@ If ($Obj_in.create)
 					"key";$File_;\
 					"caller";$Obj_in.caller;\
 					"verbose";$Boo_verbose;\
-					"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+					"picture";Not:C34(Bool:C1537(featuresFlags._97117))))  //_97117 deactive picture dump for QA purpose 
 				
 			End if 
-			
-			  //_97117 deactive picture dump for QA purpose 
 			
 			ob_error_combine ($Obj_out;$Obj_out.dump)
 			

@@ -251,6 +251,7 @@
 			"environment",
 			"errors",
 			"group",
+			"http",
 			"HTU_svg",
 			"lep",
 			"listbox",

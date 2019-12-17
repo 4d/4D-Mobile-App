@@ -47,6 +47,12 @@ If (False:C215)
 	C_OBJECT:C1216(group ;$2)
 	
 	  //______________________________________________________
+	C_LONGINT:C283(httpError)
+	C_OBJECT:C1216(http ;$0)
+	C_TEXT:C284(http ;$1)
+	C_OBJECT:C1216(http ;$2)
+	
+	  //______________________________________________________
 	C_OBJECT:C1216(lep ;$0)
 	C_TEXT:C284(lep ;$1)
 	C_OBJECT:C1216(lep ;$2)

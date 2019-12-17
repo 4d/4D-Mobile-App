@@ -12,8 +12,8 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_LONGINT:C283($i)
-C_TEXT:C284($t)
+C_LONGINT:C283($i;$j)
+C_TEXT:C284($Mnu_styles;$t)
 C_OBJECT:C1216($o)
 C_COLLECTION:C1488($c)
 
@@ -43,6 +43,7 @@ If (This:C1470[""]=Null:C1517)
 		"delete";Formula:C1597(menu ("delete";New object:C1471("item";$1)));\
 		"disable";Formula:C1597(menu ("disable";New object:C1471("item";$1)));\
 		"fileMenu";Formula:C1597(menu ("fileMenu"));\
+		"fontMenu";Formula:C1597(menu ("fontMenu";New object:C1471("style";$1)));\
 		"icon";Formula:C1597(menu ("icon";New object:C1471("icon";$1;"item";$2)));\
 		"insert";Formula:C1597(menu ("insert";Choose:C955(Value type:C1509($3)=Is object:K8:27;New object:C1471("item";String:C10($1);"after";Num:C11($2);"menu";$3);New object:C1471("item";String:C10($1);"after";Num:C11($2);"param";$3;"mark";Bool:C1537($4)))));\
 		"line";Formula:C1597(menu ("line"));\
@@ -170,6 +171,61 @@ Else
 		: ($1="fileMenu")  // Default file menu
 			
 			$o.append(":xliff:CommonMenuItemQuit").action(ak quit:K76:61).shortcut("Q")
+			
+			  //______________________________________________________
+		: ($1="fontMenu")  // Fonts menu with or without styles
+			
+			ARRAY TEXT:C222($tTxt_fontsFamilly;0x0000)
+			
+			FONT LIST:C460($tTxt_fontsFamilly)
+			
+			If (Bool:C1537($2.style))
+				
+				For ($i;1;Size of array:C274($tTxt_fontsFamilly);1)
+					
+					ARRAY TEXT:C222($tTxt_styles;0x0000)
+					ARRAY TEXT:C222($tTxt_names;0x0000)
+					
+					FONT STYLE LIST:C1362($tTxt_fontsFamilly{$i};$tTxt_styles;$tTxt_names)
+					
+					If (Size of array:C274($tTxt_styles)>0)
+						
+						If (Size of array:C274($tTxt_styles)>1)
+							
+							$Mnu_styles:=Create menu:C408
+							
+							For ($j;1;Size of array:C274($tTxt_styles);1)
+								
+								APPEND MENU ITEM:C411($Mnu_styles;$tTxt_styles{$j})  // Localized style name
+								SET MENU ITEM PARAMETER:C1004($Mnu_styles;-1;$tTxt_names{$j})  // System font name
+								
+							End for 
+							
+							APPEND MENU ITEM:C411($o.ref;$tTxt_fontsFamilly{$i};$Mnu_styles)  // Font familly name
+							RELEASE MENU:C978($Mnu_styles)
+							
+						Else 
+							
+							APPEND MENU ITEM:C411($o.ref;$tTxt_fontsFamilly{$i})
+							SET MENU ITEM PARAMETER:C1004($o.ref;-1;$tTxt_names{1})  // System font name
+							
+						End if 
+						
+					Else 
+						
+						$o.append($tTxt_fontsFamilly{$i};$tTxt_fontsFamilly{$i})  // Font familly name
+						
+					End if 
+				End for 
+				
+			Else 
+				
+				For ($i;1;Size of array:C274($tTxt_fontsFamilly);1)
+					
+					$o.append($tTxt_fontsFamilly{$i};$tTxt_fontsFamilly{$i})  // Font familly name
+					
+				End for 
+			End if 
 			
 			  //______________________________________________________
 		: ($1="icon")

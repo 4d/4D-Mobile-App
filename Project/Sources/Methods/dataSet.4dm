@@ -512,7 +512,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						$Obj_out.success:=$Obj_out.catalog.success & $Obj_out.data.success
 						
 						C_BOOLEAN:C305($Bool_withPictures)
-						$Bool_withPictures:=True:C214
+						$Bool_withPictures:=True:C214  // Default = with images
 						
 						If ($Obj_in.picture#Null:C1517)
 							
@@ -554,9 +554,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						  //CALL FORM($Obj_in.caller;"LOG_EVENT";New object(\
 							"message";"Dump Pictures";\
 							"importance";Information message))
-						
 						  // End if
-						
 						  //$Obj_out.picture:=dump (New object(\
 							"action";"pictures";\
 							"url";$Obj_in.url;\
@@ -566,11 +564,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							"debug";Bool($Obj_in.debug);\
 							"output";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator+"Pictures");\
 							"dataModel";$Obj_dataModel))
-						
 						  //ob_error_combine ($Obj_out;$Obj_out.picture)
-						
 						  //$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
-						
 						  // End if
 						
 						$Obj_out.path:=$File_

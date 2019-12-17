@@ -114,12 +114,11 @@ Case of
 		End if 
 		
 		  // If (Shift down)
-		  // SHOW ON DISK(dataSet (New object(\
+		  //SHOW ON DISK(dataSet (New object(\
 			"action";"path";\
 			"project";New object(\
 			"product";Form.product;\
 			"$project";Form.$project))).path)
-		
 		  // End if
 		
 		  //==================================================

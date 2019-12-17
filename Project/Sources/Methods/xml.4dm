@@ -159,14 +159,14 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 			Case of 
 					
 					  //----------------------------------------
+				: (Length:C16(Replace string:C233($t;"0";""))=0)
+					
+					$o.errors:=New collection:C1472("Invalid XML element.")
+					
+					  //----------------------------------------
 				: (Length:C16($t)#32)
 					
 					$o.errors:=New collection:C1472("Invalid length for xml element reference: "+$t)
-					
-					  //----------------------------------------
-				: ($t="00000000000000000000000000000000")
-					
-					$o.errors:=New collection:C1472("Invalid XML element.")
 					
 					  //----------------------------------------
 				Else 
