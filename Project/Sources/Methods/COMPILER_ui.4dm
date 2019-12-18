@@ -1,12 +1,4 @@
 //%attributes = {"invisible":true}
-If (False:C215)
-	
-	  //______________________________________________________
-	C_OBJECT:C1216(windowProperties ;$0)
-	C_LONGINT:C283(windowProperties ;$1)
-	
-	  //______________________________________________________
-End if 
 
 If (False:C215)
 	

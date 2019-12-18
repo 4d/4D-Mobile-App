@@ -657,8 +657,7 @@
 			"ui_MOVE",
 			"ui_SET_ENABLED",
 			"ui_SET_GEOMETRY",
-			"ui_TOOLBAR_ALIGN",
-			"windowProperties"
+			"ui_TOOLBAR_ALIGN"
 		]
 	},
 	"VIEWS": {

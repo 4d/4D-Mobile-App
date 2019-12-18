@@ -121,8 +121,8 @@ Case of
 	: ($Txt_entryPoint="_init")
 		
 		$o:=menu \
-			.append(":xliff:CommonMenuFile";menu .fileMenu())\
-			.append(":xliff:CommonMenuEdit";menu .editMenu())
+			.append(":xliff:CommonMenuFile";menu .file())\
+			.append(":xliff:CommonMenuEdit";menu .edit())
 		
 		If (Storage:C1525.database.isMatrix)
 			

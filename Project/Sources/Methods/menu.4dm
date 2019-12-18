@@ -12,9 +12,9 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_LONGINT:C283($i;$j)
+C_LONGINT:C283($i;$j;$l)
 C_TEXT:C284($Mnu_styles;$t)
-C_OBJECT:C1216($o)
+C_OBJECT:C1216($o;$o1)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -33,25 +33,26 @@ If (This:C1470[""]=Null:C1517)
 		"metacharacters";False:C215;\
 		"selected";False:C215;\
 		"choice";"";\
-		"release";Formula:C1597(RELEASE MENU:C978(This:C1470.ref));\
 		"count";Formula:C1597(Count menu items:C405(This:C1470.ref));\
 		"action";Formula:C1597(menu ("action";New object:C1471("action";$1;"item";$2)));\
 		"append";Formula:C1597(menu ("append";Choose:C955(Value type:C1509($2)=Is object:K8:27;New object:C1471("item";String:C10($1);"menu";$2);New object:C1471("item";String:C10($1);"param";$2;"mark";Bool:C1537($3)))));\
 		"cleanup";Formula:C1597(menu ("cleanup"));\
-		"editMenu";Formula:C1597(menu ("editMenu"));\
+		"edit";Formula:C1597(menu ("edit"));\
 		"enable";Formula:C1597(menu ("enable";New object:C1471("item";$1)));\
 		"delete";Formula:C1597(menu ("delete";New object:C1471("item";$1)));\
 		"disable";Formula:C1597(menu ("disable";New object:C1471("item";$1)));\
-		"fileMenu";Formula:C1597(menu ("fileMenu"));\
-		"fontMenu";Formula:C1597(menu ("fontMenu";New object:C1471("style";$1)));\
+		"file";Formula:C1597(menu ("file"));\
+		"fonts";Formula:C1597(menu ("fonts";New object:C1471("style";$1)));\
 		"icon";Formula:C1597(menu ("icon";New object:C1471("icon";$1;"item";$2)));\
 		"insert";Formula:C1597(menu ("insert";Choose:C955(Value type:C1509($3)=Is object:K8:27;New object:C1471("item";String:C10($1);"after";Num:C11($2);"menu";$3);New object:C1471("item";String:C10($1);"after";Num:C11($2);"param";$3;"mark";Bool:C1537($4)))));\
 		"line";Formula:C1597(menu ("line"));\
 		"loadBar";Formula:C1597(menu ("loadBar";New object:C1471("menu";$1)));\
 		"method";Formula:C1597(menu ("method";New object:C1471("method";String:C10($1);"item";$2)));\
 		"popup";Formula:C1597(menu ("popup";Choose:C955(Count parameters:C259=1;New object:C1471("default";String:C10($1));Choose:C955(Value type:C1509($2)=Is object:K8:27;New object:C1471("default";String:C10($1);"widget";$2);New object:C1471("default";String:C10($1);"xCoord";$2;"yCoord";$3)))));\
+		"release";Formula:C1597(RELEASE MENU:C978(This:C1470.ref));\
 		"setBar";Formula:C1597(menu ("setBar"));\
-		"shortcut";Formula:C1597(menu ("shortcut";New object:C1471("shortcut";$1;"modifier";Num:C11($2);"item";$3)))\
+		"shortcut";Formula:C1597(menu ("shortcut";New object:C1471("shortcut";$1;"modifier";Num:C11($2);"item";$3)));\
+		"windows";Formula:C1597(menu ("windows"))\
 		)
 	
 	If (Count parameters:C259>=1)
@@ -139,7 +140,7 @@ Else
 			  // Remove duplicates (lines or items)
 			
 			  //______________________________________________________
-		: ($1="editMenu")  // Standard edit menu
+		: ($1="edit")  // Standard Edit menu
 			
 			$o.append(":xliff:CommonMenuItemUndo").action(ak undo:K76:51).shortcut("Z")
 			$o.append(":xliff:CommonMenuRedo").action(ak redo:K76:52).shortcut("Z";512)
@@ -168,12 +169,12 @@ Else
 			DISABLE MENU ITEM:C150($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
 			
 			  //______________________________________________________
-		: ($1="fileMenu")  // Default file menu
+		: ($1="file")  // Default File menu
 			
 			$o.append(":xliff:CommonMenuItemQuit").action(ak quit:K76:61).shortcut("Q")
 			
 			  //______________________________________________________
-		: ($1="fontMenu")  // Fonts menu with or without styles
+		: ($1="fonts")  // Fonts menu with or without styles
 			
 			ARRAY TEXT:C222($tTxt_fontsFamilly;0x0000)
 			
@@ -196,24 +197,24 @@ Else
 							
 							For ($j;1;Size of array:C274($tTxt_styles);1)
 								
-								APPEND MENU ITEM:C411($Mnu_styles;$tTxt_styles{$j})  // Localized style name
-								SET MENU ITEM PARAMETER:C1004($Mnu_styles;-1;$tTxt_names{$j})  // System font name
+								APPEND MENU ITEM:C411($Mnu_styles;$tTxt_styles{$j})  // Localized name
+								SET MENU ITEM PARAMETER:C1004($Mnu_styles;-1;$tTxt_names{$j})  // System name
 								
 							End for 
 							
-							APPEND MENU ITEM:C411($o.ref;$tTxt_fontsFamilly{$i};$Mnu_styles)  // Font familly name
+							APPEND MENU ITEM:C411($o.ref;$tTxt_fontsFamilly{$i};$Mnu_styles)  // Familly name
 							RELEASE MENU:C978($Mnu_styles)
 							
 						Else 
 							
 							APPEND MENU ITEM:C411($o.ref;$tTxt_fontsFamilly{$i})
-							SET MENU ITEM PARAMETER:C1004($o.ref;-1;$tTxt_names{1})  // System font name
+							SET MENU ITEM PARAMETER:C1004($o.ref;-1;$tTxt_names{1})
 							
 						End if 
 						
 					Else 
 						
-						$o.append($tTxt_fontsFamilly{$i};$tTxt_fontsFamilly{$i})  // Font familly name
+						$o.append($tTxt_fontsFamilly{$i};$tTxt_fontsFamilly{$i})  // Familly name
 						
 					End if 
 				End for 
@@ -222,7 +223,7 @@ Else
 				
 				For ($i;1;Size of array:C274($tTxt_fontsFamilly);1)
 					
-					$o.append($tTxt_fontsFamilly{$i};$tTxt_fontsFamilly{$i})  // Font familly name
+					$o.append($tTxt_fontsFamilly{$i};$tTxt_fontsFamilly{$i})  // Familly name
 					
 				End for 
 			End if 
@@ -327,6 +328,50 @@ Else
 		: ($1="shortcut")
 			
 			SET MENU ITEM SHORTCUT:C423($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1);$2.shortcut;$2.modifier)
+			
+			  //______________________________________________________
+		: ($1="windows")  // Windows menu
+			
+			ARRAY LONGINT:C221($tLon_ref;0x0000)
+			WINDOW LIST:C442($tLon_ref)
+			
+			$c:=New collection:C1472
+			
+			For ($i;1;Size of array:C274($tLon_ref);1)
+				
+				$c.push(New object:C1471(\
+					"ref";$tLon_ref{$i};\
+					"name";Get window title:C450($tLon_ref{$i});\
+					"process";Window process:C446($tLon_ref{$i})))
+				
+			End for 
+			
+			$c:=$c.orderBy(New collection:C1472(\
+				New object:C1471("propertyPath";"process";"descending";True:C214);\
+				New object:C1471("propertyPath";"name")))
+			
+			If ($c.length>0)
+				
+				$l:=Frontmost window:C447
+				
+				$j:=$c[0].process
+				$t:=Substring:C12($c[0].name;1;Position:C15(":";$c[0].name))
+				
+				For each ($o1;$c)
+					
+					If ($o1.process#$j)\
+						 | (Substring:C12($o1.name;1;Position:C15(":";$o1.name))#$t)
+						
+						$o.line()
+						$j:=$o1.process
+						$t:=Substring:C12($o1.name;1;Position:C15(":";$o1.name))
+						
+					End if 
+					
+					$o.append($o1.name;$o1.ref;$l=$o1.ref)
+					
+				End for each 
+			End if 
 			
 			  //______________________________________________________
 		Else 

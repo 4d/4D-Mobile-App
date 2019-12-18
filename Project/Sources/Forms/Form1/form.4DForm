@@ -133,38 +133,7 @@
 					"left": 428,
 					"width": 250,
 					"height": 408,
-					"dataSource": "windowProperties ",
-					"stroke": "#1E90FF",
-					"fontFamily": "monaco",
-					"fontSize": 10,
-					"focusable": true,
-					"fill": "transparent",
-					"borderStyle": "solid",
-					"enterable": false,
-					"hideFocusRing": true,
-					"scrollbarVertical": "automatic",
-					"dragging": "custom",
-					"dropping": "none",
-					"events": [
-						"onDataChange"
-					]
-				},
-				"Text": {
-					"type": "text",
-					"top": 15,
-					"left": 428,
-					"width": 244,
-					"height": 17,
-					"stroke": "#1E90FF",
-					"text": "Window properties:"
-				},
-				"Variable3": {
-					"type": "input",
-					"top": 38,
-					"left": 723,
-					"width": 250,
-					"height": 408,
-					"dataSource": "Form:C1466",
+					"dataSource": "Form:C1466.window",
 					"stroke": "#1E90FF",
 					"fontFamily": "monaco",
 					"fontSize": 10,
@@ -178,7 +147,17 @@
 					"dropping": "none",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"dataSourceTypeHint": "object"
+				},
+				"Text": {
+					"type": "text",
+					"top": 15,
+					"left": 428,
+					"width": 244,
+					"height": 17,
+					"stroke": "#1E90FF",
+					"text": "Window:"
 				},
 				"Button": {
 					"type": "button",
@@ -301,8 +280,8 @@
 				"Button2": {
 					"type": "button",
 					"text": "Flat",
-					"top": 481,
-					"left": 901,
+					"top": 45,
+					"left": 714,
 					"width": 72,
 					"height": 22,
 					"events": [

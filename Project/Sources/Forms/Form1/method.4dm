@@ -30,10 +30,8 @@ COPY ARRAY:C226($tLon_check;(OBJECT Get pointer:C1124(Object named:K67:5;"Column
 COPY ARRAY:C226($tTxt_check;(OBJECT Get pointer:C1124(Object named:K67:5;"Column2"))->)
   //%W+518.1
 
-  //ui:=New object
-  //ui_CLASSES 
-Form:C1466.window:=window   //ui.window.get()
 
+Form:C1466.window:=window .getCoordinates()
 
 Form:C1466.tablist:=widget ("tab.list")
 Form:C1466.tabdetail:=widget ("tab.detail")

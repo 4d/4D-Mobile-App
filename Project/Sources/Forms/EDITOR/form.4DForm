@@ -192,6 +192,23 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable"
+				},
+				"debug.windows": {
+					"type": "button",
+					"text": "🗔",
+					"top": 2,
+					"left": 773,
+					"width": 45,
+					"height": 20,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/debug.windows.4dm",
+					"style": "custom",
+					"popupPlacement": "linked",
+					"stroke": "#FFFFFF",
+					"sizingX": "move",
+					"focusable": false
 				}
 			}
 		},
