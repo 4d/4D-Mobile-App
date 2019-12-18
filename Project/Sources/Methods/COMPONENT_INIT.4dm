@@ -435,11 +435,15 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags._98145:=($Lon_version>=1750)  //                   Replace, for data structure access, EXPORT STRUCTURE by ds
-	featuresFlags.withWidgetActions:=featuresFlags._8858  //         Enable widget actions
-	featuresFlags.accentColors:=featuresFlags._8858  // Manage colors according to user system parameters
+	featuresFlags._98145:=($Lon_version>=1750)  //             Replace, for data structure access, EXPORT STRUCTURE by ds
 	
-	featuresFlags._113164:=($Lon_version>=1820)  // enable/disable image dump
+	featuresFlags.withWidgetActions:=featuresFlags._8858  //   Enable widget actions
+	
+	featuresFlags.accentColors:=featuresFlags._8858  //        Manage colors according to user system parameters
+	
+	featuresFlags._113164:=($Lon_version>=1820)  //            Enable/disable image dump
+	
+	featuresFlags._113016:=($Lon_version>=1820)  //            [MOBILE] Svg improvement in forms section
 	
 End if 
 
@@ -534,9 +538,10 @@ End if
   // ________________________________________________________________________________________________________________________________
   //                                                             | ALIAS |
   // ________________________________________________________________________________________________________________________________
-  //featuresFlags.actionWithParameters:=featuresFlags._105413  //    [MOBILE] Actions with parameters
 featuresFlags.oneToManyRelations:=featuresFlags._105431
+
 featuresFlags.setImageDump:=featuresFlags._113164
+featuresFlags.newViewUI:=featuresFlags._113016
 
 
   // ________________________________________________________________________________________________________________________________

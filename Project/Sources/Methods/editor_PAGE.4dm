@@ -195,10 +195,21 @@ If (Length:C16($Txt_page)>0)
 			  //………………………………………………………………………………………
 		: ($Lon_page=5)
 			
-			$Obj_geometry.panels.push(New object:C1471(\
-				"title";Get localized string:C991("forms");\
-				"form";"VIEWS";\
-				"noTitle";True:C214))
+			If (featuresFlags.with("newViewUI"))
+				
+				$Obj_geometry.panels.push(New object:C1471(\
+					"title";Get localized string:C991("forms");\
+					"form";"_VIEWS";\
+					"noTitle";True:C214))
+				
+			Else 
+				
+				$Obj_geometry.panels.push(New object:C1471(\
+					"title";Get localized string:C991("forms");\
+					"form";"VIEWS";\
+					"noTitle";True:C214))
+				
+			End if 
 			
 			$Obj_geometry.action:=New object:C1471(\
 				"title";".Repair the project";\

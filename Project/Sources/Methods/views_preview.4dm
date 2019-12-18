@@ -106,9 +106,25 @@ Case of
 					  // Load the template
 					PROCESS 4D TAGS:C816($Path_root.file("template.svg").getText();$t)
 					
-					$svg:=svg ("parse";New object:C1471(\
-						"variable";$t)).setAttribute("transform";\
-						"scale(0.95)")
+					If (featuresFlags.with("newViewUI"))
+						
+						$t:=Replace string:C233($t;"<rect class=\"container\"/>";"")
+						$t:=Replace string:C233($t;"<rect class=\"bgcontainer\"/>";"<rect class=\"bgcontainer_v2\"/>")
+						$t:=Replace string:C233($t;"<g id=\"bgcontainer\">";"<g id=\"bgcontainer\" transform=\"translate(0,-40)\">")
+						
+						$svg:=svg ("parse";New object:C1471(\
+							"variable";$t)).setAttribute("transform";\
+							"scale(0.97)")
+						
+					Else 
+						
+						$svg:=svg ("parse";New object:C1471(\
+							"variable";$t)).setAttribute("transform";\
+							"scale(0.95)")
+						
+					End if 
+					
+					
 					
 					If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
 						
@@ -397,6 +413,13 @@ Case of
 						If (featuresFlags.with("_8858"))
 							
 							$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg");True:C214)
+							
+						End if 
+						
+						If (featuresFlags.with("newViewUI"))
+							
+							$Obj_form.preview.getCoordinates()
+							$svg.setDimensions($Obj_form.preview.coordinates.width;770)
 							
 						End if 
 						

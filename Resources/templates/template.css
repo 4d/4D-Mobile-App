@@ -25,6 +25,16 @@
 	stroke-width: 0.5
 }
 
+.bgcontainer_v2 {
+	x: 0;
+	y: 0;
+	width: 270;
+	height: 800;
+	fill: white;
+	stroke: white;
+	stroke-width: 0.5
+}
+
 .title {
 	fill: dimgray;
 	font-size: 24;

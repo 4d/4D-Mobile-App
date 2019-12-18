@@ -58,6 +58,10 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 		"actionParameters";"ACTIONS_PARAMS";\
 		"ribbon";"ribbon")
 	
+	If (featuresFlags.with("newViewUI"))
+		$Obj_form.views:="_VIEWS"
+	End if 
+	
 Else 
 	
 	ABORT:C156

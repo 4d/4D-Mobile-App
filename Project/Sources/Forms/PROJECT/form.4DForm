@@ -163,7 +163,7 @@
 					"width": 21,
 					"height": 22,
 					"visibility": "hidden",
-					"sizingX": "move",
+					"sizingX": "fixed",
 					"style": "help",
 					"method": "ObjectMethods/help.1.4dm",
 					"events": [

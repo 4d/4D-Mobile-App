@@ -79,6 +79,28 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 			"formula";Formula:C1597(VIEWS_Handler (New object:C1471("action";\
 			"geometry")))))
 		
+		If (featuresFlags.with("newViewUI"))
+			
+			$Obj_context.constraints.rules.push(New object:C1471(\
+				"object";"preview";\
+				"reference";"viewport.preview";\
+				"type";"horizontal alignment";\
+				"value";"center"))
+			
+			$Obj_context.constraints.rules.push(New object:C1471(\
+				"object";"preview.label";\
+				"reference";"viewport.preview";\
+				"type";"horizontal alignment";\
+				"value";"center"))
+			
+			$Obj_context.constraints.rules.push(New object:C1471(\
+				"object";"preview.back";\
+				"reference";"viewport.preview";\
+				"type";"horizontal alignment";\
+				"value";"center"))
+			
+		End if 
+		
 		  // Define form member methods
 		
 		  // Selected table ID as string, empty if none
