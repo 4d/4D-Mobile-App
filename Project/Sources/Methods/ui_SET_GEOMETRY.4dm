@@ -10,81 +10,64 @@
   // Declarations
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($Boo_horizontal;$Boo_vertical)
-C_LONGINT:C283($i;$kLon_margin;$kLon_scrollBarWidth;$kLon_verticalMargin;$l;$Lon_bottom)
-C_LONGINT:C283($Lon_height;$Lon_left;$Lon_margin;$Lon_maximum;$Lon_offset;$Lon_parameters)
-C_LONGINT:C283($Lon_rBottom;$Lon_rCenter;$Lon_right;$Lon_rLeft;$Lon_rRight;$Lon_rTop)
-C_LONGINT:C283($Lon_tBottom;$Lon_tCenter;$Lon_tLeft;$Lon_top;$Lon_tRight;$Lon_tTop)
-C_LONGINT:C283($Lon_type;$Lon_width)
-C_TEXT:C284($t;$Txt_constraint;$Txt_widget)
-C_OBJECT:C1216($Obj_constraints)
-
-ARRAY OBJECT:C1221($tObj_rules;0)
+C_BOOLEAN:C305($b)
+C_LONGINT:C283($bottom;$bottomRef;$bottomTarget;$height;$l;$left)
+C_LONGINT:C283($leftRef;$leftTarget;$marginH;$marginV;$max;$middleRef)
+C_LONGINT:C283($middleTarget;$offset;$right;$rightRef;$rightTarget;$top)
+C_LONGINT:C283($topRef;$topTarget;$type;$width;$widthScrollBar)
+C_TEXT:C284($t)
+C_OBJECT:C1216($o;$Obj_constraints)
 
 If (False:C215)
 	C_OBJECT:C1216(ui_SET_GEOMETRY ;$1)
 End if 
 
+  //ARRAY OBJECT($tObj_rules;0)
+
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+  // NO PARAMETERS REQUIRED
+
+  // Optional parameters
+If (Count parameters:C259>=1)
 	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Obj_constraints:=$1
-		
-	Else 
-		
-		$t:=Current form name:C1298
-		
-		Case of 
-				
-				  //______________________________________________________
-			: (Form:C1466.$dialog[$t].constraints#Null:C1517)
-				
-				$Obj_constraints:=Form:C1466.$dialog[$t].constraints
-				
-				  //______________________________________________________ #OLD MECHANISM
-				  //: (Not(Is nil pointer(OBJECT Get pointer(Object named;"constraints"))))
-				  //$Obj_constraints:=(OBJECT Get pointer(Object named;"constraints"))->
-				
-				  //______________________________________________________
-			Else 
-				
-				  // ASSERT(Structure file#Structure file(*))
-				
-				  //______________________________________________________
-		End case 
-	End if 
-	
-	$kLon_scrollBarWidth:=15
-	$kLon_verticalMargin:=2
-	$kLon_margin:=14
+	$Obj_constraints:=$1
 	
 Else 
 	
-	ABORT:C156
+	$t:=Current form name:C1298
 	
+	Case of 
+			
+			  //______________________________________________________
+		: (Form:C1466.$dialog[$t].constraints#Null:C1517)
+			
+			$Obj_constraints:=Form:C1466.$dialog[$t].constraints
+			
+			  //______________________________________________________
+		Else 
+			
+			  // ASSERT(Structure file#Structure file(*))
+			
+			  //______________________________________________________
+	End case 
 End if 
+
+$widthScrollBar:=15
+$marginV:=2
+$marginH:=14
 
   // ----------------------------------------------------
 If (Not:C34(Is nil pointer:C315(OBJECT Get pointer:C1124(Object subform container:K67:4))))
 	
 	  // Place the background & the bottom line {
-	OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_width;$Lon_height)
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width;$height)
 	
-	  //OBJECT GET COORDINATES(*;"background";$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-	  //OBJECT SET COORDINATES(*;"background";0;0;$Lon_width;$Lon_height)
+	OBJECT SET COORDINATES:C1248(*;"bottom.line";16;$height-1;$width-16;$height-1)
 	
-	OBJECT SET COORDINATES:C1248(*;"bottom.line";16;$Lon_height-1;$Lon_width-16;$Lon_height-1)
-	
-	OBJECT GET COORDINATES:C663(*;"viewport";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-	OBJECT SET COORDINATES:C1248(*;"viewport";$Lon_left;0;$Lon_width-$kLon_scrollBarWidth;$Lon_height)
+	OBJECT GET COORDINATES:C663(*;"viewport";$left;$top;$right;$bottom)
+	OBJECT SET COORDINATES:C1248(*;"viewport";$left;0;$width-$widthScrollBar;$height)
 	  //}
 	
 End if 
@@ -92,438 +75,431 @@ End if
   // Position the local viewport if any
 If (OBJECT Get type:C1300(*;"_viewport")#Object type unknown:K79:1)
 	
-	OBJECT GET COORDINATES:C663(*;"viewport";$l;$l;$Lon_right;$l)
-	OBJECT GET COORDINATES:C663(*;"_viewport";$Lon_left;$Lon_top;$l;$Lon_bottom)
-	OBJECT SET COORDINATES:C1248(*;"_viewport";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+	OBJECT GET COORDINATES:C663(*;"viewport";$l;$l;$right;$l)
+	OBJECT GET COORDINATES:C663(*;"_viewport";$left;$top;$l;$bottom)
+	OBJECT SET COORDINATES:C1248(*;"_viewport";$left;$top;$right;$bottom)
 	
 End if 
 
   // ----------------------------------------------------
   // Handle the constraints
-If (OB Is defined:C1231($Obj_constraints))
+If ($Obj_constraints.rules#Null:C1517)
 	
-	OB GET ARRAY:C1229($Obj_constraints;"rules";$tObj_rules)
-	
-	For ($i;1;Size of array:C274($tObj_rules);1)
+	For each ($o;$Obj_constraints.rules)
 		
 		Case of 
 				
 				  //========================================================
-			: ($tObj_rules{$i}.formula#Null:C1517)
+			: ($o.formula#Null:C1517)
 				
-				$tObj_rules{$i}.formula.call()
+				$o.formula.call()
 				
 				  //========================================================
-			: ($tObj_rules{$i}.method#Null:C1517)
+			: ($o.method#Null:C1517)
 				
-				If ($tObj_rules{$i}.param#Null:C1517)
+				If ($o.param#Null:C1517)
 					
-					EXECUTE METHOD:C1007($tObj_rules{$i}.method;*;$tObj_rules{$i}.param)
+					EXECUTE METHOD:C1007($o.method;*;$o.param)
 					
 				Else 
 					
-					EXECUTE METHOD:C1007($tObj_rules{$i}.method)
+					EXECUTE METHOD:C1007($o.method)
 					
 				End if 
 				
 				  //========================================================
 			Else 
 				
-				$Txt_widget:=$tObj_rules{$i}.object  // Target object
-				
-				$Lon_type:=OBJECT Get type:C1300(*;$Txt_widget)
-				
-				If ($Lon_type#Object type unknown:K79:1)
+				If (Value type:C1509($o.object)=Is text:K8:3)
 					
-					OBJECT GET COORDINATES:C663(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
+					$type:=OBJECT Get type:C1300(*;$o.object)
 					
-					If ($tObj_rules{$i}.reference#Null:C1517)
+					If ($type#Object type unknown:K79:1)
 						
-						  // Reference object
-						OBJECT GET COORDINATES:C663(*;$tObj_rules{$i}.reference;$Lon_rLeft;$Lon_rTop;$Lon_rRight;$Lon_rBottom)
+						OBJECT GET COORDINATES:C663(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+						
+						If ($o.reference#Null:C1517)
+							
+							  // Reference object
+							OBJECT GET COORDINATES:C663(*;$o.reference;$leftRef;$topRef;$rightRef;$bottomRef)
+							
+						Else 
+							
+							  // Viewport
+							OBJECT GET SUBFORM CONTAINER SIZE:C1148($rightRef;$bottomRef)
+							$rightRef:=$rightRef-$widthScrollBar
+							
+						End if 
+						
+						Case of 
+								
+								  //______________________________________________________
+							: ($o.type="width")  // Set width in percent of the reference
+								
+								$width:=($rightRef-$leftRef)*Num:C11($o.value)+Num:C11($o.offset)
+								$rightTarget:=$leftTarget+$width-$marginV
+								
+								Case of 
+										
+										  //……………………………………………………………………………………………………………
+									: ($type=Object type text input:K79:4)
+										
+										OBJECT GET SCROLLBAR:C1076(*;$o.object;$b;$b)
+										
+										If ($b)
+											
+											$rightTarget:=$rightTarget-$widthScrollBar
+											
+										End if 
+										
+										  //……………………………………………………………………………………………………………
+									: ($type=Object type picture input:K79:5)
+										
+										$rightTarget:=$rightTarget+$marginV
+										
+										  //……………………………………………………………………………………………………………
+									: ($type=Object type listbox:K79:8)
+										
+										$rightTarget:=$rightTarget+$marginV
+										
+										  //……………………………………………………………………………………………………………
+									: ($type=Object type rectangle:K79:32)
+										
+										$rightTarget:=$rightTarget+($marginV*2)
+										
+										  //……………………………………………………………………………………………………………
+									: ($type=Object type popup dropdown list:K79:13)
+										
+										$rightTarget:=$rightTarget+5
+										
+										  //……………………………………………………………………………………………………………
+								End case 
+								
+								  // Move the associated help if any
+								If (OBJECT Get type:C1300(*;$o.object+".help")#Object type unknown:K79:1)
+									
+									OBJECT GET COORDINATES:C663(*;$o.object+".help";$left;$top;$right;$bottom)
+									
+									$width:=$right-$left
+									
+									$left:=$rightTarget-$width
+									$right:=$rightTarget
+									
+									OBJECT SET COORDINATES:C1248(*;$o.object+".help";$left;$top;$right;$bottom)
+									
+									$rightTarget:=$rightTarget-$width-$marginH
+									
+								End if 
+								
+								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								
+								  //______________________________________________________
+							: ($o.type="fit-width")
+								
+								$rightTarget:=$leftTarget+($rightRef-$leftTarget)-Num:C11($o.offset)
+								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								
+								  //______________________________________________________
+							: ($o.type="maximum-width")  // Maximum object width
+								
+								If (OBJECT Get type:C1300(*;$o.object+".help")#Object type unknown:K79:1)
+									
+									OBJECT GET COORDINATES:C663(*;$o.object+".help";$left;$top;$right;$bottom)
+									
+									If ($right>$o.value)
+										
+										$width:=$right-$left
+										
+										$right:=$o.value
+										$left:=$right-$width
+										
+										OBJECT SET COORDINATES:C1248(*;$o.object+".help";$left;$top;$right;$bottom)
+										
+										$rightTarget:=$left-$marginH
+										
+										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										
+									End if 
+									
+								Else 
+									
+									$width:=$o.value
+									
+									Case of 
+											
+											  //……………………………………………………………………………………………………………
+										: ($type=Object type popup dropdown list:K79:13)
+											
+											$width:=$width+4
+											
+											  //……………………………………………………………………………………………………………
+									End case 
+									
+									If (($rightTarget-$leftTarget)>$width)
+										
+										$rightTarget:=$leftTarget+$width
+										
+										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										
+									End if 
+								End if 
+								
+								  //______________________________________________________
+							: ($o.type="minimum-width")  // Minimum object width
+								
+								If (OBJECT Get type:C1300(*;$o.object+".help")#Object type unknown:K79:1)
+									
+									OBJECT GET COORDINATES:C663(*;$o.object+".help";$left;$top;$right;$bottom)
+									
+									If ($right<$o.value)
+										
+										$width:=$right-$left
+										
+										$right:=$o.value
+										$left:=$right-$width
+										
+										OBJECT SET COORDINATES:C1248(*;$o.object+".help";$left;$top;$right;$bottom)
+										
+										$rightTarget:=$left-$marginH
+										
+										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										
+									End if 
+									
+								Else 
+									
+									$width:=$o.value
+									
+									Case of 
+											
+											  //……………………………………………………………………………………………………………
+										: ($type=Object type popup dropdown list:K79:13)
+											
+											$width:=$width+4
+											
+											  //……………………………………………………………………………………………………………
+									End case 
+									
+									If (($rightTarget-$leftTarget)<$width)
+										
+										$rightTarget:=$leftTarget+$width
+										
+										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										
+									End if 
+								End if 
+								
+								  //______________________________________________________
+							: ($o.type="margin-auto")
+								
+								$l:=(($rightRef-$leftRef)-($width))/2
+								
+								$width:=$rightTarget-$leftTarget
+								
+								If ($l>0)
+									
+									$leftTarget:=$leftRef+$l
+									$rightTarget:=$leftTarget+$width
+									
+									OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+									
+								End if 
+								
+								  //______________________________________________________
+							: ($o.type="margin-right")
+								
+								$rightTarget:=$leftRef-$o.value
+								
+								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								
+								  //______________________________________________________
+							: ($o.type="margin-left")  // Set the distance to the object on the left
+								
+								$width:=$rightTarget-$leftTarget
+								$leftTarget:=$rightRef+$o.value
+								$rightTarget:=$leftTarget+$width
+								
+								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								
+								  //______________________________________________________
+							: ($o.type="inline")
+								
+								If ($o.reference#Null:C1517)
+									
+									$width:=$rightTarget-$leftTarget
+									
+									$leftTarget:=$rightRef-$width+Num:C11($o.margin)
+									$rightTarget:=$leftTarget+$width
+									
+									OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+									
+									$rightRef:=$leftTarget-$width-Num:C11($o.margin)
+									
+									OBJECT SET COORDINATES:C1248(*;$o.reference;$leftRef;$topRef;$rightRef;$bottomRef)
+									
+								End if 
+								
+								  //______________________________________________________
+							: ($o.type="tile")  // Set width as percent of the reference
+								
+								  // Calculate proportional width
+								$width:=Int:C8(($rightRef-$leftRef)*Num:C11($o.value))
+								
+								If ($o.parent#Null:C1517)
+									
+									  // Left is the parent right
+									OBJECT GET COORDINATES:C663(*;$o.parent;$leftRef;$topRef;$rightRef;$bottomRef)
+									$leftTarget:=$rightRef+Num:C11(OBJECT Get type:C1300(*;$o.object+".border")#Object type unknown:K79:1)
+									
+								End if 
+								
+								$rightTarget:=$leftTarget+$width
+								
+								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								
+								  //______________________________________________________
+							: ($o.type="float")
+								
+								Case of 
+										
+										  //……………………………………………………………………………………………
+									: ($o.value="left")
+										
+										$width:=$rightTarget-$leftTarget
+										
+										If ($o.reference#Null:C1517)
+											
+											  // Right is the reference left
+											$rightTarget:=$leftRef-Num:C11($o.margin)
+											
+										Else 
+											
+											  // Align to right of the viewport
+											$rightTarget:=$rightRef
+											
+										End if 
+										
+										$max:=Num:C11($o.maximum)
+										
+										If ($max#0)
+											
+											$rightTarget:=Choose:C955($rightTarget>$max;$max;$rightTarget)
+											
+										End if 
+										
+										$leftTarget:=$rightTarget-$width
+										
+										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										
+										  // Move the associated label if any
+										If (OBJECT Get type:C1300(*;$o.object+".label")#Object type unknown:K79:1)
+											
+											  // Object becomes reference
+											OBJECT GET COORDINATES:C663(*;$o.object;$leftRef;$topRef;$rightRef;$bottomRef)
+											
+											OBJECT GET COORDINATES:C663(*;$o.object+".label";$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+											
+											$width:=$rightTarget-$leftTarget
+											$rightTarget:=$leftRef-$marginH
+											$leftTarget:=$rightTarget-$width
+											
+											OBJECT SET COORDINATES:C1248(*;$o.object+".label";$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+											
+										End if 
+										
+										  //……………………………………………………………………………………………
+									Else 
+										
+										ASSERT:C1129(dev_Matrix ;"Unknown value:"+String:C10($o.value))
+										
+										  //……………………………………………………………………………………………
+								End case 
+								
+								  //______________________________________________________
+							: ($o.type="right hook")
+								
+								$rightRef:=$rightRef+Num:C11($o.offset)+$marginV
+								
+								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightRef;$bottomTarget)
+								
+								  //______________________________________________________
+							: ($o.type="horizontal alignment")
+								
+								Case of 
+										
+										  //……………………………………………………………………………………………
+									: ($o.value="center")  // Keep objects vertically centered
+										
+										  // Calculate middle reference
+										$middleRef:=(($rightRef-$leftRef)/2)+$leftRef
+										$middleTarget:=(($rightTarget-$leftTarget)/2)+$leftTarget
+										
+										$offset:=$middleRef-$middleTarget
+										OBJECT MOVE:C664(*;$o.object;$offset;0)
+										
+										  //……………………………………………………………………………………………
+									: ($o.value="left")  // Keep objects left aligned
+										
+										$width:=$rightTarget-$leftTarget
+										
+										$leftTarget:=$leftRef+Num:C11($o.margin)
+										$rightTarget:=$leftTarget+$width
+										
+										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										
+										  //……………………………………………………………………………………………
+									: ($o.value="right")  // Keep objects right aligned
+										
+										$width:=$rightTarget-$leftTarget
+										
+										$rightTarget:=$rightRef-Num:C11($o.margin)
+										$leftTarget:=$rightTarget-$width
+										
+										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										
+										  //……………………………………………………………………………………………
+									Else 
+										
+										ASSERT:C1129(dev_Matrix ;"Unknown value:"+String:C10($o.value))
+										
+										  //……………………………………………………………………………………………
+								End case 
+								
+								  //______________________________________________________
+							Else 
+								
+								ASSERT:C1129(dev_Matrix ;"Unknown constraint:"+String:C10($o.type))
+								
+								  //______________________________________________________
+						End case 
 						
 					Else 
 						
-						  // Viewport
-						OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_rRight;$Lon_rBottom)
-						$Lon_rRight:=$Lon_rRight-$kLon_scrollBarWidth
+						ASSERT:C1129(dev_Matrix ;"Unknown constraint:"+String:C10($o.object))
 						
 					End if 
 					
-					$Txt_constraint:=$tObj_rules{$i}.type
-					
-					Case of 
-							
-							  //______________________________________________________
-						: ($Txt_constraint="width")  // Set width in percent of the reference
-							
-							$Lon_width:=($Lon_rRight-$Lon_rLeft)*$tObj_rules{$i}.value+Num:C11($tObj_rules{$i}.offset)
-							$Lon_tRight:=$Lon_tLeft+$Lon_width-$kLon_verticalMargin
-							
-							Case of 
-									
-									  //……………………………………………………………………………………………………………
-								: ($Lon_type=Object type text input:K79:4)
-									
-									OBJECT GET SCROLLBAR:C1076(*;$Txt_widget;$Boo_horizontal;$Boo_vertical)
-									
-									If ($Boo_vertical)
-										
-										$Lon_tRight:=$Lon_tRight-$kLon_scrollBarWidth
-										
-									End if 
-									
-									  //……………………………………………………………………………………………………………
-								: ($Lon_type=Object type picture input:K79:5)
-									
-									$Lon_tRight:=$Lon_tRight+$kLon_verticalMargin
-									
-									  //……………………………………………………………………………………………………………
-								: ($Lon_type=Object type listbox:K79:8)
-									
-									$Lon_tRight:=$Lon_tRight+$kLon_verticalMargin
-									
-									  //……………………………………………………………………………………………………………
-								: ($Lon_type=Object type rectangle:K79:32)
-									
-									$Lon_tRight:=$Lon_tRight+($kLon_verticalMargin*2)
-									
-									  //……………………………………………………………………………………………………………
-								: ($Lon_type=Object type popup dropdown list:K79:13)
-									
-									$Lon_tRight:=$Lon_tRight+5
-									
-									  //……………………………………………………………………………………………………………
-							End case 
-							
-							  // Move the associated help if any
-							If (OBJECT Get type:C1300(*;$Txt_widget+".help")#Object type unknown:K79:1)
-								
-								OBJECT GET COORDINATES:C663(*;$Txt_widget+".help";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-								
-								$Lon_width:=$Lon_right-$Lon_left
-								
-								$Lon_left:=$Lon_tRight-$Lon_width
-								$Lon_right:=$Lon_tRight
-								
-								OBJECT SET COORDINATES:C1248(*;$Txt_widget+".help";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-								
-								$Lon_tRight:=$Lon_tRight-$Lon_width-$kLon_margin
-								
-							End if 
-							
-							OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-							
-							  //______________________________________________________
-						: ($Txt_constraint="fit-width")
-							
-							$Lon_tRight:=$Lon_tLeft+($Lon_rRight-$Lon_tLeft)-Num:C11($tObj_rules{$i}.offset)
-							OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-							
-							  //______________________________________________________
-						: ($Txt_constraint="maximum-width")  // Maximum object width
-							
-							If (OBJECT Get type:C1300(*;$Txt_widget+".help")#Object type unknown:K79:1)
-								
-								OBJECT GET COORDINATES:C663(*;$Txt_widget+".help";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-								
-								If ($Lon_right>$tObj_rules{$i}.value)
-									
-									$Lon_width:=$Lon_right-$Lon_left
-									
-									$Lon_right:=$tObj_rules{$i}.value
-									$Lon_left:=$Lon_right-$Lon_width
-									
-									OBJECT SET COORDINATES:C1248(*;$Txt_widget+".help";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-									
-									$Lon_tRight:=$Lon_left-$kLon_margin
-									
-									OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-									
-								End if 
-								
-							Else 
-								
-								$Lon_width:=$tObj_rules{$i}.value
-								
-								Case of 
-										
-										  //……………………………………………………………………………………………………………
-									: ($Lon_type=Object type popup dropdown list:K79:13)
-										
-										$Lon_width:=$Lon_width+4
-										
-										  //……………………………………………………………………………………………………………
-								End case 
-								
-								If (($Lon_tRight-$Lon_tLeft)>$Lon_width)
-									
-									$Lon_tRight:=$Lon_tLeft+$Lon_width
-									
-									OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-									
-								End if 
-							End if 
-							
-							  //______________________________________________________
-						: ($Txt_constraint="minimum-width")  // Minimum object width
-							
-							If (OBJECT Get type:C1300(*;$Txt_widget+".help")#Object type unknown:K79:1)
-								
-								OBJECT GET COORDINATES:C663(*;$Txt_widget+".help";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-								
-								If ($Lon_right<$tObj_rules{$i}.value)
-									
-									$Lon_width:=$Lon_right-$Lon_left
-									
-									$Lon_right:=$tObj_rules{$i}.value
-									$Lon_left:=$Lon_right-$Lon_width
-									
-									OBJECT SET COORDINATES:C1248(*;$Txt_widget+".help";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-									
-									$Lon_tRight:=$Lon_left-$kLon_margin
-									
-									OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-									
-								End if 
-								
-							Else 
-								
-								$Lon_width:=$tObj_rules{$i}.value
-								
-								Case of 
-										
-										  //……………………………………………………………………………………………………………
-									: ($Lon_type=Object type popup dropdown list:K79:13)
-										
-										$Lon_width:=$Lon_width+4
-										
-										  //……………………………………………………………………………………………………………
-								End case 
-								
-								If (($Lon_tRight-$Lon_tLeft)<$Lon_width)
-									
-									$Lon_tRight:=$Lon_tLeft+$Lon_width
-									
-									OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-									
-								End if 
-							End if 
-							
-							  //______________________________________________________
-						: ($Txt_constraint="margin-auto")
-							
-							$Lon_margin:=(($Lon_rRight-$Lon_rLeft)-($Lon_width))/2
-							
-							$Lon_width:=$Lon_tRight-$Lon_tLeft
-							
-							If ($Lon_margin>0)
-								
-								$Lon_tLeft:=$Lon_rLeft+$Lon_margin
-								$Lon_tRight:=$Lon_tLeft+$Lon_width
-								
-								OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-								
-							End if 
-							
-							  //______________________________________________________
-						: ($Txt_constraint="margin-right")
-							
-							$Lon_tRight:=$Lon_rLeft-$tObj_rules{$i}.value
-							
-							OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-							
-							  //______________________________________________________
-						: ($Txt_constraint="margin-left")  // Set the distance to the object on the left
-							
-							$Lon_width:=$Lon_tRight-$Lon_tLeft
-							$Lon_tLeft:=$Lon_rRight+$tObj_rules{$i}.value
-							$Lon_tRight:=$Lon_tLeft+$Lon_width
-							
-							OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-							
-							  //______________________________________________________
-						: ($Txt_constraint="inline")
-							
-							If ($tObj_rules{$i}.reference#Null:C1517)
-								
-								  // Get the margin value if any
-								$Lon_margin:=Num:C11($tObj_rules{$i}.margin)
-								
-								$Lon_width:=$Lon_tRight-$Lon_tLeft
-								
-								$Lon_tLeft:=$Lon_rRight-$Lon_width+$Lon_margin
-								$Lon_tRight:=$Lon_tLeft+$Lon_width
-								
-								OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-								
-								$Lon_rRight:=$Lon_tLeft-$Lon_width-$Lon_margin
-								
-								OBJECT SET COORDINATES:C1248(*;$tObj_rules{$i}.reference;$Lon_rLeft;$Lon_rTop;$Lon_rRight;$Lon_rBottom)
-								
-							End if 
-							
-							  //______________________________________________________
-						: ($Txt_constraint="tile")  // Set width as percent of the reference
-							
-							  // Calculate proportional width
-							$Lon_width:=Int:C8(($Lon_rRight-$Lon_rLeft)*Num:C11($tObj_rules{$i}.value))
-							
-							If ($tObj_rules{$i}.parent#Null:C1517)
-								
-								  // Left is the parent right
-								OBJECT GET COORDINATES:C663(*;$tObj_rules{$i}.parent;$Lon_rLeft;$Lon_rTop;$Lon_rRight;$Lon_rBottom)
-								$Lon_tLeft:=$Lon_rRight+Num:C11(OBJECT Get type:C1300(*;$Txt_widget+".border")#Object type unknown:K79:1)
-								
-							End if 
-							
-							$Lon_tRight:=$Lon_tLeft+$Lon_width
-							
-							OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-							
-							  //______________________________________________________
-						: ($Txt_constraint="float")
-							
-							  // Get the margin value if any
-							$Lon_margin:=Num:C11($tObj_rules{$i}.margin)
-							
-							Case of 
-									
-									  //……………………………………………………………………………………………
-								: ($tObj_rules{$i}.value="left")
-									
-									$Lon_width:=$Lon_tRight-$Lon_tLeft
-									
-									If ($tObj_rules{$i}.reference#Null:C1517)
-										
-										  // Right is the reference left
-										$Lon_tRight:=$Lon_rLeft-$Lon_margin
-										
-									Else 
-										
-										  // Align to right of the viewport
-										$Lon_tRight:=$Lon_rRight
-										
-									End if 
-									
-									$Lon_maximum:=Num:C11($tObj_rules{$i}.maximum)
-									
-									If ($Lon_maximum#0)
-										
-										$Lon_tRight:=Choose:C955($Lon_tRight>$Lon_maximum;$Lon_maximum;$Lon_tRight)
-										
-									End if 
-									
-									$Lon_tLeft:=$Lon_tRight-$Lon_width
-									
-									OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-									
-									  // Move the associated label if any
-									If (OBJECT Get type:C1300(*;$Txt_widget+".label")#Object type unknown:K79:1)
-										
-										  // Object becomes reference
-										OBJECT GET COORDINATES:C663(*;$Txt_widget;$Lon_rLeft;$Lon_rTop;$Lon_rRight;$Lon_rBottom)
-										
-										OBJECT GET COORDINATES:C663(*;$Txt_widget+".label";$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-										
-										$Lon_width:=$Lon_tRight-$Lon_tLeft
-										$Lon_tRight:=$Lon_rLeft-$kLon_margin
-										$Lon_tLeft:=$Lon_tRight-$Lon_width
-										
-										OBJECT SET COORDINATES:C1248(*;$Txt_widget+".label";$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-										
-									End if 
-									
-									  //……………………………………………………………………………………………
-								Else 
-									
-									ASSERT:C1129(dev_Matrix ;"Unknown value:"+String:C10($tObj_rules{$i}.value))
-									
-									  //……………………………………………………………………………………………
-							End case 
-							
-							  //______________________________________________________
-						: ($Txt_constraint="right hook")
-							
-							$Lon_rRight:=$Lon_rRight+Num:C11($tObj_rules{$i}.offset)+$kLon_verticalMargin
-							
-							OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_rRight;$Lon_tBottom)
-							
-							  //______________________________________________________
-						: ($Txt_constraint="horizontal alignment")
-							
-							  // Get the margin value if any
-							$Lon_margin:=Num:C11($tObj_rules{$i}.margin)
-							
-							Case of 
-									
-									  //……………………………………………………………………………………………
-								: ($tObj_rules{$i}.value="center")  // Keep objects vertically centered
-									
-									  // Calculate middle reference
-									$Lon_rCenter:=(($Lon_rRight-$Lon_rLeft)/2)+$Lon_rLeft
-									$Lon_tCenter:=(($Lon_tRight-$Lon_tLeft)/2)+$Lon_tLeft
-									
-									$Lon_offset:=$Lon_rCenter-$Lon_tCenter
-									OBJECT MOVE:C664(*;$Txt_widget;$Lon_offset;0)
-									
-									  //……………………………………………………………………………………………
-								: ($tObj_rules{$i}.value="left")  // Keep objects left aligned
-									
-									$Lon_width:=$Lon_tRight-$Lon_tLeft
-									
-									$Lon_tLeft:=$Lon_rLeft+$Lon_margin
-									$Lon_tRight:=$Lon_tLeft+$Lon_width
-									
-									OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-									
-									  //……………………………………………………………………………………………
-								: ($tObj_rules{$i}.value="right")  // Keep objects right aligned
-									
-									$Lon_width:=$Lon_tRight-$Lon_tLeft
-									
-									$Lon_tRight:=$Lon_rRight-$Lon_margin
-									$Lon_tLeft:=$Lon_tRight-$Lon_width
-									
-									OBJECT SET COORDINATES:C1248(*;$Txt_widget;$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
-									
-									  //……………………………………………………………………………………………
-								Else 
-									
-									ASSERT:C1129(dev_Matrix ;"Unknown value:"+String:C10($tObj_rules{$i}.value))
-									
-									  //……………………………………………………………………………………………
-							End case 
-							
-							  //______________________________________________________
-						Else 
-							
-							ASSERT:C1129(dev_Matrix ;"Unknown constraint:"+String:C10($tObj_rules{$i}.type))
-							
-							  //______________________________________________________
-					End case 
-					
 				Else 
 					
-					ASSERT:C1129(dev_Matrix ;"Unknown constraint:"+String:C10($tObj_rules{$i}.object))
+					  // A "If" statement should never omit "Else"
 					
 				End if 
 				
 				  // Adjust the border if any
-				If (OBJECT Get type:C1300(*;$Txt_widget+".border")#Object type unknown:K79:1)
+				If (OBJECT Get type:C1300(*;$o.object+".border")#Object type unknown:K79:1)
 					
-					$Lon_tLeft:=$Lon_tLeft-1
-					$Lon_tTop:=$Lon_tTop-1
-					$Lon_tRight:=$Lon_tRight+1
-					$Lon_tBottom:=$Lon_tBottom+1
+					$leftTarget:=$leftTarget-1
+					$topTarget:=$topTarget-1
+					$rightTarget:=$rightTarget+1
+					$bottomTarget:=$bottomTarget+1
 					
-					OBJECT SET COORDINATES:C1248(*;$Txt_widget+".border";$Lon_tLeft;$Lon_tTop;$Lon_tRight;$Lon_tBottom)
+					OBJECT SET COORDINATES:C1248(*;$o.object+".border";$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 					
 				End if 
 				
 				  //========================================================
 		End case 
-	End for 
+	End for each 
 End if 
 
   // ----------------------------------------------------

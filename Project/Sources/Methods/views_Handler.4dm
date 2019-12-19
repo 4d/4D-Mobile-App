@@ -74,35 +74,43 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 		  // Constraints definition
 		ob_createPath ($context;"constraints.rules";Is collection:K8:32)
 		
-		$context.constraints.rules.push(New object:C1471(\
+		$c:=$context.constraints.rules
+		
+		$c.push(New object:C1471(\
 			"formula";Formula:C1597(VIEWS_Handler (New object:C1471("action";\
 			"geometry")))))
 		
 		If (featuresFlags.with("newViewUI"))
 			
-			$context.constraints.rules.push(New object:C1471(\
+			$c.push(New object:C1471(\
 				"object";"preview";\
 				"reference";"viewport.preview";\
 				"type";"horizontal alignment";\
 				"value";"center"))
 			
-			$context.constraints.rules.push(New object:C1471(\
+			$c.push(New object:C1471(\
 				"object";"preview.label";\
 				"reference";"viewport.preview";\
 				"type";"horizontal alignment";\
 				"value";"center"))
 			
-			$context.constraints.rules.push(New object:C1471(\
+			$c.push(New object:C1471(\
 				"object";"preview.back";\
 				"reference";"viewport.preview";\
 				"type";"horizontal alignment";\
 				"value";"center"))
 			
-			$context.constraints.rules.push(New object:C1471(\
+			$c.push(New object:C1471(\
 				"object";"Preview.border";\
 				"reference";"viewport.preview";\
 				"type";"horizontal alignment";\
 				"value";"center"))
+			
+			$c.push(New object:C1471(\
+				"object";"preview.scrollBar";\
+				"reference";"preview";\
+				"type";"margin-left";\
+				"value";20))
 			
 		End if 
 		
@@ -398,7 +406,7 @@ Case of
 			End if 
 		End if 
 		
-		$form.scrollBar.setVisible($context.typeForm()="detail")
+		$form.scrollBar.setVisible(($context.typeForm()="detail") & ($form.preview.visible()))
 		
 		If (Bool:C1537($context.picker))
 			

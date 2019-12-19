@@ -41,17 +41,24 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 			If ($o.fieldType#8859)  // Not 1-N relation
 				
-				  // Accept drag if the type match with the source
-				SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$t)
-				
-				$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
-				
-				If (_or (\
-					Formula:C1597($t="all");\
-					Formula:C1597(tmpl_compatibleType ($c;$o.fieldType))))
+				If (This:C1470.$.current="background")
 					
 					$0:=0
 					
+				Else 
+					
+					  // Accept drag if the type match with the source
+					SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$t)
+					
+					$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
+					
+					If (_or (\
+						Formula:C1597($t="all");\
+						Formula:C1597(tmpl_compatibleType ($c;$o.fieldType))))
+						
+						$0:=0
+						
+					End if 
 				End if 
 				
 			Else 
@@ -91,6 +98,11 @@ If (Length:C16(This:C1470.$.current)>0)
 			End if 
 		End if 
 	End if 
+	
+Else 
+	
+	ASSERT:C1129(Not:C34(Shift down:C543))
+	
 End if 
 
   // ----------------------------------------------------

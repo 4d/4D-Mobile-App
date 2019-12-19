@@ -54,7 +54,7 @@
 					"events": [
 						"onClick"
 					],
-					"method": "VIEWS_OBJECTS_HANDLER"
+					"method": "views_OBJECTS_HANDLER"
 				},
 				"next": {
 					"type": "button",
@@ -70,7 +70,7 @@
 					"events": [
 						"onClick"
 					],
-					"method": "VIEWS_OBJECTS_HANDLER"
+					"method": "views_OBJECTS_HANDLER"
 				},
 				"previous.limit": {
 					"type": "line",
@@ -179,7 +179,7 @@
 						"onClick"
 					],
 					"focusable": false,
-					"method": "VIEWS_OBJECTS_HANDLER",
+					"method": "views_OBJECTS_HANDLER",
 					"text": "__XXXX__",
 					"textDecoration": "underline",
 					"stroke": "#1BA1E5"
@@ -203,8 +203,8 @@
 				"Preview.back": {
 					"type": "rectangle",
 					"top": 184,
-					"left": 558,
-					"width": 288,
+					"left": 560,
+					"width": 284,
 					"height": 468,
 					"borderRadius": 20,
 					"fill": "#FFFFFF",
@@ -319,7 +319,7 @@
 						"onSelectionChange",
 						"onBeginDragOver"
 					],
-					"method": "VIEWS_OBJECTS_HANDLER",
+					"method": "ObjectMethods/01_fields.4dm",
 					"columns": [
 						{
 							"name": "fields",
@@ -470,7 +470,6 @@
 		"views": {
 			"View 1": {},
 			"ui": {
-				"visible": false,
 				"objects": [
 					"Preview.back",
 					"Preview.border"

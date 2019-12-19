@@ -7,8 +7,8 @@ If (False:C215)
 	C_OBJECT:C1216(views_fieldList ;$2)
 	
 	  // ----------------------------------------------------
-	C_OBJECT:C1216(views_Handler ;$0)
-	C_OBJECT:C1216(views_Handler ;$1)
+	C_OBJECT:C1216(VIEWS_Handler ;$0)
+	C_OBJECT:C1216(VIEWS_Handler ;$1)
 	
 	  // ----------------------------------------------------
 	C_TEXT:C284(views_LAYOUT_PICKER ;$1)

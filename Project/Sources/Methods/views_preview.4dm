@@ -12,12 +12,13 @@ C_TEXT:C284($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_BOOLEAN:C305($Boo_first;$Boo_multivalued;$Boo_OK)
-C_LONGINT:C283($i;$Lon_index;$Lon_parameters;$Lon_width;$Lon_y;$Lon_yOffset)
+C_BOOLEAN:C305($Boo_first;$Boo_multivalued;$success)
+C_LONGINT:C283($i;$Lon_index;$Lon_y;$Lon_yOffset;$width)
 C_TEXT:C284($Dom_field;$Dom_multivalued;$Dom_new;$Dom_template;$Dom_use;$t)
 C_TEXT:C284($tt;$Txt_field;$Txt_in;$Txt_index;$Txt_name;$Txt_out)
 C_TEXT:C284($Txt_typeForm)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_target;$Path_root;$svg)
+C_OBJECT:C1216($context;$folderForm;$form;$manifest;$o;$Obj_target)
+C_OBJECT:C1216($svg)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -28,31 +29,22 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+  // NO PARAMETERS REQUIRED
+
+  // Optional parameters
+If (Count parameters:C259>=1)
 	
-	  // NO PARAMETERS REQUIRED
+	$Txt_in:=$1
 	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
+	If (Count parameters:C259>=2)
 		
-		$Txt_in:=$1
+		$form:=$2
 		
-		If ($Lon_parameters>=2)
-			
-			$Obj_form:=$2
-			
-		End if 
 	End if 
-	
-	$Obj_context:=$Obj_form.$
-	
-Else 
-	
-	ABORT:C156
-	
 End if 
+
+$context:=$form.$
 
   // ----------------------------------------------------
 Case of 
@@ -60,11 +52,11 @@ Case of
 		  //______________________________________________________
 	: ($Txt_in="draw")  // Uppdate preview
 		
-		$Txt_typeForm:=$Obj_context.typeForm()
+		$Txt_typeForm:=$context.typeForm()
 		
-		If (Length:C16($Obj_context.tableNum())>0)
+		If (Length:C16($context.tableNum())>0)
 			
-			$t:=String:C10(Form:C1466[$Txt_typeForm][$Obj_context.tableNum()].form)  // Form name
+			$t:=String:C10(Form:C1466[$Txt_typeForm][$context.tableNum()].form)  // Form name
 			
 			If (Length:C16($t)>0)\
 				 & ($t#"null")
@@ -74,47 +66,66 @@ Case of
 					  // Host database resources
 					$t:=Delete string:C232($t;1;1)
 					
-					$Path_root:=COMPONENT_Pathname ("host_"+$Txt_typeForm+"Forms").folder($t)
+					$folderForm:=COMPONENT_Pathname ("host_"+$Txt_typeForm+"Forms").folder($t)
 					
-					$Boo_OK:=$Path_root.exists
+					$success:=$folderForm.exists
 					
-					If ($Boo_OK)
+					If ($success)
 						
 						  // Verify the structure validity
-						$o:=JSON Parse:C1218(COMPONENT_Pathname ($Txt_typeForm+"Forms").file("manifest.json").getText())
+						$manifest:=JSON Parse:C1218(COMPONENT_Pathname ($Txt_typeForm+"Forms").file("manifest.json").getText())
 						
-						For each ($tt;$o.mandatory) While ($Boo_OK)
+						For each ($tt;$manifest.mandatory) While ($success)
 							
-							$Boo_OK:=$Path_root.file($tt).exists
+							$success:=$folderForm.file($tt).exists
 							
 						End for each 
 					End if 
 					
 				Else 
 					
-					$Path_root:=COMPONENT_Pathname ($Txt_typeForm+"Forms").folder($t)
+					$folderForm:=COMPONENT_Pathname ($Txt_typeForm+"Forms").folder($t)
 					
 					  // We assume that our templates are OK!
-					$Boo_OK:=$Path_root.exists
+					$success:=$folderForm.exists
 					
 				End if 
 				
 				OBJECT SET TITLE:C194(*;"preview.label";$t)
 				
-				If ($Boo_OK)
+				If ($success)
 					
 					  // Load the template
-					PROCESS 4D TAGS:C816($Path_root.file("template.svg").getText();$t)
+					PROCESS 4D TAGS:C816($folderForm.file("template.svg").getText();$t)
 					
 					If (featuresFlags.with("newViewUI"))
 						
-						$t:=Replace string:C233($t;"<rect class=\"container\"/>";"")
-						$t:=Replace string:C233($t;"<rect class=\"bgcontainer\"/>";"<rect class=\"bgcontainer_v2\"/>")
-						$t:=Replace string:C233($t;"<g id=\"bgcontainer\">";"<g id=\"bgcontainer\" transform=\"translate(0,-40)\">")
-						
-						$svg:=svg ("parse";New object:C1471(\
-							"variable";$t)).setAttribute("transform";\
-							"scale(0.97)")
+						If (Num:C11($manifest.version)<2)  // COMPATIBILITY MODE
+							
+							$t:=Replace string:C233($t;"<rect class=\"container\"/>";"")
+							
+							If ($Txt_typeForm="detail")
+								
+								  // Make background droppable
+								$t:=Replace string:C233($t;"<rect class=\"bgcontainer\"/>";"<rect id=\"background\" class=\"bgcontainer_v2 droppable\" ios:type=\"all\"/>")
+								
+							Else 
+								
+								$t:=Replace string:C233($t;"<rect class=\"bgcontainer\"/>";"<rect class=\"bgcontainer_v2\"/>")
+								
+							End if 
+							
+							$t:=Replace string:C233($t;"<g id=\"bgcontainer\">";"<g id=\"bgcontainer\" transform=\"translate(0,-40)\">")
+							
+							$svg:=svg ("parse";New object:C1471(\
+								"variable";$t)).setAttribute("transform";\
+								"scale(0.97)")
+							
+						Else 
+							
+							  //#TO_DO - A new format for the
+							
+						End if 
 						
 					Else 
 						
@@ -123,8 +134,6 @@ Case of
 							"scale(0.95)")
 						
 					End if 
-					
-					
 					
 					If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
 						
@@ -145,7 +154,7 @@ Case of
 								
 							End if 
 							
-							$Obj_target:=Choose:C955(Form:C1466[$Txt_typeForm][$Obj_context.tableNumber]=Null:C1517;New object:C1471;Form:C1466[$Txt_typeForm][$Obj_context.tableNumber])
+							$Obj_target:=Choose:C955(Form:C1466[$Txt_typeForm][$context.tableNumber]=Null:C1517;New object:C1471;Form:C1466[$Txt_typeForm][$context.tableNumber])
 							
 							  // Get the template for multivalued fields reference, if exist
 							$Dom_template:=$svg.findById("f")
@@ -171,6 +180,17 @@ Case of
 									$t:=$svg.findById($Txt_field)
 									
 									If ($svg.success)
+										
+										If (featuresFlags.with("newViewUI"))
+											
+											$tt:=$svg.findById($Txt_field+".label")
+											
+											If ($svg.success)
+												
+												DOM SET XML ELEMENT VALUE:C868($tt;Get localized string:C991("dropAFieldHere"))
+												
+											End if 
+										End if 
 										
 										  // Get position
 										$tt:=DOM Get parent XML element:C923($t)
@@ -205,24 +225,35 @@ Case of
 											$tt:=DOM Find XML element by ID:C1010($Dom_new;"f.label")
 											DOM SET XML ATTRIBUTE:C866($tt;\
 												"id";$Txt_field+".label")
-											DOM GET XML ELEMENT VALUE:C731($tt;$t)
-											DOM SET XML ELEMENT VALUE:C868($tt;Get localized string:C991($t)+$Txt_index)
 											
-											
-											  //DOM SET XML ELEMENT VALUE($tt;".Drop a field here")
+											If (featuresFlags.with("newViewUI"))
+												
+												DOM SET XML ELEMENT VALUE:C868($tt;Get localized string:C991("dropAFieldHere"))
+												
+											Else 
+												
+												DOM GET XML ELEMENT VALUE:C731($tt;$t)
+												DOM SET XML ELEMENT VALUE:C868($tt;Get localized string:C991($t)+$Txt_index)
+												
+											End if 
 											
 											  // Set id, bind & default label
 											$tt:=DOM Find XML element by ID:C1010($Dom_new;"f")
 											
-											DOM SET XML ATTRIBUTE:C866($tt;\
-												"id";$Txt_field;\
-												"ios:bind";"fields["+String:C10(Num:C11($Txt_field)-1)+"]";\
-												"ios:label";Get localized string:C991("field[n]")+" "+$Txt_index)
-											
-											  //DOM SET XML ATTRIBUTE($tt;\
-												"id";$Txt_field;\
-												"ios:bind";"fields["+String(Num($Txt_field)-1)+"]";\
-												"ios:label";".Drop a field here")
+											If (featuresFlags.with("newViewUI")) & False:C215
+												
+												DOM SET XML ATTRIBUTE:C866($tt;\
+													"id";$Txt_field;\
+													"ios:bind";"fields["+String:C10(Num:C11($Txt_field)-1)+"]")
+												
+											Else 
+												
+												DOM SET XML ATTRIBUTE:C866($tt;\
+													"id";$Txt_field;\
+													"ios:bind";"fields["+String:C10(Num:C11($Txt_field)-1)+"]";\
+													"ios:label";Get localized string:C991("field[n]")+" "+$Txt_index)
+												
+											End if 
 											
 											  // Set cancel id
 											$tt:=DOM Find XML element by ID:C1010($Dom_new;"f.cancel")
@@ -329,16 +360,16 @@ Case of
 										If (Asserted:C1132($svg.success))
 											
 											  // Truncate & set tips if necessary
-											$Lon_width:=Num:C11(xml_attributes ($tt).width)
+											$width:=Num:C11(xml_attributes ($tt).width)
 											
-											If ($Lon_width>0)
+											If ($width>0)
 												
-												$Lon_width:=$Lon_width/10
+												$width:=$width/10
 												
-												If (Length:C16($Txt_name)>($Lon_width))
+												If (Length:C16($Txt_name)>($width))
 													
 													$svg.setAttribute("tips";$Txt_name;$tt)
-													$Txt_name:=Substring:C12($Txt_name;1;$Lon_width)+"…"
+													$Txt_name:=Substring:C12($Txt_name;1;$width)+"…"
 													
 												End if 
 											End if 
@@ -402,7 +433,7 @@ Case of
 									
 									If ($svg.success)
 										
-										$svg.setVisible(Num:C11($Obj_context.tabIndex)=$Lon_index;$tt)
+										$svg.setVisible(Num:C11($context.tabIndex)=$Lon_index;$tt)
 										
 									End if 
 									
@@ -420,32 +451,32 @@ Case of
 						
 						If (featuresFlags.with("newViewUI"))
 							
-							$Obj_form.preview.getCoordinates()
+							$form.preview.getCoordinates()
 							
 							If ($Txt_typeForm="detail")
 								
-								$svg.setDimensions($Obj_form.preview.coordinates.width;770)
+								$svg.setDimensions($form.preview.coordinates.width;770)
 								
 							Else 
 								
-								$svg.setDimensions($Obj_form.preview.coordinates.width;440)
+								$svg.setDimensions($form.preview.coordinates.width;440)
 								
 							End if 
 						End if 
 						
-						($Obj_form.preview.pointer())->:=$svg.getPicture()
+						($form.preview.pointer())->:=$svg.getPicture()
 						
 					End if 
 					
 				Else 
 					
-					$Obj_form.form.call("pickerHide")
+					$form.form.call("pickerHide")
 					
-					$Obj_form.preview.getCoordinates()
+					$form.preview.getCoordinates()
 					
-					($Obj_form.preview.pointer())->:=svg .setDimensions($Obj_form.preview.coordinates.width-20;$Obj_form.preview.coordinates.height)\
-						.textArea(Replace string:C233(Get localized string:C991("theTemplateIsMissingOrInvalid");"{tmpl}";$Path_root.name);0;200)\
-						.setDimensions($Obj_form.preview.coordinates.width-20)\
+					($form.preview.pointer())->:=svg .setDimensions($form.preview.coordinates.width-20;$form.preview.coordinates.height)\
+						.textArea(Replace string:C233(Get localized string:C991("theTemplateIsMissingOrInvalid");"{tmpl}";$folderForm.name);0;200)\
+						.setDimensions($form.preview.coordinates.width-20)\
 						.setFill(ui.colors.errorColor.hex)\
 						.setAttributes(New object:C1471("font-size";14;"text-align";"center"))\
 						.getPicture()
@@ -455,8 +486,8 @@ Case of
 			Else 
 				
 				  // Display the template picker
-				$Obj_form.fieldGroup.hide()
-				$Obj_form.previewGroup.hide()
+				$form.fieldGroup.hide()
+				$form.previewGroup.hide()
 				
 				views_LAYOUT_PICKER ($Txt_typeForm)
 				

@@ -50,7 +50,6 @@ If (Length:C16(This:C1470.$.current)>0)
 		
 		If ($b)
 			
-			  //$Obj_field:=$o
 			$o.name:=$o.path
 			
 			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:bind";$t)

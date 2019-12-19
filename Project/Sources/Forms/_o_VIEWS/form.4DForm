@@ -181,7 +181,7 @@
 						"onClick"
 					],
 					"focusable": false,
-					"method": "VIEWS_OBJECTS_HANDLER",
+					"method": "views_OBJECTS_HANDLER",
 					"text": "__XXXX__",
 					"textDecoration": "underline",
 					"stroke": "#1BA1E5"
@@ -274,7 +274,7 @@
 						"onSelectionChange",
 						"onBeginDragOver"
 					],
-					"method": "VIEWS_OBJECTS_HANDLER",
+					"method": "ObjectMethods/01_fields.4dm",
 					"columns": [
 						{
 							"name": "fields",
