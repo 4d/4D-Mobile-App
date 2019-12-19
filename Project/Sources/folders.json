@@ -39,7 +39,7 @@
 			"TURN_AROUND_Field_name"
 		],
 		"forms": [
-			"STRUCTURE_OLD"
+			"_o_VIEWS"
 		]
 	},
 	"__TEMPO": {
@@ -106,7 +106,6 @@
 			"COMPONENT_Pathname"
 		]
 	},
-	"(__TRASH)": {},
 	"[EDITOR]": {
 		"methods": [
 			"COMPILER_editor",
@@ -678,7 +677,6 @@
 			"views_UPDATE"
 		],
 		"forms": [
-			"_VIEWS",
 			"VIEWS"
 		]
 	},
@@ -712,9 +710,5 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(__TRASH)"
-		]
-	}
+	"trash": {}
 }

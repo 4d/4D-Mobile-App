@@ -175,7 +175,7 @@
 					"width": 179,
 					"height": 22,
 					"visibility": "visible",
-					"sizingX": "move",
+					"sizingX": "fixed",
 					"style": "custom",
 					"events": [
 						"onClick"
@@ -190,77 +190,22 @@
 		},
 		{
 			"objects": {
-				"viewport.preview": {
+				"01_fields.border": {
 					"type": "rectangle",
-					"top": 156,
-					"left": 467,
-					"width": 470,
-					"height": 495,
-					"fill": "transparent",
-					"stroke": "#1e90ff",
-					"strokeDashArray": [
-						6,
-						2
-					],
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"sizingY": "grow"
-				},
-				"Preview.back": {
-					"type": "rectangle",
-					"top": 184,
-					"left": 558,
-					"width": 288,
+					"top": 183,
+					"left": 18,
+					"width": 441,
 					"height": 468,
-					"borderRadius": 20,
-					"fill": "#c0c0c0",
-					"sizingY": "fixed",
-					"visibility": "hidden",
-					"stroke": "#696969"
-				},
-				"preview.label": {
-					"type": "text",
-					"top": 163,
-					"left": 558,
-					"width": 288,
-					"height": 16,
-					"visibility": "hidden",
-					"stroke": "#04A9F4",
-					"textAlign": "center",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 13,
-					"fontWeight": "bold",
-					"text": "xxx",
-					"sizingX": "fixed",
-					"borderStyle": "none"
-				},
-				"01_fields.label": {
-					"type": "text",
-					"top": 162,
-					"left": 19,
-					"width": 151,
-					"height": 17,
-					"visibility": "hidden",
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:fields"
-				},
-				"Line1": {
-					"type": "line",
-					"top": 156,
-					"left": 19,
-					"width": 921,
-					"sizingX": "grow",
-					"stroke": "#DCDCDC",
-					"height": 0,
-					"startPoint": "topLeft"
+					"fill": "transparent",
+					"stroke": "#CECECE",
+					"strokeWidth": 0.1
 				},
 				"preview": {
 					"type": "input",
-					"top": 197,
-					"left": 573,
-					"width": 258,
-					"height": 443,
+					"top": 184,
+					"left": 510,
+					"width": 287,
+					"height": 486,
 					"visibility": "hidden",
 					"sizingY": "grow",
 					"dataSourceTypeHint": "picture",
@@ -270,6 +215,7 @@
 					"enterable": false,
 					"hideFocusRing": true,
 					"contextMenu": "none",
+					"scrollbarVertical": "automatic",
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -281,18 +227,22 @@
 						"onMouseMove",
 						"onBeginDragOver"
 					],
-					"method": "ObjectMethods/preview.4dm",
-					"pictureFormat": "truncatedTopLeft"
+					"method": "ObjectMethods/preview.4dm"
 				},
-				"01_fields.border": {
-					"type": "rectangle",
-					"top": 183,
-					"left": 18,
-					"width": 441,
-					"height": 468,
-					"fill": "transparent",
-					"stroke": "#CECECE",
-					"strokeWidth": 0.1
+				"preview.label": {
+					"type": "text",
+					"top": 163,
+					"left": 510,
+					"width": 267,
+					"height": 17,
+					"visibility": "hidden",
+					"stroke": "#04A9F4",
+					"textAlign": "center",
+					"fontFamily": ".SF NS Text",
+					"fontSize": 13,
+					"fontWeight": "bold",
+					"text": "xxx",
+					"borderStyle": "none"
 				},
 				"01_fields": {
 					"type": "listbox",
@@ -324,7 +274,7 @@
 						"onSelectionChange",
 						"onBeginDragOver"
 					],
-					"method": "ObjectMethods/01_fields.4dm",
+					"method": "VIEWS_OBJECTS_HANDLER",
 					"columns": [
 						{
 							"name": "fields",
@@ -434,6 +384,27 @@
 							}
 						}
 					]
+				},
+				"01_fields.label": {
+					"type": "text",
+					"top": 162,
+					"left": 19,
+					"width": 151,
+					"height": 17,
+					"visibility": "hidden",
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:fields"
+				},
+				"Line1": {
+					"type": "line",
+					"top": 156,
+					"left": 19,
+					"width": 921,
+					"sizingX": "grow",
+					"stroke": "#DCDCDC",
+					"height": 0,
+					"startPoint": "topLeft"
 				}
 			}
 		}

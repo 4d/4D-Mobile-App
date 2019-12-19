@@ -65,7 +65,7 @@ $svg:=svg
 
 If ($Obj_dataModel#Null:C1517)
 	
-	$Txt_type:=Choose:C955(Num:C11(Form:C1466.$dialog.VIEWS.selector)=2;"detail";"list")
+	$Txt_type:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(featuresFlags.with("newViewUI");"VIEWS";"_o_VIEWS")].selector)=2;"detail";"list")
 	
 	$Path_root:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16);fk platform path:K87:2)
 	$Path_hostRoot:=COMPONENT_Pathname ("host_"+$Txt_type+"Forms")

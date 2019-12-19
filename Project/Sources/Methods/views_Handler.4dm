@@ -11,9 +11,9 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($i;$Lon_formEvent;$Lon_hScroll;$Lon_offset;$Lon_parameters)
+C_LONGINT:C283($i;$eventCode;$Lon_hScroll;$Lon_offset)
 C_TEXT:C284($t;$Txt_form;$Txt_newForm;$Txt_table)
-C_OBJECT:C1216($o;$Obj_context;$Obj_dataModel;$Obj_form;$Obj_in;$Obj_out)
+C_OBJECT:C1216($o;$context;$Obj_dataModel;$form;$Obj_in;$Obj_out)
 C_OBJECT:C1216($Obj_target;$oo)
 C_COLLECTION:C1488($c;$Col_assigned)
 
@@ -26,20 +26,18 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 	
 	  // NO PARAMETERS REQUIRED
 	
 	  // Optional parameters
-	If ($Lon_parameters>=1)
+	If (Count parameters:C259>=1)
 		
 		$Obj_in:=$1
 		
 	End if 
 	
-	$Obj_form:=New object:C1471(\
+	$form:=New object:C1471(\
 		"$";editor_INIT ;\
 		"form";ui.form("editor_CALLBACK").get();\
 		"tableWidget";ui.picture("tables");\
@@ -66,35 +64,42 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		"drag";Formula:C1597(tmpl_On_drag_over );\
 		"drop";Formula:C1597(tmpl_ON_DROP );\
 		"cancel";Formula:C1597(tmpl_REMOVE );\
-		"tips";Formula:C1597(tmpl_TIPS ))
+		"tips";Formula:C1597(tmpl_TIPS );\
+		"scrollBar";ui.thermometer("preview.scrollBar"))
 	
-	$Obj_context:=$Obj_form.$
+	$context:=$form.$
 	
-	If (OB Is empty:C1297($Obj_context))  // First load
+	If (OB Is empty:C1297($context))  // First load
 		
 		  // Constraints definition
-		ob_createPath ($Obj_context;"constraints.rules";Is collection:K8:32)
+		ob_createPath ($context;"constraints.rules";Is collection:K8:32)
 		
-		$Obj_context.constraints.rules.push(New object:C1471(\
+		$context.constraints.rules.push(New object:C1471(\
 			"formula";Formula:C1597(VIEWS_Handler (New object:C1471("action";\
 			"geometry")))))
 		
 		If (featuresFlags.with("newViewUI"))
 			
-			$Obj_context.constraints.rules.push(New object:C1471(\
+			$context.constraints.rules.push(New object:C1471(\
 				"object";"preview";\
 				"reference";"viewport.preview";\
 				"type";"horizontal alignment";\
 				"value";"center"))
 			
-			$Obj_context.constraints.rules.push(New object:C1471(\
+			$context.constraints.rules.push(New object:C1471(\
 				"object";"preview.label";\
 				"reference";"viewport.preview";\
 				"type";"horizontal alignment";\
 				"value";"center"))
 			
-			$Obj_context.constraints.rules.push(New object:C1471(\
+			$context.constraints.rules.push(New object:C1471(\
 				"object";"preview.back";\
+				"reference";"viewport.preview";\
+				"type";"horizontal alignment";\
+				"value";"center"))
+			
+			$context.constraints.rules.push(New object:C1471(\
+				"object";"Preview.border";\
 				"reference";"viewport.preview";\
 				"type";"horizontal alignment";\
 				"value";"center"))
@@ -104,17 +109,17 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		  // Define form member methods
 		
 		  // Selected table ID as string, empty if none
-		$Obj_context.tableNum:=Formula:C1597(String:C10(This:C1470.tableNumber))
+		$context.tableNum:=Formula:C1597(String:C10(This:C1470.tableNumber))
 		
 		  // The form type according to the selected tab
-		$Obj_context.typeForm:=Formula:C1597(Choose:C955(Num:C11(This:C1470.selector)=2;"detail";"list"))
+		$context.typeForm:=Formula:C1597(Choose:C955(Num:C11(This:C1470.selector)=2;"detail";"list"))
 		
 		  // Update selected tab
-		$Obj_context.setTab:=Formula:C1597(VIEWS_Handler (New object:C1471(\
+		$context.setTab:=Formula:C1597(VIEWS_Handler (New object:C1471(\
 			"action";"setTab")))
 		
 		  // Update geometry
-		$Obj_context.setGeometry:=Formula:C1597(VIEWS_Handler (New object:C1471(\
+		$context.setGeometry:=Formula:C1597(VIEWS_Handler (New object:C1471(\
 			"action";"geometry")))
 		
 	End if 
@@ -131,27 +136,29 @@ Case of
 		  //=========================================================
 	: ($Obj_in=Null:C1517)  // Form method
 		
-		$Lon_formEvent:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
+		$eventCode:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
 		
 		$Obj_dataModel:=Form:C1466.dataModel
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Load:K2:1)
+			: ($eventCode=On Load:K2:1)
+				
+				$context.scroll:=450
 				
 				  // This trick remove the horizontal gap
-				$Obj_form.fieldList.setScrollbar(0;2)
+				$form.fieldList.setScrollbar(0;2)
 				
 				  // Place the tabs according to the localization
-				$Lon_offset:=$Obj_form.tablist.bestSize(Align left:K42:2).coordinates.right+10
-				$Obj_form.tabdetail.bestSize(Align left:K42:2).setCoordinates($Lon_offset)
+				$Lon_offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
+				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($Lon_offset)
 				
 				  // Place the download button
-				$Obj_form.resources.setTitle(str ("downloadMoreResources").localized("templates"))
-				$Obj_form.resources.bestSize(Align right:K42:4)
+				$form.resources.setTitle(str ("downloadMoreResources").localized("templates"))
+				$form.resources.bestSize(Align right:K42:4)
 				
-				$Obj_context.setTab()
+				$context.setTab()
 				
 				  // Create, if any, & update the list & detail model [
 				$o:=ob_createPath (Form:C1466;"list")
@@ -171,94 +178,94 @@ Case of
 				If (($Obj_dataModel=Null:C1517) | OB Is empty:C1297($Obj_dataModel))
 					
 					  // No published table
-					$Obj_form.noPublishedTable.show()
+					$form.noPublishedTable.show()
 					
-					$Obj_form.fieldGroup.hide()
-					$Obj_form.previewGroup.hide()
+					$form.fieldGroup.hide()
+					$form.previewGroup.hide()
 					
-					OB REMOVE:C1226($Obj_context;"tableID")
+					OB REMOVE:C1226($context;"tableID")
 					
 				Else 
 					
-					$Obj_form.noPublishedTable.hide()
+					$form.noPublishedTable.hide()
 					
 					  // Select the first table if any
 					OB GET PROPERTY NAMES:C1232($Obj_dataModel;$tTxt_tables)
 					
-					If (Length:C16($Obj_context.tableNum())=0)\
-						 | (Find in array:C230($tTxt_tables;$Obj_context.tableNum())=-1)
+					If (Length:C16($context.tableNum())=0)\
+						 | (Find in array:C230($tTxt_tables;$context.tableNum())=-1)
 						
 						If (Size of array:C274($tTxt_tables)>0)
 							
 							  // Select
-							$Obj_context.tableNumber:=$tTxt_tables{1}
+							$context.tableNumber:=$tTxt_tables{1}
 							
 						Else 
 							
 							  // No more published table
-							OB REMOVE:C1226($Obj_context;"tableID")
+							OB REMOVE:C1226($context;"tableID")
 							
 						End if 
 					End if 
 				End if 
 				
 				  // List/detail selector [
-				$Obj_context.selector:=Num:C11($Obj_context.selector)+Num:C11(Num:C11($Obj_context.selector)=0)
-				($Obj_form.tablist.pointer())->:=Num:C11($Obj_context.selector=1)
-				($Obj_form.tabdetail.pointer())->:=Num:C11($Obj_context.selector=2)
+				$context.selector:=Num:C11($context.selector)+Num:C11(Num:C11($context.selector)=0)
+				($form.tablist.pointer())->:=Num:C11($context.selector=1)
+				($form.tabdetail.pointer())->:=Num:C11($context.selector=2)
 				  //]
 				
 				  // Draw the table list
-				($Obj_form.tableWidget.pointer())->:=tables_Widget ($Obj_dataModel;New object:C1471(\
-					"tableNumber";$Obj_context.tableNum()))
+				($form.tableWidget.pointer())->:=tables_Widget ($Obj_dataModel;New object:C1471(\
+					"tableNumber";$context.tableNum()))
 				
 				views_UPDATE ("list")
 				views_UPDATE ("detail")
 				
 				  // Update geometry
-				$Obj_context.setGeometry()
+				$context.setGeometry()
 				
 				  //$Obj_context.actions:=_w_actions ("getList";$Obj_context).actions
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Timer:K2:25)
+			: ($eventCode=On Timer:K2:25)
 				
 				SET TIMER:C645(0)
 				
-				$Txt_form:=$Obj_context.typeForm()
+				$Txt_form:=$context.typeForm()
 				
 				If ($Obj_dataModel=Null:C1517) | OB Is empty:C1297($Obj_dataModel)
 					
 					  // No published table
-					$Obj_form.noPublishedTable.show()
+					$form.noPublishedTable.show()
 					
-					$Obj_form.fieldGroup.hide()
-					$Obj_form.previewGroup.hide()
+					$form.fieldGroup.hide()
+					$form.previewGroup.hide()
 					
 				Else 
 					
-					$Obj_form.noPublishedTable.hide()
+					$form.noPublishedTable.hide()
 					
 				End if 
 				
 				  // Draw the table list
-				($Obj_form.tableWidget.pointer())->:=tables_Widget ($Obj_dataModel;New object:C1471(\
-					"tableNumber";$Obj_context.tableNum()))
+				($form.tableWidget.pointer())->:=tables_Widget ($Obj_dataModel;New object:C1471(\
+					"tableNumber";$context.tableNum()))
 				
 				Case of 
 						
 						  //………………………………………………………………………………………………………………………………………
-					: (Bool:C1537($Obj_context.draw))
+					: (Bool:C1537($context.draw))
 						
-						$Obj_form.fieldGroup.setVisible(Length:C16($Obj_context.tableNum())>0)
-						$Obj_form.previewGroup.setVisible(Length:C16($Obj_context.tableNum())>0)
+						$form.fieldGroup.setVisible(Length:C16($context.tableNum())>0)
+						$form.previewGroup.setVisible(Length:C16($context.tableNum())>0)
 						
 						  // Uppdate preview
-						views_preview ("draw";$Obj_form)
+						views_preview ("draw";$form)
 						
 						  //(ui.pointer($Obj_form.actionDrop))->:=_w_actions ("preview";$Obj_context).pict
 						
-						OB REMOVE:C1226($Obj_context;"draw")
+						OB REMOVE:C1226($context;"draw")
 						
 						  //………………………………………………………………………………………………………………………………………
 					Else 
@@ -267,10 +274,10 @@ Case of
 						  //$Obj_form.previewGroup.hide()
 						  //CLEAR VARIABLE(($Obj_form.preview.pointer())->)
 						
-						If (Length:C16($Obj_context.tableNum())>0)\
-							 & ($Obj_dataModel[$Obj_context.tableNum()]#Null:C1517)
+						If (Length:C16($context.tableNum())>0)\
+							 & ($Obj_dataModel[$context.tableNum()]#Null:C1517)
 							
-							$t:=String:C10(Form:C1466[$Txt_form][$Obj_context.tableNum()].form)
+							$t:=String:C10(Form:C1466[$Txt_form][$context.tableNum()].form)
 							
 							If (Length:C16($t)>0)
 								
@@ -289,11 +296,11 @@ Case of
 							If (Bool:C1537($o.exists))
 								
 								  // Update lists
-								$Obj_context.update:=True:C214
+								$context.update:=True:C214
 								
 								  // Redraw
-								$Obj_context.draw:=True:C214
-								$Obj_form.form.refresh()
+								$context.draw:=True:C214
+								$form.form.refresh()
 								
 							Else 
 								
@@ -302,11 +309,11 @@ Case of
 									If (Length:C16($t)>0)
 										
 										  // Hide the template picker
-										$Obj_form.form.call("pickerHide")
+										$form.form.call("pickerHide")
 										
 										  // Redraw
-										$Obj_context.draw:=True:C214
-										$Obj_form.form.refresh()
+										$context.draw:=True:C214
+										$form.form.refresh()
 										
 									End if 
 									
@@ -315,11 +322,11 @@ Case of
 									If (Not:C34(($Obj_dataModel=Null:C1517) | OB Is empty:C1297($Obj_dataModel)))
 										
 										  // Update lists
-										$Obj_context.update:=True:C214
+										$context.update:=True:C214
 										
 										  // Display the template picker
-										$Obj_form.fieldGroup.hide()
-										$Obj_form.previewGroup.hide()
+										$form.fieldGroup.hide()
+										$form.previewGroup.hide()
 										
 										views_LAYOUT_PICKER ($Txt_form)
 										
@@ -339,17 +346,17 @@ Case of
 				  //______________________________________________________
 		End case 
 		
-		If (Bool:C1537($Obj_context.update))
+		If (Bool:C1537($context.update))
 			
-			OB REMOVE:C1226($Obj_context;"update")
+			OB REMOVE:C1226($context;"update")
 			
-			$o:=views_fieldList ($Obj_context.tableNum())
+			$o:=views_fieldList ($context.tableNum())
 			
 			If ($o.success)
 				
-				COLLECTION TO ARRAY:C1562($o.fields;($Obj_form.fields.pointer())->)
-				COLLECTION TO ARRAY:C1562($o.fields.extract("id");($Obj_form.ids.pointer())->)
-				COLLECTION TO ARRAY:C1562($o.fields.extract("path");($Obj_form.names.pointer())->)
+				COLLECTION TO ARRAY:C1562($o.fields;($form.fields.pointer())->)
+				COLLECTION TO ARRAY:C1562($o.fields.extract("id");($form.ids.pointer())->)
+				COLLECTION TO ARRAY:C1562($o.fields.extract("path");($form.names.pointer())->)
 				
 				$c:=New collection:C1472
 				
@@ -359,46 +366,48 @@ Case of
 					
 				End for each 
 				
-				COLLECTION TO ARRAY:C1562($c;($Obj_form.icons.pointer())->)
+				COLLECTION TO ARRAY:C1562($c;($form.icons.pointer())->)
 				
 				  // Highlight errors
-				For ($i;1;Size of array:C274(($Obj_form.fields.pointer())->);1)
+				For ($i;1;Size of array:C274(($form.fields.pointer())->);1)
 					
-					$o:=($Obj_form.fields.pointer())->{$i}
+					$o:=($form.fields.pointer())->{$i}
 					
 					If ($o.fieldType=8859)  // 1-N
 						
 						If ($Obj_dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)
 							
-							LISTBOX SET ROW COLOR:C1270(*;$Obj_form.fieldList.name;$i;ui.errorColor;lk font color:K53:24)
+							LISTBOX SET ROW COLOR:C1270(*;$form.fieldList.name;$i;ui.errorColor;lk font color:K53:24)
 							
 						End if 
 					End if 
 				End for 
 				
-				$Obj_form.fieldGroup.show()
-				$Obj_form.previewGroup.show()
+				$form.fieldGroup.show()
+				$form.previewGroup.show()
 				
-				$Obj_form.fieldList.focus()
+				$form.fieldList.focus()
 				
 			Else 
 				
-				$Obj_form.fields.clear()
-				$Obj_form.ids.clear()
-				$Obj_form.names.clear()
-				$Obj_form.icons.clear()
+				$form.fields.clear()
+				$form.ids.clear()
+				$form.names.clear()
+				$form.icons.clear()
 				
 			End if 
 		End if 
 		
-		If (Bool:C1537($Obj_context.picker))
+		$form.scrollBar.setVisible($context.typeForm()="detail")
+		
+		If (Bool:C1537($context.picker))
 			
 			  // Display the template picker
 			views_LAYOUT_PICKER ($Txt_form)
 			
 		End if 
 		
-		OB REMOVE:C1226($Obj_context;"picker")
+		OB REMOVE:C1226($context;"picker")
 		
 		  //=========================================================
 	: ($Obj_in.action=Null:C1517)  // Error
@@ -408,12 +417,12 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="init")  // Return the form objects definition
 		
-		$Obj_out:=$Obj_form
+		$Obj_out:=$form
 		
 		  //=========================================================
 	: ($Obj_in.action="scroll-table")
 		
-		$o:=$Obj_form.tableWidget.update()
+		$o:=$form.tableWidget.update()
 		
 		If (String:C10($Obj_in.direction)="next")
 			
@@ -426,26 +435,26 @@ Case of
 			
 		End if 
 		
-		$Obj_form.tableWidget.setScrollPosition($Lon_hScroll;Null:C1517)
+		$form.tableWidget.setScrollPosition($Lon_hScroll;Null:C1517)
 		
-		$Obj_context.setGeometry()
+		$context.setGeometry()
 		
 		  //=========================================================
 	: ($Obj_in.action="geometry")
 		
-		If (Not:C34(Is nil pointer:C315($obj_form.tableWidget.pointer())))
+		If (Not:C34(Is nil pointer:C315($form.tableWidget.pointer())))
 			
-			$o:=$obj_form.tableWidget.update()
+			$o:=$form.tableWidget.update()
 			
 			If ($o.dimensions.width>$o.coordinates.width)
 				
-				$Obj_form.tablePrevious.setVisible($o.scroll.horizontal>0)
-				$Obj_form.tableNext.setVisible(($o.scroll.horizontal+$o.coordinates.width)<$o.dimensions.width)
+				$form.tablePrevious.setVisible($o.scroll.horizontal>0)
+				$form.tableNext.setVisible(($o.scroll.horizontal+$o.coordinates.width)<$o.dimensions.width)
 				
 			Else 
 				
-				$Obj_form.tablePrevious.hide()
-				$Obj_form.tableNext.hide()
+				$form.tablePrevious.hide()
+				$form.tableNext.hide()
 				
 			End if 
 		End if 
@@ -453,13 +462,13 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="forms")  // Call back from widget
 		
-		$Obj_form.fieldGroup.show()
-		$Obj_form.previewGroup.show()
+		$form.fieldGroup.show()
+		$form.previewGroup.show()
 		
 		If ($Obj_in.item>0)\
 			 & ($Obj_in.item<=$Obj_in.pathnames.length)
 			
-			$Txt_table:=$Obj_context.tableNum()
+			$Txt_table:=$context.tableNum()
 			
 			  // The selected form
 			$Txt_newForm:=$Obj_in.pathnames[$Obj_in.item-1]
@@ -469,7 +478,7 @@ Case of
 			
 			If ($Txt_newForm#$t)
 				
-				$Obj_target:=Form:C1466[$Obj_in.selector][$Obj_context.tableNumber]
+				$Obj_target:=Form:C1466[$Obj_in.selector][$context.tableNumber]
 				
 				$Obj_in.target:=OB Copy:C1225($Obj_target)
 				OB REMOVE:C1226($Obj_in.target;"form")
@@ -480,22 +489,22 @@ Case of
 					Case of 
 							
 							  //______________________________________________________
-						: ($Obj_context[$Txt_table]=Null:C1517)
+						: ($context[$Txt_table]=Null:C1517)
 							
-							$Obj_context[$Txt_table]:=New object:C1471(\
+							$context[$Txt_table]:=New object:C1471(\
 								$Obj_in.selector;New object:C1471($t;\
 								$Obj_in.target))
 							
 							  //______________________________________________________
-						: ($Obj_context[$Txt_table][$Obj_in.selector]=Null:C1517)
+						: ($context[$Txt_table][$Obj_in.selector]=Null:C1517)
 							
-							$Obj_context[$Txt_table][$Obj_in.selector]:=New object:C1471(\
+							$context[$Txt_table][$Obj_in.selector]:=New object:C1471(\
 								$t;$Obj_in.target)
 							
 							  //______________________________________________________
 						Else 
 							
-							$Obj_context[$Txt_table][$Obj_in.selector][$t]:=$Obj_in.target
+							$context[$Txt_table][$Obj_in.selector][$t]:=$Obj_in.target
 							
 							  //______________________________________________________
 					End case 
@@ -504,7 +513,7 @@ Case of
 				  // Update project & save [
 				$Obj_target.form:=$Txt_newForm
 				
-				OB REMOVE:C1226($Obj_context;"manifest")
+				OB REMOVE:C1226($context;"manifest")
 				
 				project.save()
 				  //]
@@ -514,12 +523,12 @@ Case of
 					If (Not:C34(Form:C1466.$project.status.project))
 						
 						  // Launch project verifications
-						$Obj_form.form.call("projectAudit")
+						$form.form.call("projectAudit")
 						
 					End if 
 				End if 
 				
-				If ($Obj_context[$Txt_table][$Obj_in.selector][$Txt_newForm]=Null:C1517)
+				If ($context[$Txt_table][$Obj_in.selector][$Txt_newForm]=Null:C1517)
 					
 					If ($Obj_target.fields=Null:C1517)
 						
@@ -530,14 +539,14 @@ Case of
 					  // Create a new binding
 					$Col_assigned:=$Obj_target.fields.copy()
 					
-					If ($Obj_context[$Txt_table]#Null:C1517)
+					If ($context[$Txt_table]#Null:C1517)
 						
-						If ($Obj_context[$Txt_table][$Obj_in.selector]#Null:C1517)
+						If ($context[$Txt_table][$Obj_in.selector]#Null:C1517)
 							
 							  // Enrich with the fields already used during the session
-							For each ($Txt_form;$Obj_context[$Txt_table][$Obj_in.selector])
+							For each ($Txt_form;$context[$Txt_table][$Obj_in.selector])
 								
-								For each ($o;$Obj_context[$Txt_table][$Obj_in.selector][$Txt_form].fields.filter("col_notNull"))
+								For each ($o;$context[$Txt_table][$Obj_in.selector][$Txt_form].fields.filter("col_notNull"))
 									
 									If ($Col_assigned.extract("name").indexOf($o.name)=-1)
 										
@@ -552,14 +561,14 @@ Case of
 				Else 
 					
 					  // Reuse the last snapshot
-					$Col_assigned:=$Obj_context[$Txt_table][$Obj_in.selector][$Txt_newForm].fields
+					$Col_assigned:=$context[$Txt_table][$Obj_in.selector][$Txt_newForm].fields
 					
 					  // Enrich the last snapshot with the fields already used during the session
-					For each ($Txt_form;$Obj_context[$Txt_table][$Obj_in.selector])
+					For each ($Txt_form;$context[$Txt_table][$Obj_in.selector])
 						
 						If ($Txt_form#$Txt_newForm)
 							
-							For each ($o;$Obj_context[$Txt_table][$Obj_in.selector][$Txt_form].fields.filter("col_notNull"))
+							For each ($o;$context[$Txt_table][$Obj_in.selector][$Txt_form].fields.filter("col_notNull"))
 								
 								If ($Col_assigned.extract("name").indexOf($o.name)=-1)
 									
@@ -580,89 +589,89 @@ Case of
 		End if 
 		
 		  // Redraw
-		$Obj_context.draw:=True:C214
-		$Obj_form.form.refresh()
+		$context.draw:=True:C214
+		$form.form.refresh()
 		
 		  //=========================================================
 	: ($Obj_in.action="show")
 		
 		  // Restore preview and field list…
-		$Obj_form.fieldGroup.show()
-		$Obj_form.previewGroup.show()
+		$form.fieldGroup.show()
+		$form.previewGroup.show()
 		
 		  // …and redraw
-		$Obj_context.draw:=True:C214
-		$Obj_form.form.refresh()
+		$context.draw:=True:C214
+		$form.form.refresh()
 		
 		  //=========================================================
 	: ($Obj_in.action="pickerHide")  // Call back from widget
 		
-		If (Form:C1466[$Obj_in.selector][$Obj_context.tableNum()].form=Null:C1517)
+		If (Form:C1466[$Obj_in.selector][$context.tableNum()].form=Null:C1517)
 			
-			$Obj_form.fieldGroup.hide()
-			$Obj_form.previewGroup.hide()
+			$form.fieldGroup.hide()
+			$form.previewGroup.hide()
 			
 		Else 
 			
-			$Obj_form.fieldGroup.show()
-			$Obj_form.previewGroup.show()
+			$form.fieldGroup.show()
+			$form.previewGroup.show()
 			
 		End if 
 		
 		  //=========================================================
 	: ($Obj_in.action="setTab")  // UI for tabs
 		
-		OBJECT SET FONT STYLE:C166(*;$obj_form.selectors.name;Plain:K14:1)
+		OBJECT SET FONT STYLE:C166(*;$form.selectors.name;Plain:K14:1)
 		
-		$t:="tab."+$Obj_context.typeForm()
+		$t:="tab."+$context.typeForm()
 		OBJECT SET FONT STYLE:C166(*;$t;Bold:K14:2)
 		
 		$t:=Replace string:C233($t;".";"")
-		$o:=$Obj_form[$t].getCoordinates().coordinates
-		$oo:=$Obj_form.tabSelector.getCoordinates()
+		$o:=$form[$t].getCoordinates().coordinates
+		$oo:=$form.tabSelector.getCoordinates()
 		$oo.setCoordinates($o.left;$oo.coordinates.top;$o.right;$oo.coordinates.bottom)
 		
 		  //=========================================================
 	: ($Obj_in.action="selectTab")
 		
-		$Obj_context.selector:=1+Num:C11($Obj_in.tab="detail")
+		$context.selector:=1+Num:C11($Obj_in.tab="detail")
 		
-		$Obj_context.setTab()
+		$context.setTab()
 		
 		If ($Obj_in.table#Null:C1517)
 			
-			If (Length:C16($Obj_context.tableNum())>0)
+			If (Length:C16($context.tableNum())>0)
 				
 				  // Restore current selected background
-				SVG SET ATTRIBUTE:C1055(*;$Obj_form.tableWidget.name;$Obj_context.tableNumber;\
+				SVG SET ATTRIBUTE:C1055(*;$form.tableWidget.name;$context.tableNumber;\
 					"fill";ui.unselectedFillColor)
 				
 			End if 
 			
-			$Obj_context.tableNumber:=$Obj_in.table
+			$context.tableNumber:=$Obj_in.table
 			
 			  // Select the item
-			SVG SET ATTRIBUTE:C1055(*;$Obj_form.tableWidget.name;$Obj_context.tableNumber;\
+			SVG SET ATTRIBUTE:C1055(*;$form.tableWidget.name;$context.tableNumber;\
 				"fill";ui.selectedColorFill)
 			
-			$Obj_context.update:=True:C214
-			$Obj_context.picker:=(String:C10(Form:C1466[$Obj_context.typeForm()][$Obj_context.tableNumber].form)="")
+			$context.update:=True:C214
+			$context.picker:=(String:C10(Form:C1466[$context.typeForm()][$context.tableNumber].form)="")
 			
 		End if 
 		
 		  // Redraw
-		$Obj_context.draw:=True:C214
-		$Obj_form.form.refresh()
+		$context.draw:=True:C214
+		$form.form.refresh()
 		
 		  //=========================================================
 	: ($Obj_in.action="refreshViews")
 		
-		If (Length:C16($Obj_context.tableNum())>0)\
-			 & ($Obj_dataModel[$Obj_context.tableNum()]#Null:C1517)
+		If (Length:C16($context.tableNum())>0)\
+			 & ($Obj_dataModel[$context.tableNum()]#Null:C1517)
 			
 			  // Redraw
-			$Obj_context.draw:=True:C214
-			$Obj_form.form.refresh()
+			$context.draw:=True:C214
+			$form.form.refresh()
 			
 		End if 
 		

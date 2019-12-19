@@ -207,6 +207,8 @@ Case of
 												"id";$Txt_field+".label")
 											DOM GET XML ELEMENT VALUE:C731($tt;$t)
 											DOM SET XML ELEMENT VALUE:C868($tt;Get localized string:C991($t)+$Txt_index)
+											
+											
 											  //DOM SET XML ELEMENT VALUE($tt;".Drop a field here")
 											
 											  // Set id, bind & default label
@@ -419,8 +421,16 @@ Case of
 						If (featuresFlags.with("newViewUI"))
 							
 							$Obj_form.preview.getCoordinates()
-							$svg.setDimensions($Obj_form.preview.coordinates.width;770)
 							
+							If ($Txt_typeForm="detail")
+								
+								$svg.setDimensions($Obj_form.preview.coordinates.width;770)
+								
+							Else 
+								
+								$svg.setDimensions($Obj_form.preview.coordinates.width;440)
+								
+							End if 
 						End if 
 						
 						($Obj_form.preview.pointer())->:=$svg.getPicture()
