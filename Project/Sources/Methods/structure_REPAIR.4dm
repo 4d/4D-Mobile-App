@@ -93,20 +93,13 @@ For ($i;1;$Obj_project.$dialog.unsynchronizedTableFields.length-1;1)
 									Case of 
 											
 											  //……………………………………………………………………………………………………………………………………………………………………………
-										: (($o.fieldType=Is alpha field:K8:1)\
-											 & ($o.current.fieldType=Is text:K8:3))\
-											 | (($o.fieldType=Is text:K8:3) & ($o.current.fieldType=Is alpha field:K8:1))  // String
+										: (($o.fieldType=Is alpha field:K8:1) & ($o.current.fieldType=Is text:K8:3)) | (($o.fieldType=Is text:K8:3) & ($o.current.fieldType=Is alpha field:K8:1))  // String
 											
 											$Obj_table[$t].fieldType:=$o.current.fieldType
 											$Lon_published:=$Lon_published+1
 											
 											  //……………………………………………………………………………………………………………………………………………………………………………
-										: (($o.current.fieldType=Is integer:K8:5)\
-											 | ($o.current.fieldType=Is longint:K8:6)\
-											 | ($o.current.fieldType=Is integer 64 bits:K8:25)\
-											 | ($o.current.fieldType=Is real:K8:4)\
-											 | ($o.current.fieldType=_o_Is float:K8:26))\
-											 & (($o.fieldType=Is integer:K8:5) | ($o.fieldType=Is longint:K8:6) | ($o.fieldType=Is integer 64 bits:K8:25) | ($o.fieldType=Is real:K8:4) | ($o.fieldType=_o_Is float:K8:26))  // Numeric
+										: (($o.current.fieldType=Is integer:K8:5) | ($o.current.fieldType=Is longint:K8:6) | ($o.current.fieldType=Is integer 64 bits:K8:25) | ($o.current.fieldType=Is real:K8:4) | ($o.current.fieldType=_o_Is float:K8:26)) & (($o.fieldType=Is integer:K8:5) | ($o.fieldType=Is longint:K8:6) | ($o.fieldType=Is integer 64 bits:K8:25) | ($o.fieldType=Is real:K8:4) | ($o.fieldType=_o_Is float:K8:26))  // Numeric
 											
 											$Obj_table[$t].fieldType:=$o.current.fieldType
 											$Lon_published:=$Lon_published+1
@@ -252,8 +245,7 @@ If ($o.exists)
 	
 Else 
 	
-	$Obj_cache:=New object:C1471(\
-		"structure";New object:C1471)
+	$Obj_cache:=New object:C1471("structure";New object:C1471)
 	
 End if 
 
@@ -266,9 +258,7 @@ $o.setText(JSON Stringify:C1217($Obj_cache;*))
   //]
 
   // Refresh UI
-STRUCTURE_Handler (New object:C1471(\
-"action";"update";\
-"project";$Obj_project))
+STRUCTURE_Handler (New object:C1471("action";"update";"project";$Obj_project))
 
 project_REPAIR ($Obj_project)
 
@@ -280,8 +270,7 @@ CALL FORM:C1391($Win_current;"project_SAVE")
 CALL FORM:C1391($Win_current;"editor_CALLBACK";"updateRibbon")
 CALL FORM:C1391($Win_current;"editor_CALLBACK";"refreshViews")
 CALL FORM:C1391($Win_current;"editor_CALLBACK";"pickerHide")
-CALL FORM:C1391($Win_current;"editor_CALLBACK";"description";New object:C1471(\
-"show";False:C215))
+CALL FORM:C1391($Win_current;"editor_CALLBACK";"description";New object:C1471("show";False:C215))
 
   // ----------------------------------------------------
   // Return

@@ -290,6 +290,18 @@
 					"method": "ObjectMethods/Button2.4dm",
 					"style": "flat",
 					"stroke": "#808080"
+				},
+				"Button4": {
+					"type": "button",
+					"text": "fonts",
+					"top": 414,
+					"left": 16,
+					"width": 105,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button4.4dm"
 				}
 			}
 		}

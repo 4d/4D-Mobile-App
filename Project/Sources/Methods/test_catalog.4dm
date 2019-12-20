@@ -8,6 +8,16 @@ TRY
 
   //_____________________________________________________________
 $o:=catalog ("fields";New object:C1471(\
+"tableName";"NOT EXPOSED"))
+
+ASSERT:C1129(Not:C34($o.success))
+ASSERT:C1129($o.errors#Null:C1517)
+ASSERT:C1129($o.errors.length=1)
+ASSERT:C1129($o.errors[0]="Table not found \"Command\"")
+
+
+  //_____________________________________________________________
+$o:=catalog ("fields";New object:C1471(\
 "tableName";"Command"))
 
 $b:=Not:C34($o.success)

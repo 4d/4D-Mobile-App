@@ -24,8 +24,7 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$form:=ACTIONS_Handler (New object:C1471(\
-"action";"init"))
+$form:=ACTIONS_Handler (New object:C1471("action";"init"))
 
 $context:=$form[""]
 
@@ -92,8 +91,7 @@ Case of
 				  //______________________________________________________
 			: ($form.form.eventCode=On Begin Drag Over:K2:44)
 				
-				$o:=New object:C1471(\
-					"src";$context.index)
+				$o:=New object:C1471("src";$context.index)
 				
 				  // Put into the container
 				VARIABLE TO BLOB:C532($o;$x)
@@ -134,8 +132,7 @@ Case of
 						
 					Else 
 						
-						If ($o.src#$o.tgt)\
-							 & ($o.tgt#($o.src+1))  // Not the same or the next one
+						If ($o.src#$o.tgt) & ($o.tgt#($o.src+1))  // Not the same or the next one
 							
 							$o:=$Obj_widget.cellCoordinates(1;$o.tgt).cellBox
 							$o.bottom:=$o.top
@@ -261,9 +258,7 @@ Case of
 							$o.prompt:=str .setText("chooseAnIconForTheAction").localized(String:C10($context.current.name))
 							
 							  // Display selector
-							$form.form.call(New object:C1471(\
-								"parameters";New collection:C1472("pickerShow";\
-								$o)))
+							$form.form.call(New object:C1471("parameters";New collection:C1472("pickerShow";$o)))
 							
 						End if 
 						
@@ -280,9 +275,7 @@ Case of
 				Case of 
 						
 						  //…………………………………………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$form.name].number)\
-						 | ($Obj_widget.column=$Obj_widget.columns[$form.shortLabel].number)\
-						 | ($Obj_widget.column=$Obj_widget.columns[$form.label].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$form.name].number) | ($Obj_widget.column=$Obj_widget.columns[$form.shortLabel].number) | ($Obj_widget.column=$Obj_widget.columns[$form.label].number)
 						
 						  // Put an edit flag to manage loss of focus
 						$context.$cellEdition:=True:C214
@@ -338,14 +331,12 @@ Case of
 								Case of 
 										
 										  //________________________________________
-									: ($i=1)\
-										 & (String:C10($context.current.preset)="suppression")  // Table
+									: ($i=1) & (String:C10($context.current.preset)="suppression")  // Table
 										
 										$menu.disable()
 										
 										  //________________________________________
-									: ($i=2)\
-										 & (String:C10($context.current.preset)="adding")  // Current entity
+									: ($i=2) & (String:C10($context.current.preset)="adding")  // Current entity
 										
 										$menu.disable()
 										
@@ -509,15 +500,7 @@ Case of
 						Until ($c.length=0)
 					End if 
 					
-					$o:=New object:C1471(\
-						"preset";$menu.preset;\
-						"icon";$menu.icon;\
-						"$icon";$p;\
-						"tableNumber";$menu.tableNumber;\
-						"scope";$menu.scope;\
-						"name";$menu.name;\
-						"shortLabel";$menu.label;\
-						"label";$menu.label)
+					$o:=New object:C1471("preset";$menu.preset;"icon";$menu.icon;"$icon";$p;"tableNumber";$menu.tableNumber;"scope";$menu.scope;"name";$menu.name;"shortLabel";$menu.label;"label";$menu.label)
 					
 					Case of 
 							
@@ -551,12 +534,7 @@ Case of
 												
 												$Obj_field:=$Col_fields.query("name = :1";$Obj_table[$t].name).pop()
 												
-												$oo:=New object:C1471(\
-													"fieldNumber";$Obj_field.fieldNumber;\
-													"name";str ($Obj_table[$t].name).uperCamelCase();\
-													"label";$Obj_table[$t].label;\
-													"shortLabel";$Obj_table[$t].shortLabel;\
-													"type";Choose:C955($Obj_field.fieldType=Is time:K8:8;"time";$Obj_field.valueType))
+												$oo:=New object:C1471("fieldNumber";$Obj_field.fieldNumber;"name";str ($Obj_table[$t].name).uperCamelCase();"label";$Obj_table[$t].label;"shortLabel";$Obj_table[$t].shortLabel;"type";Choose:C955($Obj_field.fieldType=Is time:K8:8;"time";$Obj_field.valueType))
 												
 												If ($menu.edit)
 													
@@ -576,9 +554,7 @@ Case of
 													Case of 
 															
 															  //……………………………………………………………………
-														: ($Obj_field.fieldType=Is integer:K8:5)\
-															 | ($Obj_field.fieldType=Is longint:K8:6)\
-															 | ($Obj_field.fieldType=Is integer 64 bits:K8:25)
+														: ($Obj_field.fieldType=Is integer:K8:5) | ($Obj_field.fieldType=Is longint:K8:6) | ($Obj_field.fieldType=Is integer 64 bits:K8:25)
 															
 															$oo.format:="integer"
 															
@@ -624,12 +600,7 @@ Case of
 												
 												$cc:=$Col_fields.query("name = :1";$Obj_table[$t].name)
 												
-												$oo:=New object:C1471(\
-													"fieldNumber";$cc[0].fieldNumber;\
-													"name";str ($Obj_table[$t].name).uperCamelCase();\
-													"label";$Obj_table[$t].label;\
-													"shortLabel";$Obj_table[$t].shortLabel;\
-													"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType))
+												$oo:=New object:C1471("fieldNumber";$cc[0].fieldNumber;"name";str ($Obj_table[$t].name).uperCamelCase();"label";$Obj_table[$t].label;"shortLabel";$Obj_table[$t].shortLabel;"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType))
 												
 												If ($menu.edit)
 													
@@ -649,9 +620,7 @@ Case of
 													Case of 
 															
 															  //……………………………………………………………………
-														: ($cc[0].fieldType=Is integer:K8:5)\
-															 | ($cc[0].fieldType=Is longint:K8:6)\
-															 | ($cc[0].fieldType=Is integer 64 bits:K8:25)
+														: ($cc[0].fieldType=Is integer:K8:5) | ($cc[0].fieldType=Is longint:K8:6) | ($cc[0].fieldType=Is integer 64 bits:K8:25)
 															
 															$oo.format:="integer"
 															
@@ -715,12 +684,7 @@ Case of
 				Until ($c.length=0)
 			End if 
 			
-			$o:=New object:C1471(\
-				"name";$t;\
-				"scope";"table";\
-				"shortLabel";$t;\
-				"label";$t;\
-				"$icon";$p)
+			$o:=New object:C1471("name";$t;"scope";"table";"shortLabel";$t;"label";$t;"$icon";$p)
 			
 			  // Auto define the target table if only one is published
 			$i:=0
@@ -811,8 +775,7 @@ Case of
 		METHOD GET PATHS:C1163(Path database method:K72:2;$tTxt_;*)
 		$tTxt_{0}:=METHOD Get path:C1164(Path database method:K72:2;"onMobileAppAction")
 		
-		If (Macintosh option down:C545)\
-			 & (Structure file:C489=Structure file:C489(*))
+		If (Macintosh option down:C545) & (Structure file:C489=Structure file:C489(*))
 			
 			If (Find in array:C230($tTxt_;$tTxt_{0})>0)
 				

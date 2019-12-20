@@ -35,9 +35,9 @@ _svgObject_ [object] := ***svg*** {(_param_ [text] { ; _options_ [object] } )}
 *latest*     | The XML reference of the last created object using a creation member method                    | Null
 *success*    | A boolean that indicates whether a member method call was successfully executed                |
 *errors*     | A collection of textual descriptions of encountered errors                                     | [ ]
-*autoClose*  | A boolean that indicates whether the xml tree should be closed after a call to one of the `getPicture ()`, `getText ()`, `savePicture ()`, `saveText ()`, or `save ()` member methods      | True 
-*picture*    | The image generated of the last `get ("picture")` call                                         | Null
-*xml*        | The XML text generated from the last `get ("xml")` call                                        | Null
+*autoClose*  | A boolean that indicates whether the xml tree should be closed after a call to one of the `getPicture ()`, `getText ()`, `savePicture ()`, `saveText ()`, or `save ()` member methods      | True* 
+*picture*    | The image generated of the last `getPicture ()` call                                         | Null
+*xml*        | The XML text generated from the last `getText ()` call                                        | Null
 *origin*     | The object pathname of a file initially loaded                                                 | Null
 *file*       | The object pathname of the last `save()` call                                                  | Null
 
@@ -48,6 +48,10 @@ _svgObject_ [object] := ***svg*** {(_param_ [text] { ; _options_ [object] } )}
 >* Remember that you can still add unmanaged attributes for the moment with the member methods setAttribute() or setAttributes() (see above)
 >* Remember that you can always use DOM XML commands to manipulate the SVG tree (*root*) or object (*latest*)
 >* With the exception of utility methods, all member methods return the _svgObject_ so that methods can be chained
+
+**WARNING**: 
+
+> If you call the method
 
 ## Member methods
 
@@ -94,32 +98,43 @@ _svgObject_ [object] := ***svg*** {(_param_ [text] { ; _options_ [object] } )}
 `showInViewer()`   | Display the SVG picture & tree into the SVG Viewer if the component 4D SVG is available.
 
 ## Sample code
+```js
+$svg:=svg
 
-	$svg:=svg
-	
-	// My first rect	$svg.rect(10;10;100;20)
-	
-	// Pass optional attributes if you need	`$svg.rect(120;10;100;20;New object("stroke";"blue";"fill";"white";"stroke-width";2))
-	
+	// My first rect
+$svg.rect(10;10;100;20)
+
+	// Pass optional attributes if you need
+$svg.rect(120;10;100;20;New object("stroke";"blue";"fill";"white";"stroke-width";2))
+
 	// Or use svg methods if available
-	// You can always add unmanaged attributes with attribute() or attributes()	$svg.rect(230;10;100;20)\
-		.setStroke("green")\
-		.setFill("orangered";50)\
-		.setAttributes(New object("stroke-width";2;"stroke-dasharray";"2,2")
+	// You can always add unmanaged attributes with attribute() or attributes()
+$svg.rect(230;10;100;20)\
+	.setStroke("green")\
+	.setFill("orangered";50)\
+	.setAttributes(New object("stroke-width";2;"stroke-dasharray";"2,2")
 	
-	// Create a group with id "test" & keep its reference	$g:=$svg.group("test").latest
+	// Create a group with id "test" & keep its reference
+$g:=$svg.group("test").latest
 	
-	// Create a rounded square into the group	$svg.rect(0;0;New object("target";$g;"rx";5))\
-		.setDimensions(50)\
-		.setFill("yellow")\
-		.setStroke("red")\
-		.setPosition(20;40)
+	// Create a rounded square into the group
+$svg.rect(0;0;New object("target";$g;"rx";5))\
+	.setDimensions(50)\
+	.setFill("yellow")\
+	.setStroke("red")\
+	.setPosition(20;40)
 	
-	// My first text	$svg.textArea("Hello World").setPosition(120;100).setFont(Null;18).setFill("dimgray")
+	// My first text
+$svg.textArea("Hello World").setPosition(120;100).setFont(Null;18).setFill("dimgray")
 	
-	// Get the image (but keep the SVG tree in memory for later use)	$p:=$svg.getPicture(True)
+	// Get the image (but keep the SVG tree in memory for later use)
+$p:=$svg.getPicture(True)
 	
-	// Save as XML file to the desktop (but keep the SVG tree in memory for later use)	$svg.saveText(Folder(fk desktop folder).file("test svg.xml");True)
+	// Save as XML file to the desktop (but keep the SVG tree in memory for later use)
+$svg.saveText(Folder(fk desktop folder).file("test svg.xml");True)
 	
-	// Save as PNG file to the desktop (the memory is automatically released)	$svg.savePicture(Folder(fk desktop folder).file("test svg.png"))
+	// Save as PNG file to the desktop (the memory is automatically released)
+$svg.savePicture(Folder(fk desktop folder).file("test svg.png"))
+```
+
 

@@ -56,6 +56,7 @@ Case of
 	: ($Txt_action="datastore")
 		
 		$Obj_datastore:=Build Exposed Datastore:C1598
+		
 		$Obj_out.success:=($Obj_datastore#Null:C1517)
 		
 		If ($Obj_out.success)

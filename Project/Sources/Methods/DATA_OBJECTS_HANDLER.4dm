@@ -40,8 +40,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 	
-	$form:=DATA_Handler (New object:C1471(\
-		"action";"init"))
+	$form:=DATA_Handler (New object:C1471("action";"init"))
 	
 	$context:=$form.ui
 	$Obj_table:=$context.current
@@ -101,9 +100,7 @@ Case of
 					
 					$o:=$context.tables[$Lon_row-1]
 					
-					If (Bool:C1537($o.embedded))\
-						 & (Not:C34(Bool:C1537($o.filter.parameters)))\
-						 & ((Bool:C1537($o.filter.validated)) | (Length:C16(String:C10($o.filter.string))=0))
+					If (Bool:C1537($o.embedded)) & (Not:C34(Bool:C1537($o.filter.parameters))) & ((Bool:C1537($o.filter.validated)) | (Length:C16(String:C10($o.filter.string))=0))
 						
 						If (Length:C16(String:C10($o.filter.string))=0)
 							
@@ -185,12 +182,7 @@ Case of
 				
 				$t:=Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"queryWidget.svg")
 				
-				PROCESS 4D TAGS:C816($t;$t;\
-					ui.selectedFillColor;\
-					Get localized string:C991("fields");\
-					Get localized string:C991("comparators");\
-					Get localized string:C991("operators");\
-					"🢓")
+				PROCESS 4D TAGS:C816($t;$t;ui.selectedFillColor;Get localized string:C991("fields");Get localized string:C991("comparators");Get localized string:C991("operators");"🢓")
 				
 				$Ptr_me->:=svg ("parse";New object:C1471("variable";$t)).getPicture()
 				
@@ -285,11 +277,9 @@ Case of
 							
 						End if 
 						
-						If ($Lon_begin=$Lon_end)\
-							 & ($Lon_begin#1)
+						If ($Lon_begin=$Lon_end) & ($Lon_begin#1)
 							
-							If (String:C10($Obj_table.filter.string)[[$Lon_begin-1]]#" ")\
-								 & (String:C10($Obj_table.filter.string)[[$Lon_begin-1]]#"(")
+							If (String:C10($Obj_table.filter.string)[[$Lon_begin-1]]#" ") & (String:C10($Obj_table.filter.string)[[$Lon_begin-1]]#"(")
 								
 								$Obj_table.filter.string:=$Obj_table.filter.string+" "
 								$Lon_begin:=$Lon_begin+1
@@ -313,8 +303,7 @@ Case of
 							
 						End if 
 						
-						If ($Boo_caret)\
-							 & (Length:C16($Txt_selection)=0)
+						If ($Boo_caret) & (Length:C16($Txt_selection)=0)
 							
 							  // Put the carret into
 							$o.begin:=$o.end-1
@@ -344,14 +333,11 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$form.validate)\
-		 | ($Txt_me=$form.enter)
+	: ($Txt_me=$form.validate) | ($Txt_me=$form.enter)
 		
 		GOTO OBJECT:C206(*;$form.list)
 		
-		$o:=checkQueryFilter (New object:C1471(\
-			"table";$Obj_table.name;\
-			"filter";$Obj_table.filter))
+		$o:=checkQueryFilter (New object:C1471("table";$Obj_table.name;"filter";$Obj_table.filter))
 		
 		$Obj_table.filter:=$o.filter
 		
@@ -413,8 +399,7 @@ Case of
 				
 				If ($Obj_table.filter=Null:C1517)
 					
-					$Obj_table.filter:=New object:C1471(\
-						"string";"")
+					$Obj_table.filter:=New object:C1471("string";"")
 					
 					$Obj_table.validated:=False:C215
 					
@@ -518,8 +503,7 @@ Case of
 		  //==================================================
 	: ($Txt_me=$form.method)
 		
-		SERVER_Handler (New object:C1471(\
-			"action";"editAuthenticationMethod"))
+		SERVER_Handler (New object:C1471("action";"editAuthenticationMethod"))
 		
 		  //==================================================
 	Else 

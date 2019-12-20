@@ -113,11 +113,15 @@ _menuObject_ [object] := ***menu*** {(_param_ [text])}
 
 - _item_ is the menu item number to disable - last item added if omitted
 
-### Delete a menu item>*menuObject*.**delete** ( {item (number)} ) -> [menuObject]
+### Delete a menu item
+
+>*menuObject*.**delete** ( {item (number)} ) -> [menuObject]
 
 - _item_ is the menu item number to delete - last item added if omitted
 
-### Display menu as popup>*menuObject*.**popup** ( {_default_ [text] {; _xCoord_ [number] ; _yCoord_ [number }} ) -> [menuObject]
+### Display menu as popup
+
+>*menuObject*.**popup** ( {_default_ [text] {; _xCoord_ [number] ; _yCoord_ [number }} ) -> [menuObject]
 
 or
 
@@ -130,11 +134,37 @@ or
 
 ## Sample code
 
-`$m:=menu                                         // Create a main menu`  `$m.append("Line 1";"fisrtLine")                  // Append a first item`     `$m.line()                                        // Append a line`    `$m.append("Line 3";"thirdLine";True)             // Append a second item with check mark`     `$s:=menu                                         // Create a sub menu`    `$s.append("Sub menu line 1";"subFisrtLine")      // Append a first item`    `$s.append("Sub menu line 2";"subSecondLine")     // Append a second item`    `$m.line()                                        // Add a line (will be automatically deleted because this is the last item)`     `$m.append("Sub menu";$s)                         // Append the sub menu to the main menu (memory is automatically released)`     `$m.popup("thirdLine")                            // Display as popup with third line selected (memory is automatically released)`     `If ($m.selected)                                 // If user select an item `      `  Case of                                        // Do something according to the user's choice`  `    : ($m.choice="fisrtLine")`  `      // … ` 			  `    : ($m.choice="thirdLine")`  `      // …`  `    : ($m.choice="subFisrtLine")`  `      // …`  
-`    : ($m.choice="subSecondLine")`   `      // …`   `  End case`  `End if`  
+```js
+$m:=menu                                         // Create a main menu
+$m.append("Line 1";"fisrtLine")                  // Append a first item
+$m.line()                                        // Append a line
+$m.append("Line 3";"thirdLine";True)             // Append a second item with check mark
+$s:=menu                                         // Create a sub menu
+$s.append("Sub menu line 1";"subFisrtLine")      // Append a first item
+$s.append("Sub menu line 2";"subSecondLine")     // Append a second item
+$m.line()                                        // Add a line (will be automatically deleted because this is the last item)
+$m.append("Sub menu";$s)                         // Append the sub menu to the main menu (memory is automatically released)
+$m.popup("thirdLine")                            // Display as popup with third line selected (memory is automatically released)
+If ($m.selected)                                 // If user select an item
+  Case of                                        // Do something according to the user's choice
+    : ($m.choice="fisrtLine")
+      // …
+    : ($m.choice="thirdLine")
+      // …
+    : ($m.choice="subFisrtLine")
+      // …
+    : ($m.choice="subSecondLine")
+      // …
+  End case
+End if
+```
 
 **Note** Since all the used methods return the object menu, if you want a more concise (but less readable) code or if you want to use it in a **Formula** object, you can create and display the menu in just one line of code, by replacing lines 1 to 20 with:
 
-`$m:=menu.append("Line 1";"fisrtLine").line().append("Line 3";"thirdLine";True).append("Sub menu";menu .append("Sub menu line 1";"subFisrtLine").append("Sub menu line 2";"subSecondLine")).popup("thirdLine")`  
-
-
+```js
+$m:=menu\
+.append("Line 1";"fisrtLine")\
+.line().append("Line 3";"thirdLine";True)\
+.append("Sub menu";menu .append("Sub menu line 1";"subFisrtLine").append("Sub menu line 2";"subSecondLine"))\
+.popup("thirdLine")
+```

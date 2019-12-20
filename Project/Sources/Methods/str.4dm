@@ -422,12 +422,12 @@ Else
 					$o.value:=$Txt_result
 					
 					  //______________________________________________________
-				: ($1="filter")  //
+				: ($1="filter")
 					
 					Case of 
 							
 							  //…………………………………………………………………………………
-						: (String:C10($2.as)="numeric")
+						: (String:C10($2.as)="numeric")  //Return extract numeric 
 							
 							$Txt_pattern:="(?m-si)^\\D*([+-]?\\d+\\{thousand}?\\d*\\{decimal}?\\d?)\\s?\\D*$"
 							$Txt_filtered:=This:C1470.value
@@ -897,10 +897,10 @@ Else
 					  //______________________________________________________
 					  //: (Formula(process ).call().isPreemptif)
 					  //_4D THROW ERROR(New object(\
-												"component";"CLAS";\
-												"code";1;\
-												"description";"The method "+String($1)+"() for class "+String(This[""])+" can't be called in preemptive mode";\
-												"something";"my bug"))
+																		"component";"CLAS";\
+																		"code";1;\
+																		"description";"The method "+String($1)+"() for class "+String(This[""])+" can't be called in preemptive mode";\
+																		"something";"my bug"))
 					
 					  //______________________________________________________
 				Else 

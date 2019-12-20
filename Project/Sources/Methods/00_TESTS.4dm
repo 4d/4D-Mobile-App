@@ -4,11 +4,12 @@ C_LONGINT:C283($l;$Lon_build;$Lon_error;$Lon_result;$Lon_type;$Lon_value)
 C_LONGINT:C283($Lon_x)
 C_REAL:C285($Num_;$r)
 C_TEXT:C284($Dir_root;$t;$tt;$Txt_in;$Txt_ormula;$Txt_result)
-C_OBJECT:C1216($cc;$folder;$o;$Obj_formula;$Obj_new;$Obj_result)
-C_OBJECT:C1216($Obj_target;$Obj_template;$oo;$ooo;$svg)
-C_COLLECTION:C1488($c;$Col_2)
+C_OBJECT:C1216($folder;$o;$Obj_formula;$Obj_new;$Obj_result;$Obj_target)
+C_OBJECT:C1216($Obj_template;$oo;$ooo;$svg)
+C_COLLECTION:C1488($c;$cc;$Col_2)
 
 ARRAY TEXT:C222($tTxt_;0)
+
 
 If (False:C215)
 	SHOW ON DISK:C922(Folder:C1567(Temporary folder:C486;fk platform path:K87:2).platformPath)
@@ -20,6 +21,20 @@ $o:=Folder:C1567("/")
 $oo:=Folder:C1567(fk system folder:K87:13).parent
 
 Case of 
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$o:=Build Exposed Datastore:C1598["NOT EXPOSED"]
+		
+		$oo:=$o.getInfo()
+		
+		$c:=New collection:C1472
+		For each ($t;$o)
+			
+			$c.push($o[$t])
+			
+		End for each 
 		
 		  //________________________________________
 	: (True:C214)
