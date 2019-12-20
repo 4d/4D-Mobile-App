@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {}
   // ----------------------------------------------------
   // Project method : _catalog
   // ID[EA24F65ED9BE4E64B8616A4B2A31A494]
@@ -92,7 +92,7 @@ Else
 			End if 
 			
 			  //______________________________________________________
-		: ($1="table")
+		: ($1="table")  // Return table infos and fields and links collection (could be filtered)
 			
 			ASSERT:C1129($2.name#Null:C1517)
 			
@@ -122,7 +122,7 @@ Else
 						"fields";Null:C1517\
 						)
 					
-					$c:=New collection:C1472  //
+					$c:=New collection:C1472
 					
 					For each ($t;$oo)
 						

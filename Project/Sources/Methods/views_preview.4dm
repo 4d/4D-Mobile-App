@@ -123,7 +123,7 @@ Case of
 							
 						Else 
 							
-							  //#TO_DO - A new format for the
+							  //#TO_DO - A new format for the template
 							
 						End if 
 						
@@ -335,8 +335,15 @@ Case of
 														
 													End if 
 												End if 
+												
+												
+												  // Keep the nex available index
+												$context.lastMultivaluedField:=$Lon_index+1
+												
 											End if 
 										End if 
+										
+										
 									End if 
 								End if 
 								
