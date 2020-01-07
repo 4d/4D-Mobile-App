@@ -45,6 +45,6 @@ End use
 SET ASSERT ENABLED:C1131(True:C214;*)
 
   // Don't catch unitErrors in dev mode
-ON ERR CALL:C155(Choose:C955(Bool:C1537(Storage:C1525.database.isMatrix);"";"CATCH"))
+ON ERR CALL:C155(Choose:C955(Structure file:C489=Structure file:C489(*);"";"CATCH"))
 
   // ----------------------------------------------------

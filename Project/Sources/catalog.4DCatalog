@@ -30,7 +30,13 @@
 		<field name="Comment" uuid="F9BBED0B0AF84E868A62DDD9F0B82E8E" type="10" never_null="true" id="9">
 			<field_extra position="9"/>
 		</field>
-		<field name="__GlobalStamp" uuid="501862F4C19B42699963B626C8722E85" type="5" id="24"/>
+		<field name="__GlobalStamp" uuid="501862F4C19B42699963B626C8722E85" type="5" id="24">
+			<field_extra>
+				<editor_field_info>
+					<color red="216" green="30" blue="5" alpha="255"/>
+				</editor_field_info>
+			</field_extra>
+		</field>
 		<primary_key field_name="ID" field_uuid="A3A83460686047C694B467689032AAD8"/>
 		<table_extra input_form="Form1" output_form="Form2">
 			<editor_table_info fields_ordering="2" displayable_fields_count="11">
@@ -46,7 +52,7 @@
 		<primary_key field_name="ID" field_uuid="FC410E361AD949239DC0E21EE742DB47"/>
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="3">
-				<color red="255" green="255" blue="255" alpha="0"/>
+				<color red="255" green="38" blue="0" alpha="255"/>
 				<coordinates left="428" top="410" width="121" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
@@ -61,7 +67,13 @@
 		</field>
 		<field name="Field_6" uuid="E36D895A28EA4D98833975684F878CFC" type="10" limiting_length="255" never_null="true" id="2"/>
 		<field name="Field_7" uuid="9AF221BAC10A4B4E918ED02F8FF5CB0B" type="10" limiting_length="255" never_null="true" id="3"/>
-		<field name="NOT EXPOSED" uuid="411950160ECE455A972AAD0D4803FF02" type="10" limiting_length="255" never_null="true" id="7" hide_in_REST="true"/>
+		<field name="NOT EXPOSED" uuid="411950160ECE455A972AAD0D4803FF02" type="10" limiting_length="255" never_null="true" id="7" hide_in_REST="true">
+			<field_extra>
+				<editor_field_info>
+					<color red="216" green="30" blue="5" alpha="255"/>
+				</editor_field_info>
+			</field_extra>
+		</field>
 		<field name="Name with space" uuid="4B27D0006C4A40F5BF55203794B05AEF" type="10" never_null="true" id="8"/>
 		<field name="INVISIBLE" uuid="7EB2CC5C9E614211A410FF5CF3DFA704" type="10" limiting_length="255" never_null="true" id="9">
 			<field_extra visible="false"/>
@@ -132,7 +144,13 @@
 			<field_extra position="5"/>
 		</field>
 		<field name="Avatar" uuid="3B9DF20CCA7442878ADB63D714CB4C87" type="12" never_null="true" id="5" hide_in_REST="true"/>
-		<field name="__GlobalStamp" uuid="B7AD222132BA40B0AA61029B788464FC" type="5" id="6"/>
+		<field name="__GlobalStamp" uuid="B7AD222132BA40B0AA61029B788464FC" type="5" id="6">
+			<field_extra>
+				<editor_field_info>
+					<color red="216" green="30" blue="5" alpha="255"/>
+				</editor_field_info>
+			</field_extra>
+		</field>
 		<primary_key field_name="ID" field_uuid="0A26D100922E475A92C49657B6C02271"/>
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="6">
@@ -301,13 +319,13 @@
 			</editor_table_info>
 		</table_extra>
 	</table>
-	<table name="__DeletedRecords" uuid="805519E1BFB04641B0BAD317AE45C82E" id="18" leave_tag_on_delete="true" prevent_journaling="true">
-		<field name="ID" uuid="6AB99358EB564E5CB475DEE8E0B673F8" type="5" unique="true" autosequence="true" id="1"/>
-		<field name="__Stamp" uuid="A49BCC49018C4567B19EAAC833B18A85" type="5" id="2"/>
-		<field name="__TableNumber" uuid="B0AB6701FFF94D30BA50A1103718DCBB" type="4" id="3"/>
-		<field name="__TableName" uuid="6E4CFA959C694D42A971EE40E2324C50" type="10" limiting_length="255" id="4"/>
-		<field name="__PrimaryKey" uuid="83BFA91605FA45B2AAD31697B4707DDE" type="10" limiting_length="255" id="5"/>
-		<primary_key field_name="ID" field_uuid="6AB99358EB564E5CB475DEE8E0B673F8"/>
+	<table name="__DeletedRecords" uuid="50755D53C6F64B47AC7D6CB93B687541" id="18" leave_tag_on_delete="true" prevent_journaling="true">
+		<field name="ID" uuid="44A6FD55F77B42309E41636DDDE7952F" type="5" unique="true" autosequence="true" id="1"/>
+		<field name="__Stamp" uuid="205D3D956038449AA8096038E0C2D738" type="5" id="2"/>
+		<field name="__TableNumber" uuid="1952DD3FCFBF47589C2E4CD2A5606150" type="4" id="3"/>
+		<field name="__TableName" uuid="42767B5CD1AF4FAFBD7969BB104F32BA" type="10" limiting_length="255" id="4"/>
+		<field name="__PrimaryKey" uuid="ECD65BACD227494B8B6B0B6AAC4E618C" type="10" limiting_length="255" id="5"/>
+		<primary_key field_name="ID" field_uuid="44A6FD55F77B42309E41636DDDE7952F"/>
 		<table_extra>
 			<editor_table_info fields_ordering="1" displayable_fields_count="6">
 				<color red="255" green="255" blue="255" alpha="0"/>
@@ -568,11 +586,6 @@
 			<table_ref uuid="677711DF5FAF4C00A69092ED84B50A2D" name="ALL_TYPES"/>
 		</field_ref>
 	</index>
-	<index kind="regular" unique_keys="true" name="__DeletedRecordsID" uuid="1A2557F336594A41AD62EA712B1331DC" type="7">
-		<field_ref uuid="6AB99358EB564E5CB475DEE8E0B673F8" name="ID">
-			<table_ref uuid="805519E1BFB04641B0BAD317AE45C82E" name="__DeletedRecords"/>
-		</field_ref>
-	</index>
 	<index kind="regular" uuid="28BBE591ECA14531B7C388772D2BEEA9" type="7">
 		<field_ref uuid="61141087F41B4016B4ED6AD8797357B3" name="Field_2">
 			<table_ref uuid="E0EF4D9E925848A8893B9926694CF58E" name="Table_2"/>
@@ -628,11 +641,6 @@
 			<table_ref uuid="6A24BB0C42844B26AA22357C0545137E" name="Table_1"/>
 		</field_ref>
 	</index>
-	<index kind="regular" name="__DeletedRecords__Stamp" uuid="7B07674065564628BD902C319774586D" type="7">
-		<field_ref uuid="A49BCC49018C4567B19EAAC833B18A85" name="__Stamp">
-			<table_ref uuid="805519E1BFB04641B0BAD317AE45C82E" name="__DeletedRecords"/>
-		</field_ref>
-	</index>
 	<index kind="regular" uuid="846B2AC9634646BD8026EE56940334E5" type="7">
 		<field_ref uuid="3446D143AA2B4BEFB57C38620EE2C14F" name="Field_3">
 			<table_ref uuid="30E13DEEB95C4BABA4D0449FDF2C55DC" name="Table_3"/>
@@ -641,6 +649,11 @@
 	<index kind="regular" uuid="8E421378BA7045A4953DB4E049B01123" type="7">
 		<field_ref uuid="49DB40D057134576A0784A05B556C07F" name="Field_4">
 			<table_ref uuid="19473CD8716E4AE3A637B9B88E664639" name="UNIT_0"/>
+		</field_ref>
+	</index>
+	<index kind="regular" unique_keys="true" name="__DeletedRecordsID" uuid="927EE1B38B54492E8FB833B9281A5EED" type="7">
+		<field_ref uuid="44A6FD55F77B42309E41636DDDE7952F" name="ID">
+			<table_ref uuid="50755D53C6F64B47AC7D6CB93B687541" name="__DeletedRecords"/>
 		</field_ref>
 	</index>
 	<index kind="regular" name="__GlobalStamp_commands" uuid="943C95744F96409CB88F9F77ACD0700A" type="7">
@@ -661,6 +674,11 @@
 	<index kind="regular" unique_keys="true" uuid="A91B402DE8144D3D8C68DC40E492D364" type="7">
 		<field_ref uuid="FC410E361AD949239DC0E21EE742DB47" name="ID">
 			<table_ref uuid="055A694C43554BE7BEE23E0E890C3E48" name="NOT EXPOSED"/>
+		</field_ref>
+	</index>
+	<index kind="regular" name="__DeletedRecords__Stamp" uuid="A9CB7D5AA3AE460DACC1629C54DAC2D2" type="7">
+		<field_ref uuid="205D3D956038449AA8096038E0C2D738" name="__Stamp">
+			<table_ref uuid="50755D53C6F64B47AC7D6CB93B687541" name="__DeletedRecords"/>
 		</field_ref>
 	</index>
 	<index kind="regular" unique_keys="true" uuid="AB57858B5A4041A098BAB45DF9F84FCB" type="7">

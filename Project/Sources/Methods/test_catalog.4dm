@@ -13,7 +13,7 @@ $o:=catalog ("fields";New object:C1471(\
 ASSERT:C1129(Not:C34($o.success))
 ASSERT:C1129($o.errors#Null:C1517)
 ASSERT:C1129($o.errors.length=1)
-ASSERT:C1129($o.errors[0]="Table not found \"Command\"")
+ASSERT:C1129($o.errors[0]="Table not found \"NOT EXPOSED\"")
 
 
   //_____________________________________________________________

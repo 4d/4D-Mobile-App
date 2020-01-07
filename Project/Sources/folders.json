@@ -70,6 +70,10 @@
 		"forms": [
 			"_w_VIEWS",
 			"[ALL_TYPES]Form1",
+			"[Commands]Form1",
+			"[Commands]Form2",
+			"[Themes]Form1",
+			"[Themes]Form2",
 			"00_TESTS",
 			"APP_STORE",
 			"Form1",

@@ -81,8 +81,8 @@ Else
 			: ($Obj_in.action="hide")
 				
 				  // Don't dismiss an alert or confirmation
-				If ($Obj_message.type#"alert")\
-					 & ($Obj_message.type#"confirm")
+				If (String:C10($Obj_message.type)#"alert")\
+					 & (String:C10($Obj_message.type)#"confirm")
 					
 					OBJECT SET VISIBLE:C603(*;"message@";False:C215)
 					

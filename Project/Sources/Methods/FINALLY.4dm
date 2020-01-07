@@ -35,7 +35,7 @@ SET ASSERT ENABLED:C1131(Bool:C1537(unitErr.assertEnabled);*)
 
   // ----------------------------------------------------
 
-If (Storage:C1525.database.isMatrix)
+If (Structure file:C489=Structure file:C489(*))
 	
 	ALERT:C41("Done")
 	
