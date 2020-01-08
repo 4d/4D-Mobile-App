@@ -15,7 +15,7 @@ C_OBJECT:C1216($3)
 C_LONGINT:C283($Lon_bottom;$Lon_height;$Lon_i;$Lon_index;$Lon_left;$Lon_parameters)
 C_LONGINT:C283($Lon_right;$Lon_top;$Lon_width)
 C_POINTER:C301($Ptr_)
-C_TEXT:C284($Txt_selector;$Txt_panel)
+C_TEXT:C284($t;$Txt_selector;$Txt_panel)
 C_OBJECT:C1216($Obj_form;$Obj_in)
 
 If (False:C215)
@@ -185,32 +185,34 @@ Case of
 			OB REMOVE:C1226(Form:C1466.$dialog;"picker")
 			
 			  // Pass to target panel
+			$t:=String:C10($Obj_in.action)
+			
 			Case of 
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="tableIcons")
+				: ($t="tableIcons")
 					
 					$Txt_panel:=panel_Find_by_name ($Obj_form.tableProperties)
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="fieldIcons")
+				: ($t="fieldIcons")
 					
 					$Txt_panel:=panel_Find_by_name ($Obj_form.fieldProperties)
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="forms")
+				: ($t="forms")
 					
 					$Txt_panel:=panel_Find_by_name ($Obj_form.views)
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="actionIcons")
+				: ($t="actionIcons")
 					
 					$Txt_panel:=panel_Find_by_name ($Obj_form.actions)
 					
 					  //……………………………………………………………………………………………
 				Else 
 					
-					ASSERT:C1129(False:C215;"Unknown entry point: \""+String:C10($Obj_in.action)+"\"")
+					ASSERT:C1129(False:C215;"Unknown entry point: \""+$t+"\"")
 					
 					  //……………………………………………………………………………………………
 			End case 
@@ -226,22 +228,22 @@ Case of
 			Case of 
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="tableIcons")
+				: ($Obj_form.currentForm=$Obj_form.tableProperties)
 					
 					tables_Handler ($Obj_in)
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="fieldIcons")
+				: ($Obj_form.currentForm=$Obj_form.fieldProperties)
 					
 					FIELDS_HANDLER ($Obj_in)
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="forms")
+				: ($Obj_form.currentForm=$Obj_form.views)
 					
 					VIEWS_Handler ($Obj_in)
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="actionIcons")
+				: ($Obj_form.currentForm=$Obj_form.actions)
 					
 					ACTIONS_Handler ($Obj_in)
 					

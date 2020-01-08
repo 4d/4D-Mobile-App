@@ -284,7 +284,9 @@ If (Length:C16($Txt_page)>0)
 			  //………………………………………………………………………………………
 	End case 
 	
-	If ($tTxt_pages{$Lon_page}#$Txt_currentPage)
+	FORM GOTO PAGE:C247(1)
+	
+	If ($tTxt_pages{$Lon_page}#$Txt_currentPage)  //| (Count parameters=2)
 		
 		  // Hide picker if any
 		CALL FORM:C1391($win;"editor_CALLBACK";"pickerHide")

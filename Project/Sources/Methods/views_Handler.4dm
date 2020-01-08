@@ -71,16 +71,25 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 	
 	If (OB Is empty:C1297($context))  // First load
 		
-		  // Constraints definition
-		ob_createPath ($context;"constraints.rules";Is collection:K8:32)
-		
-		$c:=$context.constraints.rules
+		$c:=New collection:C1472
 		
 		$c.push(New object:C1471(\
 			"formula";Formula:C1597(VIEWS_Handler (New object:C1471("action";\
 			"geometry")))))
 		
 		If (featuresFlags.with("newViewUI"))
+			
+/*
+			
+#TO_DO - allow collection for object
+			
+						$c.push(New object(\
+								"object";new collection("preview";"preview.label";"preview.back";"Preview.border");\
+								"reference";"viewport.preview";\
+								"type";"horizontal alignment";\
+								"value";"center"))
+			
+*/
 			
 			$c.push(New object:C1471(\
 				"object";"preview";\
@@ -113,6 +122,8 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 				"value";20))
 			
 		End if 
+		
+		$context:=ob .set($context).createPath("constraints.rules";Is collection:K8:32;$c).contents
 		
 		  // Define form member methods
 		
@@ -478,81 +489,105 @@ Case of
 			
 			$Txt_table:=$context.tableNum()
 			
-			  // The selected form
-			$Txt_newForm:=$Obj_in.pathnames[$Obj_in.item-1]
 			
-			  // The current table form
-			$t:=String:C10(Form:C1466[$Obj_in.selector][$Txt_table].form)
-			
-			If ($Txt_newForm#$t)
+			If ($Obj_in.pathnames[$Obj_in.item-1]#Null:C1517)
+				  // The selected form
+				$Txt_newForm:=$Obj_in.pathnames[$Obj_in.item-1]
 				
-				$Obj_target:=Form:C1466[$Obj_in.selector][$context.tableNumber]
+				  // The current table form
+				$t:=String:C10(Form:C1466[$Obj_in.selector][$Txt_table].form)
 				
-				$Obj_in.target:=OB Copy:C1225($Obj_target)
-				OB REMOVE:C1226($Obj_in.target;"form")
-				
-				If (Length:C16($t)#0)
+				If ($Txt_newForm#$t)
 					
-					  // Save a snapshot of the current form definition
-					Case of 
-							
-							  //______________________________________________________
-						: ($context[$Txt_table]=Null:C1517)
-							
-							$context[$Txt_table]:=New object:C1471(\
-								$Obj_in.selector;New object:C1471($t;\
-								$Obj_in.target))
-							
-							  //______________________________________________________
-						: ($context[$Txt_table][$Obj_in.selector]=Null:C1517)
-							
-							$context[$Txt_table][$Obj_in.selector]:=New object:C1471(\
-								$t;$Obj_in.target)
-							
-							  //______________________________________________________
-						Else 
-							
-							$context[$Txt_table][$Obj_in.selector][$t]:=$Obj_in.target
-							
-							  //______________________________________________________
-					End case 
-				End if 
-				
-				  // Update project & save [
-				$Obj_target.form:=$Txt_newForm
-				
-				OB REMOVE:C1226($context;"manifest")
-				
-				project.save()
-				  //]
-				
-				If (ob_testPath (Form:C1466.$project;"status";"project"))
+					$Obj_target:=Form:C1466[$Obj_in.selector][$context.tableNumber]
 					
-					If (Not:C34(Form:C1466.$project.status.project))
-						
-						  // Launch project verifications
-						$form.form.call("projectAudit")
-						
-					End if 
-				End if 
-				
-				If ($context[$Txt_table][$Obj_in.selector][$Txt_newForm]=Null:C1517)
+					$Obj_in.target:=OB Copy:C1225($Obj_target)
+					OB REMOVE:C1226($Obj_in.target;"form")
 					
-					If ($Obj_target.fields=Null:C1517)
+					If (Length:C16($t)#0)
 						
-						$Obj_target.fields:=New collection:C1472
-						
+						  // Save a snapshot of the current form definition
+						Case of 
+								
+								  //______________________________________________________
+							: ($context[$Txt_table]=Null:C1517)
+								
+								$context[$Txt_table]:=New object:C1471(\
+									$Obj_in.selector;New object:C1471($t;\
+									$Obj_in.target))
+								
+								  //______________________________________________________
+							: ($context[$Txt_table][$Obj_in.selector]=Null:C1517)
+								
+								$context[$Txt_table][$Obj_in.selector]:=New object:C1471(\
+									$t;$Obj_in.target)
+								
+								  //______________________________________________________
+							Else 
+								
+								$context[$Txt_table][$Obj_in.selector][$t]:=$Obj_in.target
+								
+								  //______________________________________________________
+						End case 
 					End if 
 					
-					  // Create a new binding
-					$Col_assigned:=$Obj_target.fields.copy()
+					  // Update project & save [
+					$Obj_target.form:=$Txt_newForm
 					
-					If ($context[$Txt_table]#Null:C1517)
+					OB REMOVE:C1226($context;"manifest")
+					
+					project.save()
+					  //]
+					
+					If (ob_testPath (Form:C1466.$project;"status";"project"))
 						
-						If ($context[$Txt_table][$Obj_in.selector]#Null:C1517)
+						If (Not:C34(Form:C1466.$project.status.project))
 							
-							  // Enrich with the fields already used during the session
-							For each ($Txt_form;$context[$Txt_table][$Obj_in.selector])
+							  // Launch project verifications
+							$form.form.call("projectAudit")
+							
+						End if 
+					End if 
+					
+					If ($context[$Txt_table][$Obj_in.selector][$Txt_newForm]=Null:C1517)
+						
+						If ($Obj_target.fields=Null:C1517)
+							
+							$Obj_target.fields:=New collection:C1472
+							
+						End if 
+						
+						  // Create a new binding
+						$Col_assigned:=$Obj_target.fields.copy()
+						
+						If ($context[$Txt_table]#Null:C1517)
+							
+							If ($context[$Txt_table][$Obj_in.selector]#Null:C1517)
+								
+								  // Enrich with the fields already used during the session
+								For each ($Txt_form;$context[$Txt_table][$Obj_in.selector])
+									
+									For each ($o;$context[$Txt_table][$Obj_in.selector][$Txt_form].fields.filter("col_notNull"))
+										
+										If ($Col_assigned.extract("name").indexOf($o.name)=-1)
+											
+											$Col_assigned.push($o)
+											
+										End if 
+									End for each 
+								End for each 
+							End if 
+						End if 
+						
+					Else 
+						
+						  // Reuse the last snapshot
+						$Col_assigned:=$context[$Txt_table][$Obj_in.selector][$Txt_newForm].fields
+						
+						  // Enrich the last snapshot with the fields already used during the session
+						For each ($Txt_form;$context[$Txt_table][$Obj_in.selector])
+							
+							If ($Txt_form#$Txt_newForm)
 								
 								For each ($o;$context[$Txt_table][$Obj_in.selector][$Txt_form].fields.filter("col_notNull"))
 									
@@ -562,38 +597,36 @@ Case of
 										
 									End if 
 								End for each 
-							End for each 
-						End if 
+							End if 
+						End for each 
 					End if 
 					
-				Else 
+					$Obj_in.form:=$Txt_newForm
+					$Obj_in.tableNumber:=$Txt_table
 					
-					  // Reuse the last snapshot
-					$Col_assigned:=$context[$Txt_table][$Obj_in.selector][$Txt_newForm].fields
+					tmpl_REORDER ($Obj_in)
 					
-					  // Enrich the last snapshot with the fields already used during the session
-					For each ($Txt_form;$context[$Txt_table][$Obj_in.selector])
-						
-						If ($Txt_form#$Txt_newForm)
-							
-							For each ($o;$context[$Txt_table][$Obj_in.selector][$Txt_form].fields.filter("col_notNull"))
-								
-								If ($Col_assigned.extract("name").indexOf($o.name)=-1)
-									
-									$Col_assigned.push($o)
-									
-								End if 
-							End for each 
-						End if 
-					End for each 
 				End if 
 				
-				$Obj_in.form:=$Txt_newForm
-				$Obj_in.tableNumber:=$Txt_table
+			Else 
 				
-				tmpl_REORDER ($Obj_in)
+				  // Browse forms from community
+				
+				
+				
+				
+				FORM GOTO PAGE:C247(3)
+				
+				
+				
+				
+				
+				  //CALL FORM(Current form window;"webLoadForms")
+				
+				
 				
 			End if 
+			
 		End if 
 		
 		  // Redraw

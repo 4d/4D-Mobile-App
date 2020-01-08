@@ -16,11 +16,20 @@ End if
 $object:=$1
 
 C_TEXT:C284($key)
+
 For each ($key;$object)
+	
 	If (Value type:C1509($object[$key])=Is object:K8:27)
+		
 		  // I find this only way to identify formula (but any object with call attribut will be removed too...), there is no Is Formula or Native Function
-		If ($object[$key].call#Null:C1517)
+		  //If ($object[$key].call#Null)
+		  //OB REMOVE($object;$key)
+		  //End if 
+		
+		If ($object[$key].source#Null:C1517)
+			
 			OB REMOVE:C1226($object;$key)
+			
 		End if 
 	End if 
 End for each 

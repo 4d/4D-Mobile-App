@@ -54,7 +54,7 @@ Else
 			$o:=New object:C1471(\
 				"properties";New collection:C1472;\
 				"functions";New collection:C1472;\
-				"fomulas";New collection:C1472)
+				"formulas";New collection:C1472)
 			
 			$c:=New collection:C1472
 			
@@ -80,7 +80,7 @@ Else
 						If (This:C1470[$t].source#Null:C1517)
 							
 							$o.functions.push($t)
-							$o.fomulas.push(This:C1470[$t].source)
+							$o.formulas.push(This:C1470[$t].source)
 							
 						Else 
 							

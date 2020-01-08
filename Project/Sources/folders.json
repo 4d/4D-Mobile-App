@@ -132,6 +132,7 @@
 			"RIBBON"
 		],
 		"forms": [
+			"BROWSER",
 			"EDITOR",
 			"RIBBON",
 			"TITLE",
@@ -260,6 +261,7 @@
 			"lep",
 			"listbox",
 			"menu",
+			"ob",
 			"picture",
 			"process",
 			"static",
@@ -268,6 +270,7 @@
 			"svg",
 			"test_db",
 			"test_errors",
+			"test_ob",
 			"test_str",
 			"thermometer",
 			"tips",
@@ -502,7 +505,7 @@
 			"ob_writeToDocument",
 			"sharedCollection",
 			"sharedObject",
-			"test_ob"
+			"test_ob_"
 		]
 	},
 	"ob_error": {
@@ -677,6 +680,7 @@
 			"views_fieldList",
 			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",
+			"views_OBJECTS_HANDLER",
 			"views_preview",
 			"views_UPDATE"
 		],

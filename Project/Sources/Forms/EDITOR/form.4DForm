@@ -16,7 +16,8 @@
 		"onCloseBox",
 		"onUnload",
 		"onTimer",
-		"onResize"
+		"onResize",
+		"onPageChange"
 	],
 	"pageFormat": {
 		"paperName": "A4",
@@ -231,6 +232,22 @@
 					"printFrame": "variable",
 					"borderStyle": "sunken",
 					"method": "ObjectMethods/welcome.4dm"
+				}
+			}
+		},
+		{
+			"objects": {
+				"browser": {
+					"type": "subform",
+					"left": 0,
+					"top": 190,
+					"width": 970,
+					"height": 685,
+					"detailForm": "",
+					"borderStyle": "none",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"method": "ObjectMethods/browser.4dm"
 				}
 			}
 		}

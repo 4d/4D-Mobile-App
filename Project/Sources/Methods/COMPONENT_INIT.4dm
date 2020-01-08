@@ -441,9 +441,9 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	
 	featuresFlags.accentColors:=featuresFlags._8858  //        Manage colors according to user system parameters
 	
-	featuresFlags._113164:=($Lon_version>=1820)  //            Enable/disable image dump
+	featuresFlags._113164:=($Lon_version>=1830)  //            Enable/disable image dump
 	
-	featuresFlags._113016:=($Lon_version>=1820)  //            [MOBILE] Svg improvement in forms section
+	featuresFlags._113016:=($Lon_version>=1830)  //            [MOBILE] Svg improvement in forms section
 	
 End if 
 

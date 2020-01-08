@@ -60,6 +60,28 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
+			: ($Lon_formEvent=On Page Change:K2:54)
+				
+				Case of 
+					: (FORM Get current page:C276=2)
+					: (FORM Get current page:C276=3)
+						
+						OBJECT SET SUBFORM:C1138(*;"browser";"BROWSER")
+						OBJECT SET VISIBLE:C603(*;"browser";True:C214)
+						$o:=New object:C1471("url";Folder:C1567(fk web root folder:K87:15).file("index.html").platformPath)
+						(OBJECT Get pointer:C1124(Object named:K67:5;"browser"))->:=$o
+						
+					Else 
+						
+						  //$Txt_currentPage:=
+						  //Form.currentPage:=""
+						  //editor_PAGE ("general")
+						editor_PAGE (String:C10(Form:C1466.currentPage))
+						
+						
+				End case 
+				
+				  //______________________________________________________
 			: ($Lon_formEvent=On Load:K2:1)
 				
 				OBJECT SET VISIBLE:C603(*;"debug.@";Bool:C1537(Storage:C1525.database.isMatrix))

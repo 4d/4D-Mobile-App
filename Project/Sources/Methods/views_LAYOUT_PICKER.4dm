@@ -223,6 +223,28 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 	End if 
 End for 
 
+If (Structure file:C489=Structure file:C489(*))
+	
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more.png").platformPath;$p)
+	
+	$svg:=svg .setDimensions($kLon_cellWidth;$kLon_cellHeight)
+	
+	$svg.embedPicture($p;-10;0)
+	
+	$t:="More…"
+	
+	$svg.textArea($t;0;$kLon_cellHeight-20)\
+		.setDimensions($kLon_cellWidth)\
+		.setFill("dimgray")\
+		.setAttribute("text-align";"center")
+	
+	$p:=$svg.getPicture()
+	
+	$Obj_picker.pictures.insert(1;$p)
+	$Obj_picker.pathnames.insert(1;Null:C1517)
+	
+End if 
+
   // Add 1 because the widget work with arrays
 $Lon_index:=$Obj_picker.pathnames.indexOf(String:C10(Form:C1466[$Txt_typeForm][$Obj_context.tableNum()].form))+1
 $Obj_picker.item:=Choose:C955($Lon_index=0;1;$Lon_index)
