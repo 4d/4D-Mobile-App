@@ -64,9 +64,9 @@ Case of
 							
 							$folder:=COMPONENT_Pathname ("host")
 							
-							If (Not:C34($folder.exists))
+							If ($folder.name="Resources")
 								
-								$folder:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16;*);fk platform path:K87:2).folder("mobile")
+								$folder:=$folder.folder("mobile")
 								$folder.create()
 								
 							End if 

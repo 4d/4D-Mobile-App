@@ -76,13 +76,13 @@ Case of
 		  //______________________________________________________
 	: ($Txt_target="host")  // 'mobile' folder
 		
-		$o:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16;*);fk platform path:K87:2)
+		$Obj_path:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16;*);fk platform path:K87:2)
 		
-		If ($o.file("mobile").exists)  // Could be an alias
+		If ($Obj_path.file("mobile").exists)  // Could be an alias
 			
-			If ($o.file("mobile").original#Null:C1517)
+			If ($Obj_path.file("mobile").original#Null:C1517)
 				
-				$Obj_path:=$o.file("mobile").original
+				$Obj_path:=$Obj_path.file("mobile").original
 				
 			Else 
 				
@@ -92,7 +92,7 @@ Case of
 			
 		Else 
 			
-			If ($o.folder("mobile").exists)
+			If ($Obj_path.folder("mobile").exists)
 				
 				$Obj_path:=$Obj_path.folder("mobile")
 				
