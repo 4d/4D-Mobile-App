@@ -135,6 +135,7 @@
 			"RIBBON"
 		],
 		"forms": [
+			"dummy",
 			"EDITOR",
 			"RIBBON",
 			"TITLE",

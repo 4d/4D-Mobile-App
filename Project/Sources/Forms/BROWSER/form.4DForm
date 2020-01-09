@@ -47,7 +47,12 @@
 					"methodsAccessibility": "all",
 					"contextMenu": "none",
 					"urlSource": "https://translate.google.com/",
-					"borderStyle": "none"
+					"borderStyle": "none",
+					"events": [
+						"onLoad",
+						"onURLFiltering"
+					],
+					"method": "browser_OBJECTS_HANDLER"
 				},
 				"return": {
 					"type": "button",

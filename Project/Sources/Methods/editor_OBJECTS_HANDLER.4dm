@@ -48,6 +48,7 @@ Case of
 		If ($Lon_formEvent=-1)  // Hide
 			
 			OBJECT SET VISIBLE:C603(*;$Txt_me;False:C215)
+			OBJECT SET SUBFORM:C1138(*;$Txt_me;"dummy")
 			
 		End if 
 		
