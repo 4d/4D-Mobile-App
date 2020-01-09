@@ -640,7 +640,17 @@ Case of
 			
 		Else 
 			
-			VIEWS_Handler (New object:C1471("action";$Txt_selector))
+			If ($Obj_in=Null:C1517)
+				
+				$Obj_in:=New object:C1471("action";$Txt_selector)
+				
+			Else 
+				
+				$Obj_in.action:=$Txt_selector
+				
+			End if 
+			
+			VIEWS_Handler ($Obj_in)
 			
 		End if 
 		

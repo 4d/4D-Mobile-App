@@ -26,10 +26,10 @@
 			"objects": {
 				"background": {
 					"type": "rectangle",
-					"top": 20,
-					"left": 12,
-					"width": 943,
-					"height": 649,
+					"top": 10,
+					"left": 15,
+					"width": 938,
+					"height": 669,
 					"sizingY": "grow",
 					"stroke": "#1BA1E5",
 					"fill": "#1BA1E5",
@@ -37,10 +37,10 @@
 				},
 				"webArea": {
 					"type": "webArea",
-					"left": 13,
-					"top": 47,
-					"width": 940,
-					"height": 621,
+					"left": 16,
+					"top": 37,
+					"width": 935,
+					"height": 641,
 					"sizingX": "grow",
 					"sizingY": "grow",
 					"webEngine": "embedded",
@@ -49,12 +49,12 @@
 					"urlSource": "https://translate.google.com/",
 					"borderStyle": "none"
 				},
-				"Button": {
+				"return": {
 					"type": "button",
-					"text": "",
-					"top": 22,
-					"left": 13,
-					"width": 24,
+					"text": ".Return",
+					"top": 12,
+					"left": 16,
+					"width": 104,
 					"height": 24,
 					"events": [
 						"onClick"
@@ -62,10 +62,13 @@
 					"style": "custom",
 					"icon": "/RESOURCES/images/common/previous.png",
 					"iconFrames": 4,
-					"method": "ObjectMethods/Button.4dm"
+					"textPlacement": "right",
+					"stroke": "#FFFFFF",
+					"method": "browser_OBJECTS_HANDLER",
+					"focusable": false
 				}
 			}
 		}
 	],
-	"method": "method.4dm"
+	"method": "browser_HANDLER"
 }

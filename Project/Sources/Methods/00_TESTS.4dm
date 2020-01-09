@@ -25,6 +25,12 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
+		  //this command list all loaded component with path
+		$c:=WEB Servers list:C1716
+		
+		  //________________________________________
+	: (True:C214)
+		
 		$o:=Build Exposed Datastore:C1598["NOT EXPOSED"]
 		
 		$oo:=$o.getInfo()

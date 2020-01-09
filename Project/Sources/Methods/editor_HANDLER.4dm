@@ -10,9 +10,9 @@
   // Declarations
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_left;$Lon_middle;$Lon_parameters)
-C_LONGINT:C283($Lon_right;$Lon_top;$Lon_width)
-C_TEXT:C284($Txt_worker)
+C_LONGINT:C283($l;$Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_left;$Lon_middle)
+C_LONGINT:C283($Lon_parameters;$Lon_right;$Lon_top;$Lon_width)
+C_TEXT:C284($t;$Txt_worker)
 C_OBJECT:C1216($o;$Obj_form;$Obj_in;$Obj_project)
 
 If (False:C215)
@@ -58,29 +58,6 @@ Case of
 		$Lon_formEvent:=Form event code:C388
 		
 		Case of 
-				
-				  //______________________________________________________
-			: ($Lon_formEvent=On Page Change:K2:54)
-				
-				Case of 
-					: (FORM Get current page:C276=2)
-					: (FORM Get current page:C276=3)
-						
-						OBJECT SET SUBFORM:C1138(*;"browser";"BROWSER")
-						OBJECT SET VISIBLE:C603(*;"browser";True:C214)
-						$o:=New object:C1471("url";Folder:C1567(fk web root folder:K87:15).file("index.html").platformPath)
-						(OBJECT Get pointer:C1124(Object named:K67:5;"browser"))->:=$o
-						
-					Else 
-						
-						  //$Txt_currentPage:=
-						  //Form.currentPage:=""
-						  //editor_PAGE ("general")
-						editor_PAGE (String:C10(Form:C1466.currentPage))
-						
-						
-				End case 
-				
 				  //______________________________________________________
 			: ($Lon_formEvent=On Load:K2:1)
 				
@@ -213,7 +190,6 @@ Case of
 				EXECUTE METHOD IN SUBFORM:C1085($Obj_form.project;"call_MESSAGE_DISPATCH";*;New object:C1471(\
 					"target";"panel.";\
 					"method";"UI_SET_GEOMETRY"))
-				
 				
 				  //______________________________________________________
 			Else 

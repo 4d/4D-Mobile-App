@@ -87,7 +87,7 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 								"object";new collection("preview";"preview.label";"preview.back";"Preview.border");\
 								"reference";"viewport.preview";\
 								"type";"horizontal alignment";\
-								"value";"center"))
+								"value";"center"))					
 			
 */
 			
@@ -489,8 +489,8 @@ Case of
 			
 			$Txt_table:=$context.tableNum()
 			
-			
 			If ($Obj_in.pathnames[$Obj_in.item-1]#Null:C1517)
+				
 				  // The selected form
 				$Txt_newForm:=$Obj_in.pathnames[$Obj_in.item-1]
 				
@@ -610,23 +610,11 @@ Case of
 				
 			Else 
 				
-				  // Browse forms from community
-				
-				
-				
-				
-				FORM GOTO PAGE:C247(3)
-				
-				
-				
-				
-				
-				  //CALL FORM(Current form window;"webLoadForms")
-				
-				
+				  // Show browser
+				$o:=New object:C1471("url";"https://developer.4d.com/4d-for-ios/docs/en/custom-"+Choose:C955($context.typeForm()="list";"listform";"detailform")+"-templates.html")
+				$form.form.call(New collection:C1472("showBrowser";$o))
 				
 			End if 
-			
 		End if 
 		
 		  // Redraw
@@ -708,10 +696,11 @@ Case of
 	: ($Obj_in.action="refreshViews")
 		
 		If (Length:C16($context.tableNum())>0)\
-			 & ($Obj_dataModel[$context.tableNum()]#Null:C1517)
+			 & (Form:C1466.dataModel[$context.tableNum()]#Null:C1517)
 			
 			  // Redraw
 			$context.draw:=True:C214
+			
 			$form.form.refresh()
 			
 		End if 

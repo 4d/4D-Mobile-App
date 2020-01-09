@@ -43,6 +43,15 @@ End if
 Case of 
 		
 		  //==================================================
+	: ($Txt_me="browser")
+		
+		If ($Lon_formEvent=-1)  // Hide
+			
+			OBJECT SET VISIBLE:C603(*;$Txt_me;False:C215)
+			
+		End if 
+		
+		  //==================================================
 	: ($Txt_me="message")
 		
 		Case of 

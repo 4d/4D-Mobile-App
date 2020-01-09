@@ -111,6 +111,9 @@
 		]
 	},
 	"[EDITOR]": {
+		"groups": [
+			"BROWSER"
+		],
 		"methods": [
 			"COMPILER_editor",
 			"editor_CALLBACK",
@@ -132,7 +135,6 @@
 			"RIBBON"
 		],
 		"forms": [
-			"BROWSER",
 			"EDITOR",
 			"RIBBON",
 			"TITLE",
@@ -242,6 +244,15 @@
 			"template",
 			"templates",
 			"xloc"
+		]
+	},
+	"BROWSER": {
+		"methods": [
+			"browser_HANDLER",
+			"browser_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"BROWSER"
 		]
 	},
 	"classes": {

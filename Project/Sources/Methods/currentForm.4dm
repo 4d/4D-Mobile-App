@@ -12,6 +12,7 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
+C_LONGINT:C283($i;$l)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o)
 
@@ -44,6 +45,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"get";Formula:C1597(currentForm );\
 		"getEvent";Formula:C1597(currentForm ("getEvent"));\
 		"getCurrentWidget";Formula:C1597(currentForm ("getCurrentWidget"));\
+		"getEnterableWidgets";Formula:C1597(currentForm ("getEnterableWidgets"));\
 		"getFocusedWidget";Formula:C1597(currentForm ("getFocusedWidget"))\
 		)
 	
@@ -72,6 +74,27 @@ Else
 				MOUSEX:=Drop position:C608(MOUSEY)
 				
 			End if 
+			
+			  //______________________________________________________
+		: ($1="getEnterableWidgets")
+			
+			$o.enterables:=New collection:C1472
+			
+			ARRAY TEXT:C222($tTxt_widgets;0x0000)
+			FORM GET OBJECTS:C898($tTxt_widgets)
+			SORT ARRAY:C229($tTxt_widgets)
+			
+			For ($i;1;Size of array:C274($tTxt_widgets);1)
+				
+				$l:=OBJECT Get type:C1300(*;$tTxt_widgets{$i})
+				
+				If (OBJECT Get enterable:C1067(*;$tTxt_widgets{$i}))\
+					 | ($l=Object type listbox:K79:8)
+					
+					$o.enterables.push($tTxt_widgets{$i})
+					
+				End if 
+			End for 
 			
 			  //______________________________________________________
 		: ($1="getEvent")

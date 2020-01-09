@@ -58,6 +58,13 @@ Case of
 		EXECUTE METHOD IN SUBFORM:C1085("description";"editor_description";*;$Obj_in)
 		
 		  //______________________________________________________
+	: ($Txt_selector="showBrowser")
+		
+		OBJECT SET SUBFORM:C1138(*;"browser";"BROWSER")
+		OBJECT SET VISIBLE:C603(*;"browser";True:C214)
+		(OBJECT Get pointer:C1124(Object named:K67:5;"browser"))->:=$Obj_in
+		
+		  //______________________________________________________
 	: ($Txt_selector="projectAuditResult")
 		
 		PROJECT_HANDLER (New object:C1471(\
@@ -92,10 +99,10 @@ Case of
 		Else 
 			
 			  // DO_MESSAGE (New object(\
-				"action";"show";\
-				"type";"alert";\
-				"title";"noDevices";\
-				"additional";""))
+								"action";"show";\
+								"type";"alert";\
+								"title";"noDevices";\
+								"additional";""))
 			
 		End if 
 		

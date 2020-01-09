@@ -16,8 +16,7 @@
 		"onCloseBox",
 		"onUnload",
 		"onTimer",
-		"onResize",
-		"onPageChange"
+		"onResize"
 	],
 	"pageFormat": {
 		"paperName": "A4",
@@ -210,6 +209,19 @@
 					"stroke": "#FFFFFF",
 					"sizingX": "move",
 					"focusable": false
+				},
+				"browser": {
+					"type": "subform",
+					"left": 0,
+					"top": 190,
+					"width": 970,
+					"height": 685,
+					"detailForm": "",
+					"borderStyle": "none",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"visibility": "hidden",
+					"method": "editor_OBJECTS_HANDLER"
 				}
 			}
 		},
@@ -234,22 +246,6 @@
 					"method": "ObjectMethods/welcome.4dm"
 				}
 			}
-		},
-		{
-			"objects": {
-				"browser": {
-					"type": "subform",
-					"left": 0,
-					"top": 190,
-					"width": 970,
-					"height": 685,
-					"detailForm": "",
-					"borderStyle": "none",
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"method": "ObjectMethods/browser.4dm"
-				}
-			}
 		}
 	],
 	"$4d": {
@@ -257,7 +253,7 @@
 		"kind": "form"
 	},
 	"editor": {
-		"activeView": "default",
+		"activeView": "Browser",
 		"defaultView": "default",
 		"views": {
 			"default": {},
@@ -269,15 +265,24 @@
 					"message"
 				]
 			},
-			"debug": {
+			"Project": {
+				"visible": false,
+				"objects": [
+					"project"
+				]
+			},
+			"Browser": {
+				"objects": [
+					"browser"
+				]
+			},
+			"DEBUG": {
 				"objects": [
 					"debug.focus",
 					"debug.buildNumber",
 					"debug.localization"
 				]
 			},
-			"View 3": {},
-			"View 4": {},
 			"View 5": {},
 			"View 6": {},
 			"View 7": {},
