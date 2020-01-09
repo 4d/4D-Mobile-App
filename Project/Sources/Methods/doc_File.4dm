@@ -37,7 +37,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
 	  // Default values
 	$Obj_template:=New object:C1471(\
-		"exist";False:C215;\
+		"exists";False:C215;\
 		"name";"";\
 		"extension";"";\
 		"fullName";"";\
