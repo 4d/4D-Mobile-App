@@ -130,21 +130,37 @@ If ($Obj_in.create)
 	
 	$Obj_project.server.authentication.reloadData:=False:C215
 	
-	  // If (Bool(featuresFlags._100174))
 	  // If there is filter with parameters reload data after auth
-	For each ($Txt_buffer;$Obj_project.dataModel)
+	If (featuresFlags.with("newDataModel"))
 		
-		If (Value type:C1509($Obj_project.dataModel[$Txt_buffer].filter)=Is object:K8:27)
+		For each ($Txt_buffer;$Obj_project.dataModel)
 			
-			If (Bool:C1537($Obj_project.dataModel[$Txt_buffer].filter.parameters))
+			If (Value type:C1509($Obj_project.dataModel[$Txt_buffer][""].filter)=Is object:K8:27)
 				
-				$Obj_project.server.authentication.reloadData:=True:C214
-				
+				If (Bool:C1537($Obj_project.dataModel[$Txt_buffer][""].filter.parameters))
+					
+					$Obj_project.server.authentication.reloadData:=True:C214
+					
+				End if 
 			End if 
-		End if 
-	End for each 
+		End for each 
+		
+	Else 
+		
+		For each ($Txt_buffer;$Obj_project.dataModel)
+			
+			If (Value type:C1509($Obj_project.dataModel[$Txt_buffer].filter)=Is object:K8:27)
+				
+				If (Bool:C1537($Obj_project.dataModel[$Txt_buffer].filter.parameters))
+					
+					$Obj_project.server.authentication.reloadData:=True:C214
+					
+				End if 
+			End if 
+		End for each 
+	End if 
 	
-	  // other criteria like there is no embedded for one table ?
+	  // Other criteria like there is no embedded for one table ?
 	If (Not:C34($Obj_project.server.authentication.reloadData))
 		
 		For each ($Txt_buffer;$Obj_project.dataModel)
@@ -167,8 +183,6 @@ If ($Obj_in.create)
 			End if 
 		End for each 
 	End if 
-	
-	  // End if
 	
 	  //===============================================================
 	
