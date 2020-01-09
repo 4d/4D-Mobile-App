@@ -26,7 +26,7 @@ Case of
 	: (True:C214)
 		
 		  //this command list all loaded component with path
-		$c:=WEB Servers list:C1716
+		  //$c:=WEB Servers list
 		
 		  //________________________________________
 	: (True:C214)
