@@ -97,6 +97,7 @@
 			"[PANELS]",
 			"[PROJECT]",
 			"backend",
+			"BROWSER",
 			"deliver",
 			"macOS",
 			"mobile"
@@ -114,9 +115,6 @@
 		]
 	},
 	"[EDITOR]": {
-		"groups": [
-			"BROWSER"
-		],
 		"methods": [
 			"COMPILER_editor",
 			"editor_CALLBACK",
