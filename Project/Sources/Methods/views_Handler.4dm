@@ -83,11 +83,11 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 			
 #TO_DO - allow collection for object
 			
-						$c.push(New object(\
-								"object";new collection("preview";"preview.label";"preview.back";"Preview.border");\
-								"reference";"viewport.preview";\
-								"type";"horizontal alignment";\
-								"value";"center"))					
+									$c.push(New object(\
+												"object";new collection("preview";"preview.label";"preview.back";"Preview.border");\
+												"reference";"viewport.preview";\
+												"type";"horizontal alignment";\
+												"value";"center"))					
 			
 */
 			
@@ -173,9 +173,18 @@ Case of
 				$Lon_offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
 				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($Lon_offset)
 				
-				  // Place the download button
-				$form.resources.setTitle(str ("downloadMoreResources").localized("templates"))
-				$form.resources.bestSize(Align right:K42:4)
+				
+				If (featuresFlags.with("resourcesBrowser"))
+					
+					$form.resources.hide()
+					
+				Else 
+					
+					  // Place the download button
+					$form.resources.setTitle(str ("downloadMoreResources").localized("templates"))
+					$form.resources.bestSize(Align right:K42:4)
+					
+				End if 
 				
 				$context.setTab()
 				

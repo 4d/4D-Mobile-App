@@ -1,4 +1,4 @@
-//%attributes = {}
+//%attributes = {"invisible":true}
   // ----------------------------------------------------
   // Project method : _catalog
   // ID[EA24F65ED9BE4E64B8616A4B2A31A494]

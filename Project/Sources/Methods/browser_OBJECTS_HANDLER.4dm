@@ -1,55 +1,63 @@
 //%attributes = {"invisible":true}
+  // ----------------------------------------------------
+  // Project method : BROWSER_OBJECTS_HANDLER
+  // ID[5FD48D75EE7A4BF89BFF64B772B9C79B]
+  // Created 10-1-2020 by Vincent de Lachaux
+  // ----------------------------------------------------
+  // Description:
+  // 
+  // ----------------------------------------------------
+  // Declarations
 C_BOOLEAN:C305($b)
-C_LONGINT:C283($end;$start)
-C_TEXT:C284($t;$Txt_url;$Txt_widget)
-C_OBJECT:C1216($archive;$event;$folder;$http)
+C_LONGINT:C283($end;$l;$start)
+C_TEXT:C284($t;$Txt_url;$Txt_me)
+C_OBJECT:C1216($archive;$event;$folder;$form;$http)
 
-$Txt_widget:=OBJECT Get name:C1087(Object current:K67:2)
+  // ----------------------------------------------------
+  // Initialisations
+$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
+$event:=FORM Event:C1606
 
+  // ----------------------------------------------------
 Case of 
-		  //______________________________________________________
-	: ($Txt_widget="webarea")
 		
-		$event:=FORM Event:C1606
+		  //______________________________________________________
+	: ($Txt_me="webarea")
+		
+		$form:=BROWSER_Handler (New object:C1471("action";"init"))
 		
 		Case of 
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On Load:K2:1)
 				
-				ARRAY TEXT:C222($tTxt_url;0x0000)
-				ARRAY BOOLEAN:C223($tBoo_allow;0x0000)
+				$form.web.init()
 				
-				  //All are forbidden
-				APPEND TO ARRAY:C911($tTxt_url;"*")  //all
-				APPEND TO ARRAY:C911($tBoo_allow;False:C215)  //forbidden
+				  //………………………………………………………………………………………………………………
+			: ($event.code=On End URL Loading:K2:47)
 				
-				  //Allow WA SET PAGE CONTENT
-				APPEND TO ARRAY:C911($tTxt_url;"file*")
-				APPEND TO ARRAY:C911($tBoo_allow;True:C214)  // to allow including HTML files
-				
-				WA SET URL FILTERS:C1030(*;$Txt_widget;$tTxt_url;$tBoo_allow)
-				
-				WA SET PREFERENCE:C1041(*;$Txt_widget;WA enable Java applets:K62:3;False:C215)
-				WA SET PREFERENCE:C1041(*;$Txt_widget;WA enable JavaScript:K62:4;True:C214)
-				WA SET PREFERENCE:C1041(*;$Txt_widget;WA enable plugins:K62:5;False:C215)  //
-				
-				  //Active the contextual menu in debug mode
-				WA SET PREFERENCE:C1041(*;$Txt_widget;WA enable contextual menu:K62:6;Not:C34(Is compiled mode:C492) | (Structure file:C489=Structure file:C489(*)))
-				WA SET PREFERENCE:C1041(*;$Txt_widget;WA enable Web inspector:K62:7;True:C214)
+				$form.wait.hide()
 				
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On URL Filtering:K2:49)
 				
-				$Txt_url:=WA Get last filtered URL:C1035(*;$Txt_widget)
+				$Txt_url:=$form.web.lastFiltered()
 				
 				Case of 
 						
 						  //______________________________________________________
-					: (Match regex:C1019("(?m-si)/download/(.*)\\.zip";$Txt_url;1;$start;$end))
+					: (Match regex:C1019("(?m-si)/download/([^//]*)\\.zip$";$Txt_url;1;$start;$end))
 						
 						  //https://github.com/4d-for-ios/form-list-ClientList/releases/latest/download/form-list-ClientList.zip
-						$start:=$start+10
+						
+						$l:=Progress New 
+						
+						Progress SET TITLE ($l;Get localized string:C991("downloadInProgress");-1)
+						
+						$start:=$start+Length:C16("/download/")
 						$t:=Substring:C12($Txt_url;$start;($start+$end)-$start)
+						
+						Progress SET MESSAGE ($l;$t;True:C214)
+						
 						$archive:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($t)
 						
 						If ($archive.exists)
@@ -59,6 +67,8 @@ Case of
 						End if 
 						
 						$http:=http ($Txt_url).get(Is a document:K24:1;False:C215;$archive)
+						
+						Progress QUIT ($l)
 						
 						If ($http.success)
 							
@@ -85,9 +95,15 @@ Case of
 									$folder:=$folder.folder("form/detail")
 									
 									  //……………………………………………………………………………………
+								: ($t="formatter-@")
+									
+									$t:=Replace string:C233($t;"formatter-";"")
+									$folder:=$folder.folder("formatters")
+									
+									  //……………………………………………………………………………………
 								Else 
 									
-									  // A "Case of" statement should never omit "Else"
+									  // https://github.com/4d-for-ios/formatter-Mail/releases/latest/download/formatter-Mail.zip
 									
 									  //……………………………………………………………………………………
 							End case 
@@ -102,9 +118,6 @@ Case of
 							  // A "If" statement should never omit "Else"
 							
 						End if 
-						
-						  //______________________________________________________
-					: (False:C215)
 						
 						  //______________________________________________________
 					Else 
@@ -123,8 +136,7 @@ Case of
 		End case 
 		
 		  //______________________________________________________
-	: ($Txt_widget="return")
-		
+	: ($Txt_me="return")
 		
 		CALL SUBFORM CONTAINER:C1086(-1)
 		
@@ -138,3 +150,9 @@ Case of
 		
 		  //______________________________________________________
 End case 
+
+  // ----------------------------------------------------
+  // Return
+  // <NONE>
+  // ----------------------------------------------------
+  // End

@@ -223,25 +223,13 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 	End if 
 End for 
 
-If (Structure file:C489=Structure file:C489(*))
+If (featuresFlags.with("resourcesBrowser"))
 	
-	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more.png").platformPath;$p)
-	
-	$svg:=svg .setDimensions($kLon_cellWidth;$kLon_cellHeight)
-	
-	$svg.embedPicture($p;-10;0)
-	
-	$t:="More…"
-	
-	$svg.textArea($t;0;$kLon_cellHeight-20)\
-		.setDimensions($kLon_cellWidth)\
-		.setFill("dimgray")\
-		.setAttribute("text-align";"center")
-	
-	$p:=$svg.getPicture()
+	$p:=svg ("load";File:C1566("/RESOURCES/templates/more.svg")).setDimensions($kLon_cellWidth;$kLon_cellHeight).getPicture()
 	
 	$Obj_picker.pictures.insert(1;$p)
 	$Obj_picker.pathnames.insert(1;Null:C1517)
+	$Obj_picker.tips:=Replace string:C233(Get localized string:C991("downloadMoreResources");"{resources}";$Txt_typeForm)
 	
 End if 
 

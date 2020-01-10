@@ -327,7 +327,17 @@ Case of
 		  //==================================================
 	: ($Obj_form.form.current=$Obj_form.resources.name)
 		
-		OPEN URL:C673(Get localized string:C991("doc_fornatters");*)
+		If (featuresFlags.with("resourcesBrowser"))
+			
+			  // Show browser
+			$o:=New object:C1471("url";Get localized string:C991("doc_fornatters"))
+			$Obj_form.form.call(New collection:C1472("showBrowser";$o))
+			
+		Else 
+			
+			OPEN URL:C673(Get localized string:C991("doc_fornatters");*)
+			
+		End if 
 		
 		  //==================================================
 	Else 

@@ -108,6 +108,9 @@
 			"COMPONENT_Infos",
 			"COMPONENT_INIT",
 			"COMPONENT_Pathname"
+		],
+		"forms": [
+			"EMPTY"
 		]
 	},
 	"[EDITOR]": {
@@ -135,7 +138,6 @@
 			"RIBBON"
 		],
 		"forms": [
-			"dummy",
 			"EDITOR",
 			"RIBBON",
 			"TITLE",
@@ -249,8 +251,8 @@
 	},
 	"BROWSER": {
 		"methods": [
-			"browser_HANDLER",
-			"browser_OBJECTS_HANDLER"
+			"BROWSER_Handler",
+			"BROWSER_OBJECTS_HANDLER"
 		],
 		"forms": [
 			"BROWSER"
@@ -286,6 +288,7 @@
 			"test_str",
 			"thermometer",
 			"tips",
+			"webArea",
 			"widget",
 			"window"
 		]
@@ -515,6 +518,7 @@
 			"ob_setProperties",
 			"ob_testPath",
 			"ob_writeToDocument",
+			"ob_writeToFile",
 			"sharedCollection",
 			"sharedObject",
 			"test_ob_"
@@ -692,7 +696,6 @@
 			"views_fieldList",
 			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",
-			"views_OBJECTS_HANDLER",
 			"views_preview",
 			"views_UPDATE"
 		],

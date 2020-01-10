@@ -445,6 +445,8 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	
 	featuresFlags._113016:=($Lon_version>=1830)  //            [MOBILE] Svg improvement in forms section
 	
+	featuresFlags._112225:=($Lon_version>=1830)  //            [MOBILE] Select / install / use custom templates
+	
 End if 
 
 If ($Obj_preferences.features#Null:C1517)  // Update feature flags with the local preferences
@@ -542,6 +544,7 @@ featuresFlags.oneToManyRelations:=featuresFlags._105431
 
 featuresFlags.setImageDump:=featuresFlags._113164
 featuresFlags.newViewUI:=featuresFlags._113016
+featuresFlags.resourcesBrowser:=featuresFlags._112225
 
 
   // ________________________________________________________________________________________________________________________________

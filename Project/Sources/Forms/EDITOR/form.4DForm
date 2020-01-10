@@ -100,7 +100,7 @@
 					"sizingX": "grow",
 					"sizingY": "grow",
 					"pictureFormat": "tiled",
-					"picture": "/RESOURCES/images/common/back.png"
+					"picture": "/RESOURCES/images/common/background.png"
 				},
 				"message.button": {
 					"type": "button",

@@ -77,7 +77,26 @@ Case of
 		If ($Lon_cellIndex>0)\
 			 & ($Lon_cellIndex<=Form:C1466.pictures.length)
 			
-			OBJECT SET HELP TIP:C1181(*;$Txt_me;String:C10(Form:C1466.pathnames[$Lon_cellIndex-1]))
+			If (Form:C1466.pathnames[$Lon_cellIndex-1]=Null:C1517)
+				
+				If (featuresFlags.with("resourcesBrowser"))
+					
+					If (Form:C1466.tips[$Lon_cellIndex-1]#Null:C1517)
+						
+						OBJECT SET HELP TIP:C1181(*;$Txt_me;String:C10(Form:C1466.tips[$Lon_cellIndex-1]))
+						
+					Else 
+						
+						OBJECT SET HELP TIP:C1181(*;$Txt_me;Get localized string:C991("findAndDownloadMoreResources"))
+						
+					End if 
+				End if 
+				
+			Else 
+				
+				OBJECT SET HELP TIP:C1181(*;$Txt_me;String:C10(Form:C1466.pathnames[$Lon_cellIndex-1]))
+				
+			End if 
 			
 		Else 
 			

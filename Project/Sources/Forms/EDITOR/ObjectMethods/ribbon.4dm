@@ -42,6 +42,8 @@ Case of
 					OBJECT SET COORDINATES:C1248(*;"description";$Lon_left;$Lon_top-$Lon_offset;$Lon_right;$Lon_bottom)
 					OBJECT GET COORDINATES:C663(*;"project";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 					OBJECT SET COORDINATES:C1248(*;"project";$Lon_left;$Lon_top-$Lon_offset;$Lon_right;$Lon_bottom)
+					OBJECT GET COORDINATES:C663(*;"browser";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+					OBJECT SET COORDINATES:C1248(*;"browser";$Lon_left;$Lon_top-$Lon_offset;$Lon_right;$Lon_bottom)
 					
 					$Ptr_me->state:="close"
 					
@@ -54,6 +56,8 @@ Case of
 					OBJECT SET COORDINATES:C1248(*;"description";$Lon_left;$Lon_top+$Lon_offset;$Lon_right;$Lon_bottom)
 					OBJECT GET COORDINATES:C663(*;"project";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 					OBJECT SET COORDINATES:C1248(*;"project";$Lon_left;$Lon_top+$Lon_offset;$Lon_right;$Lon_bottom)
+					OBJECT GET COORDINATES:C663(*;"browser";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+					OBJECT SET COORDINATES:C1248(*;"browser";$Lon_left;$Lon_top+$Lon_offset;$Lon_right;$Lon_bottom)
 					
 					$Ptr_me->state:="open"
 					

@@ -19,16 +19,7 @@
 			"objects": {}
 		},
 		{
-			"objects": {
-				"Text": {
-					"type": "text",
-					"text": "text default",
-					"top": 25,
-					"left": 30,
-					"width": 94,
-					"height": 16
-				}
-			}
+			"objects": {}
 		}
 	]
 }
