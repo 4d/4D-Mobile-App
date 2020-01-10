@@ -33,7 +33,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 	$o:=New object:C1471(\
 		"";"webArea";\
 		"name";$t;\
-		"url";"about:blank";\
+		"url";"";\
 		"coordinates";Null:C1517;\
 		"windowCoordinates";Null:C1517;\
 		"getCoordinates";Formula:C1597(widget ("getCoordinates"));\
@@ -52,9 +52,16 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"isLoaded";Formula:C1597(WA Get current URL:C1025(*;This:C1470.name)=This:C1470.url);\
 		"lastFiltered";Formula:C1597(WA Get last filtered URL:C1035(*;This:C1470.name));\
 		"openURL";Formula:C1597(webArea ("openURL";New object:C1471("url";$1)));\
-		"refresh";Formula:C1597(WA REFRESH CURRENT URL:C1023(*;This:C1470.name));\
+		"refresh";Formula:C1597(webArea ("openURL";New object:C1471("url";$1)));\
+		"setContent";Formula:C1597(webArea ("setContent";New object:C1471("content";String:C10($1);"base";$2)));\
 		"title";Formula:C1597(WA Get page title:C1036(*;This:C1470.name))\
 		)
+	
+	If (Is Windows:C1573)
+		
+		$o.openURL()  // previously load about:blank
+		
+	End if 
 	
 Else 
 	
@@ -73,11 +80,11 @@ Else
 			ARRAY TEXT:C222($tTxt_filters;0x0000)
 			ARRAY BOOLEAN:C223($tBoo_allow;0x0000)
 			
-			  //All are forbidden
-			APPEND TO ARRAY:C911($tTxt_filters;"*")  //all
-			APPEND TO ARRAY:C911($tBoo_allow;False:C215)  //forbidden
+			  // All are forbidden
+			APPEND TO ARRAY:C911($tTxt_filters;"*")  // All
+			APPEND TO ARRAY:C911($tBoo_allow;False:C215)  // Forbidden
 			
-			  //Allow WA SET PAGE CONTENT
+			  // Allow WA SET PAGE CONTENT
 			APPEND TO ARRAY:C911($tTxt_filters;"file*")
 			APPEND TO ARRAY:C911($tBoo_allow;True:C214)  // to allow including HTML files
 			
@@ -87,7 +94,7 @@ Else
 			WA SET PREFERENCE:C1041(*;$o.name;WA enable JavaScript:K62:4;True:C214)
 			WA SET PREFERENCE:C1041(*;$o.name;WA enable plugins:K62:5;False:C215)  //
 			
-			  //Active the contextual menu in debug mode
+			  // Active the contextual menu in debug mode
 			WA SET PREFERENCE:C1041(*;$o.name;WA enable contextual menu:K62:6;Not:C34(Is compiled mode:C492) | (Structure file:C489=Structure file:C489(*)))
 			WA SET PREFERENCE:C1041(*;$o.name;WA enable Web inspector:K62:7;True:C214)
 			
@@ -128,6 +135,11 @@ Else
 			$o.url:=$t
 			
 			WA OPEN URL:C1020(*;$o.name;$o.url)
+			
+			  //______________________________________________________
+		: ($1="setContent")
+			
+			WA SET PAGE CONTENT:C1037(*;$o.name;$2.content;Choose:C955($2.base=Null:C1517;"/";String:C10($2.base)))
 			
 			  //______________________________________________________
 		Else 

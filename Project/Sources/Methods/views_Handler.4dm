@@ -71,6 +71,7 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 	
 	If (OB Is empty:C1297($context))  // First load
 		
+		  // § DEFINE UI CONSTRAINTS
 		$c:=New collection:C1472
 		
 		$c.push(New object:C1471(\
@@ -79,38 +80,8 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 		
 		If (featuresFlags.with("newViewUI"))
 			
-/*
-			
-#TO_DO - allow collection for object
-			
-									$c.push(New object(\
-												"object";new collection("preview";"preview.label";"preview.back";"Preview.border");\
-												"reference";"viewport.preview";\
-												"type";"horizontal alignment";\
-												"value";"center"))					
-			
-*/
-			
 			$c.push(New object:C1471(\
-				"object";"preview";\
-				"reference";"viewport.preview";\
-				"type";"horizontal alignment";\
-				"value";"center"))
-			
-			$c.push(New object:C1471(\
-				"object";"preview.label";\
-				"reference";"viewport.preview";\
-				"type";"horizontal alignment";\
-				"value";"center"))
-			
-			$c.push(New object:C1471(\
-				"object";"preview.back";\
-				"reference";"viewport.preview";\
-				"type";"horizontal alignment";\
-				"value";"center"))
-			
-			$c.push(New object:C1471(\
-				"object";"Preview.border";\
+				"object";New collection:C1472("preview";"preview.label";"preview.back";"Preview.border");\
 				"reference";"viewport.preview";\
 				"type";"horizontal alignment";\
 				"value";"center"))
@@ -125,7 +96,7 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 		
 		$context:=ob .set($context).createPath("constraints.rules";Is collection:K8:32;$c).contents
 		
-		  // Define form member methods
+		  // § DEFINE FORM MEMBER METHODS
 		
 		  // Selected table ID as string, empty if none
 		$context.tableNum:=Formula:C1597(String:C10(This:C1470.tableNumber))
@@ -172,7 +143,6 @@ Case of
 				  // Place the tabs according to the localization
 				$Lon_offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
 				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($Lon_offset)
-				
 				
 				If (featuresFlags.with("resourcesBrowser"))
 					
@@ -620,7 +590,9 @@ Case of
 			Else 
 				
 				  // Show browser
-				$o:=New object:C1471("url";"https://developer.4d.com/4d-for-ios/docs/en/custom-"+Choose:C955($context.typeForm()="list";"listform";"detailform")+"-templates.html")
+				$o:=New object:C1471(\
+					"url";"https://developer.4d.com/4d-for-ios/docs/en/custom-"+Choose:C955($context.typeForm()="list";\
+					"listform";"detailform")+"-templates.html")
 				$form.form.call(New collection:C1472("showBrowser";$o))
 				
 			End if 

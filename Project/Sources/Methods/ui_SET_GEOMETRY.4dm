@@ -15,14 +15,13 @@ C_LONGINT:C283($bottom;$bottomRef;$bottomTarget;$height;$l;$left)
 C_LONGINT:C283($leftRef;$leftTarget;$marginH;$marginV;$max;$middleRef)
 C_LONGINT:C283($middleTarget;$offset;$right;$rightRef;$rightTarget;$top)
 C_LONGINT:C283($topRef;$topTarget;$type;$width;$widthScrollBar)
-C_TEXT:C284($t)
+C_TEXT:C284($t;$Txt_widget)
 C_OBJECT:C1216($o;$Obj_constraints)
+C_COLLECTION:C1488($c)
 
 If (False:C215)
 	C_OBJECT:C1216(ui_SET_GEOMETRY ;$1)
 End if 
-
-  //ARRAY OBJECT($tObj_rules;0)
 
   // ----------------------------------------------------
   // Initialisations
@@ -110,13 +109,32 @@ If ($Obj_constraints.rules#Null:C1517)
 				  //========================================================
 			Else 
 				
-				If (Value type:C1509($o.object)=Is text:K8:3)
+				Case of 
+						
+						  //______________________________________________________
+					: (Value type:C1509($o.object)=Is text:K8:3)
+						
+						$c:=New collection:C1472($o.object)
+						
+						  //______________________________________________________
+					: (Value type:C1509($o.object)=Is collection:K8:32)
+						
+						$c:=$o.object
+						
+						  //______________________________________________________
+					Else 
+						
+						  // A "Case of" statement should never omit "Else"
+						  //______________________________________________________
+				End case 
+				
+				For each ($Txt_widget;$c)
 					
-					$type:=OBJECT Get type:C1300(*;$o.object)
+					$type:=OBJECT Get type:C1300(*;$Txt_widget)
 					
 					If ($type#Object type unknown:K79:1)
 						
-						OBJECT GET COORDINATES:C663(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+						OBJECT GET COORDINATES:C663(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 						
 						If ($o.reference#Null:C1517)
 							
@@ -144,7 +162,7 @@ If ($Obj_constraints.rules#Null:C1517)
 										  //……………………………………………………………………………………………………………
 									: ($type=Object type text input:K79:4)
 										
-										OBJECT GET SCROLLBAR:C1076(*;$o.object;$b;$b)
+										OBJECT GET SCROLLBAR:C1076(*;$Txt_widget;$b;$b)
 										
 										If ($b)
 											
@@ -176,35 +194,35 @@ If ($Obj_constraints.rules#Null:C1517)
 								End case 
 								
 								  // Move the associated help if any
-								If (OBJECT Get type:C1300(*;$o.object+".help")#Object type unknown:K79:1)
+								If (OBJECT Get type:C1300(*;$Txt_widget+".help")#Object type unknown:K79:1)
 									
-									OBJECT GET COORDINATES:C663(*;$o.object+".help";$left;$top;$right;$bottom)
+									OBJECT GET COORDINATES:C663(*;$Txt_widget+".help";$left;$top;$right;$bottom)
 									
 									$width:=$right-$left
 									
 									$left:=$rightTarget-$width
 									$right:=$rightTarget
 									
-									OBJECT SET COORDINATES:C1248(*;$o.object+".help";$left;$top;$right;$bottom)
+									OBJECT SET COORDINATES:C1248(*;$Txt_widget+".help";$left;$top;$right;$bottom)
 									
 									$rightTarget:=$rightTarget-$width-$marginH
 									
 								End if 
 								
-								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 								
 								  //______________________________________________________
 							: ($o.type="fit-width")
 								
 								$rightTarget:=$leftTarget+($rightRef-$leftTarget)-Num:C11($o.offset)
-								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 								
 								  //______________________________________________________
 							: ($o.type="maximum-width")  // Maximum object width
 								
-								If (OBJECT Get type:C1300(*;$o.object+".help")#Object type unknown:K79:1)
+								If (OBJECT Get type:C1300(*;$Txt_widget+".help")#Object type unknown:K79:1)
 									
-									OBJECT GET COORDINATES:C663(*;$o.object+".help";$left;$top;$right;$bottom)
+									OBJECT GET COORDINATES:C663(*;$Txt_widget+".help";$left;$top;$right;$bottom)
 									
 									If ($right>$o.value)
 										
@@ -213,11 +231,11 @@ If ($Obj_constraints.rules#Null:C1517)
 										$right:=$o.value
 										$left:=$right-$width
 										
-										OBJECT SET COORDINATES:C1248(*;$o.object+".help";$left;$top;$right;$bottom)
+										OBJECT SET COORDINATES:C1248(*;$Txt_widget+".help";$left;$top;$right;$bottom)
 										
 										$rightTarget:=$left-$marginH
 										
-										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 										
 									End if 
 									
@@ -239,7 +257,7 @@ If ($Obj_constraints.rules#Null:C1517)
 										
 										$rightTarget:=$leftTarget+$width
 										
-										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 										
 									End if 
 								End if 
@@ -247,9 +265,9 @@ If ($Obj_constraints.rules#Null:C1517)
 								  //______________________________________________________
 							: ($o.type="minimum-width")  // Minimum object width
 								
-								If (OBJECT Get type:C1300(*;$o.object+".help")#Object type unknown:K79:1)
+								If (OBJECT Get type:C1300(*;$Txt_widget+".help")#Object type unknown:K79:1)
 									
-									OBJECT GET COORDINATES:C663(*;$o.object+".help";$left;$top;$right;$bottom)
+									OBJECT GET COORDINATES:C663(*;$Txt_widget+".help";$left;$top;$right;$bottom)
 									
 									If ($right<$o.value)
 										
@@ -258,11 +276,11 @@ If ($Obj_constraints.rules#Null:C1517)
 										$right:=$o.value
 										$left:=$right-$width
 										
-										OBJECT SET COORDINATES:C1248(*;$o.object+".help";$left;$top;$right;$bottom)
+										OBJECT SET COORDINATES:C1248(*;$Txt_widget+".help";$left;$top;$right;$bottom)
 										
 										$rightTarget:=$left-$marginH
 										
-										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 										
 									End if 
 									
@@ -284,7 +302,7 @@ If ($Obj_constraints.rules#Null:C1517)
 										
 										$rightTarget:=$leftTarget+$width
 										
-										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 										
 									End if 
 								End if 
@@ -301,7 +319,7 @@ If ($Obj_constraints.rules#Null:C1517)
 									$leftTarget:=$leftRef+$l
 									$rightTarget:=$leftTarget+$width
 									
-									OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+									OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 									
 								End if 
 								
@@ -310,7 +328,7 @@ If ($Obj_constraints.rules#Null:C1517)
 								
 								$rightTarget:=$leftRef-$o.value
 								
-								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 								
 								  //______________________________________________________
 							: ($o.type="margin-left")  // Set the distance to the object on the left
@@ -319,7 +337,7 @@ If ($Obj_constraints.rules#Null:C1517)
 								$leftTarget:=$rightRef+$o.value
 								$rightTarget:=$leftTarget+$width
 								
-								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 								
 								  //______________________________________________________
 							: ($o.type="inline")
@@ -331,7 +349,7 @@ If ($Obj_constraints.rules#Null:C1517)
 									$leftTarget:=$rightRef-$width+Num:C11($o.margin)
 									$rightTarget:=$leftTarget+$width
 									
-									OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+									OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 									
 									$rightRef:=$leftTarget-$width-Num:C11($o.margin)
 									
@@ -349,13 +367,13 @@ If ($Obj_constraints.rules#Null:C1517)
 									
 									  // Left is the parent right
 									OBJECT GET COORDINATES:C663(*;$o.parent;$leftRef;$topRef;$rightRef;$bottomRef)
-									$leftTarget:=$rightRef+Num:C11(OBJECT Get type:C1300(*;$o.object+".border")#Object type unknown:K79:1)
+									$leftTarget:=$rightRef+Num:C11(OBJECT Get type:C1300(*;$Txt_widget+".border")#Object type unknown:K79:1)
 									
 								End if 
 								
 								$rightTarget:=$leftTarget+$width
 								
-								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+								OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 								
 								  //______________________________________________________
 							: ($o.type="float")
@@ -389,21 +407,21 @@ If ($Obj_constraints.rules#Null:C1517)
 										
 										$leftTarget:=$rightTarget-$width
 										
-										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 										
 										  // Move the associated label if any
-										If (OBJECT Get type:C1300(*;$o.object+".label")#Object type unknown:K79:1)
+										If (OBJECT Get type:C1300(*;$Txt_widget+".label")#Object type unknown:K79:1)
 											
 											  // Object becomes reference
-											OBJECT GET COORDINATES:C663(*;$o.object;$leftRef;$topRef;$rightRef;$bottomRef)
+											OBJECT GET COORDINATES:C663(*;$Txt_widget;$leftRef;$topRef;$rightRef;$bottomRef)
 											
-											OBJECT GET COORDINATES:C663(*;$o.object+".label";$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+											OBJECT GET COORDINATES:C663(*;$Txt_widget+".label";$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 											
 											$width:=$rightTarget-$leftTarget
 											$rightTarget:=$leftRef-$marginH
 											$leftTarget:=$rightTarget-$width
 											
-											OBJECT SET COORDINATES:C1248(*;$o.object+".label";$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+											OBJECT SET COORDINATES:C1248(*;$Txt_widget+".label";$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 											
 										End if 
 										
@@ -420,7 +438,7 @@ If ($Obj_constraints.rules#Null:C1517)
 								
 								$rightRef:=$rightRef+Num:C11($o.offset)+$marginV
 								
-								OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightRef;$bottomTarget)
+								OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightRef;$bottomTarget)
 								
 								  //______________________________________________________
 							: ($o.type="horizontal alignment")
@@ -435,7 +453,7 @@ If ($Obj_constraints.rules#Null:C1517)
 										$middleTarget:=(($rightTarget-$leftTarget)/2)+$leftTarget
 										
 										$offset:=$middleRef-$middleTarget
-										OBJECT MOVE:C664(*;$o.object;$offset;0)
+										OBJECT MOVE:C664(*;$Txt_widget;$offset;0)
 										
 										  //……………………………………………………………………………………………
 									: ($o.value="left")  // Keep objects left aligned
@@ -445,7 +463,7 @@ If ($Obj_constraints.rules#Null:C1517)
 										$leftTarget:=$leftRef+Num:C11($o.margin)
 										$rightTarget:=$leftTarget+$width
 										
-										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 										
 										  //……………………………………………………………………………………………
 									: ($o.value="right")  // Keep objects right aligned
@@ -455,7 +473,7 @@ If ($Obj_constraints.rules#Null:C1517)
 										$rightTarget:=$rightRef-Num:C11($o.margin)
 										$leftTarget:=$rightTarget-$width
 										
-										OBJECT SET COORDINATES:C1248(*;$o.object;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+										OBJECT SET COORDINATES:C1248(*;$Txt_widget;$leftTarget;$topTarget;$rightTarget;$bottomTarget)
 										
 										  //……………………………………………………………………………………………
 									Else 
@@ -475,27 +493,22 @@ If ($Obj_constraints.rules#Null:C1517)
 						
 					Else 
 						
-						ASSERT:C1129(dev_Matrix ;"Unknown constraint:"+String:C10($o.object))
+						ASSERT:C1129(dev_Matrix ;"Unknown constraint:"+String:C10($Txt_widget))
 						
 					End if 
 					
-				Else 
-					
-					  // A "If" statement should never omit "Else"
-					
-				End if 
-				
-				  // Adjust the border if any
-				If (OBJECT Get type:C1300(*;$o.object+".border")#Object type unknown:K79:1)
-					
-					$leftTarget:=$leftTarget-1
-					$topTarget:=$topTarget-1
-					$rightTarget:=$rightTarget+1
-					$bottomTarget:=$bottomTarget+1
-					
-					OBJECT SET COORDINATES:C1248(*;$o.object+".border";$leftTarget;$topTarget;$rightTarget;$bottomTarget)
-					
-				End if 
+					  // Adjust the border if any
+					If (OBJECT Get type:C1300(*;$Txt_widget+".border")#Object type unknown:K79:1)
+						
+						$leftTarget:=$leftTarget-1
+						$topTarget:=$topTarget-1
+						$rightTarget:=$rightTarget+1
+						$bottomTarget:=$bottomTarget+1
+						
+						OBJECT SET COORDINATES:C1248(*;$Txt_widget+".border";$leftTarget;$topTarget;$rightTarget;$bottomTarget)
+						
+					End if 
+				End for each 
 				
 				  //========================================================
 		End case 
