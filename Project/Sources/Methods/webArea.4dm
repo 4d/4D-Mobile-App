@@ -12,8 +12,10 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
+C_BLOB:C604($x)
+C_LONGINT:C283($l)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o)
+C_OBJECT:C1216($fileTempo;$o;$o1)
 
 If (False:C215)
 	C_OBJECT:C1216(webArea ;$0)
@@ -140,6 +142,102 @@ Else
 		: ($1="setContent")
 			
 			WA SET PAGE CONTENT:C1037(*;$o.name;$2.content;Choose:C955($2.base=Null:C1517;"/";String:C10($2.base)))
+			
+			  //______________________________________________________
+		: ($1="load")
+			
+			  //#TO_DO : Allow relative path to resources folder
+			
+			If (Bool:C1537($2.exists))
+				
+				DOCUMENT TO BLOB:C525($2.platformPath;$x)
+				$o.success:=Bool:C1537(OK)
+				
+				If ($o.success)
+					
+					$t:=Convert to text:C1012($x;"UTF-8")
+					$o.success:=Bool:C1537(OK)
+					
+					If ($o.success)
+						
+						  // Process tags
+						PROCESS 4D TAGS:C816($t;$t)
+						
+						  // Cleanup
+						$t:=Replace string:C233($t;"\r\n";"")
+						$t:=Replace string:C233($t;"\r";"")
+						$t:=Replace string:C233($t;"\n";"")
+						$t:=Replace string:C233($t;"\t";"")
+						
+						  // Temporary allow "file:// "
+						ARRAY TEXT:C222($tTxt_filters;0x0000)
+						ARRAY BOOLEAN:C223($tBoo_allow;0x0000)
+						WA GET URL FILTERS:C1031(*;$o.name;$tTxt_filters;$tBoo_allow)
+						
+						$o1:=New object:C1471(\
+							"filters";New collection:C1472;\
+							"allowDeny";New collection:C1472)
+						
+						ARRAY TO COLLECTION:C1563($o1.filters;$tTxt_filters)
+						ARRAY TO COLLECTION:C1563($o1.allowDeny;$tBoo_allow)
+						
+						$l:=Find in array:C230($tTxt_filters;"file*")
+						
+						If ($l>0)
+							
+							$tBoo_allow{$l}:=True:C214
+							
+						Else 
+							
+							APPEND TO ARRAY:C911($tTxt_filters;"file*")
+							APPEND TO ARRAY:C911($tBoo_allow;True:C214)  // Allowed
+							
+						End if 
+						
+						WA SET URL FILTERS:C1030(*;$o.name;$tTxt_filters;$tBoo_allow)
+						
+						$fileTempo:=Temporary folder:C486+$2.name+$2.extension
+						
+						$fileTempo.setText($t)
+						
+						WA OPEN URL:C1020(*;$o.name;$fileTempo.platformPath)
+						
+						  // Restore filters
+						COLLECTION TO ARRAY:C1562($o1.filters;$tTxt_filters)
+						COLLECTION TO ARRAY:C1562($o1.allowDeny;$tBoo_allow)
+						
+						WA SET URL FILTERS:C1030(*;$o.name;$tTxt_filters;$tBoo_allow)
+						
+					Else 
+						
+						  // A "If" statement should never omit "Else"
+						
+					End if 
+					
+				Else 
+					
+					  // A "If" statement should never omit "Else"
+					
+				End if 
+				
+			Else 
+				
+				  // A "If" statement should never omit "Else"
+				
+			End if 
+			
+			  //______________________________________________________
+		: ($1="execute")
+			
+			If ($2.type#Null:C1517)
+				
+				$o.result:=WA Evaluate JavaScript:C1029(*;$o.name;$2.code;Num:C11($2.type))
+				
+			Else 
+				
+				$o.result:=WA Evaluate JavaScript:C1029(*;$o.name;$2.code;$l)
+				
+			End if 
 			
 			  //______________________________________________________
 		Else 

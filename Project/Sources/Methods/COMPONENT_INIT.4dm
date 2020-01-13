@@ -363,7 +363,13 @@ $Lon_version:=Num:C11(Application version:C493)
 If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	
 	featuresFlags:=New object:C1471(\
-		"with";Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))])))
+		"with";Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]));\
+		"unstable";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($Lon_version>=1830));\
+		"delivered";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($Lon_version>=Num:C11($2)));\
+		"debug";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
+		"wip";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
+		"alias";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=Bool:C1537(This:C1470[Choose:C955(Value type:C1509($2)=Is text:K8:3;$2;"_"+String:C10($2))]))\
+		)
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | TOOLS |
@@ -375,7 +381,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  //featuresFlags._475:=True //      deactivate code signing on framework
 	  //featuresFlags._234:=True //      Add in coreData model Record abstract entity
 	  //featuresFlags._568:=True //      use previous project build SDK as new SDK (ie. fast sdk move, bug exists)
-	featuresFlags._8858:=(Structure file:C489=Structure file:C489(*))  // Activates a debug mode for UI
+	featuresFlags.debug(8858)  // Activates a debug mode for UI
 	
 	  // Use old behaviour
 	  //featuresFlags._677:=True //     Format fields when dumping data from rest (userless if iOS app could translate)
@@ -415,6 +421,7 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  //featuresFlags._103505:=($Lon_version>=1750)  //   [MOBILE] Add, Update and Save Actions
 	  //featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  //  Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
 	  //featuresFlags.withRecursiveLink:=True  //                       Enable recursive link management
+	featuresFlags.delivered(98145;1750)  //             Replace, for data structure access, EXPORT STRUCTURE by ds
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R6 |
@@ -426,26 +433,25 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  18  |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags._105431:=($Lon_version>=1800)  //  [MOBILE] Display 1-n relations
-	featuresFlags._110882:=($Lon_version>=1800)  //  [MOBILE] Dump data into core data SQLLite database
+	featuresFlags.delivered(105431;1800)  //          [MOBILE] Display 1-n relations
+	featuresFlags.delivered(110882;1800)  //          [MOBILE] Dump data into core data SQLLite database
 	
-	featuresFlags.repairStructureMoreVisible:=($Lon_version>=1820)
-	featuresFlags.newDataModel:=($Lon_version>=1800)
+	featuresFlags.delivered("newDataModel";1800)
+	
+	  // ________________________________________________________________________________________________________________________________
+	  //                                                             | 18R2 |
+	  // ________________________________________________________________________________________________________________________________
+	featuresFlags.delivered("repairStructureMoreVisible";1820)
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags._98145:=($Lon_version>=1750)  //             Replace, for data structure access, EXPORT STRUCTURE by ds
+	featuresFlags.wip("withWidgetActions")  //          Enable widget actions
+	featuresFlags.wip("accentColors")  //               Manage colors according to user system parameters
 	
-	featuresFlags.withWidgetActions:=featuresFlags._8858  //   Enable widget actions
-	
-	featuresFlags.accentColors:=featuresFlags._8858  //        Manage colors according to user system parameters
-	
-	featuresFlags._113164:=($Lon_version>=1830)  //            Enable/disable image dump
-	
-	featuresFlags._113016:=($Lon_version>=1830)  //            [MOBILE] Svg improvement in forms section
-	
-	featuresFlags._112225:=($Lon_version>=1830)  //            [MOBILE] Select / install / use custom templates
+	featuresFlags.unstable(113164)  //                  Enable/disable image dump
+	featuresFlags.unstable(113016)  //                  [MOBILE] Svg improvement in forms section
+	featuresFlags.unstable(112225)  //                  [MOBILE] Select / install / use custom templates
 	
 End if 
 
@@ -540,12 +546,10 @@ End if
   // ________________________________________________________________________________________________________________________________
   //                                                             | ALIAS |
   // ________________________________________________________________________________________________________________________________
-featuresFlags.oneToManyRelations:=featuresFlags._105431
-
-featuresFlags.setImageDump:=featuresFlags._113164
-featuresFlags.newViewUI:=featuresFlags._113016
-featuresFlags.resourcesBrowser:=featuresFlags._112225
-
+featuresFlags.alias("oneToManyRelations";105431)
+featuresFlags.alias("setImageDump";113164)
+featuresFlags.alias("newViewUI";113016)
+featuresFlags.alias("resourcesBrowser";112225)
 
   // ________________________________________________________________________________________________________________________________
   //                                                         | AFTER FLAGS |

@@ -249,8 +249,8 @@
 	},
 	"BROWSER": {
 		"methods": [
-			"BROWSER_Handler",
-			"BROWSER_OBJECTS_HANDLER"
+			"browser_HANDLER",
+			"browser_OBJECTS_HANDLER"
 		],
 		"forms": [
 			"BROWSER"
@@ -694,6 +694,7 @@
 			"views_fieldList",
 			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",
+			"views_OBJECTS_HANDLER",
 			"views_preview",
 			"views_UPDATE"
 		],
