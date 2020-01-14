@@ -17,12 +17,14 @@ $Col_types[Is integer:K8:5]:=3
 $Col_types[Is longint:K8:6]:=4
 $Col_types[Is integer 64 bits:K8:25]:=5
 $Col_types[Is real:K8:4]:=6
-$Col_types[Is float:K8:26]:=6
+$Col_types[_o_Is float:K8:26]:=6
 $Col_types[Is date:K8:7]:=8
 $Col_types[Is time:K8:8]:=9
 $Col_types[Is text:K8:3]:=10
 $Col_types[Is picture:K8:10]:=12
 $Col_types[Is BLOB:K8:12]:=18
 $Col_types[Is object:K8:27]:=21
+
+$Col_types[5]:=10  // ACI0100285
 
 $0:=$Col_types[$1]
