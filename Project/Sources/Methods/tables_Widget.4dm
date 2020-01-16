@@ -12,12 +12,12 @@ C_PICTURE:C286($0)
 C_OBJECT:C1216($1)
 C_OBJECT:C1216($2)
 
-C_BOOLEAN:C305($Boo_selected)
-C_LONGINT:C283($kLon_cellHeight;$kLon_cellWidth;$kLon_iconWidth;$kLon_maxChar;$kLon_offset;$Lon_parameters)
-C_LONGINT:C283($Lon_x;$Lon_y)
-C_TEXT:C284($Dom_table;$kTxt_selectedFill;$kTxt_selectedStroke;$Txt_defaultForm;$Txt_name;$Txt_table)
-C_TEXT:C284($Txt_type)
-C_OBJECT:C1216($file;$svg;$Obj_dataModel;$Obj_params;$Path_hostRoot;$Path_root)
+C_BLOB:C604($x)
+C_BOOLEAN:C305($bSelected)
+C_PICTURE:C286($p)
+C_TEXT:C284($domTable;$tFormName;$tName;$tTable;$tTypeForm)
+C_OBJECT:C1216($errors;$file;$oDataModel;$oParams;$pathForm;$str)
+C_OBJECT:C1216($svg)
 
 If (False:C215)
 	C_PICTURE:C286(tables_Widget ;$0)
@@ -27,32 +27,41 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$Obj_dataModel:=$1
+	$oDataModel:=$1
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
+	If (Count parameters:C259>=2)
 		
-		$Obj_params:=$2
+		$oParams:=$2
+		
+	Else 
+		
+		$oParams:=New object:C1471
 		
 	End if 
 	
-	$kLon_cellWidth:=115  // 100
-	$kLon_cellHeight:=110  // 70
-	$kLon_iconWidth:=80
-	$kLon_offset:=5
+	$oParams.x:=0  // Start x
+	$oParams.y:=0  // Start y
 	
-	$kTxt_selectedFill:=ui.colors.backgroundSelectedColor.hex
-	$kTxt_selectedStroke:=ui.colors.strokeColor.hex
+	$oParams.cell:=New object:C1471(\
+		"width";115;\
+		"height";110)
 	
-	$kLon_maxChar:=18
+	$oParams.icon:=New object:C1471(\
+		"width";80;\
+		"height";110)
 	
-	$Lon_x:=0  // Start x
-	$Lon_y:=0  // Start y
+	$oParams.hOffset:=5
+	$oParams.maxChar:=18  //Choose(Get database localization="ja";9;18)
+	
+	$oParams.selectedFill:=ui.colors.backgroundSelectedColor.hex
+	$oParams.selectedStroke:=ui.colors.strokeColor.hex
+	
+	$str:=str ()
+	$svg:=svg ()
 	
 Else 
 	
@@ -61,105 +70,105 @@ Else
 End if 
 
   // ----------------------------------------------------
-$svg:=svg 
-
-If ($Obj_dataModel#Null:C1517)
+If ($oDataModel#Null:C1517)
 	
-	$Txt_type:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(featuresFlags.with("newViewUI");"VIEWS";"_o_VIEWS")].selector)=2;"detail";"list")
+	$tTypeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(featuresFlags.with("newViewUI");"VIEWS";"_o_VIEWS")].selector)=2;"detail";"list")
 	
-	$Path_root:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16);fk platform path:K87:2)
-	$Path_hostRoot:=COMPONENT_Pathname ("host_"+$Txt_type+"Forms")
+	$errors:=errors ("noError")  //========================================================================================================
 	
-	  // Get the default form
-	$Txt_defaultForm:=JSON Parse:C1218($Path_root.file("templates/form/"+$Txt_type+"/manifest.json").getText()).default
-	
-	For each ($Txt_table;$Obj_dataModel)
+	For each ($tTable;$oDataModel)
 		
-		$Boo_selected:=($Txt_table=String:C10($Obj_params.tableNumber))
+		$bSelected:=($tTable=String:C10($oParams.tableNumber))
 		
 		  // Create a table group. filled according to selected status
-		$Dom_table:=$svg.group($Txt_table)\
-			.setFill(Choose:C955($Boo_selected;$kTxt_selectedFill;"white")).latest
+		$domTable:=$svg.group($tTable)\
+			.setFill(Choose:C955($bSelected;$oParams.selectedFill;"none")).latest
 		
 		  // Background
-		$svg.rect($Lon_x;$Lon_y;$kLon_cellWidth;$kLon_cellHeight;New object:C1471("target";$Dom_table))\
-			.setStroke(Choose:C955($Boo_selected;$kTxt_selectedFill;"none"))
+		$svg.rect($oParams.x;$oParams.y;$oParams.cell.width;$oParams.cell.height;New object:C1471("target";$domTable))\
+			.setStroke(Choose:C955($bSelected;$oParams.selectedFill;"none"))
 		
 		  // Border & reactive 'button'
-		$svg.rect($Lon_x+1;$Lon_y+1;$kLon_cellWidth;$kLon_cellHeight;New object:C1471("target";$Dom_table))\
-			.setStroke(Choose:C955($Boo_selected;$kTxt_selectedStroke;"none"))\
+		$svg.rect($oParams.x+1;$oParams.y+1;$oParams.cell.width;$oParams.cell.height;New object:C1471("target";$domTable))\
+			.setStroke(Choose:C955($bSelected;$oParams.selectedStroke;"none"))\
 			.setFill("white";5)
 		
 		  // Put the icon [
-		If (Form:C1466[$Txt_type][$Txt_table].form=Null:C1517)
+		If (Form:C1466[$tTypeForm][$tTable].form=Null:C1517)
 			
 			  // No form selected
-			$file:=$Path_root.file("templates/form/"+$Txt_type+"/defaultLayoutIcon.png")
+			$file:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16);fk platform path:K87:2).file("templates/form/"+$tTypeForm+"/defaultLayoutIcon.png")
 			
 		Else 
 			
-			If (Position:C15("/";String:C10(Form:C1466[$Txt_type][$Txt_table].form))=1)
+			$tFormName:=String:C10(Form:C1466[$tTypeForm][$tTable].form)
+			$pathForm:=tmpl_form ($tFormName;$tTypeForm)
+			
+			If ($pathForm.exists)
 				
-				If ($Path_hostRoot.exists)
-					
-					$file:=$Path_hostRoot.file(Delete string:C232(String:C10(Form:C1466[$Txt_type][$Txt_table].form);1;1)+"/layoutIconx2.png")
-					
-					If (Not:C34($file.exists))
-						
-						$file:=$Path_root.file("images/errorIcon.svg")
-						
-					End if 
-					
-				Else 
-					
-					$file:=$Path_root.file("images/errorIcon.svg")
-					
-				End if 
+				$file:=$pathForm.file("layoutIconx2.png")
 				
 			Else 
 				
-				$file:=$Path_root.file("templates/form/"+$Txt_type+"/"+String:C10(Form:C1466[$Txt_type][$Txt_table].form)+"/layoutIconx2.png")
+				  // Error
+				$file:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16);fk platform path:K87:2).file("images/errorIcon.svg")
 				
-				If (Not:C34($file.exists))
-					
-					$file:=$Path_root.file("images/noIcon.svg")
-					
-				End if 
 			End if 
 		End if 
 		
-		$svg.image($file;New object:C1471(\
-			"target";$Dom_table;\
-			"left";$Lon_x+($kLon_cellWidth/2)-($kLon_iconWidth/2);\
-			"top";$Lon_y+5))\
-			.setDimensions($kLon_iconWidth)
-		
-		If (featuresFlags.with("newDataModel"))
+		If (featuresFlags.with("resourcesBrowser"))
 			
-			  // Avoid too long name
-			$Txt_name:=$Obj_dataModel[$Txt_table][""].shortLabel
+			If ($pathForm.extension=commonValues.archiveExtension)  // Archive
+				
+				$x:=$file.getContent()
+				BLOB TO PICTURE:C682($x;$p)
+				CLEAR VARIABLE:C89($x)
+				
+				CREATE THUMBNAIL:C679($p;$p;$oParams.icon.width;$oParams.icon.width)
+				$svg.embedPicture($p;$oParams.x+18;5;New object:C1471(\
+					"target";$domTable))
+				CLEAR VARIABLE:C89($p)
+				
+			Else 
+				
+				$svg.image($file;New object:C1471(\
+					"target";$domTable;\
+					"left";$oParams.x+($oParams.cell.width/2)-($oParams.icon.width/2);\
+					"top";$oParams.y+5))\
+					.setDimensions($oParams.icon.width)
+				
+			End if 
 			
 		Else 
 			
-			$Txt_name:=$Obj_dataModel[$Txt_table].shortLabel
+			$svg.image($file;New object:C1471(\
+				"target";$domTable;\
+				"left";$oParams.x+($oParams.cell.width/2)-($oParams.icon.width/2);\
+				"top";$oParams.y+5))\
+				.setDimensions($oParams.icon.width)
 			
 		End if 
 		
+		  // Avoid too long name
+		$tName:=Choose:C955(featuresFlags.with("newDataModel");$oDataModel[$tTable][""].shortLabel;$oDataModel[$tTable].shortLabel)
 		
-		If (Length:C16($Txt_name)>$kLon_maxChar)
+		If (Length:C16($tName)>$oParams.maxChar)
 			
-			$Txt_name:=Substring:C12($Txt_name;1;$kLon_maxChar)+"…"
+			$tName:=Substring:C12($tName;1;$oParams.maxChar)+"…"
 			
 		End if 
 		
-		$svg.textArea($Txt_name;$Lon_x;$kLon_cellHeight-20)\
-			.setDimensions($kLon_cellWidth;14)\
-			.setFill(Choose:C955($Boo_selected;"dimgray";"dimgray"))\
+		$svg.textArea($str.setText($tName).truncate($oParams.maxChar);$oParams.x;$oParams.cell.height-20;New object:C1471("target";$domTable))\
+			.setDimensions($oParams.cell.width;14)\
+			.setFill(Choose:C955($bSelected;"dimgray";"dimgray"))\
 			.setAttribute("text-align";"center")
 		
-		$Lon_x:=$Lon_x+$kLon_cellWidth+$kLon_offset
+		$oParams.x:=$oParams.x+$oParams.cell.width+$oParams.hOffset
 		
 	End for each 
+	
+	$errors.deinstall()  //================================================================================================================
+	
 End if 
 
   // ----------------------------------------------------

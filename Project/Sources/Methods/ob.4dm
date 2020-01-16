@@ -41,6 +41,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"isCollection";Formula:C1597(Value type:C1509(This:C1470.contents)=Is collection:K8:32);\
 		"isEmpty";Formula:C1597(ob ("isEmpty").value);\
 		"isObject";Formula:C1597(Value type:C1509(This:C1470.contents)=Is object:K8:27);\
+		"remove";Formula:C1597(ob ("remove";New object:C1471("key";$1)));\
 		"set";Formula:C1597(ob ("set";New object:C1471("value";$1)));\
 		"testPath";Formula:C1597(ob ("testPath";New object:C1471("path";String:C10($1))).value)\
 		)
@@ -311,6 +312,15 @@ Else
 			End for each 
 			
 			$o.value:=JSON Validate:C1456($o.contents;$Obj_schem).success
+			
+			  //______________________________________________________
+		: ($1="remove")
+			
+			If ($2.key#Null:C1517)
+				
+				OB REMOVE:C1226($o;String:C10($2.key))
+				
+			End if 
 			
 			  //______________________________________________________
 		Else 

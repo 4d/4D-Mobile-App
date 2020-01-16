@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
-  // Project method : views_OBJECTS_HANDLER
+  // Project method : VIEWS_Objects_handler
   // ID[D7D3A572E98F4D8BBDDCE96E1A322DAC]
   // Created 18-12-2017 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -18,7 +18,7 @@ C_TEXT:C284($Txt_tableNumber;$Txt_template;$Txt_typeForm)
 C_OBJECT:C1216($context;$form;$Obj_current)
 
 If (False:C215)
-	C_LONGINT:C283(views_OBJECTS_HANDLER ;$0)
+	C_LONGINT:C283(VIEWS_Objects_handler ;$0)
 End if 
 
   // ----------------------------------------------------
@@ -36,8 +36,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$form:=VIEWS_Handler (New object:C1471(\
-		"action";"init"))
+	$form:=VIEWS_Handler (New object:C1471("action";"init"))
 	
 	$context:=$form.$
 	
@@ -105,9 +104,7 @@ Case of
 						End if 
 						
 						  //______________________________________________________
-					: ($Txt_tableNumber#$context.tableNum())\
-						 | (Length:C16($Txt_template)=0)\
-						 | (Test path name:C476(COMPONENT_Pathname ("listforms").platformPath+$Txt_template+Folder separator:K24:12)#Is a folder:K24:2)
+					: ($Txt_tableNumber#$context.tableNum()) | (Length:C16($Txt_template)=0) | (Test path name:C476(COMPONENT_Pathname ("listforms").platformPath+$Txt_template+Folder separator:K24:12)#Is a folder:K24:2)
 						
 						If ($Txt_tableNumber#$context.tableNum())
 							
@@ -120,14 +117,12 @@ Case of
 						If (Length:C16($context.tableNum())>0)
 							
 							  // Restore current selected background
-							SVG SET ATTRIBUTE:C1055(*;$form.form.current;$context.tableNumber;\
-								"fill";ui.unselectedFillColor)
+							SVG SET ATTRIBUTE:C1055(*;$form.form.current;$context.tableNumber;"fill";ui.unselectedFillColor)
 							
 						End if 
 						
 						  // Select the item
-						SVG SET ATTRIBUTE:C1055(*;$form.form.current;$Txt_tableNumber;\
-							"fill";ui.selectedColorFill)
+						SVG SET ATTRIBUTE:C1055(*;$form.form.current;$Txt_tableNumber;"fill";ui.selectedColorFill)
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -142,8 +137,7 @@ Case of
 						If (Length:C16($context.tableNum())>0)
 							
 							  // Unselect
-							SVG SET ATTRIBUTE:C1055(*;$form.form.current;$context.tableNumber;\
-								"fill";ui.unselectedFillColor)
+							SVG SET ATTRIBUTE:C1055(*;$form.form.current;$context.tableNumber;"fill";ui.unselectedFillColor)
 							
 						End if 
 						
@@ -184,8 +178,7 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Clicked:K2:4)\
-				 | ($form.form.eventCode=On Selection Change:K2:29)
+			: ($form.form.eventCode=On Clicked:K2:4) | ($form.form.eventCode=On Selection Change:K2:29)
 				
 				editor_ui_LISTBOX ($form.form.current)
 				
@@ -391,8 +384,7 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($form.form.current=$form.selectorList.name)\
-		 | ($form.form.current=$form.selectorDetail.name)
+	: ($form.form.current=$form.selectorList.name) | ($form.form.current=$form.selectorDetail.name)
 		
 		Case of 
 				
@@ -438,12 +430,9 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($form.form.current=$form.tableButtonNext.name)\
-		 | ($form.form.current=$form.tableButtonPrevious.name)
+	: ($form.form.current=$form.tableButtonNext.name) | ($form.form.current=$form.tableButtonPrevious.name)
 		
-		VIEWS_Handler (New object:C1471(\
-			"action";"scroll-table";\
-			"direction";Choose:C955($form.form.current=$form.tableButtonPrevious.name;"previous";"next")))
+		VIEWS_Handler (New object:C1471("action";"scroll-table";"direction";Choose:C955($form.form.current=$form.tableButtonPrevious.name;"previous";"next")))
 		
 		  //==================================================
 	: ($form.form.current=$form.resources.name)

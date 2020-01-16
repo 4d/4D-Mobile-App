@@ -410,6 +410,16 @@ ASSERT:C1129($o.setText("9 1 2").versionCompare("9 0";" ")=1)
 ASSERT:C1129($o.setText("9/1/2").versionCompare("9/0";"/")=1)
 
   // ============================================
+  // truncate()
+ASSERT:C1129($o.setText("hello").truncate(1)="h…")
+ASSERT:C1129($o.setText("hello").truncate(2)="he…")
+ASSERT:C1129($o.setText("hello").truncate(3)="hel…")
+ASSERT:C1129($o.setText("hello").truncate(4)="hell…")
+ASSERT:C1129($o.setText("hello").truncate(5)="hello")
+ASSERT:C1129($o.setText("hello").truncate(10)="hello")
+ASSERT:C1129($o.setText("hello world").truncate(12)="hello world")
+
+  // ============================================
 ASSERT:C1129(str_cmpVersion ("9.0";"9.1.2")=-1)
 ASSERT:C1129(str_cmpVersion ("9.1.2";"9.0")=1)
 ASSERT:C1129(str_cmpVersion ("9.1.2";"9.1.2")=0)

@@ -17,7 +17,7 @@ C_LONGINT:C283($i)
 C_PICTURE:C286($p)
 C_REAL:C285($Num_height;$Num_width)
 C_TEXT:C284($Dom_;$Dom_target;$t;$tt;$Txt_object)
-C_OBJECT:C1216($file;$o;$oo;$signal)
+C_OBJECT:C1216($file;$o;$o_;$signal)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -181,12 +181,12 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 						  //______________________________________________________
 					: (Match regex:C1019("(?m-si)^\\{.*\\}$";$t;1))  // json object
 						
-						$oo:=JSON Parse:C1218($t)
+						$o_:=JSON Parse:C1218($t)
 						
-						For each ($tt;$oo)
+						For each ($tt;$o_)
 							
 							DOM SET XML ATTRIBUTE:C866($o.root;\
-								$tt;$oo[$tt])
+								$tt;$o_[$tt])
 							
 						End for each 
 						
@@ -237,7 +237,7 @@ Else
 		Else 
 			
 			$o.success:=True:C214
-			$oo:=$2.options
+			$o_:=$2.options
 			$Txt_object:=String:C10($2.what)
 			
 			  // Find the target
@@ -246,12 +246,12 @@ Else
 					  //______________________________________________________
 				: (New collection:C1472("new";"findByPath").indexOf($1)#-1)
 					
-					$Dom_target:=Choose:C955($oo.target#Null:C1517;String:C10($oo.target);$o.root)
+					$Dom_target:=Choose:C955($o_.target#Null:C1517;String:C10($o_.target);$o.root)
 					
 					  //______________________________________________________
 				: ($1="set")
 					
-					If ($oo.target=Null:C1517)
+					If ($o_.target=Null:C1517)
 						
 						If ($o.latest=Null:C1517)
 							
@@ -266,7 +266,7 @@ Else
 						
 					Else 
 						
-						$Dom_target:=$oo.target
+						$Dom_target:=$o_.target
 						
 					End if 
 					
@@ -393,7 +393,7 @@ Else
 						: ($Txt_object="picture")
 							
 							  // Own XML data source
-							SVG EXPORT TO PICTURE:C1017($o.root;$p;Choose:C955($oo.exportType#Null:C1517;Num:C11($oo.exportType);Copy XML data source:K45:17))
+							SVG EXPORT TO PICTURE:C1017($o.root;$p;Choose:C955($o_.exportType#Null:C1517;Num:C11($o_.exportType);Copy XML data source:K45:17))
 							$o.success:=(Picture size:C356($p)>0)
 							
 							If ($o.success)
@@ -527,16 +527,17 @@ Else
 					  //=================================================================
 				: ($1="showInViewer")
 					
+					$o.success:=False:C215
+					
 					$signal:=New signal:C1641("CALL_MAIN_PROCESS")
 					CALL WORKER:C1389(1;"CALL_MAIN_PROCESS";$signal;"listOfLoadedComponents")
 					
-					$o.success:=False:C215
-					
 					If ($signal.wait(1))
 						
-						If ($signal.value.indexOf("4D SVG")#-1)
+						$o.success:=($signal.value.indexOf("4D SVG")#-1)
+						
+						If ($o.success)
 							
-							$o.success:=True:C214
 							EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER";*;$o.root)
 							
 						Else 
@@ -617,8 +618,8 @@ Else
 								If (OK=1)
 									
 									  // Get width & height of the picture if any
-									If ($oo.width=Null:C1517)\
-										 | ($oo.height=Null:C1517)
+									If ($o_.width=Null:C1517)\
+										 | ($o_.height=Null:C1517)
 										
 										READ PICTURE FILE:C678($file.platformPath;$p)
 										
@@ -627,15 +628,15 @@ Else
 											PICTURE PROPERTIES:C457($p;$Num_width;$Num_height)
 											CLEAR VARIABLE:C89($p)
 											
-											If ($oo.width=Null:C1517)
+											If ($o_.width=Null:C1517)
 												
-												$oo.width:=$Num_width
+												$o_.width:=$Num_width
 												
 											End if 
 											
-											If ($oo.height=Null:C1517)
+											If ($o_.height=Null:C1517)
 												
-												$oo.height:=$Num_height
+												$o_.height:=$Num_height
 												
 											End if 
 										End if 
@@ -649,10 +650,10 @@ Else
 										
 										$o.latest:=DOM Create XML element:C865($Dom_target;"image";\
 											"xlink:href";$t;\
-											"x";Num:C11($oo.left);\
-											"y";Num:C11($oo.top);\
-											"width";Num:C11($oo.width);\
-											"height";Num:C11($oo.height))
+											"x";Num:C11($o_.left);\
+											"y";Num:C11($o_.top);\
+											"width";Num:C11($o_.width);\
+											"height";Num:C11($o_.height))
 										
 									End if 
 									
@@ -676,7 +677,7 @@ Else
 							If (Picture size:C356($p)>0)
 								
 								  // Encode in base64
-								PICTURE TO BLOB:C692($p;$x;Choose:C955($oo.codec#Null:C1517;String:C10($oo.codec);".png"))
+								PICTURE TO BLOB:C692($p;$x;Choose:C955($o_.codec#Null:C1517;String:C10($o_.codec);".png"))
 								
 								If (OK=1)
 									
@@ -712,8 +713,8 @@ Else
 							$o.latest:=DOM Create XML element:C865($Dom_target;"textArea";\
 								"x";$2.x;\
 								"y";$2.y;\
-								"width";Choose:C955($oo.width=Null:C1517;"auto";Num:C11($oo.width));\
-								"height";Choose:C955($oo.height=Null:C1517;"auto";Num:C11($oo.height)))
+								"width";Choose:C955($o_.width=Null:C1517;"auto";Num:C11($o_.width));\
+								"height";Choose:C955($o_.height=Null:C1517;"auto";Num:C11($o_.height)))
 							
 							If (OK=1)\
 								 & (Length:C16($t)>0)
@@ -767,19 +768,19 @@ Else
 					
 					If ($o.success)  // Additional attributes
 						
-						If ($oo#Null:C1517)
+						If ($o_#Null:C1517)
 							
 							$c:=New collection:C1472("target";"left";"top";"width";"height";"codec")
 							
-							For each ($t;$oo)
+							For each ($t;$o_)
 								
 								If ($c.indexOf($t)=-1)
 									
 									If (Length:C16($t)#0)\
-										 & ($oo[$t]#Null:C1517)
+										 & ($o_[$t]#Null:C1517)
 										
 										DOM SET XML ATTRIBUTE:C866($o.latest;\
-											$t;$oo[$t])
+											$t;$o_[$t])
 										
 									Else 
 										
@@ -1057,16 +1058,16 @@ Else
 							  //______________________________________________________
 						: ($2.what="attributes")
 							
-							For each ($t;$oo) Until (OK=0)
+							For each ($t;$o_) Until (OK=0)
 								
 								If ($t#"target")
 									
 									If (Length:C16($t)#0)
 										
-										If ($oo[$t]#Null:C1517)
+										If ($o_[$t]#Null:C1517)
 											
 											DOM SET XML ATTRIBUTE:C866($Dom_target;\
-												$t;$oo[$t])
+												$t;$o_[$t])
 											
 										Else 
 											

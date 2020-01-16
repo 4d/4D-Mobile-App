@@ -35,8 +35,6 @@ SET ASSERT ENABLED:C1131(Bool:C1537(unitErr.assertEnabled);*)
 
   // ----------------------------------------------------
 
-If (Structure file:C489=Structure file:C489(*))
-	
-	ALERT:C41("Done")
-	
-End if 
+  //If (Structure file=Structure file(*))
+  //ALERT("Done")
+  //End if 

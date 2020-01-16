@@ -43,7 +43,8 @@
 					"height": 100,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"stroke": "#FFFFFF"
+					"stroke": "#FFFFFF",
+					"fill": "automatic"
 				},
 				"prompt.background": {
 					"type": "rectangle",

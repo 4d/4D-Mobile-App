@@ -209,7 +209,7 @@ Case of
 		  //______________________________________________________
 	: ($Txt_target="scripts")
 		
-		  // unsandboxed for use with LEP
+		  // Unsandboxed for use with LEP
 		$Obj_path:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath;fk platform path:K87:2)
 		
 		  //______________________________________________________

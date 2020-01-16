@@ -4,12 +4,11 @@ C_LONGINT:C283($l;$Lon_build;$Lon_error;$Lon_result;$Lon_type;$Lon_value)
 C_LONGINT:C283($Lon_x)
 C_REAL:C285($Num_;$r)
 C_TEXT:C284($Dir_root;$t;$tt;$Txt_in;$Txt_ormula;$Txt_result)
-C_OBJECT:C1216($folder;$o;$Obj_formula;$Obj_new;$Obj_result;$Obj_target)
-C_OBJECT:C1216($Obj_template;$oo;$ooo;$svg)
-C_COLLECTION:C1488($c;$cc;$Col_2)
+C_OBJECT:C1216($folder;$o;$o1;$o2;$Obj_formula;$Obj_new)
+C_OBJECT:C1216($Obj_result;$Obj_target;$Obj_template;$oErrors;$svg)
+C_COLLECTION:C1488($c;$c1;$Col_2)
 
 ARRAY TEXT:C222($tTxt_;0)
-
 
 If (False:C215)
 	SHOW ON DISK:C922(Folder:C1567(Temporary folder:C486;fk platform path:K87:2).platformPath)
@@ -18,7 +17,7 @@ End if
 COMPONENT_INIT 
 
 $o:=Folder:C1567("/")
-$oo:=Folder:C1567(fk system folder:K87:13).parent
+$o1:=Folder:C1567(fk system folder:K87:13).parent
 
 Case of 
 		
@@ -27,13 +26,12 @@ Case of
 		
 		  //this command list all loaded component with path
 		  //$c:=WEB Servers list
-		
 		  //________________________________________
 	: (True:C214)
 		
 		$o:=Build Exposed Datastore:C1598["NOT EXPOSED"]
 		
-		$oo:=$o.getInfo()
+		$o1:=$o.getInfo()
 		
 		$c:=New collection:C1472
 		For each ($t;$o)
@@ -61,7 +59,7 @@ Case of
 	: (False:C215)
 		
 		$o:=class ("lep")
-		$oo:=$o.constructor()
+		$o1:=$o.constructor()
 		
 		$o:=lep ("blocking:false")
 		$o.launch("open";"/Applications/Calculator.app")
@@ -97,9 +95,9 @@ Case of
 	: (False:C215)  // Unsandbox
 		
 		$o:=Folder:C1567(fk database folder:K87:14)
-		$oo:=Folder:C1567($o.platformPath;fk platform path:K87:2)
+		$o1:=Folder:C1567($o.platformPath;fk platform path:K87:2)
 		
-		$ooo:=Folder:C1567(Folder:C1567(fk database folder:K87:14).platformPath;fk platform path:K87:2)
+		$o2:=Folder:C1567(Folder:C1567(fk database folder:K87:14).platformPath;fk platform path:K87:2)
 		
 		  //________________________________________
 	: (True:C214)
@@ -108,22 +106,22 @@ Case of
 		  //$cc:=$c.slice($c.length-1)
 		
 		$o:=class ("str";"test")
-		$oo:=$o.constructor()
+		$o1:=$o.constructor()
 		
 		$c:=$o.distinctLetters()
 		$o.setText("hello world")
 		$t:=$o.lowerCamelCase()
 		
 		$o:=class ("svg";"test")
-		$oo:=$o.constructor()
+		$o1:=$o.constructor()
 		$o.close()
 		
 		$o:=class ("str";"test")
-		$oo:=$o.constructor()
+		$o1:=$o.constructor()
 		
 		$o.setText("Hello world")
 		$t:=$o.insert(" great";6).value
-		$oo:=$o.insert("Vincent";7;MAXLONG:K35:2)
+		$o1:=$o.insert("Vincent";7;MAXLONG:K35:2)
 		
 		  //________________________________________
 	: (True:C214)
@@ -164,15 +162,15 @@ Case of
 		
 		$o:=db ("object;blob")
 		
-		$oo:=$o.table("Commands")
-		$oo:=$o.table(5)
-		$oo:=$o.table(55)
-		$oo:=$o.table("hello")
-		$oo:=$o.table("Table_1")
-		$oo:=$o.table("Table_3")
+		$o1:=$o.table("Commands")
+		$o1:=$o.table(5)
+		$o1:=$o.table(55)
+		$o1:=$o.table("hello")
+		$o1:=$o.table("Table_1")
+		$o1:=$o.table("Table_3")
 		
-		$oo:=$o.field("Commands";4)
-		$oo:=$o.field("Commands";"theme")
+		$o1:=$o.field("Commands";4)
+		$o1:=$o.field("Commands";"theme")
 		
 		  //________________________________________
 	: (True:C214)
@@ -182,7 +180,7 @@ Case of
 		$c:=$c.map("col_formula";"$1.result:=Convert path system to POSIX:C1106($1.value)")
 		
 		$c:=New collection:C1472(Get 4D folder:C485(Current resources folder:K5:16);Get 4D folder:C485(Database folder:K5:14))
-		$cc:=$c.map("col_method";Formula:C1597($1.result:=Convert path system to POSIX:C1106($1.value)))
+		$c1:=$c.map("col_method";Formula:C1597($1.result:=Convert path system to POSIX:C1106($1.value)))
 		
 		  //________________________________________
 	: (True:C214)
@@ -195,8 +193,8 @@ Case of
 		$l:=$c.countValues("mandatory")
 		$b:=($c.countValues("mandatory")>0)
 		
-		$cc:=$c.extract("min")
-		$b:=($cc.length>0)
+		$c1:=$c.extract("min")
+		$b:=($c1.length>0)
 		
 		$l:=$c.count("min")
 		$b:=($l>0)
@@ -267,19 +265,19 @@ Case of
 		
 		For each ($o;ds:C1482.Commands.all())
 			
-			$ooo:=ds:C1482.Themes.query("Name = :1";$o.themeName)
+			$o2:=ds:C1482.Themes.query("Name = :1";$o.themeName)
 			
-			If ($ooo.length=0)
+			If ($o2.length=0)
 				
-				$oo:=ds:C1482.Themes.new()
-				$oo.Name:=$o.themeName
-				$Obj_result:=$oo.save()
+				$o1:=ds:C1482.Themes.new()
+				$o1.Name:=$o.themeName
+				$Obj_result:=$o1.save()
 				
-				$o.themeID:=$oo.ID
+				$o.themeID:=$o1.ID
 				
 			Else 
 				
-				$o.themeID:=$ooo[0].ID
+				$o.themeID:=$o2[0].ID
 				
 			End if 
 			
@@ -290,9 +288,9 @@ Case of
 		  //________________________________________
 	: (False:C215)
 		
-		$oo:=Folder:C1567(_o_env_System_path ("caches");fk platform path:K87:2).folder("com.4d.mobile").folder("sdk")
+		$o1:=Folder:C1567(_o_env_System_path ("caches");fk platform path:K87:2).folder("com.4d.mobile").folder("sdk")
 		$o:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")
-		ASSERT:C1129($oo.platformPath=$o.platformPath)
+		ASSERT:C1129($o1.platformPath=$o.platformPath)
 		
 		$t:=Convert path POSIX to system:C1107(_o_env_System_path ("caches";True:C214)+"com.4d.mobile/sdk/")
 		$tt:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk").platformPath
@@ -528,8 +526,8 @@ Case of
 		
 		$t:=Parse formula:C1576("CALL FORM($Obj_in.caller;\"project_BUILD\";$Obj_in)";4)
 		
-		$oo:=Build Exposed Datastore:C1598
-		$o:=Formula:C1597(project_BUILD ($oo))
+		$o1:=Build Exposed Datastore:C1598
+		$o:=Formula:C1597(project_BUILD ($o1))
 		OB GET PROPERTY NAMES:C1232($o;$tTxt_)
 		
 		  //________________________________________

@@ -12,10 +12,9 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_OK)
-C_TEXT:C284($t;$tt;$Txt_fieldNumber;$Txt_tableNumber)
-C_OBJECT:C1216($context;$file;$o;$Obj_audit;$Obj_dataModel;$Obj_detail)
-C_OBJECT:C1216($Obj_in;$Obj_list;$Path_detailForms;$Path_fieldIcons;$Path_formaters;$Path_listForms)
-C_OBJECT:C1216($Path_tableIcons;$Path_template)
+C_TEXT:C284($t;$tFormName;$tTable;$Txt_fieldNumber)
+C_OBJECT:C1216($context;$file;$o;$oDataModel;$oDetail;$oIN)
+C_OBJECT:C1216($oList;$oOUT;$Path_fieldIcons;$Path_formaters;$Path_tableIcons;$pathForm)
 
 If (False:C215)
 	C_OBJECT:C1216(project_Audit ;$0)
@@ -27,10 +26,10 @@ End if
 If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$Obj_in:=$1
+	$oIN:=$1
 	
 	  // Default values
-	$Obj_audit:=New object:C1471(\
+	$oOUT:=New object:C1471(\
 		"success";True:C214;\
 		"errors";New collection:C1472)
 	
@@ -42,17 +41,17 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		"filters";True:C214)
 	
 	  // Allow passing value for test purpose. Normal behaviour is form
-	$Obj_dataModel:=Choose:C955(Value type:C1509($Obj_in.dataModel)=Is object:K8:27;$Obj_in.dataModel;Form:C1466.dataModel)
-	$Obj_list:=Choose:C955(Value type:C1509($Obj_in.list)=Is object:K8:27;$Obj_in.list;Form:C1466.list)
-	$Obj_detail:=Choose:C955(Value type:C1509($Obj_in.detail)=Is object:K8:27;$Obj_in.detail;Form:C1466.detail)
+	$oDataModel:=Choose:C955(Value type:C1509($oIN.dataModel)=Is object:K8:27;$oIN.dataModel;Form:C1466.dataModel)
+	$oList:=Choose:C955(Value type:C1509($oIN.list)=Is object:K8:27;$oIN.list;Form:C1466.list)
+	$oDetail:=Choose:C955(Value type:C1509($oIN.detail)=Is object:K8:27;$oIN.detail;Form:C1466.detail)
 	
-	If ($Obj_in.target#Null:C1517)
+	If ($oIN.target#Null:C1517)
 		
-		$context.list:=($Obj_in.target.indexOf("lists")#-1)
-		$context.detail:=($Obj_in.target.indexOf("details")#-1)
-		$context.icons:=($Obj_in.target.indexOf("icons")#-1)
-		$context.formatters:=($Obj_in.target.indexOf("formatters")#-1)
-		$context.filters:=($Obj_in.target.indexOf("filters")#-1)
+		$context.list:=($oIN.target.indexOf("lists")#-1)
+		$context.detail:=($oIN.target.indexOf("details")#-1)
+		$context.icons:=($oIN.target.indexOf("icons")#-1)
+		$context.formatters:=($oIN.target.indexOf("formatters")#-1)
+		$context.filters:=($oIN.target.indexOf("filters")#-1)
 		
 	End if 
 	
@@ -63,7 +62,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-If ($Obj_dataModel#Null:C1517)
+If ($oDataModel#Null:C1517)
 	
 	  // Load manifest values
 	$file:=COMPONENT_Pathname ("listForms").file("manifest.json")
@@ -82,60 +81,29 @@ If ($Obj_dataModel#Null:C1517)
 		
 	End if 
 	
-	$Path_listForms:=COMPONENT_Pathname ("host_listForms")
-	$Path_detailForms:=COMPONENT_Pathname ("host_detailForms")
 	$Path_tableIcons:=COMPONENT_Pathname ("host_tableIcons")
 	$Path_fieldIcons:=COMPONENT_Pathname ("host_fieldIcons")
 	$Path_formaters:=COMPONENT_Pathname ("host_formatters")
 	
-	For each ($Txt_tableNumber;$Obj_dataModel)
+	For each ($tTable;$oDataModel)
 		
 		If ($context.list)  // LIST FORM
 			
-			$t:=String:C10($Obj_list[$Txt_tableNumber].form)
+			$tFormName:=String:C10($oList[$tTable].form)
+			$tFormName:=$tFormName*Num:C11($tFormName#"null")  // Reject null value
 			
-			If (Position:C15("/";$t)=1)
+			If (Length:C16($tFormName)>0)
 				
-				$t:=Delete string:C232($t;1;1)
+				$pathForm:=tmpl_form ($tFormName;"list")
 				
-				$Path_template:=$Path_listForms.folder($t)
-				$Boo_OK:=$Path_template.exists
-				
-				If ($Boo_OK)
+				If (Not:C34($pathForm.exists))
 					
-					For each ($tt;$context.listManifest.mandatory) While ($Boo_OK)
-						
-						$Boo_OK:=$Path_template.file($tt).exists
-						
-					End for each 
-					
-					If (Not:C34($Boo_OK))
-						
-						  //======================================================
-						  //                   INVALID TEMPLATE
-						  //======================================================
-						
-						$Obj_audit.success:=False:C215
-						$Obj_audit.errors.push(New object:C1471(\
-							"type";"template";\
-							"tab";"list";\
-							"message";str ("theTemplateIsInvalid").localized($t);\
-							"table";$Txt_tableNumber))
-						
-					End if 
-					
-				Else 
-					
-					  //======================================================
-					  //                   MISSING TEMPLATE
-					  //======================================================
-					
-					$Obj_audit.success:=False:C215
-					$Obj_audit.errors.push(New object:C1471(\
+					$oOUT.success:=False:C215
+					$oOUT.errors.push(New object:C1471(\
 						"type";"template";\
 						"tab";"list";\
-						"message";str ("theTemplateIsMissing").localized($t);\
-						"table";$Txt_tableNumber))
+						"message";str ("theTemplateIsMissing").localized($tFormName);\
+						"table";$tTable))
 					
 				End if 
 			End if 
@@ -143,50 +111,21 @@ If ($Obj_dataModel#Null:C1517)
 		
 		If ($context.detail)  // DETAIL FORM
 			
-			$t:=String:C10($Obj_detail[$Txt_tableNumber].form)
+			$tFormName:=String:C10($oDetail[$tTable].form)
+			$tFormName:=$tFormName*Num:C11($tFormName#"null")  // Reject null value
 			
-			If (Position:C15("/";$t)=1)
+			If (Length:C16($tFormName)>0)
 				
-				$t:=Delete string:C232($t;1;1)
+				$pathForm:=tmpl_form ($tFormName;"detail")
 				
-				$Path_template:=$Path_detailForms.folder($t)
-				$Boo_OK:=$Path_template.exists
-				
-				If ($Boo_OK)
+				If (Not:C34($pathForm.exists))
 					
-					For each ($tt;$context.detailManifest.mandatory) While ($Boo_OK)
-						
-						$Boo_OK:=$Path_template.file($tt).exists
-						
-					End for each 
-					
-					If (Not:C34($Boo_OK))
-						
-						  //======================================================
-						  //                   INVALID TEMPLATE
-						  //======================================================
-						
-						$Obj_audit.success:=False:C215
-						$Obj_audit.errors.push(New object:C1471(\
-							"type";"template";\
-							"tab";"detail";\
-							"message";str ("theTemplateIsInvalid").localized($t);\
-							"table";$Txt_tableNumber))
-						
-					End if 
-					
-				Else 
-					
-					  //======================================================
-					  //                   MISSING TEMPLATE
-					  //======================================================
-					
-					$Obj_audit.success:=False:C215
-					$Obj_audit.errors.push(New object:C1471(\
+					$oOUT.success:=False:C215
+					$oOUT.errors.push(New object:C1471(\
 						"type";"template";\
-						"tab";"detail";\
-						"message";str ("theTemplateIsMissing").localized($t);\
-						"table";$Txt_tableNumber))
+						"tab";"list";\
+						"message";str ("theTemplateIsMissing").localized($tFormName);\
+						"table";$tTable))
 					
 				End if 
 			End if 
@@ -196,12 +135,12 @@ If ($Obj_dataModel#Null:C1517)
 			
 			If (featuresFlags.with("newDataModel"))
 				
-				$t:=String:C10($Obj_dataModel[$Txt_tableNumber][""].icon)
+				$t:=String:C10($oDataModel[$tTable][""].icon)
 				
 			Else 
 				
 				  //old
-				$t:=String:C10($Obj_dataModel[$Txt_tableNumber].icon)
+				$t:=String:C10($oDataModel[$tTable].icon)
 				
 			End if 
 			
@@ -217,22 +156,22 @@ If ($Obj_dataModel#Null:C1517)
 					  //                  MISSING TABLE ICON
 					  //======================================================
 					
-					$Obj_audit.success:=False:C215
-					$Obj_audit.errors.push(New object:C1471(\
+					$oOUT.success:=False:C215
+					$oOUT.errors.push(New object:C1471(\
 						"type";"icon";\
 						"panel";"TABLES";\
 						"message";str ("theTableIconIsMissing").localized($t);\
-						"table";$Txt_tableNumber;\
+						"table";$tTable;\
 						"tab";"tableProperties"))
 					
 				End if 
 			End if 
 			
-			For each ($Txt_fieldNumber;$Obj_dataModel[$Txt_tableNumber])
+			For each ($Txt_fieldNumber;$oDataModel[$tTable])
 				
 				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldNumber;1;*))
 					
-					$t:=String:C10($Obj_dataModel[$Txt_tableNumber][$Txt_fieldNumber].icon)
+					$t:=String:C10($oDataModel[$tTable][$Txt_fieldNumber].icon)
 					
 					If (Position:C15("/";$t)=1)  // Host resources
 						
@@ -252,12 +191,12 @@ If ($Obj_dataModel#Null:C1517)
 							  //                  MISSING FIELD ICON
 							  //======================================================
 							
-							$Obj_audit.success:=False:C215
-							$Obj_audit.errors.push(New object:C1471(\
+							$oOUT.success:=False:C215
+							$oOUT.errors.push(New object:C1471(\
 								"type";"icon";\
 								"panel";"TABLES";\
 								"message";str ("theFieldIconIsMissing").localized($t);\
-								"table";$Txt_tableNumber;\
+								"table";$tTable;\
 								"field";$Txt_fieldNumber))
 							
 						End if 
@@ -268,11 +207,11 @@ If ($Obj_dataModel#Null:C1517)
 		
 		If ($context.formatters)  // FORMATTERS
 			
-			For each ($Txt_fieldNumber;$Obj_dataModel[$Txt_tableNumber])
+			For each ($Txt_fieldNumber;$oDataModel[$tTable])
 				
 				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldNumber;1;*))
 					
-					$t:=String:C10($Obj_dataModel[$Txt_tableNumber][$Txt_fieldNumber].format)
+					$t:=String:C10($oDataModel[$tTable][$Txt_fieldNumber].format)
 					
 					If (Position:C15("/";$t)=1)  // Host resources
 						
@@ -286,12 +225,12 @@ If ($Obj_dataModel#Null:C1517)
 							  //              MISSING OR INVALID FORMATTER
 							  //======================================================
 							
-							$Obj_audit.success:=False:C215
-							$Obj_audit.errors.push(New object:C1471(\
+							$oOUT.success:=False:C215
+							$oOUT.errors.push(New object:C1471(\
 								"type";"formatter";\
 								"panel";"TABLES";\
 								"message";str ("theFormatterIsMissingOrInvalid").localized(Delete string:C232($t;1;1));\
-								"table";$Txt_tableNumber;\
+								"table";$tTable;\
 								"field";$Txt_fieldNumber))
 							
 						End if 
@@ -302,7 +241,7 @@ If ($Obj_dataModel#Null:C1517)
 		
 		If ($context.filters)  // FILTERS
 			
-			$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_dataModel[$Txt_tableNumber][""];$Obj_dataModel[$Txt_tableNumber])
+			$o:=Choose:C955(featuresFlags.with("newDataModel");$oDataModel[$tTable][""];$oDataModel[$tTable])
 			
 			If ($o.filter#Null:C1517)
 				
@@ -312,12 +251,12 @@ If ($Obj_dataModel#Null:C1517)
 					  //                   INVALID FILTER
 					  //======================================================
 					
-					$Obj_audit.success:=False:C215
-					$Obj_audit.errors.push(New object:C1471(\
+					$oOUT.success:=False:C215
+					$oOUT.errors.push(New object:C1471(\
 						"type";"filter";\
 						"panel";"DATA";\
 						"message";str ("theFilterForTheTableIsNotValid").localized(String:C10($o.name));\
-						"table";$Txt_tableNumber))
+						"table";$tTable))
 					
 				End if 
 			End if 
@@ -326,11 +265,11 @@ If ($Obj_dataModel#Null:C1517)
 End if 
 
 CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"description";New object:C1471(\
-"show";Not:C34($Obj_audit.success)))
+"show";Not:C34($oOUT.success)))
 
   // ----------------------------------------------------
   // Return
-$0:=$Obj_audit
+$0:=$oOUT
 
   // ----------------------------------------------------
   // End

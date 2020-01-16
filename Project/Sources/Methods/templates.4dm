@@ -18,6 +18,7 @@ C_TEXT:C284($Svg_root;$t;$Txt_name;$Txt_tableNumber;$Txt_template;$Txt_type)
 C_OBJECT:C1216($file;$folder;$o;$Obj_color;$Obj_dataModel;$Obj_field)
 C_OBJECT:C1216($Obj_in;$Obj_navigationTable;$Obj_out;$Obj_table;$Obj_tableList;$Obj_tableModel)
 C_OBJECT:C1216($Obj_template;$Obj_userChoice;$Path_hostRoot;$Path_icon;$Path_manifest;$Path_root)
+C_OBJECT:C1216($pathForm)
 C_COLLECTION:C1488($Col_actions;$Col_catalog;$Col_path)
 
 If (False:C215)
@@ -102,27 +103,46 @@ Case of
 			
 			If (Length:C16($Txt_name)>0)
 				
-				  // Check if begin with "/"
-				If (Position:C15("/";$Txt_name)=1)
+				If (featuresFlags.with("resourcesBrowser"))
 					
-					$folder:=COMPONENT_Pathname ("host_"+String:C10($Obj_template.projectTag)+"Forms")
+					$pathForm:=tmpl_form ($Txt_name;String:C10($Obj_template.projectTag))
 					
-					$folder:=$folder.folder(Substring:C12($Txt_name;2;Length:C16($Txt_name)))
-					
-					If ($folder.exists)
+					If (Path to object:C1547($Txt_name).extension=commonValues.archiveExtension)  // Archive
 						
-						$t:=$folder.platformPath
+						  // Extract
+						$o:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486;fk platform path:K87:2);"template";fk overwrite:K87:5)
+						$t:=$o.platformPath
 						
 					Else 
 						
-						  // Cannot find custom template directory
+						$t:=$pathForm.platformPath
 						
 					End if 
 					
 				Else 
 					
-					$t:=$Obj_template.source+$Txt_name+Folder separator:K24:12
-					
+					  // Check if begin with "/"
+					If (Position:C15("/";$Txt_name)=1)
+						
+						$folder:=COMPONENT_Pathname ("host_"+String:C10($Obj_template.projectTag)+"Forms")
+						
+						$folder:=$folder.folder(Substring:C12($Txt_name;2;Length:C16($Txt_name)))
+						
+						If ($folder.exists)
+							
+							$t:=$folder.platformPath
+							
+						Else 
+							
+							  // Cannot find custom template directory
+							
+						End if 
+						
+					Else 
+						
+						$t:=$Obj_template.source+$Txt_name+Folder separator:K24:12
+						
+					End if 
 				End if 
 				
 			Else 
@@ -202,8 +222,27 @@ Case of
 			
 			If ($t[[1]]="/")  // custom form
 				
-				$t:=Delete string:C232($t;1;1)
-				$folder:=COMPONENT_Pathname ("host_"+$Obj_template.userChoiceTag+"Forms").folder($t)
+				If (featuresFlags.with("resourcesBrowser"))
+					
+					$pathForm:=tmpl_form ($t;String:C10($Obj_template.userChoiceTag))
+					
+					If (Path to object:C1547($t).extension=commonValues.archiveExtension)  // Archive
+						
+						  // Extract
+						$folder:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486;fk platform path:K87:2);"template";fk overwrite:K87:5)
+						
+					Else 
+						
+						$folder:=$pathForm
+						
+					End if 
+					
+				Else 
+					
+					$t:=Delete string:C232($t;1;1)
+					$folder:=COMPONENT_Pathname ("host_"+$Obj_template.userChoiceTag+"Forms").folder($t)
+					
+				End if 
 				
 			Else 
 				
@@ -822,20 +861,8 @@ Case of
 		End case 
 		
 		  // need asset?
-		$Boo_withIcons:=Bool:C1537($Obj_template.assets.mandatory)
-		
-		If (Not:C34($Boo_withIcons))
-			
-			For each ($Obj_table;$Obj_in.tags.navigationTables) Until ($Boo_withIcons)
-				
-				If (String:C10($Obj_table.icon)#"")
-					
-					$Boo_withIcons:=True:C214
-					$i:=MAXLONG:K35:2-1  // break
-					
-				End if 
-			End for each 
-		End if 
+		$Boo_withIcons:=Bool:C1537($Obj_template.assets.mandatory)\
+			 | ($Obj_in.tags.navigationTables.query("icon != ''").length>0)
 		
 		For each ($Obj_table;$Obj_in.tags.navigationTables)
 			
@@ -1186,19 +1213,8 @@ Case of
 		$Obj_in.tags.table.detailFields:=$Obj_in.tags.table.fields
 		
 		  // Need asset?
-		$Boo_withIcons:=Bool:C1537($Obj_template.assets.mandatory)
-		
-		If (Not:C34($Boo_withIcons))
-			
-			For each ($Obj_field;$Obj_in.tags.table.detailFields) Until ($Boo_withIcons)
-				
-				If (String:C10($Obj_field.icon)#"")
-					
-					$Boo_withIcons:=True:C214
-					
-				End if 
-			End for each 
-		End if 
+		$Boo_withIcons:=Bool:C1537($Obj_template.assets.mandatory)\
+			 | ($Obj_in.tags.table.detailFields.query("icon != ''").length>0)
 		
 		  // Create by field icon alignment or icon name
 		For each ($Obj_field;$Obj_in.tags.table.detailFields)
@@ -1441,7 +1457,7 @@ If (Value type:C1509($Obj_template.children)=Is collection:K8:32)
 			
 		End if 
 		
-		$o.template.source:=COMPONENT_Pathname ("templates").folder($Txt_template).platformPath
+		$o.template.source:=$Path_manifest.parent.platformPath
 		$o.template.parent:=$Obj_template
 		$o.projfile:=$Obj_in.projfile  // do not want a copy
 		

@@ -11,7 +11,7 @@
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($Boo_enabled;$Boo_reset)
-C_LONGINT:C283($l;$Lon_lastBuild;$Lon_Mode;$Lon_version)
+C_LONGINT:C283($l;$Lon_lastBuild;$Lon_main;$Lon_Mode;$Lon_version)
 C_PICTURE:C286($p)
 C_TEXT:C284($t;$Txt_key)
 C_OBJECT:C1216($o;$Obj_preferences)
@@ -68,6 +68,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	commonValues:=New object:C1471
 	
 	commonValues.extension:=".4dmobileapp"
+	commonValues.archiveExtension:=".zip"
 	
 	commonValues.theme:=New object:C1471(\
 		"colorjuicer";New object:C1471(\
@@ -171,7 +172,6 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	commonValues.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
 	commonValues.defaultFieldBindingTypes[Is text:K8:3]:="text"
 	commonValues.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
-	
 	
 	  // XXX check table & filed names in https://project.4d.com/issues/90770
 	commonValues.deletedRecordsTable:=New object:C1471(\
@@ -359,12 +359,13 @@ End if
   //                                                          FEATURES FLAGS
   // ================================================================================================================================
 $Lon_version:=Num:C11(Application version:C493)
+$Lon_main:=1830
 
 If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	
 	featuresFlags:=New object:C1471(\
 		"with";Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]));\
-		"unstable";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($Lon_version>=1830));\
+		"unstable";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($Lon_version>=$Lon_main));\
 		"delivered";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($Lon_version>=Num:C11($2)));\
 		"debug";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
 		"wip";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
@@ -375,53 +376,53 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  //                                                             | TOOLS |
 	  // ________________________________________________________________________________________________________________________________
 	  //featuresFlags._97117:=True    // Deactivate image dump (test purpose)
-	  //featuresFlags._917:=True //      commit to git generated project
-	  //featuresFlags._405:=True //      add framework sources to workspace
-	  //featuresFlags._406:=True //      do not add compiled frameworks to workspace
-	  //featuresFlags._475:=True //      deactivate code signing on framework
-	  //featuresFlags._234:=True //      Add in coreData model Record abstract entity
-	  //featuresFlags._568:=True //      use previous project build SDK as new SDK (ie. fast sdk move, bug exists)
+	  //featuresFlags._917:=True // commit to git generated project
+	  //featuresFlags._405:=True // add framework sources to workspace
+	  //featuresFlags._406:=True // do not add compiled frameworks to workspace
+	  //featuresFlags._475:=True // deactivate code signing on framework
+	  //featuresFlags._234:=True // Add in coreData model Record abstract entity
+	  //featuresFlags._568:=True // use previous project build SDK as new SDK (ie. fast sdk move, bug exists)
 	featuresFlags.debug(8858)  // Activates a debug mode for UI
 	
 	  // Use old behaviour
-	  //featuresFlags._677:=True //     Format fields when dumping data from rest (userless if iOS app could translate)
+	  //featuresFlags._677:=True // Format fields when dumping data from rest (userless if iOS app could translate)
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R2 |
 	  // ________________________________________________________________________________________________________________________________
-	  //featuresFlags._89556:=True    //   [DONE] Reload embedded data from iOS application
-	  //featuresFlags._92293:=True    //   [DONE] Support user defined tables
-	  //featuresFlags._93674:=True    //   [DONE] Main menu
-	  //featuresFlags._8122017:=True  //   [FIXED] Turn around bug close window
-	  //featuresFlags._96674:=True    //   [DONE] Archive app
+	  //featuresFlags._89556:=True    // Reload embedded data from iOS application
+	  //featuresFlags._92293:=True    // Support user defined tables
+	  //featuresFlags._93674:=True    // Main menu
+	  //featuresFlags._8122017:=True  // Turn around bug close window
+	  //featuresFlags._96674:=True    // Archive app
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R3 |
 	  // ________________________________________________________________________________________________________________________________
-	  //featuresFlags._100157:=($Lon_version>=1730)  //   [MOBILE] Template creation
-	  //featuresFlags._100353:=featuresFlags._100157  //  [MOBILE] Template creation: inject any sources
-	  //featuresFlags._100191:=($Lon_version>=1730)  //   [MOBILE] Data Formatter
+	  //featuresFlags._100157:=($Lon_version>=1730)  // Template creation
+	  //featuresFlags._100353:=featuresFlags._100157  // Template creation: inject any sources
+	  //featuresFlags._100191:=($Lon_version>=1730)  // Data Formatter
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R4 |
 	  // ________________________________________________________________________________________________________________________________
-	  //featuresFlags._98105:=($Lon_version>=1740)  //    [MOBILE] Multi-criteria Search
-	  //featuresFlags._100990:=($Lon_version>=1740)  //   [MOBILE] Custom Data Formatter
-	  //featuresFlags._100174:=($Lon_version>=1740)  //   [MOBILE] Restricted queries
-	  //featuresFlags._101725:=featuresFlags._100174  //  [MOBILE] Restricted queries: Use NSDataSet (beter way to store resources)
-	  //featuresFlags._103112:=featuresFlags._100174  //  [MOBILE] Restricted queries: Move dataSet into database in Mobile Projects
-	  //featuresFlags._102457:=($Lon_version>=1740)  //   [MOBILE] Data file access with /mobileapp key
+	  //featuresFlags._98105:=($Lon_version>=1740)  // Multi-criteria Search
+	  //featuresFlags._100990:=($Lon_version>=1740)  // Custom Data Formatter
+	  //featuresFlags._100174:=($Lon_version>=1740)  // Restricted queries
+	  //featuresFlags._101725:=featuresFlags._100174  // Restricted queries: Use NSDataSet (beter way to store resources)
+	  //featuresFlags._103112:=featuresFlags._100174  // Restricted queries: Move dataSet into database in Mobile Projects
+	  //featuresFlags._102457:=($Lon_version>=1740)  // Data file access with /mobileapp key
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R5 |
 	  // ________________________________________________________________________________________________________________________________
-	  //featuresFlags._101637:=($Lon_version>=1750)  //   [MOBILE] Display n-1 relations
-	  //featuresFlags._103850:=featuresFlags._101637  //  [MOBILE] Reload data from iOS with N-1 relation (Generate core data model with real relation)
-	  //featuresFlags._103411:=($Lon_version>=1750)  //   [MOBILE] Incremental synchronization
-	  //featuresFlags._103505:=($Lon_version>=1750)  //   [MOBILE] Add, Update and Save Actions
-	  //featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  //  Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
-	  //featuresFlags.withRecursiveLink:=True  //                       Enable recursive link management
-	featuresFlags.delivered(98145;1750)  //             Replace, for data structure access, EXPORT STRUCTURE by ds
+	  //featuresFlags._101637:=($Lon_version>=1750)  // Display n-1 relations
+	  //featuresFlags._103850:=featuresFlags._101637  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
+	  //featuresFlags._103411:=($Lon_version>=1750)  // Incremental synchronization
+	  //featuresFlags._103505:=($Lon_version>=1750)  // Add, Update and Save Actions
+	  //featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
+	  //featuresFlags.withRecursiveLink:=True  // Enable recursive link management
+	featuresFlags.delivered(98145;1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R6 |
@@ -433,8 +434,8 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  18  |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags.delivered(105431;1800)  //          [MOBILE] Display 1-n relations
-	featuresFlags.delivered(110882;1800)  //          [MOBILE] Dump data into core data SQLLite database
+	featuresFlags.delivered(105431;1800)  // Display 1-n relations
+	featuresFlags.delivered(110882;1800)  // Dump data into core data SQLLite database
 	
 	featuresFlags.delivered("newDataModel";1800)
 	
@@ -442,16 +443,16 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	  //                                                             | 18R2 |
 	  // ________________________________________________________________________________________________________________________________
 	featuresFlags.delivered("repairStructureMoreVisible";1820)
+	featuresFlags.delivered(113164;1820)  // Enable/disable image dump
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags.wip("withWidgetActions")  //          Enable widget actions
-	featuresFlags.wip("accentColors")  //               Manage colors according to user system parameters
+	featuresFlags.wip("withWidgetActions")  // Enable widget actions
+	featuresFlags.wip("accentColors")  // Manage colors according to user system parameters
 	
-	featuresFlags.unstable(113164)  //                  Enable/disable image dump
-	featuresFlags.unstable(113016)  //                  [MOBILE] Svg improvement in forms section
-	featuresFlags.unstable(112225)  //                  [MOBILE] Select / install / use custom templates
+	featuresFlags.unstable(113016)  // Svg improvement in forms section
+	featuresFlags.unstable(112225)  // Select / install / use custom templates
 	
 End if 
 

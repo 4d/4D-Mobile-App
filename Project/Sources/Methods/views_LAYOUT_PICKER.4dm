@@ -10,13 +10,14 @@
   // Declarations
 C_TEXT:C284($1)
 
-C_BOOLEAN:C305($Boo_OK)
-C_LONGINT:C283($i;$kLon_cellHeight;$kLon_cellWidth;$kLon_iconWidth;$Lon_index;$Lon_parameters)
+C_BLOB:C604($x)
+C_BOOLEAN:C305($success)
+C_LONGINT:C283($i;$indx;$Lon_parameters)
 C_PICTURE:C286($p)
-C_TEXT:C284($Dom_buffer;$t;$Txt_processingInstruction;$Txt_typeForm)
-C_OBJECT:C1216($o;$Obj_context;$Obj_form;$Obj_manifest;$Obj_picker;$Path_component)
-C_OBJECT:C1216($Path_database;$Path_template;$svg)
-C_COLLECTION:C1488($Col_forms;$Col_host)
+C_TEXT:C284($dom;$t;$tProcessingInstruction)
+C_OBJECT:C1216($archive;$errors;$folderComponent;$folderDatabase;$o;$oLocal)
+C_OBJECT:C1216($oManifest;$oPicker;$pathTemplate;$svg)
+C_COLLECTION:C1488($c)
 
 ARRAY TEXT:C222($tTxt_forms;0)
 
@@ -26,84 +27,112 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$Txt_typeForm:=$1  // "list" or "detail"
+	$oLocal:=New object:C1471(\
+		"type";$1;\
+		"cell";New object:C1471("width";140;"height";180);\
+		"icon";New object:C1471("width";300;"height";300);\
+		"forms";New collection:C1472;\
+		"dialog";VIEWS_Handler (New object:C1471("action";"init"))\
+		)
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
+	If (Count parameters:C259>=2)
 		
 		  // <NONE>
 		
 	End if 
 	
-	$Obj_form:=VIEWS_Handler (New object:C1471(\
-		"action";"init"))
-	
-	$Obj_context:=$Obj_form.$
-	
-	$kLon_iconWidth:=300
-	
-	$kLon_cellWidth:=140
-	$kLon_cellHeight:=180
-	
-	$Col_forms:=New collection:C1472
-	
-	  // Load components templates
-	$Path_component:=COMPONENT_Pathname ($Txt_typeForm+"Forms")
+	  // Load internal templates
+	$folderComponent:=COMPONENT_Pathname ($oLocal.type+"Forms")
 	
 	  // Load the global manifest
-	$Obj_manifest:=JSON Parse:C1218($Path_component.file("manifest.json").getText())
+	$oManifest:=JSON Parse:C1218($folderComponent.file("manifest.json").getText())
 	
-	For each ($o;$Path_component.folders())
+	For each ($o;$folderComponent.folders())
 		
-		$Boo_OK:=True:C214
+		$success:=True:C214
 		
-		For each ($t;$Obj_manifest.mandatory) While ($Boo_OK)
+		For each ($t;$oManifest.mandatory) While ($success)
 			
-			$Boo_OK:=$Path_component.folder($o.name).file($t).exists
+			$success:=$folderComponent.folder($o.name).file($t).exists
 			
 		End for each 
 		
-		If ($Boo_OK)
+		If ($success)
 			
-			$Col_forms.push($o.fullName)
+			$oLocal.forms.push($o.fullName)
 			
 		End if 
 	End for each 
 	
 	  // Search for templates into the host database
-	$Path_database:=COMPONENT_Pathname ("host_"+$Txt_typeForm+"Forms")
+	$folderDatabase:=COMPONENT_Pathname ("host_"+$oLocal.type+"Forms")
 	
-	If ($Path_database.exists)
+	If ($folderDatabase.exists)
 		
-		$Col_host:=New collection:C1472
+		$c:=New collection:C1472
 		
-		For each ($o;$Path_database.folders())
+		For each ($o;$folderDatabase.folders())
 			
-			$Boo_OK:=True:C214
+			$success:=True:C214
 			
-			For each ($t;$Obj_manifest.mandatory) While ($Boo_OK)
+			For each ($t;$oManifest.mandatory) While ($success)
 				
-				$Boo_OK:=$Path_database.folder($o.name).file($t).exists
+				$success:=$folderDatabase.folder($o.name).file($t).exists
 				
 			End for each 
 			
-			If ($Boo_OK)
+			If ($success)
 				
-				$Col_host.push("/"+$o.fullName)
+				$c.push("/"+$o.fullName)
 				
 			End if 
 		End for each 
 		
-		$Col_forms.combine($Col_host)
+		If (featuresFlags.with("resourcesBrowser"))
+			
+			$errors:=errors ("noError")  //========================================================================================================
+			
+			  // Add downloaded templates
+			For each ($o;$folderDatabase.files().query("extension = :1";commonValues.archiveExtension))
+				
+				$archive:=ZIP Read archive:C1637($o)
+				
+				If ($archive#Null:C1517)
+					
+					$success:=True:C214
+					
+					For each ($t;$oManifest.mandatory) While ($success)
+						
+						$success:=$archive.root.file($t).exists
+						
+					End for each 
+					
+					If ($success)
+						
+						$success:=String:C10(JSON Parse:C1218($archive.root.file("manifest.json").getText()).type)=($oLocal.type+"form")
+						
+						If ($success)
+							
+							$c.push("/"+$o.fullName)
+							
+						End if 
+					End if 
+				End if 
+			End for each 
+			
+			$errors.deinstall()  //================================================================================================================
+			
+		End if 
+		
+		$oLocal.forms.combine($c)
 		
 	End if 
 	
-	COLLECTION TO ARRAY:C1562($Col_forms;$tTxt_forms)
+	COLLECTION TO ARRAY:C1562($oLocal.forms;$tTxt_forms)
 	
 Else 
 	
@@ -113,17 +142,18 @@ End if
 
   // ----------------------------------------------------
   // Find the default template
-$tTxt_forms{0}:=String:C10($Obj_manifest.default)
+$tTxt_forms{0}:=String:C10($oManifest.default)
 $tTxt_forms:=Find in array:C230($tTxt_forms;$tTxt_forms{0})
 
-$Obj_picker:=New object:C1471(\
+$oPicker:=New object:C1471(\
 "action";"forms";\
 "pictures";New collection:C1472;\
 "pathnames";New collection:C1472;\
-"celluleWidth";$kLon_cellWidth;\
-"celluleHeight";$kLon_cellHeight;\
+"helpTips";New collection:C1472;\
+"celluleWidth";$oLocal.cell.width;\
+"celluleHeight";$oLocal.cell.height;\
 "offset";10;\
-"thumbnailWidth";$kLon_iconWidth;\
+"thumbnailWidth";$oLocal.icon.width;\
 "noPicture";Get localized string:C991("noMedia");\
 "tips";True:C214;\
 "background";0x00FFFFFF;\
@@ -132,8 +162,12 @@ $Obj_picker:=New object:C1471(\
 "promptBackColor";ui.strokeColor;\
 "hidePromptSeparator";True:C214;\
 "forceRedraw";True:C214;\
-"prompt";str .setText("selectAFormTemplateToUseAs").localized($Txt_typeForm);\
-"selector";$Txt_typeForm)
+"prompt";str .setText("selectAFormTemplateToUseAs").localized($oLocal.type);\
+"selector";$oLocal.type)
+
+$oPicker.vOffset:=155  // Offset of the background button
+
+$errors:=errors ("noError")  //========================================================================================================
 
 For ($i;1;Size of array:C274($tTxt_forms);1)
 	
@@ -141,106 +175,166 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 	
 	If ($tTxt_forms{$i}[[1]]="/")
 		
-		  // Database template
-		$Path_template:=$Path_database.folder(Delete string:C232($tTxt_forms{$i};1;1))
+		$t:=Delete string:C232($tTxt_forms{$i};1;1)
+		
+		If (featuresFlags.with("resourcesBrowser"))
+			
+			If (Path to object:C1547($tTxt_forms{$i}).extension=commonValues.archiveExtension)  // Archive
+				
+				  // Downloaded template
+				$pathTemplate:=$folderDatabase.file($t)
+				
+			Else 
+				
+				  // Database template
+				$pathTemplate:=$folderDatabase.folder($t)
+				
+			End if 
+			
+		Else 
+			
+			  // Database template
+			$pathTemplate:=$folderDatabase.folder($t)
+			
+		End if 
 		
 	Else 
 		
-		$Path_template:=$Path_component.folder($tTxt_forms{$i})
+		  // Internal template
+		$pathTemplate:=$folderComponent.folder($tTxt_forms{$i})
 		
 	End if 
 	
-	$Path_template:=$Path_template.file("template.svg")
-	
-	If ($Path_template.exists)
+	If ($pathTemplate.extension=commonValues.archiveExtension)  // Archive
 		
-		If ($Path_template.parent.file("layoutIconx2.png").exists)
+		$archive:=ZIP Read archive:C1637($pathTemplate)
+		
+		If ($archive#Null:C1517)
 			
-			  // Use the media
-			READ PICTURE FILE:C678($Path_template.parent.file("layoutIconx2.png").platformPath;$p)
+			  // Create image
+			$svg:=svg .setDimensions($oLocal.cell.width;$oLocal.cell.height)
 			
-			$svg:=svg .setDimensions($kLon_cellWidth;$kLon_cellHeight)
-			
+			  // Put icon
+			$x:=$archive.root.file("layoutIconx2.png").getContent()
+			BLOB TO PICTURE:C682($x;$p)
 			$svg.embedPicture($p;-10;0)
 			
-			$t:=$tTxt_forms{$i}
+			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
 			
-			If ($t[[1]]="/")
-				$t:=Delete string:C232($t;1;1)
-			End if 
-			
-			$svg.textArea($t;0;$kLon_cellHeight-20)\
-				.setDimensions($kLon_cellWidth)\
+			  // Put text
+			$svg.textArea($o.name;0;$oLocal.cell.height-20)\
+				.setDimensions($oLocal.cell.width)\
 				.setFill("dimgray")\
 				.setAttribute("text-align";"center")
 			
-			$p:=$svg.getPicture()
+			$oPicker.pictures.push($svg.getPicture())
+			$oPicker.pathnames.push($tTxt_forms{$i})
+			$oPicker.helpTips.push(str .setText("tipsTemplate").localized(New collection:C1472(String:C10($pathTemplate.fullName);String:C10($o.organization.login);String:C10($o.version))))
 			
 		Else 
 			
-			  // Create from the template
-			PROCESS 4D TAGS:C816($Path_template.getText();$t)
-			
-			$t:=DOM Parse XML variable:C720($t)
-			
-			If (OK=1)
-				
-				  // Add the css reference
-				If (COMPONENT_Pathname ("templates").file("template.css").exists)
-					
-					  //<?xml-stylesheet href="file://localhost/Users/vdl/Desktop/monstyle.css" type="text/css"?>
-					$Txt_processingInstruction:="xml-stylesheet type=\"text/css\" href=\""\
-						+"file://localhost"+Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16);*)+"templates/template.css"\
-						+"\""
-					
-					$Dom_buffer:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($t);XML processing instruction:K45:9;$Txt_processingInstruction)
-					
-				End if 
-				
-				SVG EXPORT TO PICTURE:C1017($t;$p;Own XML data source:K45:18)
-				CREATE THUMBNAIL:C679($p;$p;$kLon_cellWidth;$kLon_cellHeight)
-				
-			End if 
-		End if 
-		
-		If ($i=$tTxt_forms)
-			
-			  // Put the default template at first position
-			$Obj_picker.pictures.insert(0;$p)
-			$Obj_picker.pathnames.insert(0;$tTxt_forms{$i})
-			
-		Else 
-			
-			$Obj_picker.pictures.push($p)
-			$Obj_picker.pathnames.push($tTxt_forms{$i})
+			  // Invalid archive = ignore
 			
 		End if 
 		
 	Else 
 		
-		  // Not a template folder = ignore
+		$pathTemplate:=$pathTemplate.file("template.svg")
 		
+		If ($pathTemplate.exists)
+			
+			If ($pathTemplate.parent.file("layoutIconx2.png").exists)  // Use media
+				
+				  // Create image
+				$svg:=svg .setDimensions($oLocal.cell.width;$oLocal.cell.height)
+				
+				  // Media
+				READ PICTURE FILE:C678($pathTemplate.parent.file("layoutIconx2.png").platformPath;$p)
+				$svg.embedPicture($p;-10;0)
+				
+				  // Title
+				$t:=$tTxt_forms{$i}
+				
+				If ($t[[1]]="/")  // Database template
+					
+					$t:=Delete string:C232($t;1;1)
+					
+				End if 
+				
+				$svg.textArea($t;0;$oLocal.cell.height-20)\
+					.setDimensions($oLocal.cell.width)\
+					.setFill("dimgray")\
+					.setAttribute("text-align";"center")
+				
+				$p:=$svg.getPicture()
+				
+			Else   // Create from the template
+				
+				PROCESS 4D TAGS:C816($pathTemplate.getText();$t)
+				
+				$t:=DOM Parse XML variable:C720($t)
+				
+				If (OK=1)
+					
+					  // Add the css reference
+					If (COMPONENT_Pathname ("templates").file("template.css").exists)
+						
+						  //<?xml-stylesheet href="file://localhost/Users/vdl/Desktop/monstyle.css" type="text/css"?>
+						$tProcessingInstruction:="xml-stylesheet type=\"text/css\" href=\""\
+							+"file://localhost"+Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16);*)+"templates/template.css"\
+							+"\""
+						
+						$dom:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($t);XML processing instruction:K45:9;$tProcessingInstruction)
+						
+					End if 
+					
+					SVG EXPORT TO PICTURE:C1017($t;$p;Own XML data source:K45:18)
+					CREATE THUMBNAIL:C679($p;$p;$oLocal.cell.width;$oLocal.cell.height)
+					
+				End if 
+			End if 
+			
+			If ($i=$tTxt_forms)
+				
+				  // Put the default template at first position
+				$oPicker.pictures.insert(0;$p)
+				$oPicker.pathnames.insert(0;$tTxt_forms{$i})
+				$oPicker.helpTips.insert(0;".default template")
+				
+			Else 
+				
+				$oPicker.pictures.push($p)
+				$oPicker.pathnames.push($tTxt_forms{$i})
+				$oPicker.helpTips.push("")
+				
+			End if 
+			
+		Else 
+			
+			  // Not a template folder = ignore
+			
+		End if 
 	End if 
 End for 
 
+$errors.deinstall()  //================================================================================================================
+
 If (featuresFlags.with("resourcesBrowser"))
 	
-	$p:=svg ("load";File:C1566("/RESOURCES/templates/more.svg")).setDimensions($kLon_cellWidth;$kLon_cellHeight).getPicture()
-	
-	$Obj_picker.pictures.insert(1;$p)
-	$Obj_picker.pathnames.insert(1;Null:C1517)
-	$Obj_picker.tips:=Replace string:C233(Get localized string:C991("downloadMoreResources");"{resources}";$Txt_typeForm)
+	  // Put an "explore" button after the default template
+	$svg:=svg ("load";File:C1566("/RESOURCES/templates/more.svg")).setDimensions($oLocal.cell.width;$oLocal.cell.height)
+	$oPicker.pictures.insert(1;$svg.getPicture())
+	$oPicker.pathnames.insert(1;Null:C1517)
+	$oPicker.helpTips.insert(1;str ("downloadMoreResources").localized($oLocal.type))
 	
 End if 
 
   // Add 1 because the widget work with arrays
-$Lon_index:=$Obj_picker.pathnames.indexOf(String:C10(Form:C1466[$Txt_typeForm][$Obj_context.tableNum()].form))+1
-$Obj_picker.item:=Choose:C955($Lon_index=0;1;$Lon_index)
-
-$Obj_picker.vOffset:=155  // Offset of the background button
+$indx:=$oPicker.pathnames.indexOf(String:C10(Form:C1466[$oLocal.type][$oLocal.dialog.$.tableNum()].form))+1
+$oPicker.item:=Choose:C955($indx=0;1;$indx)
 
   // Display selector
-$Obj_form.form.call(New collection:C1472("pickerShow";$Obj_picker))
+$oLocal.dialog.form.call(New collection:C1472("pickerShow";$oPicker))
 
   // ----------------------------------------------------
   // Return

@@ -70,6 +70,7 @@ If (This:C1470[""]=Null:C1517)
 		"trim";Formula:C1597(str ("trim";New object:C1471("pattern";$1)).value);\
 		"trimLeading";Formula:C1597(str ("trimLeading";New object:C1471("pattern";$1)).value);\
 		"trimTrailing";Formula:C1597(str ("trimTrailing";New object:C1471("pattern";$1)).value);\
+		"truncate";Formula:C1597(str ("truncate";New object:C1471("maxChar";$1)).value);\
 		"unaccented";Formula:C1597(str ("unaccented").value);\
 		"uperCamelCase";Formula:C1597(str ("uperCamelCase").value);\
 		"urlDecode";Formula:C1597(str ("urlDecode").value);\
@@ -895,13 +896,23 @@ Else
 					End for each 
 					
 					  //______________________________________________________
+				: ($1="truncate")  // Returns, if any, a truncated string with ellipsis character
+					
+					$o.value:=This:C1470.value
+					
+					If (This:C1470.length>$2.maxChar)
+						
+						$o.value:=Substring:C12($o.value;1;$2.maxChar)+"…"
+						
+					End if 
+					
+					  //______________________________________________________
 					  //: (Formula(process ).call().isPreemptif)
 					  //_4D THROW ERROR(New object(\
-																		"component";"CLAS";\
-																		"code";1;\
-																		"description";"The method "+String($1)+"() for class "+String(This[""])+" can't be called in preemptive mode";\
-																		"something";"my bug"))
-					
+						"component";"CLAS";\
+						"code";1;\
+						"description";"The method "+String($1)+"() for class "+String(This[""])+" can't be called in preemptive mode";\
+						"something";"my bug"))
 					  //______________________________________________________
 				Else 
 					

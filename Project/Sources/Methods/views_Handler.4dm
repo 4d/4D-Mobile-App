@@ -11,11 +11,11 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($i;$eventCode;$Lon_hScroll;$Lon_offset)
-C_TEXT:C284($t;$Txt_form;$Txt_newForm;$Txt_table)
-C_OBJECT:C1216($o;$context;$Obj_dataModel;$form;$Obj_in;$Obj_out)
-C_OBJECT:C1216($Obj_target;$oo)
-C_COLLECTION:C1488($c;$Col_assigned)
+C_LONGINT:C283($eventCode;$i;$l;$offset)
+C_TEXT:C284($t;$tFormName;$tNewForm;$tTable;$tTypeForm)
+C_OBJECT:C1216($context;$form;$o;$o1;$oDataModel;$oIN)
+C_OBJECT:C1216($oOUT;$oTarget;$pathForm)
+C_COLLECTION:C1488($c)
 
 ARRAY TEXT:C222($tTxt_tables;0)
 
@@ -33,7 +33,7 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 	  // Optional parameters
 	If (Count parameters:C259>=1)
 		
-		$Obj_in:=$1
+		$oIN:=$1
 		
 	End if 
 	
@@ -71,12 +71,12 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 	
 	If (OB Is empty:C1297($context))  // First load
 		
-		  // § DEFINE UI CONSTRAINTS
+		  // § DEFINE UI CONSTRAINTS §
 		$c:=New collection:C1472
 		
 		$c.push(New object:C1471(\
-			"formula";Formula:C1597(VIEWS_Handler (New object:C1471("action";\
-			"geometry")))))
+			"formula";Formula:C1597(VIEWS_Handler (New object:C1471(\
+			"action";"geometry")))))
 		
 		If (featuresFlags.with("newViewUI"))
 			
@@ -96,7 +96,7 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 		
 		$context:=ob .set($context).createPath("constraints.rules";Is collection:K8:32;$c).contents
 		
-		  // § DEFINE FORM MEMBER METHODS
+		  // § DEFINE FORM MEMBER METHODS §
 		
 		  // Selected table ID as string, empty if none
 		$context.tableNum:=Formula:C1597(String:C10(This:C1470.tableNumber))
@@ -124,11 +124,11 @@ End if
 Case of 
 		
 		  //=========================================================
-	: ($Obj_in=Null:C1517)  // Form method
+	: ($oIN=Null:C1517)  // Form method
 		
 		$eventCode:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
 		
-		$Obj_dataModel:=Form:C1466.dataModel
+		$oDataModel:=Form:C1466.dataModel
 		
 		Case of 
 				
@@ -141,8 +141,8 @@ Case of
 				$form.fieldList.setScrollbar(0;2)
 				
 				  // Place the tabs according to the localization
-				$Lon_offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
-				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($Lon_offset)
+				$offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
+				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($offset)
 				
 				If (featuresFlags.with("resourcesBrowser"))
 					
@@ -162,18 +162,18 @@ Case of
 				$o:=ob_createPath (Form:C1466;"list")
 				$o:=ob_createPath (Form:C1466;"detail")
 				
-				If ($Obj_dataModel#Null:C1517)
+				If ($oDataModel#Null:C1517)
 					
-					For each ($Txt_table;$Obj_dataModel)
+					For each ($tTable;$oDataModel)
 						
-						Form:C1466.list:=ob_createPath (Form:C1466.list;$Txt_table)
-						Form:C1466.detail:=ob_createPath (Form:C1466.detail;$Txt_table)
+						Form:C1466.list:=ob_createPath (Form:C1466.list;$tTable)
+						Form:C1466.detail:=ob_createPath (Form:C1466.detail;$tTable)
 						
 					End for each 
 				End if 
 				  //]
 				
-				If (($Obj_dataModel=Null:C1517) | OB Is empty:C1297($Obj_dataModel))
+				If (($oDataModel=Null:C1517) | OB Is empty:C1297($oDataModel))
 					
 					  // No published table
 					$form.noPublishedTable.show()
@@ -188,7 +188,7 @@ Case of
 					$form.noPublishedTable.hide()
 					
 					  // Select the first table if any
-					OB GET PROPERTY NAMES:C1232($Obj_dataModel;$tTxt_tables)
+					OB GET PROPERTY NAMES:C1232($oDataModel;$tTxt_tables)
 					
 					If (Length:C16($context.tableNum())=0)\
 						 | (Find in array:C230($tTxt_tables;$context.tableNum())=-1)
@@ -214,7 +214,7 @@ Case of
 				  //]
 				
 				  // Draw the table list
-				($form.tableWidget.pointer())->:=tables_Widget ($Obj_dataModel;New object:C1471(\
+				($form.tableWidget.pointer())->:=tables_Widget ($oDataModel;New object:C1471(\
 					"tableNumber";$context.tableNum()))
 				
 				views_UPDATE ("list")
@@ -223,16 +223,20 @@ Case of
 				  // Update geometry
 				$context.setGeometry()
 				
-				  //$Obj_context.actions:=_w_actions ("getList";$Obj_context).actions
+				If (featuresFlags.with("withWidgetActions"))
+					
+					  //$context.actions:=_w_actions ("getList";$context).actions
+					
+				End if 
 				
 				  //______________________________________________________
 			: ($eventCode=On Timer:K2:25)
 				
 				SET TIMER:C645(0)
 				
-				$Txt_form:=$context.typeForm()
+				$tTypeForm:=$context.typeForm()
 				
-				If ($Obj_dataModel=Null:C1517) | OB Is empty:C1297($Obj_dataModel)
+				If ($oDataModel=Null:C1517) | OB Is empty:C1297($oDataModel)
 					
 					  // No published table
 					$form.noPublishedTable.show()
@@ -247,7 +251,7 @@ Case of
 				End if 
 				
 				  // Draw the table list
-				($form.tableWidget.pointer())->:=tables_Widget ($Obj_dataModel;New object:C1471(\
+				($form.tableWidget.pointer())->:=tables_Widget ($oDataModel;New object:C1471(\
 					"tableNumber";$context.tableNum()))
 				
 				Case of 
@@ -261,37 +265,30 @@ Case of
 						  // Uppdate preview
 						views_preview ("draw";$form)
 						
-						  //(ui.pointer($Obj_form.actionDrop))->:=_w_actions ("preview";$Obj_context).pict
+						If (featuresFlags.with("withWidgetActions"))
+							
+							  //(ui.pointer($form.actionDrop))->:=_w_actions ("preview";$context).pict
+							
+						End if 
 						
 						OB REMOVE:C1226($context;"draw")
 						
 						  //………………………………………………………………………………………………………………………………………
 					Else 
 						
-						  //$Obj_form.fieldGroup.hide()
-						  //$Obj_form.previewGroup.hide()
-						  //CLEAR VARIABLE(($Obj_form.preview.pointer())->)
-						
 						If (Length:C16($context.tableNum())>0)\
-							 & ($Obj_dataModel[$context.tableNum()]#Null:C1517)
+							 & ($oDataModel[$context.tableNum()]#Null:C1517)
 							
-							$t:=String:C10(Form:C1466[$Txt_form][$context.tableNum()].form)
+							$tFormName:=String:C10(Form:C1466[$tTypeForm][$context.tableNum()].form)
+							$tFormName:=$tFormName*Num:C11($tFormName#"null")  // Reject null value
 							
-							If (Length:C16($t)>0)
+							If (Length:C16($tFormName)>0)
 								
-								If (Position:C15("/";$t)=1)
-									
-									  // Host database resources
-									$o:=COMPONENT_Pathname ("host_"+$Txt_form+"Forms").folder(Delete string:C232($t;1;1))
-									
-								Else 
-									
-									$o:=COMPONENT_Pathname ($Txt_form+"Forms").folder($t)
-									
-								End if 
+								$pathForm:=tmpl_form ($tFormName;$tTypeForm)
+								
 							End if 
 							
-							If (Bool:C1537($o.exists))
+							If (Bool:C1537($pathForm.exists))
 								
 								  // Update lists
 								$context.update:=True:C214
@@ -304,7 +301,7 @@ Case of
 								
 								If (Bool:C1537(Form:C1466.$dialog.picker))
 									
-									If (Length:C16($t)>0)
+									If (Length:C16($tFormName)>0)
 										
 										  // Hide the template picker
 										$form.form.call("pickerHide")
@@ -317,7 +314,7 @@ Case of
 									
 								Else 
 									
-									If (Not:C34(($Obj_dataModel=Null:C1517) | OB Is empty:C1297($Obj_dataModel)))
+									If (Not:C34(($oDataModel=Null:C1517) | OB Is empty:C1297($oDataModel)))
 										
 										  // Update lists
 										$context.update:=True:C214
@@ -326,7 +323,7 @@ Case of
 										$form.fieldGroup.hide()
 										$form.previewGroup.hide()
 										
-										views_LAYOUT_PICKER ($Txt_form)
+										views_LAYOUT_PICKER ($tTypeForm)
 										
 									End if 
 								End if 
@@ -373,7 +370,7 @@ Case of
 					
 					If ($o.fieldType=8859)  // 1-N
 						
-						If ($Obj_dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)
+						If ($oDataModel[String:C10($o.relatedTableNumber)]=Null:C1517)
 							
 							LISTBOX SET ROW COLOR:C1270(*;$form.fieldList.name;$i;ui.errorColor;lk font color:K53:24)
 							
@@ -401,44 +398,44 @@ Case of
 		If (Bool:C1537($context.picker))
 			
 			  // Display the template picker
-			views_LAYOUT_PICKER ($Txt_form)
+			views_LAYOUT_PICKER ($tTypeForm)
 			
 		End if 
 		
 		OB REMOVE:C1226($context;"picker")
 		
 		  //=========================================================
-	: ($Obj_in.action=Null:C1517)  // Error
+	: ($oIN.action=Null:C1517)  // Error
 		
 		ASSERT:C1129(False:C215;"Missing parameter \"action\"")
 		
 		  //=========================================================
-	: ($Obj_in.action="init")  // Return the form objects definition
+	: ($oIN.action="init")  // Return the form objects definition
 		
-		$Obj_out:=$form
+		$oOUT:=$form
 		
 		  //=========================================================
-	: ($Obj_in.action="scroll-table")
+	: ($oIN.action="scroll-table")
 		
 		$o:=$form.tableWidget.update()
 		
-		If (String:C10($Obj_in.direction)="next")
+		If (String:C10($oIN.direction)="next")
 			
-			$Lon_hScroll:=$o.scroll.horizontal+$o.coordinates.width
+			$l:=$o.scroll.horizontal+$o.coordinates.width
 			
 		Else 
 			
-			$Lon_hScroll:=$o.scroll.horizontal-$o.coordinates.width
-			$Lon_hScroll:=Choose:C955($Lon_hScroll<0;0;$o.scroll.horizontal)
+			$l:=$o.scroll.horizontal-$o.coordinates.width
+			$l:=Choose:C955($l<0;0;$o.scroll.horizontal)
 			
 		End if 
 		
-		$form.tableWidget.setScrollPosition($Lon_hScroll;Null:C1517)
+		$form.tableWidget.setScrollPosition($l;Null:C1517)
 		
 		$context.setGeometry()
 		
 		  //=========================================================
-	: ($Obj_in.action="geometry")
+	: ($oIN.action="geometry")
 		
 		If (Not:C34(Is nil pointer:C315($form.tableWidget.pointer())))
 			
@@ -458,30 +455,30 @@ Case of
 		End if 
 		
 		  //=========================================================
-	: ($Obj_in.action="forms")  // Call back from widget
+	: ($oIN.action="forms")  // Call back from widget
 		
 		$form.fieldGroup.show()
 		$form.previewGroup.show()
 		
-		If ($Obj_in.item>0)\
-			 & ($Obj_in.item<=$Obj_in.pathnames.length)
+		If ($oIN.item>0)\
+			 & ($oIN.item<=$oIN.pathnames.length)
 			
-			$Txt_table:=$context.tableNum()
+			$tTable:=$context.tableNum()
 			
-			If ($Obj_in.pathnames[$Obj_in.item-1]#Null:C1517)
+			If ($oIN.pathnames[$oIN.item-1]#Null:C1517)
 				
 				  // The selected form
-				$Txt_newForm:=$Obj_in.pathnames[$Obj_in.item-1]
+				$tNewForm:=$oIN.pathnames[$oIN.item-1]
 				
 				  // The current table form
-				$t:=String:C10(Form:C1466[$Obj_in.selector][$Txt_table].form)
+				$t:=String:C10(Form:C1466[$oIN.selector][$tTable].form)
 				
-				If ($Txt_newForm#$t)
+				If ($tNewForm#$t)
 					
-					$Obj_target:=Form:C1466[$Obj_in.selector][$context.tableNumber]
+					$oTarget:=Form:C1466[$oIN.selector][$context.tableNumber]
 					
-					$Obj_in.target:=OB Copy:C1225($Obj_target)
-					OB REMOVE:C1226($Obj_in.target;"form")
+					$oIN.target:=OB Copy:C1225($oTarget)
+					OB REMOVE:C1226($oIN.target;"form")
 					
 					If (Length:C16($t)#0)
 						
@@ -489,29 +486,29 @@ Case of
 						Case of 
 								
 								  //______________________________________________________
-							: ($context[$Txt_table]=Null:C1517)
+							: ($context[$tTable]=Null:C1517)
 								
-								$context[$Txt_table]:=New object:C1471(\
-									$Obj_in.selector;New object:C1471($t;\
-									$Obj_in.target))
+								$context[$tTable]:=New object:C1471(\
+									$oIN.selector;New object:C1471($t;\
+									$oIN.target))
 								
 								  //______________________________________________________
-							: ($context[$Txt_table][$Obj_in.selector]=Null:C1517)
+							: ($context[$tTable][$oIN.selector]=Null:C1517)
 								
-								$context[$Txt_table][$Obj_in.selector]:=New object:C1471(\
-									$t;$Obj_in.target)
+								$context[$tTable][$oIN.selector]:=New object:C1471(\
+									$t;$oIN.target)
 								
 								  //______________________________________________________
 							Else 
 								
-								$context[$Txt_table][$Obj_in.selector][$t]:=$Obj_in.target
+								$context[$tTable][$oIN.selector][$t]:=$oIN.target
 								
 								  //______________________________________________________
 						End case 
 					End if 
 					
 					  // Update project & save [
-					$Obj_target.form:=$Txt_newForm
+					$oTarget.form:=$tNewForm
 					
 					OB REMOVE:C1226($context;"manifest")
 					
@@ -528,29 +525,29 @@ Case of
 						End if 
 					End if 
 					
-					If ($context[$Txt_table][$Obj_in.selector][$Txt_newForm]=Null:C1517)
+					If ($context[$tTable][$oIN.selector][$tNewForm]=Null:C1517)
 						
-						If ($Obj_target.fields=Null:C1517)
+						If ($oTarget.fields=Null:C1517)
 							
-							$Obj_target.fields:=New collection:C1472
+							$oTarget.fields:=New collection:C1472
 							
 						End if 
 						
 						  // Create a new binding
-						$Col_assigned:=$Obj_target.fields.copy()
+						$c:=$oTarget.fields.copy()
 						
-						If ($context[$Txt_table]#Null:C1517)
+						If ($context[$tTable]#Null:C1517)
 							
-							If ($context[$Txt_table][$Obj_in.selector]#Null:C1517)
+							If ($context[$tTable][$oIN.selector]#Null:C1517)
 								
 								  // Enrich with the fields already used during the session
-								For each ($Txt_form;$context[$Txt_table][$Obj_in.selector])
+								For each ($tTypeForm;$context[$tTable][$oIN.selector])
 									
-									For each ($o;$context[$Txt_table][$Obj_in.selector][$Txt_form].fields.filter("col_notNull"))
+									For each ($o;$context[$tTable][$oIN.selector][$tTypeForm].fields.filter("col_notNull"))
 										
-										If ($Col_assigned.extract("name").indexOf($o.name)=-1)
+										If ($c.extract("name").indexOf($o.name)=-1)
 											
-											$Col_assigned.push($o)
+											$c.push($o)
 											
 										End if 
 									End for each 
@@ -561,18 +558,18 @@ Case of
 					Else 
 						
 						  // Reuse the last snapshot
-						$Col_assigned:=$context[$Txt_table][$Obj_in.selector][$Txt_newForm].fields
+						$c:=$context[$tTable][$oIN.selector][$tNewForm].fields
 						
 						  // Enrich the last snapshot with the fields already used during the session
-						For each ($Txt_form;$context[$Txt_table][$Obj_in.selector])
+						For each ($tTypeForm;$context[$tTable][$oIN.selector])
 							
-							If ($Txt_form#$Txt_newForm)
+							If ($tTypeForm#$tNewForm)
 								
-								For each ($o;$context[$Txt_table][$Obj_in.selector][$Txt_form].fields.filter("col_notNull"))
+								For each ($o;$context[$tTable][$oIN.selector][$tTypeForm].fields.filter("col_notNull"))
 									
-									If ($Col_assigned.extract("name").indexOf($o.name)=-1)
+									If ($c.extract("name").indexOf($o.name)=-1)
 										
-										$Col_assigned.push($o)
+										$c.push($o)
 										
 									End if 
 								End for each 
@@ -580,10 +577,10 @@ Case of
 						End for each 
 					End if 
 					
-					$Obj_in.form:=$Txt_newForm
-					$Obj_in.tableNumber:=$Txt_table
+					$oIN.form:=$tNewForm
+					$oIN.tableNumber:=$tTable
 					
-					tmpl_REORDER ($Obj_in)
+					tmpl_REORDER ($oIN)
 					
 				End if 
 				
@@ -603,7 +600,7 @@ Case of
 		$form.form.refresh()
 		
 		  //=========================================================
-	: ($Obj_in.action="show")
+	: ($oIN.action="show")
 		
 		  // Restore preview and field list…
 		$form.fieldGroup.show()
@@ -614,9 +611,9 @@ Case of
 		$form.form.refresh()
 		
 		  //=========================================================
-	: ($Obj_in.action="pickerHide")  // Call back from widget
+	: ($oIN.action="pickerHide")  // Call back from widget
 		
-		If (Form:C1466[$Obj_in.selector][$context.tableNum()].form=Null:C1517)
+		If (Form:C1466[$oIN.selector][$context.tableNum()].form=Null:C1517)
 			
 			$form.fieldGroup.hide()
 			$form.previewGroup.hide()
@@ -629,7 +626,7 @@ Case of
 		End if 
 		
 		  //=========================================================
-	: ($Obj_in.action="setTab")  // UI for tabs
+	: ($oIN.action="setTab")  // UI for tabs
 		
 		OBJECT SET FONT STYLE:C166(*;$form.selectors.name;Plain:K14:1)
 		
@@ -638,17 +635,17 @@ Case of
 		
 		$t:=Replace string:C233($t;".";"")
 		$o:=$form[$t].getCoordinates().coordinates
-		$oo:=$form.tabSelector.getCoordinates()
-		$oo.setCoordinates($o.left;$oo.coordinates.top;$o.right;$oo.coordinates.bottom)
+		$o1:=$form.tabSelector.getCoordinates()
+		$o1.setCoordinates($o.left;$o1.coordinates.top;$o.right;$o1.coordinates.bottom)
 		
 		  //=========================================================
-	: ($Obj_in.action="selectTab")
+	: ($oIN.action="selectTab")
 		
-		$context.selector:=1+Num:C11($Obj_in.tab="detail")
+		$context.selector:=1+Num:C11($oIN.tab="detail")
 		
 		$context.setTab()
 		
-		If ($Obj_in.table#Null:C1517)
+		If ($oIN.table#Null:C1517)
 			
 			If (Length:C16($context.tableNum())>0)
 				
@@ -658,7 +655,7 @@ Case of
 				
 			End if 
 			
-			$context.tableNumber:=$Obj_in.table
+			$context.tableNumber:=$oIN.table
 			
 			  // Select the item
 			SVG SET ATTRIBUTE:C1055(*;$form.tableWidget.name;$context.tableNumber;\
@@ -674,7 +671,7 @@ Case of
 		$form.form.refresh()
 		
 		  //=========================================================
-	: ($Obj_in.action="refreshViews")
+	: ($oIN.action="refreshViews")
 		
 		If (Length:C16($context.tableNum())>0)\
 			 & (Form:C1466.dataModel[$context.tableNum()]#Null:C1517)
@@ -687,7 +684,7 @@ Case of
 		End if 
 		
 		  //=========================================================
-	: ($Obj_in.action="updateForms")
+	: ($oIN.action="updateForms")
 		
 		views_UPDATE ("list")
 		views_UPDATE ("detail")
@@ -695,16 +692,16 @@ Case of
 		  //=========================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
+		ASSERT:C1129(False:C215;"Unknown entry point: \""+$oIN.action+"\"")
 		
 		  //=========================================================
 End case 
 
   // ----------------------------------------------------
   // Return
-If ($Obj_out#Null:C1517)
+If ($oOUT#Null:C1517)
 	
-	$0:=$Obj_out
+	$0:=$oOUT
 	
 End if 
 

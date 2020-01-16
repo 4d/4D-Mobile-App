@@ -5,7 +5,7 @@
   // Created 10-1-2020 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
-  // 
+  //
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($b)
@@ -24,9 +24,11 @@ Case of
 		  //______________________________________________________
 	: ($Txt_me="webarea")
 		
-		$form:=BROWSER_Handler (New object:C1471("action";"init"))
+		$form:=browser_HANDLER (New object:C1471(\
+			"action";"init"))
 		
 		Case of 
+				
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On Load:K2:1)
 				
@@ -82,22 +84,23 @@ Case of
 							End if 
 							
 							Case of 
+									
 									  //……………………………………………………………………………………
 								: ($t="form-list@")
 									
-									$t:=Replace string:C233($t;"form-list-";"")
+									  //$t:=Replace string($t;"form-list-";"")
 									$folder:=$folder.folder("form/list")
 									
 									  //……………………………………………………………………………………
 								: ($t="form-detail@")
 									
-									$t:=Replace string:C233($t;"form-detail-";"")
+									  //$t:=Replace string($t;"form-detail-";"")
 									$folder:=$folder.folder("form/detail")
 									
 									  //……………………………………………………………………………………
 								: ($t="formatter-@")
 									
-									$t:=Replace string:C233($t;"formatter-";"")
+									  //$t:=Replace string($t;"formatter-";"")
 									$folder:=$folder.folder("formatters")
 									
 									  //……………………………………………………………………………………
@@ -110,8 +113,10 @@ Case of
 							
 							$b:=$folder.create()
 							
-							$archive:=ZIP Read archive:C1637($archive).root
-							$folder:=$archive.copyTo($folder;Replace string:C233($t;".zip";"");fk overwrite:K87:5)
+							  //$archive:=ZIP Read archive($archive).root
+							  //$folder:=$archive.copyTo($folder;Replace string($t;".zip";"");fk overwrite)
+							
+							$folder:=$archive.copyTo($folder;fk overwrite:K87:5)
 							
 						Else 
 							
@@ -123,7 +128,6 @@ Case of
 					Else 
 						
 						  // A "Case of" statement should never omit "Else"
-						
 						  //______________________________________________________
 				End case 
 				
@@ -131,7 +135,6 @@ Case of
 			Else 
 				
 				  // A "Case of" statement should never omit "Else"
-				
 				  //………………………………………………………………………………………………………………
 		End case 
 		
@@ -147,7 +150,6 @@ Case of
 	Else 
 		
 		  // A "Case of" statement should never omit "Else"
-		
 		  //______________________________________________________
 End case 
 

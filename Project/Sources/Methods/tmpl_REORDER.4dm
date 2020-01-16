@@ -10,10 +10,10 @@
   // Declarations
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($Boo_accepted;$Boo_multiCriteria)
-C_LONGINT:C283($Lon_indx;$Lon_keyType;$Lon_parameters)
-C_TEXT:C284($Dir_root;$Dom_field;$Dom_root;$File_;$t;$Txt_bind)
-C_OBJECT:C1216($o;$Obj_attributes;$Obj_cache;$Obj_field;$Obj_in)
+C_BOOLEAN:C305($bMultiCriteria;$Boo_accepted)
+C_LONGINT:C283($indx;$Lon_keyType)
+C_TEXT:C284($dom;$Dom_field;$root;$Txt_bind)
+C_OBJECT:C1216($o;$oAttributes;$oCache;$oField;$oIN;$pathTemplate)
 C_COLLECTION:C1488($c;$Col_affected;$Col_bind;$Col_catalog)
 
 If (False:C215)
@@ -22,248 +22,220 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
+$oIN:=$1
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+  // Load template
+$pathTemplate:=tmpl_form ($oIN.form;$oIN.selector)
+
+If ($pathTemplate.extension=commonValues.archiveExtension)  // Archive
 	
-	  // Required parameters
-	$Obj_in:=$1
-	
-	  // Optional parameters
-	If ($Lon_parameters>=2)
-		
-		  // <NONE>
-		
-	End if 
-	
-	  // Load template
-	If (Position:C15("/";$Obj_in.form)=1)
-		
-		  // Host database resources
-		$Dir_root:=COMPONENT_Pathname ("host_"+$Obj_in.selector+"Forms").file(Delete string:C232($Obj_in.form;1;1)).platformPath
-		
-	Else 
-		
-		$Dir_root:=COMPONENT_Pathname ($Obj_in.selector+"Forms").platformPath+$Obj_in.form
-		
-	End if 
-	
-	$File_:=Object to path:C1548(New object:C1471(\
-		"name";"template";\
-		"extension";"svg";\
-		"parentFolder";$Dir_root))
+	  // Get from archive
+	$root:=DOM Parse XML variable:C720($pathTemplate.file("template.svg").getText())
 	
 Else 
 	
-	ABORT:C156
+	$root:=DOM Parse XML source:C719($pathTemplate.file("template.svg").platformPath)
 	
 End if 
 
-  // ----------------------------------------------------
-If (Asserted:C1132(Test path name:C476($File_)=Is a document:K24:1))
+If (Asserted:C1132(OK=1;"Invalid template"))
 	
-	$Dom_root:=DOM Parse XML source:C719($File_)
-	ASSERT:C1129(OK=1;"Invalid template")
+	$dom:=DOM Find XML element by ID:C1010($root;"cookery")
+	ASSERT:C1129(OK=1;"Missing 'cookery' element in the template")
 	
 	If (Bool:C1537(OK))
 		
-		$t:=DOM Find XML element by ID:C1010($Dom_root;"cookery")
-		ASSERT:C1129(OK=1;"Missing 'cookery' element in the template")
+		  // Get the bindind definition
+		$oAttributes:=xml_attributes ($dom)
+		OK:=Num:C11($oAttributes["ios:values"]#Null:C1517)
+		ASSERT:C1129(OK=1;"Missing 'ios:values' attribute in the template")
 		
 		If (Bool:C1537(OK))
 			
-			  // Get the bindind definition
-			$Obj_attributes:=xml_attributes ($t)
-			OK:=Num:C11($Obj_attributes["ios:values"]#Null:C1517)
-			ASSERT:C1129(OK=1;"Missing 'ios:values' attribute in the template")
+			$oCache:=Form:C1466[$oIN.selector][$oIN.tableNumber]
 			
-			If (Bool:C1537(OK))
+			$Col_bind:=Split string:C1554($oAttributes["ios:values"];",";sk trim spaces:K86:2)
+			
+			  // Create binding collection sized according to bind attribute length
+			$Col_affected:=New collection:C1472.resize($Col_bind.length)
+			
+			$Col_catalog:=editor_Catalog 
+			
+			  // Reorganize the binded fields
+			For each ($Txt_bind;$Col_bind)
 				
-				$Obj_cache:=Form:C1466[$Obj_in.selector][$Obj_in.tableNumber]
+				CLEAR VARIABLE:C89($Boo_accepted)
+				CLEAR VARIABLE:C89($oField)
 				
-				$Col_bind:=Split string:C1554($Obj_attributes["ios:values"];",";sk trim spaces:K86:2)
+				  // Find the binded element
+				$Dom_field:=DOM Find XML element by ID:C1010($root;$Txt_bind)
 				
-				  // Create binding collection sized according to bind attribute length
-				$Col_affected:=New collection:C1472.resize($Col_bind.length)
-				
-				$Col_catalog:=editor_Catalog 
-				
-				  // Reorganize the binded fields
-				For each ($Txt_bind;$Col_bind)
+				If (Bool:C1537(OK))
 					
-					CLEAR VARIABLE:C89($Boo_accepted)
-					CLEAR VARIABLE:C89($Obj_field)
+					$oAttributes:=xml_attributes ($Dom_field)
+					ASSERT:C1129($oAttributes["ios:bind"]#Null:C1517)
 					
-					  // Find the binded element
-					$Dom_field:=DOM Find XML element by ID:C1010($Dom_root;$Txt_bind)
+				Else 
 					
-					If (Bool:C1537(OK))
+					  // The multivalued fields share the same attributes
+					  // as the last field defined in the template
+					
+				End if 
+				
+				$o:=Rgx_match (New object:C1471(\
+					"pattern";"(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";\
+					"target";$oAttributes["ios:bind"]))
+				
+				If ($o.success)
+					
+					  // LIST OF FIELDS
+					
+					If ($oAttributes["ios:type"]="all")
 						
-						$Obj_attributes:=xml_attributes ($Dom_field)
-						ASSERT:C1129($Obj_attributes["ios:bind"]#Null:C1517)
+						$Boo_accepted:=True:C214
 						
 					Else 
 						
-						  // The multivalued fields share the same attributes
-						  // as the last field defined in the template
+						  // Check if the type is compatible
+						$c:=Split string:C1554($oAttributes["ios:type"];",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
+						
+						If ($oIN.target.fields#Null:C1517)
+							
+							For each ($oField;$oIN.target.fields) Until ($Boo_accepted)
+								
+								If ($oField#Null:C1517)
+									
+									$o:=structure (New object:C1471(\
+										"action";"fieldDefinition";\
+										"path";$oField.name;\
+										"tableNumber";Num:C11($oIN.tableNumber);\
+										"catalog";$Col_catalog))
+									
+									If ($o.success)
+										
+										If ($o.type=-2)  // 1-N relation
+											
+											$Boo_accepted:=Split string:C1554(String:C10($oAttributes.class);" ").indexOf("multivalued")#-1
+											
+										Else 
+											
+											$Boo_accepted:=tmpl_compatibleType ($c;$o.fieldType)
+											
+										End if 
+									End if 
+								End if 
+							End for each 
+						End if 
+					End if 
+					
+					If ($Boo_accepted)\
+						 & ($oField#Null:C1517)
+						
+						  // Keep the field…
+						$Col_affected[$indx]:=$oField
+						
+						  // …& remove it to don't use again
+						$oIN.target.fields.remove($oIN.target.fields.indexOf($oField))
 						
 					End if 
 					
-					$o:=Rgx_match (New object:C1471(\
-						"pattern";"(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";\
-						"target";$Obj_attributes["ios:bind"]))
+					$indx:=$indx+1
 					
-					If ($o.success)
-						
-						  // LIST OF FIELDS
-						
-						If ($Obj_attributes["ios:type"]="all")
+				Else 
+					
+					  // SINGLE VALUE FIELD (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
+					
+					Case of 
 							
-							$Boo_accepted:=True:C214
+							  //______________________________________________________
+						: ($oAttributes["ios:bind"]="searchableField")
 							
-						Else 
+							$bMultiCriteria:=(Split string:C1554($oAttributes.class;" ").indexOf("multi-criteria")#-1)
 							
-							  // Check if the type is compatible
-							$c:=Split string:C1554($Obj_attributes["ios:type"];",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
+							$Lon_keyType:=Value type:C1509($oIN.target.searchableField)
 							
-							If ($Obj_in.target.fields#Null:C1517)
+							If ($Lon_keyType#Is undefined:K8:13)\
+								 & ($Lon_keyType#Is null:K8:31)
 								
-								For each ($Obj_field;$Obj_in.target.fields) Until ($Boo_accepted)
+								If ($Lon_keyType=Is collection:K8:32)
 									
-									If ($Obj_field#Null:C1517)
+									  // SOURCE IS MULTICRITERIA
+									
+									If ($oIN.target.searchableField.length>0)
 										
-										$o:=structure (New object:C1471(\
-											"action";"fieldDefinition";\
-											"path";$Obj_field.name;\
-											"tableNumber";Num:C11($Obj_in.tableNumber);\
-											"catalog";$Col_catalog))
-										
-										If ($o.success)
+										If ($bMultiCriteria)
 											
-											If ($o.type=-2)  // 1-N relation
+											  // Target is multi-criteria
+											
+											  //#MARK_TODO Verify the type & remove incompatible if any
+											For each ($o;$oIN.target.searchableField)
 												
-												$Boo_accepted:=Split string:C1554(String:C10($Obj_attributes.class);" ").indexOf("multivalued")#-1
+												  // #MARK_TODO
 												
-											Else 
-												
-												$Boo_accepted:=tmpl_compatibleType ($c;$o.fieldType)
-												
-											End if 
+											End for each 
+											
+											$oCache.searchableField:=$oIN.target.searchableField
+											
+										Else 
+											
+											  // Target is mono value -> keep the first compatible type
+											$oCache.searchableField:=$oIN.target.searchableField[0]
+											
 										End if 
 									End if 
-								End for each 
-							End if 
-						End if 
-						
-						If ($Boo_accepted)\
-							 & ($Obj_field#Null:C1517)
-							
-							  // Keep the field…
-							$Col_affected[$Lon_indx]:=$Obj_field
-							
-							  // …& remove it to don't use again
-							$Obj_in.target.fields.remove($Obj_in.target.fields.indexOf($Obj_field))
-							
-						End if 
-						
-						$Lon_indx:=$Lon_indx+1
-						
-					Else 
-						
-						  // SINGLE VALUE FIELD (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
-						
-						Case of 
-								
-								  //______________________________________________________
-							: ($Obj_attributes["ios:bind"]="searchableField")
-								
-								$Boo_multiCriteria:=(Split string:C1554($Obj_attributes.class;" ").indexOf("multi-criteria")#-1)
-								
-								$Lon_keyType:=Value type:C1509($Obj_in.target.searchableField)
-								
-								If ($Lon_keyType#Is undefined:K8:13)\
-									 & ($Lon_keyType#Is null:K8:31)
 									
-									If ($Lon_keyType=Is collection:K8:32)
+								Else 
+									
+									  // SOURCE IS MONO VALUE
+									
+									If ($bMultiCriteria)
 										
-										  // SOURCE IS MULTICRITERIA
-										
-										If ($Obj_in.target.searchableField.length>0)
+										  // Target is multi-criteria -> don't modify if exist
+										If ($Lon_keyType=Is null:K8:31)
 											
-											If ($Boo_multiCriteria)
-												
-												  // Target is multi-criteria
-												
-												  //#MARK_TODO Verify the type & remove incompatible if any
-												For each ($o;$Obj_in.target.searchableField)
-													
-													  // #MARK_TODO
-													
-												End for each 
-												
-												$Obj_cache.searchableField:=$Obj_in.target.searchableField
-												
-											Else 
-												
-												  // Target is mono value -> keep the first compatible type
-												$Obj_cache.searchableField:=$Obj_in.target.searchableField[0]
-												
-											End if 
+											  // #MARK_TODO Verify the type
+											
+											$oCache.searchableField:=$oIN.target.searchableField
+											
 										End if 
 										
 									Else 
 										
-										  // SOURCE IS MONO VALUE
+										  // Target is mono value
+										$oCache.searchableField:=$oIN.target.searchableField
 										
-										If ($Boo_multiCriteria)
-											
-											  // Target is multi-criteria -> don't modify if exist
-											If ($Lon_keyType=Is null:K8:31)
-												
-												  // #MARK_TODO Verify the type
-												
-												$Obj_cache.searchableField:=$Obj_in.target.searchableField
-												
-											End if 
-											
-										Else 
-											
-											  // Target is mono value
-											$Obj_cache.searchableField:=$Obj_in.target.searchableField
-											
-										End if 
 									End if 
 								End if 
+							End if 
+							
+							  //______________________________________________________
+						: ($oAttributes["ios:bind"]="sectionField")
+							
+							If ($oIN.target.sectionField#Null:C1517)
 								
-								  //______________________________________________________
-							: ($Obj_attributes["ios:bind"]="sectionField")
+								$oCache.sectionField:=$oIN.target.sectionField
 								
-								If ($Obj_in.target.sectionField#Null:C1517)
-									
-									$Obj_cache.sectionField:=$Obj_in.target.sectionField
-									
-								End if 
-								
-								  //______________________________________________________
-							Else 
-								
-								  // #98417 - Remove in excess item from collection
-								$Col_affected.resize($Col_affected.length-1)
-								
-								  //______________________________________________________
-						End case 
-					End if 
-				End for each 
-				
-				  // Keep the field binding definition
-				$Obj_cache.fields:=$Col_affected
-				
-			End if 
+							End if 
+							
+							  //______________________________________________________
+						Else 
+							
+							  // #98417 - Remove in excess item from collection
+							$Col_affected.resize($Col_affected.length-1)
+							
+							  //______________________________________________________
+					End case 
+				End if 
+			End for each 
+			
+			  // Keep the field binding definition
+			$oCache.fields:=$Col_affected
+			
 		End if 
-		
-		DOM CLOSE XML:C722($Dom_root)
-		
 	End if 
+	
+	DOM CLOSE XML:C722($root)
+	
 End if 
 
   // ----------------------------------------------------

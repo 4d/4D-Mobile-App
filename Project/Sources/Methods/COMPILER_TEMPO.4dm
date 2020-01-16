@@ -67,6 +67,3 @@ C_LONGINT:C283(00_TESTS ;$2)
 C_OBJECT:C1216(_w_actions ;$0)
 C_TEXT:C284(_w_actions ;$1)
 C_OBJECT:C1216(_w_actions ;$2)
-
-  //__________________________________________________
-C_OBJECT:C1216(updateFeaturesFlags ;$1)
