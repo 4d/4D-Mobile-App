@@ -113,6 +113,13 @@
 			"EMPTY"
 		]
 	},
+	"(errors)": {},
+	"(WEB (Server))": {
+		"methods": [
+			"(COMPILER_WEB)",
+			"(WEB_Test)"
+		]
+	},
 	"[EDITOR]": {
 		"methods": [
 			"COMPILER_editor",
@@ -235,7 +242,6 @@
 			"formatString",
 			"formatters",
 			"getIcon",
-			"http_NO_ERROR",
 			"net",
 			"Process_tags",
 			"Process_tags_on_file",
@@ -265,7 +271,6 @@
 			"database",
 			"db",
 			"environment",
-			"errors",
 			"group",
 			"http",
 			"HTTP ERROR HANDLER",
@@ -281,7 +286,6 @@
 			"subform",
 			"svg",
 			"test_db",
-			"test_errors",
 			"test_ob",
 			"test_str",
 			"thermometer",
@@ -392,12 +396,14 @@
 			"CATCH",
 			"COMPILER_err",
 			"Continue",
+			"err",
 			"err_COMBINE",
 			"err_PUSH",
+			"errors_CAPTURE",
+			"errors_HIDE",
 			"FINALLY",
-			"hideError",
-			"keepError",
-			"noError",
+			"NO_ERROR",
+			"test_errors",
 			"THROW",
 			"TRY"
 		]
@@ -429,12 +435,12 @@
 			"str",
 			"tools",
 			"ui",
-			"WEB (Server)",
 			"xml (thread-safe)"
 		],
 		"methods": [
 			"call_MESSAGE_DISPATCH",
-			"LOG_EVENT"
+			"LOG_EVENT",
+			"noError"
 		]
 	},
 	"Localization": {
@@ -702,12 +708,6 @@
 			"VIEWS"
 		]
 	},
-	"WEB (Server)": {
-		"methods": [
-			"COMPILER_WEB",
-			"WEB_Test"
-		]
-	},
 	"widgets": {
 		"groups": [
 			"Localization",
@@ -732,5 +732,10 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {}
+	"trash": {
+		"groups": [
+			"(errors)",
+			"(WEB (Server))"
+		]
+	}
 }

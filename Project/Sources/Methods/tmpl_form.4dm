@@ -14,7 +14,7 @@ C_TEXT:C284($2)
 
 C_BOOLEAN:C305($success)
 C_TEXT:C284($t;$tFormName;$tTypeForm)
-C_OBJECT:C1216($archive;$oError;$oManifest;$pathForm)
+C_OBJECT:C1216($archive;$errors;$oManifest;$pathForm)
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_form ;$0)
@@ -54,9 +54,9 @@ If ($tFormName[[1]]="/")  // Host database resources
 		
 		If (Path to object:C1547($tFormName).extension=commonValues.archiveExtension)  // Archive
 			
-			$oError:=errors ("noError")  //========================================================================================================
+/* START HIDING ERRORS */$errors:=err .hide()
 			$archive:=ZIP Read archive:C1637(COMPONENT_Pathname ("host_"+$tTypeForm+"Forms").file($tFormName))
-			$oError.deinstall()  //================================================================================================================
+/* STOP HIDING ERRORS */$errors.show()
 			
 			If ($archive#Null:C1517)
 				

@@ -52,7 +52,7 @@ End if
   // ----------------------------------------------------
 $Txt_OnErrorMethod:=Method called on error:C704
 
-ON ERR CALL:C155("noError")
+ON ERR CALL:C155("NO_ERROR")
 
 $Obj_result.status:=HTTP Get:C1157($Obj_in.url+"/4DWEBTEST";$Txt_buffer)
 

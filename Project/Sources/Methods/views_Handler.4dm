@@ -144,17 +144,15 @@ Case of
 				$offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
 				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($offset)
 				
-				If (featuresFlags.with("resourcesBrowser"))
-					
-					$form.resources.hide()
-					
-				Else 
-					
-					  // Place the download button
-					$form.resources.setTitle(str ("downloadMoreResources").localized("templates"))
-					$form.resources.bestSize(Align right:K42:4)
-					
-				End if 
+				  //If (featuresFlags.with("resourcesBrowser"))
+				  //$form.resources.hide()
+				  //Else 
+				
+				  // Place the download button
+				$form.resources.setTitle(str ("downloadMoreResources").localized("templates"))
+				$form.resources.bestSize(Align right:K42:4)
+				
+				  //End if 
 				
 				$context.setTab()
 				

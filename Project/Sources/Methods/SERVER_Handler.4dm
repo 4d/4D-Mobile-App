@@ -13,7 +13,7 @@ C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_enabled;$Lon_formEvent;$Lon_parameters)
 C_TEXT:C284($Dir_root;$t)
-C_OBJECT:C1216($o;$Obj_form;$Obj_in;$Obj_out)
+C_OBJECT:C1216($errors;$o;$Obj_form;$Obj_in;$Obj_out)
 
 If (False:C215)
 	C_OBJECT:C1216(SERVER_Handler ;$0)
@@ -134,7 +134,6 @@ Case of
 				
 				  // FR language
 				$o:=File:C1566("/RESOURCES/fr.lproj/onMobileAppAuthentication.4md")
-				
 				
 			Else 
 				
@@ -283,10 +282,9 @@ Case of
 			
 			If ($Lon_enabled=1)
 				
-				CLEAR VARIABLE:C89(err)
-				ON ERR CALL:C155("keepError")
+/* START TRAPPING ERRORS */$errors:=err .capture()
 				WEB START SERVER:C617
-				ON ERR CALL:C155("")
+/* STOP TRAPPING ERRORS */$errors.release()
 				
 				If (OK=1)
 					
@@ -308,14 +306,14 @@ Case of
 						
 					Else 
 						
-						If (Num:C11(err.error)=-1)
+						If (Num:C11($errors.lastError().error)=-1)
 							
 							  // Port conflict ?
 							$Obj_out.configuration.message:=str .setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_out.options.webPortID);String:C10($Obj_out.options.webHTTPSPortID)))
 							
 						Else 
 							
-							$Obj_out.configuration.message:=Get localized string:C991("error:")+String:C10(err.error)
+							$Obj_out.configuration.message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
 							
 						End if 
 					End if 

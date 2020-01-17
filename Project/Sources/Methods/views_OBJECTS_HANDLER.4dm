@@ -437,14 +437,23 @@ Case of
 		  //==================================================
 	: ($form.form.current=$form.resources.name)
 		
-		If ($context.selector=1)
+		If (featuresFlags.with("resourcesBrowser"))
 			
-			OPEN URL:C673(Get localized string:C991("doc_listForm");*)
+			  // Show browser
+			$form.form.call(New collection:C1472("showBrowser";New object:C1471(\
+				"url";Get localized string:C991(Choose:C955($context.selector=1;"doc_listForm";"doc_detailForm")))))
 			
 		Else 
 			
-			OPEN URL:C673(Get localized string:C991("doc_detailForm");*)
-			
+			If ($context.selector=1)
+				
+				OPEN URL:C673(Get localized string:C991("doc_listForm");*)
+				
+			Else 
+				
+				OPEN URL:C673(Get localized string:C991("doc_detailForm");*)
+				
+			End if 
 		End if 
 		
 		  //==================================================

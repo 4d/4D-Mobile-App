@@ -1,5 +1,9 @@
 //%attributes = {"invisible":true}
-C_OBJECT:C1216(err;unitErr)
+C_OBJECT:C1216(\
+errors;\
+errStack;\
+lastError\
+)
 
 If (False:C215)
 	
@@ -17,6 +21,11 @@ If (False:C215)
 End if 
 
 If (False:C215)
+	
+	  //___________________________________
+	C_OBJECT:C1216(err ;$0)
+	C_TEXT:C284(err ;$1)
+	C_OBJECT:C1216(err ;$2)
 	
 	  //___________________________________
 	C_COLLECTION:C1488(CATCH ;$1)

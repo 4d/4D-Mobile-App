@@ -74,7 +74,7 @@ If ($oDataModel#Null:C1517)
 	
 	$tTypeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(featuresFlags.with("newViewUI");"VIEWS";"_o_VIEWS")].selector)=2;"detail";"list")
 	
-	$errors:=errors ("noError")  //========================================================================================================
+/* START HIDING ERRORS */$errors:=err .hide()
 	
 	For each ($tTable;$oDataModel)
 		
@@ -167,7 +167,7 @@ If ($oDataModel#Null:C1517)
 		
 	End for each 
 	
-	$errors.deinstall()  //================================================================================================================
+/* STOP HIDING ERRORS */$errors.show()
 	
 End if 
 

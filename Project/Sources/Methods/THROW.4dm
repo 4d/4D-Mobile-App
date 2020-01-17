@@ -6,7 +6,7 @@
   // ----------------------------------------------------
 C_OBJECT:C1216($1)
 
-C_OBJECT:C1216($Obj_error)
+C_OBJECT:C1216($o)
 
 If (False:C215)
 	C_OBJECT:C1216(THROW ;$1)
@@ -17,17 +17,17 @@ C_OBJECT:C1216(err)
   // ----------------------------------------------------
 If (Asserted:C1132(Count parameters:C259>0))
 	
-	$Obj_error:=$1
+	$o:=$1
 	
-	If ($Obj_error.component=Null:C1517)
+	If ($o.component=Null:C1517)
 		
-		$Obj_error.component:=String:C10(err.signature)
+		$o.component:=String:C10(err.signature)
 		
 	End if 
 	
-	$Obj_error.deffered:=True:C214
+	$o.deffered:=True:C214
 	
-	_4D THROW ERROR:C1520($Obj_error)
+	_4D THROW ERROR:C1520($o)
 	
 End if 
 

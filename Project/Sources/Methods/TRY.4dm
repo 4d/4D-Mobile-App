@@ -9,42 +9,54 @@ If (False:C215)
 	C_TEXT:C284(TRY ;$1)
 End if 
 
-C_OBJECT:C1216(unitErr)
+COMPILER_err 
 
+  // ----------------------------------------------------
 CLEAR VARIABLE:C89(ERROR)
 CLEAR VARIABLE:C89(ERROR METHOD)
 CLEAR VARIABLE:C89(ERROR LINE)
 CLEAR VARIABLE:C89(ERROR FORMULA)
 
-If (unitErr=Null:C1517)
+If (errStack=Null:C1517)
 	
-	unitErr:=New shared object:C1526
+	errStack:=New shared object:C1526
 	
-	Use (unitErr)
+	Use (errStack)
 		
-		unitErr.unitErrors:=New shared collection:C1527
-		unitErr.unitErrorStack:=New shared collection:C1527
+		errStack.errors:=New shared collection:C1527
+		errStack.errorStack:=New shared collection:C1527
 		
 	End use 
 End if 
 
-Use (unitErr)
+Use (errStack)
 	
 	If (Count parameters:C259>=1)
 		
-		unitErr.signature:=$1
+		errStack.signature:=$1
 		
 	End if 
 	
-	unitErr.assertEnabled:=Get assert enabled:C1130
+	  // Keep the assertions status
+	errStack.assertEnabled:=Get assert enabled:C1130
 	
-	unitErr.unitErrorStack.push(Method called on error:C704)
+	  // Keep the current method called on error
+	errStack.errorStack.push(Method called on error:C704)
 	
 End use 
 
 SET ASSERT ENABLED:C1131(True:C214;*)
 
-  // Don't catch unitErrors in dev mode
-ON ERR CALL:C155(Choose:C955(Structure file:C489=Structure file:C489(*);"";"CATCH"))
+If (Structure file:C489=Structure file:C489(*))\
+ & Not:C34(Is compiled mode:C492)
+	
+	  // Don't catch errors in dev mode
+	ON ERR CALL:C155("")
+	
+Else 
+	
+	ON ERR CALL:C155("CATCH")
+	
+End if 
 
   // ----------------------------------------------------

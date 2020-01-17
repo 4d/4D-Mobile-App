@@ -10,11 +10,14 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_parameters;$Lon_i)
-C_TEXT:C284($Txt_cmd;$Txt_error;$Txt_in;$Txt_out;$Txt_buffer;$Txt_fileRef)
-C_OBJECT:C1216($Obj_param;$Obj_result;$Obj_;$Obj_objects)
-C_COLLECTION:C1488($Col_)
+C_BLOB:C604($x)
 C_BOOLEAN:C305($Boo_install)
+C_LONGINT:C283($Lon_httpResponse;$Lon_i;$Lon_parameters)
+C_TEXT:C284($Txt_buffer;$Txt_cmd;$Txt_error;$Txt_fileRef;$Txt_in;$Txt_out)
+C_OBJECT:C1216($errors;$Obj_;$Obj_objects;$Obj_param;$Obj_result)
+C_COLLECTION:C1488($Col_)
+
+ARRAY TEXT:C222($tTxt_folders;0)
 
 If (False:C215)
 	C_OBJECT:C1216(sdk ;$0)
@@ -64,28 +67,24 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 					If (String:C10($Obj_param.url)#"")
 						
 						  // Download it if url defined
-						C_BLOB:C604($Blob)
-						C_LONGINT:C283($httpResponse)
 						
-						C_TEXT:C284($Txt_onError)
-						$Txt_onError:=Method called on error:C704
-						http_ERROR:=0
-						ON ERR CALL:C155("http_NO_ERROR")
-						$httpResponse:=HTTP Get:C1157($Obj_param.url;$Blob)
+/* START TRAPPING ERRORS */$errors:=err .capture()
 						
-						If (($httpResponse<300)\
-							 & (http_ERROR=0))
+						$Lon_httpResponse:=HTTP Get:C1157($Obj_param.url;$x)
+						
+						If (($Lon_httpResponse<300)\
+							 & (Num:C11($errors.lastError().error)=0))
 							
 							CREATE FOLDER:C475($Obj_param.file;*)
-							BLOB TO DOCUMENT:C526($Obj_param.file;$Blob)
+							BLOB TO DOCUMENT:C526($Obj_param.file;$x)
 							$Obj_result.downloadedFrom:=$Obj_param.url
 							
-							$httpResponse:=HTTP Get:C1157($Obj_param.url+".md5";$Blob)
+							$Lon_httpResponse:=HTTP Get:C1157($Obj_param.url+".md5";$x)
 							
-							If (($httpResponse<300)\
-								 & (http_ERROR=0))
+							If (($Lon_httpResponse<300)\
+								 & (Num:C11($errors.lastError().error)=0))
 								
-								BLOB TO DOCUMENT:C526($Obj_param.file+".md5";$Blob)
+								BLOB TO DOCUMENT:C526($Obj_param.file+".md5";$x)
 								
 								  // Could check md5 here
 								
@@ -93,11 +92,11 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 							
 						Else 
 							
-							$Obj_result.httpResponse:=$httpResponse
+							$Obj_result.httpResponse:=$Lon_httpResponse
 							
 						End if 
 						
-						ON ERR CALL:C155($Txt_onError)
+/* STOP TRAPPING ERRORS */$errors.release()
 						
 					End if 
 				End if 
@@ -269,7 +268,6 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				"embed";$Obj_objects["48FDD0DF1E94FA1000EEDE31"];\
 				"copy";$Obj_objects["D9BA4A381EC4A6D9001A997B"])
 			
-			ARRAY TEXT:C222($tTxt_folders;0)
 			$Txt_buffer:=$Obj_param.target+Convert path POSIX to system:C1107($Obj_param.folder)
 			If (Test path name:C476($Txt_buffer)=Is a folder:K24:2)
 				

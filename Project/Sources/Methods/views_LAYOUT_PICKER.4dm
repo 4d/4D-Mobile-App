@@ -94,7 +94,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		
 		If (featuresFlags.with("resourcesBrowser"))
 			
-			$errors:=errors ("noError")  //========================================================================================================
+/* START HIDING ERRORS */$errors:=err .hide()
 			
 			  // Add downloaded templates
 			For each ($o;$folderDatabase.files().query("extension = :1";commonValues.archiveExtension))
@@ -113,18 +113,24 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 					
 					If ($success)
 						
-						$success:=String:C10(JSON Parse:C1218($archive.root.file("manifest.json").getText()).type)=($oLocal.type+"form")
+						$oManifest:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
+						$success:=($oManifest#Null:C1517)
 						
 						If ($success)
 							
-							$c.push("/"+$o.fullName)
+							$success:=String:C10(JSON Parse:C1218($archive.root.file("manifest.json").getText()).type)=($oLocal.type+"form")
 							
+							If ($success)
+								
+								$c.push("/"+$o.fullName)
+								
+							End if 
 						End if 
 					End if 
 				End if 
 			End for each 
 			
-			$errors.deinstall()  //================================================================================================================
+/* STOP HIDING ERRORS */$errors.show()
 			
 		End if 
 		
@@ -167,7 +173,7 @@ $oPicker:=New object:C1471(\
 
 $oPicker.vOffset:=155  // Offset of the background button
 
-$errors:=errors ("noError")  //========================================================================================================
+/* START HIDING ERRORS */$errors:=err .hide()
 
 For ($i;1;Size of array:C274($tTxt_forms);1)
 	
@@ -317,7 +323,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 	End if 
 End for 
 
-$errors.deinstall()  //================================================================================================================
+/* STOP HIDING ERRORS */$errors.show()
 
 If (featuresFlags.with("resourcesBrowser"))
 	

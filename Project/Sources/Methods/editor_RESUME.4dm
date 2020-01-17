@@ -13,7 +13,8 @@ C_OBJECT:C1216($2)
 
 C_LONGINT:C283($Lon_http;$Lon_https;$Lon_parameters;$Win_me)
 C_TEXT:C284($Dir_database;$kTxt_callbackMethod;$Txt_message;$Txt_selector)
-C_OBJECT:C1216($Obj_buffer;$Obj_cancel;$Obj_in;$Obj_ok;$Obj_params;$Obj_xcode)
+C_OBJECT:C1216($errors;$Obj_buffer;$Obj_cancel;$Obj_in;$Obj_ok;$Obj_params)
+C_OBJECT:C1216($Obj_xcode)
 
 If (False:C215)
 	C_TEXT:C284(editor_RESUME ;$1)
@@ -166,10 +167,9 @@ Case of
 	: ($Txt_selector="build_startWebServer")\
 		 | ($Txt_selector="startWebServer")
 		
-		CLEAR VARIABLE:C89(err)
-		ON ERR CALL:C155("keepError")
+/* START TRAPPING ERRORS */$errors:=err .capture()
 		WEB START SERVER:C617
-		ON ERR CALL:C155("")
+/* STOP TRAPPING ERRORS */$errors.release()
 		
 		If (OK=1)
 			
@@ -192,14 +192,14 @@ Case of
 				: ($Lon_http=1)
 					
 					  // Port conflict?
-					If (Num:C11(err.error)=-1)
+					If (Num:C11($errors.lastError().error)=-1)
 						
 						$Txt_message:=str .setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_buffer.options.webPortID);String:C10($Obj_buffer.options.webHTTPSPortID)))
 						
 					Else 
 						
 						  // Display error number
-						$Txt_message:=Get localized string:C991("error:")+String:C10(err.error)
+						$Txt_message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
 						
 					End if 
 					
@@ -216,14 +216,14 @@ Case of
 						
 					Else 
 						
-						If (Num:C11(err.error)=-1)
+						If (Num:C11($errors.lastError().error)=-1)
 							
 							$Txt_message:=str .setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_buffer.options.webPortID);String:C10($Obj_buffer.options.webHTTPSPortID)))
 							
 						Else 
 							
 							  // Display error number
-							$Txt_message:=Get localized string:C991("error:")+String:C10(err.error)
+							$Txt_message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
 							
 						End if 
 					End if 
@@ -235,25 +235,6 @@ Case of
 					
 					  //______________________________________________________
 			End case 
-			
-			  //If ($Lon_https=1)
-			  //  // Port conflict? or certificates are missing?
-			  //$Dir_database:=Get 4D folder(Database folder;*)
-			  //If (Test path name($Dir_database+"cert.pem")#Is a document)\
-																												| (Test path name($Dir_database+"key.pem")#Is a document)
-			
-			  //$Txt_message:=Get localized string("checkThatTheCertificatesAreProperlyInstalled")
-			  // Else
-			  // If (Num(obj_error.error)=-1)
-			  //$Txt_message:=str_localized (New collection("someListeningPortsAreAlreadyUsed";String($Obj_buffer.options.webPortID);String($Obj_buffer.options.webHTTPSPortID)))
-			  // Else
-			  //  // Display error number
-			  //$Txt_message:=Get localized string("error:")+String(obj_error.error)
-			  // End if
-			  // End if
-			  // Else
-			  //$Txt_message:=Get localized string("httpsServerIsNotEnabledInWebConfigurationSettings")
-			  // End if
 			
 			POST_FORM_MESSAGE (New object:C1471(\
 				"target";$Win_me;\

@@ -53,10 +53,10 @@ Case of
 		  //______________________________________________________
 	: ($Txt_in="testSuites")
 		
-		C_OBJECT:C1216(err)
+		C_OBJECT:C1216(lastError)
 		
 		$Obj_out:=New object:C1471(\
-			"errors";Formula:C1597(err);\
+			"errors";Formula:C1597(lastError);\
 			"tests";New collection:C1472)
 		
 		$o:=New signal:C1641

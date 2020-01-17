@@ -12,7 +12,7 @@ If (False:C215)
 	C_TEXT:C284(FINALLY ;$1)
 End if 
 
-C_OBJECT:C1216(unitErr)
+COMPILER_err 
 
   // ----------------------------------------------------
 If (Count parameters:C259>=1)
@@ -21,20 +21,16 @@ If (Count parameters:C259>=1)
 	
 Else 
 	
-	Use (unitErr)
+	Use (errStack)
 		
-		$t:=unitErr.unitErrorStack.pop()
+		$t:=errStack.errorStack.pop()
 		
 	End use 
 	
-	ON ERR CALL:C155(Choose:C955(Length:C16(String:C10($t))>0;$t;"noError"))
+	ON ERR CALL:C155(Choose:C955(Length:C16(String:C10($t))>0;$t;"NO_ERROR"))
 	
 End if 
 
-SET ASSERT ENABLED:C1131(Bool:C1537(unitErr.assertEnabled);*)
+SET ASSERT ENABLED:C1131(Bool:C1537(errStack.assertEnabled);*)
 
   // ----------------------------------------------------
-
-  //If (Structure file=Structure file(*))
-  //ALERT("Done")
-  //End if 

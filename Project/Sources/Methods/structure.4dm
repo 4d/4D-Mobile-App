@@ -12,11 +12,10 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_find;$Boo_oneTable)
-C_LONGINT:C283($i;$l;$Lon_indx;$Lon_parameters;$Lon_tableNumber;$Lon_type)
-C_TEXT:C284($Dom_root;$t;$Txt_field;$Txt_methodCalledOnError;$Txt_onErrCall;$Txt_table)
-C_TEXT:C284($Txt_xml)
-C_OBJECT:C1216($o;$Obj_buffer;$Obj_catalog;$Obj_field;$Obj_in;$Obj_out)
-C_OBJECT:C1216($Obj_relatedDataClass;$Obj_table;$Obj_types)
+C_LONGINT:C283($l;$Lon_indx;$Lon_parameters;$Lon_tableNumber)
+C_TEXT:C284($Dom_root;$t;$Txt_field;$Txt_onErrCall;$Txt_table;$Txt_xml)
+C_OBJECT:C1216($errors;$o;$Obj_buffer;$Obj_catalog;$Obj_field;$Obj_in)
+C_OBJECT:C1216($Obj_out;$Obj_relatedDataClass;$Obj_table;$Obj_types)
 C_COLLECTION:C1488($c;$Col_catalog;$Col_fields;$Col_filtered;$Col_types)
 
 If (False:C215)
@@ -480,8 +479,6 @@ Case of
 				  //…………………………………………………………………………………………………
 			: ($Obj_field.kind="relatedEntities")  // 1 -> N relation
 				
-				
-				
 				  //…………………………………………………………………………………………………
 			Else 
 				
@@ -533,7 +530,6 @@ Case of
 							  // Get inverse table
 							$Obj_relatedDataClass:=$Obj_catalog[$Obj_field.relatedDataClass]
 							
-							C_OBJECT:C1216($o)
 							$o:=$Obj_relatedDataClass[$Obj_buffer.value]
 							$Obj_out.success:=($o#Null:C1517)
 							If ($Obj_out.success)
@@ -547,7 +543,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							  //
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																																																																// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							  //
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							  //
@@ -955,8 +951,8 @@ Case of
 	: ($Obj_in.action="definition")  // A GARDER POUR LE MOMENT
 		
 		EXPORT STRUCTURE:C1311($Txt_xml)
-		$Txt_methodCalledOnError:=Method called on error:C704
-		ON ERR CALL:C155("xml_NO_ERROR")  //    ==========================[
+		
+/* START HIDING ERRORS */$errors:=err .hide()
 		$Dom_root:=DOM Parse XML variable:C720($Txt_xml)
 		
 		If (OK=1)
@@ -974,7 +970,7 @@ Case of
 			End if 
 		End if 
 		
-		ON ERR CALL:C155($Txt_methodCalledOnError)  //    =================]
+/* STOP HIDING ERRORS */$errors.show()
 		
 		  //______________________________________________________
 		  //: (Not(Bool(featuresFlags._103411)))
@@ -1085,8 +1081,7 @@ Case of
 				
 				$Txt_onErrCall:=Method called on error:C704
 				
-				CLEAR VARIABLE:C89(err)
-				ON ERR CALL:C155("keepError")  // ========================================= [
+/* START TRAPPING ERRORS */$errors:=err .capture()
 				
 				  // Create table if any
 				DOCUMENT:="CREATE TABLE IF NOT EXISTS "+String:C10(commonValues.deletedRecordsTable.name)+" ("
@@ -1136,7 +1131,7 @@ Case of
 						
 					End if 
 					
-					CLEAR VARIABLE:C89(err)
+					$errors.reset()
 					
 					Begin SQL
 						
@@ -1144,15 +1139,15 @@ Case of
 						
 					End SQL
 					
-					If (err.stack#Null:C1517)
+					If ($errors.lastError.stack#Null:C1517)
 						
-						If (err.stack[0].code=1155)
+						If ($errors.lastError.stack[0].code=1155)
 							
 							  // Index already exists
 							
 						Else 
 							
-							ob_createPath ($Obj_out;"errors";Is collection:K8:32).errors.push(err.stack[0].error+" ("+$t+")")
+							ob_createPath ($Obj_out;"errors";Is collection:K8:32).errors.push($errors.lastError.stack[0].error+" ("+$t+")")
 							
 						End if 
 					End if 
@@ -1160,7 +1155,7 @@ Case of
 				
 				$Obj_out.success:=($Obj_out.errors=Null:C1517)
 				
-				ON ERR CALL:C155($Txt_onErrCall)  // ====================================== ]
+/* STOP TRAPPING ERRORS */$errors.release()
 				
 				  //…………………………………………………………………………………………………………………
 			: ($Obj_in.action="createStamps")
@@ -1209,13 +1204,13 @@ Case of
 			
 			$Txt_onErrCall:=Method called on error:C704
 			
-			ON ERR CALL:C155("keepError")  // ========================================= [
+/* START TRAPPING ERRORS */$errors:=err .capture()
 			
 			$t:=String:C10($Obj_in.tableName)
 			
 			DOCUMENT:="ALTER TABLE ["+$t+"] ADD TRAILING "+String:C10(commonValues.stampField.name)+" "+String:C10(commonValues.stampField.type)+";"
 			
-			CLEAR VARIABLE:C89(err)
+			$errors.reset()
 			
 			Begin SQL
 				
@@ -1223,15 +1218,15 @@ Case of
 				
 			End SQL
 			
-			If (err.stack#Null:C1517)
+			If ($errors.lastError.stack#Null:C1517)
 				
-				If (err.stack[0].code=1053)
+				If ($errors.lastError.stack[0].code=1053)
 					
 					  // Field name already exists
 					
 				Else 
 					
-					ob_createPath ($Obj_out;"errors";Is collection:K8:32).errors.push(err.stack[0].error+" ("+$t+")")
+					ob_createPath ($Obj_out;"errors";Is collection:K8:32).errors.push($errors.lastError.stack[0].error+" ("+$t+")")
 					
 				End if 
 			End if 
@@ -1242,7 +1237,7 @@ Case of
 				
 			End if 
 			
-			CLEAR VARIABLE:C89(err)
+			$errors.reset()
 			
 			Begin SQL
 				
@@ -1250,22 +1245,22 @@ Case of
 				
 			End SQL
 			
-			If (err.stack#Null:C1517)
+			If ($errors.lastError.stack#Null:C1517)
 				
-				If (err.stack[0].code=1155)
+				If ($errors.lastError.stack[0].code=1155)
 					
 					  // Index already exists
 					
 				Else 
 					
-					ob_createPath ($Obj_out;"errors";Is collection:K8:32).errors.push(err.stack[0].error+" ("+$t+")")
+					ob_createPath ($Obj_out;"errors";Is collection:K8:32).errors.push($errors.lastError.stack[0].error+" ("+$t+")")
 					
 				End if 
 			End if 
 			
 			$Obj_out.success:=($Obj_out.errors=Null:C1517)
 			
-			ON ERR CALL:C155($Txt_onErrCall)  // ====================================== ]
+/* STOP TRAPPING ERRORS */$errors.release()
 			
 		End if 
 		

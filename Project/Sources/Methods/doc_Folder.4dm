@@ -84,11 +84,12 @@ If (Length:C16($Txt_pathname)#0)
 		
 		If (Bool:C1537($Obj_options.writable))
 			
-			$File_test:=$Obj_folder.nativePath+"."+Generate UUID:C1066
-			
 			$Txt_errorMethod:=Method called on error:C704
-			ON ERR CALL:C155("hideError")
+			ON ERR CALL:C155("noError")
+			
+			$File_test:=$Obj_folder.nativePath+"."+Generate UUID:C1066
 			TEXT TO DOCUMENT:C1237($File_test;"")
+			
 			ON ERR CALL:C155($Txt_errorMethod)
 			
 			$Obj_folder.writable:=(Test path name:C476($File_test)=Is a document:K24:1)

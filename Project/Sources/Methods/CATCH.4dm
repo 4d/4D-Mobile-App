@@ -7,16 +7,18 @@
 C_COLLECTION:C1488($1)
 
 C_OBJECT:C1216($o)
-C_COLLECTION:C1488($Col_unitErrors)
+C_COLLECTION:C1488($c)
 
 If (False:C215)
 	C_COLLECTION:C1488(CATCH ;$1)
 End if 
 
-C_OBJECT:C1216(unitErr)
+COMPILER_err 
 
   // ----------------------------------------------------
 If (Count parameters:C259=0)  // Catching
+	
+	BEEP:C151
 	
 	$o:=New shared object:C1526
 	
@@ -32,9 +34,9 @@ If (Count parameters:C259=0)  // Catching
 		
 	End use 
 	
-	Use (unitErr)
+	Use (errStack)
 		
-		unitErr.unitErrors.push($o)
+		errStack.errors.push($o)
 		
 	End use 
 	
@@ -42,15 +44,15 @@ If (Count parameters:C259=0)  // Catching
 	
 Else   // Populate
 	
-	$Col_unitErrors:=$1
+	$c:=$1
 	
-	If ($Col_unitErrors#Null:C1517)
+	If ($c#Null:C1517)
 		
-		Use (unitErr)
+		Use (errStack)
 			
-			For each ($o;$Col_unitErrors)
+			For each ($o;$c)
 				
-				unitErr.unitErrors.push(OB Copy:C1225($o))
+				errStack.errors.push(OB Copy:C1225($o))
 				
 			End for each 
 		End use 

@@ -15,8 +15,8 @@ C_OBJECT:C1216($1)
 
 C_BLOB:C604($Blb_buffer)
 C_LONGINT:C283($Lon_i;$Lon_parameters;$Lon_port;$Lon_timeout;$Win_caller)
-C_TEXT:C284($Txt_onError;$Txt_query;$Txt_queryValue)
-C_OBJECT:C1216($Obj_param;$Obj_requestResult;$Obj_result;$Obj_server)
+C_TEXT:C284($Txt_query;$Txt_queryValue)
+C_OBJECT:C1216($errors;$Obj_param;$Obj_requestResult;$Obj_result;$Obj_server)
 
 ARRAY TEXT:C222($tTxt_headerNames;0)
 ARRAY TEXT:C222($tTxt_headerValues;0)
@@ -235,19 +235,9 @@ Case of
 				
 			End if 
 			
-			$Txt_onError:=Method called on error:C704
-			http_ERROR:=0
-			ON ERR CALL:C155("http_NO_ERROR")  //========== [
-			
-			  //#TURN_AROUND - HTTP Request doesn't allow an expression for content (a BLOB couldn't be passed as a value but only by a reference) {
-			  //$Obj_result.code:=HTTP Request($Obj_param.method;$Obj_result.url;$Obj_param.content;$Obj_requestResult;$tTxt_headerNames;$tTxt_headerValues)
-			  //C_TEXT($Txt_buffer)
-			  //$Txt_buffer:=$Obj_param.content
-			  //$Obj_result.code:=HTTP Request($Obj_param.method;$Obj_result.url;$Txt_buffer;$Obj_requestResult;$tTxt_headerNames;$tTxt_headerValues)
+/* START TRAPPING ERRORS */$errors:=err .capture()
 			$Obj_result.code:=HTTP Request:C1158($Obj_param.method;$Obj_result.url;($Obj_param.content);$Obj_requestResult;$tTxt_headerNames;$tTxt_headerValues)
-			  //}
-			
-			ON ERR CALL:C155($Txt_onError)  //============= ]
+/* STOP TRAPPING ERRORS */$errors.release()
 			
 			If ($Lon_timeout#0)
 				
@@ -257,9 +247,9 @@ Case of
 			
 			$Obj_result.response:=$Obj_requestResult
 			
-			If (http_ERROR#0)
+			If (Num:C11($errors.lastError().error)#0)
 				
-				$Obj_result.httpError:=http_ERROR
+				$Obj_result.httpError:=$errors.lastError().error
 				
 			End if 
 			
@@ -459,16 +449,13 @@ Case of
 		End for 
 		
 		  /// Do the request
-		$Txt_onError:=Method called on error:C704
-		http_ERROR:=0
-		ON ERR CALL:C155("http_NO_ERROR")  //========== [
 		
+/* START TRAPPING ERRORS */$errors:=err .capture()
 		$Obj_result.code:=HTTP Request:C1158(HTTP GET method:K71:1;$Obj_param.url;"";$Blb_buffer;$tTxt_headerNames;$tTxt_headerValues)
-		
-		ON ERR CALL:C155($Txt_onError)  //============= ]
+/* STOP TRAPPING ERRORS */$errors.release()
 		
 		  /// Check result
-		If (http_ERROR=0)
+		If ($errors.lastError()=Null:C1517)
 			
 			  // Write to file
 			$Lon_port:=BLOB size:C605($Blb_buffer)
@@ -489,10 +476,9 @@ Case of
 			
 		Else 
 			
-			$Obj_result.httpError:=http_ERROR
+			$Obj_result.httpError:=Num:C11($errors.lastError().error)
 			
-			ob_Lon_Error:=0
-			ON ERR CALL:C155("ob_noError")  //========== [
+/* START HIDING ERRORS */$errors:=err .hide()
 			
 			$Obj_result.response:=BLOB to text:C555($Blb_buffer;UTF8 text without length:K22:17)
 			
@@ -507,7 +493,7 @@ Case of
 				End if 
 			End if 
 			
-			ON ERR CALL:C155($Txt_onError)  //============= ]
+/* STOP HIDING ERRORS */$errors.show()
 			
 		End if 
 		

@@ -1,2 +1,2 @@
-//%attributes = {"invisible":true}
-  // <NOTHING MORE TO DO>
+//%attributes = {"invisible":true,"preemptive":"capable"}
+  //NO ERROR

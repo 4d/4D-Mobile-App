@@ -10,8 +10,9 @@
   // Declarations
 C_LONGINT:C283($Lon_formEvent;$Lon_parameters)
 C_POINTER:C301($Ptr_me)
-C_TEXT:C284($File_key;$Txt_buffer;$Txt_me;$Txt_url)
-C_OBJECT:C1216($Obj_context;$Obj_form;$Obj_project;$Obj_server;$Obj_tags)
+C_TEXT:C284($File_key;$Txt_buffer;$Txt_me)
+C_OBJECT:C1216($errors;$Obj_context;$Obj_form;$Obj_project;$Obj_server)
+
 
   // ----------------------------------------------------
   // Initialisations
@@ -115,10 +116,10 @@ Case of
 		
 		  // If (Shift down)
 		  //SHOW ON DISK(dataSet (New object(\
-			"action";"path";\
-			"project";New object(\
-			"product";Form.product;\
-			"$project";Form.$project))).path)
+						"action";"path";\
+						"project";New object(\
+						"product";Form.product;\
+						"$project";Form.$project))).path)
 		  // End if
 		
 		  //==================================================
@@ -176,10 +177,9 @@ Case of
 					  //______________________________________________________
 				: ($Obj_context.serverStatus.action="startWebServer")
 					
-					CLEAR VARIABLE:C89(err)
-					ON ERR CALL:C155("keepError")
+/* START TRAPPING ERRORS */$errors:=err .capture()
 					WEB START SERVER:C617
-					ON ERR CALL:C155("")
+/* STOP TRAPPING ERRORS */$errors.release()
 					
 					If (Bool:C1537(OK))
 						
@@ -189,14 +189,14 @@ Case of
 						
 						$Obj_server:=WEB Get server info:C1531
 						
-						If (Num:C11(err.error)=-1)
+						If (Num:C11($errors.lastError().error)=-1)
 							
 							  // Port conflict ?
 							$Obj_server.message:=str ("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_server.options.webPortID);String:C10($Obj_server.options.webHTTPSPortID)))
 							
 						Else 
 							
-							$Obj_server.message:=Get localized string:C991("error:")+String:C10(err.error)
+							$Obj_server.message:=Get localized string:C991("error:")+String:C10(Num:C11($errors.lastError().error))
 							
 						End if 
 					End if 

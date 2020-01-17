@@ -8,12 +8,10 @@
   //
   // ----------------------------------------------------
   // Declarations
-
 C_BOOLEAN:C305($Boo_Repeat)
-
 C_LONGINT:C283($Lon_index;$Lon_parameters;$Win_hdl)
-C_TEXT:C284($t;$Txt_buffer;$Txt_onErrCallMethod;$Txt_projectName)
-C_OBJECT:C1216($o;$Obj_form;$Obj_path;$Obj_project;$Obj_root)
+C_TEXT:C284($t;$Txt_buffer;$Txt_projectName)
+C_OBJECT:C1216($errors;$o;$Obj_form;$Obj_path;$Obj_project;$Obj_root)
 C_COLLECTION:C1488($c)
 
   // ----------------------------------------------------
@@ -64,14 +62,13 @@ If (Bool:C1537(OK))
 	$o:=Folder:C1567(Database folder:K5:14;*).file("._")
 	
 	  // Check if we can write
-	$Txt_onErrCallMethod:=Method called on error:C704
 	
-	ON ERR CALL:C155("hideError")  //====================== [
+/* START HIDING ERRORS */$errors:=err .hide()
 	
 	OK:=Num:C11($o.create())
 	$o.delete()
 	
-	ON ERR CALL:C155($Txt_onErrCallMethod)  //============== ]
+/* STOP HIDING ERRORS */$errors.show()
 	
 	If (Bool:C1537(OK))
 		
