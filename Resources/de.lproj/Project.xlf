@@ -583,8 +583,7 @@ This file is distributed under the same license as the product package.-->
         <trans-unit id="qSN/WPWEny3AkKjcLxpZGQ" resname="allowToMakeTheStructureAdjustments">
           <source>Allow {product} to make the necessary structure adjustments for an optimised
             mobile data update</source>
-          <target>Ermöglichen Sie {product}, die notwendigen Strukturanpassungen für eine optimierte
-            Aktualisierung der mobilen Daten vorzunehmen.</target>
+          <target>Erlauben Sie {product} notwendige Strukturanpassungen vorzunehmen.</target>
         </trans-unit>
         <trans-unit id="gx2+DInxbW2d0z4QK9jNlw" resname="linkedTableNotPublished">
           <source>Linked Table "{table}" (not published)</source>
