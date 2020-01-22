@@ -310,11 +310,13 @@ ASSERT:C1129($o.setText("").equal(""))
 
   // ============================================
   // urlEncode()
-ASSERT:C1129($o.setText("'Command Name' != '_@'").urlEncode()="%27Command%20Name%27%20%21%3D%20%27_%40%27")
+ASSERT:C1129($o.setText("'Command Name' != '_@'").urlEncode()="%27Command%20Name%27%20%21%3D%20%27_@%27")
+
+  //%27Command%20Name%27%20%21%3D%20%27_@%27
 
   // ============================================
   // urlDecode()
-ASSERT:C1129($o.setText("%27Command%20Name%27%20%21%3D%20%27_%40%27").urlDecode()="'Command Name' != '_@'")
+ASSERT:C1129($o.setText("%27Command%20Name%27%20%21%3D%20%27_@%27").urlDecode()="'Command Name' != '_@'")
 
   // ============================================
   // contains()

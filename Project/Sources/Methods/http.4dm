@@ -121,8 +121,8 @@ Else
 				$o.response:=Null:C1517
 				$o.errors:=New collection:C1472
 				
+				  //========================================== [
 				$Txt_onErrCallMethod:=Method called on error:C704
-				  //====================== [
 				httpError:=0
 				ON ERR CALL:C155("HTTP ERROR HANDLER")
 				
@@ -219,12 +219,19 @@ Else
 					
 				Else 
 					
-					$o.errors.push(Choose:C955((httpError#0);"error "+String:C10($Lon_code);$t))
-					
+					If (httpError#0)
+						
+						$o.errors.push("error "+String:C10(httpError))
+						
+					Else 
+						
+						$o.errors.push("error "+String:C10($Lon_code))
+						
+					End if 
 				End if 
 				
 				ON ERR CALL:C155($Txt_onErrCallMethod)
-				  //====================== ]
+				  //========================================== ]
 				
 				For ($i;1;Size of array:C274($tTxt_HeaderNames);1)
 					

@@ -331,7 +331,7 @@ Case of
 			
 			  // Show browser
 			$o:=New object:C1471("url";Get localized string:C991("doc_fornatters"))
-			$Obj_form.form.call(New collection:C1472("showBrowser";$o))
+			$Obj_form.form.call(New collection:C1472("initBrowser";$o))
 			
 		Else 
 			

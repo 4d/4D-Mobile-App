@@ -174,7 +174,7 @@
 			"project_CLASSES",
 			"project_Defaults",
 			"project_Fix",
-			"PROJECT_HANDLER",
+			"PROJECT_Handler",
 			"project_Load",
 			"project_MESSAGES",
 			"PROJECT_OBJECT_HANDLER",
@@ -254,8 +254,8 @@
 	},
 	"BROWSER": {
 		"methods": [
-			"browser_HANDLER",
-			"browser_OBJECTS_HANDLER"
+			"BROWSER_Handler",
+			"BROWSER_OBJECTS_HANDLER"
 		],
 		"forms": [
 			"BROWSER"
@@ -412,6 +412,7 @@
 		"methods": [
 			"COMPILER_fields",
 			"FIELDS_class",
+			"FIELDS_Handler",
 			"fields_LIST",
 			"FIELDS_OBJECTS_HANDLER"
 		],
@@ -700,7 +701,7 @@
 			"views_fieldList",
 			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",
-			"VIEWS_Objects_handler",
+			"VIEWS_OBJECTS_HANDLER",
 			"views_preview",
 			"views_UPDATE"
 		],

@@ -90,44 +90,6 @@
 					"printFrame": "variable",
 					"scrollbarHorizontal": "hidden"
 				},
-				"message.back": {
-					"type": "picture",
-					"top": 0,
-					"left": 0,
-					"width": 970,
-					"height": 875,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"pictureFormat": "tiled",
-					"picture": "/RESOURCES/images/common/background.png"
-				},
-				"message.button": {
-					"type": "button",
-					"top": 0,
-					"left": 0,
-					"width": 970,
-					"height": 875,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"display": false
-				},
-				"message": {
-					"type": "subform",
-					"top": 109,
-					"left": 280,
-					"width": 410,
-					"height": 180,
-					"visibility": "hidden",
-					"detailForm": "MESSAGE",
-					"focusable": false,
-					"deletableInList": false,
-					"doubleClickInRowAction": "editSubrecord",
-					"selectionMode": "multiple",
-					"printFrame": "variable",
-					"method": "editor_OBJECTS_HANDLER"
-				},
 				"debug.focus": {
 					"type": "input",
 					"top": 20,
@@ -221,6 +183,44 @@
 					"sizingX": "grow",
 					"sizingY": "grow",
 					"visibility": "hidden",
+					"method": "editor_OBJECTS_HANDLER"
+				},
+				"message.back": {
+					"type": "picture",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"pictureFormat": "tiled",
+					"picture": "/RESOURCES/images/common/background.png"
+				},
+				"message.button": {
+					"type": "button",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"display": false
+				},
+				"message": {
+					"type": "subform",
+					"top": 109,
+					"left": 280,
+					"width": 410,
+					"height": 180,
+					"visibility": "hidden",
+					"detailForm": "MESSAGE",
+					"focusable": false,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
 					"method": "editor_OBJECTS_HANDLER"
 				}
 			}

@@ -14,10 +14,10 @@ C_OBJECT:C1216($2)
 
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b)
-C_LONGINT:C283($i;$l;$Lon_length;$Lon_position)
-C_TEXT:C284($t;$tt;$Txt_filtered;$Txt_pattern;$Txt_result;$Txt_separator)
+C_LONGINT:C283($i;$l;$length;$position)
+C_TEXT:C284($t;$tFiltered;$tPattern;$tResult;$tSeparator;$tt)
 C_OBJECT:C1216($o)
-C_COLLECTION:C1488($c;$cc)
+C_COLLECTION:C1488($c;$c1)
 
 ARRAY TEXT:C222($tTxt_keywords;0)
 
@@ -40,12 +40,14 @@ If (This:C1470[""]=Null:C1517)
 		"";"str";\
 		"length";Length:C16($t);\
 		"value";$t;\
+		"base64";Formula:C1597(str ("base64").value);\
 		"common";Formula:C1597(str ("common";New object:C1471("with";$1;"diacritical";Bool:C1537($2))).value);\
 		"concat";Formula:C1597(str ("concat";New object:C1471("item";$1;"separator";$2)).value);\
 		"contains";Formula:C1597(str ("contains";New object:C1471("pattern";String:C10($1);"diacritical";Bool:C1537($2))).value);\
 		"distinctLetters";Formula:C1597(str ("distinctLetters";New object:C1471("delimiter";$1)).value);\
 		"equal";Formula:C1597(str ("equal";New object:C1471("with";$1)).value);\
 		"fixedLength";Formula:C1597(str ("fixedLength";New object:C1471("length";$1;"filler";$2;"alignment";$3)).value);\
+		"hyphenation";Formula:C1597(This:C1470.wordWrap($1));\
 		"insert";Formula:C1597(str ("insert";New object:C1471("value";String:C10($1);"begin";Num:C11($2);"end";Num:C11($3))));\
 		"isBoolean";Formula:C1597(str ("isBoolean").value);\
 		"isDate";Formula:C1597(str ("isDate").value);\
@@ -73,6 +75,7 @@ If (This:C1470[""]=Null:C1517)
 		"truncate";Formula:C1597(str ("truncate";New object:C1471("maxChar";$1)).value);\
 		"unaccented";Formula:C1597(str ("unaccented").value);\
 		"uperCamelCase";Formula:C1597(str ("uperCamelCase").value);\
+		"urlBase64Encode";Formula:C1597(str ("urlBase64Encode").value);\
 		"urlDecode";Formula:C1597(str ("urlDecode").value);\
 		"urlEncode";Formula:C1597(str ("urlEncode").value);\
 		"wordWrap";Formula:C1597(str ("wordWrap";New object:C1471("length";$1)).value);\
@@ -121,17 +124,17 @@ Else
 					  //______________________________________________________
 				: ($1="shuffle")
 					
-					$Txt_pattern:="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,?;.:/=+@#&([{§!)]}-_$€*`£"
+					$tPattern:="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,?;.:/=+@#&([{§!)]}-_$€*`£"
 					
 					If (Length:C16(This:C1470.value)=0)
 						
-						$t:=$Txt_pattern*2
+						$t:=$tPattern*2
 						
 					Else 
 						
 						For each ($tt;Split string:C1554(This:C1470.value;""))
 							
-							If (Position:C15($tt;$Txt_pattern)>0)
+							If (Position:C15($tt;$tPattern)>0)
 								
 								$t:=$t+$tt
 								
@@ -143,21 +146,40 @@ Else
 					End if 
 					
 					$l:=Num:C11($2.length)
-					$Lon_length:=Choose:C955($l=0;Choose:C955(10>Length:C16($t);Length:C16($t);10);Choose:C955($l>Length:C16($t);Length:C16($t);$l))
+					$length:=Choose:C955($l=0;Choose:C955(10>Length:C16($t);Length:C16($t);10);Choose:C955($l>Length:C16($t);Length:C16($t);$l))
 					
 					$l:=Length:C16($t)
 					
-					For ($i;1;$Lon_length;1)
+					For ($i;1;$length;1)
 						
 						$o.value:=$o.value+$t[[(Random:C100%($l-1+1))+1]]
 						
 					End for 
 					
 					  //______________________________________________________
+				: ($1="base64")  // Returns a base64 encoded UTF-8 string
+					
+					CONVERT FROM TEXT:C1011(This:C1470.value;"utf-8";$x)
+					BASE64 ENCODE:C895($x;$t)
+					
+					$o.value:=$t
+					
+					  //______________________________________________________
+				: ($1="urlBase64Encode")  // Returns an URL-safe base64url encoded UTF-8 string
+					
+					$t:=This:C1470.base64()
+					
+					$t:=Replace string:C233($t;"+";"-";*)
+					$t:=Replace string:C233($t;"/";"_";*)
+					$t:=Replace string:C233($t;"=";"";*)
+					
+					$o.value:=$t
+					
+					  //______________________________________________________
 				: ($1="urlEncode")  // Returns an URL encoded string
 					
 					  // List of safe characters
-					$t:="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:/.?_-$(){}~&"
+					$t:="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:/.?_-$(){}~&@"
 					
 					If (This:C1470.length>0)
 						
@@ -194,24 +216,24 @@ Else
 								  //________________________________________
 							: ($t[[$i]]="%")
 								
-								$x{$Lon_length}:=Position:C15(Substring:C12($t;$i+1;1);"123456789ABCDEF")*16\
+								$x{$length}:=Position:C15(Substring:C12($t;$i+1;1);"123456789ABCDEF")*16\
 									+Position:C15(Substring:C12($t;$i+2;1);"123456789ABCDEF")
 								$i:=$i+2
 								
 								  //________________________________________
 							Else 
 								
-								$x{$Lon_length}:=Character code:C91($t[[$i]])
+								$x{$length}:=Character code:C91($t[[$i]])
 								
 								  //________________________________________
 						End case 
 						
-						$Lon_length:=$Lon_length+1
+						$length:=$length+1
 						
 					End for 
 					
 					  // Convert from UTF-8
-					SET BLOB SIZE:C606($x;$Lon_length)
+					SET BLOB SIZE:C606($x;$length)
 					$o.value:=Convert to text:C1012($x;"utf-8")
 					
 					  //______________________________________________________
@@ -336,11 +358,11 @@ Else
 					
 					For each ($t;$c)
 						
-						$Txt_result:=$Txt_result+Uppercase:C13($t[[1]])+Lowercase:C14(Substring:C12($t;2))+" "
+						$tResult:=$tResult+Uppercase:C13($t[[1]])+Lowercase:C14(Substring:C12($t;2))+" "
 						
 					End for each 
 					
-					$o.value:=$Txt_result
+					$o.value:=$tResult
 					
 					  //______________________________________________________
 				: ($1="trimLeading")\
@@ -348,16 +370,16 @@ Else
 					
 					If ($2.pattern#Null:C1517)
 						
-						$Txt_pattern:="(?m-si)^(TRIM*)"
-						$Txt_pattern:=Replace string:C233($Txt_pattern;"TRIM";String:C10($2.pattern);*)
+						$tPattern:="(?m-si)^(TRIM*)"
+						$tPattern:=Replace string:C233($tPattern;"TRIM";String:C10($2.pattern);*)
 						
 					Else 
 						
-						$Txt_pattern:="(?m-si)^(\\s*)"
+						$tPattern:="(?m-si)^(\\s*)"
 						
 					End if 
 					
-					$Txt_result:=This:C1470.value
+					$tResult:=This:C1470.value
 					
 					If ($1="trimLeading")
 						
@@ -370,57 +392,57 @@ Else
 						
 					End if 
 					
-					If (Match regex:C1019($Txt_pattern;$t;1;$Lon_position;$Lon_length;*))
+					If (Match regex:C1019($tPattern;$t;1;$position;$length;*))
 						
 						If ($1="trimLeading")
 							
 							  // Split & reverse
-							$Txt_result:=Split string:C1554(Delete string:C232($t;$Lon_position;$Lon_length);"").reverse().join("")
+							$tResult:=Split string:C1554(Delete string:C232($t;$position;$length);"").reverse().join("")
 							
 						Else 
 							
-							$Txt_result:=Delete string:C232(This:C1470.value;$Lon_position;$Lon_length)
+							$tResult:=Delete string:C232(This:C1470.value;$position;$length)
 							
 						End if 
 					End if 
 					
-					$o.value:=$Txt_result
+					$o.value:=$tResult
 					
 					  //______________________________________________________
 				: ($1="trim")  // Trims leading & trailing spaces
 					
 					If ($2.pattern#Null:C1517)
 						
-						$Txt_pattern:="(?m-si)^(TRIM*)"
-						$Txt_pattern:=Replace string:C233($Txt_pattern;"TRIM";String:C10($2.pattern);*)
+						$tPattern:="(?m-si)^(TRIM*)"
+						$tPattern:=Replace string:C233($tPattern;"TRIM";String:C10($2.pattern);*)
 						
 					Else 
 						
-						$Txt_pattern:="(?m-si)^(\\s*)"
+						$tPattern:="(?m-si)^(\\s*)"
 						
 					End if 
 					
-					$Txt_result:=This:C1470.value
+					$tResult:=This:C1470.value
 					
 					  // trimLeading
-					$t:=Split string:C1554($Txt_result;"").reverse().join("")
+					$t:=Split string:C1554($tResult;"").reverse().join("")
 					
-					If (Match regex:C1019($Txt_pattern;$t;1;$Lon_position;$Lon_length;*))
+					If (Match regex:C1019($tPattern;$t;1;$position;$length;*))
 						
-						$Txt_result:=Split string:C1554(Delete string:C232($t;$Lon_position;$Lon_length);"").reverse().join("")
+						$tResult:=Split string:C1554(Delete string:C232($t;$position;$length);"").reverse().join("")
 						
 					End if 
 					
 					  // trimTrailing
-					$t:=$Txt_result
+					$t:=$tResult
 					
-					If (Match regex:C1019($Txt_pattern;$t;1;$Lon_position;$Lon_length;*))
+					If (Match regex:C1019($tPattern;$t;1;$position;$length;*))
 						
-						$Txt_result:=Delete string:C232($t;$Lon_position;$Lon_length)
+						$tResult:=Delete string:C232($t;$position;$length)
 						
 					End if 
 					
-					$o.value:=$Txt_result
+					$o.value:=$tResult
 					
 					  //______________________________________________________
 				: ($1="filter")
@@ -428,32 +450,32 @@ Else
 					Case of 
 							
 							  //…………………………………………………………………………………
-						: (String:C10($2.as)="numeric")  //Return extract numeric 
+						: (String:C10($2.as)="numeric")  // Return extract numeric
 							
-							$Txt_pattern:="(?m-si)^\\D*([+-]?\\d+\\{thousand}?\\d*\\{decimal}?\\d?)\\s?\\D*$"
-							$Txt_filtered:=This:C1470.value
+							$tPattern:="(?m-si)^\\D*([+-]?\\d+\\{thousand}?\\d*\\{decimal}?\\d?)\\s?\\D*$"
+							$tFiltered:=This:C1470.value
 							GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
-							$Txt_pattern:=Replace string:C233($Txt_pattern;"{decimal}";$t)
+							$tPattern:=Replace string:C233($tPattern;"{decimal}";$t)
 							
 							If ($t#".")
 								
-								$Txt_filtered:=Replace string:C233($Txt_filtered;".";$t)
+								$tFiltered:=Replace string:C233($tFiltered;".";$t)
 								
 							End if 
 							
 							GET SYSTEM FORMAT:C994(Thousand separator:K60:2;$t)
-							$Txt_pattern:=Replace string:C233($Txt_pattern;"{thousand}";$t)
+							$tPattern:=Replace string:C233($tPattern;"{thousand}";$t)
 							
-							If (Match regex:C1019($Txt_pattern;$Txt_filtered;1;$Lon_position;$Lon_length;*))
+							If (Match regex:C1019($tPattern;$tFiltered;1;$position;$length;*))
 								
-								$Txt_result:=$Txt_result+Substring:C12($Txt_filtered;1;$Lon_length)
-								$Txt_filtered:=Delete string:C232($Txt_filtered;1;$Lon_length)
+								$tResult:=$tResult+Substring:C12($tFiltered;1;$length)
+								$tFiltered:=Delete string:C232($tFiltered;1;$length)
 								
 							Else 
 								
-								If (Length:C16($Txt_filtered)>0)
+								If (Length:C16($tFiltered)>0)
 									
-									$Txt_result:=$Txt_result+$Txt_filtered
+									$tResult:=$tResult+$tFiltered
 									
 								End if 
 							End if 
@@ -461,7 +483,7 @@ Else
 							  //…………………………………………………………………………………
 					End case 
 					
-					$o.value:=Num:C11($Txt_result)
+					$o.value:=Num:C11($tResult)
 					
 					  //______________________________________________________
 				: ($1="wordWrap")  // Returns a word wrapped text based on the line length given (default is 80 characters)
@@ -477,36 +499,36 @@ Else
 						
 					End if 
 					
-					$Txt_pattern:="^(.{1,COL}|\\S{COL,})(?:\\s[^\\S\\r\\n]*|\\Z)"
-					$Txt_pattern:=Replace string:C233($Txt_pattern;"COL";String:C10($l);1;*)
-					$Txt_pattern:=Replace string:C233($Txt_pattern;"COL";String:C10($l+1);1;*)
+					$tPattern:="^(.{1,COL}|\\S{COL,})(?:\\s[^\\S\\r\\n]*|\\Z)"
+					$tPattern:=Replace string:C233($tPattern;"COL";String:C10($l);1;*)
+					$tPattern:=Replace string:C233($tPattern;"COL";String:C10($l+1);1;*)
 					$t:=This:C1470.value
 					
 					Repeat 
 						
-						$b:=Match regex:C1019($Txt_pattern;$t;1;$Lon_position;$Lon_length;*)
+						$b:=Match regex:C1019($tPattern;$t;1;$position;$length;*)
 						
 						If ($b)
 							
-							$Txt_result:=$Txt_result+Substring:C12($t;1;$Lon_length)+"\r"
-							$t:=Delete string:C232($t;1;$Lon_length)
+							$tResult:=$tResult+Substring:C12($t;1;$length)+"\r"
+							$t:=Delete string:C232($t;1;$length)
 							
 						Else 
 							
 							If (Length:C16($t)>0)
 								
-								$Txt_result:=$Txt_result+$t
+								$tResult:=$tResult+$t
 								
 							Else 
 								
 								  // Remove the last carriage return
-								$Txt_result:=Delete string:C232($Txt_result;Length:C16($Txt_result);1)
+								$tResult:=Delete string:C232($tResult;Length:C16($tResult);1)
 								
 							End if 
 						End if 
 					Until (Not:C34($b))
 					
-					$o.value:=$Txt_result
+					$o.value:=$tResult
 					
 					  //______________________________________________________
 				: ($1="unaccented")  // Replace accented characters with non accented one
@@ -637,7 +659,7 @@ Else
 								
 								If ($b)
 									
-									$b:=Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})";$o.value;1;$Lon_position;$Lon_length)
+									$b:=Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})";$o.value;1;$position;$length)
 									
 									If ($b)
 										
@@ -652,7 +674,7 @@ Else
 											
 										End if 
 										
-										$o.value:=Replace string:C233($o.value;Substring:C12($o.value;$Lon_position;$Lon_length);$t)
+										$o.value:=Replace string:C233($o.value;Substring:C12($o.value;$position;$length);$t)
 										$i:=$i+1
 										
 									End if 
@@ -661,7 +683,7 @@ Else
 							
 						Else 
 							
-							If (Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})";$o.value;1;$Lon_position;$Lon_length))
+							If (Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})";$o.value;1;$position;$length))
 								
 								$t:=Get localized string:C991(String:C10($2.substitution))
 								$t:=Choose:C955(OK=1;$t;String:C10($2.substitution))
@@ -674,7 +696,7 @@ Else
 									
 								End if 
 								
-								$o.value:=Replace string:C233($o.value;Substring:C12($o.value;$Lon_position;$Lon_length);$t)
+								$o.value:=Replace string:C233($o.value;Substring:C12($o.value;$position;$length);$t)
 								
 							End if 
 						End if 
@@ -690,11 +712,11 @@ Else
 						If ($2.separator=Null:C1517)
 							
 							  // Default is space
-							$Txt_separator:=Char:C90(Space:K15:42)
+							$tSeparator:=Char:C90(Space:K15:42)
 							
 						Else 
 							
-							$Txt_separator:=String:C10($2.separator)
+							$tSeparator:=String:C10($2.separator)
 							
 						End if 
 						
@@ -705,10 +727,10 @@ Else
 								$t:=Get localized string:C991(String:C10($tt))
 								$t:=Choose:C955(OK=1;$t;String:C10($tt))
 								
-								If (Position:C15($Txt_separator;$t)#1)\
-									 & (Position:C15($Txt_separator;$o.value)#Length:C16($o.value))
+								If (Position:C15($tSeparator;$t)#1)\
+									 & (Position:C15($tSeparator;$o.value)#Length:C16($o.value))
 									
-									$o.value:=$o.value+$Txt_separator
+									$o.value:=$o.value+$tSeparator
 									
 								End if 
 								
@@ -721,10 +743,10 @@ Else
 							$t:=Get localized string:C991(String:C10($2.item))
 							$t:=Choose:C955(OK=1;$t;String:C10($2.item))
 							
-							If (Position:C15($Txt_separator;$t)#1)\
-								 & (Position:C15($Txt_separator;$o.value)#Length:C16($o.value))
+							If (Position:C15($tSeparator;$t)#1)\
+								 & (Position:C15($tSeparator;$o.value)#Length:C16($o.value))
 								
-								$o.value:=$o.value+$Txt_separator
+								$o.value:=$o.value+$tSeparator
 								
 							End if 
 							
@@ -855,34 +877,34 @@ Else
 					$t:=Choose:C955($2.separator=Null:C1517;".";String:C10($2.separator))
 					
 					$c:=Split string:C1554(This:C1470.value;$t)
-					$cc:=Split string:C1554($2.compareTo;$t)
+					$c1:=Split string:C1554($2.compareTo;$t)
 					
 					Case of 
 							
 							  //______________________________________________________
-						: ($c.length>$cc.length)
+						: ($c.length>$c1.length)
 							
-							$cc.resize($c.length;"0")
+							$c1.resize($c.length;"0")
 							
 							  //______________________________________________________
-						: ($cc.length>$c.length)
+						: ($c1.length>$c.length)
 							
-							$c.resize($cc.length;"0")
+							$c.resize($c1.length;"0")
 							
 							  //______________________________________________________
 					End case 
 					
-					For each ($t;$cc) While ($o.value=0)
+					For each ($t;$c1) While ($o.value=0)
 						
 						Case of 
 								
 								  //______________________________________________________
-							: (Num:C11($c[$i])>Num:C11($cc[$i]))
+							: (Num:C11($c[$i])>Num:C11($c1[$i]))
 								
 								$o.value:=1  // Content > $1
 								
 								  //______________________________________________________
-							: (Num:C11($c[$i])<Num:C11($cc[$i]))
+							: (Num:C11($c[$i])<Num:C11($c1[$i]))
 								
 								$o.value:=-1  // $1 > content
 								
@@ -906,13 +928,6 @@ Else
 						
 					End if 
 					
-					  //______________________________________________________
-					  //: (Formula(process ).call().isPreemptif)
-					  //_4D THROW ERROR(New object(\
-						"component";"CLAS";\
-						"code";1;\
-						"description";"The method "+String($1)+"() for class "+String(This[""])+" can't be called in preemptive mode";\
-						"something";"my bug"))
 					  //______________________________________________________
 				Else 
 					

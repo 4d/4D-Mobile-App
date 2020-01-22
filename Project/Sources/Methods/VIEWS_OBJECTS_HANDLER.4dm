@@ -18,7 +18,7 @@ C_TEXT:C284($Txt_tableNumber;$Txt_template;$Txt_typeForm)
 C_OBJECT:C1216($context;$form;$Obj_current)
 
 If (False:C215)
-	C_LONGINT:C283(VIEWS_Objects_handler ;$0)
+	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER ;$0)
 End if 
 
   // ----------------------------------------------------
@@ -440,7 +440,7 @@ Case of
 		If (featuresFlags.with("resourcesBrowser"))
 			
 			  // Show browser
-			$form.form.call(New collection:C1472("showBrowser";New object:C1471(\
+			$form.form.call(New collection:C1472("initBrowser";New object:C1471(\
 				"url";Get localized string:C991(Choose:C955($context.selector=1;"doc_listForm";"doc_detailForm")))))
 			
 		Else 

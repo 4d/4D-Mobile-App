@@ -82,6 +82,9 @@ Else
 			$o.current:=$t
 			
 			CLEAR VARIABLE:C89(ERROR)
+			CLEAR VARIABLE:C89(ERROR METHOD)
+			CLEAR VARIABLE:C89(ERROR LINE)
+			CLEAR VARIABLE:C89(ERROR FORMULA)
 			
 			  //______________________________________________________
 		: ($1="capture")  // Install a local capture of the errors

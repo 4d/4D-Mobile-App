@@ -10,22 +10,21 @@
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($b)
-C_LONGINT:C283($end;$l;$start)
-C_TEXT:C284($t;$Txt_url;$Txt_me)
-C_OBJECT:C1216($archive;$event;$folder;$form;$http)
+C_LONGINT:C283($end;$start)
+C_TEXT:C284($t;$tURL)
+C_OBJECT:C1216($archive;$event;$folder;$form;$http;$oProgress)
 
   // ----------------------------------------------------
   // Initialisations
-$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 $event:=FORM Event:C1606
 
   // ----------------------------------------------------
 Case of 
 		
 		  //______________________________________________________
-	: ($Txt_me="webarea")
+	: ($event.objectName="webarea")
 		
-		$form:=browser_HANDLER (New object:C1471(\
+		$form:=BROWSER_Handler (New object:C1471(\
 			"action";"init"))
 		
 		Case of 
@@ -43,23 +42,19 @@ Case of
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On URL Filtering:K2:49)
 				
-				$Txt_url:=$form.web.lastFiltered()
+				$tURL:=$form.web.lastFiltered()
 				
 				Case of 
 						
 						  //______________________________________________________
-					: (Match regex:C1019("(?m-si)/download/([^//]*)\\.zip$";$Txt_url;1;$start;$end))
+					: (Match regex:C1019("(?m-si)/download/([^//]*)\\.zip$";$tURL;1;$start;$end))
+						
+						$oProgress:=progress ("downloadInProgress").showStop()  //  --- --- ->
 						
 						  //https://github.com/4d-for-ios/form-list-ClientList/releases/latest/download/form-list-ClientList.zip
-						
-						$l:=Progress New 
-						
-						Progress SET TITLE ($l;Get localized string:C991("downloadInProgress");-1)
-						
 						$start:=$start+Length:C16("/download/")
-						$t:=Substring:C12($Txt_url;$start;($start+$end)-$start)
-						
-						Progress SET MESSAGE ($l;$t;True:C214)
+						$t:=Substring:C12($tURL;$start;($start+$end)-$start)
+						$oProgress.setMessage($t).bringToFront()
 						
 						$archive:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($t)
 						
@@ -69,66 +64,75 @@ Case of
 							
 						End if 
 						
-						$http:=http ($Txt_url).get(Is a document:K24:1;False:C215;$archive)
+						  //$tURL:=$tURL+"toto"
 						
-						Progress QUIT ($l)
+						$http:=http ($tURL).get(Is a document:K24:1;False:C215;$archive)
 						
-						If ($http.success)
+						$oProgress.close()  // --- --- --- --- --- --- --- --- --- --- --- <-
+						
+						If (Not:C34($oProgress.stopped))
 							
-							$folder:=COMPONENT_Pathname ("host")
-							
-							If ($folder.name="Resources")
+							If ($http.success)
 								
-								$folder:=$folder.folder("mobile")
-								$folder.create()
+								$folder:=COMPONENT_Pathname ("host")
+								
+								If ($folder.name="Resources")
+									
+									$folder:=$folder.folder("mobile")
+									$folder.create()
+									
+								End if 
+								
+								Case of 
+										
+										  //……………………………………………………………………………………
+									: ($t="form-list@")
+										
+										$folder:=$folder.folder("form/list")
+										
+										  //……………………………………………………………………………………
+									: ($t="form-detail@")
+										
+										$folder:=$folder.folder("form/detail")
+										
+										  //……………………………………………………………………………………
+									: ($t="formatter-@")
+										
+										$folder:=$folder.folder("formatters")
+										
+										  //……………………………………………………………………………………
+									Else 
+										
+										TRACE:C157
+										
+										  //……………………………………………………………………………………
+								End case 
+								
+								$b:=$folder.create()
+								$folder:=$archive.copyTo($folder;fk overwrite:K87:5)
+								
+							Else 
+								
+								  // ERROR
+								CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"hideBrowser")
+								
+								POST_FORM_MESSAGE (New object:C1471(\
+									"target";Current form window:C827;\
+									"action";"show";\
+									"type";"alert";\
+									"title";".ERROR";\
+									"additional";$http.errors.pop();\
+									"okFormula";Formula:C1597(OBJECT SET VISIBLE:C603(*;"browser";True:C214))\
+									))
 								
 							End if 
-							
-							Case of 
-									
-									  //……………………………………………………………………………………
-								: ($t="form-list@")
-									
-									  //$t:=Replace string($t;"form-list-";"")
-									$folder:=$folder.folder("form/list")
-									
-									  //……………………………………………………………………………………
-								: ($t="form-detail@")
-									
-									  //$t:=Replace string($t;"form-detail-";"")
-									$folder:=$folder.folder("form/detail")
-									
-									  //……………………………………………………………………………………
-								: ($t="formatter-@")
-									
-									  //$t:=Replace string($t;"formatter-";"")
-									$folder:=$folder.folder("formatters")
-									
-									  //……………………………………………………………………………………
-								Else 
-									
-									  // https://github.com/4d-for-ios/formatter-Mail/releases/latest/download/formatter-Mail.zip
-									
-									  //……………………………………………………………………………………
-							End case 
-							
-							$b:=$folder.create()
-							
-							  //$archive:=ZIP Read archive($archive).root
-							  //$folder:=$archive.copyTo($folder;Replace string($t;".zip";"");fk overwrite)
-							
-							$folder:=$archive.copyTo($folder;fk overwrite:K87:5)
-							
-						Else 
-							
-							  // A "If" statement should never omit "Else"
-							
 						End if 
 						
 						  //______________________________________________________
 					Else 
 						
-						  // A "Case of" statement should never omit "Else"
+						  // <NOTHING MORE TO DO>
+						
 						  //______________________________________________________
 				End case 
 				
@@ -140,17 +144,15 @@ Case of
 		End case 
 		
 		  //______________________________________________________
-	: ($Txt_me="return")
+	: ($event.objectName="return")
 		
 		CALL SUBFORM CONTAINER:C1086(-1)
 		
 		  //______________________________________________________
-	: (False:C215)
-		
-		  //______________________________________________________
 	Else 
 		
-		  // A "Case of" statement should never omit "Else"
+		TRACE:C157
+		
 		  //______________________________________________________
 End case 
 

@@ -586,9 +586,8 @@ Case of
 				
 				  // Show browser
 				$o:=New object:C1471(\
-					"url";"https://developer.4d.com/4d-for-ios/docs/en/custom-"+Choose:C955($context.typeForm()="list";\
-					"listform";"detailform")+"-templates.html")
-				$form.form.call(New collection:C1472("showBrowser";$o))
+					"url";"https://developer.4d.com/4d-for-ios/docs/en/custom-"+Choose:C955($context.typeForm()="list";"listform";"detailform")+"-templates.html")
+				$form.form.call(New collection:C1472("initBrowser";$o))
 				
 			End if 
 		End if 

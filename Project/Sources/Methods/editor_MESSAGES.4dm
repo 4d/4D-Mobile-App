@@ -58,7 +58,17 @@ Case of
 		EXECUTE METHOD IN SUBFORM:C1085("description";"editor_description";*;$Obj_in)
 		
 		  //______________________________________________________
+	: ($Txt_selector="hideBrowser")
+		
+		OBJECT SET VISIBLE:C603(*;"browser";False:C215)
+		
+		  //______________________________________________________
 	: ($Txt_selector="showBrowser")
+		
+		OBJECT SET VISIBLE:C603(*;"browser";True:C214)
+		
+		  //______________________________________________________
+	: ($Txt_selector="initBrowser")
 		
 		OBJECT SET SUBFORM:C1138(*;"browser";"BROWSER")
 		OBJECT SET VISIBLE:C603(*;"browser";True:C214)
@@ -67,7 +77,7 @@ Case of
 		  //______________________________________________________
 	: ($Txt_selector="projectAuditResult")
 		
-		PROJECT_HANDLER (New object:C1471(\
+		PROJECT_Handler (New object:C1471(\
 			"action";$Txt_selector;\
 			"audit";$Obj_in))
 		
@@ -99,10 +109,10 @@ Case of
 		Else 
 			
 			  // DO_MESSAGE (New object(\
-								"action";"show";\
-								"type";"alert";\
-								"title";"noDevices";\
-								"additional";""))
+												"action";"show";\
+												"type";"alert";\
+												"title";"noDevices";\
+												"additional";""))
 			
 		End if 
 		
