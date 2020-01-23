@@ -175,7 +175,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 							End if 
 						End if 
 						
-						$Obj_result:=unzip ($Obj_param)
+						$Obj_result:=_o_unzip ($Obj_param)
 						$Obj_result.file:=$Obj_param.file
 						
 					End if 
@@ -240,7 +240,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 					
 					  // TODO maybe do some additional stuff like merging Cartfile.resolved instead of replace it
 					
-					$Obj_result:=unzip ($Obj_param)
+					$Obj_result:=_o_unzip ($Obj_param)
 					
 					  // Add to installed framework
 					$Obj_.sdk.installed[$Obj_param.file]:=$Obj_result
@@ -405,7 +405,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				: (Test path name:C476($Obj_param.file)=Is a document:K24:1)
 					
 					  // suppose zip
-					$Obj_result:=unzip (New object:C1471(\
+					$Obj_result:=_o_unzip (New object:C1471(\
 						"file";$Obj_param.file;\
 						"members";"sdkVersion"))
 					$Obj_result.version:=$Obj_result.out

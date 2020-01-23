@@ -7,9 +7,9 @@ If (False:C215)
 	C_OBJECT:C1216(button ;$2)
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(class ;$0)
-	C_TEXT:C284(class ;$1)
-	C_TEXT:C284(class ;$2)
+	C_OBJECT:C1216(new ;$0)
+	C_TEXT:C284(new ;$1)
+	C_TEXT:C284(new ;$2)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(color ;$0)
@@ -65,7 +65,22 @@ If (False:C215)
 	  //______________________________________________________
 	C_OBJECT:C1216(ob ;$0)
 	C_TEXT:C284(ob ;$1)
-	C_OBJECT:C1216(ob ;$2)
+	C_OBJECT:C1216(ob ;${2})
+	
+	  //______________________________________________________
+	C_OBJECT:C1216(ob deepMerge ;$0)
+	C_OBJECT:C1216(ob deepMerge ;$1)
+	C_OBJECT:C1216(ob deepMerge ;$2)
+	
+	  //______________________________________________________
+	C_OBJECT:C1216(ob MERGE ;$1)
+	C_OBJECT:C1216(ob MERGE ;$2)
+	
+	  //______________________________________________________
+	C_OBJECT:C1216(ob findPropertyValues ;$0)
+	C_OBJECT:C1216(ob findPropertyValues ;$1)
+	C_TEXT:C284(ob findPropertyValues ;$2)
+	C_OBJECT:C1216(ob findPropertyValues ;$3)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(picture ;$0)

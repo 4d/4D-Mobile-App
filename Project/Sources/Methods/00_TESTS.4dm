@@ -58,7 +58,7 @@ Case of
 		  //________________________________________
 	: (False:C215)
 		
-		$o:=class ("lep")
+		$o:=new ("lep")
 		$o1:=$o.constructor()
 		
 		$o:=lep ("blocking:false")
@@ -105,18 +105,18 @@ Case of
 		  //$c:=New collection(1;2;3;4;5)
 		  //$cc:=$c.slice($c.length-1)
 		
-		$o:=class ("str";"test")
+		$o:=new ("str";"test")
 		$o1:=$o.constructor()
 		
 		$c:=$o.distinctLetters()
 		$o.setText("hello world")
 		$t:=$o.lowerCamelCase()
 		
-		$o:=class ("svg";"test")
+		$o:=new ("svg";"test")
 		$o1:=$o.constructor()
 		$o.close()
 		
-		$o:=class ("str";"test")
+		$o:=new ("str";"test")
 		$o1:=$o.constructor()
 		
 		$o.setText("Hello world")
@@ -141,8 +141,7 @@ Case of
 		
 		PROCESS 4D TAGS:C816($t;$t;ui.selectedFillColor;Get localized string:C991("fields");Get localized string:C991("comparators");Get localized string:C991("operators");"⬇")
 		
-		$svg:=svg ("parse";New object:C1471(\
-			"variable";$t))
+		$svg:=svg ("parse";New object:C1471("variable";$t))
 		$svg.showInViewer()
 		$svg.close()
 		
@@ -185,9 +184,7 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$c:=New collection:C1472(New object:C1471(\
-			"min";5);\
-			"mandatory")
+		$c:=New collection:C1472(New object:C1471("min";5);"mandatory")
 		
 		$l:=$c.indexOf("mandatory")
 		$l:=$c.countValues("mandatory")
@@ -202,8 +199,7 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$o:=New object:C1471(\
-			"pointer";$r)
+		$o:=New object:C1471("pointer";$r)
 		
 		If ($o.pointer#Null:C1517)
 			
@@ -348,10 +344,7 @@ Case of
 		
 		$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14;*))
 		
-		$Dir_root:=Object to path:C1548(New object:C1471(\
-			"name";$o.name+" Project";\
-			"isFolder";True:C214;\
-			"parentFolder";$o.parentFolder))
+		$Dir_root:=Object to path:C1548(New object:C1471("name";$o.name+" Project";"isFolder";True:C214;"parentFolder";$o.parentFolder))
 		
 		doc_EMPTY_FOLDER ($Dir_root;New collection:C1472(".git";".gitattributes";".DS_Store"))
 		
@@ -387,64 +380,40 @@ Case of
 		  //________________________________________
 	: (False:C215)  //"mobileapp/$catalog/"
 		
-		$Lon_error:=HTTP Request:C1158(HTTP GET method:K71:1;Rest (New object:C1471(\
-			"action";"devurl";\
-			"handler";"mobileapp")).url;\
-			"";$Txt_result)
+		$Lon_error:=HTTP Request:C1158(HTTP GET method:K71:1;Rest (New object:C1471("action";"devurl";"handler";"mobileapp")).url;"";$Txt_result)
 		
 		  //________________________________________
 	: (False:C215)
 		
-		$Obj_result:=Rest (New object:C1471(\
-			"action";"url";\
-			"url";"http:// Localhost"))
-		$Obj_result:=Rest (New object:C1471(\
-			"action";"url";\
-			"url";"http://localhost/"))
-		$Obj_result:=Rest (New object:C1471(\
-			"action";"url";\
-			"url";"http://localhost/rest"))
-		$Obj_result:=Rest (New object:C1471(\
-			"action";"url";\
-			"url";"http://localhost/rest/"))
+		$Obj_result:=Rest (New object:C1471("action";"url";"url";"http:// Localhost"))
+		$Obj_result:=Rest (New object:C1471("action";"url";"url";"http://localhost/"))
+		$Obj_result:=Rest (New object:C1471("action";"url";"url";"http://localhost/rest"))
+		$Obj_result:=Rest (New object:C1471("action";"url";"url";"http://localhost/rest/"))
 		
 		  //________________________________________
 	: (False:C215)
 		
-		$Obj_result:=net (New object:C1471(\
-			"action";"resolve";\
-			"url";"fr.wikipedia.org"))
+		$Obj_result:=net (New object:C1471("action";"resolve";"url";"fr.wikipedia.org"))
 		
 		If ($Obj_result.success)
 			
-			$Obj_result.ping:=net (New object:C1471(\
-				"action";"ping";\
-				"url";$Obj_result.ip))
+			$Obj_result.ping:=net (New object:C1471("action";"ping";"url";$Obj_result.ip))
 			
 		End if 
 		
-		$Obj_result:=net (New object:C1471(\
-			"action";"ping";\
-			"url";"127.0.0.1:8880"))
+		$Obj_result:=net (New object:C1471("action";"ping";"url";"127.0.0.1:8880"))
 		
-		$Obj_result:=net (New object:C1471(\
-			"action";"ping";\
-			"url";"localhost"))
-		$Obj_result:=net (New object:C1471(\
-			"action";"resolve";\
-			"url";"localhost"))
+		$Obj_result:=net (New object:C1471("action";"ping";"url";"localhost"))
+		$Obj_result:=net (New object:C1471("action";"resolve";"url";"localhost"))
 		
 		  //$Obj_result.ping:=server (New object("action";"ping";"url";"www.fr.wikipedia.org"))
 		  //$Obj_result.ping:=server (New object("action";"ping";"url";"http://www.fr.wikipedia.org:80/"))
-		$Obj_result.ping:=net (New object:C1471(\
-			"action";"ping";\
-			"url";"testbugs.4d.fr"))
+		$Obj_result.ping:=net (New object:C1471("action";"ping";"url";"testbugs.4d.fr"))
 		
 		  //________________________________________
 	: (True:C214)
 		
-		ASSERT:C1129(Xcode (New object:C1471(\
-			"action";"xbuild-version")).success)
+		ASSERT:C1129(Xcode (New object:C1471("action";"xbuild-version")).success)
 		
 		  //________________________________________
 	: (True:C214)
@@ -464,21 +433,18 @@ Case of
 		
 		$Obj_formula:=Formula:C1597(1+2)
 		
-		$Obj_new:=New object:C1471(\
-			"f";$Obj_formula)
+		$Obj_new:=New object:C1471("f";$Obj_formula)
 		
 		$Lon_result:=$Obj_new.f()  // returns 3
 		
 		$Lon_value:=10
-		$Obj_new:=New object:C1471(\
-			"f";Formula:C1597($Lon_value))
+		$Obj_new:=New object:C1471("f";Formula:C1597($Lon_value))
 		$Lon_value:=20
 		
 		$Lon_result:=$Obj_new.f()  // returns 10
 		
 		  //$Obj_new:=New object("formula";New formula($1+$2))
-		$Obj_new:=New object:C1471(\
-			"f";Formula from string:C1601("$1+$2"))
+		$Obj_new:=New object:C1471("f";Formula from string:C1601("$1+$2"))
 		$Lon_result:=$Obj_new.f(10;20)  // returns 30
 		
 		$Txt_ormula:=Request:C163("Please type a formula")
@@ -494,16 +460,14 @@ Case of
 		$Obj_formula:=Formula from string:C1601("Uppercase:C13($1)")
 		$Txt_result:=$Obj_formula.call(Null:C1517;"hello")  // returns "HELLO"
 		
-		$Obj_new:=New object:C1471(\
-			"value";50)
+		$Obj_new:=New object:C1471("value";50)
 		$Obj_formula:=Formula:C1597(This:C1470.value*2)
 		$Lon_result:=$Obj_formula.call($Obj_new)  // returns 100
 		
 		  //________________________________________
 	: (True:C214)
 		
-		$o:=formatters (New object:C1471(\
-			"action";"getByName"))
+		$o:=formatters (New object:C1471("action";"getByName"))
 		
 		  //________________________________________
 	: (True:C214)
@@ -562,9 +526,7 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$Col_2:=New collection:C1472("manigest.json";New object:C1471(\
-			"Sources";New collection:C1472("azeaze";\
-			"azeazaze";New object:C1471("Forms";New collection:C1472()))))
+		$Col_2:=New collection:C1472("manigest.json";New object:C1471("Sources";New collection:C1472("azeaze";"azeazaze";New object:C1471("Forms";New collection:C1472()))))
 		$c:=findFirstPathComponentInCatalog ($Col_2)
 		
 		ALERT:C41(JSON Stringify:C1217($c))

@@ -34,7 +34,7 @@
 					"width": 398,
 					"height": 276,
 					"resizingMode": "legacy",
-					"rowHeight": "20px",
+					"rowHeight": "3em",
 					"events": [
 						"onClick",
 						"onDataChange",

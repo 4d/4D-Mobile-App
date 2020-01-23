@@ -113,13 +113,6 @@
 			"EMPTY"
 		]
 	},
-	"(errors)": {},
-	"(WEB (Server))": {
-		"methods": [
-			"(COMPILER_WEB)",
-			"(WEB_Test)"
-		]
-	},
 	"[EDITOR]": {
 		"methods": [
 			"COMPILER_editor",
@@ -264,7 +257,6 @@
 	"classes": {
 		"methods": [
 			"button",
-			"class",
 			"color",
 			"COMPILER_classes",
 			"currentForm",
@@ -278,7 +270,11 @@
 			"lep",
 			"listbox",
 			"menu",
+			"new",
 			"ob",
+			"ob deepMerge",
+			"ob findPropertyValues",
+			"ob MERGE",
 			"picture",
 			"process",
 			"static",
@@ -451,6 +447,7 @@
 	},
 	"macOS": {
 		"methods": [
+			"_o_unzip",
 			"asset",
 			"capabilities",
 			"certificate",
@@ -469,7 +466,6 @@
 			"teamId",
 			"test_capabilities",
 			"test_swiftPM",
-			"unzip",
 			"Xcode",
 			"Xcode_CheckInstall",
 			"XcodeProj",
@@ -733,10 +729,5 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(errors)",
-			"(WEB (Server))"
-		]
-	}
+	"trash": {}
 }

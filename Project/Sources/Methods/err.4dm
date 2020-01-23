@@ -38,6 +38,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"hide";Formula:C1597(err ("hide"));\
 		"show";Formula:C1597(This:C1470.deinstall());\
 		"capture";Formula:C1597(err ("capture"));\
+		"Continue";Formula:C1597(ERROR=0);\
 		"reset";Formula:C1597(lastError:=Null:C1517);\
 		"release";Formula:C1597(This:C1470.deinstall());\
 		"TRY";Formula:C1597(TRY ($1));\

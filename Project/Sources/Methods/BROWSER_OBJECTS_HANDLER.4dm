@@ -37,7 +37,7 @@ Case of
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On End URL Loading:K2:47)
 				
-				$form.wait.hide()
+				$form.wait.hide()  // Mask the spinner
 				
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On URL Filtering:K2:49)
@@ -49,9 +49,10 @@ Case of
 						  //______________________________________________________
 					: (Match regex:C1019("(?m-si)/download/([^//]*)\\.zip$";$tURL;1;$start;$end))
 						
+						  //https://github.com/4d-for-ios/form-list-ClientList/releases/latest/download/form-list-ClientList.zip
+						
 						$oProgress:=progress ("downloadInProgress").showStop()  //  --- --- ->
 						
-						  //https://github.com/4d-for-ios/form-list-ClientList/releases/latest/download/form-list-ClientList.zip
 						$start:=$start+Length:C16("/download/")
 						$t:=Substring:C12($tURL;$start;($start+$end)-$start)
 						$oProgress.setMessage($t).bringToFront()
@@ -63,8 +64,6 @@ Case of
 							$archive.delete()
 							
 						End if 
-						
-						  //$tURL:=$tURL+"toto"
 						
 						$http:=http ($tURL).get(Is a document:K24:1;False:C215;$archive)
 						
@@ -132,6 +131,8 @@ Case of
 					Else 
 						
 						  // <NOTHING MORE TO DO>
+						
+						  //WA OPEN URL("https://4d-for-ios.github.io/gallery/#/data/formatter")
 						
 						  //______________________________________________________
 				End case 

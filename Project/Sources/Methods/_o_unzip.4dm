@@ -16,8 +16,8 @@ C_TEXT:C284($Txt_cmd;$Txt_error;$Txt_in;$Txt_out)
 C_OBJECT:C1216($Obj_param;$Obj_result)
 
 If (False:C215)
-	C_OBJECT:C1216(unzip ;$0)
-	C_OBJECT:C1216(unzip ;$1)
+	C_OBJECT:C1216(_o_unzip ;$0)
+	C_OBJECT:C1216(_o_unzip ;$1)
 End if 
 
   // ----------------------------------------------------
@@ -64,7 +64,7 @@ If (Asserted:C1132($Obj_param.file#Null:C1517;"Missing tag file"))
 					If (Test path name:C476($Obj_param.cache)#Is a folder:K24:2)
 						
 						  // Create the cache
-						$Obj_result.success:=unzip (New object:C1471("file";$Obj_param.file;"target";$Obj_param.cache)).success  //<====== RECURSIVE
+						$Obj_result.success:=_o_unzip (New object:C1471("file";$Obj_param.file;"target";$Obj_param.cache)).success  //<====== RECURSIVE
 						
 					Else 
 						
