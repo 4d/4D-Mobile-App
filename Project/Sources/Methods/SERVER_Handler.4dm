@@ -133,11 +133,11 @@ Case of
 			If (Command name:C538(1)="Somme")
 				
 				  // FR language
-				$o:=File:C1566("/RESOURCES/fr.lproj/onMobileAppAuthentication.4md")
+				$o:=File:C1566("/RESOURCES/fr.lproj/onMobileAppAuthentication.4dm")
 				
 			Else 
 				
-				$o:=File:C1566(Get localized document path:C1105("onMobileAppAuthentication.4md");fk platform path:K87:2)
+				$o:=File:C1566(Get localized document path:C1105("onMobileAppAuthentication.4dm");fk platform path:K87:2)
 				
 			End if 
 			
