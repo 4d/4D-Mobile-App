@@ -46,8 +46,8 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"errors";New collection:C1472;\
 		"get";Formula:C1597(http ("get";New object:C1471("type";$1;"keep-alive";Bool:C1537($2);"more";$3)));\
 		"url";Formula:C1597(http ("url";New object:C1471("url";$1)));\
-		"errorMessage";Formula:C1597(http ("errorMessage";New object:C1471("code";Num:C11($1))).message);\
-		"statusMessage";Formula:C1597(http ("statusMessage";New object:C1471("code";Num:C11($1))).message);\
+		"errorCodeMessage";Formula:C1597(http ("errorCodeMessage";New object:C1471("code";Num:C11($1))).message);\
+		"statusCodeMessage";Formula:C1597(http ("statusCodeMessage";New object:C1471("code";Num:C11($1))).message);\
 		"type";Formula:C1597(http ("type";New object:C1471("type";$1)))\
 		)
 	
@@ -229,7 +229,7 @@ Else
 						
 					Else 
 						
-						$o.errors.push($o.statusMessage($Lon_code))
+						$o.errors.push($o.statusCodeMessage($Lon_code))
 						
 					End if 
 				End if 
@@ -254,10 +254,12 @@ Else
 			End if 
 			
 			  //______________________________________________________
-		: ($1="errorMessage")
+		: ($1="errorCodeMessage")
 			
 			$c:=New collection:C1472
-			$c[17]:="HTTP server not reachable"
+			
+			$c[2]:="HTTP server not reachable"
+			$c[17]:="HTTP server not reachable (timeout?)"
 			
 			If ($c[$2.code]#Null:C1517)
 				
@@ -267,14 +269,14 @@ Else
 			Else 
 				
 				$o:=New object:C1471(\
-					"message";"Error: "+String:C10($c[$2.code]))
+					"message";"HTTP error: "+String:C10($c[$2.code]))
 				
 			End if 
 			
 			$o.message:=$o.message+"\r("+$o[""].url+")"
 			
 			  //______________________________________________________
-		: ($1="statusMessage")
+		: ($1="statusCodeMessage")
 			
 			$c:=New collection:C1472
 			

@@ -12,10 +12,10 @@ C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b)
-C_LONGINT:C283($l;$Lon_parameters)
+C_LONGINT:C283($l)
 C_PICTURE:C286($p)
-C_TEXT:C284($Txt_tableNumber;$Txt_template;$Txt_typeForm)
-C_OBJECT:C1216($context;$form;$Obj_current)
+C_TEXT:C284($tTable;$tTemplate;$tTypeForm)
+C_OBJECT:C1216($context;$event;$form;$o)
 
 If (False:C215)
 	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER ;$0)
@@ -23,21 +23,20 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 	
 	  // NO PARAMETERS REQUIRED
 	
 	  // Optional parameters
-	If ($Lon_parameters>=1)
+	If (Count parameters:C259>=1)
 		
 		  // <NONE>
 		
 	End if 
 	
-	$form:=VIEWS_Handler (New object:C1471("action";"init"))
+	$event:=FORM Event:C1606
 	
+	$form:=VIEWS_Handler (New object:C1471("action";"init"))
 	$context:=$form.$
 	
 	$0:=-1  // Reject drop
@@ -52,26 +51,26 @@ End if
 Case of 
 		
 		  //==================================================
-	: ($form.form.current=$form.tableWidget.name)
+	: ($event.objectName=$form.tableWidget.name)
 		
-		$Txt_typeForm:=$context.typeForm()
+		$tTypeForm:=$context.typeForm()
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Clicked:K2:4)
+			: ($event.code=On Clicked:K2:4)
 				
 				OB REMOVE:C1226($context;"picker")
 				
-				$Txt_tableNumber:=SVG Find element ID by coordinates:C1054(*;$form.form.current;MOUSEX;MOUSEY)
-				$Txt_template:=String:C10(Form:C1466[$Txt_typeForm][$Txt_tableNumber].form)
+				$tTable:=SVG Find element ID by coordinates:C1054(*;$event.objectName;MOUSEX;MOUSEY)
+				$tTemplate:=String:C10(Form:C1466[$tTypeForm][$tTable].form)
 				
 				Case of 
 						
 						  //______________________________________________________
-					: (Length:C16($Txt_tableNumber)=0)  // Outside click
+					: (Length:C16($tTable)=0)  // Outside click
 						
-						If (Form:C1466[$Txt_typeForm][$context.tableNum()].form#Null:C1517)
+						If (Form:C1466[$tTypeForm][$context.tableNum()].form#Null:C1517)
 							
 							$form.fieldGroup.show()
 							$form.previewGroup.show()
@@ -81,11 +80,11 @@ Case of
 						End if 
 						
 						  //______________________________________________________
-					: ($Txt_tableNumber=$context.tableNum())
+					: ($tTable=$context.tableNum())
 						
 						If (Bool:C1537(Form:C1466.$dialog.picker))
 							
-							If (Length:C16($Txt_template)#0)
+							If (Length:C16($tTemplate)#0)
 								
 								$form.form.call("pickerHide")
 								
@@ -97,36 +96,40 @@ Case of
 							$form.fieldGroup.hide()
 							$form.previewGroup.hide()
 							
-							views_LAYOUT_PICKER ($Txt_typeForm)
+							views_LAYOUT_PICKER ($tTypeForm)
 							
-							CLEAR VARIABLE:C89($Txt_tableNumber)  // To avoid redrawing the preview
+							CLEAR VARIABLE:C89($tTable)  // To avoid redrawing the preview
 							
 						End if 
 						
 						  //______________________________________________________
-					: ($Txt_tableNumber#$context.tableNum()) | (Length:C16($Txt_template)=0) | (Test path name:C476(COMPONENT_Pathname ("listforms").platformPath+$Txt_template+Folder separator:K24:12)#Is a folder:K24:2)
+					: ($tTable#$context.tableNum())\
+						 | (Length:C16($tTemplate)=0)\
+						 | (Not:C34(path [$tTypeForm]($tTemplate).exists))
 						
-						If ($Txt_tableNumber#$context.tableNum())
+						If ($tTable#$context.tableNum())
 							
 							$form.form.call("pickerHide")
 							
-							$context.tableNumber:=$Txt_tableNumber
+							$context.tableNumber:=$tTable
 							
 						End if 
 						
 						If (Length:C16($context.tableNum())>0)
 							
 							  // Restore current selected background
-							SVG SET ATTRIBUTE:C1055(*;$form.form.current;$context.tableNumber;"fill";ui.unselectedFillColor)
+							SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.tableNumber;\
+								"fill";ui.unselectedFillColor)
 							
 						End if 
 						
 						  // Select the item
-						SVG SET ATTRIBUTE:C1055(*;$form.form.current;$Txt_tableNumber;"fill";ui.selectedColorFill)
+						SVG SET ATTRIBUTE:C1055(*;$event.objectName;$tTable;\
+							"fill";ui.selectedColorFill)
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
-						$context.picker:=(Length:C16($Txt_template)=0)
+						$context.picker:=(Length:C16($tTemplate)=0)
 						
 						  //______________________________________________________
 					Else 
@@ -137,7 +140,8 @@ Case of
 						If (Length:C16($context.tableNum())>0)
 							
 							  // Unselect
-							SVG SET ATTRIBUTE:C1055(*;$form.form.current;$context.tableNumber;"fill";ui.unselectedFillColor)
+							SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.tableNumber;\
+								"fill";ui.unselectedFillColor)
 							
 						End if 
 						
@@ -147,7 +151,7 @@ Case of
 				End case 
 				
 				  // Update UI
-				If (Length:C16($Txt_tableNumber)#0)
+				If (Length:C16($tTable)#0)
 					
 					OB REMOVE:C1226($context;"manifest")
 					
@@ -157,7 +161,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Scroll:K2:57)
+			: ($event.code=On Scroll:K2:57)
 				
 				  // Update geometry
 				$context.setGeometry()
@@ -165,7 +169,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($form.form.eventCode)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
 				
 				  //______________________________________________________
 		End case 
@@ -173,64 +177,69 @@ Case of
 		editor_ui_LISTBOX ($form.fieldList.name)
 		
 		  //==================================================
-	: ($form.form.current=$form.fieldList.name)
+	: ($event.objectName=$form.fieldList.name)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Clicked:K2:4) | ($form.form.eventCode=On Selection Change:K2:29)
+			: ($event.code=On Clicked:K2:4)\
+				 | ($event.code=On Selection Change:K2:29)
 				
-				editor_ui_LISTBOX ($form.form.current)
+				editor_ui_LISTBOX ($event.objectName)
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Begin Drag Over:K2:44)
+			: ($event.code=On Begin Drag Over:K2:44)
 				
 				$form.fieldList.cellPosition()
 				
 				  // Get the dragged field
 				  //%W-533.3
-				$Obj_current:=($form.fields.pointer())->{$form.fieldList.row}
+				$o:=($form.fields.pointer())->{$form.fieldList.row}
 				  //%W+533.3
 				
-				$b:=($Obj_current.fieldType#8859)  // Not 1-N relation
+				$b:=($o.fieldType#8859)  // Not 1-N relation
 				
 				If (Not:C34($b))
 					
 					  // 1-N relation with published related data class
-					$b:=(Form:C1466.dataModel[String:C10($Obj_current.relatedTableNumber)]#Null:C1517)
+					$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
 					
 				End if 
 				
 				If ($b)
 					
 					  // Put into the container
-					VARIABLE TO BLOB:C532($Obj_current;$x)
+					VARIABLE TO BLOB:C532($o;$x)
 					APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field";$x)
 					SET BLOB SIZE:C606($x;0)
 					
 					  // Create the drag icon
-					$p:=svg .embedPicture(ui.fieldIcons[$Obj_current.fieldType];2;2).textArea($Obj_current.path+" ";20;2).setAttribute("font-size";13).getPicture()
+					$p:=svg \
+						.embedPicture(ui.fieldIcons[$o.fieldType];2;2)\
+						.textArea($o.path+" ";20;2)\
+						.setAttribute("font-size";13)\
+						.getPicture()
 					
 					SET DRAG ICON:C1272($p)
 					
 				End if 
 				
-				editor_ui_LISTBOX ($form.form.current)
+				editor_ui_LISTBOX ($event.objectName)
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Getting Focus:K2:7)
+			: ($event.code=On Getting Focus:K2:7)
 				
-				editor_ui_LISTBOX ($form.form.current;True:C214)
+				editor_ui_LISTBOX ($event.objectName;True:C214)
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Losing Focus:K2:8)
+			: ($event.code=On Losing Focus:K2:8)
 				
-				editor_ui_LISTBOX ($form.form.current;False:C215)
+				editor_ui_LISTBOX ($event.objectName;False:C215)
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($form.form.eventCode)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
 				
 				  //______________________________________________________
 		End case 
@@ -307,14 +316,14 @@ Case of
 		  // End case
 		
 		  //==================================================
-	: ($form.form.current=$form.preview.name)
+	: ($event.objectName=$form.preview.name)
 		
-		$context.current:=SVG Find element ID by coordinates:C1054(*;$form.form.current;MOUSEX;MOUSEY)
+		$context.current:=SVG Find element ID by coordinates:C1054(*;$event.objectName;MOUSEX;MOUSEY)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Clicked:K2:4)
+			: ($event.code=On Clicked:K2:4)
 				
 				Case of 
 						
@@ -343,34 +352,34 @@ Case of
 				$form.fieldList.focus()
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Drag Over:K2:13)
+			: ($event.code=On Drag Over:K2:13)
 				
 				$0:=$form.drag()
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Mouse Enter:K2:33)
+			: ($event.code=On Mouse Enter:K2:33)
 				
 				ui.tips.enable()
 				ui.tips.setDuration(ui.tips.delay*2)
 				ui.tips.instantly()
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Mouse Leave:K2:34)
+			: ($event.code=On Mouse Leave:K2:34)
 				
 				ui.tips.defaultDelay()
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Mouse Move:K2:35)
+			: ($event.code=On Mouse Move:K2:35)
 				
 				$form.tips()
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Drop:K2:12)
+			: ($event.code=On Drop:K2:12)
 				
 				$form.drop()
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Scroll:K2:57)
+			: ($event.code=On Scroll:K2:57)
 				
 				OBJECT GET SCROLL POSITION:C1114(*;$form.preview.name;$l)
 				$context.scroll:=450-$l
@@ -378,24 +387,25 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($form.form.eventCode)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($form.form.current=$form.selectorList.name) | ($form.form.current=$form.selectorDetail.name)
+	: ($event.objectName=$form.selectorList.name)\
+		 | ($event.objectName=$form.selectorDetail.name)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Clicked:K2:4)
+			: ($event.code=On Clicked:K2:4)
 				
 				  // Hide picker if any
 				$form.form.call("pickerHide")
 				
 				  // Update tab detail/list
-				$context.selector:=1+Num:C11($form.form.current=$form.selectorDetail.name)
+				$context.selector:=1+Num:C11($event.objectName=$form.selectorDetail.name)
 				$context.setTab()
 				
 				  // Update field list
@@ -410,32 +420,35 @@ Case of
 				$form.form.refresh()
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Mouse Enter:K2:33)
+			: ($event.code=On Mouse Enter:K2:33)
 				
-				If ($context.selector#(1+Num:C11($form.form.current=$form.selectorDetail.name)))
+				If ($context.selector#(1+Num:C11($event.objectName=$form.selectorDetail.name)))
 					
 					  // Highlights
-					$Obj_current:=Choose:C955($form.form.current=$form.selectorList.name;$form.selectorList;$form.selectorDetail)
-					$Obj_current.setColors(ui.selectedColor;Background color none:K23:10)
+					$o:=Choose:C955($event.objectName=$form.selectorList.name;$form.selectorList;$form.selectorDetail)
+					$o.setColors(ui.selectedColor;Background color none:K23:10)
 					
 				End if 
 				
 				  //______________________________________________________
-			: ($form.form.eventCode=On Mouse Leave:K2:34)
+			: ($event.code=On Mouse Leave:K2:34)
 				
-				$Obj_current:=Choose:C955($form.form.current=$form.selectorList.name;$form.selectorList;$form.selectorDetail)
-				$Obj_current.setColors(Foreground color:K23:1;Background color none:K23:10)
+				$o:=Choose:C955($event.objectName=$form.selectorList.name;$form.selectorList;$form.selectorDetail)
+				$o.setColors(Foreground color:K23:1;Background color none:K23:10)
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($form.form.current=$form.tableButtonNext.name) | ($form.form.current=$form.tableButtonPrevious.name)
+	: ($event.objectName=$form.tableButtonNext.name)\
+		 | ($event.objectName=$form.tableButtonPrevious.name)
 		
-		VIEWS_Handler (New object:C1471("action";"scroll-table";"direction";Choose:C955($form.form.current=$form.tableButtonPrevious.name;"previous";"next")))
+		VIEWS_Handler (New object:C1471(\
+			"action";"scroll-table";\
+			"direction";Choose:C955($event.objectName=$form.tableButtonPrevious.name;"previous";"next")))
 		
 		  //==================================================
-	: ($form.form.current=$form.resources.name)
+	: ($event.objectName=$form.resources.name)
 		
 		If (featuresFlags.with("resourcesBrowser"))
 			
@@ -459,7 +472,7 @@ Case of
 		  //==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown object: \""+$form.form.current+"\"")
+		ASSERT:C1129(False:C215;"Unknown object: \""+$event.objectName+"\"")
 		
 		  //==================================================
 End case 

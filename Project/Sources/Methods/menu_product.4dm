@@ -59,7 +59,7 @@ Case of
 		  //______________________________________________________
 	: ($Mnu_choice="reveal")
 		
-		SHOW ON DISK:C922(COMPONENT_Pathname ("products").folder($Obj_project.product.name).platformPath)
+		SHOW ON DISK:C922(path .products().folder($Obj_project.product.name).platformPath)
 		
 		  //______________________________________________________
 	: ($Mnu_choice="xcdatamodel")
@@ -94,9 +94,11 @@ Case of
 				"project";$Obj_project;\
 				"digest";True:C214;\
 				"dataSet";True:C214;\
-				"key";COMPONENT_Pathname ("key").platformPath;\
+				"key";path .key().platformPath;\
 				"caller";Current form window:C827;\
 				"verbose";True:C214))
+			
+			
 			
 		Else 
 			
@@ -105,7 +107,7 @@ Case of
 				"project";$Obj_project;\
 				"digest";True:C214;\
 				"dataSet";True:C214;\
-				"key";COMPONENT_Pathname ("key").platformPath;\
+				"key";path .key().platformPath;\
 				"caller";Current form window:C827;\
 				"verbose";True:C214;\
 				"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
@@ -141,7 +143,7 @@ Case of
 				"digest";True:C214;\
 				"dataSet";True:C214;\
 				"path";$Txt_path;\
-				"key";COMPONENT_Pathname ("key").platformPath;\
+				"key";path .key().platformPath;\
 				"caller";Current form window:C827;\
 				"verbose";True:C214))
 			
@@ -153,7 +155,7 @@ Case of
 				"digest";True:C214;\
 				"dataSet";True:C214;\
 				"path";$Txt_path;\
-				"key";COMPONENT_Pathname ("key").platformPath;\
+				"key";path .key().platformPath;\
 				"caller";Current form window:C827;\
 				"verbose";True:C214;\
 				"picture";Not:C34(Bool:C1537(featuresFlags._97117))))

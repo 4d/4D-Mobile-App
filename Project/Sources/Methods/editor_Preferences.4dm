@@ -10,7 +10,7 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_OBJECT:C1216($file;$o;$Obj_in)
+C_OBJECT:C1216($file;$oOUT;$oIN)
 
 If (False:C215)
 	C_OBJECT:C1216(editor_Preferences ;$0)
@@ -23,38 +23,38 @@ End if
   // Optional parameters
 If (Count parameters:C259>=1)
 	
-	$Obj_in:=$1
+	$oIN:=$1
 	
 End if 
 
-$file:=COMPONENT_Pathname ("databasePreferences").file("4D Mobile App.preferences")
+$file:=path .databasePreferences().file("4D Mobile App.preferences")
 
   // ----------------------------------------------------
 If ($file.exists)
 	
 	  // Get
-	$o:=JSON Parse:C1218($file.getText())
+	$oOUT:=JSON Parse:C1218($file.getText())
 	
 Else 
 	
 	  // Create
-	$o:=New object:C1471
+	$oOUT:=New object:C1471
 	
 End if 
 
-If ($Obj_in#Null:C1517)
+If ($oIN#Null:C1517)
 	
 	  // Set
-	$o[$Obj_in.key]:=$Obj_in.value
+	$oOUT[$oIN.key]:=$oIN.value
 	
 	  // Save
-	$file.setText(JSON Stringify:C1217($o;*))
+	$file.setText(JSON Stringify:C1217($oOUT;*))
 	
 End if 
 
   // ----------------------------------------------------
   // Return
-$0:=$o
+$0:=$oOUT
 
   // ----------------------------------------------------
   // End

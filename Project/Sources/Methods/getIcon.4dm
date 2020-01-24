@@ -10,35 +10,38 @@
   // Declarations
 C_PICTURE:C286($0)
 C_TEXT:C284($1)
-C_TEXT:C284($2)
 
-C_LONGINT:C283($Lon_parameters)
 C_PICTURE:C286($p)
-C_TEXT:C284($Txt_icon;$Txt_type)
+C_TEXT:C284($tIcon)
 C_OBJECT:C1216($o)
 
 If (False:C215)
 	C_PICTURE:C286(getIcon ;$0)
 	C_TEXT:C284(getIcon ;$1)
-	C_TEXT:C284(getIcon ;$2)
+End if 
+
+  //C_TEXT($2)
+
+If (False:C215)
+	
+	  //C_TEXT(getIcon ;$2)
 End if 
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$Txt_icon:=$1  // icon path
+	$tIcon:=$1  // icon path
 	
 	  // Default values
-	$Txt_type:="tableIcons"
+	  // $tType:="tableIcons"
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
+	If (Count parameters:C259>=2)
 		
-		$Txt_type:=$2  // Will be useful for separate directories for tableIcons/fieldIcons/actionIcons
+		  // $tType:=$2  // Will be useful for separate directories for tableIcons/fieldIcons/actionIcons
+		  // For the moment, no distinction between table, field or action icons
 		
 	End if 
 	
@@ -49,37 +52,18 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (Length:C16($Txt_icon)=0)
+If (Length:C16($tIcon)=0)
 	
 	$o:=File:C1566(ui.noIcon;fk platform path:K87:2)
 	
 Else 
 	
-	If (Position:C15("/";$Txt_icon)=1)  // User resources
+	$o:=path .icon($tIcon)
+	
+	If (Not:C34($o.exists))
 		
-		$o:=COMPONENT_Pathname ("host_"+$Txt_type)
+		$o:=File:C1566(ui.errorIcon;fk platform path:K87:2)
 		
-		If ($o.exists)
-			
-			$o:=File:C1566($o.path+Delete string:C232($Txt_icon;1;1))
-			
-		End if 
-		
-		If (Not:C34($o.exists))
-			
-			$o:=File:C1566(ui.errorIcon;fk platform path:K87:2)
-			
-		End if 
-		
-	Else 
-		
-		$o:=File:C1566("/RESOURCES/images/"+$Txt_type+"/"+$Txt_icon)
-		
-		If (Not:C34($o.exists))
-			
-			$o:=File:C1566(ui.noIcon;fk platform path:K87:2)
-			
-		End if 
 	End if 
 End if 
 

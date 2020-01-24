@@ -228,7 +228,7 @@ Case of
 		
 		If ($file.exists)
 			
-			$o:=lep ("output:object").launch(COMPONENT_Pathname ("scripts").file("sqlite3_sizes.sh");$file.path)
+			$o:=lep ("output:object").launch(path .scripts().file("sqlite3_sizes.sh");$file.path)
 			
 			If ($o.success)
 				

@@ -60,6 +60,7 @@ Case of
 		  //______________________________________________________
 	: ($Txt_selector="hideBrowser")
 		
+		OBJECT SET SUBFORM:C1138(*;"browser";"EMPTY")
 		OBJECT SET VISIBLE:C603(*;"browser";False:C215)
 		
 		  //______________________________________________________
@@ -109,10 +110,10 @@ Case of
 		Else 
 			
 			  // DO_MESSAGE (New object(\
-												"action";"show";\
-												"type";"alert";\
-												"title";"noDevices";\
-												"additional";""))
+																"action";"show";\
+																"type";"alert";\
+																"title";"noDevices";\
+																"additional";""))
 			
 		End if 
 		

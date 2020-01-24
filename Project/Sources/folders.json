@@ -35,7 +35,6 @@
 			"str_wordWrap",
 			"TEMPO_1",
 			"tempoFiledType",
-			"test_codeRewriting",
 			"TURN_AROUND_Field_name"
 		],
 		"forms": [
@@ -64,7 +63,8 @@
 		"methods": [
 			"01_LASTBUILD",
 			"importData",
-			"killWorker"
+			"killWorker",
+			"test_codeRewriting"
 		],
 		"forms": [
 			"_w_VIEWS",
@@ -107,7 +107,9 @@
 			"COMPONENT_DEFINE_TOOLS",
 			"COMPONENT_Infos",
 			"COMPONENT_INIT",
-			"COMPONENT_Pathname"
+			"COMPONENT_Pathname",
+			"getIcon",
+			"path"
 		],
 		"forms": [
 			"EMPTY"
@@ -234,7 +236,6 @@
 			"findFirstPathComponentInCatalog",
 			"formatString",
 			"formatters",
-			"getIcon",
 			"net",
 			"Process_tags",
 			"Process_tags_on_file",

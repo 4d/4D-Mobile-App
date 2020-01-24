@@ -55,7 +55,7 @@ If ($Obj_out.success)
 	
 	If ($Obj_out.success)
 		
-		$Path_formats:=COMPONENT_Pathname ("host_formatters")
+		$Path_formats:=path .hostFormatters()
 		
 		$Obj_out.ids:=New collection:C1472
 		$Obj_out.names:=New collection:C1472

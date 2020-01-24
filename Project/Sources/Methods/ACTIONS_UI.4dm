@@ -16,8 +16,7 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($l)
 C_PICTURE:C286($p)
-C_TEXT:C284($t)
-C_OBJECT:C1216($form;$o;$Path_internal;$Path_user)
+C_OBJECT:C1216($form;$o;$oIcon)
 
 If (False:C215)
 	C_OBJECT:C1216(ACTIONS_UI ;$0)
@@ -36,43 +35,27 @@ Case of
 		
 		If (Form:C1466.actions#Null:C1517)
 			
-			$Path_internal:=COMPONENT_Pathname ("actionIcons")
-			$Path_user:=COMPONENT_Pathname ("host_actionIcons")
-			
 			  // Compute icons
 			For each ($o;Form:C1466.actions)
 				
-				$t:=String:C10($o.icon)
-				
-				Case of 
+				If (Length:C16(String:C10($o.icon))=0)
+					
+					READ PICTURE FILE:C678(ui.noIcon;$p)
+					
+				Else 
+					
+					$oIcon:=path .icon(String:C10($o.icon))
+					
+					If ($oIcon.exists)
 						
-						  //……………………………………………………………………………
-					: (Length:C16($t)=0)
+						READ PICTURE FILE:C678($oIcon.path.platformPath;$p)
 						
-						READ PICTURE FILE:C678(ui.noIcon;$p)
-						
-						  //……………………………………………………………………………
-					: ($t[[1]]="/")
-						
-						$t:=Delete string:C232($t;1;1)
-						
-						If ($Path_user.file($t).exists)
-							
-							READ PICTURE FILE:C678($Path_user.file($t).platformPath;$p)
-							
-						Else 
-							
-							READ PICTURE FILE:C678(ui.errorIcon;$p)
-							
-						End if 
-						
-						  //……………………………………………………………………………
 					Else 
 						
-						READ PICTURE FILE:C678($Path_internal.file($t).platformPath;$p)
+						READ PICTURE FILE:C678(ui.errorIcon;$p)
 						
-						  //……………………………………………………………………………
-				End case 
+					End if 
+				End if 
 				
 				CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
 				$o.$icon:=$p
@@ -85,31 +68,26 @@ Case of
 		
 		If (Num:C11($2.tableNumber)#0)
 			
-			$o:=New object:C1471(\
-				"value";Table name:C256($2.tableNumber))
+			$o:=New object:C1471("value";Table name:C256($2.tableNumber))
 			
 		Else 
 			
 			  // Invite
-			$o:=New object:C1471(\
-				"value";Get localized string:C991("choose..."))
+			$o:=New object:C1471("value";Get localized string:C991("choose..."))
 			
 		End if 
 		
 		  //______________________________________________________
 	: ($1="scopeLabel")  // Populate the scope labels' column
 		
-		$o:=New object:C1471(\
-			"value";Get localized string:C991(String:C10($2.scope)))
+		$o:=New object:C1471("value";Get localized string:C991(String:C10($2.scope)))
 		
 		  //______________________________________________________
 	: ($1="listUI")  // Colors UI according to focus
 		
-		$form:=ACTIONS_Handler (New object:C1471(\
-			"action";"init"))
+		$form:=ACTIONS_Handler (New object:C1471("action";"init"))
 		
-		If ($form.form.focusedWidget=$form.actions.name)\
-			 & (Form event code:C388=On Getting Focus:K2:7)
+		If ($form.form.focusedWidget=$form.actions.name) & (Form event code:C388=On Getting Focus:K2:7)
 			
 			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
 			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget+".border";ui.selectedColor;Background color none:K23:10)
@@ -124,13 +102,11 @@ Case of
 		  //______________________________________________________
 	: ($1="backgroundColor")  // <Background Color Expression>
 		
-		$o:=New object:C1471(\
-			"color";0x00FFFFFF)
+		$o:=New object:C1471("color";0x00FFFFFF)
 		
 		If (Num:C11(This:C1470.index)#0)
 			
-			$form:=ACTIONS_Handler (New object:C1471(\
-				"action";"init"))
+			$form:=ACTIONS_Handler (New object:C1471("action";"init"))
 			
 			$b:=($form.form.focusedWidget=$form.actions.name)
 			
@@ -150,9 +126,7 @@ Case of
 	: ($1="metaInfo")  // <Meta info expression>
 		
 		  // Default values
-		$o:=New object:C1471(\
-			"stroke";"black";\
-			"fontWeight";"normal")
+		$o:=New object:C1471("stroke";"black";"fontWeight";"normal")
 		
 		  // Mark not or missing assigned table
 		ob_createPath ($o;"cell.tables")

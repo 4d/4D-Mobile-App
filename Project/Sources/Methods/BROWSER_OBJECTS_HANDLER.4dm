@@ -9,7 +9,6 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_BOOLEAN:C305($b)
 C_LONGINT:C283($end;$start)
 C_TEXT:C284($t;$tURL)
 C_OBJECT:C1216($archive;$event;$folder;$form;$http;$oProgress)
@@ -51,7 +50,7 @@ Case of
 						
 						  //https://github.com/4d-for-ios/form-list-ClientList/releases/latest/download/form-list-ClientList.zip
 						
-						$oProgress:=progress ("downloadInProgress").showStop()  //  --- --- ->
+						$oProgress:=progress ("downloadInProgress").showStop()  // ------ ->
 						
 						$start:=$start+Length:C16("/download/")
 						$t:=Substring:C12($tURL;$start;($start+$end)-$start)
@@ -67,37 +66,28 @@ Case of
 						
 						$http:=http ($tURL).get(Is a document:K24:1;False:C215;$archive)
 						
-						$oProgress.close()  // --- --- --- --- --- --- --- --- --- --- --- <-
+						$oProgress.close()  // ------------------------------------------ <-
 						
 						If (Not:C34($oProgress.stopped))
 							
 							If ($http.success)
-								
-								$folder:=COMPONENT_Pathname ("host")
-								
-								If ($folder.name="Resources")
-									
-									$folder:=$folder.folder("mobile")
-									$folder.create()
-									
-								End if 
 								
 								Case of 
 										
 										  //……………………………………………………………………………………
 									: ($t="form-list@")
 										
-										$folder:=$folder.folder("form/list")
+										$folder:=path .hostListForms(True:C214)
 										
 										  //……………………………………………………………………………………
 									: ($t="form-detail@")
 										
-										$folder:=$folder.folder("form/detail")
+										$folder:=path .hostDetailForms(True:C214)
 										
 										  //……………………………………………………………………………………
 									: ($t="formatter-@")
 										
-										$folder:=$folder.folder("formatters")
+										$folder:=path .hostFormatters(True:C214)
 										
 										  //……………………………………………………………………………………
 									Else 
@@ -107,8 +97,37 @@ Case of
 										  //……………………………………………………………………………………
 								End case 
 								
-								$b:=$folder.create()
-								$folder:=$archive.copyTo($folder;fk overwrite:K87:5)
+								If ($folder.exists)
+									
+									$folder:=$archive.copyTo($folder;fk overwrite:K87:5)
+									
+								Else 
+									
+									  // ERROR
+									CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"hideBrowser")
+									
+									If ($folder=Null:C1517)
+										
+										POST_FORM_MESSAGE (New object:C1471(\
+											"target";Current form window:C827;\
+											"action";"show";\
+											"type";"alert";\
+											"title";"fileNotFound";\
+											"additional";"theAliasMobileOriginalCan'tBeFound"\
+											))
+										
+									Else 
+										
+										POST_FORM_MESSAGE (New object:C1471(\
+											"target";Current form window:C827;\
+											"action";"show";\
+											"type";"alert";\
+											"title";"fileNotFound";\
+											"additional";"fileNotFound"\
+											))
+										
+									End if 
+								End if 
 								
 							Else 
 								
@@ -119,7 +138,7 @@ Case of
 									"target";Current form window:C827;\
 									"action";"show";\
 									"type";"alert";\
-									"title";".ERROR";\
+									"title";"ERROR";\
 									"additional";$http.errors.pop();\
 									"okFormula";Formula:C1597(OBJECT SET VISIBLE:C603(*;"browser";True:C214))\
 									))

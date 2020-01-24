@@ -273,7 +273,7 @@ Case of
 				
 			End if 
 			
-			COMPONENT_Pathname ("project").file("Assets.xcassets/AppIcon.appiconset/Contents.json").copyTo(Folder:C1567($Obj_form.form.assets.root;fk platform path:K87:2))
+			path .project().file("Assets.xcassets/AppIcon.appiconset/Contents.json").copyTo(Folder:C1567($Obj_form.form.assets.root;fk platform path:K87:2))
 			
 		End if 
 		

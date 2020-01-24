@@ -54,7 +54,7 @@ Case of
 		  //______________________________________________________
 	: ($Obj_in.action="juicer")
 		
-		$Txt_cmd:=str_singleQuoted (COMPONENT_Pathname ("scripts").file("colorjuicer").path)
+		$Txt_cmd:=str_singleQuoted (path .scripts().file("colorjuicer").path)
 		
 		If ($Obj_in.posix=Null:C1517)
 			

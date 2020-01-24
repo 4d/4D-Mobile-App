@@ -45,7 +45,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	
 	$Obj_project:=(OBJECT Get pointer:C1124(Object named:K67:5;"project"))->
 	
-	$Path_product:=COMPONENT_Pathname ("products").folder($Obj_project.product.name)
+	$Path_product:=path .products().folder($Obj_project.product.name)
 	$Path_build:=$Path_product.folder("build")
 	
 	$Obj_could:=New object:C1471(\
@@ -480,8 +480,8 @@ Case of
 		  //______________________________________________________
 	: ($Mnu_choice="_removeMobilesProjects")
 		
-		COMPONENT_Pathname ("projects").delete(fk recursive:K87:7)
-		COMPONENT_Pathname ("products").delete(fk recursive:K87:7)
+		path .projects().delete(fk recursive:K87:7)
+		path .products().delete(fk recursive:K87:7)
 		
 		  //______________________________________________________
 	: ($Mnu_choice="_removeBuild")
@@ -510,12 +510,12 @@ Case of
 		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 		
 		  //dataModel (New object(\
-												//"action";"xcdatamodel";\
-												//"dataModel";$Obj_project.dataModel;\
-												//"flat";False;\
-												//"relationship";Bool(featuresFlags._103850);\
-												//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
-												//"path";$Txt_path))
+			//"action";"xcdatamodel";\
+			//"dataModel";$Obj_project.dataModel;\
+			//"flat";False;\
+			//"relationship";Bool(featuresFlags._103850);\
+			//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
+			//"path";$Txt_path))
 		dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\
@@ -536,22 +536,14 @@ Case of
 		  //______________________________________________________
 	: ($Mnu_choice="_openTemplateFolder")
 		
-		SHOW ON DISK:C922(COMPONENT_Pathname ("templates").platformPath)
+		SHOW ON DISK:C922(path .templates().platformPath)
 		
 		  //______________________________________________________
 	: ($Mnu_choice="_openHostFormFolder")
 		
-		  //$Txt_buffer:=Pathname ("host_forms")
-		  //If (Test path name($Txt_buffer)#Is a folder)
-		  //CREATE FOLDER($Txt_buffer;*)
-		  // CREATE FOLDER(Pathname ("host_listForms"))
-		  // CREATE FOLDER(Pathname ("host_detailForms"))
-		  // End if
-		  // SHOW ON DISK(Pathname ("host_forms"))
-		
-		COMPONENT_Pathname ("host_listForms").create()
-		COMPONENT_Pathname ("host_detailForms").create()
-		SHOW ON DISK:C922(COMPONENT_Pathname ("host_forms").platformPath)
+		$o:=path .hostListForms(True:C214)
+		$o:=path .hostDetailForms(True:C214)
+		SHOW ON DISK:C922(path .hostForms().platformPath)
 		
 		  //______________________________________________________
 	: ($Mnu_choice="_verbose")

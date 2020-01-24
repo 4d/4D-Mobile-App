@@ -43,9 +43,7 @@ End if
 
 Repeat 
 	
-	$Txt_projectName:=Request:C163(Get localized string:C991("mess_nameoftheproject");\
-		Get localized string:C991("mess_newProject");\
-		Get localized string:C991("mess_create"))
+	$Txt_projectName:=Request:C163(Get localized string:C991("mess_nameoftheproject");Get localized string:C991("mess_newProject");Get localized string:C991("mess_create"))
 	
 	$Boo_Repeat:=(Length:C16($Txt_projectName)=0) & Bool:C1537(OK)
 	
@@ -119,7 +117,7 @@ If (Bool:C1537(OK))
 			$Txt_buffer:=$Obj_project.product.name
 			
 			$Obj_path:=New object:C1471(\
-				"parentFolder";COMPONENT_Pathname ("products").platformPath;\
+				"parentFolder";path .products().platformPath;\
 				"isFolder";True:C214;\
 				"name";$Txt_buffer)
 			
