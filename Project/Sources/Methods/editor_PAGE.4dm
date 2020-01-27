@@ -291,6 +291,9 @@ If (Length:C16($Txt_page)>0)
 		  // Hide picker if any
 		CALL FORM:C1391($win;"editor_CALLBACK";"pickerHide")
 		
+		  // Hide broswer if any
+		CALL FORM:C1391($win;"editor_CALLBACK";"hideBrowser")
+		
 		If ($Lon_page>0)
 			
 			Form:C1466.currentPage:=$tTxt_pages{$Lon_page}

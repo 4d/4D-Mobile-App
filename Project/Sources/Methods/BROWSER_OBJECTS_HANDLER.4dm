@@ -31,15 +31,36 @@ Case of
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On Load:K2:1)
 				
-				$form.web.init()
+				
+				
+				  //………………………………………………………………………………………………………………
+			: ($event.code=On Begin URL Loading:K2:45)
+				
+				  //
+				
+				  //………………………………………………………………………………………………………………
+			: ($event.code=On URL Resource Loading:K2:46)
+				
+				  //
 				
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On End URL Loading:K2:47)
 				
-				$form.wait.hide()  // Mask the spinner
+				  // Remove the two first lines
+				$t:=WA Evaluate JavaScript:C1029(*;"webarea";"var list=document.getElementById(\"app\");list.removeChild(list.childNodes[0]);list.removeChild(list.childNodes[1]);")
+				
+				  // Mask the spinner
+				$form.wait.hide()
 				
 				  //………………………………………………………………………………………………………………
-			: ($event.code=On URL Filtering:K2:49)
+			: ($event.code=On URL Loading Error:K2:48)
+				
+				  //
+				
+				  //………………………………………………………………………………………………………………
+			: ($event.code=On URL Filtering:K2:49)\
+				 | ($event.code=On URL Loading Error:K2:48)\
+				 | ($event.code=On Window Opening Denied:K2:51)
 				
 				$tURL:=$form.web.lastFiltered()
 				
@@ -149,22 +170,31 @@ Case of
 						  //______________________________________________________
 					Else 
 						
-						  // <NOTHING MORE TO DO>
-						
-						  //WA OPEN URL("https://4d-for-ios.github.io/gallery/#/data/formatter")
+						OPEN URL:C673($tURL)
 						
 						  //______________________________________________________
 				End case 
 				
 				  //………………………………………………………………………………………………………………
+			: ($event.code=On Open External Link:K2:50)
+				
+				  //
+				
+				  //………………………………………………………………………………………………………………
+			: ($event.code=On Window Opening Denied:K2:51)
+				
+				  //
+				
+				  //………………………………………………………………………………………………………………
 			Else 
 				
-				  // A "Case of" statement should never omit "Else"
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
+				
 				  //………………………………………………………………………………………………………………
 		End case 
 		
 		  //______________________________________________________
-	: ($event.objectName="return")
+	: ($event.objectName="close")
 		
 		CALL SUBFORM CONTAINER:C1086(-1)
 		

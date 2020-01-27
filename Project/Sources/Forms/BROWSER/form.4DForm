@@ -26,26 +26,19 @@
 					"fill": "#1BA1E5",
 					"sizingX": "grow"
 				},
-				"webArea": {
-					"type": "webArea",
-					"left": 16,
+				"Rectangle": {
+					"type": "rectangle",
 					"top": 40,
+					"left": 16,
 					"width": 935,
 					"height": 638,
+					"fill": "#FFFFFF",
+					"stroke": "transparent",
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"webEngine": "embedded",
-					"contextMenu": "none",
-					"urlSource": "https://translate.google.com/",
-					"borderStyle": "none",
-					"events": [
-						"onLoad",
-						"onEndURLLoading",
-						"onURLFiltering"
-					],
-					"method": "BROWSER_OBJECTS_HANDLER"
+					"strokeWidth": 0
 				},
-				"return": {
+				"close": {
 					"type": "button",
 					"text": ":xliff:close",
 					"top": 14,
@@ -71,6 +64,30 @@
 					"width": 21,
 					"height": 22,
 					"sizingX": "move"
+				},
+				"webArea": {
+					"type": "webArea",
+					"left": 16,
+					"top": 40,
+					"width": 935,
+					"height": 638,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"webEngine": "system",
+					"contextMenu": "none",
+					"urlSource": "https://translate.google.com/",
+					"borderStyle": "none",
+					"events": [
+						"onLoad",
+						"onBeginURLLoading",
+						"onURLResourceLoading",
+						"onEndURLLoading",
+						"onURLLoadingError",
+						"onURLFiltering",
+						"onOpenExternalLink",
+						"onWindowOpeningDenied"
+					],
+					"method": "BROWSER_OBJECTS_HANDLER"
 				}
 			}
 		}

@@ -454,17 +454,17 @@ Case of
 			
 			  // Show browser
 			$form.form.call(New collection:C1472("initBrowser";New object:C1471(\
-				"url";Get localized string:C991(Choose:C955($context.selector=1;"doc_listForm";"doc_detailForm")))))
+				"url";Get localized string:C991("res_"+$context.typeForm()+"Forms"))))
 			
 		Else 
 			
 			If ($context.selector=1)
 				
-				OPEN URL:C673(Get localized string:C991("doc_listForm");*)
+				OPEN URL:C673(Get localized string:C991("res_listForms");*)
 				
 			Else 
 				
-				OPEN URL:C673(Get localized string:C991("doc_detailForm");*)
+				OPEN URL:C673(Get localized string:C991("res_detailForms");*)
 				
 			End if 
 		End if 

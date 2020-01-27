@@ -329,9 +329,14 @@ If (featuresFlags.with("resourcesBrowser"))
 	
 	  // Put an "explore" button after the default template
 	$svg:=svg ("load";File:C1566("/RESOURCES/templates/more.svg")).setDimensions($oLocal.cell.width;$oLocal.cell.height)
-	$oPicker.pictures.insert(1;$svg.getPicture())
-	$oPicker.pathnames.insert(1;Null:C1517)
-	$oPicker.helpTips.insert(1;str ("downloadMoreResources").localized($oLocal.type))
+	
+	  //$oPicker.pictures.insert(1;$svg.getPicture())
+	  //$oPicker.pathnames.insert(1;Null)
+	  //$oPicker.helpTips.insert(1;str ("downloadMoreResources").localized($oLocal.type))
+	
+	$oPicker.pictures.push($svg.getPicture())
+	$oPicker.pathnames.push(Null:C1517)
+	$oPicker.helpTips.push(str ("downloadMoreResources").localized($oLocal.type))
 	
 End if 
 

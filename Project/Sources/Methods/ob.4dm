@@ -37,6 +37,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"assign";Formula:C1597(ob ("assign";$1;$2;$3;$4;$5;$6;$7;$8;$9;$10));\
 		"clone";Formula:C1597(ob ("clone";$1));\
 		"copy";Formula:C1597(OB Copy:C1225(This:C1470.contents));\
+		"count";Formula:C1597(ob ("count").value);\
 		"createPath";Formula:C1597(ob ("createPath";New object:C1471("path";String:C10($1);\
 		"type";$2;\
 		"content";$3)));\
@@ -162,6 +163,14 @@ Else
 						  //……………………………………………………………………………………………………………………………
 				End case 
 			End for each 
+			
+			
+			  //______________________________________________________
+		: ($1="count")  // Returns the count of first level keys
+			
+			ARRAY TEXT:C222($tTxt_buffer;0x0000)
+			OB GET PROPERTY NAMES:C1232($o.contents;$tTxt_buffer)
+			$o.value:=Size of array:C274($tTxt_buffer)
 			
 			  //______________________________________________________
 		: ($1="merge")

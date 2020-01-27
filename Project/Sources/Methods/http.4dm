@@ -47,6 +47,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"get";Formula:C1597(http ("get";New object:C1471("type";$1;"keep-alive";Bool:C1537($2);"more";$3)));\
 		"url";Formula:C1597(http ("url";New object:C1471("url";$1)));\
 		"errorCodeMessage";Formula:C1597(http ("errorCodeMessage";New object:C1471("code";Num:C11($1))).message);\
+		"myIP";Formula:C1597(http ("myIP").ip);\
 		"statusCodeMessage";Formula:C1597(http ("statusCodeMessage";New object:C1471("code";Num:C11($1))).message);\
 		"type";Formula:C1597(http ("type";New object:C1471("type";$1)))\
 		)
@@ -225,7 +226,7 @@ Else
 					
 					If (httpError#0)
 						
-						$o.errors.push("error "+String:C10(httpError))
+						$o.errors.push($o.errorCodeMessage(httpError))
 						
 					Else 
 						
@@ -254,12 +255,46 @@ Else
 			End if 
 			
 			  //______________________________________________________
+		: ($1="myIP")
+			
+			$o:=New object:C1471(\
+				"success";False:C215)
+			
+			$Txt_onErrCallMethod:=Method called on error:C704
+			httpError:=0
+			ON ERR CALL:C155("HTTP ERROR HANDLER")
+			$Lon_code:=HTTP Get:C1157("http://api.ipify.org";$t)
+			ON ERR CALL:C155($Txt_onErrCallMethod)
+			
+			$o.success:=($Lon_code=200) & (httpError=0)
+			
+			If ($o.success)
+				
+				$o.ip:=$t
+				
+			Else 
+				
+				$o.errors:=New collection:C1472
+				
+				If (httpError#0)
+					
+					$o.errors.push(This:C1470.errorCodeMessage(httpError))
+					
+				Else 
+					
+					$o.errors.push(This:C1470.statusCodeMessage($Lon_code))
+					
+				End if 
+			End if 
+			
+			  //______________________________________________________
 		: ($1="errorCodeMessage")
 			
 			$c:=New collection:C1472
 			
 			$c[2]:="HTTP server not reachable"
 			$c[17]:="HTTP server not reachable (timeout?)"
+			$c[30]:="HTTP server not reachable"
 			
 			If ($c[$2.code]#Null:C1517)
 				
@@ -280,9 +315,9 @@ Else
 			
 			$c:=New collection:C1472
 			
-			  //1xx Informational response
+			  // 1xx Informational response
 			
-			  //2xx Success
+			  // 2xx Success
 			$c[200]:="OK"
 			$c[201]:="Created"
 			$c[202]:="Accepted"
@@ -294,9 +329,9 @@ Else
 			$c[208]:="Already Reported"
 			$c[226]:="IM Used"
 			
-			  //3xx Redirection
+			  // 3xx Redirection
 			
-			  //4xx Client errors
+			  // 4xx Client errors
 			$c[400]:="Bad Request"
 			$c[401]:="Unauthorized"
 			$c[402]:="Payment Required"
@@ -327,10 +362,12 @@ Else
 			$c[440]:="Login Time-out"
 			$c[449]:="Retry With"
 			$c[450]:="Blocked by Windows Parental Controls"
+			
 			$c[451]:="Unavailable For Legal Reasons"
+			
 			$c[456]:="Unrecoverable Error"
 			
-			  //5xx Server errors
+			  // 5xx Server errors
 			$c[500]:="Internal Server Error"
 			$c[501]:="Not Implemented"
 			$c[502]:="Bad Gateway"
@@ -342,7 +379,6 @@ Else
 			$c[508]:="Loop Detected"
 			$c[510]:="Not Extended"
 			$c[511]:="Network Authentication Required"
-			
 			
 			If ($c[$2.code]#Null:C1517)
 				

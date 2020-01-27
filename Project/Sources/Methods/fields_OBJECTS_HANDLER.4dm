@@ -330,12 +330,12 @@ Case of
 		If (featuresFlags.with("resourcesBrowser"))
 			
 			  // Show browser
-			$o:=New object:C1471("url";Get localized string:C991("doc_fornatters"))
+			$o:=New object:C1471("url";Get localized string:C991("res_formatters"))
 			$Obj_form.form.call(New collection:C1472("initBrowser";$o))
 			
 		Else 
 			
-			OPEN URL:C673(Get localized string:C991("doc_fornatters");*)
+			OPEN URL:C673(Get localized string:C991("res_formatters");*)
 			
 		End if 
 		

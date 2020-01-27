@@ -50,7 +50,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"back";Formula:C1597(WA OPEN BACK URL:C1021(*;This:C1470.name));\
 		"content";Formula:C1597(WA Get page content:C1038(*;This:C1470.name));\
 		"forward";Formula:C1597(WA OPEN FORWARD URL:C1022(*;This:C1470.name));\
-		"init";Formula:C1597(webArea ("init"));\
+		"init";Formula:C1597(webArea ("init";New object:C1471("allowed";$1)));\
 		"isLoaded";Formula:C1597(WA Get current URL:C1025(*;This:C1470.name)=This:C1470.url);\
 		"lastFiltered";Formula:C1597(WA Get last filtered URL:C1035(*;This:C1470.name));\
 		"openURL";Formula:C1597(webArea ("openURL";New object:C1471("url";$1)));\
@@ -86,15 +86,42 @@ Else
 			APPEND TO ARRAY:C911($tTxt_filters;"*")  // All
 			APPEND TO ARRAY:C911($tBoo_allow;False:C215)  // Forbidden
 			
-			  // Allow WA SET PAGE CONTENT
-			APPEND TO ARRAY:C911($tTxt_filters;"file*")
-			APPEND TO ARRAY:C911($tBoo_allow;True:C214)  // to allow including HTML files
+			If ($2.allowed#Null:C1517)
+				
+				Case of 
+						
+						  //______________________________________________________
+					: ($2.allowed=Null:C1517)
+						
+						  // Allow WA SET PAGE CONTENT
+						APPEND TO ARRAY:C911($tTxt_filters;"file*")
+						APPEND TO ARRAY:C911($tBoo_allow;True:C214)  // to allow including HTML files
+						
+						  //______________________________________________________
+					: (Value type:C1509($2.allowed)=Is text:K8:3)
+						
+						APPEND TO ARRAY:C911($tTxt_filters;$2.allowed)
+						APPEND TO ARRAY:C911($tBoo_allow;True:C214)
+						
+						  //______________________________________________________
+					: (Value type:C1509($2.allowed)=Is collection:K8:32)
+						
+						For each ($t;$2.allowed)
+							
+							APPEND TO ARRAY:C911($tTxt_filters;$t)
+							APPEND TO ARRAY:C911($tBoo_allow;True:C214)
+							
+						End for each 
+						
+						  //______________________________________________________
+				End case 
+			End if 
 			
 			WA SET URL FILTERS:C1030(*;$o.name;$tTxt_filters;$tBoo_allow)
 			
 			WA SET PREFERENCE:C1041(*;$o.name;WA enable Java applets:K62:3;False:C215)
 			WA SET PREFERENCE:C1041(*;$o.name;WA enable JavaScript:K62:4;True:C214)
-			WA SET PREFERENCE:C1041(*;$o.name;WA enable plugins:K62:5;False:C215)  //
+			WA SET PREFERENCE:C1041(*;$o.name;WA enable plugins:K62:5;False:C215)
 			
 			  // Active the contextual menu in debug mode
 			WA SET PREFERENCE:C1041(*;$o.name;WA enable contextual menu:K62:6;Not:C34(Is compiled mode:C492) | (Structure file:C489=Structure file:C489(*)))
@@ -135,6 +162,13 @@ Else
 			End case 
 			
 			$o.url:=$t
+			
+			WA GET URL FILTERS:C1031(*;$o.name;$tTxt_filters;$tBoo_allow)
+			
+			APPEND TO ARRAY:C911($tTxt_filters;$t)
+			APPEND TO ARRAY:C911($tBoo_allow;True:C214)  // to allow including HTML files
+			
+			WA SET URL FILTERS:C1030(*;$o.name;$tTxt_filters;$tBoo_allow)
 			
 			WA OPEN URL:C1020(*;$o.name;$o.url)
 			

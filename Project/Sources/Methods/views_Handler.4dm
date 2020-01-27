@@ -144,15 +144,15 @@ Case of
 				$offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
 				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($offset)
 				
-				  //If (featuresFlags.with("resourcesBrowser"))
-				  //$form.resources.hide()
-				  //Else 
-				
-				  // Place the download button
-				$form.resources.setTitle(str ("downloadMoreResources").localized("templates"))
-				$form.resources.bestSize(Align right:K42:4)
-				
-				  //End if 
+				If (featuresFlags.with("resourcesBrowser"))
+					$form.resources.hide()
+				Else 
+					
+					  // Place the download button
+					$form.resources.setTitle(str ("downloadMoreResources").localized("templates"))
+					$form.resources.bestSize(Align right:K42:4)
+					
+				End if 
 				
 				$context.setTab()
 				
@@ -582,19 +582,20 @@ Case of
 					
 				End if 
 				
+				  // Redraw
+				$context.draw:=True:C214
+				$form.form.refresh()
+				
 			Else 
 				
 				  // Show browser
 				$o:=New object:C1471(\
-					"url";"https://developer.4d.com/4d-for-ios/docs/en/custom-"+Choose:C955($context.typeForm()="list";"listform";"detailform")+"-templates.html")
+					"url";Get localized string:C991("res_"+$context.typeForm()+"Forms"))
+				
 				$form.form.call(New collection:C1472("initBrowser";$o))
 				
 			End if 
 		End if 
-		
-		  // Redraw
-		$context.draw:=True:C214
-		$form.form.refresh()
 		
 		  //=========================================================
 	: ($oIN.action="show")

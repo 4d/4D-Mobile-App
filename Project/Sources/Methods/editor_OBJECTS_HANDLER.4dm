@@ -8,99 +8,78 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_LONGINT:C283($Lon_bottom;$Lon_formEvent;$Lon_height;$Lon_left;$Lon_parameters;$Lon_right)
-C_LONGINT:C283($Lon_top;$Lon_width)
-C_POINTER:C301($Ptr_me)
-C_TEXT:C284($Txt_me)
-C_OBJECT:C1216($o)
+C_LONGINT:C283($bottom;$height;$left;$right;$top;$width)
+C_POINTER:C301($ptr)
+C_OBJECT:C1216($event;$o)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
-	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		  // <NONE>
-		
-	End if 
-	
-	$Lon_formEvent:=Form event code:C388
-	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
-	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$event:=FORM Event:C1606
 
   // ----------------------------------------------------
 Case of 
 		
 		  //==================================================
-	: ($Txt_me="browser")
+	: ($event.objectName="browser")
 		
-		If ($Lon_formEvent=-1)  // Hide
+		If ($event.code=-1)  // Hide
 			
-			OBJECT SET VISIBLE:C603(*;$Txt_me;False:C215)
-			OBJECT SET SUBFORM:C1138(*;$Txt_me;"EMPTY")
+			OBJECT SET SUBFORM:C1138(*;"browser";"EMPTY")
+			OBJECT SET VISIBLE:C603(*;"browser";False:C215)
 			
 		End if 
 		
 		  //==================================================
-	: ($Txt_me="message")
+	: ($event.objectName="message")
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent<0)  // <SUBFORM EVENTS>
+			: ($event.code<0)  // <SUBFORM EVENTS>
+				
+				$ptr:=OBJECT Get pointer:C1124(Object current:K67:2)
 				
 				Case of 
 						
 						  //…………………………………………………………………………………………………
-					: ($Lon_formEvent=-2)\
-						 | ($Lon_formEvent=-1)  // Close
+					: ($event.code=-2)\
+						 | ($event.code=-1)  // Close
 						
-						OBJECT SET VISIBLE:C603(*;"message@";False:C215)
-						
-						If ($Ptr_me->tips.enabled)
+						If ($ptr->tips.enabled)
 							
 							  // Restore help tips status
 							$o:=ui.tips
 							$o.enable()
-							$o.setDuration($Ptr_me->tips.delay)
+							$o.setDuration($ptr->tips.delay)
 							
 						End if 
 						
-						$Ptr_me->:=New object:C1471
+						$ptr->:=New object:C1471
+						
+						OBJECT SET VISIBLE:C603(*;"message@";False:C215)
 						
 						  //…………………………………………………………………………………………………
 					Else 
 						
 						  // Resizing
-						OBJECT GET COORDINATES:C663(*;$Txt_me;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+						OBJECT GET COORDINATES:C663(*;$event.objectName;$left;$top;$right;$bottom)
 						
-						$Lon_bottom:=$Lon_top+Abs:C99($Lon_formEvent)
+						$bottom:=$top+Abs:C99($event.code)
 						
 						  // Limit to the window's height [
-						OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_width;$Lon_height)
+						OBJECT GET SUBFORM CONTAINER SIZE:C1148($width;$height)
 						
-						If ($Lon_bottom>($Lon_height-20))
+						If ($bottom>($height-20))
 							
-							$Lon_bottom:=$Lon_height-20
+							$bottom:=$height-20
 							
-							$Ptr_me->scrollbar:=True:C214
-							$Ptr_me->:=$Ptr_me->  // Touch
+							$ptr->scrollbar:=True:C214
+							$ptr->:=$ptr->  // Touch
 							
 						End if 
 						  //]
 						
-						OBJECT SET COORDINATES:C1248(*;$Txt_me;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+						OBJECT SET COORDINATES:C1248(*;$event.objectName;$left;$top;$right;$bottom)
 						
 						  //…………………………………………………………………………………………………
 				End case 
@@ -108,7 +87,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
 				
 				  //______________________________________________________
 		End case 
@@ -116,7 +95,7 @@ Case of
 		  //==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown object: \""+$Txt_me+"\"")
+		ASSERT:C1129(False:C215;"Unknown object: \""+$event.objectName+"\"")
 		
 		  //==================================================
 End case 
