@@ -17,6 +17,7 @@ C_LONGINT:C283($i;$Lon_parameters)
 C_TEXT:C284($t;$Txt_in;$Txt_out)
 C_OBJECT:C1216($o;$Obj_element;$Obj_field;$Obj_table;$Obj_tags)
 C_COLLECTION:C1488($Col_newStrings;$Col_oldStrings;$Col_types)
+C_VARIANT:C1683($Var_field)
 
 If (False:C215)
 	C_TEXT:C284(Process_tags ;$0)
@@ -327,32 +328,38 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 				$Obj_tags.listFormType\
 				))
 			
-			For each ($Obj_field;$Obj_table.fields)
+			C_VARIANT:C1683($Var_field)
+			For each ($Var_field;$Obj_table.fields)
 				
-				$i:=$i+1
-				$t:="___FIELD_"+String:C10($i)
-				
-				$Col_oldStrings.combine(New collection:C1472(\
-					$t+"___";\
-					$t+"_NAME___";\
-					$t+"_LABEL___";\
-					$t+"_SHORT_LABEL___";\
-					$t+"_FORMAT___";\
-					$t+"_BINDING_TYPE___";\
-					$t+"_ICON___";\
-					$t+"_LABEL_ALIGNMENT___"\
-					))
-				
-				$Col_newStrings.combine(New collection:C1472(\
-					$Obj_field.name;\
-					$o.setText($Obj_field.originalName).xmlEncode();\
-					$o.setText($Obj_field.label).xmlEncode();\
-					$o.setText($Obj_field.shortLabel).xmlEncode();\
-					$o.setText($Obj_field.format).xmlEncode();\
-					$Obj_field.bindingType;\
-					$o.setText($Obj_field.detailIcon).xmlEncode();\
-					$Obj_field.labelAlignment\
-					))
+				If (Value type:C1509($Var_field)=Is object:K8:27) // No real #114338
+					
+					$Obj_field:=$Var_field
+					$i:=$i+1
+					$t:="___FIELD_"+String:C10($i)
+					
+					$Col_oldStrings.combine(New collection:C1472(\
+						$t+"___";\
+						$t+"_NAME___";\
+						$t+"_LABEL___";\
+						$t+"_SHORT_LABEL___";\
+						$t+"_FORMAT___";\
+						$t+"_BINDING_TYPE___";\
+						$t+"_ICON___";\
+						$t+"_LABEL_ALIGNMENT___"\
+						))
+					
+					$Col_newStrings.combine(New collection:C1472(\
+						$Obj_field.name;\
+						$o.setText($Obj_field.originalName).xmlEncode();\
+						$o.setText($Obj_field.label).xmlEncode();\
+						$o.setText($Obj_field.shortLabel).xmlEncode();\
+						$o.setText($Obj_field.format).xmlEncode();\
+						$Obj_field.bindingType;\
+						$o.setText($Obj_field.detailIcon).xmlEncode();\
+						$Obj_field.labelAlignment\
+						))
+					
+				End if 
 				
 			End for each 
 			
@@ -401,33 +408,34 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 				$o.setText($Obj_table.recordActions).xmlEncode()\
 				))
 			
-			For each ($Obj_field;$Obj_table.fields)
-				
-				$i:=$i+1
-				$t:="___FIELD_"+String:C10($i)
-				
-				$Col_oldStrings.combine(New collection:C1472(\
-					$t+"___";\
-					$t+"_NAME___";\
-					$t+"_LABEL___";\
-					$t+"_SHORT_LABEL___";\
-					$t+"_FORMAT___";\
-					$t+"_BINDING_TYPE___";\
-					$t+"_ICON___";\
-					$t+"_LABEL_ALIGNMENT___"\
-					))
-				
-				$Col_newStrings.combine(New collection:C1472(\
-					$Obj_field.name;\
-					$o.setText($Obj_field.originalName).xmlEncode();\
-					$o.setText($Obj_field.label).xmlEncode();\
-					$o.setText($Obj_field.shortLabel).xmlEncode();\
-					$o.setText($Obj_field.format).xmlEncode();\
-					$Obj_field.bindingType;\
-					$o.setText($Obj_field.detailIcon).xmlEncode();\
-					$Obj_field.labelAlignment\
-					))
-				
+			For each ($Var_field;$Obj_table.fields)
+				If (Value type:C1509($Var_field)=Is object:K8:27)
+					$Obj_field:=$Var_field
+					$i:=$i+1
+					$t:="___FIELD_"+String:C10($i)
+					
+					$Col_oldStrings.combine(New collection:C1472(\
+						$t+"___";\
+						$t+"_NAME___";\
+						$t+"_LABEL___";\
+						$t+"_SHORT_LABEL___";\
+						$t+"_FORMAT___";\
+						$t+"_BINDING_TYPE___";\
+						$t+"_ICON___";\
+						$t+"_LABEL_ALIGNMENT___"\
+						))
+					
+					$Col_newStrings.combine(New collection:C1472(\
+						$Obj_field.name;\
+						$o.setText($Obj_field.originalName).xmlEncode();\
+						$o.setText($Obj_field.label).xmlEncode();\
+						$o.setText($Obj_field.shortLabel).xmlEncode();\
+						$o.setText($Obj_field.format).xmlEncode();\
+						$Obj_field.bindingType;\
+						$o.setText($Obj_field.detailIcon).xmlEncode();\
+						$Obj_field.labelAlignment\
+						))
+				End if 
 			End for each 
 			
 			  //______________________________________________________

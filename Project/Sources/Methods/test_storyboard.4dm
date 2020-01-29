@@ -1,21 +1,27 @@
 //%attributes = {}
 
 C_OBJECT:C1216($Obj_result)
-C_BOOLEAN:C305($Boo_shift)
+C_BOOLEAN:C305($Boo_shift;$Boo_onlyOne)
 $Boo_shift:=Shift down:C543
+$Boo_onlyOne:=False:C215  // Test only the first template if true (debug purpose)
 
 If (Not:C34($Boo_shift))
 	TRY 
 End if 
 
+If (commonValues=Null:C1517)
+	COMPONENT_INIT 
+End if 
+
   //_____________________________________________________________
 
   // Test detailform action
+C_OBJECT:C1216($Folder_template;$Obj_tags;$Folder_test;$Obj_template;$Obj_element;$Obj_dom;$Obj_field)
+C_COLLECTION:C1488($Col_fields;$Col_otherFields)
+C_LONGINT:C283($Lon_duplicateExpected;$Lon_relationCount;$Lon_fieldCount;$Lon_relationMinPosition;$Lon_flatCount)
+C_VARIANT:C1683($Var_fields)
 
-
-C_OBJECT:C1216($Folder_template;$Obj_tags;$Folder_test;$Obj_template;$Obj_element;$Obj_dom)
-C_COLLECTION:C1488($Col_fields)
-C_LONGINT:C283($Lon_duplicateExpected;$Lon_relationCount;$Lon_fieldCount;$Lon_relationMinPosition)
+  // List of fields
 $Col_fields:=New collection:C1472(\
 New object:C1471("name";"field 1";"id";1);\
 New object:C1471("name";"field 2";"id";2);\
@@ -25,23 +31,65 @@ New object:C1471("name";"field 5";"id";5);\
 New object:C1471("name";"field 6";"id";6);\
 New object:C1471("name";"field 7";"id";7);\
 New object:C1471("name";"relation 1";"relatedEntities";"TableRelated1");\
-New object:C1471("name";"field 5";"id";5);\
+New object:C1471("name";"field 5";"id";5))
+$Lon_relationMinPosition:=8  // /!\ relation could be only after detail headers, so here after 8 for the moment (the test will failed if you put relation in header)
+
+$Col_otherFields:=New collection:C1472(New object:C1471("name";"field 1";"id";1);New object:C1471("name";"field 2";"id";2))
+If (featuresFlags.with(114338))
+	$Col_fields.push($Col_otherFields)
+Else 
+	$Col_fields:=$Col_fields.combine($Col_otherFields)
+End if 
+$Col_fields:=$Col_fields.combine(New collection:C1472(\
 New object:C1471("name";"relation 2";"relatedEntities";"TableRelated2");\
 New object:C1471("name";"relation 1";"relatedEntities";"TableRelated1");\
-New object:C1471("name";"field 3";"id";3))
-$Lon_relationCount:=3
-$Lon_fieldCount:=$Col_fields.length-$Lon_relationCount
-$Lon_relationMinPosition:=8  // /!\ relation could be only after detail headers, so here after 8 for the moment (the test will failed if you put relation in header)
+New object:C1471("name";"field 3";"id";3)))
+
+  // Compute some counter according to fields
+$Lon_relationCount:=0
+$Lon_flatCount:=0
+For each ($Var_fields;$Col_fields)
+	Case of 
+		: (Value type:C1509($Var_fields)=Is object:K8:27)
+			$Obj_field:=$Var_fields
+			If ($Obj_field.id=Null:C1517)
+				$Lon_relationCount:=$Lon_relationCount+1
+			End if 
+			$Lon_flatCount:=$Lon_flatCount+1
+			$Obj_field.label:=$Obj_field.name
+			$Obj_field.shortLabel:=$Obj_field.label
+		: (Value type:C1509($Var_fields)=Is collection:K8:32)
+			$Lon_flatCount:=$Lon_flatCount+$Var_fields.length
+			For each ($Obj_field;$Var_fields)
+				$Obj_field.label:=$Obj_field.name
+				$Obj_field.shortLabel:=$Obj_field.label
+			End for each 
+			  // XXX no relation for the moment to count here
+	End case 
+End for each 
+
+$Lon_fieldCount:=$Lon_flatCount-$Lon_relationCount
+
+
+  // Create tags to inject in templates
 $Obj_tags:=New object:C1471("table";New object:C1471("name";"tablename";"fields";$Col_fields;"detailFields";$Col_fields))
+
+
+  // output directory
 $Folder_test:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).folder("testdetailform")
 $Folder_test.create()
 
+  // create detail form template list
 C_COLLECTION:C1488($Col_templates)
 $Col_templates:=Folder:C1567(fk resources folder:K87:11).folder("templates").folder("form").folder("detail").folders()
 If (Folder:C1567(fk resources folder:K87:11).folder("mobile").folder("form").folder("detail").exists)
 	$Col_templates.combine(Folder:C1567(fk resources folder:K87:11).folder("mobile").folder("form").folder("detail").folders())
 End if 
+If ($Boo_onlyOne)
+	$Col_templates:=New collection:C1472($Col_templates[0])  // take only first one
+End if 
 
+  // test on each template
 For each ($Folder_template;$Col_templates)
 	
 	$Obj_template:=ob_parseFile ($Folder_template.file("manifest.json")).value
@@ -51,8 +99,10 @@ For each ($Folder_template;$Col_templates)
 		OB REMOVE:C1226($Obj_element;"tags")  // remove tags.mandatories for test purpose, do not want to filter if not defined
 	End for each 
 	
+	  // Launch tested method
 	$Obj_result:=storyboard (New object:C1471("action";"detailform";"template";$Obj_template;"tags";$Obj_tags;"target";$Folder_test.file($Folder_template.name+".storyboard").platformPath))
 	
+	  // check data
 	$Lon_duplicateExpected:=($Obj_template.relation.elements.length*$Lon_relationCount)+($Obj_template.elements.length*($Lon_fieldCount-Num:C11($Obj_template.fields.count)))
 	ASSERT:C1129($Lon_relationMinPosition>Num:C11($Obj_template.fields.count);"Change Lon_relationMinPosition and add new fields if template has more field in headers")
 	

@@ -451,6 +451,8 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags.wip("withWidgetActions")  // Enable widget actions
 	featuresFlags.wip("accentColors")  // Manage colors according to user system parameters
 	
+	featuresFlags.wip(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
+	
 	featuresFlags.unstable(113016)  // Svg improvement in forms section
 	featuresFlags.unstable(112225)  // Select / install / use custom templates
 	

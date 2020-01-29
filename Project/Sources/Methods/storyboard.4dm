@@ -16,6 +16,7 @@ C_OBJECT:C1216($Dom_;$Dom_child;$Dom_root);
 C_TEXT:C284($Txt_buffer;$Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 C_OBJECT:C1216($File_;$Obj_color;$Obj_in;$Obj_out;$Obj_element;$Obj_table;$Obj_field;$Obj_tag;$Obj_storyboardID)
 C_COLLECTION:C1488($Col_;$Col_elements)
+C_VARIANT:C1683($Var_field)
 
 If (False:C215)
 	C_OBJECT:C1216(storyboard ;$0)
@@ -762,79 +763,185 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					  // ... and fields
 					$Lon_j:=Num:C11($Obj_in.template.fields.count)  // Start at first element, not in header
-					
-					For each ($Obj_field;$Obj_in.tags.table.detailFields;Num:C11($Obj_in.template.fields.count))
+					For each ($Var_field;$Obj_in.tags.table.detailFields;Num:C11($Obj_in.template.fields.count))
 						
-						$Lon_j:=$Lon_j+1  // pos
-						
-						  // Set tags:
-						  // - field
-						$Obj_in.tags.field:=$Obj_field
-						
-						$Obj_in.tags.storyboardID:=New collection:C1472
-						
-						If (Num:C11($Obj_field.id)=0)  // relation to N field
-							
-							$Col_elements:=$Obj_in.template.relation.elements
-							
-						Else 
-							
-							$Col_elements:=$Obj_in.template.elements
-							
-						End if 
-						
-						  // For each element... (scene, cell, ...)
-						For each ($Obj_element;$Col_elements)
-							
-							If ($Obj_element.dom#Null:C1517)  // if valid element
+						Case of 
+							: (Value type:C1509($Var_field)=Is object:K8:27)
 								
-								  // - randoms ids
-								If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
+								$Obj_field:=$Var_field
+								
+								$Lon_j:=$Lon_j+1  // pos
+								
+								  // Set tags:
+								  // - field
+								$Obj_in.tags.field:=$Obj_field
+								
+								$Obj_in.tags.storyboardID:=New collection:C1472
+								
+								If (Num:C11($Obj_field.id)=0)  // relation to N field
 									
-									$Obj_storyboardID:=New object:C1471(\
-										"tagInterfix";$Obj_element.tagInterfix;\
-										"storyboardIDs";storyboard (New object:C1471(\
-										"action";"randomIds";\
-										"length";$Obj_element.idCount)).value)
+									$Col_elements:=$Obj_in.template.relation.elements
 									
-									$Obj_in.tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
+								Else 
+									
+									$Col_elements:=$Obj_in.template.elements
 									
 								End if 
 								
-								  // Process tags on the element
-								$Txt_buffer:=$Obj_element.dom.export().variable
-								$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
+								  // For each element... (scene, cell, ...)
+								For each ($Obj_element;$Col_elements)
+									
+									If ($Obj_element.dom#Null:C1517)  // if valid element
+										
+										  // - randoms ids
+										If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
+											
+											$Obj_storyboardID:=New object:C1471(\
+												"tagInterfix";$Obj_element.tagInterfix;\
+												"storyboardIDs";storyboard (New object:C1471(\
+												"action";"randomIds";\
+												"length";$Obj_element.idCount)).value)
+											
+											$Obj_in.tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
+											
+										End if 
+										
+										  // Process tags on the element
+										$Txt_buffer:=$Obj_element.dom.export().variable
+										$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
+										
+										  // Insert node for this element
+										$Dom_:=Null:C1517
+										Case of 
+												
+												  // ----------------------------------------
+											: $Obj_element.insertMode="append"
+												
+												$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
+												
+												  // ----------------------------------------
+											: $Obj_element.insertMode="first"
+												
+												$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
+												
+												  // ----------------------------------------
+											: $Obj_element.insertMode="iteration"
+												
+												$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
+												
+												  // ----------------------------------------
+										End case 
+										
+										If ($Dom_#Null:C1517)
+											ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+										End if 
+										
+										$Obj_out.doms.push($Dom_)
+										
+									End if 
+								End for each 
 								
-								  // Insert node for this element
-								$Dom_:=Null:C1517
-								Case of 
-										
-										  // ----------------------------------------
-									: $Obj_element.insertMode="append"
-										
-										$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
-										
-										  // ----------------------------------------
-									: $Obj_element.insertMode="first"
-										
-										$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
-										
-										  // ----------------------------------------
-									: $Obj_element.insertMode="iteration"
-										
-										$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
-										
-										  // ----------------------------------------
-								End case 
+							: (Value type:C1509($Var_field)=Is collection:K8:32)  // #114338 support collection
 								
-								If ($Dom_#Null:C1517)
-									ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
-								End if 
+								C_COLLECTION:C1488($Col_fields)
+								$Col_fields:=$Var_field
 								
-								$Obj_out.doms.push($Dom_)
+								$Lon_j:=$Lon_j+1  // pos, used for "insertAt" method, maybe not compatible with rows
 								
-							End if 
-						End for each 
+								For each ($Obj_field;$Col_fields)
+									
+									  // Set tags:
+									  // - field
+									$Obj_in.tags.field:=$Obj_field
+									
+									$Obj_in.tags.storyboardID:=New collection:C1472
+									
+									If (Num:C11($Obj_field.id)=0)  // relation to N field
+										
+										$Col_elements:=$Obj_in.template.relation.elements
+										
+									Else 
+										
+										$Col_elements:=$Obj_in.template.elements
+										
+									End if 
+									
+									  // For each element... (scene, cell, ...)
+									For each ($Obj_element;$Col_elements)
+										
+										If ($Obj_element.dom#Null:C1517)  // if valid element
+											
+											  /// HEADER for row 
+											If ($Obj_element.insertIntoRow=Null:C1517)
+												
+												If ($Obj_element.insertInto.parent().getName().name="stackView")  // only on stack view (suppose only one element has stack view parent..., same as relation)
+													$Txt_buffer:="<stackView opaque=\"NO\" contentMode=\"scaleToFill\" distribution=\"fillEqually\" translatesAutoresizingMaskIntoConstraints=\"NO\" id=\"ROW-SV"+String:C10($Lon_j;"##000")+"\"></stackView>"
+													$Obj_element.insertIntoRow:=$Obj_element.insertInto.append($Txt_buffer)
+													$Txt_buffer:="<rect key=\"frame\" x=\"0.0\" y=\"200\" width=\"375\" height=\"97\"/>"
+													$Dom_:=$Obj_element.insertIntoRow.append($Txt_buffer)
+													$Txt_buffer:="<subviews></subviews>"
+													$Obj_element.insertIntoRow:=$Obj_element.insertIntoRow.append($Txt_buffer)
+												Else 
+													$Obj_element.insertIntoRow:=$Obj_element.insertInto
+												End if 
+											End if 
+											  /// END HEADER for row
+											
+											  // - randoms ids
+											If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
+												
+												$Obj_storyboardID:=New object:C1471(\
+													"tagInterfix";$Obj_element.tagInterfix;\
+													"storyboardIDs";storyboard (New object:C1471(\
+													"action";"randomIds";\
+													"length";$Obj_element.idCount)).value)
+												
+												$Obj_in.tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
+												
+											End if 
+											
+											  // Process tags on the element
+											$Txt_buffer:=$Obj_element.dom.export().variable
+											$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
+											
+											  // Insert node for this element
+											$Dom_:=Null:C1517
+											Case of 
+													
+													  // ----------------------------------------
+												: $Obj_element.insertMode="append"
+													
+													$Dom_:=$Obj_element.insertIntoRow.append($Txt_buffer)
+													
+													  // ----------------------------------------
+												: $Obj_element.insertMode="first"
+													
+													$Dom_:=$Obj_element.insertIntoRow.insertFirst($Txt_buffer)
+													
+													  // ----------------------------------------
+												: $Obj_element.insertMode="iteration"
+													
+													$Dom_:=$Obj_element.insertIntoRow.insertAt($Txt_buffer;$Lon_j)
+													
+													  // ----------------------------------------
+											End case 
+											
+											If ($Dom_#Null:C1517)
+												ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+											End if 
+											
+											$Obj_out.doms.push($Dom_)
+											
+										End if 
+									End for each 
+									
+								End for each   // $Col_fields
+								
+							Else 
+								  // unknown
+								ASSERT:C1129(dev_Matrix ;"unknown data type of fields: "+String:C10(Value type:C1509($Var_field))+", must be field or a collection of fields")
+								
+						End case 
 					End for each 
 					
 					  // Remove original template duplicated element
