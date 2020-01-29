@@ -24,8 +24,7 @@ Case of
 		
 		If ($event.code=-1)  // Hide
 			
-			OBJECT SET SUBFORM:C1138(*;"browser";"EMPTY")
-			OBJECT SET VISIBLE:C603(*;"browser";False:C215)
+			CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"hideBrowser")
 			
 		End if 
 		
@@ -87,7 +86,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
 				
 				  //______________________________________________________
 		End case 

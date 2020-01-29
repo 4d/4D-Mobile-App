@@ -270,6 +270,10 @@ If ($Boo_plus)
 				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_generateDataModel")
 				
 			End if 
+			
+			APPEND MENU ITEM:C411($Mnu_pop;"-")
+			APPEND MENU ITEM:C411($Mnu_pop;".Open Commponent Log")
+			SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_openCompoentLog")
 		End if 
 	End if 
 	
@@ -500,6 +504,11 @@ Case of
 		SHOW ON DISK:C922(Get 4D folder:C485(Active 4D Folder:K5:10)+"4d.mobile")
 		
 		  //______________________________________________________
+	: ($Mnu_choice="_openCompoentLog")
+		
+		commonValues.log.open()
+		
+		  //______________________________________________________
 	: ($Mnu_choice="_generateDataModel")
 		
 		$Obj_project:=New object:C1471(\
@@ -510,12 +519,12 @@ Case of
 		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 		
 		  //dataModel (New object(\
-			//"action";"xcdatamodel";\
-			//"dataModel";$Obj_project.dataModel;\
-			//"flat";False;\
-			//"relationship";Bool(featuresFlags._103850);\
-			//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
-			//"path";$Txt_path))
+						//"action";"xcdatamodel";\
+						//"dataModel";$Obj_project.dataModel;\
+						//"flat";False;\
+						//"relationship";Bool(featuresFlags._103850);\
+						//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
+						//"path";$Txt_path))
 		dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\

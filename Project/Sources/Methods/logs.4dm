@@ -83,17 +83,31 @@ Else
 				  // Restore the previous status, if any
 				If (Value type:C1509($o.destination)=Is real:K8:4)
 					
+					PROCESS PROPERTIES:C336(Current process:C322;$t;$l;$l;$l)
+					
 					Case of 
 							
 							  //……………………………………………………………………………………………………
 						: ($o.destination=Into 4D commands log:K38:7)
 							
-							SET DATABASE PARAMETER:C642(Debug log recording:K37:34;Num:C11($o.logStatus))
+							If (Not:C34($l ?? 1))
+								
+								  //%T-
+								SET DATABASE PARAMETER:C642(Debug log recording:K37:34;Num:C11($o.logStatus))
+								  //%T+
+								
+							End if 
 							
 							  //……………………………………………………………………………………………………
 						: ($o.destination=Into 4D diagnostic log:K38:8)
 							
-							SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69;Num:C11($o.logStatus))
+							If (Not:C34($l ?? 1))
+								
+								  //%T-
+								SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69;Num:C11($o.logStatus))
+								  //%T+
+								
+							End if 
 							
 							  //……………………………………………………………………………………………………
 					End case 
@@ -142,19 +156,34 @@ Else
 			
 			If (Value type:C1509($o.destination)=Is real:K8:4)
 				
+				PROCESS PROPERTIES:C336(Current process:C322;$t;$l;$l;$l)
+				
 				Case of 
 						
 						  //……………………………………………………………………………………………………
 					: ($o.destination=Into 4D commands log:K38:7)
 						
-						$o.logStatus:=Get database parameter:C643(Debug log recording:K37:34)
-						SET DATABASE PARAMETER:C642(Debug log recording:K37:34;1)
+						If (Not:C34($l ?? 1))
+							
+							  //%T-
+							$o.logStatus:=Get database parameter:C643(Debug log recording:K37:34)
+							SET DATABASE PARAMETER:C642(Debug log recording:K37:34;1)
+							  //%T+
+							
+						End if 
 						
 						  //……………………………………………………………………………………………………
 					: ($o.destination=Into 4D diagnostic log:K38:8)
 						
-						$o.logStatus:=Get database parameter:C643(Diagnostic log recording:K37:69)
-						SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69;1)
+						If (Not:C34($l ?? 1))
+							
+							  //%T-
+							$o.logStatus:=Get database parameter:C643(Diagnostic log recording:K37:69)
+							SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69;1)
+							
+							  //%T+
+							
+						End if 
 						
 						  //……………………………………………………………………………………………………
 				End case 
@@ -165,17 +194,31 @@ Else
 			
 			If (Value type:C1509($o.destination)=Is real:K8:4)
 				
+				PROCESS PROPERTIES:C336(Current process:C322;$t;$l;$l;$l)
+				
 				Case of 
 						
 						  //……………………………………………………………………………………………………
 					: ($o.destination=Into 4D commands log:K38:7)
 						
-						SET DATABASE PARAMETER:C642(Debug log recording:K37:34;Num:C11($o.logStatus))
+						If (Not:C34($l ?? 1))
+							
+							  //%T-
+							SET DATABASE PARAMETER:C642(Debug log recording:K37:34;Num:C11($o.logStatus))
+							  //%T+
+							
+						End if 
 						
 						  //……………………………………………………………………………………………………
 					: ($o.destination=Into 4D diagnostic log:K38:8)
 						
-						SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69;Num:C11($o.logStatus))
+						If (Not:C34($l ?? 1))
+							
+							  //%T-
+							SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69;Num:C11($o.logStatus))
+							  //%T+
+							
+						End if 
 						
 						  //……………………………………………………………………………………………………
 				End case 

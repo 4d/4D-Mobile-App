@@ -17,6 +17,8 @@ C_OBJECT:C1216($archive;$event;$folder;$form;$http;$oProgress)
   // Initialisations
 $event:=FORM Event:C1606
 
+commonValues.log.infos(Current form name:C1298+"."+$event.objectName+": "+$event.description)
+
   // ----------------------------------------------------
 Case of 
 		
@@ -31,7 +33,8 @@ Case of
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On Load:K2:1)
 				
-				
+				  //………………………………………………………………………………………………………………
+			: ($event.code=On Unload:K2:2)
 				
 				  //………………………………………………………………………………………………………………
 			: ($event.code=On Begin URL Loading:K2:45)
@@ -188,7 +191,7 @@ Case of
 				  //………………………………………………………………………………………………………………
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
 				
 				  //………………………………………………………………………………………………………………
 		End case 

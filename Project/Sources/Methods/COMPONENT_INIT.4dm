@@ -232,12 +232,17 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	commonValues.thirdParty:="Carthage"
 	commonValues.thirdPartySources:=commonValues.thirdParty+"/Checkouts"
 	
+	commonValues.log:=logs ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+	commonValues.log.verbose:=(Structure file:C489=Structure file:C489(*))
+	
 	  // ================================================================================================================================
 	  //                                                           ONLY UI PROCESS
 	  // ================================================================================================================================
 	PROCESS PROPERTIES:C336(Current process:C322;$t;$l;$l;$Lon_Mode)
 	
 	If (Not:C34($Lon_Mode ?? 1))  // Not preemptive mode (always false in dev mode!)
+		
+		commonValues.log.reset()
 		
 		ui:=New object:C1471
 		
@@ -553,6 +558,21 @@ featuresFlags.alias("oneToManyRelations";105431)
 featuresFlags.alias("setImageDump";113164)
 featuresFlags.alias("newViewUI";113016)
 featuresFlags.alias("resourcesBrowser";112225)
+
+If (Not:C34($Lon_Mode ?? 1))
+	
+	For each ($t;featuresFlags)
+		
+		If (Value type:C1509(featuresFlags[$t])=Is boolean:K8:9)
+			
+			commonValues.log.infos("feature "+$t+": "+Choose:C955(featuresFlags[$t];"Enabled";"Disabled"))
+			
+		End if 
+	End for each 
+	
+	commonValues.log.line()
+	
+End if 
 
   // ________________________________________________________________________________________________________________________________
   //                                                         | AFTER FLAGS |

@@ -5,6 +5,7 @@
 	},
 	"events": [
 		"onLoad",
+		"onUnload",
 		"onTimer",
 		"onBoundVariableChange"
 	],

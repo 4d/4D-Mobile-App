@@ -32,7 +32,7 @@ End if
 
 $form:=New object:C1471(\
 "web";ui.web("webArea");\
-"wait";ui.widget("spinner")\
+"wait";ui.thermometer("spinner")\
 )
 
   // ----------------------------------------------------
@@ -44,21 +44,22 @@ Case of
 		
 		$event:=FORM Event:C1606
 		
+		commonValues.log.infos(Current form name:C1298+": "+$event.description)
+		
 		Case of 
 				
 				  //______________________________________________________
 			: ($event.code=On Load:K2:1)
 				
-				(OBJECT Get pointer:C1124(Object named:K67:5;"spinner"))->:=1
-				
+				$form.wait.start()
 				$form.web.init("https://4d-for-ios.github.io/gallery/#/data/*")
 				
-				  // SET TIMER(-1)
+				SET TIMER:C645(-1)
 				
 				  //______________________________________________________
 			: ($event.code=On Unload:K2:2)
 				
-				  //
+				$form.web.openURL("about:blank")
 				
 				  //______________________________________________________
 			: ($event.code=On Timer:K2:25)
@@ -74,7 +75,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
 				
 				  //______________________________________________________
 		End case 

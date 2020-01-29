@@ -84,7 +84,10 @@ Else
 			
 			  // All are forbidden
 			APPEND TO ARRAY:C911($tTxt_filters;"*")  // All
-			APPEND TO ARRAY:C911($tBoo_allow;False:C215)  // Forbidden
+			APPEND TO ARRAY:C911($tBoo_allow;False:C215)
+			
+			APPEND TO ARRAY:C911($tTxt_filters;"about:blank")  // Allow  blank HTML document
+			APPEND TO ARRAY:C911($tBoo_allow;True:C214)
 			
 			If ($2.allowed#Null:C1517)
 				

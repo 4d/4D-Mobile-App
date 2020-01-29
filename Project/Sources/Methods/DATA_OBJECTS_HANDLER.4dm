@@ -162,7 +162,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
 				
 				  //______________________________________________________
 		End case 
@@ -322,7 +322,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
 				
 				  //______________________________________________________
 		End case 
@@ -490,7 +490,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($event.code)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
 				
 				  //______________________________________________________
 		End case 

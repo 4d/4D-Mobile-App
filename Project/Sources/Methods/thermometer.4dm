@@ -51,7 +51,9 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"moveVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("top";$1)));\
 		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
 		"indicatorType";Formula:C1597(OBJECT Get indicator type:C1247(*;This:C1470.name));\
-		"setIndicatorType";Formula:C1597(OBJECT SET INDICATOR TYPE:C1246(*;This:C1470.name;Num:C11($1)))\
+		"setIndicatorType";Formula:C1597(OBJECT SET INDICATOR TYPE:C1246(*;This:C1470.name;Num:C11($1)));\
+		"start";Formula:C1597(thermometer ("start"));\
+		"stop";Formula:C1597(thermometer ("stop"))\
 		)
 	
 Else 
@@ -66,7 +68,22 @@ Else
 			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
 			
 			  //______________________________________________________
-		: ($1="xxxxx")
+		: ($1="start")
+			
+			If (Asserted:C1132(OBJECT Get indicator type:C1247(*;$o.name)=Asynchronous progress bar:K42:36))
+				
+				$o.pointer->:=1
+				
+			End if 
+			
+			  //______________________________________________________
+		: ($1="stop")
+			
+			If (Asserted:C1132(OBJECT Get indicator type:C1247(*;$o.name)=Asynchronous progress bar:K42:36))
+				
+				$o.pointer->:=0
+				
+			End if 
 			
 			  //______________________________________________________
 		Else 

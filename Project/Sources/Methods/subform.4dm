@@ -12,8 +12,8 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_POINTER:C301($r)
-C_TEXT:C284($t;$tt)
+C_POINTER:C301($ptr)
+C_TEXT:C284($t;$tDetail;$tList)
 C_OBJECT:C1216($o)
 
 If (False:C215)
@@ -79,12 +79,12 @@ Else
 			  //______________________________________________________
 		: ($1="getSubform")
 			
-			OBJECT GET SUBFORM:C1139(*;$o.name;$r;$t;$tt)
+			OBJECT GET SUBFORM:C1139(*;$o.name;$ptr;$tDetail;$tList)
 			
 			$o.forms:=New object:C1471(\
-				"table";$r;\
-				"detail";$t;\
-				"list";$tt)
+				"table";$ptr;\
+				"detail";$tDetail;\
+				"list";$tList)
 			
 			  //______________________________________________________
 		: ($1="setSubform")
@@ -125,17 +125,17 @@ Else
 				
 			Else 
 				
-				$r:=$2.table
+				$ptr:=$2.table
 				
 				If ($2.list#Null:C1517)
 					
 					$o.list:=String:C10($2.list)
 					
-					OBJECT SET SUBFORM:C1138(*;String:C10($o.name);$r->;String:C10($o.detail);String:C10($o.list))
+					OBJECT SET SUBFORM:C1138(*;String:C10($o.name);$ptr->;String:C10($o.detail);String:C10($o.list))
 					
 				Else 
 					
-					OBJECT SET SUBFORM:C1138(*;String:C10($o.name);$r->;String:C10($o.detail))
+					OBJECT SET SUBFORM:C1138(*;String:C10($o.name);$ptr->;String:C10($o.detail))
 					
 				End if 
 			End if 
