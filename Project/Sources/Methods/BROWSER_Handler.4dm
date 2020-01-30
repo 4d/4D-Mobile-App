@@ -44,7 +44,7 @@ Case of
 		
 		$event:=FORM Event:C1606
 		
-		commonValues.log.infos(Current form name:C1298+": "+$event.description)
+		commonValues.loggerger.info(Current form name:C1298+": "+$event.description)
 		
 		Case of 
 				

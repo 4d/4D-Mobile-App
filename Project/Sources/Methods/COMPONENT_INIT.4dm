@@ -232,8 +232,8 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	commonValues.thirdParty:="Carthage"
 	commonValues.thirdPartySources:=commonValues.thirdParty+"/Checkouts"
 	
-	commonValues.log:=logs ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
-	commonValues.log.verbose:=(Structure file:C489=Structure file:C489(*))
+	commonValues.logger:=logger ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+	commonValues.logger.verbose:=(Structure file:C489=Structure file:C489(*))
 	
 	  // ================================================================================================================================
 	  //                                                           ONLY UI PROCESS
@@ -242,7 +242,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	
 	If (Not:C34($Lon_Mode ?? 1))  // Not preemptive mode (always false in dev mode!)
 		
-		commonValues.log.reset()
+		commonValues.logger.reset()
 		
 		ui:=New object:C1471
 		
@@ -565,12 +565,12 @@ If (Not:C34($Lon_Mode ?? 1))
 		
 		If (Value type:C1509(featuresFlags[$t])=Is boolean:K8:9)
 			
-			commonValues.log.infos("feature "+$t+": "+Choose:C955(featuresFlags[$t];"Enabled";"Disabled"))
+			commonValues.logger.info("feature "+$t+": "+Choose:C955(featuresFlags[$t];"Enabled";"Disabled"))
 			
 		End if 
 	End for each 
 	
-	commonValues.log.line()
+	commonValues.logger.line()
 	
 End if 
 

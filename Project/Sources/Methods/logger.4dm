@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
-  // Project method : logs
+  // Project method : logger
   // ID[82E16D65903F4A2EB0CD458A79ECD474]
   // Created 28-1-2020 by Vincent de Lachaux
   // ----------------------------------------------------
@@ -16,29 +16,31 @@ C_TEXT:C284($t)
 C_OBJECT:C1216($file;$o)
 
 If (False:C215)
-	C_OBJECT:C1216(logs ;$0)
-	C_VARIANT:C1683(logs ;$1)
-	C_OBJECT:C1216(logs ;$2)
+	C_OBJECT:C1216(logger ;$0)
+	C_VARIANT:C1683(logger ;$1)
+	C_OBJECT:C1216(logger ;$2)
 End if 
 
   // ----------------------------------------------------
 If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
-		"";"logs";\
+		"";"logger";\
 		"destination";Into 4D debug message:K38:5;\
 		"header";Null:C1517;\
 		"success";False:C215;\
 		"verbose";False:C215;\
-		"infos";Formula:C1597(logs ("log";New object:C1471("importance";Information message:K38:1;"message";$1)));\
-		"warning";Formula:C1597(logs ("log";New object:C1471("importance";Warning message:K38:2;"message";$1)));\
-		"error";Formula:C1597(logs ("log";New object:C1471("importance";Error message:K38:3;"message";$1)));\
-		"line";Formula:C1597(logs ("line"));\
+		"info";Formula:C1597(logger ("log";New object:C1471("level";Information message:K38:1;"message";$1)));\
+		"warning";Formula:C1597(logger ("log";New object:C1471("level";Warning message:K38:2;"message";$1)));\
+		"error";Formula:C1597(logger ("log";New object:C1471("level";Error message:K38:3;"message";$1)));\
+		"line";Formula:C1597(logger ("line";New object:C1471("line";$1;"count";$2)));\
+		"log";Formula:C1597(logger (Choose:C955($2=Null:C1517;"line";"log");Choose:C955($2=Null:C1517;New object:C1471("line";$1);New object:C1471("level";$2;"message";$1))));\
 		"open";Formula:C1597(OPEN URL:C673(String:C10(This:C1470.destination.platformPath)));\
-		"reset";Formula:C1597(logs ("reset"));\
-		"setDestination";Formula:C1597(logs ("setDestination";New object:C1471("destination";$1)));\
-		"start";Formula:C1597(logs ("start"));\
-		"stop";Formula:C1597(logs ("stop"))\
+		"reset";Formula:C1597(logger ("reset"));\
+		"setDestination";Formula:C1597(logger ("setDestination";New object:C1471("destination";$1)));\
+		"start";Formula:C1597(logger ("start"));\
+		"stop";Formula:C1597(logger ("stop"));\
+		"trace";Formula:C1597(logger ("trace"))\
 		)
 	
 	If (Count parameters:C259>=1)
@@ -94,6 +96,7 @@ Else
 								
 								  //%T-
 								SET DATABASE PARAMETER:C642(Debug log recording:K37:34;Num:C11($o.logStatus))
+								
 								  //%T+
 								
 							End if 
@@ -105,6 +108,7 @@ Else
 								
 								  //%T-
 								SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69;Num:C11($o.logStatus))
+								
 								  //%T+
 								
 							End if 
@@ -168,6 +172,7 @@ Else
 							  //%T-
 							$o.logStatus:=Get database parameter:C643(Debug log recording:K37:34)
 							SET DATABASE PARAMETER:C642(Debug log recording:K37:34;1)
+							
 							  //%T+
 							
 						End if 
@@ -205,6 +210,7 @@ Else
 							
 							  //%T-
 							SET DATABASE PARAMETER:C642(Debug log recording:K37:34;Num:C11($o.logStatus))
+							
 							  //%T+
 							
 						End if 
@@ -216,6 +222,7 @@ Else
 							
 							  //%T-
 							SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69;Num:C11($o.logStatus))
+							
 							  //%T+
 							
 						End if 
@@ -230,8 +237,28 @@ Else
 			  //______________________________________________________
 		: ($1="log")
 			
-			If ($2.importance#Information message:K38:1)\
+			If ($2.level#Information message:K38:1)\
 				 | ($o.verbose)
+				
+				Case of 
+						
+						  //……………………………………………………………………………………
+					: (Value type:C1509($2.message)=Is object:K8:27)
+						
+						$2.message:=JSON Stringify:C1217($2.message;*)
+						
+						  //……………………………………………………………………………………
+					: (Value type:C1509($2.message)=Is boolean:K8:9)
+						
+						$2.message:=Choose:C955($2.message;"TRUE";"FALSE")
+						
+						  //……………………………………………………………………………………
+					Else 
+						
+						$2.message:=String:C10($2.message)
+						
+						  //……………………………………………………………………………………
+				End case 
 				
 				If (Value type:C1509($o.destination)=Is real:K8:4)
 					
@@ -240,17 +267,17 @@ Else
 						Case of 
 								
 								  //……………………………………………………………………………………………………
-							: ($2.importance=Error message:K38:3)
+							: ($2.level=Error message:K38:3)
 								
 								$t:=$t+" error: "
 								
 								  //……………………………………………………………………………………………………
-							: ($2.importance=Warning message:K38:2)
+							: ($2.level=Warning message:K38:2)
 								
 								$t:=$t+" warning: "
 								
 								  //……………………………………………………………………………………………………
-							: ($2.importance=Information message:K38:1)
+							: ($2.level=Information message:K38:1)
 								
 								$t:=$t+Choose:C955(Is Windows:C1573;" ";" note: ")
 								
@@ -265,7 +292,7 @@ Else
 						
 					End if 
 					
-					LOG EVENT:C667(Num:C11($o.destination);$t;Num:C11($2.importance))
+					LOG EVENT:C667(Num:C11($o.destination);$t;Num:C11($2.level))
 					
 				Else 
 					
@@ -274,17 +301,17 @@ Else
 					Case of 
 							
 							  //……………………………………………………………………………………………………
-						: ($2.importance=Error message:K38:3)
+						: ($2.level=Error message:K38:3)
 							
 							$t:=$t+"error: "
 							
 							  //……………………………………………………………………………………………………
-						: ($2.importance=Warning message:K38:2)
+						: ($2.level=Warning message:K38:2)
 							
 							$t:=$t+"warning: "
 							
 							  //……………………………………………………………………………………………………
-						: ($2.importance=Information message:K38:1)
+						: ($2.level=Information message:K38:1)
 							
 							$t:=$t+"info: "
 							
@@ -299,18 +326,35 @@ Else
 			  //______________________________________________________
 		: ($1="line")
 			
-			$t:="*"*100
-			
-			If (Value type:C1509($o.destination)=Is real:K8:4)
+			If ($2.line=Null:C1517)
 				
-				LOG EVENT:C667(Num:C11($o.destination);$t;Num:C11($2.importance))
+				$t:="*"*80
 				
 			Else 
 				
-				$t:=Replace string:C233(String:C10(Current date:C33;ISO date:K1:8;Current time:C178);"T";" ")+"\t("+Folder:C1567(fk database folder:K87:14).name+")\t"+$t
+				$t:=String:C10($2.line)
+				
+				If ($2.count#Null:C1517)
+					
+					$t:=$t*Num:C11($2.count)
+					
+				End if 
+			End if 
+			
+			If (Value type:C1509($o.destination)=Is real:K8:4)
+				
+				LOG EVENT:C667(Num:C11($o.destination);$t;Num:C11($2.level))
+				
+			Else 
+				
 				$o.destination.setText($o.destination.getText()+$t+"\n")
 				
 			End if 
+			
+			  //______________________________________________________
+		: ($1="trace")
+			
+			$o.error(JSON Stringify:C1217(Get call chain:C1662;*))
 			
 			  //______________________________________________________
 		Else 

@@ -17,7 +17,7 @@ C_OBJECT:C1216($archive;$event;$folder;$form;$http;$oProgress)
   // Initialisations
 $event:=FORM Event:C1606
 
-commonValues.log.infos(Current form name:C1298+"."+$event.objectName+": "+$event.description)
+commonValues.logger.info(Current form name:C1298+"."+$event.objectName+": "+$event.description)
 
   // ----------------------------------------------------
 Case of 
