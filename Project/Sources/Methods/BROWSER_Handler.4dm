@@ -44,7 +44,7 @@ Case of
 		
 		$event:=FORM Event:C1606
 		
-		commonValues.loggerger.info(Current form name:C1298+": "+$event.description)
+		commonValues.logger.info(Current form name:C1298+": "+$event.description)
 		
 		Case of 
 				
@@ -66,9 +66,10 @@ Case of
 				
 				SET TIMER:C645(0)
 				
-				
 				  //______________________________________________________
 			: ($event.code=On Bound Variable Change:K2:52)
+				
+				commonValues.logger.log("--> "+Form:C1466.url)
 				
 				$form.web.openURL(Form:C1466.url)
 				

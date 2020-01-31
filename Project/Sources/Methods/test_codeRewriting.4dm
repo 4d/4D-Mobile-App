@@ -74,10 +74,10 @@ ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("host").platformPath)
 $o:=path .hostForms()
 ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("host_forms").platformPath)
 
-$o:=path .hostListForms()
+$o:=path .hostlistForms()
 ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("host_listForms").platformPath)
 
-$o:=path .hostDetailForms()
+$o:=path .hostdetailForms()
 ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("host_detailForms").platformPath)
 
 $o:=path .hostActionIcons()

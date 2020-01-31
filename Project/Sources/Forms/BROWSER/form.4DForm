@@ -74,9 +74,7 @@
 					"height": 638,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"webEngine": "system",
 					"contextMenu": "none",
-					"urlSource": "https://translate.google.com/",
 					"borderStyle": "none",
 					"events": [
 						"onLoad",
@@ -88,7 +86,8 @@
 						"onOpenExternalLink",
 						"onWindowOpeningDenied"
 					],
-					"method": "BROWSER_OBJECTS_HANDLER"
+					"method": "BROWSER_OBJECTS_HANDLER",
+					"webEngine": "embedded"
 				}
 			}
 		}

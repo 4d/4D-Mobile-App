@@ -53,8 +53,8 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"products";Formula:C1597(path ("products";New object:C1471("create";Bool:C1537($1))));\
 		"host";Formula:C1597(path ("host";New object:C1471("create";Bool:C1537($1))));\
 		"hostForms";Formula:C1597(path ("hostForms";New object:C1471("create";Bool:C1537($1))));\
-		"hostDetailForms";Formula:C1597(path ("hostDetailForms";New object:C1471("create";Bool:C1537($1))));\
-		"hostListForms";Formula:C1597(path ("hostListForms";New object:C1471("create";Bool:C1537($1))));\
+		"hostdetailForms";Formula:C1597(path ("hostDetailForms";New object:C1471("create";Bool:C1537($1))));\
+		"hostlistForms";Formula:C1597(path ("hostListForms";New object:C1471("create";Bool:C1537($1))));\
 		"hostActionIcons";Formula:C1597(path ("hostIcons";New object:C1471("create";Bool:C1537($1))));\
 		"hostFieldIcons";Formula:C1597(path ("hostIcons";New object:C1471("create";Bool:C1537($1))));\
 		"hostFormatters";Formula:C1597(path ("hostFormatters";New object:C1471("create";Bool:C1537($1))));\

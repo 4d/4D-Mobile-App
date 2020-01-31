@@ -101,12 +101,12 @@ Case of
 										  //……………………………………………………………………………………
 									: ($t="form-list@")
 										
-										$folder:=path .hostListForms(True:C214)
+										$folder:=path .hostlistForms(True:C214)
 										
 										  //……………………………………………………………………………………
 									: ($t="form-detail@")
 										
-										$folder:=path .hostDetailForms(True:C214)
+										$folder:=path .hostdetailForms(True:C214)
 										
 										  //……………………………………………………………………………………
 									: ($t="formatter-@")

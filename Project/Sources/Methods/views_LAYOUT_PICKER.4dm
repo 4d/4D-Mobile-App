@@ -12,9 +12,9 @@ C_TEXT:C284($1)
 
 C_BLOB:C604($x)
 C_BOOLEAN:C305($success)
-C_LONGINT:C283($i;$indx;$Lon_parameters)
+C_LONGINT:C283($i;$indx)
 C_PICTURE:C286($p)
-C_TEXT:C284($dom;$t;$tProcessingInstruction)
+C_TEXT:C284($dom;$root;$t;$tDefault;$tProcessingInstruction)
 C_OBJECT:C1216($archive;$errors;$folderComponent;$folderDatabase;$o;$oLocal)
 C_OBJECT:C1216($oManifest;$oPicker;$pathTemplate;$svg)
 C_COLLECTION:C1488($c)
@@ -46,10 +46,11 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	End if 
 	
 	  // Load internal templates
-	$folderComponent:=COMPONENT_Pathname ($oLocal.type+"Forms")
+	$folderComponent:=path [$oLocal.type+"Forms"]()
 	
 	  // Load the global manifest
 	$oManifest:=JSON Parse:C1218($folderComponent.file("manifest.json").getText())
+	$tDefault:=String:C10($oManifest.default)
 	
 	For each ($o;$folderComponent.folders())
 		
@@ -69,7 +70,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	End for each 
 	
 	  // Search for templates into the host database
-	$folderDatabase:=COMPONENT_Pathname ("host_"+$oLocal.type+"Forms")
+	$folderDatabase:=path ["host"+$oLocal.type+"Forms"]()
 	
 	If ($folderDatabase.exists)
 		
@@ -148,7 +149,7 @@ End if
 
   // ----------------------------------------------------
   // Find the default template
-$tTxt_forms{0}:=String:C10($oManifest.default)
+$tTxt_forms{0}:=$tDefault
 $tTxt_forms:=Find in array:C230($tTxt_forms;$tTxt_forms{0})
 
 $oPicker:=New object:C1471(\
@@ -278,23 +279,23 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				
 				PROCESS 4D TAGS:C816($pathTemplate.getText();$t)
 				
-				$t:=DOM Parse XML variable:C720($t)
+				$root:=DOM Parse XML variable:C720($t)
 				
 				If (OK=1)
 					
 					  // Add the css reference
-					If (COMPONENT_Pathname ("templates").file("template.css").exists)
+					If (path .templates().file("template.css").exists)
 						
 						  //<?xml-stylesheet href="file://localhost/Users/vdl/Desktop/monstyle.css" type="text/css"?>
 						$tProcessingInstruction:="xml-stylesheet type=\"text/css\" href=\""\
 							+"file://localhost"+Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16);*)+"templates/template.css"\
 							+"\""
 						
-						$dom:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($t);XML processing instruction:K45:9;$tProcessingInstruction)
+						$dom:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($root);XML processing instruction:K45:9;$tProcessingInstruction)
 						
 					End if 
 					
-					SVG EXPORT TO PICTURE:C1017($t;$p;Own XML data source:K45:18)
+					SVG EXPORT TO PICTURE:C1017($root;$p;Own XML data source:K45:18)
 					CREATE THUMBNAIL:C679($p;$p;$oLocal.cell.width;$oLocal.cell.height)
 					
 				End if 
@@ -330,14 +331,17 @@ If (featuresFlags.with("resourcesBrowser"))
 	  // Put an "explore" button after the default template
 	$svg:=svg ("load";File:C1566("/RESOURCES/templates/more.svg")).setDimensions($oLocal.cell.width;$oLocal.cell.height)
 	
-	  //$oPicker.pictures.insert(1;$svg.getPicture())
-	  //$oPicker.pathnames.insert(1;Null)
-	  //$oPicker.helpTips.insert(1;str ("downloadMoreResources").localized($oLocal.type))
-	
-	$oPicker.pictures.push($svg.getPicture())
-	$oPicker.pathnames.push(Null:C1517)
-	$oPicker.helpTips.push(str ("downloadMoreResources").localized($oLocal.type))
-	
+	If (False:C215)  // Put in second position
+		$oPicker.pictures.insert(1;$svg.getPicture())
+		$oPicker.pathnames.insert(1;Null:C1517)
+		$oPicker.helpTips.insert(1;str ("downloadMoreResources").localized($oLocal.type))
+		
+	Else   // Put at the end
+		
+		$oPicker.pictures.push($svg.getPicture())
+		$oPicker.pathnames.push(Null:C1517)
+		$oPicker.helpTips.push(str ("downloadMoreResources").localized($oLocal.type))
+	End if 
 End if 
 
   // Add 1 because the widget work with arrays
