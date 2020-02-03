@@ -461,6 +461,8 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	featuresFlags.unstable(113016)  // Svg improvement in forms section
 	featuresFlags.unstable(112225)  // Select / install / use custom templates
 	
+	featuresFlags.wip("formatMarketPlace")  // Manage format as archive
+	
 End if 
 
 If ($Obj_preferences.features#Null:C1517)  // Update feature flags with the local preferences

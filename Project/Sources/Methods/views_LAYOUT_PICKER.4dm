@@ -219,7 +219,12 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 		If ($archive#Null:C1517)
 			
 			  // Create image
-			$svg:=svg .setDimensions($oLocal.cell.width;$oLocal.cell.height)
+			$svg:=svg ().setDimensions($oLocal.cell.width;$oLocal.cell.height)
+			
+			  //$svg:=svg ("solid:cornsilk").setDimensions($oLocal.cell.width;$oLocal.cell.height).setAttribute("viewport-fill-opacity";"0.50")
+			$svg.roundedRect(0;0;$oLocal.cell.width;$oLocal.cell.height).setStroke("gold").setAttribute("fill-opacity";"0.20")
+			
+			$svg.roundedRect(10;$oLocal.cell.height-18;10;10).setFill("gold").setStroke("gold")
 			
 			  // Put icon
 			$x:=$archive.root.file("layoutIconx2.png").getContent()

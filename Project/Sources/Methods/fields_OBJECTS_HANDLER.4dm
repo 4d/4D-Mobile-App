@@ -327,10 +327,12 @@ Case of
 		  //==================================================
 	: ($Obj_form.form.current=$Obj_form.resources.name)
 		
-		If (featuresFlags.with("resourcesBrowser"))
+		If (featuresFlags.with("resourcesBrowser"))\
+			 & (featuresFlags.with("formatMarketPlace"))
 			
 			  // Show browser
-			$o:=New object:C1471("url";Get localized string:C991("res_formatters"))
+			$o:=New object:C1471(\
+				"url";Get localized string:C991("res_formatters"))
 			$Obj_form.form.call(New collection:C1472("initBrowser";$o))
 			
 		Else 
@@ -338,7 +340,6 @@ Case of
 			OPEN URL:C673(Get localized string:C991("res_formatters");*)
 			
 		End if 
-		
 		  //==================================================
 	Else 
 		
