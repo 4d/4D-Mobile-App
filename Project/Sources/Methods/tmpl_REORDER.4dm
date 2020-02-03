@@ -12,7 +12,7 @@ C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($bMultiCriteria;$Boo_accepted)
 C_LONGINT:C283($indx;$Lon_keyType)
-C_TEXT:C284($dom;$Dom_field;$root;$Txt_bind)
+C_TEXT:C284($dom;$Dom_field;$root;$t;$Txt_bind)
 C_OBJECT:C1216($o;$oAttributes;$oCache;$oField;$oIN;$pathTemplate)
 C_COLLECTION:C1488($c;$Col_affected;$Col_bind;$Col_catalog)
 
@@ -30,7 +30,8 @@ $pathTemplate:=tmpl_form ($oIN.form;$oIN.selector)
 If ($pathTemplate.extension=commonValues.archiveExtension)  // Archive
 	
 	  // Get from archive
-	$root:=DOM Parse XML variable:C720($pathTemplate.file("template.svg").getText())
+	$t:=$pathTemplate.file("template.svg").getText()
+	$root:=DOM Parse XML variable:C720($t)
 	
 Else 
 	

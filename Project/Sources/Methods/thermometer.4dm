@@ -72,7 +72,7 @@ Else
 			
 			If (Asserted:C1132(OBJECT Get indicator type:C1247(*;$o.name)=Asynchronous progress bar:K42:36))
 				
-				$o.pointer->:=1
+				$o.pointer()->:=1
 				
 			End if 
 			
@@ -81,7 +81,7 @@ Else
 			
 			If (Asserted:C1132(OBJECT Get indicator type:C1247(*;$o.name)=Asynchronous progress bar:K42:36))
 				
-				$o.pointer->:=0
+				$o.pointer()->:=0
 				
 			End if 
 			
