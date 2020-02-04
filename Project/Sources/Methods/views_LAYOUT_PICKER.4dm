@@ -14,9 +14,9 @@ C_BLOB:C604($x)
 C_BOOLEAN:C305($success)
 C_LONGINT:C283($i;$indx)
 C_PICTURE:C286($p)
-C_TEXT:C284($dom;$root;$t;$tDefault;$tProcessingInstruction)
+C_TEXT:C284($dom;$root;$t;$tDefault;$tTypeForm)
 C_OBJECT:C1216($archive;$errors;$folderComponent;$folderDatabase;$o;$oLocal)
-C_OBJECT:C1216($oManifest;$oPicker;$pathTemplate;$svg)
+C_OBJECT:C1216($oManifest;$oPicker;$pathTemplate;$str;$svg)
 C_COLLECTION:C1488($c)
 
 ARRAY TEXT:C222($tTxt_forms;0)
@@ -44,6 +44,8 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		  // <NONE>
 		
 	End if 
+	
+	$str:=str 
 	
 	  // Load internal templates
 	$folderComponent:=path [$oLocal.type+"Forms"]()
@@ -95,7 +97,10 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		
 		If (featuresFlags.with("resourcesBrowser"))
 			
-/* START HIDING ERRORS */$errors:=err .hide()
+/***********************
+START HIDING ERRORS
+***********************/
+			$errors:=err .hide()
 			
 			  // Add downloaded templates
 			For each ($o;$folderDatabase.files().query("extension = :1";commonValues.archiveExtension))
@@ -131,13 +136,19 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 				End if 
 			End for each 
 			
-/* STOP HIDING ERRORS */$errors.show()
+/***********************
+STOP HIDING ERRORS
+***********************/
+			$errors.show()
 			
 		End if 
 		
 		$oLocal.forms.combine($c)
 		
 	End if 
+	
+	  // Sorting will put the downloaded models first
+	$oLocal.forms:=$oLocal.forms.orderBy()
 	
 	COLLECTION TO ARRAY:C1562($oLocal.forms;$tTxt_forms)
 	
@@ -148,7 +159,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-  // Find the default template
+  // Find the default template & keep its index
 $tTxt_forms{0}:=$tDefault
 $tTxt_forms:=Find in array:C230($tTxt_forms;$tTxt_forms{0})
 
@@ -169,12 +180,26 @@ $oPicker:=New object:C1471(\
 "promptBackColor";ui.strokeColor;\
 "hidePromptSeparator";True:C214;\
 "forceRedraw";True:C214;\
-"prompt";str .setText("selectAFormTemplateToUseAs").localized($oLocal.type);\
+"prompt";$str.setText("selectAFormTemplateToUseAs").localized($oLocal.type);\
 "selector";$oLocal.type)
 
 $oPicker.vOffset:=155  // Offset of the background button
 
-/* START HIDING ERRORS */$errors:=err .hide()
+  // List of forms used in this project
+$oPicker.marked:=New collection:C1472
+
+$tTypeForm:=Form:C1466.$dialog.VIEWS.typeForm()
+
+For each ($t;Form:C1466[$tTypeForm])
+	
+	$oPicker.marked.push(Form:C1466[$tTypeForm][$t].form)
+	
+End for each 
+
+/***********************
+START HIDING ERRORS
+***********************/
+$errors:=err .hide()
 
 For ($i;1;Size of array:C274($tTxt_forms);1)
 	
@@ -221,16 +246,20 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			  // Create image
 			$svg:=svg ().setDimensions($oLocal.cell.width;$oLocal.cell.height)
 			
-			  //$svg:=svg ("solid:cornsilk").setDimensions($oLocal.cell.width;$oLocal.cell.height).setAttribute("viewport-fill-opacity";"0.50")
-			$svg.roundedRect(0;0;$oLocal.cell.width;$oLocal.cell.height).setStroke("gold").setAttribute("fill-opacity";"0.20")
+			$svg.roundedRect(0;0;$oLocal.cell.width;$oLocal.cell.height).setStroke("gold").setFill("none")
 			
-			$svg.roundedRect(10;$oLocal.cell.height-18;10;10).setFill("gold").setStroke("gold")
+			If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
+				
+				$svg.roundedRect(10;$oLocal.cell.height-18;10;10).setFill("gold").setStroke("gold")
+				
+			End if 
 			
 			  // Put icon
 			$x:=$archive.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x;$p)
 			$svg.embedPicture($p;-10;0)
 			
+			  // Get the manifest
 			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
 			
 			  // Put text
@@ -241,7 +270,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			
 			$oPicker.pictures.push($svg.getPicture())
 			$oPicker.pathnames.push($tTxt_forms{$i})
-			$oPicker.helpTips.push(str .setText("tipsTemplate").localized(New collection:C1472(String:C10($pathTemplate.fullName);String:C10($o.organization.login);String:C10($o.version))))
+			$oPicker.helpTips.push($str.setText("tipsTemplate").localized(New collection:C1472(String:C10($pathTemplate.fullName);String:C10($o.organization.login);String:C10($o.version))))
 			
 		Else 
 			
@@ -266,6 +295,12 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				
 				  // Title
 				$t:=$tTxt_forms{$i}
+				
+				If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
+					
+					$svg.roundedRect(10;$oLocal.cell.height-18;10;10).setFill("gold").setStroke("gold")
+					
+				End if 
 				
 				If ($t[[1]]="/")  // Database template
 					
@@ -292,11 +327,11 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 					If (path .templates().file("template.css").exists)
 						
 						  //<?xml-stylesheet href="file://localhost/Users/vdl/Desktop/monstyle.css" type="text/css"?>
-						$tProcessingInstruction:="xml-stylesheet type=\"text/css\" href=\""\
+						$t:="xml-stylesheet type=\"text/css\" href=\""\
 							+"file://localhost"+Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16);*)+"templates/template.css"\
 							+"\""
 						
-						$dom:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($root);XML processing instruction:K45:9;$tProcessingInstruction)
+						$dom:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($root);XML processing instruction:K45:9;$t)
 						
 					End if 
 					
@@ -329,7 +364,10 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 	End if 
 End for 
 
-/* STOP HIDING ERRORS */$errors.show()
+/***********************
+STOP HIDING ERRORS
+***********************/
+$errors.show()
 
 If (featuresFlags.with("resourcesBrowser"))
 	
@@ -339,13 +377,13 @@ If (featuresFlags.with("resourcesBrowser"))
 	If (False:C215)  // Put in second position
 		$oPicker.pictures.insert(1;$svg.getPicture())
 		$oPicker.pathnames.insert(1;Null:C1517)
-		$oPicker.helpTips.insert(1;str ("downloadMoreResources").localized($oLocal.type))
+		$oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($oLocal.type))
 		
 	Else   // Put at the end
 		
 		$oPicker.pictures.push($svg.getPicture())
 		$oPicker.pathnames.push(Null:C1517)
-		$oPicker.helpTips.push(str ("downloadMoreResources").localized($oLocal.type))
+		$oPicker.helpTips.push($str.setText("downloadMoreResources").localized($oLocal.type))
 	End if 
 End if 
 

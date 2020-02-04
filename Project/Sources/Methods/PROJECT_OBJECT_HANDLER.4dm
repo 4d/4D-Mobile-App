@@ -8,56 +8,46 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_LONGINT:C283($Lon_formEvent;$Lon_parameters;$Lon_x)
-C_POINTER:C301($Ptr_;$Ptr_me)
-C_TEXT:C284($Txt_me)
-C_COLLECTION:C1488($Col_)
+C_LONGINT:C283($indx)
+C_POINTER:C301($ptr)
+C_OBJECT:C1216($event)
+C_COLLECTION:C1488($c)
+
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+  // NO PARAMETERS REQUIRED
+
+  // Optional parameters
+If (Count parameters:C259>=1)
 	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		  // <NONE>
-		
-	End if 
-	
-	$Lon_formEvent:=Form event code:C388
-	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
-	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
-	
-Else 
-	
-	ABORT:C156
+	  // <NONE>
 	
 End if 
+
+$event:=FORM Event:C1606
 
   // ----------------------------------------------------
 Case of 
 		
 		  //==================================================
-	: ($Txt_me="help.@")
+	: ($event.objectName="help.@")
 		
-		$Col_:=Split string:C1554($Txt_me;".")
+		$c:=Split string:C1554($event.objectName;".")
 		
 		ARRAY TEXT:C222($tTxt_objects;0x0000)
 		FORM GET OBJECTS:C898($tTxt_objects)
 		
-		$Lon_x:=Find in array:C230($tTxt_objects;"panel."+String:C10($Col_[$Col_.length-1]))
+		$indx:=Find in array:C230($tTxt_objects;"panel."+String:C10($c[$c.length-1]))
 		
-		If ($Lon_x>0)
+		If ($indx>0)
 			
-			OBJECT GET SUBFORM:C1139(*;$tTxt_objects{$Lon_x};$Ptr_;$Txt_me)
+			OBJECT GET SUBFORM:C1139(*;$tTxt_objects{$indx};$ptr;$event.objectName)
 			
-			If (Form:C1466.$dialog[$Txt_me].help#Null:C1517)
+			If (Form:C1466.$dialog[$event.objectName].help#Null:C1517)
 				
-				OPEN URL:C673(String:C10(Form:C1466.$dialog[$Txt_me].help);*)
+				OPEN URL:C673(String:C10(Form:C1466.$dialog[$event.objectName].help);*)
 				
 			Else 
 				
@@ -67,39 +57,39 @@ Case of
 		End if 
 		
 		  //==================================================
-	: ($Txt_me="panel.@")
+	: ($event.objectName="panel.@")
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Losing Focus:K2:8)
+			: ($event.code=On Losing Focus:K2:8)
 				
 				CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"onLosingFocus";New object:C1471(\
-					"panel";$Txt_me))
+					"panel";$event.objectName))
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($Txt_me="picker")
+	: ($event.objectName="picker")
 		
 		Case of 
 				
 				  // ----------------------------------------
-			: ($Lon_formEvent<0)  // <SUBFORM EVENTS>
+			: ($event.code<0)  // <SUBFORM EVENTS>
 				
 				Case of 
 						
 						  //…………………………………………………………………………………………………
-					: ($Lon_formEvent=-1)  // Close
+					: ($event.code=-1)  // Close
 						
 						  // Send result to the caller
-						CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"pickerResume";$Ptr_me->)
+						CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"pickerResume";Self:C308->)
 						
 						  //…………………………………………………………………………………………………
 					: (False:C215)
@@ -107,7 +97,7 @@ Case of
 						  //…………………………………………………………………………………………………
 					Else 
 						
-						ASSERT:C1129(False:C215;"Unknown call from subform ("+String:C10($Lon_formEvent)+")")
+						ASSERT:C1129(False:C215;"Unknown call from subform ("+String:C10($event.code)+")")
 						
 						  //…………………………………………………………………………………………………
 				End case 
@@ -115,15 +105,20 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
+	: ($event.objectName="picker.close")
+		
+		CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"pickerHide";(OBJECT Get pointer:C1124(Object named:K67:5;"picker"))->)
+		
+		  //==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown object: \""+$Txt_me+"\"")
+		ASSERT:C1129(False:C215;"Unknown object: \""+$event.objectName+"\"")
 		
 		  //==================================================
 End case 

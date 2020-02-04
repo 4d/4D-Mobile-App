@@ -26,6 +26,37 @@ Case of
 			
 			CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"hideBrowser")
 			
+			$o:=Self:C308->
+			
+			If ($o.use#Null:C1517)
+				
+				Case of 
+						
+						  //______________________________________________________
+					: ($o.selector="form-list")\
+						 | ($o.selector="form-detail")  // Forms
+						
+						CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"setForm";New object:C1471(\
+							"type";$o.selector;\
+							"form";"/"+$o.use))
+						
+						  //______________________________________________________
+					: ($o.selector="form-formatter")
+						
+						  //
+						
+						  //______________________________________________________
+					: ($o.selector="form-login")
+						
+						  //
+						
+						  //______________________________________________________
+					Else 
+						
+						  // A "Case of" statement should never omit "Else"
+						  //______________________________________________________
+				End case 
+			End if 
 		End if 
 		
 		  //==================================================

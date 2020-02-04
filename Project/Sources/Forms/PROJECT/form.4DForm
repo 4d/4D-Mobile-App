@@ -71,10 +71,10 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"method": "ObjectMethods/panel.1.4dm",
 					"events": [
 						"onLosingFocus"
-					]
+					],
+					"method": "PROJECT_OBJECT_HANDLER"
 				}
 			}
 		},
@@ -134,10 +134,10 @@
 					"sizingY": "grow",
 					"shortcutKey": "[Esc]",
 					"display": false,
-					"method": "ObjectMethods/picker.close.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "PROJECT_OBJECT_HANDLER"
 				},
 				"picker": {
 					"type": "subform",
@@ -154,7 +154,7 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"method": "ObjectMethods/picker.4dm"
+					"method": "PROJECT_OBJECT_HANDLER"
 				},
 				"help.1": {
 					"type": "button",
@@ -165,11 +165,11 @@
 					"visibility": "hidden",
 					"sizingX": "fixed",
 					"style": "help",
-					"method": "ObjectMethods/help.1.4dm",
 					"events": [
 						"onClick"
 					],
-					"focusable": false
+					"focusable": false,
+					"method": "PROJECT_OBJECT_HANDLER"
 				}
 			}
 		}

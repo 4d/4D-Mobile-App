@@ -458,133 +458,16 @@ Case of
 		$form.fieldGroup.show()
 		$form.previewGroup.show()
 		
+		C_BOOLEAN:C305($bSet)
+		
 		If ($oIN.item>0)\
 			 & ($oIN.item<=$oIN.pathnames.length)
-			
-			$tTable:=$context.tableNum()
 			
 			If ($oIN.pathnames[$oIN.item-1]#Null:C1517)
 				
 				  // The selected form
 				$tNewForm:=$oIN.pathnames[$oIN.item-1]
-				
-				  // The current table form
-				$t:=String:C10(Form:C1466[$oIN.selector][$tTable].form)
-				
-				If ($tNewForm#$t)
-					
-					$oTarget:=Form:C1466[$oIN.selector][$context.tableNumber]
-					
-					$oIN.target:=OB Copy:C1225($oTarget)
-					OB REMOVE:C1226($oIN.target;"form")
-					
-					If (Length:C16($t)#0)
-						
-						  // Save a snapshot of the current form definition
-						Case of 
-								
-								  //______________________________________________________
-							: ($context[$tTable]=Null:C1517)
-								
-								$context[$tTable]:=New object:C1471(\
-									$oIN.selector;New object:C1471($t;\
-									$oIN.target))
-								
-								  //______________________________________________________
-							: ($context[$tTable][$oIN.selector]=Null:C1517)
-								
-								$context[$tTable][$oIN.selector]:=New object:C1471(\
-									$t;$oIN.target)
-								
-								  //______________________________________________________
-							Else 
-								
-								$context[$tTable][$oIN.selector][$t]:=$oIN.target
-								
-								  //______________________________________________________
-						End case 
-					End if 
-					
-					  // Update project & save [
-					$oTarget.form:=$tNewForm
-					
-					OB REMOVE:C1226($context;"manifest")
-					
-					project.save()
-					  //]
-					
-					If (ob_testPath (Form:C1466.$project;"status";"project"))
-						
-						If (Not:C34(Form:C1466.$project.status.project))
-							
-							  // Launch project verifications
-							$form.form.call("projectAudit")
-							
-						End if 
-					End if 
-					
-					If ($context[$tTable][$oIN.selector][$tNewForm]=Null:C1517)
-						
-						If ($oTarget.fields=Null:C1517)
-							
-							$oTarget.fields:=New collection:C1472
-							
-						End if 
-						
-						  // Create a new binding
-						$c:=$oTarget.fields.copy()
-						
-						If ($context[$tTable]#Null:C1517)
-							
-							If ($context[$tTable][$oIN.selector]#Null:C1517)
-								
-								  // Enrich with the fields already used during the session
-								For each ($tTypeForm;$context[$tTable][$oIN.selector])
-									
-									For each ($o;$context[$tTable][$oIN.selector][$tTypeForm].fields.filter("col_notNull"))
-										
-										If ($c.extract("name").indexOf($o.name)=-1)
-											
-											$c.push($o)
-											
-										End if 
-									End for each 
-								End for each 
-							End if 
-						End if 
-						
-					Else 
-						
-						  // Reuse the last snapshot
-						$c:=$context[$tTable][$oIN.selector][$tNewForm].fields
-						
-						  // Enrich the last snapshot with the fields already used during the session
-						For each ($tTypeForm;$context[$tTable][$oIN.selector])
-							
-							If ($tTypeForm#$tNewForm)
-								
-								For each ($o;$context[$tTable][$oIN.selector][$tTypeForm].fields.filter("col_notNull"))
-									
-									If ($c.extract("name").indexOf($o.name)=-1)
-										
-										$c.push($o)
-										
-									End if 
-								End for each 
-							End if 
-						End for each 
-					End if 
-					
-					$oIN.form:=$tNewForm
-					$oIN.tableNumber:=$tTable
-					
-					tmpl_REORDER ($oIN)
-					
-				End if 
-				
-				  // Redraw
-				$context.draw:=True:C214
-				$form.form.refresh()
+				$bSet:=True:C214
 				
 			Else 
 				
@@ -595,6 +478,146 @@ Case of
 				$form.form.call(New collection:C1472("initBrowser";$o))
 				
 			End if 
+			
+		Else 
+			
+			If ($oIN.form#Null:C1517)  //browser auto close
+				
+				$tNewForm:=$oIN.form
+				$bSet:=True:C214
+				
+			Else 
+				
+				  // A "If" statement should never omit "Else" 
+				
+			End if 
+			
+			
+		End if 
+		
+		If ($bSet)
+			
+			$tTable:=$context.tableNum()
+			
+			  // The current table form
+			$t:=String:C10(Form:C1466[$oIN.selector][$tTable].form)
+			
+			If ($tNewForm#$t)
+				
+				$oTarget:=Form:C1466[$oIN.selector][$context.tableNumber]
+				
+				$oIN.target:=OB Copy:C1225($oTarget)
+				OB REMOVE:C1226($oIN.target;"form")
+				
+				If (Length:C16($t)#0)
+					
+					  // Save a snapshot of the current form definition
+					Case of 
+							
+							  //______________________________________________________
+						: ($context[$tTable]=Null:C1517)
+							
+							$context[$tTable]:=New object:C1471(\
+								$oIN.selector;New object:C1471($t;\
+								$oIN.target))
+							
+							  //______________________________________________________
+						: ($context[$tTable][$oIN.selector]=Null:C1517)
+							
+							$context[$tTable][$oIN.selector]:=New object:C1471(\
+								$t;$oIN.target)
+							
+							  //______________________________________________________
+						Else 
+							
+							$context[$tTable][$oIN.selector][$t]:=$oIN.target
+							
+							  //______________________________________________________
+					End case 
+				End if 
+				
+				  // Update project & save [
+				$oTarget.form:=$tNewForm
+				
+				OB REMOVE:C1226($context;"manifest")
+				
+				project.save()
+				  //]
+				
+				If (ob_testPath (Form:C1466.$project;"status";"project"))
+					
+					If (Not:C34(Form:C1466.$project.status.project))
+						
+						  // Launch project verifications
+						$form.form.call("projectAudit")
+						
+					End if 
+				End if 
+				
+				If ($context[$tTable][$oIN.selector][$tNewForm]=Null:C1517)
+					
+					If ($oTarget.fields=Null:C1517)
+						
+						$oTarget.fields:=New collection:C1472
+						
+					End if 
+					
+					  // Create a new binding
+					$c:=$oTarget.fields.copy()
+					
+					If ($context[$tTable]#Null:C1517)
+						
+						If ($context[$tTable][$oIN.selector]#Null:C1517)
+							
+							  // Enrich with the fields already used during the session
+							For each ($tTypeForm;$context[$tTable][$oIN.selector])
+								
+								For each ($o;$context[$tTable][$oIN.selector][$tTypeForm].fields.filter("col_notNull"))
+									
+									If ($c.extract("name").indexOf($o.name)=-1)
+										
+										$c.push($o)
+										
+									End if 
+								End for each 
+							End for each 
+						End if 
+					End if 
+					
+				Else 
+					
+					  // Reuse the last snapshot
+					$c:=$context[$tTable][$oIN.selector][$tNewForm].fields
+					
+					  // Enrich the last snapshot with the fields already used during the session
+					For each ($tTypeForm;$context[$tTable][$oIN.selector])
+						
+						If ($tTypeForm#$tNewForm)
+							
+							For each ($o;$context[$tTable][$oIN.selector][$tTypeForm].fields.filter("col_notNull"))
+								
+								If ($c.extract("name").indexOf($o.name)=-1)
+									
+									$c.push($o)
+									
+								End if 
+							End for each 
+						End if 
+					End for each 
+				End if 
+				
+				$oIN.form:=$tNewForm
+				$oIN.tableNumber:=$tTable
+				
+				tmpl_REORDER ($oIN)
+				
+			End if 
+			
+			  // Redraw
+			$context.draw:=True:C214
+			$form.form.refresh()
+			
+			
 		End if 
 		
 		  //=========================================================

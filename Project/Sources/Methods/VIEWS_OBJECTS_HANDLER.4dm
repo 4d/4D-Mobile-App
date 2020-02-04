@@ -11,7 +11,7 @@
 C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
-C_BOOLEAN:C305($b)
+C_BOOLEAN:C305($b;$bAvailable)
 C_LONGINT:C283($l)
 C_PICTURE:C286($p)
 C_TEXT:C284($tTable;$tTemplate;$tTypeForm)
@@ -65,6 +65,17 @@ Case of
 				$tTable:=SVG Find element ID by coordinates:C1054(*;$event.objectName;MOUSEX;MOUSEY)
 				$tTemplate:=String:C10(Form:C1466[$tTypeForm][$tTable].form)
 				
+				If ($tTemplate[[1]]="/")
+					
+					$bAvailable:=path ["host"+$tTypeForm+"Forms"]().file(Substring:C12($tTemplate;2)).exists\
+						 | path ["host"+$tTypeForm+"Forms"]().folder(Substring:C12($tTemplate;2)).exists
+					
+				Else 
+					
+					$bAvailable:=path [$tTypeForm+"Forms"]().folder($tTemplate).exists
+					
+				End if 
+				
 				Case of 
 						
 						  //______________________________________________________
@@ -105,13 +116,11 @@ Case of
 						  //______________________________________________________
 					: ($tTable#$context.tableNum())\
 						 | (Length:C16($tTemplate)=0)\
-						 | (Not:C34(path [$tTypeForm]($tTemplate).exists))
+						 | Not:C34($bAvailable)
 						
-						If ($tTable#$context.tableNum())
+						If ($tTable#$context.tableNum()) & $bAvailable
 							
 							$form.form.call("pickerHide")
-							
-							$context.tableNumber:=$tTable
 							
 						End if 
 						
@@ -130,6 +139,9 @@ Case of
 						$context.draw:=True:C214
 						$context.update:=True:C214
 						$context.picker:=(Length:C16($tTemplate)=0)
+						
+						
+						$context.tableNumber:=$tTable
 						
 						  //______________________________________________________
 					Else 

@@ -4,8 +4,8 @@ C_LONGINT:C283($l;$Lon_build;$Lon_error;$Lon_result;$Lon_type;$Lon_value)
 C_LONGINT:C283($Lon_x)
 C_REAL:C285($Num_;$r)
 C_TEXT:C284($Dir_root;$t;$tt;$Txt_in;$Txt_ormula;$Txt_result)
-C_OBJECT:C1216($folder;$o;$o1;$o2;$Obj_formula;$Obj_new)
-C_OBJECT:C1216($Obj_result;$Obj_target;$Obj_template;$oErrors;$svg)
+C_OBJECT:C1216($file;$folder;$o;$o1;$o2;$Obj_formula)
+C_OBJECT:C1216($Obj_new;$Obj_result;$Obj_target;$Obj_template;$svg;$zip)
 C_COLLECTION:C1488($c;$c1;$Col_2)
 
 ARRAY TEXT:C222($tTxt_;0)
@@ -23,6 +23,25 @@ Case of
 		
 		  //________________________________________
 	: (True:C214)
+		
+		$file:=Folder:C1567(fk desktop folder:K87:19).file("load.html")
+		$folder:=Folder:C1567(fk desktop folder:K87:19).file("DEV/test.zip")
+		$zip:=ZIP Create archive:C1640($file;$folder)
+		
+		  //$zip:=ZIP Read archive($folder)
+		
+		  //$c:=New collection
+		  //For each ($o;$zip.root.files())
+		
+		  //$c.push($o)
+		
+		  //End for each 
+		
+		  //$o:=New object()
+		  //$o.files:=$c
+		
+		
+		  //$zip:=ZIP Create archive($o;$folder)
 		
 		  //this command list all loaded component with path
 		  //$c:=WEB Servers list

@@ -235,7 +235,7 @@ Case of
 					  //……………………………………………………………………………………………
 				: ($Obj_form.currentForm=$Obj_form.fieldProperties)
 					
-					FIELDS_HANDLER ($Obj_in)
+					FIELDS_Handler ($Obj_in)
 					
 					  //……………………………………………………………………………………………
 				: ($Obj_form.currentForm=$Obj_form.views)
@@ -254,13 +254,13 @@ Case of
 		  //______________________________________________________
 	: ($Txt_selector="projectAudit")  // Verify the project integrity
 		
-		PROJECT_HANDLER (New object:C1471("action";$Txt_selector))
+		PROJECT_Handler (New object:C1471("action";$Txt_selector))
 		
 		  //______________________________________________________
 	: ($Txt_selector="projectFixErrors")  // Fix the project errors
 		
 		$Obj_in.action:=$Txt_selector
-		PROJECT_HANDLER ($Obj_in)
+		PROJECT_Handler ($Obj_in)
 		
 		  //______________________________________________________
 	: ($Txt_selector="mainMenu")  // Update Main menu panel
@@ -340,7 +340,7 @@ Case of
 			
 		Else 
 			
-			FIELDS_HANDLER (New object:C1471(\
+			FIELDS_Handler (New object:C1471(\
 				"action";"update"))
 			
 		End if 
@@ -361,7 +361,7 @@ Case of
 			
 		Else 
 			
-			FIELDS_HANDLER (New object:C1471(\
+			FIELDS_Handler (New object:C1471(\
 				"action";"icons"))
 			
 		End if 
@@ -569,7 +569,7 @@ Case of
 							If ($Obj_in.field#Null:C1517)  // Select field
 								
 								  // Set the selected field
-								FIELDS_HANDLER (New object:C1471(\
+								FIELDS_Handler (New object:C1471(\
 									"action";"select";\
 									"fieldNumber";Num:C11($Obj_in.field)))
 								
@@ -620,6 +620,37 @@ Case of
 		Else 
 			
 			$Obj_in.action:=$Txt_selector
+			VIEWS_Handler ($Obj_in)
+			
+		End if 
+		
+		  //______________________________________________________
+	: ($Txt_selector="setForm")  // Set form from browser
+		
+		If ($Obj_form.currentForm=$Obj_form.project)
+			
+			  // Pass to target panel
+			$Txt_panel:=panel_Find_by_name ($Obj_form.views)
+			
+			If (Length:C16($Txt_panel)>0)
+				
+				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				
+			End if 
+			
+		Else 
+			
+			If ($Obj_in=Null:C1517)
+				
+				$Obj_in:=New object:C1471("action";"forms")
+				
+			Else 
+				
+				$Obj_in.action:="forms"
+				$Obj_in.selector:=Replace string:C233($Obj_in.type;"form-";"")
+				
+			End if 
+			
 			VIEWS_Handler ($Obj_in)
 			
 		End if 

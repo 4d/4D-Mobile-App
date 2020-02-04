@@ -4,14 +4,12 @@
   // Created 27-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
-C_LONGINT:C283($column;$indx;$l;$Lon_x;$Lon_y;$row)
-C_TEXT:C284($Txt_me)
+C_LONGINT:C283($indx)
 C_OBJECT:C1216($event)
 
   // ----------------------------------------------------
   // Initialisations
 $event:=FORM Event:C1606
-$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 
   // ----------------------------------------------------
 Case of 
@@ -19,16 +17,10 @@ Case of
 		  //______________________________________________________
 	: ($event.code=On Clicked:K2:4)
 		
-		If (Not:C34(Macintosh command down:C546))
-			
-			LISTBOX GET CELL POSITION:C971(*;$Txt_me;$column;$row)
-			
-		End if 
+		Form:C1466.selectColumn:=$event.column
+		Form:C1466.selectRow:=$event.row
 		
-		Form:C1466.selectColumn:=$column
-		Form:C1466.selectRow:=$row
-		
-		$indx:=(LISTBOX Get number of columns:C831(*;$Txt_me)*($row-1))+$column
+		$indx:=(LISTBOX Get number of columns:C831(*;$event.objectName)*($event.row-1))+$event.column
 		
 		If ($indx<=Form:C1466.pictures.length)
 			
@@ -67,10 +59,7 @@ Case of
 		  //______________________________________________________
 	: ($event.code=On Mouse Move:K2:35)
 		
-		GET MOUSE:C468($Lon_x;$Lon_y;$l)
-		LISTBOX GET CELL POSITION:C971(*;$Txt_me;$Lon_x;$Lon_y;$column;$row)
-		
-		$indx:=(LISTBOX Get number of columns:C831(*;$Txt_me)*($row-1))+$column
+		$indx:=(LISTBOX Get number of columns:C831(*;$event.objectName)*($event.row-1))+$event.column
 		
 		If ($indx>0)\
 			 & ($indx<=Form:C1466.pictures.length)
@@ -79,7 +68,7 @@ Case of
 				
 				If (featuresFlags.with("resourcesBrowser"))
 					
-					OBJECT SET HELP TIP:C1181(*;$Txt_me;Get localized string:C991("findAndDownloadMoreResources"))
+					OBJECT SET HELP TIP:C1181(*;$event.objectName;Get localized string:C991("findAndDownloadMoreResources"))
 					
 				End if 
 				
@@ -87,18 +76,18 @@ Case of
 				
 				If (Form:C1466.helpTips[$indx-1]#Null:C1517)
 					
-					OBJECT SET HELP TIP:C1181(*;$Txt_me;String:C10(Form:C1466.helpTips[$indx-1]))
+					OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.helpTips[$indx-1]))
 					
 				Else 
 					
-					OBJECT SET HELP TIP:C1181(*;$Txt_me;String:C10(Form:C1466.pathnames[$indx-1]))
+					OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.pathnames[$indx-1]))
 					
 				End if 
 			End if 
 			
 		Else 
 			
-			OBJECT SET HELP TIP:C1181(*;$Txt_me;"")
+			OBJECT SET HELP TIP:C1181(*;$event.objectName;"")
 			
 		End if 
 		
