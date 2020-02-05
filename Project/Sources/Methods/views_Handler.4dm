@@ -11,6 +11,7 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
+C_BOOLEAN:C305($bSetForm)
 C_LONGINT:C283($eventCode;$i;$l;$offset)
 C_TEXT:C284($t;$tFormName;$tNewForm;$tTable;$tTypeForm)
 C_OBJECT:C1216($context;$form;$o;$o1;$oDataModel;$oIN)
@@ -458,44 +459,35 @@ Case of
 		$form.fieldGroup.show()
 		$form.previewGroup.show()
 		
-		C_BOOLEAN:C305($bSet)
-		
-		If ($oIN.item>0)\
-			 & ($oIN.item<=$oIN.pathnames.length)
+		If ($oIN.form#Null:C1517)  // Browser auto close
 			
-			If ($oIN.pathnames[$oIN.item-1]#Null:C1517)
-				
-				  // The selected form
-				$tNewForm:=$oIN.pathnames[$oIN.item-1]
-				$bSet:=True:C214
-				
-			Else 
-				
-				  // Show browser
-				$o:=New object:C1471(\
-					"url";Get localized string:C991("res_"+$context.typeForm()+"Forms"))
-				
-				$form.form.call(New collection:C1472("initBrowser";$o))
-				
-			End if 
+			$tNewForm:=$oIN.form
+			$bSetForm:=True:C214
 			
 		Else 
 			
-			If ($oIN.form#Null:C1517)  //browser auto close
+			If ($oIN.item>0)\
+				 & ($oIN.item<=$oIN.pathnames.length)
 				
-				$tNewForm:=$oIN.form
-				$bSet:=True:C214
-				
-			Else 
-				
-				  // A "If" statement should never omit "Else" 
-				
+				If ($oIN.pathnames[$oIN.item-1]#Null:C1517)
+					
+					  // The selected form
+					$tNewForm:=$oIN.pathnames[$oIN.item-1]
+					$bSetForm:=True:C214
+					
+				Else 
+					
+					  // Show browser
+					$o:=New object:C1471(\
+						"url";Get localized string:C991("res_"+$context.typeForm()+"Forms"))
+					
+					$form.form.call(New collection:C1472("initBrowser";$o))
+					
+				End if 
 			End if 
-			
-			
 		End if 
 		
-		If ($bSet)
+		If ($bSetForm)
 			
 			$tTable:=$context.tableNum()
 			
@@ -616,7 +608,6 @@ Case of
 			  // Redraw
 			$context.draw:=True:C214
 			$form.form.refresh()
-			
 			
 		End if 
 		

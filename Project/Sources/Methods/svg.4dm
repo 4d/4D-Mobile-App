@@ -17,7 +17,7 @@ C_LONGINT:C283($i)
 C_PICTURE:C286($p)
 C_REAL:C285($Num_height;$Num_width)
 C_TEXT:C284($Dom_;$Dom_target;$t;$tt;$Txt_object)
-C_OBJECT:C1216($file;$o;$o_;$signal)
+C_OBJECT:C1216($file;$o;$oOptions;$signal)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -181,12 +181,12 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 						  //______________________________________________________
 					: (Match regex:C1019("(?m-si)^\\{.*\\}$";$t;1))  // json object
 						
-						$o_:=JSON Parse:C1218($t)
+						$oOptions:=JSON Parse:C1218($t)
 						
-						For each ($tt;$o_)
+						For each ($tt;$oOptions)
 							
 							DOM SET XML ATTRIBUTE:C866($o.root;\
-								$tt;$o_[$tt])
+								$tt;$oOptions[$tt])
 							
 						End for each 
 						
@@ -237,7 +237,7 @@ Else
 		Else 
 			
 			$o.success:=True:C214
-			$o_:=$2.options
+			$oOptions:=$2.options
 			$Txt_object:=String:C10($2.what)
 			
 			  // Find the target
@@ -246,12 +246,12 @@ Else
 					  //______________________________________________________
 				: (New collection:C1472("new";"findByPath").indexOf($1)#-1)
 					
-					$Dom_target:=Choose:C955($o_.target#Null:C1517;String:C10($o_.target);$o.root)
+					$Dom_target:=Choose:C955($oOptions.target#Null:C1517;String:C10($oOptions.target);$o.root)
 					
 					  //______________________________________________________
 				: ($1="set")
 					
-					If ($o_.target=Null:C1517)
+					If ($oOptions.target=Null:C1517)
 						
 						If ($o.latest=Null:C1517)
 							
@@ -266,7 +266,7 @@ Else
 						
 					Else 
 						
-						$Dom_target:=$o_.target
+						$Dom_target:=$oOptions.target
 						
 					End if 
 					
@@ -393,7 +393,7 @@ Else
 						: ($Txt_object="picture")
 							
 							  // Own XML data source
-							SVG EXPORT TO PICTURE:C1017($o.root;$p;Choose:C955($o_.exportType#Null:C1517;Num:C11($o_.exportType);Copy XML data source:K45:17))
+							SVG EXPORT TO PICTURE:C1017($o.root;$p;Choose:C955($oOptions.exportType#Null:C1517;Num:C11($oOptions.exportType);Copy XML data source:K45:17))
 							$o.success:=(Picture size:C356($p)>0)
 							
 							If ($o.success)
@@ -618,8 +618,8 @@ Else
 								If (OK=1)
 									
 									  // Get width & height of the picture if any
-									If ($o_.width=Null:C1517)\
-										 | ($o_.height=Null:C1517)
+									If ($oOptions.width=Null:C1517)\
+										 | ($oOptions.height=Null:C1517)
 										
 										READ PICTURE FILE:C678($file.platformPath;$p)
 										
@@ -628,15 +628,15 @@ Else
 											PICTURE PROPERTIES:C457($p;$Num_width;$Num_height)
 											CLEAR VARIABLE:C89($p)
 											
-											If ($o_.width=Null:C1517)
+											If ($oOptions.width=Null:C1517)
 												
-												$o_.width:=$Num_width
+												$oOptions.width:=$Num_width
 												
 											End if 
 											
-											If ($o_.height=Null:C1517)
+											If ($oOptions.height=Null:C1517)
 												
-												$o_.height:=$Num_height
+												$oOptions.height:=$Num_height
 												
 											End if 
 										End if 
@@ -650,10 +650,10 @@ Else
 										
 										$o.latest:=DOM Create XML element:C865($Dom_target;"image";\
 											"xlink:href";$t;\
-											"x";Num:C11($o_.left);\
-											"y";Num:C11($o_.top);\
-											"width";Num:C11($o_.width);\
-											"height";Num:C11($o_.height))
+											"x";Num:C11($oOptions.left);\
+											"y";Num:C11($oOptions.top);\
+											"width";Num:C11($oOptions.width);\
+											"height";Num:C11($oOptions.height))
 										
 									End if 
 									
@@ -677,7 +677,7 @@ Else
 							If (Picture size:C356($p)>0)
 								
 								  // Encode in base64
-								PICTURE TO BLOB:C692($p;$x;Choose:C955($o_.codec#Null:C1517;String:C10($o_.codec);".png"))
+								PICTURE TO BLOB:C692($p;$x;Choose:C955($oOptions.codec#Null:C1517;String:C10($oOptions.codec);".png"))
 								
 								If (OK=1)
 									
@@ -713,8 +713,8 @@ Else
 							$o.latest:=DOM Create XML element:C865($Dom_target;"textArea";\
 								"x";$2.x;\
 								"y";$2.y;\
-								"width";Choose:C955($o_.width=Null:C1517;"auto";Num:C11($o_.width));\
-								"height";Choose:C955($o_.height=Null:C1517;"auto";Num:C11($o_.height)))
+								"width";Choose:C955($oOptions.width=Null:C1517;"auto";Num:C11($oOptions.width));\
+								"height";Choose:C955($oOptions.height=Null:C1517;"auto";Num:C11($oOptions.height)))
 							
 							If (OK=1)\
 								 & (Length:C16($t)>0)
@@ -768,19 +768,19 @@ Else
 					
 					If ($o.success)  // Additional attributes
 						
-						If ($o_#Null:C1517)
+						If ($oOptions#Null:C1517)
 							
 							$c:=New collection:C1472("target";"left";"top";"width";"height";"codec")
 							
-							For each ($t;$o_)
+							For each ($t;$oOptions)
 								
 								If ($c.indexOf($t)=-1)
 									
 									If (Length:C16($t)#0)\
-										 & ($o_[$t]#Null:C1517)
+										 & ($oOptions[$t]#Null:C1517)
 										
 										DOM SET XML ATTRIBUTE:C866($o.latest;\
-											$t;$o_[$t])
+											$t;$oOptions[$t])
 										
 									Else 
 										
@@ -1058,16 +1058,16 @@ Else
 							  //______________________________________________________
 						: ($2.what="attributes")
 							
-							For each ($t;$o_) Until (OK=0)
+							For each ($t;$oOptions) Until (OK=0)
 								
 								If ($t#"target")
 									
 									If (Length:C16($t)#0)
 										
-										If ($o_[$t]#Null:C1517)
+										If ($oOptions[$t]#Null:C1517)
 											
 											DOM SET XML ATTRIBUTE:C866($Dom_target;\
-												$t;$o_[$t])
+												$t;$oOptions[$t])
 											
 										Else 
 											

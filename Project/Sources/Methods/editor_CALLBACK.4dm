@@ -14,9 +14,8 @@
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Txt_selector)
-C_OBJECT:C1216($Obj_form;$Obj_in)
+C_TEXT:C284($tSelector)
+C_OBJECT:C1216($form;$oIN)
 
 If (False:C215)
 	C_TEXT:C284(editor_CALLBACK ;$1)
@@ -25,23 +24,21 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$Txt_selector:=$1
+	$tSelector:=$1
 	
 	  // Optional parameters
-	If ($Lon_parameters>=2)
+	If (Count parameters:C259>=2)
 		
-		$Obj_in:=$2
+		$oIN:=$2
 		
 	End if 
 	
 	If (featuresFlags.with("newViewUI"))
 		
-		$Obj_form:=New object:C1471(\
+		$form:=New object:C1471(\
 			"window";Current form window:C827;\
 			"callback";Current method name:C684;\
 			"currentForm";Current form name:C1298;\
@@ -62,7 +59,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 		
 	Else 
 		
-		$Obj_form:=New object:C1471(\
+		$form:=New object:C1471(\
 			"window";Current form window:C827;\
 			"callback";Current method name:C684;\
 			"currentForm";Current form name:C1298;\
@@ -90,13 +87,13 @@ Else
 End if 
 
   // ----------------------------------------------------
-If ($Obj_form.currentForm=$Obj_form.editor)
+If ($form.currentForm=$form.editor)
 	
-	editor_MESSAGES ($Txt_selector;$Obj_form;$Obj_in)
+	editor_MESSAGES ($tSelector;$form;$oIN)
 	
 Else 
 	
-	project_MESSAGES ($Txt_selector;$Obj_form;$Obj_in)
+	project_MESSAGES ($tSelector;$form;$oIN)
 	
 End if 
 

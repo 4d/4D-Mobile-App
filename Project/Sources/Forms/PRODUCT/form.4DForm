@@ -55,11 +55,11 @@
 					"borderStyle": "none",
 					"hideFocusRing": true,
 					"dragging": "none",
-					"method": "ObjectMethods/10_name.4dm",
 					"events": [
 						"onDataChange",
 						"onAfterEdit"
-					]
+					],
+					"method": "PRODUCT_OBJECTS_HANDLER"
 				},
 				"10_name.label": {
 					"type": "text",
@@ -235,13 +235,13 @@
 					"pictureFormat": "proportionalCenter",
 					"dragging": "none",
 					"dropping": "custom",
-					"method": "ObjectMethods/icon.4dm",
 					"events": [
 						"onClick",
 						"onDoubleClick",
 						"onDrop",
 						"onDragOver"
-					]
+					],
+					"method": "PRODUCT_OBJECTS_HANDLER "
 				},
 				"icon.alert": {
 					"type": "button",
@@ -260,5 +260,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

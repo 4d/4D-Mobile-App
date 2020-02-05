@@ -38,9 +38,9 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"clone";Formula:C1597(ob ("clone";$1));\
 		"copy";Formula:C1597(OB Copy:C1225(This:C1470.contents));\
 		"count";Formula:C1597(ob ("count").value);\
-		"createPath";Formula:C1597(ob ("createPath";New object:C1471("path";String:C10($1);\
-		"type";$2;\
-		"content";$3)));\
+		"coalesce";Formula:C1597(ob ("coalesce").value);\
+		"coalescence";Formula:C1597(ob ("coalescence"));\
+		"createPath";Formula:C1597(ob ("createPath";New object:C1471("path";String:C10($1);"type";$2;"content";$3)));\
 		"deepMerge";Formula:C1597(ob ("deepMerge";$1;$2;$3;$4;$5;$6;$7;$8;$9;$10));\
 		"equal";Formula:C1597(New collection:C1472(This:C1470.contents).equal(New collection:C1472($1)));\
 		"findPropertyValues";Formula:C1597(ob ("findPropertyValues";New object:C1471("key";String:C10($1))));\
@@ -51,7 +51,8 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"merge";Formula:C1597(ob ("merge";$1;$2;$3;$4;$5;$6;$7;$8;$9;$10));\
 		"remove";Formula:C1597(ob ("remove";New object:C1471("key";$1)));\
 		"set";Formula:C1597(ob ("set";New object:C1471("value";$1)));\
-		"testPath";Formula:C1597(ob ("testPath";New object:C1471("path";String:C10($1))).value))
+		"testPath";Formula:C1597(ob ("testPath";New object:C1471(\
+		"path";String:C10($1))).value))
 	
 	If (Count parameters:C259>=1)
 		
@@ -164,9 +165,40 @@ Else
 				End case 
 			End for each 
 			
+			  //______________________________________________________
+		: ($1="coalesce")
+			
+			  // Returns the first non NULL element
+			
+			$o.value:=Null:C1517
+			
+			For each ($t;$o.contents) Until ($o.value#Null:C1517)
+				
+				If ($o.contents[$t]#Null:C1517)
+					
+					$o.value:=$o.contents[$t]
+					
+				End if 
+			End for each 
 			
 			  //______________________________________________________
-		: ($1="count")  // Returns the count of first level keys
+		: ($1="coalescence")
+			
+			  // Removes all NULL element
+			
+			For each ($t;$o.contents)
+				
+				If ($o.contents[$t]=Null:C1517)
+					
+					OB REMOVE:C1226($o.contents;$t)
+					
+				End if 
+			End for each 
+			
+			  //______________________________________________________
+		: ($1="count")
+			
+			  // Returns the count of first level keys
 			
 			ARRAY TEXT:C222($tTxt_buffer;0x0000)
 			OB GET PROPERTY NAMES:C1232($o.contents;$tTxt_buffer)
@@ -191,6 +223,8 @@ Else
 			
 			  //______________________________________________________
 		: ($1="set")
+			
+			  // Sets the contents as object or collection
 			
 			If (Value type:C1509($2.value)=Is text:K8:3)
 				
@@ -257,6 +291,8 @@ Else
 			  //______________________________________________________
 		: ($1="isEmpty")
 			
+			  // Returns True if the object or the collection is empty 
+			
 			If (Value type:C1509($o.contents)=Is object:K8:27)
 				
 				$o.value:=OB Is empty:C1297($o.contents)
@@ -270,6 +306,10 @@ Else
 			
 			  //______________________________________________________
 		: ($1="createPath")
+			
+			  // Creates the hierarchy and type if specified (default is object).
+			  // Sets the value if given, default value is used  otherwise
+			  // (i.e., empty string for Text, 0 for numeric variables, False for a boolean, etc.)
 			
 			$c:=Split string:C1554($2.path;".")
 			$o.success:=$c.length>0
@@ -367,6 +407,8 @@ Else
 			  //______________________________________________________
 		: ($1="getByPath")
 			
+			  // Returns the value of the element if the path exists, Null otherwise
+			
 			$o.value:=$o.contents
 			
 			For each ($t;Split string:C1554($2.path;"."))
@@ -397,6 +439,8 @@ Else
 			
 			  //______________________________________________________
 		: ($1="testPath")
+			
+			  // Returns True if the path exists, False otherwise
 			
 			$o.value:=False:C215
 			
@@ -432,10 +476,23 @@ Else
 			  //______________________________________________________
 		: ($1="remove")
 			
+			  // Removes given key(s)
+			
 			If ($2.key#Null:C1517)
 				
-				OB REMOVE:C1226($o;String:C10($2.key))
-				
+				If (Value type:C1509($2.key)=Is collection:K8:32)
+					
+					For each ($t;$2.key)
+						
+						OB REMOVE:C1226($o;$t)
+						
+					End for each 
+					
+				Else 
+					
+					OB REMOVE:C1226($o;String:C10($2.key))
+					
+				End if 
 			End if 
 			
 			  //______________________________________________________

@@ -12,11 +12,11 @@ C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 C_OBJECT:C1216($3)
 
-C_LONGINT:C283($Lon_bottom;$Lon_height;$Lon_i;$Lon_index;$Lon_left;$Lon_parameters)
-C_LONGINT:C283($Lon_right;$Lon_top;$Lon_width)
+C_LONGINT:C283($bottom;$height;$i;$indx;$left;$right)
+C_LONGINT:C283($top;$width)
 C_POINTER:C301($Ptr_)
-C_TEXT:C284($t;$Txt_selector;$Txt_panel)
-C_OBJECT:C1216($Obj_form;$Obj_in)
+C_TEXT:C284($t;$tPanel;$tSelector)
+C_OBJECT:C1216($form;$oIN)
 
 If (False:C215)
 	C_TEXT:C284(project_MESSAGES ;$1)
@@ -26,19 +26,17 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=3;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=3;"Missing parameter"))
 	
 	  // Required parameters
-	$Txt_selector:=$1
-	$Obj_form:=$2
-	$Obj_in:=$3
+	$tSelector:=$1
+	$form:=$2
+	$oIN:=$3
 	
 	  // Default values
 	
 	  // Optional parameters
-	If ($Lon_parameters>=4)
+	If (Count parameters:C259>=4)
 		
 		  // <NONE>
 		
@@ -54,80 +52,81 @@ End if
 Case of 
 		
 		  //______________________________________________________
-	: ($Txt_selector="pickerShow")  // Display the picture grid widget
+	: ($tSelector="pickerShow")  // Display the picture grid widget
 		
 		  // Get the viewport
-		OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_width;$Lon_height)
+		OBJECT GET SUBFORM CONTAINER SIZE:C1148($width;$height)
 		
 		  // Places the background invisible button
-		OBJECT SET COORDINATES:C1248(*;"picker.close";0;Num:C11($Obj_in.vOffset);$Lon_width;$Lon_height)
+		OBJECT SET COORDINATES:C1248(*;"picker.close";0;Num:C11($oIN.vOffset);$width;$height)
 		
 		Case of 
 				
 				  //……………………………………………………………………………………………
-			: (String:C10($Obj_in.action)="tableIcons") | (String:C10($Obj_in.action)="fieldIcons")
+			: (String:C10($oIN.action)="tableIcons")\
+				 | (String:C10($oIN.action)="fieldIcons")
 				
-				$Lon_width:=$Lon_width-5
-				$Lon_height:=$Lon_height-5
+				$width:=$width-5
+				$height:=$height-5
 				
-				OBJECT GET COORDINATES:C663(*;panel_Find_by_name ($Obj_form.tableProperties);$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+				OBJECT GET COORDINATES:C663(*;panel_Find_by_name ($form.tableProperties);$left;$top;$right;$bottom)
 				
-				$Lon_left:=Num:C11($Obj_in.left)
-				$Lon_top:=$Lon_top+Num:C11($Obj_in.top)
-				$Lon_right:=$Lon_width
-				$Lon_bottom:=$Lon_height
+				$left:=Num:C11($oIN.left)
+				$top:=$top+Num:C11($oIN.top)
+				$right:=$width
+				$bottom:=$height
 				
-				$Lon_width:=$Lon_width-$Lon_left
-				
-				  //……………………………………………………………………………………………
-			: (String:C10($Obj_in.action)="forms")
-				
-				$Lon_width:=$Lon_width-15
-				$Lon_height:=$Lon_height-15
-				
-				OBJECT GET COORDINATES:C663(*;panel_Find_by_name ($Obj_form.views);$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-				
-				$Lon_left:=18
-				$Lon_top:=$Lon_top+165
-				$Lon_right:=$Lon_width
-				$Lon_bottom:=$Lon_height
+				$width:=$width-$left
 				
 				  //……………………………………………………………………………………………
-			: (String:C10($Obj_in.action)="actionIcons")
+			: (String:C10($oIN.action)="forms")
 				
-				$Lon_width:=$Lon_width-5
-				$Lon_width:=$Lon_width-5
-				$Lon_height:=$Lon_height-5
+				$width:=$width-15
+				$height:=$height-15
 				
-				OBJECT GET COORDINATES:C663(*;panel_Find_by_name ($Obj_form.tableProperties);$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+				OBJECT GET COORDINATES:C663(*;panel_Find_by_name ($form.views);$left;$top;$right;$bottom)
 				
-				$Lon_left:=Num:C11($Obj_in.left)
-				$Lon_top:=$Lon_top+Num:C11($Obj_in.top)
-				$Lon_right:=$Lon_width
-				$Lon_bottom:=$Lon_height
+				$left:=18
+				$top:=$top+165
+				$right:=$width
+				$bottom:=$height
 				
-				$Lon_width:=$Lon_width-$Lon_left
+				  //……………………………………………………………………………………………
+			: (String:C10($oIN.action)="actionIcons")
+				
+				$width:=$width-5
+				$width:=$width-5
+				$height:=$height-5
+				
+				OBJECT GET COORDINATES:C663(*;panel_Find_by_name ($form.tableProperties);$left;$top;$right;$bottom)
+				
+				$left:=Num:C11($oIN.left)
+				$top:=$top+Num:C11($oIN.top)
+				$right:=$width
+				$bottom:=$height
+				
+				$width:=$width-$left
 				
 				  //……………………………………………………………………………………………
 			Else 
 				
-				ASSERT:C1129(False:C215;"Unknown entry point: \""+String:C10($Obj_in.action)+"\"")
+				ASSERT:C1129(False:C215;"Unknown entry point: \""+String:C10($oIN.action)+"\"")
 				
 				  //……………………………………………………………………………………………
 		End case 
 		
-		$Obj_in.maxColumns:=($Lon_width-19)\$Obj_in.celluleWidth
+		$oIN.maxColumns:=($width-19)\$oIN.celluleWidth
 		
-		OBJECT SET COORDINATES:C1248(*;"picker";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+		OBJECT SET COORDINATES:C1248(*;"picker";$left;$top;$right;$bottom)
 		OBJECT SET VISIBLE:C603(*;"picker@";True:C214)
 		
 		  // Touch picker subform
-		(OBJECT Get pointer:C1124(Object named:K67:5;"picker"))->:=$Obj_in
+		(OBJECT Get pointer:C1124(Object named:K67:5;"picker"))->:=$oIN
 		
 		Form:C1466.$dialog.picker:=True:C214
 		
 		  //______________________________________________________
-	: ($Txt_selector="pickerHide")  // Hide the picture grid widget
+	: ($tSelector="pickerHide")  // Hide the picture grid widget
 		
 		OBJECT SET VISIBLE:C603(*;"picker@";False:C215)
 		
@@ -137,15 +136,15 @@ Case of
 			
 		End if 
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
 			Case of 
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="forms")
+				: (String:C10($oIN.action)="forms")
 					
-					$Txt_panel:=panel_Find_by_name ($Obj_form.views)
+					$tPanel:=panel_Find_by_name ($form.views)
 					
 					  //……………………………………………………………………………………………
 				Else 
@@ -155,9 +154,9 @@ Case of
 					  //……………………………………………………………………………………………
 			End case 
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
@@ -166,60 +165,60 @@ Case of
 			Case of 
 					
 					  //……………………………………………………………………………………………
-				: (String:C10($Obj_in.action)="forms")
+				: (String:C10($oIN.action)="forms")
 					
-					$Obj_in.action:=Choose:C955(Bool:C1537($Obj_in.onResize);"show";$Txt_selector)
-					VIEWS_Handler ($Obj_in)
+					$oIN.action:=Choose:C955(Bool:C1537($oIN.onResize);"show";$tSelector)
+					VIEWS_Handler ($oIN)
 					
 					  //……………………………………………………………………………………………
 			End case 
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="pickerResume")  // Return the picture grid widget result to the caller
+	: ($tSelector="pickerResume")  // Return the picture grid widget result to the caller
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Hide the picture grid widget
 			OBJECT SET VISIBLE:C603(*;"picker@";False:C215)
 			OB REMOVE:C1226(Form:C1466.$dialog;"picker")
 			
 			  // Pass to target panel
-			$t:=String:C10($Obj_in.action)
+			$tSelector:=String:C10($oIN.action)
 			
 			Case of 
 					
 					  //……………………………………………………………………………………………
-				: ($t="tableIcons")
+				: ($tSelector="tableIcons")
 					
-					$Txt_panel:=panel_Find_by_name ($Obj_form.tableProperties)
-					
-					  //……………………………………………………………………………………………
-				: ($t="fieldIcons")
-					
-					$Txt_panel:=panel_Find_by_name ($Obj_form.fieldProperties)
+					$tPanel:=panel_Find_by_name ($form.tableProperties)
 					
 					  //……………………………………………………………………………………………
-				: ($t="forms")
+				: ($tSelector="fieldIcons")
 					
-					$Txt_panel:=panel_Find_by_name ($Obj_form.views)
+					$tPanel:=panel_Find_by_name ($form.fieldProperties)
 					
 					  //……………………………………………………………………………………………
-				: ($t="actionIcons")
+				: ($tSelector="forms")
 					
-					$Txt_panel:=panel_Find_by_name ($Obj_form.actions)
+					$tPanel:=panel_Find_by_name ($form.views)
+					
+					  //……………………………………………………………………………………………
+				: ($tSelector="actionIcons")
+					
+					$tPanel:=panel_Find_by_name ($form.actions)
 					
 					  //……………………………………………………………………………………………
 				Else 
 					
-					ASSERT:C1129(False:C215;"Unknown entry point: \""+$t+"\"")
+					ASSERT:C1129(False:C215;"Unknown entry point: \""+$tSelector+"\"")
 					
 					  //……………………………………………………………………………………………
 			End case 
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;"pickerResume";$oIN)
 				
 			End if 
 			
@@ -228,51 +227,51 @@ Case of
 			Case of 
 					
 					  //……………………………………………………………………………………………
-				: ($Obj_form.currentForm=$Obj_form.tableProperties)
+				: ($form.currentForm=$form.tableProperties)
 					
-					tables_Handler ($Obj_in)
-					
-					  //……………………………………………………………………………………………
-				: ($Obj_form.currentForm=$Obj_form.fieldProperties)
-					
-					FIELDS_Handler ($Obj_in)
+					tables_Handler ($oIN)
 					
 					  //……………………………………………………………………………………………
-				: ($Obj_form.currentForm=$Obj_form.views)
+				: ($form.currentForm=$form.fieldProperties)
 					
-					VIEWS_Handler ($Obj_in)
+					FIELDS_Handler ($oIN)
 					
 					  //……………………………………………………………………………………………
-				: ($Obj_form.currentForm=$Obj_form.actions)
+				: ($form.currentForm=$form.views)
 					
-					ACTIONS_Handler ($Obj_in)
+					VIEWS_Handler ($oIN)
+					
+					  //……………………………………………………………………………………………
+				: ($form.currentForm=$form.actions)
+					
+					ACTIONS_Handler ($oIN)
 					
 					  //……………………………………………………………………………………………
 			End case 
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="projectAudit")  // Verify the project integrity
+	: ($tSelector="projectAudit")  // Verify the project integrity
 		
-		PROJECT_Handler (New object:C1471("action";$Txt_selector))
-		
-		  //______________________________________________________
-	: ($Txt_selector="projectFixErrors")  // Fix the project errors
-		
-		$Obj_in.action:=$Txt_selector
-		PROJECT_Handler ($Obj_in)
+		PROJECT_Handler (New object:C1471("action";$tSelector))
 		
 		  //______________________________________________________
-	: ($Txt_selector="mainMenu")  // Update Main menu panel
+	: ($tSelector="projectFixErrors")  // Fix the project errors
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		$oIN.action:=$tSelector
+		PROJECT_Handler ($oIN)
+		
+		  //______________________________________________________
+	: ($tSelector="mainMenu")  // Update Main menu panel
+		
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.mainMenu)
+			$tPanel:=panel_Find_by_name ($form.mainMenu)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector)
 				
 			End if 
 			
@@ -285,16 +284,16 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="tableProperties")  // Update table properties panel
+	: ($tSelector="tableProperties")  // Update table properties panel
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.tableProperties)
+			$tPanel:=panel_Find_by_name ($form.tableProperties)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector)
 				
 			End if 
 			
@@ -305,16 +304,16 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="tableIcons")  // Preload the table icons
+	: ($tSelector="tableIcons")  // Preload the table icons
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.tableProperties)
+			$tPanel:=panel_Find_by_name ($form.tableProperties)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
@@ -325,16 +324,16 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="fieldProperties")  // Update field properties panel
+	: ($tSelector="fieldProperties")  // Update field properties panel
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.fieldProperties)
+			$tPanel:=panel_Find_by_name ($form.fieldProperties)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector)
 				
 			End if 
 			
@@ -346,16 +345,16 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="fieldIcons")  // Preload the field icons
+	: ($tSelector="fieldIcons")  // Preload the field icons
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.fieldProperties)
+			$tPanel:=panel_Find_by_name ($form.fieldProperties)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
@@ -367,16 +366,16 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="actionIcons")  // Preload the actions icons
+	: ($tSelector="actionIcons")  // Preload the actions icons
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.actions)
+			$tPanel:=panel_Find_by_name ($form.actions)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
@@ -387,18 +386,18 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="dataSet")  // Dataset generation result
+	: ($tSelector="dataSet")  // Dataset generation result
 		
 		OB REMOVE:C1226(Form:C1466.$project;"dataSetGeneration")
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.dataSource)
+			$tPanel:=panel_Find_by_name ($form.dataSource)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector)
 				
 			End if 
 			
@@ -409,16 +408,16 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="update_data")  // Update data panel after a dataset generation
+	: ($tSelector="update_data")  // Update data panel after a dataset generation
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.data)
+			$tPanel:=panel_Find_by_name ($form.data)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector)
 				
 			End if 
 			
@@ -429,119 +428,119 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="checkingServerConfiguration")  // Verify the web server configuration
+	: ($tSelector="checkingServerConfiguration")  // Verify the web server configuration
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.dataSource)
+			$tPanel:=panel_Find_by_name ($form.dataSource)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector)
 				
 			End if 
 			
 		Else 
 			
-			SOURCE_Handler (New object:C1471("action";$Txt_selector))
+			SOURCE_Handler (New object:C1471("action";$tSelector))
 			
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="teamId")
+	: ($tSelector="teamId")
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.developer)
+			$tPanel:=panel_Find_by_name ($form.developer)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
 		Else 
 			
-			If ($Obj_in.success)
+			If ($oIN.success)
 				
-				DEVELOPER_Handler (New object:C1471("action";$Txt_selector;"value";$Obj_in.value))
+				DEVELOPER_Handler (New object:C1471("action";$tSelector;"value";$oIN.value))
 				
 			End if 
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="tableList") | ($Txt_selector="fieldList")
+	: ($tSelector="tableList") | ($tSelector="fieldList")
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.structure)
+			$tPanel:=panel_Find_by_name ($form.structure)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
 		Else 
 			
-			STRUCTURE_Handler (New object:C1471("action";$Txt_selector;"value";$Obj_in))
+			STRUCTURE_Handler (New object:C1471("action";$tSelector;"value";$oIN))
 			
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="onLosingFocus")
+	: ($tSelector="onLosingFocus")
 		
-		OBJECT GET SUBFORM:C1139(*;$Obj_in.panel;$Ptr_;$Txt_panel)
+		OBJECT GET SUBFORM:C1139(*;$oIN.panel;$Ptr_;$tPanel)
 		
 		Case of 
 				
 				  //…………………………………………………………………………………………………………
-			: ($Txt_panel=$Obj_form.structure)
+			: ($tPanel=$form.structure)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Obj_in.panel;"structure_Handler";*;New object:C1471("action";$Txt_selector))
+				EXECUTE METHOD IN SUBFORM:C1085($oIN.panel;"structure_Handler";*;New object:C1471("action";$tSelector))
 				
 				  //…………………………………………………………………………………………………………
 		End case 
 		
 		  //______________________________________________________
-	: ($Txt_selector="resizePanel")
+	: ($tSelector="resizePanel")
 		
-		$Txt_panel:=panel_Find_by_name ($Obj_in.panel;->$Lon_index)
+		$tPanel:=panel_Find_by_name ($oIN.panel;->$indx)
 		
-		If (Length:C16($Txt_panel)>0)
+		If (Length:C16($tPanel)>0)
 			
 			  // Resize the current panel
-			OBJECT MOVE:C664(*;$Txt_panel;0;0;0;$Obj_in.offset)
-			EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;"structure_Handler";*;New object:C1471("action";"geometry";"target";$Obj_in.panel))
+			OBJECT MOVE:C664(*;$tPanel;0;0;0;$oIN.offset)
+			EXECUTE METHOD IN SUBFORM:C1085($tPanel;"structure_Handler";*;New object:C1471("action";"geometry";"target";$oIN.panel))
 			
 			  // Move all the following panels
-			For ($Lon_i;$Lon_index+1;panel_Count ;1)
+			For ($i;$indx+1;panel_Count ;1)
 				
-				OBJECT MOVE:C664(*;"title.label."+String:C10($Lon_i);0;$Obj_in.offset)
-				OBJECT MOVE:C664(*;"panel."+String:C10($Lon_i);0;$Obj_in.offset)
+				OBJECT MOVE:C664(*;"title.label."+String:C10($i);0;$oIN.offset)
+				OBJECT MOVE:C664(*;"panel."+String:C10($i);0;$oIN.offset)
 				
 			End for 
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="goTo")
+	: ($tSelector="goTo")
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
-			If (Asserted:C1132($Obj_in.panel#Null:C1517))
+			If (Asserted:C1132($oIN.panel#Null:C1517))
 				
 				  // Pass to target panel
-				$Txt_panel:=panel_Find_by_name ($Obj_in.panel;->$Lon_index)
+				$tPanel:=panel_Find_by_name ($oIN.panel;->$indx)
 				
-				If (Length:C16($Txt_panel)>0)
+				If (Length:C16($tPanel)>0)
 					
 					  // Open the panel, if any
-					panel_OPEN ($Lon_index)
+					panel_OPEN ($indx)
 					
-					EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+					EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 					
 				End if 
 			End if 
@@ -551,35 +550,35 @@ Case of
 			Case of 
 					
 					  //……………………………………………………………………………………………………
-				: ($Obj_in.object#Null:C1517)  // Go to object
+				: ($oIN.object#Null:C1517)  // Go to object
 					
-					GOTO OBJECT:C206(*;$Obj_in.object)
+					GOTO OBJECT:C206(*;$oIN.object)
 					
 					  //……………………………………………………………………………………………………
-				: ($Obj_in.table#Null:C1517)  // Select table
+				: ($oIN.table#Null:C1517)  // Select table
 					
 					Case of 
 							
 							  //___________________________
-						: ($Obj_in.panel="TABLES")
+						: ($oIN.panel="TABLES")
 							
 							  // Set the selected table
-							tables_Handler (New object:C1471("action";"select";"tableNumber";Num:C11($Obj_in.table)))
+							tables_Handler (New object:C1471("action";"select";"tableNumber";Num:C11($oIN.table)))
 							
-							If ($Obj_in.field#Null:C1517)  // Select field
+							If ($oIN.field#Null:C1517)  // Select field
 								
 								  // Set the selected field
 								FIELDS_Handler (New object:C1471(\
 									"action";"select";\
-									"fieldNumber";Num:C11($Obj_in.field)))
+									"fieldNumber";Num:C11($oIN.field)))
 								
 							End if 
 							
 							  // Update field properties panel
-							CALL FORM:C1391($Obj_form.window;$Obj_form.callback;"fieldProperties")
+							CALL FORM:C1391($form.window;$form.callback;"fieldProperties")
 							
 							  //___________________________
-						: ($Obj_in.panel="DATA")
+						: ($oIN.panel="DATA")
 							
 							  //
 							
@@ -601,131 +600,120 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="selectTab")
+	: ($tSelector="selectTab")
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.views;->$Lon_index)
+			$tPanel:=panel_Find_by_name ($form.views;->$indx)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
 				  // Open the panel, if any
-				panel_OPEN ($Lon_index)
+				panel_OPEN ($indx)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
 		Else 
 			
-			$Obj_in.action:=$Txt_selector
-			VIEWS_Handler ($Obj_in)
+			$oIN.action:=$tSelector
+			VIEWS_Handler ($oIN)
 			
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="setForm")  // Set form from browser
+	: ($tSelector="setForm")  // Set form from browser
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.views)
+			$tPanel:=panel_Find_by_name ($form.views)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
 		Else 
 			
-			If ($Obj_in=Null:C1517)
+			VIEWS_Handler ($oIN)
+			
+		End if 
+		
+		  //______________________________________________________
+	: ($tSelector="refreshViews")  // Update VIEWS panel
+		
+		If ($form.currentForm=$form.project)
+			
+			  // Pass to target panel
+			$tPanel:=panel_Find_by_name ($form.views)
+			
+			If (Length:C16($tPanel)>0)
 				
-				$Obj_in:=New object:C1471("action";"forms")
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
+				
+			End if 
+			
+		Else 
+			
+			If ($oIN=Null:C1517)
+				
+				$oIN:=New object:C1471("action";$tSelector)
 				
 			Else 
 				
-				$Obj_in.action:="forms"
-				$Obj_in.selector:=Replace string:C233($Obj_in.type;"form-";"")
+				$oIN.action:=$tSelector
 				
 			End if 
 			
-			VIEWS_Handler ($Obj_in)
+			VIEWS_Handler ($oIN)
 			
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="refreshViews")  // Update VIEWS panel
+	: ($tSelector="refreshParameters")  // Update ACTIONS PARAMERS panel
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.views)
+			$tPanel:=panel_Find_by_name ($form.actionParameters)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
-				
-			End if 
-			
-		Else 
-			
-			If ($Obj_in=Null:C1517)
-				
-				$Obj_in:=New object:C1471("action";$Txt_selector)
-				
-			Else 
-				
-				$Obj_in.action:=$Txt_selector
-				
-			End if 
-			
-			VIEWS_Handler ($Obj_in)
-			
-		End if 
-		
-		  //______________________________________________________
-	: ($Txt_selector="refreshParameters")  // Update ACTIONS PARAMERS panel
-		
-		If ($Obj_form.currentForm=$Obj_form.project)
-			
-			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.actionParameters)
-			
-			If (Length:C16($Txt_panel)>0)
-				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;"panel_REFRESH")
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;"panel_REFRESH")
 				
 			End if 
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="selectParameters")  // Update ACTIONS PARAMERS panel
+	: ($tSelector="selectParameters")  // Update ACTIONS PARAMERS panel
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.actionParameters)
+			$tPanel:=panel_Find_by_name ($form.actionParameters)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;"ACTIONS_PARAMS_Handler";*;New object:C1471("action";"refresh"))
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;"ACTIONS_PARAMS_Handler";*;New object:C1471("action";"refresh"))
 				
 			End if 
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="refreshServer")  // Update SERVER panel
+	: ($tSelector="refreshServer")  // Update SERVER panel
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.server)
+			$tPanel:=panel_Find_by_name ($form.server)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
@@ -736,29 +724,29 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Txt_selector="testServer")  // Server checking response
+	: ($tSelector="testServer")  // Server checking response
 		
-		If ($Obj_form.currentForm=$Obj_form.project)
+		If ($form.currentForm=$form.project)
 			
 			  // Pass to target panel
-			$Txt_panel:=panel_Find_by_name ($Obj_form.dataSource)
+			$tPanel:=panel_Find_by_name ($form.dataSource)
 			
-			If (Length:C16($Txt_panel)>0)
+			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($Txt_panel;$Obj_form.callback;*;$Txt_selector;$Obj_in)
+				EXECUTE METHOD IN SUBFORM:C1085($tPanel;$form.callback;*;$tSelector;$oIN)
 				
 			End if 
 			
 		Else 
 			
-			SOURCE_Handler (New object:C1471("action";$Txt_selector;"response";$Obj_in))
+			SOURCE_Handler (New object:C1471("action";$tSelector;"response";$oIN))
 			
 		End if 
 		
 		  //______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Txt_selector+"\"")
+		ASSERT:C1129(False:C215;"Unknown entry point: \""+$tSelector+"\"")
 		
 		  //______________________________________________________
 End case 

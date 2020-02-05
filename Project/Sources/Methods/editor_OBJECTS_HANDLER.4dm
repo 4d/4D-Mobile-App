@@ -28,7 +28,7 @@ Case of
 			
 			$o:=Self:C308->
 			
-			If ($o.use#Null:C1517)
+			If ($o.form#Null:C1517)
 				
 				Case of 
 						
@@ -36,9 +36,9 @@ Case of
 					: ($o.selector="form-list")\
 						 | ($o.selector="form-detail")  // Forms
 						
-						CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"setForm";New object:C1471(\
-							"type";$o.selector;\
-							"form";"/"+$o.use))
+						$o.action:="forms"
+						$o.selector:=Replace string:C233($o.selector;"form-";"")
+						CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"setForm";$o)
 						
 						  //______________________________________________________
 					: ($o.selector="form-formatter")

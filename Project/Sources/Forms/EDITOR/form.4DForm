@@ -253,7 +253,7 @@
 		"kind": "form"
 	},
 	"editor": {
-		"activeView": "Browser",
+		"activeView": "default",
 		"defaultView": "default",
 		"views": {
 			"default": {},
@@ -266,7 +266,6 @@
 				]
 			},
 			"Project": {
-				"visible": false,
 				"objects": [
 					"project"
 				]

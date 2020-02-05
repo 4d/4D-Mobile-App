@@ -4,7 +4,7 @@
   // Created 27-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
-C_LONGINT:C283($indx)
+C_LONGINT:C283($index)
 C_OBJECT:C1216($event)
 
   // ----------------------------------------------------
@@ -20,11 +20,11 @@ Case of
 		Form:C1466.selectColumn:=$event.column
 		Form:C1466.selectRow:=$event.row
 		
-		$indx:=(LISTBOX Get number of columns:C831(*;$event.objectName)*($event.row-1))+$event.column
+		$index:=(LISTBOX Get number of columns:C831(*;$event.objectName)*($event.row-1))+$event.column
 		
-		If ($indx<=Form:C1466.pictures.length)
+		If ($index<=Form:C1466.pictures.length)
 			
-			Form:C1466.item:=$indx
+			Form:C1466.item:=$index
 			
 		End if 
 		
@@ -59,12 +59,12 @@ Case of
 		  //______________________________________________________
 	: ($event.code=On Mouse Move:K2:35)
 		
-		$indx:=(LISTBOX Get number of columns:C831(*;$event.objectName)*($event.row-1))+$event.column
+		$index:=(LISTBOX Get number of columns:C831(*;$event.objectName)*($event.row-1))+$event.column
 		
-		If ($indx>0)\
-			 & ($indx<=Form:C1466.pictures.length)
+		If ($index>0)\
+			 & ($index<=Form:C1466.pictures.length)
 			
-			If (Form:C1466.pathnames[$indx-1]=Null:C1517)
+			If (Form:C1466.pathnames[$index-1]=Null:C1517)
 				
 				If (featuresFlags.with("resourcesBrowser"))
 					
@@ -74,13 +74,13 @@ Case of
 				
 			Else 
 				
-				If (Form:C1466.helpTips[$indx-1]#Null:C1517)
+				If (Form:C1466.helpTips[$index-1]#Null:C1517)
 					
-					OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.helpTips[$indx-1]))
+					OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.helpTips[$index-1]))
 					
 				Else 
 					
-					OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.pathnames[$indx-1]))
+					OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.pathnames[$index-1]))
 					
 				End if 
 			End if 

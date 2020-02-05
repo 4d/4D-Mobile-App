@@ -9,8 +9,8 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_TEXT:C284($t;$tURL)
-C_OBJECT:C1216($archive;$event;$folder;$form;$http;$oProgress)
+C_TEXT:C284($t;$tForm;$tURL)
+C_OBJECT:C1216($archive;$event;$folderDestination;$form;$http;$oProgress)
 C_COLLECTION:C1488($c)
 
   // ----------------------------------------------------
@@ -25,8 +25,7 @@ Case of
 		  //______________________________________________________
 	: ($event.objectName="webarea")
 		
-		$form:=BROWSER_Handler (New object:C1471(\
-			"action";"init"))
+		$form:=BROWSER_Handler (New object:C1471("action";"init"))
 		
 		Case of 
 				
@@ -73,24 +72,49 @@ Case of
 						
 						  //https://github.com/4d-for-ios/form-detail-SimpleHeader/releases/download/0.0.1/form-detail-SimpleHeader.zip
 						
-						$t:=$c[$c.length-1]  // Name of the archive
+						$tForm:=$c[$c.length-1]  // Name of the archive
 						
-						$archive:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($t)
+						  // Create destination folder if any
+						Case of 
+								
+								  //……………………………………………………………………………………
+							: ($tForm="form-list@")
+								
+								$folderDestination:=path .hostlistForms(True:C214)
+								
+								  //……………………………………………………………………………………
+							: ($tForm="form-detail@")
+								
+								$folderDestination:=path .hostdetailForms(True:C214)
+								
+								  //……………………………………………………………………………………
+							: ($tForm="formatter-@")
+								
+								$folderDestination:=path .hostFormatters(True:C214)
+								
+								  //……………………………………………………………………………………
+							Else 
+								
+								TRACE:C157
+								
+								  //……………………………………………………………………………………
+						End case 
 						
-						If ($archive.exists)
-							
-							  //  // Check version
-							  //ASSERT(False;"Check version")
-							
-							$archive.delete()
-							
-						End if 
+						$c:=Split string:C1554(Form:C1466.url;"/")
 						
-						If (Not:C34($archive.exists))
+						If (Not:C34($folderDestination.file($tForm).exists))  // Download
+							
+							$archive:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($tForm)
+							
+							If ($archive.exists)
+								
+								$archive.delete()
+								
+							End if 
 							
 							$oProgress:=progress ("downloadInProgress").showStop()  // ------ ->
 							
-							$oProgress.setMessage($t).bringToFront()
+							$oProgress.setMessage($tForm).bringToFront()
 							
 							$http:=http ($tURL).get(Is a document:K24:1;False:C215;$archive)
 							
@@ -100,38 +124,12 @@ Case of
 								
 								If ($http.success)
 									
-									Case of 
-											
-											  //……………………………………………………………………………………
-										: ($t="form-list@")
-											
-											$folder:=path .hostlistForms(True:C214)
-											
-											  //……………………………………………………………………………………
-										: ($t="form-detail@")
-											
-											$folder:=path .hostdetailForms(True:C214)
-											
-											  //……………………………………………………………………………………
-										: ($t="formatter-@")
-											
-											$folder:=path .hostFormatters(True:C214)
-											
-											  //……………………………………………………………………………………
-										Else 
-											
-											TRACE:C157
-											
-											  //……………………………………………………………………………………
-									End case 
-									
-									If ($folder.exists)
+									If ($folderDestination.exists)
 										
-										$folder:=$archive.copyTo($folder;fk overwrite:K87:5)
+										$folderDestination:=$archive.copyTo($folderDestination;fk overwrite:K87:5)
 										
-										$c:=Split string:C1554(Form:C1466.url;"/")
 										Form:C1466.selector:=$c[$c.length-3]
-										Form:C1466.use:=$t
+										Form:C1466.form:="/"+$tForm
 										
 										CALL SUBFORM CONTAINER:C1086(-1)
 										
@@ -140,7 +138,7 @@ Case of
 										  // ERROR
 										CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"hideBrowser")
 										
-										If ($folder=Null:C1517)
+										If ($folderDestination=Null:C1517)
 											
 											POST_FORM_MESSAGE (New object:C1471(\
 												"target";Current form window:C827;\
@@ -182,9 +180,8 @@ Case of
 							
 						Else 
 							
-							$c:=Split string:C1554(Form:C1466.url;"/")
 							Form:C1466.selector:=$c[$c.length-3]
-							Form:C1466.use:=$t
+							Form:C1466.form:="/"+$tForm
 							
 							CALL SUBFORM CONTAINER:C1086(-1)
 							

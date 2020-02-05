@@ -246,11 +246,10 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			  // Create image
 			$svg:=svg ().setDimensions($oLocal.cell.width;$oLocal.cell.height)
 			
-			$svg.roundedRect(0;0;$oLocal.cell.width;$oLocal.cell.height).setStroke("gold").setFill("none")
-			
+			  // Mark if used
 			If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
 				
-				$svg.roundedRect(10;$oLocal.cell.height-18;10;10).setFill("gold").setStroke("gold")
+				$svg.roundedRect($oLocal.cell.width-10;10;10;10).setFill("gold").setStroke("gold")
 				
 			End if 
 			
@@ -267,6 +266,8 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				.setDimensions($oLocal.cell.width)\
 				.setFill("dimgray")\
 				.setAttribute("text-align";"center")
+			
+			$svg.image(Folder:C1567(Folder:C1567(fk resources folder:K87:11).platformPath;fk platform path:K87:2).file("Images/cloud.png");New object:C1471("left";0;"top";0))
 			
 			$oPicker.pictures.push($svg.getPicture())
 			$oPicker.pathnames.push($tTxt_forms{$i})
@@ -296,9 +297,10 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				  // Title
 				$t:=$tTxt_forms{$i}
 				
+				  // Mark if used
 				If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
 					
-					$svg.roundedRect(10;$oLocal.cell.height-18;10;10).setFill("gold").setStroke("gold")
+					$svg.roundedRect($oLocal.cell.width-10;10;10;10).setFill("gold").setStroke("gold")
 					
 				End if 
 				

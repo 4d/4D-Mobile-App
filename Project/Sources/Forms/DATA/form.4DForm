@@ -251,11 +251,11 @@
 					"enterable": false,
 					"contextMenu": "none",
 					"dragging": "none",
-					"method": "ObjectMethods/query.options.4dm",
 					"events": [
 						"onLoad",
 						"onClick"
-					]
+					],
+					"method": "DATA_OBJECTS_HANDLER"
 				},
 				"02_filter.label.options": {
 					"type": "text",
