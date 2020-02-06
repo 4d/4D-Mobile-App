@@ -65,15 +65,18 @@ Case of
 				$tTable:=SVG Find element ID by coordinates:C1054(*;$event.objectName;MOUSEX;MOUSEY)
 				$tTemplate:=String:C10(Form:C1466[$tTypeForm][$tTable].form)
 				
-				If ($tTemplate[[1]]="/")
+				If (Length:C16($tTemplate)>0)
 					
-					$bAvailable:=path ["host"+$tTypeForm+"Forms"]().file(Substring:C12($tTemplate;2)).exists\
-						 | path ["host"+$tTypeForm+"Forms"]().folder(Substring:C12($tTemplate;2)).exists
-					
-				Else 
-					
-					$bAvailable:=path [$tTypeForm+"Forms"]().folder($tTemplate).exists
-					
+					If ($tTemplate[[1]]="/")
+						
+						$bAvailable:=path ["host"+$tTypeForm+"Forms"]().file(Substring:C12($tTemplate;2)).exists\
+							 | path ["host"+$tTypeForm+"Forms"]().folder(Substring:C12($tTemplate;2)).exists
+						
+					Else 
+						
+						$bAvailable:=path [$tTypeForm+"Forms"]().folder($tTemplate).exists
+						
+					End if 
 				End if 
 				
 				Case of 
