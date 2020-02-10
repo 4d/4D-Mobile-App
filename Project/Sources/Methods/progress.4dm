@@ -12,8 +12,10 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
+C_LONGINT:C283($i;$l)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o)
+C_VARIANT:C1683($v)
 
 If (False:C215)
 	C_OBJECT:C1216(progress ;$0)
@@ -49,7 +51,8 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"setProgress";Formula:C1597(progress ("setProgress";New object:C1471("progress";$1)));\
 		"setTitle";Formula:C1597(progress ("setTitle";New object:C1471("value";String:C10($1))));\
 		"show";Formula:C1597(progress ("show";New object:C1471("foreground";Bool:C1537($1))));\
-		"showStop";Formula:C1597(progress ("showStop"))\
+		"showStop";Formula:C1597(progress ("showStop"));\
+		"forEach";Formula:C1597(progress ("forEach";New object:C1471("container";$1;"formula";$2;"keep";$3)))\
 		)
 	
 	$o.progress:=Progress Get Progress ($o.id)
@@ -186,6 +189,103 @@ Else
 			
 			$o.visible:=True:C214
 			Progress SET WINDOW VISIBLE (True:C214;-1;-1;True:C214)
+			
+			  //______________________________________________________
+		: ($1="forEach")
+			
+			Case of 
+					
+					  //______________________________________________________
+				: (Value type:C1509($2.container)=Is collection:K8:32)
+					
+					$o.setProgress(0)
+					$l:=$2.container.length
+					
+					  //______________________________________________________
+				: (Value type:C1509($2.container)=Is object:K8:27)
+					
+					$o.setProgress(0)
+					
+					ARRAY TEXT:C222($tTxt_properties;0x0000)
+					OB GET PROPERTY NAMES:C1232($2.container;$tTxt_properties)
+					$l:=Size of array:C274($tTxt_properties)
+					
+					  //______________________________________________________
+				Else 
+					
+					$o.setProgress(-1)  // Barber shop
+					
+					  //______________________________________________________
+			End case 
+			
+			If (Progress Get Button Enabled ($o.id))
+				
+				  // The progress bar has a Stop button
+				
+				$o.stopped:=False:C215
+				
+				  // As long as progress is not stopped...
+				For each ($v;$2.container) While (Not:C34($o.stopped))
+					
+					$o.isStopped()
+					
+					If (Not:C34($o.stopped))
+						
+						$i:=$i+1
+						$t:=String:C10($2.formula.call(Null:C1517;$v;$2.container;$i))
+						
+						If ($l#0)
+							
+							$o.setProgress($i/$l)
+							
+						End if 
+						
+						If (Length:C16($t)>0)
+							
+							$o.setMessage($t)
+							
+						End if 
+						
+					Else 
+						
+						  // The user clicks on Stop
+						$o.hideStop()
+						
+					End if 
+				End for each 
+				
+			Else 
+				
+				$o.stopped:=False:C215
+				
+				For each ($v;$2.container)
+					
+					$i:=$i+1
+					$t:=String:C10($2.formula.call(Null:C1517;$v;$2.container;$i))
+					
+					If ($l#0)
+						
+						$o.setProgress($i/$l)
+						
+					End if 
+					
+					If (Length:C16($t)>0)
+						
+						$o.setMessage($t)
+						
+					End if 
+				End for each 
+			End if 
+			
+			If (Bool:C1537($2.keep))
+				
+				$o.setProgress(-1).setMessage("")
+				
+			Else 
+				
+				$o.close()
+				
+			End if 
 			
 			  //______________________________________________________
 		Else 

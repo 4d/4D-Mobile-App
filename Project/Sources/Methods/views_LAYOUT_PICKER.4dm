@@ -168,6 +168,7 @@ $oPicker:=New object:C1471(\
 "pictures";New collection:C1472;\
 "pathnames";New collection:C1472;\
 "helpTips";New collection:C1472;\
+"infos";New collection:C1472;\
 "celluleWidth";$oLocal.cell.width;\
 "celluleHeight";$oLocal.cell.height;\
 "offset";10;\
@@ -182,6 +183,13 @@ $oPicker:=New object:C1471(\
 "forceRedraw";True:C214;\
 "prompt";$str.setText("selectAFormTemplateToUseAs").localized($oLocal.type);\
 "selector";$oLocal.type)
+
+If (featuresFlags.with("resourcesBrowser"))
+	
+	$oPicker.buttons:=New collection:C1472
+	$oPicker.buttons.push(New object:C1471("left";8;"top";8;"width";16;"height";16;"formula";Formula:C1597(tmpl_INFOS )))  // github icon
+	
+End if 
 
 $oPicker.vOffset:=155  // Offset of the background button
 
@@ -246,32 +254,38 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			  // Create image
 			$svg:=svg ().setDimensions($oLocal.cell.width;$oLocal.cell.height)
 			
-			  // Mark if used
-			If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
-				
-				$svg.roundedRect($oLocal.cell.width-10;10;10;10).setFill("gold").setStroke("gold")
-				
-			End if 
-			
 			  // Put icon
 			$x:=$archive.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x;$p)
-			$svg.embedPicture($p;-10;0)
+			  //$svg.embedPicture($p;-10;0)
+			
+			$svg.embedPicture($p;5;5)
 			
 			  // Get the manifest
 			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
 			
 			  // Put text
-			$svg.textArea($o.name;0;$oLocal.cell.height-20)\
-				.setDimensions($oLocal.cell.width)\
+			$svg.textArea($o.name;10;$oLocal.cell.height-20)\
+				.setDimensions($oLocal.cell.width+10)\
 				.setFill("dimgray")\
 				.setAttribute("text-align";"center")
 			
-			$svg.image(Folder:C1567(Folder:C1567(fk resources folder:K87:11).platformPath;fk platform path:K87:2).file("Images/cloud.png");New object:C1471("left";0;"top";0))
+			  // Mark if used
+			If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
+				
+				$svg.setAttribute("font-weight";"bold")
+				
+			End if 
+			
+			$svg.image(Folder:C1567(Folder:C1567(fk resources folder:K87:11).platformPath;fk platform path:K87:2).file("Images/github.svg");New object:C1471("left";8;"top";8)).setDimensions(16)
+			
+			$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("temp.svg");True:C214)
 			
 			$oPicker.pictures.push($svg.getPicture())
 			$oPicker.pathnames.push($tTxt_forms{$i})
 			$oPicker.helpTips.push($str.setText("tipsTemplate").localized(New collection:C1472(String:C10($pathTemplate.fullName);String:C10($o.organization.login);String:C10($o.version))))
+			$oPicker.infos.push($o)
+			
 			
 		Else 
 			
@@ -292,17 +306,10 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				
 				  // Media
 				READ PICTURE FILE:C678($pathTemplate.parent.file("layoutIconx2.png").platformPath;$p)
-				$svg.embedPicture($p;-10;0)
+				$svg.embedPicture($p;5;5)
 				
 				  // Title
 				$t:=$tTxt_forms{$i}
-				
-				  // Mark if used
-				If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
-					
-					$svg.roundedRect($oLocal.cell.width-10;10;10;10).setFill("gold").setStroke("gold")
-					
-				End if 
 				
 				If ($t[[1]]="/")  // Database template
 					
@@ -310,10 +317,17 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 					
 				End if 
 				
-				$svg.textArea($t;0;$oLocal.cell.height-20)\
-					.setDimensions($oLocal.cell.width)\
+				$svg.textArea($t;10;$oLocal.cell.height-20)\
+					.setDimensions($oLocal.cell.width+10)\
 					.setFill("dimgray")\
 					.setAttribute("text-align";"center")
+				
+				  // Mark if used
+				If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
+					
+					$svg.setAttribute("font-weight";"bold")
+					
+				End if 
 				
 				$p:=$svg.getPicture()
 				
@@ -349,12 +363,14 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				$oPicker.pictures.insert(0;$p)
 				$oPicker.pathnames.insert(0;$tTxt_forms{$i})
 				$oPicker.helpTips.insert(0;".default template")
+				$oPicker.infos.insert(0;Null:C1517)
 				
 			Else 
 				
 				$oPicker.pictures.push($p)
 				$oPicker.pathnames.push($tTxt_forms{$i})
 				$oPicker.helpTips.push("")
+				$oPicker.infos.push(Null:C1517)
 				
 			End if 
 			
@@ -386,12 +402,14 @@ If (featuresFlags.with("resourcesBrowser"))
 		$oPicker.pictures.insert(1;$svg.getPicture())
 		$oPicker.pathnames.insert(1;Null:C1517)
 		$oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($oLocal.type))
+		$oPicker.infos.push(Null:C1517)
 		
 	Else   // Put at the end
 		
 		$oPicker.pictures.push($svg.getPicture())
 		$oPicker.pathnames.push(Null:C1517)
 		$oPicker.helpTips.push($str.setText("downloadMoreResources").localized($oLocal.type))
+		$oPicker.infos.push(Null:C1517)
 		
 	End if 
 End if 

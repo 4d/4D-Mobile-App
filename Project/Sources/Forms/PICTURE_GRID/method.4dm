@@ -262,7 +262,7 @@ If ($bDisplay)\
 							ARRAY PICTURE:C279($Ptr_column->;$Lon_lineNumber)
 							  //%W+518.5
 							
-							OBJECT SET FORMAT:C236(*;$tColumn;Char:C90(1))
+							OBJECT SET FORMAT:C236(*;$tColumn;Char:C90(4))  // Char(1)
 							LISTBOX SET COLUMN WIDTH:C833(*;$tColumn;$Lon_colWidth;$Lon_colWidth;$Lon_colWidth)
 							
 						End for 

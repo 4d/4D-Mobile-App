@@ -76,7 +76,7 @@
 					"height": 29,
 					"visibility": "hidden",
 					"fill": "#E7F8FF",
-					"stroke": "transparent",
+					"stroke": "#6495ed",
 					"borderRadius": 10
 				},
 				"prompt": {

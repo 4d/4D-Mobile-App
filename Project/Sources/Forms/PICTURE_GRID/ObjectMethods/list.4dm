@@ -4,8 +4,10 @@
   // Created 27-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
-C_LONGINT:C283($index)
-C_OBJECT:C1216($event)
+C_BOOLEAN:C305($bValid)
+C_LONGINT:C283($bottom;$index;$l;$left;$Lon_x;$Lon_y)
+C_LONGINT:C283($right;$top)
+C_OBJECT:C1216($event;$o)
 
   // ----------------------------------------------------
   // Initialisations
@@ -24,18 +26,49 @@ Case of
 		
 		If ($index<=Form:C1466.pictures.length)
 			
-			Form:C1466.item:=$index
+			$bValid:=True:C214
 			
-		End if 
-		
-		If (Is nil pointer:C315(OBJECT Get pointer:C1124(Object subform container:K67:4)))
+			If (Form:C1466.buttons#Null:C1517)
+				
+				GET MOUSE:C468($Lon_x;$Lon_y;$l)  // Relative to the current form window
+				LISTBOX GET CELL COORDINATES:C1330(*;$event.objectName;$event.column;$event.row;$left;$top;$right;$bottom)  // Relative to the current form
+				
+				  // Convert to screen coordinates
+				CONVERT COORDINATES:C1365($left;$top;XY Current form:K27:5;XY Screen:K27:7)
+				CONVERT COORDINATES:C1365($Lon_x;$Lon_y;XY Current window:K27:6;XY Screen:K27:7)
+				
+				For each ($o;Form:C1466.buttons) While ($bValid)
+					
+					If ($Lon_x>=($left+$o.left)) & ($Lon_x<=($left+$o.left+$o.width))\
+						 & ($Lon_y>=($top+$o.top)) & ($Lon_y<=($top+$o.top+$o.height))
+						
+						$bValid:=False:C215
+						$o.formula.call(Null:C1517;Form:C1466.infos[$index-1])
+						
+					End if 
+				End for each 
+				
+			Else 
+				
+				  // A "If" statement should never omit "Else"
+				
+			End if 
 			
-			ACCEPT:C269  // Auto valid
-			
-		Else 
-			
-			CALL SUBFORM CONTAINER:C1086(-1)  // Call the parent form
-			
+			If ($bValid)
+				
+				  // Select
+				Form:C1466.item:=$index
+				
+				If (Is nil pointer:C315(OBJECT Get pointer:C1124(Object subform container:K67:4)))
+					
+					ACCEPT:C269  // Auto valid
+					
+				Else 
+					
+					CALL SUBFORM CONTAINER:C1086(-1)  // Call the parent form
+					
+				End if 
+			End if 
 		End if 
 		
 		  //______________________________________________________

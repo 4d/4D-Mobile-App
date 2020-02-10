@@ -256,6 +256,10 @@
 		]
 	},
 	"classes": {
+		"groups": [
+			"HTUs",
+			"Tests"
+		],
 		"methods": [
 			"button",
 			"color",
@@ -268,8 +272,6 @@
 			"group",
 			"http",
 			"HTTP ERROR HANDLER",
-			"HTU_logs",
-			"HTU_svg",
 			"lep",
 			"listbox",
 			"logger",
@@ -286,10 +288,6 @@
 			"str",
 			"subform",
 			"svg",
-			"test_dat",
-			"test_db",
-			"test_ob",
-			"test_str",
 			"thermometer",
 			"tips",
 			"webArea",
@@ -420,6 +418,14 @@
 		],
 		"forms": [
 			"FIELDS"
+		]
+	},
+	"HTUs": {
+		"methods": [
+			"HTU_logs",
+			"HTU_progress",
+			"HTU_svg",
+			"htuProgressDoSomething"
 		]
 	},
 	"lib": {
@@ -675,6 +681,14 @@
 			"TABLES"
 		]
 	},
+	"Tests": {
+		"methods": [
+			"test_dat",
+			"test_db",
+			"test_ob",
+			"test_str"
+		]
+	},
 	"tools": {},
 	"ui": {
 		"methods": [
@@ -695,6 +709,7 @@
 			"tmpl_cancel",
 			"tmpl_compatibleType",
 			"tmpl_form",
+			"tmpl_INFOS",
 			"tmpl_On_drag_over",
 			"tmpl_ON_DROP",
 			"tmpl_REMOVE",
