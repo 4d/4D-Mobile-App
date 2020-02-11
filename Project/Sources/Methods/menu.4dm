@@ -83,17 +83,20 @@ Else
 			  //______________________________________________________
 		: ($1="append")
 			
-			ASSERT:C1129(Length:C16($2.item)>0)
+			$t:=Get localized string:C991($2.item)
+			$t:=Choose:C955(Length:C16($t)>0;$t;$2.item)
+			
+			ASSERT:C1129(Length:C16($t)>0;"An empty item will be ignored")
 			
 			If ($2.menu#Null:C1517)  // Submenu
 				
 				If ($o.metacharacters)
 					
-					APPEND MENU ITEM:C411($o.ref;$2.item;$2.menu.ref)
+					APPEND MENU ITEM:C411($o.ref;$t;$2.menu.ref)
 					
 				Else 
 					
-					APPEND MENU ITEM:C411($o.ref;$2.item;$2.menu.ref;*)
+					APPEND MENU ITEM:C411($o.ref;$t;$2.menu.ref;*)
 					
 				End if 
 				
@@ -107,11 +110,11 @@ Else
 				
 				If ($o.metacharacters)
 					
-					APPEND MENU ITEM:C411($o.ref;$2.item)
+					APPEND MENU ITEM:C411($o.ref;$t)
 					
 				Else 
 					
-					APPEND MENU ITEM:C411($o.ref;$2.item;*)
+					APPEND MENU ITEM:C411($o.ref;$t;*)
 					
 				End if 
 				

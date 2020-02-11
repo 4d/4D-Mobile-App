@@ -232,7 +232,7 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	commonValues.thirdParty:="Carthage"
 	commonValues.thirdPartySources:=commonValues.thirdParty+"/Checkouts"
 	
-	commonValues.logger:=logger ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+	commonValues.logger:=logger ("~/Library/Logs/4D Mobile/"+Folder:C1567(fk database folder:K87:14).name+".log")
 	commonValues.logger.verbose:=(Structure file:C489=Structure file:C489(*))
 	
 	  // ================================================================================================================================

@@ -248,8 +248,10 @@
 	},
 	"BROWSER": {
 		"methods": [
+			"browser_DOWNLOAD",
 			"BROWSER_Handler",
-			"BROWSER_OBJECTS_HANDLER"
+			"BROWSER_OBJECTS_HANDLER",
+			"COMPILER_BROWSER"
 		],
 		"forms": [
 			"BROWSER"
@@ -708,6 +710,7 @@
 			"COMPILER_views",
 			"tmpl_cancel",
 			"tmpl_compatibleType",
+			"tmpl_CONTEXTUAL",
 			"tmpl_form",
 			"tmpl_INFOS",
 			"tmpl_On_drag_over",

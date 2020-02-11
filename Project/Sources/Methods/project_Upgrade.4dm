@@ -11,11 +11,12 @@
 C_BOOLEAN:C305($0)
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($Boo_upgraded)
+C_BOOLEAN:C305($bUpgraded)
 C_LONGINT:C283($l;$Lon_build;$Lon_parameters)
-C_TEXT:C284($t;$tt;$Txt_fieldID;$Txt_tableNumber)
-C_OBJECT:C1216($ƒ;$o;$Obj_catalog;$Obj_info;$Obj_project;$Obj_table)
-C_COLLECTION:C1488($Col_fieldTypes;$Col_types)
+C_TEXT:C284($t;$t_field;$t_related;$t_tableNumber)
+C_OBJECT:C1216($file;$ƒ;$logger;$o;$o_catalog;$o_infos)
+C_OBJECT:C1216($oDatabase;$oInternal;$oProject;$oTable;$oTemplate)
+C_COLLECTION:C1488($c;$Col_fieldTypes;$Col_types)
 
 If (False:C215)
 	C_BOOLEAN:C305(project_Upgrade ;$0)
@@ -24,11 +25,9 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
-	$Obj_project:=$1
+	$oProject:=$1
 	
 	$ƒ:=Storage:C1525.ƒ
 	
@@ -37,6 +36,9 @@ Else
 	ABORT:C156
 	
 End if 
+
+$logger:=logger ("~/Library/Logs/4D Mobile/"+String:C10($oProject.product.name)+".log").reset()
+$logger.verbose:=True:C214
 
   // ----------------------------------------------------
 If (Form:C1466#Null:C1517)
@@ -51,7 +53,7 @@ If (Form:C1466#Null:C1517)
 End if 
 
   // Create current information to compare
-$Obj_info:=New object:C1471
+$o_infos:=New object:C1471
 
 $o:=xml_fileToObject (Get 4D folder:C485(Database folder:K5:14)+"Info.plist").value.plist.dict
 
@@ -59,39 +61,39 @@ $l:=$o.key.extract("$").indexOf("CFBundleVersion")
 
 If ($l#-1)
 	
-	$Obj_info.componentBuild:=String:C10($o.string[$l].$)
+	$o_infos.componentBuild:=String:C10($o.string[$l].$)
 	
 End if 
 
-$Obj_info.ideVersion:=String:C10(Application version:C493($Lon_build))
-$Obj_info.ideBuildVersion:=String:C10($Lon_build)
+$o_infos.ideVersion:=String:C10(Application version:C493($Lon_build))
+$o_infos.ideBuildVersion:=String:C10($Lon_build)
 
-If ($Obj_project.info.ideVersion=Null:C1517)  // "1720"
+If ($oProject.info.ideVersion=Null:C1517)  // "1720"
 	
-	If (Value type:C1509($Obj_project.dataModel)=Is object:K8:27)
+	If (Value type:C1509($oProject.dataModel)=Is object:K8:27)
 		
 		  /// Remove first / on icon path #100580
-		For each ($Txt_tableNumber;$Obj_project.dataModel)
+		For each ($t_tableNumber;$oProject.dataModel)
 			
-			$t:=String:C10($Obj_project.dataModel[$Txt_tableNumber].icon)
+			$t:=String:C10($oProject.dataModel[$t_tableNumber].icon)
 			
 			If (Position:C15("/";$t)=1)
 				
-				$Obj_project.dataModel[$Txt_tableNumber].icon:=Delete string:C232($t;1;1)
-				$Boo_upgraded:=True:C214
+				$oProject.dataModel[$t_tableNumber].icon:=Delete string:C232($t;1;1)
+				$bUpgraded:=True:C214
 				
 			End if 
 			
-			For each ($Txt_fieldID;$Obj_project.dataModel[$Txt_tableNumber])
+			For each ($t_field;$oProject.dataModel[$t_tableNumber])
 				
-				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldID;1;*))
+				If (Match regex:C1019("(?m-si)^\\d+$";$t_field;1;*))
 					
-					$t:=String:C10($Obj_project.dataModel[$Txt_tableNumber][$Txt_fieldID].icon)
+					$t:=String:C10($oProject.dataModel[$t_tableNumber][$t_field].icon)
 					
 					If (Position:C15("/";$t)=1)
 						
-						$Obj_project.dataModel[$Txt_tableNumber][$Txt_fieldID].icon:=Delete string:C232($t;1;1)
-						$Boo_upgraded:=True:C214
+						$oProject.dataModel[$t_tableNumber][$t_field].icon:=Delete string:C232($t;1;1)
+						$bUpgraded:=True:C214
 						
 					End if 
 				End if 
@@ -100,65 +102,65 @@ If ($Obj_project.info.ideVersion=Null:C1517)  // "1720"
 	End if 
 	
 	  // Rename internal templates
-	If ($Obj_project.detail#Null:C1517)
+	If ($oProject.detail#Null:C1517)
 		
-		For each ($Txt_tableNumber;$Obj_project.detail)
+		For each ($t_tableNumber;$oProject.detail)
 			
 			Case of 
 					
 					  //______________________________________________________
-				: ($Obj_project.detail[$Txt_tableNumber].form=Null:C1517)
+				: ($oProject.detail[$t_tableNumber].form=Null:C1517)
 					
 					  //______________________________________________________
-				: ($Obj_project.detail[$Txt_tableNumber].form="Cards Detail")
+				: ($oProject.detail[$t_tableNumber].form="Cards Detail")
 					
-					$Obj_project.detail[$Txt_tableNumber].form:="Cards"
-					
-					  //______________________________________________________
-				: ($Obj_project.detail[$Txt_tableNumber].form="Numbers Detail")
-					
-					$Obj_project.detail[$Txt_tableNumber].form:="Numbers"
+					$oProject.detail[$t_tableNumber].form:="Cards"
 					
 					  //______________________________________________________
-				: ($Obj_project.detail[$Txt_tableNumber].form="Tasks Detail")
+				: ($oProject.detail[$t_tableNumber].form="Numbers Detail")
 					
-					$Obj_project.detail[$Txt_tableNumber].form:="Tasks"
+					$oProject.detail[$t_tableNumber].form:="Numbers"
 					
 					  //______________________________________________________
-				: ($Obj_project.detail[$Txt_tableNumber].form="Tasks Detail Plus")
+				: ($oProject.detail[$t_tableNumber].form="Tasks Detail")
 					
-					$Obj_project.detail[$Txt_tableNumber].form:="Tasks Plus"
+					$oProject.detail[$t_tableNumber].form:="Tasks"
+					
+					  //______________________________________________________
+				: ($oProject.detail[$t_tableNumber].form="Tasks Detail Plus")
+					
+					$oProject.detail[$t_tableNumber].form:="Tasks Plus"
 					
 					  //______________________________________________________
 			End case 
 		End for each 
 	End if 
 	
-	If ($Obj_project.list#Null:C1517)
+	If ($oProject.list#Null:C1517)
 		
-		For each ($Txt_tableNumber;$Obj_project.list)
+		For each ($t_tableNumber;$oProject.list)
 			
-			If ($Obj_project.list[$Txt_tableNumber].form#Null:C1517)
+			If ($oProject.list[$t_tableNumber].form#Null:C1517)
 				
 				Case of 
 						
 						  //______________________________________________________
-					: ($Obj_project.list[$Txt_tableNumber].form=Null:C1517)
+					: ($oProject.list[$t_tableNumber].form=Null:C1517)
 						
 						  //______________________________________________________
-					: ($Obj_project.list[$Txt_tableNumber].form="Profil")
+					: ($oProject.list[$t_tableNumber].form="Profil")
 						
-						$Obj_project.list[$Txt_tableNumber].form:="Profile"
-						
-						  //______________________________________________________
-					: ($Obj_project.list[$Txt_tableNumber].form="Square Profil")
-						
-						$Obj_project.list[$Txt_tableNumber].form:="Square Profile"
+						$oProject.list[$t_tableNumber].form:="Profile"
 						
 						  //______________________________________________________
-					: ($Obj_project.list[$Txt_tableNumber].form="Tasks List")
+					: ($oProject.list[$t_tableNumber].form="Square Profil")
 						
-						$Obj_project.list[$Txt_tableNumber].form:="Tasks"
+						$oProject.list[$t_tableNumber].form:="Square Profile"
+						
+						  //______________________________________________________
+					: ($oProject.list[$t_tableNumber].form="Tasks List")
+						
+						$oProject.list[$t_tableNumber].form:="Tasks"
 						
 						  //______________________________________________________
 				End case 
@@ -167,70 +169,74 @@ If ($Obj_project.info.ideVersion=Null:C1517)  // "1720"
 	End if 
 End if 
 
-If (Num:C11($Obj_project.info.version)<2)
+$logger.info("Version: "+String:C10($oProject.info.version))
+
+If (Num:C11($oProject.info.version)<2)
 	
 	  // Add datasource property if any
-	If ($Obj_project.dataSource=Null:C1517)
+	If ($oProject.dataSource=Null:C1517)
 		
-		$Obj_project.dataSource:=New object:C1471(\
+		$oProject.dataSource:=New object:C1471(\
 			"source";"local";\
 			"doNotGenerateDataAtEachBuild";False:C215)
 		
-		$Boo_upgraded:=True:C214
+		$bUpgraded:=True:C214
 		
 	End if 
 	
-	If ($Obj_project.dataModel#Null:C1517)
+	If ($oProject.dataModel#Null:C1517)
 		
-		For each ($Txt_tableNumber;$Obj_project.dataModel)
+		For each ($t_tableNumber;$oProject.dataModel)
 			
-			If ($Obj_project.dataModel[$Txt_tableNumber].embedded=Null:C1517)
+			If ($oProject.dataModel[$t_tableNumber].embedded=Null:C1517)
 				
-				$Obj_project.dataModel[$Txt_tableNumber].embedded:=True:C214
+				$oProject.dataModel[$t_tableNumber].embedded:=True:C214
 				
 			End if 
 		End for each 
 		
-		$Boo_upgraded:=True:C214
+		$bUpgraded:=True:C214
 		
 	End if 
 	
-	$Obj_project.info.version:=2
+	$oProject.info.version:=2
+	$logger.info("Upadted to version: "+String:C10($oProject.info.version))
 	
 End if 
 
   //=====================================================================
   //                 REORGANIZATION FIX AND RENAMING
   //=====================================================================
-If (Num:C11($Obj_project.info.version)<3)
+If (Num:C11($oProject.info.version)<3)
 	
-	If ($Obj_project.dataModel#Null:C1517)
+	If ($oProject.dataModel#Null:C1517)
 		
-		For each ($Txt_tableNumber;$Obj_project.dataModel)
+		For each ($t_tableNumber;$oProject.dataModel)
 			
-			$Obj_table:=$Obj_project.dataModel[$Txt_tableNumber]
+			$oTable:=$oProject.dataModel[$t_tableNumber]
 			
-			$o:=$Obj_table.primary_key
+			$o:=$oTable.primary_key
 			
 			If ($o=Null:C1517)
 				
-				$o:=$Obj_table["primary_key:"]
+				$o:=$oTable["primary_key:"]
 				
 			End if 
 			
 			If ($o#Null:C1517)
 				
-				OB REMOVE:C1226($Obj_table;"primary_key")
-				OB REMOVE:C1226($Obj_table;"primary_key:")
+				OB REMOVE:C1226($oTable;"primary_key")
+				OB REMOVE:C1226($oTable;"primary_key:")
 				
-				$Obj_table.primaryKey:=String:C10($o.field_name)
+				$oTable.primaryKey:=String:C10($o.field_name)
 				
-				$Boo_upgraded:=True:C214
+				$bUpgraded:=True:C214
 				
 			End if 
 		End for each 
 		
-		$Obj_project.info.version:=3
+		$oProject.info.version:=3
+		$logger.info("Upadted to version: "+String:C10($oProject.info.version))
 		
 	End if 
 End if 
@@ -238,13 +244,13 @@ End if
   //=====================================================================
   //                    NEW FIELD DESCRIPTION
   //=====================================================================
-If (Num:C11($Obj_project.info.version)<4)
+If (Num:C11($oProject.info.version)<4)
 	
 	  // Remap field type
 	
-	If (Value type:C1509($Obj_project.dataModel)=Is object:K8:27)
+	If (Value type:C1509($oProject.dataModel)=Is object:K8:27)
 		
-		If (Value type:C1509($Obj_project.dataModel)=Is object:K8:27)
+		If (Value type:C1509($oProject.dataModel)=Is object:K8:27)
 			
 			  // Update dataModel to be compliant with ds
 			
@@ -278,60 +284,60 @@ If (Num:C11($Obj_project.info.version)<4)
 			$Col_types[Is BLOB:K8:12]:="blob"
 			$Col_types[Is object:K8:27]:="object"
 			
-			$Obj_catalog:=Build Exposed Datastore:C1598
+			$o_catalog:=_4D_Build Exposed Datastore:C1598
 			
-			For each ($Txt_tableNumber;$Obj_project.dataModel)
+			For each ($t_tableNumber;$oProject.dataModel)
 				
-				$Obj_table:=$Obj_project.dataModel[$Txt_tableNumber]
+				$oTable:=$oProject.dataModel[$t_tableNumber]
 				
-				For each ($t;$Obj_table)
+				For each ($t_field;$oTable)
 					
 					Case of 
 							
 							  //______________________________________________________
-						: ($ƒ.isField($t))
+						: ($ƒ.isField($t_field))
 							
-							$Obj_table[$t].fieldNumber:=$Obj_table[$t].id
-							$Obj_table[$t].fieldType:=$Col_fieldTypes[$Obj_table[$t].type]
-							$Obj_table[$t].type:=$Col_types[$Obj_table[$t].fieldType]
+							$oTable[$t_field].fieldNumber:=$oTable[$t_field].id
+							$oTable[$t_field].fieldType:=$Col_fieldTypes[$oTable[$t_field].type]
+							$oTable[$t_field].type:=$Col_types[$oTable[$t_field].fieldType]
 							
 							  //______________________________________________________
-						: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
+						: ((Value type:C1509($oTable[$t_field])#Is object:K8:27))
 							
 							  // <NOTHING MORE TO DO>
 							  //________________________________________
-						: ($ƒ.isRelationToOne($Obj_table[$t]))
+						: ($ƒ.isRelationToOne($oTable[$t_field]))
 							
-							If ($Obj_table[$t].relatedTableNumber=Null:C1517)
+							If ($oTable[$t_field].relatedTableNumber=Null:C1517)
 								
-								$Obj_table[$t].relatedTableNumber:=$Obj_catalog[$Obj_table[$t].relatedDataClass].getInfo().tableNumber
+								$oTable[$t_field].relatedTableNumber:=$o_catalog[$oTable[$t_field].relatedDataClass].getInfo().tableNumber
 								
 							End if 
 							
-							If ($Obj_table[$t].inverseName=Null:C1517)
+							If ($oTable[$t_field].inverseName=Null:C1517)
 								
-								$Obj_table[$t].inverseName:=$Obj_catalog[$obj_table.name][$t].inverseName
+								$oTable[$t_field].inverseName:=$o_catalog[$oTable.name][$t_field].inverseName
 								
 							End if 
 							
-							For each ($tt;$Obj_table[$t])
+							For each ($t_related;$oTable[$t_field])
 								
-								If ($ƒ.isField($tt))
+								If ($ƒ.isField($t_related))
 									
-									$Obj_table[$t][$tt].fieldNumber:=$Obj_table[$t][$tt].id
+									$oTable[$t_field][$t_related].fieldNumber:=$oTable[$t_field][$t_related].id
 									
-									$l:=$Obj_table[$t][$tt].type
+									$l:=$oTable[$t_field][$t_related].type
 									
 									If ($l=10)
 										
 										  //#WARNING - COMPILER TYPES THE FIRST PARAMETER AS POINTER
 										  //GET FIELD PROPERTIES($Obj_table[$t].relatedTableNumber;$Obj_table[$t][$tt].id;$l)
-										GET FIELD PROPERTIES:C258(Num:C11($Obj_table[$t].relatedTableNumber);$Obj_table[$t][$tt].id;$l)
+										GET FIELD PROPERTIES:C258(Num:C11($oTable[$t_field].relatedTableNumber);$oTable[$t_field][$t_related].id;$l)
 										
 									End if 
 									
-									$Obj_table[$t][$tt].fieldType:=$Col_fieldTypes[$l]
-									$Obj_table[$t][$tt].type:=$Col_types[$Obj_table[$t][$tt].fieldType]
+									$oTable[$t_field][$t_related].fieldType:=$Col_fieldTypes[$l]
+									$oTable[$t_field][$t_related].type:=$Col_types[$oTable[$t_field][$t_related].fieldType]
 									
 								End if 
 							End for each 
@@ -342,8 +348,10 @@ If (Num:C11($Obj_project.info.version)<4)
 			End for each 
 		End if 
 		
-		$Obj_project.info.version:=4
-		$Boo_upgraded:=True:C214
+		$bUpgraded:=True:C214
+		
+		$oProject.info.version:=4
+		$logger.info("Upadted to version: "+String:C10($oProject.info.version))
 		
 	End if 
 End if 
@@ -353,72 +361,73 @@ If (featuresFlags.with("newDataModel"))
 	  //=====================================================================
 	  //                    NEW DATA MODEL
 	  //=====================================================================
-	If (Num:C11($Obj_project.info.version)<5)
+	If (Num:C11($oProject.info.version)<5)
 		
-		If ($Obj_project.dataModel#Null:C1517)
+		If ($oProject.dataModel#Null:C1517)
 			
-			For each ($Txt_tableNumber;$Obj_project.dataModel)
+			For each ($t_tableNumber;$oProject.dataModel)
 				
-				$Obj_table:=$Obj_project.dataModel[$Txt_tableNumber]
+				$oTable:=$oProject.dataModel[$t_tableNumber]
 				
-				If ($Obj_table[""]=Null:C1517)
+				If ($oTable[""]=Null:C1517)
 					
-					$Obj_table[""]:=New object:C1471(\
-						"name";$Obj_table.name;\
-						"label";$Obj_table.label;\
-						"shortLabel";$Obj_table.shortLabel;\
-						"primaryKey";$Obj_table.primaryKey\
+					$oTable[""]:=New object:C1471(\
+						"name";$oTable.name;\
+						"label";$oTable.label;\
+						"shortLabel";$oTable.shortLabel;\
+						"primaryKey";$oTable.primaryKey\
 						)
 					
-					OB REMOVE:C1226($Obj_table;"name")
-					OB REMOVE:C1226($Obj_table;"label")
-					OB REMOVE:C1226($Obj_table;"shortLabel")
-					OB REMOVE:C1226($Obj_table;"primaryKey")
+					OB REMOVE:C1226($oTable;"name")
+					OB REMOVE:C1226($oTable;"label")
+					OB REMOVE:C1226($oTable;"shortLabel")
+					OB REMOVE:C1226($oTable;"primaryKey")
 					
-					If (Bool:C1537($Obj_table.embedded))
+					If (Bool:C1537($oTable.embedded))
 						
-						$Obj_table[""].embedded:=True:C214
-						
-					End if 
-					
-					OB REMOVE:C1226($Obj_table;"embedded")
-					
-					If (Length:C16(String:C10($Obj_table.icon))>0)
-						
-						$Obj_table[""].icon:=$Obj_table.icon
+						$oTable[""].embedded:=True:C214
 						
 					End if 
 					
-					OB REMOVE:C1226($Obj_table;"icon")
+					OB REMOVE:C1226($oTable;"embedded")
+					
+					If (Length:C16(String:C10($oTable.icon))>0)
+						
+						$oTable[""].icon:=$oTable.icon
+						
+					End if 
+					
+					OB REMOVE:C1226($oTable;"icon")
 					
 					  //#ACI0100305
-					If ($Obj_table.filter#Null:C1517)
+					If ($oTable.filter#Null:C1517)
 						
-						$Obj_table[""].filter:=$Obj_table.filter
-						OB REMOVE:C1226($Obj_table;"filter")
+						$oTable[""].filter:=$oTable.filter
+						OB REMOVE:C1226($oTable;"filter")
 						
 					End if 
 				End if 
 			End for each 
 			
-			$Boo_upgraded:=True:C214
+			$bUpgraded:=True:C214
 			
 		End if 
 		
-		$Obj_project.info.version:=5
+		$oProject.info.version:=5
+		$logger.info("Upadted to version: "+String:C10($oProject.info.version))
 		
 	End if 
 	
 	  //=====================================================================
 	  //                     "Simple List" -> "Blank Form"
 	  //=====================================================================
-	If ($Obj_project.detail#Null:C1517)
+	If ($oProject.detail#Null:C1517)
 		
-		For each ($Txt_tableNumber;$Obj_project.detail)
+		For each ($t_tableNumber;$oProject.detail)
 			
-			If (String:C10($Obj_project.detail[$Txt_tableNumber].form)="Simple List")
+			If (String:C10($oProject.detail[$t_tableNumber].form)="Simple List")
 				
-				$Obj_project.detail[$Txt_tableNumber].form:="Blank Form"
+				$oProject.detail[$t_tableNumber].form:="Blank Form"
 				
 			End if 
 		End for each 
@@ -427,17 +436,17 @@ If (featuresFlags.with("newDataModel"))
 	  //=====================================================================
 	  //                              MISCELLANEOUS
 	  //=====================================================================
-	If ($Obj_project.dataModel#Null:C1517)
+	If ($oProject.dataModel#Null:C1517)
 		
-		For each ($Txt_tableNumber;$Obj_project.dataModel)
+		For each ($t_tableNumber;$oProject.dataModel)
 			
-			For each ($Txt_fieldID;$Obj_project.dataModel[$Txt_tableNumber])
+			For each ($t_field;$oProject.dataModel[$t_tableNumber])
 				
-				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldID;1;*))
+				If (Match regex:C1019("(?m-si)^\\d+$";$t_field;1;*))
 					
-					If (String:C10($Obj_project.dataModel[$Txt_tableNumber][$Txt_fieldID].icon)="")
+					If (String:C10($oProject.dataModel[$t_tableNumber][$t_field].icon)="")
 						
-						OB REMOVE:C1226($Obj_project.dataModel[$Txt_tableNumber][$Txt_fieldID];"icon")
+						OB REMOVE:C1226($oProject.dataModel[$t_tableNumber][$t_field];"icon")
 						
 					End if 
 				End if 
@@ -446,14 +455,148 @@ If (featuresFlags.with("newDataModel"))
 	End if 
 End if 
 
+If (featuresFlags.with("resourcesBrowser"))
+	
+	If ($oProject.list#Null:C1517)
+		
+		$logger.info("Check list forms")
+		
+		$oInternal:=path .listForms()
+		$oDatabase:=path .hostlistForms()
+		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/TEMPO/manifest.json").getText()).list
+		
+		For each ($t_tableNumber;$oProject.list)
+			
+			$t:=String:C10($oProject.list[$t_tableNumber].form)
+			
+			If (Length:C16($t)>0)
+				
+				If ($t[[1]]#"/")  // Internal template
+					
+					If (Not:C34($oInternal.folder($t).exists))
+						
+						$logger.warning("Missing internal form: "+$t)
+						
+						  // Ensure database folder exists
+						$oDatabase.create()
+						
+						$oTemplate:=$c.query("old=:1";$t).pop()
+						
+						If ($oTemplate#Null:C1517)
+							
+							  // Copy from tempo folder to database
+							$file:=File:C1566("/RESOURCES/TEMPO/"+$oTemplate.new)
+							
+							If ($file.exists)
+								
+								$file:=$file.copyTo($oDatabase)
+								
+								If ($file#Null:C1517)
+									
+									$oProject.list[$t_tableNumber].form:="/"+$oTemplate.new
+									$logger.info("Replaced by: "+$oProject.list[$t_tableNumber].form)
+									
+								Else 
+									
+									$logger.error("Error during copy: "+$file.path)
+									
+								End if 
+								
+							Else 
+								
+								$logger.error("Missing archive: "+$file.path)
+								
+							End if 
+							
+						Else 
+							
+							$logger.error("Unknown template: "+$t)
+							
+						End if 
+					End if 
+				End if 
+			End if 
+		End for each 
+	End if 
+	
+	If ($oProject.detail#Null:C1517)
+		
+		$logger.info("Check detail forms")
+		
+		$oInternal:=path .detailForms()
+		$oDatabase:=path .hostdetailForms()
+		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/TEMPO/manifest.json").getText()).detail
+		
+		For each ($t_tableNumber;$oProject.detail)
+			
+			$t:=String:C10($oProject.detail[$t_tableNumber].form)
+			
+			If (Length:C16($t)>0)
+				
+				If ($t[[1]]#"/")  // Internal template
+					
+					If (Not:C34($oInternal.folder($t).exists))
+						
+						$logger.warning("Missing internal form: "+$t)
+						
+						  // Ensure database folder exists
+						$oDatabase.create()
+						
+						$oTemplate:=$c.query("old=:1";$t).pop()
+						
+						If ($oTemplate#Null:C1517)
+							
+							  // Copy from tempo folder to database
+							$file:=File:C1566("/RESOURCES/TEMPO/"+$oTemplate.new)
+							
+							If ($file.exists)
+								
+								$file:=$file.copyTo($oDatabase)
+								
+								If ($file#Null:C1517)
+									
+									$oProject.detail[$t_tableNumber].form:="/"+$oTemplate.new
+									$logger.info("Replaced by: "+$oProject.detail[$t_tableNumber].form)
+									
+								Else 
+									
+									$logger.error("Error during copy: "+$file.path)
+									
+								End if 
+								
+							Else 
+								
+								$logger.error("Missing archive: "+$file.path)
+								
+							End if 
+							
+						Else 
+							
+							$logger.error("Unknown template: "+$t)
+							
+						End if 
+					End if 
+				End if 
+			End if 
+		End for each 
+	End if 
+	
+End if 
+
+If (Not:C34(Is compiled mode:C492) & Shift down:C543)
+	
+	$logger.open()
+	
+End if 
+
   // Set the current version
-$Obj_project.info.componentBuild:=$Obj_info.componentBuild
-$Obj_project.info.ideVersion:=$Obj_info.ideVersion
-$Obj_project.info.ideBuildVersion:=$Obj_info.ideBuildVersion
+$oProject.info.componentBuild:=$o_infos.componentBuild
+$oProject.info.ideVersion:=$o_infos.ideVersion
+$oProject.info.ideBuildVersion:=$o_infos.ideBuildVersion
 
   // ----------------------------------------------------
   // Return
-$0:=$Boo_upgraded
+$0:=$bUpgraded
 
   // ----------------------------------------------------
   // End

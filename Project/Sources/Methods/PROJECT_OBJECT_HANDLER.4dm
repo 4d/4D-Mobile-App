@@ -91,8 +91,12 @@ Case of
 						  // Send result to the caller
 						CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"pickerResume";Self:C308->)
 						
+						
 						  //…………………………………………………………………………………………………
-					: (False:C215)
+					: ($event.code=-2)  // update
+						
+						CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"pickerResume";Self:C308->)
+						  //views_LAYOUT_PICKER (Form.$dialog.VIEWS.typeForm())
 						
 						  //…………………………………………………………………………………………………
 					Else 

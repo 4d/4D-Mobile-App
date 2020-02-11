@@ -43,6 +43,9 @@ If (False:C215)
 	C_LONGINT:C283(tmpl_compatibleType ;$2)
 	
 	  // ----------------------------------------------------
+	C_OBJECT:C1216(tmpl_CONTEXTUAL ;$1)
+	
+	  // ----------------------------------------------------
 	C_OBJECT:C1216(tmpl_form ;$0)
 	C_TEXT:C284(tmpl_form ;$1)
 	C_TEXT:C284(tmpl_form ;$2)

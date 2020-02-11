@@ -18,7 +18,7 @@ C_LONGINT:C283($i;$l;$Lon_code)
 C_PICTURE:C286($p)
 C_POINTER:C301($ptr)
 C_TEXT:C284($t;$Txt_onErrCallMethod)
-C_OBJECT:C1216($o)
+C_OBJECT:C1216($o;$oError)
 C_COLLECTION:C1488($c)
 
 ARRAY TEXT:C222($tTxt_HeaderNames;0)
@@ -382,17 +382,18 @@ Else
 			
 			If ($c[$2.code]#Null:C1517)
 				
-				$o:=New object:C1471(\
+				$oError:=New object:C1471(\
 					"message";$c[$2.code])
 				
 			Else 
 				
-				$o:=New object:C1471(\
+				$oError:=New object:C1471(\
 					"message";"Unknow status code: "+String:C10($c[$2.code]))
 				
 			End if 
 			
-			$o.message:=$o.message+"\r("+$o[""].url+")"
+			$oError.message:=$oError.message+"\r\r("+$o[""].url+")\r"
+			$o:=$oError
 			
 			  //______________________________________________________
 			

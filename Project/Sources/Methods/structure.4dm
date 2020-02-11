@@ -78,7 +78,7 @@ Case of
 		  // ! A relation N -> 1 is not referenced if the field isn't exposed with 4D Mobile services !
 		  // -------------------------------------------------------------------------------------------
 		
-		$Obj_catalog:=Build Exposed Datastore:C1598
+		$Obj_catalog:=_4D_Build Exposed Datastore:C1598
 		
 		$Obj_out.success:=($Obj_catalog#Null:C1517)
 		
@@ -407,7 +407,7 @@ Case of
 		ASSERT:C1129($Obj_in.table#Null:C1517)
 		ASSERT:C1129($Obj_in.relatedEntity#Null:C1517)
 		
-		$Obj_catalog:=Build Exposed Datastore:C1598
+		$Obj_catalog:=_4D_Build Exposed Datastore:C1598
 		
 		$Obj_field:=$Obj_catalog[$Obj_in.table][$Obj_in.relatedEntity]
 		
@@ -501,7 +501,7 @@ Case of
 				  //…………………………………………………………………………………………………
 			Else 
 				
-				$Obj_catalog:=Build Exposed Datastore:C1598
+				$Obj_catalog:=_4D_Build Exposed Datastore:C1598
 				$Obj_table:=$Obj_catalog[String:C10($Obj_in.table)]
 				
 				If ($Obj_table#Null:C1517)
@@ -539,20 +539,20 @@ Case of
 							End if 
 						Else 
 							
-							  // // FIXME #103848 TODO filter, must be the inverse of $Obj_in.field
+							  //  // FIXME #103848 TODO filter, must be the inverse of $Obj_in.field
 							  //For each ($Txt_field;$Obj_relatedDataClass)
-							  //
+							
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																								// | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
-							  //
+								 | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+							
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
-							  //
+							
 							  //$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
 							  //$Obj_out.success:=True
-							  //
-							  // End if
-							  // End if
-							  // End for each
+							
+							  //End if 
+							  //End if 
+							  //End for each 
 							
 						End if 
 					End if 
@@ -645,7 +645,7 @@ Case of
 		  //______________________________________________________
 	: ($Obj_in.action="createField")  // CALLER: [dataModel] (add missing primary key field)
 		
-		$Obj_catalog:=Build Exposed Datastore:C1598
+		$Obj_catalog:=_4D_Build Exposed Datastore:C1598
 		$Obj_table:=$Obj_catalog[String:C10($Obj_in.table)]
 		
 		If ($Obj_table#Null:C1517)
@@ -683,7 +683,7 @@ Case of
 				  //…………………………………………………………………………………………………
 			Else 
 				
-				$Obj_catalog:=Build Exposed Datastore:C1598
+				$Obj_catalog:=_4D_Build Exposed Datastore:C1598
 				$Obj_table:=$Obj_catalog[String:C10($Obj_in.table)]
 				
 				If ($Obj_table#Null:C1517)
@@ -709,7 +709,7 @@ Case of
 		
 		If (Asserted:C1132($Obj_in.name#Null:C1517;"missing 'name' key"))
 			
-			$Obj_catalog:=Build Exposed Datastore:C1598
+			$Obj_catalog:=_4D_Build Exposed Datastore:C1598
 			
 			$Obj_out.success:=($Obj_catalog[$Obj_in.name]#Null:C1517)
 			
@@ -725,7 +725,7 @@ Case of
 		
 		If (Asserted:C1132($Obj_in.name#Null:C1517;"missing 'name' key"))
 			
-			$Obj_catalog:=Build Exposed Datastore:C1598
+			$Obj_catalog:=_4D_Build Exposed Datastore:C1598
 			
 			$Obj_out.success:=($Obj_catalog[$Obj_in.name]#Null:C1517)
 			
@@ -985,7 +985,7 @@ Case of
 				  //…………………………………………………………………………………………………………………
 			: ($Obj_in.action="verify")
 				
-				$Obj_catalog:=Build Exposed Datastore:C1598
+				$Obj_catalog:=_4D_Build Exposed Datastore:C1598
 				
 				$Obj_out.success:=structure (New object:C1471(\
 					"action";"verifyDeletedRecords";\
@@ -1019,7 +1019,7 @@ Case of
 				
 				If ($Obj_in.catalog=Null:C1517)
 					
-					$Obj_in.catalog:=Build Exposed Datastore:C1598
+					$Obj_in.catalog:=_4D_Build Exposed Datastore:C1598
 					
 				End if 
 				
@@ -1035,7 +1035,7 @@ Case of
 					
 					If ($Obj_in.catalog=Null:C1517)
 						
-						$Obj_in.catalog:=Build Exposed Datastore:C1598
+						$Obj_in.catalog:=_4D_Build Exposed Datastore:C1598
 						
 					End if 
 					
@@ -1063,7 +1063,7 @@ Case of
 				
 				$Obj_out.success:=structure (New object:C1471(\
 					"action";"createDeletedRecords";\
-					"catalog";Build Exposed Datastore:C1598)).success
+					"catalog";_4D_Build Exposed Datastore:C1598)).success
 				
 				If ($Obj_out.success)
 					

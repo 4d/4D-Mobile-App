@@ -22,7 +22,7 @@ $o1:=Folder:C1567(fk system folder:K87:13).parent
 Case of 
 		
 		  //________________________________________
-	: (True:C214)
+	: (False:C215)
 		
 		$file:=Folder:C1567(fk desktop folder:K87:19).file("load.html")
 		$folder:=Folder:C1567(fk desktop folder:K87:19).file("DEV/test.zip")
@@ -48,7 +48,7 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$o:=Build Exposed Datastore:C1598["NOT EXPOSED"]
+		$o:=_4D_Build Exposed Datastore:C1598["Commands"]
 		
 		$o1:=$o.getInfo()
 		
@@ -509,7 +509,7 @@ Case of
 		
 		$t:=Parse formula:C1576("CALL FORM($Obj_in.caller;\"project_BUILD\";$Obj_in)";4)
 		
-		$o1:=Build Exposed Datastore:C1598
+		$o1:=_4D_Build Exposed Datastore:C1598
 		$o:=Formula:C1597(project_BUILD ($o1))
 		OB GET PROPERTY NAMES:C1232($o;$tTxt_)
 		

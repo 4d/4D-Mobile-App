@@ -4,7 +4,7 @@
   // Created 27-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
-C_BOOLEAN:C305($bValid)
+C_BOOLEAN:C305($bSelect)
 C_LONGINT:C283($bottom;$index;$l;$left;$Lon_x;$Lon_y)
 C_LONGINT:C283($right;$top)
 C_OBJECT:C1216($event;$o)
@@ -26,47 +26,54 @@ Case of
 		
 		If ($index<=Form:C1466.pictures.length)
 			
-			$bValid:=True:C214
-			
-			If (Form:C1466.buttons#Null:C1517)
+			If (Contextual click:C713)
 				
-				GET MOUSE:C468($Lon_x;$Lon_y;$l)  // Relative to the current form window
-				LISTBOX GET CELL COORDINATES:C1330(*;$event.objectName;$event.column;$event.row;$left;$top;$right;$bottom)  // Relative to the current form
-				
-				  // Convert to screen coordinates
-				CONVERT COORDINATES:C1365($left;$top;XY Current form:K27:5;XY Screen:K27:7)
-				CONVERT COORDINATES:C1365($Lon_x;$Lon_y;XY Current window:K27:6;XY Screen:K27:7)
-				
-				For each ($o;Form:C1466.buttons) While ($bValid)
+				If (Form:C1466.contextual#Null:C1517)
 					
-					If ($Lon_x>=($left+$o.left)) & ($Lon_x<=($left+$o.left+$o.width))\
-						 & ($Lon_y>=($top+$o.top)) & ($Lon_y<=($top+$o.top+$o.height))
-						
-						$bValid:=False:C215
-						$o.formula.call(Null:C1517;Form:C1466.infos[$index-1])
-						
-					End if 
-				End for each 
+					Form:C1466.contextual.formula.call(Null:C1517;Form:C1466.contextual.target[$index-1])
+					
+				End if 
 				
 			Else 
 				
-				  // A "If" statement should never omit "Else"
+				$bSelect:=True:C214
 				
-			End if 
-			
-			If ($bValid)
+				If (Form:C1466.hotZones#Null:C1517)
+					
+					GET MOUSE:C468($Lon_x;$Lon_y;$l)  // Relative to the current form window
+					LISTBOX GET CELL COORDINATES:C1330(*;$event.objectName;$event.column;$event.row;$left;$top;$right;$bottom)  // Relative to the current form
+					
+					  // Convert to screen coordinates
+					CONVERT COORDINATES:C1365($left;$top;XY Current form:K27:5;XY Screen:K27:7)
+					CONVERT COORDINATES:C1365($Lon_x;$Lon_y;XY Current window:K27:6;XY Screen:K27:7)
+					
+					For each ($o;Form:C1466.hotZones) While ($bSelect)
+						
+						If ($Lon_x>=($left+$o.left))\
+							 & ($Lon_x<=($left+$o.left+$o.width))\
+							 & ($Lon_y>=($top+$o.top)) & ($Lon_y<=($top+$o.top+$o.height))
+							
+							$bSelect:=False:C215
+							$o.formula.call(Null:C1517;$o.target[$index-1])
+							
+						End if 
+					End for each 
+				End if 
 				
-				  // Select
-				Form:C1466.item:=$index
-				
-				If (Is nil pointer:C315(OBJECT Get pointer:C1124(Object subform container:K67:4)))
+				If ($bSelect)
 					
-					ACCEPT:C269  // Auto valid
+					  // Select
+					Form:C1466.item:=$index
 					
-				Else 
-					
-					CALL SUBFORM CONTAINER:C1086(-1)  // Call the parent form
-					
+					If (Is nil pointer:C315(OBJECT Get pointer:C1124(Object subform container:K67:4)))
+						
+						ACCEPT:C269  // Auto valid
+						
+					Else 
+						
+						CALL SUBFORM CONTAINER:C1086(-1)  // Call the parent form
+						
+					End if 
 				End if 
 			End if 
 		End if 

@@ -14,8 +14,8 @@ C_BLOB:C604($x)
 C_BOOLEAN:C305($success)
 C_LONGINT:C283($i;$indx)
 C_PICTURE:C286($p)
-C_TEXT:C284($dom;$root;$t;$tDefault;$tTypeForm)
-C_OBJECT:C1216($archive;$errors;$folderComponent;$folderDatabase;$o;$oLocal)
+C_TEXT:C284($dom;$root;$t;$tDefault)
+C_OBJECT:C1216($archive;$errors;$folderComponent;$folderDatabase;$ƒ;$o)
 C_OBJECT:C1216($oManifest;$oPicker;$pathTemplate;$str;$svg)
 C_COLLECTION:C1488($c)
 
@@ -30,12 +30,13 @@ End if
 If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$oLocal:=New object:C1471(\
+	$ƒ:=New object:C1471(\
 		"type";$1;\
 		"cell";New object:C1471("width";140;"height";180);\
 		"icon";New object:C1471("width";300;"height";300);\
 		"forms";New collection:C1472;\
-		"dialog";VIEWS_Handler (New object:C1471("action";"init"))\
+		"dialog";VIEWS_Handler (New object:C1471("action";"init"));\
+		"github";Folder:C1567(Folder:C1567(fk resources folder:K87:11).platformPath;fk platform path:K87:2).file("Images/github.svg")\
 		)
 	
 	  // Optional parameters
@@ -48,7 +49,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	$str:=str 
 	
 	  // Load internal templates
-	$folderComponent:=path [$oLocal.type+"Forms"]()
+	$folderComponent:=path [$ƒ.type+"Forms"]()
 	
 	  // Load the global manifest
 	$oManifest:=JSON Parse:C1218($folderComponent.file("manifest.json").getText())
@@ -66,13 +67,13 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		
 		If ($success)
 			
-			$oLocal.forms.push($o.fullName)
+			$ƒ.forms.push($o.fullName)
 			
 		End if 
 	End for each 
 	
 	  // Search for templates into the host database
-	$folderDatabase:=path ["host"+$oLocal.type+"Forms"]()
+	$folderDatabase:=path ["host"+$ƒ.type+"Forms"]()
 	
 	If ($folderDatabase.exists)
 		
@@ -124,7 +125,7 @@ START HIDING ERRORS
 						
 						If ($success)
 							
-							$success:=String:C10(JSON Parse:C1218($archive.root.file("manifest.json").getText()).type)=($oLocal.type+"form")
+							$success:=String:C10(JSON Parse:C1218($archive.root.file("manifest.json").getText()).type)=($ƒ.type+"form")
 							
 							If ($success)
 								
@@ -143,14 +144,14 @@ STOP HIDING ERRORS
 			
 		End if 
 		
-		$oLocal.forms.combine($c)
+		$ƒ.forms.combine($c)
 		
 	End if 
 	
 	  // Sorting will put the downloaded models first
-	$oLocal.forms:=$oLocal.forms.orderBy()
+	$ƒ.forms:=$ƒ.forms.orderBy()
 	
-	COLLECTION TO ARRAY:C1562($oLocal.forms;$tTxt_forms)
+	COLLECTION TO ARRAY:C1562($ƒ.forms;$tTxt_forms)
 	
 Else 
 	
@@ -169,10 +170,10 @@ $oPicker:=New object:C1471(\
 "pathnames";New collection:C1472;\
 "helpTips";New collection:C1472;\
 "infos";New collection:C1472;\
-"celluleWidth";$oLocal.cell.width;\
-"celluleHeight";$oLocal.cell.height;\
+"celluleWidth";$ƒ.cell.width;\
+"celluleHeight";$ƒ.cell.height;\
 "offset";10;\
-"thumbnailWidth";$oLocal.icon.width;\
+"thumbnailWidth";$ƒ.icon.width;\
 "noPicture";Get localized string:C991("noMedia");\
 "tips";True:C214;\
 "background";0x00FFFFFF;\
@@ -181,13 +182,24 @@ $oPicker:=New object:C1471(\
 "promptBackColor";ui.strokeColor;\
 "hidePromptSeparator";True:C214;\
 "forceRedraw";True:C214;\
-"prompt";$str.setText("selectAFormTemplateToUseAs").localized($oLocal.type);\
-"selector";$oLocal.type)
+"prompt";$str.setText("selectAFormTemplateToUseAs").localized($ƒ.type);\
+"selector";$ƒ.type)
 
 If (featuresFlags.with("resourcesBrowser"))
 	
-	$oPicker.buttons:=New collection:C1472
-	$oPicker.buttons.push(New object:C1471("left";8;"top";8;"width";16;"height";16;"formula";Formula:C1597(tmpl_INFOS )))  // github icon
+	  // Hot zones definition
+	$oPicker.hotZones:=New collection:C1472
+	$oPicker.hotZones.push(New object:C1471(\
+		"left";8;\
+		"top";8;\
+		"width";16;\
+		"height";16;\
+		"target";$oPicker.infos;\
+		"formula";Formula:C1597(tmpl_INFOS )))  // github icon
+	
+	$oPicker.contextual:=New object:C1471(\
+		"target";$oPicker.infos;\
+		"formula";Formula:C1597(tmpl_CONTEXTUAL ))  // Contextual menu
 	
 End if 
 
@@ -196,11 +208,9 @@ $oPicker.vOffset:=155  // Offset of the background button
   // List of forms used in this project
 $oPicker.marked:=New collection:C1472
 
-$tTypeForm:=Form:C1466.$dialog.VIEWS.typeForm()
-
-For each ($t;Form:C1466[$tTypeForm])
+For each ($t;Form:C1466[$ƒ.type])
 	
-	$oPicker.marked.push(Form:C1466[$tTypeForm][$t].form)
+	$oPicker.marked.push(Form:C1466[$ƒ.type][$t].form)
 	
 End for each 
 
@@ -252,40 +262,41 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 		If ($archive#Null:C1517)
 			
 			  // Create image
-			$svg:=svg ().setDimensions($oLocal.cell.width;$oLocal.cell.height)
+			$svg:=svg ().setDimensions($ƒ.cell.width;$ƒ.cell.height)
 			
 			  // Put icon
 			$x:=$archive.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x;$p)
-			  //$svg.embedPicture($p;-10;0)
-			
+			CLEAR VARIABLE:C89($x)
 			$svg.embedPicture($p;5;5)
 			
 			  // Get the manifest
 			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
 			
 			  // Put text
-			$svg.textArea($o.name;10;$oLocal.cell.height-20)\
-				.setDimensions($oLocal.cell.width+10)\
+			$svg.textArea($o.name;10;$ƒ.cell.height-20)\
+				.setDimensions($ƒ.cell.width+10)\
 				.setFill("dimgray")\
 				.setAttribute("text-align";"center")
 			
 			  // Mark if used
-			If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
+			$o.used:=($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
+			
+			If ($o.used)
 				
 				$svg.setAttribute("font-weight";"bold")
 				
 			End if 
 			
-			$svg.image(Folder:C1567(Folder:C1567(fk resources folder:K87:11).platformPath;fk platform path:K87:2).file("Images/github.svg");New object:C1471("left";8;"top";8)).setDimensions(16)
-			
-			$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("temp.svg");True:C214)
+			  // Add github icon
+			$svg.image($ƒ.github;New object:C1471(\
+				"left";8;\
+				"top";8)).setDimensions(16)
 			
 			$oPicker.pictures.push($svg.getPicture())
 			$oPicker.pathnames.push($tTxt_forms{$i})
 			$oPicker.helpTips.push($str.setText("tipsTemplate").localized(New collection:C1472(String:C10($pathTemplate.fullName);String:C10($o.organization.login);String:C10($o.version))))
 			$oPicker.infos.push($o)
-			
 			
 		Else 
 			
@@ -302,7 +313,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			If ($pathTemplate.parent.file("layoutIconx2.png").exists)  // Use media
 				
 				  // Create image
-				$svg:=svg .setDimensions($oLocal.cell.width;$oLocal.cell.height)
+				$svg:=svg .setDimensions($ƒ.cell.width;$ƒ.cell.height)
 				
 				  // Media
 				READ PICTURE FILE:C678($pathTemplate.parent.file("layoutIconx2.png").platformPath;$p)
@@ -317,8 +328,8 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 					
 				End if 
 				
-				$svg.textArea($t;10;$oLocal.cell.height-20)\
-					.setDimensions($oLocal.cell.width+10)\
+				$svg.textArea($t;10;$ƒ.cell.height-20)\
+					.setDimensions($ƒ.cell.width+10)\
 					.setFill("dimgray")\
 					.setAttribute("text-align";"center")
 				
@@ -352,7 +363,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 					End if 
 					
 					SVG EXPORT TO PICTURE:C1017($root;$p;Own XML data source:K45:18)
-					CREATE THUMBNAIL:C679($p;$p;$oLocal.cell.width;$oLocal.cell.height)
+					CREATE THUMBNAIL:C679($p;$p;$ƒ.cell.width;$ƒ.cell.height)
 					
 				End if 
 			End if 
@@ -390,36 +401,32 @@ $errors.show()
 If (featuresFlags.with("resourcesBrowser"))
 	
 	  // Put an "explore" button after the default template
-	  //$svg:=svg ("load";File("/RESOURCES/templates/more.png")).setDimensions($oLocal.cell.width;$oLocal.cell.height)
-	$svg:=svg .setDimensions($oLocal.cell.width;$oLocal.cell.height)
+	$svg:=svg .setDimensions($ƒ.cell.width;$ƒ.cell.height)
 	
 	  // Media
 	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more@2x.png").platformPath;$p)
 	$svg.embedPicture($p;-10;0)
 	
-	If (False:C215)  // Put in second position
-		
-		$oPicker.pictures.insert(1;$svg.getPicture())
-		$oPicker.pathnames.insert(1;Null:C1517)
-		$oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($oLocal.type))
-		$oPicker.infos.push(Null:C1517)
-		
-	Else   // Put at the end
-		
-		$oPicker.pictures.push($svg.getPicture())
-		$oPicker.pathnames.push(Null:C1517)
-		$oPicker.helpTips.push($str.setText("downloadMoreResources").localized($oLocal.type))
-		$oPicker.infos.push(Null:C1517)
-		
-	End if 
+	  // Put in second position
+	  //$oPicker.pictures.insert(1;$svg.getPicture())
+	  //$oPicker.pathnames.insert(1;Null)
+	  //$oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($ƒ.type))
+	  //$oPicker.infos.push(Null)
+	
+	  // Put at the end
+	$oPicker.pictures.push($svg.getPicture())
+	$oPicker.pathnames.push(Null:C1517)
+	$oPicker.helpTips.push($str.setText("downloadMoreResources").localized($ƒ.type))
+	$oPicker.infos.push(Null:C1517)
+	
 End if 
 
   // Add 1 because the widget work with arrays
-$indx:=$oPicker.pathnames.indexOf(String:C10(Form:C1466[$oLocal.type][$oLocal.dialog.$.tableNum()].form))+1
+$indx:=$oPicker.pathnames.indexOf(String:C10(Form:C1466[$ƒ.type][$ƒ.dialog.$.tableNum()].form))+1
 $oPicker.item:=Choose:C955($indx=0;1;$indx)
 
   // Display selector
-$oLocal.dialog.form.call(New collection:C1472("pickerShow";$oPicker))
+$ƒ.dialog.form.call(New collection:C1472("pickerShow";$oPicker))
 
   // ----------------------------------------------------
   // Return

@@ -25,7 +25,8 @@ Case of
 		  //______________________________________________________
 	: ($event.objectName="webarea")
 		
-		$form:=BROWSER_Handler (New object:C1471("action";"init"))
+		$form:=BROWSER_Handler (New object:C1471(\
+			"action";"init"))
 		
 		Case of 
 				
@@ -72,7 +73,7 @@ Case of
 						
 						  //https://github.com/4d-for-ios/form-detail-SimpleHeader/releases/download/0.0.1/form-detail-SimpleHeader.zip
 						
-						$tForm:=$c[$c.length-1]  // Name of the archive
+						$tForm:=$c.pop()  // Name of the archive
 						
 						  // Create destination folder if any
 						Case of 
@@ -100,31 +101,31 @@ Case of
 								  //……………………………………………………………………………………
 						End case 
 						
-						$c:=Split string:C1554(Form:C1466.url;"/")
-						
-						If (Not:C34($folderDestination.file($tForm).exists))  // Download
+						If ($folderDestination.exists)
 							
-							$archive:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($tForm)
+							$c:=Split string:C1554(Form:C1466.url;"/")
 							
-							If ($archive.exists)
+							If (Not:C34($folderDestination.file($tForm).exists))  // Download
 								
-								$archive.delete()
+								$archive:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($tForm)
 								
-							End if 
-							
-							$oProgress:=progress ("downloadInProgress").showStop()  // ------ ->
-							
-							$oProgress.setMessage($tForm).bringToFront()
-							
-							$http:=http ($tURL).get(Is a document:K24:1;False:C215;$archive)
-							
-							$oProgress.close()  // ------------------------------------------ <-
-							
-							If (Not:C34($oProgress.stopped))
-								
-								If ($http.success)
+								If ($archive.exists)
 									
-									If ($folderDestination.exists)
+									$archive.delete()
+									
+								End if 
+								
+								$oProgress:=progress ("downloadInProgress").showStop()  // ------ ->
+								
+								$oProgress.setMessage($tForm).bringToFront()
+								
+								$http:=http ($tURL).get(Is a document:K24:1;False:C215;$archive)
+								
+								$oProgress.close()  // ------------------------------------------ <-
+								
+								If (Not:C34($oProgress.stopped))
+									
+									If ($http.success)
 										
 										$folderDestination:=$archive.copyTo($folderDestination;fk overwrite:K87:5)
 										
@@ -138,53 +139,53 @@ Case of
 										  // ERROR
 										CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"hideBrowser")
 										
-										If ($folderDestination=Null:C1517)
-											
-											POST_FORM_MESSAGE (New object:C1471(\
-												"target";Current form window:C827;\
-												"action";"show";\
-												"type";"alert";\
-												"title";"fileNotFound";\
-												"additional";"theAliasMobileOriginalCan'tBeFound"\
-												))
-											
-										Else 
-											
-											POST_FORM_MESSAGE (New object:C1471(\
-												"target";Current form window:C827;\
-												"action";"show";\
-												"type";"alert";\
-												"title";"fileNotFound";\
-												"additional";"fileNotFound"\
-												))
-											
-										End if 
+										POST_FORM_MESSAGE (New object:C1471(\
+											"target";Current form window:C827;\
+											"action";"show";\
+											"type";"alert";\
+											"title";"ERROR";\
+											"additional";$http.errors.pop();\
+											"okFormula";Formula:C1597(OBJECT SET VISIBLE:C603(*;"browser";True:C214))\
+											))
+										
 									End if 
-									
-								Else 
-									
-									  // ERROR
-									CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"hideBrowser")
-									
-									POST_FORM_MESSAGE (New object:C1471(\
-										"target";Current form window:C827;\
-										"action";"show";\
-										"type";"alert";\
-										"title";"ERROR";\
-										"additional";$http.errors.pop();\
-										"okFormula";Formula:C1597(OBJECT SET VISIBLE:C603(*;"browser";True:C214))\
-										))
-									
 								End if 
+								
+							Else 
+								
+								Form:C1466.selector:=$c[$c.length-3]
+								Form:C1466.form:="/"+$tForm
+								
+								CALL SUBFORM CONTAINER:C1086(-1)
+								
 							End if 
 							
 						Else 
 							
-							Form:C1466.selector:=$c[$c.length-3]
-							Form:C1466.form:="/"+$tForm
+							  // ERROR
+							CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"hideBrowser")
 							
-							CALL SUBFORM CONTAINER:C1086(-1)
-							
+							If ($folderDestination=Null:C1517)
+								
+								POST_FORM_MESSAGE (New object:C1471(\
+									"target";Current form window:C827;\
+									"action";"show";\
+									"type";"alert";\
+									"title";"fileNotFound";\
+									"additional";"theAliasMobileOriginalCan'tBeFound"\
+									))
+								
+							Else 
+								
+								POST_FORM_MESSAGE (New object:C1471(\
+									"target";Current form window:C827;\
+									"action";"show";\
+									"type";"alert";\
+									"title";"fileNotFound";\
+									"additional";"fileNotFound"\
+									))
+								
+							End if 
 						End if 
 						
 						  //______________________________________________________
