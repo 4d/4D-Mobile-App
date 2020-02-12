@@ -195,7 +195,7 @@ If (Length:C16($Txt_page)>0)
 			  //………………………………………………………………………………………
 		: ($Lon_page=5)
 			
-			If (featuresFlags.with("newViewUI"))
+			If (feature.with("newViewUI"))
 				
 				$Obj_geometry.panels.push(New object:C1471(\
 					"title";Get localized string:C991("forms");\

@@ -196,7 +196,7 @@ Case of
 											
 											  // 1 -> N relation attribute (reference to an entity selection)
 											
-											If (featuresFlags.with("oneToManyRelations"))
+											If (feature.with("oneToManyRelations"))
 												
 												$Obj_table.field.push(New object:C1471(\
 													"name";$Txt_field;\
@@ -543,7 +543,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																 | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																								 | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
@@ -781,7 +781,7 @@ Case of
 		  //______________________________________________________
 	: ($Obj_in.action="tables")  //  [OBSOLETE]
 		
-		If (Bool:C1537(featuresFlags._98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
+		If (Bool:C1537(feature._98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
 			
 			  // CHECK ALL CALLERS AND UNIT TEST
 			

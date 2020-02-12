@@ -179,7 +179,7 @@ Case of
 					End if 
 				End for each 
 				
-				If (featuresFlags.with("resourcesBrowser"))
+				If (feature.with("resourcesBrowser"))
 					
 					$errors:=err .hide()
 					

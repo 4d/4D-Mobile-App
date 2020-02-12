@@ -465,7 +465,7 @@ Case of
 		  //==================================================
 	: ($event.objectName=$form.resources.name)
 		
-		If (featuresFlags.with("resourcesBrowser"))
+		If (feature.with("resourcesBrowser"))
 			
 			  // Show browser
 			$form.form.call(New collection:C1472("initBrowser";New object:C1471(\

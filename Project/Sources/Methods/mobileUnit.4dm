@@ -83,7 +83,7 @@ Case of
 	: ($Txt_in="featuresFlags")
 		
 		$Obj_out:=New object:C1471(\
-			"features";Formula:C1597(featuresFlags))
+			"features";Formula:C1597(feature))
 		
 		  //______________________________________________________
 	: ($Txt_in="loadProject")
@@ -139,7 +139,7 @@ Case of
 		
 		  // see if a feature is activated and exist
 		$Obj_out:=New object:C1471(\
-			"value";featuresFlags["_"+String:C10($Obj_in.value)])
+			"value";feature["_"+String:C10($Obj_in.value)])
 		
 		$Obj_out.success:=($Obj_out.value#Null:C1517)
 		

@@ -822,7 +822,7 @@ Case of
 				"path";$Obj_param.path;\
 				"type";"xcworkspace"))
 			
-			If (Bool:C1537(featuresFlags._568))  // FAST SDK MOVE
+			If (Bool:C1537(feature._568))  // FAST SDK MOVE
 				
 				sdk (New object:C1471(\
 					"action";"cache";\

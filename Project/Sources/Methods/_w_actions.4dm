@@ -59,7 +59,7 @@ Case of
 		$Txt_type:=$Obj_context.typeForm()
 		
 		If ($Txt_type="detail")\
-			 & (featuresFlags.with("withWidgetActions"))
+			 & (feature.with("withWidgetActions"))
 			
 			$Txt_type:=$Txt_type+"widget"
 			

@@ -159,7 +159,7 @@ Else
 						  //#MARK_TO_OPTIMIZE
 						  // Add all related fields
 						
-						If (featuresFlags.with("newDataModel"))
+						If (feature.with("newDataModel"))
 							
 							$o:=structure (New object:C1471(\
 								"action";"relatedCatalog";\

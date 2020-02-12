@@ -75,7 +75,7 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 		Else   // Action area (WIP)
 			
-			If (featuresFlags.with("withWidgetActions"))
+			If (feature.with("withWidgetActions"))
 				
 				  // Accept drag if a widget action is drag over
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.action";$x)

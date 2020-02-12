@@ -131,7 +131,7 @@ If ($Obj_in.create)
 	$Obj_project.server.authentication.reloadData:=False:C215
 	
 	  // If there is filter with parameters reload data after auth
-	If (featuresFlags.with("newDataModel"))
+	If (feature.with("newDataModel"))
 		
 		For each ($Txt_buffer;$Obj_project.dataModel)
 			
@@ -165,7 +165,7 @@ If ($Obj_in.create)
 		
 		For each ($Txt_buffer;$Obj_project.dataModel)
 			
-			If (featuresFlags.with("newDataModel"))
+			If (feature.with("newDataModel"))
 				
 				If (Not:C34(Bool:C1537($Obj_project.dataModel[$Txt_buffer][""].embedded)))
 					
@@ -414,7 +414,7 @@ If ($Obj_in.create)
 				End if 
 			End if 
 			
-			If (featuresFlags.with("setImageDump"))
+			If (feature.with("setImageDump"))
 				
 				$Obj_out.dump:=dataSet (New object:C1471(\
 					"action";"create";\
@@ -435,7 +435,7 @@ If ($Obj_in.create)
 					"key";$File_;\
 					"caller";$Obj_in.caller;\
 					"verbose";$Boo_verbose;\
-					"picture";Not:C34(Bool:C1537(featuresFlags._97117))))  //_97117 deactive picture dump for QA purpose 
+					"picture";Not:C34(Bool:C1537(feature._97117))))  //_97117 deactive picture dump for QA purpose 
 				
 			End if 
 			
@@ -460,7 +460,7 @@ If ($Obj_in.create)
 		
 		ob_error_combine ($Obj_out;$Obj_out.coreData)
 		
-		If (Bool:C1537(featuresFlags._110882))
+		If (Bool:C1537(feature._110882))
 			
 			If (Not:C34(Bool:C1537($Obj_project.dataSource.doNotGenerateDataAtEachBuild)))
 				
@@ -529,7 +529,7 @@ If ($Obj_in.create)
 		  // ----------------------------------------------------
 		
 		  // Add sources if any to workspace {
-		If (Bool:C1537(featuresFlags._405))  // In feature until fix project launch with xcode
+		If (Bool:C1537(feature._405))  // In feature until fix project launch with xcode
 			
 			Xcode (New object:C1471(\
 				"action";"workspace-addsources";\
@@ -539,7 +539,7 @@ If ($Obj_in.create)
 		  //}
 		
 		  // Backup into git {
-		If (Bool:C1537(featuresFlags._917))
+		If (Bool:C1537(feature._917))
 			
 			git (New object:C1471(\
 				"action";"config core.autocrlf";\

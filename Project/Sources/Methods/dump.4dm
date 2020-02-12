@@ -96,7 +96,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 				
-				$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_table[""];$Obj_table)
+				$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 				
 				$Obj_rest:=Rest (New object:C1471(\
 					"action";"table";\
@@ -186,7 +186,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				$Obj_query:=New object:C1471(\
 					"$limit";String:C10(shared.data.dump.limit))
 				
-				$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_table[""];$Obj_table)
+				$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 				
 				  // Manage  Restricted queries and embedded option
 				If (Not:C34(Bool:C1537($o.embedded)))
@@ -334,7 +334,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 				
-				$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_table[""];$Obj_table)
+				$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 				
 				$Obj_buffer:=dataModel (New object:C1471(\
 					"action";"pictureFields";\

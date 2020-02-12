@@ -353,7 +353,7 @@ If (Num:C11($o_project.info.version)<4)
 	End if 
 End if 
 
-If (featuresFlags.with("newDataModel"))
+If (feature.with("newDataModel"))
 	
 	  //=====================================================================
 	  //                    NEW DATA MODEL
@@ -452,7 +452,7 @@ If (featuresFlags.with("newDataModel"))
 	End if 
 End if 
 
-If (featuresFlags.with("resourcesBrowser"))
+If (feature.with("resourcesBrowser"))
 	
 	If ($o_project.list#Null:C1517)
 		

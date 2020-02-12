@@ -271,7 +271,7 @@ Case of
 		
 		$Obj_table:=$context.currentTable
 		
-		If (featuresFlags.with("newDataModel"))
+		If (feature.with("newDataModel"))
 			
 			$o:=$context.catalog().query("tableNumber = :1";$Obj_table.tableNumber).pop()
 			

@@ -72,7 +72,7 @@ End if
   // ----------------------------------------------------
 If ($oDataModel#Null:C1517)
 	
-	$tTypeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(featuresFlags.with("newViewUI");"VIEWS";"_o_VIEWS")].selector)=2;"detail";"list")
+	$tTypeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(feature.with("newViewUI");"VIEWS";"_o_VIEWS")].selector)=2;"detail";"list")
 	
 /* START HIDING ERRORS */$errors:=err .hide()
 	
@@ -116,7 +116,7 @@ If ($oDataModel#Null:C1517)
 			End if 
 		End if 
 		
-		If (featuresFlags.with("resourcesBrowser"))
+		If (feature.with("resourcesBrowser"))
 			
 			If ($pathForm.extension=shared.archiveExtension)  // Archive
 				
@@ -150,7 +150,7 @@ If ($oDataModel#Null:C1517)
 		End if 
 		
 		  // Avoid too long name
-		$tName:=Choose:C955(featuresFlags.with("newDataModel");$oDataModel[$tTable][""].shortLabel;$oDataModel[$tTable].shortLabel)
+		$tName:=Choose:C955(feature.with("newDataModel");$oDataModel[$tTable][""].shortLabel;$oDataModel[$tTable].shortLabel)
 		
 		If (Length:C16($tName)>$oParams.maxChar)
 			

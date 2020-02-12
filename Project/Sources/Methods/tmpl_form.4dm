@@ -50,7 +50,7 @@ If ($tFormName[[1]]="/")  // Host database resources
 	
 	$tFormName:=Delete string:C232($tFormName;1;1)  // Remove initial slash
 	
-	If (featuresFlags.with("resourcesBrowser"))
+	If (feature.with("resourcesBrowser"))
 		
 		If (Path to object:C1547($tFormName).extension=shared.archiveExtension)  // Archive
 			

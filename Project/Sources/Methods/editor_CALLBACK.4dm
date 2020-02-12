@@ -36,7 +36,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		
 	End if 
 	
-	If (featuresFlags.with("newViewUI"))
+	If (feature.with("newViewUI"))
 		
 		$form:=New object:C1471(\
 			"window";Current form window:C827;\

@@ -727,7 +727,7 @@ Case of
 		  //==================================================
 End case 
 
-If (featuresFlags.with(8858))
+If (feature.with(8858))
 	
 	project.save()
 	

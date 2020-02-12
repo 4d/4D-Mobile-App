@@ -44,7 +44,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (Bool:C1537(featuresFlags._8858))  // Debug mode
+If (Bool:C1537(feature._8858))  // Debug mode
 	
 	$Dir_:=System folder:C487(Desktop:K41:16)+Convert path POSIX to system:C1107("DEV/")
 	

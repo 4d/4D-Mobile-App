@@ -79,7 +79,7 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 			"formula";Formula:C1597(VIEWS_Handler (New object:C1471(\
 			"action";"geometry")))))
 		
-		If (featuresFlags.with("newViewUI"))
+		If (feature.with("newViewUI"))
 			
 			$c.push(New object:C1471(\
 				"object";New collection:C1472("preview";"preview.label";"preview.back";"Preview.border");\
@@ -145,7 +145,7 @@ Case of
 				$offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
 				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($offset)
 				
-				If (featuresFlags.with("resourcesBrowser"))
+				If (feature.with("resourcesBrowser"))
 					$form.resources.hide()
 				Else 
 					
@@ -222,7 +222,7 @@ Case of
 				  // Update geometry
 				$context.setGeometry()
 				
-				If (featuresFlags.with("withWidgetActions"))
+				If (feature.with("withWidgetActions"))
 					
 					  //$context.actions:=_w_actions ("getList";$context).actions
 					
@@ -264,7 +264,7 @@ Case of
 						  // Uppdate preview
 						views_preview ("draw";$form)
 						
-						If (featuresFlags.with("withWidgetActions"))
+						If (feature.with("withWidgetActions"))
 							
 							  //(ui.pointer($form.actionDrop))->:=_w_actions ("preview";$context).pict
 							

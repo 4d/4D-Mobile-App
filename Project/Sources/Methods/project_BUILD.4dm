@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																																																"action";"safeDelete";\
-																																																"path";$Obj_in.path))
+																																																				"action";"safeDelete";\
+																																																				"path";$Obj_in.path))
 			  // End if
 			
 		End if 
@@ -116,7 +116,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  // Verify the structure
 			$c:=New collection:C1472
 			
-			If (featuresFlags.with("newDataModel"))
+			If (feature.with("newDataModel"))
 				
 				For each ($t;$Obj_project.dataModel)
 					
@@ -197,7 +197,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					  // Local web server is mandatory only if data are embedded
 					For each ($t;$Obj_project.dataModel) Until ($b)
-						If (featuresFlags.with("newDataModel"))
+						If (feature.with("newDataModel"))
 							$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
 						Else 
 							$b:=Bool:C1537($Obj_project.dataModel[$t].embedded)
@@ -276,7 +276,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 						  // SERVER STRUCTURE IS NOT OK. Confirm if data embed, Alert else
 						For each ($t;$Obj_project.dataModel) Until ($b)
 							
-							If (featuresFlags.with("newDataModel"))
+							If (feature.with("newDataModel"))
 								$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
 							Else 
 								$b:=Bool:C1537($Obj_project.dataModel[$t].embedded)
@@ -332,7 +332,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					  // SERVER NOT REACHABLE - Ignore if no data embed, Confirm else
 					For each ($t;$Obj_project.dataModel) Until ($b)
 						
-						If (featuresFlags.with("newDataModel"))
+						If (feature.with("newDataModel"))
 							$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
 						Else 
 							$b:=Bool:C1537($Obj_project.dataModel[$t].embedded)

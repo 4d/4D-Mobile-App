@@ -287,7 +287,7 @@ Case of
 						
 						$menu:=menu 
 						
-						If (featuresFlags.with("newDataModel"))
+						If (feature.with("newDataModel"))
 							
 							For each ($t;Form:C1466.dataModel)
 								
@@ -382,7 +382,7 @@ Case of
 			
 			$menu.append(":xliff:deleteActionFor";$Obj_delete)
 			
-			If (featuresFlags.with("newDataModel"))
+			If (feature.with("newDataModel"))
 				
 				For each ($t;Form:C1466.dataModel)
 					
@@ -472,7 +472,7 @@ Case of
 					
 					$Obj_table:=Form:C1466.dataModel[$menu.table]
 					
-					If (featuresFlags.with("newDataModel"))
+					If (feature.with("newDataModel"))
 						
 						  // Generate a unique name
 						$t:=str (formatString ("label";$Obj_table[""].name)).uperCamelCase()
@@ -514,7 +514,7 @@ Case of
 							
 							$o.parameters:=New collection:C1472
 							
-							If (featuresFlags.with("newDataModel"))
+							If (feature.with("newDataModel"))
 								
 								$Col_fields:=catalog ("fields";New object:C1471("tableName";$Obj_table[""].name)).fields
 								
@@ -822,7 +822,7 @@ Case of
 		  //==================================================
 End case 
 
-If (Bool:C1537(featuresFlags._8858))
+If (Bool:C1537(feature._8858))
 	
 	project.save()
 	

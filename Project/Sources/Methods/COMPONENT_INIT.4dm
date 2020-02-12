@@ -16,7 +16,7 @@ C_PICTURE:C286($p)
 C_TEXT:C284($t;$tKey;$tProcess)
 C_OBJECT:C1216($o;$oPreferences;$signal)
 
-C_OBJECT:C1216(featuresFlags)
+C_OBJECT:C1216(feature)
 C_OBJECT:C1216(shared)
 C_OBJECT:C1216(ui)
 C_OBJECT:C1216(record)
@@ -380,9 +380,9 @@ End if
 $lCurrentVersion:=Num:C11(Application version:C493)
 $lMainVersion:=1830
 
-If (OB Is empty:C1297(featuresFlags)) | $bReset
+If (OB Is empty:C1297(feature)) | $bReset
 	
-	featuresFlags:=New object:C1471(\
+	feature:=New object:C1471(\
 		"with";Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]));\
 		"unstable";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($lCurrentVersion>=$lMainVersion));\
 		"delivered";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($lCurrentVersion>=Num:C11($2)));\
@@ -401,7 +401,7 @@ If (OB Is empty:C1297(featuresFlags)) | $bReset
 	  //featuresFlags._475:=True // deactivate code signing on framework
 	  //featuresFlags._234:=True // Add in coreData model Record abstract entity
 	  //featuresFlags._568:=True // use previous project build SDK as new SDK (ie. fast sdk move, bug exists)
-	featuresFlags.debug(8858)  // Activates a debug mode for UI
+	feature.debug(8858)  // Activates a debug mode for UI
 	
 	  // Use old behaviour
 	  //featuresFlags._677:=True // Format fields when dumping data from rest (userless if iOS app could translate)
@@ -441,7 +441,7 @@ If (OB Is empty:C1297(featuresFlags)) | $bReset
 	  //featuresFlags._103505:=($Lon_version>=1750)  // Add, Update and Save Actions
 	  //featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
 	  //featuresFlags.withRecursiveLink:=True  // Enable recursive link management
-	featuresFlags.delivered(98145;1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
+	feature.delivered(98145;1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 17R6 |
@@ -453,29 +453,29 @@ If (OB Is empty:C1297(featuresFlags)) | $bReset
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  18  |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags.delivered(105431;1800)  // Display 1-n relations
-	featuresFlags.delivered(110882;1800)  // Dump data into core data SQLLite database
+	feature.delivered(105431;1800)  // Display 1-n relations
+	feature.delivered(110882;1800)  // Dump data into core data SQLLite database
 	
-	featuresFlags.delivered("newDataModel";1800)
+	feature.delivered("newDataModel";1800)
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             | 18R2 |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags.delivered("repairStructureMoreVisible";1820)
-	featuresFlags.delivered(113164;1820)  // Enable/disable image dump
+	feature.delivered("repairStructureMoreVisible";1820)
+	feature.delivered(113164;1820)  // Enable/disable image dump
 	
 	  // ________________________________________________________________________________________________________________________________
 	  //                                                             |  WIP |
 	  // ________________________________________________________________________________________________________________________________
-	featuresFlags.wip("withWidgetActions")  // Enable widget actions
-	featuresFlags.wip("accentColors")  // Manage colors according to user system parameters
+	feature.wip("withWidgetActions")  // Enable widget actions
+	feature.wip("accentColors")  // Manage colors according to user system parameters
 	
-	featuresFlags.wip(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
+	feature.wip(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
 	
-	featuresFlags.unstable(113016)  // Svg improvement in forms section
-	featuresFlags.unstable(112225)  // Select / install / use custom templates
+	feature.unstable(113016)  // Svg improvement in forms section
+	feature.unstable(112225)  // Select / install / use custom templates
 	
-	featuresFlags.wip("formatMarketPlace")  // Manage format as archive
+	feature.wip("formatMarketPlace")  // Manage format as archive
 	
 End if 
 
@@ -485,7 +485,7 @@ If ($oPreferences.features#Null:C1517)  // Update feature flags with the local p
 		
 		If (Value type:C1509($o.enabled)=Is boolean:K8:9)
 			
-			featuresFlags["_"+String:C10($o.id)]:=Bool:C1537($o.enabled)
+			feature["_"+String:C10($o.id)]:=Bool:C1537($o.enabled)
 			
 		Else 
 			
@@ -561,7 +561,7 @@ If ($oPreferences.features#Null:C1517)  // Update feature flags with the local p
 				End case 
 			End for each 
 			
-			featuresFlags["_"+String:C10($o.id)]:=$bEnabled
+			feature["_"+String:C10($o.id)]:=$bEnabled
 			
 		End if 
 	End for each 
@@ -570,19 +570,19 @@ End if
   // ________________________________________________________________________________________________________________________________
   //                                                             | ALIAS |
   // ________________________________________________________________________________________________________________________________
-featuresFlags.alias("oneToManyRelations";105431)
-featuresFlags.alias("setImageDump";113164)
-featuresFlags.alias("newViewUI";113016)
-featuresFlags.alias("resourcesBrowser";112225)
+feature.alias("oneToManyRelations";105431)
+feature.alias("setImageDump";113164)
+feature.alias("newViewUI";113016)
+feature.alias("resourcesBrowser";112225)
 
 If (Not:C34($lMode ?? 1))\
  & ($tProcess#"4D Mobile (@")
 	
-	For each ($t;featuresFlags)
+	For each ($t;feature)
 		
-		If (Value type:C1509(featuresFlags[$t])=Is boolean:K8:9)
+		If (Value type:C1509(feature[$t])=Is boolean:K8:9)
 			
-			record.log("feature "+$t+": "+Choose:C955(featuresFlags[$t];"Enabled";"Disabled"))
+			record.log("feature "+$t+": "+Choose:C955(feature[$t];"Enabled";"Disabled"))
 			
 		End if 
 	End for each 
@@ -597,7 +597,7 @@ End if
 
 COMPONENT_DEFINE_TOOLS 
 
-If (featuresFlags.with("accentColors"))
+If (feature.with("accentColors"))
 	
 	  // Ui.selectedColor:=Highlight menu background color
 	  // Ui.highlightColor:=Highlight menu background color
@@ -607,7 +607,7 @@ If (featuresFlags.with("accentColors"))
 	
 End if 
 
-If (Bool:C1537(featuresFlags._8858))
+If (Bool:C1537(feature._8858))
 	
 	SET ASSERT ENABLED:C1131(True:C214;*)
 	

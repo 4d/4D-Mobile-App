@@ -46,7 +46,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (featuresFlags.with("repairStructureMoreVisible"))
+If (feature.with("repairStructureMoreVisible"))
 	
 	$o:=ui.button("action")
 	

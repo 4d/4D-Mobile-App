@@ -16,7 +16,7 @@ If (Storage:C1525.ƒ=Null:C1517)\
 			Storage:C1525.ƒ.isField:=Formula:C1597(This:C1470.isNumeric($1))
 			Storage:C1525.ƒ.isRelationToOne:=Formula:C1597($1.relatedDataClass#Null:C1517)
 			
-			If (Bool:C1537(featuresFlags.oneToManyRelations))
+			If (Bool:C1537(feature.oneToManyRelations))
 				
 				Storage:C1525.ƒ.isRelationToMany:=Formula:C1597(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities"))
 				Storage:C1525.ƒ.isRelation:=Formula:C1597((This:C1470.isRelationToOne($1)) | (This:C1470.isRelationToMany($1)))

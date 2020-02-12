@@ -73,7 +73,7 @@ Case of
 					  // Load the template
 					PROCESS 4D TAGS:C816($pathForm.file("template.svg").getText();$t)
 					
-					If (featuresFlags.with("newViewUI"))
+					If (feature.with("newViewUI"))
 						
 						If (Num:C11($oManifest.version)<2)  // COMPATIBILITY MODE
 							
@@ -158,7 +158,7 @@ Case of
 									
 									If ($svg.success)
 										
-										If (featuresFlags.with("newViewUI"))
+										If (feature.with("newViewUI"))
 											
 											$dom:=$svg.findById($tField+".label")
 											
@@ -203,7 +203,7 @@ Case of
 											DOM SET XML ATTRIBUTE:C866($dom;\
 												"id";$tField+".label")
 											
-											If (featuresFlags.with("newViewUI"))
+											If (feature.with("newViewUI"))
 												
 												DOM SET XML ELEMENT VALUE:C868($dom;Get localized string:C991("dropAFieldHere"))
 												
@@ -217,7 +217,7 @@ Case of
 											  // Set id, bind & default label
 											$dom:=DOM Find XML element by ID:C1010($domNew;"f")
 											
-											If (featuresFlags.with("newViewUI")) & False:C215
+											If (feature.with("newViewUI")) & False:C215
 												
 												DOM SET XML ATTRIBUTE:C866($dom;\
 													"id";$tField;\
@@ -424,13 +424,13 @@ Case of
 							End if 
 						End if 
 						
-						If (featuresFlags.with("_8858"))
+						If (feature.with("_8858"))
 							
 							$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg");True:C214)
 							
 						End if 
 						
-						If (featuresFlags.with("newViewUI"))
+						If (feature.with("newViewUI"))
 							
 							$form.preview.getCoordinates()
 							

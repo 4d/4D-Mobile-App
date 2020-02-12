@@ -273,7 +273,7 @@ Case of
 		  //==================================================
 End case 
 
-If (Bool:C1537(featuresFlags._8858))
+If (Bool:C1537(feature._8858))
 	
 	ui.saveProject()
 	

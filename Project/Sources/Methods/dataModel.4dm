@@ -103,7 +103,7 @@ Case of
 					$tTxt_entityValues{3}:="YES"
 					$tTxt_entityValues{4}:="class"
 					
-					If (Bool:C1537(featuresFlags._234))
+					If (Bool:C1537(feature._234))
 						
 						  // Parent abtract Record entity in model, with common private fields
 						$Txt_tableName:="Record"
@@ -172,7 +172,7 @@ Case of
 						$Lon_tableID:=Num:C11($tTxt_tables{$Lon_table})
 						$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
 						
-						If (featuresFlags.with("newDataModel"))
+						If (feature.with("newDataModel"))
 							
 							$Txt_buffer:=$Obj_table[""].name
 							
@@ -190,7 +190,7 @@ Case of
 						
 						$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model;"entity";$tTxt_entityAttributes;$tTxt_entityValues)
 						
-						If (Bool:C1537(featuresFlags._234))
+						If (Bool:C1537(feature._234))
 							
 							DOM SET XML ATTRIBUTE:C866($Dom_entity;\
 								"parentEntity";"Record")
@@ -216,7 +216,7 @@ Case of
 							
 						End if 
 						
-						$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_table[""];$Obj_table)
+						$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 						
 						  // Has or not the global stamp fields
 						$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
@@ -477,7 +477,7 @@ Case of
 												End for 
 												
 												  //without forgot the primaryKey
-												If (featuresFlags.with("newDataModel"))
+												If (feature.with("newDataModel"))
 													
 													$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)][""].primaryKey
 													
@@ -640,7 +640,7 @@ Case of
 								
 								$Obj_relationTable:=$Obj_dataModel[$tTxt_tables{$Lon_table2}]
 								
-								$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_relationTable[""];$Obj_relationTable)
+								$o:=Choose:C955(feature.with("newDataModel");$Obj_relationTable[""];$Obj_relationTable)
 								  //$o:=$Obj_relationTable
 								
 								If ($o.name=$Obj_table[$Txt_relationName].relatedDataClass)
@@ -655,7 +655,7 @@ Case of
 							
 							If (Not:C34($Boo_found))  // not found we must add a new table in model
 								
-								If (featuresFlags.with("newDataModel"))
+								If (feature.with("newDataModel"))
 									
 									$Obj_relationTable:=New object:C1471(\
 										"";New object:C1471("name";$Obj_table[$Txt_relationName].relatedDataClass)\
@@ -680,7 +680,7 @@ Case of
 									
 									$o.primaryKey:=$Obj_buffer.tableInfo.primaryKey
 									
-									If (featuresFlags.with("newDataModel"))
+									If (feature.with("newDataModel"))
 										$o.slave:=$Obj_table[""].name
 									Else 
 										$o.slave:=$Obj_table.name
@@ -713,7 +713,7 @@ Case of
 								End if 
 							End for 
 							
-							If (featuresFlags.with("newDataModel"))
+							If (feature.with("newDataModel"))
 								
 								  // Get inverse field
 								$Obj_buffer:=structure (New object:C1471(\
@@ -776,7 +776,7 @@ Case of
 			$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
 			OB GET PROPERTY NAMES:C1232($Obj_table;$tTxt_fields)
 			
-			$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_table[""];$Obj_table)
+			$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 			
 			If ($o.primaryKey#Null:C1517)
 				
@@ -1007,7 +1007,7 @@ Case of
 						
 						If (Bool:C1537($Obj_in.tag))  // for tag format name
 							
-							If (featuresFlags.with("newDataModel"))
+							If (feature.with("newDataModel"))
 								
 								$Obj_table.originalName:=$Obj_table[""].name
 								$Obj_table.name:=formatString ("table-name";$Obj_table[""].name)
@@ -1183,7 +1183,7 @@ Case of
 				End if 
 			End for each 
 			
-			$o:=Choose:C955(featuresFlags.with("newDataModel");$Obj_in.table[""];$Obj_in.table)
+			$o:=Choose:C955(feature.with("newDataModel");$Obj_in.table[""];$Obj_in.table)
 			
 			  // Append the primaryKey if any
 			If ((Length:C16(String:C10($o.primaryKey))>0) & \
@@ -1325,7 +1325,7 @@ Case of
 			
 			For each ($t;$Obj_dataModel)
 				
-				If (featuresFlags.with("newDataModel"))
+				If (feature.with("newDataModel"))
 					
 					$Obj_out.values.push($Obj_dataModel[$t][""].name)
 					

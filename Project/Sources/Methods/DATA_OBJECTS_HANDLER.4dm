@@ -288,7 +288,7 @@ Case of
 						$o:=str (String:C10($oTable.filter.string)).insert($menu.choice;$start;$end)
 						$oTable.filter.string:=$o.value
 						
-						If (featuresFlags.with("newDataModel"))
+						If (feature.with("newDataModel"))
 							
 							Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
 							
@@ -336,7 +336,7 @@ Case of
 		
 		$oTable.filter:=$o.filter
 		
-		If (featuresFlags.with("newDataModel"))
+		If (feature.with("newDataModel"))
 			
 			Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
 			
@@ -356,7 +356,7 @@ Case of
 		  //==================================================
 	: ($event.objectName=$form.embedded)
 		
-		If (featuresFlags.with("newDataModel"))
+		If (feature.with("newDataModel"))
 			
 			If (Bool:C1537($oTable.embedded))
 				
@@ -432,7 +432,7 @@ Case of
 				
 				$t:=Get edited text:C655
 				
-				If (featuresFlags.with("newDataModel"))
+				If (feature.with("newDataModel"))
 					
 					$o:=Form:C1466.dataModel[String:C10($oTable.tableNumber)][""]
 					
@@ -508,7 +508,7 @@ Case of
 		  //==================================================
 End case 
 
-If (Bool:C1537(featuresFlags._8858))
+If (Bool:C1537(feature._8858))
 	
 	ui.saveProject()
 	

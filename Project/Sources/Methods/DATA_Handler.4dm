@@ -267,7 +267,7 @@ Case of
 				If (Bool:C1537($Obj_table.embedded))\
 					 & (Not:C34(Bool:C1537($Obj_table.filter.parameters)))
 					
-					If (Bool:C1537(featuresFlags._110882))
+					If (Bool:C1537(feature._110882))
 						
 						$Boo_sqllite:=($Obj_context.sqlite#Null:C1517)
 						

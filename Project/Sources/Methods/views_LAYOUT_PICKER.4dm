@@ -96,7 +96,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 			End if 
 		End for each 
 		
-		If (featuresFlags.with("resourcesBrowser"))
+		If (feature.with("resourcesBrowser"))
 			
 /***********************
 START HIDING ERRORS
@@ -185,7 +185,7 @@ $oPicker:=New object:C1471(\
 "prompt";$str.setText("selectAFormTemplateToUseAs").localized($ƒ.type);\
 "selector";$ƒ.type)
 
-If (featuresFlags.with("resourcesBrowser"))
+If (feature.with("resourcesBrowser"))
 	
 	  // Hot zones definition
 	$oPicker.hotZones:=New collection:C1472
@@ -227,7 +227,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 		
 		$t:=Delete string:C232($tTxt_forms{$i};1;1)
 		
-		If (featuresFlags.with("resourcesBrowser"))
+		If (feature.with("resourcesBrowser"))
 			
 			If (Path to object:C1547($tTxt_forms{$i}).extension=shared.archiveExtension)  // Archive
 				
@@ -398,7 +398,7 @@ STOP HIDING ERRORS
 ***********************/
 $errors.show()
 
-If (featuresFlags.with("resourcesBrowser"))
+If (feature.with("resourcesBrowser"))
 	
 	  // Put an "explore" button after the default template
 	$svg:=svg .setDimensions($ƒ.cell.width;$ƒ.cell.height)

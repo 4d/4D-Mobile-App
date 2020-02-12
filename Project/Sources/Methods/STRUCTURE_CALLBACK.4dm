@@ -68,7 +68,7 @@ If ($file.exists)
 	
 	  // Has the structure been modified ?
 	If (Not:C34($Col_cachedCatalog.equal($Col_currentCatalog)))\
-		 | (Bool:C1537(featuresFlags._8858))
+		 | (Bool:C1537(feature._8858))
 		
 		$Col_unsynchronizedTableFields:=New collection:C1472
 		
@@ -102,7 +102,7 @@ If ($file.exists)
 				Else 
 					
 					  // Check TABLE NAME & PRIMARY KEY
-					If (featuresFlags.with("newDataModel"))
+					If (feature.with("newDataModel"))
 						
 						$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel[""].name)\
 							 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel[""].primaryKey)

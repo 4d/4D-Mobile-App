@@ -87,7 +87,7 @@ Case of
 			WEB START SERVER:C617
 		End if 
 		
-		If (featuresFlags.with("setImageDump"))
+		If (feature.with("setImageDump"))
 			
 			$Obj_result:=dataSet (New object:C1471(\
 				"action";"create";\
@@ -110,7 +110,7 @@ Case of
 				"key";path .key().platformPath;\
 				"caller";Current form window:C827;\
 				"verbose";True:C214;\
-				"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+				"picture";Not:C34(Bool:C1537(feature._97117))))
 			
 		End if 
 		
@@ -135,7 +135,7 @@ Case of
 			WEB START SERVER:C617
 		End if 
 		
-		If (featuresFlags.with("setImageDump"))
+		If (feature.with("setImageDump"))
 			
 			$Obj_result:=dataSet (New object:C1471(\
 				"action";"create";\
@@ -158,7 +158,7 @@ Case of
 				"key";path .key().platformPath;\
 				"caller";Current form window:C827;\
 				"verbose";True:C214;\
-				"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+				"picture";Not:C34(Bool:C1537(feature._97117))))
 			
 		End if 
 		

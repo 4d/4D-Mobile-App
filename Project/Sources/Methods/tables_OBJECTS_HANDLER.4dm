@@ -202,7 +202,7 @@ Case of
 					
 					$Ptr_ids:=ui.pointer($Obj_form.ids)
 					
-					If (featuresFlags.with("newDataModel"))
+					If (feature.with("newDataModel"))
 						
 						If ($Ptr_me=ui.pointer($Obj_form.labels))
 							
@@ -244,7 +244,7 @@ Case of
 		  //==================================================
 End case 
 
-If (Bool:C1537(featuresFlags._8858))
+If (Bool:C1537(feature._8858))
 	
 	ui.saveProject()
 	

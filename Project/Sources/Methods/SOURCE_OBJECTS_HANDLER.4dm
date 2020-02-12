@@ -87,7 +87,7 @@ Case of
 		
 		Form:C1466.$project.dataSetGeneration:=True:C214
 		
-		If (featuresFlags.with("setImageDump"))
+		If (feature.with("setImageDump"))
 			
 			CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
 				"caller";$Obj_form.window;\
@@ -95,7 +95,7 @@ Case of
 				"eraseIfExists";True:C214;\
 				"project";$Obj_project;\
 				"digest";True:C214;\
-				"coreDataSet";Bool:C1537(featuresFlags._110882);\
+				"coreDataSet";Bool:C1537(feature._110882);\
 				"key";$File_key;\
 				"dataSet";True:C214))
 			
@@ -107,19 +107,19 @@ Case of
 				"eraseIfExists";True:C214;\
 				"project";$Obj_project;\
 				"digest";True:C214;\
-				"coreDataSet";Bool:C1537(featuresFlags._110882);\
+				"coreDataSet";Bool:C1537(feature._110882);\
 				"key";$File_key;\
 				"dataSet";True:C214;\
-				"picture";Not:C34(Bool:C1537(featuresFlags._97117))))
+				"picture";Not:C34(Bool:C1537(feature._97117))))
 			
 		End if 
 		
 		  // If (Shift down)
 		  //SHOW ON DISK(dataSet (New object(\
-									"action";"path";\
-									"project";New object(\
-									"product";Form.product;\
-									"$project";Form.$project))).path)
+												"action";"path";\
+												"project";New object(\
+												"product";Form.product;\
+												"$project";Form.$project))).path)
 		  // End if
 		
 		  //==================================================

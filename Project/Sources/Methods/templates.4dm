@@ -103,7 +103,7 @@ Case of
 			
 			If (Length:C16($Txt_name)>0)
 				
-				If (featuresFlags.with("resourcesBrowser"))
+				If (feature.with("resourcesBrowser"))
 					
 					$pathForm:=tmpl_form ($Txt_name;String:C10($Obj_template.projectTag))
 					
@@ -222,7 +222,7 @@ Case of
 			
 			If ($t[[1]]="/")  // custom form
 				
-				If (featuresFlags.with("resourcesBrowser"))
+				If (feature.with("resourcesBrowser"))
 					
 					$pathForm:=tmpl_form ($t;String:C10($Obj_template.userChoiceTag))
 					
@@ -265,7 +265,7 @@ Case of
 				  // ==============================================================
 				$Obj_table:=OB Copy:C1225($Obj_tableModel)
 				
-				If (featuresFlags.with("newDataModel"))
+				If (feature.with("newDataModel"))
 					
 					$Obj_table.tableNumber:=$Txt_tableNumber
 					
@@ -638,7 +638,7 @@ Case of
 				
 				If (Value type:C1509($Obj_in.tags.navigationTables)=Is collection:K8:32)
 					
-					If (featuresFlags.with("newDataModel"))
+					If (feature.with("newDataModel"))
 						
 						$Obj_navigationTable:=$Obj_in.tags.navigationTables.query("originalName = :1";String:C10($Obj_table.originalName)).pop()
 						
@@ -905,7 +905,7 @@ Case of
 			
 			For each ($Obj_table;$Obj_in.tags.navigationTables)
 				
-				If (featuresFlags.with("newDataModel"))
+				If (feature.with("newDataModel"))
 					
 					If (Length:C16(String:C10($Obj_table[""].icon))=0)  // no icon defined
 						

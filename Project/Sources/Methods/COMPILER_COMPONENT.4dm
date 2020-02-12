@@ -1,5 +1,5 @@
 //%attributes = {"invisible":true}
-C_OBJECT:C1216(featuresFlags)
+C_OBJECT:C1216(feature)
 C_OBJECT:C1216(shared)
 C_OBJECT:C1216(ui)
 C_OBJECT:C1216(project)

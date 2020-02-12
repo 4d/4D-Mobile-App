@@ -133,7 +133,7 @@ If ($oDataModel#Null:C1517)
 		
 		If ($context.icons)  // ICONS
 			
-			If (featuresFlags.with("newDataModel"))
+			If (feature.with("newDataModel"))
 				
 				$t:=String:C10($oDataModel[$tTable][""].icon)
 				
@@ -241,7 +241,7 @@ If ($oDataModel#Null:C1517)
 		
 		If ($context.filters)  // FILTERS
 			
-			$o:=Choose:C955(featuresFlags.with("newDataModel");$oDataModel[$tTable][""];$oDataModel[$tTable])
+			$o:=Choose:C955(feature.with("newDataModel");$oDataModel[$tTable][""];$oDataModel[$tTable])
 			
 			If ($o.filter#Null:C1517)
 				
