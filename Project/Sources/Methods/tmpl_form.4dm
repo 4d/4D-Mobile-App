@@ -52,7 +52,7 @@ If ($tFormName[[1]]="/")  // Host database resources
 	
 	If (featuresFlags.with("resourcesBrowser"))
 		
-		If (Path to object:C1547($tFormName).extension=commonValues.archiveExtension)  // Archive
+		If (Path to object:C1547($tFormName).extension=shared.archiveExtension)  // Archive
 			
 /* START HIDING ERRORS */$errors:=err .hide()
 			$archive:=ZIP Read archive:C1637(COMPONENT_Pathname ("host_"+$tTypeForm+"Forms").file($tFormName))

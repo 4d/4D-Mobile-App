@@ -221,7 +221,7 @@ Case of
 						  // Has or not the global stamp fields
 						$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
 							"key";"globalStamp";\
-							"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";"table";$o.name;"field";commonValues.stampField.name)).value);"YES";"NO"))
+							"value";Choose:C955(Bool:C1537(structure (New object:C1471("action";"hasField";"table";$o.name;"field";shared.stampField.name)).value);"YES";"NO"))
 						
 						If (OK=1)
 							

@@ -9,7 +9,7 @@ If (Not:C34($Boo_shift))
 	TRY 
 End if 
 
-If (commonValues=Null:C1517)
+If (shared=Null:C1517)
 	COMPONENT_INIT 
 End if 
 

@@ -104,7 +104,7 @@ START HIDING ERRORS
 			$errors:=err .hide()
 			
 			  // Add downloaded templates
-			For each ($o;$folderDatabase.files().query("extension = :1";commonValues.archiveExtension))
+			For each ($o;$folderDatabase.files().query("extension = :1";shared.archiveExtension))
 				
 				$archive:=ZIP Read archive:C1637($o)
 				
@@ -229,7 +229,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 		
 		If (featuresFlags.with("resourcesBrowser"))
 			
-			If (Path to object:C1547($tTxt_forms{$i}).extension=commonValues.archiveExtension)  // Archive
+			If (Path to object:C1547($tTxt_forms{$i}).extension=shared.archiveExtension)  // Archive
 				
 				  // Downloaded template
 				$pathTemplate:=$folderDatabase.file($t)
@@ -255,7 +255,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 		
 	End if 
 	
-	If ($pathTemplate.extension=commonValues.archiveExtension)  // Archive
+	If ($pathTemplate.extension=shared.archiveExtension)  // Archive
 		
 		$archive:=ZIP Read archive:C1637($pathTemplate)
 		

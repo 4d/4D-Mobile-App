@@ -107,7 +107,7 @@ Case of
 					
 					$pathForm:=tmpl_form ($Txt_name;String:C10($Obj_template.projectTag))
 					
-					If (Path to object:C1547($Txt_name).extension=commonValues.archiveExtension)  // Archive
+					If (Path to object:C1547($Txt_name).extension=shared.archiveExtension)  // Archive
 						
 						  // Extract
 						$o:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486;fk platform path:K87:2);"template";fk overwrite:K87:5)
@@ -226,7 +226,7 @@ Case of
 					
 					$pathForm:=tmpl_form ($t;String:C10($Obj_template.userChoiceTag))
 					
-					If (Path to object:C1547($t).extension=commonValues.archiveExtension)  // Archive
+					If (Path to object:C1547($t).extension=shared.archiveExtension)  // Archive
 						
 						  // Extract
 						$folder:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486;fk platform path:K87:2);"template";fk overwrite:K87:5)
@@ -668,7 +668,7 @@ Case of
 				$o.template.parent:=$Obj_template.parent  // or $Obj_template?
 				$o.tags:=$Obj_in.tags  // has been modifyed since clone
 				$o.projfile:=$Obj_in.projfile  // do not want a copy
-				$o.exclude:=JSON Stringify:C1217(commonValues.template.exclude)
+				$o.exclude:=JSON Stringify:C1217(shared.template.exclude)
 				
 				$Obj_out.template:=templates ($o)  // <================================== RECURSIVE
 				ob_error_combine ($Obj_out;$Obj_out.template)
@@ -715,7 +715,7 @@ Case of
 				  //……………………………………………………………………………………………………………
 			: (Bool:C1537($Obj_in.template.inject))
 				
-				$Col_catalog:=doc_catalog ($Obj_template.source;JSON Stringify:C1217(commonValues.template.exclude))
+				$Col_catalog:=doc_catalog ($Obj_template.source;JSON Stringify:C1217(shared.template.exclude))
 				
 				  //……………………………………………………………………………………………………………
 			Else 
@@ -762,7 +762,7 @@ Case of
 				"success";False:C215)
 			
 			$file:=Folder:C1567($Obj_template.assets.source;fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
-			$l:=commonValues.theme.colorjuicer.scale
+			$l:=shared.theme.colorjuicer.scale
 			
 			If ($l#1024)\
 				 & ($l>0)
@@ -1112,7 +1112,7 @@ Case of
 						$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("monochrome.svg")
 						
 						  // Inject color on background if defined
-						If ((Bool:C1537(commonValues.launchScreen.useThemeColor))\
+						If ((Bool:C1537(shared.launchScreen.useThemeColor))\
 							 & (Value type:C1509($Obj_in.theme.BackgroundColor)=Is object:K8:27))
 							
 							$o:=colors (New object:C1471(\
@@ -1345,7 +1345,7 @@ Case of
 			"target";$Obj_in.path;\
 			"tags";$Obj_in.tags;\
 			"caller";$Obj_in.caller;\
-			"catalog";doc_catalog ($Obj_template.source;JSON Stringify:C1217(commonValues.template.exclude))))
+			"catalog";doc_catalog ($Obj_template.source;JSON Stringify:C1217(shared.template.exclude))))
 		
 		$Obj_out.project:=XcodeProjInject (New object:C1471(\
 			"node";$Obj_out.template;\

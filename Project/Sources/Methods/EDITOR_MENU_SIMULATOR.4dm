@@ -56,7 +56,7 @@ End if
   // Device list
 $o:=simulator (New object:C1471(\
 "action";"devices";\
-"minimumVersion";commonValues.iosDeploymentTarget;\
+"minimumVersion";shared.iosDeploymentTarget;\
 "filter";"available"))
 
 If ($o.success)

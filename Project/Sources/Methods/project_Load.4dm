@@ -11,7 +11,8 @@
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 
-C_OBJECT:C1216($file;$o;$Obj_project)
+C_TEXT:C284($t_pathname)
+C_OBJECT:C1216($file;$o;$o_project)
 
 If (False:C215)
 	C_OBJECT:C1216(project_Load ;$0)
@@ -23,7 +24,9 @@ End if
 If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$file:=File:C1566($1;fk platform path:K87:2)
+	$t_pathname:=$1  // Project pathname
+	
+	$file:=File:C1566($t_pathname;fk platform path:K87:2)
 	
 	  // Optional parameters
 	If (Count parameters:C259>=2)
@@ -39,27 +42,35 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (Asserted:C1132($file.exists;"File not found: "+$file.path))
+record.info("Opening project: "+$file.parent.fullName)
+
+If ($file.exists)
 	
-	$Obj_project:=JSON Parse:C1218($file.getText())
+	$o_project:=JSON Parse:C1218($file.getText())
 	
-	  // Upgrade project if necessary
-	If (project_Upgrade ($Obj_project))
+	If (project_Upgrade ($o_project))
 		
 		  // If upgraded Keep a copy of the old project…
 		$o:=$file.parent.folder(Replace string:C233(Get localized string:C991("convertedFiles");"{stamp}";str_date ("stamp")))
 		$o.create()
 		$file.moveTo($o)
 		
+		record.warning("Prior project was saved in: "+$o.fullName)
+		
 		  //… & immediately save
-		project_SAVE ($Obj_project)
+		project_SAVE ($o_project)
 		
 	End if 
+	
+Else 
+	
+	record.error("File not found: "+$file.path)
+	
 End if 
 
   // ----------------------------------------------------
   // Return
-$0:=$Obj_project
+$0:=$o_project  // Definition of the project updated if necessary
 
   // ----------------------------------------------------
   // End

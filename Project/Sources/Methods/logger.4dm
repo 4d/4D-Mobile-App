@@ -12,7 +12,8 @@ C_OBJECT:C1216($0)
 C_VARIANT:C1683($1)
 C_OBJECT:C1216($2)
 
-C_TEXT:C284($t)
+C_LONGINT:C283($l)
+C_TEXT:C284($t;$tProcess)
 C_OBJECT:C1216($file;$o)
 
 If (False:C215)
@@ -240,6 +241,8 @@ Else
 			If ($2.level#Information message:K38:1)\
 				 | ($o.verbose)
 				
+				PROCESS PROPERTIES:C336(Current process:C322;$tProcess;$l;$l;$l)
+				
 				Case of 
 						
 						  //……………………………………………………………………………………
@@ -288,7 +291,7 @@ Else
 						
 					Else 
 						
-						$t:="("+Folder:C1567(fk database folder:K87:14).name+") "+$t+String:C10($2.message)
+						$t:="("+Folder:C1567(fk database folder:K87:14).name+") "+$tProcess+" - "+$t+String:C10($2.message)
 						
 					End if 
 					
@@ -296,27 +299,9 @@ Else
 					
 				Else 
 					
-					$t:=Replace string:C233(String:C10(Current date:C33;ISO date:K1:8;Current time:C178);"T";" ")+"\t("+Folder:C1567(fk database folder:K87:14).name+")\t"
-					
-					Case of 
-							
-							  //……………………………………………………………………………………………………
-						: ($2.level=Error message:K38:3)
-							
-							$t:=$t+"error: "
-							
-							  //……………………………………………………………………………………………………
-						: ($2.level=Warning message:K38:2)
-							
-							$t:=$t+"warning: "
-							
-							  //……………………………………………………………………………………………………
-						: ($2.level=Information message:K38:1)
-							
-							$t:=$t+"info: "
-							
-							  //……………………………………………………………………………………………………
-					End case 
+					$t:=Replace string:C233(String:C10(Current date:C33;ISO date:K1:8;Current time:C178);"T";" ")+"\t"\
+						+$tProcess+" - "\
+						+Choose:C955(Num:C11($2.level);"info";"warning";"error")+": "
 					
 					$o.destination.setText($o.destination.getText()+$t+String:C10($2.message)+"\n")
 					
@@ -328,7 +313,7 @@ Else
 			
 			If ($2.line=Null:C1517)
 				
-				$t:="*"*80
+				$t:="-"*80
 				
 			Else 
 				

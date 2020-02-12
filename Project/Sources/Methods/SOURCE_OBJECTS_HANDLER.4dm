@@ -116,10 +116,10 @@ Case of
 		
 		  // If (Shift down)
 		  //SHOW ON DISK(dataSet (New object(\
-						"action";"path";\
-						"project";New object(\
-						"product";Form.product;\
-						"$project";Form.$project))).path)
+									"action";"path";\
+									"project";New object(\
+									"product";Form.product;\
+									"$project";Form.$project))).path)
 		  // End if
 		
 		  //==================================================
@@ -155,7 +155,7 @@ Case of
 					  //______________________________________________________
 				: ($Obj_context.serverStatus.action="localizeKeyFile")
 					
-					$Txt_buffer:=Select document:C905(Get 4D folder:C485(MobileApps folder:K5:47;*);commonValues.keyExtension;Get localized string:C991("selectTheKeyFile");Use sheet window:K24:11+Package open:K24:8)
+					$Txt_buffer:=Select document:C905(Get 4D folder:C485(MobileApps folder:K5:47;*);shared.keyExtension;Get localized string:C991("selectTheKeyFile");Use sheet window:K24:11+Package open:K24:8)
 					
 					If (Bool:C1537(OK))
 						

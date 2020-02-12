@@ -223,7 +223,7 @@ Case of
 		CALL WORKER:C1389($Txt_worker;"simulator";New object:C1471(\
 			"action";"devices";\
 			"filter";"available";\
-			"minimumVersion";commonValues.iosDeploymentTarget;\
+			"minimumVersion";shared.iosDeploymentTarget;\
 			"caller";$Obj_form.window))
 		
 		  //=========================================================

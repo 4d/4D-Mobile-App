@@ -10,19 +10,20 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_BOOLEAN:C305($Boo_enabled;$Boo_reset)
-C_LONGINT:C283($l;$Lon_lastBuild;$Lon_main;$Lon_Mode;$Lon_version)
+C_BOOLEAN:C305($bEnabled;$bReset)
+C_LONGINT:C283($l;$lCurrentVersion;$lLastBuild;$lMainVersion;$lMode)
 C_PICTURE:C286($p)
-C_TEXT:C284($t;$Txt_key)
-C_OBJECT:C1216($o;$Obj_preferences)
+C_TEXT:C284($t;$tKey;$tProcess)
+C_OBJECT:C1216($o;$oPreferences;$signal)
 
 C_OBJECT:C1216(featuresFlags)
-C_OBJECT:C1216(commonValues)
+C_OBJECT:C1216(shared)
 C_OBJECT:C1216(ui)
+C_OBJECT:C1216(record)
 
   // ----------------------------------------------------
   // Initialisations
-$Boo_reset:=Macintosh option down:C545
+$bReset:=Macintosh option down:C545
 
   // ----------------------------------------------------
   // Disable asserts in release mode
@@ -33,15 +34,15 @@ $o:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
 
 If ($o.exists)
 	
-	$Obj_preferences:=JSON Parse:C1218($o.getText())
+	$oPreferences:=JSON Parse:C1218($o.getText())
 	
 	  // Get the last build number
-	$Lon_lastBuild:=Num:C11($Obj_preferences.lastBuild)
+	$lLastBuild:=Num:C11($oPreferences.lastBuild)
 	
 Else 
 	
 	  // Create the preferences
-	$Obj_preferences:=New object:C1471
+	$oPreferences:=New object:C1471
 	
 End if 
 
@@ -53,9 +54,9 @@ CALL WORKER(1;"INIT";$o)
 $o.wait()
 */
 	
-	$o:=New signal:C1641
-	CALL WORKER:C1389("$";"INIT";$o)
-	$o.wait()
+	$signal:=New signal:C1641
+	CALL WORKER:C1389("$";"INIT";$signal)
+	$signal.wait()
 	KILL WORKER:C1390("$")
 	
 End if 
@@ -63,25 +64,25 @@ End if
   // ================================================================================================================================
   //                                                            COMMON VALUES
   // ================================================================================================================================
-If (OB Is empty:C1297(commonValues)) | $Boo_reset
+If (OB Is empty:C1297(shared)) | $bReset
 	
-	commonValues:=New object:C1471
+	shared:=New object:C1471
 	
-	commonValues.extension:=".4dmobileapp"
-	commonValues.archiveExtension:=".zip"
+	shared.extension:=".4dmobileapp"
+	shared.archiveExtension:=".zip"
 	
-	commonValues.theme:=New object:C1471(\
+	shared.theme:=New object:C1471(\
 		"colorjuicer";New object:C1471(\
 		"scale";64))
 	
 	  // minimum requierement
-	commonValues.xCodeVersion:="11.2"
-	commonValues.iosDeploymentTarget:="13.2"
+	shared.xCodeVersion:="11.2"
+	shared.iosDeploymentTarget:="13.2"
 	
-	commonValues.useXcodeDefaultPath:=True:C214
+	shared.useXcodeDefaultPath:=True:C214
 	
 	  // Project config
-	commonValues.swift:=New object:C1471(\
+	shared.swift:=New object:C1471(\
 		"Version";"5.1";\
 		"Flags";New object:C1471("Debug";"";"Release";"");\
 		"OptimizationLevel";New object:C1471(\
@@ -94,19 +95,19 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 	  // OptimizationLevel: -O (speed) -Osize (size) -Onone (nothing, better to debug)
 	
 	  // 1:iphone / 2:ipad / 1,2:universal
-	commonValues.targetedDeviceFamily:="1,2"
+	shared.targetedDeviceFamily:="1,2"
 	
 	  // https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/index.html#//apple_ref/doc/uid/TP40015083
-	commonValues.onDemandResources:=True:C214
+	shared.onDemandResources:=True:C214
 	
-	  // https://develoer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/AppThinning/AppThinning.html
-	commonValues.bitcode:=True:C214
+	  // https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/AppThinning/AppThinning.html
+	shared.bitcode:=True:C214
 	
 	  // iOS simulator time out
-	commonValues.simulatorTimeout:=10000
+	shared.simulatorTimeout:=10000
 	
 	  // Info.plist
-	commonValues.infoPlist:=New object:C1471(\
+	shared.infoPlist:=New object:C1471(\
 		"build";"1.0.0";\
 		"developmentRegion";"en";\
 		"storyboard";New object:C1471(\
@@ -114,22 +115,22 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		"Main";"Main";\
 		"backgroundColor";"white"))
 	
-	commonValues.urlScheme:=""
+	shared.urlScheme:=""
 	
 	  // Exclude some file from copy
-	commonValues.template:=New object:C1471(\
+	shared.template:=New object:C1471(\
 		"exclude";New collection:C1472("layoutIconx2.png";"manifest.json";"template.gif";"template.svg";\
 		"relationButton.xib";"README.md";"Package.swift";"Package.resolved";"Cartfile";"Cartfile.resolved"))
 	
 	  // Data dump
-	commonValues.data:=New object:C1471(\
+	shared.data:=New object:C1471(\
 		"dump";New object:C1471(\
 		"limit";1000000;\
 		"page";1))
 	
-	commonValues.lastBuild:=Num:C11(COMPONENT_Infos ("componentBuild"))
+	shared.lastBuild:=Num:C11(COMPONENT_Infos ("componentBuild"))
 	
-	If (commonValues.lastBuild#$Lon_lastBuild) | $Boo_reset
+	If (shared.lastBuild#$lLastBuild) | $bReset
 		
 		  // Invalid the cache
 		$o:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")
@@ -141,108 +142,112 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		End if 
 		
 		  // Save the preferences
-		$Obj_preferences.lastBuild:=commonValues.lastBuild
-		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($Obj_preferences;*))
+		$oPreferences.lastBuild:=shared.lastBuild
+		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($oPreferences;*))
 		
 	End if 
 	
-	commonValues.version:=COMPONENT_Infos ("componentVersion")  // Display into the main dialog
+	shared.version:=COMPONENT_Infos ("componentVersion")  // Display into the main dialog
 	
-	commonValues.keyExtension:="mobileapp"
+	shared.keyExtension:="mobileapp"
 	
 	  // Override common conf by file settings [
-	If ($Obj_preferences.common#Null:C1517)
+	If ($oPreferences.common#Null:C1517)
 		
-		ob_deepMerge (commonValues;$Obj_preferences.common)
+		ob_deepMerge (shared;$oPreferences.common)
 		
 	End if 
 	  //]
 	
 	  //commonValues.defaultFieldBindingTypes:=JSON Parse(File("/RESOURCES/resources.json").getText()).defaultFieldBindingTypes
 	
-	commonValues.defaultFieldBindingTypes:=New collection:C1472
-	commonValues.defaultFieldBindingTypes[Is alpha field:K8:1]:="text"
-	commonValues.defaultFieldBindingTypes[Is boolean:K8:9]:="falseOrTrue"
-	commonValues.defaultFieldBindingTypes[Is integer:K8:5]:="integer"
-	commonValues.defaultFieldBindingTypes[Is longint:K8:6]:="integer"
-	commonValues.defaultFieldBindingTypes[Is integer 64 bits:K8:25]:="integer"
-	commonValues.defaultFieldBindingTypes[Is real:K8:4]:="real"
-	commonValues.defaultFieldBindingTypes[_o_Is float:K8:26]:="real"
-	commonValues.defaultFieldBindingTypes[Is date:K8:7]:="mediumDate"
-	commonValues.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
-	commonValues.defaultFieldBindingTypes[Is text:K8:3]:="text"
-	commonValues.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
+	shared.defaultFieldBindingTypes:=New collection:C1472
+	shared.defaultFieldBindingTypes[Is alpha field:K8:1]:="text"
+	shared.defaultFieldBindingTypes[Is boolean:K8:9]:="falseOrTrue"
+	shared.defaultFieldBindingTypes[Is integer:K8:5]:="integer"
+	shared.defaultFieldBindingTypes[Is longint:K8:6]:="integer"
+	shared.defaultFieldBindingTypes[Is integer 64 bits:K8:25]:="integer"
+	shared.defaultFieldBindingTypes[Is real:K8:4]:="real"
+	shared.defaultFieldBindingTypes[_o_Is float:K8:26]:="real"
+	shared.defaultFieldBindingTypes[Is date:K8:7]:="mediumDate"
+	shared.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
+	shared.defaultFieldBindingTypes[Is text:K8:3]:="text"
+	shared.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
 	
 	  // XXX check table & filed names in https://project.4d.com/issues/90770
-	commonValues.deletedRecordsTable:=New object:C1471(\
+	shared.deletedRecordsTable:=New object:C1471(\
 		"name";"__DeletedRecords";\
 		"fields";New collection:C1472)
 	
-	commonValues.deletedRecordsTable.fields.push(New object:C1471(\
+	shared.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"ID";\
 		"type";"INT64";\
 		"indexed";True:C214;\
 		"primaryKey";True:C214;\
 		"autoincrement";True:C214))
 	
-	commonValues.deletedRecordsTable.fields.push(New object:C1471(\
+	shared.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"__Stamp";\
 		"type";"INT64";\
 		"indexed";True:C214))
 	
-	commonValues.deletedRecordsTable.fields.push(New object:C1471(\
+	shared.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"__TableNumber";\
 		"type";"INT32"))
 	
-	commonValues.deletedRecordsTable.fields.push(New object:C1471(\
+	shared.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"__TableName";\
 		"type";"VARCHAR(255)"))
 	
-	commonValues.deletedRecordsTable.fields.push(New object:C1471(\
+	shared.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"__PrimaryKey";\
 		"type";"VARCHAR(255)"))
 	
-	commonValues.stampField:=New object:C1471(\
+	shared.stampField:=New object:C1471(\
 		"name";"__GlobalStamp";\
 		"type";"INT64";\
 		"indexed";True:C214)
 	
 	  // Common project tags
-	commonValues.tags:=New object:C1471(\
-		"componentBuild";String:C10(commonValues.lastBuild);\
+	shared.tags:=New object:C1471(\
+		"componentBuild";String:C10(shared.lastBuild);\
 		"ideVersion";COMPONENT_Infos ("ideVersion");\
 		"ideBuildVersion";COMPONENT_Infos ("ideBuildVersion");\
-		"iosDeploymentTarget";commonValues.iosDeploymentTarget;\
-		"swiftVersion";commonValues.swift.Version;\
-		"swiftFlagsDebug";commonValues.swift.Flags.Debug;\
-		"swiftFlagsRelease";commonValues.swift.Flags.Release;\
-		"swiftOptimizationLevelDebug";commonValues.swift.OptimizationLevel.Debug;\
-		"swiftOptimizationLevelRelease";commonValues.swift.OptimizationLevel.Release;\
-		"swiftCompilationModeDebug";commonValues.swift.CompilationMode.Debug;\
-		"swiftCompilationModeRelease";commonValues.swift.CompilationMode.Release;\
-		"onDemandResources";Choose:C955(commonValues.onDemandResources;"YES";"NO");\
-		"bitcode";Choose:C955(commonValues.bitcode;"YES";"NO");\
-		"targetedDeviceFamily";commonValues.targetedDeviceFamily;\
-		"build";commonValues.infoPlist.build;\
-		"developmentRegion";commonValues.infoPlist.developmentRegion;\
-		"storyboardLaunchScreen";commonValues.infoPlist.storyboard.LaunchScreen;\
-		"storyboardMain";commonValues.infoPlist.storyboard.Main;\
-		"urlScheme";commonValues.urlScheme)
+		"iosDeploymentTarget";shared.iosDeploymentTarget;\
+		"swiftVersion";shared.swift.Version;\
+		"swiftFlagsDebug";shared.swift.Flags.Debug;\
+		"swiftFlagsRelease";shared.swift.Flags.Release;\
+		"swiftOptimizationLevelDebug";shared.swift.OptimizationLevel.Debug;\
+		"swiftOptimizationLevelRelease";shared.swift.OptimizationLevel.Release;\
+		"swiftCompilationModeDebug";shared.swift.CompilationMode.Debug;\
+		"swiftCompilationModeRelease";shared.swift.CompilationMode.Release;\
+		"onDemandResources";Choose:C955(shared.onDemandResources;"YES";"NO");\
+		"bitcode";Choose:C955(shared.bitcode;"YES";"NO");\
+		"targetedDeviceFamily";shared.targetedDeviceFamily;\
+		"build";shared.infoPlist.build;\
+		"developmentRegion";shared.infoPlist.developmentRegion;\
+		"storyboardLaunchScreen";shared.infoPlist.storyboard.LaunchScreen;\
+		"storyboardMain";shared.infoPlist.storyboard.Main;\
+		"urlScheme";shared.urlScheme)
 	
-	commonValues.thirdParty:="Carthage"
-	commonValues.thirdPartySources:=commonValues.thirdParty+"/Checkouts"
+	shared.thirdParty:="Carthage"
+	shared.thirdPartySources:=shared.thirdParty+"/Checkouts"
 	
-	commonValues.logger:=logger ("~/Library/Logs/4D Mobile/"+Folder:C1567(fk database folder:K87:14).name+".log")
-	commonValues.logger.verbose:=(Structure file:C489=Structure file:C489(*))
+	record:=logger ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+	record.verbose:=(Structure file:C489=Structure file:C489(*))
 	
 	  // ================================================================================================================================
 	  //                                                           ONLY UI PROCESS
 	  // ================================================================================================================================
-	PROCESS PROPERTIES:C336(Current process:C322;$t;$l;$l;$Lon_Mode)
+	PROCESS PROPERTIES:C336(Current process:C322;$tProcess;$l;$l;$lMode)
 	
-	If (Not:C34($Lon_Mode ?? 1))  // Not preemptive mode (always false in dev mode!)
+	If (Not:C34($lMode ?? 1))  // Not preemptive mode (always false in dev mode!)
 		
-		commonValues.logger.reset()
+		If ($tProcess#"4D Mobile (@")
+			
+			record.reset()
+			
+		End if 
 		
 		ui:=New object:C1471
 		
@@ -320,15 +325,24 @@ If (OB Is empty:C1297(commonValues)) | $Boo_reset
 		  //]
 		
 		ui.colors:=New object:C1471
-		ui.colors.strokeColor:=color ("4dColor";New object:C1471("value";ui.strokeColor))
-		ui.colors.highlightColor:=color ("4dColor";New object:C1471("value";ui.highlightColor))
-		ui.colors.highlightColorNoFocus:=color ("4dColor";New object:C1471("value";ui.highlightColorNoFocus))
-		ui.colors.selectedColor:=color ("4dColor";New object:C1471("value";ui.selectedColor))
-		ui.colors.alternateSelectedColor:=color ("4dColor";New object:C1471("value";ui.alternateSelectedColor))
-		ui.colors.backgroundSelectedColor:=color ("4dColor";New object:C1471("value";ui.backgroundSelectedColor))
-		ui.colors.backgroundUnselectedColor:=color ("4dColor";New object:C1471("value";ui.backgroundUnselectedColor))
-		ui.colors.errorColor:=color ("4dColor";New object:C1471("value";ui.errorColor))
-		ui.colors.warningColor:=color ("4dColor";New object:C1471("value";ui.warningColor))
+		ui.colors.strokeColor:=color ("4dColor";New object:C1471(\
+			"value";ui.strokeColor))
+		ui.colors.highlightColor:=color ("4dColor";New object:C1471(\
+			"value";ui.highlightColor))
+		ui.colors.highlightColorNoFocus:=color ("4dColor";New object:C1471(\
+			"value";ui.highlightColorNoFocus))
+		ui.colors.selectedColor:=color ("4dColor";New object:C1471(\
+			"value";ui.selectedColor))
+		ui.colors.alternateSelectedColor:=color ("4dColor";New object:C1471(\
+			"value";ui.alternateSelectedColor))
+		ui.colors.backgroundSelectedColor:=color ("4dColor";New object:C1471(\
+			"value";ui.backgroundSelectedColor))
+		ui.colors.backgroundUnselectedColor:=color ("4dColor";New object:C1471(\
+			"value";ui.backgroundUnselectedColor))
+		ui.colors.errorColor:=color ("4dColor";New object:C1471(\
+			"value";ui.errorColor))
+		ui.colors.warningColor:=color ("4dColor";New object:C1471(\
+			"value";ui.warningColor))
 		
 		ui.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
 		ui.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath
@@ -363,15 +377,15 @@ End if
   // ================================================================================================================================
   //                                                          FEATURES FLAGS
   // ================================================================================================================================
-$Lon_version:=Num:C11(Application version:C493)
-$Lon_main:=1830
+$lCurrentVersion:=Num:C11(Application version:C493)
+$lMainVersion:=1830
 
-If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
+If (OB Is empty:C1297(featuresFlags)) | $bReset
 	
 	featuresFlags:=New object:C1471(\
 		"with";Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]));\
-		"unstable";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($Lon_version>=$Lon_main));\
-		"delivered";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($Lon_version>=Num:C11($2)));\
+		"unstable";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($lCurrentVersion>=$lMainVersion));\
+		"delivered";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($lCurrentVersion>=Num:C11($2)));\
 		"debug";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
 		"wip";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
 		"alias";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=Bool:C1537(This:C1470[Choose:C955(Value type:C1509($2)=Is text:K8:3;$2;"_"+String:C10($2))]))\
@@ -465,9 +479,9 @@ If (OB Is empty:C1297(featuresFlags)) | $Boo_reset
 	
 End if 
 
-If ($Obj_preferences.features#Null:C1517)  // Update feature flags with the local preferences
+If ($oPreferences.features#Null:C1517)  // Update feature flags with the local preferences
 	
-	For each ($o;$Obj_preferences.features)
+	For each ($o;$oPreferences.features)
 		
 		If (Value type:C1509($o.enabled)=Is boolean:K8:9)
 			
@@ -475,79 +489,79 @@ If ($Obj_preferences.features#Null:C1517)  // Update feature flags with the loca
 			
 		Else 
 			
-			For each ($Txt_key;$o.enabled) Until (Not:C34($Boo_enabled))
+			For each ($tKey;$o.enabled) Until (Not:C34($bEnabled))
 				
 				Case of 
 						
 						  //______________________________________________________
-					: ($Txt_key="os")
+					: ($tKey="os")
 						
-						$Boo_enabled:=((Num:C11(Is macOS:C1572)+1)=Num:C11($o.enabled[$Txt_key]))
-						
-						  //______________________________________________________
-					: ($Txt_key="matrix")
-						
-						$Boo_enabled:=(Bool:C1537($o.enabled[$Txt_key]))
+						$bEnabled:=((Num:C11(Is macOS:C1572)+1)=Num:C11($o.enabled[$tKey]))
 						
 						  //______________________________________________________
-					: ($Txt_key="debug")
+					: ($tKey="matrix")
 						
-						If ($o.enabled[$Txt_key])
+						$bEnabled:=(Bool:C1537($o.enabled[$tKey]))
+						
+						  //______________________________________________________
+					: ($tKey="debug")
+						
+						If ($o.enabled[$tKey])
 							
 							  // Only into a debug version
-							$Boo_enabled:=Not:C34(Is compiled mode:C492)
+							$bEnabled:=Not:C34(Is compiled mode:C492)
 							
 						Else 
 							
 							  // Not into a debug version
-							$Boo_enabled:=Is compiled mode:C492
+							$bEnabled:=Is compiled mode:C492
 							
 						End if 
 						
 						  //______________________________________________________
-					: ($Txt_key="bitness")
+					: ($tKey="bitness")
 						
 						Case of 
 								
 								  //……………………………………………………………………………………………………
-							: (Num:C11($o.enabled[$Txt_key])=64)
+							: (Num:C11($o.enabled[$tKey])=64)
 								
-								$Boo_enabled:=(Version type:C495 ?? 64 bit version:K5:25)
+								$bEnabled:=(Version type:C495 ?? 64 bit version:K5:25)
 								
 								  //……………………………………………………………………………………………………
-							: (Num:C11($o.enabled[$Txt_key])=32)
+							: (Num:C11($o.enabled[$tKey])=32)
 								
-								$Boo_enabled:=Not:C34(Version type:C495 ?? 64 bit version:K5:25)
+								$bEnabled:=Not:C34(Version type:C495 ?? 64 bit version:K5:25)
 								
 								  //……………………………………………………………………………………………………
 							Else 
 								
-								ASSERT:C1129(False:C215;"Unknown value ("+$o.enabled[$Txt_key]+") for the key : \""+$Txt_key+"\"")
-								$Boo_enabled:=False:C215
+								ASSERT:C1129(False:C215;"Unknown value ("+$o.enabled[$tKey]+") for the key : \""+$tKey+"\"")
+								$bEnabled:=False:C215
 								
 								  //……………………………………………………………………………………………………
 						End case 
 						
 						  //______________________________________________________
-					: ($Txt_key="version")
+					: ($tKey="version")
 						
-						$Boo_enabled:=($Lon_version>=Num:C11($o.enabled[$Txt_key]))
+						$bEnabled:=($lCurrentVersion>=Num:C11($o.enabled[$tKey]))
 						
 						  //______________________________________________________
-					: ($Txt_key="type")
+					: ($tKey="type")
 						
-						$Boo_enabled:=(Application type:C494=Num:C11($o.enabled[$Txt_key]))
+						$bEnabled:=(Application type:C494=Num:C11($o.enabled[$tKey]))
 						
 						  //______________________________________________________
 					Else 
 						
-						ASSERT:C1129(False:C215;"Unknown key: \""+$Txt_key+"\"")
+						ASSERT:C1129(False:C215;"Unknown key: \""+$tKey+"\"")
 						
 						  //______________________________________________________
 				End case 
 			End for each 
 			
-			featuresFlags["_"+String:C10($o.id)]:=$Boo_enabled
+			featuresFlags["_"+String:C10($o.id)]:=$bEnabled
 			
 		End if 
 	End for each 
@@ -561,18 +575,19 @@ featuresFlags.alias("setImageDump";113164)
 featuresFlags.alias("newViewUI";113016)
 featuresFlags.alias("resourcesBrowser";112225)
 
-If (Not:C34($Lon_Mode ?? 1))
+If (Not:C34($lMode ?? 1))\
+ & ($tProcess#"4D Mobile (@")
 	
 	For each ($t;featuresFlags)
 		
 		If (Value type:C1509(featuresFlags[$t])=Is boolean:K8:9)
 			
-			commonValues.logger.info("feature "+$t+": "+Choose:C955(featuresFlags[$t];"Enabled";"Disabled"))
+			record.log("feature "+$t+": "+Choose:C955(featuresFlags[$t];"Enabled";"Disabled"))
 			
 		End if 
 	End for each 
 	
-	commonValues.logger.line()
+	record.line()
 	
 End if 
 
@@ -584,8 +599,8 @@ COMPONENT_DEFINE_TOOLS
 
 If (featuresFlags.with("accentColors"))
 	
-	  //ui.selectedColor:=Highlight menu background color
-	  //ui.highlightColor:=Highlight menu background color
+	  // Ui.selectedColor:=Highlight menu background color
+	  // Ui.highlightColor:=Highlight menu background color
 	
 	  //ui.backgroundSelectedColor:=Highlight menu background color // 0x004BA6F8
 	  //ui.backgroundUnselectedColor:=Background color none // 0x005A5A5A
@@ -597,6 +612,8 @@ If (Bool:C1537(featuresFlags._8858))
 	SET ASSERT ENABLED:C1131(True:C214;*)
 	
 End if 
+
+record.info("Assert "+Choose:C955(Get assert enabled:C1130;"Enabled";"Disabled"))
 
   // ----------------------------------------------------
   // Return

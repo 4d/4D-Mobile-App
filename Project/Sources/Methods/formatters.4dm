@@ -183,7 +183,7 @@ Case of
 					
 					$errors:=err .hide()
 					
-					For each ($oFormatter;$oResources.files().query("extension = :1";commonValues.archiveExtension))
+					For each ($oFormatter;$oResources.files().query("extension = :1";shared.archiveExtension))
 						
 						$archive:=ZIP Read archive:C1637($oFormatter)
 						

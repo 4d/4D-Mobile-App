@@ -55,7 +55,7 @@ Case of
 		  //______________________________________________________
 	: ($Txt_action="datastore")
 		
-		$Obj_datastore:=Build Exposed Datastore:C1598
+		$Obj_datastore:=_4D_Build Exposed Datastore:C1598
 		
 		$Obj_out.success:=($Obj_datastore#Null:C1517)
 		
@@ -187,7 +187,7 @@ Case of
 					Case of 
 							
 							  //______________________________________________________
-						: ($Obj_table[$Txt_field].name=commonValues.stampField.name)
+						: ($Obj_table[$Txt_field].name=shared.stampField.name)
 							
 							  // DON'T DISPLAY STAMP FIELD
 							

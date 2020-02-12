@@ -147,7 +147,7 @@ If ($Obj_out.success)
 						
 					Else 
 						
-						$t:=$o.setText("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
+						$t:=$o.setText("_"+String:C10(shared.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
 						
 					End if 
 					
@@ -214,7 +214,7 @@ If ($Obj_out.success)
 								
 							Else 
 								
-								$t:=$o.setText("_"+String:C10(commonValues.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
+								$t:=$o.setText("_"+String:C10(shared.defaultFieldBindingTypes[$Obj_field.fieldType])).localized()
 								
 							End if 
 							

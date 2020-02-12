@@ -228,7 +228,7 @@ End if
   //=                   __DeletedRecords                        =
   //=============================================================
 
-DOCUMENT:="DROP TABLE IF EXISTS "+String:C10(commonValues.deletedRecordsTable.name)
+DOCUMENT:="DROP TABLE IF EXISTS "+String:C10(shared.deletedRecordsTable.name)
 
 Begin SQL
 	
@@ -258,7 +258,7 @@ If (Asserted:C1132(Not:C34($o.success);"verifyDeletedRecords when the table does
 			
 			$o:=structure (New object:C1471(\
 				"action";"catalog";\
-				"name";commonValues.deletedRecordsTable.name))
+				"name";shared.deletedRecordsTable.name))
 			
 			ASSERT:C1129(Not:C34($o.success);"catalog doesn't filter the deletedRecords table")
 			

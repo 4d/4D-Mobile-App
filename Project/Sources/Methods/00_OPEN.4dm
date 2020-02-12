@@ -55,7 +55,7 @@ Case of
 			Else 
 				
 				  // This method must be executed in a unique new process
-				BRING TO FRONT:C326(New process:C317($Txt_methodName;0;"$dev_"+$Txt_methodName;"_run";*))
+				BRING TO FRONT:C326(New process:C317($Txt_methodName;0;"$"+$Txt_methodName;"_run";*))
 				
 				  //……………………………………………………………………
 		End case 
@@ -115,7 +115,7 @@ Case of
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_declarations")
 		
-		COMPILER_COMPONENT 
+		  //COMPILER_COMPONENT 
 		
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_init")

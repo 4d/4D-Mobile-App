@@ -103,7 +103,7 @@ Case of
 		$Obj_result:=Xcode (New object:C1471(\
 			"action";"defaultpath"))
 		
-		If (Bool:C1537(commonValues.useXcodeDefaultPath)\
+		If (Bool:C1537(shared.useXcodeDefaultPath)\
 			 & (Test path name:C476($Obj_result.path)#-43))
 			
 			$Boo_search:=False:C215  // do nothing but in case
@@ -526,8 +526,8 @@ Case of
 		Case of 
 			: (Length:C16(String:C10($Obj_param.from))>0)
 				$File_subpath:=$Obj_param.from
-			: (Length:C16(String:C10(commonValues.thirdPartySources))>0)
-				$File_subpath:=commonValues.thirdPartySources
+			: (Length:C16(String:C10(shared.thirdPartySources))>0)
+				$File_subpath:=shared.thirdPartySources
 			Else 
 				$File_subpath:="Carthage/Checkouts"
 				ASSERT:C1129(False:C215;"Must have defined commonValues.thirdPartySources")
@@ -599,12 +599,12 @@ Case of
 			End for 
 			
 			  // From config files
-			If (Value type:C1509(commonValues.xcworkspace.projects)=Is collection:K8:32)
+			If (Value type:C1509(shared.xcworkspace.projects)=Is collection:K8:32)
 				
-				For each ($Txt_buffer;commonValues.xcworkspace.projects)
+				For each ($Txt_buffer;shared.xcworkspace.projects)
 					
-					If (Length:C16(String:C10(commonValues.xcworkspace.root))>0)
-						$Txt_buffer:=String:C10(commonValues.xcworkspace.root)+$Txt_buffer
+					If (Length:C16(String:C10(shared.xcworkspace.root))>0)
+						$Txt_buffer:=String:C10(shared.xcworkspace.root)+$Txt_buffer
 					End if 
 					
 					$Obj_result:=Xcode (New object:C1471(\
