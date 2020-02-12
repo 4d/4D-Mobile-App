@@ -207,16 +207,31 @@ Case of
 							
 						End if 
 						
-						If (Length:C16(String:C10($Obj_table.slave))>0)
+/* #ACI0100534 {
+						
+If (Length(String($Obj_table.slave))>0)
+						
+// Only accessible via relations
+						  //$Dom_node:=DOM Create XML element($Dom_userInfo;"entry";\
+							"key";"slave";\
+							"value";String($o.slave))
+						
+End if
+						
+$o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
+*/
+						
+						$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
+						
+						If (Length:C16(String:C10($o.slave))>0)
 							
 							  // Only accessible via relations
 							$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
 								"key";"slave";\
-								"value";String:C10($Obj_table.slave))
+								"value";String:C10($o.slave))
 							
 						End if 
-						
-						$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
+						  //}
 						
 						  // Has or not the global stamp fields
 						$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
