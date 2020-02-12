@@ -17,7 +17,7 @@ C_COLLECTION:C1488($c)
   // Initialisations
 $event:=FORM Event:C1606
 
-record.info(Current form name:C1298+"."+$event.objectName+": "+$event.description)
+  //record.info(Current form name+"."+$event.objectName+": "+$event.description)
 
   // ----------------------------------------------------
 Case of 

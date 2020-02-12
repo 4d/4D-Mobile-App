@@ -12,7 +12,7 @@ C_BOOLEAN:C305($0)
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($b_upgraded)
-C_LONGINT:C283($l;$Lon_build)
+C_LONGINT:C283($l)
 C_TEXT:C284($t;$tField;$tRelated;$tTable)
 C_OBJECT:C1216($file;$ƒ;$o;$o_project;$oCatalog;$oDatabase)
 C_OBJECT:C1216($oInfos;$oInternal;$oTable;$oTemplate)
@@ -62,8 +62,8 @@ If ($l#-1)
 	
 End if 
 
-$oInfos.ideVersion:=String:C10(Application version:C493($Lon_build))
-$oInfos.ideBuildVersion:=String:C10($Lon_build)
+$oInfos.ideVersion:=shared.ide.version
+$oInfos.ideBuildVersion:=String:C10(shared.ide.build)
 
 If ($o_project.info.ideVersion=Null:C1517)  // "1720"
 	
@@ -166,7 +166,7 @@ If ($o_project.info.ideVersion=Null:C1517)  // "1720"
 	End if 
 End if 
 
-record.info("Version: "+String:C10($o_project.info.version))
+record.info("Project version: "+String:C10($o_project.info.version))
 
 If (Num:C11($o_project.info.version)<2)
 	

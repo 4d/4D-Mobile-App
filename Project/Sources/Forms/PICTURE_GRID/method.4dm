@@ -5,15 +5,12 @@
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($bDisplay;$bHorizontal;$bRedraw;$bVertical)
-C_LONGINT:C283($bottom;$column;$i;$kLon_cellHeight;$kLon_cellOffset;$kLon_cellWidth)
-C_LONGINT:C283($kLon_maxColumn;$l;$left;$Lon_cellNumber;$Lon_colWidth;$Lon_containerWidth)
-C_LONGINT:C283($Lon_currentColNumber;$height;$Lon_item;$Lon_lineNumber;$Lon_listHeight;$Lon_needColumns)
-C_LONGINT:C283($Lon_pictureNumber;$Lon_scrollbarWidth;$Lon_x;$offset;$right;$row)
-C_LONGINT:C283($top)
+C_LONGINT:C283($bottom;$column;$height;$i;$indx;$l)
+C_LONGINT:C283($left;$number;$right;$row;$top;$width)
 C_PICTURE:C286($p)
-C_POINTER:C301($Ptr_column;$Ptr_head)
+C_POINTER:C301($ptr;$Ptr_head)
 C_TEXT:C284($tColumn;$tProperty)
-C_OBJECT:C1216($event)
+C_OBJECT:C1216($event;$ƒ)
 
 ARRAY PICTURE:C279($tPic_data;0)
 
@@ -23,9 +20,10 @@ $event:=FORM Event:C1606
 
   // ----------------------------------------------------
   // Default values
-$kLon_cellWidth:=40
-$kLon_maxColumn:=40
-$kLon_cellOffset:=8
+$ƒ:=New object:C1471(\
+"cellWidth";40;\
+"maxColumn";40;\
+"cellOffset";8)
 
   // ----------------------------------------------------
 Case of 
@@ -36,8 +34,6 @@ Case of
 		  // This trick remove the horizontal gap
 		OBJECT SET SCROLLBAR:C843(*;"list";0;2)
 		
-		  //#96875-1
-		  //LISTBOX SET PROPERTY(*;"list";lk resizing mode;lk automatic)
 		LISTBOX SET PROPERTY:C1440(*;"list";lk resizing mode:K53:36;lk manual:K53:60)
 		
 		  // Init if not a form widget
@@ -68,9 +64,7 @@ Case of
 			
 			If ($top>=0)
 				
-				$offset:=5
-				
-				OBJECT SET COORDINATES:C1248(*;"selection";$left+$offset;$top+$offset;$right-$offset;$bottom-$offset)
+				OBJECT SET COORDINATES:C1248(*;"selection";$left;$top+2;$right;$bottom)
 				OBJECT SET VISIBLE:C603(*;"selection";True:C214)
 				
 			End if 
@@ -99,10 +93,8 @@ If ($bDisplay)\
 	
 	  // Place objects
 	OBJECT GET SUBFORM CONTAINER SIZE:C1148($right;$bottom)
-	
 	OBJECT SET COORDINATES:C1248(*;"background";0;0;$right;$bottom)
 	OBJECT SET COORDINATES:C1248(*;"list";0;0;$right;$bottom)
-	
 	OBJECT GET COORDINATES:C663(*;"prompt.background";$l;$l;$l;$bottom)
 	OBJECT SET COORDINATES:C1248(*;"prompt.background";0;0;$right;$bottom)
 	OBJECT SET COORDINATES:C1248(*;"prompt.bottom.line";0;$bottom;$right;$bottom)
@@ -160,59 +152,56 @@ If ($bDisplay)\
 			: ($tProperty="pictures")
 				
 				COLLECTION TO ARRAY:C1562(Form:C1466.pictures;$tPic_data)
-				$Lon_pictureNumber:=Size of array:C274($tPic_data)
 				
-				$kLon_cellWidth:=Choose:C955(Num:C11(Form:C1466.celluleWidth)#0;Form:C1466.celluleWidth;$kLon_cellWidth)
-				$kLon_cellHeight:=Choose:C955(Num:C11(Form:C1466.celluleHeight)#0;Form:C1466.celluleHeight;$kLon_cellWidth)
-				$kLon_maxColumn:=Choose:C955(Num:C11(Form:C1466.maxColumns)#0;Form:C1466.maxColumns;$kLon_maxColumn)
-				$kLon_cellOffset:=Choose:C955(Num:C11(Form:C1466.offset)#0;Form:C1466.offset;$kLon_cellOffset)
-				
-				$kLon_cellWidth:=$kLon_cellWidth+$kLon_cellOffset
+				$ƒ.pictureNumber:=Size of array:C274($tPic_data)
+				$ƒ.cellWidth:=Choose:C955(Num:C11(Form:C1466.celluleWidth)#0;Form:C1466.celluleWidth;$ƒ.cellWidth)
+				$ƒ.cellHeight:=Choose:C955(Num:C11(Form:C1466.celluleHeight)#0;Form:C1466.celluleHeight;$ƒ.cellWidth)
+				$ƒ.maxColumn:=Choose:C955(Num:C11(Form:C1466.maxColumns)#0;Form:C1466.maxColumns;$ƒ.maxColumn)
+				$ƒ.cellOffset:=Choose:C955(Num:C11(Form:C1466.offset)#0;Form:C1466.offset;$ƒ.cellOffset)
+				$ƒ.cellWidth:=$ƒ.cellWidth+$ƒ.cellOffset
 				
 				OBJECT GET SCROLLBAR:C1076(*;"list";$bHorizontal;$bVertical)
 				
-				$Lon_scrollbarWidth:=Choose:C955($bVertical;LISTBOX Get property:C917(*;"list";lk ver scrollbar width:K53:9);0)
+				$ƒ.scrollbarWidth:=Choose:C955($bVertical;LISTBOX Get property:C917(*;"list";lk ver scrollbar width:K53:9);0)
 				
 				OBJECT GET COORDINATES:C663(*;"list";$left;$top;$right;$bottom)
-				$Lon_containerWidth:=$right-$left-$Lon_scrollbarWidth
+				$ƒ.containerWidth:=$right-$left-$ƒ.scrollbarWidth
 				
-				If ($Lon_pictureNumber>0)
+				If ($ƒ.pictureNumber>0)
 					
-					$Lon_needColumns:=$Lon_containerWidth\$kLon_cellWidth
-					$Lon_needColumns:=$Lon_needColumns+Num:C11($Lon_needColumns<1)
-					$Lon_lineNumber:=($Lon_pictureNumber\$Lon_needColumns)+Num:C11(($Lon_pictureNumber%$Lon_needColumns)#0)
-					$Lon_cellNumber:=$Lon_needColumns*$Lon_lineNumber
+					$ƒ.needColumns:=$ƒ.containerWidth\$ƒ.cellWidth
+					$ƒ.needColumns:=$ƒ.needColumns+Num:C11($ƒ.needColumns<1)
+					$ƒ.lineNumber:=($ƒ.pictureNumber\$ƒ.needColumns)+Num:C11(($ƒ.pictureNumber%$ƒ.needColumns)#0)
+					$number:=$ƒ.needColumns*$ƒ.lineNumber
 					
-					$Lon_listHeight:=$bottom-$top
-					
-					If ($Lon_scrollbarWidth=0)
+					If ($ƒ.scrollbarWidth=0)
 						
-						If (($Lon_lineNumber*$kLon_cellHeight)>$Lon_listHeight)
+						If (($ƒ.lineNumber*$ƒ.cellHeight)>($bottom-$top))
 							
-							$Lon_containerWidth:=$Lon_containerWidth-15
-							$Lon_needColumns:=Int:C8($Lon_containerWidth/$kLon_cellWidth)
-							$Lon_needColumns:=$Lon_needColumns+Num:C11($Lon_needColumns<1)
-							$Lon_lineNumber:=Int:C8($Lon_pictureNumber/$Lon_needColumns)+Num:C11(Mod:C98($Lon_pictureNumber;$Lon_needColumns)#0)
-							$Lon_cellNumber:=$Lon_needColumns*$Lon_lineNumber
+							$ƒ.containerWidth:=$ƒ.containerWidth-15
+							$ƒ.needColumns:=Int:C8($ƒ.containerWidth/$ƒ.cellWidth)
+							$ƒ.needColumns:=$ƒ.needColumns+Num:C11($ƒ.needColumns<1)
+							$ƒ.lineNumber:=Int:C8($ƒ.pictureNumber/$ƒ.needColumns)+Num:C11(Mod:C98($ƒ.pictureNumber;$ƒ.needColumns)#0)
+							$number:=$ƒ.needColumns*$ƒ.lineNumber
 							
 						End if 
 						
 					Else 
 						
-						If (($Lon_lineNumber*$kLon_cellHeight)<=$Lon_listHeight)
+						If (($ƒ.lineNumber*$ƒ.cellHeight)<=($bottom-$top))
 							
-							$Lon_containerWidth:=$Lon_containerWidth+15
-							$Lon_needColumns:=Int:C8($Lon_containerWidth/$kLon_cellWidth)
-							$Lon_needColumns:=$Lon_needColumns+Num:C11($Lon_needColumns<1)
-							$Lon_lineNumber:=Int:C8($Lon_pictureNumber/$Lon_needColumns)+Num:C11(Mod:C98($Lon_pictureNumber;$Lon_needColumns)#0)
-							$Lon_cellNumber:=$Lon_needColumns*$Lon_lineNumber
+							$ƒ.containerWidth:=$ƒ.containerWidth+15
+							$ƒ.needColumns:=Int:C8($ƒ.containerWidth/$ƒ.cellWidth)
+							$ƒ.needColumns:=$ƒ.needColumns+Num:C11($ƒ.needColumns<1)
+							$ƒ.lineNumber:=Int:C8($ƒ.pictureNumber/$ƒ.needColumns)+Num:C11(Mod:C98($ƒ.pictureNumber;$ƒ.needColumns)#0)
+							$number:=$ƒ.needColumns*$ƒ.lineNumber
 							
 						End if 
 					End if 
 					
-					If ($Lon_needColumns>$kLon_maxColumn)
+					If ($ƒ.needColumns>$ƒ.maxColumn)
 						
-						$Lon_needColumns:=$kLon_maxColumn
+						$ƒ.needColumns:=$ƒ.maxColumn
 						
 					End if 
 					
@@ -229,61 +218,65 @@ If ($bDisplay)\
 				
 				$bRedraw:=True:C214
 				
-				$Lon_colWidth:=$Lon_containerWidth\$Lon_needColumns
-				$Lon_currentColNumber:=LISTBOX Get number of columns:C831(*;"list")
+				$ƒ.colWidth:=$ƒ.containerWidth\$ƒ.needColumns
+				$ƒ.currentColNumber:=LISTBOX Get number of columns:C831(*;"list")
 				
 				Case of 
 						
 						  //………………………………………………………………………………………………………………………………………
-					: ($Lon_needColumns=0)
+					: ($ƒ.needColumns=0)
 						
-						LISTBOX DELETE COLUMN:C830(*;"list";1;$Lon_currentColNumber)
+						LISTBOX DELETE COLUMN:C830(*;"list";1;$ƒ.currentColNumber)
 						$bRedraw:=False:C215
 						
 						  //………………………………………………………………………………………………………………………………………
-					: ($Lon_needColumns=$Lon_currentColNumber)\
+					: ($ƒ.needColumns=$ƒ.currentColNumber)\
 						 & (Not:C34(Bool:C1537(Form:C1466.forceRedraw)))
 						
 						$bRedraw:=False:C215
 						
 						  //………………………………………………………………………………………………………………………………………
-					: ($Lon_needColumns>$Lon_currentColNumber)
+					: ($ƒ.needColumns>$ƒ.currentColNumber)
 						
-						For ($i;$Lon_currentColNumber+1;$Lon_needColumns;1)
+						For ($i;$ƒ.currentColNumber+1;$ƒ.needColumns;1)
 							
 							$tColumn:="Column_"+String:C10($i)
-							$Ptr_column:=OBJECT Get pointer:C1124(Object named:K67:5;$tColumn)
+							$ptr:=OBJECT Get pointer:C1124(Object named:K67:5;$tColumn)
 							
-							LISTBOX INSERT COLUMN:C829(*;"list";$i+1;$tColumn;$Ptr_column;"Head_"+String:C10($i);$Ptr_head)
+							LISTBOX INSERT COLUMN:C829(*;"list";$i+1;$tColumn;$ptr;"Head_"+String:C10($i);$Ptr_head)
 							
-							  //EXECUTE FORMULA("ARRAY PICTURE:C279((OBJECT Get pointer:C1124(Object named:K67:5;\""+$Txt_column+"\"))->;"+String($Lon_LineNumber)+")")
-							$Ptr_column:=OBJECT Get pointer:C1124(Object named:K67:5;$tColumn)
+							$ptr:=OBJECT Get pointer:C1124(Object named:K67:5;$tColumn)
+							
 							  //%W-518.5
-							ARRAY PICTURE:C279($Ptr_column->;$Lon_lineNumber)
+							ARRAY PICTURE:C279($ptr->;$ƒ.lineNumber)
 							  //%W+518.5
 							
-							OBJECT SET FORMAT:C236(*;$tColumn;Char:C90(4))  // Char(1)
-							LISTBOX SET COLUMN WIDTH:C833(*;$tColumn;$Lon_colWidth;$Lon_colWidth;$Lon_colWidth)
+							OBJECT SET FORMAT:C236(*;$tColumn;Char:C90(6))
+							
+							LISTBOX SET COLUMN WIDTH:C833(*;$tColumn;$ƒ.colWidth;$ƒ.colWidth;$ƒ.colWidth)
 							
 						End for 
 						
 						  //………………………………………………………………………………………………………………………………………
-					: ($Lon_needColumns<$Lon_currentColNumber)
+					: ($ƒ.needColumns<$ƒ.currentColNumber)
 						
-						For ($i;1;$Lon_currentColNumber;1)
+						For ($i;1;$ƒ.currentColNumber;1)
 							
-							If ($i>$Lon_needColumns)
+							If ($i>$ƒ.needColumns)
 								
 								LISTBOX DELETE COLUMN:C830(*;"list";$i;1)
 								
 							Else 
 								
 								$tColumn:="Column_"+String:C10($i)
-								$Ptr_column:=OBJECT Get pointer:C1124(Object named:K67:5;$tColumn)
+								
+								$ptr:=OBJECT Get pointer:C1124(Object named:K67:5;$tColumn)
+								
 								  //%W-518.5
-								ARRAY PICTURE:C279($Ptr_column->;$Lon_lineNumber)
+								ARRAY PICTURE:C279($ptr->;$ƒ.lineNumber)
 								  //%W+518.5
-								LISTBOX SET COLUMN WIDTH:C833(*;$tColumn;$Lon_colWidth;$Lon_colWidth;$Lon_colWidth)
+								
+								LISTBOX SET COLUMN WIDTH:C833(*;$tColumn;$ƒ.colWidth;$ƒ.colWidth;$ƒ.colWidth)
 								
 							End if 
 						End for 
@@ -300,9 +293,9 @@ If ($bDisplay)\
 		$row:=1
 		$column:=1
 		
-		For ($i;1;$Lon_cellNumber;1)
+		For ($i;1;$number;1)
 			
-			If ($column>$Lon_needColumns)
+			If ($column>$ƒ.needColumns)
 				
 				$row:=$row+1
 				$column:=1
@@ -310,60 +303,60 @@ If ($bDisplay)\
 			End if 
 			
 			$tColumn:="Column_"+String:C10($column)
-			$Ptr_column:=OBJECT Get pointer:C1124(Object named:K67:5;$tColumn)
+			$ptr:=OBJECT Get pointer:C1124(Object named:K67:5;$tColumn)
 			
-			If (Size of array:C274($Ptr_column->)<$row)
+			If (Size of array:C274($ptr->)<$row)
 				
-				APPEND TO ARRAY:C911($Ptr_column->;$p)
+				APPEND TO ARRAY:C911($ptr->;$p)
 				
 			End if 
 			
-			If ($i>$Lon_pictureNumber)
+			If ($i>$ƒ.pictureNumber)
 				
-				$Ptr_column->{$row}:=$Ptr_column->{$row}*0
+				$ptr->{$row}:=$ptr->{$row}*0
 				
 			Else 
 				
-				$Ptr_column->{$row}:=$tPic_data{$i}
+				$ptr->{$row}:=$tPic_data{$i}
 				
 			End if 
 			
-			OBJECT SET FORMAT:C236($Ptr_column->{$row};Char:C90(1))
+			OBJECT SET FORMAT:C236($ptr->{$row};Char:C90(6))
 			
 			$column:=$column+1
 			
 		End for 
 		
-		LISTBOX SET ROWS HEIGHT:C835(*;"list";$kLon_cellHeight+$kLon_cellOffset)
+		LISTBOX SET ROWS HEIGHT:C835(*;"list";$ƒ.cellHeight+$ƒ.cellOffset)
 		
 	Else 
 		
-		$Lon_x:=Choose:C955($Lon_currentColNumber>1;$Lon_containerWidth\$Lon_currentColNumber;$kLon_cellWidth)
+		$width:=Choose:C955($ƒ.currentColNumber>1;$ƒ.containerWidth\$ƒ.currentColNumber;$ƒ.cellWidth)
 		
-		For ($i;1;$Lon_currentColNumber;1)
+		For ($i;1;$ƒ.currentColNumber;1)
 			
 			$tColumn:="Column_"+String:C10($i)
-			LISTBOX SET COLUMN WIDTH:C833(*;$tColumn;$Lon_x)
+			LISTBOX SET COLUMN WIDTH:C833(*;$tColumn;$width)
 			
 		End for 
 		
-		LISTBOX SET ROWS HEIGHT:C835(*;"list";$kLon_cellHeight+$kLon_cellOffset)
+		LISTBOX SET ROWS HEIGHT:C835(*;"list";$ƒ.cellHeight+$ƒ.cellOffset)
 		
 	End if 
 	
-	OBJECT SET SCROLLBAR:C843(*;"list";False:C215;($Lon_lineNumber*$kLon_cellHeight)>$Lon_listHeight)
+	OBJECT SET SCROLLBAR:C843(*;"list";False:C215;($ƒ.lineNumber*$ƒ.cellHeight)>($bottom-$top))
 	
-	$Lon_item:=Num:C11(Form:C1466.item)
+	$indx:=Num:C11(Form:C1466.item)
 	
-	If (($Lon_item%$Lon_needColumns)>0)
+	If (($indx%$ƒ.needColumns)>0)
 		
-		Form:C1466.selectRow:=($Lon_item\$Lon_needColumns)+1
-		Form:C1466.selectColumn:=$Lon_item%$Lon_needColumns
+		Form:C1466.selectRow:=($indx\$ƒ.needColumns)+1
+		Form:C1466.selectColumn:=$indx%$ƒ.needColumns
 		
 	Else 
 		
-		Form:C1466.selectRow:=($Lon_item\$Lon_needColumns)
-		Form:C1466.selectColumn:=$Lon_needColumns
+		Form:C1466.selectRow:=($indx\$ƒ.needColumns)
+		Form:C1466.selectColumn:=$ƒ.needColumns
 		
 	End if 
 	

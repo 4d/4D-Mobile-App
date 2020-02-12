@@ -44,7 +44,7 @@ Case of
 		
 		$event:=FORM Event:C1606
 		
-		record.info(Current form name:C1298+": "+$event.description)
+		  //record.info(Current form name+": "+$event.description)
 		
 		Case of 
 				
@@ -69,8 +69,7 @@ Case of
 				  //______________________________________________________
 			: ($event.code=On Bound Variable Change:K2:52)
 				
-				record.log("--> "+Form:C1466.url)
-				
+				  //record.log("--> "+Form.url)
 				$form.web.openURL(Form:C1466.url)
 				
 				  //______________________________________________________

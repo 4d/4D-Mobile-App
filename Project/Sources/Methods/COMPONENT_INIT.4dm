@@ -11,7 +11,7 @@
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($bEnabled;$bReset)
-C_LONGINT:C283($l;$lCurrentVersion;$lLastBuild;$lMainVersion;$lMode)
+C_LONGINT:C283($l;$l_currentVersion;$l_mainVersion;$lMode)
 C_PICTURE:C286($p)
 C_TEXT:C284($t;$tKey;$tProcess)
 C_OBJECT:C1216($o;$oPreferences;$signal)
@@ -36,9 +36,6 @@ If ($o.exists)
 	
 	$oPreferences:=JSON Parse:C1218($o.getText())
 	
-	  // Get the last build number
-	$lLastBuild:=Num:C11($oPreferences.lastBuild)
-	
 Else 
 	
 	  // Create the preferences
@@ -62,11 +59,39 @@ $o.wait()
 End if 
 
   // ================================================================================================================================
+  //                                                               LOGGER
+  // ================================================================================================================================
+
+If (OB Is empty:C1297(record)) | $bReset
+	
+	record:=logger ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+	record.verbose:=(Structure file:C489=Structure file:C489(*))
+	
+End if 
+
+  // ================================================================================================================================
   //                                                            COMMON VALUES
   // ================================================================================================================================
 If (OB Is empty:C1297(shared)) | $bReset
 	
 	shared:=New object:C1471
+	
+	shared.ide:=New object:C1471(\
+		"version";COMPONENT_Infos ("ideVersion");\
+		"build";Num:C11(COMPONENT_Infos ("ideBuildVersion")))
+	
+	shared.component:=New object:C1471(\
+		"version";COMPONENT_Infos ("componentVersion");\
+		"build";Num:C11(COMPONENT_Infos ("componentBuild")))
+	
+	$o:=xml_fileToObject (Get 4D folder:C485(Database folder:K5:14)+"Info.plist").value.plist.dict
+	$l:=$o.key.extract("$").indexOf("CFBundleVersion")
+	
+	If ($l#-1)
+		
+		shared.componentBuild:=String:C10($o.string[$l].$)
+		
+	End if 
 	
 	shared.extension:=".4dmobileapp"
 	shared.archiveExtension:=".zip"
@@ -128,9 +153,7 @@ If (OB Is empty:C1297(shared)) | $bReset
 		"limit";1000000;\
 		"page";1))
 	
-	shared.lastBuild:=Num:C11(COMPONENT_Infos ("componentBuild"))
-	
-	If (shared.lastBuild#$lLastBuild) | $bReset
+	If (shared.component.build#Num:C11($oPreferences.lastBuild)) | $bReset
 		
 		  // Invalid the cache
 		$o:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")
@@ -142,12 +165,10 @@ If (OB Is empty:C1297(shared)) | $bReset
 		End if 
 		
 		  // Save the preferences
-		$oPreferences.lastBuild:=shared.lastBuild
+		$oPreferences.lastBuild:=shared.component.build
 		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($oPreferences;*))
 		
 	End if 
-	
-	shared.version:=COMPONENT_Infos ("componentVersion")  // Display into the main dialog
 	
 	shared.keyExtension:="mobileapp"
 	
@@ -210,9 +231,9 @@ If (OB Is empty:C1297(shared)) | $bReset
 	
 	  // Common project tags
 	shared.tags:=New object:C1471(\
-		"componentBuild";String:C10(shared.lastBuild);\
-		"ideVersion";COMPONENT_Infos ("ideVersion");\
-		"ideBuildVersion";COMPONENT_Infos ("ideBuildVersion");\
+		"componentBuild";String:C10(shared.component.build);\
+		"ideVersion";shared.ide.version;\
+		"ideBuildVersion";shared.ide.build;\
 		"iosDeploymentTarget";shared.iosDeploymentTarget;\
 		"swiftVersion";shared.swift.Version;\
 		"swiftFlagsDebug";shared.swift.Flags.Debug;\
@@ -232,9 +253,6 @@ If (OB Is empty:C1297(shared)) | $bReset
 	
 	shared.thirdParty:="Carthage"
 	shared.thirdPartySources:=shared.thirdParty+"/Checkouts"
-	
-	record:=logger ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
-	record.verbose:=(Structure file:C489=Structure file:C489(*))
 	
 	  // ================================================================================================================================
 	  //                                                           ONLY UI PROCESS
@@ -377,15 +395,15 @@ End if
   // ================================================================================================================================
   //                                                          FEATURES FLAGS
   // ================================================================================================================================
-$lCurrentVersion:=Num:C11(Application version:C493)
-$lMainVersion:=1830
+$l_currentVersion:=Num:C11(shared.ide.version)
+$l_mainVersion:=1830
 
 If (OB Is empty:C1297(feature)) | $bReset
 	
 	feature:=New object:C1471(\
 		"with";Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]));\
-		"unstable";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($lCurrentVersion>=$lMainVersion));\
-		"delivered";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($lCurrentVersion>=Num:C11($2)));\
+		"unstable";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($l_currentVersion>=$l_mainVersion));\
+		"delivered";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=($l_currentVersion>=Num:C11($2)));\
 		"debug";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
 		"wip";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
 		"alias";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=Bool:C1537(This:C1470[Choose:C955(Value type:C1509($2)=Is text:K8:3;$2;"_"+String:C10($2))]))\
@@ -545,7 +563,7 @@ If ($oPreferences.features#Null:C1517)  // Update feature flags with the local p
 						  //______________________________________________________
 					: ($tKey="version")
 						
-						$bEnabled:=($lCurrentVersion>=Num:C11($o.enabled[$tKey]))
+						$bEnabled:=($l_currentVersion>=Num:C11($o.enabled[$tKey]))
 						
 						  //______________________________________________________
 					: ($tKey="type")
@@ -578,11 +596,16 @@ feature.alias("resourcesBrowser";112225)
 If (Not:C34($lMode ?? 1))\
  & ($tProcess#"4D Mobile (@")
 	
+	$t:=shared.ide.version
+	record.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0";"."+$t[[4]];"R"+$t[[3]])+" ("+String:C10(shared.ide.build)+")")
+	record.log("Component "+shared.component.version)
+	record.line()
+	
 	For each ($t;feature)
 		
 		If (Value type:C1509(feature[$t])=Is boolean:K8:9)
 			
-			record.log("feature "+$t+": "+Choose:C955(feature[$t];"Enabled";"Disabled"))
+			record.log("feature "+Replace string:C233($t;"_";"")+": "+Choose:C955(feature[$t];"Enabled";"Disabled"))
 			
 		End if 
 	End for each 

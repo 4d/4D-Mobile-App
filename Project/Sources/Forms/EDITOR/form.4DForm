@@ -122,7 +122,7 @@
 					"height": 12,
 					"visibility": "hidden",
 					"sizingX": "move",
-					"dataSource": "shared.version",
+					"dataSource": "shared.component.version",
 					"stroke": "#FFFFFF",
 					"textAlign": "center",
 					"fontFamily": ".SF NS Text",

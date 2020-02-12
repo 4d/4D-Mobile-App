@@ -40,12 +40,12 @@ Case of
 				
 				If (Form:C1466.hotZones#Null:C1517)
 					
-					GET MOUSE:C468($Lon_x;$Lon_y;$l)  // Relative to the current form window
-					LISTBOX GET CELL COORDINATES:C1330(*;$event.objectName;$event.column;$event.row;$left;$top;$right;$bottom)  // Relative to the current form
+					GET MOUSE:C468($Lon_x;$Lon_y;$l)  // Relative to the window
+					LISTBOX GET CELL COORDINATES:C1330(*;$event.objectName;$event.column;$event.row;$left;$top;$right;$bottom)  // Relative to the form
 					
 					  // Convert to screen coordinates
-					CONVERT COORDINATES:C1365($left;$top;XY Current form:K27:5;XY Screen:K27:7)
 					CONVERT COORDINATES:C1365($Lon_x;$Lon_y;XY Current window:K27:6;XY Screen:K27:7)
+					CONVERT COORDINATES:C1365($left;$top;XY Current form:K27:5;XY Screen:K27:7)
 					
 					For each ($o;Form:C1466.hotZones) While ($bSelect)
 						
@@ -62,7 +62,6 @@ Case of
 				
 				If ($bSelect)
 					
-					  // Select
 					Form:C1466.item:=$index
 					
 					If (Is nil pointer:C315(OBJECT Get pointer:C1124(Object subform container:K67:4)))

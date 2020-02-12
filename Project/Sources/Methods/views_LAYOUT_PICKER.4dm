@@ -189,6 +189,7 @@ If (feature.with("resourcesBrowser"))
 	
 	  // Hot zones definition
 	$oPicker.hotZones:=New collection:C1472
+	
 	$oPicker.hotZones.push(New object:C1471(\
 		"left";8;\
 		"top";8;\
@@ -264,18 +265,20 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			  // Create image
 			$svg:=svg ().setDimensions($ƒ.cell.width;$ƒ.cell.height)
 			
+			  //$svg.rect(0;0;$ƒ.cell.width;$ƒ.cell.height).setStroke("grey")
+			
 			  // Put icon
 			$x:=$archive.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x;$p)
 			CLEAR VARIABLE:C89($x)
-			$svg.embedPicture($p;5;5)
+			$svg.embedPicture($p;-8;0)
 			
 			  // Get the manifest
 			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
 			
 			  // Put text
-			$svg.textArea($o.name;10;$ƒ.cell.height-20)\
-				.setDimensions($ƒ.cell.width+10)\
+			$svg.textArea($o.name;0;$ƒ.cell.height-20)\
+				.setDimensions($ƒ.cell.width)\
 				.setFill("dimgray")\
 				.setAttribute("text-align";"center")
 			
@@ -290,8 +293,8 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			
 			  // Add github icon
 			$svg.image($ƒ.github;New object:C1471(\
-				"left";8;\
-				"top";8)).setDimensions(16)
+				"left";2;\
+				"top";4)).setDimensions(16)
 			
 			$oPicker.pictures.push($svg.getPicture())
 			$oPicker.pathnames.push($tTxt_forms{$i})
@@ -315,9 +318,11 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				  // Create image
 				$svg:=svg .setDimensions($ƒ.cell.width;$ƒ.cell.height)
 				
+				  //$svg.rect(0;0;$ƒ.cell.width;$ƒ.cell.height).setStroke("red")
+				
 				  // Media
 				READ PICTURE FILE:C678($pathTemplate.parent.file("layoutIconx2.png").platformPath;$p)
-				$svg.embedPicture($p;5;5)
+				$svg.embedPicture($p;-8;0)
 				
 				  // Title
 				$t:=$tTxt_forms{$i}
@@ -328,8 +333,9 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 					
 				End if 
 				
-				$svg.textArea($t;10;$ƒ.cell.height-20)\
-					.setDimensions($ƒ.cell.width+10)\
+				  // Put text
+				$svg.textArea($o.name;0;$ƒ.cell.height-20)\
+					.setDimensions($ƒ.cell.width)\
 					.setFill("dimgray")\
 					.setAttribute("text-align";"center")
 				

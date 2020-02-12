@@ -57,30 +57,26 @@ Case of
 		  //______________________________________________________
 	: ($tSelector="setURL")
 		
-		record.log("--> setURL")
-		
+		  //record.log("--> setURL")
 		(OBJECT Get pointer:C1124(Object named:K67:5;"browser"))->:=$oIN
 		
 		  //______________________________________________________
 	: ($tSelector="hideBrowser")
 		
-		record.log("--> hideBrowser")
-		
+		  //record.log("--> hideBrowser")
 		OBJECT SET SUBFORM:C1138(*;"browser";"EMPTY")
 		OBJECT SET VISIBLE:C603(*;"browser";False:C215)
 		
 		  //______________________________________________________
 	: ($tSelector="showBrowser")
 		
-		record.log("--> showBrowser")
-		
+		  //record.log("--> showBrowser")
 		OBJECT SET VISIBLE:C603(*;"browser";True:C214)
 		
 		  //______________________________________________________
 	: ($tSelector="initBrowser")
 		
-		record.log("--> initBrowser")
-		
+		  //record.log("--> initBrowser")
 		OBJECT SET VISIBLE:C603(*;"browser";True:C214)
 		OBJECT SET SUBFORM:C1138(*;"browser";"BROWSER")
 		
@@ -121,10 +117,10 @@ Case of
 		Else 
 			
 			  // DO_MESSAGE (New object(\
-								"action";"show";\
-								"type";"alert";\
-								"title";"noDevices";\
-								"additional";""))
+												"action";"show";\
+												"type";"alert";\
+												"title";"noDevices";\
+												"additional";""))
 			
 		End if 
 		

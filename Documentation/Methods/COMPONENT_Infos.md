@@ -1,0 +1,1 @@
+﻿<!----------------------------------------------------info := COMPONENT_Infos ( selector ) -> selector (Text) <- info (Text)-->info := COMPONENT_Infos ( selector )
