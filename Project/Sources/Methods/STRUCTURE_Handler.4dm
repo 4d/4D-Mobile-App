@@ -113,11 +113,9 @@ Case of
 				
 				  //#ACI0100539
 				  //If (Num($context.catalog().length)<=100)
-				If (Num:C11($context.catalog().length)<=500)  // #TO_TEST with a fat structure
-					
-					structure_TABLE_LIST ($form)
-					
-				Else 
+				structure_TABLE_LIST ($form)
+				
+				If (Num:C11($context.catalog().length)>=500)
 					
 					record.warning("Table number: "+String:C10($context.catalog().length))
 					

@@ -38,7 +38,7 @@ If (This:C1470[""]=Null:C1517)
 		"append";Formula:C1597(menu ("append";Choose:C955(Value type:C1509($2)=Is object:K8:27;New object:C1471("item";String:C10($1);"menu";$2);New object:C1471("item";String:C10($1);"param";$2;"mark";Bool:C1537($3)))));\
 		"cleanup";Formula:C1597(menu ("cleanup"));\
 		"edit";Formula:C1597(menu ("edit"));\
-		"enable";Formula:C1597(menu ("enable";New object:C1471("item";$1)));\
+		"enable";Formula:C1597(menu ("enable";Choose:C955(Value type:C1509($1)=Is boolean:K8:9;New object:C1471("enabled";$1);New object:C1471("item";$1;"enabled";$2))));\
 		"delete";Formula:C1597(menu ("delete";New object:C1471("item";$1)));\
 		"disable";Formula:C1597(menu ("disable";New object:C1471("item";$1)));\
 		"file";Formula:C1597(menu ("file"));\
@@ -159,7 +159,22 @@ Else
 			  //______________________________________________________
 		: ($1="enable")
 			
-			ENABLE MENU ITEM:C149($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
+			If ($2.enabled=Null:C1517)
+				
+				ENABLE MENU ITEM:C149($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
+				
+			Else 
+				
+				If (Bool:C1537($2.enabled))
+					
+					ENABLE MENU ITEM:C149($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
+					
+				Else 
+					
+					DISABLE MENU ITEM:C150($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
+					
+				End if 
+			End if 
 			
 			  //______________________________________________________
 		: ($1="delete")
@@ -234,7 +249,7 @@ Else
 			  //______________________________________________________
 		: ($1="icon")
 			
-			SET MENU ITEM ICON:C984($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1);"file:"+String:C10($2.icon))
+			SET MENU ITEM ICON:C984($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1);"path:"+String:C10($2.icon))
 			
 			  //______________________________________________________
 		: ($1="insert")
