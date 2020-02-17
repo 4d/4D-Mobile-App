@@ -13,8 +13,8 @@ C_TEXT:C284($1)
 C_TEXT:C284($2)
 
 C_BOOLEAN:C305($success)
-C_TEXT:C284($t;$tFormName;$tTypeForm)
-C_OBJECT:C1216($archive;$errors;$oManifest;$pathForm)
+C_TEXT:C284($t;$t_formName;$t_typeForm)
+C_OBJECT:C1216($archive;$errors;$fileManifest;$o;$pathForm)
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_form ;$0)
@@ -27,8 +27,8 @@ End if
 If (Asserted:C1132(Count parameters:C259>=2;"Missing parameter"))
 	
 	  // Required parameters
-	$tFormName:=$1
-	$tTypeForm:=$2
+	$t_formName:=$1
+	$t_typeForm:=$2
 	
 	  // Default values
 	
@@ -46,16 +46,16 @@ Else
 End if 
 
   // ----------------------------------------------------
-If ($tFormName[[1]]="/")  // Host database resources
+If ($t_formName[[1]]="/")  // Host database resources
 	
-	$tFormName:=Delete string:C232($tFormName;1;1)  // Remove initial slash
+	$t_formName:=Delete string:C232($t_formName;1;1)  // Remove initial slash
 	
 	If (feature.with("resourcesBrowser"))
 		
-		If (Path to object:C1547($tFormName).extension=shared.archiveExtension)  // Archive
+		If (Path to object:C1547($t_formName).extension=shared.archiveExtension)  // Archive
 			
 /* START HIDING ERRORS */$errors:=err .hide()
-			$archive:=ZIP Read archive:C1637(COMPONENT_Pathname ("host_"+$tTypeForm+"Forms").file($tFormName))
+			$archive:=ZIP Read archive:C1637(path ["host"+$t_typeForm+"Forms"]().file($t_formName))
 /* STOP HIDING ERRORS */$errors.show()
 			
 			If ($archive#Null:C1517)
@@ -66,13 +66,13 @@ If ($tFormName[[1]]="/")  // Host database resources
 			
 		Else 
 			
-			$pathForm:=Folder:C1567(COMPONENT_Pathname ("host_"+$tTypeForm+"Forms").folder($tFormName).platformPath;fk platform path:K87:2)
+			$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
 			
 		End if 
 		
 	Else 
 		
-		$pathForm:=Folder:C1567(COMPONENT_Pathname ("host_"+$tTypeForm+"Forms").folder($tFormName).platformPath;fk platform path:K87:2)
+		$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
 		
 	End if 
 	
@@ -81,18 +81,37 @@ If ($tFormName[[1]]="/")  // Host database resources
 	If ($success)
 		
 		  // Verify the structure validity
-		$oManifest:=JSON Parse:C1218(COMPONENT_Pathname ($tTypeForm+"Forms").file("manifest.json").getText())
+		$fileManifest:=path [$t_typeForm+"Forms"]().file("manifest.json")
 		
-		For each ($t;$oManifest.mandatory) While ($success)
+		If ($fileManifest.exists)
 			
-			$success:=$pathForm.file($t).exists
+			$o:=JSON Parse:C1218($fileManifest.getText())
 			
-		End for each 
+			If ($o.mandatory#Null:C1517)
+				
+				For each ($t;$o.mandatory) While ($success)
+					
+					$success:=$pathForm.file($t).exists
+					
+				End for each 
+				
+			Else 
+				
+				record.warning("No mandatory for: "+$fileManifest.path)
+				
+			End if 
+			
+		Else 
+			
+			record.warning("Missing manifest : "+$fileManifest.path)
+			
+		End if 
 	End if 
 	
 Else 
 	
-	$pathForm:=Folder:C1567(COMPONENT_Pathname ($tTypeForm+"Forms").folder($tFormName).platformPath;fk platform path:K87:2)
+	  //$pathForm:=Folder(COMPONENT_Pathname ($tTypeForm+"Forms").folder($tFormName).platformPath;fk platform path)
+	$pathForm:=Folder:C1567(path [$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
 	
 	  // We assume that our templates are OK!
 	$success:=$pathForm.exists
