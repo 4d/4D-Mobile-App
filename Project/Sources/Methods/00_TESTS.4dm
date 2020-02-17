@@ -20,6 +20,11 @@ $o:=Folder:C1567("/")
 $o1:=Folder:C1567(fk system folder:K87:13).parent
 
 Case of 
+		  //________________________________________
+	: (True:C214)
+		
+		$t:=Create menu:C408
+		RELEASE MENU:C978($t)
 		
 		  //________________________________________
 	: (False:C215)

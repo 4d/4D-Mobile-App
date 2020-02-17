@@ -29,22 +29,16 @@ End if
   // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
-	  // Required parameters
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/github.svg").platformPath;$p)
+	
 	$ƒ:=New object:C1471(\
 		"type";$1;\
 		"cell";New object:C1471("width";140;"height";180);\
 		"icon";New object:C1471("width";300;"height";300);\
 		"forms";New collection:C1472;\
 		"dialog";VIEWS_Handler (New object:C1471("action";"init"));\
-		"github";Folder:C1567(Folder:C1567(fk resources folder:K87:11).platformPath;fk platform path:K87:2).file("Images/github.svg")\
+		"github";$p\
 		)
-	
-	  // Optional parameters
-	If (Count parameters:C259>=2)
-		
-		  // <NONE>
-		
-	End if 
 	
 	$str:=str 
 	
@@ -187,20 +181,24 @@ $oPicker:=New object:C1471(\
 
 If (feature.with("resourcesBrowser"))
 	
-	  // Hot zones definition
+/* Hot zones definition */
 	$oPicker.hotZones:=New collection:C1472
 	
+	  // github icon
 	$oPicker.hotZones.push(New object:C1471(\
 		"left";8;\
 		"top";8;\
 		"width";16;\
 		"height";16;\
 		"target";$oPicker.infos;\
-		"formula";Formula:C1597(tmpl_INFOS )))  // github icon
+		"formula";Formula:C1597(tmpl_INFOS );\
+		"cursor";9000;\
+		"tips";"accessTheGithubRepository"))
 	
+/* Contextual menu */
 	$oPicker.contextual:=New object:C1471(\
 		"target";$oPicker.infos;\
-		"formula";Formula:C1597(tmpl_CONTEXTUAL ))  // Contextual menu
+		"formula";Formula:C1597(tmpl_CONTEXTUAL ))
 	
 End if 
 
@@ -292,9 +290,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			End if 
 			
 			  // Add github icon
-			$svg.image($ƒ.github;New object:C1471(\
-				"left";2;\
-				"top";4)).setDimensions(16)
+			$svg.embedPicture($ƒ.github;1;4).setDimensions(16)
 			
 			$oPicker.pictures.push($svg.getPicture())
 			$oPicker.pathnames.push($tTxt_forms{$i})
@@ -406,12 +402,18 @@ $errors.show()
 
 If (feature.with("resourcesBrowser"))
 	
-	  // Put an "explore" button after the default template
+	  // Put an "explore" button
 	$svg:=svg .setDimensions($ƒ.cell.width;$ƒ.cell.height)
 	
 	  // Media
 	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more@2x.png").platformPath;$p)
 	$svg.embedPicture($p;-10;0)
+	
+	  // Put text
+	$svg.textArea(Get localized string:C991("explore");0;$ƒ.cell.height-20)\
+		.setDimensions($ƒ.cell.width)\
+		.setFill("dimgray")\
+		.setAttribute("text-align";"center")
 	
 	  // Put in second position
 	  //$oPicker.pictures.insert(1;$svg.getPicture())

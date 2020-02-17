@@ -4,9 +4,9 @@
   // Created 27-10-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Declarations
-C_BOOLEAN:C305($bSelect)
-C_LONGINT:C283($bottom;$index;$l;$left;$Lon_x;$Lon_y)
-C_LONGINT:C283($right;$top)
+C_BOOLEAN:C305($bContinue)
+C_LONGINT:C283($bottom;$index;$l;$lCursor;$left;$Lon_x)
+C_LONGINT:C283($Lon_y;$right;$top)
 C_OBJECT:C1216($event;$o)
 
   // ----------------------------------------------------
@@ -36,7 +36,7 @@ Case of
 				
 			Else 
 				
-				$bSelect:=True:C214
+				$bContinue:=True:C214
 				
 				If (Form:C1466.hotZones#Null:C1517)
 					
@@ -47,20 +47,20 @@ Case of
 					CONVERT COORDINATES:C1365($Lon_x;$Lon_y;XY Current window:K27:6;XY Screen:K27:7)
 					CONVERT COORDINATES:C1365($left;$top;XY Current form:K27:5;XY Screen:K27:7)
 					
-					For each ($o;Form:C1466.hotZones) While ($bSelect)
+					For each ($o;Form:C1466.hotZones) While ($bContinue)
 						
 						If ($Lon_x>=($left+$o.left))\
 							 & ($Lon_x<=($left+$o.left+$o.width))\
 							 & ($Lon_y>=($top+$o.top)) & ($Lon_y<=($top+$o.top+$o.height))
 							
-							$bSelect:=False:C215
+							$bContinue:=False:C215
 							$o.formula.call(Null:C1517;$o.target[$index-1])
 							
 						End if 
 					End for each 
 				End if 
 				
-				If ($bSelect)
+				If ($bContinue)
 					
 					Form:C1466.item:=$index
 					
@@ -103,25 +103,61 @@ Case of
 		If ($index>0)\
 			 & ($index<=Form:C1466.pictures.length)
 			
-			If (Form:C1466.pathnames[$index-1]=Null:C1517)
+			If (Form:C1466.hotZones#Null:C1517)
 				
-				If (feature.with("resourcesBrowser"))
-					
-					OBJECT SET HELP TIP:C1181(*;$event.objectName;Get localized string:C991("findAndDownloadMoreResources"))
-					
-				End if 
+				GET MOUSE:C468($Lon_x;$Lon_y;$l)  // Relative to the window
+				LISTBOX GET CELL COORDINATES:C1330(*;$event.objectName;$event.column;$event.row;$left;$top;$right;$bottom)  // Relative to the form
 				
-			Else 
+				  // Convert to screen coordinates
+				CONVERT COORDINATES:C1365($Lon_x;$Lon_y;XY Current window:K27:6;XY Screen:K27:7)
+				CONVERT COORDINATES:C1365($left;$top;XY Current form:K27:5;XY Screen:K27:7)
 				
-				If (Form:C1466.helpTips[$index-1]#Null:C1517)
+				$bContinue:=True:C214
+				
+				For each ($o;Form:C1466.hotZones) While ($bContinue)
 					
-					OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.helpTips[$index-1]))
+					If ($Lon_x>=($left+$o.left))\
+						 & ($Lon_x<=($left+$o.left+$o.width))\
+						 & ($Lon_y>=($top+$o.top)) & ($Lon_y<=($top+$o.top+$o.height))
+						
+						If ($o.target[$index-1]#Null:C1517)
+							
+							OBJECT SET HELP TIP:C1181(*;$event.objectName;Get localized string:C991(String:C10($o.tips)))
+							$lCursor:=Num:C11($o.cursor)
+							$bContinue:=False:C215  // Done
+							
+						End if 
+						
+					End if 
+				End for each 
+				
+				SET CURSOR:C469($lCursor)
+				
+			End if 
+			
+			If ($bContinue)
+				
+				If (Form:C1466.pathnames[$index-1]=Null:C1517)
+					
+					If (feature.with("resourcesBrowser"))
+						
+						OBJECT SET HELP TIP:C1181(*;$event.objectName;Get localized string:C991("findAndDownloadMoreResources"))
+						
+					End if 
 					
 				Else 
 					
-					OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.pathnames[$index-1]))
-					
+					If (Form:C1466.helpTips[$index-1]#Null:C1517)
+						
+						OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.helpTips[$index-1]))
+						
+					Else 
+						
+						OBJECT SET HELP TIP:C1181(*;$event.objectName;String:C10(Form:C1466.pathnames[$index-1]))
+						
+					End if 
 				End if 
+				
 			End if 
 			
 		Else 

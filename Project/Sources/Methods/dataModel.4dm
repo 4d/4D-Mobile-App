@@ -207,13 +207,13 @@ Case of
 							
 						End if 
 						
-/* #ACI0100534{
+/* #ACI0100534 {
 If (Length(String($Obj_table.slave))>0)
 						
   // Only accessible via relations
-						  //$Dom_node:=DOM Create XML element($Dom_userInfo;"entry";\
-							"key";"slave";\
-							"value";String($o.slave))
+						  //  $Dom_node:=DOM Create XML element($Dom_userInfo;"entry";\
+							 "key";"slave";\
+							 "value";String($o.slave))
 						
 End if 
 						

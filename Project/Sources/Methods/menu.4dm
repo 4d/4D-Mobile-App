@@ -28,19 +28,19 @@ If (This:C1470[""]=Null:C1517)
 	
 	$o:=New object:C1471(\
 		"";"menu";\
-		"ref";Create menu:C408;\
+		"ref";Null:C1517;\
 		"autoRelease";True:C214;\
 		"metacharacters";False:C215;\
 		"selected";False:C215;\
 		"choice";"";\
-		"count";Formula:C1597(Count menu items:C405(This:C1470.ref));\
+		"itemCount";Formula:C1597(Count menu items:C405(This:C1470.ref));\
 		"action";Formula:C1597(menu ("action";New object:C1471("action";$1;"item";$2)));\
 		"append";Formula:C1597(menu ("append";Choose:C955(Value type:C1509($2)=Is object:K8:27;New object:C1471("item";String:C10($1);"menu";$2);New object:C1471("item";String:C10($1);"param";$2;"mark";Bool:C1537($3)))));\
 		"cleanup";Formula:C1597(menu ("cleanup"));\
 		"edit";Formula:C1597(menu ("edit"));\
 		"enable";Formula:C1597(menu ("enable";Choose:C955(Value type:C1509($1)=Is boolean:K8:9;New object:C1471("enabled";$1);New object:C1471("item";$1;"enabled";$2))));\
 		"delete";Formula:C1597(menu ("delete";New object:C1471("item";$1)));\
-		"disable";Formula:C1597(menu ("disable";New object:C1471("item";$1)));\
+		"disable";Formula:C1597(This:C1470.enable(False:C215));\
 		"file";Formula:C1597(menu ("file"));\
 		"fonts";Formula:C1597(menu ("fonts";New object:C1471("style";$1)));\
 		"icon";Formula:C1597(menu ("icon";New object:C1471("icon";$1;"item";$2)));\
@@ -52,15 +52,29 @@ If (This:C1470[""]=Null:C1517)
 		"release";Formula:C1597(RELEASE MENU:C978(This:C1470.ref));\
 		"setBar";Formula:C1597(menu ("setBar"));\
 		"shortcut";Formula:C1597(menu ("shortcut";New object:C1471("shortcut";$1;"modifier";Num:C11($2);"item";$3)));\
-		"windows";Formula:C1597(menu ("windows"))\
+		"windows";Formula:C1597(menu ("windows"));\
+		"items";Formula:C1597(menu ("items").result)\
 		)
 	
 	If (Count parameters:C259>=1)
 		
-		$c:=Split string:C1554(String:C10($1);";")
+		If (Match regex:C1019("(?m-si)\\|MR\\|\\d{12}";$1;1))
+			
+			$o.ref:=$1  // Menu reference
+			
+		Else 
+			
+			$o.ref:=Create menu:C408
+			
+			$c:=Split string:C1554(String:C10($1);";")
+			$o.autoRelease:=($c.indexOf("keepReference")=-1)
+			$o.metacharacters:=($c.indexOf("displayMetacharacters")#-1)
+			
+		End if 
 		
-		$o.autoRelease:=($c.indexOf("keepReference")=-1)
-		$o.metacharacters:=($c.indexOf("displayMetacharacters")#-1)
+	Else 
+		
+		$o.ref:=Create menu:C408
 		
 	End if 
 	
@@ -182,11 +196,6 @@ Else
 			DELETE MENU ITEM:C413(This:C1470.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
 			
 			  //______________________________________________________
-		: ($1="disable")
-			
-			DISABLE MENU ITEM:C150($o.ref;Choose:C955($2.item#Null:C1517;Num:C11($2.item);-1))
-			
-			  //______________________________________________________
 		: ($1="file")  // Default File menu
 			
 			$o.append(":xliff:CommonMenuItemQuit").action(ak quit:K76:61).shortcut("Q")
@@ -290,6 +299,21 @@ Else
 				SET MENU ITEM MARK:C208($o.ref;-1;Char:C90(18)*Num:C11($2.mark))
 				
 			End if 
+			
+			  //______________________________________________________
+		: ($1="items")  // Returns menu items as collection
+			
+			ARRAY TEXT:C222($aT_item;0x0000)
+			ARRAY TEXT:C222($aT_ref;0x0000)
+			GET MENU ITEMS:C977($o.ref;$aT_item;$aT_ref)
+			
+			$o.result:=New collection:C1472
+			
+			For ($i;1;Size of array:C274($aT_item);1)
+				
+				$o.result.push(New object:C1471("item";$aT_item{$i};"ref";$aT_ref{$i}))
+				
+			End for 
 			
 			  //______________________________________________________
 		: ($1="line")

@@ -15,13 +15,13 @@ If ($o_infos#Null:C1517)
 	$menu:=menu \
 		.append("accessTheGithubRepository";"show")\
 		.line()\
-		.append("downloadTheLatestRevision";"update")\
-		.line()\
-		.append("forgetThisTemplate";"forget")
+		.append("downloadTheLatestRevision";"update")
 	
-	If ($o_infos.used)
+	If (Not:C34($o_infos.used))
 		
-		$menu.disable()
+		$menu\
+			.line()\
+			.append("forgetThisTemplate";"forget")
 		
 	End if 
 	
