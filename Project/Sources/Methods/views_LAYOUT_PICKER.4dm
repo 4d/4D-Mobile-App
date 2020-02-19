@@ -15,7 +15,7 @@ C_BOOLEAN:C305($success)
 C_LONGINT:C283($i;$indx)
 C_PICTURE:C286($p)
 C_TEXT:C284($dom;$root;$t;$tDefault)
-C_OBJECT:C1216($archive;$errors;$folderComponent;$folderDatabase;$ƒ;$o)
+C_OBJECT:C1216($archive;$error;$folderComponent;$folderDatabase;$ƒ;$o)
 C_OBJECT:C1216($oManifest;$oPicker;$pathTemplate;$str;$svg)
 C_COLLECTION:C1488($c)
 
@@ -29,7 +29,9 @@ End if
   // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
-	READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/github.svg").platformPath;$p)
+	  //READ PICTURE FILE(File("/RESOURCES/Images/github.svg").platformPath;$p)
+	$o:=Folder:C1567(fk resources folder:K87:11).file("Images/github.svg")
+	READ PICTURE FILE:C678(String:C10($o.platformPath);$p)
 	
 	$ƒ:=New object:C1471(\
 		"type";$1;\
@@ -95,7 +97,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 /***********************
 START HIDING ERRORS
 ***********************/
-			$errors:=err .hide()
+			$error:=err .hide()
 			
 			  // Add downloaded templates
 			For each ($o;$folderDatabase.files().query("extension = :1";SHARED.archiveExtension))
@@ -134,7 +136,7 @@ START HIDING ERRORS
 /***********************
 STOP HIDING ERRORS
 ***********************/
-			$errors.show()
+			$error.show()
 			
 		End if 
 		
@@ -216,7 +218,7 @@ End for each
 /***********************
 START HIDING ERRORS
 ***********************/
-$errors:=err .hide()
+$error:=err .hide()
 
 For ($i;1;Size of array:C274($tTxt_forms);1)
 	
@@ -398,7 +400,7 @@ End for
 /***********************
 STOP HIDING ERRORS
 ***********************/
-$errors.show()
+$error.show()
 
 If (feature.with("resourcesBrowser"))
 	
