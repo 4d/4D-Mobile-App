@@ -14,7 +14,7 @@ C_OBJECT:C1216($2)
 
 C_BOOLEAN:C305($bCreate)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o;$oPath)
+C_OBJECT:C1216($archive;$error;$o;$oPath)
 
 If (False:C215)
 	C_OBJECT:C1216(path ;$0)
@@ -244,12 +244,19 @@ Else
 				
 				If (Path to object:C1547($t).extension=SHARED.archiveExtension)
 					
-					  // Archive path
-					$o.path:=$oPath.path.file($t)
+/* START HIDING ERRORS */$error:=err .hide()
+					$archive:=ZIP Read archive:C1637($oPath.file($t))
+/* STOP HIDING ERRORS */$error.show()
+					
+					If ($archive#Null:C1517)
+						
+						$o:=$archive.root
+						
+					End if 
 					
 				Else 
 					
-					$o.path:=$oPath.path.folder($t)
+					$o.path:=$oPath.file($t)
 					
 				End if 
 				

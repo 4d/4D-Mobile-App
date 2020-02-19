@@ -11,9 +11,9 @@
 C_PICTURE:C286($0)
 C_TEXT:C284($1)
 
-C_PICTURE:C286($p)
-C_TEXT:C284($tIcon)
-C_OBJECT:C1216($o)
+C_PICTURE:C286($p_icon)
+C_TEXT:C284($t_path)
+C_OBJECT:C1216($file)
 
 If (False:C215)
 	C_PICTURE:C286(getIcon ;$0)
@@ -32,7 +32,7 @@ End if
 If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
 	  // Required parameters
-	$tIcon:=$1  // icon path
+	$t_path:=$1  // icon path
 	
 	  // Default values
 	  // $tType:="tableIcons"
@@ -52,31 +52,31 @@ Else
 End if 
 
   // ----------------------------------------------------
-If (Length:C16($tIcon)=0)
+If (Length:C16($t_path)=0)
 	
-	$o:=File:C1566(ui.noIcon;fk platform path:K87:2)
+	$file:=File:C1566(ui.noIcon;fk platform path:K87:2)
 	
 Else 
 	
-	$o:=path .icon($tIcon)
+	$file:=path .icon($t_path)
 	
-	If (Not:C34($o.exists))
+	If (Not:C34($file.exists))
 		
-		$o:=File:C1566(ui.errorIcon;fk platform path:K87:2)
+		$file:=File:C1566(ui.errorIcon;fk platform path:K87:2)
 		
 	End if 
 End if 
 
-If ($o.exists)
+If ($file.exists)
 	
-	READ PICTURE FILE:C678($o.platformPath;$p)
-	CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
+	READ PICTURE FILE:C678($file.platformPath;$p_icon)
+	CREATE THUMBNAIL:C679($p_icon;$p_icon;24;24;Scaled to fit:K6:2)
 	
 End if 
 
   // ----------------------------------------------------
   // Return
-$0:=$p
+$0:=$p_icon  //icon | errorIcon | noIcon
 
   // ----------------------------------------------------
   // End

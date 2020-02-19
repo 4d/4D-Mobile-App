@@ -246,7 +246,7 @@ Else
 				Case of 
 						
 						  //……………………………………………………………………………………
-					: (Value type:C1509($2.message)=Is object:K8:27)
+					: (Value type:C1509($2.message)=Is object:K8:27) | (Value type:C1509($2.message)=Is collection:K8:32)
 						
 						$2.message:=JSON Stringify:C1217($2.message;*)
 						
@@ -339,7 +339,7 @@ Else
 			  //______________________________________________________
 		: ($1="trace")
 			
-			$o.error(JSON Stringify:C1217(Get call chain:C1662;*))
+			$o.log(Get call chain:C1662.query("name!=:1";Current method name:C684);8858)
 			
 			  //______________________________________________________
 		Else 
