@@ -12,9 +12,9 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($i)
-C_PICTURE:C286($p)
-C_TEXT:C284($Dir_hostRoot;$Dir_root;$tTableNumber)
-C_OBJECT:C1216($fileIcon;$o;$oDataModel;$oIN;$oOUT;$oTable)
+C_PICTURE:C286($pIcon)
+C_TEXT:C284($Dir_hostRoot;$Dir_root;$tPath;$tTableNumber)
+C_OBJECT:C1216($o;$oDataModel;$oIN;$oOUT;$oTable)
 
 If (False:C215)
 	C_OBJECT:C1216(publishedTableList ;$0)
@@ -88,36 +88,36 @@ If ($oOUT.success)
 				
 				If (Length:C16($oTable.iconPath)=0)
 					
-					$fileIcon:=ui.noIcon
+					$pIcon:=ui.noIcon
 					
 				Else 
 					
 					If (Position:C15("/";String:C10($o.icon))=1)  // User resource
 						
-						$fileIcon:=$Dir_hostRoot+Replace string:C233(String:C10($o.icon);"/";Folder separator:K24:12)
+						$tPath:=$Dir_hostRoot+Replace string:C233(String:C10($o.icon);"/";Folder separator:K24:12)
 						
-						If (Test path name:C476($fileIcon)#Is a document:K24:1)
+						If (Test path name:C476($tPath)#Is a document:K24:1)
 							
-							$fileIcon:=ui.errorIcon
+							$pIcon:=ui.errorIcon
 							
 						End if 
 						
 					Else 
 						
-						$fileIcon:=$Dir_root+Replace string:C233(String:C10($o.icon);"/";Folder separator:K24:12)
+						$tPath:=$Dir_root+Replace string:C233(String:C10($o.icon);"/";Folder separator:K24:12)
 						
-						If (Test path name:C476($fileIcon)#Is a document:K24:1)
+						If (Test path name:C476($tPath)#Is a document:K24:1)
 							
-							$fileIcon:=ui.noIcon
+							$pIcon:=ui.noIcon
 							
 						End if 
 					End if 
 				End if 
 				
-				READ PICTURE FILE:C678($fileIcon;$p)
+				READ PICTURE FILE:C678($tPath;$pIcon)
 				
-				CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
-				$oTable.icon:=$p
+				CREATE THUMBNAIL:C679($pIcon;$pIcon;24;24;Scaled to fit:K6:2)
+				$oTable.icon:=$pIcon
 				
 				$oOUT.tables.push($oTable)
 				
@@ -161,36 +161,36 @@ If ($oOUT.success)
 				
 				If (Length:C16($oTable.iconPath)=0)
 					
-					$fileIcon:=ui.noIcon
+					$pIcon:=ui.noIcon
 					
 				Else 
 					
 					If (Position:C15("/";String:C10($oDataModel[$tTableNumber].icon))=1)  // User resource
 						
-						$fileIcon:=$Dir_hostRoot+Replace string:C233(String:C10($oDataModel[$tTableNumber].icon);"/";Folder separator:K24:12)
+						$tPath:=$Dir_hostRoot+Replace string:C233(String:C10($oDataModel[$tTableNumber].icon);"/";Folder separator:K24:12)
 						
-						If (Test path name:C476($fileIcon)#Is a document:K24:1)
+						If (Test path name:C476($tPath)#Is a document:K24:1)
 							
-							$fileIcon:=ui.errorIcon
+							$pIcon:=ui.errorIcon
 							
 						End if 
 						
 					Else 
 						
-						$fileIcon:=$Dir_root+Replace string:C233(String:C10($oDataModel[$tTableNumber].icon);"/";Folder separator:K24:12)
+						$tPath:=$Dir_root+Replace string:C233(String:C10($oDataModel[$tTableNumber].icon);"/";Folder separator:K24:12)
 						
-						If (Test path name:C476($fileIcon)#Is a document:K24:1)
+						If (Test path name:C476($tPath)#Is a document:K24:1)
 							
-							$fileIcon:=ui.noIcon
+							$pIcon:=ui.noIcon
 							
 						End if 
 					End if 
 				End if 
 				
-				READ PICTURE FILE:C678($fileIcon;$p)
+				READ PICTURE FILE:C678($tPath;$pIcon)
 				
-				CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
-				$oTable.icon:=$p
+				CREATE THUMBNAIL:C679($pIcon;$pIcon;24;24;Scaled to fit:K6:2)
+				$oTable.icon:=$pIcon
 				
 				$oOUT.tables.push($oTable)
 				
@@ -236,36 +236,36 @@ If ($oOUT.success)
 				
 				If (Length:C16($oOUT.iconPaths[$i])=0)
 					
-					$fileIcon:=ui.noIcon
+					$tPath:=ui.noIcon
 					
 				Else 
 					
 					If (Position:C15("/";String:C10($o.icon))=1)  // User resource
 						
-						$fileIcon:=$Dir_hostRoot+Replace string:C233(String:C10(Delete string:C232($o.icon;1;1));"/";Folder separator:K24:12)
+						$tPath:=$Dir_hostRoot+Replace string:C233(String:C10(Delete string:C232($o.icon;1;1));"/";Folder separator:K24:12)
 						
-						If (Test path name:C476($fileIcon)#Is a document:K24:1)
+						If (Test path name:C476($tPath)#Is a document:K24:1)
 							
-							$fileIcon:=ui.errorIcon
+							$pIcon:=ui.errorIcon
 							
 						End if 
 						
 					Else 
 						
-						$fileIcon:=$Dir_root+Replace string:C233(String:C10($o.icon);"/";Folder separator:K24:12)
+						$tPath:=$Dir_root+Replace string:C233(String:C10($o.icon);"/";Folder separator:K24:12)
 						
-						If (Test path name:C476($fileIcon)#Is a document:K24:1)
+						If (Test path name:C476($tPath)#Is a document:K24:1)
 							
-							$fileIcon:=ui.noIcon
+							$pIcon:=ui.noIcon
 							
 						End if 
 					End if 
 				End if 
 				
-				READ PICTURE FILE:C678($fileIcon;$p)
+				READ PICTURE FILE:C678($tPath;$pIcon)
 				
-				CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
-				$oOUT.icons[$i]:=$p
+				CREATE THUMBNAIL:C679($pIcon;$pIcon;24;24;Scaled to fit:K6:2)
+				$oOUT.icons[$i]:=$pIcon
 				
 				$i:=$i+1
 				
@@ -300,37 +300,37 @@ If ($oOUT.success)
 				
 				If (Length:C16($oOUT.iconPaths[$i])=0)
 					
-					$fileIcon:=ui.noIcon
+					$tPath:=ui.noIcon
 					
 				Else 
 					
 					If (Position:C15("/";String:C10($oTable.icon))=1)  // User resource
 						
 						  //$File_:=$Dir_hostRoot+Replace string(String($Obj_table.icon);"/";Folder separator)
-						$fileIcon:=$Dir_hostRoot+Replace string:C233(String:C10(Delete string:C232($oTable.icon;1;1));"/";Folder separator:K24:12)
+						$tPath:=$Dir_hostRoot+Replace string:C233(String:C10(Delete string:C232($oTable.icon;1;1));"/";Folder separator:K24:12)
 						
-						If (Test path name:C476($fileIcon)#Is a document:K24:1)
+						If (Test path name:C476($tPath)#Is a document:K24:1)
 							
-							$fileIcon:=ui.errorIcon
+							$pIcon:=ui.errorIcon
 							
 						End if 
 						
 					Else 
 						
-						$fileIcon:=$Dir_root+Replace string:C233(String:C10($oTable.icon);"/";Folder separator:K24:12)
+						$tPath:=$Dir_root+Replace string:C233(String:C10($oTable.icon);"/";Folder separator:K24:12)
 						
-						If (Test path name:C476($fileIcon)#Is a document:K24:1)
+						If (Test path name:C476($tPath)#Is a document:K24:1)
 							
-							$fileIcon:=ui.noIcon
+							$pIcon:=ui.noIcon
 							
 						End if 
 					End if 
 				End if 
 				
-				READ PICTURE FILE:C678($fileIcon;$p)
+				READ PICTURE FILE:C678($tPath;$pIcon)
 				
-				CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
-				$oOUT.icons[$i]:=$p
+				CREATE THUMBNAIL:C679($pIcon;$pIcon;24;24;Scaled to fit:K6:2)
+				$oOUT.icons[$i]:=$pIcon
 				
 				$i:=$i+1
 				
