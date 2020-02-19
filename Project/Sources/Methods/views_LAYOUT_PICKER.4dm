@@ -32,6 +32,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	  //READ PICTURE FILE(File("/RESOURCES/Images/github.svg").platformPath;$p)
 	$o:=Folder:C1567(fk resources folder:K87:11).file("Images/github.svg")
 	READ PICTURE FILE:C678(String:C10($o.platformPath);$p)
+	CREATE THUMBNAIL:C679($p;$p;16;16)
 	
 	$ƒ:=New object:C1471(\
 		"type";$1;\
@@ -292,7 +293,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			End if 
 			
 			  // Add github icon
-			$svg.embedPicture($ƒ.github;1;4).setDimensions(16)
+			$svg.embedPicture($ƒ.github;1;4)  //.setDimensions(16)
 			
 			$oPicker.pictures.push($svg.getPicture())
 			$oPicker.pathnames.push($tTxt_forms{$i})
