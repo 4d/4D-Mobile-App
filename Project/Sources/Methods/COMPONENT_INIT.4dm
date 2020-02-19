@@ -17,9 +17,9 @@ C_TEXT:C284($t;$tKey;$tProcess)
 C_OBJECT:C1216($o;$oPreferences;$signal)
 
 C_OBJECT:C1216(feature)
-C_OBJECT:C1216(shared)
+C_OBJECT:C1216(SHARED)
 C_OBJECT:C1216(ui)
-C_OBJECT:C1216(record)
+C_OBJECT:C1216(RECORD)
 
   // ----------------------------------------------------
   // Initialisations
@@ -62,25 +62,25 @@ End if
   //                                                               LOGGER
   // ================================================================================================================================
 
-If (OB Is empty:C1297(record)) | $bReset
+If (OB Is empty:C1297(RECORD)) | $bReset
 	
-	record:=logger ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
-	record.verbose:=(Structure file:C489=Structure file:C489(*))
+	RECORD:=logger ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+	RECORD.verbose:=(Structure file:C489=Structure file:C489(*))
 	
 End if 
 
   // ================================================================================================================================
   //                                                            COMMON VALUES
   // ================================================================================================================================
-If (OB Is empty:C1297(shared)) | $bReset
+If (OB Is empty:C1297(SHARED)) | $bReset
 	
-	shared:=New object:C1471
+	SHARED:=New object:C1471
 	
-	shared.ide:=New object:C1471(\
+	SHARED.ide:=New object:C1471(\
 		"version";COMPONENT_Infos ("ideVersion");\
 		"build";Num:C11(COMPONENT_Infos ("ideBuildVersion")))
 	
-	shared.component:=New object:C1471(\
+	SHARED.component:=New object:C1471(\
 		"version";COMPONENT_Infos ("componentVersion");\
 		"build";Num:C11(COMPONENT_Infos ("componentBuild")))
 	
@@ -89,25 +89,25 @@ If (OB Is empty:C1297(shared)) | $bReset
 	
 	If ($l#-1)
 		
-		shared.componentBuild:=String:C10($o.string[$l].$)
+		SHARED.componentBuild:=String:C10($o.string[$l].$)
 		
 	End if 
 	
-	shared.extension:=".4dmobileapp"
-	shared.archiveExtension:=".zip"
+	SHARED.extension:=".4dmobileapp"
+	SHARED.archiveExtension:=".zip"
 	
-	shared.theme:=New object:C1471(\
+	SHARED.theme:=New object:C1471(\
 		"colorjuicer";New object:C1471(\
 		"scale";64))
 	
 	  // minimum requierement
-	shared.xCodeVersion:="11.2"
-	shared.iosDeploymentTarget:="13.2"
+	SHARED.xCodeVersion:="11.2"
+	SHARED.iosDeploymentTarget:="13.2"
 	
-	shared.useXcodeDefaultPath:=True:C214
+	SHARED.useXcodeDefaultPath:=True:C214
 	
 	  // Project config
-	shared.swift:=New object:C1471(\
+	SHARED.swift:=New object:C1471(\
 		"Version";"5.1";\
 		"Flags";New object:C1471("Debug";"";"Release";"");\
 		"OptimizationLevel";New object:C1471(\
@@ -120,19 +120,19 @@ If (OB Is empty:C1297(shared)) | $bReset
 	  // OptimizationLevel: -O (speed) -Osize (size) -Onone (nothing, better to debug)
 	
 	  // 1:iphone / 2:ipad / 1,2:universal
-	shared.targetedDeviceFamily:="1,2"
+	SHARED.targetedDeviceFamily:="1,2"
 	
 	  // https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/index.html#//apple_ref/doc/uid/TP40015083
-	shared.onDemandResources:=True:C214
+	SHARED.onDemandResources:=True:C214
 	
 	  // https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/AppThinning/AppThinning.html
-	shared.bitcode:=True:C214
+	SHARED.bitcode:=True:C214
 	
 	  // iOS simulator time out
-	shared.simulatorTimeout:=10000
+	SHARED.simulatorTimeout:=10000
 	
 	  // Info.plist
-	shared.infoPlist:=New object:C1471(\
+	SHARED.infoPlist:=New object:C1471(\
 		"build";"1.0.0";\
 		"developmentRegion";"en";\
 		"storyboard";New object:C1471(\
@@ -140,20 +140,20 @@ If (OB Is empty:C1297(shared)) | $bReset
 		"Main";"Main";\
 		"backgroundColor";"white"))
 	
-	shared.urlScheme:=""
+	SHARED.urlScheme:=""
 	
 	  // Exclude some file from copy
-	shared.template:=New object:C1471(\
+	SHARED.template:=New object:C1471(\
 		"exclude";New collection:C1472("layoutIconx2.png";"manifest.json";"template.gif";"template.svg";\
 		"relationButton.xib";"README.md";"Package.swift";"Package.resolved";"Cartfile";"Cartfile.resolved"))
 	
 	  // Data dump
-	shared.data:=New object:C1471(\
+	SHARED.data:=New object:C1471(\
 		"dump";New object:C1471(\
 		"limit";1000000;\
 		"page";1))
 	
-	If (shared.component.build#Num:C11($oPreferences.lastBuild)) | $bReset
+	If (SHARED.component.build#Num:C11($oPreferences.lastBuild)) | $bReset
 		
 		  // Invalid the cache
 		$o:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")
@@ -165,94 +165,114 @@ If (OB Is empty:C1297(shared)) | $bReset
 		End if 
 		
 		  // Save the preferences
-		$oPreferences.lastBuild:=shared.component.build
+		$oPreferences.lastBuild:=SHARED.component.build
 		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($oPreferences;*))
 		
 	End if 
 	
-	shared.keyExtension:="mobileapp"
+	SHARED.keyExtension:="mobileapp"
 	
 	  // Override common conf by file settings [
 	If ($oPreferences.common#Null:C1517)
 		
-		ob_deepMerge (shared;$oPreferences.common)
+		ob_deepMerge (SHARED;$oPreferences.common)
 		
 	End if 
 	  //]
 	
-	  //commonValues.defaultFieldBindingTypes:=JSON Parse(File("/RESOURCES/resources.json").getText()).defaultFieldBindingTypes
-	
-	shared.defaultFieldBindingTypes:=New collection:C1472
-	shared.defaultFieldBindingTypes[Is alpha field:K8:1]:="text"
-	shared.defaultFieldBindingTypes[Is boolean:K8:9]:="falseOrTrue"
-	shared.defaultFieldBindingTypes[Is integer:K8:5]:="integer"
-	shared.defaultFieldBindingTypes[Is longint:K8:6]:="integer"
-	shared.defaultFieldBindingTypes[Is integer 64 bits:K8:25]:="integer"
-	shared.defaultFieldBindingTypes[Is real:K8:4]:="real"
-	shared.defaultFieldBindingTypes[_o_Is float:K8:26]:="real"
-	shared.defaultFieldBindingTypes[Is date:K8:7]:="mediumDate"
-	shared.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
-	shared.defaultFieldBindingTypes[Is text:K8:3]:="text"
-	shared.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
+	SHARED.defaultFieldBindingTypes:=New collection:C1472
+	SHARED.defaultFieldBindingTypes[Is alpha field:K8:1]:="text"
+	SHARED.defaultFieldBindingTypes[Is boolean:K8:9]:="falseOrTrue"
+	SHARED.defaultFieldBindingTypes[Is integer:K8:5]:="integer"
+	SHARED.defaultFieldBindingTypes[Is longint:K8:6]:="integer"
+	SHARED.defaultFieldBindingTypes[Is integer 64 bits:K8:25]:="integer"
+	SHARED.defaultFieldBindingTypes[Is real:K8:4]:="real"
+	SHARED.defaultFieldBindingTypes[_o_Is float:K8:26]:="real"
+	SHARED.defaultFieldBindingTypes[Is date:K8:7]:="mediumDate"
+	SHARED.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
+	SHARED.defaultFieldBindingTypes[Is text:K8:3]:="text"
+	SHARED.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
 	
 	  // XXX check table & filed names in https://project.4d.com/issues/90770
-	shared.deletedRecordsTable:=New object:C1471(\
+	SHARED.deletedRecordsTable:=New object:C1471(\
 		"name";"__DeletedRecords";\
 		"fields";New collection:C1472)
 	
-	shared.deletedRecordsTable.fields.push(New object:C1471(\
+	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"ID";\
 		"type";"INT64";\
 		"indexed";True:C214;\
 		"primaryKey";True:C214;\
 		"autoincrement";True:C214))
 	
-	shared.deletedRecordsTable.fields.push(New object:C1471(\
+	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"__Stamp";\
 		"type";"INT64";\
 		"indexed";True:C214))
 	
-	shared.deletedRecordsTable.fields.push(New object:C1471(\
+	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"__TableNumber";\
 		"type";"INT32"))
 	
-	shared.deletedRecordsTable.fields.push(New object:C1471(\
+	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"__TableName";\
 		"type";"VARCHAR(255)"))
 	
-	shared.deletedRecordsTable.fields.push(New object:C1471(\
+	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
 		"name";"__PrimaryKey";\
 		"type";"VARCHAR(255)"))
 	
-	shared.stampField:=New object:C1471(\
+	SHARED.stampField:=New object:C1471(\
 		"name";"__GlobalStamp";\
 		"type";"INT64";\
 		"indexed";True:C214)
 	
 	  // Common project tags
-	shared.tags:=New object:C1471(\
-		"componentBuild";String:C10(shared.component.build);\
-		"ideVersion";shared.ide.version;\
-		"ideBuildVersion";shared.ide.build;\
-		"iosDeploymentTarget";shared.iosDeploymentTarget;\
-		"swiftVersion";shared.swift.Version;\
-		"swiftFlagsDebug";shared.swift.Flags.Debug;\
-		"swiftFlagsRelease";shared.swift.Flags.Release;\
-		"swiftOptimizationLevelDebug";shared.swift.OptimizationLevel.Debug;\
-		"swiftOptimizationLevelRelease";shared.swift.OptimizationLevel.Release;\
-		"swiftCompilationModeDebug";shared.swift.CompilationMode.Debug;\
-		"swiftCompilationModeRelease";shared.swift.CompilationMode.Release;\
-		"onDemandResources";Choose:C955(shared.onDemandResources;"YES";"NO");\
-		"bitcode";Choose:C955(shared.bitcode;"YES";"NO");\
-		"targetedDeviceFamily";shared.targetedDeviceFamily;\
-		"build";shared.infoPlist.build;\
-		"developmentRegion";shared.infoPlist.developmentRegion;\
-		"storyboardLaunchScreen";shared.infoPlist.storyboard.LaunchScreen;\
-		"storyboardMain";shared.infoPlist.storyboard.Main;\
-		"urlScheme";shared.urlScheme)
+	SHARED.tags:=New object:C1471(\
+		"componentBuild";String:C10(SHARED.component.build);\
+		"ideVersion";SHARED.ide.version;\
+		"ideBuildVersion";SHARED.ide.build;\
+		"iosDeploymentTarget";SHARED.iosDeploymentTarget;\
+		"swiftVersion";SHARED.swift.Version;\
+		"swiftFlagsDebug";SHARED.swift.Flags.Debug;\
+		"swiftFlagsRelease";SHARED.swift.Flags.Release;\
+		"swiftOptimizationLevelDebug";SHARED.swift.OptimizationLevel.Debug;\
+		"swiftOptimizationLevelRelease";SHARED.swift.OptimizationLevel.Release;\
+		"swiftCompilationModeDebug";SHARED.swift.CompilationMode.Debug;\
+		"swiftCompilationModeRelease";SHARED.swift.CompilationMode.Release;\
+		"onDemandResources";Choose:C955(SHARED.onDemandResources;"YES";"NO");\
+		"bitcode";Choose:C955(SHARED.bitcode;"YES";"NO");\
+		"targetedDeviceFamily";SHARED.targetedDeviceFamily;\
+		"build";SHARED.infoPlist.build;\
+		"developmentRegion";SHARED.infoPlist.developmentRegion;\
+		"storyboardLaunchScreen";SHARED.infoPlist.storyboard.LaunchScreen;\
+		"storyboardMain";SHARED.infoPlist.storyboard.Main;\
+		"urlScheme";SHARED.urlScheme)
 	
-	shared.thirdParty:="Carthage"
-	shared.thirdPartySources:=shared.thirdParty+"/Checkouts"
+	SHARED.thirdParty:="Carthage"
+	SHARED.thirdPartySources:=SHARED.thirdParty+"/Checkouts"
+	
+	$o:=File:C1566("/RESOURCES/Resources.json")
+	
+	If ($o.exists)
+		
+		$o:=JSON Resolve pointers:C1478(JSON Parse:C1218(File:C1566("/RESOURCES/Resources.json").getText()))
+		
+		If ($o.success)
+			
+			SHARED.resources:=$o.value
+			
+		Else 
+			
+			RECORD.error("Failed to parse "+File:C1566("/RESOURCES/Resources.json").path)
+			
+		End if 
+		
+	Else 
+		
+		RECORD.error("Missing file "+$o.path)
+		
+	End if 
 	
 	  // ================================================================================================================================
 	  //                                                           ONLY UI PROCESS
@@ -263,7 +283,7 @@ If (OB Is empty:C1297(shared)) | $bReset
 		
 		If ($tProcess#"4D Mobile (@")
 			
-			record.reset()
+			RECORD.reset()
 			
 		End if 
 		
@@ -395,7 +415,7 @@ End if
   // ================================================================================================================================
   //                                                          FEATURES FLAGS
   // ================================================================================================================================
-$l_currentVersion:=Num:C11(shared.ide.version)
+$l_currentVersion:=Num:C11(SHARED.ide.version)
 $l_mainVersion:=1830
 
 If (OB Is empty:C1297(feature)) | $bReset
@@ -596,21 +616,21 @@ feature.alias("resourcesBrowser";112225)
 If (Not:C34($lMode ?? 1))\
  & ($tProcess#"4D Mobile (@")
 	
-	$t:=shared.ide.version
-	record.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0";"."+$t[[4]];"R"+$t[[3]])+" ("+String:C10(shared.ide.build)+")")
-	record.log("Component "+shared.component.version)
-	record.line()
+	$t:=SHARED.ide.version
+	RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0";"."+$t[[4]];"R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
+	RECORD.log("Component "+SHARED.component.version)
+	RECORD.line()
 	
 	For each ($t;feature)
 		
 		If (Value type:C1509(feature[$t])=Is boolean:K8:9)
 			
-			record.log("feature "+Replace string:C233($t;"_";"")+": "+Choose:C955(feature[$t];"Enabled";"Disabled"))
+			RECORD.log("feature "+Replace string:C233($t;"_";"")+": "+Choose:C955(feature[$t];"Enabled";"Disabled"))
 			
 		End if 
 	End for each 
 	
-	record.line()
+	RECORD.line()
 	
 End if 
 
@@ -636,7 +656,7 @@ If (Bool:C1537(feature._8858))
 	
 End if 
 
-record.info("Assert "+Choose:C955(Get assert enabled:C1130;"Enabled";"Disabled"))
+RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130;"Enabled";"Disabled"))
 
   // ----------------------------------------------------
   // Return

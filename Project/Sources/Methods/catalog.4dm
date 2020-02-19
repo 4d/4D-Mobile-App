@@ -187,7 +187,7 @@ Case of
 					Case of 
 							
 							  //______________________________________________________
-						: ($Obj_table[$Txt_field].name=shared.stampField.name)
+						: ($Obj_table[$Txt_field].name=SHARED.stampField.name)
 							
 							  // DON'T DISPLAY STAMP FIELD
 							

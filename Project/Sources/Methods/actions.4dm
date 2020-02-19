@@ -310,7 +310,7 @@ Case of
 									
 								Else 
 									
-									$Obj_manifest:=JSON Parse:C1218(Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"resources.json")).definitions
+									$Obj_manifest:=SHARED.resources.definitions
 									
 									If ($Obj_manifest[$t].choiceList#Null:C1517)
 										

@@ -39,7 +39,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 		$Dir_default:=Storage:C1525.database.projects.platformPath
 		
-		$Txt_projectName:=Select document:C905($Dir_default;shared.extension;Get localized string:C991("mess_openProject");Package open:K24:8+Use sheet window:K24:11)
+		$Txt_projectName:=Select document:C905($Dir_default;SHARED.extension;Get localized string:C991("mess_openProject");Package open:K24:8+Use sheet window:K24:11)
 		
 		If (OK=1)
 			

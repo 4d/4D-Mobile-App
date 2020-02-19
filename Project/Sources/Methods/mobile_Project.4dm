@@ -59,8 +59,10 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		If ($Boo_dev)
 			
 			  // IF no parameters, load from previous launched file
-			If (shared=Null:C1517)
+			If (SHARED=Null:C1517)
 				
+				RECORD.warning("SHARED=Null")
+				RECORD.trace()
 				COMPONENT_INIT 
 				
 			End if 
@@ -187,7 +189,7 @@ If ($Obj_in.create)
 	  //===============================================================
 	
 	  // Create tags object for template {
-	$Obj_tags:=shared.tags
+	$Obj_tags:=SHARED.tags
 	
 	$Obj_tags.product:=$Obj_project.$project.product
 	$Obj_tags.packageName:=$Obj_tags.product
@@ -262,7 +264,7 @@ If ($Obj_in.create)
 	  //}
 	
 	  // Launchscreen
-	$Obj_tags.launchScreenBackgroundColor:=shared.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
+	$Obj_tags.launchScreenBackgroundColor:=SHARED.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
 	
 	  //===============================================================
 	
@@ -518,7 +520,7 @@ If ($Obj_in.create)
 		$Obj_out.capabilities:=capabilities (\
 			New object:C1471("action";"inject";"target";$Obj_in.path;"tags";$Obj_tags;\
 			"value";New object:C1471(\
-			"common";shared;\
+			"common";SHARED;\
 			"project";$Obj_project;\
 			"action";$Obj_out.actionCapabilities;\
 			"templates";$Obj_out.template)))
@@ -826,7 +828,7 @@ If ($Obj_out.success)
 					End if 
 				Until ($Boo_OK)\
 					 | (Not:C34($Obj_result_device.success))\
-					 | ((Milliseconds:C459-$Lon_start)>shared.simulatorTimeout)
+					 | ((Milliseconds:C459-$Lon_start)>SHARED.simulatorTimeout)
 				
 				If ($Boo_OK)
 					

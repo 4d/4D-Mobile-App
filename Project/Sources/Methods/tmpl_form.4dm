@@ -52,7 +52,7 @@ If ($t_formName[[1]]="/")  // Host database resources
 	
 	If (feature.with("resourcesBrowser"))
 		
-		If (Path to object:C1547($t_formName).extension=shared.archiveExtension)  // Archive
+		If (Path to object:C1547($t_formName).extension=SHARED.archiveExtension)  // Archive
 			
 /* START HIDING ERRORS */$errors:=err .hide()
 			$archive:=ZIP Read archive:C1637(path ["host"+$t_typeForm+"Forms"]().file($t_formName))
@@ -97,20 +97,19 @@ If ($t_formName[[1]]="/")  // Host database resources
 				
 			Else 
 				
-				record.warning("No mandatory for: "+$fileManifest.path)
+				RECORD.warning("No mandatory for: "+$fileManifest.path)
 				
 			End if 
 			
 		Else 
 			
-			record.warning("Missing manifest : "+$fileManifest.path)
+			RECORD.warning("Missing manifest : "+$fileManifest.path)
 			
 		End if 
 	End if 
 	
 Else 
 	
-	  //$pathForm:=Folder(COMPONENT_Pathname ($tTypeForm+"Forms").folder($tFormName).platformPath;fk platform path)
 	$pathForm:=Folder:C1567(path [$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
 	
 	  // We assume that our templates are OK!

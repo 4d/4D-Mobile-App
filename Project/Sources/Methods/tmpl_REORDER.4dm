@@ -27,7 +27,7 @@ $oIN:=$1
   // Load template
 $pathTemplate:=tmpl_form ($oIN.form;$oIN.selector)
 
-If ($pathTemplate.extension=shared.archiveExtension)  // Archive
+If ($pathTemplate.extension=SHARED.archiveExtension)  // Archive
 	
 	  // Get from archive
 	$t:=$pathTemplate.file("template.svg").getText()

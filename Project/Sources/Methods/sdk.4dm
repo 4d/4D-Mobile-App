@@ -122,7 +122,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						  // Check if we can just move a cached sdk from previous build
 						  // efficient only if same disk volume
 						  //$Txt_buffer:=_o_env_userPath ("cache")+".sdk"+Folder separator+commonValues.thirdParty
-						$Txt_buffer:=env_userPathname ("cache").file(".sdk/"+shared.thirdParty).platformPath
+						$Txt_buffer:=env_userPathname ("cache").file(".sdk/"+SHARED.thirdParty).platformPath
 						
 						If (Test path name:C476($Txt_buffer)=Is a folder:K24:2)
 							
@@ -308,7 +308,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						$Col_:=$Obj_result.phase.linked.files
 						$Col_.push($Txt_buffer)
 						
-						If (str_cmpVersion (shared.swift.Version;"4.1")<1)
+						If (str_cmpVersion (SHARED.swift.Version;"4.1")<1)
 							  // in Embed Frameworks // PBXCopyFilesBuildPhase
 							$Txt_buffer:=XcodeProj (New object:C1471("action";"randomObjectId";"proj";$Obj_param.projfile.value)).value
 							
@@ -350,7 +350,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				$Obj_.isFolder:=True:C214  // Ensure ensure end separator
 				$Obj_param.path:=Object to path:C1548($Obj_)
 				
-				If (Test path name:C476($Obj_param.path+shared.thirdParty)=Is a folder:K24:2)  // well known sdk path
+				If (Test path name:C476($Obj_param.path+SHARED.thirdParty)=Is a folder:K24:2)  // well known sdk path
 					
 					  //$Txt_buffer:=_o_env_userPath ("cache")
 					$Txt_buffer:=env_userPathname ("cache").platformPath
@@ -369,7 +369,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						
 					End if 
 					
-					$Txt_cmd:="mv -f "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_param.path+shared.thirdParty))\
+					$Txt_cmd:="mv -f "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_param.path+SHARED.thirdParty))\
 						+" "+str_singleQuoted (Convert path system to POSIX:C1106($Txt_buffer))
 					
 					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)

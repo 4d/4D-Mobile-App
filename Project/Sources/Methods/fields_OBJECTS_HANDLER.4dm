@@ -166,7 +166,7 @@ Case of
 					If ($Obj_field.format=Null:C1517)
 						
 						  // Default value
-						$Txt_current:=shared.defaultFieldBindingTypes[$Obj_field.fieldType]
+						$Txt_current:=SHARED.defaultFieldBindingTypes[$Obj_field.fieldType]
 						
 					Else 
 						

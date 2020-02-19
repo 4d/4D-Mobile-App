@@ -9,8 +9,12 @@ If (Not:C34($Boo_shift))
 	TRY 
 End if 
 
-If (shared=Null:C1517)
+If (SHARED=Null:C1517)
+	
+	RECORD.warning("SHARED=Null")
+	RECORD.trace()
 	COMPONENT_INIT 
+	
 End if 
 
   //_____________________________________________________________

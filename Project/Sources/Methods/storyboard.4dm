@@ -130,9 +130,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						Else 
 							
 							  // set default value according to type (here type from 4d structure)
-							If ($Obj_field.fieldType<shared.defaultFieldBindingTypes.length)
+							If ($Obj_field.fieldType<SHARED.defaultFieldBindingTypes.length)
 								
-								$Obj_out.bindingType:=shared.defaultFieldBindingTypes[$Obj_in.field.fieldType]
+								$Obj_out.bindingType:=SHARED.defaultFieldBindingTypes[$Obj_in.field.fieldType]
 								$Obj_out.success:=(Length:C16(String:C10($Obj_out.bindingType))>0)
 								
 							Else 

@@ -42,8 +42,10 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	$Obj_out:=New object:C1471(\
 		"success";False:C215)
 	
-	If (shared=Null:C1517)  // FIXME #105596
+	If (SHARED=Null:C1517)  // FIXME #105596
 		
+		RECORD.warning("SHARED=Null")
+		RECORD.trace()
 		COMPONENT_INIT 
 		
 	End if 
@@ -92,7 +94,7 @@ Case of
 				
 				$Obj_table:=$Obj_catalog[$Txt_table].getInfo()
 				
-				If ($Txt_table#shared.deletedRecordsTable.name)
+				If ($Txt_table#SHARED.deletedRecordsTable.name)
 					
 					If ($Boo_oneTable)
 						
@@ -128,7 +130,7 @@ Case of
 							
 							For each ($Txt_field;$Obj_catalog[$Txt_table])
 								
-								If ($Txt_field#shared.stampField.name)
+								If ($Txt_field#SHARED.stampField.name)
 									
 									$Obj_field:=$Obj_catalog[$Txt_table][$Txt_field]
 									
@@ -437,7 +439,7 @@ Case of
 					Case of 
 							
 							  //___________________________________________
-						: ($o.name=shared.stampField.name)
+						: ($o.name=SHARED.stampField.name)
 							
 							  // DON'T DISPLAY STAMP FIELD
 							
@@ -543,7 +545,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																								 | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
+																																 | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
 							
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
@@ -1023,7 +1025,7 @@ Case of
 					
 				End if 
 				
-				$Obj_out.success:=($Obj_in.catalog[shared.deletedRecordsTable.name]#Null:C1517)
+				$Obj_out.success:=($Obj_in.catalog[SHARED.deletedRecordsTable.name]#Null:C1517)
 				
 				  //…………………………………………………………………………………………………………………
 			: ($Obj_in.action="verifyStamps")
@@ -1039,7 +1041,7 @@ Case of
 						
 					End if 
 					
-					$Obj_out.success:=($Obj_in.catalog[$Obj_in.tableName][shared.stampField.name]#Null:C1517)
+					$Obj_out.success:=($Obj_in.catalog[$Obj_in.tableName][SHARED.stampField.name]#Null:C1517)
 					
 				End if 
 				
@@ -1084,9 +1086,9 @@ Case of
 /* START TRAPPING ERRORS */$errors:=err .capture()
 				
 				  // Create table if any
-				DOCUMENT:="CREATE TABLE IF NOT EXISTS "+String:C10(shared.deletedRecordsTable.name)+" ("
+				DOCUMENT:="CREATE TABLE IF NOT EXISTS "+String:C10(SHARED.deletedRecordsTable.name)+" ("
 				
-				For each ($o;shared.deletedRecordsTable.fields)
+				For each ($o;SHARED.deletedRecordsTable.fields)
 					
 					DOCUMENT:=DOCUMENT+" "+String:C10($o.name)+" "+String:C10($o.type)+","
 					
@@ -1107,11 +1109,11 @@ Case of
 					
 				End SQL
 				
-				For each ($o;shared.deletedRecordsTable.fields)
+				For each ($o;SHARED.deletedRecordsTable.fields)
 					
 					If (Bool:C1537($o.autoincrement))
 						
-						DOCUMENT:="ALTER TABLE "+String:C10(shared.deletedRecordsTable.name)+" MODIFY "+String:C10($o.name)+" ENABLE AUTO_INCREMENT;"
+						DOCUMENT:="ALTER TABLE "+String:C10(SHARED.deletedRecordsTable.name)+" MODIFY "+String:C10($o.name)+" ENABLE AUTO_INCREMENT;"
 						
 						Begin SQL
 							
@@ -1123,11 +1125,11 @@ Case of
 				End for each 
 				
 				  // Create the indexes if any
-				For each ($o;shared.deletedRecordsTable.fields)
+				For each ($o;SHARED.deletedRecordsTable.fields)
 					
 					If (Bool:C1537($o.indexed))
 						
-						DOCUMENT:="CREATE INDEX "+String:C10(shared.deletedRecordsTable.name)+String:C10($o.name)+" ON "+String:C10(shared.deletedRecordsTable.name)+" ("+String:C10($o.name)+");"
+						DOCUMENT:="CREATE INDEX "+String:C10(SHARED.deletedRecordsTable.name)+String:C10($o.name)+" ON "+String:C10(SHARED.deletedRecordsTable.name)+" ("+String:C10($o.name)+");"
 						
 					End if 
 					
@@ -1208,7 +1210,7 @@ Case of
 			
 			$t:=String:C10($Obj_in.tableName)
 			
-			DOCUMENT:="ALTER TABLE ["+$t+"] ADD TRAILING "+String:C10(shared.stampField.name)+" "+String:C10(shared.stampField.type)+";"
+			DOCUMENT:="ALTER TABLE ["+$t+"] ADD TRAILING "+String:C10(SHARED.stampField.name)+" "+String:C10(SHARED.stampField.type)+";"
 			
 			$errors.reset()
 			
@@ -1231,9 +1233,9 @@ Case of
 				End if 
 			End if 
 			
-			If (Bool:C1537(shared.stampField.indexed))
+			If (Bool:C1537(SHARED.stampField.indexed))
 				
-				DOCUMENT:="CREATE INDEX "+String:C10(shared.stampField.name)+"_"+str ($t).lowerCamelCase()+" ON ["+$t+"] ("+String:C10(shared.stampField.name)+");"
+				DOCUMENT:="CREATE INDEX "+String:C10(SHARED.stampField.name)+"_"+str ($t).lowerCamelCase()+" ON ["+$t+"] ("+String:C10(SHARED.stampField.name)+");"
 				
 			End if 
 			

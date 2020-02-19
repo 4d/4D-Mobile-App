@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																																																				"action";"safeDelete";\
-																																																				"path";$Obj_in.path))
+																																																								"action";"safeDelete";\
+																																																								"path";$Obj_in.path))
 			  // End if
 			
 		End if 
@@ -253,7 +253,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					$o:=$o.response
 					
-					$Boo_OK:=($o.dataClasses.extract("name").indexOf(String:C10(shared.deletedRecordsTable.name))#-1)
+					$Boo_OK:=($o.dataClasses.extract("name").indexOf(String:C10(SHARED.deletedRecordsTable.name))#-1)
 					
 					If ($Boo_OK)
 						
@@ -265,7 +265,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 							
 							If ($Boo_OK)
 								
-								$Boo_OK:=($o.dataClasses[$l].attributes.extract("name").indexOf(String:C10(shared.stampField.name))#-1)
+								$Boo_OK:=($o.dataClasses[$l].attributes.extract("name").indexOf(String:C10(SHARED.stampField.name))#-1)
 								
 							End if 
 						End for each 

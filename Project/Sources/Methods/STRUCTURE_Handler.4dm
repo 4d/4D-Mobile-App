@@ -117,7 +117,7 @@ Case of
 				
 				If (Num:C11($context.catalog().length)>=500)
 					
-					record.warning("Table number: "+String:C10($context.catalog().length))
+					RECORD.warning("Table number: "+String:C10($context.catalog().length))
 					
 				End if 
 				

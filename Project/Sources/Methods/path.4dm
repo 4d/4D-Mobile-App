@@ -242,7 +242,7 @@ Else
 						  //……………………………………………………………………………
 				End case 
 				
-				If (Path to object:C1547($t).extension=shared.archiveExtension)
+				If (Path to object:C1547($t).extension=SHARED.archiveExtension)
 					
 					  // Archive path
 					$o.path:=$oPath.path.file($t)

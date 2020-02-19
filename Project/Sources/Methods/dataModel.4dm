@@ -211,9 +211,9 @@ Case of
 If (Length(String($Obj_table.slave))>0)
 						
   // Only accessible via relations
-						  //  $Dom_node:=DOM Create XML element($Dom_userInfo;"entry";\
-							 "key";"slave";\
-							 "value";String($o.slave))
+						  //  //						  //  $Dom_node:=DOM Create XML element($Dom_userInfo;"entry";\
+														 "key";"slave";\
+														 "value";String($o.slave))
 						
 End if 
 						
@@ -238,7 +238,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 							"value";Choose:C955(Bool:C1537(structure (New object:C1471(\
 							"action";"hasField";\
 							"table";$o.name;\
-							"field";shared.stampField.name)).value);"YES";"NO"))
+							"field";SHARED.stampField.name)).value);"YES";"NO"))
 						
 						If (OK=1)
 							

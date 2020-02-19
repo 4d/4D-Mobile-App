@@ -118,7 +118,7 @@ If ($oDataModel#Null:C1517)
 		
 		If (feature.with("resourcesBrowser"))
 			
-			If ($pathForm.extension=shared.archiveExtension)  // Archive
+			If ($pathForm.extension=SHARED.archiveExtension)  // Archive
 				
 				$x:=$file.getContent()
 				BLOB TO PICTURE:C682($x;$p)

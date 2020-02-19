@@ -98,7 +98,7 @@ START HIDING ERRORS
 			$errors:=err .hide()
 			
 			  // Add downloaded templates
-			For each ($o;$folderDatabase.files().query("extension = :1";shared.archiveExtension))
+			For each ($o;$folderDatabase.files().query("extension = :1";SHARED.archiveExtension))
 				
 				$archive:=ZIP Read archive:C1637($o)
 				
@@ -228,7 +228,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 		
 		If (feature.with("resourcesBrowser"))
 			
-			If (Path to object:C1547($tTxt_forms{$i}).extension=shared.archiveExtension)  // Archive
+			If (Path to object:C1547($tTxt_forms{$i}).extension=SHARED.archiveExtension)  // Archive
 				
 				  // Downloaded template
 				$pathTemplate:=$folderDatabase.file($t)
@@ -254,7 +254,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 		
 	End if 
 	
-	If ($pathTemplate.extension=shared.archiveExtension)  // Archive
+	If ($pathTemplate.extension=SHARED.archiveExtension)  // Archive
 		
 		$archive:=ZIP Read archive:C1637($pathTemplate)
 		
@@ -375,7 +375,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				  // Put the default template at first position
 				$oPicker.pictures.insert(0;$p)
 				$oPicker.pathnames.insert(0;$tTxt_forms{$i})
-				$oPicker.helpTips.insert(0;".default template")
+				$oPicker.helpTips.insert(0;Get localized string:C991("defaultTemplate"))
 				$oPicker.infos.insert(0;Null:C1517)
 				
 			Else 

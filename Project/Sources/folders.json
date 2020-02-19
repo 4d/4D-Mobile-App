@@ -115,6 +115,20 @@
 			"EMPTY"
 		]
 	},
+	"_widgets": {
+		"methods": [
+			"button",
+			"group",
+			"listbox",
+			"picture",
+			"static",
+			"subform",
+			"thermometer",
+			"webArea",
+			"widget"
+		]
+	},
+	"(tools)": {},
 	"[EDITOR]": {
 		"methods": [
 			"COMPILER_editor",
@@ -259,11 +273,11 @@
 	},
 	"classes": {
 		"groups": [
+			"_widgets",
 			"HTUs",
 			"Tests"
 		],
 		"methods": [
-			"button",
 			"color",
 			"COMPILER_classes",
 			"currentForm",
@@ -271,11 +285,9 @@
 			"database",
 			"db",
 			"environment",
-			"group",
 			"http",
 			"HTTP ERROR HANDLER",
 			"lep",
-			"listbox",
 			"logger",
 			"menu",
 			"new",
@@ -283,17 +295,11 @@
 			"ob deepMerge",
 			"ob findPropertyValues",
 			"ob MERGE",
-			"picture",
 			"process",
 			"progress",
-			"static",
 			"str",
-			"subform",
 			"svg",
-			"thermometer",
 			"tips",
-			"webArea",
-			"widget",
 			"window"
 		]
 	},
@@ -444,7 +450,6 @@
 			"pic",
 			"rgx (thread-safe)",
 			"str",
-			"tools",
 			"ui",
 			"xml (thread-safe)"
 		],
@@ -691,7 +696,6 @@
 			"test_str"
 		]
 	},
-	"tools": {},
 	"ui": {
 		"methods": [
 			"COMPILER_ui",
@@ -753,5 +757,9 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {}
+	"trash": {
+		"groups": [
+			"(tools)"
+		]
+	}
 }

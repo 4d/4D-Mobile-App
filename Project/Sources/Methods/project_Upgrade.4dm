@@ -62,8 +62,8 @@ If ($l#-1)
 	
 End if 
 
-$oInfos.ideVersion:=shared.ide.version
-$oInfos.ideBuildVersion:=String:C10(shared.ide.build)
+$oInfos.ideVersion:=SHARED.ide.version
+$oInfos.ideBuildVersion:=String:C10(SHARED.ide.build)
 
 If ($o_project.info.ideVersion=Null:C1517)  // "1720"
 	
@@ -166,7 +166,7 @@ If ($o_project.info.ideVersion=Null:C1517)  // "1720"
 	End if 
 End if 
 
-record.info("Project version: "+String:C10($o_project.info.version))
+RECORD.info("Project version: "+String:C10($o_project.info.version))
 
 If (Num:C11($o_project.info.version)<2)
 	
@@ -197,7 +197,7 @@ If (Num:C11($o_project.info.version)<2)
 	End if 
 	
 	$o_project.info.version:=2
-	record.warning("Upadted to version: "+String:C10($o_project.info.version))
+	RECORD.warning("Upadted to version: "+String:C10($o_project.info.version))
 	
 End if 
 
@@ -233,7 +233,7 @@ If (Num:C11($o_project.info.version)<3)
 		End for each 
 		
 		$o_project.info.version:=3
-		record.warning("Upadted to version: "+String:C10($o_project.info.version))
+		RECORD.warning("Upadted to version: "+String:C10($o_project.info.version))
 		
 	End if 
 End if 
@@ -348,7 +348,7 @@ If (Num:C11($o_project.info.version)<4)
 		$b_upgraded:=True:C214
 		
 		$o_project.info.version:=4
-		record.warning("Upadted to version: "+String:C10($o_project.info.version))
+		RECORD.warning("Upadted to version: "+String:C10($o_project.info.version))
 		
 	End if 
 End if 
@@ -411,7 +411,7 @@ If (feature.with("newDataModel"))
 		End if 
 		
 		$o_project.info.version:=5
-		record.warning("Upadted to version: "+String:C10($o_project.info.version))
+		RECORD.warning("Upadted to version: "+String:C10($o_project.info.version))
 		
 	End if 
 	
@@ -456,7 +456,7 @@ If (feature.with("resourcesBrowser"))
 	
 	If ($o_project.list#Null:C1517)
 		
-		record.info("Check list forms")
+		RECORD.info("Check list forms")
 		
 		$oInternal:=path .listForms()
 		$oDatabase:=path .hostlistForms()
@@ -472,7 +472,7 @@ If (feature.with("resourcesBrowser"))
 					
 					If (Not:C34($oInternal.folder($t).exists))
 						
-						record.warning("Missing internal form: "+$t)
+						RECORD.warning("Missing internal form: "+$t)
 						
 						  // Ensure database folder exists
 						$oDatabase.create()
@@ -491,23 +491,23 @@ If (feature.with("resourcesBrowser"))
 								If ($file#Null:C1517)
 									
 									$o_project.list[$tTable].form:="/"+$oTemplate.new
-									record.info("Replaced by: "+$o_project.list[$tTable].form)
+									RECORD.info("Replaced by: "+$o_project.list[$tTable].form)
 									
 								Else 
 									
-									record.error("Error during copy: "+$file.path)
+									RECORD.error("Error during copy: "+$file.path)
 									
 								End if 
 								
 							Else 
 								
-								record.error("Missing archive: "+$file.path)
+								RECORD.error("Missing archive: "+$file.path)
 								
 							End if 
 							
 						Else 
 							
-							record.error("Unknown template: "+$t)
+							RECORD.error("Unknown template: "+$t)
 							
 						End if 
 					End if 
@@ -518,7 +518,7 @@ If (feature.with("resourcesBrowser"))
 	
 	If ($o_project.detail#Null:C1517)
 		
-		record.info("Check detail forms")
+		RECORD.info("Check detail forms")
 		
 		$oInternal:=path .detailForms()
 		$oDatabase:=path .hostdetailForms()
@@ -534,7 +534,7 @@ If (feature.with("resourcesBrowser"))
 					
 					If (Not:C34($oInternal.folder($t).exists))
 						
-						record.warning("Missing internal form: "+$t)
+						RECORD.warning("Missing internal form: "+$t)
 						
 						  // Ensure database folder exists
 						$oDatabase.create()
@@ -553,23 +553,23 @@ If (feature.with("resourcesBrowser"))
 								If ($file#Null:C1517)
 									
 									$o_project.detail[$tTable].form:="/"+$oTemplate.new
-									record.info("Replaced by: "+$o_project.detail[$tTable].form)
+									RECORD.info("Replaced by: "+$o_project.detail[$tTable].form)
 									
 								Else 
 									
-									record.error("Error during copy: "+$file.path)
+									RECORD.error("Error during copy: "+$file.path)
 									
 								End if 
 								
 							Else 
 								
-								record.error("Missing archive: "+$file.path)
+								RECORD.error("Missing archive: "+$file.path)
 								
 							End if 
 							
 						Else 
 							
-							record.error("Unknown template: "+$t)
+							RECORD.error("Unknown template: "+$t)
 							
 						End if 
 					End if 

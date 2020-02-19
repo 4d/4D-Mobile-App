@@ -39,7 +39,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	$kTxt_minimumVersion:=shared.xCodeVersion
+	$kTxt_minimumVersion:=SHARED.xCodeVersion
 	
 	$Obj_out:=New object:C1471(\
 		"platform";Mac OS:K25:2;\

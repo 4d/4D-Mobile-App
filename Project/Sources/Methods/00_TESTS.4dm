@@ -7,6 +7,7 @@ C_TEXT:C284($Dir_root;$t;$tt;$Txt_in;$Txt_ormula;$Txt_result)
 C_OBJECT:C1216($file;$folder;$o;$o1;$o2;$Obj_formula)
 C_OBJECT:C1216($Obj_new;$Obj_result;$Obj_target;$Obj_template;$svg;$zip)
 C_COLLECTION:C1488($c;$c1;$Col_2)
+C_VARIANT:C1683($null)
 
 ARRAY TEXT:C222($tTxt_;0)
 
@@ -20,11 +21,24 @@ $o:=Folder:C1567("/")
 $o1:=Folder:C1567(fk system folder:K87:13).parent
 
 Case of 
+		
 		  //________________________________________
 	: (True:C214)
 		
-		$t:=Create menu:C408
-		RELEASE MENU:C978($t)
+		$Txt_in:=formatString ("label";"t_Copy_of_commands")
+		  //$Txt_in:=formatString ("label";"Copy of commands t")
+		  //$Txt_in:=formatString ("label";"CopyOfCommandsT")
+		  //$Txt_in:=formatString ("label";"theDescription_t")
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$o:=New object:C1471
+		If ($null=Null:C1517)
+			
+			$o:=$null
+			
+		End if 
 		
 		  //________________________________________
 	: (False:C215)
@@ -40,11 +54,10 @@ Case of
 		
 		  //$c.push($o)
 		
-		  //End for each 
+		  //End for each
 		
 		  //$o:=New object()
 		  //$o.files:=$c
-		
 		
 		  //$zip:=ZIP Create archive($o;$folder)
 		
@@ -574,14 +587,6 @@ Case of
 		$Lon_error:=Rgx_SubstituteText ("[^a-zA-Z0-9]";"-";->$t;0)
 		
 		ALERT:C41($t)
-		
-		  //________________________________________
-	: (True:C214)
-		
-		$Txt_in:=formatString ("label";"Copy_of_commands")
-		$Txt_in:=formatString ("label";"Copy of commands")
-		$Txt_in:=formatString ("label";"CopyOfCommands")
-		$Txt_in:=formatString ("label";"theDescription")
 		
 		  //________________________________________
 End case 

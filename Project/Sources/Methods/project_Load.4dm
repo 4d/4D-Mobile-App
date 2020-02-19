@@ -42,7 +42,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-record.info("Opening project: "+$file.parent.fullName)
+RECORD.info("Opening project: "+$file.parent.fullName)
 
 If ($file.exists)
 	
@@ -55,7 +55,7 @@ If ($file.exists)
 		$o.create()
 		$file.moveTo($o)
 		
-		record.warning("Prior project was saved in: "+$o.fullName)
+		RECORD.warning("Prior project was saved in: "+$o.fullName)
 		
 		  //… & immediately save
 		project_SAVE ($o_project)
@@ -64,7 +64,7 @@ If ($file.exists)
 	
 Else 
 	
-	record.error("File not found: "+$file.path)
+	RECORD.error("File not found: "+$file.path)
 	
 End if 
 

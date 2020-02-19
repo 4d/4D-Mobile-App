@@ -142,7 +142,7 @@ Else
 			
 			Repeat   // Remove unnecessary lines at the end
 				
-				$i:=$o.count()
+				$i:=$o.itemCount()
 				
 				$t:=Get menu item:C422($o.ref;$i)
 				

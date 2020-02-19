@@ -184,7 +184,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 				  // Create the query string for rest
 				$Obj_query:=New object:C1471(\
-					"$limit";String:C10(shared.data.dump.limit))
+					"$limit";String:C10(SHARED.data.dump.limit))
 				
 				$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 				
@@ -233,11 +233,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					End if 
 					
 					  // For each page (if page allowed)
-					For ($Lon_i;1;shared.data.dump.page;1)
+					For ($Lon_i;1;SHARED.data.dump.page;1)
 						
 						If ($Lon_i>1)
 							
-							$Obj_query["$skip"]:=String:C10(shared.data.dump.limit*($Lon_i-1))
+							$Obj_query["$skip"]:=String:C10(SHARED.data.dump.limit*($Lon_i-1))
 							
 						End if 
 						

@@ -1,9 +1,9 @@
 //%attributes = {"invisible":true}
 C_OBJECT:C1216(feature)
-C_OBJECT:C1216(shared)
+C_OBJECT:C1216(SHARED)
 C_OBJECT:C1216(ui)
 C_OBJECT:C1216(project)
-C_OBJECT:C1216(record)
+C_OBJECT:C1216(RECORD)
 
   // INITIALIZATION
 COMPONENT_INIT 

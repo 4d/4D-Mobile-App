@@ -60,7 +60,7 @@ Case of
 		  //______________________________________________________
 	: ($oIN.action="getByName")
 		
-		$oResources:=ob_parseFile (Folder:C1567(fk resources folder:K87:11).file("resources.json")).value
+		$oResources:=SHARED.resources
 		
 		  // Formatter definitions
 		$oOUT.formatters:=$oResources.definitions
@@ -183,7 +183,7 @@ Case of
 					
 					$errors:=err .hide()
 					
-					For each ($oFormatter;$oResources.files().query("extension = :1";shared.archiveExtension))
+					For each ($oFormatter;$oResources.files().query("extension = :1";SHARED.archiveExtension))
 						
 						$archive:=ZIP Read archive:C1637($oFormatter)
 						
@@ -219,9 +219,7 @@ Case of
 			
 		Else 
 			
-			$oResources:=JSON Parse:C1218(Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"resources.json"))
-			$oResources:=JSON Resolve pointers:C1478($oResources).value
-			
+			$oResources:=SHARED.resources
 			$oOUT.formatters:=$oResources.fieldBindingTypes[$oIN.type]
 			
 		End if 

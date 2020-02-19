@@ -323,14 +323,14 @@ Case of
 		If ($Obj_result.success)
 			
 			  // Open a file of project in xcode
-			If (String:C10(shared.xCode.fileFocus)#"")
+			If (String:C10(SHARED.xCode.fileFocus)#"")
 				
 				IDLE:C311
 				DELAY PROCESS:C323(Current process:C322;60*3)  // wait xcode open
 				
 				$Obj_result:=Xcode (New object:C1471(\
 					"action";"reveal";\
-					"path";$Path_product.platformPath+Convert path POSIX to system:C1107(shared.xCode.fileFocus)))
+					"path";$Path_product.platformPath+Convert path POSIX to system:C1107(SHARED.xCode.fileFocus)))
 				
 			End if 
 			
@@ -506,7 +506,7 @@ Case of
 		  //______________________________________________________
 	: ($Mnu_choice="_openCompoentLog")
 		
-		record.open()
+		RECORD.open()
 		
 		  //______________________________________________________
 	: ($Mnu_choice="_generateDataModel")
@@ -519,12 +519,12 @@ Case of
 		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 		
 		  //dataModel (New object(\
-																		//"action";"xcdatamodel";\
-																		//"dataModel";$Obj_project.dataModel;\
-																		//"flat";False;\
-																		//"relationship";Bool(featuresFlags._103850);\
-																		//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
-																		//"path";$Txt_path))
+																					//"action";"xcdatamodel";\
+																					//"dataModel";$Obj_project.dataModel;\
+																					//"flat";False;\
+																					//"relationship";Bool(featuresFlags._103850);\
+																					//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
+																					//"path";$Txt_path))
 		dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\
