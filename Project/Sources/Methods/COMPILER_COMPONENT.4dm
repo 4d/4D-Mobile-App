@@ -1,9 +1,14 @@
 //%attributes = {"invisible":true}
-C_OBJECT:C1216(feature)
-C_OBJECT:C1216(SHARED)
-C_OBJECT:C1216(ui)
+
+  // SYSTEM VARIABLES
+C_OBJECT:C1216(SHARED)  // Common values
+C_OBJECT:C1216(ui)  // UI constants
+
+C_OBJECT:C1216(feature)  // Feature flags
+
+C_OBJECT:C1216(RECORD)  // General journal
+
 C_OBJECT:C1216(project)
-C_OBJECT:C1216(RECORD)
 
   // INITIALIZATION
 COMPONENT_INIT 
@@ -62,6 +67,15 @@ If (False:C215)
 	  // ----------------------------------------------------
 	C_OBJECT:C1216(COMPONENT_Pathname ;$0)
 	C_TEXT:C284(COMPONENT_Pathname ;$1)
+	
+	  // ----------------------------------------------------
+End if 
+
+If (False:C215)
+	
+	  // ----------------------------------------------------
+	C_LONGINT:C283(FEATURE_FLAGS ;$1)
+	C_OBJECT:C1216(FEATURE_FLAGS ;$2)
 	
 	  // ----------------------------------------------------
 End if 

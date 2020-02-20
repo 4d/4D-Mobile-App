@@ -29,10 +29,8 @@ End if
   // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
-	  //READ PICTURE FILE(File("/RESOURCES/Images/github.svg").platformPath;$p)
-	$o:=Folder:C1567(fk resources folder:K87:11).file("Images/github.svg")
-	READ PICTURE FILE:C678(String:C10($o.platformPath);$p)
-	CREATE THUMBNAIL:C679($p;$p;16;16)
+	$t:=Folder:C1567(fk resources folder:K87:11).file("images/github.png").platformPath
+	READ PICTURE FILE:C678($t;$p;*)
 	
 	$ƒ:=New object:C1471(\
 		"type";$1;\
@@ -272,7 +270,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			$x:=$archive.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x;$p)
 			CLEAR VARIABLE:C89($x)
-			$svg.embedPicture($p;-8;0)
+			$svg.embedPicture($p;-8)
 			
 			  // Get the manifest
 			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
@@ -294,6 +292,12 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			
 			  // Add github icon
 			$svg.embedPicture($ƒ.github;1;4)  //.setDimensions(16)
+			
+			If (feature.with("debug"))
+				
+				$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/github.svg");True:C214)
+				
+			End if 
 			
 			$oPicker.pictures.push($svg.getPicture())
 			$oPicker.pathnames.push($tTxt_forms{$i})
@@ -410,13 +414,13 @@ If (feature.with("resourcesBrowser"))
 	
 	  // Media
 	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more@2x.png").platformPath;$p)
-	$svg.embedPicture($p;-10;0)
+	$svg.embedPicture($p;20;30).setDimensions(96)
 	
 	  // Put text
-	$svg.textArea(Get localized string:C991("explore");0;$ƒ.cell.height-20)\
-		.setDimensions($ƒ.cell.width)\
-		.setFill("dimgray")\
-		.setAttribute("text-align";"center")
+	  //$svg.textArea(Get localized string("explore");0;$ƒ.cell.height-20)\
+				.setDimensions($ƒ.cell.width)\
+				.setFill("dimgray")\
+				.setAttribute("text-align";"center")
 	
 	  // Put in second position
 	  //$oPicker.pictures.insert(1;$svg.getPicture())

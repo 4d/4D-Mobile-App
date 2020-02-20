@@ -276,6 +276,7 @@ Else
 					If ($2.file#Null:C1517)  // Given
 						
 						$file:=$2.file
+						$file.create()  // If necessary, creates the folder hierarchy
 						
 					Else 
 						
@@ -463,15 +464,7 @@ Else
 							  //______________________________________________________
 						: ($Txt_object="picture")
 							
-							  // Turn_around #ACI0093875
-							  //SVG EXPORT TO PICTURE($o.root;$p)
-							DOM EXPORT TO VAR:C863($o.root;$t)
-							$t:=Replace string:C233($t;" xmlns=\"\"";"")
-							$t:=DOM Parse XML variable:C720($t)
-							SVG EXPORT TO PICTURE:C1017($t;$p)
-							DOM CLOSE XML:C722($t)
-							  //}
-							
+							SVG EXPORT TO PICTURE:C1017($o.root;$p)
 							$o.success:=(Picture size:C356($p)>0)
 							
 							If ($o.success)
@@ -490,10 +483,7 @@ Else
 							  //______________________________________________________
 						: ($Txt_object="text")
 							
-							  // Turn_around #ACI0093875
-							  //DOM EXPORT TO FILE($o.root;$file.platformPath)
 							DOM EXPORT TO VAR:C863($o.root;$t)
-							$t:=Replace string:C233($t;" xmlns=\"\"";"")
 							$o.success:=Bool:C1537(OK)
 							
 							If ($o.success)
@@ -579,7 +569,7 @@ Else
 							
 							$o.latest:=DOM Create XML element:C865($Dom_target;"g")
 							
-							If (OK=1)\
+							If (Bool:C1537(OK))\
 								 & ($2.id#Null:C1517)
 								
 								DOM SET XML ATTRIBUTE:C866($o.latest;\
@@ -596,7 +586,7 @@ Else
 								"width";Num:C11($2.width);\
 								"height";Num:C11($2.height))
 							
-							If (OK=1)\
+							If (Bool:C1537(OK))\
 								 & ($2.rx#Null:C1517)  // roundedRect
 								
 								DOM SET XML ATTRIBUTE:C866($o.latest;\
@@ -609,21 +599,22 @@ Else
 							
 							OK:=Num:C11(Value type:C1509($2.url)=Is object:K8:27)  // File object
 							
-							If (OK=1)
+							If (Bool:C1537(OK))
 								
 								$file:=$2.url
 								
 								OK:=Num:C11($file.exists)
 								
-								If (OK=1)
+								If (Bool:C1537(OK))
 									
 									  // Get width & height of the picture if any
 									If ($oOptions.width=Null:C1517)\
 										 | ($oOptions.height=Null:C1517)
 										
-										READ PICTURE FILE:C678($file.platformPath;$p)
+										$t:=$file.platformPath
+										READ PICTURE FILE:C678($t;$p)
 										
-										If (OK=1)
+										If (Bool:C1537(OK))
 											
 											PICTURE PROPERTIES:C457($p;$Num_width;$Num_height)
 											CLEAR VARIABLE:C89($p)
@@ -642,7 +633,7 @@ Else
 										End if 
 									End if 
 									
-									If (OK=1)
+									If (Bool:C1537(OK))
 										
 										$t:="file:/"+"/"\
 											+Choose:C955(Is Windows:C1573;"/";"")\
@@ -679,12 +670,12 @@ Else
 								  // Encode in base64
 								PICTURE TO BLOB:C692($p;$x;Choose:C955($oOptions.codec#Null:C1517;String:C10($oOptions.codec);".png"))
 								
-								If (OK=1)
+								If (Bool:C1537(OK))
 									
 									BASE64 ENCODE:C895($x;$t)
 									CLEAR VARIABLE:C89($x)
 									
-									If (OK=1)
+									If (Bool:C1537(OK))
 										
 										  // Put the encoded image
 										PICTURE PROPERTIES:C457($p;$Num_width;$Num_height)
@@ -716,7 +707,7 @@ Else
 								"width";Choose:C955($oOptions.width=Null:C1517;"auto";Num:C11($oOptions.width));\
 								"height";Choose:C955($oOptions.height=Null:C1517;"auto";Num:C11($oOptions.height)))
 							
-							If (OK=1)\
+							If (Bool:C1537(OK))\
 								 & (Length:C16($t)>0)
 								
 								Repeat 
@@ -803,7 +794,7 @@ Else
 						
 					End if 
 					
-					If (OK=1)\
+					If (Bool:C1537(OK))\
 						 & ($2.opacity#Null:C1517)
 						
 						DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -811,7 +802,7 @@ Else
 						
 					End if 
 					
-					If (OK=1)\
+					If (Bool:C1537(OK))\
 						 & ($2.width#Null:C1517)
 						
 						DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -819,7 +810,7 @@ Else
 						
 					End if 
 					
-					If (OK=1)\
+					If (Bool:C1537(OK))\
 						 & ($2.dasharray#Null:C1517)
 						
 						DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -839,7 +830,7 @@ Else
 						
 					End if 
 					
-					If (OK=1)\
+					If (Bool:C1537(OK))\
 						 & ($2.size#Null:C1517)
 						
 						DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -847,7 +838,7 @@ Else
 						
 					End if 
 					
-					If (OK=1)\
+					If (Bool:C1537(OK))\
 						 & ($2.color#Null:C1517)
 						
 						DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -855,7 +846,7 @@ Else
 						
 					End if 
 					
-					If (OK=1)\
+					If (Bool:C1537(OK))\
 						 & ($2.opacity#Null:C1517)
 						
 						DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -863,7 +854,7 @@ Else
 						
 					End if 
 					
-					If (OK=1)\
+					If (Bool:C1537(OK))\
 						 & ($2.style#Null:C1517)
 						
 						$i:=Num:C11($2.style)
@@ -885,7 +876,7 @@ Else
 								
 							End if 
 							
-							If (OK=1)\
+							If (Bool:C1537(OK))\
 								 & ($i>=4)  // Underline
 								
 								DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -894,7 +885,7 @@ Else
 								
 							End if 
 							
-							If (OK=1)\
+							If (Bool:C1537(OK))\
 								 & ($i>=2)  // Italic
 								
 								DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -903,7 +894,7 @@ Else
 								
 							End if 
 							
-							If (OK=1)\
+							If (Bool:C1537(OK))\
 								 & ($i=1)  // Bold
 								
 								DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -913,12 +904,12 @@ Else
 						End if 
 					End if 
 					
-					If (OK=1)\
+					If (Bool:C1537(OK))\
 						 & ($2.alignment#Null:C1517)
 						
 						DOM GET XML ELEMENT NAME:C730($Dom_target;$t)
 						
-						If (OK=1)
+						If (Bool:C1537(OK))
 							
 							$i:=Num:C11($2.alignment)
 							
@@ -997,13 +988,13 @@ Else
 						End if 
 					End if 
 					
-					If (OK=1)\
+					If (Bool:C1537(OK))\
 						 & ($2.rendering#Null:C1517)
 						
 						$t:=String:C10($2.rendering)
 						OK:=Num:C11(New collection:C1472("auto";"optimizeSpeed";"optimizeLegibility";"geometricPrecision";"inherit").indexOf($t)#-1)
 						
-						If (OK=1)
+						If (Bool:C1537(OK))
 							
 							DOM SET XML ATTRIBUTE:C866($Dom_target;\
 								"text-rendering";$t)
@@ -1103,7 +1094,7 @@ Else
 									DOM SET XML ATTRIBUTE:C866($Dom_target;\
 										"x";String:C10($2.x;"&xml")+String:C10($2.unit))
 									
-									If (OK=1)
+									If (Bool:C1537(OK))
 										
 										If ($2.y#Null:C1517)
 											
@@ -1128,7 +1119,7 @@ Else
 							
 							DOM GET XML ELEMENT NAME:C730($Dom_target;$t)
 							
-							If (OK=1)
+							If (Bool:C1537(OK))
 								
 								If ($t="textArea")
 									
@@ -1163,7 +1154,7 @@ Else
 										DOM SET XML ATTRIBUTE:C866($Dom_target;\
 											"width";String:C10($2.width;"&xml")+String:C10($2.unit))
 										
-										If (OK=1)
+										If (Bool:C1537(OK))
 											
 											If ($2.height#Null:C1517)
 												
@@ -1195,7 +1186,7 @@ Else
 									
 								End if 
 								
-								If (OK=1)\
+								If (Bool:C1537(OK))\
 									 & ($2.opacity#Null:C1517)
 									
 									DOM SET XML ATTRIBUTE:C866($Dom_target;\
@@ -1212,7 +1203,7 @@ Else
 									
 								End if 
 								
-								If (OK=1)\
+								If (Bool:C1537(OK))\
 									 & ($2.opacity#Null:C1517)
 									
 									DOM SET XML ATTRIBUTE:C866($Dom_target;\
