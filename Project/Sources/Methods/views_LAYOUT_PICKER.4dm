@@ -413,14 +413,14 @@ If (feature.with("resourcesBrowser"))
 	$svg:=svg .setDimensions($ƒ.cell.width;$ƒ.cell.height)
 	
 	  // Media
-	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more@2x.png").platformPath;$p)
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath;$p)
 	$svg.embedPicture($p;20;30).setDimensions(96)
 	
 	  // Put text
 	  //$svg.textArea(Get localized string("explore");0;$ƒ.cell.height-20)\
-				.setDimensions($ƒ.cell.width)\
-				.setFill("dimgray")\
-				.setAttribute("text-align";"center")
+						.setDimensions($ƒ.cell.width)\
+						.setFill("dimgray")\
+						.setAttribute("text-align";"center")
 	
 	  // Put in second position
 	  //$oPicker.pictures.insert(1;$svg.getPicture())
