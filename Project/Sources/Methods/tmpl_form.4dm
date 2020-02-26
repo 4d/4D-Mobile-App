@@ -14,7 +14,7 @@ C_TEXT:C284($2)
 
 C_BOOLEAN:C305($success)
 C_TEXT:C284($t;$t_formName;$t_typeForm)
-C_OBJECT:C1216($archive;$errors;$fileManifest;$o;$pathForm)
+C_OBJECT:C1216($archive;$errors;$fileManifest;$o;$pathForm;$pathFormFormula)
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_form ;$0)
@@ -46,6 +46,12 @@ Else
 End if 
 
   // ----------------------------------------------------
+
+$pathFormFormula:=path ["host"+$t_typeForm+"Forms"]
+If ($pathFormFormula=Null:C1517)
+	ASSERT:C1129("Unknown template path: "+"host"+$t_typeForm+"Forms")
+End if 
+
 If ($t_formName[[1]]="/")  // Host database resources
 	
 	$t_formName:=Delete string:C232($t_formName;1;1)  // Remove initial slash
@@ -55,7 +61,7 @@ If ($t_formName[[1]]="/")  // Host database resources
 		If (Path to object:C1547($t_formName).extension=SHARED.archiveExtension)  // Archive
 			
 /* START HIDING ERRORS */$errors:=err .hide()
-			$archive:=ZIP Read archive:C1637(path ["host"+$t_typeForm+"Forms"]().file($t_formName))
+			$archive:=ZIP Read archive:C1637($pathFormFormula().file($t_formName))
 /* STOP HIDING ERRORS */$errors.show()
 			
 			If ($archive#Null:C1517)
@@ -66,13 +72,13 @@ If ($t_formName[[1]]="/")  // Host database resources
 			
 		Else 
 			
-			$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
+			$pathForm:=Folder:C1567($pathFormFormula().folder($t_formName).platformPath;fk platform path:K87:2)
 			
 		End if 
 		
 	Else 
 		
-		$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
+		$pathForm:=Folder:C1567($pathFormFormula().folder($t_formName).platformPath;fk platform path:K87:2)
 		
 	End if 
 	
