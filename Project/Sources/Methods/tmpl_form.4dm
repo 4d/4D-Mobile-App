@@ -49,7 +49,7 @@ End if
 
 $pathFormFormula:=path ["host"+$t_typeForm+"Forms"]
 If ($pathFormFormula=Null:C1517)
-	ASSERT:C1129("Unknown template path: "+"host"+$t_typeForm+"Forms")
+	ASSERT:C1129(False:C215;"Unknown template path: "+"host"+$t_typeForm+"Forms")
 End if 
 
 If ($t_formName[[1]]="/")  // Host database resources
@@ -61,7 +61,7 @@ If ($t_formName[[1]]="/")  // Host database resources
 		If (Path to object:C1547($t_formName).extension=SHARED.archiveExtension)  // Archive
 			
 /* START HIDING ERRORS */$errors:=err .hide()
-			$archive:=ZIP Read archive:C1637($pathFormFormula().file($t_formName))
+			$archive:=ZIP Read archive:C1637(path ["host"+$t_typeForm+"Forms"].file($t_formName))
 /* STOP HIDING ERRORS */$errors.show()
 			
 			If ($archive#Null:C1517)
@@ -72,13 +72,13 @@ If ($t_formName[[1]]="/")  // Host database resources
 			
 		Else 
 			
-			$pathForm:=Folder:C1567($pathFormFormula().folder($t_formName).platformPath;fk platform path:K87:2)
+			$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"].folder($t_formName).platformPath;fk platform path:K87:2)
 			
 		End if 
 		
 	Else 
 		
-		$pathForm:=Folder:C1567($pathFormFormula().folder($t_formName).platformPath;fk platform path:K87:2)
+		$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"].folder($t_formName).platformPath;fk platform path:K87:2)
 		
 	End if 
 	
