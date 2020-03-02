@@ -14,7 +14,7 @@ C_TEXT:C284($2)
 
 C_BOOLEAN:C305($success)
 C_TEXT:C284($t;$t_formName;$t_typeForm)
-C_OBJECT:C1216($archive;$errors;$fileManifest;$o;$pathForm;$pathFormFormula)
+C_OBJECT:C1216($archive;$errors;$fileManifest;$o;$pathForm)
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_form ;$0)
@@ -46,11 +46,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-
-$pathFormFormula:=path ["host"+$t_typeForm+"Forms"]
-If ($pathFormFormula=Null:C1517)
-	ASSERT:C1129(False:C215;"Unknown template path: "+"host"+$t_typeForm+"Forms")
-End if 
+ASSERT:C1129(path ["host"+$t_typeForm+"Forms"]#Null:C1517;"Unknown template path: "+"host"+$t_typeForm+"Forms")
 
 If ($t_formName[[1]]="/")  // Host database resources
 	
@@ -87,29 +83,39 @@ If ($t_formName[[1]]="/")  // Host database resources
 	If ($success)
 		
 		  // Verify the structure validity
-		$fileManifest:=path [$t_typeForm+"Forms"]().file("manifest.json")
+		$o:=path 
 		
-		If ($fileManifest.exists)
+		If ($o[$t_typeForm+"Forms"]#Null:C1517)
 			
-			$o:=JSON Parse:C1218($fileManifest.getText())
+			$fileManifest:=$o[$t_typeForm+"Forms"]().file("manifest.json")
 			
-			If ($o.mandatory#Null:C1517)
+			If ($fileManifest.exists)
 				
-				For each ($t;$o.mandatory) While ($success)
+				$o:=JSON Parse:C1218($fileManifest.getText())
+				
+				If ($o.mandatory#Null:C1517)
 					
-					$success:=$pathForm.file($t).exists
+					For each ($t;$o.mandatory) While ($success)
+						
+						$success:=$pathForm.file($t).exists
+						
+					End for each 
 					
-				End for each 
+				Else 
+					
+					RECORD.warning("No mandatory for: "+$fileManifest.path)
+					
+				End if 
 				
 			Else 
 				
-				RECORD.warning("No mandatory for: "+$fileManifest.path)
+				RECORD.warning("Missing manifest: "+$fileManifest.path)
 				
 			End if 
 			
 		Else 
 			
-			RECORD.warning("Missing manifest : "+$fileManifest.path)
+			RECORD.warning("Unmanaged form type: "+$t_typeForm)
 			
 		End if 
 	End if 
