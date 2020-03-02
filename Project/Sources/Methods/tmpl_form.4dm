@@ -14,7 +14,7 @@ C_TEXT:C284($2)
 
 C_BOOLEAN:C305($success)
 C_TEXT:C284($t;$t_formName;$t_typeForm)
-C_OBJECT:C1216($archive;$errors;$fileManifest;$o;$pathForm)
+C_OBJECT:C1216($archive;$error;$fileManifest;$o;$pathForm)
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_form ;$0)
@@ -56,9 +56,9 @@ If ($t_formName[[1]]="/")  // Host database resources
 		
 		If (Path to object:C1547($t_formName).extension=SHARED.archiveExtension)  // Archive
 			
-/* START HIDING ERRORS */$errors:=err .hide()
-			$archive:=ZIP Read archive:C1637(path ["host"+$t_typeForm+"Forms"].file($t_formName))
-/* STOP HIDING ERRORS */$errors.show()
+/* START HIDING ERRORS */$error:=err .hide()
+			$archive:=ZIP Read archive:C1637(path ["host"+$t_typeForm+"Forms"]().file($t_formName))
+/* STOP HIDING ERRORS */$error.show()
 			
 			If ($archive#Null:C1517)
 				
@@ -68,13 +68,13 @@ If ($t_formName[[1]]="/")  // Host database resources
 			
 		Else 
 			
-			$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"].folder($t_formName).platformPath;fk platform path:K87:2)
+			$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
 			
 		End if 
 		
 	Else 
 		
-		$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"].folder($t_formName).platformPath;fk platform path:K87:2)
+		$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
 		
 	End if 
 	

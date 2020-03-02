@@ -17,8 +17,8 @@ C_LONGINT:C283($i;$indx;$Lon_y;$Lon_yOffset;$width)
 C_TEXT:C284($dom;$domField;$domMultivalued;$domNew;$domTemplate;$domUse)
 C_TEXT:C284($t;$tField;$tFormName;$tIN;$tIndex;$tName)
 C_TEXT:C284($tOUT;$tTypeForm)
-C_OBJECT:C1216($context;$form;$o;$oManifest;$oTarget;$pathForm)
-C_OBJECT:C1216($svg)
+C_OBJECT:C1216($archive;$context;$form;$o;$oManifest;$oTarget)
+C_OBJECT:C1216($pathForm;$svg)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -66,7 +66,25 @@ Case of
 				
 				$pathForm:=tmpl_form ($tFormName;$tTypeForm)
 				
-				OBJECT SET TITLE:C194(*;"preview.label";String:C10($pathForm.fullName))
+				If (feature.with("resourcesBrowser"))
+					
+					If ($pathForm.extension=SHARED.archiveExtension)  // Archive
+						
+						$archive:=ZIP Read archive:C1637(path ["host"+$tTypeForm+"Forms"]().file(Delete string:C232($tFormName;1;1)))
+						$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
+						OBJECT SET TITLE:C194(*;"preview.label";String:C10($o.name))
+						
+					Else 
+						
+						OBJECT SET TITLE:C194(*;"preview.label";String:C10($pathForm.fullName))
+						
+					End if 
+					
+				Else 
+					
+					OBJECT SET TITLE:C194(*;"preview.label";String:C10($pathForm.fullName))
+					
+				End if 
 				
 				If ($pathForm.exists)
 					

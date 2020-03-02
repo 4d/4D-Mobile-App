@@ -337,7 +337,7 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 				End if 
 				
 				  // Put text
-				$svg.textArea($o.name;0;$ƒ.cell.height-20)\
+				$svg.textArea($pathTemplate.parent.name;0;$ƒ.cell.height-20)\
 					.setDimensions($ƒ.cell.width)\
 					.setFill("dimgray")\
 					.setAttribute("text-align";"center")
@@ -418,9 +418,9 @@ If (feature.with("resourcesBrowser"))
 	
 	  // Put text
 	  //$svg.textArea(Get localized string("explore");0;$ƒ.cell.height-20)\
-						.setDimensions($ƒ.cell.width)\
-						.setFill("dimgray")\
-						.setAttribute("text-align";"center")
+								.setDimensions($ƒ.cell.width)\
+								.setFill("dimgray")\
+								.setAttribute("text-align";"center")
 	
 	  // Put in second position
 	  //$oPicker.pictures.insert(1;$svg.getPicture())
