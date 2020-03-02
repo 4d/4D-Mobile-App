@@ -536,7 +536,7 @@ Case of
 							$Obj_out.success:=($o#Null:C1517)
 							If ($Obj_out.success)
 								
-								$o.relatedTableNumber:=$Obj_relatedDataClass.getInfo().tableNumber
+								$o.relatedTableNumber:=$Obj_table.getInfo().tableNumber
 								$Obj_out.fields.push($o)
 							End if 
 						Else 
@@ -545,8 +545,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																 | ($Obj_relatedDataClass[$Txt_field].kind="relatedEntities"))
-							
+								
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							  //$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
