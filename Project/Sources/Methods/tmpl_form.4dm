@@ -46,8 +46,6 @@ Else
 End if 
 
   // ----------------------------------------------------
-ASSERT:C1129(path ["host"+$t_typeForm+"Forms"]#Null:C1517;"Unknown template path: "+"host"+$t_typeForm+"Forms")
-
 If ($t_formName[[1]]="/")  // Host database resources
 	
 	$t_formName:=Delete string:C232($t_formName;1;1)  // Remove initial slash
