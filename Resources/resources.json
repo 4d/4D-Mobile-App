@@ -9,7 +9,10 @@
         "hasPersistentChangedValues",
         "isFault",
         "description",
-        "shortDescription"
+        "shortDescription",
+        "private",
+        "public",
+        "init"
     ],
     "definitions": {
         "falseOrTrue": {
