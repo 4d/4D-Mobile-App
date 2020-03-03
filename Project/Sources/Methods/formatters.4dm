@@ -331,7 +331,11 @@ Case of
 							
 							For each ($t;New collection:C1472("Sources";"Resources"))  // Only Sources and "Resources" folder are imported
 								
-								$folder:=COMPONENT_Pathname ("host_formatters").folder($oFormatter.name).folder($t)
+								If ($oFormatter.folder=Null:C1517)
+									$folder:=COMPONENT_Pathname ("host_formatters").folder($oFormatter.name).folder($t)  // code could failed if name in manifest not equal to directory
+								Else 
+									$folder:=$oFormatter.folder.folder($t)
+								End if 
 								
 								If ($folder.exists)
 									
