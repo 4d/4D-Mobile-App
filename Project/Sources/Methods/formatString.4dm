@@ -73,7 +73,7 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
-			: (Get database localization:C1009(Current localization:K5:22)="ja")  //#ACI0099182
+			: (Not:C34(Match regex:C1019("(?mi-s)^[[:ascii:]]*$";$t_string;1)))  //#ACI0099182
 				
 				$t_formated:=$t_string
 				

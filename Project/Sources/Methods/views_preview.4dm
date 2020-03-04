@@ -66,13 +66,21 @@ Case of
 				
 				$pathForm:=tmpl_form ($tFormName;$tTypeForm)
 				
-				If (feature.with("resourcesBrowser"))
+				If ($pathForm.exists)
 					
-					If ($pathForm.extension=SHARED.archiveExtension)  // Archive
+					If (feature.with("resourcesBrowser"))
 						
-						$archive:=ZIP Read archive:C1637(path ["host"+$tTypeForm+"Forms"]().file(Delete string:C232($tFormName;1;1)))
-						$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
-						OBJECT SET TITLE:C194(*;"preview.label";String:C10($o.name))
+						If ($pathForm.extension=SHARED.archiveExtension)  // Archive
+							
+							$archive:=ZIP Read archive:C1637(path ["host"+$tTypeForm+"Forms"]().file(Delete string:C232($tFormName;1;1)))
+							$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
+							OBJECT SET TITLE:C194(*;"preview.label";String:C10($o.name))
+							
+						Else 
+							
+							OBJECT SET TITLE:C194(*;"preview.label";String:C10($pathForm.fullName))
+							
+						End if 
 						
 					Else 
 						
@@ -80,13 +88,7 @@ Case of
 						
 					End if 
 					
-				Else 
-					
-					OBJECT SET TITLE:C194(*;"preview.label";String:C10($pathForm.fullName))
-					
-				End if 
-				
-				If ($pathForm.exists)
+					  //If ($pathForm.exists)
 					
 					  // Load the template
 					PROCESS 4D TAGS:C816($pathForm.file("template.svg").getText();$t)
@@ -480,6 +482,8 @@ Case of
 						.setFill(ui.colors.errorColor.hex)\
 						.setAttributes(New object:C1471("font-size";14;"text-align";"center"))\
 						.getPicture()
+					
+					OBJECT SET TITLE:C194(*;"preview.label";"")
 					
 				End if 
 				

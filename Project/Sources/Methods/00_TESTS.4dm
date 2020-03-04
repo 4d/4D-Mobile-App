@@ -25,10 +25,10 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$Txt_in:=formatString ("label";"t_Copy_of_commands")
-		  //$Txt_in:=formatString ("label";"Copy of commands t")
-		  //$Txt_in:=formatString ("label";"CopyOfCommandsT")
-		  //$Txt_in:=formatString ("label";"theDescription_t")
+		$Txt_in:=formatString ("label";"t_Copy_of_commands_2")
+		$Txt_in:=formatString ("label";"デフォルトのアイコンを使用してプロジェクトを修復しますか?")
+		$Txt_in:=formatString ("label";"CopyOfCommandsT")
+		$Txt_in:=formatString ("label";"theDescription_t")
 		
 		  //________________________________________
 	: (True:C214)

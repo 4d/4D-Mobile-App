@@ -46,32 +46,32 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		$l:=Get database parameter:C643(User param value:K37:94;$t)
 		
 		Case of 
-				
-				  //______________________________________________________
-			: (Length:C16($t)=0)
-				
-				  // <NOTHING MORE TO DO>
-				
-				  //______________________________________________________
-			: (Match regex:C1019("(?m-si)^\\{.*\\}$";$t;1))  // json object
-				
-				$o.parameters:=JSON Parse:C1218($t)
-				
-				  //______________________________________________________
-			: (Match regex:C1019("(?m-si)^\\[.*\\]$";$t;1))  // json array
-				
-				ARRAY TEXT:C222($tTxt_values;0x0000)
-				JSON PARSE ARRAY:C1219($t;$tTxt_values)
-				$o.parameters:=New collection:C1472
-				ARRAY TO COLLECTION:C1563(This:C1470.parameters;$tTxt_values)
-				
-				  //______________________________________________________
-			Else 
-				
-				$o.parameters:=$t
-				
-				  //______________________________________________________
-		End case 
+			
+			  //______________________________________________________
+		: (Length:C16($t)=0)
+			
+			  // <NOTHING MORE TO DO>
+			
+			  //______________________________________________________
+		: (Match regex:C1019("(?m-si)^\\{.*\\}$";$t;1))  // json object
+			
+			$o.parameters:=JSON Parse:C1218($t)
+			
+			  //______________________________________________________
+		: (Match regex:C1019("(?m-si)^\\[.*\\]$";$t;1))  // json array
+			
+			ARRAY TEXT:C222($tTxt_values;0x0000)
+			JSON PARSE ARRAY:C1219($t;$tTxt_values)
+			$o.parameters:=New collection:C1472
+			ARRAY TO COLLECTION:C1563(This:C1470.parameters;$tTxt_values)
+			
+			  //______________________________________________________
+		Else 
+			
+			$o.parameters:=$t
+			
+			  //______________________________________________________
+	End case 
 		
 		ARRAY TEXT:C222($tTxt_components;0x0000)
 		COMPONENT LIST:C1001($tTxt_components)

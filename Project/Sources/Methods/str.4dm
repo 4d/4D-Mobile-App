@@ -49,6 +49,7 @@ If (This:C1470[""]=Null:C1517)
 		"fixedLength";Formula:C1597(str ("fixedLength";New object:C1471("length";$1;"filler";$2;"alignment";$3)).value);\
 		"hyphenation";Formula:C1597(This:C1470.wordWrap($1));\
 		"insert";Formula:C1597(str ("insert";New object:C1471("value";String:C10($1);"begin";Num:C11($2);"end";Num:C11($3))));\
+		"isAscii";Formula:C1597(str ("isAscii").value);\
 		"isBoolean";Formula:C1597(str ("isBoolean").value);\
 		"isDate";Formula:C1597(str ("isDate").value);\
 		"isJson";Formula:C1597(Match regex:C1019("(?msi)^(?:\\{.*\\})|(?:\\[.*\\])$";This:C1470.value;1));\
@@ -606,6 +607,11 @@ Else
 					End if 
 					
 					$o.value:=$t
+					
+					  //______________________________________________________
+				: ($1="isAscii")  // Returns True if the text contains only ASCII characters
+					
+					$o.value:=Match regex:C1019("(?mi-s)^[[:ascii:]]*$";String:C10(This:C1470.value);1)
 					
 					  //______________________________________________________
 				: ($1="isBoolean")  // Returns True if text is "T/true" or "F/false"

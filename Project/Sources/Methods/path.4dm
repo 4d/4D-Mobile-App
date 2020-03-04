@@ -53,8 +53,8 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"products";Formula:C1597(path ("products";New object:C1471("create";Bool:C1537($1))));\
 		"host";Formula:C1597(path ("host";New object:C1471("create";Bool:C1537($1))));\
 		"hostForms";Formula:C1597(path ("hostForms";New object:C1471("create";Bool:C1537($1))));\
-		"hostdetailForms";Formula:C1597(path ("hostDetailForms";New object:C1471("create";Bool:C1537($1))));\
-		"hostlistForms";Formula:C1597(path ("hostListForms";New object:C1471("create";Bool:C1537($1))));\
+		"hostdetailForms";Formula:C1597(path ("hostdetailForms";New object:C1471("create";Bool:C1537($1))));\
+		"hostlistForms";Formula:C1597(path ("hostlistForms";New object:C1471("create";Bool:C1537($1))));\
 		"hostloginForms";Formula:C1597(path ("hostloginForms";New object:C1471("create";Bool:C1537($1))));\
 		"hostActionIcons";Formula:C1597(path ("hostIcons";New object:C1471("create";Bool:C1537($1))));\
 		"hostFieldIcons";Formula:C1597(path ("hostIcons";New object:C1471("create";Bool:C1537($1))));\
@@ -191,7 +191,7 @@ Else
 			$bCreate:=$2.create
 			
 			  //______________________________________________________
-		: ($1="hostListForms")  // Database 'form/list' folder
+		: ($1="hostlistForms")  // Database 'form/list' folder
 			
 			$o.path:=$o.hostForms().folder("list")
 			$bCreate:=$2.create
@@ -203,7 +203,7 @@ Else
 			$bCreate:=$2.create
 			
 			  //______________________________________________________
-		: ($1="hostDetailForms")  // Database 'form/detail' folder
+		: ($1="hostdetailForms")  // Database 'form/detail' folder
 			
 			$o.path:=$o.hostForms().folder("detail")
 			$bCreate:=$2.create
@@ -228,12 +228,17 @@ Else
 						  //……………………………………………………………………………
 					: ($2.type="list")
 						
-						$oPath:=$o.hostListForms()
+						$oPath:=$o.hostlistForms()
 						
 						  //……………………………………………………………………………
 					: ($2.type="detail")
 						
-						$oPath:=$o.hostDetailForms()
+						$oPath:=$o.hostdetailForms()
+						
+						  //……………………………………………………………………………
+					: ($2.type="login")
+						
+						$oPath:=$o.hostloginForms()
 						
 						  //……………………………………………………………………………
 					: ($2.type="navigation")
