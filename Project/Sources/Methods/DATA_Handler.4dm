@@ -327,7 +327,7 @@ Case of
 							
 							If ($file.exists)
 								
-								$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).value.contentSize
+								$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).contentSize
 								
 							End if 
 							
