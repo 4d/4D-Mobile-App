@@ -48,7 +48,7 @@ Case of
 					
 					If ($oIcon.exists)
 						
-						READ PICTURE FILE:C678($oIcon.path.platformPath;$p)
+						READ PICTURE FILE:C678($oIcon.platformPath;$p)
 						
 					Else 
 						
