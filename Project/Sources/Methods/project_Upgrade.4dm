@@ -486,7 +486,7 @@ If (feature.with("resourcesBrowser"))
 							
 							If ($file.exists)
 								
-								$file:=$file.copyTo($oDatabase)
+								$file:=$file.copyTo($oDatabase;fk overwrite:K87:5)
 								
 								If ($file#Null:C1517)
 									
@@ -548,7 +548,7 @@ If (feature.with("resourcesBrowser"))
 							
 							If ($file.exists)
 								
-								$file:=$file.copyTo($oDatabase)
+								$file:=$file.copyTo($oDatabase;fk overwrite:K87:5)
 								
 								If ($file#Null:C1517)
 									
