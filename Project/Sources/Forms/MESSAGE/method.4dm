@@ -66,7 +66,7 @@ Case of
 					If (Value type:C1509(Form:C1466.title)=Is collection:K8:32)
 						
 						$c:=Form:C1466.title.copy()
-						(OBJECT Get pointer:C1124(Object named:K67:5;"title"))->:=str (str .setText($c[0]).localized()).concat($c.remove(0))
+						(OBJECT Get pointer:C1124(Object named:K67:5;"title"))->:=str .setText($c.shift()).localized($c)
 						
 					Else 
 						
@@ -80,7 +80,7 @@ Case of
 					If (Value type:C1509(Form:C1466.additional)=Is collection:K8:32)
 						
 						$c:=Form:C1466.additional.copy()
-						(OBJECT Get pointer:C1124(Object named:K67:5;"title"))->:=str (str .setText($c[0]).localized()).concat($c.remove(0))
+						(OBJECT Get pointer:C1124(Object named:K67:5;"additional"))->:=str .setText($c.shift()).localized($c)
 						
 					Else 
 						
