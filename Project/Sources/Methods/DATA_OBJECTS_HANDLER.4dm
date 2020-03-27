@@ -263,7 +263,12 @@ Case of
 						
 						GET HIGHLIGHT:C209(*;$form.filter;$start;$end)
 						
-						$tSelection:=Substring:C12($oTable[""].filter.string;$start;$end-$start)
+						If ($oTable[""].filter.string#Null:C1517)
+							
+							$tSelection:=Substring:C12($oTable[""].filter.string;$start;$end-$start)
+							
+						End if 
+						
 						$bCaret:=(Position:C15("{sel}";$menu.choice)>0)
 						
 						If ($bCaret)
