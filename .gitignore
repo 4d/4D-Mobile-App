@@ -1,45 +1,44 @@
-# Ignore invisible files/folders except me
+﻿# Ignore invisible files/folders except me
 .*
-!.gitignore
+!.git*
+.*/
 
 # Ignore data file
-Data/
-DATA/
-data/
+[dD][aA][tT][aA]/
 *.4DD
 *.journal
 *.4DIndx
 *.Match
-*symbols.txt
 
 # Ignore derived data
-DerivedData/
+Project/DerivedData/
 
 # Ignore logs
 Logs/
 
 # Ignore settings & preferences
-Settings/
-!buildApp.4DSettings
-
-Preferences/
-!4DPop AppMaker.xml
-
 userPreferences.*/
 
+Settings/
+#!buildApp.4DSettings
+
+Preferences/
+!4DPop AppMaker.*
+
 # Miscellaneous
-DEV/
 *__Orphan__*
+*symbols.txt
 ehthumbs.db
 Thumbs.db
 
+#-----------------------------------------------------
+Project/Sources/DatabaseMethods/onMobileAppAction.4dm
 Resources/php.ini
 Project/Trash/
 Mobile Projects/
 !.swiftlint.yml
 WebFolder/
 images/library/
-Mobile Projects/
 MobileApps/
 Resources/mobile
 xcuserdata/
