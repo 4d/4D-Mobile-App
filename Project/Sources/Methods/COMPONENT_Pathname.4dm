@@ -170,7 +170,7 @@ Case of
 		  //______________________________________________________
 	: ($Txt_target="key")  // key file
 		
-		$Obj_path:=Folder:C1567(Folder:C1567(MobileApps folder:K5:47;*).platformPath;fk platform path:K87:2).file("key.mobileapp")
+		$Obj_path:=Folder:C1567(MobileApps folder:K5:47;*).file("key.mobileapp")
 		
 		  //________________________________________
 	Else 

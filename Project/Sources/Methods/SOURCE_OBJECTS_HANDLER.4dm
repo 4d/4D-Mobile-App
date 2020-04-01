@@ -60,7 +60,7 @@ Case of
 		
 		If (Form:C1466.dataSource.source="server")
 			
-			$File_key:=doc_Absolute_path (Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath))
+			$File_key:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
 			
 			  //===============================================================
 			  //#RUSTINE: ne devrait plus être nécessaire
@@ -116,10 +116,10 @@ Case of
 		
 		  // If (Shift down)
 		  //SHOW ON DISK(dataSet (New object(\
-															"action";"path";\
-															"project";New object(\
-															"product";Form.product;\
-															"$project";Form.$project))).path)
+			"action";"path";\
+			"project";New object(\
+			"product";Form.product;\
+			"$project";Form.$project))).path)
 		  // End if
 		
 		  //==================================================

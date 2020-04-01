@@ -393,7 +393,7 @@ If ($Obj_in.create)
 			
 			If (String:C10($Obj_in.dataSource.source)="server")
 				
-				$File_:=Choose:C955(Length:C16(String:C10($Obj_in.dataSource.keyPath))>0;doc_Absolute_path (Convert path POSIX to system:C1107($Obj_in.dataSource.keyPath));Null:C1517)
+				$File_:=Choose:C955(Length:C16(String:C10($Obj_in.dataSource.keyPath))>0;doc_Absolute_path ($Obj_in.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*));Null:C1517)
 				
 			Else 
 				

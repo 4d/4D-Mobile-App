@@ -132,7 +132,7 @@ Else
 			  //______________________________________________________
 		: ($1="key")  // Database 'key' file
 			
-			$o.path:=Folder:C1567(Folder:C1567(MobileApps folder:K5:47;*).platformPath;fk platform path:K87:2).file("key.mobileapp")
+			$o.path:=Folder:C1567(MobileApps folder:K5:47;*).file("key.mobileapp")
 			
 			  //______________________________________________________
 		: ($1="projects")  // Database 'Mobile Projects' folder

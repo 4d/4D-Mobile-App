@@ -58,7 +58,7 @@ $Txt_reference:=Convert path system to POSIX:C1106($Dir_directory)
 
 If (Position:C15($Txt_reference;$Txt_buffer)=1)
 	
-	$Txt_relativePath:=Convert path POSIX to system:C1107(Replace string:C233($Txt_buffer;$Txt_reference;"";1))
+	$Txt_relativePath:="/"+Convert path POSIX to system:C1107(Replace string:C233($Txt_buffer;$Txt_reference;"";1))
 	
 End if 
 

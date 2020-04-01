@@ -269,7 +269,7 @@ Case of
 				
 				If (Length:C16(String:C10(Form:C1466.dataSource.keyPath))>0)
 					
-					$Txt_buffer:=doc_Absolute_path (Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath))
+					$Txt_buffer:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
 					
 					If (Test path name:C476($Txt_buffer)#Is a document:K24:1)
 						
@@ -405,7 +405,7 @@ Case of
 		ui.refresh()
 		
 		  //=========================================================
-	: ($Obj_in.action="dataset")  //end datset generation
+	: ($Obj_in.action="dataset")  //end dataset generation
 		
 		(OBJECT Get pointer:C1124(Object named:K67:5;"dataGeneration"))->:=0
 		OBJECT SET VISIBLE:C603(*;"dataGeneration@";False:C215)

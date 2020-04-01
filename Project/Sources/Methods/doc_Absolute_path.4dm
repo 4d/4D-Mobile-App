@@ -13,8 +13,7 @@ C_TEXT:C284($1)
 C_TEXT:C284($2)
 
 C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Dir_directory;$Txt_absolutePath;$Txt_buffer;$Txt_pathname;$Txt_reference)
-C_OBJECT:C1216($Obj_path)
+C_TEXT:C284($Dir_directory;$Txt_absolutePath;$Txt_pathname;$Txt_reference)
 
 If (False:C215)
 	C_TEXT:C284(doc_Absolute_path ;$0)
@@ -47,6 +46,8 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
 	$Txt_reference:=Convert path system to POSIX:C1106($Dir_directory)
 	
+	$Txt_absolutePath:=$Txt_pathname
+	
 Else 
 	
 	ABORT:C156
@@ -54,31 +55,14 @@ Else
 End if 
 
   // ----------------------------------------------------
-
-Repeat 
+If ($Txt_pathname[[1]]="/")
 	
-	$Obj_path:=Path to object:C1547($Txt_pathname)
-	
-	$Txt_buffer:=$Obj_path.name+$Obj_path.extension+("/"*Num:C11($Obj_path.isFolder))+$Txt_buffer
-	
-	If (Length:C16(String:C10($Obj_path.parentFolder))>0)
-		
-		$Obj_path:=Path to object:C1547($Obj_path.parentFolder)
-		$Txt_pathname:=Object to path:C1548($Obj_path)
-		
-	End if 
-Until (String:C10($Obj_path.parentFolder)="")
-
-$Txt_buffer:=$Obj_path.name+$Obj_path.extension+"/"+$Txt_buffer
-
-If (Position:C15($Txt_reference;$Txt_buffer)=0)
-	
-	$Txt_buffer:=$Txt_reference+$Txt_buffer
+	$Txt_pathname:=Replace string:C233($Txt_pathname;Folder separator:K24:12;"/")
+	$Txt_absolutePath:=Convert path system to POSIX:C1106($Dir_directory)+Delete string:C232($Txt_pathname;1;1)
 	
 End if 
 
-$Txt_absolutePath:=Convert path POSIX to system:C1107($Txt_buffer)
-
+$Txt_absolutePath:=Convert path POSIX to system:C1107($Txt_absolutePath)
   // ----------------------------------------------------
   // Return
 $0:=$Txt_absolutePath
