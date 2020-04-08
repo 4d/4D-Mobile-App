@@ -1,4 +1,4 @@
-//%attributes = {}
+//%attributes = {"invisible":true}
 C_LONGINT:C283($1)
 C_OBJECT:C1216($2)
 
@@ -99,16 +99,18 @@ feature.delivered("repairStructureMoreVisible";1820)
 feature.delivered(113164;1820)  // Enable/disable image dump
 
 /* _____________
+18R3
+_____________*/
+feature.delivered(112225)  // Select / install / use custom templates
+
+
+/* _____________
 WIP
 _____________*/
 feature.wip("withWidgetActions")  // Enable widget actions
 feature.wip("accentColors")  // Manage colors according to user system parameters
-
 feature.wip(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
-
 feature.unstable(113016)  // Svg improvement in forms section
-feature.unstable(112225)  // Select / install / use custom templates
-
 feature.wip("formatMarketPlace")  // Manage format as archive
 
 /* -------------------------------------

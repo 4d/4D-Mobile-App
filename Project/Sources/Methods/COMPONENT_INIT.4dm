@@ -403,12 +403,12 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 	
 End if 
 
-  // ================================================================================================================================
-  //                                                          FEATURES FLAGS
-  // ================================================================================================================================
+/*================================================================================================================================
+                                                            FEATURES FLAGS
+  ================================================================================================================================*/
 If (OB Is empty:C1297(feature)) | $bReset
 	
-	FEATURE_FLAGS (1830;$oPreferences.feature)
+	FEATURE_FLAGS (1840;$oPreferences.feature)
 	
 End if 
 
@@ -433,19 +433,18 @@ If (Not:C34($lMode ?? 1))\
 	
 End if 
 
-  // ________________________________________________________________________________________________________________________________
-  //                                                         | AFTER FLAGS |
-  // ________________________________________________________________________________________________________________________________
-
+/*================================================================================================================================
+                                                            AFTER FLAGS
+  ================================================================================================================================*/
 COMPONENT_DEFINE_TOOLS 
 
 If (feature.with("accentColors"))
 	
-	  // Ui.selectedColor:=Highlight menu background color
-	  // Ui.highlightColor:=Highlight menu background color
+	  // ui.selectedColor:=Highlight menu background color
+	  // ui.highlightColor:=Highlight menu background color
 	
-	  //ui.backgroundSelectedColor:=Highlight menu background color // 0x004BA6F8
-	  //ui.backgroundUnselectedColor:=Background color none // 0x005A5A5A
+	  // ui.backgroundSelectedColor:=Highlight menu background color // 0x004BA6F8
+	  // ui.backgroundUnselectedColor:=Background color none // 0x005A5A5A
 	
 End if 
 

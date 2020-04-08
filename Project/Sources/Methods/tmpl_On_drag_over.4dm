@@ -11,6 +11,7 @@
 C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
+C_BOOLEAN:C305($bBackground)
 C_TEXT:C284($t;$Txt_isOfClass)
 C_OBJECT:C1216($o)
 C_COLLECTION:C1488($c)
@@ -23,13 +24,24 @@ End if
   // Initialisations
 $0:=-1
 
+This:C1470.$.current:=SVG Find element ID by coordinates:C1054(*;"preview";MOUSEX;MOUSEY)
+
   // ----------------------------------------------------
-If (Length:C16(This:C1470.$.current)>0)
+If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
+	
+	If (feature.with("newViewUI"))
+		
+		  // Accept dropping on the background
+		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-background";$Txt_isOfClass)
+		$bBackground:=($Txt_isOfClass="true")
+		
+	End if 
 	
 	  // Accept drag if the object is dropable
 	SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-droppable";$Txt_isOfClass)
 	
-	If ($Txt_isOfClass="true")  // Template
+	If ($Txt_isOfClass="true")\
+		 | ($bBackground)  // Template
 		
 		  // Accept drag if a field is drag over
 		GET PASTEBOARD DATA:C401("com.4d.private.ios.field";$x)
@@ -41,7 +53,7 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 			If ($o.fieldType#8859)  // Not 1-N relation
 				
-				If (This:C1470.$.current="background")
+				If ($bBackground)
 					
 					$0:=0
 					

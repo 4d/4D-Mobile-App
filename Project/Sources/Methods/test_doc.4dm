@@ -1,41 +1,43 @@
 //%attributes = {}
-C_TEXT:C284($Dir_;$Dir_resources;$File_;$Txt_nullDateTime;$Txt_reference)
+C_TEXT:C284($Dir_;$Dir_resources;$File_;$t;$t2;$Txt_expected)
+C_TEXT:C284($Txt_nullDateTime;$Txt_reference)
 C_OBJECT:C1216($Obj_expected)
 
 TRY 
 
-If (False:C215)
-	If (True:C214)  // doc_Relative_path
+If (True:C214)
+	
+	If (True:C214)  // doc_Relative_path & doc_Absolute_path
 		
-		$File_:=Get 4D folder:C485(Database folder:K5:14;*)+Convert path POSIX to system:C1107("folder/subfolder/key.mobileapp")
 		$Txt_reference:=Get 4D folder:C485(Database folder:K5:14;*)
-		ASSERT:C1129(doc_Relative_path ($File_)=Convert path POSIX to system:C1107("folder/subfolder/key.mobileapp"))
-		ASSERT:C1129(doc_Relative_path ($File_;$Txt_reference)="folder:subfolder:key.mobileapp")
+		$File_:=$Txt_reference+Convert path POSIX to system:C1107("folder/subfolder/key.mobileapp")
+		$Txt_expected:="/"+Convert path POSIX to system:C1107("folder/subfolder/key.mobileapp")
 		
-		$File_:=Convert path POSIX to system:C1107("/Users/vdl/Desktop/DEV/key.mobileapp")
+		$t:=doc_Relative_path ($File_)
+		ASSERT:C1129($t=$Txt_expected)
+		
+		$t2:=doc_Relative_path ($File_;$Txt_reference)
+		ASSERT:C1129($t2=$Txt_expected)
+		
+		ASSERT:C1129(doc_Absolute_path ($t;$Txt_reference)=$File_)
+		
 		$Txt_reference:=Convert path POSIX to system:C1107("/Users/vdl/Desktop/DEV/")
-		ASSERT:C1129(doc_Relative_path ($File_)=$File_)
-		ASSERT:C1129(doc_Relative_path ($File_;$Txt_reference)="key.mobileapp")
+		$File_:=$Txt_reference+Convert path POSIX to system:C1107("key.mobileapp")
+		$Txt_expected:="/"+Convert path POSIX to system:C1107("key.mobileapp")
+		
+		$t:=doc_Relative_path ($File_;$Txt_reference)
+		ASSERT:C1129($t=$Txt_expected)
+		
+		$t2:=doc_Relative_path ($File_)
+		ASSERT:C1129($t2=$File_)
+		
+		ASSERT:C1129(doc_Absolute_path ($t;$Txt_reference)=$File_)
+		
+		ASSERT:C1129(doc_Absolute_path ($t)#$File_)
 		
 	End if 
 	
-	If (True:C214)  // doc_Absolute_path
-		
-		$File_:=Convert path POSIX to system:C1107("folder/key.mobileapp")
-		$Txt_reference:=Convert path POSIX to system:C1107("/Users/vdl/Desktop/DEV/")
-		ASSERT:C1129(doc_Absolute_path ($File_;$Txt_reference)=($Txt_reference+$File_))
-		
-		$File_:=Convert path POSIX to system:C1107("folder/subfolder/key.mobileapp")
-		$Txt_reference:=Get 4D folder:C485(Database folder:K5:14;*)+Convert path POSIX to system:C1107("folder/subfolder/key.mobileapp")
-		ASSERT:C1129(doc_Absolute_path ($File_)=$Txt_reference)
-		
-		$File_:=(Get 4D folder:C485(Database folder:K5:14;*)+Convert path POSIX to system:C1107("folder/subfolder/key.mobileapp"))
-		$Txt_reference:=$File_
-		ASSERT:C1129(doc_Absolute_path ($File_)=$Txt_reference)
-		
-	End if 
-	
-	If (True:C214)  // doc_document
+	If (False:C215)  // doc_document
 		
 		$File_:=Temporary folder:C486+"alias"
 		CREATE ALIAS:C694(Structure file:C489;$File_)
@@ -45,7 +47,7 @@ If (False:C215)
 		
 	End if 
 	
-	If (True:C214)  // doc_File
+	If (False:C215)  // doc_File
 		
 		$Txt_nullDateTime:=String:C10(!00-00-00!;ISO date GMT:K1:10;?00:00:00?)
 		$Dir_resources:=Get 4D folder:C485(Current resources folder:K5:16;*)
@@ -109,7 +111,7 @@ If (False:C215)
 		
 	End if 
 	
-	If (True:C214)  // doc_Folder
+	If (False:C215)  // doc_Folder
 		
 		$Dir_:=""
 		$Obj_expected:=New object:C1471(\
@@ -131,7 +133,7 @@ If (False:C215)
 		
 	End if 
 	
-	If (True:C214)  // Doc_expandPath
+	If (False:C215)  // Doc_expandPath
 		
 		ASSERT:C1129(doc_Expand_path ("$TEMP/")=Temporary folder:C486)
 		

@@ -10,8 +10,9 @@
   // Declarations
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b)
+C_LONGINT:C283($indx)
 C_TEXT:C284($t;$Txt_isOfClass)
-C_OBJECT:C1216($o;$o;$Obj_target)
+C_OBJECT:C1216($o;$Obj_target)
 C_COLLECTION:C1488($c)
 
 ARRAY TEXT:C222($tTxt_results;0)
@@ -22,7 +23,7 @@ ARRAY TEXT:C222($tTxt_results;0)
 $Obj_target:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2;"detail";"list")][This:C1470.$.tableNumber]
 
   // ----------------------------------------------------
-If (Length:C16(This:C1470.$.current)>0)
+If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
 	
 	  // Get the pastboard
 	GET PASTEBOARD DATA:C401("com.4d.private.ios.field";$x)
@@ -98,8 +99,25 @@ If (Length:C16(This:C1470.$.current)>0)
 					
 				Else 
 					
-					$Obj_target[$t]:=$o
-					
+					If (This:C1470.$.current="background")
+						
+						$indx:=$Obj_target.fields.indexOf(Null:C1517)
+						
+						If ($indx=-1)
+							
+							$Obj_target.fields.push($o)
+							
+						Else 
+							
+							$Obj_target.fields[$indx]:=$o
+							
+						End if 
+						
+					Else 
+						
+						$Obj_target[$t]:=$o
+						
+					End if 
 				End if 
 			End if 
 			

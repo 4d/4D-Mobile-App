@@ -1,6 +1,7 @@
 {
   "type": "detailform",
   "name": "Blank Form",
+  "version":2,
   "fields": {
     "count": 0,
     "max": 0

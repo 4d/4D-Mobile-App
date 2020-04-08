@@ -46,6 +46,7 @@
 			"devMenu"
 		],
 		"tables": [
+			"__DeletedRecords",
 			"ALL_TYPES",
 			"Commands",
 			"Employes",
@@ -108,6 +109,7 @@
 			"COMPONENT_Infos",
 			"COMPONENT_INIT",
 			"COMPONENT_Pathname",
+			"FEATURE_FLAGS",
 			"getIcon",
 			"path"
 		],
@@ -731,6 +733,10 @@
 		],
 		"forms": [
 			"VIEWS"
+		],
+		"classes": [
+			"tmpl",
+			"views"
 		]
 	},
 	"widgets": {
