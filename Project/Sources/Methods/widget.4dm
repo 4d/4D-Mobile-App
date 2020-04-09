@@ -15,7 +15,7 @@ C_OBJECT:C1216($2)
 C_LONGINT:C283($l;$Lon_bottom;$Lon_height;$Lon_horizontal;$Lon_left;$Lon_right)
 C_LONGINT:C283($Lon_top;$Lon_type;$Lon_vertical;$Lon_width)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o;$Obj_params)
+C_OBJECT:C1216($o)
 
 If (False:C215)
 	C_OBJECT:C1216(widget ;$0)
@@ -245,13 +245,13 @@ Else
 			
 			If ($2.vertical#Null:C1517)
 				
-				$Lon_vertical:=Num:C11($Obj_params.vertical)
+				$Lon_vertical:=Num:C11($2.vertical)
 				
 			End if 
 			
 			If ($2.horizontal#Null:C1517)
 				
-				$Lon_horizontal:=Num:C11($Obj_params.horizontal)
+				$Lon_horizontal:=Num:C11($2.horizontal)
 				
 			End if 
 			

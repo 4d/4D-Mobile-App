@@ -81,11 +81,11 @@ If ($t_formName[[1]]="/")  // Host database resources
 	If ($success)
 		
 		  // Verify the structure validity
-		$o:=path 
+		$o:=path [$t_typeForm+"Forms"]()
 		
-		If ($o[$t_typeForm+"Forms"]#Null:C1517)
+		If ($o#Null:C1517)
 			
-			$fileManifest:=$o[$t_typeForm+"Forms"]().file("manifest.json")
+			$fileManifest:=$o.file("manifest.json")
 			
 			If ($fileManifest.exists)
 				

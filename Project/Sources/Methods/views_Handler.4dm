@@ -228,6 +228,13 @@ Case of
 					
 				End if 
 				
+				If (feature.with("newViewUI"))
+					
+					OB REMOVE:C1226($context;"scrollPosition")
+					$context.scroll:=0
+					
+				End if 
+				
 				  //______________________________________________________
 			: ($eventCode=On Timer:K2:25)
 				
@@ -392,7 +399,7 @@ Case of
 			End if 
 		End if 
 		
-		$form.scrollBar.setVisible(($context.typeForm()="detail") & ($form.preview.visible()))
+		$form.scrollBar.setVisible(($context.typeForm()="detail") & ($form.preview.visible()) & (Num:C11($context.previewHeight)>460))
 		
 		If (Bool:C1537($context.picker))
 			
@@ -429,7 +436,7 @@ Case of
 			
 		End if 
 		
-		$form.tableWidget.setScrollPosition($l;Null:C1517)
+		$form.tableWidget.setScrollPosition(Null:C1517;$l)
 		
 		$context.setGeometry()
 		

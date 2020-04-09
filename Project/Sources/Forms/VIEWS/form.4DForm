@@ -9,6 +9,7 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onDataChange",
 		"onUnload",
 		"onTimer"
 	],
@@ -445,16 +446,24 @@
 				"preview.scrollBar": {
 					"type": "ruler",
 					"left": 851,
-					"top": 198,
-					"width": 17,
-					"height": 444,
-					"max": 450,
+					"top": 204,
+					"width": 15,
+					"height": 436,
+					"max": 100,
 					"events": [
 						"onDataChange"
 					],
 					"visibility": "hidden",
-					"focusable": false,
-					"dataSource": "Form:C1466.$dialog.VIEWS.scroll"
+					"dataSource": "vThermo",
+					"min": 0,
+					"showGraduations": false,
+					"graduationStep": 10,
+					"dataSourceTypeHint": "integer",
+					"labelsPlacement": "none",
+					"method": "views_OBJECTS_HANDLER",
+					"fontSize": 10,
+					"stroke": "#ff0000",
+					"focusable": false
 				}
 			}
 		}

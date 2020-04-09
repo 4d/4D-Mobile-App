@@ -55,7 +55,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"resizeVertically";Formula:C1597(widget ("setCoordinates";New object:C1471("bottom";$1)));\
 		"scroll";Null:C1517;\
 		"getScrollPosition";Formula:C1597(widget ("getScrollPosition"));\
-		"setScrollPosition";Formula:C1597(widget ("setScrollPosition";New object:C1471("horizontal";$1;"vertical";$2)));\
+		"setScrollPosition";Formula:C1597(widget ("setScrollPosition";New object:C1471("vertical";$1;"horizontal";$2)));\
 		"dimensions";Null:C1517;\
 		"getDimensions";Formula:C1597(picture ("getDimensions"));\
 		"getAttribute";Formula:C1597(picture ("getAttribute";New object:C1471("id";$1;"attribute";$2)))\

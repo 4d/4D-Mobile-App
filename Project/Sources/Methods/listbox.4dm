@@ -154,7 +154,7 @@ Else
 			End for each 
 			
 			  //______________________________________________________
-		: ($1="getScrollbar")  // Scroolbar status
+		: ($1="getScrollbar")  // Scrollbar status
 			
 			OBJECT GET SCROLLBAR:C1076(*;$o.name;$Boo_horizontal;$Boo_vertical)
 			

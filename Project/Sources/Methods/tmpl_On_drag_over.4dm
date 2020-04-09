@@ -41,7 +41,7 @@ If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
 	SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-droppable";$Txt_isOfClass)
 	
 	If ($Txt_isOfClass="true")\
-		 | ($bBackground)  // Template
+		 | ($bBackground)
 		
 		  // Accept drag if a field is drag over
 		GET PASTEBOARD DATA:C401("com.4d.private.ios.field";$x)

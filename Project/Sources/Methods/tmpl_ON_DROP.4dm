@@ -121,6 +121,12 @@ If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
 				End if 
 			End if 
 			
+			If (feature.with("newViewUI"))
+				
+				OB REMOVE:C1226(Form:C1466.$dialog.VIEWS;"scroll")
+				
+			End if 
+			
 			  // Update preview
 			views_preview ("draw";This:C1470)
 			

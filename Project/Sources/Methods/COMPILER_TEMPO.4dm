@@ -1,4 +1,5 @@
 //%attributes = {"invisible":true}
+C_LONGINT:C283(vThermo)
 
 C_OBJECT:C1216(_catalog ;$0)
 C_TEXT:C284(_catalog ;$1)

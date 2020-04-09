@@ -397,7 +397,9 @@ Case of
 			: ($event.code=On Scroll:K2:57)
 				
 				OBJECT GET SCROLL POSITION:C1114(*;$form.preview.name;$l)
-				$context.scroll:=450-$l
+				$context.scroll:=$context.previewHeight-$l
+				
+				vThermo:=$context.scroll
 				
 				  //______________________________________________________
 			Else 
@@ -429,6 +431,14 @@ Case of
 				  //$Obj_context.actions:=_w_actions ("getList";$Obj_context).actions
 				
 				OB REMOVE:C1226($context;"manifest")
+				
+				
+				If (feature.with("newViewUI"))
+					
+					OB REMOVE:C1226($context;"scrollPosition")
+					$context.scroll:=0
+					
+				End if 
 				
 				  // Redraw
 				$context.draw:=True:C214
@@ -483,6 +493,12 @@ Case of
 				
 			End if 
 		End if 
+		
+		  //==================================================
+	: ($event.objectName=$form.scrollBar.name)
+		
+		$context.scroll:=vThermo
+		OBJECT SET SCROLL POSITION:C906(*;"preview";-($context.scroll-$context.previewHeight);0;*)
 		
 		  //==================================================
 	Else 

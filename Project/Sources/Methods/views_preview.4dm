@@ -118,9 +118,11 @@ Case of
 								
 								$c:=New collection:C1472
 								$c.push(Substring:C12($t;1;$positions{1}+$lengths{1}-1))
-								$c.push("_v2 droppable")
+								  //$c.push("_v2 droppable")
+								$c.push("_v2")
 								$c.push(Substring:C12($t;$positions{1}+$lengths{1};$lengths{2}))
-								$c.push(" ios:type=\"all\" id=\"background\"")
+								  //$c.push(" ios:type=\"all\" id=\"background\"")
+								$c.push(" ios:type=\"all\"")
 								$c.push(Substring:C12($t;$positions{2}+$lengths{2}))
 								$t:=$c.join("")
 								
@@ -128,6 +130,12 @@ Case of
 							
 							  // Adjustments
 							$t:=Replace string:C233($t;"<g id=\"bgcontainer\">";"<g id=\"bgcontainer\" transform=\"translate(0,-40)\">")
+							
+							
+							  //$t:=Replace string($t;"<g id=\"bgcontainer\">";"<g class=\"background\" id=\"background\" transform=\"translate(0,-40)\">\n\t\t  <rect class=\"bgcontainer_v2\" "\
+								+"ios:type=\"all\"/>")
+							
+							  //$t:=Replace string($t;"<g id=\"multivalued\">";"<g class=\"background\" id=\"multivalued\">")
 							
 						End if 
 						
@@ -149,6 +157,8 @@ Case of
 						$svg.styleSheet(Form:C1466.$tmpl.css())
 						
 						$oTarget:=Choose:C955(Form:C1466[$tTypeForm][$context.tableNumber]=Null:C1517;New object:C1471;Form:C1466[$tTypeForm][$context.tableNumber])
+						
+						$form.preview.getCoordinates()
 						
 						If ($bBlankForm)
 							
@@ -186,10 +196,55 @@ Case of
 								End if 
 							End for each 
 							
-							$height:=$height+30
+							$height:=$height+40
 							
-							  //  SVG_SET_DIMENSIONS ($svg.root;$width;$height)
-							OBJECT SET SCROLL POSITION:C906(*;"layout";$height;*)
+							ASSERT:C1129(Not:C34(Shift down:C543))
+							
+							If ($context.scrollPosition=Null:C1517)
+								
+								$context.scroll:=$height
+								$context.scrollPosition:=0
+								
+								If ($height<460)
+									
+									$height:=443
+									$form.scrollBar.hide()
+									
+								Else 
+									
+									$form.scrollBar.show()
+									
+								End if 
+								
+							Else 
+								
+								If ($height<450)
+									
+									$form.preview.setScrollPosition(0)
+									$context.scroll:=0
+									$context.scrollPosition:=0
+									$height:=443
+									$form.scrollBar.hide()
+									
+								Else 
+									
+									If ($context.scroll=Null:C1517)
+										
+										$context.scrollPosition:=443-$height
+										$context.scroll:=443-$height
+										$form.preview.setScrollPosition($height)
+										
+									End if 
+									
+									$form.scrollBar.show()
+									
+								End if 
+							End if 
+							
+							OBJECT SET FORMAT:C236(*;"preview.scrollBar";"443;"+String:C10($height)+";20;1;32;")
+							$context.previewHeight:=$height
+							
+							vThermo:=$context.scroll
 							
 						Else 
 							
@@ -489,20 +544,14 @@ Case of
 								End if 
 							End if 
 							
-							If (feature.with("newViewUI"))
-								
-								$form.preview.getCoordinates()
-								
-								If ($tTypeForm="detail")
-									
-									$svg.setDimensions($form.preview.coordinates.width;770)
-									
-								Else 
-									
-									$svg.setDimensions($form.preview.coordinates.width;440)
-									
-								End if 
-							End if 
+							$context.previewHeight:=440
+							
+						End if 
+						
+						If (feature.with("newViewUI"))
+							
+							$svg.setDimensions($form.preview.coordinates.width;$context.previewHeight)
+							
 						End if 
 						
 						If (feature.with("_8858"))
