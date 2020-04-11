@@ -44,8 +44,10 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
 	If (SHARED=Null:C1517)  // FIXME #105596
 		
-		RECORD.warning("SHARED=Null")
-		RECORD.trace()
+		If (RECORD#Null:C1517)
+			RECORD.warning("SHARED=Null")
+			RECORD.trace()
+		End if 
 		COMPONENT_INIT 
 		
 	End if 
@@ -545,7 +547,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-								
+																
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							  //$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
