@@ -103,6 +103,10 @@ feature.delivered(113164;1820)  // Enable/disable image dump
 _____________*/
 feature.delivered(112225)  // Select / install / use custom templates
 
+/* _____________
+18R4
+_____________*/
+feature.unstable(107526)  //Push Notifications
 
 /* _____________
 WIP

@@ -1552,6 +1552,23 @@ If (($Txt_type="main"))
 	
 	ob_error_combine ($Obj_out;$Obj_out.formatters)
 	
+	If (Bool:C1537(feature._107526))
+		If (True:C214)  // TODO VDL Feature 107526 from project config, capabilies activated? $Obj_project.???
+			
+			$o:=New object:C1471(\
+				"template";New object:C1471(\
+				"name";"pushNotification";\
+				"inject";True:C214;\
+				"source";COMPONENT_Pathname ("templates").folder("pushNotification").platformPath;\
+				"parent";$Obj_template);\
+				"project";$Obj_in.project;\
+				"path";$Obj_in.path;\
+				"projfile";$Obj_in.projfile)
+			
+			$Obj_out["pushNotification"]:=templates ($o)  // <================================== RECURSIVE
+		End if 
+	End if 
+	
 	  // /  Save project file if has been modified
 	If (Bool:C1537($Obj_out.projfile.mustSave))
 		

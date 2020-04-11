@@ -516,6 +516,15 @@ If ($Obj_in.create)
 			"project";$Obj_project;\
 			"target";$Obj_in.path))
 		
+		$Obj_out.computedCapabilities:=New object:C1471("capabilities";New object:C1471())
+		If (Bool:C1537(feature._107526))
+			If (True:C214)  // TODO VDL Feature 107526 from project config, capabilies activated? $Obj_project.???
+				
+				$Obj_out.computedCapabilities.capabilities.pushNotification:=True:C214
+				
+			End if 
+		End if 
+		
 		  // Manage app capabilities
 		$Obj_out.capabilities:=capabilities (\
 			New object:C1471("action";"inject";"target";$Obj_in.path;"tags";$Obj_tags;\
@@ -523,6 +532,7 @@ If ($Obj_in.create)
 			"common";SHARED;\
 			"project";$Obj_project;\
 			"action";$Obj_out.actionCapabilities;\
+			"computed";$Obj_out.computedCapabilities;\
 			"templates";$Obj_out.template)))
 		ob_error_combine ($Obj_out;$Obj_out.capabilities)
 		
