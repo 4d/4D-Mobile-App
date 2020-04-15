@@ -8,7 +8,7 @@ exec 1>&2
 ############################################
 
 # Get file with one line updated
-files=$(git diff-files --stat | grep "2 +-" | sed "s/ | 2 +-//g")
+files=$(git diff-files --numstat | grep "1\t1\t" | tr -d '\t' | sed 's/^11//g')
 for file in $files
 do
   createdModify=$(git diff-files --patch  $file | grep "+//  Created by" | wc -l)
