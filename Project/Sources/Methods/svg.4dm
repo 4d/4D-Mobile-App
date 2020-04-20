@@ -545,7 +545,7 @@ Else
 					If ($o.success)
 						
 						$t:=Convert path system to POSIX:C1106($2.platformPath;*)
-						$t:="xml-stylesheet type=\"text/css\" href=\"file://localhost"+$t+"\""
+						$t:="xml-stylesheet href=\"file://localhost"+$t+"\" type=\"text/css\""
 						$t:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($o.root);XML processing instruction:K45:9;$t)
 						$o.success:=Bool:C1537(OK)
 						
@@ -645,6 +645,8 @@ Else
 											"y";Num:C11($oOptions.top);\
 											"width";Num:C11($oOptions.width);\
 											"height";Num:C11($oOptions.height))
+										
+										OK:=1
 										
 									End if 
 									
@@ -1118,6 +1120,7 @@ Else
 						: ($2.what="dimensions")
 							
 							DOM GET XML ELEMENT NAME:C730($Dom_target;$t)
+							OK:=1
 							
 							If (Bool:C1537(OK))
 								

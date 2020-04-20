@@ -124,7 +124,7 @@ If (False:C215)  // File & Folder
 	$l:=$o.creationTime  // Return the creation time
 	$d:=$o.modificationDate  // Return the modification date
 	$l:=$o.modificationTime  // Return the modification time
-	$t:=$o.fullname  // Final folder name of the specified path
+	$t:=$o.fullname  // Final file name of the specified path
 	$t:=$o.name  // Final folder name of the specified path, without extension
 	$t:=$o.extension  // Extension of the final file name. Always starts with ".". Empty string "" if no extension
 	$t:=$o.platformPath  // Return the system path

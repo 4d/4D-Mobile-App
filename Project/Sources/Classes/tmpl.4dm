@@ -5,19 +5,70 @@ Class constructor
 	C_TEXT:C284($1)
 	C_TEXT:C284($2)
 	
-	If (Count parameters:C259>0)
+	C_OBJECT:C1216($file)
+	
+	If (Count parameters:C259>=1)
 		
 		This:C1470.name:=$1
+		This:C1470.title:=This:C1470.name
 		
-		If (Count parameters:C259>1)
+		  //%W-533.1
+		If (This:C1470.name[[1]]="/")
+			
+			This:C1470.title:=Delete string:C232(This:C1470.title;1;1)
+			
+		End if 
+		  //%W+533.1
+		
+		  // Set the display name
+		This:C1470.title:=Replace string:C233(This:C1470.title;"form-detail-";"")
+		This:C1470.title:=Replace string:C233(This:C1470.title;"form-list-";"")
+		This:C1470.title:=Replace string:C233(This:C1470.title;SHARED.archiveExtension;"")
+		
+		If (Count parameters:C259>=2)
 			
 			This:C1470.type:=$2
+			
+			This:C1470.path:=This:C1470.path()
+			
+			If (Bool:C1537(This:C1470.path.exists))
+				
+				  // Load the manifest
+				$file:=This:C1470.path.file("manifest.json")
+				
+				If ($file.exists)
+					
+					This:C1470.manifest:=JSON Parse:C1218($file.getText())
+					
+				Else 
+					
+					RECORD.warning("Missing manifest for the template "+This:C1470.title)
+					
+				End if 
+				
+				  // Load the svg template
+				$file:=This:C1470.path.file("template.svg")
+				
+				If ($file.exists)
+					
+					This:C1470.template:=$file.getText()
+					
+				Else 
+					
+					RECORD.warning("Missing svg for the template "+This:C1470.title)
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			  // Call from PROCESS 4D TAGS
 			
 		End if 
 	End if 
 	
 /* ============================================================================*/
-Function cancel
+Function cancel  // Return the embedded cancel button used into the templates
 	
 	C_TEXT:C284($0)
 	
@@ -32,7 +83,7 @@ Function cancel
 		"mkHfgG6PCOSHCtXRwAAAABJRU5ErkJggg=="
 	
 /* ============================================================================*/
-Function path
+Function path  // Return the path of the file/folder
 	
 	C_OBJECT:C1216($0)
 	
@@ -103,13 +154,13 @@ Function path
 					
 				Else 
 					
-					RECORD.warning("Missing manifest: "+$fileManifest.path)
+					RECORD.error("Missing manifest: "+$fileManifest.path)
 					
 				End if 
 				
 			Else 
 				
-				RECORD.warning("Unmanaged form type: "+This:C1470.type)
+				RECORD.error("Unmanaged form type: "+This:C1470.type)
 				
 			End if 
 		End if 

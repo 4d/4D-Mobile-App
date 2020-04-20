@@ -1,9 +1,8 @@
-﻿#--------------------------------
+#--------------------------------
 # Ignore invisible files/folders
 #--------------------------------
 .*
-!.git*
-.git/
+!.gitignore
 
 #--------------------------------
 # Ignore data file
@@ -55,3 +54,5 @@ images/library/
 MobileApps/
 Resources/mobile
 xcuserdata/
+
+*.bbprojectd/

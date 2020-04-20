@@ -36,8 +36,6 @@ If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
 		  // Check the match of the type with the source
 		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$t)
 		
-		$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
-		
 		If ($t="all")
 			
 			$b:=True:C214
@@ -45,6 +43,7 @@ If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
 		Else 
 			
 			  // Check the type compatibility
+			$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
 			$b:=tmpl_compatibleType ($c;$o.fieldType)
 			
 		End if 
@@ -99,25 +98,36 @@ If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
 					
 				Else 
 					
-					If (This:C1470.$.current="background")
-						
-						$indx:=$Obj_target.fields.indexOf(Null:C1517)
-						
-						If ($indx=-1)
+					Case of 
+							  //______________________________________________________
+						: (This:C1470.$.current="background")
 							
-							$Obj_target.fields.push($o)
+							$indx:=$Obj_target.fields.indexOf(Null:C1517)
 							
+							If ($indx=-1)
+								
+								$Obj_target.fields.push($o)
+								
+							Else 
+								
+								$Obj_target.fields[$indx]:=$o
+								
+							End if 
+							
+							  //______________________________________________________
+						: (This:C1470.$.current="@.insert")
+							
+							$indx:=Num:C11(Replace string:C233(This:C1470.$.current;".insert";""))
+							
+							$Obj_target.fields.insert($indx-1;$o)
+							
+							  //______________________________________________________
 						Else 
 							
-							$Obj_target.fields[$indx]:=$o
+							$Obj_target[$t]:=$o
 							
-						End if 
-						
-					Else 
-						
-						$Obj_target[$t]:=$o
-						
-					End if 
+							  //______________________________________________________
+					End case 
 				End if 
 			End if 
 			

@@ -690,6 +690,23 @@
 			"TABLES"
 		]
 	},
+	"templates": {
+		"methods": [
+			"tmpl_cancel",
+			"tmpl_compatibleType",
+			"tmpl_CONTEXTUAL",
+			"tmpl_form",
+			"tmpl_INFOS",
+			"tmpl_On_drag_over",
+			"tmpl_ON_DROP",
+			"tmpl_REMOVE",
+			"tmpl_REORDER",
+			"tmpl_TIPS"
+		],
+		"classes": [
+			"tmpl"
+		]
+	},
 	"Tests": {
 		"methods": [
 			"test_dat",
@@ -712,18 +729,11 @@
 		]
 	},
 	"VIEWS": {
+		"groups": [
+			"templates"
+		],
 		"methods": [
 			"COMPILER_views",
-			"tmpl_cancel",
-			"tmpl_compatibleType",
-			"tmpl_CONTEXTUAL",
-			"tmpl_form",
-			"tmpl_INFOS",
-			"tmpl_On_drag_over",
-			"tmpl_ON_DROP",
-			"tmpl_REMOVE",
-			"tmpl_REORDER",
-			"tmpl_TIPS",
 			"views_fieldList",
 			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",
@@ -735,7 +745,6 @@
 			"VIEWS"
 		],
 		"classes": [
-			"tmpl",
 			"views"
 		]
 	},

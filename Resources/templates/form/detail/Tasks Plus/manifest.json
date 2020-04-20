@@ -1,6 +1,8 @@
 {
   "type": "detailform",
   "name": "Tasks Detail Plus",
+  "version":2,
+  "hOffset":208,
   "fields": {
     "count": 7,
     "max": 0

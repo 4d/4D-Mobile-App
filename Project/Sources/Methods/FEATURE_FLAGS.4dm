@@ -106,6 +106,7 @@ feature.delivered(112225)  // Select / install / use custom templates
 /* _____________
 18R4
 _____________*/
+feature.unstable(113016)  // Svg improvement in forms section
 feature.unstable(107526)  //Push Notifications
 
 /* _____________
@@ -114,7 +115,6 @@ _____________*/
 feature.wip("withWidgetActions")  // Enable widget actions
 feature.wip("accentColors")  // Manage colors according to user system parameters
 feature.wip(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
-feature.unstable(113016)  // Svg improvement in forms section
 feature.wip("formatMarketPlace")  // Manage format as archive
 
 /* -------------------------------------

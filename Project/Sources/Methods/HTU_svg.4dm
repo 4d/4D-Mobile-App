@@ -90,8 +90,8 @@ Case of
 		End if 
 		
 		ASSERT:C1129($t=$svg.findById("test"))
-		ASSERT:C1129($svg.findByPath("svg/rect").length=3)
-		ASSERT:C1129(Value type:C1509($svg.findByPath("svg/g/rect"))=Is text:K8:3)
+		ASSERT:C1129($svg.findByPath("/svg/rect").length=3)
+		ASSERT:C1129(Value type:C1509($svg.findByPath("/svg/g/rect"))=Is text:K8:3)
 		
 		  //______________________________________________________
 	: (True:C214)

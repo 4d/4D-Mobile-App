@@ -50,7 +50,7 @@ $Dom_root:=DOM Parse XML variable:C720($Txt_plist)
 If (OK=1)
 	
 	ARRAY TEXT:C222($tDom_dicts;0x0000)
-	$tDom_dicts{0}:=DOM Find XML element:C864($Dom_root;"plist/dict/key";$tDom_dicts)
+	$tDom_dicts{0}:=DOM Find XML element:C864($Dom_root;"/plist/dict/key";$tDom_dicts)
 	
 	If (OK=1)
 		

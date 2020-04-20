@@ -21,7 +21,7 @@
 	width: 250;
 	height: 385;
 	fill: white;
-	stroke: black;
+	stroke: white;
 	stroke-width: 0.5
 }
 
@@ -29,7 +29,7 @@
 	x: 0;
 	y: 0;
 	width: 270;
-	height: 800;
+	height: 110%;
 	fill: white;
 	stroke: white;
 	stroke-width: 0.5
@@ -46,6 +46,19 @@
 .field {
 	rx: 5;
 	ry: 5
+}
+
+.vInsert {
+	x: 0;
+	y: 4;
+	rx:2;
+	width: 238;
+	height: 4;
+	fill: red;
+	stroke: red;
+	stroke-width: 0.5;
+	fill-opacity: 0.01;
+	stroke-opacity: 0.01
 }
 
 .droppable {

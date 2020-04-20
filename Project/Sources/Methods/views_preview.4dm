@@ -12,14 +12,14 @@ C_TEXT:C284($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_BOOLEAN:C305($bBlankForm;$bFirst;$bMultivalued)
-C_LONGINT:C283($height;$i;$indx;$length;$Lon_y;$Lon_yOffset)
-C_LONGINT:C283($pos;$width)
-C_TEXT:C284($dom;$domBackground;$domField;$domNew;$domTemplate;$domUse)
+C_BOOLEAN:C305($bBlankForm;$bFirst;$bMultivalued;$bV2)
+C_LONGINT:C283($height;$i;$indx;$Lon_y;$Lon_yOffset;$lStaticFields)
+C_LONGINT:C283($width)
+C_TEXT:C284($dom;$domBkg;$domField;$domNew;$domTemplate;$domUse)
 C_TEXT:C284($node;$root;$t;$tFormName;$tIN;$tIndex)
 C_TEXT:C284($tName;$tOUT;$tTypeForm;$tWidgetField)
-C_OBJECT:C1216($archive;$context;$form;$o;$oManifest;$oTarget)
-C_OBJECT:C1216($oWidgetField;$pathForm;$svg)
+C_OBJECT:C1216($context;$form;$o;$oManifest;$oTarget;$oTemplate)
+C_OBJECT:C1216($oWidgetManifest;$svg)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -55,87 +55,139 @@ Case of
 		  //______________________________________________________
 	: ($tIN="draw")  // Uppdate preview
 		
-		$tTypeForm:=$context.typeForm()
-		
 		If (Length:C16($context.tableNum())>0)
 			
 			  // Form name
+			$tTypeForm:=$context.typeForm()
 			$tFormName:=String:C10(Form:C1466[$tTypeForm][$context.tableNum()].form)
-			$tFormName:=$tFormName*Num:C11($tFormName#"null")  // Reject null value
 			
 			If (Length:C16($tFormName)>0)
 				
 				$bBlankForm:=($tTypeForm="detail")\
-					 & ($tFormName="blank form")\
 					 & (feature.with("newViewUI"))
 				
-				Form:C1466.$tmpl:=cs:C1710.tmpl.new($tFormName;$tTypeForm)
-				$pathForm:=Form:C1466.$tmpl.path()
-				
-				If ($pathForm.exists)
+				If (String:C10(Form:C1466.$dialog.VIEWS.template.name)#$tFormName)
 					
-					If (feature.with("resourcesBrowser"))
-						
-						If ($pathForm.extension=SHARED.archiveExtension)  // Archive
-							
-							$archive:=ZIP Read archive:C1637(path ["host"+$tTypeForm+"Forms"]().file(Delete string:C232($tFormName;1;1)))
-							$oManifest:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
-							OBJECT SET TITLE:C194(*;"preview.label";String:C10($o.name))
-							
-						Else 
-							
-							OBJECT SET TITLE:C194(*;"preview.label";String:C10($pathForm.fullName))
-							$oManifest:=JSON Parse:C1218($pathForm.file("manifest.json").getText())
-							
-						End if 
-						
-					Else 
-						
-						OBJECT SET TITLE:C194(*;"preview.label";String:C10($pathForm.fullName))
-						$oManifest:=JSON Parse:C1218($pathForm.file("manifest.json").getText())
-						
-					End if 
+					Form:C1466.$dialog.VIEWS.template:=cs:C1710.tmpl.new($tFormName;$tTypeForm)
+					
+				End if 
+				
+				$oTemplate:=Form:C1466.$dialog.VIEWS.template
+				
+				If ($oTemplate.path.exists)
+					
+					  //If (feature.with("resourcesBrowser"))
+					  //If ($tmpl.path.extension=SHARED.archiveExtension)  // Archive
+					  //  //$archive:=ZIP Read archive(path ["host"+$tTypeForm+"Forms"]().file(Delete string($tFormName;1;1)))
+					  //  //$oManifest:=JSON Parse($archive.root.file("manifest.json").getText())
+					  //  //OBJECT SET TITLE(*;"preview.label";String($o.name))
+					  //Else
+					  //$oManifest:=JSON Parse($pathForm.file("manifest.json").getText())
+					  //OBJECT SET TITLE(*;"preview.label";String($tmpl.title))
+					  //End if
+					  //Else
+					  //OBJECT SET TITLE(*;"preview.label";String($pathForm.fullName))
+					  //$oManifest:=JSON Parse($pathForm.file("manifest.json").getText())
+					  //End if
+					
+					OBJECT SET TITLE:C194(*;"preview.label";String:C10($oTemplate.title))
+					
+					$oManifest:=$oTemplate.manifest
 					
 					  // Load the template
-					PROCESS 4D TAGS:C816($pathForm.file("template.svg").getText();$t)
+					PROCESS 4D TAGS:C816($oTemplate.template;$t;$oTemplate.title;$oTemplate.cancel())
 					
 					If (feature.with("newViewUI"))
 						
-						If (Num:C11($oManifest.version)<2)  // #COMPATIBILITY MODE
+						  //If (Num($oManifest.version)<2) & False  // #COMPATIBILITY MODE
+						  //If (True)  // New xPath capabilities
+						  //$root:=DOM Parse XML variable($t)
+						  //If (Bool(OK))
+						  //  // Remove mobile picture
+						  //$node:=DOM Find XML element($root;"/"+"/rect[@class='container'")
+						  //If (Bool(OK))
+						  //DOM REMOVE XML ELEMENT($node)
+						  //End if
+						  //$node:=DOM Find XML element($root;"/"+"/rect[@class='bgcontainer'")
+						  //If (Bool(OK))
+						  //DOM REMOVE XML ELEMENT($node)
+						  //End if
+						  //  // Make the background droppable
+						  //$node:=DOM Find XML element by ID($root;"multivalued")
+						  //If (Bool(OK))
+						  //$t:=DOM Create XML element(DOM Get parent XML element($node);"rect";\
+														"class";"bgcontainer_v2 background droppable")
+						  //DOM REMOVE XML ELEMENT($node)
+						  //End if
+						  //  // Adjustments
+						  //$node:=DOM Find XML element by ID($root;"bgcontainer")
+						  //If (Bool(OK))
+						  //DOM SET XML ATTRIBUTE($node;\
+														"transform";"translate(0,-40)";\
+														"ios:type";"all";\
+														"id";"background")
+						  //End if
+						  //DOM EXPORT TO VAR($root;$t)
+						  //DOM CLOSE XML($root)
+						  //End if
+						  //Else
+						  //  // Remove mobile picture
+						  //If (Match regex("(?mi-s)<rect[^/]*class=\"container\"[^/]*/>";$t;1;$pos;$length))
+						  //$t:=Substring($t;1;$pos-1)+Substring($t;$pos+$length+1)
+						  //End if
+						  //  // Make the background droppable
+						  //ARRAY LONGINT($positions;0x0000)
+						  //ARRAY LONGINT($lengths;0x0000)
+						  //If (Match regex("(?mi-s)(<rect[^/]*class=\"bgcontainer)(\"[^/]*)(/>)";$t;1;$positions;$lengths))
+						  //$c:=New collection
+						  //$c.push(Substring($t;1;$positions{1}+$lengths{1}-1))
+						  //  //$c.push("_v2 droppable")
+						  //$c.push("_v2")
+						  //$c.push(Substring($t;$positions{1}+$lengths{1};$lengths{2}))
+						  //  //$c.push(" ios:type=\"all\" id=\"background\"")
+						  //$c.push(" ios:type=\"all\"")
+						  //$c.push(Substring($t;$positions{2}+$lengths{2}))
+						  //$t:=$c.join("")
+						  //End if
+						  //  // Adjustments
+						  //$t:=Replace string($t;"<g id=\"bgcontainer\">";"<g id=\"bgcontainer\" transform=\"translate(0,-40)\">")
+						  //End if
+						  //End if
+						
+						$bV2:=(Num:C11($oManifest.version)>=2)
+						
+						If ($bV2)
 							
-							  // Remove mobile picture
-							If (Match regex:C1019("(?mi-s)<rect[^/]*class=\"container\"[^/]*/>";$t;1;$pos;$length))
+							  //
+							
+						Else 
+							
+							$root:=DOM Parse XML variable:C720($t)
+							
+							If (Bool:C1537(OK))
 								
-								$t:=Substring:C12($t;1;$pos-1)+Substring:C12($t;$pos+$length+1)
+								  // Remove mobile picture
+								$node:=DOM Find XML element:C864($root;"/"+"/rect[@class='container'")
 								
+								If (Bool:C1537(OK))
+									
+									DOM REMOVE XML ELEMENT:C869($node)
+									
+								End if 
+								
+								  // Adjustments
+								$node:=DOM Find XML element by ID:C1010($root;"bgcontainer")
+								
+								If (Bool:C1537(OK))
+									
+									DOM SET XML ATTRIBUTE:C866($node;\
+										"transform";"translate(0,-50)")
+									
+								End if 
 							End if 
 							
-							  // Make the background droppable
-							ARRAY LONGINT:C221($positions;0x0000)
-							ARRAY LONGINT:C221($lengths;0x0000)
-							
-							If (Match regex:C1019("(?mi-s)(<rect[^/]*class=\"bgcontainer)(\"[^/]*)(/>)";$t;1;$positions;$lengths))
-								
-								$c:=New collection:C1472
-								$c.push(Substring:C12($t;1;$positions{1}+$lengths{1}-1))
-								  //$c.push("_v2 droppable")
-								$c.push("_v2")
-								$c.push(Substring:C12($t;$positions{1}+$lengths{1};$lengths{2}))
-								  //$c.push(" ios:type=\"all\" id=\"background\"")
-								$c.push(" ios:type=\"all\"")
-								$c.push(Substring:C12($t;$positions{2}+$lengths{2}))
-								$t:=$c.join("")
-								
-							End if 
-							
-							  // Adjustments
-							$t:=Replace string:C233($t;"<g id=\"bgcontainer\">";"<g id=\"bgcontainer\" transform=\"translate(0,-40)\">")
-							
-							
-							  //$t:=Replace string($t;"<g id=\"bgcontainer\">";"<g class=\"background\" id=\"background\" transform=\"translate(0,-40)\">\n\t\t  <rect class=\"bgcontainer_v2\" "\
-								+"ios:type=\"all\"/>")
-							
-							  //$t:=Replace string($t;"<g id=\"multivalued\">";"<g class=\"background\" id=\"multivalued\">")
+							DOM EXPORT TO VAR:C863($root;$t)
+							DOM CLOSE XML:C722($root)
 							
 						End if 
 						
@@ -154,43 +206,54 @@ Case of
 					If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
 						
 						  // Add the style sheet
-						$svg.styleSheet(Form:C1466.$tmpl.css())
+						$svg.styleSheet($oTemplate.css())
 						
 						$oTarget:=Choose:C955(Form:C1466[$tTypeForm][$context.tableNumber]=Null:C1517;New object:C1471;Form:C1466[$tTypeForm][$context.tableNumber])
 						
 						$form.preview.getCoordinates()
 						
-						If ($bBlankForm)
+						If ($bV2)
 							
-							$domBackground:=$svg.findById("background")
+							$domBkg:=$svg.findById("background")
 							
-							$height:=5
+							$height:=Num:C11($oManifest.hOffset)
 							
-							$oWidgetField:=JSON Parse:C1218(File:C1566("/RESOURCES/templates/form/objects/oneField/manifest.json").getText())
+							$oWidgetManifest:=JSON Parse:C1218(File:C1566("/RESOURCES/templates/form/objects/oneField/manifest.json").getText())
 							$tWidgetField:=File:C1566("/RESOURCES/templates/form/objects/oneField/widget.svg").getText()
+							
+							$lStaticFields:=Num:C11($oManifest.fields.count)
 							
 							For each ($o;$oTarget.fields)
 								
 								If ($o#Null:C1517)
 									
-									  // Set ids, label & position
 									$indx:=$indx+1
-									PROCESS 4D TAGS:C816($tWidgetField;$t;$indx;$o.name;5+$height)
 									
-									$root:=DOM Parse XML variable:C720($t)
-									
-									If (Bool:C1537(OK))
+									If ($indx>$lStaticFields)  // Dynamic
 										
-										$node:=DOM Find XML element:C864($root;"/svg/g")
+										  // Set ids, label & position
+										PROCESS 4D TAGS:C816($tWidgetField;$t;$indx;$o.name;5+$height)
+										
+										$root:=DOM Parse XML variable:C720($t)
 										
 										If (Bool:C1537(OK))
 											
-											$node:=DOM Append XML element:C1082($domBackground;$node)
-											$height:=$height+Num:C11($oWidgetField.height)
+											$node:=DOM Find XML element:C864($root;"/svg/g")
+											
+											If (Bool:C1537(OK))
+												
+												$node:=DOM Append XML element:C1082($domBkg;$node)
+												$height:=$height+Num:C11($oWidgetManifest.height)
+												
+											End if 
+											
+											DOM CLOSE XML:C722($root)
 											
 										End if 
 										
-										DOM CLOSE XML:C722($root)
+									Else   // Static
+										
+										  //#TO_DO
 										
 									End if 
 								End if 
@@ -269,7 +332,7 @@ Case of
 								If ($bMultivalued)
 									
 									  // Get the main group reference
-									$domBackground:=$svg.findById("multivalued")
+									$domBkg:=$svg.findById("multivalued")
 									
 									  // Get the vertical offset
 									$o:=xml_attributes ($domTemplate)
@@ -357,14 +420,13 @@ Case of
 													"id";$tWidgetField+".cancel")
 												
 												  // Append object to the preview
-												$domNew:=DOM Append XML element:C1082($domBackground;$domNew)
+												$domNew:=DOM Append XML element:C1082($domBkg;$domNew)
 												
 												DOM CLOSE XML:C722($domUse)
 												
 											End if 
 										End if 
 									End for each 
-									
 								End if 
 								
 								  // Valorize the fields
@@ -497,7 +559,7 @@ Case of
 									
 									  // Hide unassigned multivalued fields (except the first)
 									ARRAY TEXT:C222($tDom_;0x0000)
-									$tDom_{0}:=DOM Find XML element:C864($domBackground;"g/g";$tDom_)
+									$tDom_{0}:=DOM Find XML element:C864($domBkg;"g/g";$tDom_)
 									
 									For ($i;1;Size of array:C274($tDom_);1)
 										
@@ -556,52 +618,50 @@ Case of
 						
 						If (feature.with("_8858"))
 							
+							$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.png");True:C214)
 							$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg");True:C214)
 							
 						End if 
 						
 						($form.preview.pointer())->:=$svg.getPicture()
 						
+					Else 
+						
+						$form.form.call("pickerHide")
+						
+						  // Put an error message
+						$form.preview.getCoordinates()
+						
+						($form.preview.pointer())->:=svg .setDimensions($form.preview.coordinates.width-20;$form.preview.coordinates.height)\
+							.textArea(str ("theTemplateIsMissingOrInvalid").localized($oTemplate.title);20;180)\
+							.setDimensions($form.preview.coordinates.width-20)\
+							.setFill(ui.colors.errorColor.hex)\
+							.setAttributes(New object:C1471("font-size";14;"text-align";"center"))\
+							.textArea(str ("theTemplateIsMissingOrInvalid").localized(Replace string:C233($tFormName;"/";""));20;180)\
+							
+						OBJECT SET TITLE:C194(*;"preview.label";"")
+						
 					End if 
 					
 				Else 
 					
-					$form.form.call("pickerHide")
+					  // Display the template picker
+					$form.fieldGroup.hide()
+					$form.previewGroup.hide()
 					
-					  // Put an error message
-					$form.preview.getCoordinates()
-					
-					($form.preview.pointer())->:=svg .setDimensions($form.preview.coordinates.width-20;$form.preview.coordinates.height)\
-						.textArea(str ("theTemplateIsMissingOrInvalid").localized(Replace string:C233($tFormName;"/";""));20;180)\
-						.setDimensions($form.preview.coordinates.width-20)\
-						.setFill(ui.colors.errorColor.hex)\
-						.setAttributes(New object:C1471("font-size";14;"text-align";"center"))\
-						.getPicture()
-					
-					OBJECT SET TITLE:C194(*;"preview.label";"")
+					views_LAYOUT_PICKER ($tTypeForm)
 					
 				End if 
 				
 			Else 
 				
-				  // Display the template picker
-				$form.fieldGroup.hide()
-				$form.previewGroup.hide()
-				
-				views_LAYOUT_PICKER ($tTypeForm)
+				  // NOTHING MORE TO DO
 				
 			End if 
-			
-		Else 
-			
-			  // NOTHING MORE TO DO
-			
 		End if 
 		
-		  //______________________________________________________
+		  //________________________________________
 	: ($tIN="cancel")  // Return cancel button as Base64 data
-		
-		  //#KEEP FOR COMPATIBILITY WITH OLD TEMPLATES
 		
 		  //READ PICTURE FILE(Get 4D folder(Current resources folder)+Convert path POSIX to system("images/Buttons/LightGrey/Cancel.png");$Pic_cancel)
 		  //TRANSFORM PICTURE($Pic_cancel;Crop;1;1;48;48)

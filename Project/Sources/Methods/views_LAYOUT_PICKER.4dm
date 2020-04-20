@@ -293,12 +293,6 @@ For ($i;1;Size of array:C274($tTxt_forms);1)
 			  // Add github icon
 			$svg.embedPicture($ƒ.github;1;4)  //.setDimensions(16)
 			
-			If (feature.with("debug"))
-				
-				$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/github.svg");True:C214)
-				
-			End if 
-			
 			$oPicker.pictures.push($svg.getPicture())
 			$oPicker.pathnames.push($tTxt_forms{$i})
 			$oPicker.helpTips.push($str.setText("tipsTemplate").localized(New collection:C1472(String:C10($pathTemplate.fullName);String:C10($o.organization.login);String:C10($o.version))))
@@ -418,9 +412,9 @@ If (feature.with("resourcesBrowser"))
 	
 	  // Put text
 	  //$svg.textArea(Get localized string("explore");0;$ƒ.cell.height-20)\
-								.setDimensions($ƒ.cell.width)\
-								.setFill("dimgray")\
-								.setAttribute("text-align";"center")
+										.setDimensions($ƒ.cell.width)\
+										.setFill("dimgray")\
+										.setAttribute("text-align";"center")
 	
 	  // Put in second position
 	  //$oPicker.pictures.insert(1;$svg.getPicture())
