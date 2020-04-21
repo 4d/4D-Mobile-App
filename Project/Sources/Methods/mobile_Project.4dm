@@ -516,9 +516,12 @@ If ($Obj_in.create)
 			"project";$Obj_project;\
 			"target";$Obj_in.path))
 		
-		$Obj_out.computedCapabilities:=New object:C1471("capabilities";New object:C1471())
-		If (Bool:C1537(feature._107526))
-			If (True:C214)  // TODO VDL Feature 107526 from project config, capabilies activated? $Obj_project.???
+		$Obj_out.computedCapabilities:=New object:C1471(\
+			"capabilities";New object:C1471())
+		
+		If (feature.with(107526))
+			
+			If (Bool:C1537($Obj_project.server.pushNotification))
 				
 				$Obj_out.computedCapabilities.capabilities.pushNotification:=True:C214
 				
