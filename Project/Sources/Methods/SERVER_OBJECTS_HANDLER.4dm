@@ -54,6 +54,7 @@ Case of
 				
 				  // Verify the web server configuration
 				CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"checkingServerConfiguration")
+				ui.saveProject()
 				
 				  //______________________________________________________
 			Else 
@@ -76,7 +77,8 @@ Case of
 				  //______________________________________________________
 			: ($Lon_formEvent=On Clicked:K2:4)
 				
-				Form:C1466.server.authentication.email:=($Ptr_me->=1)
+				Form:C1466.server.authentication.email:=Bool:C1537($Ptr_me->)
+				ui.saveProject()
 				
 				  //______________________________________________________
 			Else 
@@ -91,6 +93,31 @@ Case of
 		
 		SERVER_Handler (New object:C1471(\
 			"action";"editAuthenticationMethod"))
+		
+		  //  //==================================================
+	: ($Txt_me=$Obj_form.pushNotifications)
+		
+		Case of 
+				
+				  //______________________________________________________
+			: ($Lon_formEvent=On Load:K2:1)
+				
+				$Ptr_me->:=Num:C11(Bool:C1537(Form:C1466.server.pushNotification))
+				
+				  //______________________________________________________
+			: ($Lon_formEvent=On Clicked:K2:4)
+				
+				Form:C1466.server.pushNotification:=Bool:C1537($Ptr_me->)
+				ui.saveProject()
+				
+				  //______________________________________________________
+			Else 
+				
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				
+				  //______________________________________________________
+		End case 
+		
 		
 		  //==================================================
 	: ($Txt_me="webSettings")

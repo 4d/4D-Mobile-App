@@ -1552,8 +1552,9 @@ If (($Txt_type="main"))
 	
 	ob_error_combine ($Obj_out;$Obj_out.formatters)
 	
-	If (Bool:C1537(feature._107526))
-		If (True:C214)  // TODO VDL Feature 107526 from project config, capabilies activated? $Obj_project.???
+	If (feature.with(107526))
+		
+		If (Bool:C1537($Obj_in.project.server.pushNotification))
 			
 			$o:=New object:C1471(\
 				"template";New object:C1471(\
@@ -1566,6 +1567,7 @@ If (($Txt_type="main"))
 				"projfile";$Obj_in.projfile)
 			
 			$Obj_out["pushNotification"]:=templates ($o)  // <================================== RECURSIVE
+			
 		End if 
 	End if 
 	

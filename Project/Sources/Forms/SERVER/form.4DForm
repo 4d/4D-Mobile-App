@@ -2,7 +2,7 @@
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 141,
+	"height": 200,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -12,7 +12,7 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "method.4dm",
+	"method": "SERVER_Handler",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -32,33 +32,6 @@
 					"textAlign": "left",
 					"text": ":xliff:productionUrl"
 				},
-				"Text1": {
-					"type": "text",
-					"top": 238,
-					"left": 7,
-					"width": 136,
-					"height": 17,
-					"textAlign": "right",
-					"text": ".Test URL"
-				},
-				"01_testURL": {
-					"type": "input",
-					"top": 238,
-					"left": 160,
-					"width": 270,
-					"height": 17,
-					"dataSource": "Form:C1466.server.urls.test",
-					"focusable": false,
-					"enterable": false,
-					"hideFocusRing": true,
-					"placeholder": "127.0.0.1",
-					"dragging": "none",
-					"method": "ObjectMethods/01_testURL.4dm",
-					"events": [
-						"onLoad",
-						"onDataChange"
-					]
-				},
 				"test.alert": {
 					"type": "button",
 					"top": 106,
@@ -66,19 +39,6 @@
 					"width": 20,
 					"height": 20,
 					"style": "custom",
-					"events": [
-						"onClick"
-					]
-				},
-				"testUrl.status": {
-					"type": "button",
-					"top": 240,
-					"left": 422,
-					"width": 11,
-					"height": 11,
-					"icon": "/RESOURCES/images/light_off.png",
-					"style": "custom",
-					"method": "ObjectMethods/testUrl.status.4dm",
 					"events": [
 						"onClick"
 					]
@@ -103,10 +63,10 @@
 					"hideFocusRing": true,
 					"placeholder": "https://mycompany.com/mobile",
 					"dragging": "none",
-					"method": "ObjectMethods/02_prodURL.4dm",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"method": "SERVER_OBJECTS_HANDLER"
 				},
 				"03_email": {
 					"type": "checkbox",
@@ -115,11 +75,11 @@
 					"width": 344,
 					"height": 18,
 					"text": ":xliff:requiresAnEmailToConnect",
-					"method": "ObjectMethods/03_email.4dm",
 					"events": [
 						"onLoad",
 						"onClick"
-					]
+					],
+					"method": "SERVER_OBJECTS_HANDLER"
 				},
 				"02_prodURL.label1": {
 					"type": "text",
@@ -139,10 +99,10 @@
 					"height": 20,
 					"visibility": "hidden",
 					"text": ":xliff:edit...",
-					"method": "ObjectMethods/authenticationMethod.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "SERVER_OBJECTS_HANDLER"
 				},
 				"02_prodURL.label2": {
 					"type": "text",
@@ -161,10 +121,10 @@
 					"width": 130,
 					"height": 20,
 					"text": ":xliff:edit...",
-					"method": "ObjectMethods/webSettings.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "SERVER_OBJECTS_HANDLER"
 				},
 				"02_prodURL.label3": {
 					"type": "text",
@@ -188,8 +148,35 @@
 						"onMouseEnter",
 						"onMouseLeave"
 					]
+				},
+				"04_pushNotification": {
+					"type": "checkbox",
+					"top": 157,
+					"left": 14,
+					"width": 344,
+					"height": 18,
+					"text": ":xliff:enablePushNotifications",
+					"events": [
+						"onLoad",
+						"onClick"
+					],
+					"method": "SERVER_OBJECTS_HANDLER"
+				},
+				"02_prodURL.label4": {
+					"type": "text",
+					"top": 130,
+					"left": 16,
+					"width": 344,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:features"
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

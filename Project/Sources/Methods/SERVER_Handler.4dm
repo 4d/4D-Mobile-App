@@ -38,12 +38,13 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	If (Form:C1466#Null:C1517)
 		
 		$Obj_form:=New object:C1471(\
-			"window";Current form window:C827;\
 			"form";editor_INIT ;\
+			"window";Current form window:C827;\
 			"email";"03_email";\
 			"method";"authenticationMethod";\
 			"productionURL";"02_prodURL";\
-			"webSettings";"webSettings")
+			"webSettings";"webSettings";\
+			"pushNotifications";"04_pushNotification")
 		
 	End if 
 	
@@ -74,6 +75,9 @@ Case of
 				
 				ui_BEST_SIZE (New object:C1471(\
 					"widgets";New collection:C1472($Obj_form.email)))
+				
+				ui_BEST_SIZE (New object:C1471(\
+					"widgets";New collection:C1472($Obj_form.pushNotifications)))
 				
 				$Obj_in:=New object:C1471
 				$Obj_in.buffer:=New object:C1471(\
