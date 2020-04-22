@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="156">
+﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="157">
 	<com.4d>
 		<deployment>
 			<options/>
@@ -47,7 +47,7 @@
 		<php ip_address="127.0.0.1"/>
 		<database>
 			<cache flush_buffer_delay="20s" size_reserved="512"/>
-			<misc standard_xpath="false" use_ast_interpreter="false"/>
+			<misc standard_xpath="true" use_ast_interpreter="false"/>
 		</database>
 	</com.4d>
 </preferences>

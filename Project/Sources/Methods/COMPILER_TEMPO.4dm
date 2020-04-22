@@ -1,6 +1,12 @@
 //%attributes = {"invisible":true}
 C_LONGINT:C283(vThermo)
 
+If (False:C215)
+	C_OBJECT:C1216(c_formula ;$1)
+	C_OBJECT:C1216(c_formula ;$2)
+	C_VARIANT:C1683(c_formula ;${3})
+End if 
+
 C_OBJECT:C1216(_catalog ;$0)
 C_TEXT:C284(_catalog ;$1)
 C_OBJECT:C1216(_catalog ;$2)

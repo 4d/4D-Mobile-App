@@ -9,37 +9,46 @@
   // ----------------------------------------------------
   // Declarations
 C_BOOLEAN:C305($0)
-C_COLLECTION:C1488($1)
+C_VARIANT:C1683($1)
 C_LONGINT:C283($2)
 
 C_BOOLEAN:C305($Boo_accepted)
-C_LONGINT:C283($Lon_parameters;$Lon_type)
+C_LONGINT:C283($Lon_type)
 C_COLLECTION:C1488($Col_types)
 
 If (False:C215)
 	C_BOOLEAN:C305(tmpl_compatibleType ;$0)
-	C_COLLECTION:C1488(tmpl_compatibleType ;$1)
+	C_VARIANT:C1683(tmpl_compatibleType ;$1)
 	C_LONGINT:C283(tmpl_compatibleType ;$2)
 End if 
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=2;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=2;"Missing parameter"))
 	
 	  // Required parameters
-	$Col_types:=$1  //Collection des types
-	$Lon_type:=$2  //type à tester
+	Case of 
+			
+			  //___________________________
+		: (Value type:C1509($1)=Is text:K8:3)
+			
+			$Col_types:=Split string:C1554($1;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
+			
+			  //___________________________
+		: (Value type:C1509($1)=Is collection:K8:32)
+			
+			$Col_types:=$1  // Collection des types
+			
+			  //___________________________
+		Else 
+			
+			TRACE:C157
+			
+			  //___________________________
+	End case 
 	
-	  // Default values
-	
-	  // Optional parameters
-	If ($Lon_parameters>=3)
-		
-		  // <NONE>
-		
-	End if 
+	$Lon_type:=$2  // Type à tester
 	
 Else 
 	
@@ -62,7 +71,7 @@ End if
 
   // ----------------------------------------------------
   // Return
-$0:=$Boo_accepted  //vrai si compatible
+$0:=$Boo_accepted  // Vrai si compatible
 
   // ----------------------------------------------------
   // End

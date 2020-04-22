@@ -11,7 +11,7 @@
 C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
-C_BOOLEAN:C305($bBackground;$bDroppable;$bInsert)
+C_BOOLEAN:C305($b_background;$b_droppable;$b_vInsertion)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o)
 C_COLLECTION:C1488($c)
@@ -33,7 +33,14 @@ End if
 
 This:C1470.$.current:=SVG Find element ID by coordinates:C1054(*;"preview";MOUSEX;MOUSEY)
 
-ASSERT:C1129(Not:C34(Shift down:C543))
+GET PASTEBOARD DATA:C401("com.4d.private.ios.field";$x)
+
+If (Bool:C1537(OK))
+	
+	BLOB TO VARIABLE:C533($x;$o)
+	SET BLOB SIZE:C606($x;0)
+	
+End if 
 
   // ----------------------------------------------------
 If (Length:C16(This:C1470.$.current)>0)
@@ -42,82 +49,93 @@ If (Length:C16(This:C1470.$.current)>0)
 		 & (Num:C11(Form:C1466.$dialog.VIEWS.template.manifest.version)>=2)
 		
 		  // Accept insertion
-		$bInsert:=(This:C1470.$.current="@.insert")
+		$t:=This:C1470.$.current
+		$b_vInsertion:=($t="@.vInsert")
 		
-		  // Accept dropping on the background
-		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-background";$t)
-		$bBackground:=($t="true")
+		If (feature.with("droppingNext"))
+			
+			$b_vInsertion:=$b_vInsertion | ($t="@.hInsertBefore") | ($t="@.hInsertAfter")
+			
+		End if 
 		
+		If ($b_vInsertion)
+			
+			If ($o.fromIndex#Null:C1517)  // Internal D&D
+				
+				  // Not if it's me
+				$b_vInsertion:=($o.fromIndex#(Num:C11(Replace string:C233(This:C1470.$.current;"e";""))-1))
+				
+			End if 
+		End if 
+		
+		If (Not:C34($b_vInsertion))
+			
+			  // Accept dropping on the background
+			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-background";$t)
+			$b_background:=($t="true")
+			
+		End if 
 	End if 
 	
-	If (Not:C34($bBackground))
+	If (Not:C34($b_background))
 		
 		  // Accept drag if the object is dropable
 		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-droppable";$t)
-		$bDroppable:=($t="true")
+		$b_droppable:=($t="true")
 		
 	End if 
 	
 	Case of 
 			
 			  //————————————————————————————————————
-		: ($bDroppable\
-			 | $bBackground\
-			 | $bInsert)
+		: ($b_droppable\
+			 | $b_background\
+			 | $b_vInsertion)
 			
-			  // Accept drag if a field is drag over
-			GET PASTEBOARD DATA:C401("com.4d.private.ios.field";$x)
-			
-			If (Bool:C1537(OK))
+			If ($b_background\
+				 | $b_vInsertion)
 				
-				BLOB TO VARIABLE:C533($x;$o)
-				SET BLOB SIZE:C606($x;0)
+				If ($b_vInsertion)
+					
+					This:C1470.$.vInsert:=This:C1470.$.current
+					SVG SET ATTRIBUTE:C1055(*;This:C1470.preview.name;This:C1470.$.current;\
+						"fill-opacity";"1")
+					
+				End if 
 				
-				If ($bBackground\
-					 | $bInsert)
+				$0:=0
+				
+			Else 
+				
+				If ($o.fieldType#8859)  // Not 1-N relation
 					
-					If ($bInsert)
-						
-						This:C1470.$.vInsert:=This:C1470.$.current
-						SVG SET ATTRIBUTE:C1055(*;This:C1470.preview.name;This:C1470.$.current;\
-							"fill-opacity";"1")
-						
-					End if 
+					  // Accept drag if the type match with the source
+					SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$t)
 					
-					$0:=0
-					
-				Else 
-					
-					If ($o.fieldType#8859)  // Not 1-N relation
+					If ($t="all")
 						
-						  // Accept drag if the type match with the source
-						SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$t)
-						
-						If ($t="all")
-							
-							$0:=0
-							
-						Else 
-							
-							$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
-							
-							If (tmpl_compatibleType ($c;$o.fieldType))
-								
-								$0:=0
-								
-							End if 
-						End if 
+						$0:=0
 						
 					Else 
 						
-						  // Accept only on multi-valued fields
-						SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multivalued";$t)
+						$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
 						
-						If ($t="true")
+						If (tmpl_compatibleType ($c;$o.fieldType))
 							
 							$0:=0
 							
 						End if 
+					End if 
+					
+				Else 
+					
+					  // Accept only on multi-valued fields
+					SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multivalued";$t)
+					
+					If ($t="true")
+						
+						$0:=0
+						
 					End if 
 				End if 
 			End if 

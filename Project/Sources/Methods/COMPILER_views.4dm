@@ -39,7 +39,7 @@ If (False:C215)
 	
 	  // ----------------------------------------------------
 	C_BOOLEAN:C305(tmpl_compatibleType ;$0)
-	C_COLLECTION:C1488(tmpl_compatibleType ;$1)
+	C_VARIANT:C1683(tmpl_compatibleType ;$1)
 	C_LONGINT:C283(tmpl_compatibleType ;$2)
 	
 	  // ----------------------------------------------------

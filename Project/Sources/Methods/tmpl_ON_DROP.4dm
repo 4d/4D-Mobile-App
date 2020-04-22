@@ -10,20 +10,20 @@
   // Declarations
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b)
-C_LONGINT:C283($indx)
-C_TEXT:C284($t;$Txt_isOfClass)
-C_OBJECT:C1216($o;$Obj_target)
+C_LONGINT:C283($countFixed;$indx)
+C_TEXT:C284($t;$t_isOfClass)
+C_OBJECT:C1216($o;$oTarget)
 C_COLLECTION:C1488($c)
 
-ARRAY TEXT:C222($tTxt_results;0)
+ARRAY TEXT:C222($tMatches;0)
 
   // ----------------------------------------------------
   // Initialisations
 
-$Obj_target:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2;"detail";"list")][This:C1470.$.tableNumber]
+$oTarget:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2;"detail";"list")][This:C1470.$.tableNumber]
 
   // ----------------------------------------------------
-If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
+If (Length:C16(This:C1470.$.current)>0)
 	
 	  // Get the pastboard
 	GET PASTEBOARD DATA:C401("com.4d.private.ios.field";$x)
@@ -53,45 +53,45 @@ If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
 			$o.name:=$o.path
 			
 			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:bind";$t)
-			Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tTxt_results)
+			Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tMatches)
 			
-			If (Size of array:C274($tTxt_results)=2)  // List of fields
+			If (Size of array:C274($tMatches)=2)  // List of fields
 				
 				  // Belt and braces
-				If ($Obj_target[$tTxt_results{1}]=Null:C1517)
+				If ($oTarget[$tMatches{1}]=Null:C1517)
 					
-					$Obj_target[$tTxt_results{1}]:=New collection:C1472
+					$oTarget[$tMatches{1}]:=New collection:C1472
 					
 				End if 
 				
-				$Obj_target[$tTxt_results{1}][Num:C11($tTxt_results{2})]:=$o  //$o
+				$oTarget[$tMatches{1}][Num:C11($tMatches{2})]:=$o
 				
 			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				
-				SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multi-criteria";$Txt_isOfClass)
+				SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multi-criteria";$t_isOfClass)
 				
-				If (_bool ($Txt_isOfClass))  // Search on several fields - append to the field list if any
+				If ($t_isOfClass="true")  // Search on several fields - append to the field list if any
 					
-					If (Value type:C1509($Obj_target[$t])#Is collection:K8:32)
+					If (Value type:C1509($oTarget[$t])#Is collection:K8:32)
 						
-						If ($Obj_target[$t]#Null:C1517)
+						If ($oTarget[$t]#Null:C1517)
 							
 							  // Convert
-							$Obj_target[$t]:=New collection:C1472($Obj_target[$t])
+							$oTarget[$t]:=New collection:C1472($oTarget[$t])
 							
 						Else 
 							
-							$Obj_target[$t]:=$o
+							$oTarget[$t]:=$o
 							
 						End if 
 					End if 
 					
-					If (Value type:C1509($Obj_target[$t])=Is collection:K8:32)
+					If (Value type:C1509($oTarget[$t])=Is collection:K8:32)
 						
-						If ($Obj_target[$t].extract("name").indexOf($o.path)=-1)
+						If ($oTarget[$t].extract("name").indexOf($o.path)=-1)
 							
 							  // Append field
-							$Obj_target[$t].push($o)
+							$oTarget[$t].push($o)
 							
 						End if 
 					End if 
@@ -102,29 +102,55 @@ If (Length:C16(This:C1470.$.current)>0)  // | (feature.with("newViewUI"))
 							  //______________________________________________________
 						: (This:C1470.$.current="background")
 							
-							$indx:=$Obj_target.fields.indexOf(Null:C1517)
+							If ($o.fromIndex#Null:C1517)
+								
+								$oTarget.fields.remove($o.fromIndex)
+								
+							End if 
+							
+							$countFixed:=Form:C1466.$dialog.VIEWS.template.manifest.fields.count
+							$indx:=$oTarget.fields.indexOf(Null:C1517;$countFixed)
 							
 							If ($indx=-1)
 								
-								$Obj_target.fields.push($o)
+								If ($oTarget.fields.length<$countFixed)
+									
+									$oTarget.fields[$countFixed]:=$o
+									
+								Else 
+									
+									$oTarget.fields.push($o)
+									
+								End if 
 								
 							Else 
 								
-								$Obj_target.fields[$indx]:=$o
+								$oTarget.fields[$indx]:=$o
 								
 							End if 
 							
 							  //______________________________________________________
-						: (This:C1470.$.current="@.insert")
+						: (This:C1470.$.current="@.vInsert")
 							
-							$indx:=Num:C11(Replace string:C233(This:C1470.$.current;".insert";""))
+							$indx:=Num:C11(Replace string:C233(This:C1470.$.current;"e";""))
 							
-							$Obj_target.fields.insert($indx-1;$o)
+							If ($o.fromIndex#Null:C1517)
+								
+								$oTarget.fields.remove($o.fromIndex)
+								$indx:=$indx-1-Num:C11($o.fromIndex<$indx)
+								
+							Else 
+								
+								$indx:=$indx-1
+								
+							End if 
+							
+							$oTarget.fields.insert($indx;$o)
 							
 							  //______________________________________________________
 						Else 
 							
-							$Obj_target[$t]:=$o
+							$oTarget[$t]:=$o
 							
 							  //______________________________________________________
 					End case 

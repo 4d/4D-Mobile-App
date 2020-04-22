@@ -12,10 +12,10 @@ C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b;$bAvailable)
-C_LONGINT:C283($l)
+C_LONGINT:C283($indx;$l)
 C_PICTURE:C286($p)
 C_TEXT:C284($tTable;$tTemplate;$tTypeForm)
-C_OBJECT:C1216($context;$event;$form;$o)
+C_OBJECT:C1216($context;$event;$form;$o;$oTarget)
 
 If (False:C215)
 	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER ;$0)
@@ -143,7 +143,6 @@ Case of
 						$context.update:=True:C214
 						$context.picker:=(Length:C16($tTemplate)=0)
 						
-						
 						$context.tableNumber:=$tTable
 						
 						  //______________________________________________________
@@ -197,6 +196,54 @@ Case of
 		Case of 
 				
 				  //______________________________________________________
+			: ($event.code=On Double Clicked:K2:5)
+				
+				If (feature.with("newViewUI"))
+					
+					$tTypeForm:=Choose:C955(Num:C11($context.selector)=2;"detail";"list")
+					
+					If ($tTypeForm="detail")
+						
+						$form.fieldList.cellPosition()
+						
+						  // Get the current field
+						  //%W-533.3
+						$o:=($form.fields.pointer())->{$form.fieldList.row}
+						  //%W+533.3
+						
+						$b:=($o.fieldType#8859)  // Not 1-N relation
+						
+						If (Not:C34($b))
+							
+							  // 1-N relation with published related data class
+							$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
+							
+						End if 
+						
+						If ($b)
+							
+							  // Add the field
+							$oTarget:=Form:C1466[$tTypeForm][$context.tableNumber]
+							$oTarget.fields.push($o)
+							
+							  // Update preview
+							views_preview ("draw";$form)
+							
+							  // Save project
+							project.save()
+							
+						End if 
+						
+					Else 
+						
+						  // Not for a list form
+						
+					End if 
+				End if 
+				
+				editor_ui_LISTBOX ($event.objectName)
+				
+				  //______________________________________________________
 			: ($event.code=On Clicked:K2:4)\
 				 | ($event.code=On Selection Change:K2:29)
 				
@@ -222,7 +269,6 @@ Case of
 				End if 
 				
 				If ($b)
-					
 					  // Put into the container
 					VARIABLE TO BLOB:C532($o;$x)
 					APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field";$x)
@@ -236,6 +282,8 @@ Case of
 						.getPicture()
 					
 					SET DRAG ICON:C1272($p)
+					
+					$0:=0
 					
 				End if 
 				
@@ -357,6 +405,9 @@ Case of
 						$form.cancel()
 						
 						  //………………………………………………………………………………………………………………
+					: ($context.current="f@")
+						
+						  //………………………………………………………………………………………………………………
 					Else 
 						
 						  // NOT A CLICKABLE OBJECT
@@ -365,6 +416,52 @@ Case of
 				End case 
 				
 				$form.fieldList.focus()
+				
+				  //______________________________________________________
+			: ($event.code=On Begin Drag Over:K2:44)
+				
+				Case of 
+						
+						  //………………………………………………………………………………………………………………
+					: ($context.current="tab_@")
+						
+						  // NOT A DRAGGABLE OBJECT
+						
+						  //………………………………………………………………………………………………………………
+					: ($context.current="@.cancel")
+						
+						  // NOT A DRAGGABLE OBJECT
+						  //………………………………………………………………………………………………………………
+					: ($context.current="f@")
+						
+						$0:=0
+						
+						  // Get the dragged field
+						$indx:=Num:C11($context.current)-1
+						$o:=Form:C1466.detail[Form:C1466.$dialog.VIEWS.tableNumber].fields[$indx]
+						$o.fromIndex:=$indx
+						
+						  // Put into the container
+						VARIABLE TO BLOB:C532($o;$x)
+						APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field";$x)
+						SET BLOB SIZE:C606($x;0)
+						
+						  // Create the drag icon
+						$p:=svg \
+							.embedPicture(ui.fieldIcons[$o.fieldType];2;2)\
+							.textArea($o.path+" ";20;2)\
+							.setAttribute("font-size";13)\
+							.getPicture()
+						
+						SET DRAG ICON:C1272($p)
+						
+						  //………………………………………………………………………………………………………………
+					Else 
+						
+						  // NOT A DRAGGABLE OBJECT
+						
+						  //………………………………………………………………………………………………………………
+				End case 
 				
 				  //______________________________________________________
 			: ($event.code=On Drag Over:K2:13)
@@ -431,7 +528,6 @@ Case of
 				  //$Obj_context.actions:=_w_actions ("getList";$Obj_context).actions
 				
 				OB REMOVE:C1226($context;"manifest")
-				
 				
 				If (feature.with("newViewUI"))
 					

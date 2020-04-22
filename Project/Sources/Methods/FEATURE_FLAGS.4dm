@@ -101,21 +101,32 @@ feature.delivered(113164;1820)  // Enable/disable image dump
 /* _____________
 18R3
 _____________*/
-feature.delivered(112225)  // Select / install / use custom templates
+feature.delivered(112225)  // Select/install/use custom templates
 
 /* _____________
 18R4
 _____________*/
 feature.unstable(113016)  // Svg improvement in forms section
-feature.unstable(107526)  //Push Notifications
+feature.unstable(107526)  // Push Notifications
 
 /* _____________
 WIP
 _____________*/
-feature.wip("withWidgetActions")  // Enable widget actions
-feature.wip("accentColors")  // Manage colors according to user system parameters
-feature.wip(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
-feature.wip("formatMarketPlace")  // Manage format as archive
+
+  // Enable widget actions
+feature.wip("withWidgetActions")
+
+  // Manage colors according to user system parameters
+feature.wip("accentColors")
+
+  // Manage format as archive
+feature.wip("formatMarketPlace")
+
+  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
+feature.wip(114338)
+
+  // Allow to drop a multivalued field next to another existing dropped multivalued fields to have two fields next to each other
+feature.alias("droppingNext";114338)
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES

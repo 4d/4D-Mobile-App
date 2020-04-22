@@ -164,7 +164,7 @@
 					"left": 19,
 					"width": 95,
 					"height": 5,
-					"fill": "#1AA1E5",
+					"fill": "#1CA0E6",
 					"stroke": "transparent"
 				},
 				"resources": {
@@ -265,7 +265,7 @@
 					"enterable": false,
 					"hideFocusRing": true,
 					"contextMenu": "none",
-					"dragging": "none",
+					"dragging": "custom",
 					"dropping": "custom",
 					"events": [
 						"onClick",
@@ -315,12 +315,13 @@
 					"borderStyle": "none",
 					"events": [
 						"onClick",
+						"onDoubleClick",
 						"onLosingFocus",
 						"onGettingFocus",
 						"onSelectionChange",
 						"onBeginDragOver"
 					],
-					"method": "ObjectMethods/01_fields.4dm",
+					"method": "VIEWS_OBJECTS_HANDLER",
 					"columns": [
 						{
 							"name": "fields",

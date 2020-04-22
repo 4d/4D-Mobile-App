@@ -11,12 +11,13 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($bSetForm)
-C_LONGINT:C283($eventCode;$i;$l;$offset)
+C_BOOLEAN:C305($bSetForm;$bV2)
+C_LONGINT:C283($codeEvent;$count;$i;$indx;$l;$offset)
 C_TEXT:C284($t;$tFormName;$tNewForm;$tTable;$tTypeForm)
 C_OBJECT:C1216($context;$form;$o;$o1;$oDataModel;$oIN)
-C_OBJECT:C1216($oOUT;$oTarget;$pathForm)
+C_OBJECT:C1216($oManifest;$oNewTemplate;$oOUT;$oTarget;$pathForm)
 C_COLLECTION:C1488($c)
+C_VARIANT:C1683($v)
 
 ARRAY TEXT:C222($tTxt_tables;0)
 
@@ -127,14 +128,14 @@ Case of
 		  //=========================================================
 	: ($oIN=Null:C1517)  // Form method
 		
-		$eventCode:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
+		$codeEvent:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
 		
 		$oDataModel:=Form:C1466.dataModel
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($eventCode=On Load:K2:1)
+			: ($codeEvent=On Load:K2:1)
 				
 				$context.scroll:=450
 				
@@ -236,7 +237,7 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($eventCode=On Timer:K2:25)
+			: ($codeEvent=On Timer:K2:25)
 				
 				SET TIMER:C645(0)
 				
@@ -608,8 +609,46 @@ Case of
 				$oIN.form:=$tNewForm
 				$oIN.tableNumber:=$tTable
 				
-				tmpl_REORDER ($oIN)
+				$oNewTemplate:=cs:C1710.tmpl.new($tNewForm;$oIN.selector)
+				$oManifest:=$oNewTemplate.manifest
 				
+				If (feature.with("newViewUI"))
+					
+					$bV2:=(Num:C11($oManifest.version)>=2)
+					
+					If ($bV2)
+						
+						If ($oIN.target.fields#Null:C1517)
+							
+							$count:=Num:C11($oManifest.fields.count)  //fixed
+							
+							For each ($v;$oIN.target.fields)
+								
+								If ($indx<$count)
+									
+									  //check compatibility
+									
+								Else 
+									
+									  // A "If" statement should never omit "Else"
+									
+								End if 
+								
+								$indx:=$indx+1
+								
+							End for each 
+						End if 
+						
+					Else 
+						
+						tmpl_REORDER ($oIN)
+						
+					End if 
+				Else 
+					
+					tmpl_REORDER ($oIN)
+					
+				End if 
 			End if 
 			
 			  // Redraw

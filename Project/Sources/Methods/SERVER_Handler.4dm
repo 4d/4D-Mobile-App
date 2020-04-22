@@ -48,6 +48,8 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
+	$Obj_out:=New object:C1471
+	
 Else 
 	
 	ABORT:C156
@@ -203,7 +205,7 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="checkProductionURL")
 		
-		$Obj_out:=New object:C1471
+		  //$Obj_out:=New object
 		
 		  // URL is not mandatory
 		$Obj_out.success:=(Length:C16($Obj_in.url)=0)
