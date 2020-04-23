@@ -73,123 +73,14 @@ Case of
 				End if 
 				
 				$oTemplate:=Form:C1466.$dialog.VIEWS.template
+				$oManifest:=$oTemplate.manifest
 				
 				If ($oTemplate.path.exists)
 					
-					  //If (feature.with("resourcesBrowser"))
-					  //If ($tmpl.path.extension=SHARED.archiveExtension)  // Archive
-					  //  //$archive:=ZIP Read archive(path ["host"+$tTypeForm+"Forms"]().file(Delete string($tFormName;1;1)))
-					  //  //$oManifest:=JSON Parse($archive.root.file("manifest.json").getText())
-					  //  //OBJECT SET TITLE(*;"preview.label";String($o.name))
-					  //Else
-					  //$oManifest:=JSON Parse($pathForm.file("manifest.json").getText())
-					  //OBJECT SET TITLE(*;"preview.label";String($tmpl.title))
-					  //End if
-					  //Else
-					  //OBJECT SET TITLE(*;"preview.label";String($pathForm.fullName))
-					  //$oManifest:=JSON Parse($pathForm.file("manifest.json").getText())
-					  //End if
-					
-					OBJECT SET TITLE:C194(*;"preview.label";String:C10($oTemplate.title))
-					
-					$oManifest:=$oTemplate.manifest
-					
-					  // Load the template
-					PROCESS 4D TAGS:C816($oTemplate.template;$t;$oTemplate.title;$oTemplate.cancel())
-					
 					If (feature.with("newViewUI"))
 						
-						  //If (Num($oManifest.version)<2) & False  // #COMPATIBILITY MODE
-						  //If (True)  // New xPath capabilities
-						  //$root:=DOM Parse XML variable($t)
-						  //If (Bool(OK))
-						  //  // Remove mobile picture
-						  //$node:=DOM Find XML element($root;"/"+"/rect[@class='container'")
-						  //If (Bool(OK))
-						  //DOM REMOVE XML ELEMENT($node)
-						  //End if
-						  //$node:=DOM Find XML element($root;"/"+"/rect[@class='bgcontainer'")
-						  //If (Bool(OK))
-						  //DOM REMOVE XML ELEMENT($node)
-						  //End if
-						  //  // Make the background droppable
-						  //$node:=DOM Find XML element by ID($root;"multivalued")
-						  //If (Bool(OK))
-						  //$t:=DOM Create XML element(DOM Get parent XML element($node);"rect";\
-							"class";"bgcontainer_v2 background droppable")
-						  //DOM REMOVE XML ELEMENT($node)
-						  //End if
-						  //  // Adjustments
-						  //$node:=DOM Find XML element by ID($root;"bgcontainer")
-						  //If (Bool(OK))
-						  //DOM SET XML ATTRIBUTE($node;\
-							"transform";"translate(0,-40)";\
-							"ios:type";"all";\
-							"id";"background")
-						  //End if
-						  //DOM EXPORT TO VAR($root;$t)
-						  //DOM CLOSE XML($root)
-						  //End if
-						  //Else
-						  //  // Remove mobile picture
-						  //If (Match regex("(?mi-s)<rect[^/]*class=\"container\"[^/]*/>";$t;1;$pos;$length))
-						  //$t:=Substring($t;1;$pos-1)+Substring($t;$pos+$length+1)
-						  //End if
-						  //  // Make the background droppable
-						  //ARRAY LONGINT($positions;0x0000)
-						  //ARRAY LONGINT($lengths;0x0000)
-						  //If (Match regex("(?mi-s)(<rect[^/]*class=\"bgcontainer)(\"[^/]*)(/>)";$t;1;$positions;$lengths))
-						  //$c:=New collection
-						  //$c.push(Substring($t;1;$positions{1}+$lengths{1}-1))
-						  //  //$c.push("_v2 droppable")
-						  //$c.push("_v2")
-						  //$c.push(Substring($t;$positions{1}+$lengths{1};$lengths{2}))
-						  //  //$c.push(" ios:type=\"all\" id=\"background\"")
-						  //$c.push(" ios:type=\"all\"")
-						  //$c.push(Substring($t;$positions{2}+$lengths{2}))
-						  //$t:=$c.join("")
-						  //End if
-						  //  // Adjustments
-						  //$t:=Replace string($t;"<g id=\"bgcontainer\">";"<g id=\"bgcontainer\" transform=\"translate(0,-40)\">")
-						  //End if
-						  //End if
-						
-						$bV2:=(Num:C11($oManifest.version)>=2)
-						
-						If ($bV2)
-							
-							  //
-							
-						Else 
-							
-							$root:=DOM Parse XML variable:C720($t)
-							
-							If (Bool:C1537(OK))
-								
-								  // Remove mobile picture
-								$node:=DOM Find XML element:C864($root;"/"+"/rect[@class='container'")
-								
-								If (Bool:C1537(OK))
-									
-									DOM REMOVE XML ELEMENT:C869($node)
-									
-								End if 
-								
-								  // Adjustments
-								$node:=DOM Find XML element by ID:C1010($root;"bgcontainer")
-								
-								If (Bool:C1537(OK))
-									
-									DOM SET XML ATTRIBUTE:C866($node;\
-										"transform";"translate(0,-50)")
-									
-								End if 
-							End if 
-							
-							DOM EXPORT TO VAR:C863($root;$t)
-							DOM CLOSE XML:C722($root)
-							
-						End if 
+						  // Load the template
+						PROCESS 4D TAGS:C816($oTemplate.load().template;$t;$oTemplate.title;$oTemplate.cancel())
 						
 						$svg:=svg ("parse";New object:C1471(\
 							"variable";$t)).setAttribute("transform";\
@@ -197,11 +88,16 @@ Case of
 						
 					Else 
 						
+						  // Load the template
+						PROCESS 4D TAGS:C816($oTemplate.template;$t)
+						
 						$svg:=svg ("parse";New object:C1471(\
 							"variable";$t)).setAttribute("transform";\
 							"scale(0.95)")
 						
 					End if 
+					
+					OBJECT SET TITLE:C194(*;"preview.label";String:C10($oTemplate.title))
 					
 					If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
 						
@@ -212,7 +108,7 @@ Case of
 						
 						$form.preview.getCoordinates()
 						
-						If ($bV2)
+						If (Num:C11($oManifest.renderer)>=2)
 							
 							$domBkg:=$svg.findById("background")
 							
@@ -222,13 +118,6 @@ Case of
 							$tWidgetField:=File:C1566("/RESOURCES/templates/form/objects/oneField/widget.svg").getText()
 							
 							$count:=Num:C11($oManifest.fields.count)
-							
-							  //If ($count>0)
-							
-							  //ARRAY TEXT($tDom;0x0000)
-							  //$tDom{0}:=DOM Find XML element($svg.root;"/"+"/rect[@class='droppable field'";$tDom)
-							
-							  //End if
 							
 							For each ($o;$oTarget.fields)
 								

@@ -5,7 +5,7 @@
   // ----------------------------------------------------
   // Description:
   // Get information about installed certificate in macOS
-  //  
+  //
   // certificate (New object("action";"codesigning";"subject";True))
   //   - get info about signing identity ie. dev that sign app
   // ----------------------------------------------------

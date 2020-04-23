@@ -115,7 +115,7 @@ Case of
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_declarations")
 		
-		  //COMPILER_COMPONENT 
+		  //COMPILER_COMPONENT
 		
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_init")

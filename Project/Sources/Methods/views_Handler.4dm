@@ -614,7 +614,7 @@ Case of
 				
 				If (feature.with("newViewUI"))
 					
-					$bV2:=(Num:C11($oManifest.version)>=2)
+					$bV2:=(Num:C11($oManifest.renderer)>=2)
 					
 					If ($bV2)
 						

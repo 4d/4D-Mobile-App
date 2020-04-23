@@ -637,7 +637,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								If (Not:C34($Dom_relation.success))  // else us default one
 									
 									$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
-									  //$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml")) 
+									  //$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml"))
 									$Dom_relation.isDefault:=True:C214
 									
 								Else 
@@ -871,7 +871,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										
 										If ($Obj_element.dom#Null:C1517)  // if valid element
 											
-											  /// HEADER for row 
+											  /// HEADER for row
 											If ($Obj_element.insertIntoRow=Null:C1517)
 												
 												If ($Obj_element.insertInto.parent().getName().name="stackView")  // only on stack view (suppose only one element has stack view parent..., same as relation)
@@ -1273,7 +1273,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					$Txt_cmd:="ibtool --upgrade "+str_singleQuoted ($File_.path)+" --write "+str_singleQuoted ($Obj_in.path.path)
 					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 					
-					If (Asserted:C1132(Ok=1;"LEP failed: "+$Txt_cmd))
+					If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
 						
 						$Obj_out.success:=True:C214
 						$File_.delete()  // delete temporary file
@@ -1343,7 +1343,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			$Txt_cmd:="ibtool --version"
 			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 			
-			If (Asserted:C1132(Ok=1;"LEP failed: "+$Txt_cmd))
+			If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
 				
 				If (Length:C16($Txt_out)>0)
 					

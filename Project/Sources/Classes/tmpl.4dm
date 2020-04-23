@@ -68,6 +68,200 @@ Class constructor
 	End if 
 	
 /* ============================================================================*/
+Function load  // Load and update the template if any
+	
+	C_OBJECT:C1216($0)
+	
+	C_TEXT:C284($t;$root;$node)
+	
+	ASSERT:C1129(Not:C34(Shift down:C543))
+	
+	If (Num:C11(This:C1470.manifest.renderer)<2)
+		
+		$t:=This:C1470.template
+		$root:=DOM Parse XML variable:C720($t)
+		
+		If (Bool:C1537(OK))
+			
+			  // Remove mobile picture
+			  //$node:=DOM Find XML element($root;"/"+"/rect[@class='container'")
+			$node:=DOM Find XML element:C864($root;"/"+"/rect[contains(@class,'container')")
+			
+			If (Bool:C1537(OK))
+				
+				DOM REMOVE XML ELEMENT:C869($node)
+				
+			End if 
+			
+			  // Adjustments
+			$node:=DOM Find XML element by ID:C1010($root;"bgcontainer")
+			
+			If (Bool:C1537(OK))
+				
+				DOM SET XML ATTRIBUTE:C866($node;\
+					"transform";"translate(0,-50)")
+				
+			End if 
+			
+			DOM EXPORT TO VAR:C863($root;$t)
+			DOM CLOSE XML:C722($root)
+			
+			  // Keep the modified template
+			This:C1470.template:=$t
+			
+			  // Try to adapt the old template to the renderer v2
+			$root:=DOM Parse XML variable:C720($t)
+			
+			If (Bool:C1537(OK))
+				
+				  // Remove cookery
+				$node:=DOM Find XML element by ID:C1010($root;"cookery")
+				
+				If (Bool:C1537(OK))
+					
+					DOM REMOVE XML ELEMENT:C869($node)
+					
+				End if 
+				
+				  // Remove template for additional fields
+				$node:=DOM Find XML element by ID:C1010($root;"f")
+				
+				If (Bool:C1537(OK))
+					
+					DOM REMOVE XML ELEMENT:C869($node)
+					
+				End if 
+				
+				  // Remove the fisrt multivalued field
+				$node:=DOM Find XML element by ID:C1010($root;"multivalued")
+				
+				If (Bool:C1537(OK))
+					
+					DOM REMOVE XML ELEMENT:C869($node)
+					
+					$node:=DOM Find XML element:C864($root;"/"+"/rect[contains(@class,'bgcontainer')")
+					
+					If (Bool:C1537(OK))
+						
+						DOM REMOVE XML ELEMENT:C869($node)
+						
+						$node:=DOM Find XML element by ID:C1010($root;"bgcontainer")
+						
+						If (Bool:C1537(OK))
+							
+							DOM SET XML ATTRIBUTE:C866($node;\
+								"id";"background";\
+								"class";"background";\
+								"ios:type";"all")
+							
+							If (Bool:C1537(OK))
+								
+								$x:=DOM Create XML element:C865($node;"rect";\
+									"class";"bgcontainer_v2";\
+									"x";0;\
+									"y";0)
+								
+								If (Bool:C1537(OK))
+									
+									$y:=DOM Insert XML element:C1083($node;$x;0)
+									
+									If (Bool:C1537(OK))
+										
+										DOM REMOVE XML ELEMENT:C869($x)
+										
+									End if 
+								End if 
+							End if 
+						End if 
+					End if 
+				End if 
+				
+				If (Bool:C1537(OK))
+					
+					Case of 
+							
+							  //____________________________
+						: (This:C1470.title="parallaxHeader")\
+							 | (This:C1470.title="Numbers")
+							
+							This:C1470.manifest.hOffset:=254
+							
+							  //____________________________
+						: (This:C1470.title="cards")\
+							 | (This:C1470.title="ClientDetail")
+							
+							This:C1470.manifest.hOffset:=136
+							
+							  //____________________________
+						: (This:C1470.title="Circle")
+							
+							This:C1470.manifest.hOffset:=253
+							
+							  //____________________________
+						: (This:C1470.title="dashboard")
+							
+							This:C1470.manifest.hOffset:=262
+							
+							  //____________________________
+						: (This:C1470.title="InvoiceDetail")
+							
+							This:C1470.manifest.hOffset:=136
+							
+							  //____________________________
+						: (This:C1470.title="LeftCutHeader")
+							
+							This:C1470.manifest.hOffset:=234
+							
+							  //____________________________
+						: (This:C1470.title="ParallaxDetail")
+							
+							This:C1470.manifest.hOffset:=223
+							
+							  //____________________________
+						: (This:C1470.title="RightCutHeader")
+							
+							This:C1470.manifest.hOffset:=273
+							
+							  //____________________________
+						: (This:C1470.title="SimpleContact")
+							
+							This:C1470.manifest.hOffset:=118
+							
+							  //____________________________
+						: (This:C1470.title="SimpleHeader")
+							
+							This:C1470.manifest.hOffset:=161
+							
+							
+							  //____________________________
+						Else 
+							
+							OK:=0
+							
+							  //____________________________
+					End case 
+					
+					If (Bool:C1537(OK))
+						
+						  // Update the manifest
+						This:C1470.manifest.renderer:=2
+						This:C1470.manifest.fields.max:=0
+						
+						DOM EXPORT TO VAR:C863($root;$t)
+						DOM CLOSE XML:C722($root)
+						
+						  // Keep the updated template
+						This:C1470.template:=$t
+						
+					End if 
+				End if 
+			End if 
+		End if 
+	End if 
+	
+	$0:=This:C1470
+	
+/* ============================================================================*/
 Function cancel  // Return the embedded cancel button used into the templates
 	
 	C_TEXT:C284($0)

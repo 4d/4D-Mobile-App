@@ -412,9 +412,9 @@ If (feature.with("resourcesBrowser"))
 	
 	  // Put text
 	  //$svg.textArea(Get localized string("explore");0;$ƒ.cell.height-20)\
-										.setDimensions($ƒ.cell.width)\
-										.setFill("dimgray")\
-										.setAttribute("text-align";"center")
+												.setDimensions($ƒ.cell.width)\
+												.setFill("dimgray")\
+												.setAttribute("text-align";"center")
 	
 	  // Put in second position
 	  //$oPicker.pictures.insert(1;$svg.getPicture())

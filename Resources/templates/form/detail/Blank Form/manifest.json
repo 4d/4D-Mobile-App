@@ -1,7 +1,7 @@
 {
 	"type": "detailform",
 	"name": "Blank Form",
-	"version":2,
+	"renderer":2,
 	"hOffset":0,
 	"fields": 
 	{

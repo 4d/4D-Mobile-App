@@ -1,7 +1,7 @@
 {
   "type": "detailform",
   "name": "Left Cut Header",
-  "version":2,
+  "renderer":2,
   "hOffset":183,
   "fields": {
     "count": 3,

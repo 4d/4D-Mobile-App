@@ -46,7 +46,7 @@ End if
 If (Length:C16(This:C1470.$.current)>0)
 	
 	If (feature.with("newViewUI"))\
-		 & (Num:C11(Form:C1466.$dialog.VIEWS.template.manifest.version)>=2)
+		 & (Num:C11(Form:C1466.$dialog.VIEWS.template.manifest.renderer)>=2)
 		
 		  // Accept insertion
 		$t:=This:C1470.$.current

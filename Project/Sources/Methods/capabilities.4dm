@@ -211,7 +211,8 @@ Case of
 						
 					Else 
 						
-						$Obj_out[$Txt_fileType]:=Null:C1517  // Do nothing
+						  // Do nothing
+						$Obj_out[$Txt_fileType]:=Null:C1517
 						
 					End if 
 				End if 
@@ -227,7 +228,6 @@ Case of
 					$Obj_out[$Txt_fileType].value:=$Obj_in[$Txt_fileType]
 					
 				End if 
-				
 			End for each 
 			
 			  // Else failed to read files
@@ -298,7 +298,6 @@ Case of
 		End case 
 		
 		  // Manage simple properties
-		
 		If (Bool:C1537($Obj_in.home) | Bool:C1537($Obj_in.homekit))
 			
 			$Obj_out.entitlements.push(New object:C1471(\
@@ -331,6 +330,9 @@ Case of
 			
 			$Obj_out.entitlements.push(New object:C1471(\
 				"aps-environment";"development"))  // production?
+			
+			$Obj_out.settings.push(New object:C1471(\
+				"pushNotification";True:C214))
 			
 		End if 
 		
@@ -380,19 +382,19 @@ Case of
 					"MKDirectionsApplicationSupportedModes";$Obj_in.mapModes))
 				
 				  // collection(\
-																														"MKDirectionsModeBike";\
-																														"MKDirectionsModeBus";\
-																														"MKDirectionsModeCar";\
-																														"MKDirectionsModeFerry";\
-																														"MKDirectionsModeOther";\
-																														"MKDirectionsModePedestrian";\
-																														"MKDirectionsModePlane";\
-																														"MKDirectionsModeRideShare";\
-																														"MKDirectionsModeStreetCar";\
-																														"MKDirectionsModeSubway";\
-																														"MKDirectionsModeTaxi";\
-																														"MKDirectionsModeTrain"\
-																														)
+																																								"MKDirectionsModeBike";\
+																																								"MKDirectionsModeBus";\
+																																								"MKDirectionsModeCar";\
+																																								"MKDirectionsModeFerry";\
+																																								"MKDirectionsModeOther";\
+																																								"MKDirectionsModePedestrian";\
+																																								"MKDirectionsModePlane";\
+																																								"MKDirectionsModeRideShare";\
+																																								"MKDirectionsModeStreetCar";\
+																																								"MKDirectionsModeSubway";\
+																																								"MKDirectionsModeTaxi";\
+																																								"MKDirectionsModeTrain"\
+																																								)
 				
 			End if 
 		End if 
@@ -452,8 +454,6 @@ Case of
 				"NSPhotoLibraryUsageDescription";String:C10($Obj_in.photo)))
 			
 		End if 
-		
-		
 		
 		If (Bool:C1537($Obj_in.contacts)\
 			 | (Length:C16(String:C10($Obj_in.contacts))>0))

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE base SYSTEM "http://www.4d.com/dtd/2007/base.dtd" >
-<base name="" uuid="FF8A60871EDB4EDCA82874198F406728" collation_locale="en">
+<base name="4D Mobile App" uuid="FF8A60871EDB4EDCA82874198F406728" collation_locale="en">
 	<schema name="DEFAULT_SCHEMA"/>
 	<table name="Commands" uuid="4AED578B39014B59AB3054B0278F6453" id="1" prevent_journaling="true">
 		<field name="ID" uuid="A3A83460686047C694B467689032AAD8" type="4" unique="true" autosequence="true" not_null="true" id="1">

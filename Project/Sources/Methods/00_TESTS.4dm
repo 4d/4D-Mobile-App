@@ -2,8 +2,10 @@
 C_BOOLEAN:C305($b;$Boo_reset)
 C_LONGINT:C283($l;$Lon_build;$Lon_error;$Lon_result;$Lon_type;$Lon_value)
 C_LONGINT:C283($Lon_x)
+C_TIME:C306($Gmt_timeGMT)
 C_REAL:C285($Num_;$r)
-C_TEXT:C284($Dir_root;$t;$tt;$Txt_in;$Txt_ormula;$Txt_result)
+C_TEXT:C284($Dir_root;$node;$root;$t;$tt;$Txt_in)
+C_TEXT:C284($Txt_ormula;$Txt_result)
 C_OBJECT:C1216($file;$folder;$o;$o1;$o2;$Obj_formula)
 C_OBJECT:C1216($Obj_new;$Obj_result;$Obj_target;$Obj_template;$svg;$zip)
 C_COLLECTION:C1488($c;$c1;$Col_2)
@@ -21,6 +23,76 @@ $o:=Folder:C1567("/")
 $o1:=Folder:C1567(fk system folder:K87:13).parent
 
 Case of 
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$Gmt_timeGMT:=Time:C179(Replace string:C233(Delete string:C232(String:C10(Current date:C33;ISO date GMT:K1:10;Current time:C178);1;11);"Z";""))
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$root:=DOM Create XML Ref:C861("root")
+		
+		$node:=DOM Create XML element:C865($root;"element";"class";"test")
+		$node:=DOM Create XML element:C865($root;"element";"class";"blank test")
+		$node:=DOM Create XML element:C865($root;"element")
+		$node:=DOM Create XML element:C865($root;"element";"class";"blank test dark")
+		
+		  // Select elements with attribute "class" strictly equal to "test"
+		$tTxt_{0}:=DOM Find XML element:C864($root;"element[@class='test']";$tTxt_)
+		
+		  // Select elements with the attribute "class" whatever its content
+		$tTxt_{0}:=DOM Find XML element:C864($root;"element[@class]";$tTxt_)
+		
+		  // Select all first level elements
+		$tTxt_{0}:=DOM Find XML element:C864($root;"*";$tTxt_)
+		
+		DOM EXPORT TO VAR:C863($root;$t)
+		DOM CLOSE XML:C722($root)
+		
+		Folder:C1567(fk desktop folder:K87:19).file("DEV/test.xml").setText($t)
+		
+		  //________________________________________
+	: (False:C215)
+		
+		$o:=cs:C1710.tmpl.new("Blank form";"detail")
+		
+		$file:=Folder:C1567(fk desktop folder:K87:19).file("DEV/test.xml")
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$root:=DOM Create XML Ref:C861("root")
+		
+		$t:=DOM Create XML element:C865($root;"g")
+		
+		$node:=DOM Create XML element:C865($t;"element1")
+		$node:=DOM Create XML element:C865($t;"element2")
+		$node:=DOM Create XML element:C865($t;"element3")
+		$node:=DOM Create XML element:C865($t;"element4")
+		
+		DOM EXPORT TO VAR:C863($root;$t)
+		DOM CLOSE XML:C722($root)
+		
+		Folder:C1567(fk desktop folder:K87:19).file("DEV/test.xml").setText($t)
+		
+		  //________________________________________
+	: (True:C214)
+		
+		  ///Volumes/Passport 500/Perforce/vincent.delachaux_MBP/4eDimension/main/4DComponents/Internal User Components/4D Mobile App/Resources/templates/form/detail/Blank Form/template.svg
+		
+		$file:=File:C1566("/RESOURCES/templates/form/detail/Blank Form/template.svg")
+		PROCESS 4D TAGS:C816($file.getText();$t)
+		$root:=DOM Parse XML variable:C720($t)
+		
+		If (OK=1)
+			
+			$node:=DOM Find XML element:C864($root;"//g[@class='background']")
+			
+			DOM CLOSE XML:C722($root)
+			
+		End if 
 		
 		  //________________________________________
 	: (True:C214)
@@ -486,7 +558,7 @@ Case of
 		
 		$Txt_ormula:=Request:C163("Please type a formula")
 		
-		If (ok=1)
+		If (OK=1)
 			
 			$Obj_formula:=Formula from string:C1601($Txt_ormula)
 			ALERT:C41("Result = "+String:C10($Obj_formula.call()))

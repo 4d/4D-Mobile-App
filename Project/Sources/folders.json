@@ -131,6 +131,7 @@
 		]
 	},
 	"(tools)": {},
+	"(v18)": {},
 	"[EDITOR]": {
 		"methods": [
 			"COMPILER_editor",
@@ -303,6 +304,9 @@
 			"svg",
 			"tips",
 			"window"
+		],
+		"classes": [
+			"svg"
 		]
 	},
 	"col": {
@@ -771,7 +775,8 @@
 	},
 	"trash": {
 		"groups": [
-			"(tools)"
+			"(tools)",
+			"(v18)"
 		]
 	}
 }

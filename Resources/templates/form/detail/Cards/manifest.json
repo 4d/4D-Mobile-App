@@ -1,7 +1,7 @@
 {
 	"type": "detailform",
 	"name": "Cards Detail",
-	"version":2,
+	"renderer":2,
 	"hOffset":91,
 	"fields": 
 	{

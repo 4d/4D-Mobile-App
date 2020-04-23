@@ -210,12 +210,12 @@ Case of
 /* #ACI0100534 {
 If (Length(String($Obj_table.slave))>0)
 						
-  // Only accessible via relations
-						  //  //						  //  $Dom_node:=DOM Create XML element($Dom_userInfo;"entry";\
-														 "key";"slave";\
-														 "value";String($o.slave))
+// Only accessible via relations
+						//  //						  //  $Dom_node:=DOM Create XML element($Dom_userInfo;"entry";\
+																					 "key";"slave";\
+																					 "value";String($o.slave))
 						
-End if 
+End if
 						
 $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 */
@@ -500,7 +500,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 													
 												Else 
 													
-													  //#OLD 
+													  //#OLD
 													$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)].primaryKey
 													
 												End if 
