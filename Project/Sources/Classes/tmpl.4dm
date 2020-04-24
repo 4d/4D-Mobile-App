@@ -72,7 +72,7 @@ Function load  // Load and update the template if any
 	
 	C_OBJECT:C1216($0)
 	
-	C_TEXT:C284($t;$root;$node)
+	C_TEXT:C284($t;$root;$node;$dom)
 	
 	ASSERT:C1129(Not:C34(Shift down:C543))
 	
@@ -84,7 +84,6 @@ Function load  // Load and update the template if any
 		If (Bool:C1537(OK))
 			
 			  // Remove mobile picture
-			  //$node:=DOM Find XML element($root;"/"+"/rect[@class='container'")
 			$node:=DOM Find XML element:C864($root;"/"+"/rect[contains(@class,'container')")
 			
 			If (Bool:C1537(OK))
@@ -156,18 +155,18 @@ Function load  // Load and update the template if any
 							
 							If (Bool:C1537(OK))
 								
-								$x:=DOM Create XML element:C865($node;"rect";\
+								$dom:=DOM Create XML element:C865($node;"rect";\
 									"class";"bgcontainer_v2";\
 									"x";0;\
 									"y";0)
 								
 								If (Bool:C1537(OK))
 									
-									$y:=DOM Insert XML element:C1083($node;$x;0)
+									$node:=DOM Insert XML element:C1083($node;$dom;0)
 									
 									If (Bool:C1537(OK))
 										
-										DOM REMOVE XML ELEMENT:C869($x)
+										DOM REMOVE XML ELEMENT:C869($dom)
 										
 									End if 
 								End if 
