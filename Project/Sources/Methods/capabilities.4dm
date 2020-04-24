@@ -49,8 +49,7 @@ End if
 
 If ($Obj_in.tags=Null:C1517)
 	
-	$Obj_in.tags:=New object:C1471(\
-		)
+	$Obj_in.tags:=New object:C1471
 	
 End if 
 
@@ -381,20 +380,20 @@ Case of
 				$Obj_out.info.push(New object:C1471(\
 					"MKDirectionsApplicationSupportedModes";$Obj_in.mapModes))
 				
-				  // collection(\
-																																								"MKDirectionsModeBike";\
-																																								"MKDirectionsModeBus";\
-																																								"MKDirectionsModeCar";\
-																																								"MKDirectionsModeFerry";\
-																																								"MKDirectionsModeOther";\
-																																								"MKDirectionsModePedestrian";\
-																																								"MKDirectionsModePlane";\
-																																								"MKDirectionsModeRideShare";\
-																																								"MKDirectionsModeStreetCar";\
-																																								"MKDirectionsModeSubway";\
-																																								"MKDirectionsModeTaxi";\
-																																								"MKDirectionsModeTrain"\
-																																								)
+				  //collection(\
+					"MKDirectionsModeBike";\
+					"MKDirectionsModeBus";\
+					"MKDirectionsModeCar";\
+					"MKDirectionsModeFerry";\
+					"MKDirectionsModeOther";\
+					"MKDirectionsModePedestrian";\
+					"MKDirectionsModePlane";\
+					"MKDirectionsModeRideShare";\
+					"MKDirectionsModeStreetCar";\
+					"MKDirectionsModeSubway";\
+					"MKDirectionsModeTaxi";\
+					"MKDirectionsModeTrain"\
+					)
 				
 			End if 
 		End if 

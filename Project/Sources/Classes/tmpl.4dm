@@ -72,6 +72,7 @@ Function load  // Load and update the template if any
 	
 	C_OBJECT:C1216($0)
 	
+	C_OBJECT:C1216($o)
 	C_TEXT:C284($t;$root;$node;$dom)
 	
 	ASSERT:C1129(Not:C34(Shift down:C543))
@@ -177,80 +178,29 @@ Function load  // Load and update the template if any
 				
 				If (Bool:C1537(OK))
 					
-					Case of 
-							
-							  //____________________________
-						: (This:C1470.title="parallaxHeader")\
-							 | (This:C1470.title="Numbers")
-							
-							This:C1470.manifest.hOffset:=254
-							
-							  //____________________________
-						: (This:C1470.title="cards")\
-							 | (This:C1470.title="ClientDetail")
-							
-							This:C1470.manifest.hOffset:=136
-							
-							  //____________________________
-						: (This:C1470.title="Circle")
-							
-							This:C1470.manifest.hOffset:=253
-							
-							  //____________________________
-						: (This:C1470.title="dashboard")
-							
-							This:C1470.manifest.hOffset:=262
-							
-							  //____________________________
-						: (This:C1470.title="InvoiceDetail")
-							
-							This:C1470.manifest.hOffset:=136
-							
-							  //____________________________
-						: (This:C1470.title="LeftCutHeader")
-							
-							This:C1470.manifest.hOffset:=234
-							
-							  //____________________________
-						: (This:C1470.title="ParallaxDetail")
-							
-							This:C1470.manifest.hOffset:=223
-							
-							  //____________________________
-						: (This:C1470.title="RightCutHeader")
-							
-							This:C1470.manifest.hOffset:=273
-							
-							  //____________________________
-						: (This:C1470.title="SimpleContact")
-							
-							This:C1470.manifest.hOffset:=118
-							
-							  //____________________________
-						: (This:C1470.title="SimpleHeader")
-							
-							This:C1470.manifest.hOffset:=161
-							
-							
-							  //____________________________
-						Else 
-							
-							OK:=0
-							
-							  //____________________________
-					End case 
+					$o:=JSON Parse:C1218(File:C1566("/RESOURCES/templates/v2Conversion.json").getText())
 					
-					If (Bool:C1537(OK))
+					If ($o[This:C1470.title]#Null:C1517)
 						
-						  // Update the manifest
-						This:C1470.manifest.renderer:=2
-						This:C1470.manifest.fields.max:=0
+						This:C1470.manifest.hOffset:=$o[This:C1470.title]
 						
-						DOM EXPORT TO VAR:C863($root;$t)
-						DOM CLOSE XML:C722($root)
+						If (Bool:C1537(OK))
+							
+							  // Update the manifest
+							This:C1470.manifest.renderer:=2
+							This:C1470.manifest.fields.max:=0
+							
+							DOM EXPORT TO VAR:C863($root;$t)
+							DOM CLOSE XML:C722($root)
+							
+							  // Keep the updated template
+							This:C1470.template:=$t
+							
+						End if 
 						
-						  // Keep the updated template
-						This:C1470.template:=$t
+					Else 
+						
+						TRACE:C157
 						
 					End if 
 				End if 
