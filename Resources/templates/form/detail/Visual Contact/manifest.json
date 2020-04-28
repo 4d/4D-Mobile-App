@@ -2,7 +2,7 @@
 	"type": "detailform",
 	"name": "Visual Contact",
 	"renderer":2,
-	"hOffset":198,
+	"hOffset":161,
 	"fields": 
 	{
 		"count": 4,
