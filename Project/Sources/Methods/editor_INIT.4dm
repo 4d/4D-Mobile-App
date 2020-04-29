@@ -11,8 +11,7 @@
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Txt_form)
+C_TEXT:C284($t)
 
 If (False:C215)
 	C_OBJECT:C1216(editor_INIT ;$0)
@@ -21,29 +20,19 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+  // NO PARAMETERS REQUIRED
+
+  // Optional parameters
+If (Count parameters:C259>=1)
 	
-	  // NO PARAMETERS REQUIRED
-	$Txt_form:=Current form name:C1298
+	$t:=$1
 	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Txt_form:=$1
-		
-	End if 
+End if 
+
+If (Length:C16($t)=0)
 	
-	If (Length:C16($Txt_form)=0)
-		
-		TRACE:C157
-		
-	End if 
-	
-Else 
-	
-	ABORT:C156
+	$t:=Current form name:C1298
 	
 End if 
 
@@ -51,20 +40,20 @@ End if
 If (Form:C1466.$dialog=Null:C1517)
 	
 	Form:C1466.$dialog:=New object:C1471(\
-		$Txt_form;New object:C1471)
+		$t;New object:C1471)
 	
 Else 
 	
-	If (Form:C1466.$dialog[$Txt_form]=Null:C1517)
+	If (Form:C1466.$dialog[$t]=Null:C1517)
 		
-		Form:C1466.$dialog[$Txt_form]:=New object:C1471
+		Form:C1466.$dialog[$t]:=New object:C1471
 		
 	End if 
 End if 
 
   // ----------------------------------------------------
   // Return
-$0:=Form:C1466.$dialog[$Txt_form]
+$0:=Form:C1466.$dialog[$t]
 
   // ----------------------------------------------------
   // End

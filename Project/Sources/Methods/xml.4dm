@@ -368,8 +368,8 @@ Else
 						
 					Else 
 						
-						$t:=DOM Create XML element:C865($t;$2.element)  // Will work only with simple xpath ie. subnode name
-						
+						  //$t:=DOM Create XML element($t;$2.element)  // Will work only with simple xpath ie. subnode name
+						$t:=DOM Create XML element:C865($t;$tt+"/"+$2.element)
 					End if 
 					
 					  //=================================================================

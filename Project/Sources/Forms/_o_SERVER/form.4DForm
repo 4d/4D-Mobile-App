@@ -2,7 +2,7 @@
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 81,
+	"height": 136,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -12,7 +12,7 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "SERVER_Handler",
+	"method": "_o_SERVER_Handler",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -66,26 +66,71 @@
 					"events": [
 						"onDataChange"
 					],
-					"method": "SERVER_OBJECTS_HANDLER"
+					"method": "_o_SERVER_OBJECTS_HANDLER"
 				},
-				"webSettings": {
+				"03_email": {
+					"type": "checkbox",
+					"top": 97,
+					"left": 14,
+					"width": 344,
+					"height": 18,
+					"text": ":xliff:requiresAnEmailToConnect",
+					"events": [
+						"onLoad",
+						"onClick"
+					],
+					"method": "_o_SERVER_OBJECTS_HANDLER"
+				},
+				"02_prodURL.label1": {
+					"type": "text",
+					"top": 70,
+					"left": 16,
+					"width": 344,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:authentication"
+				},
+				"authenticationMethod": {
 					"type": "button",
-					"top": 33,
-					"left": 690,
+					"top": 96,
+					"left": 487,
 					"width": 130,
-					"height": 22,
+					"height": 20,
+					"visibility": "hidden",
 					"text": ":xliff:edit...",
 					"events": [
 						"onClick"
 					],
-					"method": "SERVER_OBJECTS_HANDLER",
-					"focusable": false
+					"method": "_o_SERVER_OBJECTS_HANDLER"
 				},
-				"webSettings.label": {
+				"02_prodURL.label2": {
 					"type": "text",
-					"top": 36,
+					"top": 70,
 					"left": 487,
-					"width": 204,
+					"width": 344,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:authenticationMethod"
+				},
+				"webSettings": {
+					"type": "button",
+					"top": 34,
+					"left": 487,
+					"width": 130,
+					"height": 20,
+					"text": ":xliff:edit...",
+					"events": [
+						"onClick"
+					],
+					"method": "_o_SERVER_OBJECTS_HANDLER"
+				},
+				"02_prodURL.label3": {
+					"type": "text",
+					"top": 5,
+					"left": 487,
+					"width": 344,
 					"height": 17,
 					"stroke": "#808080",
 					"textAlign": "left",

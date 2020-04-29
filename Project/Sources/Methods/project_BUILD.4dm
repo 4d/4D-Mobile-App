@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																																																								"action";"safeDelete";\
-																																																								"path";$Obj_in.path))
+																																																												"action";"safeDelete";\
+																																																												"path";$Obj_in.path))
 			  // End if
 			
 		End if 
@@ -349,7 +349,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 							"action";"show";\
 							"type";"alert";\
 							"title";"theProductionServerIsNotAvailable";\
-							"additional";SERVER_Handler (New object:C1471(\
+							"additional";_o_SERVER_Handler (New object:C1471(\
 							"action";"localization";\
 							"code";$o.httpError)).message))
 						

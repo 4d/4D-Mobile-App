@@ -13,23 +13,26 @@ C_OBJECT:C1216($f)
   // ----------------------------------------------------
   // Initialisations
 
-$f:=panel_Form_definition ("SERVER")
+$f:=panel_Form_definition ("FEATURES")
 
   // ----------------------------------------------------
 Case of 
 		
 		  //==================================================
-	: ($f.productionURL.catch($f.event))
+	: ($f.loginRequired.catch($f.event))
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($f.event.code=On Data Change:K2:15)
+			: ($f.event.code=On Load:K2:1)
 				
+				$f.loginRequired.pointer->:=Num:C11(Bool:C1537(Form:C1466.server.authentication.email))
+				
+				  //______________________________________________________
+			: ($f.event.code=On Clicked:K2:4)
+				
+				Form:C1466.server.authentication.email:=Bool:C1537($f.loginRequired.pointer->)
 				ui.saveProject()
-				
-				  // Verify the web server configuration
-				CALL FORM:C1391($f.window;"editor_CALLBACK";"checkingServerConfiguration")
 				
 				  //______________________________________________________
 			Else 
@@ -40,9 +43,33 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($f.webSettings.catch($f.event))
+	: ($f.authenticationButton.catch($f.event))
 		
-		$f.settings()
+		$f.editAuthenticationMethod()
+		
+		  //  //==================================================
+	: ($f.pushNotification.catch($f.event))
+		
+		Case of 
+				
+				  //______________________________________________________
+			: ($f.event.code=On Load:K2:1)
+				
+				$f.pushNotification.pointer->:=Num:C11(Bool:C1537(Form:C1466.server.pushNotification))
+				
+				  //______________________________________________________
+			: ($f.event.code=On Clicked:K2:4)
+				
+				Form:C1466.server.pushNotification:=Bool:C1537($f.pushNotification.pointer->)
+				ui.saveProject()
+				
+				  //______________________________________________________
+			Else 
+				
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$f.event.description+")")
+				
+				  //______________________________________________________
+		End case 
 		
 		  //==================================================
 	Else 

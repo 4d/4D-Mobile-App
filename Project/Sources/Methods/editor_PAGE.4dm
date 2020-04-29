@@ -240,9 +240,23 @@ If (Length:C16($Txt_page)>0)
 			  //………………………………………………………………………………………
 		: ($Lon_page=6)
 			
-			$Obj_geometry.panels.push(New object:C1471(\
-				"title";Get localized string:C991("server");\
-				"form";"SERVER"))
+			If (feature.with("pushNotification"))
+				
+				$Obj_geometry.panels.push(New object:C1471(\
+					"title";Get localized string:C991("server");\
+					"form";"SERVER"))
+				
+				$Obj_geometry.panels.push(New object:C1471(\
+					"title";Get localized string:C991("features");\
+					"form";"FEATURES"))
+				
+			Else 
+				
+				$Obj_geometry.panels.push(New object:C1471(\
+					"title";Get localized string:C991("server");\
+					"form";"_o_SERVER"))
+				
+			End if 
 			
 			If (False:C215)
 				$Obj_geometry.panels.push(New object:C1471(\

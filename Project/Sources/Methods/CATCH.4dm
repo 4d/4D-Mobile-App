@@ -18,8 +18,6 @@ COMPILER_err
   // ----------------------------------------------------
 If (Count parameters:C259=0)  // Catching
 	
-	BEEP:C151
-	
 	$o:=New shared object:C1526
 	
 	Use ($o)

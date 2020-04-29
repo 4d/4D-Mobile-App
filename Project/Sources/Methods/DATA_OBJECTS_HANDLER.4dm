@@ -503,7 +503,7 @@ Case of
 		  //==================================================
 	: ($event.objectName=$form.method)
 		
-		SERVER_Handler (New object:C1471("action";"editAuthenticationMethod"))
+		_o_SERVER_Handler (New object:C1471("action";"editAuthenticationMethod"))
 		
 		  //==================================================
 	Else 

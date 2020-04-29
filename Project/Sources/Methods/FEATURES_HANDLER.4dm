@@ -5,7 +5,7 @@
   // Created 17-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
-  // 
+  //
   // ----------------------------------------------------
   // Declarations
 C_VARIANT:C1683($1)
@@ -15,13 +15,13 @@ C_TEXT:C284($tAction)
 C_OBJECT:C1216($f;$o)
 
 If (False:C215)
-	C_VARIANT:C1683(SERVER_HANDLER ;$1)
+	C_VARIANT:C1683(FEATURES_HANDLER ;$1)
 End if 
 
   // ----------------------------------------------------
   // Initialisations
 
-$f:=panel_Form_definition ("SERVER")
+$f:=panel_Form_definition ("FEATURES")
 
   // ----------------------------------------------------
 If (Count parameters:C259=0)  // Form method
@@ -33,16 +33,10 @@ If (Count parameters:C259=0)  // Form method
 			  //______________________________________________________
 		: ($lEventCode=On Load:K2:1)
 			
-			$f.webSettings.bestSize()
-			$f.webSettingsGroup.distributeHorizontally()
-			
-			$o:=New object:C1471(\
-				"buffer";New object:C1471(\
-				"server";New object:C1471(\
-				"authentication";New object:C1471;\
-				"urls";New object:C1471)))
-			
-			ob_MERGE (Form:C1466;$o.buffer)
+			$f.loginRequired.bestSize()
+			$f.pushNotification.bestSize()
+			$f.authenticationGroup.distributeHorizontally()
+			$f.checkAuthenticationMethod()
 			
 			  //______________________________________________________
 	End case 

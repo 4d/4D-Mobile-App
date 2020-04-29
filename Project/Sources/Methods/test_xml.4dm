@@ -62,7 +62,7 @@ C_OBJECT:C1216($element;$result)
 $result:=$scenes.findByName("scene")
 ASSERT:C1129(Num:C11($result.elements.length)=3)
 
-$result:=$xml.findMany("document/scenes/scene")
+$result:=$xml.findMany("/document/scenes/scene")
 ASSERT:C1129(Num:C11($result.elements.length)=3)
 
   // findOrCreate

@@ -122,5 +122,3 @@ ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("host_formatters").platformPath
   //ASSERT($t=$tt)
 
 FINALLY 
-
-BEEP:C151

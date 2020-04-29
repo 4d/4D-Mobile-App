@@ -140,6 +140,12 @@ If (Length:C16(This:C1470.$.current)>0)
 				End if 
 			End if 
 			
+			If ($0=-1)
+				
+				SET CURSOR:C469(9019)
+				
+			End if 
+			
 			  //————————————————————————————————————
 		: (feature.with("withWidgetActions"))  // Action area (WIP)
 			

@@ -26,6 +26,8 @@
 			"_o_env_System_path",
 			"_o_panel_SET_CONSTRAINTS",
 			"_o_rest_isValidField",
+			"_o_SERVER_Handler",
+			"_o_SERVER_OBJECTS_HANDLER",
 			"EDITOR_MENU_SIMULATOR",
 			"str_trim",
 			"str_trimLeading",
@@ -38,6 +40,7 @@
 			"TURN_AROUND_Field_name"
 		],
 		"forms": [
+			"_o_SERVER",
 			"_o_VIEWS"
 		]
 	},
@@ -117,19 +120,7 @@
 			"EMPTY"
 		]
 	},
-	"_widgets": {
-		"methods": [
-			"button",
-			"group",
-			"listbox",
-			"picture",
-			"static",
-			"subform",
-			"thermometer",
-			"webArea",
-			"widget"
-		]
-	},
+	"(_widgets)": {},
 	"(tools)": {},
 	"(v18)": {},
 	"[EDITOR]": {
@@ -166,6 +157,7 @@
 			"ACTIONS_PARAMS",
 			"DATA",
 			"DEVELOPER",
+			"FEATURES",
 			"FIELDS",
 			"MAIN",
 			"ORGANIZATION",
@@ -276,11 +268,11 @@
 	},
 	"classes": {
 		"groups": [
-			"_widgets",
 			"HTUs",
 			"Tests"
 		],
 		"methods": [
+			"button",
 			"color",
 			"COMPILER_classes",
 			"currentForm",
@@ -288,9 +280,11 @@
 			"database",
 			"db",
 			"environment",
+			"group",
 			"http",
 			"HTTP ERROR HANDLER",
 			"lep",
+			"listbox",
 			"logger",
 			"menu",
 			"new",
@@ -298,15 +292,27 @@
 			"ob deepMerge",
 			"ob findPropertyValues",
 			"ob MERGE",
+			"picture",
 			"process",
 			"progress",
+			"static",
 			"str",
+			"subform",
 			"svg",
+			"thermometer",
 			"tips",
+			"webArea",
+			"widget",
 			"window"
 		],
 		"classes": [
-			"svg"
+			"button",
+			"enterable",
+			"group",
+			"scrollable",
+			"static",
+			"svg",
+			"widget"
 		]
 	},
 	"col": {
@@ -420,6 +426,19 @@
 			"test_errors",
 			"THROW",
 			"TRY"
+		]
+	},
+	"FEATURES": {
+		"methods": [
+			"COMPILER_FEATURES",
+			"FEATURES_HANDLER",
+			"FEATURES_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"FEATURES"
+		],
+		"classes": [
+			"FEATURES_CLASS"
 		]
 	},
 	"FIELDS": {
@@ -639,11 +658,15 @@
 	"SERVER": {
 		"methods": [
 			"COMPILER_SERVER",
-			"SERVER_Handler",
+			"Method406",
+			"SERVER_HANDLER",
 			"SERVER_OBJECTS_HANDLER"
 		],
 		"forms": [
 			"SERVER"
+		],
+		"classes": [
+			"SERVER_CLASS"
 		]
 	},
 	"SOURCE": {
@@ -775,6 +798,7 @@
 	},
 	"trash": {
 		"groups": [
+			"(_widgets)",
 			"(tools)",
 			"(v18)"
 		]

@@ -1,0 +1,95 @@
+﻿{
+	"destination": "detailScreen",
+	"inheritedForm": "panel_template",
+	"width": 960,
+	"height": 83,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onUnload",
+		"onTimer"
+	],
+	"method": "FEATURES_Handler",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"test.alert": {
+					"type": "button",
+					"top": 46,
+					"left": 144,
+					"width": 20,
+					"height": 20,
+					"style": "custom",
+					"events": [
+						"onClick"
+					]
+				},
+				"01_login": {
+					"type": "checkbox",
+					"top": 8,
+					"left": 14,
+					"width": 344,
+					"height": 18,
+					"text": ":xliff:requiresAnEmailToConnect",
+					"events": [
+						"onLoad",
+						"onClick"
+					],
+					"method": "FEATURES_OBJECTS_HANDLER",
+					"focusable": false
+				},
+				"authentication": {
+					"type": "button",
+					"top": 6,
+					"left": 707,
+					"width": 130,
+					"height": 22,
+					"visibility": "hidden",
+					"text": ":xliff:edit...",
+					"events": [
+						"onClick"
+					],
+					"method": "FEATURES_OBJECTS_HANDLER",
+					"focusable": false
+				},
+				"authentication.label": {
+					"type": "text",
+					"top": 9,
+					"left": 488,
+					"width": 178,
+					"height": 17,
+					"stroke": "#808080",
+					"text": ":xliff:authenticationMethod",
+					"borderStyle": "none"
+				},
+				"02_pushNotification": {
+					"type": "checkbox",
+					"top": 45,
+					"left": 14,
+					"width": 225,
+					"height": 18,
+					"text": ":xliff:enablePushNotifications",
+					"events": [
+						"onLoad",
+						"onClick"
+					],
+					"method": "FEATURES_OBJECTS_HANDLER",
+					"focusable": false
+				}
+			}
+		}
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
+}

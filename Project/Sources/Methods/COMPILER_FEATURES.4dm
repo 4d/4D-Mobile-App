@@ -2,11 +2,7 @@
 If (False:C215)
 	
 	  // ----------------------------------------------------
-	C_OBJECT:C1216(_o_SERVER_Handler ;$0)
-	C_OBJECT:C1216(_o_SERVER_Handler ;$1)
-	
-	  // ----------------------------------------------------
-	C_VARIANT:C1683(SERVER_HANDLER ;$1)
+	C_VARIANT:C1683(FEATURES_HANDLER ;$1)
 	
 	  // ----------------------------------------------------
 End if 

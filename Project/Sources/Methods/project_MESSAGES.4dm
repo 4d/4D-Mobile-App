@@ -719,7 +719,7 @@ Case of
 			
 		Else 
 			
-			SERVER_Handler (New object:C1471("action";"authenticationMethod"))
+			_o_SERVER_Handler (New object:C1471("action";"authenticationMethod"))
 			
 		End if 
 		

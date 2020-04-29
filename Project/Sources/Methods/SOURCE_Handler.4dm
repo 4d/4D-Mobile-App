@@ -231,7 +231,7 @@ Case of
 				If ($Obj_result.errors#Null:C1517)
 					
 					  // Oops - Keep the first error message for the tips
-					$Obj_result.message:=SERVER_Handler (New object:C1471("action";"localization";"message";String:C10($Obj_result.errors[0].message))).message
+					$Obj_result.message:=_o_SERVER_Handler (New object:C1471("action";"localization";"message";String:C10($Obj_result.errors[0].message))).message
 					
 				Else 
 					
@@ -243,7 +243,7 @@ Case of
 					End if 
 					
 					  // Use error code
-					$Obj_result.message:=SERVER_Handler (New object:C1471("action";"localization";"code";Num:C11($Obj_result.code))).message
+					$Obj_result.message:=_o_SERVER_Handler (New object:C1471("action";"localization";"code";Num:C11($Obj_result.code))).message
 					
 				End if 
 				
@@ -373,7 +373,7 @@ Case of
 					If ($Obj_result.__ERRORS#Null:C1517)
 						
 						  // Oops - Keep the first error message for the tips
-						$Obj_result.message:=SERVER_Handler (New object:C1471("action";"localization";"message";String:C10($Obj_result.__ERRORS[0].message))).message
+						$Obj_result.message:=_o_SERVER_Handler (New object:C1471("action";"localization";"message";String:C10($Obj_result.__ERRORS[0].message))).message
 						
 					End if 
 					

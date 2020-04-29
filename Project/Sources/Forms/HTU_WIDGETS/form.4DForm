@@ -1,0 +1,396 @@
+﻿{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "variable",
+	"windowSizingY": "variable",
+	"windowMinWidth": 0,
+	"windowMinHeight": 0,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"rightMargin": 20,
+	"bottomMargin": 20,
+	"events": [
+		"onLoad"
+	],
+	"windowTitle": "window title",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"Line8": {
+					"type": "line",
+					"top": 308,
+					"left": 16,
+					"width": 422,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Line9": {
+					"type": "line",
+					"top": 329,
+					"left": 16,
+					"width": 422,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Line": {
+					"type": "line",
+					"top": 69,
+					"left": 21,
+					"width": 0,
+					"height": 349,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Line1": {
+					"type": "line",
+					"top": 69,
+					"left": 193,
+					"width": 0,
+					"height": 349,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Line2": {
+					"type": "line",
+					"top": 69,
+					"left": 254,
+					"width": 0,
+					"height": 349,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Line3": {
+					"type": "line",
+					"top": 69,
+					"left": 426,
+					"width": 0,
+					"height": 349,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Line4": {
+					"type": "line",
+					"top": 237,
+					"left": 16,
+					"width": 422,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Line5": {
+					"type": "line",
+					"top": 258,
+					"left": 16,
+					"width": 422,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Line6": {
+					"type": "line",
+					"top": 167,
+					"left": 16,
+					"width": 422,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Line7": {
+					"type": "line",
+					"top": 189,
+					"left": 16,
+					"width": 422,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#1e90ff",
+					"strokeDashArray": [
+						1,
+						2
+					]
+				},
+				"Rectangle2": {
+					"type": "rectangle",
+					"top": 167,
+					"left": 21,
+					"width": 173,
+					"height": 22,
+					"fill": "transparent",
+					"stroke": "#ff0000"
+				},
+				"Button1": {
+					"type": "button",
+					"text": "Align Left",
+					"top": 74,
+					"left": 21,
+					"width": 174,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"focusable": false
+				},
+				"Button2": {
+					"type": "button",
+					"text": "Align right",
+					"top": 74,
+					"left": 254,
+					"width": 174,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"focusable": false
+				},
+				"Text": {
+					"type": "text",
+					"text": ".bestSize()",
+					"top": 51,
+					"left": 26,
+					"width": 185,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Text1": {
+					"type": "text",
+					"text": ".bestSize(Align right)",
+					"top": 51,
+					"left": 259,
+					"width": 185,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Text2": {
+					"type": "text",
+					"text": ".setCoordinates(left-10;top-5;right+10;bottom+5)",
+					"top": 146,
+					"left": 26,
+					"width": 406,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Text3": {
+					"type": "text",
+					"text": ".moveHorizontally(10)",
+					"top": 216,
+					"left": 259,
+					"width": 185,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Text4": {
+					"type": "text",
+					"text": ".resizeHorizontally(20)",
+					"top": 215,
+					"left": 26,
+					"width": 185,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Text5": {
+					"type": "text",
+					"text": ".resizeVertically(10)",
+					"top": 286,
+					"left": 26,
+					"width": 185,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Check Box": {
+					"type": "checkbox",
+					"text": "Login Required",
+					"top": 108,
+					"left": 21,
+					"width": 172,
+					"height": 18,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"shortcutKey": "r"
+				},
+				"Check Box1": {
+					"type": "checkbox",
+					"text": "Close",
+					"top": 108,
+					"left": 254,
+					"width": 172,
+					"height": 18,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"shortcutKey": ""
+				},
+				"Rectangle1": {
+					"type": "rectangle",
+					"top": 237,
+					"left": 254,
+					"width": 173,
+					"height": 22,
+					"fill": "transparent",
+					"stroke": "#ff0000"
+				},
+				"Rectangle4": {
+					"type": "rectangle",
+					"top": 237,
+					"left": 21,
+					"width": 173,
+					"height": 22,
+					"fill": "transparent",
+					"stroke": "#ff0000"
+				},
+				"Rectangle3": {
+					"type": "rectangle",
+					"top": 308,
+					"left": 21,
+					"width": 173,
+					"height": 22,
+					"fill": "transparent",
+					"stroke": "#ff0000"
+				},
+				"Text6": {
+					"type": "text",
+					"text": ".moveHorizontally(100).resizeHorizontally(-141).resizeVertically(10)",
+					"top": 357,
+					"left": 26,
+					"width": 425,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Rectangle5": {
+					"type": "rectangle",
+					"top": 379,
+					"left": 21,
+					"width": 173,
+					"height": 22,
+					"fill": "transparent",
+					"stroke": "#ff0000"
+				},
+				"Button": {
+					"type": "button",
+					"text": "Close",
+					"top": 401,
+					"left": 550,
+					"width": 105,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"action": "cancel",
+					"focusable": false
+				},
+				"Text7": {
+					"type": "text",
+					"text": ".moveVertically(10)",
+					"top": 285,
+					"left": 259,
+					"width": 185,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Rectangle6": {
+					"type": "rectangle",
+					"top": 308,
+					"left": 255,
+					"width": 173,
+					"height": 22,
+					"fill": "transparent",
+					"stroke": "#ff0000"
+				},
+				"Button3": {
+					"type": "button",
+					"text": "Apply",
+					"top": 74,
+					"left": 550,
+					"width": 105,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"action": "",
+					"focusable": false,
+					"method": "ObjectMethods/Button3.4dm"
+				}
+			}
+		}
+	],
+	"method": "method.4dm",
+	"editor": {
+		"groups": {
+			"Group2": [
+				"Line8",
+				"Line9",
+				"Text5",
+				"Rectangle3",
+				"Text7",
+				"Rectangle6"
+			],
+			"Group1": [
+				"Line4",
+				"Line5",
+				"Text3",
+				"Text4",
+				"Rectangle1",
+				"Rectangle4"
+			],
+			"Group": [
+				"Line6",
+				"Line7",
+				"Rectangle2",
+				"Text2"
+			]
+		}
+	}
+}
