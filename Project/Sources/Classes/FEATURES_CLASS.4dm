@@ -1,23 +1,35 @@
+/*===============================================*/
 Class constructor
 	
 	C_OBJECT:C1216($o)
+	C_COLLECTION:C1488($c)
 	
 	$o:=editor_INIT 
 	
 	If (OB Is empty:C1297($o))
 		
+		$c:=New collection:C1472
+		
 		This:C1470.window:=Current form window:C827
+		
 		This:C1470.loginRequired:=cs:C1710.button.new("01_login")
-		This:C1470.authenticationButton:=cs:C1710.button.new("authentication")
+		
 		This:C1470.authenticationLabel:=cs:C1710.static.new("authentication.label")
-		This:C1470.authenticationGroup:=cs:C1710.group.new(This:C1470.authenticationLabel;This:C1470.authenticationButton)
+		$c.push(This:C1470.authenticationLabel)
+		
+		This:C1470.authenticationButton:=cs:C1710.button.new("authentication")
+		$c.push(This:C1470.authenticationButton)
+		
 		This:C1470.pushNotification:=cs:C1710.button.new("02_pushNotification")
+		
+		This:C1470.authenticationGroup:=cs:C1710.group.new($c)
 		
 		  // Constraints definition
 		ob_createPath ($o;"constraints.rules";Is collection:K8:32)
 		
 	End if 
 	
+/*===============================================*/
 Function checkAuthenticationMethod
 	
 	ARRAY TEXT:C222($tTxt_;0x0000)
@@ -29,6 +41,7 @@ Function checkAuthenticationMethod
 		.bestSize()\
 		.show()
 	
+/*===============================================*/
 Function editAuthenticationMethod
 	
 	C_OBJECT:C1216($o)
@@ -62,3 +75,5 @@ Function editAuthenticationMethod
 	METHOD OPEN PATH:C1213($tTxt_{0};*)
 	
 	This:C1470.checkAuthenticationMethod()
+	
+/*===============================================*/

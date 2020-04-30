@@ -21,7 +21,7 @@ Class constructor
 		
 		This:C1470.type:=OBJECT Get type:C1300(*;This:C1470.name)
 		
-		ASSERT:C1129(This:C1470.type#0;"The object \""+This:C1470.name+"\" doesn't exist!")
+		ASSERT:C1129(This:C1470.type#0;Current method name:C684+": The object \""+This:C1470.name+"\" doesn't exist!")
 		
 	End if 
 	
@@ -176,6 +176,43 @@ Function setEnabled
 	$0:=This:C1470
 	
 /*===============================================*/
+Function setTitle
+	
+	C_OBJECT:C1216($0)
+	C_TEXT:C284($1)  // Text or resname
+	C_TEXT:C284($tName;$tTitle)
+	
+	$tTitle:=Get localized string:C991($1)
+	$tTitle:=Choose:C955(OK=1;$tTitle;$1)  // Revert if no localization
+	
+	If (This:C1470.type=-1)  // Group
+		
+		For each ($tName;This:C1470.name)
+			
+			OBJECT SET TITLE:C194(*;$tName;$tTitle)
+			
+		End for each 
+		
+	Else 
+		
+		OBJECT SET TITLE:C194(*;This:C1470.name;$tTitle)
+		
+	End if 
+	
+	$0:=This:C1470
+	
+/*===============================================*/
+Function getTitle
+	
+	C_TEXT:C284($0)
+	
+	If (This:C1470.type#Is collection:K8:32)
+		
+		$0:=OBJECT Get title:C1068(*;This:C1470.name)
+		
+	End if 
+	
+/*===============================================*/
 Function setCoordinates
 	
 	C_OBJECT:C1216($0;$o)
@@ -263,6 +300,105 @@ Function getCoordinates
 		$0:=This:C1470.coordinates
 		
 	End if 
+	
+/*===============================================*/
+Function bestSize  // Resize the widget to its best size
+	
+	C_OBJECT:C1216($0;$o)
+	C_LONGINT:C283($1)  // Alignement
+	C_LONGINT:C283($2)  // {minWidth}
+	C_LONGINT:C283($3)  // {maxidth}
+	C_LONGINT:C283($left;$top;$right;$bottom;$width;$height)
+	
+	$o:=New object:C1471
+	
+	If (Count parameters:C259>=1)
+		
+		$o.alignment:=$1
+		
+		If (Count parameters:C259>=2)
+			
+			$o.min:=$2
+			
+			If (Count parameters:C259>=3)
+				
+				$o.max:=$3
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		$o.alignment:=Align left:K42:2
+		
+	End if 
+	
+	If (This:C1470.type=-1)  // Group
+		
+		  // #TO_DO
+		
+	Else 
+		
+		OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
+		
+		If ($o.max#Null:C1517)
+			
+			OBJECT GET BEST SIZE:C717(*;This:C1470.name;$width;$height;$o.max)
+			
+		Else 
+			
+			OBJECT GET BEST SIZE:C717(*;This:C1470.name;$width;$height)
+			
+		End if 
+		
+		Case of 
+				
+				  //______________________________
+			: (This:C1470.type=Object type static text:K79:2)\
+				 | (This:C1470.type=Object type checkbox:K79:26)
+				
+				  // Add 10 pixels
+				$width:=$width+10
+				
+				  //______________________________
+			: (This:C1470.type=Object type push button:K79:16)
+				
+				  // Add 10% for margins
+				$width:=Round:C94($width*1.1;0)
+				
+				  //______________________________
+			Else 
+				
+				  // Add 10 pixels
+				$width:=$width+10
+				
+				  //______________________________
+		End case 
+		
+		If ($o.min#Null:C1517)
+			
+			$width:=Choose:C955($width<$o.min;$o.min;$width)
+			
+		End if 
+		
+		If ($o.alignment=Align right:K42:4)
+			
+			$left:=$right-$width
+			
+		Else 
+			
+			  // Default is Align left
+			$right:=$left+$width
+			
+		End if 
+		
+		OBJECT SET COORDINATES:C1248(*;This:C1470.name;$left;$top;$right;$bottom)
+		
+		This:C1470._updateCoordinates($left;$top;$right;$bottom)
+		
+	End if 
+	
+	$0:=This:C1470
 	
 /*===============================================*/
 Function moveHorizontally

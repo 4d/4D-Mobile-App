@@ -68,8 +68,7 @@
 					"width": 178,
 					"height": 17,
 					"stroke": "#808080",
-					"text": ":xliff:authenticationMethod",
-					"borderStyle": "none"
+					"text": ":xliff:authenticationMethod"
 				},
 				"02_pushNotification": {
 					"type": "checkbox",

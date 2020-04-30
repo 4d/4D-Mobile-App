@@ -123,7 +123,7 @@ Function push  // Keep dom reference for futur
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function fetch
+Function fetch  // Retrive a stored dom reference
 	
 	C_TEXT:C284($0)
 	C_TEXT:C284($1)
@@ -250,6 +250,8 @@ Function load  // Load a variable or a file
 			
 			$node:=DOM Parse XML variable:C720($1)
 			This:C1470.success:=Bool:C1537(OK)
+			
+			CLEAR VARIABLE:C89($1)
 			
 			If (This:C1470.success)
 				

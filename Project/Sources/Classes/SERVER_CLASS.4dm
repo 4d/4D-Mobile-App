@@ -1,3 +1,4 @@
+/*===============================================*/
 Class constructor
 	
 	C_OBJECT:C1216($o)
@@ -17,6 +18,9 @@ Class constructor
 		
 	End if 
 	
+/*===============================================*/
 Function settings
 	
 	OPEN SETTINGS WINDOW:C903("/Database/Web/Config")
+	
+/*===============================================*/

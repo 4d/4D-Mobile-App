@@ -53,7 +53,7 @@
 					"top": 69,
 					"left": 21,
 					"width": 0,
-					"height": 349,
+					"height": 469,
 					"startPoint": "topLeft",
 					"stroke": "#1e90ff",
 					"strokeDashArray": [
@@ -66,7 +66,7 @@
 					"top": 69,
 					"left": 193,
 					"width": 0,
-					"height": 349,
+					"height": 469,
 					"startPoint": "topLeft",
 					"stroke": "#1e90ff",
 					"strokeDashArray": [
@@ -79,7 +79,7 @@
 					"top": 69,
 					"left": 254,
 					"width": 0,
-					"height": 349,
+					"height": 469,
 					"startPoint": "topLeft",
 					"stroke": "#1e90ff",
 					"strokeDashArray": [
@@ -92,7 +92,7 @@
 					"top": 69,
 					"left": 426,
 					"width": 0,
-					"height": 349,
+					"height": 469,
 					"startPoint": "topLeft",
 					"stroke": "#1e90ff",
 					"strokeDashArray": [
@@ -321,7 +321,7 @@
 				"Button": {
 					"type": "button",
 					"text": "Close",
-					"top": 401,
+					"top": 607,
 					"left": 550,
 					"width": 105,
 					"height": 22,
@@ -362,6 +362,47 @@
 					"action": "",
 					"focusable": false,
 					"method": "ObjectMethods/Button3.4dm"
+				},
+				"Button4": {
+					"type": "button",
+					"text": "Create",
+					"top": 438,
+					"left": 193,
+					"width": 174,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"focusable": false
+				},
+				"Button5": {
+					"type": "button",
+					"text": "Delete",
+					"top": 438,
+					"left": 426,
+					"width": 174,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"focusable": false
+				},
+				"Text8": {
+					"type": "text",
+					"text": "Label",
+					"top": 441,
+					"left": 21,
+					"width": 174,
+					"height": 16
+				},
+				"Text9": {
+					"type": "text",
+					"text": ".distributeHorizontally()",
+					"top": 418,
+					"left": 21,
+					"width": 425,
+					"height": 16,
+					"stroke": "#1e90ff"
 				}
 			}
 		}
@@ -369,13 +410,11 @@
 	"method": "method.4dm",
 	"editor": {
 		"groups": {
-			"Group2": [
-				"Line8",
-				"Line9",
-				"Text5",
-				"Rectangle3",
-				"Text7",
-				"Rectangle6"
+			"Group": [
+				"Line6",
+				"Line7",
+				"Rectangle2",
+				"Text2"
 			],
 			"Group1": [
 				"Line4",
@@ -385,11 +424,13 @@
 				"Rectangle1",
 				"Rectangle4"
 			],
-			"Group": [
-				"Line6",
-				"Line7",
-				"Rectangle2",
-				"Text2"
+			"Group2": [
+				"Line8",
+				"Line9",
+				"Text5",
+				"Rectangle3",
+				"Text7",
+				"Rectangle6"
 			]
 		}
 	}

@@ -677,19 +677,16 @@ Else
 									BASE64 ENCODE:C895($x;$t)
 									CLEAR VARIABLE:C89($x)
 									
-									If (Bool:C1537(OK))
-										
-										  // Put the encoded image
-										PICTURE PROPERTIES:C457($p;$Num_width;$Num_height)
-										
-										$o.latest:=DOM Create XML element:C865($Dom_target;"image";\
-											"xlink:href";"data:;base64,"+$t;\
-											"x";$2.x;\
-											"y";$2.y;\
-											"width";$Num_width;\
-											"height";$Num_height)
-										
-									End if 
+									  // Put the encoded image
+									PICTURE PROPERTIES:C457($p;$Num_width;$Num_height)
+									
+									$o.latest:=DOM Create XML element:C865($Dom_target;"image";\
+										"xlink:href";"data:;base64,"+$t;\
+										"x";$2.x;\
+										"y";$2.y;\
+										"width";$Num_width;\
+										"height";$Num_height)
+									
 								End if 
 								
 							Else 

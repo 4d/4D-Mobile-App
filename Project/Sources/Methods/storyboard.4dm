@@ -325,32 +325,41 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							$Dom_:=Null:C1517
 							
-							Case of 
+							If (Bool:C1537($Obj_element.insertInto.success))
+								
+								Case of 
+										
+										  // ----------------------------------------
+									: ($Obj_element.insertMode="append")
+										
+										$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
+										
+										  // ----------------------------------------
+									: ($Obj_element.insertMode="first")
+										
+										$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
+										
+										  // ----------------------------------------
+									: ($Obj_element.insertMode="iteration")
+										
+										$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
+										
+										  // ----------------------------------------
+								End case 
+								
+								If ($Dom_#Null:C1517)
 									
-									  // ----------------------------------------
-								: $Obj_element.insertMode="append"
+									ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
 									
-									$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
-									
-									  // ----------------------------------------
-								: $Obj_element.insertMode="first"
-									
-									$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
-									
-									  // ----------------------------------------
-								: $Obj_element.insertMode="iteration"
-									
-									$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
-									
-									  // ----------------------------------------
-							End case 
-							
-							If ($Dom_#Null:C1517)
-								ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+								End if 
+								
+								$Obj_out.doms.push($Dom_)
+								
+							Else 
+								
+								ob_error_add ($Obj_out;"Failed to nsert after processing tags '"+$Txt_buffer+"'")
+								
 							End if 
-							
-							$Obj_out.doms.push($Dom_)
-							
 						End for each 
 						
 						  // Remove originals template element
@@ -812,31 +821,67 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										
 										  // Insert node for this element
 										$Dom_:=Null:C1517
-										Case of 
-												
-												  // ----------------------------------------
-											: $Obj_element.insertMode="append"
-												
-												$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
-												
-												  // ----------------------------------------
-											: $Obj_element.insertMode="first"
-												
-												$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
-												
-												  // ----------------------------------------
-											: $Obj_element.insertMode="iteration"
-												
-												$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
-												
-												  // ----------------------------------------
-										End case 
+										  //Case of 
 										
-										If ($Dom_#Null:C1517)
-											ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+										  //  // ----------------------------------------
+										  //: $Obj_element.insertMode="append"
+										
+										  //$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
+										
+										  //  // ----------------------------------------
+										  //: $Obj_element.insertMode="first"
+										
+										  //$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
+										
+										  //  // ----------------------------------------
+										  //: $Obj_element.insertMode="iteration"
+										
+										  //$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
+										
+										  //  // ----------------------------------------
+										  //End case 
+										
+										  //If ($Dom_#Null)
+										  //ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+										  //End if 
+										
+										  //$Obj_out.doms.push($Dom_)
+										
+										If (Bool:C1537($Obj_element.insertInto.success))
+											
+											Case of 
+													
+													  // ----------------------------------------
+												: ($Obj_element.insertMode="append")
+													
+													$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
+													
+													  // ----------------------------------------
+												: ($Obj_element.insertMode="first")
+													
+													$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
+													
+													  // ----------------------------------------
+												: ($Obj_element.insertMode="iteration")
+													
+													$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
+													
+													  // ----------------------------------------
+											End case 
+											
+											If ($Dom_#Null:C1517)
+												
+												ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+												
+											End if 
+											
+											$Obj_out.doms.push($Dom_)
+											
+										Else 
+											
+											ob_error_add ($Obj_out;"Failed to nsert after processing tags '"+$Txt_buffer+"'")
+											
 										End if 
-										
-										$Obj_out.doms.push($Dom_)
 										
 									End if 
 								End for each 

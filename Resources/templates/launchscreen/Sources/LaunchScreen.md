@@ -1,4 +1,4 @@
-# Launch Screen
+﻿# Launch Screen
 
 If you follow Apple guideline, you must display a view close to the first screen of your app.
 

@@ -1,8 +1,8 @@
 //%attributes = {"invisible":true}
   // ----------------------------------------------------
-  // Project method : SERVER_OBJECTS_HANDLER
-  // ID[BC4F7ABBBE3E4D58A8E7DA4D98B71B51]
-  // Created 17-8-2017 by Vincent de Lachaux
+  // Project method : FEATURES_OBJECTS_HANDLER
+  // ID[18D1402F352E45689C460CD90E64A32D]
+  // Created 29-4-2020 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
   //
@@ -26,12 +26,12 @@ Case of
 				  //______________________________________________________
 			: ($f.event.code=On Load:K2:1)
 				
-				$f.loginRequired.pointer->:=Num:C11(Bool:C1537(Form:C1466.server.authentication.email))
+				Self:C308->:=Num:C11(Bool:C1537(Form:C1466.server.authentication.email))
 				
 				  //______________________________________________________
 			: ($f.event.code=On Clicked:K2:4)
 				
-				Form:C1466.server.authentication.email:=Bool:C1537($f.loginRequired.pointer->)
+				Form:C1466.server.authentication.email:=Bool:C1537(Self:C308->)
 				ui.saveProject()
 				
 				  //______________________________________________________
@@ -55,12 +55,12 @@ Case of
 				  //______________________________________________________
 			: ($f.event.code=On Load:K2:1)
 				
-				$f.pushNotification.pointer->:=Num:C11(Bool:C1537(Form:C1466.server.pushNotification))
+				Self:C308->:=Num:C11(Bool:C1537(Form:C1466.server.pushNotification))
 				
 				  //______________________________________________________
 			: ($f.event.code=On Clicked:K2:4)
 				
-				Form:C1466.server.pushNotification:=Bool:C1537($f.pushNotification.pointer->)
+				Form:C1466.server.pushNotification:=Bool:C1537(Self:C308->)
 				ui.saveProject()
 				
 				  //______________________________________________________

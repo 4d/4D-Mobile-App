@@ -208,7 +208,6 @@ Else
 		: ($1="merge")
 			
 			  // Adds the missing properties of the passed objects.
-			
 			If ($o.isObject())
 				
 				For ($i;2;11;1)

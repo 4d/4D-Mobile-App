@@ -7,20 +7,34 @@ Case of
 		  //______________________________________________________
 	: ($event.code=On Load:K2:1)
 		
-		Form:C1466.button1:=cs:C1710.button.new("Button1").setShortcut("l").highlightShortcut()
-		Form:C1466.button2:=cs:C1710.button.new("Button2")
-		Form:C1466.button3:=cs:C1710.button.new("Check Box").highlightShortcut()
-		Form:C1466.button4:=cs:C1710.button.new("Check Box1").setShortcut("c").highlightShortcut()
+		  //Form.button1:=cs.button.new("Button1").setShortcut("l").highlightShortcut()
+		  //Form.button2:=cs.button.new("Button2")
+		  //Form.button3:=cs.button.new("Check Box").highlightShortcut()
+		  //Form.button4:=cs.button.new("Check Box1").setShortcut("c").highlightShortcut()
 		
-		Form:C1466.static1:=cs:C1710.static.new("Rectangle1")
-		Form:C1466.static2:=cs:C1710.static.new("Rectangle2")
-		Form:C1466.static3:=cs:C1710.static.new("Rectangle3")
-		Form:C1466.static4:=cs:C1710.static.new("Rectangle4")
-		Form:C1466.static5:=cs:C1710.static.new("Rectangle5")
-		Form:C1466.static6:=cs:C1710.static.new("Rectangle6")
+		  //Form.static1:=cs.static.new("Rectangle1")
+		  //Form.static2:=cs.static.new("Rectangle2")
+		  //Form.static3:=cs.static.new("Rectangle3")
+		  //Form.static4:=cs.static.new("Rectangle4")
+		  //Form.static5:=cs.static.new("Rectangle5")
+		  //Form.static6:=cs.static.new("Rectangle6")
+		
+		Form:C1466.button1:=object ("Button1").setShortcut("l").highlightShortcut()
+		Form:C1466.button2:=object ("Button2")
+		Form:C1466.button3:=object ("Check Box").highlightShortcut()
+		Form:C1466.button4:=object ("Check Box1").setShortcut("c").highlightShortcut()
+		
+		Form:C1466.static1:=object ("Rectangle1")
+		Form:C1466.static2:=object ("Rectangle2")
+		Form:C1466.static3:=object ("Rectangle3")
+		Form:C1466.static4:=object ("Rectangle4")
+		Form:C1466.static5:=object ("Rectangle5")
+		Form:C1466.static6:=object ("Rectangle6")
+		
+		Form:C1466.group1:=cs:C1710.group.new("Text8,Button4,Button5").distributeHorizontally()
 		
 		  // If uncommented, must generate an assert
-		  //Form.Input:=cs.widget.new("Input") 
+		  //Form.Input:=cs.widget.new("objectThatDoesNotExist") 
 		
 		  //______________________________________________________
 	: (False:C215)

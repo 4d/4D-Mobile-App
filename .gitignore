@@ -1,4 +1,4 @@
-#--------------------------------
+﻿#--------------------------------
 # Ignore invisible files/folders
 #--------------------------------
 .*
@@ -56,3 +56,4 @@ Resources/mobile
 xcuserdata/
 
 *.bbprojectd/
+Resources/_DEMO/
