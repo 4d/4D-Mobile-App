@@ -188,7 +188,7 @@ Case of
 				
 				$tID:=SVG Find element ID by coordinates:C1054(*;$event.objectName;MOUSEX;MOUSEY)
 				
-				$menu:=menu 
+				$menu:=cs:C1710.menu.new()
 				
 				If (Length:C16($tID)#0)
 					

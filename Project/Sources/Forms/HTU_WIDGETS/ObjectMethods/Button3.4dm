@@ -20,3 +20,5 @@ $bottom:=$o.bottom+5
 Form:C1466.static2.setCoordinates($left;$top;$right;$bottom)
 
 Form:C1466.static5.moveHorizontally(100).resizeHorizontally(-141).resizeVertically(10)
+
+Form:C1466.group1.distributeHorizontally()

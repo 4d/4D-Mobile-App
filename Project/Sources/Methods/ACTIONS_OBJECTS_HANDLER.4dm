@@ -285,7 +285,7 @@ Case of
 						  //…………………………………………………………………………………………………………………………………………
 					: ($Obj_widget.column=$Obj_widget.columns[$form.table].number)  // Display published table menu
 						
-						$menu:=menu 
+						$menu:=cs:C1710.menu.new()
 						
 						If (feature.with("newDataModel"))
 							
@@ -317,7 +317,7 @@ Case of
 						  //…………………………………………………………………………………………………………………………………………
 					: ($Obj_widget.column=$Obj_widget.columns[$form.scope].number)  // Display scope menu
 						
-						$menu:=menu 
+						$menu:=cs:C1710.menu.new()
 						
 						Repeat 
 							
@@ -368,17 +368,17 @@ Case of
 		
 		If ($form.form.eventCode=On Alternative Click:K2:36)
 			
-			$menu:=menu .append(":xliff:newAction";"new").line()
+			$menu:=cs:C1710.menu.new().append(":xliff:newAction";"new").line()
 			
-			$Obj_add:=menu 
+			$Obj_add:=cs:C1710.menu.new()
 			
 			$menu.append(":xliff:addActionFor";$Obj_add)
 			
-			$Obj_edit:=menu 
+			$Obj_edit:=cs:C1710.menu.new()
 			
 			$menu.append(":xliff:editActionFor";$Obj_edit)
 			
-			$Obj_delete:=menu 
+			$Obj_delete:=cs:C1710.menu.new()
 			
 			$menu.append(":xliff:deleteActionFor";$Obj_delete)
 			

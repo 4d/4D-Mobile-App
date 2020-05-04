@@ -191,7 +191,7 @@ Case of
 		  //==================================================
 	: ($Obj_form.form.current=$Obj_form.format.name)  // Format choice
 		
-		$Obj_menu:=menu 
+		$Obj_menu:=cs:C1710.menu.new()
 		
 		$Obj_current:=$Obj_context.parameter  // Current parameter
 		$t:=String:C10($Obj_current.format)  // Current format
@@ -215,7 +215,7 @@ Case of
 				
 				If ($Obj_formats[$Txt_type].length>0)
 					
-					$o:=menu 
+					$o:=cs:C1710.menu.new()
 					
 					$Txt_label:=Choose:C955($Txt_type="string";"text";$Txt_type)
 					
@@ -302,7 +302,7 @@ Case of
 				  //______________________________________________________
 			: ($Obj_form.form.eventCode=On Alternative Click:K2:36)  // Display
 				
-				$Obj_menu:=menu 
+				$Obj_menu:=cs:C1710.menu.new()
 				$Obj_menu.append(":xliff:addParameter";"new")
 				
 				If ($Obj_context.action.tableNumber#Null:C1517)

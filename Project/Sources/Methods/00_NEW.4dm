@@ -121,9 +121,9 @@ Case of
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_init")
 		
-		$o:=menu \
-			.append(":xliff:CommonMenuFile";menu .file())\
-			.append(":xliff:CommonMenuEdit";menu .edit())
+		$o:=cs:C1710.menu.new()\
+			.append(":xliff:CommonMenuFile";cs:C1710.menu.new().file())\
+			.append(":xliff:CommonMenuEdit";cs:C1710.menu.new().edit())
 		
 		If (Storage:C1525.database.isMatrix)
 			
@@ -133,6 +133,7 @@ Case of
 		End if 
 		
 		$o.setBar()
+		
 		
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_deinit")

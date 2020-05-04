@@ -12,7 +12,7 @@ $o_infos:=$1
 
 If ($o_infos#Null:C1517)
 	
-	$menu:=menu \
+	$menu:=cs:C1710.menu.new()\
 		.append("accessTheGithubRepository";"show")\
 		.line()\
 		.append("downloadTheLatestRevision";"update")

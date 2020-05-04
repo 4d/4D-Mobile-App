@@ -357,8 +357,12 @@ Function bestSize  // Resize the widget to its best size
 			: (This:C1470.type=Object type static text:K79:2)\
 				 | (This:C1470.type=Object type checkbox:K79:26)
 				
-				  // Add 10 pixels
-				$width:=$width+10
+				If (Num:C11($o.alignment)=Align left:K42:2)
+					
+					  // Add 10 pixels
+					$width:=$width+10
+					
+				End if 
 				
 				  //______________________________
 			: (This:C1470.type=Object type push button:K79:16)

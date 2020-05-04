@@ -13,7 +13,7 @@ $t:="$"+$1
 
 If (OB Is empty:C1297(editor_INIT )) | (Shift down:C543 & Not:C34(Is compiled mode:C492))
 	
-	Form:C1466[$t]:=cs:C1710[$1+"_CLASS"].new()
+	Form:C1466[$t]:=cs:C1710[$1].new()
 	
 End if 
 

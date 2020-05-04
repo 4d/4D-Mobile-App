@@ -46,7 +46,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-$Obj_popup:=menu 
+$Obj_popup:=cs:C1710.menu.new()
 
 Case of 
 		

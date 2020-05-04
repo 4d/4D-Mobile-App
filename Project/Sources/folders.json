@@ -308,6 +308,8 @@
 		"classes": [
 			"button",
 			"group",
+			"input",
+			"menu",
 			"scrollable",
 			"static",
 			"svg",
@@ -437,7 +439,7 @@
 			"FEATURES"
 		],
 		"classes": [
-			"FEATURES_CLASS"
+			"FEATURES"
 		]
 	},
 	"FIELDS": {
@@ -607,6 +609,9 @@
 		],
 		"forms": [
 			"panel_template"
+		],
+		"classes": [
+			"panel"
 		]
 	},
 	"pic": {
@@ -665,7 +670,7 @@
 			"SERVER"
 		],
 		"classes": [
-			"SERVER_CLASS"
+			"SERVER"
 		]
 	},
 	"SOURCE": {

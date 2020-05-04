@@ -1,6 +1,7 @@
 C_OBJECT:C1216($menu)
 
-$menu:=menu .windows().popup()
+$menu:=cs:C1710.menu.new().windows()
+$menu.popup()
 
 If ($menu.selected)
 	

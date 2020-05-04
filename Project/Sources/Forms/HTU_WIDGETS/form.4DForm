@@ -403,18 +403,65 @@
 					"width": 425,
 					"height": 16,
 					"stroke": "#1e90ff"
+				},
+				"Input": {
+					"type": "input",
+					"left": 450,
+					"top": 215,
+					"width": 183,
+					"height": 17,
+					"dataSource": "Form:C1466.testThis"
+				},
+				"Button6": {
+					"type": "button",
+					"text": "Set value to \"Hello World\"",
+					"top": 279,
+					"left": 450,
+					"width": 215,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button6.4dm"
+				},
+				"Button7": {
+					"type": "button",
+					"text": "Get value…",
+					"top": 244,
+					"left": 450,
+					"width": 183,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button7.4dm"
 				}
-			}
+			},
+			"entryOrder": [
+				"Button1",
+				"Button2",
+				"Check Box",
+				"Check Box1",
+				"Button",
+				"Button3",
+				"Button4",
+				"Button5",
+				"Button6",
+				"Input",
+				"Button7"
+			]
 		}
 	],
 	"method": "method.4dm",
 	"editor": {
 		"groups": {
-			"Group": [
-				"Line6",
-				"Line7",
-				"Rectangle2",
-				"Text2"
+			"Group2": [
+				"Line8",
+				"Line9",
+				"Text5",
+				"Rectangle3",
+				"Text7",
+				"Rectangle6"
 			],
 			"Group1": [
 				"Line4",
@@ -424,13 +471,11 @@
 				"Rectangle1",
 				"Rectangle4"
 			],
-			"Group2": [
-				"Line8",
-				"Line9",
-				"Text5",
-				"Rectangle3",
-				"Text7",
-				"Rectangle6"
+			"Group": [
+				"Line6",
+				"Line7",
+				"Rectangle2",
+				"Text2"
 			]
 		}
 	}

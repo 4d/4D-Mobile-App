@@ -235,11 +235,6 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
-		$o:=menu .edit().popup()
-		
-		  //________________________________________
-	: (True:C214)
-		
 		$svg:=svg ("load";File:C1566("/RESOURCES/templates/form/list/Vertical Cards/template.svg"))
 		$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/export.png"))
 		

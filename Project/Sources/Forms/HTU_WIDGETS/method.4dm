@@ -11,13 +11,13 @@ Case of
 		  //Form.button2:=cs.button.new("Button2")
 		  //Form.button3:=cs.button.new("Check Box").highlightShortcut()
 		  //Form.button4:=cs.button.new("Check Box1").setShortcut("c").highlightShortcut()
-		
 		  //Form.static1:=cs.static.new("Rectangle1")
 		  //Form.static2:=cs.static.new("Rectangle2")
 		  //Form.static3:=cs.static.new("Rectangle3")
 		  //Form.static4:=cs.static.new("Rectangle4")
 		  //Form.static5:=cs.static.new("Rectangle5")
 		  //Form.static6:=cs.static.new("Rectangle6")
+		  //Form.group1:=cs.group.new("Text8,Button4,Button5")
 		
 		Form:C1466.button1:=object ("Button1").setShortcut("l").highlightShortcut()
 		Form:C1466.button2:=object ("Button2")
@@ -31,10 +31,13 @@ Case of
 		Form:C1466.static5:=object ("Rectangle5")
 		Form:C1466.static6:=object ("Rectangle6")
 		
-		Form:C1466.group1:=cs:C1710.group.new("Text8,Button4,Button5").distributeHorizontally()
+		Form:C1466.group1:=object ("Text8,Button4,Button5")
 		
 		  // If uncommented, must generate an assert
 		  //Form.Input:=cs.widget.new("objectThatDoesNotExist") 
+		
+		Form:C1466.testThis:="Hello"
+		Form:C1466.test:=cs:C1710.input.new("Form.testThis")
 		
 		  //______________________________________________________
 	: (False:C215)

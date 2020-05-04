@@ -23,6 +23,11 @@
 		"paperWidth": "595pt",
 		"paperHeight": "842pt"
 	},
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"method": "editor_HANDLER",
 	"pages": [
 		{
 			"objects": {
@@ -248,10 +253,6 @@
 			}
 		}
 	],
-	"$4d": {
-		"version": "1",
-		"kind": "form"
-	},
 	"editor": {
 		"activeView": "default",
 		"defaultView": "default",
@@ -287,6 +288,5 @@
 			"View 7": {},
 			"View 8": {}
 		}
-	},
-	"method": "editor_HANDLER"
+	}
 }

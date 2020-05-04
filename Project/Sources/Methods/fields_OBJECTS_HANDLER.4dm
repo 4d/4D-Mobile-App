@@ -160,7 +160,7 @@ Case of
 					  // Get the field definition
 					$Obj_field:=$Obj_context.field($Obj_widget.row)
 					
-					$Obj_popup:=menu 
+					$Obj_popup:=cs:C1710.menu.new()
 					
 					  // Get current format
 					If ($Obj_field.format=Null:C1517)

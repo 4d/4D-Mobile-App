@@ -13,6 +13,7 @@ Class constructor
 	If (This:C1470.assignable)
 		
 		This:C1470.pointer:=$ptr
+		This:C1470.value:=$ptr->
 		
 	End if 
 	

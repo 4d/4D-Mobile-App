@@ -12,18 +12,18 @@ Function forceBoolean
 	EXECUTE FORMULA:C63("C_BOOLEAN:C305((OBJECT Get pointer:C1124(Object named:K67:5;$o.name))->)")
 	
 /*===============================================*/
-Function value
+Function getValue
 	
 	C_LONGINT:C283($0)
 	
-	$0:=This:C1470.pointer()->
+	$0:=This:C1470.value
 	
 /*===============================================*/
 Function setValue
 	
 	C_VARIANT:C1683($1)
 	
-	This:C1470.pointer()->:=Bool:C1537($1)
+	This:C1470.value:=Bool:C1537($1)
 	
 /*===============================================*/
 Function highlightShortcut
