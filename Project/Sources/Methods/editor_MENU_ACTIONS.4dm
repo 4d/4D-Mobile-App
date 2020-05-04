@@ -13,10 +13,9 @@ C_OBJECT:C1216($1)
 C_BOOLEAN:C305($Boo_;$Boo_booted;$Boo_dev;$Boo_plus)
 C_LONGINT:C283($Lon_parameters)
 C_PICTURE:C286($Pic_buffer;$Pic_icon)
-C_TEXT:C284($Dir_root;$Mnu_app;$Mnu_choice;$Mnu_pop;$Txt_buffer;$Txt_path)
-C_TEXT:C284($Txt_UDID)
-C_OBJECT:C1216($o;$Obj_app;$Obj_could;$Obj_in;$Obj_project;$Obj_result)
-C_OBJECT:C1216($Obj_simulator;$Path_build;$Path_product)
+C_TEXT:C284($Dir_root;$t;$Txt_path;$Txt_UDID)
+C_OBJECT:C1216($menu;$menuApp;$o;$Obj_could;$Obj_in;$Obj_project)
+C_OBJECT:C1216($Obj_result;$Obj_simulator;$Path_build;$Path_product)
 
 If (False:C215)
 	C_OBJECT:C1216(editor_MENU_ACTIONS ;$1)
@@ -68,41 +67,22 @@ Else
 End if 
 
   // ----------------------------------------------------
-$Mnu_pop:=Create menu:C408
+$menu:=cs:C1710.menu.new()
 
 If (editor_Locked )
 	
-	APPEND MENU ITEM:C411($Mnu_pop;":xliff:syncDataModel")
-	SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"syncDataModel")
-	
-	APPEND MENU ITEM:C411($Mnu_pop;"-")
+	$menu.append("syncDataModel";"syncDataModel").line()
 	
 End if 
 
-APPEND MENU ITEM:C411($Mnu_pop;":xliff:mnuProjectFolder")
-SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"project")
+  // Project folder
+$menu.append("mnuProjectFolder";"project").line()
 
-APPEND MENU ITEM:C411($Mnu_pop;"-")
+  // Product folder, disabled if the product folder doesn't exist
+$menu.append("mnuProductFolder";"product").enable($Obj_could.openProductFolder)
 
-APPEND MENU ITEM:C411($Mnu_pop;":xliff:mnuProductFolder")
-SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"product")
-
-  // Disable if the product folder doesn't exist
-If (Not:C34($Obj_could.openProductFolder))
-	
-	DISABLE MENU ITEM:C150($Mnu_pop;-1)
-	
-End if 
-
-APPEND MENU ITEM:C411($Mnu_pop;":xliff:mnuOpenTheProjectWithXcode")
-SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"xCode")
-
-  // Disable if Xcode isn't installed
-If (Not:C34($Obj_could.openWithXcode))
-	
-	DISABLE MENU ITEM:C150($Mnu_pop;-1)
-	
-End if 
+  // Open project, disabled if Xcode isn't installed
+$menu.append("mnuOpenTheProjectWithXcode";"xCode").enable($Obj_could.openWithXcode)
 
   // =================== DEVELOPMENT ITEMS ===================== [
 If ($Boo_plus)
@@ -115,30 +95,22 @@ If ($Boo_plus)
 	
 	If (Num:C11(Form:C1466.xCode.platform)=Mac OS:K25:2)
 		
-		APPEND MENU ITEM:C411($Mnu_pop;"-")
+		$menu.line()
 		
-		$Obj_simulator:=simulator (New object:C1471(\
-			"action";"default"))
-		$Txt_UDID:=String:C10($Obj_simulator.udid)
+		$menu.append("openSimulatorLogs";"_openLogs")\
+			.append("openSimulatorDiagnosticReports";"_openDiagnosticReports")
 		
-		APPEND MENU ITEM:C411($Mnu_pop;":xliff:openSimulatorLogs")
-		SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_openLogs")
-		
-		APPEND MENU ITEM:C411($Mnu_pop;":xliff:openSimulatorDiagnosticReports")
-		SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_openDiagnosticReports")
+		$Txt_UDID:=String:C10(simulator (New object:C1471(\
+			"action";"default")).udid)
 		
 		If (Length:C16($Txt_UDID)#0)
 			
-			APPEND MENU ITEM:C411($Mnu_pop;":xliff:openCurrentSimulatorFolder")
-			SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_openSimuPath")
+			$menu.append("openCurrentSimulatorFolder";"_openSimuPath")
 			
 			If ($Boo_dev)
 				
-				APPEND MENU ITEM:C411($Mnu_pop;".Close simulators")
-				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_killSimulators")
-				
-				APPEND MENU ITEM:C411($Mnu_pop;".Erase Current Simulator")
-				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_eraseCurrentSimulator")
+				$menu.append(".Close simulators";"_killSimulators")\
+					.append(".Erase Current Simulator";"_eraseCurrentSimulator")
 				
 			End if 
 			
@@ -149,22 +121,21 @@ If ($Boo_plus)
 			
 			If ($Obj_simulator.success)
 				
-				$Mnu_app:=Create menu:C408
+				$menuApp:=cs:C1710.menu.new()
 				
-				For each ($Obj_app;$Obj_simulator.apps)
+				For each ($o;$Obj_simulator.apps)
 					
-					If (String:C10($Obj_app.metaData.path)#"")
+					If (String:C10($o.metaData.path)#"")
 						
-						$Txt_buffer:=String:C10($Obj_app.CFBundleExecutable)
+						$t:=String:C10($o.CFBundleExecutable)
 						
-						If (Length:C16(String:C10($Obj_app.AppIdentifierPrefix))>0)
+						If (Length:C16(String:C10($o.AppIdentifierPrefix))>0)
 							
-							$Txt_buffer:=$Txt_buffer+" - "+String:C10($Obj_app.AppIdentifierPrefix)
+							$t:=$t+" - "+String:C10($o.AppIdentifierPrefix)
 							
 						End if 
 						
-						APPEND MENU ITEM:C411($Mnu_app;$Txt_buffer)
-						SET MENU ITEM PARAMETER:C1004($Mnu_app;-1;"_app"+JSON Stringify:C1217($Obj_app))
+						$menuApp.append($t;"_app"+JSON Stringify:C1217($o))
 						
 						If (Storage:C1525.database.isMatrix) & False:C215
 							
@@ -172,19 +143,19 @@ If ($Boo_plus)
 							
 							  // XXX Could not do that in real app, resource folder must not be modified
 							  // ASK for SET MENU ITEM ICON with absolute path
-							$Txt_buffer:="mobile"+Folder separator:K24:12+"cache"+Folder separator:K24:12+"icon"+Folder separator:K24:12
+							$t:="mobile"+Folder separator:K24:12+"cache"+Folder separator:K24:12+"icon"+Folder separator:K24:12
 							
-							If (Length:C16(String:C10($Obj_app.AppIdentifierPrefix))>0)
+							If (Length:C16(String:C10($o.AppIdentifierPrefix))>0)
 								
-								$Txt_buffer:=$Txt_buffer+$Obj_app.AppIdentifierPrefix+Folder separator:K24:12
+								$t:=$t+$o.AppIdentifierPrefix+Folder separator:K24:12
 								
 							End if 
 							
-							$Txt_buffer:=$Txt_buffer+$Obj_app.CFBundleIdentifier+".png"
-							$Txt_path:=Get 4D folder:C485(Current resources folder:K5:16;*)+$Txt_buffer  // Copy into resource folder, because menu item allow only iconRef from here
+							$t:=$t+$o.CFBundleIdentifier+".png"
+							$Txt_path:=Get 4D folder:C485(Current resources folder:K5:16;*)+$t  // Copy into resource folder, because menu item allow only iconRef from here
 							CREATE FOLDER:C475($Txt_path;*)
 							
-							$Txt_path:=$Obj_app.appPath+Folder separator:K24:12+$Obj_app.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles[0]+"@2x.png"
+							$Txt_path:=$o.appPath+Folder separator:K24:12+$o.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles[0]+"@2x.png"
 							
 							If (Test path name:C476($Txt_path)=Is a document:K24:1)
 								
@@ -196,8 +167,8 @@ If ($Boo_plus)
 									
 									If (OK=1)
 										
-										WRITE PICTURE FILE:C680(Get 4D folder:C485(Current resources folder:K5:16;*)+$Txt_buffer;$Pic_icon;".png")
-										SET MENU ITEM ICON:C984($Mnu_app;-1;"File:"+Convert path system to POSIX:C1106($Txt_buffer))
+										WRITE PICTURE FILE:C680(Get 4D folder:C485(Current resources folder:K5:16;*)+$t;$Pic_icon;".png")
+										$menuApp.icon("File:"+Convert path system to POSIX:C1106($t))
 										
 									End if 
 								End if 
@@ -206,115 +177,86 @@ If ($Boo_plus)
 					End if 
 				End for each 
 				
-				APPEND MENU ITEM:C411($Mnu_pop;":xliff:openApplicationSimulatorFolder";$Mnu_app)
+				$menu.append("openApplicationSimulatorFolder";$menuApp)\
+					.line()
 				
 			End if 
 		End if 
 		
-		APPEND MENU ITEM:C411($Mnu_pop;"-")
-		
 		If ($Boo_dev)
 			
-			APPEND MENU ITEM:C411($Mnu_pop;".Clear Xcode Build And Derived Data")
-			SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_removeDerivedData")
+			$menu.append(".Clear Xcode Build And Derived Data";"_removeDerivedData")
 			
 		Else 
 			
-			APPEND MENU ITEM:C411($Mnu_pop;":xliff:clearXcodeBuild")
-			SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_removeBuild")
+			$menu.append("clearXcodeBuild";"_removeBuild").enable($Path_build.exists)
 			
-			If (Not:C34($Path_build.exists))
-				
-				DISABLE MENU ITEM:C150($Mnu_pop;-1)
-				
-			End if 
 		End if 
 		
-		APPEND MENU ITEM:C411($Mnu_pop;"-")
-		
-		APPEND MENU ITEM:C411($Mnu_pop;":xliff:openTheCacheFolder")
-		SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_openCache")
+		$menu.line()
+		$menu.append("openTheCacheFolder";"_openCache")
 		
 		If ($Boo_dev)
 			
-			APPEND MENU ITEM:C411($Mnu_pop;".🗑 Clear Cache folder")
-			SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_clearCache")
+			$menu.append(".🗑 Clear Cache folder";"_clearCache")
 			
 			If (Not:C34(Is compiled mode:C492))
 				
-				APPEND MENU ITEM:C411($Mnu_pop;".💣 Remove SDK")
-				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_removeSDK")
+				$menu.append(".💣 Remove SDK";"_removeSDK")\
+					.line()\
+					.append(".💣 Clear Mobiles projects";"_removeMobilesProjects")\
+					.line()\
+					.append(".⚙️ Show config file ";"_showConfigFile")\
+					.append(".Add sources to Xcode Project";"_addSources")\
+					.line()
 				
-				APPEND MENU ITEM:C411($Mnu_pop;"-")
-				
-				APPEND MENU ITEM:C411($Mnu_pop;".💣 Clear Mobiles projects")
-				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_removeMobilesProjects")
-				
-				APPEND MENU ITEM:C411($Mnu_pop;"-")
-				
-				APPEND MENU ITEM:C411($Mnu_pop;".⚙️ Show config file ")
-				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_showConfigFile")
-				
-				APPEND MENU ITEM:C411($Mnu_pop;".Add sources to Xcode Project")
-				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_addSources")
-				
-				APPEND MENU ITEM:C411($Mnu_pop;"-")
-				
-				APPEND MENU ITEM:C411($Mnu_pop;".Reveal 4D template folder")
-				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_openTemplateFolder")
-				
-				APPEND MENU ITEM:C411($Mnu_pop;".🚧 Reveal custom form folder")
-				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_openHostFormFolder")
-				
-				APPEND MENU ITEM:C411($Mnu_pop;".🍪 Generate data model")
-				SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_generateDataModel")
+				$menu.append(".Reveal 4D template folder";"_openTemplateFolder")\
+					.append(".🚧 Reveal custom form folder";"_openHostFormFolder")\
+					.append(".🍪 Generate data model";"_generateDataModel")
 				
 			End if 
 			
-			APPEND MENU ITEM:C411($Mnu_pop;"-")
-			APPEND MENU ITEM:C411($Mnu_pop;".Open Commponent Log")
-			SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_openCompoentLog")
+			$menu.line()
+			$menu.append(".Open Component Log";"_openCompoentLog")
+			
 		End if 
 	End if 
 	
-	APPEND MENU ITEM:C411($Mnu_pop;"-")
-	
-	APPEND MENU ITEM:C411($Mnu_pop;":xliff:verbose")
-	SET MENU ITEM PARAMETER:C1004($Mnu_pop;-1;"_verbose")
-	SET MENU ITEM MARK:C208($Mnu_pop;-1;Char:C90(18)*Num:C11(Form:C1466.verbose))
+	$menu.line()
+	$menu.append("verbose";"_verbose").mark(Form:C1466.verbose)
 	
 End if 
-
-  // =========================================================== ]
 
 If ($Obj_in.x#Null:C1517)\
  & ($Obj_in.y#Null:C1517)
 	
-	  // Place the contextual menu
-	$Mnu_choice:=Dynamic pop up menu:C1006($Mnu_pop;"";$Obj_in.x;$Obj_in.y)
+	$menu.popup($Obj_in.x;$Obj_in.y)
 	
 Else 
 	
-	$Mnu_choice:=Dynamic pop up menu:C1006($Mnu_pop)
+	$menu.popup()
 	
 End if 
-
-RELEASE MENU:C978($Mnu_pop)
 
 Case of 
 		
 		  //______________________________________________________
-	: ($Mnu_choice="product")
+	: (Not:C34($menu.selected))
+		
+		  // <NOTHING MORE TO DO>
+		
+		  //______________________________________________________
+	: ($menu.choice="product")
 		
 		SHOW ON DISK:C922($Path_product.platformPath)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="project")
+	: ($menu.choice="project")
 		
 		SHOW ON DISK:C922(Form:C1466.root)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="xCode")
+	: ($menu.choice="xCode")
 		
 		$Obj_result:=Xcode (New object:C1471(\
 			"action";"open";\
@@ -342,7 +284,7 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Mnu_choice="syncDataModel")
+	: ($menu.choice="syncDataModel")
 		
 		POST_FORM_MESSAGE (New object:C1471(\
 			"target";Current form window:C827;\
@@ -354,7 +296,7 @@ Case of
 			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"syncDataModel"))))
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_installCertificats")
+	: ($menu.choice="_installCertificats")
 		
 		$Dir_root:=HTTP Get certificates folder:C1307
 		CREATE FOLDER:C475($Dir_root;*)
@@ -365,12 +307,12 @@ Case of
 		CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"checkingServerConfiguration")
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_openDiagnosticReports")
+	: ($menu.choice="_openDiagnosticReports")
 		
 		SHOW ON DISK:C922(env_userPathname ("logs";"DiagnosticReports").platformPath)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_openLogs")
+	: ($menu.choice="_openLogs")
 		
 		$o:=env_userPathname ("logs";"CoreSimulator/")
 		
@@ -390,7 +332,7 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_openSimuPath")
+	: ($menu.choice="_openSimuPath")
 		
 		$Obj_simulator:=simulator (New object:C1471(\
 			"action";"default"))
@@ -409,13 +351,13 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_killSimulators")
+	: ($menu.choice="_killSimulators")
 		
 		$Obj_result:=simulator (New object:C1471(\
 			"action";"kill"))
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_eraseCurrentSimulator")
+	: ($menu.choice="_eraseCurrentSimulator")
 		
 		$Obj_simulator:=simulator (New object:C1471(\
 			"action";"default"))
@@ -467,49 +409,49 @@ Case of
 		End if 
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_openCache")
+	: ($menu.choice="_openCache")
 		
 		SHOW ON DISK:C922(env_userPathname ("cache").platformPath)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_clearCache")
+	: ($menu.choice="_clearCache")
 		
 		env_userPathname ("cache").delete(fk recursive:K87:7)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_removeSDK")
+	: ($menu.choice="_removeSDK")
 		
 		env_userPathname ("sdk").delete(fk recursive:K87:7)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_removeMobilesProjects")
+	: ($menu.choice="_removeMobilesProjects")
 		
 		path .projects().delete(fk recursive:K87:7)
 		path .products().delete(fk recursive:K87:7)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_removeBuild")
+	: ($menu.choice="_removeBuild")
 		
 		$Path_build.delete(fk recursive:K87:7)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_removeDerivedData")
+	: ($menu.choice="_removeDerivedData")
 		
 		env_userPathname ("derivedData").delete(fk recursive:K87:7)
 		$Path_build.delete(fk recursive:K87:7)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_showConfigFile")
+	: ($menu.choice="_showConfigFile")
 		
 		SHOW ON DISK:C922(Get 4D folder:C485(Active 4D Folder:K5:10)+"4d.mobile")
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_openCompoentLog")
+	: ($menu.choice="_openCompoentLog")
 		
 		RECORD.open()
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_generateDataModel")
+	: ($menu.choice="_generateDataModel")
 		
 		$Obj_project:=New object:C1471(\
 			)  ///  XXX find a way to ge data model
@@ -518,13 +460,6 @@ Case of
 		
 		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 		
-		  //dataModel (New object(\
-																								//"action";"xcdatamodel";\
-																								//"dataModel";$Obj_project.dataModel;\
-																								//"flat";False;\
-																								//"relationship";Bool(featuresFlags._103850);\
-																								//"dataSet";dataSet (New object("action";"readCatalog";"project";$Obj_project)).catalog;\
-																								//"path";$Txt_path))
 		dataModel (New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\
@@ -536,48 +471,42 @@ Case of
 		SHOW ON DISK:C922($Txt_path)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_addSources")
+	: ($menu.choice="_addSources")
 		
 		Xcode (New object:C1471(\
 			"action";"workspace-addsources";\
 			"path";$Path_product.platformPath))
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_openTemplateFolder")
+	: ($menu.choice="_openTemplateFolder")
 		
 		SHOW ON DISK:C922(path .templates().platformPath)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_openHostFormFolder")
+	: ($menu.choice="_openHostFormFolder")
 		
 		$o:=path .hostlistForms(True:C214)
 		$o:=path .hostdetailForms(True:C214)
 		SHOW ON DISK:C922(path .hostForms().platformPath)
 		
 		  //______________________________________________________
-	: ($Mnu_choice="_verbose")
+	: ($menu.choice="_verbose")
 		
 		Form:C1466.verbose:=Not:C34(Bool:C1537(Form:C1466.verbose))
 		
 		  //______________________________________________________
-	: (Position:C15("_app{";$Mnu_choice)=1)
+	: (Position:C15("_app{";$menu.choice)=1)
 		
-		SHOW ON DISK:C922(JSON Parse:C1218(Substring:C12($Mnu_choice;Length:C16("_app")+1)).metaData.path)
+		SHOW ON DISK:C922(JSON Parse:C1218(Substring:C12($menu.choice;Length:C16("_app")+1)).metaData.path)
 		
 		  //______________________________________________________
 	Else 
 		
-		If (Length:C16($Mnu_choice)#0)
+		If (Length:C16($menu.choice)#0)
 			
-			ASSERT:C1129(False:C215;"Unknown menu action ("+$Mnu_choice+")")
+			ASSERT:C1129(False:C215;"Unknown menu action ("+$menu.choice+")")
 			
 		End if 
 		
 		  //______________________________________________________
 End case 
-
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End

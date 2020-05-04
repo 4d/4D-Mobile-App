@@ -8,171 +8,168 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_BOOLEAN:C305($Boo_value)
-C_LONGINT:C283($i;$l;$Lon_bottom;$Lon_button;$Lon_column;$Lon_formEvent)
-C_LONGINT:C283($Lon_height;$Lon_left;$Lon_number;$Lon_published;$Lon_right;$Lon_row)
-C_LONGINT:C283($Lon_targetBottom;$Lon_targetTop;$Lon_top;$Lon_unpublished;$Lon_vOffset;$Lon_width)
-C_LONGINT:C283($Lon_x;$Win_hdl)
+C_BOOLEAN:C305($b)
+C_LONGINT:C283($bottom;$column;$height;$i;$indx;$l)
+C_LONGINT:C283($left;$Lon_button;$Lon_number;$Lon_published;$Lon_targetBottom;$Lon_targetTop)
+C_LONGINT:C283($Lon_unpublished;$Lon_vOffset;$right;$row;$top;$width)
+C_LONGINT:C283($Win_hdl)
 C_POINTER:C301($Ptr_;$Ptr_me;$Ptr_published)
-C_TEXT:C284($Mnu_choice;$Mnu_main;$t;$Txt_fieldNumber;$Txt_me)
-C_OBJECT:C1216($o;$Obj_context;$Obj_dataModel;$Obj_form;$Obj_related)
+C_TEXT:C284($t;$Txt_fieldNumber)
+C_OBJECT:C1216($context;$e;$form;$menu;$o;$Obj_dataModel)
+C_OBJECT:C1216($Obj_related)
 C_COLLECTION:C1488($c;$Col_published)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=Form event code:C388
-$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
+$e:=FORM Event:C1606
+
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 
-$Obj_form:=STRUCTURE_Handler (New object:C1471(\
+$form:=STRUCTURE_Handler (New object:C1471(\
 "action";"init"))
 
-$Obj_context:=$Obj_form.form
+$context:=$form.form
 
   // ----------------------------------------------------
 Case of 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.allow)
+	: ($e.objectName=$form.allow)
 		
 		ui.saveProject()
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.allowHelp)
+	: ($e.objectName=$form.allowHelp)
 		
 		OPEN URL:C673(Get localized string:C991("doc_incremental");*)
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.tableList)
+	: ($e.objectName=$form.tableList)
 		
-		LISTBOX GET CELL POSITION:C971(*;$Txt_me;$Lon_column;$Lon_row)
+		LISTBOX GET CELL POSITION:C971(*;$e.objectName;$column;$row)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Selection Change:K2:29)
+			: ($e.code=On Selection Change:K2:29)
 				
-				editor_ui_LISTBOX ($Txt_me)
+				editor_ui_LISTBOX ($e.objectName)
 				
-				If ($Lon_row=0)
+				If ($row=0)
 					
-					OB REMOVE:C1226($Obj_context;"currentTable")
+					OB REMOVE:C1226($context;"currentTable")
 					
 				Else 
 					
 					  // Keep the current selected table
 					$c:=editor_Catalog 
-					$l:=$c.extract("name").indexOf((ui.pointer($Obj_form.tables))->{$Lon_row})
-					$Obj_context.currentTable:=$c[$l]
+					$l:=$c.extract("name").indexOf((ui.pointer($form.tables))->{$row})
+					$context.currentTable:=$c[$l]
 					
 				End if 
 				
 				  // Update field list
-				structure_FIELD_LIST ($Obj_form)
+				structure_FIELD_LIST ($form)
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Clicked:K2:4)
+			: ($e.code=On Clicked:K2:4)
 				
 				If (Right click:C712)
 					
-					$Mnu_main:=Create menu:C408
-					
-					$Ptr_published:=ui.pointer($Obj_form.published)
+					$Ptr_published:=ui.pointer($form.published)
 					$Lon_unpublished:=Count in array:C907($Ptr_published->;0)
+					
+					$menu:=cs:C1710.menu.new()
 					
 					If ($Lon_unpublished>0)
 						
-						APPEND MENU ITEM:C411($Mnu_main;":xliff:publishAll")
-						SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"publishAll")
+						$menu.append("publishAll";"publishAll")
 						
 					End if 
 					
 					If ($Lon_unpublished#Size of array:C274($Ptr_published->))
 						
-						APPEND MENU ITEM:C411($Mnu_main;":xliff:unpublishAll")
-						SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"unpublishAll")
+						$menu.append("unpublishAll";"unpublishAll")
 						
 					End if 
 					
-					$Mnu_choice:=Dynamic pop up menu:C1006($Mnu_main)
-					RELEASE MENU:C978($Mnu_main)
+					$menu.popup()
 					
-					Case of 
-							
-							  //………………………………………………………………………………………
-						: ($Mnu_choice="publishAll")\
-							 | ($Mnu_choice="unpublishAll")
-							
-							  //#MARK_TODO - management of relatedDataClass
-							
-							$Boo_value:=($Mnu_choice="publishAll")
-							
-							For ($i;1;Size of array:C274($Ptr_published->);1)
+					If ($menu.selected)
+						
+						Case of 
 								
-								$Ptr_published->{$i}:=Num:C11($Boo_value)
+								  //………………………………………………………………………………………
+							: ($menu.choice="publishAll")\
+								 | ($menu.choice="unpublishAll")
 								
-							End for 
-							
-							STRUCTURE_UPDATE ($Obj_form)
-							
-							  //………………………………………………………………………………………
-						Else 
-							
-							If (Length:C16($Mnu_choice)>0)
+								  //#MARK_TODO - management of relatedDataClass
 								
-								ASSERT:C1129(False:C215;"Unknown menu action ("+$Mnu_choice+")")
+								$b:=($menu.choice="publishAll")
 								
-							End if 
-							
-							  //………………………………………………………………………………………
-					End case 
+								For ($i;1;Size of array:C274($Ptr_published->);1)
+									
+									$Ptr_published->{$i}:=Num:C11($b)
+									
+								End for 
+								
+								STRUCTURE_UPDATE ($form)
+								
+								  //………………………………………………………………………………………
+							Else 
+								
+								ASSERT:C1129(False:C215;"Unknown menu action ("+$menu.choice+")")
+								
+								  //………………………………………………………………………………………
+						End case 
+					End if 
 				End if 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Mouse Enter:K2:33)
+			: ($e.code=On Mouse Enter:K2:33)
 				
 				ui.tips.instantly(100)
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Mouse Move:K2:35)
+			: ($e.code=On Mouse Move:K2:35)
 				
-				$Obj_context.setHelpTip($Txt_me;$Obj_form)
+				$context.setHelpTip($e.objectName;$form)
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Mouse Leave:K2:34)
+			: ($e.code=On Mouse Leave:K2:34)
 				
 				ui.tips.default()
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Getting Focus:K2:7)
+			: ($e.code=On Getting Focus:K2:7)
 				
-				$Obj_context.focus:=$Obj_form.tables
+				$context.focus:=$form.tables
 				
-				If (LISTBOX Get number of rows:C915(*;$Txt_me)>0)
+				If (LISTBOX Get number of rows:C915(*;$e.objectName)>0)
 					
-					LISTBOX GET CELL POSITION:C971(*;$Txt_me;$l;$Lon_row)
+					LISTBOX GET CELL POSITION:C971(*;$e.objectName;$l;$row)
 					
-					If ($Lon_row=0)
+					If ($row=0)
 						
-						LISTBOX SELECT ROW:C912(*;$Txt_me;1;lk replace selection:K53:1)
+						LISTBOX SELECT ROW:C912(*;$e.objectName;1;lk replace selection:K53:1)
 						
 					End if 
 				End if 
 				
-				OBJECT SET RGB COLORS:C628(*;$Txt_me;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
+				OBJECT SET RGB COLORS:C628(*;$e.objectName;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
 				
-				structure_FIELD_LIST ($Obj_form)
+				structure_FIELD_LIST ($form)
 				
-				ui_MOVE ($Obj_form.search;$Txt_me;Align right:K42:4;30)
-				ui_MOVE ($Obj_form.action;$Txt_me;Align right:K42:4;0)
+				ui_MOVE ($form.search;$e.objectName;Align right:K42:4;30)
+				ui_MOVE ($form.action;$e.objectName;Align right:K42:4;0)
 				
-				OBJECT SET VISIBLE:C603(*;$Obj_form.tables+".filter";False:C215)
-				OBJECT SET VISIBLE:C603(*;$Obj_form.search;True:C214)
-				OBJECT SET VISIBLE:C603(*;$Obj_form.action;True:C214)
+				OBJECT SET VISIBLE:C603(*;$form.tables+".filter";False:C215)
+				OBJECT SET VISIBLE:C603(*;$form.search;True:C214)
+				OBJECT SET VISIBLE:C603(*;$form.action;True:C214)
 				  //]
 				
-				$Ptr_:=ui.pointer($Obj_form.search)
-				$Ptr_->value:=String:C10($Obj_context.tableFilter)
+				$Ptr_:=ui.pointer($form.search)
+				$Ptr_->value:=String:C10($context.tableFilter)
 				$Ptr_->:=$Ptr_->  // Touch
 				
 				STRUCTURE_Handler (New object:C1471(\
@@ -180,81 +177,69 @@ Case of
 					"showIfNotEmpty";True:C214))
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Losing Focus:K2:8)
+			: ($e.code=On Losing Focus:K2:8)
 				
 				STRUCTURE_Handler (New object:C1471(\
 					"action";"tableFilter"))
 				
-				OBJECT SET VISIBLE:C603(*;$Obj_form.tableFilter;True:C214)
-				OBJECT SET RGB COLORS:C628(*;$Txt_me;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
+				OBJECT SET VISIBLE:C603(*;$form.tableFilter;True:C214)
+				OBJECT SET RGB COLORS:C628(*;$e.objectName;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
 				SET TIMER:C645(-1)  // Restore visual selection
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$e.description+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.tableFilter)
+	: ($e.objectName=$form.tableFilter)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Clicked:K2:4)
+			: ($e.code=On Clicked:K2:4)
 				
 				  // Get the content type
-				If (ST Get content type:C1286(*;$Txt_me;ST Start highlight:K78:13;ST End highlight:K78:14)=ST User type:K78:12)  // This is a user link
+				If (ST Get content type:C1286(*;$e.objectName;ST Start highlight:K78:13;ST End highlight:K78:14)=ST User type:K78:12)  // This is a user link
 					
-					$Mnu_main:=Create menu:C408
+					$menu:=cs:C1710.menu.new()
 					
-					If (Length:C16(String:C10($Obj_context.tableFilter))>0)
+					If (Length:C16(String:C10($context.tableFilter))>0)
 						
-						APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("structName")+" : ("+$Obj_context.tableFilter+")";*)
-						SET MENU ITEM MARK:C208($Mnu_main;-1;Char:C90(18))
+						$menu.append(Get localized string:C991("structName")+" : ("+$context.tableFilter+")";"name").mark()
 						
 					Else 
 						
-						APPEND MENU ITEM:C411($Mnu_main;":xliff:structName")
-						DISABLE MENU ITEM:C150($Mnu_main;-1)
+						$menu.append("structName";"name").disable()
 						
 					End if 
 					
-					SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"name")
+					$menu.append("onlyPublishedTables";"published").mark(Bool:C1537($context.tableFilterPublished))
 					
-					APPEND MENU ITEM:C411($Mnu_main;":xliff:onlyPublishedTables")
-					SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"published")
-					
-					If (Bool:C1537($Obj_context.tableFilterPublished))
-						
-						SET MENU ITEM MARK:C208($Mnu_main;-1;Char:C90(18))
-						
-					End if 
-					
-					$Mnu_choice:=Dynamic pop up menu:C1006($Mnu_main)
-					RELEASE MENU:C978($Mnu_main)
+					$menu.popup()
 					
 					Case of 
 							
 							  //………………………………………………………………………………………
-						: (Length:C16($Mnu_choice)=0)
+						: (Not:C34($menu.selected))
 							
 							  // Nothing selected
 							
 							  //………………………………………………………………………………………
-						: ($Mnu_choice="name")  // Remove name filter
+						: ($menu.choice="name")  // Remove name filter
 							
-							$Obj_context.tableFilter:=""
+							$context.tableFilter:=""
 							
 							STRUCTURE_Handler (New object:C1471(\
 								"action";"tableList"))
 							
 							  //………………………………………………………………………………………
-						: ($Mnu_choice="published")  // Add-remove published filter
+						: ($menu.choice="published")  // Add-remove published filter
 							
-							$Obj_context.tableFilterPublished:=Not:C34(Bool:C1537($Obj_context.tableFilterPublished))
+							$context.tableFilterPublished:=Not:C34(Bool:C1537($context.tableFilterPublished))
 							
 							STRUCTURE_Handler (New object:C1471(\
 								"action";"tableList"))
@@ -262,7 +247,7 @@ Case of
 							  //………………………………………………………………………………………
 						Else 
 							
-							ASSERT:C1129(False:C215;"Unknown menu action ("+$Mnu_choice+")")
+							ASSERT:C1129(False:C215;"Unknown menu action ("+$menu.choice+")")
 							
 							  //………………………………………………………………………………………
 					End case 
@@ -275,34 +260,34 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$e.description+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.fieldList)
+	: ($e.objectName=$form.fieldList)
 		
-		LISTBOX GET CELL POSITION:C971(*;$Txt_me;$Lon_column;$Lon_row)
+		LISTBOX GET CELL POSITION:C971(*;$e.objectName;$column;$row)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Selection Change:K2:29)\
-				 | ($Lon_formEvent=On Clicked:K2:4)
+			: ($e.code=On Selection Change:K2:29)\
+				 | ($e.code=On Clicked:K2:4)
 				
-				editor_ui_LISTBOX ($Txt_me)
+				editor_ui_LISTBOX ($e.objectName)
 				
-				If ($Lon_row=0)
+				If ($row=0)
 					
-					OB REMOVE:C1226($Obj_context;"fieldName")
+					OB REMOVE:C1226($context;"fieldName")
 					
 				Else 
 					
 					  // Keep the current field name
-					$Obj_context.fieldName:=(ui.pointer($Obj_form.fields))->{$Lon_row}
+					$context.fieldName:=(ui.pointer($form.fields))->{$row}
 					
-					If ($Lon_formEvent=On Clicked:K2:4)
+					If ($e.code=On Clicked:K2:4)
 						
 						If (Right click:C712)
 							
@@ -310,21 +295,21 @@ Case of
 							
 						Else 
 							
-							If ($Lon_row>0)
+							If ($row>0)
 								
-								If ($Lon_column=3)  // & (Bool(featuresFlags._101637))
+								If ($column=3)  // & (Bool(featuresFlags._101637))
 									
 									If (Not:C34(editor_Locked ))
 										
 										  //#MARK_TO_OPTIMIZE
 										$o:=structure (New object:C1471(\
 											"action";"relatedCatalog";\
-											"table";String:C10($Obj_context.currentTable.name);\
-											"relatedEntity";$Obj_context.fieldName))
+											"table";String:C10($context.currentTable.name);\
+											"relatedEntity";$context.fieldName))
 										
 										If ($o.success)  // Open field picker
 											
-											$Obj_dataModel:=Form:C1466.dataModel[String:C10($Obj_context.currentTable.tableNumber)][$o.relatedEntity]
+											$Obj_dataModel:=Form:C1466.dataModel[String:C10($context.currentTable.tableNumber)][$o.relatedEntity]
 											
 											For each ($Obj_related;$o.fields)
 												
@@ -341,7 +326,7 @@ Case of
 												  // If at least one related field is published
 												If ($o.fields.extract("published").indexOf(True:C214)#-1)
 													
-													$Obj_dataModel:=Form:C1466.dataModel[String:C10($Obj_context.currentTable.tableNumber)]
+													$Obj_dataModel:=Form:C1466.dataModel[String:C10($context.currentTable.tableNumber)]
 													
 													If ($Obj_dataModel=Null:C1517)\
 														 | OB Is empty:C1297($Obj_dataModel)
@@ -362,20 +347,20 @@ Case of
 															
 															$Col_published.push($Obj_related)
 															
-															If ($Obj_dataModel[$Obj_context.fieldName]=Null:C1517)
+															If ($Obj_dataModel[$context.fieldName]=Null:C1517)
 																
 																  // Create the relation
-																$Obj_dataModel[$Obj_context.fieldName]:=New object:C1471(\
+																$Obj_dataModel[$context.fieldName]:=New object:C1471(\
 																	"relatedDataClass";$o.relatedDataClass;\
 																	"relatedTableNumber";$o.relatedTableNumber;\
 																	"inverseName";$o.inverseName)
 																
 															End if 
 															
-															If ($Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber]=Null:C1517)
+															If ($Obj_dataModel[$context.fieldName][$Txt_fieldNumber]=Null:C1517)
 																
 																  // Create the field
-																$Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber]:=New object:C1471(\
+																$Obj_dataModel[$context.fieldName][$Txt_fieldNumber]:=New object:C1471(\
 																	"name";$Obj_related.name;\
 																	"label";formatString ("label";$Obj_related.name);\
 																	"shortLabel";formatString ("label";$Obj_related.name);\
@@ -388,11 +373,11 @@ Case of
 														Else 
 															
 															  // Remove the field
-															If ($Obj_dataModel[$Obj_context.fieldName]#Null:C1517)
+															If ($Obj_dataModel[$context.fieldName]#Null:C1517)
 																
-																If ($Obj_dataModel[$Obj_context.fieldName][$Txt_fieldNumber]#Null:C1517)
+																If ($Obj_dataModel[$context.fieldName][$Txt_fieldNumber]#Null:C1517)
 																	
-																	OB REMOVE:C1226($Obj_dataModel[$Obj_context.fieldName];$Txt_fieldNumber)
+																	OB REMOVE:C1226($Obj_dataModel[$context.fieldName];$Txt_fieldNumber)
 																	
 																End if 
 															End if 
@@ -412,7 +397,7 @@ Case of
 													End if 
 												End if 
 												
-												($Obj_form.publishedPtr)->{$Lon_row}:=$Lon_published
+												($form.publishedPtr)->{$row}:=$Lon_published
 												
 											End if 
 											
@@ -425,12 +410,12 @@ Case of
 											Else 
 												
 												  // Invert published status
-												($Obj_form.publishedPtr)->{$Lon_row}:=1-($Obj_form.publishedPtr)->{$Lon_row}
+												($form.publishedPtr)->{$row}:=1-($form.publishedPtr)->{$row}
 												
 											End if 
 										End if 
 										
-										STRUCTURE_UPDATE ($Obj_form)
+										STRUCTURE_UPDATE ($form)
 										
 									End if 
 								End if 
@@ -440,166 +425,154 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Data Change:K2:15)
+			: ($e.code=On Data Change:K2:15)
 				
-				LISTBOX GET CELL POSITION:C971(*;$Txt_me;$Lon_column;$Lon_row)
+				LISTBOX GET CELL POSITION:C971(*;$e.objectName;$column;$row)
 				
-				If ($Lon_column=1)
+				If ($column=1)
 					
 					  // Keep current
-					$Obj_context.fieldName:=(ui.pointer($Obj_form.fields))->{$Lon_row}
+					$context.fieldName:=(ui.pointer($form.fields))->{$row}
 					
 					  // Three-state checkbox
-					If ($Ptr_me->{$Lon_row}=2)
+					If ($Ptr_me->{$row}=2)
 						
-						$Ptr_me->{$Lon_row}:=0
+						$Ptr_me->{$row}:=0
 						
 					End if 
 					
 					If (Macintosh command down:C546)
 						
 						  // Apply the value to all items
-						For ($i;1;LISTBOX Get number of rows:C915(*;$Txt_me);1)
+						For ($i;1;LISTBOX Get number of rows:C915(*;$e.objectName);1)
 							
-							$Ptr_me->{$i}:=$Ptr_me->{$Lon_row}
+							$Ptr_me->{$i}:=$Ptr_me->{$row}
 							
 						End for 
 					End if 
 					
 					  //#MARK_TODO - use CALL FORM to avoid three-state display
-					STRUCTURE_UPDATE ($Obj_form)
+					STRUCTURE_UPDATE ($form)
 					
 				End if 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Mouse Enter:K2:33)
+			: ($e.code=On Mouse Enter:K2:33)
 				
 				ui.tips.instantly(100)
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Mouse Move:K2:35)
+			: ($e.code=On Mouse Move:K2:35)
 				
-				$Obj_context.setHelpTip($Txt_me;$Obj_form)
+				$context.setHelpTip($e.objectName;$form)
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Mouse Leave:K2:34)
+			: ($e.code=On Mouse Leave:K2:34)
 				
-				OBJECT SET HELP TIP:C1181(*;$Txt_me;"")
+				OBJECT SET HELP TIP:C1181(*;$e.objectName;"")
 				ui.tips.default()
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Getting Focus:K2:7)
+			: ($e.code=On Getting Focus:K2:7)
 				
-				$Obj_context.focus:=$Obj_form.fields
+				$context.focus:=$form.fields
 				
-				LISTBOX GET CELL POSITION:C971(*;$Txt_me;$l;$Lon_row)
+				LISTBOX GET CELL POSITION:C971(*;$e.objectName;$l;$row)
 				
-				If ($Lon_row=0)
+				If ($row=0)
 					
-					If (LISTBOX Get number of rows:C915(*;$Txt_me)>0)
+					If (LISTBOX Get number of rows:C915(*;$e.objectName)>0)
 						
-						LISTBOX SELECT ROW:C912(*;$Txt_me;1;lk replace selection:K53:1)
+						LISTBOX SELECT ROW:C912(*;$e.objectName;1;lk replace selection:K53:1)
 						
 					End if 
 				End if 
 				
-				OBJECT SET RGB COLORS:C628(*;$Txt_me;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
+				OBJECT SET RGB COLORS:C628(*;$e.objectName;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
 				
 				  // Move search & action [
-				ui_MOVE ($Obj_form.search;$Txt_me;Align right:K42:4;30)
-				ui_MOVE ($Obj_form.action;$Txt_me;Align right:K42:4;0)
+				ui_MOVE ($form.search;$e.objectName;Align right:K42:4;30)
+				ui_MOVE ($form.action;$e.objectName;Align right:K42:4;0)
 				
-				OBJECT SET VISIBLE:C603(*;$Obj_form.fields+".filter";False:C215)
-				OBJECT SET VISIBLE:C603(*;$Obj_form.search;True:C214)
-				OBJECT SET VISIBLE:C603(*;$Obj_form.action;True:C214)
+				OBJECT SET VISIBLE:C603(*;$form.fields+".filter";False:C215)
+				OBJECT SET VISIBLE:C603(*;$form.search;True:C214)
+				OBJECT SET VISIBLE:C603(*;$form.action;True:C214)
 				  //]
 				
-				$Ptr_:=ui.pointer($Obj_form.search)
-				$Ptr_->value:=String:C10($Obj_context.fieldFilter)
+				$Ptr_:=ui.pointer($form.search)
+				$Ptr_->value:=String:C10($context.fieldFilter)
 				$Ptr_->:=$Ptr_->  // Touch
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Losing Focus:K2:8)
+			: ($e.code=On Losing Focus:K2:8)
 				
 				STRUCTURE_Handler (New object:C1471(\
 					"action";"fieldFilter"))
 				
-				OBJECT SET VISIBLE:C603(*;$Obj_form.fields+".filter";True:C214)
-				OBJECT SET RGB COLORS:C628(*;$Txt_me;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
+				OBJECT SET VISIBLE:C603(*;$form.fields+".filter";True:C214)
+				OBJECT SET RGB COLORS:C628(*;$e.objectName;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
 				SET TIMER:C645(-1)  // Restore visual selection
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$e.description+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.fieldFilter)
+	: ($e.objectName=$form.fieldFilter)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Clicked:K2:4)
+			: ($e.code=On Clicked:K2:4)
 				
 				  // Get the content type
-				If (ST Get content type:C1286(*;$Txt_me;ST Start highlight:K78:13;ST End highlight:K78:14)=ST User type:K78:12)  // This is a user link
+				If (ST Get content type:C1286(*;$e.objectName;ST Start highlight:K78:13;ST End highlight:K78:14)=ST User type:K78:12)  // This is a user link
 					
-					$Mnu_main:=Create menu:C408
+					$menu:=cs:C1710.menu.new()
 					
-					If (Length:C16(String:C10($Obj_context.fieldFilter))>0)
+					If (Length:C16(String:C10($context.fieldFilter))>0)
 						
-						APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("structName")+" : ("+$Obj_context.fieldFilter+")";*)
-						SET MENU ITEM MARK:C208($Mnu_main;-1;Char:C90(18))
+						$menu.append(Get localized string:C991("structName")+" : ("+$context.fieldFilter+")";"name").mark()
 						
 					Else 
 						
-						APPEND MENU ITEM:C411($Mnu_main;":xliff:structName")
-						DISABLE MENU ITEM:C150($Mnu_main;-1)
+						$menu.append("structName";"name").disable()
 						
 					End if 
 					
-					SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"name")
+					$menu.append("onlyPublishedFields";"published").mark(Bool:C1537($context.fieldFilterPublished))
 					
-					APPEND MENU ITEM:C411($Mnu_main;":xliff:onlyPublishedFields")
-					SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"published")
-					
-					If (Bool:C1537($Obj_context.fieldFilterPublished))
-						
-						SET MENU ITEM MARK:C208($Mnu_main;-1;Char:C90(18))
-						
-					End if 
-					
-					$Mnu_choice:=Dynamic pop up menu:C1006($Mnu_main)
-					RELEASE MENU:C978($Mnu_main)
+					$menu.popup()
 					
 					Case of 
 							
 							  //………………………………………………………………………………………
-						: (Length:C16($Mnu_choice)=0)
+						: (Not:C34($menu.selected))
 							
 							  // Nothing selected
 							
 							  //………………………………………………………………………………………
-						: ($Mnu_choice="name")  // Remove name filter
+						: ($menu.choice="name")  // Remove name filter
 							
-							$Obj_context.fieldFilter:=""
+							$context.fieldFilter:=""
 							
-							structure_FIELD_LIST ($Obj_form)
+							structure_FIELD_LIST ($form)
 							
 							  //………………………………………………………………………………………
-						: ($Mnu_choice="published")  // Add-remove published filter
+						: ($menu.choice="published")  // Add-remove published filter
 							
-							$Obj_context.fieldFilterPublished:=Not:C34(Bool:C1537($Obj_context.fieldFilterPublished))
+							$context.fieldFilterPublished:=Not:C34(Bool:C1537($context.fieldFilterPublished))
 							
-							structure_FIELD_LIST ($Obj_form)
+							structure_FIELD_LIST ($form)
 							
 							  //………………………………………………………………………………………
 						Else 
 							
-							ASSERT:C1129(False:C215;"Unknown menu action ("+$Mnu_choice+")")
+							ASSERT:C1129(False:C215;"Unknown menu action ("+$menu.choice+")")
 							
 							  //………………………………………………………………………………………
 					End case 
@@ -612,30 +585,30 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$e.description+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.search)
+	: ($e.objectName=$form.search)
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent<0)  // <SUBFORM EVENTS>
+			: ($e.code<0)  // <SUBFORM EVENTS>
 				
 				Case of 
 						
 						  //…………………………………………………………………………………………………
-					: ($Lon_formEvent=-1)
+					: ($e.code=-1)
 						
 						  // Filter the vue by name
 						If (Not:C34(OB Is empty:C1297($Ptr_me->)))
 							
-							If ($Obj_context.focus=$Obj_form.tables)
+							If ($context.focus=$form.tables)
 								
-								$Obj_context.tableFilter:=$Ptr_me->value
+								$context.tableFilter:=$Ptr_me->value
 								
 								STRUCTURE_Handler (New object:C1471(\
 									"action";"tableList"))
@@ -645,20 +618,20 @@ Case of
 								
 							Else   // Fields
 								
-								$Obj_context.fieldFilter:=$Ptr_me->value
+								$context.fieldFilter:=$Ptr_me->value
 								
-								structure_FIELD_LIST ($Obj_form)
+								structure_FIELD_LIST ($form)
 								
-								If (Length:C16(String:C10($Obj_context.fieldFilter))>0)
+								If (Length:C16(String:C10($context.fieldFilter))>0)
 									
 									  // Create a styled text with a User Link
 									$t:=Get localized string:C991("filteredBy")+Char:C90(Space:K15:42)+"<span style=\"-d4-ref-user:'filter'\">"+Get localized string:C991("structName")+"</span>"
 									
-									ST SET TEXT:C1115(*;$Obj_form.fieldFilter;$t;ST Start text:K78:15;ST End text:K78:16)
+									ST SET TEXT:C1115(*;$form.fieldFilter;$t;ST Start text:K78:15;ST End text:K78:16)
 									
 								Else 
 									
-									ST SET TEXT:C1115(*;$Obj_form.fieldFilter;"";ST Start text:K78:15;ST End text:K78:16)
+									ST SET TEXT:C1115(*;$form.fieldFilter;"";ST Start text:K78:15;ST End text:K78:16)
 									
 								End if 
 							End if 
@@ -667,99 +640,99 @@ Case of
 						  //…………………………………………………………………………………………………
 					Else 
 						
-						ASSERT:C1129(False:C215;"Unknown call from subform ("+String:C10($Lon_formEvent)+")")
+						ASSERT:C1129(False:C215;"Unknown call from subform ("+$e.description+")")
 						
 						  //…………………………………………………………………………………………………
 				End case 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Getting Focus:K2:7)
+			: ($e.code=On Getting Focus:K2:7)
 				
-				OBJECT SET VISIBLE:C603(*;Choose:C955($Obj_context.focus=$Obj_form.tables;$Obj_form.tableFilter;$Obj_form.fieldFilter);False:C215)
+				OBJECT SET VISIBLE:C603(*;Choose:C955($context.focus=$form.tables;$form.tableFilter;$form.fieldFilter);False:C215)
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Losing Focus:K2:8)
+			: ($e.code=On Losing Focus:K2:8)
 				
-				OBJECT SET VISIBLE:C603(*;Choose:C955($Obj_context.focus=$Obj_form.tables;$Obj_form.tableFilter;$Obj_form.fieldFilter);True:C214)
+				OBJECT SET VISIBLE:C603(*;Choose:C955($context.focus=$form.tables;$form.tableFilter;$form.fieldFilter);True:C214)
 				
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$e.description+")")
 				
 				  //______________________________________________________
 		End case 
 		
 		  //==================================================
-	: ($Txt_me=$Obj_form.action)
+	: ($e.objectName=$form.action)
 		
-		STRUCTURE_ACTION ($Obj_form)
+		STRUCTURE_ACTION ($form)
 		
 		  //==================================================
-	: ($Txt_me="space.shortcut")
+	: ($e.objectName="space.shortcut")
 		
 		If (Not:C34(editor_Locked ))
 			
 			  // Check/uncheck the selection
-			If (OBJECT Get name:C1087(Object with focus:K67:3)=$Obj_form.fieldList)
+			If (OBJECT Get name:C1087(Object with focus:K67:3)=$form.fieldList)
 				
 				  // Check the selection
-				$Ptr_me:=ui.pointer($Obj_form.fieldList)
-				$Lon_row:=Find in array:C230($Ptr_me->;True:C214)
+				$Ptr_me:=ui.pointer($form.fieldList)
+				$row:=Find in array:C230($Ptr_me->;True:C214)
 				
-				If ($Lon_row>0)
+				If ($row>0)
 					
 					  // Get the value of the first selected item
-					$Ptr_published:=ui.pointer($Obj_form.published)
-					$Boo_value:=Bool:C1537($Ptr_published->{$Lon_row})
+					$Ptr_published:=ui.pointer($form.published)
+					$b:=Bool:C1537($Ptr_published->{$row})
 					
 					  // Apply to all selected items
 					
 					Repeat 
 						
-						$Lon_x:=Find in array:C230($Ptr_me->;True:C214;$Lon_x+1)
+						$indx:=Find in array:C230($Ptr_me->;True:C214;$indx+1)
 						
-						If ($Lon_x>0)
+						If ($indx>0)
 							
-							$Ptr_published->{$Lon_x}:=Num:C11(Not:C34($Boo_value))
+							$Ptr_published->{$indx}:=Num:C11(Not:C34($b))
 							
 						End if 
-					Until ($Lon_x=-1)
+					Until ($indx=-1)
 				End if 
 			End if 
 			
-			STRUCTURE_UPDATE ($Obj_form)
+			STRUCTURE_UPDATE ($form)
 			
 		End if 
 		
 		  //==================================================
-	: ($Txt_me="search.shortcut")
+	: ($e.objectName="search.shortcut")
 		
 		EXECUTE METHOD IN SUBFORM:C1085("search";"Search_HANDLER";*;New object:C1471(\
 			"action";"search"))
 		
 		  //==================================================
-	: ($Txt_me="splitter")  // **********************************************
+	: ($e.objectName="splitter")  // **********************************************
 		
 		Case of 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Clicked:K2:4)
+			: ($e.code=On Clicked:K2:4)
 				
 				  // Determine the offset
-				OBJECT GET COORDINATES:C663(*;$Txt_me;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+				OBJECT GET COORDINATES:C663(*;$e.objectName;$left;$top;$right;$bottom)
 				OBJECT GET COORDINATES:C663(*;"_viewport";$l;$Lon_targetTop;$l;$Lon_targetBottom)
 				
-				$Lon_vOffset:=$Lon_bottom-$Lon_targetBottom
+				$Lon_vOffset:=$bottom-$Lon_targetBottom
 				
 				If (($Lon_targetBottom+$Lon_vOffset-$Lon_targetTop)<=200)
 					
 					  // < Minimum height
 					CLEAR VARIABLE:C89($Lon_vOffset)
 					
-					OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_width;$Lon_height)
-					$Lon_bottom:=$Lon_height-10
-					OBJECT SET COORDINATES:C1248(*;"splitter";0;$Lon_bottom;$Lon_width;$Lon_bottom+1)
+					OBJECT GET SUBFORM CONTAINER SIZE:C1148($width;$height)
+					$bottom:=$height-10
+					OBJECT SET COORDINATES:C1248(*;"splitter";0;$bottom;$width;$bottom+1)
 					
 				Else 
 					
@@ -773,15 +746,15 @@ Case of
 				End if 
 				
 				  //______________________________________________________
-			: ($Lon_formEvent=On Mouse Leave:K2:34)
+			: ($e.code=On Mouse Leave:K2:34)
 				
 				GET MOUSE:C468($l;$l;$Lon_button)
 				
 				If ($Lon_button#1)
 					
-					OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_width;$Lon_height)
-					$Lon_bottom:=$Lon_height-10
-					OBJECT SET COORDINATES:C1248(*;"splitter";0;$Lon_bottom;$Lon_width;$Lon_bottom+1)
+					OBJECT GET SUBFORM CONTAINER SIZE:C1148($width;$height)
+					$bottom:=$height-10
+					OBJECT SET COORDINATES:C1248(*;"splitter";0;$bottom;$width;$bottom+1)
 					
 				End if 
 				
@@ -805,7 +778,7 @@ Case of
 				  //______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$e.description+")")
 				
 				  //______________________________________________________
 		End case 
@@ -813,14 +786,14 @@ Case of
 		  //==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown object: \""+$Txt_me+"\"")
+		ASSERT:C1129(False:C215;"Unknown object: \""+$e.objectName+"\"")
 		
 		  //==================================================
 End case 
 
-  //If (Bool(featuresFlags._8858))
-  //ui.saveProject()
-  //End if 
+  // If (Bool(featuresFlags._8858))
+  // Ui.saveProject()
+  // End if
 
   // ----------------------------------------------------
   // Return

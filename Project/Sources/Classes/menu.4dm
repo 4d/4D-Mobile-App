@@ -364,6 +364,26 @@ Function parameter
 	$0:=This:C1470
 	
 /*===============================================*/
+Function property
+	
+	C_TEXT:C284($1)  // property
+	C_VARIANT:C1683($2)  // value (Text, Number or Boolean)
+	C_LONGINT:C283($3)  // {target}
+	
+	If (Count parameters:C259>=3)
+		
+		SET MENU ITEM PARAMETER:C1004(This:C1470.ref;$3;$1;$2)
+		
+	Else 
+		
+		SET MENU ITEM PROPERTY:C973(This:C1470.ref;-1;$1;$2)
+		
+	End if 
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*===============================================*/
 Function mark
 	
 	C_BOOLEAN:C305($1)

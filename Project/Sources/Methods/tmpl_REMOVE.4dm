@@ -12,8 +12,8 @@
   // ----------------------------------------------------
   // Declarations
 C_LONGINT:C283($Lon_indx)
-C_TEXT:C284($Mnu_main;$Txt_bind;$Txt_choice;$Txt_field;$Txt_isOfClass)
-C_OBJECT:C1216($Obj_field;$Obj_target)
+C_TEXT:C284($Txt_bind;$Txt_field;$Txt_isOfClass)
+C_OBJECT:C1216($menu;$o;$Obj_target)
 
 ARRAY TEXT:C222($tTxt_results;0)
 
@@ -30,36 +30,32 @@ SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;$Txt_field;"4D-isOfClass-multi
 If ($Txt_isOfClass="true")\
  & (Value type:C1509($Obj_target[$Txt_bind])=Is collection:K8:32)
 	
-	$Mnu_main:=Create menu:C408
+	$menu:=cs:C1710.menu.new()
 	
-	For each ($Obj_field;$Obj_target[$Txt_bind])
+	For each ($o;$Obj_target[$Txt_bind])
 		
-		If ($Obj_field#Null:C1517)
+		If ($o#Null:C1517)
 			
-			APPEND MENU ITEM:C411($Mnu_main;Replace string:C233(Get localized string:C991("removeField");"{field}";$Obj_field.name))
-			SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;String:C10($Obj_field.id))
+			$menu.append(Replace string:C233(Get localized string:C991("removeField");"{field}";$o.name);String:C10($o.id))
 			
 		End if 
 	End for each 
 	
-	APPEND MENU ITEM:C411($Mnu_main;"-")
+	$menu.line()
+	$menu.append("removeAllFields";"all")
 	
-	APPEND MENU ITEM:C411($Mnu_main;Get localized string:C991("removeAllFields"))
-	SET MENU ITEM PARAMETER:C1004($Mnu_main;-1;"all")
+	$menu.popup()
 	
-	$Txt_choice:=Dynamic pop up menu:C1006($Mnu_main)
-	RELEASE MENU:C978($Mnu_main)
-	
-	If (Length:C16($Txt_choice)#0)
+	If ($menu.selected)
 		
-		If ($Txt_choice="all")
+		If ($menu.choice="all")
 			
 			$Obj_target[$Txt_bind]:=Null:C1517
 			
 		Else 
 			
 			  // Delete one
-			$Lon_indx:=$Obj_target[$Txt_bind].extract("id").indexOf(Num:C11($Txt_choice))
+			$Lon_indx:=$Obj_target[$Txt_bind].extract("id").indexOf(Num:C11($menu.choice))
 			
 			If ($Lon_indx#-1)
 				
