@@ -44,88 +44,45 @@ If ($oOUT.success)
 		
 		$oOUT.tables:=New collection:C1472
 		
-		If (feature.with("newDataModel"))
+		For each ($tTableNumber;$oDataModel)
 			
-			For each ($tTableNumber;$oDataModel)
-				
-				$o:=$oDataModel[$tTableNumber][""]  // Table properties
-				
-				$oTable:=New object:C1471(\
-					"tableNumber";Num:C11($tTableNumber);\
-					"name";$o.name)
-				
-				If ($o.label=Null:C1517)
-					
-					$o.label:=formatString ("label";$o.name)
-					
-				End if 
-				
-				$oTable.label:=$o.label
-				
-				If ($o.shortLabel=Null:C1517)
-					
-					$o.shortLabel:=$o.label
-					
-				End if 
-				
-				$oTable.shortLabel:=$o.shortLabel
-				
-				If ($o.filter#Null:C1517)
-					
-					$oTable.filter:=Choose:C955(Value type:C1509($o.filter)=Is text:K8:3;New object:C1471(\
-						"string";$o.filter);\
-						$o.filter)
-					
-				End if 
-				
-				$oTable.embedded:=Bool:C1537($o.embedded)
-				$oTable.iconPath:=String:C10($o.icon)
-				$oTable.icon:=getIcon ($oTable.iconPath)
-				
-				$oOUT.tables.push($oTable)
-				
-			End for each 
+			$o:=$oDataModel[$tTableNumber][""]  // Table properties
 			
-		Else 
+			$oTable:=New object:C1471(\
+				"tableNumber";Num:C11($tTableNumber);\
+				"name";$o.name)
 			
-			For each ($tTableNumber;$oDataModel)
+			If ($o.label=Null:C1517)
 				
-				$oTable:=New object:C1471(\
-					"tableNumber";Num:C11($tTableNumber);\
-					"name";$oDataModel[$tTableNumber].name)
+				$o.label:=formatString ("label";$o.name)
 				
-				If ($oDataModel[$tTableNumber].label=Null:C1517)
-					
-					$oDataModel[$tTableNumber].label:=formatString ("label";$oDataModel[$tTableNumber].name)
-					
-				End if 
+			End if 
+			
+			$oTable.label:=$o.label
+			
+			If ($o.shortLabel=Null:C1517)
 				
-				$oTable.label:=$oDataModel[$tTableNumber].label
+				$o.shortLabel:=$o.label
 				
-				If ($oDataModel[$tTableNumber].shortLabel=Null:C1517)
-					
-					$oDataModel[$tTableNumber].shortLabel:=$oDataModel[$tTableNumber].label
-					
-				End if 
+			End if 
+			
+			$oTable.shortLabel:=$o.shortLabel
+			
+			If ($o.filter#Null:C1517)
 				
-				$oTable.shortLabel:=$oDataModel[$tTableNumber].shortLabel
+				$oTable.filter:=Choose:C955(Value type:C1509($o.filter)=Is text:K8:3;New object:C1471(\
+					"string";$o.filter);\
+					$o.filter)
 				
-				If ($oDataModel[$tTableNumber].filter#Null:C1517)
-					
-					$oTable.filter:=Choose:C955(Value type:C1509($oDataModel[$tTableNumber].filter)=Is text:K8:3;New object:C1471(\
-						"string";$oDataModel[$tTableNumber].filter);\
-						$oDataModel[$tTableNumber].filter)
-					
-				End if 
-				
-				$oTable.embedded:=Bool:C1537($oDataModel[$tTableNumber].embedded)
-				$oTable.iconPath:=String:C10($oDataModel[$tTableNumber].icon)
-				$oTable.icon:=getIcon ($oTable.iconPath)
-				
-				$oOUT.tables.push($oTable)
-				
-			End for each 
-		End if 
+			End if 
+			
+			$oTable.embedded:=Bool:C1537($o.embedded)
+			$oTable.iconPath:=String:C10($o.icon)
+			$oTable.icon:=getIcon ($oTable.iconPath)
+			
+			$oOUT.tables.push($oTable)
+			
+		End for each 
 		
 	Else   // Old mechanism
 		
@@ -138,68 +95,34 @@ If ($oOUT.success)
 		$oOUT.iconPaths:=New collection:C1472
 		$oOUT.icons:=New collection:C1472
 		
-		If (feature.with("newDataModel"))
+		For each ($tTableNumber;$oDataModel)
 			
-			For each ($tTableNumber;$oDataModel)
-				
-				$o:=$oDataModel[$tTableNumber][""]  // Table properties
-				
-				$oOUT.ids[$i]:=Num:C11($tTableNumber)
-				$oOUT.names[$i]:=$o.name
-				
-				If ($o.label=Null:C1517)
-					
-					$o.label:=formatString ("label";$o.name)
-					
-				End if 
-				
-				$oOUT.labels[$i]:=$o.label
-				
-				If ($o.shortLabel=Null:C1517)
-					
-					$o.shortLabel:=$o.label
-					
-				End if 
-				
-				$oOUT.shortLabels[$i]:=$o.shortLabel
-				$oOUT.iconPaths[$i]:=String:C10($o.icon)
-				$oOUT.icons[$i]:=getIcon ($oOUT.iconPaths[$i])
-				
-				$i:=$i+1
-				
-			End for each 
+			$o:=$oDataModel[$tTableNumber][""]  // Table properties
 			
-		Else 
+			$oOUT.ids[$i]:=Num:C11($tTableNumber)
+			$oOUT.names[$i]:=$o.name
 			
-			For each ($tTableNumber;$oDataModel)
+			If ($o.label=Null:C1517)
 				
-				$oTable:=$oDataModel[$tTableNumber]
+				$o.label:=formatString ("label";$o.name)
 				
-				$oOUT.ids[$i]:=Num:C11($tTableNumber)
-				$oOUT.names[$i]:=$oTable.name
+			End if 
+			
+			$oOUT.labels[$i]:=$o.label
+			
+			If ($o.shortLabel=Null:C1517)
 				
-				If ($oTable.label=Null:C1517)
-					
-					$oTable.label:=formatString ("label";$oTable.name)
-					
-				End if 
+				$o.shortLabel:=$o.label
 				
-				$oOUT.labels[$i]:=$oTable.label
-				
-				If ($oTable.shortLabel=Null:C1517)
-					
-					$oTable.shortLabel:=$oTable.label
-					
-				End if 
-				
-				$oOUT.shortLabels[$i]:=$oTable.shortLabel
-				$oOUT.iconPaths[$i]:=String:C10($oTable.icon)
-				$oOUT.icons[$i]:=getIcon ($oOUT.iconPaths[$i])
-				
-				$i:=$i+1
-				
-			End for each 
-		End if 
+			End if 
+			
+			$oOUT.shortLabels[$i]:=$o.shortLabel
+			$oOUT.iconPaths[$i]:=String:C10($o.icon)
+			$oOUT.icons[$i]:=getIcon ($oOUT.iconPaths[$i])
+			
+			$i:=$i+1
+			
+		End for each 
 		
 		$oOUT.count:=$i
 		

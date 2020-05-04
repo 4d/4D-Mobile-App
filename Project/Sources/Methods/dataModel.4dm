@@ -172,17 +172,7 @@ Case of
 						$Lon_tableID:=Num:C11($tTxt_tables{$Lon_table})
 						$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
 						
-						If (feature.with("newDataModel"))
-							
-							$Txt_buffer:=$Obj_table[""].name
-							
-						Else 
-							
-							  // #OLD
-							$Txt_buffer:=$Obj_table.name
-							
-						End if 
-						
+						$Txt_buffer:=$Obj_table[""].name
 						$Txt_tableName:=formatString ("table-name";$Txt_buffer)
 						
 						$tTxt_entityValues{1}:=$Txt_tableName
@@ -207,20 +197,7 @@ Case of
 							
 						End if 
 						
-/* #ACI0100534 {
-If (Length(String($Obj_table.slave))>0)
-						
-// Only accessible via relations
-						//  //						  //  $Dom_node:=DOM Create XML element($Dom_userInfo;"entry";\
-																					 "key";"slave";\
-																					 "value";String($o.slave))
-						
-End if
-						
-$o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
-*/
-						
-						$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
+						$o:=$Obj_table[""]
 						
 						If (Length:C16(String:C10($o.slave))>0)
 							
@@ -250,7 +227,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 								
 							End if 
 							
-							  //Development #113102
+							  // Development #113102
 							If ($o.filter#Null:C1517)  // Is filter is available?
 								
 								If (Bool:C1537($o.filter.validated))  // Is filter is validated?
@@ -336,6 +313,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 												"domUserInfo";$Dom_userInfo))
 											
 										End if 
+										
 										  //……………………………………………………………………………………………………………
 									: (Value type:C1509($Obj_table[$tTxt_fields{$Lon_field}])#Is object:K8:27)
 										
@@ -493,19 +471,11 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 													End if 
 												End for 
 												
-												  //without forgot the primaryKey
-												If (feature.with("newDataModel"))
-													
-													$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)][""].primaryKey
-													
-												Else 
-													
-													  //#OLD
-													$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)].primaryKey
-													
-												End if 
+												  // Without forgot the primaryKey
+												$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)][""].primaryKey
 												
 												If (Length:C16($Txt_buffer)>0)
+													
 													If ($Col_fields.indexOf($Txt_buffer)<0)
 														
 														$Col_fields.push($Txt_buffer)
@@ -645,7 +615,9 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 						$Txt_relationName:=$tTxt_fields{$Lon_field}  // link name (or primaryKey, etc...)
 						
 						If ($Obj_table[$Txt_relationName].relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
+							
 							$Obj_table[$Txt_relationName].relatedDataClass:=$Obj_table[$Txt_relationName].relatedEntities
+							
 						End if 
 						
 						If ($Obj_table[$Txt_relationName].relatedDataClass#Null:C1517)  // Is is a link?
@@ -657,8 +629,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 								
 								$Obj_relationTable:=$Obj_dataModel[$tTxt_tables{$Lon_table2}]
 								
-								$o:=Choose:C955(feature.with("newDataModel");$Obj_relationTable[""];$Obj_relationTable)
-								  //$o:=$Obj_relationTable
+								$o:=$Obj_relationTable[""]
 								
 								If ($o.name=$Obj_table[$Txt_relationName].relatedDataClass)
 									
@@ -672,22 +643,11 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 							
 							If (Not:C34($Boo_found))  // not found we must add a new table in model
 								
-								If (feature.with("newDataModel"))
-									
-									$Obj_relationTable:=New object:C1471(\
-										"";New object:C1471("name";$Obj_table[$Txt_relationName].relatedDataClass)\
-										)
-									$o:=$Obj_relationTable[""]
-									
-								Else 
-									
-									$Obj_relationTable:=New object:C1471(\
-										"name";$Obj_table[$Txt_relationName].relatedDataClass\
-										)
-									
-									$o:=$Obj_relationTable
-									
-								End if 
+								$Obj_relationTable:=New object:C1471(\
+									"";New object:C1471(\
+									"name";$Obj_table[$Txt_relationName].relatedDataClass))
+								
+								$o:=$Obj_relationTable[""]
 								
 								$Obj_buffer:=structure (New object:C1471(\
 									"action";"tableInfo";\
@@ -696,12 +656,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 								If ($Obj_buffer.success)
 									
 									$o.primaryKey:=$Obj_buffer.tableInfo.primaryKey
-									
-									If (feature.with("newDataModel"))
-										$o.slave:=$Obj_table[""].name
-									Else 
-										$o.slave:=$Obj_table.name
-									End if 
+									$o.slave:=$Obj_table[""].name
 									
 									$Lon_relatedTableID:=$Obj_buffer.tableInfo.tableNumber
 									APPEND TO ARRAY:C911($tTxt_tables;String:C10($Lon_relatedTableID))
@@ -730,23 +685,12 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 								End if 
 							End for 
 							
-							If (feature.with("newDataModel"))
-								
-								  // Get inverse field
-								$Obj_buffer:=structure (New object:C1471(\
-									"action";"inverseRelatedFields";\
-									"table";$Obj_table[""].name;\
-									"relation";$Txt_relationName;\
-									"definition";$Obj_in.definition))
-								
-							Else 
-								
-								$Obj_buffer:=structure (New object:C1471(\
-									"action";"inverseRelatedFields";\
-									"table";$Obj_table.name;\
-									"relation";$Txt_relationName;\
-									"definition";$Obj_in.definition))
-							End if 
+							  // Get inverse field
+							$Obj_buffer:=structure (New object:C1471(\
+								"action";"inverseRelatedFields";\
+								"table";$Obj_table[""].name;\
+								"relation";$Txt_relationName;\
+								"definition";$Obj_in.definition))
 							
 							If ($Obj_buffer.success)
 								
@@ -763,6 +707,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 											"inverseName";$Txt_relationName;\
 											"relatedTableNumber";$Obj_field.relatedTableNumber;\
 											"relatedDataClass";$Obj_field.relatedDataClass)
+										
 									End if 
 									
 									$Obj_relationTable[$Obj_field.name].inverseName:=$Txt_relationName
@@ -793,7 +738,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 			$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
 			OB GET PROPERTY NAMES:C1232($Obj_table;$tTxt_fields)
 			
-			$o:=Choose:C955(feature.with("newDataModel");$Obj_table[""];$Obj_table)
+			$o:=$Obj_table[""]
 			
 			If ($o.primaryKey#Null:C1517)
 				
@@ -1024,25 +969,16 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 						
 						If (Bool:C1537($Obj_in.tag))  // for tag format name
 							
-							If (feature.with("newDataModel"))
-								
-								$Obj_table.originalName:=$Obj_table[""].name
-								$Obj_table.name:=formatString ("table-name";$Obj_table[""].name)
-								
-								
-							Else 
-								
-								$Obj_table.originalName:=$Obj_table.name
-								$Obj_table.name:=formatString ("table-name";$Obj_table.name)
-								
-							End if 
+							$Obj_table.originalName:=$Obj_table[""].name
+							$Obj_table.name:=formatString ("table-name";$Obj_table[""].name)
+							
 						End if 
 						
 						$Obj_out.tables.push($Obj_table)
 						
 					Else 
 						
-						  //ASSERT(dev_Matrix )
+						  // ASSERT(dev_Matrix )
 						
 					End if 
 				End for each 
@@ -1078,6 +1014,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 						If (Bool:C1537($Obj_in.relation))
 							
 							If ($Obj_in.table[$Txt_field].relatedEntities#Null:C1517)  // To change if relatedEntities deleted and relatedDataClass already filled #109019
+								
 								  // redmine #110927 : want to add relation 1-N if no field specified at all by user
 								  // Here we detect 1-N Relation, there is no "kind" or "type" to see it at this level...
 								
@@ -1139,7 +1076,9 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 						$Obj_buffer:=$Obj_in.table[$Txt_field]
 						
 						If ($Obj_buffer.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
+							
 							$Obj_buffer.relatedDataClass:=$Obj_buffer.relatedEntities
+							
 						End if 
 						
 						If ($Obj_buffer.relatedDataClass#Null:C1517)  // Is is a link?
@@ -1200,7 +1139,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 				End if 
 			End for each 
 			
-			$o:=Choose:C955(feature.with("newDataModel");$Obj_in.table[""];$Obj_in.table)
+			$o:=$Obj_in.table[""]
 			
 			  // Append the primaryKey if any
 			If ((Length:C16(String:C10($o.primaryKey))>0) & \
@@ -1342,15 +1281,7 @@ $o:=Choose(feature.with("newDataModel");$Obj_table[""];$Obj_table)
 			
 			For each ($t;$Obj_dataModel)
 				
-				If (feature.with("newDataModel"))
-					
-					$Obj_out.values.push($Obj_dataModel[$t][""].name)
-					
-				Else 
-					
-					$Obj_out.values.push($Obj_dataModel[$t].name)
-					
-				End if 
+				$Obj_out.values.push($Obj_dataModel[$t][""].name)
 				
 				If (Bool:C1537($Obj_in.relation))
 					

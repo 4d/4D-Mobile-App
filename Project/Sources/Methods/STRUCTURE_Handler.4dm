@@ -275,32 +275,17 @@ Case of
 		
 		$Obj_table:=$context.currentTable
 		
-		If (feature.with("newDataModel"))
-			
-			$o:=$context.catalog().query("tableNumber = :1";$Obj_table.tableNumber).pop()
-			
-			  // Put internal properties into a substructure
-			$0:=New object:C1471(\
-				"";New object:C1471(\
-				"name";$o.name;\
-				"label";formatString ("label";$o.name);\
-				"shortLabel";formatString ("label";$o.name);\
-				"primaryKey";String:C10($o.primaryKey);\
-				"embedded";True:C214)\
-				)
-			
-		Else 
-			
-			$c:=$context.catalog().query("tableNumber = :1";$Obj_table.tableNumber)
-			
-			$0:=New object:C1471(\
-				"name";$c[0].name;\
-				"label";formatString ("label";$c[0].name);\
-				"shortLabel";formatString ("label";$c[0].name);\
-				"primaryKey";String:C10($c[0].primaryKey);\
-				"embedded";True:C214)
-			
-		End if 
+		$o:=$context.catalog().query("tableNumber = :1";$Obj_table.tableNumber).pop()
+		
+		  // Put internal properties into a substructure
+		$0:=New object:C1471(\
+			"";New object:C1471(\
+			"name";$o.name;\
+			"label";formatString ("label";$o.name);\
+			"shortLabel";formatString ("label";$o.name);\
+			"primaryKey";String:C10($o.primaryKey);\
+			"embedded";True:C214)\
+			)
 		
 		  // Update main menu
 		main_Handler (New object:C1471(\

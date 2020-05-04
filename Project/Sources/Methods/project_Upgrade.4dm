@@ -353,103 +353,100 @@ If (Num:C11($o_project.info.version)<4)
 	End if 
 End if 
 
-If (feature.with("newDataModel"))
+  //=====================================================================
+  //                    NEW DATA MODEL
+  //=====================================================================
+If (Num:C11($o_project.info.version)<5)
 	
-	  //=====================================================================
-	  //                    NEW DATA MODEL
-	  //=====================================================================
-	If (Num:C11($o_project.info.version)<5)
-		
-		If ($o_project.dataModel#Null:C1517)
-			
-			For each ($tTable;$o_project.dataModel)
-				
-				$oTable:=$o_project.dataModel[$tTable]
-				
-				If ($oTable[""]=Null:C1517)
-					
-					$oTable[""]:=New object:C1471(\
-						"name";$oTable.name;\
-						"label";$oTable.label;\
-						"shortLabel";$oTable.shortLabel;\
-						"primaryKey";$oTable.primaryKey\
-						)
-					
-					OB REMOVE:C1226($oTable;"name")
-					OB REMOVE:C1226($oTable;"label")
-					OB REMOVE:C1226($oTable;"shortLabel")
-					OB REMOVE:C1226($oTable;"primaryKey")
-					
-					If (Bool:C1537($oTable.embedded))
-						
-						$oTable[""].embedded:=True:C214
-						
-					End if 
-					
-					OB REMOVE:C1226($oTable;"embedded")
-					
-					If (Length:C16(String:C10($oTable.icon))>0)
-						
-						$oTable[""].icon:=$oTable.icon
-						
-					End if 
-					
-					OB REMOVE:C1226($oTable;"icon")
-					
-					  //#ACI0100305
-					If ($oTable.filter#Null:C1517)
-						
-						$oTable[""].filter:=$oTable.filter
-						OB REMOVE:C1226($oTable;"filter")
-						
-					End if 
-				End if 
-			End for each 
-			
-			$b_upgraded:=True:C214
-			
-		End if 
-		
-		$o_project.info.version:=5
-		RECORD.warning("Upadted to version: "+String:C10($o_project.info.version))
-		
-	End if 
-	
-	  //=====================================================================
-	  //                     "Simple List" -> "Blank Form"
-	  //=====================================================================
-	If ($o_project.detail#Null:C1517)
-		
-		For each ($tTable;$o_project.detail)
-			
-			If (String:C10($o_project.detail[$tTable].form)="Simple List")
-				
-				$o_project.detail[$tTable].form:="Blank Form"
-				
-			End if 
-		End for each 
-	End if 
-	
-	  //=====================================================================
-	  //                              MISCELLANEOUS
-	  //=====================================================================
 	If ($o_project.dataModel#Null:C1517)
 		
 		For each ($tTable;$o_project.dataModel)
 			
-			For each ($tField;$o_project.dataModel[$tTable])
+			$oTable:=$o_project.dataModel[$tTable]
+			
+			If ($oTable[""]=Null:C1517)
 				
-				If (Match regex:C1019("(?m-si)^\\d+$";$tField;1;*))
+				$oTable[""]:=New object:C1471(\
+					"name";$oTable.name;\
+					"label";$oTable.label;\
+					"shortLabel";$oTable.shortLabel;\
+					"primaryKey";$oTable.primaryKey\
+					)
+				
+				OB REMOVE:C1226($oTable;"name")
+				OB REMOVE:C1226($oTable;"label")
+				OB REMOVE:C1226($oTable;"shortLabel")
+				OB REMOVE:C1226($oTable;"primaryKey")
+				
+				If (Bool:C1537($oTable.embedded))
 					
-					If (String:C10($o_project.dataModel[$tTable][$tField].icon)="")
-						
-						OB REMOVE:C1226($o_project.dataModel[$tTable][$tField];"icon")
-						
-					End if 
+					$oTable[""].embedded:=True:C214
+					
 				End if 
-			End for each 
+				
+				OB REMOVE:C1226($oTable;"embedded")
+				
+				If (Length:C16(String:C10($oTable.icon))>0)
+					
+					$oTable[""].icon:=$oTable.icon
+					
+				End if 
+				
+				OB REMOVE:C1226($oTable;"icon")
+				
+				  //#ACI0100305
+				If ($oTable.filter#Null:C1517)
+					
+					$oTable[""].filter:=$oTable.filter
+					OB REMOVE:C1226($oTable;"filter")
+					
+				End if 
+			End if 
 		End for each 
+		
+		$b_upgraded:=True:C214
+		
 	End if 
+	
+	$o_project.info.version:=5
+	RECORD.warning("Upadted to version: "+String:C10($o_project.info.version))
+	
+End if 
+
+  //=====================================================================
+  //                     "Simple List" -> "Blank Form"
+  //=====================================================================
+If ($o_project.detail#Null:C1517)
+	
+	For each ($tTable;$o_project.detail)
+		
+		If (String:C10($o_project.detail[$tTable].form)="Simple List")
+			
+			$o_project.detail[$tTable].form:="Blank Form"
+			
+		End if 
+	End for each 
+End if 
+
+  //=====================================================================
+  //                              MISCELLANEOUS
+  //=====================================================================
+If ($o_project.dataModel#Null:C1517)
+	
+	For each ($tTable;$o_project.dataModel)
+		
+		For each ($tField;$o_project.dataModel[$tTable])
+			
+			If (Match regex:C1019("(?m-si)^\\d+$";$tField;1;*))
+				
+				If (String:C10($o_project.dataModel[$tTable][$tField].icon)="")
+					
+					OB REMOVE:C1226($o_project.dataModel[$tTable][$tField];"icon")
+					
+				End if 
+			End if 
+		End for each 
+	End for each 
 End if 
 
 If (feature.with("resourcesBrowser"))

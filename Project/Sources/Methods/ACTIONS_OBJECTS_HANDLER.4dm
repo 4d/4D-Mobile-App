@@ -24,7 +24,8 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-$form:=ACTIONS_Handler (New object:C1471("action";"init"))
+$form:=ACTIONS_Handler (New object:C1471(\
+"action";"init"))
 
 $context:=$form[""]
 
@@ -91,7 +92,8 @@ Case of
 				  //______________________________________________________
 			: ($form.form.eventCode=On Begin Drag Over:K2:44)
 				
-				$o:=New object:C1471("src";$context.index)
+				$o:=New object:C1471(\
+					"src";$context.index)
 				
 				  // Put into the container
 				VARIABLE TO BLOB:C532($o;$x)
@@ -132,7 +134,8 @@ Case of
 						
 					Else 
 						
-						If ($o.src#$o.tgt) & ($o.tgt#($o.src+1))  // Not the same or the next one
+						If ($o.src#$o.tgt)\
+							 & ($o.tgt#($o.src+1))  // Not the same or the next one
 							
 							$o:=$Obj_widget.cellCoordinates(1;$o.tgt).cellBox
 							$o.bottom:=$o.top
@@ -258,7 +261,9 @@ Case of
 							$o.prompt:=str .setText("chooseAnIconForTheAction").localized(String:C10($context.current.name))
 							
 							  // Display selector
-							$form.form.call(New object:C1471("parameters";New collection:C1472("pickerShow";$o)))
+							$form.form.call(New object:C1471(\
+								"parameters";New collection:C1472("pickerShow";\
+								$o)))
 							
 						End if 
 						
@@ -275,7 +280,9 @@ Case of
 				Case of 
 						
 						  //…………………………………………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$form.name].number) | ($Obj_widget.column=$Obj_widget.columns[$form.shortLabel].number) | ($Obj_widget.column=$Obj_widget.columns[$form.label].number)
+					: ($Obj_widget.column=$Obj_widget.columns[$form.name].number)\
+						 | ($Obj_widget.column=$Obj_widget.columns[$form.shortLabel].number)\
+						 | ($Obj_widget.column=$Obj_widget.columns[$form.label].number)
 						
 						  // Put an edit flag to manage loss of focus
 						$context.$cellEdition:=True:C214
@@ -287,23 +294,11 @@ Case of
 						
 						$menu:=cs:C1710.menu.new()
 						
-						If (feature.with("newDataModel"))
+						For each ($t;Form:C1466.dataModel)
 							
-							For each ($t;Form:C1466.dataModel)
-								
-								$menu.append(Form:C1466.dataModel[$t][""].name;$t;Num:C11($context.current.tableNumber)=Num:C11($t))
-								
-							End for each 
+							$menu.append(Form:C1466.dataModel[$t][""].name;$t;Num:C11($context.current.tableNumber)=Num:C11($t))
 							
-						Else 
-							
-							For each ($t;Form:C1466.dataModel)
-								
-								$menu.append(Form:C1466.dataModel[$t].name;$t;Num:C11($context.current.tableNumber)=Num:C11($t))
-								
-							End for each 
-							
-						End if 
+						End for each 
 						
 						If ($Obj_widget.popup($menu).selected)
 							
@@ -331,12 +326,14 @@ Case of
 								Case of 
 										
 										  //________________________________________
-									: ($i=1) & (String:C10($context.current.preset)="suppression")  // Table
+									: ($i=1)\
+										 & (String:C10($context.current.preset)="suppression")  // Table
 										
 										$menu.disable()
 										
 										  //________________________________________
-									: ($i=2) & (String:C10($context.current.preset)="adding")  // Current entity
+									: ($i=2)\
+										 & (String:C10($context.current.preset)="adding")  // Current entity
 										
 										$menu.disable()
 										
@@ -382,27 +379,13 @@ Case of
 			
 			$menu.append(":xliff:deleteActionFor";$Obj_delete)
 			
-			If (feature.with("newDataModel"))
+			For each ($t;Form:C1466.dataModel)
 				
-				For each ($t;Form:C1466.dataModel)
-					
-					$Obj_add.append(Form:C1466.dataModel[$t][""].name;"add_"+$t)
-					$Obj_edit.append(Form:C1466.dataModel[$t][""].name;"edit_"+$t)
-					$Obj_delete.append(Form:C1466.dataModel[$t][""].name;"delete_"+$t)
-					
-				End for each 
+				$Obj_add.append(Form:C1466.dataModel[$t][""].name;"add_"+$t)
+				$Obj_edit.append(Form:C1466.dataModel[$t][""].name;"edit_"+$t)
+				$Obj_delete.append(Form:C1466.dataModel[$t][""].name;"delete_"+$t)
 				
-			Else 
-				
-				For each ($t;Form:C1466.dataModel)
-					
-					$Obj_add.append(Form:C1466.dataModel[$t].name;"add_"+$t)
-					$Obj_edit.append(Form:C1466.dataModel[$t].name;"edit_"+$t)
-					$Obj_delete.append(Form:C1466.dataModel[$t].name;"delete_"+$t)
-					
-				End for each 
-				
-			End if 
+			End for each 
 			
 			$menu.popup("";$form.add.getCoordinates())
 			
@@ -472,16 +455,8 @@ Case of
 					
 					$Obj_table:=Form:C1466.dataModel[$menu.table]
 					
-					If (feature.with("newDataModel"))
-						
-						  // Generate a unique name
-						$t:=str (formatString ("label";$Obj_table[""].name)).uperCamelCase()
-						
-					Else 
-						
-						$t:=str (formatString ("label";$Obj_table.name)).uperCamelCase()
-						
-					End if 
+					  // Generate a unique name
+					$t:=str (formatString ("label";$Obj_table[""].name)).uperCamelCase()
 					
 					$menu.name:=$menu.prefix+$t
 					
@@ -500,7 +475,15 @@ Case of
 						Until ($c.length=0)
 					End if 
 					
-					$o:=New object:C1471("preset";$menu.preset;"icon";$menu.icon;"$icon";$p;"tableNumber";$menu.tableNumber;"scope";$menu.scope;"name";$menu.name;"shortLabel";$menu.label;"label";$menu.label)
+					$o:=New object:C1471(\
+						"preset";$menu.preset;\
+						"icon";$menu.icon;\
+						"$icon";$p;\
+						"tableNumber";$menu.tableNumber;\
+						"scope";$menu.scope;\
+						"name";$menu.name;\
+						"shortLabel";$menu.label;\
+						"label";$menu.label)
 					
 					Case of 
 							
@@ -514,143 +497,81 @@ Case of
 							
 							$o.parameters:=New collection:C1472
 							
-							If (feature.with("newDataModel"))
+							$Col_fields:=catalog ("fields";New object:C1471("tableName";$Obj_table[""].name)).fields
+							
+							For each ($t;$Obj_table)
 								
-								$Col_fields:=catalog ("fields";New object:C1471("tableName";$Obj_table[""].name)).fields
-								
-								For each ($t;$Obj_table)
-									
-									Case of 
+								Case of 
+										
+										  //______________________________________________________
+									: (Length:C16($t)=0)
+										
+										  // <NOTHING MORE TO DO>
+										
+										  //______________________________________________________
+									: (Storage:C1525.ƒ.isField($t))
+										
+										If ($Obj_table[$t].name#$Obj_table[""].primaryKey)  // DO NOT ADD A PRIMARY KEY
 											
-											  //______________________________________________________
-										: (Length:C16($t)=0)
+											$Obj_field:=$Col_fields.query("name = :1";$Obj_table[$t].name).pop()
 											
-											  // <NOTHING MORE TO DO>
+											$oo:=New object:C1471(\
+												"fieldNumber";$Obj_field.fieldNumber;\
+												"name";str ($Obj_table[$t].name).uperCamelCase();\
+												"label";$Obj_table[$t].label;\
+												"shortLabel";$Obj_table[$t].shortLabel;\
+												"type";Choose:C955($Obj_field.fieldType=Is time:K8:8;"time";$Obj_field.valueType))
 											
-											  //______________________________________________________
-										: (Storage:C1525.ƒ.isField($t))
-											
-											If ($Obj_table[$t].name#$Obj_table[""].primaryKey)  // DO NOT ADD A PRIMARY KEY
+											If ($menu.edit)
 												
-												$Obj_field:=$Col_fields.query("name = :1";$Obj_table[$t].name).pop()
+												$oo.defaultField:=formatString ("field-name";$Obj_table[$t].name)
 												
-												$oo:=New object:C1471("fieldNumber";$Obj_field.fieldNumber;"name";str ($Obj_table[$t].name).uperCamelCase();"label";$Obj_table[$t].label;"shortLabel";$Obj_table[$t].shortLabel;"type";Choose:C955($Obj_field.fieldType=Is time:K8:8;"time";$Obj_field.valueType))
-												
-												If ($menu.edit)
-													
-													$oo.defaultField:=formatString ("field-name";$Obj_table[$t].name)
-													
-												End if 
-												
-												If ($oo#Null:C1517)
-													
-													If (Bool:C1537($Obj_field.mandatory))
-														
-														$oo.rules:=New collection:C1472("mandatory")
-														
-													End if 
-													
-													  // Preset formats
-													Case of 
-															
-															  //……………………………………………………………………
-														: ($Obj_field.fieldType=Is integer:K8:5) | ($Obj_field.fieldType=Is longint:K8:6) | ($Obj_field.fieldType=Is integer 64 bits:K8:25)
-															
-															$oo.format:="integer"
-															
-															  //……………………………………………………………………
-														: ($oo.type="date")
-															
-															$oo.format:="shortDate"
-															
-															  //……………………………………………………………………
-													End case 
-													
-													$o.parameters.push($oo)
-													
-												End if 
 											End if 
 											
-											  //______________________________________________________
-										: (Value type:C1509($Obj_table[$t])#Is object:K8:27)
-											
-											  // <NOTHING MORE TO DO>
-											
-											  //______________________________________________________
-										: (Storage:C1525.ƒ.isRelation($Obj_table[$t]))
-											
-											  //
-											
-											  //______________________________________________________
-									End case 
-								End for each 
-								
-							Else 
-								
-								$Col_fields:=catalog ("fields";New object:C1471("tableName";$Obj_table.name)).fields
-								
-								For each ($t;$Obj_table)
-									
-									Case of 
-											
-											  //______________________________________________________
-										: (Storage:C1525.ƒ.isField($t))
-											
-											If ($Obj_table[$t].name#$Obj_table.primaryKey)  // DO NOT ADD A PRIMARY KEY
+											If ($oo#Null:C1517)
 												
-												$cc:=$Col_fields.query("name = :1";$Obj_table[$t].name)
-												
-												$oo:=New object:C1471("fieldNumber";$cc[0].fieldNumber;"name";str ($Obj_table[$t].name).uperCamelCase();"label";$Obj_table[$t].label;"shortLabel";$Obj_table[$t].shortLabel;"type";Choose:C955($cc[0].fieldType=Is time:K8:8;"time";$cc[0].valueType))
-												
-												If ($menu.edit)
+												If (Bool:C1537($Obj_field.mandatory))
 													
-													$oo.defaultField:=formatString ("field-name";$Obj_table[$t].name)
+													$oo.rules:=New collection:C1472("mandatory")
 													
 												End if 
 												
-												If ($oo#Null:C1517)
-													
-													If (Bool:C1537($cc[0].mandatory))
+												  // Preset formats
+												Case of 
 														
-														$oo.rules:=New collection:C1472("mandatory")
+														  //……………………………………………………………………
+													: ($Obj_field.fieldType=Is integer:K8:5)\
+														 | ($Obj_field.fieldType=Is longint:K8:6)\
+														 | ($Obj_field.fieldType=Is integer 64 bits:K8:25)
 														
-													End if 
-													
-													  // Preset formats
-													Case of 
-															
-															  //……………………………………………………………………
-														: ($cc[0].fieldType=Is integer:K8:5) | ($cc[0].fieldType=Is longint:K8:6) | ($cc[0].fieldType=Is integer 64 bits:K8:25)
-															
-															$oo.format:="integer"
-															
-															  //……………………………………………………………………
-														: ($oo.type="date")
-															
-															$oo.format:="shortDate"
-															
-															  //……………………………………………………………………
-													End case 
-													
-													$o.parameters.push($oo)
-													
-												End if 
+														$oo.format:="integer"
+														
+														  //……………………………………………………………………
+													: ($oo.type="date")
+														
+														$oo.format:="shortDate"
+														
+														  //……………………………………………………………………
+												End case 
+												
+												$o.parameters.push($oo)
+												
 											End if 
-											
-											  //______________________________________________________
-										: (Value type:C1509($Obj_table[$t])#Is object:K8:27)
-											
-											  // <NOTHING MORE TO DO>
-											
-											  //______________________________________________________
-										: (Storage:C1525.ƒ.isRelation($Obj_table[$t]))
-											
-											  //
-											
-											  //______________________________________________________
-									End case 
-								End for each 
-							End if 
+										End if 
+										
+										  //______________________________________________________
+									: (Value type:C1509($Obj_table[$t])#Is object:K8:27)
+										
+										  // <NOTHING MORE TO DO>
+										
+										  //______________________________________________________
+									: (Storage:C1525.ƒ.isRelation($Obj_table[$t]))
+										
+										  //
+										
+										  //______________________________________________________
+								End case 
+							End for each 
 							
 							  //……………………………………………………………………
 					End case 
@@ -684,10 +605,16 @@ Case of
 				Until ($c.length=0)
 			End if 
 			
-			$o:=New object:C1471("name";$t;"scope";"table";"shortLabel";$t;"label";$t;"$icon";$p)
+			$o:=New object:C1471(\
+				"name";$t;\
+				"scope";"table";\
+				"shortLabel";$t;\
+				"label";$t;\
+				"$icon";$p)
 			
 			  // Auto define the target table if only one is published
 			$i:=0
+			
 			For each ($t;Form:C1466.dataModel) While ($i<2)
 				
 				$i:=$i+1
@@ -775,7 +702,8 @@ Case of
 		METHOD GET PATHS:C1163(Path database method:K72:2;$tTxt_;*)
 		$tTxt_{0}:=METHOD Get path:C1164(Path database method:K72:2;"onMobileAppAction")
 		
-		If (Macintosh option down:C545) & (Structure file:C489=Structure file:C489(*))
+		If (Macintosh option down:C545)\
+			 & (Structure file:C489=Structure file:C489(*))
 			
 			If (Find in array:C230($tTxt_;$tTxt_{0})>0)
 				
@@ -815,6 +743,7 @@ Case of
 		METHOD OPEN PATH:C1213($tTxt_{0};*)
 		
 		  //==================================================
+		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown widget: \""+$form.form.current+"\"")

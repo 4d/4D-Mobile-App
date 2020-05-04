@@ -102,17 +102,8 @@ If ($file.exists)
 				Else 
 					
 					  // Check TABLE NAME & PRIMARY KEY
-					If (feature.with("newDataModel"))
-						
-						$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel[""].name)\
-							 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel[""].primaryKey)
-						
-					Else 
-						
-						$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel.name)\
-							 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel.primaryKey)
-						
-					End if 
+					$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel[""].name)\
+						 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel[""].primaryKey)
 					
 					If (Not:C34($Boo_unsynchronizedTable))
 						

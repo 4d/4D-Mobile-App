@@ -133,16 +133,7 @@ If ($oDataModel#Null:C1517)
 		
 		If ($context.icons)  // ICONS
 			
-			If (feature.with("newDataModel"))
-				
-				$t:=String:C10($oDataModel[$tTable][""].icon)
-				
-			Else 
-				
-				  //old
-				$t:=String:C10($oDataModel[$tTable].icon)
-				
-			End if 
+			$t:=String:C10($oDataModel[$tTable][""].icon)
 			
 			If (Position:C15("/";$t)=1)  // Host database resources
 				
@@ -241,7 +232,7 @@ If ($oDataModel#Null:C1517)
 		
 		If ($context.filters)  // FILTERS
 			
-			$o:=Choose:C955(feature.with("newDataModel");$oDataModel[$tTable][""];$oDataModel[$tTable])
+			$o:=$oDataModel[$tTable][""]
 			
 			If ($o.filter#Null:C1517)
 				

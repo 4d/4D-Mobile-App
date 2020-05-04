@@ -136,53 +136,26 @@ Case of
 		  // Available tables
 		If (Form:C1466.dataModel#Null:C1517)
 			
-			If (feature.with("newDataModel"))
+			For each ($Txt_tableNumber;Form:C1466.dataModel)
 				
-				For each ($Txt_tableNumber;Form:C1466.dataModel)
-					
-					APPEND TO ARRAY:C911($Ptr_names->;Form:C1466.dataModel[$Txt_tableNumber][""].label)
-					APPEND TO ARRAY:C911($Ptr_IDs->;$Txt_tableNumber)
-					
-				End for each 
+				APPEND TO ARRAY:C911($Ptr_names->;Form:C1466.dataModel[$Txt_tableNumber][""].label)
+				APPEND TO ARRAY:C911($Ptr_IDs->;$Txt_tableNumber)
 				
-			Else 
-				
-				For each ($Txt_tableNumber;Form:C1466.dataModel)
-					
-					APPEND TO ARRAY:C911($Ptr_names->;Form:C1466.dataModel[$Txt_tableNumber].label)
-					APPEND TO ARRAY:C911($Ptr_IDs->;$Txt_tableNumber)
-					
-				End for each 
-			End if 
+			End for each 
 		End if 
 		
 		OBJECT SET VISIBLE:C603(*;"noPublishedTable";Size of array:C274($Ptr_names->)=0)
 		
 		  // Selected tables
-		If (feature.with("newDataModel"))
+		For each ($Txt_tableNumber;Form:C1466.main.order)
 			
-			For each ($Txt_tableNumber;Form:C1466.main.order)
+			If (Form:C1466.dataModel[$Txt_tableNumber]#Null:C1517)
 				
-				If (Form:C1466.dataModel[$Txt_tableNumber]#Null:C1517)
-					
-					APPEND TO ARRAY:C911($Ptr_mainIDs->;$Txt_tableNumber)
-					APPEND TO ARRAY:C911($Ptr_mainNames->;Form:C1466.dataModel[$Txt_tableNumber][""].label)
-					
-				End if 
-			End for each 
-			
-		Else 
-			
-			For each ($Txt_tableNumber;Form:C1466.main.order)
+				APPEND TO ARRAY:C911($Ptr_mainIDs->;$Txt_tableNumber)
+				APPEND TO ARRAY:C911($Ptr_mainNames->;Form:C1466.dataModel[$Txt_tableNumber][""].label)
 				
-				If (Form:C1466.dataModel[$Txt_tableNumber]#Null:C1517)
-					
-					APPEND TO ARRAY:C911($Ptr_mainIDs->;$Txt_tableNumber)
-					APPEND TO ARRAY:C911($Ptr_mainNames->;Form:C1466.dataModel[$Txt_tableNumber].label)
-					
-				End if 
-			End for each 
-		End if 
+			End if 
+		End for each 
 		
 		If (editor_Locked )
 			

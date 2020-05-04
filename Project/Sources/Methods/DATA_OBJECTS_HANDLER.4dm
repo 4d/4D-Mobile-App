@@ -35,7 +35,8 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 	
 	$event:=FORM Event:C1606
 	
-	$form:=DATA_Handler (New object:C1471("action";"init"))
+	$form:=DATA_Handler (New object:C1471(\
+		"action";"init"))
 	
 	$context:=$form.ui
 	$oTable:=$context.current
@@ -95,7 +96,10 @@ Case of
 					
 					$o:=$context.tables[$row-1]
 					
-					If (Bool:C1537($o.embedded)) & (Not:C34(Bool:C1537($o.filter.parameters))) & ((Bool:C1537($o.filter.validated)) | (Length:C16(String:C10($o.filter.string))=0))
+					If (Bool:C1537($o.embedded))\
+						 & (Not:C34(Bool:C1537($o.filter.parameters)))\
+						 & ((Bool:C1537($o.filter.validated))\
+						 | (Length:C16(String:C10($o.filter.string))=0))
 						
 						If (Length:C16(String:C10($o.filter.string))=0)
 							
@@ -179,7 +183,8 @@ Case of
 				
 				PROCESS 4D TAGS:C816($t;$t;ui.selectedFillColor;Get localized string:C991("fields");Get localized string:C991("comparators");Get localized string:C991("operators");"🢓")
 				
-				(OBJECT Get pointer:C1124(Object current:K67:2))->:=svg ("parse";New object:C1471("variable";$t)).getPicture()
+				(OBJECT Get pointer:C1124(Object current:K67:2))->:=svg ("parse";New object:C1471(\
+					"variable";$t)).getPicture()
 				
 				OBJECT SET VISIBLE:C603(*;$event.objectName;False:C215)
 				
@@ -277,9 +282,11 @@ Case of
 							
 						End if 
 						
-						If ($start=$end) & ($start#1)
+						If ($start=$end)\
+							 & ($start#1)
 							
-							If (String:C10($oTable.filter.string)[[$start-1]]#" ") & (String:C10($oTable.filter.string)[[$start-1]]#"(")
+							If (String:C10($oTable.filter.string)[[$start-1]]#" ")\
+								 & (String:C10($oTable.filter.string)[[$start-1]]#"(")
 								
 								$oTable.filter.string:=$oTable.filter.string+" "
 								$start:=$start+1
@@ -293,17 +300,10 @@ Case of
 						$o:=str (String:C10($oTable.filter.string)).insert($menu.choice;$start;$end)
 						$oTable.filter.string:=$o.value
 						
-						If (feature.with("newDataModel"))
-							
-							Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
-							
-						Else 
-							
-							Form:C1466.dataModel[String:C10($oTable.tableNumber)].filter:=$oTable.filter
-							
-						End if 
+						Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
 						
-						If ($bCaret) & (Length:C16($tSelection)=0)
+						If ($bCaret)\
+							 & (Length:C16($tSelection)=0)
 							
 							  // Put the carret into
 							$o.begin:=$o.end-1
@@ -333,24 +333,18 @@ Case of
 		End case 
 		
 		  //==================================================
-	: ($event.objectName=$form.validate) | ($event.objectName=$form.enter)
+	: ($event.objectName=$form.validate)\
+		 | ($event.objectName=$form.enter)
 		
 		GOTO OBJECT:C206(*;$form.list)
 		
-		$o:=checkQueryFilter (New object:C1471("table";$oTable.name;"filter";$oTable.filter))
+		$o:=checkQueryFilter (New object:C1471(\
+			"table";$oTable.name;\
+			"filter";$oTable.filter))
 		
 		$oTable.filter:=$o.filter
 		
-		If (feature.with("newDataModel"))
-			
-			Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
-			
-		Else 
-			
-			$oTable.filter:=$o.filter
-			Form:C1466.dataModel[String:C10($oTable.tableNumber)].filter:=$oTable.filter
-			
-		End if 
+		Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
 		
 		ui.saveProject()
 		$context.refresh()
@@ -361,29 +355,14 @@ Case of
 		  //==================================================
 	: ($event.objectName=$form.embedded)
 		
-		If (feature.with("newDataModel"))
+		If (Bool:C1537($oTable.embedded))
 			
-			If (Bool:C1537($oTable.embedded))
-				
-				Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].embedded:=True:C214
-				
-			Else 
-				
-				OB REMOVE:C1226(Form:C1466.dataModel[String:C10($oTable.tableNumber)][""];"embedded")
-				
-			End if 
+			Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].embedded:=True:C214
 			
 		Else 
 			
-			If (Bool:C1537($oTable.embedded))
-				
-				Form:C1466.dataModel[String:C10($oTable.tableNumber)].embedded:=True:C214
-				
-			Else 
-				
-				OB REMOVE:C1226(Form:C1466.dataModel[String:C10($oTable.tableNumber)];"embedded")
-				
-			End if 
+			OB REMOVE:C1226(Form:C1466.dataModel[String:C10($oTable.tableNumber)][""];"embedded")
+			
 		End if 
 		
 		ui.saveProject()
@@ -399,7 +378,8 @@ Case of
 				
 				If ($oTable.filter=Null:C1517)
 					
-					$oTable.filter:=New object:C1471("string";"")
+					$oTable.filter:=New object:C1471(\
+						"string";"")
 					
 					$oTable.validated:=False:C215
 					
@@ -437,15 +417,7 @@ Case of
 				
 				$t:=Get edited text:C655
 				
-				If (feature.with("newDataModel"))
-					
-					$o:=Form:C1466.dataModel[String:C10($oTable.tableNumber)][""]
-					
-				Else 
-					
-					$o:=Form:C1466.dataModel[String:C10($oTable.tableNumber)]
-					
-				End if 
+				$o:=Form:C1466.dataModel[String:C10($oTable.tableNumber)][""]
 				
 				If (Value type:C1509($o.filter)#Is object:K8:27)
 					
@@ -503,7 +475,8 @@ Case of
 		  //==================================================
 	: ($event.objectName=$form.method)
 		
-		_o_SERVER_Handler (New object:C1471("action";"editAuthenticationMethod"))
+		_o_SERVER_Handler (New object:C1471(\
+			"action";"editAuthenticationMethod"))
 		
 		  //==================================================
 	Else 

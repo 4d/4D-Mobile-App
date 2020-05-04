@@ -265,58 +265,32 @@ Case of
 				  // ==============================================================
 				$Obj_table:=OB Copy:C1225($Obj_tableModel)
 				
-				If (feature.with("newDataModel"))
+				$Obj_table.tableNumber:=$Txt_tableNumber
+				$Obj_table.originalName:=$Obj_table[""].name
+				
+				  // Format name for the tag
+				$Obj_table.name:=formatString ("table-name";$Obj_table.originalName)
+				
+				If ($Obj_table[""].label=Null:C1517)
 					
-					$Obj_table.tableNumber:=$Txt_tableNumber
-					
-					$Obj_table.originalName:=$Obj_table[""].name
-					
-					  // Format name for the tag
-					$Obj_table.name:=formatString ("table-name";$Obj_table.originalName)
-					
-					If ($Obj_table[""].label=Null:C1517)
-						
-						$Obj_table.label:=formatString ("label";$Obj_table.originalName)
-						
-					Else 
-						
-						  // User label
-						$Obj_table.label:=$Obj_table[""].label
-						
-					End if 
-					
-					If ($Obj_table[""].shortLabel=Null:C1517)
-						
-						$Obj_table.shortLabel:=formatString ("label";$Obj_table.originalName)
-						
-					Else 
-						
-						  // User label
-						$Obj_table.shortLabel:=$Obj_table[""].shortLabel
-						
-					End if 
+					$Obj_table.label:=formatString ("label";$Obj_table.originalName)
 					
 				Else 
 					
-					  // #OLD
-					$Obj_table.originalName:=$Obj_table.name
+					  // User label
+					$Obj_table.label:=$Obj_table[""].label
 					
-					$Obj_table.tableNumber:=$Txt_tableNumber
+				End if 
+				
+				If ($Obj_table[""].shortLabel=Null:C1517)
 					
-					  // Format name for the tag
-					$Obj_table.name:=formatString ("table-name";$Obj_table.originalName)
+					$Obj_table.shortLabel:=formatString ("label";$Obj_table.originalName)
 					
-					If ($Obj_table.label=Null:C1517)
-						
-						$Obj_table.label:=formatString ("label";$Obj_table.originalName)
-						
-					End if 
+				Else 
 					
-					If ($Obj_table.shortLabel=Null:C1517)
-						
-						$Obj_table.shortLabel:=formatString ("label";$Obj_table.originalName)
-						
-					End if 
+					  // User label
+					$Obj_table.shortLabel:=$Obj_table[""].shortLabel
+					
 				End if 
 				
 				  // ==============================================================
@@ -638,16 +612,7 @@ Case of
 				
 				If (Value type:C1509($Obj_in.tags.navigationTables)=Is collection:K8:32)
 					
-					If (feature.with("newDataModel"))
-						
-						$Obj_navigationTable:=$Obj_in.tags.navigationTables.query("originalName = :1";String:C10($Obj_table.originalName)).pop()
-						
-					Else 
-						
-						  //#OLD
-						$Obj_navigationTable:=$Obj_in.tags.navigationTables.find("col_formula";"$1.result:=String:C10($1.value.originalName)=\""+$Obj_table.originalName+"\"")
-						
-					End if 
+					$Obj_navigationTable:=$Obj_in.tags.navigationTables.query("originalName = :1";String:C10($Obj_table.originalName)).pop()
 					
 					If ($Obj_navigationTable#Null:C1517)
 						
@@ -905,177 +870,87 @@ Case of
 			
 			For each ($Obj_table;$Obj_in.tags.navigationTables)
 				
-				If (feature.with("newDataModel"))
+				If (Length:C16(String:C10($Obj_table[""].icon))=0)  // no icon defined
 					
-					If (Length:C16(String:C10($Obj_table[""].icon))=0)  // no icon defined
+					If ($Obj_table[""].shortLabel#Null:C1517)
 						
-						If ($Obj_table[""].shortLabel#Null:C1517)
+						  // Generate asset using first table letter
+						$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
+						
+						If (Asserted:C1132($file.exists;"Missing ressources: "+$file.path))
 							
-							  // Generate asset using first table letter
-							$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
+							$Svg_root:=DOM Parse XML source:C719($file.platformPath)
 							
-							If (Asserted:C1132($file.exists;"Missing ressources: "+$file.path))
+							If (Asserted:C1132(OK=1;"Failed to parse: "+$file.path))
 								
-								$Svg_root:=DOM Parse XML source:C719($file.platformPath)
+								$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_table[""].shortLabel;$Obj_table[""].label)
 								
-								If (Asserted:C1132(OK=1;"Failed to parse: "+$file.path))
+								If (Length:C16($t)>0)
 									
-									$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_table[""].shortLabel;$Obj_table[""].label)
+									  // Take first letter
+									$t:=Uppercase:C13($t[[1]])
 									
-									If (Length:C16($t)>0)
-										
-										  // Take first letter
-										$t:=Uppercase:C13($t[[1]])
-										
-									Else 
-										
-										  //%W-533.1
-										$t:=Uppercase:C13($Obj_table[""].name[[1]])  // 4D table names are not empty
-										  //%W+533.1
-										
-									End if 
+								Else 
 									
-									DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$t)
-									
-									$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($Obj_in.project.product.bundleIdentifier+".svg")
-									$file.delete()
-									
-									DOM EXPORT TO FILE:C862($Svg_root;$file.platformPath)
-									
-									DOM CLOSE XML:C722($Svg_root)
-									
-									$o:=asset (New object:C1471(\
-										"action";"create";\
-										"type";"imageset";\
-										"tags";New object:C1471("name";"Main"+$Obj_table[""].name);\
-										"source";$file.platformPath;\
-										"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
-										"format";$Obj_template.assets.format;\
-										"size";$Obj_template.assets.size\
-										))
-									
-									$Obj_out.assets.push($o)
-									ob_error_combine ($Obj_out;$o)
+									  //%W-533.1
+									$t:=Uppercase:C13($Obj_table[""].name[[1]])  // 4D table names are not empty
+									  //%W+533.1
 									
 								End if 
+								
+								DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$t)
+								
+								$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($Obj_in.project.product.bundleIdentifier+".svg")
+								$file.delete()
+								
+								DOM EXPORT TO FILE:C862($Svg_root;$file.platformPath)
+								
+								DOM CLOSE XML:C722($Svg_root)
+								
+								$o:=asset (New object:C1471(\
+									"action";"create";\
+									"type";"imageset";\
+									"tags";New object:C1471("name";"Main"+$Obj_table[""].name);\
+									"source";$file.platformPath;\
+									"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
+									"format";$Obj_template.assets.format;\
+									"size";$Obj_template.assets.size\
+									))
+								
+								$Obj_out.assets.push($o)
+								ob_error_combine ($Obj_out;$o)
+								
 							End if 
 						End if 
-						
-					Else 
-						
-						If (Position:C15("/";$Obj_table[""].icon)=1)
-							
-							  // User icon
-							$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_table[""].icon;2))
-							
-						Else 
-							
-							$Path_icon:=$Path_root.file($Obj_table[""].icon)
-							
-						End if 
-						
-						$o:=asset (New object:C1471(\
-							"action";"create";\
-							"type";"imageset";\
-							"tags";New object:C1471("name";"Main"+$Obj_table[""].name);\
-							"source";$Path_icon.platformPath;\
-							"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
-							"format";$Obj_template.assets.format;\
-							"size";$Obj_template.assets.size))
-						
-						$Obj_out.assets.push($o)
-						ob_error_combine ($Obj_out;$o)
-						
 					End if 
 					
 				Else 
 					
-					If (Length:C16(String:C10($Obj_table.icon))=0)  // no icon defined
+					If (Position:C15("/";$Obj_table[""].icon)=1)
 						
-						If ($Obj_table.shortLabel#Null:C1517)
-							
-							  //#################################
-							
-							  // Generate asset using first table letter
-							$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
-							
-							If (Asserted:C1132($file.exists;"Missing ressources: "+$file.path))
-								
-								$Svg_root:=DOM Parse XML source:C719($file.platformPath)
-								
-								If (Asserted:C1132(OK=1;"Failed to parse: "+$file.path))
-									
-									$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel);$Obj_table.shortLabel;$Obj_table.label)
-									
-									If (Length:C16($t)>0)
-										
-										  // Take first letter
-										$t:=Uppercase:C13($t[[1]])
-										
-									Else 
-										
-										  //%W-533.1
-										$t:=Uppercase:C13($Obj_table.name[[1]])  // 4D table names are not empty
-										  //%W+533.1
-										
-									End if 
-									
-									DOM SET XML ELEMENT VALUE:C868($Svg_root;"/svg/textArea";$t)
-									
-									$file:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file($Obj_in.project.product.bundleIdentifier+".svg")
-									$file.delete()
-									
-									DOM EXPORT TO FILE:C862($Svg_root;$file.platformPath)
-									
-									DOM CLOSE XML:C722($Svg_root)
-									
-									$o:=asset (New object:C1471(\
-										"action";"create";\
-										"type";"imageset";\
-										"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-										"source";$file.platformPath;\
-										"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
-										"format";$Obj_template.assets.format;\
-										"size";$Obj_template.assets.size\
-										))
-									
-									$Obj_out.assets.push($o)
-									ob_error_combine ($Obj_out;$o)
-									
-								End if 
-							End if 
-							
-							  //#################################
-							
-						End if 
+						  // User icon
+						$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_table[""].icon;2))
 						
 					Else 
 						
-						If (Position:C15("/";$Obj_table.icon)=1)
-							
-							  // User icon
-							$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_table.icon;2))
-							
-						Else 
-							
-							$Path_icon:=$Path_root.file($Obj_table.icon)
-							
-						End if 
-						
-						$o:=asset (New object:C1471(\
-							"action";"create";\
-							"type";"imageset";\
-							"tags";New object:C1471("name";"Main"+$Obj_table.name);\
-							"source";$Path_icon.platformPath;\
-							"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
-							"format";$Obj_template.assets.format;\
-							"size";$Obj_template.assets.size))
-						
-						$Obj_out.assets.push($o)
-						ob_error_combine ($Obj_out;$o)
+						$Path_icon:=$Path_root.file($Obj_table[""].icon)
 						
 					End if 
+					
+					$o:=asset (New object:C1471(\
+						"action";"create";\
+						"type";"imageset";\
+						"tags";New object:C1471("name";"Main"+$Obj_table[""].name);\
+						"source";$Path_icon.platformPath;\
+						"target";$Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12;\
+						"format";$Obj_template.assets.format;\
+						"size";$Obj_template.assets.size))
+					
+					$Obj_out.assets.push($o)
+					ob_error_combine ($Obj_out;$o)
+					
 				End if 
+				
 			End for each 
 		End if 
 		

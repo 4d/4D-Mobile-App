@@ -133,55 +133,27 @@ If ($Obj_in.create)
 	$Obj_project.server.authentication.reloadData:=False:C215
 	
 	  // If there is filter with parameters reload data after auth
-	If (feature.with("newDataModel"))
+	For each ($Txt_buffer;$Obj_project.dataModel)
 		
-		For each ($Txt_buffer;$Obj_project.dataModel)
+		If (Value type:C1509($Obj_project.dataModel[$Txt_buffer][""].filter)=Is object:K8:27)
 			
-			If (Value type:C1509($Obj_project.dataModel[$Txt_buffer][""].filter)=Is object:K8:27)
+			If (Bool:C1537($Obj_project.dataModel[$Txt_buffer][""].filter.parameters))
 				
-				If (Bool:C1537($Obj_project.dataModel[$Txt_buffer][""].filter.parameters))
-					
-					$Obj_project.server.authentication.reloadData:=True:C214
-					
-				End if 
-			End if 
-		End for each 
-		
-	Else 
-		
-		For each ($Txt_buffer;$Obj_project.dataModel)
-			
-			If (Value type:C1509($Obj_project.dataModel[$Txt_buffer].filter)=Is object:K8:27)
+				$Obj_project.server.authentication.reloadData:=True:C214
 				
-				If (Bool:C1537($Obj_project.dataModel[$Txt_buffer].filter.parameters))
-					
-					$Obj_project.server.authentication.reloadData:=True:C214
-					
-				End if 
 			End if 
-		End for each 
-	End if 
+		End if 
+	End for each 
 	
 	  // Other criteria like there is no embedded for one table ?
 	If (Not:C34($Obj_project.server.authentication.reloadData))
 		
 		For each ($Txt_buffer;$Obj_project.dataModel)
 			
-			If (feature.with("newDataModel"))
+			If (Not:C34(Bool:C1537($Obj_project.dataModel[$Txt_buffer][""].embedded)))
 				
-				If (Not:C34(Bool:C1537($Obj_project.dataModel[$Txt_buffer][""].embedded)))
-					
-					$Obj_project.server.authentication.reloadData:=True:C214
-					
-				End if 
+				$Obj_project.server.authentication.reloadData:=True:C214
 				
-			Else 
-				
-				If (Not:C34(Bool:C1537($Obj_project.dataModel[$Txt_buffer].embedded)))
-					
-					$Obj_project.server.authentication.reloadData:=True:C214
-					
-				End if 
 			End if 
 		End for each 
 	End if 
@@ -462,36 +434,24 @@ If ($Obj_in.create)
 		
 		ob_error_combine ($Obj_out;$Obj_out.coreData)
 		
-		If (Bool:C1537(feature._110882))
+		If (Not:C34(Bool:C1537($Obj_project.dataSource.doNotGenerateDataAtEachBuild)))
 			
-			If (Not:C34(Bool:C1537($Obj_project.dataSource.doNotGenerateDataAtEachBuild)))
-				
-				POST_FORM_MESSAGE (New object:C1471(\
-					"target";$Obj_in.caller;\
-					"additional";"dataSetGeneration"))
-				
-			End if 
+			POST_FORM_MESSAGE (New object:C1471(\
+				"target";$Obj_in.caller;\
+				"additional";"dataSetGeneration"))
 			
-			If ($Folder_destination.folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
-				
-				$Obj_out.coreDataSet:=dataSet (New object:C1471(\
-					"action";"coreData";\
-					"removeAsset";True:C214;\
-					"path";$Obj_in.path))
-				
-				ob_error_combine ($Obj_out;$Obj_out.coreDataSet)
-				
-				If (Bool:C1537($Obj_out.coreDataSet.success))
-					
-					dataSet (New object:C1471(\
-						"action";"coreDataAddToProject";\
-						"uuid";$Obj_template.uuid;\
-						"tags";$Obj_tags;\
-						"path";$Obj_in.path))
-					
-				End if 
-				
-			Else 
+		End if 
+		
+		If ($Folder_destination.folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
+			
+			$Obj_out.coreDataSet:=dataSet (New object:C1471(\
+				"action";"coreData";\
+				"removeAsset";True:C214;\
+				"path";$Obj_in.path))
+			
+			ob_error_combine ($Obj_out;$Obj_out.coreDataSet)
+			
+			If (Bool:C1537($Obj_out.coreDataSet.success))
 				
 				dataSet (New object:C1471(\
 					"action";"coreDataAddToProject";\
@@ -500,6 +460,15 @@ If ($Obj_in.create)
 					"path";$Obj_in.path))
 				
 			End if 
+			
+		Else 
+			
+			dataSet (New object:C1471(\
+				"action";"coreDataAddToProject";\
+				"uuid";$Obj_template.uuid;\
+				"tags";$Obj_tags;\
+				"path";$Obj_in.path))
+			
 		End if 
 		
 		  // ----------------------------------------------------

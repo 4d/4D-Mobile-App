@@ -267,48 +267,44 @@ Case of
 				If (Bool:C1537($Obj_table.embedded))\
 					 & (Not:C34(Bool:C1537($Obj_table.filter.parameters)))
 					
-					If (Bool:C1537(feature._110882))
+					$Boo_sqllite:=($Obj_context.sqlite#Null:C1517)
+					
+					If ($Boo_sqllite)
 						
-						$Boo_sqllite:=($Obj_context.sqlite#Null:C1517)
+						$t:=formatString ("table-name";$Obj_table.name)
 						
-						If ($Boo_sqllite)
+						If ($Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]#Null:C1517)
 							
-							$t:=formatString ("table-name";$Obj_table.name)
+							$Lon_size:=$Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]  // Size of the data dump
 							
-							If ($Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]#Null:C1517)
+							If ($Lon_size>4096)
 								
-								$Lon_size:=$Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]  // Size of the data dump
+								  // Add pictures size if any
+								$file:=Folder:C1567(asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12;fk platform path:K87:2).file("manifest.json")
 								
-								If ($Lon_size>4096)
+								If ($file.exists)
 									
-									  // Add pictures size if any
-									$file:=Folder:C1567(asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12;fk platform path:K87:2).file("manifest.json")
-									
-									If ($file.exists)
-										
-										$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).value.contentSize
-										
-									End if 
-									
-									$o.tables[$Lon_index].dumpSize:=doc_bytesToString ($Lon_size)
-									
-								Else 
-									
-									$o.tables[$Lon_index].dumpSize:=Choose:C955($Lon_size>0;"< "+doc_bytesToString ($Lon_size);"#na")
+									$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).value.contentSize
 									
 								End if 
 								
+								$o.tables[$Lon_index].dumpSize:=doc_bytesToString ($Lon_size)
+								
 							Else 
 								
-								$o.tables[$Lon_index].dumpSize:="#na"
+								$o.tables[$Lon_index].dumpSize:=Choose:C955($Lon_size>0;"< "+doc_bytesToString ($Lon_size);"#na")
 								
 							End if 
 							
 						Else 
 							
-							$Boo_sqllite:=False:C215
+							$o.tables[$Lon_index].dumpSize:="#na"
 							
 						End if 
+						
+					Else 
+						
+						$Boo_sqllite:=False:C215
 						
 					End if 
 					

@@ -87,10 +87,9 @@ _____________*/
 /* _____________
 18
 _____________*/
-feature.delivered(105431;1800)  // Display 1-n relations
-feature.delivered(110882;1800)  // Dump data into core data SQLLite database
-
-feature.delivered("newDataModel";1800)
+  //feature.delivered(105431;1800)  // Display 1-n relations
+  //feature.delivered(110882;1800)  // Dump data into core data SQLLite database
+  //feature.delivered("newDataModel";1800)
 
 /* _____________
 18R2
@@ -222,7 +221,6 @@ End if
 /* _____________
 ALIAS
 _____________*/
-feature.alias("oneToManyRelations";105431)
 feature.alias("setImageDump";113164)
 feature.alias("newViewUI";113016)
 feature.alias("resourcesBrowser";112225)

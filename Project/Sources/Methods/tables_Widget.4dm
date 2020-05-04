@@ -150,7 +150,7 @@ If ($oDataModel#Null:C1517)
 		End if 
 		
 		  // Avoid too long name
-		$tName:=Choose:C955(feature.with("newDataModel");$oDataModel[$tTable][""].shortLabel;$oDataModel[$tTable].shortLabel)
+		$tName:=$oDataModel[$tTable][""].shortLabel
 		
 		If (Length:C16($tName)>$oParams.maxChar)
 			

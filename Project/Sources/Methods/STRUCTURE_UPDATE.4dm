@@ -158,22 +158,10 @@ Else
 						
 						  //#MARK_TO_OPTIMIZE
 						  // Add all related fields
-						
-						If (feature.with("newDataModel"))
-							
-							$o:=structure (New object:C1471(\
-								"action";"relatedCatalog";\
-								"table";$Obj_table[""].name;\
-								"relatedEntity";$o.name))
-							
-						Else 
-							
-							$o:=structure (New object:C1471(\
-								"action";"relatedCatalog";\
-								"table";$Obj_table.name;\
-								"relatedEntity";$o.name))
-							
-						End if 
+						$o:=structure (New object:C1471(\
+							"action";"relatedCatalog";\
+							"table";$Obj_table[""].name;\
+							"relatedEntity";$o.name))
 						
 						If (Asserted:C1132($o.success))
 							

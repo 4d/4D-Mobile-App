@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																																																												"action";"safeDelete";\
-																																																												"path";$Obj_in.path))
+																																																																"action";"safeDelete";\
+																																																																"path";$Obj_in.path))
 			  // End if
 			
 		End if 
@@ -116,44 +116,22 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  // Verify the structure
 			$c:=New collection:C1472
 			
-			If (feature.with("newDataModel"))
+			For each ($t;$Obj_project.dataModel)
 				
-				For each ($t;$Obj_project.dataModel)
+				$c.push($Obj_project.dataModel[$t][""].name)
+				
+				For each ($tt;$Obj_project.dataModel[$t])
 					
-					$c.push($Obj_project.dataModel[$t][""].name)
-					
-					For each ($tt;$Obj_project.dataModel[$t])
+					If (Length:C16($tt)>0)
 						
-						If (Length:C16($tt)>0)
+						If ($Obj_project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
 							
-							If ($Obj_project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
-								
-								$c.push($Obj_project.dataModel[$t][$tt].relatedDataClass)
-								
-							End if 
-						End if 
-					End for each 
-				End for each 
-				
-			Else 
-				
-				For each ($t;$Obj_project.dataModel)
-					
-					$c.push($Obj_project.dataModel[$t].name)
-					
-					For each ($tt;$Obj_project.dataModel[$t])
-						
-						If (Value type:C1509($Obj_project.dataModel[$t][$tt])=Is object:K8:27)
+							$c.push($Obj_project.dataModel[$t][$tt].relatedDataClass)
 							
-							If ($Obj_project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
-								
-								$c.push($Obj_project.dataModel[$t][$tt].relatedDataClass)
-								
-							End if 
 						End if 
-					End for each 
+					End if 
 				End for each 
-			End if 
+			End for each 
 			
 			If ($Obj_project.dataSource.source="local")
 				
@@ -197,11 +175,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					  // Local web server is mandatory only if data are embedded
 					For each ($t;$Obj_project.dataModel) Until ($b)
-						If (feature.with("newDataModel"))
-							$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
-						Else 
-							$b:=Bool:C1537($Obj_project.dataModel[$t].embedded)
-						End if 
+						
+						$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
 						
 					End for each 
 					
@@ -276,11 +251,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 						  // SERVER STRUCTURE IS NOT OK. Confirm if data embed, Alert else
 						For each ($t;$Obj_project.dataModel) Until ($b)
 							
-							If (feature.with("newDataModel"))
-								$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
-							Else 
-								$b:=Bool:C1537($Obj_project.dataModel[$t].embedded)
-							End if 
+							$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
 							
 						End for each 
 						
@@ -332,11 +303,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					  // SERVER NOT REACHABLE - Ignore if no data embed, Confirm else
 					For each ($t;$Obj_project.dataModel) Until ($b)
 						
-						If (feature.with("newDataModel"))
-							$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
-						Else 
-							$b:=Bool:C1537($Obj_project.dataModel[$t].embedded)
-						End if 
+						$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
 						
 					End for each 
 					

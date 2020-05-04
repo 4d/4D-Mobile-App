@@ -200,16 +200,12 @@ Case of
 											
 											  // 1 -> N relation attribute (reference to an entity selection)
 											
-											If (feature.with("oneToManyRelations"))
-												
-												$Obj_table.field.push(New object:C1471(\
-													"name";$Txt_field;\
-													"inverseName";$Obj_field.inverseName;\
-													"type";-2;\
-													"relatedDataClass";$Obj_field.relatedDataClass;\
-													"relatedTableNumber";$Obj_catalog[$Obj_field.relatedDataClass].getInfo().tableNumber))
-												
-											End if 
+											$Obj_table.field.push(New object:C1471(\
+												"name";$Txt_field;\
+												"inverseName";$Obj_field.inverseName;\
+												"type";-2;\
+												"relatedDataClass";$Obj_field.relatedDataClass;\
+												"relatedTableNumber";$Obj_catalog[$Obj_field.relatedDataClass].getInfo().tableNumber))
 											
 											  //…………………………………………………………………………………………………
 									End case 
@@ -547,7 +543,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-								
+																
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							  //$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

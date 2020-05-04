@@ -95,7 +95,7 @@ Case of
 				"eraseIfExists";True:C214;\
 				"project";$Obj_project;\
 				"digest";True:C214;\
-				"coreDataSet";Bool:C1537(feature._110882);\
+				"coreDataSet";True:C214;\
 				"key";$File_key;\
 				"dataSet";True:C214))
 			
@@ -107,7 +107,7 @@ Case of
 				"eraseIfExists";True:C214;\
 				"project";$Obj_project;\
 				"digest";True:C214;\
-				"coreDataSet";Bool:C1537(feature._110882);\
+				"coreDataSet";True:C214;\
 				"key";$File_key;\
 				"dataSet";True:C214;\
 				"picture";Not:C34(Bool:C1537(feature._97117))))
@@ -116,10 +116,10 @@ Case of
 		
 		  // If (Shift down)
 		  //SHOW ON DISK(dataSet (New object(\
-						"action";"path";\
-						"project";New object(\
-						"product";Form.product;\
-						"$project";Form.$project))).path)
+									"action";"path";\
+									"project";New object(\
+									"product";Form.product;\
+									"$project";Form.$project))).path)
 		  // End if
 		
 		  //==================================================
