@@ -1,108 +1,70 @@
 //%attributes = {"invisible":true}
-C_TEXT:C284($1)
+C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_i;$Lon_pageNumber)
-C_TEXT:C284($Mnu_bar;$Mnu_dev;$Mnu_method;$Mnu_navigate;$Mnu_product;$Mnu_window)
+C_OBJECT:C1216($menu;$o)
+C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_TEXT:C284(dev_Menu ;$1)
+	C_OBJECT:C1216(dev_Menu ;$1)
 End if 
 
-$Mnu_bar:=$1
+$menu:=$1
 
-$Mnu_navigate:=Create menu:C408
+$c:=New collection:C1472
 
-$Lon_pageNumber:=6  // TODO Factorize menu declaraton
-ARRAY TEXT:C222($tTxt_pages;$Lon_pageNumber)
-$tTxt_pages{1}:="general"
-$tTxt_pages{2}:="structure"
-$tTxt_pages{3}:="properties"
-$tTxt_pages{4}:="main"
-$tTxt_pages{5}:="views"
-$tTxt_pages{6}:="deployment"
+$c.push(New object:C1471(\
+"label";"page_general";\
+"parameter";"general";\
+"method";"menu_goToPage"))
 
-For ($Lon_i;1;$Lon_pageNumber;1)
-	
-	APPEND MENU ITEM:C411($Mnu_navigate;":xliff:page_"+$tTxt_pages{$Lon_i})
-	SET MENU ITEM METHOD:C982($Mnu_navigate;-1;"menu_goToPage")
-	SET MENU ITEM PARAMETER:C1004($Mnu_navigate;-1;$tTxt_pages{$Lon_i})
-	
-End for 
+$c.push(New object:C1471(\
+"label";"page_structure";\
+"parameter";"structure";\
+"method";"menu_goToPage"))
 
-APPEND MENU ITEM:C411($Mnu_bar;"Navigate";$Mnu_navigate)
-RELEASE MENU:C978($Mnu_navigate)
+$c.push(New object:C1471(\
+"label";"page_properties";\
+"parameter";"properties";\
+"method";"menu_goToPage"))
 
-$Mnu_product:=Create menu:C408
+$c.push(New object:C1471(\
+"label";"page_main";\
+"parameter";"main";\
+"method";"menu_goToPage"))
 
-APPEND MENU ITEM:C411($Mnu_product;"Create project without building")
-SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
-SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"create")
+$c.push(New object:C1471(\
+"label";"page_views";\
+"parameter";"views";\
+"method";"menu_goToPage"))
 
-APPEND MENU ITEM:C411($Mnu_product;"Build and run (")
-SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
-SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"build")
+$c.push(New object:C1471(\
+"label";"page_deployment";\
+"parameter";"deployment";\
+"method";"menu_goToPage"))
 
-APPEND MENU ITEM:C411($Mnu_product;"Create, build and run")
-SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
-SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"buildAndRun")
+$menu.append("Navigate";cs:C1710.menu.new().append($c))
 
-APPEND MENU ITEM:C411($Mnu_product;"Run only (must have been builded)")
-SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
-SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"run")
+$o:=cs:C1710.menu.new()
+$o.append("Create project without building";"create").method("menu_product")
+$o.append("Build and run";"build").method("menu_product").disable()
+$o.append("Create, build and run";"buildAndRun").method("menu_product")
+$o.append("Run only (must have been builded)";"run").method("menu_product")
+$o.line()
+$o.append("Launch Last Build").method("01_LASTBUILD")
+$o.line()
+$o.append("Reveal in Finder";"reveal").method("menu_product")
+$o.line()
+$o.append("Generate core data model";"xcdatamodel").method("menu_product")
+$o.append("Generate data set";"dataSet").method("menu_product")
+$o.append("Generate core data set";"coreDataSet").method("menu_product")
+$menu.append("Product";$o)
 
-APPEND MENU ITEM:C411($Mnu_product;"(-")
+$o:=cs:C1710.menu.new()
+$o.append("Close";"close").method("menu_window")
+$o.append("Minimize";"minimize").method("menu_window")
+$o.append("Maximize";"maximize").method("menu_window")
+$o.append("Centered";"centered").method("menu_window")
+$menu.append("Window";$o)
 
-APPEND MENU ITEM:C411($Mnu_product;"Launch Last Build")
-SET MENU ITEM METHOD:C982($Mnu_product;-1;"01_LASTBUILD")
-
-APPEND MENU ITEM:C411($Mnu_product;"(-")
-
-APPEND MENU ITEM:C411($Mnu_product;"Reveal in Finder")
-SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
-SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"reveal")
-
-APPEND MENU ITEM:C411($Mnu_product;"(-")
-
-APPEND MENU ITEM:C411($Mnu_product;"Generate core data model")
-SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
-SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"xcdatamodel")
-
-APPEND MENU ITEM:C411($Mnu_product;"Generate data set")
-SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
-SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"dataSet")
-
-APPEND MENU ITEM:C411($Mnu_product;"Generate core data set")
-SET MENU ITEM METHOD:C982($Mnu_product;-1;"menu_product")
-SET MENU ITEM PARAMETER:C1004($Mnu_product;-1;"coreDataSet")
-
-APPEND MENU ITEM:C411($Mnu_bar;"Product";$Mnu_product)
-RELEASE MENU:C978($Mnu_product)
-
-$Mnu_window:=Create menu:C408
-
-APPEND MENU ITEM:C411($Mnu_window;"Close")
-SET MENU ITEM METHOD:C982($Mnu_window;-1;"menu_window")
-SET MENU ITEM PARAMETER:C1004($Mnu_window;-1;"close")
-
-APPEND MENU ITEM:C411($Mnu_window;"Minimize")
-SET MENU ITEM METHOD:C982($Mnu_window;-1;"menu_window")
-SET MENU ITEM PARAMETER:C1004($Mnu_window;-1;"minimize")
-
-APPEND MENU ITEM:C411($Mnu_window;"Maximize")
-SET MENU ITEM METHOD:C982($Mnu_window;-1;"menu_window")
-SET MENU ITEM PARAMETER:C1004($Mnu_window;-1;"maximize")
-
-APPEND MENU ITEM:C411($Mnu_window;"Centered")
-SET MENU ITEM METHOD:C982($Mnu_window;-1;"menu_window")
-SET MENU ITEM PARAMETER:C1004($Mnu_window;-1;"centered")
-
-APPEND MENU ITEM:C411($Mnu_bar;"Window";$Mnu_window)
-RELEASE MENU:C978($Mnu_window)
-
-$Mnu_dev:=Create menu:C408
-
-APPEND MENU ITEM:C411($Mnu_dev;"00_TESTS")
-SET MENU ITEM METHOD:C982($Mnu_dev;-1;"00_TESTS")
-
-APPEND MENU ITEM:C411($Mnu_bar;"Dev";$Mnu_dev)
-RELEASE MENU:C978($Mnu_dev)
+$menu.append("DEV";cs:C1710.menu.new()\
+.append("00_TESTS";"00_TESTS"))

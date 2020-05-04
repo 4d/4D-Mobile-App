@@ -12,7 +12,7 @@ C_TEXT:C284($1)
 
 C_LONGINT:C283($Lon_parameters;$Win_hdl)
 C_TEXT:C284($t;$Txt_entryPoint;$Txt_projectName;$Txt_worker)
-C_OBJECT:C1216($o;$Obj_form;$Obj_root)
+C_OBJECT:C1216($menu;$menuFile;$o;$Obj_form;$Obj_root)
 
 If (False:C215)
 	C_TEXT:C284(00_NEW ;$1)
@@ -121,19 +121,20 @@ Case of
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_init")
 		
-		$o:=cs:C1710.menu.new()\
-			.append(":xliff:CommonMenuFile";cs:C1710.menu.new().file())\
-			.append(":xliff:CommonMenuEdit";cs:C1710.menu.new().edit())
+		$menuFile:=cs:C1710.menu.new().file()
+		
+		$menu:=cs:C1710.menu.new()\
+			.append("CommonMenuFile";$menuFile)\
+			.append("CommonMenuEdit";cs:C1710.menu.new().edit())
 		
 		If (Storage:C1525.database.isMatrix)
 			
-			file_Menu ($o.ref)
-			dev_Menu ($o.ref)
+			file_Menu ($menuFile)
+			dev_Menu ($menu)
 			
 		End if 
 		
-		$o.setBar()
-		
+		$menu.setBar()
 		
 		  //___________________________________________________________
 	: ($Txt_entryPoint="_deinit")

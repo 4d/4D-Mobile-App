@@ -779,3 +779,38 @@ Function items  // Returns menu items as collection
 	End for 
 	
 /*===============================================*/
+Function getReference
+	
+	C_TEXT:C284($0)
+	C_VARIANT:C1683($1)
+	
+	C_LONGINT:C283($indx)
+	
+	ARRAY TEXT:C222($aT_titles;0)
+	ARRAY TEXT:C222($aT_refs;0)
+	GET MENU ITEMS:C977(This:C1470.ref;$aT_titles;$aT_refs)
+	
+	Case of 
+			  //______________________________________________________
+		: (Value type:C1509($1)=Is text:K8:3)
+			
+			$indx:=Find in array:C230($aT_titles;$1)
+			
+			  //______________________________________________________
+		: (Value type:C1509($1)=Is real:K8:4)
+			
+			$indx:=$1
+			
+			  //______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215;Current method name:C684+": invalid type")
+			
+			  //______________________________________________________
+	End case 
+	
+	If (Asserted:C1132($indx>0;"Item \""+String:C10($1)+"\" not found"))
+		
+		$0:=$aT_refs{$indx}
+		
+	End if 

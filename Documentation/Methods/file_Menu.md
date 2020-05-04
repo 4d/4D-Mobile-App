@@ -1,1 +1,1 @@
-﻿<!----------------------------------------------------file_Menu ( Param_1 ) -> Param_1 (Text)-->file_Menu ( MenuBar )
+﻿<!----------------------------------------------------file_Menu ( Param_1 ) -> Param_1 (Object)-->file_Menu ( MenuBar )

@@ -138,9 +138,9 @@ If (False:C215)  // Tools
 	C_OBJECT:C1216(logger ;$2)
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(menu ;$0)
-	C_TEXT:C284(menu ;$1)
-	C_OBJECT:C1216(menu ;$2)
+	  //C_OBJECT(menu;$0)
+	  //C_TEXT(menu;$1)
+	  //C_OBJECT(menu;$2)
 	
 	  //______________________________________________________
 	C_OBJECT:C1216(process ;$0)
