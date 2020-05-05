@@ -226,14 +226,30 @@ Case of
 					
 					$pathForm:=tmpl_form ($t;String:C10($Obj_template.userChoiceTag))
 					
-					If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
+					If (Bool:C1537($pathForm.exists))
 						
-						  // Extract
-						$folder:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486;fk platform path:K87:2);"template";fk overwrite:K87:5)
+						If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
+							
+							  // Extract
+							$folder:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486;fk platform path:K87:2);"template";fk overwrite:K87:5)
+							
+						Else 
+							
+							$folder:=$pathForm
+							
+						End if 
 						
 					Else 
 						
-						$folder:=$pathForm
+						RECORD.error("Invalid path: \""+$pathForm.path+"\"")
+						
+						If ($Obj_out.errors=Null:C1517)
+							
+							$Obj_out.errors:=New collection:C1472
+							
+						End if 
+						
+						$Obj_out.errors.push("Invalid path: "+$pathForm.path)
 						
 					End if 
 					
@@ -250,144 +266,181 @@ Case of
 				
 			End if 
 			
-			  // Load the manifest file
-			$o:=OB Copy:C1225($Obj_in)
-			$file:=$folder.file("manifest.json")
-			$o.template:=ob_parseFile ($file)
-			
-			If ($o.template.success)  // The template existe or not
+			If ($folder.exists)
 				
-				$o.template:=$o.template.value  // Get the doc object
-				$o.template.isInternal:=Not:C34(Bool:C1537($t[[1]]="/"))
+				  // Load the manifest file
+				$o:=OB Copy:C1225($Obj_in)
+				$file:=$folder.file("manifest.json")
+				$o.template:=ob_parseFile ($file)
 				
-				  // ==============================================================
-				  //                          TABLE INFOS
-				  // ==============================================================
-				$Obj_table:=OB Copy:C1225($Obj_tableModel)
-				
-				$Obj_table.tableNumber:=$Txt_tableNumber
-				$Obj_table.originalName:=$Obj_table[""].name
-				
-				  // Format name for the tag
-				$Obj_table.name:=formatString ("table-name";$Obj_table.originalName)
-				
-				If ($Obj_table[""].label=Null:C1517)
+				If ($o.template.success)  // The template existe or not
 					
-					$Obj_table.label:=formatString ("label";$Obj_table.originalName)
+					$o.template:=$o.template.value  // Get the doc object
+					$o.template.isInternal:=Not:C34(Bool:C1537($t[[1]]="/"))
 					
-				Else 
+					  // ==============================================================
+					  //                          TABLE INFOS
+					  // ==============================================================
+					$Obj_table:=OB Copy:C1225($Obj_tableModel)
 					
-					  // User label
-					$Obj_table.label:=$Obj_table[""].label
+					$Obj_table.tableNumber:=$Txt_tableNumber
+					$Obj_table.originalName:=$Obj_table[""].name
 					
-				End if 
-				
-				If ($Obj_table[""].shortLabel=Null:C1517)
+					  // Format name for the tag
+					$Obj_table.name:=formatString ("table-name";$Obj_table.originalName)
 					
-					$Obj_table.shortLabel:=formatString ("label";$Obj_table.originalName)
+					If ($Obj_table[""].label=Null:C1517)
+						
+						$Obj_table.label:=formatString ("label";$Obj_table.originalName)
+						
+					Else 
+						
+						  // User label
+						$Obj_table.label:=$Obj_table[""].label
+						
+					End if 
 					
-				Else 
+					If ($Obj_table[""].shortLabel=Null:C1517)
+						
+						$Obj_table.shortLabel:=formatString ("label";$Obj_table.originalName)
+						
+					Else 
+						
+						  // User label
+						$Obj_table.shortLabel:=$Obj_table[""].shortLabel
+						
+					End if 
 					
-					  // User label
-					$Obj_table.shortLabel:=$Obj_table[""].shortLabel
+					  // ==============================================================
+					  //                          FIELDS
+					  // ==============================================================
 					
-				End if 
-				
-				  // ==============================================================
-				  //                          FIELDS
-				  // ==============================================================
-				
-				$Obj_table.fields:=New collection:C1472
-				
-				  // Get expected field count
-				$Lon_count:=Num:C11($o.template.fields.count)
-				
-				$i:=0
-				
-				For each ($Obj_field;$Obj_tableList.fields)
+					$Obj_table.fields:=New collection:C1472
 					
-					Case of 
-							
-							  //……………………………………………………………………………………………………………
-						: (Num:C11($Obj_field.id)#0)
-							
-							$Obj_field:=OB Copy:C1225($Obj_field)
-							$Obj_field.originalName:=$Obj_field.name
-							
-							$Col_path:=Split string:C1554($Obj_field.name;".")
-							
-							If ($Col_path.length>1)  // is it a link?
+					  // Get expected field count
+					$Lon_count:=Num:C11($o.template.fields.count)
+					
+					$i:=0
+					
+					For each ($Obj_field;$Obj_tableList.fields)
+						
+						Case of 
 								
-								$Obj_tableModel:=$Obj_tableModel[$Col_path[0]]  // get sub model if related field
+								  //……………………………………………………………………………………………………………
+							: (Num:C11($Obj_field.id)#0)
 								
-							End if 
-							
-							  // Add info from dataModel
-							If ($Obj_tableModel[String:C10($Obj_field.id)]#Null:C1517)
+								$Obj_field:=OB Copy:C1225($Obj_field)
+								$Obj_field.originalName:=$Obj_field.name
 								
-								$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[String:C10($Obj_field.id)])
+								$Col_path:=Split string:C1554($Obj_field.name;".")
 								
-								  // TODO instead of deep merge, try to not override left side, add option?
+								If ($Col_path.length>1)  // is it a link?
+									
+									$Obj_tableModel:=$Obj_tableModel[$Col_path[0]]  // get sub model if related field
+									
+								End if 
 								
-							End if 
-							
-							  // Format name for the tag
-							$Obj_field.name:=formatString ("field-name";$Obj_field.originalName)
-							
-							If ($Obj_field.label=Null:C1517)
+								  // Add info from dataModel
+								If ($Obj_tableModel[String:C10($Obj_field.id)]#Null:C1517)
+									
+									$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[String:C10($Obj_field.id)])
+									
+									  // TODO instead of deep merge, try to not override left side, add option?
+									
+								End if 
 								
-								$Obj_field.label:=formatString ("label";$Obj_field.originalName)
+								  // Format name for the tag
+								$Obj_field.name:=formatString ("field-name";$Obj_field.originalName)
 								
-							End if 
-							
-							If ($Obj_field.shortLabel=Null:C1517)
+								If ($Obj_field.label=Null:C1517)
+									
+									$Obj_field.label:=formatString ("label";$Obj_field.originalName)
+									
+								End if 
 								
-								$Obj_field.shortLabel:=formatString ("label";$Obj_field.originalName)
+								If ($Obj_field.shortLabel=Null:C1517)
+									
+									$Obj_field.shortLabel:=formatString ("label";$Obj_field.originalName)
+									
+								End if 
 								
-							End if 
-							
-							  // Set binding type according to field information
-							$Obj_field.bindingType:=storyboard (New object:C1471("action";"fieldBinding";"field";$Obj_field;"formatters";$Obj_in.formatters)).bindingType
-							
-							If ($Col_path.length>1)  // is it a link?
+								  // Set binding type according to field information
+								$Obj_field.bindingType:=storyboard (New object:C1471("action";"fieldBinding";"field";$Obj_field;"formatters";$Obj_in.formatters)).bindingType
 								
-								  // restore original table model
-								$Obj_tableModel:=$Obj_dataModel[$Txt_tableNumber]
+								If ($Col_path.length>1)  // is it a link?
+									
+									  // restore original table model
+									$Obj_tableModel:=$Obj_dataModel[$Txt_tableNumber]
+									
+								End if 
 								
-							End if 
-							
-							  //……………………………………………………………………………………………………………
-						: ($Obj_field.name#Null:C1517)  // ie. relation
-							
-							$Obj_field:=OB Copy:C1225($Obj_field)
-							
-							$Obj_field.originalName:=$Obj_field.name
-							
-							$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[$Obj_field.name])
-							
-							  // Format name for the tag
-							$Obj_field.name:=formatString ("field-name";$Obj_field.originalName)
-							
-							If ($Obj_field.label=Null:C1517)
+								  //……………………………………………………………………………………………………………
+							: ($Obj_field.name#Null:C1517)  // ie. relation
 								
-								$Obj_field.label:=formatString ("label";$Obj_field.originalName)
+								$Obj_field:=OB Copy:C1225($Obj_field)
 								
-							End if 
-							
-							If ($Obj_field.shortLabel=Null:C1517)
+								$Obj_field.originalName:=$Obj_field.name
 								
-								$Obj_field.shortLabel:=formatString ("label";$Obj_field.originalName)
+								$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[$Obj_field.name])
 								
-							End if 
+								  // Format name for the tag
+								$Obj_field.name:=formatString ("field-name";$Obj_field.originalName)
+								
+								If ($Obj_field.label=Null:C1517)
+									
+									$Obj_field.label:=formatString ("label";$Obj_field.originalName)
+									
+								End if 
+								
+								If ($Obj_field.shortLabel=Null:C1517)
+									
+									$Obj_field.shortLabel:=formatString ("label";$Obj_field.originalName)
+									
+								End if 
+								
+								  // Set binding type according to field information
+								  //$Obj_field.bindingType:=storyboard (New object("action";"fieldBinding";"field";$Obj_field;"formatters";$Obj_in.formatters)).bindingType
+								
+								  //……………………………………………………………………………………………………………
+							: ($i<$Lon_count)
+								
+								  // Create a dummy fields to replace in template
+								$Obj_field:=New object:C1471(\
+									"name";"";\
+									"originalName";"";\
+									"label";"";\
+									"shortLabel";"";\
+									"bindingType";"unknown";\
+									"type";-1;\
+									"fieldType";-1;\
+									"icon";"")
+								
+								  //……………………………………………………………………………………………………………
+							Else 
+								
+								$Obj_field:=Null:C1517
+								
+								  //……………………………………………………………………………………………………………
+						End case 
+						
+						If ($Obj_field#Null:C1517)
 							
-							  // Set binding type according to field information
-							  //$Obj_field.bindingType:=storyboard (New object("action";"fieldBinding";"field";$Obj_field;"formatters";$Obj_in.formatters)).bindingType
+							$Obj_table.fields.push($Obj_field)
 							
-							  //……………………………………………………………………………………………………………
-						: ($i<$Lon_count)
+						End if 
+						
+						$i:=$i+1
+						
+					End for each 
+					
+					If ($Lon_count>0)
+						
+						  // If there is more fields in template than defined by user (ie. last fields not defined)
+						  // add dummy fields
+						
+						While ($Obj_table.fields.length<$Lon_count)
 							
-							  // Create a dummy fields to replace in template
-							$Obj_field:=New object:C1471(\
+							$Obj_table.fields.push(New object:C1471(\
 								"name";"";\
 								"originalName";"";\
 								"label";"";\
@@ -395,253 +448,232 @@ Case of
 								"bindingType";"unknown";\
 								"type";-1;\
 								"fieldType";-1;\
-								"icon";"")
+								"icon";""))
+							
+						End while 
+					End if 
+					
+					  // ==============================================================
+					  //                     SEARCH FIELDS
+					  // ==============================================================
+					
+					If ($Obj_tableList.searchableField#Null:C1517)
+						
+						Case of 
+								
+								  //……………………………………………………………………………………………………………
+							: (Value type:C1509($Obj_tableList.searchableField)=Is object:K8:27)
+								
+								$Obj_table.searchableField:=formatString ("field-name";String:C10($Obj_tableList.searchableField.name))
+								
+								  //……………………………………………………………………………………………………………
+							: (Value type:C1509($Obj_tableList.searchableField)=Is collection:K8:32)
+								
+								$Obj_table.searchableField:=$Obj_tableList.searchableField.extract("name").map("col_formula";"$1.result:=formatString (\"field-name\";String:C10($1.value))").join(",")
+								
+								  //……………………………………………………………………………………………………………
+							: (Value type:C1509($Obj_tableList.searchableField)=Is text:K8:3)
+								
+								$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.searchableField))
+								
+								  //……………………………………………………………………………………………………………
+						End case 
+					End if 
+					
+					  // ==============================================================
+					  //                        SORT FIELDS
+					  // ==============================================================
+					
+					If ($Obj_tableList.sortField#Null:C1517)
+						
+						Case of 
+								
+								  //……………………………………………………………………………………………………………
+							: (Value type:C1509($Obj_tableList.sortField)=Is object:K8:27)
+								
+								$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.sortField.name))
+								
+								  //……………………………………………………………………………………………………………
+							: (Value type:C1509($Obj_tableList.sortField)=Is collection:K8:32)
+								
+								$Obj_table.sortField:=$Obj_tableList.sortField.extract("name").map("col_formula";"$1.result:=formatString (\"field-name\";String:C10($1.value))").join(",")
+								
+								  //……………………………………………………………………………………………………………
+							: (Value type:C1509($Obj_tableList.sortField)=Is text:K8:3)
+								
+								$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.sortField))
+								
+								  //……………………………………………………………………………………………………………
+						End case 
+						
+					Else 
+						
+						  // take searchable field as sort field if not defined yet
+						$Obj_table.sortField:=$Obj_table.searchableField
+						
+						If (Length:C16(String:C10($Obj_table.sortField))=0)
+							
+							  // and if no search field find the first one sortable in diplayed field
+							For each ($Obj_field;$Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
+								
+								If (($Obj_field.fieldType#Is picture:K8:10)\
+									 & ($Obj_field.fieldType#-1))  // not image or not defined
+									
+									$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
+									
+								End if 
+							End for each 
+						End if 
+						
+						  // XXX maybe if not in displayable fields, go for not displayable fields?
+						
+					End if 
+					
+					  // If (Length($Obj_table.sortField)=0)
+					  // XXX maybe primary key field?
+					  // End if
+					
+					  // ==============================================================
+					  //                         SECTION
+					  // ==============================================================
+					
+					If ($Obj_tableList.sectionField#Null:C1517)
+						
+						$Obj_table.sectionField:=formatString ("field-name";String:C10($Obj_tableList.sectionField.name))
+						$Obj_table.sectionFieldBindingType:=""
+						
+						  // Get format of section field$Obj_tableList
+						If ($Obj_tableModel[String:C10($Obj_tableList.sectionField.id)]#Null:C1517)
+							
+							$Obj_field:=New object:C1471  // maybe get other info from  $Obj_tableList.fields
+							$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[String:C10($Obj_tableList.sectionField.id)])
+							
+							$Obj_table.sectionFieldBindingType:=storyboard (New object:C1471(\
+								"action";"fieldBinding";\
+								"field";$Obj_field;\
+								"formatters";$Obj_in.formatters)).bindingType
+							
+						End if 
+					End if 
+					
+					$Obj_table.showSection:="NO"  // show or not the section bar at right
+					
+					  // ==============================================================
+					  //                        ACTIONS
+					  // ==============================================================
+					
+					Case of 
+							
+							  //……………………………………………………………………………………………………………
+						: (String:C10($Obj_template.userChoiceTag)="list")
+							
+							  // get action on table
+							$Col_actions:=actions ("form";New object:C1471(\
+								"project";$Obj_in.project;\
+								"table";$Obj_table.originalName;\
+								"tableNumber";$Obj_table.tableNumber;\
+								"scope";"table")).actions
+							
+							If ($Col_actions.length>0)
+								
+								$Obj_table.tableActions:=JSON Stringify:C1217(New object:C1471(\
+									"actions";$Col_actions))
+								
+							End if 
+							
+							$Col_actions:=actions ("form";New object:C1471(\
+								"project";$Obj_in.project;\
+								"table";$Obj_table.originalName;\
+								"tableNumber";$Obj_table.tableNumber;\
+								"scope";"currentRecord")).actions
+							
+							If ($Col_actions.length>0)
+								
+								$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
+									"actions";$Col_actions))
+								
+							End if 
+							
+							  // XXX selection actions
+							  //……………………………………………………………………………………………………………
+						: (String:C10($Obj_template.userChoiceTag)="detail")
+							
+							$Col_actions:=actions ("form";New object:C1471(\
+								"project";$Obj_in.project;\
+								"table";$Obj_table.originalName;\
+								"tableNumber";$Obj_table.tableNumber;\
+								"scope";"currentRecord")).actions
+							
+							If ($Col_actions.length>0)
+								
+								$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
+									"actions";$Col_actions))
+								
+							End if 
 							
 							  //……………………………………………………………………………………………………………
 						Else 
 							
-							$Obj_field:=Null:C1517
+							ASSERT:C1129(dev_assert ;"Unknown form type "+String:C10(String:C10($Obj_template.userChoiceTag)))
 							
 							  //……………………………………………………………………………………………………………
 					End case 
 					
-					If ($Obj_field#Null:C1517)
+					  // ==============================================================
+					  //                       TYPE AN OTHERS
+					  // ==============================================================
+					
+					$Obj_in.tags.detailFormType:=String:C10($o.template.tags.___DETAILFORMTYPE___)  // XXX could do a generic insert of all $Obj_buffer.template.tags here
+					$Obj_in.tags.listFormType:=String:C10($o.template.tags.___LISTFORMTYPE___)
+					
+					$Obj_table.navigationIcon:=Null:C1517
+					
+					If (Value type:C1509($Obj_in.tags.navigationTables)=Is collection:K8:32)
 						
-						$Obj_table.fields.push($Obj_field)
+						$Obj_navigationTable:=$Obj_in.tags.navigationTables.query("originalName = :1";String:C10($Obj_table.originalName)).pop()
 						
-					End if 
-					
-					$i:=$i+1
-					
-				End for each 
-				
-				If ($Lon_count>0)
-					
-					  // If there is more fields in template than defined by user (ie. last fields not defined)
-					  // add dummy fields
-					
-					While ($Obj_table.fields.length<$Lon_count)
-						
-						$Obj_table.fields.push(New object:C1471(\
-							"name";"";\
-							"originalName";"";\
-							"label";"";\
-							"shortLabel";"";\
-							"bindingType";"unknown";\
-							"type";-1;\
-							"fieldType";-1;\
-							"icon";""))
-						
-					End while 
-				End if 
-				
-				  // ==============================================================
-				  //                     SEARCH FIELDS
-				  // ==============================================================
-				
-				If ($Obj_tableList.searchableField#Null:C1517)
-					
-					Case of 
+						If ($Obj_navigationTable#Null:C1517)
 							
-							  //……………………………………………………………………………………………………………
-						: (Value type:C1509($Obj_tableList.searchableField)=Is object:K8:27)
-							
-							$Obj_table.searchableField:=formatString ("field-name";String:C10($Obj_tableList.searchableField.name))
-							
-							  //……………………………………………………………………………………………………………
-						: (Value type:C1509($Obj_tableList.searchableField)=Is collection:K8:32)
-							
-							$Obj_table.searchableField:=$Obj_tableList.searchableField.extract("name").map("col_formula";"$1.result:=formatString (\"field-name\";String:C10($1.value))").join(",")
-							
-							  //……………………………………………………………………………………………………………
-						: (Value type:C1509($Obj_tableList.searchableField)=Is text:K8:3)
-							
-							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.searchableField))
-							
-							  //……………………………………………………………………………………………………………
-					End case 
-				End if 
-				
-				  // ==============================================================
-				  //                        SORT FIELDS
-				  // ==============================================================
-				
-				If ($Obj_tableList.sortField#Null:C1517)
-					
-					Case of 
-							
-							  //……………………………………………………………………………………………………………
-						: (Value type:C1509($Obj_tableList.sortField)=Is object:K8:27)
-							
-							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.sortField.name))
-							
-							  //……………………………………………………………………………………………………………
-						: (Value type:C1509($Obj_tableList.sortField)=Is collection:K8:32)
-							
-							$Obj_table.sortField:=$Obj_tableList.sortField.extract("name").map("col_formula";"$1.result:=formatString (\"field-name\";String:C10($1.value))").join(",")
-							
-							  //……………………………………………………………………………………………………………
-						: (Value type:C1509($Obj_tableList.sortField)=Is text:K8:3)
-							
-							$Obj_table.sortField:=formatString ("field-name";String:C10($Obj_tableList.sortField))
-							
-							  //……………………………………………………………………………………………………………
-					End case 
-					
-				Else 
-					
-					  // take searchable field as sort field if not defined yet
-					$Obj_table.sortField:=$Obj_table.searchableField
-					
-					If (Length:C16(String:C10($Obj_table.sortField))=0)
-						
-						  // and if no search field find the first one sortable in diplayed field
-						For each ($Obj_field;$Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
-							
-							If (($Obj_field.fieldType#Is picture:K8:10)\
-								 & ($Obj_field.fieldType#-1))  // not image or not defined
-								
-								$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
-								
-							End if 
-						End for each 
-					End if 
-					
-					  // XXX maybe if not in displayable fields, go for not displayable fields?
-					
-				End if 
-				
-				  // If (Length($Obj_table.sortField)=0)
-				  // XXX maybe primary key field?
-				  // End if
-				
-				  // ==============================================================
-				  //                         SECTION
-				  // ==============================================================
-				
-				If ($Obj_tableList.sectionField#Null:C1517)
-					
-					$Obj_table.sectionField:=formatString ("field-name";String:C10($Obj_tableList.sectionField.name))
-					$Obj_table.sectionFieldBindingType:=""
-					
-					  // Get format of section field$Obj_tableList
-					If ($Obj_tableModel[String:C10($Obj_tableList.sectionField.id)]#Null:C1517)
-						
-						$Obj_field:=New object:C1471  // maybe get other info from  $Obj_tableList.fields
-						$Obj_field:=ob_deepMerge ($Obj_field;$Obj_tableModel[String:C10($Obj_tableList.sectionField.id)])
-						
-						$Obj_table.sectionFieldBindingType:=storyboard (New object:C1471(\
-							"action";"fieldBinding";\
-							"field";$Obj_field;\
-							"formatters";$Obj_in.formatters)).bindingType
-						
-					End if 
-				End if 
-				
-				$Obj_table.showSection:="NO"  // show or not the section bar at right
-				
-				  // ==============================================================
-				  //                        ACTIONS
-				  // ==============================================================
-				
-				Case of 
-						
-						  //……………………………………………………………………………………………………………
-					: (String:C10($Obj_template.userChoiceTag)="list")
-						
-						  // get action on table
-						$Col_actions:=actions ("form";New object:C1471(\
-							"project";$Obj_in.project;\
-							"table";$Obj_table.originalName;\
-							"tableNumber";$Obj_table.tableNumber;\
-							"scope";"table")).actions
-						
-						If ($Col_actions.length>0)
-							
-							$Obj_table.tableActions:=JSON Stringify:C1217(New object:C1471(\
-								"actions";$Col_actions))
+							$Obj_table.navigationIcon:=String:C10($Obj_navigationTable.navigationIcon)
 							
 						End if 
 						
-						$Col_actions:=actions ("form";New object:C1471(\
-							"project";$Obj_in.project;\
-							"table";$Obj_table.originalName;\
-							"tableNumber";$Obj_table.tableNumber;\
-							"scope";"currentRecord")).actions
-						
-						If ($Col_actions.length>0)
-							
-							$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
-								"actions";$Col_actions))
-							
-						End if 
-						
-						  // XXX selection actions
-						  //……………………………………………………………………………………………………………
-					: (String:C10($Obj_template.userChoiceTag)="detail")
-						
-						$Col_actions:=actions ("form";New object:C1471(\
-							"project";$Obj_in.project;\
-							"table";$Obj_table.originalName;\
-							"tableNumber";$Obj_table.tableNumber;\
-							"scope";"currentRecord")).actions
-						
-						If ($Col_actions.length>0)
-							
-							$Obj_table.recordActions:=JSON Stringify:C1217(New object:C1471(\
-								"actions";$Col_actions))
-							
-						End if 
-						
-						  //……………………………………………………………………………………………………………
 					Else 
 						
-						ASSERT:C1129(dev_assert ;"Unknown form type "+String:C10(String:C10($Obj_template.userChoiceTag)))
-						
-						  //……………………………………………………………………………………………………………
-				End case 
-				
-				  // ==============================================================
-				  //                       TYPE AN OTHERS
-				  // ==============================================================
-				
-				$Obj_in.tags.detailFormType:=String:C10($o.template.tags.___DETAILFORMTYPE___)  // XXX could do a generic insert of all $Obj_buffer.template.tags here
-				$Obj_in.tags.listFormType:=String:C10($o.template.tags.___LISTFORMTYPE___)
-				
-				$Obj_table.navigationIcon:=Null:C1517
-				
-				If (Value type:C1509($Obj_in.tags.navigationTables)=Is collection:K8:32)
-					
-					$Obj_navigationTable:=$Obj_in.tags.navigationTables.query("originalName = :1";String:C10($Obj_table.originalName)).pop()
-					
-					If ($Obj_navigationTable#Null:C1517)
-						
-						$Obj_table.navigationIcon:=String:C10($Obj_navigationTable.navigationIcon)
+						ASSERT:C1129(dev_Matrix ;"No navigationTables computed before doing table forms. Need to know if form is in main navigation and get the icon")
 						
 					End if 
 					
-				Else 
+					$Obj_in.tags.table:=$Obj_table
 					
-					ASSERT:C1129(dev_Matrix ;"No navigationTables computed before doing table forms. Need to know if form is in main navigation and get the icon")
+					  // Process the template
+					$o.template.source:=$folder.platformPath
+					$o.template.parent:=$Obj_template.parent  // or $Obj_template?
+					$o.tags:=$Obj_in.tags  // has been modifyed since clone
+					$o.projfile:=$Obj_in.projfile  // do not want a copy
+					$o.exclude:=JSON Stringify:C1217(SHARED.template.exclude)
+					
+					$Obj_out.template:=templates ($o)  // <================================== RECURSIVE
+					ob_error_combine ($Obj_out;$Obj_out.template)
+					
+				Else   // cannot read the template
+					
+					ob_error_combine ($Obj_out;$o.template)
+					$Obj_out.success:=False:C215
 					
 				End if 
 				
-				$Obj_in.tags.table:=$Obj_table
+			Else 
 				
-				  // Process the template
-				$o.template.source:=$folder.platformPath
-				$o.template.parent:=$Obj_template.parent  // or $Obj_template?
-				$o.tags:=$Obj_in.tags  // has been modifyed since clone
-				$o.projfile:=$Obj_in.projfile  // do not want a copy
-				$o.exclude:=JSON Stringify:C1217(SHARED.template.exclude)
+				RECORD.error("Invalid path: \""+$folder.path+"\"")
 				
-				$Obj_out.template:=templates ($o)  // <================================== RECURSIVE
-				ob_error_combine ($Obj_out;$Obj_out.template)
+				If ($Obj_out.errors=Null:C1517)
+					
+					$Obj_out.errors:=New collection:C1472
+					
+				End if 
 				
-			Else   // cannot read the template
-				
-				ob_error_combine ($Obj_out;$o.template)
-				$Obj_out.success:=False:C215
+				$Obj_out.errors.push("Invalid path: "+$folder.path)
 				
 			End if 
 		End for each 

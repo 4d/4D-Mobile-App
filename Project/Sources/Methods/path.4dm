@@ -104,6 +104,11 @@ Else
 			$o.path:=Folder:C1567("/RESOURCES/templates/form/list")
 			
 			  //______________________________________________________
+		: ($1="loginForms")  // Component list forms folder
+			
+			$o.path:=Folder:C1567("/RESOURCES/templates/form/login")
+			
+			  //______________________________________________________
 		: ($1="navigationForms")  // Component navigation forms folder
 			
 			$o.path:=Folder:C1567("/RESOURCES/templates/form/navigation")

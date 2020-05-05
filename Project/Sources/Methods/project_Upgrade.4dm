@@ -457,7 +457,7 @@ If (feature.with("resourcesBrowser"))
 		
 		$oInternal:=path .listForms()
 		$oDatabase:=path .hostlistForms()
-		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/TEMPO/manifest.json").getText()).list
+		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).list
 		
 		For each ($tTable;$o_project.list)
 			
@@ -479,7 +479,7 @@ If (feature.with("resourcesBrowser"))
 						If ($oTemplate#Null:C1517)
 							
 							  // Copy from tempo folder to database
-							$file:=File:C1566("/RESOURCES/TEMPO/"+$oTemplate.new)
+							$file:=File:C1566("/RESOURCES/Compatibility/"+$oTemplate.new)
 							
 							If ($file.exists)
 								
@@ -519,7 +519,7 @@ If (feature.with("resourcesBrowser"))
 		
 		$oInternal:=path .detailForms()
 		$oDatabase:=path .hostdetailForms()
-		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/TEMPO/manifest.json").getText()).detail
+		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).detail
 		
 		For each ($tTable;$o_project.detail)
 			
@@ -541,7 +541,7 @@ If (feature.with("resourcesBrowser"))
 						If ($oTemplate#Null:C1517)
 							
 							  // Copy from tempo folder to database
-							$file:=File:C1566("/RESOURCES/TEMPO/"+$oTemplate.new)
+							$file:=File:C1566("/RESOURCES/Compatibility/"+$oTemplate.new)
 							
 							If ($file.exists)
 								

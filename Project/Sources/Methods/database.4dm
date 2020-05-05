@@ -27,7 +27,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"isProject";False:C215;\
 		"isMatrix";Structure file:C489=Structure file:C489(*);\
 		"isRemote";Application type:C494=4D Remote mode:K5:5;\
-		"parameters";Null:C1517;\
+		"parameters";New shared object:C1526;\
 		"components";New shared collection:C1527;\
 		"plugins";New shared collection:C1527;\
 		"enableDebugLog";Formula:C1597(SET DATABASE PARAMETER:C642(Debug log recording:K37:34;1));\
@@ -45,33 +45,50 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		
 		$l:=Get database parameter:C643(User param value:K37:94;$t)
 		
+		  // Decode special entities
+		$t:=Replace string:C233($t;"&amp;";"&")
+		$t:=Replace string:C233($t;"&lt;";"<")
+		$t:=Replace string:C233($t;"&gt;";">")
+		$t:=Replace string:C233($t;"&apos;";"'")
+		$t:=Replace string:C233($t;"&quot;";"\"")
+		
 		Case of 
-			
-			  //______________________________________________________
-		: (Length:C16($t)=0)
-			
-			  // <NOTHING MORE TO DO>
-			
-			  //______________________________________________________
-		: (Match regex:C1019("(?m-si)^\\{.*\\}$";$t;1))  // json object
-			
-			$o.parameters:=JSON Parse:C1218($t)
-			
-			  //______________________________________________________
-		: (Match regex:C1019("(?m-si)^\\[.*\\]$";$t;1))  // json array
-			
-			ARRAY TEXT:C222($tTxt_values;0x0000)
-			JSON PARSE ARRAY:C1219($t;$tTxt_values)
-			$o.parameters:=New collection:C1472
-			ARRAY TO COLLECTION:C1563(This:C1470.parameters;$tTxt_values)
-			
-			  //______________________________________________________
-		Else 
-			
-			$o.parameters:=$t
-			
-			  //______________________________________________________
-	End case 
+				
+				  //______________________________________________________
+			: (Length:C16($t)=0)
+				
+				  // <NOTHING MORE TO DO>
+				
+				  //______________________________________________________
+			: (Match regex:C1019("(?m-si)^\\{.*\\}$";$t;1))  // json object
+				
+				C_OBJECT:C1216($oBuffer)
+				$oBuffer:=JSON Parse:C1218($t)
+				
+				Use ($o.parameters)
+					
+					For each ($t;$oBuffer)
+						
+						$o.parameters[$t]:=$oBuffer[$t]
+						
+					End for each 
+				End use 
+				
+				  //______________________________________________________
+			: (Match regex:C1019("(?m-si)^\\[.*\\]$";$t;1))  // json array
+				
+				ARRAY TEXT:C222($tTxt_values;0x0000)
+				JSON PARSE ARRAY:C1219($t;$tTxt_values)
+				$o.parameters:=New collection:C1472
+				ARRAY TO COLLECTION:C1563(This:C1470.parameters;$tTxt_values)
+				
+				  //______________________________________________________
+			Else 
+				
+				$o.parameters:=$t
+				
+				  //______________________________________________________
+		End case 
 		
 		ARRAY TEXT:C222($tTxt_components;0x0000)
 		COMPONENT LIST:C1001($tTxt_components)

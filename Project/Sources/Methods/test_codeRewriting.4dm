@@ -1,5 +1,5 @@
 //%attributes = {}
-C_OBJECT:C1216($o)
+C_OBJECT:C1216($o;$oo)
 
 TRY 
 
@@ -91,6 +91,73 @@ ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("host_tableIcons").platformPath
 
 $o:=path .hostFormatters()
 ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("host_formatters").platformPath)
+
+/*
+
+Class path
+
+*/
+
+$o:=cs:C1710.path.new()
+ASSERT:C1129($o.projects().platformPath=COMPONENT_Pathname ("projects").platformPath)
+
+ASSERT:C1129($o.products().platformPath=COMPONENT_Pathname ("products").platformPath)
+
+$oo:=$o.sdk()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("sdk").platformPath)
+ASSERT:C1129($oo.exists)
+
+$o:=cs:C1710.path.new("sdk")
+ASSERT:C1129($o.exists)
+
+$oo:=$o.project()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("project").platformPath)
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.templates()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("templates").platformPath)
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.scripts()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("scripts").platformPath)
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.tableIcons()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("tableIcons").platformPath)
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.fieldIcons()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("fieldIcons").platformPath)
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.actionIcons()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("actionIcons").platformPath)
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.forms()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("forms").platformPath)
+ASSERT:C1129($oo.exists)
+
+$o:=cs:C1710.path.new("forms")
+ASSERT:C1129($o.target.platformPath=COMPONENT_Pathname ("forms").platformPath)
+
+$oo:=$o.listForms()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("listForms").platformPath)
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.detailForms()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("detailForms").platformPath)
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.navigationForms()
+ASSERT:C1129($oo.platformPath=COMPONENT_Pathname ("navigationForms").platformPath)
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.loginForms()
+ASSERT:C1129($oo.exists)
+
+$oo:=$o.databasePreferences()
+ASSERT:C1129($oo.exists)
 
   // ASSERT(_o_env_userPath ("home")=env_userPathname ("home").platformPath)
   // ASSERT(_o_env_userPath ("home";True)=env_userPathname ("home").path)
