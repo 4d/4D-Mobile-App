@@ -5,7 +5,7 @@
   // Created 17-8-2017 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
-  //
+  // SERVER pannel widgets management
   // ----------------------------------------------------
   // Declarations
 C_OBJECT:C1216($f)

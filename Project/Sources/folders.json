@@ -15,10 +15,59 @@
 			"_wip_Xcode",
 			"00_NEW",
 			"00_OPEN",
-			"00_TESTS"
+			"00_TESTS",
+			"COMPILER_TEMPO"
+		],
+		"forms": [
+			"UI"
 		]
 	},
-	"__o_OBSOLETES": {
+	"_[DEV]": {
+		"groups": [
+			"devMenu"
+		],
+		"tables": [
+			"__DeletedRecords",
+			"ALL_TYPES",
+			"Commands",
+			"Employes",
+			"NAME WITH SPACE",
+			"NO FIELDS",
+			"NOT EXPOSED",
+			"Only primary key",
+			"Service",
+			"Table_1",
+			"Table_2",
+			"Table_3",
+			"Themes",
+			"とてもとても長いフィールド"
+		],
+		"methods": [
+			"_catalog",
+			"01_LASTBUILD",
+			"c_formula",
+			"importData",
+			"INIT_AUTO_COMPLETION",
+			"ON_STARTUP",
+			"populateCommands",
+			"test_codeRewriting"
+		],
+		"forms": [
+			"_w_VIEWS",
+			"[ALL_TYPES]Form1",
+			"[Commands]Form1",
+			"[Commands]Form2",
+			"[Themes]Form1",
+			"[Themes]Form2",
+			"00_TESTS",
+			"APP_STORE",
+			"Form1",
+			"ITUNE",
+			"LAUNCHSCREEN",
+			"NO_PUBLISHED_TABLES"
+		]
+	},
+	"_o_OBSOLETES": {
 		"methods": [
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
@@ -43,49 +92,11 @@
 			"_o_VIEWS"
 		]
 	},
-	"__TEMPO": {
-		"groups": [
-			"devMenu"
-		],
-		"tables": [
-			"__DeletedRecords",
-			"ALL_TYPES",
-			"Commands",
-			"Employes",
-			"NAME WITH SPACE",
-			"NO FIELDS",
-			"NOT EXPOSED",
-			"Only primary key",
-			"Service",
-			"Table_1",
-			"Table_2",
-			"Table_3",
-			"Themes",
-			"とてもとても長いフィールド"
-		],
-		"methods": [
-			"01_LASTBUILD",
-			"importData",
-			"killWorker",
-			"test_codeRewriting"
-		],
-		"forms": [
-			"_w_VIEWS",
-			"[ALL_TYPES]Form1",
-			"[Commands]Form1",
-			"[Commands]Form2",
-			"[Themes]Form1",
-			"[Themes]Form2",
-			"00_TESTS",
-			"APP_STORE",
-			"Form1",
-			"ITUNE",
-			"LAUNCHSCREEN",
-			"NO_PUBLISHED_TABLES",
-			"UI"
-		]
-	},
-	"_[API]": {
+	"(_TEMPO)": {},
+	"(_widgets)": {},
+	"(tools)": {},
+	"(v18)": {},
+	"[API]": {
 		"methods": [
 			"C_NEW_MOBILE_PROJECT",
 			"C_OPEN_MOBILE_PROJECT",
@@ -93,17 +104,18 @@
 			"mobileUnit"
 		]
 	},
-	"_[COMPONENT]": {
-		"groups": [
-			"[EDITOR]",
-			"[PANELS]",
-			"[PROJECT]",
-			"backend",
-			"BROWSER",
-			"deliver",
-			"macOS",
-			"mobile"
+	"[BROWSER]": {
+		"methods": [
+			"browser_DOWNLOAD",
+			"BROWSER_Handler",
+			"BROWSER_OBJECTS_HANDLER",
+			"COMPILER_BROWSER"
 		],
+		"forms": [
+			"BROWSER"
+		]
+	},
+	"[COMPONENT]": {
 		"methods": [
 			"BUILD",
 			"COMPILER_COMPONENT",
@@ -113,15 +125,13 @@
 			"COMPONENT_Pathname",
 			"FEATURE_FLAGS",
 			"getIcon",
+			"killWorker",
 			"path"
 		],
 		"forms": [
 			"EMPTY"
 		]
 	},
-	"(_widgets)": {},
-	"(tools)": {},
-	"(v18)": {},
 	"[EDITOR]": {
 		"methods": [
 			"COMPILER_editor",
@@ -254,17 +264,6 @@
 			"xloc"
 		]
 	},
-	"BROWSER": {
-		"methods": [
-			"browser_DOWNLOAD",
-			"BROWSER_Handler",
-			"BROWSER_OBJECTS_HANDLER",
-			"COMPILER_BROWSER"
-		],
-		"forms": [
-			"BROWSER"
-		]
-	},
 	"classes": {
 		"groups": [
 			"HTUs",
@@ -272,6 +271,7 @@
 		],
 		"methods": [
 			"button",
+			"CALL_MAIN_PROCESS",
 			"color",
 			"COMPILER_classes",
 			"currentForm",
@@ -282,6 +282,7 @@
 			"group",
 			"http",
 			"HTTP ERROR HANDLER",
+			"HTU_svg class",
 			"lep",
 			"listbox",
 			"logger",
@@ -290,6 +291,7 @@
 			"ob deepMerge",
 			"ob findPropertyValues",
 			"ob MERGE",
+			"object",
 			"picture",
 			"process",
 			"progress",
@@ -308,6 +310,7 @@
 			"group",
 			"input",
 			"menu",
+			"path",
 			"scrollable",
 			"static",
 			"svg",
@@ -458,6 +461,9 @@
 			"HTU_progress",
 			"HTU_svg",
 			"htuProgressDoSomething"
+		],
+		"forms": [
+			"HTU_WIDGETS"
 		]
 	},
 	"lib": {
@@ -470,7 +476,6 @@
 			"err",
 			"ob",
 			"ob_error",
-			"panel",
 			"pic",
 			"rgx (thread-safe)",
 			"str",
@@ -595,6 +600,7 @@
 			"panel_Count",
 			"panel_Find_by_name",
 			"panel_Form_common",
+			"panel_Form_definition",
 			"panel_GOTO",
 			"panel_INIT",
 			"panel_Objects",
@@ -660,7 +666,6 @@
 	"SERVER": {
 		"methods": [
 			"COMPILER_SERVER",
-			"Method406",
 			"SERVER_HANDLER",
 			"SERVER_OBJECTS_HANDLER"
 		],
@@ -800,6 +805,7 @@
 	},
 	"trash": {
 		"groups": [
+			"(_TEMPO)",
 			"(_widgets)",
 			"(tools)",
 			"(v18)"

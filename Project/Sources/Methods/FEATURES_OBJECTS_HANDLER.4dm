@@ -5,7 +5,7 @@
   // Created 29-4-2020 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
-  //
+  // FEATURES pannel widgets management
   // ----------------------------------------------------
   // Declarations
 C_OBJECT:C1216($f)

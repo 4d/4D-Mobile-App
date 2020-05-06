@@ -5,12 +5,12 @@
   // Created 29-4-2020 by Vincent de Lachaux
   // ----------------------------------------------------
   // Description:
-  //
+  // FEATURES pannel management
   // ----------------------------------------------------
   // Declarations
 C_VARIANT:C1683($1)
 
-C_LONGINT:C283($lEventCode)
+C_LONGINT:C283($codeEvent)
 C_TEXT:C284($tAction)
 C_OBJECT:C1216($f;$o)
 
@@ -20,18 +20,17 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-
 $f:=panel_Form_definition ("FEATURES")
 
   // ----------------------------------------------------
 If (Count parameters:C259=0)  // Form method
 	
-	$lEventCode:=panel_Form_common (On Load:K2:1)
+	$codeEvent:=panel_Form_common (On Load:K2:1)
 	
 	Case of 
 			
 			  //______________________________________________________
-		: ($lEventCode=On Load:K2:1)
+		: ($codeEvent=On Load:K2:1)
 			
 			$f.loginRequired.bestSize()
 			$f.pushNotification.bestSize()
@@ -49,7 +48,7 @@ Else
 		
 	Else 
 		
-		$tAction:=$1.action
+		$tAction:=String:C10($1.action)
 		
 	End if 
 	
