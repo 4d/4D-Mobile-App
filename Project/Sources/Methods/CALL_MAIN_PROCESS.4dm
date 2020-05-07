@@ -69,7 +69,11 @@ Case of
 		  //______________________________________________________
 End case 
 
-$signal.trigger()
+If (Not:C34(Process aborted:C672))
+	
+	$signal.trigger()
+	
+End if 
 
   // ----------------------------------------------------
   // Return

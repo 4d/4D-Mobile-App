@@ -37,6 +37,7 @@ Function checkAuthenticationMethod
 Function editAuthenticationMethod
 	
 	C_OBJECT:C1216($o)
+	C_TEXT:C284($t)
 	
 	ARRAY TEXT:C222($tTxt_;0x0000)
 	METHOD GET PATHS:C1163(Path database method:K72:2;$tTxt_;*)
@@ -58,7 +59,8 @@ Function editAuthenticationMethod
 		
 		If ($o.exists)
 			
-			METHOD SET CODE:C1194($tTxt_{0};$o.getText();*)
+			$t:=$o.getText()
+			METHOD SET CODE:C1194($tTxt_{0};$t;*)
 			
 		End if 
 	End if 
