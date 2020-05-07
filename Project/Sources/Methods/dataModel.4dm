@@ -70,9 +70,13 @@ Case of
 		
 		If (Asserted:C1132($Obj_in.path#Null:C1517;"Missing the tag \"path\""))
 			
-			If ($Obj_in.dataModel#Null:C1517)
+			  //If ($Obj_in.dataModel#Null)
+			
+			If ($Obj_in.project.dataModel#Null:C1517)
 				
-				$Obj_dataModel:=OB Copy:C1225($Obj_in.dataModel)
+				  //$Obj_dataModel:=OB Copy($Obj_in.dataModel)
+				
+				$Obj_dataModel:=OB Copy:C1225($Obj_in.project.dataModel)
 				
 				$Dom_model:=DOM Create XML Ref:C861("model")
 				
@@ -591,7 +595,7 @@ Case of
 				
 			Else 
 				
-				RECORD.warning("$Obj_in.dataModel is null")
+				RECORD.warning("$Obj_in.project.dataModel is null")
 				
 			End if 
 		End if 
@@ -637,7 +641,8 @@ Case of
 								
 								$Obj_relationTable:=$Obj_dataModel[$tTxt_tables{$Lon_table2}]
 								
-								$o:=$Obj_relationTable[""]
+								  //$o:=$Obj_relationTable[""]
+								$o:=$Obj_relationTable
 								
 								If ($o.name=$Obj_table[$Txt_relationName].relatedDataClass)
 									
@@ -655,7 +660,8 @@ Case of
 									"";New object:C1471(\
 									"name";$Obj_table[$Txt_relationName].relatedDataClass))
 								
-								$o:=$Obj_relationTable[""]
+								  //$o:=$Obj_relationTable[""]
+								$o:=$Obj_relationTable
 								
 								$Obj_buffer:=structure (New object:C1471(\
 									"action";"tableInfo";\
