@@ -86,7 +86,6 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 			Else 
 				
 				$o.parameters:=$t
-				
 				  //______________________________________________________
 		End case 
 		

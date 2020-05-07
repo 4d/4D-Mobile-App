@@ -43,6 +43,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"forms";Formula:C1597(path ("forms"));\
 		"key";Formula:C1597(path ("key"));\
 		"listForms";Formula:C1597(path ("listForms"));\
+		"loginForms";Formula:C1597(path ("loginForms"));\
 		"navigationForms";Formula:C1597(path ("navigationForms"));\
 		"project";Formula:C1597(path ("project"));\
 		"scripts";Formula:C1597(path ("scripts"));\
