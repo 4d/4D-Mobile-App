@@ -39,7 +39,7 @@ Else
 End if 
 
   // ----------------------------------------------------
-$Boo_throwAssert:=(Structure file:C489#Structure file:C489(*))  // Dev mode
+$Boo_throwAssert:=(Structure file:C489=Structure file:C489(*))  // Dev mode
 
   // ----------------------------------------------------
   // Return
