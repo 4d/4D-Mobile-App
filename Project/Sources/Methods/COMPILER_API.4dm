@@ -14,5 +14,7 @@ If (False:C215)  // Unit test
 	C_TEXT:C284(mobileUnit ;$1)
 	C_OBJECT:C1216(mobileUnit ;$2)
 	
+	
+	C_OBJECT:C1216(unit ;$0)
 	  //_______________________________________
 End if 

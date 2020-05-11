@@ -10,7 +10,7 @@
   //
   // ----------------------------------------------------
   // Declarations
-C_BOOLEAN:C305($bReset)
+C_BOOLEAN:C305($bInitRecord;$bReset)
 C_LONGINT:C283($l;$lMode)
 C_PICTURE:C286($p)
 C_TEXT:C284($t;$tProcess)
@@ -65,6 +65,7 @@ If (OB Is empty:C1297(RECORD)) | $bReset
 	
 	RECORD:=logger ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
 	RECORD.verbose:=(Structure file:C489=Structure file:C489(*))
+	$bInitRecord:=True:C214
 	
 End if 
 
@@ -403,8 +404,8 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 End if 
 
 /*================================================================================================================================
-                                                            FEATURES FLAGS
-  ================================================================================================================================*/
+FEATURES FLAGS
+================================================================================================================================*/
 If (OB Is empty:C1297(feature)) | $bReset
 	
 	FEATURE_FLAGS (1840;$oPreferences.feature)
@@ -412,7 +413,8 @@ If (OB Is empty:C1297(feature)) | $bReset
 End if 
 
 If (Not:C34($lMode ?? 1))\
- & ($tProcess#"4D Mobile (@")
+ & ($tProcess#"4D Mobile (@")\
+ & ($bInitRecord)
 	
 	$t:=SHARED.ide.version
 	RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0";"."+$t[[4]];"R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
@@ -433,8 +435,8 @@ If (Not:C34($lMode ?? 1))\
 End if 
 
 /*================================================================================================================================
-                                                            AFTER FLAGS
-  ================================================================================================================================*/
+AFTER FLAGS
+================================================================================================================================*/
 COMPONENT_DEFINE_TOOLS 
 
 If (feature.with("accentColors"))
