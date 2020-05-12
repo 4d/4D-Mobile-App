@@ -58,7 +58,18 @@ If (Asserted:C1132(OK=1;"Invalid template"))
 			$Col_bind:=Split string:C1554($oAttributes["ios:values"];",";sk trim spaces:K86:2)
 			
 			  // Create binding collection sized according to bind attribute length
-			$Col_affected:=New collection:C1472.resize($Col_bind.length)
+			If (feature.with("newViewUI"))
+				
+				$Col_bind.resize($oIN.manifest.fields.count)
+				
+				  // No limit
+				$Col_affected:=New collection:C1472
+				
+			Else 
+				
+				$Col_affected:=New collection:C1472.resize($Col_bind.length)
+				
+			End if 
 			
 			$Col_catalog:=editor_Catalog 
 			
@@ -228,6 +239,13 @@ If (Asserted:C1132(OK=1;"Invalid template"))
 					End case 
 				End if 
 			End for each 
+			
+			If (feature.with("newViewUI")) & ($oIN.manifest#Null:C1517)
+				
+				  // Append the non affected fields
+				$Col_affected.combine($oIN.target.fields)
+				
+			End if 
 			
 			  // Keep the field binding definition
 			$oCache.fields:=$Col_affected

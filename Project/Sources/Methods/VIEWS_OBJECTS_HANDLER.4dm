@@ -12,10 +12,10 @@ C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b;$bAvailable)
-C_LONGINT:C283($indx;$l)
+C_LONGINT:C283($i;$indx;$l)
 C_PICTURE:C286($p)
 C_TEXT:C284($tTable;$tTemplate;$tTypeForm)
-C_OBJECT:C1216($context;$event;$form;$o;$oTarget)
+C_OBJECT:C1216($context;$event;$form;$menu;$o;$oTarget)
 
 If (False:C215)
 	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER ;$0)
@@ -248,6 +248,70 @@ Case of
 				 | ($event.code=On Selection Change:K2:29)
 				
 				editor_ui_LISTBOX ($event.objectName)
+				
+				If (feature.with("newViewUI"))
+					
+					If (Contextual click:C713)
+						
+						$menu:=cs:C1710.menu.new().append("addAllFields";"all").popup()
+						
+						Case of 
+								  //______________________________________________________
+							: (Not:C34($menu.selected))
+								
+								  // <NOTHING MORE TO DO>
+								
+								  //______________________________________________________
+							: ($menu.choice="all")
+								
+								$tTypeForm:=Choose:C955(Num:C11($context.selector)=2;"detail";"list")
+								
+								If ($tTypeForm="detail")
+									
+									For ($i;1;Size of array:C274(($form.fields.pointer())->);1)
+										
+										$o:=($form.fields.pointer())->{$i}
+										
+										$b:=($o.fieldType#8859)  // Not 1-N relation
+										
+										If (Not:C34($b))
+											
+											  // 1-N relation with published related data class
+											$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
+											
+										End if 
+										
+										If ($b)
+											
+											  // Add the field
+											$oTarget:=Form:C1466[$tTypeForm][$context.tableNumber]
+											$oTarget.fields.push($o)
+											
+										End if 
+									End for 
+									
+									  // Update preview
+									views_preview ("draw";$form)
+									
+									  // Save project
+									project.save()
+									
+								Else 
+									
+									  // Not for a list form
+									
+								End if 
+								
+								  //______________________________________________________
+							Else 
+								
+								  // A "Case of" statement should never omit "Else
+								TRACE:C157
+								
+								  //______________________________________________________
+						End case 
+					End if 
+				End if 
 				
 				  //______________________________________________________
 			: ($event.code=On Begin Drag Over:K2:44)

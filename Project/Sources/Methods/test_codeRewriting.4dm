@@ -71,6 +71,9 @@ ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("key").platformPath)
 $o:=path .host()
 ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("host").platformPath)
 
+
+
+
 $o:=path .hostForms()
 ASSERT:C1129($o.platformPath=COMPONENT_Pathname ("host_forms").platformPath)
 

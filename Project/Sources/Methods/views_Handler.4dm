@@ -11,9 +11,10 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($bSetForm;$bV2)
+C_BOOLEAN:C305($bUpdate;$bV2)
 C_LONGINT:C283($codeEvent;$count;$i;$indx;$l;$offset)
-C_TEXT:C284($t;$tFormName;$tNewForm;$tTable;$tTypeForm)
+C_TEXT:C284($t;$tFormName;$tCurrentFormName;$tFormName;$tSelector;$tTableNumber)
+C_TEXT:C284($tTypeForm)
 C_OBJECT:C1216($context;$form;$o;$o1;$oDataModel;$oIN)
 C_OBJECT:C1216($oManifest;$oNewTemplate;$oOUT;$oTarget;$pathForm)
 C_COLLECTION:C1488($c)
@@ -164,10 +165,10 @@ Case of
 				
 				If ($oDataModel#Null:C1517)
 					
-					For each ($tTable;$oDataModel)
+					For each ($tTableNumber;$oDataModel)
 						
-						Form:C1466.list:=ob_createPath (Form:C1466.list;$tTable)
-						Form:C1466.detail:=ob_createPath (Form:C1466.detail;$tTable)
+						Form:C1466.list:=ob_createPath (Form:C1466.list;$tTableNumber)
+						Form:C1466.detail:=ob_createPath (Form:C1466.detail;$tTableNumber)
 						
 					End for each 
 				End if 
@@ -217,8 +218,7 @@ Case of
 				($form.tableWidget.pointer())->:=tables_Widget ($oDataModel;New object:C1471(\
 					"tableNumber";$context.tableNum()))
 				
-				views_UPDATE ("list")
-				views_UPDATE ("detail")
+				views_UPDATE 
 				
 				  // Update geometry
 				$context.setGeometry()
@@ -466,11 +466,12 @@ Case of
 		
 		$form.fieldGroup.show()
 		$form.previewGroup.show()
+		$form.scrollBar.hide()
 		
 		If ($oIN.form#Null:C1517)  // Browser auto close
 			
-			$tNewForm:=$oIN.form
-			$bSetForm:=True:C214
+			$tFormName:=$oIN.form
+			$bUpdate:=True:C214
 			
 		Else 
 			
@@ -480,8 +481,8 @@ Case of
 				If ($oIN.pathnames[$oIN.item-1]#Null:C1517)
 					
 					  // The selected form
-					$tNewForm:=$oIN.pathnames[$oIN.item-1]
-					$bSetForm:=True:C214
+					$tFormName:=$oIN.pathnames[$oIN.item-1]
+					$bUpdate:=True:C214
 					
 				Else 
 					
@@ -495,49 +496,53 @@ Case of
 			End if 
 		End if 
 		
-		If ($bSetForm)
+		If ($bUpdate)
 			
-			$tTable:=$context.tableNum()
+			  // Table number as string
+			$tTableNumber:=$context.tableNum()
+			
+			  // Current selector (list | detail)
+			$tSelector:=$oIN.selector
 			
 			  // The current table form
-			$t:=String:C10(Form:C1466[$oIN.selector][$tTable].form)
+			$tCurrentFormName:=String:C10(Form:C1466[$tSelector][$tTableNumber].form)
 			
-			If ($tNewForm#$t)
+			If ($tFormName#$tCurrentFormName)
 				
-				$oTarget:=Form:C1466[$oIN.selector][$context.tableNumber]
+				$oTarget:=Form:C1466[$tSelector][$context.tableNumber]
 				
 				$oIN.target:=OB Copy:C1225($oTarget)
 				OB REMOVE:C1226($oIN.target;"form")
 				
-				If (Length:C16($t)#0)
+				If (Length:C16($tCurrentFormName)#0)
 					
 					  // Save a snapshot of the current form definition
 					Case of 
 							
 							  //______________________________________________________
-						: ($context[$tTable]=Null:C1517)
+						: ($context[$tTableNumber]=Null:C1517)
 							
-							$context[$tTable]:=New object:C1471(\
-								$oIN.selector;New object:C1471($t;\
+							$context[$tTableNumber]:=New object:C1471(\
+								$tSelector;New object:C1471($tCurrentFormName;\
 								$oIN.target))
 							
 							  //______________________________________________________
-						: ($context[$tTable][$oIN.selector]=Null:C1517)
+						: ($context[$tTableNumber][$tSelector]=Null:C1517)
 							
-							$context[$tTable][$oIN.selector]:=New object:C1471(\
-								$t;$oIN.target)
+							$context[$tTableNumber][$tSelector]:=New object:C1471(\
+								$tCurrentFormName;$oIN.target)
 							
 							  //______________________________________________________
 						Else 
 							
-							$context[$tTable][$oIN.selector][$t]:=$oIN.target
+							$context[$tTableNumber][$tSelector][$tCurrentFormName]:=$oIN.target
 							
 							  //______________________________________________________
 					End case 
 				End if 
 				
 				  // Update project & save [
-				$oTarget.form:=$tNewForm
+				$oTarget.form:=$tFormName
 				
 				OB REMOVE:C1226($context;"manifest")
 				
@@ -554,7 +559,7 @@ Case of
 					End if 
 				End if 
 				
-				If ($context[$tTable][$oIN.selector][$tNewForm]=Null:C1517)
+				If ($context[$tTableNumber][$tSelector][$tFormName]=Null:C1517)
 					
 					If ($oTarget.fields=Null:C1517)
 						
@@ -565,16 +570,16 @@ Case of
 					  // Create a new binding
 					$c:=$oTarget.fields.copy()
 					
-					If ($context[$tTable]#Null:C1517)
+					If ($context[$tTableNumber]#Null:C1517)
 						
-						If ($context[$tTable][$oIN.selector]#Null:C1517)
+						If ($context[$tTableNumber][$tSelector]#Null:C1517)
 							
 							  // Enrich with the fields already used during the session
-							For each ($tTypeForm;$context[$tTable][$oIN.selector])
+							For each ($tTypeForm;$context[$tTableNumber][$tSelector])
 								
-								For each ($o;$context[$tTable][$oIN.selector][$tTypeForm].fields.filter("col_notNull"))
+								For each ($o;$context[$tTableNumber][$tSelector][$tTypeForm].fields.filter("col_notNull"))
 									
-									If ($c.extract("name").indexOf($o.name)=-1)
+									If ($c.query("name = :1";$o.name).pop()=Null:C1517)
 										
 										$c.push($o)
 										
@@ -587,14 +592,14 @@ Case of
 				Else 
 					
 					  // Reuse the last snapshot
-					$c:=$context[$tTable][$oIN.selector][$tNewForm].fields
+					$c:=$context[$tTableNumber][$tSelector][$tFormName].fields
 					
 					  // Enrich the last snapshot with the fields already used during the session
-					For each ($tTypeForm;$context[$tTable][$oIN.selector])
+					For each ($tTypeForm;$context[$tTableNumber][$tSelector])
 						
-						If ($tTypeForm#$tNewForm)
+						If ($tTypeForm#$tFormName)
 							
-							For each ($o;$context[$tTable][$oIN.selector][$tTypeForm].fields.filter("col_notNull"))
+							For each ($o;$context[$tTableNumber][$tSelector][$tTypeForm].fields.filter("col_notNull"))
 								
 								If ($c.extract("name").indexOf($o.name)=-1)
 									
@@ -606,49 +611,20 @@ Case of
 					End for each 
 				End if 
 				
-				$oIN.form:=$tNewForm
-				$oIN.tableNumber:=$tTable
+				$oIN.form:=$tFormName
+				$oIN.tableNumber:=$tTableNumber
 				
-				$oNewTemplate:=cs:C1710.tmpl.new($tNewForm;$oIN.selector)
+				$oNewTemplate:=cs:C1710.tmpl.new($tFormName;$tSelector)
 				$oManifest:=$oNewTemplate.manifest
 				
 				If (feature.with("newViewUI"))
 					
-					$bV2:=(Num:C11($oManifest.renderer)>=2)
-					
-					If ($bV2)
-						
-						If ($oIN.target.fields#Null:C1517)
-							
-							$count:=Num:C11($oManifest.fields.count)  //fixed
-							
-							For each ($v;$oIN.target.fields)
-								
-								If ($indx<$count)
-									
-									  //check compatibility
-									
-								Else 
-									
-									  // A "If" statement should never omit "Else"
-									
-								End if 
-								
-								$indx:=$indx+1
-								
-							End for each 
-						End if 
-						
-					Else 
-						
-						tmpl_REORDER ($oIN)
-						
-					End if 
-				Else 
-					
-					tmpl_REORDER ($oIN)
+					$oIN.manifest:=$oManifest
 					
 				End if 
+				
+				tmpl_REORDER ($oIN)
+				
 			End if 
 			
 			  // Redraw
@@ -663,6 +639,7 @@ Case of
 		  // Restore preview and field list…
 		$form.fieldGroup.show()
 		$form.previewGroup.show()
+		$form.scrollBar.hide()
 		
 		  // …and redraw
 		$context.draw:=True:C214
@@ -744,8 +721,7 @@ Case of
 		  //=========================================================
 	: ($oIN.action="updateForms")
 		
-		views_UPDATE ("list")
-		views_UPDATE ("detail")
+		views_UPDATE 
 		
 		  //=========================================================
 	Else 

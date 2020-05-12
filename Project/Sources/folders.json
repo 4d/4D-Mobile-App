@@ -103,6 +103,9 @@
 			"COMPILER_API",
 			"mobileUnit",
 			"unit"
+		],
+		"classes": [
+			"mobileUnit"
 		]
 	},
 	"[BROWSER]": {
@@ -718,8 +721,7 @@
 		"methods": [
 			"COMPILER_tables",
 			"tables_Handler",
-			"tables_OBJECTS_HANDLER",
-			"tables_Widget"
+			"tables_OBJECTS_HANDLER"
 		],
 		"forms": [
 			"TABLES"
@@ -769,6 +771,7 @@
 		],
 		"methods": [
 			"COMPILER_views",
+			"tables_Widget",
 			"views_fieldList",
 			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",

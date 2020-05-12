@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ios="http://www.4d.com">
-	<title>$4DEVAL($1)</title>
-	<defs>
-		<symbol id="cancel">
-			<image x="0" y="0" width="30" height="30" xlink:href="$4DEVAL($2)"/>
-		</symbol>
-	</defs>
-	<g id="background" class="background" ios:type="all">
-		<rect class="bgcontainer_v2" x="0" y="0"/>
-	</g>
+  <title>$4DEVAL($1)</title>
+  <defs>
+    <symbol id="cancel">
+      <image x="0" y="0" width="30" height="30" xlink:href="$4DEVAL($2)"/>
+    </symbol>
+  </defs>
+  <g id="background" class="background" ios:type="all">
+    <rect class="bgcontainer_v2" x="0" y="0"/>
+  </g>
 </svg>

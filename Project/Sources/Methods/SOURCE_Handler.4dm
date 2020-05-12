@@ -12,8 +12,8 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_formEvent;$Lon_parameters)
-C_TEXT:C284($Txt_buffer;$Txt_format;$Txt_url)
-C_OBJECT:C1216($file;$Obj_form;$Obj_in;$Obj_out;$Obj_result;$Obj_server)
+C_TEXT:C284($t;$Txt_format;$Txt_url)
+C_OBJECT:C1216($file;$Obj_form;$Obj_in;$Obj_out;$Obj_result;$oServer)
 
 If (False:C215)
 	C_OBJECT:C1216(SOURCE_Handler ;$0)
@@ -269,20 +269,33 @@ Case of
 				
 				If (Length:C16(String:C10(Form:C1466.dataSource.keyPath))>0)
 					
-					$Txt_buffer:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
+					$t:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
 					
-					If (Test path name:C476($Txt_buffer)#Is a document:K24:1)
+					If (Test path name:C476($t)#Is a document:K24:1)
 						
-						$Txt_buffer:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+						$t:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
 						
 					End if 
 					
-					If (Test path name:C476($Txt_buffer)=Is a document:K24:1)  // & Shift down
+					var $file : Object
+					$file:=File:C1566($t;fk platform path:K87:2)
+					
+					  //If (Test path name($t)=Is a document)
+					If ($file.exists)  // & Shift down
 						
 						  // Test server
 						If (Not:C34(Bool:C1537($Obj_form.ui.serverInTest)))
 							
 							$Obj_form.ui.serverInTest:=True:C214
+							
+							  //CALL WORKER(Form.$worker;"Rest";New object(\
+								"caller";$Obj_form.window;\
+								"action";"status";\
+								"handler";"mobileapp";\
+								"timeout";60;\
+								"url";Form.server.urls.production;\
+								"headers";New object("X-MobileApp";"1";\
+								"Authorization";"Bearer "+Document to text($t))))
 							
 							CALL WORKER:C1389(Form:C1466.$worker;"Rest";New object:C1471(\
 								"caller";$Obj_form.window;\
@@ -291,7 +304,7 @@ Case of
 								"timeout";60;\
 								"url";Form:C1466.server.urls.production;\
 								"headers";New object:C1471("X-MobileApp";"1";\
-								"Authorization";"Bearer "+Document to text:C1236($Txt_buffer))))
+								"Authorization";"Bearer "+$file.getText())))
 							
 						End if 
 						
@@ -338,14 +351,14 @@ Case of
 		Else 
 			
 			  // Test REST response
-			$Obj_server:=WEB Get server info:C1531
+			$oServer:=WEB Get server info:C1531
 			
-			If ($Obj_server.started)
+			If ($oServer.started)
 				
-				$Txt_url:="127.0.0.1:"+String:C10($Obj_server.options.webPortID)
+				$Txt_url:="127.0.0.1:"+String:C10($oServer.options.webPortID)
 				
 				  // Test the key
-				  //$Txt_buffer:=_o_Pathname ("key")
+				  //$t:=_o_Pathname ("key")
 				
 				$file:=COMPONENT_Pathname ("key")
 				

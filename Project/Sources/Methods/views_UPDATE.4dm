@@ -23,40 +23,273 @@ End if
 
   // ----------------------------------------------------
   // Initialisations
-If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
+
+  // ----------------------------------------------------
+If (Count parameters:C259=0)
 	
-	  // Required parameters
-	$Txt_formFamilly:=$1  // "list" | "detail"
-	
-	  // Default values
-	
-	  // Optional parameters
-	If (Count parameters:C259>=2)
-		
-		  // <NONE>
-		
-	End if 
+	views_UPDATE ("list")
+	views_UPDATE ("detail")
 	
 Else 
 	
-	ABORT:C156
+	$Txt_formFamilly:=$1
 	
-End if 
-
-  // ----------------------------------------------------
-If (Form:C1466[$Txt_formFamilly]#Null:C1517)
-	
-	$Col_catalog:=editor_Catalog 
-	
-	For each ($Txt_table;Form:C1466[$Txt_formFamilly])
+	If (Form:C1466[$Txt_formFamilly]#Null:C1517)
 		
-		If (Form:C1466.dataModel[$Txt_table]#Null:C1517)
+		$Col_catalog:=editor_Catalog 
+		
+		For each ($Txt_table;Form:C1466[$Txt_formFamilly])
 			
-			$Obj_target:=Form:C1466[$Txt_formFamilly][$Txt_table]
-			
-			If ($Obj_target.fields#Null:C1517)
+			If (Form:C1466.dataModel[$Txt_table]#Null:C1517)
 				
-				For each ($Obj_field;$Obj_target.fields)
+				$Obj_target:=Form:C1466[$Txt_formFamilly][$Txt_table]
+				
+				If ($Obj_target.fields#Null:C1517)
+					
+					For each ($Obj_field;$Obj_target.fields)
+						
+						If ($Obj_field#Null:C1517)
+							
+							$c:=Split string:C1554($Obj_field.name;".")
+							
+							If ($c.length=1)
+								
+								If (Num:C11($Obj_field.id)=0)  // 1 - N relation
+									
+									If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.name)]=Null:C1517)
+										
+										$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+										
+									End if 
+									
+								Else 
+									
+									If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
+										
+										$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+										
+									End if 
+								End if 
+								
+							Else 
+								
+								  // Get the related data class
+								$l:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
+								
+								If ($l>=0)
+									
+									$Col_fields:=$Col_catalog[$l].field
+									$l:=$Col_fields.extract("name").indexOf($c[0])
+									
+									If ($l>=0)
+										
+										$l:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$l].relatedTableNumber)
+										
+									End if 
+									
+									If ($l>=0)
+										
+										$Col_fields:=$Col_catalog[$l].field
+										
+										If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
+											
+											CLEAR VARIABLE:C89($b)
+											
+											For each ($o;$Col_fields) Until ($b)
+												
+												$b:=($o.id=$Obj_field.id)
+												
+												If ($b)
+													
+													If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
+														
+														$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+														
+													End if 
+												End if 
+											End for each 
+											
+										Else 
+											
+											$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+											
+										End if 
+										
+									Else 
+										
+										$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+										
+									End if 
+									
+								Else 
+									
+									$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+									
+								End if 
+							End if 
+						End if 
+					End for each 
+				End if 
+				
+				If ($Txt_formFamilly="list")
+					
+					If ($Obj_target.searchableField#Null:C1517)
+						
+						If (Value type:C1509($Obj_target.searchableField)=Is collection:K8:32)
+							
+							For each ($Obj_field;$Obj_target.searchableField)
+								
+								$c:=Split string:C1554($Obj_field.name;".")
+								
+								If ($c.length=1)
+									
+									If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
+										
+										$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
+										
+									End if 
+									
+								Else 
+									
+									  // Get the related data class
+									$l:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
+									
+									If ($l>=0)
+										
+										$Col_fields:=$Col_catalog[$l].field
+										$l:=$Col_fields.extract("name").indexOf($c[0])
+										$l:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$l].relatedTableNumber)
+										
+										If ($l>=0)
+											
+											$Col_fields:=$Col_catalog[$l].field
+											
+											If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
+												
+												CLEAR VARIABLE:C89($b)
+												
+												For each ($o;$Col_fields) Until ($b)
+													
+													$b:=($o.id=$Obj_field.id)
+													
+													If ($b)
+														
+														If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
+															
+															$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
+															
+														End if 
+													End if 
+												End for each 
+												
+											Else 
+												
+												$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
+												
+											End if 
+											
+										Else 
+											
+											$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
+											
+										End if 
+										
+									Else 
+										
+										$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
+										
+									End if 
+								End if 
+							End for each 
+							
+							Case of 
+									
+									  //…………………………………………………………………………………………………
+								: ($Obj_target.searchableField.length=0)
+									
+									OB REMOVE:C1226($Obj_target;"searchableField")
+									
+									  //…………………………………………………………………………………………………
+								: ($Obj_target.searchableField.length=1)
+									
+									  // Convert to object
+									$Obj_target.searchableField:=$Obj_target.searchableField[0]
+									
+									  //…………………………………………………………………………………………………
+							End case 
+							
+						Else 
+							
+							$Obj_field:=$Obj_target.searchableField
+							
+							If ($Obj_field#Null:C1517)
+								
+								$c:=Split string:C1554($Obj_field.name;".")
+								
+								If ($c.length=1)
+									
+									If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
+										
+										$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+										
+									End if 
+									
+								Else 
+									
+									  // Get the related data class
+									$l:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
+									
+									If ($l>=0)
+										
+										$Col_fields:=$Col_catalog[$l].field
+										$l:=$Col_fields.extract("name").indexOf($c[0])
+										$l:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$l].relatedTableNumber)
+										
+										If ($l>=0)
+											
+											$Col_fields:=$Col_catalog[$l].field
+											
+											If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
+												
+												CLEAR VARIABLE:C89($b)
+												
+												For each ($o;$Col_fields) Until ($b)
+													
+													$b:=($o.id=$Obj_field.id)
+													
+													If ($b)
+														
+														If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
+															
+															OB REMOVE:C1226($Obj_target;"searchableField")
+															
+														End if 
+													End if 
+												End for each 
+												
+											Else 
+												
+												OB REMOVE:C1226($Obj_target;"searchableField")
+												
+											End if 
+											
+										Else 
+											
+											OB REMOVE:C1226($Obj_target;"searchableField")
+											
+										End if 
+										
+									Else 
+										
+										OB REMOVE:C1226($Obj_target;"searchableField")
+										
+									End if 
+								End if 
+							End if 
+						End if 
+					End if 
+					
+					$Obj_field:=$Obj_target.sectionField
 					
 					If ($Obj_field#Null:C1517)
 						
@@ -64,21 +297,10 @@ If (Form:C1466[$Txt_formFamilly]#Null:C1517)
 						
 						If ($c.length=1)
 							
-							If (Num:C11($Obj_field.id)=0)  // 1 - N relation
+							If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
 								
-								If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.name)]=Null:C1517)
-									
-									$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-									
-								End if 
+								$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
 								
-							Else 
-								
-								If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
-									
-									$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-									
-								End if 
 							End if 
 							
 						Else 
@@ -90,12 +312,7 @@ If (Form:C1466[$Txt_formFamilly]#Null:C1517)
 								
 								$Col_fields:=$Col_catalog[$l].field
 								$l:=$Col_fields.extract("name").indexOf($c[0])
-								
-								If ($l>=0)
-									
-									$l:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$l].relatedTableNumber)
-									
-								End if 
+								$l:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$l].relatedTableNumber)
 								
 								If ($l>=0)
 									
@@ -113,7 +330,7 @@ If (Form:C1466[$Txt_formFamilly]#Null:C1517)
 												
 												If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
 													
-													$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+													OB REMOVE:C1226($Obj_target;"sectionField")
 													
 												End if 
 											End if 
@@ -121,235 +338,9 @@ If (Form:C1466[$Txt_formFamilly]#Null:C1517)
 										
 									Else 
 										
-										$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
+										OB REMOVE:C1226($Obj_target;"sectionField")
 										
 									End if 
-									
-								Else 
-									
-									$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-									
-								End if 
-								
-							Else 
-								
-								$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-								
-							End if 
-						End if 
-					End if 
-				End for each 
-			End if 
-		End if 
-		
-		  // End for each
-		
-		If (Form:C1466.dataModel[$Txt_table]#Null:C1517)
-			
-			If ($Txt_formFamilly="list")
-				
-				If ($Obj_target.searchableField#Null:C1517)
-					
-					If (Value type:C1509($Obj_target.searchableField)=Is collection:K8:32)
-						
-						For each ($Obj_field;$Obj_target.searchableField)
-							
-							$c:=Split string:C1554($Obj_field.name;".")
-							
-							If ($c.length=1)
-								
-								If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
-									
-									$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-									
-								End if 
-								
-							Else 
-								
-								  // Get the related data class
-								$l:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
-								
-								If ($l>=0)
-									
-									$Col_fields:=$Col_catalog[$l].field
-									$l:=$Col_fields.extract("name").indexOf($c[0])
-									$l:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$l].relatedTableNumber)
-									
-									If ($l>=0)
-										
-										$Col_fields:=$Col_catalog[$l].field
-										
-										If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
-											
-											CLEAR VARIABLE:C89($b)
-											
-											For each ($o;$Col_fields) Until ($b)
-												
-												$b:=($o.id=$Obj_field.id)
-												
-												If ($b)
-													
-													If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
-														
-														$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-														
-													End if 
-												End if 
-											End for each 
-											
-										Else 
-											
-											$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-											
-										End if 
-										
-									Else 
-										
-										$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-										
-									End if 
-									
-								Else 
-									
-									$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-									
-								End if 
-							End if 
-						End for each 
-						
-						Case of 
-								
-								  //…………………………………………………………………………………………………
-							: ($Obj_target.searchableField.length=0)
-								
-								OB REMOVE:C1226($Obj_target;"searchableField")
-								
-								  //…………………………………………………………………………………………………
-							: ($Obj_target.searchableField.length=1)
-								
-								  // Convert to object
-								$Obj_target.searchableField:=$Obj_target.searchableField[0]
-								
-								  //…………………………………………………………………………………………………
-						End case 
-						
-					Else 
-						
-						$Obj_field:=$Obj_target.searchableField
-						
-						If ($Obj_field#Null:C1517)
-							
-							$c:=Split string:C1554($Obj_field.name;".")
-							
-							If ($c.length=1)
-								
-								If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
-									
-									$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-									
-								End if 
-								
-							Else 
-								
-								  // Get the related data class
-								$l:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
-								
-								If ($l>=0)
-									
-									$Col_fields:=$Col_catalog[$l].field
-									$l:=$Col_fields.extract("name").indexOf($c[0])
-									$l:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$l].relatedTableNumber)
-									
-									If ($l>=0)
-										
-										$Col_fields:=$Col_catalog[$l].field
-										
-										If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
-											
-											CLEAR VARIABLE:C89($b)
-											
-											For each ($o;$Col_fields) Until ($b)
-												
-												$b:=($o.id=$Obj_field.id)
-												
-												If ($b)
-													
-													If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
-														
-														OB REMOVE:C1226($Obj_target;"searchableField")
-														
-													End if 
-												End if 
-											End for each 
-											
-										Else 
-											
-											OB REMOVE:C1226($Obj_target;"searchableField")
-											
-										End if 
-										
-									Else 
-										
-										OB REMOVE:C1226($Obj_target;"searchableField")
-										
-									End if 
-									
-								Else 
-									
-									OB REMOVE:C1226($Obj_target;"searchableField")
-									
-								End if 
-							End if 
-						End if 
-					End if 
-				End if 
-				
-				$Obj_field:=$Obj_target.sectionField
-				
-				If ($Obj_field#Null:C1517)
-					
-					$c:=Split string:C1554($Obj_field.name;".")
-					
-					If ($c.length=1)
-						
-						If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
-							
-							$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-							
-						End if 
-						
-					Else 
-						
-						  // Get the related data class
-						$l:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
-						
-						If ($l>=0)
-							
-							$Col_fields:=$Col_catalog[$l].field
-							$l:=$Col_fields.extract("name").indexOf($c[0])
-							$l:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$l].relatedTableNumber)
-							
-							If ($l>=0)
-								
-								$Col_fields:=$Col_catalog[$l].field
-								
-								If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
-									
-									CLEAR VARIABLE:C89($b)
-									
-									For each ($o;$Col_fields) Until ($b)
-										
-										$b:=($o.id=$Obj_field.id)
-										
-										If ($b)
-											
-											If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
-												
-												OB REMOVE:C1226($Obj_target;"sectionField")
-												
-											End if 
-										End if 
-									End for each 
 									
 								Else 
 									
@@ -362,17 +353,12 @@ If (Form:C1466[$Txt_formFamilly]#Null:C1517)
 								OB REMOVE:C1226($Obj_target;"sectionField")
 								
 							End if 
-							
-						Else 
-							
-							OB REMOVE:C1226($Obj_target;"sectionField")
-							
 						End if 
 					End if 
 				End if 
 			End if 
-		End if 
-	End for each 
+		End for each 
+	End if 
 End if 
 
   // ----------------------------------------------------

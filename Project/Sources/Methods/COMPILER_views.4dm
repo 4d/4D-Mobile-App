@@ -9,6 +9,11 @@ If (False:C215)
 	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER ;$0)
 	
 	  // ----------------------------------------------------
+	C_PICTURE:C286(tables_Widget ;$0)
+	C_OBJECT:C1216(tables_Widget ;$1)
+	C_OBJECT:C1216(tables_Widget ;$2)
+	
+	  // ----------------------------------------------------
 End if 
 
 If (False:C215)

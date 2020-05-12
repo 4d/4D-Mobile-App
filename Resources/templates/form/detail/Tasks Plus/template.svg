@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ios="http://www.4d.com">
-	<title>Tasks Detail Plus</title>
-	<defs>
-		<symbol id="cancel">
-			<image x="0" y="0" width="30" height="30" xlink:href="$4DEVAL(tmpl_cancel)"/>
-		</symbol>
-	</defs>
-	<g id="background" class="background" ios:type="all">
-		<rect class="bgcontainer_v2" x="0" y="0"/>
-		<g transform="translate(0,5)">
-			<rect class="bg field" x="14" y="0" width="116" height="30"/>
-			<textArea id="f1.label" class="label" x="18" y="8" width="90">$4DEVAL(:C991("field[n]")) 1</textArea>
-			<rect id="f1" class="droppable field" x="14" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[0]"/>
-			<use id="f1.cancel" x="98" y="1" xlink:href="#cancel" visibility="hidden"/>
-		</g>
-		<g transform="translate(0,5)">
-			<rect class="bg field" x="136" y="0" width="116" height="30"/>
-			<textArea id="f2.label" class="label" x="140" y="8" width="90">$4DEVAL(:C991("field[n]")) 2</textArea>
-			<rect id="f2" class="droppable field" x="136" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[1]"/>
-			<use id="f2.cancel" x="222" y="1" xlink:href="#cancel" visibility="hidden"/>
-		</g>
-		<g transform="translate(0,48)">
-			<rect class="bg field" x="85" y="0" width="90" height="90"/>
-			<path class="circleGraph" transform="translate(94,10) scale(1)"/>
-			<textArea id="f3.label" class="label" x="85" y="35" width="90">$4DEVAL(:C991("field[n]"))3</textArea>
-			<rect id="f3" class="droppable field" x="85" y="0" width="90" height="90" stroke-dasharray="5,2" ios:type="1,8,9,25,35" ios:bind="fields[2]"/>
-			<use id="f3.cancel" x="142" y="0" xlink:href="#cancel" visibility="hidden"/>
-		</g>
-		<g transform="translate(0,150)">
-			<rect class="bg field" x="14" y="0" width="116" height="30"/>
-			<textArea id="f4.label" class="label" x="18" y="8" width="90">$4DEVAL(:C991("field[n]")) 4</textArea>
-			<rect id="f4" class="droppable field" x="14" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[3]"/>
-			<use id="f4.cancel" x="98" y="1" xlink:href="#cancel" visibility="hidden"/>
-		</g>
-		<g transform="translate(0,150)">
-			<rect class="bg field" x="136" y="0" width="116" height="30"/>
-			<textArea id="f5.label" class="label" x="140" y="8" width="90">$4DEVAL(:C991("field[n]")) 5</textArea>
-			<rect id="f5" class="droppable field" x="136" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[4]"/>
-			<use id="f5.cancel" x="222" y="1" xlink:href="#cancel" visibility="hidden"/>
-		</g>
-		<g transform="translate(0,185)">
-			<rect class="bg field" x="14" y="0" width="116" height="30"/>
-			<textArea id="f6.label" class="label" x="18" y="8" width="90">$4DEVAL(:C991("field[n]")) 6</textArea>
-			<rect id="f6" class="droppable field" x="14" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[5]"/>
-			<use id="f6.cancel" x="98" y="1" xlink:href="#cancel" visibility="hidden"/>
-		</g>
-		<g transform="translate(0,185)">
-			<rect class="bg field" x="136" y="0" width="116" height="30"/>
-			<textArea id="f7.label" class="label" x="140" y="8" width="90">$4DEVAL(:C991("field[n]")) 7</textArea>
-			<rect id="f7" class="droppable field" x="136" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[6]"/>
-			<use id="f7.cancel" x="222" y="1" xlink:href="#cancel" visibility="hidden"/>
-		</g>	
-	</g>
+  <title>Tasks Detail Plus</title>
+  <defs>
+    <symbol id="cancel">
+      <image x="0" y="0" width="30" height="30" xlink:href="$4DEVAL(tmpl_cancel)"/>
+    </symbol>
+  </defs>
+  <g id="background" class="background" ios:type="all">
+    <rect class="bgcontainer_v2" x="0" y="0"/>
+    <g transform="translate(0,5)">
+      <rect class="bg field" x="14" y="0" width="116" height="30"/>
+      <textArea id="f1.label" class="label" x="18" y="8" width="90">$4DEVAL(:C991("field[n]")) 1</textArea>
+      <rect id="f1" class="droppable field" x="14" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[0]"/>
+      <use id="f1.cancel" x="98" y="1" xlink:href="#cancel" visibility="hidden"/>
+    </g>
+    <g transform="translate(0,5)">
+      <rect class="bg field" x="136" y="0" width="116" height="30"/>
+      <textArea id="f2.label" class="label" x="140" y="8" width="90">$4DEVAL(:C991("field[n]")) 2</textArea>
+      <rect id="f2" class="droppable field" x="136" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[1]"/>
+      <use id="f2.cancel" x="222" y="1" xlink:href="#cancel" visibility="hidden"/>
+    </g>
+    <g transform="translate(0,48)">
+      <rect class="bg field" x="85" y="0" width="90" height="90"/>
+      <path class="circleGraph" transform="translate(94,10) scale(1)"/>
+      <textArea id="f3.label" class="label" x="85" y="35" width="90">$4DEVAL(:C991("field[n]"))3</textArea>
+      <rect id="f3" class="droppable field" x="85" y="0" width="90" height="90" stroke-dasharray="5,2" ios:type="1,8,9,25,35" ios:bind="fields[2]"/>
+      <use id="f3.cancel" x="142" y="0" xlink:href="#cancel" visibility="hidden"/>
+    </g>
+    <g transform="translate(0,150)">
+      <rect class="bg field" x="14" y="0" width="116" height="30"/>
+      <textArea id="f4.label" class="label" x="18" y="8" width="90">$4DEVAL(:C991("field[n]")) 4</textArea>
+      <rect id="f4" class="droppable field" x="14" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[3]"/>
+      <use id="f4.cancel" x="98" y="1" xlink:href="#cancel" visibility="hidden"/>
+    </g>
+    <g transform="translate(0,150)">
+      <rect class="bg field" x="136" y="0" width="116" height="30"/>
+      <textArea id="f5.label" class="label" x="140" y="8" width="90">$4DEVAL(:C991("field[n]")) 5</textArea>
+      <rect id="f5" class="droppable field" x="136" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[4]"/>
+      <use id="f5.cancel" x="222" y="1" xlink:href="#cancel" visibility="hidden"/>
+    </g>
+    <g transform="translate(0,185)">
+      <rect class="bg field" x="14" y="0" width="116" height="30"/>
+      <textArea id="f6.label" class="label" x="18" y="8" width="90">$4DEVAL(:C991("field[n]")) 6</textArea>
+      <rect id="f6" class="droppable field" x="14" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[5]"/>
+      <use id="f6.cancel" x="98" y="1" xlink:href="#cancel" visibility="hidden"/>
+    </g>
+    <g transform="translate(0,185)">
+      <rect class="bg field" x="136" y="0" width="116" height="30"/>
+      <textArea id="f7.label" class="label" x="140" y="8" width="90">$4DEVAL(:C991("field[n]")) 7</textArea>
+      <rect id="f7" class="droppable field" x="136" y="0" width="116" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[6]"/>
+      <use id="f7.cancel" x="222" y="1" xlink:href="#cancel" visibility="hidden"/>
+    </g>
+  </g>
 </svg>
