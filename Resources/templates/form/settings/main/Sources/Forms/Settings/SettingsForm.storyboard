@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VB8-8p-VEb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VB8-8p-VEb">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,14 +18,14 @@
                         <sections>
                             <tableViewSection headerTitle="Server" id="8kW-YW-Fnt">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" id="6hg-Oh-085" customClass="SettingURLCell" customModule="___PRODUCT___" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="6hg-Oh-085" customClass="SettingURLCell" customModule="___PRODUCT___" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6hg-Oh-085" id="r7F-TS-5jT">
-                                            <rect key="frame" x="0.0" y="0.0" width="348" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Remote URL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rpg-w6-r6l">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rpg-w6-r6l">
                                                     <rect key="frame" x="18" y="11" width="97" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -46,7 +46,6 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="serverURLLabel" destination="Reh-Ow-8i3" id="cjD-qJ-HAU"/>
-                                            <segue destination="m4C-TK-4zi" kind="show" identifier="editServerURL" id="X1D-IN-tIh"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -128,21 +127,13 @@
             </objects>
             <point key="canvasLocation" x="-1079" y="-146"/>
         </scene>
-        <!--SettingURLForm-->
-        <scene sceneID="aQh-oK-dUD">
-            <objects>
-                <viewControllerPlaceholder storyboardName="SettingURLForm" id="m4C-TK-4zi" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4OV-53-Dub" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="402" y="-148"/>
-        </scene>
         <!--SettingLogOutDialog-->
         <scene sceneID="BVX-gk-DtW">
             <objects>
                 <viewControllerPlaceholder storyboardName="SettingLogOutDialog" id="lCY-Sn-Tbh" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uw9-EL-LtL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="428" y="-103"/>
+            <point key="canvasLocation" x="446" y="-171"/>
         </scene>
         <!--Main-->
         <scene sceneID="XB2-6Q-ZXM">
@@ -150,7 +141,7 @@
                 <viewControllerPlaceholder storyboardName="Main" id="kWN-Xb-iOH" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="C3R-nG-nni" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="350" y="-60"/>
+            <point key="canvasLocation" x="368" y="-125"/>
         </scene>
     </scenes>
     <resources>
