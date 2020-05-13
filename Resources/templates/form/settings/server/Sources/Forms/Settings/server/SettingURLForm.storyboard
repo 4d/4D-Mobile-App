@@ -1,103 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Nio-TB-1Wk">
-    <device id="retina5_5" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AzY-G4-iV3">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Remote URL-->
-        <scene sceneID="kLD-aX-EOL">
+        <!--Setting URL Form-->
+        <scene sceneID="mug-ML-ry6">
             <objects>
-                <tableViewController id="0bI-w0-rEw" customClass="SettingURLForm" customModule="Contact_Demo_app" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="1XZ-ud-bvJ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                <viewController modalPresentationStyle="fullScreen" id="AzY-G4-iV3" customClass="SettingURLForm" customModule="querybug" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="b2T-e6-Pi6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <sections>
-                            <tableViewSection headerTitle="Server" id="Pza-hW-V7B">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="NXT-kS-QjR">
-                                        <rect key="frame" x="0.0" y="55.333332061767578" width="414" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NXT-kS-QjR" id="bNJ-4x-Fut">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="127.0.0.1:80" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="CEc-Yt-uqj">
-                                                    <rect key="frame" x="8" y="5" width="398" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="string" keyPath="bindTo.settings.server.url" value="text"/>
-                                                    </userDefinedRuntimeAttributes>
-                                                </textField>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="dataSource" destination="0bI-w0-rEw" id="uAm-La-u4a"/>
-                            <outlet property="delegate" destination="0bI-w0-rEw" id="gLE-LH-j68"/>
-                            <outletCollection property="gestureRecognizers" destination="H7B-hR-2jJ" appends="YES" id="IdQ-mm-in2"/>
-                        </connections>
-                    </tableView>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Remote URL" id="Jiv-vt-IX8">
-                        <barButtonItem key="leftBarButtonItem" image="previous" id="smR-JN-Ygd">
-                            <connections>
-                                <action selector="previousPage:" destination="0bI-w0-rEw" id="ebN-f2-Yy2"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LS.Center" translatesAutoresizingMaskIntoConstraints="NO" id="Qr4-m5-i2X">
+                                <rect key="frame" x="123" y="64" width="168" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="7vn-an-OcR"/>
+                                    <constraint firstAttribute="width" constant="168" id="9hy-F1-g41"/>
+                                </constraints>
+                            </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter the address" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="BJ3-6I-rWJ" userLabel="Server Address Text Field" customClass="FloatingLabelTextField" customModule="QMobileUI">
+                                <rect key="frame" x="20" y="217" width="374" height="50"/>
+                                <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="LS4-Z2-b34"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL" returnKeyType="send" textContentType="url"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                        <color key="value" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vx-y8-SVW" customClass="LoadingButton" customModule="QMobileUI">
+                                <rect key="frame" x="64" y="798" width="286" height="44"/>
+                                <color key="backgroundColor" name="BackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="dgi-yK-oYj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                                <state key="normal" title="Connect">
+                                    <color key="titleColor" name="ForegroundColor"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="normalCornerRadius">
+                                        <real key="value" value="22"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="connect:" destination="AzY-G4-iV3" eventType="touchUpInside" id="dU0-8H-jqa"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="g2I-Ub-kv0" firstAttribute="bottom" secondItem="1vx-y8-SVW" secondAttribute="bottom" constant="20" id="BWE-xJ-JrG"/>
+                            <constraint firstItem="BJ3-6I-rWJ" firstAttribute="leading" secondItem="g2I-Ub-kv0" secondAttribute="leading" constant="20" id="JAD-d4-aXM"/>
+                            <constraint firstItem="1vx-y8-SVW" firstAttribute="leading" secondItem="g2I-Ub-kv0" secondAttribute="leading" constant="64" id="g7s-GC-20J"/>
+                            <constraint firstItem="g2I-Ub-kv0" firstAttribute="trailing" secondItem="1vx-y8-SVW" secondAttribute="trailing" constant="64" id="iuB-Vp-RCr"/>
+                            <constraint firstItem="Qr4-m5-i2X" firstAttribute="top" secondItem="g2I-Ub-kv0" secondAttribute="top" constant="20" id="mdr-Hv-ZLK"/>
+                            <constraint firstItem="Qr4-m5-i2X" firstAttribute="centerX" secondItem="b2T-e6-Pi6" secondAttribute="centerX" id="nWI-tj-x0O"/>
+                            <constraint firstItem="1vx-y8-SVW" firstAttribute="top" relation="greaterThanOrEqual" secondItem="BJ3-6I-rWJ" secondAttribute="bottom" priority="992" constant="20" id="pN5-qX-Vrd"/>
+                            <constraint firstItem="BJ3-6I-rWJ" firstAttribute="top" secondItem="Qr4-m5-i2X" secondAttribute="bottom" constant="25" id="u36-pJ-0IJ"/>
+                            <constraint firstItem="g2I-Ub-kv0" firstAttribute="trailing" secondItem="BJ3-6I-rWJ" secondAttribute="trailing" constant="20" id="vuZ-To-ZC7"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="g2I-Ub-kv0"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="SqG-v9-VZX"/>
                     <connections>
-                        <outlet property="serverURLTextField" destination="CEc-Yt-uqj" id="fuC-zH-j2A"/>
+                        <outlet property="bottomLayoutConstraint" destination="BWE-xJ-JrG" id="RmN-dg-EjN"/>
+                        <outlet property="connectButton" destination="1vx-y8-SVW" id="7CD-M4-FVS"/>
+                        <outlet property="serverURLTextField" destination="BJ3-6I-rWJ" id="lsn-sJ-ToY"/>
                     </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="J7a-2n-bn3" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="H7B-hR-2jJ">
-                    <connections>
-                        <action selector="serverURLTextFieldEndEditing:" destination="0bI-w0-rEw" id="Kdy-jo-0h7"/>
-                    </connections>
-                </tapGestureRecognizer>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KX1-Ir-fGd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1498" y="163"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="830-7e-liu">
-            <objects>
-                <navigationController id="Nio-TB-1Wk" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7ug-SH-M94">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" name="BackgroundColor"/>
-                        <color key="tintColor" name="ForegroundColor"/>
-                        <color key="barTintColor" name="BackgroundColor"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" name="ForegroundColor"/>
-                        </textAttributes>
-                        <textAttributes key="largeTitleTextAttributes">
-                            <color key="textColor" name="ForegroundColor"/>
-                        </textAttributes>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="0bI-w0-rEw" kind="relationship" relationship="rootViewController" id="fYO-cn-XpB"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="095-Dl-cGT" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="689" y="164"/>
+            <point key="canvasLocation" x="2109" y="147"/>
         </scene>
     </scenes>
     <resources>
-        <image name="previous" width="22" height="22"/>
+        <image name="LS.Center" width="76" height="76"/>
         <namedColor name="BackgroundColor">
-            <color red="0.0" green="0.64313725490196083" blue="0.64313725490196083" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.031372549019607843" green="0.29019607843137257" blue="0.58039215686274515" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="ForegroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
