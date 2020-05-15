@@ -37,8 +37,17 @@ open class SettingURLForm: QMobileUI.SettingURLForm {
         }
     }
 
+    @IBOutlet open override var connectButton: UIButton! {
+        get {
+            return super.connectButton
+        }
+        set {
+            super.connectButton = newValue
+        }
+    }
+
     // MARK: action
-    @IBAction open override func serverURLTextFieldEndEditing(_ sender: Any?) {
-        super.serverURLTextFieldEndEditing(sender)
+    @IBAction open override func connect(_ sender: Any?) {
+         super.connect(sender)
     }
 }
