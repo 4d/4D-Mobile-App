@@ -1,6 +1,33 @@
+/*
+
+Static objects are generally used for setting the appearance of the form and its 
+labels as well as for the graphic interface.Static objects do not have 
+associated variables like active objects.
+
+            ╔══════════════════════════════════════════════╗
+            ║ This is the parent class of all form objects ║
+            ╚══════════════════════════════════════════════╝
+
+                                ┏━━━━━━━━┓           ┏━━━━━━━━━┓
+                             ┏━━┫ button ┃        ┏━━┫ picture ┃
+                             ┃  ┗━━━━━━━━┛        ┃  ┗━━━━━━━━━┛
+┏━━━━━━━━┓     ┏━━━━━━━━┓    ┃  ┏━━━━━━━━━━━━┓    ┃  ┏━━━━━━━━━┓
+┃ static ┣━━━━━┫ widget ┣━━━━╋━━┫ scrollable ┣━━━━╋━━┫ listbox ┃
+┗━━━━━━━━┛     ┗━━━━━━━━┛    ┃  ┗━━━━━━━━━━━━┛    ┃  ┗━━━━━━━━━┛
+                             ┃  ┏━━━━━━━━━━┓      ┃  ┏━━━━━━━━━┓
+                             ┣━━┫ progress ┃      ┗━━┫ subform ┃
+                             ┃  ┗━━━━━━━━━━┛         ┗━━━━━━━━━┛
+                             ┃  ┏━━━━━━━┓
+                             ┣━━┫ input ┃
+                             ┃  ┗━━━━━━━┛
+                             ┃  ┏━━━━━━━━━┓
+                             ┗━━┫ stepper ┃
+                                ┗━━━━━━━━━┛
+*/
+
 Class constructor
 	
-	C_VARIANT:C1683($1)
+	C_TEXT:C284($1)
 	
 	If (Count parameters:C259>=1)
 		
@@ -13,57 +40,43 @@ Class constructor
 		
 	End if 
 	
-	If (Value type:C1509(This:C1470.name)=Is collection:K8:32)
+	This:C1470.type:=OBJECT Get type:C1300(*;This:C1470.name)
+	
+	If (Asserted:C1132(This:C1470.type#0;Current method name:C684+": No objects found named \""+This:C1470.name+"\""))
 		
-		This:C1470.type:=-1  // Group
-		
-	Else 
-		
-		This:C1470.type:=OBJECT Get type:C1300(*;This:C1470.name)
-		
-		ASSERT:C1129(This:C1470.type#0;Current method name:C684+": The object \""+This:C1470.name+"\" doesn't exist!")
+		This:C1470._updateCoordinates()
 		
 	End if 
 	
-	This:C1470.action:=OBJECT Get action:C1457(*;This:C1470.name)
-	
-	This:C1470._updateCoordinates()
-	
-/*===============================================*/
+/*════════════════════════════════════════════
+.hide() -> This
+══════════════════════════*/
 Function hide
 	
+	OBJECT SET VISIBLE:C603(*;This:C1470.name;False:C215)
+	
 	C_OBJECT:C1216($0)
-	C_TEXT:C284($t)
-	
-	If (This:C1470.type=-1)  // Group
-		
-		For each ($t;This:C1470.name)
-			
-			OBJECT SET VISIBLE:C603(*;$t;False:C215)
-			
-		End for each 
-		
-	Else 
-		
-		OBJECT SET VISIBLE:C603(*;This:C1470.name;False:C215)
-		
-	End if 
-	
 	$0:=This:C1470
 	
-/*===============================================*/
+/*════════════════════════════════════════════
+.show() -> This
+.show(bool) -> This
+══════════════════════════*/
 Function show
 	
-	C_OBJECT:C1216($0)
-	C_TEXT:C284($t)
+	C_BOOLEAN:C305($1)
 	
-	If (This:C1470.type=-1)  // Group
+	If (Count parameters:C259>=1)
 		
-		For each ($t;This:C1470.name)
+		If ($1)
 			
-			OBJECT SET VISIBLE:C603(*;$t;True:C214)
+			OBJECT SET VISIBLE:C603(*;This:C1470.name;True:C214)
 			
-		End for each 
+		Else 
+			
+			OBJECT SET VISIBLE:C603(*;This:C1470.name;False:C215)
+			
+		End if 
 		
 	Else 
 		
@@ -71,61 +84,35 @@ Function show
 		
 	End if 
 	
-	$0:=This:C1470
-	
-/*===============================================*/
-Function setVisible
-	
 	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
-	
-	If ($1)
-		
-		This:C1470.show()
-		
-	Else 
-		
-		This:C1470.hide()
-		
-	End if 
-	
 	$0:=This:C1470
 	
-/*===============================================*/
+/*════════════════════════════════════════════*/
 Function getVisible
 	
 	C_BOOLEAN:C305($0)
-	C_TEXT:C284($t)
 	
-	If (This:C1470.type=-1)
-		
-		$0:=True:C214
-		
-		For each ($t;This:C1470.name)
-			
-			$0:=$0 & OBJECT Get visible:C1075(*;$t)
-			
-		End for each 
-		
-	Else 
-		
-		$0:=OBJECT Get visible:C1075(*;This:C1470.name)
-		
-	End if 
+	$0:=OBJECT Get visible:C1075(*;This:C1470.name)
 	
-/*===============================================*/
+/*════════════════════════════════════════════
+.enable() -> This
+.enable(bool) -> This
+══════════════════════════*/
 Function enable
 	
-	C_OBJECT:C1216($0)
-	C_TEXT:C284($t)
+	C_BOOLEAN:C305($1)
 	
-	If (This:C1470.type=-1)  // Group
+	If (Count parameters:C259>=1)
 		
-		For each ($t;This:C1470.name)
+		If ($1)
 			
-			OBJECT SET ENABLED:C1123(*;$t;True:C214)
+			OBJECT SET ENABLED:C1123(*;This:C1470.name;True:C214)
 			
-		End for each 
+		Else 
+			
+			OBJECT SET ENABLED:C1123(*;This:C1470.name;False:C215)
+			
+		End if 
 		
 	Else 
 		
@@ -133,352 +120,321 @@ Function enable
 		
 	End if 
 	
+	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*===============================================*/
+/*════════════════════════════════════════════
+.disable() -> This
+══════════════════════════*/
 Function disable
 	
-	C_OBJECT:C1216($0)
-	C_TEXT:C284($t)
-	
-	If (This:C1470.type=-1)  // Group
-		
-		For each ($t;This:C1470.name)
-			
-			OBJECT SET ENABLED:C1123(*;$t;False:C215)
-			
-		End for each 
-		
-	Else 
-		
-		OBJECT SET ENABLED:C1123(*;This:C1470.name;False:C215)
-		
-	End if 
-	
-	$0:=This:C1470
-	
-/*===============================================*/
-Function setEnabled
+	OBJECT SET ENABLED:C1123(*;This:C1470.name;False:C215)
 	
 	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
-	
-	If ($1)
-		
-		This:C1470.enable()
-		
-	Else 
-		
-		This:C1470.disable()
-		
-	End if 
-	
 	$0:=This:C1470
 	
-/*===============================================*/
+/*════════════════════════════════════════════
+.setTitle(text) -> This
+══════════════════════════*/
 Function setTitle
 	
-	C_OBJECT:C1216($0)
 	C_TEXT:C284($1)  // Text or resname
-	C_TEXT:C284($tName;$tTitle)
+	C_TEXT:C284($t)
 	
-	$tTitle:=Get localized string:C991($1)
-	$tTitle:=Choose:C955(OK=1;$tTitle;$1)  // Revert if no localization
+	$t:=Get localized string:C991($1)
+	$t:=Choose:C955(Length:C16($t)>0;$t;$1)  // Revert if no localization
 	
-	If (This:C1470.type=-1)  // Group
-		
-		For each ($tName;This:C1470.name)
-			
-			OBJECT SET TITLE:C194(*;$tName;$tTitle)
-			
-		End for each 
-		
-	Else 
-		
-		OBJECT SET TITLE:C194(*;This:C1470.name;$tTitle)
-		
-	End if 
+	OBJECT SET TITLE:C194(*;This:C1470.name;$t)
 	
+	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*===============================================*/
+/*════════════════════════════════════════════
+.getTitle() -> text
+══════════════════════════*/
 Function getTitle
 	
 	C_TEXT:C284($0)
 	
-	If (This:C1470.type#Is collection:K8:32)
-		
-		$0:=OBJECT Get title:C1068(*;This:C1470.name)
-		
-	End if 
+	$0:=OBJECT Get title:C1068(*;This:C1470.name)
 	
-/*===============================================*/
+/*════════════════════════════════════════════
+.setCoordinates (left;top;right;bottom) -> This
+.setCoordinates (obj) -> This
+  obj = {"left":int,"top":int,"right":int,"bottom":int}
+══════════════════════════*/
 Function setCoordinates
 	
-	C_OBJECT:C1216($0;$o)
-	C_VARIANT:C1683($1;$2;$3;$4)
-	C_LONGINT:C283($left;$top;$right;$bottom)
+	C_VARIANT:C1683($1)
+	C_LONGINT:C283($2;$3;$4)
 	
-	OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
+	C_OBJECT:C1216($o)
 	
-	$o:=New object:C1471(\
-		"left";$left;\
-		"top";$top;\
-		"right";$right;\
-		"bottom";$bottom;\
-		"width";$right-$left;\
-		"height";$bottom-$top)
-	
-	If ($1#Null:C1517)
+	If (Value type:C1509($1)=Is object:K8:27)
 		
-		$o.left:=Num:C11($1)
-		
-		If ($3#Null:C1517)
-			
-			$o.right:=Num:C11($3)
-			
-		Else 
-			
-			  // Move horizontally
-			$o.right:=$o.left+$o.width
-			
-		End if 
+		$o:=New object:C1471(\
+			"left";Num:C11($1.left);\
+			"top";Num:C11($1.top);\
+			"right";Num:C11($1.right);\
+			"bottom";Num:C11($1.bottom))
 		
 	Else 
 		
-		If ($3#Null:C1517)
-			
-			  // Resize horizontally
-			$o.right:=Num:C11($3)
-			
-		End if 
-	End if 
-	
-	If ($2#Null:C1517)
+		$o:=New object:C1471(\
+			"left";Num:C11($1);\
+			"top";Num:C11($2);\
+			"right";Num:C11($3);\
+			"bottom";Num:C11($4))
 		
-		$o.top:=Num:C11($2)
-		
-		If ($4#Null:C1517)
-			
-			$o.bottom:=Num:C11($4)
-			
-		Else 
-			
-			  // Move vertically
-			$o.bottom:=$o.top+$o.height
-			
-		End if 
-		
-	Else 
-		
-		If ($4#Null:C1517)
-			
-			  // Resize vertically
-			$o.bottom:=Num:C11($4)
-			
-		End if 
 	End if 
 	
 	OBJECT SET COORDINATES:C1248(*;This:C1470.name;$o.left;$o.top;$o.right;$o.bottom)
 	
 	This:C1470._updateCoordinates($o.left;$o.top;$o.right;$o.bottom)
 	
+	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*===============================================*/
+/*════════════════════════════════════════════
+.getCoordinates() -> obj 
+  obj = {"left":int,"top":int,"right":int,"bottom":int})
+══════════════════════════*/
 Function getCoordinates
 	
 	C_OBJECT:C1216($0)
 	C_LONGINT:C283($left;$top;$right;$bottom)
 	
-	If (This:C1470.type#-1)
-		
-		OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
-		
-		This:C1470._updateCoordinates($left;$top;$right;$bottom)
-		
-		$0:=This:C1470.coordinates
-		
-	End if 
+	OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
+	This:C1470._updateCoordinates($left;$top;$right;$bottom)
 	
-/*===============================================*/
-Function bestSize  // Resize the widget to its best size
+	$0:=This:C1470.coordinates
 	
-	C_OBJECT:C1216($0;$o)
-	C_LONGINT:C283($1)  // Alignement
-	C_LONGINT:C283($2)  // {minWidth}
-	C_LONGINT:C283($3)  // {maxidth}
+/*════════════════════════════════════════════
+.bestSize(obj) -> This
+  obj = {"alignment":int,"min":int,"max:int}}
+	
+.bestSize({alignment{;min{;max}}}) -> This
+══════════════════════════*/
+Function bestSize
+	
+	C_VARIANT:C1683($1)
+	C_LONGINT:C283($2;$3)
+	C_OBJECT:C1216($o)
 	C_LONGINT:C283($left;$top;$right;$bottom;$width;$height)
 	
-	$o:=New object:C1471
-	
-	If (Count parameters:C259>=1)
+	If (Value type:C1509($1)=Is object:K8:27)
 		
-		$o.alignment:=$1
+		$o:=$1
 		
-		If (Count parameters:C259>=2)
+		If ($o.alignment=Null:C1517)
 			
-			$o.min:=$2
+			$o.alignment:=Align left:K42:2
 			
-			If (Count parameters:C259>=3)
-				
-				$o.max:=$3
-				
-			End if 
 		End if 
 		
 	Else 
 		
-		$o.alignment:=Align left:K42:2
+		$o:=New object:C1471
 		
-	End if 
-	
-	If (This:C1470.type=-1)  // Group
-		
-		  // #TO_DO
-		
-	Else 
-		
-		OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
-		
-		If ($o.max#Null:C1517)
+		If (Count parameters:C259>=1)
 			
-			OBJECT GET BEST SIZE:C717(*;This:C1470.name;$width;$height;$o.max)
+			$o.alignment:=$1
+			
+			If (Count parameters:C259>=2)
+				
+				$o.min:=$2
+				
+				If (Count parameters:C259>=3)
+					
+					$o.max:=$3
+					
+				End if 
+			End if 
 			
 		Else 
 			
-			OBJECT GET BEST SIZE:C717(*;This:C1470.name;$width;$height)
+			$o.alignment:=Align left:K42:2
 			
 		End if 
+	End if 
+	
+	OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
+	
+	If ($o.max#Null:C1517)
 		
-		Case of 
-				
-				  //______________________________
-			: (This:C1470.type=Object type static text:K79:2)\
-				 | (This:C1470.type=Object type checkbox:K79:26)
-				
-				If (Num:C11($o.alignment)=Align left:K42:2)
-					
-					  // Add 10 pixels
-					$width:=$width+10
-					
-				End if 
-				
-				  //______________________________
-			: (This:C1470.type=Object type push button:K79:16)
-				
-				  // Add 10% for margins
-				$width:=Round:C94($width*1.1;0)
-				
-				  //______________________________
-			Else 
+		OBJECT GET BEST SIZE:C717(*;This:C1470.name;$width;$height;$o.max)
+		
+	Else 
+		
+		OBJECT GET BEST SIZE:C717(*;This:C1470.name;$width;$height)
+		
+	End if 
+	
+	Case of 
+			
+			  //______________________________
+		: (This:C1470.type=Object type static text:K79:2)\
+			 | (This:C1470.type=Object type checkbox:K79:26)
+			
+			If (Num:C11($o.alignment)=Align left:K42:2)
 				
 				  // Add 10 pixels
 				$width:=$width+10
 				
-				  //______________________________
-		End case 
-		
-		If ($o.min#Null:C1517)
+			End if 
 			
-			$width:=Choose:C955($width<$o.min;$o.min;$width)
+			  //______________________________
+		: (This:C1470.type=Object type push button:K79:16)
 			
-		End if 
-		
-		If ($o.alignment=Align right:K42:4)
+			  // Add 10% for margins
+			$width:=Round:C94($width*1.1;0)
 			
-			$left:=$right-$width
-			
+			  //______________________________
 		Else 
 			
-			  // Default is Align left
-			$right:=$left+$width
+			  // Add 10 pixels
+			$width:=$width+10
 			
-		End if 
+			  //______________________________
+	End case 
+	
+	If ($o.min#Null:C1517)
 		
-		OBJECT SET COORDINATES:C1248(*;This:C1470.name;$left;$top;$right;$bottom)
-		
-		This:C1470._updateCoordinates($left;$top;$right;$bottom)
+		$width:=Choose:C955($width<$o.min;$o.min;$width)
 		
 	End if 
 	
-	$0:=This:C1470
-	
-/*===============================================*/
-Function moveHorizontally
-	
-	C_OBJECT:C1216($0)
-	C_LONGINT:C283($1)
-	
-	C_OBJECT:C1216($o)
-	
-	$o:=This:C1470.getCoordinates()
-	This:C1470.setCoordinates($o.left+$1;Null:C1517;Null:C1517;Null:C1517)
-	
-	$0:=This:C1470
-	
-/*===============================================*/
-Function moveVertically
-	
-	C_OBJECT:C1216($0)
-	C_LONGINT:C283($1)
-	C_OBJECT:C1216($o)
-	
-	$o:=This:C1470.getCoordinates()
-	This:C1470.setCoordinates(Null:C1517;This:C1470.coordinates.top+$1;Null:C1517;Null:C1517)
-	
-	$0:=This:C1470
-	
-/*===============================================*/
-Function resizeHorizontally
-	
-	C_OBJECT:C1216($0)
-	C_LONGINT:C283($1)
-	C_OBJECT:C1216($o)
-	
-	$o:=This:C1470.getCoordinates()
-	This:C1470.setCoordinates(Null:C1517;Null:C1517;This:C1470.coordinates.right+$1;Null:C1517)
-	
-	$0:=This:C1470
-	
-/*===============================================*/
-Function resizeVertically
-	
-	C_OBJECT:C1216($0)
-	C_LONGINT:C283($1)
-	C_OBJECT:C1216($o)
-	
-	$o:=This:C1470.getCoordinates()
-	This:C1470.setCoordinates(Null:C1517;Null:C1517;Null:C1517;This:C1470.coordinates.bottom+$1)
-	
-	$0:=This:C1470
-	
-/*===============================================*/
-Function setDimension
-	
-	C_OBJECT:C1216($0;$o)
-	C_LONGINT:C283($1;$2)
-	
-	$o:=This:C1470.getCoordinates()
-	
-	If (Count parameters:C259>=2)
+	If ($o.alignment=Align right:K42:4)
 		
-		OBJECT SET COORDINATES:C1248(*;This:C1470.name;$o.left;$o.top;$o.right+$1;$o.bottom+$2)
+		$left:=$right-$width
 		
 	Else 
 		
-		OBJECT SET COORDINATES:C1248(*;This:C1470.name;$o.left;$o.top;$o.right+$1;$o.bottom)
+		  // Default is Align left
+		$right:=$left+$width
 		
 	End if 
 	
-	$0:=This:C1470
-	
-/*===============================================*/
-Function _updateCoordinates
+	OBJECT SET COORDINATES:C1248(*;This:C1470.name;$left;$top;$right;$bottom)
+	This:C1470._updateCoordinates($left;$top;$right;$bottom)
 	
 	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*════════════════════════════════════════════
+.moveHorizontally(int) -> This
+══════════════════════════*/
+Function moveHorizontally
+	
+	C_LONGINT:C283($1)
+	C_LONGINT:C283($left;$top;$right;$bottom)
+	
+	OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
+	
+	$left:=$left+$1
+	$right:=$right+$1
+	
+	This:C1470.setCoordinates(New object:C1471(\
+		"left";$left;\
+		"top";$top;\
+		"right";$right;\
+		"bottom";$bottom))
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*════════════════════════════════════════════
+.moveVertically(int) -> This
+══════════════════════════*/
+Function moveVertically
+	
+	C_LONGINT:C283($1)
+	C_LONGINT:C283($left;$top;$right;$bottom)
+	
+	OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
+	
+	$top:=$top+$1
+	$bottom:=$bottom+$1
+	
+	This:C1470.setCoordinates(New object:C1471(\
+		"left";$left;\
+		"top";$top;\
+		"right";$right;\
+		"bottom";$bottom))
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*════════════════════════════════════════════
+.resizeHorizontally(int) -> This
+══════════════════════════*/
+Function resizeHorizontally
+	
+	C_LONGINT:C283($1)
+	C_LONGINT:C283($left;$top;$right;$bottom)
+	
+	OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
+	
+	$right:=$right+$1
+	
+	This:C1470.setCoordinates(New object:C1471(\
+		"left";$left;\
+		"top";$top;\
+		"right";$right;\
+		"bottom";$bottom))
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*════════════════════════════════════════════
+.resizeVertically(int) -> This
+══════════════════════════*/
+Function resizeVertically
+	
+	C_LONGINT:C283($1)
+	C_LONGINT:C283($left;$top;$right;$bottom)
+	
+	OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
+	
+	$bottom:=$bottom+$1
+	
+	This:C1470.setCoordinates(New object:C1471(\
+		"left";$left;\
+		"top";$top;\
+		"right";$right;\
+		"bottom";$bottom))
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*════════════════════════════════════════════
+.setDimension(width {; height}) -> This
+══════════════════════════*/
+Function setDimension
+	
+	C_LONGINT:C283($1;$2)
+	C_OBJECT:C1216($o)
+	
+	$o:=This:C1470.getCoordinates()
+	$o.right:=$o.left+$1
+	
+	If (Count parameters:C259>=2)
+		
+		$o.bottom:=$o.top+$2
+		
+	End if 
+	
+	OBJECT SET COORDINATES:C1248(*;This:C1470.name;$o.left;$o.top;$o.right;$o.bottom)
+	This:C1470._updateCoordinates($o.left;$o.top;$o.right;$o.bottom)
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*════════════════════════════════════════════*/
+Function _updateCoordinates
+	
 	C_LONGINT:C283($1;$2;$3;$4)
-	C_LONGINT:C283($bottom;$left;$right;$top)
+	C_LONGINT:C283($left;$top;$right;$bottom)
 	
 	If (Count parameters:C259>=4)
 		
@@ -512,4 +468,7 @@ Function _updateCoordinates
 		"right";$right;\
 		"bottom";$bottom)
 	
+	C_OBJECT:C1216($0)
 	$0:=This:C1470
+	
+/*════════════════════════════════════════════*/

@@ -1,4 +1,12 @@
+/*
+
+Some specificity for button widgets
+
+*/
+
+/*═══════════════════*/
 Class extends widget
+/*═══════════════════*/
 
 Class constructor
 	
@@ -6,29 +14,12 @@ Class constructor
 	
 	Super:C1705($1)
 	
-/*===============================================*/
-Function forceBoolean
-	
-	EXECUTE FORMULA:C63("C_BOOLEAN:C305((OBJECT Get pointer:C1124(Object named:K67:5;$o.name))->)")
-	
-/*===============================================*/
-Function getValue
-	
-	C_LONGINT:C283($0)
-	
-	$0:=This:C1470.value
-	
-/*===============================================*/
-Function setValue
-	
-	C_VARIANT:C1683($1)
-	
-	This:C1470.value:=Bool:C1537($1)
-	
-/*===============================================*/
+/*════════════════════════════════════════════
+Tryes to underline the first capital letter or, 
+if not found the first letter, corresponding to 
+the associated key shortcut
+════════════════════════════════════════════*/
 Function highlightShortcut
-	
-	C_OBJECT:C1216($0)
 	
 	C_LONGINT:C283($index;$lModifier)
 	C_TEXT:C284($key;$t)
@@ -54,4 +45,24 @@ Function highlightShortcut
 		End if 
 	End if 
 	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*════════════════════════════════════════════
+A hack to force a button to be boolean type
+	
+⚠️ Obsolete in project mode because you can 
+   choose the type for the checkboxes
+════════════════════════════════════════════*/
+Function asBoolean
+	
+	If (This:C1470.type=Object type checkbox:K79:26)
+		If (This:C1470.assignable)
+			
+			EXECUTE FORMULA:C63(":C305((:C1124(:K67:5;This.name))->)")
+			
+		End if 
+	End if 
+	
+	C_OBJECT:C1216($0)
 	$0:=This:C1470

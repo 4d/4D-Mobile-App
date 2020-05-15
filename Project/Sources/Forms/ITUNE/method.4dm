@@ -8,7 +8,7 @@ C_LONGINT:C283($Lon_formEvent)
 
   // ----------------------------------------------------
   // Initialisations
-$Lon_formEvent:=panel_Form_common 
+$Lon_formEvent:=_o_panel_Form_common 
 
   // ----------------------------------------------------
   //Case of

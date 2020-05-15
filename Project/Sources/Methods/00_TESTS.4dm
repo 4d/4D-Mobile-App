@@ -1,14 +1,15 @@
 //%attributes = {}
 C_BOOLEAN:C305($b;$Boo_reset)
-C_LONGINT:C283($l;$Lon_build;$Lon_error;$Lon_result;$Lon_type;$Lon_value)
-C_LONGINT:C283($Lon_x)
+C_LONGINT:C283($i;$index;$l;$Lon_build;$Lon_error;$Lon_result)
+C_LONGINT:C283($Lon_type;$Lon_value;$Lon_x)
 C_TIME:C306($Gmt_timeGMT)
+C_PICTURE:C286($Pic_)
 C_REAL:C285($Num_;$r)
-C_TEXT:C284($Dir_root;$node;$root;$t;$tt;$Txt_in)
-C_TEXT:C284($Txt_ormula;$Txt_result)
+C_TEXT:C284($Dir_root;$node;$pattern;$root;$t;$tt)
+C_TEXT:C284($Txt_in;$Txt_ormula;$Txt_result)
 C_OBJECT:C1216($file;$folder;$o;$o1;$o2;$Obj_formula)
 C_OBJECT:C1216($Obj_new;$Obj_result;$Obj_target;$Obj_template;$svg;$zip)
-C_COLLECTION:C1488($c;$c1;$Col_2)
+C_COLLECTION:C1488($c;$c1;$Col_2;$cUserdCommands)
 C_VARIANT:C1683($null)
 
 ARRAY TEXT:C222($tTxt_;0)
@@ -23,6 +24,125 @@ $o:=Folder:C1567("/")
 $o1:=Folder:C1567(fk system folder:K87:13).parent
 
 Case of 
+		
+		  //________________________________________
+	: (True:C214)
+		
+		CREATE THUMBNAIL:C679($Pic_;$Pic_;0;0)
+		$o:=New object:C1471("hello";$Pic_)
+		$Pic_:=$Pic_*0
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$folder:=Folder:C1567(Application file:C491;fk platform path:K87:2)
+		
+		If (Is macOS:C1572)
+			
+			$folder:=$folder.folder("Contents")
+			
+		End if 
+		
+		$file:=$folder.file("Resources/gram.4dsyntax")
+		
+		$c:=Split string:C1554($file.getText();"\r";sk trim spaces:K86:2)
+		
+		$o:=New object:C1471
+		
+		For ($i;1;$c.length;1)
+			
+			$t:=Command name:C538($i)
+			
+			If (Length:C16($t)#0)\
+				 & ($t#"_4D")
+				
+				$o[String:C10($i)]:=New object:C1471(\
+					"name";$t;\
+					"count";0)
+				
+			End if 
+		End for 
+		
+		METHOD GET PATHS:C1163(Path all objects:K72:16;$tTxt_)
+		$pattern:="(([[:letter:][_]][[:letter:][:number:][. _]]+(?<![. ])):C(\\d{1,4}))"
+		$cUserdCommands:=New collection:C1472
+		
+		For ($i;1;Size of array:C274($tTxt_);1)
+			
+			If (Current method path:C1201#$tTxt_{$i})
+				
+				METHOD GET CODE:C1190($tTxt_{$i};DOCUMENT;Code with tokens:K72:18)
+				
+				For each ($tt;Split string:C1554(DOCUMENT;"\r";sk trim spaces:K86:2).shift())
+					
+					Case of 
+							
+							  //________________________________________
+						: (Match regex:C1019("\\s*";$tt))
+							
+							  //________________________________________
+						: (Match regex:C1019("^//.*";$tt))
+							
+							  //________________________________________
+						Else 
+							
+							ARRAY LONGINT:C221($tLon_position;0x0000)
+							ARRAY LONGINT:C221($tLon_length;0x0000)
+							$index:=1
+							
+							While (Match regex:C1019($pattern;$tt;$index;$tLon_position;$tLon_length))
+								
+								$t:=Substring:C12($tt;$tLon_position{3};$tLon_length{3})
+								
+								If ($o[$t]#Null:C1517)
+									
+									If ($o[$t].name=Substring:C12($tt;$tLon_position{2};$tLon_length{2}))
+										
+										If ($o[$t].count=0)
+											
+											$cUserdCommands.push($o[$t])
+											
+										End if 
+										
+										$o[$t].count:=$o[$t].count+1
+										
+									End if 
+								End if 
+								
+								$index:=$tLon_position{1}+$tLon_length{1}
+								
+							End while 
+							
+							  //________________________________________
+					End case 
+				End for each 
+			End if 
+		End for 
+		
+		$cUserdCommands:=$cUserdCommands.orderBy("count desc")
+		
+		$c:=New collection:C1472
+		For each ($o;$cUserdCommands)
+			
+			  //$ratio:=""  //"\t"+string(100*$o.count/$total)
+			$c.push($o.name+"\t"+String:C10($o.count))  //+$ratio)
+			
+		End for each 
+		
+		SET TEXT TO PASTEBOARD:C523($c.join("\r"))
+		
+		  //________________________________________
+	: (True:C214)
+		
+		$o:=Folder:C1567("/RESOURCES")
+		
+		$Obj_result:=OB Class:C1730($o)
+		
+		$b:=OB Instance of:C1731($o;$Obj_result)
+		
+		$o:=cs:C1710.static.new("toto")
+		$Obj_result:=OB Class:C1730($o)
+		$b:=OB Instance of:C1731($o;cs:C1710.static)
 		
 		  //________________________________________
 	: (True:C214)

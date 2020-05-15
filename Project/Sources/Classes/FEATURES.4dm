@@ -3,7 +3,7 @@
 ===============================================*/
 Class constructor
 	
-	C_OBJECT:C1216($o)
+	var $o : Object
 	
 	$o:=editor_INIT 
 	

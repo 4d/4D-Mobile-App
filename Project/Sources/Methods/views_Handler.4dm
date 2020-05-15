@@ -129,7 +129,7 @@ Case of
 		  //=========================================================
 	: ($oIN=Null:C1517)  // Form method
 		
-		$codeEvent:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
+		$codeEvent:=_o_panel_Form_common (On Load:K2:1;On Timer:K2:25)
 		
 		$oDataModel:=Form:C1466.dataModel
 		

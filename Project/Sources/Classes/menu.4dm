@@ -116,8 +116,7 @@ Function release
 /*===============================================*/
 Function append
 	
-	C_VARIANT:C1683($1)
-	C_VARIANT:C1683($2)
+	C_VARIANT:C1683($1;$2)
 	C_BOOLEAN:C305($3)
 	
 	C_TEXT:C284($t)
@@ -138,24 +137,49 @@ Function append
 			
 			ASSERT:C1129(Length:C16($t)>0;Current method name:C684+": An empty item will not be displayed")
 			
-			If (Value type:C1509($2)=Is object:K8:27)  // Submenu
+			If (Count parameters:C259>=2)
 				
-				If (This:C1470.metacharacters)
+				If (Value type:C1509($2)=Is object:K8:27)  // Submenu
 					
-					APPEND MENU ITEM:C411(This:C1470.ref;$t;$2.ref)
+					If (This:C1470.metacharacters)
+						
+						APPEND MENU ITEM:C411(This:C1470.ref;$t;$2.ref)
+						
+					Else 
+						
+						APPEND MENU ITEM:C411(This:C1470.ref;$t;$2.ref;*)
+						
+					End if 
+					
+					If ($2.autoRelease)
+						
+						RELEASE MENU:C978($2.ref)
+						
+					End if 
 					
 				Else 
 					
-					APPEND MENU ITEM:C411(This:C1470.ref;$t;$2.ref;*)
+					If (This:C1470.metacharacters)
+						
+						APPEND MENU ITEM:C411(This:C1470.ref;$t)
+						
+					Else 
+						
+						APPEND MENU ITEM:C411(This:C1470.ref;$t;*)
+						
+					End if 
 					
+					If (Count parameters:C259>1)
+						
+						SET MENU ITEM PARAMETER:C1004(This:C1470.ref;-1;String:C10($2))
+						
+						If (Count parameters:C259>2)
+							
+							SET MENU ITEM MARK:C208(This:C1470.ref;-1;Char:C90(18)*Num:C11($3))
+							
+						End if 
+					End if 
 				End if 
-				
-				If ($2.autoRelease)
-					
-					RELEASE MENU:C978($2.ref)
-					
-				End if 
-				
 			Else 
 				
 				If (This:C1470.metacharacters)
@@ -166,17 +190,6 @@ Function append
 					
 					APPEND MENU ITEM:C411(This:C1470.ref;$t;*)
 					
-				End if 
-				
-				If (Count parameters:C259>1)
-					
-					SET MENU ITEM PARAMETER:C1004(This:C1470.ref;-1;String:C10($2))
-					
-					If (Count parameters:C259>2)
-						
-						SET MENU ITEM MARK:C208(This:C1470.ref;-1;Char:C90(18)*Num:C11($3))
-						
-					End if 
 				End if 
 			End if 
 			

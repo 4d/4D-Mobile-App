@@ -12,7 +12,7 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "FEATURES_Handler",
+	"method": "FEATURES",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -44,7 +44,7 @@
 						"onLoad",
 						"onClick"
 					],
-					"method": "FEATURES_OBJECTS_HANDLER",
+					"method": "FEATURES",
 					"focusable": false
 				},
 				"authentication": {
@@ -58,7 +58,7 @@
 					"events": [
 						"onClick"
 					],
-					"method": "FEATURES_OBJECTS_HANDLER",
+					"method": "FEATURES",
 					"focusable": false
 				},
 				"authentication.label": {
@@ -81,7 +81,7 @@
 						"onLoad",
 						"onClick"
 					],
-					"method": "FEATURES_OBJECTS_HANDLER",
+					"method": "FEATURES",
 					"focusable": false
 				}
 			}

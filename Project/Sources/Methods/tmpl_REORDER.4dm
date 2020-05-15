@@ -240,7 +240,10 @@ If (Asserted:C1132(OK=1;"Invalid template"))
 				End if 
 			End for each 
 			
-			If (feature.with("newViewUI")) & ($oIN.manifest#Null:C1517)
+			If (feature.with("newViewUI"))\
+				 & ($oIN.manifest#Null:C1517)\
+				 & ($oIN.selector="detail")\
+				 & ($oIN.target.fields#Null:C1517)
 				
 				  // Append the non affected fields
 				$Col_affected.combine($oIN.target.fields)

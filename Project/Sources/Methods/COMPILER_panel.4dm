@@ -16,12 +16,15 @@ If (False:C215)
 	C_POINTER:C301(panel_Find_by_name ;$2)
 	
 	  //______________________________________________________
-	C_LONGINT:C283(panel_Form_common ;$0)
-	C_LONGINT:C283(panel_Form_common ;${1})
+	C_OBJECT:C1216(panel_Form ;$0)
+	C_LONGINT:C283(panel_Form ;${1})
 	
 	  //______________________________________________________
-	C_OBJECT:C1216(panel_Form_definition ;$0)
-	C_TEXT:C284(panel_Form_definition ;$1)
+	C_LONGINT:C283(_o_panel_Form_common ;$0)
+	C_LONGINT:C283(_o_panel_Form_common ;${1})
+	
+	  //______________________________________________________
+	C_OBJECT:C1216(panel_Definition ;$0)
 	
 	  //______________________________________________________
 	C_LONGINT:C283(panel_GOTO ;$1)

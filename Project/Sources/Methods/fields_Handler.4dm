@@ -15,7 +15,7 @@ C_PICTURE:C286($p)
 C_OBJECT:C1216($ƒ;$Obj_form;$Obj_in)
 
 If (False:C215)
-	C_OBJECT:C1216(FIELDS_HANDLER ;$1)
+	C_OBJECT:C1216(FIELDS_Handler ;$1)
 End if 
 
   // ----------------------------------------------------
@@ -42,7 +42,7 @@ Case of
 		  //=========================================================
 	: ($Obj_in=Null:C1517)  // Form method
 		
-		$Lon_formEvent:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
+		$Lon_formEvent:=_o_panel_Form_common (On Load:K2:1;On Timer:K2:25)
 		
 		Case of 
 				

@@ -73,7 +73,7 @@ Case of
 		  //=========================================================
 	: ($Obj_in=Null:C1517)  // Form method
 		
-		$eventCode:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
+		$eventCode:=_o_panel_Form_common (On Load:K2:1;On Timer:K2:25)
 		
 		Case of 
 				

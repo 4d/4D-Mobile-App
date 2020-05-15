@@ -5,6 +5,10 @@ C_OBJECT:C1216(object ;$0)
 C_TEXT:C284(object ;$1)
 
 
+  // ----------------------------------------------------
+C_OBJECT:C1216(_o_SERVER_Handler ;$0)
+C_OBJECT:C1216(_o_SERVER_Handler ;$1)
+
 If (False:C215)
 	C_OBJECT:C1216(c_formula ;$1)
 	C_OBJECT:C1216(c_formula ;$2)

@@ -81,7 +81,7 @@ Case of
 		  //=========================================================
 	: ($Obj_in=Null:C1517)  // Form method
 		
-		$Lon_event:=panel_Form_common (On Load:K2:1;On Timer:K2:25)
+		$Lon_event:=_o_panel_Form_common (On Load:K2:1;On Timer:K2:25)
 		
 		Case of 
 				
