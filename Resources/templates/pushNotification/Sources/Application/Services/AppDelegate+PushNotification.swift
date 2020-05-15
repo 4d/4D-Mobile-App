@@ -20,4 +20,8 @@ extension AppDelegate {
         type(of: self).application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
     }
 
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        type(of: self).application(application, didFailToRegisterForRemoteNotificationsWithError: error)
+    }
+
 }
