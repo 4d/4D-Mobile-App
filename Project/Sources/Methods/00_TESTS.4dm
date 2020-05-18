@@ -28,6 +28,22 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
+		$c:=New collection:C1472(\
+			New object:C1471("name";"Dupont");\
+			New object:C1471("name";"Durant");\
+			New object:C1471("name";"Dupond");\
+			New object:C1471("name";"Martin"))
+		
+		For each ($i;$c.indices("name = Dupon@").reverse())
+			
+			$c.remove($i)
+			
+		End for each 
+		
+		
+		  //________________________________________
+	: (True:C214)
+		
 		CREATE THUMBNAIL:C679($Pic_;$Pic_;0;0)
 		$o:=New object:C1471("hello";$Pic_)
 		$Pic_:=$Pic_*0

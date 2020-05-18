@@ -1,8 +1,15 @@
+C_OBJECT:C1216($menu)
+
 If (Bool:C1537(Form:C1466.trace))
 	
 	TRACE:C157
 	
 End if 
 
-(OBJECT Get pointer:C1124(Object named:K67:5;"Input1"))->:=Form:C1466.testDatasource.getValue()
-GOTO OBJECT:C206(*;"Input1")
+GOTO OBJECT:C206(*;"Input2")
+
+  // Create edit menu
+$menu:=cs:C1710.menu.new().edit()
+
+  // Display as popup
+$menu.popup()

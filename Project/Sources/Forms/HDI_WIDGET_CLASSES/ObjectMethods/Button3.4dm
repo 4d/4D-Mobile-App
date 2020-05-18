@@ -4,4 +4,4 @@ If (Bool:C1537(Form:C1466.trace))
 	
 End if 
 
-Form:C1466.testDatasource.clear()
+Form:C1466.testDatasource.setValue(Form:C1466.value.getValue())

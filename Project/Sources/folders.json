@@ -429,6 +429,7 @@
 			"button",
 			"group",
 			"input",
+			"picture",
 			"scrollable",
 			"static",
 			"widget"

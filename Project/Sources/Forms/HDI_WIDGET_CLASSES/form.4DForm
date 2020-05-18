@@ -16,7 +16,7 @@
 		"onClick",
 		"onPageChange"
 	],
-	"windowTitle": "window title",
+	"windowTitle": "DEMO WIDGET CLASSES",
 	"destination": "detailScreen",
 	"pages": [
 		{
@@ -142,7 +142,7 @@
 					"top": 69,
 					"left": 21,
 					"width": 0,
-					"height": 469,
+					"height": 409,
 					"startPoint": "topLeft",
 					"stroke": "#1e90ff",
 					"strokeDashArray": [
@@ -155,7 +155,7 @@
 					"top": 69,
 					"left": 193,
 					"width": 0,
-					"height": 469,
+					"height": 409,
 					"startPoint": "topLeft",
 					"stroke": "#1e90ff",
 					"strokeDashArray": [
@@ -168,7 +168,7 @@
 					"top": 69,
 					"left": 254,
 					"width": 0,
-					"height": 469,
+					"height": 409,
 					"startPoint": "topLeft",
 					"stroke": "#1e90ff",
 					"strokeDashArray": [
@@ -181,7 +181,7 @@
 					"top": 69,
 					"left": 426,
 					"width": 0,
-					"height": 469,
+					"height": 409,
 					"startPoint": "topLeft",
 					"stroke": "#1e90ff",
 					"strokeDashArray": [
@@ -248,7 +248,7 @@
 					"width": 173,
 					"height": 22,
 					"fill": "transparent",
-					"stroke": "#000000"
+					"stroke": "automatic"
 				},
 				"Button1": {
 					"type": "button",
@@ -509,54 +509,10 @@
 		},
 		{
 			"objects": {
-				"Line11": {
-					"type": "line",
-					"top": 97,
-					"left": 274,
-					"width": 0,
-					"height": 78,
-					"stroke": "#ff0000",
-					"strokeWidth": 2,
-					"startPoint": "topLeft"
-				},
-				"Line12": {
-					"type": "line",
-					"top": 175,
-					"left": 126,
-					"width": 128,
-					"height": 0,
-					"stroke": "#ff0000",
-					"strokeWidth": 2,
-					"startPoint": "topLeft"
-				},
-				"Line13": {
-					"type": "line",
-					"top": 97,
-					"left": 218,
-					"width": 56,
-					"height": 0,
-					"stroke": "#ff0000",
-					"strokeWidth": 2,
-					"startPoint": "topLeft"
-				},
-				"Line10": {
-					"type": "line",
-					"top": 107,
-					"left": 126,
-					"width": 0,
-					"height": 58,
-					"stroke": "#ff0000",
-					"strokeWidth": 2,
-					"strokeDashArray": [
-						6,
-						2
-					],
-					"startPoint": "topLeft"
-				},
 				"Input": {
 					"type": "input",
-					"left": 35,
-					"top": 88,
+					"left": 97,
+					"top": 87,
 					"width": 183,
 					"height": 17,
 					"dataSource": "Form:C1466.nonAssignable",
@@ -567,37 +523,41 @@
 				},
 				"Input1": {
 					"type": "input",
-					"left": 35,
-					"top": 167,
-					"width": 183,
+					"left": 402,
+					"top": 155,
+					"width": 257,
 					"height": 17,
-					"dataSource": ""
+					"dataSource": "",
+					"events": [
+						"onAfterEdit"
+					],
+					"method": "ObjectMethods/Input1.4dm"
 				},
-				"Button7": {
+				"getValue": {
 					"type": "button",
 					"text": "Get value",
-					"top": 126,
-					"left": 86,
+					"top": 153,
+					"left": 300,
 					"width": 82,
 					"height": 20,
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/Button7.4dm",
+					"method": "ObjectMethods/getValue.4dm",
 					"focusable": true,
 					"display": true
 				},
-				"Button6": {
+				"Button3": {
 					"type": "button",
 					"text": "Set value",
-					"top": 165,
-					"left": 238,
-					"width": 80,
+					"top": 213,
+					"left": 300,
+					"width": 82,
 					"height": 20,
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/Button6.4dm",
+					"method": "ObjectMethods/Button3.4dm",
 					"focusable": true
 				},
 				"Text13": {
@@ -613,26 +573,217 @@
 				},
 				"Text11": {
 					"type": "text",
-					"text": "You can execute the object positioning code once or several times by clicking on the \"Execute\" button and then restore the initial positions with the \"Reset\" button.",
-					"top": 84,
-					"left": 474,
-					"width": 307,
-					"height": 77
+					"text": "The input box on left is linked to the expression \"Form.nonAssignable\".\rYou can retrieve it's value and put it into the one below (it is a dynamic variable), by clicking the button \"Get value\"",
+					"top": 87,
+					"left": 300,
+					"width": 497,
+					"height": 56
 				},
-				"Button3": {
+				"celarValue": {
 					"type": "button",
 					"text": "Clear",
-					"top": 211,
-					"left": 138,
-					"width": 80,
+					"top": 260,
+					"left": 300,
+					"width": 82,
 					"height": 20,
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/Button3.4dm",
+					"method": "ObjectMethods/celarValue.4dm",
 					"focusable": true
+				},
+				"Text14": {
+					"type": "text",
+					"text": "Then, set its content or clear it",
+					"top": 191,
+					"left": 454,
+					"width": 267,
+					"height": 16
+				},
+				"Line10": {
+					"type": "line",
+					"top": 107,
+					"left": 204,
+					"width": 0,
+					"height": 56,
+					"startPoint": "topLeft",
+					"stroke": "#ff0000"
+				},
+				"Line11": {
+					"type": "line",
+					"top": 163,
+					"left": 204,
+					"width": 93,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#ff0000"
+				},
+				"Line12": {
+					"type": "line",
+					"top": 163,
+					"left": 384,
+					"width": 13,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#ff0000"
+				},
+				"Text16": {
+					"type": "text",
+					"text": "Form.nonAssignable",
+					"top": 64,
+					"left": 97,
+					"width": 183,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Line15": {
+					"type": "line",
+					"top": 223,
+					"left": 155,
+					"width": 142,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#0000cd"
+				},
+				"Line16": {
+					"type": "line",
+					"top": 107,
+					"left": 155,
+					"width": 0,
+					"height": 116,
+					"startPoint": "topLeft",
+					"stroke": "#0000cd"
+				},
+				"Line13": {
+					"type": "line",
+					"top": 223,
+					"left": 384,
+					"width": 50,
+					"height": 0,
+					"startPoint": "topLeft",
+					"stroke": "#0000cd"
+				},
+				"Line14": {
+					"type": "line",
+					"top": 176,
+					"left": 434,
+					"width": 0,
+					"height": 48,
+					"startPoint": "topLeft",
+					"stroke": "#0000cd"
 				}
 			}
+		},
+		{
+			"objects": {
+				"Text15": {
+					"type": "text",
+					"text": "Menus",
+					"top": 8,
+					"left": 97,
+					"width": 466,
+					"height": 29,
+					"fontSize": 24,
+					"stroke": "#808080",
+					"textAlign": "center"
+				},
+				"Button": {
+					"type": "button",
+					"text": "pop menu",
+					"top": 78,
+					"left": 54,
+					"width": 115,
+					"height": 30,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button.4dm",
+					"style": "bevel",
+					"popupPlacement": "linked",
+					"focusable": false
+				},
+				"Button6": {
+					"type": "button",
+					"text": "Fonts",
+					"top": 121,
+					"left": 366,
+					"width": 115,
+					"height": 30,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button6.4dm",
+					"style": "bevel",
+					"popupPlacement": "linked",
+					"focusable": false
+				},
+				"fontStyles": {
+					"type": "checkbox",
+					"text": "styles",
+					"top": 126,
+					"left": 274,
+					"width": 109,
+					"height": 20,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean"
+				},
+				"Button7": {
+					"type": "button",
+					"text": "Edit",
+					"top": 171,
+					"left": 366,
+					"width": 115,
+					"height": 30,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button7.4dm",
+					"style": "bevel",
+					"popupPlacement": "linked",
+					"focusable": false
+				},
+				"Button8": {
+					"type": "button",
+					"text": "Windows",
+					"top": 221,
+					"left": 366,
+					"width": 115,
+					"height": 30,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button8.4dm",
+					"style": "bevel",
+					"popupPlacement": "linked",
+					"focusable": false
+				},
+				"Text17": {
+					"type": "text",
+					"text": "Display a font menu with or without ",
+					"top": 128,
+					"left": 54,
+					"width": 305,
+					"height": 16
+				},
+				"Input2": {
+					"type": "input",
+					"left": 501,
+					"top": 178,
+					"width": 172,
+					"height": 17,
+					"dataSource": "Form:C1466.input"
+				}
+			},
+			"entryOrder": [
+				"Input2",
+				"Button",
+				"Button6",
+				"fontStyles",
+				"Button7",
+				"Button8"
+			]
 		}
 	],
 	"method": "method.4dm",
@@ -643,17 +794,6 @@
 				"Line7",
 				"Rectangle2",
 				"Text2"
-			],
-			"Group3": [
-				"Line11",
-				"Line12",
-				"Line13",
-				"Line10",
-				"Input",
-				"Input1",
-				"Button7",
-				"Button6",
-				"Button3"
 			]
 		}
 	}

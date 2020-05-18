@@ -4,7 +4,8 @@ C_COLLECTION:C1488($c)
 
 $e:=FORM Event:C1606
 
-If (Bool:C1537(Form:C1466.trace))
+If (Bool:C1537(Form:C1466.trace))\
+ & (FORM Get current page:C276=1)
 	
 	TRACE:C157
 	
@@ -15,7 +16,7 @@ Case of
 		  //———————————————————————————————————————————————
 	: ($e.code=On Load:K2:1)
 		
-		Form:C1466.pages:=New collection:C1472.resize(3)  // Two pages + page 0
+		Form:C1466.pages:=New collection:C1472.resize(4)  // 3 pages + page 0
 		
 		  //______________________________________________________
 	: ($e.code=On Page Change:K2:54)
@@ -65,7 +66,7 @@ If (Form:C1466.pages[$l]=Null:C1517)
 				.setShortcut("l";Command key mask:K16:1)\
 				.highlightShortcut()\
 				.disable()\
-				.setHelpTip("Click here for more information about me")
+				.setHelpTip("Click on \"Execute\" to activate")
 			
 			Form:C1466.alignRight:=cs:C1710.button.new("Button2")
 			
@@ -124,7 +125,14 @@ If (Form:C1466.pages[$l]=Null:C1517)
 		: ($l=2)
 			
 			Form:C1466.nonAssignable:="Hello"
-			Form:C1466.testDatasource:=cs:C1710.input.new("Input";"Form.nonAssignable")
+			Form:C1466.testDatasource:=cs:C1710.input.new("Input";Formula:C1597(Form:C1466.nonAssignable))
+			Form:C1466.value:=cs:C1710.input.new("Input1")
+			Form:C1466.getValue:=cs:C1710.button.new("Button3").disable()
+			
+			  //______________________________________________________
+		: ($l=3)
+			
+			Form:C1466.input:="Hello world"
 			
 			  //______________________________________________________
 		Else 

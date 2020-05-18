@@ -16,7 +16,8 @@ Class extends static
 
 Class constructor
 	
-	C_TEXT:C284($1;$2)
+	C_TEXT:C284($1)
+	C_VARIANT:C1683($2)
 	
 	Super:C1705($1)
 	
@@ -34,8 +35,17 @@ Class constructor
 		If (Count parameters:C259>=2)
 			
 			This:C1470.dataSource:=$2
-			This:C1470.value:=Formula from string:C1601($2).call()
 			
+			If (Value type:C1509($2)=Is object:K8:27)
+				
+				  // Formula
+				This:C1470.value:=This:C1470.dataSource.call()
+				
+			Else 
+				
+				This:C1470.value:=Formula from string:C1601($2).call()
+				
+			End if 
 		End if 
 	End if 
 	
@@ -91,8 +101,16 @@ Function getValue
 		
 	Else 
 		
-		$0:=Formula from string:C1601(String:C10(This:C1470.dataSource)).call()
-		
+		If (Value type:C1509(This:C1470.dataSource)=Is object:K8:27)
+			
+			$0:=This:C1470.dataSource.call()
+			
+		Else 
+			
+			  // Create formula
+			$0:=Formula from string:C1601(String:C10(This:C1470.dataSource)).call()
+			
+		End if 
 	End if 
 	
 /*══════════════════════════*/
@@ -109,8 +127,16 @@ Function setValue
 		If (This:C1470.dataSource#Null:C1517)
 			
 			This:C1470.value:=$1
-			EXECUTE FORMULA:C63(This:C1470.dataSource+":=This.value")
 			
+			If (Value type:C1509(This:C1470.dataSource)=Is object:K8:27)
+				
+				EXECUTE FORMULA:C63(This:C1470.dataSource.source+":=This.value")
+				
+			Else 
+				
+				EXECUTE FORMULA:C63(This:C1470.dataSource+":=This.value")
+				
+			End if 
 		End if 
 	End if 
 	

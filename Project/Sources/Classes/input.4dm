@@ -5,7 +5,9 @@ Class extends widget
 
 Class constructor
 	
-	C_TEXT:C284($1;$2)
+	C_TEXT:C284($1)
+	C_VARIANT:C1683($2)
+	
 	
 	If (Count parameters:C259>=2)
 		

@@ -69,40 +69,39 @@ Class constructor
 /* ============================================================================*/
 Function reorder
 	
-	  //C_COLLECTION($1)
-	  //C_LONGINT($count;$indx)
-	  //C_OBJECT($o)
-	
-	  //$count:=Num(This.manifest.fields.count)  //fixed
-	
-	  //$cAffected:=New collection
-	
-	  //If ($count=0)
-	
-	  //$0:=$1
-	
-	  //Else 
-	
-	  //For each ($o;$1)
-	
-	  //If ($indx<$count)
-	
-	  //  //check compatibility
-	  //$cAffected.push(Null)
-	
-	  //Else 
-	
-	  //$cAffected.push($o)
-	
-	  //End if 
-	
-	  //$indx:=$indx+1
-	
-	  //End for each 
-	
-	  //End if 
-	
-	
+	If (False:C215)
+		
+		  //C_COLLECTION($1)
+		  //C_LONGINT($count;$indx)
+		  //C_OBJECT($o)
+		
+		  //$count:=Num(This.manifest.fields.count)  //fixed
+		
+		  //$cAffected:=New collection
+		
+		  //If ($count=0)
+		  //$0:=$1
+		
+		  // Else
+		
+		  //For each ($o;$1)
+		
+		  //If ($indx<$count)
+		  //  //check compatibility
+		  //$cAffected.push(Null)
+		
+		  // Else
+		
+		  //$cAffected.push($o)
+		
+		  // End if
+		
+		  //$indx:=$indx+1
+		
+		  // End for each
+		
+		  // End if
+	End if 
 	
 /* ============================================================================*/
 Function load  // Load and update the template if any
@@ -237,7 +236,7 @@ Function load  // Load and update the template if any
 						
 					Else 
 						
-						TRACE:C157
+						This:C1470.warning:="Obsolete template"
 						
 					End if 
 				End if 

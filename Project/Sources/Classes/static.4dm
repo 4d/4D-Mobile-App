@@ -1,8 +1,7 @@
 /*
 
 Static objects are generally used for setting the appearance of the form and its 
-labels as well as for the graphic interface.Static objects do not have 
-associated variables like active objects.
+labels as well as for the graphic interface.
 
             ╔══════════════════════════════════════════════╗
             ║ This is the parent class of all form objects ║

@@ -5,7 +5,8 @@ If (Bool:C1537(Form:C1466.trace))
 	
 End if 
 
-Form:C1466.alignLeft.bestSize().enable()
+Form:C1466.alignLeft.bestSize().enable().setHelpTip("Click here for more information about me")
+
 Form:C1466.alignRight.bestSize(Align right:K42:4)
 Form:C1466.login.bestSize().enable(Bool:C1537(Form:C1466.trace))
 Form:C1466.close.bestSize(Align right:K42:4).enable()
