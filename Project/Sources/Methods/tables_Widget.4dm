@@ -43,7 +43,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		
 	End if 
 	
-	$oParams.x:=0  // Start x
+	$oParams.x:=1  // Start x
 	$oParams.y:=0  // Start y
 	
 	$oParams.cell:=New object:C1471(\
@@ -85,11 +85,11 @@ If ($oDataModel#Null:C1517)
 			.setFill(Choose:C955($bSelected;$oParams.selectedFill;"none")).latest
 		
 		  // Background
-		$svg.rect($oParams.x;$oParams.y;$oParams.cell.width;$oParams.cell.height;New object:C1471("target";$domTable))\
+		$svg.rect($oParams.x;$oParams.y;$oParams.cell.width;$oParams.cell.height;$domTable)\
 			.setStroke(Choose:C955($bSelected;$oParams.selectedFill;"none"))
 		
 		  // Border & reactive 'button'
-		$svg.rect($oParams.x+1;$oParams.y+1;$oParams.cell.width;$oParams.cell.height;New object:C1471("target";$domTable))\
+		$svg.rect($oParams.x+1;$oParams.y+1;$oParams.cell.width;$oParams.cell.height;$domTable)\
 			.setStroke(Choose:C955($bSelected;$oParams.selectedStroke;"none"))\
 			.setFill("white";5)
 		

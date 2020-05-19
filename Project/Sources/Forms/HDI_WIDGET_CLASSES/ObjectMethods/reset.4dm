@@ -2,11 +2,12 @@ C_OBJECT:C1216($o)
 
 If (Bool:C1537(Form:C1466.trace))
 	
+	Form:C1466.trace:=False:C215
 	TRACE:C157
 	
 End if 
 
-Form:C1466.alignLeft.setCoordinates(Form:C1466.alignLeft.origin)
+Form:C1466.clickMe.setCoordinates(Form:C1466.clickMe.origin)
 Form:C1466.alignRight.setCoordinates(Form:C1466.alignRight.origin)
 Form:C1466.login.setCoordinates(Form:C1466.login.origin)
 Form:C1466.close.setCoordinates(Form:C1466.close.origin)

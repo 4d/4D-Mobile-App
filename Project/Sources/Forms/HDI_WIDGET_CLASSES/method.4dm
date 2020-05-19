@@ -5,8 +5,10 @@ C_COLLECTION:C1488($c)
 $e:=FORM Event:C1606
 
 If (Bool:C1537(Form:C1466.trace))\
- & (FORM Get current page:C276=1)
+ & (FORM Get current page:C276=1)\
+ & (String:C10($e.objectName)#"trace")
 	
+	Form:C1466.trace:=False:C215
 	TRACE:C157
 	
 End if 
@@ -24,9 +26,12 @@ Case of
 		  // <NOTHING MORE TO DO>
 		
 		  //______________________________________________________
-	: (Form:C1466.alignLeft.catch($e))
+	: (Form:C1466.clickMe.catch($e))
 		
-		Form:C1466.alignLeft.method()
+		  // <THE WIDGET CALLBACK METHOD HAS BEEN EXECUTED DURING .catch()>
+		
+		  //Note: You can change on the fly the code executed :-)
+		Form:C1466.clickMe.setCallback(Formula:C1597(ALERT:C41("Hello World")))
 		
 		  //______________________________________________________
 	: (Form:C1466.alignRight.catch($e))
@@ -62,12 +67,6 @@ If (Form:C1466.pages[$l]=Null:C1517)
 			  //______________________________________________________
 		: ($l=1)
 			
-			Form:C1466.alignLeft:=cs:C1710.button.new("Button1")\
-				.setShortcut("l";Command key mask:K16:1)\
-				.highlightShortcut()\
-				.disable()\
-				.setHelpTip("Click on \"Execute\" to activate")
-			
 			Form:C1466.alignRight:=cs:C1710.button.new("Button2")
 			
 			Form:C1466.login:=cs:C1710.button.new("Check Box")\
@@ -96,10 +95,17 @@ If (Form:C1466.pages[$l]=Null:C1517)
 			
 			cs:C1710.group.new("execute,reset").distributeHorizontally()
 			
+			Form:C1466.clickMe:=cs:C1710.button.new("Button1")\
+				.setShortcut("m";Command key mask:K16:1)\
+				.highlightShortcut()\
+				.disable()\
+				.setHelpTip("Click on \"Execute\" to activate me")\
+				.setCallback(Formula:C1597(ALERT:C41("You have clicked on me."+"\rMy name is: "+This:C1470.name+"\rMy title is: "+This:C1470.getTitle()+"\r\rNow, click again to see...")))
+			
 			  //=========================================
 			  //  Keep coordinates for the reset button
 			  //=========================================
-			Form:C1466.alignLeft.origin:=Form:C1466.alignLeft.coordinates
+			Form:C1466.clickMe.origin:=Form:C1466.clickMe.coordinates
 			Form:C1466.alignRight.origin:=Form:C1466.alignRight.coordinates
 			Form:C1466.login.origin:=Form:C1466.login.coordinates
 			Form:C1466.close.origin:=Form:C1466.close.coordinates
@@ -115,11 +121,6 @@ If (Form:C1466.pages[$l]=Null:C1517)
 				$o.origin:=$o.coordinates
 				
 			End for each 
-			
-			  // Associate a method to the button "Button1"
-			Form:C1466.alignLeft.method:=Formula:C1597(ALERT:C41("You have clicked on me."\
-				+"\rMy name is: "+This:C1470.name\
-				+"\rMy title is: "+This:C1470.getTitle()))
 			
 			  //______________________________________________________
 		: ($l=2)

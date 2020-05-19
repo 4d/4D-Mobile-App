@@ -1,12 +1,12 @@
 /*
 
-Active objects perform a database task or an interface function. Fields are
-active objects. Other active objects — enterable objects (variables), combo
-boxes, drop-down lists, picture buttons, and so on — store data temporarily in
-memory or perform some action such as opening a dialog box, printing a report,
+Active objects perform a database task or an interface function.
+Active objects — enterable objects (variables), combo boxes, drop-down lists, 
+picture buttons, and so on — store data temporarily in memory 
+or perform some action such as opening a dialog box, printing a report,
 or starting a background process.
 
-I prefer to call them widgets to make the difference with language objects
+I prefer to call them "widgets" to differentiate them from language objects.
 
 */
 
@@ -89,7 +89,9 @@ Function notEnterable
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*══════════════════════════*/
+/*══════════════════════════
+.getValue() -> value
+══════════════════════════*/
 Function getValue
 	
 	C_VARIANT:C1683($0)
@@ -113,7 +115,9 @@ Function getValue
 		End if 
 	End if 
 	
-/*══════════════════════════*/
+/*══════════════════════════
+.setValue(value) -> This
+══════════════════════════*/
 Function setValue
 	
 	C_VARIANT:C1683($1)
@@ -143,7 +147,9 @@ Function setValue
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*══════════════════════════*/
+/*══════════════════════════
+.clear() -> This
+══════════════════════════*/
 Function clear
 	
 	If (This:C1470.assignable)
@@ -157,48 +163,56 @@ Function clear
 			C_LONGINT:C283($l)
 			$l:=Value type:C1509(This:C1470.getValue())
 			
+			C_TEXT:C284($t)
+			$t:=Choose:C955(Value type:C1509(This:C1470.dataSource)=Is object:K8:27;This:C1470.dataSource.source;This:C1470.dataSource)
+			
 			Case of 
 					
 					  //______________________________________________________
 				: ($l=Is text:K8:3)
 					
-					EXECUTE FORMULA:C63(This:C1470.dataSource+":=\"\"")
+					EXECUTE FORMULA:C63($t+":=\"\"")
 					
 					  //______________________________________________________
 				: ($l=Is real:K8:4)\
 					 | ($l=Is longint:K8:6)
 					
-					EXECUTE FORMULA:C63(This:C1470.dataSource+":=0")
+					EXECUTE FORMULA:C63($t+":=0")
 					
 					  //______________________________________________________
 				: ($l=Is boolean:K8:9)
 					
-					EXECUTE FORMULA:C63(This:C1470.dataSource+":=:C215")
+					EXECUTE FORMULA:C63($t+":=")
 					
 					  //______________________________________________________
 				: ($l=Is date:K8:7)
 					
-					EXECUTE FORMULA:C63(This:C1470.dataSource+":=:C102(\"\")")
+					EXECUTE FORMULA:C63($t+":=(\"\")")
 					
 					  //______________________________________________________
 				: ($l=Is time:K8:8)
 					
-					EXECUTE FORMULA:C63(This:C1470.dataSource+":=:C179(0)")
+					EXECUTE FORMULA:C63($t+":=(0)")
 					
 					  //______________________________________________________
 				: ($l=Is object:K8:27)
 					
-					EXECUTE FORMULA:C63(This:C1470.dataSource+":=null")
+					EXECUTE FORMULA:C63($t+":=null")
+					
+					  //______________________________________________________
+				: ($l=Is collection:K8:32)
+					
+					EXECUTE FORMULA:C63($t+":=")
 					
 					  //______________________________________________________
 				: ($l=Is picture:K8:10)
 					
-					EXECUTE FORMULA:C63(This:C1470.dataSource+":="+This:C1470.dataSource+"*0")
+					EXECUTE FORMULA:C63($t+":="+$t+"*0")
 					
 					  //______________________________________________________
 				Else 
 					
-					EXECUTE FORMULA:C63(This:C1470.dataSource+":=null")
+					EXECUTE FORMULA:C63($t+":=null")
 					
 					  //______________________________________________________
 			End case 
@@ -208,20 +222,33 @@ Function clear
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*══════════════════════════*/
+/*══════════════════════════
+.touch() -> This
+══════════════════════════*/
 Function touch
 	
 	If (This:C1470.assignable)
 		
-		(This:C1470.pointer)->:=(This:C1470.pointer)->
+		This:C1470.pointer->:=(This:C1470.pointer)->
 		
 	Else 
 		
-		EXECUTE FORMULA:C63(This:C1470.dataSource+":="+This:C1470.dataSource)
-		
+		If (This:C1470.dataSource#Null:C1517)
+			
+			C_TEXT:C284($t)
+			$t:=Choose:C955(Value type:C1509(This:C1470.dataSource)=Is object:K8:27;This:C1470.dataSource.source;This:C1470.dataSource)
+			
+			EXECUTE FORMULA:C63($t+":="+$t)
+			
+		End if 
 	End if 
 	
-/*══════════════════════════*/
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*══════════════════════════
+.catch(e) -> bool
+══════════════════════════*/
 Function catch
 	
 	C_BOOLEAN:C305($0)
@@ -245,6 +272,47 @@ Function catch
 				
 			End if 
 		End if 
+	End if 
+	
+	If ($0)
+		
+		If (This:C1470.callback#Null:C1517)
+			
+			This:C1470.callback()
+			
+		End if 
+	End if 
+	
+/*══════════════════════════
+.setCallback(formula) -> This
+.setCallback(text) -> This
+══════════════════════════*/
+Function setCallback
+	
+	C_VARIANT:C1683($1)
+	
+	If (Value type:C1509($1)=Is object:K8:27)
+		
+		This:C1470.callback:=$1
+		
+	Else 
+		
+		This:C1470.callback:=Formula from string:C1601(String:C10($1))
+		
+	End if 
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*══════════════════════════
+.execute()
+══════════════════════════*/
+Function execute
+	
+	If (Asserted:C1132(This:C1470.callback#Null:C1517;"No callback method define"))
+		
+		This:C1470.callback()
+		
 	End if 
 	
 /*══════════════════════════
@@ -272,7 +340,10 @@ Function setHelpTip
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*════════════════════════════════════════════*/
+/*══════════════════════════
+.getShortcut() -> object
+  {"key";text;"modifier";int)
+══════════════════════════*/
 Function getShortcut
 	
 	C_OBJECT:C1216($0)
@@ -285,7 +356,9 @@ Function getShortcut
 		"key";$t;\
 		"modifier";$l)
 	
-/*════════════════════════════════════════════*/
+/*══════════════════════════
+.setShortcut(text{;int} ) -> This
+══════════════════════════*/
 Function setShortcut
 	
 	C_TEXT:C284($1)  // key
@@ -304,7 +377,9 @@ Function setShortcut
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*════════════════════════════════════════════*/
+/*══════════════════════════
+.focus() -> This
+══════════════════════════*/
 Function focus
 	
 	GOTO OBJECT:C206(*;This:C1470.name)
@@ -312,4 +387,4 @@ Function focus
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*════════════════════════════════════════════*/
+	

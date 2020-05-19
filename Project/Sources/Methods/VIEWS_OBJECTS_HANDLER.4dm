@@ -12,7 +12,7 @@ C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b;$bAvailable)
-C_LONGINT:C283($i;$indx;$l)
+C_LONGINT:C283($count;$i;$indx;$l)
 C_PICTURE:C286($p)
 C_TEXT:C284($tTable;$tTemplate;$tTypeForm)
 C_OBJECT:C1216($context;$event;$form;$menu;$o;$oTarget)
@@ -86,11 +86,17 @@ Case of
 						
 						If (Form:C1466[$tTypeForm][$context.tableNum()].form#Null:C1517)
 							
-							$form.fieldGroup.show()
-							$form.previewGroup.show()
-							
 							$form.form.call("pickerHide")
 							
+							If (Bool:C1537(Form:C1466.$dialog.picker))
+								
+								$form.fieldGroup.show()
+								$form.previewGroup.show()
+								$form.scrollBar.hide()
+								
+								$form.form.refresh()
+								
+							End if 
 						End if 
 						
 						  //______________________________________________________
@@ -251,65 +257,100 @@ Case of
 				
 				If (feature.with("newViewUI"))
 					
-					If (Contextual click:C713)
+					$tTypeForm:=Choose:C955(Num:C11($context.selector)=2;"detail";"list")
+					
+					If (Contextual click:C713) & ($tTypeForm="detail")
 						
-						$menu:=cs:C1710.menu.new().append("addAllFields";"all").popup()
+						$oTarget:=Form:C1466[$tTypeForm][$context.tableNumber]
 						
-						Case of 
-								  //______________________________________________________
-							: (Not:C34($menu.selected))
+						$count:=Size of array:C274(($form.fields.pointer())->)
+						
+						If ($count>$oTarget.fields.length)
+							
+							$menu:=cs:C1710.menu.new()
+							
+							If ($oTarget.fields.length=0)
 								
-								  // <NOTHING MORE TO DO>
+								$menu.append("addAllFields";"all")
 								
-								  //______________________________________________________
-							: ($menu.choice="all")
-								
-								$tTypeForm:=Choose:C955(Num:C11($context.selector)=2;"detail";"list")
-								
-								If ($tTypeForm="detail")
-									
-									For ($i;1;Size of array:C274(($form.fields.pointer())->);1)
-										
-										$o:=($form.fields.pointer())->{$i}
-										
-										$b:=($o.fieldType#8859)  // Not 1-N relation
-										
-										If (Not:C34($b))
-											
-											  // 1-N relation with published related data class
-											$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
-											
-										End if 
-										
-										If ($b)
-											
-											  // Add the field
-											$oTarget:=Form:C1466[$tTypeForm][$context.tableNumber]
-											$oTarget.fields.push($o)
-											
-										End if 
-									End for 
-									
-									  // Update preview
-									views_preview ("draw";$form)
-									
-									  // Save project
-									project.save()
-									
-								Else 
-									
-									  // Not for a list form
-									
-								End if 
-								
-								  //______________________________________________________
 							Else 
 								
-								  // A "Case of" statement should never omit "Else
-								TRACE:C157
+								$menu.append("addMissingFields";"missing")
 								
-								  //______________________________________________________
-						End case 
+							End if 
+							
+							$menu.popup()
+							
+							If ($menu.selected)
+								
+								Case of 
+										
+										  //______________________________________________________
+									: ($menu.choice="all")
+										
+										For ($i;1;$count;1)
+											
+											$o:=($form.fields.pointer())->{$i}
+											
+											$b:=($o.fieldType#8859)  // Not 1-N relation
+											
+											If (Not:C34($b))
+												
+												  // 1-N relation with published related data class
+												$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
+												
+											End if 
+											
+											If ($b)
+												
+												  // Add the field
+												$oTarget.fields.push($o)
+												
+											End if 
+										End for 
+										
+										  //______________________________________________________
+									: ($menu.choice="missing")
+										
+										For ($i;1;$count;1)
+											
+											$o:=($form.fields.pointer())->{$i}
+											
+											$b:=($o.fieldType#8859)  // Not 1-N relation
+											
+											If (Not:C34($b))
+												
+												  // 1-N relation with published related data class
+												$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
+												
+											End if 
+											
+											If ($b)\
+												 & ($oTarget.fields.query("fieldNumber = :1";$o.fieldNumber).pop()=Null:C1517)
+												
+												  // Add the field
+												$oTarget.fields.push($o)
+												
+											End if 
+										End for 
+										
+										  //______________________________________________________
+									Else 
+										
+										  // A "Case of" statement should never omit "Else
+										TRACE:C157
+										
+										  //______________________________________________________
+								End case 
+								
+								  // Update preview
+								views_preview ("draw";$form)
+								
+								  // Save project
+								project.save()
+								
+							End if 
+						End if 
 					End if 
 				End if 
 				

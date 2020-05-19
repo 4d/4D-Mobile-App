@@ -47,7 +47,8 @@
 					"dataSourceTypeHint": "boolean",
 					"dataSource": "Form:C1466.trace",
 					"stroke": "#ff0000",
-					"fontWeight": "normal"
+					"fontWeight": "normal",
+					"focusable": false
 				},
 				"Rectangle": {
 					"type": "rectangle",
@@ -252,7 +253,7 @@
 				},
 				"Button1": {
 					"type": "button",
-					"text": "Align Left",
+					"text": "Click Me",
 					"top": 74,
 					"left": 21,
 					"width": 174,
@@ -579,7 +580,7 @@
 					"width": 497,
 					"height": 56
 				},
-				"celarValue": {
+				"clearValue": {
 					"type": "button",
 					"text": "Clear",
 					"top": 260,
@@ -589,7 +590,7 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/celarValue.4dm",
+					"method": "ObjectMethods/clearValue.4dm",
 					"focusable": true
 				},
 				"Text14": {
@@ -678,7 +679,7 @@
 			"objects": {
 				"Text15": {
 					"type": "text",
-					"text": "Menus",
+					"text": "Contextual menus",
 					"top": 8,
 					"left": 97,
 					"width": 466,
@@ -690,8 +691,8 @@
 				"Button": {
 					"type": "button",
 					"text": "pop menu",
-					"top": 78,
-					"left": 54,
+					"top": 88,
+					"left": 366,
 					"width": 115,
 					"height": 30,
 					"events": [
@@ -705,7 +706,7 @@
 				"Button6": {
 					"type": "button",
 					"text": "Fonts",
-					"top": 121,
+					"top": 177,
 					"left": 366,
 					"width": 115,
 					"height": 30,
@@ -720,7 +721,7 @@
 				"fontStyles": {
 					"type": "checkbox",
 					"text": "styles",
-					"top": 126,
+					"top": 182,
 					"left": 274,
 					"width": 109,
 					"height": 20,
@@ -732,7 +733,7 @@
 				"Button7": {
 					"type": "button",
 					"text": "Edit",
-					"top": 171,
+					"top": 227,
 					"left": 366,
 					"width": 115,
 					"height": 30,
@@ -747,7 +748,7 @@
 				"Button8": {
 					"type": "button",
 					"text": "Windows",
-					"top": 221,
+					"top": 277,
 					"left": 366,
 					"width": 115,
 					"height": 30,
@@ -762,7 +763,7 @@
 				"Text17": {
 					"type": "text",
 					"text": "Display a font menu with or without ",
-					"top": 128,
+					"top": 184,
 					"left": 54,
 					"width": 305,
 					"height": 16
@@ -770,10 +771,61 @@
 				"Input2": {
 					"type": "input",
 					"left": 501,
-					"top": 178,
+					"top": 234,
 					"width": 172,
 					"height": 17,
 					"dataSource": "Form:C1466.input"
+				},
+				"Text18": {
+					"type": "text",
+					"text": "Display a standard Edit menu",
+					"top": 234,
+					"left": 54,
+					"width": 305,
+					"height": 16
+				},
+				"Text19": {
+					"type": "text",
+					"text": "Display a Windows menu",
+					"top": 284,
+					"left": 54,
+					"width": 305,
+					"height": 16
+				},
+				"Text20": {
+					"type": "text",
+					"text": "cs.menu.new().fonts(bool)",
+					"top": 163,
+					"left": 54,
+					"width": 406,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Text21": {
+					"type": "text",
+					"text": "cs.menu.new().edit()",
+					"top": 215,
+					"left": 54,
+					"width": 406,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Text22": {
+					"type": "text",
+					"text": "cs.menu.new().windows()",
+					"top": 267,
+					"left": 54,
+					"width": 406,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Text23": {
+					"type": "text",
+					"text": "Display a contextual menu",
+					"top": 95,
+					"left": 54,
+					"width": 305,
+					"height": 16
 				}
 			},
 			"entryOrder": [

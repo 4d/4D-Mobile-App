@@ -387,6 +387,7 @@ Case of
 				
 				$form.fieldGroup.show()
 				$form.previewGroup.show()
+				$form.scrollBar.hide()
 				
 				$form.fieldList.focus()
 				
@@ -657,6 +658,7 @@ Case of
 			
 			$form.fieldGroup.show()
 			$form.previewGroup.show()
+			$form.scrollBar.hide()
 			
 		End if 
 		

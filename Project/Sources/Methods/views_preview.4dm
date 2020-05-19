@@ -80,11 +80,46 @@ Case of
 					If (feature.with("newViewUI"))
 						
 						  // Load the template
-						PROCESS 4D TAGS:C816($oTemplate.load().template;$t;$oTemplate.title;$oTemplate.cancel())
+						$t:=$oTemplate.load().template
+						$t:=Replace string:C233($t;"&quot;";"\"")
+						PROCESS 4D TAGS:C816($t;$t;$oTemplate.title;$oTemplate.cancel())
 						
 						$svg:=svg ("parse";New object:C1471(\
 							"variable";$t)).setAttribute("transform";\
 							"scale(0.97)")
+						
+						If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
+							
+							$node:=$svg.findById("cancel")
+							
+							If ($svg.success)
+								
+								$node:=DOM Find XML element:C864($node;"image")
+								$svg.setAttribute("xlink:href";$oTemplate.cancel();$node)
+								
+							End if 
+							
+							$node:=$svg.findById("search.label")
+							
+							If ($svg.success)
+								
+								$svg.setAttribute("ios:tips";Get localized string:C991("searchBoxTips");$node)
+								DOM SET XML ELEMENT VALUE:C868($node;Get localized string:C991("fieldToUseForSearch"))
+								
+							End if 
+							
+							$node:=$svg.findById("section.label")
+							
+							If ($svg.success)
+								
+								$svg.setAttribute("ios:tips";Get localized string:C991("sectionTips");$node)
+								DOM SET XML ELEMENT VALUE:C868($node;Get localized string:C991("fieldToUseAsSection"))
+								
+							End if 
+							
+							$svg.success:=True:C214
+							
+						End if 
 						
 					Else 
 						
@@ -507,7 +542,7 @@ Case of
 									
 									  // Hide unassigned multivalued fields (except the first)
 									ARRAY TEXT:C222($tDom_;0x0000)
-									$tDom_{0}:=DOM Find XML element:C864($domBkg;"g/g";$tDom_)
+									$tDom_{0}:=DOM Find XML element:C864($domBkg;"g";$tDom_)
 									
 									For ($i;1;Size of array:C274($tDom_);1)
 										
@@ -603,7 +638,11 @@ Case of
 				
 			Else 
 				
-				  // NOTHING MORE TO DO
+				  // Display the template picker
+				$form.fieldGroup.hide()
+				$form.previewGroup.hide()
+				
+				views_LAYOUT_PICKER ($tTypeForm)
 				
 			End if 
 		End if 
