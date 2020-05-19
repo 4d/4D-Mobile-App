@@ -3,21 +3,25 @@
   <title>Cards Detail</title>
   <defs>
     <symbol id="cancel">
-      <image x="0" y="0" width="30" height="30" xlink:href="$4DEVAL(tmpl_cancel)"/>
+      <image width="30" height="30"/>
     </symbol>
   </defs>
+  <!-- background -->
   <g id="background" class="background" ios:type="all">
     <rect class="bgcontainer_v2" x="0" y="100"/>
+    <!-- image -->
     <rect class="bgblue" x="11" y="3" width="244" height="90" transform="translate(0,5)"/>
+    <!-- Field 1 -->
     <g transform="translate(0,18)">
       <rect class="bg field" x="15" y="0" width="236" height="30"/>
-      <textArea id="f1.label" class="label" x="18" y="8" width="228">$4DEVAL(:C991("field[n]")) 1</textArea>
+      <textArea id="f1.label" class="label" x="18" y="8" width="228">$4DEVAL(:C991("dropAFieldHere"))</textArea>
       <rect id="f1" class="droppable field" x="15" y="0" width="236" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[0]"/>
       <use id="f1.cancel" x="224" y="1" xlink:href="#cancel" visibility="hidden"/>
     </g>
+    <!-- Field 2 -->
     <g transform="translate(0,58)">
       <rect class="bg field" x="15" y="0" width="236" height="30"/>
-      <textArea id="f2.label" class="label" x="18" y="8" width="228">$4DEVAL(:C991("field[n]")) 2</textArea>
+      <textArea id="f2.label" class="label" x="18" y="8" width="228">$4DEVAL(:C991("dropAFieldHere"))</textArea>
       <rect id="f2" class="droppable field" x="15" y="0" width="236" height="30" stroke-dasharray="5,2" ios:type="-3" ios:bind="fields[1]"/>
       <use id="f2.cancel" x="224" y="1" xlink:href="#cancel" visibility="hidden"/>
     </g>

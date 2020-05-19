@@ -3,7 +3,7 @@
   <title>Left Cut Header</title>
   <defs>
     <symbol id="cancel">
-      <image x="0" y="0" width="30" height="30" xlink:href="$4DEVAL($2)"/>
+      <image width="30" height="30"/>
     </symbol>
   </defs>
   <g id="background" class="background" ios:type="all">

@@ -3,7 +3,7 @@
   <title>Tasks Detail Plus</title>
   <defs>
     <symbol id="cancel">
-      <image x="0" y="0" width="30" height="30" xlink:href="$4DEVAL(tmpl_cancel)"/>
+      <image width="30" height="30"/>
     </symbol>
   </defs>
   <g id="background" class="background" ios:type="all">
