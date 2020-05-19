@@ -3,7 +3,7 @@
   <title>Simple Table</title>
   <defs>
     <symbol id="cancel">
-      <image x="0" y="0" width="30" height="30" xlink:href="$4DEVAL(tmpl_cancel)"/>
+      <image width="30" height="30"/>
     </symbol>
     <text id="cookery" ios:values="search,section,f1,f2"/>
   </defs>
@@ -15,13 +15,13 @@
     <g transform="translate(0,60)">
       <rect class="bg field" x="14" y="0" width="238" height="30"/>
       <path class="magnifyingGlass" transform="translate(20,8) scale(1)"/>
-      <textArea id="search.label" class="label" x="17" y="8" width="230" ios:tips="$4DEVAL(:C991(&quot;searchBoxTips&quot;))">$4DEVAL(:C991("fieldToUseForSearch"))</textArea>
+      <textArea id="search.label" class="label" x="17" y="8" width="230"/>
       <rect id="search" class="droppable field optional multi-criteria" x="14" y="0" width="238" height="30" stroke-dasharray="5,2" ios:type="-3,-6" ios:bind="searchableField"/>
       <use id="search.cancel" x="224" y="1" xlink:href="#cancel" visibility="hidden"/>
     </g>
     <!-- sectionField -->
     <rect class="bg field" x="10" y="110" width="246" height="30"/>
-    <textArea id="section.label" class="label" x="0" y="118" width="250" ios:tips="$4DEVAL(:C991(&quot;sectionTips&quot;))">$4DEVAL(:C991("fieldToUseAsSection"))</textArea>
+    <textArea id="section.label" class="label" x="0" y="118" width="250"/>
     <rect id="section" class="droppable optional" x="10" y="110" width="246" height="30" stroke-dasharray="5,2" ios:type="-3,-6" ios:bind="sectionField"/>
     <use id="section.cancel" x="224" y="111" xlink:href="#cancel" visibility="hidden"/>
     <!-- titleField -->
