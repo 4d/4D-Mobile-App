@@ -431,7 +431,7 @@ Function shortcut
 	C_VARIANT:C1683($1)
 	C_LONGINT:C283($2)
 	
-	If (Count parameters:C259>1)
+	If (Count parameters:C259>=2)
 		
 		If (Value type:C1509($1)=Is object:K8:27)
 			

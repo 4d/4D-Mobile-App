@@ -221,40 +221,49 @@ Function bestSize
 	C_OBJECT:C1216($o)
 	C_LONGINT:C283($left;$top;$right;$bottom;$width;$height)
 	
-	If (Value type:C1509($1)=Is object:K8:27)
+	If (Count parameters:C259>=1)
 		
-		$o:=$1
-		
-		If ($o.alignment=Null:C1517)
+		If (Value type:C1509($1)=Is object:K8:27)
 			
-			$o.alignment:=Align left:K42:2
+			$o:=$1
 			
-		End if 
-		
-	Else 
-		
-		$o:=New object:C1471
-		
-		If (Count parameters:C259>=1)
-			
-			$o.alignment:=$1
-			
-			If (Count parameters:C259>=2)
+			If ($o.alignment=Null:C1517)
 				
-				$o.min:=$2
+				$o.alignment:=Align left:K42:2
 				
-				If (Count parameters:C259>=3)
-					
-					$o.max:=$3
-					
-				End if 
 			End if 
 			
 		Else 
 			
-			$o.alignment:=Align left:K42:2
+			$o:=New object:C1471
 			
+			If (Count parameters:C259>=1)
+				
+				$o.alignment:=$1
+				
+				If (Count parameters:C259>=2)
+					
+					$o.min:=$2
+					
+					If (Count parameters:C259>=3)
+						
+						$o.max:=$3
+						
+					End if 
+				End if 
+				
+			Else 
+				
+				$o.alignment:=Align left:K42:2
+				
+			End if 
 		End if 
+		
+	Else 
+		
+		$o:=New object:C1471(\
+			"alignment";Align left:K42:2)
+		
 	End if 
 	
 	OBJECT GET COORDINATES:C663(*;This:C1470.name;$left;$top;$right;$bottom)
