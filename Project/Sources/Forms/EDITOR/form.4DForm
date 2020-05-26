@@ -254,7 +254,7 @@
 		}
 	],
 	"editor": {
-		"activeView": "default",
+		"activeView": "Project",
 		"defaultView": "default",
 		"views": {
 			"default": {},
@@ -272,6 +272,7 @@
 				]
 			},
 			"Browser": {
+				"visible": false,
 				"objects": [
 					"browser"
 				]

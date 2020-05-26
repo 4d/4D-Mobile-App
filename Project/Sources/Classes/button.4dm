@@ -10,15 +10,24 @@ Class extends widget
 
 Class constructor
 	
-	C_VARIANT:C1683($1)
+	C_TEXT:C284($1)
+	C_VARIANT:C1683($2)
 	
-	Super:C1705($1)
+	If (Count parameters:C259>=2)
+		
+		Super:C1705($1;$2)
+		
+	Else 
+		
+		Super:C1705($1)
+		
+	End if 
 	
 /*════════════════════════════════════════════
 Tryes to underline the first capital letter or, 
 if not found the first letter, corresponding to 
 the associated key shortcut
-════════════════════════════════════════════*/
+══════════════════════════*/
 Function highlightShortcut
 	
 	C_LONGINT:C283($index;$lModifier)
@@ -53,7 +62,7 @@ A hack to force a button to be boolean type
 	
 ⚠️ Obsolete in project mode because you can 
    choose the type for the checkboxes
-════════════════════════════════════════════*/
+══════════════════════════*/
 Function asBoolean
 	
 	If (This:C1470.type=Object type checkbox:K79:26)

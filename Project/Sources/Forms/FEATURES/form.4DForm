@@ -9,6 +9,7 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onClick",
 		"onUnload",
 		"onTimer"
 	],
@@ -41,11 +42,12 @@
 					"height": 18,
 					"text": ":xliff:requiresAnEmailToConnect",
 					"events": [
-						"onLoad",
 						"onClick"
 					],
 					"method": "FEATURES",
-					"focusable": false
+					"focusable": false,
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.server.authentication.email"
 				},
 				"authentication": {
 					"type": "button",
@@ -78,11 +80,12 @@
 					"height": 18,
 					"text": ":xliff:enablePushNotifications",
 					"events": [
-						"onLoad",
 						"onClick"
 					],
 					"method": "FEATURES",
-					"focusable": false
+					"focusable": false,
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.server.pushNotification"
 				}
 			}
 		}

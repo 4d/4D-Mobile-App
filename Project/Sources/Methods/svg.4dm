@@ -237,8 +237,13 @@ Else
 		Else 
 			
 			$o.success:=True:C214
-			$oOptions:=$2.options
-			$Txt_object:=String:C10($2.what)
+			
+			If (Count parameters:C259>=2)
+				
+				$oOptions:=$2.options
+				$Txt_object:=String:C10($2.what)
+				
+			End if 
 			
 			  // Find the target
 			Case of 

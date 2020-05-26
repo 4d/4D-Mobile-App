@@ -189,7 +189,7 @@ Function new  // Create a default SVG structure
 	
 	If (This:C1470.success)
 		
-		If (Count parameters:C259>1)
+		If (Count parameters:C259>=1)
 			
 			If ($1#Null:C1517)
 				

@@ -15,8 +15,10 @@ var $f;$e : Object
   // Initialisations
 $f:=panel_Definition 
 
+ASSERT:C1129(Not:C34(Shift down:C543))
+
   // ----------------------------------------------------
-If ($e.objectName=Null:C1517)  // <== Form method
+If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 	
 	$e:=panel_Form (On Load:K2:1;On Timer:K2:25)
 	
@@ -46,26 +48,8 @@ Else   // <== Widgets method
 			  //==================================================
 		: ($f.loginRequired.catch($e))
 			
-			Case of 
-					
-					  //_____________________________________
-				: ($e.code=On Load:K2:1)
-					
-					Self:C308->:=Num:C11(Bool:C1537(Form:C1466.server.authentication.email))
-					
-					  //_____________________________________
-				: ($e.code=On Clicked:K2:4)
-					
-					Form:C1466.server.authentication.email:=Bool:C1537(Self:C308->)
-					ui.saveProject()
-					
-					  //_____________________________________
-				Else 
-					
-					ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$e.description+")")
-					
-					  //_____________________________________
-			End case 
+			Form:C1466.server.authentication.email:=Bool:C1537(Form:C1466.server.authentication.email)
+			ui.saveProject()
 			
 			  //==================================================
 		: ($f.authenticationButton.catch($e))
@@ -75,26 +59,8 @@ Else   // <== Widgets method
 			  //  //==================================================
 		: ($f.pushNotification.catch($e))
 			
-			Case of 
-					
-					  //_____________________________________
-				: ($e.code=On Load:K2:1)
-					
-					Self:C308->:=Num:C11(Bool:C1537(Form:C1466.server.pushNotification))
-					
-					  //_____________________________________
-				: ($e.code=On Clicked:K2:4)
-					
-					Form:C1466.server.pushNotification:=Bool:C1537(Self:C308->)
-					ui.saveProject()
-					
-					  //_____________________________________
-				Else 
-					
-					ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$e.description+")")
-					
-					  //_____________________________________
-			End case 
+			Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
+			ui.saveProject()
 			
 			  //==================================================
 	End case 
