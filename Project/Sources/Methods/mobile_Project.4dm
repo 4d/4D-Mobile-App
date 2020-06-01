@@ -241,14 +241,18 @@ If ($Obj_in.create)
 	  //===============================================================
 	  // App manifest
 	
-	C_OBJECT:C1216($appManifest)
+	C_OBJECT:C1216($appManifest;$appFolder)
 	$appManifest:=New object:C1471(\
 		"application";New object:C1471("id";$Obj_project.product.bundleIdentifier);\
 		"team";New object:C1471("id";$Obj_project.organization.teamId))
 	$appManifest.id:=String:C10($appManifest.team.id)+"."+$appManifest.application.id
 	$appManifest.application.name:=$Obj_project.product.name
 	$appManifest.info:=$Obj_project.info
-	Folder:C1567(fk mobileApps folder:K87:18).folder($appManifest.id).file("manifest.json").setText(JSON Stringify:C1217($appManifest;*))
+	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18).folder($appManifest.id)
+	If (Not:C34($appFolder.exists))
+		$appFolder.create()
+	End if 
+	$appFolder.file("manifest.json").setText(JSON Stringify:C1217($appManifest;*))
 	
 	  //===============================================================
 	
