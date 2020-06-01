@@ -238,11 +238,14 @@ Else
 			
 			$o.success:=True:C214
 			
-			If (Count parameters:C259>=2)
+			If (Count parameters:C259>1)
 				
-				$oOptions:=$2.options
-				$Txt_object:=String:C10($2.what)
-				
+				If (Value type:C1509($2)=Is object:K8:27)
+					
+					$oOptions:=$2.options
+					$Txt_object:=String:C10($2.what)
+					
+				End if 
 			End if 
 			
 			  // Find the target
@@ -467,7 +470,7 @@ Else
 							$o:=svg ("save";$2)
 							
 							  //______________________________________________________
-						: ($Txt_object="picture")
+						: ($2.what="picture")
 							
 							SVG EXPORT TO PICTURE:C1017($o.root;$p)
 							$o.success:=(Picture size:C356($p)>0)
@@ -515,7 +518,7 @@ Else
 						
 					Else 
 						
-						$o.errors.push("Failed to save SVG structure as "+$Txt_object+".")
+						$o.errors.push("Failed to save SVG structure as "+String:C10($2.what)+".")
 						
 					End if 
 					

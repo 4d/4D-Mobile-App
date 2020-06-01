@@ -171,7 +171,7 @@ Else
 			  //______________________________________________________
 		: ($1="cellPosition")  // Current cell indexes
 			
-			If (Form event code:C388=On Clicked:K2:4)
+			If (Form event code:C388=On Clicked:K2:4) | (Form event code:C388=On Double Clicked:K2:5)
 				
 				LISTBOX GET CELL POSITION:C971(*;$o.name;$Lon_column;$Lon_row)
 				

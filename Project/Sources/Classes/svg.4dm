@@ -13,7 +13,12 @@ Class constructor
 	This:C1470.origin:=Null:C1517
 	This:C1470.file:=Null:C1517
 	This:C1470.store:=New collection:C1472
-	This:C1470[""]:=New object:C1471("_attributes";New collection:C1472("target";"left";"top";"width";"height";"codec"))
+	This:C1470[""]:=New object:C1471(\
+		"_attributes";New collection:C1472("target";\
+		"left";"top";\
+		"width";"height";\
+		"codec"))
+	
 	  //This.target:=Formula(Choose($1.target=Null;Choose(This.latest#Null;This.latest;This.root);String($1.target)))
 	
 	If (Count parameters:C259>0)
@@ -27,7 +32,7 @@ Class constructor
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function target
+Function _target
 	
 	C_TEXT:C284($0)
 	C_VARIANT:C1683($1)
@@ -86,12 +91,11 @@ Function target
 				
 			Else 
 				
-				This:C1470.target("latest")
+				This:C1470._target("latest")
 				
 			End if 
 			
 			  //______________________________________________________
-			
 		Else 
 			
 			This:C1470.success:=False:C215
@@ -106,31 +110,51 @@ Function push  // Keep dom reference for futur
 	C_OBJECT:C1216($0)
 	C_TEXT:C284($1)
 	
-	This:C1470.success:=(This:C1470.store.query("id=:1";$1).pop()=Null:C1517)
-	
-	If (This:C1470.success)
+	If (Count parameters:C259>=1)
 		
-		This:C1470.store.push(New object:C1471(\
-			"id";$1;\
-			"dom";This:C1470.latest))
+		This:C1470.success:=(This:C1470.store.query("id=:1";$1).pop()=Null:C1517)
+		
+		If (This:C1470.success)
+			
+			This:C1470.store.push(New object:C1471(\
+				"id";$1;\
+				"dom";This:C1470.latest))
+			
+		Else 
+			
+			This:C1470.errors.push("The element \""+$1+"\" already exists")
+			
+		End if 
 		
 	Else 
 		
-		This:C1470.errors.push("The element \""+$1+"\" already exists")
+		This:C1470.store.push(New object:C1471(\
+			"id";Generate UUID:C1066;\
+			"dom";This:C1470.latest))
 		
 	End if 
 	
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function fetch  // Retrive a stored dom reference
+Function fetch  // Retrieve a stored dom reference
 	
 	C_TEXT:C284($0)
 	C_TEXT:C284($1)
 	
 	C_OBJECT:C1216($o)
 	
-	$o:=This:C1470.store.query("id=:1";$1).pop()
+	If (Count parameters:C259>=1)
+		
+		$o:=This:C1470.store.query("id=:1";$1).pop()
+		
+	Else 
+		
+		  // Lastest
+		$o:=New object:C1471("dom";This:C1470.latest)
+		
+	End if 
+	
 	This:C1470.success:=($o#Null:C1517)
 	
 	If (This:C1470.success)
@@ -321,54 +345,80 @@ Function close  // Close XML tree
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function show  // Show in 4D SVG Viewer
+Function id
+	
+	C_TEXT:C284($1)
+	
+	C_TEXT:C284($node)
+	$node:=This:C1470._target()
+	
+	DOM SET XML ATTRIBUTE:C866($node;"id";$1)
 	
 	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function show  // Show in 4D SVG Viewer
+	
 	
 	  //#TO_DO: Should test if the component is available
 	EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER";*;This:C1470.root)
 	
+	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function rect
 	
-	C_OBJECT:C1216($0)
-	C_VARIANT:C1683($1;$2)
+	C_LONGINT:C283($1)
+	C_VARIANT:C1683($2)
 	C_VARIANT:C1683($3)
 	
-	C_VARIANT:C1683($vWidth)
+	C_LONGINT:C283($height;$vWidth)
 	C_TEXT:C284($node)
 	
-	If (Count parameters:C259>1)
-		
-		$vWidth:=Choose:C955($2#Null:C1517;$2;$1)
-		
-	Else 
-		
-		  // Square
-		$vWidth:=$1
-		
-	End if 
+	$height:=$1
+	$vWidth:=$1  // Square (default)
 	
-	$node:=This:C1470.target($3)
-	
-	If (This:C1470.success)
+	If (Count parameters:C259>=1)
 		
-		This:C1470.latest:=DOM Create XML element:C865($node;"rect";\
-			"width";$1;\
-			"height";$vWidth)
-		
-		This:C1470.success:=Bool:C1537(OK)
-		
-		If (Count parameters:C259>2)\
-			 & (This:C1470.success)
+		If (Value type:C1509($2)=Is real:K8:4)
 			
-			This:C1470.attributes($3)
+			$vWidth:=$2
+			
+			If (Count parameters:C259>=2)
+				
+				$node:=This:C1470._target($3)
+				
+			Else 
+				
+				$node:=This:C1470.latest
+				
+			End if 
+			
+		Else 
+			
+			$node:=This:C1470._target($2)
 			
 		End if 
 	End if 
 	
+	
+	This:C1470.latest:=DOM Create XML element:C865($node;"rect";\
+		"width";$height;\
+		"height";$vWidth)
+	
+	This:C1470.success:=Bool:C1537(OK)
+	
+	  //If (Count parameters>2)\
+								 & (This.success)
+	
+	  //This.attributes($3)
+	
+	  //End if 
+	
+	
+	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -392,11 +442,11 @@ Function group
 	
 	If (Count parameters:C259>=1)
 		
-		$node:=This:C1470.target($1)
+		$node:=This:C1470._target($1)
 		
 	Else 
 		
-		$node:=This:C1470.target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -408,14 +458,13 @@ Function group
 /*———————————————————————————————————————————————————————————*/
 Function position
 	
-	C_OBJECT:C1216($0)
 	C_LONGINT:C283($1)  // x
 	C_VARIANT:C1683($2)  // {y | unit}
 	C_TEXT:C284($3)  //    {unit}
 	
 	C_TEXT:C284($node)
 	
-	$node:=This:C1470.target()
+	$node:=This:C1470._target()
 	This:C1470.success:=($node#This:C1470.root)
 	
 	If (This:C1470.success)
@@ -423,7 +472,7 @@ Function position
 		If (Value type:C1509($2)=Is text:K8:3)
 			
 			DOM SET XML ATTRIBUTE:C866($node;\
-				"x";String:C10($1;"&xml")+String:C10($2))
+				"x";String:C10(Num:C11($1);"&xml")+String:C10($2))
 			
 		Else 
 			
@@ -431,13 +480,13 @@ Function position
 				
 				DOM SET XML ATTRIBUTE:C866($node;\
 					"x";String:C10($1;"&xml")+String:C10($3);\
-					"y";String:C10($2;"&xml")+String:C10($3))
+					"y";String:C10(Num:C11($2);"&xml")+String:C10($3))
 				
 			Else 
 				
 				DOM SET XML ATTRIBUTE:C866($node;\
 					"x";$1;\
-					"y";$2)
+					"y";Num:C11($2))
 				
 			End if 
 		End if 
@@ -450,6 +499,83 @@ Function position
 		
 	End if 
 	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function dimensions
+	
+	C_VARIANT:C1683($1)  // width
+	C_VARIANT:C1683($2)  // {height | unit}
+	C_TEXT:C284($3)  //    {unit}
+	
+	C_TEXT:C284($node;$t)
+	$node:=This:C1470._target()
+	DOM GET XML ELEMENT NAME:C730($node;$t)
+	
+	If ($t="textArea")
+		
+		Case of 
+				
+				  //______________________________________________________
+			: (Count parameters:C259=0)
+				
+				DOM SET XML ATTRIBUTE:C866($node;\
+					"width";"auto";\
+					"height";"auto")
+				
+				  //______________________________________________________
+			: (Count parameters:C259>=3)
+				
+				DOM SET XML ATTRIBUTE:C866($node;\
+					"width";Choose:C955($1=Null:C1517;"auto";String:C10($1;"&xml")+String:C10($3));\
+					"height";Choose:C955($2=Null:C1517;"auto";String:C10($2;"&xml")+String:C10($3)))
+				
+				  //______________________________________________________
+			: (Count parameters:C259>=2)
+				
+				DOM SET XML ATTRIBUTE:C866($node;\
+					"width";Choose:C955($1=Null:C1517;"auto";String:C10($1;"&xml"));\
+					"height";Choose:C955($2=Null:C1517;"auto";String:C10($2;"&xml")))
+				
+				  //______________________________________________________
+			: (Count parameters:C259>=1)
+				
+				DOM SET XML ATTRIBUTE:C866($node;\
+					"width";Choose:C955($1=Null:C1517;"auto";String:C10($1;"&xml")))
+				
+				  //______________________________________________________
+		End case 
+		
+	Else 
+		
+		Case of 
+				
+				  //______________________________________________________
+			: (Count parameters:C259>=3)
+				
+				DOM SET XML ATTRIBUTE:C866($node;\
+					"width";String:C10($1;"&xml")+String:C10($3);\
+					"height";String:C10($2;"&xml")+String:C10($3))
+				
+				  //______________________________________________________
+			: (Count parameters:C259>=2)
+				
+				DOM SET XML ATTRIBUTE:C866($node;\
+					"width";String:C10($1;"&xml");\
+					"height";String:C10($2;"&xml"))
+				
+				  //______________________________________________________
+			: (Count parameters:C259>=1)
+				
+				DOM SET XML ATTRIBUTE:C866($node;\
+					"width";String:C10($1;"&xml"))
+				
+				  //______________________________________________________
+		End case 
+	End if 
+	
+	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -466,7 +592,7 @@ Function attributes
 		
 		If ($1#Null:C1517)
 			
-			$node:=This:C1470.target($1)
+			$node:=This:C1470._target($1)
 			$c:=This:C1470[""]._attributes
 			
 			For each ($key;$1)
@@ -481,8 +607,8 @@ Function attributes
 						
 					Else 
 						
-						  //This.success:=False
-						  //This.errors.push("Invalid values pair for an attribute.")
+						  // This.success:=False
+						  // This.errors.push("Invalid values pair for an attribute.")
 						
 					End if 
 				End if 
@@ -499,11 +625,11 @@ Function attributes
 		Else 
 			
 			  //If (Value type($1)=Is text)
-			
 			  //  // Remove
 			  //DOM REMOVE XML ATTRIBUTE(This.latest;$1)
 			
-			  //End if 
+			  // End if
+			
 		End if 
 		
 		This:C1470.success:=Bool:C1537(OK)
@@ -511,3 +637,403 @@ Function attributes
 	End if 
 	
 	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function fill
+	
+	C_TEXT:C284($1)  // Color
+	C_VARIANT:C1683($2)  // {target}
+	
+	C_TEXT:C284($node)
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._target($2)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	If ($node=This:C1470.root)
+		
+		DOM SET XML ATTRIBUTE:C866($node;\
+			"viewport-fill";$1)
+		
+	Else 
+		
+		DOM SET XML ATTRIBUTE:C866($node;\
+			"fill";$1)
+		
+	End if 
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function stroke
+	
+	C_TEXT:C284($1)  // Color
+	C_VARIANT:C1683($2)  // {target}
+	
+	C_TEXT:C284($node)
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._target($2)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	DOM SET XML ATTRIBUTE:C866($node;\
+		"stroke";$1)
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function fillOpacity
+	
+	C_REAL:C285($1)  // opacity
+	C_VARIANT:C1683($2)  // {target}
+	
+	C_TEXT:C284($node)
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._target($2)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	If ($node=This:C1470.root)
+		
+		DOM SET XML ATTRIBUTE:C866($node;\
+			"viewport-fill-opacity";$1)
+		
+	Else 
+		
+		DOM SET XML ATTRIBUTE:C866($node;\
+			"fill-opacity";$1)
+		
+	End if 
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function embedPicture
+	
+	C_PICTURE:C286($1)  // Picture
+	C_VARIANT:C1683($2)  // {target}
+	
+	C_TEXT:C284($node)
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._target($2)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	This:C1470.success:=(Picture size:C356($1)>0)
+	
+	If (This:C1470.success)
+		
+		  // Encode in base64
+		C_BLOB:C604($x)
+		PICTURE TO BLOB:C692($1;$x;".png")
+		This:C1470.success:=Bool:C1537(OK)
+		
+		If (This:C1470.success)
+			
+			C_TEXT:C284($t)
+			BASE64 ENCODE:C895($x;$t)
+			CLEAR VARIABLE:C89($x)
+			
+			  // Put the encoded image
+			C_LONGINT:C283($width;$height)
+			PICTURE PROPERTIES:C457($1;$width;$height)
+			
+			This:C1470.latest:=DOM Create XML element:C865($node;"image";\
+				"xlink:href";"data:;base64,"+$t;\
+				"x";0;\
+				"y";0;\
+				"width";$width;\
+				"height";$height)
+			
+			This:C1470.success:=Bool:C1537(OK)
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.errors.push("Given picture is empty")
+		
+	End if 
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function image
+	
+	C_OBJECT:C1216($1)  // File
+	C_VARIANT:C1683($2)  // {target}
+	
+	C_TEXT:C284($node)
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._target($2)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	This:C1470.success:=Bool:C1537($1.exists)
+	
+	If (This:C1470.success)
+		
+		C_PICTURE:C286($p)
+		C_TEXT:C284($t)
+		$t:=$1.platformPath
+		READ PICTURE FILE:C678($t;$p)
+		This:C1470.success:=Bool:C1537(OK)
+		
+		If (This:C1470.success)
+			
+			C_LONGINT:C283($width;$height)
+			PICTURE PROPERTIES:C457($p;$width;$height)
+			CLEAR VARIABLE:C89($p)
+			
+			This:C1470.success:=Bool:C1537(OK)
+			
+			If (This:C1470.success)
+				
+				$t:="file:/"+"/"\
+					+Choose:C955(Is Windows:C1573;"/";"")\
+					+Replace string:C233($1.path;" ";"%20")
+				
+				This:C1470.latest:=DOM Create XML element:C865($node;"image";\
+					"xlink:href";$t;\
+					"x";0;\
+					"y";0;\
+					"width";$width;\
+					"height";$height)
+				
+				This:C1470.success:=Bool:C1537(OK)
+				
+			End if 
+		End if 
+		
+		If (Not:C34(This:C1470.success))
+			
+			This:C1470.errors.push("Failed to create image \""+String:C10($1.path)+"\"")
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.errors.push("File not found \""+String:C10($1.path)+"\"")
+		
+	End if 
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function textArea
+	
+	C_TEXT:C284($1)  // Text
+	C_VARIANT:C1683($2)  // {target}
+	
+	C_TEXT:C284($node)
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._target($2)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	This:C1470.latest:=DOM Create XML element:C865($node;"textArea";\
+		"x";0;\
+		"y";0;\
+		"width";"auto";\
+		"height";"auto")
+	
+	If (Bool:C1537(OK))\
+		 & (Length:C16($1)>0)
+		
+		C_TEXT:C284($t;$tt)
+		C_LONGINT:C283($i)
+		$t:=Replace string:C233(String:C10($1);"\r\n";"\r")
+		
+		Repeat 
+			
+			$i:=Position:C15("\r";$t)
+			
+			If ($i=0)
+				
+				$i:=Position:C15("\n";$t)
+				
+			End if 
+			
+			If ($i>0)
+				
+				$tt:=Substring:C12($t;1;$i-1)
+				
+				If (Length:C16($tt)>0)
+					
+					$node:=DOM Append XML child node:C1080(This:C1470.latest;XML DATA:K45:12;$tt)
+					
+				End if 
+				
+				$node:=DOM Append XML child node:C1080(This:C1470.latest;XML ELEMENT:K45:20;"tbreak")
+				
+				$t:=Delete string:C232($t;1;Length:C16($tt)+1)
+				
+			Else 
+				
+				If (Length:C16($t)>0)
+					
+					$node:=DOM Append XML child node:C1080(This:C1470.latest;XML DATA:K45:12;$t)
+					
+				End if 
+			End if 
+		Until ($i=0)\
+			 | (OK=0)
+		
+	End if 
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function getPicture
+	
+	C_PICTURE:C286($0)
+	C_VARIANT:C1683($1)
+	C_BOOLEAN:C305($2)
+	
+	C_PICTURE:C286($p)
+	
+	Case of 
+			
+			  //______________________________________________________
+		: (Count parameters:C259>=2)
+			
+			SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Num:C11($1))
+			
+			If (This:C1470.autoClose)\
+				 & (Not:C34($2))
+				
+				This:C1470.close()
+				
+			End if 
+			
+			  //______________________________________________________
+		: (Count parameters:C259>=1)
+			
+			If (Value type:C1509($1)=Is boolean:K8:9)
+				
+				SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Copy XML data source:K45:17)
+				
+				If (This:C1470.autoClose)\
+					 & (Not:C34($1))
+					
+					This:C1470.close()
+					
+				End if 
+				
+			Else 
+				
+				SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Num:C11($1))
+				
+				If (This:C1470.autoClose)
+					
+					This:C1470.close()
+					
+				End if 
+			End if 
+			
+			  //______________________________________________________
+		Else 
+			
+			SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Copy XML data source:K45:17)
+			
+			If (This:C1470.autoClose)
+				
+				This:C1470.close()
+				
+			End if 
+			
+			  //______________________________________________________
+	End case 
+	
+	This:C1470.success:=(Picture size:C356($p)>0)
+	
+	If (This:C1470.success)
+		
+		This:C1470.picture:=$p
+		
+	Else 
+		
+		This:C1470.picture:=Null:C1517
+		This:C1470.errors.push("Failed to convert SVG structure as picture.")
+		
+	End if 
+	
+	$0:=$p
+	
+/*———————————————————————————————————————————————————————————*/
+Function getText
+	
+	C_TEXT:C284($0)
+	C_BOOLEAN:C305($1)
+	
+	C_TEXT:C284($t)
+	DOM EXPORT TO VAR:C863(This:C1470.root;$t)
+	This:C1470.success:=Bool:C1537(OK)
+	
+	If (This:C1470.success)
+		
+		This:C1470.xml:=$t
+		
+		If (This:C1470.autoClose)
+			
+			If (Count parameters:C259>=1)
+				
+				If (Not:C34($1))
+					
+					This:C1470.close()
+					
+				End if 
+				
+			Else 
+				
+				This:C1470.close()
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		This:C1470.xml:=Null:C1517
+		This:C1470.errors.push("Failed to export SVG structure as XML.")
+		
+	End if 
+	
+	$0:=$t
+	

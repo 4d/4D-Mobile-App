@@ -43,7 +43,7 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		
 	End if 
 	
-	$oParams.x:=1  // Start x
+	$oParams.x:=0  // Start x
 	$oParams.y:=0  // Start y
 	
 	$oParams.cell:=New object:C1471(\
@@ -55,13 +55,14 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 		"height";110)
 	
 	$oParams.hOffset:=5
-	$oParams.maxChar:=18  //Choose(Get database localization="ja";9;18)
+	$oParams.maxChar:=18  // Choose(Get database localization="ja";9;18)
 	
 	$oParams.selectedFill:=ui.colors.backgroundSelectedColor.hex
 	$oParams.selectedStroke:=ui.colors.strokeColor.hex
 	
 	$str:=str ()
-	$svg:=svg ()
+	
+	$svg:=cs:C1710.svg.new()
 	
 Else 
 	
@@ -76,22 +77,25 @@ If ($oDataModel#Null:C1517)
 	
 /* START HIDING ERRORS */$errors:=err .hide()
 	
+	var $tFill;$tStroke : Text
+	
 	For each ($tTable;$oDataModel)
 		
 		$bSelected:=($tTable=String:C10($oParams.tableNumber))
 		
+		$tFill:=Choose:C955($bSelected;$oParams.selectedFill;"none")
+		$tStroke:=Choose:C955($bSelected;$oParams.selectedStroke;"none")
+		
 		  // Create a table group. filled according to selected status
-		$domTable:=$svg.group($tTable)\
-			.setFill(Choose:C955($bSelected;$oParams.selectedFill;"none")).latest
+		$svg.group("root")\
+			.id($tTable)\
+			.fill($tFill)\
+			.push($tTable)  // Memorize table group address
 		
 		  // Background
-		$svg.rect($oParams.x;$oParams.y;$oParams.cell.width;$oParams.cell.height;$domTable)\
-			.setStroke(Choose:C955($bSelected;$oParams.selectedFill;"none"))
-		
-		  // Border & reactive 'button'
-		$svg.rect($oParams.x+1;$oParams.y+1;$oParams.cell.width;$oParams.cell.height;$domTable)\
-			.setStroke(Choose:C955($bSelected;$oParams.selectedStroke;"none"))\
-			.setFill("white";5)
+		$svg.rect($oParams.cell.width;$oParams.cell.height;$tTable)\
+			.position($oParams.x;$oParams.y)\
+			.stroke($tFill)
 		
 		  // Put the icon [
 		If (Form:C1466[$tTypeForm][$tTable].form=Null:C1517)
@@ -125,27 +129,22 @@ If ($oDataModel#Null:C1517)
 				CLEAR VARIABLE:C89($x)
 				
 				CREATE THUMBNAIL:C679($p;$p;$oParams.icon.width;$oParams.icon.width)
-				$svg.embedPicture($p;$oParams.x+18;5;New object:C1471(\
-					"target";$domTable))
+				$svg.embedPicture($p;$tTable).position($oParams.x+18;5)
 				CLEAR VARIABLE:C89($p)
 				
 			Else 
 				
-				$svg.image($file;New object:C1471(\
-					"target";$domTable;\
-					"left";$oParams.x+($oParams.cell.width/2)-($oParams.icon.width/2);\
-					"top";$oParams.y+5))\
-					.setDimensions($oParams.icon.width)
+				$svg.image($file;$tTable)\
+					.position($oParams.x+($oParams.cell.width/2)-($oParams.icon.width/2);$oParams.y+5)\
+					.dimensions($oParams.icon.width;$oParams.icon.width)
 				
 			End if 
 			
 		Else 
 			
-			$svg.image($file;New object:C1471(\
-				"target";$domTable;\
-				"left";$oParams.x+($oParams.cell.width/2)-($oParams.icon.width/2);\
-				"top";$oParams.y+5))\
-				.setDimensions($oParams.icon.width)
+			$svg.image($file;$tTable)\
+				.position($oParams.x+($oParams.cell.width/2)-($oParams.icon.width/2);$oParams.y+5)\
+				.dimensions($oParams.icon.width)
 			
 		End if 
 		
@@ -158,10 +157,20 @@ If ($oDataModel#Null:C1517)
 			
 		End if 
 		
-		$svg.textArea($str.setText($tName).truncate($oParams.maxChar);$oParams.x;$oParams.cell.height-20;New object:C1471("target";$domTable))\
-			.setDimensions($oParams.cell.width;14)\
-			.setFill(Choose:C955($bSelected;"dimgray";"dimgray"))\
-			.setAttribute("text-align";"center")
+		var $t : Text
+		$t:=$str.setText($tName).truncate($oParams.maxChar)
+		
+		$svg.textArea($t;$tTable)\
+			.position($oParams.x;$oParams.cell.height-18)\
+			.dimensions($oParams.cell.width)\
+			.attributes("text-align";"center")\
+			.fill(Choose:C955($bSelected;"dimgray";"dimgray"))
+		
+		  // Border & reactive 'button'
+		$svg.rect(Num:C11($oParams.cell.width);Num:C11($oParams.cell.height);$tTable)\
+			.position(Num:C11($oParams.x)+1;Num:C11($oParams.y)+1)\
+			.stroke($tStroke)\
+			.fill("white").fillOpacity(0.05)
 		
 		$oParams.x:=$oParams.x+$oParams.cell.width+$oParams.hOffset
 		

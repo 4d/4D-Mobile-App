@@ -28,6 +28,32 @@ Case of
 		  //________________________________________
 	: (True:C214)
 		
+		$root:=DOM Create XML Ref:C861("root")
+		
+		If (False:C215)
+			
+			$t:=DOM Create XML element:C865($root;"element_1";"id";1)
+			$t:=DOM Create XML element:C865($root;"element_2";"id";2)
+			$t:=DOM Create XML element:C865($root;"element_3";"id";3)
+			
+		Else 
+			
+			  //ACI0100854 - DOM Create XML element - Creates elements in inverse order
+			
+			$t:=DOM Create XML element:C865($root;"rect";"id";1)
+			$t:=DOM Create XML element:C865($root;"rect";"id";2)
+			$t:=DOM Create XML element:C865($root;"rect";"id";3)
+			
+		End if 
+		
+		DOM EXPORT TO VAR:C863($root;$t)
+		DOM CLOSE XML:C722($root)
+		
+		SET TEXT TO PASTEBOARD:C523($t)
+		
+		  //________________________________________
+	: (True:C214)
+		
 		$c:=New collection:C1472(\
 			New object:C1471("name";"Dupont");\
 			New object:C1471("name";"Durant");\

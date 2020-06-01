@@ -553,9 +553,9 @@ Function popup
 			End if 
 			
 			  //______________________________________________________
-		: (Asserted:C1132(Count parameters:C259=1;"Missing parameter"))
+		: (Count parameters:C259<2)
 			
-			  // ERROR
+			ASSERT:C1129(False:C215;"Missing x & y parameters")
 			
 			  //______________________________________________________
 		Else   // x ; y  (no item selected)

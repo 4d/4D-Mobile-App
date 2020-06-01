@@ -104,10 +104,10 @@
 			"C_OPEN_MOBILE_PROJECT",
 			"COMPILER_API",
 			"mobileUnit",
-			"unit"
+			"unit4D"
 		],
 		"classes": [
-			"mobileUnit"
+			"unit4D"
 		]
 	},
 	"[BROWSER]": {
