@@ -15,7 +15,7 @@ If (False:C215)  // Unit test
 	C_OBJECT:C1216(mobileUnit ;$2)
 	
 	  //_______________________________________
-	C_OBJECT:C1216(unit4D ;$0)
+	C_OBJECT:C1216(internalTests ;$0)
 	
 	  //_______________________________________
 End if 
