@@ -243,11 +243,10 @@ If ($Obj_in.create)
 	
 	C_OBJECT:C1216($appManifest;$appFolder)
 	$appManifest:=New object:C1471(\
-		"application";New object:C1471("id";$Obj_project.product.bundleIdentifier);\
-		"team";New object:C1471("id";$Obj_project.organization.teamId))
+		"application";New object:C1471("id";$Obj_project.product.bundleIdentifier;"name";$Obj_project.product.name);\
+		"team";New object:C1471("id";$Obj_project.organization.teamId);\
+		"info";$Obj_project.info)
 	$appManifest.id:=String:C10($appManifest.team.id)+"."+$appManifest.application.id
-	$appManifest.application.name:=$Obj_project.product.name
-	$appManifest.info:=$Obj_project.info
 	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18).folder($appManifest.id)
 	If (Not:C34($appFolder.exists))
 		$appFolder.create()
@@ -286,7 +285,7 @@ If ($Obj_in.create)
 		"action";"install";\
 		"file";COMPONENT_Pathname ("sdk").platformPath+$Obj_template.sdk.version+".zip";\
 		"target";$Obj_in.path;\
-		"cache";Folder:C1567("/Library/Caches/com.4d.mobile/sdk").platformPath))
+		"cache";sdk (New object:C1471("action";"cacheFolder")).platformPath))
 	
 	$Obj_tags.sdkVersion:=String:C10($Obj_out.sdk.version)
 	

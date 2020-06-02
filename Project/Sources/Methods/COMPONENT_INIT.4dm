@@ -156,7 +156,7 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 	If (SHARED.component.build#Num:C11($oPreferences.lastBuild)) | $bReset
 		
 		  // Invalid the cache
-		$o:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")
+		$o:=sdk (New object:C1471("action";"cacheFolder"))
 		
 		If ($o.exists)
 			

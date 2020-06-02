@@ -53,6 +53,10 @@ End if
 If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 	
 	Case of 
+			  //______________________________________________________
+		: ($Obj_param.action="cacheFolder")
+			
+			$Obj_result:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")
 			
 			  //______________________________________________________
 		: ($Obj_param.action="install")
@@ -153,7 +157,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						  //#ACI0098572 [
 						  //$Obj_param.cache:=env_userPath ("cacheSdk")  //   Just copy if cache exist, else unzip
 						  //$Obj_param.cache:=Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")  //   Just copy if cache exist, else unzip
-						$Obj_param.cacheFolder:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")
+						$Obj_param.cacheFolder:=sdk (New object:C1471("action";"cacheFolder"))
 						$Obj_param.cache:=$Obj_param.cacheFolder.platformPath  // Just copy if cache exist, else unzip
 						  //]
 						

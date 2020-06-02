@@ -197,6 +197,7 @@ If ($Boo_plus)
 		$menu.append("openTheCacheFolder";"_openCache")
 		
 		If ($Boo_dev)
+			$menu.append(". Open the SDK Cache Folder";"_openSDKCache")
 			
 			$menu.append(".🗑 Clear Cache folder";"_clearCache")
 			
@@ -412,6 +413,11 @@ Case of
 	: ($menu.choice="_openCache")
 		
 		SHOW ON DISK:C922(env_userPathname ("cache").platformPath)
+		
+		  //______________________________________________________
+	: ($menu.choice="_openSDKCache")
+		
+		SHOW ON DISK:C922(sdk (New object:C1471("action";"cacheFolder")).platformPath)
 		
 		  //______________________________________________________
 	: ($menu.choice="_clearCache")
