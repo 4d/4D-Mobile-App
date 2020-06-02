@@ -408,7 +408,7 @@ FEATURES FLAGS
 ================================================================================================================================*/
 If (OB Is empty:C1297(feature)) | $bReset
 	
-	FEATURE_FLAGS (1840;$oPreferences.feature)
+	FEATURE_FLAGS (1840;$oPreferences)
 	
 End if 
 

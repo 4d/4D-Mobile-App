@@ -130,9 +130,10 @@ feature.alias("droppingNext";114338)
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES
 ________________________________________*/
-If ($o_preferences#Null:C1517)
+
+If ($o_preferences.features#Null:C1517)
 	
-	For each ($o;$o_preferences)
+	For each ($o;$o_preferences.features)
 		
 		If (Value type:C1509($o.enabled)=Is boolean:K8:9)
 			
