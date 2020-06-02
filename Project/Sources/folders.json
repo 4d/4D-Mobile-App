@@ -103,8 +103,8 @@
 			"C_NEW_MOBILE_PROJECT",
 			"C_OPEN_MOBILE_PROJECT",
 			"COMPILER_API",
-			"mobileUnit",
-			"unit4D"
+			"internalTests",
+			"mobileUnit"
 		],
 		"classes": [
 			"unit4D"

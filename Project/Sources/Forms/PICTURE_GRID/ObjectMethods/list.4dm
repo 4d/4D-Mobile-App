@@ -98,7 +98,7 @@ Case of
 		  //______________________________________________________
 	: ($event.code=On Mouse Move:K2:35)
 		
-		$index:=(LISTBOX Get number of columns:C831(*;$event.objectName)*($event.row-1))+$event.column
+		$index:=(LISTBOX Get number of columns:C831(*;$event.objectName)*(Num:C11($event.row)-1))+Num:C11($event.column)
 		
 		If ($index>0)\
 			 & ($index<=Form:C1466.pictures.length)
