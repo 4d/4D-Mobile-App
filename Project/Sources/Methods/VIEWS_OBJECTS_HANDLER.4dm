@@ -541,6 +541,9 @@ Case of
 						
 						$0:=0
 						
+						SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".cancel";"visibility";"hidden")
+						SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".g";"fill-opacity";0.2;"stroke-opacity";0.5)
+						
 						  // Get the dragged field
 						$indx:=Num:C11($context.current)-1
 						$o:=Form:C1466.detail[Form:C1466.$dialog.VIEWS.tableNumber].fields[$indx]
@@ -572,6 +575,11 @@ Case of
 			: ($event.code=On Drag Over:K2:13)
 				
 				$0:=$form.drag()
+				
+				  //______________________________________________________
+			: ($event.code=On Mouse Up:K2:58)
+				
+				  //
 				
 				  //______________________________________________________
 			: ($event.code=On Mouse Enter:K2:33)

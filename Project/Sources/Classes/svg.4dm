@@ -44,6 +44,11 @@ Function _target
 	Case of 
 			
 			  //______________________________________________________
+		: (Count parameters:C259<1)
+			
+			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
+			
+			  //______________________________________________________
 		: (Value type:C1509($1)=Is undefined:K8:13)
 			
 			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
@@ -411,7 +416,7 @@ Function rect
 	This:C1470.success:=Bool:C1537(OK)
 	
 	  //If (Count parameters>2)\
-								 & (This.success)
+										 & (This.success)
 	
 	  //This.attributes($3)
 	
