@@ -94,7 +94,7 @@ Case of
 					"widgets";New collection:C1472($Obj_form.doNotGenerate)))
 				
 				  // Declare check box as boolean (NO MORE NECESSARY IN JSON FORM)
-				  //EXECUTE FORMULA("C_BOOLEAN:C305((OBJECT Get pointer:C1124(Object named:K67:5;\"doNotGenerate\"))->)")
+				  // EXECUTE FORMULA("C_BOOLEAN:C305((OBJECT Get pointer:C1124(Object named:K67:5;\"doNotGenerate\"))->)")
 				
 				$Obj_form.ui.testServer()
 				
@@ -210,9 +210,9 @@ Case of
 		
 		If ($Obj_form.ui.remote())
 			
-			$Obj_result:=$Obj_in.response
+			$Obj_result:=Choose:C955($Obj_in.response=Null:C1517;New object:C1471;$Obj_in.response)
 			
-			If (Not:C34($Obj_result.success))
+			If (Not:C34(Bool:C1537($Obj_result.success)))
 				
 				If (String:C10($Obj_result.errors[0].message)="The request is unauthorized")\
 					 | (String:C10($Obj_result.errors[0].message)="This request is forbidden")
@@ -262,40 +262,73 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="checkingServerConfiguration")
 		
-		If ($Obj_form.ui.remote())
+		If (feature.with("sourceClass"))
 			
-			  // Verify the production server adress
-			If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
+			var $oSource : Object
+			$oSource:=cs:C1710.source.new()
+			
+			If ($Obj_form.ui.remote())
 				
-				If (Length:C16(String:C10(Form:C1466.dataSource.keyPath))>0)
+				ASSERT:C1129(Not:C34(Shift down:C543))
+				
+				  // Verify the production server adress
+				If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
 					
-					$t:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
+					C_BOOLEAN:C305($ok)
+					$ok:=Not:C34(WEB Get server info:C1531.started)
 					
-					If (Test path name:C476($t)#Is a document:K24:1)
+					If (Not:C34($ok))
 						
-						$t:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+						$ok:=(Position:C15("127.0.0.1";Form:C1466.server.urls.production)=0)\
+							 & (Position:C15("localhost";Form:C1466.server.urls.production)=0)
 						
 					End if 
 					
-					var $file : Object
-					$file:=File:C1566($t;fk platform path:K87:2)
-					
-					  //If (Test path name($t)=Is a document)
-					If ($file.exists)  // & Shift down
+					If ($ok)
 						
-						  // Test server
-						If (Not:C34(Bool:C1537($Obj_form.ui.serverInTest)))
+						If (Length:C16(String:C10(Form:C1466.dataSource.keyPath))>0)
 							
-							$Obj_form.ui.serverInTest:=True:C214
+							$t:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
 							
-							  //CALL WORKER(Form.$worker;"Rest";New object(\
-																"caller";$Obj_form.window;\
-																"action";"status";\
-																"handler";"mobileapp";\
-																"timeout";60;\
-																"url";Form.server.urls.production;\
-																"headers";New object("X-MobileApp";"1";\
-																"Authorization";"Bearer "+Document to text($t))))
+							If (Test path name:C476($t)#Is a document:K24:1)
+								
+								$t:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+								
+							End if 
+							
+							var $file : Object
+							$file:=File:C1566($t;fk platform path:K87:2)
+							
+							If ($file.exists)  // & Shift down
+								
+								  // Test server
+								If (Not:C34(Bool:C1537($Obj_form.ui.serverInTest)))
+									
+									$Obj_form.ui.serverInTest:=True:C214
+									
+									CALL WORKER:C1389(Form:C1466.$worker;"Rest";New object:C1471(\
+										"caller";$Obj_form.window;\
+										"action";"status";\
+										"handler";"mobileapp";\
+										"timeout";60;\
+										"url";Form:C1466.server.urls.production;\
+										"headers";New object:C1471("X-MobileApp";"1";\
+										"Authorization";"Bearer "+$file.getText())))
+									
+								End if 
+								
+							Else 
+								
+								$Obj_result:=New object:C1471(\
+									"success";False:C215;\
+									"title";Get localized string:C991("locateTheKey");\
+									"message";Get localized string:C991("theKeyFileIsNotAvailable")+"\r"+Get localized string:C991("clickHereToFindTheKeyFile");\
+									"action";"localizeKeyFile";\
+									"type";9)
+								
+							End if 
+							
+						Else 
 							
 							CALL WORKER:C1389(Form:C1466.$worker;"Rest";New object:C1471(\
 								"caller";$Obj_form.window;\
@@ -303,8 +336,14 @@ Case of
 								"handler";"mobileapp";\
 								"timeout";60;\
 								"url";Form:C1466.server.urls.production;\
-								"headers";New object:C1471("X-MobileApp";"1";\
-								"Authorization";"Bearer "+$file.getText())))
+								"headers";New object:C1471(\
+								"X-MobileApp";"1")))
+							
+							$Obj_result:=New object:C1471(\
+								"success";False:C215;\
+								"message";Get localized string:C991("theKeyFileIsNotAvailable")+"\r"+Get localized string:C991("clickHereToFindTheKeyFile");\
+								"action";"localizeKeyFile";\
+								"type";9)
 							
 						End if 
 						
@@ -312,105 +351,263 @@ Case of
 						
 						$Obj_result:=New object:C1471(\
 							"success";False:C215;\
-							"title";Get localized string:C991("locateTheKey");\
-							"message";Get localized string:C991("theKeyFileIsNotAvailable")+"\r"+Get localized string:C991("clickHereToFindTheKeyFile");\
-							"action";"localizeKeyFile";\
+							"title";Get localized string:C991("setTheServerUrl");\
+							"message";Get localized string:C991("theProductionUrlIsNotPopulated")+"\r"+Get localized string:C991("clickToFillItIn");\
+							"action";"goToProductionURL";\
 							"type";9)
+						
+						POST_FORM_MESSAGE (New object:C1471(\
+							"target";Current form window:C827;\
+							"action";"show";\
+							"type";"confirm";\
+							"title";ui.alert+" "+Get localized string:C991("theLocalWebServerIsStarted");\
+							"additional";"youNeedToShutDownTheLocalWebServer";\
+							"okAction";"stopWebServer";\
+							"ok";"stopTheLocalServer"))
 						
 					End if 
 					
 				Else 
 					
-					CALL WORKER:C1389(Form:C1466.$worker;"Rest";New object:C1471(\
-						"caller";$Obj_form.window;\
-						"action";"status";\
-						"handler";"mobileapp";\
-						"timeout";60;\
-						"url";Form:C1466.server.urls.production;\
-						"headers";New object:C1471("X-MobileApp";"1")))
-					
 					$Obj_result:=New object:C1471(\
 						"success";False:C215;\
-						"message";Get localized string:C991("theKeyFileIsNotAvailable")+"\r"+Get localized string:C991("clickHereToFindTheKeyFile");\
-						"action";"localizeKeyFile";\
+						"title";Get localized string:C991("setTheServerUrl");\
+						"message";Get localized string:C991("theProductionUrlIsNotPopulated")+"\r"+Get localized string:C991("clickToFillItIn");\
+						"action";"goToProductionURL";\
 						"type";9)
 					
 				End if 
 				
 			Else 
 				
-				$Obj_result:=New object:C1471(\
-					"success";False:C215;\
-					"title";Get localized string:C991("setTheServerUrl");\
-					"message";Get localized string:C991("theProductionUrlIsNotPopulated")+"\r"+Get localized string:C991("clickToFillItIn");\
-					"action";"goToProductionURL";\
-					"type";9)
-				
+				  // Test REST response
+				If (WEB Get server info:C1531.started)
+					
+					  // Test the key
+					$file:=Folder:C1567(fk mobileApps folder:K87:18).file("key.mobileapp")
+					
+					If (Not:C34($file.exists))
+						
+						$Obj_result:=$oSource.sendRequest()
+						
+					End if 
+					
+					If ($file.exists)
+						
+						  // Make a call to verify
+						$oSource.headers.push(New object:C1471(\
+							"Authorization";"Bearer "+$file.getText()))
+						
+						$Obj_result:=$oSource.status()
+						
+						If ($Obj_result.errors#Null:C1517)
+							
+							  // Oops - Keep the first error message for the tips
+							$Obj_result.message:=_o_SERVER_Handler (New object:C1471("action";"localization";"message";String:C10($Obj_result.errors[0].message))).message
+							
+						End if 
+						
+					Else 
+						
+						  // No key
+						$Obj_result:=New object:C1471(\
+							"success";False:C215;\
+							"message";Get localized string:C991("failedToGenerateAuthorizationKey"))
+						
+					End if 
+					
+					$Obj_result.type:=0
+					
+				Else 
+					
+					$Obj_result:=New object:C1471(\
+						"success";False:C215;\
+						"message";Get localized string:C991("theWebServerIsNotStarted")+"\r"+Get localized string:C991("clickToStartIt");\
+						"action";"startWebServer";\
+						"title";Get localized string:C991("startWebServer");\
+						"type";9)
+					
+				End if 
 			End if 
 			
 		Else 
 			
-			  // Test REST response
-			$oServer:=WEB Get server info:C1531
-			
-			If ($oServer.started)
+			If ($Obj_form.ui.remote())
 				
-				$Txt_url:="127.0.0.1:"+String:C10($oServer.options.webPortID)
+				ASSERT:C1129(Not:C34(Shift down:C543))
 				
-				  // Test the key
-				  //$t:=_o_Pathname ("key")
-				
-				$file:=COMPONENT_Pathname ("key")
-				
-				If (Not:C34($file.exists))
+				  // Verify the production server adress
+				If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
 					
-					  // Generate the key
-					$Obj_result:=Rest (New object:C1471(\
-						"action";"request";\
-						"handler";"mobileapp";\
-						"url";$Txt_url))
+					C_BOOLEAN:C305($ok)
+					$ok:=Not:C34(WEB Get server info:C1531.started)
 					
-				End if 
-				
-				  // Make a call to verify
-				If ($file.exists)
-					
-					$Obj_result:=Rest (New object:C1471(\
-						"action";"request";\
-						"handler";"mobileapp";\
-						"url";$Txt_url;\
-						"headers";New object:C1471(\
-						"X-MobileApp";"1";\
-						"Authorization";"Bearer "+$file.getText())))
-					
-					If ($Obj_result.__ERRORS#Null:C1517)
+					If (Not:C34($ok))
 						
-						  // Oops - Keep the first error message for the tips
-						$Obj_result.message:=_o_SERVER_Handler (New object:C1471("action";"localization";"message";String:C10($Obj_result.__ERRORS[0].message))).message
+						$ok:=(Position:C15("127.0.0.1";Form:C1466.server.urls.production)=0)\
+							 & (Position:C15("localhost";Form:C1466.server.urls.production)=0)
+						
+					End if 
+					
+					If ($ok)
+						
+						If (Length:C16(String:C10(Form:C1466.dataSource.keyPath))>0)
+							
+							$t:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
+							
+							If (Test path name:C476($t)#Is a document:K24:1)
+								
+								$t:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+								
+							End if 
+							
+							var $file : Object
+							$file:=File:C1566($t;fk platform path:K87:2)
+							
+							If ($file.exists)  // & Shift down
+								
+								  // Test server
+								If (Not:C34(Bool:C1537($Obj_form.ui.serverInTest)))
+									
+									$Obj_form.ui.serverInTest:=True:C214
+									
+									CALL WORKER:C1389(Form:C1466.$worker;"Rest";New object:C1471(\
+										"caller";$Obj_form.window;\
+										"action";"status";\
+										"handler";"mobileapp";\
+										"timeout";60;\
+										"url";Form:C1466.server.urls.production;\
+										"headers";New object:C1471("X-MobileApp";"1";\
+										"Authorization";"Bearer "+$file.getText())))
+									
+								End if 
+								
+							Else 
+								
+								$Obj_result:=New object:C1471(\
+									"success";False:C215;\
+									"title";Get localized string:C991("locateTheKey");\
+									"message";Get localized string:C991("theKeyFileIsNotAvailable")+"\r"+Get localized string:C991("clickHereToFindTheKeyFile");\
+									"action";"localizeKeyFile";\
+									"type";9)
+								
+							End if 
+							
+						Else 
+							
+							CALL WORKER:C1389(Form:C1466.$worker;"Rest";New object:C1471(\
+								"caller";$Obj_form.window;\
+								"action";"status";\
+								"handler";"mobileapp";\
+								"timeout";60;\
+								"url";Form:C1466.server.urls.production;\
+								"headers";New object:C1471(\
+								"X-MobileApp";"1")))
+							
+							$Obj_result:=New object:C1471(\
+								"success";False:C215;\
+								"message";Get localized string:C991("theKeyFileIsNotAvailable")+"\r"+Get localized string:C991("clickHereToFindTheKeyFile");\
+								"action";"localizeKeyFile";\
+								"type";9)
+							
+						End if 
+						
+					Else 
+						
+						$Obj_result:=New object:C1471(\
+							"success";False:C215;\
+							"title";Get localized string:C991("setTheServerUrl");\
+							"message";Get localized string:C991("theProductionUrlIsNotPopulated")+"\r"+Get localized string:C991("clickToFillItIn");\
+							"action";"goToProductionURL";\
+							"type";9)
+						
+						POST_FORM_MESSAGE (New object:C1471(\
+							"target";Current form window:C827;\
+							"action";"show";\
+							"type";"confirm";\
+							"title";ui.alert+" "+Get localized string:C991("theLocalWebServerIsStarted");\
+							"additional";"youNeedToShutDownTheLocalWebServer";\
+							"okAction";"stopWebServer";\
+							"ok";"stopTheLocalServer"))
 						
 					End if 
 					
 				Else 
 					
-					  // No key
 					$Obj_result:=New object:C1471(\
 						"success";False:C215;\
-						"message";Get localized string:C991("failedToGenerateAuthorizationKey"))
+						"title";Get localized string:C991("setTheServerUrl");\
+						"message";Get localized string:C991("theProductionUrlIsNotPopulated")+"\r"+Get localized string:C991("clickToFillItIn");\
+						"action";"goToProductionURL";\
+						"type";9)
 					
 				End if 
 				
-				$Obj_result.type:=0
-				
 			Else 
 				
-				$Obj_result:=New object:C1471(\
-					"success";False:C215;\
-					"message";Get localized string:C991("theWebServerIsNotStarted")+"\r"+Get localized string:C991("clickToStartIt");\
-					"action";"startWebServer";\
-					"title";Get localized string:C991("startWebServer");\
-					"type";9)
+				  // Test REST response
+				$oServer:=WEB Get server info:C1531
 				
-			End if 
+				If ($oServer.started)
+					
+					$Txt_url:="127.0.0.1:"+String:C10($oServer.options.webPortID)
+					
+					  // Test the key
+					$file:=Folder:C1567(fk mobileApps folder:K87:18).file("key.mobileapp")
+					
+					If (Not:C34($file.exists))
+						
+						  // Generate the key
+						$Obj_result:=Rest (New object:C1471(\
+							"action";"request";\
+							"handler";"mobileapp";\
+							"url";$Txt_url))
+						
+					End if 
+					
+					  // Make a call to verify
+					If ($file.exists)
+						
+						$Obj_result:=Rest (New object:C1471(\
+							"action";"request";\
+							"handler";"mobileapp";\
+							"url";$Txt_url;\
+							"headers";New object:C1471(\
+							"X-MobileApp";"1";\
+							"Authorization";"Bearer "+$file.getText())))
+						
+						  // Test REST response
+						If ($Obj_result.__ERRORS#Null:C1517)
+							
+							  // Oops - Keep the first error message for the tips
+							$Obj_result.message:=_o_SERVER_Handler (New object:C1471("action";"localization";"message";String:C10($Obj_result.__ERRORS[0].message))).message
+							
+						End if 
+						
+					Else 
+						
+						  // No key
+						$Obj_result:=New object:C1471(\
+							"success";False:C215;\
+							"message";Get localized string:C991("failedToGenerateAuthorizationKey"))
+						
+					End if 
+					
+					$Obj_result.type:=0
+					
+				Else 
+					
+					$Obj_result:=New object:C1471(\
+						"success";False:C215;\
+						"message";Get localized string:C991("theWebServerIsNotStarted")+"\r"+Get localized string:C991("clickToStartIt");\
+						"action";"startWebServer";\
+						"title";Get localized string:C991("startWebServer");\
+						"type";9)
+					
+				End if 
+				
+			End if   // A "If" statement should never omit "Else"
+			
 		End if 
 		
 		$Obj_form.ui.serverStatus:=$Obj_result
@@ -418,7 +615,7 @@ Case of
 		ui.refresh()
 		
 		  //=========================================================
-	: ($Obj_in.action="dataset")  //end dataset generation
+	: ($Obj_in.action="dataset")  // End dataset generation
 		
 		(OBJECT Get pointer:C1124(Object named:K67:5;"dataGeneration"))->:=0
 		OBJECT SET VISIBLE:C603(*;"dataGeneration@";False:C215)
@@ -426,6 +623,7 @@ Case of
 		CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"update_data")
 		
 		  //=========================================================
+		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")

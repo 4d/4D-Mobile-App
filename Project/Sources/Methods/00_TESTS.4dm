@@ -1,5 +1,5 @@
 //%attributes = {}
-C_BOOLEAN:C305($b;$Boo_reset)
+C_BOOLEAN:C305($b;$Boo_reset;$ok)
 C_LONGINT:C283($i;$index;$l;$Lon_build;$Lon_error;$Lon_result)
 C_LONGINT:C283($Lon_type;$Lon_value;$Lon_x)
 C_TIME:C306($Gmt_timeGMT)
@@ -24,6 +24,112 @@ $o:=Folder:C1567("/")
 $o1:=Folder:C1567(fk system folder:K87:13).parent
 
 Case of 
+		
+		  //________________________________________
+	: (True:C214)
+		
+		  // Test code rewriting
+		If (False:C215)
+			
+			$o:=cs:C1710.source.new()
+			$Obj_template:=Rest (New object:C1471(\
+				"action";"url"))
+			ASSERT:C1129($o.url=$Obj_template.url)
+			
+			$o:=cs:C1710.source.new("localhost")
+			$Obj_template:=Rest (New object:C1471(\
+				"action";"url";"url";"localhost"))
+			ASSERT:C1129($o.url=$Obj_template.url)
+			
+		End if 
+		
+		  // Test response
+		$o:=cs:C1710.source.new("localhost")
+		
+		$Obj_result:=$o.status()
+		
+		SET TEXT TO PASTEBOARD:C523(JSON Stringify:C1217($Obj_result;*))
+		
+		Case of 
+				
+				  //______________________________________________________
+			: ($Obj_result.success)
+				
+				  // TVB
+				
+				  //______________________________________________________
+			: (Num:C11($Obj_result.httpError)=30)
+				
+				ALERT:C41(Get localized string:C991("theServerIsNotReady"))  // Server unavailable/Serveur inaccessible
+				
+				  //______________________________________________________
+			: ($Obj_result.code=401)
+				
+				$ok:=($Obj_result.errors.query("errCode=1907").pop()#Null:C1517)
+				
+				If ($ok)
+					
+					  // The key.mobileapp file should be created
+					If (WEB Get server info:C1531.started)  // Local
+						
+						  // Get file
+						$file:=Folder:C1567(fk mobileApps folder:K87:18).file("key.mobileapp")
+						$ok:=$file.exists
+						
+						If ($ok)
+							
+							$o.url:="127.0.0.1:"+String:C10(WEB Get server info:C1531.options.webPortID)
+							$o.headers.push(New object:C1471("Authorization";"Bearer "+$file.getText()))
+							$ok:=$o.status().success
+							
+							SET TEXT TO PASTEBOARD:C523(JSON Stringify:C1217($o.response;*))
+							
+						Else 
+							
+							ALERT:C41(Get localized string:C991("failedToGenerateAuthorizationKey"))
+							
+						End if 
+						
+					Else 
+						
+						  // Server -> The user must select the file retrieved
+						
+						$file:=File:C1566("/Volumes/Transcend 2To/keyMobile/Data/MobileApps/key.mobileapp")
+						$ok:=$file.exists
+						
+						If ($ok)
+							
+							$o.url:="127.0.0.1:"+String:C10(WEB Get server info:C1531.options.webPortID)
+							$o.headers.push(New object:C1471("Authorization";"Bearer "+$file.getText()))
+							$ok:=$o.status().success
+							
+							SET TEXT TO PASTEBOARD:C523(JSON Stringify:C1217($o.response;*))
+							
+						Else 
+							
+							ALERT:C41(Get localized string:C991("locateTheKey"))
+							
+						End if 
+						
+					End if 
+					
+				Else 
+					
+					  // ERROR
+					
+				End if 
+				  //______________________________________________________
+			Else 
+				
+				  // A "Case of" statement should never omit "Else"
+				  //______________________________________________________
+		End case 
+		
+		  //$t:=JSON Stringify($o;*)
+		  //SET TEXT TO PASTEBOARD($t)
+		
+		  //http://127.0.0.1/mobileapp/
+		  //$Lon_error:=HTTP Request(HTTP GET method;Rest (New object("action";"devurl";"handler";"mobileapp")).url;"";$Txt_result)
 		
 		  //________________________________________
 	: (True:C214)
@@ -65,7 +171,6 @@ Case of
 			$c.remove($i)
 			
 		End for each 
-		
 		
 		  //________________________________________
 	: (True:C214)

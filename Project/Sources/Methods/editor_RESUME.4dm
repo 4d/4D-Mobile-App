@@ -290,6 +290,12 @@ Case of
 		CALL FORM:C1391($Win_me;$kTxt_callbackMethod;$Txt_selector;$Obj_in)
 		
 		  //______________________________________________________
+	: ($Txt_selector="stopWebServer")
+		
+		WEB STOP SERVER:C618
+		CALL FORM:C1391($Win_me;$kTxt_callbackMethod;"testServer";$Obj_in)
+		
+		  //______________________________________________________
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Txt_selector+"\"")

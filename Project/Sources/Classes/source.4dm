@@ -1,0 +1,194 @@
+Class constructor
+	
+	This:C1470.handler:="mobileapp"
+	This:C1470.method:=HTTP GET method:K71:1
+	This:C1470.headers:=New collection:C1472(New object:C1471(\
+		"X-MobileApp";"1"))
+	This:C1470.timeout:=60
+	
+	This:C1470.path:=""
+	
+	var $1 : Text
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.setURL($1)
+		
+	Else 
+		
+		This:C1470.setURL()
+		
+	End if 
+	
+Function setURL
+	
+	var $1 : Text
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.url:=$1
+		
+		  // Add missing / if necessary
+		If (Not:C34(Match regex:C1019("/$";This:C1470.url;1)))
+			
+			This:C1470.url:=This:C1470.url+"/"
+			
+		End if 
+		
+		  // Add missing handler if needed
+		If (Not:C34(Match regex:C1019(This:C1470.handler+"/$";This:C1470.url;1)))
+			
+			This:C1470.url:=This:C1470.url+This:C1470.handler+"/"
+			
+		End if 
+		
+	Else 
+		
+		  // Default url to the current database
+		var $o : Object
+		$o:=WEB Get server info:C1531
+		
+		Case of 
+				
+				  //________________________________________
+			: (Bool:C1537($o.security.HTTPEnabled))  // Priority for http
+				
+				This:C1470.url:="http://localhost:"+String:C10($o.options.webPortID)+"/"+This:C1470.handler+"/"
+				
+				  //________________________________________
+			: (Bool:C1537($o.security.HTTPSEnabled))  // Only https, use it
+				
+				This:C1470.url:="https://localhost:"+String:C10($o.options.webHTTPSPortID)+"/"+This:C1470.handler+"/"
+				
+				  //________________________________________
+			Else 
+				
+				var $l : Integer
+				WEB GET OPTION:C1209(Web Port ID:K73:14;$l)
+				This:C1470.url:="http://localhost:"+String:C10($l)+"/"+This:C1470.handler+"/"
+				
+				  //________________________________________
+		End case 
+	End if 
+	
+	  //#TURN_AROUND - In some cases, using "localhost" we get the error -30 "Server unreachable"
+	This:C1470.url:=Replace string:C233(This:C1470.url;"localhost";"127.0.0.1")
+	
+Function status
+	
+	This:C1470.sendRequest()
+	
+	var $1 : Object  // Callback formula
+	
+	If (Count parameters:C259>=1)
+		
+		  //CALL FORM($Win_caller;"editor_CALLBACK";"testServer";$1)
+		$1.call(This:C1470.response)
+		
+	Else 
+		
+		var $0 : Object
+		$0:=This:C1470.response
+		
+	End if 
+	
+Function sendRequest
+	
+	var $l : Integer
+	var $o : Object
+	var $e : Object
+	var $t : Text
+	
+	If (This:C1470.url=Null:C1517)
+		
+		This:C1470.setURL()
+		
+	End if 
+	
+	  // If (This.contentObject=Null)
+	  // If (This.content=Null)
+	  // This.content:=""
+	  // End if
+	  // Else
+	  // This.content:=JSON Stringify(This.contentObject)
+	  // End if
+	
+	This:C1470.response:=New object:C1471(\
+		"success";False:C215)
+	
+	This:C1470.request:=New object:C1471(\
+		"url";This:C1470.url+This:C1470.path;\
+		"headers";This:C1470.headers)
+	
+	  // Manage query parameters
+	  //#TO_DO
+	
+	  // Manage headers
+	ARRAY TEXT:C222($tTxt_headerNames;0)
+	ARRAY TEXT:C222($tTxt_headerValues;0)
+	
+	var $c : Collection
+	For each ($o;This:C1470.request.headers)
+		
+		$c:=OB Entries:C1720($o)
+		APPEND TO ARRAY:C911($tTxt_headerNames;$c[0].key)
+		APPEND TO ARRAY:C911($tTxt_headerValues;$c[0].value)
+		
+	End for each 
+	
+	CLEAR VARIABLE:C89($o)
+	
+	  // Set timeout
+	HTTP GET OPTION:C1159(HTTP timeout:K71:10;$l)
+	HTTP SET OPTION:C1160(HTTP timeout:K71:10;This:C1470.timeout)
+	
+/* START TRAPPING ERRORS */
+	$e:=err .capture()
+	This:C1470.response.code:=HTTP Request:C1158(This:C1470.method;This:C1470.request.url;"";$o;$tTxt_headerNames;$tTxt_headerValues)
+	$e.release()
+/* STOP TRAPPING ERRORS */
+	
+	  // Restore timeout
+	HTTP SET OPTION:C1160(HTTP timeout:K71:10;$l)
+	
+	If (Num:C11($e.lastError().error)#0)
+		
+		This:C1470.response.httpError:=$e.lastError().error
+		
+	End if 
+	
+	If ($o=Null:C1517)
+		
+		This:C1470.response.success:=Choose:C955(This:C1470.response.httpError=Null:C1517;This:C1470.response.code<300;False:C215)
+		
+	Else 
+		
+		This:C1470.response.success:=Bool:C1537($o.success) | Bool:C1537($o.ok)
+		
+		If ($o.__ERROR#Null:C1517)
+			
+			This:C1470.response.success:=False:C215
+			This:C1470.response.errors:=$o.__ERROR
+			OB REMOVE:C1226($o;"__ERROR")
+			
+		End if 
+		
+		If ($o.__ERRORS#Null:C1517)
+			
+			This:C1470.response.success:=False:C215
+			This:C1470.response.errors:=$o.__ERRORS
+			OB REMOVE:C1226($o;"__ERRORS")
+			
+		End if 
+		
+		  // Keep the headers
+		For each ($t;$o)
+			
+			This:C1470.response[$t]:=$o[$t]
+			
+		End for each 
+	End if 
+	
+	This:C1470.response.headers:=New collection:C1472
+	
+	ARRAY TO COLLECTION:C1563(This:C1470.response.headers;$tTxt_headerNames;"name";$tTxt_headerValues;"value")

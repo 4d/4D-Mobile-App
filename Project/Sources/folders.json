@@ -134,9 +134,6 @@
 			"killWorker",
 			"path"
 		],
-		"forms": [
-			"EMPTY"
-		],
 		"classes": [
 			"path"
 		]
@@ -171,20 +168,23 @@
 	},
 	"[PANELS]": {
 		"groups": [
-			"ACTIONS",
-			"ACTIONS_PARAMS",
-			"DATA",
-			"DEVELOPER",
-			"FEATURES",
-			"FIELDS",
-			"MAIN",
-			"ORGANIZATION",
-			"PRODUCT",
-			"SERVER",
-			"SOURCE",
-			"STRUCTURE",
-			"TABLES",
-			"VIEWS"
+			"01] ORGANIZATION",
+			"02] PRODUCT",
+			"03] DEVELOPER",
+			"04] STRUCTURE",
+			"05] SOURCE",
+			"06] DATA",
+			"07] ACTIONS",
+			"08] ACTIONS_PARAMS",
+			"09] TABLES",
+			"10] FIELDS",
+			"11] MAIN",
+			"12] VIEWS",
+			"13] SERVER",
+			"14] FEATURES"
+		],
+		"forms": [
+			"EMPTY"
 		]
 	},
 	"[PROJECT]": {
@@ -211,6 +211,171 @@
 			"PROJECT"
 		]
 	},
+	"01] ORGANIZATION": {
+		"methods": [
+			"COMPILER_ORGANIZATION",
+			"ORGANIZATION_Handler",
+			"ORGANIZATION_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"ORGANIZATION"
+		]
+	},
+	"02] PRODUCT": {
+		"methods": [
+			"COMPILER_PRODUCT",
+			"PRODUCT_Handler",
+			"PRODUCT_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"PRODUCT"
+		]
+	},
+	"03] DEVELOPER": {
+		"methods": [
+			"COMPILER_DEVELOPER",
+			"DEVELOPER_Handler",
+			"DEVELOPER_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"DEVELOPER"
+		]
+	},
+	"04] STRUCTURE": {
+		"methods": [
+			"COMPILER_STRUCTURES",
+			"STRUCTURE_ACTION",
+			"STRUCTURE_CALLBACK",
+			"structure_FIELD_LIST",
+			"STRUCTURE_Handler",
+			"STRUCTURE_OBJECTS_HANDLER",
+			"structure_REPAIR",
+			"structure_TABLE_LIST",
+			"STRUCTURE_TIPS",
+			"STRUCTURE_UPDATE"
+		],
+		"forms": [
+			"RELATED",
+			"STRUCTURE"
+		]
+	},
+	"05] SOURCE": {
+		"methods": [
+			"COMPILER_SOURCE",
+			"SOURCE_Handler",
+			"SOURCE_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"SOURCE"
+		],
+		"classes": [
+			"source"
+		]
+	},
+	"06] DATA": {
+		"methods": [
+			"COMPILER_DATA",
+			"DATA_Handler",
+			"DATA_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"DATA"
+		]
+	},
+	"07] ACTIONS": {
+		"methods": [
+			"ACTIONS_Handler",
+			"ACTIONS_OBJECTS_HANDLER",
+			"ACTIONS_UI",
+			"COMPILER_ACTIONS"
+		],
+		"forms": [
+			"ACTIONS"
+		]
+	},
+	"08] ACTIONS_PARAMS": {
+		"methods": [
+			"ACTIONS_PARAMS_Handler",
+			"ACTIONS_PARAMS_OBJECTS_HANDLER",
+			"ACTIONS_PARAMS_UI",
+			"COMPILER_ACTIONS_PARAMS"
+		],
+		"forms": [
+			"ACTIONS_PARAMS"
+		]
+	},
+	"09] TABLES": {
+		"methods": [
+			"COMPILER_tables",
+			"tables_Handler",
+			"tables_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"TABLES"
+		]
+	},
+	"10] FIELDS": {
+		"methods": [
+			"COMPILER_fields",
+			"FIELDS_class",
+			"FIELDS_Handler",
+			"fields_LIST",
+			"FIELDS_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"FIELDS"
+		]
+	},
+	"11] MAIN": {
+		"methods": [
+			"COMPILER_main",
+			"main_Handler",
+			"main_OBJECTS_HANDLER"
+		],
+		"forms": [
+			"MAIN"
+		]
+	},
+	"12] VIEWS": {
+		"groups": [
+			"templates"
+		],
+		"methods": [
+			"COMPILER_views",
+			"tables_Widget",
+			"views_fieldList",
+			"VIEWS_Handler",
+			"views_LAYOUT_PICKER",
+			"VIEWS_OBJECTS_HANDLER",
+			"views_preview",
+			"views_UPDATE"
+		],
+		"forms": [
+			"VIEWS"
+		]
+	},
+	"13] SERVER": {
+		"methods": [
+			"SERVER"
+		],
+		"forms": [
+			"SERVER"
+		],
+		"classes": [
+			"SERVER"
+		]
+	},
+	"14] FEATURES": {
+		"methods": [
+			"FEATURES"
+		],
+		"forms": [
+			"FEATURES"
+		],
+		"classes": [
+			"FEATURES"
+		]
+	},
 	"4dUnit": {
 		"tables": [
 			"UNIT_0",
@@ -227,28 +392,6 @@
 			"test_structure",
 			"test_structureCatalog",
 			"unitTestSuites"
-		]
-	},
-	"ACTIONS": {
-		"methods": [
-			"ACTIONS_Handler",
-			"ACTIONS_OBJECTS_HANDLER",
-			"ACTIONS_UI",
-			"COMPILER_ACTIONS"
-		],
-		"forms": [
-			"ACTIONS"
-		]
-	},
-	"ACTIONS_PARAMS": {
-		"methods": [
-			"ACTIONS_PARAMS_Handler",
-			"ACTIONS_PARAMS_OBJECTS_HANDLER",
-			"ACTIONS_PARAMS_UI",
-			"COMPILER_ACTIONS_PARAMS"
-		],
-		"forms": [
-			"ACTIONS_PARAMS"
 		]
 	},
 	"backend": {
@@ -299,16 +442,6 @@
 			"test_colObj_distinct"
 		]
 	},
-	"DATA": {
-		"methods": [
-			"COMPILER_DATA",
-			"DATA_Handler",
-			"DATA_OBJECTS_HANDLER"
-		],
-		"forms": [
-			"DATA"
-		]
-	},
 	"deliver": {
 		"methods": [
 			"COMPILER_deliver",
@@ -322,16 +455,6 @@
 			"COMPILER_dev",
 			"dev_assert",
 			"dev_Matrix"
-		]
-	},
-	"DEVELOPER": {
-		"methods": [
-			"COMPILER_DEVELOPER",
-			"DEVELOPER_Handler",
-			"DEVELOPER_OBJECTS_HANDLER"
-		],
-		"forms": [
-			"DEVELOPER"
 		]
 	},
 	"devMenu": {
@@ -396,29 +519,6 @@
 			"test_errors",
 			"THROW",
 			"TRY"
-		]
-	},
-	"FEATURES": {
-		"methods": [
-			"FEATURES"
-		],
-		"forms": [
-			"FEATURES"
-		],
-		"classes": [
-			"FEATURES"
-		]
-	},
-	"FIELDS": {
-		"methods": [
-			"COMPILER_fields",
-			"FIELDS_class",
-			"FIELDS_Handler",
-			"fields_LIST",
-			"FIELDS_OBJECTS_HANDLER"
-		],
-		"forms": [
-			"FIELDS"
 		]
 	},
 	"form": {
@@ -497,16 +597,6 @@
 			"XcodeProjInject"
 		]
 	},
-	"MAIN": {
-		"methods": [
-			"COMPILER_main",
-			"main_Handler",
-			"main_OBJECTS_HANDLER"
-		],
-		"forms": [
-			"MAIN"
-		]
-	},
 	"Message": {
 		"methods": [
 			"COMPILER_message",
@@ -560,16 +650,6 @@
 			"test_ob_error"
 		]
 	},
-	"ORGANIZATION": {
-		"methods": [
-			"COMPILER_ORGANIZATION",
-			"ORGANIZATION_Handler",
-			"ORGANIZATION_OBJECTS_HANDLER"
-		],
-		"forms": [
-			"ORGANIZATION"
-		]
-	},
 	"panel": {
 		"methods": [
 			"COMPILER_panel",
@@ -604,16 +684,6 @@
 	"Picture grid": {
 		"forms": [
 			"PICTURE_GRID"
-		]
-	},
-	"PRODUCT": {
-		"methods": [
-			"COMPILER_PRODUCT",
-			"PRODUCT_Handler",
-			"PRODUCT_OBJECTS_HANDLER"
-		],
-		"forms": [
-			"PRODUCT"
 		]
 	},
 	"Pseudo-Class": {
@@ -677,27 +747,6 @@
 			"SEARCH"
 		]
 	},
-	"SERVER": {
-		"methods": [
-			"SERVER"
-		],
-		"forms": [
-			"SERVER"
-		],
-		"classes": [
-			"SERVER"
-		]
-	},
-	"SOURCE": {
-		"methods": [
-			"COMPILER_SOURCE",
-			"SOURCE_Handler",
-			"SOURCE_OBJECTS_HANDLER"
-		],
-		"forms": [
-			"SOURCE"
-		]
-	},
 	"str": {
 		"methods": [
 			"COMPILER_str",
@@ -705,34 +754,6 @@
 			"str_date",
 			"str_equal",
 			"str_singleQuoted"
-		]
-	},
-	"STRUCTURE": {
-		"methods": [
-			"COMPILER_STRUCTURES",
-			"STRUCTURE_ACTION",
-			"STRUCTURE_CALLBACK",
-			"structure_FIELD_LIST",
-			"STRUCTURE_Handler",
-			"STRUCTURE_OBJECTS_HANDLER",
-			"structure_REPAIR",
-			"structure_TABLE_LIST",
-			"STRUCTURE_TIPS",
-			"STRUCTURE_UPDATE"
-		],
-		"forms": [
-			"RELATED",
-			"STRUCTURE"
-		]
-	},
-	"TABLES": {
-		"methods": [
-			"COMPILER_tables",
-			"tables_Handler",
-			"tables_OBJECTS_HANDLER"
-		],
-		"forms": [
-			"TABLES"
 		]
 	},
 	"templates": {
@@ -771,24 +792,6 @@
 			"ui_SET_ENABLED",
 			"ui_SET_GEOMETRY",
 			"ui_TOOLBAR_ALIGN"
-		]
-	},
-	"VIEWS": {
-		"groups": [
-			"templates"
-		],
-		"methods": [
-			"COMPILER_views",
-			"tables_Widget",
-			"views_fieldList",
-			"VIEWS_Handler",
-			"views_LAYOUT_PICKER",
-			"VIEWS_OBJECTS_HANDLER",
-			"views_preview",
-			"views_UPDATE"
-		],
-		"forms": [
-			"VIEWS"
 		]
 	},
 	"widgets": {

@@ -127,6 +127,9 @@ feature.wip(114338)
   // Allow to drop a multivalued field next to another existing dropped multivalued fields to have two fields next to each other
 feature.alias("droppingNext";114338)
 
+  // Work with Source class to test tge data source
+feature.wip("sourceClass")
+
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES
 ________________________________________*/

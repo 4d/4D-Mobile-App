@@ -91,7 +91,6 @@ Case of
 		
 		If ($Obj_param.handler=Null:C1517)
 			
-			  //$Obj_param.handler:=Choose(Bool(featuresFlags._102457);"mobileapp";"rest")
 			$Obj_param.handler:="mobileapp"
 			
 		End if 
@@ -118,12 +117,11 @@ Case of
 			  // Add missing handler if needed
 			If ($Obj_param.handler=Null:C1517)
 				
-				  //$Obj_param.handler:=Choose(Bool(featuresFlags._102457);"mobileapp";"rest")
 				$Obj_param.handler:="mobileapp"
 				
 			End if 
 			
-			If (Position:C15($Obj_param.handler+"/";$Obj_result.url)#(Length:C16($Obj_result.url)-Length:C16($Obj_param.handler)))
+			If (Not:C34(Match regex:C1019($Obj_param.handler+"/$";$Obj_result.url;1)))
 				
 				$Obj_result.url:=$Obj_result.url+$Obj_param.handler+"/"
 				
@@ -183,7 +181,6 @@ Case of
 				
 				For ($Lon_i;1;Size of array:C274($tTxt_names);1)
 					
-					  //$queryValue:=OB Get($Obj_param.query;$tTxt_names{$Lon_i})
 					$Txt_queryValue:=$Obj_param.query[$tTxt_names{$Lon_i}]
 					
 					If ($Lon_i#1)
@@ -196,9 +193,13 @@ Case of
 						
 						  // Encode value
 						If ((Position:C15("\"";$Txt_queryValue)>0) & (Position:C15("'";$Txt_queryValue)=0))
+							
 							$Txt_query:=$Txt_query+$tTxt_names{$Lon_i}+"='"+str_URLEncode ($Txt_queryValue)+"'"  // use ' if filter contains = and no '
+							
 						Else 
+							
 							$Txt_query:=$Txt_query+$tTxt_names{$Lon_i}+"=\""+str_URLEncode ($Txt_queryValue)+"\""
+							
 						End if 
 						
 					Else 

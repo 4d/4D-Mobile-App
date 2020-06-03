@@ -11,7 +11,7 @@
 C_LONGINT:C283($0)
 
 C_BLOB:C604($x)
-C_BOOLEAN:C305($b;$bAvailable)
+C_BOOLEAN:C305($bAvailable;$ok)
 C_LONGINT:C283($count;$i;$indx;$l)
 C_PICTURE:C286($p)
 C_TEXT:C284($tTable;$tTemplate;$tTypeForm)
@@ -217,19 +217,21 @@ Case of
 						$o:=($form.fields.pointer())->{$form.fieldList.row}
 						  //%W+533.3
 						
-						$b:=($o.fieldType#8859)  // Not 1-N relation
+						$ok:=($o.fieldType#8859)  // Not 1-N relation
 						
-						If (Not:C34($b))
+						If (Not:C34($ok))
 							
 							  // 1-N relation with published related data class
-							$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
+							$ok:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
 							
 						End if 
 						
-						If ($b)
+						If ($ok)
 							
 							  // Add the field
 							$oTarget:=Form:C1466[$tTypeForm][$context.tableNumber]
+							
+							$o.name:=$o.path
 							$oTarget.fields.push($o)
 							
 							  // Update preview
@@ -292,18 +294,19 @@ Case of
 											
 											$o:=($form.fields.pointer())->{$i}
 											
-											$b:=($o.fieldType#8859)  // Not 1-N relation
+											$ok:=($o.fieldType#8859)  // Not 1-N relation
 											
-											If (Not:C34($b))
+											If (Not:C34($ok))
 												
 												  // 1-N relation with published related data class
-												$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
+												$ok:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
 												
 											End if 
 											
-											If ($b)
+											If ($ok)
 												
 												  // Add the field
+												$o.name:=$o.path
 												$oTarget.fields.push($o)
 												
 											End if 
@@ -316,19 +319,20 @@ Case of
 											
 											$o:=($form.fields.pointer())->{$i}
 											
-											$b:=($o.fieldType#8859)  // Not 1-N relation
+											$ok:=($o.fieldType#8859)  // Not 1-N relation
 											
-											If (Not:C34($b))
+											If (Not:C34($ok))
 												
 												  // 1-N relation with published related data class
-												$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
+												$ok:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
 												
 											End if 
 											
-											If ($b)\
+											If ($ok)\
 												 & ($oTarget.fields.query("fieldNumber = :1";$o.fieldNumber).pop()=Null:C1517)
 												
 												  // Add the field
+												$o.name:=$o.path
 												$oTarget.fields.push($o)
 												
 											End if 
@@ -364,16 +368,16 @@ Case of
 				$o:=($form.fields.pointer())->{$form.fieldList.row}
 				  //%W+533.3
 				
-				$b:=($o.fieldType#8859)  // Not 1-N relation
+				$ok:=($o.fieldType#8859)  // Not 1-N relation
 				
-				If (Not:C34($b))
+				If (Not:C34($ok))
 					
 					  // 1-N relation with published related data class
-					$b:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
+					$ok:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
 					
 				End if 
 				
-				If ($b)
+				If ($ok)
 					  // Put into the container
 					VARIABLE TO BLOB:C532($o;$x)
 					APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field";$x)
@@ -512,6 +516,8 @@ Case of
 						  //………………………………………………………………………………………………………………
 					: ($context.current="f@")
 						
+						  //
+						
 						  //………………………………………………………………………………………………………………
 					Else 
 						
@@ -539,8 +545,6 @@ Case of
 						  //………………………………………………………………………………………………………………
 					: ($context.current="f@")
 						
-						$0:=0
-						
 						SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".cancel";"visibility";"hidden")
 						SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".g";"fill-opacity";0.2;"stroke-opacity";0.5)
 						
@@ -562,6 +566,8 @@ Case of
 							.getPicture()
 						
 						SET DRAG ICON:C1272($p)
+						
+						$0:=0
 						
 						  //………………………………………………………………………………………………………………
 					Else 

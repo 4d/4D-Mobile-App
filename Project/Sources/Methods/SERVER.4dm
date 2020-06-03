@@ -15,6 +15,7 @@ var $o : Object
   // ----------------------------------------------------
   // Initialisations
 $f:=panel_Definition 
+$e:=$f.event
 
   // ----------------------------------------------------
 If ($e.objectName=Null:C1517)  // <== Form method
@@ -42,8 +43,6 @@ If ($e.objectName=Null:C1517)  // <== Form method
 	
 Else   // <== Widgets method
 	
-	$e:=$f.event
-	
 	Case of 
 			
 			  //==================================================
@@ -58,6 +57,12 @@ Else   // <== Widgets method
 					
 					  // Verify the web server configuration
 					CALL FORM:C1391($f.window;"editor_CALLBACK";"checkingServerConfiguration")
+					
+					  //_____________________________________
+				: ($e.code=On Getting Focus:K2:7)\
+					 | ($e.code=On Losing Focus:K2:8)
+					
+					  //#TURNAROUND - THE EVENT SHOULD NOT BE TRIGGERED
 					
 					  //_____________________________________
 				Else 

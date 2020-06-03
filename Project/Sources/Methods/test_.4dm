@@ -1,14 +1,12 @@
 //%attributes = {}
 C_TEXT:C284($t)
-C_OBJECT:C1216($o)
 
 TRY 
 
   //%W-518.7
+C_OBJECT:C1216($o)
 ASSERT:C1129(Not:C34(_and (Formula:C1597(Not:C34(Undefined:C82($o)));Formula:C1597($o.test#Null:C1517)));"_and")
-
 $o:=New object:C1471
-
 ASSERT:C1129(Not:C34(_and (Formula:C1597(Not:C34(Undefined:C82($o)));Formula:C1597($o.test#Null:C1517)));"_and")
 
 $o:=New object:C1471(\

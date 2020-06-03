@@ -71,6 +71,7 @@ Function _target
 					  //_______________________________
 				Else 
 					
+					  // Find a memorized target
 					$o:=This:C1470.store.query("id=:1";$1).pop()
 					
 					If ($o#Null:C1517)
@@ -416,7 +417,7 @@ Function rect
 	This:C1470.success:=Bool:C1537(OK)
 	
 	  //If (Count parameters>2)\
-										 & (This.success)
+												 & (This.success)
 	
 	  //This.attributes($3)
 	
@@ -455,8 +456,12 @@ Function group
 		
 	End if 
 	
-	This:C1470.latest:=DOM Create XML element:C865($node;"g")
-	This:C1470.success:=Bool:C1537(OK)
+	If (This:C1470.success)
+		
+		This:C1470.latest:=DOM Create XML element:C865($node;"g")
+		This:C1470.success:=Bool:C1537(OK)
+		
+	End if 
 	
 	$0:=This:C1470
 	

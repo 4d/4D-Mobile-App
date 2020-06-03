@@ -94,7 +94,8 @@
 					"events": [
 						"onClick"
 					],
-					"method": "SOURCE_OBJECTS_HANDLER"
+					"method": "SOURCE_OBJECTS_HANDLER",
+					"focusable": false
 				},
 				"serverInTest": {
 					"type": "spinner",
