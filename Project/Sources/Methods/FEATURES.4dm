@@ -50,11 +50,13 @@ Else   // <== Widgets method
 			  //==================================================
 		: ($f.certificat.catch($e;On Data Change:K2:15))
 			
-			If (Length:C16($f.certificat.picker.platformPath)>0)
+			  //If (Length($f.certificat.picker.platformPath)>0)
+			
+			If (Bool:C1537($f.certificat.picker._target.exists))
 				
-				If ($f.certificat.picker._target.path#String:C10(Form:C1466.server.pushCertificat))
+				If ($f.certificat.picker._target.path#String:C10(Form:C1466.server.pushCertificate))
 					
-					Form:C1466.server.pushCertificat:=$f.certificat.picker._target.path
+					Form:C1466.server.pushCertificate:=$f.certificat.picker._target.path
 					project.save()
 					
 				End if 
@@ -68,12 +70,12 @@ Else   // <== Widgets method
 			project.save()
 			
 			  //==================================================
-		: ($f.authenticationButton.catch($e))
+		: ($f.authenticationButton.catch($e;On Clicked:K2:4))
 			
 			$f.editAuthenticationMethod()
 			
 			  //  //==================================================
-		: ($f.pushNotification.catch($e))
+		: ($f.pushNotification.catch($e;On Clicked:K2:4))
 			
 			Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
 			$f.certificat.show(Form:C1466.server.pushNotification)

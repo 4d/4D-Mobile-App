@@ -16,15 +16,14 @@ Class constructor
 		This:C1470.authenticationGroup:=cs:C1710.group.new(This:C1470.authenticationLabel;This:C1470.authenticationButton)
 		
 		This:C1470.certificat:=cs:C1710.widget.new("certificatePicker")
-		This:C1470.certificat.picker:=pathPicker (String:C10(Form:C1466.server.pushCertificat);New object:C1471(\
+		This:C1470.certificat.picker:=pathPicker (String:C10(Form:C1466.server.pushCertificate);New object:C1471(\
 			"options";Package open:K24:8+Use sheet window:K24:11;\
 			"fileTypes";".p8";\
 			"directory";8858;\
 			"copyPath";False:C215;\
 			"openItem";False:C215;\
-			"message";Get localized string:C991("selectACertificat");\
-			"placeHolder";Get localized string:C991("selectACertificat")+"…"))
-		
+			"message";Get localized string:C991("selectACertificate");\
+			"placeHolder";Get localized string:C991("selectACertificate")+"…"))
 		
 		  // Constraints definition
 		ob_createPath ($o;"constraints.rules";Is collection:K8:32)
@@ -46,8 +45,8 @@ Function checkAuthenticationMethod
 /*===============================================*/
 Function editAuthenticationMethod
 	
-	C_OBJECT:C1216($o)
-	C_TEXT:C284($t)
+	var $o : Object
+	var $t : Text
 	
 	ARRAY TEXT:C222($tTxt_;0x0000)
 	METHOD GET PATHS:C1163(Path database method:K72:2;$tTxt_;*)
