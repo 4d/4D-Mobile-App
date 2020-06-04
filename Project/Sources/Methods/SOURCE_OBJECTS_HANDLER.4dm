@@ -116,10 +116,10 @@ Case of
 		
 		  // If (Shift down)
 		  //SHOW ON DISK(dataSet (New object(\
-									"action";"path";\
-									"project";New object(\
-									"product";Form.product;\
-									"$project";Form.$project))).path)
+												"action";"path";\
+												"project";New object(\
+												"product";Form.product;\
+												"$project";Form.$project))).path)
 		  // End if
 		
 		  //==================================================
@@ -143,6 +143,20 @@ Case of
 		Form:C1466.dataSource.source:="server"
 		
 		ui.saveProject()
+		
+		  //==================================== #ACI0100687
+		If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
+			
+			  // Generate the key
+			C_OBJECT:C1216($o)
+			$o:=Rest (New object:C1471(\
+				"action";"request";\
+				"handler";"mobileapp";\
+				"url";Form:C1466.server.urls.production))
+			
+		End if 
+		  //==================================== #ACI0100687
+		
 		$Obj_context.testServer()
 		
 		  //==================================================

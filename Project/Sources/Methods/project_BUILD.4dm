@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			  //If ($Obj_in.create)
 			  //  // Must also close and delete folders if no change and want to recreate.
 			  // Xcode (New object(\
-																																																																"action";"safeDelete";\
-																																																																"path";$Obj_in.path))
+																																																																				"action";"safeDelete";\
+																																																																				"path";$Obj_in.path))
 			  // End if
 			
 		End if 
@@ -251,7 +251,9 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 						  // SERVER STRUCTURE IS NOT OK. Confirm if data embed, Alert else
 						For each ($t;$Obj_project.dataModel) Until ($b)
 							
-							$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
+							  //==================================== #ACI0100704
+							  //$b:=Bool($Obj_project.dataModel[$t][""].embedded)
+							$b:=Not:C34(Bool:C1537($Obj_project.dataModel[$t][""].embedded))
 							
 						End for each 
 						
@@ -303,7 +305,9 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					  // SERVER NOT REACHABLE - Ignore if no data embed, Confirm else
 					For each ($t;$Obj_project.dataModel) Until ($b)
 						
-						$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
+						  //==================================== #ACI0100704
+						  //$b:=Bool($Obj_project.dataModel[$t][""].embedded)
+						$b:=Not:C34(Bool:C1537($Obj_project.dataModel[$t][""].embedded))
 						
 					End for each 
 					

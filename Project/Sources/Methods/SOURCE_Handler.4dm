@@ -262,7 +262,9 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="checkingServerConfiguration")
 		
-		If (feature.with("sourceClass")) & False:C215
+		ASSERT:C1129(Not:C34(Shift down:C543))
+		
+		If (feature.with("sourceClass"))
 			
 			BEEP:C151
 			
@@ -270,8 +272,6 @@ Case of
 			$oSource:=cs:C1710.source.new()
 			
 			If ($Obj_form.ui.remote())
-				
-				ASSERT:C1129(Not:C34(Shift down:C543))
 				
 				  // Verify the production server adress
 				If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
@@ -283,8 +283,6 @@ Case of
 					$ok:=Not:C34($oServer.started)
 					
 					If (Not:C34($ok))
-						
-						
 						
 						$ok:=(Position:C15("127.0.0.1";Form:C1466.server.urls.production)=0)\
 							 & (Position:C15("localhost";Form:C1466.server.urls.production)=0)
@@ -491,18 +489,18 @@ Case of
 			
 			If ($Obj_form.ui.remote())
 				
-				ASSERT:C1129(Not:C34(Shift down:C543))
-				
 				  // Verify the production server adress
-				If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
+				$Txt_url:=String:C10(Form:C1466.server.urls.production)
+				
+				If (Length:C16($Txt_url)>0)
 					
 					C_BOOLEAN:C305($ok)
 					$ok:=Not:C34(WEB Get server info:C1531.started)
 					
 					If (Not:C34($ok))
 						
-						$ok:=(Position:C15("127.0.0.1";Form:C1466.server.urls.production)=0)\
-							 & (Position:C15("localhost";Form:C1466.server.urls.production)=0)
+						$ok:=(Position:C15("127.0.0.1";$Txt_url)=0)\
+							 & (Position:C15("localhost";$Txt_url)=0)
 						
 					End if 
 					
@@ -533,13 +531,21 @@ Case of
 										"action";"status";\
 										"handler";"mobileapp";\
 										"timeout";60;\
-										"url";Form:C1466.server.urls.production;\
+										"url";$Txt_url;\
 										"headers";New object:C1471("X-MobileApp";"1";\
 										"Authorization";"Bearer "+$file.getText())))
 									
 								End if 
 								
 							Else 
+								
+								  //==================================== #ACI0100687
+								  // Generate the key
+								$Obj_result:=Rest (New object:C1471(\
+									"action";"request";\
+									"handler";"mobileapp";\
+									"url";$Txt_url))
+								  //==================================== #ACI0100687
 								
 								$Obj_result:=New object:C1471(\
 									"success";False:C215;\
@@ -557,7 +563,7 @@ Case of
 								"action";"status";\
 								"handler";"mobileapp";\
 								"timeout";60;\
-								"url";Form:C1466.server.urls.production;\
+								"url";$Txt_url;\
 								"headers";New object:C1471(\
 								"X-MobileApp";"1")))
 							
