@@ -509,6 +509,15 @@ If ($Obj_in.create)
 				
 				$Obj_out.computedCapabilities.capabilities.pushNotification:=True:C214
 				
+				If (Length:C16(String:C10($Obj_project.server.pushCertificate))>0)
+					C_OBJECT:C1216($certificateFile)
+					$certificateFile:=File:C1566($Obj_project.server.pushCertificate)
+					If ($certificateFile.exists)
+						$certificateFile.copyTo($appFolder;fk overwrite:K87:5)
+					Else 
+						ob_warning_add ($Obj_out;"Certificate file "+String:C10($Obj_project.server.pushCertificate)+" is missing")
+					End if 
+				End if 
 			End if 
 		End if 
 		
