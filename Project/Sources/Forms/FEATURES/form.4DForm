@@ -70,7 +70,8 @@
 					"width": 178,
 					"height": 17,
 					"stroke": "#808080",
-					"text": ":xliff:authenticationMethod"
+					"text": ":xliff:authenticationMethod",
+					"visibility": "hidden"
 				},
 				"02_pushNotification": {
 					"type": "checkbox",
@@ -86,8 +87,31 @@
 					"focusable": false,
 					"dataSourceTypeHint": "boolean",
 					"dataSource": "Form:C1466.server.pushNotification"
+				},
+				"certificatePicker": {
+					"type": "subform",
+					"left": 488,
+					"top": 45,
+					"width": 451,
+					"height": 22,
+					"detailForm": "PATH PICKER",
+					"borderStyle": "none",
+					"dataSource": "Form:C1466.$FEATURES.certificat.picker",
+					"events": [
+						"onDataChange"
+					],
+					"focusable": false,
+					"method": "FEATURES",
+					"visibility": "visible"
 				}
-			}
+			},
+			"entryOrder": [
+				"01_login",
+				"authentication",
+				"02_pushNotification",
+				"test.alert",
+				"certificatePicker"
+			]
 		}
 	],
 	"$4d": {

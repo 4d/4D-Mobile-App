@@ -4,7 +4,6 @@
 Class constructor
 	
 	var $o : Object
-	
 	$o:=editor_INIT 
 	
 	If (OB Is empty:C1297($o))
@@ -15,6 +14,17 @@ Class constructor
 		This:C1470.authenticationButton:=cs:C1710.button.new("authentication")
 		This:C1470.pushNotification:=cs:C1710.button.new("02_pushNotification")
 		This:C1470.authenticationGroup:=cs:C1710.group.new(This:C1470.authenticationLabel;This:C1470.authenticationButton)
+		
+		This:C1470.certificat:=cs:C1710.widget.new("certificatePicker")
+		This:C1470.certificat.picker:=pathPicker (String:C10(Form:C1466.server.pushCertificat);New object:C1471(\
+			"options";Package open:K24:8+Use sheet window:K24:11;\
+			"fileTypes";".p8";\
+			"directory";8858;\
+			"copyPath";False:C215;\
+			"openItem";False:C215;\
+			"message";Get localized string:C991("selectACertificat");\
+			"placeHolder";Get localized string:C991("selectACertificat")+"…"))
+		
 		
 		  // Constraints definition
 		ob_createPath ($o;"constraints.rules";Is collection:K8:32)
@@ -31,7 +41,7 @@ Function checkAuthenticationMethod
 	This:C1470.authenticationButton\
 		.setTitle(Choose:C955(Find in array:C230($tTxt_;$tTxt_{0})=-1;"create...";"edit..."))\
 		.bestSize()\
-		.show()
+		.show(Form:C1466.server.authentication.email)
 	
 /*===============================================*/
 Function editAuthenticationMethod

@@ -530,9 +530,7 @@
 			"group",
 			"input",
 			"picture",
-			"scrollable",
-			"static",
-			"widget"
+			"static"
 		]
 	},
 	"HTUs": {
@@ -675,6 +673,15 @@
 			"panel"
 		]
 	},
+	"pathPicker": {
+		"methods": [
+			"COMPILER_PATH PICKER",
+			"pathPicker"
+		],
+		"forms": [
+			"PATH PICKER"
+		]
+	},
 	"pic": {
 		"methods": [
 			"COMPILER_pic",
@@ -798,6 +805,7 @@
 		"groups": [
 			"Localization",
 			"Message",
+			"pathPicker",
 			"Picture grid",
 			"Search"
 		]

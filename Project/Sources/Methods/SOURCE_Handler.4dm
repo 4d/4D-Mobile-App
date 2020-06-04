@@ -262,7 +262,9 @@ Case of
 		  //=========================================================
 	: ($Obj_in.action="checkingServerConfiguration")
 		
-		If (feature.with("sourceClass"))
+		If (feature.with("sourceClass")) & False:C215
+			
+			BEEP:C151
 			
 			var $oSource : Object
 			$oSource:=cs:C1710.source.new()
@@ -274,14 +276,69 @@ Case of
 				  // Verify the production server adress
 				If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
 					
-					C_BOOLEAN:C305($ok)
-					$ok:=Not:C34(WEB Get server info:C1531.started)
+					var $oServer : Object
+					$oServer:=WEB Get server info:C1531
+					
+					var $ok : Boolean
+					$ok:=Not:C34($oServer.started)
 					
 					If (Not:C34($ok))
+						
+						
 						
 						$ok:=(Position:C15("127.0.0.1";Form:C1466.server.urls.production)=0)\
 							 & (Position:C15("localhost";Form:C1466.server.urls.production)=0)
 						
+						var $regex : Object
+						$regex:=Rgx_match (New object:C1471(\
+							"pattern";"(?mi-s)(localhost|(?:(?:\\d+\\.){3}\\d+))(?::(\\d+))?";\
+							"target";Form:C1466.server.urls.production))
+						
+						If ($regex.success)
+							
+							If ($regex.match[1].data="127.0.0.1")\
+								 | ($regex.match[1].data="localhost")
+								
+								  // Check the port
+								If ($regex.match.length>=2)
+									
+									$ok:=($oServer.options.webPortID#Num:C11($regex.match[2].data))
+									
+								Else 
+									
+									  // default port 80
+									$ok:=($oServer.options.webPortID#80)
+									
+								End if 
+								
+								  //______________________________________________________
+							End if 
+							
+							If ($ok)
+								
+								var $oSystem : Object
+								$oSystem:=Get system info:C1571
+								
+								var $o : Object
+								$o:=$oSystem.networkInterfaces.query("ipAddresses[].ip=:1";$regex.match[1].data).pop()
+								
+								If ($o#Null:C1517)
+									
+									  // warning même adresse mais pas moyen de tester le port
+									
+								Else 
+									
+									$ok:=True:C214
+									
+								End if 
+							End if 
+							
+							
+						Else 
+							
+							$ok:=True:C214
+							
+						End if 
 					End if 
 					
 					If ($ok)

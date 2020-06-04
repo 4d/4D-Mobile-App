@@ -1,0 +1,134 @@
+﻿{
+	"destination": "detailScreen",
+	"windowMinHeight": 30,
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerBody": 22,
+	"markerBreak": 22,
+	"markerFooter": 22,
+	"events": [
+		"onLoad",
+		"onTimer",
+		"onResize",
+		"onBoundVariableChange"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"border": {
+					"type": "rectangle",
+					"top": 1,
+					"left": 1,
+					"width": 322,
+					"height": 20,
+					"sizingX": "grow",
+					"fill": "automatic",
+					"stroke": "#C0C0C0"
+				},
+				"_airbag": {
+					"type": "button",
+					"top": 17,
+					"left": 0,
+					"width": 264,
+					"height": 4,
+					"sizingX": "move",
+					"display": false,
+					"events": [
+						"onClick"
+					]
+				},
+				"label": {
+					"type": "input",
+					"top": 3,
+					"left": 18,
+					"width": 302,
+					"height": 18,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"dragging": "none",
+					"dropping": "none",
+					"sizingX": "grow",
+					"focusable": false,
+					"contextMenu": "none",
+					"dataSource": "Form:C1466.label",
+					"events": []
+				},
+				"browse": {
+					"type": "button",
+					"top": 1,
+					"left": 328,
+					"width": 45,
+					"height": 21,
+					"sizingX": "move",
+					"fontFamily": "System Font Regular",
+					"fontSize": 13,
+					"text": ":xliff:CommonEllipse",
+					"style": "roundedBevel",
+					"dropping": "custom",
+					"method": "ObjectMethods/browse.4dm",
+					"events": [
+						"onClick",
+						"onDrop",
+						"onDragOver"
+					],
+					"focusable": false,
+					"bottom": 22
+				},
+				"menu": {
+					"type": "button",
+					"top": 3,
+					"left": 1,
+					"width": 16,
+					"height": 16,
+					"visibility": "hidden",
+					"icon": "/RESOURCES/Images/pathPicker/down.png",
+					"iconFrames": 4,
+					"textPlacement": "top",
+					"style": "custom",
+					"method": "ObjectMethods/menu.4dm",
+					"events": [
+						"onClick"
+					],
+					"focusable": false
+				},
+				"menu.expand": {
+					"type": "button",
+					"top": 1,
+					"left": 18,
+					"width": 304,
+					"height": 20,
+					"visibility": "hidden",
+					"icon": "",
+					"iconFrames": 4,
+					"textPlacement": "top",
+					"style": "regular",
+					"method": "ObjectMethods/menu.expand.4dm",
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"display": false,
+					"sizingX": "grow",
+					"right": 322,
+					"bottom": 21
+				}
+			}
+		}
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"shared": true
+}

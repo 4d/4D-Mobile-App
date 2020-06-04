@@ -29,11 +29,13 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 			
 			$f.loginRequired.bestSize()
 			$f.pushNotification.bestSize()
-			$f.authenticationGroup.distributeHorizontally()
+			$f.authenticationGroup.distributeHorizontally()\
+				.show(Form:C1466.server.authentication.email)
 			
 			  //______________________________________________________
 		: ($e.code=On Timer:K2:25)
 			
+			$f.certificat.show(Form:C1466.server.pushNotification)
 			$f.checkAuthenticationMethod()
 			
 			  //______________________________________________________
@@ -46,10 +48,24 @@ Else   // <== Widgets method
 	Case of 
 			
 			  //==================================================
-		: ($f.loginRequired.catch($e))
+		: ($f.certificat.catch($e;On Data Change:K2:15))
+			
+			If (Length:C16($f.certificat.picker.platformPath)>0)
+				
+				If ($f.certificat.picker._target.path#String:C10(Form:C1466.server.pushCertificat))
+					
+					Form:C1466.server.pushCertificat:=$f.certificat.picker._target.path
+					project.save()
+					
+				End if 
+			End if 
+			
+			  //==================================================
+		: ($f.loginRequired.catch($e;On Clicked:K2:4))
 			
 			Form:C1466.server.authentication.email:=Bool:C1537(Form:C1466.server.authentication.email)
-			ui.saveProject()
+			$f.authenticationGroup.show(Form:C1466.server.authentication.email)
+			project.save()
 			
 			  //==================================================
 		: ($f.authenticationButton.catch($e))
@@ -60,7 +76,8 @@ Else   // <== Widgets method
 		: ($f.pushNotification.catch($e))
 			
 			Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
-			ui.saveProject()
+			$f.certificat.show(Form:C1466.server.pushNotification)
+			project.save()
 			
 			  //==================================================
 	End case 
