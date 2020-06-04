@@ -14,7 +14,7 @@ C_OBJECT:C1216($2)
 
 C_LONGINT:C283($bottom;$left;$right;$top)
 C_TEXT:C284($popup;$t;$Txt_path;$Txt_Separator)
-C_OBJECT:C1216($o;$Path_root)
+C_OBJECT:C1216($o)
 C_COLLECTION:C1488($c)
 
 ARRAY TEXT:C222($tTxt_volumes;0)
@@ -191,7 +191,6 @@ Else
 			If (Length:C16($o.platformPath)>0)
 				
 				  // In remote mode, the path can be in the server system format
-				
 				Case of 
 						
 						  //……………………………………………………………………………………………
@@ -250,7 +249,6 @@ Else
 		: ($1="displayMenu")
 			
 			  // In remote mode, the path can be in the server system format
-			
 			Case of 
 					
 					  //……………………………………………………………………………………………
@@ -281,9 +279,6 @@ Else
 			
 			$c:=Split string:C1554($o.platformPath;$Txt_separator)
 			
-			  //$Path_root:=Folder(Temporary folder;fk platform path).folder(Generate UUID)
-			  //$Path_root.create()
-			
 			$popup:=Create menu:C408
 			
 			For each ($t;$c)
@@ -307,35 +302,21 @@ Else
 						  //……………………………………………………………………………………………
 					: (Find in array:C230($tTxt_volumes;$t)>0)
 						
-						SET MENU ITEM ICON:C984($popup;-1;"#images/pathPicker/drive.png")
+						SET MENU ITEM ICON:C984($popup;-1;"#pathPicker/drive.png")
 						
 						  //……………………………………………………………………………………………
 					: (Test path name:C476($Txt_path)=Is a folder:K24:2)
 						
-						SET MENU ITEM ICON:C984($popup;-1;"#images/pathPicker/folder.png")
-						
-						  //$oo:=Folder($Txt_path;fk platform path)
-						  //$p:=$oo.getIcon(32)
-						  //$ooo:=$Path_root.file(Generate UUID)
-						  //WRITE PICTURE FILE($ooo.platformPath;$p;".png")
-						  //SET MENU ITEM ICON($popup;-1;"path://"+$ooo.path)
+						SET MENU ITEM ICON:C984($popup;-1;"#pathPicker/folder.png")
 						
 						  //……………………………………………………………………………………………
 					: (Test path name:C476($Txt_path)=Is a document:K24:1)
 						
-						SET MENU ITEM ICON:C984($popup;-1;"#images/pathPicker/file.png")
-						
-						  //$oo:=File($Txt_path;fk platform path)
-						  //$p:=$oo.getIcon(32)
-						  //$ooo:=$Path_root.file(Generate UUID)
-						  //WRITE PICTURE FILE($ooo.platformPath;$p;".png")
-						  //SET MENU ITEM ICON($popup;-1;"path:"+$ooo.target)
+						SET MENU ITEM ICON:C984($popup;-1;"#pathPicker/file.png")
 						
 						  //……………………………………………………………………………………………
 				End case 
 			End for each 
-			
-			  //$Path_root.delete(Delete with contents)
 			
 			If (Count menu items:C405($popup)>0)
 				
@@ -409,4 +390,4 @@ End if
 $0:=$o
 
   // ----------------------------------------------------
-  // End 
+  // End
