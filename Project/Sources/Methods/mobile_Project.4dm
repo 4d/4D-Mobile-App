@@ -247,7 +247,12 @@ If ($Obj_in.create)
 		"team";New object:C1471("id";$Obj_project.organization.teamId);\
 		"info";$Obj_project.info)
 	$appManifest.id:=String:C10($appManifest.team.id)+"."+$appManifest.application.id
-	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18).folder($appManifest.id)
+	
+	  //#ACI0100704
+	  //$appFolder:=Folder(fk mobileApps folder).folder($appManifest.id)
+	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18;*).folder($appManifest.id)
+	  //#ACI0100704
+	
 	If (Not:C34($appFolder.exists))
 		$appFolder.create()
 	End if 
