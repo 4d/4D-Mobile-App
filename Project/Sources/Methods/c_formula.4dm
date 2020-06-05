@@ -19,7 +19,9 @@ End if
 
 $count:=Count parameters:C259
 
+  //%W-518.7
 $key:=Choose:C955(Undefined:C82($1.accumulator);"result";"accumulator")
+  //%W+518.7
 
 Case of 
 		

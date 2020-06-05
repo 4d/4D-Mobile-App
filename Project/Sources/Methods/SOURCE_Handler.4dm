@@ -439,7 +439,7 @@ Case of
 				If (WEB Get server info:C1531.started)
 					
 					  // Test the key
-					$file:=Folder:C1567(fk mobileApps folder:K87:18).file("key.mobileapp")
+					$file:=Folder:C1567(fk mobileApps folder:K87:18;*).file("key.mobileapp")
 					
 					If (Not:C34($file.exists))
 						
@@ -616,7 +616,7 @@ Case of
 					$Txt_url:="127.0.0.1:"+String:C10($oServer.options.webPortID)
 					
 					  // Test the key
-					$file:=Folder:C1567(fk mobileApps folder:K87:18).file("key.mobileapp")
+					$file:=Folder:C1567(fk mobileApps folder:K87:18;*).file("key.mobileapp")
 					
 					If (Not:C34($file.exists))
 						

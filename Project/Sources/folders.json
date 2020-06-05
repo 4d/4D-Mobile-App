@@ -678,10 +678,13 @@
 	"pathPicker": {
 		"methods": [
 			"COMPILER_PATH PICKER",
-			"pathPicker"
+			"PATH_PICKER"
 		],
 		"forms": [
 			"PATH PICKER"
+		],
+		"classes": [
+			"pathPicker"
 		]
 	},
 	"pic": {

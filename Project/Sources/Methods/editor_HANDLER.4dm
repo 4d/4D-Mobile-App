@@ -158,10 +158,12 @@ Case of
 					
 				End if 
 				
+				  // Mask picker during resizing
 				EXECUTE METHOD IN SUBFORM:C1085($Obj_form.project;"editor_CALLBACK";*;"pickerHide";New object:C1471(\
 					"action";"forms";\
 					"onResize";True:C214))
 				
+				  // Execute geometry rules in each loaded pannel
 				EXECUTE METHOD IN SUBFORM:C1085($Obj_form.project;"call_MESSAGE_DISPATCH";*;New object:C1471(\
 					"target";"panel.";\
 					"method";"UI_SET_GEOMETRY"))
@@ -174,7 +176,6 @@ Case of
 				$Lon_width:=$Lon_right-$Lon_left
 				$Lon_left:=$Lon_middle-($Lon_width\2)
 				$Lon_right:=$Lon_left+$Lon_width
-				
 				OBJECT SET COORDINATES:C1248(*;$Obj_form.message;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
 				
 				  // Center the greeting screen

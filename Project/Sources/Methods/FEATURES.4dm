@@ -8,12 +8,11 @@
   // FEATURES pannel management
   // ----------------------------------------------------
   // Declarations
-  // var $1
-var $f;$e : Object
+var $ƒ;$e : Object
 
   // ----------------------------------------------------
   // Initialisations
-$f:=panel_Definition 
+$ƒ:=panel_Definition 
 
 ASSERT:C1129(Not:C34(Shift down:C543))
 
@@ -27,58 +26,59 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 			  //______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			$f.loginRequired.bestSize()
-			$f.pushNotification.bestSize()
-			$f.authenticationGroup.distributeHorizontally()\
+			$ƒ.loginRequired.bestSize()
+			$ƒ.pushNotification.bestSize()
+			$ƒ.authenticationGroup.distributeHorizontally()\
 				.show(Form:C1466.server.authentication.email)
 			
 			  //______________________________________________________
 		: ($e.code=On Timer:K2:25)
 			
-			$f.certificat.show(Form:C1466.server.pushNotification)
-			$f.checkAuthenticationMethod()
+			$ƒ.certificat.show(Form:C1466.server.pushNotification)
+			$ƒ.checkAuthenticationMethod()
 			
 			  //______________________________________________________
 	End case 
 	
 Else   // <== Widgets method
 	
-	$e:=$f.event
+	$e:=$ƒ.event
 	
 	Case of 
 			
 			  //==================================================
-		: ($f.certificat.catch($e;On Data Change:K2:15))
+		: ($ƒ.certificat.catch($e;On Data Change:K2:15))
 			
-			  //If (Length($f.certificat.picker.platformPath)>0)
-			
-			If (Bool:C1537($f.certificat.picker._target.exists))
+			If ($ƒ.certificat.picker.target#Null:C1517)
 				
-				If ($f.certificat.picker._target.path#String:C10(Form:C1466.server.pushCertificate))
+				If (Bool:C1537($ƒ.certificat.picker.target.exists))
 					
-					Form:C1466.server.pushCertificate:=$f.certificat.picker._target.path
-					project.save()
-					
+					If ($ƒ.certificat.picker.path#String:C10(Form:C1466.server.pushCertificate))
+						
+						Form:C1466.server.pushCertificate:=$ƒ.certificat.picker.path
+						project.save()
+						
+					End if 
 				End if 
 			End if 
 			
 			  //==================================================
-		: ($f.loginRequired.catch($e;On Clicked:K2:4))
+		: ($ƒ.loginRequired.catch($e;On Clicked:K2:4))
 			
 			Form:C1466.server.authentication.email:=Bool:C1537(Form:C1466.server.authentication.email)
-			$f.authenticationGroup.show(Form:C1466.server.authentication.email)
+			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
 			project.save()
 			
 			  //==================================================
-		: ($f.authenticationButton.catch($e;On Clicked:K2:4))
+		: ($ƒ.authenticationButton.catch($e;On Clicked:K2:4))
 			
-			$f.editAuthenticationMethod()
+			$ƒ.editAuthenticationMethod()
 			
 			  //  //==================================================
-		: ($f.pushNotification.catch($e;On Clicked:K2:4))
+		: ($ƒ.pushNotification.catch($e;On Clicked:K2:4))
 			
 			Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
-			$f.certificat.show(Form:C1466.server.pushNotification)
+			$ƒ.certificat.show(Form:C1466.server.pushNotification)
 			project.save()
 			
 			  //==================================================

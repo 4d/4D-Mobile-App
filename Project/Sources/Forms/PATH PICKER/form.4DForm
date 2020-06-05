@@ -12,7 +12,6 @@
 		"onResize",
 		"onBoundVariableChange"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -56,11 +55,8 @@
 					"borderStyle": "none",
 					"enterable": false,
 					"hideFocusRing": true,
-					"dragging": "none",
-					"dropping": "none",
 					"sizingX": "grow",
 					"focusable": false,
-					"contextMenu": "none",
 					"dataSource": "Form:C1466.label",
 					"events": []
 				},
@@ -76,14 +72,14 @@
 					"text": ":xliff:CommonEllipse",
 					"style": "roundedBevel",
 					"dropping": "custom",
-					"method": "ObjectMethods/browse.4dm",
 					"events": [
 						"onClick",
 						"onDrop",
 						"onDragOver"
 					],
 					"focusable": false,
-					"bottom": 22
+					"bottom": 22,
+					"method": "PATH_PICKER"
 				},
 				"menu": {
 					"type": "button",
@@ -92,15 +88,15 @@
 					"width": 16,
 					"height": 16,
 					"visibility": "hidden",
-					"icon": "/RESOURCES/Images/pathPicker/down.png",
+					"icon": "/RESOURCES/pathPicker/down.png",
 					"iconFrames": 4,
 					"textPlacement": "top",
 					"style": "custom",
-					"method": "ObjectMethods/menu.4dm",
 					"events": [
 						"onClick"
 					],
-					"focusable": false
+					"focusable": false,
+					"method": "PATH_PICKER"
 				},
 				"menu.expand": {
 					"type": "button",
@@ -113,15 +109,17 @@
 					"iconFrames": 4,
 					"textPlacement": "top",
 					"style": "regular",
-					"method": "ObjectMethods/menu.expand.4dm",
 					"events": [
-						"onClick"
+						"onClick",
+						"onDrop",
+						"onDragOver"
 					],
 					"focusable": false,
 					"display": false,
 					"sizingX": "grow",
 					"right": 322,
-					"bottom": 21
+					"bottom": 21,
+					"method": "PATH_PICKER"
 				}
 			}
 		}
@@ -130,5 +128,6 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"shared": true
+	"shared": true,
+	"method": "PATH_PICKER"
 }

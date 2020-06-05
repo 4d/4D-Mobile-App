@@ -17,8 +17,8 @@ C_OBJECT:C1216($Obj_cancel;$Obj_form;$Obj_in;$Obj_ok;$Obj_update)
 C_COLLECTION:C1488($Col_buffer;$Col_panels)
 
 If (False:C215)
-	C_OBJECT:C1216(PROJECT_HANDLER ;$0)
-	C_OBJECT:C1216(PROJECT_HANDLER ;$1)
+	C_OBJECT:C1216(PROJECT_Handler ;$0)
+	C_OBJECT:C1216(PROJECT_Handler ;$1)
 End if 
 
   // ----------------------------------------------------

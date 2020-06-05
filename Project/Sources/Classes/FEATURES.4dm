@@ -1,5 +1,5 @@
 /*===============================================
-           FEATURES pannel Class
+FEATURES pannel Class
 ===============================================*/
 Class constructor
 	
@@ -16,7 +16,7 @@ Class constructor
 		This:C1470.authenticationGroup:=cs:C1710.group.new(This:C1470.authenticationLabel;This:C1470.authenticationButton)
 		
 		This:C1470.certificat:=cs:C1710.widget.new("certificatePicker")
-		This:C1470.certificat.picker:=pathPicker (String:C10(Form:C1466.server.pushCertificate);New object:C1471(\
+		This:C1470.certificat.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.pushCertificate);New object:C1471(\
 			"options";Package open:K24:8+Use sheet window:K24:11;\
 			"fileTypes";".p8";\
 			"directory";8858;\

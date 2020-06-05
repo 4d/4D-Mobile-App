@@ -92,7 +92,7 @@
 					"type": "subform",
 					"left": 488,
 					"top": 45,
-					"width": 451,
+					"width": 449,
 					"height": 22,
 					"detailForm": "PATH PICKER",
 					"borderStyle": "none",

@@ -247,6 +247,49 @@ Function touch
 	$0:=This:C1470
 	
 /*══════════════════════════
+.on(e;callback) -> bool
+══════════════════════════*/
+Function on
+	
+	C_BOOLEAN:C305($0)
+	C_VARIANT:C1683($1)
+	C_OBJECT:C1216($2)
+	
+	If (Asserted:C1132(This:C1470.type#-1;"Does not apply to a group"))
+		
+		If (Count parameters:C259=0)
+			
+			$0:=(This:C1470.name=FORM Event:C1606.objectName)
+			
+		Else 
+			
+			If (Value type:C1509($1)=Is object:K8:27)
+				
+				If (Count parameters:C259>=2)
+					
+					$0:=(This:C1470.name=String:C10($1.objectName))\
+						 & ($1.code=$2)
+					
+				Else 
+					
+					$0:=(This:C1470.name=String:C10($1.objectName))
+					
+				End if 
+			Else 
+				
+				$0:=(This:C1470.name=String:C10($1))
+				
+			End if 
+		End if 
+		
+		If ($0)
+			
+			$2.call()
+			
+		End if 
+	End if 
+	
+/*══════════════════════════
 .catch(e) -> bool
 ══════════════════════════*/
 Function catch

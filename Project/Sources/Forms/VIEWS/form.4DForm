@@ -192,8 +192,8 @@
 				"viewport.preview": {
 					"type": "rectangle",
 					"top": 157,
-					"left": 466,
-					"width": 472,
+					"left": 486,
+					"width": 432,
 					"height": 503,
 					"fill": "transparent",
 					"stroke": "#ffb6c1",
@@ -211,7 +211,8 @@
 					"fill": "#FFFFFF",
 					"sizingY": "fixed",
 					"visibility": "hidden",
-					"stroke": "#696969"
+					"stroke": "#696969",
+					"sizingX": "move"
 				},
 				"preview.label": {
 					"type": "text",
@@ -226,7 +227,7 @@
 					"fontSize": 13,
 					"fontWeight": "bold",
 					"text": "xxx",
-					"sizingX": "fixed",
+					"sizingX": "move",
 					"borderStyle": "none"
 				},
 				"01_fields.label": {
@@ -279,7 +280,8 @@
 						"onScroll"
 					],
 					"pictureFormat": "truncatedTopLeft",
-					"method": "ObjectMethods/preview.4dm"
+					"method": "ObjectMethods/preview.4dm",
+					"sizingX": "move"
 				},
 				"01_fields.border": {
 					"type": "rectangle",
@@ -443,7 +445,8 @@
 					"fill": "transparent",
 					"sizingY": "fixed",
 					"visibility": "hidden",
-					"stroke": "#696969"
+					"stroke": "#696969",
+					"sizingX": "move"
 				},
 				"preview.scrollBar": {
 					"type": "ruler",
@@ -465,7 +468,8 @@
 					"method": "views_OBJECTS_HANDLER",
 					"fontSize": 10,
 					"stroke": "#ff0000",
-					"focusable": false
+					"focusable": false,
+					"sizingX": "move"
 				}
 			}
 		}
