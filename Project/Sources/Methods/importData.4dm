@@ -28,3 +28,41 @@ SAVE RECORD([Commands])
 End for each 
 End if 
 */
+
+C_PICTURE:C286($picture)
+C_BLOB:C604($pictureBlob)
+C_TEXT:C284($pictureURL;$fieldName)
+C_OBJECT:C1216($e;$s;$field)
+C_LONGINT:C283($i;$max;$hs)
+C_OBJECT:C1216($classStore)
+
+$classStore:=ds:C1482.ALL_TYPES
+$max:=100
+
+$pictureURL:="https://picsum.photos/1000"
+For ($i;1;$max)
+	$e:=$classStore.new()
+	For each ($fieldName;$classStore)
+		$field:=$classStore[$fieldName]
+		  // TODO manage primary key
+		Case of 
+			: ($field.type="string")
+				$e[$fieldName]:=Generate UUID:C1066
+			: ($field.type="number")
+				$e[$fieldName]:=Random:C100
+			: ($field.type="bool")
+				$e[$fieldName]:=(Random:C100%2)>0
+			: ($field.type="date")
+				$e[$fieldName]:=Current date:C33  // add random
+			: ($field.type="object")
+				$e[$fieldName]:=New object:C1471("num";Random:C100;"str";Generate UUID:C1066)
+			: ($field.type="image")
+				$hs:=HTTP Get:C1157($pictureURL;$pictureBlob)
+				BLOB TO PICTURE:C682($pictureBlob;$picture)
+				$e[$fieldName]:=$picture
+			Else 
+				
+		End case 
+	End for each 
+	$s:=$e.save()
+End for 
