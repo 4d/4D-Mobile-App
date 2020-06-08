@@ -635,7 +635,7 @@ Case of
 			
 			If ($Dom_root.success)
 				
-				$Dom_group:=$Dom_root.findByXPath("Workspace/Group")
+				$Dom_group:=$Dom_root.findByXPath("/Workspace/Group")
 				
 				  // Remove current group children if any
 				$Dom_child:=$Dom_group.firstChild()
