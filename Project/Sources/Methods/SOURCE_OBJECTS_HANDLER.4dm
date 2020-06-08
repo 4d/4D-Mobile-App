@@ -50,8 +50,7 @@ Case of
 		  //==================================================
 	: ($Txt_me=$Obj_form.generate)
 		
-		$Obj_project:=New object:C1471(\
-			)
+		$Obj_project:=New object:C1471
 		$Obj_project.product:=Form:C1466.product
 		$Obj_project.dataModel:=Form:C1466.dataModel
 		$Obj_project.$project:=Form:C1466.$project
@@ -60,7 +59,9 @@ Case of
 		
 		If (Form:C1466.dataSource.source="server")
 			
-			$File_key:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
+			  //ACI0100868
+			  //$File_key:=doc_Absolute_path (Form.dataSource.keyPath;Get 4D folder(MobileApps folder;*))
+			$File_key:=doc_Absolute_path (Form:C1466.dataSource.keyPath)
 			
 			  //===============================================================
 			  //#RUSTINE: ne devrait plus être nécessaire
@@ -116,10 +117,10 @@ Case of
 		
 		  // If (Shift down)
 		  //SHOW ON DISK(dataSet (New object(\
-												"action";"path";\
-												"project";New object(\
-												"product";Form.product;\
-												"$project";Form.$project))).path)
+															"action";"path";\
+															"project";New object(\
+															"product";Form.product;\
+															"$project";Form.$project))).path)
 		  // End if
 		
 		  //==================================================
@@ -173,7 +174,16 @@ Case of
 					
 					If (Bool:C1537(OK))
 						
-						Form:C1466.dataSource.keyPath:=Replace string:C233(doc_Relative_path (DOCUMENT);Folder separator:K24:12;"/")
+						If (feature.with("sourceClass"))
+							
+							Form:C1466.dataSource.keyPath:=cs:C1710.doc.new(DOCUMENT).relativePath
+							
+						Else 
+							
+							  // 18R2-
+							Form:C1466.dataSource.keyPath:=Replace string:C233(doc_Relative_path (DOCUMENT);Folder separator:K24:12;"/")
+							
+						End if 
 						
 						ui.saveProject()
 						$Obj_context.testServer()

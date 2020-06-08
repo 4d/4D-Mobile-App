@@ -55,17 +55,7 @@ Class constructor
 		End if 
 	End if 
 	
-	  // Keep initial values to allow a reset
-	This:C1470.initial:=New object:C1471
-	
-	For each ($t;This:C1470)
-		
-		This:C1470.initial[$t]:=This:C1470[$t]
-		
-	End for each 
-	
-	OBJECT SET PLACEHOLDER:C1295(*;"label";This:C1470.placeHolder)
-	
+	This:C1470.geometry()
 	This:C1470._updateLabel()
 	
 	  //===================================================
@@ -73,7 +63,7 @@ Function setType
 	
 	var $1 : Integer
 	
-	If (Count parameters:C259=1)
+	If (Count parameters:C259>=1)
 		
 		This:C1470.type:=$1
 		
@@ -88,7 +78,7 @@ Function setMessage
 	
 	var $1 : Text
 	
-	If (Count parameters:C259=1)
+	If (Count parameters:C259>=1)
 		
 		This:C1470.message:=$1
 		
@@ -103,7 +93,7 @@ Function setPlaceholder
 	
 	var $1 : Text
 	
-	If (Count parameters:C259=1)
+	If (Count parameters:C259>=1)
 		
 		This:C1470.placeHolder:=$1
 		OBJECT SET PLACEHOLDER:C1295(*;"label";This:C1470.placeHolder)
@@ -119,7 +109,7 @@ Function setTarget
 	
 	var $1 : Object
 	
-	If (Count parameters:C259=1)
+	If (Count parameters:C259>=1)
 		
 		If ($1#Null:C1517)
 			
@@ -159,34 +149,7 @@ Function setPlatformPath
 	
 	var $1 : Text
 	
-	If (Count parameters:C259=1)
-		
-		  // In remote mode, the path can be in the server system format
-		Case of 
-				
-				  //……………………………………………………………………………………………
-			: (Application type:C494=4D Remote mode:K5:5)\
-				 & (Is macOS:C1572)\
-				 & (Position:C15("\\";This:C1470.platformPath)>0)
-				
-				  // macOS client with server on Windows
-				This:C1470.separator:="\\"
-				
-				  //……………………………………………………………………………………………
-			: (Application type:C494=4D Remote mode:K5:5)\
-				 & (Is Windows:C1573)\
-				 & (Position:C15(":";Replace string:C233(This:C1470.platformPath;":";"";1))>0)
-				
-				  // Windows client with server on macOS
-				This:C1470.separator:=":"
-				
-				  //……………………………………………………………………………………………
-			Else 
-				
-				This:C1470.separator:=Folder separator:K24:12
-				
-				  //……………………………………………………………………………………………
-		End case 
+	If (Count parameters:C259>=1)
 		
 		This:C1470.platformPath:=$1
 		
@@ -226,7 +189,7 @@ Function setPath
 	
 	var $1 : Text
 	
-	If (Count parameters:C259=1)
+	If (Count parameters:C259>=1)
 		
 		This:C1470.path:=$1
 		
@@ -306,20 +269,6 @@ Function select
 		This:C1470._resume()
 		
 	End if 
-	
-	  //===================================================
-Function reset
-	
-	var $t : Text
-	
-	For each ($t;This:C1470.initial)
-		
-		This:C1470[$t]:=This:C1470.initial[$t]
-		
-	End for each 
-	
-	OBJECT SET PLACEHOLDER:C1295(*;"label";This:C1470.placeHolder)
-	This:C1470.ui()
 	
 	  //===================================================
 Function displayMenu
@@ -486,12 +435,50 @@ Function _updateLabel
 	
 	If (Length:C16(This:C1470.platformPath)>0)
 		
+		
+		  // In remote mode, the path can be in the server system format
+		Case of 
+				
+				  //……………………………………………………………………………………………
+			: (Application type:C494=4D Remote mode:K5:5)\
+				 & (Is macOS:C1572)\
+				 & (Position:C15("\\";This:C1470.platformPath)>0)
+				
+				  // macOS client with server on Windows
+				This:C1470.separator:="\\"
+				
+				  //……………………………………………………………………………………………
+			: (Application type:C494=4D Remote mode:K5:5)\
+				 & (Is Windows:C1573)\
+				 & (Position:C15(":";Replace string:C233(This:C1470.platformPath;":";"";1))>0)
+				
+				  // Windows client with server on macOS
+				This:C1470.separator:=":"
+				
+				  //……………………………………………………………………………………………
+			Else 
+				
+				This:C1470.separator:=Folder separator:K24:12
+				
+				  //……………………………………………………………………………………………
+		End case 
+		
 		var $c : Collection
 		$c:=Split string:C1554(This:C1470.platformPath;This:C1470.separator;sk ignore empty strings:K86:1)
 		
 		This:C1470.label:=Choose:C955($c[$c.length-1]#$c[0];\
 			Replace string:C233(Replace string:C233(Get localized string:C991("FileInVolume");"{file}";$c[$c.length-1]);"{volume}";$c[0]);\
 			"\""+$c[$c.length-1]+"\"")
+		
+		If (Bool:C1537(This:C1470.target.exists))
+			
+			OBJECT SET RGB COLORS:C628(*;"label";Foreground color:K23:1)
+			
+		Else 
+			
+			OBJECT SET RGB COLORS:C628(*;"label";"red")
+			
+		End if 
 		
 		OBJECT SET VISIBLE:C603(*;"menu@";True:C214)
 		
@@ -576,5 +563,6 @@ Function ui
 	End if 
 	
 	OBJECT SET VISIBLE:C603(*;"menu@";Length:C16(This:C1470.label)>0)
+	OBJECT SET PLACEHOLDER:C1295(*;"label";This:C1470.placeHolder)
 	
 	  //===================================================

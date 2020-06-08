@@ -23,7 +23,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 	
 	Case of 
 			
-			  //______________________________________________________
+			  //______________________________________________
 		: ($e.code=On Load:K2:1)
 			
 			$ƒ.loginRequired.bestSize()
@@ -31,13 +31,15 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 			$ƒ.authenticationGroup.distributeHorizontally()\
 				.show(Form:C1466.server.authentication.email)
 			
-			  //______________________________________________________
+			  //______________________________________________
 		: ($e.code=On Timer:K2:25)
 			
 			$ƒ.certificat.show(Form:C1466.server.pushNotification)
 			$ƒ.checkAuthenticationMethod()
 			
-			  //______________________________________________________
+			$ƒ.certificat.picker._updateLabel()
+			
+			  //______________________________________________
 	End case 
 	
 Else   // <== Widgets method
@@ -46,7 +48,7 @@ Else   // <== Widgets method
 	
 	Case of 
 			
-			  //==================================================
+			  //==============================================
 		: ($ƒ.certificat.catch($e;On Data Change:K2:15))
 			
 			If ($ƒ.certificat.picker.target#Null:C1517)
@@ -55,32 +57,32 @@ Else   // <== Widgets method
 					
 					If ($ƒ.certificat.picker.path#String:C10(Form:C1466.server.pushCertificate))
 						
-						Form:C1466.server.pushCertificate:=$ƒ.certificat.picker.path
+						Form:C1466.server.pushCertificate:=cs:C1710.doc.new($ƒ.certificat.picker.target).relativePath
 						project.save()
 						
 					End if 
 				End if 
 			End if 
 			
-			  //==================================================
+			  //==============================================
 		: ($ƒ.loginRequired.catch($e;On Clicked:K2:4))
 			
 			Form:C1466.server.authentication.email:=Bool:C1537(Form:C1466.server.authentication.email)
 			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
 			project.save()
 			
-			  //==================================================
+			  //==============================================
 		: ($ƒ.authenticationButton.catch($e;On Clicked:K2:4))
 			
 			$ƒ.editAuthenticationMethod()
 			
-			  //  //==================================================
+			  //==============================================
 		: ($ƒ.pushNotification.catch($e;On Clicked:K2:4))
 			
 			Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
 			$ƒ.certificat.show(Form:C1466.server.pushNotification)
 			project.save()
 			
-			  //==================================================
+			  //==============================================
 	End case 
 End if 

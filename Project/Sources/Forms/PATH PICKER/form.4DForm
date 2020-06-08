@@ -58,7 +58,8 @@
 					"sizingX": "grow",
 					"focusable": false,
 					"dataSource": "Form:C1466.label",
-					"events": []
+					"events": [],
+					"stroke": "automatic"
 				},
 				"browse": {
 					"type": "button",
@@ -79,7 +80,7 @@
 					],
 					"focusable": false,
 					"bottom": 22,
-					"method": "PATH_PICKER"
+					"method": "ObjectMethods/browse.4dm"
 				},
 				"menu": {
 					"type": "button",

@@ -385,7 +385,9 @@ If ($Obj_in.create)
 			
 			If (String:C10($Obj_in.dataSource.source)="server")
 				
-				$File_:=Choose:C955(Length:C16(String:C10($Obj_in.dataSource.keyPath))>0;doc_Absolute_path ($Obj_in.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*));Null:C1517)
+				  //ACI0100868
+				  //$File_:=Choose(Length(String($Obj_in.dataSource.keyPath))>0;doc_Absolute_path ($Obj_in.dataSource.keyPath;Get 4D folder(MobileApps folder;*));Null)
+				$File_:=Choose:C955(Length:C16(String:C10($Obj_in.dataSource.keyPath))>0;doc_Absolute_path ($Obj_in.dataSource.keyPath);Null:C1517)
 				
 			Else 
 				
@@ -516,7 +518,7 @@ If ($Obj_in.create)
 				
 				If (Length:C16(String:C10($Obj_project.server.pushCertificate))>0)
 					C_OBJECT:C1216($certificateFile)
-					$certificateFile:=File:C1566($Obj_project.server.pushCertificate)
+					$certificateFile:=cs:C1710.doc.new($Obj_project.server.pushCertificate).target
 					If ($certificateFile.exists)
 						$certificateFile.copyTo($appFolder;fk overwrite:K87:5)
 					Else 

@@ -424,6 +424,7 @@
 			"Tests"
 		],
 		"classes": [
+			"doc",
 			"menu",
 			"svg"
 		]

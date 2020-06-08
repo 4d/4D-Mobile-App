@@ -264,7 +264,7 @@ Case of
 		
 		ASSERT:C1129(Not:C34(Shift down:C543))
 		
-		If (feature.with("sourceClass"))
+		If (feature.with("sourceClass")) & False:C215
 			
 			BEEP:C151
 			
@@ -343,16 +343,8 @@ Case of
 						
 						If (Length:C16(String:C10(Form:C1466.dataSource.keyPath))>0)
 							
-							$t:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
-							
-							If (Test path name:C476($t)#Is a document:K24:1)
-								
-								$t:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
-								
-							End if 
-							
 							var $file : Object
-							$file:=File:C1566($t;fk platform path:K87:2)
+							$file:=cs:C1710.doc.new(Form:C1466.dataSource.keyPath).target
 							
 							If ($file.exists)  // & Shift down
 								
@@ -489,7 +481,7 @@ Case of
 			
 			If ($Obj_form.ui.remote())
 				
-				  // Verify the production server adress
+				  // Verify the production server address
 				$Txt_url:=String:C10(Form:C1466.server.urls.production)
 				
 				If (Length:C16($Txt_url)>0)
@@ -508,7 +500,9 @@ Case of
 						
 						If (Length:C16(String:C10(Form:C1466.dataSource.keyPath))>0)
 							
-							$t:=doc_Absolute_path (Form:C1466.dataSource.keyPath;Get 4D folder:C485(MobileApps folder:K5:47;*))
+							  //ACI0100868
+							  //$t:=doc_Absolute_path (Form.dataSource.keyPath;Get 4D folder(MobileApps folder;*))
+							$t:=doc_Absolute_path (Form:C1466.dataSource.keyPath)
 							
 							If (Test path name:C476($t)#Is a document:K24:1)
 								

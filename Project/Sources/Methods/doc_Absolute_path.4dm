@@ -57,9 +57,20 @@ End if
   // ----------------------------------------------------
 If ($Txt_pathname[[1]]="/")
 	
-	$Txt_pathname:=Replace string:C233($Txt_pathname;Folder separator:K24:12;"/")
-	$Txt_absolutePath:=Convert path system to POSIX:C1106($Dir_directory)+Delete string:C232($Txt_pathname;1;1)
-	
+	  //ACI0100868
+	  //$Txt_pathname:=Replace string($Txt_pathname;Folder separator;"/")
+	  //$Txt_absolutePath:=Convert path system to POSIX($Dir_directory)+Delete string($Txt_pathname;1;1)
+	If (Position:C15("/Volumes/";$Txt_pathname;*)=0)\
+		 & (Position:C15("/Users/";$Txt_pathname;*)=0)
+		
+		$Txt_pathname:=Replace string:C233($Txt_pathname;Folder separator:K24:12;"/")
+		$Txt_absolutePath:=Convert path system to POSIX:C1106($Dir_directory)+Delete string:C232($Txt_pathname;1;1)
+		
+	Else 
+		
+		$Txt_absolutePath:=Replace string:C233($Txt_pathname;Folder separator:K24:12;"/")
+		
+	End if 
 End if 
 
 $Txt_absolutePath:=Convert path POSIX to system:C1107($Txt_absolutePath)
