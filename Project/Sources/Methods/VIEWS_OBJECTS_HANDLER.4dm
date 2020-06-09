@@ -534,6 +534,11 @@ Case of
 				Case of 
 						
 						  //………………………………………………………………………………………………………………
+					: ($context.typeForm()="list")
+						
+						  // DISABLE DRAG AND DROP
+						
+						  //………………………………………………………………………………………………………………
 					: ($context.current="tab_@")
 						
 						  // NOT A DRAGGABLE OBJECT
