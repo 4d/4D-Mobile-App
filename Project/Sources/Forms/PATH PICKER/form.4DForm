@@ -80,7 +80,7 @@
 					],
 					"focusable": false,
 					"bottom": 22,
-					"method": "ObjectMethods/browse.4dm"
+					"method": "PATH_PICKER"
 				},
 				"menu": {
 					"type": "button",
@@ -120,6 +120,7 @@
 					"sizingX": "grow",
 					"right": 322,
 					"bottom": 21,
+					"dropping": "custom",
 					"method": "PATH_PICKER"
 				}
 			}

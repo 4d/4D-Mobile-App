@@ -10,40 +10,11 @@ Class constructor
 		
 		If (Count parameters:C259>=2)
 			
-			Case of 
-					
-					  //______________________________________________________
-				: (Value type:C1509($2)=Is object:K8:27)
-					
-					If (OB Instance of:C1731($2;4D:C1709.Folder))\
-						 | (OB Instance of:C1731($2;4D:C1709.File))
-						
-						This:C1470.reference:=$2
-						
-					Else 
-						
-						ASSERT:C1129(False:C215;Current method name:C684+": The passed object must be a File/Folder object")
-						
-					End if 
-					
-					  //______________________________________________________
-				: (Value type:C1509($2)=Is text:K8:3)
-					
-					This:C1470.reference:=Folder:C1567($2;Choose:C955(Position:C15(":";$2)>0;fk platform path:K87:2;fk posix path:K87:1))
-					
-					  //______________________________________________________
-				Else 
-					
-					This:C1470.reference:=Null:C1517
-					ASSERT:C1129(False:C215;Current method name:C684+": The reference must be a path or a File/Folder")
-					
-					  //______________________________________________________
-			End case 
+			This:C1470.setReference($2)
 			
 		Else 
 			
-			  // Default is the structure file
-			This:C1470.reference:=Folder:C1567(Folder:C1567(fk database folder:K87:14;*).platformPath;fk platform path:K87:2)
+			This:C1470._defaultReference()
 			
 		End if 
 		
@@ -57,30 +28,7 @@ Class constructor
 				  //______________________________________________________
 			: (Value type:C1509($1)=Is object:K8:27)
 				
-				If (OB Instance of:C1731($1;4D:C1709.Folder))\
-					 | (OB Instance of:C1731($1;4D:C1709.File))
-					
-					This:C1470.target:=$1
-					This:C1470.platformPath:=This:C1470.target.platformPath
-					This:C1470.path:=This:C1470.target.path
-					
-					If (Position:C15("/Users/";This:C1470.path;*)=0)
-						
-						This:C1470.relativePath:="/"+Replace string:C233(This:C1470.path;This:C1470.reference.path;"")
-						
-					Else 
-						
-						This:C1470.relativePath:=This:C1470.path
-						
-					End if 
-					
-					
-					
-				Else 
-					
-					ASSERT:C1129(False:C215;Current method name:C684+": The passed object must be a File or a Folder")
-					
-				End if 
+				This:C1470.setTarget($1)
 				
 				  //______________________________________________________
 			: (Value type:C1509($1)=Is text:K8:3)
@@ -157,3 +105,106 @@ Class constructor
 				  //______________________________________________________
 		End case 
 	End if 
+	
+/*======================================================================*/
+Function _defaultReference
+	
+	If (This:C1470.reference=Null:C1517)
+		
+		  // Default is the database folder
+		This:C1470.reference:=Folder:C1567(Folder:C1567(fk database folder:K87:14;*).platformPath;fk platform path:K87:2)
+		
+	End if 
+	
+/*======================================================================*/
+Function setReference
+	
+	var $1
+	
+	Case of 
+			
+			  //______________________________________________________
+		: (Value type:C1509($1)=Is object:K8:27)
+			
+			If (OB Instance of:C1731($1;4D:C1709.Folder))\
+				 | (OB Instance of:C1731($1;4D:C1709.File))
+				
+				This:C1470.reference:=$1
+				
+			Else 
+				
+				This:C1470.reference:=Null:C1517
+				ASSERT:C1129(False:C215;Current method name:C684+": The passed object must be a File/Folder object")
+				
+			End if 
+			
+			  //______________________________________________________
+		: (Value type:C1509($1)=Is text:K8:3)
+			
+			This:C1470.reference:=Folder:C1567($1;Choose:C955(Position:C15(":";$1)>0;fk platform path:K87:2;fk posix path:K87:1))
+			
+			  //______________________________________________________
+		Else 
+			
+			This:C1470.reference:=Null:C1517
+			ASSERT:C1129(False:C215;Current method name:C684+": The reference must be a path or a File/Folder")
+			
+			  //______________________________________________________
+	End case 
+	
+/*======================================================================*/
+Function setTarget
+	
+	var $1;$2
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470.setReference($2)
+		
+	Else 
+		
+		This:C1470._defaultReference()
+		
+	End if 
+	
+	If (Count parameters:C259>=1)
+		
+		If (OB Instance of:C1731($1;4D:C1709.Folder))\
+			 | (OB Instance of:C1731($1;4D:C1709.File))
+			
+			This:C1470.target:=$1
+			This:C1470.platformPath:=This:C1470.target.platformPath
+			This:C1470.path:=This:C1470.target.path
+			
+			If (Position:C15(This:C1470.reference.path;This:C1470.path)=1)
+				
+				This:C1470.relativePath:="/"+Replace string:C233(This:C1470.path;This:C1470.reference.path;"")
+				
+			Else 
+				
+				If (Position:C15("/Users/";This:C1470.path;*)=0)\
+					 & (Position:C15("/Volumes/";This:C1470.path;*)=0)
+					
+					This:C1470.relativePath:="/"+Replace string:C233(This:C1470.path;This:C1470.reference.path;"")
+					
+				Else 
+					
+					This:C1470.relativePath:=This:C1470.path
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			ASSERT:C1129(False:C215;Current method name:C684+"setTarget(): The passed object must be a File or a Folder")
+			
+		End if 
+		
+	Else 
+		
+		ASSERT:C1129(False:C215;Current method name:C684+"setTarget(): Missing File/folder parameter")
+		
+	End if 
+	
+	
+	

@@ -348,8 +348,15 @@ Function displayMenu
 				
 				SET MENU ITEM ICON:C984($pop;-1;"#pathPicker/file.png")
 				
+			Else 
+				
+				SET MENU ITEM STYLE:C425($pop;-1;Italic:K14:3)
+				DISABLE MENU ITEM:C150($pop;-1)
+				
 				  //……………………………………………………………………………………………
 		End case 
+		
+		
 	End for each 
 	
 	If (Count menu items:C405($pop)>0)
@@ -425,9 +432,12 @@ Function onDrop
 	
 	If (Test path name:C476(DOCUMENT)=Num:C11(This:C1470.type))
 		
-		This:C1470.setPlatformPath(DOCUMENT)
-		This:C1470._resume()
-		
+		If (Position:C15(Path to object:C1547(DOCUMENT).extension;This:C1470.fileTypes)>0)
+			
+			This:C1470.setPlatformPath(DOCUMENT)
+			This:C1470._resume()
+			
+		End if 
 	End if 
 	
 	  //===================================================
@@ -470,17 +480,8 @@ Function _updateLabel
 			Replace string:C233(Replace string:C233(Get localized string:C991("FileInVolume");"{file}";$c[$c.length-1]);"{volume}";$c[0]);\
 			"\""+$c[$c.length-1]+"\"")
 		
-		If (Bool:C1537(This:C1470.target.exists))
-			
-			OBJECT SET RGB COLORS:C628(*;"label";Foreground color:K23:1)
-			
-		Else 
-			
-			OBJECT SET RGB COLORS:C628(*;"label";"red")
-			
-		End if 
-		
 		OBJECT SET VISIBLE:C603(*;"menu@";True:C214)
+		OBJECT SET RGB COLORS:C628(*;"label";Choose:C955(Bool:C1537(This:C1470.target.exists);Foreground color:K23:1;"red"))
 		
 	Else 
 		
@@ -564,5 +565,6 @@ Function ui
 	
 	OBJECT SET VISIBLE:C603(*;"menu@";Length:C16(This:C1470.label)>0)
 	OBJECT SET PLACEHOLDER:C1295(*;"label";This:C1470.placeHolder)
+	OBJECT SET RGB COLORS:C628(*;"label";Choose:C955(Bool:C1537(This:C1470.target.exists);Foreground color:K23:1;"red"))
 	
 	  //===================================================
