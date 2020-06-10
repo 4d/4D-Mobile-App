@@ -6,6 +6,7 @@
 	"markerBody": 22,
 	"markerBreak": 22,
 	"markerFooter": 22,
+	"css": "pathPicker.css",
 	"events": [
 		"onLoad",
 		"onTimer",
@@ -29,9 +30,7 @@
 					"left": 1,
 					"width": 322,
 					"height": 20,
-					"sizingX": "grow",
-					"fill": "automatic",
-					"stroke": "#C0C0C0"
+					"sizingX": "grow"
 				},
 				"_airbag": {
 					"type": "button",
@@ -58,8 +57,7 @@
 					"sizingX": "grow",
 					"focusable": false,
 					"dataSource": "Form:C1466.label",
-					"events": [],
-					"stroke": "automatic"
+					"events": []
 				},
 				"browse": {
 					"type": "button",
@@ -68,8 +66,6 @@
 					"width": 45,
 					"height": 21,
 					"sizingX": "move",
-					"fontFamily": "System Font Regular",
-					"fontSize": 13,
 					"text": ":xliff:CommonEllipse",
 					"style": "roundedBevel",
 					"dropping": "custom",
@@ -89,7 +85,7 @@
 					"width": 16,
 					"height": 16,
 					"visibility": "hidden",
-					"icon": "/RESOURCES/pathPicker/down.png",
+					"icon": "Images/down.png",
 					"iconFrames": 4,
 					"textPlacement": "top",
 					"style": "custom",
@@ -131,5 +127,6 @@
 		"kind": "form"
 	},
 	"shared": true,
-	"method": "PATH_PICKER"
+	"method": "PATH_PICKER",
+	"geometryStamp": 33
 }

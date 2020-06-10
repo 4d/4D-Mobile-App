@@ -264,9 +264,7 @@ If ($Obj_in.create)
 	  // Launchscreen
 	$Obj_tags.launchScreenBackgroundColor:=SHARED.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
 	
-	  //===============================================================
-	  // App manifest
-	
+	  // App manifest =================================================
 	C_OBJECT:C1216($appManifest;$appFolder)
 	$appManifest:=New object:C1471(\
 		"application";New object:C1471("id";$Obj_project.product.bundleIdentifier;"name";$Obj_project.product.name);\
@@ -275,15 +273,12 @@ If ($Obj_in.create)
 	$appManifest.id:=String:C10($appManifest.team.id)+"."+$appManifest.application.id
 	
 	  //#ACI0100704
-	  //$appFolder:=Folder(fk mobileApps folder).folder($appManifest.id)
 	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18;*).folder($appManifest.id)
-	  //#ACI0100704
 	
 	If (Not:C34($appFolder.exists))
 		$appFolder.create()
 	End if 
 	$appFolder.file("manifest.json").setText(JSON Stringify:C1217($appManifest;*))
-	
 	  //===============================================================
 	
 	POST_FORM_MESSAGE (New object:C1471(\

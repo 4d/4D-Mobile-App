@@ -501,7 +501,6 @@ Case of
 						If (Length:C16(String:C10(Form:C1466.dataSource.keyPath))>0)
 							
 							  //ACI0100868
-							  //$t:=doc_Absolute_path (Form.dataSource.keyPath;Get 4D folder(MobileApps folder;*))
 							$t:=doc_Absolute_path (Form:C1466.dataSource.keyPath)
 							
 							If (Test path name:C476($t)#Is a document:K24:1)
@@ -533,13 +532,11 @@ Case of
 								
 							Else 
 								
-								  //==================================== #ACI0100687
-								  // Generate the key
+								  //#ACI0100687 Generate the key
 								$Obj_result:=Rest (New object:C1471(\
 									"action";"request";\
 									"handler";"mobileapp";\
 									"url";$Txt_url))
-								  //==================================== #ACI0100687
 								
 								$Obj_result:=New object:C1471(\
 									"success";False:C215;\

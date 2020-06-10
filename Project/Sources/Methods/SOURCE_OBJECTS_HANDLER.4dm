@@ -115,14 +115,6 @@ Case of
 			
 		End if 
 		
-		  // If (Shift down)
-		  //SHOW ON DISK(dataSet (New object(\
-															"action";"path";\
-															"project";New object(\
-															"product";Form.product;\
-															"$project";Form.$project))).path)
-		  // End if
-		
 		  //==================================================
 	: ($Txt_me=$Obj_form.doNotGenerate)\
 		 | ($Txt_me=$Obj_form.doNotExportImages)
@@ -145,7 +137,7 @@ Case of
 		
 		ui.saveProject()
 		
-		  //==================================== #ACI0100687
+		  //#ACI0100687
 		If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
 			
 			  // Generate the key
@@ -156,7 +148,6 @@ Case of
 				"url";Form:C1466.server.urls.production))
 			
 		End if 
-		  //==================================== #ACI0100687
 		
 		$Obj_context.testServer()
 		

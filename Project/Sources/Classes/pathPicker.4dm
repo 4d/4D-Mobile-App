@@ -251,12 +251,12 @@ Function select
 			
 			If (Value type:C1509(This:C1470.directory)=Is text:K8:3)
 				
-				$t:=Select folder:C670(This:C1470.message;This:C1470.directory;This:C1470.options)
+				DOCUMENT:=Select folder:C670(This:C1470.message;This:C1470.directory;This:C1470.options)
 				
 			Else 
 				
 				  // Use a memorized access path
-				$t:=Select folder:C670(This:C1470.message;Num:C11(This:C1470.directory);This:C1470.options)
+				DOCUMENT:=Select folder:C670(This:C1470.message;Num:C11(This:C1470.directory);This:C1470.options)
 				
 			End if 
 			
