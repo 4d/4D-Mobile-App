@@ -69,7 +69,7 @@ Function setType
 		
 	Else 
 		
-		ASSERT:C1129(False:C215;Current method name:C684+".setTarget(): Missing the type (integer) parameter")
+		ASSERT:C1129(False:C215;Current method name:C684+".setType(): Missing the type (integer) parameter")
 		
 	End if 
 	
@@ -84,7 +84,7 @@ Function setMessage
 		
 	Else 
 		
-		ASSERT:C1129(False:C215;Current method name:C684+".setTarget(): Missing the message (text) parameter")
+		ASSERT:C1129(False:C215;Current method name:C684+".setMessage(): Missing the message (text) parameter")
 		
 	End if 
 	
@@ -100,7 +100,7 @@ Function setPlaceholder
 		
 	Else 
 		
-		ASSERT:C1129(False:C215;Current method name:C684+".setTarget(): Missing the placeHolder (text) parameter")
+		ASSERT:C1129(False:C215;Current method name:C684+".setPlaceholder(): Missing the placeHolder (text) parameter")
 		
 	End if 
 	
@@ -565,6 +565,19 @@ Function ui
 	
 	OBJECT SET VISIBLE:C603(*;"menu@";Length:C16(This:C1470.label)>0)
 	OBJECT SET PLACEHOLDER:C1295(*;"label";This:C1470.placeHolder)
-	OBJECT SET RGB COLORS:C628(*;"label";Choose:C955(Bool:C1537(This:C1470.target.exists);Foreground color:K23:1;"red"))
+	
+	If (This:C1470.target#Null:C1517)
+		
+		If (Bool:C1537(This:C1470.target.exists))
+			
+			OBJECT SET RGB COLORS:C628(*;"label";Foreground color:K23:1)
+			
+		Else 
+			
+			OBJECT SET RGB COLORS:C628(*;"label";"red")
+			
+		End if 
+	End if 
+	
 	
 	  //===================================================

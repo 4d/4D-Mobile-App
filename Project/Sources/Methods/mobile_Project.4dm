@@ -91,6 +91,32 @@ If (Asserted:C1132($Obj_in.project#Null:C1517))
 	
 End if 
 
+  // Cleanup
+var $t;$tt : Text
+
+For each ($t;$Obj_project)
+	
+	If ($t[[1]]="$")
+		
+		If ($t="$project")
+			
+			For each ($tt;$Obj_project[$t])
+				
+				If ($tt[[1]]="$")
+					
+					OB REMOVE:C1226($Obj_project[$t];$tt)
+					
+				End if 
+			End for each 
+			
+		Else 
+			
+			OB REMOVE:C1226($Obj_project;$t)
+			
+		End if 
+	End if 
+End for each 
+
 If ($Obj_in.create=Null:C1517)
 	
 	  // Default create if not defined

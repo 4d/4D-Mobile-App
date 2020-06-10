@@ -15,7 +15,7 @@ Class constructor
 		This:C1470.pushNotification:=cs:C1710.button.new("02_pushNotification")
 		This:C1470.authenticationGroup:=cs:C1710.group.new(This:C1470.authenticationLabel;This:C1470.authenticationButton)
 		
-		This:C1470.certificat:=cs:C1710.widget.new("certificatePicker")
+		This:C1470.certificat:=cs:C1710.widget.new("certificatePicker";Formula:C1597(Form:C1466.$FEATURES.certificat.picker))
 		This:C1470.certificat.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.pushCertificate);New object:C1471(\
 			"options";Package open:K24:8+Use sheet window:K24:11;\
 			"fileTypes";".p8";\

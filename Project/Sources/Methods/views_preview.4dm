@@ -68,8 +68,16 @@ Case of
 				
 				If (String:C10(Form:C1466.$dialog.VIEWS.template.name)#$tFormName)
 					
-					Form:C1466.$dialog.VIEWS.template:=cs:C1710.tmpl.new($tFormName;$tTypeForm)
-					
+					If (feature.with("newViewUI"))
+						
+						Form:C1466.$dialog.VIEWS.template:=cs:C1710.tmpl.new($tFormName;$tTypeForm)
+						
+					Else 
+						
+						  // 
+						Form:C1466.$dialog._o_VIEWS.template:=cs:C1710.tmpl.new($tFormName;$tTypeForm)
+						
+					End if 
 				End if 
 				
 				$oTemplate:=Form:C1466.$dialog.VIEWS.template

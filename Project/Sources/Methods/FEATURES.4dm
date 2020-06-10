@@ -34,10 +34,8 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 			  //______________________________________________
 		: ($e.code=On Timer:K2:25)
 			
-			$ƒ.certificat.show(Form:C1466.server.pushNotification)
+			$ƒ.certificat.show(Form:C1466.server.pushNotification).touch()
 			$ƒ.checkAuthenticationMethod()
-			
-			$ƒ.certificat.picker._updateLabel()
 			
 			  //______________________________________________
 	End case 
