@@ -520,6 +520,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				ASSERT:C1129($Obj_in.uuid.sources#Null:C1517)  // Key for source build phase
 				ASSERT:C1129($Obj_in.uuid.resources#Null:C1517)  // Key for resources phrase
 				
+				$Obj_out.success:=True:C214
+				
 				  // project is in tree mode or not?
 				If (Bool:C1537($Obj_in.tree))  // could force with parameter
 					$Bool_tree:=$Obj_in.tree
@@ -615,16 +617,20 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						)
 					$Obj_objects[$Txt_buildfileRef]:=$Obj_buildfile
 					$Col_children:=$Obj_objects[$Obj_in.uuid.resources].files
-					If ($Bool_tree)
-						$Obj_buildfile.ref:=$Txt_buildfileRef
-						$Col_children.push($Obj_buildfile)
+					If ($Col_children=Null:C1517)
+						$Obj_out.success:=False:C215
+						ob_error_add ($Obj_out;"No Xcode proj node files under resources with id"+String:C10($Obj_in.uuid.resources))
 					Else 
-						$Col_children.push($Txt_buildfileRef)
+						If ($Bool_tree)
+							$Obj_buildfile.ref:=$Txt_buildfileRef
+							$Col_children.push($Obj_buildfile)
+						Else 
+							$Col_children.push($Txt_buildfileRef)
+						End if 
 					End if 
 					
 				End for each 
 				
-				$Obj_out.success:=True:C214
 				$Obj_out.value:=$Obj_in.proj
 				
 			Else 
@@ -647,6 +653,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				  // XXX maybe add option to add only catalog or data (filter)
 				OB GET PROPERTY NAMES:C1232($Obj_in.uuid.json;$tTxt_keys)
 				
+				$Obj_out.success:=True:C214
+				
 				For ($Lon_i;1;Size of array:C274($tTxt_keys);1)
 					$Txt_formType:=$tTxt_keys{$Lon_i}
 					
@@ -661,31 +669,35 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						)
 					$Obj_objects[$Txt_fileRef]:=$Obj_file
 					$Col_children:=$Obj_objects[$Obj_in.uuid.json[$Txt_formType]].children
-					If ($Bool_tree)
-						$Obj_file.ref:=$Txt_fileRef
-						$Col_children.push($Obj_file)
+					If ($Col_children=Null:C1517)
+						$Obj_out.success:=False:C215
+						ob_error_add ($Obj_out;"No Xcode proj node children for "+$Txt_formType+" with id"+String:C10($Obj_in.uuid.json[$Txt_formType]))
 					Else 
-						$Col_children.push($Txt_fileRef)
-					End if 
-					
-					  // Add file in resource phase
-					$Txt_buildfileRef:=XcodeProj (New object:C1471("action";"randomObjectId";"proj";$Obj_in.proj)).value
-					$Obj_buildfile:=New object:C1471(\
-						"fileRef";$Txt_fileRef;\
-						"isa";"PBXBuildFile"\
-						)
-					$Obj_objects[$Txt_buildfileRef]:=$Obj_buildfile
-					$Col_children:=$Obj_objects[$Obj_in.uuid.resources].files
-					If ($Bool_tree)
-						$Obj_buildfile.ref:=$Txt_buildfileRef
-						$Col_children.push($Obj_buildfile)
-					Else 
-						$Col_children.push($Txt_buildfileRef)
+						If ($Bool_tree)
+							$Obj_file.ref:=$Txt_fileRef
+							$Col_children.push($Obj_file)
+						Else 
+							$Col_children.push($Txt_fileRef)
+						End if 
+						
+						  // Add file in resource phase
+						$Txt_buildfileRef:=XcodeProj (New object:C1471("action";"randomObjectId";"proj";$Obj_in.proj)).value
+						$Obj_buildfile:=New object:C1471(\
+							"fileRef";$Txt_fileRef;\
+							"isa";"PBXBuildFile"\
+							)
+						$Obj_objects[$Txt_buildfileRef]:=$Obj_buildfile
+						$Col_children:=$Obj_objects[$Obj_in.uuid.resources].files
+						If ($Bool_tree)
+							$Obj_buildfile.ref:=$Txt_buildfileRef
+							$Col_children.push($Obj_buildfile)
+						Else 
+							$Col_children.push($Txt_buildfileRef)
+						End if 
 					End if 
 					
 				End for 
 				
-				$Obj_out.success:=True:C214
 				$Obj_out.value:=$Obj_in.proj
 				
 			Else 
