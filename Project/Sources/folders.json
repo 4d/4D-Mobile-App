@@ -678,7 +678,6 @@
 	},
 	"pathPicker": {
 		"methods": [
-			"COMPILER_PATH PICKER",
 			"PATH_PICKER"
 		],
 		"forms": [

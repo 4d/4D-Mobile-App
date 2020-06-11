@@ -126,7 +126,6 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"shared": true,
 	"method": "PATH_PICKER",
 	"geometryStamp": 33
 }

@@ -308,8 +308,8 @@ Function displayMenu
 	var $c : Collection
 	$c:=Split string:C1554(This:C1470.platformPath;$sep)
 	
-	var $pop : Text
-	$pop:=Create menu:C408
+	var $menu : Text
+	$menu:=Create menu:C408
 	
 	CLEAR VARIABLE:C89(DOCUMENT)
 	
@@ -319,11 +319,11 @@ Function displayMenu
 		
 		If (Is Windows:C1573)
 			
-			APPEND MENU ITEM:C411($pop;$t)
+			APPEND MENU ITEM:C411($menu;$t)
 			
 		Else 
 			
-			INSERT MENU ITEM:C412($pop;0;$t)
+			INSERT MENU ITEM:C412($menu;0;$t)
 			
 		End if 
 		
@@ -336,49 +336,47 @@ Function displayMenu
 				  //……………………………………………………………………………………………
 			: (Find in array:C230($aVol;$t)>0)
 				
-				SET MENU ITEM ICON:C984($pop;-1;"#pathPicker/drive.png")
+				SET MENU ITEM ICON:C984($menu;-1;"path:/RESOURCES/pathPicker/drive.png")
 				
 				  //……………………………………………………………………………………………
 			: (Test path name:C476(DOCUMENT)=Is a folder:K24:2)
 				
-				SET MENU ITEM ICON:C984($pop;-1;"#pathPicker/folder.png")
+				SET MENU ITEM ICON:C984($menu;-1;"path:/RESOURCES/pathPicker/folder.png")
 				
 				  //……………………………………………………………………………………………
 			: (Test path name:C476(DOCUMENT)=Is a document:K24:1)
 				
-				SET MENU ITEM ICON:C984($pop;-1;"#pathPicker/file.png")
+				SET MENU ITEM ICON:C984($menu;-1;"path:/RESOURCES/pathPicker/file.png")
 				
 			Else 
 				
-				SET MENU ITEM STYLE:C425($pop;-1;Italic:K14:3)
-				DISABLE MENU ITEM:C150($pop;-1)
+				SET MENU ITEM STYLE:C425($menu;-1;Italic:K14:3)
+				DISABLE MENU ITEM:C150($menu;-1)
 				
 				  //……………………………………………………………………………………………
 		End case 
-		
-		
 	End for each 
 	
-	If (Count menu items:C405($pop)>0)
+	If (Count menu items:C405($menu)>0)
 		
 		If (Bool:C1537(This:C1470.showOnDisk))\
 			 | (Bool:C1537(This:C1470.copyPath))
 			
-			APPEND MENU ITEM:C411($pop;"-")
+			APPEND MENU ITEM:C411($menu;"-")
 			
 		End if 
 		
 		If (Bool:C1537(This:C1470.showOnDisk))
 			
-			APPEND MENU ITEM:C411($pop;Get localized string:C991("ShowOnDisk"))
-			SET MENU ITEM PARAMETER:C1004($pop;-1;"show")
+			APPEND MENU ITEM:C411($menu;Get localized string:C991("ShowOnDisk"))
+			SET MENU ITEM PARAMETER:C1004($menu;-1;"show")
 			
 		End if 
 		
 		If (Bool:C1537(This:C1470.copyPath))
 			
-			APPEND MENU ITEM:C411($pop;Get localized string:C991("CopyPath"))
-			SET MENU ITEM PARAMETER:C1004($pop;-1;"copy")
+			APPEND MENU ITEM:C411($menu;Get localized string:C991("CopyPath"))
+			SET MENU ITEM PARAMETER:C1004($menu;-1;"copy")
 			
 		End if 
 		
@@ -386,8 +384,8 @@ Function displayMenu
 		OBJECT GET COORDINATES:C663(*;"border";$left;$top;$right;$bottom)
 		CONVERT COORDINATES:C1365($left;$bottom;1;2)
 		
-		$t:=Dynamic pop up menu:C1006($pop;"";$left;$bottom-5)
-		RELEASE MENU:C978($pop)
+		$t:=Dynamic pop up menu:C1006($menu;"";$left;$bottom-5)
+		RELEASE MENU:C978($menu)
 		
 		Case of 
 				
@@ -578,6 +576,5 @@ Function ui
 			
 		End if 
 	End if 
-	
 	
 	  //===================================================
