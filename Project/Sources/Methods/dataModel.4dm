@@ -656,9 +656,7 @@ Case of
 							For ($Lon_table2;1;Size of array:C274($tTxt_tables);1)
 								
 								$Obj_relationTable:=$Obj_dataModel[$tTxt_tables{$Lon_table2}]
-								
-								  //$o:=$Obj_relationTable[""]
-								$o:=$Obj_relationTable
+								$o:=$Obj_relationTable[""]
 								
 								If ($o.name=$Obj_table[$Txt_relationName].relatedDataClass)
 									

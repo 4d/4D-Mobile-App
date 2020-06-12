@@ -543,7 +543,7 @@ Case of
 							  //For each ($Txt_field;$Obj_relatedDataClass)
 							
 							  //If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																
+																								
 							  //If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							  //$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

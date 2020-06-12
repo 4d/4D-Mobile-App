@@ -76,6 +76,12 @@ Case of
 				
 				If (Right click:C712)
 					
+					  // Keep the current selected table
+					$c:=editor_Catalog 
+					$l:=$c.extract("name").indexOf((ui.pointer($form.tables))->{$row})
+					$context.currentTable:=$c[$l]
+					LISTBOX SELECT ROW:C912(*;$e.objectName;$row;lk replace selection:K53:1)
+					
 					$Ptr_published:=ui.pointer($form.published)
 					$Lon_unpublished:=Count in array:C907($Ptr_published->;0)
 					
@@ -441,9 +447,8 @@ Case of
 						
 					End if 
 					
-					If (Macintosh command down:C546)
+					If (Macintosh command down:C546)  // Apply the value to all items
 						
-						  // Apply the value to all items
 						For ($i;1;LISTBOX Get number of rows:C915(*;$e.objectName);1)
 							
 							$Ptr_me->{$i}:=$Ptr_me->{$row}
