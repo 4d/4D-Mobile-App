@@ -102,6 +102,30 @@ Case of
 		  //______________________________________________________
 End case 
 
+/*
+redmine:#117188
+[BUG] error generating a mobile project if the project.4dmobileapp file is not in the Mobile Projects folder
+*/
+If ($Obj_out.success & Bool:C1537($Obj_in.build))
+	
+	If (Value type:C1509($Obj_in.project.$project.file)=Is object:K8:27)
+		
+		$Obj_out.success:=($Obj_in.project.$project.file.parent.parent.path="/PACKAGE/Mobile Projects/")
+		
+		If (Not:C34($Obj_out.success))
+			
+			DO_MESSAGE (New object:C1471(\
+				"action";"show";\
+				"type";"alert";\
+				"title";ui.alert+" "+Get localized string:C991("unableToGenerateApp");\
+				"additional";Get localized string:C991("theprojectmustbelocatedrinthemobileprojectsfolder");\
+				"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"build_stop"))\
+				))
+			
+		End if 
+	End if 
+End if 
+
 If ($Obj_out.success & Bool:C1537($Obj_in.build))
 	
 	  // CHECK IF THE PROJECT COULD BE BUILD
