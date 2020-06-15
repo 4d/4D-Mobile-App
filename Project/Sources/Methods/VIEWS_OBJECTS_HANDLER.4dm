@@ -204,7 +204,8 @@ Case of
 				  //______________________________________________________
 			: ($event.code=On Double Clicked:K2:5)
 				
-				If (feature.with("newViewUI"))
+				If (feature.with("newViewUI"))\
+					 & (Num:C11($context.template.manifest.renderer)>=2)
 					
 					$tTypeForm:=Choose:C955(Num:C11($context.selector)=2;"detail";"list")
 					
@@ -257,7 +258,8 @@ Case of
 				
 				editor_ui_LISTBOX ($event.objectName)
 				
-				If (feature.with("newViewUI"))
+				If (feature.with("newViewUI"))\
+					 & (Num:C11($context.template.manifest.renderer)>=2)
 					
 					$tTypeForm:=Choose:C955(Num:C11($context.selector)=2;"detail";"list")
 					
