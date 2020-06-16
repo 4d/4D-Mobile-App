@@ -5,6 +5,9 @@ C_OBJECT:C1216(object ;$0)
 C_TEXT:C284(object ;$1)
 
 
+  //_______________________________________
+C_OBJECT:C1216(internalTests ;$0)
+
   // ----------------------------------------------------
 C_OBJECT:C1216(_o_SERVER_Handler ;$0)
 C_OBJECT:C1216(_o_SERVER_Handler ;$1)

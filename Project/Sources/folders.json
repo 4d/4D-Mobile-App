@@ -17,10 +17,14 @@
 			"00_OPEN",
 			"00_TESTS",
 			"COMPILER_TEMPO",
+			"internalTests",
 			"object"
 		],
 		"forms": [
 			"UI"
+		],
+		"classes": [
+			"unit4D"
 		]
 	},
 	"_[DEV]": {
@@ -103,11 +107,7 @@
 			"C_NEW_MOBILE_PROJECT",
 			"C_OPEN_MOBILE_PROJECT",
 			"COMPILER_API",
-			"internalTests",
 			"mobileUnit"
-		],
-		"classes": [
-			"unit4D"
 		]
 	},
 	"[BROWSER]": {

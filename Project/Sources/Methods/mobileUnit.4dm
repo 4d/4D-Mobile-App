@@ -1,13 +1,13 @@
 //%attributes = {"invisible":true,"shared":true,"preemptive":"capable"}
-  // ----------------------------------------------------
-  // Project method : mobileUnit
-  // ID[397F98984CE44B3CB94A856B86C833B1]
-  // Created 21-8-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  // API for unit tests
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : mobileUnit
+// ID[397F98984CE44B3CB94A856B86C833B1]
+// Created 21-8-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// API for unit tests
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
@@ -18,28 +18,28 @@ C_TEXT:C284($t;$Txt_in;$Txt_out)
 C_OBJECT:C1216($o;$Obj_in;$Obj_out)
 
 If (False:C215)
-	C_OBJECT:C1216(mobileUnit ;$0)
-	C_TEXT:C284(mobileUnit ;$1)
-	C_OBJECT:C1216(mobileUnit ;$2)
+	C_OBJECT:C1216(mobileUnit;$0)
+	C_TEXT:C284(mobileUnit;$1)
+	C_OBJECT:C1216(mobileUnit;$2)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Txt_in:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
 		$Obj_in:=$2
 		
 	End if 
 	
-	COMPONENT_INIT 
+	COMPONENT_INIT
 	
 Else 
 	
@@ -47,17 +47,23 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="testSuites")
 		
 		C_OBJECT:C1216(lastError)
 		
-		$Obj_out:=New object:C1471(\
-			"errors";Formula:C1597(lastError);\
-			"tests";New collection:C1472)
+		$Obj_out:=New object:C1471
+		$Obj_out.errors:=Formula:C1597(lastError)
+		$Obj_out.component:=SHARED.component
+		$Obj_out.requirement:=New object:C1471(\
+			"xCodeVersion";SHARED.xCodeVersion;\
+			"iosDeploymentTarget";SHARED.iosDeploymentTarget)
+		$Obj_out.targetedDeviceFamily:=SHARED.targetedDeviceFamily
+		$Obj_out.simulatorTimeout:=SHARED.simulatorTimeout
+		$Obj_out.tests:=New collection:C1472
 		
 		$o:=New signal:C1641
 		
@@ -79,13 +85,13 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="featuresFlags")
 		
 		$Obj_out:=New object:C1471(\
 			"features";Formula:C1597(feature))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="loadProject")
 		
 		If (Asserted:C1132($Obj_in.project#Null:C1517;"Expected 'project' key into object parameter"))
@@ -97,22 +103,22 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="checkRest")
 		
 		EXECUTE METHOD:C1007("env_Database_setting";$Obj_out;"rest")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="checkInstall")
 		
 		EXECUTE METHOD:C1007("Xcode_CheckInstall";$Obj_out)
 		
-		  //________________________________________
+		//________________________________________
 	: (Not:C34(Asserted:C1132($Lon_parameters=2;"Expected object parameter")))
 		
-		  // ALL SUBSEQUENT ENTRY POINTS REQUIRE AT LEAST 2 PARAMETERS
+		// ALL SUBSEQUENT ENTRY POINTS REQUIRE AT LEAST 2 PARAMETERS
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="rest")\
 		 | ($Txt_in="structure")\
 		 | ($Txt_in="dump")
@@ -123,32 +129,32 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="pathname")
 		
 		If (Asserted:C1132($Obj_in.target#Null:C1517;"Expected 'target' key into object parameter"))
 			
 			$Obj_out:=New object:C1471(\
 				"success";True:C214;\
-				"value";COMPONENT_Pathname ($Obj_in.target).platformPath)
+				"value";COMPONENT_Pathname($Obj_in.target).platformPath)
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="featuresFlags")
 		
-		  // see if a feature is activated and exist
+		// see if a feature is activated and exist
 		$Obj_out:=New object:C1471(\
 			"value";feature["_"+String:C10($Obj_in.value)])
 		
 		$Obj_out.success:=($Obj_out.value#Null:C1517)
 		
-		  //________________________________________
+		//________________________________________
 	: (Not:C34(Asserted:C1132(Is macOS:C1572;"Command unavailable for this operating system")))
 		
-		  // ALL SUBSEQUENT ENTRY POINTS ARE ONLY AVAILABLE ON macOS
+		// ALL SUBSEQUENT ENTRY POINTS ARE ONLY AVAILABLE ON macOS
 		
-		  //________________________________________
+		//________________________________________
 	: ($Txt_in="xcode")\
 		 | ($Txt_in="xcodeProj")\
 		 | ($Txt_in="plist")\
@@ -176,35 +182,35 @@ Case of
 		
 		EXECUTE METHOD:C1007($Txt_in;$Obj_out;$Obj_in)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="project")
 		
 		EXECUTE METHOD:C1007("mobile_Project";$Obj_out;$Obj_in)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="Process_tags")
 		
 		If (Asserted:C1132($Obj_in.text#Null:C1517;"Expected 'text' key into object parameter"))
 			
 			Case of 
 					
-					  //……………………………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………………………
 				: ($Obj_in.tags#Null:C1517)\
 					 & ($Obj_in.types#Null:C1517)
 					
 					EXECUTE METHOD:C1007("Process_tags";$Txt_out;$Obj_in.text;$Obj_in.tags;$Obj_in.types)
 					
-					  //……………………………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………………………
 				: ($Obj_in.tags#Null:C1517)
 					
 					EXECUTE METHOD:C1007("Process_tags";$Txt_out;$Obj_in.text;$Obj_in.tags)
 					
-					  //……………………………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………………………
 				Else 
 					
 					EXECUTE METHOD:C1007("Process_tags";$Txt_out;$Obj_in.text)
 					
-					  //……………………………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………………………
 			End case 
 			
 			$Obj_out:=New object:C1471(\
@@ -213,42 +219,42 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_in="Process_tags_on_file")
 		
 		If (Asserted:C1132($Obj_in.text#Null:C1517;"Expected 'text' key into object parameter"))
 			
 			Case of 
 					
-					  //……………………………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………………………
 				: (Not:C34(Asserted:C1132($Obj_in.file#Null:C1517;"Expected 'file' key into object parameter")))
 					
-					  //……………………………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………………………
 				: (Not:C34(Asserted:C1132($Obj_in.tags#Null:C1517;"Expected 'tags' key into object parameter")))
 					
-					  //……………………………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………………………
 				: (Not:C34(Asserted:C1132($Obj_in.types#Null:C1517;"Expected 'types' key into object parameter")))
 					
-					  //……………………………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………………………
 				Else 
 					
 					EXECUTE METHOD:C1007("Process_tags_on_file";$Obj_out;$Obj_in.file;$Obj_in.tags;$Obj_in.types)
 					
-					  //…………………………………………………………………………………………………………………………
+					//…………………………………………………………………………………………………………………………
 			End case 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Txt_in+"\"")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_out
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
