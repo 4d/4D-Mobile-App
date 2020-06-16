@@ -1,13 +1,13 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : project_Check_param
-  // ID[79BFA3C24536452A892A486A32EC7437]
-  // Created 28-8-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : project_Check_param
+// ID[79BFA3C24536452A892A486A32EC7437]
+// Created 28-8-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
@@ -16,23 +16,23 @@ C_TEXT:C284($t;$tt)
 C_OBJECT:C1216($ƒ;$o;$Obj_in;$Obj_out)
 
 If (False:C215)
-	C_OBJECT:C1216(project_Check_param ;$0)
-	C_OBJECT:C1216(project_Check_param ;$1)
+	C_OBJECT:C1216(project_Check_param;$0)
+	C_OBJECT:C1216(project_Check_param;$1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_in:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
@@ -47,59 +47,59 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
-  // CHECK IF THE PROJECT COULD BE CREATE
+// ----------------------------------------------------
+// CHECK IF THE PROJECT COULD BE CREATE
 Case of 
 		
-		  //______________________________________________________
-	: ((Length:C16(String:C10($o.product.name))=0))  // Empty App name
+		//______________________________________________________
+	: ((Length:C16(String:C10($o.product.name))=0))// Empty App name
 		
 		$o:=New object:C1471(\
 			"page";"general";\
 			"panel";"PRODUCT";\
 			"object";"10_name")
 		
-		DO_MESSAGE (New object:C1471(\
+		DO_MESSAGE(New object:C1471(\
 			"action";"show";\
 			"type";"alert";\
 			"title";ui.alert+" "+Get localized string:C991("theProductNameIsMandatory");\
 			"additional";"pleaseGiveNameToYourProduct";\
 			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: (OB Get:C1224($o;"dataModel";Is object:K8:27)=Null:C1517)\
-		 | OB Is empty:C1297(OB Get:C1224($o;"dataModel";Is object:K8:27))  // No published structure
+		 | OB Is empty:C1297(OB Get:C1224($o;"dataModel";Is object:K8:27))// No published structure
 		
 		$o:=New object:C1471(\
 			"page";"structure")
 		
-		DO_MESSAGE (New object:C1471(\
+		DO_MESSAGE(New object:C1471(\
 			"action";"show";\
 			"type";"alert";\
 			"title";ui.alert+" "+Get localized string:C991("noPublishedTable");\
 			"additional";"youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication";\
 			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($o.main.order=Null:C1517)\
-		 | ($o.main.order.length=0)  // No table in the main menu
+		 | ($o.main.order.length=0)// No table in the main menu
 		
 		$o:=New object:C1471(\
 			"page";"main")
 		
-		DO_MESSAGE (New object:C1471(\
+		DO_MESSAGE(New object:C1471(\
 			"action";"show";\
 			"type";"alert";\
 			"title";ui.alert+" "+Get localized string:C991("noTableDefinedInTheMainMenu");\
 			"additional";"youMustSetAtLeastOneTableIntoTheMainMenu";\
 			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
-		$Obj_out.success:=True:C214  // no error
+		$Obj_out.success:=True:C214// no error
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
 
 /*
@@ -110,11 +110,11 @@ If ($Obj_out.success & Bool:C1537($Obj_in.build))
 	
 	If (Value type:C1509($Obj_in.project.$project.file)=Is object:K8:27)
 		
-		$Obj_out.success:=($Obj_in.project.$project.file.parent.parent.path="/PACKAGE/Mobile Projects/")
+		$Obj_out.success:=(cs:C1710.doc.new($Obj_in.project.$project.file.parent.parent).relativePath="/Mobile Projects/")
 		
 		If (Not:C34($Obj_out.success))
 			
-			DO_MESSAGE (New object:C1471(\
+			DO_MESSAGE(New object:C1471(\
 				"action";"show";\
 				"type";"alert";\
 				"title";ui.alert+" "+Get localized string:C991("unableToGenerateApp");\
@@ -128,7 +128,7 @@ End if
 
 If ($Obj_out.success & Bool:C1537($Obj_in.build))
 	
-	  // CHECK IF THE PROJECT COULD BE BUILD
+	// CHECK IF THE PROJECT COULD BE BUILD
 	$o:=$Obj_in.project.dataModel
 	$ƒ:=Storage:C1525.ƒ
 	
@@ -138,34 +138,34 @@ If ($Obj_out.success & Bool:C1537($Obj_in.build))
 			
 			Case of 
 					
-					  //………………………………………………………………………………………………………
+					//………………………………………………………………………………………………………
 				: ($ƒ.isField($tt))
 					
-					  //
+					//
 					
-					  //………………………………………………………………………………………………………
+					//………………………………………………………………………………………………………
 				: (Value type:C1509($o[$t][$tt])#Is object:K8:27)
 					
-					  // <NOTHING MORE TO DO>
+					// <NOTHING MORE TO DO>
 					
-					  //………………………………………………………………………………………………………
-				: ($ƒ.isRelationToOne($o[$t][$tt]))  // N -> 1 relation
+					//………………………………………………………………………………………………………
+				: ($ƒ.isRelationToOne($o[$t][$tt]))// N -> 1 relation
 					
-					  //
+					//
 					
-					  //………………………………………………………………………………………………………
-				: ($ƒ.isRelationToMany($o[$t][$tt]))  // 1 -> N relation
+					//………………………………………………………………………………………………………
+				: ($ƒ.isRelationToMany($o[$t][$tt]))// 1 -> N relation
 					
 					If (Value type:C1509($o[String:C10($o[$t][$tt].relatedTableNumber)])=Is undefined:K8:13)
 						
 						$Obj_out.success:=False:C215
 						
-						  // Ensure the errors collection exists
-						$Obj_out:=ob_createPath ($Obj_out;"errors";Is collection:K8:32)
-						$Obj_out.errors.push(str ("theLinkedTableIsNotPublished").localized($o[$t][$tt].relatedEntities))
+						// Ensure the errors collection exists
+						$Obj_out:=ob_createPath($Obj_out;"errors";Is collection:K8:32)
+						$Obj_out.errors.push(str("theLinkedTableIsNotPublished").localized($o[$t][$tt].relatedEntities))
 						
 					End if 
-					  //………………………………………………………………………………………………………
+					//………………………………………………………………………………………………………
 			End case 
 			
 		End for each 
@@ -176,7 +176,7 @@ If ($Obj_out.success & Bool:C1537($Obj_in.build))
 		$o:=New object:C1471(\
 			"page";"structure")
 		
-		DO_MESSAGE (New object:C1471(\
+		DO_MESSAGE(New object:C1471(\
 			"action";"show";\
 			"type";"alert";\
 			"title";ui.alert+" "+Get localized string:C991("theDefinitionOfTheStructureIsInconsistent");\
@@ -189,13 +189,13 @@ End if
 
 If ($Obj_out.success & Bool:C1537($Obj_in.run))
 	
-	  // CHECK IF THE PROJECT COULD BE RUN
+	// CHECK IF THE PROJECT COULD BE RUN
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_out
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
