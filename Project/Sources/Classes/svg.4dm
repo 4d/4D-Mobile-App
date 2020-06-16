@@ -19,7 +19,7 @@ Class constructor
 		"width";"height";\
 		"codec"))
 	
-	  //This.target:=Formula(Choose($1.target=Null;Choose(This.latest#Null;This.latest;This.root);String($1.target)))
+	//This.target:=Formula(Choose($1.target=Null;Choose(This.latest#Null;This.latest;This.root);String($1.target)))
 	
 	If (Count parameters:C259>0)
 		
@@ -32,7 +32,7 @@ Class constructor
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function _target
+Function __target
 	
 	C_TEXT:C284($0)
 	C_VARIANT:C1683($1)
@@ -43,35 +43,35 @@ Function _target
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Count parameters:C259<1)
 			
 			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Value type:C1509($1)=Is undefined:K8:13)
 			
 			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)
 			
 			Case of 
 					
-					  //_______________________________
+					//_______________________________
 				: ($1="root")
 					
 					$0:=This:C1470.root
 					
-					  //_______________________________
+					//_______________________________
 				: ($1="latest")
 					
 					$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
 					
-					  //_______________________________
+					//_______________________________
 				Else 
 					
-					  // Find a memorized target
+					// Find a memorized target
 					$o:=This:C1470.store.query("id=:1";$1).pop()
 					
 					If ($o#Null:C1517)
@@ -85,10 +85,10 @@ Function _target
 						
 					End if 
 					
-					  //_______________________________
+					//_______________________________
 			End case 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Value type:C1509($1)=Is object:K8:27)
 			
 			If ($1.target#Null:C1517)
@@ -97,21 +97,21 @@ Function _target
 				
 			Else 
 				
-				This:C1470._target("latest")
+				This:C1470.__target("latest")
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		Else 
 			
 			This:C1470.success:=False:C215
 			This:C1470.errors.push("Unmanaged type")
 			
-			  //______________________________________________________
+			//______________________________________________________
 	End case 
 	
 /*———————————————————————————————————————————————————————————*/
-Function push  // Keep dom reference for futur
+Function push// Keep dom reference for futur
 	
 	C_OBJECT:C1216($0)
 	C_TEXT:C284($1)
@@ -143,7 +143,7 @@ Function push  // Keep dom reference for futur
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function fetch  // Retrieve a stored dom reference
+Function fetch// Retrieve a stored dom reference
 	
 	C_TEXT:C284($0)
 	C_TEXT:C284($1)
@@ -156,7 +156,7 @@ Function fetch  // Retrieve a stored dom reference
 		
 	Else 
 		
-		  // Lastest
+		// Lastest
 		$o:=New object:C1471("dom";This:C1470.latest)
 		
 	End if 
@@ -174,14 +174,14 @@ Function fetch  // Retrieve a stored dom reference
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function new  // Create a default SVG structure
+Function new// Create a default SVG structure
 	
 	C_OBJECT:C1216($0)
 	C_OBJECT:C1216($1)
 	
 	C_TEXT:C284($node;$t)
 	
-	This:C1470.close()  // Release memory
+	This:C1470.close()// Release memory
 	
 	$node:=DOM Create XML Ref:C861("svg";"http://www.w3.org/2000/svg")
 	This:C1470.success:=Bool:C1537(OK)
@@ -201,7 +201,7 @@ Function new  // Create a default SVG structure
 		
 		If (This:C1470.success)
 			
-			  // Default values
+			// Default values
 			DOM SET XML ATTRIBUTE:C866(This:C1470.root;\
 				"viewport-fill";"none";\
 				"fill";"none";\
@@ -227,30 +227,30 @@ Function new  // Create a default SVG structure
 					
 					Case of 
 							
-							  //_______________________
+							//_______________________
 						: ($t="keepReference")
 							
 							This:C1470.autoClose:=Bool:C1537($1[$t])
 							
-							  //_______________________
+							//_______________________
 						Else 
 							
 							DOM SET XML ATTRIBUTE:C866(This:C1470.root;\
 								$t;$1[$t])
 							
-							  //______________________
+							//______________________
 					End case 
 				End for each 
 				
 			Else 
 				
-				  // <NOTHING MORE TO DO>
+				// <NOTHING MORE TO DO>
 				
 			End if 
 			
 		Else 
 			
-			  // <NOTHING MORE TO DO>
+			// <NOTHING MORE TO DO>
 			
 		End if 
 		
@@ -263,20 +263,20 @@ Function new  // Create a default SVG structure
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function load  // Load a variable or a file
+Function load// Load a variable or a file
 	
 	C_OBJECT:C1216($0)
 	C_VARIANT:C1683($1)
 	
 	C_TEXT:C284($node)
 	
-	This:C1470.close()  // Release memory
+	This:C1470.close()// Release memory
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)\
-			 | (Value type:C1509($1)=Is BLOB:K8:12)  // Parse a given variable
+			 | (Value type:C1509($1)=Is BLOB:K8:12)// Parse a given variable
 			
 			$node:=DOM Parse XML variable:C720($1)
 			This:C1470.success:=Bool:C1537(OK)
@@ -293,8 +293,8 @@ Function load  // Load a variable or a file
 				
 			End if 
 			
-			  //______________________________________________________
-		: (Value type:C1509($1)=Is object:K8:27)  // File to load
+			//______________________________________________________
+		: (Value type:C1509($1)=Is object:K8:27)// File to load
 			
 			This:C1470.success:=($1#Null:C1517)
 			
@@ -326,18 +326,18 @@ Function load  // Load a variable or a file
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		Else 
 			
 			This:C1470.errors.push("Unmanaged type: "+String:C10(Value type:C1509($1)))
 			
-			  //________________________________________
+			//________________________________________
 	End case 
 	
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function close  // Close XML tree
+Function close// Close XML tree
 	
 	C_OBJECT:C1216($0)
 	
@@ -356,7 +356,7 @@ Function id
 	C_TEXT:C284($1)
 	
 	C_TEXT:C284($node)
-	$node:=This:C1470._target()
+	$node:=This:C1470.__target()
 	
 	DOM SET XML ATTRIBUTE:C866($node;"id";$1)
 	
@@ -364,10 +364,10 @@ Function id
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function show  // Show in 4D SVG Viewer
+Function show// Show in 4D SVG Viewer
 	
 	
-	  //#TO_DO: Should test if the component is available
+	//#TO_DO: Should test if the component is available
 	EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER";*;This:C1470.root)
 	
 	C_OBJECT:C1216($0)
@@ -384,7 +384,7 @@ Function rect
 	C_TEXT:C284($node)
 	
 	$height:=$1
-	$vWidth:=$1  // Square (default)
+	$vWidth:=$1// Square (default)
 	
 	If (Count parameters:C259>=1)
 		
@@ -394,7 +394,7 @@ Function rect
 			
 			If (Count parameters:C259>=2)
 				
-				$node:=This:C1470._target($3)
+				$node:=This:C1470.__target($3)
 				
 			Else 
 				
@@ -404,7 +404,7 @@ Function rect
 			
 		Else 
 			
-			$node:=This:C1470._target($2)
+			$node:=This:C1470.__target($2)
 			
 		End if 
 	End if 
@@ -416,12 +416,12 @@ Function rect
 	
 	This:C1470.success:=Bool:C1537(OK)
 	
-	  //If (Count parameters>2)\
-												 & (This.success)
+	//If (Count parameters>2)\
+														 & (This.success)
 	
-	  //This.attributes($3)
+	//This.attributes($3)
 	
-	  //End if 
+	//End if 
 	
 	
 	C_OBJECT:C1216($0)
@@ -442,17 +442,17 @@ Function square
 Function group
 	
 	C_OBJECT:C1216($0)
-	C_VARIANT:C1683($1)  // text | object
+	C_VARIANT:C1683($1)// text | object
 	
 	C_TEXT:C284($node)
 	
 	If (Count parameters:C259>=1)
 		
-		$node:=This:C1470._target($1)
+		$node:=This:C1470.__target($1)
 		
 	Else 
 		
-		$node:=This:C1470._target()
+		$node:=This:C1470.__target()
 		
 	End if 
 	
@@ -468,13 +468,13 @@ Function group
 /*———————————————————————————————————————————————————————————*/
 Function position
 	
-	C_LONGINT:C283($1)  // x
-	C_VARIANT:C1683($2)  // {y | unit}
-	C_TEXT:C284($3)  //    {unit}
+	C_LONGINT:C283($1)// x
+	C_VARIANT:C1683($2)// {y | unit}
+	C_TEXT:C284($3)//    {unit}
 	
 	C_TEXT:C284($node)
 	
-	$node:=This:C1470._target()
+	$node:=This:C1470.__target()
 	This:C1470.success:=($node#This:C1470.root)
 	
 	If (This:C1470.success)
@@ -515,73 +515,73 @@ Function position
 /*———————————————————————————————————————————————————————————*/
 Function dimensions
 	
-	C_VARIANT:C1683($1)  // width
-	C_VARIANT:C1683($2)  // {height | unit}
-	C_TEXT:C284($3)  //    {unit}
+	C_VARIANT:C1683($1)// width
+	C_VARIANT:C1683($2)// {height | unit}
+	C_TEXT:C284($3)//    {unit}
 	
 	C_TEXT:C284($node;$t)
-	$node:=This:C1470._target()
+	$node:=This:C1470.__target()
 	DOM GET XML ELEMENT NAME:C730($node;$t)
 	
 	If ($t="textArea")
 		
 		Case of 
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: (Count parameters:C259=0)
 				
 				DOM SET XML ATTRIBUTE:C866($node;\
 					"width";"auto";\
 					"height";"auto")
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: (Count parameters:C259>=3)
 				
 				DOM SET XML ATTRIBUTE:C866($node;\
 					"width";Choose:C955($1=Null:C1517;"auto";String:C10($1;"&xml")+String:C10($3));\
 					"height";Choose:C955($2=Null:C1517;"auto";String:C10($2;"&xml")+String:C10($3)))
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: (Count parameters:C259>=2)
 				
 				DOM SET XML ATTRIBUTE:C866($node;\
 					"width";Choose:C955($1=Null:C1517;"auto";String:C10($1;"&xml"));\
 					"height";Choose:C955($2=Null:C1517;"auto";String:C10($2;"&xml")))
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: (Count parameters:C259>=1)
 				
 				DOM SET XML ATTRIBUTE:C866($node;\
 					"width";Choose:C955($1=Null:C1517;"auto";String:C10($1;"&xml")))
 				
-				  //______________________________________________________
+				//______________________________________________________
 		End case 
 		
 	Else 
 		
 		Case of 
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: (Count parameters:C259>=3)
 				
 				DOM SET XML ATTRIBUTE:C866($node;\
 					"width";String:C10($1;"&xml")+String:C10($3);\
 					"height";String:C10($2;"&xml")+String:C10($3))
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: (Count parameters:C259>=2)
 				
 				DOM SET XML ATTRIBUTE:C866($node;\
 					"width";String:C10($1;"&xml");\
 					"height";String:C10($2;"&xml"))
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: (Count parameters:C259>=1)
 				
 				DOM SET XML ATTRIBUTE:C866($node;\
 					"width";String:C10($1;"&xml"))
 				
-				  //______________________________________________________
+				//______________________________________________________
 		End case 
 	End if 
 	
@@ -592,8 +592,8 @@ Function dimensions
 Function attributes
 	
 	C_OBJECT:C1216($0)
-	C_VARIANT:C1683($1)  // object | attribute
-	C_VARIANT:C1683($2)  // Value
+	C_VARIANT:C1683($1)// object | attribute
+	C_VARIANT:C1683($2)// Value
 	
 	C_TEXT:C284($key;$node)
 	C_COLLECTION:C1488($c)
@@ -602,7 +602,7 @@ Function attributes
 		
 		If ($1#Null:C1517)
 			
-			$node:=This:C1470._target($1)
+			$node:=This:C1470.__target($1)
 			$c:=This:C1470[""]._attributes
 			
 			For each ($key;$1)
@@ -617,8 +617,8 @@ Function attributes
 						
 					Else 
 						
-						  // This.success:=False
-						  // This.errors.push("Invalid values pair for an attribute.")
+						// This.success:=False
+						// This.errors.push("Invalid values pair for an attribute.")
 						
 					End if 
 				End if 
@@ -634,11 +634,11 @@ Function attributes
 			
 		Else 
 			
-			  //If (Value type($1)=Is text)
-			  //  // Remove
-			  //DOM REMOVE XML ATTRIBUTE(This.latest;$1)
+			//If (Value type($1)=Is text)
+			//  // Remove
+			//DOM REMOVE XML ATTRIBUTE(This.latest;$1)
 			
-			  // End if
+			// End if
 			
 		End if 
 		
@@ -651,18 +651,18 @@ Function attributes
 /*———————————————————————————————————————————————————————————*/
 Function fill
 	
-	C_TEXT:C284($1)  // Color
-	C_VARIANT:C1683($2)  // {target}
+	C_TEXT:C284($1)// Color
+	C_VARIANT:C1683($2)// {target}
 	
 	C_TEXT:C284($node)
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470._target($2)
+		$node:=This:C1470.__target($2)
 		
 	Else 
 		
-		$node:=This:C1470._target()
+		$node:=This:C1470.__target()
 		
 	End if 
 	
@@ -684,17 +684,17 @@ Function fill
 /*———————————————————————————————————————————————————————————*/
 Function stroke
 	
-	C_TEXT:C284($1)  // Color
-	C_VARIANT:C1683($2)  // {target}
+	C_TEXT:C284($1)// Color
+	C_VARIANT:C1683($2)// {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470._target($2)
+		$node:=This:C1470.__target($2)
 		
 	Else 
 		
-		$node:=This:C1470._target()
+		$node:=This:C1470.__target()
 		
 	End if 
 	
@@ -707,17 +707,17 @@ Function stroke
 /*———————————————————————————————————————————————————————————*/
 Function fillOpacity
 	
-	C_REAL:C285($1)  // opacity
-	C_VARIANT:C1683($2)  // {target}
+	C_REAL:C285($1)// opacity
+	C_VARIANT:C1683($2)// {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470._target($2)
+		$node:=This:C1470.__target($2)
 		
 	Else 
 		
-		$node:=This:C1470._target()
+		$node:=This:C1470.__target()
 		
 	End if 
 	
@@ -739,17 +739,17 @@ Function fillOpacity
 /*———————————————————————————————————————————————————————————*/
 Function embedPicture
 	
-	C_PICTURE:C286($1)  // Picture
-	C_VARIANT:C1683($2)  // {target}
+	C_PICTURE:C286($1)// Picture
+	C_VARIANT:C1683($2)// {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470._target($2)
+		$node:=This:C1470.__target($2)
 		
 	Else 
 		
-		$node:=This:C1470._target()
+		$node:=This:C1470.__target()
 		
 	End if 
 	
@@ -757,7 +757,7 @@ Function embedPicture
 	
 	If (This:C1470.success)
 		
-		  // Encode in base64
+		// Encode in base64
 		C_BLOB:C604($x)
 		PICTURE TO BLOB:C692($1;$x;".png")
 		This:C1470.success:=Bool:C1537(OK)
@@ -768,7 +768,7 @@ Function embedPicture
 			BASE64 ENCODE:C895($x;$t)
 			CLEAR VARIABLE:C89($x)
 			
-			  // Put the encoded image
+			// Put the encoded image
 			C_LONGINT:C283($width;$height)
 			PICTURE PROPERTIES:C457($1;$width;$height)
 			
@@ -795,17 +795,17 @@ Function embedPicture
 /*———————————————————————————————————————————————————————————*/
 Function image
 	
-	C_OBJECT:C1216($1)  // File
-	C_VARIANT:C1683($2)  // {target}
+	C_OBJECT:C1216($1)// File
+	C_VARIANT:C1683($2)// {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470._target($2)
+		$node:=This:C1470.__target($2)
 		
 	Else 
 		
-		$node:=This:C1470._target()
+		$node:=This:C1470.__target()
 		
 	End if 
 	
@@ -863,17 +863,17 @@ Function image
 /*———————————————————————————————————————————————————————————*/
 Function textArea
 	
-	C_TEXT:C284($1)  // Text
-	C_VARIANT:C1683($2)  // {target}
+	C_TEXT:C284($1)// Text
+	C_VARIANT:C1683($2)// {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470._target($2)
+		$node:=This:C1470.__target($2)
 		
 	Else 
 		
-		$node:=This:C1470._target()
+		$node:=This:C1470.__target()
 		
 	End if 
 	
@@ -941,7 +941,7 @@ Function getPicture
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Count parameters:C259>=2)
 			
 			SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Num:C11($1))
@@ -953,7 +953,7 @@ Function getPicture
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Count parameters:C259>=1)
 			
 			If (Value type:C1509($1)=Is boolean:K8:9)
@@ -978,7 +978,7 @@ Function getPicture
 				End if 
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		Else 
 			
 			SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Copy XML data source:K45:17)
@@ -989,7 +989,7 @@ Function getPicture
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 	End case 
 	
 	This:C1470.success:=(Picture size:C356($p)>0)

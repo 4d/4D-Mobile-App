@@ -16,7 +16,7 @@ If (Form:C1466#Null:C1517)  // Prematurely
 				  //…………………………………………………………………………………
 			: ($e.code=On Bound Variable Change:K2:52)
 				
-				Form:C1466.ui()
+				Form:C1466.__ui()
 				
 				  //…………………………………………………………………………………
 			: ($e.code=On Resize:K2:27)
@@ -28,7 +28,7 @@ If (Form:C1466#Null:C1517)  // Prematurely
 				
 				SET TIMER:C645(0)
 				
-				Form:C1466.geometry()
+				Form:C1466.__geometry()
 				
 				  //…………………………………………………………………………………
 		End case 
@@ -45,17 +45,17 @@ If (Form:C1466#Null:C1517)  // Prematurely
 				  //=============================================
 			: ($e.code=On Drop:K2:12)
 				
-				Form:C1466.onDrop()
+				Form:C1466.__onDrop()
 				
 				  //=============================================
 			: ($e.objectName="browse")
 				
-				Form:C1466.select()
+				Form:C1466.__select()
 				
 				  //=============================================
 			: ($e.objectName="menu@")
 				
-				Form:C1466.displayMenu()
+				Form:C1466.__displayMenu()
 				
 				  //=============================================
 		End case 

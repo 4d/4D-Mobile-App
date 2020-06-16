@@ -8,7 +8,6 @@
 		"onLoad",
 		"onBoundVariableChange"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -26,10 +25,10 @@
 					"height": 21,
 					"sizingX": "grow",
 					"display": false,
-					"method": "ObjectMethods/button.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "Search_OBJECTS_HANDLER"
 				},
 				"border": {
 					"type": "rectangle",
@@ -52,14 +51,14 @@
 					"hideFocusRing": true,
 					"contextMenu": "none",
 					"dragging": "none",
-					"method": "ObjectMethods/box.4dm",
 					"events": [
 						"onLoad",
 						"onLosingFocus",
 						"onGettingFocus",
 						"onUnload",
 						"onAfterEdit"
-					]
+					],
+					"method": "Search_OBJECTS_HANDLER"
 				},
 				"glass": {
 					"type": "picture",
@@ -80,10 +79,10 @@
 					"sizingX": "move",
 					"icon": "/RESOURCES/images/close.png",
 					"style": "custom",
-					"method": "ObjectMethods/close.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "Search_OBJECTS_HANDLER"
 				},
 				"placeholder": {
 					"type": "input",
@@ -107,5 +106,7 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"method": "search_HANDLER",
+	"geometryStamp": 4
 }
