@@ -1,13 +1,13 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : views_preview
-  // ID[C76CC05CD44641EC92AE0C413664247C]
-  // Created 5-12-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : views_preview
+// ID[C76CC05CD44641EC92AE0C413664247C]
+// Created 5-12-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_TEXT:C284($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
@@ -23,17 +23,17 @@ C_OBJECT:C1216($oTemplate;$oWidgetManifest;$svg)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_TEXT:C284(views_preview ;$0)
-	C_TEXT:C284(views_preview ;$1)
-	C_OBJECT:C1216(views_preview ;$2)
+	C_TEXT:C284(views_preview;$0)
+	C_TEXT:C284(views_preview;$1)
+	C_OBJECT:C1216(views_preview;$2)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 
-  // NO PARAMETERS REQUIRED
+// NO PARAMETERS REQUIRED
 
-  // Optional parameters
+// Optional parameters
 If (Count parameters:C259>=1)
 	
 	$tIN:=$1
@@ -47,17 +47,19 @@ End if
 
 $context:=$form.$
 
-TRY 
+TRY
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //______________________________________________________
-	: ($tIN="draw")  // Uppdate preview
+		//______________________________________________________
+	: ($tIN="draw")// Uppdate preview
+		
+		ASSERT:C1129(Not:C34(Shift down:C543))
 		
 		If (Length:C16($context.tableNum())>0)
 			
-			  // Form name
+			// Form name
 			$tTypeForm:=$context.typeForm()
 			$tFormName:=String:C10(Form:C1466[$tTypeForm][$context.tableNum()].form)
 			
@@ -74,7 +76,7 @@ Case of
 						
 					Else 
 						
-						  // 
+						// 
 						Form:C1466.$dialog._o_VIEWS.template:=cs:C1710.tmpl.new($tFormName;$tTypeForm)
 						
 					End if 
@@ -87,12 +89,12 @@ Case of
 					
 					If (feature.with("newViewUI"))
 						
-						  // Load the template
+						// Load the template
 						$t:=$oTemplate.load().template
 						$t:=Replace string:C233($t;"&quot;";"\"")
 						PROCESS 4D TAGS:C816($t;$t;$oTemplate.title;$oTemplate.cancel())
 						
-						$svg:=svg ("parse";New object:C1471(\
+						$svg:=svg("parse";New object:C1471(\
 							"variable";$t)).setAttribute("transform";\
 							"scale(0.97)")
 						
@@ -131,10 +133,10 @@ Case of
 						
 					Else 
 						
-						  // Load the template
+						// Load the template
 						PROCESS 4D TAGS:C816($oTemplate.template;$t)
 						
-						$svg:=svg ("parse";New object:C1471(\
+						$svg:=svg("parse";New object:C1471(\
 							"variable";$t)).setAttribute("transform";\
 							"scale(0.95)")
 						
@@ -144,7 +146,7 @@ Case of
 					
 					If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
 						
-						  // Add the style sheet
+						// Add the style sheet
 						$svg.styleSheet($oTemplate.css())
 						
 						$oTarget:=Choose:C955(Form:C1466[$tTypeForm][$context.tableNumber]=Null:C1517;New object:C1471;Form:C1466[$tTypeForm][$context.tableNumber])
@@ -168,10 +170,26 @@ Case of
 								
 								If ($o#Null:C1517)
 									
-									If ($indx>$count)  // Dynamic
+									If ($indx>$count)// Dynamic
 										
-										  // Set ids, label & position
-										PROCESS 4D TAGS:C816($tWidgetField;$t;$indx;$o.name;5+$height)
+										//#117298 - [BUG] Missing relation italic style
+										var $tStyle;$tClass : Text
+										CLEAR VARIABLE:C89($tStyle)
+										CLEAR VARIABLE:C89($tClass)
+										
+										If ($o.fieldType=8859)// 1-N relation
+											
+											$tStyle:="italic"
+											
+											If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)// Error
+												
+												$tClass:=" error"
+												
+											End if 
+										End if 
+										
+										// Set ids, label & position
+										PROCESS 4D TAGS:C816($tWidgetField;$t;$indx;$o.name;5+$height;$tStyle;$tClass)
 										
 										$root:=DOM Parse XML variable:C720($t)
 										
@@ -190,25 +208,25 @@ Case of
 											
 										End if 
 										
-									Else   // Static
+									Else // Static
 										
 										$t:=String:C10($indx)
 										
-										  // Get the bindind definition
+										// Get the bindind definition
 										$node:=$svg.findById("f"+$t)
 										
 										If ($svg.success)
 											
-											$oAttributes:=xml_attributes ($node)
+											$oAttributes:=xml_attributes($node)
 											
-											  // Get the bindind definition
+											// Get the bindind definition
 											If ($oAttributes["ios:type"]#Null:C1517)
 												
 												$b:=($oAttributes["ios:type"]="all")
 												
 												If (Not:C34($b))
 													
-													$b:=tmpl_compatibleType ($oAttributes["ios:type"];$o.fieldType)
+													$b:=tmpl_compatibleType($oAttributes["ios:type"];$o.fieldType)
 													
 												End if 
 												
@@ -220,6 +238,10 @@ Case of
 														
 														DOM SET XML ELEMENT VALUE:C868($node;$o.name)
 														
+														//#117302 - [BUG] Fixed dropped field style
+														$node:=DOM Get next sibling XML element:C724($node)
+														$svg.setAttribute("stroke-dasharray";"none";$node)
+														
 														$node:=$svg.findById("f"+$t+".cancel")
 														
 														If ($svg.success)
@@ -230,20 +252,20 @@ Case of
 														
 													Else 
 														
-														  // ERROR
+														// ERROR
 														
 													End if 
 												End if 
 												
 											Else 
 												
-												  // ERROR
+												// ERROR
 												
 											End if 
 											
 										Else 
 											
-											  // ERROR
+											// ERROR
 											
 										End if 
 									End if 
@@ -302,31 +324,31 @@ Case of
 							
 						Else 
 							
-							  // Update values if any
+							// Update values if any
 							$t:=$svg.findById("cookery")
 							
 							If (Asserted:C1132($svg.success;"Missing cookery element"))
 								
-								$o:=xml_attributes ($t)
+								$o:=xml_attributes($t)
 								
-								  // Get the bindind definition
+								// Get the bindind definition
 								If (Asserted:C1132($o["ios:values"]#Null:C1517))
 									
 									$c:=Split string:C1554(String:C10($o["ios:values"]);",";sk trim spaces:K86:2)
 									
 								End if 
 								
-								  // Get the template for multivalued fields reference, if exist
+								// Get the template for multivalued fields reference, if exist
 								$domTemplate:=$svg.findById("f")
 								$bMultivalued:=($svg.success)
 								
 								If ($bMultivalued)
 									
-									  // Get the main group reference
+									// Get the main group reference
 									$domBkg:=$svg.findById("multivalued")
 									
-									  // Get the vertical offset
-									$o:=xml_attributes ($domTemplate)
+									// Get the vertical offset
+									$o:=xml_attributes($domTemplate)
 									
 									If ($o["ios:dy"]#Null:C1517)
 										
@@ -352,7 +374,7 @@ Case of
 												End if 
 											End if 
 											
-											  // Get position
+											// Get position
 											$node:=DOM Get parent XML element:C923($t)
 											
 											If (Asserted:C1132(OK=1))
@@ -364,7 +386,7 @@ Case of
 											
 										Else 
 											
-											  // Create an object from the template
+											// Create an object from the template
 											$Lon_y:=$Lon_y+$Lon_yOffset
 											$tIndex:=String:C10(Num:C11($tWidgetField))
 											
@@ -374,14 +396,14 @@ Case of
 												
 												$domNew:=DOM Append XML element:C1082($domUse;$domTemplate)
 												
-												  // Remove id
+												// Remove id
 												DOM REMOVE XML ATTRIBUTE:C1084($domNew;"id")
 												
-												  // Set position
+												// Set position
 												DOM SET XML ATTRIBUTE:C866($domNew;\
 													"transform";"translate(0,"+String:C10($Lon_y)+")")
 												
-												  // Set label
+												// Set label
 												$node:=DOM Find XML element by ID:C1010($domNew;"f.label")
 												DOM SET XML ATTRIBUTE:C866($node;\
 													"id";$tWidgetField+".label")
@@ -397,7 +419,7 @@ Case of
 													
 												End if 
 												
-												  // Set id, bind & default label
+												// Set id, bind & default label
 												$node:=DOM Find XML element by ID:C1010($domNew;"f")
 												
 												DOM SET XML ATTRIBUTE:C866($node;\
@@ -405,12 +427,12 @@ Case of
 													"ios:bind";"fields["+String:C10(Num:C11($tWidgetField)-1)+"]";\
 													"ios:label";Get localized string:C991("field[n]")+" "+$tIndex)
 												
-												  // Set cancel id
+												// Set cancel id
 												$node:=DOM Find XML element by ID:C1010($domNew;"f.cancel")
 												DOM SET XML ATTRIBUTE:C866($node;\
 													"id";$tWidgetField+".cancel")
 												
-												  // Append object to the preview
+												// Append object to the preview
 												$domNew:=DOM Append XML element:C1082($domBkg;$domNew)
 												
 												DOM CLOSE XML:C722($domUse)
@@ -420,22 +442,22 @@ Case of
 									End for each 
 								End if 
 								
-								  // Valorize the fields
+								// Valorize the fields
 								For each ($t;$c)
 									
 									CLEAR VARIABLE:C89($tName)
 									
-									  // Find the binded element
+									// Find the binded element
 									$domField:=$svg.findById($t)
 									
-									  // Get the field bind
-									$o:=xml_attributes ($domField)
+									// Get the field bind
+									$o:=xml_attributes($domField)
 									
 									If (Asserted:C1132($o["ios:bind"]#Null:C1517))
 										
-										If (Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$o["ios:bind"])=-1)
+										If (Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$o["ios:bind"])=-1)
 											
-											  // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
+											// Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 											If ($oTarget[$o["ios:bind"]]#Null:C1517)
 												
 												If (Value type:C1509($oTarget[$o["ios:bind"]])=Is collection:K8:32)
@@ -446,7 +468,7 @@ Case of
 														
 													Else 
 														
-														  // Multi-criteria Search
+														// Multi-criteria Search
 														$tName:=Get localized string:C991("multiCriteriaSearch")
 														
 													End if 
@@ -468,25 +490,25 @@ Case of
 												
 												If ($o#Null:C1517)
 													
-													  // Keep the field  description for the needs of UI
+													// Keep the field  description for the needs of UI
 													$svg.setAttribute("ios:data";JSON Stringify:C1217($o);$domField)
 													
 													$tName:=$o.name
 													
-													If (Num:C11($o.fieldType)=8859)  // 1-N relation
+													If (Num:C11($o.fieldType)=8859)// 1-N relation
 														
 														$node:=$svg.findById($t+".label")
 														
 														$svg.setAttribute("font-style";"italic";$node)
 														
-														If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
+														If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)// Error
 															
-															$svg.setAttribute("class";String:C10(xml_attributes ($node).class)+" error";$node)
+															$svg.setAttribute("class";String:C10(xml_attributes($node).class)+" error";$node)
 															
 														End if 
 													End if 
 													
-													  // Keep the nex available index
+													// Keep the nex available index
 													$context.lastMultivaluedField:=$indx+1
 													
 												End if 
@@ -502,7 +524,7 @@ Case of
 											
 											If ($bMultivalued)
 												
-												  // Make it visible & mark as affected
+												// Make it visible & mark as affected
 												$svg.setAttributes(New object:C1471("target";DOM Get parent XML element:C923($domField);\
 													"visibility";"visible";\
 													"class";"affected"))
@@ -513,8 +535,8 @@ Case of
 											
 											If (Asserted:C1132($svg.success))
 												
-												  // Truncate & set tips if necessary
-												$width:=Num:C11(xml_attributes ($node).width)
+												// Truncate & set tips if necessary
+												$width:=Num:C11(xml_attributes($node).width)
 												
 												If ($width>0)
 													
@@ -548,25 +570,25 @@ Case of
 								
 								If ($bMultivalued)
 									
-									  // Hide unassigned multivalued fields (except the first)
+									// Hide unassigned multivalued fields (except the first)
 									ARRAY TEXT:C222($tDom_;0x0000)
 									$tDom_{0}:=DOM Find XML element:C864($domBkg;"g";$tDom_)
 									
 									For ($i;1;Size of array:C274($tDom_);1)
 										
-										If (String:C10(xml_attributes ($tDom_{$i}).class)="")  // Not affected
+										If (String:C10(xml_attributes($tDom_{$i}).class)="")// Not affected
 											
 											If (Not:C34($bFirst))
 												
-												  // We have found the first non affected field
+												// We have found the first non affected field
 												$bFirst:=True:C214
 												
-												  // Make it visible to allow drag and drop
+												// Make it visible to allow drag and drop
 												$svg.setVisible(True:C214;$tDom_{$i})
 												
 											Else 
 												
-												  // Hide the other ones
+												// Hide the other ones
 												$svg.setVisible(False:C215;$tDom_{$i})
 												
 											End if 
@@ -574,7 +596,7 @@ Case of
 									End for 
 								End if 
 								
-								  // Tabs
+								// Tabs
 								$t:=$svg.findById("tabs")
 								
 								If ($svg.success)
@@ -620,15 +642,15 @@ Case of
 						
 						$form.form.call("pickerHide")
 						
-						  // Put an error message
+						// Put an error message
 						$form.preview.getCoordinates()
 						
-						($form.preview.pointer())->:=svg .setDimensions($form.preview.coordinates.width-20;$form.preview.coordinates.height)\
-							.textArea(str ("theTemplateIsMissingOrInvalid").localized($oTemplate.title);20;180)\
+						($form.preview.pointer())->:=svg.setDimensions($form.preview.coordinates.width-20;$form.preview.coordinates.height)\
+							.textArea(str("theTemplateIsMissingOrInvalid").localized($oTemplate.title);20;180)\
 							.setDimensions($form.preview.coordinates.width-20)\
 							.setFill(ui.colors.errorColor.hex)\
 							.setAttributes(New object:C1471("font-size";14;"text-align";"center"))\
-							.textArea(str ("theTemplateIsMissingOrInvalid").localized(Replace string:C233($tFormName;"/";""));20;180)\
+							.textArea(str("theTemplateIsMissingOrInvalid").localized(Replace string:C233($tFormName;"/";""));20;180)\
 							
 						OBJECT SET TITLE:C194(*;"preview.label";"")
 						
@@ -636,34 +658,34 @@ Case of
 					
 				Else 
 					
-					  // Display the template picker
+					// Display the template picker
 					$form.fieldGroup.hide()
 					$form.previewGroup.hide()
 					
-					views_LAYOUT_PICKER ($tTypeForm)
+					views_LAYOUT_PICKER($tTypeForm)
 					
 				End if 
 				
 			Else 
 				
-				  // Display the template picker
+				// Display the template picker
 				$form.fieldGroup.hide()
 				$form.previewGroup.hide()
 				
-				views_LAYOUT_PICKER ($tTypeForm)
+				views_LAYOUT_PICKER($tTypeForm)
 				
 			End if 
 		End if 
 		
-		  //________________________________________
-	: ($tIN="cancel")  // Return cancel button as Base64 data
+		//________________________________________
+	: ($tIN="cancel")// Return cancel button as Base64 data
 		
-		  //READ PICTURE FILE(Get 4D folder(Current resources folder)+Convert path POSIX to system("images/Buttons/LightGrey/Cancel.png");$Pic_cancel)
-		  //TRANSFORM PICTURE($Pic_cancel;Crop;1;1;48;48)
-		  //CREATE THUMBNAIL($Pic_cancel;$Pic_cancel;30;30)
-		  //PICTURE TO BLOB($Pic_cancel;$Blb_;".png")
-		  //BASE64 ENCODE($Blb_;$Txt_out)
-		  //$Txt_out:="data:;base64,"+$Txt_out
+		//READ PICTURE FILE(Get 4D folder(Current resources folder)+Convert path POSIX to system("images/Buttons/LightGrey/Cancel.png");$Pic_cancel)
+		//TRANSFORM PICTURE($Pic_cancel;Crop;1;1;48;48)
+		//CREATE THUMBNAIL($Pic_cancel;$Pic_cancel;30;30)
+		//PICTURE TO BLOB($Pic_cancel;$Blb_;".png")
+		//BASE64 ENCODE($Blb_;$Txt_out)
+		//$Txt_out:="data:;base64,"+$Txt_out
 		
 		$tOUT:="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAuJJREFUSA3tlEtoU1EQhptHI4lp8FUMlIIPpH"+\
 			"ZRixTdFYIIUrCBkJTQlCpEjFJw4UYRFaObVnEjWbhQqRgLtiG6koAiIiiKG0UkiRXrShHbQtNiJEnT+E3hykFyb+LGheTAMOf8Z2b+mblzT1NTYzU68L91wPS3Bfn9/l1ms7nf"+\
@@ -675,20 +697,20 @@ Case of
 			"ZtlozCgaD26lAnsJ2Al8l8CO32/0pFosVIZNO7OWTHEfvwe4kLRZbw1UXsUTwer0tdrv9KMRCYEMqgpPEqkD4iv2lycnJjOC1Vt3EWiBJgO/Yw5PYRhLNkM1D+p7WftZsGrrRgUYH/"+\
 			"mkHfgG6PCOSHCtXRwAAAABJRU5ErkJggg=="
 		
-		  //______________________________________________________
+		//______________________________________________________
 		
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$tIN+"\"")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
 
-FINALLY 
+FINALLY
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$tOUT
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
