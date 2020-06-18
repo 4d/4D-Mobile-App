@@ -474,6 +474,11 @@ Case of
 					//#MARK_TODO - use CALL FORM to avoid three-state display
 					STRUCTURE_UPDATE($form)
 					
+					If ($Ptr_me->{$row}=0)
+						
+						cs:C1710.project.new(Form:C1466).updateActions()
+						
+					End if 
 				End if 
 				
 				//______________________________________________________
