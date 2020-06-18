@@ -23,7 +23,6 @@ labels as well as for the graphic interface.
                              ┗━━┫ stepper ┃
                                 ┗━━━━━━━━━┛
 */
-
 Class constructor
 	
 	C_TEXT:C284($1)
@@ -34,7 +33,7 @@ Class constructor
 		
 	Else 
 		
-		  // Called from the widget method
+		// Called from the widget method
 		This:C1470.name:=OBJECT Get name:C1087(Object current:K67:2)
 		
 	End if 
@@ -137,11 +136,11 @@ Function disable
 ══════════════════════════*/
 Function setTitle
 	
-	C_TEXT:C284($1)  // Text or resname
+	C_TEXT:C284($1)// Text or resname
 	C_TEXT:C284($t)
 	
 	$t:=Get localized string:C991($1)
-	$t:=Choose:C955(Length:C16($t)>0;$t;$1)  // Revert if no localization
+	$t:=Choose:C955(Length:C16($t)>0;$t;$1)// Revert if no localization
 	
 	OBJECT SET TITLE:C194(*;This:C1470.name;$t)
 	
@@ -280,30 +279,30 @@ Function bestSize
 	
 	Case of 
 			
-			  //______________________________
+			//______________________________
 		: (This:C1470.type=Object type static text:K79:2)\
 			 | (This:C1470.type=Object type checkbox:K79:26)
 			
 			If (Num:C11($o.alignment)=Align left:K42:2)
 				
-				  // Add 10 pixels
+				// Add 10 pixels
 				$width:=$width+10
 				
 			End if 
 			
-			  //______________________________
+			//______________________________
 		: (This:C1470.type=Object type push button:K79:16)
 			
-			  // Add 10% for margins
+			// Add 10% for margins
 			$width:=Round:C94($width*1.1;0)
 			
-			  //______________________________
+			//______________________________
 		Else 
 			
-			  // Add 10 pixels
+			// Add 10 pixels
 			$width:=$width+10
 			
-			  //______________________________
+			//______________________________
 	End case 
 	
 	If ($o.min#Null:C1517)
@@ -318,7 +317,7 @@ Function bestSize
 		
 	Else 
 		
-		  // Default is Align left
+		// Default is Align left
 		$right:=$left+$width
 		
 	End if 

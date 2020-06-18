@@ -580,19 +580,6 @@
 					"width": 497,
 					"height": 56
 				},
-				"clearValue": {
-					"type": "button",
-					"text": "Clear",
-					"top": 260,
-					"left": 300,
-					"width": 82,
-					"height": 20,
-					"events": [
-						"onClick"
-					],
-					"method": "ObjectMethods/clearValue.4dm",
-					"focusable": true
-				},
 				"Text14": {
 					"type": "text",
 					"text": "Then, set its content or clear it",
@@ -672,6 +659,79 @@
 					"height": 48,
 					"startPoint": "topLeft",
 					"stroke": "#0000cd"
+				},
+				"picture": {
+					"type": "input",
+					"left": 97,
+					"top": 275,
+					"width": 150,
+					"height": 150,
+					"dataSource": "Form:C1466.picture",
+					"enterable": false,
+					"focusable": false,
+					"contextMenu": "none",
+					"fill": "transparent",
+					"dataSourceTypeHint": "picture",
+					"pictureFormat": "proportionalCenter",
+					"borderStyle": "system"
+				},
+				"Text24": {
+					"type": "text",
+					"text": "Form.picture",
+					"top": 250,
+					"left": 97,
+					"width": 343,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"Button9": {
+					"type": "button",
+					"text": "Browse…",
+					"top": 286,
+					"left": 294,
+					"width": 82,
+					"height": 20,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button9.4dm",
+					"focusable": false
+				},
+				"Text25": {
+					"type": "text",
+					"text": "Form.picture.read()",
+					"top": 288,
+					"left": 390,
+					"width": 178,
+					"height": 16,
+					"stroke": "#1e90ff"
+				},
+				"clearValue1": {
+					"type": "button",
+					"text": "Clear",
+					"top": 190,
+					"left": 658,
+					"width": 82,
+					"height": 20,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/clearValue1.4dm",
+					"focusable": true
+				},
+				"Input3": {
+					"type": "input",
+					"left": 97,
+					"top": 431,
+					"width": 149,
+					"height": 17,
+					"dataSource": "Form:C1466.picture.fileName",
+					"enterable": false,
+					"focusable": false,
+					"contextMenu": "none",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"textAlign": "center"
 				}
 			}
 		},
@@ -848,5 +908,6 @@
 				"Text2"
 			]
 		}
-	}
+	},
+	"geometryStamp": 64
 }

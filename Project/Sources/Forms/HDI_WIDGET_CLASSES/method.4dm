@@ -1,4 +1,5 @@
 C_LONGINT:C283($l)
+C_PICTURE:C286($p)
 C_OBJECT:C1216($e;$o)
 C_COLLECTION:C1488($c)
 
@@ -15,56 +16,56 @@ End if
 
 Case of 
 		
-		  //———————————————————————————————————————————————
+		//———————————————————————————————————————————————
 	: ($e.code=On Load:K2:1)
 		
-		Form:C1466.pages:=New collection:C1472.resize(4)  // 3 pages + page 0
+		Form:C1466.pages:=New collection:C1472.resize(4)// 3 pages + page 0
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($e.code=On Page Change:K2:54)
 		
-		  // <NOTHING MORE TO DO>
+		// <NOTHING MORE TO DO>
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: (Form:C1466.clickMe.catch($e))
 		
-		  // <THE WIDGET CALLBACK METHOD HAS BEEN EXECUTED DURING .catch()>
+		// <THE WIDGET CALLBACK METHOD HAS BEEN EXECUTED DURING .catch()>
 		
-		  //Note: You can change on the fly the code executed :-)
+		//Note: You can change on the fly the code executed :-)
 		Form:C1466.clickMe.setCallback(Formula:C1597(ALERT:C41("Hello World")))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: (Form:C1466.alignRight.catch($e))
 		
 		ALERT:C41("You have clicked on "+$e.objectName)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: (Split string:C1554("execute.reset.trace.next.previous";".").indexOf($e.objectName)#-1)
 		
-		  // Ignore
+		// Ignore
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: (FORM Get current page:C276>1)
 		
-		  // Ignore
+		// Ignore
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
 		ALERT:C41("Event \""+$e.description+"\" activated unnecessarily for \""+$e.objectName+"\"")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
 
 $l:=FORM Get current page:C276
 
-If (Form:C1466.pages[$l]=Null:C1517)
+If (Form:C1466.pages[$l]=Null:C1517) | Shift down:C543
 	
 	Form:C1466.pages[$l]:=True:C214
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($l=1)
 			
 			Form:C1466.alignRight:=cs:C1710.button.new("Button2")
@@ -85,13 +86,13 @@ If (Form:C1466.pages[$l]=Null:C1517)
 			Form:C1466.grapRect:=cs:C1710.static.new("Rectangle5")
 			
 			$c:=New collection:C1472
-			$c.push(cs:C1710.static.new("Text8").setTitle("CommonMenuFile"))  // Set title with a resname
-			$c.push(cs:C1710.button.new("Button4").setTitle("Hello"))  // Set title with a string
+			$c.push(cs:C1710.static.new("Text8").setTitle("CommonMenuFile"))// Set title with a resname
+			$c.push(cs:C1710.button.new("Button4").setTitle("Hello"))// Set title with a string
 			$c.push(cs:C1710.button.new("Button5").disable())
 			Form:C1466.group1:=cs:C1710.group.new($c)
 			
-			  // If uncommented, must generate an assert
-			  // Form.Input:=cs.widget.new("objectThatDoesNotExist")
+			// If uncommented, must generate an assert
+			// Form.Input:=cs.widget.new("objectThatDoesNotExist")
 			
 			cs:C1710.group.new("execute,reset").distributeHorizontally()
 			
@@ -102,9 +103,9 @@ If (Form:C1466.pages[$l]=Null:C1517)
 				.setHelpTip("Click on \"Execute\" to activate me")\
 				.setCallback(Formula:C1597(ALERT:C41("You have clicked on me."+"\rMy name is: "+This:C1470.name+"\rMy title is: "+This:C1470.getTitle()+"\r\rNow, click again to see...")))
 			
-			  //=========================================
-			  //  Keep coordinates for the reset button
-			  //=========================================
+			//=========================================
+			//  Keep coordinates for the reset button
+			//=========================================
 			Form:C1466.clickMe.origin:=Form:C1466.clickMe.coordinates
 			Form:C1466.alignRight.origin:=Form:C1466.alignRight.coordinates
 			Form:C1466.login.origin:=Form:C1466.login.coordinates
@@ -122,7 +123,7 @@ If (Form:C1466.pages[$l]=Null:C1517)
 				
 			End for each 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($l=2)
 			
 			Form:C1466.nonAssignable:="Hello"
@@ -130,21 +131,25 @@ If (Form:C1466.pages[$l]=Null:C1517)
 			Form:C1466.value:=cs:C1710.input.new("Input1")
 			Form:C1466.getValue:=cs:C1710.button.new("Button3").disable()
 			
-			  //______________________________________________________
+			Form:C1466.testPicture:=cs:C1710.picture.new("picture";Formula:C1597(Form:C1466.picture))
+			Form:C1466.testPicture.read(File:C1566("/RESOURCES/images/4d.png")).thumbnail(100)\
+				.superImposition(File:C1566("/RESOURCES/images/light_on.png");5;5)
+			
+			//______________________________________________________
 		: ($l=3)
 			
 			Form:C1466.input:="Hello world"
 			
-			  //______________________________________________________
+			//______________________________________________________
 		Else 
 			
 			Form:C1466.pages[$l]:=Null:C1517
 			
-			  //______________________________________________________
+			//______________________________________________________
 	End case 
 	
 Else 
 	
-	  // A "If" statement should never omit "Else"
+	// A "If" statement should never omit "Else"
 	
 End if 

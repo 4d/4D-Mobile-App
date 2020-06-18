@@ -38,7 +38,7 @@ Class constructor
 			
 			If (Value type:C1509($2)=Is object:K8:27)
 				
-				  // Formula
+				// Formula
 				This:C1470.value:=This:C1470.dataSource.call()
 				
 			Else 
@@ -98,7 +98,7 @@ Function getValue
 	
 	If (This:C1470.assignable)
 		
-		  // Use pointer
+		// Use pointer
 		$0:=(This:C1470.pointer)->
 		
 	Else 
@@ -109,7 +109,7 @@ Function getValue
 			
 		Else 
 			
-			  // Create formula
+			// Create formula
 			$0:=Formula from string:C1601(String:C10(This:C1470.dataSource)).call()
 			
 		End if 
@@ -164,57 +164,65 @@ Function clear
 			$l:=Value type:C1509(This:C1470.getValue())
 			
 			C_TEXT:C284($t)
-			$t:=Choose:C955(Value type:C1509(This:C1470.dataSource)=Is object:K8:27;This:C1470.dataSource.source;This:C1470.dataSource)
+			If (Value type:C1509(This:C1470.dataSource)=Is object:K8:27)
+				
+				$t:=This:C1470.dataSource.source
+				
+			Else 
+				
+				$t:=This:C1470.dataSource
+				
+			End if 
 			
 			Case of 
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($l=Is text:K8:3)
 					
 					EXECUTE FORMULA:C63($t+":=\"\"")
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($l=Is real:K8:4)\
 					 | ($l=Is longint:K8:6)
 					
 					EXECUTE FORMULA:C63($t+":=0")
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($l=Is boolean:K8:9)
 					
 					EXECUTE FORMULA:C63($t+":=")
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($l=Is date:K8:7)
 					
 					EXECUTE FORMULA:C63($t+":=(\"\")")
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($l=Is time:K8:8)
 					
 					EXECUTE FORMULA:C63($t+":=(0)")
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($l=Is object:K8:27)
 					
 					EXECUTE FORMULA:C63($t+":=null")
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($l=Is collection:K8:32)
 					
 					EXECUTE FORMULA:C63($t+":=")
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($l=Is picture:K8:10)
 					
 					EXECUTE FORMULA:C63($t+":="+$t+"*0")
 					
-					  //______________________________________________________
+					//______________________________________________________
 				Else 
 					
 					EXECUTE FORMULA:C63($t+":=null")
 					
-					  //______________________________________________________
+					//______________________________________________________
 			End case 
 		End if 
 	End if 
@@ -381,11 +389,11 @@ Function getHelpTip
 ══════════════════════════*/
 Function setHelpTip
 	
-	C_TEXT:C284($1)  // Text or resname
+	C_TEXT:C284($1)// Text or resname
 	C_TEXT:C284($t)
 	
 	$t:=Get localized string:C991($1)
-	$t:=Choose:C955(Length:C16($t)>0;$t;$1)  // Revert if no localization
+	$t:=Choose:C955(Length:C16($t)>0;$t;$1)// Revert if no localization
 	
 	OBJECT SET HELP TIP:C1181(*;This:C1470.name;$t)
 	
@@ -413,8 +421,8 @@ Function getShortcut
 ══════════════════════════*/
 Function setShortcut
 	
-	C_TEXT:C284($1)  // key
-	C_LONGINT:C283($2)  // modifier
+	C_TEXT:C284($1)// key
+	C_LONGINT:C283($2)// modifier
 	
 	If (Count parameters:C259>=2)
 		

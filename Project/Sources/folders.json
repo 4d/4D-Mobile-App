@@ -530,10 +530,7 @@
 			"button",
 			"group",
 			"input",
-			"picture",
-			"scrollable",
-			"static",
-			"widget"
+			"picture"
 		]
 	},
 	"HTUs": {

@@ -604,12 +604,12 @@ Case of
 				//______________________________________________________
 			: ($event.code=On Mouse Leave:K2:34)
 				
-				ui.tips.defaultDelay()
-				
 				//#redmine:117297 - [BUG] Move field out of the svg area
 				SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".cancel";"visibility";"visible")
 				SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".g";"fill-opacity";1;"stroke-opacity";1)
 				REDRAW WINDOW:C456
+				
+				ui.tips.defaultDelay()
 				
 				//______________________________________________________
 			: ($event.code=On Mouse Move:K2:35)
