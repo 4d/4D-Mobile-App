@@ -209,6 +209,9 @@
 		],
 		"forms": [
 			"PROJECT"
+		],
+		"classes": [
+			"project"
 		]
 	},
 	"01] ORGANIZATION": {
@@ -530,7 +533,10 @@
 			"button",
 			"group",
 			"input",
-			"picture"
+			"picture",
+			"scrollable",
+			"static",
+			"widget"
 		]
 	},
 	"HTUs": {

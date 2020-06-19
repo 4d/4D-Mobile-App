@@ -1,314 +1,271 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : STRUCTURE_UPDATE
-  // ID[5478941602C842A7B3FCBC8097348516]
-  // Created 23-1-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  // Updating the data model and project dependencies
-  // ----------------------------------------------------
-  // Declarations
-C_OBJECT:C1216($1)
+// ----------------------------------------------------
+// Project method : STRUCTURE_UPDATE
+// ID[5478941602C842A7B3FCBC8097348516]
+// Created 23-1-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// Updating the data model and project dependencies
+// ----------------------------------------------------
+// Declarations
+var $1 : Object
+var $form;$context;$project;$dataModel;$currentTable : Object
+var $o;$table;$field;$oo : Object
+var $found : Boolean
+var $published : Collection
+var $indx;$l : Integer
+var $t : Text
 
-C_BOOLEAN:C305($Boo_found)
-C_LONGINT:C283($Lon_indx;$Lon_type)
-C_TEXT:C284($t;$Txt_fieldNumber;$Txt_tableNumber)
-C_OBJECT:C1216($ƒ;$o;$Obj_context;$Obj_currentTable;$Obj_dataModel;$Obj_field)
-C_OBJECT:C1216($Obj_form;$Obj_related;$Obj_table)
-C_COLLECTION:C1488($Col_published)
-
-If (False:C215)
-	C_OBJECT:C1216(STRUCTURE_UPDATE ;$1)
-End if 
-
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 If (Count parameters:C259>=1)
 	
-	$Obj_form:=$1
+	$form:=$1
 	
 Else 
 	
-	$Obj_form:=STRUCTURE_Handler (New object:C1471(\
+	$form:=STRUCTURE_Handler(New object:C1471(\
 		"action";"init"))
 	
 End if 
 
-$Obj_context:=$Obj_form.form
+$context:=$form.form
 
-$ƒ:=Storage:C1525.ƒ
+$project:=cs:C1710.project.new(Form:C1466)
+$dataModel:=$project.project.dataModel
+$currentTable:=$context.currentTable
+$published:=New collection:C1472
 
-  // ----------------------------------------------------
-$Obj_dataModel:=Form:C1466.dataModel
-$Obj_currentTable:=$Obj_context.currentTable
-$Txt_tableNumber:=String:C10($Obj_currentTable.tableNumber)
+// ----------------------------------------------------
 
-  // GET THE PUBLISHED FIELD NAMES LIST
-$Col_published:=New collection:C1472
-ARRAY TO COLLECTION:C1563($Col_published;($Obj_form.publishedPtr)->;"published";(ui.pointer($Obj_form.fields))->;"name")
+// GET THE PUBLISHED FIELD NAMES LIST
+ARRAY TO COLLECTION:C1563($published;($form.publishedPtr)->;"published";(ui.pointer($form.fields))->;"name")
 
-If ($Col_published.extract("published").countValues(0)=$Col_published.length)\
- & ($Col_published.extract("published").indexOf(2)=-1)\
- & (Length:C16(String:C10($Obj_context.fieldFilter))=0)\
- & (Not:C34(Bool:C1537($Obj_context.fieldFilterPublished)))
+If ($published.extract("published").countValues(0)=$published.length)\
+ & ($published.extract("published").indexOf(2)=-1)\
+ & (Length:C16(String:C10($context.fieldFilter))=0)\
+ & (Not:C34(Bool:C1537($context.fieldFilterPublished)))
 	
-	  // NO FIELD PUBLISHED
+	// NO FIELD PUBLISHED
+	$project.removeTable($currentTable.tableNumber)
 	
-	OB REMOVE:C1226($Obj_dataModel;$Txt_tableNumber)
-	
-	  // Update main menu
-	main_Handler (New object:C1471(\
-		"action";"remove";\
-		"tableNumber";$Txt_tableNumber))
-	
-	  // UI - De-emphasize the table name
-	$Lon_indx:=Find in array:C230((ui.pointer($Obj_form.tableList))->;True:C214)
-	LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_indx;Plain:K14:1)
+	// UI - De-emphasize the table name
+	$indx:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
+	LISTBOX SET ROW FONT STYLE:C1268(*;$form.tableList;$indx;Plain:K14:1)
 	
 Else 
 	
-	$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
+	$table:=$dataModel[String:C10($currentTable.tableNumber)]
 	
-	  // Create the table if it does not exist
-	If ($Obj_table=Null:C1517)
+	If ($table=Null:C1517)
 		
-		$Obj_table:=STRUCTURE_Handler (New object:C1471(\
-			"action";"addTable"))
+		// ADD TABLE
+		$table:=$project.addTable($currentTable)
+		
+		// UI - Emphasize the table name
+		$indx:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
+		LISTBOX SET ROW FONT STYLE:C1268(*;$form.tableList;$indx;Bold:K14:2)
 		
 	End if 
 	
-	For each ($o;$Col_published)  // For each published field
+	// For each published field
+	For each ($o;$published)
 		
-		  // Find if the field exists in the data model [
-		CLEAR VARIABLE:C89($Boo_found)
+		// Find if the field exists in the data model [
+		CLEAR VARIABLE:C89($found)
 		
-		For each ($t;$Obj_table) Until ($Boo_found)
+		For each ($t;$table) Until ($found)
 			
 			Case of 
 					
-					  //………………………………………………………………………………………………………
+					//………………………………………………………………………………………………………
 				: (Length:C16($t)=0)
 					
-					  // <NOTHING MORE TO DO>
+					// <NOTHING MORE TO DO>
 					
-					  //………………………………………………………………………………………………………
-				: ($ƒ.isField($t))
+					//………………………………………………………………………………………………………
+				: ($project.isField($t))
 					
-					$Boo_found:=(String:C10($Obj_table[$t].name)=$o.name)
+					$found:=(String:C10($table[$t].name)=$o.name)
 					
-					If ($Boo_found)
+					If ($found)
 						
-						$Obj_field:=$Obj_currentTable.field[$Obj_currentTable.field.extract("name").indexOf($o.name)]
-						
-					End if 
-					
-					  //………………………………………………………………………………………………………
-				: (Value type:C1509($Obj_table[$t])#Is object:K8:27)
-					
-					  // <NOTHING MORE TO DO>
-					
-					  //………………………………………………………………………………………………………
-				: ($ƒ.isRelationToOne($Obj_table[$t]))  // N -> 1 relation
-					
-					$Boo_found:=(String:C10($o.name)=$t) & (Num:C11($o.published)#2)  // Not mixed
-					
-					If ($Boo_found)
-						
-						$Obj_field:=$Obj_currentTable.field[$Obj_currentTable.field.extract("name").indexOf($t)]
+						$field:=$currentTable.field[$currentTable.field.extract("name").indexOf($o.name)]
 						
 					End if 
 					
-					  //………………………………………………………………………………………………………
-				: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
+					//………………………………………………………………………………………………………
+				: (Value type:C1509($table[$t])#Is object:K8:27)
 					
-					$Boo_found:=(String:C10($o.name)=$t)
+					// <NOTHING MORE TO DO>
 					
-					If ($Boo_found)
+					//………………………………………………………………………………………………………
+				: ($project.isRelationToOne($table[$t]))// N -> 1 relation
+					
+					$found:=(String:C10($o.name)=$t) & (Num:C11($o.published)#2)// Not mixed
+					
+					If ($found)
 						
-						$Obj_field:=$Obj_currentTable.field[$Obj_currentTable.field.extract("name").indexOf($t)]
+						$field:=$currentTable.field[$currentTable.field.extract("name").indexOf($t)]
 						
 					End if 
 					
-					  //………………………………………………………………………………………………………
+					//………………………………………………………………………………………………………
+				: ($project.isRelationToMany($table[$t]))// 1 -> N relation
+					
+					$found:=(String:C10($o.name)=$t)
+					
+					If ($found)
+						
+						$field:=$currentTable.field[$currentTable.field.extract("name").indexOf($t)]
+						
+					End if 
+					
+					//………………………………………………………………………………………………………
 			End case 
 		End for each 
-		  //]
+		//]
 		
-		If (Not:C34($Boo_found))
+		If (Not:C34($found))
 			
-			  // Get from cache
-			$Lon_indx:=$Obj_currentTable.field.extract("name").indexOf($o.name)
-			$Obj_field:=$Obj_currentTable.field[$Lon_indx]
+			// Get from cache
+			$indx:=$currentTable.field.extract("name").indexOf($o.name)
+			$field:=$currentTable.field[$indx]
 			
 		End if 
 		
-		$Lon_type:=Num:C11($Obj_field.type)
-		$Txt_fieldNumber:=String:C10($Obj_field.id)
+		$l:=Num:C11($field.type)
 		
 		Case of 
 				
-				  //_____________________________________________________
+				//_____________________________________________________
 			: (Num:C11($o.published)=1)\
-				 & (Not:C34($Boo_found))  // ADDED
+				 & (Not:C34($found))// ADDED
 				
 				Case of 
 						
-						  //………………………………………………………………………………………………………
-					: ($Lon_type=-1)  // N -> 1 relation
+						//………………………………………………………………………………………………………
+					: ($l=-1)// N -> 1 relation
 						
-						  //#MARK_TO_OPTIMIZE
-						  // Add all related fields
-						$o:=structure (New object:C1471(\
+						// 🕛 #MARK_TO_OPTIMIZE
+						
+						// Add all related fields
+						$o:=structure(New object:C1471(\
 							"action";"relatedCatalog";\
-							"table";$Obj_table[""].name;\
+							"table";$table[""].name;\
 							"relatedEntity";$o.name))
 						
 						If (Asserted:C1132($o.success))
 							
-							$Obj_table[$Obj_field.name]:=New object:C1471(\
-								"relatedDataClass";$Obj_field.relatedDataClass;\
+							$table[$field.name]:=New object:C1471(\
+								"relatedDataClass";$field.relatedDataClass;\
 								"relatedTableNumber";$o.relatedTableNumber;\
 								"inverseName";$o.inverseName)
 							
-							For each ($Obj_related;$o.fields)
+							For each ($oo;$o.fields)
 								
-								If ($Obj_related.fieldType>=0)
+								If ($oo.fieldType>=0)
 									
-									$Obj_table[$Obj_field.name][String:C10($Obj_related.fieldNumber)]:=New object:C1471(\
-										"name";$Obj_related.name;\
-										"label";formatString ("label";$Obj_related.name);\
-										"shortLabel";formatString ("label";$Obj_related.name);\
-										"fieldType";$Obj_related.fieldType;\
+									$table[$field.name][String:C10($oo.fieldNumber)]:=New object:C1471(\
+										"name";$oo.name;\
+										"label";formatString("label";$oo.name);\
+										"shortLabel";formatString("label";$oo.name);\
+										"fieldType";$oo.fieldType;\
 										"relatedTableNumber";$o.relatedTableNumber)
 									
-									  // #TEMPO [
-									$Obj_table[$Obj_field.name][String:C10($Obj_related.fieldNumber)].type:=$Obj_related.type
-									  //]
+									// #TEMPO [
+									$table[$field.name][String:C10($oo.fieldNumber)].type:=$oo.type
+									//]
 									
 								End if 
 							End for each 
 						End if 
 						
-						  //………………………………………………………………………………………………………
-					: ($Lon_type=-2)  // 1 -> N relation
+						//………………………………………………………………………………………………………
+					: ($l=-2)// 1 -> N relation
 						
-						$Obj_table[$Obj_field.name]:=New object:C1471(\
-							"label";formatString ("label";str ("listOf").localized($Obj_field.name));\
-							"shortLabel";formatString ("label";$Obj_field.name);\
-							"relatedEntities";$Obj_field.relatedDataClass;\
-							"relatedTableNumber";$Obj_field.relatedTableNumber;\
-							"inverseName";$Obj_field.inverseName)
+						$table[$field.name]:=New object:C1471(\
+							"label";formatString("label";str("listOf").localized($field.name));\
+							"shortLabel";formatString("label";$field.name);\
+							"relatedEntities";$field.relatedDataClass;\
+							"relatedTableNumber";$field.relatedTableNumber;\
+							"inverseName";$field.inverseName)
 						
-						  //………………………………………………………………………………………………………
+						//………………………………………………………………………………………………………
 					Else 
 						
-						  // Add the field to data model
-						$Obj_table[$Txt_fieldNumber]:=New object:C1471(\
-							"name";$Obj_field.name;\
-							"label";formatString ("label";$Obj_field.name);\
-							"shortLabel";formatString ("label";$Obj_field.name);\
-							"fieldType";$Obj_field.fieldType)
+						// Add the field to data model
+						$table[String:C10($field.id)]:=New object:C1471(\
+							"name";$field.name;\
+							"label";formatString("label";$field.name);\
+							"shortLabel";formatString("label";$field.name);\
+							"fieldType";$field.fieldType)
 						
-						  // #TEMPO [
-						$Obj_table[$Txt_fieldNumber].type:=$Obj_field.type
-						  //]
+						// #TEMPO [
+						$table[String:C10($field.id)].type:=$field.type
+						//]
 						
-						  //………………………………………………………………………………………………………
+						//………………………………………………………………………………………………………
 				End case 
 				
-				  //_____________________________________________________
+				//_____________________________________________________
 			: (Num:C11($o.published)=0)\
-				 & ($Boo_found)  // REMOVED
+				 & ($found)// REMOVED
 				
 				Case of 
 						
-						  //………………………………………………………………………………………………………
-					: ($Lon_type=-1)  // N -> 1 relation
+						//………………………………………………………………………………………………………
+					: ($l=-1)// N -> 1 relation
 						
-						  // Remove all related fields
-						If ($Obj_table[$o.name]#Null:C1517)
+						// Remove all related fields
+						If ($table[$o.name]#Null:C1517)
 							
-							OB REMOVE:C1226($Obj_table;$o.name)
-							
-						End if 
-						
-						  //………………………………………………………………………………………………………
-					: ($Lon_type=-2)  // 1 -> N relation
-						
-						If ($Obj_table[$o.name]#Null:C1517)
-							
-							OB REMOVE:C1226($Obj_table;$o.name)
+							OB REMOVE:C1226($table;$o.name)
 							
 						End if 
 						
-						  //………………………………………………………………………………………………………
+						//………………………………………………………………………………………………………
+					: ($l=-2)// 1 -> N relation
+						
+						If ($table[$o.name]#Null:C1517)
+							
+							OB REMOVE:C1226($table;$o.name)
+							
+						End if 
+						
+						//………………………………………………………………………………………………………
 					Else 
 						
-						  // Remove the field
-						OB REMOVE:C1226($Obj_table;$Txt_fieldNumber)
+						// Remove the field
+						OB REMOVE:C1226($table;String:C10($field.id))
 						
-						  //………………………………………………………………………………………………………
+						//………………………………………………………………………………………………………
 				End case 
 				
-				  //_____________________________________________________
+				//_____________________________________________________
 			Else 
 				
-				  // MIXED
+				// MIXED
 				
-				  //_____________________________________________________
+				//_____________________________________________________
 		End case 
 	End for each 
 	
-	  // REMOVE TABLE IF NO MORE PUBLISHED FIELDS
-	CLEAR VARIABLE:C89($Boo_found)
-	
-	For each ($t;$Obj_table) Until ($Boo_found)
+	// REMOVE TABLE IF NO MORE PUBLISHED FIELDS
+	If (OB Keys:C1719($table).length=1)
 		
-		Case of 
-				
-				  //………………………………………………………………………………………………………
-			: (Length:C16($t)=0)
-				
-				  // <NOTHING MORE TO DO>
-				
-				  //………………………………………………………………………………………………………
-			: ($ƒ.isField($t))
-				
-				$Boo_found:=True:C214
-				
-				  //………………………………………………………………………………………………………
-			: (Value type:C1509($Obj_table[$t])=Is object:K8:27)
-				
-				$Boo_found:=$ƒ.isRelation($Obj_table[$t])
-				
-				  //………………………………………………………………………………………………………
-		End case 
-	End for each 
-	
-	If (Not:C34($Boo_found))
+		$project.removeTable($currentTable.tableNumber)
 		
-		OB REMOVE:C1226($Obj_dataModel;$Txt_tableNumber)
-		
-		  // Update main menu
-		main_Handler (New object:C1471(\
-			"action";"remove";\
-			"tableNumber";$Txt_tableNumber))
-		
-		  // UI - De-emphasize the table name
-		$Lon_indx:=Find in array:C230((ui.pointer($Obj_form.tableList))->;True:C214)
-		LISTBOX SET ROW FONT STYLE:C1268(*;$Obj_form.tableList;$Lon_indx;Plain:K14:1)
+		// UI - De-emphasize the table name
+		$indx:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
+		LISTBOX SET ROW FONT STYLE:C1268(*;$form.tableList;$indx;Plain:K14:1)
 		
 	End if 
 End if 
 
-  // Update field list
-structure_FIELD_LIST ($Obj_form)
+$project.save()
 
-$Obj_context.setHelpTip($Obj_form.fieldList;$Obj_form)
-ui.saveProject()
+// Update field list
+structure_FIELD_LIST($form)
 
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End
+$context.setHelpTip($form.fieldList;$form)

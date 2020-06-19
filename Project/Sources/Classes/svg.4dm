@@ -417,7 +417,7 @@ Function rect
 	This:C1470.success:=Bool:C1537(OK)
 	
 	//If (Count parameters>2)\
-														 & (This.success)
+																 & (This.success)
 	
 	//This.attributes($3)
 	

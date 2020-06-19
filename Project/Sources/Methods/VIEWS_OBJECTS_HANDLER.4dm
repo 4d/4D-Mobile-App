@@ -239,7 +239,7 @@ Case of
 							views_preview("draw";$form)
 							
 							// Save project
-							project.save()
+							_o_project.save()
 							
 						End if 
 						
@@ -353,7 +353,7 @@ Case of
 								views_preview("draw";$form)
 								
 								// Save project
-								project.save()
+								_o_project.save()
 								
 							End if 
 						End if 

@@ -1,30 +1,30 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : tmpl_REMOVE
-  // ID[77787A83B9A048FCBA802902156129C9]
-  // Created 25-4-2018 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Modified 4-9-2018 by Vincent de Lachaux
-  // #98105 - Multi-criteria Search
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : tmpl_REMOVE
+// ID[77787A83B9A048FCBA802902156129C9]
+// Created 25-4-2018 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Modified 4-9-2018 by Vincent de Lachaux
+// #98105 - Multi-criteria Search
+// ----------------------------------------------------
+// Declarations
 C_LONGINT:C283($Lon_indx)
 C_TEXT:C284($Txt_bind;$Txt_field;$Txt_isOfClass)
 C_OBJECT:C1216($menu;$o;$Obj_target)
 
 ARRAY TEXT:C222($tTxt_results;0)
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Txt_field:=Replace string:C233(This:C1470.$.current;".cancel";"")
 SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;$Txt_field;"ios:bind";$Txt_bind)
 
 $Obj_target:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2;"detail";"list")][This:C1470.$.tableNumber]
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;$Txt_field;"4D-isOfClass-multi-criteria";$Txt_isOfClass)
 
 If ($Txt_isOfClass="true")\
@@ -54,7 +54,7 @@ If ($Txt_isOfClass="true")\
 			
 		Else 
 			
-			  // Delete one
+			// Delete one
 			$Lon_indx:=$Obj_target[$Txt_bind].extract("id").indexOf(Num:C11($menu.choice))
 			
 			If ($Lon_indx#-1)
@@ -63,7 +63,7 @@ If ($Txt_isOfClass="true")\
 				
 				If ($Obj_target[$Txt_bind].length=1)
 					
-					  // Convert to object
+					// Convert to object
 					$Obj_target[$Txt_bind]:=$Obj_target[$Txt_bind][0]
 					
 				End if 
@@ -75,7 +75,7 @@ Else
 	
 	If (Asserted:C1132(Length:C16($Txt_bind)>0))
 		
-		Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$Txt_bind;->$tTxt_results)
+		Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$Txt_bind;->$tTxt_results)
 		
 		If (Size of array:C274($tTxt_results)=2)
 			
@@ -93,7 +93,7 @@ Else
 						
 					Else 
 						
-						  // Empty
+						// Empty
 						$Obj_target[$tTxt_results{1}][$Lon_indx]:=Null:C1517
 						
 					End if 
@@ -108,11 +108,11 @@ Else
 	End if 
 End if 
 
-  // Update preview
-views_preview ("draw";This:C1470)
+// Update preview
+views_preview("draw";This:C1470)
 
-  // Save project
-project.save()
+// Save project
+_o_project.save()
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

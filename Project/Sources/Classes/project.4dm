@@ -1,29 +1,100 @@
 Class constructor
 	
 	var $1 : Object
+	This:C1470.project:=$1
 	
-	This:C1470.datamodel:=$1.dataModel
-	This:C1470.actions:=$1.actions
+	//====================================
+Function save
 	
-	//==============================================================
+	var $project : Object
+	$project:=OB Copy:C1225(This:C1470.project)
+	
+	var $t;$tt : Text
+	var $o : Object
+	
+	If (Bool:C1537(feature._8858))// Debug mode
+		
+		$o:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
+		
+		If ($o.exists)
+			
+			$o.file("project.json").setText(JSON Stringify:C1217($project;*))
+			
+		End if 
+	End if 
+	
+	For each ($t;$project)
+		
+		If ($t[[1]]="$")
+			
+			OB REMOVE:C1226($project;$t)
+			
+		Else 
+			
+			Case of 
+					
+					//______________________________________________________
+				: (Value type:C1509($project[$t])=Is object:K8:27)
+					
+					For each ($tt;$project[$t])
+						
+						If ($tt[[1]]="$")
+							
+							OB REMOVE:C1226($project[$t];$tt)
+							
+						End if 
+					End for each 
+					
+					//______________________________________________________
+				: (Value type:C1509($project[$t])=Is collection:K8:32)
+					
+					For each ($o;$project[$t])
+						
+						For each ($tt;$o)
+							
+							If ($tt[[1]]="$")
+								
+								OB REMOVE:C1226($o;$tt)
+								
+							End if 
+						End for each 
+					End for each 
+					
+					//______________________________________________________
+			End case 
+		End if 
+	End for each 
+	
+	$t:=This:C1470.project.$project.project
+	CREATE FOLDER:C475($t;*)
+	
+	TEXT TO DOCUMENT:C1237($t;JSON Stringify:C1217($project;*))
+	
+	//====================================
 Function updateActions
 	
-	var $indx : Integer
-	var $table;$parameter : Object
+	var $actions : Collection
+	$actions:=This:C1470.project.actions
 	
-	If (This:C1470.actions#Null:C1517)
+	If ($actions#Null:C1517)
 		
-		For each ($table;This:C1470.actions)
+		var $datamodel : Object
+		$datamodel:=This:C1470.project.datamodel
+		
+		var $indx : Integer
+		var $table;$parameter : Object
+		
+		For each ($table;$actions)
 			
-			If (This:C1470.datamodel[String:C10($table.tableNumber)]#Null:C1517)
+			If ($datamodel[String:C10($table.tableNumber)]#Null:C1517)
 				
 				If ($table.parameters#Null:C1517)
 					
 					For each ($parameter;$table.parameters)
 						
-						If (This:C1470.datamodel[String:C10($table.tableNumber)][String:C10($parameter.fieldNumber)]=Null:C1517)
+						If ($datamodel[String:C10($table.tableNumber)][String:C10($parameter.fieldNumber)]=Null:C1517)
 							
-							// THE FIELD DOESN'T EXIST ANYMORE
+							// ❌ THE FIELD DOESN'T EXIST ANYMORE
 							$table.parameters.remove($table.parameters.indexOf($parameter))
 							
 						End if 
@@ -32,8 +103,8 @@ Function updateActions
 				
 			Else 
 				
-				// THE TABLE DOESN'T EXIST ANYMORE
-				This:C1470.actions.remove($indx)
+				// ❌ THE TABLE DOESN'T EXIST ANYMORE
+				$actions.remove($indx)
 				
 			End if 
 			
@@ -41,10 +112,148 @@ Function updateActions
 			
 		End for each 
 		
-		If (This:C1470.actions.length=0)
+		If ($actions.length=0)
 			
-			// NO MORE ACTION
+			// ❌ NO MORE ACTION
 			OB REMOVE:C1226(This:C1470.project;"actions")
 			
 		End if 
 	End if 
+	
+	//====================================
+Function removeFromMain
+	
+	var $1
+	var $main : Object
+	$main:=This:C1470.project.main
+	
+	If ($main.order=Null:C1517)
+		
+		$main.order:=New collection:C1472
+		
+	Else 
+		
+		var $l : Integer
+		$l:=$main.order.indexOf(String:C10($1))
+		
+		If ($l#-1)
+			
+			$main.order.remove($l)
+			
+		End if 
+	End if 
+	
+	//====================================
+Function addToMain
+	
+	var $1
+	var $main : Object
+	$main:=This:C1470.project.main
+	
+	If ($main.order=Null:C1517)
+		
+		$main.order:=New collection:C1472(String:C10($1))
+		
+	Else 
+		
+		If ($main.order.indexOf(String:C10($1))=-1)
+			
+			$main.order.push(String:C10($1))
+			
+		End if 
+	End if 
+	
+	//====================================
+Function isField
+	
+	var $0 : Boolean
+	var $1 : Text
+	$0:=Match regex:C1019("(?m-si)^\\d+$";$1;1;*)
+	
+	//====================================
+Function isRelation
+	
+	var $0 : Boolean
+	var $1 : Object
+	$0:=((This:C1470.isRelationToOne($1)) | (This:C1470.isRelationToMany($1)))
+	
+	//====================================
+Function isRelationToOne
+	
+	var $0 : Boolean
+	var $1 : Object
+	$0:=($1.relatedDataClass#Null:C1517)
+	
+	//====================================
+Function isRelationToMany
+	
+	var $0 : Boolean
+	var $1 : Object// Field
+	$0:=(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities"))
+	
+/* ===================================
+Add the table to the data model
+====================================*/
+Function addTable
+	
+	var $0;$1 : Object
+	var $o : Object
+	
+	$o:=This:C1470.getCatalog().query("tableNumber = :1";$1.tableNumber).pop()
+	
+	// Put internal properties into a substructure
+	$0:=New object:C1471(\
+		"";New object:C1471(\
+		"name";$o.name;\
+		"label";formatString("label";$o.name);\
+		"shortLabel";formatString("label";$o.name);\
+		"primaryKey";String:C10($o.primaryKey);\
+		"embedded";True:C214)\
+		)
+	
+	// Update dataModel
+	If (This:C1470.project.dataModel=Null:C1517)
+		
+		This:C1470.project.dataModel:=New object:C1471
+		
+	End if 
+	
+	// Update main
+	This:C1470.addToMain($1.tableNumber)
+	
+	This:C1470.project.dataModel[String:C10($1.tableNumber)]:=$0
+	
+/* ===================================
+Delete the table from the data model
+====================================*/
+Function removeTable
+	
+	var $1
+	OB REMOVE:C1226(This:C1470.project.dataModel;String:C10($1))
+	
+	// Update main
+	This:C1470.removeFromMain($1)
+	
+	//====================================
+Function getCatalog
+	
+	var $0 : Collection
+	Case of 
+			
+			//____________________________________
+		: (This:C1470.project.$project#Null:C1517)
+			
+			$0:=This:C1470.project.$project.$catalog
+			
+			//____________________________________
+		: (This:C1470.project.$catalog#Null:C1517)
+			
+			$0:=This:C1470.project.$catalog
+			
+			//____________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215)
+			
+			//____________________________________
+	End case 

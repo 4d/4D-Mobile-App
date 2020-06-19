@@ -1,13 +1,13 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : project_REPAIR
-  // ID[ECE5239C52D746B4A01A459D8DBE8A9D]
-  // Created 27-8-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : project_REPAIR
+// ID[ECE5239C52D746B4A01A459D8DBE8A9D]
+// Created 27-8-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_actionIndex;$Lon_parameterIndex;$Lon_type)
@@ -15,11 +15,11 @@ C_OBJECT:C1216($o;$Obj_dataModel;$Obj_project;$oo)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_OBJECT:C1216(project_REPAIR ;$1)
+	C_OBJECT:C1216(project_REPAIR;$1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 If (Count parameters:C259>=1)
 	
 	$Obj_project:=$1
@@ -75,33 +75,33 @@ If ($Obj_project.actions#Null:C1517)
 							
 							Case of 
 									
-									  //……………………………………………………………………
+									//……………………………………………………………………
 								: ($oo.type="date")
 									
 									$oo.format:="mediumDate"
 									
-									  //……………………………………………………………………
+									//……………………………………………………………………
 								: ($oo.type="time")
 									
 									$oo.format:="hour"
 									
-									  //……………………………………………………………………
+									//……………………………………………………………………
 								Else 
 									
 									OB REMOVE:C1226($oo;"format")
 									
-									  //……………………………………………………………………
+									//……………………………………………………………………
 							End case 
 							
 						Else 
 							
-							  // <NOTHING MORE TO DO>
+							// <NOTHING MORE TO DO>
 							
 						End if 
 						
 					Else 
 						
-						  // THE FIELD DOESN'T EXIST ANYMORE
+						// THE FIELD DOESN'T EXIST ANYMORE
 						$o.parameters.remove($Lon_parameterIndex)
 						
 					End if 
@@ -113,7 +113,7 @@ If ($Obj_project.actions#Null:C1517)
 			
 		Else 
 			
-			  // THE TABLE DOESN'T EXIST ANYMORE
+			// THE TABLE DOESN'T EXIST ANYMORE
 			$Obj_project.actions.remove($Lon_actionIndex)
 			
 		End if 
@@ -124,7 +124,7 @@ If ($Obj_project.actions#Null:C1517)
 	
 	If ($Obj_project.actions.length=0)
 		
-		  // NO MORE ACTION
+		// NO MORE ACTION
 		OB REMOVE:C1226($Obj_project;"actions")
 		
 	End if 
@@ -145,11 +145,8 @@ End for each
 OB REMOVE:C1226(Form:C1466;"audit")
 Form:C1466.status.project:=True:C214
 
-
-
-
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// Return
+// <NONE>
+// ----------------------------------------------------
+// End
