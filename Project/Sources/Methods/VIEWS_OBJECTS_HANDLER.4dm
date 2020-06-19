@@ -604,10 +604,17 @@ Case of
 				//______________________________________________________
 			: ($event.code=On Mouse Leave:K2:34)
 				
-				//#redmine:117297 - [BUG] Move field out of the svg area
-				SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".cancel";"visibility";"visible")
-				SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".g";"fill-opacity";1;"stroke-opacity";1)
-				REDRAW WINDOW:C456
+				var $x : Blob
+				GET PASTEBOARD DATA:C401("com.4d.private.ios.field";$x)
+				
+				If (Bool:C1537(OK))
+					
+					//#redmine:117297 - [BUG] Move field out of the svg area
+					SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".cancel";"visibility";"visible")
+					SVG SET ATTRIBUTE:C1055(*;$event.objectName;$context.current+".g";"fill-opacity";1;"stroke-opacity";1)
+					REDRAW WINDOW:C456
+					
+				End if 
 				
 				ui.tips.defaultDelay()
 				
