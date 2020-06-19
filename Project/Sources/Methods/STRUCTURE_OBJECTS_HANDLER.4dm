@@ -36,7 +36,7 @@ Case of
 		//==================================================
 	: ($e.objectName=$form.allow)
 		
-		ui.saveProject()
+		project.save()
 		
 		//==================================================
 	: ($e.objectName=$form.allowHelp)
@@ -476,7 +476,7 @@ Case of
 					
 					If ($Ptr_me->{$row}=0)
 						
-						cs:C1710.project.new(Form:C1466).updateActions()
+						project.updateActions()
 						
 					End if 
 				End if 
@@ -815,13 +815,3 @@ Case of
 		
 		//==================================================
 End case 
-
-// If (Bool(featuresFlags._8858))
-// Ui.saveProject()
-// End if
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

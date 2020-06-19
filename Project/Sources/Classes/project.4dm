@@ -4,24 +4,14 @@ Class constructor
 	This:C1470.project:=$1
 	
 	//====================================
-Function save
+Function get
 	
+	var $0 : Object
 	var $project : Object
 	$project:=OB Copy:C1225(This:C1470.project)
 	
 	var $t;$tt : Text
 	var $o : Object
-	
-	If (Bool:C1537(feature._8858))// Debug mode
-		
-		$o:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
-		
-		If ($o.exists)
-			
-			$o.file("project.json").setText(JSON Stringify:C1217($project;*))
-			
-		End if 
-	End if 
 	
 	For each ($t;$project)
 		
@@ -65,6 +55,30 @@ Function save
 		End if 
 	End for each 
 	
+	$0:=$project
+	
+	//====================================
+Function save
+	
+	var $project : Object
+	$project:=OB Copy:C1225(This:C1470.project)
+	
+	var $o : Object
+	
+	If (Bool:C1537(feature._8858))// Debug mode
+		
+		$o:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
+		
+		If ($o.exists)
+			
+			$o.file("project.json").setText(JSON Stringify:C1217(This:C1470.project;*))
+			
+		End if 
+	End if 
+	
+	$project:=This:C1470.get()
+	
+	var $t : Text
 	$t:=This:C1470.project.$project.project
 	CREATE FOLDER:C475($t;*)
 	
@@ -78,21 +92,21 @@ Function updateActions
 	
 	If ($actions#Null:C1517)
 		
-		var $datamodel : Object
-		$datamodel:=This:C1470.project.datamodel
+		var $dataModel : Object
+		$dataModel:=This:C1470.project.dataModel
 		
 		var $indx : Integer
 		var $table;$parameter : Object
 		
 		For each ($table;$actions)
 			
-			If ($datamodel[String:C10($table.tableNumber)]#Null:C1517)
+			If ($dataModel[String:C10($table.tableNumber)]#Null:C1517)
 				
 				If ($table.parameters#Null:C1517)
 					
 					For each ($parameter;$table.parameters)
 						
-						If ($datamodel[String:C10($table.tableNumber)][String:C10($parameter.fieldNumber)]=Null:C1517)
+						If ($dataModel[String:C10($table.tableNumber)][String:C10($parameter.fieldNumber)]=Null:C1517)
 							
 							// ❌ THE FIELD DOESN'T EXIST ANYMORE
 							$table.parameters.remove($table.parameters.indexOf($parameter))
@@ -238,6 +252,7 @@ Function removeTable
 Function getCatalog
 	
 	var $0 : Collection
+	
 	Case of 
 			
 			//____________________________________

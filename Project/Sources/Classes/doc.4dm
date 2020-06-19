@@ -134,7 +134,7 @@ Function setReference
 			Else 
 				
 				This:C1470.reference:=Null:C1517
-				ASSERT:C1129(False:C215;Current method name:C684+": The passed object must be a File/Folder object")
+				ASSERT:C1129(False:C215;Current method name:C684+"__defaultReference(): The passed object must be a File/Folder object")
 				
 			End if 
 			
@@ -147,7 +147,7 @@ Function setReference
 		Else 
 			
 			This:C1470.reference:=Null:C1517
-			ASSERT:C1129(False:C215;Current method name:C684+": The reference must be a path or a File/Folder")
+			ASSERT:C1129(False:C215;Current method name:C684+"__defaultReference(): The reference must be a path or a File/Folder")
 			
 			//______________________________________________________
 	End case 

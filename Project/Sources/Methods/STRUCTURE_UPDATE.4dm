@@ -9,7 +9,7 @@
 // ----------------------------------------------------
 // Declarations
 var $1 : Object
-var $form;$context;$project;$dataModel;$currentTable : Object
+var $form;$context;$dataModel;$currentTable : Object
 var $o;$table;$field;$oo : Object
 var $found : Boolean
 var $published : Collection
@@ -29,10 +29,9 @@ Else
 	
 End if 
 
-$context:=$form.form
+$dataModel:=project.project.dataModel
 
-$project:=cs:C1710.project.new(Form:C1466)
-$dataModel:=$project.project.dataModel
+$context:=$form.form
 $currentTable:=$context.currentTable
 $published:=New collection:C1472
 
@@ -47,7 +46,7 @@ If ($published.extract("published").countValues(0)=$published.length)\
  & (Not:C34(Bool:C1537($context.fieldFilterPublished)))
 	
 	// NO FIELD PUBLISHED
-	$project.removeTable($currentTable.tableNumber)
+	project.removeTable($currentTable.tableNumber)
 	
 	// UI - De-emphasize the table name
 	$indx:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
@@ -60,7 +59,7 @@ Else
 	If ($table=Null:C1517)
 		
 		// ADD TABLE
-		$table:=$project.addTable($currentTable)
+		$table:=project.addTable($currentTable)
 		
 		// UI - Emphasize the table name
 		$indx:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
@@ -84,7 +83,7 @@ Else
 					// <NOTHING MORE TO DO>
 					
 					//………………………………………………………………………………………………………
-				: ($project.isField($t))
+				: (project.isField($t))
 					
 					$found:=(String:C10($table[$t].name)=$o.name)
 					
@@ -100,7 +99,7 @@ Else
 					// <NOTHING MORE TO DO>
 					
 					//………………………………………………………………………………………………………
-				: ($project.isRelationToOne($table[$t]))// N -> 1 relation
+				: (project.isRelationToOne($table[$t]))// N -> 1 relation
 					
 					$found:=(String:C10($o.name)=$t) & (Num:C11($o.published)#2)// Not mixed
 					
@@ -111,7 +110,7 @@ Else
 					End if 
 					
 					//………………………………………………………………………………………………………
-				: ($project.isRelationToMany($table[$t]))// 1 -> N relation
+				: (project.isRelationToMany($table[$t]))// 1 -> N relation
 					
 					$found:=(String:C10($o.name)=$t)
 					
@@ -254,7 +253,7 @@ Else
 	// REMOVE TABLE IF NO MORE PUBLISHED FIELDS
 	If (OB Keys:C1719($table).length=1)
 		
-		$project.removeTable($currentTable.tableNumber)
+		project.removeTable($currentTable.tableNumber)
 		
 		// UI - De-emphasize the table name
 		$indx:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
@@ -263,7 +262,7 @@ Else
 	End if 
 End if 
 
-$project.save()
+project.save()
 
 // Update field list
 structure_FIELD_LIST($form)

@@ -67,9 +67,6 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 	End if 
 	
-	var $project
-	$project:=cs:C1710.project.new(Form:C1466)
-	
 Else 
 	
 	ABORT:C156
@@ -116,9 +113,9 @@ Case of
 				
 				structure_TABLE_LIST($form)
 				
-				If (Num:C11($project.getCatalog().length)>=500)
+				If (Num:C11(project.getCatalog().length)>=500)
 					
-					RECORD.warning("Table number: "+String:C10($project.getCatalog().length))
+					RECORD.warning("Table number: "+String:C10(project.getCatalog().length))
 					
 				End if 
 				
@@ -206,7 +203,7 @@ Case of
 		//=========================================================
 	: ($Obj_in.action="fieldList")
 		
-		$o:=$project.getCatalog().query("name = :1";String:C10($context.currentTable.name)).pop()
+		$o:=project.getCatalog().query("name = :1";String:C10($context.currentTable.name)).pop()
 		
 		If ($o=Null:C1517)
 			
@@ -274,7 +271,7 @@ Case of
 		//=========================================================
 	: ($Obj_in.action="addTable")
 		
-		$project.addTable($context.currentTable)
+		project.addTable($context.currentTable)
 		
 		// Highlight the table name
 		$l:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
