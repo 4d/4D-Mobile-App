@@ -1,13 +1,13 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : project_BUILD
-  // ID[7568C2BF25664764BE3D8F3E0B9EAEB0]
-  // Created 4-8-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  // common initializations and confirmations
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : project_BUILD
+// ID[7568C2BF25664764BE3D8F3E0B9EAEB0]
+// Created 4-8-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// common initializations and confirmations
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($b;$Boo_OK)
@@ -17,26 +17,26 @@ C_OBJECT:C1216($o;$Obj_cancel;$Obj_in;$Obj_ok;$Obj_project)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_OBJECT:C1216(project_BUILD ;$1)
+	C_OBJECT:C1216(project_BUILD;$1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_in:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
-	ob_MERGE ($Obj_in;project_Defaults )
+	ob_MERGE($Obj_in;project_Defaults)
 	
 	$Obj_project:=$Obj_in.project
 	
@@ -48,19 +48,19 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If (Asserted:C1132($Obj_project#Null:C1517))
 	
-	If (project_Check_param ($Obj_in).success)
+	If (project_Check_param($Obj_in).success)
 		
-		  //#99788 ========================================================
+		//#99788 ========================================================
 		EXECUTE METHOD IN SUBFORM:C1085("project";"views_Handler";*;New object:C1471(\
 			"action";"updateForms"))  //=====================================
 		
-		$Obj_project.organization.identifier:=$Obj_project.organization.id+"."+str ($Obj_project.product.name).uperCamelCase()
-		$Obj_project.product.bundleIdentifier:=formatString ("bundleApp";$Obj_project.organization.id+"."+$Obj_project.product.name)
+		$Obj_project.organization.identifier:=$Obj_project.organization.id+"."+str($Obj_project.product.name).uperCamelCase()
+		$Obj_project.product.bundleIdentifier:=formatString("bundleApp";$Obj_project.organization.id+"."+$Obj_project.product.name)
 		
-		$Dir_tgt:=COMPONENT_Pathname ("products").folder($Obj_project.product.name).platformPath
+		$Dir_tgt:=COMPONENT_Pathname("products").folder($Obj_project.product.name).platformPath
 		
 		$Obj_in.path:=$Dir_tgt
 		
@@ -72,13 +72,13 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			
 			If (Not:C34($Boo_OK))
 				
-				  // Check if the project was modified by another application
-				  // Compare to the signature of the sources folder
-				$o:=env_userPathname ("cache";$Obj_project.$project.product)
+				// Check if the project was modified by another application
+				// Compare to the signature of the sources folder
+				$o:=env_userPathname("cache";$Obj_project.$project.product)
 				
 				If ($o.exists)
 					
-					$Boo_OK:=(doc_folderDigest ($Dir_tgt+"Sources"+Folder separator:K24:12)=$o.getText())
+					$Boo_OK:=(doc_folderDigest($Dir_tgt+"Sources"+Folder separator:K24:12)=$o.getText())
 					
 				End if 
 			End if 
@@ -86,12 +86,12 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 		
 		If (Not:C34($Boo_OK))
 			
-			  // Product folder already exist. user MUST CONFIRM
+			// Product folder already exist. user MUST CONFIRM
 			$Obj_ok:=New object:C1471(\
 				"action";"build_deleteProductFolder";\
 				"build";$Obj_in)
 			
-			POST_FORM_MESSAGE (New object:C1471(\
+			POST_FORM_MESSAGE(New object:C1471(\
 				"target";$Win_target;\
 				"action";"show";\
 				"type";"confirm";\
@@ -102,18 +102,18 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			
 		Else 
 			
-			  //If ($Obj_in.create)
-			  //  // Must also close and delete folders if no change and want to recreate.
-			  // Xcode (New object(\
-																																																																												"action";"safeDelete";\
-																																																																												"path";$Obj_in.path))
-			  // End if
+			//If ($Obj_in.create)
+			//  // Must also close and delete folders if no change and want to recreate.
+			// Xcode (New object(\
+																																																																																"action";"safeDelete";\
+																																																																																"path";$Obj_in.path))
+			// End if
 			
 		End if 
 		
 		If ($Boo_OK)
 			
-			  // Verify the structure
+			// Verify the structure
 			$c:=New collection:C1472
 			
 			For each ($t;$Obj_project.dataModel)
@@ -135,8 +135,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			
 			If ($Obj_project.dataSource.source="local")
 				
-				  // Check host-database structure
-				If (Not:C34(structure (New object:C1471(\
+				// Check host-database structure
+				If (Not:C34(structure(New object:C1471(\
 					"action";"verify";\
 					"tables";$c)).success))
 					
@@ -145,24 +145,24 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					If ($Boo_OK)
 						
-						$Boo_OK:=structure (New object:C1471(\
+						$Boo_OK:=structure(New object:C1471(\
 							"action";"create";\
 							"tables";$c)).success
 						
 						If (Not:C34($Boo_OK))
 							
-							  //#MARK_TODO - DISPLAY ERROR
+							//#MARK_TODO - DISPLAY ERROR
 							
 						End if 
 						
 					Else 
 						
-						POST_FORM_MESSAGE (New object:C1471(\
+						POST_FORM_MESSAGE(New object:C1471(\
 							"target";$Win_target;\
 							"action";"show";\
 							"type";"confirm";\
 							"title";"someStructuralAdjustmentsAreNeeded";\
-							"additional";str .setText("doYouAllow4dMobileToModifyStructure").localized("4dProductName");\
+							"additional";str.setText("doYouAllow4dMobileToModifyStructure").localized("4dProductName");\
 							"option";New object:C1471("title";"rememberMyChoice";"value";False:C215);\
 							"ok";"allow";\
 							"cancelFormula";Formula:C1597(CALL FORM:C1391($Win_target;"editor_CALLBACK";"build_stop"));\
@@ -173,7 +173,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 				
 				If ($Boo_OK)
 					
-					  // Local web server is mandatory only if data are embedded
+					// Local web server is mandatory only if data are embedded
 					For each ($t;$Obj_project.dataModel) Until ($b)
 						
 						$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
@@ -196,8 +196,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 								"action";"build_ignoreServer";\
 								"build";$Obj_in)
 							
-							  // Web server must running to test data synchronization
-							POST_FORM_MESSAGE (New object:C1471(\
+							// Web server must running to test data synchronization
+							POST_FORM_MESSAGE(New object:C1471(\
 								"target";$Win_target;\
 								"action";"show";\
 								"type";"confirm";\
@@ -213,14 +213,14 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 				
 			Else 
 				
-				  // Check server-database structure, if any
-				$o:=Rest (New object:C1471(\
+				// Check server-database structure, if any
+				$o:=Rest(New object:C1471(\
 					"action";"tables";\
 					"handler";"mobileapp";\
 					"url";String:C10($Obj_project.server.urls.production);\
 					"headers";New object:C1471(\
 					"X-MobileApp";"1";\
-					"Authorization";"Bearer "+COMPONENT_Pathname ("key").getText())))
+					"Authorization";"Bearer "+COMPONENT_Pathname("key").getText())))
 				
 				$Boo_OK:=$o.success
 				
@@ -248,10 +248,10 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					If (Not:C34($Boo_OK))
 						
-						  // SERVER STRUCTURE IS NOT OK. Confirm if data embed, Alert else
+						// SERVER STRUCTURE IS NOT OK. Confirm if data embed, Alert else
 						For each ($t;$Obj_project.dataModel) Until ($b)
 							
-							  //#ACI0100704
+							//#ACI0100704
 							$b:=Not:C34(Bool:C1537($Obj_project.dataModel[$t][""].embedded))
 							
 						End for each 
@@ -269,7 +269,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 							
 							If (True:C214)
 								
-								POST_FORM_MESSAGE (New object:C1471(\
+								POST_FORM_MESSAGE(New object:C1471(\
 									"target";$Win_target;\
 									"action";"show";\
 									"type";"confirm";\
@@ -293,7 +293,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 									"ok";Get localized string:C991("continue");\
 									"okFormula";Formula:C1597(This:C1470.choice:="ignore"))
 								
-								WAIT_FORM_MESSAGE ($o)
+								WAIT_FORM_MESSAGE($o)
 								
 							End if 
 						End if 
@@ -301,10 +301,10 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 				Else 
 					
-					  // SERVER NOT REACHABLE - Ignore if no data embed, Confirm else
+					// SERVER NOT REACHABLE - Ignore if no data embed, Confirm else
 					For each ($t;$Obj_project.dataModel) Until ($b)
 						
-						  //#ACI0100704
+						//#ACI0100704
 						$b:=Not:C34(Bool:C1537($Obj_project.dataModel[$t][""].embedded))
 						
 					End for each 
@@ -313,12 +313,12 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					If (Not:C34($Boo_OK))
 						
-						POST_FORM_MESSAGE (New object:C1471(\
+						POST_FORM_MESSAGE(New object:C1471(\
 							"target";$Win_target;\
 							"action";"show";\
 							"type";"alert";\
 							"title";"theProductionServerIsNotAvailable";\
-							"additional";_o_SERVER_Handler (New object:C1471(\
+							"additional";_o_SERVER_Handler(New object:C1471(\
 							"action";"localization";\
 							"code";$o.httpError)).message))
 						
@@ -337,8 +337,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					If (Not:C34(Bool:C1537($Obj_in.configurator)))
 						
-						  // Verify that Apple Configurator 2 application is installed
-						$Obj_in.configurator:=device (New object:C1471("action";"appPath")).success
+						// Verify that Apple Configurator 2 application is installed
+						$Obj_in.configurator:=device(New object:C1471("action";"appPath")).success
 						
 					End if 
 					
@@ -346,12 +346,12 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					If ($Boo_OK)
 						
-						  // Verify that at least one device is plugged
-						$Boo_OK:=device (New object:C1471("action";"plugged")).success
+						// Verify that at least one device is plugged
+						$Boo_OK:=device(New object:C1471("action";"plugged")).success
 						
 						If (Not:C34($Boo_OK))
 							
-							  // Ask for a device
+							// Ask for a device
 							$Obj_ok:=New object:C1471(\
 								"action";"build_deviceOnline";\
 								"build";$Obj_in)
@@ -360,7 +360,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 								"action";"build_manualInstallation";\
 								"build";$Obj_in)
 							
-							POST_FORM_MESSAGE (New object:C1471(\
+							POST_FORM_MESSAGE(New object:C1471(\
 								"target";$Win_target;\
 								"action";"show";\
 								"type";"confirm";\
@@ -375,7 +375,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 						
 					Else 
 						
-						  // Ask for installation
+						// Ask for installation
 						$Obj_ok:=New object:C1471(\
 							"action";"build_waitingForConfigurator";\
 							"build";$Obj_in)
@@ -384,9 +384,9 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 							"action";"build_manualInstallation";\
 							"build";$Obj_in)
 						
-						$t:=device (New object:C1471("action";"appName")).value
+						$t:=device(New object:C1471("action";"appName")).value
 						
-						POST_FORM_MESSAGE (New object:C1471(\
+						POST_FORM_MESSAGE(New object:C1471(\
 							"target";$Win_target;\
 							"action";"show";\
 							"type";"confirm";\
@@ -412,8 +412,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// Return
+// <NONE>
+// ----------------------------------------------------
+// End

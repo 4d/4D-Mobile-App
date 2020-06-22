@@ -2,7 +2,7 @@
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 83,
+	"height": 66,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -25,7 +25,7 @@
 			"objects": {
 				"test.alert": {
 					"type": "button",
-					"top": 46,
+					"top": 75,
 					"left": 144,
 					"width": 20,
 					"height": 20,
@@ -51,8 +51,8 @@
 				},
 				"authentication": {
 					"type": "button",
-					"top": 6,
-					"left": 707,
+					"top": 34,
+					"left": 257,
 					"width": 130,
 					"height": 22,
 					"visibility": "hidden",
@@ -65,9 +65,9 @@
 				},
 				"authentication.label": {
 					"type": "text",
-					"top": 9,
-					"left": 488,
-					"width": 178,
+					"top": 37,
+					"left": 38,
+					"width": 180,
 					"height": 17,
 					"stroke": "#808080",
 					"text": ":xliff:authenticationMethod",
@@ -75,8 +75,8 @@
 				},
 				"02_pushNotification": {
 					"type": "checkbox",
-					"top": 45,
-					"left": 14,
+					"top": 8,
+					"left": 466,
 					"width": 225,
 					"height": 18,
 					"text": ":xliff:enablePushNotifications",
@@ -90,18 +90,28 @@
 				},
 				"certificatePicker": {
 					"type": "subform",
-					"left": 488,
-					"top": 45,
-					"width": 449,
+					"left": 566,
+					"top": 34,
+					"width": 369,
 					"height": 22,
 					"detailForm": "PATH PICKER",
-					"dataSource": "Form:C1466.$FEATURES.certificat.picker",
+					"dataSource": "Form:C1466.$FEATURES.certificate.picker",
 					"events": [
 						"onDataChange"
 					],
 					"focusable": false,
 					"method": "FEATURES",
-					"visibility": "visible"
+					"visibility": "hidden"
+				},
+				"certificateLabel": {
+					"type": "text",
+					"text": ":xliff:certificate",
+					"top": 37,
+					"left": 489,
+					"width": 180,
+					"height": 16,
+					"stroke": "#808080",
+					"visibility": "hidden"
 				}
 			},
 			"entryOrder": [
@@ -116,5 +126,6 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"geometryStamp": 67
 }

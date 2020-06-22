@@ -24,12 +24,12 @@ Class constructor
 		
 		Case of 
 				
-				  //___________________________
+				//___________________________
 			: (Value type:C1509($1)=Is collection:K8:32)
 				
 				This:C1470.members:=$1
 				
-				  //___________________________
+				//___________________________
 			: (Value type:C1509($1)=Is object:K8:27)  // 1 to n objects
 				
 				This:C1470.members:=New collection:C1472
@@ -40,7 +40,7 @@ Class constructor
 					
 				End for 
 				
-				  //___________________________
+				//___________________________
 			: (Value type:C1509($1)=Is text:K8:3)  // Comma separated list of object names
 				
 				This:C1470.members:=New collection:C1472
@@ -51,12 +51,12 @@ Class constructor
 					
 				End for each 
 				
-				  //___________________________
+				//___________________________
 			Else 
 				
 				ASSERT:C1129(False:C215;"Bad parameter type")
 				
-				  //___________________________
+				//___________________________
 		End case 
 	End if 
 	
@@ -69,7 +69,7 @@ or
 	
 .include("name") --> bool
 	
-════════════════════════════════════════════*/
+══════════════════════════*/
 Function include
 	
 	C_BOOLEAN:C305($0)
@@ -77,22 +77,22 @@ Function include
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Value type:C1509($1)=Is object:K8:27)
 			
 			$0:=(This:C1470.members.indexOf($1)#-1)
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)
 			
 			$0:=(This:C1470.members.query("name=:1";$1).pop()#Null:C1517)
 			
-			  //______________________________________________________
+			//______________________________________________________
 		Else 
 			
 			ASSERT:C1129(False:C215;"Unmanaged parameter type")
 			
-			  //______________________________________________________
+			//______________________________________________________
 	End case 
 	
 /*════════════════════════════════════════════
@@ -107,7 +107,7 @@ The optional object type parameter allow to specify:
 - The minimum width to respect in pixels (minWidth)
 - The maximum width to respect in pixels (maxWidth)
 	
-════════════════════════════════════════════*/
+══════════════════════════*/
 Function distributeHorizontally
 	
 	C_OBJECT:C1216($1;$o;$e)
@@ -135,15 +135,29 @@ Function distributeHorizontally
 	
 	For each ($o;This:C1470.members)
 		
-		If (Count parameters:C259>=1)
-			
-			$o.bestSize($1)
-			
-		Else 
-			
-			$o.bestSize()
-			
-		End if 
+		
+		Case of 
+				
+				//_______________________________
+			: ($o.type=Object type subform:K79:40)
+				
+				// Maintain dimensions
+				
+				//_______________________________
+			Else 
+				
+				If (Count parameters:C259>=1)
+					
+					$o.bestSize($1)
+					
+				Else 
+					
+					$o.bestSize()
+					
+				End if 
+				
+				//_______________________________
+		End case 
 		
 		If ($e.start#0)
 			
@@ -151,25 +165,25 @@ Function distributeHorizontally
 			
 		End if 
 		
-		  // Calculate the cumulative shift
+		// Calculate the cumulative shift
 		If ($e.spacing=0)
 			
 			Case of 
 					
-					  //_______________________________
+					//_______________________________
 				: ($o.type=Object type push button:K79:16)
 					
 					$e.start:=$o.coordinates.right+Choose:C955(Is macOS:C1572;20;20)
 					
-					  //_______________________________
+					//_______________________________
 				: (False:C215)
 					
-					  //_______________________________
+					//_______________________________
 				Else 
 					
 					$e.start:=$o.coordinates.right
 					
-					  //_______________________________
+					//_______________________________
 			End case 
 			
 		Else 
@@ -182,7 +196,7 @@ Function distributeHorizontally
 /*════════════════════════════════════════════
 .show()
 .show(bool)
-════════════════════════════════════════════*/
+══════════════════════════*/
 Function show
 	
 	C_BOOLEAN:C305($1)
@@ -219,7 +233,7 @@ Function hide
 /*════════════════════════════════════════════
 .enable()
 .enable(bool)
-════════════════════════════════════════════*/
+══════════════════════════*/
 Function enable
 	
 	C_BOOLEAN:C305($1)
