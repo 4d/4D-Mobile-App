@@ -53,7 +53,7 @@ TRY
 Case of 
 		
 		//______________________________________________________
-	: ($tIN="draw")// Uppdate preview
+	: ($tIN="draw")  // Uppdate preview
 		
 		ASSERT:C1129(Not:C34(Shift down:C543))
 		
@@ -170,18 +170,18 @@ Case of
 								
 								If ($o#Null:C1517)
 									
-									If ($indx>$count)// Dynamic
+									If ($indx>$count)  // Dynamic
 										
 										//#117298 - [BUG] Missing relation italic style
 										var $tStyle;$tClass : Text
 										CLEAR VARIABLE:C89($tStyle)
 										CLEAR VARIABLE:C89($tClass)
 										
-										If ($o.fieldType=8859)// 1-N relation
+										If ($o.fieldType=8859)  // 1-N relation
 											
 											$tStyle:="italic"
 											
-											If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)// Error
+											If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
 												
 												$tClass:=" error"
 												
@@ -189,7 +189,12 @@ Case of
 										End if 
 										
 										// Set ids, label & position
-										PROCESS 4D TAGS:C816($tWidgetField;$t;$indx;$o.name;5+$height;$tStyle;$tClass)
+										PROCESS 4D TAGS:C816($tWidgetField;$t;New object:C1471(\
+											"index";$indx;\
+											"name";$o.name;\
+											"offset";5+$height;\
+											"style";$tStyle;\
+											"class";$tClass))
 										
 										$root:=DOM Parse XML variable:C720($t)
 										
@@ -208,7 +213,7 @@ Case of
 											
 										End if 
 										
-									Else // Static
+									Else   // Static
 										
 										$t:=String:C10($indx)
 										
@@ -495,13 +500,13 @@ Case of
 													
 													$tName:=$o.name
 													
-													If (Num:C11($o.fieldType)=8859)// 1-N relation
+													If (Num:C11($o.fieldType)=8859)  // 1-N relation
 														
 														$node:=$svg.findById($t+".label")
 														
 														$svg.setAttribute("font-style";"italic";$node)
 														
-														If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)// Error
+														If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
 															
 															$svg.setAttribute("class";String:C10(xml_attributes($node).class)+" error";$node)
 															
@@ -576,7 +581,7 @@ Case of
 									
 									For ($i;1;Size of array:C274($tDom_);1)
 										
-										If (String:C10(xml_attributes($tDom_{$i}).class)="")// Not affected
+										If (String:C10(xml_attributes($tDom_{$i}).class)="")  // Not affected
 											
 											If (Not:C34($bFirst))
 												
@@ -678,7 +683,7 @@ Case of
 		End if 
 		
 		//________________________________________
-	: ($tIN="cancel")// Return cancel button as Base64 data
+	: ($tIN="cancel")  // Return cancel button as Base64 data
 		
 		//READ PICTURE FILE(Get 4D folder(Current resources folder)+Convert path POSIX to system("images/Buttons/LightGrey/Cancel.png");$Pic_cancel)
 		//TRANSFORM PICTURE($Pic_cancel;Crop;1;1;48;48)

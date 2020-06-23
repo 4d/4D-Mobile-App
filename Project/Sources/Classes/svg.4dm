@@ -1,17 +1,26 @@
+
+/*═══════════════*/
+Class extends xml
+/*═══════════════*/
+
 Class constructor
 	
 	C_VARIANT:C1683($1)
-	C_OBJECT:C1216($2)
 	
-	This:C1470.root:=Null:C1517
-	This:C1470.autoClose:=True:C214
-	This:C1470.success:=False:C215
-	This:C1470.errors:=New collection:C1472
+	If (Count parameters:C259>0)
+		
+		//This.load($1)
+		Super:C1705($1)
+		
+	Else 
+		
+		Super:C1705()
+		This:C1470.new()
+		
+	End if 
+	
 	This:C1470.latest:=Null:C1517
 	This:C1470.picture:=Null:C1517
-	This:C1470.xml:=Null:C1517
-	This:C1470.origin:=Null:C1517
-	This:C1470.file:=Null:C1517
 	This:C1470.store:=New collection:C1472
 	This:C1470[""]:=New object:C1471(\
 		"_attributes";New collection:C1472("target";\
@@ -20,16 +29,6 @@ Class constructor
 		"codec"))
 	
 	//This.target:=Formula(Choose($1.target=Null;Choose(This.latest#Null;This.latest;This.root);String($1.target)))
-	
-	If (Count parameters:C259>0)
-		
-		This:C1470.load($1)
-		
-	Else 
-		
-		This:C1470.new()
-		
-	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function __target
@@ -111,7 +110,7 @@ Function __target
 	End case 
 	
 /*———————————————————————————————————————————————————————————*/
-Function push// Keep dom reference for futur
+Function push  // Keep dom reference for futur
 	
 	C_OBJECT:C1216($0)
 	C_TEXT:C284($1)
@@ -143,7 +142,7 @@ Function push// Keep dom reference for futur
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function fetch// Retrieve a stored dom reference
+Function fetch  // Retrieve a stored dom reference
 	
 	C_TEXT:C284($0)
 	C_TEXT:C284($1)
@@ -174,14 +173,14 @@ Function fetch// Retrieve a stored dom reference
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function new// Create a default SVG structure
+Function new  // Create a default SVG structure
 	
 	C_OBJECT:C1216($0)
 	C_OBJECT:C1216($1)
 	
 	C_TEXT:C284($node;$t)
 	
-	This:C1470.close()// Release memory
+	This:C1470.close()  // Release memory
 	
 	$node:=DOM Create XML Ref:C861("svg";"http://www.w3.org/2000/svg")
 	This:C1470.success:=Bool:C1537(OK)
@@ -263,94 +262,6 @@ Function new// Create a default SVG structure
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function load// Load a variable or a file
-	
-	C_OBJECT:C1216($0)
-	C_VARIANT:C1683($1)
-	
-	C_TEXT:C284($node)
-	
-	This:C1470.close()// Release memory
-	
-	Case of 
-			
-			//______________________________________________________
-		: (Value type:C1509($1)=Is text:K8:3)\
-			 | (Value type:C1509($1)=Is BLOB:K8:12)// Parse a given variable
-			
-			$node:=DOM Parse XML variable:C720($1)
-			This:C1470.success:=Bool:C1537(OK)
-			
-			CLEAR VARIABLE:C89($1)
-			
-			If (This:C1470.success)
-				
-				This:C1470.root:=$node
-				
-			Else 
-				
-				This:C1470.errors.push("Failed to parse the given variable")
-				
-			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($1)=Is object:K8:27)// File to load
-			
-			This:C1470.success:=($1#Null:C1517)
-			
-			If (This:C1470.success)
-				
-				This:C1470.success:=Bool:C1537($1.isFile) & Bool:C1537($1.exists)
-				
-				If (This:C1470.success)
-					
-					$node:=DOM Parse XML source:C719($1.platformPath)
-					This:C1470.success:=Bool:C1537(OK)
-					
-					If (This:C1470.success)
-						
-						This:C1470.root:=$node
-						This:C1470.origin:=$1
-						
-					End if 
-					
-				Else 
-					
-					This:C1470.errors.push("File doesn't exists: "+String:C10($1.platformPath))
-					
-				End if 
-				
-			Else 
-				
-				This:C1470.errors.push("Missing File obkect to load")
-				
-			End if 
-			
-			//______________________________________________________
-		Else 
-			
-			This:C1470.errors.push("Unmanaged type: "+String:C10(Value type:C1509($1)))
-			
-			//________________________________________
-	End case 
-	
-	$0:=This:C1470
-	
-/*———————————————————————————————————————————————————————————*/
-Function close// Close XML tree
-	
-	C_OBJECT:C1216($0)
-	
-	If (This:C1470.root#Null:C1517)
-		
-		DOM CLOSE XML:C722(This:C1470.root)
-		This:C1470.root:=Null:C1517
-		
-	End if 
-	
-	$0:=This:C1470
-	
-/*———————————————————————————————————————————————————————————*/
 Function id
 	
 	C_TEXT:C284($1)
@@ -364,7 +275,7 @@ Function id
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function show// Show in 4D SVG Viewer
+Function show  // Show in 4D SVG Viewer
 	
 	
 	//#TO_DO: Should test if the component is available
@@ -384,7 +295,7 @@ Function rect
 	C_TEXT:C284($node)
 	
 	$height:=$1
-	$vWidth:=$1// Square (default)
+	$vWidth:=$1  // Square (default)
 	
 	If (Count parameters:C259>=1)
 		
@@ -417,7 +328,7 @@ Function rect
 	This:C1470.success:=Bool:C1537(OK)
 	
 	//If (Count parameters>2)\
-																 & (This.success)
+																				 & (This.success)
 	
 	//This.attributes($3)
 	
@@ -442,7 +353,7 @@ Function square
 Function group
 	
 	C_OBJECT:C1216($0)
-	C_VARIANT:C1683($1)// text | object
+	C_VARIANT:C1683($1)  // text | object
 	
 	C_TEXT:C284($node)
 	
@@ -468,9 +379,9 @@ Function group
 /*———————————————————————————————————————————————————————————*/
 Function position
 	
-	C_LONGINT:C283($1)// x
-	C_VARIANT:C1683($2)// {y | unit}
-	C_TEXT:C284($3)//    {unit}
+	C_LONGINT:C283($1)  // x
+	C_VARIANT:C1683($2)  // {y | unit}
+	C_TEXT:C284($3)  //    {unit}
 	
 	C_TEXT:C284($node)
 	
@@ -515,9 +426,9 @@ Function position
 /*———————————————————————————————————————————————————————————*/
 Function dimensions
 	
-	C_VARIANT:C1683($1)// width
-	C_VARIANT:C1683($2)// {height | unit}
-	C_TEXT:C284($3)//    {unit}
+	C_VARIANT:C1683($1)  // width
+	C_VARIANT:C1683($2)  // {height | unit}
+	C_TEXT:C284($3)  //    {unit}
 	
 	C_TEXT:C284($node;$t)
 	$node:=This:C1470.__target()
@@ -592,8 +503,8 @@ Function dimensions
 Function attributes
 	
 	C_OBJECT:C1216($0)
-	C_VARIANT:C1683($1)// object | attribute
-	C_VARIANT:C1683($2)// Value
+	C_VARIANT:C1683($1)  // object | attribute
+	C_VARIANT:C1683($2)  // Value
 	
 	C_TEXT:C284($key;$node)
 	C_COLLECTION:C1488($c)
@@ -651,8 +562,8 @@ Function attributes
 /*———————————————————————————————————————————————————————————*/
 Function fill
 	
-	C_TEXT:C284($1)// Color
-	C_VARIANT:C1683($2)// {target}
+	C_TEXT:C284($1)  // Color
+	C_VARIANT:C1683($2)  // {target}
 	
 	C_TEXT:C284($node)
 	
@@ -684,8 +595,8 @@ Function fill
 /*———————————————————————————————————————————————————————————*/
 Function stroke
 	
-	C_TEXT:C284($1)// Color
-	C_VARIANT:C1683($2)// {target}
+	C_TEXT:C284($1)  // Color
+	C_VARIANT:C1683($2)  // {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
@@ -707,8 +618,8 @@ Function stroke
 /*———————————————————————————————————————————————————————————*/
 Function fillOpacity
 	
-	C_REAL:C285($1)// opacity
-	C_VARIANT:C1683($2)// {target}
+	C_REAL:C285($1)  // opacity
+	C_VARIANT:C1683($2)  // {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
@@ -739,8 +650,8 @@ Function fillOpacity
 /*———————————————————————————————————————————————————————————*/
 Function embedPicture
 	
-	C_PICTURE:C286($1)// Picture
-	C_VARIANT:C1683($2)// {target}
+	C_PICTURE:C286($1)  // Picture
+	C_VARIANT:C1683($2)  // {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
@@ -795,8 +706,8 @@ Function embedPicture
 /*———————————————————————————————————————————————————————————*/
 Function image
 	
-	C_OBJECT:C1216($1)// File
-	C_VARIANT:C1683($2)// {target}
+	C_OBJECT:C1216($1)  // File
+	C_VARIANT:C1683($2)  // {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
@@ -863,8 +774,8 @@ Function image
 /*———————————————————————————————————————————————————————————*/
 Function textArea
 	
-	C_TEXT:C284($1)// Text
-	C_VARIANT:C1683($2)// {target}
+	C_TEXT:C284($1)  // Text
+	C_VARIANT:C1683($2)  // {target}
 	
 	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
@@ -1006,44 +917,4 @@ Function getPicture
 	End if 
 	
 	$0:=$p
-	
-/*———————————————————————————————————————————————————————————*/
-Function getText
-	
-	C_TEXT:C284($0)
-	C_BOOLEAN:C305($1)
-	
-	C_TEXT:C284($t)
-	DOM EXPORT TO VAR:C863(This:C1470.root;$t)
-	This:C1470.success:=Bool:C1537(OK)
-	
-	If (This:C1470.success)
-		
-		This:C1470.xml:=$t
-		
-		If (This:C1470.autoClose)
-			
-			If (Count parameters:C259>=1)
-				
-				If (Not:C34($1))
-					
-					This:C1470.close()
-					
-				End if 
-				
-			Else 
-				
-				This:C1470.close()
-				
-			End if 
-		End if 
-		
-	Else 
-		
-		This:C1470.xml:=Null:C1517
-		This:C1470.errors.push("Failed to export SVG structure as XML.")
-		
-	End if 
-	
-	$0:=$t
 	

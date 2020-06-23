@@ -72,7 +72,7 @@ Case of
 				//______________________________________________________
 			: (Num:C11($Obj_result.httpError)=30)
 				
-				ALERT:C41(Get localized string:C991("theServerIsNotReady"))// Server unavailable/Serveur inaccessible
+				ALERT:C41(Get localized string:C991("theServerIsNotReady"))  // Server unavailable/Serveur inaccessible
 				
 				//______________________________________________________
 			: ($Obj_result.code=401)
@@ -82,7 +82,7 @@ Case of
 				If ($ok)
 					
 					// The key.mobileapp file should be created
-					If (WEB Get server info:C1531.started)// Local
+					If (WEB Get server info:C1531.started)  // Local
 						
 						// Get file
 						$file:=Folder:C1567(fk mobileApps folder:K87:18).file("key.mobileapp")
@@ -284,7 +284,7 @@ Case of
 		For each ($o;$cUserdCommands)
 			
 			//$ratio:=""  //"\t"+string(100*$o.count/$total)
-			$c.push($o.name+"\t"+String:C10($o.count))//+$ratio)
+			$c.push($o.name+"\t"+String:C10($o.count))  //+$ratio)
 			
 		End for each 
 		
@@ -480,7 +480,7 @@ Case of
 		$t:=str.setText("Note: if a value being appended is a collection, the elements of the collection will be appended.").shuffle(15)
 		
 		//________________________________________
-	: (False:C215)// Unsandbox
+	: (False:C215)  // Unsandbox
 		
 		$o:=Folder:C1567(fk database folder:K87:14)
 		$o1:=Folder:C1567($o.platformPath;fk platform path:K87:2)
@@ -621,9 +621,9 @@ Case of
 		If (False:C215)
 			$o:=New object:C1471
 			
-			ASSERT:C1129(Not:C34(Bool:C1537($o.error)))// False
+			ASSERT:C1129(Not:C34(Bool:C1537($o.error)))  // False
 			$o.error:="Hello world"
-			ASSERT:C1129(Bool:C1537($o.error))// False (should be True)
+			ASSERT:C1129(Bool:C1537($o.error))  // False (should be True)
 			
 		Else 
 			
@@ -633,14 +633,14 @@ Case of
 			$o:=New object:C1471
 			ASSERT:C1129(Not:C34(Undefined:C82($o)))
 			
-			ASSERT:C1129(Undefined:C82($o.error))// True
+			ASSERT:C1129(Undefined:C82($o.error))  // True
 			$o.error:="Hello world"
-			ASSERT:C1129(Not:C34(Undefined:C82($o.error)))// False
+			ASSERT:C1129(Not:C34(Undefined:C82($o.error)))  // False
 			//%W+518.7
 		End if 
 		
 		//________________________________________
-	: (False:C215)// Create themes
+	: (False:C215)  // Create themes
 		
 		For each ($o;ds:C1482.Commands.all())
 			
@@ -696,7 +696,7 @@ Case of
 		$o:=mobileUnit("testSuites")
 		
 		//________________________________________
-	: (True:C214)// Volume from path
+	: (True:C214)  // Volume from path
 		
 		$t:=Get 4D folder:C485(Current resources folder:K5:16)+"Images"+Folder separator:K24:12+"action.png"
 		
@@ -761,7 +761,7 @@ Case of
 		End if 
 		
 		//________________________________________
-	: (False:C215)//"mobileapp/$catalog/"
+	: (False:C215)  //"mobileapp/$catalog/"
 		
 		$Lon_error:=HTTP Request:C1158(HTTP GET method:K71:1;Rest(New object:C1471("action";"devurl";"handler";"mobileapp")).url;"";$Txt_result)
 		
@@ -808,7 +808,7 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$t:=JSON Parse:C1218("\"toto\"")// ;Is text)
+		$t:=JSON Parse:C1218("\"toto\"")  // ;Is text)
 		$Num_:=JSON Parse:C1218(String:C10(Pi:K30:1;"&xml");Is real:K8:4)
 		
 		//________________________________________
@@ -818,17 +818,17 @@ Case of
 		
 		$Obj_new:=New object:C1471("f";$Obj_formula)
 		
-		$Lon_result:=$Obj_new.f()// returns 3
+		$Lon_result:=$Obj_new.f()  // returns 3
 		
 		$Lon_value:=10
 		$Obj_new:=New object:C1471("f";Formula:C1597($Lon_value))
 		$Lon_value:=20
 		
-		$Lon_result:=$Obj_new.f()// returns 10
+		$Lon_result:=$Obj_new.f()  // returns 10
 		
 		//$Obj_new:=New object("formula";New formula($1+$2))
 		$Obj_new:=New object:C1471("f";Formula from string:C1601("$1+$2"))
-		$Lon_result:=$Obj_new.f(10;20)// returns 30
+		$Lon_result:=$Obj_new.f(10;20)  // returns 30
 		
 		$Txt_ormula:=Request:C163("Please type a formula")
 		
@@ -841,11 +841,11 @@ Case of
 		
 		//$Obj_formula:=New formula from string(Uppercase($1))
 		$Obj_formula:=Formula from string:C1601("Uppercase:C13($1)")
-		$Txt_result:=$Obj_formula.call(Null:C1517;"hello")// returns "HELLO"
+		$Txt_result:=$Obj_formula.call(Null:C1517;"hello")  // returns "HELLO"
 		
 		$Obj_new:=New object:C1471("value";50)
 		$Obj_formula:=Formula:C1597(This:C1470.value*2)
-		$Lon_result:=$Obj_formula.call($Obj_new)// returns 100
+		$Lon_result:=$Obj_formula.call($Obj_new)  // returns 100
 		
 		//________________________________________
 	: (True:C214)
@@ -857,10 +857,10 @@ Case of
 		
 		$t:="Hello .world"
 		
-		$Boo_reset:=$t%"world"// True
-		$Boo_reset:=$t%"Hello"// True
-		$Boo_reset:=$t%".world"// False
-		$Boo_reset:=$t%"@.world"// False
+		$Boo_reset:=$t%"world"  // True
+		$Boo_reset:=$t%"Hello"  // True
+		$Boo_reset:=$t%".world"  // False
+		$Boo_reset:=$t%"@.world"  // False
 		
 		//________________________________________
 	: (True:C214)

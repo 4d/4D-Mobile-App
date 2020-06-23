@@ -429,7 +429,8 @@
 		"classes": [
 			"doc",
 			"menu",
-			"svg"
+			"svg",
+			"xml"
 		]
 	},
 	"col": {
