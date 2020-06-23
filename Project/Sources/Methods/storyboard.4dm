@@ -210,6 +210,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If (Length:C16(String:C10($Obj_element.xpath))>0)
 						
+						If ($Obj_element.xpath[[1]]#"/")
+							
+							$Obj_element.xpath:="/"+$Obj_element.xpath
+							
+						End if 
+						
 						$Obj_element.dom:=$Dom_root.findByXPath($Obj_element.xpath)
 						
 						If (Not:C34($Obj_element.dom.success))
@@ -498,6 +504,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								// already found by construction, nothing to do
 								
 							: (Length:C16(String:C10($Obj_element.xpath))>0)  // look up with xpath
+								
+								If ($Obj_element.xpath[[1]]#"/")
+									
+									$Obj_element.xpath:="/"+$Obj_element.xpath
+									
+								End if 
 								
 								$Obj_element.dom:=$Dom_root.findByXPath($Obj_element.xpath)
 								
