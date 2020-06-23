@@ -730,11 +730,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						// 2- scene
 						//$Obj_element:=New object(\
-							"insertInto";$Dom_root.findByXPath("document/scenes");\
-							"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-							"idCount";3;\
-							"tagInterfix";"SN";\
-							"insertMode";"append")
+																					"insertInto";$Dom_root.findByXPath("document/scenes");\
+																					"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																					"idCount";3;\
+																					"tagInterfix";"SN";\
+																					"insertMode";"append")
 						$Obj_element:=New object:C1471(\
 							"insertInto";$Dom_root.findByXPath("/document/scenes");\
 							"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
@@ -1141,7 +1141,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						// find named colors
 						$Boo_buffer:=False:C215
 						
-						For each ($Dom_;$Dom_root.findMany("document/resources/namedColor").elements)
+						For each ($Dom_;$Dom_root.findMany("/document/resources/namedColor").elements)
 							
 							// get color name
 							$Txt_buffer:=$Dom_.getAttribute("name").value
@@ -1250,7 +1250,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						$Boo_buffer:=False:C215
 						
 						// find named colors
-						For each ($Dom_;$Dom_root.findMany("document/resources/image").elements)
+						For each ($Dom_;$Dom_root.findMany("/document/resources/image").elements)
 							
 							$Col_:=New collection:C1472
 							
