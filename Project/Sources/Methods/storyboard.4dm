@@ -1,12 +1,12 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-  // ----------------------------------------------------
-  // Project method : storyboard
-  // Created 27-6-2017 by Eric Marchand
-  // ----------------------------------------------------
-  // Description:
-  // manage storyboard xml
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : storyboard
+// Created 27-6-2017 by Eric Marchand
+// ----------------------------------------------------
+// Description:
+// manage storyboard xml
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
@@ -19,23 +19,23 @@ C_COLLECTION:C1488($Col_;$Col_elements)
 C_VARIANT:C1683($Var_field)
 
 If (False:C215)
-	C_OBJECT:C1216(storyboard ;$0)
-	C_OBJECT:C1216(storyboard ;$1)
+	C_OBJECT:C1216(storyboard;$0)
+	C_OBJECT:C1216(storyboard;$1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_in:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
@@ -48,39 +48,39 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="fieldBinding")
 			
 			Case of 
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 				: ($Obj_in.field=Null:C1517)
 					
 					$Obj_out.errors:=New collection:C1472("field must be specified to fill binding type")
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 				: ($Obj_in.field.type=Null:C1517)
 					
 					$Obj_out.errors:=New collection:C1472("field must be have a type to fill binding type")
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 				Else 
 					
 					$Obj_field:=$Obj_in.field
 					
 					Case of 
 							
-							  //________________________________________
+							//________________________________________
 						: (Value type:C1509($Obj_field.format)=Is object:K8:27)
 							
 							$Obj_out.format:=$Obj_field.format
 							
-							  //________________________________________
+							//________________________________________
 						: (Value type:C1509($Obj_field.format)=Is text:K8:3)
 							
 							If (Value type:C1509($Obj_in.formatters)=Is object:K8:27)
@@ -91,17 +91,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									
 								Else 
 									
-									ob_error_add ($Obj_out;"Unknown data formatter '"+$Obj_field.format+"'")
+									ob_error_add($Obj_out;"Unknown data formatter '"+$Obj_field.format+"'")
 									
 								End if 
 								
 							Else 
 								
-								ob_error_add ($Obj_out;"No list of formatters provided to resolve '"+$Obj_field.format+"'")
+								ob_error_add($Obj_out;"No list of formatters provided to resolve '"+$Obj_field.format+"'")
 								
 							End if 
 							
-							  // ........................................
+							// ........................................
 					End case 
 					
 					If ($Obj_out.format#Null:C1517)
@@ -129,7 +129,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 						Else 
 							
-							  // set default value according to type (here type from 4d structure)
+							// set default value according to type (here type from 4d structure)
 							If ($Obj_field.fieldType<SHARED.defaultFieldBindingTypes.length)
 								
 								$Obj_out.bindingType:=SHARED.defaultFieldBindingTypes[$Obj_in.field.fieldType]
@@ -137,16 +137,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 							Else 
 								
-								ob_error_add ($Obj_out;"No default format for type '"+String:C10($Obj_field.fieldType)+"'")
+								ob_error_add($Obj_out;"No default format for type '"+String:C10($Obj_field.fieldType)+"'")
 								
 							End if 
 						End if 
 					End if 
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 			End case 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="randomId")  // Return one random id for storyboard xml element
 			
 			$Txt_buffer:=Generate UUID:C1066
@@ -155,7 +155,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			$Obj_out.value:=$Txt_buffer
 			$Obj_out.success:=True:C214
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="randomIds")  // Return `length` random id for storyboard xml element
 			
 			$Obj_out.value:=New collection:C1472
@@ -169,18 +169,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End for 
 			
-			  // XXX maybe add a list of forbidden id from current storyboard, then check if collection have distinct element
-			  // storyboard (New object("action";"attributelist";"path";$Obj_in.path;"attribute";"id"))
-			  // and do a while value.count < $Obj_in.length
+			// XXX maybe add a list of forbidden id from current storyboard, then check if collection have distinct element
+			// storyboard (New object("action";"attributelist";"path";$Obj_in.path;"attribute";"id"))
+			// and do a while value.count < $Obj_in.length
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="object")
 			
 			If ($Obj_in.path#Null:C1517)
 				
-				  // Load as object
+				// Load as object
 				
-				$Obj_out:=xml_fileToObject ($Obj_in.path)
+				$Obj_out:=xml_fileToObject($Obj_in.path)
 				
 			Else 
 				
@@ -188,7 +188,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="navigation")
 			
 			$Obj_out.doms:=New collection:C1472()
@@ -203,10 +203,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If ($File_.exists)
 				
-				$Dom_root:=xml ("load";$File_)
+				$Dom_root:=xml("load";$File_)
 				
-				  // Look up first all the elements. Dom could be modifyed
-				
+				// Look up first all the elements. Dom could be modifyed
 				For each ($Obj_element;$Obj_in.template.elements)
 					
 					If (Length:C16(String:C10($Obj_element.xpath))>0)
@@ -226,7 +225,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						Case of 
 								
-								  // ----------------------------------------
+								// ----------------------------------------
 							: ($Lon_length=2)
 								
 								$Obj_element.dom:=$Dom_root.findById("TAG-"+$Obj_element.tagInterfix+"-001")
@@ -238,17 +237,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									
 								End if 
 								
-								  // ----------------------------------------
+								// ----------------------------------------
 							: ($Lon_length>0)
 								
 								ASSERT:C1129(False:C215;"Element 'tagInterfix' defined in manifest.json "+$Obj_element.tagInterfix+" must have exactly two caracters")
 								
-								  // ----------------------------------------
+								// ----------------------------------------
 							Else 
 								
 								ASSERT:C1129(False:C215;"No xpath defined for template file "+$File_.path+" to find element "+JSON Stringify:C1217($Obj_element))
 								
-								  // ----------------------------------------
+								// ----------------------------------------
 						End case 
 					End if 
 					
@@ -289,39 +288,39 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					End if 
 				End for each 
 				
-				  // For each table create a storyboard id shared by all xml elements
+				// For each table create a storyboard id shared by all xml elements
 				
 				For each ($Obj_table;$Obj_in.tags.navigationTables)
 					
-					$Obj_table.segueDestinationId:=storyboard (New object:C1471("action";"randomId")).value
+					$Obj_table.segueDestinationId:=storyboard(New object:C1471("action";"randomId")).value
 					
 				End for each 
 				
-				  // For each element... (scene, cell, ...)
+				// For each element... (scene, cell, ...)
 				For each ($Obj_element;$Obj_in.template.elements)
 					
 					If ($Obj_element.dom#Null:C1517)
 						
-						  // ... and table
+						// ... and table
 						$Lon_j:=0
 						
 						For each ($Obj_table;$Obj_in.tags.navigationTables)
 							
 							$Lon_j:=$Lon_j+1  // pos
 							
-							  // set tags
+							// set tags
 							$Obj_in.tags.table:=$Obj_table
 							
 							If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
 								
 								$Obj_in.tags.tagInterfix:=$Obj_element.tagInterfix
-								$Obj_in.tags.storyboardIDs:=storyboard (New object:C1471("action";"randomIds";"length";$Obj_element.idCount)).value
+								$Obj_in.tags.storyboardIDs:=storyboard(New object:C1471("action";"randomIds";"length";$Obj_element.idCount)).value
 								
 							End if 
 							
-							  // Insert after processing tags
+							// Insert after processing tags
 							$Txt_buffer:=$Obj_element.dom.export().variable
-							$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;$Obj_in.template.tagtypes)
+							$Txt_buffer:=Process_tags($Txt_buffer;$Obj_in.tags;$Obj_in.template.tagtypes)
 							
 							$Dom_:=Null:C1517
 							
@@ -329,27 +328,27 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 								Case of 
 										
-										  // ----------------------------------------
+										// ----------------------------------------
 									: ($Obj_element.insertMode="append")
 										
 										$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
 										
-										  // ----------------------------------------
+										// ----------------------------------------
 									: ($Obj_element.insertMode="first")
 										
 										$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
 										
-										  // ----------------------------------------
+										// ----------------------------------------
 									: ($Obj_element.insertMode="iteration")
 										
 										$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
 										
-										  // ----------------------------------------
+										// ----------------------------------------
 								End case 
 								
 								If ($Dom_#Null:C1517)
 									
-									ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+									ob_removeFormula($Dom_)  // For debugging purpose remove all formula
 									
 								End if 
 								
@@ -357,26 +356,26 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 							Else 
 								
-								ob_error_add ($Obj_out;"Failed to nsert after processing tags '"+$Txt_buffer+"'")
+								ob_error_add($Obj_out;"Failed to nsert after processing tags '"+$Txt_buffer+"'")
 								
 							End if 
 						End for each 
 						
-						  // Remove originals template element
+						// Remove originals template element
 						$Obj_element.dom.remove()
 						
 					End if 
 				End for each 
 				
-				  // Save file at destination after replacing tags
+				// Save file at destination after replacing tags
 				$Txt_buffer:=$Dom_root.export().variable
 				$Dom_root.close()
-				$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("navigation.storyboard"))
+				$Txt_buffer:=Process_tags($Txt_buffer;$Obj_in.tags;New collection:C1472("navigation.storyboard"))
 				
 				$File_:=Folder:C1567($Obj_in.target;fk platform path:K87:2).file(String:C10($Obj_in.template.storyboard))
 				$File_.setText($Txt_buffer;"UTF-8";Document with CRLF:K24:20)
 				
-				$Obj_out.format:=storyboard (New object:C1471(\
+				$Obj_out.format:=storyboard(New object:C1471(\
 					"action";"format";\
 					"path";$File_))
 				
@@ -384,12 +383,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			Else   // Not a document
 				
-				ASSERT:C1129(dev_Matrix ;"Missing "+$Obj_in.action+" storyboard")
+				ASSERT:C1129(dev_Matrix;"Missing "+$Obj_in.action+" storyboard")
 				$Obj_out.errors:=New collection:C1472("Missing "+$Obj_in.action+" storyboard")
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="detailform")
 			
 			$Obj_out.doms:=New collection:C1472()
@@ -403,7 +402,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			C_OBJECT:C1216($Folder_template)
 			$Folder_template:=Folder:C1567($Obj_in.template.source;fk platform path:K87:2)
 			$File_:=$Folder_template.file(String:C10($Obj_in.template.storyboard))
-			$Dom_root:=xml ("load";$File_)
+			$Dom_root:=xml("load";$File_)
 			
 			If ($Dom_root.success)
 				
@@ -417,9 +416,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If (Position:C15($Txt_cmd;$Txt_buffer)=0)
 							
-							ob_warning_add ($Obj_out;"Detail template storyboard '"+$File_.path+"'do not countains action tag "+$Txt_cmd)
+							ob_warning_add($Obj_out;"Detail template storyboard '"+$File_.path+"'do not countains action tag "+$Txt_cmd)
 							
-							  // XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
+							// XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
 							
 						End if 
 					End if 
@@ -427,12 +426,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 				If ($Obj_in.template.elements=Null:C1517)
 					
-					  // Elements not defined in manifest, try to compute it using storyboard XMLs
+					// Elements not defined in manifest, try to compute it using storyboard XMLs
 					ARRAY TEXT:C222($tTxt_result;0)
 					
 					Case of 
-							  // ----------------------------------------
-						: (Rgx_ExtractText ("TAG-(.?.?)-001";$Txt_buffer;"1";->$tTxt_result)=0)
+							// ----------------------------------------
+						: (Rgx_ExtractText("TAG-(.?.?)-001";$Txt_buffer;"1";->$tTxt_result)=0)
 							
 							$Col_:=New collection:C1472()
 							ARRAY TO COLLECTION:C1563($Col_;$tTxt_result)
@@ -441,7 +440,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							$Obj_in.template.elements:=$Col_
 							
-							  // ----------------------------------------
+							// ----------------------------------------
 						: (Value type:C1509($Obj_in.template.elementsID)=Is collection:K8:32)  // alernative way not documented, declare id of elements
 							
 							$Col_:=New collection:C1472()
@@ -452,14 +451,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								$Obj_element.dom:=$Dom_root.findById($Txt_id)
 								$Obj_element.originalId:=$Txt_id
 								
-								$Obj_element:=storyboard_fix_id ($Obj_element).element
+								$Obj_element:=storyboard_fix_id($Obj_element).element
 								
 							End for each 
 							
 							$Obj_in.template.elements:=$Col_
 						Else 
 							
-							  // find by attributes? find by children kel value?
+							// find by attributes? find by children kel value?
 							C_OBJECT:C1216($result)
 							$result:=$Dom_root.findByAttribute("userLabel";"stack")
 							If ($result.success)
@@ -467,7 +466,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									
 									$Obj_element:=New object:C1471()
 									$Obj_element.dom:=$result.elements[0]
-									$Obj_element:=storyboard_fix_id ($Obj_element).element
+									$Obj_element:=storyboard_fix_id($Obj_element).element
 									
 									$Obj_in.template.elements:=New collection:C1472($Obj_element)
 									
@@ -478,8 +477,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 				End if 
 				
-				  // Try to determine if must duplicate or not element
-				  // elements are specified or 0 is set as "infinite" representation or if  max > count or one of them defined to 0
+				// Try to determine if must duplicate or not element
+				// elements are specified or 0 is set as "infinite" representation or if  max > count or one of them defined to 0
 				If (($Obj_in.template.elements#Null:C1517)\
 					 | (($Obj_in.template.fields.count#Null:C1517) & (Num:C11($Obj_in.template.fields.count)=0))\
 					 | (($Obj_in.template.fields.max#Null:C1517) & (Num:C11($Obj_in.template.fields.max)=0))\
@@ -491,12 +490,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						$Obj_in.template.elements:=New collection:C1472()  // prevent errors, but there is issues maybe if we define count or max without elements...
 					End if 
 					
-					  // Look up first all the elements in Dom. Dom could be modifyed
+					// Look up first all the elements in Dom. Dom could be modifyed
 					For each ($Obj_element;$Obj_in.template.elements)
 						
 						Case of 
 							: ($Obj_element.dom#Null:C1517)
-								  // already found by construction, nothing to do
+								// already found by construction, nothing to do
 								
 							: (Length:C16(String:C10($Obj_element.xpath))>0)  // look up with xpath
 								
@@ -505,7 +504,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								If ($Obj_element.dom.success)
 									
 									If (Not:C34(Bool:C1537($Obj_in.template.isInternal)))  // to optimize, suppose our template do not need to have fix...
-										$Obj_element:=storyboard_fix_id ($Obj_element).element  // potentially fix subnodes if copy our storyboard to modify it
+										$Obj_element:=storyboard_fix_id($Obj_element).element  // potentially fix subnodes if copy our storyboard to modify it
 									End if 
 									
 								Else 
@@ -521,10 +520,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 								Case of 
 										
-										  // ----------------------------------------
+										// ----------------------------------------
 									: ($Lon_length=2)
 										
-										  // if "AS" document/resources and read children, to find ___FIELD_ICON___ ?? (no id for image, let ibtool fix that for the moment)
+										// if "AS" document/resources and read children, to find ___FIELD_ICON___ ?? (no id for image, let ibtool fix that for the moment)
 										$Obj_element.dom:=$Dom_root.findById("TAG-"+String:C10($Obj_element.tagInterfix)+"-001")
 										
 										If (Not:C34($Obj_element.dom.success))
@@ -534,19 +533,19 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 											
 										End if 
 										
-										$Obj_element:=storyboard_fix_id ($Obj_element).element  // potentially fix subnodes
+										$Obj_element:=storyboard_fix_id($Obj_element).element  // potentially fix subnodes
 										
-										  // ----------------------------------------
+										// ----------------------------------------
 									: ($Lon_length>0)
 										
 										ASSERT:C1129(False:C215;"Element 'tagInterfix' defined in manifest.json "+String:C10($Obj_element.tagInterfix)+" must have exactly two caracters.")
 										
-										  // ----------------------------------------
+										// ----------------------------------------
 									Else 
 										
 										ASSERT:C1129(False:C215;"No tag interfix defined for element "+JSON Stringify:C1217($Obj_element)+" (TAG->tagInterfix>-001). Alternatively you can defined node xpath for template file "+$File_.path+" to find the xml element in storyboard.")
 										
-										  // ----------------------------------------
+										// ----------------------------------------
 								End case 
 						End case 
 						
@@ -556,7 +555,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								$Obj_element.insertInto:=$Obj_element.dom.parent()  // define where to insert
 							End if 
 							
-							  // - define id count allow to speed up and pass that
+							// - define id count allow to speed up and pass that
 							$Lon_ids:=Num:C11($Obj_element.idCount)
 							
 							If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
@@ -580,14 +579,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							$Obj_element.idCount:=$Lon_ids  // as a result purpose
 							
-							  // - Check how to insert new node (ie. the insertMode)
+							// - Check how to insert new node (ie. the insertMode)
 							If (Length:C16(String:C10($Obj_element.insertMode))=0)
 								
 								$Obj_element.insertMode:="append"
 								
 							End if 
 							
-							  // - Check if there is some mandatories tags before inserting
+							// - Check if there is some mandatories tags before inserting
 							If (Value type:C1509($Obj_element.tags.mandatories)=Is collection:K8:32)
 								
 								For each ($Obj_tag;$Obj_element.tags.mandatories)
@@ -618,7 +617,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						$Obj_in.template.relation.elements:=New collection:C1472()
 						
 						C_OBJECT:C1216($Folder_relation)
-						$Folder_relation:=COMPONENT_Pathname ("templates").folder("relation")
+						$Folder_relation:=COMPONENT_Pathname("templates").folder("relation")
 						
 						C_OBJECT:C1216($Dom_relation)
 						
@@ -631,12 +630,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 							: ($Folder_template.file("relationButton.xml").exists)
 								
-								$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xml"))
+								$Dom_relation:=xml("load";$Folder_template.file("relationButton.xml"))
 								$Dom_relation.isDefault:=False:C215
 								
 							: ($Folder_template.file("relationButton.xib").exists)
 								
-								$Dom_relation:=xml ("load";$Folder_template.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+								//$Dom_relation:=xml("load";$Folder_template.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+								$Dom_relation:=xml("load";$Folder_template.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 								$Dom_relation.isDefault:=False:C215
 								
 							Else 
@@ -645,8 +645,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 								If (Not:C34($Dom_relation.success))  // else us default one
 									
-									$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
-									  //$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml"))
+									//$Dom_relation:=xml("load";$Folder_relation.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+									
+									$Dom_relation:=xml("load";$Folder_relation.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+									//$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml"))
 									$Dom_relation.isDefault:=True:C214
 									
 								Else 
@@ -658,7 +660,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 						End case 
 						
-						  // 1- element
+						// 1- element
 						$Obj_element:=New object:C1471(\
 							"dom";$Dom_relation;\
 							"idCount";6;\
@@ -693,7 +695,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							$Obj_element.idCount:=$Lon_ids  // as a result purpose
 						End if 
 						
-						  // Must be inserted into a stack view (with a subviews as intermediate)
+						// Must be inserted into a stack view (with a subviews as intermediate)
 						C_OBJECT:C1216($Obj_)
 						For each ($Obj_;$Obj_in.template.elements) Until ($Obj_element.insertInto#Null:C1517)
 							If (String:C10($Obj_.insertInto.parent().getName().name)="stackView")
@@ -702,28 +704,36 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						End for each 
 						$Obj_in.template.relation.elements.push($Obj_element)
 						
-						  // 2- scene
-						$Obj_element:=New object:C1471(\
+						// 2- scene
+						//$Obj_element:=New object(\
 							"insertInto";$Dom_root.findByXPath("document/scenes");\
-							"dom";xml ("load";$Folder_relation.file("storyboardScene.xml"));\
+							"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+							"idCount";3;\
+							"tagInterfix";"SN";\
+							"insertMode";"append")
+						//$Obj_in.template.relation.elements.push($Obj_element)
+						$Obj_element:=New object:C1471(\
+							"insertInto";$Dom_root.findByXPath("/document/scenes");\
+							"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
 							"idCount";3;\
 							"tagInterfix";"SN";\
 							"insertMode";"append")
 						$Obj_in.template.relation.elements.push($Obj_element)
 						
-						  // 3- connection
+						// 3- connection
 						$Obj_element:=New object:C1471("idCount";1;\
 							"tagInterfix";"SG";\
 							"insertMode";"append"\
 							)
 						
-						  // find controller of where we inject relation element button
+						// find controller of where we inject relation element button
 						$Obj_element.insertInto:=$Obj_in.template.relation.elements[0].insertInto.parentWithName("viewController")
 						If (Not:C34($Obj_element.insertInto.success))  // find with old code
 							$Lon_j:=3
 							Repeat 
 								
-								$Obj_element.insertInto:=$Dom_root.findByXPath("document/scenes/scene["+String:C10($Lon_j)+"]/objects/viewController")
+								//$Obj_element.insertInto:=$Dom_root.findByXPath("document/scenes/scene["+String($Lon_j)+"]/objects/viewController")
+								$Obj_element.insertInto:=$Dom_root.findByXPath("/document/scenes/scene["+String:C10($Lon_j)+"]/objects/viewController")
 								$Lon_j:=$Lon_j-1
 								
 							Until ($Obj_element.insertInto.success | ($Lon_j<0))
@@ -734,7 +744,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						End if 
 						If (Length:C16(String:C10($Obj_in.template.relation.transition.kind))=0)
 							$Obj_in.template.relation.transition.kind:="show"
-							  // else check type?
+							// else check type?
 						End if 
 						
 						$Txt_buffer:="<segue destination=\"TAG-SN-001\""
@@ -756,21 +766,21 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If ($Obj_element.insertInto.success)
 							$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
-							$Obj_element.dom:=xml ("parse";New object:C1471("variable";$Txt_buffer))
+							$Obj_element.dom:=xml("parse";New object:C1471("variable";$Txt_buffer))
 							$Obj_in.template.relation.elements.push($Obj_element)
 							
 						Else 
 							
-							  // Invalid relation
-							ASSERT:C1129(dev_Matrix ;"Cannot add relation on this template. Cannot find viewController: "+JSON Stringify:C1217($Obj_element))
+							// Invalid relation
+							ASSERT:C1129(dev_Matrix;"Cannot add relation on this template. Cannot find viewController: "+JSON Stringify:C1217($Obj_element))
 							
 						End if 
 						
 					End if 
 					
-					  // START browser fields
+					// START browser fields
 					
-					  // ... and fields
+					// ... and fields
 					$Lon_j:=Num:C11($Obj_in.template.fields.count)  // Start at first element, not in header
 					For each ($Var_field;$Obj_in.tags.table.detailFields;Num:C11($Obj_in.template.fields.count))
 						
@@ -781,8 +791,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 								$Lon_j:=$Lon_j+1  // pos
 								
-								  // Set tags:
-								  // - field
+								// Set tags:
+								// - field
 								$Obj_in.tags.field:=$Obj_field
 								
 								$Obj_in.tags.storyboardID:=New collection:C1472
@@ -797,17 +807,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 									
 								End if 
 								
-								  // For each element... (scene, cell, ...)
+								// For each element... (scene, cell, ...)
 								For each ($Obj_element;$Col_elements)
 									
 									If ($Obj_element.dom#Null:C1517)  // if valid element
 										
-										  // - randoms ids
+										// - randoms ids
 										If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
 											
 											$Obj_storyboardID:=New object:C1471(\
 												"tagInterfix";$Obj_element.tagInterfix;\
-												"storyboardIDs";storyboard (New object:C1471(\
+												"storyboardIDs";storyboard(New object:C1471(\
 												"action";"randomIds";\
 												"length";$Obj_element.idCount)).value)
 											
@@ -815,63 +825,63 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 											
 										End if 
 										
-										  // Process tags on the element
+										// Process tags on the element
 										$Txt_buffer:=$Obj_element.dom.export().variable
-										$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
+										$Txt_buffer:=Process_tags($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
 										
-										  // Insert node for this element
+										// Insert node for this element
 										$Dom_:=Null:C1517
-										  //Case of 
+										//Case of 
 										
-										  //  // ----------------------------------------
-										  //: $Obj_element.insertMode="append"
+										//  // ----------------------------------------
+										//: $Obj_element.insertMode="append"
 										
-										  //$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
+										//$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
 										
-										  //  // ----------------------------------------
-										  //: $Obj_element.insertMode="first"
+										//  // ----------------------------------------
+										//: $Obj_element.insertMode="first"
 										
-										  //$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
+										//$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
 										
-										  //  // ----------------------------------------
-										  //: $Obj_element.insertMode="iteration"
+										//  // ----------------------------------------
+										//: $Obj_element.insertMode="iteration"
 										
-										  //$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
+										//$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
 										
-										  //  // ----------------------------------------
-										  //End case 
+										//  // ----------------------------------------
+										//End case 
 										
-										  //If ($Dom_#Null)
-										  //ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
-										  //End if 
+										//If ($Dom_#Null)
+										//ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+										//End if 
 										
-										  //$Obj_out.doms.push($Dom_)
+										//$Obj_out.doms.push($Dom_)
 										
 										If (Bool:C1537($Obj_element.insertInto.success))
 											
 											Case of 
 													
-													  // ----------------------------------------
+													// ----------------------------------------
 												: ($Obj_element.insertMode="append")
 													
 													$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
 													
-													  // ----------------------------------------
+													// ----------------------------------------
 												: ($Obj_element.insertMode="first")
 													
 													$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
 													
-													  // ----------------------------------------
+													// ----------------------------------------
 												: ($Obj_element.insertMode="iteration")
 													
 													$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
 													
-													  // ----------------------------------------
+													// ----------------------------------------
 											End case 
 											
 											If ($Dom_#Null:C1517)
 												
-												ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+												ob_removeFormula($Dom_)  // For debugging purpose remove all formula
 												
 											End if 
 											
@@ -879,7 +889,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 											
 										Else 
 											
-											ob_error_add ($Obj_out;"Failed to nsert after processing tags '"+$Txt_buffer+"'")
+											ob_error_add($Obj_out;"Failed to nsert after processing tags '"+$Txt_buffer+"'")
 											
 										End if 
 										
@@ -895,8 +905,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 								For each ($Obj_field;$Col_fields)
 									
-									  // Set tags:
-									  // - field
+									// Set tags:
+									// - field
 									$Obj_in.tags.field:=$Obj_field
 									
 									$Obj_in.tags.storyboardID:=New collection:C1472
@@ -911,12 +921,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 										
 									End if 
 									
-									  // For each element... (scene, cell, ...)
+									// For each element... (scene, cell, ...)
 									For each ($Obj_element;$Col_elements)
 										
 										If ($Obj_element.dom#Null:C1517)  // if valid element
 											
-											  /// HEADER for row
+											/// HEADER for row
 											If ($Obj_element.insertIntoRow=Null:C1517)
 												
 												If ($Obj_element.insertInto.parent().getName().name="stackView")  // only on stack view (suppose only one element has stack view parent..., same as relation)
@@ -930,14 +940,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 													$Obj_element.insertIntoRow:=$Obj_element.insertInto
 												End if 
 											End if 
-											  /// END HEADER for row
+											/// END HEADER for row
 											
-											  // - randoms ids
+											// - randoms ids
 											If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
 												
 												$Obj_storyboardID:=New object:C1471(\
 													"tagInterfix";$Obj_element.tagInterfix;\
-													"storyboardIDs";storyboard (New object:C1471(\
+													"storyboardIDs";storyboard(New object:C1471(\
 													"action";"randomIds";\
 													"length";$Obj_element.idCount)).value)
 												
@@ -945,34 +955,34 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 												
 											End if 
 											
-											  // Process tags on the element
+											// Process tags on the element
 											$Txt_buffer:=$Obj_element.dom.export().variable
-											$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
+											$Txt_buffer:=Process_tags($Txt_buffer;$Obj_in.tags;New collection:C1472("___TABLE___";"detailform";"storyboardID"))
 											
-											  // Insert node for this element
+											// Insert node for this element
 											$Dom_:=Null:C1517
 											Case of 
 													
-													  // ----------------------------------------
+													// ----------------------------------------
 												: $Obj_element.insertMode="append"
 													
 													$Dom_:=$Obj_element.insertIntoRow.append($Txt_buffer)
 													
-													  // ----------------------------------------
+													// ----------------------------------------
 												: $Obj_element.insertMode="first"
 													
 													$Dom_:=$Obj_element.insertIntoRow.insertFirst($Txt_buffer)
 													
-													  // ----------------------------------------
+													// ----------------------------------------
 												: $Obj_element.insertMode="iteration"
 													
 													$Dom_:=$Obj_element.insertIntoRow.insertAt($Txt_buffer;$Lon_j)
 													
-													  // ----------------------------------------
+													// ----------------------------------------
 											End case 
 											
 											If ($Dom_#Null:C1517)
-												ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
+												ob_removeFormula($Dom_)  // For debugging purpose remove all formula
 											End if 
 											
 											$Obj_out.doms.push($Dom_)
@@ -983,13 +993,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								End for each   // $Col_fields
 								
 							Else 
-								  // unknown
-								ASSERT:C1129(dev_Matrix ;"unknown data type of fields: "+String:C10(Value type:C1509($Var_field))+", must be field or a collection of fields")
+								// unknown
+								ASSERT:C1129(dev_Matrix;"unknown data type of fields: "+String:C10(Value type:C1509($Var_field))+", must be field or a collection of fields")
 								
 						End case 
 					End for each 
 					
-					  // Remove original template duplicated element
+					// Remove original template duplicated element
 					For each ($Obj_element;$Obj_in.template.elements)
 						
 						If ($Obj_element.dom#Null:C1517)
@@ -1003,7 +1013,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						End if 
 					End for each 
 					
-					  // close relation elements dom elements
+					// close relation elements dom elements
 					If ($Boo_hasRelation)
 						
 						For each ($Obj_element;$Obj_in.template.relation.elements)
@@ -1018,17 +1028,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 				End if 
 				
-				  // Save file at destination after replacing tags
+				// Save file at destination after replacing tags
 				If ($Boo_buffer)
 					
 					$Txt_buffer:=$Dom_root.export().variable
-					$Txt_buffer:=Process_tags ($Txt_buffer;$Obj_in.tags;New collection:C1472("storyboard";"___TABLE___"))
+					$Txt_buffer:=Process_tags($Txt_buffer;$Obj_in.tags;New collection:C1472("storyboard";"___TABLE___"))
 					$Txt_buffer:=Replace string:C233($Txt_buffer;"<userDefinedRuntimeAttribute type=\"image\" keyPath=\"image\"/>";"")  // Remove useless empty image
 					
-					$File_:=Folder:C1567($Obj_in.target;fk platform path:K87:2).file(Process_tags (String:C10($Obj_in.template.storyboard);$Obj_in.tags;New collection:C1472("filename")))
+					$File_:=Folder:C1567($Obj_in.target;fk platform path:K87:2).file(Process_tags(String:C10($Obj_in.template.storyboard);$Obj_in.tags;New collection:C1472("filename")))
 					$File_.setText($Txt_buffer;"UTF-8";Document with CRLF:K24:20)
 					
-					$Obj_out.format:=storyboard (New object:C1471(\
+					$Obj_out.format:=storyboard(New object:C1471(\
 						"action";"format";\
 						"path";$File_))
 					
@@ -1040,14 +1050,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			Else   // Not a document
 				
-				ASSERT:C1129(dev_Matrix ;"Missing or not decodable "+$Obj_in.action+" storyboard")
+				ASSERT:C1129(dev_Matrix;"Missing or not decodable "+$Obj_in.action+" storyboard")
 				
 				$Obj_out.errors:=New collection:C1472("Template "+$File_.path+" not decodable or available")
 				$Obj_out.success:=False:C215
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="listform")
 			
 			If ($Obj_in.template.storyboard=Null:C1517)  // set default path if not defined
@@ -1074,9 +1084,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							If (Position:C15($Txt_cmd;$Txt_buffer)=0)
 								
-								ob_warning_add ($Obj_out;"List template storyboard '"+$File_.path+"'do not countains action tag "+$Txt_cmd)
+								ob_warning_add($Obj_out;"List template storyboard '"+$File_.path+"'do not countains action tag "+$Txt_cmd)
 								
-								  // XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
+								// XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
 								
 							End if 
 						End if 
@@ -1087,11 +1097,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			Else   // Not a document
 				
-				ASSERT:C1129(dev_Matrix ;"Missing "+$Obj_in.action+" storyboard")
+				ASSERT:C1129(dev_Matrix;"Missing "+$Obj_in.action+" storyboard")
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="colorAssetFix")
 			
 			If (Test path name:C476(String:C10($Obj_in.path))=Is a folder:K24:2)
@@ -1102,34 +1112,34 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If ($File_.extension=".storyboard")
 						
-						  // read file
-						$Dom_root:=xml ("load";$File_)
+						// read file
+						$Dom_root:=xml("load";$File_)
 						
-						  // find named colors
+						// find named colors
 						$Boo_buffer:=False:C215
 						
 						For each ($Dom_;$Dom_root.findMany("document/resources/namedColor").elements)
 							
-							  // get color name
+							// get color name
 							$Txt_buffer:=$Dom_.getAttribute("name").value
 							
 							If ($Obj_in.theme[$Txt_buffer]#Null:C1517)
 								
 								If (Value type:C1509($Obj_in.theme[$Txt_buffer])=Is object:K8:27)
 									
-									  // get color xml child
+									// get color xml child
 									$Dom_child:=$Dom_.firstChild()
 									
 									$Obj_color:=$Obj_in.theme[$Txt_buffer]
 									
-									  // recreate node
+									// recreate node
 									$Dom_child.remove()
 									$Dom_child:=$Dom_.create("color")
 									$Boo_buffer:=True:C214
 									
 									Case of 
 											
-											  //______________________________________________________
+											//______________________________________________________
 										: ($Obj_color.space="gray")
 											
 											If ($Obj_color.alpha=Null:C1517)
@@ -1144,7 +1154,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 												"colorSpace";"custom";\
 												"customColorSpace";"genericGamma22GrayColorSpace"))
 											
-											  //______________________________________________________
+											//______________________________________________________
 										: ($Obj_color.space="srgb")
 											
 											If ($Obj_color.alpha=Null:C1517)
@@ -1161,12 +1171,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 												"colorSpace";"custom";\
 												"customColorSpace";"sRGB"))
 											
-											  // ----------------------------------------
+											// ----------------------------------------
 										Else 
 											
 											ASSERT:C1129("Unknown color space "+$Obj_color.space)
 											
-											  // ----------------------------------------
+											// ----------------------------------------
 									End case 
 								End if 
 							End if 
@@ -1174,14 +1184,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						
 						If ($Boo_buffer)
 							
-							  // write if there is one named colors (could also do it only if one attribute change)
-							doc_UNLOCK_DIRECTORY (New object:C1471(\
+							// write if there is one named colors (could also do it only if one attribute change)
+							doc_UNLOCK_DIRECTORY(New object:C1471(\
 								"path";$File_.parent.platformPath))
 							$Dom_root.save($File_)
 							$Dom_root.close()
 							$Obj_out.files.push($File_.platformPath)
 							
-							storyboard (New object:C1471(\
+							storyboard(New object:C1471(\
 								"action";"format";\
 								"path";$File_))  // XXX to do it only one time, maybe do it in caller, using the "files"
 							
@@ -1199,10 +1209,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="imageAssetFix")
 			
-			  // remove all empty image asset, and double
+			// remove all empty image asset, and double
 			
 			If (Test path name:C476(String:C10($Obj_in.path))=Is a folder:K24:2)
 				
@@ -1212,16 +1222,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If ($File_.extension=".storyboard")
 						
-						  // read file
-						$Dom_root:=xml ("load";$File_)
+						// read file
+						$Dom_root:=xml("load";$File_)
 						$Boo_buffer:=False:C215
 						
-						  // find named colors
+						// find named colors
 						For each ($Dom_;$Dom_root.findMany("document/resources/image").elements)
 							
 							$Col_:=New collection:C1472
 							
-							  // get  name
+							// get  name
 							$Txt_buffer:=$Dom_.getAttribute("name").value
 							
 							If (Length:C16($Txt_buffer)=0)
@@ -1243,7 +1253,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							End if 
 						End for each 
 						
-						  // Remove empty value attribute of userDefinedRuntimeAttribute with type image
+						// Remove empty value attribute of userDefinedRuntimeAttribute with type image
 						For each ($Dom_;$Dom_root.findByName("userDefinedRuntimeAttribute").elements)
 							
 							C_OBJECT:C1216($Obj_attributes)
@@ -1261,14 +1271,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							End if 
 						End for each 
 						
-						  // write if there is one modification
+						// write if there is one modification
 						If ($Boo_buffer)
 							
 							$Dom_root.save($File_)
 							$Dom_root.close()
 							$Obj_out.files.push($File_.platformPath)
 							
-							storyboard (New object:C1471(\
+							storyboard(New object:C1471(\
 								"action";"format";\
 								"path";$File_))  // XXX to do it only one time, maybe do it in caller, using the "files" and a "set" behaviour
 							
@@ -1286,16 +1296,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="format")
 			
-			  // Reformat storyboard document to follow xcode rules (line ending, attributes order, add missing resources)
+			// Reformat storyboard document to follow xcode rules (line ending, attributes order, add missing resources)
 			
 			If (Value type:C1509($Obj_in.path)=Is text:K8:3)
 				
 				If (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)
 					
-					ASSERT:C1129(dev_Matrix ;"Must not be string, now File")  // Deprecated, maybe be test ...
+					ASSERT:C1129(dev_Matrix;"Must not be string, now File")  // Deprecated, maybe be test ...
 					$Obj_in.path:=File:C1566($Obj_in.path;fk platform path:K87:2)
 					
 				End if 
@@ -1303,19 +1313,19 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			Case of 
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 				: ($Obj_in.path=Null:C1517)
 					
 					$Obj_out.errors:=New collection:C1472("path not defined")
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 				: ($Obj_in.path.exists)
 					
-					  // Use temp file because inplace command do not reformat
+					// Use temp file because inplace command do not reformat
 					$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+".storyboard")
 					$Obj_in.path.copyTo($File_.parent;$File_.name+$File_.extension)
 					
-					$Txt_cmd:="ibtool --upgrade "+str_singleQuoted ($File_.path)+" --write "+str_singleQuoted ($Obj_in.path.path)
+					$Txt_cmd:="ibtool --upgrade "+str_singleQuoted($File_.path)+" --write "+str_singleQuoted($Obj_in.path.path)
 					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 					
 					If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
@@ -1327,7 +1337,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							
 							$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
 							$File_.setText($Txt_out)
-							$Obj_out:=plist (New object:C1471(\
+							$Obj_out:=plist(New object:C1471(\
 								"action";"object";\
 								"domain";$File_.path))
 							$File_.delete()  // delete temporary file
@@ -1335,30 +1345,30 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							If (($Obj_out.success)\
 								 & ($Obj_out.value#Null:C1517))
 								
-								  // errors
+								// errors
 								Case of 
 										
-										  //........................................
+										//........................................
 									: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is collection:K8:32)
 										
 										$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.document.errors"]
 										
-										  //........................................
+										//........................................
 									: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is object:K8:27)
 										
 										$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.document.errors"])
 										
-										  //........................................
+										//........................................
 									: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is collection:K8:32)
 										
 										$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.errors"]
 										
-										  //........................................
+										//........................................
 									: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is object:K8:27)
 										
 										$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.errors"])
 										
-										  //........................................
+										//........................................
 								End case 
 								
 								If (Value type:C1509($Obj_out.errors)=Is collection:K8:32)
@@ -1370,21 +1380,21 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						End if 
 					End if 
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 				Else 
 					
 					$File_.delete()  // delete temporary file
 					$Obj_out.errors:=New collection:C1472("path do not exist")
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 			End case 
 			
-			  //______________________________________________________
+			//______________________________________________________
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="version")
 			
-			  // Get storyboard tool version (could be used to replace in storyboard header)
+			// Get storyboard tool version (could be used to replace in storyboard header)
 			$Txt_cmd:="ibtool --version"
 			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
 			
@@ -1394,7 +1404,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					$File_:=Folder:C1567(Temporary folder:C486;fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
 					$File_.setText($Txt_out)
-					$Obj_out:=plist (New object:C1471(\
+					$Obj_out:=plist(New object:C1471(\
 						"action";"object";\
 						"domain";$File_.path))
 					$File_.delete()
@@ -1408,18 +1418,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				End if 
 			End if 
 			
-			  //________________________________________
+			//________________________________________
 		Else 
 			
 			ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
 			
-			  //________________________________________
+			//________________________________________
 	End case 
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_out
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
