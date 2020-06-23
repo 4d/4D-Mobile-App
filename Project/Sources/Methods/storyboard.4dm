@@ -210,7 +210,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If (Length:C16(String:C10($Obj_element.xpath))>0)
 						
+						//%W-533.1
 						If ($Obj_element.xpath[[1]]#"/")
+							//%W+533.1
 							
 							$Obj_element.xpath:="/"+$Obj_element.xpath
 							
@@ -505,7 +507,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 								
 							: (Length:C16(String:C10($Obj_element.xpath))>0)  // look up with xpath
 								
+								//%W-533.1
 								If ($Obj_element.xpath[[1]]#"/")
+									//%W+533.1
 									
 									$Obj_element.xpath:="/"+$Obj_element.xpath
 									
@@ -636,6 +640,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 						Case of 
 							: (Length:C16(String:C10($Obj_in.template.relation.xpath))>0)
 								
+								//%W-533.1
+								If ($Obj_in.template.relation.xpath[[1]]#"/")
+									//%W+533.1
+									
+									$Obj_in.template.relation.xpath:="/"+$Obj_in.template.relation.xpath
+									
+								End if 
+								
 								$Dom_relation:=$Dom_root.findByXPath(String:C10($Obj_in.template.relation.xpath))
 								$Dom_relation.isDefault:=False:C215
 								$Dom_relation.doNotClose:=True:C214
@@ -723,7 +735,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 							"idCount";3;\
 							"tagInterfix";"SN";\
 							"insertMode";"append")
-						//$Obj_in.template.relation.elements.push($Obj_element)
 						$Obj_element:=New object:C1471(\
 							"insertInto";$Dom_root.findByXPath("/document/scenes");\
 							"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
