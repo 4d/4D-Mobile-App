@@ -292,7 +292,7 @@ Function save
 	
 	var $1
 	var $2;$b : Boolean
-	var $file : Object
+	var $file : 4D:C1709.File
 	
 	If (Count parameters:C259>=2)
 		

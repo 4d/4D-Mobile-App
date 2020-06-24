@@ -15,7 +15,7 @@ Class constructor
 		
 		Super:C1705()
 		
-		// Create an empty canvas
+		// 􀁌 Create an empty canvas
 		This:C1470.new()
 		
 	End if 
@@ -28,84 +28,6 @@ Class constructor
 		"left";"top";\
 		"width";"height";\
 		"codec"))
-	
-/*———————————————————————————————————————————————————————————*/
-Function __target
-	
-	var $0 : Text
-	var $1
-	var $o : Object
-	
-	This:C1470.success:=True:C214
-	
-	Case of 
-			
-			//______________________________________________________
-		: (Count parameters:C259=0)
-			
-			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
-			
-			//______________________________________________________
-		: (Value type:C1509($1)=Is undefined:K8:13)
-			
-			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
-			
-			//______________________________________________________
-		: (Value type:C1509($1)=Is text:K8:3)
-			
-			Case of 
-					
-					//_______________________________
-				: ($1="root")
-					
-					$0:=This:C1470.root
-					
-					//_______________________________
-				: ($1="latest")
-					
-					$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
-					
-					//_______________________________
-				Else 
-					
-					// Find a memorized target
-					$o:=This:C1470.store.query("id=:1";$1).pop()
-					
-					If ($o#Null:C1517)
-						
-						$0:=$o.dom
-						
-					Else 
-						
-						This:C1470.success:=False:C215
-						This:C1470.errors.push("The element \""+$1+"\" doesn't exists")
-						
-					End if 
-					
-					//_______________________________
-			End case 
-			
-			//______________________________________________________
-		: (Value type:C1509($1)=Is object:K8:27)
-			
-			If ($1.target#Null:C1517)
-				
-				$0:=String:C10($1.target)
-				
-			Else 
-				
-				This:C1470.__target("latest")
-				
-			End if 
-			
-			//______________________________________________________
-		Else 
-			
-			This:C1470.success:=False:C215
-			This:C1470.errors.push("Unmanaged type")
-			
-			//______________________________________________________
-	End case 
 	
 /*———————————————————————————————————————————————————————————*/
 Function push  // Keep dom reference for futur
@@ -906,4 +828,84 @@ Function getPicture
 	End if 
 	
 	$0:=$p
+	
+/*——————————————————————————
+        PRIVATE
+——————————————————————————*/
+Function __target
+	
+	var $0 : Text
+	var $1
+	var $o : Object
+	
+	This:C1470.success:=True:C214
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
+			
+			//______________________________________________________
+		: (Value type:C1509($1)=Is undefined:K8:13)
+			
+			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
+			
+			//______________________________________________________
+		: (Value type:C1509($1)=Is text:K8:3)
+			
+			Case of 
+					
+					//_______________________________
+				: ($1="root")
+					
+					$0:=This:C1470.root
+					
+					//_______________________________
+				: ($1="latest")
+					
+					$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
+					
+					//_______________________________
+				Else 
+					
+					// Find a memorized target
+					$o:=This:C1470.store.query("id=:1";$1).pop()
+					
+					If ($o#Null:C1517)
+						
+						$0:=$o.dom
+						
+					Else 
+						
+						This:C1470.success:=False:C215
+						This:C1470.errors.push("The element \""+$1+"\" doesn't exists")
+						
+					End if 
+					
+					//_______________________________
+			End case 
+			
+			//______________________________________________________
+		: (Value type:C1509($1)=Is object:K8:27)
+			
+			If ($1.target#Null:C1517)
+				
+				$0:=String:C10($1.target)
+				
+			Else 
+				
+				This:C1470.__target("latest")
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470.success:=False:C215
+			This:C1470.errors.push("Unmanaged type")
+			
+			//______________________________________________________
+	End case 
 	

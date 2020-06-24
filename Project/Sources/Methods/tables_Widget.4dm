@@ -1,13 +1,13 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : tables_Widget
-  // ID[F05D79A919D64F9C80B35C2D83E03B35]
-  // Created 20-12-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : tables_Widget
+// ID[F05D79A919D64F9C80B35C2D83E03B35]
+// Created 20-12-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_PICTURE:C286($0)
 C_OBJECT:C1216($1)
 C_OBJECT:C1216($2)
@@ -20,19 +20,19 @@ C_OBJECT:C1216($errors;$file;$oDataModel;$oParams;$pathForm;$str)
 C_OBJECT:C1216($svg)
 
 If (False:C215)
-	C_PICTURE:C286(tables_Widget ;$0)
-	C_OBJECT:C1216(tables_Widget ;$1)
-	C_OBJECT:C1216(tables_Widget ;$2)
+	C_PICTURE:C286(tables_Widget;$0)
+	C_OBJECT:C1216(tables_Widget;$1)
+	C_OBJECT:C1216(tables_Widget;$2)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$oDataModel:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If (Count parameters:C259>=2)
 		
 		$oParams:=$2
@@ -60,8 +60,9 @@ If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	$oParams.selectedFill:=ui.colors.backgroundSelectedColor.hex
 	$oParams.selectedStroke:=ui.colors.strokeColor.hex
 	
-	$str:=str ()
+	$str:=str()
 	
+	var $svg : cs:C1710.svg
 	$svg:=cs:C1710.svg.new()
 	
 Else 
@@ -70,12 +71,12 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If ($oDataModel#Null:C1517)
 	
 	$tTypeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(feature.with("newViewUI");"VIEWS";"_o_VIEWS")].selector)=2;"detail";"list")
 	
-/* START HIDING ERRORS */$errors:=err .hide()
+/* START HIDING ERRORS */$errors:=err.hide()
 	
 	var $tFill;$tStroke : Text
 	
@@ -86,27 +87,27 @@ If ($oDataModel#Null:C1517)
 		$tFill:=Choose:C955($bSelected;$oParams.selectedFill;"none")
 		$tStroke:=Choose:C955($bSelected;$oParams.selectedStroke;"none")
 		
-		  // Create a table group. filled according to selected status
+		// Create a table group. filled according to selected status
 		$svg.group("root")\
 			.id($tTable)\
 			.fill($tFill)\
 			.push($tTable)  // Memorize table group address
 		
-		  // Background
+		// Background
 		$svg.rect($oParams.cell.width;$oParams.cell.height;$tTable)\
 			.position($oParams.x;$oParams.y)\
 			.stroke($tFill)
 		
-		  // Put the icon [
+		// Put the icon [
 		If (Form:C1466[$tTypeForm][$tTable].form=Null:C1517)
 			
-			  // No form selected
+			// No form selected
 			$file:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16);fk platform path:K87:2).file("templates/form/"+$tTypeForm+"/defaultLayoutIcon.png")
 			
 		Else 
 			
 			$tFormName:=String:C10(Form:C1466[$tTypeForm][$tTable].form)
-			$pathForm:=tmpl_form ($tFormName;$tTypeForm)
+			$pathForm:=tmpl_form($tFormName;$tTypeForm)
 			
 			If ($pathForm.exists)
 				
@@ -114,7 +115,7 @@ If ($oDataModel#Null:C1517)
 				
 			Else 
 				
-				  // Error
+				// Error
 				$file:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16);fk platform path:K87:2).file("images/errorIcon.svg")
 				
 			End if 
@@ -148,7 +149,7 @@ If ($oDataModel#Null:C1517)
 			
 		End if 
 		
-		  // Avoid too long name
+		// Avoid too long name
 		$tName:=$oDataModel[$tTable][""].shortLabel
 		
 		If (Length:C16($tName)>$oParams.maxChar)
@@ -166,7 +167,7 @@ If ($oDataModel#Null:C1517)
 			.attributes("text-align";"center")\
 			.fill(Choose:C955($bSelected;"dimgray";"dimgray"))
 		
-		  // Border & reactive 'button'
+		// Border & reactive 'button'
 		$svg.rect(Num:C11($oParams.cell.width);Num:C11($oParams.cell.height);$tTable)\
 			.position(Num:C11($oParams.x)+1;Num:C11($oParams.y)+1)\
 			.stroke($tStroke)\
@@ -186,9 +187,9 @@ If (feature.with("debug"))
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$svg.getPicture()
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
