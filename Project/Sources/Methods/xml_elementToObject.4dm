@@ -1,45 +1,42 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-  // ----------------------------------------------------
-  // Project method : xml_elementToObject
-  // ID[EE35EDAF20D24025877FA9FC15284E38]
-  // Created 1-8-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  // Returns an XML element as an object
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : xml_elementToObject
+// ID[EE35EDAF20D24025877FA9FC15284E38]
+// Created 1-8-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// Returns an XML element as an object
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_BOOLEAN:C305($2)
 
-C_BOOLEAN:C305($Boo_references)
-C_LONGINT:C283($Lon_count;$Lon_i;$Lon_parameters)
-C_TEXT:C284($Dom_child;$Dom_elementRef;$Txt_key;$Txt_name;$Txt_value)
-C_OBJECT:C1216($Obj_result)
+C_BOOLEAN:C305($withRef)
+C_LONGINT:C283($count;$i)
+C_TEXT:C284($dom;$key;$name;$node;$tValue)
 
 If (False:C215)
-	C_OBJECT:C1216(xml_elementToObject ;$0)
-	C_TEXT:C284(xml_elementToObject ;$1)
-	C_BOOLEAN:C305(xml_elementToObject ;$2)
+	C_OBJECT:C1216(xml_elementToObject;$0)
+	C_TEXT:C284(xml_elementToObject;$1)
+	C_BOOLEAN:C305(xml_elementToObject;$2)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+// ----------------------------------------------------
+// Initialisations
+If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
 	
-	  // Required parameters
-	$Dom_elementRef:=$1
+	// Required parameters
+	$node:=$1
 	
-	  // Optional parameters
-	If ($Lon_parameters>=2)
+	// Optional parameters
+	If (Count parameters:C259>=2)
 		
-		$Boo_references:=$2
+		$withRef:=$2
 		
 	End if 
 	
-	$Obj_result:=New object:C1471
+	$0:=New object:C1471
 	
 Else 
 	
@@ -47,118 +44,109 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
-  // DOM reference
-If ($Boo_references)
+// ----------------------------------------------------
+// DOM reference
+If ($withRef)
 	
-	$Obj_result["@"]:=$Dom_elementRef
+	$0["@"]:=$node
 	
 End if 
 
-  // For all attributes {
-For ($Lon_i;1;DOM Count XML attributes:C727($Dom_elementRef);1)
+// Attributes
+For ($i;1;DOM Count XML attributes:C727($node);1)
 	
-	DOM GET XML ATTRIBUTE BY INDEX:C729($Dom_elementRef;$Lon_i;$Txt_key;$Txt_value)
+	DOM GET XML ATTRIBUTE BY INDEX:C729($node;$i;$key;$tValue)
 	
 	Case of   // Value types
 			
-			  //______________________________________________________
-		: (Length:C16($Txt_key)=0)
-			  // skip malformed node
+			//______________________________________________________
+		: (Length:C16($key)=0)
 			
-			  //______________________________________________________
-		: (Match regex:C1019("(?m-si)^\\d+\\.*\\d*$";$Txt_value;1))  // Numeric
+			// Skip malformed node
 			
-			$Obj_result[$Txt_key]:=Num:C11($Txt_value;".")
+			//______________________________________________________
+		: (Match regex:C1019("(?m-si)^\\d+\\.*\\d*$";$tValue;1))  // Numeric
 			
-			  //______________________________________________________
-		: (Match regex:C1019("(?mi-s)^true|false$";$Txt_value;1))  // Boolean
+			$0[$key]:=Num:C11($tValue;".")
 			
-			$Obj_result[$Txt_key]:=($Txt_value="true")
+			//______________________________________________________
+		: (Match regex:C1019("(?mi-s)^true|false$";$tValue;1))  // Boolean
 			
-			  //______________________________________________________
+			$0[$key]:=($tValue="true")
+			
+			//______________________________________________________
 		Else   // Text
 			
-			$Obj_result[$Txt_key]:=$Txt_value
+			$0[$key]:=$tValue
 			
-			  //______________________________________________________
+			//______________________________________________________
 	End case 
 End for 
-  //}
 
-  // Value if any {
-DOM GET XML ELEMENT VALUE:C731($Dom_elementRef;$Txt_value)
 
-If (Match regex:C1019("[^\\s]+";$Txt_value;1))
+// Value
+DOM GET XML ELEMENT VALUE:C731($node;$tValue)
+
+If (Match regex:C1019("[^\\s]+";$tValue;1))
 	
-	$Obj_result["$"]:=$Txt_value
+	$0["$"]:=$tValue
 	
 End if 
-  //}
 
-  // Childs if any {
-$Dom_child:=DOM Get first child XML element:C723($Dom_elementRef;$Txt_name)
+// Childs
+$dom:=DOM Get first child XML element:C723($node;$name)
 
 If (OK=1)
 	
-	  // Many one? [
-	$Lon_count:=DOM Count XML elements:C726($Dom_elementRef;$Txt_name)
+	// Many one?
+	$count:=DOM Count XML elements:C726($node;$name)
 	
-	If ($Lon_count>1)  // Yes
+	If ($count>1)  // Yes
 		
-		$Obj_result[$Txt_name]:=New collection:C1472
+		$0[$name]:=New collection:C1472
 		
-		For ($Lon_i;1;$Lon_count;1)
+		For ($i;1;$count;1)
 			
-			$Obj_result[$Txt_name].push(xml_elementToObject (DOM Get XML element:C725($Dom_elementRef;$Txt_name;$Lon_i);$Boo_references))
+			$0[$name].push(xml_elementToObject(DOM Get XML element:C725($node;$name;$i);$withRef))
 			
 		End for 
 		
 	Else   // No
 		
-		$Obj_result[$Txt_name]:=xml_elementToObject ($Dom_child;$Boo_references)
+		$0[$name]:=xml_elementToObject($dom;$withRef)
 		
 	End if 
-	  //]
 	
-	  // Next one, if any
-	$Dom_child:=DOM Get next sibling XML element:C724($Dom_child;$Txt_name)
+	// Next one
+	$dom:=DOM Get next sibling XML element:C724($dom;$name)
 	
 	While (OK=1)
 		
-		  // Already treated?
-		If ($Obj_result[$Txt_name]=Null:C1517)
+		// Already treated?
+		If ($0[$name]=Null:C1517)
 			
-			  // Many one? [
-			$Lon_count:=DOM Count XML elements:C726($Dom_elementRef;$Txt_name)
+			// Many one?
+			$count:=DOM Count XML elements:C726($node;$name)
 			
-			If ($Lon_count>1)  // Yes
+			If ($count>1)  // Yes
 				
-				$Obj_result[$Txt_name]:=New collection:C1472
+				$0[$name]:=New collection:C1472
 				
-				For ($Lon_i;1;$Lon_count;1)
+				For ($i;1;$count;1)
 					
-					$Obj_result[$Txt_name].push(xml_elementToObject (DOM Get XML element:C725($Dom_elementRef;$Txt_name;$Lon_i);$Boo_references))
+					$0[$name].push(xml_elementToObject(DOM Get XML element:C725($node;$name;$i);$withRef))
 					
 				End for 
 				
 			Else   // No
 				
-				$Obj_result[$Txt_name]:=xml_elementToObject ($Dom_child;$Boo_references)
+				$0[$name]:=xml_elementToObject($dom;$withRef)
 				
 			End if 
 		End if 
 		
-		  // Next one, if any
-		$Dom_child:=DOM Get next sibling XML element:C724($Dom_child;$Txt_name)
+		// Next one
+		$dom:=DOM Get next sibling XML element:C724($dom;$name)
 		
 	End while 
 End if 
-  //}
-
-  // ----------------------------------------------------
-  // Return
-$0:=$Obj_result
-
-  // ----------------------------------------------------
-  // End

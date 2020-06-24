@@ -1,0 +1,1 @@
+﻿<!----------------------------------------------------Object := xml_elementToObject ( node ; withRef ) -> node (Text) -> withRef (Boolean)-->Object := xml_elementToObject ( node ; withRef )

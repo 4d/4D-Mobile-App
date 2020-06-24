@@ -5,16 +5,17 @@ Class extends xml
 
 Class constructor
 	
-	C_VARIANT:C1683($1)
+	var $1
 	
 	If (Count parameters:C259>0)
 		
-		//This.load($1)
 		Super:C1705($1)
 		
 	Else 
 		
 		Super:C1705()
+		
+		// Create an empty canvas
 		This:C1470.new()
 		
 	End if 
@@ -28,22 +29,19 @@ Class constructor
 		"width";"height";\
 		"codec"))
 	
-	//This.target:=Formula(Choose($1.target=Null;Choose(This.latest#Null;This.latest;This.root);String($1.target)))
-	
 /*———————————————————————————————————————————————————————————*/
 Function __target
 	
-	C_TEXT:C284($0)
-	C_VARIANT:C1683($1)
-	
-	C_OBJECT:C1216($o)
+	var $0 : Text
+	var $1
+	var $o : Object
 	
 	This:C1470.success:=True:C214
 	
 	Case of 
 			
 			//______________________________________________________
-		: (Count parameters:C259<1)
+		: (Count parameters:C259=0)
 			
 			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
 			
@@ -112,8 +110,8 @@ Function __target
 /*———————————————————————————————————————————————————————————*/
 Function push  // Keep dom reference for futur
 	
-	C_OBJECT:C1216($0)
-	C_TEXT:C284($1)
+	var $0 : Object
+	var $1 : Text
 	
 	If (Count parameters:C259>=1)
 		
@@ -144,10 +142,8 @@ Function push  // Keep dom reference for futur
 /*———————————————————————————————————————————————————————————*/
 Function fetch  // Retrieve a stored dom reference
 	
-	C_TEXT:C284($0)
-	C_TEXT:C284($1)
-	
-	C_OBJECT:C1216($o)
+	var $0;$1 : Text
+	var $o : Object
 	
 	If (Count parameters:C259>=1)
 		
@@ -175,10 +171,8 @@ Function fetch  // Retrieve a stored dom reference
 /*———————————————————————————————————————————————————————————*/
 Function new  // Create a default SVG structure
 	
-	C_OBJECT:C1216($0)
-	C_OBJECT:C1216($1)
-	
-	C_TEXT:C284($node;$t)
+	var $0;$1 : Object
+	var $node;$t : Text
 	
 	This:C1470.close()  // Release memory
 	
@@ -264,24 +258,27 @@ Function new  // Create a default SVG structure
 /*———————————————————————————————————————————————————————————*/
 Function id
 	
-	C_TEXT:C284($1)
+	var $1;$node : Text
 	
-	C_TEXT:C284($node)
 	$node:=This:C1470.__target()
 	
 	DOM SET XML ATTRIBUTE:C866($node;"id";$1)
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function preview  // Alias show()
+	
+	This:C1470.show()
 	
 /*———————————————————————————————————————————————————————————*/
 Function show  // Show in 4D SVG Viewer
 	
-	
 	//#TO_DO: Should test if the component is available
 	EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER";*;This:C1470.root)
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -327,32 +324,23 @@ Function rect
 	
 	This:C1470.success:=Bool:C1537(OK)
 	
-	//If (Count parameters>2)\
-																				 & (This.success)
-	
-	//This.attributes($3)
-	
-	//End if 
-	
-	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function square
 	
-	C_OBJECT:C1216($0)
 	C_VARIANT:C1683($1)
 	C_VARIANT:C1683($2)
 	
 	This:C1470.rect($1;Null:C1517;$2)
 	
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function group
 	
-	C_OBJECT:C1216($0)
 	C_VARIANT:C1683($1)  // text | object
 	
 	C_TEXT:C284($node)
@@ -374,6 +362,7 @@ Function group
 		
 	End if 
 	
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -420,7 +409,7 @@ Function position
 		
 	End if 
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -496,13 +485,12 @@ Function dimensions
 		End case 
 	End if 
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function attributes
 	
-	C_OBJECT:C1216($0)
 	C_VARIANT:C1683($1)  // object | attribute
 	C_VARIANT:C1683($2)  // Value
 	
@@ -557,6 +545,7 @@ Function attributes
 		
 	End if 
 	
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -589,7 +578,7 @@ Function fill
 		
 	End if 
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -612,7 +601,7 @@ Function stroke
 	DOM SET XML ATTRIBUTE:C866($node;\
 		"stroke";$1)
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -644,7 +633,7 @@ Function fillOpacity
 		
 	End if 
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -700,7 +689,7 @@ Function embedPicture
 		
 	End if 
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -768,7 +757,7 @@ Function image
 		
 	End if 
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -838,7 +827,7 @@ Function textArea
 		
 	End if 
 	
-	C_OBJECT:C1216($0)
+	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/

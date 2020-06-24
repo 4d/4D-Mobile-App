@@ -5,8 +5,6 @@ Class constructor
 	This:C1470.root:=Null:C1517
 	This:C1470.autoClose:=True:C214
 	This:C1470.success:=False:C215
-	This:C1470.xml:=Null:C1517
-	This:C1470.origin:=Null:C1517
 	This:C1470.file:=Null:C1517
 	This:C1470.errors:=New collection:C1472
 	
@@ -19,12 +17,62 @@ Class constructor
 /*———————————————————————————————————————————————————————————*/
 Function new
 	
-	var $1;$2 : Text
-	If (Count parameters:C259>=1)
+	var $1;$2;${3} : Text
+	var $l : Integer
+	$l:=Count parameters:C259
+	
+	If ($l>=1)
 		
-		If (Count parameters:C259>=2)
+		If ($l>=2)
 			
-			This:C1470.root:=DOM Create XML Ref:C861($1;$2)
+			Case of 
+					
+					//……………………………………………………………………………………………
+				: (($l%2)#0)
+					
+					This:C1470.errors.push("Unbalanced key/value pairs")
+					OK:=0
+					
+					//……………………………………………………………………………………………
+				: ($l=2)
+					
+					This:C1470.root:=DOM Create XML Ref:C861($1;$2)
+					
+					//……………………………………………………………………………………………
+				: ($l=4)
+					
+					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4)
+					
+					//……………………………………………………………………………………………
+				: ($l=6)
+					
+					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4;$5;$6)
+					
+					//……………………………………………………………………………………………
+				: ($l=8)
+					
+					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4;$5;$6;$7;$8)
+					
+					//……………………………………………………………………………………………
+				: ($l=10)
+					
+					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4;$5;$6;$7;$8;$9;$10)
+					
+					//……………………………………………………………………………………………
+				: ($l=12)
+					
+					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4;$5;$6;$7;$8;$9;$10;$11;$12)
+					
+					//______________________________________________________
+				Else 
+					
+					This:C1470.errors.push("Unmanaged number of  key/value structures (max = 5)")
+					OK:=0
+					
+					//______________________________________________________
+			End case 
+			
+			This:C1470.success:=Bool:C1537(OK)
 			
 		Else 
 			
@@ -42,23 +90,128 @@ Function new
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function load  // Load a variable or a file
+Function setOption
+	
+	var $1;$2 : Integer
+	var $0 : Object
+	
+	This:C1470.success:=(Count parameters:C259=2)
+	
+	If (This:C1470.success)
+		
+		XML SET OPTIONS:C1090(This:C1470.root;$1;$2)
+		
+	Else 
+		
+		This:C1470.errors.push("Unbalanced selector/value pairs")
+		
+	End if 
+	
+	var $0 : Object
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function setOptions
+	
+	var $1;$2;${3};$i : Integer
+	
+	This:C1470.success:=((Count parameters:C259%2)=0)
+	
+	If (This:C1470.success)
+		
+		For ($i;1;Count parameters:C259;2)
+			
+			XML SET OPTIONS:C1090(This:C1470.root;${$i};${$i+1})
+			
+		End for 
+		
+	Else 
+		
+		This:C1470.errors.push("Unbalanced selector/value pairs")
+		
+	End if 
+	
+	var $0 : Object
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function parse  // Parse a variable (TEXT or BLOB) 
+	
+	var $0 : Object
+	var $1
+	var $2 : Boolean
+	var $3 : Text
+	
+	Case of 
+			
+			//……………………………………………………………………………………………
+		: (Count parameters:C259=0)
+			
+			$0:=This:C1470.load()
+			
+			//……………………………………………………………………………………………
+		: (Count parameters:C259=1)
+			
+			$0:=This:C1470.load($1)
+			
+			//……………………………………………………………………………………………
+		: (Count parameters:C259=2)
+			
+			$0:=This:C1470.load($1;$2)
+			
+			//……………………………………………………………………………………………
+		Else 
+			
+			$0:=This:C1470.load($1;$2;$3)
+			
+			//……………………………………………………………………………………………
+	End case 
+	
+/*———————————————————————————————————————————————————————————*/
+Function load  // Load a variable (TEXT or BLOB) or a file
 	
 	var $1
-	
-	var $node : Text
+	var $2 : Boolean
+	var $3;$node : Text
+	var $l : Integer
 	
 	This:C1470.close()  // Release memory
 	
+	$l:=Count parameters:C259
+	
 	Case of 
+			
+			//______________________________________________________
+		: ($l=0)
+			
+			This:C1470.success:=False:C215
+			This:C1470.errors.push("Missing the target to load")
 			
 			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)\
 			 | (Value type:C1509($1)=Is BLOB:K8:12)  // Parse a given variable
 			
-			$node:=DOM Parse XML variable:C720($1)
-			This:C1470.success:=Bool:C1537(OK)
+			Case of 
+					
+					//……………………………………………………………………………………………
+				: ($l=1)
+					
+					$node:=DOM Parse XML variable:C720($1)
+					
+					//……………………………………………………………………………………………
+				: ($l=2)
+					
+					$node:=DOM Parse XML variable:C720($1;$2)
+					
+					//……………………………………………………………………………………………
+				Else 
+					
+					$node:=DOM Parse XML variable:C720($1;$2;$3)
+					
+					//……………………………………………………………………………………………
+			End case 
 			
+			This:C1470.success:=Bool:C1537(OK)
 			CLEAR VARIABLE:C89($1)
 			
 			If (This:C1470.success)
@@ -82,13 +235,32 @@ Function load  // Load a variable or a file
 				
 				If (This:C1470.success)
 					
-					$node:=DOM Parse XML source:C719($1.platformPath)
+					Case of 
+							
+							//……………………………………………………………………………………………
+						: ($l=1)
+							
+							$node:=DOM Parse XML source:C719($1.platformPath)
+							
+							//……………………………………………………………………………………………
+						: ($l=2)
+							
+							$node:=DOM Parse XML source:C719($1.platformPath;$2)
+							
+							//……………………………………………………………………………………………
+						Else 
+							
+							$node:=DOM Parse XML source:C719($1.platformPath;$2;$3)
+							
+							//……………………………………………………………………………………………
+					End case 
+					
 					This:C1470.success:=Bool:C1537(OK)
 					
 					If (This:C1470.success)
 						
 						This:C1470.root:=$node
-						This:C1470.origin:=$1
+						This:C1470.file:=$1
 						
 					End if 
 					
@@ -175,8 +347,11 @@ Function save
 		End if 
 	End if 
 	
+	var $0 : Object
+	$0:=This:C1470
+	
 /*———————————————————————————————————————————————————————————*/
-Function close  // Close XML tree
+Function close  // Close the XML tree
 	
 	If (This:C1470.root#Null:C1517)
 		
@@ -189,7 +364,7 @@ Function close  // Close XML tree
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function getText
+Function getText  //return the  XML tree as text
 	
 	var $0;$t : Text
 	var $1 : Boolean
@@ -198,8 +373,6 @@ Function getText
 	This:C1470.success:=Bool:C1537(OK)
 	
 	If (This:C1470.success)
-		
-		This:C1470.xml:=$t
 		
 		If (Count parameters:C259>=1)
 			
@@ -213,12 +386,56 @@ Function getText
 		
 	Else 
 		
-		This:C1470.xml:=Null:C1517
 		This:C1470.errors.push("Failed to export XML to text.")
 		
 	End if 
 	
 	$0:=$t
+	
+/*———————————————————————————————————————————————————————————*/
+Function getBlob  // Return the  XML tree as BLOB
+	
+	var $0;$x : Blob
+	var $1 : Boolean
+	
+	DOM EXPORT TO VAR:C863(This:C1470.root;$x)
+	This:C1470.success:=Bool:C1537(OK)
+	
+	If (This:C1470.success)
+		
+		If (Count parameters:C259>=1)
+			
+			This:C1470.__close($1)
+			
+		Else 
+			
+			This:C1470.__close()
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.errors.push("Failed to export XML to text.")
+		
+	End if 
+	
+	$0:=$x
+	
+/*———————————————————————————————————————————————————————————*/
+Function toObject
+	
+	var $0 : Object
+	var $1 : Boolean
+	
+	If (Count parameters:C259=2)
+		
+		$0:=xml_elementToObject(This:C1470.root;$1)
+		
+	Else 
+		
+		$0:=xml_elementToObject(This:C1470.root)
+		
+	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function findById
