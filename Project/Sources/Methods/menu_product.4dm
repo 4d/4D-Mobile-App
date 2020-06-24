@@ -7,15 +7,15 @@ $Obj_project:=(OBJECT Get pointer:C1124(Object named:K67:5;"project"))->
 
 Case of 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: (Length:C16($Mnu_choice)=0)
 		
-		  // NOTHING MORE TO DO
+		// NOTHING MORE TO DO
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="buildAndRun")
 		
-		project_BUILD (New object:C1471(\
+		project_BUILD(New object:C1471(\
 			"caller";Current form window:C827;\
 			"project";$Obj_project;\
 			"create";True:C214;\
@@ -23,10 +23,10 @@ Case of
 			"run";True:C214;\
 			"verbose";True:C214))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="create")
 		
-		project_BUILD (New object:C1471(\
+		project_BUILD(New object:C1471(\
 			"caller";Current form window:C827;\
 			"project";$Obj_project;\
 			"create";True:C214;\
@@ -34,10 +34,10 @@ Case of
 			"run";False:C215;\
 			"verbose";True:C214))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="build")
 		
-		project_BUILD (New object:C1471(\
+		project_BUILD(New object:C1471(\
 			"caller";Current form window:C827;\
 			"project";$Obj_project;\
 			"create";False:C215;\
@@ -45,10 +45,10 @@ Case of
 			"run";True:C214;\
 			"verbose";True:C214))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="run")
 		
-		project_BUILD (New object:C1471(\
+		project_BUILD(New object:C1471(\
 			"caller";Current form window:C827;\
 			"project";$Obj_project;\
 			"create";False:C215;\
@@ -56,18 +56,18 @@ Case of
 			"run";True:C214;\
 			"verbose";True:C214))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="reveal")
 		
-		SHOW ON DISK:C922(path .products().folder($Obj_project.product.name).platformPath)
+		SHOW ON DISK:C922(path.products().folder($Obj_project.product.name).platformPath)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="xcdatamodel")
 		
 		C_TEXT:C284($Txt_path)
 		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
 		
-		dataModel (New object:C1471(\
+		dataModel(New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\
 			"flat";False:C215;\
@@ -76,10 +76,10 @@ Case of
 		
 		SHOW ON DISK:C922($Txt_path)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="dataSet")
 		
-		dataSet (New object:C1471(\
+		dataSet(New object:C1471(\
 			"action";"erase";\
 			"project";$Obj_project))
 		
@@ -87,44 +87,22 @@ Case of
 			WEB START SERVER:C617
 		End if 
 		
-		If (feature.with("setImageDump"))
-			
-			$Obj_result:=dataSet (New object:C1471(\
-				"action";"create";\
-				"project";$Obj_project;\
-				"digest";True:C214;\
-				"dataSet";True:C214;\
-				"key";path .key().platformPath;\
-				"caller";Current form window:C827;\
-				"verbose";True:C214))
-			
-			
-			
-		Else 
-			
-			$Obj_result:=dataSet (New object:C1471(\
-				"action";"create";\
-				"project";$Obj_project;\
-				"digest";True:C214;\
-				"dataSet";True:C214;\
-				"key";path .key().platformPath;\
-				"caller";Current form window:C827;\
-				"verbose";True:C214;\
-				"picture";Not:C34(Bool:C1537(feature._97117))))
-			
-		End if 
+		$Obj_result:=dataSet(New object:C1471(\
+			"action";"create";\
+			"project";$Obj_project;\
+			"digest";True:C214;\
+			"dataSet";True:C214;\
+			"key";path.key().platformPath;\
+			"caller";Current form window:C827;\
+			"verbose";True:C214))
 		
-		If (Not:C34($Obj_result.success))
-			
-		End if 
-		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="coreDataSet")
 		
 		C_TEXT:C284($Txt_path)
 		$Txt_path:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
 		
-		$Obj_result:=dataModel (New object:C1471(\
+		$Obj_result:=dataModel(New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\
 			"flat";False:C215;\
@@ -132,37 +110,22 @@ Case of
 			"path";$Txt_path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
 		
 		If (Not:C34(WEB Is server running:C1313))
+			
 			WEB START SERVER:C617
-		End if 
-		
-		If (feature.with("setImageDump"))
-			
-			$Obj_result:=dataSet (New object:C1471(\
-				"action";"create";\
-				"project";$Obj_project;\
-				"digest";True:C214;\
-				"dataSet";True:C214;\
-				"path";$Txt_path;\
-				"key";path .key().platformPath;\
-				"caller";Current form window:C827;\
-				"verbose";True:C214))
-			
-		Else 
-			
-			$Obj_result:=dataSet (New object:C1471(\
-				"action";"create";\
-				"project";$Obj_project;\
-				"digest";True:C214;\
-				"dataSet";True:C214;\
-				"path";$Txt_path;\
-				"key";path .key().platformPath;\
-				"caller";Current form window:C827;\
-				"verbose";True:C214;\
-				"picture";Not:C34(Bool:C1537(feature._97117))))
 			
 		End if 
 		
-		$Obj_result:=dataSet (New object:C1471(\
+		$Obj_result:=dataSet(New object:C1471(\
+			"action";"create";\
+			"project";$Obj_project;\
+			"digest";True:C214;\
+			"dataSet";True:C214;\
+			"path";$Txt_path;\
+			"key";path.key().platformPath;\
+			"caller";Current form window:C827;\
+			"verbose";True:C214))
+		
+		$Obj_result:=dataSet(New object:C1471(\
 			"action";"coreData";\
 			"removeAsset";True:C214;\
 			"caller";Current form window:C827;\
@@ -171,10 +134,10 @@ Case of
 		
 		SHOW ON DISK:C922($Txt_path)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown menu action ("+$Mnu_choice+")")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 

@@ -1,16 +1,16 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-  // ----------------------------------------------------
-  // Project method : mobile_Project
-  // ID[11266537E65642B19D01235BDDCA03AB]
-  // Created 22-6-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Modified by Vincent de Lachaux (04/08/17)
-  // Make thread-safe
-  // ----------------------------------------------------
-  // Description:
-  // Manage creation, build and test run of a (iOS) project
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : mobile_Project
+// ID[11266537E65642B19D01235BDDCA03AB]
+// Created 22-6-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Modified by Vincent de Lachaux (04/08/17)
+// Make thread-safe
+// ----------------------------------------------------
+// Description:
+// Manage creation, build and test run of a (iOS) project
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
@@ -22,35 +22,35 @@ C_OBJECT:C1216($Obj_project;$Obj_result_build;$Obj_result_device;$Obj_server;$Ob
 C_OBJECT:C1216($Obj_parameters;$Path_manifest;$Folder_destination)
 
 If (False:C215)
-	C_OBJECT:C1216(mobile_Project ;$0)
-	C_OBJECT:C1216(mobile_Project ;$1)
+	C_OBJECT:C1216(mobile_Project;$0)
+	C_OBJECT:C1216(mobile_Project;$1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	
-	  // NO PARAMETERS REQUIRED
+	// NO PARAMETERS REQUIRED
 	$Boo_dev:=Not:C34(Is compiled mode:C492)
 	
-	$Obj_cache:=env_userPathname ("cache")
+	$Obj_cache:=env_userPathname("cache")
 	$Obj_cache.create()
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=1)
 		
 		$Obj_in:=$1
 		
-		  // Add choice lists if any to action parameters
+		// Add choice lists if any to action parameters
 		
-		actions ("addChoiceList";$Obj_in)
+		actions("addChoiceList";$Obj_in)
 		
 		If ($Boo_dev)
 			
-			  // Cache the last build for debug purpose
-			ob_writeToFile ($Obj_in;$Obj_cache.file("lastBuild.4dmobile");True:C214)
+			// Cache the last build for debug purpose
+			ob_writeToFile($Obj_in;$Obj_cache.file("lastBuild.4dmobile");True:C214)
 			
 		End if 
 		
@@ -58,16 +58,16 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 		If ($Boo_dev)
 			
-			  // IF no parameters, load from previous launched file
+			// IF no parameters, load from previous launched file
 			If (SHARED=Null:C1517)
 				
 				RECORD.warning("SHARED=Null")
 				RECORD.trace()
-				COMPONENT_INIT 
+				COMPONENT_INIT
 				
 			End if 
 			
-			$Obj_in:=ob_parseFile ($Obj_cache.file("lastBuild.4dmobile")).value
+			$Obj_in:=ob_parseFile($Obj_cache.file("lastBuild.4dmobile")).value
 			
 		End if 
 	End if 
@@ -83,7 +83,7 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 
 If (Asserted:C1132($Obj_in.project#Null:C1517))
 	
@@ -91,7 +91,7 @@ If (Asserted:C1132($Obj_in.project#Null:C1517))
 	
 End if 
 
-  // Cleanup
+// Cleanup
 var $t;$tt : Text
 
 For each ($t;$Obj_project)
@@ -119,12 +119,12 @@ End for each
 
 If ($Obj_in.create=Null:C1517)
 	
-	  // Default create if not defined
+	// Default create if not defined
 	$Obj_in.create:=True:C214
 	
 End if 
 
-POST_FORM_MESSAGE (New object:C1471(\
+POST_FORM_MESSAGE(New object:C1471(\
 "target";$Obj_in.caller;\
 "action";"show";\
 "type";"progress";\
@@ -132,12 +132,12 @@ POST_FORM_MESSAGE (New object:C1471(\
 
 If ($Obj_in.create)
 	
-	POST_FORM_MESSAGE (New object:C1471(\
+	POST_FORM_MESSAGE(New object:C1471(\
 		"target";$Obj_in.caller;\
 		"additional";"waitingForXcode"))
 	
-	  // Must also close and delete folders if no change and want to recreate.
-	Xcode (New object:C1471(\
+	// Must also close and delete folders if no change and want to recreate.
+	Xcode(New object:C1471(\
 		"action";"safeDelete";\
 		"path";$Obj_in.path))
 	
@@ -149,7 +149,7 @@ If ($Obj_in.create)
 		
 	End if 
 	
-	  // We need to reload data after login?
+	// We need to reload data after login?
 	If ($Obj_project.server.authentication=Null:C1517)
 		
 		$Obj_project.server.authentication:=New object:C1471
@@ -158,7 +158,7 @@ If ($Obj_in.create)
 	
 	$Obj_project.server.authentication.reloadData:=False:C215
 	
-	  // If there is filter with parameters reload data after auth
+	// If there is filter with parameters reload data after auth
 	For each ($Txt_buffer;$Obj_project.dataModel)
 		
 		If (Value type:C1509($Obj_project.dataModel[$Txt_buffer][""].filter)=Is object:K8:27)
@@ -171,7 +171,7 @@ If ($Obj_in.create)
 		End if 
 	End for each 
 	
-	  // Other criteria like there is no embedded for one table ?
+	// Other criteria like there is no embedded for one table ?
 	If (Not:C34($Obj_project.server.authentication.reloadData))
 		
 		For each ($Txt_buffer;$Obj_project.dataModel)
@@ -184,15 +184,15 @@ If ($Obj_in.create)
 		End for each 
 	End if 
 	
-	  //===============================================================
+	//===============================================================
 	
-	  // Create tags object for template {
+	// Create tags object for template {
 	$Obj_tags:=SHARED.tags
 	
 	$Obj_tags.product:=$Obj_project.$project.product
 	$Obj_tags.packageName:=$Obj_tags.product
 	
-	  // Project file tags
+	// Project file tags
 	$Obj_tags.bundleIdentifier:=$Obj_project.product.bundleIdentifier
 	$Obj_tags.company:=$Obj_project.organization.name
 	
@@ -202,7 +202,7 @@ If ($Obj_in.create)
 		
 	End if 
 	
-	  // Info plist tags
+	// Info plist tags
 	$Obj_tags.displayName:=$Obj_project.product.name
 	$Obj_tags.version:=$Obj_project.product.version
 	
@@ -212,7 +212,7 @@ If ($Obj_in.create)
 		
 		If (Not:C34(Match regex:C1019("(?i-ms)http[s]?://";$Obj_tags.prodUrl;1)))
 			
-			  // Default to http
+			// Default to http
 			$Obj_tags.prodUrl:="http://"+$Obj_tags.prodUrl
 			
 		End if 
@@ -224,22 +224,22 @@ If ($Obj_in.create)
 	
 	Case of 
 			
-			  //________________________________________
+			//________________________________________
 		: (Bool:C1537($Obj_server.security.HTTPEnabled))  // priority for http
 			
 			$Obj_tags.serverScheme:="http"
 			
-			  //________________________________________
+			//________________________________________
 		: (Bool:C1537($Obj_server.security.HTTPSEnabled))  // only https, use it
 			
 			$Obj_tags.serverScheme:="https"
 			
-			  //________________________________________
+			//________________________________________
 		Else 
 			
 			$Obj_tags.serverScheme:=""  // default: let mobile app defined default?
 			
-			  //________________________________________
+			//________________________________________
 	End case 
 	
 	$Obj_tags.serverUrls:=$Obj_server.options.webIPAddressToListen.join(",";ck ignore null or empty:K85:5)
@@ -247,24 +247,24 @@ If ($Obj_in.create)
 	$Obj_tags.serverAuthenticationEmail:=Choose:C955(Bool:C1537($Obj_project.server.authentication.email);"true";"false")  // plist bool format
 	$Obj_tags.serverAuthenticationReloadData:=Choose:C955(Bool:C1537($Obj_project.server.authentication.reloadData);"true";"false")  // plist bool format
 	
-	  // Source files tags
+	// Source files tags
 	$Obj_tags.copyright:=$Obj_project.product.copyright
 	$Obj_tags.fullname:=$Obj_project.developer.name
 	$Obj_tags.date:=String:C10(Current date:C33;Date RFC 1123:K1:11;Current time:C178);
 	
-	  // Scripts
+	// Scripts
 	$Obj_tags.xCodeVersion:=$Obj_project.$project.xCode.version
 	
-	  // Navigation tags
+	// Navigation tags
 	$Obj_tags.navigationTitle:=$Obj_project.main.navigationTitle
 	$Obj_tags.navigationType:=$Obj_project.main.navigationType
 	$Obj_tags.navigationTransition:=$Obj_project.ui.navigationTransition
-	  //}
+	//}
 	
-	  // Launchscreen
+	// Launchscreen
 	$Obj_tags.launchScreenBackgroundColor:=SHARED.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
 	
-	  // App manifest =================================================
+	// App manifest =================================================
 	C_OBJECT:C1216($appManifest;$appFolder)
 	$appManifest:=New object:C1471(\
 		"application";New object:C1471("id";$Obj_project.product.bundleIdentifier;"name";$Obj_project.product.name);\
@@ -272,31 +272,31 @@ If ($Obj_in.create)
 		"info";$Obj_project.info)
 	$appManifest.id:=String:C10($appManifest.team.id)+"."+$appManifest.application.id
 	
-	  //#ACI0100704
+	//#ACI0100704
 	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18;*).folder($appManifest.id)
 	
 	If (Not:C34($appFolder.exists))
 		$appFolder.create()
 	End if 
 	$appFolder.file("manifest.json").setText(JSON Stringify:C1217($appManifest;*))
-	  //===============================================================
+	//===============================================================
 	
-	POST_FORM_MESSAGE (New object:C1471(\
+	POST_FORM_MESSAGE(New object:C1471(\
 		"target";$Obj_in.caller;\
 		"additional";"decompressionOfTheSdk"))
 	
-	  // Target folder
+	// Target folder
 	$Obj_out.path:=$Obj_in.path
 	$Folder_destination:=Folder:C1567($Obj_in.path;fk platform path:K87:2)
 	$Folder_destination.create()
 	
-	ob_writeToFile ($Obj_in;$Folder_destination.file("project.4dmobile");True:C214)
+	ob_writeToFile($Obj_in;$Folder_destination.file("project.4dmobile");True:C214)
 	
-	$Dir_template:=COMPONENT_Pathname ("templates").folder($Obj_in.template)
+	$Dir_template:=COMPONENT_Pathname("templates").folder($Obj_in.template)
 	
 	If (Asserted:C1132($Dir_template.file("manifest.json").exists))
 		
-		$Obj_template:=ob_parseFile ($Dir_template.file("manifest.json")).value
+		$Obj_template:=ob_parseFile($Dir_template.file("manifest.json")).value
 		
 	End if 
 	
@@ -305,64 +305,64 @@ If ($Obj_in.create)
 	
 	$Obj_template.source:=$Dir_template.platformPath
 	$Obj_template.assets.target:=$Obj_in.path+Convert path POSIX to system:C1107($Obj_template.assets.path)+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
-	$Obj_template.assets.source:=COMPONENT_Pathname ("projects").platformPath+$Obj_project.$project.product+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
+	$Obj_template.assets.source:=COMPONENT_Pathname("projects").platformPath+$Obj_project.$project.product+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
 	
-	$Obj_out.sdk:=sdk (New object:C1471(\
+	$Obj_out.sdk:=sdk(New object:C1471(\
 		"action";"install";\
-		"file";COMPONENT_Pathname ("sdk").platformPath+$Obj_template.sdk.version+".zip";\
+		"file";COMPONENT_Pathname("sdk").platformPath+$Obj_template.sdk.version+".zip";\
 		"target";$Obj_in.path;\
-		"cache";sdk (New object:C1471("action";"cacheFolder")).platformPath))
+		"cache";sdk(New object:C1471("action";"cacheFolder")).platformPath))
 	
 	$Obj_tags.sdkVersion:=String:C10($Obj_out.sdk.version)
 	
 	If ($Obj_out.sdk.success)
 		
-		  // ----------------------------------------------------
-		  // TEMPLATE
-		  // ----------------------------------------------------
+		// ----------------------------------------------------
+		// TEMPLATE
+		// ----------------------------------------------------
 		
-		POST_FORM_MESSAGE (New object:C1471(\
+		POST_FORM_MESSAGE(New object:C1471(\
 			"target";$Obj_in.caller;\
 			"additional";"workspaceCreation"))
 		
-		  // I need a map, string -> format
-		$Obj_out.formatters:=formatters (New object:C1471("action";"getByName")).formatters
+		// I need a map, string -> format
+		$Obj_out.formatters:=formatters(New object:C1471("action";"getByName")).formatters
 		
-		  // Duplicate the template {
-		$Obj_out.template:=templates (New object:C1471(\
+		// Duplicate the template {
+		$Obj_out.template:=templates(New object:C1471(\
 			"template";$Obj_template;\
 			"path";$Obj_in.path;\
 			"tags";$Obj_tags;\
 			"formatters";$Obj_out.formatters;\
 			"project";$Obj_project))
-		ob_error_combine ($Obj_out;$Obj_out.template)
+		ob_error_combine($Obj_out;$Obj_out.template)
 		
 		$Obj_out.projfile:=$Obj_out.template.projfile
-		ob_removeProperty ($Obj_out.template;"projfile")  // redundant information
+		ob_removeProperty($Obj_out.template;"projfile")  // redundant information
 		
-		  // Add some asset fix (could optimize by merging fix)
-		$Obj_out.colorAssetFix:=storyboard (New object:C1471(\
+		// Add some asset fix (could optimize by merging fix)
+		$Obj_out.colorAssetFix:=storyboard(New object:C1471(\
 			"action";"colorAssetFix";\
 			"path";$Obj_in.path+"Sources"+Folder separator:K24:12+"Forms";\
 			"theme";$Obj_out.template.theme))
-		ob_error_combine ($Obj_out;$Obj_out.colorAssetFix)
+		ob_error_combine($Obj_out;$Obj_out.colorAssetFix)
 		
-		$Obj_out.imageAssetFix:=storyboard (New object:C1471(\
+		$Obj_out.imageAssetFix:=storyboard(New object:C1471(\
 			"action";"imageAssetFix";\
 			"path";$Obj_in.path+"Sources"+Folder separator:K24:12+"Forms"))
-		ob_error_combine ($Obj_out;$Obj_out.imageAssetFix)
+		ob_error_combine($Obj_out;$Obj_out.imageAssetFix)
 		
-		  //}
+		//}
 		
-		  // Set writable target directory with all its subfolders and files
-		doc_UNLOCK_DIRECTORY (New object:C1471(\
+		// Set writable target directory with all its subfolders and files
+		doc_UNLOCK_DIRECTORY(New object:C1471(\
 			"path";$Obj_in.path))
 		
-		  // ----------------------------------------------------
-		  // STRUCTURE & DATA
-		  // ----------------------------------------------------
+		// ----------------------------------------------------
+		// STRUCTURE & DATA
+		// ----------------------------------------------------
 		
-		  // Create catalog and data files {
+		// Create catalog and data files {
 		If ($Obj_in.structureAdjustments=Null:C1517)
 			
 			$Obj_in.structureAdjustments:=Bool:C1537($Obj_in.test)  // default value for test
@@ -371,33 +371,33 @@ If ($Obj_in.create)
 		
 		If (Bool:C1537($Obj_in.structureAdjustments))
 			
-			$Obj_out.structureAdjustments:=structure (New object:C1471(\
+			$Obj_out.structureAdjustments:=structure(New object:C1471(\
 				"action";"create";\
-				"tables";dataModel (New object:C1471(\
+				"tables";dataModel(New object:C1471(\
 				"action";"tableNames";\
 				"dataModel";$Obj_project.dataModel;\
 				"relation";True:C214)).values))
 			
 		End if 
 		
-		$Obj_out.dump:=dataSet (New object:C1471(\
+		$Obj_out.dump:=dataSet(New object:C1471(\
 			"action";"check";\
 			"digest";True:C214;\
 			"project";$Obj_project))
-		ob_error_combine ($Obj_out;$Obj_out.dump)
+		ob_error_combine($Obj_out;$Obj_out.dump)
 		
 		If (Bool:C1537($Obj_out.dump.exists))
 			
 			If (Not:C34($Obj_out.dump.valid) | Not:C34(Bool:C1537($Obj_project.dataSource.doNotGenerateDataAtEachBuild)))
 				
-				$Obj_out.dump:=dataSet (New object:C1471(\
+				$Obj_out.dump:=dataSet(New object:C1471(\
 					"action";"erase";\
 					"project";$Obj_project))
 				
 			End if 
 		End if 
 		
-		$Obj_out.dump:=dataSet (New object:C1471(\
+		$Obj_out.dump:=dataSet(New object:C1471(\
 			"action";"check";\
 			"digest";False:C215;\
 			"project";$Obj_project))
@@ -406,17 +406,17 @@ If ($Obj_in.create)
 			
 			If (String:C10($Obj_in.dataSource.source)="server")
 				
-				  //ACI0100868
-				  //$File_:=Choose(Length(String($Obj_in.dataSource.keyPath))>0;doc_Absolute_path ($Obj_in.dataSource.keyPath;Get 4D folder(MobileApps folder;*));Null)
-				$File_:=Choose:C955(Length:C16(String:C10($Obj_in.dataSource.keyPath))>0;doc_Absolute_path ($Obj_in.dataSource.keyPath);Null:C1517)
+				//ACI0100868
+				//$File_:=Choose(Length(String($Obj_in.dataSource.keyPath))>0;doc_Absolute_path ($Obj_in.dataSource.keyPath;Get 4D folder(MobileApps folder;*));Null)
+				$File_:=Choose:C955(Length:C16(String:C10($Obj_in.dataSource.keyPath))>0;doc_Absolute_path($Obj_in.dataSource.keyPath);Null:C1517)
 				
 			Else 
 				
-				$File_:=COMPONENT_Pathname ("key").platformPath
+				$File_:=COMPONENT_Pathname("key").platformPath
 				
 				If (Test path name:C476($File_)#Is a document:K24:1)
 					
-					$Obj_out.keyPing:=Rest (New object:C1471(\
+					$Obj_out.keyPing:=Rest(New object:C1471(\
 						"action";"status";\
 						"handler";"mobileapp"))
 					$Obj_out.keyPing.file:=New object:C1471(\
@@ -425,61 +425,45 @@ If ($Obj_in.create)
 					
 					If (Not:C34($Obj_out.keyPing.file.exists))
 						
-						ob_error_add ($Obj_out;"Local server key file do not exists and cannot be created")
+						ob_error_add($Obj_out;"Local server key file do not exists and cannot be created")
 						
 					End if 
 				End if 
 			End if 
 			
-			If (feature.with("setImageDump"))
-				
-				$Obj_out.dump:=dataSet (New object:C1471(\
-					"action";"create";\
-					"project";$Obj_project;\
-					"digest";True:C214;\
-					"dataSet";True:C214;\
-					"key";$File_;\
-					"caller";$Obj_in.caller;\
-					"verbose";$Boo_verbose))
-				
-			Else 
-				
-				$Obj_out.dump:=dataSet (New object:C1471(\
-					"action";"create";\
-					"project";$Obj_project;\
-					"digest";True:C214;\
-					"dataSet";True:C214;\
-					"key";$File_;\
-					"caller";$Obj_in.caller;\
-					"verbose";$Boo_verbose;\
-					"picture";Not:C34(Bool:C1537(feature._97117))))  //_97117 deactive picture dump for QA purpose 
-				
-			End if 
+			$Obj_out.dump:=dataSet(New object:C1471(\
+				"action";"create";\
+				"project";$Obj_project;\
+				"digest";True:C214;\
+				"dataSet";True:C214;\
+				"key";$File_;\
+				"caller";$Obj_in.caller;\
+				"verbose";$Boo_verbose))
 			
-			ob_error_combine ($Obj_out;$Obj_out.dump)
+			ob_error_combine($Obj_out;$Obj_out.dump)
 			
 		End if 
 		
-		  // Then copy
-		$Obj_out.dumpCopy:=dataSet (New object:C1471(\
+		// Then copy
+		$Obj_out.dumpCopy:=dataSet(New object:C1471(\
 			"action";"copy";\
 			"project";$Obj_project;\
 			"target";$Obj_in.path))
-		ob_error_combine ($Obj_out;$Obj_out.dumpCopy)
-		  //}
+		ob_error_combine($Obj_out;$Obj_out.dumpCopy)
+		//}
 		
-		$Obj_out.coreData:=dataModel (New object:C1471(\
+		$Obj_out.coreData:=dataModel(New object:C1471(\
 			"action";"xcdatamodel";\
 			"dataModel";$Obj_project.dataModel;\
 			"flat";False:C215;\
 			"relationship";True:C214;\
 			"path";$Obj_in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
 		
-		ob_error_combine ($Obj_out;$Obj_out.coreData)
+		ob_error_combine($Obj_out;$Obj_out.coreData)
 		
 		If (Not:C34(Bool:C1537($Obj_project.dataSource.doNotGenerateDataAtEachBuild)))
 			
-			POST_FORM_MESSAGE (New object:C1471(\
+			POST_FORM_MESSAGE(New object:C1471(\
 				"target";$Obj_in.caller;\
 				"additional";"dataSetGeneration"))
 			
@@ -487,16 +471,16 @@ If ($Obj_in.create)
 		
 		If ($Folder_destination.folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
 			
-			$Obj_out.coreDataSet:=dataSet (New object:C1471(\
+			$Obj_out.coreDataSet:=dataSet(New object:C1471(\
 				"action";"coreData";\
 				"removeAsset";True:C214;\
 				"path";$Obj_in.path))
 			
-			ob_error_combine ($Obj_out;$Obj_out.coreDataSet)
+			ob_error_combine($Obj_out;$Obj_out.coreDataSet)
 			
 			If (Bool:C1537($Obj_out.coreDataSet.success))
 				
-				dataSet (New object:C1471(\
+				dataSet(New object:C1471(\
 					"action";"coreDataAddToProject";\
 					"uuid";$Obj_template.uuid;\
 					"tags";$Obj_tags;\
@@ -506,7 +490,7 @@ If ($Obj_in.create)
 			
 		Else 
 			
-			dataSet (New object:C1471(\
+			dataSet(New object:C1471(\
 				"action";"coreDataAddToProject";\
 				"uuid";$Obj_template.uuid;\
 				"tags";$Obj_tags;\
@@ -514,17 +498,17 @@ If ($Obj_in.create)
 			
 		End if 
 		
-		  // ----------------------------------------------------
-		  // Others (maybe move to templates, main management
-		  // ----------------------------------------------------
+		// ----------------------------------------------------
+		// Others (maybe move to templates, main management
+		// ----------------------------------------------------
 		
-		  // Generate action asset
-		$Obj_out.actionAssets:=actions ("assets";New object:C1471(\
+		// Generate action asset
+		$Obj_out.actionAssets:=actions("assets";New object:C1471(\
 			"project";$Obj_project;\
 			"target";$Obj_in.path))
-		ob_error_combine ($Obj_out;$Obj_out.actionAssets)
+		ob_error_combine($Obj_out;$Obj_out.actionAssets)
 		
-		$Obj_out.actionCapabilities:=actions ("capabilities";New object:C1471(\
+		$Obj_out.actionCapabilities:=actions("capabilities";New object:C1471(\
 			"project";$Obj_project;\
 			"target";$Obj_in.path))
 		
@@ -543,14 +527,14 @@ If ($Obj_in.create)
 					If ($certificateFile.exists)
 						$certificateFile.copyTo($appFolder;fk overwrite:K87:5)
 					Else 
-						ob_warning_add ($Obj_out;"Certificate file "+String:C10($Obj_project.server.pushCertificate)+" is missing")
+						ob_warning_add($Obj_out;"Certificate file "+String:C10($Obj_project.server.pushCertificate)+" is missing")
 					End if 
 				End if 
 			End if 
 		End if 
 		
-		  // Manage app capabilities
-		$Obj_out.capabilities:=capabilities (\
+		// Manage app capabilities
+		$Obj_out.capabilities:=capabilities(\
 			New object:C1471("action";"inject";"target";$Obj_in.path;"tags";$Obj_tags;\
 			"value";New object:C1471(\
 			"common";SHARED;\
@@ -558,74 +542,74 @@ If ($Obj_in.create)
 			"action";$Obj_out.actionCapabilities;\
 			"computed";$Obj_out.computedCapabilities;\
 			"templates";$Obj_out.template)))
-		ob_error_combine ($Obj_out;$Obj_out.capabilities)
+		ob_error_combine($Obj_out;$Obj_out.capabilities)
 		
-		  // ----------------------------------------------------
-		  // DEV FEATURES
-		  // ----------------------------------------------------
+		// ----------------------------------------------------
+		// DEV FEATURES
+		// ----------------------------------------------------
 		
-		  // Add sources if any to workspace {
+		// Add sources if any to workspace {
 		If (Bool:C1537(feature._405))  // In feature until fix project launch with xcode
 			
-			Xcode (New object:C1471(\
+			Xcode(New object:C1471(\
 				"action";"workspace-addsources";\
 				"path";$Obj_in.path))
 			
 		End if 
-		  //}
+		//}
 		
-		  // Backup into git {
+		// Backup into git {
 		If (Bool:C1537(feature._917))
 			
-			git (New object:C1471(\
+			git(New object:C1471(\
 				"action";"config core.autocrlf";\
 				"path";$Obj_in.path))
 			
-			$Obj_out.git:=git (New object:C1471(\
+			$Obj_out.git:=git(New object:C1471(\
 				"action";"init";\
 				"path";$Obj_in.path))
 			
-			  //ob_error_combine ($Obj_out;$Obj_out.git) //  XXX cannot combine until there is warning not in errors
+			//ob_error_combine ($Obj_out;$Obj_out.git) //  XXX cannot combine until there is warning not in errors
 			
 			If ($Obj_out.git.success)
 				
-				$Obj_out.git:=git (New object:C1471(\
+				$Obj_out.git:=git(New object:C1471(\
 					"action";"add -A";\
 					"path";$Obj_in.path))
 				
-				  //ob_error_combine ($Obj_out;$Obj_out.git) //  XXX cannot combine until there is warning not in errors
+				//ob_error_combine ($Obj_out;$Obj_out.git) //  XXX cannot combine until there is warning not in errors
 				
-				$Obj_out.git:=git (New object:C1471(\
+				$Obj_out.git:=git(New object:C1471(\
 					"action";"commit -m initial";\
 					"path";$Obj_in.path))
 				
-				  //ob_error_combine ($Obj_out;$Obj_out.git) //  XXX cannot combine until there is warning not in errors
+				//ob_error_combine ($Obj_out;$Obj_out.git) //  XXX cannot combine until there is warning not in errors
 				
 			End if 
 		End if 
-		  //}
+		//}
 		
 		$Obj_out.tags:=$Obj_tags
 		
-		$Obj_out.success:=Not:C34(ob_error_has ($Obj_out))  // XXX do it only at end (and remove this code, but must be tested)
+		$Obj_out.success:=Not:C34(ob_error_has($Obj_out))  // XXX do it only at end (and remove this code, but must be tested)
 		
 		If (Not:C34($Obj_out.success))
 			
-			POST_FORM_MESSAGE (New object:C1471(\
+			POST_FORM_MESSAGE(New object:C1471(\
 				"type";"alert";\
 				"target";$Obj_in.caller;\
-				"additional";ob_error_string ($Obj_out)))
+				"additional";ob_error_string($Obj_out)))
 			
 		End if 
 		
-		  // End creation process
+		// End creation process
 		
 	Else 
 		
 		$Obj_out.success:=False:C215
 		
-		  // Failed to unzip sdk
-		POST_FORM_MESSAGE (New object:C1471(\
+		// Failed to unzip sdk
+		POST_FORM_MESSAGE(New object:C1471(\
 			"type";"alert";\
 			"target";$Obj_in.caller;\
 			"additional";"failedDecompressTheSdk"))
@@ -643,9 +627,9 @@ If ($Obj_in.create)
 	
 End if 
 
-  // ----------------------------------------------------
-  // BUILD OR ARCHIVE & LAUNCH
-  // ----------------------------------------------------
+// ----------------------------------------------------
+// BUILD OR ARCHIVE & LAUNCH
+// ----------------------------------------------------
 
 If ($Obj_out.success)
 	
@@ -653,8 +637,8 @@ If ($Obj_out.success)
 		
 		If (Bool:C1537($Obj_in.archive))
 			
-			  // Archive
-			POST_FORM_MESSAGE (New object:C1471(\
+			// Archive
+			POST_FORM_MESSAGE(New object:C1471(\
 				"target";$Obj_in.caller;\
 				"additional";"projectArchive"))
 			
@@ -666,7 +650,7 @@ If ($Obj_out.success)
 				
 			End if 
 			
-			$Obj_result_build:=Xcode (New object:C1471(\
+			$Obj_result_build:=Xcode(New object:C1471(\
 				"action";"build";\
 				"scheme";$Obj_project.$project.product;\
 				"destination";$Obj_in.path;\
@@ -680,12 +664,12 @@ If ($Obj_out.success)
 			
 			$Obj_cache.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out);"UTF-8";Document with LF:K24:22)
 			
-			ob_error_combine ($Obj_out;$Obj_result_build)
+			ob_error_combine($Obj_out;$Obj_result_build)
 			
 			If ($Obj_result_build.success)
 				
-				  // And export
-				POST_FORM_MESSAGE (New object:C1471(\
+				// And export
+				POST_FORM_MESSAGE(New object:C1471(\
 					"target";$Obj_in.caller;\
 					"additional";"projectArchiveExport"))
 				
@@ -697,7 +681,7 @@ If ($Obj_out.success)
 					
 				End if 
 				
-				$Obj_result_build:=Xcode (New object:C1471(\
+				$Obj_result_build:=Xcode(New object:C1471(\
 					"action";"build";\
 					"verbose";$Boo_dev;\
 					"exportArchive";True:C214;\
@@ -705,14 +689,14 @@ If ($Obj_out.success)
 					"exportPath";Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12);\
 					"archivePath";Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12+$Obj_project.$project.product+".xcarchive")))
 				
-				env_userPathname ("cache";"lastExportArchive.xlog").setText(String:C10($Obj_result_build.out);"UTF-8";Document with LF:K24:22)
+				env_userPathname("cache";"lastExportArchive.xlog").setText(String:C10($Obj_result_build.out);"UTF-8";Document with LF:K24:22)
 				
-				ob_error_combine ($Obj_out;$Obj_result_build)
+				ob_error_combine($Obj_out;$Obj_result_build)
 				
 			Else 
 				
-				  // Failed to archive
-				POST_FORM_MESSAGE (New object:C1471(\
+				// Failed to archive
+				POST_FORM_MESSAGE(New object:C1471(\
 					"type";"alert";\
 					"target";$Obj_in.caller;\
 					"additional";"failedToArchive"))
@@ -721,8 +705,8 @@ If ($Obj_out.success)
 			
 		Else 
 			
-			  // Build application
-			POST_FORM_MESSAGE (New object:C1471(\
+			// Build application
+			POST_FORM_MESSAGE(New object:C1471(\
 				"target";$Obj_in.caller;\
 				"additional";"projectBuild"))
 			
@@ -734,7 +718,7 @@ If ($Obj_out.success)
 				
 			End if 
 			
-			$Obj_result_build:=Xcode (New object:C1471(\
+			$Obj_result_build:=Xcode(New object:C1471(\
 				"action";"build";\
 				"scheme";$Obj_project.$project.product;\
 				"destination";$Obj_in.path;\
@@ -743,11 +727,11 @@ If ($Obj_out.success)
 				"test";Bool:C1537($Obj_in.test);\
 				"target";Convert path system to POSIX:C1106($Obj_in.path+"build"+Folder separator:K24:12)))
 			
-			ob_error_combine ($Obj_out;$Obj_result_build)
+			ob_error_combine($Obj_out;$Obj_result_build)
 			
 			$Obj_cache.file("lastBuild.xlog").setText(String:C10($Obj_result_build.out);"UTF-8";Document with LF:K24:22)
 			
-			  // Some times Xcode method failed to get app path, maybe if already builded and nothing to do???
+			// Some times Xcode method failed to get app path, maybe if already builded and nothing to do???
 			If ($Obj_result_build.app=Null:C1517)
 				
 				$File_:=$Obj_in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+$Obj_project.$project.product+".app"
@@ -764,7 +748,7 @@ If ($Obj_out.success)
 			
 		Else 
 			
-			POST_FORM_MESSAGE (New object:C1471(\
+			POST_FORM_MESSAGE(New object:C1471(\
 				"type";"alert";\
 				"target";$Obj_in.caller;\
 				"additional";String:C10($Obj_result_build.error)))
@@ -788,7 +772,7 @@ If ($Obj_out.success)
 			
 		End if 
 		
-		  // Compute data without building
+		// Compute data without building
 		$Obj_result_build:=New object:C1471
 		
 		$File_:=$Obj_in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+$Obj_project.$project.product+".app"
@@ -808,24 +792,24 @@ If ($Obj_out.success)
 	$Obj_out.build:=$Obj_result_build
 	$Obj_out.success:=$Obj_result_build.success | Not:C34(Bool:C1537($Obj_in.build))
 	
-	  // Else
-	  // we failed to create project
+	// Else
+	// we failed to create project
 	
 End if 
 
 If ($Obj_out.success)
 	
-	  // Save the signature of the sources folder
-	$Obj_cache.file($Obj_project.$project.product).setText(doc_folderDigest ($Obj_in.path+"Sources"+Folder separator:K24:12))
+	// Save the signature of the sources folder
+	$Obj_cache.file($Obj_project.$project.product).setText(doc_folderDigest($Obj_in.path+"Sources"+Folder separator:K24:12))
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Bool:C1537($Obj_in.run))
 			
 			$Obj_in.product:=$Obj_out.build.app
 			
-			POST_FORM_MESSAGE (New object:C1471(\
+			POST_FORM_MESSAGE(New object:C1471(\
 				"target";$Obj_in.caller;\
 				"additional";"launchingTheSimulator"))
 			
@@ -837,19 +821,19 @@ If ($Obj_out.success)
 				
 			End if 
 			
-			If (simulator (New object:C1471(\
+			If (simulator(New object:C1471(\
 				"action";"open";\
 				"editorToFront";Bool:C1537($Obj_in.testing);\
 				"bringToFront";Not:C34(Bool:C1537($Obj_in.testing)))).success)
 				
-				  // Wait for a booted simulator
+				// Wait for a booted simulator
 				$Lon_start:=Milliseconds:C459
 				
 				Repeat 
 					
 					IDLE:C311
 					DELAY PROCESS:C323(Current process:C322;60)
-					$Obj_result_device:=simulator (New object:C1471(\
+					$Obj_result_device:=simulator(New object:C1471(\
 						"action";"devices";\
 						"filter";"booted"))
 					
@@ -866,7 +850,7 @@ If ($Obj_out.success)
 				
 				If ($Boo_OK)
 					
-					POST_FORM_MESSAGE (New object:C1471(\
+					POST_FORM_MESSAGE(New object:C1471(\
 						"target";$Obj_in.caller;\
 						"additional";"installingTheApplication"))
 					
@@ -878,16 +862,16 @@ If ($Obj_out.success)
 						
 					End if 
 					
-					  // Quit app
-					$Obj_out.simulator:=simulator (New object:C1471(\
+					// Quit app
+					$Obj_out.simulator:=simulator(New object:C1471(\
 						"action";"terminate";\
 						"identifier";$Obj_project.product.bundleIdentifier))
 					
-					  // Better user impression because the simulator display the installation
+					// Better user impression because the simulator display the installation
 					DELAY PROCESS:C323(Current process:C322;10)
 					
-					  // Uninstall app
-					$Obj_out.simulator:=simulator (New object:C1471(\
+					// Uninstall app
+					$Obj_out.simulator:=simulator(New object:C1471(\
 						"action";"uninstall";\
 						"identifier";$Obj_project.product.bundleIdentifier))
 					
@@ -901,19 +885,19 @@ If ($Obj_out.success)
 							
 						End if 
 						
-						  // Install app
-						$Obj_out.simulator:=simulator (New object:C1471(\
+						// Install app
+						$Obj_out.simulator:=simulator(New object:C1471(\
 							"action";"install";\
 							"identifier";$Obj_in.product))
 						
 						If (Not:C34($Obj_out.simulator.success))
 							
-							  // redmine #102346
+							// redmine #102346
 							If (Value type:C1509($Obj_out.simulator.errors)=Is collection:K8:32)
 								
 								If (Position:C15("MIInstallerErrorDomain, code=35";String:C10($Obj_out.simulator.errors[0]))>0)
 									
-									$Obj_out.simulator:=simulator (New object:C1471(\
+									$Obj_out.simulator:=simulator(New object:C1471(\
 										"action";"install";\
 										"identifier";$Obj_in.product))
 									
@@ -923,7 +907,7 @@ If ($Obj_out.success)
 						
 						If ($Obj_out.simulator.success)
 							
-							POST_FORM_MESSAGE (New object:C1471(\
+							POST_FORM_MESSAGE(New object:C1471(\
 								"target";$Obj_in.caller;\
 								"additional";"launchingTheApplication"))
 							
@@ -935,15 +919,15 @@ If ($Obj_out.success)
 								
 							End if 
 							
-							  // Launch app
-							$Obj_out.simulator:=simulator (New object:C1471(\
+							// Launch app
+							$Obj_out.simulator:=simulator(New object:C1471(\
 								"action";"launch";\
 								"identifier";$Obj_project.product.bundleIdentifier))
 							
 							If (Not:C34($Obj_out.simulator.success))
 								
-								  // Failed to launch app
-								POST_FORM_MESSAGE (New object:C1471(\
+								// Failed to launch app
+								POST_FORM_MESSAGE(New object:C1471(\
 									"type";"alert";\
 									"target";$Obj_in.caller;\
 									"additional";String:C10($Obj_out.simulator.error)))
@@ -959,8 +943,8 @@ If ($Obj_out.success)
 							
 						Else 
 							
-							  // Failed to install app
-							POST_FORM_MESSAGE (New object:C1471(\
+							// Failed to install app
+							POST_FORM_MESSAGE(New object:C1471(\
 								"type";"alert";\
 								"target";$Obj_in.caller;\
 								"additional";String:C10($Obj_out.simulator.error)))
@@ -976,8 +960,8 @@ If ($Obj_out.success)
 						
 					Else 
 						
-						  // Failed to uninstall app
-						POST_FORM_MESSAGE (New object:C1471(\
+						// Failed to uninstall app
+						POST_FORM_MESSAGE(New object:C1471(\
 							"type";"alert";\
 							"target";$Obj_in.caller;\
 							"additional";String:C10($Obj_out.simulator.error)))
@@ -993,8 +977,8 @@ If ($Obj_out.success)
 					
 				Else 
 					
-					  // Failed to launch device
-					POST_FORM_MESSAGE (New object:C1471(\
+					// Failed to launch device
+					POST_FORM_MESSAGE(New object:C1471(\
 						"type";"alert";\
 						"target";$Obj_in.caller;\
 						"additional";"failedToLaunchTheSimulator"))
@@ -1010,8 +994,8 @@ If ($Obj_out.success)
 				
 			Else 
 				
-				  // Failed to open simulator
-				POST_FORM_MESSAGE (New object:C1471(\
+				// Failed to open simulator
+				POST_FORM_MESSAGE(New object:C1471(\
 					"type";"alert";\
 					"target";$Obj_in.caller;\
 					"additional";"failedToOpenSimulator"))
@@ -1025,10 +1009,10 @@ If ($Obj_out.success)
 				End if 
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: (Bool:C1537($Obj_in.archive))
 			
-			  // Calculate the ipa file pathname
+			// Calculate the ipa file pathname
 			$File_:=Convert path POSIX to system:C1107($Obj_result_build.archivePath)
 			$File_:=Object to path:C1548(New object:C1471(\
 				"parentFolder";Path to object:C1547($File_).parentFolder;\
@@ -1037,12 +1021,12 @@ If ($Obj_out.success)
 			
 			If ($Obj_in.manualInstallation)
 				
-				  // Open xCode devices window
-				Xcode (New object:C1471(\
+				// Open xCode devices window
+				Xcode(New object:C1471(\
 					"action";"showDevicesWindow"))
 				
-				  // Show archive on disk ?
-				POST_FORM_MESSAGE (New object:C1471(\
+				// Show archive on disk ?
+				POST_FORM_MESSAGE(New object:C1471(\
 					"target";$Obj_in.caller;\
 					"type";"confirm";\
 					"title";"archiveCreationSuccessful";\
@@ -1051,20 +1035,20 @@ If ($Obj_out.success)
 				
 			Else 
 				
-				  // Install the archive on the device
-				POST_FORM_MESSAGE (New object:C1471(\
+				// Install the archive on the device
+				POST_FORM_MESSAGE(New object:C1471(\
 					"target";$Obj_in.caller;\
 					"additional";"installingTheApplication"))
 				
-				$Obj_out.device:=device (New object:C1471(\
+				$Obj_out.device:=device(New object:C1471(\
 					"action";"installApp";\
 					"path";$File_))
 				
-				ob_error_combine ($Obj_out;$Obj_out.device)
+				ob_error_combine($Obj_out;$Obj_out.device)
 				
 				If (Not:C34($Obj_out.device.success))
 					
-					POST_FORM_MESSAGE (New object:C1471(\
+					POST_FORM_MESSAGE(New object:C1471(\
 						"type";"alert";\
 						"target";$Obj_in.caller;\
 						"additional";$Obj_out.device.errors.join("\r")))
@@ -1072,30 +1056,30 @@ If ($Obj_out.success)
 				End if 
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 	End case 
 End if 
 
-POST_FORM_MESSAGE (New object:C1471(\
+POST_FORM_MESSAGE(New object:C1471(\
 "target";$Obj_in.caller;\
 "action";"hide"))
 
-ob_writeToDocument ($Obj_out;$Obj_cache.file("lastBuild.json").platformPath;True:C214)
+ob_writeToDocument($Obj_out;$Obj_cache.file("lastBuild.json").platformPath;True:C214)
 
 $Obj_out.param:=$Obj_in
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If ($Obj_in.caller#Null:C1517)
 	
-	  // Send result
+	// Send result
 	CALL FORM:C1391($Obj_in.caller;"EDITOR_CALLBACK";"build";$Obj_out)
 	
 Else 
 	
-	  // Return result
+	// Return result
 	$0:=$Obj_out
 	
 End if 
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
