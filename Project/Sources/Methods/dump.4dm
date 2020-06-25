@@ -1,13 +1,13 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-  // ----------------------------------------------------
-  // Project method : dump
-  // ID[BC6599132D8B41458EE1B30856D08E06]
-  // Created 27-6-2017 by Eric Marchand
-  // ----------------------------------------------------
-  // Description:
-  // dump rest info
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : dump
+// ID[BC6599132D8B41458EE1B30856D08E06]
+// Created 27-6-2017 by Eric Marchand
+// ----------------------------------------------------
+// Description:
+// dump rest info
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
@@ -19,23 +19,23 @@ C_OBJECT:C1216($Obj_query;$Obj_record;$Obj_rest;$Obj_result;$Obj_table)
 C_COLLECTION:C1488($Col_pictureFields)
 
 If (False:C215)
-	C_OBJECT:C1216(dump ;$0)
-	C_OBJECT:C1216(dump ;$1)
+	C_OBJECT:C1216(dump;$0)
+	C_OBJECT:C1216(dump;$1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_in:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
@@ -48,14 +48,14 @@ Else
 	
 End if 
 
-  // Check output
+// Check output
 If (Length:C16(String:C10($Obj_in.output))=0)
 	
 	$Obj_in.output:=Temporary folder:C486
 	
 Else 
 	
-	$Obj_in.output:=doc_checkFolderSeparator ($Obj_in.output)
+	$Obj_in.output:=doc_checkFolderSeparator($Obj_in.output)
 	
 	If (Test path name:C476($Obj_in.output)#Is a folder:K24:2)
 		
@@ -64,7 +64,7 @@ Else
 	End if 
 End if 
 
-  // dataModel
+// dataModel
 $Obj_dataModel:=$Obj_in.dataModel
 
 If ($Obj_dataModel=Null:C1517)
@@ -73,32 +73,32 @@ If ($Obj_dataModel=Null:C1517)
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.dataModel=Null:C1517)
 			
 			$Obj_out.errors:=New collection:C1472("`dataModel` must be specified when dumping")
 			$Obj_out.success:=False:C215
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="catalog")
 			
 			$Obj_out.success:=True:C214
 			
 			$Obj_result:=New object:C1471
 			
-			  // For each table
+			// For each table
 			For each ($Txt_tableNumber;$Obj_dataModel)
 				
 				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 				
 				$o:=$Obj_table[""]
 				
-				$Obj_rest:=Rest (New object:C1471(\
+				$Obj_rest:=Rest(New object:C1471(\
 					"action";"table";\
 					"url";$Obj_in.url;\
 					"headers";$Obj_in.headers;\
@@ -125,12 +125,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					
 					$File_output:=$File_output+".catalog.json"
 					
-					  // Make sure the folder exist
+					// Make sure the folder exist
 					CREATE FOLDER:C475($File_output;*)
 					
 					If (Bool:C1537($Obj_in.dataSet))
 						
-						asset (New object:C1471("action";"create";\
+						asset(New object:C1471("action";"create";\
 							"type";"dataset";\
 							"target";$Obj_in.output;\
 							"tags";New object:C1471(\
@@ -164,34 +164,34 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 				$Obj_result[$o.name]:=$Obj_rest
 				
-				ob_error_combine ($Obj_out;$Obj_rest)
+				ob_error_combine($Obj_out;$Obj_rest)
 				
 			End for each 
 			
 			$Obj_out.results:=$Obj_result
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="data")
 			
 			$Obj_out.success:=True:C214
 			
 			$Obj_result:=New object:C1471
 			
-			  // for each table in model
+			// for each table in model
 			For each ($Txt_tableNumber;$Obj_dataModel)
 				
 				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 				
-				  // Create the query string for rest
+				// Create the query string for rest
 				$Obj_query:=New object:C1471(\
 					"$limit";String:C10(SHARED.data.dump.limit))
 				
 				$o:=$Obj_table[""]
 				
-				  // Manage  Restricted queries and embedded option
+				// Manage  Restricted queries and embedded option
 				If (Not:C34(Bool:C1537($o.embedded)))
 					
-					  // we do not want to dump
+					// we do not want to dump
 					$Obj_query:=Null:C1517
 					
 				Else 
@@ -205,22 +205,31 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 								$Obj_query["$filter"]:=String:C10($o.filter.string)
 								$Obj_query["$queryplan"]:="true"
 								
+								If (SHARED.globalFilter#Null:C1517)
+									$Obj_query["$filter"]:="("+$Obj_query["$filter"]+")"+String:C10(SHARED.globalFilter)
+								End if 
+								
 							Else 
 								
 								$Obj_query:=Null:C1517  // do not filter and dump
 								
-								  // note: core data building already warn if not valided
+								// note: core data building already warn if not valided
 								
 							End if 
+						End if 
+					Else 
+						If (SHARED.globalFilter#Null:C1517)
+							$Obj_query["$filter"]:=String:C10(SHARED.globalFilter)
+							$Obj_query["$queryplan"]:="true"
 						End if 
 					End if 
 				End if 
 				
-				  // If query defined, we must dump the table
+				// If query defined, we must dump the table
 				If ($Obj_query#Null:C1517)
 					
-					  // get field list name
-					$Obj_buffer:=dataModel (New object:C1471(\
+					// get field list name
+					$Obj_buffer:=dataModel(New object:C1471(\
 						"action";"fieldNames";\
 						"table";$Obj_table))
 					
@@ -232,7 +241,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						End if 
 					End if 
 					
-					  // For each page (if page allowed)
+					// For each page (if page allowed)
 					For ($Lon_i;1;SHARED.data.dump.page;1)
 						
 						If ($Lon_i>1)
@@ -241,8 +250,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							
 						End if 
 						
-						  // Do the rest request
-						$Obj_rest:=Rest (New object:C1471(\
+						// Do the rest request
+						$Obj_rest:=Rest(New object:C1471(\
 							"action";"records";\
 							"url";$Obj_in.url;\
 							"headers";$Obj_in.headers;\
@@ -259,7 +268,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 						$Obj_result[$o.name]:=$Obj_rest
 						
-						ob_error_combine ($Obj_out;$Obj_rest)
+						ob_error_combine($Obj_out;$Obj_rest)
 						
 						If ($Obj_rest.success)
 							
@@ -279,12 +288,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							
 							$File_output:=$File_output+".data.json"
 							
-							  // Make sure the folder exist
+							// Make sure the folder exist
 							CREATE FOLDER:C475($File_output;*)
 							
 							If (Bool:C1537($Obj_in.dataSet))
 								
-								asset (New object:C1471("action";"create";"type";"dataset";\
+								asset(New object:C1471("action";"create";"type";"dataset";\
 									"target";$Obj_in.output;\
 									"tags";New object:C1471(\
 									"name";$o.name;\
@@ -293,8 +302,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 								
 							End if 
 							
-							$Obj_rest.write:=ob_writeToDocument ($Obj_rest.response;$File_output;True:C214)
-							ob_error_combine ($Obj_out;$Obj_rest.write)
+							$Obj_rest.write:=ob_writeToDocument($Obj_rest.response;$File_output;True:C214)
+							ob_error_combine($Obj_out;$Obj_rest.write)
 							If (Not:C34($Obj_rest.write.success))
 								
 								$Obj_rest.success:=False:C215
@@ -310,13 +319,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					End for 
 				End if 
 				
-				  // Else table skipped
+				// Else table skipped
 				
 			End for each   // end table
 			
 			$Obj_out.results:=$Obj_result
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_in.action="pictures")
 			
 			If ($Obj_in.format=Null:C1517)
@@ -329,18 +338,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			
 			$Obj_out.results:=New object:C1471()
 			
-			  // For each table
+			// For each table
 			For each ($Txt_tableNumber;$Obj_dataModel)
 				
 				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 				
 				$o:=$Obj_table[""]
 				
-				$Obj_buffer:=dataModel (New object:C1471(\
+				$Obj_buffer:=dataModel(New object:C1471(\
 					"action";"pictureFields";\
 					"table";$Obj_table))
 				
-				  // Check if there is image (XXX use some extract/filter function)
+				// Check if there is image (XXX use some extract/filter function)
 				$Col_pictureFields:=$Obj_buffer.fields
 				
 				If ($Col_pictureFields=Null:C1517)
@@ -354,11 +363,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					If (Bool:C1537($Obj_in.rest)\
 						 | (Length:C16(String:C10($Obj_in.url))>0))
 						
-						  // ----------------------------------
-						  // Get Image from REST server, default local one
-						  // ----------------------------------
+						// ----------------------------------
+						// Get Image from REST server, default local one
+						// ----------------------------------
 						
-						  // If cached rest result use it
+						// If cached rest result use it
 						$Txt_buffer:=String:C10($Obj_in.cache)+Folder separator:K24:12+$o.name
 						
 						If (Bool:C1537($Obj_in.dataSet))
@@ -371,23 +380,23 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 						If (Test path name:C476($Txt_buffer)=Is a document:K24:1)
 							
-							$Obj_rest:=ob_parseDocument ($Txt_buffer)
+							$Obj_rest:=ob_parseDocument($Txt_buffer)
 							$Obj_rest.response:=$Obj_rest.value
 							
 						Else 
 							
-							  // No more supported, data file must be passed
+							// No more supported, data file must be passed
 							$Obj_rest:=New object:C1471(\
 								"success";False:C215)
 							
 						End if 
 						
-						  // we have succeed to have rest result
+						// we have succeed to have rest result
 						If ($Obj_rest.success)
 							
-							  // Rest server URL ? (to replace in image url
+							// Rest server URL ? (to replace in image url
 							$Obj_in.action:="url"
-							$Obj_result:=Rest ($Obj_in)
+							$Obj_result:=Rest($Obj_in)
 							
 							$Obj_result.contentSize:=0
 							$Obj_result.count:=0
@@ -395,7 +404,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 								$Obj_out.files:=New collection:C1472()
 							End if 
 							
-							  //$Txt_handler:=Choose(Bool(featuresFlags._102457);"mobileapp/";"rest/")
+							//$Txt_handler:=Choose(Bool(featuresFlags._102457);"mobileapp/";"rest/")
 							$Txt_handler:="mobileapp/"
 							
 							If (Position:C15($Txt_handler;$Obj_result.url)=0)
@@ -407,10 +416,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							
 							If (Value type:C1509($Obj_rest.response.__ENTITIES)=Is collection:K8:32)
 								
-								  // For each records
+								// For each records
 								For each ($Obj_record;$Obj_rest.response.__ENTITIES)
 									
-									  // ... look for images
+									// ... look for images
 									For each ($Obj_field;$Col_pictureFields)
 										
 										$Obj_buffer:=Null:C1517
@@ -418,7 +427,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 										
 										Case of 
 												
-												  //----------------------------------------
+												//----------------------------------------
 											: ($Obj_field.relatedField#Null:C1517)
 												
 												$Obj_buffer:=$Obj_record[$Obj_field.relatedField]
@@ -435,22 +444,22 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 													
 												End if 
 												
-												  //----------------------------------------
+												//----------------------------------------
 											: ($Obj_record[$Obj_field.name]#Null:C1517)
 												
 												$Obj_buffer:=$Obj_record[$Obj_field.name]
 												
-												  //----------------------------------------
+												//----------------------------------------
 										End case 
 										
 										If ($Obj_buffer#Null:C1517)
 											
 											If (Bool:C1537($Obj_buffer.__deferred.image))
 												
-												  // Get url for image
+												// Get url for image
 												$Txt_url:=String:C10($Obj_buffer.__deferred.uri)
 												
-												  //If (Bool(featuresFlags._102457))
+												//If (Bool(featuresFlags._102457))
 												
 												If (Position:C15("/mobileapp/";$Txt_url)>0)
 													
@@ -458,11 +467,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 													
 												End if 
 												
-												  //Else
-												  //If (Position("/rest/";$Txt_url)>0)
-												  //$Txt_url:=Substring($Txt_url;7)  // remove /rest/
-												  //End if
-												  //End if
+												//Else
+												//If (Position("/rest/";$Txt_url)>0)
+												//$Txt_url:=Substring($Txt_url;7)  // remove /rest/
+												//End if
+												//End if
 												
 												If (Length:C16(String:C10($Obj_in.format))#0)
 													
@@ -483,7 +492,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 												
 												Case of 
 														
-														  //----------------------------------------
+														//----------------------------------------
 													: ($Obj_field.relatedDataClass#Null:C1517)  // want to dump in relation?
 														
 														If (Bool:C1537($Obj_in.dataSet))
@@ -494,7 +503,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 														
 														$File_name:=$Obj_field.relatedDataClass+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+$Obj_in.format
 														
-														  //----------------------------------------
+														//----------------------------------------
 													: ($Obj_field.relatedField#Null:C1517)  // want to dump in current table as related field
 														
 														If (Bool:C1537($Obj_in.dataSet))
@@ -505,7 +514,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 														
 														$File_name:=$o.name+"("+$Txt_id+")"+"_"+$Obj_field.relatedField+"."+$Obj_field.name+"_"+$Txt_version+$Obj_in.format
 														
-														  //----------------------------------------
+														//----------------------------------------
 													Else 
 														
 														If (Bool:C1537($Obj_in.dataSet))
@@ -516,23 +525,23 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 														
 														$File_name:=$o.name+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+$Obj_in.format
 														
-														  //----------------------------------------
+														//----------------------------------------
 												End case 
 												
 												CREATE FOLDER:C475($File_output+$File_name;*)
 												
 												If (Test path name:C476($File_output+$File_name)#Is a document:K24:1)
 													
-													$Obj_rest:=Rest (New object:C1471("action";"image";\
+													$Obj_rest:=Rest(New object:C1471("action";"image";\
 														"headers";$Obj_in.headers;\
 														"url";$Txt_url;\
 														"target";$File_output+$File_name\
 														))
-													ob_error_combine ($Obj_out;$Obj_rest)
+													ob_error_combine($Obj_out;$Obj_rest)
 													
 												Else 
 													
-													  // No need to dump. File already dumped.
+													// No need to dump. File already dumped.
 													$Obj_rest:=New object:C1471("success";False:C215)
 													
 												End if 
@@ -564,7 +573,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 													
 												Else 
 													
-													  // Remove the image if wrong type
+													// Remove the image if wrong type
 													If (Not:C34(Is picture file:C1113($File_output+$File_name)))
 														
 														DELETE DOCUMENT:C159($File_output+$File_name)
@@ -577,7 +586,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 													End if 
 												End if 
 												
-												  // Else ignore
+												// Else ignore
 												
 											End if 
 										End if 
@@ -602,24 +611,24 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 					Else 
 						
-						  // DUMP without rest is not implemented. Could use ds, with query filters to do it?
+						// DUMP without rest is not implemented. Could use ds, with query filters to do it?
 						
 					End if 
 				End if 
 			End for each 
 			
-			  //________________________________________
+			//________________________________________
 		Else 
 			
 			ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
 			
-			  //________________________________________
+			//________________________________________
 	End case 
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_out
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
