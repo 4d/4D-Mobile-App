@@ -206,7 +206,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 								$Obj_query["$queryplan"]:="true"
 								
 								If (SHARED.globalFilter#Null:C1517)
-									$Obj_query["$filter"]:="("+$Obj_query["$filter"]+")"+String:C10(SHARED.globalFilter)
+									$Obj_query["$filter"]:="("+$Obj_query["$filter"]+") AND "+String:C10(SHARED.globalFilter)
 								End if 
 								
 							Else 
