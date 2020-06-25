@@ -1,13 +1,13 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : DATA_Handler
-  // ID[68574C7BCD7A4D5FA9CC3284DAEF4F51]
-  // Created 25-9-2018 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : DATA_Handler
+// ID[68574C7BCD7A4D5FA9CC3284DAEF4F51]
+// Created 25-9-2018 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
@@ -19,19 +19,19 @@ C_OBJECT:C1216($file;$o;$Obj_context;$Obj_form;$Obj_in;$Obj_out)
 C_OBJECT:C1216($Obj_table)
 
 If (False:C215)
-	C_OBJECT:C1216(DATA_Handler ;$0)
-	C_OBJECT:C1216(DATA_Handler ;$1)
+	C_OBJECT:C1216(DATA_Handler;$0)
+	C_OBJECT:C1216(DATA_Handler;$1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	
-	  // NO PARAMETERS REQUIRED
+	// NO PARAMETERS REQUIRED
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=1)
 		
 		$Obj_in:=$1
@@ -40,7 +40,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	
 	$Obj_form:=New object:C1471(\
 		"window";Current form window:C827;\
-		"ui";editor_INIT ;\
+		"ui";editor_INIT;\
 		"list";"01_tables";\
 		"filter";"02_filter.options";\
 		"queryWidget";"query.options";\
@@ -57,23 +57,23 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 		
 		$Obj_context.help:=Get localized string:C991("help_properties")
 		
-		  // Define form methods
-		$Obj_context.listboxUI:=Formula:C1597(DATA_Handler (New object:C1471(\
+		// Define form methods
+		$Obj_context.listboxUI:=Formula:C1597(DATA_Handler(New object:C1471(\
 			"action";"listboxUI")))
 		
-		$Obj_context.listBackground:=Formula:C1597(DATA_Handler (New object:C1471(\
+		$Obj_context.listBackground:=Formula:C1597(DATA_Handler(New object:C1471(\
 			"action";"background";\
 			"this";$1)))
 		
-		$Obj_context.text:=Formula:C1597(DATA_Handler (New object:C1471(\
+		$Obj_context.text:=Formula:C1597(DATA_Handler(New object:C1471(\
 			"action";"meta-infos")))
 		
-		$Obj_context.dumpSizes:=Formula:C1597(DATA_Handler (New object:C1471(\
+		$Obj_context.dumpSizes:=Formula:C1597(DATA_Handler(New object:C1471(\
 			"action";"dumpSizes")))
 		
 		$Obj_context.refresh:=Formula:C1597(SET TIMER:C645(-1))
 		
-		$Obj_context.update:=Formula:C1597(DATA_Handler (New object:C1471(\
+		$Obj_context.update:=Formula:C1597(DATA_Handler(New object:C1471(\
 			"action";"update")))
 		
 	End if 
@@ -84,34 +84,34 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //=========================================================
+		//=========================================================
 	: ($Obj_in=Null:C1517)  // Form method
 		
-		$Lon_formEvent:=_o_panel_Form_common (On Load:K2:1;On Timer:K2:25)
+		$Lon_formEvent:=_o_panel_Form_common(On Load:K2:1;On Timer:K2:25)
 		
 		Case of 
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($Lon_formEvent=On Load:K2:1)
 				
-				  // This trick remove the horizontal gap
+				// This trick remove the horizontal gap
 				OBJECT SET SCROLLBAR:C843(*;$Obj_form.list;0;2)
 				
-				  // Constraints definition
+				// Constraints definition
 				$Obj_context.constraints:=New object:C1471
 				
-				ui_BEST_SIZE (New object:C1471(\
+				ui_BEST_SIZE(New object:C1471(\
 					"widgets";New collection:C1472($Obj_form.embedded);\
 					"factor";1))
 				
-				ui_BEST_SIZE (New object:C1471(\
+				ui_BEST_SIZE(New object:C1471(\
 					"widgets";New collection:C1472($Obj_form.method);\
 					"factor";1))
 				
-				ui_BEST_SIZE (New object:C1471(\
+				ui_BEST_SIZE(New object:C1471(\
 					"widgets";New collection:C1472($Obj_form.validate);\
 					"alignment";Align right:K42:4;\
 					"factor";1))
@@ -122,7 +122,7 @@ Case of
 				
 				ui.tips.enable()
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
 				ui.tips.enable()
@@ -153,13 +153,13 @@ Case of
 								
 								OBJECT SET HELP TIP:C1181(*;$Obj_form.filter;$Obj_context.current.filter.error)
 								
-								  // Can't embed data
+								// Can't embed data
 								OBJECT SET VISIBLE:C603(*;$Obj_form.embedded;False:C215)
 								
-								  // Allow to edit the 'On Mobile App Authentification' method
+								// Allow to edit the 'On Mobile App Authentification' method
 								OBJECT SET VISIBLE:C603(*;$Obj_form.method;True:C214)
 								
-								  // Populate user icon
+								// Populate user icon
 								$Obj_context.current.filterIcon:=ui.user
 								
 							End if 
@@ -200,35 +200,35 @@ Case of
 					
 				End if 
 				
-				  // Redraw list
+				// Redraw list
 				$Obj_context.tables:=$Obj_context.tables
 				
-				  //______________________________________________________
+				//______________________________________________________
 		End case 
 		
-		  //=========================================================
+		//=========================================================
 	: ($Obj_in.action=Null:C1517)  // Error
 		
 		ASSERT:C1129(False:C215;"Missing parameter \"action\"")
 		
-		  //=========================================================
+		//=========================================================
 	: ($Obj_in.action="init")  // Return the form objects definition
 		
 		$Obj_out:=$Obj_form
 		
-		  //=========================================================
+		//=========================================================
 	: ($Obj_in.action="dumpSizes")  // Get the dump size if available
 		
 		$Obj_context.sqlite:=Null:C1517
 		
-		$Dir_root:=dataSet (New object:C1471("action";"path";\
+		$Dir_root:=dataSet(New object:C1471("action";"path";\
 			"project";New object:C1471("product";Form:C1466.product;"$project";Form:C1466.$project))).path
 		
 		$file:=Folder:C1567($Dir_root;fk platform path:K87:2).file("Resources/Structures.sqlite")
 		
 		If ($file.exists)
 			
-			$o:=lep ("output:object").launch(path .scripts().file("sqlite3_sizes.sh");$file.path)
+			$o:=lep("output:object").launch(path.scripts().file("sqlite3_sizes.sh");$file.path)
 			
 			If ($o.success)
 				
@@ -237,23 +237,23 @@ Case of
 			End if 
 		End if 
 		
-		  //=========================================================
+		//=========================================================
 	: ($Obj_in.action="update")  // Display published tables according to data model
 		
 		$Obj_context.dumpSizes()
 		
 		OBJECT SET VISIBLE:C603(*;$Obj_form.list;False:C215)
 		
-		$o:=publishedTableList (New object:C1471(\
+		$o:=publishedTableList(New object:C1471(\
 			"dataModel";Form:C1466.dataModel;\
 			"asCollection";True:C214))
 		
 		If ($o.success)
 			
-			$Dir_root:=dataSet (New object:C1471("action";"path";\
+			$Dir_root:=dataSet(New object:C1471("action";"path";\
 				"project";New object:C1471("product";Form:C1466.product;"$project";Form:C1466.$project))).path
 			
-			  // Populate user icons if any
+			// Populate user icons if any
 			For each ($Obj_table;$o.tables)
 				
 				$Lon_index:=$o.tables.indexOf($Obj_table)
@@ -271,7 +271,7 @@ Case of
 					
 					If ($Boo_sqllite)
 						
-						$t:=formatString ("table-name";$Obj_table.name)
+						$t:=formatString("table-name";$Obj_table.name)
 						
 						If ($Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]#Null:C1517)
 							
@@ -279,20 +279,20 @@ Case of
 							
 							If ($Lon_size>4096)
 								
-								  // Add pictures size if any
-								$file:=Folder:C1567(asset (New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12;fk platform path:K87:2).file("manifest.json")
+								// Add pictures size if any
+								$file:=Folder:C1567(asset(New object:C1471("action";"path";"path";$Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12;fk platform path:K87:2).file("manifest.json")
 								
 								If ($file.exists)
 									
-									$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).value.contentSize
+									$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).contentSize
 									
 								End if 
 								
-								$o.tables[$Lon_index].dumpSize:=doc_bytesToString ($Lon_size)
+								$o.tables[$Lon_index].dumpSize:=doc_bytesToString($Lon_size)
 								
 							Else 
 								
-								$o.tables[$Lon_index].dumpSize:=Choose:C955($Lon_size>0;"< "+doc_bytesToString ($Lon_size);"#na")
+								$o.tables[$Lon_index].dumpSize:=Choose:C955($Lon_size>0;"< "+doc_bytesToString($Lon_size);"#na")
 								
 							End if 
 							
@@ -314,7 +314,7 @@ Case of
 						
 						If ($file.exists)
 							
-							  // Get document size
+							// Get document size
 							$x:=$file.getContent()
 							$Lon_size:=BLOB size:C605($x)
 							SET BLOB SIZE:C606($x;0)
@@ -327,7 +327,7 @@ Case of
 								
 							End if 
 							
-							$o.tables[$Lon_index].dumpSize:=doc_bytesToString ($Lon_size)
+							$o.tables[$Lon_index].dumpSize:=doc_bytesToString($Lon_size)
 							
 						Else 
 							
@@ -346,7 +346,7 @@ Case of
 				OBJECT SET VISIBLE:C603(*;"noPublishedTable";False:C215)
 				GOTO OBJECT:C206(*;$Obj_form.list)
 				
-				  // Select the last used table or the first one if none
+				// Select the last used table or the first one if none
 				$Lon_row:=Choose:C955(Num:C11($Obj_context.lastIndex)=0;1;Num:C11($Obj_context.lastIndex))
 				$Lon_row:=Choose:C955($Lon_row>$o.tables.length;1;$Lon_row)
 				LISTBOX SELECT ROW:C912(*;$Obj_form.list;$Lon_row;lk replace selection:K53:1)
@@ -369,14 +369,14 @@ Case of
 			
 		End if 
 		
-		  // Redraw list
+		// Redraw list
 		$Obj_context.tables:=$Obj_context.tables
 		
 		$Obj_context.listboxUI()
 		
 		SET TIMER:C645(-1)
 		
-		  //=========================================================
+		//=========================================================
 	: ($Obj_in.action="background")
 		
 		$Obj_out:=New object:C1471(\
@@ -398,7 +398,7 @@ Case of
 			End if 
 		End if 
 		
-		  //=========================================================
+		//=========================================================
 	: ($Obj_in.action="meta-infos")
 		
 		$Obj_out:=New object:C1471
@@ -427,7 +427,7 @@ Case of
 			End if 
 		End if 
 		
-		  //=========================================================
+		//=========================================================
 	: ($Obj_in.action="listboxUI")
 		
 		If ($Obj_form.focus=$Obj_form.list)  // & (Form event code=On Getting Focus)
@@ -442,21 +442,21 @@ Case of
 			
 		End if 
 		
-		  //=========================================================
+		//=========================================================
 	Else 
 		
 		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
 		
-		  //=========================================================
+		//=========================================================
 End case 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 If ($Obj_out#Null:C1517)
 	
 	$0:=$Obj_out
 	
 End if 
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
