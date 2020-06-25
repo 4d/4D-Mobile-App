@@ -164,7 +164,7 @@ If ($oDataModel#Null:C1517)
 		$svg.textArea($t;$tTable)\
 			.position($oParams.x;$oParams.cell.height-18)\
 			.dimensions($oParams.cell.width)\
-			.attributes("text-align";"center")\
+			.setAttribute("text-align";"center")\
 			.fill(Choose:C955($bSelected;"dimgray";"dimgray"))
 		
 		// Border & reactive 'button'

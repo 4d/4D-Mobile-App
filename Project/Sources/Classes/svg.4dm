@@ -15,7 +15,7 @@ Class constructor
 		
 		Super:C1705()
 		
-		// 􀁌 Create an empty canvas
+		// Create an empty canvas
 		This:C1470.new()
 		
 	End if 
@@ -23,11 +23,6 @@ Class constructor
 	This:C1470.latest:=Null:C1517
 	This:C1470.picture:=Null:C1517
 	This:C1470.store:=New collection:C1472
-	This:C1470[""]:=New object:C1471(\
-		"_attributes";New collection:C1472("target";\
-		"left";"top";\
-		"width";"height";\
-		"codec"))
 	
 /*———————————————————————————————————————————————————————————*/
 Function push  // Keep dom reference for futur
@@ -234,7 +229,7 @@ Function rect
 			
 		Else 
 			
-			$node:=This:C1470.__target($2)
+			$node:=This:C1470.__target($3)
 			
 		End if 
 	End if 
@@ -411,61 +406,105 @@ Function dimensions
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function attributes
+	// ⚠️ Overrides the method of the inherited class
+Function setAttribute
 	
-	C_VARIANT:C1683($1)  // object | attribute
+	C_TEXT:C284($1)  // name
 	C_VARIANT:C1683($2)  // Value
+	C_TEXT:C284($3)
 	
-	C_TEXT:C284($key;$node)
-	C_COLLECTION:C1488($c)
-	
-	If (Value type:C1509($1)=Is object:K8:27)
+	If (Count parameters:C259=3)
 		
-		If ($1#Null:C1517)
-			
-			$node:=This:C1470.__target($1)
-			$c:=This:C1470[""]._attributes
-			
-			For each ($key;$1)
-				
-				If ($c.indexOf($key)=-1)
-					
-					If (Length:C16($key)#0)\
-						 & ($1[$key]#Null:C1517)
-						
-						DOM SET XML ATTRIBUTE:C866($node;\
-							$key;$1[$key])
-						
-					Else 
-						
-						// This.success:=False
-						// This.errors.push("Invalid values pair for an attribute.")
-						
-					End if 
-				End if 
-			End for each 
-		End if 
+		Super:C1706.setAttribute($3;$1;$2)
 		
 	Else 
 		
-		If (Count parameters:C259>1)
-			
-			DOM SET XML ATTRIBUTE:C866(This:C1470.latest;\
-				String:C10($1);$2)
-			
-		Else 
-			
-			//If (Value type($1)=Is text)
-			//  // Remove
-			//DOM REMOVE XML ATTRIBUTE(This.latest;$1)
-			
-			// End if
-			
-		End if 
-		
-		This:C1470.success:=Bool:C1537(OK)
+		Super:C1706.setAttribute(This:C1470.latest;$1;$2)
 		
 	End if 
+	
+	var $0 : Object
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+	// ⚠️ Overrides the method of the inherited class
+Function setAttributes
+	
+	C_VARIANT:C1683($1)  // object | attribute
+	C_VARIANT:C1683($2)  // Value
+	C_TEXT:C284($3)
+	
+	C_TEXT:C284($key;$node;$t)
+	C_COLLECTION:C1488($c)
+	C_OBJECT:C1216($o)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($1)=Is object:K8:27)
+			
+			If ($1#Null:C1517)
+				
+				$node:=This:C1470.__target($1)
+				
+				$c:=OB Entries:C1720($1)
+				
+				For each ($t;New collection:C1472("target";"left";"top";"width";"height";"codec"))
+					
+					$c:=$c.query("key != :1";$t)
+					
+				End for each 
+				
+				Super:C1706.setAttributes($node;$c)
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($1)=Is collection:K8:32)
+			
+			$o:=$1.query("key=target").pop()
+			
+			If ($o#Null:C1517)
+				
+				$node:=This:C1470.__target($o.value)
+				
+			Else 
+				
+				// Applies to the latest
+				$node:=This:C1470.latest
+				
+			End if 
+			
+			For each ($t;New collection:C1472("target";"left";"top";"width";"height";"codec"))
+				
+				$1:=$1.query("key != :1";$t)
+				
+			End for each 
+			
+			Super:C1706.setAttributes($node;$c)
+			
+			//______________________________________________________
+		: (Value type:C1509($1)=Is text:K8:3)
+			
+			If (Count parameters:C259=3)
+				
+				Super:C1706.setAttribute($3;$1;$2)
+				
+			Else 
+				
+				Super:C1706.setAttribute(This:C1470.latest;$1;$2)
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			OK:=0
+			
+			//______________________________________________________
+	End case 
+	
+	This:C1470.success:=Bool:C1537(OK)
 	
 	var $0 : Object
 	$0:=This:C1470
@@ -909,3 +948,12 @@ Function __target
 			//______________________________________________________
 	End case 
 	
+/*——————————————————————————
+     _DEPRECATED_
+——————————————————————————*/
+Function attributes
+	
+	C_VARIANT:C1683($1)  // object | attribute
+	C_VARIANT:C1683($2)  // Value
+	
+	This:C1470.setAttributes($1;$2)

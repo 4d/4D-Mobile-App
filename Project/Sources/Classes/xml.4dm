@@ -18,8 +18,11 @@ Class constructor
 Function new
 	
 	var $1;$2;${3} : Text
+	
 	var $l : Integer
 	$l:=Count parameters:C259
+	
+	OK:=0
 	
 	If ($l>=1)
 		
@@ -30,7 +33,7 @@ Function new
 					//……………………………………………………………………………………………
 				: (($l%2)#0)
 					
-					This:C1470.errors.push("Unbalanced key/value pairs")
+					This:C1470.errors.push(Current method name:C684+"(): Unbalanced key/value pairs")
 					OK:=0
 					
 					//……………………………………………………………………………………………
@@ -66,13 +69,10 @@ Function new
 					//______________________________________________________
 				Else 
 					
-					This:C1470.errors.push("Unmanaged number of  key/value structures (max = 5)")
-					OK:=0
+					This:C1470.errors.push(Current method name:C684+"(): Unmanaged number of  key/value pairs (max = 5)")
 					
 					//______________________________________________________
 			End case 
-			
-			This:C1470.success:=Bool:C1537(OK)
 			
 		Else 
 			
@@ -85,6 +85,8 @@ Function new
 		This:C1470.root:=DOM Create XML Ref:C861("root")
 		
 	End if 
+	
+	This:C1470.success:=Bool:C1537(OK)
 	
 	var $0 : Object
 	$0:=This:C1470
@@ -103,7 +105,7 @@ Function setOption
 		
 	Else 
 		
-		This:C1470.errors.push("Unbalanced selector/value pairs")
+		This:C1470.errors.push(Current method name:C684+"(): Unbalanced selector/value pairs")
 		
 	End if 
 	
@@ -127,7 +129,7 @@ Function setOptions
 		
 	Else 
 		
-		This:C1470.errors.push("Unbalanced selector/value pairs")
+		This:C1470.errors.push(Current method name:C684+"(): Unbalanced selector/value pairs")
 		
 	End if 
 	
@@ -185,7 +187,7 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 		: ($l=0)
 			
 			This:C1470.success:=False:C215
-			This:C1470.errors.push("Missing the target to load")
+			This:C1470.errors.push(Current method name:C684+"(): Missing the target to load")
 			
 			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)\
@@ -212,7 +214,6 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 			End case 
 			
 			This:C1470.success:=Bool:C1537(OK)
-			CLEAR VARIABLE:C89($1)
 			
 			If (This:C1470.success)
 				
@@ -220,7 +221,7 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 				
 			Else 
 				
-				This:C1470.errors.push("Failed to parse the "+Choose:C955(Value type:C1509($1)=Is text:K8:3;"text";"blob")+" variable")
+				This:C1470.errors.push(Current method name:C684+"(): Failed to parse the "+Choose:C955(Value type:C1509($1)=Is text:K8:3;"text";"blob")+" variable")
 				
 			End if 
 			
@@ -266,20 +267,20 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 					
 				Else 
 					
-					This:C1470.errors.push("File not found: "+String:C10($1.platformPath))
+					This:C1470.errors.push(Current method name:C684+"(): File not found: "+String:C10($1.platformPath))
 					
 				End if 
 				
 			Else 
 				
-				This:C1470.errors.push("The parameter is not a File object")
+				This:C1470.errors.push(Current method name:C684+"(): The parameter is not a File object")
 				
 			End if 
 			
 			//______________________________________________________
 		Else 
 			
-			This:C1470.errors.push("Unmanaged type: "+String:C10(Value type:C1509($1)))
+			This:C1470.errors.push(Current method name:C684+"(): Unmanaged type: "+String:C10(Value type:C1509($1)))
 			
 			//________________________________________
 	End case 
@@ -330,7 +331,7 @@ Function save
 		
 	Else 
 		
-		This:C1470.errors.push("File is not defined")
+		This:C1470.errors.push(Current method name:C684+"(): File is not defined")
 		
 	End if 
 	
@@ -353,9 +354,12 @@ Function save
 /*———————————————————————————————————————————————————————————*/
 Function close  // Close the XML tree
 	
-	If (This:C1470.root#Null:C1517)
+	This:C1470.success:=(This:C1470.root#Null:C1517)
+	
+	If (This:C1470.success)
 		
 		DOM CLOSE XML:C722(This:C1470.root)
+		This:C1470.success:=Bool:C1537(OK)
 		This:C1470.root:=Null:C1517
 		
 	End if 
@@ -386,7 +390,7 @@ Function getText  //return the  XML tree as text
 		
 	Else 
 		
-		This:C1470.errors.push("Failed to export XML to text.")
+		This:C1470.errors.push(Current method name:C684+"(): Failed to export XML to text.")
 		
 	End if 
 	
@@ -415,7 +419,7 @@ Function getBlob  // Return the  XML tree as BLOB
 		
 	Else 
 		
-		This:C1470.errors.push("Failed to export XML to text.")
+		This:C1470.errors.push(Current method name:C684+"(): Failed to export XML to BLOB.")
 		
 	End if 
 	
@@ -451,22 +455,127 @@ Function findById
 		
 	Else 
 		
-		This:C1470.errors.push("Missing ID parameter")
+		This:C1470.errors.push(Current method name:C684+"(): Missing ID parameter")
+		
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function findByXPath
+	
+	var $0;$1 : Text
+	
+	This:C1470.success:=(Count parameters:C259>=1)
+	
+	If (This:C1470.success)
+		
+		$0:=DOM Find XML element:C864(This:C1470.root;$1)
+		This:C1470.success:=Bool:C1537(OK)
+		
+	Else 
+		
+		This:C1470.errors.push(Current method name:C684+"(): Missing path parameter")
+		
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function findByName
+	
+	var $0 : Collection
+	var $1;$2 : Text
+	
+	
+	This:C1470.success:=(Count parameters:C259>=1)
+	
+	If (This:C1470.success)
+		
+		ARRAY TEXT:C222($aT;0x0000)
+		
+		$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//"+$1;$aT)
+		
+		This:C1470.success:=Bool:C1537(OK)
+		$0:=New collection:C1472
+		ARRAY TO COLLECTION:C1563($0;$aT)
+		
+	Else 
+		
+		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+		
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function findByAttribute
+	
+	var $0 : Collection
+	var $1;$2;$3;$4 : Text
+	
+	This:C1470.success:=(Count parameters:C259>=2)
+	
+	If (This:C1470.success)
+		
+		ARRAY TEXT:C222($aT;0x0000)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Count parameters:C259=2)  // All elements with the attribute $2
+				
+				$aT{0}:=DOM Find XML element:C864($1;"//@"+$2;$aT)
+				
+				//______________________________________________________
+			: (Count parameters:C259=3)  // All elements with the attribute $2 equal to $3
+				
+				$aT{0}:=DOM Find XML element:C864($1;"//*[@"+$2+"=\""+$3+"\"]";$aT)
+				
+				//______________________________________________________
+			: (Count parameters:C259=4)  // Elements $4 with the attribute $2 equal to $3
+				
+				$aT{0}:=DOM Find XML element:C864($1;"//"+$4+"[@"+$2+"=\""+$3+"\"]";$aT)
+				
+				//______________________________________________________
+			Else 
+				
+				OK:=0
+				
+				//______________________________________________________
+		End case 
+		
+		This:C1470.success:=Bool:C1537(OK)
+		$0:=New collection:C1472
+		ARRAY TO COLLECTION:C1563($0;$aT)
+		
+	Else 
+		
+		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
 		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function getAttribute  // Return a node attribute value if exists
 	
-	var $0;$1;$2 : Text
+	var $0
+	var $1;$2 : Text
 	var $o : Object
 	
-	$o:=OB Entries:C1720(This:C1470.getAttributes($1)).query("key=:1";$2).pop()
-	This:C1470.success:=($o#Null:C1517)
+	This:C1470.success:=(Count parameters:C259=2)
 	
 	If (This:C1470.success)
 		
-		$0:=$o.value
+		$o:=OB Entries:C1720(This:C1470.getAttributes($1)).query("key=:1";$2).pop()
+		This:C1470.success:=($o#Null:C1517)
+		
+		If (This:C1470.success)
+			
+			$0:=$o.value
+			
+		Else 
+			
+			This:C1470.errors.push(Current method name:C684+"(): Attribute \""+$1+"\" not found")
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
 		
 	End if 
 	
@@ -474,32 +583,167 @@ Function getAttribute  // Return a node attribute value if exists
 Function getAttributes  // Return a node attributes as object
 	
 	var $0 : Object
-	var $1;$key;$value : Text
+	var $1;$key;$value;$t : Text
 	var $i : Integer
 	
-	This:C1470.success:=(Count parameters:C259>=1)
+	This:C1470.success:=(Count parameters:C259=1)
 	
-	If (Asserted:C1132(This:C1470.success;"Missing node reference"))
+	If (This:C1470.success)
 		
 		$0:=New object:C1471
+		
+		GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
 		
 		For ($i;1;DOM Count XML attributes:C727($1);1)
 			
 			DOM GET XML ATTRIBUTE BY INDEX:C729($1;$i;$key;$value)
 			
-			$0[$key]:=$value
-			
+			Case of 
+					
+					//______________________________________________________
+				: (Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$";$value;1))
+					
+					$0[$key]:=($value="true")
+					
+					//______________________________________________________
+				: (Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$t+"\\d+)?$";$value;1))
+					
+					$0[$key]:=Num:C11($value)
+					
+					//______________________________________________________
+				: (Match regex:C1019("(?m-si)^\\d+-\\d+-\\d+$";$value;1))
+					
+					$0[$key]:=Date:C102($value+"T00:00:00")
+					
+					//______________________________________________________
+				Else 
+					
+					$0[$key]:=$value
+					
+					//______________________________________________________
+			End case 
 		End for 
+		
+	Else 
+		
+		This:C1470.errors.push(Current method name:C684+"(): Missing node reference")
+		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function setAttribute
+Function getAttributesCollection  // Return a node attributes as collection
+	
+	var $0 : Collection
+	var $1 : Text
+	
+	This:C1470.success:=(Count parameters:C259=1)
+	
+	If (This:C1470.success)
+		
+		$0:=OB Entries:C1720(This:C1470.getAttributes($1))
+		
+	Else 
+		
+		This:C1470.errors.push(Current method name:C684+"(): Missing node reference")
+		
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function setAttribute  // Set a node attribute
 	
 	var $1;$2 : Text
-	var $3
+	var $3 : Variant
 	
-	DOM SET XML ATTRIBUTE:C866($1;$2;$3)
-	This:C1470.success:=Bool:C1537(OK)
+	This:C1470.success:=(Count parameters:C259=3)
+	
+	If (This:C1470.success)
+		
+		DOM SET XML ATTRIBUTE:C866($1;$2;$3)
+		This:C1470.success:=Bool:C1537(OK)
+		
+	Else 
+		
+		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+		
+	End if 
+	
+	var $0 : Object
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function setAttributes  // Set a node attributes from an object or a collection (key/value pairs)
+	
+	var $1;$t : Text
+	var $2;$3 : Variant
+	var $o : Object
+	
+	This:C1470.success:=(Count parameters:C259>=2)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Not:C34(This:C1470.success))
+			
+			This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+			
+			//______________________________________________________
+		: (Value type:C1509($2)=Is text:K8:3)
+			
+			This:C1470.success:=(Count parameters:C259=3)
+			
+			If (This:C1470.success)
+				
+				This:C1470.setAttribute($1;$2;$3)
+				
+			Else 
+				
+				This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($2)=Is object:K8:27)
+			
+			For each ($t;$2) While (This:C1470.success)
+				
+				DOM SET XML ATTRIBUTE:C866($1;$t;$2[$t])
+				This:C1470.success:=Bool:C1537(OK)
+				
+			End for each 
+			
+			If (Not:C34(This:C1470.success))
+				
+				This:C1470.errors.push(Current method name:C684+"(): Failed to set attribute \""+$t+"\"")
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($2)=Is collection:K8:32)
+			
+			For each ($o;$2) While (This:C1470.success)
+				
+				DOM SET XML ATTRIBUTE:C866($1;String:C10($o.key);$o.value)
+				This:C1470.success:=Bool:C1537(OK)
+				
+			End for each 
+			
+			If (Not:C34(This:C1470.success))
+				
+				This:C1470.errors.push(Current method name:C684+"(): Failed to set attribute \""+String:C10($o.key)+"\"")
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470.success:=False:C215
+			This:C1470.errors.push(Current method name:C684+"(): Unmanaged type: "+String:C10(Value type:C1509($1)))
+			
+			//______________________________________________________
+	End case 
+	
+	var $0 : Object
+	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function __close

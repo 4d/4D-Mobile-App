@@ -5,8 +5,8 @@ C_OBJECT:C1216(${1})
 C_LONGINT:C283($i)
 
 If (False:C215)
-	C_BOOLEAN:C305(_and ;$0)
-	C_OBJECT:C1216(_and ;${1})
+	C_BOOLEAN:C305(_and;$0)
+	C_OBJECT:C1216(_and;${1})
 End if 
 
 $0:=True:C214
