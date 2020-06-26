@@ -394,6 +394,7 @@
 			"test_storyboard",
 			"test_structure",
 			"test_structureCatalog",
+			"test_xmlClass",
 			"unitTestSuites"
 		]
 	},

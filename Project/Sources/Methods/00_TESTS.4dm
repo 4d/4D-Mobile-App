@@ -29,13 +29,17 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=New object:C1471
-		$o.true:=True:C214
-		$o.false:=False:C215
+		$c:=New collection:C1472("target";"left";"top";"width";"height";"codec")
+		$c1:=New collection:C1472("target";"left";"top";"width";"height";"codec";"hello";"world")
 		
-		$b:=$o["true"]
-		$b:=$o["false"]
-		
+		For each ($t;$c)
+			
+			If ($c1.indexOf($t)#-1)
+				
+				$c1:=$c1.remove($c1.indexOf($t))
+				
+			End if 
+		End for each 
 		
 		//________________________________________
 	: (True:C214)

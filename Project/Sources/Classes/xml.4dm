@@ -368,6 +368,45 @@ Function close  // Close the XML tree
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
+Function create
+	
+	var $0;$1 : Text
+	var $2;$3
+	
+	This:C1470.success:=(Count parameters:C259>=1)
+	
+	If (This:C1470.success)
+		
+		If (This:C1470.__isReference($1))
+			
+			$0:=DOM Create XML element:C865($1;$2)
+			
+			If (Count parameters:C259=3)
+				
+				This:C1470.setAttributes($0;$3)
+				
+			End if 
+			
+		Else 
+			
+			$0:=DOM Create XML element:C865(This:C1470.root;$1)
+			
+			If (Count parameters:C259=2)
+				
+				This:C1470.setAttributes($0;$2)
+				
+			End if 
+		End if 
+		
+		This:C1470.success:=Bool:C1537(OK)
+		
+	Else 
+		
+		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+		
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
 Function getText  //return the  XML tree as text
 	
 	var $0;$t : Text
@@ -397,7 +436,7 @@ Function getText  //return the  XML tree as text
 	$0:=$t
 	
 /*———————————————————————————————————————————————————————————*/
-Function getBlob  // Return the  XML tree as BLOB
+Function getContent  // Return the  XML tree as BLOB
 	
 	var $0;$x : Blob
 	var $1 : Boolean
@@ -483,14 +522,29 @@ Function findByName
 	var $0 : Collection
 	var $1;$2 : Text
 	
-	
 	This:C1470.success:=(Count parameters:C259>=1)
 	
 	If (This:C1470.success)
 		
 		ARRAY TEXT:C222($aT;0x0000)
 		
-		$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//"+$1;$aT)
+		If (Count parameters:C259>=2)
+			
+			If (This:C1470.__isReference($1))
+				
+				$aT{0}:=DOM Find XML element:C864($1;$2;$aT)
+				
+			Else 
+				
+				$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//"+$1;$aT)
+				
+			End if 
+			
+		Else 
+			
+			$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//"+$1;$aT)
+			
+		End if 
 		
 		This:C1470.success:=Bool:C1537(OK)
 		$0:=New collection:C1472
@@ -508,36 +562,66 @@ Function findByAttribute
 	var $0 : Collection
 	var $1;$2;$3;$4 : Text
 	
-	This:C1470.success:=(Count parameters:C259>=2)
+	This:C1470.success:=(Count parameters:C259>=1)
 	
 	If (This:C1470.success)
 		
 		ARRAY TEXT:C222($aT;0x0000)
 		
-		Case of 
-				
-				//______________________________________________________
-			: (Count parameters:C259=2)  // All elements with the attribute $2
-				
-				$aT{0}:=DOM Find XML element:C864($1;"//@"+$2;$aT)
-				
-				//______________________________________________________
-			: (Count parameters:C259=3)  // All elements with the attribute $2 equal to $3
-				
-				$aT{0}:=DOM Find XML element:C864($1;"//*[@"+$2+"=\""+$3+"\"]";$aT)
-				
-				//______________________________________________________
-			: (Count parameters:C259=4)  // Elements $4 with the attribute $2 equal to $3
-				
-				$aT{0}:=DOM Find XML element:C864($1;"//"+$4+"[@"+$2+"=\""+$3+"\"]";$aT)
-				
-				//______________________________________________________
-			Else 
-				
-				OK:=0
-				
-				//______________________________________________________
-		End case 
+		If (This:C1470.__isReference($1))
+			
+			Case of 
+					
+					//______________________________________________________
+				: (Count parameters:C259=2)  // Elements with the attribute $2
+					
+					$aT{0}:=DOM Find XML element:C864($1;"//@"+$2;$aT)
+					
+					//______________________________________________________
+				: (Count parameters:C259=3)  // Elements with the attribute $2 equal to $3
+					
+					$aT{0}:=DOM Find XML element:C864($1;"//[@"+$2+"=\""+$3+"\"]";$aT)
+					
+					//______________________________________________________
+				: (Count parameters:C259>=4)  // Elements $2 with the attribute $3 equal to $4
+					
+					$aT{0}:=DOM Find XML element:C864($1;"//"+$2+"[@"+$3+"=\""+$4+"\"]";$aT)
+					
+					//______________________________________________________
+				Else 
+					
+					OK:=0
+					
+					//______________________________________________________
+			End case 
+			
+		Else 
+			
+			Case of 
+					
+					//______________________________________________________
+				: (Count parameters:C259=1)  // Elements with the attribute $1
+					
+					$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//@"+$1;$aT)
+					
+					//______________________________________________________
+				: (Count parameters:C259=2)  // Elements with the attribute $1 equal to $2
+					
+					$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//*[@"+$1+"=\""+$2+"\"]";$aT)
+					
+					//______________________________________________________
+				: (Count parameters:C259>=3)  // Elements $2 with the attribute $3 equal to $4
+					
+					$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//"+$1+"[@"+$2+"=\""+$3+"\"]";$aT)
+					
+					//______________________________________________________
+				Else 
+					
+					OK:=0
+					
+					//______________________________________________________
+			End case 
+		End if 
 		
 		This:C1470.success:=Bool:C1537(OK)
 		$0:=New collection:C1472
@@ -550,7 +634,180 @@ Function findByAttribute
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function getAttribute  // Return a node attribute value if exists
+Function findOrCreate
+	
+	var $0;$1;$2 : Text
+	var $c : Collection
+	
+	If (This:C1470.__isReference($1))
+		
+		$c:=This:C1470.findByName($1;$2)
+		
+		If (This:C1470.success)
+			
+			$0:=$c[0]
+			
+		Else 
+			
+			// Create
+			$0:=DOM Create XML element:C865($1;$2)
+			
+		End if 
+		
+	Else 
+		
+		$c:=This:C1470.findByName($1)
+		
+		If (This:C1470.success)
+			
+			$0:=$c[0]
+			
+		Else 
+			
+			// Create
+			$0:=DOM Create XML element:C865(This:C1470.root;$1)
+			
+		End if 
+	End if 
+	
+	This:C1470.success:=Bool:C1537(OK)
+	
+/*———————————————————————————————————————————————————————————*/
+Function parent
+	
+	var $0;$1 : Text
+	
+	$0:=DOM Get parent XML element:C923($1)
+	
+/*———————————————————————————————————————————————————————————*/
+Function childrens  // Returns the childs of a node
+	
+	var $0 : Collection
+	var $1 : Text
+	var $i : Integer
+	
+	$0:=New collection:C1472
+	
+	ARRAY LONGINT:C221($aL;0x0000)
+	ARRAY TEXT:C222($aT;0x0000)
+	
+	If (Count parameters:C259>=1)
+		
+		DOM GET XML CHILD NODES:C1081($1;$aL;$aT)
+		
+	Else 
+		
+		DOM GET XML CHILD NODES:C1081(This:C1470.root;$aL;$aT)
+		
+	End if 
+	
+	For ($i;1;Size of array:C274($aL);1)
+		
+		If ($aL{$i}=XML ELEMENT:K45:20)
+			
+			$0.push($aT{$i})
+			
+		End if 
+	End for 
+	
+/*———————————————————————————————————————————————————————————*/
+Function descendants  // Returns the descendants of a node
+	
+	var $0 : Collection
+	var $1 : Text
+	var $i : Integer
+	
+	$0:=New collection:C1472
+	
+	ARRAY LONGINT:C221($aL;0x0000)
+	ARRAY TEXT:C222($aT;0x0000)
+	
+	If (Count parameters:C259>=1)
+		
+		DOM GET XML CHILD NODES:C1081($1;$aL;$aT)
+		
+	Else 
+		
+		DOM GET XML CHILD NODES:C1081(This:C1470.root;$aL;$aT)
+		
+	End if 
+	
+	For ($i;1;Size of array:C274($aL);1)
+		
+		If ($aL{$i}=XML ELEMENT:K45:20)
+			
+			$0.push($aT{$i})
+			$0.combine(This:C1470.descendants($aT{$i}))
+			
+		End if 
+	End for 
+	
+/*———————————————————————————————————————————————————————————*/
+Function getName
+	
+	var $0;$1 : Text
+	
+	This:C1470.success:=(Count parameters:C259>=1)
+	
+	If (This:C1470.success)
+		
+		DOM GET XML ELEMENT NAME:C730($1;$0)
+		
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function setName
+	
+	var $1;$2 : Text
+	
+	This:C1470.success:=(Count parameters:C259>=2)
+	
+	If (This:C1470.success)
+		
+		DOM SET XML ELEMENT NAME:C867($1;$2)
+		This:C1470.success:=Bool:C1537(OK)
+		
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function remove
+	
+	var $1 : Text
+	
+	This:C1470.success:=(Count parameters:C259>=1)
+	
+	If (This:C1470.success)
+		
+		DOM REMOVE XML ELEMENT:C869($1)
+		This:C1470.success:=Bool:C1537(OK)
+		
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function getValue
+	
+	var $0
+	var $1;$value;$tCDATA : Text
+	
+	DOM GET XML ELEMENT VALUE:C731($1;$value;$tCDATA)
+	This:C1470.success:=Bool:C1537(OK)
+	
+	If (This:C1470.success)
+		
+		If (Length:C16($value)=0)
+			
+			// Try CDATA
+			$0:=This:C1470.__convert($tCDATA)
+			
+		Else 
+			
+			$0:=This:C1470.__convert($value)
+			
+		End if 
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function getAttribute  // Returns a node attribute value if exists
 	
 	var $0
 	var $1;$2 : Text
@@ -580,7 +837,7 @@ Function getAttribute  // Return a node attribute value if exists
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function getAttributes  // Return a node attributes as object
+Function getAttributes  // Returns a node attributes as object
 	
 	var $0 : Object
 	var $1;$key;$value;$t : Text
@@ -598,30 +855,8 @@ Function getAttributes  // Return a node attributes as object
 			
 			DOM GET XML ATTRIBUTE BY INDEX:C729($1;$i;$key;$value)
 			
-			Case of 
-					
-					//______________________________________________________
-				: (Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$";$value;1))
-					
-					$0[$key]:=($value="true")
-					
-					//______________________________________________________
-				: (Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$t+"\\d+)?$";$value;1))
-					
-					$0[$key]:=Num:C11($value)
-					
-					//______________________________________________________
-				: (Match regex:C1019("(?m-si)^\\d+-\\d+-\\d+$";$value;1))
-					
-					$0[$key]:=Date:C102($value+"T00:00:00")
-					
-					//______________________________________________________
-				Else 
-					
-					$0[$key]:=$value
-					
-					//______________________________________________________
-			End case 
+			$0[$key]:=This:C1470.__convert($value)
+			
 		End for 
 		
 	Else 
@@ -631,7 +866,7 @@ Function getAttributes  // Return a node attributes as object
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function getAttributesCollection  // Return a node attributes as collection
+Function getAttributesCollection  // Returns a node attributes as collection
 	
 	var $0 : Collection
 	var $1 : Text
@@ -744,6 +979,72 @@ Function setAttributes  // Set a node attributes from an object or a collection 
 	
 	var $0 : Object
 	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function setValue
+	
+	var $1 : Text
+	var $2
+	var $3 : Boolean
+	
+	If (Count parameters:C259=3)
+		
+		If ($3)
+			
+			DOM SET XML ELEMENT VALUE:C868($1;$2;*)
+			
+		Else 
+			
+			DOM SET XML ELEMENT VALUE:C868($1;$2)
+			
+		End if 
+		
+	Else 
+		
+		DOM SET XML ELEMENT VALUE:C868($1;$2)
+		
+	End if 
+	
+	This:C1470.success:=Bool:C1537(OK)
+	
+/*———————————————————————————————————————————————————————————*/
+Function __isReference
+	
+	var $0 : Boolean
+	var $1 : Text
+	
+	$0:=Match regex:C1019("(?mi-s)^[a-zA-Z0-9]{32}$";$1;1)
+	
+/*———————————————————————————————————————————————————————————*/
+Function __convert
+	
+	var $1 : Text
+	var $0
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$";$1;1))
+			
+			$0:=($1="true")
+			
+			//______________________________________________________
+		: (Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$1+"\\d+)?$";$1;1))
+			
+			$0:=Num:C11($1)
+			
+			//______________________________________________________
+		: (Match regex:C1019("(?m-si)^\\d+-\\d+-\\d+$";$1;1))
+			
+			$0:=Date:C102($1+"T00:00:00")
+			
+			//______________________________________________________
+		Else 
+			
+			$0:=$1
+			
+			//______________________________________________________
+	End case 
 	
 /*———————————————————————————————————————————————————————————*/
 Function __close

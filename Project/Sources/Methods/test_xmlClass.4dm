@@ -8,7 +8,8 @@ TRY
 //======================================================================================
 // Create from scratch
 var $xml : cs:C1710.xml
-$xml:=cs:C1710.xml.new().new()
+$xml:=cs:C1710.xml.new()
+$xml.new()
 ASSERT:C1129($xml.success;".new()")
 
 // Export to an internal variable
@@ -22,19 +23,151 @@ ASSERT:C1129(Not:C34($xml.success);".close()")
 
 //======================================================================================
 // Create by parsing
-$xml:=cs:C1710.xml.new("<html><header></header><body></body></html>")
-ASSERT:C1129($xml.success;".new(\"<html><header></header><body></body></html>\")")
+$t:="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>\n<repertoire>\n  "\
++"<!-- John DOE -->\n  <personne sexe=\"masculin\">\n    <nom>DOE</nom>\n    "\
++"<prenom>John</prenom>\n    <adresse>\n      <numero>7</numero>\n      <voie "\
++"type=\"impasse\">impasse du chemin</voie>\n      "\
++"<codePostal>75015</codePostal>\n      <ville>PARIS</ville>\n      "\
++"<pays>FRANCE</pays>\n    </adresse>\n    <telephones>\n      <telephone "\
++"type=\"fixe\">01 02 03 04 05</telephone>\n      <telephone type=\"portable\">06 "\
++"07 08 09 10</telephone>\n    </telephones>\n    <emails>\n      <email "\
++"type=\"personnel\">john.doe@wanadoo.fr</email>\n      <email "\
++"type=\"professionnel\">john.doe@societe.com</email>\n    </emails>\n  "\
++"</personne>\n</repertoire>"
+
+$xml:=cs:C1710.xml.new($t)
+
+// Childs of the root
+$c:=$xml.childrens()
+ASSERT:C1129($c.length=1)
+
+// Descendants of the root
+$c:=$xml.descendants()
+ASSERT:C1129($c.length=15)
+
+$node:=$xml.findByXPath("/repertoire/personne")
+
+// Childs of the node
+$c:=$xml.childrens($node)
+
+If (Asserted:C1132($c.length=5))
+	
+	ASSERT:C1129($xml.getValue($c[0])="DOE")
+	ASSERT:C1129($xml.getValue($c[1])="John")
+	
+End if 
+
+// Descendants of the node
+$c:=$xml.descendants($node)
+
+If (Asserted:C1132($c.length=14))
+	
+	ASSERT:C1129($xml.getValue($c[3])=7)
+	ASSERT:C1129($xml.getValue($c[5])=75015)
+	
+End if 
+
+$c:=$xml.findByAttribute("type")
+ASSERT:C1129($c.length=5)
+
+$c:=$xml.findByAttribute("type";"impasse")
+
+If (Asserted:C1132($c.length=1))
+	
+	ASSERT:C1129($xml.getValue($c[0])="impasse du chemin")
+	
+End if 
+
+$c:=$xml.findByAttribute("email";"type";"personnel")
+
+If (Asserted:C1132($c.length=1))
+	
+	ASSERT:C1129($xml.getValue($c[0])="john.doe@wanadoo.fr")
+	
+End if 
+
+$c:=$xml.findByName("telephones")
+
+If (Asserted:C1132($c.length=1))
+	
+	$c:=$xml.childrens($c[0])
+	
+	If (Asserted:C1132($c.length=2))
+		
+		$c:=$xml.findByAttribute($c[0];"type";"portable")
+		
+		If (Asserted:C1132($xml.success))
+			
+			ASSERT:C1129($xml.getValue($c[0])="06 07 08 09 10")
+			
+		End if 
+	End if 
+End if 
+
+$node:=$xml.findByXPath("/repertoire/personne/telephones")
+ASSERT:C1129($xml.findByName($node;"telephone").length=2)
+
+$node:=$xml.findOrCreate("anniversary")
+
+If (Asserted:C1132($xml.success))
+	
+	$c:=$xml.findByName("anniversary")
+	
+	If (Asserted:C1132($c.length=1))
+		
+		ASSERT:C1129($node=$c[0])
+		
+	End if 
+End if 
+
+$node:=$xml.findByXPath("/repertoire/personne/telephones")
+$node:=$xml.findOrCreate($node;"anniversary")
+
+If (Asserted:C1132($xml.success))
+	
+	$c:=$xml.findByName("anniversary")
+	ASSERT:C1129($c.length=2)
+	
+End if 
+
 $xml.close()
 
 //======================================================================================
 // Create from file
 $o:=Folder:C1567(fk resources folder:K87:11).file("templates/form/list/Simple Table/Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.storyboard")
 $xml:=cs:C1710.xml.new($o)
-ASSERT:C1129($xml.success;".new($file)")
+ASSERT:C1129($xml.success;".new(File)")
+
+// Elements of the tree with the attribute "id"
+$c:=$xml.findByAttribute("id")
+ASSERT:C1129($c.length=35;".findByAttribute()")
+
+// Elements of the tree with the attribute "id=39w-Zo-jTU"
+$c:=$xml.findByAttribute("id";"39w-Zo-jTU")
+ASSERT:C1129($c.length=1;".findByAttribute()")
+ASSERT:C1129($c[0]=$xml.findById("39w-Zo-jTU");".findByAttribute(\"id\";\"39w-Zo-jTU\")")
+
+$node:=$xml.findByXPath("/document/scenes/scene/objects/tableViewController/tableView/prototypes/tableViewCell/tableViewCellContentView/subviews/view/subviews")
+ASSERT:C1129($xml.success;".findByXPath()")
+ASSERT:C1129($xml.getName($node)="subviews")
+ASSERT:C1129($xml.getName($xml.parent($node))="view")
 
 $node:=$xml.findByXPath("/document/scenes")
 ASSERT:C1129($xml.success;".findByXPath(\"/document/scenes\")")
-ASSERT:C1129($node#"00000000000000000000000000000000")
+ASSERT:C1129($node#("0"*32))
+
+If (False:C215)  //BUG?
+	
+	// Elements of the node with the attribute "id"
+	$c:=$xml.findByAttribute($node;"id")
+	ASSERT:C1129($c.length=34;".findByAttribute($node;\"id\")")
+	
+End if 
+
+$c:=$xml.findByAttribute($node;"id";"39w-Zo-jTU")
+ASSERT:C1129($c.length=1;".findByAttribute($node;\"id\";\"39w-Zo-jTU\")")
+ASSERT:C1129($c[0]=$xml.findById("39w-Zo-jTU");".findByAttribute()")
+
 
 // All elements with the attribute "userLabel"
 $c:=$xml.findByAttribute($node;"userLabel")
@@ -48,7 +181,7 @@ $c:=$xml.findByAttribute($node;"key";"backgroundColor")
 ASSERT:C1129($c.length=5;".findByAttribute()")
 
 // All "color" elements with the attribute "key='backgroundColor'"
-$c:=$xml.findByAttribute($node;"key";"backgroundColor";"color")
+$c:=$xml.findByAttribute($node;"color";"key";"backgroundColor")
 ASSERT:C1129($c.length=5;".findByAttribute()")
 
 $c:=$xml.findByAttribute($node;"value")
@@ -60,6 +193,13 @@ ASSERT:C1129($c.length=1;".findByAttribute()")
 $c:=$xml.findByAttribute($node;"value";"hello")
 ASSERT:C1129($c.length=0;".findByAttribute()")
 ASSERT:C1129(Not:C34($xml.success);".findByAttribute()")
+
+
+$c:=$xml.childrens($node)
+ASSERT:C1129($c.length=3;".child($node)")
+
+$c:=$xml.descendants($node)
+ASSERT:C1129($c.length=107;".descendant($node)")
 
 $node:=$xml.findById("Dxc-Bl-At2")
 ASSERT:C1129($xml.success;".findById()")
