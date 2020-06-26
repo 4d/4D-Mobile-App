@@ -1,13 +1,13 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : lep
-  // ID[B93E680CFFB7499989181BA9AF8D0B8B]
-  // Created 15-10-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : lep
+// ID[B93E680CFFB7499989181BA9AF8D0B8B]
+// Created 15-10-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
@@ -21,22 +21,22 @@ C_OBJECT:C1216($o;$oo)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_OBJECT:C1216(lep ;$0)
-	C_TEXT:C284(lep ;$1)
-	C_OBJECT:C1216(lep ;$2)
+	C_OBJECT:C1216(lep;$0)
+	C_TEXT:C284(lep;$1)
+	C_OBJECT:C1216(lep;$2)
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
 		"";"lep";\
-		"launch";Formula:C1597(lep ("launch";New object:C1471("file";$1;"arguments";$2)));\
-		"reset";Formula:C1597(lep ("reset"));\
-		"setCharSet";Formula:C1597(lep ("setCharSet";New object:C1471("charSet";$1)));\
-		"setEnvironnementVariable";Formula:C1597(lep ("setEnvironnementVariable";New object:C1471("variables";$1)));\
-		"setOutputType";Formula:C1597(lep ("setOutputType";New object:C1471("type";Num:C11($1))));\
-		"$escape";Formula:C1597(lep ("$escape";New object:C1471("in";$1)).value)\
+		"launch";Formula:C1597(lep("launch";New object:C1471("file";$1;"arguments";$2)));\
+		"reset";Formula:C1597(lep("reset"));\
+		"setCharSet";Formula:C1597(lep("setCharSet";New object:C1471("charSet";$1)));\
+		"setEnvironnementVariable";Formula:C1597(lep("setEnvironnementVariable";New object:C1471("variables";$1)));\
+		"setOutputType";Formula:C1597(lep("setOutputType";New object:C1471("type";Num:C11($1))));\
+		"$escape";Formula:C1597(lep("$escape";New object:C1471("in";$1)).value)\
 		)
 	
 	$o.reset()
@@ -49,18 +49,18 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 			
 			Case of 
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: ($c.length<2)
 					
 					$o.success:=False:C215
 					$o.errors.push("Missing value for the named parameter "+$c[0])
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: ($c[0]="charset")
 					
 					$o.charSet:=$c[1]
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: ($c[0]="output")
 					
 					$o.outputType:=Choose:C955($c[1]="blob";Is BLOB:K8:12;\
@@ -68,28 +68,28 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 						Choose:C955($c[1]="numeric";Is real:K8:4;\
 						Choose:C955($c[1]="boolean";Is boolean:K8:9;Is text:K8:3))))
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: ($c[0]="directory")
 					
 					$o.environmentVariables["_4D_OPTION_CURRENT_DIRECTORY"]:=$c[1]
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: ($c[0]="blocking")
 					
 					$o.environmentVariables["_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"]:=Choose:C955($c[1]="true";"true";"false")
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: ($c[0]="console")
 					
 					$o.environmentVariables["_4D_OPTION_HIDE_CONSOLE"]:=Choose:C955($c[1]="true";"true";"false")
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				Else 
 					
 					$o.success:=False:C215
 					$o.errors.push("Unknown named parameter: "+$c[0])
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 			End case 
 		End for each 
 	End if 
@@ -100,12 +100,12 @@ Else
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($o=Null:C1517)
 			
 			ASSERT:C1129(False:C215;"OOPS, this method must be called from a member method")
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($1="reset")
 			
 			$o.success:=True:C214
@@ -125,17 +125,17 @@ Else
 				"_4D_OPTION_BLOCKING_EXTERNAL_PROCESS";"true"\
 				)
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($1="setCharSet")
 			
 			$o.charSet:=Choose:C955($2.charset=Null:C1517;"UTF-8";String:C10($2.charset))
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($1="setOutputType")
 			
 			$o.outputType:=$2.type
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($1="launch")
 			
 			$o.outputStream:=Null:C1517
@@ -147,26 +147,26 @@ Else
 				
 			Else 
 				
-				  // Path must be POSIX
+				// Path must be POSIX
 				$Txt_command:=String:C10($2.file)
 				
 				Case of 
 						
-						  //______________________________________________________
+						//______________________________________________________
 					: ($Txt_command="shell")
 						
 						$Txt_command:="/bin/sh"
 						
-						  //______________________________________________________
+						//______________________________________________________
 					: ($Txt_command="bat")
 						
 						$Txt_command:="cmd.exe /C start /B"
 						
-						  //______________________________________________________
+						//______________________________________________________
 					Else 
 						
-						  // A "Case of" statement should never omit "Else"
-						  //______________________________________________________
+						// A "Case of" statement should never omit "Else"
+						//______________________________________________________
 				End case 
 			End if 
 			
@@ -186,23 +186,23 @@ Else
 			
 			Case of 
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: ($o.inputStream=Null:C1517)
 					
-					  // <NOTHING MORE TO DO>
+					// <NOTHING MORE TO DO>
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: (Value type:C1509($o.inputStream)=Is text:K8:3)\
 					 | (Value type:C1509($o.inputStream)=Is alpha field:K8:1)
 					
 					CONVERT FROM TEXT:C1011($o.inputStream;$o.charSet;$Blb_input)
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: (Value type:C1509($o.inputStream)=Is boolean:K8:9)
 					
 					CONVERT FROM TEXT:C1011(Choose:C955($o.inputStream;"true";"false");$o.charSet;$Blb_input)
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: (Value type:C1509($o.inputStream)=Is longint:K8:6)\
 					 | (Value type:C1509($o.inputStream)=Is integer:K8:5)\
 					 | (Value type:C1509($o.inputStream)=Is integer 64 bits:K8:25)\
@@ -210,12 +210,12 @@ Else
 					
 					CONVERT FROM TEXT:C1011(String:C10($o.inputStream;"&xml");$o.charSet;$Blb_input)
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				Else 
 					
 					$Blb_output:=$o.inputStream  // Blob
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 			End case 
 			
 			LAUNCH EXTERNAL PROCESS:C811($o.command;$Blb_input;$Blb_output;$Txt_error;$Lon_pid)
@@ -228,22 +228,33 @@ Else
 				
 				Case of 
 						
-						  //……………………………………………………………………
+						//……………………………………………………………………
 					: ($o.outputType=Is text:K8:3)
 						
 						$o.outputStream:=Convert to text:C1012($Blb_output;$o.charSet)
 						
-						  //……………………………………………………………………
+						//……………………………………………………………………
 					: ($o.outputType=Is object:K8:27)
 						
-						$o.outputStream:=JSON Parse:C1218(Convert to text:C1012($Blb_output;$o.charSet))
+						$t:=Convert to text:C1012($Blb_output;$o.charSet)
+						$o.success:=(Match regex:C1019("(?mi-s)^{.*}$|^\\[.*\\]$";$t;1))
 						
-						  //……………………………………………………………………
+						If ($o.success)
+							
+							$o.outputStream:=JSON Parse:C1218($t)
+							
+						Else 
+							
+							$o.errorStream:=$t
+							
+						End if 
+						
+						//……………………………………………………………………
 					: ($o.outputType=Is boolean:K8:9)
 						
 						$o.outputStream:=(Convert to text:C1012($Blb_output;$o.charSet)="true")
 						
-						  //……………………………………………………………………
+						//……………………………………………………………………
 					: ($o.outputType=Is longint:K8:6)\
 						 | ($o.outputType=Is integer:K8:5)\
 						 | ($o.outputType=Is integer 64 bits:K8:25)\
@@ -251,12 +262,12 @@ Else
 						
 						$o.outputStream:=Num:C11(Convert to text:C1012($Blb_output;$o.charSet))
 						
-						  //……………………………………………………………………
+						//……………………………………………………………………
 					Else 
 						
 						$o.outputStream:=$Blb_output  // Blob
 						
-						  //……………………………………………………………………
+						//……………………………………………………………………
 				End case 
 				
 			Else 
@@ -267,17 +278,17 @@ Else
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($1="setEnvironnementVariable")
 			
 			Case of 
 					
-					  //……………………………………………………………………
+					//……………………………………………………………………
 				: ($2.variables=Null:C1517)
 					
 					$o.reset()
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: (Value type:C1509($2.variables)=Is object:K8:27)
 					
 					$c:=New collection:C1472
@@ -292,7 +303,7 @@ Else
 					
 					$o.environmentVariables[$c[0].key]:=$2.variables[$c[0].key]
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: (Value type:C1509($2.variables)=Is collection:K8:32)
 					
 					For each ($oo;$2.variables)
@@ -301,16 +312,16 @@ Else
 						
 					End for each 
 					
-					  //______________________________________________________
+					//______________________________________________________
 				Else 
 					
 					$o.success:=False:C215
 					$o.errors.push("setEnvironnementVariable() method is waiting for a parameter object or collection")
 					
-					  //______________________________________________________
+					//______________________________________________________
 			End case 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($1="$escape")
 			
 			$o:=New object:C1471(\
@@ -320,13 +331,13 @@ Else
 				 | ($2.in="'@'")\
 				 | ($2.in="\"@\"")
 				
-				  // <EMPTY OR QUOTED>
+				// <EMPTY OR QUOTED>
 				
 			Else 
 				
 				If (Is macOS:C1572)
 					
-					  // Metacharacters to escape
+					// Metacharacters to escape
 					$c:=Split string:C1554("\"#%&'=~<>;`]!";"")\
 						.push("\\\\")\
 						.push("\\|")\
@@ -371,7 +382,7 @@ Else
 					
 				Else 
 					
-					  //#TO_TEST
+					//#TO_TEST
 					
 					$Txt_metaCharacters:="&|<>()%^\" "
 					
@@ -389,7 +400,7 @@ Else
 								
 							Else 
 								
-								  // Quote
+								// Quote
 								$o.value:="\""+$text+"\""
 								
 							End if 
@@ -401,18 +412,18 @@ Else
 				End if 
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		Else 
 			
 			ASSERT:C1129(False:C215;"Unknown entry point: \""+$1+"\"")
 			
-			  //______________________________________________________
+			//______________________________________________________
 	End case 
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$o
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
