@@ -55,7 +55,7 @@ If (Length:C16(This:C1470.$.current)>0)
 			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:bind";$t)
 			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tMatches)
 			
-			If (Size of array:C274($tMatches)=2)// List of fields
+			If (Size of array:C274($tMatches)=2)  // List of fields
 				
 				// Belt and braces
 				If ($oTarget[$tMatches{1}]=Null:C1517)
@@ -64,13 +64,28 @@ If (Length:C16(This:C1470.$.current)>0)
 					
 				End if 
 				
-				$oTarget[$tMatches{1}][Num:C11($tMatches{2})]:=$o
+				If ($o.fromIndex#Null:C1517)
+					
+					If ($o.fromIndex#(Num:C11(Replace string:C233(This:C1470.$.current;"e";""))-1))
+						
+						$indx:=Num:C11(Replace string:C233(This:C1470.$.current;"e";""))
+						$oTarget.fields.remove($o.fromIndex)
+						$indx:=$indx-1-Num:C11($o.fromIndex<$indx)
+						$oTarget.fields.insert($indx;$o)
+						
+					End if 
+					
+				Else 
+					
+					$oTarget[$tMatches{1}][Num:C11($tMatches{2})]:=$o
+					
+				End if 
 				
-			Else // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
+			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				
 				SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multi-criteria";$t_isOfClass)
 				
-				If ($t_isOfClass="true")// Search on several fields - append to the field list if any
+				If ($t_isOfClass="true")  // Search on several fields - append to the field list if any
 					
 					If (Value type:C1509($oTarget[$t])#Is collection:K8:32)
 						
