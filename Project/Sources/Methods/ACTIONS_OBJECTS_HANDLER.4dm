@@ -38,7 +38,7 @@ Case of
 		// Should not!
 		
 		//==================================================
-	: ($form.form.current=$form.actions.name)// Actions listbox
+	: ($form.form.current=$form.actions.name)  // Actions listbox
 		
 		$Obj_widget:=$form.actions
 		
@@ -101,7 +101,7 @@ Case of
 				SET BLOB SIZE:C606($x;0)
 				
 				//______________________________________________________
-			: ($form.form.eventCode=On Drag Over:K2:13)// Manage drag & drop cursor
+			: ($form.form.eventCode=On Drag Over:K2:13)  // Manage drag & drop cursor
 				
 				// Get the pastboard
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.action";$x)
@@ -113,9 +113,9 @@ Case of
 					
 					$o.tgt:=Drop position:C608
 					
-					If ($o.tgt=-1)// After the last line
+					If ($o.tgt=-1)  // After the last line
 						
-						If ($o.src#$Obj_widget.rowsNumber())// Not if the source was the last line
+						If ($o.src#$Obj_widget.rowsNumber())  // Not if the source was the last line
 							
 							$o:=$Obj_widget.cellCoordinates(1;$Obj_widget.rowsNumber()).cellBox
 							$o.top:=$o.bottom
@@ -135,7 +135,7 @@ Case of
 					Else 
 						
 						If ($o.src#$o.tgt)\
-							 & ($o.tgt#($o.src+1))// Not the same or the next one
+							 & ($o.tgt#($o.src+1))  // Not the same or the next one
 							
 							$o:=$Obj_widget.cellCoordinates(1;$o.tgt).cellBox
 							$o.bottom:=$o.top
@@ -180,7 +180,7 @@ Case of
 					
 					$Obj_current:=Form:C1466.actions[$o.src-1]
 					
-					If ($o.tgt=-1)// After the last line
+					If ($o.tgt=-1)  // After the last line
 						
 						Form:C1466.actions.push($Obj_current)
 						Form:C1466.actions.remove($o.src-1)
@@ -236,14 +236,14 @@ Case of
 				Case of 
 						
 						//…………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$form.icon].number)// Open the fields icons picker
+					: ($Obj_widget.column=$Obj_widget.columns[$form.icon].number)  // Open the fields icons picker
 						
 						If ($context.current#Null:C1517)
 							
 							$o:=$form.iconGrid.pointer()->
 							
 							$o.item:=$o.pathnames.indexOf(String:C10($context.current.icon))
-							$o.item:=$o.item+1// Widget work with array
+							$o.item:=$o.item+1  // Widget work with array
 							
 							$o.row:=$Obj_widget.row
 							
@@ -273,7 +273,7 @@ Case of
 				//______________________________________________________
 			: ($form.form.eventCode=On Before Data Entry:K2:39)
 				
-				$0:=-1// Reject data entry
+				$0:=-1  // Reject data entry
 				
 				$Obj_widget.update()
 				
@@ -287,10 +287,10 @@ Case of
 						// Put an edit flag to manage loss of focus
 						$context.$cellEdition:=True:C214
 						
-						$0:=0// Allow direct entry
+						$0:=0  // Allow direct entry
 						
 						//…………………………………………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$form.table].number)// Display published table menu
+					: ($Obj_widget.column=$Obj_widget.columns[$form.table].number)  // Display published table menu
 						
 						$menu:=cs:C1710.menu.new()
 						
@@ -310,7 +310,7 @@ Case of
 						End if 
 						
 						//…………………………………………………………………………………………………………………………………………
-					: ($Obj_widget.column=$Obj_widget.columns[$form.scope].number)// Display scope menu
+					: ($Obj_widget.column=$Obj_widget.columns[$form.scope].number)  // Display scope menu
 						
 						$menu:=cs:C1710.menu.new()
 						
@@ -319,7 +319,7 @@ Case of
 							$i:=$i+1
 							$t:=Get localized string:C991("scope_"+String:C10($i))
 							
-							If (Bool:C1537(OK))
+							If (Length:C16($t)>0)  //#ACI0100966
 								
 								$menu.append(":xliff:"+$t;$t;String:C10($context.current.scope)=$t)
 								
@@ -327,20 +327,20 @@ Case of
 										
 										//________________________________________
 									: ($i=1)\
-										 & (String:C10($context.current.preset)="suppression")// Table
+										 & (String:C10($context.current.preset)="suppression")  // Table
 										
 										$menu.disable()
 										
 										//________________________________________
 									: ($i=2)\
-										 & (String:C10($context.current.preset)="adding")// Current entity
+										 & (String:C10($context.current.preset)="adding")  // Current entity
 										
 										$menu.disable()
 										
 										//________________________________________
 								End case 
 							End if 
-						Until (OK=0)
+						Until (Length:C16($t)=0)  //#ACI0100966
 						
 						If ($Obj_widget.popup($menu).selected)
 							
@@ -399,7 +399,7 @@ Case of
 					//______________________________________________________
 				: ($menu.choice="new")
 					
-					$form.form.eventCode:=On Clicked:K2:4// Default action
+					$form.form.eventCode:=On Clicked:K2:4  // Default action
 					
 					//______________________________________________________
 				Else 
@@ -511,7 +511,7 @@ Case of
 										//______________________________________________________
 									: (Storage:C1525.ƒ.isField($t))
 										
-										If ($Obj_table[$t].name#$Obj_table[""].primaryKey)// DO NOT ADD A PRIMARY KEY
+										If ($Obj_table[$t].name#$Obj_table[""].primaryKey)  // DO NOT ADD A PRIMARY KEY
 											
 											$Obj_field:=$Col_fields.query("name = :1";$Obj_table[$t].name).pop()
 											
@@ -628,7 +628,7 @@ Case of
 			End if 
 		End if 
 		
-		If ($o#Null:C1517)// An action was created
+		If ($o#Null:C1517)  // An action was created
 			
 			// Ensure the action collection exists
 			ob_createPath(Form:C1466;"actions";Is collection:K8:32)
