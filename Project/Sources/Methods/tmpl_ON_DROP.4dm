@@ -10,31 +10,31 @@
 // Declarations
 C_BLOB:C604($x)
 C_BOOLEAN:C305($b)
-C_LONGINT:C283($countFixed;$indx)
-C_TEXT:C284($t;$t_isOfClass)
-C_OBJECT:C1216($o;$oTarget)
+C_LONGINT:C283($countFixed; $indx)
+C_TEXT:C284($t; $t_isOfClass)
+C_OBJECT:C1216($o; $oTarget)
 C_COLLECTION:C1488($c)
 
-ARRAY TEXT:C222($tMatches;0)
+ARRAY TEXT:C222($tMatches; 0)
 
 // ----------------------------------------------------
 // Initialisations
 
-$oTarget:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2;"detail";"list")][This:C1470.$.tableNumber]
+$oTarget:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2; "detail"; "list")][This:C1470.$.tableNumber]
 
 // ----------------------------------------------------
 If (Length:C16(This:C1470.$.current)>0)
 	
 	// Get the pastboard
-	GET PASTEBOARD DATA:C401("com.4d.private.ios.field";$x)
+	GET PASTEBOARD DATA:C401("com.4d.private.ios.field"; $x)
 	
 	If (Bool:C1537(OK))
 		
-		BLOB TO VARIABLE:C533($x;$o)
-		SET BLOB SIZE:C606($x;0)
+		BLOB TO VARIABLE:C533($x; $o)
+		SET BLOB SIZE:C606($x; 0)
 		
 		// Check the match of the type with the source
-		SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:type";$t)
+		SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "ios:type"; $t)
 		
 		If ($t="all")
 			
@@ -43,8 +43,9 @@ If (Length:C16(This:C1470.$.current)>0)
 		Else 
 			
 			// Check the type compatibility
-			$c:=Split string:C1554($t;",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
-			$b:=tmpl_compatibleType($c;$o.fieldType)
+			//$c:=Split string($t; ","; sk trim spaces).map("col_formula"; "$1.result:=Num:C11($1.value)")
+			$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+			$b:=tmpl_compatibleType($c; $o.fieldType)
 			
 		End if 
 		
@@ -52,8 +53,8 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 			$o.name:=$o.path
 			
-			SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"ios:bind";$t)
-			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tMatches)
+			SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "ios:bind"; $t)
+			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $t; ->$tMatches)
 			
 			If (Size of array:C274($tMatches)=2)  // List of fields
 				
@@ -66,12 +67,12 @@ If (Length:C16(This:C1470.$.current)>0)
 				
 				If ($o.fromIndex#Null:C1517)
 					
-					If ($o.fromIndex#(Num:C11(Replace string:C233(This:C1470.$.current;"e";""))-1))
+					If ($o.fromIndex#(Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))-1))
 						
-						$indx:=Num:C11(Replace string:C233(This:C1470.$.current;"e";""))
+						$indx:=Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))
 						$oTarget.fields.remove($o.fromIndex)
 						$indx:=$indx-1-Num:C11($o.fromIndex<$indx)
-						$oTarget.fields.insert($indx;$o)
+						$oTarget.fields.insert($indx; $o)
 						
 					End if 
 					
@@ -83,7 +84,7 @@ If (Length:C16(This:C1470.$.current)>0)
 				
 			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				
-				SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;This:C1470.$.current;"4D-isOfClass-multi-criteria";$t_isOfClass)
+				SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "4D-isOfClass-multi-criteria"; $t_isOfClass)
 				
 				If ($t_isOfClass="true")  // Search on several fields - append to the field list if any
 					
@@ -124,7 +125,7 @@ If (Length:C16(This:C1470.$.current)>0)
 							End if 
 							
 							$countFixed:=Form:C1466.$dialog.VIEWS.template.manifest.fields.count
-							$indx:=$oTarget.fields.indexOf(Null:C1517;$countFixed)
+							$indx:=$oTarget.fields.indexOf(Null:C1517; $countFixed)
 							
 							If ($indx=-1)
 								
@@ -147,7 +148,7 @@ If (Length:C16(This:C1470.$.current)>0)
 							//______________________________________________________
 						: (This:C1470.$.current="@.vInsert")
 							
-							$indx:=Num:C11(Replace string:C233(This:C1470.$.current;"e";""))
+							$indx:=Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))
 							
 							If ($o.fromIndex#Null:C1517)
 								
@@ -160,7 +161,7 @@ If (Length:C16(This:C1470.$.current)>0)
 								
 							End if 
 							
-							$oTarget.fields.insert($indx;$o)
+							$oTarget.fields.insert($indx; $o)
 							
 							//______________________________________________________
 						Else 
@@ -174,12 +175,12 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 			If (feature.with("newViewUI"))
 				
-				OB REMOVE:C1226(Form:C1466.$dialog.VIEWS;"scroll")
+				OB REMOVE:C1226(Form:C1466.$dialog.VIEWS; "scroll")
 				
 			End if 
 			
 			// Update preview
-			views_preview("draw";This:C1470)
+			views_preview("draw"; This:C1470)
 			
 			// Save project
 			_o_project.save()

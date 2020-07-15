@@ -10,14 +10,14 @@
 // Declarations
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($bMultiCriteria;$Boo_accepted)
-C_LONGINT:C283($indx;$Lon_keyType)
-C_TEXT:C284($dom;$Dom_field;$root;$t;$Txt_bind)
-C_OBJECT:C1216($o;$oAttributes;$oCache;$oField;$oIN;$pathTemplate)
-C_COLLECTION:C1488($c;$Col_affected;$Col_bind;$Col_catalog)
+C_BOOLEAN:C305($bMultiCriteria; $Boo_accepted)
+C_LONGINT:C283($indx; $Lon_keyType)
+C_TEXT:C284($dom; $Dom_field; $root; $t; $Txt_bind)
+C_OBJECT:C1216($o; $oAttributes; $oCache; $oField; $oIN; $pathTemplate)
+C_COLLECTION:C1488($c; $Col_affected; $Col_bind; $Col_catalog)
 
 If (False:C215)
-	C_OBJECT:C1216(tmpl_REORDER;$1)
+	C_OBJECT:C1216(tmpl_REORDER; $1)
 End if 
 
 // ----------------------------------------------------
@@ -25,9 +25,9 @@ End if
 $oIN:=$1
 
 // Load template
-$pathTemplate:=tmpl_form($oIN.form;$oIN.selector)
+$pathTemplate:=tmpl_form($oIN.form; $oIN.selector)
 
-If ($pathTemplate.extension=SHARED.archiveExtension)// Archive
+If ($pathTemplate.extension=SHARED.archiveExtension)  // Archive
 	
 	// Get from archive
 	$t:=$pathTemplate.file("template.svg").getText()
@@ -39,23 +39,23 @@ Else
 	
 End if 
 
-If (Asserted:C1132(OK=1;"Invalid template"))
+If (Asserted:C1132(OK=1; "Invalid template"))
 	
-	$dom:=DOM Find XML element by ID:C1010($root;"cookery")
-	ASSERT:C1129(OK=1;"Missing 'cookery' element in the template")
+	$dom:=DOM Find XML element by ID:C1010($root; "cookery")
+	ASSERT:C1129(OK=1; "Missing 'cookery' element in the template")
 	
 	If (Bool:C1537(OK))
 		
 		// Get the bindind definition
 		$oAttributes:=xml_attributes($dom)
 		OK:=Num:C11($oAttributes["ios:values"]#Null:C1517)
-		ASSERT:C1129(OK=1;"Missing 'ios:values' attribute in the template")
+		ASSERT:C1129(OK=1; "Missing 'ios:values' attribute in the template")
 		
 		If (Bool:C1537(OK))
 			
 			$oCache:=Form:C1466[$oIN.selector][$oIN.tableNumber]
 			
-			$Col_bind:=Split string:C1554($oAttributes["ios:values"];",";sk trim spaces:K86:2)
+			$Col_bind:=Split string:C1554($oAttributes["ios:values"]; ","; sk trim spaces:K86:2)
 			
 			// Create binding collection sized according to bind attribute length
 			If (feature.with("newViewUI"))\
@@ -75,13 +75,13 @@ If (Asserted:C1132(OK=1;"Invalid template"))
 			$Col_catalog:=editor_Catalog
 			
 			// Reorganize the binded fields
-			For each ($Txt_bind;$Col_bind)
+			For each ($Txt_bind; $Col_bind)
 				
 				CLEAR VARIABLE:C89($Boo_accepted)
 				CLEAR VARIABLE:C89($oField)
 				
 				// Find the binded element
-				$Dom_field:=DOM Find XML element by ID:C1010($root;$Txt_bind)
+				$Dom_field:=DOM Find XML element by ID:C1010($root; $Txt_bind)
 				
 				If (Bool:C1537(OK))
 					
@@ -96,8 +96,8 @@ If (Asserted:C1132(OK=1;"Invalid template"))
 				End if 
 				
 				$o:=Rgx_match(New object:C1471(\
-					"pattern";"(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";\
-					"target";$oAttributes["ios:bind"]))
+					"pattern"; "(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; \
+					"target"; $oAttributes["ios:bind"]))
 				
 				If ($o.success)
 					
@@ -110,29 +110,29 @@ If (Asserted:C1132(OK=1;"Invalid template"))
 					Else 
 						
 						// Check if the type is compatible
-						$c:=Split string:C1554($oAttributes["ios:type"];",";sk trim spaces:K86:2).map("col_formula";"$1.result:=Num:C11($1.value)")
+						$c:=Split string:C1554($oAttributes["ios:type"]; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
 						
 						If ($oIN.target.fields#Null:C1517)
 							
-							For each ($oField;$oIN.target.fields) Until ($Boo_accepted)
+							For each ($oField; $oIN.target.fields) Until ($Boo_accepted)
 								
 								If ($oField#Null:C1517)
 									
 									$o:=structure(New object:C1471(\
-										"action";"fieldDefinition";\
-										"path";$oField.name;\
-										"tableNumber";Num:C11($oIN.tableNumber);\
-										"catalog";$Col_catalog))
+										"action"; "fieldDefinition"; \
+										"path"; $oField.name; \
+										"tableNumber"; Num:C11($oIN.tableNumber); \
+										"catalog"; $Col_catalog))
 									
 									If ($o.success)
 										
-										If ($o.type=-2)// 1-N relation
+										If ($o.type=-2)  // 1-N relation
 											
-											$Boo_accepted:=Split string:C1554(String:C10($oAttributes.class);" ").indexOf("multivalued")#-1
+											$Boo_accepted:=Split string:C1554(String:C10($oAttributes.class); " ").indexOf("multivalued")#-1
 											
 										Else 
 											
-											$Boo_accepted:=tmpl_compatibleType($c;$o.fieldType)
+											$Boo_accepted:=tmpl_compatibleType($c; $o.fieldType)
 											
 										End if 
 									End if 
@@ -163,7 +163,7 @@ If (Asserted:C1132(OK=1;"Invalid template"))
 							//______________________________________________________
 						: ($oAttributes["ios:bind"]="searchableField")
 							
-							$bMultiCriteria:=(Split string:C1554($oAttributes.class;" ").indexOf("multi-criteria")#-1)
+							$bMultiCriteria:=(Split string:C1554($oAttributes.class; " ").indexOf("multi-criteria")#-1)
 							
 							$Lon_keyType:=Value type:C1509($oIN.target.searchableField)
 							
@@ -181,7 +181,7 @@ If (Asserted:C1132(OK=1;"Invalid template"))
 											// Target is multi-criteria
 											
 											//#MARK_TODO Verify the type & remove incompatible if any
-											For each ($o;$oIN.target.searchableField)
+											For each ($o; $oIN.target.searchableField)
 												
 												// #MARK_TODO
 												

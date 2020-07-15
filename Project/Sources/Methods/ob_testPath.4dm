@@ -1,52 +1,44 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : ob_testPath
-  // ID[0891820C25E74BAFB812771534BE392B]
-  // Created 15-6-2018 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  // Checks if the path exists and return True if so,
-  // even if not contain any values (not same result as comparison to Null)
-  // ----------------------------------------------------
-  // Declarations
-C_BOOLEAN:C305($0)
-C_OBJECT:C1216($1)
-C_TEXT:C284($2)
-C_TEXT:C284(${3})
+// ----------------------------------------------------
+// Project method : ob_testPath
+// ID[0891820C25E74BAFB812771534BE392B]
+// Created 15-6-2018 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// Checks if the path exists and return True if so,
+// even if not contain any values (not same result as comparison to Null)
+// ----------------------------------------------------
+// Declarations
+var $0 : Boolean
+var $1 : Object
+var ${2} : Text
 
-C_BOOLEAN:C305($Boo_pathExist)
-C_LONGINT:C283($Lon_i;$Lon_parameters)
-C_POINTER:C301($Ptr_schem)
-C_TEXT:C284($Txt_property)
-C_OBJECT:C1216($Obj_buffer;$Obj_in;$Obj_schem;$Obj_sub)
+var $i, $param : Integer
+var $schemPtr : Pointer
+var $o, $Obj_in, $schem, $sub : Object
 
 If (False:C215)
-	C_BOOLEAN:C305(ob_testPath ;$0)
-	C_OBJECT:C1216(ob_testPath ;$1)
-	C_TEXT:C284(ob_testPath ;$2)
-	C_TEXT:C284(ob_testPath ;${3})
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_parameters:=Count parameters:C259
+// ----------------------------------------------------
+// Initialisations
+$param:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=2;"Missing parameter"))
+If (Asserted:C1132($param>=2; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_in:=$1
-	$Txt_property:=$2
 	
-	  // Optional parameters
-	If ($Lon_parameters>=3)
+	// Optional parameters
+	If ($param>=3)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
-	$Obj_buffer:=New object:C1471
-	$Obj_schem:=$Obj_buffer
-	$Ptr_schem:=->$Obj_schem
+	$o:=New object:C1471
+	$schem:=$o
+	$schemPtr:=->$schem
 	
 Else 
 	
@@ -54,32 +46,30 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
-For ($Lon_i;2;$Lon_parameters;1)
+// ----------------------------------------------------
+For ($i; 2; $param; 1)
 	
-	$Ptr_schem->type:="object"
-	$Ptr_schem->required:=New collection:C1472
-	$Ptr_schem->required[0]:=${$Lon_i}
+	$schemPtr->type:="object"
+	$schemPtr->required:=New collection:C1472
+	$schemPtr->required[0]:=${$i}
 	
-	If ($Lon_i<$Lon_parameters)
+	If ($i<$param)
 		
-		$Obj_sub:=New object:C1471
+		$sub:=New object:C1471
 		
-		$Ptr_schem->properties:=New object:C1471
-		$Ptr_schem->properties[${$Lon_i}]:=$Obj_sub
+		$schemPtr->properties:=New object:C1471
+		$schemPtr->properties[${$i}]:=$sub
 		
-		$Obj_buffer:=$Obj_sub
+		$o:=$sub
 		
-		$Ptr_schem:=->$Obj_buffer
+		$schemPtr:=->$o
 		
 	End if 
 End for 
 
-$Boo_pathExist:=JSON Validate:C1456($Obj_in;$Obj_schem).success
+// ----------------------------------------------------
+// Return
+$0:=JSON Validate:C1456($1; $schem).success
 
-  // ----------------------------------------------------
-  // Return
-$0:=$Boo_pathExist
-
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

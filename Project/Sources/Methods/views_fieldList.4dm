@@ -1,44 +1,44 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : views_fieldList
-  // ID[6CB8A40D701F4747A463177B92640A0E]
-  // Created 28-3-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  // Return a readonly flat table field collection
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : views_fieldList
+// ID[6CB8A40D701F4747A463177B92640A0E]
+// Created 28-3-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// Return a readonly flat table field collection
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
 C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($t;$tt;$Txt_tableNumber)
-C_OBJECT:C1216($ƒ;$o;$Obj_out;$Obj_table)
+C_TEXT:C284($t; $tt; $Txt_tableNumber)
+C_OBJECT:C1216($ƒ; $o; $Obj_out; $Obj_table)
 
 If (False:C215)
-	C_OBJECT:C1216(views_fieldList ;$0)
-	C_TEXT:C284(views_fieldList ;$1)
-	C_OBJECT:C1216(views_fieldList ;$2)
+	C_OBJECT:C1216(views_fieldList; $0)
+	C_TEXT:C284(views_fieldList; $1)
+	C_OBJECT:C1216(views_fieldList; $2)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
 	$Txt_tableNumber:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
 	$Obj_out:=New object:C1471(\
-		"success";Form:C1466.dataModel#Null:C1517)
+		"success"; Form:C1466.dataModel#Null:C1517)
 	
 	$ƒ:=Storage:C1525.ƒ
 	
@@ -48,7 +48,7 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If ($Obj_out.success)
 	
 	$Obj_table:=Form:C1466.dataModel[$Txt_tableNumber]
@@ -59,42 +59,42 @@ If ($Obj_out.success)
 		
 		$Obj_out.fields:=New collection:C1472
 		
-		For each ($t;$Obj_table)
+		For each ($t; $Obj_table)
 			
 			Case of 
 					
-					  //……………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………
 				: ($ƒ.isField($t))
 					
 					$o:=OB Copy:C1225($Obj_table[$t])
 					
-					  // #TEMPO [
+					// #TEMPO [
 					$o.id:=Num:C11($t)
 					$o.fieldNumber:=Num:C11($t)
-					  //]
+					//]
 					
 					$o.path:=$o.name
 					
 					$Obj_out.fields.push($o)
 					
-					  //……………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………
 				: (Value type:C1509($Obj_table[$t])#Is object:K8:27)
 					
-					  // <NOTHING MORE TO DO>
+					// <NOTHING MORE TO DO>
 					
-					  //……………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………
 				: ($ƒ.isRelationToOne($Obj_table[$t]))
 					
-					For each ($tt;$Obj_table[$t])
+					For each ($tt; $Obj_table[$t])
 						
 						If ($ƒ.isField($tt))  // fieldNumber
 							
 							$o:=OB Copy:C1225($Obj_table[$t][$tt])
 							
-							  // #TEMPO [
+							// #TEMPO [
 							$o.id:=Num:C11($tt)
 							$o.fieldNumber:=Num:C11($tt)
-							  //]
+							//]
 							
 							$o.path:=$t+"."+$o.name
 							
@@ -103,20 +103,20 @@ If ($Obj_out.success)
 						End if 
 					End for each 
 					
-					  //……………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………
 				: ($ƒ.isRelationToMany($Obj_table[$t]))
 					
-					If (Form:C1466.$dialog.VIEWS.typeForm()="detail")
+					If (Form:C1466.$dialog.VIEWS.typeForm()="detail") | feature.with("moreRelations")
 						
 						$o:=OB Copy:C1225($Obj_table[$t])
 						
 						$o.name:=$t
 						$o.fieldType:=8859
 						
-						  // #TEMPO [
+						// #TEMPO [
 						$o.id:=0
 						$o.fieldNumber:=0
-						  //]
+						//]
 						
 						$o.path:=$t
 						
@@ -124,7 +124,7 @@ If ($Obj_out.success)
 						
 					End if 
 					
-					  //……………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………
 			End case 
 		End for each 
 		
@@ -133,9 +133,9 @@ If ($Obj_out.success)
 	End if 
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_out
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

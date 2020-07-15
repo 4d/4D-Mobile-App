@@ -439,7 +439,6 @@
 			"col_distinctObject",
 			"col_findObject",
 			"col_formula",
-			"col_method",
 			"col_notNull",
 			"col_replaceString",
 			"col_valueToObject",

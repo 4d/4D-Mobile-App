@@ -5,23 +5,23 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($bEnabled)
 C_LONGINT:C283($l_stable_version)
 C_TEXT:C284($tKey)
-C_OBJECT:C1216($o;$o_preferences)
+C_OBJECT:C1216($o; $o_preferences)
 
 If (False:C215)
-	C_LONGINT:C283(FEATURE_FLAGS;$1)
-	C_OBJECT:C1216(FEATURE_FLAGS;$2)
+	C_LONGINT:C283(FEATURE_FLAGS; $1)
+	C_OBJECT:C1216(FEATURE_FLAGS; $2)
 End if 
 
 $l_stable_version:=$1
 $o_preferences:=$2
 
 feature:=New object:C1471(\
-"with";Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]));\
-"unstable";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=$l_stable_version));\
-"delivered";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=Num:C11($2)));\
-"debug";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
-"wip";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*)));\
-"alias";Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3;$1;"_"+String:C10($1))]:=Bool:C1537(This:C1470[Choose:C955(Value type:C1509($2)=Is text:K8:3;$2;"_"+String:C10($2))]))\
+"with"; Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))])); \
+"unstable"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=$l_stable_version)); \
+"delivered"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=Num:C11($2))); \
+"debug"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
+"wip"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
+"alias"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=Bool:C1537(This:C1470[Choose:C955(Value type:C1509($2)=Is text:K8:3; $2; "_"+String:C10($2))]))\
 )
 
 /* _____________
@@ -35,7 +35,7 @@ _____________*/
 //featuresFlags._234:=True // Add in coreData model Record abstract entity
 //featuresFlags._568:=True // use previous project build SDK as new SDK (ie. fast sdk move, bug exists)
 feature.debug(8858)  // Activates a debug mode for UI
-feature.alias("debug";8858)
+feature.alias("debug"; 8858)
 
 // Use old behaviour
 //featuresFlags._677:=True // Format fields when dumping data from rest (userless if iOS app could translate)
@@ -75,7 +75,7 @@ _____________*/
 //featuresFlags._103505:=($Lon_version>=1750)  // Add, Update and Save Actions
 //featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
 //featuresFlags.withRecursiveLink:=True  // Enable recursive link management
-feature.delivered(98145;1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
+feature.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
 
 /* _____________
 17R6
@@ -100,13 +100,19 @@ _____________*/
 /* _____________
 18R3
 _____________*/
-feature.delivered(112225;1830)  // Select/install/use custom templates
+feature.delivered(112225; 1830)  // Select/install/use custom templates
 
 /* _____________
 18R4
 _____________*/
 feature.unstable(113016)  // Svg improvement in forms section
 feature.unstable(107526)  // Push Notifications
+
+/* _____________
+18R5
+_____________*/
+
+feature.unstable(117601)  // Relation management optimisation
 
 /* _____________
 WIP
@@ -125,7 +131,7 @@ feature.wip("formatMarketPlace")
 feature.wip(114338)
 
 // Allow to drop a multivalued field next to another existing dropped multivalued fields to have two fields next to each other
-feature.alias("droppingNext";114338)
+feature.alias("droppingNext"; 114338)
 
 // Work with Source class to test tge data source
 feature.wip("sourceClass")
@@ -136,7 +142,7 @@ ________________________________________*/
 
 If ($o_preferences.features#Null:C1517)
 	
-	For each ($o;$o_preferences.features)
+	For each ($o; $o_preferences.features)
 		
 		If (Value type:C1509($o.enabled)=Is boolean:K8:9)
 			
@@ -144,7 +150,7 @@ If ($o_preferences.features#Null:C1517)
 			
 		Else 
 			
-			For each ($tKey;$o.enabled) Until (Not:C34($bEnabled))
+			For each ($tKey; $o.enabled) Until (Not:C34($bEnabled))
 				
 				Case of 
 						
@@ -191,7 +197,7 @@ If ($o_preferences.features#Null:C1517)
 								//……………………………………………………………………………………………………
 							Else 
 								
-								ASSERT:C1129(False:C215;"Unknown value ("+$o.enabled[$tKey]+") for the key : \""+$tKey+"\"")
+								ASSERT:C1129(False:C215; "Unknown value ("+$o.enabled[$tKey]+") for the key : \""+$tKey+"\"")
 								$bEnabled:=False:C215
 								
 								//……………………………………………………………………………………………………
@@ -210,7 +216,7 @@ If ($o_preferences.features#Null:C1517)
 						//______________________________________________________
 					Else 
 						
-						ASSERT:C1129(False:C215;"Unknown key: \""+$tKey+"\"")
+						ASSERT:C1129(False:C215; "Unknown key: \""+$tKey+"\"")
 						
 						//______________________________________________________
 				End case 
@@ -225,6 +231,7 @@ End if
 /* _____________
 ALIAS
 _____________*/
-feature.alias("newViewUI";113016)
-feature.alias("resourcesBrowser";112225)
-feature.alias("pushNotification";107526)
+feature.alias("newViewUI"; 113016)
+feature.alias("resourcesBrowser"; 112225)
+feature.alias("pushNotification"; 107526)
+feature.alias("moreRelations"; 117601)
