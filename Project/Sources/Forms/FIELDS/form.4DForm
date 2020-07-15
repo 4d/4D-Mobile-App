@@ -138,7 +138,6 @@
 							"fill": "#FFFFFF",
 							"textAlign": "left",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 10,
 							"events": [
 								"onDataChange"

@@ -223,12 +223,12 @@
 					"visibility": "hidden",
 					"stroke": "#04A9F4",
 					"textAlign": "center",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 13,
 					"fontWeight": "bold",
 					"text": "xxx",
 					"sizingX": "move",
-					"borderStyle": "none"
+					"borderStyle": "none",
+					"fontTheme": "normal",
+					"fontSize": 13
 				},
 				"01_fields.label": {
 					"type": "text",

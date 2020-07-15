@@ -249,8 +249,6 @@
 					"left": 629,
 					"width": 20,
 					"height": 20,
-					"fontFamily": ".SF NS Text",
-					"fontSize": 13,
 					"iconFrames": 4,
 					"textPlacement": "right",
 					"style": "custom",

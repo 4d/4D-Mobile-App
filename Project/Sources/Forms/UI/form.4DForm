@@ -34,9 +34,9 @@
 					"width": 176,
 					"height": 22,
 					"stroke": "#000000",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 18,
-					"text": "Hello World !"
+					"text": "Hello World !",
+					"fontTheme": "normal",
+					"fontSize": 18
 				},
 				"Check Box": {
 					"type": "checkbox",
@@ -65,5 +65,6 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"geometryStamp": 1
 }

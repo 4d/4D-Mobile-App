@@ -65,26 +65,26 @@
 					"top": 56,
 					"left": 0,
 					"width": 970,
-					"height": 58,
+					"height": 46,
 					"sizingX": "grow",
 					"stroke": "#696969",
 					"textAlign": "center",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 48,
-					"text": ":xliff:wel_title"
+					"text": ":xliff:wel_title",
+					"fontTheme": "normal",
+					"fontSize": 48
 				},
 				"subtitle": {
 					"type": "text",
 					"top": 172,
 					"left": 0,
 					"width": 970,
-					"height": 69,
+					"height": 62,
 					"sizingX": "grow",
 					"stroke": "#696969",
 					"textAlign": "center",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 14,
-					"text": ":xliff:wel_subtitle"
+					"text": ":xliff:wel_subtitle",
+					"fontTheme": "normal",
+					"fontSize": 14
 				},
 				"list": {
 					"type": "listbox",
@@ -101,8 +101,6 @@
 					"verticalLineStroke": "transparent",
 					"fill": "transparent",
 					"verticalAlign": "middle",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 14,
 					"borderStyle": "none",
 					"hideExtraBlankRows": true,
 					"movableRows": false,
@@ -110,6 +108,7 @@
 					"selectionMode": "none",
 					"resizingMode": "legacy",
 					"visibility": "visible",
+					"fontSize": 14,
 					"columns": [
 						{
 							"name": "icons",
@@ -151,7 +150,6 @@
 							"wordwrap": "normal",
 							"truncateMode": "none",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 14,
 							"header": {
 								"name": "Header2",

@@ -232,12 +232,12 @@
 					"top": 196,
 					"left": 106,
 					"width": 160,
-					"height": 14,
+					"height": 16,
 					"stroke": "#C0C0C0",
 					"textAlign": "center",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 10,
-					"text": "icon.infos"
+					"text": "icon.infos",
+					"fontTheme": "normal",
+					"fontSize": 10
 				},
 				"Text1": {
 					"type": "text",
@@ -258,5 +258,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

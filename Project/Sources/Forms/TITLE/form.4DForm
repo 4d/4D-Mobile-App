@@ -58,12 +58,12 @@
 					"top": 13,
 					"left": 52,
 					"width": 89,
-					"height": 25,
+					"height": 24,
 					"stroke": "#1EAAF1",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 20,
 					"fontWeight": "bold",
-					"text": ":xliff:page_general"
+					"text": ":xliff:page_general",
+					"fontTheme": "normal",
+					"fontSize": 20
 				},
 				"comment": {
 					"type": "text",
@@ -109,5 +109,6 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"geometryStamp": 1
 }

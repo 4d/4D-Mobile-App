@@ -85,23 +85,21 @@
 					"top": 45,
 					"left": 15,
 					"width": 72,
-					"height": 19,
+					"height": 16,
 					"stroke": "#39525E",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 16,
-					"text": "Title"
+					"text": "Title",
+					"fontTheme": "normal",
+					"fontSize": 16
 				},
 				"UI": {
 					"type": "input",
 					"top": 5,
 					"left": 920,
 					"width": 44,
-					"height": 14,
+					"height": 17,
 					"visibility": "hidden",
 					"dataSourceTypeHint": "object",
 					"stroke": "#FF0000",
-					"fontFamily": ".SF NS Text",
-					"fontSize": 11,
 					"focusable": false,
 					"fill": "transparent",
 					"borderStyle": "dotted",
@@ -109,7 +107,9 @@
 					"hideFocusRing": true,
 					"contextMenu": "none",
 					"dragging": "none",
-					"dropping": "none"
+					"dropping": "none",
+					"fontTheme": "normal",
+					"fontSize": 11
 				},
 				"Line": {
 					"type": "line",
@@ -177,5 +177,12 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
+	},
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
 	}
 }

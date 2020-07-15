@@ -118,7 +118,6 @@
 							"alternateFill": "#FFFFFF",
 							"textAlign": "left",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 10,
 							"events": [
 								"onDataChange"
@@ -207,7 +206,6 @@
 							"stroke": "#FF9300",
 							"textAlign": "left",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 10,
 							"events": [
 								"onDataChange"
