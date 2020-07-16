@@ -11,31 +11,31 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($Boo_4dType;$Boo_found)
-C_LONGINT:C283($Lon_attributs;$Lon_field;$Lon_field2;$Lon_fieldID;$Lon_parameters;$Lon_relatedTableID)
-C_LONGINT:C283($Lon_relationField;$Lon_table;$Lon_table2;$Lon_tableID;$Lon_type)
+C_BOOLEAN:C305($Boo_4dType; $Boo_found)
+C_LONGINT:C283($Lon_attributs; $Lon_field; $Lon_field2; $Lon_fieldID; $Lon_parameters; $Lon_relatedTableID)
+C_LONGINT:C283($Lon_relationField; $Lon_table; $Lon_table2; $Lon_tableID; $Lon_type)
 C_POINTER:C301($Ptr_field)
-C_TEXT:C284($Dom_attribute;$Dom_elements;$Dom_entity;$Dom_model;$Dom_node;$Dom_userInfo)
-C_TEXT:C284($File_;$t;$tt;$Txt_buffer;$Txt_field;$Txt_fieldName)
-C_TEXT:C284($Txt_fieldNumber;$Txt_inverseName;$Txt_relationName;$Txt_tableName;$Txt_tableNumber;$Txt_value)
-C_OBJECT:C1216($ƒ;$o;$Obj_buffer;$Obj_dataModel;$Obj_field;$Obj_in)
-C_OBJECT:C1216($Obj_out;$Obj_path;$Obj_relationTable;$Obj_table)
-C_COLLECTION:C1488($Col_fields;$Col_tables)
+C_TEXT:C284($Dom_attribute; $Dom_elements; $Dom_entity; $Dom_model; $Dom_node; $Dom_userInfo)
+C_TEXT:C284($File_; $t; $tt; $Txt_buffer; $Txt_field; $Txt_fieldName)
+C_TEXT:C284($Txt_fieldNumber; $Txt_inverseName; $Txt_relationName; $Txt_tableName; $Txt_tableNumber; $Txt_value)
+C_OBJECT:C1216($ƒ; $o; $Obj_buffer; $Obj_dataModel; $Obj_field; $Obj_in)
+C_OBJECT:C1216($Obj_out; $Obj_path; $Obj_relationTable; $Obj_table)
+C_COLLECTION:C1488($Col_fields; $Col_tables)
 
-ARRAY TEXT:C222($tTxt_fields;0)
-ARRAY TEXT:C222($tTxt_relationFields;0)
-ARRAY TEXT:C222($tTxt_tables;0)
+ARRAY TEXT:C222($tTxt_fields; 0)
+ARRAY TEXT:C222($tTxt_relationFields; 0)
+ARRAY TEXT:C222($tTxt_tables; 0)
 
 If (False:C215)
-	C_OBJECT:C1216(dataModel;$0)
-	C_OBJECT:C1216(dataModel;$1)
+	C_OBJECT:C1216(dataModel; $0)
+	C_OBJECT:C1216(dataModel; $1)
 End if 
 
 // ----------------------------------------------------
 // Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	
 	// NO PARAMETERS REQUIRED
 	
@@ -49,7 +49,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$ƒ:=Storage:C1525.ƒ
 	
 	$Obj_out:=New object:C1471(\
-		"success";False:C215)
+		"success"; False:C215)
 	
 Else 
 	
@@ -61,14 +61,14 @@ End if
 Case of 
 		
 		//______________________________________________________
-	: ($Obj_in.action=Null:C1517)// Missing parameter
+	: ($Obj_in.action=Null:C1517)  // Missing parameter
 		
-		ASSERT:C1129(False:C215;"Missing parameter \"action\"")
+		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
 		
 		//______________________________________________________
-	: ($Obj_in.action="xcdatamodel")// Dump the data mode as xcdatamodel - CALLERS: editor_MENU_ACTIONS, mobile_Project
+	: ($Obj_in.action="xcdatamodel")  // Dump the data mode as xcdatamodel - CALLERS: editor_MENU_ACTIONS, mobile_Project
 		
-		If (Asserted:C1132($Obj_in.path#Null:C1517;"Missing the tag \"path\""))
+		If (Asserted:C1132($Obj_in.path#Null:C1517; "Missing the tag \"path\""))
 			
 			If ($Obj_in.dataModel=Null:C1517)
 				
@@ -98,28 +98,28 @@ Case of
 				
 				If (OK=1)
 					
-					XML SET OPTIONS:C1090($Dom_model;XML indentation:K45:34;XML with indentation:K45:35)
+					XML SET OPTIONS:C1090($Dom_model; XML indentation:K45:34; XML with indentation:K45:35)
 					
-					DOM SET XML ATTRIBUTE:C866($Dom_model;\
-						"type";"com.apple.IDECoreDataModeler.DataModel";\
-						"documentVersion";"1.0";\
-						"lastSavedToolsVersion";"14903";\
-						"systemVersion";"18G87";\
-						"minimumToolsVersion";"Automatic";\
-						"sourceLanguage";"Swift";\
-						"userDefinedModelVersionIdentifier";"")
+					DOM SET XML ATTRIBUTE:C866($Dom_model; \
+						"type"; "com.apple.IDECoreDataModeler.DataModel"; \
+						"documentVersion"; "1.0"; \
+						"lastSavedToolsVersion"; "14903"; \
+						"systemVersion"; "18G87"; \
+						"minimumToolsVersion"; "Automatic"; \
+						"sourceLanguage"; "Swift"; \
+						"userDefinedModelVersionIdentifier"; "")
 					
-					$Dom_elements:=DOM Create XML element:C865($Dom_model;"elements")
+					$Dom_elements:=DOM Create XML element:C865($Dom_model; "elements")
 					
 					If (OK=1)
 						
-						ARRAY TEXT:C222($tTxt_entityAttributes;4)
+						ARRAY TEXT:C222($tTxt_entityAttributes; 4)
 						$tTxt_entityAttributes{1}:="name"
 						$tTxt_entityAttributes{2}:="representedClassName"
 						$tTxt_entityAttributes{3}:="syncable"
 						$tTxt_entityAttributes{4}:="codeGenerationType"
 						
-						ARRAY TEXT:C222($tTxt_entityValues;4)
+						ARRAY TEXT:C222($tTxt_entityValues; 4)
 						$tTxt_entityValues{1}:=""
 						$tTxt_entityValues{2}:=""
 						$tTxt_entityValues{3}:="YES"
@@ -133,40 +133,40 @@ Case of
 							$tTxt_entityValues{1}:=$Txt_tableName
 							$tTxt_entityValues{2}:=$Txt_tableName
 							
-							$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model;"entity";$tTxt_entityAttributes;$tTxt_entityValues)
-							DOM SET XML ATTRIBUTE:C866($Dom_entity;\
-								"isAbstract";"YES")
+							$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
+							DOM SET XML ATTRIBUTE:C866($Dom_entity; \
+								"isAbstract"; "YES")
 							
-							$Dom_attribute:=DOM Create XML element:C865($Dom_entity;"attribute")
-							DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-								"name";"qmobile__STAMP";\
-								"attributeType";"Integer 64")
+							$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
+							DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+								"name"; "qmobile__STAMP"; \
+								"attributeType"; "Integer 64")
 							
-							$Dom_attribute:=DOM Create XML element:C865($Dom_entity;"attribute")
-							DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-								"name";"qmobile__TIMESTAMP";\
-								"attributeType";"Date")
+							$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
+							DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+								"name"; "qmobile__TIMESTAMP"; \
+								"attributeType"; "Date")
 							
-							$Dom_attribute:=DOM Create XML element:C865($Dom_entity;"attribute")
-							DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-								"name";"qmobile__KEY";\
-								"attributeType";"String")
+							$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
+							DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+								"name"; "qmobile__KEY"; \
+								"attributeType"; "String")
 							
-							$Dom_node:=DOM Create XML element:C865($Dom_elements;"element";\
-								"name";$Txt_tableName;\
-								"positionX";200;\
-								"positionY";0;\
-								"width";150;\
-								"height";45+(15*3))
+							$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
+								"name"; $Txt_tableName; \
+								"positionX"; 200; \
+								"positionY"; 0; \
+								"width"; 150; \
+								"height"; 45+(15*3))
 							
 						End if 
 						
-						If (Bool:C1537($Obj_in.relationship))// core data relation ship table
+						If (Bool:C1537($Obj_in.relationship))  // core data relation ship table
 							
 							$Obj_buffer:=dataModel(New object:C1471(\
-								"action";"xcdatamodel_relation";\
-								"dataModel";$Obj_dataModel;\
-								"definition";$Obj_in.definition))
+								"action"; "xcdatamodel_relation"; \
+								"dataModel"; $Obj_dataModel; \
+								"definition"; $Obj_in.definition))
 							
 							If ($Obj_buffer.success)
 								
@@ -174,11 +174,11 @@ Case of
 								$Obj_out.definition:=$Obj_buffer.definition
 								
 							End if 
-						End if // end pre-parsing for relationship
+						End if   // end pre-parsing for relationship
 						
 						$Obj_buffer:=dataModel(New object:C1471(\
-							"action";"xcdatamodel_primaryKey";\
-							"dataModel";$Obj_dataModel))
+							"action"; "xcdatamodel_primaryKey"; \
+							"dataModel"; $Obj_dataModel))
 						
 						If ($Obj_buffer.success)
 							
@@ -187,35 +187,35 @@ Case of
 						End if 
 						
 						// For each table
-						OB GET PROPERTY NAMES:C1232($Obj_dataModel;$tTxt_tables)// #CLEAN use for each
+						OB GET PROPERTY NAMES:C1232($Obj_dataModel; $tTxt_tables)  // #CLEAN use for each
 						
-						For ($Lon_table;1;Size of array:C274($tTxt_tables);1)
+						For ($Lon_table; 1; Size of array:C274($tTxt_tables); 1)
 							
 							$Lon_tableID:=Num:C11($tTxt_tables{$Lon_table})
 							$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
 							
 							$Txt_buffer:=$Obj_table[""].name
-							$Txt_tableName:=formatString("table-name";$Txt_buffer)
+							$Txt_tableName:=formatString("table-name"; $Txt_buffer)
 							
 							$tTxt_entityValues{1}:=$Txt_tableName
 							$tTxt_entityValues{2}:=$Txt_tableName
 							
-							$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model;"entity";$tTxt_entityAttributes;$tTxt_entityValues)
+							$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
 							
 							If (Bool:C1537(feature._234))
 								
-								DOM SET XML ATTRIBUTE:C866($Dom_entity;\
-									"parentEntity";"Record")
+								DOM SET XML ATTRIBUTE:C866($Dom_entity; \
+									"parentEntity"; "Record")
 								
 							End if 
 							
-							$Dom_userInfo:=DOM Create XML element:C865($Dom_entity;"userInfo")
+							$Dom_userInfo:=DOM Create XML element:C865($Dom_entity; "userInfo")
 							
-							If (Not:C34(str_equal($Txt_tableName;$Txt_buffer)))
+							If (Not:C34(str_equal($Txt_tableName; $Txt_buffer)))
 								
-								$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-									"key";"keyMapping";\
-									"value";$Txt_buffer)
+								$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+									"key"; "keyMapping"; \
+									"value"; $Txt_buffer)
 								
 							End if 
 							
@@ -224,71 +224,71 @@ Case of
 							If (Length:C16(String:C10($o.slave))>0)
 								
 								// Only accessible via relations
-								$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-									"key";"slave";\
-									"value";String:C10($o.slave))
+								$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+									"key"; "slave"; \
+									"value"; String:C10($o.slave))
 								
 							End if 
 							//}
 							
 							// Has or not the global stamp fields
-							$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-								"key";"globalStamp";\
-								"value";Choose:C955(Bool:C1537(structure(New object:C1471(\
-								"action";"hasField";\
-								"table";$o.name;\
-								"field";SHARED.stampField.name)).value);"YES";"NO"))
+							$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+								"key"; "globalStamp"; \
+								"value"; Choose:C955(Bool:C1537(structure(New object:C1471(\
+								"action"; "hasField"; \
+								"table"; $o.name; \
+								"field"; SHARED.stampField.name)).value); "YES"; "NO"))
 							
 							If (OK=1)
 								
 								If ($o.primaryKey#Null:C1517)
 									
-									$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-										"key";"primaryKey";\
-										"value";String:C10($o.primaryKey))
+									$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+										"key"; "primaryKey"; \
+										"value"; String:C10($o.primaryKey))
 									
 									If (Length:C16(String:C10($o.primaryKey))>0)
-										C_TEXT:C284($Dom_fetchIndex;$Dom_fetchIndexElement)
-										$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity;"fetchIndex";"name";"byPrimaryKey")
-										$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex;"fetchIndexElement";\
-											"property";formatString("field-name";String:C10($o.primaryKey));"type";"binary";"order";"ascending")
+										C_TEXT:C284($Dom_fetchIndex; $Dom_fetchIndexElement)
+										$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; "byPrimaryKey")
+										$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
+											"property"; formatString("field-name"; String:C10($o.primaryKey)); "type"; "binary"; "order"; "ascending")
 									End if 
 									
 								End if 
 								
 								// Development #113102
-								If ($o.filter#Null:C1517)// Is filter is available?
+								If ($o.filter#Null:C1517)  // Is filter is available?
 									
-									If (Bool:C1537($o.filter.validated))// Is filter is validated?
+									If (Bool:C1537($o.filter.validated))  // Is filter is validated?
 										
-										$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-											"key";"filter";\
-											"value";String:C10($o.filter.string))
+										$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+											"key"; "filter"; \
+											"value"; String:C10($o.filter.string))
 										
 									Else 
 										
-										ob_warning_add($Obj_out;"Filter '"+String:C10($o.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
+										ob_warning_add($Obj_out; "Filter '"+String:C10($o.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
 										
 									End if 
 								End if 
 								
-								OB GET PROPERTY NAMES:C1232($Obj_table;$tTxt_fields)
+								OB GET PROPERTY NAMES:C1232($Obj_table; $tTxt_fields)
 								
 								$Lon_attributs:=Size of array:C274($tTxt_fields)
 								
-								$Dom_node:=DOM Create XML element:C865($Dom_elements;"element";\
-									"name";$Txt_tableName;\
-									"positionX";200*$Lon_table;\
-									"positionY";100;\
-									"width";150;\
-									"height";45+(15*$Lon_attributs))
+								$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
+									"name"; $Txt_tableName; \
+									"positionX"; 200*$Lon_table; \
+									"positionY"; 100; \
+									"width"; 150; \
+									"height"; 45+(15*$Lon_attributs))
 								
-								For ($Lon_field;1;$Lon_attributs;1)
+								For ($Lon_field; 1; $Lon_attributs; 1)
 									
 									Case of 
 											
 											//………………………………………………………………………………………………………………………
-										: (Length:C16($tTxt_fields{$Lon_field})=0)// Properties
+										: (Length:C16($tTxt_fields{$Lon_field})=0)  // Properties
 											
 											// <NOTHING MORE TO DO>
 											
@@ -303,7 +303,7 @@ Case of
 											Else 
 												
 												$Lon_fieldID:=Num:C11($tTxt_fields{$Lon_field})
-												$Ptr_field:=Field:C253($Lon_tableID;$Lon_fieldID)
+												$Ptr_field:=Field:C253($Lon_tableID; $Lon_fieldID)
 												$Txt_buffer:=Field name:C257($Ptr_field)
 												$Lon_type:=Type:C295($Ptr_field->)
 												$Boo_4dType:=True:C214
@@ -312,34 +312,34 @@ Case of
 											
 											If (Length:C16($Txt_buffer)>0)
 												
-												$Txt_fieldName:=formatString("field-name";$Txt_buffer)
+												$Txt_fieldName:=formatString("field-name"; $Txt_buffer)
 												
-												$Dom_attribute:=DOM Create XML element:C865($Dom_entity;"attribute")// XXX merge with next instruction
+												$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
 												
-												DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-													"name";$Txt_fieldName;\
-													"optional";"YES";\
-													"indexed";"NO";\
-													"syncable";"YES")
+												DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+													"name"; $Txt_fieldName; \
+													"optional"; "YES"; \
+													"indexed"; "NO"; \
+													"syncable"; "YES")
 												
-												$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute;"userInfo")
+												$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
 												
-												If (Not:C34(str_equal($Txt_fieldName;$Txt_buffer)))
+												If (Not:C34(str_equal($Txt_fieldName; $Txt_buffer)))
 													
-													$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-														"key";"keyMapping";\
-														"value";$Txt_buffer)
+													$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+														"key"; "keyMapping"; \
+														"value"; $Txt_buffer)
 													
 												End if 
 												
 												// add xml attribut for type
 												dataModel(New object:C1471(\
-													"action";"xcdatamodel_field";\
-													"type";$Lon_type;\
-													"fieldType";$Lon_type;\
-													"4d";$Ptr_field#Null:C1517;\
-													"dom";$Dom_attribute;\
-													"domUserInfo";$Dom_userInfo))
+													"action"; "xcdatamodel_field"; \
+													"type"; $Lon_type; \
+													"fieldType"; $Lon_type; \
+													"4d"; $Ptr_field#Null:C1517; \
+													"dom"; $Dom_attribute; \
+													"domUserInfo"; $Dom_userInfo))
 												
 											End if 
 											
@@ -356,37 +356,37 @@ Case of
 											Case of 
 													
 													//__________________________________
-												: (Bool:C1537($Obj_in.flat))// mode flat: one typed core data attribute by related fields
+												: (Bool:C1537($Obj_in.flat))  // mode flat: one typed core data attribute by related fields
 													
-													OB GET PROPERTY NAMES:C1232($Obj_table[$Txt_relationName];$tTxt_relationFields)
+													OB GET PROPERTY NAMES:C1232($Obj_table[$Txt_relationName]; $tTxt_relationFields)
 													
-													For ($Lon_relationField;1;Size of array:C274($tTxt_relationFields);1)
+													For ($Lon_relationField; 1; Size of array:C274($tTxt_relationFields); 1)
 														
 														Case of 
 																
 																//……………………………………………………
 															: ($ƒ.isField($tTxt_relationFields{$Lon_relationField}))
 																
-																$Dom_attribute:=DOM Create XML element:C865($Dom_entity;"attribute")
+																$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
 																
 																If (OK=1)
 																	
 																	$Txt_buffer:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].name
-																	$Txt_fieldName:=formatString("field-name";$Txt_relationName+"."+$Txt_buffer)
+																	$Txt_fieldName:=formatString("field-name"; $Txt_relationName+"."+$Txt_buffer)
 																	
-																	DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-																		"name";$Txt_fieldName;\
-																		"optional";"YES";\
-																		"indexed";"NO";\
-																		"syncable";"YES")
+																	DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+																		"name"; $Txt_fieldName; \
+																		"optional"; "YES"; \
+																		"indexed"; "NO"; \
+																		"syncable"; "YES")
 																	
-																	$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute;"userInfo")
+																	$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
 																	
-																	If (Not:C34(str_equal($Txt_fieldName;$Txt_relationName+"."+$Txt_buffer)))
+																	If (Not:C34(str_equal($Txt_fieldName; $Txt_relationName+"."+$Txt_buffer)))
 																		
-																		$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-																			"key";"keyMapping";\
-																			"value";$Txt_relationName+"."+$Txt_buffer)
+																		$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+																			"key"; "keyMapping"; \
+																			"value"; $Txt_relationName+"."+$Txt_buffer)
 																		
 																	End if 
 																	
@@ -394,11 +394,11 @@ Case of
 																	
 																	// CLEAN call this method with $Lon_type not converted, and do a method which support that?
 																	dataModel(New object:C1471(\
-																		"action";"xcdatamodel_field";\
-																		"type";$Lon_type;\
-																		"4d";$Boo_4dType;\
-																		"dom";$Dom_attribute;\
-																		"domUserInfo";$Dom_userInfo))
+																		"action"; "xcdatamodel_field"; \
+																		"type"; $Lon_type; \
+																		"4d"; $Boo_4dType; \
+																		"dom"; $Dom_attribute; \
+																		"domUserInfo"; $Dom_userInfo))
 																	
 																End if 
 																
@@ -412,9 +412,9 @@ Case of
 													End for 
 													
 													//__________________________________
-												: (Bool:C1537($Obj_in.relationship))// core data relation ship table
+												: (Bool:C1537($Obj_in.relationship))  // core data relation ship table
 													
-													$Txt_buffer:=formatString("field-name";$Txt_relationName)
+													$Txt_buffer:=formatString("field-name"; $Txt_relationName)
 													
 													$Txt_inverseName:=String:C10($Obj_table[$Txt_relationName].inverseName)
 													
@@ -422,51 +422,51 @@ Case of
 														
 														If (dev_Matrix)
 															
-															ASSERT:C1129(False:C215;"Missing inverseName")
+															ASSERT:C1129(False:C215; "Missing inverseName")
 															
 														End if 
 														
 														$Obj_buffer:=structure(New object:C1471(\
-															"action";"inverseRelationName";\
-															"table";$Obj_table.name;\
-															"definition";$Obj_out.definition;\
-															"relation";$Txt_relationName))
+															"action"; "inverseRelationName"; \
+															"table"; $Obj_table.name; \
+															"definition"; $Obj_out.definition; \
+															"relation"; $Txt_relationName))
 														
 														If ($Obj_buffer.success)
 															
 															$Txt_inverseName:=$Obj_buffer.value
-															$Obj_in.definition:=$Obj_buffer.definition// cache purpose
+															$Obj_in.definition:=$Obj_buffer.definition  // cache purpose
 															$Obj_out.definition:=$Obj_buffer.definition
 															
 														End if 
 													End if 
 													
 													// relation mode
-													If ($ƒ.isRelationToMany($Obj_table[$Txt_relationName]))// to N
+													If ($ƒ.isRelationToMany($Obj_table[$Txt_relationName]))  // to N
 														
 														// we must have {type:TABLENAMESelection,relatedDataClass:TABLENAME}
 														
-														$Dom_attribute:=DOM Create XML element:C865($Dom_entity;"relationship";\
-															"name";$Txt_buffer;\
-															"destinationEntity";formatString("table-name";$Obj_table[$Txt_relationName].relatedDataClass);\
-															"inverseEntity";formatString("table-name";$Obj_table[$Txt_relationName].relatedDataClass);\
-															"inverseName";formatString("field-name";$Txt_inverseName);\
-															"toMany";"YES";\
-															"optional";"YES";\
-															"syncable";"YES";\
-															"deletionRule";"Nullify")
+														$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
+															"name"; $Txt_buffer; \
+															"destinationEntity"; formatString("table-name"; $Obj_table[$Txt_relationName].relatedDataClass); \
+															"inverseEntity"; formatString("table-name"; $Obj_table[$Txt_relationName].relatedDataClass); \
+															"inverseName"; formatString("field-name"; $Txt_inverseName); \
+															"toMany"; "YES"; \
+															"optional"; "YES"; \
+															"syncable"; "YES"; \
+															"deletionRule"; "Nullify")
 														
-													Else // to 1
+													Else   // to 1
 														
-														$Dom_attribute:=DOM Create XML element:C865($Dom_entity;"relationship";\
-															"name";$Txt_buffer;\
-															"destinationEntity";formatString("table-name";$Obj_table[$Txt_relationName].relatedDataClass);\
-															"inverseEntity";formatString("table-name";$Obj_table[$Txt_relationName].relatedDataClass);\
-															"inverseName";formatString("field-name";$Txt_inverseName);\
-															"maxCount";"1";\
-															"optional";"YES";\
-															"syncable";"YES";\
-															"deletionRule";"Nullify")
+														$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
+															"name"; $Txt_buffer; \
+															"destinationEntity"; formatString("table-name"; $Obj_table[$Txt_relationName].relatedDataClass); \
+															"inverseEntity"; formatString("table-name"; $Obj_table[$Txt_relationName].relatedDataClass); \
+															"inverseName"; formatString("field-name"; $Txt_inverseName); \
+															"maxCount"; "1"; \
+															"optional"; "YES"; \
+															"syncable"; "YES"; \
+															"deletionRule"; "Nullify")
 														
 														// XXX: inverse name?
 														// XXX: if we have a relation, we must ensure that the destination table will be created with all wanted fields
@@ -474,23 +474,31 @@ Case of
 														
 													End if 
 													
-													$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute;"userInfo")
+													$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
 													
-													If (Not:C34(str_equal($Txt_buffer;$Txt_relationName)))
+													If (Not:C34(str_equal($Txt_buffer; $Txt_relationName)))
 														
-														$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-															"key";"keyMapping";\
-															"value";$Txt_relationName)
+														$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+															"key"; "keyMapping"; \
+															"value"; $Txt_relationName)
+														
+													End if 
+													
+													If (Length:C16(String:C10($Obj_table[$Txt_relationName].format))>0)
+														
+														$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+															"key"; "format"; \
+															"value"; String:C10($Obj_table[$Txt_relationName].format))
 														
 													End if 
 													
 													// Get all fields to put in expand userInfo
 													$Col_fields:=New collection:C1472()
-													OB GET PROPERTY NAMES:C1232($Obj_table[$Txt_relationName];$tTxt_relationFields)
+													OB GET PROPERTY NAMES:C1232($Obj_table[$Txt_relationName]; $tTxt_relationFields)
 													
-													For ($Lon_relationField;1;Size of array:C274($tTxt_relationFields);1)
+													For ($Lon_relationField; 1; Size of array:C274($tTxt_relationFields); 1)
 														
-														If (Match regex:C1019("(?m-si)^\\d+$";$tTxt_relationFields{$Lon_relationField};1;*))// field if
+														If (Match regex:C1019("(?m-si)^\\d+$"; $tTxt_relationFields{$Lon_relationField}; 1; *))  // field if
 															
 															$Txt_buffer:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].name
 															$Col_fields.push($Txt_buffer)
@@ -514,43 +522,43 @@ Case of
 													
 													If ($Col_fields.length>0)
 														
-														$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-															"key";"expand";\
-															"value";$Col_fields.join(","))
+														$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+															"key"; "expand"; \
+															"value"; $Col_fields.join(","))
 														
 													End if 
 													
 													//__________________________________
-												Else // mode with one attribute core data for all related fields
+												Else   // mode with one attribute core data for all related fields
 													
 													// attribute mode
-													$Dom_attribute:=DOM Create XML element:C865($Dom_entity;"attribute")
+													$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
 													
 													If (OK=1)
 														
-														$Txt_fieldName:=formatString("field-name";$Txt_relationName)
+														$Txt_fieldName:=formatString("field-name"; $Txt_relationName)
 														
-														DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-															"name";$Txt_fieldName;\
-															"attributeType";"Transformable";\
-															"valueTransformerName";"NSSecureUnarchiveFromData";\
-															"optional";"YES";\
-															"indexed";"NO";\
-															"syncable";"YES")
+														DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+															"name"; $Txt_fieldName; \
+															"attributeType"; "Transformable"; \
+															"valueTransformerName"; "NSSecureUnarchiveFromData"; \
+															"optional"; "YES"; \
+															"indexed"; "NO"; \
+															"syncable"; "YES")
 														
-														$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute;"userInfo")
+														$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
 														
-														If (Not:C34(str_equal($Txt_fieldName;$Txt_relationName)))
+														If (Not:C34(str_equal($Txt_fieldName; $Txt_relationName)))
 															
-															$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-																"key";"keyMapping";\
-																"value";$Txt_relationName)
+															$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+																"key"; "keyMapping"; \
+																"value"; $Txt_relationName)
 															
 														End if 
 														
-														$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-															"key";"path";\
-															"value";$Obj_table[$Txt_relationName].relatedDataClass)
+														$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+															"key"; "path"; \
+															"value"; $Obj_table[$Txt_relationName].relatedDataClass)
 														
 													End if 
 													
@@ -558,9 +566,9 @@ Case of
 											End case 
 											
 											//……………………………………………………………………………………………………………
-										: ($Obj_table[$tTxt_fields{$Lon_field}].relatedEntities#Null:C1517)// XXX do not edit here without care
+										: ($Obj_table[$tTxt_fields{$Lon_field}].relatedEntities#Null:C1517)  // XXX do not edit here without care
 											
-											ASSERT:C1129(False:C215;"Must not be here if relatedDataClass correctly filled")
+											ASSERT:C1129(False:C215; "Must not be here if relatedDataClass correctly filled")
 											
 											//………………………………………………………………………………………………………………………
 										Else 
@@ -572,18 +580,18 @@ Case of
 									
 									If (OK=0)
 										
-										$Lon_field:=MAXLONG:K35:2-1// Break
+										$Lon_field:=MAXLONG:K35:2-1  // Break
 										
 									End if 
-								End for // end fields
+								End for   // end fields
 							End if 
 							
 							If (OK=0)
 								
-								$Lon_table:=MAXLONG:K35:2-1// Break
+								$Lon_table:=MAXLONG:K35:2-1  // Break
 								
 							End if 
-						End for // end tables
+						End for   // end tables
 					End if 
 					
 					$File_:=$Obj_in.path
@@ -605,14 +613,14 @@ Case of
 							//………………………………………………………………………………………………
 					End case 
 					
-					CREATE FOLDER:C475($File_;*)
+					CREATE FOLDER:C475($File_; *)
 					
-					DOM EXPORT TO FILE:C862($Dom_model;$File_)
+					DOM EXPORT TO FILE:C862($Dom_model; $File_)
 					
 					$Obj_out.success:=Bool:C1537(OK)
 					$Obj_out.path:=$File_
 					
-					DOM CLOSE XML:C722($Dom_model)// Modify the system variable OK!
+					DOM CLOSE XML:C722($Dom_model)  // Modify the system variable OK!
 					
 				End if 
 				
@@ -624,43 +632,43 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="xcdatamodel_relation")// RECURSIVE CALL
+	: ($Obj_in.action="xcdatamodel_relation")  // RECURSIVE CALL
 		
 		$Obj_dataModel:=$Obj_in.dataModel
 		
-		OB GET PROPERTY NAMES:C1232($Obj_dataModel;$tTxt_tables)// #CLEAN: use for each on object
+		OB GET PROPERTY NAMES:C1232($Obj_dataModel; $tTxt_tables)  // #CLEAN: use for each on object
 		
-		For ($Lon_table;1;Size of array:C274($tTxt_tables);1)
+		For ($Lon_table; 1; Size of array:C274($tTxt_tables); 1)
 			
 			$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
-			OB GET PROPERTY NAMES:C1232($Obj_table;$tTxt_fields)
+			OB GET PROPERTY NAMES:C1232($Obj_table; $tTxt_fields)
 			
-			For ($Lon_field;1;Size of array:C274($tTxt_fields);1)
+			For ($Lon_field; 1; Size of array:C274($tTxt_fields); 1)
 				
 				Case of 
 						
 						//………………………………………………………………………………………………………………………
-					: (Match regex:C1019("(?m-si)^\\d+$";$tTxt_fields{$Lon_field};1;*))
+					: (Match regex:C1019("(?m-si)^\\d+$"; $tTxt_fields{$Lon_field}; 1; *))
 						
 						// field if ignore
 						
 						//………………………………………………………………………………………………………………………
 					: ((Value type:C1509($Obj_table[$tTxt_fields{$Lon_field}])=Is object:K8:27))
 						
-						$Txt_relationName:=$tTxt_fields{$Lon_field}// link name (or primaryKey, etc...)
+						$Txt_relationName:=$tTxt_fields{$Lon_field}  // link name (or primaryKey, etc...)
 						
-						If ($Obj_table[$Txt_relationName].relatedEntities#Null:C1517)// To remove if relatedEntities deleted and relatedDataClass already filled #109019
+						If ($Obj_table[$Txt_relationName].relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
 							
 							$Obj_table[$Txt_relationName].relatedDataClass:=$Obj_table[$Txt_relationName].relatedEntities
 							
 						End if 
 						
-						If ($Obj_table[$Txt_relationName].relatedDataClass#Null:C1517)// Is is a link?
+						If ($Obj_table[$Txt_relationName].relatedDataClass#Null:C1517)  // Is is a link?
 							
 							// if this relatedDataClass in model?
 							$Boo_found:=False:C215
 							
-							For ($Lon_table2;1;Size of array:C274($tTxt_tables);1)
+							For ($Lon_table2; 1; Size of array:C274($tTxt_tables); 1)
 								
 								$Obj_relationTable:=$Obj_dataModel[$tTxt_tables{$Lon_table2}]
 								$o:=$Obj_relationTable[""]
@@ -668,24 +676,24 @@ Case of
 								If ($o.name=$Obj_table[$Txt_relationName].relatedDataClass)
 									
 									$Boo_found:=True:C214
-									$Lon_table2:=MAXLONG:K35:2-1// Break
+									$Lon_table2:=MAXLONG:K35:2-1  // Break
 									
 								End if 
 							End for 
 							
-							OB GET PROPERTY NAMES:C1232($Obj_table[$Txt_relationName];$tTxt_relationFields)
+							OB GET PROPERTY NAMES:C1232($Obj_table[$Txt_relationName]; $tTxt_relationFields)
 							
-							If (Not:C34($Boo_found))// not found we must add a new table in model
+							If (Not:C34($Boo_found))  // not found we must add a new table in model
 								
 								$Obj_relationTable:=New object:C1471(\
-									"";New object:C1471(\
-									"name";$Obj_table[$Txt_relationName].relatedDataClass))
+									""; New object:C1471(\
+									"name"; $Obj_table[$Txt_relationName].relatedDataClass))
 								
 								$o:=$Obj_relationTable[""]
 								
 								$Obj_buffer:=structure(New object:C1471(\
-									"action";"tableInfo";\
-									"name";$o.name))
+									"action"; "tableInfo"; \
+									"name"; $o.name))
 								
 								If ($Obj_buffer.success)
 									
@@ -693,26 +701,26 @@ Case of
 									$o.slave:=$Obj_table[""].name
 									
 									$Lon_relatedTableID:=$Obj_buffer.tableInfo.tableNumber
-									APPEND TO ARRAY:C911($tTxt_tables;String:C10($Lon_relatedTableID))
+									APPEND TO ARRAY:C911($tTxt_tables; String:C10($Lon_relatedTableID))
 									
 									$Obj_dataModel[String:C10($Lon_relatedTableID)]:=$Obj_relationTable
 									$Obj_out.hasBeenEdited:=True:C214
 									
 								Else 
 									
-									ob_error_add($Obj_out;"Unknown related table "+String:C10($o.name))
+									ob_error_add($Obj_out; "Unknown related table "+String:C10($o.name))
 									
 								End if 
 							End if 
 							
 							// just check if we must add new fields
-							For ($Lon_field2;1;Size of array:C274($tTxt_relationFields);1)
+							For ($Lon_field2; 1; Size of array:C274($tTxt_relationFields); 1)
 								
-								If (Match regex:C1019("(?m-si)^\\d+$";$tTxt_relationFields{$Lon_field2};1;*))
+								If (Match regex:C1019("(?m-si)^\\d+$"; $tTxt_relationFields{$Lon_field2}; 1; *))
 									
 									If (($Obj_relationTable[$tTxt_relationFields{$Lon_field2}])=Null:C1517)
 										
-										$Obj_relationTable[$tTxt_relationFields{$Lon_field2}]:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_field2}]// name & type
+										$Obj_relationTable[$tTxt_relationFields{$Lon_field2}]:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_field2}]  // name & type
 										$Obj_out.hasBeenEdited:=True:C214
 										
 									End if 
@@ -721,26 +729,26 @@ Case of
 							
 							// Get inverse field
 							$Obj_buffer:=structure(New object:C1471(\
-								"action";"inverseRelatedFields";\
-								"table";$Obj_table[""].name;\
-								"relation";$Txt_relationName;\
-								"definition";$Obj_in.definition))
+								"action"; "inverseRelatedFields"; \
+								"table"; $Obj_table[""].name; \
+								"relation"; $Txt_relationName; \
+								"definition"; $Obj_in.definition))
 							
 							If ($Obj_buffer.success)
 								
-								$Obj_in.definition:=$Obj_buffer.definition// cache purpose
+								$Obj_in.definition:=$Obj_buffer.definition  // cache purpose
 								
-								For each ($Obj_field;$Obj_buffer.fields)// CLEAN must only have one
+								For each ($Obj_field; $Obj_buffer.fields)  // CLEAN must only have one
 									
 									// Create the inverse field
 									If ($Obj_relationTable[$Obj_field.name]=Null:C1517)
 										
 										$Obj_relationTable[$Obj_field.name]:=New object:C1471(\
-											"kind";$Obj_field.kind;\
-											"type";$Obj_field.fieldType;\
-											"inverseName";$Txt_relationName;\
-											"relatedTableNumber";$Obj_field.relatedTableNumber;\
-											"relatedDataClass";$Obj_field.relatedDataClass)
+											"kind"; $Obj_field.kind; \
+											"type"; $Obj_field.fieldType; \
+											"inverseName"; $Txt_relationName; \
+											"relatedTableNumber"; $Obj_field.relatedTableNumber; \
+											"relatedDataClass"; $Obj_field.relatedDataClass)
 										
 									End if 
 									
@@ -761,16 +769,16 @@ Case of
 		$Obj_out.success:=Bool:C1537($Obj_out.hasBeenEdited)
 		
 		//______________________________________________________
-	: ($Obj_in.action="xcdatamodel_primaryKey")// Add always primary key field in table model - RECURSIVE CALL
+	: ($Obj_in.action="xcdatamodel_primaryKey")  // Add always primary key field in table model - RECURSIVE CALL
 		
 		$Obj_dataModel:=$Obj_in.dataModel
 		
-		OB GET PROPERTY NAMES:C1232($Obj_dataModel;$tTxt_tables)// CLEAN: use for each on object
+		OB GET PROPERTY NAMES:C1232($Obj_dataModel; $tTxt_tables)  // CLEAN: use for each on object
 		
-		For ($Lon_table;1;Size of array:C274($tTxt_tables);1)// CLEAN use for each
+		For ($Lon_table; 1; Size of array:C274($tTxt_tables); 1)  // CLEAN use for each
 			
 			$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
-			OB GET PROPERTY NAMES:C1232($Obj_table;$tTxt_fields)
+			OB GET PROPERTY NAMES:C1232($Obj_table; $tTxt_fields)
 			
 			$o:=$Obj_table[""]
 			
@@ -796,17 +804,17 @@ Case of
 					Else 
 						
 						$Obj_buffer:=structure(New object:C1471(\
-							"action";"tableInfo";\
-							"name";$o.name))
+							"action"; "tableInfo"; \
+							"name"; $o.name))
 						
-						$Txt_fieldName:=Choose:C955($Obj_buffer.success;$Obj_buffer.tableInfo.primaryKey;"")
+						$Txt_fieldName:=Choose:C955($Obj_buffer.success; $Obj_buffer.tableInfo.primaryKey; "")
 						
 						//………………………………………………………………………………………………………………………
 				End case 
 				
-				For ($Lon_field;1;Size of array:C274($tTxt_fields);1)
+				For ($Lon_field; 1; Size of array:C274($tTxt_fields); 1)
 					
-					If (Match regex:C1019("(?m-si)^\\d+$";$tTxt_fields{$Lon_field};1;*))
+					If (Match regex:C1019("(?m-si)^\\d+$"; $tTxt_fields{$Lon_field}; 1; *))
 						
 						$Obj_field:=$Obj_table[$tTxt_fields{$Lon_field}]
 						
@@ -819,12 +827,12 @@ Case of
 					End if 
 				End for 
 				
-				If (Not:C34($Boo_found))// if not add missing primary key field
+				If (Not:C34($Boo_found))  // if not add missing primary key field
 					
 					$Obj_buffer:=structure(New object:C1471(\
-						"action";"createField";\
-						"table";$o.name;\
-						"field";$Txt_fieldName))
+						"action"; "createField"; \
+						"table"; $o.name; \
+						"field"; $Txt_fieldName))
 					
 					If ($Obj_buffer.success)
 						
@@ -834,7 +842,7 @@ Case of
 						
 					Else 
 						
-						ob_error_combine($Obj_out;$Obj_buffer)
+						ob_error_combine($Obj_out; $Obj_buffer)
 						
 					End if 
 				End if 
@@ -845,7 +853,7 @@ Case of
 		$Obj_out.success:=Bool:C1537($Obj_out.hasBeenEdited)
 		
 		//______________________________________________________
-	: ($Obj_in.action="xcdatamodel_field")// RECURSIVE CALL
+	: ($Obj_in.action="xcdatamodel_field")  // RECURSIVE CALL
 		
 		$Dom_attribute:=$Obj_in.dom
 		$Dom_userInfo:=$Obj_in.domUserInfo
@@ -856,107 +864,107 @@ Case of
 				//________________________________________
 			: ($Lon_type=Is boolean:K8:9)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Boolean";\
-					"usesScalarValueType";"YES")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Boolean"; \
+					"usesScalarValueType"; "YES")
 				
 				//________________________________________
 			: ($Lon_type=Is alpha field:K8:1)\
 				 | ($Lon_type=Is text:K8:3)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"String")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "String")
 				
 				//________________________________________
 			: ($Lon_type=Is date:K8:7)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Date")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Date")
 				
 				//________________________________________
 			: ($Lon_type=Is picture:K8:10)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Transformable")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Transformable")
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"valueTransformerName";"NSSecureUnarchiveFromData")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"valueTransformerName"; "NSSecureUnarchiveFromData")
 				
-				$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-					"key";"image";\
-					"value";"YES")
+				$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+					"key"; "image"; \
+					"value"; "YES")
 				
 				//________________________________________
 			: ($Lon_type=Is longint:K8:6)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Integer 32";\
-					"usesScalarValueType";"YES")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Integer 32"; \
+					"usesScalarValueType"; "YES")
 				
 				//________________________________________
 			: ($Lon_type=Is integer:K8:5)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Integer 32";\
-					"usesScalarValueType";"YES")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Integer 32"; \
+					"usesScalarValueType"; "YES")
 				
-				$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-					"key";"integer";\
-					"value";"YES")
+				$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+					"key"; "integer"; \
+					"value"; "YES")
 				
 				//________________________________________
 			: ($Lon_type=Is integer 64 bits:K8:25)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Integer 64")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Integer 64")
 				
 				//________________________________________
 			: ($Lon_type=Is real:K8:4)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Double";\
-					"usesScalarValueType";"YES")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Double"; \
+					"usesScalarValueType"; "YES")
 				
 				//________________________________________
 			: ($Lon_type=Is time:K8:8)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Integer 64";\
-					"usesScalarValueType";"YES")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Integer 64"; \
+					"usesScalarValueType"; "YES")
 				
-				$Dom_node:=DOM Create XML element:C865($Dom_userInfo;"entry";\
-					"key";"duration";\
-					"value";"YES")
+				$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+					"key"; "duration"; \
+					"value"; "YES")
 				
 				//________________________________________
 			: ($Lon_type=Is object:K8:27)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Transformable")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Transformable")
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"valueTransformerName";"NSSecureUnarchiveFromData")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"valueTransformerName"; "NSSecureUnarchiveFromData")
 				
 				//________________________________________
 			: ($Lon_type=Is BLOB:K8:12)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Binary")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Binary")
 				
 				//________________________________________
 			: ($Lon_type=_o_Is float:K8:26)
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"Float";\
-					"usesScalarValueType";"YES")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "Float"; \
+					"usesScalarValueType"; "YES")
 				
 				//________________________________________
 			Else 
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute;\
-					"attributeType";"String")
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"attributeType"; "String")
 				
-				ob_warning_add($Obj_out;"Unknown type "+String:C10($Lon_type))
+				ob_warning_add($Obj_out; "Unknown type "+String:C10($Lon_type))
 				
 				//________________________________________
 		End case 
@@ -964,7 +972,7 @@ Case of
 		$Obj_out.success:=True:C214
 		
 		//______________________________________________________
-	: ($Obj_in.action="tableCollection")// Get table as collection - CALLERS : templates
+	: ($Obj_in.action="tableCollection")  // Get table as collection - CALLERS : templates
 		
 		Case of 
 				
@@ -985,15 +993,15 @@ Case of
 				Else 
 					
 					// all table in model
-					OB GET PROPERTY NAMES:C1232($Obj_dataModel;$tTxt_tables)
+					OB GET PROPERTY NAMES:C1232($Obj_dataModel; $tTxt_tables)
 					$Col_tables:=New collection:C1472()
-					ARRAY TO COLLECTION:C1563($Col_tables;$tTxt_tables)
+					ARRAY TO COLLECTION:C1563($Col_tables; $tTxt_tables)
 					
 				End if 
 				
 				$Obj_out.tables:=New collection:C1472
 				
-				For each ($Txt_tableNumber;$Col_tables)
+				For each ($Txt_tableNumber; $Col_tables)
 					
 					If ($Obj_dataModel[$Txt_tableNumber]#Null:C1517)
 						
@@ -1001,10 +1009,10 @@ Case of
 						
 						$Obj_table.tableNumber:=Num:C11($Txt_tableNumber)
 						
-						If (Bool:C1537($Obj_in.tag))// for tag format name
+						If (Bool:C1537($Obj_in.tag))  // for tag format name
 							
 							$Obj_table.originalName:=$Obj_table[""].name
-							$Obj_table.name:=formatString("table-name";$Obj_table[""].name)
+							$Obj_table.name:=formatString("table-name"; $Obj_table[""].name)
 							
 						End if 
 						
@@ -1023,7 +1031,7 @@ Case of
 		End case 
 		
 		//______________________________________________________
-	: ($Obj_in.action="fieldCollection")// get field name and if, format in list and detail userChoice - CALLERS : templates
+	: ($Obj_in.action="fieldCollection")  // get field name and if, format in list and detail userChoice - CALLERS : templates
 		
 		$Obj_out.success:=($Obj_in.table#Null:C1517)
 		
@@ -1031,35 +1039,35 @@ Case of
 			
 			$Obj_out.fields:=New collection:C1472()
 			
-			For each ($Txt_field;$Obj_in.table)
+			For each ($Txt_field; $Obj_in.table)
 				
 				Case of 
 						
 						//………………………………………………………………………………………………………………………
-					: (Match regex:C1019("(?m-si)^\\d+$";$Txt_field;1;*))
+					: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))
 						
 						$Obj_out.fields.push(New object:C1471(\
-							"name";$Obj_in.table[$Txt_field].name;\
-							"id";$Txt_field))// TODO field.id change to fieldNumber
+							"name"; $Obj_in.table[$Txt_field].name; \
+							"id"; $Txt_field))  // TODO field.id change to fieldNumber
 						
 						//………………………………………………………………………………………………………………………
 					: ((Value type:C1509($Obj_in.table[$Txt_field])=Is object:K8:27))
 						
 						If (Bool:C1537($Obj_in.relation))
 							
-							If ($Obj_in.table[$Txt_field].relatedEntities#Null:C1517)// To change if relatedEntities deleted and relatedDataClass already filled #109019
+							If ($Obj_in.table[$Txt_field].relatedEntities#Null:C1517)  // To change if relatedEntities deleted and relatedDataClass already filled #109019
 								
 								// redmine #110927 : want to add relation 1-N if no field specified at all by user
 								// Here we detect 1-N Relation, there is no "kind" or "type" to see it at this level...
 								
-								If ($Obj_in.dataModel[String:C10($Obj_in.table[$Txt_field].relatedTableNumber)]#Null:C1517)// only if destination table published
+								If ($Obj_in.dataModel[String:C10($Obj_in.table[$Txt_field].relatedTableNumber)]#Null:C1517)  // only if destination table published
 									
 									$Obj_out.fields.push(New object:C1471(\
-										"name";$Txt_field;\
-										"relatedDataClass";$Obj_in.table[$Txt_field].relatedEntities;\
-										"relatedTableNumber";$Obj_in.table[$Txt_field].relatedTableNumber;\
-										"fieldType";8859;\
-										"id";0))// TODO field.id change to fieldNumber
+										"name"; $Txt_field; \
+										"relatedDataClass"; $Obj_in.table[$Txt_field].relatedEntities; \
+										"relatedTableNumber"; $Obj_in.table[$Txt_field].relatedTableNumber; \
+										"fieldType"; 8859; \
+										"id"; 0))  // TODO field.id change to fieldNumber
 									
 								End if 
 							End if 
@@ -1081,7 +1089,7 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="fieldNames")// Get field names for dump with table (model format) - CALLERS : dump
+	: ($Obj_in.action="fieldNames")  // Get field names for dump with table (model format) - CALLERS : dump
 		
 		$Obj_out.success:=($Obj_in.table#Null:C1517)
 		
@@ -1090,7 +1098,7 @@ Case of
 			$Obj_out.fields:=New collection:C1472()
 			$Obj_out.expand:=New collection:C1472()
 			
-			For each ($Txt_field;$Obj_in.table)
+			For each ($Txt_field; $Obj_in.table)
 				
 				Case of 
 						
@@ -1100,7 +1108,7 @@ Case of
 						// <NOTHING MORE TO DO>
 						
 						//………………………………………………………………………………………………………………………
-					: (Match regex:C1019("(?m-si)^\\d+$";$Txt_field;1;*))
+					: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))
 						
 						$Obj_out.fields.push($Obj_in.table[$Txt_field].name)
 						
@@ -1109,13 +1117,13 @@ Case of
 						
 						$Obj_buffer:=$Obj_in.table[$Txt_field]
 						
-						If ($Obj_buffer.relatedEntities#Null:C1517)// To remove if relatedEntities deleted and relatedDataClass already filled #109019
+						If ($Obj_buffer.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
 							
 							$Obj_buffer.relatedDataClass:=$Obj_buffer.relatedEntities
 							
 						End if 
 						
-						If ($Obj_buffer.relatedDataClass#Null:C1517)// Is is a link?
+						If ($Obj_buffer.relatedDataClass#Null:C1517)  // Is is a link?
 							
 							If ($Obj_out.expand.indexOf($Txt_field)<0)
 								
@@ -1123,9 +1131,9 @@ Case of
 								
 							End if 
 							
-							For each ($Txt_fieldNumber;$Obj_buffer)
+							For each ($Txt_fieldNumber; $Obj_buffer)
 								
-								If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldNumber;1;*))// fieldNumber
+								If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))  // fieldNumber
 									
 									$Obj_out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
 									
@@ -1150,11 +1158,11 @@ Case of
 			End for each 
 			
 			// Add primary key if needed for expanded data
-			For each ($Txt_field;$Obj_out.expand)
+			For each ($Txt_field; $Obj_out.expand)
 				
 				$Obj_buffer:=structure(New object:C1471(\
-					"action";"tableInfo";\
-					"name";String:C10($Obj_in.table[$Txt_field].relatedDataClass)))
+					"action"; "tableInfo"; \
+					"name"; String:C10($Obj_in.table[$Txt_field].relatedDataClass)))
 				
 				If ($Obj_buffer.success)
 					
@@ -1168,7 +1176,7 @@ Case of
 					
 				Else 
 					
-					ob_warning_add($Obj_out;"Cannot get information for related table "+String:C10($Obj_in.table[$Txt_field].relatedDataClass)+"(related by "+$Txt_field+" in "+$Obj_in.table+")")
+					ob_warning_add($Obj_out; "Cannot get information for related table "+String:C10($Obj_in.table[$Txt_field].relatedDataClass)+"(related by "+$Txt_field+" in "+$Obj_in.table+")")
 					
 				End if 
 			End for each 
@@ -1190,7 +1198,7 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="pictureFields")// get field names for dump with table (model format) - CALLERS : dump
+	: ($Obj_in.action="pictureFields")  // get field names for dump with table (model format) - CALLERS : dump
 		
 		$Obj_out.success:=($Obj_in.table#Null:C1517)
 		
@@ -1199,12 +1207,12 @@ Case of
 			$Obj_out.fields:=New collection:C1472()
 			$Obj_buffer:=$Obj_in.table
 			
-			For each ($Txt_field;$Obj_buffer)
+			For each ($Txt_field; $Obj_buffer)
 				
 				Case of 
 						
 						//………………………………………………………………………………………………………………………
-					: (Match regex:C1019("(?m-si)^\\d+$";$Txt_field;1;*))
+					: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))
 						
 						If ($Obj_buffer[$Txt_field].fieldType=Is picture:K8:10)
 							
@@ -1216,16 +1224,16 @@ Case of
 					: (Value type:C1509($Obj_buffer[$Txt_field])#Is object:K8:27)
 						
 						//………………………………………………………………………………………………………………………
-					: ($Obj_buffer[$Txt_field].relatedDataClass#Null:C1517)// Is is a link?
+					: ($Obj_buffer[$Txt_field].relatedDataClass#Null:C1517)  // Is is a link?
 						
-						For each ($Txt_fieldNumber;$Obj_buffer[$Txt_field])
+						For each ($Txt_fieldNumber; $Obj_buffer[$Txt_field])
 							
-							If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldNumber;1;*))// fieldNumber
+							If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))  // fieldNumber
 								
-								If ($Obj_buffer[$Txt_field][$Txt_fieldNumber].fieldType=Is picture:K8:10)// if image
+								If ($Obj_buffer[$Txt_field][$Txt_fieldNumber].fieldType=Is picture:K8:10)  // if image
 									
 									$Obj_field:=OB Copy:C1225($Obj_buffer[$Txt_field][$Txt_fieldNumber])
-									$Obj_field.relatedDataClass:=$Obj_buffer[$Txt_field].relatedDataClass// copy it only if wanted to index picture on this table
+									$Obj_field.relatedDataClass:=$Obj_buffer[$Txt_field].relatedDataClass  // copy it only if wanted to index picture on this table
 									$Obj_field.relatedField:=$Txt_field
 									$Obj_out.fields.push($Obj_field)
 									
@@ -1249,7 +1257,7 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="fields")// Return a readonly flat table field list - CALLERS : views_Handler
+	: ($Obj_in.action="fields")  // Return a readonly flat table field list - CALLERS : views_Handler
 		
 		$Obj_dataModel:=$Obj_in.dataModel
 		
@@ -1263,12 +1271,12 @@ Case of
 				
 				$Obj_out.fields:=New collection:C1472
 				
-				For each ($Txt_value;$Obj_dataModel[$Obj_in.tableNumber])
+				For each ($Txt_value; $Obj_dataModel[$Obj_in.tableNumber])
 					
 					Case of 
 							
 							//……………………………………………………………………………………………………………
-						: ($ƒ.isField($Txt_value))// fieldNumber
+						: ($ƒ.isField($Txt_value))  // fieldNumber
 							
 							$Obj_field:=OB Copy:C1225($Obj_dataModel[$Obj_in.tableNumber][$Txt_value])
 							$Obj_field.path:=$Obj_field.name
@@ -1279,11 +1287,11 @@ Case of
 						: (Value type:C1509($Obj_dataModel[$Obj_in.tableNumber][$Txt_value])#Is object:K8:27)
 							
 							//……………………………………………………………………………………………………………
-						: ($ƒ.isRelationToOne($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))// relatedDataClass
+						: ($ƒ.isRelationToOne($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))  // relatedDataClass
 							
-							For each ($t;$Obj_dataModel[$Obj_in.tableNumber][$Txt_value])
+							For each ($t; $Obj_dataModel[$Obj_in.tableNumber][$Txt_value])
 								
-								If (Match regex:C1019("(?m-si)^\\d+$";$t;1;*))// fieldNumber
+								If (Match regex:C1019("(?m-si)^\\d+$"; $t; 1; *))  // fieldNumber
 									
 									$Obj_field:=OB Copy:C1225($Obj_dataModel[$Obj_in.tableNumber][$Txt_value][$t])
 									$Obj_field.path:=$Txt_value+"."+$Obj_field.name
@@ -1294,7 +1302,7 @@ Case of
 							End for each 
 							
 							//……………………………………………………………………………………………………………
-						: ($ƒ.isRelationToMany($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))// relatedEntities
+						: ($ƒ.isRelationToMany($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))  // relatedEntities
 							
 							//……………………………………………………………………………………………………………
 					End case 
@@ -1303,7 +1311,7 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="tableNames")// CALLERS : mobile_Project
+	: ($Obj_in.action="tableNames")  // CALLERS : mobile_Project
 		
 		$Obj_dataModel:=$Obj_in.dataModel
 		
@@ -1313,13 +1321,13 @@ Case of
 			
 			$Obj_out.values:=New collection:C1472
 			
-			For each ($t;$Obj_dataModel)
+			For each ($t; $Obj_dataModel)
 				
 				$Obj_out.values.push($Obj_dataModel[$t][""].name)
 				
 				If (Bool:C1537($Obj_in.relation))
 					
-					For each ($tt;$Obj_dataModel[$t])
+					For each ($tt; $Obj_dataModel[$t])
 						
 						If (Value type:C1509($Obj_dataModel[$t][$tt])=Is object:K8:27)
 							
@@ -1335,14 +1343,14 @@ Case of
 			
 		Else 
 			
-			ASSERT:C1129(dev_Matrix;"No data model")//#ERROR
+			ASSERT:C1129(dev_Matrix; "No data model")  //#ERROR
 			
 		End if 
 		
 		//________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
 		
 		//________________________________________
 End case 
