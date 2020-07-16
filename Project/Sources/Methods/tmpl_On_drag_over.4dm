@@ -8,17 +8,13 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($0)
+var $0 : Integer
 
-C_BLOB:C604($x)
-C_BOOLEAN:C305($b_background; $b_droppable; $b_vInsertion; $bHighlight)
-C_TEXT:C284($t)
-C_OBJECT:C1216($o)
-C_COLLECTION:C1488($c)
-
-If (False:C215)
-	C_LONGINT:C283(tmpl_On_drag_over; $0)
-End if 
+var $t : Text
+var $background, $droppable, $highlight, $vInsertion : Boolean
+var $x : Blob
+var $o : Object
+var $c : Collection
 
 // ----------------------------------------------------
 // Initialisations
@@ -50,44 +46,44 @@ If (Length:C16(This:C1470.$.current)>0)
 		
 		// Accept insertion
 		$t:=This:C1470.$.current
-		$b_vInsertion:=($t="@.vInsert")
+		$vInsertion:=($t="@.vInsert")
 		
 		If (feature.with("droppingNext"))
 			
-			$b_vInsertion:=$b_vInsertion | ($t="@.hInsertBefore") | ($t="@.hInsertAfter")
+			$vInsertion:=$vInsertion | ($t="@.hInsertBefore") | ($t="@.hInsertAfter")
 			
 		End if 
 		
-		If ($b_vInsertion)
+		If ($vInsertion)
 			
 			If ($o.fromIndex#Null:C1517)  // Internal D&D
 				
 				// Not if it's me
-				$b_vInsertion:=($o.fromIndex#(Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))-1))
+				$vInsertion:=($o.fromIndex#(Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))-1))
 				
 			End if 
 		End if 
 		
-		If (Not:C34($b_vInsertion))
+		If (Not:C34($vInsertion))
 			
 			// Accept dropping on the background
 			SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "4D-isOfClass-background"; $t)
-			$b_background:=($t="true")
+			$background:=JSON Parse:C1218($t; Is boolean:K8:9)
 			
 		End if 
 	End if 
 	
-	$bHighlight:=$b_vInsertion
+	$highlight:=$vInsertion
 	
-	If (Not:C34($b_background))
+	If (Not:C34($background))
 		
 		// Accept drag if the object is dropable
 		SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "4D-isOfClass-droppable"; $t)
-		$b_droppable:=($t="true")
+		$droppable:=JSON Parse:C1218($t; Is boolean:K8:9)
 		
-		If ($b_droppable)
+		If ($droppable)
 			
-			$b_vInsertion:=($o.fromIndex#(Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))-1))
+			$vInsertion:=($o.fromIndex#(Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))-1))
 			
 		End if 
 	End if 
@@ -95,18 +91,18 @@ If (Length:C16(This:C1470.$.current)>0)
 	Case of 
 			
 			//————————————————————————————————————
-		: ($b_droppable\
-			 | $b_background\
-			 | $b_vInsertion)
+		: ($droppable\
+			 | $background\
+			 | $vInsertion)
 			
-			If ($b_background\
-				 | $b_vInsertion)
+			If ($background\
+				 | $vInsertion)
 				
-				If ($b_vInsertion)
+				If ($vInsertion)
 					
 					This:C1470.$.vInsert:=This:C1470.$.current
 					
-					If ($bHighlight)
+					If ($highlight)
 						
 						SVG SET ATTRIBUTE:C1055(*; This:C1470.preview.name; This:C1470.$.current; \
 							"fill-opacity"; 1)
@@ -123,7 +119,6 @@ If (Length:C16(This:C1470.$.current)>0)
 				
 			Else 
 				
-				
 				If (feature.with("moreRelations"))  // Accept 1-N relation
 					
 					// Accept drag if the type match with the source
@@ -135,7 +130,6 @@ If (Length:C16(This:C1470.$.current)>0)
 						
 					Else 
 						
-						//$c:=Split string($t; ","; sk trim spaces).map("col_formula"; "$1.result:=Num:C11($1.value)")
 						$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
 						
 						If (tmpl_compatibleType($c; $o.fieldType))
@@ -158,7 +152,6 @@ If (Length:C16(This:C1470.$.current)>0)
 							
 						Else 
 							
-							//$c:=Split string($t; ","; sk trim spaces).map("col_formula"; "$1.result:=Num:C11($1.value)")
 							$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
 							
 							If (tmpl_compatibleType($c; $o.fieldType))
@@ -173,15 +166,13 @@ If (Length:C16(This:C1470.$.current)>0)
 						// Accept only on multi-valued fields
 						SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "4D-isOfClass-multivalued"; $t)
 						
-						If ($t="true")
+						If (JSON Parse:C1218($t; Is boolean:K8:9))
 							
 							$0:=0
 							
 						End if 
 					End if 
 				End if 
-				
-				
 			End if 
 			
 			If ($0=-1)
@@ -227,3 +218,4 @@ End if
 
 // ----------------------------------------------------
 // End
+

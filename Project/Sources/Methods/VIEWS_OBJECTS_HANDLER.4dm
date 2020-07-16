@@ -39,7 +39,7 @@ If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
 	$form:=VIEWS_Handler(New object:C1471("action";"init"))
 	$context:=$form.$
 	
-	$0:=-1// Reject drop
+	$0:=-1  // Reject drop
 	
 Else 
 	
@@ -82,7 +82,7 @@ Case of
 				Case of 
 						
 						//______________________________________________________
-					: (Length:C16($tTable)=0)// Outside click
+					: (Length:C16($tTable)=0)  // Outside click
 						
 						If (Form:C1466[$tTypeForm][$context.tableNum()].form#Null:C1517)
 							
@@ -118,7 +118,7 @@ Case of
 							
 							views_LAYOUT_PICKER($tTypeForm)
 							
-							CLEAR VARIABLE:C89($tTable)// To avoid redrawing the preview
+							CLEAR VARIABLE:C89($tTable)  // To avoid redrawing the preview
 							
 						End if 
 						
@@ -218,7 +218,7 @@ Case of
 						$o:=($form.fields.pointer())->{$form.fieldList.row}
 						//%W+533.3
 						
-						$ok:=($o.fieldType#8859)// Not 1-N relation
+						$ok:=($o.fieldType#8859)  // Not 1-N relation
 						
 						If (Not:C34($ok))
 							
@@ -296,7 +296,7 @@ Case of
 											
 											$o:=($form.fields.pointer())->{$i}
 											
-											$ok:=($o.fieldType#8859)// Not 1-N relation
+											$ok:=($o.fieldType#8859)  // Not 1-N relation
 											
 											If (Not:C34($ok))
 												
@@ -321,7 +321,7 @@ Case of
 											
 											$o:=($form.fields.pointer())->{$i}
 											
-											$ok:=($o.fieldType#8859)// Not 1-N relation
+											$ok:=($o.fieldType#8859)  // Not 1-N relation
 											
 											If (Not:C34($ok))
 												
@@ -370,7 +370,7 @@ Case of
 				$o:=($form.fields.pointer())->{$form.fieldList.row}
 				//%W+533.3
 				
-				$ok:=($o.fieldType#8859)// Not 1-N relation
+				$ok:=($o.fieldType#8859)  // Not 1-N relation
 				
 				If (Not:C34($ok))
 					

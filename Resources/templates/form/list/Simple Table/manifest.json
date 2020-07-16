@@ -1,10 +1,10 @@
 {
-  "type": "listform",
-  "name": "Simple Table",
-  "fields": {
-    "count": 2
-  },
-  "tags": {
-    "___LISTFORMTYPE___": "Table"
-  }
+    "name": "Simple Table",
+    "type": "listform",
+    "fields": {
+        "count": 2
+    },
+    "tags": {
+        "___LISTFORMTYPE___": "Table"
+    }
 }

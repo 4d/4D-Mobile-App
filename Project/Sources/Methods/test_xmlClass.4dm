@@ -1,7 +1,7 @@
 //%attributes = {}
-C_TEXT:C284($node;$t)
-C_OBJECT:C1216($o)
-C_COLLECTION:C1488($c)
+var $node,$t : Text
+var $o : Object
+var $c : Collection
 
 TRY
 

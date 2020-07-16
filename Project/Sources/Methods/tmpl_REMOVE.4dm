@@ -11,38 +11,38 @@
 // #98105 - Multi-criteria Search
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($Lon_indx)
-C_TEXT:C284($Txt_bind;$Txt_field;$Txt_isOfClass)
-C_OBJECT:C1216($menu;$o;$Obj_target)
+var $Txt_bind, $Txt_field, $Txt_isOfClass : Text
+var $Lon_indx : Integer
+var $menu, $o, $Obj_target : Object
 
-ARRAY TEXT:C222($tTxt_results;0)
+ARRAY TEXT:C222($tTxt_results; 0)
 
 // ----------------------------------------------------
 // Initialisations
-$Txt_field:=Replace string:C233(This:C1470.$.current;".cancel";"")
-SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;$Txt_field;"ios:bind";$Txt_bind)
+$Txt_field:=Replace string:C233(This:C1470.$.current; ".cancel"; "")
+SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; $Txt_field; "ios:bind"; $Txt_bind)
 
-$Obj_target:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2;"detail";"list")][This:C1470.$.tableNumber]
+$Obj_target:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2; "detail"; "list")][This:C1470.$.tableNumber]
 
 // ----------------------------------------------------
-SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;$Txt_field;"4D-isOfClass-multi-criteria";$Txt_isOfClass)
+SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; $Txt_field; "4D-isOfClass-multi-criteria"; $Txt_isOfClass)
 
 If ($Txt_isOfClass="true")\
  & (Value type:C1509($Obj_target[$Txt_bind])=Is collection:K8:32)
 	
 	$menu:=cs:C1710.menu.new()
 	
-	For each ($o;$Obj_target[$Txt_bind])
+	For each ($o; $Obj_target[$Txt_bind])
 		
 		If ($o#Null:C1517)
 			
-			$menu.append(Replace string:C233(Get localized string:C991("removeField");"{field}";$o.name);String:C10($o.id))
+			$menu.append(Replace string:C233(Get localized string:C991("removeField"); "{field}"; $o.name); String:C10($o.id))
 			
 		End if 
 	End for each 
 	
 	$menu.line()
-	$menu.append("removeAllFields";"all")
+	$menu.append("removeAllFields"; "all")
 	
 	$menu.popup()
 	
@@ -75,7 +75,7 @@ Else
 	
 	If (Asserted:C1132(Length:C16($Txt_bind)>0))
 		
-		Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$Txt_bind;->$tTxt_results)
+		Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $Txt_bind; ->$tTxt_results)
 		
 		If (Size of array:C274($tTxt_results)=2)
 			
@@ -85,7 +85,7 @@ Else
 				
 				If ($Obj_target[$tTxt_results{1}].length>$Lon_indx)
 					
-					SVG GET ATTRIBUTE:C1056(*;This:C1470.preview.name;$Txt_field;"4D-isOfClass-multivalued";$Txt_isOfClass)
+					SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; $Txt_field; "4D-isOfClass-multivalued"; $Txt_isOfClass)
 					
 					If ($Txt_isOfClass="true")
 						
@@ -108,11 +108,10 @@ Else
 	End if 
 End if 
 
-// Update preview
-views_preview("draw";This:C1470)
+project.save()
 
-// Save project
-_o_project.save()
+// Update preview
+views_preview("draw"; This:C1470)
 
 // ----------------------------------------------------
 // End

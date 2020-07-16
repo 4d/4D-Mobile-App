@@ -1,17 +1,13 @@
 //%attributes = {}
-C_BOOLEAN:C305($b; $Boo_reset; $ok)
-C_LONGINT:C283($i; $index; $l; $Lon_build; $Lon_error; $Lon_result)
-C_LONGINT:C283($Lon_type; $Lon_value; $Lon_x)
-C_TIME:C306($Gmt_timeGMT)
-C_PICTURE:C286($Pic_)
-C_POINTER:C301($ptr)
-C_REAL:C285($Num_; $r)
-C_TEXT:C284($Dir_root; $node; $pattern; $root; $t; $tt)
-C_TEXT:C284($Txt_in; $Txt_ormula; $Txt_result)
-C_OBJECT:C1216($file; $folder; $o; $o1; $o2; $Obj_formula)
-C_OBJECT:C1216($Obj_new; $Obj_result; $Obj_target; $Obj_template; $svg; $zip)
-C_COLLECTION:C1488($c; $c1; $Col_2; $cUserdCommands)
-C_VARIANT:C1683($null)
+var $Num_, $r : Real
+var $Dir_root, $node, $pattern, $root, $t, $tt, $Txt_in, $Txt_ormula, $Txt_result : Text
+var $b, $Boo_reset, $ok : Boolean
+var $i, $index, $l, $Lon_build, $Lon_error, $Lon_result, $Lon_type, $Lon_value, $Lon_x : Integer
+var $Gmt_timeGMT : Time
+var $null : Variant
+var $file, $folder, $o, $o1, $o2, $Obj_formula, $Obj_new, $Obj_result, $Obj_target, $Obj_template : Object
+var $svg, $zip : Object
+var $c, $c1, $Col_2, $cUserdCommands : Collection
 
 ARRAY TEXT:C222($tTxt_; 0)
 
@@ -25,6 +21,13 @@ $o:=Folder:C1567("/")
 $o1:=Folder:C1567(fk system folder:K87:13).parent
 
 Case of 
+		
+		//________________________________________
+	: (True:C214)
+		
+		$b:=False:C215
+		$t:="1"
+		$b:=JSON Parse:C1218($t; Is boolean:K8:9)
 		
 		//________________________________________
 	: (True:C214)
@@ -190,10 +193,6 @@ Case of
 		
 		//________________________________________
 	: (True:C214)
-		
-		CREATE THUMBNAIL:C679($Pic_; $Pic_; 0; 0)
-		$o:=New object:C1471("hello"; $Pic_)
-		$Pic_:=$Pic_*0
 		
 		//________________________________________
 	: (True:C214)
@@ -722,8 +721,6 @@ Case of
 		
 		$Dir_root:=Object to path:C1548(New object:C1471("name"; $o.name+" Project"; "isFolder"; True:C214; "parentFolder"; $o.parentFolder))
 		
-		doc_EMPTY_FOLDER($Dir_root; New collection:C1472(".git"; ".gitattributes"; ".DS_Store"))
-		
 		//________________________________________
 	: (False:C215)
 		
@@ -929,3 +926,4 @@ Case of
 		
 		//________________________________________
 End case 
+

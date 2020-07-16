@@ -4,8 +4,7 @@ Class extends xml
 /*═══════════════*/
 
 Class constructor
-	
-	var $1
+	var $1 : Variant
 	
 	If (Count parameters:C259>0)
 		
@@ -26,19 +25,18 @@ Class constructor
 	
 /*———————————————————————————————————————————————————————————*/
 Function push  // Keep dom reference for futur
-	
 	var $0 : Object
 	var $1 : Text
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.success:=(This:C1470.store.query("id=:1";$1).pop()=Null:C1517)
+		This:C1470.success:=(This:C1470.store.query("id=:1"; $1).pop()=Null:C1517)
 		
 		If (This:C1470.success)
 			
 			This:C1470.store.push(New object:C1471(\
-				"id";$1;\
-				"dom";This:C1470.latest))
+				"id"; $1; \
+				"dom"; This:C1470.latest))
 			
 		Else 
 			
@@ -49,8 +47,8 @@ Function push  // Keep dom reference for futur
 	Else 
 		
 		This:C1470.store.push(New object:C1471(\
-			"id";Generate UUID:C1066;\
-			"dom";This:C1470.latest))
+			"id"; Generate UUID:C1066; \
+			"dom"; This:C1470.latest))
 		
 	End if 
 	
@@ -58,18 +56,20 @@ Function push  // Keep dom reference for futur
 	
 /*———————————————————————————————————————————————————————————*/
 Function fetch  // Retrieve a stored dom reference
+	var $0 : Text
+	var $1 : Text
 	
-	var $0;$1 : Text
 	var $o : Object
 	
 	If (Count parameters:C259>=1)
 		
-		$o:=This:C1470.store.query("id=:1";$1).pop()
+		$o:=This:C1470.store.query("id=:1"; $1).pop()
 		
 	Else 
 		
 		// Lastest
-		$o:=New object:C1471("dom";This:C1470.latest)
+		$o:=New object:C1471(\
+			"dom"; This:C1470.latest)
 		
 	End if 
 	
@@ -87,40 +87,41 @@ Function fetch  // Retrieve a stored dom reference
 	
 /*———————————————————————————————————————————————————————————*/
 Function new  // Create a default SVG structure
+	var $0 : Object
+	var $1 : Object
 	
-	var $0;$1 : Object
-	var $node;$t : Text
+	var $node, $t : Text
 	
 	This:C1470.close()  // Release memory
 	
-	$node:=DOM Create XML Ref:C861("svg";"http://www.w3.org/2000/svg")
+	$node:=DOM Create XML Ref:C861("svg"; "http://www.w3.org/2000/svg")
 	This:C1470.success:=Bool:C1537(OK)
 	
 	If (This:C1470.success)
 		
 		This:C1470.root:=$node
 		
-		DOM SET XML ATTRIBUTE:C866($node;\
-			"xmlns:xlink";"http://www.w3.org/1999/xlink")
+		DOM SET XML ATTRIBUTE:C866($node; \
+			"xmlns:xlink"; "http://www.w3.org/1999/xlink")
 		
-		DOM SET XML DECLARATION:C859($node;"UTF-8";True:C214)
-		XML SET OPTIONS:C1090($node;XML indentation:K45:34;Choose:C955(Is compiled mode:C492;XML no indentation:K45:36;XML with indentation:K45:35))
+		DOM SET XML DECLARATION:C859($node; "UTF-8"; True:C214)
+		XML SET OPTIONS:C1090($node; XML indentation:K45:34; Choose:C955(Is compiled mode:C492; XML no indentation:K45:36; XML with indentation:K45:35))
 		
-		$node:=DOM Create XML element:C865(This:C1470.root;"def")
+		$node:=DOM Create XML element:C865(This:C1470.root; "def")
 		This:C1470.success:=Bool:C1537(OK)
 		
 		If (This:C1470.success)
 			
 			// Default values
-			DOM SET XML ATTRIBUTE:C866(This:C1470.root;\
-				"viewport-fill";"none";\
-				"fill";"none";\
-				"stroke";"black";\
-				"font-family";"'lucida grande','segoe UI',sans-serif";\
-				"font-size";12;\
-				"text-rendering";"geometricPrecision";\
-				"shape-rendering";"crispEdges";\
-				"preserveAspectRatio";"none")
+			DOM SET XML ATTRIBUTE:C866(This:C1470.root; \
+				"viewport-fill"; "none"; \
+				"fill"; "none"; \
+				"stroke"; "black"; \
+				"font-family"; "'lucida grande','segoe UI',sans-serif"; \
+				"font-size"; 12; \
+				"text-rendering"; "geometricPrecision"; \
+				"shape-rendering"; "crispEdges"; \
+				"preserveAspectRatio"; "none")
 			
 		End if 
 	End if 
@@ -133,7 +134,7 @@ Function new  // Create a default SVG structure
 			
 			If ($1#Null:C1517)
 				
-				For each ($t;$1)
+				For each ($t; $1)
 					
 					Case of 
 							
@@ -145,8 +146,8 @@ Function new  // Create a default SVG structure
 							//_______________________
 						Else 
 							
-							DOM SET XML ATTRIBUTE:C866(This:C1470.root;\
-								$t;$1[$t])
+							DOM SET XML ATTRIBUTE:C866(This:C1470.root; \
+								$t; $1[$t])
 							
 							//______________________
 					End case 
@@ -174,14 +175,16 @@ Function new  // Create a default SVG structure
 	
 /*———————————————————————————————————————————————————————————*/
 Function id
+	var $0 : Object
+	var $1 : Text
 	
-	var $1;$node : Text
+	var $node : Text
 	
 	$node:=This:C1470.__target()
 	
-	DOM SET XML ATTRIBUTE:C866($node;"id";$1)
+	DOM SET XML ATTRIBUTE:C866($node; \
+		"id"; $1)
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -191,22 +194,22 @@ Function preview  // Alias show()
 	
 /*———————————————————————————————————————————————————————————*/
 Function show  // Show in 4D SVG Viewer
+	var $0 : Object
 	
 	//#TO_DO: Should test if the component is available
-	EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER";*;This:C1470.root)
+	EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER"; *; This:C1470.root)
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function rect
+	var $0 : Object
+	var $1 : Integer
+	var $2 : Variant
+	var $3 : Variant
 	
-	C_LONGINT:C283($1)
-	C_VARIANT:C1683($2)
-	C_VARIANT:C1683($3)
-	
-	C_LONGINT:C283($height;$vWidth)
-	C_TEXT:C284($node)
+	var $node : Text
+	var $height, $vWidth : Integer
 	
 	$height:=$1
 	$vWidth:=$1  // Square (default)
@@ -234,33 +237,30 @@ Function rect
 		End if 
 	End if 
 	
-	
-	This:C1470.latest:=DOM Create XML element:C865($node;"rect";\
-		"width";$height;\
-		"height";$vWidth)
+	This:C1470.latest:=DOM Create XML element:C865($node; "rect"; \
+		"width"; $height; \
+		"height"; $vWidth)
 	
 	This:C1470.success:=Bool:C1537(OK)
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function square
-	
-	C_VARIANT:C1683($1)
-	C_VARIANT:C1683($2)
-	
-	This:C1470.rect($1;Null:C1517;$2)
-	
 	var $0 : Object
+	var $1 : Variant
+	var $2 : Variant
+	
+	This:C1470.rect($1; Null:C1517; $2)
+	
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function group
+	var $0 : Object
+	var $1 : Variant
 	
-	C_VARIANT:C1683($1)  // text | object
-	
-	C_TEXT:C284($node)
+	var $node : Text
 	
 	If (Count parameters:C259>=1)
 		
@@ -274,22 +274,21 @@ Function group
 	
 	If (This:C1470.success)
 		
-		This:C1470.latest:=DOM Create XML element:C865($node;"g")
+		This:C1470.latest:=DOM Create XML element:C865($node; "g")
 		This:C1470.success:=Bool:C1537(OK)
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function position
+	var $0 : Object
+	var $1 : Integer
+	var $2 : Variant
+	var $3 : Text
 	
-	C_LONGINT:C283($1)  // x
-	C_VARIANT:C1683($2)  // {y | unit}
-	C_TEXT:C284($3)  //    {unit}
-	
-	C_TEXT:C284($node)
+	var $node : Text
 	
 	$node:=This:C1470.__target()
 	This:C1470.success:=($node#This:C1470.root)
@@ -298,22 +297,22 @@ Function position
 		
 		If (Value type:C1509($2)=Is text:K8:3)
 			
-			DOM SET XML ATTRIBUTE:C866($node;\
-				"x";String:C10(Num:C11($1);"&xml")+String:C10($2))
+			DOM SET XML ATTRIBUTE:C866($node; \
+				"x"; String:C10(Num:C11($1); "&xml")+String:C10($2))
 			
 		Else 
 			
 			If (Count parameters:C259>2)
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"x";String:C10($1;"&xml")+String:C10($3);\
-					"y";String:C10(Num:C11($2);"&xml")+String:C10($3))
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"x"; String:C10($1; "&xml")+String:C10($3); \
+					"y"; String:C10(Num:C11($2); "&xml")+String:C10($3))
 				
 			Else 
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"x";$1;\
-					"y";Num:C11($2))
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"x"; $1; \
+					"y"; Num:C11($2))
 				
 			End if 
 		End if 
@@ -326,19 +325,19 @@ Function position
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function dimensions
+	var $0 : Object
+	var $1 : Variant
+	var $2 : Variant
+	var $3 : Text
 	
-	C_VARIANT:C1683($1)  // width
-	C_VARIANT:C1683($2)  // {height | unit}
-	C_TEXT:C284($3)  //    {unit}
+	var $node, $t : Text
 	
-	C_TEXT:C284($node;$t)
 	$node:=This:C1470.__target()
-	DOM GET XML ELEMENT NAME:C730($node;$t)
+	DOM GET XML ELEMENT NAME:C730($node; $t)
 	
 	If ($t="textArea")
 		
@@ -347,29 +346,29 @@ Function dimensions
 				//______________________________________________________
 			: (Count parameters:C259=0)
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"width";"auto";\
-					"height";"auto")
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"width"; "auto"; \
+					"height"; "auto")
 				
 				//______________________________________________________
 			: (Count parameters:C259>=3)
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"width";Choose:C955($1=Null:C1517;"auto";String:C10($1;"&xml")+String:C10($3));\
-					"height";Choose:C955($2=Null:C1517;"auto";String:C10($2;"&xml")+String:C10($3)))
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"width"; Choose:C955($1=Null:C1517; "auto"; String:C10($1; "&xml")+String:C10($3)); \
+					"height"; Choose:C955($2=Null:C1517; "auto"; String:C10($2; "&xml")+String:C10($3)))
 				
 				//______________________________________________________
 			: (Count parameters:C259>=2)
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"width";Choose:C955($1=Null:C1517;"auto";String:C10($1;"&xml"));\
-					"height";Choose:C955($2=Null:C1517;"auto";String:C10($2;"&xml")))
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"width"; Choose:C955($1=Null:C1517; "auto"; String:C10($1; "&xml")); \
+					"height"; Choose:C955($2=Null:C1517; "auto"; String:C10($2; "&xml")))
 				
 				//______________________________________________________
 			: (Count parameters:C259>=1)
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"width";Choose:C955($1=Null:C1517;"auto";String:C10($1;"&xml")))
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"width"; Choose:C955($1=Null:C1517; "auto"; String:C10($1; "&xml")))
 				
 				//______________________________________________________
 		End case 
@@ -381,62 +380,62 @@ Function dimensions
 				//______________________________________________________
 			: (Count parameters:C259>=3)
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"width";String:C10($1;"&xml")+String:C10($3);\
-					"height";String:C10($2;"&xml")+String:C10($3))
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"width"; String:C10($1; "&xml")+String:C10($3); \
+					"height"; String:C10($2; "&xml")+String:C10($3))
 				
 				//______________________________________________________
 			: (Count parameters:C259>=2)
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"width";String:C10($1;"&xml");\
-					"height";String:C10($2;"&xml"))
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"width"; String:C10($1; "&xml"); \
+					"height"; String:C10($2; "&xml"))
 				
 				//______________________________________________________
 			: (Count parameters:C259>=1)
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"width";String:C10($1;"&xml"))
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"width"; String:C10($1; "&xml"))
 				
 				//______________________________________________________
 		End case 
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
+	
 	// ⚠️ Overrides the method of the inherited class
 Function setAttribute
-	
-	C_TEXT:C284($1)  // name
-	C_VARIANT:C1683($2)  // Value
-	C_TEXT:C284($3)
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
+	var $3 : Text
 	
 	If (Count parameters:C259=3)
 		
-		Super:C1706.setAttribute($3;$1;$2)
+		Super:C1706.setAttribute($3; $1; $2)
 		
 	Else 
 		
-		Super:C1706.setAttribute(This:C1470.latest;$1;$2)
+		Super:C1706.setAttribute(This:C1470.latest; $1; $2)
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
+	
 	// ⚠️ Overrides the method of the inherited class
 Function setAttributes
+	var $0 : Object
+	var $1 : Variant
+	var $2 : Variant
+	var $3 : Text
 	
-	C_VARIANT:C1683($1)  // object | attribute
-	C_VARIANT:C1683($2)  // Value
-	C_TEXT:C284($3)
-	
-	C_TEXT:C284($key;$node;$t)
-	C_COLLECTION:C1488($c)
-	C_OBJECT:C1216($o)
+	var $node, $t : Text
+	var $o : Object
+	var $c : Collection
 	
 	Case of 
 			
@@ -449,13 +448,13 @@ Function setAttributes
 				
 				$c:=OB Entries:C1720($1)
 				
-				For each ($t;New collection:C1472("target";"left";"top";"width";"height";"codec"))
+				For each ($t; New collection:C1472("target"; "left"; "top"; "width"; "height"; "codec"))
 					
-					$c:=$c.query("key != :1";$t)
+					$c:=$c.query("key != :1"; $t)
 					
 				End for each 
 				
-				Super:C1706.setAttributes($node;$c)
+				Super:C1706.setAttributes($node; $c)
 				
 			End if 
 			
@@ -475,24 +474,24 @@ Function setAttributes
 				
 			End if 
 			
-			For each ($t;New collection:C1472("target";"left";"top";"width";"height";"codec"))
+			For each ($t; New collection:C1472("target"; "left"; "top"; "width"; "height"; "codec"))
 				
-				$1:=$1.query("key != :1";$t)
+				$1:=$1.query("key != :1"; $t)
 				
 			End for each 
 			
-			Super:C1706.setAttributes($node;$c)
+			Super:C1706.setAttributes($node; $c)
 			
 			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)
 			
 			If (Count parameters:C259=3)
 				
-				Super:C1706.setAttribute($3;$1;$2)
+				Super:C1706.setAttribute($3; $1; $2)
 				
 			Else 
 				
-				Super:C1706.setAttribute(This:C1470.latest;$1;$2)
+				Super:C1706.setAttribute(This:C1470.latest; $1; $2)
 				
 			End if 
 			
@@ -506,16 +505,15 @@ Function setAttributes
 	
 	This:C1470.success:=Bool:C1537(OK)
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function fill
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
 	
-	C_TEXT:C284($1)  // Color
-	C_VARIANT:C1683($2)  // {target}
-	
-	C_TEXT:C284($node)
+	var $node : Text
 	
 	If (Count parameters:C259>=2)
 		
@@ -529,26 +527,26 @@ Function fill
 	
 	If ($node=This:C1470.root)
 		
-		DOM SET XML ATTRIBUTE:C866($node;\
-			"viewport-fill";$1)
+		DOM SET XML ATTRIBUTE:C866($node; \
+			"viewport-fill"; $1)
 		
 	Else 
 		
-		DOM SET XML ATTRIBUTE:C866($node;\
-			"fill";$1)
+		DOM SET XML ATTRIBUTE:C866($node; \
+			"fill"; $1)
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function stroke
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
 	
-	C_TEXT:C284($1)  // Color
-	C_VARIANT:C1683($2)  // {target}
+	var $node : Text
 	
-	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
 		$node:=This:C1470.__target($2)
@@ -559,19 +557,19 @@ Function stroke
 		
 	End if 
 	
-	DOM SET XML ATTRIBUTE:C866($node;\
-		"stroke";$1)
+	DOM SET XML ATTRIBUTE:C866($node; \
+		"stroke"; $1)
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function fillOpacity
+	var $0 : Object
+	var $1 : Real
+	var $2 : Variant
 	
-	C_REAL:C285($1)  // opacity
-	C_VARIANT:C1683($2)  // {target}
+	var $node : Text
 	
-	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
 		$node:=This:C1470.__target($2)
@@ -584,26 +582,28 @@ Function fillOpacity
 	
 	If ($node=This:C1470.root)
 		
-		DOM SET XML ATTRIBUTE:C866($node;\
-			"viewport-fill-opacity";$1)
+		DOM SET XML ATTRIBUTE:C866($node; \
+			"viewport-fill-opacity"; $1)
 		
 	Else 
 		
-		DOM SET XML ATTRIBUTE:C866($node;\
-			"fill-opacity";$1)
+		DOM SET XML ATTRIBUTE:C866($node; \
+			"fill-opacity"; $1)
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function embedPicture
+	var $0 : Object
+	var $1 : Picture
+	var $2 : Variant
 	
-	C_PICTURE:C286($1)  // Picture
-	C_VARIANT:C1683($2)  // {target}
+	var $node, $t : Text
+	var $height, $width : Integer
+	var $x : Blob
 	
-	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
 		$node:=This:C1470.__target($2)
@@ -619,26 +619,23 @@ Function embedPicture
 	If (This:C1470.success)
 		
 		// Encode in base64
-		C_BLOB:C604($x)
-		PICTURE TO BLOB:C692($1;$x;".png")
+		PICTURE TO BLOB:C692($1; $x; ".png")
 		This:C1470.success:=Bool:C1537(OK)
 		
 		If (This:C1470.success)
 			
-			C_TEXT:C284($t)
-			BASE64 ENCODE:C895($x;$t)
+			BASE64 ENCODE:C895($x; $t)
 			CLEAR VARIABLE:C89($x)
 			
 			// Put the encoded image
-			C_LONGINT:C283($width;$height)
-			PICTURE PROPERTIES:C457($1;$width;$height)
+			PICTURE PROPERTIES:C457($1; $width; $height)
 			
-			This:C1470.latest:=DOM Create XML element:C865($node;"image";\
-				"xlink:href";"data:;base64,"+$t;\
-				"x";0;\
-				"y";0;\
-				"width";$width;\
-				"height";$height)
+			This:C1470.latest:=DOM Create XML element:C865($node; "image"; \
+				"xlink:href"; "data:;base64,"+$t; \
+				"x"; 0; \
+				"y"; 0; \
+				"width"; $width; \
+				"height"; $height)
 			
 			This:C1470.success:=Bool:C1537(OK)
 			
@@ -650,16 +647,18 @@ Function embedPicture
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function image
+	var $0 : Object
+	var $1 : Object
+	var $2 : Variant
 	
-	C_OBJECT:C1216($1)  // File
-	C_VARIANT:C1683($2)  // {target}
+	var $node, $t : Text
+	var $p : Picture
+	var $height, $width : Integer
 	
-	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
 		$node:=This:C1470.__target($2)
@@ -674,16 +673,13 @@ Function image
 	
 	If (This:C1470.success)
 		
-		C_PICTURE:C286($p)
-		C_TEXT:C284($t)
 		$t:=$1.platformPath
-		READ PICTURE FILE:C678($t;$p)
+		READ PICTURE FILE:C678($t; $p)
 		This:C1470.success:=Bool:C1537(OK)
 		
 		If (This:C1470.success)
 			
-			C_LONGINT:C283($width;$height)
-			PICTURE PROPERTIES:C457($p;$width;$height)
+			PICTURE PROPERTIES:C457($p; $width; $height)
 			CLEAR VARIABLE:C89($p)
 			
 			This:C1470.success:=Bool:C1537(OK)
@@ -691,15 +687,15 @@ Function image
 			If (This:C1470.success)
 				
 				$t:="file:/"+"/"\
-					+Choose:C955(Is Windows:C1573;"/";"")\
-					+Replace string:C233($1.path;" ";"%20")
+					+Choose:C955(Is Windows:C1573; "/"; "")\
+					+Replace string:C233($1.path; " "; "%20")
 				
-				This:C1470.latest:=DOM Create XML element:C865($node;"image";\
-					"xlink:href";$t;\
-					"x";0;\
-					"y";0;\
-					"width";$width;\
-					"height";$height)
+				This:C1470.latest:=DOM Create XML element:C865($node; "image"; \
+					"xlink:href"; $t; \
+					"x"; 0; \
+					"y"; 0; \
+					"width"; $width; \
+					"height"; $height)
 				
 				This:C1470.success:=Bool:C1537(OK)
 				
@@ -718,16 +714,17 @@ Function image
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function textArea
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
 	
-	C_TEXT:C284($1)  // Text
-	C_VARIANT:C1683($2)  // {target}
+	var $node, $t, $tt : Text
+	var $i : Integer
 	
-	C_TEXT:C284($node)
 	If (Count parameters:C259>=2)
 		
 		$node:=This:C1470.__target($2)
@@ -738,48 +735,46 @@ Function textArea
 		
 	End if 
 	
-	This:C1470.latest:=DOM Create XML element:C865($node;"textArea";\
-		"x";0;\
-		"y";0;\
-		"width";"auto";\
-		"height";"auto")
+	This:C1470.latest:=DOM Create XML element:C865($node; "textArea"; \
+		"x"; 0; \
+		"y"; 0; \
+		"width"; "auto"; \
+		"height"; "auto")
 	
 	If (Bool:C1537(OK))\
 		 & (Length:C16($1)>0)
 		
-		C_TEXT:C284($t;$tt)
-		C_LONGINT:C283($i)
-		$t:=Replace string:C233(String:C10($1);"\r\n";"\r")
+		$t:=Replace string:C233(String:C10($1); "\r\n"; "\r")
 		
 		Repeat 
 			
-			$i:=Position:C15("\r";$t)
+			$i:=Position:C15("\r"; $t)
 			
 			If ($i=0)
 				
-				$i:=Position:C15("\n";$t)
+				$i:=Position:C15("\n"; $t)
 				
 			End if 
 			
 			If ($i>0)
 				
-				$tt:=Substring:C12($t;1;$i-1)
+				$tt:=Substring:C12($t; 1; $i-1)
 				
 				If (Length:C16($tt)>0)
 					
-					$node:=DOM Append XML child node:C1080(This:C1470.latest;XML DATA:K45:12;$tt)
+					$node:=DOM Append XML child node:C1080(This:C1470.latest; XML DATA:K45:12; $tt)
 					
 				End if 
 				
-				$node:=DOM Append XML child node:C1080(This:C1470.latest;XML ELEMENT:K45:20;"tbreak")
+				$node:=DOM Append XML child node:C1080(This:C1470.latest; XML ELEMENT:K45:20; "tbreak")
 				
-				$t:=Delete string:C232($t;1;Length:C16($tt)+1)
+				$t:=Delete string:C232($t; 1; Length:C16($tt)+1)
 				
 			Else 
 				
 				If (Length:C16($t)>0)
 					
-					$node:=DOM Append XML child node:C1080(This:C1470.latest;XML DATA:K45:12;$t)
+					$node:=DOM Append XML child node:C1080(This:C1470.latest; XML DATA:K45:12; $t)
 					
 				End if 
 			End if 
@@ -788,24 +783,22 @@ Function textArea
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function getPicture
+	var $0 : Picture
+	var $1 : Variant
+	var $2 : Boolean
 	
-	C_PICTURE:C286($0)
-	C_VARIANT:C1683($1)
-	C_BOOLEAN:C305($2)
-	
-	C_PICTURE:C286($p)
+	var $p : Picture
 	
 	Case of 
 			
 			//______________________________________________________
 		: (Count parameters:C259>=2)
 			
-			SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Num:C11($1))
+			SVG EXPORT TO PICTURE:C1017(This:C1470.root; $p; Num:C11($1))
 			
 			If (This:C1470.autoClose)\
 				 & (Not:C34($2))
@@ -819,7 +812,7 @@ Function getPicture
 			
 			If (Value type:C1509($1)=Is boolean:K8:9)
 				
-				SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Copy XML data source:K45:17)
+				SVG EXPORT TO PICTURE:C1017(This:C1470.root; $p; Copy XML data source:K45:17)
 				
 				If (This:C1470.autoClose)\
 					 & (Not:C34($1))
@@ -830,7 +823,7 @@ Function getPicture
 				
 			Else 
 				
-				SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Num:C11($1))
+				SVG EXPORT TO PICTURE:C1017(This:C1470.root; $p; Num:C11($1))
 				
 				If (This:C1470.autoClose)
 					
@@ -842,7 +835,7 @@ Function getPicture
 			//______________________________________________________
 		Else 
 			
-			SVG EXPORT TO PICTURE:C1017(This:C1470.root;$p;Copy XML data source:K45:17)
+			SVG EXPORT TO PICTURE:C1017(This:C1470.root; $p; Copy XML data source:K45:17)
 			
 			If (This:C1470.autoClose)
 				
@@ -869,12 +862,12 @@ Function getPicture
 	$0:=$p
 	
 /*——————————————————————————
-        PRIVATE
+PRIVATE
 ——————————————————————————*/
 Function __target
-	
 	var $0 : Text
-	var $1
+	var $1 : Variant
+	
 	var $o : Object
 	
 	This:C1470.success:=True:C214
@@ -884,12 +877,12 @@ Function __target
 			//______________________________________________________
 		: (Count parameters:C259=0)
 			
-			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
+			$0:=Choose:C955(This:C1470.latest#Null:C1517; This:C1470.latest; This:C1470.root)
 			
 			//______________________________________________________
 		: (Value type:C1509($1)=Is undefined:K8:13)
 			
-			$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
+			$0:=Choose:C955(This:C1470.latest#Null:C1517; This:C1470.latest; This:C1470.root)
 			
 			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)
@@ -904,13 +897,13 @@ Function __target
 					//_______________________________
 				: ($1="latest")
 					
-					$0:=Choose:C955(This:C1470.latest#Null:C1517;This:C1470.latest;This:C1470.root)
+					$0:=Choose:C955(This:C1470.latest#Null:C1517; This:C1470.latest; This:C1470.root)
 					
 					//_______________________________
 				Else 
 					
 					// Find a memorized target
-					$o:=This:C1470.store.query("id=:1";$1).pop()
+					$o:=This:C1470.store.query("id=:1"; $1).pop()
 					
 					If ($o#Null:C1517)
 						
@@ -949,11 +942,10 @@ Function __target
 	End case 
 	
 /*——————————————————————————
-     _DEPRECATED_
+_DEPRECATED_
 ——————————————————————————*/
 Function attributes
+	var $1 : Variant
+	var $2 : Variant
 	
-	C_VARIANT:C1683($1)  // object | attribute
-	C_VARIANT:C1683($2)  // Value
-	
-	This:C1470.setAttributes($1;$2)
+	This:C1470.setAttributes($1; $2)

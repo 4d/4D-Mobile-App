@@ -8,12 +8,12 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_BLOB:C604($x)
-C_BOOLEAN:C305($b)
-C_LONGINT:C283($countFixed; $indx)
-C_TEXT:C284($t; $t_isOfClass)
-C_OBJECT:C1216($o; $oTarget)
-C_COLLECTION:C1488($c)
+var $t, $t_isOfClass : Text
+var $b : Boolean
+var $countFixed, $indx : Integer
+var $x : Blob
+var $o, $oTarget : Object
+var $c : Collection
 
 ARRAY TEXT:C222($tMatches; 0)
 
@@ -43,7 +43,6 @@ If (Length:C16(This:C1470.$.current)>0)
 		Else 
 			
 			// Check the type compatibility
-			//$c:=Split string($t; ","; sk trim spaces).map("col_formula"; "$1.result:=Num:C11($1.value)")
 			$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
 			$b:=tmpl_compatibleType($c; $o.fieldType)
 			
@@ -179,11 +178,10 @@ If (Length:C16(This:C1470.$.current)>0)
 				
 			End if 
 			
+			project.save()
+			
 			// Update preview
 			views_preview("draw"; This:C1470)
-			
-			// Save project
-			_o_project.save()
 			
 		End if 
 		

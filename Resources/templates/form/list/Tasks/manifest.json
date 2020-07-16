@@ -1,10 +1,10 @@
 {
-  "type": "listform",
-  "name": "Tasks List",
-  "fields": {
-    "count": 4
-  },
-  "tags": {
-    "___LISTFORMTYPE___": "Table"
-  }
+    "name": "Tasks List",
+    "type": "listform",
+    "fields": {
+        "count": 4
+    },
+    "tags": {
+        "___LISTFORMTYPE___": "Table"
+    }
 }

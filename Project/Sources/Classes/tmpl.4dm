@@ -1,28 +1,27 @@
 /* ============================================================================*/
 Class constructor
+	var $1 : Text
+	var $2 : Text
 	
-	C_TEXT:C284($1)
-	C_TEXT:C284($2)
-	
-	C_OBJECT:C1216($file)
+	var $file : Object
 	
 	If (Count parameters:C259>=1)
 		
 		This:C1470.name:=$1
 		This:C1470.title:=This:C1470.name
 		
-		  //%W-533.1
+		//%W-533.1
 		If (This:C1470.name[[1]]="/")
 			
-			This:C1470.title:=Delete string:C232(This:C1470.title;1;1)
+			This:C1470.title:=Delete string:C232(This:C1470.title; 1; 1)
 			
 		End if 
-		  //%W+533.1
+		//%W+533.1
 		
-		  // Set the display name
-		This:C1470.title:=Replace string:C233(This:C1470.title;"form-detail-";"")
-		This:C1470.title:=Replace string:C233(This:C1470.title;"form-list-";"")
-		This:C1470.title:=Replace string:C233(This:C1470.title;SHARED.archiveExtension;"")
+		// Set the display name
+		This:C1470.title:=Replace string:C233(This:C1470.title; "form-detail-"; "")
+		This:C1470.title:=Replace string:C233(This:C1470.title; "form-list-"; "")
+		This:C1470.title:=Replace string:C233(This:C1470.title; SHARED.archiveExtension; "")
 		
 		If (Count parameters:C259>=2)
 			
@@ -32,7 +31,7 @@ Class constructor
 			
 			If (Bool:C1537(This:C1470.path.exists))
 				
-				  // Load the manifest
+				// Load the manifest
 				$file:=This:C1470.path.file("manifest.json")
 				
 				If ($file.exists)
@@ -45,7 +44,7 @@ Class constructor
 					
 				End if 
 				
-				  // Load the svg template
+				// Load the svg template
 				$file:=This:C1470.path.file("template.svg")
 				
 				If ($file.exists)
@@ -61,18 +60,17 @@ Class constructor
 			
 		Else 
 			
-			  // Call from PROCESS 4D TAGS
+			// Call from PROCESS 4D TAGS
 			
 		End if 
 	End if 
 	
 /* ============================================================================*/
 Function load  // Load and update the template if any
+	var $0 : Object
 	
-	C_OBJECT:C1216($0)
-	
-	C_OBJECT:C1216($o)
-	C_TEXT:C284($t;$root;$node;$dom)
+	var $dom, $node, $root, $t : Text
+	var $o : Object
 	
 	ASSERT:C1129(Not:C34(Shift down:C543))
 	
@@ -83,8 +81,8 @@ Function load  // Load and update the template if any
 		
 		If (Bool:C1537(OK))
 			
-			  // Remove mobile picture
-			$node:=DOM Find XML element:C864($root;"/"+"/rect[contains(@class,'container')")
+			// Remove mobile picture
+			$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@class,'container')")
 			
 			If (Bool:C1537(OK))
 				
@@ -92,29 +90,29 @@ Function load  // Load and update the template if any
 				
 			End if 
 			
-			  // Adjustments
-			$node:=DOM Find XML element by ID:C1010($root;"bgcontainer")
+			// Adjustments
+			$node:=DOM Find XML element by ID:C1010($root; "bgcontainer")
 			
 			If (Bool:C1537(OK))
 				
-				DOM SET XML ATTRIBUTE:C866($node;\
-					"transform";"translate(0,-50)")
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"transform"; "translate(0,-50)")
 				
 			End if 
 			
-			DOM EXPORT TO VAR:C863($root;$t)
+			DOM EXPORT TO VAR:C863($root; $t)
 			DOM CLOSE XML:C722($root)
 			
-			  // Keep the modified template
+			// Keep the modified template
 			This:C1470.template:=$t
 			
-			  // Try to adapt the old template to the renderer v2
+			// Try to adapt the old template to the renderer v2
 			$root:=DOM Parse XML variable:C720($t)
 			
 			If (Bool:C1537(OK))
 				
-				  // Remove cookery
-				$node:=DOM Find XML element by ID:C1010($root;"cookery")
+				// Remove cookery
+				$node:=DOM Find XML element by ID:C1010($root; "cookery")
 				
 				If (Bool:C1537(OK))
 					
@@ -122,8 +120,8 @@ Function load  // Load and update the template if any
 					
 				End if 
 				
-				  // Remove template for additional fields
-				$node:=DOM Find XML element by ID:C1010($root;"f")
+				// Remove template for additional fields
+				$node:=DOM Find XML element by ID:C1010($root; "f")
 				
 				If (Bool:C1537(OK))
 					
@@ -131,38 +129,38 @@ Function load  // Load and update the template if any
 					
 				End if 
 				
-				  // Remove the fisrt multivalued field
-				$node:=DOM Find XML element by ID:C1010($root;"multivalued")
+				// Remove the fisrt multivalued field
+				$node:=DOM Find XML element by ID:C1010($root; "multivalued")
 				
 				If (Bool:C1537(OK))
 					
 					DOM REMOVE XML ELEMENT:C869($node)
 					
-					$node:=DOM Find XML element:C864($root;"/"+"/rect[contains(@class,'bgcontainer')")
+					$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@class,'bgcontainer')")
 					
 					If (Bool:C1537(OK))
 						
 						DOM REMOVE XML ELEMENT:C869($node)
 						
-						$node:=DOM Find XML element by ID:C1010($root;"bgcontainer")
+						$node:=DOM Find XML element by ID:C1010($root; "bgcontainer")
 						
 						If (Bool:C1537(OK))
 							
-							DOM SET XML ATTRIBUTE:C866($node;\
-								"id";"background";\
-								"class";"background";\
-								"ios:type";"all")
+							DOM SET XML ATTRIBUTE:C866($node; \
+								"id"; "background"; \
+								"class"; "background"; \
+								"ios:type"; "all")
 							
 							If (Bool:C1537(OK))
 								
-								$dom:=DOM Create XML element:C865($node;"rect";\
-									"class";"bgcontainer_v2";\
-									"x";0;\
-									"y";0)
+								$dom:=DOM Create XML element:C865($node; "rect"; \
+									"class"; "bgcontainer_v2"; \
+									"x"; 0; \
+									"y"; 0)
 								
 								If (Bool:C1537(OK))
 									
-									$node:=DOM Insert XML element:C1083($node;$dom;0)
+									$node:=DOM Insert XML element:C1083($node; $dom; 0)
 									
 									If (Bool:C1537(OK))
 										
@@ -185,14 +183,14 @@ Function load  // Load and update the template if any
 						
 						If (Bool:C1537(OK))
 							
-							  // Update the manifest
+							// Update the manifest
 							This:C1470.manifest.renderer:=2
 							This:C1470.manifest.fields.max:=0
 							
-							DOM EXPORT TO VAR:C863($root;$t)
+							DOM EXPORT TO VAR:C863($root; $t)
 							DOM CLOSE XML:C722($root)
 							
-							  // Keep the updated template
+							// Keep the updated template
 							This:C1470.template:=$t
 							
 						End if 
@@ -205,14 +203,52 @@ Function load  // Load and update the template if any
 				End if 
 			End if 
 		End if 
+		
+		If (String:C10(This:C1470.manifest.type)="listform")\
+			 & (Num:C11(This:C1470.manifest.renderer)<3)
+			
+			$t:=This:C1470.template
+			$root:=DOM Parse XML variable:C720($t)
+			
+			If (Bool:C1537(OK))
+				
+/* Add the type -8859 to forbid the deposit of a 1->N relationship
+on the"searchableField" & "sectionField fields"*/
+				
+				$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='searchableField']")
+				
+				If (Bool:C1537(OK))
+					
+					DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8859")
+					
+				End if 
+				
+				$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='sectionField']")
+				
+				If (Bool:C1537(OK))
+					
+					DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8859")
+					
+				End if 
+				
+				// Update the manifest
+				This:C1470.manifest.renderer:=3
+				
+				DOM EXPORT TO VAR:C863($root; $t)
+				DOM CLOSE XML:C722($root)
+				
+				// Keep the updated template
+				This:C1470.template:=$t
+				
+			End if 
+		End if 
 	End if 
 	
 	$0:=This:C1470
 	
 /* ============================================================================*/
 Function cancel  // Return the embedded cancel button used into the templates
-	
-	C_TEXT:C284($0)
+	var $0 : Text
 	
 	$0:="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAuJJREFUSA3tlEtoU1EQhptHI4lp8FUMlIIPpH"+\
 		"ZRixTdFYIIUrCBkJTQlCpEjFJw4UYRFaObVnEjWbhQqRgLtiG6koAiIiiKG0UkiRXrShHbQtNiJEnT+E3hykFyb+LGheTAMOf8Z2b+mblzT1NTYzU68L91wPS3Bfn9/l1ms7nf"+\
@@ -226,26 +262,25 @@ Function cancel  // Return the embedded cancel button used into the templates
 	
 /* ============================================================================*/
 Function path  // Return the path of the file/folder
+	var $0 : Object
 	
-	C_OBJECT:C1216($0)
-	
-	C_BOOLEAN:C305($success)
-	C_TEXT:C284($t)
-	C_OBJECT:C1216($archive;$error;$fileManifest;$o;$path)
+	var $t : Text
+	var $success : Boolean
+	var $archive, $error, $fileManifest, $o, $path : Object
 	
 	$t:=This:C1470.name
 	
 	If ($t[[1]]="/")  // Host database resources
 		
-		$t:=Delete string:C232($t;1;1)  // Remove initial slash
+		$t:=Delete string:C232($t; 1; 1)  // Remove initial slash
 		
 		If (feature.with("resourcesBrowser"))
 			
 			If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
 				
-				$error:=err .hide()/* START HIDING ERRORS */
-				$archive:=ZIP Read archive:C1637(path ["host"+This:C1470.type+"Forms"]().file($t))
-				$error.show()/* STOP HIDING ERRORS */
+				$error:=err.hide()
+				$archive:=ZIP Read archive:C1637(path["host"+This:C1470.type+"Forms"]().file($t))
+				$error.show()
 				
 				If ($archive#Null:C1517)
 					
@@ -255,13 +290,13 @@ Function path  // Return the path of the file/folder
 				
 			Else 
 				
-				$path:=Folder:C1567(path ["host"+This:C1470.type+"Forms"]().folder($t).platformPath;fk platform path:K87:2)
+				$path:=Folder:C1567(path["host"+This:C1470.type+"Forms"]().folder($t).platformPath; fk platform path:K87:2)
 				
 			End if 
 			
 		Else 
 			
-			$path:=Folder:C1567(path ["host"+This:C1470.type+"Forms"]().folder($t).platformPath;fk platform path:K87:2)
+			$path:=Folder:C1567(path["host"+This:C1470.type+"Forms"]().folder($t).platformPath; fk platform path:K87:2)
 			
 		End if 
 		
@@ -269,8 +304,8 @@ Function path  // Return the path of the file/folder
 		
 		If ($success)
 			
-			  // Verify the structure validity
-			$o:=path [This:C1470.type+"Forms"]()
+			// Verify the structure validity
+			$o:=path[This:C1470.type+"Forms"]()
 			
 			If ($o#Null:C1517)
 				
@@ -282,7 +317,7 @@ Function path  // Return the path of the file/folder
 					
 					If ($o.mandatory#Null:C1517)
 						
-						For each ($t;$o.mandatory) While ($success)
+						For each ($t; $o.mandatory) While ($success)
 							
 							$success:=$path.file($t).exists
 							
@@ -309,9 +344,9 @@ Function path  // Return the path of the file/folder
 		
 	Else 
 		
-		$path:=Folder:C1567(path [This:C1470.type+"Forms"]().folder($t).platformPath;fk platform path:K87:2)
+		$path:=Folder:C1567(path[This:C1470.type+"Forms"]().folder($t).platformPath; fk platform path:K87:2)
 		
-		  // We assume that our templates are OK!
+		// We assume that our templates are OK!
 		$success:=$path.exists
 		
 	End if 
@@ -323,21 +358,20 @@ Function path  // Return the path of the file/folder
 	Else 
 		
 		$0:=New object:C1471(\
-			"exists";False:C215)
+			"exists"; False:C215)
 		
 	End if 
 	
 /* ============================================================================*/
 Function css
+	var $0 : Object
 	
-	C_OBJECT:C1216($0)
-	
-	$0:=path .templates().file("template.css")
+	$0:=path.templates().file("template.css")
 	
 /* ============================================================================*/
 Function label
-	
-	C_TEXT:C284($0;$1)
+	var $0 : Text
+	var $1 : Text
 	
 	$0:=Get localized string:C991($1)
 	

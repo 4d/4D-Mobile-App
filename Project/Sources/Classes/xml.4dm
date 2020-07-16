@@ -1,6 +1,5 @@
 Class constructor
-	
-	var $1
+	var $1 : Variant
 	
 	This:C1470.root:=Null:C1517
 	This:C1470.autoClose:=True:C214
@@ -16,10 +15,13 @@ Class constructor
 	
 /*———————————————————————————————————————————————————————————*/
 Function new
-	
-	var $1;$2;${3} : Text
+	var $0 : Object
+	var $1 : Text
+	var $2 : Text
+	var ${3} : Text
 	
 	var $l : Integer
+	
 	$l:=Count parameters:C259
 	
 	OK:=0
@@ -33,43 +35,43 @@ Function new
 					//……………………………………………………………………………………………
 				: (($l%2)#0)
 					
-					This:C1470.errors.push(Current method name:C684+"(): Unbalanced key/value pairs")
+					This:C1470.errors.push(Current method name:C684+" -  Unbalanced key/value pairs")
 					OK:=0
 					
 					//……………………………………………………………………………………………
 				: ($l=2)
 					
-					This:C1470.root:=DOM Create XML Ref:C861($1;$2)
+					This:C1470.root:=DOM Create XML Ref:C861($1; $2)
 					
 					//……………………………………………………………………………………………
 				: ($l=4)
 					
-					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4)
+					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4)
 					
 					//……………………………………………………………………………………………
 				: ($l=6)
 					
-					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4;$5;$6)
+					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4; $5; $6)
 					
 					//……………………………………………………………………………………………
 				: ($l=8)
 					
-					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4;$5;$6;$7;$8)
+					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4; $5; $6; $7; $8)
 					
 					//……………………………………………………………………………………………
 				: ($l=10)
 					
-					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4;$5;$6;$7;$8;$9;$10)
+					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4; $5; $6; $7; $8; $9; $10)
 					
 					//……………………………………………………………………………………………
 				: ($l=12)
 					
-					This:C1470.root:=DOM Create XML Ref:C861($1;$2;$3;$4;$5;$6;$7;$8;$9;$10;$11;$12)
+					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4; $5; $6; $7; $8; $9; $10; $11; $12)
 					
 					//______________________________________________________
 				Else 
 					
-					This:C1470.errors.push(Current method name:C684+"(): Unmanaged number of  key/value pairs (max = 5)")
+					This:C1470.errors.push(Current method name:C684+" -  Unmanaged number of  key/value pairs (max = 5)")
 					
 					//______________________________________________________
 			End case 
@@ -88,59 +90,59 @@ Function new
 	
 	This:C1470.success:=Bool:C1537(OK)
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function setOption
-	
-	var $1;$2 : Integer
 	var $0 : Object
+	var $1 : Integer
+	var $2 : Integer
 	
 	This:C1470.success:=(Count parameters:C259=2)
 	
 	If (This:C1470.success)
 		
-		XML SET OPTIONS:C1090(This:C1470.root;$1;$2)
+		XML SET OPTIONS:C1090(This:C1470.root; $1; $2)
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Unbalanced selector/value pairs")
+		This:C1470.errors.push(Current method name:C684+" -  Unbalanced selector/value pairs")
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function setOptions
+	var $0 : Object
+	var $1 : Integer
+	var $2 : Integer
+	var ${3} : Integer
 	
-	var $1;$2;${3};$i : Integer
+	var $i : Integer
 	
 	This:C1470.success:=((Count parameters:C259%2)=0)
 	
 	If (This:C1470.success)
 		
-		For ($i;1;Count parameters:C259;2)
+		For ($i; 1; Count parameters:C259; 2)
 			
-			XML SET OPTIONS:C1090(This:C1470.root;${$i};${$i+1})
+			XML SET OPTIONS:C1090(This:C1470.root; ${$i}; ${$i+1})
 			
 		End for 
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Unbalanced selector/value pairs")
+		This:C1470.errors.push(Current method name:C684+" -  Unbalanced selector/value pairs")
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function parse  // Parse a variable (TEXT or BLOB) 
-	
+Function parse  // Parse a variable (TEXT or BLOB)
 	var $0 : Object
-	var $1
+	var $1 : Variant
 	var $2 : Boolean
 	var $3 : Text
 	
@@ -159,22 +161,24 @@ Function parse  // Parse a variable (TEXT or BLOB)
 			//……………………………………………………………………………………………
 		: (Count parameters:C259=2)
 			
-			$0:=This:C1470.load($1;$2)
+			$0:=This:C1470.load($1; $2)
 			
 			//……………………………………………………………………………………………
 		Else 
 			
-			$0:=This:C1470.load($1;$2;$3)
+			$0:=This:C1470.load($1; $2; $3)
 			
 			//……………………………………………………………………………………………
 	End case 
 	
 /*———————————————————————————————————————————————————————————*/
 Function load  // Load a variable (TEXT or BLOB) or a file
-	
-	var $1
+	var $0 : Object
+	var $1 : Variant
 	var $2 : Boolean
-	var $3;$node : Text
+	var $3 : Text
+	
+	var $node : Text
 	var $l : Integer
 	
 	This:C1470.close()  // Release memory
@@ -187,7 +191,7 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 		: ($l=0)
 			
 			This:C1470.success:=False:C215
-			This:C1470.errors.push(Current method name:C684+"(): Missing the target to load")
+			This:C1470.errors.push(Current method name:C684+" -  Missing the target to load")
 			
 			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)\
@@ -203,12 +207,12 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 					//……………………………………………………………………………………………
 				: ($l=2)
 					
-					$node:=DOM Parse XML variable:C720($1;$2)
+					$node:=DOM Parse XML variable:C720($1; $2)
 					
 					//……………………………………………………………………………………………
 				Else 
 					
-					$node:=DOM Parse XML variable:C720($1;$2;$3)
+					$node:=DOM Parse XML variable:C720($1; $2; $3)
 					
 					//……………………………………………………………………………………………
 			End case 
@@ -221,14 +225,14 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 				
 			Else 
 				
-				This:C1470.errors.push(Current method name:C684+"(): Failed to parse the "+Choose:C955(Value type:C1509($1)=Is text:K8:3;"text";"blob")+" variable")
+				This:C1470.errors.push(Current method name:C684+" -  Failed to parse the "+Choose:C955(Value type:C1509($1)=Is text:K8:3; "text"; "blob")+" variable")
 				
 			End if 
 			
 			//______________________________________________________
 		: (Value type:C1509($1)=Is object:K8:27)  // File to load
 			
-			This:C1470.success:=OB Instance of:C1731($1;4D:C1709.File)
+			This:C1470.success:=OB Instance of:C1731($1; 4D:C1709.File)
 			
 			If (This:C1470.success)
 				
@@ -246,12 +250,12 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 							//……………………………………………………………………………………………
 						: ($l=2)
 							
-							$node:=DOM Parse XML source:C719($1.platformPath;$2)
+							$node:=DOM Parse XML source:C719($1.platformPath; $2)
 							
 							//……………………………………………………………………………………………
 						Else 
 							
-							$node:=DOM Parse XML source:C719($1.platformPath;$2;$3)
+							$node:=DOM Parse XML source:C719($1.platformPath; $2; $3)
 							
 							//……………………………………………………………………………………………
 					End case 
@@ -267,33 +271,34 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 					
 				Else 
 					
-					This:C1470.errors.push(Current method name:C684+"(): File not found: "+String:C10($1.platformPath))
+					This:C1470.errors.push(Current method name:C684+" -  File not found: "+String:C10($1.platformPath))
 					
 				End if 
 				
 			Else 
 				
-				This:C1470.errors.push(Current method name:C684+"(): The parameter is not a File object")
+				This:C1470.errors.push(Current method name:C684+" -  The parameter is not a File object")
 				
 			End if 
 			
 			//______________________________________________________
 		Else 
 			
-			This:C1470.errors.push(Current method name:C684+"(): Unmanaged type: "+String:C10(Value type:C1509($1)))
+			This:C1470.errors.push(Current method name:C684+" -  Unmanaged type: "+String:C10(Value type:C1509($1)))
 			
 			//________________________________________
 	End case 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function save
+	var $0 : Object
+	var $1 : Variant
+	var $2 : Boolean
 	
-	var $1
-	var $2;$b : Boolean
-	var $file : 4D:C1709.File
+	var $b : Boolean
+	var $file : Object
 	
 	If (Count parameters:C259>=2)
 		
@@ -322,16 +327,16 @@ Function save
 		End if 
 	End if 
 	
-	This:C1470.success:=OB Instance of:C1731($file;4D:C1709.File)
+	This:C1470.success:=OB Instance of:C1731($file; 4D:C1709.File)
 	
 	If (This:C1470.success)
 		
-		DOM EXPORT TO FILE:C862(This:C1470.root;$file.platformPath)
+		DOM EXPORT TO FILE:C862(This:C1470.root; $file.platformPath)
 		This:C1470.success:=Bool:C1537(OK)
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): File is not defined")
+		This:C1470.errors.push(Current method name:C684+" -  File is not defined")
 		
 	End if 
 	
@@ -348,11 +353,11 @@ Function save
 		End if 
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function close  // Close the XML tree
+	var $0 : Object
 	
 	This:C1470.success:=(This:C1470.root#Null:C1517)
 	
@@ -364,14 +369,14 @@ Function close  // Close the XML tree
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function create
-	
-	var $0;$1 : Text
-	var $2;$3
+	var $0 : Text
+	var $1 : Text
+	var $2 : Variant
+	var $3 : Variant
 	
 	This:C1470.success:=(Count parameters:C259>=1)
 	
@@ -379,21 +384,21 @@ Function create
 		
 		If (This:C1470.__isReference($1))
 			
-			$0:=DOM Create XML element:C865($1;$2)
+			$0:=DOM Create XML element:C865($1; $2)
 			
 			If (Count parameters:C259=3)
 				
-				This:C1470.setAttributes($0;$3)
+				This:C1470.setAttributes($0; $3)
 				
 			End if 
 			
 		Else 
 			
-			$0:=DOM Create XML element:C865(This:C1470.root;$1)
+			$0:=DOM Create XML element:C865(This:C1470.root; $1)
 			
 			If (Count parameters:C259=2)
 				
-				This:C1470.setAttributes($0;$2)
+				This:C1470.setAttributes($0; $2)
 				
 			End if 
 		End if 
@@ -402,17 +407,18 @@ Function create
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+		This:C1470.errors.push(Current method name:C684+" -  Missing parameters")
 		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function getText  //return the  XML tree as text
-	
-	var $0;$t : Text
+Function getText  // Return the  XML tree as text
+	var $0 : Text
 	var $1 : Boolean
 	
-	DOM EXPORT TO VAR:C863(This:C1470.root;$t)
+	var $t : Text
+	
+	DOM EXPORT TO VAR:C863(This:C1470.root; $t)
 	This:C1470.success:=Bool:C1537(OK)
 	
 	If (This:C1470.success)
@@ -429,7 +435,7 @@ Function getText  //return the  XML tree as text
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Failed to export XML to text.")
+		This:C1470.errors.push(Current method name:C684+" -  Failed to export XML to text.")
 		
 	End if 
 	
@@ -437,11 +443,12 @@ Function getText  //return the  XML tree as text
 	
 /*———————————————————————————————————————————————————————————*/
 Function getContent  // Return the  XML tree as BLOB
-	
-	var $0;$x : Blob
+	var $0 : Blob
 	var $1 : Boolean
 	
-	DOM EXPORT TO VAR:C863(This:C1470.root;$x)
+	var $x : Blob
+	
+	DOM EXPORT TO VAR:C863(This:C1470.root; $x)
 	This:C1470.success:=Bool:C1537(OK)
 	
 	If (This:C1470.success)
@@ -458,7 +465,7 @@ Function getContent  // Return the  XML tree as BLOB
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Failed to export XML to BLOB.")
+		This:C1470.errors.push(Current method name:C684+" -  Failed to export XML to BLOB.")
 		
 	End if 
 	
@@ -466,13 +473,12 @@ Function getContent  // Return the  XML tree as BLOB
 	
 /*———————————————————————————————————————————————————————————*/
 Function toObject
-	
 	var $0 : Object
 	var $1 : Boolean
 	
 	If (Count parameters:C259=2)
 		
-		$0:=xml_elementToObject(This:C1470.root;$1)
+		$0:=xml_elementToObject(This:C1470.root; $1)
 		
 	Else 
 		
@@ -482,91 +488,93 @@ Function toObject
 	
 /*———————————————————————————————————————————————————————————*/
 Function findById
-	
-	var $0;$1 : Text
+	var $0 : Text
+	var $1 : Text
 	
 	This:C1470.success:=(Count parameters:C259>=1)
 	
 	If (This:C1470.success)
 		
-		$0:=DOM Find XML element by ID:C1010(This:C1470.root;$1)
+		$0:=DOM Find XML element by ID:C1010(This:C1470.root; $1)
 		This:C1470.success:=Bool:C1537(OK)
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Missing ID parameter")
+		This:C1470.errors.push(Current method name:C684+" -  Missing ID parameter")
 		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function findByXPath
-	
-	var $0;$1 : Text
+	var $0 : Text
+	var $1 : Text
 	
 	This:C1470.success:=(Count parameters:C259>=1)
 	
 	If (This:C1470.success)
 		
-		$0:=DOM Find XML element:C864(This:C1470.root;$1)
+		$0:=DOM Find XML element:C864(This:C1470.root; $1)
 		This:C1470.success:=Bool:C1537(OK)
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Missing path parameter")
+		This:C1470.errors.push(Current method name:C684+" -  Missing path parameter")
 		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function findByName
-	
 	var $0 : Collection
-	var $1;$2 : Text
+	var $1 : Text
+	var $2 : Text
 	
 	This:C1470.success:=(Count parameters:C259>=1)
 	
 	If (This:C1470.success)
 		
-		ARRAY TEXT:C222($aT;0x0000)
+		ARRAY TEXT:C222($aT; 0x0000)
 		
 		If (Count parameters:C259>=2)
 			
 			If (This:C1470.__isReference($1))
 				
-				$aT{0}:=DOM Find XML element:C864($1;$2;$aT)
+				$aT{0}:=DOM Find XML element:C864($1; $2; $aT)
 				
 			Else 
 				
-				$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//"+$1;$aT)
+				$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//"+$1; $aT)
 				
 			End if 
 			
 		Else 
 			
-			$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//"+$1;$aT)
+			$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//"+$1; $aT)
 			
 		End if 
 		
 		This:C1470.success:=Bool:C1537(OK)
 		$0:=New collection:C1472
-		ARRAY TO COLLECTION:C1563($0;$aT)
+		ARRAY TO COLLECTION:C1563($0; $aT)
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+		This:C1470.errors.push(Current method name:C684+" -  Missing parameters")
 		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function findByAttribute
-	
 	var $0 : Collection
-	var $1;$2;$3;$4 : Text
+	var $1 : Text
+	var $2 : Text
+	var $3 : Text
+	var $4 : Text
 	
 	This:C1470.success:=(Count parameters:C259>=1)
 	
 	If (This:C1470.success)
 		
-		ARRAY TEXT:C222($aT;0x0000)
+		ARRAY TEXT:C222($aT; 0x0000)
 		
 		If (This:C1470.__isReference($1))
 			
@@ -575,17 +583,17 @@ Function findByAttribute
 					//______________________________________________________
 				: (Count parameters:C259=2)  // Elements with the attribute $2
 					
-					$aT{0}:=DOM Find XML element:C864($1;"//@"+$2;$aT)
+					$aT{0}:=DOM Find XML element:C864($1; "//@"+$2; $aT)
 					
 					//______________________________________________________
 				: (Count parameters:C259=3)  // Elements with the attribute $2 equal to $3
 					
-					$aT{0}:=DOM Find XML element:C864($1;"//[@"+$2+"=\""+$3+"\"]";$aT)
+					$aT{0}:=DOM Find XML element:C864($1; "//[@"+$2+"=\""+$3+"\"]"; $aT)
 					
 					//______________________________________________________
 				: (Count parameters:C259>=4)  // Elements $2 with the attribute $3 equal to $4
 					
-					$aT{0}:=DOM Find XML element:C864($1;"//"+$2+"[@"+$3+"=\""+$4+"\"]";$aT)
+					$aT{0}:=DOM Find XML element:C864($1; "//"+$2+"[@"+$3+"=\""+$4+"\"]"; $aT)
 					
 					//______________________________________________________
 				Else 
@@ -602,17 +610,17 @@ Function findByAttribute
 					//______________________________________________________
 				: (Count parameters:C259=1)  // Elements with the attribute $1
 					
-					$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//@"+$1;$aT)
+					$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//@"+$1; $aT)
 					
 					//______________________________________________________
 				: (Count parameters:C259=2)  // Elements with the attribute $1 equal to $2
 					
-					$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//*[@"+$1+"=\""+$2+"\"]";$aT)
+					$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//*[@"+$1+"=\""+$2+"\"]"; $aT)
 					
 					//______________________________________________________
 				: (Count parameters:C259>=3)  // Elements $2 with the attribute $3 equal to $4
 					
-					$aT{0}:=DOM Find XML element:C864(This:C1470.root;"//"+$1+"[@"+$2+"=\""+$3+"\"]";$aT)
+					$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//"+$1+"[@"+$2+"=\""+$3+"\"]"; $aT)
 					
 					//______________________________________________________
 				Else 
@@ -625,23 +633,25 @@ Function findByAttribute
 		
 		This:C1470.success:=Bool:C1537(OK)
 		$0:=New collection:C1472
-		ARRAY TO COLLECTION:C1563($0;$aT)
+		ARRAY TO COLLECTION:C1563($0; $aT)
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+		This:C1470.errors.push(Current method name:C684+" -  Missing parameters")
 		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function findOrCreate
+	var $0 : Text
+	var $1 : Text
+	var $2 : Text
 	
-	var $0;$1;$2 : Text
 	var $c : Collection
 	
 	If (This:C1470.__isReference($1))
 		
-		$c:=This:C1470.findByName($1;$2)
+		$c:=This:C1470.findByName($1; $2)
 		
 		If (This:C1470.success)
 			
@@ -650,7 +660,7 @@ Function findOrCreate
 		Else 
 			
 			// Create
-			$0:=DOM Create XML element:C865($1;$2)
+			$0:=DOM Create XML element:C865($1; $2)
 			
 		End if 
 		
@@ -665,7 +675,7 @@ Function findOrCreate
 		Else 
 			
 			// Create
-			$0:=DOM Create XML element:C865(This:C1470.root;$1)
+			$0:=DOM Create XML element:C865(This:C1470.root; $1)
 			
 		End if 
 	End if 
@@ -674,34 +684,54 @@ Function findOrCreate
 	
 /*———————————————————————————————————————————————————————————*/
 Function parent
+	var $0 : Text
+	var $1 : Text
 	
-	var $0;$1 : Text
+	This:C1470.success:=This:C1470.__isReference($1)
 	
-	$0:=DOM Get parent XML element:C923($1)
+	If (This:C1470.success)
+		
+		$0:=DOM Get parent XML element:C923($1)
+		
+	Else 
+		
+		This:C1470.errors.push(Current method name:C684+" -  Invalid XML element reference")
+		
+	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function childrens  // Returns the childs of a node
-	
 	var $0 : Collection
 	var $1 : Text
+	
 	var $i : Integer
 	
 	$0:=New collection:C1472
 	
-	ARRAY LONGINT:C221($aL;0x0000)
-	ARRAY TEXT:C222($aT;0x0000)
+	ARRAY LONGINT:C221($aL; 0x0000)
+	ARRAY TEXT:C222($aT; 0x0000)
 	
 	If (Count parameters:C259>=1)
 		
-		DOM GET XML CHILD NODES:C1081($1;$aL;$aT)
+		This:C1470.success:=This:C1470.__isReference($1)
+		
+		If (This:C1470.success)
+			
+			DOM GET XML CHILD NODES:C1081($1; $aL; $aT)
+			
+		Else 
+			
+			This:C1470.errors.push(Current method name:C684+" -  Invalid XML element reference")
+			
+		End if 
 		
 	Else 
 		
-		DOM GET XML CHILD NODES:C1081(This:C1470.root;$aL;$aT)
+		DOM GET XML CHILD NODES:C1081(This:C1470.root; $aL; $aT)
 		
 	End if 
 	
-	For ($i;1;Size of array:C274($aL);1)
+	For ($i; 1; Size of array:C274($aL); 1)
 		
 		If ($aL{$i}=XML ELEMENT:K45:20)
 			
@@ -712,27 +742,37 @@ Function childrens  // Returns the childs of a node
 	
 /*———————————————————————————————————————————————————————————*/
 Function descendants  // Returns the descendants of a node
-	
 	var $0 : Collection
 	var $1 : Text
+	
 	var $i : Integer
 	
 	$0:=New collection:C1472
 	
-	ARRAY LONGINT:C221($aL;0x0000)
-	ARRAY TEXT:C222($aT;0x0000)
+	ARRAY LONGINT:C221($aL; 0x0000)
+	ARRAY TEXT:C222($aT; 0x0000)
 	
 	If (Count parameters:C259>=1)
 		
-		DOM GET XML CHILD NODES:C1081($1;$aL;$aT)
+		This:C1470.success:=This:C1470.__isReference($1)
+		
+		If (This:C1470.success)
+			
+			DOM GET XML CHILD NODES:C1081($1; $aL; $aT)
+			
+		Else 
+			
+			This:C1470.errors.push(Current method name:C684+" -  Invalid XML element reference")
+			
+		End if 
 		
 	Else 
 		
-		DOM GET XML CHILD NODES:C1081(This:C1470.root;$aL;$aT)
+		DOM GET XML CHILD NODES:C1081(This:C1470.root; $aL; $aT)
 		
 	End if 
 	
-	For ($i;1;Size of array:C274($aL);1)
+	For ($i; 1; Size of array:C274($aL); 1)
 		
 		If ($aL{$i}=XML ELEMENT:K45:20)
 			
@@ -744,80 +784,124 @@ Function descendants  // Returns the descendants of a node
 	
 /*———————————————————————————————————————————————————————————*/
 Function getName
-	
-	var $0;$1 : Text
-	
-	This:C1470.success:=(Count parameters:C259>=1)
-	
-	If (This:C1470.success)
-		
-		DOM GET XML ELEMENT NAME:C730($1;$0)
-		
-	End if 
-	
-/*———————————————————————————————————————————————————————————*/
-Function setName
-	
-	var $1;$2 : Text
-	
-	This:C1470.success:=(Count parameters:C259>=2)
-	
-	If (This:C1470.success)
-		
-		DOM SET XML ELEMENT NAME:C867($1;$2)
-		This:C1470.success:=Bool:C1537(OK)
-		
-	End if 
-	
-/*———————————————————————————————————————————————————————————*/
-Function remove
-	
+	var $0 : Text
 	var $1 : Text
 	
 	This:C1470.success:=(Count parameters:C259>=1)
 	
 	If (This:C1470.success)
 		
-		DOM REMOVE XML ELEMENT:C869($1)
-		This:C1470.success:=Bool:C1537(OK)
+		This:C1470.success:=This:C1470.__isReference($1)
 		
+		If (This:C1470.success)
+			
+			DOM GET XML ELEMENT NAME:C730($1; $0)
+			This:C1470.success:=Bool:C1537(OK)
+			
+		Else 
+			
+			This:C1470.errors.push(Current method name:C684+" -  Invalid XML element reference")
+			
+		End if 
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function setName
+	var $1 : Text
+	var $2 : Text
+	
+	This:C1470.success:=(Count parameters:C259>=2)
+	
+	If (This:C1470.success)
+		
+		This:C1470.success:=This:C1470.__isReference($1)
+		
+		If (This:C1470.success)
+			
+			DOM SET XML ELEMENT NAME:C867($1; $2)
+			This:C1470.success:=Bool:C1537(OK)
+			
+		Else 
+			
+			This:C1470.errors.push(Current method name:C684+" -  Invalid XML element reference")
+			
+		End if 
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function remove
+	var $1 : Text
+	
+	This:C1470.success:=(Count parameters:C259>=1)
+	
+	If (This:C1470.success)
+		
+		This:C1470.success:=This:C1470.__isReference($1)
+		
+		If (This:C1470.success)
+			
+			DOM REMOVE XML ELEMENT:C869($1)
+			This:C1470.success:=Bool:C1537(OK)
+			
+		Else 
+			
+			This:C1470.errors.push(Current method name:C684+" -  Invalid XML element reference")
+			
+		End if 
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function getValue
+	var $0 : Variant
+	var $1 : Text
 	
-	var $0
-	var $1;$value;$tCDATA : Text
+	var $tCDATA, $value : Text
 	
-	DOM GET XML ELEMENT VALUE:C731($1;$value;$tCDATA)
-	This:C1470.success:=Bool:C1537(OK)
+	This:C1470.success:=(Count parameters:C259>=1)
 	
 	If (This:C1470.success)
 		
-		If (Length:C16($value)=0)
+		This:C1470.success:=This:C1470.__isReference($1)
+		
+		If (This:C1470.success)
 			
-			// Try CDATA
-			$0:=This:C1470.__convert($tCDATA)
+			DOM GET XML ELEMENT VALUE:C731($1; $value; $tCDATA)
+			This:C1470.success:=Bool:C1537(OK)
+			
+			If (This:C1470.success)
+				
+				If (Length:C16($value)=0)
+					
+					// Try CDATA
+					$0:=This:C1470.__convert($tCDATA)
+					
+				Else 
+					
+					$0:=This:C1470.__convert($value)
+					
+				End if 
+			End if 
 			
 		Else 
 			
-			$0:=This:C1470.__convert($value)
+			This:C1470.errors.push(Current method name:C684+" -  Invalid XML element reference")
 			
 		End if 
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function getAttribute  // Returns a node attribute value if exists
+	var $0 : Variant
+	var $1 : Text
+	var $2 : Text
 	
-	var $0
-	var $1;$2 : Text
 	var $o : Object
 	
 	This:C1470.success:=(Count parameters:C259=2)
 	
 	If (This:C1470.success)
 		
-		$o:=OB Entries:C1720(This:C1470.getAttributes($1)).query("key=:1";$2).pop()
+		$o:=OB Entries:C1720(This:C1470.getAttributes($1)).query("key=:1"; $2).pop()
 		This:C1470.success:=($o#Null:C1517)
 		
 		If (This:C1470.success)
@@ -826,21 +910,22 @@ Function getAttribute  // Returns a node attribute value if exists
 			
 		Else 
 			
-			This:C1470.errors.push(Current method name:C684+"(): Attribute \""+$1+"\" not found")
+			This:C1470.errors.push(Current method name:C684+" -  Attribute \""+$1+"\" not found")
 			
 		End if 
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+		This:C1470.errors.push(Current method name:C684+" -  Missing parameters")
 		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function getAttributes  // Returns a node attributes as object
-	
 	var $0 : Object
-	var $1;$key;$value;$t : Text
+	var $1 : Text
+	
+	var $key, $t, $value : Text
 	var $i : Integer
 	
 	This:C1470.success:=(Count parameters:C259=1)
@@ -849,11 +934,11 @@ Function getAttributes  // Returns a node attributes as object
 		
 		$0:=New object:C1471
 		
-		GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$t)
+		GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $t)
 		
-		For ($i;1;DOM Count XML attributes:C727($1);1)
+		For ($i; 1; DOM Count XML attributes:C727($1); 1)
 			
-			DOM GET XML ATTRIBUTE BY INDEX:C729($1;$i;$key;$value)
+			DOM GET XML ATTRIBUTE BY INDEX:C729($1; $i; $key; $value)
 			
 			$0[$key]:=This:C1470.__convert($value)
 			
@@ -861,13 +946,12 @@ Function getAttributes  // Returns a node attributes as object
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Missing node reference")
+		This:C1470.errors.push(Current method name:C684+" -  Missing node reference")
 		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function getAttributesCollection  // Returns a node attributes as collection
-	
 	var $0 : Collection
 	var $1 : Text
 	
@@ -879,37 +963,41 @@ Function getAttributesCollection  // Returns a node attributes as collection
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Missing node reference")
+		This:C1470.errors.push(Current method name:C684+" -  Missing node reference")
 		
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
 Function setAttribute  // Set a node attribute
-	
-	var $1;$2 : Text
+	var $0 : Object
+	var $1 : Text
+	var $2 : Text
 	var $3 : Variant
 	
 	This:C1470.success:=(Count parameters:C259=3)
 	
 	If (This:C1470.success)
 		
-		DOM SET XML ATTRIBUTE:C866($1;$2;$3)
+		DOM SET XML ATTRIBUTE:C866($1; \
+			$2; $3)
 		This:C1470.success:=Bool:C1537(OK)
 		
 	Else 
 		
-		This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+		This:C1470.errors.push(Current method name:C684+" -  Missing parameters")
 		
 	End if 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function setAttributes  // Set a node attributes from an object or a collection (key/value pairs)
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
+	var $3 : Variant
 	
-	var $1;$t : Text
-	var $2;$3 : Variant
+	var $t : Text
 	var $o : Object
 	
 	This:C1470.success:=(Count parameters:C259>=2)
@@ -919,7 +1007,7 @@ Function setAttributes  // Set a node attributes from an object or a collection 
 			//______________________________________________________
 		: (Not:C34(This:C1470.success))
 			
-			This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+			This:C1470.errors.push(Current method name:C684+" -  Missing parameters")
 			
 			//______________________________________________________
 		: (Value type:C1509($2)=Is text:K8:3)
@@ -928,43 +1016,45 @@ Function setAttributes  // Set a node attributes from an object or a collection 
 			
 			If (This:C1470.success)
 				
-				This:C1470.setAttribute($1;$2;$3)
+				This:C1470.setAttribute($1; $2; $3)
 				
 			Else 
 				
-				This:C1470.errors.push(Current method name:C684+"(): Missing parameters")
+				This:C1470.errors.push(Current method name:C684+" -  Missing parameters")
 				
 			End if 
 			
 			//______________________________________________________
 		: (Value type:C1509($2)=Is object:K8:27)
 			
-			For each ($t;$2) While (This:C1470.success)
+			For each ($t; $2) While (This:C1470.success)
 				
-				DOM SET XML ATTRIBUTE:C866($1;$t;$2[$t])
+				DOM SET XML ATTRIBUTE:C866($1; \
+					$t; $2[$t])
 				This:C1470.success:=Bool:C1537(OK)
 				
 			End for each 
 			
 			If (Not:C34(This:C1470.success))
 				
-				This:C1470.errors.push(Current method name:C684+"(): Failed to set attribute \""+$t+"\"")
+				This:C1470.errors.push(Current method name:C684+" -  Failed to set attribute \""+$t+"\"")
 				
 			End if 
 			
 			//______________________________________________________
 		: (Value type:C1509($2)=Is collection:K8:32)
 			
-			For each ($o;$2) While (This:C1470.success)
+			For each ($o; $2) While (This:C1470.success)
 				
-				DOM SET XML ATTRIBUTE:C866($1;String:C10($o.key);$o.value)
+				DOM SET XML ATTRIBUTE:C866($1; \
+					String:C10($o.key); $o.value)
 				This:C1470.success:=Bool:C1537(OK)
 				
 			End for each 
 			
 			If (Not:C34(This:C1470.success))
 				
-				This:C1470.errors.push(Current method name:C684+"(): Failed to set attribute \""+String:C10($o.key)+"\"")
+				This:C1470.errors.push(Current method name:C684+" -  Failed to set attribute \""+String:C10($o.key)+"\"")
 				
 			End if 
 			
@@ -972,36 +1062,34 @@ Function setAttributes  // Set a node attributes from an object or a collection 
 		Else 
 			
 			This:C1470.success:=False:C215
-			This:C1470.errors.push(Current method name:C684+"(): Unmanaged type: "+String:C10(Value type:C1509($1)))
+			This:C1470.errors.push(Current method name:C684+" -  Unmanaged type: "+String:C10(Value type:C1509($1)))
 			
 			//______________________________________________________
 	End case 
 	
-	var $0 : Object
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function setValue
-	
 	var $1 : Text
-	var $2
+	var $2 : Variant
 	var $3 : Boolean
 	
 	If (Count parameters:C259=3)
 		
 		If ($3)
 			
-			DOM SET XML ELEMENT VALUE:C868($1;$2;*)
+			DOM SET XML ELEMENT VALUE:C868($1; $2; *)
 			
 		Else 
 			
-			DOM SET XML ELEMENT VALUE:C868($1;$2)
+			DOM SET XML ELEMENT VALUE:C868($1; $2)
 			
 		End if 
 		
 	Else 
 		
-		DOM SET XML ELEMENT VALUE:C868($1;$2)
+		DOM SET XML ELEMENT VALUE:C868($1; $2)
 		
 	End if 
 	
@@ -1009,32 +1097,30 @@ Function setValue
 	
 /*———————————————————————————————————————————————————————————*/
 Function __isReference
-	
 	var $0 : Boolean
 	var $1 : Text
 	
-	$0:=Match regex:C1019("(?mi-s)^[a-zA-Z0-9]{32}$";$1;1)
+	$0:=Match regex:C1019("(?mi-s)^[a-zA-Z0-9]{32}$"; $1; 1)
 	
 /*———————————————————————————————————————————————————————————*/
 Function __convert
-	
+	var $0 : Variant
 	var $1 : Text
-	var $0
 	
 	Case of 
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$";$1;1))
+		: (Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$"; $1; 1))
 			
 			$0:=($1="true")
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$1+"\\d+)?$";$1;1))
+		: (Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$1+"\\d+)?$"; $1; 1))
 			
 			$0:=Num:C11($1)
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-si)^\\d+-\\d+-\\d+$";$1;1))
+		: (Match regex:C1019("(?m-si)^\\d+-\\d+-\\d+$"; $1; 1))
 			
 			$0:=Date:C102($1+"T00:00:00")
 			
@@ -1048,7 +1134,6 @@ Function __convert
 	
 /*———————————————————————————————————————————————————————————*/
 Function __close
-	
 	var $1 : Boolean
 	
 	If (This:C1470.autoClose)
