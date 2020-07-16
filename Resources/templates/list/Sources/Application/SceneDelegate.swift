@@ -6,6 +6,7 @@
 //  ___COPYRIGHT___
 //
 import UIKit
+import QMobileUI
 
 #if swift(>=5.1)
 @available(iOS 13.0, *)
@@ -46,6 +47,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+    }
+
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let urlContext = URLContexts.first else {
+            return
+        }
+        _ = AppDelegate.self.application(UIApplication.shared, open: urlContext.url, options: urlContext.options.app)
     }
 
 }
