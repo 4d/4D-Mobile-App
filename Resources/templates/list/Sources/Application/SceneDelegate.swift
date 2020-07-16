@@ -56,5 +56,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         _ = AppDelegate.self.application(UIApplication.shared, open: urlContext.url, options: urlContext.options.app)
     }
 
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        _ = AppDelegate.self.application(UIApplication.shared, continue: userActivity, restorationHandler: { _ in })
+    }
+
 }
 #endif
