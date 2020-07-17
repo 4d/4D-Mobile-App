@@ -9,6 +9,7 @@ Class constructor
 		
 		This:C1470.name:=$1
 		This:C1470.title:=This:C1470.name
+		This:C1470.type:=Null:C1517
 		
 		//%W-533.1
 		If (This:C1470.name[[1]]="/")
@@ -37,6 +38,8 @@ Class constructor
 				If ($file.exists)
 					
 					This:C1470.manifest:=JSON Parse:C1218($file.getText())
+					This:C1470.listform:=(String:C10(This:C1470.manifest.type)="listform")
+					This:C1470.detailform:=(String:C10(This:C1470.manifest.type)="detailform")
 					
 				Else 
 					
@@ -173,72 +176,84 @@ Function load  // Load and update the template if any
 					End if 
 				End if 
 				
-				If (Bool:C1537(OK))
+				If (This:C1470.listform) & (feature.with("moreRelations"))
 					
-					$o:=JSON Parse:C1218(File:C1566("/RESOURCES/templates/v2Conversion.json").getText())
+					// Add the types -8858 & -8859 to forbid the deposit of a relation
+					// on the"searchableField" & "sectionField fields"
 					
-					If ($o[This:C1470.title]#Null:C1517)
+					$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='searchableField']")
+					
+					If (Bool:C1537(OK))
 						
-						This:C1470.manifest.hOffset:=$o[This:C1470.title]
+						DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8858,-8859")
 						
-						If (Bool:C1537(OK))
+					End if 
+					
+					$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='sectionField']")
+					
+					If (Bool:C1537(OK))
+						
+						DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8858,-8859")
+						
+					End if 
+				End if 
+				
+				Case of 
+						
+						//______________________________________________________
+					: (Not:C34(Bool:C1537(OK)))
+						
+						This:C1470.warning:="Something failed when updating the template"
+						
+						//______________________________________________________
+					: (This:C1470.detailform)
+						
+						// Fix hOffset
+						$o:=JSON Parse:C1218(File:C1566("/RESOURCES/templates/v2Conversion.json").getText())
+						
+						If ($o[This:C1470.title]#Null:C1517)
+							
+							This:C1470.manifest.hOffset:=$o[This:C1470.title]
 							
 							// Update the manifest
 							This:C1470.manifest.renderer:=2
 							This:C1470.manifest.fields.max:=0
 							
-							DOM EXPORT TO VAR:C863($root; $t)
-							DOM CLOSE XML:C722($root)
-							
 							// Keep the updated template
+							DOM EXPORT TO VAR:C863($root; $t)
 							This:C1470.template:=$t
+							
+							
+						Else 
+							
+							This:C1470.warning:="Obsolete template"
 							
 						End if 
 						
+						//______________________________________________________
+					: (This:C1470.listform) & (feature.with("moreRelations"))
+						
+						// Update the manifest
+						This:C1470.manifest.renderer:=2
+						
+						// Keep the updated template
+						DOM EXPORT TO VAR:C863($root; $t)
+						This:C1470.template:=$t
+						
+						//______________________________________________________
+					: (Not:C34(feature.with("moreRelations")))
+						
+						//
+						
+						//______________________________________________________
 					Else 
 						
-						This:C1470.warning:="Obsolete template"
+						This:C1470.warning:="Missing template type"
 						
-					End if 
-				End if 
-			End if 
-		End if 
-		
-		If (String:C10(This:C1470.manifest.type)="listform")\
-			 & (Num:C11(This:C1470.manifest.renderer)<3)
-			
-			$t:=This:C1470.template
-			$root:=DOM Parse XML variable:C720($t)
-			
-			If (Bool:C1537(OK))
+						//______________________________________________________
+				End case 
 				
-/* Add the type -8859 to forbid the deposit of a 1->N relationship
-on the"searchableField" & "sectionField fields"*/
-				
-				$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='searchableField']")
-				
-				If (Bool:C1537(OK))
-					
-					DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8859")
-					
-				End if 
-				
-				$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='sectionField']")
-				
-				If (Bool:C1537(OK))
-					
-					DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8859")
-					
-				End if 
-				
-				// Update the manifest
-				This:C1470.manifest.renderer:=3
-				
-				DOM EXPORT TO VAR:C863($root; $t)
 				DOM CLOSE XML:C722($root)
-				
-				// Keep the updated template
-				This:C1470.template:=$t
 				
 			End if 
 		End if 

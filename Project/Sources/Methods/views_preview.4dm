@@ -8,25 +8,17 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_TEXT:C284($0)
-C_TEXT:C284($1)
-C_OBJECT:C1216($2)
+var $0 : Text
+var $1 : Text
+var $2 : Object
 
-C_BOOLEAN:C305($b;$bBlankForm;$bFirst;$bMultivalued;$bV2)
-C_LONGINT:C283($count;$height;$i;$indx;$Lon_y;$Lon_yOffset)
-C_LONGINT:C283($width)
-C_TEXT:C284($domBkg;$domField;$domNew;$domTemplate;$domUse;$node)
-C_TEXT:C284($root;$t;$tFormName;$tIN;$tIndex;$tName)
-C_TEXT:C284($tOUT;$tTypeForm;$tWidgetField)
-C_OBJECT:C1216($context;$form;$o;$oAttributes;$oManifest;$oTarget)
-C_OBJECT:C1216($oTemplate;$oWidgetManifest;$svg)
-C_COLLECTION:C1488($c)
+var $container, $domField, $domTemplate, $domUse, $IN, $new, $node, $OUT, $root, $t : Text
+var $tClass, $tFormName, $tIndex, $tName, $tStyle, $tTypeForm, $tWidgetField : Text
+var $b, $bFirst, $bMultivalued : Boolean
+var $count, $height, $i, $indx, $Lon_y, $Lon_yOffset, $width : Integer
+var $context, $form, $manifest, $o, $oAttributes, $oWidgetManifest, $svg, $target, $template : Object
+var $c : Collection
 
-If (False:C215)
-	C_TEXT:C284(views_preview;$0)
-	C_TEXT:C284(views_preview;$1)
-	C_OBJECT:C1216(views_preview;$2)
-End if 
 
 // ----------------------------------------------------
 // Initialisations
@@ -36,7 +28,7 @@ End if
 // Optional parameters
 If (Count parameters:C259>=1)
 	
-	$tIN:=$1
+	$IN:=$1
 	
 	If (Count parameters:C259>=2)
 		
@@ -53,7 +45,7 @@ TRY
 Case of 
 		
 		//______________________________________________________
-	: ($tIN="draw")  // Uppdate preview
+	: ($IN="draw")  // Uppdate preview
 		
 		ASSERT:C1129(Not:C34(Shift down:C543))
 		
@@ -65,47 +57,43 @@ Case of
 			
 			If (Length:C16($tFormName)>0)
 				
-				$bBlankForm:=($tTypeForm="detail")\
-					 & (feature.with("newViewUI"))
-				
 				If (String:C10(Form:C1466.$dialog.VIEWS.template.name)#$tFormName)
 					
 					If (feature.with("newViewUI"))
 						
-						Form:C1466.$dialog.VIEWS.template:=cs:C1710.tmpl.new($tFormName;$tTypeForm)
+						Form:C1466.$dialog.VIEWS.template:=cs:C1710.tmpl.new($tFormName; $tTypeForm)
 						
 					Else 
 						
-						// 
-						Form:C1466.$dialog._o_VIEWS.template:=cs:C1710.tmpl.new($tFormName;$tTypeForm)
+						Form:C1466.$dialog._o_VIEWS.template:=cs:C1710.tmpl.new($tFormName; $tTypeForm)
 						
 					End if 
 				End if 
 				
-				$oTemplate:=Form:C1466.$dialog.VIEWS.template
-				$oManifest:=$oTemplate.manifest
+				$template:=Form:C1466.$dialog.VIEWS.template
+				$manifest:=$template.manifest
 				
-				If ($oTemplate.path.exists)
+				If ($template.path.exists)
 					
 					If (feature.with("newViewUI"))
 						
 						// Load the template
-						$t:=$oTemplate.load().template
-						$t:=Replace string:C233($t;"&quot;";"\"")
-						PROCESS 4D TAGS:C816($t;$t;$oTemplate.title;$oTemplate.cancel())
+						$t:=$template.load().template
+						$t:=Replace string:C233($t; "&quot;"; "\"")
+						PROCESS 4D TAGS:C816($t; $t; $template.title; $template.cancel())
 						
-						$svg:=svg("parse";New object:C1471(\
-							"variable";$t)).setAttribute("transform";\
+						$svg:=svg("parse"; New object:C1471(\
+							"variable"; $t)).setAttribute("transform"; \
 							"scale(0.97)")
 						
-						If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
+						If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 							
 							$node:=$svg.findById("cancel")
 							
 							If ($svg.success)
 								
-								$node:=DOM Find XML element:C864($node;"image")
-								$svg.setAttribute("xlink:href";$oTemplate.cancel();$node)
+								$node:=DOM Find XML element:C864($node; "image")
+								$svg.setAttribute("xlink:href"; $template.cancel(); $node)
 								
 							End if 
 							
@@ -113,8 +101,8 @@ Case of
 							
 							If ($svg.success)
 								
-								$svg.setAttribute("ios:tips";Get localized string:C991("searchBoxTips");$node)
-								DOM SET XML ELEMENT VALUE:C868($node;Get localized string:C991("fieldToUseForSearch"))
+								$svg.setAttribute("ios:tips"; Get localized string:C991("searchBoxTips"); $node)
+								DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("fieldToUseForSearch"))
 								
 							End if 
 							
@@ -122,8 +110,8 @@ Case of
 							
 							If ($svg.success)
 								
-								$svg.setAttribute("ios:tips";Get localized string:C991("sectionTips");$node)
-								DOM SET XML ELEMENT VALUE:C868($node;Get localized string:C991("fieldToUseAsSection"))
+								$svg.setAttribute("ios:tips"; Get localized string:C991("sectionTips"); $node)
+								DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("fieldToUseAsSection"))
 								
 							End if 
 							
@@ -134,48 +122,93 @@ Case of
 					Else 
 						
 						// Load the template
-						PROCESS 4D TAGS:C816($oTemplate.template;$t)
+						PROCESS 4D TAGS:C816($template.template; $t)
 						
-						$svg:=svg("parse";New object:C1471(\
-							"variable";$t)).setAttribute("transform";\
+						$svg:=svg("parse"; New object:C1471(\
+							"variable"; $t)).setAttribute("transform"; \
 							"scale(0.95)")
 						
 					End if 
 					
-					OBJECT SET TITLE:C194(*;"preview.label";String:C10($oTemplate.title))
+					OBJECT SET TITLE:C194(*; "preview.label"; String:C10($template.title))
 					
-					If (Asserted:C1132($svg.success;"Failed to parse template \""+$t+"\""))
+					If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 						
 						// Add the style sheet
-						$svg.styleSheet($oTemplate.css())
+						$svg.styleSheet($template.css())
 						
-						$oTarget:=Choose:C955(Form:C1466[$tTypeForm][$context.tableNumber]=Null:C1517;New object:C1471;Form:C1466[$tTypeForm][$context.tableNumber])
+						$target:=Choose:C955(Form:C1466[$tTypeForm][$context.tableNumber]=Null:C1517; New object:C1471; Form:C1466[$tTypeForm][$context.tableNumber])
 						
 						$form.preview.getCoordinates()
 						
-						If (Num:C11($oManifest.renderer)>=2)
+						If (Num:C11($manifest.renderer)>=2)
 							
-							$domBkg:=$svg.findById("background")
+							If ($target.searchableField#Null:C1517)
+								
+								$node:=$svg.findById("search.label")
+								
+								If ($svg.success)
+									
+									If (Value type:C1509($target.searchableField)=Is collection:K8:32)
+										
+										If ($target.searchableField.length>1)
+											
+											DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("multiCriteriaSearch"))
+											
+										Else 
+											
+											DOM SET XML ELEMENT VALUE:C868($node; $target.searchableField[0].name)
+											
+										End if 
+										
+									Else 
+										
+										DOM SET XML ELEMENT VALUE:C868($node; $target.searchableField.name)
+										
+									End if 
+									
+									$node:=DOM Get next sibling XML element:C724($node)
+									$svg.setAttribute("stroke-dasharray"; "none"; $node)
+									$svg.setVisible(True:C214; $svg.findById("search.cancel"))
+									
+								End if 
+							End if 
 							
-							$height:=Num:C11($oManifest.hOffset)
+							If ($target.sectionField#Null:C1517)
+								
+								$node:=$svg.findById("section.label")
+								
+								If ($svg.success)
+									
+									DOM SET XML ELEMENT VALUE:C868($node; $target.sectionField.name)
+									
+									$node:=DOM Get next sibling XML element:C724($node)
+									$svg.setAttribute("stroke-dasharray"; "none"; $node)
+									$svg.setVisible(True:C214; $svg.findById("section.cancel"))
+									
+								End if 
+							End if 
+							
+							$container:=$svg.findById("background")
+							
+							$height:=Num:C11($manifest.hOffset)
 							
 							$oWidgetManifest:=JSON Parse:C1218(File:C1566("/RESOURCES/templates/form/objects/oneField/manifest.json").getText())
 							$tWidgetField:=File:C1566("/RESOURCES/templates/form/objects/oneField/widget.svg").getText()
 							
-							$count:=Num:C11($oManifest.fields.count)
+							$count:=Num:C11($manifest.fields.count)
 							
-							For each ($o;$oTarget.fields)
+							For each ($o; $target.fields)
 								
 								$indx:=$indx+1
 								
 								If ($o#Null:C1517)
 									
+									//#117298 - [BUG] Missing relation italic style
+									CLEAR VARIABLE:C89($tStyle)
+									CLEAR VARIABLE:C89($tClass)
+									
 									If ($indx>$count)  // Dynamic
-										
-										//#117298 - [BUG] Missing relation italic style
-										var $tStyle;$tClass : Text
-										CLEAR VARIABLE:C89($tStyle)
-										CLEAR VARIABLE:C89($tClass)
 										
 										If ($o.fieldType=8859)  // 1-N relation
 											
@@ -189,22 +222,22 @@ Case of
 										End if 
 										
 										// Set ids, label & position
-										PROCESS 4D TAGS:C816($tWidgetField;$t;New object:C1471(\
-											"index";$indx;\
-											"name";$o.name;\
-											"offset";5+$height;\
-											"style";$tStyle;\
-											"class";$tClass))
+										PROCESS 4D TAGS:C816($tWidgetField; $t; New object:C1471(\
+											"index"; $indx; \
+											"name"; $o.name; \
+											"offset"; 5+$height; \
+											"style"; $tStyle; \
+											"class"; $tClass))
 										
 										$root:=DOM Parse XML variable:C720($t)
 										
 										If (Bool:C1537(OK))
 											
-											$node:=DOM Find XML element:C864($root;"/svg/g")
+											$node:=DOM Find XML element:C864($root; "/svg/g")
 											
 											If (Bool:C1537(OK))
 												
-												$node:=DOM Append XML element:C1082($domBkg;$node)
+												$node:=DOM Append XML element:C1082($container; $node)
 												$height:=$height+Num:C11($oWidgetManifest.height)
 												
 											End if 
@@ -231,7 +264,7 @@ Case of
 												
 												If (Not:C34($b))
 													
-													$b:=tmpl_compatibleType($oAttributes["ios:type"];$o.fieldType)
+													$b:=tmpl_compatibleType($oAttributes["ios:type"]; $o.fieldType)
 													
 												End if 
 												
@@ -241,19 +274,23 @@ Case of
 													
 													If ($svg.success)
 														
-														DOM SET XML ELEMENT VALUE:C868($node;$o.name)
+														DOM SET XML ELEMENT VALUE:C868($node; $o.name)
+														
+														If ($o.fieldType=8859)  // 1-N relation
+															
+															DOM SET XML ATTRIBUTE:C866($node; "font-style"; "italic")
+															
+															If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
+																
+																DOM SET XML ATTRIBUTE:C866($node; "class"; "label error")
+																
+															End if 
+														End if 
 														
 														//#117302 - [BUG] Fixed dropped field style
 														$node:=DOM Get next sibling XML element:C724($node)
-														$svg.setAttribute("stroke-dasharray";"none";$node)
-														
-														$node:=$svg.findById("f"+$t+".cancel")
-														
-														If ($svg.success)
-															
-															$svg.setVisible(True:C214;$node)
-															
-														End if 
+														$svg.setAttribute("stroke-dasharray"; "none"; $node)
+														$svg.setVisible(True:C214; $svg.findById("f"+$t+".cancel"))
 														
 													Else 
 														
@@ -322,7 +359,7 @@ Case of
 								End if 
 							End if 
 							
-							OBJECT SET FORMAT:C236(*;"preview.scrollBar";"443;"+String:C10($height)+";20;1;32;")
+							OBJECT SET FORMAT:C236(*; "preview.scrollBar"; "443;"+String:C10($height)+";20;1;32;")
 							$context.previewHeight:=$height
 							
 							vThermo:=$context.scroll
@@ -332,14 +369,14 @@ Case of
 							// Update values if any
 							$t:=$svg.findById("cookery")
 							
-							If (Asserted:C1132($svg.success;"Missing cookery element"))
+							If (Asserted:C1132($svg.success; "Missing cookery element"))
 								
 								$o:=xml_attributes($t)
 								
 								// Get the bindind definition
 								If (Asserted:C1132($o["ios:values"]#Null:C1517))
 									
-									$c:=Split string:C1554(String:C10($o["ios:values"]);",";sk trim spaces:K86:2)
+									$c:=Split string:C1554(String:C10($o["ios:values"]); ","; sk trim spaces:K86:2)
 									
 								End if 
 								
@@ -350,7 +387,7 @@ Case of
 								If ($bMultivalued)
 									
 									// Get the main group reference
-									$domBkg:=$svg.findById("multivalued")
+									$container:=$svg.findById("multivalued")
 									
 									// Get the vertical offset
 									$o:=xml_attributes($domTemplate)
@@ -358,11 +395,11 @@ Case of
 									If ($o["ios:dy"]#Null:C1517)
 										
 										$Lon_yOffset:=Num:C11($o["ios:dy"])
-										DOM REMOVE XML ATTRIBUTE:C1084($domTemplate;"ios:dy")
+										DOM REMOVE XML ATTRIBUTE:C1084($domTemplate; "ios:dy")
 										
 									End if 
 									
-									For each ($tWidgetField;$c)
+									For each ($tWidgetField; $c)
 										
 										$t:=$svg.findById($tWidgetField)
 										
@@ -374,7 +411,7 @@ Case of
 												
 												If ($svg.success)
 													
-													DOM SET XML ELEMENT VALUE:C868($node;Get localized string:C991("dropAFieldHere"))
+													DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("dropAFieldHere"))
 													
 												End if 
 											End if 
@@ -384,8 +421,8 @@ Case of
 											
 											If (Asserted:C1132(OK=1))
 												
-												DOM GET XML ATTRIBUTE BY NAME:C728($node;"transform";$t)
-												$Lon_y:=Num:C11(Replace string:C233($t;"translate(0,";""))
+												DOM GET XML ATTRIBUTE BY NAME:C728($node; "transform"; $t)
+												$Lon_y:=Num:C11(Replace string:C233($t; "translate(0,"; ""))
 												
 											End if 
 											
@@ -399,46 +436,46 @@ Case of
 											
 											If (Asserted:C1132(OK=1))
 												
-												$domNew:=DOM Append XML element:C1082($domUse;$domTemplate)
+												$new:=DOM Append XML element:C1082($domUse; $domTemplate)
 												
 												// Remove id
-												DOM REMOVE XML ATTRIBUTE:C1084($domNew;"id")
+												DOM REMOVE XML ATTRIBUTE:C1084($new; "id")
 												
 												// Set position
-												DOM SET XML ATTRIBUTE:C866($domNew;\
-													"transform";"translate(0,"+String:C10($Lon_y)+")")
+												DOM SET XML ATTRIBUTE:C866($new; \
+													"transform"; "translate(0,"+String:C10($Lon_y)+")")
 												
 												// Set label
-												$node:=DOM Find XML element by ID:C1010($domNew;"f.label")
-												DOM SET XML ATTRIBUTE:C866($node;\
-													"id";$tWidgetField+".label")
+												$node:=DOM Find XML element by ID:C1010($new; "f.label")
+												DOM SET XML ATTRIBUTE:C866($node; \
+													"id"; $tWidgetField+".label")
 												
 												If (feature.with("newViewUI"))
 													
-													DOM SET XML ELEMENT VALUE:C868($node;Get localized string:C991("dropAFieldHere"))
+													DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("dropAFieldHere"))
 													
 												Else 
 													
-													DOM GET XML ELEMENT VALUE:C731($node;$t)
-													DOM SET XML ELEMENT VALUE:C868($node;Get localized string:C991($t)+$tIndex)
+													DOM GET XML ELEMENT VALUE:C731($node; $t)
+													DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991($t)+$tIndex)
 													
 												End if 
 												
 												// Set id, bind & default label
-												$node:=DOM Find XML element by ID:C1010($domNew;"f")
+												$node:=DOM Find XML element by ID:C1010($new; "f")
 												
-												DOM SET XML ATTRIBUTE:C866($node;\
-													"id";$tWidgetField;\
-													"ios:bind";"fields["+String:C10(Num:C11($tWidgetField)-1)+"]";\
-													"ios:label";Get localized string:C991("field[n]")+" "+$tIndex)
+												DOM SET XML ATTRIBUTE:C866($node; \
+													"id"; $tWidgetField; \
+													"ios:bind"; "fields["+String:C10(Num:C11($tWidgetField)-1)+"]"; \
+													"ios:label"; Get localized string:C991("field[n]")+" "+$tIndex)
 												
 												// Set cancel id
-												$node:=DOM Find XML element by ID:C1010($domNew;"f.cancel")
-												DOM SET XML ATTRIBUTE:C866($node;\
-													"id";$tWidgetField+".cancel")
+												$node:=DOM Find XML element by ID:C1010($new; "f.cancel")
+												DOM SET XML ATTRIBUTE:C866($node; \
+													"id"; $tWidgetField+".cancel")
 												
 												// Append object to the preview
-												$domNew:=DOM Append XML element:C1082($domBkg;$domNew)
+												$new:=DOM Append XML element:C1082($container; $new)
 												
 												DOM CLOSE XML:C722($domUse)
 												
@@ -448,7 +485,7 @@ Case of
 								End if 
 								
 								// Valorize the fields
-								For each ($t;$c)
+								For each ($t; $c)
 									
 									CLEAR VARIABLE:C89($tName)
 									
@@ -460,16 +497,16 @@ Case of
 									
 									If (Asserted:C1132($o["ios:bind"]#Null:C1517))
 										
-										If (Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$o["ios:bind"])=-1)
+										If (Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $o["ios:bind"])=-1)
 											
 											// Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
-											If ($oTarget[$o["ios:bind"]]#Null:C1517)
+											If ($target[$o["ios:bind"]]#Null:C1517)
 												
-												If (Value type:C1509($oTarget[$o["ios:bind"]])=Is collection:K8:32)
+												If (Value type:C1509($target[$o["ios:bind"]])=Is collection:K8:32)
 													
-													If ($oTarget[$o["ios:bind"]].length=1)
+													If ($target[$o["ios:bind"]].length=1)
 														
-														$tName:=$oTarget[$o["ios:bind"]][0].name
+														$tName:=$target[$o["ios:bind"]][0].name
 														
 													Else 
 														
@@ -480,7 +517,7 @@ Case of
 													
 												Else 
 													
-													$tName:=String:C10($oTarget[$o["ios:bind"]].name)
+													$tName:=String:C10($target[$o["ios:bind"]].name)
 													
 												End if 
 											End if 
@@ -489,14 +526,14 @@ Case of
 											
 										Else 
 											
-											If ($indx<$oTarget.fields.length)
+											If ($indx<$target.fields.length)
 												
-												$o:=$oTarget.fields[$indx]
+												$o:=$target.fields[$indx]
 												
 												If ($o#Null:C1517)
 													
 													// Keep the field  description for the needs of UI
-													$svg.setAttribute("ios:data";JSON Stringify:C1217($o);$domField)
+													$svg.setAttribute("ios:data"; JSON Stringify:C1217($o); $domField)
 													
 													$tName:=$o.name
 													
@@ -504,11 +541,11 @@ Case of
 														
 														$node:=$svg.findById($t+".label")
 														
-														$svg.setAttribute("font-style";"italic";$node)
+														$svg.setAttribute("font-style"; "italic"; $node)
 														
 														If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
 															
-															$svg.setAttribute("class";String:C10(xml_attributes($node).class)+" error";$node)
+															$svg.setAttribute("class"; String:C10(xml_attributes($node).class)+" error"; $node)
 															
 														End if 
 													End if 
@@ -525,14 +562,14 @@ Case of
 										
 										If (Asserted:C1132(OK=1))
 											
-											$svg.setAttribute("stroke-dasharray";"none";$domField)
+											$svg.setAttribute("stroke-dasharray"; "none"; $domField)
 											
 											If ($bMultivalued)
 												
 												// Make it visible & mark as affected
-												$svg.setAttributes(New object:C1471("target";DOM Get parent XML element:C923($domField);\
-													"visibility";"visible";\
-													"class";"affected"))
+												$svg.setAttributes(New object:C1471("target"; DOM Get parent XML element:C923($domField); \
+													"visibility"; "visible"; \
+													"class"; "affected"))
 												
 											End if 
 											
@@ -549,13 +586,13 @@ Case of
 													
 													If (Length:C16($tName)>($width))
 														
-														$svg.setAttribute("tips";$tName;$node)
-														$tName:=Substring:C12($tName;1;$width)+"…"
+														$svg.setAttribute("tips"; $tName; $node)
+														$tName:=Substring:C12($tName; 1; $width)+"…"
 														
 													End if 
 												End if 
 												
-												DOM SET XML ELEMENT VALUE:C868($node;$tName)
+												DOM SET XML ELEMENT VALUE:C868($node; $tName)
 												
 											End if 
 											
@@ -563,7 +600,7 @@ Case of
 											
 											If ($svg.success)
 												
-												$svg.setVisible(True:C214;$node)
+												$svg.setVisible(True:C214; $node)
 												
 											End if 
 										End if 
@@ -576,10 +613,10 @@ Case of
 								If ($bMultivalued)
 									
 									// Hide unassigned multivalued fields (except the first)
-									ARRAY TEXT:C222($tDom_;0x0000)
-									$tDom_{0}:=DOM Find XML element:C864($domBkg;"g";$tDom_)
+									ARRAY TEXT:C222($tDom_; 0x0000)
+									$tDom_{0}:=DOM Find XML element:C864($container; "g"; $tDom_)
 									
-									For ($i;1;Size of array:C274($tDom_);1)
+									For ($i; 1; Size of array:C274($tDom_); 1)
 										
 										If (String:C10(xml_attributes($tDom_{$i}).class)="")  // Not affected
 											
@@ -589,12 +626,12 @@ Case of
 												$bFirst:=True:C214
 												
 												// Make it visible to allow drag and drop
-												$svg.setVisible(True:C214;$tDom_{$i})
+												$svg.setVisible(True:C214; $tDom_{$i})
 												
 											Else 
 												
 												// Hide the other ones
-												$svg.setVisible(False:C215;$tDom_{$i})
+												$svg.setVisible(False:C215; $tDom_{$i})
 												
 											End if 
 										End if 
@@ -614,7 +651,7 @@ Case of
 										
 										If ($svg.success)
 											
-											$svg.setVisible(Num:C11($context.tabIndex)=$indx;$node)
+											$svg.setVisible(Num:C11($context.tabIndex)=$indx; $node)
 											
 										End if 
 										
@@ -630,14 +667,14 @@ Case of
 						
 						If (feature.with("newViewUI"))
 							
-							$svg.setDimensions($form.preview.coordinates.width;$context.previewHeight)
+							$svg.setDimensions($form.preview.coordinates.width; $context.previewHeight)
 							
 						End if 
 						
 						If (feature.with("_8858"))
 							
-							$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.png");True:C214)
-							$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg");True:C214)
+							$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.png"); True:C214)
+							$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg"); True:C214)
 							
 						End if 
 						
@@ -650,14 +687,14 @@ Case of
 						// Put an error message
 						$form.preview.getCoordinates()
 						
-						($form.preview.pointer())->:=svg.setDimensions($form.preview.coordinates.width-20;$form.preview.coordinates.height)\
-							.textArea(str("theTemplateIsMissingOrInvalid").localized($oTemplate.title);20;180)\
+						($form.preview.pointer())->:=svg.setDimensions($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
+							.textArea(str("theTemplateIsMissingOrInvalid").localized($template.title); 20; 180)\
 							.setDimensions($form.preview.coordinates.width-20)\
 							.setFill(ui.colors.errorColor.hex)\
-							.setAttributes(New object:C1471("font-size";14;"text-align";"center"))\
-							.textArea(str("theTemplateIsMissingOrInvalid").localized(Replace string:C233($tFormName;"/";""));20;180)\
+							.setAttributes(New object:C1471("font-size"; 14; "text-align"; "center"))\
+							.textArea(str("theTemplateIsMissingOrInvalid").localized(Replace string:C233($tFormName; "/"; "")); 20; 180)\
 							
-						OBJECT SET TITLE:C194(*;"preview.label";"")
+						OBJECT SET TITLE:C194(*; "preview.label"; "")
 						
 					End if 
 					
@@ -683,7 +720,7 @@ Case of
 		End if 
 		
 		//________________________________________
-	: ($tIN="cancel")  // Return cancel button as Base64 data
+	: ($IN="cancel")  // Return cancel button as Base64 data
 		
 		//READ PICTURE FILE(Get 4D folder(Current resources folder)+Convert path POSIX to system("images/Buttons/LightGrey/Cancel.png");$Pic_cancel)
 		//TRANSFORM PICTURE($Pic_cancel;Crop;1;1;48;48)
@@ -692,7 +729,7 @@ Case of
 		//BASE64 ENCODE($Blb_;$Txt_out)
 		//$Txt_out:="data:;base64,"+$Txt_out
 		
-		$tOUT:="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAuJJREFUSA3tlEtoU1EQhptHI4lp8FUMlIIPpH"+\
+		$OUT:="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAuJJREFUSA3tlEtoU1EQhptHI4lp8FUMlIIPpH"+\
 			"ZRixTdFYIIUrCBkJTQlCpEjFJw4UYRFaObVnEjWbhQqRgLtiG6koAiIiiKG0UkiRXrShHbQtNiJEnT+E3hykFyb+LGheTAMOf8Z2b+mblzT1NTYzU68L91wPS3Bfn9/l1ms7nf"+\
 			"ZDLtxHcN8oX9E5vN9jQej/+oN17dxAMDAx0Qnl9ZWfESfBr5ipSQDRB3oOeR6NTUVBJdc9VFDOk+gscrlcoMEc9R3ZuJiYlFie7xeKytra1bSOoIxxFsriNnE4lEWe71Vk1"+\
 			"iqRTnZ0gCOUXAn3rBAoHAQRK8y/0YdmN6doJbjC6lGqfTeY1gQnaIYAUj+3Q6Pd3V1TVHxRc6OzsfZjKZWT17s96F4LSwmyD95XL5DKRFwaLRqHl4eHit7GXREVtfX58M2ep"+\
@@ -706,7 +743,7 @@ Case of
 		
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown entry point: \""+$tIN+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$IN+"\"")
 		
 		//______________________________________________________
 End case 
@@ -715,7 +752,7 @@ FINALLY
 
 // ----------------------------------------------------
 // Return
-$0:=$tOUT
+$0:=$OUT
 
 // ----------------------------------------------------
 // End

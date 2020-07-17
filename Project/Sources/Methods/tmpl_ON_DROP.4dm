@@ -77,6 +77,20 @@ If (Length:C16(This:C1470.$.current)>0)
 					
 				Else 
 					
+					Case of 
+							//______________________________________________________
+						: ($o.fieldType=8858)
+							
+							
+							//______________________________________________________
+						: ($o.fieldType=8859)
+							
+							OB REMOVE:C1226($o; "id")
+							OB REMOVE:C1226($o; "fieldNumber")
+							
+							//______________________________________________________
+					End case 
+					
 					$oTarget[$tMatches{1}][Num:C11($tMatches{2})]:=$o
 					
 				End if 
