@@ -73,7 +73,10 @@ Function load  // Load and update the template if any
 	var $0 : Object
 	
 	var $dom, $node, $root, $t : Text
+	var $succes : Boolean
+	var $count, $i : Integer
 	var $o : Object
+	var $c : Collection
 	
 	ASSERT:C1129(Not:C34(Shift down:C543))
 	
@@ -114,89 +117,159 @@ Function load  // Load and update the template if any
 			
 			If (Bool:C1537(OK))
 				
-				// Remove cookery
-				$node:=DOM Find XML element by ID:C1010($root; "cookery")
+				// Change the background
+				$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@class,'bgcontainer')")
 				
 				If (Bool:C1537(OK))
 					
 					DOM REMOVE XML ELEMENT:C869($node)
 					
-				End if 
-				
-				// Remove template for additional fields
-				$node:=DOM Find XML element by ID:C1010($root; "f")
-				
-				If (Bool:C1537(OK))
-					
-					DOM REMOVE XML ELEMENT:C869($node)
-					
-				End if 
-				
-				// Remove the fisrt multivalued field
-				$node:=DOM Find XML element by ID:C1010($root; "multivalued")
-				
-				If (Bool:C1537(OK))
-					
-					DOM REMOVE XML ELEMENT:C869($node)
-					
-					$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@class,'bgcontainer')")
+					$node:=DOM Find XML element by ID:C1010($root; "bgcontainer")
 					
 					If (Bool:C1537(OK))
 						
-						DOM REMOVE XML ELEMENT:C869($node)
-						
-						$node:=DOM Find XML element by ID:C1010($root; "bgcontainer")
+						DOM SET XML ATTRIBUTE:C866($node; \
+							"id"; "background"; \
+							"class"; "background"; \
+							"ios:type"; "all")
 						
 						If (Bool:C1537(OK))
 							
-							DOM SET XML ATTRIBUTE:C866($node; \
-								"id"; "background"; \
-								"class"; "background"; \
-								"ios:type"; "all")
+							$dom:=DOM Create XML element:C865($node; "rect"; \
+								"class"; "bgcontainer_v2"; \
+								"x"; 0; \
+								"y"; 0)
 							
 							If (Bool:C1537(OK))
 								
-								$dom:=DOM Create XML element:C865($node; "rect"; \
-									"class"; "bgcontainer_v2"; \
-									"x"; 0; \
-									"y"; 0)
+								$node:=DOM Insert XML element:C1083($node; $dom; 0)
 								
 								If (Bool:C1537(OK))
 									
-									$node:=DOM Insert XML element:C1083($node; $dom; 0)
+									DOM REMOVE XML ELEMENT:C869($dom)
 									
-									If (Bool:C1537(OK))
-										
-										DOM REMOVE XML ELEMENT:C869($dom)
-										
-									End if 
 								End if 
 							End if 
 						End if 
 					End if 
 				End if 
 				
-				If (This:C1470.listform) & (feature.with("moreRelations"))
-					
-					// Add the types -8858 & -8859 to forbid the deposit of a relation
-					// on the"searchableField" & "sectionField fields"
-					
-					$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='searchableField']")
-					
-					If (Bool:C1537(OK))
+				Case of 
 						
-						DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8858,-8859")
+						//______________________________________________________
+					: (This:C1470.detailform)
 						
-					End if 
-					
-					$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='sectionField']")
-					
-					If (Bool:C1537(OK))
+						// Remove cookery
+						$node:=DOM Find XML element by ID:C1010($root; "cookery")
 						
-						DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8858,-8859")
+						If (Bool:C1537(OK))
+							
+							DOM REMOVE XML ELEMENT:C869($node)
+							
+						End if 
 						
-					End if 
-				End if 
+						// Remove template for additional fields
+						$node:=DOM Find XML element by ID:C1010($root; "f")
+						
+						If (Bool:C1537(OK))
+							
+							DOM REMOVE XML ELEMENT:C869($node)
+							
+						End if 
+						
+						// Remove the fisrt multivalued field
+						$node:=DOM Find XML element by ID:C1010($root; "multivalued")
+						
+						If (Bool:C1537(OK))
+							
+							DOM REMOVE XML ELEMENT:C869($node)
+							
+						End if 
+						
+						//______________________________________________________
+					: (This:C1470.listform) & (feature.with("moreRelations"))
+						
+						// Add the types -8858 & -8859 to forbid the deposit of a relation
+						// on the"searchableField" & "sectionField fields"
+						
+						$succes:=Bool:C1537(OK)
+						
+						$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='searchableField']")
+						
+						If (Bool:C1537(OK))
+							
+							DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8858,-8859")
+							
+						End if 
+						
+						$node:=DOM Find XML element:C864($root; "/"+"/rect[@ios:bind='sectionField']")
+						
+						If (Bool:C1537(OK))
+							
+							DOM SET XML ATTRIBUTE:C866($node; "ios:type"; "-3,-6,-8858,-8859")
+							
+						End if 
+						
+						OK:=Num:C11($succes)
+						
+						If (False:C215)  //#WIP - Set to true to don't allow drop of relation on fixed fields
+							
+							// Don't allows deposit of a relation on the fixed fields
+							// if it's not explicity allowed
+							
+							$count:=Num:C11(This:C1470.manifest.fields.count)
+							
+							For ($i; 1; $count; 1)
+								
+								$node:=DOM Find XML element by ID:C1010($root; "f"+String:C10($i))
+								
+								If (Bool:C1537(OK))
+									
+									$c:=Split string:C1554(This:C1470.getBinding($node); ",")
+									
+									Case of 
+											
+											//____________________________
+										: ($c.length=0)  // Should not but…
+											
+											$c:=New collection:C1472(-8858; -8859)
+											
+											//____________________________
+										: ($c[0]="all")
+											
+											// Don't modify
+											
+											//____________________________
+										: ($c[0]="-@")
+											
+											If ($c.indexOf(-8858)=-1)
+												
+												$c.push(-8858)
+												
+											End if 
+											
+											If ($c.indexOf(-8859)=-1)
+												
+												$c.push(-8859)
+												
+											End if 
+											
+											//____________________________
+										Else 
+											
+											// Don't modify
+											
+											//____________________________
+									End case 
+									
+									DOM SET XML ATTRIBUTE:C866($node; "ios:type"; $c.join(","))
+									
+								End if 
+							End for 
+						End if 
+						
+						//______________________________________________________
+				End case 
 				
 				Case of 
 						
@@ -223,7 +296,6 @@ Function load  // Load and update the template if any
 							DOM EXPORT TO VAR:C863($root; $t)
 							This:C1470.template:=$t
 							
-							
 						Else 
 							
 							This:C1470.warning:="Obsolete template"
@@ -231,7 +303,12 @@ Function load  // Load and update the template if any
 						End if 
 						
 						//______________________________________________________
-					: (This:C1470.listform) & (feature.with("moreRelations"))
+					: (Not:C34(feature.with("moreRelations")))
+						
+						//
+						
+						//______________________________________________________
+					: (This:C1470.listform)
 						
 						// Update the manifest
 						This:C1470.manifest.renderer:=2
@@ -239,11 +316,6 @@ Function load  // Load and update the template if any
 						// Keep the updated template
 						DOM EXPORT TO VAR:C863($root; $t)
 						This:C1470.template:=$t
-						
-						//______________________________________________________
-					: (Not:C34(feature.with("moreRelations")))
-						
-						//
 						
 						//______________________________________________________
 					Else 
@@ -260,6 +332,21 @@ Function load  // Load and update the template if any
 	End if 
 	
 	$0:=This:C1470
+	
+/* ============================================================================*/
+Function getBinding
+	var $0 : Text
+	var $1 : Text
+	
+	var $o : Object
+	
+	$o:=xml_attributes($1)
+	
+	If ($o["ios:type"]#Null:C1517)
+		
+		$0:=$o["ios:type"]
+		
+	End if 
 	
 /* ============================================================================*/
 Function cancel  // Return the embedded cancel button used into the templates

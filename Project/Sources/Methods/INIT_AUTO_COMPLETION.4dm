@@ -13,21 +13,21 @@ End if
 
 If (False:C215)  // File & Folder
 	
-	  // Constants
+	// Constants
 	
-	  // Fk platform path = 1
-	  // Fk posix path = 0
+	// Fk platform path = 1
+	// Fk posix path = 0
 	
-	  // Fk alias link = 0
-	  // Fk symbolic link = 1
+	// Fk alias link = 0
+	// Fk symbolic link = 1
 	
-	  // Fk overwrite = 4
+	// Fk overwrite = 4
 	
-	  // Fk recursive = 1
+	// Fk recursive = 1
 	
-	  // folder <- Folder ( path { ; pathType } )
-	  // OR
-	  // folder <- Folder ( pathConstant ; { * } )
+	// folder <- Folder ( path { ; pathType } )
+	// OR
+	// folder <- Folder ( pathConstant ; { * } )
 	
 	$d:=$o.creationDate  // Return the creation date
 	$l:=$o.creationTime  // Return the creation time
@@ -48,77 +48,77 @@ If (False:C215)  // File & Folder
 	
 	$o:=$o.parent  // Returns a parent folder object. If no parent, return a NULL object
 	
-	  // Create a sub folder object
-	  // - Return a new folder object
-	  //- $1: relative path in posix
-	  // Returns Null if invalid
-	  // SubFolder:=myFolder.folder( "relativePosixPath" )
+	// Create a sub folder object
+	// - Return a new folder object
+	//- $1: relative path in posix
+	// Returns Null if invalid
+	// SubFolder:=myFolder.folder( "relativePosixPath" )
 	$o.folder()
 	
-	  // Create a sub file object
-	  // - Return a new file object
-	  //- $1: relative path in posix
-	  // Returns Null if invalid
-	  // SubFile:=myFolder.file( "relativePosixPath" )
+	// Create a sub file object
+	// - Return a new file object
+	//- $1: relative path in posix
+	// Returns Null if invalid
+	// SubFile:=myFolder.file( "relativePosixPath" )
 	$o.file()
 	
-	  // Returns a collection of children folder object
-	  //- $1: fk recursive or fk no recursive (By default fk no recursive)
+	// Returns a collection of children folder object
+	//- $1: fk recursive or fk no recursive (By default fk no recursive)
 	$o.folders()
 	
-	  // Returns a collection of children file object (Does not resolve aliases or
-	  // Symbolic links)
-	  //- $1: fk recursive or fk no recursive (By default fk no recursive)
+	// Returns a collection of children file object (Does not resolve aliases or
+	// Symbolic links)
+	//- $1: fk recursive or fk no recursive (By default fk no recursive)
 	$o.files()
 	
-	  // Return the system image associated with the type scaled from the nearest
-	  // Available size (On windows an icon max size is 256*256, Mac is variable and
-	  // Depends on the app)
-	  //- $1: size of the picture size in pixel
+	// Return the system image associated with the type scaled from the nearest
+	// Available size (On windows an icon max size is 256*256, Mac is variable and
+	// Depends on the app)
+	//- $1: size of the picture size in pixel
 	$o.getIcon()
 	
-	  // Rename the folder
-	  // - Return a new folder object with the new name
-	  //- $1: new name (error if contains /)
+	// Rename the folder
+	// - Return a new folder object with the new name
+	//- $1: new name (error if contains /)
 	$o.rename()
 	
-	  // Makes a copy of the folder to another location
-	  // - Return the new folder object
-	  //- $1: destination folder object
-	  //- $2 : new name (not mandatory, error if contains /)
-	  //- $3: "fk overwrite" or "fk no overwrite" a existing document (not mandatory -
-	  // By default "No overwrite"
+	// Makes a copy of the folder to another location
+	// - Return the new folder object
+	//- $1: destination folder object
+	//- $2 : new name (not mandatory, error if contains /)
+	//- $3: "fk overwrite" or "fk no overwrite" a existing document (not mandatory -
+	// By default "No overwrite"
 	$o.copyTo()
 	
-	  // Move the file or the folder to another location
-	  // - Return the new folder object
-	  //- $1: destination folder object
-	  //- $2 : new name (not mandatory, error if contains /)
-	  // Error if move to another Volume
+	// Move the file or the folder to another location
+	// - Return the new folder object
+	//- $1: destination folder object
+	//- $2 : new name (not mandatory, error if contains /)
+	// Error if move to another Volume
 	$o.moveTo()
 	
-	  // Delete the folder on disk
-	  //- $1 constant: Delete only if empty or Delete with contents. Same behavior as
-	  // DELETE FOLDER (By default Delete only if empty)
+	// Delete the folder on disk
+	//- $1 constant: Delete only if empty or Delete with contents. Same behavior as
+	// DELETE FOLDER (By default Delete only if empty)
 	$o.delete()
 	
-	  // Create a new folder on disk - This function creates the folder hierarchy. If
-	  // The folder already exists on the disk, no error is throw. Returns false if
-	  // Folder already exists or an error occured
+	// Create a new folder on disk - This function creates the folder hierarchy. If
+	// The folder already exists on the disk, no error is throw. Returns false if
+	// Folder already exists or an error occured
 	$o.create()
 	
-	  // Creates an alias (mac) or symbolic link (mac) or shortcut (windows)
-	  // - Return the alias object
-	  //- $1: alias destination folder object
-	  //- $2: alias name
-	  //- $3 : Link Type: Alias (alias mac or shortcut windows) (by default) or Symbolic Link (mac only)
-	  // MyAlias:=subfolder.createAlias( folder ; aliasName ; fk Alias ou fk SymLink)
-	  // MyAlias.exists() -> true
+	// Creates an alias (mac) or symbolic link (mac) or shortcut (windows)
+	// - Return the alias object
+	//- $1: alias destination folder object
+	//- $2: alias name
+	//- $3 : Link Type: Alias (alias mac or shortcut windows) (by default) or Symbolic Link (mac only)
+	// MyAlias:=subfolder.createAlias( folder ; aliasName ; fk Alias ou fk SymLink)
+	// MyAlias.exists() -> true
 	$o.createAlias()
 	
-	  // file <- File ( path { ; pathType } )
-	  // OR
-	  // file <- File ( constant get 4d file ; { * } )
+	// file <- File ( path { ; pathType } )
+	// OR
+	// file <- File ( constant get 4d file ; { * } )
 	
 	$d:=$o.creationDate  // Return the creation date
 	$l:=$o.creationTime  // Return the creation time
@@ -139,67 +139,67 @@ If (False:C215)  // File & Folder
 	
 	$o:=$o.parent  // Returns a parent folder object. If no parent, return a NULL object.
 	
-	  // Return the system image associated with the type with the nearest size
-	  //- $1: size of the picture
+	// Return the system image associated with the type with the nearest size
+	//- $1: size of the picture
 	$o.getIcon()
 	
-	  // Rename the file
-	  // - Return a new file object with the new name
-	  //- $1: new name
+	// Rename the file
+	// - Return a new file object with the new name
+	//- $1: new name
 	$o.rename()
 	
-	  // Makes a copy of the file to another location
-	  // - Return the new file object
-	  //- $1: destination folder object
-	  //- $2: new name (not mandatory)
-	  //- $3: "fk overwrite" or "fk no overwrite" a existing document (not mandatory -
-	  // By default "No overwrite"
+	// Makes a copy of the file to another location
+	// - Return the new file object
+	//- $1: destination folder object
+	//- $2: new name (not mandatory)
+	//- $3: "fk overwrite" or "fk no overwrite" a existing document (not mandatory -
+	// By default "No overwrite"
 	$o.copyTo()
 	
-	  // Move the file to another location
-	  // - Return the new file object
-	  //- $1: destination folder object
-	  //- $2: new name (not mandatory)
+	// Move the file to another location
+	// - Return the new file object
+	//- $1: destination folder object
+	//- $2: new name (not mandatory)
 	$o.moveTo()
 	
-	  // Delete the file on disk. Same behavior as DELETE DOCUMENT
+	// Delete the file on disk. Same behavior as DELETE DOCUMENT
 	$o.delete()
 	
-	  // Create a new file on disk. If the file already exists on the disk, no error is
-	  // Throw. Returns false if file was already existing or an error occured
+	// Create a new file on disk. If the file already exists on the disk, no error is
+	// Throw. Returns false if file was already existing or an error occured
 	$o.create()
 	
-	  // Get all the content of a file.
-	  // - Returns the content of the file in a blob
+	// Get all the content of a file.
+	// - Returns the content of the file in a blob
 	$o.getContent()
 	
-	  // Set all the content of a file.
-	  //- $1 content of the file
+	// Set all the content of a file.
+	//- $1 content of the file
 	$o.setContent()
 	
-	  // Retrieve the text of the file
-	  //- $1 charset ; Not mandatory ; Default charset is UTF-8
-	  //- $2 breakmode constant: Document unchanged ; Document with CR ; Document with
-	  // CRLF ; Document with LF ; Document with native format (Not mandatory ; Default
-	  // Breakmode is Document with native format)
+	// Retrieve the text of the file
+	//- $1 charset ; Not mandatory ; Default charset is UTF-8
+	//- $2 breakmode constant: Document unchanged ; Document with CR ; Document with
+	// CRLF ; Document with LF ; Document with native format (Not mandatory ; Default
+	// Breakmode is Document with native format)
 	$o.getText()
 	
-	  // Write the text in the file
-	  //- $1Text to store in the file
-	  //- $2 charset ; Not mandatory ; Default charset is UTF-8
-	  //- $2 breakmode constant: Document unchanged ; Document with CR ; Document with
-	  // CRLF ; Document with LF ; Document with native format (Not mandatory ; Default
-	  // Breakmode is Document with native format)
+	// Write the text in the file
+	//- $1Text to store in the file
+	//- $2 charset ; Not mandatory ; Default charset is UTF-8
+	//- $2 breakmode constant: Document unchanged ; Document with CR ; Document with
+	// CRLF ; Document with LF ; Document with native format (Not mandatory ; Default
+	// Breakmode is Document with native format)
 	$o.setText()
 	
-	  // Creates an alias or shortcut
-	  // - Return the alias object
-	  //- $1: alias folder object
-	  //- $2: alias name
-	  //- $3 : Link TypeAlias (alias mac or shortcut windows) (by default) or Symbolic Link (mac only)
+	// Creates an alias or shortcut
+	// - Return the alias object
+	//- $1: alias folder object
+	//- $2: alias name
+	//- $3 : Link TypeAlias (alias mac or shortcut windows) (by default) or Symbolic Link (mac only)
 	$o.createAlias()
 	
-	  // Returns TRUE if the filename exists and is writable. (Check on disk if 4D can Write)
+	// Returns TRUE if the filename exists and is writable. (Check on disk if 4D can Write)
 	$o.isWritable()
 	
 End if 
@@ -254,7 +254,7 @@ End if
 
 If (False:C215)
 	
-	  // DataClass
+	// DataClass
 	$o:=$o.all()
 	$o:=$o.fromCollection()
 	$o:=$o.get()
@@ -262,7 +262,7 @@ If (False:C215)
 	$o:=$o.newSelection()
 	$o:=$o.query()
 	
-	  // DataClassAttribute
+	// DataClassAttribute
 	$o.kind()
 	$o.name()
 End if 

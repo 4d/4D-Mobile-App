@@ -85,6 +85,22 @@ If ($Obj_out.success)
 					//……………………………………………………………………………………………………………
 				: ($ƒ.isRelationToOne($Obj_table[$t]))
 					
+					If (feature.with("moreRelations"))
+						
+						// Label & shortLabel should come from fields panel
+						
+						$o:=New object:C1471(\
+							"name"; $t; \
+							"fieldType"; 8858; \
+							"relatedTableNumber"; $Obj_table[$t].relatedTableNumber; \
+							"label"; formatString("label"; $t); \
+							"shortlabel"; formatString("shortlabel"; $t); \
+							"path"; $t)
+						
+						$Obj_out.fields.push($o)
+						
+					End if 
+					
 					For each ($tt; $Obj_table[$t])
 						
 						If ($ƒ.isField($tt))  // fieldNumber

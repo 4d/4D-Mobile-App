@@ -1,45 +1,45 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : simulator
-  // ID[99B8916684A94F25B8BE366E2FF87552]
-  // Created 27-6-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : simulator
+// ID[99B8916684A94F25B8BE366E2FF87552]
+// Created 27-6-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_i;$Lon_parameters;$Lon_pid;$Lon_x;$position)
-C_TEXT:C284($File_;$Txt_cmd;$Txt_error;$Txt_in;$Txt_key;$Txt_methodOnErrorCall)
+C_LONGINT:C283($Lon_i; $Lon_parameters; $Lon_pid; $Lon_x; $position)
+C_TEXT:C284($File_; $Txt_cmd; $Txt_error; $Txt_in; $Txt_key; $Txt_methodOnErrorCall)
 C_TEXT:C284($Txt_out)
-C_OBJECT:C1216($file;$o;$Obj_device;$Obj_in;$Obj_out;$Obj_runtime)
+C_OBJECT:C1216($file; $o; $Obj_device; $Obj_in; $Obj_out; $Obj_runtime)
 C_COLLECTION:C1488($Col_runtimes)
 
 If (False:C215)
-	C_OBJECT:C1216(simulator ;$0)
-	C_OBJECT:C1216(simulator ;$1)
+	C_OBJECT:C1216(simulator; $0)
+	C_OBJECT:C1216(simulator; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_in:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
 	$Obj_out:=New object:C1471(\
-		"success";False:C215;\
-		"param";$Obj_in)
+		"success"; False:C215; \
+		"param"; $Obj_in)
 	
 Else 
 	
@@ -47,27 +47,27 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action=Null:C1517)
 		
 		ASSERT:C1129(False:C215)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="default")  // Return the default simulator UDID
 		
-		$file:=env_userPathname ("preferences").file("com.apple.iphonesimulator.plist")
+		$file:=env_userPathname("preferences").file("com.apple.iphonesimulator.plist")
 		
 		Case of 
 				
-				  //----------------------------------------
+				//----------------------------------------
 			: ($file.exists)
 				
-				$o:=plist (New object:C1471(\
-					"action";"object";\
-					"domain";$file.path))
+				$o:=plist(New object:C1471(\
+					"action"; "object"; \
+					"domain"; $file.path))
 				
 				If ($o.success)
 					
@@ -76,32 +76,32 @@ Case of
 					
 				End if 
 				
-				  //----------------------------------------
+				//----------------------------------------
 			: (Bool:C1537($Obj_in.fix))
 				
-				$Obj_out:=simulator (New object:C1471(\
-					"action";"fixdefault"))
+				$Obj_out:=simulator(New object:C1471(\
+					"action"; "fixdefault"))
 				
 				If ($Obj_out.success)
 					
-					$Obj_out:=simulator (New object:C1471(\
-						"action";"default"))
+					$Obj_out:=simulator(New object:C1471(\
+						"action"; "default"))
 					
 				End if 
 				
-				  //----------------------------------------
+				//----------------------------------------
 		End case 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="getdefault")
 		
-		$Obj_out:=simulator (New object:C1471(\
-			"action";"devices";\
-			"filter";"available"))
+		$Obj_out:=simulator(New object:C1471(\
+			"action"; "devices"; \
+			"filter"; "available"))
 		
 		If ($Obj_out.success)
 			
-			For each ($Obj_device;$Obj_out.devices)
+			For each ($Obj_device; $Obj_out.devices)
 				
 				If ($Obj_device.name="iPhone@")  // Fix with only iphone
 					
@@ -111,7 +111,7 @@ Case of
 						
 					Else 
 						
-						If (str_cmpVersion ($o.runtime.version;$Obj_device.runtime.version)>-1)  // same or equal
+						If (str_cmpVersion($o.runtime.version; $Obj_device.runtime.version)>-1)  // same or equal
 							
 							If ($o.name<$Obj_device.name)  // iPhone X win
 								
@@ -125,11 +125,11 @@ Case of
 			
 			If ($o#Null:C1517)
 				
-				$Obj_out:=plist (New object:C1471(\
-					"action";"write";\
-					"domain";env_userPathname ("preferences").file("com.apple.iphonesimulator.plist").path;\
-					"key";"CurrentDeviceUDID";\
-					"value";$o.udid))
+				$Obj_out:=plist(New object:C1471(\
+					"action"; "write"; \
+					"domain"; env_userPathname("preferences").file("com.apple.iphonesimulator.plist").path; \
+					"key"; "CurrentDeviceUDID"; \
+					"value"; $o.udid))
 				
 			Else 
 				
@@ -139,23 +139,23 @@ Case of
 			End if 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="fixdefault")
 		
-		$file:=env_userPathname ("preferences").file("com.apple.iphonesimulator.plist")
+		$file:=env_userPathname("preferences").file("com.apple.iphonesimulator.plist")
 		$Obj_out.success:=$file.exists
 		
 		If (Not:C34($Obj_out.success))
 			
-			$Obj_out:=simulator (New object:C1471(\
-				"action";"devices";\
-				"filter";"available"))
+			$Obj_out:=simulator(New object:C1471(\
+				"action"; "devices"; \
+				"filter"; "available"))
 			
 			If ($Obj_out.success)
 				
 				$o:=Null:C1517
 				
-				For each ($Obj_device;$Obj_out.devices)
+				For each ($Obj_device; $Obj_out.devices)
 					
 					If ($Obj_device.name="iPhone@")  // Fix with only iphone
 						
@@ -165,7 +165,7 @@ Case of
 							
 						Else 
 							
-							If (str_cmpVersion ($o.runtime.version;$Obj_device.runtime.version)>-1)  // same or equal
+							If (str_cmpVersion($o.runtime.version; $Obj_device.runtime.version)>-1)  // same or equal
 								
 								If ($o.name<$Obj_device.name)  // iPhone X win
 									
@@ -179,11 +179,11 @@ Case of
 				
 				If ($o#Null:C1517)
 					
-					$Obj_out:=plist (New object:C1471(\
-						"action";"write";\
-						"domain";$file.path;\
-						"key";"CurrentDeviceUDID";\
-						"value";$o.udid))
+					$Obj_out:=plist(New object:C1471(\
+						"action"; "write"; \
+						"domain"; $file.path; \
+						"key"; "CurrentDeviceUDID"; \
+						"value"; $o.udid))
 					
 				Else 
 					
@@ -195,15 +195,15 @@ Case of
 			
 		Else 
 			
-			  // File already exit
+			// File already exit
 			$Obj_out.success:=True:C214
 			
 		End if 
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="isLaunched")\
 		
-		$Obj_out:=Xcode (New object:C1471(\
-			"action";"tools-path"))
+		$Obj_out:=Xcode(New object:C1471(\
+			"action"; "tools-path"))
 		
 		If ($Obj_out.success)
 			
@@ -211,14 +211,14 @@ Case of
 			$Obj_out.path:=Convert path POSIX to system:C1107($Obj_out.posix)
 			
 			$Txt_cmd:="ps -e"
-			LAUNCH EXTERNAL PROCESS:C811("ps -e";$Txt_in;$Txt_out;$Txt_error)
+			LAUNCH EXTERNAL PROCESS:C811("ps -e"; $Txt_in; $Txt_out; $Txt_error)
 			
-			  // true if list contains the launch path
-			$Obj_out.value:=(Position:C15($Obj_out.posix;$Txt_out)>0)
+			// true if list contains the launch path
+			$Obj_out.value:=(Position:C15($Obj_out.posix; $Txt_out)>0)
 			
-			  //If (Bool($Obj_in.pid))
-			  // XXX extract line with pid
-			  //End if
+			//If (Bool($Obj_in.pid))
+			// XXX extract line with pid
+			//End if
 			
 		Else 
 			
@@ -226,39 +226,39 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="open")\
 		 | ($Obj_in.action="boot")
 		
 		If ($Obj_in.device=Null:C1517)
-			  // use default if no device
-			$Obj_in.device:=simulator (New object:C1471("action";"default";"fix";True:C214)).udid
+			// use default if no device
+			$Obj_in.device:=simulator(New object:C1471("action"; "default"; "fix"; True:C214)).udid
 			
 		End if 
 		
 		If ($Obj_in.device#Null:C1517)
-			  // boot the selected device
+			// boot the selected device
 			$Txt_cmd:="xcrun simctl boot "+$Obj_in.device
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error;$Lon_pid)
+			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error; $Lon_pid)
 			If (Length:C16($Txt_error)>0)
-				ob_error_add ($Obj_out;$Txt_error)
+				ob_error_add($Obj_out; $Txt_error)
 			End if 
 			
 		End if 
 		
-		  // launch process if not already launched
-		$Obj_runtime:=simulator (New object:C1471("action";"isLaunched"))
+		// launch process if not already launched
+		$Obj_runtime:=simulator(New object:C1471("action"; "isLaunched"))
 		If (Not:C34($Obj_runtime.value))
 			
-			$Txt_cmd:="open -a "+str_singleQuoted ($Obj_runtime.posix)
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+			$Txt_cmd:="open -a "+str_singleQuoted($Obj_runtime.posix)
+			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 			If (Length:C16($Txt_error)>0)
-				ob_error_add ($Obj_out;$Txt_error)
+				ob_error_add($Obj_out; $Txt_error)
 			End if 
 			
 		End if 
 		
-		If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+		If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
 			
 			If ($Lon_pid#0)
 				
@@ -268,10 +268,10 @@ Case of
 				If (Bool:C1537($Obj_in.bringToFront))
 					
 					$Txt_cmd:="osascript -e 'tell app \"Simulator\" to activate'"
-					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 					
 					If (Length:C16($Txt_error)>0)
-						ob_error_add ($Obj_out;$Txt_error)
+						ob_error_add($Obj_out; $Txt_error)
 					End if 
 				End if 
 				
@@ -281,20 +281,20 @@ Case of
 		
 		If (Bool:C1537($Obj_in.editorToFront))
 			
-			DELAY PROCESS:C323(Current process:C322;60*5)
+			DELAY PROCESS:C323(Current process:C322; 60*5)
 			
 			$Txt_cmd:="osascript -e 'tell app \"4D\" to activate'"
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="bringToFront")
 		
 		$Txt_cmd:="osascript -e 'tell app \"Simulator\" to activate'"
-		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="install")\
 		 | ($Obj_in.action="uninstall")\
 		 | ($Obj_in.action="launch")\
@@ -310,18 +310,18 @@ Case of
 				
 			Else 
 				
-				  // Use the current device
+				// Use the current device
 				$Txt_cmd:=$Txt_cmd+" booted "
 				
 			End if 
 			
-			$Txt_cmd:=$Txt_cmd+str_singleQuoted ($Obj_in.identifier)
+			$Txt_cmd:=$Txt_cmd+str_singleQuoted($Obj_in.identifier)
 			
 		End if 
 		
-		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 		
-		If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+		If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
 			
 			If (Length:C16($Txt_error)=0)
 				
@@ -334,18 +334,18 @@ Case of
 			End if 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="isBooted")
 		
-		$Obj_out:=simulator (New object:C1471(\
-			"action";"devices";\
-			"filter";"booted"))
+		$Obj_out:=simulator(New object:C1471(\
+			"action"; "devices"; \
+			"filter"; "booted"))
 		
 		If ($Obj_out.success)
 			
 			$Obj_out.booted:=False:C215
 			
-			For each ($Obj_device;$Obj_out.devices) Until ($Obj_out.booted)
+			For each ($Obj_device; $Obj_out.devices) Until ($Obj_out.booted)
 				
 				If ($Obj_device.udid=$Obj_in.device)\
 					 & ($Obj_device.state="Booted")
@@ -356,20 +356,20 @@ Case of
 			End for each 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="device")
 		
 		If (String:C10($Obj_in.udid)#"")
 			
-			$Obj_out:=simulator (New object:C1471(\
-				"action";"devices";\
-				"filter";"available"))
+			$Obj_out:=simulator(New object:C1471(\
+				"action"; "devices"; \
+				"filter"; "available"))
 			
 			If ($Obj_out.success)
 				
 				$Obj_out.success:=False:C215
 				
-				For each ($Obj_device;$Obj_out.devices) Until ($Obj_out.success)
+				For each ($Obj_device; $Obj_out.devices) Until ($Obj_out.success)
 					
 					If ($Obj_device.udid=$Obj_in.udid)
 						
@@ -386,28 +386,28 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="kill")\
 		 | ($Obj_in.action="shutdown")
 		
 		If ($Obj_in.device=Null:C1517)
 			
-			  // Kill all
+			// Kill all
 			$Txt_cmd:="xcrun simctl shutdown all"
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 			
-			If (simulator (New object:C1471("action";"isLaunched")).value)
+			If (simulator(New object:C1471("action"; "isLaunched")).value)
 				
-				  // use applescript because kill will not remove all subprocess
+				// use applescript because kill will not remove all subprocess
 				$Txt_cmd:="osascript -e 'tell app \"Simulator\" to quit'"
-				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 				
 			End if 
 			
 		Else 
 			
 			$Txt_cmd:="xcrun simctl shutdown "+$Obj_in.device
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 			
 		End if 
 		
@@ -419,25 +419,25 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="delete")\
 		 | ($Obj_in.action="erase")
 		
 		If ($Obj_in.device=Null:C1517)
 			
-			  // All
+			// All
 			If ($Obj_in.action="delete")
 				
 				$Txt_cmd:="xcrun simctl delete all"
-				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 				
 			End if 
 			
 		Else 
 			
-			  // One device
+			// One device
 			$Txt_cmd:="xcrun simctl "+$Obj_in.action+" "+$Obj_in.device
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 			
 		End if 
 		
@@ -449,12 +449,12 @@ Case of
 			
 		End if 
 		
-		  //________________________________________
+		//________________________________________
 	: ($Obj_in.action="devicePath")
 		
 		If ($Obj_in.device#Null:C1517)
 			
-			$Obj_out.path:=env_userPathname ("simulators").platformPath+$Obj_in.device
+			$Obj_out.path:=env_userPathname("simulators").platformPath+$Obj_in.device
 			
 			If (Bool:C1537($Obj_in.data))
 				
@@ -471,34 +471,34 @@ Case of
 			
 		End if 
 		
-		  //________________________________________
+		//________________________________________
 	: ($Obj_in.action="deviceApp")
 		
 		If ($Obj_in.device#Null:C1517)
 			
-			$Obj_out.path:=env_userPathname ("simulators").platformPath+$Obj_in.device+Folder separator:K24:12+"data"+Folder separator:K24:12+"Containers"+Folder separator:K24:12+"Bundle"+Folder separator:K24:12+"Application"+Folder separator:K24:12
+			$Obj_out.path:=env_userPathname("simulators").platformPath+$Obj_in.device+Folder separator:K24:12+"data"+Folder separator:K24:12+"Containers"+Folder separator:K24:12+"Bundle"+Folder separator:K24:12+"Application"+Folder separator:K24:12
 			
 			$Obj_out.apps:=New collection:C1472
 			
 			If (Bool:C1537($Obj_in.data))
 				
-				$Obj_out.path:=env_userPathname ("simulators").platformPath+$Obj_in.device+Folder separator:K24:12+"data"+Folder separator:K24:12+"Containers"+Folder separator:K24:12+"Data"+Folder separator:K24:12+"Application"+Folder separator:K24:12
+				$Obj_out.path:=env_userPathname("simulators").platformPath+$Obj_in.device+Folder separator:K24:12+"data"+Folder separator:K24:12+"Containers"+Folder separator:K24:12+"Data"+Folder separator:K24:12+"Application"+Folder separator:K24:12
 				
 				$Obj_out.metaData:=New collection:C1472
 				
 				If (Test path name:C476($Obj_out.path)=Is a folder:K24:2)
 					
-					ARRAY TEXT:C222($tTxt_folders;0x0000)
-					FOLDER LIST:C473($Obj_out.path;$tTxt_folders)
+					ARRAY TEXT:C222($tTxt_folders; 0x0000)
+					FOLDER LIST:C473($Obj_out.path; $tTxt_folders)
 					
-					For ($Lon_i;1;Size of array:C274($tTxt_folders);1)
+					For ($Lon_i; 1; Size of array:C274($tTxt_folders); 1)
 						
 						$File_:=$Obj_out.path+$tTxt_folders{$Lon_i}+Folder separator:K24:12+"Library"+Folder separator:K24:12+"Preferences"
 						
 						If (Test path name:C476($File_)=Is a folder:K24:2)
 							
-							ARRAY TEXT:C222($tTxt_files;0x0000)
-							DOCUMENT LIST:C474($File_;$tTxt_files)
+							ARRAY TEXT:C222($tTxt_files; 0x0000)
+							DOCUMENT LIST:C474($File_; $tTxt_files)
 							
 							If (Size of array:C274($tTxt_files)>0)  // Check that app have user default (as any 4d for ios app, this speed up  menu loading ))
 								
@@ -506,9 +506,9 @@ Case of
 								
 								If (Test path name:C476($File_)=Is a document:K24:1)
 									
-									$o:=plist (New object:C1471(\
-										"action";"object";\
-										"path";$File_))
+									$o:=plist(New object:C1471(\
+										"action"; "object"; \
+										"path"; $File_))
 									
 									If ($o.success)
 										
@@ -524,18 +524,18 @@ Case of
 				End if 
 			End if 
 			
-			  //$Obj_out.path:=_o_env_userPath ("simulators")+$Obj_in.device+Folder separator+"data"+Folder separator+"Containers"+Folder separator+"Bundle"+Folder separator+"Application"+Folder separator
-			$Obj_out.path:=env_userPathname ("simulators").folder($Obj_in.device+"/data/Containers/Bundle/Application").platformPath
+			//$Obj_out.path:=_o_env_userPath ("simulators")+$Obj_in.device+Folder separator+"data"+Folder separator+"Containers"+Folder separator+"Bundle"+Folder separator+"Application"+Folder separator
+			$Obj_out.path:=env_userPathname("simulators").folder($Obj_in.device+"/data/Containers/Bundle/Application").platformPath
 			
 			If (Test path name:C476($Obj_out.path)=Is a folder:K24:2)
 				
-				ARRAY TEXT:C222($tTxt_folders;0x0000)
-				FOLDER LIST:C473($Obj_out.path;$tTxt_folders)
+				ARRAY TEXT:C222($tTxt_folders; 0x0000)
+				FOLDER LIST:C473($Obj_out.path; $tTxt_folders)
 				
-				For ($Lon_i;1;Size of array:C274($tTxt_folders);1)
+				For ($Lon_i; 1; Size of array:C274($tTxt_folders); 1)
 					
-					ARRAY TEXT:C222($tTxt_subdir;0x0000)
-					FOLDER LIST:C473($Obj_out.path+$tTxt_folders{$Lon_i};$tTxt_subdir)
+					ARRAY TEXT:C222($tTxt_subdir; 0x0000)
+					FOLDER LIST:C473($Obj_out.path+$tTxt_folders{$Lon_i}; $tTxt_subdir)
 					
 					If (Size of array:C274($tTxt_subdir)>0)
 						
@@ -543,9 +543,9 @@ Case of
 						
 						If (Test path name:C476($File_)=Is a document:K24:1)
 							
-							$o:=plist (New object:C1471(\
-								"action";"object";\
-								"path";$File_))
+							$o:=plist(New object:C1471(\
+								"action"; "object"; \
+								"path"; $File_))
 							
 							If ($o.success)
 								
@@ -557,7 +557,7 @@ Case of
 								
 								If (Bool:C1537($Obj_in.data))
 									
-									  // Search associated metadata
+									// Search associated metadata
 									$Lon_x:=$Obj_out.metaData.extract("MCMMetadataIdentifier").indexOf($o.value["CFBundleIdentifier"])
 									
 									If ($Lon_x#-1)
@@ -580,13 +580,13 @@ Case of
 			
 		End if 
 		
-		  //________________________________________
+		//________________________________________
 	: ($Obj_in.action="devicetypes")
 		
 		$Txt_cmd:="xcrun simctl list devicetypes --json"
-		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 		
-		If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+		If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
 			
 			If (Length:C16($Txt_out)>0)
 				
@@ -617,13 +617,13 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="runtimes")
 		
 		$Txt_cmd:="xcrun simctl list runtimes --json"
-		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 		
-		If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+		If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
 			
 			If (Length:C16($Txt_out)>0)
 				
@@ -632,12 +632,12 @@ Case of
 				ob_Lon_Error:=0
 				ON ERR CALL:C155("ob_noError")
 				
-				If (Position:C15("Install Started";$Txt_out)=1)
+				If (Position:C15("Install Started"; $Txt_out)=1)
 					
-					$position:=Position:C15("{\n  \"runtimes\"";$Txt_out)
+					$position:=Position:C15("{\n  \"runtimes\""; $Txt_out)
 					If ($position>0)
 						
-						$Txt_out:=Substring:C12($Txt_out;$position)
+						$Txt_out:=Substring:C12($Txt_out; $position)
 						
 					End if 
 					
@@ -670,13 +670,13 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="devices")
 		
 		$Txt_cmd:="xcrun simctl list devices --json"
-		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 		
-		If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+		If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
 			
 			If (Length:C16($Txt_out)>0)
 				
@@ -685,12 +685,12 @@ Case of
 				ob_Lon_Error:=0
 				ON ERR CALL:C155("ob_noError")
 				
-				If (Position:C15("Install Started";$Txt_out)=1)
+				If (Position:C15("Install Started"; $Txt_out)=1)
 					
-					$position:=Position:C15("{\n  \"devices\"";$Txt_out)
+					$position:=Position:C15("{\n  \"devices\""; $Txt_out)
 					If ($position>0)
 						
-						$Txt_out:=Substring:C12($Txt_out;$position)
+						$Txt_out:=Substring:C12($Txt_out; $position)
 						
 					End if 
 					
@@ -706,21 +706,21 @@ Case of
 					
 					Case of 
 							
-							  //………………………………………………………………………………………
+							//………………………………………………………………………………………
 						: ($Obj_in.filter=Null:C1517)
 							
 							$Obj_out.devices:=$o.devices
 							
-							  //………………………………………………………………………………………
+							//………………………………………………………………………………………
 						: ($Obj_in.filter="booted")
 							
 							$Obj_out.devices:=New collection:C1472
 							
-							For each ($Txt_key;$o.devices)
+							For each ($Txt_key; $o.devices)
 								
 								If (Value type:C1509($o.devices[$Txt_key])=Is collection:K8:32)
 									
-									For each ($Obj_device;$o.devices[$Txt_key])
+									For each ($Obj_device; $o.devices[$Txt_key])
 										
 										If (String:C10($Obj_device.state)="Booted")\
 											 & ((String:C10($Obj_device.name)="iPhone@")\
@@ -733,29 +733,29 @@ Case of
 								End if 
 							End for each 
 							
-							  //………………………………………………………………………………………
+							//………………………………………………………………………………………
 						: ($Obj_in.filter="available")
 							
-							$Col_runtimes:=simulator (New object:C1471("action";"runtimes")).runtimes  // XXX could speed up by asking runtimes only time before and filter here
+							$Col_runtimes:=simulator(New object:C1471("action"; "runtimes")).runtimes  // XXX could speed up by asking runtimes only time before and filter here
 							
 							$Obj_out.devices:=New collection:C1472
 							
-							For each ($Txt_key;$o.devices)
+							For each ($Txt_key; $o.devices)
 								
 								If (Value type:C1509($o.devices[$Txt_key])=Is collection:K8:32)
 									
-									For each ($Obj_device;$o.devices[$Txt_key])
+									For each ($Obj_device; $o.devices[$Txt_key])
 										
 										If ((String:C10($Obj_device.availability)="(available)") | (Bool:C1537($Obj_device.isAvailable)))\
 											 & ((String:C10($Obj_device.name)="iPhone@")\
 											 | (String:C10($Obj_device.name)="iPad@"))
 											
-											For each ($Obj_runtime;$Col_runtimes)
+											For each ($Obj_runtime; $Col_runtimes)
 												
 												If (($Obj_runtime.name=$Txt_key)\
 													 | ($Obj_runtime.identifier=$Txt_key))
 													
-													If (str_cmpVersion ($Obj_runtime.version;$Obj_in.minimumVersion)>=0)  // Equal or higher
+													If (str_cmpVersion($Obj_runtime.version; $Obj_in.minimumVersion)>=0)  // Equal or higher
 														
 														$Obj_device.runtime:=$Obj_runtime
 														$Obj_out.devices.push($Obj_device)
@@ -768,12 +768,12 @@ Case of
 								End if 
 							End for each 
 							
-							  //………………………………………………………………………………………
+							//………………………………………………………………………………………
 						Else 
 							
-							ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.filter+"\"")
+							ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.filter+"\"")
 							
-							  //………………………………………………………………………………………
+							//………………………………………………………………………………………
 					End case 
 					
 				Else 
@@ -789,14 +789,14 @@ Case of
 			End if 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 If (Bool:C1537($Obj_in.caller))
 	
-	CALL FORM:C1391($Obj_in.caller;"editor_CALLBACK";"simulator";$Obj_out)
+	CALL FORM:C1391($Obj_in.caller; "editor_CALLBACK"; "simulator"; $Obj_out)
 	
 Else 
 	
@@ -804,5 +804,5 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

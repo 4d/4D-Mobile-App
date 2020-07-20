@@ -25,9 +25,10 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$b:=False:C215
-		$t:="1"
-		$b:=JSON Parse:C1218($t; Is boolean:K8:9)
+		$o:=simulator(New object:C1471(\
+			"action"; "open"; \
+			"editorToFront"; False:C215; \
+			"bringToFront"; True:C214))
 		
 		//________________________________________
 	: (True:C214)
