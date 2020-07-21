@@ -1,43 +1,40 @@
 //%attributes = {"invisible":true,"preemptive":"incapable"}
-  // ----------------------------------------------------
-  // Project method : fields_LIST
-  // ID[0F8855BDB0F7477397EEEE16B17EE729]
-  // Created 28-3-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  // Return selected table field list according to data model
-  // ----------------------------------------------------
-  // Declarations
-C_OBJECT:C1216($0)
-C_TEXT:C284($1)
+// ----------------------------------------------------
+// Project method : fields_LIST
+// ID[0F8855BDB0F7477397EEEE16B17EE729]
+// Created 28-3-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// Return selected table field list according to data model
+// ----------------------------------------------------
+// Declarations
+var $0 : Object
+var $1 : Text
 
-C_TEXT:C284($key;$t;$t_tableNumber;$tField)
-C_OBJECT:C1216($folderFormats;$ƒ;$o_out;$oField;$oTable;$str)
+var $fieldIdentifier, $key, $t, $tableIdentifier : Text
+var $field, $out, $str, $table : Object
+var $formatters : cs:C1710.path
 
 If (False:C215)
-	C_OBJECT:C1216(fields_LIST ;$0)
-	C_TEXT:C284(fields_LIST ;$1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
+// ----------------------------------------------------
+// Initialisations
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	$t_tableNumber:=$1
+	$tableIdentifier:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If (Count parameters:C259>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
-	$o_out:=New object:C1471(\
-		"success";Form:C1466.dataModel#Null:C1517)
+	$out:=New object:C1471(\
+		"success"; Form:C1466.dataModel#Null:C1517)
 	
-	$ƒ:=Storage:C1525.ƒ
-	
-	$str:=str ()
+	$str:=str()
 	
 Else 
 	
@@ -45,251 +42,302 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
-If ($o_out.success)
+// ----------------------------------------------------
+If ($out.success)
 	
-	$o_out.success:=(Form:C1466.dataModel[$t_tableNumber]#Null:C1517)
+	$out.success:=(Form:C1466.dataModel[$tableIdentifier]#Null:C1517)
 	
-	If ($o_out.success)
+	If ($out.success)
 		
-		$folderFormats:=path .hostFormatters()
+		$formatters:=cs:C1710.path.new().hostFormatters()
 		
-		$o_out.ids:=New collection:C1472
-		$o_out.names:=New collection:C1472
-		$o_out.labels:=New collection:C1472
-		$o_out.shortLabels:=New collection:C1472
-		$o_out.iconPaths:=New collection:C1472
-		$o_out.icons:=New collection:C1472
-		$o_out.types:=New collection:C1472
-		$o_out.formats:=New collection:C1472
-		$o_out.formatColors:=New collection:C1472
-		$o_out.nameColors:=New collection:C1472
+		$out.ids:=New collection:C1472
+		$out.names:=New collection:C1472
+		$out.labels:=New collection:C1472
+		$out.shortLabels:=New collection:C1472
+		$out.iconPaths:=New collection:C1472
+		$out.icons:=New collection:C1472
+		$out.types:=New collection:C1472
+		$out.formats:=New collection:C1472
+		$out.formatColors:=New collection:C1472
+		$out.nameColors:=New collection:C1472
 		
-		  // ***********************************
-		  // ***********************************
-		$o_out.tableNumbers:=New collection:C1472
+		// ***********************************
+		// ***********************************
+		$out.tableNumbers:=New collection:C1472
 		
-		  // ***********************************
-		  // ***********************************
+		// ***********************************
+		// ***********************************
 		
-		$o_out.paths:=New collection:C1472
+		$out.paths:=New collection:C1472
 		
-		$oTable:=Form:C1466.dataModel[$t_tableNumber]
+		$table:=Form:C1466.dataModel[$tableIdentifier]
 		
-		For each ($key;$oTable)
+		For each ($key; $table)
 			
 			Case of 
 					
-					  //……………………………………………………………………………………………………………
-				: ($ƒ.isField($key))\
+					//……………………………………………………………………………………………………………
+				: (project.isField($key))\
 					 & (Num:C11(This:C1470.selector)=0)
 					
-					$o_out.formatColors.push(Foreground color:K23:1)
-					$o_out.nameColors.push(Foreground color:K23:1)
+					$out.formatColors.push(Foreground color:K23:1)
+					$out.nameColors.push(Foreground color:K23:1)
 					
-					$oField:=$oTable[$key]
-					$oField.id:=Num:C11($key)
+					$field:=$table[$key]
+					$field.id:=Num:C11($key)
 					
-					  // ***********************************
-					  // ***********************************
-					$o_out.tableNumbers.push(Num:C11($t_tableNumber))
+					// ***********************************
+					// ***********************************
+					$out.tableNumbers.push(Num:C11($tableIdentifier))
 					
-					  // ***********************************
-					  // ***********************************
+					// ***********************************
+					// ***********************************
 					
-					$o_out.ids.push($oField.id)
-					$o_out.names.push($oField.name)
-					$o_out.paths.push($oField.name)
-					$o_out.types.push($oField.type)
+					$out.ids.push($field.id)
+					$out.names.push($field.name)
+					$out.paths.push($field.name)
+					$out.types.push($field.type)
 					
-					If ($oField.label=Null:C1517)
+					If ($field.label=Null:C1517)
 						
-						$oField.label:=formatString ("label";$oField.name)
-						
-					End if 
-					
-					$o_out.labels.push($oField.label)
-					
-					If ($oField.shortLabel=Null:C1517)
-						
-						$oField.shortLabel:=$oField.label
+						$field.label:=project.label($field.name)
 						
 					End if 
 					
-					$o_out.shortLabels.push($oField.shortLabel)
-					$o_out.iconPaths.push(String:C10($oField.icon))
-					$o_out.icons.push(getIcon (String:C10($oField.icon)))
+					$out.labels.push($field.label)
 					
-					If ($oField.format#Null:C1517)
+					If ($field.shortLabel=Null:C1517)
 						
-						  //%W-533.1
-						If ($oField.format[[1]]="/")  // User resources
+						$field.shortLabel:=$field.label
+						
+					End if 
+					
+					$out.shortLabels.push($field.shortLabel)
+					$out.iconPaths.push(String:C10($field.icon))
+					$out.icons.push(getIcon(String:C10($field.icon)))
+					
+					If ($field.format#Null:C1517)
+						
+						//%W-533.1
+						If ($field.format[[1]]="/")  // User resources
 							
-							$t:=Substring:C12($oField.format;2)
+							$t:=Substring:C12($field.format; 2)
 							
-							If (Not:C34(formatters (New object:C1471(\
-								"action";"isValid";\
-								"format";$folderFormats.folder($t))).success))
+							If (Not:C34(formatters(New object:C1471(\
+								"action"; "isValid"; \
+								"format"; $formatters.folder($t))).success))
 								
-								$o_out.formatColors[$o_out.formats.length]:=ui.errorColor  // Missing or invalid
+								$out.formatColors[$out.formats.length]:=ui.errorColor  // Missing or invalid
 								
 							End if 
 							
 						Else 
 							
-							$t:=$str.setText("_"+$oField.format).localized()
+							$t:=$str.setText("_"+$field.format).localized()
 							
 						End if 
-						  //%W+533.1
+						//%W+533.1
 						
 					Else 
 						
-						$t:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$oField.fieldType])).localized()
+						$t:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
 						
 					End if 
 					
-					$o_out.formats.push($t)
+					$out.formats.push($t)
 					
-					  //……………………………………………………………………………………………………………
-				: (Value type:C1509($oTable[$key])#Is object:K8:27)
+					//……………………………………………………………………………………………………………
+				: (Value type:C1509($table[$key])#Is object:K8:27)
 					
-					  // <NOTHING MORE TO DO>
+					// <NOTHING MORE TO DO>
 					
-					  //……………………………………………………………………………………………………………
-				: ($ƒ.isRelationToOne($oTable[$key]))\
-					 & (Num:C11(This:C1470.selector)=0)
+					//……………………………………………………………………………………………………………
+				: (project.isRelationToOne($table[$key]))
 					
-					For each ($tField;$oTable[$key])
+					If (Num:C11(This:C1470.selector)=0)
 						
-						If ($ƒ.isField($tField))
+						For each ($fieldIdentifier; $table[$key])
 							
-							$o_out.formatColors.push(Foreground color:K23:1)
-							$o_out.nameColors.push(Foreground color:K23:1)
-							
-							$oField:=$oTable[$key][$tField]
-							$oField.id:=Num:C11($tField)
-							
-							  // ***********************************
-							  // ***********************************
-							$o_out.tableNumbers.push(structure (New object:C1471(\
-								"action";"tableNumber";\
-								"name";$oTable[$key].relatedDataClass)).tableNumber)
-							
-							  // ***********************************
-							  // ***********************************
-							
-							$o_out.ids.push($oField.id)
-							$o_out.names.push($oField.name)
-							$o_out.paths.push($key+"."+$oField.name)
-							$o_out.types.push($oField.fieldType)
-							$o_out.labels.push($oField.label)
-							$o_out.shortLabels.push($oField.shortLabel)
-							$o_out.iconPaths.push(String:C10($oField.icon))
-							$o_out.icons.push(getIcon (String:C10($oField.icon)))
-							
-							If ($oField.format#Null:C1517)
+							If (project.isField($fieldIdentifier))
 								
-								  //%W-533.1
-								If ($oField.format[[1]]="/")  // User resources
+								$out.formatColors.push(Foreground color:K23:1)
+								$out.nameColors.push(Foreground color:K23:1)
+								
+								$field:=$table[$key][$fieldIdentifier]
+								$field.id:=Num:C11($fieldIdentifier)
+								
+								// ***********************************
+								// ***********************************
+								$out.tableNumbers.push(structure(New object:C1471(\
+									"action"; "tableNumber"; \
+									"name"; $table[$key].relatedDataClass)).tableNumber)
+								
+								// ***********************************
+								// ***********************************
+								
+								$out.ids.push($field.id)
+								$out.names.push($field.name)
+								$out.paths.push($key+"."+$field.name)
+								$out.types.push($field.fieldType)
+								$out.labels.push($field.label)
+								$out.shortLabels.push($field.shortLabel)
+								$out.iconPaths.push(String:C10($field.icon))
+								$out.icons.push(getIcon(String:C10($field.icon)))
+								
+								If ($field.format#Null:C1517)
 									
-									$t:=Substring:C12($oField.format;2)
-									
-									If (Not:C34(formatters (New object:C1471(\
-										"action";"isValid";\
-										"format";$folderFormats.folder($t))).success))
+									//%W-533.1
+									If ($field.format[[1]]="/")  // User resources
 										
-										$o_out.formatColors[$o_out.formats.length]:=ui.errorColor  // Missing or invalid
+										$t:=Substring:C12($field.format; 2)
+										
+										If (Not:C34(formatters(New object:C1471(\
+											"action"; "isValid"; \
+											"format"; $formatters.folder($t))).success))
+											
+											$out.formatColors[$out.formats.length]:=ui.errorColor  // Missing or invalid
+											
+										End if 
+										
+									Else 
+										
+										$t:=$str.setText("_"+$field.format).localized()
 										
 									End if 
+									//%W+533.1
 									
 								Else 
 									
-									$t:=$str.setText("_"+$oField.format).localized()
+									$t:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
 									
 								End if 
-								  //%W+533.1
 								
-							Else 
+								$out.formats.push($t)
 								
-								$t:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$oField.fieldType])).localized()
+							End if 
+						End for each 
+						
+					Else 
+						
+						If (feature.with("moreRelations"))
+							
+							$out.formatColors.push(Foreground color:K23:1)
+							$out.nameColors.push(Foreground color:K23:1)
+							
+							$field:=$table[$key]
+							
+							// ***********************************
+							// ***********************************
+							$out.tableNumbers.push(Num:C11($tableIdentifier))
+							
+							// ***********************************
+							// ***********************************
+							
+							$out.ids.push(Null:C1517)
+							$out.names.push($key)
+							$out.paths.push($key)
+							$out.types.push(-1)
+							
+							If (String:C10($field.label)="")
+								
+								$field.label:=project.label($key)
 								
 							End if 
 							
-							$o_out.formats.push($t)
+							$out.labels.push($field.label)
+							
+							If (String:C10($field.shortLabel)="")
+								
+								$field.shortLabel:=$field.label
+								
+							End if 
+							
+							$out.shortLabels.push($field.shortLabel)
+							$out.iconPaths.push(String:C10($field.icon))
+							$out.icons.push(getIcon(String:C10($field.icon)))
+							
+							If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
+								
+								$out.nameColors[$out.names.length-1]:=ui.errorColor  // Missing or invalid
+								
+							End if 
+							
+							$out.formats.push($field.format)
 							
 						End if 
-					End for each 
+					End if 
 					
-					  //……………………………………………………………………………………………………………
+					//……………………………………………………………………………………………………………
 				: (Num:C11(This:C1470.selector)=0)
 					
-					  //……………………………………………………………………………………………………………
-				: ($ƒ.isRelationToMany($oTable[$key]))  //&(Num(This.selector)=1)
+					//……………………………………………………………………………………………………………
+				: (project.isRelationToMany($table[$key]))  //&(Num(This.selector)=1)
 					
-					$o_out.formatColors.push(Foreground color:K23:1)
-					$o_out.nameColors.push(Foreground color:K23:1)
+					$out.formatColors.push(Foreground color:K23:1)
+					$out.nameColors.push(Foreground color:K23:1)
 					
-					$oField:=$oTable[$key]
+					$field:=$table[$key]
 					
-					  // ***********************************
-					  // ***********************************
-					$o_out.tableNumbers.push(Num:C11($t_tableNumber))
+					// ***********************************
+					// ***********************************
+					$out.tableNumbers.push(Num:C11($tableIdentifier))
 					
-					  // ***********************************
-					  // ***********************************
+					// ***********************************
+					// ***********************************
 					
-					$o_out.ids.push(Null:C1517)
-					$o_out.names.push($key)
-					$o_out.paths.push($key)
-					$o_out.types.push(-2)
+					$out.ids.push(Null:C1517)
+					$out.names.push($key)
+					$out.paths.push($key)
+					$out.types.push(-2)
 					
-					If (String:C10($oField.label)="")
+					If (String:C10($field.label)="")
 						
-						$oField.label:=formatString ("label";$key)
-						
-					End if 
-					
-					$o_out.labels.push($oField.label)
-					
-					If (String:C10($oField.shortLabel)="")
-						
-						$oField.shortLabel:=$oField.label
+						$field.label:=project.label($key)
 						
 					End if 
 					
-					$o_out.shortLabels.push($oField.shortLabel)
-					$o_out.iconPaths.push(String:C10($oField.icon))
-					$o_out.icons.push(getIcon (String:C10($oField.icon)))
+					$out.labels.push($field.label)
 					
-					If (Form:C1466.dataModel[String:C10($oField.relatedTableNumber)]=Null:C1517)
+					If (String:C10($field.shortLabel)="")
 						
-						$o_out.nameColors[$o_out.names.length-1]:=ui.errorColor  // Missing or invalid
+						$field.shortLabel:=$field.label
 						
 					End if 
 					
-					$o_out.formats.push($oField.format)
+					$out.shortLabels.push($field.shortLabel)
+					$out.iconPaths.push(String:C10($field.icon))
+					$out.icons.push(getIcon(String:C10($field.icon)))
 					
-					  //……………………………………………………………………………………………………………
+					If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
+						
+						$out.nameColors[$out.names.length-1]:=ui.errorColor  // Missing or invalid
+						
+					End if 
+					
+					$out.formats.push($field.format)
+					
+					//……………………………………………………………………………………………………………
 			End case 
 		End for each 
 		
-		$o_out.count:=$o_out.ids.length
+		$out.count:=$out.ids.length
 		
 	Else 
 		
-		  // No table selected
+		// No table selected
 		
 	End if 
 	
 Else 
 	
-	  // Empty dataModel
+	// Empty dataModel
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
-$0:=$o_out
+// ----------------------------------------------------
+// Return
+$0:=$out
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

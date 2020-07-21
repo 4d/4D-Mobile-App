@@ -274,15 +274,43 @@ Case of
 													
 													If ($svg.success)
 														
-														DOM SET XML ELEMENT VALUE:C868($node; $o.name)
-														
-														If ($o.fieldType=8859)  // 1-N relation
+														If ($o.fieldType=8858)
 															
-															DOM SET XML ATTRIBUTE:C866($node; "font-style"; "italic")
+															var $relation : Object
+															$relation:=Form:C1466.dataModel[$context.tableNumber]
+															
+															If ($relation[$o.name].format#Null:C1517)
+																
+																var $buffer : Text
+																$buffer:=$relation[$o.name].format
+																$buffer:=Replace string:C233($buffer; "%"; " ("; 1)
+																$buffer:=Replace string:C233($buffer; "%"; ")")
+																$buffer:=$o.name+$buffer
+																
+															Else 
+																
+																$buffer:=$o.name
+																
+															End if 
+															
+														Else 
+															
+															$buffer:=$o.name
+															
+														End if 
+														
+														DOM SET XML ELEMENT VALUE:C868($node; $buffer)
+														
+														If ($o.fieldType=8858)\
+															 | ($o.fieldType=8859)  // relation
+															
+															DOM SET XML ATTRIBUTE:C866($node; \
+																"font-style"; "italic")
 															
 															If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
 																
-																DOM SET XML ATTRIBUTE:C866($node; "class"; "label error")
+																DOM SET XML ATTRIBUTE:C866($node; \
+																	"class"; "label error")
 																
 															End if 
 														End if 

@@ -8,33 +8,34 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $t, $t_isOfClass : Text
+var $ObjectName, $t, $tableIdentifier, $target : Text
 var $b : Boolean
 var $countFixed, $indx : Integer
 var $x : Blob
-var $o, $oTarget : Object
-var $c : Collection
+var $current, $droped, $relation, $table, $targetTable : Object
+var $c, $cc : Collection
 
 ARRAY TEXT:C222($tMatches; 0)
 
 // ----------------------------------------------------
 // Initialisations
-
-$oTarget:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2; "detail"; "list")][This:C1470.$.tableNumber]
+$target:=This:C1470.$.current
+$tableIdentifier:=This:C1470.$.tableNumber
+$ObjectName:=This:C1470.preview.name
 
 // ----------------------------------------------------
-If (Length:C16(This:C1470.$.current)>0)
+If (Length:C16($target)>0)
 	
 	// Get the pastboard
 	GET PASTEBOARD DATA:C401("com.4d.private.ios.field"; $x)
 	
 	If (Bool:C1537(OK))
 		
-		BLOB TO VARIABLE:C533($x; $o)
+		BLOB TO VARIABLE:C533($x; $droped)
 		SET BLOB SIZE:C606($x; 0)
 		
 		// Check the match of the type with the source
-		SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "ios:type"; $t)
+		SVG GET ATTRIBUTE:C1056(*; $ObjectName; $target; "ios:type"; $t)
 		
 		If ($t="all")
 			
@@ -44,83 +45,177 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 			// Check the type compatibility
 			$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
-			$b:=tmpl_compatibleType($c; $o.fieldType)
+			$b:=tmpl_compatibleType($c; $droped.fieldType)
 			
 		End if 
 		
 		If ($b)
 			
-			$o.name:=$o.path
+			$targetTable:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2; "detail"; "list")][$tableIdentifier]
 			
-			SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "ios:bind"; $t)
+			$droped.name:=$droped.path
+			
+			SVG GET ATTRIBUTE:C1056(*; $ObjectName; $target; "ios:bind"; $t)
 			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $t; ->$tMatches)
 			
 			If (Size of array:C274($tMatches)=2)  // List of fields
 				
 				// Belt and braces
-				If ($oTarget[$tMatches{1}]=Null:C1517)
+				If ($targetTable[$tMatches{1}]=Null:C1517)
 					
-					$oTarget[$tMatches{1}]:=New collection:C1472
+					$targetTable[$tMatches{1}]:=New collection:C1472
 					
 				End if 
 				
-				If ($o.fromIndex#Null:C1517)
+				If ($droped.fromIndex#Null:C1517)
 					
-					If ($o.fromIndex#(Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))-1))
+					If ($droped.fromIndex#(Num:C11(Replace string:C233($target; "e"; ""))-1))
 						
-						$indx:=Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))
-						$oTarget.fields.remove($o.fromIndex)
-						$indx:=$indx-1-Num:C11($o.fromIndex<$indx)
-						$oTarget.fields.insert($indx; $o)
+						$indx:=Num:C11(Replace string:C233($target; "e"; ""))
+						$targetTable.fields.remove($droped.fromIndex)
+						$indx:=$indx-1-Num:C11($droped.fromIndex<$indx)
+						$targetTable.fields.insert($indx; $droped)
 						
 					End if 
 					
 				Else 
 					
+					$current:=$targetTable[$tMatches{1}][Num:C11($tMatches{2})]
+					
 					Case of 
-							//______________________________________________________
-						: ($o.fieldType=8858)
-							
 							
 							//______________________________________________________
-						: ($o.fieldType=8859)
+						: ($droped.fieldType=8858)
 							
-							OB REMOVE:C1226($o; "id")
-							OB REMOVE:C1226($o; "fieldNumber")
+							OB REMOVE:C1226($droped; "id")
+							
+							//______________________________________________________
+						: ($droped.fieldType=8859)
+							
+							OB REMOVE:C1226($droped; "id")
+							
+							//______________________________________________________
+						: ($current=Null:C1517)
+							
+							// Add
+							
+							//______________________________________________________
+						Else 
+							
+							// Check for the same root
+							$c:=Split string:C1554($current.path; ".")
+							$cc:=Split string:C1554($droped.path; ".")
+							
+							$table:=Form:C1466.dataModel[$tableIdentifier]
+							
+							Case of 
+									
+									//______________________________________________________
+								: ($c.length=$cc.length)
+									
+									// Replace
+									
+									//______________________________________________________
+								: ($c.length=1)\
+									 & ($cc.length=2)  // Relation + relation field
+									
+									$relation:=$table[$current.name]
+									
+									If ($current.fieldType=8858)
+										
+										If ($c[0]=$cc[0])  // Same relation
+											
+											// Switch to relation & add/modify the format
+											$droped:=New object:C1471(\
+												"name"; $cc[0]; \
+												"fieldType"; 8858; \
+												"relatedTableNumber"; $relation.relatedTableNumber; \
+												"label"; $relation.label; \
+												"shortlabel"; $relation.shortLabel; \
+												"path"; $cc[0])
+											
+											$relation.format:="%"+$cc[1]+"%"
+											
+										Else 
+											
+											// Replace by the field (and remove the format ?)
+											//If ($relation#Null)
+											//OB REMOVE($relation; "format")
+											//End if 
+											
+										End if 
+										
+									Else 
+										
+										// Replace (and remove the format ?)
+										//If ($relation#Null)
+										//OB REMOVE($relation; "format")
+										//End if 
+										
+									End if 
+									
+									//______________________________________________________
+								: ($c.length=2)\
+									 & ($cc.length=1)  // Relation field + relation
+									
+									If ($c[0]=$cc[0])
+										
+										// Keep the droped relation & add the format
+										$relation:=$table[$cc[0]]
+										$relation.format:="%"+$cc[1]+"%"
+										
+									Else 
+										
+										// Replace by the new relation (and remove the format ?)
+										//If ($relation#Null)
+										//OB REMOVE($relation; "format")
+										//End if 
+										
+									End if 
+									
+									//______________________________________________________
+								Else 
+									
+									// Should not
+									TRACE:C157
+									
+									//______________________________________________________
+							End case 
 							
 							//______________________________________________________
 					End case 
 					
-					$oTarget[$tMatches{1}][Num:C11($tMatches{2})]:=$o
+					$targetTable[$tMatches{1}][Num:C11($tMatches{2})]:=$droped
 					
 				End if 
 				
 			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				
-				SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "4D-isOfClass-multi-criteria"; $t_isOfClass)
+				var $buffer : Text
+				SVG GET ATTRIBUTE:C1056(*; $ObjectName; $target; "4D-isOfClass-multi-criteria"; $buffer)
 				
-				If ($t_isOfClass="true")  // Search on several fields - append to the field list if any
+				If (JSON Parse:C1218($buffer; Is boolean:K8:9))  // Search on several fields - append to the field list if any
 					
-					If (Value type:C1509($oTarget[$t])#Is collection:K8:32)
+					If (Value type:C1509($targetTable[$t])#Is collection:K8:32)
 						
-						If ($oTarget[$t]#Null:C1517)
+						If ($targetTable[$t]#Null:C1517)
 							
 							// Convert
-							$oTarget[$t]:=New collection:C1472($oTarget[$t])
+							$targetTable[$t]:=New collection:C1472($targetTable[$t])
 							
 						Else 
 							
-							$oTarget[$t]:=$o
+							$targetTable[$t]:=$droped
 							
 						End if 
 					End if 
 					
-					If (Value type:C1509($oTarget[$t])=Is collection:K8:32)
+					If (Value type:C1509($targetTable[$t])=Is collection:K8:32)
 						
-						If ($oTarget[$t].extract("name").indexOf($o.path)=-1)
+						If ($targetTable[$t].extract("name").indexOf($droped.path)=-1)
 							
 							// Append field
-							$oTarget[$t].push($o)
+							$targetTable[$t].push($droped)
 							
 						End if 
 					End if 
@@ -128,45 +223,46 @@ If (Length:C16(This:C1470.$.current)>0)
 				Else 
 					
 					Case of 
-							//______________________________________________________
-						: (This:C1470.$.current="background")
 							
-							If ($o.fromIndex#Null:C1517)
+							//______________________________________________________
+						: ($target="background")
+							
+							If ($droped.fromIndex#Null:C1517)
 								
-								$oTarget.fields.remove($o.fromIndex)
+								$targetTable.fields.remove($droped.fromIndex)
 								
 							End if 
 							
 							$countFixed:=Form:C1466.$dialog.VIEWS.template.manifest.fields.count
-							$indx:=$oTarget.fields.indexOf(Null:C1517; $countFixed)
+							$indx:=$targetTable.fields.indexOf(Null:C1517; $countFixed)
 							
 							If ($indx=-1)
 								
-								If ($oTarget.fields.length<$countFixed)
+								If ($targetTable.fields.length<$countFixed)
 									
-									$oTarget.fields[$countFixed]:=$o
+									$targetTable.fields[$countFixed]:=$droped
 									
 								Else 
 									
-									$oTarget.fields.push($o)
+									$targetTable.fields.push($droped)
 									
 								End if 
 								
 							Else 
 								
-								$oTarget.fields[$indx]:=$o
+								$targetTable.fields[$indx]:=$droped
 								
 							End if 
 							
 							//______________________________________________________
-						: (This:C1470.$.current="@.vInsert")
+						: ($target="@.vInsert")
 							
-							$indx:=Num:C11(Replace string:C233(This:C1470.$.current; "e"; ""))
+							$indx:=Num:C11(Replace string:C233($target; "e"; ""))
 							
-							If ($o.fromIndex#Null:C1517)
+							If ($droped.fromIndex#Null:C1517)
 								
-								$oTarget.fields.remove($o.fromIndex)
-								$indx:=$indx-1-Num:C11($o.fromIndex<$indx)
+								$targetTable.fields.remove($droped.fromIndex)
+								$indx:=$indx-1-Num:C11($droped.fromIndex<$indx)
 								
 							Else 
 								
@@ -174,12 +270,12 @@ If (Length:C16(This:C1470.$.current)>0)
 								
 							End if 
 							
-							$oTarget.fields.insert($indx; $o)
+							$targetTable.fields.insert($indx; $droped)
 							
 							//______________________________________________________
 						Else 
 							
-							$oTarget[$t]:=$o
+							$targetTable[$t]:=$droped
 							
 							//______________________________________________________
 					End case 
@@ -198,32 +294,6 @@ If (Length:C16(This:C1470.$.current)>0)
 			views_preview("draw"; This:C1470)
 			
 		End if 
-		
-	Else 
-		
-		// If (Bool(featuresFlags._103505))
-		//SVG GET ATTRIBUTE(*;This.preview;This.$.current;"4D-isOfClass-action";$Txt_isOfClass)
-		//If ($Txt_isOfClass="true")
-		//SVG GET ATTRIBUTE(*;This.preview.name;This.$.current;"ios:bind";$t)
-		//Rgx_MatchText ("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$";$t;->$tTxt_results)
-		//If (Size of array($tTxt_results)=2)  // List of fields
-		//GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
-		// If (Bool(OK))
-		//BLOB TO VARIABLE($x;$o)
-		//SET BLOB SIZE($x;0)
-		//OB REMOVE($o;"target")
-		//For each ($t;$o)
-		//If ($t[[1]]="$")
-		//OB REMOVE($o;$t)
-		// End if
-		// End for each
-		//ob_createPath ($Obj_target;"fieldsActions";Is collection)
-		//$Obj_target.fieldsActions[Num($tTxt_results{2})]:=$o
-		// End if
-		// End if
-		// End if
-		// End if
-		
 	End if 
 End if 
 
