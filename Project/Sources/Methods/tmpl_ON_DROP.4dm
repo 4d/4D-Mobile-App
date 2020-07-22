@@ -8,23 +8,22 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $ObjectName, $t, $tableIdentifier, $target : Text
-var $b : Boolean
-var $countFixed, $indx : Integer
+var $buffer, $cible, $ObjectName, $t, $tableIdentifier : Text
+var $success : Boolean
+var $fixed, $indx : Integer
 var $x : Blob
-var $current, $droped, $relation, $table, $targetTable : Object
-var $c, $cc : Collection
+var $current, $droped, $relation, $table, $target : Object
+var $c, $cCurrent, $cDroped : Collection
 
-ARRAY TEXT:C222($tMatches; 0)
 
 // ----------------------------------------------------
 // Initialisations
-$target:=This:C1470.$.current
+$cible:=This:C1470.$.current
 $tableIdentifier:=This:C1470.$.tableNumber
 $ObjectName:=This:C1470.preview.name
 
 // ----------------------------------------------------
-If (Length:C16($target)>0)
+If (Length:C16($cible)>0)
 	
 	// Get the pastboard
 	GET PASTEBOARD DATA:C401("com.4d.private.ios.field"; $x)
@@ -35,187 +34,163 @@ If (Length:C16($target)>0)
 		SET BLOB SIZE:C606($x; 0)
 		
 		// Check the match of the type with the source
-		SVG GET ATTRIBUTE:C1056(*; $ObjectName; $target; "ios:type"; $t)
+		SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:type"; $t)
 		
 		If ($t="all")
 			
-			$b:=True:C214
+			$success:=True:C214
 			
 		Else 
 			
 			// Check the type compatibility
 			$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
-			$b:=tmpl_compatibleType($c; $droped.fieldType)
+			$success:=tmpl_compatibleType($c; $droped.fieldType)
 			
 		End if 
 		
-		If ($b)
+		If ($success)
 			
-			$targetTable:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2; "detail"; "list")][$tableIdentifier]
+			$target:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2; "detail"; "list")][$tableIdentifier]
 			
 			$droped.name:=$droped.path
 			
-			SVG GET ATTRIBUTE:C1056(*; $ObjectName; $target; "ios:bind"; $t)
+			SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:bind"; $t)
+			ARRAY TEXT:C222($tMatches; 0x0000)
 			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $t; ->$tMatches)
 			
 			If (Size of array:C274($tMatches)=2)  // List of fields
 				
 				// Belt and braces
-				If ($targetTable[$tMatches{1}]=Null:C1517)
+				If ($target[$tMatches{1}]=Null:C1517)
 					
-					$targetTable[$tMatches{1}]:=New collection:C1472
+					$target[$tMatches{1}]:=New collection:C1472
 					
 				End if 
 				
-				If ($droped.fromIndex#Null:C1517)
+				If ($droped.fromIndex#Null:C1517)  // Internal D&D
 					
-					If ($droped.fromIndex#(Num:C11(Replace string:C233($target; "e"; ""))-1))
+					If ($droped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
 						
-						$indx:=Num:C11(Replace string:C233($target; "e"; ""))
-						$targetTable.fields.remove($droped.fromIndex)
+						$indx:=Num:C11(Replace string:C233($cible; "e"; ""))
+						$target.fields.remove($droped.fromIndex)
 						$indx:=$indx-1-Num:C11($droped.fromIndex<$indx)
-						$targetTable.fields.insert($indx; $droped)
+						$target.fields.insert($indx; $droped)
 						
 					End if 
 					
 				Else 
 					
-					$current:=$targetTable[$tMatches{1}][Num:C11($tMatches{2})]
+					// The current item, if any
+					$current:=$target[$tMatches{1}][Num:C11($tMatches{2})]
+					
+					// Splits path for later
+					$cCurrent:=Split string:C1554(String:C10($current.path); ".")
+					$cDroped:=Split string:C1554($droped.path; ".")
+					
+					// Get current table
+					$table:=Form:C1466.dataModel[$tableIdentifier]
 					
 					Case of 
 							
 							//______________________________________________________
-						: ($droped.fieldType=8858)
+						: ($droped.fieldType=8858)  // N -> 1 relation
+							
+							OB REMOVE:C1226($droped; "id")
+							
+							If ($cCurrent.length=2)\
+								 & ($cDroped.length=1)  // Drop a relation on a field
+								
+								If ($cCurrent[0]=$cDroped[0])  // Same related table
+									
+									// Keep the droped relation & add/update the format
+									$relation:=$table[$cDroped[0]]
+									$relation.format:="%"+$cCurrent[1]+"%"
+									
+								End if 
+							End if 
+							
+							//______________________________________________________
+						: ($droped.fieldType=8859)  // 1 -> N relation
 							
 							OB REMOVE:C1226($droped; "id")
 							
 							//______________________________________________________
-						: ($droped.fieldType=8859)
+						: ($current=Null:C1517)  // Add
 							
-							OB REMOVE:C1226($droped; "id")
-							
-							//______________________________________________________
-						: ($current=Null:C1517)
-							
-							// Add
+							// <NOTHING MORE TO DO>
 							
 							//______________________________________________________
 						Else 
 							
 							// Check for the same root
-							$c:=Split string:C1554($current.path; ".")
-							$cc:=Split string:C1554($droped.path; ".")
-							
-							$table:=Form:C1466.dataModel[$tableIdentifier]
 							
 							Case of 
 									
-									//______________________________________________________
-								: ($c.length=$cc.length)
+									//……………………………………………………………………………………………………
+								: ($cCurrent.length=$cDroped.length)
 									
 									// Replace
 									
-									//______________________________________________________
-								: ($c.length=1)\
-									 & ($cc.length=2)  // Relation + relation field
+									//……………………………………………………………………………………………………
+								: ($cCurrent.length=1)\
+									 & ($cDroped.length=2)  // Drop a field on a relation
 									
 									$relation:=$table[$current.name]
 									
-									If ($current.fieldType=8858)
+									If ($current.fieldType=8858)  // 1 -> N relation
 										
-										If ($c[0]=$cc[0])  // Same relation
+										If ($cCurrent[0]=$cDroped[0])  // Same related table
 											
 											// Switch to relation & add/modify the format
 											$droped:=New object:C1471(\
-												"name"; $cc[0]; \
+												"name"; $cDroped[0]; \
 												"fieldType"; 8858; \
 												"relatedTableNumber"; $relation.relatedTableNumber; \
 												"label"; $relation.label; \
 												"shortlabel"; $relation.shortLabel; \
-												"path"; $cc[0])
+												"path"; $cDroped[0])
 											
-											$relation.format:="%"+$cc[1]+"%"
-											
-										Else 
-											
-											// Replace by the field (and remove the format ?)
-											//If ($relation#Null)
-											//OB REMOVE($relation; "format")
-											//End if 
+											$relation.format:="%"+$cDroped[1]+"%"
 											
 										End if 
-										
-									Else 
-										
-										// Replace (and remove the format ?)
-										//If ($relation#Null)
-										//OB REMOVE($relation; "format")
-										//End if 
-										
 									End if 
 									
-									//______________________________________________________
-								: ($c.length=2)\
-									 & ($cc.length=1)  // Relation field + relation
-									
-									If ($c[0]=$cc[0])
-										
-										// Keep the droped relation & add the format
-										$relation:=$table[$cc[0]]
-										$relation.format:="%"+$cc[1]+"%"
-										
-									Else 
-										
-										// Replace by the new relation (and remove the format ?)
-										//If ($relation#Null)
-										//OB REMOVE($relation; "format")
-										//End if 
-										
-									End if 
-									
-									//______________________________________________________
-								Else 
-									
-									// Should not
-									TRACE:C157
-									
-									//______________________________________________________
+									//……………………………………………………………………………………………………
 							End case 
 							
 							//______________________________________________________
 					End case 
 					
-					$targetTable[$tMatches{1}][Num:C11($tMatches{2})]:=$droped
+					$target[$tMatches{1}][Num:C11($tMatches{2})]:=$droped
 					
 				End if 
 				
 			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				
-				var $buffer : Text
-				SVG GET ATTRIBUTE:C1056(*; $ObjectName; $target; "4D-isOfClass-multi-criteria"; $buffer)
+				SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "4D-isOfClass-multi-criteria"; $buffer)
 				
 				If (JSON Parse:C1218($buffer; Is boolean:K8:9))  // Search on several fields - append to the field list if any
 					
-					If (Value type:C1509($targetTable[$t])#Is collection:K8:32)
+					If (Value type:C1509($target[$t])#Is collection:K8:32)
 						
-						If ($targetTable[$t]#Null:C1517)
+						If ($target[$t]#Null:C1517)
 							
 							// Convert
-							$targetTable[$t]:=New collection:C1472($targetTable[$t])
+							$target[$t]:=New collection:C1472($target[$t])
 							
 						Else 
 							
-							$targetTable[$t]:=$droped
+							$target[$t]:=$droped
 							
 						End if 
 					End if 
 					
-					If (Value type:C1509($targetTable[$t])=Is collection:K8:32)
+					If (Value type:C1509($target[$t])=Is collection:K8:32)
 						
-						If ($targetTable[$t].extract("name").indexOf($droped.path)=-1)
+						If ($target[$t].extract("name").indexOf($droped.path)=-1)
 							
 							// Append field
-							$targetTable[$t].push($droped)
+							$target[$t].push($droped)
 							
 						End if 
 					End if 
@@ -225,43 +200,43 @@ If (Length:C16($target)>0)
 					Case of 
 							
 							//______________________________________________________
-						: ($target="background")
+						: ($cible="background")
 							
 							If ($droped.fromIndex#Null:C1517)
 								
-								$targetTable.fields.remove($droped.fromIndex)
+								$target.fields.remove($droped.fromIndex)
 								
 							End if 
 							
-							$countFixed:=Form:C1466.$dialog.VIEWS.template.manifest.fields.count
-							$indx:=$targetTable.fields.indexOf(Null:C1517; $countFixed)
+							$fixed:=Form:C1466.$dialog.VIEWS.template.manifest.fields.count
+							$indx:=$target.fields.indexOf(Null:C1517; $fixed)
 							
 							If ($indx=-1)
 								
-								If ($targetTable.fields.length<$countFixed)
+								If ($target.fields.length<$fixed)
 									
-									$targetTable.fields[$countFixed]:=$droped
+									$target.fields[$fixed]:=$droped
 									
 								Else 
 									
-									$targetTable.fields.push($droped)
+									$target.fields.push($droped)
 									
 								End if 
 								
 							Else 
 								
-								$targetTable.fields[$indx]:=$droped
+								$target.fields[$indx]:=$droped
 								
 							End if 
 							
 							//______________________________________________________
-						: ($target="@.vInsert")
+						: ($cible="@.vInsert")
 							
-							$indx:=Num:C11(Replace string:C233($target; "e"; ""))
+							$indx:=Num:C11(Replace string:C233($cible; "e"; ""))
 							
 							If ($droped.fromIndex#Null:C1517)
 								
-								$targetTable.fields.remove($droped.fromIndex)
+								$target.fields.remove($droped.fromIndex)
 								$indx:=$indx-1-Num:C11($droped.fromIndex<$indx)
 								
 							Else 
@@ -270,12 +245,12 @@ If (Length:C16($target)>0)
 								
 							End if 
 							
-							$targetTable.fields.insert($indx; $droped)
+							$target.fields.insert($indx; $droped)
 							
 							//______________________________________________________
 						Else 
 							
-							$targetTable[$t]:=$droped
+							$target[$t]:=$droped
 							
 							//______________________________________________________
 					End case 

@@ -418,7 +418,7 @@ Function setAttribute
 		
 	Else 
 		
-		Super:C1706.setAttribute(This:C1470.latest; $1; $2)
+		Super:C1706.setAttribute(This:C1470.__target(); $1; $2)
 		
 	End if 
 	

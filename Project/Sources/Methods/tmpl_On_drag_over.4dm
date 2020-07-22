@@ -126,11 +126,11 @@ If (Length:C16(This:C1470.$.current)>0)
 					
 					If ($t="all")
 						
-						If ($o.fieldType<8858)  // Not relation
-							
-							$0:=0
-							
-						End if 
+						//If ($o.fieldType<8858)  // Not relation
+						
+						$0:=0
+						
+						//End if 
 						
 					Else 
 						

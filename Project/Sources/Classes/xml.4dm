@@ -16,11 +16,10 @@ Class constructor
 /*———————————————————————————————————————————————————————————*/
 Function new
 	var $0 : Object
-	var $1 : Text
-	var $2 : Text
-	var ${3} : Text
+	var ${1} : Text
 	
-	var $l : Integer
+	var $t : Text
+	var $i, $l : Integer
 	
 	$l:=Count parameters:C259
 	
@@ -30,55 +29,30 @@ Function new
 		
 		If ($l>=2)
 			
-			Case of 
+			If (($l%2)#0)
+				
+				This:C1470.errors.push(Current method name:C684+" -  Unbalanced key/value pairs")
+				OK:=0
+				
+			Else 
+				
+				$t:=":C861("
+				
+				For ($i; 1; $l; 2)
 					
-					//……………………………………………………………………………………………
-				: (($l%2)#0)
+					$t:=$t+(";"*Num:C11($i>1))+"\""+${$i}+"\";\""+${$i+1}+"\""
 					
-					This:C1470.errors.push(Current method name:C684+" -  Unbalanced key/value pairs")
-					OK:=0
-					
-					//……………………………………………………………………………………………
-				: ($l=2)
-					
-					This:C1470.root:=DOM Create XML Ref:C861($1; $2)
-					
-					//……………………………………………………………………………………………
-				: ($l=4)
-					
-					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4)
-					
-					//……………………………………………………………………………………………
-				: ($l=6)
-					
-					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4; $5; $6)
-					
-					//……………………………………………………………………………………………
-				: ($l=8)
-					
-					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4; $5; $6; $7; $8)
-					
-					//……………………………………………………………………………………………
-				: ($l=10)
-					
-					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4; $5; $6; $7; $8; $9; $10)
-					
-					//……………………………………………………………………………………………
-				: ($l=12)
-					
-					This:C1470.root:=DOM Create XML Ref:C861($1; $2; $3; $4; $5; $6; $7; $8; $9; $10; $11; $12)
-					
-					//______________________________________________________
-				Else 
-					
-					This:C1470.errors.push(Current method name:C684+" -  Unmanaged number of  key/value pairs (max = 5)")
-					
-					//______________________________________________________
-			End case 
+				End for 
+				
+				$t:=$t+")"
+				
+			End if 
+			
+			This:C1470.root:=Formula from string:C1601($t).call()
 			
 		Else 
 			
-			This:C1470.root:=DOM Create XML Ref:C861($1)
+			This:C1470.root:=DOM Create XML Ref:C861(${1})
 			
 		End if 
 		

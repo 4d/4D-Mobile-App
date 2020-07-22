@@ -8,7 +8,7 @@
 // FEATURES pannel management
 // ----------------------------------------------------
 // Declarations
-var $ƒ;$e : Object
+var $e, $ƒ : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -19,7 +19,7 @@ ASSERT:C1129(Not:C34(Shift down:C543))
 // ----------------------------------------------------
 If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 	
-	$e:=panel_Form(On Load:K2:1;On Timer:K2:25)
+	$e:=panel_Form(On Load:K2:1; On Timer:K2:25)
 	
 	Case of 
 			
@@ -40,7 +40,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
 			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)
 			
-			OBJECT SET VISIBLE:C603(*;"certificatePicker";Form:C1466.server.pushNotification)
+			OBJECT SET VISIBLE:C603(*; "certificatePicker"; Form:C1466.server.pushNotification)
 			
 			$ƒ.certificate.touch()
 			$ƒ.checkAuthenticationMethod()
@@ -55,7 +55,7 @@ Else   // <== Widgets method
 	Case of 
 			
 			//==============================================
-		: ($ƒ.certificate.catch($e;On Data Change:K2:15))
+		: ($ƒ.certificate.catch($e; On Data Change:K2:15))
 			
 			If ($ƒ.certificate.picker.target#Null:C1517)
 				
@@ -71,19 +71,19 @@ Else   // <== Widgets method
 			End if 
 			
 			//==============================================
-		: ($ƒ.loginRequired.catch($e;On Clicked:K2:4))
+		: ($ƒ.loginRequired.catch($e; On Clicked:K2:4))
 			
 			Form:C1466.server.authentication.email:=Bool:C1537(Form:C1466.server.authentication.email)
 			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
 			project.save()
 			
 			//==============================================
-		: ($ƒ.authenticationButton.catch($e;On Clicked:K2:4))
+		: ($ƒ.authenticationButton.catch($e; On Clicked:K2:4))
 			
 			$ƒ.editAuthenticationMethod()
 			
 			//==============================================
-		: ($ƒ.pushNotification.catch($e;On Clicked:K2:4))
+		: ($ƒ.pushNotification.catch($e; On Clicked:K2:4))
 			
 			Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
 			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)

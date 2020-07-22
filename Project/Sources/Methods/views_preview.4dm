@@ -12,11 +12,11 @@ var $0 : Text
 var $1 : Text
 var $2 : Object
 
-var $container, $domField, $domTemplate, $domUse, $IN, $new, $node, $OUT, $root, $t : Text
-var $tClass, $tFormName, $tIndex, $tName, $tStyle, $tTypeForm, $tWidgetField : Text
+var $buffer, $container, $domField, $domTemplate, $domUse, $IN, $new, $node, $OUT, $root : Text
+var $t, $tClass, $tFormName, $tIndex, $tName, $tStyle, $tTypeForm, $tWidgetField : Text
 var $b, $bFirst, $bMultivalued : Boolean
 var $count, $height, $i, $indx, $Lon_y, $Lon_yOffset, $width : Integer
-var $context, $form, $manifest, $o, $oAttributes, $oWidgetManifest, $svg, $target, $template : Object
+var $context, $form, $manifest, $o, $oAttributes, $oWidgetManifest, $relation, $svg, $target, $template : Object
 var $c : Collection
 
 
@@ -276,16 +276,12 @@ Case of
 														
 														If ($o.fieldType=8858)
 															
-															var $relation : Object
 															$relation:=Form:C1466.dataModel[$context.tableNumber]
 															
 															If ($relation[$o.name].format#Null:C1517)
 																
-																var $buffer : Text
-																$buffer:=$relation[$o.name].format
-																$buffer:=Replace string:C233($buffer; "%"; " ("; 1)
-																$buffer:=Replace string:C233($buffer; "%"; ")")
-																$buffer:=$o.name+$buffer
+																$c:=Split string:C1554($relation[$o.name].format; "%"; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
+																$buffer:=$o.name+" ("+$c[0]+")"
 																
 															Else 
 																

@@ -10,7 +10,7 @@ Function get
 	var $project : Object
 	$project:=OB Copy:C1225(This:C1470.project)
 	
-	var $t; $tt : Text
+	var $t, $tt : Text
 	var $o : Object
 	
 	For each ($t; $project)
@@ -96,7 +96,7 @@ Function updateActions
 		$dataModel:=This:C1470.project.dataModel
 		
 		var $indx : Integer
-		var $table; $parameter : Object
+		var $table, $parameter : Object
 		
 		For each ($table; $actions)
 			
@@ -210,7 +210,7 @@ Add the table to the data model
 ====================================*/
 Function addTable
 	
-	var $0; $1 : Object
+	var $0, $1 : Object
 	var $o : Object
 	
 	$o:=This:C1470.getCatalog().query("tableNumber = :1"; $1.tableNumber).pop()
@@ -274,7 +274,7 @@ Function getCatalog
 	End case 
 	
 	//====================================
-Function label
+Function label  // Format labels
 	var $0 : Text
 	var $1 : Text
 	
@@ -324,7 +324,7 @@ Function label
 	End case 
 	
 	//====================================
-Function shortLabel
+Function shortLabel  // Format short labels
 	var $0 : Text
 	var $1 : Text
 	
@@ -335,4 +335,3 @@ Function shortLabel
 		$0:=Substring:C12($0; 1; 10)
 		
 	End if 
-	

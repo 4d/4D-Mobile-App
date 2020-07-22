@@ -9,12 +9,12 @@
 // ----------------------------------------------------
 // Declarations
 var $1 : Object
-var $form;$context;$dataModel;$currentTable : Object
-var $o;$table;$field;$oo : Object
-var $found : Boolean
-var $published : Collection
-var $indx;$l : Integer
+
 var $t : Text
+var $found : Boolean
+var $indx, $l : Integer
+var $context, $currentTable, $dataModel, $field, $form, $o, $oo, $table : Object
+var $published : Collection
 
 // ----------------------------------------------------
 // Initialisations
@@ -25,7 +25,7 @@ If (Count parameters:C259>=1)
 Else 
 	
 	$form:=STRUCTURE_Handler(New object:C1471(\
-		"action";"init"))
+		"action"; "init"))
 	
 End if 
 
@@ -38,7 +38,7 @@ $published:=New collection:C1472
 // ----------------------------------------------------
 
 // GET THE PUBLISHED FIELD NAMES LIST
-ARRAY TO COLLECTION:C1563($published;($form.publishedPtr)->;"published";(ui.pointer($form.fields))->;"name")
+ARRAY TO COLLECTION:C1563($published; ($form.publishedPtr)->; "published"; (ui.pointer($form.fields))->; "name")
 
 If ($published.extract("published").countValues(0)=$published.length)\
  & ($published.extract("published").indexOf(2)=-1)\
@@ -49,8 +49,8 @@ If ($published.extract("published").countValues(0)=$published.length)\
 	project.removeTable($currentTable.tableNumber)
 	
 	// UI - De-emphasize the table name
-	$indx:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
-	LISTBOX SET ROW FONT STYLE:C1268(*;$form.tableList;$indx;Plain:K14:1)
+	$indx:=Find in array:C230((ui.pointer($form.tableList))->; True:C214)
+	LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Plain:K14:1)
 	
 Else 
 	
@@ -62,18 +62,18 @@ Else
 		$table:=project.addTable($currentTable)
 		
 		// UI - Emphasize the table name
-		$indx:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
-		LISTBOX SET ROW FONT STYLE:C1268(*;$form.tableList;$indx;Bold:K14:2)
+		$indx:=Find in array:C230((ui.pointer($form.tableList))->; True:C214)
+		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Bold:K14:2)
 		
 	End if 
 	
 	// For each published field
-	For each ($o;$published)
+	For each ($o; $published)
 		
 		// Find if the field exists in the data model [
 		CLEAR VARIABLE:C89($found)
 		
-		For each ($t;$table) Until ($found)
+		For each ($t; $table) Until ($found)
 			
 			Case of 
 					
@@ -99,9 +99,9 @@ Else
 					// <NOTHING MORE TO DO>
 					
 					//………………………………………………………………………………………………………
-				: (project.isRelationToOne($table[$t]))// N -> 1 relation
+				: (project.isRelationToOne($table[$t]))  // N -> 1 relation
 					
-					$found:=(String:C10($o.name)=$t) & (Num:C11($o.published)#2)// Not mixed
+					$found:=(String:C10($o.name)=$t) & (Num:C11($o.published)#2)  // Not mixed
 					
 					If ($found)
 						
@@ -110,7 +110,7 @@ Else
 					End if 
 					
 					//………………………………………………………………………………………………………
-				: (project.isRelationToMany($table[$t]))// 1 -> N relation
+				: (project.isRelationToMany($table[$t]))  // 1 -> N relation
 					
 					$found:=(String:C10($o.name)=$t)
 					
@@ -139,38 +139,38 @@ Else
 				
 				//_____________________________________________________
 			: (Num:C11($o.published)=1)\
-				 & (Not:C34($found))// ADDED
+				 & (Not:C34($found))  // ADDED
 				
 				Case of 
 						
 						//………………………………………………………………………………………………………
-					: ($l=-1)// N -> 1 relation
+					: ($l=-1)  // N -> 1 relation
 						
 						// 🕛 #MARK_TO_OPTIMIZE
 						
 						// Add all related fields
 						$o:=structure(New object:C1471(\
-							"action";"relatedCatalog";\
-							"table";$table[""].name;\
-							"relatedEntity";$o.name))
+							"action"; "relatedCatalog"; \
+							"table"; $table[""].name; \
+							"relatedEntity"; $o.name))
 						
 						If (Asserted:C1132($o.success))
 							
 							$table[$field.name]:=New object:C1471(\
-								"relatedDataClass";$field.relatedDataClass;\
-								"relatedTableNumber";$o.relatedTableNumber;\
-								"inverseName";$o.inverseName)
+								"relatedDataClass"; $field.relatedDataClass; \
+								"relatedTableNumber"; $o.relatedTableNumber; \
+								"inverseName"; $o.inverseName)
 							
-							For each ($oo;$o.fields)
+							For each ($oo; $o.fields)
 								
 								If ($oo.fieldType>=0)
 									
 									$table[$field.name][String:C10($oo.fieldNumber)]:=New object:C1471(\
-										"name";$oo.name;\
-										"label";formatString("label";$oo.name);\
-										"shortLabel";formatString("label";$oo.name);\
-										"fieldType";$oo.fieldType;\
-										"relatedTableNumber";$o.relatedTableNumber)
+										"name"; $oo.name; \
+										"label"; formatString("label"; $oo.name); \
+										"shortLabel"; formatString("label"; $oo.name); \
+										"fieldType"; $oo.fieldType; \
+										"relatedTableNumber"; $o.relatedTableNumber)
 									
 									// #TEMPO [
 									$table[$field.name][String:C10($oo.fieldNumber)].type:=$oo.type
@@ -181,24 +181,24 @@ Else
 						End if 
 						
 						//………………………………………………………………………………………………………
-					: ($l=-2)// 1 -> N relation
+					: ($l=-2)  // 1 -> N relation
 						
 						$table[$field.name]:=New object:C1471(\
-							"label";formatString("label";str("listOf").localized($field.name));\
-							"shortLabel";formatString("label";$field.name);\
-							"relatedEntities";$field.relatedDataClass;\
-							"relatedTableNumber";$field.relatedTableNumber;\
-							"inverseName";$field.inverseName)
+							"label"; formatString("label"; str("listOf").localized($field.name)); \
+							"shortLabel"; formatString("label"; $field.name); \
+							"relatedEntities"; $field.relatedDataClass; \
+							"relatedTableNumber"; $field.relatedTableNumber; \
+							"inverseName"; $field.inverseName)
 						
 						//………………………………………………………………………………………………………
 					Else 
 						
 						// Add the field to data model
 						$table[String:C10($field.id)]:=New object:C1471(\
-							"name";$field.name;\
-							"label";formatString("label";$field.name);\
-							"shortLabel";formatString("label";$field.name);\
-							"fieldType";$field.fieldType)
+							"name"; $field.name; \
+							"label"; formatString("label"; $field.name); \
+							"shortLabel"; formatString("label"; $field.name); \
+							"fieldType"; $field.fieldType)
 						
 						// #TEMPO [
 						$table[String:C10($field.id)].type:=$field.type
@@ -209,26 +209,26 @@ Else
 				
 				//_____________________________________________________
 			: (Num:C11($o.published)=0)\
-				 & ($found)// REMOVED
+				 & ($found)  // REMOVED
 				
 				Case of 
 						
 						//………………………………………………………………………………………………………
-					: ($l=-1)// N -> 1 relation
+					: ($l=-1)  // N -> 1 relation
 						
 						// Remove all related fields
 						If ($table[$o.name]#Null:C1517)
 							
-							OB REMOVE:C1226($table;$o.name)
+							OB REMOVE:C1226($table; $o.name)
 							
 						End if 
 						
 						//………………………………………………………………………………………………………
-					: ($l=-2)// 1 -> N relation
+					: ($l=-2)  // 1 -> N relation
 						
 						If ($table[$o.name]#Null:C1517)
 							
-							OB REMOVE:C1226($table;$o.name)
+							OB REMOVE:C1226($table; $o.name)
 							
 						End if 
 						
@@ -236,7 +236,7 @@ Else
 					Else 
 						
 						// Remove the field
-						OB REMOVE:C1226($table;String:C10($field.id))
+						OB REMOVE:C1226($table; String:C10($field.id))
 						
 						//………………………………………………………………………………………………………
 				End case 
@@ -256,8 +256,8 @@ Else
 		project.removeTable($currentTable.tableNumber)
 		
 		// UI - De-emphasize the table name
-		$indx:=Find in array:C230((ui.pointer($form.tableList))->;True:C214)
-		LISTBOX SET ROW FONT STYLE:C1268(*;$form.tableList;$indx;Plain:K14:1)
+		$indx:=Find in array:C230((ui.pointer($form.tableList))->; True:C214)
+		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Plain:K14:1)
 		
 	End if 
 End if 
@@ -267,4 +267,4 @@ project.save()
 // Update field list
 structure_FIELD_LIST($form)
 
-$context.setHelpTip($form.fieldList;$form)
+$context.setHelpTip($form.fieldList; $form)
