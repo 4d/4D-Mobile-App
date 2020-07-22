@@ -105,8 +105,8 @@ feature.delivered(112225; 1830)  // Select/install/use custom templates
 /* _____________
 18R4
 _____________*/
-feature.unstable(113016)  // Svg improvement in forms section
-feature.unstable(107526)  // Push Notifications
+feature.delivered(113016)  // Svg improvement in forms section
+feature.delivered(107526)  // Push Notifications
 
 /* _____________
 18R5
