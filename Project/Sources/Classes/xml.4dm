@@ -19,7 +19,7 @@ Function new
 	var ${1} : Text
 	
 	var $t : Text
-	var $i, $l : Integer
+	var $i; $l : Integer
 	
 	$l:=Count parameters:C259
 	
@@ -829,7 +829,7 @@ Function getValue
 	var $0 : Variant
 	var $1 : Text
 	
-	var $tCDATA, $value : Text
+	var $tCDATA; $value : Text
 	
 	This:C1470.success:=(Count parameters:C259>=1)
 	
@@ -899,7 +899,7 @@ Function getAttributes  // Returns a node attributes as object
 	var $0 : Object
 	var $1 : Text
 	
-	var $key, $t, $value : Text
+	var $key; $t; $value : Text
 	var $i : Integer
 	
 	This:C1470.success:=(Count parameters:C259=1)

@@ -90,7 +90,7 @@ Function new  // Create a default SVG structure
 	var $0 : Object
 	var $1 : Object
 	
-	var $node, $t : Text
+	var $node; $t : Text
 	
 	This:C1470.close()  // Release memory
 	
@@ -209,7 +209,7 @@ Function rect
 	var $3 : Variant
 	
 	var $node : Text
-	var $height, $vWidth : Integer
+	var $height; $vWidth : Integer
 	
 	$height:=$1
 	$vWidth:=$1  // Square (default)
@@ -334,7 +334,7 @@ Function dimensions
 	var $2 : Variant
 	var $3 : Text
 	
-	var $node, $t : Text
+	var $node; $t : Text
 	
 	$node:=This:C1470.__target()
 	DOM GET XML ELEMENT NAME:C730($node; $t)
@@ -433,7 +433,7 @@ Function setAttributes
 	var $2 : Variant
 	var $3 : Text
 	
-	var $node, $t : Text
+	var $node; $t : Text
 	var $o : Object
 	var $c : Collection
 	
@@ -600,8 +600,8 @@ Function embedPicture
 	var $1 : Picture
 	var $2 : Variant
 	
-	var $node, $t : Text
-	var $height, $width : Integer
+	var $node; $t : Text
+	var $height; $width : Integer
 	var $x : Blob
 	
 	If (Count parameters:C259>=2)
@@ -655,9 +655,9 @@ Function image
 	var $1 : Object
 	var $2 : Variant
 	
-	var $node, $t : Text
+	var $node; $t : Text
 	var $p : Picture
-	var $height, $width : Integer
+	var $height; $width : Integer
 	
 	If (Count parameters:C259>=2)
 		
@@ -722,7 +722,7 @@ Function textArea
 	var $1 : Text
 	var $2 : Variant
 	
-	var $node, $t, $tt : Text
+	var $node; $t; $tt : Text
 	var $i : Integer
 	
 	If (Count parameters:C259>=2)

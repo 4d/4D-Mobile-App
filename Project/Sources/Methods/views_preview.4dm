@@ -12,13 +12,12 @@ var $0 : Text
 var $1 : Text
 var $2 : Object
 
-var $buffer, $container, $domField, $domTemplate, $domUse, $IN, $new, $node, $OUT, $root : Text
-var $t, $tClass, $tFormName, $tIndex, $tName, $tStyle, $tTypeForm, $tWidgetField : Text
-var $b, $bFirst, $bMultivalued : Boolean
-var $count, $height, $i, $indx, $Lon_y, $Lon_yOffset, $width : Integer
-var $context, $form, $manifest, $o, $oAttributes, $oWidgetManifest, $relation, $svg, $target, $template : Object
+var $buffer; $container; $domField; $domTemplate; $domUse; $IN; $new; $node; $OUT; $root : Text
+var $t; $tClass; $tFormName; $tIndex; $tName; $tStyle; $tTypeForm; $tWidgetField : Text
+var $b; $bFirst; $bMultivalued : Boolean
+var $count; $height; $i; $indx; $Lon_y; $Lon_yOffset; $width : Integer
+var $context; $form; $manifest; $o; $oAttributes; $oWidgetManifest; $relation; $svg; $target; $template : Object
 var $c : Collection
-
 
 // ----------------------------------------------------
 // Initialisations

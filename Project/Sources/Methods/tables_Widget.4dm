@@ -8,22 +8,14 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_PICTURE:C286($0)
-C_OBJECT:C1216($1)
-C_OBJECT:C1216($2)
+var $0 : Picture
+var $1 : Object
+var $2 : Object
 
-C_BLOB:C604($x)
-C_BOOLEAN:C305($bSelected)
-C_PICTURE:C286($p)
-C_TEXT:C284($domTable; $tFormName; $tName; $tTable; $tTypeForm)
-C_OBJECT:C1216($errors; $file; $oDataModel; $oParams; $pathForm; $str)
-C_OBJECT:C1216($svg)
+var $tTypeForm : Text
+var $errors; $oDataModel; $oParams; $str : Object
 
-If (False:C215)
-	C_PICTURE:C286(tables_Widget; $0)
-	C_OBJECT:C1216(tables_Widget; $1)
-	C_OBJECT:C1216(tables_Widget; $2)
-End if 
+var $svg : cs:C1710.svg
 
 // ----------------------------------------------------
 // Initialisations
@@ -62,7 +54,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	$str:=str()
 	
-	var $svg : cs:C1710.svg
 	$svg:=cs:C1710.svg.new()
 	
 Else 
@@ -76,9 +67,14 @@ If ($oDataModel#Null:C1517)
 	
 	$tTypeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(feature.with("newViewUI"); "VIEWS"; "_o_VIEWS")].selector)=2; "detail"; "list")
 	
-/* START HIDING ERRORS */$errors:=err.hide()
+/* START HIDING ERRORS */
+	$errors:=err.hide()
 	
-	var $tFill, $tStroke : Text
+	var $t; $tFill; $tFormName; $tName; $tStroke; $tTable; $tTypeForm : Text
+	var $p : Picture
+	var $bSelected : Boolean
+	var $x : Blob
+	var $file; $oDataModel; $oParams; $pathForm; $str; $svg : Object
 	
 	For each ($tTable; $oDataModel)
 		
@@ -158,7 +154,6 @@ If ($oDataModel#Null:C1517)
 			
 		End if 
 		
-		var $t : Text
 		$t:=$str.setText($tName).truncate($oParams.maxChar)
 		
 		$svg.textArea($t; $tTable)\
@@ -177,7 +172,8 @@ If ($oDataModel#Null:C1517)
 		
 	End for each 
 	
-/* STOP HIDING ERRORS */$errors.show()
+/* STOP HIDING ERRORS */
+	$errors.show()
 	
 End if 
 

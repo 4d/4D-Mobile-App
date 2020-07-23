@@ -8,13 +8,12 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $buffer, $cible, $ObjectName, $t, $tableIdentifier : Text
+var $buffer; $cible; $ObjectName; $t; $tableIdentifier : Text
 var $success : Boolean
-var $fixed, $indx : Integer
+var $fixed; $indx : Integer
 var $x : Blob
-var $current, $droped, $relation, $table, $target : Object
-var $c, $cCurrent, $cDroped : Collection
-
+var $current; $droped; $relation; $table; $target : Object
+var $c; $cCurrent; $cDroped : Collection
 
 // ----------------------------------------------------
 // Initialisations

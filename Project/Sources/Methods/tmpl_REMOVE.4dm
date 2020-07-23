@@ -11,9 +11,9 @@
 // #98105 - Multi-criteria Search
 // ----------------------------------------------------
 // Declarations
-var $Txt_bind, $Txt_field, $Txt_isOfClass : Text
+var $Txt_bind; $Txt_field; $Txt_isOfClass : Text
 var $Lon_indx : Integer
-var $menu, $o, $Obj_target : Object
+var $menu; $o; $Obj_target : Object
 
 ARRAY TEXT:C222($tTxt_results; 0)
 

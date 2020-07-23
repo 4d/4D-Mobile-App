@@ -8,7 +8,7 @@
 // FEATURES pannel management
 // ----------------------------------------------------
 // Declarations
-var $e, $ƒ : Object
+var $e; $ƒ : Object
 
 // ----------------------------------------------------
 // Initialisations

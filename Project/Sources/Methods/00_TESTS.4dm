@@ -1,13 +1,13 @@
 //%attributes = {}
-var $Num_, $r : Real
-var $Dir_root, $node, $pattern, $root, $t, $tt, $Txt_in, $Txt_ormula, $Txt_result : Text
-var $b, $Boo_reset, $ok : Boolean
-var $i, $index, $l, $Lon_build, $Lon_error, $Lon_result, $Lon_type, $Lon_value, $Lon_x : Integer
+var $Num_; $r : Real
+var $Dir_root; $node; $pattern; $root; $t; $tt; $Txt_in; $Txt_ormula; $Txt_result : Text
+var $b; $Boo_reset; $ok : Boolean
+var $i; $index; $l; $Lon_build; $Lon_error; $Lon_result; $Lon_type; $Lon_value; $Lon_x : Integer
 var $Gmt_timeGMT : Time
 var $null : Variant
-var $file, $folder, $o, $o1, $o2, $Obj_formula, $Obj_new, $Obj_result, $Obj_target, $Obj_template : Object
-var $svg, $zip : Object
-var $c, $c1, $Col_2, $cUserdCommands : Collection
+var $file; $folder; $o; $o1; $o2; $Obj_formula; $Obj_new; $Obj_result; $Obj_target; $Obj_template : Object
+var $svg; $zip : Object
+var $c; $c1; $Col_2; $cUserdCommands : Collection
 
 ARRAY TEXT:C222($tTxt_; 0)
 
@@ -927,4 +927,3 @@ Case of
 		
 		//________________________________________
 End case 
-

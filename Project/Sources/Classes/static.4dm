@@ -200,7 +200,7 @@ Function setCoordinates
 Function getCoordinates
 	var $0 : Object
 	
-	var $bottom, $left, $right, $top : Integer
+	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	This:C1470._updateCoordinates($left; $top; $right; $bottom)
@@ -219,7 +219,7 @@ Function bestSize
 	var $2 : Integer
 	var $3 : Integer
 	
-	var $bottom, $height, $left, $right, $top, $width : Integer
+	var $bottom; $height; $left; $right; $top; $width : Integer
 	var $o : Object
 	
 	If (Count parameters:C259>=1)
@@ -328,7 +328,7 @@ Function moveHorizontally
 	var $0 : Object
 	var $1 : Integer
 	
-	var $bottom, $left, $right, $top : Integer
+	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
@@ -350,7 +350,7 @@ Function moveVertically
 	var $0 : Object
 	var $1 : Integer
 	
-	var $bottom, $left, $right, $top : Integer
+	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
@@ -372,7 +372,7 @@ Function resizeHorizontally
 	var $0 : Object
 	var $1 : Integer
 	
-	var $bottom, $left, $right, $top : Integer
+	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
@@ -393,7 +393,7 @@ Function resizeVertically
 	var $0 : Object
 	var $1 : Integer
 	
-	var $bottom, $left, $right, $top : Integer
+	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
@@ -439,7 +439,7 @@ Function _updateCoordinates
 	var $3 : Integer
 	var $4 : Integer
 	
-	var $bottom, $left, $right, $top : Integer
+	var $bottom; $left; $right; $top : Integer
 	
 	If (Count parameters:C259>=4)
 		

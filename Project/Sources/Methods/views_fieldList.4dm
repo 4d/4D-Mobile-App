@@ -12,8 +12,8 @@ var $0 : Object
 var $1 : Text
 var $2 : Object
 
-var $fieldIdentifier, $key, $tableIdentifier : Text
-var $o, $out, $table : Object
+var $fieldIdentifier; $key; $tableIdentifier : Text
+var $o; $out; $table : Object
 
 // ----------------------------------------------------
 // Initialisations

@@ -11,7 +11,7 @@
 var $0 : Integer
 
 var $t : Text
-var $background, $droppable, $highlight, $vInsertion : Boolean
+var $background; $droppable; $highlight; $vInsertion : Boolean
 var $x : Blob
 var $o : Object
 var $c : Collection
@@ -130,7 +130,7 @@ If (Length:C16(This:C1470.$.current)>0)
 						
 						$0:=0
 						
-						//End if 
+						//End if
 						
 					Else 
 						

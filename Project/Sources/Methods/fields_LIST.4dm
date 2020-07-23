@@ -11,8 +11,9 @@
 var $0 : Object
 var $1 : Text
 
-var $fieldIdentifier, $key, $t, $tableIdentifier : Text
-var $field, $out, $str, $table : Object
+var $fieldIdentifier; $key; $t; $tableIdentifier : Text
+var $field; $out; $str; $table : Object
+
 var $formatters : cs:C1710.path
 
 If (False:C215)

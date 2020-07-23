@@ -92,7 +92,7 @@ If (Asserted:C1132($Obj_in.project#Null:C1517))
 End if 
 
 // Cleanup
-var $t, $tt : Text
+var $t; $tt : Text
 
 For each ($t; $Obj_project)
 	

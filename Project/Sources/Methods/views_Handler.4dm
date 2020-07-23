@@ -11,10 +11,10 @@
 var $0 : Object
 var $1 : Object
 
-var $currentForm, $formName, $selector, $t, $tableIdentifier, $typeForm : Text
+var $currentForm; $formName; $selector; $t; $tableIdentifier; $typeForm : Text
 var $update : Boolean
-var $codeEvent, $i, $l, $offset : Integer
-var $context, $datamodel, $form, $IN, $manifest, $o, $o1, $OUT, $target, $template : Object
+var $codeEvent; $i; $l; $offset : Integer
+var $context; $datamodel; $form; $IN; $manifest; $o; $o1; $OUT; $target; $template : Object
 var $c : Collection
 
 // ----------------------------------------------------

@@ -72,9 +72,9 @@ Class constructor
 Function load  // Load and update the template if any
 	var $0 : Object
 	
-	var $dom, $node, $root, $t : Text
+	var $dom; $node; $root; $t : Text
 	var $succes : Boolean
-	var $count, $i : Integer
+	var $count; $i : Integer
 	var $o : Object
 	var $c : Collection
 	
@@ -368,7 +368,7 @@ Function path  // Return the path of the file/folder
 	
 	var $t : Text
 	var $success : Boolean
-	var $archive, $error, $fileManifest, $o, $path : Object
+	var $archive; $error; $fileManifest; $o; $path : Object
 	
 	$t:=This:C1470.name
 	

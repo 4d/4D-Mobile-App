@@ -12,8 +12,8 @@ var $1 : Object
 
 var $t : Text
 var $found : Boolean
-var $indx, $l : Integer
-var $context, $currentTable, $dataModel, $field, $form, $o, $oo, $table : Object
+var $indx; $l : Integer
+var $context; $currentTable; $dataModel; $field; $form; $o; $oo; $table : Object
 var $published : Collection
 
 // ----------------------------------------------------

@@ -10,21 +10,20 @@ Class constructor
 	This:C1470.simulatorTimeout:=SHARED.simulatorTimeout
 	
 Function testSuite
+	var $0 : Object
 	
-	var $0, lastError : Object
+	var $t : Text
+	var $o : Object
 	
 	$0:=New object:C1471(\
 		"errors"; Formula:C1597(lastError); \
 		"tests"; New collection:C1472)
 	
-	var $o : Object
 	$o:=New signal:C1641
 	
 	CALL WORKER:C1389(1; "unitTestSuites"; $o)
 	
 	If ($o.wait(10))
-		
-		var $t : Text
 		
 		For each ($t; $o.result)
 			
@@ -42,29 +41,27 @@ Function testSuite
 	
 	//______________________________________________________
 Function _parameters
-	
 	var $0 : Boolean
-	var $1, $2 : Integer
+	var $1 : Integer
+	var $2 : Integer
 	
-	$0:=$2>$2
+	$0:=$2>$1
 	
 	//______________________________________________________
 Function featuresFlags
-	
 	var $0 : Object
+	
 	$0:=feature
 	
 	//______________________________________________________
 Function featuresFlag
-	
 	var $0 : Boolean
-	var $1
+	var $1 : Variant
 	
 	$0:=feature.with($1)
 	
 	//______________________________________________________
 Function loadProject
-	
 	var $0 : Boolean
 	var $1 : Object
 	
@@ -80,38 +77,42 @@ Function loadProject
 	
 	//______________________________________________________
 Function checkRest
-	
 	var $0 : Object
+	
 	$0:=env_Database_setting("rest")
 	
 	//______________________________________________________
 Function checkInstall
-	
 	var $0 : Object
+	
 	$0:=Xcode_CheckInstall
 	
 	//______________________________________________________
 Function rest
+	var $0 : Object
+	var $1 : Object
 	
-	var $0, $1 : Object
 	$0:=Rest($1)
 	
 	//______________________________________________________
 Function structure
+	var $0 : Object
+	var $1 : Object
 	
-	var $0, $1 : Object
 	$0:=structure($1)
 	
 	//______________________________________________________
 Function dump
+	var $0 : Object
+	var $1 : Object
 	
-	var $0, $1 : Object
 	$0:=dump($1)
 	
 	//______________________________________________________
 Function pathname
+	var $0 : Object
+	var $1 : Object
 	
-	var $0, $1 : Object
 	$0:=New object:C1471(\
 		"success"; True:C214; \
 		"value"; COMPONENT_Pathname($1.target).platformPath)

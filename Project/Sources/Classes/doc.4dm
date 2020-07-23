@@ -1,10 +1,12 @@
 Class constructor
+	var $1 : Variant
+	var $2 : Variant
+	
+	var $t : Text
 	
 	This:C1470.platformPath:=""
 	This:C1470.path:=""
 	This:C1470.relativePath:=""
-	
-	var $1, $2
 	
 	If (Asserted:C1132(Count parameters:C259>0; Current method name:C684+": Missing parameter"))
 		
@@ -55,7 +57,6 @@ Class constructor
 					
 				Else   // POSIX
 					
-					var $t : Text
 					$t:=Replace string:C233($1; This:C1470.reference.path; ""; 1)
 					
 					If (Length:C16($t)#Length:C16($1))
@@ -154,8 +155,8 @@ Function setReference
 	
 /*======================================================================*/
 Function setTarget
-	
-	var $1, $2
+	var $1 : Variant
+	var $2 : Variant
 	
 	If (Count parameters:C259>=2)
 		
@@ -216,6 +217,4 @@ Function setTarget
 		ASSERT:C1129(False:C215; Current method name:C684+"setTarget(): Missing File/folder parameter")
 		
 	End if 
-	
-	
 	

@@ -5,13 +5,12 @@ Class constructor
 	
 	//====================================
 Function get
-	
 	var $0 : Object
-	var $project : Object
-	$project:=OB Copy:C1225(This:C1470.project)
 	
-	var $t, $tt : Text
-	var $o : Object
+	var $t; $tt : Text
+	var $o; $project : Object
+	
+	$project:=OB Copy:C1225(This:C1470.project)
 	
 	For each ($t; $project)
 		
@@ -86,17 +85,15 @@ Function save
 	
 	//====================================
 Function updateActions
-	
+	var $indx : Integer
+	var $dataModel; $parameter; $table : Object
 	var $actions : Collection
+	
 	$actions:=This:C1470.project.actions
 	
 	If ($actions#Null:C1517)
 		
-		var $dataModel : Object
 		$dataModel:=This:C1470.project.dataModel
-		
-		var $indx : Integer
-		var $table, $parameter : Object
 		
 		For each ($table; $actions)
 			
@@ -209,8 +206,9 @@ Function isRelationToMany
 Add the table to the data model
 ====================================*/
 Function addTable
+	var $0 : Object
+	var $1 : Object
 	
-	var $0, $1 : Object
 	var $o : Object
 	
 	$o:=This:C1470.getCatalog().query("tableNumber = :1"; $1.tableNumber).pop()

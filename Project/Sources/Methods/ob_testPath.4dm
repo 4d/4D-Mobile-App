@@ -13,28 +13,16 @@ var $0 : Boolean
 var $1 : Object
 var ${2} : Text
 
-var $i, $param : Integer
+var $i; $param : Integer
 var $schemPtr : Pointer
-var $o, $Obj_in, $schem, $sub : Object
+var $o; $schem; $sub : Object
 
 If (False:C215)
 End if 
 
 // ----------------------------------------------------
 // Initialisations
-$param:=Count parameters:C259
-
-If (Asserted:C1132($param>=2; "Missing parameter"))
-	
-	// Required parameters
-	$Obj_in:=$1
-	
-	// Optional parameters
-	If ($param>=3)
-		
-		// <NONE>
-		
-	End if 
+If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
 	
 	$o:=New object:C1471
 	$schem:=$o

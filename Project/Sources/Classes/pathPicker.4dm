@@ -272,8 +272,8 @@ Function __select
 	
 	//===================================================
 Function __displayMenu
-	var $menu, $sep, $t : Text
-	var $bottom, $left, $right, $top : Integer
+	var $menu; $sep; $t : Text
+	var $bottom; $left; $right; $top : Integer
 	var $c : Collection
 	
 	
@@ -501,13 +501,12 @@ Function __resume
 	
 	//===================================================
 Function __geometry
+	var $bottom; $l; $left; $formWidth; $offset; $right; $top; $containerWidth : Integer
 	
-	var $bottom, $l, $left, $Lon_width, $offset, $right, $top, $width : Integer
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($containerWidth; $l)
+	FORM GET PROPERTIES:C674(Current form name:C1298; $formWidth; $l)
 	
-	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $l)
-	FORM GET PROPERTIES:C674(Current form name:C1298; $Lon_width; $l)
-	
-	$offset:=$width-$Lon_width-8
+	$offset:=$containerWidth-$formWidth-8
 	OBJECT GET COORDINATES:C663(*; "browse"; $left; $top; $right; $bottom)
 	OBJECT SET COORDINATES:C1248(*; "browse"; $left+$offset; $top; $right+$offset; $bottom)
 	
@@ -523,8 +522,7 @@ Function __geometry
 	
 	//===================================================
 Function __ui
-	
-	var $bottom, $l, $left, $right, $top : Integer
+	var $bottom; $l; $left; $right; $top : Integer
 	
 	If (This:C1470.browse)
 		
