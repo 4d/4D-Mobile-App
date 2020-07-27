@@ -248,10 +248,17 @@ Case of
 										"value"; String:C10($o.primaryKey))
 									
 									If (Length:C16(String:C10($o.primaryKey))>0)
+										
 										C_TEXT:C284($Dom_fetchIndex; $Dom_fetchIndexElement)
 										$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; "byPrimaryKey")
 										$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
 											"property"; formatString("field-name"; String:C10($o.primaryKey)); "type"; "binary"; "order"; "ascending")
+										
+										C_TEXT:C284($Dom_uniquenessConstraints; $Dom_uniquenessConstraint; $Dom_constraint)
+										$Dom_uniquenessConstraints:=DOM Create XML element:C865($Dom_entity; "uniquenessConstraints")
+										$Dom_uniquenessConstraint:=DOM Create XML element:C865($Dom_uniquenessConstraints; "uniquenessConstraint")
+										$Dom_constraint:=DOM Create XML element:C865($Dom_uniquenessConstraints; "constraint"; "value"; formatString("field-name"; String:C10($o.primaryKey)))
+										
 									End if 
 									
 								End if 
