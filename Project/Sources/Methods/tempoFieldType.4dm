@@ -5,11 +5,11 @@ C_LONGINT:C283($1)
 C_COLLECTION:C1488($Col_types)
 
 If (False:C215)
-	C_LONGINT:C283(tempoFiledType ;$0)
-	C_LONGINT:C283(tempoFiledType ;$1)
+	C_LONGINT:C283(tempoFieldType; $0)
+	C_LONGINT:C283(tempoFieldType; $1)
 End if 
 
-  // #TEMPORARY REMAPPING FOR THE FIELD TYPE
+// #TEMPORARY REMAPPING FOR THE FIELD TYPE
 $Col_types:=New collection:C1472
 $Col_types[0]:=10  // text
 $Col_types[Is boolean:K8:9]:=1

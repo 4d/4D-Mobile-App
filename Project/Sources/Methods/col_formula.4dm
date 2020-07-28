@@ -11,16 +11,30 @@
 var $1 : Object
 var $2 : Variant
 
+If (False:C215)
+	C_OBJECT:C1216(col_formula; $1)
+	C_VARIANT:C1683(col_formula; $2)
+End if 
+
 // ----------------------------------------------------
 
-If (Value type:C1509($2)=Is text:K8:3)
-	
-	EXECUTE FORMULA:C63($2)
-	
-Else 
-	
-	ASSERT:C1129(OB Instance of:C1731($2; 4D:C1709.Function))
-	
-	$2.call(Null:C1517; $1)
-	
-End if 
+Case of 
+		
+		//______________________________________________________
+	: (Value type:C1509($2)=Is text:K8:3)
+		
+		EXECUTE FORMULA:C63($2)
+		
+		//______________________________________________________
+	: (Value type:C1509($2)=Is object:K8:27)
+		
+		ASSERT:C1129(OB Instance of:C1731($2; 4D:C1709.Function))
+		
+		$2.call(Null:C1517; $1)
+		
+		//______________________________________________________
+	Else 
+		
+		// A "Case of" statement should never omit "Else"
+		//______________________________________________________
+End case 

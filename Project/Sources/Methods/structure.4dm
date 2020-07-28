@@ -8,38 +8,28 @@
 // Get database structure informations
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_BOOLEAN:C305($Boo_find; $Boo_oneTable)
-C_LONGINT:C283($l; $Lon_indx; $Lon_parameters; $Lon_tableNumber)
-C_TEXT:C284($Dom_root; $t; $Txt_field; $Txt_onErrCall; $Txt_table; $Txt_xml)
-C_OBJECT:C1216($errors; $o; $Obj_buffer; $Obj_catalog; $Obj_field; $Obj_in)
-C_OBJECT:C1216($Obj_out; $Obj_relatedDataClass; $Obj_table; $Obj_types)
-C_COLLECTION:C1488($c; $Col_catalog; $Col_fields; $Col_filtered; $Col_types)
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(structure; $0)
 	C_OBJECT:C1216(structure; $1)
 End if 
 
+var $fieldID; $onErrCall; $root; $t; $tableID; $xml : Text
+var $found; $oneTable : Boolean
+var $indx; $l; $tableNumber : Integer
+var $datastore; $errors; $field; $IN; $o; $Obj_buffer; $OUT; $relatedDataClass; $table : Object
+var $c; $catalog; $fields; $filtered : Collection
+
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
-	$Obj_in:=$1
+	$IN:=$1
 	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
-	
-	$Obj_out:=New object:C1471(\
+	$OUT:=New object:C1471(\
 		"success"; False:C215)
 	
 	If (SHARED=Null:C1517)  // FIXME #105596
@@ -48,6 +38,7 @@ If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 			RECORD.warning("SHARED=Null")
 			RECORD.trace()
 		End if 
+		
 		COMPONENT_INIT
 		
 	End if 
@@ -62,12 +53,12 @@ End if
 Case of 
 		
 		//______________________________________________________
-	: ($Obj_in.action=Null:C1517)
+	: ($IN.action=Null:C1517)
 		
 		ASSERT:C1129(False:C215)
 		
 		//______________________________________________________
-	: ($Obj_in.action="catalog")  // Return the exposed datastore
+	: ($IN.action="catalog")  // Return the exposed datastore
 		
 		// -------------------------------------------------------------------------------------------
 		// If 'name' or 'tableNumber is not null, the result is limited to the corresponding table
@@ -82,65 +73,65 @@ Case of
 		// ! A relation N -> 1 is not referenced if the field isn't exposed with 4D Mobile services !
 		// -------------------------------------------------------------------------------------------
 		
-		$Obj_catalog:=_4D_Build Exposed Datastore:C1598
+		$datastore:=_4D_Build Exposed Datastore:C1598
 		
-		$Obj_out.success:=($Obj_catalog#Null:C1517)
+		$OUT.success:=($datastore#Null:C1517)
 		
-		If ($Obj_out.success)
+		If ($OUT.success)
 			
-			$Obj_out.value:=New collection:C1472
+			$OUT.value:=New collection:C1472
 			
-			$Boo_oneTable:=($Obj_in.name#Null:C1517) | ($Obj_in.tableNumber#Null:C1517)
+			$oneTable:=($IN.name#Null:C1517) | ($IN.tableNumber#Null:C1517)
 			
-			For each ($Txt_table; $Obj_catalog) Until ($Boo_find)
+			For each ($tableID; $datastore) Until ($found)
 				
-				$Obj_table:=$Obj_catalog[$Txt_table].getInfo()
+				$table:=$datastore[$tableID].getInfo()
 				
-				If ($Txt_table#SHARED.deletedRecordsTable.name)
+				If ($tableID#SHARED.deletedRecordsTable.name)
 					
-					If ($Boo_oneTable)
+					If ($oneTable)
 						
 						Case of 
 								
 								//______________________________________________________
-							: ($Obj_in.name#Null:C1517)
+							: ($IN.name#Null:C1517)
 								
-								$Boo_find:=($Txt_table=$Obj_in.name)
+								$found:=($tableID=$IN.name)
 								
 								//______________________________________________________
-							: ($Obj_in.tableNumber#Null:C1517)
+							: ($IN.tableNumber#Null:C1517)
 								
-								$Boo_find:=($Obj_table.tableNumber=$Obj_in.tableNumber)
+								$found:=($table.tableNumber=$IN.tableNumber)
 								
 								//______________________________________________________
 						End case 
 					End if 
 					
-					If ($Boo_oneTable)
+					If ($oneTable)
 						
-						$Obj_out.success:=$Boo_find
+						$OUT.success:=$found
 						
 					End if 
 					
-					If ($Obj_out.success)
+					If ($OUT.success)
 						
-						If (Not:C34($Boo_oneTable)) | $Boo_find
+						If (Not:C34($oneTable)) | $found
 							
-							$Obj_out.value.push($Obj_table)
+							$OUT.value.push($table)
 							
-							$Obj_table.field:=New collection:C1472
+							$table.field:=New collection:C1472
 							
-							For each ($Txt_field; $Obj_catalog[$Txt_table])
+							For each ($fieldID; $datastore[$tableID])
 								
-								If ($Txt_field#SHARED.stampField.name)
+								If ($fieldID#SHARED.stampField.name)
 									
-									$Obj_field:=$Obj_catalog[$Txt_table][$Txt_field]
+									$field:=$datastore[$tableID][$fieldID]
 									
-									$l:=$Obj_table.field.extract("name").indexOf($Txt_field)
+									$l:=$table.field.extract("name").indexOf($fieldID)
 									
 									If ($l>=0)
 										
-										If (Not:C34(str_equal($Txt_field; $Obj_table.field.extract("name")[$l])))
+										If (Not:C34(str_equal($fieldID; $table.field.extract("name")[$l])))
 											
 											$l:=-1
 											
@@ -153,59 +144,59 @@ Case of
 										: ($l#-1)
 											
 											// NOT ALLOW DUPLICATE NAMES !
-											err_PUSH($Obj_out; "Name conflict for \""+$Txt_field+"\""; Warning message:K38:2)
+											err_PUSH($OUT; "Name conflict for \""+$fieldID+"\""; Warning message:K38:2)
 											
 											//…………………………………………………………………………………………………
-										: (Position:C15("."; $Txt_field)>0)
+										: (Position:C15("."; $fieldID)>0)
 											
 											// NOT ALLOW FIELD OR RELATION NAME WITH DOT !
 											
 											//…………………………………………………………………………………………………
-										: ($Obj_field.kind="storage")
+										: ($field.kind="storage")
 											
 											// storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
 											
-											If ($Obj_field.fieldType#Is object:K8:27)\
-												 & ($Obj_field.fieldType#Is BLOB:K8:12)\
-												 & ($Obj_field.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
+											If ($field.fieldType#Is object:K8:27)\
+												 & ($field.fieldType#Is BLOB:K8:12)\
+												 & ($field.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
 												
 												// #TEMPO [
-												$Obj_field.id:=$Obj_field.fieldNumber
-												$Obj_field.valueType:=$Obj_field.type
-												$Obj_field.type:=tempoFiledType($Obj_field.fieldType)
+												$field.id:=$field.fieldNumber
+												$field.valueType:=$field.type
+												$field.type:=tempoFieldType($field.fieldType)
 												//]
 												
-												$Obj_table.field.push($Obj_field)
+												$table.field.push($field)
 												
 											End if 
 											
 											//…………………………………………………………………………………………………
-										: ($Obj_field.kind="relatedEntity")
+										: ($field.kind="relatedEntity")
 											
 											// N -> 1 relation attribute (reference to an entity)
 											
-											If ($Obj_catalog[$Obj_field.relatedDataClass]#Null:C1517)
+											If ($datastore[$field.relatedDataClass]#Null:C1517)
 												
-												$Obj_table.field.push(New object:C1471(\
-													"name"; $Txt_field; \
-													"inverseName"; $Obj_field.inverseName; \
+												$table.field.push(New object:C1471(\
+													"name"; $fieldID; \
+													"inverseName"; $field.inverseName; \
 													"type"; -1; \
-													"relatedDataClass"; $Obj_field.relatedDataClass; \
-													"relatedTableNumber"; $Obj_catalog[$Obj_field.relatedDataClass].getInfo().tableNumber))
+													"relatedDataClass"; $field.relatedDataClass; \
+													"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber))
 												
 											End if 
 											
 											//…………………………………………………………………………………………………
-										: ($Obj_field.kind="relatedEntities")
+										: ($field.kind="relatedEntities")
 											
 											// 1 -> N relation attribute (reference to an entity selection)
 											
-											$Obj_table.field.push(New object:C1471(\
-												"name"; $Txt_field; \
-												"inverseName"; $Obj_field.inverseName; \
+											$table.field.push(New object:C1471(\
+												"name"; $fieldID; \
+												"inverseName"; $field.inverseName; \
 												"type"; -2; \
-												"relatedDataClass"; $Obj_field.relatedDataClass; \
-												"relatedTableNumber"; $Obj_catalog[$Obj_field.relatedDataClass].getInfo().tableNumber))
+												"relatedDataClass"; $field.relatedDataClass; \
+												"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber))
 											
 											//…………………………………………………………………………………………………
 									End case 
@@ -217,9 +208,9 @@ Case of
 								End if 
 							End for each 
 							
-							If (Bool:C1537($Obj_in.sorted))
+							If (Bool:C1537($IN.sorted))
 								
-								$Obj_table.field:=$Obj_table.field.orderBy("name asc")
+								$table.field:=$table.field.orderBy("name asc")
 								
 							End if 
 						End if 
@@ -232,207 +223,207 @@ Case of
 				End if 
 			End for each 
 			
-			If ($Obj_out.success)
+			If ($OUT.success)
 				
-				If (Bool:C1537($Obj_in.sorted))
+				If (Bool:C1537($IN.sorted))
 					
-					$Obj_out.value:=$Obj_out.value.orderBy("name asc")
+					$OUT.value:=$OUT.value.orderBy("name asc")
 					
 				End if 
 				
 			Else 
 				
-				OB REMOVE:C1226($Obj_out; "value")
+				OB REMOVE:C1226($OUT; "value")
 				
-				If ($Boo_oneTable)
+				If ($oneTable)
 					
-					err_PUSH($Obj_out; "Table not found: "+Choose:C955($Obj_in.name#Null:C1517; $Obj_in.name; "#"+String:C10($Obj_in.tableNumber)))
+					err_PUSH($OUT; "Table not found: "+Choose:C955($IN.name#Null:C1517; $IN.name; "#"+String:C10($IN.tableNumber)))
 					
 				End if 
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="fieldDefinition")  // Returns the field definition from the starting table number and its path
+	: ($IN.action="fieldDefinition")  // Returns the field definition from the starting table number and its path
 		
-		ASSERT:C1129(($Obj_in.tableNumber#Null:C1517) | ($Obj_in.tableNamer#Null:C1517))
-		ASSERT:C1129(($Obj_in.path#Null:C1517) | ($Obj_in.fieldNumber#Null:C1517))
+		ASSERT:C1129(($IN.tableNumber#Null:C1517) | ($IN.tableNamer#Null:C1517))
+		ASSERT:C1129(($IN.path#Null:C1517) | ($IN.fieldNumber#Null:C1517))
 		
-		If ($Obj_in.catalog=Null:C1517)
+		If ($IN.catalog=Null:C1517)
 			
 			// Get the catalog
-			$Col_catalog:=structure(New object:C1471(\
+			$catalog:=structure(New object:C1471(\
 				"action"; "catalog")).value
 			
 		Else 
 			
-			$Col_catalog:=$Obj_in.catalog
+			$catalog:=$IN.catalog
 			
 		End if 
 		
-		$Lon_tableNumber:=$Obj_in.tableNumber
+		$tableNumber:=$IN.tableNumber
 		
-		$c:=Split string:C1554($Obj_in.path; ".")
+		$c:=Split string:C1554($IN.path; ".")
 		
 		If ($c.length=1)
 			
-			$Lon_indx:=$Col_catalog.extract("tableNumber").indexOf($Lon_tableNumber)
+			$indx:=$catalog.extract("tableNumber").indexOf($tableNumber)
 			
-			If ($Lon_indx#-1)
+			If ($indx#-1)
 				
-				$Col_fields:=$Col_catalog[$Lon_indx].field
+				$fields:=$catalog[$indx].field
 				
-				$Lon_indx:=$Col_fields.extract("name").indexOf($c[0])
+				$indx:=$fields.extract("name").indexOf($c[0])
 				
-				If ($Lon_indx#-1)
+				If ($indx#-1)
 					
-					$Obj_out.success:=True:C214
+					$OUT.success:=True:C214
 					
-					$Obj_field:=$Col_fields[$Lon_indx]
+					$field:=$fields[$indx]
 					
-					$Obj_out.path:=$Obj_in.path
-					$Obj_out.tableNumber:=$Lon_tableNumber
-					$Obj_out.tableName:=Table name:C256($Lon_tableNumber)
+					$OUT.path:=$IN.path
+					$OUT.tableNumber:=$tableNumber
+					$OUT.tableName:=Table name:C256($tableNumber)
 					
-					If ($Obj_field.type=-2)  //1 to N relation
+					If ($field.type=-2)  //1 to N relation
 						
-						$Obj_out.fieldType:=8859
-						$Obj_out.type:=-2
-						$Obj_out.relatedDataClass:=$Obj_field.relatedDataClass
-						$Obj_out.relatedTableNumber:=$Obj_field.relatedTableNumber
+						$OUT.fieldType:=8859
+						$OUT.type:=-2
+						$OUT.relatedDataClass:=$field.relatedDataClass
+						$OUT.relatedTableNumber:=$field.relatedTableNumber
 						
 					Else 
 						
-						$Obj_out.fieldNumber:=$Obj_field.fieldNumber
-						$Obj_out.fieldType:=$Obj_field.fieldType
-						$Obj_out.name:=Field name:C257($Lon_tableNumber; $Obj_field.fieldNumber)
-						$Obj_out.type:=tempoFiledType($Obj_field.fieldType)
+						$OUT.fieldNumber:=$field.fieldNumber
+						$OUT.fieldType:=$field.fieldType
+						$OUT.name:=Field name:C257($tableNumber; $field.fieldNumber)
+						$OUT.type:=tempoFieldType($field.fieldType)
 						
 					End if 
 					
 				Else 
 					
-					err_PUSH($Obj_out; "Field not found")
+					err_PUSH($OUT; "Field not found")
 					
 				End if 
 				
 			Else 
 				
-				err_PUSH($Obj_out; "Table not found #"+String:C10($Lon_tableNumber))
+				err_PUSH($OUT; "Table not found #"+String:C10($tableNumber))
 				
 			End if 
 			
 		Else 
 			
-			$Lon_indx:=$Col_catalog.extract("tableNumber").indexOf($Lon_tableNumber)
+			$indx:=$catalog.extract("tableNumber").indexOf($tableNumber)
 			
-			If ($Lon_indx#-1)
+			If ($indx#-1)
 				
-				$Col_fields:=$Col_catalog[$Lon_indx].field
+				$fields:=$catalog[$indx].field
 				
-				$Lon_indx:=$Col_fields.extract("name").indexOf($c[0])
+				$indx:=$fields.extract("name").indexOf($c[0])
 				
-				If ($Lon_indx#-1)
+				If ($indx#-1)
 					
-					$Lon_tableNumber:=$Col_fields[$Lon_indx].relatedTableNumber
+					$tableNumber:=$fields[$indx].relatedTableNumber
 					
 					If ($c.length>2)
 						
-						$Obj_field:=structure(New object:C1471(\
+						$field:=structure(New object:C1471(\
 							"action"; "fieldDefinition"; \
 							"path"; $c.copy().remove(0).join("."); \
-							"tableNumber"; $Lon_tableNumber; \
-							"catalog"; $Col_catalog))
+							"tableNumber"; $tableNumber; \
+							"catalog"; $catalog))
 						
-						$Obj_out:=$Obj_field
+						$OUT:=$field
 						
-						$Obj_out.path:=$Obj_in.path
+						$OUT.path:=$IN.path
 						
 					Else 
 						
-						$Lon_indx:=$Col_catalog.extract("tableNumber").indexOf($Lon_tableNumber)
+						$indx:=$catalog.extract("tableNumber").indexOf($tableNumber)
 						
-						If ($Lon_indx#-1)
+						If ($indx#-1)
 							
-							$Col_fields:=$Col_catalog[$Lon_indx].field
+							$fields:=$catalog[$indx].field
 							
-							$Lon_indx:=$Col_fields.extract("name").indexOf($c[1])
+							$indx:=$fields.extract("name").indexOf($c[1])
 							
-							If ($Lon_indx#-1)
+							If ($indx#-1)
 								
-								$Obj_out.success:=True:C214
-								$Obj_field:=$Col_fields[$Lon_indx]
+								$OUT.success:=True:C214
+								$field:=$fields[$indx]
 								
-								$Obj_out.path:=$Obj_in.path
-								$Obj_out.tableName:=Table name:C256($Lon_tableNumber)
-								$Obj_out.tableNumber:=$Lon_tableNumber
-								$Obj_out.fieldNumber:=$Obj_field.fieldNumber
-								$Obj_out.name:=Field name:C257($Lon_tableNumber; $Obj_field.fieldNumber)
-								$Obj_out.fieldType:=$Obj_field.fieldType
+								$OUT.path:=$IN.path
+								$OUT.tableName:=Table name:C256($tableNumber)
+								$OUT.tableNumber:=$tableNumber
+								$OUT.fieldNumber:=$field.fieldNumber
+								$OUT.name:=Field name:C257($tableNumber; $field.fieldNumber)
+								$OUT.fieldType:=$field.fieldType
 								
 								// #TEMPO [
-								$Obj_out.valueType:=$Obj_field.type
-								$Obj_out.type:=tempoFiledType($Obj_field.fieldType)
+								$OUT.valueType:=$field.type
+								$OUT.type:=tempoFieldType($field.fieldType)
 								//]
 								
 							Else 
 								
-								err_PUSH($Obj_out; "Related field not found")
+								err_PUSH($OUT; "Related field not found")
 								
 							End if 
 							
 						Else 
 							
-							err_PUSH($Obj_out; "Related table not found")
+							err_PUSH($OUT; "Related table not found")
 							
 						End if 
 					End if 
 					
 				Else 
 					
-					err_PUSH($Obj_out; "Field not found")
+					err_PUSH($OUT; "Field not found")
 					
 				End if 
 				
 			Else 
 				
-				err_PUSH($Obj_out; "Table not found")
+				err_PUSH($OUT; "Table not found")
 				
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="relatedCatalog")  // Return related entity catalog
+	: ($IN.action="relatedCatalog")  // Return related entity catalog
 		
-		ASSERT:C1129($Obj_in.table#Null:C1517)
-		ASSERT:C1129($Obj_in.relatedEntity#Null:C1517)
+		ASSERT:C1129($IN.table#Null:C1517)
+		ASSERT:C1129($IN.relatedEntity#Null:C1517)
 		
-		$Obj_catalog:=_4D_Build Exposed Datastore:C1598
+		$datastore:=_4D_Build Exposed Datastore:C1598
 		
-		$Obj_field:=$Obj_catalog[$Obj_in.table][$Obj_in.relatedEntity]
+		$field:=$datastore[$IN.table][$IN.relatedEntity]
 		
 		Case of 
 				
 				//…………………………………………………………………………………………………
-			: ($Obj_field=Null:C1517)
+			: ($field=Null:C1517)
 				
 				// <NOTHING MORE TO DO>
 				
 				//…………………………………………………………………………………………………
-			: ($Obj_field.kind="relatedEntity")  // N -> 1 relation
+			: ($field.kind="relatedEntity")  // N -> 1 relation
 				
-				$Obj_out.success:=True:C214
-				$Obj_out.fields:=New collection:C1472
-				$Obj_out.relatedEntity:=$Obj_field.name
-				$Obj_out.relatedTableNumber:=$Obj_catalog[$Obj_field.relatedDataClass].getInfo().tableNumber
-				$Obj_out.relatedDataClass:=$Obj_field.relatedDataClass
-				$Obj_out.inverseName:=$Obj_field.inverseName
+				$OUT.success:=True:C214
+				$OUT.fields:=New collection:C1472
+				$OUT.relatedEntity:=$field.name
+				$OUT.relatedTableNumber:=$datastore[$field.relatedDataClass].getInfo().tableNumber
+				$OUT.relatedDataClass:=$field.relatedDataClass
+				$OUT.inverseName:=$field.inverseName
 				
-				$Obj_relatedDataClass:=$Obj_catalog[$Obj_field.relatedDataClass]
+				$relatedDataClass:=$datastore[$field.relatedDataClass]
 				
-				For each ($Txt_field; $Obj_relatedDataClass)
+				For each ($fieldID; $relatedDataClass)
 					
-					$o:=$Obj_relatedDataClass[$Txt_field]
+					$o:=$relatedDataClass[$fieldID]
 					
 					Case of 
 							
@@ -451,18 +442,36 @@ Case of
 								//$o.id:=$o.fieldNumber
 								$o.valueType:=$o.type
 								
-								$o.type:=tempoFiledType($o.fieldType)
+								$o.type:=tempoFieldType($o.fieldType)
 								
-								$o.relatedTableNumber:=$Obj_out.relatedTableNumber
+								$o.relatedTableNumber:=$OUT.relatedTableNumber
 								
-								$Obj_out.fields.push($o)
+								$OUT.fields.push($o)
 								
 							End if 
 							
 							//___________________________________________
 						: ($o.kind="relatedEntity")
 							
-							// <NOT YET  MANAGED>
+							If (feature.with("moreRelations"))
+								
+								//var $relatedField; $related : Object
+								//For each ($relatedField; Form.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
+								
+								//If (project.isStorage($relatedField))
+								
+								//$related:=OB Copy($relatedField)
+								//$related.path:=$o.name+"."+$relatedField.name
+								//$Obj_out.fields.push($related)
+								
+								//End if
+								//End for each
+								
+							Else 
+								
+								// <NOT YET  MANAGED>
+								
+							End if 
 							
 							//…………………………………………………………………………………………………
 						: ($o.kind="relatedEntities")
@@ -476,7 +485,7 @@ Case of
 				End for each 
 				
 				//…………………………………………………………………………………………………
-			: ($Obj_field.kind="relatedEntities")  // 1 -> N relation
+			: ($field.kind="relatedEntities")  // 1 -> N relation
 				
 				//…………………………………………………………………………………………………
 			Else 
@@ -487,54 +496,54 @@ Case of
 		End case 
 		
 		//______________________________________________________
-	: ($Obj_in.action="inverseRelatedFields")  // on related data class, get related fields linked to current table CALLER: [dataModel]
+	: ($IN.action="inverseRelatedFields")  // on related data class, get related fields linked to current table CALLER: [dataModel]
 		
 		Case of 
 				
 				//…………………………………………………………………………………………………
-			: (($Obj_in.table=Null:C1517)\
-				 | ($Obj_in.relation=Null:C1517))
+			: (($IN.table=Null:C1517)\
+				 | ($IN.relation=Null:C1517))
 				
-				ob_error_add($Obj_out; "table ore relation name must be defined")
+				ob_error_add($OUT; "table ore relation name must be defined")
 				
 				//…………………………………………………………………………………………………
 			Else 
 				
-				$Obj_catalog:=_4D_Build Exposed Datastore:C1598
-				$Obj_table:=$Obj_catalog[String:C10($Obj_in.table)]
+				$datastore:=_4D_Build Exposed Datastore:C1598
+				$table:=$datastore[String:C10($IN.table)]
 				
-				If ($Obj_table#Null:C1517)
+				If ($table#Null:C1517)
 					
-					$Obj_field:=$Obj_table[$Obj_in.relation]
+					$field:=$table[$IN.relation]
 					
-					If ($Obj_field#Null:C1517)
+					If ($field#Null:C1517)
 						
-						$Obj_out.fields:=New collection:C1472
+						$OUT.fields:=New collection:C1472
 						
 						// Get inverse name
-						If (Length:C16(String:C10($Obj_field.inverseName))>0)
-							$Obj_buffer:=New object:C1471("value"; $Obj_field.inverseName; "success"; True:C214)
+						If (Length:C16(String:C10($field.inverseName))>0)
+							$Obj_buffer:=New object:C1471("value"; $field.inverseName; "success"; True:C214)
 						Else   // OBSOLETE normally
 							$Obj_buffer:=structure(New object:C1471(\
 								"action"; "inverseRelationName"; \
-								"table"; $Obj_in.table; \
-								"relation"; $Obj_in.relation; \
-								"definition"; $Obj_in.definition))
+								"table"; $IN.table; \
+								"relation"; $IN.relation; \
+								"definition"; $IN.definition))
 						End if 
 						
 						If ($Obj_buffer.success)
 							
-							$Obj_out.definition:=$Obj_buffer.definition  // cache purpose // OBSOLETE normally
+							$OUT.definition:=$Obj_buffer.definition  // cache purpose // OBSOLETE normally
 							
 							// Get inverse table
-							$Obj_relatedDataClass:=$Obj_catalog[$Obj_field.relatedDataClass]
+							$relatedDataClass:=$datastore[$field.relatedDataClass]
 							
-							$o:=$Obj_relatedDataClass[$Obj_buffer.value]
-							$Obj_out.success:=($o#Null:C1517)
-							If ($Obj_out.success)
+							$o:=$relatedDataClass[$Obj_buffer.value]
+							$OUT.success:=($o#Null:C1517)
+							If ($OUT.success)
 								
-								$o.relatedTableNumber:=$Obj_table.getInfo().tableNumber
-								$Obj_out.fields.push($o)
+								$o.relatedTableNumber:=$table.getInfo().tableNumber
+								$OUT.fields.push($o)
 							End if 
 						Else 
 							
@@ -542,7 +551,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																
+								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -560,69 +569,69 @@ Case of
 		End case 
 		
 		//______________________________________________________
-	: ($Obj_in.action="inverseRelationName")  //  [OBSOLETE]
+	: ($IN.action="inverseRelationName")  //  [OBSOLETE]
 		
 		Case of 
 				
 				//…………………………………………………………………………………………………
-			: (($Obj_in.table=Null:C1517)\
-				 | ($Obj_in.relation=Null:C1517))
+			: (($IN.table=Null:C1517)\
+				 | ($IN.relation=Null:C1517))
 				
-				ob_error_add($Obj_out; "table ore relation name must be defined")
+				ob_error_add($OUT; "table ore relation name must be defined")
 				
 				//…………………………………………………………………………………………………
 			Else 
 				
 				// Until DS provide information about relation, use xml. redmine #103848
 				
-				$Obj_out:=Choose:C955(Value type:C1509($Obj_in.definition)=Is object:K8:27; New object:C1471(\
+				$OUT:=Choose:C955(Value type:C1509($IN.definition)=Is object:K8:27; New object:C1471(\
 					"success"; True:C214; \
-					"value"; $Obj_in.definition); \
+					"value"; $IN.definition); \
 					structure(New object:C1471(\
 					"action"; "definition")))
 				
-				If ($Obj_out.success)
+				If ($OUT.success)
 					
-					$Obj_out.definition:=$Obj_out.value
-					$Obj_out.value:=Null:C1517
+					$OUT.definition:=$OUT.value
+					$OUT.value:=Null:C1517
 					
-					If (Value type:C1509($Obj_out.definition.relation)=Is object:K8:27)
+					If (Value type:C1509($OUT.definition.relation)=Is object:K8:27)
 						
-						$Obj_out.definition.relation:=New collection:C1472($Obj_out.definition.relation)
+						$OUT.definition.relation:=New collection:C1472($OUT.definition.relation)
 						
 					End if 
 					
-					If (Value type:C1509($Obj_out.definition.relation)=Is collection:K8:32)
+					If (Value type:C1509($OUT.definition.relation)=Is collection:K8:32)
 						
-						For each ($Obj_buffer; $Obj_out.definition.relation) Until ($Obj_out.value#Null:C1517)
+						For each ($Obj_buffer; $OUT.definition.relation) Until ($OUT.value#Null:C1517)
 							
 							Case of 
 									
 									//………………………………………………………………………………………………………………………
-								: ($Obj_buffer["name_1toN"]=$Obj_in.relation)
+								: ($Obj_buffer["name_1toN"]=$IN.relation)
 									
-									For each ($Obj_field; $Obj_buffer.related_field)
+									For each ($field; $Obj_buffer.related_field)
 										
-										If ($Obj_field.kind="destination")
+										If ($field.kind="destination")
 											
-											If ($Obj_field.field_ref.table_ref.name=$Obj_in.table)
+											If ($field.field_ref.table_ref.name=$IN.table)
 												
-												$Obj_out.value:=$Obj_buffer["name_Nto1"]
+												$OUT.value:=$Obj_buffer["name_Nto1"]
 												
 											End if 
 										End if 
 									End for each 
 									
 									//………………………………………………………………………………………………………………………
-								: ($Obj_buffer["name_Nto1"]=$Obj_in.relation)
+								: ($Obj_buffer["name_Nto1"]=$IN.relation)
 									
-									For each ($Obj_field; $Obj_buffer.related_field)
+									For each ($field; $Obj_buffer.related_field)
 										
-										If ($Obj_field.kind="source")
+										If ($field.kind="source")
 											
-											If ($Obj_field.field_ref.table_ref.name=$Obj_in.table)
+											If ($field.field_ref.table_ref.name=$IN.table)
 												
-												$Obj_out.value:=$Obj_buffer["name_1toN"]
+												$OUT.value:=$Obj_buffer["name_1toN"]
 												
 											End if 
 										End if 
@@ -633,7 +642,7 @@ Case of
 						End for each 
 					End if 
 					
-					$Obj_out.success:=($Obj_out.value#Null:C1517)
+					$OUT.success:=($OUT.value#Null:C1517)
 					
 				End if 
 				
@@ -641,61 +650,61 @@ Case of
 		End case 
 		
 		//______________________________________________________
-	: ($Obj_in.action="createField")  // CALLER: [dataModel] (add missing primary key field)
+	: ($IN.action="createField")  // CALLER: [dataModel] (add missing primary key field)
 		
-		$Obj_catalog:=_4D_Build Exposed Datastore:C1598
-		$Obj_table:=$Obj_catalog[String:C10($Obj_in.table)]
+		$datastore:=_4D_Build Exposed Datastore:C1598
+		$table:=$datastore[String:C10($IN.table)]
 		
-		If ($Obj_table#Null:C1517)
+		If ($table#Null:C1517)
 			
-			$Obj_field:=$Obj_table[$Obj_in.field]
+			$field:=$table[$IN.field]
 			
-			If ($Obj_field#Null:C1517)
+			If ($field#Null:C1517)
 				
-				$Obj_out.success:=True:C214
+				$OUT.success:=True:C214
 				
 				// Format as other fields
 				
 				//#REMINDER: Change id -> fieldNumber
-				$Obj_out.value:=New object:C1471(\
-					"id"; $Obj_field.fieldNumber; \
-					"name"; $Obj_field.name; \
-					"label"; formatString("label"; $Obj_field.name); \
-					"shortLabel"; formatString("label"; $Obj_field.name); \
-					"fieldType"; $Obj_field.fieldType)
+				$OUT.value:=New object:C1471(\
+					"id"; $field.fieldNumber; \
+					"name"; $field.name; \
+					"label"; formatString("label"; $field.name); \
+					"shortLabel"; formatString("label"; $field.name); \
+					"fieldType"; $field.fieldType)
 				
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="hasField")  // Check that table contains a field CALLER: [dataModel]
+	: ($IN.action="hasField")  // Check that table contains a field CALLER: [dataModel]
 		
 		Case of 
 				
 				//…………………………………………………………………………………………………
-			: (($Obj_in.table=Null:C1517)\
-				 | ($Obj_in.field=Null:C1517))
+			: (($IN.table=Null:C1517)\
+				 | ($IN.field=Null:C1517))
 				
-				ob_error_add($Obj_out; "table and field name must be defined")
+				ob_error_add($OUT; "table and field name must be defined")
 				
 				//…………………………………………………………………………………………………
 			Else 
 				
-				$Obj_catalog:=_4D_Build Exposed Datastore:C1598
-				$Obj_table:=$Obj_catalog[String:C10($Obj_in.table)]
+				$datastore:=_4D_Build Exposed Datastore:C1598
+				$table:=$datastore[String:C10($IN.table)]
 				
-				If ($Obj_table#Null:C1517)
+				If ($table#Null:C1517)
 					
-					$Obj_field:=$Obj_table[$Obj_in.field]
+					$field:=$table[$IN.field]
 					
-					$Obj_out.value:=$Obj_field#Null:C1517
-					$Obj_out.success:=True:C214
+					$OUT.value:=$field#Null:C1517
+					$OUT.success:=True:C214
 					
 				Else 
 					
-					ob_error_add($Obj_out; "table "+String:C10($Obj_in.table)+" not found")
-					$Obj_out.value:=False:C215
-					$Obj_out.success:=False:C215
+					ob_error_add($OUT; "table "+String:C10($IN.table)+" not found")
+					$OUT.value:=False:C215
+					$OUT.success:=False:C215
 					
 				End if 
 				
@@ -703,176 +712,176 @@ Case of
 		End case 
 		
 		//______________________________________________________
-	: ($Obj_in.action="tableInfo")  // Return table.getInfo() from table name CALLER: [dataModel]
+	: ($IN.action="tableInfo")  // Return table.getInfo() from table name CALLER: [dataModel]
 		
-		If (Asserted:C1132($Obj_in.name#Null:C1517; "missing 'name' key"))
+		If (Asserted:C1132($IN.name#Null:C1517; "missing 'name' key"))
 			
-			$Obj_catalog:=_4D_Build Exposed Datastore:C1598
+			$datastore:=_4D_Build Exposed Datastore:C1598
 			
-			$Obj_out.success:=($Obj_catalog[$Obj_in.name]#Null:C1517)
+			$OUT.success:=($datastore[$IN.name]#Null:C1517)
 			
-			If ($Obj_out.success)
+			If ($OUT.success)
 				
-				$Obj_out.tableInfo:=$Obj_catalog[$Obj_in.name].getInfo()
-				
-			End if 
-		End if 
-		
-		//______________________________________________________
-	: ($Obj_in.action="tableNumber")  // Return table number from table name
-		
-		If (Asserted:C1132($Obj_in.name#Null:C1517; "missing 'name' key"))
-			
-			$Obj_catalog:=_4D_Build Exposed Datastore:C1598
-			
-			$Obj_out.success:=($Obj_catalog[$Obj_in.name]#Null:C1517)
-			
-			If ($Obj_out.success)
-				
-				$Obj_out.tableNumber:=$Obj_catalog[$Obj_in.name].getInfo().tableNumber
+				$OUT.tableInfo:=$datastore[$IN.name].getInfo()
 				
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="tmplType")  // Type mapping for svg templates [OBSOLETE]
+	: ($IN.action="tableNumber")  // Return table number from table name
+		
+		If (Asserted:C1132($IN.name#Null:C1517; "missing 'name' key"))
+			
+			$datastore:=_4D_Build Exposed Datastore:C1598
+			
+			$OUT.success:=($datastore[$IN.name]#Null:C1517)
+			
+			If ($OUT.success)
+				
+				$OUT.tableNumber:=$datastore[$IN.name].getInfo().tableNumber
+				
+			End if 
+		End if 
+		
+		//______________________________________________________
+	: ($IN.action="tmplType")  // Type mapping for svg templates [OBSOLETE]
 		
 		// TODO cache this collection (COMPONENT_INIT?)
-		$Col_types:=New collection:C1472
-		$Col_types[1]:=Is boolean:K8:9
-		$Col_types[3]:=Is integer:K8:5
-		$Col_types[4]:=Is longint:K8:6
-		$Col_types[5]:=Is integer 64 bits:K8:25
-		$Col_types[6]:=Is real:K8:4
-		$Col_types[7]:=_o_Is float:K8:26
-		$Col_types[8]:=Is date:K8:7
-		$Col_types[9]:=Is time:K8:8
-		$Col_types[10]:=Is text:K8:3
-		$Col_types[12]:=Is picture:K8:10
-		$Col_types[18]:=Is BLOB:K8:12
-		$Col_types[21]:=Is object:K8:27
+		$c:=New collection:C1472
+		$c[1]:=Is boolean:K8:9
+		$c[3]:=Is integer:K8:5
+		$c[4]:=Is longint:K8:6
+		$c[5]:=Is integer 64 bits:K8:25
+		$c[6]:=Is real:K8:4
+		$c[7]:=_o_Is float:K8:26
+		$c[8]:=Is date:K8:7
+		$c[9]:=Is time:K8:8
+		$c[10]:=Is text:K8:3
+		$c[12]:=Is picture:K8:10
+		$c[18]:=Is BLOB:K8:12
+		$c[21]:=Is object:K8:27
 		
-		$Obj_out.value:=$Col_types[$Obj_in.value]
+		$OUT.value:=$c[$IN.value]
 		
-		$Obj_out.success:=$Obj_out.value#Null:C1517
-		
-		//______________________________________________________
-	: ($Obj_in.action="entityType")  // Type mapping for enttity RECURSIVE - [OBSOLETE]
-		
-		$Obj_types:=New object:C1471
-		$Obj_types["bool"]:=1
-		$Obj_types["word"]:=3
-		$Obj_types["long"]:=4
-		$Obj_types["long64"]:=5
-		$Obj_types["number"]:=6
-		$Obj_types["string"]:=10
-		$Obj_types["date"]:=8
-		$Obj_types["duration"]:=9
-		$Obj_types["image"]:=12
-		$Obj_types["blob"]:=18
-		$Obj_types["object"]:=21
-		
-		$Obj_out.value:=$Obj_types[String:C10($Obj_in.value)]
-		
-		$Obj_out.success:=$Obj_out.value#Null:C1517
+		$OUT.success:=$OUT.value#Null:C1517
 		
 		//______________________________________________________
-	: ($Obj_in.action="tables")  //  [OBSOLETE]
+	: ($IN.action="entityType")  // Type mapping for enttity RECURSIVE - [OBSOLETE]
+		
+		$o:=New object:C1471
+		$o["bool"]:=1
+		$o["word"]:=3
+		$o["long"]:=4
+		$o["long64"]:=5
+		$o["number"]:=6
+		$o["string"]:=10
+		$o["date"]:=8
+		$o["duration"]:=9
+		$o["image"]:=12
+		$o["blob"]:=18
+		$o["object"]:=21
+		
+		$OUT.value:=$o[String:C10($IN.value)]
+		
+		$OUT.success:=$OUT.value#Null:C1517
+		
+		//______________________________________________________
+	: ($IN.action="tables")  //  [OBSOLETE]
 		
 		If (Bool:C1537(feature._98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
 			
 			// CHECK ALL CALLERS AND UNIT TEST
 			
-			$Obj_buffer:=OB Copy:C1225($Obj_in)
+			$Obj_buffer:=OB Copy:C1225($IN)
 			
-			OB REMOVE:C1226($Obj_in; "caller")
+			OB REMOVE:C1226($IN; "caller")
 			
-			$Obj_in.action:="catalog"
+			$IN.action:="catalog"
 			
-			$Obj_out:=structure($Obj_in)
+			$OUT:=structure($IN)
 			
-			$Obj_in:=$Obj_buffer
+			$IN:=$Obj_buffer
 			
 		Else 
 			
-			$Obj_out:=structure(New object:C1471(\
+			$OUT:=structure(New object:C1471(\
 				"action"; "definition"))
 			
-			If ($Obj_out.success)
+			If ($OUT.success)
 				
 				// Keep the tables definition only
-				If ($Obj_out.value.table#Null:C1517)
+				If ($OUT.value.table#Null:C1517)
 					
-					$Obj_out.value:=$Obj_out.value.table
+					$OUT.value:=$OUT.value.table
 					
 				Else 
 					
 					// No table
-					$Obj_out.value:=New collection:C1472
-					$Obj_out.success:=False:C215
+					$OUT.value:=New collection:C1472
+					$OUT.success:=False:C215
 					
 				End if 
 			End if 
 			
-			If ($Obj_out.success)
+			If ($OUT.success)
 				
-				If (Bool:C1537($Obj_in.inRest))
+				If (Bool:C1537($IN.inRest))
 					
 					// -----------------------------------
 					// [REST] - Remove not exposed tables
 					// -----------------------------------
-					$Col_filtered:=New collection:C1472
+					$filtered:=New collection:C1472
 					
-					If (Value type:C1509($Obj_out.value)=Is collection:K8:32)
+					If (Value type:C1509($OUT.value)=Is collection:K8:32)
 						
-						For each ($Obj_table; $Obj_out.value)
+						For each ($table; $OUT.value)
 							
-							If (Not:C34(Bool:C1537($Obj_table.hide_in_REST)))
+							If (Not:C34(Bool:C1537($table.hide_in_REST)))
 								
-								$Col_filtered.push(structure(New object:C1471(\
+								$filtered.push(structure(New object:C1471(\
 									"action"; "tableDefinition"; \
-									"value"; $Obj_table)).value)
+									"value"; $table)).value)
 								
 								// Remove incompatible and not exposed fields
-								If (Value type:C1509($Obj_table.field)=Is collection:K8:32)
+								If (Value type:C1509($table.field)=Is collection:K8:32)
 									
-									For each ($Obj_field; $Obj_table.field)
+									For each ($field; $table.field)
 										
-										If (_o_rest_isValidField($Obj_field))
+										If (_o_rest_isValidField($field))
 											
 											// Cleanup the properties
-											$Obj_field:=structure(New object:C1471(\
+											$field:=structure(New object:C1471(\
 												"action"; "fieldDefinition"; \
-												"value"; $Obj_field)).value
+												"value"; $field)).value
 											
 										Else 
 											
 											// Mark the field to remove
-											$Obj_field.hidden:=True:C214
+											$field.hidden:=True:C214
 											
 										End if 
 									End for each 
 									
 									// Remove marked fields
-									For each ($l; $Obj_table.field.indices("hidden = :1"; True:C214).reverse())
+									For each ($l; $table.field.indices("hidden = :1"; True:C214).reverse())
 										
-										$Obj_table.field.remove($l)
+										$table.field.remove($l)
 										
 									End for each 
 									
 								Else 
 									
 									// Only one field
-									If (_o_rest_isValidField($Obj_table.field))
+									If (_o_rest_isValidField($table.field))
 										
-										$Obj_table.field:=structure(New object:C1471(\
+										$table.field:=structure(New object:C1471(\
 											"action"; "fieldDefinition"; \
-											"value"; $Obj_table.field)).value
+											"value"; $table.field)).value
 										
 									Else 
 										
 										// Remove the field and so the table
-										$Col_filtered.pop()
+										$filtered.pop()
 										
 									End if 
 								End if 
@@ -882,88 +891,88 @@ Case of
 					Else 
 						
 						// Only one table
-						$Obj_table:=$Obj_out.value
+						$table:=$OUT.value
 						
-						If (Not:C34(Bool:C1537($Obj_table.hide_in_REST)))
+						If (Not:C34(Bool:C1537($table.hide_in_REST)))
 							
-							$Obj_table:=structure(New object:C1471(\
+							$table:=structure(New object:C1471(\
 								"action"; "tableDefinition"; \
-								"value"; $Obj_table)).value
+								"value"; $table)).value
 							
-							$Col_filtered.push($Obj_table)
+							$filtered.push($table)
 							
 							// Remove incompatible and not exposed fields, if any
-							If (Value type:C1509($Obj_table.field)=Is collection:K8:32)
+							If (Value type:C1509($table.field)=Is collection:K8:32)
 								
-								For each ($Obj_field; $Obj_table.field)
+								For each ($field; $table.field)
 									
-									If (_o_rest_isValidField($Obj_field))
+									If (_o_rest_isValidField($field))
 										
 										// Cleanup the properties
-										$Obj_field:=structure(New object:C1471(\
+										$field:=structure(New object:C1471(\
 											"action"; "fieldDefinition"; \
-											"value"; $Obj_field)).value
+											"value"; $field)).value
 										
 									Else 
 										
 										// Mark the field to remove
-										$Obj_field.hidden:=True:C214
+										$field.hidden:=True:C214
 										
 									End if 
 								End for each 
 								
 								// Remove marked fields
-								For each ($l; $Obj_table.field.indices("hidden = :1"; True:C214).reverse())
+								For each ($l; $table.field.indices("hidden = :1"; True:C214).reverse())
 									
-									$Obj_table.field.remove($l)
+									$table.field.remove($l)
 									
 								End for each 
 								
 							Else 
 								
 								// Only one field
-								If (_o_rest_isValidField($Obj_table.field))
+								If (_o_rest_isValidField($table.field))
 									
 									// Remove unnecessary informations
-									$Obj_table.field:=structure(New object:C1471(\
+									$table.field:=structure(New object:C1471(\
 										"action"; "fieldDefinition"; \
-										"value"; $Obj_table.field)).value
+										"value"; $table.field)).value
 									
 								Else 
 									
 									// Remove the field and so the table
-									$Col_filtered:=New collection:C1472
+									$filtered:=New collection:C1472
 									
 								End if 
 							End if 
 						End if 
 					End if 
 					
-					$Obj_out.value:=$Col_filtered
+					$OUT.value:=$filtered
 					
 				End if 
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_in.action="definition")  // A GARDER POUR LE MOMENT
+	: ($IN.action="definition")  // A GARDER POUR LE MOMENT
 		
-		EXPORT STRUCTURE:C1311($Txt_xml)
+		EXPORT STRUCTURE:C1311($xml)
 		
 /* START HIDING ERRORS */$errors:=err.hide()
-		$Dom_root:=DOM Parse XML variable:C720($Txt_xml)
+		$root:=DOM Parse XML variable:C720($xml)
 		
 		If (OK=1)
 			
-			$Obj_out:=New object:C1471(\
+			$OUT:=New object:C1471(\
 				"success"; True:C214; \
-				"value"; xml_refToObject($Dom_root))
+				"value"; xml_refToObject($root))
 			
-			DOM CLOSE XML:C722($Dom_root)
+			DOM CLOSE XML:C722($root)
 			
-			If ($Obj_out.success)
+			If ($OUT.success)
 				
-				$Obj_out.value:=$Obj_out.value.base
+				$OUT.value:=$OUT.value.base
 				
 			End if 
 		End if 
@@ -976,98 +985,98 @@ Case of
 		//ASSERT(False;"Not implemented: \""+$Obj_in.action+"\"")
 		
 		//______________________________________________________
-	: ($Obj_in.action="verify@")
+	: ($IN.action="verify@")
 		
 		Case of 
 				
 				//…………………………………………………………………………………………………………………
-			: ($Obj_in.action="verify")
+			: ($IN.action="verify")
 				
-				$Obj_catalog:=_4D_Build Exposed Datastore:C1598
+				$datastore:=_4D_Build Exposed Datastore:C1598
 				
-				$Obj_out.success:=structure(New object:C1471(\
+				$OUT.success:=structure(New object:C1471(\
 					"action"; "verifyDeletedRecords"; \
-					"catalog"; $Obj_catalog)).success
+					"catalog"; $datastore)).success
 				
-				If ($Obj_out.success)
+				If ($OUT.success)
 					
-					If (Value type:C1509($Obj_in.tables)=Is collection:K8:32)
+					If (Value type:C1509($IN.tables)=Is collection:K8:32)
 						
-						For each ($t; $Obj_in.tables) While ($Obj_out.success)
+						For each ($t; $IN.tables) While ($OUT.success)
 							
-							$Obj_out.success:=structure(New object:C1471(\
+							$OUT.success:=structure(New object:C1471(\
 								"action"; "verifyStamps"; \
 								"tableName"; $t; \
-								"catalog"; $Obj_catalog)).success
+								"catalog"; $datastore)).success
 							
 						End for each 
 						
 					Else 
 						
-						$Obj_out.success:=structure(New object:C1471(\
+						$OUT.success:=structure(New object:C1471(\
 							"action"; "verifyStamps"; \
-							"tableName"; $Obj_in.tables; \
-							"catalog"; $Obj_catalog)).success
+							"tableName"; $IN.tables; \
+							"catalog"; $datastore)).success
 						
 					End if 
 				End if 
 				
 				//…………………………………………………………………………………………………………………
-			: ($Obj_in.action="verifyDeletedRecords")
+			: ($IN.action="verifyDeletedRecords")
 				
-				If ($Obj_in.catalog=Null:C1517)
+				If ($IN.catalog=Null:C1517)
 					
-					$Obj_in.catalog:=_4D_Build Exposed Datastore:C1598
+					$IN.catalog:=_4D_Build Exposed Datastore:C1598
 					
 				End if 
 				
-				$Obj_out.success:=($Obj_in.catalog[SHARED.deletedRecordsTable.name]#Null:C1517)
+				$OUT.success:=($IN.catalog[SHARED.deletedRecordsTable.name]#Null:C1517)
 				
 				//…………………………………………………………………………………………………………………
-			: ($Obj_in.action="verifyStamps")
+			: ($IN.action="verifyStamps")
 				
-				$Obj_out.success:=($Obj_in.tableName#Null:C1517)
-				ASSERT:C1129($Obj_out.success; "Missing tableName")
+				$OUT.success:=($IN.tableName#Null:C1517)
+				ASSERT:C1129($OUT.success; "Missing tableName")
 				
-				If ($Obj_out.success)
+				If ($OUT.success)
 					
-					If ($Obj_in.catalog=Null:C1517)
+					If ($IN.catalog=Null:C1517)
 						
-						$Obj_in.catalog:=_4D_Build Exposed Datastore:C1598
+						$IN.catalog:=_4D_Build Exposed Datastore:C1598
 						
 					End if 
 					
-					$Obj_out.success:=($Obj_in.catalog[$Obj_in.tableName][SHARED.stampField.name]#Null:C1517)
+					$OUT.success:=($IN.catalog[$IN.tableName][SHARED.stampField.name]#Null:C1517)
 					
 				End if 
 				
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
+				ASSERT:C1129(False:C215; "Unknown entry point: \""+$IN.action+"\"")
 				
 				//______________________________________________________
 		End case 
 		
 		//______________________________________________________
-	: ($Obj_in.action="create@")
+	: ($IN.action="create@")
 		
 		Case of 
 				
 				//…………………………………………………………………………………………………………………
-			: ($Obj_in.action="create")
+			: ($IN.action="create")
 				
-				ASSERT:C1129($Obj_in.tables#Null:C1517)
+				ASSERT:C1129($IN.tables#Null:C1517)
 				
-				$Obj_out.success:=structure(New object:C1471(\
+				$OUT.success:=structure(New object:C1471(\
 					"action"; "createDeletedRecords"; \
 					"catalog"; _4D_Build Exposed Datastore:C1598)).success
 				
-				If ($Obj_out.success)
+				If ($OUT.success)
 					
-					For each ($t; $Obj_in.tables) While ($Obj_out.success)
+					For each ($t; $IN.tables) While ($OUT.success)
 						
-						$Obj_out.success:=structure(New object:C1471(\
+						$OUT.success:=structure(New object:C1471(\
 							"action"; "createStamps"; \
 							"tableName"; $t)).success
 						
@@ -1075,9 +1084,9 @@ Case of
 				End if 
 				
 				//…………………………………………………………………………………………………………………
-			: ($Obj_in.action="createDeletedRecords")
+			: ($IN.action="createDeletedRecords")
 				
-				$Txt_onErrCall:=Method called on error:C704
+				$onErrCall:=Method called on error:C704
 				
 /* START TRAPPING ERRORS */$errors:=err.capture()
 				
@@ -1145,31 +1154,31 @@ Case of
 							
 						Else 
 							
-							ob_createPath($Obj_out; "errors"; Is collection:K8:32).errors.push($errors.lastError.stack[0].error+" ("+$t+")")
+							ob_createPath($OUT; "errors"; Is collection:K8:32).errors.push($errors.lastError.stack[0].error+" ("+$t+")")
 							
 						End if 
 					End if 
 				End for each 
 				
-				$Obj_out.success:=($Obj_out.errors=Null:C1517)
+				$OUT.success:=($OUT.errors=Null:C1517)
 				
 /* STOP TRAPPING ERRORS */$errors.release()
 				
 				//…………………………………………………………………………………………………………………
-			: ($Obj_in.action="createStamps")
+			: ($IN.action="createStamps")
 				
-				$Obj_out.success:=($Obj_in.tableName#Null:C1517)
-				ASSERT:C1129($Obj_out.success; "Missing tableName")
+				$OUT.success:=($IN.tableName#Null:C1517)
+				ASSERT:C1129($OUT.success; "Missing tableName")
 				
-				If ($Obj_out.success)
+				If ($OUT.success)
 					
-					If (Value type:C1509($Obj_in.tableName)=Is collection:K8:32)
+					If (Value type:C1509($IN.tableName)=Is collection:K8:32)
 						
-						$Obj_out.success:=True:C214
+						$OUT.success:=True:C214
 						
-						For each ($t; $Obj_in.tableName) While ($Obj_out.success)
+						For each ($t; $IN.tableName) While ($OUT.success)
 							
-							$Obj_out.success:=structure(New object:C1471(\
+							$OUT.success:=structure(New object:C1471(\
 								"action"; "addStamp"; \
 								"tableName"; $t)).success
 							
@@ -1177,9 +1186,9 @@ Case of
 						
 					Else 
 						
-						$Obj_out.success:=structure(New object:C1471(\
+						$OUT.success:=structure(New object:C1471(\
 							"action"; "addStamp"; \
-							"tableName"; $Obj_in.tableName)).success
+							"tableName"; $IN.tableName)).success
 						
 					End if 
 				End if 
@@ -1187,24 +1196,25 @@ Case of
 				//…………………………………………………………………………………………………………………
 			Else 
 				
-				ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
+				ASSERT:C1129(False:C215; "Unknown entry point: \""+$IN.action+"\"")
 				
 				//______________________________________________________
 		End case 
 		
 		//______________________________________________________
-	: ($Obj_in.action="addStamp")
+	: ($IN.action="addStamp")
 		
-		$Obj_out.success:=($Obj_in.tableName#Null:C1517)
-		ASSERT:C1129($Obj_out.success; "Missing tableName")
+		$OUT.success:=($IN.tableName#Null:C1517)
+		ASSERT:C1129($OUT.success; "Missing tableName")
 		
-		If ($Obj_out.success)
+		If ($OUT.success)
 			
-			$Txt_onErrCall:=Method called on error:C704
+			$onErrCall:=Method called on error:C704
 			
-/* START TRAPPING ERRORS */$errors:=err.capture()
+/* START TRAPPING ERRORS */
+			$errors:=err.capture()
 			
-			$t:=String:C10($Obj_in.tableName)
+			$t:=String:C10($IN.tableName)
 			
 			DOCUMENT:="ALTER TABLE ["+$t+"] ADD TRAILING "+String:C10(SHARED.stampField.name)+" "+String:C10(SHARED.stampField.type)+";"
 			
@@ -1224,7 +1234,7 @@ Case of
 					
 				Else 
 					
-					ob_createPath($Obj_out; "errors"; Is collection:K8:32).errors.push($errors.lastError.stack[0].error+" ("+$t+")")
+					ob_createPath($OUT; "errors"; Is collection:K8:32).errors.push($errors.lastError.stack[0].error+" ("+$t+")")
 					
 				End if 
 			End if 
@@ -1251,34 +1261,35 @@ Case of
 					
 				Else 
 					
-					ob_createPath($Obj_out; "errors"; Is collection:K8:32).errors.push($errors.lastError.stack[0].error+" ("+$t+")")
+					ob_createPath($OUT; "errors"; Is collection:K8:32).errors.push($errors.lastError.stack[0].error+" ("+$t+")")
 					
 				End if 
 			End if 
 			
-			$Obj_out.success:=($Obj_out.errors=Null:C1517)
+			$OUT.success:=($OUT.errors=Null:C1517)
 			
-/* STOP TRAPPING ERRORS */$errors.release()
+/* STOP TRAPPING ERRORS */
+			$errors.release()
 			
 		End if 
 		
 		//________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$IN.action+"\"")
 		
 		//________________________________________
 End case 
 
 // ----------------------------------------------------
 // Return
-If (Bool:C1537($Obj_in.caller))
+If (Bool:C1537($IN.caller))
 	
-	CALL FORM:C1391($Obj_in.caller; "editor_CALLBACK"; "structureCheckingResult"; $Obj_out)
+	CALL FORM:C1391($IN.caller; "editor_CALLBACK"; "structureCheckingResult"; $OUT)
 	
 Else 
 	
-	$0:=$Obj_out
+	$0:=$OUT
 	
 End if 
 

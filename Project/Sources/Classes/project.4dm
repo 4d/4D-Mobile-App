@@ -333,3 +333,18 @@ Function shortLabel  // Format short labels
 		$0:=Substring:C12($0; 1; 10)
 		
 	End if 
+	
+Function isStorage
+	var $0 : Boolean
+	var $1 : Object
+	
+	If (String:C10($1.kind)="storage")
+		
+		If ($1.fieldType#Is object:K8:27)\
+			 & ($1.fieldType#Is BLOB:K8:12)\
+			 & ($1.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
+			
+			$0:=True:C214
+			
+		End if 
+	End if 

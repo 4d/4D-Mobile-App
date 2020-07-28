@@ -59,7 +59,7 @@ If (False:C215)
 	C_OBJECT:C1216(tmpl_INFOS; $1)
 	
 	// ----------------------------------------------------
-	C_LONGINT:C283(tmpl_On_drag_over; $0)
+	C_LONGINT:C283(tmpl_On_drag_over; $0)  // -1 = deny; 0 = accept
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(tmpl_REORDER; $1)

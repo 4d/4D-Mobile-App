@@ -12,7 +12,7 @@ var $buffer; $cible; $ObjectName; $t; $tableIdentifier : Text
 var $success : Boolean
 var $fixed; $indx : Integer
 var $x : Blob
-var $current; $droped; $relation; $table; $target : Object
+var $current; $dropped; $relation; $table; $target : Object
 var $c; $cCurrent; $cDroped : Collection
 
 // ----------------------------------------------------
@@ -29,7 +29,7 @@ If (Length:C16($cible)>0)
 	
 	If (Bool:C1537(OK))
 		
-		BLOB TO VARIABLE:C533($x; $droped)
+		BLOB TO VARIABLE:C533($x; $dropped)
 		SET BLOB SIZE:C606($x; 0)
 		
 		// Check the match of the type with the source
@@ -43,7 +43,7 @@ If (Length:C16($cible)>0)
 			
 			// Check the type compatibility
 			$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
-			$success:=tmpl_compatibleType($c; $droped.fieldType)
+			$success:=tmpl_compatibleType($c; $dropped.fieldType)
 			
 		End if 
 		
@@ -51,7 +51,7 @@ If (Length:C16($cible)>0)
 			
 			$target:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2; "detail"; "list")][$tableIdentifier]
 			
-			$droped.name:=$droped.path
+			$dropped.name:=$dropped.path
 			
 			SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:bind"; $t)
 			ARRAY TEXT:C222($tMatches; 0x0000)
@@ -66,14 +66,14 @@ If (Length:C16($cible)>0)
 					
 				End if 
 				
-				If ($droped.fromIndex#Null:C1517)  // Internal D&D
+				If ($dropped.fromIndex#Null:C1517)  // Internal D&D
 					
-					If ($droped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
+					If ($dropped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
 						
 						$indx:=Num:C11(Replace string:C233($cible; "e"; ""))
-						$target.fields.remove($droped.fromIndex)
-						$indx:=$indx-1-Num:C11($droped.fromIndex<$indx)
-						$target.fields.insert($indx; $droped)
+						$target.fields.remove($dropped.fromIndex)
+						$indx:=$indx-1-Num:C11($dropped.fromIndex<$indx)
+						$target.fields.insert($indx; $dropped)
 						
 					End if 
 					
@@ -84,7 +84,7 @@ If (Length:C16($cible)>0)
 					
 					// Splits path for later
 					$cCurrent:=Split string:C1554(String:C10($current.path); ".")
-					$cDroped:=Split string:C1554($droped.path; ".")
+					$cDroped:=Split string:C1554($dropped.path; ".")
 					
 					// Get current table
 					$table:=Form:C1466.dataModel[$tableIdentifier]
@@ -92,9 +92,9 @@ If (Length:C16($cible)>0)
 					Case of 
 							
 							//______________________________________________________
-						: ($droped.fieldType=8858)  // N -> 1 relation
+						: ($dropped.fieldType=8858)  // N -> 1 relation
 							
-							OB REMOVE:C1226($droped; "id")
+							OB REMOVE:C1226($dropped; "id")
 							
 							If ($cCurrent.length=2)\
 								 & ($cDroped.length=1)  // Drop a relation on a field
@@ -109,9 +109,9 @@ If (Length:C16($cible)>0)
 							End if 
 							
 							//______________________________________________________
-						: ($droped.fieldType=8859)  // 1 -> N relation
+						: ($dropped.fieldType=8859)  // 1 -> N relation
 							
-							OB REMOVE:C1226($droped; "id")
+							OB REMOVE:C1226($dropped; "id")
 							
 							//______________________________________________________
 						: ($current=Null:C1517)  // Add
@@ -141,7 +141,7 @@ If (Length:C16($cible)>0)
 										If ($cCurrent[0]=$cDroped[0])  // Same related table
 											
 											// Switch to relation & add/modify the format
-											$droped:=New object:C1471(\
+											$dropped:=New object:C1471(\
 												"name"; $cDroped[0]; \
 												"fieldType"; 8858; \
 												"relatedTableNumber"; $relation.relatedTableNumber; \
@@ -160,7 +160,7 @@ If (Length:C16($cible)>0)
 							//______________________________________________________
 					End case 
 					
-					$target[$tMatches{1}][Num:C11($tMatches{2})]:=$droped
+					$target[$tMatches{1}][Num:C11($tMatches{2})]:=$dropped
 					
 				End if 
 				
@@ -179,17 +179,17 @@ If (Length:C16($cible)>0)
 							
 						Else 
 							
-							$target[$t]:=$droped
+							$target[$t]:=$dropped
 							
 						End if 
 					End if 
 					
 					If (Value type:C1509($target[$t])=Is collection:K8:32)
 						
-						If ($target[$t].extract("name").indexOf($droped.path)=-1)
+						If ($target[$t].extract("name").indexOf($dropped.path)=-1)
 							
 							// Append field
-							$target[$t].push($droped)
+							$target[$t].push($dropped)
 							
 						End if 
 					End if 
@@ -201,9 +201,9 @@ If (Length:C16($cible)>0)
 							//______________________________________________________
 						: ($cible="background")
 							
-							If ($droped.fromIndex#Null:C1517)
+							If ($dropped.fromIndex#Null:C1517)
 								
-								$target.fields.remove($droped.fromIndex)
+								$target.fields.remove($dropped.fromIndex)
 								
 							End if 
 							
@@ -214,17 +214,17 @@ If (Length:C16($cible)>0)
 								
 								If ($target.fields.length<$fixed)
 									
-									$target.fields[$fixed]:=$droped
+									$target.fields[$fixed]:=$dropped
 									
 								Else 
 									
-									$target.fields.push($droped)
+									$target.fields.push($dropped)
 									
 								End if 
 								
 							Else 
 								
-								$target.fields[$indx]:=$droped
+								$target.fields[$indx]:=$dropped
 								
 							End if 
 							
@@ -233,10 +233,10 @@ If (Length:C16($cible)>0)
 							
 							$indx:=Num:C11(Replace string:C233($cible; "e"; ""))
 							
-							If ($droped.fromIndex#Null:C1517)
+							If ($dropped.fromIndex#Null:C1517)
 								
-								$target.fields.remove($droped.fromIndex)
-								$indx:=$indx-1-Num:C11($droped.fromIndex<$indx)
+								$target.fields.remove($dropped.fromIndex)
+								$indx:=$indx-1-Num:C11($dropped.fromIndex<$indx)
 								
 							Else 
 								
@@ -244,12 +244,12 @@ If (Length:C16($cible)>0)
 								
 							End if 
 							
-							$target.fields.insert($indx; $droped)
+							$target.fields.insert($indx; $dropped)
 							
 							//______________________________________________________
 						Else 
 							
-							$target[$t]:=$droped
+							$target[$t]:=$dropped
 							
 							//______________________________________________________
 					End case 
