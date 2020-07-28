@@ -16,7 +16,7 @@ If (False:C215)
 	C_OBJECT:C1216(structure; $1)
 End if 
 
-var $fieldID; $onErrCall; $root; $t; $tableID; $xml : Text
+var $fieldName; $onErrCall; $root; $t; $tableName; $xml : Text
 var $found; $oneTable : Boolean
 var $indx; $l; $tableNumber : Integer
 var $datastore; $errors; $field; $IN; $o; $Obj_buffer; $OUT; $relatedDataClass; $table : Object
@@ -83,11 +83,11 @@ Case of
 			
 			$oneTable:=($IN.name#Null:C1517) | ($IN.tableNumber#Null:C1517)
 			
-			For each ($tableID; $datastore) Until ($found)
+			For each ($tableName; $datastore) Until ($found)
 				
-				$table:=$datastore[$tableID].getInfo()
+				$table:=$datastore[$tableName].getInfo()
 				
-				If ($tableID#SHARED.deletedRecordsTable.name)
+				If ($tableName#SHARED.deletedRecordsTable.name)
 					
 					If ($oneTable)
 						
@@ -96,7 +96,7 @@ Case of
 								//______________________________________________________
 							: ($IN.name#Null:C1517)
 								
-								$found:=($tableID=$IN.name)
+								$found:=($tableName=$IN.name)
 								
 								//______________________________________________________
 							: ($IN.tableNumber#Null:C1517)
@@ -121,17 +121,17 @@ Case of
 							
 							$table.field:=New collection:C1472
 							
-							For each ($fieldID; $datastore[$tableID])
+							For each ($fieldName; $datastore[$tableName])
 								
-								If ($fieldID#SHARED.stampField.name)
+								If ($fieldName#SHARED.stampField.name)
 									
-									$field:=$datastore[$tableID][$fieldID]
+									$field:=$datastore[$tableName][$fieldName]
 									
-									$l:=$table.field.extract("name").indexOf($fieldID)
+									$l:=$table.field.extract("name").indexOf($fieldName)
 									
 									If ($l>=0)
 										
-										If (Not:C34(str_equal($fieldID; $table.field.extract("name")[$l])))
+										If (Not:C34(str_equal($fieldName; $table.field.extract("name")[$l])))
 											
 											$l:=-1
 											
@@ -144,10 +144,10 @@ Case of
 										: ($l#-1)
 											
 											// NOT ALLOW DUPLICATE NAMES !
-											err_PUSH($OUT; "Name conflict for \""+$fieldID+"\""; Warning message:K38:2)
+											err_PUSH($OUT; "Name conflict for \""+$fieldName+"\""; Warning message:K38:2)
 											
 											//…………………………………………………………………………………………………
-										: (Position:C15("."; $fieldID)>0)
+										: (Position:C15("."; $fieldName)>0)
 											
 											// NOT ALLOW FIELD OR RELATION NAME WITH DOT !
 											
@@ -163,7 +163,7 @@ Case of
 												// #TEMPO [
 												$field.id:=$field.fieldNumber
 												$field.valueType:=$field.type
-												$field.type:=tempoFieldType($field.fieldType)
+												$field.type:=_o_tempoFieldType($field.fieldType)
 												//]
 												
 												$table.field.push($field)
@@ -178,7 +178,7 @@ Case of
 											If ($datastore[$field.relatedDataClass]#Null:C1517)
 												
 												$table.field.push(New object:C1471(\
-													"name"; $fieldID; \
+													"name"; $fieldName; \
 													"inverseName"; $field.inverseName; \
 													"type"; -1; \
 													"relatedDataClass"; $field.relatedDataClass; \
@@ -192,7 +192,7 @@ Case of
 											// 1 -> N relation attribute (reference to an entity selection)
 											
 											$table.field.push(New object:C1471(\
-												"name"; $fieldID; \
+												"name"; $fieldName; \
 												"inverseName"; $field.inverseName; \
 												"type"; -2; \
 												"relatedDataClass"; $field.relatedDataClass; \
@@ -297,7 +297,7 @@ Case of
 						$OUT.fieldNumber:=$field.fieldNumber
 						$OUT.fieldType:=$field.fieldType
 						$OUT.name:=Field name:C257($tableNumber; $field.fieldNumber)
-						$OUT.type:=tempoFieldType($field.fieldType)
+						$OUT.type:=_o_tempoFieldType($field.fieldType)
 						
 					End if 
 					
@@ -363,7 +363,7 @@ Case of
 								
 								// #TEMPO [
 								$OUT.valueType:=$field.type
-								$OUT.type:=tempoFieldType($field.fieldType)
+								$OUT.type:=_o_tempoFieldType($field.fieldType)
 								//]
 								
 							Else 
@@ -421,9 +421,9 @@ Case of
 				
 				$relatedDataClass:=$datastore[$field.relatedDataClass]
 				
-				For each ($fieldID; $relatedDataClass)
+				For each ($fieldName; $relatedDataClass)
 					
-					$o:=$relatedDataClass[$fieldID]
+					$o:=$relatedDataClass[$fieldName]
 					
 					Case of 
 							
@@ -442,7 +442,7 @@ Case of
 								//$o.id:=$o.fieldNumber
 								$o.valueType:=$o.type
 								
-								$o.type:=tempoFieldType($o.fieldType)
+								$o.type:=_o_tempoFieldType($o.fieldType)
 								
 								$o.relatedTableNumber:=$OUT.relatedTableNumber
 								
@@ -453,25 +453,7 @@ Case of
 							//___________________________________________
 						: ($o.kind="relatedEntity")
 							
-							If (feature.with("moreRelations"))
-								
-								//var $relatedField; $related : Object
-								//For each ($relatedField; Form.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
-								
-								//If (project.isStorage($relatedField))
-								
-								//$related:=OB Copy($relatedField)
-								//$related.path:=$o.name+"."+$relatedField.name
-								//$Obj_out.fields.push($related)
-								
-								//End if
-								//End for each
-								
-							Else 
-								
-								// <NOT YET  MANAGED>
-								
-							End if 
+							// <NOT YET  MANAGED>
 							
 							//…………………………………………………………………………………………………
 						: ($o.kind="relatedEntities")
@@ -551,7 +533,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-								
+																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

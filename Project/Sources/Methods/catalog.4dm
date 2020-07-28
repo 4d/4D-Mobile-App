@@ -199,7 +199,7 @@ Case of
 							
 							// #TEMPO [
 							$o.valueType:=$o.type
-							$o.type:=tempoFieldType($o.fieldType)
+							$o.type:=_o_tempoFieldType($o.fieldType)
 							$o.typeLegacy:=$o.fieldType
 							//]
 							

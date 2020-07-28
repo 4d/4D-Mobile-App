@@ -5,8 +5,8 @@ C_LONGINT:C283($1)
 C_COLLECTION:C1488($Col_types)
 
 If (False:C215)
-	C_LONGINT:C283(tempoFieldType; $0)
-	C_LONGINT:C283(tempoFieldType; $1)
+	C_LONGINT:C283(_o_tempoFieldType; $0)
+	C_LONGINT:C283(_o_tempoFieldType; $1)
 End if 
 
 // #TEMPORARY REMAPPING FOR THE FIELD TYPE

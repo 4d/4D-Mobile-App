@@ -36,8 +36,8 @@ C_OBJECT:C1216(publishedTableList; $0)
 C_OBJECT:C1216(publishedTableList; $1)
 
 //__________________________________________________
-C_LONGINT:C283(tempoFieldType; $0)
-C_LONGINT:C283(tempoFieldType; $1)
+C_LONGINT:C283(_o_tempoFieldType; $0)
+C_LONGINT:C283(_o_tempoFieldType; $1)
 
 //__________________________________________________
 C_OBJECT:C1216(LOG_EVENT; $1)

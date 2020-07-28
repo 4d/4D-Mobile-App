@@ -78,7 +78,7 @@ Case of
 					
 				Else 
 					
-					// A "If" statement should never omit "Else" 
+					// A "If" statement should never omit "Else"
 					
 				End if 
 				

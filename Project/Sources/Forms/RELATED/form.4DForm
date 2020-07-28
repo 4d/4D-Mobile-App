@@ -124,7 +124,7 @@
 						},
 						{
 							"name": "name",
-							"dataSource": "This:C1470.name",
+							"dataSource": "This:C1470.path",
 							"width": 433,
 							"minWidth": 10,
 							"maxWidth": 32000,
@@ -201,5 +201,16 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

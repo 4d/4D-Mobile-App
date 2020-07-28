@@ -32,7 +32,6 @@
 			"devMenu"
 		],
 		"tables": [
-			"__DeletedRecords",
 			"ALL_TYPES",
 			"Commands",
 			"Employes",
@@ -134,7 +133,8 @@
 			"path"
 		],
 		"classes": [
-			"path"
+			"path",
+			"structure"
 		]
 	},
 	"[EDITOR]": {
@@ -393,6 +393,7 @@
 			"test_storyboard",
 			"test_structure",
 			"test_structureCatalog",
+			"test_structureClass",
 			"test_xmlClass",
 			"unitTestSuites"
 		]
@@ -413,7 +414,6 @@
 			"Process_tags",
 			"Process_tags_on_file",
 			"Rest",
-			"structure",
 			"template",
 			"templates",
 			"xloc"

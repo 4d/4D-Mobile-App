@@ -1074,7 +1074,7 @@ Function __isReference
 	var $0 : Boolean
 	var $1 : Text
 	
-	$0:=Match regex:C1019("(?mi-s)^[a-zA-Z0-9]{32}$"; $1; 1)
+	$0:=Match regex:C1019("[[:xdigit:]]{32}"; $1; 1)
 	
 /*———————————————————————————————————————————————————————————*/
 Function __convert

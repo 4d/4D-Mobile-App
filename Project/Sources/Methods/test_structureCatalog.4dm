@@ -1,15 +1,15 @@
 //%attributes = {}
-C_LONGINT:C283($i;$l;$Lon_indx;$Lon_tableNumber)
+C_LONGINT:C283($i; $l; $Lon_indx; $Lon_tableNumber)
 C_OBJECT:C1216($o)
 C_COLLECTION:C1488($c)
 
-TRY 
+TRY
 
-COMPONENT_INIT 
+COMPONENT_INIT
 
-  //_____________________________________________________________
-$o:=structure (New object:C1471(\
-"action";"catalog"))
+//_____________________________________________________________
+$o:=structure(New object:C1471(\
+"action"; "catalog"))
 
 If (Asserted:C1132($o.success))
 	
@@ -23,10 +23,10 @@ If (Asserted:C1132($o.success))
 	End if 
 End if 
 
-  //_____________________________________________________________
-$o:=structure (New object:C1471(\
-"action";"catalog";\
-"name";"HELLO_WORLD"))
+//_____________________________________________________________
+$o:=structure(New object:C1471(\
+"action"; "catalog"; \
+"name"; "HELLO_WORLD"))
 
 If (Asserted:C1132(Not:C34($o.success)))
 	
@@ -40,10 +40,10 @@ If (Asserted:C1132(Not:C34($o.success)))
 	End if 
 End if 
 
-  //_____________________________________________________________
-$o:=structure (New object:C1471(\
-"action";"catalog";\
-"tableNumber";8858))
+//_____________________________________________________________
+$o:=structure(New object:C1471(\
+"action"; "catalog"; \
+"tableNumber"; 8858))
 
 If (Asserted:C1132(Not:C34($o.success)))
 	
@@ -57,8 +57,8 @@ If (Asserted:C1132(Not:C34($o.success)))
 	End if 
 End if 
 
-  //_____________________________________________________________
-For ($i;1;Get last table number:C254;1)
+//_____________________________________________________________
+For ($i; 1; Get last table number:C254; 1)
 	
 	If (Is table number valid:C999($i))
 		
@@ -71,9 +71,9 @@ For ($i;1;Get last table number:C254;1)
 	End if 
 End for 
 
-$o:=structure (New object:C1471(\
-"action";"catalog";\
-"name";"UNIT_0"))
+$o:=structure(New object:C1471(\
+"action"; "catalog"; \
+"name"; "UNIT_0"))
 
 If (Asserted:C1132($o.success))
 	
@@ -89,7 +89,7 @@ If (Asserted:C1132($o.success))
 				
 				If (Asserted:C1132($o.value[0].field.length>0))
 					
-					For ($i;1;Get last table number:C254;1)
+					For ($i; 1; Get last table number:C254; 1)
 						
 						If (Is table number valid:C999($i))
 							
@@ -207,4 +207,4 @@ If (Asserted:C1132($o.success))
 	End if 
 End if 
 
-FINALLY 
+FINALLY

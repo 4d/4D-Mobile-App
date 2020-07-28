@@ -217,8 +217,8 @@ Function addTable
 	$0:=New object:C1471(\
 		""; New object:C1471(\
 		"name"; $o.name; \
-		"label"; formatString("label"; $o.name); \
-		"shortLabel"; formatString("label"; $o.name); \
+		"label"; This:C1470.label($o.name); \
+		"shortLabel"; This:C1470.shortLabel($o.name); \
 		"primaryKey"; String:C10($o.primaryKey); \
 		"embedded"; True:C214)\
 		)
