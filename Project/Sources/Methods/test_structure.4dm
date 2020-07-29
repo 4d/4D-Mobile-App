@@ -10,7 +10,7 @@ COMPONENT_INIT
 $start:=Milliseconds:C459
 
 //_____________________________________________________________
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "catalog"))
 
 If (Asserted:C1132($o.success))
@@ -29,7 +29,7 @@ End if
 //=                    fieldDefinition                        =
 //=============================================================
 
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "fieldDefinition"; \
 "path"; "ID"; \
 "tableNumber"; 8858))
@@ -59,7 +59,7 @@ For ($i; 1; Get last table number:C254; 1)
 	End if 
 End for 
 
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "fieldDefinition"; \
 "path"; "ID"; \
 "tableNumber"; $l))
@@ -81,7 +81,7 @@ If (Asserted:C1132($o.success))
 End if 
 
 //_____________________________________________________________
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "fieldDefinition"; \
 "path"; "r_1.Field_1_2"; \
 "tableNumber"; $l))
@@ -115,7 +115,7 @@ If (Asserted:C1132($o.success))
 End if 
 
 //_____________________________________________________________
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "fieldDefinition"; \
 "path"; "r_2.Field_1_2"; \
 "tableNumber"; $l))
@@ -136,7 +136,7 @@ If (Asserted:C1132($o.success))
 End if 
 
 //_____________________________________________________________
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "fieldDefinition"; \
 "path"; "r_1.r_1_2.Field_2_3"; \
 "tableNumber"; $l))
@@ -170,7 +170,7 @@ If (Asserted:C1132($o.success))
 End if 
 
 //_____________________________________________________________
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "fieldDefinition"; \
 "path"; "r_1.r_1_2.r_2_3.Field_3_2"; \
 "tableNumber"; $l; \
@@ -205,7 +205,7 @@ If (Asserted:C1132($o.success))
 End if 
 
 //_____________________________________________________________
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "fieldDefinition"; \
 "path"; "r_2.r_1_2.r_2_3.Field_3_2"; \
 "tableNumber"; $l; \
@@ -240,27 +240,27 @@ If (Structure file:C489=Structure file:C489(*))
 		
 	End SQL
 	
-	$o:=structure(New object:C1471(\
+	$o:=_o_structure(New object:C1471(\
 		"action"; "verifyDeletedRecords"))
 	
 	If (Asserted:C1132(Not:C34($o.success); "verifyDeletedRecords when the table doesn't exist"))
 		
-		$o:=structure(New object:C1471(\
+		$o:=_o_structure(New object:C1471(\
 			"action"; "createDeletedRecords"))
 		
 		If (Asserted:C1132($o.success; "createDeletedRecords when the table doesn't exist"))
 			
-			$o:=structure(New object:C1471(\
+			$o:=_o_structure(New object:C1471(\
 				"action"; "verifyDeletedRecords"))
 			
 			If (Asserted:C1132($o.success; "verifyDeletedRecords when the table exist"))
 				
-				$o:=structure(New object:C1471(\
+				$o:=_o_structure(New object:C1471(\
 					"action"; "createDeletedRecords"))
 				
 				ASSERT:C1129($o.success; "createDeletedRecords when the table already exist")
 				
-				$o:=structure(New object:C1471(\
+				$o:=_o_structure(New object:C1471(\
 					"action"; "catalog"; \
 					"name"; SHARED.deletedRecordsTable.name))
 				
@@ -282,25 +282,25 @@ If (Structure file:C489=Structure file:C489(*))
 		
 	End SQL
 	
-	$o:=structure(New object:C1471(\
+	$o:=_o_structure(New object:C1471(\
 		"action"; "verifyStamps"; \
 		"tableName"; "UNIT_STRUCTURE"))
 	
 	ASSERT:C1129(Not:C34($o.success); "verifyStamps when field is missing")
 	
-	$o:=structure(New object:C1471(\
+	$o:=_o_structure(New object:C1471(\
 		"action"; "createStamps"; \
 		"tableName"; "UNIT_STRUCTURE"))
 	
 	If (Asserted:C1132($o.success; "createStamps when the stamp doesn't exist"))
 		
-		$o:=structure(New object:C1471(\
+		$o:=_o_structure(New object:C1471(\
 			"action"; "createStamps"; \
 			"tableName"; "UNIT_STRUCTURE"))
 		
 		ASSERT:C1129($o.success; "createStamps when the stamp already exist")
 		
-		$o:=structure(New object:C1471(\
+		$o:=_o_structure(New object:C1471(\
 			"action"; "verifyStamps"; \
 			"tableName"; "UNIT_STRUCTURE"))
 		
@@ -308,19 +308,19 @@ If (Structure file:C489=Structure file:C489(*))
 		
 	End if 
 	
-	$o:=structure(New object:C1471(\
+	$o:=_o_structure(New object:C1471(\
 		"action"; "verify"; \
 		"tables"; "UNIT_STRUCTURE"))
 	
 	ASSERT:C1129($o.success; "verify for a table")
 	
-	$o:=structure(New object:C1471(\
+	$o:=_o_structure(New object:C1471(\
 		"action"; "verify"; \
 		"tables"; New collection:C1472("UNIT_STRUCTURE")))
 	
 	ASSERT:C1129($o.success; "verify for collection of tables")
 	
-	$o:=structure(New object:C1471(\
+	$o:=_o_structure(New object:C1471(\
 		"action"; "verifyStamps"; \
 		"tableName"; "UNKNOWN"))
 	

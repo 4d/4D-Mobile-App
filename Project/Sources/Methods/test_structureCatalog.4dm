@@ -8,7 +8,7 @@ TRY
 COMPONENT_INIT
 
 //_____________________________________________________________
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "catalog"))
 
 If (Asserted:C1132($o.success))
@@ -24,7 +24,7 @@ If (Asserted:C1132($o.success))
 End if 
 
 //_____________________________________________________________
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "catalog"; \
 "name"; "HELLO_WORLD"))
 
@@ -41,7 +41,7 @@ If (Asserted:C1132(Not:C34($o.success)))
 End if 
 
 //_____________________________________________________________
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "catalog"; \
 "tableNumber"; 8858))
 
@@ -71,7 +71,7 @@ For ($i; 1; Get last table number:C254; 1)
 	End if 
 End for 
 
-$o:=structure(New object:C1471(\
+$o:=_o_structure(New object:C1471(\
 "action"; "catalog"; \
 "name"; "UNIT_0"))
 

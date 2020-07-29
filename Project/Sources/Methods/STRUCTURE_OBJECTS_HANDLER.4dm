@@ -8,16 +8,15 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_BOOLEAN:C305($b)
-C_LONGINT:C283($bottom; $column; $height; $i; $indx; $l)
-C_LONGINT:C283($left; $Lon_button; $number; $Lon_published; $Lon_targetBottom; $Lon_targetTop)
-C_LONGINT:C283($Lon_unpublished; $Lon_vOffset; $right; $row; $top; $width)
-C_LONGINT:C283($Win_hdl)
-C_POINTER:C301($Ptr_; $Ptr_me; $Ptr_published)
-C_TEXT:C284($t; $fieldID)
-C_OBJECT:C1216($context; $e; $form; $menu; $o; $dataModel)
-C_OBJECT:C1216($o)
-C_COLLECTION:C1488($c)
+var $fieldID; $t : Text
+var $b : Boolean
+var $bottom; $column; $count; $height; $i; $indx; $l; $left; $Lon_button; $Lon_targetBottom : Integer
+var $Lon_targetTop; $Lon_unpublished; $Lon_vOffset; $right; $row; $top; $width; $Win_hdl : Integer
+var $Ptr_; $Ptr_me; $Ptr_published : Pointer
+var $context; $dataModel; $e; $form; $menu; $o; $relatedCatalog; $table : Object
+var $c : Collection
+
+var $structure : cs:C1710.structure
 
 // ----------------------------------------------------
 // Initialisations
@@ -322,11 +321,8 @@ Case of
 									
 									If (Not:C34(editor_Locked))
 										
-										var $structure : cs:C1710.structure
 										$structure:=cs:C1710.structure.new()
-										
-										var $relatedCatalog : Object
-										$relatedCatalog:=$structure.relatedCatalog($context.currentTable.name; $context.fieldName)
+										$relatedCatalog:=$structure.relatedCatalog($context.currentTable.name; $context.fieldName; True:C214)
 										
 										If ($relatedCatalog.success)  // Open field picker
 											
@@ -334,7 +330,20 @@ Case of
 											
 											For each ($o; $relatedCatalog.fields)
 												
-												$o.published:=($dataModel[String:C10($o.fieldNumber)]#Null:C1517)
+												$fieldID:=String:C10($o.fieldNumber)
+												$c:=Split string:C1554($o.path; ".")
+												
+												If ($c.length=1)
+													
+													$o.published:=($dataModel[$fieldID]#Null:C1517)
+													
+												Else 
+													
+													// Enhance_relation
+													$o.published:=($dataModel[$c[0]][$fieldID]#Null:C1517)
+													
+												End if 
+												
 												$o.icon:=UI.fieldIcons[$o.fieldType]
 												
 											End for each 
@@ -347,7 +356,6 @@ Case of
 												// If at least one related field is published
 												If ($relatedCatalog.fields.query("published=true").length>0)
 													
-													var $table : Object
 													$table:=Form:C1466.dataModel[String:C10($context.currentTable.tableNumber)]
 													
 													If ($table=Null:C1517)\
@@ -355,22 +363,18 @@ Case of
 														
 														$table:=project.addTable($context.currentTable)
 														
-														// Highlight the table name
-														$l:=Find in array:C230((ui.pointer($form.tableList))->; True:C214)
-														LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $l; Bold:K14:2)
-														
 													End if 
 													
-													$c:=New collection:C1472
+													$count:=0  //the number of published fields
 													
 													For each ($o; $relatedCatalog.fields)
 														
-														$number:=$number+1
 														$fieldID:=String:C10($o.fieldNumber)
+														$c:=Split string:C1554($o.path; ".")
 														
 														If ($o.published)
 															
-															$c.push($o)
+															$count:=$count+1
 															
 															If ($table[$context.fieldName]=Null:C1517)
 																
@@ -382,17 +386,45 @@ Case of
 																
 															End if 
 															
-															If ($table[$context.fieldName][$fieldID]=Null:C1517)
+															// Create the field, if any
+															If ($c.length>1)
 																
-																// Create the field
-																$table[$context.fieldName][$fieldID]:=New object:C1471(\
-																	"name"; $o.name; \
-																	"label"; project.label($o.name); \
-																	"shortLabel"; project.shortLabel($o.name); \
-																	"type"; $o.type; \
-																	"relatedTableNumber"; $o.relatedTableNumber; \
-																	"fieldType"; $o.fieldType)
+																If ($table[$context.fieldName][$c[0]]=Null:C1517)
+																	
+																	$table[$context.fieldName][$c[0]]:=New object:C1471(\
+																		"relatedDataClass"; $o.tableName; \
+																		"relatedTableNumber"; $o.tableNumber; \
+																		"inverseName"; "#TODO")
+																	
+																End if 
 																
+																If ($table[$context.fieldName][$c[0]][$fieldID]=Null:C1517)
+																	
+																	$table[$context.fieldName][$c[0]][$fieldID]:=New object:C1471(\
+																		"name"; $o.name; \
+																		"path"; $o.path; \
+																		"label"; project.label($o.name); \
+																		"shortLabel"; project.shortLabel($o.name); \
+																		"type"; $o.type; \
+																		"relatedTableNumber"; $o.relatedTableNumber; \
+																		"fieldType"; $o.fieldType)
+																	
+																End if 
+																
+															Else 
+																
+																If ($table[$context.fieldName][$fieldID]=Null:C1517)
+																	
+																	$table[$context.fieldName][$fieldID]:=New object:C1471(\
+																		"name"; $o.name; \
+																		"path"; $o.path; \
+																		"label"; project.label($o.name); \
+																		"shortLabel"; project.shortLabel($o.name); \
+																		"type"; $o.type; \
+																		"relatedTableNumber"; $o.relatedTableNumber; \
+																		"fieldType"; $o.fieldType)
+																	
+																End if 
 															End if 
 															
 														Else 
@@ -400,29 +432,38 @@ Case of
 															// Remove the field
 															If ($table[$context.fieldName]#Null:C1517)
 																
-																If ($table[$context.fieldName][$fieldID]#Null:C1517)
+																If ($c.length>1)
 																	
-																	OB REMOVE:C1226($table[$context.fieldName]; $fieldID)
+																	If ($table[$context.fieldName][$o.path]#Null:C1517)
+																		
+																		OB REMOVE:C1226($table[$context.fieldName]; $o.path)
+																		
+																	End if 
 																	
+																Else 
+																	
+																	If ($table[$context.fieldName][$fieldID]#Null:C1517)
+																		
+																		If ($table[$context.fieldName][$fieldID].path=$o.path)
+																			
+																			OB REMOVE:C1226($table[$context.fieldName]; $fieldID)
+																			
+																		End if 
+																	End if 
 																End if 
 															End if 
 														End if 
 													End for each 
 													
-													// Checkbox value
-													If ($c.length>0)
+													// Checkbox value according to the count
+													If ($count>0)
 														
-														$Lon_published:=1
+														$count:=1+Num:C11($count#$relatedCatalog.fields.length)
 														
-														If ($c.length#$relatedCatalog.fields.length)
-															
-															$Lon_published:=2
-															
-														End if 
 													End if 
 												End if 
 												
-												($form.publishedPtr)->{$row}:=$Lon_published
+												($form.publishedPtr)->{$row}:=$count
 												
 											End if 
 											

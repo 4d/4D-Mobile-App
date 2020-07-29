@@ -12,7 +12,7 @@ var $1 : Object
 
 var $t : Text
 var $found : Boolean
-var $indx; $l : Integer
+var $indx; $type : Integer
 var $context; $currentTable; $dataModel; $field; $form; $o; $oo; $table : Object
 var $published : Collection
 
@@ -105,7 +105,7 @@ Else
 					
 					If ($found)
 						
-						$field:=$currentTable.field[$currentTable.field.extract("name").indexOf($t)]
+						$field:=$currentTable.field.query("name=:1"; $t).pop()
 						
 					End if 
 					
@@ -128,12 +128,11 @@ Else
 		If (Not:C34($found))
 			
 			// Get from cache
-			$indx:=$currentTable.field.extract("name").indexOf($o.name)
-			$field:=$currentTable.field[$indx]
+			$field:=$currentTable.field.query("name = :1"; $o.name).pop()
 			
 		End if 
 		
-		$l:=Num:C11($field.type)
+		$type:=Num:C11($field.type)
 		
 		Case of 
 				
@@ -144,12 +143,12 @@ Else
 				Case of 
 						
 						//………………………………………………………………………………………………………
-					: ($l=-1)  // N -> 1 relation
+					: ($type=-1)  // N -> 1 relation
 						
 						// 🕛 #MARK_TO_OPTIMIZE
 						
 						// Add all related fields
-						$o:=structure(New object:C1471(\
+						$o:=_o_structure(New object:C1471(\
 							"action"; "relatedCatalog"; \
 							"table"; $table[""].name; \
 							"relatedEntity"; $o.name))
@@ -181,7 +180,7 @@ Else
 						End if 
 						
 						//………………………………………………………………………………………………………
-					: ($l=-2)  // 1 -> N relation
+					: ($type=-2)  // 1 -> N relation
 						
 						$table[$field.name]:=New object:C1471(\
 							"label"; formatString("label"; str("listOf").localized($field.name)); \
@@ -214,7 +213,7 @@ Else
 				Case of 
 						
 						//………………………………………………………………………………………………………
-					: ($l=-1)  // N -> 1 relation
+					: ($type=-1)  // N -> 1 relation
 						
 						// Remove all related fields
 						If ($table[$o.name]#Null:C1517)
@@ -224,7 +223,7 @@ Else
 						End if 
 						
 						//………………………………………………………………………………………………………
-					: ($l=-2)  // 1 -> N relation
+					: ($type=-2)  // 1 -> N relation
 						
 						If ($table[$o.name]#Null:C1517)
 							
@@ -240,6 +239,11 @@ Else
 						
 						//………………………………………………………………………………………………………
 				End case 
+				
+				//_____________________________________________________
+			: (Num:C11($o.published)=0)
+				
+				// <NOTHING MORE TO DO>
 				
 				//_____________________________________________________
 			Else 

@@ -99,7 +99,7 @@ Function structure
 	var $0 : Object
 	var $1 : Object
 	
-	$0:=structure($1)
+	$0:=_o_structure($1)
 	
 	//______________________________________________________
 Function dump

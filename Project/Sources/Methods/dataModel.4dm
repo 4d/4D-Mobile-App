@@ -234,7 +234,7 @@ Case of
 							// Has or not the global stamp fields
 							$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
 								"key"; "globalStamp"; \
-								"value"; Choose:C955(Bool:C1537(structure(New object:C1471(\
+								"value"; Choose:C955(Bool:C1537(_o_structure(New object:C1471(\
 								"action"; "hasField"; \
 								"table"; $o.name; \
 								"field"; SHARED.stampField.name)).value); "YES"; "NO"))
@@ -433,7 +433,7 @@ Case of
 															
 														End if 
 														
-														$Obj_buffer:=structure(New object:C1471(\
+														$Obj_buffer:=_o_structure(New object:C1471(\
 															"action"; "inverseRelationName"; \
 															"table"; $Obj_table.name; \
 															"definition"; $Obj_out.definition; \
@@ -698,7 +698,7 @@ Case of
 								
 								$o:=$Obj_relationTable[""]
 								
-								$Obj_buffer:=structure(New object:C1471(\
+								$Obj_buffer:=_o_structure(New object:C1471(\
 									"action"; "tableInfo"; \
 									"name"; $o.name))
 								
@@ -735,7 +735,7 @@ Case of
 							End for 
 							
 							// Get inverse field
-							$Obj_buffer:=structure(New object:C1471(\
+							$Obj_buffer:=_o_structure(New object:C1471(\
 								"action"; "inverseRelatedFields"; \
 								"table"; $Obj_table[""].name; \
 								"relation"; $Txt_relationName; \
@@ -810,7 +810,7 @@ Case of
 						//………………………………………………………………………………………………………………………
 					Else 
 						
-						$Obj_buffer:=structure(New object:C1471(\
+						$Obj_buffer:=_o_structure(New object:C1471(\
 							"action"; "tableInfo"; \
 							"name"; $o.name))
 						
@@ -836,7 +836,7 @@ Case of
 				
 				If (Not:C34($Boo_found))  // if not add missing primary key field
 					
-					$Obj_buffer:=structure(New object:C1471(\
+					$Obj_buffer:=_o_structure(New object:C1471(\
 						"action"; "createField"; \
 						"table"; $o.name; \
 						"field"; $Txt_fieldName))
@@ -1167,7 +1167,7 @@ Case of
 			// Add primary key if needed for expanded data
 			For each ($Txt_field; $Obj_out.expand)
 				
-				$Obj_buffer:=structure(New object:C1471(\
+				$Obj_buffer:=_o_structure(New object:C1471(\
 					"action"; "tableInfo"; \
 					"name"; String:C10($Obj_in.table[$Txt_field].relatedDataClass)))
 				

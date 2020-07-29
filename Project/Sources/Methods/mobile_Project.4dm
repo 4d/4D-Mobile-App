@@ -371,7 +371,7 @@ If ($Obj_in.create)
 		
 		If (Bool:C1537($Obj_in.structureAdjustments))
 			
-			$Obj_out.structureAdjustments:=structure(New object:C1471(\
+			$Obj_out.structureAdjustments:=_o_structure(New object:C1471(\
 				"action"; "create"; \
 				"tables"; dataModel(New object:C1471(\
 				"action"; "tableNames"; \

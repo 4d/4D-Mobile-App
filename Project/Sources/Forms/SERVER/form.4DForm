@@ -110,5 +110,12 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
+	},
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
 	}
 }

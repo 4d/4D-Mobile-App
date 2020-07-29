@@ -1,31 +1,31 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-  // ----------------------------------------------------
-  // Project method : publishedTableList
-  // ID[892090D3E24D425C9269C91077BE4BCD]
-  // Created 21-3-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($i)
-C_TEXT:C284($tTableNumber)
-C_OBJECT:C1216($o;$oDataModel;$oIN;$oOUT;$oTable)
+// ----------------------------------------------------
+// Project method : publishedTableList
+// ID[892090D3E24D425C9269C91077BE4BCD]
+// Created 21-3-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(publishedTableList ;$0)
-	C_OBJECT:C1216(publishedTableList ;$1)
+	C_OBJECT:C1216(publishedTableList; $0)
+	C_OBJECT:C1216(publishedTableList; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+var $tTableNumber : Text
+var $i : Integer
+var $o; $oDataModel; $oIN; $oOUT; $oTable : Object
 
-  // <NO PARAMETERS REQUIRED>
+// ----------------------------------------------------
+// Initialisations
 
-  // Optional parameters
+// <NO PARAMETERS REQUIRED>
+
+// Optional parameters
 If (Count parameters:C259>=1)
 	
 	$oIN:=$1
@@ -33,9 +33,9 @@ If (Count parameters:C259>=1)
 End if 
 
 $oOUT:=New object:C1471(\
-"success";$oIN.dataModel#Null:C1517)
+"success"; $oIN.dataModel#Null:C1517)
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If ($oOUT.success)
 	
 	$oDataModel:=$oIN.dataModel
@@ -44,17 +44,17 @@ If ($oOUT.success)
 		
 		$oOUT.tables:=New collection:C1472
 		
-		For each ($tTableNumber;$oDataModel)
+		For each ($tTableNumber; $oDataModel)
 			
 			$o:=$oDataModel[$tTableNumber][""]  // Table properties
 			
 			$oTable:=New object:C1471(\
-				"tableNumber";Num:C11($tTableNumber);\
-				"name";$o.name)
+				"tableNumber"; Num:C11($tTableNumber); \
+				"name"; $o.name)
 			
 			If ($o.label=Null:C1517)
 				
-				$o.label:=formatString ("label";$o.name)
+				$o.label:=formatString("label"; $o.name)
 				
 			End if 
 			
@@ -70,15 +70,15 @@ If ($oOUT.success)
 			
 			If ($o.filter#Null:C1517)
 				
-				$oTable.filter:=Choose:C955(Value type:C1509($o.filter)=Is text:K8:3;New object:C1471(\
-					"string";$o.filter);\
+				$oTable.filter:=Choose:C955(Value type:C1509($o.filter)=Is text:K8:3; New object:C1471(\
+					"string"; $o.filter); \
 					$o.filter)
 				
 			End if 
 			
 			$oTable.embedded:=Bool:C1537($o.embedded)
 			$oTable.iconPath:=String:C10($o.icon)
-			$oTable.icon:=getIcon ($oTable.iconPath)
+			$oTable.icon:=getIcon($oTable.iconPath)
 			
 			$oOUT.tables.push($oTable)
 			
@@ -95,7 +95,7 @@ If ($oOUT.success)
 		$oOUT.iconPaths:=New collection:C1472
 		$oOUT.icons:=New collection:C1472
 		
-		For each ($tTableNumber;$oDataModel)
+		For each ($tTableNumber; $oDataModel)
 			
 			$o:=$oDataModel[$tTableNumber][""]  // Table properties
 			
@@ -104,7 +104,7 @@ If ($oOUT.success)
 			
 			If ($o.label=Null:C1517)
 				
-				$o.label:=formatString ("label";$o.name)
+				$o.label:=formatString("label"; $o.name)
 				
 			End if 
 			
@@ -118,7 +118,7 @@ If ($oOUT.success)
 			
 			$oOUT.shortLabels[$i]:=$o.shortLabel
 			$oOUT.iconPaths[$i]:=String:C10($o.icon)
-			$oOUT.icons[$i]:=getIcon ($oOUT.iconPaths[$i])
+			$oOUT.icons[$i]:=getIcon($oOUT.iconPaths[$i])
 			
 			$i:=$i+1
 			
@@ -130,13 +130,13 @@ If ($oOUT.success)
 	
 Else 
 	
-	  // ASSERT(dev_Matrix ;"No data model")  // XXX maybe add this error too?
+	// ASSERT(dev_Matrix ;"No data model")  // XXX maybe add this error too?
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$oOUT
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

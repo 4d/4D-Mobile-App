@@ -249,7 +249,7 @@ Else
 	
 End if 
 
-Form:C1466.$catalog:=structure(New object:C1471("action"; "catalog")).value
+Form:C1466.$catalog:=_o_structure(New object:C1471("action"; "catalog")).value
 
 $Obj_cache.structure.definition:=Form:C1466.$catalog
 $Obj_cache.structure.digest:=Generate digest:C1147(JSON Stringify:C1217(Form:C1466.$catalog); SHA1 digest:K66:2)

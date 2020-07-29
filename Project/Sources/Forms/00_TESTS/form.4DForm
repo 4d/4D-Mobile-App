@@ -28,7 +28,7 @@
 					"height": 1097,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"dataSource": "structure (New object:C1471(\"action\";\"catalog\";\"sorted\";True:C214)).value",
+					"dataSource": "cs:C1710.structure.new().catalog",
 					"dataSourceTypeHint": "object",
 					"fontFamily": "monaco",
 					"fontSize": 11,
@@ -49,5 +49,12 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
+	},
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
 	}
 }

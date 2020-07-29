@@ -16,9 +16,6 @@ var $field; $out; $str; $table : Object
 
 var $formatters : cs:C1710.path
 
-If (False:C215)
-End if 
-
 // ----------------------------------------------------
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
@@ -170,7 +167,7 @@ If ($out.success)
 								
 								// ***********************************
 								// ***********************************
-								$out.tableNumbers.push(structure(New object:C1471(\
+								$out.tableNumbers.push(_o_structure(New object:C1471(\
 									"action"; "tableNumber"; \
 									"name"; $table[$key].relatedDataClass)).tableNumber)
 								

@@ -325,7 +325,7 @@ Case of
 					$Lon_published:=1  // All related fields are published
 					
 					//#MARK_TO_OPTIMIZE
-					$o:=structure(New object:C1471(\
+					$o:=_o_structure(New object:C1471(\
 						"action"; "relatedCatalog"; \
 						"table"; $Obj_in.table.name; \
 						"relatedEntity"; $Obj_in.field.name))

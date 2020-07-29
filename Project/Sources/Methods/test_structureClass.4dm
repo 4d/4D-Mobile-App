@@ -375,27 +375,27 @@ If (False:C215)  //============================================================ 
 			
 		End SQL
 		
-		$o:=structure(New object:C1471(\
+		$o:=_o_structure(New object:C1471(\
 			"action"; "verifyDeletedRecords"))
 		
 		If (Asserted:C1132(Not:C34($o.success); "verifyDeletedRecords when the table doesn't exist"))
 			
-			$o:=structure(New object:C1471(\
+			$o:=_o_structure(New object:C1471(\
 				"action"; "createDeletedRecords"))
 			
 			If (Asserted:C1132($o.success; "createDeletedRecords when the table doesn't exist"))
 				
-				$o:=structure(New object:C1471(\
+				$o:=_o_structure(New object:C1471(\
 					"action"; "verifyDeletedRecords"))
 				
 				If (Asserted:C1132($o.success; "verifyDeletedRecords when the table exist"))
 					
-					$o:=structure(New object:C1471(\
+					$o:=_o_structure(New object:C1471(\
 						"action"; "createDeletedRecords"))
 					
 					ASSERT:C1129($o.success; "createDeletedRecords when the table already exist")
 					
-					$o:=structure(New object:C1471(\
+					$o:=_o_structure(New object:C1471(\
 						"action"; "catalog"; \
 						"name"; SHARED.deletedRecordsTable.name))
 					
@@ -417,25 +417,25 @@ If (False:C215)  //============================================================ 
 			
 		End SQL
 		
-		$o:=structure(New object:C1471(\
+		$o:=_o_structure(New object:C1471(\
 			"action"; "verifyStamps"; \
 			"tableName"; "UNIT_STRUCTURE"))
 		
 		ASSERT:C1129(Not:C34($o.success); "verifyStamps when field is missing")
 		
-		$o:=structure(New object:C1471(\
+		$o:=_o_structure(New object:C1471(\
 			"action"; "createStamps"; \
 			"tableName"; "UNIT_STRUCTURE"))
 		
 		If (Asserted:C1132($o.success; "createStamps when the stamp doesn't exist"))
 			
-			$o:=structure(New object:C1471(\
+			$o:=_o_structure(New object:C1471(\
 				"action"; "createStamps"; \
 				"tableName"; "UNIT_STRUCTURE"))
 			
 			ASSERT:C1129($o.success; "createStamps when the stamp already exist")
 			
-			$o:=structure(New object:C1471(\
+			$o:=_o_structure(New object:C1471(\
 				"action"; "verifyStamps"; \
 				"tableName"; "UNIT_STRUCTURE"))
 			
@@ -443,19 +443,19 @@ If (False:C215)  //============================================================ 
 			
 		End if 
 		
-		$o:=structure(New object:C1471(\
+		$o:=_o_structure(New object:C1471(\
 			"action"; "verify"; \
 			"tables"; "UNIT_STRUCTURE"))
 		
 		ASSERT:C1129($o.success; "verify for a table")
 		
-		$o:=structure(New object:C1471(\
+		$o:=_o_structure(New object:C1471(\
 			"action"; "verify"; \
 			"tables"; New collection:C1472("UNIT_STRUCTURE")))
 		
 		ASSERT:C1129($o.success; "verify for collection of tables")
 		
-		$o:=structure(New object:C1471(\
+		$o:=_o_structure(New object:C1471(\
 			"action"; "verifyStamps"; \
 			"tableName"; "UNKNOWN"))
 		
@@ -473,3 +473,5 @@ If (False:C215)  //============================================================ 
 End if 
 
 FINALLY
+
+BEEP:C151

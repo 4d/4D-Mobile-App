@@ -33,7 +33,7 @@
 					"fill": "automatic",
 					"stroke": "transparent"
 				},
-				"List Box": {
+				"fields": {
 					"type": "listbox",
 					"top": 36,
 					"left": 0,
@@ -57,12 +57,10 @@
 					"horizontalLineStroke": "transparent",
 					"verticalLineStroke": "transparent",
 					"borderStyle": "none",
-					"events": [
-						"onClick",
-						"onDataChange",
-						"onSelectionChange",
-						"onHeaderClick"
-					],
+					"events": [],
+					"sortable": false,
+					"focusable": false,
+					"rowStyleSource": "Choose:C955(Position:C15(\".\"; This:C1470.path)>0; Italic:K14:3; Plain:K14:1)",
 					"columns": [
 						{
 							"name": "_airbag",
@@ -73,7 +71,6 @@
 							"enterable": false,
 							"truncateMode": "none",
 							"events": [
-								"onClick",
 								"onDataChange"
 							],
 							"header": {
@@ -130,9 +127,7 @@
 							"maxWidth": 32000,
 							"resizable": false,
 							"enterable": false,
-							"events": [
-								"onClick"
-							],
+							"events": [],
 							"header": {
 								"name": "Header1",
 								"text": "Header3"
@@ -157,7 +152,13 @@
 					"method": "ObjectMethods/cancel.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false,
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"shortcutKey": "[Esc]"
 				},
 				"ok": {
 					"type": "button",
@@ -172,7 +173,13 @@
 					"defaultButton": true,
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false,
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"shortcutKey": "[Return]"
 				},
 				"_bottomLine": {
 					"type": "line",
@@ -212,5 +219,6 @@
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"geometryStamp": 1
 }

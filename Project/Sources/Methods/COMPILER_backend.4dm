@@ -69,8 +69,8 @@ If (False:C215)
 	C_OBJECT:C1216(Rest; $1)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(structure; $0)
-	C_OBJECT:C1216(structure; $1)
+	C_OBJECT:C1216(_o_structure; $0)
+	C_OBJECT:C1216(_o_structure; $1)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(template; $0)

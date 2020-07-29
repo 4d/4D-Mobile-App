@@ -385,14 +385,22 @@ Function fieldDefinition
 	//==================================================================
 Function relatedCatalog  // Return related entity catalog
 	var $0 : Object
-	var $1 : Text  // Table ID
+	var $1 : Text  // Table name
 	var $2 : Text  // RelatedEntity
+	var $3 : Boolean
 	
-	var $fieldID : Text
+	var $fieldName : Text
+	var $withRecursiveLinks : Boolean
 	var $field; $o; $related; $relatedDataClass; $relatedField : Object
 	
 	$0:=New object:C1471(\
 		"success"; False:C215)
+	
+	If (Count parameters:C259>=3)
+		
+		$withRecursiveLinks:=$3
+		
+	End if 
 	
 	$field:=This:C1470.datastore[$1][$2]
 	
@@ -415,9 +423,9 @@ Function relatedCatalog  // Return related entity catalog
 			
 			$relatedDataClass:=This:C1470.datastore[$field.relatedDataClass]
 			
-			For each ($fieldID; $relatedDataClass)
+			For each ($fieldName; $relatedDataClass)
 				
-				$o:=$relatedDataClass[$fieldID]
+				$o:=$relatedDataClass[$fieldName]
 				
 				Case of 
 						
@@ -437,19 +445,27 @@ Function relatedCatalog  // Return related entity catalog
 						//___________________________________________
 					: (This:C1470.isRelatedEntity($o))  // N -> 1 relation
 						
-						If (feature.with("moreRelations"))  // & False
+						If (feature.with("moreRelations"))  //& False
 							
-							For each ($relatedField; Form:C1466.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
+							If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$1)))
 								
-								If (This:C1470.isStorage($relatedField))
+								For each ($relatedField; Form:C1466.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
 									
-									$o:=This:C1470.fieldDefinition(Num:C11($0.relatedTableNumber); $relatedField.name)
-									$o.path:=$o.tableName+"."+$o.name
-									
-									$0.fields.push($o)
-									
-								End if 
-							End for each 
+									If (This:C1470.isStorage($relatedField))
+										
+										//ASSERT($o.name#"service")
+										$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($o.relatedDataClass); $relatedField.name)
+										
+										//If ($related.tableName#$1) | True
+										
+										$related.path:=$o.name+"."+$related.name
+										
+										$0.fields.push($related)
+										
+										//End if 
+									End if 
+								End for each 
+							End if 
 						End if 
 						
 						//…………………………………………………………………………………………………

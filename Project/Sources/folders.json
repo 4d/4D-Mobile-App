@@ -82,6 +82,8 @@
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
 			"_o_SERVER_OBJECTS_HANDLER",
+			"_o_structure",
+			"_o_tempoFieldType",
 			"str_trim",
 			"str_trimLeading",
 			"str_trimTrailing",

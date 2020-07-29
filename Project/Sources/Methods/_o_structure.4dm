@@ -12,8 +12,8 @@ var $0 : Object
 var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(structure; $0)
-	C_OBJECT:C1216(structure; $1)
+	C_OBJECT:C1216(_o_structure; $0)
+	C_OBJECT:C1216(_o_structure; $1)
 End if 
 
 var $fieldName; $onErrCall; $root; $t; $tableName; $xml : Text
@@ -252,7 +252,7 @@ Case of
 		If ($IN.catalog=Null:C1517)
 			
 			// Get the catalog
-			$catalog:=structure(New object:C1471(\
+			$catalog:=_o_structure(New object:C1471(\
 				"action"; "catalog")).value
 			
 		Else 
@@ -329,7 +329,7 @@ Case of
 					
 					If ($c.length>2)
 						
-						$field:=structure(New object:C1471(\
+						$field:=_o_structure(New object:C1471(\
 							"action"; "fieldDefinition"; \
 							"path"; $c.copy().remove(0).join("."); \
 							"tableNumber"; $tableNumber; \
@@ -506,7 +506,7 @@ Case of
 						If (Length:C16(String:C10($field.inverseName))>0)
 							$Obj_buffer:=New object:C1471("value"; $field.inverseName; "success"; True:C214)
 						Else   // OBSOLETE normally
-							$Obj_buffer:=structure(New object:C1471(\
+							$Obj_buffer:=_o_structure(New object:C1471(\
 								"action"; "inverseRelationName"; \
 								"table"; $IN.table; \
 								"relation"; $IN.relation; \
@@ -533,7 +533,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																
+								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -569,7 +569,7 @@ Case of
 				$OUT:=Choose:C955(Value type:C1509($IN.definition)=Is object:K8:27; New object:C1471(\
 					"success"; True:C214; \
 					"value"; $IN.definition); \
-					structure(New object:C1471(\
+					_o_structure(New object:C1471(\
 					"action"; "definition")))
 				
 				If ($OUT.success)
@@ -780,13 +780,13 @@ Case of
 			
 			$IN.action:="catalog"
 			
-			$OUT:=structure($IN)
+			$OUT:=_o_structure($IN)
 			
 			$IN:=$Obj_buffer
 			
 		Else 
 			
-			$OUT:=structure(New object:C1471(\
+			$OUT:=_o_structure(New object:C1471(\
 				"action"; "definition"))
 			
 			If ($OUT.success)
@@ -820,7 +820,7 @@ Case of
 							
 							If (Not:C34(Bool:C1537($table.hide_in_REST)))
 								
-								$filtered.push(structure(New object:C1471(\
+								$filtered.push(_o_structure(New object:C1471(\
 									"action"; "tableDefinition"; \
 									"value"; $table)).value)
 								
@@ -832,7 +832,7 @@ Case of
 										If (_o_rest_isValidField($field))
 											
 											// Cleanup the properties
-											$field:=structure(New object:C1471(\
+											$field:=_o_structure(New object:C1471(\
 												"action"; "fieldDefinition"; \
 												"value"; $field)).value
 											
@@ -856,7 +856,7 @@ Case of
 									// Only one field
 									If (_o_rest_isValidField($table.field))
 										
-										$table.field:=structure(New object:C1471(\
+										$table.field:=_o_structure(New object:C1471(\
 											"action"; "fieldDefinition"; \
 											"value"; $table.field)).value
 										
@@ -877,7 +877,7 @@ Case of
 						
 						If (Not:C34(Bool:C1537($table.hide_in_REST)))
 							
-							$table:=structure(New object:C1471(\
+							$table:=_o_structure(New object:C1471(\
 								"action"; "tableDefinition"; \
 								"value"; $table)).value
 							
@@ -891,7 +891,7 @@ Case of
 									If (_o_rest_isValidField($field))
 										
 										// Cleanup the properties
-										$field:=structure(New object:C1471(\
+										$field:=_o_structure(New object:C1471(\
 											"action"; "fieldDefinition"; \
 											"value"; $field)).value
 										
@@ -916,7 +916,7 @@ Case of
 								If (_o_rest_isValidField($table.field))
 									
 									// Remove unnecessary informations
-									$table.field:=structure(New object:C1471(\
+									$table.field:=_o_structure(New object:C1471(\
 										"action"; "fieldDefinition"; \
 										"value"; $table.field)).value
 									
@@ -976,7 +976,7 @@ Case of
 				
 				$datastore:=_4D_Build Exposed Datastore:C1598
 				
-				$OUT.success:=structure(New object:C1471(\
+				$OUT.success:=_o_structure(New object:C1471(\
 					"action"; "verifyDeletedRecords"; \
 					"catalog"; $datastore)).success
 				
@@ -986,7 +986,7 @@ Case of
 						
 						For each ($t; $IN.tables) While ($OUT.success)
 							
-							$OUT.success:=structure(New object:C1471(\
+							$OUT.success:=_o_structure(New object:C1471(\
 								"action"; "verifyStamps"; \
 								"tableName"; $t; \
 								"catalog"; $datastore)).success
@@ -995,7 +995,7 @@ Case of
 						
 					Else 
 						
-						$OUT.success:=structure(New object:C1471(\
+						$OUT.success:=_o_structure(New object:C1471(\
 							"action"; "verifyStamps"; \
 							"tableName"; $IN.tables; \
 							"catalog"; $datastore)).success
@@ -1050,7 +1050,7 @@ Case of
 				
 				ASSERT:C1129($IN.tables#Null:C1517)
 				
-				$OUT.success:=structure(New object:C1471(\
+				$OUT.success:=_o_structure(New object:C1471(\
 					"action"; "createDeletedRecords"; \
 					"catalog"; _4D_Build Exposed Datastore:C1598)).success
 				
@@ -1058,7 +1058,7 @@ Case of
 					
 					For each ($t; $IN.tables) While ($OUT.success)
 						
-						$OUT.success:=structure(New object:C1471(\
+						$OUT.success:=_o_structure(New object:C1471(\
 							"action"; "createStamps"; \
 							"tableName"; $t)).success
 						
@@ -1160,7 +1160,7 @@ Case of
 						
 						For each ($t; $IN.tableName) While ($OUT.success)
 							
-							$OUT.success:=structure(New object:C1471(\
+							$OUT.success:=_o_structure(New object:C1471(\
 								"action"; "addStamp"; \
 								"tableName"; $t)).success
 							
@@ -1168,7 +1168,7 @@ Case of
 						
 					Else 
 						
-						$OUT.success:=structure(New object:C1471(\
+						$OUT.success:=_o_structure(New object:C1471(\
 							"action"; "addStamp"; \
 							"tableName"; $IN.tableName)).success
 						

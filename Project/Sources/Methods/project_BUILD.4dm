@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			//If ($Obj_in.create)
 			//  // Must also close and delete folders if no change and want to recreate.
 			// Xcode (New object(\
-																																																																																								"action";"safeDelete";\
-																																																																																								"path";$Obj_in.path))
+																																																																																												"action";"safeDelete";\
+																																																																																												"path";$Obj_in.path))
 			// End if
 			
 		End if 
@@ -136,7 +136,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			If ($Obj_project.dataSource.source="local")
 				
 				// Check host-database structure
-				If (Not:C34(structure(New object:C1471(\
+				If (Not:C34(_o_structure(New object:C1471(\
 					"action"; "verify"; \
 					"tables"; $c)).success))
 					
@@ -145,7 +145,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					If ($Boo_OK)
 						
-						$Boo_OK:=structure(New object:C1471(\
+						$Boo_OK:=_o_structure(New object:C1471(\
 							"action"; "create"; \
 							"tables"; $c)).success
 						

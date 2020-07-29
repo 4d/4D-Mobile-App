@@ -100,7 +100,7 @@ If ($Lon_row>0)
 						If ($ƒ.isRelationToOne($Obj_field))
 							
 							//#MARK_TO_OPTIMIZE
-							$Obj_:=structure(New object:C1471(\
+							$Obj_:=_o_structure(New object:C1471(\
 								"action"; "catalog"; \
 								"tableNumber"; $Obj_field.relatedTableNumber))
 							
@@ -167,7 +167,7 @@ If ($Lon_row>0)
 					If ($ƒ.isRelationToOne($Obj_field))
 						
 						//#MARK_TO_OPTIMIZE
-						$Obj_:=structure(New object:C1471(\
+						$Obj_:=_o_structure(New object:C1471(\
 							"action"; "catalog"; \
 							"tableNumber"; $Obj_field.relatedTableNumber))
 						

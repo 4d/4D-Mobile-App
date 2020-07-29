@@ -1,39 +1,49 @@
-  // ----------------------------------------------------
-  // Form method : RELATED - (4D Mobile App)
-  // ID[FC51239B819F405287A5D751167C2CE3]
-  // Created 12-12-2018 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Declarations
-C_LONGINT:C283($Lon_formEvent)
+// ----------------------------------------------------
+// Form method : RELATED - (4D Mobile App)
+// ID[FC51239B819F405287A5D751167C2CE3]
+// Created 12-12-2018 by Vincent de Lachaux
+// ----------------------------------------------------
+// Declarations
+var $row : Integer
+var $e; $o : Object
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_formEvent:=Form event code:C388
+// ----------------------------------------------------
+// Initialisations
+$e:=FORM Event:C1606
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 
 Case of 
 		
-		  //______________________________________________________
-	: ($Lon_formEvent=On Load:K2:1)
+		//______________________________________________________
+	: ($e.code=On Load:K2:1)
 		
-		ui_BEST_SIZE (New object:C1471(\
-			"widgets";New collection:C1472("ok";"cancel");\
-			"alignment";Align right:K42:4))
+		ui_BEST_SIZE(New object:C1471(\
+			"widgets"; New collection:C1472("ok"; "cancel"); \
+			"alignment"; Align right:K42:4))
 		
-		OBJECT SET TITLE:C194(*;"title";Replace string:C233(Get localized string:C991("relatedTable");"{entity}";String:C10(Form:C1466.relatedDataClass)))
+		OBJECT SET TITLE:C194(*; "title"; Replace string:C233(Get localized string:C991("relatedTable"); "{entity}"; String:C10(Form:C1466.relatedDataClass)))
+		
+		//For each ($o; Form.fields)
+		
+		//$row:=$row+1
+		
+		//$style:=Choose(Position("."; this.path)>0;Italic;Plain)
+		//End for each 
+		
+		
 		
 		SET TIMER:C645(-1)
 		
-		  //______________________________________________________
-	: ($Lon_formEvent=On Timer:K2:25)
+		//______________________________________________________
+	: ($e.code=On Timer:K2:25)
 		
 		SET TIMER:C645(0)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 

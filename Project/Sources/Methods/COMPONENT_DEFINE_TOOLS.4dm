@@ -22,9 +22,9 @@ If (Storage:C1525.ƒ=Null:C1517)\
 			Storage:C1525.ƒ.action:=Formula:C1597(New object:C1471(\
 				"action"; $1))
 			
-			Storage:C1525.ƒ.structureCatalog:=Formula:C1597(structure(This:C1470.action("catalog")))
+			Storage:C1525.ƒ.structureCatalog:=Formula:C1597(_o_structure(This:C1470.action("catalog")))
 			
-			Storage:C1525.ƒ.tableCatalog:=Formula:C1597(structure(New object:C1471(\
+			Storage:C1525.ƒ.tableCatalog:=Formula:C1597(_o_structure(New object:C1471(\
 				"action"; "catalog"; \
 				"name"; $1)))
 			

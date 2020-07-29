@@ -1,28 +1,28 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : editor_PROJECT_AUDIT
-  // ID[4E068BB188A548B8A85C59D3D99C9EC9]
-  // Created 5-9-2018 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  // Launch project verifications
-  // ----------------------------------------------------
-  // Declarations
-C_LONGINT:C283($Lon_parameters;$Win_hdl)
+// ----------------------------------------------------
+// Project method : editor_PROJECT_AUDIT
+// ID[4E068BB188A548B8A85C59D3D99C9EC9]
+// Created 5-9-2018 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// Launch project verifications
+// ----------------------------------------------------
+// Declarations
+C_LONGINT:C283($Lon_parameters; $Win_hdl)
 C_TEXT:C284($Txt_worker)
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	
-	  // <NO PARAMETERS REQUIRED>
+	// <NO PARAMETERS REQUIRED>
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=1)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
@@ -36,18 +36,18 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
-  // Launch checking the structure
-CALL WORKER:C1389($Txt_worker;"structure";New object:C1471(\
-"action";"catalog";\
-"caller";$Win_hdl))
+// ----------------------------------------------------
+// Launch checking the structure
+CALL WORKER:C1389($Txt_worker; "_o_structure"; New object:C1471(\
+"action"; "catalog"; \
+"caller"; $Win_hdl))
 
-  // Launch project verifications
-CALL FORM:C1391($Win_hdl;"editor_CALLBACK";"projectAudit")
+// Launch project verifications
+CALL FORM:C1391($Win_hdl; "editor_CALLBACK"; "projectAudit")
 
 
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// Return
+// <NONE>
+// ----------------------------------------------------
+// End

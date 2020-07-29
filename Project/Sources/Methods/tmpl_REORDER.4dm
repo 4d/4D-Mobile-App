@@ -118,7 +118,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 								
 								If ($oField#Null:C1517)
 									
-									$o:=structure(New object:C1471(\
+									$o:=_o_structure(New object:C1471(\
 										"action"; "fieldDefinition"; \
 										"path"; $oField.name; \
 										"tableNumber"; Num:C11($oIN.tableNumber); \

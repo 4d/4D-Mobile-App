@@ -1,25 +1,25 @@
 //%attributes = {}
-  // Global initialization
-C_OBJECT:C1216($1)
-
-C_OBJECT:C1216($o)
+// Global initialization
+var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(INIT ;$1)
+	C_OBJECT:C1216(INIT; $1)
 End if 
 
-  // DATABASE
+var $o : Object
+
+// DATABASE
 If (Storage:C1525.database=Null:C1517)  // | (Structure file=Structure file(*))
 	
 	$o:=New shared object:C1526
 	
 	Use ($o)
 		
-		$o:=database 
+		$o:=database
 		
 		Use ($o)
 			
-			  //  Writable user database preferences folder
+			//  Writable user database preferences folder
 			$o.preferences:=New shared object:C1526
 			
 			Use ($o.preferences)
@@ -30,7 +30,7 @@ If (Storage:C1525.database=Null:C1517)  // | (Structure file=Structure file(*))
 			
 			$o.preferences.create()
 			
-			  // 'Mobile Projects' folder
+			// 'Mobile Projects' folder
 			$o.projects:=New shared object:C1526
 			
 			Use ($o.projects)
@@ -41,7 +41,7 @@ If (Storage:C1525.database=Null:C1517)  // | (Structure file=Structure file(*))
 			
 			$o.projects.create()
 			
-			  // Products folder
+			// Products folder
 			$o.products:=New shared object:C1526
 			
 			Use ($o.products)
@@ -60,4 +60,3 @@ If (Storage:C1525.database=Null:C1517)  // | (Structure file=Structure file(*))
 End if 
 
 $1.trigger()
-
