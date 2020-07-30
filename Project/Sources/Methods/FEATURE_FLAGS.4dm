@@ -43,59 +43,59 @@ feature.alias("debug"; 8858)
 /* _____________
 17R2
 _____________*/
-//featuresFlags._89556:=True    // Reload embedded data from iOS application
-//featuresFlags._92293:=True    // Support user defined tables
-//featuresFlags._93674:=True    // Main menu
-//featuresFlags._8122017:=True  // Turn around bug close window
-//featuresFlags._96674:=True    // Archive app
+feature.delivered(89556; 1720)  // Reload embedded data from iOS application
+feature.delivered(92293; 1720)  // Support user defined tables
+feature.delivered(93674; 1720)  // Main menu
+feature.delivered(8122017; 1720)  // Turn around bug close window
+feature.delivered(96674; 1720)  // Archive app
 
 /* _____________
 17R3
 _____________*/
-//featuresFlags._100157:=($Lon_version>=1730)  // Template creation
-//featuresFlags._100353:=featuresFlags._100157  // Template creation: inject any sources
-//featuresFlags._100191:=($Lon_version>=1730)  // Data Formatter
+feature.delivered(100157; 1730)  // Template creation
+feature.delivered(100353; 1730)  // Template creation: inject any sources
+feature.delivered(100191; 1730)  // Data Formatter
 
 /* _____________
 17R4
 _____________*/
-//featuresFlags._98105:=($Lon_version>=1740)  // Multi-criteria Search
-//featuresFlags._100990:=($Lon_version>=1740)  // Custom Data Formatter
-//featuresFlags._100174:=($Lon_version>=1740)  // Restricted queries
-//featuresFlags._101725:=featuresFlags._100174  // Restricted queries: Use NSDataSet (beter way to store resources)
-//featuresFlags._103112:=featuresFlags._100174  // Restricted queries: Move dataSet into database in Mobile Projects
-//featuresFlags._102457:=($Lon_version>=1740)  // Data file access with /mobileapp key
+feature.delivered(98105; 1740)  // Multi-criteria Search
+feature.delivered(100990; 1740)  // Custom Data Formatter
+feature.delivered(100174; 1740)  // Restricted queries
+feature.delivered(101725; 1740)  // Restricted queries: Use NSDataSet (beter way to store resources)
+feature.delivered(103112; 1740)  // Restricted queries: Move dataSet into database in Mobile Projects
+feature.delivered(102457; 1740)  // Data file access with /mobileapp key
 
 /* _____________
 17R5
 _____________*/
-//featuresFlags._101637:=($Lon_version>=1750)  // Display n-1 relations
-//featuresFlags._103850:=featuresFlags._101637  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
-//featuresFlags._103411:=($Lon_version>=1750)  // Incremental synchronization
-//featuresFlags._103505:=($Lon_version>=1750)  // Add, Update and Save Actions
-//featuresFlags.withNewFieldProperties:=($Lon_version>=1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
-//featuresFlags.withRecursiveLink:=True  // Enable recursive link management
+feature.delivered(101637; 1750)  // Display n-1 relations
+feature.delivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
+feature.delivered(103411; 1750)  // Incremental synchronization
+feature.delivered(103505; 1750)  // Add, Update and Save Actions
+feature.delivered("withNewFieldProperties"; 1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
+feature.delivered("withRecursiveLink"; 1750)  // Enable recursive link management
 feature.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
 
 /* _____________
 17R6
 _____________*/
-//featuresFlags._105413:=($Lon_version>=1760)  //  [MOBILE] Actions with parameters
-//featuresFlags.parameterListOfValues:=featuresFlags._105413  //     Manage field formatters as list of values for parameters
-//featuresFlags.allowPictureAsActionParameters:=featuresFlags._105413  // #107932 - [Mobile] Allow to use picture as action parameters
+feature.delivered(105413; 1760)  // [MOBILE] Actions with parameters
+feature.delivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
+feature.delivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
 
 /* _____________
 18
 _____________*/
-//feature.delivered(105431;1800)  // Display 1-n relations
-//feature.delivered(110882;1800)  // Dump data into core data SQLLite database
-//feature.delivered("newDataModel";1800)
+feature.delivered(105431; 1800)  // Display 1-n relations
+feature.delivered(110882; 1800)  // Dump data into core data SQLLite database
+feature.delivered("newDataModel"; 1800)
 
 /* _____________
 18R2
 _____________*/
-//feature.delivered("repairStructureMoreVisible";1820)
-//feature.delivered(113164;1820)  // Enable/disable image dump
+feature.delivered("repairStructureMoreVisible"; 1820)
+feature.delivered(113164; 1820)  // Enable/disable image dump
 
 /* _____________
 18R3
