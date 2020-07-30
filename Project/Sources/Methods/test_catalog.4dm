@@ -2,13 +2,13 @@
 C_BOOLEAN:C305($b)
 C_OBJECT:C1216($o)
 
-COMPONENT_INIT 
+COMPONENT_INIT
 
-TRY 
+TRY
 
-  //_____________________________________________________________
-$o:=catalog ("fields";New object:C1471(\
-"tableName";"NOT EXPOSED"))
+//_____________________________________________________________
+$o:=catalog("fields"; New object:C1471(\
+"tableName"; "NOT EXPOSED"))
 
 ASSERT:C1129(Not:C34($o.success))
 ASSERT:C1129($o.errors#Null:C1517)
@@ -16,9 +16,9 @@ ASSERT:C1129($o.errors.length=1)
 ASSERT:C1129($o.errors[0]="Table not found \"NOT EXPOSED\"")
 
 
-  //_____________________________________________________________
-$o:=catalog ("fields";New object:C1471(\
-"tableName";"Command"))
+//_____________________________________________________________
+$o:=catalog("fields"; New object:C1471(\
+"tableName"; "Command"))
 
 $b:=Not:C34($o.success)
 
@@ -27,11 +27,11 @@ ASSERT:C1129($o.errors#Null:C1517)
 ASSERT:C1129($o.errors.length=1)
 ASSERT:C1129($o.errors[0]="Table not found \"Command\"")
 
-  //_____________________________________________________________
+//_____________________________________________________________
 If (Storage:C1525.database.isMatrix)
 	
-	$o:=catalog ("fields";New object:C1471(\
-		"tableName";"Commands"))
+	$o:=catalog("fields"; New object:C1471(\
+		"tableName"; "Commands"))
 	
 	$b:=$b & $o.success
 	
@@ -39,9 +39,9 @@ If (Storage:C1525.database.isMatrix)
 	
 End if 
 
-  //_____________________________________________________________
-$o:=catalog ("fields";New object:C1471(\
-"tableName";"UNIT_0"))
+//_____________________________________________________________
+$o:=catalog("fields"; New object:C1471(\
+"tableName"; "UNIT_0"))
 
 $b:=$b & $o.success
 
@@ -70,9 +70,9 @@ If (Asserted:C1132($o.success))
 	End if 
 End if 
 
-  //_____________________________________________________________
-$o:=catalog ("fields";New object:C1471(\
-"tableName";"UNIT_1"))
+//_____________________________________________________________
+$o:=catalog("fields"; New object:C1471(\
+"tableName"; "UNIT_1"))
 
 $b:=$b & $o.success
 
@@ -100,9 +100,9 @@ If (Asserted:C1132($o.success))
 	End if 
 End if 
 
-  //_____________________________________________________________
-$o:=catalog ("fields";New object:C1471(\
-"tableName";"UNIT_2"))
+//_____________________________________________________________
+$o:=catalog("fields"; New object:C1471(\
+"tableName"; "UNIT_2"))
 
 $b:=$b & $o.success
 
@@ -130,9 +130,9 @@ If (Asserted:C1132($o.success))
 	End if 
 End if 
 
-  //_____________________________________________________________
-$o:=catalog ("fields";New object:C1471(\
-"tableName";"UNIT_3"))
+//_____________________________________________________________
+$o:=catalog("fields"; New object:C1471(\
+"tableName"; "UNIT_3"))
 
 $b:=$b & $o.success
 
@@ -160,4 +160,4 @@ If (Asserted:C1132($o.success))
 	End if 
 End if 
 
-FINALLY 
+FINALLY

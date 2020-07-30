@@ -1,5 +1,0 @@
-﻿<!----------------------------------------------------
-icon := getIcon ( path )
- -> path (Text) -  icon path
- <- icon (Picture)-->
-icon := getIcon ( path )

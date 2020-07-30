@@ -84,12 +84,7 @@
 			"_o_SERVER_OBJECTS_HANDLER",
 			"_o_structure",
 			"_o_tempoFieldType",
-			"str_trim",
-			"str_trimLeading",
-			"str_trimTrailing",
-			"str_URLDecode",
 			"str_URLEncode",
-			"str_wordWrap",
 			"TEMPO_1",
 			"TURN_AROUND_Field_name"
 		],
@@ -130,7 +125,6 @@
 			"COMPONENT_INIT",
 			"COMPONENT_Pathname",
 			"FEATURE_FLAGS",
-			"getIcon",
 			"killWorker",
 			"path"
 		],

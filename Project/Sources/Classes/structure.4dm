@@ -126,20 +126,14 @@ Build Exposed Datastore:
 										
 										// Storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
 										
-										If ($field.fieldType#Is object:K8:27)\
-											 & ($field.fieldType#Is BLOB:K8:12)\
-											 & ($field.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
-											
-											// #TEMPO [
-											$field.id:=$field.fieldNumber
-											$field.valueType:=$field.type
-											$field.type:=This:C1470.__fielddType($field.fieldType)
-											
-											// ]
-											
-											$table.field.push($field)
-											
-										End if 
+										// #TEMPO [
+										$field.id:=$field.fieldNumber
+										$field.valueType:=$field.type
+										$field.type:=This:C1470.__fielddType($field.fieldType)
+										
+										// ]
+										
+										$table.field.push($field)
 										
 										//…………………………………………………………………………………………………
 									: (This:C1470.isRelatedEntity($field))
@@ -167,7 +161,8 @@ Build Exposed Datastore:
 											"inverseName"; $field.inverseName; \
 											"type"; -2; \
 											"relatedDataClass"; $field.relatedDataClass; \
-											"relatedTableNumber"; This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber))
+											"relatedTableNumber"; This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber; \
+											"isToMany"; True:C214))
 										
 										//…………………………………………………………………………………………………
 								End case 
@@ -442,36 +437,44 @@ Function relatedCatalog  // Return related entity catalog
 						
 						$0.fields.push($o)
 						
+						//…………………………………………………………………………………………………
+					: (Not:C34(feature.with("moreRelations")))
+						
+						// <NOT YET DELIVERED>
+						
 						//___________________________________________
 					: (This:C1470.isRelatedEntity($o))  // N -> 1 relation
 						
-						If (feature.with("moreRelations"))  //& False
+						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$1)))
 							
-							If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$1)))
+							For each ($relatedField; Form:C1466.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
 								
-								For each ($relatedField; Form:C1466.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
+								If (This:C1470.isStorage($relatedField))
 									
-									If (This:C1470.isStorage($relatedField))
-										
-										//ASSERT($o.name#"service")
-										$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($o.relatedDataClass); $relatedField.name)
-										
-										//If ($related.tableName#$1) | True
-										
-										$related.path:=$o.name+"."+$related.name
-										
-										$0.fields.push($related)
-										
-										//End if 
-									End if 
-								End for each 
-							End if 
+									$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($o.relatedDataClass); $relatedField.name)
+									
+									$related.path:=$o.name+"."+$related.name
+									
+									$0.fields.push($related)
+									
+								End if 
+							End for each 
 						End if 
 						
 						//…………………………………………………………………………………………………
 					: (This:C1470.isRelatedEntities($o))  // 1 -> N relation
 						
-						// <NOT YET  MANAGED>
+						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$1)))
+							
+							$0.fields.push(New object:C1471(\
+								"name"; $o.name; \
+								"path"; $o.name; \
+								"fieldType"; 8859; \
+								"relatedDataClass"; $o.relatedDataClass; \
+								"inverseName"; $o.inverseName; \
+								"isToMany"; True:C214))
+							
+						End if 
 						
 						//___________________________________________
 				End case 
@@ -491,7 +494,7 @@ Function relatedCatalog  // Return related entity catalog
 	End case 
 	
 	//==================================================================
-Function tableNumber
+Function tableNumber  // Table number from name
 	var $1 : Text
 	var $0 : Integer
 	

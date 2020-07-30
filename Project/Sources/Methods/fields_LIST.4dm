@@ -11,7 +11,7 @@
 var $0 : Object
 var $1 : Text
 
-var $fieldIdentifier; $key; $t; $tableIdentifier : Text
+var $fieldID; $key; $t; $tableID : Text
 var $field; $out; $str; $table : Object
 
 var $formatters : cs:C1710.path
@@ -20,7 +20,7 @@ var $formatters : cs:C1710.path
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	$tableIdentifier:=$1
+	$tableID:=$1
 	
 	// Optional parameters
 	If (Count parameters:C259>=2)
@@ -43,7 +43,7 @@ End if
 // ----------------------------------------------------
 If ($out.success)
 	
-	$out.success:=(Form:C1466.dataModel[$tableIdentifier]#Null:C1517)
+	$out.success:=(Form:C1466.dataModel[$tableID]#Null:C1517)
 	
 	If ($out.success)
 		
@@ -69,7 +69,7 @@ If ($out.success)
 		
 		$out.paths:=New collection:C1472
 		
-		$table:=Form:C1466.dataModel[$tableIdentifier]
+		$table:=Form:C1466.dataModel[$tableID]
 		
 		For each ($key; $table)
 			
@@ -87,7 +87,7 @@ If ($out.success)
 					
 					// ***********************************
 					// ***********************************
-					$out.tableNumbers.push(Num:C11($tableIdentifier))
+					$out.tableNumbers.push(Num:C11($tableID))
 					
 					// ***********************************
 					// ***********************************
@@ -113,7 +113,7 @@ If ($out.success)
 					
 					$out.shortLabels.push($field.shortLabel)
 					$out.iconPaths.push(String:C10($field.icon))
-					$out.icons.push(getIcon(String:C10($field.icon)))
+					$out.icons.push(project.getIcon(String:C10($field.icon)))
 					
 					If ($field.format#Null:C1517)
 						
@@ -155,23 +155,22 @@ If ($out.success)
 					
 					If (Num:C11(This:C1470.selector)=0)
 						
-						For each ($fieldIdentifier; $table[$key])
+						For each ($fieldID; $table[$key])
 							
-							If (project.isField($fieldIdentifier))
+							If (project.isField($fieldID))
 								
 								$out.formatColors.push(Foreground color:K23:1)
 								$out.nameColors.push(Foreground color:K23:1)
 								
-								$field:=$table[$key][$fieldIdentifier]
-								$field.id:=Num:C11($fieldIdentifier)
+								$field:=$table[$key][$fieldID]
+								$field.id:=Num:C11($fieldID)
 								
 								// ***********************************
-								// ***********************************
+								
 								$out.tableNumbers.push(_o_structure(New object:C1471(\
 									"action"; "tableNumber"; \
 									"name"; $table[$key].relatedDataClass)).tableNumber)
 								
-								// ***********************************
 								// ***********************************
 								
 								$out.ids.push($field.id)
@@ -181,7 +180,7 @@ If ($out.success)
 								$out.labels.push($field.label)
 								$out.shortLabels.push($field.shortLabel)
 								$out.iconPaths.push(String:C10($field.icon))
-								$out.icons.push(getIcon(String:C10($field.icon)))
+								$out.icons.push(project.getIcon(String:C10($field.icon)))
 								
 								If ($field.format#Null:C1517)
 									
@@ -220,16 +219,17 @@ If ($out.success)
 						
 						If (feature.with("moreRelations"))
 							
+							$field:=$table[$key]
+							
+							
+							
 							$out.formatColors.push(Foreground color:K23:1)
 							$out.nameColors.push(Foreground color:K23:1)
 							
-							$field:=$table[$key]
+							// ***********************************
 							
-							// ***********************************
-							// ***********************************
-							$out.tableNumbers.push(Num:C11($tableIdentifier))
+							$out.tableNumbers.push(Num:C11($tableID))
 							
-							// ***********************************
 							// ***********************************
 							
 							$out.ids.push(Null:C1517)
@@ -253,12 +253,19 @@ If ($out.success)
 							
 							$out.shortLabels.push($field.shortLabel)
 							$out.iconPaths.push(String:C10($field.icon))
-							$out.icons.push(getIcon(String:C10($field.icon)))
+							$out.icons.push(project.getIcon(String:C10($field.icon)))
 							
-							If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
+							If (OB Keys:C1719($table[$key]).length>3)
 								
-								$out.nameColors[$out.names.length-1]:=ui.errorColor  // Missing or invalid
+								// N -> 1 -> N relation
 								
+							Else 
+								
+								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
+									
+									$out.nameColors[$out.names.length-1]:=ui.errorColor  // Missing or invalid
+									
+								End if 
 							End if 
 							
 							$out.formats.push($field.format)
@@ -278,10 +285,9 @@ If ($out.success)
 					$field:=$table[$key]
 					
 					// ***********************************
-					// ***********************************
-					$out.tableNumbers.push(Num:C11($tableIdentifier))
 					
-					// ***********************************
+					$out.tableNumbers.push(Num:C11($tableID))
+					
 					// ***********************************
 					
 					$out.ids.push(Null:C1517)
@@ -305,7 +311,7 @@ If ($out.success)
 					
 					$out.shortLabels.push($field.shortLabel)
 					$out.iconPaths.push(String:C10($field.icon))
-					$out.icons.push(getIcon(String:C10($field.icon)))
+					$out.icons.push(project.getIcon(String:C10($field.icon)))
 					
 					If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 						

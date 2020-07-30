@@ -326,21 +326,37 @@ Case of
 										
 										If ($relatedCatalog.success)  // Open field picker
 											
-											$dataModel:=Form:C1466.dataModel[String:C10($context.currentTable.tableNumber)][$relatedCatalog.relatedEntity]
+											If (Bool:C1537($context.fieldSortByName))
+												
+												$relatedCatalog.fields:=$relatedCatalog.fields.orderBy("path")
+												
+											End if 
+											
+											$table:=Form:C1466.dataModel[String:C10($context.currentTable.tableNumber)]
+											$dataModel:=$table[$relatedCatalog.relatedEntity]
 											
 											For each ($o; $relatedCatalog.fields)
 												
-												$fieldID:=String:C10($o.fieldNumber)
-												$c:=Split string:C1554($o.path; ".")
-												
-												If ($c.length=1)
+												If (Bool:C1537($o.isToMany))  //1 -> N
 													
-													$o.published:=($dataModel[$fieldID]#Null:C1517)
+													$o.published:=($table[$o.inverseName][$o.name]#Null:C1517)
 													
 												Else 
 													
-													// Enhance_relation
-													$o.published:=($dataModel[$c[0]][$fieldID]#Null:C1517)
+													$fieldID:=String:C10($o.fieldNumber)
+													$c:=Split string:C1554($o.path; ".")
+													
+													If ($c.length=1)
+														
+														$o.published:=($dataModel[$fieldID]#Null:C1517)
+														
+													Else 
+														
+														// Enhance_relation
+														$o.published:=($dataModel[$c[0]][$fieldID]#Null:C1517)
+														
+													End if 
+													
 													
 												End if 
 												
@@ -353,10 +369,10 @@ Case of
 											
 											If ($relatedCatalog.success)  // Dialog was validated
 												
-												// If at least one related field is published
-												If ($relatedCatalog.fields.query("published=true").length>0)
-													
-													$table:=Form:C1466.dataModel[String:C10($context.currentTable.tableNumber)]
+												// The number of published 
+												$count:=$relatedCatalog.fields.query("published=true").length
+												
+												If ($count>0)  // At least one related field is published
 													
 													If ($table=Null:C1517)\
 														 | OB Is empty:C1297($table)
@@ -365,8 +381,6 @@ Case of
 														
 													End if 
 													
-													$count:=0  //the number of published fields
-													
 													For each ($o; $relatedCatalog.fields)
 														
 														$fieldID:=String:C10($o.fieldNumber)
@@ -374,15 +388,13 @@ Case of
 														
 														If ($o.published)
 															
-															$count:=$count+1
-															
 															If ($table[$context.fieldName]=Null:C1517)
 																
 																// Create the relation
 																$table[$context.fieldName]:=New object:C1471(\
 																	"relatedDataClass"; $relatedCatalog.relatedDataClass; \
-																	"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
-																	"inverseName"; $relatedCatalog.inverseName)
+																	"inverseName"; $relatedCatalog.inverseName; \
+																	"relatedTableNumber"; $relatedCatalog.relatedTableNumber)
 																
 															End if 
 															
@@ -393,8 +405,8 @@ Case of
 																	
 																	$table[$context.fieldName][$c[0]]:=New object:C1471(\
 																		"relatedDataClass"; $o.tableName; \
-																		"relatedTableNumber"; $o.tableNumber; \
-																		"inverseName"; "#TODO")
+																		"inverseName"; $context.currentTable.field.query("name=:1"; $context.fieldName).pop().inverseName; \
+																		"relatedTableNumber"; $o.tableNumber)
 																	
 																End if 
 																
@@ -406,48 +418,74 @@ Case of
 																		"label"; project.label($o.name); \
 																		"shortLabel"; project.shortLabel($o.name); \
 																		"type"; $o.type; \
-																		"relatedTableNumber"; $o.relatedTableNumber; \
 																		"fieldType"; $o.fieldType)
 																	
 																End if 
 																
 															Else 
 																
-																If ($table[$context.fieldName][$fieldID]=Null:C1517)
+																If (Bool:C1537($o.isToMany))
 																	
-																	$table[$context.fieldName][$fieldID]:=New object:C1471(\
-																		"name"; $o.name; \
-																		"path"; $o.path; \
-																		"label"; project.label($o.name); \
-																		"shortLabel"; project.shortLabel($o.name); \
-																		"type"; $o.type; \
-																		"relatedTableNumber"; $o.relatedTableNumber; \
-																		"fieldType"; $o.fieldType)
-																	
-																End if 
-															End if 
-															
-														Else 
-															
-															// Remove the field
-															If ($table[$context.fieldName]#Null:C1517)
-																
-																If ($c.length>1)
-																	
-																	If ($table[$context.fieldName][$o.path]#Null:C1517)
+																	If ($table[$context.fieldName][$o.name]=Null:C1517)
 																		
-																		OB REMOVE:C1226($table[$context.fieldName]; $o.path)
+																		$table[$context.fieldName][$o.name]:=New object:C1471(\
+																			"name"; $o.name; \
+																			"relatedDataClass"; $o.relatedDataClass; \
+																			"path"; $context.fieldName+"."+$o.path; \
+																			"label"; project.labelList($o.name); \
+																			"shortLabel"; project.label($o.name); \
+																			"inverseName"; $o.inverseName)
 																		
 																	End if 
 																	
 																Else 
 																	
-																	If ($table[$context.fieldName][$fieldID]#Null:C1517)
+																	If ($table[$context.fieldName][$fieldID]=Null:C1517)
 																		
-																		If ($table[$context.fieldName][$fieldID].path=$o.path)
+																		$table[$context.fieldName][$fieldID]:=New object:C1471(\
+																			"name"; $o.name; \
+																			"path"; $o.path; \
+																			"label"; project.label($o.name); \
+																			"shortLabel"; project.shortLabel($o.name); \
+																			"type"; $o.type; \
+																			"fieldType"; $o.fieldType)
+																		
+																	End if 
+																End if 
+															End if 
+															
+														Else 
+															
+															// Remove the field, if any
+															If (Bool:C1537($o.isToMany))
+																
+																If ($table[$o.inverseName][$o.name]#Null:C1517)
+																	
+																	OB REMOVE:C1226($table[$o.inverseName]; $o.name)
+																	
+																End if 
+																
+															Else 
+																
+																If ($table[$context.fieldName]#Null:C1517)
+																	
+																	If ($c.length>1)
+																		
+																		If ($table[$context.fieldName][$o.path]#Null:C1517)
 																			
-																			OB REMOVE:C1226($table[$context.fieldName]; $fieldID)
+																			OB REMOVE:C1226($table[$context.fieldName]; $o.path)
 																			
+																		End if 
+																		
+																	Else 
+																		
+																		If ($table[$context.fieldName][$fieldID]#Null:C1517)
+																			
+																			If ($table[$context.fieldName][$fieldID].path=$o.path)
+																				
+																				OB REMOVE:C1226($table[$context.fieldName]; $fieldID)
+																				
+																			End if 
 																		End if 
 																	End if 
 																End if 

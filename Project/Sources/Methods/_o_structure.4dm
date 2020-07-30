@@ -196,7 +196,8 @@ Case of
 												"inverseName"; $field.inverseName; \
 												"type"; -2; \
 												"relatedDataClass"; $field.relatedDataClass; \
-												"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber))
+												"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber; \
+												"isToMany"; True:C214))
 											
 											//…………………………………………………………………………………………………
 									End case 
@@ -533,7 +534,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-								
+																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

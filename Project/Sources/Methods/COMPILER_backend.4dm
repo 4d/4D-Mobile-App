@@ -44,8 +44,8 @@ If (False:C215)
 	C_OBJECT:C1216(formatters; $1)
 	
 	//__________________________________________________
-	C_PICTURE:C286(getIcon; $0)
-	C_TEXT:C284(getIcon; $1)
+	//C_PICTURE(getIcon; $0)
+	//C_TEXT(getIcon; $1)
 	//C_TEXT(getIcon ;$2)
 	
 	//______________________________________________________

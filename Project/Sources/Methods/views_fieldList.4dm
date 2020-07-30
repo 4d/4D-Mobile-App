@@ -151,7 +151,8 @@ If ($out.success)
 								"relatedTableNumber"; $table[$key].relatedTableNumber; \
 								"label"; $table[$key].label; \
 								"shortlabel"; $table[$key].$t.shortLabel; \
-								"path"; $key)
+								"path"; $key; \
+								"isToMany"; True:C214)
 							
 							// #TEMPO [
 							$o.id:=Num:C11($fieldIdentifier)

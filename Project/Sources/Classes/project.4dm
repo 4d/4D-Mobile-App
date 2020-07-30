@@ -318,6 +318,8 @@ Function label  // Format labels
 				
 			End for 
 			
+			$0:=Replace string:C233($0; "id"; "ID")
+			
 			//______________________________________________________
 	End case 
 	
@@ -334,6 +336,14 @@ Function shortLabel  // Format short labels
 		
 	End if 
 	
+	//====================================
+Function labelList  // List of x
+	var $0 : Text
+	var $1 : Text
+	
+	$0:=This:C1470.label(Replace string:C233(Get localized string:C991("listOf"); "{values}"; $1))
+	
+	//====================================
 Function isStorage
 	var $0 : Boolean
 	var $1 : Object
@@ -347,4 +357,34 @@ Function isStorage
 			$0:=True:C214
 			
 		End if 
+	End if 
+	
+	//====================================
+Function getIcon
+	var $0 : Picture
+	var $1 : Text
+	
+	var $icon : Picture
+	var $file : 4D:C1709.File
+	
+	If (Length:C16($1)=0)
+		
+		$file:=File:C1566(ui.noIcon; fk platform path:K87:2)
+		
+	Else 
+		
+		$file:=path.icon($1)
+		
+		If (Not:C34($file.exists))
+			
+			$file:=File:C1566(ui.errorIcon; fk platform path:K87:2)
+			
+		End if 
+	End if 
+	
+	If ($file.exists)
+		
+		READ PICTURE FILE:C678($file.platformPath; $icon)
+		CREATE THUMBNAIL:C679($icon; $0; 24; 24; Scaled to fit:K6:2)
+		
 	End if 

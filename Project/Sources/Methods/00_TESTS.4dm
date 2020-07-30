@@ -25,6 +25,11 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		$o:=cs:C1710.structure.new()
+		
+		//________________________________________
+	: (True:C214)
+		
 		$o:=simulator(New object:C1471(\
 			"action"; "open"; \
 			"editorToFront"; False:C215; \
