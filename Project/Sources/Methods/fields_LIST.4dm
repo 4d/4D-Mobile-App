@@ -11,7 +11,7 @@
 var $0 : Object
 var $1 : Text
 
-var $fieldID; $key; $t; $tableID : Text
+var $subKey; $key; $t; $tableID : Text
 var $field; $out; $str; $table : Object
 
 var $formatters : cs:C1710.path
@@ -74,6 +74,11 @@ If ($out.success)
 		For each ($key; $table)
 			
 			Case of 
+					
+					//……………………………………………………………………………………………………………
+				: (Length:C16($key)=0)
+					
+					// <META-DATA>
 					
 					//……………………………………………………………………………………………………………
 				: (project.isField($key))\
@@ -155,64 +160,92 @@ If ($out.success)
 					
 					If (Num:C11(This:C1470.selector)=0)
 						
-						For each ($fieldID; $table[$key])
+						For each ($subKey; $table[$key])
 							
-							If (project.isField($fieldID))
-								
-								$out.formatColors.push(Foreground color:K23:1)
-								$out.nameColors.push(Foreground color:K23:1)
-								
-								$field:=$table[$key][$fieldID]
-								$field.id:=Num:C11($fieldID)
-								
-								// ***********************************
-								
-								$out.tableNumbers.push(_o_structure(New object:C1471(\
-									"action"; "tableNumber"; \
-									"name"; $table[$key].relatedDataClass)).tableNumber)
-								
-								// ***********************************
-								
-								$out.ids.push($field.id)
-								$out.names.push($field.name)
-								$out.paths.push($key+"."+$field.name)
-								$out.types.push($field.fieldType)
-								$out.labels.push($field.label)
-								$out.shortLabels.push($field.shortLabel)
-								$out.iconPaths.push(String:C10($field.icon))
-								$out.icons.push(project.getIcon(String:C10($field.icon)))
-								
-								If ($field.format#Null:C1517)
+							Case of 
+									//______________________________________________________
+								: (Value type:C1509($table[$key][$subKey])#Is object:K8:27)
 									
-									//%W-533.1
-									If ($field.format[[1]]="/")  // User resources
+									// <NOTHING MORE TO DO>
+									
+									//______________________________________________________
+								: (project.isField($subKey))
+									
+									$out.formatColors.push(Foreground color:K23:1)
+									$out.nameColors.push(Foreground color:K23:1)
+									
+									$field:=$table[$key][$subKey]
+									$field.id:=Num:C11($subKey)
+									
+									// ***********************************
+									
+									$out.tableNumbers.push(_o_structure(New object:C1471(\
+										"action"; "tableNumber"; \
+										"name"; $table[$key].relatedDataClass)).tableNumber)
+									
+									// ***********************************
+									
+									$out.ids.push($field.id)
+									$out.names.push($field.name)
+									$out.paths.push($key+"."+$field.name)
+									$out.types.push($field.fieldType)
+									$out.labels.push($field.label)
+									$out.shortLabels.push($field.shortLabel)
+									$out.iconPaths.push(String:C10($field.icon))
+									$out.icons.push(project.getIcon(String:C10($field.icon)))
+									
+									If ($field.format#Null:C1517)
 										
-										$t:=Substring:C12($field.format; 2)
-										
-										If (Not:C34(formatters(New object:C1471(\
-											"action"; "isValid"; \
-											"format"; $formatters.folder($t))).success))
+										//%W-533.1
+										If ($field.format[[1]]="/")  // User resources
 											
-											$out.formatColors[$out.formats.length]:=ui.errorColor  // Missing or invalid
+											$t:=Substring:C12($field.format; 2)
+											
+											If (Not:C34(formatters(New object:C1471(\
+												"action"; "isValid"; \
+												"format"; $formatters.folder($t))).success))
+												
+												$out.formatColors[$out.formats.length]:=ui.errorColor  // Missing or invalid
+												
+											End if 
+											
+										Else 
+											
+											$t:=$str.setText("_"+$field.format).localized()
 											
 										End if 
+										//%W+533.1
 										
 									Else 
 										
-										$t:=$str.setText("_"+$field.format).localized()
+										$t:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
 										
 									End if 
-									//%W+533.1
 									
+									$out.formats.push($t)
+									
+									//______________________________________________________
 								Else 
 									
-									$t:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
+									//**************************************************************************
+									$out.formatColors.push(Foreground color:K23:1)
+									$out.nameColors.push(Foreground color:K23:1)
 									
-								End if 
-								
-								$out.formats.push($t)
-								
-							End if 
+									$field:=$table[$key][$subKey]
+									
+									$out.ids.push(0)
+									$out.names.push($field.name)
+									$out.paths.push($field.path)
+									$out.types.push(Choose:C955(Bool:C1537($field.isToMany); 8859; 8858))
+									$out.labels.push($field.label)
+									$out.shortLabels.push($field.shortLabel)
+									$out.iconPaths.push(String:C10($field.icon))
+									$out.icons.push(project.getIcon(String:C10($field.icon)))
+									//**************************************************************************
+									
+									//______________________________________________________
+							End case 
+							
 						End for each 
 						
 					Else 
@@ -220,8 +253,6 @@ If ($out.success)
 						If (feature.with("moreRelations"))
 							
 							$field:=$table[$key]
-							
-							
 							
 							$out.formatColors.push(Foreground color:K23:1)
 							$out.nameColors.push(Foreground color:K23:1)
@@ -255,7 +286,7 @@ If ($out.success)
 							$out.iconPaths.push(String:C10($field.icon))
 							$out.icons.push(project.getIcon(String:C10($field.icon)))
 							
-							If (OB Keys:C1719($table[$key]).length>3)
+							If (project.isLink($table[$key]))
 								
 								// N -> 1 -> N relation
 								

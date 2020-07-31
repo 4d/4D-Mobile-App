@@ -25,28 +25,15 @@ Function get
 					//______________________________________________________
 				: (Value type:C1509($project[$t])=Is object:K8:27)
 					
-					For each ($tt; $project[$t])
-						
-						If ($tt[[1]]="$")
-							
-							OB REMOVE:C1226($project[$t]; $tt)
-							
-						End if 
-					End for each 
+					This:C1470.cleanup($project[$t])
 					
 					//______________________________________________________
 				: (Value type:C1509($project[$t])=Is collection:K8:32)
 					
 					For each ($o; $project[$t])
 						
-						For each ($tt; $o)
-							
-							If ($tt[[1]]="$")
-								
-								OB REMOVE:C1226($o; $tt)
-								
-							End if 
-						End for each 
+						This:C1470.cleanup($o)
+						
 					End for each 
 					
 					//______________________________________________________
@@ -55,6 +42,21 @@ Function get
 	End for each 
 	
 	$0:=$project
+	
+	//====================================
+Function cleanup
+	var $1 : Object
+	
+	var $t : Text
+	
+	For each ($t; $1)
+		
+		If ($t[[1]]="$")
+			
+			OB REMOVE:C1226($1; $t)
+			
+		End if 
+	End for each 
 	
 	//====================================
 Function save
@@ -388,3 +390,16 @@ Function getIcon
 		CREATE THUMBNAIL:C679($icon; $0; 24; 24; Scaled to fit:K6:2)
 		
 	End if 
+	
+	//====================================
+Function isLink
+	var $0 : Boolean
+	var $1 : Object
+	
+	var $t : Text
+	
+	For each ($t; OB Keys:C1719($1)) Until ($0)
+		
+		$0:=Value type:C1509($1[$t])=Is object:K8:27
+		
+	End for each 

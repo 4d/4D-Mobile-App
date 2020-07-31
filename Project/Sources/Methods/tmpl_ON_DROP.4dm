@@ -32,6 +32,8 @@ If (Length:C16($cible)>0)
 		BLOB TO VARIABLE:C533($x; $dropped)
 		SET BLOB SIZE:C606($x; 0)
 		
+		project.cleanup($dropped)
+		
 		// Check the match of the type with the source
 		SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:type"; $t)
 		
@@ -94,7 +96,7 @@ If (Length:C16($cible)>0)
 							//______________________________________________________
 						: ($dropped.fieldType=8858)  // N -> 1 relation
 							
-							OB REMOVE:C1226($dropped; "id")
+							//OB REMOVE($dropped; "id")
 							
 							If ($cCurrent.length=2)\
 								 & ($cDroped.length=1)  // Drop a relation on a field
@@ -111,7 +113,7 @@ If (Length:C16($cible)>0)
 							//______________________________________________________
 						: ($dropped.fieldType=8859)  // 1 -> N relation
 							
-							OB REMOVE:C1226($dropped; "id")
+							//OB REMOVE($dropped; "id")
 							
 							//______________________________________________________
 						: ($current=Null:C1517)  // Add

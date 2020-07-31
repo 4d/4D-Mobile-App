@@ -158,7 +158,7 @@ Else
 		
 		SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "4D-isOfClass-multi-criteria"; $t)
 		
-		If ($t="true")  // Search on several fields - append to the field list if any
+		If (JSON Parse:C1218($t; Is boolean:K8:9))  // Search on several fields - append to the field list if any
 			
 			If (Value type:C1509($Obj_target[$Txt_bind])=Is collection:K8:32)
 				
@@ -200,6 +200,11 @@ Else
 				
 			End if 
 		End if 
+		
+	Else 
+		
+		
+		
 	End if 
 End if 
 

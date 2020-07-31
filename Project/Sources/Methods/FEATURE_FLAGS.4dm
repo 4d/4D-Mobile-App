@@ -1,23 +1,23 @@
 //%attributes = {"invisible":true}
-C_LONGINT:C283($1)
-C_OBJECT:C1216($2)
-
-C_BOOLEAN:C305($bEnabled)
-C_LONGINT:C283($l_stable_version)
-C_TEXT:C284($tKey)
-C_OBJECT:C1216($o; $o_preferences)
+var $1 : Integer
+var $2 : Object
 
 If (False:C215)
 	C_LONGINT:C283(FEATURE_FLAGS; $1)
 	C_OBJECT:C1216(FEATURE_FLAGS; $2)
 End if 
 
-$l_stable_version:=$1
-$o_preferences:=$2
+var $key : Text
+var $enabled : Boolean
+var $stableVersion : Integer
+var $o; $preferences : Object
+
+$stableVersion:=$1
+$preferences:=$2
 
 feature:=New object:C1471(\
 "with"; Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))])); \
-"unstable"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=$l_stable_version)); \
+"unstable"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=$stableVersion)); \
 "delivered"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=Num:C11($2))); \
 "debug"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
 "wip"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
@@ -140,9 +140,9 @@ feature.wip("sourceClass")
 OVERRIDE WITH LOCAL PREFERENCES
 ________________________________________*/
 
-If ($o_preferences.features#Null:C1517)
+If ($preferences.features#Null:C1517)
 	
-	For each ($o; $o_preferences.features)
+	For each ($o; $preferences.features)
 		
 		If (Value type:C1509($o.enabled)=Is boolean:K8:9)
 			
@@ -150,79 +150,79 @@ If ($o_preferences.features#Null:C1517)
 			
 		Else 
 			
-			For each ($tKey; $o.enabled) Until (Not:C34($bEnabled))
+			For each ($key; $o.enabled) Until (Not:C34($enabled))
 				
 				Case of 
 						
 						//______________________________________________________
-					: ($tKey="os")
+					: ($key="os")
 						
-						$bEnabled:=((Num:C11(Is macOS:C1572)+1)=Num:C11($o.enabled[$tKey]))
-						
-						//______________________________________________________
-					: ($tKey="matrix")
-						
-						$bEnabled:=(Bool:C1537($o.enabled[$tKey]))
+						$enabled:=((Num:C11(Is macOS:C1572)+1)=Num:C11($o.enabled[$key]))
 						
 						//______________________________________________________
-					: ($tKey="debug")
+					: ($key="matrix")
 						
-						If ($o.enabled[$tKey])
+						$enabled:=(Bool:C1537($o.enabled[$key]))
+						
+						//______________________________________________________
+					: ($key="debug")
+						
+						If ($o.enabled[$key])
 							
 							// Only into a debug version
-							$bEnabled:=Not:C34(Is compiled mode:C492)
+							$enabled:=Not:C34(Is compiled mode:C492)
 							
 						Else 
 							
 							// Not into a debug version
-							$bEnabled:=Is compiled mode:C492
+							$enabled:=Is compiled mode:C492
 							
 						End if 
 						
 						//______________________________________________________
-					: ($tKey="bitness")
+					: ($key="bitness")
 						
 						Case of 
 								
 								//……………………………………………………………………………………………………
-							: (Num:C11($o.enabled[$tKey])=64)
+							: (Num:C11($o.enabled[$key])=64)
 								
-								$bEnabled:=(Version type:C495 ?? 64 bit version:K5:25)
+								$enabled:=(Version type:C495 ?? 64 bit version:K5:25)
 								
 								//……………………………………………………………………………………………………
-							: (Num:C11($o.enabled[$tKey])=32)
+							: (Num:C11($o.enabled[$key])=32)
 								
-								$bEnabled:=Not:C34(Version type:C495 ?? 64 bit version:K5:25)
+								$enabled:=Not:C34(Version type:C495 ?? 64 bit version:K5:25)
 								
 								//……………………………………………………………………………………………………
 							Else 
 								
-								ASSERT:C1129(False:C215; "Unknown value ("+$o.enabled[$tKey]+") for the key : \""+$tKey+"\"")
-								$bEnabled:=False:C215
+								ASSERT:C1129(False:C215; "Unknown value ("+$o.enabled[$key]+") for the key : \""+$key+"\"")
+								$enabled:=False:C215
 								
 								//……………………………………………………………………………………………………
 						End case 
 						
 						//______________________________________________________
-					: ($tKey="version")
+					: ($key="version")
 						
-						$bEnabled:=(Num:C11(SHARED.ide.version)>=Num:C11($o.enabled[$tKey]))
+						$enabled:=(Num:C11(SHARED.ide.version)>=Num:C11($o.enabled[$key]))
 						
 						//______________________________________________________
-					: ($tKey="type")
+					: ($key="type")
 						
-						$bEnabled:=(Application type:C494=Num:C11($o.enabled[$tKey]))
+						$enabled:=(Application type:C494=Num:C11($o.enabled[$key]))
 						
 						//______________________________________________________
 					Else 
 						
-						ASSERT:C1129(False:C215; "Unknown key: \""+$tKey+"\"")
+						ASSERT:C1129(False:C215; "Unknown key: \""+$key+"\"")
 						
 						//______________________________________________________
 				End case 
 			End for each 
 			
-			feature["_"+String:C10($o.id)]:=$bEnabled
+			feature["_"+String:C10($o.id)]:=$enabled
 			
 		End if 
 	End for each 

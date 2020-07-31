@@ -208,7 +208,6 @@ Case of
 								$indx:=$indx+1
 								
 								If ($o#Null:C1517)
-									
 									//#117298 - [BUG] Missing relation italic style
 									CLEAR VARIABLE:C89($style)
 									CLEAR VARIABLE:C89($class)
@@ -216,14 +215,36 @@ Case of
 									If ($indx>$count)  // Dynamic
 										
 										If ($o.fieldType=8858)\
-											 | ($o.fieldType=8859)  // relation
+											 | ($o.fieldType=8859)  // Relation
 											
 											$style:="italic"
 											
-											If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
+											If ($o.fieldType=8858)  // Relation
 												
-												$class:=" error"
+												$relation:=Form:C1466.dataModel[$context.tableNumber]
 												
+												If ($relation[$o.name].format=Null:C1517)
+													
+													$class:=" error"
+													
+												End if 
+												
+											Else 
+												
+												If (Split string:C1554($o.path; ".").length=1)
+													
+													If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
+														
+														$class:=" error"
+														
+													End if 
+													
+												Else 
+													
+													//DOM SET XML ATTRIBUTE($node; \
+														"tips"; $o.label)
+													
+												End if 
 											End if 
 										End if 
 										
@@ -325,15 +346,30 @@ Case of
 														DOM SET XML ELEMENT VALUE:C868($node; $buffer)
 														
 														If ($o.fieldType=8858)\
-															 | ($o.fieldType=8859)  // relation
+															 | ($o.fieldType=8859)  // Relation
 															
 															DOM SET XML ATTRIBUTE:C866($node; \
 																"font-style"; "italic")
 															
-															If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
+															If (Split string:C1554($o.path; ".").length=1)
+																
+																If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
+																	
+																	If ($relation[$o.name].format=Null:C1517)
+																		
+																		DOM SET XML ATTRIBUTE:C866($node; \
+																			"class"; "label error")
+																		
+																	End if 
+																End if 
+																
+															Else 
 																
 																DOM SET XML ATTRIBUTE:C866($node; \
-																	"class"; "label error")
+																	"class"; "label")
+																
+																DOM SET XML ATTRIBUTE:C866($node; \
+																	"tips"; $o.label)
 																
 															End if 
 														End if 

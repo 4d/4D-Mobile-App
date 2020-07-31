@@ -9,17 +9,29 @@
 // ----------------------------------------------------
 // Declarations
 var $0 : Object
-var $1 : Text
-var $2 : Object
+var $1 : Variant
 
-var $fieldIdentifier; $key; $tableIdentifier : Text
+If (False:C215)
+	C_OBJECT:C1216(views_fieldList; $0)
+	C_VARIANT:C1683(views_fieldList; $1)
+End if 
+
+var $attribute; $key; $tableID : Text
 var $o; $out; $table : Object
 
 // ----------------------------------------------------
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	$tableIdentifier:=$1
+	If (Value type:C1509($1)=Is text:K8:3)
+		
+		$tableID:=$1
+		
+	Else 
+		
+		$tableID:=String:C10($1)
+		
+	End if 
 	
 	$out:=New object:C1471(\
 		"success"; Form:C1466.dataModel#Null:C1517)
@@ -33,7 +45,7 @@ End if
 // ----------------------------------------------------
 If ($out.success)
 	
-	$table:=Form:C1466.dataModel[$tableIdentifier]
+	$table:=Form:C1466.dataModel[$tableID]
 	
 	$out.success:=($table#Null:C1517)
 	
@@ -51,6 +63,11 @@ If ($out.success)
 					// table meta-data
 					
 					//……………………………………………………………………………………………………………
+				: (Value type:C1509($table[$key])#Is object:K8:27)
+					
+					// <NOTHING MORE TO DO>
+					
+					//……………………………………………………………………………………………………………
 				: (project.isField($key))
 					
 					$o:=OB Copy:C1225($table[$key])
@@ -63,11 +80,6 @@ If ($out.success)
 					$o.path:=$o.name
 					
 					$out.fields.push($o)
-					
-					//……………………………………………………………………………………………………………
-				: (Value type:C1509($table[$key])#Is object:K8:27)
-					
-					// <NOTHING MORE TO DO>
 					
 					//……………………………………………………………………………………………………………
 				: (project.isRelationToOne($table[$key]))
@@ -88,38 +100,67 @@ If ($out.success)
 						
 						$o:=New object:C1471(\
 							"name"; $key; \
+							"path"; $key; \
 							"fieldType"; 8858; \
-							"relatedTableNumber"; $table[$key].relatedTableNumber; \
+							"relatedDataClass"; $table[$key].relatedDataclass; \
+							"inverseName"; $table[$key].inverseName; \
 							"label"; $table[$key].label; \
 							"shortlabel"; $table[$key].$t.shortLabel; \
-							"path"; $key)
+							"relatedTableNumber"; $table[$key].relatedTableNumber; \
+							"$added"; True:C214)
 						
 						// #TEMPO [
-						$o.id:=Num:C11($fieldIdentifier)
+						$o.id:=0
 						//]
 						
 						$out.fields.push($o)
 						
 					End if 
 					
-					For each ($fieldIdentifier; $table[$key])
+					For each ($attribute; $table[$key])
 						
-						If (project.isField($fieldIdentifier))  // fieldNumber
-							
-							$o:=OB Copy:C1225($table[$key][$fieldIdentifier])
-							
-							// #TEMPO [
-							$o.id:=Num:C11($fieldIdentifier)
-							$o.fieldNumber:=Num:C11($fieldIdentifier)
-							//]
-							
-							$o.path:=$key+"."+$o.name
-							
-							//$o.path:="┊"+$o.path
-							
-							$out.fields.push($o)
-							
-						End if 
+						
+						Case of 
+								
+								//______________________________________________________
+							: (Value type:C1509($table[$key][$attribute])#Is object:K8:27)
+								
+								// <NOTHING MORE TO DO>
+								
+								//______________________________________________________
+							: (project.isField($attribute))
+								
+								$o:=OB Copy:C1225($table[$key][$attribute])
+								
+								// #TEMPO [
+								$o.id:=Num:C11($attribute)
+								$o.fieldNumber:=Num:C11($attribute)
+								//]
+								
+								$o.path:=$key+"."+$o.name
+								
+								//$o.path:="┊"+$o.path
+								
+								$out.fields.push($o)
+								
+								//______________________________________________________
+							: (Not:C34(feature.with("moreRelations")))
+								
+								// <NOT DELIVERED>
+								
+								//______________________________________________________
+							Else 
+								
+								$o:=OB Copy:C1225($table[$key][$attribute])
+								$o.id:=0
+								$o.fieldType:=Choose:C955(Bool:C1537($o.isToMany); 8859; 8858)
+								$o.$added:=True:C214
+								$out.fields.push($o)
+								
+								
+								//______________________________________________________
+						End case 
+						
 					End for each 
 					
 					//……………………………………………………………………………………………………………
@@ -147,15 +188,17 @@ If ($out.success)
 							
 							$o:=New object:C1471(\
 								"name"; $key; \
-								"fieldType"; 8859; \
-								"relatedTableNumber"; $table[$key].relatedTableNumber; \
-								"label"; $table[$key].label; \
-								"shortlabel"; $table[$key].$t.shortLabel; \
 								"path"; $key; \
-								"isToMany"; True:C214)
+								"fieldType"; 8859; \
+								"relatedDataClass"; $table[$key].relatedDataclass; \
+								"inverseName"; $table[$key].inverseName; \
+								"label"; project.label($table[$key].label); \
+								"shortlabel"; project.label($table[$key].$t.shortLabel); \
+								"isToMany"; True:C214; \
+								"relatedTableNumber"; $table[$key].relatedTableNumber)
 							
 							// #TEMPO [
-							$o.id:=Num:C11($fieldIdentifier)
+							$o.id:=0
 							//]
 							
 							$out.fields.push($o)
@@ -167,7 +210,7 @@ If ($out.success)
 			End case 
 		End for each 
 		
-		$out.fields.orderBy("path")
+		$out.fields:=$out.fields.orderBy("path")
 		
 	End if 
 End if 

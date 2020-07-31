@@ -366,15 +366,20 @@ Case of
 				// Highlight errors
 				For ($i; 1; Size of array:C274(($form.fields.pointer())->); 1)
 					
+					LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; lk inherited:K53:26; lk font color:K53:24)
+					
 					$o:=($form.fields.pointer())->{$i}
 					
 					If ($o.fieldType=8858)\
 						 | ($o.fieldType=8859)  // relation
 						
-						If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
+						If (Not:C34(Bool:C1537($o.$added)))
 							
-							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; ui.errorColor; lk font color:K53:24)
-							
+							If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
+								
+								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; ui.errorColor; lk font color:K53:24)
+								
+							End if 
 						End if 
 					End if 
 				End for 

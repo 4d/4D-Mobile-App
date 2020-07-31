@@ -375,11 +375,13 @@ Case of
 				If (Not:C34($ok))
 					
 					// 1-N relation with published related data class
-					$ok:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
+					$ok:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)\
+						 | (Bool:C1537($o.$added))
 					
 				End if 
 				
 				If ($ok)
+					
 					// Put into the container
 					VARIABLE TO BLOB:C532($o; $x)
 					APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field"; $x)

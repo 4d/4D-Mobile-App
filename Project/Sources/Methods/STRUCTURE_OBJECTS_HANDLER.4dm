@@ -434,7 +434,8 @@ Case of
 																			"path"; $context.fieldName+"."+$o.path; \
 																			"label"; project.labelList($o.name); \
 																			"shortLabel"; project.label($o.name); \
-																			"inverseName"; $o.inverseName)
+																			"inverseName"; $o.inverseName; \
+																			"isToMany"; True:C214)
 																		
 																	End if 
 																	
