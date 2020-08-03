@@ -257,7 +257,7 @@ Case of
 										C_TEXT:C284($Dom_uniquenessConstraints; $Dom_uniquenessConstraint; $Dom_constraint)
 										$Dom_uniquenessConstraints:=DOM Create XML element:C865($Dom_entity; "uniquenessConstraints")
 										$Dom_uniquenessConstraint:=DOM Create XML element:C865($Dom_uniquenessConstraints; "uniquenessConstraint")
-										$Dom_constraint:=DOM Create XML element:C865($Dom_uniquenessConstraints; "constraint"; "value"; formatString("field-name"; String:C10($o.primaryKey)))
+										$Dom_constraint:=DOM Create XML element:C865($Dom_uniquenessConstraint; "constraint"; "value"; formatString("field-name"; String:C10($o.primaryKey)))
 										
 									End if 
 									
@@ -678,8 +678,8 @@ Case of
 							For ($Lon_table2; 1; Size of array:C274($tTxt_tables); 1)
 								
 								$Obj_relationTable:=$Obj_dataModel[$tTxt_tables{$Lon_table2}]
-								//$o:=$Obj_relationTable[""]
-								$o:=$Obj_relationTable
+								$o:=$Obj_relationTable[""]
+								//$o:=$Obj_relationTable
 								
 								If ($o.name=$Obj_table[$Txt_relationName].relatedDataClass)
 									
