@@ -52,6 +52,7 @@
 			"01_LASTBUILD",
 			"c_formula",
 			"importData",
+			"importRelationRandomly",
 			"INIT_AUTO_COMPLETION",
 			"ON_STARTUP",
 			"populateCommands",
