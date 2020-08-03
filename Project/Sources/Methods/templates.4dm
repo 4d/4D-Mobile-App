@@ -381,7 +381,23 @@ Case of
 								
 								$Obj_field.originalName:=$Obj_field.name
 								
-								$Obj_field:=ob_deepMerge($Obj_field; $Obj_tableModel[$Obj_field.name])
+								C_OBJECT:C1216($tmp)
+								C_COLLECTION:C1488($keyPaths)
+								C_TEXT:C284($keyPath)
+								$tmp:=$Obj_tableModel[$Obj_field.name]
+								If ($tmp=Null:C1517)
+									$keyPaths:=Split string:C1554($Obj_field.name; ".")
+									If ($keyPaths.length>1)
+										$tmp:=$Obj_tableModel
+										For each ($keyPath; $keyPaths) Until ($tmp=Null:C1517)
+											$tmp:=$tmp[$keyPath]
+										End for each 
+									End if 
+								End if 
+								
+								If ($tmp#Null:C1517)
+									$Obj_field:=ob_deepMerge($Obj_field; $tmp)
+								End if 
 								
 								// Format name for the tag
 								$Obj_field.name:=formatString("field-name"; $Obj_field.originalName)
