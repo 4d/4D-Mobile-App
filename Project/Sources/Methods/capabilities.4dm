@@ -473,7 +473,7 @@ Case of
 			
 			$Obj_out.info.push(New object:C1471(\
 				"CFBundleURLTypes"; New collection:C1472(New object:C1471(\
-				"CFBundleTypeRole"; "Editor"\
+				"CFBundleTypeRole"; "Editor"; \
 				"CFBundleURLSchemes"; $Obj_in.urlSchemes))))
 			
 		End if 
