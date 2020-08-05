@@ -2,7 +2,7 @@
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 66,
+	"height": 200,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -112,6 +112,66 @@
 					"height": 16,
 					"stroke": "#808080",
 					"visibility": "hidden"
+				},
+				"01_deepLinking": {
+					"type": "checkbox",
+					"top": 69,
+					"left": 14,
+					"width": 344,
+					"height": 18,
+					"text": ":xliff:deepLinking",
+					"events": [
+						"onClick"
+					],
+					"method": "FEATURES",
+					"focusable": false,
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.deepLinking.enabled"
+				},
+				"deepLinkingLabel1": {
+					"type": "text",
+					"text": ":xliff:urlScheme",
+					"top": 97,
+					"left": 38,
+					"width": 137,
+					"height": 16,
+					"stroke": "#808080",
+					"visibility": "hidden"
+				},
+				"urlSchemeInput": {
+					"type": "input",
+					"left": 257,
+					"top": 96,
+					"width": 205,
+					"height": 17,
+					"dataSource": "Form:C1466.deepLinking.urlScheme",
+					"placeholder": "myappscheme://",
+					"method": "FEATURES",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"deepLinkingLabel2": {
+					"type": "text",
+					"text": ":xliff:associatedDomain",
+					"top": 133,
+					"left": 38,
+					"width": 137,
+					"height": 16,
+					"stroke": "#808080",
+					"visibility": "hidden"
+				},
+				"associatedDomainInput": {
+					"type": "input",
+					"left": 257,
+					"top": 132,
+					"width": 205,
+					"height": 17,
+					"dataSource": "Form:C1466.deepLinking.associatedDomain",
+					"method": "FEATURES",
+					"events": [
+						"onDataChange"
+					]
 				}
 			},
 			"entryOrder": [
@@ -119,7 +179,10 @@
 				"authentication",
 				"02_pushNotification",
 				"test.alert",
-				"certificatePicker"
+				"certificatePicker",
+				"01_deepLinking",
+				"urlSchemeInput",
+				"associatedDomainInput"
 			]
 		}
 	],
@@ -127,5 +190,12 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 67
+	"geometryStamp": 104,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

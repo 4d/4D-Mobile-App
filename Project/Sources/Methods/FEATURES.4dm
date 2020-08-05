@@ -40,7 +40,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
 			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)
 			
-			OBJECT SET VISIBLE:C603(*; "certificatePicker"; Form:C1466.server.pushNotification)
+			OBJECT SET VISIBLE:C603(*; "certificatePicker"; Bool:C1537(Form:C1466.server.pushNotification))
 			
 			$ƒ.certificate.touch()
 			$ƒ.checkAuthenticationMethod()
@@ -87,6 +87,32 @@ Else   // <== Widgets method
 			
 			Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
 			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)
+			project.save()
+			
+			
+			//==============================================
+		: ($ƒ.deepLinking.catch($e; On Clicked:K2:4))
+			
+			Form:C1466.deepLinking.enabled:=Bool:C1537(Form:C1466.deepLinking.enabled)
+			If (Form:C1466.deepLinking.enabled)
+				
+				$ƒ.deepLinkingUrlScheme.setValue(Replace string:C233(Lowercase:C14(Form:C1466.product.name); " "; "")+"://")  // TODO get from app name and remove illegal character?
+				$ƒ.deepLinkingAssociatedDomain.setValue(String:C10(Form:C1466.server.urls.production))  // get from production url
+				
+			Else 
+				$ƒ.deepLinkingUrlScheme.setValue("")
+				$ƒ.deepLinkingAssociatedDomain.setValue("")
+			End if 
+			project.save()
+			
+			//==============================================
+		: ($ƒ.deepLinkingUrlScheme.catch($e; On Data Change:K2:15))
+			
+			project.save()
+			
+			//==============================================
+		: ($ƒ.deepLinkingAssociatedDomain.catch($e; On Data Change:K2:15))
+			
 			project.save()
 			
 			//==============================================
