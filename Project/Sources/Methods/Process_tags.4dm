@@ -88,7 +88,6 @@ Case of   // According to type replace the tag
 			"___BUILD_NUMBER___"; \
 			"___STORYBOARD_LAUNCH_SCREEN___"; \
 			"___STORYBOARD_MAIN___"; \
-			"___URL_SCHEME___"; \
 			"___COMPONENT_BUILD___"; \
 			"___IDE_VERSION___"; \
 			"___IDE_BUILD_VERSION___"; \
@@ -102,7 +101,6 @@ Case of   // According to type replace the tag
 			$Obj_tags.build; \
 			$Obj_tags.storyboardLaunchScreen; \
 			$Obj_tags.storyboardMain; \
-			$Obj_tags.urlScheme; \
 			$Obj_tags.componentBuild; \
 			$Obj_tags.ideVersion; \
 			$Obj_tags.ideBuildVersion; \

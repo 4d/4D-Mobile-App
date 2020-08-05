@@ -113,6 +113,7 @@ feature.delivered(107526)  // Push Notifications
 _____________*/
 
 feature.unstable(117601)  // Relation management optimisation
+feature.unstable(117618)  // Deep Linking
 
 /* _____________
 WIP
@@ -234,4 +235,5 @@ _____________*/
 feature.alias("newViewUI"; 113016)
 feature.alias("resourcesBrowser"; 112225)
 feature.alias("pushNotification"; 107526)
+feature.alias("deepLinking"; 117618)
 feature.alias("moreRelations"; 117601)

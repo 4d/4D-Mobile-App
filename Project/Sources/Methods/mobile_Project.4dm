@@ -532,6 +532,26 @@ If ($Obj_in.create)
 				End if 
 			End if 
 		End if 
+		If (feature.with(117618))
+			
+			If (Bool:C1537($Obj_project.deepLinking.enabled))
+				If (Length:C16(String:C10($Obj_project.deepLinking.urlScheme))>0)
+					C_TEXT:C284($urlScheme)
+					$urlScheme:=String:C10($Obj_project.deepLinking.urlScheme)
+					$urlScheme:=Replace string:C233($urlScheme; "://"; "")
+					$Obj_out.computedCapabilities.capabilities.urlSchemes:=New collection:C1472($urlScheme)
+				End if 
+				
+				If (Length:C16(String:C10($Obj_project.deepLinking.associatedDomain))>0)
+					C_TEXT:C284($associatedDomain)
+					$associatedDomain:=String:C10($Obj_project.deepLinking.associatedDomain)
+					$associatedDomain:=Replace string:C233($associatedDomain; "https://"; "")
+					$associatedDomain:=Replace string:C233($associatedDomain; "http://"; "")
+					$Obj_out.computedCapabilities.capabilities.associatedDomains:=New collection:C1472($associatedDomain)
+				End if 
+			End if 
+			
+		End if 
 		
 		// Manage app capabilities
 		$Obj_out.capabilities:=capabilities(\

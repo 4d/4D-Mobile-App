@@ -31,17 +31,6 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>___VERSION___</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>___URL_SCHEME___</string>
-			</array>
-		</dict>
-	</array>
 	<key>CFBundleVersion</key>
 	<string>___BUILD_NUMBER___</string>
 	<key>LSRequiresIPhoneOS</key>

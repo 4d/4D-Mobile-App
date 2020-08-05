@@ -1,35 +1,35 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-  // ----------------------------------------------------
-  // Project method : COMPONENT_INIT
-  // ID[F84912DC921C45C49366AD32CAA443C7]
-  // Created 15-9-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // #THREAD-SAFE
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
-C_BOOLEAN:C305($bInitRecord;$bReset)
-C_LONGINT:C283($l;$lMode)
+// ----------------------------------------------------
+// Project method : COMPONENT_INIT
+// ID[F84912DC921C45C49366AD32CAA443C7]
+// Created 15-9-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// #THREAD-SAFE
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
+C_BOOLEAN:C305($bInitRecord; $bReset)
+C_LONGINT:C283($l; $lMode)
 C_PICTURE:C286($p)
-C_TEXT:C284($t;$tProcess)
-C_OBJECT:C1216($o;$oPreferences;$signal)
+C_TEXT:C284($t; $tProcess)
+C_OBJECT:C1216($o; $oPreferences; $signal)
 
 C_OBJECT:C1216(feature)
 C_OBJECT:C1216(SHARED)
 C_OBJECT:C1216(ui)
 C_OBJECT:C1216(RECORD)
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $bReset:=Macintosh option down:C545
 
-  // ----------------------------------------------------
-  // Disable asserts in release mode
-SET ASSERT ENABLED:C1131(Not:C34(Is compiled mode:C492);*)
+// ----------------------------------------------------
+// Disable asserts in release mode
+SET ASSERT ENABLED:C1131(Not:C34(Is compiled mode:C492); *)
 
-  // Get the config file
+// Get the config file
 $o:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
 
 If ($o.exists)
@@ -38,7 +38,7 @@ If ($o.exists)
 	
 Else 
 	
-	  // Create the preferences
+	// Create the preferences
 	$oPreferences:=New object:C1471
 	
 End if 
@@ -52,39 +52,39 @@ $o.wait()
 */
 	
 	$signal:=New signal:C1641
-	CALL WORKER:C1389("$";"INIT";$signal)
+	CALL WORKER:C1389("$"; "INIT"; $signal)
 	$signal.wait()
 	KILL WORKER:C1390("$")
 	
 End if 
 
-  // ================================================================================================================================
-  //                                                               LOGGER
-  // ================================================================================================================================
+// ================================================================================================================================
+//                                                               LOGGER
+// ================================================================================================================================
 If (OB Is empty:C1297(RECORD)) | $bReset
 	
-	RECORD:=logger ("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+	RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
 	RECORD.verbose:=(Structure file:C489=Structure file:C489(*))
 	$bInitRecord:=True:C214
 	
 End if 
 
-  // ================================================================================================================================
-  //                                                            COMMON VALUES
-  // ================================================================================================================================
+// ================================================================================================================================
+//                                                            COMMON VALUES
+// ================================================================================================================================
 If (OB Is empty:C1297(SHARED)) | $bReset
 	
 	SHARED:=New object:C1471
 	
 	SHARED.ide:=New object:C1471(\
-		"version";COMPONENT_Infos ("ideVersion");\
-		"build";Num:C11(COMPONENT_Infos ("ideBuildVersion")))
+		"version"; COMPONENT_Infos("ideVersion"); \
+		"build"; Num:C11(COMPONENT_Infos("ideBuildVersion")))
 	
 	SHARED.component:=New object:C1471(\
-		"version";COMPONENT_Infos ("componentVersion");\
-		"build";Num:C11(COMPONENT_Infos ("componentBuild")))
+		"version"; COMPONENT_Infos("componentVersion"); \
+		"build"; Num:C11(COMPONENT_Infos("componentBuild")))
 	
-	$o:=xml_fileToObject (Get 4D folder:C485(Database folder:K5:14)+"Info.plist").value.plist.dict
+	$o:=xml_fileToObject(Get 4D folder:C485(Database folder:K5:14)+"Info.plist").value.plist.dict
 	$l:=$o.key.extract("$").indexOf("CFBundleVersion")
 	
 	If ($l#-1)
@@ -97,66 +97,64 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 	SHARED.archiveExtension:=".zip"
 	
 	SHARED.theme:=New object:C1471(\
-		"colorjuicer";New object:C1471(\
-		"scale";64))
+		"colorjuicer"; New object:C1471(\
+		"scale"; 64))
 	
-	  // minimum requierement
+	// minimum requierement
 	SHARED.xCodeVersion:="11.6"
 	SHARED.iosDeploymentTarget:="13.6"
 	
 	SHARED.useXcodeDefaultPath:=True:C214
 	
-	  // Project config
+	// Project config
 	SHARED.swift:=New object:C1471(\
-		"Version";"5.1";\
-		"Flags";New object:C1471("Debug";"";"Release";"");\
-		"OptimizationLevel";New object:C1471(\
-		"Debug";"-Onone";\
-		"Release";"-O");\
-		"CompilationMode";New object:C1471(\
-		"Debug";"singlefile";\
-		"Release";"wholemodule"))
+		"Version"; "5.1"; \
+		"Flags"; New object:C1471("Debug"; ""; "Release"; ""); \
+		"OptimizationLevel"; New object:C1471(\
+		"Debug"; "-Onone"; \
+		"Release"; "-O"); \
+		"CompilationMode"; New object:C1471(\
+		"Debug"; "singlefile"; \
+		"Release"; "wholemodule"))
 	
-	  // OptimizationLevel: -O (speed) -Osize (size) -Onone (nothing, better to debug)
+	// OptimizationLevel: -O (speed) -Osize (size) -Onone (nothing, better to debug)
 	
-	  // 1:iphone / 2:ipad / 1,2:universal
+	// 1:iphone / 2:ipad / 1,2:universal
 	SHARED.targetedDeviceFamily:="1,2"
 	
-	  // https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/index.html#//apple_ref/doc/uid/TP40015083
+	// https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/index.html#//apple_ref/doc/uid/TP40015083
 	SHARED.onDemandResources:=True:C214
 	
-	  // https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/AppThinning/AppThinning.html
+	// https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/AppThinning/AppThinning.html
 	SHARED.bitcode:=True:C214
 	
-	  // iOS simulator time out
+	// iOS simulator time out
 	SHARED.simulatorTimeout:=10000
 	
-	  // Info.plist
+	// Info.plist
 	SHARED.infoPlist:=New object:C1471(\
-		"build";"1.0.0";\
-		"developmentRegion";"en";\
-		"storyboard";New object:C1471(\
-		"LaunchScreen";"LaunchScreen";\
-		"Main";"Main";\
-		"backgroundColor";"white"))
+		"build"; "1.0.0"; \
+		"developmentRegion"; "en"; \
+		"storyboard"; New object:C1471(\
+		"LaunchScreen"; "LaunchScreen"; \
+		"Main"; "Main"; \
+		"backgroundColor"; "white"))
 	
-	SHARED.urlScheme:=""
-	
-	  // Exclude some file from copy
+	// Exclude some file from copy
 	SHARED.template:=New object:C1471(\
-		"exclude";New collection:C1472("layoutIconx2.png";"manifest.json";"template.gif";"template.svg";\
-		"relationButton.xib";"README.md";"Package.swift";"Package.resolved";"Cartfile";"Cartfile.resolved"))
+		"exclude"; New collection:C1472("layoutIconx2.png"; "manifest.json"; "template.gif"; "template.svg"; \
+		"relationButton.xib"; "README.md"; "Package.swift"; "Package.resolved"; "Cartfile"; "Cartfile.resolved"))
 	
-	  // Data dump
+	// Data dump
 	SHARED.data:=New object:C1471(\
-		"dump";New object:C1471(\
-		"limit";1000000;\
-		"page";1))
+		"dump"; New object:C1471(\
+		"limit"; 1000000; \
+		"page"; 1))
 	
 	If (SHARED.component.build#Num:C11($oPreferences.lastBuild)) | $bReset
 		
-		  // Invalid the cache
-		$o:=sdk (New object:C1471("action";"cacheFolder"))
+		// Invalid the cache
+		$o:=sdk(New object:C1471("action"; "cacheFolder"))
 		
 		If ($o.exists)
 			
@@ -164,21 +162,21 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 			
 		End if 
 		
-		  // Save the preferences
+		// Save the preferences
 		$oPreferences.lastBuild:=SHARED.component.build
-		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($oPreferences;*))
+		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($oPreferences; *))
 		
 	End if 
 	
 	SHARED.keyExtension:="mobileapp"
 	
-	  // Override common conf by file settings [
+	// Override common conf by file settings [
 	If ($oPreferences.common#Null:C1517)
 		
-		ob_deepMerge (SHARED;$oPreferences.common)
+		ob_deepMerge(SHARED; $oPreferences.common)
 		
 	End if 
-	  //]
+	//]
 	
 	SHARED.defaultFieldBindingTypes:=New collection:C1472
 	SHARED.defaultFieldBindingTypes[Is alpha field:K8:1]:="text"
@@ -193,61 +191,60 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 	SHARED.defaultFieldBindingTypes[Is text:K8:3]:="text"
 	SHARED.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
 	
-	  // XXX check table & filed names in https://project.4d.com/issues/90770
+	// XXX check table & filed names in https://project.4d.com/issues/90770
 	SHARED.deletedRecordsTable:=New object:C1471(\
-		"name";"__DeletedRecords";\
-		"fields";New collection:C1472)
+		"name"; "__DeletedRecords"; \
+		"fields"; New collection:C1472)
 	
 	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
-		"name";"ID";\
-		"type";"INT64";\
-		"indexed";True:C214;\
-		"primaryKey";True:C214;\
-		"autoincrement";True:C214))
+		"name"; "ID"; \
+		"type"; "INT64"; \
+		"indexed"; True:C214; \
+		"primaryKey"; True:C214; \
+		"autoincrement"; True:C214))
 	
 	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
-		"name";"__Stamp";\
-		"type";"INT64";\
-		"indexed";True:C214))
+		"name"; "__Stamp"; \
+		"type"; "INT64"; \
+		"indexed"; True:C214))
 	
 	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
-		"name";"__TableNumber";\
-		"type";"INT32"))
+		"name"; "__TableNumber"; \
+		"type"; "INT32"))
 	
 	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
-		"name";"__TableName";\
-		"type";"VARCHAR(255)"))
+		"name"; "__TableName"; \
+		"type"; "VARCHAR(255)"))
 	
 	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
-		"name";"__PrimaryKey";\
-		"type";"VARCHAR(255)"))
+		"name"; "__PrimaryKey"; \
+		"type"; "VARCHAR(255)"))
 	
 	SHARED.stampField:=New object:C1471(\
-		"name";"__GlobalStamp";\
-		"type";"INT64";\
-		"indexed";True:C214)
+		"name"; "__GlobalStamp"; \
+		"type"; "INT64"; \
+		"indexed"; True:C214)
 	
-	  // Common project tags
+	// Common project tags
 	SHARED.tags:=New object:C1471(\
-		"componentBuild";String:C10(SHARED.component.build);\
-		"ideVersion";SHARED.ide.version;\
-		"ideBuildVersion";SHARED.ide.build;\
-		"iosDeploymentTarget";SHARED.iosDeploymentTarget;\
-		"swiftVersion";SHARED.swift.Version;\
-		"swiftFlagsDebug";SHARED.swift.Flags.Debug;\
-		"swiftFlagsRelease";SHARED.swift.Flags.Release;\
-		"swiftOptimizationLevelDebug";SHARED.swift.OptimizationLevel.Debug;\
-		"swiftOptimizationLevelRelease";SHARED.swift.OptimizationLevel.Release;\
-		"swiftCompilationModeDebug";SHARED.swift.CompilationMode.Debug;\
-		"swiftCompilationModeRelease";SHARED.swift.CompilationMode.Release;\
-		"onDemandResources";Choose:C955(SHARED.onDemandResources;"YES";"NO");\
-		"bitcode";Choose:C955(SHARED.bitcode;"YES";"NO");\
-		"targetedDeviceFamily";SHARED.targetedDeviceFamily;\
-		"build";SHARED.infoPlist.build;\
-		"developmentRegion";SHARED.infoPlist.developmentRegion;\
-		"storyboardLaunchScreen";SHARED.infoPlist.storyboard.LaunchScreen;\
-		"storyboardMain";SHARED.infoPlist.storyboard.Main;\
-		"urlScheme";SHARED.urlScheme)
+		"componentBuild"; String:C10(SHARED.component.build); \
+		"ideVersion"; SHARED.ide.version; \
+		"ideBuildVersion"; SHARED.ide.build; \
+		"iosDeploymentTarget"; SHARED.iosDeploymentTarget; \
+		"swiftVersion"; SHARED.swift.Version; \
+		"swiftFlagsDebug"; SHARED.swift.Flags.Debug; \
+		"swiftFlagsRelease"; SHARED.swift.Flags.Release; \
+		"swiftOptimizationLevelDebug"; SHARED.swift.OptimizationLevel.Debug; \
+		"swiftOptimizationLevelRelease"; SHARED.swift.OptimizationLevel.Release; \
+		"swiftCompilationModeDebug"; SHARED.swift.CompilationMode.Debug; \
+		"swiftCompilationModeRelease"; SHARED.swift.CompilationMode.Release; \
+		"onDemandResources"; Choose:C955(SHARED.onDemandResources; "YES"; "NO"); \
+		"bitcode"; Choose:C955(SHARED.bitcode; "YES"; "NO"); \
+		"targetedDeviceFamily"; SHARED.targetedDeviceFamily; \
+		"build"; SHARED.infoPlist.build; \
+		"developmentRegion"; SHARED.infoPlist.developmentRegion; \
+		"storyboardLaunchScreen"; SHARED.infoPlist.storyboard.LaunchScreen; \
+		"storyboardMain"; SHARED.infoPlist.storyboard.Main)
 	
 	SHARED.thirdParty:="Carthage"
 	SHARED.thirdPartySources:=SHARED.thirdParty+"/Checkouts"
@@ -274,10 +271,10 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 		
 	End if 
 	
-	  // ================================================================================================================================
-	  //                                                           ONLY UI PROCESS
-	  // ================================================================================================================================
-	PROCESS PROPERTIES:C336(Current process:C322;$tProcess;$l;$l;$lMode)
+	// ================================================================================================================================
+	//                                                           ONLY UI PROCESS
+	// ================================================================================================================================
+	PROCESS PROPERTIES:C336(Current process:C322; $tProcess; $l; $l; $lMode)
 	
 	If (Not:C34($lMode ?? 1))  // Not preemptive mode (always false in dev mode!)
 		
@@ -291,17 +288,17 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 		
 		ui.debugMode:=(Structure file:C489=Structure file:C489(*))  // True in matrix database
 		
-		  // Preload icons for field types [
+		// Preload icons for field types [
 		ui.fieldIcons:=New collection:C1472
 		
-		For each ($o;Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))
+		For each ($o; Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))
 			
-			READ PICTURE FILE:C678($o.platformPath;$p)
-			ui.fieldIcons[Num:C11(Replace string:C233($o.name;"field_";""))]:=$p
+			READ PICTURE FILE:C678($o.platformPath; $p)
+			ui.fieldIcons[Num:C11(Replace string:C233($o.name; "field_"; ""))]:=$p
 			
 		End for each 
 		
-		  // Field type names [
+		// Field type names [
 		ui.typeNames:=New collection:C1472
 		ui.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
 		ui.typeNames[Is integer:K8:5]:=Get localized string:C991("integer")
@@ -314,10 +311,10 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 		ui.typeNames[Is date:K8:7]:=Get localized string:C991("date")
 		ui.typeNames[Is text:K8:3]:=Get localized string:C991("text")
 		ui.typeNames[Is picture:K8:10]:=Get localized string:C991("picture")
-		  //]
+		//]
 		
-		  // Colors [
-		ui.colorScheme:=ui_colorScheme 
+		// Colors [
+		ui.colorScheme:=ui_colorScheme
 		
 		If (ui.colorScheme.isDarkStyle)
 			
@@ -360,18 +357,18 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 			ui.warningRGB:="darkorange"
 			
 		End if 
-		  //]
+		//]
 		
 		ui.colors:=New object:C1471
-		ui.colors.strokeColor:=color ("4dColor";New object:C1471("value";ui.strokeColor))
-		ui.colors.highlightColor:=color ("4dColor";New object:C1471("value";ui.highlightColor))
-		ui.colors.highlightColorNoFocus:=color ("4dColor";New object:C1471("value";ui.highlightColorNoFocus))
-		ui.colors.selectedColor:=color ("4dColor";New object:C1471("value";ui.selectedColor))
-		ui.colors.alternateSelectedColor:=color ("4dColor";New object:C1471("value";ui.alternateSelectedColor))
-		ui.colors.backgroundSelectedColor:=color ("4dColor";New object:C1471("value";ui.backgroundSelectedColor))
-		ui.colors.backgroundUnselectedColor:=color ("4dColor";New object:C1471("value";ui.backgroundUnselectedColor))
-		ui.colors.errorColor:=color ("4dColor";New object:C1471("value";ui.errorColor))
-		ui.colors.warningColor:=color ("4dColor";New object:C1471("value";ui.warningColor))
+		ui.colors.strokeColor:=color("4dColor"; New object:C1471("value"; ui.strokeColor))
+		ui.colors.highlightColor:=color("4dColor"; New object:C1471("value"; ui.highlightColor))
+		ui.colors.highlightColorNoFocus:=color("4dColor"; New object:C1471("value"; ui.highlightColorNoFocus))
+		ui.colors.selectedColor:=color("4dColor"; New object:C1471("value"; ui.selectedColor))
+		ui.colors.alternateSelectedColor:=color("4dColor"; New object:C1471("value"; ui.alternateSelectedColor))
+		ui.colors.backgroundSelectedColor:=color("4dColor"; New object:C1471("value"; ui.backgroundSelectedColor))
+		ui.colors.backgroundUnselectedColor:=color("4dColor"; New object:C1471("value"; ui.backgroundUnselectedColor))
+		ui.colors.errorColor:=color("4dColor"; New object:C1471("value"; ui.errorColor))
+		ui.colors.warningColor:=color("4dColor"; New object:C1471("value"; ui.warningColor))
 		
 		ui.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
 		ui.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath
@@ -379,13 +376,13 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 		ui.alert:="🚫"
 		ui.warning:="❗"
 		
-		  // Only for data pannel [
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/user.png").platformPath;$p)
+		// Only for data pannel [
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/user.png").platformPath; $p)
 		ui.user:=$p
 		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/filter.png").platformPath;$p)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/filter.png").platformPath; $p)
 		ui.filter:=$p
-		  //]
+		//]
 		
 		ui.checkMark:=Char:C90(19)
 		
@@ -397,7 +394,7 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 		
 	End if 
 	
-	  // Define classes & methods
+	// Define classes & methods
 	EXECUTE METHOD:C1007("ui_CLASSES")
 	EXECUTE METHOD:C1007("project_CLASSES")
 	
@@ -408,7 +405,7 @@ FEATURES FLAGS
 ================================================================================================================================*/
 If (OB Is empty:C1297(feature)) | $bReset
 	
-	FEATURE_FLAGS (1840;$oPreferences)
+	FEATURE_FLAGS(1840; $oPreferences)
 	
 End if 
 
@@ -417,15 +414,15 @@ If (Not:C34($lMode ?? 1))\
  & ($bInitRecord)
 	
 	$t:=SHARED.ide.version
-	RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0";"."+$t[[4]];"R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
+	RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0"; "."+$t[[4]]; "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
 	RECORD.log("Component "+SHARED.component.version)
 	RECORD.line()
 	
-	For each ($t;feature)
+	For each ($t; feature)
 		
 		If (Value type:C1509(feature[$t])=Is boolean:K8:9)
 			
-			RECORD.log("feature "+Replace string:C233($t;"_";"")+": "+Choose:C955(feature[$t];"Enabled";"Disabled"))
+			RECORD.log("feature "+Replace string:C233($t; "_"; "")+": "+Choose:C955(feature[$t]; "Enabled"; "Disabled"))
 			
 		End if 
 	End for each 
@@ -437,28 +434,28 @@ End if
 /*================================================================================================================================
 AFTER FLAGS
 ================================================================================================================================*/
-COMPONENT_DEFINE_TOOLS 
+COMPONENT_DEFINE_TOOLS
 
 If (feature.with("accentColors"))
 	
-	  // ui.selectedColor:=Highlight menu background color
-	  // ui.highlightColor:=Highlight menu background color
+	// ui.selectedColor:=Highlight menu background color
+	// ui.highlightColor:=Highlight menu background color
 	
-	  // ui.backgroundSelectedColor:=Highlight menu background color // 0x004BA6F8
-	  // ui.backgroundUnselectedColor:=Background color none // 0x005A5A5A
+	// ui.backgroundSelectedColor:=Highlight menu background color // 0x004BA6F8
+	// ui.backgroundUnselectedColor:=Background color none // 0x005A5A5A
 	
 End if 
 
 If (feature.with("debug"))
 	
-	SET ASSERT ENABLED:C1131(True:C214;*)
+	SET ASSERT ENABLED:C1131(True:C214; *)
 	
 End if 
 
-RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130;"Enabled";"Disabled"))
+RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
 
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// Return
+// <NONE>
+// ----------------------------------------------------
+// End
