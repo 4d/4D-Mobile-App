@@ -272,6 +272,20 @@ If ($Obj_in.create)
 		"info"; $Obj_project.info)
 	$appManifest.id:=String:C10($appManifest.team.id)+"."+$appManifest.application.id
 	
+	If (feature.with(117618))
+		If (Bool:C1537($Obj_project.deepLinking.enabled))
+			If (Length:C16(String:C10($Obj_project.deepLinking.urlScheme))>0)
+				$appManifest.urlScheme:=String:C10($Obj_project.deepLinking.urlScheme)
+				$appManifest.urlScheme:=Replace string:C233($appManifest.urlScheme; "://"; "")
+			End if 
+			If (Length:C16(String:C10($Obj_project.deepLinking.associatedDomain))>0)
+				$appManifest.associatedDomain:=String:C10($Obj_project.deepLinking.associatedDomain)
+				$appManifest.associatedDomain:=Replace string:C233($appManifest.associatedDomain; "https://"; "")
+				$appManifest.associatedDomain:=Replace string:C233($appManifest.associatedDomain; "http://"; "")
+			End if 
+		End if 
+	End if 
+	
 	//#ACI0100704
 	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18; *).folder($appManifest.id)
 	
