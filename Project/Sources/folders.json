@@ -85,6 +85,7 @@
 			"_o_SERVER_Handler",
 			"_o_SERVER_OBJECTS_HANDLER",
 			"_o_structure",
+			"_o_templates",
 			"_o_tempoFieldType",
 			"str_URLEncode",
 			"TEMPO_1",
@@ -95,10 +96,6 @@
 			"_o_VIEWS"
 		]
 	},
-	"(_TEMPO)": {},
-	"(_widgets)": {},
-	"(tools)": {},
-	"(v18)": {},
 	"[API]": {
 		"methods": [
 			"C_NEW_MOBILE_PROJECT",
@@ -397,6 +394,9 @@
 		]
 	},
 	"backend": {
+		"groups": [
+			"templateClass"
+		],
 		"methods": [
 			"actions",
 			"catalog",
@@ -413,7 +413,6 @@
 			"Process_tags_on_file",
 			"Rest",
 			"template",
-			"templates",
 			"xloc"
 		]
 	},
@@ -769,6 +768,30 @@
 			"str_singleQuoted"
 		]
 	},
+	"templateClass": {
+		"groups": [
+			"templateFormClass"
+		],
+		"methods": [
+			"TemplateInstanceFactory"
+		],
+		"classes": [
+			"ChoiceTemplate",
+			"FolderTemplate",
+			"LaunchScreenTemplate",
+			"MainTemplate",
+			"Template"
+		]
+	},
+	"templateFormClass": {
+		"classes": [
+			"DetailFormTemplate",
+			"FormTemplate",
+			"ListFormTemplate",
+			"NavigationTemplate",
+			"TablesFormsTemplate"
+		]
+	},
 	"templates": {
 		"methods": [
 			"tmpl_cancel",
@@ -832,12 +855,5 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(_TEMPO)",
-			"(_widgets)",
-			"(tools)",
-			"(v18)"
-		]
-	}
+	"trash": {}
 }

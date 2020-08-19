@@ -22,8 +22,8 @@ C_OBJECT:C1216($pathForm)
 C_COLLECTION:C1488($Col_actions; $Col_catalog; $Col_path)
 
 If (False:C215)
-	C_OBJECT:C1216(templates; $0)
-	C_OBJECT:C1216(templates; $1)
+	C_OBJECT:C1216(_o_templates; $0)
+	C_OBJECT:C1216(_o_templates; $1)
 End if 
 
 // TODO change recursion onChoice and byTable, each table have it's choice
@@ -168,7 +168,7 @@ Case of
 			$o.template.parent:=$Obj_template.parent  // or $Obj_template?
 			$o.projfile:=$Obj_in.projfile  // do not want a copy
 			
-			$Obj_out.template:=templates($o)  // <================================== RECURSIVE
+			$Obj_out.template:=_o_templates($o)  // <================================== RECURSIVE
 			
 		Else 
 			
@@ -669,7 +669,7 @@ Case of
 					$o.projfile:=$Obj_in.projfile  // do not want a copy
 					$o.exclude:=JSON Stringify:C1217(SHARED.template.exclude)
 					
-					$Obj_out.template:=templates($o)  // <================================== RECURSIVE
+					$Obj_out.template:=_o_templates($o)  // <================================== RECURSIVE
 					ob_error_combine($Obj_out; $Obj_out.template)
 					
 				Else   // cannot read the template
@@ -1384,7 +1384,7 @@ If (Value type:C1509($Obj_template.children)=Is collection:K8:32)
 		$o.template.parent:=$Obj_template
 		$o.projfile:=$Obj_in.projfile  // do not want a copy
 		
-		$o:=templates($o)  // <================================== RECURSIVE
+		$o:=_o_templates($o)  // <================================== RECURSIVE
 		$Obj_out.children.push($o)
 		ob_error_combine($Obj_out; $o)
 		
@@ -1419,7 +1419,7 @@ If (($Txt_type="main"))
 				"path"; $Obj_in.path; \
 				"projfile"; $Obj_in.projfile)
 			
-			$Obj_out["project"+$t]:=templates($o)  // <================================== RECURSIVE
+			$Obj_out["project"+$t]:=_o_templates($o)  // <================================== RECURSIVE
 			
 		End if 
 	End if 
@@ -1489,7 +1489,7 @@ If (($Txt_type="main"))
 				"path"; $Obj_in.path; \
 				"projfile"; $Obj_in.projfile)
 			
-			$Obj_out["pushNotification"]:=templates($o)  // <================================== RECURSIVE
+			$Obj_out["pushNotification"]:=_o_templates($o)  // <================================== RECURSIVE
 			
 		End if 
 	End if 

@@ -77,8 +77,13 @@ If (False:C215)
 	C_OBJECT:C1216(template; $1)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(templates; $0)
-	C_OBJECT:C1216(templates; $1)
+	C_OBJECT:C1216(_o_templates; $0)
+	C_OBJECT:C1216(_o_templates; $1)
+	C_OBJECT:C1216(_o_templates; $2)
+	
+	//______________________________________________________
+	C_OBJECT:C1216(TemplateInstanceFactory; $0)
+	C_OBJECT:C1216(TemplateInstanceFactory; $1)
 	
 	//______________________________________________________
 End if 

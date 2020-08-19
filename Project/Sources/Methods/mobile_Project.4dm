@@ -343,12 +343,21 @@ If ($Obj_in.create)
 		$Obj_out.formatters:=formatters(New object:C1471("action"; "getByName")).formatters
 		
 		// Duplicate the template {
-		$Obj_out.template:=templates(New object:C1471(\
-			"template"; $Obj_template; \
-			"path"; $Obj_in.path; \
-			"tags"; $Obj_tags; \
-			"formatters"; $Obj_out.formatters; \
-			"project"; $Obj_project))
+		If (feature.with("templateClass"))  // add feature flag if test not possible with new code
+			$Obj_out.template:=cs:C1710.MainTemplate.new(New object:C1471(\
+				"template"; $Obj_template; \
+				"path"; $Obj_in.path; \
+				"tags"; $Obj_tags; \
+				"formatters"; $Obj_out.formatters; \
+				"project"; $Obj_project)).run()
+		Else 
+			$Obj_out.template:=_o_templates(New object:C1471(\
+				"template"; $Obj_template; \
+				"path"; $Obj_in.path; \
+				"tags"; $Obj_tags; \
+				"formatters"; $Obj_out.formatters; \
+				"project"; $Obj_project))
+		End if 
 		ob_error_combine($Obj_out; $Obj_out.template)
 		
 		$Obj_out.projfile:=$Obj_out.template.projfile
