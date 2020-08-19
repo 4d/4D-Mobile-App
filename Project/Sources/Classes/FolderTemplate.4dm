@@ -5,5 +5,5 @@ Class constructor
 	Super:C1705($1)
 	ASSERT:C1129(This:C1470.template.type="folder")
 	
-Function firstPass
-	// do nothing, just an intermediate folder
+Function doRun
+	// do nothing, just an intermediate folder, recursion(manageChildren) will do the job

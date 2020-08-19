@@ -5,7 +5,12 @@ Class constructor
 	Super:C1705($1)
 	ASSERT:C1129(This:C1470.template.type="ls")
 	
-Function secondPass
+Function doRun
+	C_OBJECT:C1216($0)
+	$0:=Super:C1706.doRun()  // copy files
+	$0:=ob_deepMerge($0; This:C1470.generateAssets())
+	
+Function generateAssets
 	C_OBJECT:C1216($0; $Obj_out)
 	$Obj_out:=New object:C1471()
 	

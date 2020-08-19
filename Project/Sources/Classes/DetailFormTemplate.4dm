@@ -5,15 +5,11 @@ Class constructor
 	Super:C1705($1)
 	ASSERT:C1129(This:C1470.template.type="detailform")
 	
-Function firstPass
-	// do nothing for detail form, will be managed by second pass with xml change
-	
-	// do not remove or tag will be replaced
-	// The TEMPLATE method is called later after replacing some tag
-	
-Function secondPass
+Function doRun
 	C_OBJECT:C1216($0; $Obj_out)
 	$Obj_out:=New object:C1471()
+	
+	// NO SUPER, we do not want to copy files currently
 	
 	// XXX factorize with navigation template code for image?
 	

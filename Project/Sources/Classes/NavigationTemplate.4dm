@@ -5,10 +5,9 @@ Class constructor
 	Super:C1705($1)
 	ASSERT:C1129(This:C1470.template.type="navigation")
 	
-Function secondPass
-	C_OBJECT:C1216($0)
-	C_OBJECT:C1216($Obj_out)
-	$Obj_out:=New object:C1471()
+Function doRun
+	C_OBJECT:C1216($0; $Obj_out)
+	$Obj_out:=Super:C1706.doRun()  // copy files
 	
 	C_OBJECT:C1216($Obj_in; $Obj_template)
 	$Obj_in:=This:C1470.input

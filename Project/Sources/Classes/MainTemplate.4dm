@@ -241,6 +241,12 @@ Function afterChildren
 	$0:=$Obj_out
 	
 	
-Function secondPass
+Function getCatalogExcludePattern
+	C_TEXT:C284($0)
+	$0:="*"  // nothing, even hidden files must be copyed for this template
+	
+Function doRun
 	C_OBJECT:C1216($0)
-	$0:=This:C1470.updateAssets()
+	$0:=Super:C1706.doRun()  // copy files
+	$0:=ob_deepMerge($0; This:C1470.updateAssets())
+	

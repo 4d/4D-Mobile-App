@@ -5,8 +5,7 @@ Class constructor
 	Super:C1705($1)
 	ASSERT:C1129(This:C1470.template.type="tablesForms")
 	
-	
-Function firstPass
+Function doRun
 	C_OBJECT:C1216($0; $Obj_out)
 	
 	$Obj_out:=New object:C1471()

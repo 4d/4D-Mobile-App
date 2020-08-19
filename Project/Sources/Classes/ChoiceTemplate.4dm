@@ -5,9 +5,8 @@ Class constructor
 	Super:C1705($1)
 	ASSERT:C1129(This:C1470.template.type="choice")
 	
-Function firstPass
+Function doRun
 	C_OBJECT:C1216($0)
-	// TODO RELATION Pass the result of first pass
 	$0:=This:C1470.makeTheChoice()
 	
 Function makeTheChoice

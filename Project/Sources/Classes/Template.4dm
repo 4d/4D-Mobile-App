@@ -21,14 +21,7 @@ Function run
 	
 	// mainly copy file or skip the template to use a children one
 	C_OBJECT:C1216($Obj_result)
-	$Obj_result:=This:C1470.firstPass()
-	If ($Obj_result#Null:C1517)
-		ob_error_combine($Obj_out; $Obj_result)
-	End if 
-	
-	// Then code for final template
-	
-	$Obj_result:=This:C1470.secondPass()
+	$Obj_result:=This:C1470.doRun()
 	If ($Obj_result#Null:C1517)
 		ob_error_combine($Obj_out; $Obj_result)
 	End if 
@@ -90,70 +83,59 @@ Function run
 	$0:=$Obj_out
 	
 	
-Function copyFiles
-	C_OBJECT:C1216($0)
-	C_OBJECT:C1216($Obj_in; $Obj_template)
-	C_COLLECTION:C1488($Col_catalog)
+Function getCatalogExcludePattern
+	C_TEXT:C284($0)
 	
-	$Obj_in:=This:C1470.input
-	$Obj_template:=This:C1470.template
-	
-	// get files to copy
 	Case of 
 			
 			//……………………………………………………………………………………………………………
-		: (Value type:C1509($Obj_in.exclude)=Is text:K8:3)
+		: (Value type:C1509(This:C1470.input.exclude)=Is text:K8:3)
 			
-			$Col_catalog:=doc_catalog($Obj_template.source; $Obj_in.exclude)
-			
-			//……………………………………………………………………………………………………………
-		: (Value type:C1509($Obj_in.exclude)=Is collection:K8:32)
-			
-			$Col_catalog:=doc_catalog($Obj_template.source; JSON Stringify:C1217($Obj_in.exclude))
+			$0:=This:C1470.input.exclude
 			
 			//……………………………………………………………………………………………………………
-		: (String:C10(This:C1470.template.type)="main")
+		: (Value type:C1509(This:C1470.input.exclude)=Is collection:K8:32)
 			
-			//Folder($obj_template.source;fk platform path).files().extract("fullName")
-			
-			$Col_catalog:=doc_catalog($Obj_template.source; "*")
+			$0:=JSON Stringify:C1217(This:C1470.input.exclude)
 			
 			//……………………………………………………………………………………………………………
-		: (Bool:C1537($Obj_in.template.inject))
+		: (Bool:C1537(This:C1470.template.inject))
 			
-			$Col_catalog:=doc_catalog($Obj_template.source; JSON Stringify:C1217(SHARED.template.exclude))
+			$0:=JSON Stringify:C1217(SHARED.template.exclude)
 			
 			//……………………………………………………………………………………………………………
 		Else 
 			
-			$Col_catalog:=doc_catalog($Obj_template.source)
+			$0:="."  // ignore invisible files by default
 			
 			//……………………………………………………………………………………………………………
 	End case 
 	
-	// finally copy
+	
+Function copyFiles
+	C_OBJECT:C1216($0)
+	
+	// get files to copy
+	C_COLLECTION:C1488($Col_catalog)
+	$Col_catalog:=doc_catalog(This:C1470.template.source; This:C1470.getCatalogExcludePattern())
+	
+	// and finally copy with tag processing
 	This:C1470.copyFilesResult:=template(New object:C1471(\
-		"source"; $Obj_template.source; \
-		"target"; $Obj_in.path; \
-		"tags"; $Obj_in.tags; \
-		"caller"; $Obj_in.caller; \
+		"source"; This:C1470.template.source; \
+		"target"; This:C1470.input.path; \
+		"tags"; This:C1470.input.tags; \
+		"caller"; This:C1470.input.caller; \
 		"catalog"; $Col_catalog\
 		))
 	
 	$0:=This:C1470.copyFilesResult
 	
-	// By default copy files, override to change first pass
-Function firstPass
+Function doRun
 	C_OBJECT:C1216($0)
 	
-	// Default template management code, a copy and tag replacement
 	$0:=This:C1470.copyFiles()
 	$0.capabilities:=This:C1470.template.capabilities
 	
-Function secondPass
-	C_OBJECT:C1216($0)
-	
-	// do nothing at this level
 	
 Function getXcodeProj
 	C_OBJECT:C1216($0)
