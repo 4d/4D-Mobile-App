@@ -155,6 +155,15 @@ Case of
 		// ALL SUBSEQUENT ENTRY POINTS ARE ONLY AVAILABLE ON macOS
 		
 		//________________________________________
+	: ($Txt_in="templates")
+		
+		If (feature.with("templateClass"))
+			$Obj_out:=TemplateInstanceFactory($Obj_in).run()
+		Else 
+			EXECUTE METHOD:C1007("_o_templates"; $Obj_out; $Obj_in)
+		End if 
+		
+		//________________________________________
 	: ($Txt_in="xcode")\
 		 | ($Txt_in="xcodeProj")\
 		 | ($Txt_in="plist")\
@@ -165,7 +174,6 @@ Case of
 		 | ($Txt_in="dataSet")\
 		 | ($Txt_in="dataModel")\
 		 | ($Txt_in="storyboard")\
-		 | ($Txt_in="templates")\
 		 | ($Txt_in="TEMPLATE")\
 		 | ($Txt_in="sdk")\
 		 | ($Txt_in="git")\
