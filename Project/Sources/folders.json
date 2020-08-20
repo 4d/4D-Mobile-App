@@ -84,10 +84,10 @@
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
 			"_o_SERVER_OBJECTS_HANDLER",
+			"_o_storyboard",
 			"_o_structure",
 			"_o_templates",
 			"_o_tempoFieldType",
-			"str_URLEncode",
 			"TEMPO_1",
 			"TURN_AROUND_Field_name"
 		],
@@ -409,6 +409,7 @@
 			"formatString",
 			"formatters",
 			"net",
+			"plist_toObject",
 			"Process_tags",
 			"Process_tags_on_file",
 			"Rest",
@@ -572,6 +573,9 @@
 		]
 	},
 	"macOS": {
+		"groups": [
+			"storyboardClass"
+		],
 		"methods": [
 			"_o_unzip",
 			"asset",
@@ -582,11 +586,9 @@
 			"device",
 			"git",
 			"plist",
-			"plist_toObject",
 			"provisioningProfiles",
 			"sdk",
 			"simulator",
-			"storyboard",
 			"storyboard_fix_id",
 			"swiftPM",
 			"teamId",
@@ -759,13 +761,23 @@
 			"SEARCH"
 		]
 	},
+	"storyboardClass": {
+		"classes": [
+			"DetailFormStoryboard",
+			"ListFormStoryboard",
+			"NavigationStoryboard",
+			"Storyboard",
+			"Storyboards"
+		]
+	},
 	"str": {
 		"methods": [
 			"COMPILER_str",
 			"str_cmpVersion",
 			"str_date",
 			"str_equal",
-			"str_singleQuoted"
+			"str_singleQuoted",
+			"str_URLEncode"
 		]
 	},
 	"templateClass": {

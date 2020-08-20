@@ -364,15 +364,12 @@ If ($Obj_in.create)
 		ob_removeProperty($Obj_out.template; "projfile")  // redundant information
 		
 		// Add some asset fix (could optimize by merging fix)
-		$Obj_out.colorAssetFix:=storyboard(New object:C1471(\
-			"action"; "colorAssetFix"; \
-			"path"; $Obj_in.path+"Sources"+Folder separator:K24:12+"Forms"; \
-			"theme"; $Obj_out.template.theme))
+		C_OBJECT:C1216($fixes)
+		$fixes:=cs:C1710.Storyboards.new(Folder:C1567($Obj_in.path+"Sources"+Folder separator:K24:12+"Forms"; fk platform path:K87:2))
+		$Obj_out.colorAssetFix:=$fixes.colorAssetFix($Obj_out.template.theme)
 		ob_error_combine($Obj_out; $Obj_out.colorAssetFix)
 		
-		$Obj_out.imageAssetFix:=storyboard(New object:C1471(\
-			"action"; "imageAssetFix"; \
-			"path"; $Obj_in.path+"Sources"+Folder separator:K24:12+"Forms"))
+		$Obj_out.imageAssetFix:=$fixes.imageAssetFix()
 		ob_error_combine($Obj_out; $Obj_out.imageAssetFix)
 		
 		//}

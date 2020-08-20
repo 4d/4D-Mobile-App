@@ -9,53 +9,76 @@ Function doRun
 	C_OBJECT:C1216($0; $Obj_out)
 	$Obj_out:=Super:C1706.doRun()  // copy files
 	
-	C_OBJECT:C1216($Obj_in; $Obj_template)
-	$Obj_in:=This:C1470.input
+	C_OBJECT:C1216($Obj_template)
 	$Obj_template:=This:C1470.template
 	
 	// Get navigation tables as tag
-	$Obj_in.tags.navigationTables:=dataModel(New object:C1471(\
+	This:C1470.input.tags.navigationTables:=dataModel(New object:C1471(\
 		"action"; "tableCollection"; \
-		"dataModel"; $Obj_in.project.dataModel; \
+		"dataModel"; This:C1470.input.project.dataModel; \
 		"tag"; True:C214; \
-		"tables"; $Obj_in.project.main.order)).tables
+		"tables"; This:C1470.input.project.main.order)).tables
 	
 	// Compute table row height, not very responsive. Check if possible with storyboard
 	C_LONGINT:C283($i)
-	$i:=$Obj_in.tags.navigationTables.length
+	$i:=This:C1470.input.tags.navigationTables.length
 	
 	Case of 
 			
 			//……………………………………………………………………………………
 		: ($i>10)
 			
-			$Obj_in.tags.navigationRowHeight:="-1"  // https://developer.apple.com/documentation/uikit/uitableviewautomaticdimension
+			This:C1470.input.tags.navigationRowHeight:="-1"  // https://developer.apple.com/documentation/uikit/uitableviewautomaticdimension
 			
 			//……………………………………………………………………………………
 		: ($i<3)
 			
-			$Obj_in.tags.navigationRowHeight:="300"
+			This:C1470.input.tags.navigationRowHeight:="300"
 			
 			//……………………………………………………………………………………
 		: ($i<4)
 			
-			$Obj_in.tags.navigationRowHeight:="200"
+			This:C1470.input.tags.navigationRowHeight:="200"
 			
 			//……………………………………………………………………………………
 		Else 
 			
-			$Obj_in.tags.navigationRowHeight:=String:C10(100+(100/$i))
+			This:C1470.input.tags.navigationRowHeight:=String:C10(100+(100/$i))
 			
 			//……………………………………………………………………………………
 	End case 
 	
+	C_OBJECT:C1216($Obj_result)
+	$Obj_result:=This:C1470.createIconAssets()
+	ob_error_combine($Obj_out; $Obj_result)
+	
+	$Obj_out.tags:=New object:C1471(\
+		"navigationTables"; This:C1470.input.tags.navigationTables)  // Tag to transmit
+	
+	// Modify storyboards with navigation tables
+	$Obj_out.storyboard:=This:C1470.storyboard().run(This:C1470.template; Folder:C1567(This:C1470.input.path; fk platform path:K87:2); This:C1470.input.tags)
+	
+	If (Not:C34($Obj_out.storyboard.success))
+		
+		$Obj_out.success:=False:C215
+		
+		ob_error_combine($Obj_out; $Obj_out.storyboard; "Storyboard for navigation template failed")
+		
+	End if 
+	
+	$0:=$Obj_out
+	
+Function createIconAssets
+	C_OBJECT:C1216($Obj_out; $0)
+	$Obj_out:=New object:C1471()
+	
 	// need asset?
 	C_BOOLEAN:C305($Boo_withIcons)
-	$Boo_withIcons:=Bool:C1537($Obj_template.assets.mandatory)\
-		 | ($Obj_in.tags.navigationTables.query("icon != ''").length>0)
+	$Boo_withIcons:=Bool:C1537(This:C1470.template.assets.mandatory)\
+		 | (This:C1470.input.tags.navigationTables.query("icon != ''").length>0)
 	
 	C_OBJECT:C1216($Obj_table)
-	For each ($Obj_table; $Obj_in.tags.navigationTables)
+	For each ($Obj_table; This:C1470.input.tags.navigationTables)
 		
 		If ($Boo_withIcons)
 			
@@ -70,36 +93,23 @@ Function doRun
 		End if 
 	End for each 
 	
-	// Modify storyboards with navigation tables
-	$Obj_out.storyboard:=storyboard(New object:C1471(\
-		"action"; "navigation"; \
-		"template"; $Obj_template; \
-		"target"; $Obj_in.path; \
-		"tags"; $Obj_in.tags\
-		))
-	
-	If (Not:C34($Obj_out.storyboard.success))
-		
-		$Obj_out.success:=False:C215
-		
-		ob_error_combine($Obj_out; $Obj_out.storyboard; "Storyboard for navigation template failed")
-		
-	End if 
-	
 	If ($Boo_withIcons)
+		
+		$Obj_out.assets:=New collection:C1472  // result of asset operations
 		
 		C_OBJECT:C1216($Path_root; $Path_hostRoot)
 		$Path_root:=COMPONENT_Pathname("fieldIcons")
 		$Path_hostRoot:=COMPONENT_Pathname("host_fieldIcons")
 		
-		// If avigation need asset, create it
-		$Obj_out.assets:=New collection:C1472  // result of asset operations
-		
-		For each ($Obj_table; $Obj_in.tags.navigationTables)
+		C_OBJECT:C1216($Obj_table)
+		For each ($Obj_table; This:C1470.input.tags.navigationTables)
 			
-			If (Length:C16(String:C10($Obj_table[""].icon))=0)  // no icon defined
+			C_OBJECT:C1216($Obj_metaData)
+			$Obj_metaData:=$Obj_table[""]
+			
+			If (Length:C16(String:C10($Obj_metaData.icon))=0)  // no icon defined
 				
-				If ($Obj_table[""].shortLabel#Null:C1517)
+				If ($Obj_metaData.shortLabel#Null:C1517)
 					
 					// Generate asset using first table letter
 					C_OBJECT:C1216($file)
@@ -112,7 +122,7 @@ Function doRun
 						
 						If (Asserted:C1132(OK=1; "Failed to parse: "+$file.path))
 							
-							$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel); $Obj_table[""].shortLabel; $Obj_table[""].label)
+							$t:=Choose:C955(Bool:C1537(This:C1470.template.shortLabel); $Obj_metaData.shortLabel; $Obj_metaData.label)
 							
 							If (Length:C16($t)>0)
 								
@@ -122,14 +132,14 @@ Function doRun
 							Else 
 								
 								//%W-533.1
-								$t:=Uppercase:C13($Obj_table[""].name[[1]])  // 4D table names are not empty
+								$t:=Uppercase:C13($Obj_metaData.name[[1]])  // 4D table names are not empty
 								//%W+533.1
 								
 							End if 
 							
 							DOM SET XML ELEMENT VALUE:C868($Svg_root; "/svg/textArea"; $t)
 							
-							$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file($Obj_in.project.product.bundleIdentifier+".svg")
+							$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(This:C1470.input.project.product.bundleIdentifier+".svg")
 							$file.delete()
 							
 							DOM EXPORT TO FILE:C862($Svg_root; $file.platformPath)
@@ -139,11 +149,11 @@ Function doRun
 							$o:=asset(New object:C1471(\
 								"action"; "create"; \
 								"type"; "imageset"; \
-								"tags"; New object:C1471("name"; "Main"+$Obj_table[""].name); \
+								"tags"; New object:C1471("name"; "Main"+$Obj_metaData.name); \
 								"source"; $file.platformPath; \
-								"target"; $Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12; \
-								"format"; $Obj_template.assets.format; \
-								"size"; $Obj_template.assets.size\
+								"target"; This:C1470.template.parent.assets.target+This:C1470.template.assets.target+Folder separator:K24:12; \
+								"format"; This:C1470.template.assets.format; \
+								"size"; This:C1470.template.assets.size\
 								))
 							
 							$Obj_out.assets.push($o)
@@ -156,14 +166,14 @@ Function doRun
 			Else 
 				
 				C_OBJECT:C1216($Path_icon)
-				If (Position:C15("/"; $Obj_table[""].icon)=1)
+				If (Position:C15("/"; $Obj_metaData.icon)=1)
 					
 					// User icon
-					$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_table[""].icon; 2))
+					$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_metaData.icon; 2))
 					
 				Else 
 					
-					$Path_icon:=$Path_root.file($Obj_table[""].icon)
+					$Path_icon:=$Path_root.file($Obj_metaData.icon)
 					
 				End if 
 				
@@ -171,11 +181,11 @@ Function doRun
 				$o:=asset(New object:C1471(\
 					"action"; "create"; \
 					"type"; "imageset"; \
-					"tags"; New object:C1471("name"; "Main"+$Obj_table[""].name); \
+					"tags"; New object:C1471("name"; "Main"+$Obj_metaData.name); \
 					"source"; $Path_icon.platformPath; \
-					"target"; $Obj_template.parent.assets.target+$Obj_template.assets.target+Folder separator:K24:12; \
-					"format"; $Obj_template.assets.format; \
-					"size"; $Obj_template.assets.size))
+					"target"; This:C1470.template.parent.assets.target+This:C1470.template.assets.target+Folder separator:K24:12; \
+					"format"; This:C1470.template.assets.format; \
+					"size"; This:C1470.template.assets.size))
 				
 				$Obj_out.assets.push($o)
 				ob_error_combine($Obj_out; $o)
@@ -183,9 +193,11 @@ Function doRun
 			End if 
 			
 		End for each 
+		
 	End if 
 	
-	$Obj_out.tags:=New object:C1471(\
-		"navigationTables"; $Obj_in.tags.navigationTables)  // Tag to transmit
-	
 	$0:=$Obj_out
+	
+Function storyboard
+	C_OBJECT:C1216($0)
+	$0:=cs:C1710.NavigationStoryboard.new()

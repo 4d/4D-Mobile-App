@@ -9,30 +9,58 @@ Function doRun
 	C_OBJECT:C1216($0; $Obj_out)
 	$Obj_out:=New object:C1471()
 	
-	// NO SUPER, we do not want to copy files currently
+	// modify tags (CHECK why we cannot use fields?)
+	This:C1470.input.tags.table.detailFields:=This:C1470.input.tags.table.fields
 	
-	// XXX factorize with navigation template code for image?
+	// Create the icons
+	$Obj_out:=This:C1470.createIconAssets()
 	
-	C_OBJECT:C1216($Obj_in; $Obj_template)
-	$Obj_in:=This:C1470.input
-	$Obj_template:=This:C1470.template
+	This:C1470.template.inject:=True:C214
 	
-	$Obj_in.tags.table.detailFields:=$Obj_in.tags.table.fields
+	C_OBJECT:C1216($Obj_result)
+	$Obj_result:=Super:C1706.doRun()  // copy files: done after modyfing tags in creteIcoAssets and by settings detailsFields
+	ob_error_combine($Obj_out; $Obj_result)
 	
-	// Need asset?
+	$Obj_out.template:=This:C1470.copyFilesResult
+	
+	//$Obj_out.project:=This.injectSources()
+	//ob_error_combine($Obj_out; $Obj_out.project)
+	
+	This:C1470.input.projfile.mustSave:=True:C214  // project modified
+	
+	// Manage template elements duplication
+	
+	$Obj_out.storyboard:=This:C1470.storyboard().run(This:C1470.template; Folder:C1567(This:C1470.input.path; fk platform path:K87:2); This:C1470.input.tags)
+	
+	If (Not:C34($Obj_out.storyboard.success))  // just in case no errors is generated and success is false
+		
+		$Obj_out.success:=False:C215
+		ob_error_combine($Obj_out; $Obj_out.storyboard; "detail form storyboard creation failed for table "+This:C1470.input.tags.table.name)
+		
+	End if 
+	
+	$0:=$Obj_out
+	
+Function storyboard
+	C_OBJECT:C1216($0)
+	$0:=cs:C1710.DetailFormStoryboard.new()
+	
+Function createIconAssets
+	C_OBJECT:C1216($Obj_out; $0)
+	$Obj_out:=New object:C1471()
+	
 	C_BOOLEAN:C305($Boo_withIcons)
-	$Boo_withIcons:=Bool:C1537($Obj_template.assets.mandatory)\
-		 | ($Obj_in.tags.table.detailFields.query("icon != ''").length>0)
+	$Boo_withIcons:=Bool:C1537(This:C1470.template.assets.mandatory)\
+		 | (This:C1470.input.tags.table.detailFields.query("icon != ''").length>0)
 	
 	// Create by field icon alignment or icon name
 	C_OBJECT:C1216($Obj_field)
-	For each ($Obj_field; $Obj_in.tags.table.detailFields)
+	For each ($Obj_field; This:C1470.input.tags.table.detailFields)
 		
-		C_BOOLEAN:C305($Boo_withIcons)
 		If ($Boo_withIcons)
 			
 			$Obj_field.labelAlignment:="left"
-			$Obj_field.detailIcon:=$Obj_in.tags.table.name+"Detail"+$Obj_field.name
+			$Obj_field.detailIcon:=This:C1470.input.tags.table.name+"Detail"+$Obj_field.name
 			
 		Else 
 			
@@ -42,35 +70,33 @@ Function doRun
 		End if 
 	End for each 
 	
-	// Create the icons
 	If ($Boo_withIcons)
 		
-		C_OBJECT:C1216($Path_root; $Path_hostRoot)
+		C_OBJECT:C1216($file; $Path_root; $Path_hostRoot)
 		$Path_root:=COMPONENT_Pathname("fieldIcons")
 		$Path_hostRoot:=COMPONENT_Pathname("host_fieldIcons")
 		
 		// If need asset, create it
 		$Obj_out.assets:=New collection:C1472  // result of asset operations
 		
-		If (Value type:C1509($Obj_template.assets)#Is object:K8:27)
+		If (Value type:C1509(This:C1470.template.assets)#Is object:K8:27)
 			
-			$Obj_template.assets:=New object:C1471(\
-				"format"; "png")  // Fill missing information for detail template only
-			
-		End if 
-		
-		If ($Obj_template.assets.target=Null:C1517)
-			
-			$Obj_template.assets.target:="___TABLE___/Detail"  // Default path for detail template resource
+			This:C1470.template.assets:=New object:C1471("format"; "png")  // Fill missing information for detail template only
 			
 		End if 
 		
-		For each ($Obj_field; $Obj_in.tags.table.detailFields)
+		If (This:C1470.template.assets.target=Null:C1517)
 			
-			If (Length:C16(String:C10($Obj_field.icon))=0)  // no icon defined
+			This:C1470.template.assets.target:="___TABLE___/Detail"  // Default path for detail template resource
+			
+		End if 
+		
+		C_OBJECT:C1216($Obj_metaData)
+		For each ($Obj_metaData; This:C1470.input.tags.table.detailFields)
+			
+			If (Length:C16(String:C10($Obj_metaData.icon))=0)  // no icon defined
 				
 				// Generate asset using first table letter
-				C_OBJECT:C1216($file)
 				$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
 				
 				If (Asserted:C1132($file.exists; "Missing ressources: "+$file.path))
@@ -80,7 +106,7 @@ Function doRun
 					
 					If (Asserted:C1132(OK=1; "Failed to parse: "+$file.path))
 						
-						$t:=Choose:C955(Bool:C1537($Obj_template.shortLabel); $Obj_field.shortLabel; $Obj_field.label)
+						$t:=Choose:C955(Bool:C1537(This:C1470.template.shortLabel); $Obj_metaData.shortLabel; $Obj_metaData.label)
 						
 						Case of 
 								
@@ -91,10 +117,10 @@ Function doRun
 								$t:=Uppercase:C13($t[[1]])
 								
 								//……………………………………………………………………………………………………………
-							: (Length:C16($Obj_field.name)>0)
+							: (Length:C16($Obj_metaData.name)>0)
 								
 								//%W-533.1
-								$t:=Uppercase:C13($Obj_field.name[[1]])
+								$t:=Uppercase:C13($Obj_metaData.name[[1]])
 								//%W+533.1
 								
 								//……………………………………………………………………………………………………………
@@ -112,11 +138,11 @@ Function doRun
 							$Obj_out.assets.push(asset(New object:C1471(\
 								"action"; "create"; \
 								"type"; "imageset"; \
-								"tags"; New object:C1471("name"; $Obj_in.tags.table.name+"Detail"+$Obj_field.name); \
+								"tags"; New object:C1471("name"; This:C1470.input.tags.table.name+"Detail"+$Obj_metaData.name); \
 								"source"; $file.platformPath; \
-								"target"; $Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags($Obj_template.assets.target; $Obj_in.tags; New collection:C1472("filename")); "/"; Folder separator:K24:12)+Folder separator:K24:12; \
-								"format"; $Obj_template.assets.format; \
-								"size"; $Obj_template.assets.size)))
+								"target"; This:C1470.template.parent.parent.assets.target+Replace string:C233(Process_tags(This:C1470.template.assets.target; This:C1470.input.tags; New collection:C1472("filename")); "/"; Folder separator:K24:12)+Folder separator:K24:12; \
+								"format"; This:C1470.template.assets.format; \
+								"size"; This:C1470.template.assets.size)))
 							
 						End if 
 					End if 
@@ -125,15 +151,15 @@ Function doRun
 			Else   // There is an icon defined
 				
 				C_OBJECT:C1216($Path_icon)
-				If (Position:C15("/"; $Obj_field.icon)=1)
+				If (Position:C15("/"; $Obj_metaData.icon)=1)
 					
 					// Custom icon
-					$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_field.icon; 2))
+					$Path_icon:=$Path_hostRoot.file(Substring:C12($Obj_metaData.icon; 2))
 					
 				Else 
 					
 					// Product icon
-					$Path_icon:=$Path_root.file($Obj_field.icon)
+					$Path_icon:=$Path_root.file($Obj_metaData.icon)
 					
 				End if 
 				
@@ -141,52 +167,18 @@ Function doRun
 				$o:=asset(New object:C1471(\
 					"action"; "create"; \
 					"type"; "imageset"; \
-					"tags"; New object:C1471("name"; $Obj_in.tags.table.name+"Detail"+$Obj_field.name); \
+					"tags"; New object:C1471("name"; This:C1470.input.tags.table.name+"Detail"+$Obj_metaData.name); \
 					"source"; $Path_icon.platformPath; \
-					"target"; $Obj_template.parent.parent.assets.target+Replace string:C233(Process_tags($Obj_template.assets.target; $Obj_in.tags; New collection:C1472("filename")); "/"; Folder separator:K24:12)+Folder separator:K24:12; \
-					"format"; $Obj_template.assets.format; \
-					"size"; $Obj_template.assets.size))
+					"target"; This:C1470.template.parent.parent.assets.target+Replace string:C233(Process_tags(This:C1470.template.assets.target; This:C1470.input.tags; New collection:C1472("filename")); "/"; Folder separator:K24:12)+Folder separator:K24:12; \
+					"format"; This:C1470.template.assets.format; \
+					"size"; This:C1470.template.assets.size))
 				
 				$Obj_out.assets.push($o)
 				ob_error_combine($Obj_out; $o)
 				
 			End if 
 		End for each 
-	End if 
-	
-	// Standard code to copy template (not done before tags replacement, that's why nothing is done in first case of)
-	This:C1470.copyFilesResult:=template(New object:C1471(\
-		"source"; $Obj_template.source; \
-		"target"; $Obj_in.path; \
-		"tags"; $Obj_in.tags; \
-		"caller"; $Obj_in.caller; \
-		"catalog"; doc_catalog($Obj_template.source; JSON Stringify:C1217(SHARED.template.exclude))))
-	
-	$Obj_out.template:=This:C1470.copyFilesResult
-	
-	$Obj_out.project:=XcodeProjInject(New object:C1471(\
-		"node"; This:C1470.copyFilesResult; \
-		"mapping"; $Obj_in.projfile.mapping; \
-		"proj"; $Obj_in.projfile.value; \
-		"target"; $Obj_in.path; \
-		"uuid"; ob_inHierarchy($Obj_template; "uuid").uuid))
-	
-	ob_error_combine($Obj_out; $Obj_out.project)
-	
-	$Obj_in.projfile.mustSave:=True:C214  // project modified
-	
-	// Manage template elements duplication
-	
-	$Obj_out.storyboard:=storyboard(New object:C1471(\
-		"action"; "detailform"; \
-		"template"; $Obj_template; \
-		"target"; $Obj_in.path; \
-		"tags"; $Obj_in.tags))
-	
-	If (Not:C34($Obj_out.storyboard.success))  // just in case no errors is generated and success is false
-		
-		$Obj_out.success:=False:C215
-		ob_error_combine($Obj_out; $Obj_out.storyboard; "detail form storyboard creation failed for table "+$Obj_in.tags.table.name)
 		
 	End if 
+	
 	$0:=$Obj_out

@@ -85,5 +85,9 @@ If (False:C215)
 	C_OBJECT:C1216(TemplateInstanceFactory; $0)
 	C_OBJECT:C1216(TemplateInstanceFactory; $1)
 	
+	//__________________________________________________
+	C_OBJECT:C1216(plist_toObject; $0)
+	C_TEXT:C284(plist_toObject; $1)
+	
 	//______________________________________________________
 End if 

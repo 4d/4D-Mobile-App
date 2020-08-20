@@ -365,7 +365,7 @@ Case of
 								End if 
 								
 								// Set binding type according to field information
-								$Obj_field.bindingType:=storyboard(New object:C1471("action"; "fieldBinding"; "field"; $Obj_field; "formatters"; $Obj_in.formatters)).bindingType
+								$Obj_field.bindingType:=_o_storyboard(New object:C1471("action"; "fieldBinding"; "field"; $Obj_field; "formatters"; $Obj_in.formatters)).bindingType
 								
 								If ($Col_path.length>1)  // is it a link?
 									
@@ -564,7 +564,7 @@ Case of
 							$Obj_field:=New object:C1471  // maybe get other info from  $Obj_tableList.fields
 							$Obj_field:=ob_deepMerge($Obj_field; $Obj_tableModel[String:C10($Obj_tableList.sectionField.id)])
 							
-							$Obj_table.sectionFieldBindingType:=storyboard(New object:C1471(\
+							$Obj_table.sectionFieldBindingType:=_o_storyboard(New object:C1471(\
 								"action"; "fieldBinding"; \
 								"field"; $Obj_field; \
 								"formatters"; $Obj_in.formatters)).bindingType
@@ -893,7 +893,7 @@ Case of
 		End for each 
 		
 		// Modify storyboards with navigation tables
-		$Obj_out.storyboard:=storyboard(New object:C1471(\
+		$Obj_out.storyboard:=_o_storyboard(New object:C1471(\
 			"action"; "navigation"; \
 			"template"; $Obj_template; \
 			"target"; $Obj_in.path; \
@@ -1119,7 +1119,7 @@ Case of
 		End if 
 		
 		// If (Bool(featuresFlags._103505))
-		$Obj_out.storyboard:=storyboard(New object:C1471(\
+		$Obj_out.storyboard:=_o_storyboard(New object:C1471(\
 			"action"; "listform"; \
 			"template"; $Obj_template; \
 			"target"; $Obj_in.path; \
@@ -1283,7 +1283,7 @@ Case of
 		
 		// Manage template elements duplication
 		
-		$Obj_out.storyboard:=storyboard(New object:C1471(\
+		$Obj_out.storyboard:=_o_storyboard(New object:C1471(\
 			"action"; "detailform"; \
 			"template"; $Obj_template; \
 			"target"; $Obj_in.path; \

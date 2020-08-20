@@ -212,7 +212,7 @@ Function doRun
 							End if 
 							
 							// Set binding type according to field information
-							$Obj_field.bindingType:=storyboard(New object:C1471("action"; "fieldBinding"; "field"; $Obj_field; "formatters"; $Obj_in.formatters)).bindingType
+							$Obj_field.bindingType:=This:C1470.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
 							
 							If ($Col_path.length>1)  // is it a link?
 								
@@ -262,7 +262,7 @@ Function doRun
 							End if 
 							
 							// Set binding type according to field information
-							//$Obj_field.bindingType:=storyboard (New object("action";"fieldBinding";"field";$Obj_field;"formatters";$Obj_in.formatters)).bindingType
+							//$Obj_field.bindingType:=This.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
 							
 							//……………………………………………………………………………………………………………
 						: ($i<$Lon_count)
@@ -411,10 +411,7 @@ Function doRun
 						$Obj_field:=New object:C1471  // maybe get other info from  $Obj_tableList.fields
 						$Obj_field:=ob_deepMerge($Obj_field; $Obj_tableModel[String:C10($Obj_tableList.sectionField.id)])
 						
-						$Obj_table.sectionFieldBindingType:=storyboard(New object:C1471(\
-							"action"; "fieldBinding"; \
-							"field"; $Obj_field; \
-							"formatters"; $Obj_in.formatters)).bindingType
+						$Obj_table.sectionFieldBindingType:=This:C1470.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
 						
 					End if 
 				End if 
@@ -542,3 +539,103 @@ Function doRun
 			
 		End if 
 	End for each 
+	$0:=$Obj_out
+	
+	
+Function fieldBinding
+	C_OBJECT:C1216($0; $Obj_out)
+	$Obj_out:=New object:C1471("success"; False:C215)
+	
+	C_OBJECT:C1216($1; $Obj_field)
+	$Obj_field:=$1
+	
+	C_OBJECT:C1216($2; $Obj_formatters)
+	$Obj_formatters:=$2
+	
+	Case of 
+			
+			// ----------------------------------------
+		: ($Obj_field=Null:C1517)
+			
+			$Obj_out.errors:=New collection:C1472("field must be specified to fill binding type")
+			
+			// ----------------------------------------
+		: ($Obj_field.type=Null:C1517)
+			
+			$Obj_out.errors:=New collection:C1472("field must be have a type to fill binding type")
+			
+			// ----------------------------------------
+		Else 
+			
+			Case of 
+					
+					//________________________________________
+				: (Value type:C1509($Obj_field.format)=Is object:K8:27)
+					
+					$Obj_out.format:=$Obj_field.format
+					
+					//________________________________________
+				: (Value type:C1509($Obj_field.format)=Is text:K8:3)
+					
+					If (Value type:C1509($Obj_formatters)=Is object:K8:27)
+						
+						If (Value type:C1509($Obj_formatters[$Obj_field.format])=Is object:K8:27)
+							
+							$Obj_out.format:=$Obj_formatters[$Obj_field.format]
+							
+						Else 
+							
+							ob_error_add($Obj_out; "Unknown data formatter '"+$Obj_field.format+"'")
+							
+						End if 
+						
+					Else 
+						
+						ob_error_add($Obj_out; "No list of formatters provided to resolve '"+$Obj_field.format+"'")
+						
+					End if 
+					
+					// ........................................
+			End case 
+			
+			If ($Obj_out.format#Null:C1517)
+				
+				If ((Length:C16(String:C10($Obj_out.format.binding))=0) | (String:C10($Obj_out.format.binding)=String:C10($Obj_out.format.name)))
+					
+					$Obj_out.bindingType:=String:C10($Obj_out.format.name)
+					
+				Else 
+					
+					$Obj_out.bindingType:=String:C10($Obj_out.format.binding)+","+String:C10($Obj_out.format.name)
+					
+				End if 
+				
+				$Obj_out.success:=True:C214
+				
+			End if 
+			
+			If (Length:C16(String:C10($Obj_out.bindingType))=0)
+				
+				If (Length:C16(String:C10($Obj_field.relatedDataClass))>0)
+					
+					$Obj_out.bindingType:="Transformable"
+					$Obj_out.success:=True:C214
+					
+				Else 
+					
+					// set default value according to type (here type from 4d structure)
+					If ($Obj_field.fieldType<SHARED.defaultFieldBindingTypes.length)
+						
+						$Obj_out.bindingType:=SHARED.defaultFieldBindingTypes[$Obj_field.fieldType]
+						$Obj_out.success:=(Length:C16(String:C10($Obj_out.bindingType))>0)
+						
+					Else 
+						
+						ob_error_add($Obj_out; "No default format for type '"+String:C10($Obj_field.fieldType)+"'")
+						
+					End if 
+				End if 
+			End if 
+	End case 
+	
+	$0:=$Obj_out

@@ -123,6 +123,21 @@ Case of
 		
 		EXECUTE METHOD:C1007("_o_structure"; $Obj_out; $Obj_in)
 		
+		//________________________________________
+	: ($Txt_in="templates")
+		
+		If (feature.with("templateClass"))
+			$Obj_out:=TemplateInstanceFactory($Obj_in).run()
+		Else 
+			EXECUTE METHOD:C1007("_o_templates"; $Obj_out; $Obj_in)
+		End if 
+		
+		//______________________________________________________
+	: ($Txt_in="storyboard")
+		
+		// if feature.with("templateClass") must not be tested anymore
+		EXECUTE METHOD:C1007("_o_storyboard"; $Obj_out; $Obj_in)
+		
 		//______________________________________________________
 	: ($Txt_in="rest")\
 		 | ($Txt_in="dump")
@@ -153,15 +168,6 @@ Case of
 	: (Not:C34(Asserted:C1132(Is macOS:C1572; "Command unavailable for this operating system")))
 		
 		// ALL SUBSEQUENT ENTRY POINTS ARE ONLY AVAILABLE ON macOS
-		
-		//________________________________________
-	: ($Txt_in="templates")
-		
-		If (feature.with("templateClass"))
-			$Obj_out:=TemplateInstanceFactory($Obj_in).run()
-		Else 
-			EXECUTE METHOD:C1007("_o_templates"; $Obj_out; $Obj_in)
-		End if 
 		
 		//________________________________________
 	: ($Txt_in="xcode")\
