@@ -89,40 +89,8 @@ Function run
 			End if 
 			
 			If ($Obj_element.dom#Null:C1517)
-				
-				If ($Obj_element.insertInto=Null:C1517)
-					$Obj_element.insertInto:=$Obj_element.dom.parent()
-				End if 
-				
-				C_LONGINT:C283($Lon_ids)
-				$Lon_ids:=Num:C11($Obj_element.idCount)
-				
-				If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
-					
-					$Dom_child:=$Obj_element.dom  // 001 must be encapsulated node
-					$Lon_ids:=0
-					
-					While ($Dom_child.success)
-						
-						$Lon_ids:=$Lon_ids+1
-						$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1; "##000"))
-						
-					End while 
-					
-					If ($Lon_ids=1)
-						
-						$Lon_ids:=32  // default value if not found
-						
-					End if 
-				End if 
-				
-				$Obj_element.idCount:=$Lon_ids
-				
-				If (Length:C16(String:C10($Obj_element.insertMode))=0)
-					
-					$Obj_element.insertMode:="append"
-					
-				End if 
+				This:C1470.checkIDCount($Obj_element)
+				This:C1470.checkInsert($Obj_element; $Obj_tags)
 			End if 
 		End for each 
 		
@@ -166,32 +134,7 @@ Function run
 					
 					If (Bool:C1537($Obj_element.insertInto.success))
 						
-						Case of 
-								
-								// ----------------------------------------
-							: ($Obj_element.insertMode="append")
-								
-								$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
-								
-								// ----------------------------------------
-							: ($Obj_element.insertMode="first")
-								
-								$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
-								
-								// ----------------------------------------
-							: ($Obj_element.insertMode="iteration")
-								
-								$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer; $Lon_j)
-								
-								// ----------------------------------------
-						End case 
-						
-						If ($Dom_#Null:C1517)
-							
-							ob_removeFormula($Dom_)  // For debugging purpose remove all formula
-							
-						End if 
-						
+						$Dom_:=This:C1470.insertInto($Obj_element; $Txt_buffer; $Lon_j)
 						$Obj_out.doms.push($Dom_)
 						
 					Else 

@@ -414,7 +414,9 @@
 			"Process_tags",
 			"Process_tags_on_file",
 			"Rest",
+			"sdk",
 			"template",
+			"unzip",
 			"xloc"
 		]
 	},
@@ -588,7 +590,6 @@
 			"git",
 			"plist",
 			"provisioningProfiles",
-			"sdk",
 			"simulator",
 			"swiftPM",
 			"teamId",

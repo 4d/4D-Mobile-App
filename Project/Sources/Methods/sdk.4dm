@@ -1,47 +1,47 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : sdk
-  // Created 21-8-2017 by Eric Marchand
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : sdk
+// Created 21-8-2017 by Eric Marchand
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_BLOB:C604($x)
 C_BOOLEAN:C305($Boo_install)
-C_LONGINT:C283($Lon_httpResponse;$Lon_i;$Lon_parameters)
-C_TEXT:C284($Txt_buffer;$Txt_cmd;$Txt_error;$Txt_fileRef;$Txt_in;$Txt_out)
-C_OBJECT:C1216($errors;$Obj_;$Obj_objects;$Obj_param;$Obj_result)
+C_LONGINT:C283($Lon_httpResponse; $Lon_i; $Lon_parameters)
+C_TEXT:C284($Txt_buffer; $Txt_cmd; $Txt_error; $Txt_fileRef; $Txt_in; $Txt_out)
+C_OBJECT:C1216($errors; $Obj_; $Obj_objects; $Obj_param; $Obj_result)
 C_COLLECTION:C1488($Col_)
 
-ARRAY TEXT:C222($tTxt_folders;0)
+ARRAY TEXT:C222($tTxt_folders; 0)
 
 If (False:C215)
-	C_OBJECT:C1216(sdk ;$0)
-	C_OBJECT:C1216(sdk ;$1)
+	C_OBJECT:C1216(sdk; $0)
+	C_OBJECT:C1216(sdk; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_param:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
 	$Obj_result:=New object:C1471(\
-		"success";False:C215)
+		"success"; False:C215)
 	
 Else 
 	
@@ -49,48 +49,48 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
-If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
+// ----------------------------------------------------
+If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 	
 	Case of 
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_param.action="cacheFolder")
 			
 			$Obj_result:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_param.action="install")
 			
 			If (String:C10($Obj_param.file)#"")
 				
 				$Obj_result.file:=$Obj_param.file
 				
-				  // If not exist try to download it
+				// If not exist try to download it
 				If (Test path name:C476($Obj_param.file)#Is a document:K24:1)
 					
 					If (String:C10($Obj_param.url)#"")
 						
-						  // Download it if url defined
+						// Download it if url defined
 						
-/* START TRAPPING ERRORS */$errors:=err .capture()
+/* START TRAPPING ERRORS */$errors:=err.capture()
 						
-						$Lon_httpResponse:=HTTP Get:C1157($Obj_param.url;$x)
+						$Lon_httpResponse:=HTTP Get:C1157($Obj_param.url; $x)
 						
 						If (($Lon_httpResponse<300)\
 							 & (Num:C11($errors.lastError().error)=0))
 							
-							CREATE FOLDER:C475($Obj_param.file;*)
-							BLOB TO DOCUMENT:C526($Obj_param.file;$x)
+							CREATE FOLDER:C475($Obj_param.file; *)
+							BLOB TO DOCUMENT:C526($Obj_param.file; $x)
 							$Obj_result.downloadedFrom:=$Obj_param.url
 							
-							$Lon_httpResponse:=HTTP Get:C1157($Obj_param.url+".md5";$x)
+							$Lon_httpResponse:=HTTP Get:C1157($Obj_param.url+".md5"; $x)
 							
 							If (($Lon_httpResponse<300)\
 								 & (Num:C11($errors.lastError().error)=0))
 								
-								BLOB TO DOCUMENT:C526($Obj_param.file+".md5";$x)
+								BLOB TO DOCUMENT:C526($Obj_param.file+".md5"; $x)
 								
-								  // Could check md5 here
+								// Could check md5 here
 								
 							End if 
 							
@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 					End if 
 				End if 
 				
-				  // Check if there is a source version SDK, if yes use it instead
-				$Txt_buffer:=Replace string:C233($Obj_param.file;"zip";"src.zip")
+				// Check if there is a source version SDK, if yes use it instead
+				$Txt_buffer:=Replace string:C233($Obj_param.file; "zip"; "src.zip")
 				
 				If (Test path name:C476($Txt_buffer)=Is a document:K24:1)
 					
@@ -114,28 +114,28 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 					
 				End if 
 				
-				  //
+				//
 				
-				  // Finally unzip if SDK exist
+				// Finally unzip if SDK exist
 				If (Test path name:C476($Obj_param.file)=Is a document:K24:1)
 					
 					$Obj_result.success:=False:C215
 					
 					If (Bool:C1537(feature._568))  // FAST SDK MOVE
 						
-						  // Check if we can just move a cached sdk from previous build
-						  // efficient only if same disk volume
-						  //$Txt_buffer:=_o_env_userPath ("cache")+".sdk"+Folder separator+commonValues.thirdParty
-						$Txt_buffer:=env_userPathname ("cache").file(".sdk/"+SHARED.thirdParty).platformPath
+						// Check if we can just move a cached sdk from previous build
+						// efficient only if same disk volume
+						//$Txt_buffer:=_o_env_userPath ("cache")+".sdk"+Folder separator+commonValues.thirdParty
+						$Txt_buffer:=env_userPathname("cache").file(".sdk/"+SHARED.thirdParty).platformPath
 						
 						If (Test path name:C476($Txt_buffer)=Is a folder:K24:2)
 							
-							$Txt_cmd:="mv -f "+str_singleQuoted (Convert path system to POSIX:C1106($Txt_buffer))\
-								+" "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_param.target))
+							$Txt_cmd:="mv -f "+str_singleQuoted(Convert path system to POSIX:C1106($Txt_buffer))\
+								+" "+str_singleQuoted(Convert path system to POSIX:C1106($Obj_param.target))
 							
-							LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+							LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 							
-							If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+							If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
 								
 								If (Length:C16($Txt_error)=0)
 									
@@ -152,25 +152,25 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 					
 					If (Not:C34($Obj_result.success))
 						
-						  // Unzip the SDK
+						// Unzip the SDK
 						
-						  //#ACI0098572 [
-						  //$Obj_param.cache:=env_userPath ("cacheSdk")  //   Just copy if cache exist, else unzip
-						  //$Obj_param.cache:=Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")  //   Just copy if cache exist, else unzip
-						$Obj_param.cacheFolder:=sdk (New object:C1471("action";"cacheFolder"))
+						//#ACI0098572 [
+						//$Obj_param.cache:=env_userPath ("cacheSdk")  //   Just copy if cache exist, else unzip
+						//$Obj_param.cache:=Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")  //   Just copy if cache exist, else unzip
+						$Obj_param.cacheFolder:=sdk(New object:C1471("action"; "cacheFolder"))
 						$Obj_param.cache:=$Obj_param.cacheFolder.platformPath  // Just copy if cache exist, else unzip
-						  //]
+						//]
 						
 						If ($Obj_param.cacheFolder.exists)
 							
-							  // If zip version and cache folder different, remove the cache
-							$Obj_result.fileVersion:=sdk (New object:C1471(\
-								"action";"sdkVersion";\
-								"file";$Obj_param.file))
+							// If zip version and cache folder different, remove the cache
+							$Obj_result.fileVersion:=sdk(New object:C1471(\
+								"action"; "sdkVersion"; \
+								"file"; $Obj_param.file))
 							
-							$Obj_result.cacheVersion:=sdk (New object:C1471(\
-								"action";"sdkVersion";\
-								"file";$Obj_param.cache))
+							$Obj_result.cacheVersion:=sdk(New object:C1471(\
+								"action"; "sdkVersion"; \
+								"file"; $Obj_param.cache))
 							
 							If (String:C10($Obj_result.cacheVersion.version)#String:C10($Obj_result.fileVersion.version))
 								
@@ -179,7 +179,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 							End if 
 						End if 
 						
-						$Obj_result:=_o_unzip ($Obj_param)
+						$Obj_result:=_o_unzip($Obj_param)
 						$Obj_result.file:=$Obj_param.file
 						
 					End if 
@@ -187,9 +187,9 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				
 				If ($Obj_result.success)
 					
-					$Obj_result.version:=sdk (New object:C1471(\
-						"action";"sdkVersion";\
-						"file";$Obj_param.target)).version
+					$Obj_result.version:=sdk(New object:C1471(\
+						"action"; "sdkVersion"; \
+						"file"; $Obj_param.target)).version
 					
 				End if 
 				
@@ -199,22 +199,22 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_param.action="installAdditionnalSDK")
 			
-			  // Check
+			// Check
 			$Obj_param.file:=String:C10($Obj_param.template.source)+"sdk"+Folder separator:K24:12+String:C10($Obj_param.template.sdk.name)+".zip"
 			
 			If (Test path name:C476(String:C10($Obj_param.file))#Is a document:K24:1)
 				
-				  //$Obj_param.file:=_o_Pathname ("sdk")+String($Obj_param.template.sdk.name)+".zip"
-				$Obj_param.file:=COMPONENT_Pathname ("sdk").file(String:C10($Obj_param.template.sdk.name)+".zip").platformPath
+				//$Obj_param.file:=_o_Pathname ("sdk")+String($Obj_param.template.sdk.name)+".zip"
+				$Obj_param.file:=COMPONENT_Pathname("sdk").file(String:C10($Obj_param.template.sdk.name)+".zip").platformPath
 				
 			End if 
 			
 			If (Test path name:C476(String:C10($Obj_param.file))=Is a document:K24:1)
 				
-				  // Get the root template to keep SDK information in it
+				// Get the root template to keep SDK information in it
 				$Obj_:=$Obj_param.template
 				
 				While (Value type:C1509($Obj_.parent)=Is object:K8:27)
@@ -242,11 +242,11 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				
 				If ($Boo_install)
 					
-					  // TODO maybe do some additional stuff like merging Cartfile.resolved instead of replace it
+					// TODO maybe do some additional stuff like merging Cartfile.resolved instead of replace it
 					
-					$Obj_result:=_o_unzip ($Obj_param)
+					$Obj_result:=_o_unzip($Obj_param)
 					
-					  // Add to installed framework
+					// Add to installed framework
 					$Obj_.sdk.installed[$Obj_param.file]:=$Obj_result
 					
 				End if 
@@ -257,47 +257,47 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //________________________________________
+			//________________________________________
 		: ($Obj_param.action="inject")
 			
 			$Obj_param.projfile.mustSave:=True:C214
 			
 			$Obj_objects:=$Obj_param.projfile.value.objects
 			$Obj_result.group:=New object:C1471(\
-				"qmobile";$Obj_objects["A0152FA2B08DC7DAB2CD6DB4"].children;\
-				"thirdparty";$Obj_objects["48FB2CF71E93C0FA00F4F685"].children)
+				"qmobile"; $Obj_objects["A0152FA2B08DC7DAB2CD6DB4"].children; \
+				"thirdparty"; $Obj_objects["48FB2CF71E93C0FA00F4F685"].children)
 			
 			$Obj_result.phase:=New object:C1471(\
-				"linked";$Obj_objects["48861A161E8953B800C1A97C"];\
-				"embed";$Obj_objects["48FDD0DF1E94FA1000EEDE31"];\
-				"copy";$Obj_objects["D9BA4A381EC4A6D9001A997B"])
+				"linked"; $Obj_objects["48861A161E8953B800C1A97C"]; \
+				"embed"; $Obj_objects["48FDD0DF1E94FA1000EEDE31"]; \
+				"copy"; $Obj_objects["D9BA4A381EC4A6D9001A997B"])
 			
 			$Txt_buffer:=$Obj_param.target+Convert path POSIX to system:C1107($Obj_param.folder)
 			If (Test path name:C476($Txt_buffer)=Is a folder:K24:2)
 				
-				FOLDER LIST:C473($Txt_buffer;$tTxt_folders)
+				FOLDER LIST:C473($Txt_buffer; $tTxt_folders)
 				
 				If (Size of array:C274($tTxt_folders)>0)
 					$Obj_param.projfile.mustSave:=True:C214
 				End if 
 				
-				For ($Lon_i;1;Size of array:C274($tTxt_folders);1)
+				For ($Lon_i; 1; Size of array:C274($tTxt_folders); 1)
 					
 					If (Path to object:C1547($tTxt_folders{$Lon_i}).extension=".framework")
 						
-						  // in source tree group
-						$Txt_buffer:=XcodeProj (New object:C1471("action";"randomObjectId";"proj";$Obj_param.projfile.value)).value
+						// in source tree group
+						$Txt_buffer:=XcodeProj(New object:C1471("action"; "randomObjectId"; "proj"; $Obj_param.projfile.value)).value
 						
 						If (Not:C34(Bool:C1537(feature._406)))  // # feature to not add framework
-							$Obj_:=New object:C1471("name";$tTxt_folders{$Lon_i};"isa";"PBXFileReference";"lastKnownFileType";"wrapper.framework";"path";$Obj_param.folder+$tTxt_folders{$Lon_i};"sourceTree";"<group>")
+							$Obj_:=New object:C1471("name"; $tTxt_folders{$Lon_i}; "isa"; "PBXFileReference"; "lastKnownFileType"; "wrapper.framework"; "path"; $Obj_param.folder+$tTxt_folders{$Lon_i}; "sourceTree"; "<group>")
 						Else 
-							  // XXX for source not in compiled, maybe do thi code elsewhere, or change $Obj_param.folder in caller function
-							$Obj_:=New object:C1471("name";$tTxt_folders{$Lon_i};"isa";"PBXFileReference";"lastKnownFileType";"wrapper.framework";"path";$tTxt_folders{$Lon_i};"sourceTree";"BUILT_PRODUCTS_DIR")
+							// XXX for source not in compiled, maybe do thi code elsewhere, or change $Obj_param.folder in caller function
+							$Obj_:=New object:C1471("name"; $tTxt_folders{$Lon_i}; "isa"; "PBXFileReference"; "lastKnownFileType"; "wrapper.framework"; "path"; $tTxt_folders{$Lon_i}; "sourceTree"; "BUILT_PRODUCTS_DIR")
 							
 						End if 
 						
 						$Obj_objects[$Txt_buffer]:=$Obj_
-						If (Position:C15("QMobile";$tTxt_folders{$Lon_i})=1)
+						If (Position:C15("QMobile"; $tTxt_folders{$Lon_i})=1)
 							$Col_:=$Obj_result.group["qmobile"]
 						Else 
 							$Col_:=$Obj_result.group["thirdparty"]
@@ -305,29 +305,29 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						$Col_.push($Txt_buffer)
 						$Txt_fileRef:=$Txt_buffer
 						
-						  // in Frameworks // PBXFrameworksBuildPhase
-						$Txt_buffer:=XcodeProj (New object:C1471("action";"randomObjectId";"proj";$Obj_param.projfile.value)).value
-						$Obj_:=New object:C1471("isa";"PBXBuildFile";"fileRef";$Txt_fileRef)
+						// in Frameworks // PBXFrameworksBuildPhase
+						$Txt_buffer:=XcodeProj(New object:C1471("action"; "randomObjectId"; "proj"; $Obj_param.projfile.value)).value
+						$Obj_:=New object:C1471("isa"; "PBXBuildFile"; "fileRef"; $Txt_fileRef)
 						$Obj_objects[$Txt_buffer]:=$Obj_
 						$Col_:=$Obj_result.phase.linked.files
 						$Col_.push($Txt_buffer)
 						
-						If (str_cmpVersion (SHARED.swift.Version;"4.1")<1)
-							  // in Embed Frameworks // PBXCopyFilesBuildPhase
-							$Txt_buffer:=XcodeProj (New object:C1471("action";"randomObjectId";"proj";$Obj_param.projfile.value)).value
+						If (str_cmpVersion(SHARED.swift.Version; "4.1")<1)
+							// in Embed Frameworks // PBXCopyFilesBuildPhase
+							$Txt_buffer:=XcodeProj(New object:C1471("action"; "randomObjectId"; "proj"; $Obj_param.projfile.value)).value
 							
-							$Obj_:=New object:C1471("isa";"PBXBuildFile";"fileRef";$Txt_fileRef)
+							$Obj_:=New object:C1471("isa"; "PBXBuildFile"; "fileRef"; $Txt_fileRef)
 							If (Not:C34(Bool:C1537(feature._475)))
-								$Obj_.settings:=New object:C1471("ATTRIBUTES";New collection:C1472("CodeSignOnCopy"))  // ;"RemoveHeadersOnCopy"
+								$Obj_.settings:=New object:C1471("ATTRIBUTES"; New collection:C1472("CodeSignOnCopy"))  // ;"RemoveHeadersOnCopy"
 							End if 
 							$Obj_objects[$Txt_buffer]:=$Obj_
 							
 							$Col_:=$Obj_result.phase.embed.files
 							$Col_.push($Txt_buffer)
-							  //Else swift 4.2: do not embed or will result in duplicate objects error
+							//Else swift 4.2: do not embed or will result in duplicate objects error
 						End if 
 						
-						  // in Copy Frameworks // PBXShellScriptBuildPhase
+						// in Copy Frameworks // PBXShellScriptBuildPhase
 						If (Value type:C1509($Obj_result.phase.copy)=Is object:K8:27)
 							
 							$Obj_result.phase.copy.inputPaths.push("$(SRCROOT)/"+$Obj_param.folder+$tTxt_folders{$Lon_i})
@@ -345,7 +345,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_param.action="cache")
 			
 			If (String:C10($Obj_param.path)#"")
@@ -356,8 +356,8 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				
 				If (Test path name:C476($Obj_param.path+SHARED.thirdParty)=Is a folder:K24:2)  // well known sdk path
 					
-					  //$Txt_buffer:=_o_env_userPath ("cache")
-					$Txt_buffer:=env_userPathname ("cache").platformPath
+					//$Txt_buffer:=_o_env_userPath ("cache")
+					$Txt_buffer:=env_userPathname("cache").platformPath
 					
 					If (Test path name:C476($Txt_buffer)#Is a folder:K24:2)
 						
@@ -373,12 +373,12 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						
 					End if 
 					
-					$Txt_cmd:="mv -f "+str_singleQuoted (Convert path system to POSIX:C1106($Obj_param.path+SHARED.thirdParty))\
-						+" "+str_singleQuoted (Convert path system to POSIX:C1106($Txt_buffer))
+					$Txt_cmd:="mv -f "+str_singleQuoted(Convert path system to POSIX:C1106($Obj_param.path+SHARED.thirdParty))\
+						+" "+str_singleQuoted(Convert path system to POSIX:C1106($Txt_buffer))
 					
-					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 					
-					If (Asserted:C1132(OK=1;"LEP failed: "+$Txt_cmd))
+					If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
 						
 						If (Length:C16($Txt_error)=0)
 							
@@ -398,23 +398,23 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_param.action="sdkVersion")
 			
 			$Obj_result.version:=""
 			
 			Case of 
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 				: (Test path name:C476($Obj_param.file)=Is a document:K24:1)
 					
-					  // suppose zip
-					$Obj_result:=_o_unzip (New object:C1471(\
-						"file";$Obj_param.file;\
-						"members";"sdkVersion"))
+					// suppose zip
+					$Obj_result:=_o_unzip(New object:C1471(\
+						"file"; $Obj_param.file; \
+						"members"; "sdkVersion"))
 					$Obj_result.version:=$Obj_result.out
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 				: (Test path name:C476($Obj_param.file)=Is a folder:K24:2)
 					
 					If (Test path name:C476($Obj_param.file+"sdkVersion")=Is a document:K24:1)
@@ -428,30 +428,30 @@ If (Asserted:C1132($Obj_param.action#Null:C1517;"Missing the tag \"action\""))
 						
 					End if 
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 				Else 
 					
 					$Obj_result.errors:=New collection:C1472("No valid cache folder provided")
 					
-					  // ----------------------------------------
+					// ----------------------------------------
 			End case 
 			
-			$Obj_result.version:=Replace string:C233($Obj_result.version;Char:C90(Line feed:K15:40);"")
-			$Obj_result.version:=Replace string:C233($Obj_result.version;Char:C90(Carriage return:K15:38);"")
+			$Obj_result.version:=Replace string:C233($Obj_result.version; Char:C90(Line feed:K15:40); "")
+			$Obj_result.version:=Replace string:C233($Obj_result.version; Char:C90(Carriage return:K15:38); "")
 			
-			  //________________________________________
+			//________________________________________
 		Else 
 			
 			$Obj_result.success:=False:C215
 			$Obj_result.errors:=New collection:C1472("Unknown entry point "+$Obj_param.action)
 			
-			  //________________________________________
+			//________________________________________
 	End case 
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_result
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

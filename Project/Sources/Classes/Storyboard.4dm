@@ -20,10 +20,15 @@ Function randomID
 	$0:=Substring:C12($0; 1; 3)+"-"+Substring:C12($0; 4; 2)+"-"+Substring:C12($0; 7; 3)
 	
 Function randomIDS
+	var $0 : Collection
 	$0:=New collection:C1472
 	
+	var $l; $1 : Integer
 	$l:=$1
 	
+	var $t : Text
+	
+	var $i : Integer
 	For ($i; 1; $l; 1)
 		
 		$t:=Generate UUID:C1066
@@ -32,6 +37,107 @@ Function randomIDS
 		$0.push($t)
 		
 	End for 
+	
+Function insertInto  // ($Obj_element : Object; $text : Text; $at : Integer)
+	C_OBJECT:C1216($0; $Dom_)
+	
+	var $Obj_element; $1 : Object
+	$Obj_element:=$1
+	var $text; $2 : Text
+	$text:=$2
+	var $at; $3 : Integer
+	$at:=$3
+	
+	$Dom_:=Null:C1517
+	Case of 
+			
+			// ----------------------------------------
+		: ($Obj_element.insertMode="append")
+			
+			$Dom_:=$Obj_element.insertInto.append($text)
+			
+			// ----------------------------------------
+		: ($Obj_element.insertMode="first")
+			
+			$Dom_:=$Obj_element.insertInto.insertFirst($text)
+			
+			// ----------------------------------------
+		: ($Obj_element.insertMode="iteration")
+			
+			$Dom_:=$Obj_element.insertInto.insertAt($text; $at)
+			
+			// ----------------------------------------
+	End case 
+	
+	If ($Dom_#Null:C1517)
+		
+		ob_removeFormula($Dom_)  // For debugging purpose remove all formula
+		
+	End if 
+	$0:=$Dom_
+	
+	
+/* If not set, find number of id to inject */
+Function checkIDCount  // ($Obj_element : Object)
+	var $Obj_element; $1 : Object
+	$Obj_element:=$1
+	
+	C_LONGINT:C283($Lon_ids)
+	$Lon_ids:=Num:C11($Obj_element.idCount)
+	
+	If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
+		
+		C_OBJECT:C1216($Dom_child)
+		$Dom_child:=$Obj_element.dom  // 001 must be encapsulated node
+		$Lon_ids:=0
+		
+		While ($Dom_child.success)
+			
+			$Lon_ids:=$Lon_ids+1
+			$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1; "##000"))
+			
+		End while 
+		
+		If ($Lon_ids=1)
+			
+			$Lon_ids:=32  // default value if not found
+			
+		End if 
+	End if 
+	
+	$Obj_element.idCount:=$Lon_ids
+	
+/* If not set, update default parameters for insert mode */
+Function checkInsert  // ($Obj_element : Object; $Obj_tags : Object)
+	var $Obj_element; $1 : Object
+	$Obj_element:=$1
+	var $Obj_tags; $2 : Object
+	$Obj_tags:=$2
+	
+	
+	If ($Obj_element.insertInto=Null:C1517)
+		$Obj_element.insertInto:=$Obj_element.dom.parent()
+	End if 
+	
+	If (Length:C16(String:C10($Obj_element.insertMode))=0)
+		
+		$Obj_element.insertMode:="append"
+		
+	End if 
+	
+	// - Check if there is some mandatories tags before inserting
+	If (Value type:C1509($Obj_element.tags.mandatories)=Is collection:K8:32)
+		
+		C_OBJECT:C1216($Obj_tag)
+		For each ($Obj_tag; $Obj_element.tags.mandatories)
+			
+			If (String:C10($Obj_tags[String:C10($Obj_tag.key)])="")  // support not empty rules now
+				
+				$Obj_element.insertMode:="none"  // do not insert
+				
+			End if 
+		End for each 
+	End if 
 	
 	// Reformat storyboard document to follow xcode rules (line ending, attributes order, add missing resources)
 Function format  // MAC ONLY
@@ -134,10 +240,10 @@ Function format  // MAC ONLY
 	$0:=$Obj_out
 	
 Function ibtoolVersion
-	var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
-	var $File_; $Obj_out : Object
+	var $0; $Obj_out : Object
 	
 	// Get storyboard tool version (could be used to replace in storyboard header)
+	var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
 	$Txt_cmd:="ibtool --version"
 	LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 	
@@ -145,6 +251,7 @@ Function ibtoolVersion
 		
 		If (Length:C16($Txt_out)>0)
 			
+			var $File_ : Object
 			$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
 			$File_.setText($Txt_out)
 			$Obj_out:=plist(New object:C1471(\
@@ -160,6 +267,7 @@ Function ibtoolVersion
 			End if 
 		End if 
 	End if 
+	$0:=$Obj_out
 	
 /* fix color asset according to theme. issues on simu*/
 Function colorAssetFix
@@ -181,78 +289,84 @@ Function colorAssetFix
 	// find named colors
 	$asModification:=False:C215
 	
-	For each ($node; $root.findMany("/document/resources/namedColor").elements)
+	If ($root.success)
 		
-		// get color name
-		$t:=$node.getAttribute("name").value
-		
-		If ($theme[$t]#Null:C1517)
+		For each ($node; $root.findMany("/document/resources/namedColor").elements)
 			
-			If (Value type:C1509($theme[$t])=Is object:K8:27)
+			// get color name
+			$t:=$node.getAttribute("name").value
+			
+			If ($theme[$t]#Null:C1517)
 				
-				// get color xml child
-				$Dom_child:=$node.firstChild()
-				
-				$Obj_color:=$theme[$t]
-				
-				// recreate node
-				$Dom_child.remove()
-				$Dom_child:=$node.create("color")
-				$asModification:=True:C214
-				
-				Case of 
-						
-						//______________________________________________________
-					: ($Obj_color.space="gray")
-						
-						If ($Obj_color.alpha=Null:C1517)
+				If (Value type:C1509($theme[$t])=Is object:K8:27)
+					
+					// get color xml child
+					$Dom_child:=$node.firstChild()
+					
+					$Obj_color:=$theme[$t]
+					
+					// recreate node
+					$Dom_child.remove()
+					$Dom_child:=$node.create("color")
+					$asModification:=True:C214
+					
+					Case of 
 							
-							$Obj_color.alpha:=1
+							//______________________________________________________
+						: ($Obj_color.space="gray")
 							
-						End if 
-						
-						$Dom_child.setAttributes(New object:C1471(\
-							"white"; String:C10($Obj_color.white); \
-							"alpha"; String:C10($Obj_color.alpha); \
-							"colorSpace"; "custom"; \
-							"customColorSpace"; "genericGamma22GrayColorSpace"))
-						
-						//______________________________________________________
-					: ($Obj_color.space="srgb")
-						
-						If ($Obj_color.alpha=Null:C1517)
+							If ($Obj_color.alpha=Null:C1517)
+								
+								$Obj_color.alpha:=1
+								
+							End if 
 							
-							$Obj_color.alpha:=255
+							$Dom_child.setAttributes(New object:C1471(\
+								"white"; String:C10($Obj_color.white); \
+								"alpha"; String:C10($Obj_color.alpha); \
+								"colorSpace"; "custom"; \
+								"customColorSpace"; "genericGamma22GrayColorSpace"))
 							
-						End if 
-						
-						$Dom_child.setAttributes(New object:C1471(\
-							"alpha"; String:C10($Obj_color.alpha/255; "&xml"); \
-							"red"; String:C10($Obj_color.red/255; "&xml"); \
-							"green"; String:C10($Obj_color.green/255; "&xml"); \
-							"blue"; String:C10($Obj_color.blue/255; "&xml"); \
-							"colorSpace"; "custom"; \
-							"customColorSpace"; "sRGB"))
-						
-						// ----------------------------------------
-					Else 
-						
-						ASSERT:C1129("Unknown color space "+$Obj_color.space)
-						
-						// ----------------------------------------
-				End case 
+							//______________________________________________________
+						: ($Obj_color.space="srgb")
+							
+							If ($Obj_color.alpha=Null:C1517)
+								
+								$Obj_color.alpha:=255
+								
+							End if 
+							
+							$Dom_child.setAttributes(New object:C1471(\
+								"alpha"; String:C10($Obj_color.alpha/255; "&xml"); \
+								"red"; String:C10($Obj_color.red/255; "&xml"); \
+								"green"; String:C10($Obj_color.green/255; "&xml"); \
+								"blue"; String:C10($Obj_color.blue/255; "&xml"); \
+								"colorSpace"; "custom"; \
+								"customColorSpace"; "sRGB"))
+							
+							// ----------------------------------------
+						Else 
+							
+							ASSERT:C1129("Unknown color space "+$Obj_color.space)
+							
+							// ----------------------------------------
+					End case 
+				End if 
 			End if 
+		End for each 
+		
+		If ($asModification)
+			
+			// write if there is one named colors (could also do it only if one attribute change)
+			doc_UNLOCK_DIRECTORY(New object:C1471(\
+				"path"; $File_.parent.platformPath))
+			$root.save($File_)
+			
+			This:C1470.format()
+			
 		End if 
-	End for each 
-	
-	If ($asModification)
 		
-		// write if there is one named colors (could also do it only if one attribute change)
-		"path"; $File_.parent.platformPath))
-		$root.save($File_)
 		$root.close()
-		
-		This:C1470.format()
 		
 	End if 
 	
@@ -332,10 +446,6 @@ Function imageAssetFix
 		End if 
 		
 		$root.close()
-		
-	Else 
-		
-		// ERROR
 		
 	End if 
 	

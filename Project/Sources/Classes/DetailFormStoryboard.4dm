@@ -52,60 +52,8 @@ Function run
 			End if 
 		End if 
 		
-		C_OBJECT:C1216($Obj_element)
-		If ($Obj_template.elements=Null:C1517)
-			
-			// Elements not defined in manifest, try to compute it using storyboard XMLs
-			ARRAY TEXT:C222($tTxt_result; 0)
-			
-			C_COLLECTION:C1488($Col_)
-			Case of 
-					// ----------------------------------------
-				: (Rgx_ExtractText("TAG-(.?.?)-001"; $Txt_buffer; "1"; ->$tTxt_result)=0)
-					
-					$Col_:=New collection:C1472()
-					ARRAY TO COLLECTION:C1563($Col_; $tTxt_result)
-					$Col_:=$Col_.distinct()
-					$Col_:=$Col_.map("col_valueToObject"; "tagInterfix")
-					
-					$Obj_template.elements:=$Col_
-					
-					// ----------------------------------------
-				: (Value type:C1509($Obj_template.elementsID)=Is collection:K8:32)  // alernative way not documented, declare id of elements
-					
-					$Col_:=New collection:C1472()
-					C_TEXT:C284($Txt_id)
-					For each ($Txt_id; $Obj_template.elementsID)
-						
-						$Obj_element:=New object:C1471()
-						$Obj_element.dom:=$Dom_root.findById($Txt_id)
-						$Obj_element.originalId:=$Txt_id
-						
-						$Obj_element:=This:C1470.fixDomChildID($Obj_element).element
-						
-					End for each 
-					
-					$Obj_template.elements:=$Col_
-				Else 
-					
-					// find by attributes? find by children kel value?
-					C_OBJECT:C1216($result)
-					$result:=$Dom_root.findByAttribute("userLabel"; "stack")
-					If ($result.success)
-						If ($result.elements.length>0)  // Value type($result.elements)=Is collection)
-							
-							$Obj_element:=New object:C1471()
-							$Obj_element.dom:=$result.elements[0]
-							$Obj_element:=This:C1470.fixDomChildID($Obj_element).element
-							
-							$Obj_template.elements:=New collection:C1472($Obj_element)
-							
-						End if 
-					End if 
-					
-			End case 
-			
-		End if 
+		// create elements if not defined in manifest (if defined, this is an opti)
+		This:C1470.checkTemplateElements($Obj_template; $Txt_buffer; $Dom_root)
 		
 		// Try to determine if must duplicate or not element
 		// elements are specified or 0 is set as "infinite" representation or if  max > count or one of them defined to 0
@@ -122,6 +70,7 @@ Function run
 			End if 
 			
 			// Look up first all the elements in Dom. Dom could be modifyed
+			C_OBJECT:C1216($Obj_element)
 			For each ($Obj_element; $Obj_template.elements)
 				
 				Case of 
@@ -155,6 +104,7 @@ Function run
 						
 					Else   // or look up with id TAG-INTERFIX-001
 						
+						C_LONGINT:C283($Lon_length)
 						$Lon_length:=Length:C16(String:C10($Obj_element.tagInterfix))
 						
 						Case of 
@@ -190,55 +140,9 @@ Function run
 				
 				If ($Obj_element.dom#Null:C1517)
 					
-					If ($Obj_element.insertInto=Null:C1517)
-						$Obj_element.insertInto:=$Obj_element.dom.parent()  // define where to insert
-					End if 
+					This:C1470.checkIDCount($Obj_element)
+					This:C1470.checkInsert($Obj_element; $Obj_tags)
 					
-					// - define id count allow to speed up and pass that
-					C_LONGINT:C283($Lon_ids; $Lon_length)
-					$Lon_ids:=Num:C11($Obj_element.idCount)
-					
-					If ($Lon_ids=0)  // idCount, not defined, try to count into storyboard
-						
-						$Dom_child:=$Obj_element.dom
-						$Lon_ids:=0
-						
-						While ($Dom_child.success)
-							
-							$Lon_ids:=$Lon_ids+1
-							$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1; "##000"))
-							
-						End while 
-						
-						If ($Lon_ids=1)
-							
-							$Lon_ids:=32  // default value if not found
-							
-						End if 
-					End if 
-					
-					$Obj_element.idCount:=$Lon_ids  // as a result purpose
-					
-					// - Check how to insert new node (ie. the insertMode)
-					If (Length:C16(String:C10($Obj_element.insertMode))=0)
-						
-						$Obj_element.insertMode:="append"
-						
-					End if 
-					
-					// - Check if there is some mandatories tags before inserting
-					If (Value type:C1509($Obj_element.tags.mandatories)=Is collection:K8:32)
-						
-						C_OBJECT:C1216($Obj_tag)
-						For each ($Obj_tag; $Obj_element.tags.mandatories)
-							
-							If (String:C10($Obj_tags[String:C10($Obj_tag.key)])="")  // support not empty rules now
-								
-								$Obj_element.insertMode:="none"  // do not insert
-								
-							End if 
-						End for each 
-					End if 
 				End if 
 			End for each 
 			
@@ -313,7 +217,6 @@ Function run
 				// 1- element
 				$Obj_element:=New object:C1471(\
 					"dom"; $Dom_relation; \
-					"idCount"; 6; \
 					"tagInterfix"; "RL"; \
 					"insertMode"; "append")
 				
@@ -323,26 +226,12 @@ Function run
 					
 				Else   // not defined, we an check
 					
+					C_LONGINT:C283($Lon_ids)
 					If (Not:C34($Dom_relation.isDefault))  // fix id count if not defined by reading dom
-						
-						$Dom_child:=$Obj_element.dom
-						$Lon_ids:=0
-						
-						While ($Dom_child.success)
-							
-							$Lon_ids:=$Lon_ids+1
-							$Dom_child:=$Obj_element.dom.findById("TAG-"+$Obj_element.tagInterfix+"-"+String:C10($Lon_ids+1; "##000"))
-							
-						End while 
-						
-						If ($Lon_ids=1)
-							
-							$Lon_ids:=32  // default value if not found
-							
-						End if 
+						This:C1470.checkIDCount($Obj_element)
+					Else 
+						$Obj_element.idCount:=6
 					End if 
-					
-					$Obj_element.idCount:=$Lon_ids  // as a result purpose
 				End if 
 				
 				// Must be inserted into a stack view (with a subviews as intermediate)
@@ -356,11 +245,11 @@ Function run
 				
 				// 2- scene
 				//$Obj_element:=New object(\
-															"insertInto";$Dom_root.findByXPath("document/scenes");\
-															"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-															"idCount";3;\
-															"tagInterfix";"SN";\
-															"insertMode";"append")
+																									"insertInto";$Dom_root.findByXPath("document/scenes");\
+																									"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																									"idCount";3;\
+																									"tagInterfix";"SN";\
+																									"insertMode";"append")
 				$Obj_element:=New object:C1471(\
 					"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 					"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
@@ -389,30 +278,7 @@ Function run
 					Until ($Obj_element.insertInto.success | ($Lon_j<0))
 				End if 
 				
-				If ($Obj_template.relation.transition=Null:C1517)
-					$Obj_template.relation.transition:=New object:C1471()
-				End if 
-				If (Length:C16(String:C10($Obj_template.relation.transition.kind))=0)
-					$Obj_template.relation.transition.kind:="show"
-					// else check type?
-				End if 
-				
-				$Txt_buffer:="<segue destination=\"TAG-SN-001\""
-				
-				If ($Obj_template.relation.transition.customClass#Null:C1517)
-					$Txt_buffer:=$Txt_buffer+" customClass=\""+String:C10($Obj_template.relation.transition.customClass)+"\""
-				End if 
-				If ($Obj_template.relation.transition.customModule#Null:C1517)
-					$Txt_buffer:=$Txt_buffer+" customModule=\""+String:C10($Obj_template.relation.transition.customModule)+"\""
-				End if 
-				If ($Obj_template.relation.transition.modalPresentationStyle#Null:C1517)
-					$Txt_buffer:=$Txt_buffer+" modalPresentationStyle=\""+String:C10($Obj_template.relation.transition.modalPresentationStyle)+"\""
-				End if 
-				If ($Obj_template.relation.transition.modalTransitionStyle#Null:C1517)
-					$Txt_buffer:=$Txt_buffer+" modalTransitionStyle=\""+String:C10($Obj_template.relation.transition.modalTransitionStyle)+"\""
-				End if 
-				$Txt_buffer:=$Txt_buffer+" kind=\""+String:C10($Obj_template.relation.transition.kind)+"\""
-				$Txt_buffer:=$Txt_buffer+" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"
+				$Txt_buffer:=This:C1470.relationSegue($Obj_template.relation)
 				
 				If ($Obj_element.insertInto.success)
 					$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
@@ -481,60 +347,10 @@ Function run
 								
 								// Insert node for this element
 								$Dom_:=Null:C1517
-								//Case of 
-								
-								//  // ----------------------------------------
-								//: $Obj_element.insertMode="append"
-								
-								//$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
-								
-								//  // ----------------------------------------
-								//: $Obj_element.insertMode="first"
-								
-								//$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
-								
-								//  // ----------------------------------------
-								//: $Obj_element.insertMode="iteration"
-								
-								//$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
-								
-								//  // ----------------------------------------
-								//End case 
-								
-								//If ($Dom_#Null)
-								//ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
-								//End if 
-								
-								//$Obj_out.doms.push($Dom_)
 								
 								If (Bool:C1537($Obj_element.insertInto.success))
 									
-									Case of 
-											
-											// ----------------------------------------
-										: ($Obj_element.insertMode="append")
-											
-											$Dom_:=$Obj_element.insertInto.append($Txt_buffer)
-											
-											// ----------------------------------------
-										: ($Obj_element.insertMode="first")
-											
-											$Dom_:=$Obj_element.insertInto.insertFirst($Txt_buffer)
-											
-											// ----------------------------------------
-										: ($Obj_element.insertMode="iteration")
-											
-											$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer; $Lon_j)
-											
-											// ----------------------------------------
-									End case 
-									
-									If ($Dom_#Null:C1517)
-										
-										ob_removeFormula($Dom_)  // For debugging purpose remove all formula
-										
-									End if 
-									
+									$Dom_:=This:C1470.insertInto($Obj_element; $Txt_buffer; $Lon_j)
 									$Obj_out.doms.push($Dom_)
 									
 								Else 
@@ -610,30 +426,7 @@ Function run
 									$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("___TABLE___"; "detailform"; "storyboardID"))
 									
 									// Insert node for this element
-									$Dom_:=Null:C1517
-									Case of 
-											
-											// ----------------------------------------
-										: $Obj_element.insertMode="append"
-											
-											$Dom_:=$Obj_element.insertIntoRow.append($Txt_buffer)
-											
-											// ----------------------------------------
-										: $Obj_element.insertMode="first"
-											
-											$Dom_:=$Obj_element.insertIntoRow.insertFirst($Txt_buffer)
-											
-											// ----------------------------------------
-										: $Obj_element.insertMode="iteration"
-											
-											$Dom_:=$Obj_element.insertIntoRow.insertAt($Txt_buffer; $Lon_j)
-											
-											// ----------------------------------------
-									End case 
-									
-									If ($Dom_#Null:C1517)
-										ob_removeFormula($Dom_)  // For debugging purpose remove all formula
-									End if 
+									$Dom_:=This:C1470.insertInto($Obj_element; $Txt_buffer; $Lon_j)
 									
 									$Obj_out.doms.push($Dom_)
 									
@@ -707,3 +500,92 @@ Function run
 	End if 
 	
 	$0:=$Obj_out
+	
+Function checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_root : Object/*xml node*/)
+	
+	If ($Obj_template.elements=Null:C1517)
+		
+		C_OBJECT:C1216($Obj_element)
+		// Elements not defined in manifest, try to compute it using storyboard XMLs
+		ARRAY TEXT:C222($tTxt_result; 0)
+		
+		C_COLLECTION:C1488($Col_)
+		Case of 
+				// ----------------------------------------
+			: (Rgx_ExtractText("TAG-(.?.?)-001"; $Txt_buffer; "1"; ->$tTxt_result)=0)
+				
+				$Col_:=New collection:C1472()
+				ARRAY TO COLLECTION:C1563($Col_; $tTxt_result)
+				$Col_:=$Col_.distinct()
+				$Col_:=$Col_.map("col_valueToObject"; "tagInterfix")
+				
+				$Obj_template.elements:=$Col_
+				
+				// ----------------------------------------
+			: (Value type:C1509($Obj_template.elementsID)=Is collection:K8:32)  // alernative way not documented, declare id of elements
+				
+				$Col_:=New collection:C1472()
+				C_TEXT:C284($Txt_id)
+				For each ($Txt_id; $Obj_template.elementsID)
+					
+					$Obj_element:=New object:C1471()
+					$Obj_element.dom:=$Dom_root.findById($Txt_id)
+					$Obj_element.originalId:=$Txt_id
+					
+					$Obj_element:=This:C1470.fixDomChildID($Obj_element).element
+					
+				End for each 
+				
+				$Obj_template.elements:=$Col_
+			Else 
+				
+				// find by attributes? find by children kel value?
+				C_OBJECT:C1216($result)
+				$result:=$Dom_root.findByAttribute("userLabel"; "stack")
+				If ($result.success)
+					If ($result.elements.length>0)  // Value type($result.elements)=Is collection)
+						
+						$Obj_element:=New object:C1471()
+						$Obj_element.dom:=$result.elements[0]
+						$Obj_element:=This:C1470.fixDomChildID($Obj_element).element
+						
+						$Obj_template.elements:=New collection:C1472($Obj_element)
+						
+					End if 
+				End if 
+				
+		End case 
+		
+	End if 
+	
+	
+	
+Function relationSegue($relation : Object)
+	C_TEXT:C284($0; $Txt_buffer)
+	If ($relation.transition=Null:C1517)
+		$relation.transition:=New object:C1471()
+	End if 
+	
+	If (Length:C16(String:C10($relation.transition.kind))=0)
+		$relation.transition.kind:="show"
+		// else check type?
+	End if 
+	
+	$Txt_buffer:="<segue destination=\"TAG-SN-001\""
+	
+	If ($relation.transition.customClass#Null:C1517)
+		$Txt_buffer:=$Txt_buffer+" customClass=\""+String:C10($relation.transition.customClass)+"\""
+	End if 
+	If ($relation.transition.customModule#Null:C1517)
+		$Txt_buffer:=$Txt_buffer+" customModule=\""+String:C10($relation.transition.customModule)+"\""
+	End if 
+	If ($relation.transition.modalPresentationStyle#Null:C1517)
+		$Txt_buffer:=$Txt_buffer+" modalPresentationStyle=\""+String:C10($relation.transition.modalPresentationStyle)+"\""
+	End if 
+	If ($relation.transition.modalTransitionStyle#Null:C1517)
+		$Txt_buffer:=$Txt_buffer+" modalTransitionStyle=\""+String:C10($relation.transition.modalTransitionStyle)+"\""
+	End if 
+	$Txt_buffer:=$Txt_buffer+" kind=\""+String:C10($relation.transition.kind)+"\""
+	$Txt_buffer:=$Txt_buffer+" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"
+	
+	$0:=$Txt_buffer
