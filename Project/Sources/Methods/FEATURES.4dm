@@ -89,20 +89,23 @@ Else   // <== Widgets method
 			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)
 			project.save()
 			
-			
 			//==============================================
 		: ($ƒ.deepLinking.catch($e; On Clicked:K2:4))
 			
 			Form:C1466.deepLinking.enabled:=Bool:C1537(Form:C1466.deepLinking.enabled)
+			
 			If (Form:C1466.deepLinking.enabled)
 				
 				$ƒ.deepLinkingUrlScheme.setValue(Replace string:C233(Lowercase:C14(Form:C1466.product.name); " "; "")+"://")  // TODO get from app name and remove illegal character?
-				$ƒ.deepLinkingAssociatedDomain.setValue(String:C10(Form:C1466.server.urls.production))  // get from production url
+				$ƒ.deepLinkingAssociatedDomain.setValue(String:C10(Form:C1466.server.urls.production))  // Get from production url
 				
 			Else 
+				
 				$ƒ.deepLinkingUrlScheme.setValue("")
 				$ƒ.deepLinkingAssociatedDomain.setValue("")
+				
 			End if 
+			
 			project.save()
 			
 			//==============================================

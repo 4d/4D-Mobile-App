@@ -1,39 +1,47 @@
 Class constructor
-	C_OBJECT:C1216($1)
+	var $1 : Object
+	
 	This:C1470.path:=$1
+	
 	If (This:C1470.path#Null:C1517)
+		
 		ASSERT:C1129(OB Instance of:C1731(This:C1470.path; 4D:C1709.File); "storyboard must be a file")
+		
 	End if 
 	
 Function randomID
-	C_TEXT:C284($0)
+	var $0 : Text
+	var $1 : Integer
+	
+	var $t : Text
+	var $i; $l : Integer
+	
 	$0:=Generate UUID:C1066
 	$0:=Substring:C12($0; 1; 3)+"-"+Substring:C12($0; 4; 2)+"-"+Substring:C12($0; 7; 3)
 	
 Function randomIDS
-	C_COLLECTION:C1488($0)
 	$0:=New collection:C1472
 	
-	C_LONGINT:C283($1; $l)
 	$l:=$1
 	
-	C_LONGINT:C283($i)
-	C_TEXT:C284($Txt_buffer)
 	For ($i; 1; $l; 1)
 		
-		$Txt_buffer:=Generate UUID:C1066
-		$Txt_buffer:=Substring:C12($Txt_buffer; 1; 3)+"-"+Substring:C12($Txt_buffer; 4; 2)+"-"+Substring:C12($Txt_buffer; 7; 3)
+		$t:=Generate UUID:C1066
+		$t:=Substring:C12($t; 1; 3)+"-"+Substring:C12($t; 4; 2)+"-"+Substring:C12($t; 7; 3)
 		
-		$0.push($Txt_buffer)
+		$0.push($t)
 		
 	End for 
 	
 	// Reformat storyboard document to follow xcode rules (line ending, attributes order, add missing resources)
 Function format  // MAC ONLY
-	C_OBJECT:C1216($0; $Obj_out)
+	var $0 : Object
+	
+	var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
+	var $File_; $Obj_in; $Obj_out : Object
+	
 	$Obj_out:=New object:C1471()
 	
-	C_OBJECT:C1216($Obj_in)
 	$Obj_in:=This:C1470
 	If (Value type:C1509($Obj_in.path)=Is text:K8:3)
 		
@@ -56,11 +64,9 @@ Function format  // MAC ONLY
 		: ($Obj_in.path.exists)
 			
 			// Use temp file because inplace command do not reformat
-			C_OBJECT:C1216($File_)
 			$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+".storyboard")
 			$Obj_in.path.copyTo($File_.parent; $File_.name+$File_.extension)
 			
-			C_TEXT:C284($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 			$Txt_cmd:="ibtool --upgrade "+str_singleQuoted($File_.path)+" --write "+str_singleQuoted($Obj_in.path.path)
 			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 			
@@ -128,8 +134,8 @@ Function format  // MAC ONLY
 	$0:=$Obj_out
 	
 Function ibtoolVersion
-	C_OBJECT:C1216($Obj_out; $File_)
-	C_TEXT:C284($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
+	var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
+	var $File_; $Obj_out : Object
 	
 	// Get storyboard tool version (could be used to replace in storyboard header)
 	$Txt_cmd:="ibtool --version"
@@ -157,42 +163,42 @@ Function ibtoolVersion
 	
 /* fix color asset according to theme. issues on simu*/
 Function colorAssetFix
-	C_OBJECT:C1216($Obj_out; $0)
+	var $0 : Object
+	var $1 : Object
+	
+	var $t : Text
+	var $asModification : Boolean
+	var $node; $Dom_child; $root; $File_; $Obj_color; $Obj_out; $theme : Object
+	
 	$Obj_out:=New object:C1471()
-	C_OBJECT:C1216($theme; $1)
 	$theme:=$1
 	
-	C_OBJECT:C1216($File_)
 	$File_:=This:C1470.path
 	
 	// read file
-	C_OBJECT:C1216($Dom_root; $Dom_; $Dom_child)
-	$Dom_root:=xml("load"; $File_)
+	$root:=xml("load"; $File_)
 	
 	// find named colors
-	C_BOOLEAN:C305($Boo_buffer)
-	$Boo_buffer:=False:C215
+	$asModification:=False:C215
 	
-	For each ($Dom_; $Dom_root.findMany("/document/resources/namedColor").elements)
+	For each ($node; $root.findMany("/document/resources/namedColor").elements)
 		
 		// get color name
-		C_TEXT:C284($Txt_buffer)
-		$Txt_buffer:=$Dom_.getAttribute("name").value
+		$t:=$node.getAttribute("name").value
 		
-		If ($theme[$Txt_buffer]#Null:C1517)
+		If ($theme[$t]#Null:C1517)
 			
-			If (Value type:C1509($theme[$Txt_buffer])=Is object:K8:27)
+			If (Value type:C1509($theme[$t])=Is object:K8:27)
 				
 				// get color xml child
-				$Dom_child:=$Dom_.firstChild()
+				$Dom_child:=$node.firstChild()
 				
-				C_OBJECT:C1216($Obj_color)
-				$Obj_color:=$theme[$Txt_buffer]
+				$Obj_color:=$theme[$t]
 				
 				// recreate node
 				$Dom_child.remove()
-				$Dom_child:=$Dom_.create("color")
-				$Boo_buffer:=True:C214
+				$Dom_child:=$node.create("color")
+				$asModification:=True:C214
 				
 				Case of 
 						
@@ -239,13 +245,12 @@ Function colorAssetFix
 		End if 
 	End for each 
 	
-	If ($Boo_buffer)
+	If ($asModification)
 		
 		// write if there is one named colors (could also do it only if one attribute change)
-		doc_UNLOCK_DIRECTORY(New object:C1471(\
-			"path"; $File_.parent.platformPath))
-		$Dom_root.save($File_)
-		$Dom_root.close()
+		"path"; $File_.parent.platformPath))
+		$root.save($File_)
+		$root.close()
 		
 		This:C1470.format()
 		
@@ -257,89 +262,92 @@ Function colorAssetFix
 	
 /* remove all empty image asset, and double*/
 Function imageAssetFix
-	C_OBJECT:C1216($Obj_out; $0)
-	$Obj_out:=New object:C1471()
+	var $0 : Object
 	
-	C_OBJECT:C1216($File_)
-	$File_:=This:C1470.path
+	var $t : Text
+	var $asModification : Boolean
+	var $node; $attributes; $root : Object
+	var $c : Collection
 	
-	// read file
-	C_OBJECT:C1216($Dom_root; $Dom_)
-	$Dom_root:=xml("load"; $File_)
-	C_BOOLEAN:C305($Boo_buffer)
-	$Boo_buffer:=False:C215
+	$0:=New object:C1471(\
+		"success"; False:C215)
 	
-	// find named colors
-	For each ($Dom_; $Dom_root.findMany("/document/resources/image").elements)
+	// Read file
+	$root:=xml("load"; This:C1470.path)
+	
+	If ($root.success)
 		
-		C_COLLECTION:C1488($Col_)
-		$Col_:=New collection:C1472
-		
-		// get  name
-		C_TEXT:C284($Txt_buffer)
-		$Txt_buffer:=$Dom_.getAttribute("name").value
-		
-		If (Length:C16($Txt_buffer)=0)
+		// Find named colors
+		For each ($node; $root.findMany("/document/resources/image").elements)
 			
-			$Dom_.remove()
-			$Boo_buffer:=True:C214
+			$c:=New collection:C1472
 			
-		Else 
+			// Get  name
+			$t:=$node.getAttribute("name").value
 			
-			If ($Col_.indexOf($Txt_buffer)>-1)
+			If (Length:C16($t)=0)
 				
-				$Boo_buffer:=True:C214
+				$node.remove()
+				$asModification:=True:C214
 				
 			Else 
 				
-				$Col_.push($Txt_buffer)
-				
+				If ($c.indexOf($t)>-1)
+					
+					$asModification:=True:C214
+					
+				Else 
+					
+					$c.push($t)
+					
+				End if 
 			End if 
-		End if 
-	End for each 
-	
-	// Remove empty value attribute of userDefinedRuntimeAttribute with type image
-	For each ($Dom_; $Dom_root.findByName("userDefinedRuntimeAttribute").elements)
+		End for each 
 		
-		C_OBJECT:C1216($Obj_attributes)
-		$Obj_attributes:=$Dom_.attributes().attributes
-		
-		If (String:C10($Obj_attributes.type)="image")
+		// Remove empty value attribute of userDefinedRuntimeAttribute with type image
+		For each ($node; $root.findByName("userDefinedRuntimeAttribute").elements)
 			
-			If ($Obj_attributes.value#Null:C1517)\
-				 & (Length:C16(String:C10($Obj_attributes.value))=0)
+			$attributes:=$node.attributes().attributes
+			
+			If (String:C10($attributes.type)="image")
 				
-				$Dom_.removeAttribute("value")
-				$Boo_buffer:=True:C214
-				
+				If ($attributes.value#Null:C1517)\
+					 & (Length:C16(String:C10($attributes.value))=0)
+					
+					$node.removeAttribute("value")
+					$asModification:=True:C214
+					
+				End if 
 			End if 
+		End for each 
+		
+		// Write if there is one modification
+		If ($asModification)
+			
+			$root.save(This:C1470.path)
+			This:C1470.format()
+			
+			$0.success:=True:C214
+			
 		End if 
-	End for each 
-	
-	// write if there is one modification
-	If ($Boo_buffer)
 		
-		$Dom_root.save($File_)
-		$Dom_root.close()
+		$root.close()
 		
-		This:C1470.format()
+	Else 
+		
+		// ERROR
 		
 	End if 
 	
-	$Obj_out.success:=True:C214
-	
-	$0:=$Obj_out
-	
 /* fix potential duplicated id elements, due to copy paste in storyboard (as requested by PO) */
 Function fixDomChildID($Obj_element : Object)
-	C_OBJECT:C1216($0)
-	C_OBJECT:C1216($1)
+	var $0 : Object
+	var $1 : Object
 	
-	C_LONGINT:C283($Lon_parameters; $Lon_ids; $Lon_current)
-	C_OBJECT:C1216($Obj_result)
-	C_OBJECT:C1216($Obj_nodeByIds; $Obj_tag; $Obj_child; $Obj_tagMapping; $Dom_child)
-	C_TEXT:C284($Txt_tagPrefix; $Txt_tagInterfix; $Txt_tagFullPrefix; $Txt_tag; $Txt_buffer)
-	C_BOOLEAN:C305($Boo_haveWrongTag)
+	var $t; $Txt_tag; $Txt_tagFullPrefix; $Txt_tagInterfix; $Txt_tagPrefix : Text
+	var $Boo_haveWrongTag : Boolean
+	var $Lon_current; $Lon_ids : Integer
+	var $Obj_child; $Obj_element; $Obj_nodeByIds; $Obj_result; $Obj_tag; $Obj_tagMapping : Object
 	
 	$Obj_result:=New object:C1471(\
 		"success"; False:C215)
@@ -402,10 +410,10 @@ Function fixDomChildID($Obj_element : Object)
 		End for each 
 		
 		// Make the tag id replacement
-		$Txt_buffer:=$Obj_element.dom.export().variable
+		$t:=$Obj_element.dom.export().variable
 		For each ($Txt_tag; $Obj_tagMapping)
 			
-			$Txt_buffer:=Replace string:C233($Txt_buffer; $Txt_tag; $Obj_tagMapping[$Txt_tag])
+			$t:=Replace string:C233($t; $Txt_tag; $Obj_tagMapping[$Txt_tag])
 			
 		End for each 
 		
@@ -413,7 +421,7 @@ Function fixDomChildID($Obj_element : Object)
 		If ($Boo_haveWrongTag)  //or $Obj_tagMapping key size  OPTI: if we do nothing, do not return new node (just edit the current one and add idCount)
 			$Obj_element.originalDom:=$Obj_element.dom  // store old one (useful to get parent or replace)
 			$Obj_element.insertInto:=$Obj_element.originalDom.parent()
-			$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
+			$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $t))
 			$Obj_element.tagInterfix:=$Txt_tagInterfix
 		End if 
 		

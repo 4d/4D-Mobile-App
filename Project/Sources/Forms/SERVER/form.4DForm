@@ -32,17 +32,6 @@
 					"textAlign": "left",
 					"text": ":xliff:productionUrl"
 				},
-				"test.alert": {
-					"type": "button",
-					"top": 106,
-					"left": 144,
-					"width": 20,
-					"height": 20,
-					"style": "custom",
-					"events": [
-						"onClick"
-					]
-				},
 				"02_prodURL.border": {
 					"type": "rectangle",
 					"top": 28,
@@ -117,5 +106,6 @@
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"geometryStamp": 1
 }
