@@ -459,7 +459,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								$Obj_element.dom:=$Dom_root.findById($Txt_id)
 								$Obj_element.originalId:=$Txt_id
 								
-								$Obj_element:=storyboard_fix_id($Obj_element).element
+								$Obj_element:=_o_storyboard_fix_id($Obj_element).element
 								
 							End for each 
 							
@@ -474,7 +474,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									
 									$Obj_element:=New object:C1471()
 									$Obj_element.dom:=$result.elements[0]
-									$Obj_element:=storyboard_fix_id($Obj_element).element
+									$Obj_element:=_o_storyboard_fix_id($Obj_element).element
 									
 									$Obj_in.template.elements:=New collection:C1472($Obj_element)
 									
@@ -520,7 +520,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								If ($Obj_element.dom.success)
 									
 									If (Not:C34(Bool:C1537($Obj_in.template.isInternal)))  // to optimize, suppose our template do not need to have fix...
-										$Obj_element:=storyboard_fix_id($Obj_element).element  // potentially fix subnodes if copy our storyboard to modify it
+										$Obj_element:=_o_storyboard_fix_id($Obj_element).element  // potentially fix subnodes if copy our storyboard to modify it
 									End if 
 									
 								Else 
@@ -549,7 +549,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 											
 										End if 
 										
-										$Obj_element:=storyboard_fix_id($Obj_element).element  // potentially fix subnodes
+										$Obj_element:=_o_storyboard_fix_id($Obj_element).element  // potentially fix subnodes
 										
 										// ----------------------------------------
 									: ($Lon_length>0)
@@ -730,11 +730,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						// 2- scene
 						//$Obj_element:=New object(\
-																												"insertInto";$Dom_root.findByXPath("document/scenes");\
-																												"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																												"idCount";3;\
-																												"tagInterfix";"SN";\
-																												"insertMode";"append")
+																																			"insertInto";$Dom_root.findByXPath("document/scenes");\
+																																			"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																																			"idCount";3;\
+																																			"tagInterfix";"SN";\
+																																			"insertMode";"append")
 						$Obj_element:=New object:C1471(\
 							"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 							"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
@@ -854,7 +854,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 										
 										// Insert node for this element
 										$Dom_:=Null:C1517
-										//Case of 
+										//Case of
 										
 										//  // ----------------------------------------
 										//: $Obj_element.insertMode="append"
@@ -872,11 +872,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 										//$Dom_:=$Obj_element.insertInto.insertAt($Txt_buffer;$Lon_j)
 										
 										//  // ----------------------------------------
-										//End case 
+										//End case
 										
 										//If ($Dom_#Null)
 										//ob_removeFormula ($Dom_)  // For debugging purpose remove all formula
-										//End if 
+										//End if
 										
 										//$Obj_out.doms.push($Dom_)
 										

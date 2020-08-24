@@ -81,7 +81,7 @@ Function run
 						$Obj_element.dom:=$Dom_root.findById($Txt_id)
 						$Obj_element.originalId:=$Txt_id
 						
-						$Obj_element:=storyboard_fix_id($Obj_element).element
+						$Obj_element:=This:C1470.fixDomChildID($Obj_element).element
 						
 					End for each 
 					
@@ -96,7 +96,7 @@ Function run
 							
 							$Obj_element:=New object:C1471()
 							$Obj_element.dom:=$result.elements[0]
-							$Obj_element:=storyboard_fix_id($Obj_element).element
+							$Obj_element:=This:C1470.fixDomChildID($Obj_element).element
 							
 							$Obj_template.elements:=New collection:C1472($Obj_element)
 							
@@ -143,7 +143,7 @@ Function run
 						If ($Obj_element.dom.success)
 							
 							If (Not:C34(Bool:C1537($Obj_template.isInternal)))  // to optimize, suppose our template do not need to have fix...
-								$Obj_element:=storyboard_fix_id($Obj_element).element  // potentially fix subnodes if copy our storyboard to modify it
+								$Obj_element:=This:C1470.fixDomChildID($Obj_element).element  // potentially fix subnodes if copy our storyboard to modify it
 							End if 
 							
 						Else 
@@ -172,7 +172,7 @@ Function run
 									
 								End if 
 								
-								$Obj_element:=storyboard_fix_id($Obj_element).element  // potentially fix subnodes
+								$Obj_element:=This:C1470.fixDomChildID($Obj_element).element  // potentially fix subnodes
 								
 								// ----------------------------------------
 							: ($Lon_length>0)
@@ -356,11 +356,11 @@ Function run
 				
 				// 2- scene
 				//$Obj_element:=New object(\
-										"insertInto";$Dom_root.findByXPath("document/scenes");\
-										"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-										"idCount";3;\
-										"tagInterfix";"SN";\
-										"insertMode";"append")
+															"insertInto";$Dom_root.findByXPath("document/scenes");\
+															"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+															"idCount";3;\
+															"tagInterfix";"SN";\
+															"insertMode";"append")
 				$Obj_element:=New object:C1471(\
 					"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 					"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
