@@ -16,7 +16,7 @@ var ${3} : Text
 
 var $i; $param : Integer
 var $schemPtr : Pointer
-var $o; $Obj_in; $schem; $sub : Object
+var $o; $schem; $sub : Object
 
 If (False:C215)
 	C_BOOLEAN:C305(ob_testPath; $0)
@@ -30,16 +30,6 @@ End if
 $param:=Count parameters:C259
 
 If (Asserted:C1132($param>=2; "Missing parameter"))
-	
-	// Required parameters
-	$Obj_in:=$1
-	
-	// Optional parameters
-	If ($param>=3)
-		
-		// <NONE>
-		
-	End if 
 	
 	$o:=New object:C1471
 	$schem:=$o

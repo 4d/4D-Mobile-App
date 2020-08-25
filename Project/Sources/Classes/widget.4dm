@@ -22,7 +22,7 @@ Class constructor
 	Super:C1705($1)
 	
 	C_POINTER:C301($p)
-	$p:=OBJECT Get pointer:C1124(Object named:K67:5;This:C1470.name)
+	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
 	This:C1470.assignable:=Not:C34(Is nil pointer:C315($p))
 	
 	If (This:C1470.assignable)
@@ -49,14 +49,14 @@ Class constructor
 		End if 
 	End if 
 	
-	This:C1470.action:=OBJECT Get action:C1457(*;This:C1470.name)
+	This:C1470.action:=OBJECT Get action:C1457(*; This:C1470.name)
 	
 /*══════════════════════════*/
 Function getEnterable
 	
 	C_BOOLEAN:C305($0)
 	
-	$0:=OBJECT Get enterable:C1067(*;This:C1470.name)
+	$0:=OBJECT Get enterable:C1067(*; This:C1470.name)
 	
 /*══════════════════════════
 .enterable()
@@ -68,11 +68,11 @@ Function enterable
 	
 	If (Count parameters:C259>=1)
 		
-		OBJECT SET ENTERABLE:C238(*;This:C1470.name;$1)
+		OBJECT SET ENTERABLE:C238(*; This:C1470.name; $1)
 		
 	Else 
 		
-		OBJECT SET ENTERABLE:C238(*;This:C1470.name;True:C214)
+		OBJECT SET ENTERABLE:C238(*; This:C1470.name; True:C214)
 		
 	End if 
 	
@@ -84,7 +84,7 @@ Function enterable
 ══════════════════════════*/
 Function notEnterable
 	
-	OBJECT SET ENTERABLE:C238(*;This:C1470.name;False:C215)
+	OBJECT SET ENTERABLE:C238(*; This:C1470.name; False:C215)
 	
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
@@ -244,7 +244,7 @@ Function touch
 		If (This:C1470.dataSource#Null:C1517)
 			
 			C_TEXT:C284($t)
-			$t:=Choose:C955(Value type:C1509(This:C1470.dataSource)=Is object:K8:27;This:C1470.dataSource.source;This:C1470.dataSource)
+			$t:=Choose:C955(Value type:C1509(This:C1470.dataSource)=Is object:K8:27; This:C1470.dataSource.source; This:C1470.dataSource)
 			
 			EXECUTE FORMULA:C63($t+":="+$t)
 			
@@ -263,7 +263,7 @@ Function on
 	C_VARIANT:C1683($1)
 	C_OBJECT:C1216($2)
 	
-	If (Asserted:C1132(This:C1470.type#-1;"Does not apply to a group"))
+	If (Asserted:C1132(This:C1470.type#-1; "Does not apply to a group"))
 		
 		If (Count parameters:C259=0)
 			
@@ -306,7 +306,7 @@ Function catch
 	C_VARIANT:C1683($1)
 	C_LONGINT:C283($2)
 	
-	If (Asserted:C1132(This:C1470.type#-1;"Does not apply to a group"))
+	If (Asserted:C1132(This:C1470.type#-1; "Does not apply to a group"))
 		
 		If (Count parameters:C259=0)
 			
@@ -369,7 +369,7 @@ Function setCallback
 ══════════════════════════*/
 Function execute
 	
-	If (Asserted:C1132(This:C1470.callback#Null:C1517;"No callback method define"))
+	If (Asserted:C1132(This:C1470.callback#Null:C1517; "No callback method define"))
 		
 		This:C1470.callback()
 		
@@ -382,20 +382,24 @@ Function getHelpTip
 	
 	C_TEXT:C284($0)
 	
-	$0:=OBJECT Get help tip:C1182(*;This:C1470.name)
+	$0:=OBJECT Get help tip:C1182(*; This:C1470.name)
 	
 /*══════════════════════════
 .setHelpTip(text) -> This
 ══════════════════════════*/
 Function setHelpTip
 	
-	C_TEXT:C284($1)// Text or resname
+	C_TEXT:C284($1)  // Text or resname
 	C_TEXT:C284($t)
 	
-	$t:=Get localized string:C991($1)
-	$t:=Choose:C955(Length:C16($t)>0;$t;$1)// Revert if no localization
+	If (Count parameters:C259>=1)
+		
+		$t:=Get localized string:C991($1)
+		$t:=Choose:C955(Length:C16($t)>0; $t; $1)  // Revert if no localization
+		
+	End if 
 	
-	OBJECT SET HELP TIP:C1181(*;This:C1470.name;$t)
+	OBJECT SET HELP TIP:C1181(*; This:C1470.name; $t)
 	
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
@@ -410,27 +414,27 @@ Function getShortcut
 	C_TEXT:C284($t)
 	C_LONGINT:C283($l)
 	
-	OBJECT GET SHORTCUT:C1186(*;This:C1470.name;$t;$l)
+	OBJECT GET SHORTCUT:C1186(*; This:C1470.name; $t; $l)
 	
 	$0:=New object:C1471(\
-		"key";$t;\
-		"modifier";$l)
+		"key"; $t; \
+		"modifier"; $l)
 	
 /*══════════════════════════
 .setShortcut(text{;int} ) -> This
 ══════════════════════════*/
 Function setShortcut
 	
-	C_TEXT:C284($1)// key
-	C_LONGINT:C283($2)// modifier
+	C_TEXT:C284($1)  // key
+	C_LONGINT:C283($2)  // modifier
 	
 	If (Count parameters:C259>=2)
 		
-		OBJECT SET SHORTCUT:C1185(*;This:C1470.name;$1;$2)
+		OBJECT SET SHORTCUT:C1185(*; This:C1470.name; $1; $2)
 		
 	Else 
 		
-		OBJECT SET SHORTCUT:C1185(*;This:C1470.name;$1)
+		OBJECT SET SHORTCUT:C1185(*; This:C1470.name; $1)
 		
 	End if 
 	
@@ -442,7 +446,7 @@ Function setShortcut
 ══════════════════════════*/
 Function focus
 	
-	GOTO OBJECT:C206(*;This:C1470.name)
+	GOTO OBJECT:C206(*; This:C1470.name)
 	
 	C_OBJECT:C1216($0)
 	$0:=This:C1470

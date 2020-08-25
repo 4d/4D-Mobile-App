@@ -20,7 +20,7 @@ Class constructor
 	C_LONGINT:C283($i)
 	C_TEXT:C284($t)
 	
-	If (Asserted:C1132(Count parameters:C259>0;"Missing parameter"))
+	If (Asserted:C1132(Count parameters:C259>0; "Missing parameter"))
 		
 		Case of 
 				
@@ -34,7 +34,7 @@ Class constructor
 				
 				This:C1470.members:=New collection:C1472
 				
-				For ($i;1;Count parameters:C259;1)
+				For ($i; 1; Count parameters:C259; 1)
 					
 					This:C1470.members.push(${$i})
 					
@@ -45,7 +45,7 @@ Class constructor
 				
 				This:C1470.members:=New collection:C1472
 				
-				For each ($t;Split string:C1554($1;","))
+				For each ($t; Split string:C1554($1; ","))
 					
 					This:C1470.members.push(cs:C1710.widget.new($t))  // Widget by default
 					
@@ -54,7 +54,7 @@ Class constructor
 				//___________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Bad parameter type")
+				ASSERT:C1129(False:C215; "Bad parameter type")
 				
 				//___________________________
 		End case 
@@ -85,12 +85,12 @@ Function include
 			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)
 			
-			$0:=(This:C1470.members.query("name=:1";$1).pop()#Null:C1517)
+			$0:=(This:C1470.members.query("name=:1"; $1).pop()#Null:C1517)
 			
 			//______________________________________________________
 		Else 
 			
-			ASSERT:C1129(False:C215;"Unmanaged parameter type")
+			ASSERT:C1129(False:C215; "Unmanaged parameter type")
 			
 			//______________________________________________________
 	End case 
@@ -110,13 +110,13 @@ The optional object type parameter allow to specify:
 ══════════════════════════*/
 Function distributeHorizontally
 	
-	C_OBJECT:C1216($1;$o;$e)
+	C_OBJECT:C1216($1; $o; $e)
 	
 	$e:=New object:C1471(\
-		"start";0;\
-		"spacing";0;\
-		"minWidth";0;\
-		"maxWidth";0)
+		"start"; 0; \
+		"spacing"; 0; \
+		"minWidth"; 0; \
+		"maxWidth"; 0)
 	
 	If (Count parameters:C259>=1)
 		
@@ -133,13 +133,18 @@ Function distributeHorizontally
 		End if 
 	End if 
 	
-	For each ($o;This:C1470.members)
+	For each ($o; This:C1470.members)
 		
 		
 		Case of 
 				
 				//_______________________________
 			: ($o.type=Object type subform:K79:40)
+				
+				// Maintain dimensions
+				
+				//_______________________________
+			: ($o.type=Object type text input:K79:4)
 				
 				// Maintain dimensions
 				
@@ -173,7 +178,7 @@ Function distributeHorizontally
 					//_______________________________
 				: ($o.type=Object type push button:K79:16)
 					
-					$e.start:=$o.coordinates.right+Choose:C955(Is macOS:C1572;20;20)
+					$e.start:=$o.coordinates.right+Choose:C955(Is macOS:C1572; 20; 20)
 					
 					//_______________________________
 				: (False:C215)
@@ -204,7 +209,7 @@ Function show
 	
 	If (Count parameters:C259>=1)
 		
-		For each ($o;This:C1470.members)
+		For each ($o; This:C1470.members)
 			
 			$o.show($1)
 			
@@ -212,7 +217,7 @@ Function show
 		
 	Else 
 		
-		For each ($o;This:C1470.members)
+		For each ($o; This:C1470.members)
 			
 			$o.show()
 			
@@ -224,7 +229,7 @@ Function hide
 	
 	C_OBJECT:C1216($o)
 	
-	For each ($o;This:C1470.members)
+	For each ($o; This:C1470.members)
 		
 		$o.hide()
 		
@@ -241,7 +246,7 @@ Function enable
 	
 	If (Count parameters:C259>=1)
 		
-		For each ($o;This:C1470.members)
+		For each ($o; This:C1470.members)
 			
 			$o.enable($1)
 			
@@ -249,7 +254,7 @@ Function enable
 		
 	Else 
 		
-		For each ($o;This:C1470.members)
+		For each ($o; This:C1470.members)
 			
 			$o.enable()
 			
@@ -261,7 +266,7 @@ Function disable
 	
 	C_OBJECT:C1216($o)
 	
-	For each ($o;This:C1470.members)
+	For each ($o; This:C1470.members)
 		
 		$o.disable()
 		

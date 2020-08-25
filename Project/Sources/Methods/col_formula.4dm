@@ -35,8 +35,7 @@ Case of
 		//______________________________________________________
 	Else 
 		
-		// A "Case of" statement should never omit "Else"
-		ASSERT:C1129(False:C215; "col_formula not correct type"+String:C10(Value type:C1509($2)))
+		ASSERT:C1129(False:C215; "col_formula not correct type: "+String:C10(Value type:C1509($2)))
 		
 		//______________________________________________________
 End case 

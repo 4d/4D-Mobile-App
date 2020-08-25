@@ -34,6 +34,9 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 			$ƒ.certificateGroup.distributeHorizontally()\
 				.show(Form:C1466.server.pushNotification)
 			
+			$ƒ.deepLinking.bestSize()
+			$ƒ.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
+			
 			//______________________________________________
 		: ($e.code=On Timer:K2:25)
 			
@@ -96,13 +99,28 @@ Else   // <== Widgets method
 			
 			If (Form:C1466.deepLinking.enabled)
 				
-				$ƒ.deepLinkingUrlScheme.setValue(Replace string:C233(Lowercase:C14(Form:C1466.product.name); " "; "")+"://")  // TODO get from app name and remove illegal character?
-				$ƒ.deepLinkingAssociatedDomain.setValue(String:C10(Form:C1466.server.urls.production))  // Get from production url
+				$ƒ.deepLinkingGroup.show()
+				
+				If (Length:C16(String:C10(Form:C1466.deepLinking.urlScheme))=0)
+					
+					Form:C1466.deepLinking.urlScheme:=formatString("urlScheme"; Form:C1466.product.name)+"://"
+					
+				End if 
+				
+				If (Form:C1466.deepLinking.associatedDomain=Null:C1517)
+					
+					Form:C1466.deepLinking.associatedDomain:=""
+					$ƒ.deepLinkingAssociatedDomain.setHelpTip()
+					
+				Else 
+					
+					$ƒ.deepLinkingAssociatedDomain.setHelpTip("universalLinksTips")
+					
+				End if 
 				
 			Else 
 				
-				$ƒ.deepLinkingUrlScheme.setValue("")
-				$ƒ.deepLinkingAssociatedDomain.setValue("")
+				$ƒ.deepLinkingGroup.hide()
 				
 			End if 
 			
@@ -111,12 +129,24 @@ Else   // <== Widgets method
 			//==============================================
 		: ($ƒ.deepLinkingUrlScheme.catch($e; On Data Change:K2:15))
 			
-			project.save()
+			If (Match regex:C1019("(?mi-s)^([^:/?#]+)(?:://)?$"; Form:C1466.deepLinking.urlScheme; 1))
+				
+				Form:C1466.deepLinking.urlScheme:=formatString("urlScheme"; Replace string:C233(Form:C1466.deepLinking.urlScheme; "://"; ""))+"://"
+				project.save()
+				
+			Else 
+				
+				BEEP:C151  //#TO_DO - display an alert
+				$ƒ.deepLinkingUrlScheme.focus()
+				
+			End if 
 			
 			//==============================================
 		: ($ƒ.deepLinkingAssociatedDomain.catch($e; On Data Change:K2:15))
 			
 			project.save()
+			
+			$ƒ.deepLinkingAssociatedDomain.setHelpTip(Choose:C955(Length:C16(Form:C1466.deepLinking.associatedDomain)>0; "universalLinksTips"; ""))
 			
 			//==============================================
 	End case 

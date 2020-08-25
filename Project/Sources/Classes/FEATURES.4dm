@@ -28,12 +28,18 @@ Class constructor
 		This:C1470.certificateLabel:=cs:C1710.static.new("certificateLabel")
 		This:C1470.certificateGroup:=cs:C1710.group.new(This:C1470.certificateLabel; This:C1470.certificate)
 		
-		This:C1470.deepLinking:=cs:C1710.button.new("01_deepLinking")
-		//This.deepLinkingUrlSchemeLabel:=cs.static.new("deepLinkingLabel1")
-		This:C1470.deepLinkingUrlScheme:=cs:C1710.input.new("urlSchemeInput"; "Form.deepLinking.urlScheme")
-		//This.deepLinkingAssociatedDomainLabel:=cs.static.new("deepLinkingLabel2")
-		This:C1470.deepLinkingAssociatedDomain:=cs:C1710.input.new("associatedDomainInput"; "Form.deepLinking.associatedDomain")
-		//This.deepLinkingGroup:=cs.group.new(This.deepLinkingUrlSchemeLabel; This.deepLinkingAssociatedDomainLabel;...)
+		This:C1470.deepLinking:=cs:C1710.button.new("03_deepLinking")
+		This:C1470.deepLinkingUrlSchemeLabel:=cs:C1710.static.new("urlScheme.label")
+		This:C1470.deepLinkingUrlScheme:=cs:C1710.input.new("03_urlScheme.input")  //; "Form.deepLinking.urlScheme")
+		This:C1470.deepLinkingAssociatedDomainLabel:=cs:C1710.static.new("associatedDomain.label")
+		This:C1470.deepLinkingAssociatedDomain:=cs:C1710.input.new("04_associatedDomain.input")  //; "Form.deepLinking.associatedDomain")
+		This:C1470.deepLinkingGroup:=cs:C1710.group.new(\
+			This:C1470.deepLinkingUrlSchemeLabel; \
+			cs:C1710.static.new("urlScheme.border"); \
+			This:C1470.deepLinkingUrlScheme; \
+			This:C1470.deepLinkingAssociatedDomainLabel; \
+			cs:C1710.static.new("associatedDomain.border"); \
+			This:C1470.deepLinkingAssociatedDomain)
 		
 		// Constraints definition
 		ob_createPath($o; "constraints.rules"; Is collection:K8:32)

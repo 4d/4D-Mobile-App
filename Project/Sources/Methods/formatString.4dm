@@ -48,6 +48,18 @@ End if
 Case of 
 		
 		//______________________________________________________
+	: ($t_format="urlScheme")
+		
+		// Replace accented characters with non accented one.
+		$t_formated:=str($t_string).unaccented()
+		
+		// Remove space, other accent, special characters
+		$lError:=Rgx_SubstituteText("[^-+\\.a-zA-Z0-9]"; "-"; ->$t_formated; 0)
+		
+		// All in lowercase
+		$t_formated:=Lowercase:C14($t_formated)
+		
+		//______________________________________________________
 	: ($t_format="bundleApp")
 		
 		// Replace accented characters with non accented one.
