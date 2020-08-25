@@ -58,7 +58,7 @@ If (Asserted:C1132($file#Null:C1517; "Missing tag file"))
 	If (Asserted:C1132($file.exists; "file to unzip not found"))
 		
 		
-		$archive:=ZIP Read archive:C1637($file)
+		$archive:=ZIP Read archive:C1637($file).root
 		
 		Case of 
 				
@@ -101,7 +101,8 @@ If (Asserted:C1132($file#Null:C1517; "Missing tag file"))
 						$cache.create()
 						
 						// Create the cache
-						$archive.root.copyTo($cache)
+						//$archive.root.copyTo($cache)  // could not use it, it add a folder with archive name
+						$archive.files().combine($archive.folders()).map("col_formula"; Formula:C1597($1.value.copyTo($cache)))
 						$Obj_result.success:=True:C214
 						
 					Else 
@@ -112,13 +113,14 @@ If (Asserted:C1132($file#Null:C1517; "Missing tag file"))
 					
 					If ($Obj_result.success)
 						
-						$cache.copyTo($target)
+						$cache.files().combine($cache.folders()).map("col_formula"; Formula:C1597($1.value.copyTo($target)))
 						
 					End if 
 					
 				Else 
 					
-					$archive.root.copyTo($target)
+					//$archive.root.copyTo($target) // could not use it, it add a folder with archive name
+					$archive.files().combine($archive.folders()).map("col_formula"; Formula:C1597($1.value.copyTo($target)))
 					
 				End if 
 				
