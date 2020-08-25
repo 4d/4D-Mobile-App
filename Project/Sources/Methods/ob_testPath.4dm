@@ -11,18 +11,35 @@
 // Declarations
 var $0 : Boolean
 var $1 : Object
-var ${2} : Text
+var $2 : Text
+var ${3} : Text
 
 var $i; $param : Integer
 var $schemPtr : Pointer
-var $o; $schem; $sub : Object
+var $o; $Obj_in; $schem; $sub : Object
 
 If (False:C215)
+	C_BOOLEAN:C305(ob_testPath; $0)
+	C_OBJECT:C1216(ob_testPath; $1)
+	C_TEXT:C284(ob_testPath; $2)
+	C_TEXT:C284(ob_testPath; ${3})
 End if 
 
 // ----------------------------------------------------
 // Initialisations
-If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
+$param:=Count parameters:C259
+
+If (Asserted:C1132($param>=2; "Missing parameter"))
+	
+	// Required parameters
+	$Obj_in:=$1
+	
+	// Optional parameters
+	If ($param>=3)
+		
+		// <NONE>
+		
+	End if 
 	
 	$o:=New object:C1471
 	$schem:=$o
