@@ -8,95 +8,66 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($Lon_formEvent; $Lon_parameters)
-C_TEXT:C284($Txt_additional; $Txt_panel; $Txt_title)
-C_OBJECT:C1216($Obj_cancel; $Obj_form; $Obj_in; $Obj_ok; $Obj_update)
-C_COLLECTION:C1488($Col_buffer; $Col_panels)
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(PROJECT_Handler; $0)
 	C_OBJECT:C1216(PROJECT_Handler; $1)
 End if 
 
-// ----------------------------------------------------
-// Initialisations
-$Lon_parameters:=Count parameters:C259
+var $additional; $panel; $title : Text
+var $cancel; $e; $form; $IN; $ok; $update : Object
+var $c : Collection
 
-If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
+// NO PARAMETERS REQUIRED
+
+// Optional parameters
+If (Count parameters:C259>=1)
 	
-	// NO PARAMETERS REQUIRED
-	
-	// Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Obj_in:=$1
-		
-	End if 
-	
-	$Obj_form:=New object:C1471(\
-		"window"; Current form window:C827)
-	
-Else 
-	
-	ABORT:C156
+	$IN:=$1
 	
 End if 
+
+$form:=New object:C1471(\
+"window"; Current form window:C827)
 
 // ----------------------------------------------------
 Case of 
 		
 		//=========================================================
-	: ($Obj_in=Null:C1517)  // Form method
+	: ($IN=Null:C1517)  // Form method
 		
-		$Lon_formEvent:=Form event code:C388
+		$e:=FORM Event:C1606
 		
 		// ----------------------------------------------------
 		Case of 
 				
 				//______________________________________________________
-			: ($Lon_formEvent=On Load:K2:1)
-				
-				$Col_panels:=New collection:C1472
-				
-				$Col_panels.push(New object:C1471(\
-					"title"; Get localized string:C991("organization"); \
-					"form"; "ORGANIZATION"))
-				
-				$Col_panels.push(New object:C1471(\
-					"title"; Get localized string:C991("product"); \
-					"form"; "PRODUCT"))
-				
-				$Col_panels.push(New object:C1471(\
-					"title"; Get localized string:C991("developer"); \
-					"form"; "DEVELOPER"))
-				
-				project_UI_DEFINITION($Col_panels)
+			: ($e.code=On Load:K2:1)
 				
 				SET TIMER:C645(-1)
 				
 				//______________________________________________________
-			: ($Lon_formEvent=On Unload:K2:2)
+			: ($e.code=On Unload:K2:2)
 				
 				//
 				
 				//______________________________________________________
-			: ($Lon_formEvent=On Timer:K2:25)
+			: ($e.code=On Timer:K2:25)
 				
 				SET TIMER:C645(0)
 				
-				For each ($Txt_panel; panel_Objects)
+				For each ($panel; panel_Objects)
 					
-					EXECUTE METHOD IN SUBFORM:C1085($Txt_panel; "panel_UI"; *; (OBJECT Get pointer:C1124(Object named:K67:5; "UI"))->)
+					EXECUTE METHOD IN SUBFORM:C1085($panel; "panel_UI"; *; (OBJECT Get pointer:C1124(Object named:K67:5; "UI"))->)
 					
 				End for each 
 				
 				panel_GOTO
 				
 				//______________________________________________________
-			: ($Lon_formEvent=On Bound Variable Change:K2:52)
+			: ($e.code=On Bound Variable Change:K2:52)
 				
 				Form:C1466.$worker:=Form:C1466.$project.$worker
 				
@@ -106,29 +77,29 @@ Case of
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 				
 				//______________________________________________________
 		End case 
 		
 		//=========================================================
-	: ($Obj_in.action=Null:C1517)
+	: ($IN.action=Null:C1517)
 		
 		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
 		
 		//=========================================================
-	: ($Obj_in.action="projectAudit")  // Audit the project
+	: ($IN.action="projectAudit")  // Audit the project
 		
 		// ----------------------------------------------------
-		If (Num:C11($Obj_form.window)#0)
+		If (Num:C11($form.window)#0)
 			
 			// Send result
-			CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "projectAuditResult"; project_Audit($Obj_in))
+			CALL FORM:C1391($form.window; "editor_CALLBACK"; "projectAuditResult"; project_Audit($IN))
 			
 		Else 
 			
 			// Test purpose - Return result
-			$0:=project_Audit($Obj_in)
+			$0:=project_Audit($IN)
 			
 		End if 
 		
@@ -136,7 +107,7 @@ Case of
 		// End
 		
 		//=========================================================
-	: ($Obj_in.action="projectAuditResult")  // Result of the project audit
+	: ($IN.action="projectAuditResult")  // Result of the project audit
 		
 		// ================================== //
 		// Execution space is the form EDITOR //
@@ -149,16 +120,16 @@ Case of
 			
 		End if 
 		
-		Form:C1466.status.project:=$Obj_in.audit.success
-		Form:C1466.audit:=$Obj_in.audit
+		Form:C1466.status.project:=$IN.audit.success
+		Form:C1466.audit:=$IN.audit
 		
 		// Update UI
-		CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "tableProperties")
-		CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "fieldProperties")
-		CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "refreshViews")
-		CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "update_data")
+		CALL FORM:C1391($form.window; "editor_CALLBACK"; "tableProperties")
+		CALL FORM:C1391($form.window; "editor_CALLBACK"; "fieldProperties")
+		CALL FORM:C1391($form.window; "editor_CALLBACK"; "refreshViews")
+		CALL FORM:C1391($form.window; "editor_CALLBACK"; "update_data")
 		
-		If ($Obj_in.audit.success)
+		If ($IN.audit.success)
 			
 			// Update status
 			If (Form:C1466.$dialog.projectInvalid#Null:C1517)
@@ -174,175 +145,175 @@ Case of
 				
 				Form:C1466.$dialog.projectInvalid:=True:C214
 				
-				$Obj_ok:=New object:C1471(\
+				$ok:=New object:C1471(\
 					"action"; "projectFixErrors"; \
-					"audit"; $Obj_in.audit)
+					"audit"; $IN.audit)
 				
 				// Try to show message according to errors
-				If ($Obj_in.audit.errors.length=1)
+				If ($IN.audit.errors.length=1)
 					
-					$Txt_title:=$Obj_in.audit.errors[0].message
+					$title:=$IN.audit.errors[0].message
 					
 					Case of 
 							
 							//________________________________________
-						: ($Obj_in.audit.errors[0].type="template")
+						: ($IN.audit.errors[0].type="template")
 							
-							$Txt_additional:="doYouWantToFixYourProjectByUsingTheDefaultTemplates"
+							$additional:="doYouWantToFixYourProjectByUsingTheDefaultTemplates"
 							
-							$Obj_cancel:=New object:C1471(\
+							$cancel:=New object:C1471(\
 								"action"; "page_views"; \
-								"tab"; $Obj_in.audit.errors[0].tab; \
-								"table"; $Obj_in.audit.errors[0].table)
+								"tab"; $IN.audit.errors[0].tab; \
+								"table"; $IN.audit.errors[0].table)
 							
 							//________________________________________
-						: ($Obj_in.audit.errors[0].type="icon")
+						: ($IN.audit.errors[0].type="icon")
 							
-							$Txt_additional:="doYouWantToFixYourProjectByUsingTheDefaultIcons"
+							$additional:="doYouWantToFixYourProjectByUsingTheDefaultIcons"
 							
-							$Obj_cancel:=New object:C1471(\
+							$cancel:=New object:C1471(\
 								"action"; "page_properties"; \
-								"panel"; $Obj_in.audit.errors[0].panel; \
-								"table"; $Obj_in.audit.errors[0].table; \
-								"field"; Num:C11($Obj_in.audit.errors[0].field))
+								"panel"; $IN.audit.errors[0].panel; \
+								"table"; $IN.audit.errors[0].table; \
+								"field"; Num:C11($IN.audit.errors[0].field))
 							
 							//________________________________________
-						: ($Obj_in.audit.errors[0].type="formatter")
+						: ($IN.audit.errors[0].type="formatter")
 							
-							$Txt_additional:="doYouWantToFixYourProjectByUsingTheDefaultFormatter"
+							$additional:="doYouWantToFixYourProjectByUsingTheDefaultFormatter"
 							
-							$Obj_cancel:=New object:C1471(\
+							$cancel:=New object:C1471(\
 								"action"; "page_properties"; \
-								"panel"; $Obj_in.audit.errors[0].panel; \
-								"table"; $Obj_in.audit.errors[0].table; \
-								"field"; Num:C11($Obj_in.audit.errors[0].field))
+								"panel"; $IN.audit.errors[0].panel; \
+								"table"; $IN.audit.errors[0].table; \
+								"field"; Num:C11($IN.audit.errors[0].field))
 							
 							//________________________________________
-						: ($Obj_in.audit.errors[0].type="filter")
+						: ($IN.audit.errors[0].type="filter")
 							
-							$Txt_additional:="wouldYouLikeToRemoveTheFilterToFixYourProject"
+							$additional:="wouldYouLikeToRemoveTheFilterToFixYourProject"
 							
-							$Obj_cancel:=New object:C1471(\
+							$cancel:=New object:C1471(\
 								"action"; "page_data"; \
-								"panel"; $Obj_in.audit.errors[0].panel; \
-								"table"; $Obj_in.audit.errors[0].table)
+								"panel"; $IN.audit.errors[0].panel; \
+								"table"; $IN.audit.errors[0].table)
 							
 							//________________________________________
 						Else 
 							
-							ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+$Obj_in.audit.errors[0].type)
+							ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+$IN.audit.errors[0].type)
 							
 							//________________________________________
 					End case 
 					
 				Else 
 					
-					$Col_buffer:=$Obj_in.audit.errors.extract("type").distinct()
+					$c:=$IN.audit.errors.extract("type").distinct()
 					
-					If ($Col_buffer.length=1)
+					If ($c.length=1)
 						
 						Case of 
 								
 								//________________________________________
-							: ($Col_buffer[0]="template")
+							: ($c[0]="template")
 								
-								$Txt_title:="someTemplatesAreMissingOrInvalid"
-								$Txt_additional:="doYouWantToFixYourProjectByUsingTheDefaultTemplates"
+								$title:="someTemplatesAreMissingOrInvalid"
+								$additional:="doYouWantToFixYourProjectByUsingTheDefaultTemplates"
 								
-								$Obj_cancel:=New object:C1471(\
+								$cancel:=New object:C1471(\
 									"action"; "page_views"; \
-									"tab"; $Obj_in.audit.errors[0].tab; \
-									"table"; $Obj_in.audit.errors[0].table)
+									"tab"; $IN.audit.errors[0].tab; \
+									"table"; $IN.audit.errors[0].table)
 								
 								//________________________________________
-							: ($Col_buffer[0]="icon")
+							: ($c[0]="icon")
 								
-								$Txt_title:="someIconsAreMissingOrInvalid"
-								$Txt_additional:="doYouWantToFixYourProjectByUsingTheDefaultIcons"
+								$title:="someIconsAreMissingOrInvalid"
+								$additional:="doYouWantToFixYourProjectByUsingTheDefaultIcons"
 								
-								$Obj_cancel:=New object:C1471(\
+								$cancel:=New object:C1471(\
 									"action"; "page_properties"; \
-									"panel"; $Obj_in.audit.errors[0].panel; \
-									"table"; $Obj_in.audit.errors[0].table; \
-									"field"; Num:C11($Obj_in.audit.errors[0].field))
+									"panel"; $IN.audit.errors[0].panel; \
+									"table"; $IN.audit.errors[0].table; \
+									"field"; Num:C11($IN.audit.errors[0].field))
 								
 								//________________________________________
-							: ($Col_buffer[0]="formatter")
+							: ($c[0]="formatter")
 								
-								$Txt_title:="someFormattersAreMissingOrInvalid"
-								$Txt_additional:="doYouWantToFixYourProjectByUsingTheDefaultFormatter"
+								$title:="someFormattersAreMissingOrInvalid"
+								$additional:="doYouWantToFixYourProjectByUsingTheDefaultFormatter"
 								
-								$Obj_cancel:=New object:C1471(\
+								$cancel:=New object:C1471(\
 									"action"; "page_properties"; \
-									"panel"; $Obj_in.audit.errors[0].panel; \
-									"table"; $Obj_in.audit.errors[0].table; \
-									"field"; Num:C11($Obj_in.audit.errors[0].field))
+									"panel"; $IN.audit.errors[0].panel; \
+									"table"; $IN.audit.errors[0].table; \
+									"field"; Num:C11($IN.audit.errors[0].field))
 								
 								//________________________________________
-							: ($Obj_in.audit.errors[0].type="filter")
+							: ($IN.audit.errors[0].type="filter")
 								
-								$Txt_title:="someFiltersAreNotValidatedOrInvalid"
-								$Txt_additional:="wouldYouLikeToRemoveTheInvalidOrNotValidatedFilters"
+								$title:="someFiltersAreNotValidatedOrInvalid"
+								$additional:="wouldYouLikeToRemoveTheInvalidOrNotValidatedFilters"
 								
-								$Obj_cancel:=New object:C1471(\
+								$cancel:=New object:C1471(\
 									"action"; "page_data"; \
-									"panel"; $Obj_in.audit.errors[0].panel; \
-									"table"; $Obj_in.audit.errors[0].table)
+									"panel"; $IN.audit.errors[0].panel; \
+									"table"; $IN.audit.errors[0].table)
 								
 								//________________________________________
 							Else 
 								
-								ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+$Col_buffer[0].type)
+								ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+$c[0].type)
 								
 								//________________________________________
 						End case 
 						
 					Else 
 						
-						$Txt_title:="someResourcesAreMissingOrInvalid"
-						$Txt_additional:="doYouWantToFixYourProjectByUsingTheDefaultResources"
+						$title:="someResourcesAreMissingOrInvalid"
+						$additional:="doYouWantToFixYourProjectByUsingTheDefaultResources"
 						
 						// Load the firts one
 						Case of 
 								
 								//________________________________________
-							: ($Obj_in.audit.errors[0].type="template")
+							: ($IN.audit.errors[0].type="template")
 								
-								$Obj_cancel:=New object:C1471(\
+								$cancel:=New object:C1471(\
 									"action"; "page_views"; \
-									"tab"; $Obj_in.audit.errors[0].tab; \
-									"table"; $Obj_in.audit.errors[0].table)
+									"tab"; $IN.audit.errors[0].tab; \
+									"table"; $IN.audit.errors[0].table)
 								
 								//________________________________________
-							: ($Obj_in.audit.errors[0].type="icon")
+							: ($IN.audit.errors[0].type="icon")
 								
-								$Obj_cancel:=New object:C1471(\
+								$cancel:=New object:C1471(\
 									"action"; "page_properties"; \
-									"panel"; $Obj_in.audit.errors[0].panel; \
-									"table"; $Obj_in.audit.errors[0].table; \
-									"field"; Num:C11($Obj_in.audit.errors[0].field))
+									"panel"; $IN.audit.errors[0].panel; \
+									"table"; $IN.audit.errors[0].table; \
+									"field"; Num:C11($IN.audit.errors[0].field))
 								
 								//________________________________________
-							: ($Col_buffer[0]="formatter")
+							: ($c[0]="formatter")
 								
-								$Obj_cancel:=New object:C1471(\
+								$cancel:=New object:C1471(\
 									"action"; "page_properties"; \
-									"panel"; $Obj_in.audit.errors[0].panel; \
-									"table"; $Obj_in.audit.errors[0].table; \
-									"field"; Num:C11($Obj_in.audit.errors[0].field))
+									"panel"; $IN.audit.errors[0].panel; \
+									"table"; $IN.audit.errors[0].table; \
+									"field"; Num:C11($IN.audit.errors[0].field))
 								
 								//________________________________________
-							: ($Col_buffer[0]="filter")
+							: ($c[0]="filter")
 								
-								$Obj_cancel:=New object:C1471(\
+								$cancel:=New object:C1471(\
 									"action"; "page_data"; \
-									"panel"; $Obj_in.audit.errors[0].panel; \
-									"table"; $Obj_in.audit.errors[0].table)
+									"panel"; $IN.audit.errors[0].panel; \
+									"table"; $IN.audit.errors[0].table)
 								
 								//________________________________________
 							Else 
 								
-								ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+$Obj_in.audit.errors[0].type)
+								ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+$IN.audit.errors[0].type)
 								
 								//________________________________________
 						End case 
@@ -350,21 +321,21 @@ Case of
 				End if 
 				
 				// user dialog
-				POST_FORM_MESSAGE(New object:C1471("target"; $Obj_form.window; \
+				POST_FORM_MESSAGE(New object:C1471("target"; $form.window; \
 					"action"; "show"; \
 					"type"; "confirm"; \
-					"title"; $Txt_title; \
-					"additional"; $Txt_additional; \
+					"title"; $title; \
+					"additional"; $additional; \
 					"ok"; "update"; \
 					"cancel"; "reviewing"; \
-					"cancelAction"; JSON Stringify:C1217($Obj_cancel); \
-					"okAction"; JSON Stringify:C1217($Obj_ok)))
+					"cancelAction"; JSON Stringify:C1217($cancel); \
+					"okAction"; JSON Stringify:C1217($ok)))
 				
 			End if 
 		End if 
 		
 		//=========================================================
-	: ($Obj_in.action="projectFixErrors")
+	: ($IN.action="projectFixErrors")
 		
 		If (Form:C1466.$dialog.projectInvalid#Null:C1517)
 			
@@ -374,31 +345,31 @@ Case of
 			
 		End if 
 		
-		$Obj_update:=project_Fix($Obj_in)
+		$update:=project_Fix($IN)
 		
-		If (Num:C11($Obj_form.window)>0)
+		If (Num:C11($form.window)>0)
 			
 			// Store the status
 			If (Form:C1466.status=Null:C1517)
 				
 				Form:C1466.status:=New object:C1471(\
-					"project"; $Obj_update.success)
+					"project"; $update.success)
 				
 			Else 
 				
-				Form:C1466.status.project:=$Obj_update.success
+				Form:C1466.status.project:=$update.success
 				
 			End if 
 			
 			// Update UI [
-			CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "tableProperties")
-			CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "fieldProperties")
-			CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "refreshViews")
-			CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "update_data")
+			CALL FORM:C1391($form.window; "editor_CALLBACK"; "tableProperties")
+			CALL FORM:C1391($form.window; "editor_CALLBACK"; "fieldProperties")
+			CALL FORM:C1391($form.window; "editor_CALLBACK"; "refreshViews")
+			CALL FORM:C1391($form.window; "editor_CALLBACK"; "update_data")
 			//]
 			
 			// Relaunch audit
-			CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "projectAudit")
+			CALL FORM:C1391($form.window; "editor_CALLBACK"; "projectAudit")
 			
 			// Save project
 			ui.saveProject()
@@ -406,14 +377,14 @@ Case of
 		Else 
 			
 			// Test purpose - Return result
-			$0:=$Obj_update
+			$0:=$update
 			
 		End if 
 		//=========================================================
 		
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$IN.action+"\"")
 		
 		//=========================================================
 End case 

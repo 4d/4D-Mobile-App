@@ -17,7 +17,7 @@ $ƒ:=panel_Definition
 ASSERT:C1129(Not:C34(Shift down:C543))
 
 // ----------------------------------------------------
-If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
+If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
 	$e:=panel_Form(On Load:K2:1; On Timer:K2:25)
 	
@@ -42,8 +42,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 			
 			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
 			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)
-			
-			OBJECT SET VISIBLE:C603(*; "certificatePicker"; Bool:C1537(Form:C1466.server.pushNotification))
+			$ƒ.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
 			
 			$ƒ.certificate.touch()
 			$ƒ.checkAuthenticationMethod()
@@ -51,7 +50,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== Form method
 			//______________________________________________
 	End case 
 	
-Else   // <== Widgets method
+Else   // <== WIDGETS METHOD
 	
 	$e:=$ƒ.event
 	

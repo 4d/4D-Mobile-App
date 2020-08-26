@@ -12,7 +12,6 @@
 		"onTimer",
 		"onBoundVariableChange"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -72,6 +71,7 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"events": [
+						"onLoad",
 						"onLosingFocus"
 					],
 					"method": "PROJECT_OBJECT_HANDLER"
@@ -88,7 +88,6 @@
 					"height": 16,
 					"stroke": "#39525E",
 					"text": "Title",
-					"fontTheme": "normal",
 					"fontSize": 16
 				},
 				"UI": {
@@ -184,5 +183,6 @@
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"method": "PROJECT_Handler"
 }

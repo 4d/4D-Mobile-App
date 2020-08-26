@@ -81,6 +81,7 @@
 			"_o_env_System_path",
 			"_o_panel_Form_common",
 			"_o_panel_SET_CONSTRAINTS",
+			"_o_project_UI_DEFINITION",
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
 			"_o_SERVER_OBJECTS_HANDLER",
@@ -89,6 +90,7 @@
 			"_o_structure",
 			"_o_templates",
 			"_o_tempoFieldType",
+			"_o_unzip",
 			"TEMPO_1",
 			"TURN_AROUND_Field_name"
 		],
@@ -199,7 +201,6 @@
 			"project_SAVE",
 			"project_SKIN",
 			"project_UI_ALERT",
-			"project_UI_DEFINITION",
 			"project_Upgrade"
 		],
 		"forms": [
@@ -580,7 +581,6 @@
 			"storyboardClass"
 		],
 		"methods": [
-			"_o_unzip",
 			"asset",
 			"capabilities",
 			"certificate",
@@ -664,6 +664,7 @@
 			"panel_Form",
 			"panel_GOTO",
 			"panel_INIT",
+			"panel_LAST",
 			"panel_Objects",
 			"panel_OPEN",
 			"panel_REFRESH",
