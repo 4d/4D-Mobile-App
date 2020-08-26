@@ -13,17 +13,15 @@ Class constructor
 	
 Function run
 	C_OBJECT:C1216($0; $Obj_out)
-	$Obj_out:=New object:C1471("success"; True:C214)
 	
 	// ----------------------------------------------------
 	// Manage template files according to type
 	// ----------------------------------------------------
 	
 	// mainly copy file or skip the template to use a children one
-	C_OBJECT:C1216($Obj_result)
-	$Obj_result:=This:C1470.doRun()
-	If ($Obj_result#Null:C1517)
-		ob_error_combine($Obj_out; $Obj_result)
+	$Obj_out:=This:C1470.doRun()
+	If ($Obj_out=Null:C1517)
+		$Obj_out:=New object:C1471("success"; True:C214)
 	End if 
 	
 	// ----------------------------------------------------
@@ -56,7 +54,7 @@ Function run
 	// ----------------------------------------------------
 	// Template has children template?
 	// ----------------------------------------------------
-	
+	C_OBJECT:C1216($Obj_result)
 	$Obj_result:=This:C1470.manageChildren()
 	ob_deepMerge($Obj_out; $Obj_result)  // TODO test success status, is it computed later?
 	
