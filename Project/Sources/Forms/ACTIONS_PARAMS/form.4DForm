@@ -56,7 +56,7 @@
 					"sizingX": "grow",
 					"stroke": "#808080",
 					"textAlign": "left",
-					"text": ":xliff:deleteActionDoesNotUseParameter"
+					"text": ":xliff:thisActionDoesNotUseParameter"
 				}
 			}
 		},
