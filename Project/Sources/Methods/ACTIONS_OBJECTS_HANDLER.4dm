@@ -4,9 +4,6 @@
 // ID[33A96C70CD6F4A70A0910ADDDEDD6491]
 // Created 11-03-2019 by Vincent de Lachaux
 // ----------------------------------------------------
-// Description:
-//
-// ----------------------------------------------------
 // Declarations
 var $0 : Integer
 
@@ -470,6 +467,7 @@ Case of
 							$menu.scope:="currentRecord"
 							$menu.label:=Get localized string:C991("share...")
 							READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Send-basic.svg").platformPath; $icon)
+							$menu.description:=""
 							
 							//……………………………………………………………………
 					End case 
@@ -518,7 +516,7 @@ Case of
 							//……………………………………………………………………
 						: ($menu.share)
 							
-							// <NOTHING MORE TO DO>
+							$o.description:=$menu.description
 							
 							//……………………………………………………………………
 						Else 

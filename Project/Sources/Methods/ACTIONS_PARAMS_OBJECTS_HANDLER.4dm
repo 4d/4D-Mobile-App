@@ -4,52 +4,50 @@
 // ID[35D81378EF494DE38795C6B491E4CAA8]
 // Created 11-4-2019 by Vincent de Lachaux
 // ----------------------------------------------------
-// Description:
-//
-// ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($0)
-
-C_BLOB:C604($x)
-C_DATE:C307($d)
-C_LONGINT:C283($i; $l)
-C_TEXT:C284($t; $tt; $Txt_format; $Txt_label; $Txt_type)
-C_OBJECT:C1216($o; $Obj_context; $Obj_current; $Obj_form; $Obj_formats; $Obj_menu)
-C_OBJECT:C1216($Obj_table; $Obj_widget)
-C_COLLECTION:C1488($c; $cc)
+var $0 : Integer
 
 If (False:C215)
 	C_LONGINT:C283(ACTIONS_PARAMS_OBJECTS_HANDLER; $0)
 End if 
 
+var $format; $label; $t; $tt; $type : Text
+var $date : Date
+var $i; $index : Integer
+var $x : Blob
+var $current; $form; $formats; $ƒ; $o; $table; $widget : Object
+var $c; $cc : Collection
+
+var $menu : cs:C1710.menu
+
 // ----------------------------------------------------
 // Initialisations
-$Obj_form:=ACTIONS_PARAMS_Handler(New object:C1471(\
+$form:=ACTIONS_PARAMS_Handler(New object:C1471(\
 "action"; "init"))
 
-$Obj_context:=$Obj_form.$
+$ƒ:=$form.$
 
 // ----------------------------------------------------
 Case of 
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.parameters.name)  // Parameters listbox
+	: ($form.form.current=$form.parameters.name)  // Parameters listbox
 		
-		$Obj_widget:=$Obj_form.parameters
+		$widget:=$form.parameters
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Getting Focus:K2:7)\
-				 | ($Obj_form.form.eventCode=On Losing Focus:K2:8)
+			: ($form.form.eventCode=On Getting Focus:K2:7)\
+				 | ($form.form.eventCode=On Losing Focus:K2:8)
 				
-				$Obj_context.listUI()
+				$ƒ.listUI()
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Selection Change:K2:29)
+			: ($form.form.eventCode=On Selection Change:K2:29)
 				
-				$Obj_context.$current:=$Obj_context.parameter
-				$Obj_form.form.refresh()
+				$ƒ.$current:=$ƒ.parameter
+				$form.form.refresh()
 				
 				//______________________________________________________
 			: (editor_Locked)
@@ -57,20 +55,20 @@ Case of
 				$0:=-1
 				
 				//______________________________________________________
-			: ($Obj_widget.row=0)
+			: ($widget.row=0)
 				
 				// <NOTHING MORE TO DO>
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
+			: ($form.form.eventCode=On Mouse Leave:K2:34)
 				
-				$Obj_form.dropCursor.hide()
+				$form.dropCursor.hide()
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Begin Drag Over:K2:44)
+			: ($form.form.eventCode=On Begin Drag Over:K2:44)
 				
 				$o:=New object:C1471(\
-					"src"; $Obj_context.index)
+					"src"; $ƒ.index)
 				
 				// Put into the container
 				VARIABLE TO BLOB:C532($o; $x)
@@ -78,7 +76,7 @@ Case of
 				SET BLOB SIZE:C606($x; 0)
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Drag Over:K2:13)  // Manage drag & drop cursor
+			: ($form.form.eventCode=On Drag Over:K2:13)  // Manage drag & drop cursor
 				
 				// Get the pastboard
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter"; $x)
@@ -92,19 +90,19 @@ Case of
 					
 					If ($o.tgt=-1)  // After the last line
 						
-						If ($o.src#$Obj_widget.rowsNumber())  // Not if the source was the last line
+						If ($o.src#$widget.rowsNumber())  // Not if the source was the last line
 							
-							$o:=$Obj_widget.cellCoordinates(1; $Obj_widget.rowsNumber()).cellBox
+							$o:=$widget.cellCoordinates(1; $widget.rowsNumber()).cellBox
 							$o.top:=$o.bottom
-							$o.right:=$Obj_widget.coordinates.right
+							$o.right:=$widget.coordinates.right
 							
-							$Obj_form.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
-							$Obj_form.dropCursor.show()
+							$form.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
+							$form.dropCursor.show()
 							
 						Else 
 							
 							// Reject drop
-							$Obj_form.dropCursor.hide()
+							$form.dropCursor.hide()
 							$0:=-1
 							
 						End if 
@@ -114,17 +112,17 @@ Case of
 						If ($o.src#$o.tgt)\
 							 & ($o.tgt#($o.src+1))  // Not the same or the next one
 							
-							$o:=$Obj_widget.cellCoordinates(1; $o.tgt).cellBox
+							$o:=$widget.cellCoordinates(1; $o.tgt).cellBox
 							$o.bottom:=$o.top
-							$o.right:=$Obj_widget.coordinates.right
+							$o.right:=$widget.coordinates.right
 							
-							$Obj_form.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
-							$Obj_form.dropCursor.show()
+							$form.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
+							$form.dropCursor.show()
 							
 						Else 
 							
 							// Reject drop
-							$Obj_form.dropCursor.hide()
+							$form.dropCursor.hide()
 							$0:=-1
 							
 						End if 
@@ -133,13 +131,13 @@ Case of
 				Else 
 					
 					// Reject drop
-					$Obj_form.dropCursor.hide()
+					$form.dropCursor.hide()
 					$0:=-1
 					
 				End if 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Drop:K2:12)
+			: ($form.form.eventCode=On Drop:K2:12)
 				
 				// Get the pastboard
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter"; $x)
@@ -155,125 +153,125 @@ Case of
 				
 				If ($o.src#$o.tgt)
 					
-					$Obj_current:=$Obj_context.action.parameters[$o.src-1]
+					$current:=$ƒ.action.parameters[$o.src-1]
 					
 					If ($o.tgt=-1)  // After the last line
 						
-						$Obj_context.action.parameters.push($Obj_current)
-						$Obj_context.action.parameters.remove($o.src-1)
+						$ƒ.action.parameters.push($current)
+						$ƒ.action.parameters.remove($o.src-1)
 						
 					Else 
 						
-						$Obj_context.action.parameters.insert($o.tgt-1; $Obj_current)
+						$ƒ.action.parameters.insert($o.tgt-1; $current)
 						
 						If ($o.tgt<$o.src)
 							
-							$Obj_context.action.parameters.remove($o.src)
+							$ƒ.action.parameters.remove($o.src)
 							
 						Else 
 							
-							$Obj_context.action.parameters.remove($o.src-1)
+							$ƒ.action.parameters.remove($o.src-1)
 							
 						End if 
 					End if 
 				End if 
 				
-				$Obj_form.dropCursor.hide()
+				$form.dropCursor.hide()
 				
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($Obj_form.form.eventCode)+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($form.form.eventCode)+")")
 				
 				//______________________________________________________
 		End case 
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.format.name)  // Format choice
+	: ($form.form.current=$form.format.name)  // Format choice
 		
-		$Obj_menu:=cs:C1710.menu.new()
+		$menu:=cs:C1710.menu.new()
 		
-		$Obj_current:=$Obj_context.parameter  // Current parameter
-		$t:=String:C10($Obj_current.format)  // Current format
+		$current:=$ƒ.parameter  // Current parameter
+		$t:=String:C10($current.format)  // Current format
 		
-		$Obj_formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
+		$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
 		
-		If ($Obj_current.fieldNumber#Null:C1517)  // Action linked to a field
+		If ($current.fieldNumber#Null:C1517)  // Action linked to a field
 			
-			$Obj_menu.append(":xliff:byDefault"; "null"; $Obj_current.format=Null:C1517)
-			$Obj_menu.line()
+			$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517)
+			$menu.line()
 			
-			For each ($Txt_format; $Obj_formats[$Obj_current.type])
+			For each ($format; $formats[$current.type])
 				
-				$Obj_menu.append(":xliff:f_"+$Txt_format; $Txt_format; $t=$Txt_format)
+				$menu.append(":xliff:f_"+$format; $format; $t=$format)
 				
 			End for each 
 			
 		Else 
 			
-			For each ($Txt_type; $Obj_formats)
+			For each ($type; $formats)
 				
-				If ($Obj_formats[$Txt_type].length>0)
+				If ($formats[$type].length>0)
 					
 					$o:=cs:C1710.menu.new()
 					
-					$Txt_label:=Choose:C955($Txt_type="string"; "text"; $Txt_type)
+					$label:=Choose:C955($type="string"; "text"; $type)
 					
-					$o.append(":xliff:"+$Txt_label; $Txt_label)
+					$o.append(":xliff:"+$label; $label)
 					$o.line()
 					
-					For each ($Txt_format; $Obj_formats[$Txt_type])
+					For each ($format; $formats[$type])
 						
-						$o.append(":xliff:f_"+$Txt_format; $Txt_format; $t=$Txt_format)
+						$o.append(":xliff:f_"+$format; $format; $t=$format)
 						
 					End for each 
 					
-					$Obj_menu.append(":xliff:"+$Txt_label; $o)
+					$menu.append(":xliff:"+$label; $o)
 					
 				Else 
 					
-					$Obj_menu.append(":xliff:f_"+$Txt_type; $Txt_type; $t=$Txt_type)
+					$menu.append(":xliff:f_"+$type; $type; $t=$type)
 					
 				End if 
 			End for each 
 		End if 
 		
 		// Position according to the box
-		If ($Obj_menu.popup(""; $Obj_form.formatBorder.getCoordinates()).selected)
+		If ($menu.popup(""; $form.formatBorder.getCoordinates()).selected)
 			
-			If ($Obj_menu.choice="null")
+			If ($menu.choice="null")
 				
-				OB REMOVE:C1226($Obj_current; "format")
+				OB REMOVE:C1226($current; "format")
 				
 			Else 
 				
-				$Obj_current.format:=$Obj_menu.choice
+				$current.format:=$menu.choice
 				
-				If ($Obj_current.defaultField=Null:C1517)  // User parameter
+				If ($current.defaultField=Null:C1517)  // User parameter
 					
-					For each ($Txt_type; $Obj_formats) Until ($l#-1)
+					For each ($type; $formats) Until ($index#-1)
 						
-						$l:=$Obj_formats[$Txt_type].indexOf($Obj_current.format)
+						$index:=$formats[$type].indexOf($current.format)
 						
-						If ($l#-1)
+						If ($index#-1)
 							
-							$t:=Choose:C955($Txt_type="string"; "text"; $Txt_type)
+							$t:=Choose:C955($type="string"; "text"; $type)
 							
 						End if 
 					End for each 
 					
-					If ($l=-1)
+					If ($index=-1)
 						
-						$t:=$Obj_current.format
+						$t:=$current.format
 						
 					End if 
 					
-					If ($Obj_current.type#$t)  // The type is changed
+					If ($current.type#$t)  // The type is changed
 						
-						$Obj_current.type:=$t
-						OB REMOVE:C1226($Obj_current; "default")
+						$current.type:=$t
+						OB REMOVE:C1226($current; "default")
 						
-						If ($Obj_form.default.focused())
+						If ($form.default.focused())
 							
 							GOTO OBJECT:C206(*; "")
 							
@@ -282,57 +280,57 @@ Case of
 				End if 
 			End if 
 			
-			$Obj_form.form.refresh()
-			_o_project.save()
+			$form.form.refresh()
+			project.save()
 			
 		End if 
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.add.name)  // Add action button
+	: ($form.form.current=$form.add.name)  // Add action button
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Clicked:K2:4)  // Add a user parameter
+			: ($form.form.eventCode=On Clicked:K2:4)  // Add a user parameter
 				
-				$Obj_menu:=New object:C1471(\
+				$menu:=New object:C1471(\
 					"selected"; True:C214; \
 					"choice"; "new")
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Alternative Click:K2:36)  // Display
+			: ($form.form.eventCode=On Alternative Click:K2:36)  // Display
 				
-				$Obj_menu:=cs:C1710.menu.new()
-				$Obj_menu.append(":xliff:addParameter"; "new")
+				$menu:=cs:C1710.menu.new()
+				$menu.append(":xliff:addParameter"; "new")
 				
-				If ($Obj_context.action.tableNumber#Null:C1517)
+				If ($ƒ.action.tableNumber#Null:C1517)
 					
-					$Obj_table:=Form:C1466.dataModel[String:C10($Obj_context.action.tableNumber)]
+					$table:=Form:C1466.dataModel[String:C10($ƒ.action.tableNumber)]
 					
 					$c:=New collection:C1472
 					
-					If ($Obj_context.action.parameters=Null:C1517)
+					If ($ƒ.action.parameters=Null:C1517)
 						
-						For each ($t; $Obj_table)
+						For each ($t; $table)
 							
 							If (Storage:C1525.ƒ.isField($t))
 								
-								$Obj_table[$t].fieldNumber:=Num:C11($t)
-								$c.push($Obj_table[$t])
+								$table[$t].fieldNumber:=Num:C11($t)
+								$c.push($table[$t])
 								
 							End if 
 						End for each 
 						
 					Else 
 						
-						For each ($t; $Obj_table)
+						For each ($t; $table)
 							
 							If (Storage:C1525.ƒ.isField($t))
 								
-								If ($Obj_context.action.parameters.query("fieldNumber = :1"; Num:C11($t)).length=0)
+								If ($ƒ.action.parameters.query("fieldNumber = :1"; Num:C11($t)).length=0)
 									
-									$Obj_table[$t].fieldNumber:=Num:C11($t)
-									$c.push($Obj_table[$t])
+									$table[$t].fieldNumber:=Num:C11($t)
+									$c.push($table[$t])
 									
 								End if 
 							End if 
@@ -341,11 +339,11 @@ Case of
 					
 					If ($c.length>0)
 						
-						$Obj_menu.line()
+						$menu.line()
 						
 						For each ($o; $c)
 							
-							$Obj_menu.append($o.name; String:C10($o.fieldNumber))
+							$menu.append($o.name; String:C10($o.fieldNumber))
 							
 						End for each 
 					End if 
@@ -356,23 +354,23 @@ Case of
 					
 				End if 
 				
-				$Obj_menu.popup(""; $Obj_form.add.getCoordinates())
+				$menu.popup(""; $form.add.getCoordinates())
 				
 				//______________________________________________________
 		End case 
 		
-		If ($Obj_menu.selected)
+		If ($menu.selected)
 			
 			Case of 
 					
 					//______________________________________________________
-				: ($Obj_menu.choice="new")  // Add a user parameter
+				: ($menu.choice="new")  // Add a user parameter
 					
 					$tt:=Get localized string:C991("newParameter")
 					
-					If ($Obj_context.action.parameters#Null:C1517)
+					If ($ƒ.action.parameters#Null:C1517)
 						
-						If ($Obj_context.action.parameters.query("name=:1"; $tt).length=0)
+						If ($ƒ.action.parameters.query("name=:1"; $tt).length=0)
 							
 							$t:=$tt
 							
@@ -382,7 +380,7 @@ Case of
 								
 								$i:=$i+1
 								
-								$c:=$Obj_context.action.parameters.query("name=:1"; $tt+String:C10($i))
+								$c:=$ƒ.action.parameters.query("name=:1"; $tt+String:C10($i))
 								
 								If ($c.length=0)
 									
@@ -407,7 +405,7 @@ Case of
 					//______________________________________________________
 				Else   // Add a field
 					
-					$c:=$c.query("fieldNumber = :1"; Num:C11($Obj_menu.choice))
+					$c:=$c.query("fieldNumber = :1"; Num:C11($menu.choice))
 					
 					$o:=New object:C1471(\
 						"fieldNumber"; $c[0].fieldNumber; \
@@ -457,90 +455,90 @@ Case of
 					//______________________________________________________
 			End case 
 			
-			$Obj_context:=ob_createPath($Obj_context; "action.parameters"; Is collection:K8:32)
-			$Obj_context.action.parameters.push($o)
-			$Obj_form.parameters.focus()
-			$Obj_form.parameters.reveal($Obj_form.parameters.rowsNumber()+Num:C11($Obj_form.parameters.rowsNumber()=0))
+			$ƒ:=ob_createPath($ƒ; "action.parameters"; Is collection:K8:32)
+			$ƒ.action.parameters.push($o)
+			$form.parameters.focus()
+			$form.parameters.reveal($form.parameters.rowsNumber()+Num:C11($form.parameters.rowsNumber()=0))
 			
-			$Obj_form.form.refresh()
-			_o_project.save()
+			$form.form.refresh()
+			project.save()
 			
 		End if 
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.remove.name)  // Remove action button
+	: ($form.form.current=$form.remove.name)  // Remove action button
 		
-		$i:=$Obj_context.action.parameters.indexOf($Obj_context.parameter)
-		$Obj_context.action.parameters.remove($i)
+		$i:=$ƒ.action.parameters.indexOf($ƒ.parameter)
+		$ƒ.action.parameters.remove($i)
 		
 		$i:=$i+1  // Collection index to listbox index
 		
-		If ($i<=$Obj_form.parameters.rowsNumber())
+		If ($i<=$form.parameters.rowsNumber())
 			
-			$Obj_form.parameters.select($i)
+			$form.parameters.select($i)
 			
 		Else 
 			
-			$Obj_form.parameters.deselect()
+			$form.parameters.deselect()
 			
 		End if 
 		
-		$Obj_form.form.refresh()
-		_o_project.save()
+		$form.form.refresh()
+		project.save()
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.mandatory.name)  // Mandatory checkbox
+	: ($form.form.current=$form.mandatory.name)  // Mandatory checkbox
 		
-		If (($Obj_form.mandatory.pointer())->)  // Checked
+		If (($form.mandatory.pointer())->)  // Checked
 			
-			ob_createPath($Obj_context.parameter; "rules"; Is collection:K8:32)
+			ob_createPath($ƒ.parameter; "rules"; Is collection:K8:32)
 			
-			If ($Obj_context.parameter.rules.indexOf("mandatory")=-1)
+			If ($ƒ.parameter.rules.indexOf("mandatory")=-1)
 				
-				$Obj_context.parameter.rules.push("mandatory")
+				$ƒ.parameter.rules.push("mandatory")
 				
 			End if 
 			
 		Else 
 			
-			If ($Obj_context.parameter.rules#Null:C1517)
+			If ($ƒ.parameter.rules#Null:C1517)
 				
-				$l:=$Obj_context.parameter.rules.indexOf("mandatory")
+				$index:=$ƒ.parameter.rules.indexOf("mandatory")
 				
-				If ($l#-1)
+				If ($index#-1)
 					
-					$Obj_context.parameter.rules.remove($l)
+					$ƒ.parameter.rules.remove($index)
 					
 				End if 
 				
-				If ($Obj_context.parameter.rules.length=0)
+				If ($ƒ.parameter.rules.length=0)
 					
-					OB REMOVE:C1226($Obj_context.parameter; "rules")
+					OB REMOVE:C1226($ƒ.parameter; "rules")
 					
 				End if 
 			End if 
 		End if 
 		
-		_o_project.save()
+		project.save()
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.min.name)\
-		 | ($Obj_form.form.current=$Obj_form.max.name)  // Minimum & Maximum
+	: ($form.form.current=$form.min.name)\
+		 | ($form.form.current=$form.max.name)  // Minimum & Maximum
 		
-		$o:=Choose:C955($Obj_form.form.current=$Obj_form.min.name; $Obj_form.min; $Obj_form.max)
-		$t:=Choose:C955($Obj_form.form.current=$Obj_form.min.name; "min"; "max")
+		$o:=Choose:C955($form.form.current=$form.min.name; $form.min; $form.max)
+		$t:=Choose:C955($form.form.current=$form.min.name; "min"; "max")
 		
 		If (Length:C16($o.value())>0)
 			
-			If ($Obj_context.parameter.rules#Null:C1517)
+			If ($ƒ.parameter.rules#Null:C1517)
 				
-				For ($i; 0; $Obj_context.parameter.rules.length-1; 1)
+				For ($i; 0; $ƒ.parameter.rules.length-1; 1)
 					
-					If (Value type:C1509($Obj_context.parameter.rules[$i])=Is object:K8:27)
+					If (Value type:C1509($ƒ.parameter.rules[$i])=Is object:K8:27)
 						
-						If ($Obj_context.parameter.rules[$i][$t]#Null:C1517)
+						If ($ƒ.parameter.rules[$i][$t]#Null:C1517)
 							
-							$Obj_context.parameter.rules[$i][$t]:=Num:C11($o.value())
+							$ƒ.parameter.rules[$i][$t]:=Num:C11($o.value())
 							$i:=MAXLONG:K35:2-1
 							
 						End if 
@@ -549,55 +547,55 @@ Case of
 				
 				If ($i#MAXLONG:K35:2)
 					
-					$Obj_context.parameter.rules.push(New object:C1471(\
+					$ƒ.parameter.rules.push(New object:C1471(\
 						$t; Num:C11($o.value())))
 					
 				End if 
 				
 			Else 
 				
-				ob_createPath($Obj_context.parameter; "rules"; Is collection:K8:32)
-				$Obj_context.parameter.rules.push(New object:C1471(\
+				ob_createPath($ƒ.parameter; "rules"; Is collection:K8:32)
+				$ƒ.parameter.rules.push(New object:C1471(\
 					$t; Num:C11($o.value())))
 				
 			End if 
 			
 		Else 
 			
-			If ($Obj_context.parameter.rules#Null:C1517)
+			If ($ƒ.parameter.rules#Null:C1517)
 				
-				For ($i; 0; $Obj_context.parameter.rules.length-1; 1)
+				For ($i; 0; $ƒ.parameter.rules.length-1; 1)
 					
-					If (Value type:C1509($Obj_context.parameter.rules[$i])=Is object:K8:27)
+					If (Value type:C1509($ƒ.parameter.rules[$i])=Is object:K8:27)
 						
-						If ($Obj_context.parameter.rules[$i][$t]#Null:C1517)
+						If ($ƒ.parameter.rules[$i][$t]#Null:C1517)
 							
-							$Obj_context.parameter.rules.remove($i)
+							$ƒ.parameter.rules.remove($i)
 							$i:=MAXLONG:K35:2-1
 							
 						End if 
 					End if 
 				End for 
 				
-				If ($Obj_context.parameter.rules.length=0)
+				If ($ƒ.parameter.rules.length=0)
 					
-					OB REMOVE:C1226($Obj_context.parameter; "rules")
+					OB REMOVE:C1226($ƒ.parameter; "rules")
 					
 				End if 
 			End if 
 		End if 
 		
-		_o_project.save()
+		project.save()
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.default.name)  // Default value
+	: ($form.form.current=$form.default.name)  // Default value
 		
-		$o:=$Obj_context.parameter
+		$o:=$ƒ.parameter
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On After Edit:K2:43)
+			: ($form.form.eventCode=On After Edit:K2:43)
 				
 				If (Length:C16(Get edited text:C655)=0)
 					
@@ -606,9 +604,9 @@ Case of
 				End if 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Data Change:K2:15)
+			: ($form.form.eventCode=On Data Change:K2:15)
 				
-				$t:=$Obj_form.default.value()
+				$t:=$form.default.value()
 				
 				If (Length:C16(String:C10($t))>0)
 					
@@ -631,14 +629,14 @@ Case of
 								If (Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$"; $t; 1))
 									
 									// Use internal REST date format
-									$d:=Date:C102($t)
-									$o.default:=String:C10(Day of:C23($d); "00!")+String:C10(Month of:C24($d); "00!")+String:C10(Year of:C25($d); "0000")
+									$date:=Date:C102($t)
+									$o.default:=String:C10(Day of:C23($date); "00!")+String:C10(Month of:C24($date); "00!")+String:C10(Year of:C25($date); "0000")
 									
 								Else 
 									
 									BEEP:C151
 									OB REMOVE:C1226($o; "default")
-									$Obj_form.default.focus()
+									$form.default.focus()
 									
 								End if 
 							End if 
@@ -662,7 +660,7 @@ Case of
 										
 										BEEP:C151
 										OB REMOVE:C1226($o; "default")
-										$Obj_form.default.focus()
+										$form.default.focus()
 										
 									End if 
 								End if 
@@ -683,7 +681,7 @@ Case of
 										
 										BEEP:C151
 										OB REMOVE:C1226($o; "default")
-										$Obj_form.default.focus()
+										$form.default.focus()
 										
 									End if 
 								End if 
@@ -708,32 +706,35 @@ Case of
 					
 				End if 
 				
-				$Obj_form.form.refresh()
-				_o_project.save()
+				$form.form.refresh()
+				project.save()
 				
 				//______________________________________________________
 		End case 
 		
 		//==================================================
-	: ($Obj_form.linked.include($Obj_form.form.current))  // Linked widgets
+	: ($form.form.current=$form.description.name)  // Description associated to the link
 		
-		_o_project.save()
+		project.save()
+		
+		//==================================================
+	: ($form.linked.include($form.form.current))  // Linked widgets
+		
+		project.save()
 		
 		//==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown widget: \""+String:C10($Obj_form.form.current)+"\"")
+		ASSERT:C1129(False:C215; "Unknown widget: \""+String:C10($form.form.current)+"\"")
 		
 		//==================================================
 End case 
 
 If (feature.with(8858))
 	
-	_o_project.save()
+	project.save()
 	
 End if 
 
-// ----------------------------------------------------
-// Return
 // ----------------------------------------------------
 // End

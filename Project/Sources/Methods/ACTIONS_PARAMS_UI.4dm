@@ -4,25 +4,22 @@
 // ID[43429814D9324358882F88A14298D45D]
 // Created 11-4-2019 by Vincent de Lachaux
 // ----------------------------------------------------
-// Description:
-//
-// ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_TEXT:C284($1)
-C_OBJECT:C1216($2)
-
-C_BOOLEAN:C305($b)
-C_LONGINT:C283($l)
-C_TEXT:C284($t)
-C_OBJECT:C1216($form; $o; $Obj_action; $Obj_parameter; $rgx)
-C_COLLECTION:C1488($c)
+var $0 : Object
+var $1 : Text
+var $2 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(ACTIONS_PARAMS_UI; $0)
 	C_TEXT:C284(ACTIONS_PARAMS_UI; $1)
 	C_OBJECT:C1216(ACTIONS_PARAMS_UI; $2)
 End if 
+
+var $t : Text
+var $isFocused; $isMandatory; $withDefault : Boolean
+var $color : Integer
+var $action; $form; $o; $parameter; $rgx : Object
+var $c : Collection
 
 // ----------------------------------------------------
 Case of 
@@ -46,177 +43,194 @@ Case of
 			
 			$o.noAction.hide()
 			
-			$Obj_action:=This:C1470.action
-			$Obj_parameter:=This:C1470.parameter
+			$action:=This:C1470.action
+			$parameter:=This:C1470.parameter
 			
-			If ($Obj_action=Null:C1517)  // No action selected
+			ASSERT:C1129(Not:C34(Shift down:C543))
+			
+			If ($action=Null:C1517)  // No action selected
+				
+				FORM GOTO PAGE:C247(1; *)
 				
 				$o.noSelection.show()
 				$o.withSelection.hide()
 				
 			Else 
 				
-				If (New collection:C1472("suppression"; "share").indexOf($Obj_action.preset)#-1)
-					
-					$o.noSelection.hide()
-					$o.deleteAction.show()
-					
-				Else 
-					
-					$o.withSelection.show()
-					
-					If ($Obj_action.tableNumber=Null:C1517)  // No target table
+				Case of 
+						//______________________________________________________
+					: (String:C10($action.preset)="suppression")
 						
-						$o.noTable.show()
-						$o.properties.hide()
-						$o.remove.disable()
-						$o.add.disable()
+						FORM GOTO PAGE:C247(1; *)
 						
+						$o.noSelection.hide()
+						$o.deleteAction.show()
+						
+						//______________________________________________________
+					: (String:C10($action.preset)="share")
+						
+						FORM GOTO PAGE:C247(2; *)
+						
+						//______________________________________________________
 					Else 
 						
-						$o.add.enable()
+						FORM GOTO PAGE:C247(1; *)
 						
-						If ($Obj_parameter=Null:C1517)  // No current parameter
+						$o.withSelection.show()
+						
+						If ($action.tableNumber=Null:C1517)  // No target table
 							
+							$o.noTable.show()
 							$o.properties.hide()
 							$o.remove.disable()
+							$o.add.disable()
 							
 						Else 
 							
-							If ($Obj_action.parameters.length>0)
-								
-								$o.remove.enable()
-								$o.properties.show()
-								
-								$o.variable.setVisible($Obj_parameter.fieldNumber=Null:C1517)  // User parameter
-								$o.field.setVisible($Obj_parameter.fieldNumber#Null:C1517)  // Linked to a field
-								
-								$o.number.setVisible(String:C10($Obj_parameter.type)="number")
-								
-								$o.mandatory.setValue(ACTIONS_PARAMS_UI("mandatory").value)
-								$o.min.setValue(ACTIONS_PARAMS_UI("min").value)
-								$o.max.setValue(ACTIONS_PARAMS_UI("max").value)
-								
-								$o.placeholder.setVisible($Obj_parameter.type#"bool")
-								
-								If ($Obj_parameter.type#"image")
-									
-									$b:=Choose:C955(String:C10($Obj_action.preset)#"edition"; True:C214; ($Obj_parameter.fieldNumber=Null:C1517))
-									
-								End if 
-								
-								If ($b)
-									
-									$o.withDefault.show()
-									
-									$o.default.setValue(String:C10($Obj_parameter.default))
-									
-									Case of 
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($Obj_parameter.type="number")
-											
-											Case of 
-													
-													//________________________________________
-												: (String:C10($Obj_parameter.format)="integer")
-													
-													$o.default.setFilter(Is integer:K8:5)
-													
-													//________________________________________
-												: (String:C10($Obj_parameter.format)="spellOut")
-													
-													$o.default.setFilter(Is integer:K8:5)
-													
-													//________________________________________
-												Else 
-													
-													$o.default.setFilter(Is real:K8:4)
-													
-													//________________________________________
-											End case 
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($Obj_parameter.type="date")
-											
-											// Should accept "today", "yesterday", "tomorrow"
-											GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
-											$o.default.setFilter("&\"0-9;"+$t+";-;/;"+str("todayyesterdaytomorrow").distinctLetters(";")+"\"")
-											
-											If (Position:C15(String:C10($o.default.value()); "todayyesterdaytomorrow")=0)
-												
-												$rgx:=Rgx_match(New object:C1471(\
-													"pattern"; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$"; \
-													"target"; $o.default.value()))
-												
-												If ($rgx.success)
-													
-													$o.default.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.match[3].data); Num:C11($rgx.match[2].data); Num:C11($rgx.match[1].data))))
-													
-												End if 
-											End if 
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($Obj_parameter.type="time")
-											
-											$o.default.setFilter(Is time:K8:8)
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($Obj_parameter.type="string")
-											
-											$o.default.setFilter(Is text:K8:3)
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($Obj_parameter.type="bool")
-											
-											If (String:C10($Obj_parameter.format)="check")
-												
-												If ($Obj_parameter.default#Null:C1517)
-													
-													If (Value type:C1509($Obj_parameter.default)=Is boolean:K8:9)
-														
-														$o.default.setValue(Choose:C955($Obj_parameter.default; "checked"; "unchecked"))
-														
-													End if 
-												End if 
-												
-												// Should accept "checked", "unchecked", 0 or 1
-												$o.default.setFilter("&\"0;1;"+str("unchecked").distinctLetters(";")+"\"")
-												
-											Else 
-												
-												If ($Obj_parameter.default#Null:C1517)
-													
-													If (Value type:C1509($Obj_parameter.default)=Is boolean:K8:9)
-														
-														$o.default.setValue(Choose:C955($Obj_parameter.default; "true"; "false"))
-														
-													End if 
-												End if 
-												
-												// Should accept "true", "false", 0 or 1
-												$o.default.setFilter("&\"0;1;"+str("truefalse").distinctLetters(";")+"\"")
-												
-											End if 
-											
-											//…………………………………………………………………………………………………………………………………………
-									End case 
-									
-								Else 
-									
-									$o.withDefault.hide()
-									
-								End if 
-								
-							Else 
+							$o.add.enable()
+							
+							If ($parameter=Null:C1517)  // No current parameter
 								
 								$o.properties.hide()
 								$o.remove.disable()
 								
+							Else 
+								
+								If ($action.parameters.length>0)
+									
+									$o.remove.enable()
+									$o.properties.show()
+									
+									$o.variable.setVisible($parameter.fieldNumber=Null:C1517)  // User parameter
+									$o.field.setVisible($parameter.fieldNumber#Null:C1517)  // Linked to a field
+									
+									$o.number.setVisible(String:C10($parameter.type)="number")
+									
+									$o.mandatory.setValue(ACTIONS_PARAMS_UI("mandatory").value)
+									$o.min.setValue(ACTIONS_PARAMS_UI("min").value)
+									$o.max.setValue(ACTIONS_PARAMS_UI("max").value)
+									
+									$o.placeholder.setVisible($parameter.type#"bool")
+									
+									If ($parameter.type#"image")
+										
+										$withDefault:=Choose:C955(String:C10($action.preset)#"edition"; True:C214; ($parameter.fieldNumber=Null:C1517))
+										
+									End if 
+									
+									If ($withDefault)
+										
+										$o.withDefault.show()
+										
+										$o.default.setValue(String:C10($parameter.default))
+										
+										Case of 
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($parameter.type="number")
+												
+												Case of 
+														
+														//________________________________________
+													: (String:C10($parameter.format)="integer")
+														
+														$o.default.setFilter(Is integer:K8:5)
+														
+														//________________________________________
+													: (String:C10($parameter.format)="spellOut")
+														
+														$o.default.setFilter(Is integer:K8:5)
+														
+														//________________________________________
+													Else 
+														
+														$o.default.setFilter(Is real:K8:4)
+														
+														//________________________________________
+												End case 
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($parameter.type="date")
+												
+												// Should accept "today", "yesterday", "tomorrow"
+												GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
+												$o.default.setFilter("&\"0-9;"+$t+";-;/;"+str("todayyesterdaytomorrow").distinctLetters(";")+"\"")
+												
+												If (Position:C15(String:C10($o.default.value()); "todayyesterdaytomorrow")=0)
+													
+													$rgx:=Rgx_match(New object:C1471(\
+														"pattern"; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$"; \
+														"target"; $o.default.value()))
+													
+													If ($rgx.success)
+														
+														$o.default.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.match[3].data); Num:C11($rgx.match[2].data); Num:C11($rgx.match[1].data))))
+														
+													End if 
+												End if 
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($parameter.type="time")
+												
+												$o.default.setFilter(Is time:K8:8)
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($parameter.type="string")
+												
+												$o.default.setFilter(Is text:K8:3)
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($parameter.type="bool")
+												
+												If (String:C10($parameter.format)="check")
+													
+													If ($parameter.default#Null:C1517)
+														
+														If (Value type:C1509($parameter.default)=Is boolean:K8:9)
+															
+															$o.default.setValue(Choose:C955($parameter.default; "checked"; "unchecked"))
+															
+														End if 
+													End if 
+													
+													// Should accept "checked", "unchecked", 0 or 1
+													$o.default.setFilter("&\"0;1;"+str("unchecked").distinctLetters(";")+"\"")
+													
+												Else 
+													
+													If ($parameter.default#Null:C1517)
+														
+														If (Value type:C1509($parameter.default)=Is boolean:K8:9)
+															
+															$o.default.setValue(Choose:C955($parameter.default; "true"; "false"))
+															
+														End if 
+													End if 
+													
+													// Should accept "true", "false", 0 or 1
+													$o.default.setFilter("&\"0;1;"+str("truefalse").distinctLetters(";")+"\"")
+													
+												End if 
+												
+												//…………………………………………………………………………………………………………………………………………
+										End case 
+										
+									Else 
+										
+										$o.withDefault.hide()
+										
+									End if 
+									
+								Else 
+									
+									$o.properties.hide()
+									$o.remove.disable()
+									
+								End if 
 							End if 
 						End if 
-					End if 
-				End if 
+						//______________________________________________________
+				End case 
 			End if 
 		End if 
 		
@@ -224,11 +238,11 @@ Case of
 	: ($1="min")\
 		 | ($1="max")  // Return the min or max rule value as string
 		
-		$Obj_parameter:=This:C1470.parameter
+		$parameter:=This:C1470.parameter
 		
-		If ($Obj_parameter.rules#Null:C1517)
+		If ($parameter.rules#Null:C1517)
 			
-			$c:=$Obj_parameter.rules.extract($1)
+			$c:=$parameter.rules.extract($1)
 			
 			If ($c.length>0)
 				
@@ -243,31 +257,31 @@ Case of
 		//______________________________________________________
 	: ($1="mandatory")  // Return the mandatory rule value as boolean
 		
-		$Obj_parameter:=This:C1470.parameter
+		$parameter:=This:C1470.parameter
 		
-		If ($Obj_parameter.rules#Null:C1517)
+		If ($parameter.rules#Null:C1517)
 			
-			$b:=($Obj_parameter.rules.countValues("mandatory")>0)
+			$isMandatory:=($parameter.rules.countValues("mandatory")>0)
 			
 		End if 
 		
 		$o:=New object:C1471(\
-			"value"; $b)
+			"value"; $isMandatory)
 		
 		//______________________________________________________
 	: ($1="comment")  // Comment associated with the parameter linked to a field
 		
-		$Obj_action:=This:C1470.action
-		$Obj_parameter:=This:C1470.parameter
+		$action:=This:C1470.action
+		$parameter:=This:C1470.parameter
 		
-		If (Num:C11($Obj_parameter.fieldNumber)#0)  // One parameter slected
+		If (Num:C11($parameter.fieldNumber)#0)  // One parameter slected
 			
-			If (Num:C11($Obj_action.tableNumber)#0)
+			If (Num:C11($action.tableNumber)#0)
 				
 				$o:=New object:C1471(\
 					"value"; Replace string:C233(Get localized string:C991("thisParameterIsLinkedToTheField"); \
 					"{field}"; \
-					String:C10(Form:C1466.dataModel[String:C10($Obj_action.tableNumber)][String:C10($Obj_parameter.fieldNumber)].name))\
+					String:C10(Form:C1466.dataModel[String:C10($action.tableNumber)][String:C10($parameter.fieldNumber)].name))\
 					)
 				
 			End if 
@@ -282,17 +296,17 @@ Case of
 		//______________________________________________________
 	: ($1="formatLabel")  // display format according to format or type
 		
-		$Obj_parameter:=This:C1470.parameter
+		$parameter:=This:C1470.parameter
 		
-		If (Length:C16(String:C10($Obj_parameter.format))=0)
+		If (Length:C16(String:C10($parameter.format))=0)
 			
 			// Take type
-			$t:=Choose:C955($Obj_parameter.type="string"; "text"; String:C10($Obj_parameter.type))
+			$t:=Choose:C955($parameter.type="string"; "text"; String:C10($parameter.type))
 			
 		Else 
 			
 			// Prefer format
-			$t:=Choose:C955($Obj_parameter.format#$Obj_parameter.type; "f_"+String:C10($Obj_parameter.format); String:C10($Obj_parameter.type))
+			$t:=Choose:C955($parameter.format#$parameter.type; "f_"+String:C10($parameter.format); String:C10($parameter.type))
 			
 		End if 
 		
@@ -329,16 +343,16 @@ Case of
 			$form:=ACTIONS_PARAMS_Handler(New object:C1471(\
 				"action"; "init"))
 			
-			$b:=($form.form.focusedWidget=$form.parameters.name)
+			$isFocused:=($form.form.focusedWidget=$form.parameters.name)
 			
 			If (ob_equal(This:C1470.parameter; $2))  // Selected row
 				
-				$o.color:=Choose:C955($b; ui.backgroundSelectedColor; ui.alternateSelectedColor)
+				$o.color:=Choose:C955($isFocused; ui.backgroundSelectedColor; ui.alternateSelectedColor)
 				
 			Else 
 				
-				$l:=Choose:C955($b; ui.highlightColor; ui.highlightColorNoFocus)
-				$o.color:=Choose:C955($b; $l; 0x00FFFFFF)
+				$color:=Choose:C955($isFocused; ui.highlightColor; ui.highlightColorNoFocus)
+				$o.color:=Choose:C955($isFocused; $color; 0x00FFFFFF)
 				
 			End if 
 		End if 

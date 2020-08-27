@@ -574,10 +574,57 @@
 				"parameters.remove",
 				"00_field_comment"
 			]
+		},
+		{
+			"objects": {
+				"description.label": {
+					"type": "text",
+					"text": ":xliff:description",
+					"top": 6,
+					"left": 16,
+					"width": 190,
+					"height": 16,
+					"visibility": "visible"
+				},
+				"description.border": {
+					"type": "rectangle",
+					"top": 28,
+					"left": 16,
+					"width": 920,
+					"height": 33,
+					"visibility": "visible",
+					"stroke": "#C4C4C4"
+				},
+				"01_description": {
+					"type": "input",
+					"top": 36,
+					"left": 23,
+					"width": 903,
+					"height": 17,
+					"visibility": "visible",
+					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.action.description",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"hideFocusRing": true,
+					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"dragging": "none",
+					"events": [
+						"onDataChange"
+					]
+				}
+			}
 		}
 	],
 	"$4d": {
 		"version": "1",
 		"kind": "form"
+	},
+	"geometryStamp": 15,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
 	}
 }
