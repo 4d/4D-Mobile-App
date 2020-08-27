@@ -137,9 +137,7 @@ Case of
 		
 		If (Value type:C1509($Obj_in.value)=Is collection:K8:32)
 			
-			$Obj_out.value:=$Obj_in.value.reduce("col_formula"; New object:C1471(\
-				); "$1.accumulator:=ob_deepMerge ($1.accumulator;"+\
-				"$1.value)")
+			$Obj_out.value:=$Obj_in.value.reduce("col_formula"; New object:C1471; "$1.accumulator:=ob_deepMerge ($1.accumulator;$1.value)")
 			$Obj_out.success:=True:C214
 			
 		End if 
@@ -381,19 +379,19 @@ Case of
 					"MKDirectionsApplicationSupportedModes"; $Obj_in.mapModes))
 				
 				//collection(\
-										"MKDirectionsModeBike";\
-										"MKDirectionsModeBus";\
-										"MKDirectionsModeCar";\
-										"MKDirectionsModeFerry";\
-										"MKDirectionsModeOther";\
-										"MKDirectionsModePedestrian";\
-										"MKDirectionsModePlane";\
-										"MKDirectionsModeRideShare";\
-										"MKDirectionsModeStreetCar";\
-										"MKDirectionsModeSubway";\
-										"MKDirectionsModeTaxi";\
-										"MKDirectionsModeTrain"\
-										)
+															"MKDirectionsModeBike";\
+															"MKDirectionsModeBus";\
+															"MKDirectionsModeCar";\
+															"MKDirectionsModeFerry";\
+															"MKDirectionsModeOther";\
+															"MKDirectionsModePedestrian";\
+															"MKDirectionsModePlane";\
+															"MKDirectionsModeRideShare";\
+															"MKDirectionsModeStreetCar";\
+															"MKDirectionsModeSubway";\
+															"MKDirectionsModeTaxi";\
+															"MKDirectionsModeTrain"\
+															)
 				
 			End if 
 		End if 

@@ -113,7 +113,7 @@ feature.delivered(107526)  // Push Notifications
 _____________*/
 
 feature.unstable(117601)  // Relation management optimisation
-feature.unstable("templateClass")  // Relation management optimisation using to generate project
+//feature.unstable("templateClass")  // Relation management optimisation using to generate project
 feature.unstable(117618)  // Deep Linking
 
 /* _____________
