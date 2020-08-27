@@ -2,7 +2,7 @@
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 173,
+	"height": 236,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -25,9 +25,9 @@
 			"objects": {
 				"associatedDomain.border": {
 					"type": "rectangle",
-					"top": 120,
-					"left": 466,
-					"width": 471,
+					"top": 183,
+					"left": 38,
+					"width": 320,
 					"height": 33,
 					"stroke": "#C4C4C4"
 				},
@@ -35,10 +35,10 @@
 					"type": "rectangle",
 					"top": 120,
 					"left": 38,
-					"width": 322,
+					"width": 320,
 					"height": 33,
 					"stroke": "#C4C4C4",
-					"right": 360
+					"right": 358
 				},
 				"01_login": {
 					"type": "checkbox",
@@ -148,7 +148,7 @@
 					"type": "input",
 					"left": 45,
 					"top": 128,
-					"width": 307,
+					"width": 305,
 					"height": 17,
 					"dataSource": "Form:C1466.deepLinking.urlScheme",
 					"placeholder": "myappscheme://",
@@ -158,13 +158,13 @@
 					],
 					"hideFocusRing": true,
 					"borderStyle": "none",
-					"right": 352
+					"right": 350
 				},
 				"associatedDomain.label": {
 					"type": "text",
 					"text": ":xliff:universalLinks",
-					"top": 98,
-					"left": 466,
+					"top": 161,
+					"left": 38,
 					"width": 118,
 					"height": 16,
 					"stroke": "#808080",
@@ -172,9 +172,9 @@
 				},
 				"04_associatedDomain.input": {
 					"type": "input",
-					"left": 473,
-					"top": 128,
-					"width": 452,
+					"left": 45,
+					"top": 191,
+					"width": 305,
 					"height": 17,
 					"dataSource": "Form:C1466.deepLinking.associatedDomain",
 					"method": "FEATURES",
@@ -201,7 +201,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 322,
+	"geometryStamp": 361,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

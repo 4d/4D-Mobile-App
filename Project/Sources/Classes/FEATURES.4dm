@@ -9,10 +9,13 @@ Class constructor
 	If (OB Is empty:C1297($o)) | Shift down:C543
 		
 		This:C1470.window:=Current form window:C827
+		
 		This:C1470.loginRequired:=cs:C1710.button.new("01_login")
 		This:C1470.authenticationLabel:=cs:C1710.static.new("authentication.label")
 		This:C1470.authenticationButton:=cs:C1710.button.new("authentication")
-		This:C1470.authenticationGroup:=cs:C1710.group.new(This:C1470.authenticationLabel; This:C1470.authenticationButton)
+		This:C1470.authenticationGroup:=cs:C1710.group.new(\
+			This:C1470.authenticationLabel; \
+			This:C1470.authenticationButton)
 		
 		This:C1470.pushNotification:=cs:C1710.button.new("02_pushNotification")
 		This:C1470.certificate:=cs:C1710.widget.new("certificatePicker"; Formula:C1597(Form:C1466.$FEATURES.certificate.picker))
@@ -26,13 +29,15 @@ Class constructor
 			"placeHolder"; Get localized string:C991("selectACertificate")+"…"))
 		
 		This:C1470.certificateLabel:=cs:C1710.static.new("certificateLabel")
-		This:C1470.certificateGroup:=cs:C1710.group.new(This:C1470.certificateLabel; This:C1470.certificate)
+		This:C1470.certificateGroup:=cs:C1710.group.new(\
+			This:C1470.certificateLabel; \
+			This:C1470.certificate)
 		
 		This:C1470.deepLinking:=cs:C1710.button.new("03_deepLinking")
 		This:C1470.deepLinkingUrlSchemeLabel:=cs:C1710.static.new("urlScheme.label")
-		This:C1470.deepLinkingUrlScheme:=cs:C1710.input.new("03_urlScheme.input")  //; "Form.deepLinking.urlScheme")
+		This:C1470.deepLinkingUrlScheme:=cs:C1710.input.new("03_urlScheme.input")
 		This:C1470.deepLinkingAssociatedDomainLabel:=cs:C1710.static.new("associatedDomain.label")
-		This:C1470.deepLinkingAssociatedDomain:=cs:C1710.input.new("04_associatedDomain.input")  //; "Form.deepLinking.associatedDomain")
+		This:C1470.deepLinkingAssociatedDomain:=cs:C1710.input.new("04_associatedDomain.input")
 		This:C1470.deepLinkingGroup:=cs:C1710.group.new(\
 			This:C1470.deepLinkingUrlSchemeLabel; \
 			cs:C1710.static.new("urlScheme.border"); \

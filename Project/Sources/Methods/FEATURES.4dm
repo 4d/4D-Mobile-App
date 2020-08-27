@@ -14,8 +14,6 @@ var $e; $ƒ : Object
 // Initialisations
 $ƒ:=panel_Definition
 
-ASSERT:C1129(Not:C34(Shift down:C543))
-
 // ----------------------------------------------------
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
