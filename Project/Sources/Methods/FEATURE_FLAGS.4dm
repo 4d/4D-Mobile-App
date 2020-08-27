@@ -148,7 +148,11 @@ If ($preferences.features#Null:C1517)
 		
 		If (Value type:C1509($o.enabled)=Is boolean:K8:9)
 			
-			feature["_"+String:C10($o.id)]:=Bool:C1537($o.enabled)
+			If (Value type:C1509($o.id)=Is text:K8:3)
+				feature[$o.id]:=Bool:C1537($o.enabled)
+			Else 
+				feature["_"+String:C10($o.id)]:=Bool:C1537($o.enabled)
+			End if 
 			
 		Else 
 			
