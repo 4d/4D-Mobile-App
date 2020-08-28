@@ -6,6 +6,7 @@
 * @param parameters: object with key "recording"
 */
 Class constructor
+	C_OBJECT:C1216($1)
 	This:C1470.parameters:=$1
 	This:C1470.restoreParameters:=New object:C1471()
 	If (This:C1470.parameters#Null:C1517)
