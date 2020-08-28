@@ -101,17 +101,22 @@ Function makeTheChoice
 	C_OBJECT:C1216($o)
 	$o:=OB Copy:C1225($Obj_in)
 	
-	$Obj_out:=ob_parseDocument($t+"manifest.json")
+	$Obj_out:=New object:C1471("success"; True:C214)
+	$Obj_out.template:=ob_parseDocument($t+"manifest.json")
 	
-	If ($Obj_out.success)
+	If ($Obj_out.template.success)
 		
-		$o.template:=$Obj_out.value  // TODO RELATION COMPARE code with previous  $Obj_out.template.value
+		$o.template:=$Obj_out.template.value  // TODO RELATION COMPARE code with previous  $Obj_out.template.value
 		$o.template.source:=$t
 		$o.template.parent:=$Obj_template.parent  // or $Obj_template?
 		$o.projfile:=$Obj_in.projfile  // do not want a copy (done by ob copy to be able to change it)
 		
-		$Obj_out:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
+		$Obj_out.template:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
+		ob_error_combine($Obj_out; $Obj_out.template)
 		
+	Else 
+		
+		ob_error_combine($Obj_out; $Obj_out.template)
 	End if 
 	
 	$0:=$Obj_out
