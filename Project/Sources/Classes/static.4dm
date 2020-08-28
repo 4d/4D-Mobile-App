@@ -139,8 +139,12 @@ Function setTitle
 	
 	var $t : Text
 	
-	$t:=Get localized string:C991($1)
-	$t:=Choose:C955(Length:C16($t)>0; $t; $1)  // Revert if no localization
+	If (Count parameters:C259>=1)
+		
+		$t:=Get localized string:C991($1)
+		$t:=Choose:C955(Length:C16($t)>0; $t; $1)  // Revert if no localization
+		
+	End if 
 	
 	OBJECT SET TITLE:C194(*; This:C1470.name; $t)
 	

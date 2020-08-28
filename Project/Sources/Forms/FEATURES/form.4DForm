@@ -11,7 +11,9 @@
 		"onLoad",
 		"onClick",
 		"onUnload",
-		"onTimer"
+		"onTimer",
+		"onMouseEnter",
+		"onMouseLeave"
 	],
 	"method": "FEATURES",
 	"pageFormat": {
@@ -184,6 +186,18 @@
 					"placeholder": ":xliff:universalLinksPlaceholder",
 					"hideFocusRing": true,
 					"borderStyle": "none"
+				},
+				"urlScheme.alert": {
+					"type": "button",
+					"top": 126,
+					"left": 14,
+					"width": 20,
+					"height": 20,
+					"style": "custom",
+					"events": [
+						"onMouseEnter",
+						"onMouseLeave"
+					]
 				}
 			},
 			"entryOrder": [
@@ -193,7 +207,8 @@
 				"certificatePicker",
 				"03_deepLinking",
 				"03_urlScheme.input",
-				"04_associatedDomain.input"
+				"04_associatedDomain.input",
+				"urlScheme.alert"
 			]
 		}
 	],
@@ -201,7 +216,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 361,
+	"geometryStamp": 367,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

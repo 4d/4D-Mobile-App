@@ -1,6 +1,6 @@
 //%attributes = {}
-C_TEXT:C284($t)
-C_COLLECTION:C1488($c)
+var $t : Text
+var $c : Collection
 
 TRY
 
@@ -15,7 +15,6 @@ $c:=$c.map("col_formula"; Formula:C1597($1.result:=Convert path system to POSIX:
 ASSERT:C1129($c[0]=Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16)))
 ASSERT:C1129($c[1]=Convert path system to POSIX:C1106(Get 4D folder:C485(Database folder:K5:14)))
 
-
 // Col_notNull
 $c:=New collection:C1472(Null:C1517; 1; Null:C1517; 2)
 $c[10]:=10
@@ -25,7 +24,6 @@ ASSERT:C1129($c[0]=1)
 ASSERT:C1129($c[1]=2)
 ASSERT:C1129($c[2]=10)
 
-//
 $c:=New collection:C1472(Null:C1517; 1; Null:C1517; 2)
 $c[10]:=10
 $c:=$c.filter("col_formula"; "$1.result:=($1.value#Null:C1517)")

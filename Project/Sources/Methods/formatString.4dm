@@ -56,9 +56,6 @@ Case of
 		// Remove space, other accent, special characters
 		$lError:=Rgx_SubstituteText("[^-+\\.a-zA-Z0-9]"; "-"; ->$t_formated; 0)
 		
-		// All in lowercase
-		$t_formated:=Lowercase:C14($t_formated)
-		
 		//______________________________________________________
 	: ($t_format="bundleApp")
 		

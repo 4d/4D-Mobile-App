@@ -533,6 +533,7 @@
 			"HDI_WIDGET_CLASSES"
 		],
 		"classes": [
+			"attention",
 			"button",
 			"group",
 			"input",

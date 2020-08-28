@@ -45,6 +45,12 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			$ƒ.certificate.touch()
 			$ƒ.checkAuthenticationMethod()
 			
+			If (Form:C1466.deepLinking.enabled)
+				
+				$ƒ.validateScheme()
+				
+			End if 
+			
 			//______________________________________________
 	End case 
 	
@@ -98,20 +104,17 @@ Else   // <== WIDGETS METHOD
 				
 				$ƒ.deepLinkingGroup.show()
 				
-				If (Length:C16(String:C10(Form:C1466.deepLinking.urlScheme))=0)
-					
-					Form:C1466.deepLinking.urlScheme:=formatString("urlScheme"; Form:C1466.product.name)+"://"
-					
-				End if 
+				// Create scheme from application name if not defined
+				$ƒ.initScheme()
 				
 				If (Form:C1466.deepLinking.associatedDomain=Null:C1517)
 					
 					Form:C1466.deepLinking.associatedDomain:=""
-					$ƒ.deepLinkingAssociatedDomain.setHelpTip()
+					$ƒ.deepLink.setHelpTip()
 					
 				Else 
 					
-					$ƒ.deepLinkingAssociatedDomain.setHelpTip("universalLinksTips")
+					$ƒ.deepLink.setHelpTip("universalLinksTips")
 					
 				End if 
 				
@@ -124,26 +127,25 @@ Else   // <== WIDGETS METHOD
 			project.save()
 			
 			//==============================================
-		: ($ƒ.deepLinkingUrlScheme.catch($e; On Data Change:K2:15))
+		: ($ƒ.deepScheme.catch($e; On Data Change:K2:15))
 			
-			If (Match regex:C1019("(?mi-s)^([^:/?#]+)(?:://)?$"; Form:C1466.deepLinking.urlScheme; 1))
+			If ($ƒ.validateScheme())
 				
-				Form:C1466.deepLinking.urlScheme:=formatString("urlScheme"; Replace string:C233(Form:C1466.deepLinking.urlScheme; "://"; ""))+"://"
 				project.save()
-				
-			Else 
-				
-				BEEP:C151  //#TO_DO - display an alert
-				$ƒ.deepLinkingUrlScheme.focus()
 				
 			End if 
 			
 			//==============================================
-		: ($ƒ.deepLinkingAssociatedDomain.catch($e; On Data Change:K2:15))
+		: ($ƒ.deepSchemeAlert.catch())
+			
+			$ƒ.deepSchemeAlert.method($e)
+			
+			//==============================================
+		: ($ƒ.deepLink.catch($e; On Data Change:K2:15))
 			
 			project.save()
 			
-			$ƒ.deepLinkingAssociatedDomain.setHelpTip(Choose:C955(Length:C16(Form:C1466.deepLinking.associatedDomain)>0; "universalLinksTips"; ""))
+			$ƒ.deepLink.setHelpTip(Choose:C955(Length:C16(Form:C1466.deepLinking.associatedDomain)>0; "universalLinksTips"; ""))
 			
 			//==============================================
 	End case 
