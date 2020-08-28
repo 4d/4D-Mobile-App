@@ -522,6 +522,11 @@ If ($Obj_in.create)
 		// Others (maybe move to templates, main management
 		// ----------------------------------------------------
 		
+		C_OBJECT:C1216($debugLog)
+		$debugLog:=cs:C1710.debugLog.new(SHARED.debugLog)
+		
+		$debugLog.start()
+		
 		// Generate action asset
 		$Obj_out.actionAssets:=actions("assets"; New object:C1471(\
 			"project"; $Obj_project; \
@@ -583,6 +588,8 @@ If ($Obj_in.create)
 			"computed"; $Obj_out.computedCapabilities; \
 			"templates"; $Obj_out.template)))
 		ob_error_combine($Obj_out; $Obj_out.capabilities)
+		
+		$debugLog.stop()
 		
 		// ----------------------------------------------------
 		// DEV FEATURES
@@ -1107,6 +1114,7 @@ POST_FORM_MESSAGE(New object:C1471(\
 ob_writeToDocument($Obj_out; $Obj_cache.file("lastBuild.json").platformPath; True:C214)
 
 $Obj_out.param:=$Obj_in
+
 
 // ----------------------------------------------------
 If ($Obj_in.caller#Null:C1517)

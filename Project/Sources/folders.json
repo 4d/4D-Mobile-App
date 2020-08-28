@@ -429,6 +429,7 @@
 			"Tests"
 		],
 		"classes": [
+			"debugLog",
 			"doc",
 			"menu",
 			"svg",
