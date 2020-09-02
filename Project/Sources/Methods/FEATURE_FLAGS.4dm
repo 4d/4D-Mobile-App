@@ -111,14 +111,18 @@ feature.delivered(107526)  // Push Notifications
 /* _____________
 18R5
 _____________*/
-
 feature.unstable(117601)  // Relation management optimisation
-//feature.unstable("templateClass")  // Relation management optimisation using to generate project
 feature.unstable(117618)  // Deep Linking
 
 /* _____________
 WIP
 _____________*/
+
+// Share action with descrition
+feature.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
+
+// Relation management optimisation using to generate project
+//feature.unstable("templateClass") 
 
 // Enable widget actions
 feature.wip("withWidgetActions")
@@ -135,7 +139,7 @@ feature.wip(114338)
 // Allow to drop a multivalued field next to another existing dropped multivalued fields to have two fields next to each other
 feature.alias("droppingNext"; 114338)
 
-// Work with Source class to test tge data source
+// Work with Source class to test the data source
 feature.wip("sourceClass")
 
 /* -------------------------------------
@@ -149,9 +153,13 @@ If ($preferences.features#Null:C1517)
 		If (Value type:C1509($o.enabled)=Is boolean:K8:9)
 			
 			If (Value type:C1509($o.id)=Is text:K8:3)
+				
 				feature[$o.id]:=Bool:C1537($o.enabled)
+				
 			Else 
+				
 				feature["_"+String:C10($o.id)]:=Bool:C1537($o.enabled)
+				
 			End if 
 			
 		Else 

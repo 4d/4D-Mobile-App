@@ -387,11 +387,10 @@ Case of
 					APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field"; $x)
 					SET BLOB SIZE:C606($x; 0)
 					
-					// Create the drag icon
-					$p:=svg\
-						.embedPicture(ui.fieldIcons[$o.fieldType]; 2; 2)\
-						.textArea($o.path+" "; 20; 2)\
-						.setAttribute("font-size"; 13)\
+					// Set the drag icon
+					$p:=cs:C1710.svg.new()\
+						.embedPicture(ui.fieldIcons[$o.fieldType]).position(2; 2)\
+						.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 						.getPicture()
 					
 					SET DRAG ICON:C1272($p)
@@ -568,10 +567,9 @@ Case of
 						SET BLOB SIZE:C606($x; 0)
 						
 						// Create the drag icon
-						$p:=svg\
-							.embedPicture(ui.fieldIcons[$o.fieldType]; 2; 2)\
-							.textArea($o.path+" "; 20; 2)\
-							.setAttribute("font-size"; 13)\
+						$p:=cs:C1710.svg.new()\
+							.embedPicture(ui.fieldIcons[$o.fieldType]).position(2; 2)\
+							.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 							.getPicture()
 						
 						SET DRAG ICON:C1272($p)

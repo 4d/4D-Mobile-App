@@ -69,7 +69,16 @@ Case of
 						//______________________________________________________
 					: (String:C10($action.preset)="share")
 						
-						FORM GOTO PAGE:C247(2; *)
+						If (feature.with("sharedActionWithDescription"))
+							
+							FORM GOTO PAGE:C247(2; *)
+							
+						Else 
+							
+							$o.noSelection.hide()
+							$o.deleteAction.show()
+							
+						End if 
 						
 						//______________________________________________________
 					Else 

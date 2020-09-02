@@ -404,7 +404,20 @@ Function dimensions
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
+Function fontSize
+	var $0 : Object
+	var $1 : Integer
 	
+	var $node : Text
+	
+	$node:=This:C1470.__target()
+	
+	DOM SET XML ATTRIBUTE:C866($node; \
+		"font-size"; $1)
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
 	// ⚠️ Overrides the method of the inherited class
 Function setAttribute
 	var $0 : Object
@@ -425,7 +438,6 @@ Function setAttribute
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-	
 	// ⚠️ Overrides the method of the inherited class
 Function setAttributes
 	var $0 : Object
@@ -898,6 +910,21 @@ Function __target
 				: ($1="latest")
 					
 					$0:=Choose:C955(This:C1470.latest#Null:C1517; This:C1470.latest; This:C1470.root)
+					
+					//_______________________________
+				: ($1="parent")\
+					 | ($1="append")
+					
+					If (This:C1470.latest=Null:C1517)
+						
+						$0:=This:C1470.root
+						
+					Else 
+						
+						// Get the parent
+						$0:=This:C1470.parent(This:C1470.latest)
+						
+					End if 
 					
 					//_______________________________
 				Else 
