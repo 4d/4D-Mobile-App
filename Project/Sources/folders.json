@@ -51,11 +51,15 @@
 			"_catalog",
 			"01_LASTBUILD",
 			"c_formula",
+			"Compiler_",
+			"dev_test_data",
 			"importData",
 			"importRelationRandomly",
 			"INIT_AUTO_COMPLETION",
 			"ON_STARTUP",
 			"populateCommands",
+			"removeAllEntities",
+			"removeRelations",
 			"test_codeRewriting"
 		],
 		"forms": [
@@ -71,6 +75,9 @@
 			"ITUNE",
 			"LAUNCHSCREEN",
 			"NO_PUBLISHED_TABLES"
+		],
+		"classes": [
+			"DevTestData"
 		]
 	},
 	"_o_OBSOLETES": {

@@ -1,0 +1,241 @@
+
+
+Class constructor
+	var $1 : Object
+	If (Count parameters:C259>0)
+		This:C1470.ds:=$1
+	Else 
+		This:C1470.ds:=ds:C1482
+	End if 
+	
+Function run
+	// clean all
+	removeAllEntities(This:C1470.ds)
+	This:C1470.notify()
+	
+	// create one records by data class
+	This:C1470.newEntityOfEach()
+	
+	// clean again
+	removeAllEntities(This:C1470.ds)
+	This:C1470.notify()
+	
+	// create one record of each and attach it
+	C_OBJECT:C1216($entitiesByDataClass)
+	$entitiesByDataClass:=This:C1470.newEntityOfEach()
+	This:C1470.attach($entitiesByDataClass)
+	This:C1470.notify()
+	
+	// remove relations
+	This:C1470.unattach($entitiesByDataClass)
+	This:C1470.notify()
+	
+	// clean again
+	//removeAllEntities(This.ds)
+	//This.notify()
+	
+Function newEntityOfEach
+	var $dataClassName : Text
+	var $0; $result : Object
+	$result:=New object:C1471()
+	For each ($dataClassName; This:C1470.ds)
+		$result[$dataClassName]:=This:C1470.newEntity(This:C1470.ds[$dataClassName])
+	End for each 
+	$0:=$result
+	
+Function attach
+	var $entitiesByDataClass; $1 : Object
+	$entitiesByDataClass:=$1
+	
+	var $entities : Variant  // Collection or Selection -> iterable of object
+	$entities:=$entitiesByDataClass[OB Keys:C1719($entitiesByDataClass)[0]]
+	
+	var $classStore : 4D:C1709.DataClass
+	$classStore:=This:C1470.ds[OB Keys:C1719($entitiesByDataClass)[0]]
+	var $entity : 4D:C1709.Entity
+	For each ($entity; $entities)
+		var $key : Text
+		For each ($key; $classStore)
+			
+			Case of 
+				: ($classStore[$key].kind="relatedEntities")
+					
+/*$related:=ds[$classStore[$key].relatedDataClass].all()
+					
+$one:=Random%$related.length
+$two:=Random%$related.length
+					
+$related:=$related.slice(Min($two;$one);Max($two;$one))
+					
+$entity[$key]:=$related*/
+					
+				: ($classStore[$key].kind="relatedEntity")
+					
+					C_OBJECT:C1216($related)
+					$related:=ds:C1482[$classStore[$key].relatedDataClass].all()
+					C_LONGINT:C283($one)
+					$one:=Random:C100%$related.length
+					$entity[$key]:=$related[$one]
+					
+				Else 
+					// ignore
+			End case 
+			
+		End for each 
+		
+		$entity.save()
+		
+	End for each 
+	
+	
+Function unattach
+	var $entitiesByDataClass; $1 : Object
+	$entitiesByDataClass:=$1
+	
+	var $entities : Variant  // Collection or Selection -> iterable of object
+	$entities:=$entitiesByDataClass[OB Keys:C1719($entitiesByDataClass)[0]]
+	
+	var $classStore : 4D:C1709.DataClass
+	$classStore:=This:C1470.ds[OB Keys:C1719($entitiesByDataClass)[0]]
+	var $entity : 4D:C1709.Entity
+	For each ($entity; $entities)
+		var $key : Text
+		For each ($key; $classStore)
+			
+			Case of 
+				: ($classStore[$key].kind="relatedEntities")
+					
+				: ($classStore[$key].kind="relatedEntity")
+					
+					$entity[$key]:=Null:C1517
+					
+				Else 
+					// ignore
+			End case 
+			
+		End for each 
+		
+		$entity.save()
+		
+	End for each 
+	
+Function newEntity
+	var $0; $entities : Collection
+	var $1; $classStore : Object
+	$classStore:=$1
+	$entities:=New collection:C1472()
+	
+	var $max; $maxStr; $i; $j : Integer
+	$max:=1
+	$maxStr:=1
+	
+	var $primaryKey; $fieldName : Text
+	$primaryKey:=$classStore.getInfo().primaryKey
+	
+	var $pictureURL : Text
+	$pictureURL:="https://picsum.photos/1000"
+	For ($i; 1; $max)
+		var $entity : 4D:C1709.Entity
+		$entity:=$classStore.new()
+		For each ($fieldName; $classStore)
+			If ($fieldName=$primaryKey)
+				// skip
+			Else 
+				var $field : Object
+				$field:=$classStore[$fieldName]
+				// TODO manage primary key
+				Case of 
+					: ($field.type="string")
+						$entity[$fieldName]:=""
+						For ($j; 1; $maxStr)
+							$entity[$fieldName]:=$entity[$fieldName]+Generate UUID:C1066
+						End for 
+					: ($field.type="number")
+						$entity[$fieldName]:=Random:C100
+					: ($field.type="bool")
+						$entity[$fieldName]:=(Random:C100%2)>0
+					: ($field.type="date")
+						$entity[$fieldName]:=Current date:C33  // add random
+					: ($field.type="object")
+						$entity[$fieldName]:=New object:C1471("num"; Random:C100; "str"; Generate UUID:C1066)
+					: ($field.type="image")
+						var $hs : Integer
+						var $picture : Picture
+						var $pictureBlob : Blob
+						$hs:=HTTP Get:C1157($pictureURL; $pictureBlob)
+						BLOB TO PICTURE:C682($pictureBlob; $picture)
+						$entity[$fieldName]:=$picture
+					Else 
+						
+				End case 
+			End if 
+		End for each 
+		var $status : Object
+		$status:=$entity.save()  // check or not?
+		ASSERT:C1129($status.success; "Failed to save an entity:"+JSON Stringify:C1217($status))
+		$entities.push($entity)
+	End for 
+	$0:=$entities
+	
+Function stat
+	var $dataClassName : Text
+	var $entity : 4D:C1709.Entity
+	
+	var $0; $stat : Object
+	$stat:=New object:C1471()
+	
+	var $all : Object
+	
+	For each ($dataClassName; This:C1470.ds)
+		$all:=This:C1470.ds[$dataClassName].all()
+		
+		$stat[$dataClassName]:=New object:C1471("count"; $all.length)
+		
+		$stat[$dataClassName].relation:=This:C1470.statRelation(This:C1470.ds[$dataClassName]; $all)
+		
+	End for each 
+	
+	$0:=$stat
+	
+Function statRelation
+	var $1; $dataClass : 4D:C1709.DataClass  // 
+	var $2; $entities : Object  //selection
+	$dataClass:=$1
+	$entities:=$2
+	var $entity : 4D:C1709.Entity
+	var $0 : Object
+	$0:=New object:C1471()
+	
+	var $key : Text
+	For each ($key; $dataClass)
+		Case of 
+			: ($dataClass[$key].kind="relatedEntities")
+				// reverve stat?
+				
+			: ($dataClass[$key].kind="relatedEntity")
+				$0[$key]:=0
+				// $0[$key]:=$entities.count($key) // not working with relation? why? not user friendly
+				For each ($entity; $entities)
+					If ($entity[$key]#Null:C1517)
+						$0[$key]:=$0[$key]+1
+					End if 
+				End for each 
+				
+			Else 
+				// ignore
+		End case 
+		
+	End for each 
+	
+Function notify
+	If (This:C1470.callback#Null:C1517)
+		This:C1470.callback.call(This:C1470.stat())
+	Else 
+		This:C1470._callback(This:C1470.stat())
+	End if 
+	
+Function _callback
+	var $1 : Object  //stat
+	
+	// here we could launch task, study mobile app etc.., or pass a "callback" function to this class
+	
