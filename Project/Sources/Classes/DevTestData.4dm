@@ -330,10 +330,10 @@ Function _callback
 			End if 
 			
 			var $key : Text
-			For each ($key; $stat[$dataClassName]["relation"])
+			For each ($key; $mobileStat.relation)  // $stat[$dataClassName]["relation"]), we use mobile json because maybe all fields are not in mobile database
 				
 				If ($mobileStat.relation[$key]#$stat[$dataClassName].relation[$key])
-					// TRACE
+					TRACE:C157
 					// ASSERT (False; "Not correct number of records relation for dataclass "+$dataClassName+" and key "+$key)
 				End if 
 				
@@ -359,14 +359,22 @@ Function mobileStatRelation
 				// reverve stat?
 				
 			: ($dataClass[$key].kind="relatedEntity")
+				
+				var $keyExist : Boolean
+				$keyExist:=False:C215
 				$0[$key]:=0
 				var $entity : Object
 				For each ($entity; $2)
 					If ($entity[$key]#Null:C1517)
 						$0[$key]:=$0[$key]+1
 					End if 
+					If (Not:C34(Undefined:C82($entity[$key])))  // null must be defined (we want here a method ob has key
+						$keyExist:=True:C214
+					End if 
 				End for each 
-				
+				If (Not:C34($keyExist))
+					OB REMOVE:C1226($0; $key)
+				End if 
 			Else 
 				// ignore
 		End case 
@@ -384,6 +392,7 @@ End while */
 	While (This:C1470.waiting)
 		IDLE:C311  //or there is better ?
 	End while 
+	// XXX maybe also add a time max, and stop current process if too much time
 	
 Function xCallback
 	var $1 : Object
