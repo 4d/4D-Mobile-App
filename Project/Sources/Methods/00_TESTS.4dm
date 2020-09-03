@@ -25,7 +25,7 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=:=Folder:C1567(fk desktop folder:K87:19).parent
+		$o:=Folder:C1567(fk desktop folder:K87:19).parent
 		$o1:=Folder:C1567("/Users/"+Get system info:C1571.accountName)
 		
 		//________________________________________

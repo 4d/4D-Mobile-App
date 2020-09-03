@@ -368,9 +368,11 @@ Function mobileStatRelation
 					If ($entity[$key]#Null:C1517)
 						$0[$key]:=$0[$key]+1
 					End if 
+					//%W-518.7
 					If (Not:C34(Undefined:C82($entity[$key])))  // null must be defined (we want here a method ob has key
 						$keyExist:=True:C214
 					End if 
+					//%W+518.7
 				End for each 
 				If (Not:C34($keyExist))
 					OB REMOVE:C1226($0; $key)
