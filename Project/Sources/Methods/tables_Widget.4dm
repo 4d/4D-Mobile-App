@@ -12,9 +12,21 @@ var $0 : Picture
 var $1 : Object
 var $2 : Object
 
-var $tTypeForm : Text
-var $errors; $oDataModel; $oParams; $str : Object
+If (False:C215)
+	C_PICTURE:C286(tables_Widget; $0)
+	C_OBJECT:C1216(tables_Widget; $1)
+	C_OBJECT:C1216(tables_Widget; $2)
+End if 
 
+var $fill; $formName; $name; $stroke; $t; $table; $typeForm : Text
+var $picture : Picture
+var $isSelected : Boolean
+var $x : Blob
+var $dataModel; $params; $str : Object
+
+var $formRoot : 4D:C1709.Directory
+var $file : 4D:C1709.Document
+var $error : cs:C1710.error
 var $svg : cs:C1710.svg
 
 // ----------------------------------------------------
@@ -22,39 +34,40 @@ var $svg : cs:C1710.svg
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
-	$oDataModel:=$1
+	$dataModel:=$1
 	
 	// Optional parameters
 	If (Count parameters:C259>=2)
 		
-		$oParams:=$2
+		$params:=$2
 		
 	Else 
 		
-		$oParams:=New object:C1471
+		$params:=New object:C1471
 		
 	End if 
 	
-	$oParams.x:=0  // Start x
-	$oParams.y:=0  // Start y
+	$params.x:=0  // Start x
+	$params.y:=0  // Start y
 	
-	$oParams.cell:=New object:C1471(\
+	$params.cell:=New object:C1471(\
 		"width"; 115; \
 		"height"; 110)
 	
-	$oParams.icon:=New object:C1471(\
+	$params.icon:=New object:C1471(\
 		"width"; 80; \
 		"height"; 110)
 	
-	$oParams.hOffset:=5
-	$oParams.maxChar:=18  // Choose(Get database localization="ja";9;18)
+	$params.hOffset:=5
+	$params.maxChar:=18  // Choose(Get database localization="ja";9;18)
 	
-	$oParams.selectedFill:=ui.colors.backgroundSelectedColor.hex
-	$oParams.selectedStroke:=ui.colors.strokeColor.hex
+	$params.selectedFill:=ui.colors.backgroundSelectedColor.hex
+	$params.selectedStroke:=ui.colors.strokeColor.hex
 	
 	$str:=str()
 	
 	$svg:=cs:C1710.svg.new()
+	$error:=cs:C1710.error.new()
 	
 Else 
 	
@@ -63,51 +76,45 @@ Else
 End if 
 
 // ----------------------------------------------------
-If ($oDataModel#Null:C1517)
+If ($dataModel#Null:C1517)
 	
-	$tTypeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(feature.with("newViewUI"); "VIEWS"; "_o_VIEWS")].selector)=2; "detail"; "list")
+	$typeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(feature.with("newViewUI"); "VIEWS"; "_o_VIEWS")].selector)=2; "detail"; "list")
 	
 /* START HIDING ERRORS */
-	$errors:=err.hide()
+	$error.hide()
 	
-	var $t; $tFill; $tFormName; $tName; $tStroke; $tTable; $tTypeForm : Text
-	var $p : Picture
-	var $bSelected : Boolean
-	var $x : Blob
-	var $file; $oDataModel; $oParams; $pathForm; $str; $svg : Object
-	
-	For each ($tTable; $oDataModel)
+	For each ($table; $dataModel)
 		
-		$bSelected:=($tTable=String:C10($oParams.tableNumber))
+		$isSelected:=($table=String:C10($params.tableNumber))
 		
-		$tFill:=Choose:C955($bSelected; $oParams.selectedFill; "none")
-		$tStroke:=Choose:C955($bSelected; $oParams.selectedStroke; "none")
+		$fill:=Choose:C955($isSelected; $params.selectedFill; "none")
+		$stroke:=Choose:C955($isSelected; $params.selectedStroke; "none")
 		
 		// Create a table group. filled according to selected status
 		$svg.group("root")\
-			.id($tTable)\
-			.fill($tFill)\
-			.push($tTable)  // Memorize table group address
+			.id($table)\
+			.fill($fill)\
+			.push($table)  // Memorize table group address
 		
 		// Background
-		$svg.rect($oParams.cell.width; $oParams.cell.height; $tTable)\
-			.position($oParams.x; $oParams.y)\
-			.stroke($tFill)
+		$svg.rect($params.cell.width; $params.cell.height; $table)\
+			.position($params.x; $params.y)\
+			.stroke($fill)
 		
 		// Put the icon [
-		If (Form:C1466[$tTypeForm][$tTable].form=Null:C1517)
+		If (Form:C1466[$typeForm][$table].form=Null:C1517)
 			
 			// No form selected
-			$file:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16); fk platform path:K87:2).file("templates/form/"+$tTypeForm+"/defaultLayoutIcon.png")
+			$file:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16); fk platform path:K87:2).file("templates/form/"+$typeForm+"/defaultLayoutIcon.png")
 			
 		Else 
 			
-			$tFormName:=String:C10(Form:C1466[$tTypeForm][$tTable].form)
-			$pathForm:=tmpl_form($tFormName; $tTypeForm)
+			$formName:=String:C10(Form:C1466[$typeForm][$table].form)
+			$formRoot:=tmpl_form($formName; $typeForm)
 			
-			If ($pathForm.exists)
+			If ($formRoot.exists)
 				
-				$file:=$pathForm.file("layoutIconx2.png")
+				$file:=$formRoot.file("layoutIconx2.png")
 				
 			Else 
 				
@@ -119,61 +126,61 @@ If ($oDataModel#Null:C1517)
 		
 		If (feature.with("resourcesBrowser"))
 			
-			If ($pathForm.extension=SHARED.archiveExtension)  // Archive
+			If ($formRoot.extension=SHARED.archiveExtension)  // Archive
 				
 				$x:=$file.getContent()
-				BLOB TO PICTURE:C682($x; $p)
+				BLOB TO PICTURE:C682($x; $picture)
 				CLEAR VARIABLE:C89($x)
 				
-				CREATE THUMBNAIL:C679($p; $p; $oParams.icon.width; $oParams.icon.width)
-				$svg.embedPicture($p; $tTable).position($oParams.x+18; 5)
-				CLEAR VARIABLE:C89($p)
+				CREATE THUMBNAIL:C679($picture; $picture; $params.icon.width; $params.icon.width)
+				$svg.embedPicture($picture; $table).position($params.x+18; 5)
+				CLEAR VARIABLE:C89($picture)
 				
 			Else 
 				
-				$svg.image($file; $tTable)\
-					.position($oParams.x+($oParams.cell.width/2)-($oParams.icon.width/2); $oParams.y+5)\
-					.dimensions($oParams.icon.width; $oParams.icon.width)
+				$svg.image($file; $table)\
+					.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
+					.dimensions($params.icon.width; $params.icon.width)
 				
 			End if 
 			
 		Else 
 			
-			$svg.image($file; $tTable)\
-				.position($oParams.x+($oParams.cell.width/2)-($oParams.icon.width/2); $oParams.y+5)\
-				.dimensions($oParams.icon.width)
+			$svg.image($file; $table)\
+				.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
+				.dimensions($params.icon.width)
 			
 		End if 
 		
 		// Avoid too long name
-		$tName:=$oDataModel[$tTable][""].shortLabel
+		$name:=$dataModel[$table][""].shortLabel
 		
-		If (Length:C16($tName)>$oParams.maxChar)
+		If (Length:C16($name)>$params.maxChar)
 			
-			$tName:=Substring:C12($tName; 1; $oParams.maxChar)+"…"
+			$name:=Substring:C12($name; 1; $params.maxChar)+"..."
 			
 		End if 
 		
-		$t:=$str.setText($tName).truncate($oParams.maxChar)
+		$t:=$str.setText($name).truncate($params.maxChar)
 		
-		$svg.textArea($t; $tTable)\
-			.position($oParams.x; $oParams.cell.height-18)\
-			.dimensions($oParams.cell.width)\
+		$svg.textArea($t; $table)\
+			.position($params.x; $params.cell.height-18)\
+			.dimensions($params.cell.width)\
 			.setAttribute("text-align"; "center")\
-			.fill(Choose:C955($bSelected; "dimgray"; "dimgray"))
+			.fill(Choose:C955($isSelected; "dimgray"; "dimgray"))
 		
 		// Border & reactive 'button'
-		$svg.rect(Num:C11($oParams.cell.width); Num:C11($oParams.cell.height); $tTable)\
-			.position(Num:C11($oParams.x)+1; Num:C11($oParams.y)+1)\
-			.stroke($tStroke)\
+		$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height); $table)\
+			.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\
+			.stroke($stroke)\
 			.fill("white").fillOpacity(0.05)
 		
-		$oParams.x:=$oParams.x+$oParams.cell.width+$oParams.hOffset
+		$params.x:=$params.x+$params.cell.width+$params.hOffset
 		
 	End for each 
 	
 /* STOP HIDING ERRORS */
-	$errors.show()
+	$error.show()
 	
 End if 
 

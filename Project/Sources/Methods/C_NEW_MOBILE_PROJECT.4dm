@@ -1,82 +1,68 @@
 //%attributes = {"invisible":true,"shared":true}
-  // ----------------------------------------------------
-  // Project method : C_NEW_MOBILE_PROJECT
-  // ID[574C8C3337AE4A1098BE3B5ACA721C48]
-  // Created 13-6-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
-C_BOOLEAN:C305($Boo_Repeat)
-C_LONGINT:C283($Lon_index;$Lon_parameters;$Win_hdl)
-C_TEXT:C284($t;$Txt_buffer;$Txt_projectName)
-C_OBJECT:C1216($errors;$o;$Obj_form;$Obj_path;$Obj_project;$Obj_root)
-C_COLLECTION:C1488($c)
+// ----------------------------------------------------
+// Project method : C_NEW_MOBILE_PROJECT
+// ID[574C8C3337AE4A1098BE3B5ACA721C48]
+// Created 13-6-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
+var $json; $name; $t : Text
+var $isEmpty : Boolean
+var $index; $w : Integer
+var $formData; $path; $project : Object
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_parameters:=Count parameters:C259
+var $folder; $mobileProject : 4D:C1709.Directory
+var $file : 4D:C1709.Document
+var $error : cs:C1710.error
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
-	
-	  // NO PARAMETERS REQUIRED
-	
-	COMPILER_COMPONENT 
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		  // <NONE>
-		
-	End if 
-	
-	OK:=1
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+// ----------------------------------------------------
+// Initialisations
 
-  // ----------------------------------------------------
+// NO PARAMETERS REQUIRED
 
+COMPILER_COMPONENT
+
+OK:=1
+
+// ----------------------------------------------------
 Repeat 
 	
-	$Txt_projectName:=Request:C163(Get localized string:C991("mess_nameoftheproject");Get localized string:C991("mess_newProject");Get localized string:C991("mess_create"))
+	$name:=Request:C163(Get localized string:C991("mess_nameoftheproject"); Get localized string:C991("mess_newProject"); Get localized string:C991("mess_create"))
 	
-	$Boo_Repeat:=(Length:C16($Txt_projectName)=0) & Bool:C1537(OK)
+	$isEmpty:=(Length:C16($name)=0) & Bool:C1537(OK)
 	
-	If ($Boo_Repeat)
+	If ($isEmpty)
 		
 		ALERT:C41(Get localized string:C991("theProjectNameCanNotBeEmpty"))
 		
 	End if 
 	
-Until (Not:C34($Boo_Repeat))
+Until (Not:C34($isEmpty))
 
 If (Bool:C1537(OK))
 	
-	$o:=Folder:C1567(Database folder:K5:14;*).file("._")
+	// Check if the database folder is writable
 	
-	  // Check if we can write
+/* START HIDING ERRORS */
+	$error:=cs:C1710.error.new()
+	$error.hide()
 	
-/* START HIDING ERRORS */$errors:=err .hide()
+	$file:=Folder:C1567(Database folder:K5:14; *).file("._")
+	OK:=Num:C11($file.create())
+	$file.delete()
 	
-	OK:=Num:C11($o.create())
-	$o.delete()
-	
-/* STOP HIDING ERRORS */$errors.show()
+/* STOP HIDING ERRORS */
+	$error.show()
 	
 	If (Bool:C1537(OK))
 		
-		  // Get the mobile project folder pathname
-		$Obj_root:=Folder:C1567(fk database folder:K87:14;*).folder("Mobile Projects")
-		$Obj_root.create()
+		// Get the mobile project folder pathname
+		$mobileProject:=Folder:C1567(fk database folder:K87:14; *).folder("Mobile Projects")
+		$mobileProject.create()
 		
-		$o:=$Obj_root.folder($Txt_projectName)
-		
-		If ($o.exists)
+		If ($mobileProject.folder($name).exists)
 			
 			CONFIRM:C162(Get localized string:C991("mess_thisProjectAlreadyExist"))
 			
@@ -91,82 +77,79 @@ End if
 
 If (Bool:C1537(OK))
 	
-	$Obj_form:=New object:C1471
+	$formData:=New object:C1471
 	
-	  // Create the project {
-	$o:=Folder:C1567("/RESOURCES/default project").copyTo($Obj_root;$Txt_projectName;fk overwrite:K87:5)
+	// Create the project
+	$folder:=Folder:C1567("/RESOURCES/default project").copyTo($mobileProject; $name; fk overwrite:K87:5)
 	
-	  // Init default values
-	$c:=$o.files().query("name = 'project'")
+	// Init default values
+	$file:=$folder.files().query("name = 'project'").pop()
 	
-	If ($c.length=1)
+	If ($file#Null:C1517)
 		
-		$o:=$c[0]
-		$t:=$o.getText()
-		PROCESS 4D TAGS:C816($t;$t)
+		$json:=$file.getText()
 		
-		$Obj_form.file:=$o
+		PROCESS 4D TAGS:C816($json; $json)
 		
-		$Obj_form.project:=$o.platformPath
+		$formData.file:=$file
+		$formData.project:=$file.platformPath
 		
-		  // Unique application name [
-		$Obj_project:=JSON Parse:C1218($t)
+		// Ensure that the name of the application is unique
+		$project:=JSON Parse:C1218($json)
 		
-		If ($Obj_project.product.name#Null:C1517)
+		If ($project.product.name#Null:C1517)
 			
-			$Txt_buffer:=$Obj_project.product.name
+			$t:=$project.product.name
 			
-			$Obj_path:=New object:C1471(\
-				"parentFolder";path .products().platformPath;\
-				"isFolder";True:C214;\
-				"name";$Txt_buffer)
+			$path:=New object:C1471(\
+				"parentFolder"; path.products().platformPath; \
+				"isFolder"; True:C214; \
+				"name"; $t)
 			
-			While (Test path name:C476(Object to path:C1548($Obj_path))=Is a folder:K24:2)
+			While (Test path name:C476(Object to path:C1548($path))=Is a folder:K24:2)
 				
-				$Lon_index:=$Lon_index+1
-				$Obj_path.name:=$Txt_buffer+String:C10($Lon_index;" #####0")
+				$index:=$index+1
+				$path.name:=$t+String:C10($index; " #####0")
 				
 			End while 
 			
-			If ($Obj_path.name#$Obj_project.product.name)
+			If ($path.name#$project.product.name)
 				
-				$Obj_project.product.name:=$Obj_path.name
-				$t:=JSON Stringify:C1217($Obj_project;*)
+				$project.product.name:=$path.name
+				$json:=JSON Stringify:C1217($project; *)
 				
 			End if 
 		End if 
-		  //]
 		
-		$o.setText($t)
-		  //}
+		$file.setText($json)
 		
-		  // Open the project editor
-		$Win_hdl:=Open form window:C675("EDITOR";Plain form window:K39:10;Horizontally centered:K39:1;At the top:K39:5;*)
+		// Open the project editor
+		$w:=Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
 		
-		  // Launch the worker
-		$Obj_form.$worker:="4D Mobile ("+String:C10($Win_hdl)+")"
-		CALL WORKER:C1389(String:C10($Obj_form.$worker);"COMPILER_COMPONENT")
+		// Launch the worker
+		$formData.$worker:="4D Mobile ("+String:C10($w)+")"
+		CALL WORKER:C1389(String:C10($formData.$worker); "COMPILER_COMPONENT")
 		
 		If (Storage:C1525.database.isMatrix)
 			
-			DIALOG:C40("EDITOR";$Obj_form)
-			CLOSE WINDOW:C154($Win_hdl)
+			DIALOG:C40("EDITOR"; $formData)
+			CLOSE WINDOW:C154($w)
 			
 		Else 
 			
-			DIALOG:C40("EDITOR";$Obj_form;*)
+			DIALOG:C40("EDITOR"; $formData; *)
 			
 		End if 
 		
 	Else 
 		
-		ASSERT:C1129(dev_Matrix ;"The default project content is not the expected one")
+		ASSERT:C1129(dev_Matrix; "The default project content is not the expected one")
 		
 	End if 
 End if 
 
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// Return
+// <NONE>
+// ----------------------------------------------------
+// End

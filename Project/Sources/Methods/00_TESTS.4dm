@@ -25,7 +25,31 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=cs:C1710.structure.new()
+		$o:=:=Folder:C1567(fk desktop folder:K87:19).parent
+		$o1:=Folder:C1567("/Users/"+Get system info:C1571.accountName)
+		
+		//________________________________________
+	: (True:C214)
+		
+		$o:=cs:C1710.error.new("capture")
+		
+		Formula from string:C1601("$b:=true").call()
+		
+		If ($o.noError())
+			
+			
+			
+		Else 
+			
+			BEEP:C151
+			
+			$o1:=$o.lastError()
+			
+		End if 
+		
+		
+		$o.release()
+		
 		
 		//________________________________________
 	: (True:C214)

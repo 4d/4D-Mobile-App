@@ -1,71 +1,61 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : mobile_Check_installation
-  // ID[684C0081C1734937A99F71EC2516C9F8]
-  // Created 30-6-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($Lon_parameters)
-C_OBJECT:C1216($Obj_in;$Obj_out)
+// ----------------------------------------------------
+// Project method : mobile_Check_installation
+// ID[684C0081C1734937A99F71EC2516C9F8]
+// Created 30-6-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(mobile_Check_installation ;$0)
-	C_OBJECT:C1216(mobile_Check_installation ;$1)
+	C_OBJECT:C1216(mobile_Check_installation; $0)
+	C_OBJECT:C1216(mobile_Check_installation; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Declarations
+var $in; $out : Object
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_parameters:=Count parameters:C259
+// ----------------------------------------------------
+// Declarations
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+// ----------------------------------------------------
+// Initialisations
+
+// NO PARAMETERS REQUIRED
+
+// Optional parameters
+If (Count parameters:C259>=1)
 	
-	  // NO PARAMETERS REQUIRED
-	
-	  // Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Obj_in:=$1
-		
-	End if 
-	
-Else 
-	
-	ABORT:C156
+	$in:=$1
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If (Is macOS:C1572)
 	
-	$Obj_out:=Xcode_CheckInstall ($Obj_in)
+	$out:=Xcode_CheckInstall($in)
 	
 Else 
 	
-	$Obj_out:=New object:C1471(\
-		"platform";3;\
-		"XcodeAvailable";False:C215;\
-		"toolsAvalaible";False:C215;\
-		"ready";False:C215)
+	$out:=New object:C1471(\
+		"platform"; 3; \
+		"XcodeAvailable"; False:C215; \
+		"toolsAvalaible"; False:C215; \
+		"ready"; False:C215)
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
-If (Bool:C1537($Obj_in.caller))
+// ----------------------------------------------------
+// Return
+If (Bool:C1537($in.caller))
 	
-	CALL FORM:C1391($Obj_in.caller;"editor_CALLBACK";"checkInstall";$Obj_out)
+	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "checkInstall"; $out)
 	
 Else 
 	
-	$0:=$Obj_out
+	$0:=$out
 	
 End if 
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
