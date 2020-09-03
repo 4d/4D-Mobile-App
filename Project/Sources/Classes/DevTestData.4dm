@@ -235,7 +235,76 @@ Function notify
 	End if 
 	
 Function _callback
-	var $1 : Object  //stat
-	
+	var $1; $stat : Object  //stat
+	$stat:=$1
+	C_OBJECT:C1216($dumpFolder)
 	// here we could launch task, study mobile app etc.., or pass a "callback" function to this class
+	
+	// replace following code by simctl class (in qa database)
+	
+	var $scheme; $url; $udid; $callback : Text
+	$scheme:="testa"  // in ios app info.plist com.4d.qa.urlScheme and also in url types, scheme
+	$callback:="http://"+WEB Get server info:C1531().options.webIPAddressToListen[0]+":"+String:C10(WEB Get server info:C1531().options.webPortID)+"/4DAction/dev_test_data"  // XXX must be encoded?
+	$url:=$scheme+"://x-callback-url/sync?x-success="+$callback+"?success=1&x-error="+$callback+"?success=0"
+	
+	This:C1470.waiting:=True:C214
+	$udid:="booted"  // simu id
+	LAUNCH EXTERNAL PROCESS:C811("xcrun simctl openurl "+$udid+" "+$url)
+	
+	// wait sync end? using callback and server
+	// while idle on a boolean for instance ? or there is better
+	While (This:C1470.waiting)
+		IDLE:C311
+	End while 
+	
+	If (Not:C34(This:C1470.lastCallbackInfo.success))
+		TRACE:C157
+	End if 
+	
+	This:C1470.waiting:=True:C214
+	$url:=$scheme+"://x-callback-url/dump?x-success="+$callback+"?success=1&x-error="+$callback+"?success=0"
+	LAUNCH EXTERNAL PROCESS:C811("xcrun simctl openurl "+$udid+" "+$url)
+	
+	While (This:C1470.waiting)
+		IDLE:C311
+	End while 
+	
+	If (Not:C34(This:C1470.lastCallbackInfo.success))
+		TRACE:C157
+	Else 
+		//var $dumpFolder : 4D.Folder
+		C_TEXT:C284($path)
+		$dumpFolder:=Folder:C1567(This:C1470.lastCallbackInfo.path)
+		var $dbFile; $jsonFile : 4D:C1709.File
+		$dbFile:=$dumpFolder.file("Structures.sqlite")
+		// TODO CHECK db ? using sqlite3 command line
+		
+		var $dataClassName : Text
+		For each ($dataClassName; This:C1470.ds)
+			$jsonFile:=$dumpFolder.file($dataClassName+".json")
+			// TODO CHECK json 
+			var $parsed : Object
+			$parsed:=JSON Parse:C1218($jsonFile.getText())  // XXX will failed if file not exist
+			
+			If ($parsed.records.length#$stat[$dataClassName].count)
+				TRACE:C157
+				// ASSERT (False; "Not correct number of records for dataclass "+$dataClassName)
+			End if 
+		End for each 
+		
+		
+	End if 
+	
+Function xCallback
+	var $1 : Object
+	This:C1470.lastCallbackInfo:=$1
+	This:C1470.lastCallbackInfo.success:=Bool:C1537(Num:C11(This:C1470.lastCallbackInfo.success))
+	
+	var $html : Text
+	$html:="<html><body><h1>"
+	$html:=$html+JSON Stringify:C1217($1)
+	$html:=$html+"</h1></body></html>"
+	WEB SEND TEXT:C677($html)  // just to have a response from this 4daction (maybe add later progress)
+	
+	This:C1470.waiting:=False:C215  // stop waiting block
 	
