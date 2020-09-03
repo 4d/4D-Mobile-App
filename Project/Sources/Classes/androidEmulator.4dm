@@ -138,24 +138,29 @@ Android Emulator usage: emulator [options] [-qemu args]
 Class extends androidProcess
 
 Class constructor
+	
 	Super:C1705()
-	This:C1470.cmd:=This:C1470.emulatorFile().path  // fill default emulator command path
+	
+	This:C1470.cmd:=This:C1470.emulatorFile().path  // Fill default emulator command path
 	
 Function emulatorFile
 	var $0 : 4D:C1709.File
+	
 	$0:=This:C1470.androidSDKFolder().folder("emulator").file("emulator")
 	
+Function list  // List available AVDs
+	var $0 : Object
 	
-Function list
-	C_OBJECT:C1216($0)
-	$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-list-avds"))
+	$0:=This:C1470.launch(This:C1470.cmd; "-list-avds")
+	
 	If ($0.success)
+		
 		$0.emulators:=Split string:C1554($0.out; "\n"; sk ignore empty strings:K86:1)
+		
 	End if 
 	
-	
 Function start
-	C_OBJECT:C1216($0)
-	C_TEXT:C284($1)
-	$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-avd"; $1; "-netdelay"; "none"; "-netspeed"; "full"))
+	var $0 : Object
+	var $1 : Text
 	
+	$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-avd"; $1; "-netdelay"; "none"; "-netspeed"; "full"))
