@@ -15,6 +15,7 @@ Function run
 	
 	// create one records by data class
 	This:C1470.newEntityOfEach()
+	This:C1470.notify()
 	
 	// clean again
 	removeAllEntities(This:C1470.ds)
@@ -30,9 +31,33 @@ Function run
 	This:C1470.unattach($entitiesByDataClass)
 	This:C1470.notify()
 	
+	// create records
+	var $i : Integer
+	For ($i; 1; 100; 1)
+		This:C1470.newEntityOfEach()
+	End for 
+	This:C1470.notify()
+	
 	// clean again
-	//removeAllEntities(This.ds)
-	//This.notify()
+	removeAllEntities(This:C1470.ds)
+	This:C1470.notify()
+	
+	// create records and attach
+	For ($i; 1; 100; 1)
+		$entitiesByDataClass:=This:C1470.newEntityOfEach()
+		This:C1470.attach($entitiesByDataClass)
+	End for 
+	This:C1470.notify()
+	
+	// delete some
+	For ($i; 1; 10; 1)
+		This:C1470.randomDeleteOneOfEach()
+	End for 
+	This:C1470.notify()
+	
+	// clean again
+	removeAllEntities(This:C1470.ds)
+	This:C1470.notify()
 	
 Function newEntityOfEach
 	var $dataClassName : Text
@@ -40,6 +65,18 @@ Function newEntityOfEach
 	$result:=New object:C1471()
 	For each ($dataClassName; This:C1470.ds)
 		$result[$dataClassName]:=This:C1470.newEntity(This:C1470.ds[$dataClassName])
+	End for each 
+	$0:=$result
+	
+Function randomDeleteOneOfEach
+	var $dataClassName : Text
+	var $0; $result : Object
+	var $all : Object  // sel
+	
+	$result:=New object:C1471()
+	For each ($dataClassName; This:C1470.ds)
+		$all:=This:C1470.ds[$dataClassName].all()
+		$result[$dataClassName]:=$all[Random:C100%$all.length].drop()
 	End for each 
 	$0:=$result
 	
@@ -83,7 +120,9 @@ $entity[$key]:=$related*/
 			
 		End for each 
 		
-		$entity.save()
+		var $status : Object
+		$status:=$entity.save()  // check or not?
+		ASSERT:C1129($status.success; "Failed to save an entity:"+JSON Stringify:C1217($status))
 		
 	End for each 
 	
@@ -115,7 +154,9 @@ Function unattach
 			
 		End for each 
 		
-		$entity.save()
+		var $status : Object
+		$status:=$entity.save()  // check or not?
+		ASSERT:C1129($status.success; "Failed to save an entity:"+JSON Stringify:C1217($status))
 		
 	End for each 
 	
@@ -251,23 +292,20 @@ Function _callback
 	$udid:="booted"  // simu id
 	LAUNCH EXTERNAL PROCESS:C811("xcrun simctl openurl "+$udid+" "+$url)
 	
-	// wait sync end? using callback and server
-	// while idle on a boolean for instance ? or there is better
-	While (This:C1470.waiting)
-		IDLE:C311
-	End while 
+	// wait sync end
+	This:C1470.wait()
 	
 	If (Not:C34(This:C1470.lastCallbackInfo.success))
 		TRACE:C157
 	End if 
 	
+	// comment this line if command no supported in 18R, or maybe a rest request instead to check?
+	ASSERT:C1129(String:C10(Get Global Stamp:C1676)=This:C1470.lastCallbackInfo.globalStamp; "Not sync to "+String:C10(Get Global Stamp:C1676)+" but only "+This:C1470.lastCallbackInfo.globalStamp)
+	
 	This:C1470.waiting:=True:C214
 	$url:=$scheme+"://x-callback-url/dump?x-success="+$callback+"?success=1&x-error="+$callback+"?success=0"
 	LAUNCH EXTERNAL PROCESS:C811("xcrun simctl openurl "+$udid+" "+$url)
-	
-	While (This:C1470.waiting)
-		IDLE:C311
-	End while 
+	This:C1470.wait()
 	
 	If (Not:C34(This:C1470.lastCallbackInfo.success))
 		TRACE:C157
@@ -283,17 +321,69 @@ Function _callback
 		For each ($dataClassName; This:C1470.ds)
 			$jsonFile:=$dumpFolder.file($dataClassName+".json")
 			// TODO CHECK json 
-			var $parsed : Object
+			var $parsed; $mobileStat : Object
 			$parsed:=JSON Parse:C1218($jsonFile.getText())  // XXX will failed if file not exist
-			
-			If ($parsed.records.length#$stat[$dataClassName].count)
+			$mobileStat:=This:C1470.mobileStat(This:C1470.ds[$dataClassName]; $parsed)
+			If ($mobileStat.count#$stat[$dataClassName].count)
 				TRACE:C157
 				// ASSERT (False; "Not correct number of records for dataclass "+$dataClassName)
 			End if 
+			
+			var $key : Text
+			For each ($key; $stat[$dataClassName]["relation"])
+				
+				If ($mobileStat.relation[$key]#$stat[$dataClassName].relation[$key])
+					// TRACE
+					// ASSERT (False; "Not correct number of records relation for dataclass "+$dataClassName+" and key "+$key)
+				End if 
+				
+			End for each 
+			
 		End for each 
-		
-		
 	End if 
+	
+Function mobileStat
+	var $0; $1; $dataClass; $2 : Object
+	$0:=New object:C1471("count"; $2.records.length; "relation"; This:C1470.mobileStatRelation($1; $2.records))
+	
+	
+Function mobileStatRelation
+	var $0; $1; $dataClass : Object
+	var $2 : Collection
+	$dataClass:=$1
+	$0:=New object:C1471()
+	var $key : Text
+	For each ($key; $dataClass)
+		Case of 
+			: ($dataClass[$key].kind="relatedEntities")
+				// reverve stat?
+				
+			: ($dataClass[$key].kind="relatedEntity")
+				$0[$key]:=0
+				var $entity : Object
+				For each ($entity; $2)
+					If ($entity[$key]#Null:C1517)
+						$0[$key]:=$0[$key]+1
+					End if 
+				End for each 
+				
+			Else 
+				// ignore
+		End case 
+		
+	End for each 
+	// XXX factorrize with ds Stat relation?
+	
+Function wait
+/*var $min : Integer  // min time to wait (study maybe bug with sync/dump)
+$min:=Milliseconds+5000
+While (This.waiting | (Milliseconds<$min))
+IDLE  //or there is better ?
+End while */
+	
+	While (This:C1470.waiting)
+		IDLE:C311  //or there is better ?
+	End while 
 	
 Function xCallback
 	var $1 : Object
@@ -301,9 +391,9 @@ Function xCallback
 	This:C1470.lastCallbackInfo.success:=Bool:C1537(Num:C11(This:C1470.lastCallbackInfo.success))
 	
 	var $html : Text
-	$html:="<html><body><h1>"
+	$html:="<html><body><h1><font size=\"7\">"
 	$html:=$html+JSON Stringify:C1217($1)
-	$html:=$html+"</h1></body></html>"
+	$html:=$html+"</h1></font></body></html>"
 	WEB SEND TEXT:C677($html)  // just to have a response from this 4daction (maybe add later progress)
 	
 	This:C1470.waiting:=False:C215  // stop waiting block
