@@ -401,6 +401,18 @@
 			"unitTestSuites"
 		]
 	},
+	"android": {
+		"methods": [
+			"dev_test_android"
+		],
+		"classes": [
+			"adb",
+			"androidEmulator",
+			"androidPlatformTools",
+			"androidProcess",
+			"externalProcess"
+		]
+	},
 	"backend": {
 		"groups": [
 			"templateClass"
