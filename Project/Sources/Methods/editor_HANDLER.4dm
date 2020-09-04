@@ -85,7 +85,6 @@ Case of
 						"navigationTransition"; "PresentSlideSegue")
 					
 				End if 
-				
 				// ===================================== ]
 				
 				project:=cs:C1710.project.new($project)
@@ -195,6 +194,8 @@ Case of
 		
 		//=========================================================
 	: ($IN.action="open")
+		
+		editor_PAGE("general")
 		
 		OBJECT SET VISIBLE:C603(*; $form.ribbon; True:C214)
 		OBJECT SET VISIBLE:C603(*; $form.description; True:C214)

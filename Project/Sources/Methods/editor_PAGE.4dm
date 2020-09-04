@@ -289,29 +289,25 @@ If (Length:C16($page)>0)
 	
 	FORM GOTO PAGE:C247(1)
 	
-	If ($sections{$index}#$sections{0})
+	// Hide picker if any
+	CALL FORM:C1391($w; "editor_CALLBACK"; "pickerHide")
+	
+	// Hide broswer if any
+	CALL FORM:C1391($w; "editor_CALLBACK"; "hideBrowser")
+	
+	If ($index>0)
 		
-		// Hide picker if any
-		CALL FORM:C1391($w; "editor_CALLBACK"; "pickerHide")
+		Form:C1466.currentPage:=$sections{$index}
 		
-		// Hide broswer if any
-		CALL FORM:C1391($w; "editor_CALLBACK"; "hideBrowser")
-		
-		If ($index>0)
-			
-			Form:C1466.currentPage:=$sections{$index}
-			
-			(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=Form:C1466.currentPage
-			
-		End if 
-		
-		Form:C1466.$page:=$o
-		
-		EXECUTE METHOD IN SUBFORM:C1085("PROJECT"; "panel_INIT"; *; $o)
-		
-		SET TIMER:C645(-1)  // Set geometry
+		(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=Form:C1466.currentPage
 		
 	End if 
+	
+	Form:C1466.$page:=$o
+	
+	EXECUTE METHOD IN SUBFORM:C1085("PROJECT"; "panel_INIT"; *; $o)
+	
+	SET TIMER:C645(-1)  // Set geometry
 	
 	EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_description"; *; $o)
 	
