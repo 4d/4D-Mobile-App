@@ -137,13 +137,13 @@ Case of
 							
 							// Restore current selected background
 							SVG SET ATTRIBUTE:C1055(*; $e.objectName; $context.tableNumber; \
-								"fill"; ui.unselectedFillColor)
+								"fill"; UI.unselectedFillColor)
 							
 						End if 
 						
 						// Select the item
 						SVG SET ATTRIBUTE:C1055(*; $e.objectName; $tTable; \
-							"fill"; ui.selectedColorFill)
+							"fill"; UI.selectedColorFill)
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -161,7 +161,7 @@ Case of
 							
 							// Unselect
 							SVG SET ATTRIBUTE:C1055(*; $e.objectName; $context.tableNumber; \
-								"fill"; ui.unselectedFillColor)
+								"fill"; UI.unselectedFillColor)
 							
 						End if 
 						
@@ -204,7 +204,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Double Clicked:K2:5)
 				
-				If (feature.with("newViewUI"))\
+				If (FEATURE.with("newViewUI"))\
 					 & (Num:C11($context.template.manifest.renderer)>=2)
 					
 					$tTypeForm:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
@@ -239,7 +239,7 @@ Case of
 							views_preview("draw"; $form)
 							
 							// Save project
-							project.save()
+							PROJECT.save()
 							
 						End if 
 						
@@ -258,7 +258,7 @@ Case of
 				
 				editor_ui_LISTBOX($e.objectName)
 				
-				If (feature.with("newViewUI"))\
+				If (FEATURE.with("newViewUI"))\
 					 & (Num:C11($context.template.manifest.renderer)>=2)
 					
 					$tTypeForm:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
@@ -353,7 +353,7 @@ Case of
 								views_preview("draw"; $form)
 								
 								// Save project
-								project.save()
+								PROJECT.save()
 								
 							End if 
 						End if 
@@ -389,7 +389,7 @@ Case of
 					
 					// Set the drag icon
 					$p:=cs:C1710.svg.new()\
-						.embedPicture(ui.fieldIcons[$o.fieldType]).position(2; 2)\
+						.embedPicture(UI.fieldIcons[$o.fieldType]).position(2; 2)\
 						.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 						.getPicture()
 					
@@ -568,7 +568,7 @@ Case of
 						
 						// Create the drag icon
 						$p:=cs:C1710.svg.new()\
-							.embedPicture(ui.fieldIcons[$o.fieldType]).position(2; 2)\
+							.embedPicture(UI.fieldIcons[$o.fieldType]).position(2; 2)\
 							.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 							.getPicture()
 						
@@ -597,9 +597,9 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				ui.tips.enable()
-				ui.tips.setDuration(ui.tips.delay*2)
-				ui.tips.instantly()
+				UI.tips.enable()
+				UI.tips.setDuration(UI.tips.delay*2)
+				UI.tips.instantly()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
@@ -616,7 +616,7 @@ Case of
 					
 				End if 
 				
-				ui.tips.defaultDelay()
+				UI.tips.defaultDelay()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -667,7 +667,7 @@ Case of
 				
 				OB REMOVE:C1226($context; "manifest")
 				
-				If (feature.with("newViewUI"))
+				If (FEATURE.with("newViewUI"))
 					
 					OB REMOVE:C1226($context; "scrollPosition")
 					$context.scroll:=0
@@ -685,7 +685,7 @@ Case of
 					
 					// Highlights
 					$o:=Choose:C955($e.objectName=$form.selectorList.name; $form.selectorList; $form.selectorDetail)
-					$o.setColors(ui.selectedColor; Background color none:K23:10)
+					$o.setColors(UI.selectedColor; Background color none:K23:10)
 					
 				End if 
 				
@@ -709,7 +709,7 @@ Case of
 		//==================================================
 	: ($e.objectName=$form.resources.name)
 		
-		If (feature.with("resourcesBrowser"))
+		If (FEATURE.with("resourcesBrowser"))
 			
 			// Show browser
 			$form.form.call(New collection:C1472("initBrowser"; New object:C1471(\

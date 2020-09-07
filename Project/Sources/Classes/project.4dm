@@ -45,18 +45,39 @@ Function get
 	
 	//====================================
 Function cleanup
+	var $0 : Object
 	var $1 : Object
 	
 	var $t : Text
+	var $project : Object
 	
-	For each ($t; $1)
+	If (Count parameters:C259>=1)
 		
-		If ($t[[1]]="$")
+		For each ($t; $1)
 			
-			OB REMOVE:C1226($1; $t)
+			If ($t[[1]]="$")
+				
+				OB REMOVE:C1226($1; $t)
+				
+			End if 
+		End for each 
+		
+	Else 
+		
+		$project:=OB Copy:C1225(This:C1470.project)
+		
+		For each ($t; $project)
 			
-		End if 
-	End for each 
+			If ($t[[1]]="$")
+				
+				OB REMOVE:C1226($project; $t)
+				
+			End if 
+		End for each 
+		
+		$0:=$project
+		
+	End if 
 	
 	//====================================
 Function save
@@ -66,7 +87,7 @@ Function save
 	
 	var $o : Object
 	
-	If (Bool:C1537(feature._8858))  // Debug mode
+	If (Bool:C1537(FEATURE._8858))  // Debug mode
 		
 		$o:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
 		
@@ -371,7 +392,7 @@ Function getIcon
 	
 	If (Length:C16($1)=0)
 		
-		$file:=File:C1566(ui.noIcon; fk platform path:K87:2)
+		$file:=File:C1566(UI.noIcon; fk platform path:K87:2)
 		
 	Else 
 		
@@ -379,7 +400,7 @@ Function getIcon
 		
 		If (Not:C34($file.exists))
 			
-			$file:=File:C1566(ui.errorIcon; fk platform path:K87:2)
+			$file:=File:C1566(UI.errorIcon; fk platform path:K87:2)
 			
 		End if 
 	End if 

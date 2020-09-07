@@ -3,10 +3,10 @@ FEATURES pannel Class
 ===============================================*/
 Class constructor
 	
-	var $o : Object
-	$o:=editor_INIT
+	var $form : Object
+	$form:=editor_INIT
 	
-	If (OB Is empty:C1297($o)) | Shift down:C543
+	If (OB Is empty:C1297($form)) | Shift down:C543
 		
 		This:C1470.window:=Current form window:C827
 		
@@ -55,56 +55,56 @@ Class constructor
 			This:C1470.deepLink)
 		
 		// Constraints definition
-		ob_createPath($o; "constraints.rules"; Is collection:K8:32)
+		ob_createPath($form; "constraints.rules"; Is collection:K8:32)
 		
 	End if 
 	
 /*===============================================*/
 Function checkAuthenticationMethod
 	
-	ARRAY TEXT:C222($paths; 0x0000)
-	METHOD GET PATHS:C1163(Path database method:K72:2; $paths; *)
-	$paths{0}:=METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAuthentication")
+	ARRAY TEXT:C222($methods; 0x0000)
+	METHOD GET PATHS:C1163(Path database method:K72:2; $methods; *)
+	$methods{0}:=METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAuthentication")
 	
 	This:C1470.authenticationButton\
-		.setTitle(Choose:C955(Find in array:C230($paths; $paths{0})=-1; "create..."; "edit..."))\
+		.setTitle(Choose:C955(Find in array:C230($methods; $methods{0})=-1; "create..."; "edit..."))\
 		.bestSize()\
 		.show(Form:C1466.server.authentication.email)
 	
 /*===============================================*/
 Function editAuthenticationMethod
 	
-	var $o : Object
-	var $t : Text
+	var $file : Object
+	var $text : Text
 	
-	ARRAY TEXT:C222($paths; 0x0000)
-	METHOD GET PATHS:C1163(Path database method:K72:2; $paths; *)
-	$paths{0}:=METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAuthentication")
+	ARRAY TEXT:C222($methods; 0x0000)
+	METHOD GET PATHS:C1163(Path database method:K72:2; $methods; *)
+	$methods{0}:=METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAuthentication")
 	
 	// Create method if not exist
-	If (Find in array:C230($paths; $paths{0})=-1)
+	If (Find in array:C230($methods; $methods{0})=-1)
 		
 		If (Command name:C538(1)="Somme")
 			
 			// FR language
-			$o:=File:C1566("/RESOURCES/fr.lproj/onMobileAppAuthentication.4dm")
+			$file:=File:C1566("/RESOURCES/fr.lproj/onMobileAppAuthentication.4dm")
 			
 		Else 
 			
-			$o:=File:C1566(Get localized document path:C1105("onMobileAppAuthentication.4dm"); fk platform path:K87:2)
+			$file:=File:C1566(Get localized document path:C1105("onMobileAppAuthentication.4dm"); fk platform path:K87:2)
 			
 		End if 
 		
-		If ($o.exists)
+		If ($file.exists)
 			
-			$t:=$o.getText()
-			METHOD SET CODE:C1194($paths{0}; $t; *)
+			$text:=$file.getText()
+			METHOD SET CODE:C1194($methods{0}; $text; *)
 			
 		End if 
 	End if 
 	
 	// Open method
-	METHOD OPEN PATH:C1213($paths{0}; *)
+	METHOD OPEN PATH:C1213($methods{0}; *)
 	
 	This:C1470.checkAuthenticationMethod()
 	

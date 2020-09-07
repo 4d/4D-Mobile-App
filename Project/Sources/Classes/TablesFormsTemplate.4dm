@@ -62,7 +62,7 @@ Function doRun
 		C_OBJECT:C1216($pathForm; $folder; $file)
 		If ($t[[1]]="/")  // custom form
 			
-			If (feature.with("resourcesBrowser"))
+			If (FEATURE.with("resourcesBrowser"))
 				
 				$pathForm:=tmpl_form($t; String:C10($Obj_template.userChoiceTag))
 				

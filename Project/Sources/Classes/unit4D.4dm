@@ -51,14 +51,14 @@ Function _parameters
 Function featuresFlags
 	var $0 : Object
 	
-	$0:=feature
+	$0:=FEATURE
 	
 	//______________________________________________________
 Function featuresFlag
 	var $0 : Boolean
 	var $1 : Variant
 	
-	$0:=feature.with($1)
+	$0:=FEATURE.with($1)
 	
 	//______________________________________________________
 Function loadProject

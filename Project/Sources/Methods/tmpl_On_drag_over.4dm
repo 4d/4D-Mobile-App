@@ -49,13 +49,13 @@ If (Length:C16(This:C1470.$.current)>0)
 	
 	$cible:=This:C1470.$.current
 	
-	If (feature.with("newViewUI"))\
+	If (FEATURE.with("newViewUI"))\
 		 & (Num:C11(Form:C1466.$dialog.VIEWS.template.manifest.renderer)>=2)
 		
 		// Accept insertion
 		$vInsertion:=($cible="@.vInsert")
 		
-		If (feature.with("droppingNext"))
+		If (FEATURE.with("droppingNext"))
 			
 			$vInsertion:=$vInsertion | ($cible="@.hInsertBefore") | ($cible="@.hInsertAfter")
 			
@@ -127,7 +127,7 @@ If (Length:C16(This:C1470.$.current)>0)
 				
 			Else 
 				
-				If (feature.with("moreRelations"))  // Accept 1-N relation
+				If (FEATURE.with("moreRelations"))  // Accept 1-N relation
 					
 					// Accept drag if the type match with the source
 					SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:type"; $t)
@@ -193,7 +193,7 @@ If (Length:C16(This:C1470.$.current)>0)
 			End if 
 			
 			//————————————————————————————————————
-		: (feature.with("withWidgetActions"))  // Action area (WIP)
+		: (FEATURE.with("withWidgetActions"))  // Action area (WIP)
 			
 			// Accept drag if a widget action is drag over
 			GET PASTEBOARD DATA:C401("com.4d.private.ios.action"; $x)

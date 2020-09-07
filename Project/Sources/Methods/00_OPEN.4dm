@@ -1,149 +1,139 @@
 //%attributes = {}
-  // ----------------------------------------------------
-  // Project method: 00_OPEN
-  // ID[2A0199468FC24025903500DE13DD6E63]
-  // Created 11-5-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description
-  //
-  // ----------------------------------------------------
-  // Declarations
-C_TEXT:C284($1)
-
-C_BOOLEAN:C305($Boo_debuglog)
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($File_project;$t;$Txt_entryPoint;$Txt_methodName;$Txt_projectName)
-C_OBJECT:C1216($menu;$menuFile)
+// ----------------------------------------------------
+// Project method: 00_OPEN
+// ID[2A0199468FC24025903500DE13DD6E63]
+// Created 11-5-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description
+//
+// ----------------------------------------------------
+// Declarations
+var $1 : Text
 
 If (False:C215)
-	C_TEXT:C284(00_OPEN ;$1)
+	C_TEXT:C284(00_OPEN; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_parameters:=Count parameters:C259
+var $directory; $entryPoint; $methodName; $pathName; $projectName; $t : Text
+var $withDebuglog : Boolean
+var $menu; $menuFile : Object
 
-If ($Lon_parameters>=1)
+// ----------------------------------------------------
+// Initialisations
+If (Count parameters:C259>=1)
 	
-	$Txt_entryPoint:=$1
+	$entryPoint:=$1
 	
 End if 
 
-$Boo_debuglog:=True:C214  // Activate or not debug log for performance tests
+$withDebuglog:=True:C214  // Activate or not debug log for performance tests
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //___________________________________________________________
-	: (Length:C16($Txt_entryPoint)=0)
+		//___________________________________________________________
+	: (Length:C16($entryPoint)=0)
 		
-		$Txt_methodName:=Current method name:C684
+		$methodName:=Current method name:C684
 		
 		Case of 
 				
-				  //……………………………………………………………………
-			: (Method called on error:C704=$Txt_methodName)
+				//……………………………………………………………………
+			: (Method called on error:C704=$methodName)
 				
-				  // Error handling manager
+				// Error handling manager
 				
-				  //……………………………………………………………………
-				  //: (Method called on event=$Txt_methodName)
-				
-				  // Event manager - disabled for a component method
-				
-				  //……………………………………………………………………
+				//……………………………………………………………………
 			Else 
 				
-				  // This method must be executed in a unique new process
-				BRING TO FRONT:C326(New process:C317($Txt_methodName;0;"$"+$Txt_methodName;"_run";*))
+				// This method must be executed in a unique new process
+				BRING TO FRONT:C326(New process:C317($methodName; 0; "$"+$methodName; "_run"; *))
 				
-				  //……………………………………………………………………
+				//……………………………………………………………………
 		End case 
 		
-		  //___________________________________________________________
-	: ($Txt_entryPoint="_run")
+		//___________________________________________________________
+	: ($entryPoint="_run")
 		
-		  // First launch of this method executed in a new process
-		00_OPEN ("_declarations")
-		00_OPEN ("_init")
+		// First launch of this method executed in a new process
+		00_OPEN("_declarations")
+		00_OPEN("_init")
 		
 		If (Shift down:C543)  // Select project
 			
-			$Txt_entryPoint:=Select document:C905(Get 4D folder:C485(Database folder:K5:14)+"Mobile Projects"+Folder separator:K24:12;".4dmobileapp";"";Package open:K24:8+Alias selection:K24:10)
+			$directory:=Folder:C1567("/PACKAGE/Mobile Projects").platformPath
+			$entryPoint:=Select document:C905($directory; ".4dmobileapp"; ""; Package open:K24:8+Alias selection:K24:10)
 			
 			If (Bool:C1537(OK))
 				
-				$File_project:=DOCUMENT
-				RESOLVE ALIAS:C695($File_project;$File_project)
+				$pathName:=DOCUMENT
+				RESOLVE ALIAS:C695($pathName; $pathName)
 				
 			End if 
 			
 		Else   // Open project created by 00_New
 			
-			$Txt_projectName:=Choose:C955(Macintosh option down:C545;"test";"New Project")
-			
-			$File_project:=Get 4D folder:C485(Database folder:K5:14)+Convert path POSIX to system:C1107("Mobile Projects/"+$Txt_projectName+"/project.4dmobileapp")
+			$projectName:=Choose:C955(Macintosh option down:C545; "test"; "New Project")
+			$pathName:=Folder:C1567("/PACKAGE/Mobile Projects").platformPath+Convert path POSIX to system:C1107($projectName+"/project.4dmobileapp")
 			
 		End if 
 		
-		If (Length:C16($File_project)>0)
+		If (Length:C16($pathName)>0)
 			
-			If ($Boo_debuglog)
+			If ($withDebuglog)
 				
-				For each ($t;Folder:C1567(Logs folder:K5:19).files().query("name = '4DDebugLog_@'").extract("platformPath"))
+				For each ($t; Folder:C1567(Logs folder:K5:19).files().query("name = '4DDebugLog_@'").extract("platformPath"))
 					
 					DELETE DOCUMENT:C159($t)
 					
 				End for each 
 				
-				SET DATABASE PARAMETER:C642(Log command list:K37:70;"")
-				SET DATABASE PARAMETER:C642(Debug log recording:K37:34;4+8)
+				SET DATABASE PARAMETER:C642(Log command list:K37:70; "")
+				SET DATABASE PARAMETER:C642(Debug log recording:K37:34; 4+8)
 				
 			End if 
 			
-			C_OPEN_MOBILE_PROJECT ($File_project)
-			
-			If ($Boo_debuglog)
+			If ($withDebuglog)
 				
-				SET DATABASE PARAMETER:C642(Debug log recording:K37:34;0)
+				SET DATABASE PARAMETER:C642(Debug log recording:K37:34; 0)
 				
 			End if 
 		End if 
 		
-		00_OPEN ("_deinit")
+		00_OPEN("_deinit")
 		
-		  //___________________________________________________________
-	: ($Txt_entryPoint="_declarations")
+		//___________________________________________________________
+	: ($entryPoint="_declarations")
 		
-		  //COMPILER_COMPONENT
+		//COMPILER_COMPONENT
 		
-		  //___________________________________________________________
-	: ($Txt_entryPoint="_init")
+		//___________________________________________________________
+	: ($entryPoint="_init")
 		
 		$menuFile:=cs:C1710.menu.new().file()
 		
 		$menu:=cs:C1710.menu.new()\
-			.append("CommonMenuFile";$menuFile)\
-			.append("CommonMenuEdit";cs:C1710.menu.new().edit())
+			.append("CommonMenuFile"; $menuFile)\
+			.append("CommonMenuEdit"; cs:C1710.menu.new().edit())
 		
-		If (Storage:C1525.database.isMatrix)
+		If (DATABASE.isMatrix)
 			
-			file_Menu ($menuFile)
-			dev_Menu ($menu)
+			file_Menu($menuFile)
+			dev_Menu($menu)
 			
 		End if 
 		
 		$menu.setBar()
 		
-		  //___________________________________________________________
-	: ($Txt_entryPoint="_deinit")
+		//___________________________________________________________
+	: ($entryPoint="_deinit")
 		
-		  //
+		//
 		
-		  //___________________________________________________________
+		//___________________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown entry point ("+$Txt_entryPoint+")")
+		ASSERT:C1129(False:C215; "Unknown entry point ("+$entryPoint+")")
 		
-		  //___________________________________________________________
+		//___________________________________________________________
 End case 

@@ -81,7 +81,7 @@ If ($out.success)
 					// <META-DATA>
 					
 					//……………………………………………………………………………………………………………
-				: (project.isField($key))\
+				: (PROJECT.isField($key))\
 					 & (Num:C11(This:C1470.selector)=0)
 					
 					$out.formatColors.push(Foreground color:K23:1)
@@ -104,7 +104,7 @@ If ($out.success)
 					
 					If ($field.label=Null:C1517)
 						
-						$field.label:=project.label($field.name)
+						$field.label:=PROJECT.label($field.name)
 						
 					End if 
 					
@@ -118,7 +118,7 @@ If ($out.success)
 					
 					$out.shortLabels.push($field.shortLabel)
 					$out.iconPaths.push(String:C10($field.icon))
-					$out.icons.push(project.getIcon(String:C10($field.icon)))
+					$out.icons.push(PROJECT.getIcon(String:C10($field.icon)))
 					
 					If ($field.format#Null:C1517)
 						
@@ -131,7 +131,7 @@ If ($out.success)
 								"action"; "isValid"; \
 								"format"; $formatters.folder($t))).success))
 								
-								$out.formatColors[$out.formats.length]:=ui.errorColor  // Missing or invalid
+								$out.formatColors[$out.formats.length]:=UI.errorColor  // Missing or invalid
 								
 							End if 
 							
@@ -156,7 +156,7 @@ If ($out.success)
 					// <NOTHING MORE TO DO>
 					
 					//……………………………………………………………………………………………………………
-				: (project.isRelationToOne($table[$key]))
+				: (PROJECT.isRelationToOne($table[$key]))
 					
 					If (Num:C11(This:C1470.selector)=0)
 						
@@ -169,7 +169,7 @@ If ($out.success)
 									// <NOTHING MORE TO DO>
 									
 									//______________________________________________________
-								: (project.isField($subKey))
+								: (PROJECT.isField($subKey))
 									
 									$out.formatColors.push(Foreground color:K23:1)
 									$out.nameColors.push(Foreground color:K23:1)
@@ -192,7 +192,7 @@ If ($out.success)
 									$out.labels.push($field.label)
 									$out.shortLabels.push($field.shortLabel)
 									$out.iconPaths.push(String:C10($field.icon))
-									$out.icons.push(project.getIcon(String:C10($field.icon)))
+									$out.icons.push(PROJECT.getIcon(String:C10($field.icon)))
 									
 									If ($field.format#Null:C1517)
 										
@@ -205,7 +205,7 @@ If ($out.success)
 												"action"; "isValid"; \
 												"format"; $formatters.folder($t))).success))
 												
-												$out.formatColors[$out.formats.length]:=ui.errorColor  // Missing or invalid
+												$out.formatColors[$out.formats.length]:=UI.errorColor  // Missing or invalid
 												
 											End if 
 											
@@ -240,7 +240,7 @@ If ($out.success)
 									$out.labels.push($field.label)
 									$out.shortLabels.push($field.shortLabel)
 									$out.iconPaths.push(String:C10($field.icon))
-									$out.icons.push(project.getIcon(String:C10($field.icon)))
+									$out.icons.push(PROJECT.getIcon(String:C10($field.icon)))
 									//**************************************************************************
 									
 									//______________________________________________________
@@ -250,7 +250,7 @@ If ($out.success)
 						
 					Else 
 						
-						If (feature.with("moreRelations"))
+						If (FEATURE.with("moreRelations"))
 							
 							$field:=$table[$key]
 							
@@ -270,7 +270,7 @@ If ($out.success)
 							
 							If (String:C10($field.label)="")
 								
-								$field.label:=project.label($key)
+								$field.label:=PROJECT.label($key)
 								
 							End if 
 							
@@ -284,9 +284,9 @@ If ($out.success)
 							
 							$out.shortLabels.push($field.shortLabel)
 							$out.iconPaths.push(String:C10($field.icon))
-							$out.icons.push(project.getIcon(String:C10($field.icon)))
+							$out.icons.push(PROJECT.getIcon(String:C10($field.icon)))
 							
-							If (project.isLink($table[$key]))
+							If (PROJECT.isLink($table[$key]))
 								
 								// N -> 1 -> N relation
 								
@@ -294,7 +294,7 @@ If ($out.success)
 								
 								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 									
-									$out.nameColors[$out.names.length-1]:=ui.errorColor  // Missing or invalid
+									$out.nameColors[$out.names.length-1]:=UI.errorColor  // Missing or invalid
 									
 								End if 
 							End if 
@@ -308,7 +308,7 @@ If ($out.success)
 				: (Num:C11(This:C1470.selector)=0)
 					
 					//……………………………………………………………………………………………………………
-				: (project.isRelationToMany($table[$key]))  //&(Num(This.selector)=1)
+				: (PROJECT.isRelationToMany($table[$key]))  //&(Num(This.selector)=1)
 					
 					$out.formatColors.push(Foreground color:K23:1)
 					$out.nameColors.push(Foreground color:K23:1)
@@ -328,7 +328,7 @@ If ($out.success)
 					
 					If (String:C10($field.label)="")
 						
-						$field.label:=project.label($key)
+						$field.label:=PROJECT.label($key)
 						
 					End if 
 					
@@ -342,11 +342,11 @@ If ($out.success)
 					
 					$out.shortLabels.push($field.shortLabel)
 					$out.iconPaths.push(String:C10($field.icon))
-					$out.icons.push(project.getIcon(String:C10($field.icon)))
+					$out.icons.push(PROJECT.getIcon(String:C10($field.icon)))
 					
 					If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 						
-						$out.nameColors[$out.names.length-1]:=ui.errorColor  // Missing or invalid
+						$out.nameColors[$out.names.length-1]:=UI.errorColor  // Missing or invalid
 						
 					End if 
 					

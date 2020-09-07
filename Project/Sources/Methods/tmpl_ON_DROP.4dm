@@ -32,7 +32,7 @@ If (Length:C16($cible)>0)
 		BLOB TO VARIABLE:C533($x; $dropped)
 		SET BLOB SIZE:C606($x; 0)
 		
-		project.cleanup($dropped)
+		PROJECT.cleanup($dropped)
 		
 		// Check the match of the type with the source
 		SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:type"; $t)
@@ -258,13 +258,13 @@ If (Length:C16($cible)>0)
 				End if 
 			End if 
 			
-			If (feature.with("newViewUI"))
+			If (FEATURE.with("newViewUI"))
 				
 				OB REMOVE:C1226(Form:C1466.$dialog.VIEWS; "scroll")
 				
 			End if 
 			
-			project.save()
+			PROJECT.save()
 			
 			// Update preview
 			views_preview("draw"; This:C1470)

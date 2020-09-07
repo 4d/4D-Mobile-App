@@ -52,7 +52,7 @@ $Obj_geometry:=New object:C1471
 
 $Obj_geometry.ui:=New object:C1471
 
-If (ui.colorScheme.isDarkStyle)
+If (UI.colorScheme.isDarkStyle)
 	
 	$Obj_geometry.ui.background:=Background color none:K23:10
 	

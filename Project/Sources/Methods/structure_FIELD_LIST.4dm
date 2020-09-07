@@ -15,7 +15,7 @@ C_BOOLEAN:C305($Boo_error; $Boo_found)
 C_LONGINT:C283($i; $Lon_colum; $Lon_row)
 C_POINTER:C301($Ptr_fields; $Ptr_icons; $Ptr_list; $Ptr_published)
 C_TEXT:C284($t)
-C_OBJECT:C1216($ƒ; $Obj_; $Obj_context; $Obj_dataModel; $Obj_field; $Obj_form)
+C_OBJECT:C1216($Obj_; $Obj_context; $Obj_dataModel; $Obj_field; $Obj_form)
 C_OBJECT:C1216($Obj_table)
 C_COLLECTION:C1488($Col_desynchronized; $Col_selected)
 
@@ -35,8 +35,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	$Obj_context:=$Obj_form.form
 	
-	$ƒ:=Storage:C1525.ƒ
-	
 	$Obj_dataModel:=Form:C1466.dataModel
 	
 Else 
@@ -46,7 +44,7 @@ Else
 End if 
 
 // ----------------------------------------------------
-$Ptr_fields:=ui.pointer($Obj_form.fields)
+$Ptr_fields:=UI.pointer($Obj_form.fields)
 $Col_selected:=New collection:C1472
 
 If (Size of array:C274($Ptr_fields->)>0)
@@ -57,7 +55,7 @@ If (Size of array:C274($Ptr_fields->)>0)
 	$Obj_context.fieldName:=$Ptr_fields->{$Lon_row}
 	
 	// Keep the selection
-	$Ptr_list:=ui.pointer($Obj_form.fieldList)
+	$Ptr_list:=UI.pointer($Obj_form.fieldList)
 	
 	For ($i; 1; LISTBOX Get number of rows:C915(*; $Obj_form.fieldList); 1)
 		
@@ -71,8 +69,8 @@ End if
 
 LISTBOX GET CELL POSITION:C971(*; $Obj_form.tableList; $Lon_colum; $Lon_row)
 
-$Ptr_icons:=ui.pointer($Obj_form.icons)
-$Ptr_published:=ui.pointer($Obj_form.published)
+$Ptr_icons:=UI.pointer($Obj_form.icons)
+$Ptr_published:=UI.pointer($Obj_form.published)
 
 CLEAR VARIABLE:C89($Ptr_fields->)
 CLEAR VARIABLE:C89($Ptr_published->)
@@ -97,7 +95,7 @@ If ($Lon_row>0)
 					
 					If (Position:C15($Obj_context.fieldFilter; $Obj_field.name)>0)
 						
-						If ($ƒ.isRelationToOne($Obj_field))
+						If (PROJECT.isRelationToOne($Obj_field))
 							
 							//#MARK_TO_OPTIMIZE
 							$Obj_:=_o_structure(New object:C1471(\
@@ -164,7 +162,7 @@ If ($Lon_row>0)
 				
 				For each ($Obj_field; $Obj_table.field)
 					
-					If ($ƒ.isRelationToOne($Obj_field))
+					If (PROJECT.isRelationToOne($Obj_field))
 						
 						//#MARK_TO_OPTIMIZE
 						$Obj_:=_o_structure(New object:C1471(\
@@ -254,7 +252,7 @@ If ($Lon_row>0)
 					
 				End if 
 				
-				LISTBOX SET ROW COLOR:C1270(*; $Obj_form.fieldList; $Lon_row; Choose:C955($Boo_error; ui.errorColor; lk inherited:K53:26); lk font color:K53:24)
+				LISTBOX SET ROW COLOR:C1270(*; $Obj_form.fieldList; $Lon_row; Choose:C955($Boo_error; UI.errorColor; lk inherited:K53:26); lk font color:K53:24)
 				
 				// Highlight primary key
 				If ($Obj_field.name=$Obj_table.primaryKey)

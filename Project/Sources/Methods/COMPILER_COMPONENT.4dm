@@ -1,17 +1,15 @@
 //%attributes = {"invisible":true}
 
 // SYSTEM VARIABLES
-C_OBJECT:C1216(SHARED)  // Common values
-C_OBJECT:C1216(ui)  // UI constants
+var SHARED : Object  // Common values
+var UI : Object  // UI constants
 
-C_OBJECT:C1216(feature)  // Feature flags
+var FEATURE : Object  // Feature flags
 
-C_OBJECT:C1216(RECORD)  // General journal
+var RECORD : Object  // General journal
 
-C_OBJECT:C1216(_o_project)
-
-//C_OBJECT(project)
-var project : cs:C1710.project
+var PROJECT : cs:C1710.project
+var DATABASE : cs:C1710.database
 
 // INITIALIZATION
 COMPONENT_INIT

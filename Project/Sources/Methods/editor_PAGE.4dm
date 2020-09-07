@@ -184,7 +184,7 @@ If (Length:C16($page)>0)
 			//………………………………………………………………………………………
 		: ($index=5)
 			
-			If (feature.with("newViewUI"))
+			If (FEATURE.with("newViewUI"))
 				
 				$o.panels.push(New object:C1471(\
 					"title"; Get localized string:C991("forms"); \
@@ -229,7 +229,7 @@ If (Length:C16($page)>0)
 			//………………………………………………………………………………………
 		: ($index=6)
 			
-			If (feature.with("pushNotification"))
+			If (FEATURE.with("pushNotification"))
 				
 				$o.panels.push(New object:C1471(\
 					"title"; Get localized string:C991("server"); \

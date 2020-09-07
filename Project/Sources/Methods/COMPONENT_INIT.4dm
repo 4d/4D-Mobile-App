@@ -10,20 +10,25 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_BOOLEAN:C305($bInitRecord; $bReset)
-C_LONGINT:C283($l; $lMode)
-C_PICTURE:C286($p)
-C_TEXT:C284($t; $tProcess)
-C_OBJECT:C1216($o; $oPreferences; $signal)
-
-C_OBJECT:C1216(feature)
-C_OBJECT:C1216(SHARED)
-C_OBJECT:C1216(ui)
-C_OBJECT:C1216(RECORD)
+var $processName; $t : Text
+var $p : Picture
+var $initLog; $reset : Boolean
+var $l; $mode : Integer
+var $o; $pref; $signal : Object
 
 // ----------------------------------------------------
 // Initialisations
-$bReset:=Macintosh option down:C545
+$reset:=Macintosh option down:C545
+
+PROJECT:=cs:C1710.project.new()
+
+DATABASE:=cs:C1710.database.new()
+
+DATABASE.projects:=Folder:C1567("/PACKAGE/Mobile Projects")
+DATABASE.projects.create()
+
+DATABASE.products:=DATABASE.root.parent.folder(DATABASE.structure.name+" - Mobile")
+
 
 // ----------------------------------------------------
 // Disable asserts in release mode
@@ -34,15 +39,17 @@ $o:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
 
 If ($o.exists)
 	
-	$oPreferences:=JSON Parse:C1218($o.getText())
+	$pref:=JSON Parse:C1218($o.getText())
 	
 Else 
 	
 	// Create the preferences
-	$oPreferences:=New object:C1471
+	$pref:=New object:C1471
 	
 End if 
 
+//***********************************************************************
+//***********************************************************************
 If (Storage:C1525.database=Null:C1517)
 	
 /* #ACI0099986
@@ -57,22 +64,24 @@ $o.wait()
 	KILL WORKER:C1390("$")
 	
 End if 
+//***********************************************************************
+//***********************************************************************
 
 // ================================================================================================================================
 //                                                               LOGGER
 // ================================================================================================================================
-If (OB Is empty:C1297(RECORD)) | $bReset
+If (OB Is empty:C1297(RECORD)) | $reset
 	
 	RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
 	RECORD.verbose:=(Structure file:C489=Structure file:C489(*))
-	$bInitRecord:=True:C214
+	$initLog:=True:C214
 	
 End if 
 
 // ================================================================================================================================
 //                                                            COMMON VALUES
 // ================================================================================================================================
-If (OB Is empty:C1297(SHARED)) | $bReset
+If (OB Is empty:C1297(SHARED)) | $reset
 	
 	SHARED:=New object:C1471
 	
@@ -151,7 +160,7 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 		"limit"; 1000000; \
 		"page"; 1))
 	
-	If (SHARED.component.build#Num:C11($oPreferences.lastBuild)) | $bReset
+	If (SHARED.component.build#Num:C11($pref.lastBuild)) | $reset
 		
 		// Invalid the cache
 		$o:=sdk(New object:C1471("action"; "cacheFolder"))
@@ -163,17 +172,17 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 		End if 
 		
 		// Save the preferences
-		$oPreferences.lastBuild:=SHARED.component.build
-		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($oPreferences; *))
+		$pref.lastBuild:=SHARED.component.build
+		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($pref; *))
 		
 	End if 
 	
 	SHARED.keyExtension:="mobileapp"
 	
 	// Override common conf by file settings [
-	If ($oPreferences.common#Null:C1517)
+	If ($pref.common#Null:C1517)
 		
-		ob_deepMerge(SHARED; $oPreferences.common)
+		ob_deepMerge(SHARED; $pref.common)
 		
 	End if 
 	//]
@@ -274,121 +283,121 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 	// ================================================================================================================================
 	//                                                           ONLY UI PROCESS
 	// ================================================================================================================================
-	PROCESS PROPERTIES:C336(Current process:C322; $tProcess; $l; $l; $lMode)
+	PROCESS PROPERTIES:C336(Current process:C322; $processName; $l; $l; $mode)
 	
-	If (Not:C34($lMode ?? 1))  // Not preemptive mode (always false in dev mode!)
+	If (Not:C34($mode ?? 1))  // Not preemptive mode (always false in dev mode!)
 		
-		If ($tProcess#"4D Mobile (@")
+		If ($processName#"4D Mobile (@")
 			
 			RECORD.reset()
 			
 		End if 
 		
-		ui:=New object:C1471
+		UI:=New object:C1471
 		
-		ui.debugMode:=(Structure file:C489=Structure file:C489(*))  // True in matrix database
+		UI.debugMode:=(Structure file:C489=Structure file:C489(*))  // True in matrix database
 		
 		// Preload icons for field types [
-		ui.fieldIcons:=New collection:C1472
+		UI.fieldIcons:=New collection:C1472
 		
 		For each ($o; Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))
 			
 			READ PICTURE FILE:C678($o.platformPath; $p)
-			ui.fieldIcons[Num:C11(Replace string:C233($o.name; "field_"; ""))]:=$p
+			UI.fieldIcons[Num:C11(Replace string:C233($o.name; "field_"; ""))]:=$p
 			
 		End for each 
 		
 		// Field type names [
-		ui.typeNames:=New collection:C1472
-		ui.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
-		ui.typeNames[Is integer:K8:5]:=Get localized string:C991("integer")
-		ui.typeNames[Is longint:K8:6]:=Get localized string:C991("longInteger")
-		ui.typeNames[Is integer 64 bits:K8:25]:=Get localized string:C991("integer64Bits")
-		ui.typeNames[Is real:K8:4]:=Get localized string:C991("real")
-		ui.typeNames[_o_Is float:K8:26]:=Get localized string:C991("float")
-		ui.typeNames[Is boolean:K8:9]:=Get localized string:C991("boolean")
-		ui.typeNames[Is time:K8:8]:=Get localized string:C991("time")
-		ui.typeNames[Is date:K8:7]:=Get localized string:C991("date")
-		ui.typeNames[Is text:K8:3]:=Get localized string:C991("text")
-		ui.typeNames[Is picture:K8:10]:=Get localized string:C991("picture")
+		UI.typeNames:=New collection:C1472
+		UI.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
+		UI.typeNames[Is integer:K8:5]:=Get localized string:C991("integer")
+		UI.typeNames[Is longint:K8:6]:=Get localized string:C991("longInteger")
+		UI.typeNames[Is integer 64 bits:K8:25]:=Get localized string:C991("integer64Bits")
+		UI.typeNames[Is real:K8:4]:=Get localized string:C991("real")
+		UI.typeNames[_o_Is float:K8:26]:=Get localized string:C991("float")
+		UI.typeNames[Is boolean:K8:9]:=Get localized string:C991("boolean")
+		UI.typeNames[Is time:K8:8]:=Get localized string:C991("time")
+		UI.typeNames[Is date:K8:7]:=Get localized string:C991("date")
+		UI.typeNames[Is text:K8:3]:=Get localized string:C991("text")
+		UI.typeNames[Is picture:K8:10]:=Get localized string:C991("picture")
 		//]
 		
 		// Colors [
-		ui.colorScheme:=ui_colorScheme
+		UI.colorScheme:=ui_colorScheme
 		
-		If (ui.colorScheme.isDarkStyle)
+		If (UI.colorScheme.isDarkStyle)
 			
-			ui.strokeColor:=0x00083C56
-			ui.highlightColor:=Background color:K23:2  // 0x00111111  // 0x00E6F8FF
-			ui.highlightColorNoFocus:=Background color:K23:2  // 0x00111111
+			UI.strokeColor:=0x00083C56
+			UI.highlightColor:=Background color:K23:2  // 0x00111111  // 0x00E6F8FF
+			UI.highlightColorNoFocus:=Background color:K23:2  // 0x00111111
 			
-			ui.selectedColor:=0x00034B6D
-			ui.alternateSelectedColor:=0x00C1C1FF  // 0x00E7F8FF
-			ui.backgroundSelectedColor:=Highlight text background color:K23:5  // 0x004BA6F8
-			ui.backgroundUnselectedColor:=Highlight text background color:K23:5  // 0x005A5A5A
+			UI.selectedColor:=0x00034B6D
+			UI.alternateSelectedColor:=0x00C1C1FF  // 0x00E7F8FF
+			UI.backgroundSelectedColor:=Highlight text background color:K23:5  // 0x004BA6F8
+			UI.backgroundUnselectedColor:=Highlight text background color:K23:5  // 0x005A5A5A
 			
-			ui.selectedFillColor:="darkgray"
-			ui.unselectedFillColor:="black"
+			UI.selectedFillColor:="darkgray"
+			UI.unselectedFillColor:="black"
 			
-			ui.errorColor:=0x00F28585
-			ui.warningColor:=0x00F2B174
+			UI.errorColor:=0x00F28585
+			UI.warningColor:=0x00F2B174
 			
-			ui.errorRGB:="red"
-			ui.warningRGB:="orange"
+			UI.errorRGB:="red"
+			UI.warningRGB:="orange"
 			
 		Else 
 			
-			ui.strokeColor:=0x001AA1E5
-			ui.highlightColor:=0x00FFFFFF  // 0x00E6F8FF
-			ui.highlightColorNoFocus:=0x00FFFFFF  // XXXX change name
+			UI.strokeColor:=0x001AA1E5
+			UI.highlightColor:=0x00FFFFFF  // 0x00E6F8FF
+			UI.highlightColorNoFocus:=0x00FFFFFF  // XXXX change name
 			
-			ui.selectedColor:=0x0003A9F4
-			ui.alternateSelectedColor:=0x00F4F4F6  // 0x00E7F8FF
-			ui.backgroundSelectedColor:=0x00E7F8FF
-			ui.backgroundUnselectedColor:=0x00C9C9C9
+			UI.selectedColor:=0x0003A9F4
+			UI.alternateSelectedColor:=0x00F4F4F6  // 0x00E7F8FF
+			UI.backgroundSelectedColor:=0x00E7F8FF
+			UI.backgroundUnselectedColor:=0x00C9C9C9
 			
-			ui.selectedFillColor:="gray"  // "dodgerblue"
-			ui.unselectedFillColor:="white"
+			UI.selectedFillColor:="gray"  // "dodgerblue"
+			UI.unselectedFillColor:="white"
 			
-			ui.errorColor:=0x00FF0000
-			ui.warningColor:=0x00F19135
+			UI.errorColor:=0x00FF0000
+			UI.warningColor:=0x00F19135
 			
-			ui.errorRGB:="red"
-			ui.warningRGB:="darkorange"
+			UI.errorRGB:="red"
+			UI.warningRGB:="darkorange"
 			
 		End if 
 		//]
 		
-		ui.colors:=New object:C1471
-		ui.colors.strokeColor:=color("4dColor"; New object:C1471("value"; ui.strokeColor))
-		ui.colors.highlightColor:=color("4dColor"; New object:C1471("value"; ui.highlightColor))
-		ui.colors.highlightColorNoFocus:=color("4dColor"; New object:C1471("value"; ui.highlightColorNoFocus))
-		ui.colors.selectedColor:=color("4dColor"; New object:C1471("value"; ui.selectedColor))
-		ui.colors.alternateSelectedColor:=color("4dColor"; New object:C1471("value"; ui.alternateSelectedColor))
-		ui.colors.backgroundSelectedColor:=color("4dColor"; New object:C1471("value"; ui.backgroundSelectedColor))
-		ui.colors.backgroundUnselectedColor:=color("4dColor"; New object:C1471("value"; ui.backgroundUnselectedColor))
-		ui.colors.errorColor:=color("4dColor"; New object:C1471("value"; ui.errorColor))
-		ui.colors.warningColor:=color("4dColor"; New object:C1471("value"; ui.warningColor))
+		UI.colors:=New object:C1471
+		UI.colors.strokeColor:=color("4dColor"; New object:C1471("value"; UI.strokeColor))
+		UI.colors.highlightColor:=color("4dColor"; New object:C1471("value"; UI.highlightColor))
+		UI.colors.highlightColorNoFocus:=color("4dColor"; New object:C1471("value"; UI.highlightColorNoFocus))
+		UI.colors.selectedColor:=color("4dColor"; New object:C1471("value"; UI.selectedColor))
+		UI.colors.alternateSelectedColor:=color("4dColor"; New object:C1471("value"; UI.alternateSelectedColor))
+		UI.colors.backgroundSelectedColor:=color("4dColor"; New object:C1471("value"; UI.backgroundSelectedColor))
+		UI.colors.backgroundUnselectedColor:=color("4dColor"; New object:C1471("value"; UI.backgroundUnselectedColor))
+		UI.colors.errorColor:=color("4dColor"; New object:C1471("value"; UI.errorColor))
+		UI.colors.warningColor:=color("4dColor"; New object:C1471("value"; UI.warningColor))
 		
-		ui.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
-		ui.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath
+		UI.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
+		UI.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath
 		
-		ui.alert:="🚫"
-		ui.warning:="❗"
+		UI.alert:="🚫"
+		UI.warning:="❗"
 		
 		// Only for data pannel [
 		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/user.png").platformPath; $p)
-		ui.user:=$p
+		UI.user:=$p
 		
 		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/filter.png").platformPath; $p)
-		ui.filter:=$p
+		UI.filter:=$p
 		//]
 		
-		ui.checkMark:=Char:C90(19)
+		UI.checkMark:=Char:C90(19)
 		
 	End if 
 	
-	If (Bool:C1537(ui.debugMode))
+	If (Bool:C1537(UI.debugMode))
 		
 		Folder:C1567(fk desktop folder:K87:19).folder("DEV").create()
 		
@@ -396,33 +405,32 @@ If (OB Is empty:C1297(SHARED)) | $bReset
 	
 	// Define classes & methods
 	EXECUTE METHOD:C1007("ui_CLASSES")
-	EXECUTE METHOD:C1007("project_CLASSES")
 	
 End if 
 
 /*================================================================================================================================
 FEATURES FLAGS
 ================================================================================================================================*/
-If (OB Is empty:C1297(feature)) | $bReset
+If (OB Is empty:C1297(FEATURE)) | $reset
 	
-	FEATURE_FLAGS(1840; $oPreferences)
+	FEATURE_FLAGS(1840; $pref)
 	
 End if 
 
-If (Not:C34($lMode ?? 1))\
- & ($tProcess#"4D Mobile (@")\
- & ($bInitRecord)
+If (Not:C34($mode ?? 1))\
+ & ($processName#"4D Mobile (@")\
+ & ($initLog)
 	
 	$t:=SHARED.ide.version
 	RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0"; "."+$t[[4]]; "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
 	RECORD.log("Component "+SHARED.component.version)
 	RECORD.line()
 	
-	For each ($t; feature)
+	For each ($t; FEATURE)
 		
-		If (Value type:C1509(feature[$t])=Is boolean:K8:9)
+		If (Value type:C1509(FEATURE[$t])=Is boolean:K8:9)
 			
-			RECORD.log("feature "+Replace string:C233($t; "_"; "")+": "+Choose:C955(feature[$t]; "Enabled"; "Disabled"))
+			RECORD.log("feature "+Replace string:C233($t; "_"; "")+": "+Choose:C955(FEATURE[$t]; "Enabled"; "Disabled"))
 			
 		End if 
 	End for each 
@@ -434,9 +442,9 @@ End if
 /*================================================================================================================================
 AFTER FLAGS
 ================================================================================================================================*/
-COMPONENT_DEFINE_TOOLS
+//COMPONENT_DEFINE_TOOLS
 
-If (feature.with("accentColors"))
+If (FEATURE.with("accentColors"))
 	
 	// ui.selectedColor:=Highlight menu background color
 	// ui.highlightColor:=Highlight menu background color
@@ -446,7 +454,7 @@ If (feature.with("accentColors"))
 	
 End if 
 
-If (feature.with("debug"))
+If (FEATURE.with("debug"))
 	
 	SET ASSERT ENABLED:C1131(True:C214; *)
 	
@@ -454,8 +462,5 @@ End if
 
 RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
 
-// ----------------------------------------------------
-// Return
-// <NONE>
 // ----------------------------------------------------
 // End

@@ -15,7 +15,7 @@ var $o; $preferences : Object
 $stableVersion:=$1
 $preferences:=$2
 
-feature:=New object:C1471(\
+FEATURE:=New object:C1471(\
 "with"; Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))])); \
 "unstable"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=$stableVersion)); \
 "delivered"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=Num:C11($2))); \
@@ -34,8 +34,8 @@ _____________*/
 //featuresFlags._475:=True // deactivate code signing on framework
 //featuresFlags._234:=True // Add in coreData model Record abstract entity
 //featuresFlags._568:=True // use previous project build SDK as new SDK (ie. fast sdk move, bug exists)
-feature.debug(8858)  // Activates a debug mode for UI
-feature.alias("debug"; 8858)
+FEATURE.debug(8858)  // Activates a debug mode for UI
+FEATURE.alias("debug"; 8858)
 
 // Use old behaviour
 //featuresFlags._677:=True // Format fields when dumping data from rest (userless if iOS app could translate)
@@ -43,104 +43,104 @@ feature.alias("debug"; 8858)
 /* _____________
 17R2
 _____________*/
-feature.delivered(89556; 1720)  // Reload embedded data from iOS application
-feature.delivered(92293; 1720)  // Support user defined tables
-feature.delivered(93674; 1720)  // Main menu
-feature.delivered(8122017; 1720)  // Turn around bug close window
-feature.delivered(96674; 1720)  // Archive app
+FEATURE.delivered(89556; 1720)  // Reload embedded data from iOS application
+FEATURE.delivered(92293; 1720)  // Support user defined tables
+FEATURE.delivered(93674; 1720)  // Main menu
+FEATURE.delivered(8122017; 1720)  // Turn around bug close window
+FEATURE.delivered(96674; 1720)  // Archive app
 
 /* _____________
 17R3
 _____________*/
-feature.delivered(100157; 1730)  // Template creation
-feature.delivered(100353; 1730)  // Template creation: inject any sources
-feature.delivered(100191; 1730)  // Data Formatter
+FEATURE.delivered(100157; 1730)  // Template creation
+FEATURE.delivered(100353; 1730)  // Template creation: inject any sources
+FEATURE.delivered(100191; 1730)  // Data Formatter
 
 /* _____________
 17R4
 _____________*/
-feature.delivered(98105; 1740)  // Multi-criteria Search
-feature.delivered(100990; 1740)  // Custom Data Formatter
-feature.delivered(100174; 1740)  // Restricted queries
-feature.delivered(101725; 1740)  // Restricted queries: Use NSDataSet (beter way to store resources)
-feature.delivered(103112; 1740)  // Restricted queries: Move dataSet into database in Mobile Projects
-feature.delivered(102457; 1740)  // Data file access with /mobileapp key
+FEATURE.delivered(98105; 1740)  // Multi-criteria Search
+FEATURE.delivered(100990; 1740)  // Custom Data Formatter
+FEATURE.delivered(100174; 1740)  // Restricted queries
+FEATURE.delivered(101725; 1740)  // Restricted queries: Use NSDataSet (beter way to store resources)
+FEATURE.delivered(103112; 1740)  // Restricted queries: Move dataSet into database in Mobile Projects
+FEATURE.delivered(102457; 1740)  // Data file access with /mobileapp key
 
 /* _____________
 17R5
 _____________*/
-feature.delivered(101637; 1750)  // Display n-1 relations
-feature.delivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
-feature.delivered(103411; 1750)  // Incremental synchronization
-feature.delivered(103505; 1750)  // Add, Update and Save Actions
-feature.delivered("withNewFieldProperties"; 1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
-feature.delivered("withRecursiveLink"; 1750)  // Enable recursive link management
-feature.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
+FEATURE.delivered(101637; 1750)  // Display n-1 relations
+FEATURE.delivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
+FEATURE.delivered(103411; 1750)  // Incremental synchronization
+FEATURE.delivered(103505; 1750)  // Add, Update and Save Actions
+FEATURE.delivered("withNewFieldProperties"; 1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
+FEATURE.delivered("withRecursiveLink"; 1750)  // Enable recursive link management
+FEATURE.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
 
 /* _____________
 17R6
 _____________*/
-feature.delivered(105413; 1760)  // [MOBILE] Actions with parameters
-feature.delivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
-feature.delivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
+FEATURE.delivered(105413; 1760)  // [MOBILE] Actions with parameters
+FEATURE.delivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
+FEATURE.delivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
 
 /* _____________
 18
 _____________*/
-feature.delivered(105431; 1800)  // Display 1-n relations
-feature.delivered(110882; 1800)  // Dump data into core data SQLLite database
-feature.delivered("newDataModel"; 1800)
+FEATURE.delivered(105431; 1800)  // Display 1-n relations
+FEATURE.delivered(110882; 1800)  // Dump data into core data SQLLite database
+FEATURE.delivered("newDataModel"; 1800)
 
 /* _____________
 18R2
 _____________*/
-feature.delivered("repairStructureMoreVisible"; 1820)
-feature.delivered(113164; 1820)  // Enable/disable image dump
+FEATURE.delivered("repairStructureMoreVisible"; 1820)
+FEATURE.delivered(113164; 1820)  // Enable/disable image dump
 
 /* _____________
 18R3
 _____________*/
-feature.delivered(112225; 1830)  // Select/install/use custom templates
+FEATURE.delivered(112225; 1830)  // Select/install/use custom templates
 
 /* _____________
 18R4
 _____________*/
-feature.delivered(113016)  // Svg improvement in forms section
-feature.delivered(107526)  // Push Notifications
+FEATURE.delivered(113016)  // Svg improvement in forms section
+FEATURE.delivered(107526)  // Push Notifications
 
 /* _____________
 18R5
 _____________*/
-feature.unstable(117601)  // Relation management optimisation
-feature.unstable(117618)  // Deep Linking
+FEATURE.unstable(117601)  // Relation management optimisation
+FEATURE.unstable(117618)  // Deep Linking
 
 /* _____________
 WIP
 _____________*/
 
 // Share action with descrition
-feature.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
+FEATURE.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
 
 // Relation management optimisation using to generate project
-//feature.unstable("templateClass") 
+//feature.unstable("templateClass")
 
 // Enable widget actions
-feature.wip("withWidgetActions")
+FEATURE.wip("withWidgetActions")
 
 // Manage colors according to user system parameters
-feature.wip("accentColors")
+FEATURE.wip("accentColors")
 
 // Manage format as archive
-feature.wip("formatMarketPlace")
+FEATURE.wip("formatMarketPlace")
 
 // Support Collection of field injected into detail template https://project.4d.com/issues/114338
-feature.wip(114338)
+FEATURE.wip(114338)
 
 // Allow to drop a multivalued field next to another existing dropped multivalued fields to have two fields next to each other
-feature.alias("droppingNext"; 114338)
+FEATURE.alias("droppingNext"; 114338)
 
 // Work with Source class to test the data source
-feature.wip("sourceClass")
+FEATURE.wip("sourceClass")
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES
@@ -154,11 +154,11 @@ If ($preferences.features#Null:C1517)
 			
 			If (Value type:C1509($o.id)=Is text:K8:3)
 				
-				feature[$o.id]:=Bool:C1537($o.enabled)
+				FEATURE[$o.id]:=Bool:C1537($o.enabled)
 				
 			Else 
 				
-				feature["_"+String:C10($o.id)]:=Bool:C1537($o.enabled)
+				FEATURE["_"+String:C10($o.id)]:=Bool:C1537($o.enabled)
 				
 			End if 
 			
@@ -236,7 +236,7 @@ If ($preferences.features#Null:C1517)
 				End case 
 			End for each 
 			
-			feature["_"+String:C10($o.id)]:=$enabled
+			FEATURE["_"+String:C10($o.id)]:=$enabled
 			
 		End if 
 	End for each 
@@ -245,8 +245,8 @@ End if
 /* _____________
 ALIAS
 _____________*/
-feature.alias("newViewUI"; 113016)
-feature.alias("resourcesBrowser"; 112225)
-feature.alias("pushNotification"; 107526)
-feature.alias("deepLinking"; 117618)
-feature.alias("moreRelations"; 117601)
+FEATURE.alias("newViewUI"; 113016)
+FEATURE.alias("resourcesBrowser"; 112225)
+FEATURE.alias("pushNotification"; 107526)
+FEATURE.alias("deepLinking"; 117618)
+FEATURE.alias("moreRelations"; 117601)

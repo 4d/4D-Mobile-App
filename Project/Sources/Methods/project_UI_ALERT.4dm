@@ -1,35 +1,35 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : project_UI_ALERT
-  // ID[ACDDE8AE2FFC4989ADC083AF98BE31E1]
-  // Created 10-8-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : project_UI_ALERT
+// ID[ACDDE8AE2FFC4989ADC083AF98BE31E1]
+// Created 10-8-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_parameters)
 C_OBJECT:C1216($Obj_ui)
 
 If (False:C215)
-	C_OBJECT:C1216(project_UI_ALERT ;$1)
+	C_OBJECT:C1216(project_UI_ALERT; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
-	  //Required parameters
+	//Required parameters
 	$Obj_ui:=$1
 	
-	  //Optional parameters
+	//Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
@@ -39,40 +39,40 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
-If (OB Get:C1224($Obj_ui;"reset";Is boolean:K8:9))
+// ----------------------------------------------------
+If (OB Get:C1224($Obj_ui; "reset"; Is boolean:K8:9))
 	
-	OBJECT SET TITLE:C194(*;$Obj_ui.target;"")
-	OBJECT SET HELP TIP:C1181(*;$Obj_ui.target;"")
+	OBJECT SET TITLE:C194(*; $Obj_ui.target; "")
+	OBJECT SET HELP TIP:C1181(*; $Obj_ui.target; "")
 	
 Else 
 	
 	Case of 
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_ui.type="alert")
 			
-			OBJECT SET TITLE:C194(*;$Obj_ui.target;ui.alert)
+			OBJECT SET TITLE:C194(*; $Obj_ui.target; UI.alert)
 			
-			  //______________________________________________________
+			//______________________________________________________
 		: ($Obj_ui.type="warning")
 			
-			OBJECT SET TITLE:C194(*;$Obj_ui.target;ui.warning)
+			OBJECT SET TITLE:C194(*; $Obj_ui.target; UI.warning)
 			
-			  //______________________________________________________
+			//______________________________________________________
 		Else 
 			
-			OBJECT SET TITLE:C194(*;$Obj_ui.target;ui.alert)
+			OBJECT SET TITLE:C194(*; $Obj_ui.target; UI.alert)
 			
-			  //______________________________________________________
+			//______________________________________________________
 	End case 
 	
-	OBJECT SET HELP TIP:C1181(*;$Obj_ui.target;$Obj_ui.tips)
+	OBJECT SET HELP TIP:C1181(*; $Obj_ui.target; $Obj_ui.tips)
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// Return
+// <NONE>
+// ----------------------------------------------------
+// End

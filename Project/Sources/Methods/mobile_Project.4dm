@@ -14,7 +14,7 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($Boo_dev; $Boo_OK; $Boo_verbose)
+C_BOOLEAN:C305($isDebug; $Boo_OK; $Boo_verbose)
 C_LONGINT:C283($Lon_parameters; $Lon_start)
 C_TEXT:C284($File_; $t; $Txt_buffer)
 C_OBJECT:C1216($Obj_action; $Dir_template; $Obj_cache; $Obj_dataModel; $Obj_in; $Obj_manifest; $Obj_out)
@@ -33,7 +33,7 @@ $Lon_parameters:=Count parameters:C259
 If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	
 	// NO PARAMETERS REQUIRED
-	$Boo_dev:=Not:C34(Is compiled mode:C492)
+	$isDebug:=DATABASE.isInterpreted
 	
 	$Obj_cache:=env_userPathname("cache")
 	$Obj_cache.create()
@@ -47,7 +47,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 		
 		actions("addChoiceList"; $Obj_in)
 		
-		If ($Boo_dev)
+		If ($isDebug)
 			
 			// Cache the last build for debug purpose
 			ob_writeToFile($Obj_in; $Obj_cache.file("lastBuild.4dmobile"); True:C214)
@@ -56,7 +56,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 		
 	Else 
 		
-		If ($Boo_dev)
+		If ($isDebug)
 			
 			// IF no parameters, load from previous launched file
 			If (SHARED=Null:C1517)
@@ -89,33 +89,35 @@ If (Asserted:C1132($Obj_in.project#Null:C1517))
 	
 	$Obj_project:=$Obj_in.project
 	
-End if 
-
-// Cleanup
-var $t; $tt : Text
-
-For each ($t; $Obj_project)
+	// Cleanup
+	var $t; $tt : Text
 	
-	If ($t[[1]]="$")
+	For each ($t; $Obj_project)
 		
-		If ($t="$project")
+		If ($t[[1]]="$")
 			
-			For each ($tt; $Obj_project[$t])
+			If ($t="$project")
 				
-				If ($tt[[1]]="$")
+				For each ($tt; $Obj_project[$t])
 					
-					OB REMOVE:C1226($Obj_project[$t]; $tt)
-					
-				End if 
-			End for each 
-			
-		Else 
-			
-			OB REMOVE:C1226($Obj_project; $t)
-			
+					If ($tt[[1]]="$")
+						
+						OB REMOVE:C1226($Obj_project[$t]; $tt)
+						
+					End if 
+				End for each 
+				
+			Else 
+				
+				OB REMOVE:C1226($Obj_project; $t)
+				
+			End if 
 		End if 
-	End if 
-End for each 
+	End for each 
+	
+	PROJECT:=cs:C1710.project.new($Obj_project)
+	
+End if 
 
 If ($Obj_in.create=Null:C1517)
 	
@@ -272,7 +274,7 @@ If ($Obj_in.create)
 		"info"; $Obj_project.info)
 	$appManifest.id:=String:C10($appManifest.team.id)+"."+$appManifest.application.id
 	
-	If (feature.with(117618))
+	If (FEATURE.with(117618))
 		If (Bool:C1537($Obj_project.deepLinking.enabled))
 			If (Length:C16(String:C10($Obj_project.deepLinking.urlScheme))>0)
 				$appManifest.urlScheme:=String:C10($Obj_project.deepLinking.urlScheme)
@@ -343,7 +345,7 @@ If ($Obj_in.create)
 		$Obj_out.formatters:=formatters(New object:C1471("action"; "getByName")).formatters
 		
 		// Duplicate the template {
-		If (feature.with("templateClass"))  // add feature flag if test not possible with new code
+		If (FEATURE.with("templateClass"))  // add feature flag if test not possible with new code
 			$Obj_out.template:=cs:C1710.MainTemplate.new(New object:C1471(\
 				"template"; $Obj_template; \
 				"path"; $Obj_in.path; \
@@ -540,7 +542,7 @@ If ($Obj_in.create)
 		$Obj_out.computedCapabilities:=New object:C1471(\
 			"capabilities"; New object:C1471())
 		
-		If (feature.with(107526))
+		If (FEATURE.with(107526))
 			
 			If (Bool:C1537($Obj_project.server.pushNotification))
 				
@@ -557,7 +559,7 @@ If ($Obj_in.create)
 				End if 
 			End if 
 		End if 
-		If (feature.with(117618))
+		If (FEATURE.with(117618))
 			
 			If (Bool:C1537($Obj_project.deepLinking.enabled))
 				If (Length:C16(String:C10($Obj_project.deepLinking.urlScheme))>0)
@@ -596,7 +598,7 @@ If ($Obj_in.create)
 		// ----------------------------------------------------
 		
 		// Add sources if any to workspace {
-		If (Bool:C1537(feature._405))  // In feature until fix project launch with xcode
+		If (Bool:C1537(FEATURE._405))  // In feature until fix project launch with xcode
 			
 			Xcode(New object:C1471(\
 				"action"; "workspace-addsources"; \
@@ -606,7 +608,7 @@ If ($Obj_in.create)
 		//}
 		
 		// Backup into git {
-		If (Bool:C1537(feature._917))
+		If (Bool:C1537(FEATURE._917))
 			
 			git(New object:C1471(\
 				"action"; "config core.autocrlf"; \
@@ -702,7 +704,7 @@ If ($Obj_out.success)
 				"scheme"; $Obj_project.$project.product; \
 				"destination"; $Obj_in.path; \
 				"sdk"; "iphoneos"; \
-				"verbose"; $Boo_dev; \
+				"verbose"; $isDebug; \
 				"configuration"; "Release"; \
 				"archive"; True:C214; \
 				"allowProvisioningUpdates"; True:C214; \
@@ -730,7 +732,7 @@ If ($Obj_out.success)
 				
 				$Obj_result_build:=Xcode(New object:C1471(\
 					"action"; "build"; \
-					"verbose"; $Boo_dev; \
+					"verbose"; $isDebug; \
 					"exportArchive"; True:C214; \
 					"teamID"; String:C10($Obj_in.project.organization.teamId); \
 					"exportPath"; Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12); \
@@ -770,7 +772,7 @@ If ($Obj_out.success)
 				"scheme"; $Obj_project.$project.product; \
 				"destination"; $Obj_in.path; \
 				"sdk"; $Obj_in.sdk; \
-				"verbose"; $Boo_dev; \
+				"verbose"; $isDebug; \
 				"test"; Bool:C1537($Obj_in.test); \
 				"target"; Convert path system to POSIX:C1106($Obj_in.path+"build"+Folder separator:K24:12)))
 			

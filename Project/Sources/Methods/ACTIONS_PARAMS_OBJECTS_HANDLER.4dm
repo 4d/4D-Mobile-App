@@ -281,7 +281,7 @@ Case of
 			End if 
 			
 			$form.form.refresh()
-			project.save()
+			PROJECT.save()
 			
 		End if 
 		
@@ -313,7 +313,7 @@ Case of
 						
 						For each ($t; $table)
 							
-							If (Storage:C1525.ƒ.isField($t))
+							If (PROJECT.isField($t))
 								
 								$table[$t].fieldNumber:=Num:C11($t)
 								$c.push($table[$t])
@@ -325,7 +325,7 @@ Case of
 						
 						For each ($t; $table)
 							
-							If (Storage:C1525.ƒ.isField($t))
+							If (PROJECT.isField($t))
 								
 								If ($ƒ.action.parameters.query("fieldNumber = :1"; Num:C11($t)).length=0)
 									
@@ -461,7 +461,7 @@ Case of
 			$form.parameters.reveal($form.parameters.rowsNumber()+Num:C11($form.parameters.rowsNumber()=0))
 			
 			$form.form.refresh()
-			project.save()
+			PROJECT.save()
 			
 		End if 
 		
@@ -484,7 +484,7 @@ Case of
 		End if 
 		
 		$form.form.refresh()
-		project.save()
+		PROJECT.save()
 		
 		//==================================================
 	: ($form.form.current=$form.mandatory.name)  // Mandatory checkbox
@@ -519,7 +519,7 @@ Case of
 			End if 
 		End if 
 		
-		project.save()
+		PROJECT.save()
 		
 		//==================================================
 	: ($form.form.current=$form.min.name)\
@@ -585,7 +585,7 @@ Case of
 			End if 
 		End if 
 		
-		project.save()
+		PROJECT.save()
 		
 		//==================================================
 	: ($form.form.current=$form.default.name)  // Default value
@@ -707,7 +707,7 @@ Case of
 				End if 
 				
 				$form.form.refresh()
-				project.save()
+				PROJECT.save()
 				
 				//______________________________________________________
 		End case 
@@ -715,12 +715,12 @@ Case of
 		//==================================================
 	: ($form.form.current=$form.description.name)  // Description associated to the link
 		
-		project.save()
+		PROJECT.save()
 		
 		//==================================================
 	: ($form.linked.include($form.form.current))  // Linked widgets
 		
-		project.save()
+		PROJECT.save()
 		
 		//==================================================
 	Else 
@@ -730,9 +730,9 @@ Case of
 		//==================================================
 End case 
 
-If (feature.with(8858))
+If (FEATURE.with(8858))
 	
-	project.save()
+	PROJECT.save()
 	
 End if 
 

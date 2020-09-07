@@ -117,12 +117,12 @@ Else
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldThatMustBe_"; "theFieldTypeMustBe_")).localized(ui.typeNames[$Lon_type])
+						$Txt_tips:=str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldThatMustBe_"; "theFieldTypeMustBe_")).localized(UI.typeNames[$Lon_type])
 						
 					Else 
 						
 						// Concat
-						$Txt_tips:=$Txt_tips+Get localized string:C991("_or_")+ui.typeNames[$Lon_type]
+						$Txt_tips:=$Txt_tips+Get localized string:C991("_or_")+UI.typeNames[$Lon_type]
 						
 					End if 
 				End for each 
@@ -136,12 +136,12 @@ Else
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldWhoseTypeMustNotBe_"; "theFieldTypeMustNotBe_")).localized(ui.typeNames[$Lon_type])
+						$Txt_tips:=str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldWhoseTypeMustNotBe_"; "theFieldTypeMustNotBe_")).localized(UI.typeNames[$Lon_type])
 						
 					Else 
 						
 						// Concat
-						$Txt_tips:=$Txt_tips+Get localized string:C991("_or_")+ui.typeNames[$Lon_type]
+						$Txt_tips:=$Txt_tips+Get localized string:C991("_or_")+UI.typeNames[$Lon_type]
 						
 					End if 
 				End for each 
@@ -224,7 +224,7 @@ If (Length:C16($Txt_tips)=0)
 				
 				If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)
 					
-					$Txt_tips:=ui.alert+str("theLinkedTableIsNotPublished")\
+					$Txt_tips:=UI.alert+str("theLinkedTableIsNotPublished")\
 						.localized($o.relatedEntities)
 					
 				Else 

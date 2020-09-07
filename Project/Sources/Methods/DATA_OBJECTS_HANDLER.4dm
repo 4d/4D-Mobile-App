@@ -1,42 +1,42 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : DATA_OBJECTS_HANDLER
-  // ID[DE1DC030CB2B497BA1A42C0D39E7CE09]
-  // Created 18-12-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : DATA_OBJECTS_HANDLER
+// ID[DE1DC030CB2B497BA1A42C0D39E7CE09]
+// Created 18-12-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_LONGINT:C283($0)
 
 C_BOOLEAN:C305($bCaret)
-C_LONGINT:C283($column;$end;$l;$Lon_x;$Lon_y;$row)
+C_LONGINT:C283($column; $end; $l; $Lon_x; $Lon_y; $row)
 C_LONGINT:C283($start)
-C_TEXT:C284($t;$tID;$tSelection;$tTip)
-C_OBJECT:C1216($context;$event;$form;$menu;$o;$oTable)
+C_TEXT:C284($t; $tID; $tSelection; $tTip)
+C_OBJECT:C1216($context; $event; $form; $menu; $o; $oTable)
 
 If (False:C215)
-	C_LONGINT:C283(DATA_OBJECTS_HANDLER ;$0)
+	C_LONGINT:C283(DATA_OBJECTS_HANDLER; $0)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
+// ----------------------------------------------------
+// Initialisations
+If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
 	
-	  // NO PARAMETERS REQUIRED
+	// NO PARAMETERS REQUIRED
 	
-	  // Optional parameters
+	// Optional parameters
 	If (Count parameters:C259>=1)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
 	$event:=FORM Event:C1606
 	
-	$form:=DATA_Handler (New object:C1471(\
-		"action";"init"))
+	$form:=DATA_Handler(New object:C1471(\
+		"action"; "init"))
 	
 	$context:=$form.ui
 	$oTable:=$context.current
@@ -47,30 +47,30 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //==================================================
+		//==================================================
 	: ($event.objectName=$form.list)
 		
 		Case of 
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Getting Focus:K2:7)
 				
 				$context.listboxUI()
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Mouse Enter:K2:33)
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Losing Focus:K2:8)
 				
 				$context.listboxUI()
 				
 				$context.tables:=$context.tables
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Selection Change:K2:29)
 				
 				$context.lastIndex:=$context.index
@@ -78,19 +78,19 @@ Case of
 				$context.current:=$context.tables[$context.index-Num:C11($context.index>0)]
 				SET TIMER:C645(-1)
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Mouse Enter:K2:33)
 				
-				ui.tips.enable()
-				ui.tips.instantly()
+				UI.tips.enable()
+				UI.tips.instantly()
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Mouse Move:K2:35)
 				
-				GET MOUSE:C468($Lon_x;$Lon_y;$l)
+				GET MOUSE:C468($Lon_x; $Lon_y; $l)
 				
-				  //$oInfos:=LISTBOX Get info at(*;$Obj_form.list;$Lon_x;$Lon_y).element
-				LISTBOX GET CELL POSITION:C971(*;$event.objectName;$Lon_x;$Lon_y;$column;$row)
+				//$oInfos:=LISTBOX Get info at(*;$Obj_form.list;$Lon_x;$Lon_y).element
+				LISTBOX GET CELL POSITION:C971(*; $event.objectName; $Lon_x; $Lon_y; $column; $row)
 				
 				If ($row#0)
 					
@@ -103,7 +103,7 @@ Case of
 						
 						If (Length:C16(String:C10($o.filter.string))=0)
 							
-							  // No filter
+							// No filter
 							$tTip:=Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")
 							
 						Else 
@@ -120,7 +120,7 @@ Case of
 								
 								If (Bool:C1537($o.filter.parameters))
 									
-									  // User filter
+									// User filter
 									$tTip:=Get localized string:C991("theDataWillBeFilteredAccordingToTheConnectedUserParameters")
 									
 								Else 
@@ -133,7 +133,7 @@ Case of
 								
 								If (Length:C16(String:C10($o.filter.error))>0)
 									
-									  // Return the error encountered
+									// Return the error encountered
 									$tTip:=Get localized string:C991("error:")+$o.filter.error
 									
 								Else 
@@ -151,47 +151,47 @@ Case of
 					End if 
 				End if 
 				
-				OBJECT SET HELP TIP:C1181(*;$form.list;$tTip)
+				OBJECT SET HELP TIP:C1181(*; $form.list; $tTip)
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Mouse Leave:K2:34)
 				
-				ui.tips.defaultDelay()
+				UI.tips.defaultDelay()
 				
-				  //______________________________________________________
-			: (editor_Locked )
+				//______________________________________________________
+			: (editor_Locked)
 				
-				  // NOTHING MORE TO DO
+				// NOTHING MORE TO DO
 				
-				  //______________________________________________________
+				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$event.description+")")
 				
-				  //______________________________________________________
+				//______________________________________________________
 		End case 
 		
-		  //==================================================
+		//==================================================
 	: ($event.objectName=$form.queryWidget)
 		
 		Case of 
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Load:K2:1)
 				
 				$t:=Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"queryWidget.svg")
 				
-				PROCESS 4D TAGS:C816($t;$t;ui.selectedFillColor;Get localized string:C991("fields");Get localized string:C991("comparators");Get localized string:C991("operators");"🢓")
+				PROCESS 4D TAGS:C816($t; $t; UI.selectedFillColor; Get localized string:C991("fields"); Get localized string:C991("comparators"); Get localized string:C991("operators"); "🢓")
 				
-				(OBJECT Get pointer:C1124(Object current:K67:2))->:=svg ("parse";New object:C1471(\
-					"variable";$t)).getPicture()
+				(OBJECT Get pointer:C1124(Object current:K67:2))->:=svg("parse"; New object:C1471(\
+					"variable"; $t)).getPicture()
 				
-				OBJECT SET VISIBLE:C603(*;$event.objectName;False:C215)
+				OBJECT SET VISIBLE:C603(*; $event.objectName; False:C215)
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Clicked:K2:4)
 				
-				$tID:=SVG Find element ID by coordinates:C1054(*;$event.objectName;MOUSEX;MOUSEY)
+				$tID:=SVG Find element ID by coordinates:C1054(*; $event.objectName; MOUSEX; MOUSEY)
 				
 				$menu:=cs:C1710.menu.new()
 				
@@ -199,86 +199,86 @@ Case of
 					
 					Case of 
 							
-							  //……………………………………………………………………………………………………………………………
+							//……………………………………………………………………………………………………………………………
 						: ($tID="fields")
 							
-							$o:=catalog ("fields";New object:C1471(\
-								"tableName";$oTable.name))
+							$o:=catalog("fields"; New object:C1471(\
+								"tableName"; $oTable.name))
 							
 							If ($o.success)
 								
-								For each ($o;$o.fields)
+								For each ($o; $o.fields)
 									
 									$t:=$o.path
 									
-									If (Position:C15(" ";$t)>0)
+									If (Position:C15(" "; $t)>0)
 										
-										$menu.append($t;"'"+$t+"'")
+										$menu.append($t; "'"+$t+"'")
 										
 									Else 
 										
-										$menu.append($t;$t)
+										$menu.append($t; $t)
 										
 									End if 
 									
-									$menu.icon("Images/fieldsIcons/field_"+String:C10($o.typeLegacy;"00")+".png")
+									$menu.icon("Images/fieldsIcons/field_"+String:C10($o.typeLegacy; "00")+".png")
 									
 								End for each 
 							End if 
 							
-							  //……………………………………………………………………………………………………………………………
+							//……………………………………………………………………………………………………………………………
 						: ($tID="comparator")
 							
-							$menu.append(":xliff:equalTo";"= ")
-							$menu.append(":xliff:notEqualTo";"!= ")
+							$menu.append(":xliff:equalTo"; "= ")
+							$menu.append(":xliff:notEqualTo"; "!= ")
 							$menu.line()
 							
-							$menu.append("IS";"=== ")
-							$menu.append("IS NOT";"!== ")
+							$menu.append("IS"; "=== ")
+							$menu.append("IS NOT"; "!== ")
 							$menu.line()
 							
-							$menu.append(":xliff:lessThan";"< ")
-							$menu.append(":xliff:greaterThan";"> ")
+							$menu.append(":xliff:lessThan"; "< ")
+							$menu.append(":xliff:greaterThan"; "> ")
 							$menu.line()
 							
-							$menu.append(":xliff:lessThanOrEqualTo";"<= ")
-							$menu.append(":xliff:greaterThanOrEqualTo";">= ")
+							$menu.append(":xliff:lessThanOrEqualTo"; "<= ")
+							$menu.append(":xliff:greaterThanOrEqualTo"; ">= ")
 							$menu.line()
 							
-							$menu.append(":xliff:containsKeyword";"% ")
+							$menu.append(":xliff:containsKeyword"; "% ")
 							
-							  //……………………………………………………………………………………………………………………………
+							//……………………………………………………………………………………………………………………………
 						: ($tID="operator")
 							
-							$menu.append("AND";"& ")
-							$menu.append("OR";"| ")
+							$menu.append("AND"; "& ")
+							$menu.append("OR"; "| ")
 							$menu.line()
 							
-							$menu.append("NOT";"NOT({sel})")
+							$menu.append("NOT"; "NOT({sel})")
 							$menu.line()
 							
-							$menu.append("(…)";"NOT(({sel}))")
+							$menu.append("(…)"; "NOT(({sel}))")
 							
-							  //……………………………………………………………………………………………………………………………
+							//……………………………………………………………………………………………………………………………
 					End case 
 					
 					$menu.popup()
 					
 					If ($menu.selected)
 						
-						GET HIGHLIGHT:C209(*;$form.filter;$start;$end)
+						GET HIGHLIGHT:C209(*; $form.filter; $start; $end)
 						
 						If ($oTable[""].filter.string#Null:C1517)
 							
-							$tSelection:=Substring:C12($oTable[""].filter.string;$start;$end-$start)
+							$tSelection:=Substring:C12($oTable[""].filter.string; $start; $end-$start)
 							
 						End if 
 						
-						$bCaret:=(Position:C15("{sel}";$menu.choice)>0)
+						$bCaret:=(Position:C15("{sel}"; $menu.choice)>0)
 						
 						If ($bCaret)
 							
-							$menu.choice:=Replace string:C233($menu.choice;"{sel}";$tSelection)
+							$menu.choice:=Replace string:C233($menu.choice; "{sel}"; $tSelection)
 							
 						End if 
 						
@@ -297,7 +297,7 @@ Case of
 						
 						$oTable.filter.validated:=False:C215
 						
-						$o:=str (String:C10($oTable.filter.string)).insert($menu.choice;$start;$end)
+						$o:=str(String:C10($oTable.filter.string)).insert($menu.choice; $start; $end)
 						$oTable.filter.string:=$o.value
 						
 						Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
@@ -305,54 +305,54 @@ Case of
 						If ($bCaret)\
 							 & (Length:C16($tSelection)=0)
 							
-							  // Put the carret into
+							// Put the carret into
 							$o.begin:=$o.end-1
 							$o.end:=$o.end-1
 							
 						End if 
 						
-						HIGHLIGHT TEXT:C210(*;$form.filter;$o.begin;$o.end)
+						HIGHLIGHT TEXT:C210(*; $form.filter; $o.begin; $o.end)
 						
 						$form.filter:=$form.filter
 						
-						GOTO OBJECT:C206(*;$form.filter)
+						GOTO OBJECT:C206(*; $form.filter)
 						
-						ui.saveProject()
+						UI.saveProject()
 						
 						$context.refresh()
 						
 					End if 
 				End if 
 				
-				  //______________________________________________________
+				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$event.description+")")
 				
-				  //______________________________________________________
+				//______________________________________________________
 		End case 
 		
-		  //==================================================
+		//==================================================
 	: ($event.objectName=$form.validate)\
 		 | ($event.objectName=$form.enter)
 		
-		GOTO OBJECT:C206(*;$form.list)
+		GOTO OBJECT:C206(*; $form.list)
 		
-		$o:=checkQueryFilter (New object:C1471(\
-			"table";$oTable.name;\
-			"filter";$oTable.filter))
+		$o:=checkQueryFilter(New object:C1471(\
+			"table"; $oTable.name; \
+			"filter"; $oTable.filter))
 		
 		$oTable.filter:=$o.filter
 		
 		Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
 		
-		ui.saveProject()
+		UI.saveProject()
 		$context.refresh()
 		
-		Form:C1466.$project.status.project:=project_Audit (New object:C1471("target";New collection:C1472("filters"))).success
-		CALL FORM:C1391($form.window;"editor_CALLBACK";"updateRibbon")
+		Form:C1466.$project.status.project:=project_Audit(New object:C1471("target"; New collection:C1472("filters"))).success
+		CALL FORM:C1391($form.window; "editor_CALLBACK"; "updateRibbon")
 		
-		  //==================================================
+		//==================================================
 	: ($event.objectName=$form.embedded)
 		
 		If (Bool:C1537($oTable.embedded))
@@ -361,58 +361,58 @@ Case of
 			
 		Else 
 			
-			OB REMOVE:C1226(Form:C1466.dataModel[String:C10($oTable.tableNumber)][""];"embedded")
+			OB REMOVE:C1226(Form:C1466.dataModel[String:C10($oTable.tableNumber)][""]; "embedded")
 			
 		End if 
 		
-		ui.saveProject()
+		UI.saveProject()
 		$context.update()
 		
-		  //==================================================
+		//==================================================
 	: ($event.objectName=$form.filter)
 		
 		Case of 
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Getting Focus:K2:7)
 				
 				If ($oTable.filter=Null:C1517)
 					
 					$oTable.filter:=New object:C1471(\
-						"string";"")
+						"string"; "")
 					
 					$oTable.validated:=False:C215
 					
 				End if 
 				
-				  // Keep current filter definition
+				// Keep current filter definition
 				$context.currentFilter:=OB Copy:C1225($oTable.filter)
 				
 				$context.refresh()
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Losing Focus:K2:8)
 				
 				$context.refresh()
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On Data Change:K2:15)
 				
 				If (Length:C16($t)>0)
 					
-					ui.tips.instantly()
-					OBJECT SET HELP TIP:C1181(*;$form.filter;Get localized string:C991("notValidatedFilter"))
+					UI.tips.instantly()
+					OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("notValidatedFilter"))
 					
 				Else 
 					
-					ui.tips.defaultDelay()
-					OBJECT SET HELP TIP:C1181(*;$form.filter;"")
+					UI.tips.defaultDelay()
+					OBJECT SET HELP TIP:C1181(*; $form.filter; "")
 					
 				End if 
 				
 				$context.refresh()
 				
-				  //______________________________________________________
+				//______________________________________________________
 			: ($event.code=On After Edit:K2:43)
 				
 				$t:=Get edited text:C655
@@ -433,7 +433,7 @@ Case of
 						
 						$o.filter.validated:=False:C215
 						$o.filter.parameters:=False:C215
-						OB REMOVE:C1226($o.filter;"error")
+						OB REMOVE:C1226($o.filter; "error")
 						
 					Else 
 						
@@ -447,7 +447,7 @@ Case of
 							
 						Else 
 							
-							OB REMOVE:C1226($o.filter;"error")
+							OB REMOVE:C1226($o.filter; "error")
 							
 						End if 
 					End if 
@@ -457,43 +457,43 @@ Case of
 				Else 
 					
 					$oTable.filter.string:=""
-					OB REMOVE:C1226($o;"filter")
+					OB REMOVE:C1226($o; "filter")
 					
 				End if 
 				
-				ui.saveProject()
+				UI.saveProject()
 				$context.refresh()
 				
-				  //______________________________________________________
+				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+$event.description+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$event.description+")")
 				
-				  //______________________________________________________
+				//______________________________________________________
 		End case 
 		
-		  //==================================================
+		//==================================================
 	: ($event.objectName=$form.method)
 		
-		_o_SERVER_Handler (New object:C1471(\
-			"action";"editAuthenticationMethod"))
+		_o_SERVER_Handler(New object:C1471(\
+			"action"; "editAuthenticationMethod"))
 		
-		  //==================================================
+		//==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown object: \""+$event.objectName+"\"")
+		ASSERT:C1129(False:C215; "Unknown object: \""+$event.objectName+"\"")
 		
-		  //==================================================
+		//==================================================
 End case 
 
-If (Bool:C1537(feature._8858))
+If (Bool:C1537(FEATURE._8858))
 	
-	ui.saveProject()
+	UI.saveProject()
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// Return
+// <NONE>
+// ----------------------------------------------------
+// End

@@ -48,9 +48,9 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Load:K2:1)
 				
-				OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(Storage:C1525.database.isMatrix))
+				OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(DATABASE.isMatrix))
 				
-				$o:=ui.tips
+				$o:=UI.tips
 				$o.enable()
 				$o.defaultDelay()
 				$o.defaultDuration()
@@ -87,7 +87,7 @@ Case of
 				End if 
 				// ===================================== ]
 				
-				project:=cs:C1710.project.new($project)
+				PROJECT:=cs:C1710.project.new($project)
 				
 				$project.$project:=Form:C1466
 				

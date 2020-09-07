@@ -108,7 +108,7 @@ Else
 	End if 
 End if 
 
-project.save()
+PROJECT.save()
 
 // Update preview
 views_preview("draw"; This:C1470)

@@ -14,17 +14,15 @@
 // Declarations
 C_LONGINT:C283($i; $Lon_number2; $Lon_published; $Win_current)
 C_TEXT:C284($t; $tt)
-C_OBJECT:C1216($catalog; $ƒ; $o; $Obj_cache; $Obj_dataModel; $Obj_datastore)
+C_OBJECT:C1216($catalog; $o; $Obj_cache; $Obj_dataModel; $Obj_datastore)
 C_OBJECT:C1216($Obj_field; $Obj_project; $Obj_table; $oo)
 C_COLLECTION:C1488($c; $cc)
 
 // ----------------------------------------------------
 // Initialisations
 
-$Obj_project:=(ui.pointer("project"))->
+$Obj_project:=(UI.pointer("project"))->
 ASSERT:C1129($Obj_project#Null:C1517)
-
-$ƒ:=Storage:C1525.ƒ
 
 $Obj_dataModel:=$Obj_project.dataModel
 $Obj_datastore:=catalog("datastore").datastore
@@ -69,7 +67,7 @@ For ($i; 1; $Obj_project.$dialog.unsynchronizedTableFields.length-1; 1)
 						// TABLE PROPERTIES
 						
 						//______________________________________________________
-					: ($ƒ.isField($t))
+					: (PROJECT.isField($t))
 						
 						$o:=$c.query("fieldNumber = :1"; Num:C11($t)).pop()
 						
@@ -129,7 +127,7 @@ For ($i; 1; $Obj_project.$dialog.unsynchronizedTableFields.length-1; 1)
 						// <NOTHING MORE TO DO>
 						
 						//______________________________________________________
-					: ($ƒ.isRelationToOne($Obj_table[$t]))  // N -> 1 relation
+					: (PROJECT.isRelationToOne($Obj_table[$t]))  // N -> 1 relation
 						
 						If ($Obj_datastore[$Obj_table[$t].relatedDataClass]=Null:C1517)
 							
@@ -145,7 +143,7 @@ For ($i; 1; $Obj_project.$dialog.unsynchronizedTableFields.length-1; 1)
 								Case of 
 										
 										//…………………………………………………………………………
-									: ($ƒ.isField($tt))
+									: (PROJECT.isField($tt))
 										
 										$Obj_field:=$Obj_table[$t][$tt]
 										
@@ -196,7 +194,7 @@ For ($i; 1; $Obj_project.$dialog.unsynchronizedTableFields.length-1; 1)
 						End if 
 						
 						//______________________________________________________
-					: ($ƒ.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
+					: (PROJECT.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
 						
 						If ($Obj_datastore[$Obj_table[$t].relatedEntities]=Null:C1517)
 							

@@ -1,41 +1,41 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : tmpl_form
-  // ID[5A5E314B52D74229853B34D28FC902B5]
-  // Created 15-1-2020 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : tmpl_form
+// ID[5A5E314B52D74229853B34D28FC902B5]
+// Created 15-1-2020 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_TEXT:C284($2)
 
 C_BOOLEAN:C305($success)
-C_TEXT:C284($t;$t_formName;$t_typeForm)
-C_OBJECT:C1216($archive;$error;$fileManifest;$o;$pathForm)
+C_TEXT:C284($t; $t_formName; $t_typeForm)
+C_OBJECT:C1216($archive; $error; $fileManifest; $o; $pathForm)
 
 If (False:C215)
-	C_OBJECT:C1216(tmpl_form ;$0)
-	C_TEXT:C284(tmpl_form ;$1)
-	C_TEXT:C284(tmpl_form ;$2)
+	C_OBJECT:C1216(tmpl_form; $0)
+	C_TEXT:C284(tmpl_form; $1)
+	C_TEXT:C284(tmpl_form; $2)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-If (Asserted:C1132(Count parameters:C259>=2;"Missing parameter"))
+// ----------------------------------------------------
+// Initialisations
+If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$t_formName:=$1
 	$t_typeForm:=$2
 	
-	  // Default values
+	// Default values
 	
-	  // Optional parameters
+	// Optional parameters
 	If (Count parameters:C259>=3)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
@@ -45,17 +45,17 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If ($t_formName[[1]]="/")  // Host database resources
 	
-	$t_formName:=Delete string:C232($t_formName;1;1)  // Remove initial slash
+	$t_formName:=Delete string:C232($t_formName; 1; 1)  // Remove initial slash
 	
-	If (feature.with("resourcesBrowser"))
+	If (FEATURE.with("resourcesBrowser"))
 		
 		If (Path to object:C1547($t_formName).extension=SHARED.archiveExtension)  // Archive
 			
-/* START HIDING ERRORS */$error:=err .hide()
-			$archive:=ZIP Read archive:C1637(path ["host"+$t_typeForm+"Forms"]().file($t_formName))
+/* START HIDING ERRORS */$error:=err.hide()
+			$archive:=ZIP Read archive:C1637(path["host"+$t_typeForm+"Forms"]().file($t_formName))
 /* STOP HIDING ERRORS */$error.show()
 			
 			If ($archive#Null:C1517)
@@ -66,13 +66,13 @@ If ($t_formName[[1]]="/")  // Host database resources
 			
 		Else 
 			
-			$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
+			$pathForm:=Folder:C1567(path["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath; fk platform path:K87:2)
 			
 		End if 
 		
 	Else 
 		
-		$pathForm:=Folder:C1567(path ["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
+		$pathForm:=Folder:C1567(path["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath; fk platform path:K87:2)
 		
 	End if 
 	
@@ -80,8 +80,8 @@ If ($t_formName[[1]]="/")  // Host database resources
 	
 	If ($success)
 		
-		  // Verify the structure validity
-		$o:=path [$t_typeForm+"Forms"]()
+		// Verify the structure validity
+		$o:=path[$t_typeForm+"Forms"]()
 		
 		If ($o#Null:C1517)
 			
@@ -93,7 +93,7 @@ If ($t_formName[[1]]="/")  // Host database resources
 				
 				If ($o.mandatory#Null:C1517)
 					
-					For each ($t;$o.mandatory) While ($success)
+					For each ($t; $o.mandatory) While ($success)
 						
 						$success:=$pathForm.file($t).exists
 						
@@ -120,15 +120,15 @@ If ($t_formName[[1]]="/")  // Host database resources
 	
 Else 
 	
-	$pathForm:=Folder:C1567(path [$t_typeForm+"Forms"]().folder($t_formName).platformPath;fk platform path:K87:2)
+	$pathForm:=Folder:C1567(path[$t_typeForm+"Forms"]().folder($t_formName).platformPath; fk platform path:K87:2)
 	
-	  // We assume that our templates are OK!
+	// We assume that our templates are OK!
 	$success:=$pathForm.exists
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 If ($success)
 	
 	$0:=$pathForm
@@ -136,9 +136,9 @@ If ($success)
 Else 
 	
 	$0:=New object:C1471(\
-		"exists";False:C215)
+		"exists"; False:C215)
 	
 End if 
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

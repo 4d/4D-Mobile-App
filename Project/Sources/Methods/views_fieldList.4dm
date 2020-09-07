@@ -68,7 +68,7 @@ If ($out.success)
 					// <NOTHING MORE TO DO>
 					
 					//……………………………………………………………………………………………………………
-				: (project.isField($key))
+				: (PROJECT.isField($key))
 					
 					$o:=OB Copy:C1225($table[$key])
 					
@@ -82,19 +82,19 @@ If ($out.success)
 					$out.fields.push($o)
 					
 					//……………………………………………………………………………………………………………
-				: (project.isRelationToOne($table[$key]))
+				: (PROJECT.isRelationToOne($table[$key]))
 					
-					If (feature.with("moreRelations"))
+					If (FEATURE.with("moreRelations"))
 						
 						If ($table[$key].label=Null:C1517)
 							
-							$table[$key].label:=project.label($key)
+							$table[$key].label:=PROJECT.label($key)
 							
 						End if 
 						
 						If ($table[$key].shortLabel=Null:C1517)
 							
-							$table[$key].shortLabel:=project.shortLabel($key)
+							$table[$key].shortLabel:=PROJECT.shortLabel($key)
 							
 						End if 
 						
@@ -128,7 +128,7 @@ If ($out.success)
 								// <NOTHING MORE TO DO>
 								
 								//______________________________________________________
-							: (project.isField($attribute))
+							: (PROJECT.isField($attribute))
 								
 								$o:=OB Copy:C1225($table[$key][$attribute])
 								
@@ -144,7 +144,7 @@ If ($out.success)
 								$out.fields.push($o)
 								
 								//______________________________________________________
-							: (Not:C34(feature.with("moreRelations")))
+							: (Not:C34(FEATURE.with("moreRelations")))
 								
 								// <NOT DELIVERED>
 								
@@ -164,7 +164,7 @@ If ($out.success)
 					End for each 
 					
 					//……………………………………………………………………………………………………………
-				: (project.isRelationToMany($table[$key]))
+				: (PROJECT.isRelationToMany($table[$key]))
 					
 					If (Form:C1466.$dialog.VIEWS.template.detailform)
 						
@@ -184,7 +184,7 @@ If ($out.success)
 						
 					Else 
 						
-						If (feature.with("moreRelations"))
+						If (FEATURE.with("moreRelations"))
 							
 							$o:=New object:C1471(\
 								"name"; $key; \
@@ -192,8 +192,8 @@ If ($out.success)
 								"fieldType"; 8859; \
 								"relatedDataClass"; $table[$key].relatedDataclass; \
 								"inverseName"; $table[$key].inverseName; \
-								"label"; project.label($table[$key].label); \
-								"shortlabel"; project.label($table[$key].$t.shortLabel); \
+								"label"; PROJECT.label($table[$key].label); \
+								"shortlabel"; PROJECT.label($table[$key].$t.shortLabel); \
 								"isToMany"; True:C214; \
 								"relatedTableNumber"; $table[$key].relatedTableNumber)
 							

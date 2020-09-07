@@ -1,150 +1,144 @@
 //%attributes = {}
-  // ----------------------------------------------------
-  // Project method: 00_NEW
-  // ID[2A0199468FC24025903500DE13DD6E63]
-  // Created 11-5-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description
-  //
-  // ----------------------------------------------------
-  // Declarations
-C_TEXT:C284($1)
-
-C_LONGINT:C283($Lon_parameters;$Win_hdl)
-C_TEXT:C284($t;$Txt_entryPoint;$Txt_projectName;$Txt_worker)
-C_OBJECT:C1216($menu;$menuFile;$o;$Obj_form;$Obj_root)
+// ----------------------------------------------------
+// Project method: 00_NEW
+// ID[2A0199468FC24025903500DE13DD6E63]
+// Created 11-5-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description
+//
+// ----------------------------------------------------
+// Declarations
+var $1 : Text
 
 If (False:C215)
-	C_TEXT:C284(00_NEW ;$1)
+	C_TEXT:C284(00_NEW; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_parameters:=Count parameters:C259
+var $entryPoint; $methodName; $projectName; $t; $worker : Text
+var $window : Integer
+var $formData; $menu; $menuFile; $mobileProjects; $project : Object
 
-If ($Lon_parameters>=1)
+// ----------------------------------------------------
+// Initialisations
+If (Count parameters:C259>=1)
 	
-	$Txt_entryPoint:=$1
+	$entryPoint:=$1
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //___________________________________________________________
-	: (Length:C16($Txt_entryPoint)=0)
+		//___________________________________________________________
+	: (Length:C16($entryPoint)=0)
 		
-		$t:=Current method name:C684
+		$methodName:=Current method name:C684
 		
 		Case of 
 				
-				  //……………………………………………………………………
-			: (Method called on error:C704=$t)
+				//……………………………………………………………………
+			: (Method called on error:C704=$methodName)
 				
-				  // Error handling manager
+				// Error handling manager
 				
-				  //……………………………………………………………………
+				//……………………………………………………………………
 			Else 
 				
-				  // This method must be executed in a unique new process
-				BRING TO FRONT:C326(New process:C317($t;0;"$"+$t;"_run";*))
+				// This method must be executed in a unique new process
+				BRING TO FRONT:C326(New process:C317($methodName; 0; "$"+$methodName; "_run"; *))
 				
-				  //……………………………………………………………………
+				//……………………………………………………………………
 		End case 
 		
-		  //___________________________________________________________
-	: ($Txt_entryPoint="_run")
+		//___________________________________________________________
+	: ($entryPoint="_run")
 		
-		  // First launch of this method executed in a new process
-		00_NEW ("_declarations")
-		00_NEW ("_init")
+		// First launch of this method executed in a new process
+		00_NEW("_declarations")
+		00_NEW("_init")
 		
-		If (False:C215)
-			C_NEW_MOBILE_PROJECT 
+		// C_NEW_MOBILE_PROJECT
+		
+		$mobileProjects:=Folder:C1567("/PACKAGE/Mobile Projects")
+		$mobileProjects.create()
+		
+		If (Shift down:C543)
+			
+			$projectName:=Request:C163(Get localized string:C991("mess_nameoftheproject"); \
+				"test"; \
+				Get localized string:C991("mess_create"))
+			
+			$projectName:=Choose:C955(Length:C16($projectName)=0; "test"; $projectName)
 			
 		Else 
 			
-			$Obj_root:=Folder:C1567("/PACKAGE/Mobile Projects")
-			$Obj_root.create()
+			$projectName:="test"
 			
-			If (Shift down:C543)
-				
-				$Txt_projectName:=Request:C163(Get localized string:C991("mess_nameoftheproject");\
-					"test";\
-					Get localized string:C991("mess_create"))
-				
-				$Txt_projectName:=Choose:C955(Length:C16($Txt_projectName)=0;"test";$Txt_projectName)
-				
-			Else 
-				
-				$Txt_projectName:="test"
-				
-			End if 
-			
-			  // Create the project {
-			$o:=Folder:C1567("/RESOURCES/default project").copyTo($Obj_root;$Txt_projectName;fk overwrite:K87:5).file("project.4dmobileapp")
-			$t:=$o.getText()
-			PROCESS 4D TAGS:C816($t;$t)
-			$o.setText($t)
-			
-			  // Open the project editor
-			$Win_hdl:=Open form window:C675("EDITOR";Plain form window:K39:10;*)
-			
-			$Txt_worker:="4D Mobile ("+String:C10($Win_hdl)+")"
-			CALL WORKER:C1389($Txt_worker;"COMPILER_COMPONENT")
-			
-			$Obj_form:=New object:C1471(\
-				"$worker";$Txt_worker;\
-				"project";$o.platformPath;\
-				"file";$o)
-			
-			If (Storage:C1525.database.isMatrix)
-				
-				DIALOG:C40("EDITOR";$Obj_form)
-				
-				CLOSE WINDOW:C154($Win_hdl)
-				
-			Else 
-				
-				DIALOG:C40("EDITOR";$Obj_form;*)
-				
-			End if 
 		End if 
 		
-		00_NEW ("_deinit")
+		// Create the project {
+		$project:=Folder:C1567("/RESOURCES/default project").copyTo($mobileProjects; $projectName; fk overwrite:K87:5).file("project.4dmobileapp")
+		$t:=$project.getText()
+		PROCESS 4D TAGS:C816($t; $t)
+		$project.setText($t)
 		
-		  //___________________________________________________________
-	: ($Txt_entryPoint="_declarations")
+		// Open the project editor
+		$window:=Open form window:C675("EDITOR"; Plain form window:K39:10; *)
 		
-		COMPILER_COMPONENT 
+		$worker:="4D Mobile ("+String:C10($window)+")"
+		CALL WORKER:C1389($worker; "COMPILER_COMPONENT")
 		
-		  //___________________________________________________________
-	: ($Txt_entryPoint="_init")
+		$formData:=New object:C1471(\
+			"$worker"; $worker; \
+			"project"; $project.platformPath; \
+			"file"; $project)
+		
+		If (DATABASE.isMatrix)
+			
+			DIALOG:C40("EDITOR"; $formData)
+			
+			CLOSE WINDOW:C154($window)
+			
+		Else 
+			
+			DIALOG:C40("EDITOR"; $formData; *)
+			
+		End if 
+		
+		00_NEW("_deinit")
+		
+		//___________________________________________________________
+	: ($entryPoint="_declarations")
+		
+		COMPILER_COMPONENT
+		
+		//___________________________________________________________
+	: ($entryPoint="_init")
 		
 		$menuFile:=cs:C1710.menu.new().file()
 		
 		$menu:=cs:C1710.menu.new()\
-			.append("CommonMenuFile";$menuFile)\
-			.append("CommonMenuEdit";cs:C1710.menu.new().edit())
+			.append("CommonMenuFile"; $menuFile)\
+			.append("CommonMenuEdit"; cs:C1710.menu.new().edit())
 		
-		If (Storage:C1525.database.isMatrix)
+		If (DATABASE.isMatrix)
 			
-			file_Menu ($menuFile)
-			dev_Menu ($menu)
+			file_Menu($menuFile)
+			dev_Menu($menu)
 			
 		End if 
 		
 		$menu.setBar()
 		
-		  //___________________________________________________________
-	: ($Txt_entryPoint="_deinit")
+		//___________________________________________________________
+	: ($entryPoint="_deinit")
 		
-		  //
+		//
 		
-		  //___________________________________________________________
+		//___________________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown entry point ("+$Txt_entryPoint+")")
+		ASSERT:C1129(False:C215; "Unknown entry point ("+$entryPoint+")")
 		
-		  //___________________________________________________________
+		//___________________________________________________________
 End case 

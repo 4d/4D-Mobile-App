@@ -30,14 +30,14 @@ End if
 
 $form:=New object:C1471(\
 ""; editor_INIT; \
-"form"; ui.form("editor_CALLBACK").get(); \
-"add"; ui.button("actions.add"); \
-"remove"; ui.button("actions.remove"); \
-"databaseMethod"; ui.button("actionMethod"); \
-"actions"; ui.listbox("actions"); \
-"noPublishedTable"; ui.widget("noPublishedTable"); \
-"iconGrid"; ui.widget("iconGrid"); \
-"dropCursor"; ui.static("dropCursor"); \
+"form"; UI.form("editor_CALLBACK").get(); \
+"add"; UI.button("actions.add"); \
+"remove"; UI.button("actions.remove"); \
+"databaseMethod"; UI.button("actionMethod"); \
+"actions"; UI.listbox("actions"); \
+"noPublishedTable"; UI.widget("noPublishedTable"); \
+"iconGrid"; UI.widget("iconGrid"); \
+"dropCursor"; UI.static("dropCursor"); \
 "name"; "names"; \
 "icon"; "icons"; \
 "shortLabel"; "shorts"; \
@@ -175,7 +175,7 @@ Case of
 		
 		$form.form.refresh()
 		
-		project.save()
+		PROJECT.save()
 		
 		//=========================================================
 	: ($Obj_in.action="icons")  // Preload the icons

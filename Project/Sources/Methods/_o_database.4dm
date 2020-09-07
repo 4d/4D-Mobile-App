@@ -9,9 +9,9 @@ C_TEXT:C284($t)
 C_OBJECT:C1216($o)
 
 If (False:C215)
-	C_OBJECT:C1216(database; $0)
-	C_TEXT:C284(database; $1)
-	C_OBJECT:C1216(database; $2)
+	C_OBJECT:C1216(_o_database; $0)
+	C_TEXT:C284(_o_database; $1)
+	C_OBJECT:C1216(_o_database; $2)
 End if 
 
 If (This:C1470[""]=Null:C1517)  // Constructor
@@ -32,7 +32,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"plugins"; New shared collection:C1527; \
 		"enableDebugLog"; Formula:C1597(SET DATABASE PARAMETER:C642(Debug log recording:K37:34; 1)); \
 		"disableDebugLog"; Formula:C1597(SET DATABASE PARAMETER:C642(Debug log recording:K37:34; 0)); \
-		"method"; Formula:C1597(database("methodExists"; New object:C1471("method"; $1))); \
+		"method"; Formula:C1597(_o_database("methodExists"; New object:C1471("method"; $1))); \
 		"clearCompiledCode"; Formula:C1597(This:C1470.structure.parent.folder("DerivedData/CompiledCode").delete(Delete with contents:K24:24)); \
 		"componentAvailable"; Formula:C1597(This:C1470.components.indexOf($1)#-1); \
 		"pluginAvailable"; Formula:C1597(This:C1470.plugins.indexOf($1)#-1)\

@@ -130,7 +130,7 @@ If (Bool:C1537(OK))
 		$formData.$worker:="4D Mobile ("+String:C10($w)+")"
 		CALL WORKER:C1389(String:C10($formData.$worker); "COMPILER_COMPONENT")
 		
-		If (Storage:C1525.database.isMatrix)
+		If (DATABASE.isMatrix)
 			
 			DIALOG:C40("EDITOR"; $formData)
 			CLOSE WINDOW:C154($w)

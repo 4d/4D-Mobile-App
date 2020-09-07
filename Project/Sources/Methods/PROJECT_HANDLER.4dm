@@ -372,7 +372,7 @@ Case of
 			CALL FORM:C1391($form.window; "editor_CALLBACK"; "projectAudit")
 			
 			// Save project
-			ui.saveProject()
+			UI.saveProject()
 			
 		Else 
 			

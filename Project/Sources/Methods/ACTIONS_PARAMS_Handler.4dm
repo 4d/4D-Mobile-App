@@ -28,30 +28,30 @@ End if
 
 $form:=New object:C1471(\
 "$"; editor_INIT; \
-"form"; ui.form("editor_CALLBACK").get(); \
-"noSelection"; ui.static("empty"); \
-"noAction"; ui.static("noAction"); \
-"noTable"; ui.static("noTable"); \
-"withSelection"; ui.group("@parameters@;@property@;@variable@"); \
-"field"; ui.group("@_field_@"); \
-"variable"; ui.group("@variable@"); \
-"properties"; ui.group("@property@;@variable@"); \
-"number"; ui.group("@number@"); \
-"parameters"; ui.listbox("01_Parameters"); \
-"add"; ui.button("parameters.add"); \
-"remove"; ui.button("parameters.remove"); \
-"format"; ui.button("05_property_type.popup"); \
-"formatBorder"; ui.static("05_property_type.border"); \
-"linked"; ui.group("02_property_name;03_property_label;04_property_shortLabel;06_property_placeholder;07_variable_default"); \
-"deleteAction"; ui.static("deleteAction"); \
-"mandatory"; ui.button("02_property_mandatory"); \
-"min"; ui.button("09_property_constraint_number_min"); \
-"max"; ui.button("10_property_constraint_number_max"); \
+"form"; UI.form("editor_CALLBACK").get(); \
+"noSelection"; UI.static("empty"); \
+"noAction"; UI.static("noAction"); \
+"noTable"; UI.static("noTable"); \
+"withSelection"; UI.group("@parameters@;@property@;@variable@"); \
+"field"; UI.group("@_field_@"); \
+"variable"; UI.group("@variable@"); \
+"properties"; UI.group("@property@;@variable@"); \
+"number"; UI.group("@number@"); \
+"parameters"; UI.listbox("01_Parameters"); \
+"add"; UI.button("parameters.add"); \
+"remove"; UI.button("parameters.remove"); \
+"format"; UI.button("05_property_type.popup"); \
+"formatBorder"; UI.static("05_property_type.border"); \
+"linked"; UI.group("02_property_name;03_property_label;04_property_shortLabel;06_property_placeholder;07_variable_default"); \
+"deleteAction"; UI.static("deleteAction"); \
+"mandatory"; UI.button("02_property_mandatory"); \
+"min"; UI.button("09_property_constraint_number_min"); \
+"max"; UI.button("10_property_constraint_number_max"); \
 "default"; UI.widget("07_variable_default"); \
 "withDefault"; UI.group("@_default@"); \
-"dropCursor"; ui.static("dropCursor"); \
-"placeholder"; ui.widget("@_placeholder@"); \
-"description"; ui.widget("01_description")\
+"dropCursor"; UI.static("dropCursor"); \
+"placeholder"; UI.widget("@_placeholder@"); \
+"description"; UI.widget("01_description")\
 )
 
 //"boolDefault";UI.group("@_bool@")

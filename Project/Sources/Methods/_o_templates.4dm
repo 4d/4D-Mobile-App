@@ -103,7 +103,7 @@ Case of
 			
 			If (Length:C16($Txt_name)>0)
 				
-				If (feature.with("resourcesBrowser"))
+				If (FEATURE.with("resourcesBrowser"))
 					
 					$pathForm:=tmpl_form($Txt_name; String:C10($Obj_template.projectTag))
 					
@@ -222,7 +222,7 @@ Case of
 			
 			If ($t[[1]]="/")  // custom form
 				
-				If (feature.with("resourcesBrowser"))
+				If (FEATURE.with("resourcesBrowser"))
 					
 					$pathForm:=tmpl_form($t; String:C10($Obj_template.userChoiceTag))
 					
@@ -1475,7 +1475,7 @@ If (($Txt_type="main"))
 	
 	ob_error_combine($Obj_out; $Obj_out.formatters)
 	
-	If (feature.with(107526))
+	If (FEATURE.with(107526))
 		
 		If (Bool:C1537($Obj_in.project.server.pushNotification))
 			

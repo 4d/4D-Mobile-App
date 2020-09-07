@@ -70,7 +70,7 @@ Else   // <== WIDGETS METHOD
 					If ($ƒ.certificate.picker.path#String:C10(Form:C1466.server.pushCertificate))
 						
 						Form:C1466.server.pushCertificate:=cs:C1710.doc.new($ƒ.certificate.picker.target).relativePath
-						project.save()
+						PROJECT.save()
 						
 					End if 
 				End if 
@@ -81,7 +81,7 @@ Else   // <== WIDGETS METHOD
 			
 			Form:C1466.server.authentication.email:=Bool:C1537(Form:C1466.server.authentication.email)
 			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
-			project.save()
+			PROJECT.save()
 			
 			//==============================================
 		: ($ƒ.authenticationButton.catch($e; On Clicked:K2:4))
@@ -93,7 +93,7 @@ Else   // <== WIDGETS METHOD
 			
 			Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
 			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)
-			project.save()
+			PROJECT.save()
 			
 			//==============================================
 		: ($ƒ.deepLinking.catch($e; On Clicked:K2:4))
@@ -124,14 +124,14 @@ Else   // <== WIDGETS METHOD
 				
 			End if 
 			
-			project.save()
+			PROJECT.save()
 			
 			//==============================================
 		: ($ƒ.deepScheme.catch($e; On Data Change:K2:15))
 			
 			If ($ƒ.validateScheme())
 				
-				project.save()
+				PROJECT.save()
 				
 			End if 
 			
@@ -143,7 +143,7 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.deepLink.catch($e; On Data Change:K2:15))
 			
-			project.save()
+			PROJECT.save()
 			
 			$ƒ.deepLink.setHelpTip(Choose:C955(Length:C16(Form:C1466.deepLinking.associatedDomain)>0; "universalLinksTips"; ""))
 			

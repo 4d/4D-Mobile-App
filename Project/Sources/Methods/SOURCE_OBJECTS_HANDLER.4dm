@@ -8,17 +8,17 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($Lon_formEvent;$Lon_parameters)
+C_LONGINT:C283($Lon_formEvent; $Lon_parameters)
 C_POINTER:C301($Ptr_me)
-C_TEXT:C284($File_key;$Txt_buffer;$Txt_me)
-C_OBJECT:C1216($errors;$Obj_context;$Obj_form;$Obj_project;$Obj_server)
+C_TEXT:C284($File_key; $Txt_buffer; $Txt_me)
+C_OBJECT:C1216($errors; $Obj_context; $Obj_form; $Obj_project; $Obj_server)
 
 
 // ----------------------------------------------------
 // Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	
 	// NO PARAMETERS REQUIRED
 	
@@ -34,7 +34,7 @@ If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
 	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 	
 	$Obj_form:=SOURCE_Handler(New object:C1471(\
-		"action";"init"))
+		"action"; "init"))
 	
 	$Obj_context:=$Obj_form.ui
 	
@@ -68,7 +68,7 @@ Case of
 			If (Test path name:C476($File_key)#Is a document:K24:1)
 				
 				LOG_EVENT(New object:C1471(\
-					"message";Form:C1466.dataSource.keyPath+" ->"+$File_key))
+					"message"; Form:C1466.dataSource.keyPath+" ->"+$File_key))
 				
 				$File_key:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
 				
@@ -83,34 +83,34 @@ Case of
 			
 		End if 
 		
-		(OBJECT Get pointer:C1124(Object named:K67:5;"dataGeneration"))->:=1
-		OBJECT SET VISIBLE:C603(*;"dataGeneration@";True:C214)
+		(OBJECT Get pointer:C1124(Object named:K67:5; "dataGeneration"))->:=1
+		OBJECT SET VISIBLE:C603(*; "dataGeneration@"; True:C214)
 		
 		Form:C1466.$project.dataSetGeneration:=True:C214
 		
-		CALL WORKER:C1389(Form:C1466.$worker;"dataSet";New object:C1471(\
-			"caller";$Obj_form.window;\
-			"action";"create";\
-			"eraseIfExists";True:C214;\
-			"project";$Obj_project;\
-			"digest";True:C214;\
-			"coreDataSet";True:C214;\
-			"key";$File_key;\
-			"dataSet";True:C214))
+		CALL WORKER:C1389(Form:C1466.$worker; "dataSet"; New object:C1471(\
+			"caller"; $Obj_form.window; \
+			"action"; "create"; \
+			"eraseIfExists"; True:C214; \
+			"project"; $Obj_project; \
+			"digest"; True:C214; \
+			"coreDataSet"; True:C214; \
+			"key"; $File_key; \
+			"dataSet"; True:C214))
 		
 		//==================================================
 	: ($Txt_me=$Obj_form.doNotGenerate)\
 		 | ($Txt_me=$Obj_form.doNotExportImages)
 		
-		ui.saveProject()
-		ui.refresh()
+		UI.saveProject()
+		UI.refresh()
 		
 		//==================================================
 	: ($Txt_me=$Obj_form.local)
 		
 		Form:C1466.dataSource.source:="local"
 		
-		ui.saveProject()
+		UI.saveProject()
 		$Obj_context.testServer()
 		
 		//==================================================
@@ -118,7 +118,7 @@ Case of
 		
 		Form:C1466.dataSource.source:="server"
 		
-		ui.saveProject()
+		UI.saveProject()
 		
 		//#ACI0100687
 		If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
@@ -126,9 +126,9 @@ Case of
 			// Generate the key
 			C_OBJECT:C1216($o)
 			$o:=Rest(New object:C1471(\
-				"action";"request";\
-				"handler";"mobileapp";\
-				"url";Form:C1466.server.urls.production))
+				"action"; "request"; \
+				"handler"; "mobileapp"; \
+				"url"; Form:C1466.server.urls.production))
 			
 		End if 
 		
@@ -144,22 +144,22 @@ Case of
 					//______________________________________________________
 				: ($Obj_context.serverStatus.action="localizeKeyFile")
 					
-					$Txt_buffer:=Select document:C905(Get 4D folder:C485(MobileApps folder:K5:47;*);SHARED.keyExtension;Get localized string:C991("selectTheKeyFile");Use sheet window:K24:11+Package open:K24:8)
+					$Txt_buffer:=Select document:C905(Get 4D folder:C485(MobileApps folder:K5:47; *); SHARED.keyExtension; Get localized string:C991("selectTheKeyFile"); Use sheet window:K24:11+Package open:K24:8)
 					
 					If (Bool:C1537(OK))
 						
-						If (feature.with("sourceClass"))
+						If (FEATURE.with("sourceClass"))
 							
 							Form:C1466.dataSource.keyPath:=cs:C1710.doc.new(DOCUMENT).relativePath
 							
 						Else 
 							
 							// 18R2-
-							Form:C1466.dataSource.keyPath:=Replace string:C233(doc_Relative_path(DOCUMENT);Folder separator:K24:12;"/")
+							Form:C1466.dataSource.keyPath:=Replace string:C233(doc_Relative_path(DOCUMENT); Folder separator:K24:12; "/")
 							
 						End if 
 						
-						ui.saveProject()
+						UI.saveProject()
 						$Obj_context.testServer()
 						
 					End if 
@@ -167,10 +167,10 @@ Case of
 					//______________________________________________________
 				: ($Obj_context.serverStatus.action="goToProductionURL")
 					
-					CALL FORM:C1391($Obj_form.window;"editor_CALLBACK";"goToPage";New object:C1471(\
-						"page";"deployment";\
-						"panel";"SERVER";\
-						"object";"02_prodURL"))
+					CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "goToPage"; New object:C1471(\
+						"page"; "deployment"; \
+						"panel"; "SERVER"; \
+						"object"; "02_prodURL"))
 					
 					//______________________________________________________
 				: ($Obj_context.serverStatus.action="startWebServer")
@@ -190,7 +190,7 @@ Case of
 						If (Num:C11($errors.lastError().error)=-1)
 							
 							// Port conflict ?
-							$Obj_server.message:=str("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_server.options.webPortID);String:C10($Obj_server.options.webHTTPSPortID)))
+							$Obj_server.message:=str("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_server.options.webPortID); String:C10($Obj_server.options.webHTTPSPortID)))
 							
 						Else 
 							
@@ -202,11 +202,11 @@ Case of
 					If (String:C10($Obj_server.message)#"")
 						
 						POST_FORM_MESSAGE(New object:C1471(\
-							"target";$Obj_form.window;\
-							"action";"show";\
-							"type";"alert";\
-							"title";Get localized string:C991("theServerIsNotReady");\
-							"additional";$Obj_server.message))
+							"target"; $Obj_form.window; \
+							"action"; "show"; \
+							"type"; "alert"; \
+							"title"; Get localized string:C991("theServerIsNotReady"); \
+							"additional"; $Obj_server.message))
 						
 					End if 
 					
@@ -214,7 +214,7 @@ Case of
 					
 				Else 
 					
-					ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_context.serverStatus.action+"\"")
+					ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_context.serverStatus.action+"\"")
 					
 					//______________________________________________________
 			End case 
@@ -224,7 +224,7 @@ Case of
 		
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown object: \""+$Txt_me+"\"")
+		ASSERT:C1129(False:C215; "Unknown object: \""+$Txt_me+"\"")
 		
 		//==================================================
 End case 

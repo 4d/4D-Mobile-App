@@ -11,20 +11,20 @@ If (Storage:C1525.ƒ=Null:C1517)\
 		Use (Storage:C1525.ƒ)
 			
 			// Return true if the passed string is a numeric
-			Storage:C1525.ƒ.isNumeric:=Formula:C1597(Match regex:C1019("(?m-si)^\\d+$"; $1; 1; *))
+			//Storage.ƒ.isNumeric:=Formula(Match regex("(?m-si)^\\d+$"; $1; 1; *))
 			
-			Storage:C1525.ƒ.isField:=Formula:C1597(This:C1470.isNumeric($1))
-			Storage:C1525.ƒ.isRelationToOne:=Formula:C1597($1.relatedDataClass#Null:C1517)
-			Storage:C1525.ƒ.isRelationToMany:=Formula:C1597(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities"))
-			Storage:C1525.ƒ.isRelation:=Formula:C1597((This:C1470.isRelationToOne($1)) | (This:C1470.isRelationToMany($1)))
+			//Storage.ƒ.isField:=Formula(This.isNumeric($1))
+			//Storage.ƒ.isRelationToOne:=Formula($1.relatedDataClass#Null)
+			//Storage.ƒ.isRelationToMany:=Formula(($1.relatedEntities#Null) | (String($1.kind)="relatedEntities"))
+			//Storage.ƒ.isRelation:=Formula((This.isRelationToOne($1)) | (This.isRelationToMany($1)))
 			
 			// Tests
-			Storage:C1525.ƒ.action:=Formula:C1597(New object:C1471(\
+			//Storage.ƒ.action:=Formula(New object(\
 				"action"; $1))
 			
-			Storage:C1525.ƒ.structureCatalog:=Formula:C1597(_o_structure(This:C1470.action("catalog")))
+			//Storage.ƒ.structureCatalog:=Formula(_o_structure(This.action("catalog")))
 			
-			Storage:C1525.ƒ.tableCatalog:=Formula:C1597(_o_structure(New object:C1471(\
+			//Storage.ƒ.tableCatalog:=Formula(_o_structure(New object(\
 				"action"; "catalog"; \
 				"name"; $1)))
 			

@@ -18,7 +18,7 @@ C_POINTER:C301($Ptr_field)
 C_TEXT:C284($Dom_attribute; $Dom_elements; $Dom_entity; $Dom_model; $Dom_node; $Dom_userInfo)
 C_TEXT:C284($File_; $t; $tt; $Txt_buffer; $Txt_field; $Txt_fieldName)
 C_TEXT:C284($Txt_fieldNumber; $Txt_inverseName; $Txt_relationName; $Txt_tableName; $Txt_tableNumber; $Txt_value)
-C_OBJECT:C1216($ƒ; $o; $Obj_buffer; $Obj_dataModel; $Obj_field; $Obj_in)
+C_OBJECT:C1216($o; $Obj_buffer; $Obj_dataModel; $Obj_field; $Obj_in)
 C_OBJECT:C1216($Obj_out; $Obj_path; $Obj_relationTable; $Obj_table)
 C_COLLECTION:C1488($Col_fields; $Col_tables)
 
@@ -45,8 +45,6 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 		$Obj_in:=$1
 		
 	End if 
-	
-	$ƒ:=Storage:C1525.ƒ
 	
 	$Obj_out:=New object:C1471(\
 		"success"; False:C215)
@@ -125,7 +123,7 @@ Case of
 						$tTxt_entityValues{3}:="YES"
 						$tTxt_entityValues{4}:="class"
 						
-						If (Bool:C1537(feature._234))
+						If (Bool:C1537(FEATURE._234))
 							
 							// Parent abtract Record entity in model, with common private fields
 							$Txt_tableName:="Record"
@@ -202,7 +200,7 @@ Case of
 							
 							$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
 							
-							If (Bool:C1537(feature._234))
+							If (Bool:C1537(FEATURE._234))
 								
 								DOM SET XML ATTRIBUTE:C866($Dom_entity; \
 									"parentEntity"; "Record")
@@ -300,7 +298,7 @@ Case of
 											// <NOTHING MORE TO DO>
 											
 											//………………………………………………………………………………………………………………………
-										: ($ƒ.isField($tTxt_fields{$Lon_field}))
+										: (PROJECT.isField($tTxt_fields{$Lon_field}))
 											
 											If (Value type:C1509($Obj_table[$tTxt_fields{$Lon_field}])=Is object:K8:27)
 												
@@ -356,7 +354,7 @@ Case of
 											// <NOTHING MORE TO DO>
 											
 											//………………………………………………………………………………………………………………………
-										: ($ƒ.isRelation($Obj_table[$tTxt_fields{$Lon_field}]))
+										: (PROJECT.isRelation($Obj_table[$tTxt_fields{$Lon_field}]))
 											
 											$Txt_relationName:=$tTxt_fields{$Lon_field}
 											
@@ -372,7 +370,7 @@ Case of
 														Case of 
 																
 																//……………………………………………………
-															: ($ƒ.isField($tTxt_relationFields{$Lon_relationField}))
+															: (PROJECT.isField($tTxt_relationFields{$Lon_relationField}))
 																
 																$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
 																
@@ -449,7 +447,7 @@ Case of
 													End if 
 													
 													// relation mode
-													If ($ƒ.isRelationToMany($Obj_table[$Txt_relationName]))  // to N
+													If (PROJECT.isRelationToMany($Obj_table[$Txt_relationName]))  // to N
 														
 														// we must have {type:TABLENAMESelection,relatedDataClass:TABLENAME}
 														
@@ -1284,7 +1282,7 @@ Case of
 					Case of 
 							
 							//……………………………………………………………………………………………………………
-						: ($ƒ.isField($Txt_value))  // fieldNumber
+						: (PROJECT.isField($Txt_value))  // fieldNumber
 							
 							$Obj_field:=OB Copy:C1225($Obj_dataModel[$Obj_in.tableNumber][$Txt_value])
 							$Obj_field.path:=$Obj_field.name
@@ -1295,7 +1293,7 @@ Case of
 						: (Value type:C1509($Obj_dataModel[$Obj_in.tableNumber][$Txt_value])#Is object:K8:27)
 							
 							//……………………………………………………………………………………………………………
-						: ($ƒ.isRelationToOne($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))  // relatedDataClass
+						: (PROJECT.isRelationToOne($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))  // relatedDataClass
 							
 							For each ($t; $Obj_dataModel[$Obj_in.tableNumber][$Txt_value])
 								
@@ -1310,7 +1308,7 @@ Case of
 							End for each 
 							
 							//……………………………………………………………………………………………………………
-						: ($ƒ.isRelationToMany($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))  // relatedEntities
+						: (PROJECT.isRelationToMany($Obj_dataModel[$Obj_in.tableNumber][$Txt_value]))  // relatedEntities
 							
 							//……………………………………………………………………………………………………………
 					End case 

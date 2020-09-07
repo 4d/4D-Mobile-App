@@ -10,12 +10,12 @@
 // Declarations
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_actionIndex;$Lon_parameterIndex;$Lon_type)
-C_OBJECT:C1216($o;$Obj_dataModel;$Obj_project;$oo)
+C_LONGINT:C283($Lon_actionIndex; $Lon_parameterIndex; $Lon_type)
+C_OBJECT:C1216($o; $Obj_dataModel; $Obj_project; $oo)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_OBJECT:C1216(project_REPAIR;$1)
+	C_OBJECT:C1216(project_REPAIR; $1)
 End if 
 
 // ----------------------------------------------------
@@ -26,7 +26,7 @@ If (Count parameters:C259>=1)
 	
 Else 
 	
-	$Obj_project:=(ui.pointer("project"))->
+	$Obj_project:=(UI.pointer("project"))->
 	
 End if 
 
@@ -55,7 +55,7 @@ If ($Obj_project.actions#Null:C1517)
 	$c[Is time:K8:8]:="time"
 	$c[Is date:K8:7]:="date"
 	
-	For each ($o;$Obj_project.actions)
+	For each ($o; $Obj_project.actions)
 		
 		$Lon_parameterIndex:=0
 		
@@ -63,7 +63,7 @@ If ($Obj_project.actions#Null:C1517)
 			
 			If ($o.parameters#Null:C1517)
 				
-				For each ($oo;$o.parameters)
+				For each ($oo; $o.parameters)
 					
 					If ($Obj_dataModel[String:C10($o.tableNumber)][String:C10($oo.fieldNumber)]#Null:C1517)
 						
@@ -88,7 +88,7 @@ If ($Obj_project.actions#Null:C1517)
 									//……………………………………………………………………
 								Else 
 									
-									OB REMOVE:C1226($oo;"format")
+									OB REMOVE:C1226($oo; "format")
 									
 									//……………………………………………………………………
 							End case 
@@ -125,7 +125,7 @@ If ($Obj_project.actions#Null:C1517)
 	If ($Obj_project.actions.length=0)
 		
 		// NO MORE ACTION
-		OB REMOVE:C1226($Obj_project;"actions")
+		OB REMOVE:C1226($Obj_project; "actions")
 		
 	End if 
 End if 
@@ -136,13 +136,13 @@ End if
 =============================================================================================
 */
 
-For each ($o;Form:C1466.audit.errors)
+For each ($o; Form:C1466.audit.errors)
 	
 	$Obj_project[$o.tab][$o.table]:=New object:C1471
 	
 End for each 
 
-OB REMOVE:C1226(Form:C1466;"audit")
+OB REMOVE:C1226(Form:C1466; "audit")
 Form:C1466.status.project:=True:C214
 
 // ----------------------------------------------------

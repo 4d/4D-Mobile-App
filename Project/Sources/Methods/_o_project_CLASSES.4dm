@@ -12,8 +12,8 @@
 // ----------------------------------------------------
 // Initialisations
 
-_o_project:=New object:C1471(\
-"save";Formula:C1597(CALL FORM:C1391(Current form window:C827;"project_SAVE"))\
+//_o_project:=New object(\
+"save"; Formula(CALL FORM(Current form window; "project_SAVE"))\
 )
 
 // ----------------------------------------------------

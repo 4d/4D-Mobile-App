@@ -61,8 +61,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$params.hOffset:=5
 	$params.maxChar:=18  // Choose(Get database localization="ja";9;18)
 	
-	$params.selectedFill:=ui.colors.backgroundSelectedColor.hex
-	$params.selectedStroke:=ui.colors.strokeColor.hex
+	$params.selectedFill:=UI.colors.backgroundSelectedColor.hex
+	$params.selectedStroke:=UI.colors.strokeColor.hex
 	
 	$str:=str()
 	
@@ -78,7 +78,7 @@ End if
 // ----------------------------------------------------
 If ($dataModel#Null:C1517)
 	
-	$typeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(feature.with("newViewUI"); "VIEWS"; "_o_VIEWS")].selector)=2; "detail"; "list")
+	$typeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(FEATURE.with("newViewUI"); "VIEWS"; "_o_VIEWS")].selector)=2; "detail"; "list")
 	
 /* START HIDING ERRORS */
 	$error.hide()
@@ -124,7 +124,7 @@ If ($dataModel#Null:C1517)
 			End if 
 		End if 
 		
-		If (feature.with("resourcesBrowser"))
+		If (FEATURE.with("resourcesBrowser"))
 			
 			If ($formRoot.extension=SHARED.archiveExtension)  // Archive
 				
@@ -184,7 +184,7 @@ If ($dataModel#Null:C1517)
 	
 End if 
 
-If (feature.with("debug"))
+If (FEATURE.with("debug"))
 	
 	Folder:C1567(fk desktop folder:K87:19).file("DEV/table.svg").setText($svg.getText(True:C214))
 	

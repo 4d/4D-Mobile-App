@@ -25,12 +25,6 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=Folder:C1567(fk desktop folder:K87:19).parent
-		$o1:=Folder:C1567("/Users/"+Get system info:C1571.accountName)
-		
-		//________________________________________
-	: (True:C214)
-		
 		$o:=cs:C1710.error.new("capture")
 		
 		Formula from string:C1601("$b:=true").call()
@@ -555,7 +549,7 @@ Case of
 		
 		$t:=File:C1566("/RESOURCES/queryWidget.svg").getText()
 		
-		PROCESS 4D TAGS:C816($t; $t; ui.selectedFillColor; Get localized string:C991("fields"); Get localized string:C991("comparators"); Get localized string:C991("operators"); "⬇")
+		PROCESS 4D TAGS:C816($t; $t; UI.selectedFillColor; Get localized string:C991("fields"); Get localized string:C991("comparators"); Get localized string:C991("operators"); "⬇")
 		
 		$svg:=svg("parse"; New object:C1471("variable"; $t))
 		$svg.showInViewer()

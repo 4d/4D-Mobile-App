@@ -15,7 +15,7 @@ If (Storage:C1525.database=Null:C1517)  // | (Structure file=Structure file(*))
 	
 	Use ($o)
 		
-		$o:=database
+		$o:=_o_database
 		
 		Use ($o)
 			

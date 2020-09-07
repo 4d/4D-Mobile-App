@@ -87,6 +87,7 @@
 			"_o_env_System_path",
 			"_o_panel_Form_common",
 			"_o_panel_SET_CONSTRAINTS",
+			"_o_project_CLASSES",
 			"_o_project_UI_DEFINITION",
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
@@ -196,7 +197,6 @@
 			"project_Audit",
 			"project_BUILD",
 			"project_Check_param",
-			"project_CLASSES",
 			"project_Defaults",
 			"project_Fix",
 			"PROJECT_Handler",
@@ -447,8 +447,11 @@
 			"Tests"
 		],
 		"classes": [
+			"database",
 			"debugLog",
 			"doc",
+			"env",
+			"error",
 			"menu",
 			"svg",
 			"xml"
@@ -730,7 +733,6 @@
 			"COMPILER_classes",
 			"currentForm",
 			"dat",
-			"database",
 			"db",
 			"environment",
 			"group",

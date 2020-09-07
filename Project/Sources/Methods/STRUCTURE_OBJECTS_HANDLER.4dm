@@ -35,7 +35,7 @@ Case of
 		//==================================================
 	: ($e.objectName=$form.allow)
 		
-		project.save()
+		PROJECT.save()
 		
 		//==================================================
 	: ($e.objectName=$form.allowHelp)
@@ -62,7 +62,7 @@ Case of
 					
 					// Keep the current selected table
 					$c:=editor_Catalog
-					$context.currentTable:=$c[$c.indices("name=:1"; (ui.pointer($form.tables))->{$row})[0]]
+					$context.currentTable:=$c[$c.indices("name=:1"; (UI.pointer($form.tables))->{$row})[0]]
 					
 				End if 
 				
@@ -83,7 +83,7 @@ Case of
 						LISTBOX SELECT ROW:C912(*; $e.objectName; $row; lk replace selection:K53:1)
 						
 						$c:=editor_Catalog
-						$o:=$c[$c.indices("name=:1"; (ui.pointer($form.tables))->{$row})[0]]
+						$o:=$c[$c.indices("name=:1"; (UI.pointer($form.tables))->{$row})[0]]
 						
 						If (Not:C34(ob_equal($o; $context.currentTable)))
 							
@@ -95,7 +95,7 @@ Case of
 							
 						End if 
 						
-						$Ptr_published:=ui.pointer($form.published)
+						$Ptr_published:=UI.pointer($form.published)
 						$Lon_unpublished:=Count in array:C907($Ptr_published->; 0)
 						
 						$menu:=cs:C1710.menu.new()
@@ -148,7 +148,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				ui.tips.instantly(100)
+				UI.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -158,7 +158,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
 				
-				ui.tips.default()
+				UI.tips.default()
 				
 				//______________________________________________________
 			: ($e.code=On Getting Focus:K2:7)
@@ -176,7 +176,7 @@ Case of
 					End if 
 				End if 
 				
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; ui.highlightColor; ui.highlightColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
 				
 				structure_FIELD_LIST($form)
 				
@@ -188,7 +188,7 @@ Case of
 				OBJECT SET VISIBLE:C603(*; $form.action; True:C214)
 				//]
 				
-				$Ptr_:=ui.pointer($form.search)
+				$Ptr_:=UI.pointer($form.search)
 				$Ptr_->value:=String:C10($context.tableFilter)
 				$Ptr_->:=$Ptr_->  // Touch
 				
@@ -305,7 +305,7 @@ Case of
 				Else 
 					
 					// Keep the current field name
-					$context.fieldName:=(ui.pointer($form.fields))->{$row}
+					$context.fieldName:=(UI.pointer($form.fields))->{$row}
 					
 					If ($e.code=On Clicked:K2:4)
 						
@@ -369,7 +369,7 @@ Case of
 											
 											If ($relatedCatalog.success)  // Dialog was validated
 												
-												// The number of published 
+												// The number of published
 												$count:=$relatedCatalog.fields.query("published=true").length
 												
 												If ($count>0)  // At least one related field is published
@@ -377,7 +377,7 @@ Case of
 													If ($table=Null:C1517)\
 														 | OB Is empty:C1297($table)
 														
-														$table:=project.addTable($context.currentTable)
+														$table:=PROJECT.addTable($context.currentTable)
 														
 													End if 
 													
@@ -415,8 +415,8 @@ Case of
 																	$table[$context.fieldName][$c[0]][$fieldID]:=New object:C1471(\
 																		"name"; $o.name; \
 																		"path"; $o.path; \
-																		"label"; project.label($o.name); \
-																		"shortLabel"; project.shortLabel($o.name); \
+																		"label"; PROJECT.label($o.name); \
+																		"shortLabel"; PROJECT.shortLabel($o.name); \
 																		"type"; $o.type; \
 																		"fieldType"; $o.fieldType)
 																	
@@ -432,8 +432,8 @@ Case of
 																			"name"; $o.name; \
 																			"relatedDataClass"; $o.relatedDataClass; \
 																			"path"; $context.fieldName+"."+$o.path; \
-																			"label"; project.labelList($o.name); \
-																			"shortLabel"; project.label($o.name); \
+																			"label"; PROJECT.labelList($o.name); \
+																			"shortLabel"; PROJECT.label($o.name); \
 																			"inverseName"; $o.inverseName; \
 																			"isToMany"; True:C214)
 																		
@@ -446,8 +446,8 @@ Case of
 																		$table[$context.fieldName][$fieldID]:=New object:C1471(\
 																			"name"; $o.name; \
 																			"path"; $o.path; \
-																			"label"; project.label($o.name); \
-																			"shortLabel"; project.shortLabel($o.name); \
+																			"label"; PROJECT.label($o.name); \
+																			"shortLabel"; PROJECT.shortLabel($o.name); \
 																			"type"; $o.type; \
 																			"fieldType"; $o.fieldType)
 																		
@@ -537,7 +537,7 @@ Case of
 				If ($column=1)
 					
 					// Keep current
-					$context.fieldName:=(ui.pointer($form.fields))->{$row}
+					$context.fieldName:=(UI.pointer($form.fields))->{$row}
 					
 					// Three-state checkbox
 					If ($Ptr_me->{$row}=2)
@@ -560,7 +560,7 @@ Case of
 					
 					If ($Ptr_me->{$row}=0)
 						
-						project.updateActions()
+						PROJECT.updateActions()
 						
 					End if 
 				End if 
@@ -568,7 +568,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				ui.tips.instantly(100)
+				UI.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -579,7 +579,7 @@ Case of
 			: ($e.code=On Mouse Leave:K2:34)
 				
 				OBJECT SET HELP TIP:C1181(*; $e.objectName; "")
-				ui.tips.default()
+				UI.tips.default()
 				
 				//______________________________________________________
 			: ($e.code=On Getting Focus:K2:7)
@@ -597,7 +597,7 @@ Case of
 					End if 
 				End if 
 				
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; ui.highlightColor; ui.highlightColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
 				
 				// Move search & action [
 				ui_MOVE($form.search; $e.objectName; Align right:K42:4; 30)
@@ -608,7 +608,7 @@ Case of
 				OBJECT SET VISIBLE:C603(*; $form.action; True:C214)
 				//]
 				
-				$Ptr_:=ui.pointer($form.search)
+				$Ptr_:=UI.pointer($form.search)
 				$Ptr_->value:=String:C10($context.fieldFilter)
 				$Ptr_->:=$Ptr_->  // Touch
 				
@@ -786,13 +786,13 @@ Case of
 			If (OBJECT Get name:C1087(Object with focus:K67:3)=$form.fieldList)
 				
 				// Check the selection
-				$Ptr_me:=ui.pointer($form.fieldList)
+				$Ptr_me:=UI.pointer($form.fieldList)
 				$row:=Find in array:C230($Ptr_me->; True:C214)
 				
 				If ($row>0)
 					
 					// Get the value of the first selected item
-					$Ptr_published:=ui.pointer($form.published)
+					$Ptr_published:=UI.pointer($form.published)
 					$b:=Bool:C1537($Ptr_published->{$row})
 					
 					// Apply to all selected items

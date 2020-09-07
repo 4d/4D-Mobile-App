@@ -1,45 +1,45 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-  // ----------------------------------------------------
-  // Project method : formatters
-  // Created 2018 by Eric Marchand
-  // ----------------------------------------------------
-  // Description: Manage data formatters
-  //  * action = extract: from data model get a list of formatters
-  //  * action = generate: generate from a list of formatters project files
-  //  * action = get: get indexed formatter info by name
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : formatters
+// Created 2018 by Eric Marchand
+// ----------------------------------------------------
+// Description: Manage data formatters
+//  * action = extract: from data model get a list of formatters
+//  * action = generate: generate from a list of formatters project files
+//  * action = get: get indexed formatter info by name
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($bAppend)
 C_LONGINT:C283($i)
-C_TEXT:C284($t;$tFieldID;$tTable)
-C_OBJECT:C1216($archive;$errors;$folder;$o;$oField;$oFormatter)
-C_OBJECT:C1216($oIN;$oOUT;$oResources;$oResult)
+C_TEXT:C284($t; $tFieldID; $tTable)
+C_OBJECT:C1216($archive; $errors; $folder; $o; $oField; $oFormatter)
+C_OBJECT:C1216($oIN; $oOUT; $oResources; $oResult)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_OBJECT:C1216(formatters ;$0)
-	C_OBJECT:C1216(formatters ;$1)
+	C_OBJECT:C1216(formatters; $0)
+	C_OBJECT:C1216(formatters; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
+// ----------------------------------------------------
+// Initialisations
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$oIN:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If (Count parameters:C259>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
 	$oOUT:=New object:C1471(\
-		"success";False:C215)
+		"success"; False:C215)
 	
 Else 
 	
@@ -47,29 +47,29 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 
 Case of 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: (Length:C16(String:C10($oIN.action))=0)
 		
 		$oOUT.errors:=New collection:C1472("No action provided when processing formatters")
-		ASSERT:C1129(dev_Matrix ;"No action provided when processing formatters")
+		ASSERT:C1129(dev_Matrix; "No action provided when processing formatters")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($oIN.action="getByName")
 		
 		$oResources:=SHARED.resources
 		
-		  // Formatter definitions
+		// Formatter definitions
 		$oOUT.formatters:=$oResources.definitions
 		
-		For each ($t;$oOUT.formatters)
+		For each ($t; $oOUT.formatters)
 			
 			If (Value type:C1509($oOUT.formatters[$t])=Is collection:K8:32)
 				
-				For each ($oFormatter;$oOUT.formatters[$t])
+				For each ($oFormatter; $oOUT.formatters[$t])
 					
 					If (Length:C16(String:C10($oFormatter.name))>0)\
 						 & (String:C10($oFormatter.name)#"-")
@@ -79,18 +79,18 @@ Case of
 					End if 
 				End for each 
 				
-				OB REMOVE:C1226($oOUT.formatters;$t)
+				OB REMOVE:C1226($oOUT.formatters; $t)
 				
 			End if 
 		End for each 
 		
-		  // Others formatter
-		For each ($c;$oResources.fieldBindingTypes.filter("col_formula";"$1.result:=(Value type:C1509($1.value)=42)");1)
+		// Others formatter
+		For each ($c; $oResources.fieldBindingTypes.filter("col_formula"; "$1.result:=(Value type:C1509($1.value)=42)"); 1)
 			
-			  // Keep only formats with defined name
-			$c:=$c.filter("col_formula";"$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
+			// Keep only formats with defined name
+			$c:=$c.filter("col_formula"; "$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
 			
-			For each ($oFormatter;$c)
+			For each ($oFormatter; $c)
 				
 				$t:=String:C10($oFormatter.name)
 				
@@ -103,14 +103,14 @@ Case of
 			End for each 
 		End for each 
 		
-		  // Host formatters
-		$oResources:=COMPONENT_Pathname ("host_formatters")
+		// Host formatters
+		$oResources:=COMPONENT_Pathname("host_formatters")
 		
 		If ($oResources.exists)
 			
-			For each ($o;$oResources.folders())
+			For each ($o; $oResources.folders())
 				
-				$oFormatter:=ob_parseFile ($o.file("manifest.json"))
+				$oFormatter:=ob_parseFile($o.file("manifest.json"))
 				
 				If ($oFormatter.success)
 					
@@ -124,14 +124,14 @@ Case of
 			End for each 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($oIN.action="getByType")
 		
 		If (Bool:C1537($oIN.host))
 			
 			$oOUT.formatters:=New collection:C1472
 			
-			$oResources:=COMPONENT_Pathname ("host_formatters")
+			$oResources:=COMPONENT_Pathname("host_formatters")
 			
 			If ($oResources.exists)
 				
@@ -149,7 +149,7 @@ Case of
 				$c[Is text:K8:3]:="text"
 				$c[Is picture:K8:10]:="picture"
 				
-				For each ($oFormatter;$oResources.folders())
+				For each ($oFormatter; $oResources.folders())
 					
 					If ($oFormatter.file("manifest.json").exists)
 						
@@ -162,7 +162,7 @@ Case of
 								If ($o.type.indexOf($c[$oIN.type])#-1)
 									
 									$oOUT.formatters.push(New object:C1471(\
-										"name";$oFormatter.name))
+										"name"; $oFormatter.name))
 									
 								End if 
 								
@@ -171,7 +171,7 @@ Case of
 								If ($o.type=$c[$oIN.type])
 									
 									$oOUT.formatters.push(New object:C1471(\
-										"name";$oFormatter.name))
+										"name"; $oFormatter.name))
 									
 								End if 
 							End if 
@@ -179,11 +179,11 @@ Case of
 					End if 
 				End for each 
 				
-				If (feature.with("resourcesBrowser"))
+				If (FEATURE.with("resourcesBrowser"))
 					
-					$errors:=err .hide()
+					$errors:=err.hide()
 					
-					For each ($oFormatter;$oResources.files().query("extension = :1";SHARED.archiveExtension))
+					For each ($oFormatter; $oResources.files().query("extension = :1"; SHARED.archiveExtension))
 						
 						$archive:=ZIP Read archive:C1637($oFormatter)
 						
@@ -196,7 +196,7 @@ Case of
 								If ($o.type.indexOf($c[$oIN.type])#-1)
 									
 									$oOUT.formatters.push(New object:C1471(\
-										"name";$oFormatter.name))
+										"name"; $oFormatter.name))
 									
 								End if 
 								
@@ -205,7 +205,7 @@ Case of
 								If ($o.type=$c[$oIN.type])
 									
 									$oOUT.formatters.push(New object:C1471(\
-										"name";$oFormatter.name))
+										"name"; $oFormatter.name))
 									
 								End if 
 							End if 
@@ -224,7 +224,7 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($oIN.action="isValid")
 		
 		If ($oIN.format#Null:C1517)
@@ -232,7 +232,7 @@ Case of
 			If (Not:C34($oIN.format.exists))\
 				 | (Not:C34($oIN.format.file("manifest.json").exists))
 				
-				ob_error_add ($oOUT;"Formatter missing or invalid")  // Missing or invalid
+				ob_error_add($oOUT; "Formatter missing or invalid")  // Missing or invalid
 				
 			End if 
 			
@@ -241,33 +241,33 @@ Case of
 			If (Test path name:C476($oIN.path)#Is a folder:K24:2)\
 				 | (Test path name:C476($oIN.path+"manifest.json")#Is a document:K24:1)
 				
-				ob_error_add ($oOUT;"Formatter missing or invalid")  // Missing or invalid
+				ob_error_add($oOUT; "Formatter missing or invalid")  // Missing or invalid
 				
 			End if 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($oIN.action="extract")
 		
-		  // Extract format from data model
+		// Extract format from data model
 		$oOUT.formatters:=New collection:C1472()
 		
-		For each ($tTable;$oIN.dataModel)
+		For each ($tTable; $oIN.dataModel)
 			
-			For each ($tFieldID;$oIN.dataModel[$tTable])
+			For each ($tFieldID; $oIN.dataModel[$tTable])
 				
-				If (Match regex:C1019("(?m-si)^\\d+$";$tFieldID;1;*))
+				If (Match regex:C1019("(?m-si)^\\d+$"; $tFieldID; 1; *))
 					
 					$oField:=$oIN.dataModel[$tTable][$tFieldID]
 					
 					Case of 
 							
-							  //………………………………………………………………………………………………………
+							//………………………………………………………………………………………………………
 						: (Value type:C1509($oField.format)=Is object:K8:27)
 							
 							$oOUT.formatters.push($oField)
 							
-							  //………………………………………………………………………………………………………
+							//………………………………………………………………………………………………………
 						: (Value type:C1509($oField.format)=Is text:K8:3)
 							
 							If (Value type:C1509($oIN.formatters)=Is object:K8:27)
@@ -278,33 +278,33 @@ Case of
 									
 								Else 
 									
-									ob_error_add ($oOUT;"Unknown data formatter '"+$oField.format+"'")
+									ob_error_add($oOUT; "Unknown data formatter '"+$oField.format+"'")
 									
 								End if 
 								
 							Else 
 								
-								ob_error_add ($oOUT;"No list of formatters provided to resolve '"+$oField.format+"'")
+								ob_error_add($oOUT; "No list of formatters provided to resolve '"+$oField.format+"'")
 								
 							End if 
 							
-							  //………………………………………………………………………………………………………
+							//………………………………………………………………………………………………………
 						: ($oField.format=Null:C1517)
 							
-							  // Ignore if not set
+							// Ignore if not set
 							
-							  //………………………………………………………………………………………………………
+							//………………………………………………………………………………………………………
 						Else 
 							
-							ob_error_add ($oOUT;"Wrong format type defined by field: "+JSON Stringify:C1217($oField))
+							ob_error_add($oOUT; "Wrong format type defined by field: "+JSON Stringify:C1217($oField))
 							
-							  //………………………………………………………………………………………………………
+							//………………………………………………………………………………………………………
 					End case 
 				End if 
 			End for each 
 		End for each 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($oIN.action="generate")
 		
 		If (Asserted:C1132(Value type:C1509($oIN.formatters)=Is collection:K8:32))
@@ -317,34 +317,34 @@ Case of
 			
 			$oOUT.children:=New collection:C1472()
 			
-			  // Generate project files according to formats
-			For each ($oFormatter;$oIN.formatters)
+			// Generate project files according to formats
+			For each ($oFormatter; $oIN.formatters)
 				
 				If (Length:C16(String:C10($oFormatter.name))#0)
 					
-					  // If (Bool(featuresFlags._100990))
+					// If (Bool(featuresFlags._100990))
 					If ($oOUT.sources.indexOf($oFormatter.name)<0)
 						
 						$oOUT.sources.push($oFormatter.name)
 						
 						If (Bool:C1537($oFormatter.isHost))  // CHECK IF host formatter before, no source in ours formatters
 							
-							For each ($t;New collection:C1472("Sources";"Resources"))  // Only Sources and "Resources" folder are imported
+							For each ($t; New collection:C1472("Sources"; "Resources"))  // Only Sources and "Resources" folder are imported
 								
 								If ($oFormatter.folder=Null:C1517)
-									$folder:=COMPONENT_Pathname ("host_formatters").folder($oFormatter.name).folder($t)  // code could failed if name in manifest not equal to directory
+									$folder:=COMPONENT_Pathname("host_formatters").folder($oFormatter.name).folder($t)  // code could failed if name in manifest not equal to directory
 								Else 
 									$folder:=$oFormatter.folder.folder($t)
 								End if 
 								
 								If ($folder.exists)
 									
-									$oResult:=template (New object:C1471(\
-										"source";$folder.platformPath;\
-										"tags";$oIN.tags;\
-										"target";$oIN.target+$t+Folder separator:K24:12))
+									$oResult:=template(New object:C1471(\
+										"source"; $folder.platformPath; \
+										"tags"; $oIN.tags; \
+										"target"; $oIN.target+$t+Folder separator:K24:12))
 									
-									  // to inject in project file
+									// to inject in project file
 									$oOUT.children.push($oResult)
 									
 								End if 
@@ -352,7 +352,7 @@ Case of
 						End if 
 					End if 
 					
-					  // End if
+					// End if
 					
 					Case of 
 							
@@ -360,131 +360,131 @@ Case of
 							
 							$oFormatter.binding:=$oFormatter.name  // must an attribute of UI component
 							
-							  //………………………………………………………………………………………………………
+							//………………………………………………………………………………………………………
 						: ($oFormatter.binding="localizedText")  // a text with a choice list
 							
 							If ($oOUT.localized.indexOf($oFormatter.name)<0)
 								
-								$oResult:=xloc (New object:C1471(\
-									"action";"create";\
-									"formatter";$oFormatter;\
-									"append";$bAppend;\
-									"file";"Formatters";\
-									"target";$oIN.target+"Resources"+Folder separator:K24:12))
+								$oResult:=xloc(New object:C1471(\
+									"action"; "create"; \
+									"formatter"; $oFormatter; \
+									"append"; $bAppend; \
+									"file"; "Formatters"; \
+									"target"; $oIN.target+"Resources"+Folder separator:K24:12))
 								
 								$bAppend:=True:C214  // append next
 								
-								ob_error_combine ($oOUT;$oResult)
+								ob_error_combine($oOUT; $oResult)
 								
 								$oOUT.localized.push($oFormatter.name)
 								
-								  // If (Bool(featuresFlags._100990))
+								// If (Bool(featuresFlags._100990))
 								$oOUT.children.push(New object:C1471(\
-									"target";$oResult.target;\
-									"types";New collection:C1472("strings")))
+									"target"; $oResult.target; \
+									"types"; New collection:C1472("strings")))
 								
-								  // Else
-								  //$Obj_out.target:=$Obj_result.target  // XXX if multiple files replace by a collection
-								  // End if
+								// Else
+								//$Obj_out.target:=$Obj_result.target  // XXX if multiple files replace by a collection
+								// End if
 								
 							Else 
 								
-								  // Already managed
+								// Already managed
 								
 							End if 
 							
-							  //………………………………………………………………………………………………………
+							//………………………………………………………………………………………………………
 						: ($oFormatter.binding="imageNamed")  // a list of image asset
 							
 							If ($oOUT.imageNamed.indexOf($oFormatter.name)<0)
 								
-								$oResult:=asset (New object:C1471(\
-									"action";"formatter";\
-									"formatter";$oFormatter;\
-									"target";$oIN.target+"Resources"+Folder separator:K24:12+"Assets.xcassets"+Folder separator:K24:12+"Formatters"+Folder separator:K24:12))  // XXX path from? template?
+								$oResult:=asset(New object:C1471(\
+									"action"; "formatter"; \
+									"formatter"; $oFormatter; \
+									"target"; $oIN.target+"Resources"+Folder separator:K24:12+"Assets.xcassets"+Folder separator:K24:12+"Formatters"+Folder separator:K24:12))  // XXX path from? template?
 								
-								ob_error_combine ($oOUT;$oResult)
+								ob_error_combine($oOUT; $oResult)
 								
 								$oOUT.imageNamed.push($oFormatter.name)
 								
-								  // Else already managed
+								// Else already managed
 								
 							End if 
 							
-							  //………………………………………………………………………………………………………
+							//………………………………………………………………………………………………………
 						Else 
 							
-							  // nothing?
+							// nothing?
 							
-							  //………………………………………………………………………………………………………
+							//………………………………………………………………………………………………………
 					End case 
 					
-					  //________________________________________
+					//________________________________________
 				Else 
 					
-					ob_error_add ($oOUT;"No name for format: "+JSON Stringify:C1217($oFormatter))
+					ob_error_add($oOUT; "No name for format: "+JSON Stringify:C1217($oFormatter))
 					
 				End if 
 			End for each 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($oIN.action="objectify")
 		
 		$i:=0  // First index
 		
 		Case of 
 				
-				  //........................................
+				//........................................
 			: ($oIN.value=Null:C1517)
 				
 				$oOUT.value:=Null:C1517
-				ob_error_add ($oOUT;"No value provided: "+JSON Stringify:C1217($oFormatter))
+				ob_error_add($oOUT; "No value provided: "+JSON Stringify:C1217($oFormatter))
 				
-				  //........................................
+				//........................................
 			: (Value type:C1509($oIN.value)=Is object:K8:27)
 				
 				$oOUT.value:=$oIN.value
 				
-				  //........................................
+				//........................................
 			: (Value type:C1509($oIN.value)=Is collection:K8:32)  // expected collection of text XXX add a check?
 				
 				$oOUT.value:=New object:C1471(\
 					)
 				
-				  // indexes collection like in php
-				For each ($t;$oIN.value)
+				// indexes collection like in php
+				For each ($t; $oIN.value)
 					
 					$oOUT.value[String:C10($i)]:=$t
 					$i:=$i+1
 					
 				End for each 
 				
-				  //........................................
+				//........................................
 			: (Value type:C1509($oIN.value)=Is text:K8:3)
 				
 				$oOUT.value:=New object:C1471(\
-					String:C10($i);$oIN.value)
+					String:C10($i); $oIN.value)
 				
-				  //........................................
+				//........................................
 			Else 
 				
 				$oOUT.value:=New object:C1471(\
-					String:C10($i);String:C10($oIN.value))
+					String:C10($i); String:C10($oIN.value))
 				
-				  // XXX warning, unknown type for value
+				// XXX warning, unknown type for value
 				
-				  //........................................
+				//........................................
 		End case 
 		
-		  //----------------------------------------
+		//----------------------------------------
 End case 
 
-$oOUT.success:=Not:C34(ob_error_has ($oOUT))
+$oOUT.success:=Not:C34(ob_error_has($oOUT))
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$oOUT
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

@@ -534,7 +534,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																
+								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -771,7 +771,7 @@ Case of
 		//______________________________________________________
 	: ($IN.action="tables")  //  [OBSOLETE]
 		
-		If (Bool:C1537(feature._98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
+		If (Bool:C1537(FEATURE._98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
 			
 			// CHECK ALL CALLERS AND UNIT TEST
 			

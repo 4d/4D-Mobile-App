@@ -12,19 +12,19 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($t;$tt)
-C_OBJECT:C1216($ƒ;$o;$Obj_in;$Obj_out)
+C_TEXT:C284($t; $tt)
+C_OBJECT:C1216($o; $Obj_in; $Obj_out)
 
 If (False:C215)
-	C_OBJECT:C1216(project_Check_param;$0)
-	C_OBJECT:C1216(project_Check_param;$1)
+	C_OBJECT:C1216(project_Check_param; $0)
+	C_OBJECT:C1216(project_Check_param; $1)
 End if 
 
 // ----------------------------------------------------
 // Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
 	// Required parameters
 	$Obj_in:=$1
@@ -37,7 +37,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	End if 
 	
 	$Obj_out:=New object:C1471(\
-		"success";False:C215)
+		"success"; False:C215)
 	
 	$o:=$Obj_in.project
 	
@@ -52,52 +52,52 @@ End if
 Case of 
 		
 		//______________________________________________________
-	: ((Length:C16(String:C10($o.product.name))=0))// Empty App name
+	: ((Length:C16(String:C10($o.product.name))=0))  // Empty App name
 		
 		$o:=New object:C1471(\
-			"page";"general";\
-			"panel";"PRODUCT";\
-			"object";"10_name")
+			"page"; "general"; \
+			"panel"; "PRODUCT"; \
+			"object"; "10_name")
 		
 		DO_MESSAGE(New object:C1471(\
-			"action";"show";\
-			"type";"alert";\
-			"title";ui.alert+" "+Get localized string:C991("theProductNameIsMandatory");\
-			"additional";"pleaseGiveNameToYourProduct";\
-			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
+			"action"; "show"; \
+			"type"; "alert"; \
+			"title"; UI.alert+" "+Get localized string:C991("theProductNameIsMandatory"); \
+			"additional"; "pleaseGiveNameToYourProduct"; \
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
 		
 		//______________________________________________________
-	: (OB Get:C1224($o;"dataModel";Is object:K8:27)=Null:C1517)\
-		 | OB Is empty:C1297(OB Get:C1224($o;"dataModel";Is object:K8:27))// No published structure
+	: (OB Get:C1224($o; "dataModel"; Is object:K8:27)=Null:C1517)\
+		 | OB Is empty:C1297(OB Get:C1224($o; "dataModel"; Is object:K8:27))  // No published structure
 		
 		$o:=New object:C1471(\
-			"page";"structure")
+			"page"; "structure")
 		
 		DO_MESSAGE(New object:C1471(\
-			"action";"show";\
-			"type";"alert";\
-			"title";ui.alert+" "+Get localized string:C991("noPublishedTable");\
-			"additional";"youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication";\
-			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
+			"action"; "show"; \
+			"type"; "alert"; \
+			"title"; UI.alert+" "+Get localized string:C991("noPublishedTable"); \
+			"additional"; "youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication"; \
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
 		
 		//______________________________________________________
 	: ($o.main.order=Null:C1517)\
-		 | ($o.main.order.length=0)// No table in the main menu
+		 | ($o.main.order.length=0)  // No table in the main menu
 		
 		$o:=New object:C1471(\
-			"page";"main")
+			"page"; "main")
 		
 		DO_MESSAGE(New object:C1471(\
-			"action";"show";\
-			"type";"alert";\
-			"title";ui.alert+" "+Get localized string:C991("noTableDefinedInTheMainMenu");\
-			"additional";"youMustSetAtLeastOneTableIntoTheMainMenu";\
-			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
+			"action"; "show"; \
+			"type"; "alert"; \
+			"title"; UI.alert+" "+Get localized string:C991("noTableDefinedInTheMainMenu"); \
+			"additional"; "youMustSetAtLeastOneTableIntoTheMainMenu"; \
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
 		
 		//______________________________________________________
 	Else 
 		
-		$Obj_out.success:=True:C214// no error
+		$Obj_out.success:=True:C214  // no error
 		
 		//______________________________________________________
 End case 
@@ -115,11 +115,11 @@ If ($Obj_out.success & Bool:C1537($Obj_in.build))
 		If (Not:C34($Obj_out.success))
 			
 			DO_MESSAGE(New object:C1471(\
-				"action";"show";\
-				"type";"alert";\
-				"title";ui.alert+" "+Get localized string:C991("unableToGenerateApp");\
-				"additional";Get localized string:C991("theprojectmustbelocatedrinthemobileprojectsfolder");\
-				"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"build_stop"))\
+				"action"; "show"; \
+				"type"; "alert"; \
+				"title"; UI.alert+" "+Get localized string:C991("unableToGenerateApp"); \
+				"additional"; Get localized string:C991("theprojectmustbelocatedrinthemobileprojectsfolder"); \
+				"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "build_stop"))\
 				))
 			
 		End if 
@@ -130,16 +130,15 @@ If ($Obj_out.success & Bool:C1537($Obj_in.build))
 	
 	// CHECK IF THE PROJECT COULD BE BUILD
 	$o:=$Obj_in.project.dataModel
-	$ƒ:=Storage:C1525.ƒ
 	
-	For each ($t;$o)
+	For each ($t; $o)
 		
-		For each ($tt;$o[$t])
+		For each ($tt; $o[$t])
 			
 			Case of 
 					
 					//………………………………………………………………………………………………………
-				: ($ƒ.isField($tt))
+				: (PROJECT.isField($tt))
 					
 					//
 					
@@ -149,19 +148,19 @@ If ($Obj_out.success & Bool:C1537($Obj_in.build))
 					// <NOTHING MORE TO DO>
 					
 					//………………………………………………………………………………………………………
-				: ($ƒ.isRelationToOne($o[$t][$tt]))// N -> 1 relation
+				: (PROJECT.isRelationToOne($o[$t][$tt]))  // N -> 1 relation
 					
 					//
 					
 					//………………………………………………………………………………………………………
-				: ($ƒ.isRelationToMany($o[$t][$tt]))// 1 -> N relation
+				: (PROJECT.isRelationToMany($o[$t][$tt]))  // 1 -> N relation
 					
 					If (Value type:C1509($o[String:C10($o[$t][$tt].relatedTableNumber)])=Is undefined:K8:13)
 						
 						$Obj_out.success:=False:C215
 						
 						// Ensure the errors collection exists
-						$Obj_out:=ob_createPath($Obj_out;"errors";Is collection:K8:32)
+						$Obj_out:=ob_createPath($Obj_out; "errors"; Is collection:K8:32)
 						$Obj_out.errors.push(str("theLinkedTableIsNotPublished").localized($o[$t][$tt].relatedEntities))
 						
 					End if 
@@ -174,14 +173,14 @@ If ($Obj_out.success & Bool:C1537($Obj_in.build))
 	If (Not:C34($Obj_out.success))
 		
 		$o:=New object:C1471(\
-			"page";"structure")
+			"page"; "structure")
 		
 		DO_MESSAGE(New object:C1471(\
-			"action";"show";\
-			"type";"alert";\
-			"title";ui.alert+" "+Get localized string:C991("theDefinitionOfTheStructureIsInconsistent");\
-			"additional";"- "+$Obj_out.errors.join("\r- ")+"\r\r\r"+Get localized string:C991("youMustFixItBeforeBuildingTheApplication");\
-			"okFormula";Formula:C1597(CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"goToPage";$o))))
+			"action"; "show"; \
+			"type"; "alert"; \
+			"title"; UI.alert+" "+Get localized string:C991("theDefinitionOfTheStructureIsInconsistent"); \
+			"additional"; "- "+$Obj_out.errors.join("\r- ")+"\r\r\r"+Get localized string:C991("youMustFixItBeforeBuildingTheApplication"); \
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
 		
 	End if 
 	

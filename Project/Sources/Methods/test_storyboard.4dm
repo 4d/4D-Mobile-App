@@ -39,7 +39,7 @@ New object:C1471("name"; "field 5"; "id"; 5))
 $Lon_relationMinPosition:=8  // /!\ relation could be only after detail headers, so here after 8 for the moment (the test will failed if you put relation in header)
 
 $Col_otherFields:=New collection:C1472(New object:C1471("name"; "field 1"; "id"; 1); New object:C1471("name"; "field 2"; "id"; 2))
-If (feature.with(114338))
+If (FEATURE.with(114338))
 	$Col_fields.push($Col_otherFields)
 Else 
 	$Col_fields:=$Col_fields.combine($Col_otherFields)

@@ -187,7 +187,7 @@ Function load  // Load and update the template if any
 						End if 
 						
 						//______________________________________________________
-					: (This:C1470.listform) & (feature.with("moreRelations"))
+					: (This:C1470.listform) & (FEATURE.with("moreRelations"))
 						
 						// Add the types -8858 & -8859 to forbid the deposit of a relation
 						// on the"searchableField" & "sectionField fields"
@@ -303,7 +303,7 @@ Function load  // Load and update the template if any
 						End if 
 						
 						//______________________________________________________
-					: (Not:C34(feature.with("moreRelations")))
+					: (Not:C34(FEATURE.with("moreRelations")))
 						
 						//
 						
@@ -376,7 +376,7 @@ Function path  // Return the path of the file/folder
 		
 		$t:=Delete string:C232($t; 1; 1)  // Remove initial slash
 		
-		If (feature.with("resourcesBrowser"))
+		If (FEATURE.with("resourcesBrowser"))
 			
 			If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
 				

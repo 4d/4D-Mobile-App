@@ -48,7 +48,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 		"fields"; "fields"; \
 		"fieldFilter"; "fields.filter"; \
 		"published"; "published"; \
-		"publishedPtr"; ui.pointer("published"); \
+		"publishedPtr"; UI.pointer("published"); \
 		"icons"; "icons"; \
 		"search"; "search"; \
 		"action"; "action"; \
@@ -113,9 +113,9 @@ Case of
 				
 				structure_TABLE_LIST($form)
 				
-				If (Num:C11(project.getCatalog().length)>=500)
+				If (Num:C11(PROJECT.getCatalog().length)>=500)
 					
-					RECORD.warning("Table number: "+String:C10(project.getCatalog().length))
+					RECORD.warning("Table number: "+String:C10(PROJECT.getCatalog().length))
 					
 				End if 
 				
@@ -203,7 +203,7 @@ Case of
 		//=========================================================
 	: ($Obj_in.action="fieldList")
 		
-		$o:=project.getCatalog().query("name = :1"; String:C10($context.currentTable.name)).pop()
+		$o:=PROJECT.getCatalog().query("name = :1"; String:C10($context.currentTable.name)).pop()
 		
 		If ($o=Null:C1517)
 			
@@ -271,10 +271,10 @@ Case of
 		//=========================================================
 	: ($Obj_in.action="addTable")
 		
-		project.addTable($context.currentTable)
+		PROJECT.addTable($context.currentTable)
 		
 		// Highlight the table name
-		$l:=Find in array:C230((ui.pointer($form.tableList))->; True:C214)
+		$l:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
 		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $l; Bold:K14:2)
 		
 		//=========================================================
@@ -368,12 +368,12 @@ Case of
 				//…………………………………………………………………………………………………
 			Else 
 				
-				If ($Obj_in.field.fieldType<=ui.fieldIcons.length)
+				If ($Obj_in.field.fieldType<=UI.fieldIcons.length)
 					
 					$Lon_published:=Num:C11(Form:C1466.dataModel[String:C10($Obj_in.table.tableNumber)][String:C10($Obj_in.field.id)]#Null:C1517)
 					
 					APPEND TO ARRAY:C911(($Obj_in.published)->; $Lon_published)
-					APPEND TO ARRAY:C911(($Obj_in.icons)->; ui.fieldIcons[$Obj_in.field.fieldType])
+					APPEND TO ARRAY:C911(($Obj_in.icons)->; UI.fieldIcons[$Obj_in.field.fieldType])
 					APPEND TO ARRAY:C911(($Obj_in.fields)->; $Obj_in.field.name)
 					
 				End if 

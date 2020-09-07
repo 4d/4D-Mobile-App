@@ -251,9 +251,9 @@ Case of
 							$o.action:="actionIcons"
 							
 							$o.background:=0x00FFFFFF
-							$o.backgroundStroke:=ui.strokeColor
+							$o.backgroundStroke:=UI.strokeColor
 							$o.promptColor:=0x00FFFFFF
-							$o.promptBackColor:=ui.strokeColor
+							$o.promptBackColor:=UI.strokeColor
 							$o.hidePromptSeparator:=True:C214
 							$o.forceRedraw:=True:C214
 							$o.prompt:=str.setText("chooseAnIconForTheAction").localized(String:C10($context.current.name))
@@ -303,7 +303,7 @@ Case of
 							$context.current.tableNumber:=Num:C11($menu.choice)
 							
 							$form.form.refresh()
-							project.save()
+							PROJECT.save()
 							
 						End if 
 						
@@ -343,7 +343,7 @@ Case of
 						If ($widget.popup($menu).selected)
 							
 							$context.current.scope:=$menu.choice
-							project.save()
+							PROJECT.save()
 							
 						End if 
 						
@@ -374,7 +374,7 @@ Case of
 			$deleteMenu:=cs:C1710.menu.new()
 			$menu.append(":xliff:deleteActionFor"; $deleteMenu)
 			
-			If (feature.with(117618))
+			If (FEATURE.with(117618))
 				
 				$shareMenu:=cs:C1710.menu.new()
 				$menu.append(":xliff:shareActionFor"; $shareMenu)
@@ -387,7 +387,7 @@ Case of
 				$editMenu.append(Form:C1466.dataModel[$t][""].name; "edit_"+$t)
 				$deleteMenu.append(Form:C1466.dataModel[$t][""].name; "delete_"+$t)
 				
-				If (feature.with(117618))
+				If (FEATURE.with(117618))
 					
 					$shareMenu.append(Form:C1466.dataModel[$t][""].name; "share_"+$t)
 					
@@ -535,7 +535,7 @@ Case of
 										// <NOTHING MORE TO DO>
 										
 										//______________________________________________________
-									: (Storage:C1525.ƒ.isField($t))
+									: (PROJECT.isField($t))
 										
 										If ($table[$t].name#$table[""].primaryKey)  // DO NOT ADD A PRIMARY KEY
 											
@@ -591,7 +591,7 @@ Case of
 										// <NOTHING MORE TO DO>
 										
 										//______________________________________________________
-									: (Storage:C1525.ƒ.isRelation($table[$t]))
+									: (PROJECT.isRelation($table[$t]))
 										
 										//
 										
@@ -608,7 +608,7 @@ Case of
 		
 		If ($form.form.eventCode=On Clicked:K2:4)
 			
-			READ PICTURE FILE:C678(ui.noIcon; $icon)
+			READ PICTURE FILE:C678(UI.noIcon; $icon)
 			CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
 			
 			$t:="action_"+String:C10($index)
@@ -669,7 +669,7 @@ Case of
 			//EDIT ITEM(*;$Obj_form.name;Form.actions.length)
 			
 			$form.form.refresh()
-			project.save()
+			PROJECT.save()
 			
 			$form.form.call("selectParameters")
 			
@@ -710,7 +710,7 @@ Case of
 				End if 
 				
 				$form.form.refresh()
-				project.save()
+				PROJECT.save()
 				
 				//______________________________________________________
 			Else 
@@ -777,9 +777,9 @@ Case of
 		//==================================================
 End case 
 
-If (Bool:C1537(feature._8858))
+If (Bool:C1537(FEATURE._8858))
 	
-	project.save()
+	PROJECT.save()
 	
 End if 
 

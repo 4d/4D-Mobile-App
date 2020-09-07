@@ -58,7 +58,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 			$Col_bind:=Split string:C1554($oAttributes["ios:values"]; ","; sk trim spaces:K86:2)
 			
 			// Create binding collection sized according to bind attribute length
-			If (feature.with("newViewUI"))\
+			If (FEATURE.with("newViewUI"))\
 				 & ($oIN.selector="detail")
 				
 				$Col_bind.resize($oIN.manifest.fields.count)
@@ -241,7 +241,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 				End if 
 			End for each 
 			
-			If (feature.with("newViewUI"))\
+			If (FEATURE.with("newViewUI"))\
 				 & ($oIN.manifest#Null:C1517)\
 				 & ($oIN.selector="detail")\
 				 & ($oIN.target.fields#Null:C1517)

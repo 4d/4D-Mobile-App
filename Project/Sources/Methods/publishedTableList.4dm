@@ -54,7 +54,7 @@ If ($oOUT.success)
 			
 			If ($o.label=Null:C1517)
 				
-				$o.label:=project.label($o.name)
+				$o.label:=PROJECT.label($o.name)
 				
 			End if 
 			
@@ -78,7 +78,7 @@ If ($oOUT.success)
 			
 			$oTable.embedded:=Bool:C1537($o.embedded)
 			$oTable.iconPath:=String:C10($o.icon)
-			$oTable.icon:=project.getIcon(String:C10($oTable.iconPath))
+			$oTable.icon:=PROJECT.getIcon(String:C10($oTable.iconPath))
 			
 			$oOUT.tables.push($oTable)
 			
@@ -104,7 +104,7 @@ If ($oOUT.success)
 			
 			If ($o.label=Null:C1517)
 				
-				$o.label:=project.label($o.name)
+				$o.label:=PROJECT.label($o.name)
 				
 			End if 
 			
@@ -118,7 +118,7 @@ If ($oOUT.success)
 			
 			$oOUT.shortLabels[$i]:=$o.shortLabel
 			$oOUT.iconPaths[$i]:=String:C10($o.icon)
-			$oOUT.icons[$i]:=project.getIcon(String:C10($oOUT.iconPaths[$i]))
+			$oOUT.icons[$i]:=PROJECT.getIcon(String:C10($oOUT.iconPaths[$i]))
 			
 			$i:=$i+1
 			

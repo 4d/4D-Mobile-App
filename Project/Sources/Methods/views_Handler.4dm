@@ -32,33 +32,33 @@ If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
 	
 	$form:=New object:C1471(\
 		"$"; editor_INIT; \
-		"form"; ui.form("editor_CALLBACK").get(); \
-		"tableWidget"; ui.picture("tables"); \
-		"tableNext"; ui.static("next@"); \
-		"tablePrevious"; ui.static("previous@"); \
-		"tableButtonNext"; ui.button("next"); \
-		"tableButtonPrevious"; ui.button("previous"); \
-		"tablist"; ui.button("tab.list"); \
-		"tabdetail"; ui.button("tab.detail"); \
-		"tabSelector"; ui.widget("tab.selector"); \
-		"noPublishedTable"; ui.widget("noPublishedTable"); \
-		"fieldList"; ui.listbox("01_fields"); \
-		"fieldGroup"; ui.static("01_fields@"); \
-		"preview"; ui.picture("preview"); \
-		"previewGroup"; ui.static("preview@"); \
-		"fields"; ui.widget("fields"); \
-		"ids"; ui.widget("field_ids"); \
-		"icons"; ui.widget("icons"); \
-		"names"; ui.widget("names"); \
-		"selectorList"; ui.button("tab.list"); \
-		"selectorDetail"; ui.button("tab.detail"); \
-		"selectors"; ui.static("tab.@"); \
-		"resources"; ui.button("resources"); \
+		"form"; UI.form("editor_CALLBACK").get(); \
+		"tableWidget"; UI.picture("tables"); \
+		"tableNext"; UI.static("next@"); \
+		"tablePrevious"; UI.static("previous@"); \
+		"tableButtonNext"; UI.button("next"); \
+		"tableButtonPrevious"; UI.button("previous"); \
+		"tablist"; UI.button("tab.list"); \
+		"tabdetail"; UI.button("tab.detail"); \
+		"tabSelector"; UI.widget("tab.selector"); \
+		"noPublishedTable"; UI.widget("noPublishedTable"); \
+		"fieldList"; UI.listbox("01_fields"); \
+		"fieldGroup"; UI.static("01_fields@"); \
+		"preview"; UI.picture("preview"); \
+		"previewGroup"; UI.static("preview@"); \
+		"fields"; UI.widget("fields"); \
+		"ids"; UI.widget("field_ids"); \
+		"icons"; UI.widget("icons"); \
+		"names"; UI.widget("names"); \
+		"selectorList"; UI.button("tab.list"); \
+		"selectorDetail"; UI.button("tab.detail"); \
+		"selectors"; UI.static("tab.@"); \
+		"resources"; UI.button("resources"); \
 		"drag"; Formula:C1597(tmpl_On_drag_over); \
 		"drop"; Formula:C1597(tmpl_ON_DROP); \
 		"cancel"; Formula:C1597(tmpl_REMOVE); \
 		"tips"; Formula:C1597(tmpl_TIPS); \
-		"scrollBar"; ui.thermometer("preview.scrollBar"))
+		"scrollBar"; UI.thermometer("preview.scrollBar"))
 	
 	$context:=$form.$
 	
@@ -71,7 +71,7 @@ If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
 			"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
 			"action"; "geometry")))))
 		
-		If (feature.with("newViewUI"))
+		If (FEATURE.with("newViewUI"))
 			
 			$c.push(New object:C1471(\
 				"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
@@ -137,7 +137,7 @@ Case of
 				$offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
 				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($offset)
 				
-				If (feature.with("resourcesBrowser"))
+				If (FEATURE.with("resourcesBrowser"))
 					
 					$form.resources.hide()
 					
@@ -216,13 +216,13 @@ Case of
 				// Update geometry
 				$context.setGeometry()
 				
-				If (feature.with("withWidgetActions"))
+				If (FEATURE.with("withWidgetActions"))
 					
 					//$context.actions:=_w_actions ("getList";$context).actions
 					
 				End if 
 				
-				If (feature.with("newViewUI"))
+				If (FEATURE.with("newViewUI"))
 					
 					OB REMOVE:C1226($context; "scrollPosition")
 					$context.scroll:=0
@@ -265,7 +265,7 @@ Case of
 						// Uppdate preview
 						views_preview("draw"; $form)
 						
-						If (feature.with("withWidgetActions"))
+						If (FEATURE.with("withWidgetActions"))
 							
 							//(ui.pointer($form.actionDrop))->:=_w_actions ("preview";$context).pict
 							
@@ -357,7 +357,7 @@ Case of
 				
 				For each ($i; $o.fields.extract("fieldType"))
 					
-					$c.push(ui.fieldIcons[$i])
+					$c.push(UI.fieldIcons[$i])
 					
 				End for each 
 				
@@ -377,7 +377,7 @@ Case of
 							
 							If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
 								
-								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; ui.errorColor; lk font color:K53:24)
+								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
 								
 							End if 
 						End if 
@@ -544,7 +544,7 @@ Case of
 				// Update project & save
 				$target.form:=$formName
 				OB REMOVE:C1226($context; "manifest")
-				project.save()
+				PROJECT.save()
 				
 				If (ob_testPath(Form:C1466.$project; "status"; "project"))
 					
@@ -614,7 +614,7 @@ Case of
 				$template:=cs:C1710.tmpl.new($formName; $selector)
 				$manifest:=$template.manifest
 				
-				If (feature.with("newViewUI"))
+				If (FEATURE.with("newViewUI"))
 					
 					$IN.manifest:=$manifest
 					
@@ -684,7 +684,7 @@ Case of
 				
 				// Restore current selected background
 				SVG SET ATTRIBUTE:C1055(*; $form.tableWidget.name; $context.tableNumber; \
-					"fill"; ui.unselectedFillColor)
+					"fill"; UI.unselectedFillColor)
 				
 			End if 
 			
@@ -692,7 +692,7 @@ Case of
 			
 			// Select the item
 			SVG SET ATTRIBUTE:C1055(*; $form.tableWidget.name; $context.tableNumber; \
-				"fill"; ui.selectedColorFill)
+				"fill"; UI.selectedColorFill)
 			
 			$context.update:=True:C214
 			$context.picker:=(String:C10(Form:C1466[$context.typeForm()][$context.tableNumber].form)="")

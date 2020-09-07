@@ -1,14 +1,14 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : ACTIONS_UI
-  // ID[F5B35B27DE504EA3BF5697976B967FB5]
-  // Created 13-3-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
-  //C_OBJECT($0)
+// ----------------------------------------------------
+// Project method : ACTIONS_UI
+// ID[F5B35B27DE504EA3BF5697976B967FB5]
+// Created 13-3-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
+//C_OBJECT($0)
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
@@ -16,148 +16,148 @@ C_OBJECT:C1216($2)
 C_BOOLEAN:C305($b)
 C_LONGINT:C283($l)
 C_PICTURE:C286($p)
-C_OBJECT:C1216($form;$o;$oIcon)
+C_OBJECT:C1216($form; $o; $oIcon)
 
 If (False:C215)
-	C_OBJECT:C1216(ACTIONS_UI ;$0)
-	C_TEXT:C284(ACTIONS_UI ;$1)
-	C_OBJECT:C1216(ACTIONS_UI ;$2)
+	C_OBJECT:C1216(ACTIONS_UI; $0)
+	C_TEXT:C284(ACTIONS_UI; $1)
+	C_OBJECT:C1216(ACTIONS_UI; $2)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($1="load")  // Load project actions
 		
 		If (Form:C1466.actions#Null:C1517)
 			
-			  // Compute icons
-			For each ($o;Form:C1466.actions)
+			// Compute icons
+			For each ($o; Form:C1466.actions)
 				
 				If (Length:C16(String:C10($o.icon))=0)
 					
-					READ PICTURE FILE:C678(ui.noIcon;$p)
+					READ PICTURE FILE:C678(UI.noIcon; $p)
 					
 				Else 
 					
-					$oIcon:=path .icon(String:C10($o.icon))
+					$oIcon:=path.icon(String:C10($o.icon))
 					
 					If ($oIcon.exists)
 						
-						READ PICTURE FILE:C678($oIcon.platformPath;$p)
+						READ PICTURE FILE:C678($oIcon.platformPath; $p)
 						
 					Else 
 						
-						READ PICTURE FILE:C678(ui.errorIcon;$p)
+						READ PICTURE FILE:C678(UI.errorIcon; $p)
 						
 					End if 
 				End if 
 				
-				CREATE THUMBNAIL:C679($p;$p;24;24;Scaled to fit:K6:2)
+				CREATE THUMBNAIL:C679($p; $p; 24; 24; Scaled to fit:K6:2)
 				$o.$icon:=$p
 				
 			End for each 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($1="tableName")  // Populate the table names' column
 		
 		If (Num:C11($2.tableNumber)#0)
 			
-			$o:=New object:C1471("value";Table name:C256($2.tableNumber))
+			$o:=New object:C1471("value"; Table name:C256($2.tableNumber))
 			
 		Else 
 			
-			  // Invite
-			$o:=New object:C1471("value";Get localized string:C991("choose..."))
+			// Invite
+			$o:=New object:C1471("value"; Get localized string:C991("choose..."))
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($1="scopeLabel")  // Populate the scope labels' column
 		
-		$o:=New object:C1471("value";Get localized string:C991(String:C10($2.scope)))
+		$o:=New object:C1471("value"; Get localized string:C991(String:C10($2.scope)))
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($1="listUI")  // Colors UI according to focus
 		
-		$form:=ACTIONS_Handler (New object:C1471("action";"init"))
+		$form:=ACTIONS_Handler(New object:C1471("action"; "init"))
 		
 		If ($form.form.focusedWidget=$form.actions.name) & (Form event code:C388=On Getting Focus:K2:7)
 			
-			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget;Foreground color:K23:1;ui.highlightColor;ui.highlightColor)
-			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget+".border";ui.selectedColor;Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.selectedColor; Background color none:K23:10)
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget;Foreground color:K23:1;0x00FFFFFF;0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*;$form.form.focusedWidget+".border";ui.backgroundUnselectedColor;Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.backgroundUnselectedColor; Background color none:K23:10)
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($1="backgroundColor")  // <Background Color Expression>
 		
-		$o:=New object:C1471("color";0x00FFFFFF)
+		$o:=New object:C1471("color"; 0x00FFFFFF)
 		
 		If (Num:C11(This:C1470.index)#0)
 			
-			$form:=ACTIONS_Handler (New object:C1471("action";"init"))
+			$form:=ACTIONS_Handler(New object:C1471("action"; "init"))
 			
 			$b:=($form.form.focusedWidget=$form.actions.name)
 			
-			If (ob_equal (This:C1470.current;$2))  // Selected row
+			If (ob_equal(This:C1470.current; $2))  // Selected row
 				
-				$o.color:=Choose:C955($b;ui.backgroundSelectedColor;ui.alternateSelectedColor)
+				$o.color:=Choose:C955($b; UI.backgroundSelectedColor; UI.alternateSelectedColor)
 				
 			Else 
 				
-				$l:=Choose:C955($b;ui.highlightColor;ui.highlightColorNoFocus)
-				$o.color:=Choose:C955($b;$l;0x00FFFFFF)
+				$l:=Choose:C955($b; UI.highlightColor; UI.highlightColorNoFocus)
+				$o.color:=Choose:C955($b; $l; 0x00FFFFFF)
 				
 			End if 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($1="metaInfo")  // <Meta info expression>
 		
-		  // Default values
-		$o:=New object:C1471("stroke";"black";"fontWeight";"normal")
+		// Default values
+		$o:=New object:C1471("stroke"; "black"; "fontWeight"; "normal")
 		
-		  // Mark not or missing assigned table
-		ob_createPath ($o;"cell.tables")
+		// Mark not or missing assigned table
+		ob_createPath($o; "cell.tables")
 		
 		If (Form:C1466.dataModel[String:C10($2.tableNumber)]=Null:C1517)
 			
-			  // Not published table
-			$o.cell.tables.stroke:=ui.errorRGB
+			// Not published table
+			$o.cell.tables.stroke:=UI.errorRGB
 			
 		Else 
 			
-			  // Not assigned table
-			$o.cell.tables.stroke:=Choose:C955(Num:C11($2.tableNumber)=0;ui.errorRGB;"black")
+			// Not assigned table
+			$o.cell.tables.stroke:=Choose:C955(Num:C11($2.tableNumber)=0; UI.errorRGB; "black")
 			
 		End if 
 		
-		  // Mark duplicate names
-		ob_createPath ($o;"cell.names")
-		$o.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1";$2.name).length>1;ui.errorRGB;"black")
+		// Mark duplicate names
+		ob_createPath($o; "cell.names")
+		$o.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $2.name).length>1; UI.errorRGB; "black")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown entry point: \""+$1+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$1+"\"")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$o
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

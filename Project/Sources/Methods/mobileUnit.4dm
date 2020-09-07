@@ -89,7 +89,7 @@ Case of
 	: ($Txt_in="featuresFlags")
 		
 		$Obj_out:=New object:C1471(\
-			"features"; Formula:C1597(feature))
+			"features"; Formula:C1597(FEATURE))
 		
 		//______________________________________________________
 	: ($Txt_in="loadProject")
@@ -126,7 +126,7 @@ Case of
 		//________________________________________
 	: ($Txt_in="templates")
 		
-		If (feature.with("templateClass"))
+		If (FEATURE.with("templateClass"))
 			$Obj_out:=TemplateInstanceFactory($Obj_in).run()
 		Else 
 			EXECUTE METHOD:C1007("_o_templates"; $Obj_out; $Obj_in)
@@ -160,7 +160,7 @@ Case of
 		
 		// see if a feature is activated and exist
 		$Obj_out:=New object:C1471(\
-			"value"; feature["_"+String:C10($Obj_in.value)])
+			"value"; FEATURE["_"+String:C10($Obj_in.value)])
 		
 		$Obj_out.success:=($Obj_out.value#Null:C1517)
 		

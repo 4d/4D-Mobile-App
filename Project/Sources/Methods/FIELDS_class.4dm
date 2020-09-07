@@ -29,23 +29,23 @@ $Obj_form:=New object:C1471(\
 ""; "FIELDS_class"; \
 "window"; Current form window:C827; \
 "$"; editor_INIT; \
-"form"; ui.form("editor_CALLBACK").get(); \
-"fieldList"; ui.listbox("01_fields"); \
-"ids"; ui.widget("IDs"); \
-"names"; ui.widget("fields"); \
-"icons"; ui.widget("icons"); \
-"labels"; ui.widget("labels"); \
-"shortLabels"; ui.widget("shortLabels"); \
-"formats"; ui.widget("formats"); \
-"titles"; ui.widget("titles"); \
-"formatLabel"; ui.static("format.label"); \
-"picker"; ui.widget("iconGrid"); \
-"tabSelector"; ui.widget("tab.selector"); \
-"selectorFields"; ui.button("tab.fields"); \
-"selectorRelations"; ui.button("tab.relations"); \
-"selectors"; ui.static("tab.@"); \
-"empty"; ui.static("empty"); \
-"resources"; ui.button("resources")\
+"form"; UI.form("editor_CALLBACK").get(); \
+"fieldList"; UI.listbox("01_fields"); \
+"ids"; UI.widget("IDs"); \
+"names"; UI.widget("fields"); \
+"icons"; UI.widget("icons"); \
+"labels"; UI.widget("labels"); \
+"shortLabels"; UI.widget("shortLabels"); \
+"formats"; UI.widget("formats"); \
+"titles"; UI.widget("titles"); \
+"formatLabel"; UI.static("format.label"); \
+"picker"; UI.widget("iconGrid"); \
+"tabSelector"; UI.widget("tab.selector"); \
+"selectorFields"; UI.button("tab.fields"); \
+"selectorRelations"; UI.button("tab.relations"); \
+"selectors"; UI.static("tab.@"); \
+"empty"; UI.static("empty"); \
+"resources"; UI.button("resources")\
 )
 
 $ƒ:=$Obj_form.$
@@ -157,7 +157,7 @@ Else
 			ASSERT:C1129($2.row#Null:C1517)
 			
 			//%W-533.3
-			$c:=Split string:C1554((ui.pointer($Obj_form.names.name))->{$2.row}; ".")
+			$c:=Split string:C1554((UI.pointer($Obj_form.names.name))->{$2.row}; ".")
 			
 			If ($c.length>1)  // RelatedDataclass
 				

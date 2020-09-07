@@ -438,7 +438,7 @@ Function relatedCatalog  // Return related entity catalog
 						$0.fields.push($o)
 						
 						//…………………………………………………………………………………………………
-					: (Not:C34(feature.with("moreRelations")))
+					: (Not:C34(FEATURE.with("moreRelations")))
 						
 						// <NOT YET DELIVERED>
 						

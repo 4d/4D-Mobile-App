@@ -13,12 +13,12 @@ C_OBJECT:C1216($1)
 C_OBJECT:C1216($o)
 
 If (False:C215)
-	C_OBJECT:C1216(editor_description;$1)
+	C_OBJECT:C1216(editor_description; $1)
 End if 
 
 // ----------------------------------------------------
 // Initialisations
-If (Asserted:C1132(Count parameters:C259>=0;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
 	
 	// <NO PARAMETERS REQUIRED>
 	
@@ -46,7 +46,7 @@ Else
 End if 
 
 // ----------------------------------------------------
-$o:=ui.button("action")
+$o:=UI.button("action")
 
 If (Form:C1466.action#Null:C1517)
 	

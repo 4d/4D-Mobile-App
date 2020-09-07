@@ -64,7 +64,7 @@ Case of
 				
 				If (String:C10(Form:C1466.$dialog.VIEWS.template.name)#$formName)
 					
-					If (feature.with("newViewUI"))
+					If (FEATURE.with("newViewUI"))
 						
 						Form:C1466.$dialog.VIEWS.template:=cs:C1710.tmpl.new($formName; $formType)
 						
@@ -80,7 +80,7 @@ Case of
 				
 				If ($template.path.exists)
 					
-					If (feature.with("newViewUI"))
+					If (FEATURE.with("newViewUI"))
 						
 						// Load the template
 						$t:=$template.load().template
@@ -242,7 +242,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-														"tips"; $o.label)
+																																										"tips"; $o.label)
 													
 												End if 
 											End if 
@@ -492,7 +492,7 @@ Case of
 										
 										If ($svg.success)
 											
-											If (feature.with("newViewUI"))
+											If (FEATURE.with("newViewUI"))
 												
 												$node:=$svg.findById($widgetField+".label")
 												
@@ -537,7 +537,7 @@ Case of
 												DOM SET XML ATTRIBUTE:C866($node; \
 													"id"; $widgetField+".label")
 												
-												If (feature.with("newViewUI"))
+												If (FEATURE.with("newViewUI"))
 													
 													DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("dropAFieldHere"))
 													
@@ -752,13 +752,13 @@ Case of
 							
 						End if 
 						
-						If (feature.with("newViewUI"))
+						If (FEATURE.with("newViewUI"))
 							
 							$svg.setDimensions($form.preview.coordinates.width; $context.previewHeight)
 							
 						End if 
 						
-						If (feature.with("_8858"))
+						If (FEATURE.with("_8858"))
 							
 							$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.png"); True:C214)
 							$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg"); True:C214)
@@ -777,7 +777,7 @@ Case of
 						OBJECT SET VALUE:C1742("preview"; svg.setDimensions($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
 							.textArea(str("theTemplateIsMissingOrInvalid").localized($template.title); 20; 180)\
 							.setDimensions($form.preview.coordinates.width-20)\
-							.setFill(ui.colors.errorColor.hex)\
+							.setFill(UI.colors.errorColor.hex)\
 							.setAttributes(New object:C1471("font-size"; 14; "text-align"; "center"))\
 							.textArea(str("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; "")); 20; 180))
 						

@@ -11,12 +11,12 @@
 C_LONGINT:C283($0)
 
 C_POINTER:C301($Ptr_me)
-C_TEXT:C284($t;$Txt_current)
-C_OBJECT:C1216($o;$Obj_context;$Obj_field;$Obj_form;$Obj_popup;$Obj_widget)
+C_TEXT:C284($t; $Txt_current)
+C_OBJECT:C1216($o; $Obj_context; $Obj_field; $Obj_form; $Obj_popup; $Obj_widget)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_LONGINT:C283(FIELDS_OBJECTS_HANDLER;$0)
+	C_LONGINT:C283(FIELDS_OBJECTS_HANDLER; $0)
 End if 
 
 // ----------------------------------------------------
@@ -64,7 +64,7 @@ Case of
 						// NO SELECTION
 						
 						//______________________________________________________
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.icons.name].number)// Open the fields icons picker
+					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.icons.name].number)  // Open the fields icons picker
 						
 						// Get the current field
 						$Obj_widget.cellCoordinates()
@@ -89,12 +89,12 @@ Case of
 						
 						$o.row:=$Obj_widget.row
 						$o.left:=$Obj_widget.cellBox.right
-						$o.top:=-56//$Lon_bottom+2
+						$o.top:=-56  //$Lon_bottom+2
 						$o.action:="fieldIcons"
 						$o.background:=0x00FFFFFF
-						$o.backgroundStroke:=ui.strokeColor
+						$o.backgroundStroke:=UI.strokeColor
 						$o.promptColor:=0x00FFFFFF
-						$o.promptBackColor:=ui.strokeColor
+						$o.promptBackColor:=UI.strokeColor
 						$o.hidePromptSeparator:=True:C214
 						$o.forceRedraw:=True:C214
 						$o.prompt:=str("chooseAnIconForTheField").localized($Obj_field.name)
@@ -107,29 +107,29 @@ Case of
 				//______________________________________________________
 			: ($Obj_form.form.eventCode=On Mouse Enter:K2:33)
 				
-				ui.tips.instantly()
+				UI.tips.instantly()
 				
 				//______________________________________________________
 			: ($Obj_form.form.eventCode=On Mouse Move:K2:35)
 				
-				$Obj_context.setHelpTip($Obj_widget.name;$Obj_form)
+				$Obj_context.setHelpTip($Obj_widget.name; $Obj_form)
 				
 				//______________________________________________________
 			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
 				
-				ui.tips.default()
+				UI.tips.default()
 				
 				//______________________________________________________
 			: ($Obj_form.form.eventCode=On Getting Focus:K2:7)
 				
-				editor_ui_LISTBOX($Obj_widget.name;True:C214)
+				editor_ui_LISTBOX($Obj_widget.name; True:C214)
 				
-				$Obj_context.setHelpTip($Obj_widget.name;$Obj_form)
+				$Obj_context.setHelpTip($Obj_widget.name; $Obj_form)
 				
 				//______________________________________________________
 			: ($Obj_form.form.eventCode=On Losing Focus:K2:8)
 				
-				editor_ui_LISTBOX($Obj_widget.name;False:C215)
+				editor_ui_LISTBOX($Obj_widget.name; False:C215)
 				
 				//______________________________________________________
 			: (editor_Locked)\
@@ -138,7 +138,7 @@ Case of
 				// NOTHING MORE TO DO
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Double Clicked:K2:5)// Edit current cell if any
+			: ($Obj_form.form.eventCode=On Double Clicked:K2:5)  // Edit current cell if any
 				
 				editor_ui_LISTBOX($Obj_widget.name)
 				
@@ -146,7 +146,7 @@ Case of
 					 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabels.name].number)\
 					 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.titles.name].number)
 					
-					EDIT ITEM:C870($Ptr_me->;$Ptr_me->)
+					EDIT ITEM:C870($Ptr_me->; $Ptr_me->)
 					
 				End if 
 				
@@ -182,9 +182,9 @@ Case of
 						End if 
 					End if 
 					
-					For each ($o;formatters(New object:C1471(\
-						"action";"getByType";\
-						"type";$Obj_field.fieldType)).formatters)
+					For each ($o; formatters(New object:C1471(\
+						"action"; "getByType"; \
+						"type"; $Obj_field.fieldType)).formatters)
 						
 						$t:=String:C10($o.name)
 						
@@ -194,21 +194,21 @@ Case of
 							
 						Else 
 							
-							$Obj_popup.append(str("_"+$t).localized();$t;$Txt_current=$t)
+							$Obj_popup.append(str("_"+$t).localized(); $t; $Txt_current=$t)
 							
 						End if 
 					End for each 
 					
 					// Append user formatters if any
-					$c:=formatters(New object:C1471("action";"getByType";"host";True:C214;"type";Num:C11($Obj_field.fieldType))).formatters
+					$c:=formatters(New object:C1471("action"; "getByType"; "host"; True:C214; "type"; Num:C11($Obj_field.fieldType))).formatters
 					
 					If ($c.length>0)
 						
 						$Obj_popup.line()
 						
-						For each ($o;$c)
+						For each ($o; $c)
 							
-							$Obj_popup.append($o.name;"/"+$o.name;$Txt_current=("/"+$o.name))
+							$Obj_popup.append($o.name; "/"+$o.name; $Txt_current=("/"+$o.name))
 							
 						End for each 
 					End if 
@@ -225,7 +225,7 @@ Case of
 							//%W+533.1
 							
 							// User resources
-							$Ptr_me->{$Obj_widget.row}:=Substring:C12($Obj_popup.choice;2)
+							$Ptr_me->{$Obj_widget.row}:=Substring:C12($Obj_popup.choice; 2)
 							
 						Else 
 							
@@ -234,7 +234,7 @@ Case of
 						End if 
 						//%W+533.3
 						
-						_o_project.save()
+						PROJECT.save()
 						
 					End if 
 					
@@ -280,12 +280,12 @@ Case of
 						//______________________________________________________
 				End case 
 				
-				_o_project.save()
+				PROJECT.save()
 				
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Obj_form.form.eventCode)+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($Obj_form.form.eventCode)+")")
 				
 				//______________________________________________________
 		End case 
@@ -310,16 +310,16 @@ Case of
 				If ($Obj_context.selector#(Num:C11($Obj_form.form.current=$Obj_form.selectorRelations.name)))
 					
 					// Highlights
-					$o:=Choose:C955($Obj_form.form.current=$Obj_form.selectorFields.name;$Obj_form.selectorFields;$Obj_form.selectorRelations)
-					$o.setColors(ui.selectedColor;Background color none:K23:10)
+					$o:=Choose:C955($Obj_form.form.current=$Obj_form.selectorFields.name; $Obj_form.selectorFields; $Obj_form.selectorRelations)
+					$o.setColors(UI.selectedColor; Background color none:K23:10)
 					
 				End if 
 				
 				//______________________________________________________
 			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
 				
-				$o:=Choose:C955($Obj_form.form.current=$Obj_form.selectorFields.name;$Obj_form.selectorFields;$Obj_form.selectorRelations)
-				$o.setColors(Foreground color:K23:1;Background color none:K23:10)
+				$o:=Choose:C955($Obj_form.form.current=$Obj_form.selectorFields.name; $Obj_form.selectorFields; $Obj_form.selectorRelations)
+				$o.setColors(Foreground color:K23:1; Background color none:K23:10)
 				
 				//______________________________________________________
 		End case 
@@ -327,23 +327,23 @@ Case of
 		//==================================================
 	: ($Obj_form.form.current=$Obj_form.resources.name)
 		
-		If (feature.with("resourcesBrowser"))\
-			 & (feature.with("formatMarketPlace"))
+		If (FEATURE.with("resourcesBrowser"))\
+			 & (FEATURE.with("formatMarketPlace"))
 			
 			// Show browser
 			$o:=New object:C1471(\
-				"url";Get localized string:C991("res_formatters"))
-			$Obj_form.form.call(New collection:C1472("initBrowser";$o))
+				"url"; Get localized string:C991("res_formatters"))
+			$Obj_form.form.call(New collection:C1472("initBrowser"; $o))
 			
 		Else 
 			
-			OPEN URL:C673(Get localized string:C991("res_formatters");*)
+			OPEN URL:C673(Get localized string:C991("res_formatters"); *)
 			
 		End if 
 		//==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown object: \""+$Obj_form.form.current+"\"")
+		ASSERT:C1129(False:C215; "Unknown object: \""+$Obj_form.form.current+"\"")
 		
 		//==================================================
 End case 

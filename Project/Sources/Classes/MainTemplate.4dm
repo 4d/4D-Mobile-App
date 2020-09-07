@@ -198,7 +198,7 @@ Function afterChildren
 	
 	ob_error_combine($Obj_out; $Obj_out.formatters)
 	
-	If (feature.with(107526))
+	If (FEATURE.with(107526))
 		
 		If (Bool:C1537($Obj_in.project.server.pushNotification))
 			

@@ -29,7 +29,7 @@ Else
 	
 End if 
 
-$dataModel:=project.project.dataModel
+$dataModel:=PROJECT.project.dataModel
 
 $context:=$form.form
 $currentTable:=$context.currentTable
@@ -38,7 +38,7 @@ $published:=New collection:C1472
 // ----------------------------------------------------
 
 // GET THE PUBLISHED FIELD NAMES LIST
-ARRAY TO COLLECTION:C1563($published; ($form.publishedPtr)->; "published"; (ui.pointer($form.fields))->; "name")
+ARRAY TO COLLECTION:C1563($published; ($form.publishedPtr)->; "published"; (UI.pointer($form.fields))->; "name")
 
 If ($published.extract("published").countValues(0)=$published.length)\
  & ($published.extract("published").indexOf(2)=-1)\
@@ -46,10 +46,10 @@ If ($published.extract("published").countValues(0)=$published.length)\
  & (Not:C34(Bool:C1537($context.fieldFilterPublished)))
 	
 	// NO FIELD PUBLISHED
-	project.removeTable($currentTable.tableNumber)
+	PROJECT.removeTable($currentTable.tableNumber)
 	
 	// UI - De-emphasize the table name
-	$indx:=Find in array:C230((ui.pointer($form.tableList))->; True:C214)
+	$indx:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
 	LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Plain:K14:1)
 	
 Else 
@@ -59,10 +59,10 @@ Else
 	If ($table=Null:C1517)
 		
 		// ADD TABLE
-		$table:=project.addTable($currentTable)
+		$table:=PROJECT.addTable($currentTable)
 		
 		// UI - Emphasize the table name
-		$indx:=Find in array:C230((ui.pointer($form.tableList))->; True:C214)
+		$indx:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
 		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Bold:K14:2)
 		
 	End if 
@@ -83,7 +83,7 @@ Else
 					// <NOTHING MORE TO DO>
 					
 					//………………………………………………………………………………………………………
-				: (project.isField($t))
+				: (PROJECT.isField($t))
 					
 					$found:=(String:C10($table[$t].name)=$o.name)
 					
@@ -99,7 +99,7 @@ Else
 					// <NOTHING MORE TO DO>
 					
 					//………………………………………………………………………………………………………
-				: (project.isRelationToOne($table[$t]))  // N -> 1 relation
+				: (PROJECT.isRelationToOne($table[$t]))  // N -> 1 relation
 					
 					$found:=(String:C10($o.name)=$t) & (Num:C11($o.published)#2)  // Not mixed
 					
@@ -110,7 +110,7 @@ Else
 					End if 
 					
 					//………………………………………………………………………………………………………
-				: (project.isRelationToMany($table[$t]))  // 1 -> N relation
+				: (PROJECT.isRelationToMany($table[$t]))  // 1 -> N relation
 					
 					$found:=(String:C10($o.name)=$t)
 					
@@ -257,16 +257,16 @@ Else
 	// REMOVE TABLE IF NO MORE PUBLISHED FIELDS
 	If (OB Keys:C1719($table).length=1)
 		
-		project.removeTable($currentTable.tableNumber)
+		PROJECT.removeTable($currentTable.tableNumber)
 		
 		// UI - De-emphasize the table name
-		$indx:=Find in array:C230((ui.pointer($form.tableList))->; True:C214)
+		$indx:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
 		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Plain:K14:1)
 		
 	End if 
 End if 
 
-project.save()
+PROJECT.save()
 
 // Update field list
 structure_FIELD_LIST($form)
