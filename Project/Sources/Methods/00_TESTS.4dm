@@ -25,6 +25,17 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		$o:=Xcode(New object:C1471(\
+			"action"; "path"))
+		
+		$o1:=cs:C1710.Xcode.new()
+		$o1.lastPath()
+		$b:=$o1.isDefaultPath()
+		
+		
+		//________________________________________
+	: (True:C214)
+		
 		$o:=cs:C1710.error.new("capture")
 		
 		Formula from string:C1601("$b:=true").call()
