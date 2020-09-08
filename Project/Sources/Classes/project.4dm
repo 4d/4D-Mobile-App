@@ -1,11 +1,21 @@
 Class constructor
+	var $1: Object
 	
-	var $1 : Object
+	If (Count parameters:C259>=1)
+		
+		This:C1470.init($1)
+		
+	End if 
+	
+	//====================================
+Function init
+	
+	var $1: Object
 	This:C1470.project:=$1
 	
 	//====================================
 Function get
-	var $0 : Object
+	var $0: Object
 	
 	var $t; $tt : Text
 	var $o; $project : Object
@@ -45,8 +55,8 @@ Function get
 	
 	//====================================
 Function cleanup
-	var $0 : Object
-	var $1 : Object
+	var $0: Object
+	var $1: Object
 	
 	var $t : Text
 	var $project : Object
@@ -200,37 +210,37 @@ Function addToMain
 	//====================================
 Function isField
 	
-	var $0 : Boolean
-	var $1 : Text
+	var $0: Boolean
+	var $1: Text
 	$0:=Match regex:C1019("(?m-si)^\\d+$"; $1; 1; *)
 	
 	//====================================
 Function isRelation
 	
-	var $0 : Boolean
-	var $1 : Object
+	var $0: Boolean
+	var $1: Object
 	$0:=((This:C1470.isRelationToOne($1)) | (This:C1470.isRelationToMany($1)))
 	
 	//====================================
 Function isRelationToOne
 	
-	var $0 : Boolean
-	var $1 : Object
+	var $0: Boolean
+	var $1: Object
 	$0:=($1.relatedDataClass#Null:C1517)
 	
 	//====================================
 Function isRelationToMany
 	
-	var $0 : Boolean
-	var $1 : Object  // Field
+	var $0: Boolean
+	var $1: Object  // Field
 	$0:=(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities"))
 	
 /* ===================================
 Add the table to the data model
 ====================================*/
 Function addTable
-	var $0 : Object
-	var $1 : Object
+	var $0: Object
+	var $1: Object
 	
 	var $o : Object
 	
@@ -272,7 +282,7 @@ Function removeTable
 	//====================================
 Function getCatalog
 	
-	var $0 : Collection
+	var $0: Collection
 	
 	Case of 
 			
@@ -296,8 +306,8 @@ Function getCatalog
 	
 	//====================================
 Function label  // Format labels
-	var $0 : Text
-	var $1 : Text
+	var $0: Text
+	var $1: Text
 	
 	var $t : Text
 	var $i : Integer
@@ -348,8 +358,8 @@ Function label  // Format labels
 	
 	//====================================
 Function shortLabel  // Format short labels
-	var $0 : Text
-	var $1 : Text
+	var $0: Text
+	var $1: Text
 	
 	$0:=This:C1470.label($1)
 	
@@ -361,15 +371,15 @@ Function shortLabel  // Format short labels
 	
 	//====================================
 Function labelList  // List of x
-	var $0 : Text
-	var $1 : Text
+	var $0: Text
+	var $1: Text
 	
 	$0:=This:C1470.label(Replace string:C233(Get localized string:C991("listOf"); "{values}"; $1))
 	
 	//====================================
 Function isStorage
-	var $0 : Boolean
-	var $1 : Object
+	var $0: Boolean
+	var $1: Object
 	
 	If (String:C10($1.kind)="storage")
 		
@@ -384,8 +394,8 @@ Function isStorage
 	
 	//====================================
 Function getIcon
-	var $0 : Picture
-	var $1 : Text
+	var $0: Picture
+	var $1: Text
 	
 	var $icon : Picture
 	var $file : 4D:C1709.File
@@ -414,8 +424,8 @@ Function getIcon
 	
 	//====================================
 Function isLink
-	var $0 : Boolean
-	var $1 : Object
+	var $0: Boolean
+	var $1: Object
 	
 	var $t : Text
 	
