@@ -201,7 +201,7 @@ Case of
 					
 					If (String:C10($Obj_server.message)#"")
 						
-						POST_FORM_MESSAGE(New object:C1471(\
+						POST_MESSAGE(New object:C1471(\
 							"target"; $Obj_form.window; \
 							"action"; "show"; \
 							"type"; "alert"; \

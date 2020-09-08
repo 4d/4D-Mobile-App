@@ -8,8 +8,8 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $0 : Object
-var $1 : Object
+var $0: Object
+var $1: Object
 
 If (False:C215)
 	C_OBJECT:C1216(PROJECT_Handler; $0)
@@ -321,7 +321,7 @@ Case of
 				End if 
 				
 				// user dialog
-				POST_FORM_MESSAGE(New object:C1471("target"; $form.window; \
+				POST_MESSAGE(New object:C1471("target"; $form.window; \
 					"action"; "show"; \
 					"type"; "confirm"; \
 					"title"; $title; \

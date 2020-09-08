@@ -303,7 +303,7 @@ If ($file.exists)
 			// Display alert only one time
 			If (Not:C34(editor_Locked))
 				
-				POST_FORM_MESSAGE(New object:C1471(\
+				POST_MESSAGE(New object:C1471(\
 					"target"; Current form window:C827; \
 					"action"; "show"; \
 					"type"; "confirm"; \

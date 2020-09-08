@@ -91,7 +91,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 				"action"; "build_deleteProductFolder"; \
 				"build"; $Obj_in)
 			
-			POST_FORM_MESSAGE(New object:C1471(\
+			POST_MESSAGE(New object:C1471(\
 				"target"; $Win_target; \
 				"action"; "show"; \
 				"type"; "confirm"; \
@@ -105,8 +105,8 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			//If ($Obj_in.create)
 			//  // Must also close and delete folders if no change and want to recreate.
 			// Xcode (New object(\
-																																																																																												"action";"safeDelete";\
-																																																																																												"path";$Obj_in.path))
+																																																																																																				"action";"safeDelete";\
+																																																																																																				"path";$Obj_in.path))
 			// End if
 			
 		End if 
@@ -157,7 +157,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 						
 					Else 
 						
-						POST_FORM_MESSAGE(New object:C1471(\
+						POST_MESSAGE(New object:C1471(\
 							"target"; $Win_target; \
 							"action"; "show"; \
 							"type"; "confirm"; \
@@ -197,7 +197,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 								"build"; $Obj_in)
 							
 							// Web server must running to test data synchronization
-							POST_FORM_MESSAGE(New object:C1471(\
+							POST_MESSAGE(New object:C1471(\
 								"target"; $Win_target; \
 								"action"; "show"; \
 								"type"; "confirm"; \
@@ -269,7 +269,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 							
 							If (True:C214)
 								
-								POST_FORM_MESSAGE(New object:C1471(\
+								POST_MESSAGE(New object:C1471(\
 									"target"; $Win_target; \
 									"action"; "show"; \
 									"type"; "confirm"; \
@@ -293,7 +293,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 									"ok"; Get localized string:C991("continue"); \
 									"okFormula"; Formula:C1597(This:C1470.choice:="ignore"))
 								
-								WAIT_FORM_MESSAGE($o)
+								WAIT_MESSAGE($o)
 								
 							End if 
 						End if 
@@ -313,7 +313,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 					
 					If (Not:C34($Boo_OK))
 						
-						POST_FORM_MESSAGE(New object:C1471(\
+						POST_MESSAGE(New object:C1471(\
 							"target"; $Win_target; \
 							"action"; "show"; \
 							"type"; "alert"; \
@@ -360,7 +360,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 								"action"; "build_manualInstallation"; \
 								"build"; $Obj_in)
 							
-							POST_FORM_MESSAGE(New object:C1471(\
+							POST_MESSAGE(New object:C1471(\
 								"target"; $Win_target; \
 								"action"; "show"; \
 								"type"; "confirm"; \
@@ -386,7 +386,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 						
 						$t:=device(New object:C1471("action"; "appName")).value
 						
-						POST_FORM_MESSAGE(New object:C1471(\
+						POST_MESSAGE(New object:C1471(\
 							"target"; $Win_target; \
 							"action"; "show"; \
 							"type"; "confirm"; \

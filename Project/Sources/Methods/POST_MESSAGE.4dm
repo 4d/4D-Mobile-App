@@ -1,20 +1,22 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 // ----------------------------------------------------
-// Project method : BUILD
-// ID[0E60C5F1D0B948B0BE313B5059F35010]
-// Created 27-4-2018 by Vincent de Lachaux
+// Project method : POST_FORM_MESSAGE
+// ID[9EA6C0AFDD1E426C86CA28F644F30845]
+// Created 3-7-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// #THREAD-SAFE
 // ----------------------------------------------------
 // Description:
-// Try to make UI building more fluent
+//
 // ----------------------------------------------------
 // Declarations
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_parameters)
-C_OBJECT:C1216($Obj_in)
+C_OBJECT:C1216($Obj_message)
 
 If (False:C215)
-	C_OBJECT:C1216(BUILD; $1)
+	C_OBJECT:C1216(POST_MESSAGE; $1)
 End if 
 
 // ----------------------------------------------------
@@ -23,10 +25,10 @@ $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
-	// Required parameters
-	$Obj_in:=$1
+	//Required parameters
+	$Obj_message:=$1
 	
-	// Optional parameters
+	//Optional parameters
 	If ($Lon_parameters>=2)
 		
 		// <NONE>
@@ -40,13 +42,11 @@ Else
 End if 
 
 // ----------------------------------------------------
-POST_MESSAGE(New object:C1471(\
-"target"; $Obj_in.caller; \
-"action"; "show"; \
-"type"; "progress"; \
-"title"; New collection:C1472("product"; " - "; $Obj_in.project.product.name); \
-"additional"; Get localized string:C991("preparations"); \
-"autostart"; New object:C1471("action"; "build_run"; "method"; "EDITOR_RESUME"; "project"; $Obj_in)))
+If (Bool:C1537(Num:C11(String:C10($Obj_message.target))#0))
+	
+	CALL FORM:C1391($Obj_message.target; "DO_MESSAGE"; $Obj_message)
+	
+End if 
 
 // ----------------------------------------------------
 // Return

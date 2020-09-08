@@ -453,6 +453,7 @@
 			"env",
 			"error",
 			"menu",
+			"process",
 			"svg",
 			"xml"
 		]
@@ -628,8 +629,8 @@
 		"methods": [
 			"COMPILER_message",
 			"DO_MESSAGE",
-			"POST_FORM_MESSAGE",
-			"WAIT_FORM_MESSAGE"
+			"POST_MESSAGE",
+			"WAIT_MESSAGE"
 		],
 		"forms": [
 			"MESSAGE"

@@ -10,36 +10,49 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $processName; $t : Text
-var $p : Picture
+var $t : Text
+var $icon : Picture
 var $initLog; $reset : Boolean
-var $l; $mode : Integer
-var $o; $pref; $signal : Object
+var $l : Integer
+var $o; $pref : Object
+
+var $folder : 4D:C1709.Directory
+var $file : 4D:C1709.Document
+var $signal : 4D:C1709.signal
+var $process : cs:C1710.process
+
+var SHARED : Object  // Common values
+var UI : Object  // UI constants
+
+var FEATURE : Object  // Feature flags
+
+var RECORD : Object  // General journal
+
+var PROJECT : cs:C1710.project
+var DATABASE : cs:C1710.database
 
 // ----------------------------------------------------
 // Initialisations
 $reset:=Macintosh option down:C545
 
 PROJECT:=cs:C1710.project.new()
-
 DATABASE:=cs:C1710.database.new()
-
 DATABASE.projects:=Folder:C1567("/PACKAGE/Mobile Projects")
-DATABASE.projects.create()
-
+DATABASE.projects.create()  // Make sure the directory exists
 DATABASE.products:=DATABASE.root.parent.folder(DATABASE.structure.name+" - Mobile")
 
+$process:=cs:C1710.process.new()
 
 // ----------------------------------------------------
 // Disable asserts in release mode
-SET ASSERT ENABLED:C1131(Not:C34(Is compiled mode:C492); *)
+SET ASSERT ENABLED:C1131(DATABASE.isInterpreted; *)
 
 // Get the config file
-$o:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+$file:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
 
-If ($o.exists)
+If ($file.exists)
 	
-	$pref:=JSON Parse:C1218($o.getText())
+	$pref:=JSON Parse:C1218($file.getText())
 	
 Else 
 	
@@ -48,32 +61,13 @@ Else
 	
 End if 
 
-//***********************************************************************
-//***********************************************************************
-If (Storage:C1525.database=Null:C1517)
-	
-/* #ACI0099986
-$o:=New signal
-CALL WORKER(1;"INIT";$o)
-$o.wait()
-*/
-	
-	$signal:=New signal:C1641
-	CALL WORKER:C1389("$"; "INIT"; $signal)
-	$signal.wait()
-	KILL WORKER:C1390("$")
-	
-End if 
-//***********************************************************************
-//***********************************************************************
-
 // ================================================================================================================================
 //                                                               LOGGER
 // ================================================================================================================================
 If (OB Is empty:C1297(RECORD)) | $reset
 	
 	RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
-	RECORD.verbose:=(Structure file:C489=Structure file:C489(*))
+	RECORD.verbose:=(DATABASE.isMatrix)
 	$initLog:=True:C214
 	
 End if 
@@ -163,11 +157,11 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	If (SHARED.component.build#Num:C11($pref.lastBuild)) | $reset
 		
 		// Invalid the cache
-		$o:=sdk(New object:C1471("action"; "cacheFolder"))
+		$folder:=sdk(New object:C1471("action"; "cacheFolder"))
 		
-		If ($o.exists)
+		If ($folder.exists)
 			
-			$o.delete(Delete with contents:K24:24)
+			$folder.delete(Delete with contents:K24:24)
 			
 		End if 
 		
@@ -258,15 +252,15 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	SHARED.thirdParty:="Carthage"
 	SHARED.thirdPartySources:=SHARED.thirdParty+"/Checkouts"
 	
-	$o:=File:C1566("/RESOURCES/Resources.json")
+	$file:=File:C1566("/RESOURCES/Resources.json")
 	
-	If ($o.exists)
+	If ($file.exists)
 		
-		$o:=JSON Resolve pointers:C1478(JSON Parse:C1218(File:C1566("/RESOURCES/Resources.json").getText()))
+		$file:=JSON Resolve pointers:C1478(JSON Parse:C1218(File:C1566("/RESOURCES/Resources.json").getText()))
 		
-		If ($o.success)
+		If ($file.success)
 			
-			SHARED.resources:=$o.value
+			SHARED.resources:=$file.value
 			
 		Else 
 			
@@ -276,18 +270,16 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		
 	Else 
 		
-		RECORD.error("Missing file "+$o.path)
+		RECORD.error("Missing file "+$file.path)
 		
 	End if 
 	
 	// ================================================================================================================================
 	//                                                           ONLY UI PROCESS
 	// ================================================================================================================================
-	PROCESS PROPERTIES:C336(Current process:C322; $processName; $l; $l; $mode)
-	
-	If (Not:C34($mode ?? 1))  // Not preemptive mode (always false in dev mode!)
+	If ($process.cooperative)  // Not preemptive mode (always false in dev mode!)
 		
-		If ($processName#"4D Mobile (@")
+		If (Not:C34($process.worker))
 			
 			RECORD.reset()
 			
@@ -295,19 +287,17 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		
 		UI:=New object:C1471
 		
-		UI.debugMode:=(Structure file:C489=Structure file:C489(*))  // True in matrix database
-		
-		// Preload icons for field types [
+		// PRELOAD ICONS FOR FIELD TYPES
 		UI.fieldIcons:=New collection:C1472
 		
-		For each ($o; Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))
+		For each ($file; Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))
 			
-			READ PICTURE FILE:C678($o.platformPath; $p)
-			UI.fieldIcons[Num:C11(Replace string:C233($o.name; "field_"; ""))]:=$p
+			READ PICTURE FILE:C678($file.platformPath; $icon)
+			UI.fieldIcons[Num:C11(Replace string:C233($file.name; "field_"; ""))]:=$icon
 			
 		End for each 
 		
-		// Field type names [
+		// FIELD TYPE NAMES
 		UI.typeNames:=New collection:C1472
 		UI.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
 		UI.typeNames[Is integer:K8:5]:=Get localized string:C991("integer")
@@ -320,9 +310,8 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		UI.typeNames[Is date:K8:7]:=Get localized string:C991("date")
 		UI.typeNames[Is text:K8:3]:=Get localized string:C991("text")
 		UI.typeNames[Is picture:K8:10]:=Get localized string:C991("picture")
-		//]
 		
-		// Colors [
+		// COLORS
 		UI.colorScheme:=ui_colorScheme
 		
 		If (UI.colorScheme.isDarkStyle)
@@ -366,7 +355,6 @@ If (OB Is empty:C1297(SHARED)) | $reset
 			UI.warningRGB:="darkorange"
 			
 		End if 
-		//]
 		
 		UI.colors:=New object:C1471
 		UI.colors.strokeColor:=color("4dColor"; New object:C1471("value"; UI.strokeColor))
@@ -385,19 +373,15 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		UI.alert:="🚫"
 		UI.warning:="❗"
 		
-		// Only for data pannel [
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/user.png").platformPath; $p)
-		UI.user:=$p
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/user.png").platformPath; $icon)
+		UI.user:=$icon
 		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/filter.png").platformPath; $p)
-		UI.filter:=$p
-		//]
-		
-		UI.checkMark:=Char:C90(19)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/filter.png").platformPath; $icon)
+		UI.filter:=$icon
 		
 	End if 
 	
-	If (Bool:C1537(UI.debugMode))
+	If (DATABASE.isMatrix)
 		
 		Folder:C1567(fk desktop folder:K87:19).folder("DEV").create()
 		
@@ -417,8 +401,8 @@ If (OB Is empty:C1297(FEATURE)) | $reset
 	
 End if 
 
-If (Not:C34($mode ?? 1))\
- & ($processName#"4D Mobile (@")\
+If ($process.cooperative)\
+ & (Not:C34($process.worker))\
  & ($initLog)
 	
 	$t:=SHARED.ide.version
@@ -442,8 +426,6 @@ End if
 /*================================================================================================================================
 AFTER FLAGS
 ================================================================================================================================*/
-//COMPONENT_DEFINE_TOOLS
-
 If (FEATURE.with("accentColors"))
 	
 	// ui.selectedColor:=Highlight menu background color
@@ -454,11 +436,7 @@ If (FEATURE.with("accentColors"))
 	
 End if 
 
-If (FEATURE.with("debug"))
-	
-	SET ASSERT ENABLED:C1131(True:C214; *)
-	
-End if 
+SET ASSERT ENABLED:C1131(FEATURE.with("debug"); *)
 
 RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
 

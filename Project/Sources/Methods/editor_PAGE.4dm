@@ -8,7 +8,7 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $1 : Text
+var $1: Text
 
 If (False:C215)
 	C_TEXT:C284(editor_PAGE; $1)
@@ -138,7 +138,7 @@ If (Length:C16($page)>0)
 			$o.action:=New object:C1471(\
 				"title"; "syncDataModel"; \
 				"show"; False:C215; \
-				"formula"; Formula:C1597(POST_FORM_MESSAGE(New object:C1471(\
+				"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
 				"target"; $w; \
 				"action"; "show"; \
 				"type"; "confirm"; \
@@ -203,7 +203,7 @@ If (Length:C16($page)>0)
 			$o.action:=New object:C1471(\
 				"title"; ".Repair the project"; \
 				"show"; False:C215; \
-				"formula"; Formula:C1597(POST_FORM_MESSAGE(New object:C1471(\
+				"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
 				"target"; $w; \
 				"action"; "show"; \
 				"type"; "confirm"; \

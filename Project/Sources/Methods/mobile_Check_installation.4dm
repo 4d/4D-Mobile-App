@@ -5,8 +5,8 @@
 // Created 30-6-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-var $0 : Object
-var $1 : Object
+var $0: Object
+var $1: Object
 
 If (False:C215)
 	C_OBJECT:C1216(mobile_Check_installation; $0)
@@ -36,6 +36,8 @@ If (Is macOS:C1572)
 	$out:=Xcode_CheckInstall($in)
 	
 Else 
+	
+	ASSERT:C1129(DATABASE.isMatrix)
 	
 	$out:=New object:C1471(\
 		"platform"; 3; \

@@ -15,7 +15,7 @@ If (False:C215)
 	SHOW ON DISK:C922(Folder:C1567(Temporary folder:C486; fk platform path:K87:2).platformPath)
 End if 
 
-COMPONENT_INIT
+COMPILER_COMPONENT
 
 $o:=Folder:C1567("/")
 $o1:=Folder:C1567(fk system folder:K87:13).parent

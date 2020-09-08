@@ -10,7 +10,6 @@
 
 // ••••••••••• OBSOLETE OR NOT IN THE RIGHT PLACE •••••••••••
 UI.pointer:=Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5; $1))
-UI.enable:=Formula:C1597(OBJECT SET ENABLED:C1123(*; $1; Bool:C1537($2)))
 UI.refresh:=Formula:C1597(SET TIMER:C645(-1))
 
 // ••••••••••••••••• NOT IN THE RIGHT PLACE •••••••••••••••••

@@ -287,7 +287,7 @@ Case of
 		//______________________________________________________
 	: ($menu.choice="syncDataModel")
 		
-		POST_FORM_MESSAGE(New object:C1471(\
+		POST_MESSAGE(New object:C1471(\
 			"target"; Current form window:C827; \
 			"action"; "show"; \
 			"type"; "confirm"; \

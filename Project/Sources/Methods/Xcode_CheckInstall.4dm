@@ -12,8 +12,8 @@
 // - Is the Xcode licence accepted?
 // ----------------------------------------------------
 // Declarations
-var $0 : Object
-var $1 : Object
+var $0: Object
+var $1: Object
 
 If (False:C215)
 	C_OBJECT:C1216(Xcode_CheckInstall; $0)
@@ -85,7 +85,7 @@ If ($out.XcodeAvailable)
 			If (Not:C34($out.ready))
 				
 				// No version available using spotlight search, ask to update
-				POST_FORM_MESSAGE(New object:C1471(\
+				POST_MESSAGE(New object:C1471(\
 					"target"; $in.caller; \
 					"action"; "show"; \
 					"type"; "confirm"; \
@@ -97,7 +97,7 @@ If ($out.XcodeAvailable)
 			End if 
 		End if 
 		
-		// CHECK TOOLS-PATH 
+		// CHECK TOOLS-PATH
 		$Xcode:=Xcode(New object:C1471(\
 			"action"; "tools-path"))
 		
@@ -116,7 +116,7 @@ If ($out.XcodeAvailable)
 			
 			$out.ready:=False:C215
 			
-			POST_FORM_MESSAGE(New object:C1471(\
+			POST_MESSAGE(New object:C1471(\
 				"target"; $in.caller; \
 				"action"; "show"; \
 				"type"; "confirm"; \
@@ -132,7 +132,7 @@ If ($out.XcodeAvailable)
 	
 Else 
 	
-	POST_FORM_MESSAGE(New object:C1471(\
+	POST_MESSAGE(New object:C1471(\
 		"target"; $in.caller; \
 		"action"; "show"; \
 		"type"; "confirm"; \
@@ -154,7 +154,7 @@ If ($out.ready)
 		// Alternatively you can launch with admin privileges 'sudo xcodebuild -runFirstLaunch'
 		// $Obj_buffer:=Xcode (New object("action";"runFirstLaunch"))
 		
-		POST_FORM_MESSAGE(New object:C1471(\
+		POST_MESSAGE(New object:C1471(\
 			"target"; $in.caller; \
 			"action"; "show"; \
 			"type"; "confirm"; \

@@ -126,7 +126,7 @@ If ($Obj_in.create=Null:C1517)
 	
 End if 
 
-POST_FORM_MESSAGE(New object:C1471(\
+POST_MESSAGE(New object:C1471(\
 "target"; $Obj_in.caller; \
 "action"; "show"; \
 "type"; "progress"; \
@@ -134,7 +134,7 @@ POST_FORM_MESSAGE(New object:C1471(\
 
 If ($Obj_in.create)
 	
-	POST_FORM_MESSAGE(New object:C1471(\
+	POST_MESSAGE(New object:C1471(\
 		"target"; $Obj_in.caller; \
 		"additional"; "waitingForXcode"))
 	
@@ -297,7 +297,7 @@ If ($Obj_in.create)
 	$appFolder.file("manifest.json").setText(JSON Stringify:C1217($appManifest; *))
 	//===============================================================
 	
-	POST_FORM_MESSAGE(New object:C1471(\
+	POST_MESSAGE(New object:C1471(\
 		"target"; $Obj_in.caller; \
 		"additional"; "decompressionOfTheSdk"))
 	
@@ -337,7 +337,7 @@ If ($Obj_in.create)
 		// TEMPLATE
 		// ----------------------------------------------------
 		
-		POST_FORM_MESSAGE(New object:C1471(\
+		POST_MESSAGE(New object:C1471(\
 			"target"; $Obj_in.caller; \
 			"additional"; "workspaceCreation"))
 		
@@ -485,7 +485,7 @@ If ($Obj_in.create)
 		
 		If (Not:C34(Bool:C1537($Obj_project.dataSource.doNotGenerateDataAtEachBuild)))
 			
-			POST_FORM_MESSAGE(New object:C1471(\
+			POST_MESSAGE(New object:C1471(\
 				"target"; $Obj_in.caller; \
 				"additional"; "dataSetGeneration"))
 			
@@ -644,7 +644,7 @@ If ($Obj_in.create)
 		
 		If (Not:C34($Obj_out.success))
 			
-			POST_FORM_MESSAGE(New object:C1471(\
+			POST_MESSAGE(New object:C1471(\
 				"type"; "alert"; \
 				"target"; $Obj_in.caller; \
 				"additional"; ob_error_string($Obj_out)))
@@ -658,7 +658,7 @@ If ($Obj_in.create)
 		$Obj_out.success:=False:C215
 		
 		// Failed to unzip sdk
-		POST_FORM_MESSAGE(New object:C1471(\
+		POST_MESSAGE(New object:C1471(\
 			"type"; "alert"; \
 			"target"; $Obj_in.caller; \
 			"additional"; "failedDecompressTheSdk"))
@@ -687,7 +687,7 @@ If ($Obj_out.success)
 		If (Bool:C1537($Obj_in.archive))
 			
 			// Archive
-			POST_FORM_MESSAGE(New object:C1471(\
+			POST_MESSAGE(New object:C1471(\
 				"target"; $Obj_in.caller; \
 				"additional"; "projectArchive"))
 			
@@ -718,7 +718,7 @@ If ($Obj_out.success)
 			If ($Obj_result_build.success)
 				
 				// And export
-				POST_FORM_MESSAGE(New object:C1471(\
+				POST_MESSAGE(New object:C1471(\
 					"target"; $Obj_in.caller; \
 					"additional"; "projectArchiveExport"))
 				
@@ -745,7 +745,7 @@ If ($Obj_out.success)
 			Else 
 				
 				// Failed to archive
-				POST_FORM_MESSAGE(New object:C1471(\
+				POST_MESSAGE(New object:C1471(\
 					"type"; "alert"; \
 					"target"; $Obj_in.caller; \
 					"additional"; "failedToArchive"))
@@ -755,7 +755,7 @@ If ($Obj_out.success)
 		Else 
 			
 			// Build application
-			POST_FORM_MESSAGE(New object:C1471(\
+			POST_MESSAGE(New object:C1471(\
 				"target"; $Obj_in.caller; \
 				"additional"; "projectBuild"))
 			
@@ -797,7 +797,7 @@ If ($Obj_out.success)
 			
 		Else 
 			
-			POST_FORM_MESSAGE(New object:C1471(\
+			POST_MESSAGE(New object:C1471(\
 				"type"; "alert"; \
 				"target"; $Obj_in.caller; \
 				"additional"; String:C10($Obj_result_build.error)))
@@ -858,7 +858,7 @@ If ($Obj_out.success)
 			
 			$Obj_in.product:=$Obj_out.build.app
 			
-			POST_FORM_MESSAGE(New object:C1471(\
+			POST_MESSAGE(New object:C1471(\
 				"target"; $Obj_in.caller; \
 				"additional"; "launchingTheSimulator"))
 			
@@ -899,7 +899,7 @@ If ($Obj_out.success)
 				
 				If ($Boo_OK)
 					
-					POST_FORM_MESSAGE(New object:C1471(\
+					POST_MESSAGE(New object:C1471(\
 						"target"; $Obj_in.caller; \
 						"additional"; "installingTheApplication"))
 					
@@ -956,7 +956,7 @@ If ($Obj_out.success)
 						
 						If ($Obj_out.simulator.success)
 							
-							POST_FORM_MESSAGE(New object:C1471(\
+							POST_MESSAGE(New object:C1471(\
 								"target"; $Obj_in.caller; \
 								"additional"; "launchingTheApplication"))
 							
@@ -976,7 +976,7 @@ If ($Obj_out.success)
 							If (Not:C34($Obj_out.simulator.success))
 								
 								// Failed to launch app
-								POST_FORM_MESSAGE(New object:C1471(\
+								POST_MESSAGE(New object:C1471(\
 									"type"; "alert"; \
 									"target"; $Obj_in.caller; \
 									"additional"; String:C10($Obj_out.simulator.error)))
@@ -993,7 +993,7 @@ If ($Obj_out.success)
 						Else 
 							
 							// Failed to install app
-							POST_FORM_MESSAGE(New object:C1471(\
+							POST_MESSAGE(New object:C1471(\
 								"type"; "alert"; \
 								"target"; $Obj_in.caller; \
 								"additional"; String:C10($Obj_out.simulator.error)))
@@ -1010,7 +1010,7 @@ If ($Obj_out.success)
 					Else 
 						
 						// Failed to uninstall app
-						POST_FORM_MESSAGE(New object:C1471(\
+						POST_MESSAGE(New object:C1471(\
 							"type"; "alert"; \
 							"target"; $Obj_in.caller; \
 							"additional"; String:C10($Obj_out.simulator.error)))
@@ -1027,7 +1027,7 @@ If ($Obj_out.success)
 				Else 
 					
 					// Failed to launch device
-					POST_FORM_MESSAGE(New object:C1471(\
+					POST_MESSAGE(New object:C1471(\
 						"type"; "alert"; \
 						"target"; $Obj_in.caller; \
 						"additional"; "failedToLaunchTheSimulator"))
@@ -1044,7 +1044,7 @@ If ($Obj_out.success)
 			Else 
 				
 				// Failed to open simulator
-				POST_FORM_MESSAGE(New object:C1471(\
+				POST_MESSAGE(New object:C1471(\
 					"type"; "alert"; \
 					"target"; $Obj_in.caller; \
 					"additional"; "failedToOpenSimulator"))
@@ -1075,7 +1075,7 @@ If ($Obj_out.success)
 					"action"; "showDevicesWindow"))
 				
 				// Show archive on disk ?
-				POST_FORM_MESSAGE(New object:C1471(\
+				POST_MESSAGE(New object:C1471(\
 					"target"; $Obj_in.caller; \
 					"type"; "confirm"; \
 					"title"; "archiveCreationSuccessful"; \
@@ -1085,7 +1085,7 @@ If ($Obj_out.success)
 			Else 
 				
 				// Install the archive on the device
-				POST_FORM_MESSAGE(New object:C1471(\
+				POST_MESSAGE(New object:C1471(\
 					"target"; $Obj_in.caller; \
 					"additional"; "installingTheApplication"))
 				
@@ -1097,7 +1097,7 @@ If ($Obj_out.success)
 				
 				If (Not:C34($Obj_out.device.success))
 					
-					POST_FORM_MESSAGE(New object:C1471(\
+					POST_MESSAGE(New object:C1471(\
 						"type"; "alert"; \
 						"target"; $Obj_in.caller; \
 						"additional"; $Obj_out.device.errors.join("\r")))
@@ -1109,7 +1109,7 @@ If ($Obj_out.success)
 	End case 
 End if 
 
-POST_FORM_MESSAGE(New object:C1471(\
+POST_MESSAGE(New object:C1471(\
 "target"; $Obj_in.caller; \
 "action"; "hide"))
 

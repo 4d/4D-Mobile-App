@@ -107,11 +107,6 @@ If (False:C215)  // Tools
 	C_OBJECT:C1216(dat; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(_o_database; $0)
-	C_TEXT:C284(_o_database; $1)
-	C_OBJECT:C1216(_o_database; $2)
-	
-	//______________________________________________________
 	C_OBJECT:C1216(db; $0)
 	C_TEXT:C284(db; $1)
 	C_OBJECT:C1216(db; $2)

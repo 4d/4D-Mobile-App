@@ -44,6 +44,8 @@ COMPILER_ob_error
 COMPILER_macOS
 COMPILER_mobile
 
+COMPILER_err
+
 If (False:C215)
 	
 	// ----------------------------------------------------
