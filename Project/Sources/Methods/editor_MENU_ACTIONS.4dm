@@ -259,21 +259,19 @@ Case of
 		//______________________________________________________
 	: ($menu.choice="xCode")
 		
-		$Obj_result:=Xcode(New object:C1471(\
-			"action"; "open"; \
-			"path"; $Path_product.platformPath))
+		var $Xcode : cs:C1710.Xcode
+		$Xcode:=cs:C1710.Xcode.new()
+		$Xcode.open($Path_product)
 		
-		If ($Obj_result.success)
+		If ($Xcode.success)
 			
 			// Open a file of project in xcode
 			If (String:C10(SHARED.xCode.fileFocus)#"")
 				
 				IDLE:C311
-				DELAY PROCESS:C323(Current process:C322; 60*3)  // wait xcode open
+				DELAY PROCESS:C323(Current process:C322; 60*3)  // Wait xcode open
 				
-				$Obj_result:=Xcode(New object:C1471(\
-					"action"; "reveal"; \
-					"path"; $Path_product.platformPath+Convert path POSIX to system:C1107(SHARED.xCode.fileFocus)))
+				$Xcode.reveal($Path_product.platformPath+Convert path POSIX to system:C1107(SHARED.xCode.fileFocus))
 				
 			End if 
 			

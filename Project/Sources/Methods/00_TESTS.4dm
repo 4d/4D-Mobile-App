@@ -25,12 +25,10 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=Xcode(New object:C1471(\
-			"action"; "path"))
+		$o:=cs:C1710.Xcode.new()
+		$b:=$o.isDefaultPath()
 		
-		$o1:=cs:C1710.Xcode.new()
-		$o1.lastPath()
-		$b:=$o1.isDefaultPath()
+		$o.open()
 		
 		
 		//________________________________________

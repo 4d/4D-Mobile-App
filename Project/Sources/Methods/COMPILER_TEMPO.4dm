@@ -4,7 +4,6 @@ C_OBJECT:C1216(<>testData)
 C_OBJECT:C1216(object; $0)
 C_VARIANT:C1683(object; $1)
 
-
 C_OBJECT:C1216(removeAllEntities; $1)
 
 //_______________________________________

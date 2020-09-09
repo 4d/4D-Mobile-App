@@ -1,24 +1,40 @@
+Class extends tools
+
 Class constructor
-	var $1: Boolean
+	var $1 : Boolean
 	
-	This:C1470.success:=True:C214
+	Super:C1705()
 	
-	This:C1470.application:=Null:C1517
+	This:C1470.success:=Is macOS:C1572
 	
-	This:C1470.lastError:=""
-	This:C1470.errors:=New collection:C1472
-	
-	If (Count parameters:C259>=1)
+	If (This:C1470.success)
 		
-		This:C1470.path($1)
+		If (Count parameters:C259>=1)
+			
+			This:C1470.path($1)
+			
+		Else 
+			
+			This:C1470.path()
+			
+		End if 
+		
+		If (This:C1470.success)
+			
+			This:C1470.version:=This:C1470.version()
+			This:C1470.toolsPath()
+			
+		End if 
 		
 	Else 
 		
-		This:C1470.path()
+		This:C1470.lastError:="Xcode is not available on this platform"
+		This:C1470.errors.push(This:C1470.lastError)
 		
 	End if 
 	
 	//====================================================================
+	// Populate Application with the default path
 Function defaultPath
 	
 	var $folder : 4D:C1709.Directory
@@ -34,8 +50,9 @@ Function defaultPath
 	End if 
 	
 	//====================================================================
+	// Test if the current path is the default path
 Function isDefaultPath
-	var $0: Boolean
+	var $0 : Boolean
 	
 	$0:=(This:C1470.application.path=Folder:C1567("/Applications/Xcode.app").path)
 	
@@ -44,10 +61,10 @@ Function isDefaultPath
 	// If not exist the tool path,
 	// If not exist one of the path found by spotlight. The last version.
 Function path
+	var $1 : Boolean  // Use default path
 	
-	var $1: Boolean  // Use default path
+	var $found; $useDefaultPath : Boolean
 	
-	var $useDefaultPath; $search : Boolean
 	var $folder : 4D:C1709.Directory
 	
 	If (Count parameters:C259>=1)
@@ -56,17 +73,12 @@ Function path
 		
 	End if 
 	
-	$search:=True:C214
-	
 	This:C1470.defaultPath()
 	
-	If (This:C1470.success & $useDefaultPath)
+	$found:=(This:C1470.success & $useDefaultPath)
+	
+	If (Not:C34($found))
 		
-		$search:=False:C215
-		
-	Else 
-		
-		// Test the tools path
 		This:C1470.toolsPath()
 		
 		If (This:C1470.success)
@@ -76,13 +88,13 @@ Function path
 			If (This:C1470.application.path=$folder.path)
 				
 				This:C1470.application:=$folder
-				$search:=False:C215
+				$found:=True:C214
 				
 			End if 
 		End if 
 	End if 
 	
-	If ($search)
+	If (Not:C34($found))
 		
 		This:C1470.lastPath()
 		
@@ -92,7 +104,7 @@ Function path
 Function toolsPath
 	var $o : Object
 	
-	$o:=This:C1470.__lep("xcode-select --print-path")
+	$o:=This:C1470.lep("xcode-select --print-path")
 	
 	This:C1470.success:=$o.success
 	
@@ -124,7 +136,7 @@ Function lastPath
 			
 			$version:=This:C1470.version(Folder:C1567($pathname))
 			
-			If (This:C1470.__versionCompare($version; $t)>=0)  // Equal or higher
+			If (This:C1470.versionCompare($version; $t)>=0)  // Equal or higher
 				
 				$t:=$version
 				This:C1470.version:=$version
@@ -136,14 +148,14 @@ Function lastPath
 	End if 
 	
 	//====================================================================
-	// Get al installed xcode using spotlight
+	// Get all installed Xcode applications using Spotlight
 Function paths
-	var $0: Collection
+	var $0 : Collection
 	
 	var $pos : Integer
 	var $o : Object
 	
-	$o:=This:C1470.__lep("mdfind \"kMDItemCFBundleIdentifier == 'com.apple.dt.Xcode'\"")
+	$o:=This:C1470.lep("mdfind \"kMDItemCFBundleIdentifier == 'com.apple.dt.Xcode'\"")
 	
 	This:C1470.success:=$o.success
 	
@@ -159,8 +171,8 @@ Function paths
 	
 	//====================================================================
 Function version
-	var $0: Text
-	var $1: 4D:C1709.Directory
+	var $0 : Text
+	var $1 : 4D:C1709.Directory
 	
 	var $o : Object
 	
@@ -176,7 +188,7 @@ Function version
 		
 	End if 
 	
-	$o:=This:C1470.__lep("defaults read"+" '"+$directory.file("Contents/Info.plist").path+"' CFBundleShortVersionString")
+	$o:=This:C1470.lep("defaults read"+" '"+$directory.file("Contents/Info.plist").path+"' CFBundleShortVersionString")
 	
 	If ($o.success)
 		
@@ -185,89 +197,137 @@ Function version
 	End if 
 	
 	//====================================================================
-Function __lep
-	var $0: Object
-	var $1: Text
+	// Returns True if the version of Xcode is equal or superior to the desired one
+Function checkVersion
+	var $0 : Boolean
+	var $1 : Text
 	
-	var $cmd; $error; $in; $out : Text
+	$0:=(This:C1470.versionCompare(This:C1470.version; $1)>=0)
 	
-	$0:=New object:C1471(\
-		"success"; False:C215)
+	//====================================================================
+	// Check if any First Launch tasks need to be performed.
+Function checkFirstLaunchStatus
+	var $0 : Boolean
 	
-	LAUNCH EXTERNAL PROCESS:C811($1; $in; $out; $error)
+	var $o : Object
 	
-	$0.out:=$out
-	$0.error:=$error
+	$o:=This:C1470.lep(This:C1470.singleQuoted(Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2).file("echoStatus").path); "xcodebuild -checkFirstLaunchStatus")
 	
-	If (Asserted:C1132(OK=1; "LEP failed: "+$cmd))
+	If ($o.success)
 		
-		$0.success:=(Length:C16($out)>0)\
-			 & (Length:C16($error)=0)
+		$0:=($o.out="0\n")  // Success even if there is some error logs. Only check status.
 		
 	End if 
 	
 	//====================================================================
-	// Compare two string version
-	// -  0 if equal
-	// -  1 if $1 is more recent than $2
-	// - -1 if $1 is less recent than $2
-Function __versionCompare
-	var $0: Integer  //0 if equal, 1 if $1 is more recent than $2, -1 if $1 is less recent than $2
-	var $1: Text  // Version to test
-	var $2: Text  // Reference version
-	var $3: Text  // Separator (optional - "." if omitted)
+Function setToolPath
+	var $o : Object
 	
-	var $separator : Text
-	var $i : Integer
-	var $c1; $c2 : Collection
+	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; str.setText("4dMobileWantsToMakeChanges").localized("4dProductName"))
+	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
+	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2).file("sudo-askpass").path)
 	
-	$separator:="."
+	$o:=This:C1470.lep("sudo -A /usr/bin/xcode-select -s "+This:C1470.singleQuoted(This:C1470.application.path))
 	
-	If (Count parameters:C259>=1)
+	If ($o.success)
 		
-		$separator:=$3
+		If (Length:C16($o.error)>0)
+			
+			This:C1470.lastError:=$o.error
+			This:C1470.errors.push(This:C1470.lastError)
+			
+			This:C1470.success:=False:C215
+			
+		Else 
+			
+			This:C1470.toolsPath()
+			
+		End if 
+	End if 
+	
+	//====================================================================
+Function open
+	var $1 : 4D:C1709.Directory
+	
+	var $o : Object
+	
+	If (Count parameters:C259>=1)  // Open workspace or project
+		
+		$o:=$1.folders().query("extension = .xcworkspace").pop()
+		
+		If ($o=Null:C1517)
+			
+			$o:=$1.folders().query("extension = .xcodeproj").pop()
+			
+		End if 
+		
+		If (Bool:C1537($o.exists))
+			
+			$o:=This:C1470.lep("open "+This:C1470.singleQuoted($o.path))
+			
+		End if 
+		
+	Else   // Open Xcode
+		
+		$o:=This:C1470.lep("open "+This:C1470.singleQuoted(This:C1470.application.path))
 		
 	End if 
 	
-	$c1:=Split string:C1554($1; $separator)
-	$c2:=Split string:C1554($2; $separator)
-	
-	Case of 
-			
-			//______________________________________________________
-		: ($c1.length>$c2.length)
-			
-			$c2.resize($c1.length; "0")
-			
-			//______________________________________________________
-		: ($c2.length>$c1.length)
-			
-			$c1.resize($c2.length; "0")
-			
-			//______________________________________________________
-	End case 
-	
-	For ($i; 0; $c2.length-1; 1)
+	If (Bool:C1537($o.success))
 		
-		Case of 
-				
-				//______________________________________________________
-			: (Num:C11($c1[$i])>Num:C11($c2[$i]))
-				
-				$0:=1
-				$i:=MAXLONG:K35:2-1
-				
-				//______________________________________________________
-			: (Num:C11($c1[$i])<Num:C11($c2[$i]))
-				
-				$0:=-1
-				$i:=MAXLONG:K35:2-1
-				
-				//______________________________________________________
-			Else 
-				
-				// Go on
-				
-				//______________________________________________________
-		End case 
-	End for 
+		This:C1470.success:=True:C214
+		
+	Else 
+		
+		This:C1470.success:=False:C215
+		This:C1470.lastError:=Choose:C955(Length:C16(String:C10($o.error))>0; String:C10($o.error); "Unknown error")
+		This:C1470.errors.push(This:C1470.lastError)
+		
+	End if 
+	
+	//====================================================================
+Function reveal
+	var $1 : Text
+	
+	var $cmd : Text
+	var $o : Object
+	
+	$cmd:="/usr/bin/osascript"\
+		+" -e 'if application \"Xcode\" is running then'"\
+		+" -e ' tell application \"Xcode\"'"\
+		+" -e ' activate'"
+	
+	If (Count parameters:C259>=1)
+		
+		$cmd:=$cmd+" -e '  open file \""+$1+"\"'"
+		
+	End if 
+	
+	$cmd:=$cmd+" -e ' end tell'"\
+		+" -e 'end if'"\
+		+" -e 'delay 0.1'"\
+		+" -e 'tell application \"System Events\"'"\
+		+" -e ' tell process \"Xcode\"'"
+	
+	// Move focus to next area, the individual file
+	$cmd:=$cmd+" -e '  keystroke \"`\" using {command down, option down}'"\
+		+" -e '  delay 0.1'"
+	
+	// Reveal in Project Navigator
+	$cmd:=$cmd+" -e '  keystroke \"j\" using {shift down, command down}'"\
+		+" -e ' end tell'"\
+		+" -e 'end tell'"
+	
+	$o:=This:C1470.lep("open "+This:C1470.singleQuoted(This:C1470.application.path))
+	
+	If ($o.success)
+		
+		This:C1470.success:=True:C214
+		
+	Else 
+		
+		This:C1470.success:=False:C215
+		This:C1470.lastError:=Choose:C955(Length:C16(String:C10($o.error))>0; String:C10($o.error); "Unknown error")
+		This:C1470.errors.push(This:C1470.lastError)
+		
+	End if 

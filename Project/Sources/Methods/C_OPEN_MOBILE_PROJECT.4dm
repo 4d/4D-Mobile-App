@@ -34,7 +34,7 @@ If (Count parameters:C259>=1)
 	
 Else 
 	
-	$directory:=Folder:C1567("/PACKAGE/Mobile Projects").platformPath
+	$directory:=Folder:C1567(fk database folder:K87:14; *).folder("Mobile Projects").platformPath
 	$projectName:=Select document:C905($directory; SHARED.extension; Get localized string:C991("mess_openProject"); Package open:K24:8+Use sheet window:K24:11)
 	
 	If (OK=1)

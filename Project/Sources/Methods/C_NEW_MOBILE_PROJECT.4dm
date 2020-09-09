@@ -29,7 +29,10 @@ OK:=1
 // ----------------------------------------------------
 Repeat 
 	
-	$name:=Request:C163(Get localized string:C991("mess_nameoftheproject"); Get localized string:C991("mess_newProject"); Get localized string:C991("mess_create"))
+	$name:=Request:C163(\
+		Get localized string:C991("mess_nameoftheproject"); \
+		Get localized string:C991("mess_newProject"); \
+		Get localized string:C991("mess_create"))
 	
 	$isEmpty:=(Length:C16($name)=0) & Bool:C1537(OK)
 	
@@ -143,13 +146,10 @@ If (Bool:C1537(OK))
 		
 	Else 
 		
-		ASSERT:C1129(dev_Matrix; "The default project content is not the expected one")
+		ASSERT:C1129(DATABASE.isMatrix; "The default project content is not the expected one")
 		
 	End if 
 End if 
 
-// ----------------------------------------------------
-// Return
-// <NONE>
 // ----------------------------------------------------
 // End

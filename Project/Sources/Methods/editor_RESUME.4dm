@@ -87,49 +87,6 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($Txt_selector="installXcode")
-		
-		$Obj_xcode:=Xcode(New object:C1471(\
-			"action"; "appStore"))
-		
-		//______________________________________________________
-	: ($Txt_selector="openXcode")
-		
-		$Obj_xcode:=Xcode(New object:C1471(\
-			"action"; "open"))
-		
-		//______________________________________________________
-	: ($Txt_selector="setToolPath")
-		
-		$Obj_xcode:=Xcode(New object:C1471(\
-			"action"; "set-tool-path"; \
-			"posix"; String:C10($Obj_in.posix)))
-		
-		If ($Obj_xcode.success)
-			
-			// Relaunch checking the development environment
-			CALL WORKER:C1389("4D Mobile ("+String:C10($Win_me)+")"; "mobile_Check_installation"; New object:C1471(\
-				"caller"; $Win_me))
-			
-		Else 
-			
-			If (Position:C15("User canceled. (-128)"; String:C10($Obj_xcode.error))>0)
-				
-				// NOTHING MORE TO DO
-				
-			Else 
-				
-				POST_MESSAGE(New object:C1471(\
-					"target"; $Win_me; \
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
-					"additional"; "tryDoingThisFromTheXcodeApplication"))
-				
-			End if 
-		End if 
-		
-		//______________________________________________________
 	: ($Txt_selector="build_stop")  // #MARK_TO_REMOVE
 		
 		CALL FORM:C1391($Win_me; $kTxt_callbackMethod; $Txt_selector)

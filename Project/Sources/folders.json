@@ -455,6 +455,7 @@
 			"menu",
 			"process",
 			"svg",
+			"tools",
 			"Xcode",
 			"xml"
 		]
@@ -628,6 +629,7 @@
 	},
 	"Message": {
 		"methods": [
+			"await_MESSAGE",
 			"COMPILER_message",
 			"DO_MESSAGE",
 			"POST_MESSAGE",

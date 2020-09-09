@@ -12,15 +12,17 @@
 // - Is the Xcode licence accepted?
 // ----------------------------------------------------
 // Declarations
-var $0: Object
-var $1: Object
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(Xcode_CheckInstall; $0)
 	C_OBJECT:C1216(Xcode_CheckInstall; $1)
 End if 
 
-var $in; $out; $Xcode : Object
+var $in; $out; $signal : Object
+
+var $Xcode : cs:C1710.Xcode
 
 // ----------------------------------------------------
 // Initialisations
@@ -35,80 +37,59 @@ If (Count parameters:C259>=1)
 End if 
 
 $out:=New object:C1471(\
-"platform"; Mac OS:K25:2; \
 "XcodeAvailable"; False:C215; \
 "toolsAvalaible"; False:C215; \
 "ready"; False:C215)
 
 // ----------------------------------------------------
-// Check install [
-$Xcode:=Xcode(New object:C1471(\
-"action"; "path"))
+// Check if Xcode is available into the "Applications" folder
+$Xcode:=cs:C1710.Xcode.new(True:C214)
 
 If ($Xcode.success)
 	
-	$out.XcodePosix:=$Xcode.posix
-	$out.XcodePath:=$Xcode.path
-	
-	$out.XcodeAvailable:=(Test path name:C476($out.XcodePath)#-43)
+	$out.XcodeAvailable:=$Xcode.application.exists
 	
 End if 
 
 If ($out.XcodeAvailable)
 	
-	// CHECK VERSION
-	$Xcode:=Xcode(New object:C1471(\
-		"action"; "version"; "path"; $out.XcodePath))
+	// Check version
+	$out.ready:=$Xcode.checkVersion(SHARED.xCodeVersion)
 	
-	If ($Xcode.success)
+	If ($out.ready)
 		
-		// Keep the version
 		$out.version:=$Xcode.version
 		
-		$out.ready:=str_cmpVersion($Xcode.version; SHARED.xCodeVersion)>=0  // Equal or higher
+	Else 
 		
-		If (Not:C34($out.ready))
+		// Look for the highest version of Xcode installed
+		$Xcode.path()
+		
+		If ($Xcode.success)
 			
-			// Maybe there is a more recent one
-			$Xcode:=Xcode(New object:C1471(\
-				"action"; "lastpath"))
+			$out.XcodeAvailable:=$Xcode.application.exists
 			
-			If ($Xcode.success)
-				
-				$out.XcodePosix:=$Xcode.posix
-				$out.XcodePath:=$Xcode.path
-				
-				$out.ready:=str_cmpVersion($Xcode.version; SHARED.xCodeVersion)>=0  // Equal or higher
-				
-			End if 
+		End if 
+		
+		If ($out.XcodeAvailable)
 			
-			If (Not:C34($out.ready))
+			// Check version
+			$out.ready:=$Xcode.checkVersion(SHARED.xCodeVersion)
+			
+			If ($out.ready)
 				
-				// No version available using spotlight search, ask to update
-				POST_MESSAGE(New object:C1471(\
-					"target"; $in.caller; \
-					"action"; "show"; \
-					"type"; "confirm"; \
-					"title"; New collection:C1472("obsoleteVersionOfXcode"; "4dProductName"; SHARED.xCodeVersion); \
-					"additional"; New collection:C1472("wouldYouLikeToInstallFromTheAppStoreNow"; "\"Xcode\""); \
-					"cancelAction"; ""; \
-					"okAction"; "installXcode"))
+				$out.version:=$Xcode.version
 				
 			End if 
 		End if 
+	End if 
+	
+	If ($out.ready)
 		
 		// CHECK TOOLS-PATH
-		$Xcode:=Xcode(New object:C1471(\
-			"action"; "tools-path"))
-		
-		$out.toolsAvalaible:=$Xcode.success
-		
-		If ($out.toolsAvalaible)
+		If ($Xcode.tools.exists)
 			
-			$out.toolsPosix:=$Xcode.posix
-			
-			$out.toolsAvalaible:=($out.toolsPosix=($out.XcodePosix+"/Contents/Developer"))\
-				 | ($out.toolsPosix=($out.XcodePosix+"Contents/Developer"))
+			$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
 			
 		End if 
 		
@@ -116,52 +97,78 @@ If ($out.XcodeAvailable)
 			
 			$out.ready:=False:C215
 			
-			POST_MESSAGE(New object:C1471(\
+			$signal:=await_MESSAGE(New object:C1471(\
 				"target"; $in.caller; \
 				"action"; "show"; \
 				"type"; "confirm"; \
 				"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
-				"additional"; "wantToFixThePath"; \
-				"cancelAction"; ""; \
-				"okAction"; JSON Stringify:C1217(New object:C1471(\
-				"action"; "setToolPath"; \
-				"posix"; $out.XcodePosix))))
+				"additional"; "wantToFixThePath"))
 			
+			If ($signal.validate)
+				
+				$Xcode.setToolPath()
+				
+				If ($Xcode.success)
+					
+					CALL WORKER:C1389("4D Mobile ("+String:C10($in.caller)+")"; "mobile_Check_installation"; New object:C1471(\
+						"caller"; $in.caller))
+					
+				End if 
+				
+			Else 
+				
+				If (Position:C15("User canceled. (-128)"; $Xcode.lastError)>0)
+					
+					// NOTHING MORE TO DO
+					
+				Else 
+					
+					POST_MESSAGE(New object:C1471(\
+						"target"; $in.caller; \
+						"action"; "show"; \
+						"type"; "alert"; \
+						"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
+						"additional"; "tryDoingThisFromTheXcodeApplication"))
+					
+				End if 
+			End if 
+		End if 
+	End if 
+	
+	If ($out.ready)
+		
+		// CHECK LICENCE AGREEMENT
+		$Xcode.checkFirstLaunchStatus()
+		
+		If (Not:C34($Xcode.success))
+			
+			$signal:=await_MESSAGE(New object:C1471(\
+				"target"; $in.caller; \
+				"action"; "show"; \
+				"type"; "confirm"; \
+				"title"; "youHaveNotYetAcceptedTheXcodeLicense"; \
+				"additional"; "wouldYouLikeToLaunchXcodeNow"))
+			
+			If ($signal.validate)
+				
+				$Xcode.open()
+				
+			End if 
 		End if 
 	End if 
 	
 Else 
 	
-	POST_MESSAGE(New object:C1471(\
+	$signal:=await_MESSAGE(New object:C1471(\
 		"target"; $in.caller; \
 		"action"; "show"; \
 		"type"; "confirm"; \
 		"title"; New collection:C1472("4dMobileRequiresToInstallDeveloperTools"; "4dProductName"); \
-		"additional"; New collection:C1472("wouldYouLikeToInstallFromTheAppStoreNow"; "\"Xcode\""); \
-		"cancelAction"; ""; \
-		"okAction"; "installXcode"))
+		"additional"; New collection:C1472("wouldYouLikeToInstallFromTheAppStoreNow"; "\"Xcode\"")))
 	
-End if 
-
-If ($out.ready)
-	
-	// CHECK LICENCE AGREEMENT
-	$Xcode:=Xcode(New object:C1471(\
-		"action"; "checkFirstLaunchStatus"))
-	
-	If (Not:C34($Xcode.success))
+	If ($signal.validate)
 		
-		// Alternatively you can launch with admin privileges 'sudo xcodebuild -runFirstLaunch'
-		// $Obj_buffer:=Xcode (New object("action";"runFirstLaunch"))
-		
-		POST_MESSAGE(New object:C1471(\
-			"target"; $in.caller; \
-			"action"; "show"; \
-			"type"; "confirm"; \
-			"title"; "youHaveNotYetAcceptedTheXcodeLicense"; \
-			"additional"; "wouldYouLikeToLaunchXcodeNow"; \
-			"cancelAction"; ""; \
-			"okAction"; "openXcode"))
+		OPEN URL:C673(Get localized string:C991("appstore_xcode"); *)
 		
 	End if 
 End if 

@@ -237,8 +237,12 @@ Else
 					: ($o.outputType=Is object:K8:27)
 						
 						$t:=Convert to text:C1012($Blb_output; $o.charSet)
-						//$o.success:=(Match regex("(?mi-s)^{.*}$|^\\[.*\\]$"; $t; 1))
-						$o.success:=(Match regex:C1019("(?msi)^(?:{.*})|(?:\\[.*\\])$"; $t; 1))
+						
+						If (Length:C16($t)>0)
+							
+							$o.success:=(Match regex:C1019("(?mi-s)^{.*}$|^\\[.*\\]$"; $t; 1))
+							
+						End if 
 						
 						If ($o.success)
 							
