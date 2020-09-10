@@ -61,7 +61,7 @@ Function versionCompare
 	
 	$separator:="."
 	
-	If (Count parameters:C259>=1)
+	If (Count parameters:C259>=3)
 		
 		$separator:=$3
 		
@@ -118,11 +118,11 @@ Function singleQuoted
 	
 	If (Match regex:C1019("^'.*'$"; $1; 1))
 		
-		$0:=$1
+		$0:=$1  // Already done
 		
 	Else 
 		
-		$0:="'"+$1+"'"
+		$0:="'"+$1+"'"  // Do it
 		
 	End if 
 	
