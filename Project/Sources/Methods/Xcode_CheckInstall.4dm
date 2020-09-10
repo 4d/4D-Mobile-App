@@ -139,6 +139,9 @@ If ($out.XcodeAvailable)
 	
 	If ($out.ready)
 		
+		$out.xcode:=$Xcode.application
+		$out.tools:=$Xcode.tools
+		
 		// CHECK LICENCE AGREEMENT
 		$Xcode.checkFirstLaunchStatus()
 		
