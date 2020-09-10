@@ -5,6 +5,8 @@ Class constructor
 	This:C1470.linux:=Not:C34(This:C1470.macos) & Not:C34(This:C1470.windows)
 	This:C1470.system:=Get system info:C1571
 	
+	This:C1470.user:=Folder:C1567(fk desktop folder:K87:19).parent
+	
 	This:C1470.update()
 	
 	//===================================================================================

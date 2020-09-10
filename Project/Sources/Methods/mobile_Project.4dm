@@ -1071,8 +1071,10 @@ If ($Obj_out.success)
 			If ($Obj_in.manualInstallation)
 				
 				// Open xCode devices window
-				Xcode(New object:C1471(\
+				OPEN URL:C673("xcdevice://showDevicesWindow"; *)
+				//Xcode(New object(\
 					"action"; "showDevicesWindow"))
+				
 				
 				// Show archive on disk ?
 				POST_MESSAGE(New object:C1471(\

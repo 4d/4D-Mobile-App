@@ -110,9 +110,11 @@ If ($out.XcodeAvailable)
 				
 				If ($Xcode.success)
 					
-					CALL WORKER:C1389("4D Mobile ("+String:C10($in.caller)+")"; "mobile_Check_installation"; New object:C1471(\
-						"caller"; $in.caller))
-					
+					If ($Xcode.tools.exists)
+						
+						$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
+						
+					End if 
 				End if 
 				
 			Else 

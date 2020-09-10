@@ -60,7 +60,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 		$Obj_project.organization.identifier:=$Obj_project.organization.id+"."+str($Obj_project.product.name).uperCamelCase()
 		$Obj_project.product.bundleIdentifier:=formatString("bundleApp"; $Obj_project.organization.id+"."+$Obj_project.product.name)
 		
-		$Dir_tgt:=COMPONENT_Pathname("products").folder($Obj_project.product.name).platformPath
+		$Dir_tgt:=path.products().folder($Obj_project.product.name).platformPath
 		
 		$Obj_in.path:=$Dir_tgt
 		
@@ -74,7 +74,7 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 				
 				// Check if the project was modified by another application
 				// Compare to the signature of the sources folder
-				$o:=env_userPathname("cache"; $Obj_project.$project.product)
+				$o:=DATABASE.user.folder("Library/Caches/com.4d.mobile/").file($Obj_project.$project.product)
 				
 				If ($o.exists)
 					
@@ -84,7 +84,14 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			End if 
 		End if 
 		
-		If (Not:C34($Boo_OK))
+		If ($Boo_OK)
+			
+			//If ($Obj_in.create)
+			//  // Must also close and delete folders if no change and want to recreate.
+			// Xcode (New object(\"path";$Obj_in.path))
+			// End if
+			
+		Else 
 			
 			// Product folder already exist. user MUST CONFIRM
 			$Obj_ok:=New object:C1471(\
@@ -99,15 +106,6 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 				"additional"; "allContentWillBeReplaced"; \
 				"okAction"; JSON Stringify:C1217($Obj_ok); \
 				"cancelFormula"; Formula:C1597(CALL FORM:C1391($Win_target; "editor_CALLBACK"; "build_stop"))))
-			
-		Else 
-			
-			//If ($Obj_in.create)
-			//  // Must also close and delete folders if no change and want to recreate.
-			// Xcode (New object(\
-																																																																																																				"action";"safeDelete";\
-																																																																																																				"path";$Obj_in.path))
-			// End if
 			
 		End if 
 		

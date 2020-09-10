@@ -26,9 +26,9 @@ Case of
 	: (True:C214)
 		
 		$o:=cs:C1710.Xcode.new()
-		$b:=$o.isDefaultPath()
-		
 		$o.open()
+		
+		$o.close()
 		
 		
 		//________________________________________

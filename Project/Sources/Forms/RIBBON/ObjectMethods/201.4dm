@@ -93,8 +93,7 @@ Case of
 					//______________________________________________________
 				: ($menu.choice="_showDevicesWindow")
 					
-					$o:=Xcode(New object:C1471(\
-						"action"; "showDevicesWindow"))
+					OPEN URL:C673("xcdevice://showDevicesWindow"; *)
 					
 					//______________________________________________________
 				Else 

@@ -31,6 +31,12 @@ Function lep
 	SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
 	LAUNCH EXTERNAL PROCESS:C811($1; $in; $out; $error)
 	
+	If ($out="@\n")  // Remove the last line feed, if any
+		
+		$out:=Delete string:C232($out; Length:C16($out); 1)
+		
+	End if 
+	
 	$0.out:=$out
 	$0.error:=$error
 	

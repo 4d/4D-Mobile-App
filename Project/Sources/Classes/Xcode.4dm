@@ -192,7 +192,7 @@ Function version
 	
 	If ($o.success)
 		
-		$0:=Replace string:C233($o.out; "\n"; "")
+		$0:=$o.out
 		
 	End if 
 	
@@ -215,7 +215,7 @@ Function checkFirstLaunchStatus
 	
 	If ($o.success)
 		
-		$0:=($o.out="0\n")  // Success even if there is some error logs. Only check status.
+		$0:=($o.out="0")  // Success even if there is some error logs. Only check status.
 		
 	End if 
 	
@@ -286,6 +286,45 @@ Function open
 	End if 
 	
 	//====================================================================
+Function close
+	var $1 : 4D:C1709.Directory
+	
+	var $cmd : Text
+	var $o : Object
+	
+	$cmd:="/usr/bin/osascript"
+	$cmd:=$cmd+" -e 'if application \"Xcode\" is running then'"
+	$cmd:=$cmd+" -e 'tell application \"Xcode\"'"
+	
+	If (Count parameters:C259>=1)  // Close workspace or project
+		
+		$o:=$1.folders().query("extension = .xcworkspace").pop()
+		
+		If ($o=Null:C1517)
+			
+			$o:=$1.folders().query("extension = .xcodeproj").pop()
+			
+		End if 
+		
+		If (Bool:C1537($o.exists))
+			
+			$cmd:=$cmd+" -e 'close window \""+$o.fullname+"\"'"
+			
+		End if 
+		
+	Else 
+		
+		// Quit Xcode
+		$cmd:=$cmd+" -e 'quit'"
+		
+	End if 
+	
+	$cmd:=$cmd+" -e 'end tell'"
+	$cmd:=$cmd+" -e 'end if'"
+	
+	$o:=This:C1470.lep($cmd)
+	
+	//====================================================================
 Function reveal
 	var $1 : Text
 	
@@ -331,3 +370,9 @@ Function reveal
 		This:C1470.errors.push(This:C1470.lastError)
 		
 	End if 
+	
+	//====================================================================
+	// Open xCode devices window
+Function showDevicesWindow
+	
+	OPEN URL:C673("xcdevice://showDevicesWindow"; *)

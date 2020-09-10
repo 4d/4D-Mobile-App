@@ -1506,7 +1506,7 @@ Case of
 		//______________________________________________________
 	: ($Obj_param.action="showDevicesWindow")
 		
-		OPEN URL:C673("xcdevice:// ShowDevicesWindow")
+		OPEN URL:C673("xcdevice://ShowDevicesWindow")
 		$Obj_result.success:=True:C214
 		
 		//______________________________________________________
