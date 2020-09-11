@@ -55,7 +55,9 @@ Case of
 				$o.defaultDelay()
 				$o.defaultDuration()
 				
-				editor_PAGE("general")
+				//editor_PAGE("general")
+				Form:C1466.$dialog.EDITOR.pages:=cs:C1710.editor.new()
+				Form:C1466.$dialog.EDITOR.pages.gotoPage("general")
 				
 				// Set ribbon and description
 				$form.form.ribbon:=New object:C1471(\
@@ -195,7 +197,8 @@ Case of
 		//=========================================================
 	: ($IN.action="open")
 		
-		editor_PAGE("general")
+		//editor_PAGE("general")
+		Form:C1466.$dialog.EDITOR.pages.gotoPage("general")
 		
 		OBJECT SET VISIBLE:C603(*; $form.ribbon; True:C214)
 		OBJECT SET VISIBLE:C603(*; $form.description; True:C214)

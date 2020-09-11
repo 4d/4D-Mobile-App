@@ -143,7 +143,8 @@ Case of
 				$Lon_index:=Form:C1466.$dialog.EDITOR.ribbon.pages.extract("button").indexOf(String:C10($Lon_formEvent))
 				$Ptr_me->page:=Form:C1466.$dialog.EDITOR.ribbon.pages[$Lon_index].name
 				
-				editor_PAGE($Ptr_me->page)
+				//editor_PAGE($Ptr_me->page)
+				Form:C1466.$dialog.EDITOR.pages.gotoPage($Ptr_me->page)
 				
 				//…………………………………………………………………………………………………
 			Else 

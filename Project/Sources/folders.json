@@ -153,6 +153,7 @@
 			"editor_LoadIcons",
 			"editor_Locked",
 			"editor_MENU_ACTIONS",
+			"editor_MESSAGE_CALLBACK",
 			"editor_MESSAGES",
 			"editor_OBJECTS_HANDLER",
 			"EDITOR_ON_ACTIVATE",
@@ -168,6 +169,9 @@
 			"RIBBON",
 			"TITLE",
 			"WELCOME"
+		],
+		"classes": [
+			"editor"
 		]
 	},
 	"[PANELS]": {

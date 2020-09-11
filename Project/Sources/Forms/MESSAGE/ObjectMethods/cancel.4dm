@@ -2,6 +2,15 @@ If (Form:C1466.signal#Null:C1517)
 	
 	Form:C1466.signal.trigger()
 	
+	If (Form:C1466.signal.description#Null:C1517)
+		
+		If (Form:C1466.CALLBACK#Null:C1517)
+			
+			EXECUTE METHOD:C1007(Form:C1466.CALLBACK; *; Form:C1466)
+			
+		End if 
+	End if 
+	
 Else 
 	
 	If (Form:C1466.cancelFormula#Null:C1517)

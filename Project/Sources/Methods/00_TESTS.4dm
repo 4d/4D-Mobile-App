@@ -25,6 +25,11 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		ALERT:C41(cs:C1710.tools.new().localized("doYouAllow4dMobileToModifyStructure"; "4dProductName"))
+		
+		//________________________________________
+	: (True:C214)
+		
 		$o:=cs:C1710.Xcode.new()
 		$o.open()
 		

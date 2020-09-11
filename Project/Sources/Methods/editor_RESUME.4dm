@@ -124,9 +124,11 @@ Case of
 	: ($Txt_selector="build_startWebServer")\
 		 | ($Txt_selector="startWebServer")
 		
-/* START TRAPPING ERRORS */$errors:=err.capture()
+/* START TRAPPING ERRORS */
+		$errors:=err.capture()
 		WEB START SERVER:C617
-/* STOP TRAPPING ERRORS */$errors.release()
+		$errors.release()
+/* STOP TRAPPING ERRORS */
 		
 		If (OK=1)
 			

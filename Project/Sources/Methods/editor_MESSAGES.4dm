@@ -117,10 +117,10 @@ Case of
 		Else 
 			
 			// DO_MESSAGE (New object(\
-																				"action";"show";\
-																				"type";"alert";\
-																				"title";"noDevices";\
-																				"additional";""))
+																								"action";"show";\
+																								"type";"alert";\
+																								"title";"noDevices";\
+																								"additional";""))
 			
 		End if 
 		
@@ -132,7 +132,8 @@ Case of
 		//______________________________________________________
 	: ($tSelector="goToPage")
 		
-		editor_PAGE($oIN.page)
+		//editor_PAGE($oIN.page)
+		Form:C1466.$dialog.EDITOR.pages.gotoPage($oIN.page)
 		
 		Form:C1466.$dialog[$form.editor].ribbon.page:=Form:C1466.currentPage
 		

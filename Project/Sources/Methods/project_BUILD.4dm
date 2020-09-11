@@ -8,39 +8,32 @@
 // common initializations and confirmations
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($1)
-
-C_BOOLEAN:C305($b; $Boo_OK)
-C_LONGINT:C283($l; $Lon_parameters; $Win_target)
-C_TEXT:C284($Dir_tgt; $t; $tt)
-C_OBJECT:C1216($o; $Obj_cancel; $Obj_in; $Obj_ok; $Obj_project)
-C_COLLECTION:C1488($c)
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(project_BUILD; $1)
 End if 
 
+var $t; $tt : Text
+var $b; $success : Boolean
+var $l; $target : Integer
+var $o; $Obj_cancel; $Obj_ok; $in; $project : Object
+var $c : Collection
+
+var $file : 4D:C1709.Document
+
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
-	$Obj_in:=$1
+	$in:=$1
 	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
+	ob_MERGE($in; project_Defaults)
 	
-	ob_MERGE($Obj_in; project_Defaults)
+	$project:=$in.project
 	
-	$Obj_project:=$Obj_in.project
-	
-	$Win_target:=Current form window:C827
+	$target:=Current form window:C827
 	
 Else 
 	
@@ -49,105 +42,100 @@ Else
 End if 
 
 // ----------------------------------------------------
-If (Asserted:C1132($Obj_project#Null:C1517))
+If (Asserted:C1132($project#Null:C1517))
 	
-	If (project_Check_param($Obj_in).success)
+	If (project_Check_param($in).success)
 		
 		//#99788 ========================================================
 		EXECUTE METHOD IN SUBFORM:C1085("project"; "views_Handler"; *; New object:C1471(\
-			"action"; "updateForms"))  //=====================================
+			"action"; "updateForms"))
 		
-		$Obj_project.organization.identifier:=$Obj_project.organization.id+"."+str($Obj_project.product.name).uperCamelCase()
-		$Obj_project.product.bundleIdentifier:=formatString("bundleApp"; $Obj_project.organization.id+"."+$Obj_project.product.name)
+		$project.organization.identifier:=$project.organization.id+"."+str($project.product.name).uperCamelCase()
+		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
 		
-		$Dir_tgt:=path.products().folder($Obj_project.product.name).platformPath
+		$in.path:=path.products().folder($project.product.name).platformPath
 		
-		$Obj_in.path:=$Dir_tgt
+		$success:=Not:C34($in.create)
 		
-		$Boo_OK:=Not:C34($Obj_in.create)
-		
-		If (Not:C34($Boo_OK))
+		If (Not:C34($success))
 			
-			$Boo_OK:=(Test path name:C476($Dir_tgt+"Sources"+Folder separator:K24:12)=-43)
+			$success:=(Test path name:C476($in.path+"Sources"+Folder separator:K24:12)=-43)
 			
-			If (Not:C34($Boo_OK))
+			If (Not:C34($success))
 				
 				// Check if the project was modified by another application
 				// Compare to the signature of the sources folder
-				$o:=DATABASE.user.folder("Library/Caches/com.4d.mobile/").file($Obj_project.$project.product)
+				$file:=DATABASE.user.folder("Library/Caches/com.4d.mobile/").file($project.$project.product)
 				
-				If ($o.exists)
+				If ($file.exists)
 					
-					$Boo_OK:=(doc_folderDigest($Dir_tgt+"Sources"+Folder separator:K24:12)=$o.getText())
+					$success:=(doc_folderDigest($in.path+"Sources"+Folder separator:K24:12)=$file.getText())
 					
 				End if 
 			End if 
 		End if 
 		
-		If ($Boo_OK)
+		If ($success)
 			
-			//If ($Obj_in.create)
+			
 			//  // Must also close and delete folders if no change and want to recreate.
 			// Xcode (New object(\"path";$Obj_in.path))
-			// End if
+			
 			
 		Else 
 			
 			// Product folder already exist. user MUST CONFIRM
-			$Obj_ok:=New object:C1471(\
-				"action"; "build_deleteProductFolder"; \
-				"build"; $Obj_in)
-			
-			POST_MESSAGE(New object:C1471(\
-				"target"; $Win_target; \
+			$o:=New object:C1471(\
 				"action"; "show"; \
 				"type"; "confirm"; \
 				"title"; "theProductFolderAlreadyExist"; \
 				"additional"; "allContentWillBeReplaced"; \
-				"okAction"; JSON Stringify:C1217($Obj_ok); \
-				"cancelFormula"; Formula:C1597(CALL FORM:C1391($Win_target; "editor_CALLBACK"; "build_stop"))))
+				"CALLBACK"; "editor_MESSAGE_CALLBACK"; \
+				"build"; $in)
+			
+			$o:=await_MESSAGE($o; "productFolderAlreadyExist")
 			
 		End if 
 		
-		If ($Boo_OK)
+		If ($success)
 			
 			// Verify the structure
 			$c:=New collection:C1472
 			
-			For each ($t; $Obj_project.dataModel)
+			For each ($t; $project.dataModel)
 				
-				$c.push($Obj_project.dataModel[$t][""].name)
+				$c.push($project.dataModel[$t][""].name)
 				
-				For each ($tt; $Obj_project.dataModel[$t])
+				For each ($tt; $project.dataModel[$t])
 					
 					If (Length:C16($tt)>0)
 						
-						If ($Obj_project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
+						If ($project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
 							
-							$c.push($Obj_project.dataModel[$t][$tt].relatedDataClass)
+							$c.push($project.dataModel[$t][$tt].relatedDataClass)
 							
 						End if 
 					End if 
 				End for each 
 			End for each 
 			
-			If ($Obj_project.dataSource.source="local")
+			If ($project.dataSource.source="local")
 				
 				// Check host-database structure
 				If (Not:C34(_o_structure(New object:C1471(\
 					"action"; "verify"; \
 					"tables"; $c)).success))
 					
-					$Boo_OK:=(Bool:C1537($Obj_project.allowStructureAdjustments))\
-						 | (Bool:C1537($Obj_project.$_allowStructureAdjustments))
+					$success:=(Bool:C1537($project.allowStructureAdjustments))\
+						 | (Bool:C1537($project.$_allowStructureAdjustments))
 					
-					If ($Boo_OK)
+					If ($success)
 						
-						$Boo_OK:=_o_structure(New object:C1471(\
+						$success:=_o_structure(New object:C1471(\
 							"action"; "create"; \
 							"tables"; $c)).success
 						
-						If (Not:C34($Boo_OK))
+						If (Not:C34($success))
 							
 							//#MARK_TODO - DISPLAY ERROR
 							
@@ -155,55 +143,72 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 						
 					Else 
 						
-						POST_MESSAGE(New object:C1471(\
-							"target"; $Win_target; \
+						$o:=New object:C1471(\
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; "someStructuralAdjustmentsAreNeeded"; \
-							"additional"; str.setText("doYouAllow4dMobileToModifyStructure").localized("4dProductName"); \
-							"option"; New object:C1471("title"; "rememberMyChoice"; "value"; False:C215); \
+							"additional"; cs:C1710.tools.new().localized("doYouAllow4dMobileToModifyStructure"; "4dProductName"); \
 							"ok"; "allow"; \
-							"cancelFormula"; Formula:C1597(CALL FORM:C1391($Win_target; "editor_CALLBACK"; "build_stop")); \
-							"okFormula"; Formula:C1597(CALL FORM:C1391($Win_target; "editor_CALLBACK"; "allowStructureModification"; Form:C1466.option))))
+							"option"; New object:C1471("title"; "rememberMyChoice"; "value"; False:C215); \
+							"CALLBACK"; "editor_MESSAGE_CALLBACK")
+						
+						$o:=await_MESSAGE($o; "someStructuralAdjustmentsAreNeeded")
 						
 					End if 
 				End if 
 				
-				If ($Boo_OK)
+				If ($success)
 					
 					// Local web server is mandatory only if data are embedded
-					For each ($t; $Obj_project.dataModel) Until ($b)
+					For each ($t; $project.dataModel) Until ($b)
 						
-						$b:=Bool:C1537($Obj_project.dataModel[$t][""].embedded)
+						$b:=Bool:C1537($project.dataModel[$t][""].embedded)
 						
 					End for each 
 					
-					$Boo_OK:=Not:C34($b)
+					$success:=Not:C34($b)
 					
-					If (Not:C34($Boo_OK))
+					If (Not:C34($success))
 						
-						$Boo_OK:=WEB Is server running:C1313 | Bool:C1537($Obj_in.ignoreServer)
+						$success:=WEB Is server running:C1313 | Bool:C1537($in.ignoreServer)
 						
-						If (Not:C34($Boo_OK))
+						If (Not:C34($success))
 							
 							$Obj_ok:=New object:C1471(\
 								"action"; "build_startWebServer"; \
-								"build"; $Obj_in)
+								"build"; $in)
 							
 							$Obj_cancel:=New object:C1471(\
 								"action"; "build_ignoreServer"; \
-								"build"; $Obj_in)
+								"build"; $in)
 							
 							// Web server must running to test data synchronization
-							POST_MESSAGE(New object:C1471(\
-								"target"; $Win_target; \
-								"action"; "show"; \
-								"type"; "confirm"; \
-								"title"; "theWebServerIsNotStarted"; \
-								"additional"; "DoYouWantToStartTheWebServer"; \
-								"okAction"; JSON Stringify:C1217($Obj_ok); \
-								"cancel"; "notNow"; \
-								"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
+							If (False:C215)
+								
+								POST_MESSAGE(New object:C1471(\
+									"target"; $target; \
+									"action"; "show"; \
+									"type"; "confirm"; \
+									"title"; "theWebServerIsNotStarted"; \
+									"additional"; "DoYouWantToStartTheWebServer"; \
+									"okAction"; JSON Stringify:C1217($Obj_ok); \
+									"cancel"; "notNow"; \
+									"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
+								
+							Else 
+								
+								$o:=New object:C1471(\
+									"action"; "show"; \
+									"type"; "confirm"; \
+									"title"; "theWebServerIsNotStarted"; \
+									"additional"; "DoYouWantToStartTheWebServer"; \
+									"cancel"; "notNow"; \
+									"CALLBACK"; "editor_MESSAGE_CALLBACK"; \
+									"build"; $in)
+								
+								$o:=await_MESSAGE($o; "someStructuralAdjustmentsAreNeeded")
+								
+							End if 
 							
 						End if 
 					End if 
@@ -215,73 +220,73 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 				$o:=Rest(New object:C1471(\
 					"action"; "tables"; \
 					"handler"; "mobileapp"; \
-					"url"; String:C10($Obj_project.server.urls.production); \
+					"url"; String:C10($project.server.urls.production); \
 					"headers"; New object:C1471(\
 					"X-MobileApp"; "1"; \
 					"Authorization"; "Bearer "+COMPONENT_Pathname("key").getText())))
 				
-				$Boo_OK:=$o.success
+				$success:=$o.success
 				
 				If ($o.success)
 					
 					$o:=$o.response
 					
-					$Boo_OK:=($o.dataClasses.extract("name").indexOf(String:C10(SHARED.deletedRecordsTable.name))#-1)
+					$success:=($o.dataClasses.extract("name").indexOf(String:C10(SHARED.deletedRecordsTable.name))#-1)
 					
-					If ($Boo_OK)
+					If ($success)
 						
-						For each ($t; $c) While ($Boo_OK)
+						For each ($t; $c) While ($success)
 							
 							$l:=$o.dataClasses.extract("name").indexOf($t)
 							
-							$Boo_OK:=($l#-1)
+							$success:=($l#-1)
 							
-							If ($Boo_OK)
+							If ($success)
 								
-								$Boo_OK:=($o.dataClasses[$l].attributes.extract("name").indexOf(String:C10(SHARED.stampField.name))#-1)
+								$success:=($o.dataClasses[$l].attributes.extract("name").indexOf(String:C10(SHARED.stampField.name))#-1)
 								
 							End if 
 						End for each 
 					End if 
 					
-					If (Not:C34($Boo_OK))
+					If (Not:C34($success))
 						
 						// SERVER STRUCTURE IS NOT OK. Confirm if data embed, Alert else
-						For each ($t; $Obj_project.dataModel) Until ($b)
+						For each ($t; $project.dataModel) Until ($b)
 							
 							//#ACI0100704
-							$b:=Not:C34(Bool:C1537($Obj_project.dataModel[$t][""].embedded))
+							$b:=Not:C34(Bool:C1537($project.dataModel[$t][""].embedded))
 							
 						End for each 
 						
-						$Boo_OK:=Not:C34($b)
+						$success:=Not:C34($b)
 						
-						If (Not:C34($Boo_OK))
+						If (Not:C34($success))
 							
-							$Boo_OK:=(Bool:C1537($Obj_project.$_ignoreServerStructureAdjustement))
-							OB REMOVE:C1226($Obj_project; "$_ignoreServerStructureAdjustement")
+							$success:=(Bool:C1537($project.$_ignoreServerStructureAdjustement))
+							OB REMOVE:C1226($project; "$_ignoreServerStructureAdjustement")
 							
 						End if 
 						
-						If (Not:C34($Boo_OK))
+						If (Not:C34($success))
 							
 							If (True:C214)
 								
 								POST_MESSAGE(New object:C1471(\
-									"target"; $Win_target; \
+									"target"; $target; \
 									"action"; "show"; \
 									"type"; "confirm"; \
 									"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
 									"additional"; "youMustUpdateTheStructureOfTheProductionServer"; \
 									"help"; Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment"); *)); \
-									"cancelFormula"; Formula:C1597(CALL FORM:C1391($Win_target; "editor_CALLBACK"; "build_stop")); \
+									"cancelFormula"; Formula:C1597(CALL FORM:C1391($target; "editor_CALLBACK"; "build_stop")); \
 									"ok"; Get localized string:C991("continue"); \
-									"okFormula"; Formula:C1597(CALL FORM:C1391($Win_target; "editor_CALLBACK"; "ignoreServerStructureAdjustement"))))
+									"okFormula"; Formula:C1597(CALL FORM:C1391($target; "editor_CALLBACK"; "ignoreServerStructureAdjustement"))))
 								
 							Else 
 								
 								$o:=New object:C1471(\
-									"target"; $Win_target; \
+									"target"; $target; \
 									"action"; "show"; \
 									"type"; "confirm"; \
 									"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
@@ -300,19 +305,19 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 				Else 
 					
 					// SERVER NOT REACHABLE - Ignore if no data embed, Confirm else
-					For each ($t; $Obj_project.dataModel) Until ($b)
+					For each ($t; $project.dataModel) Until ($b)
 						
 						//#ACI0100704
-						$b:=Not:C34(Bool:C1537($Obj_project.dataModel[$t][""].embedded))
+						$b:=Not:C34(Bool:C1537($project.dataModel[$t][""].embedded))
 						
 					End for each 
 					
-					$Boo_OK:=Not:C34($b)
+					$success:=Not:C34($b)
 					
-					If (Not:C34($Boo_OK))
+					If (Not:C34($success))
 						
 						POST_MESSAGE(New object:C1471(\
-							"target"; $Win_target; \
+							"target"; $target; \
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; "theProductionServerIsNotAvailable"; \
@@ -325,41 +330,41 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			End if 
 		End if 
 		
-		If ($Boo_OK)
+		If ($success)
 			
-			If (Bool:C1537($Obj_in.archive))
+			If (Bool:C1537($in.archive))
 				
-				$Boo_OK:=Bool:C1537($Obj_in.manualInstallation)
+				$success:=Bool:C1537($in.manualInstallation)
 				
-				If (Not:C34($Boo_OK))
+				If (Not:C34($success))
 					
-					If (Not:C34(Bool:C1537($Obj_in.configurator)))
+					If (Not:C34(Bool:C1537($in.configurator)))
 						
 						// Verify that Apple Configurator 2 application is installed
-						$Obj_in.configurator:=device(New object:C1471("action"; "appPath")).success
+						$in.configurator:=device(New object:C1471("action"; "appPath")).success
 						
 					End if 
 					
-					$Boo_OK:=Bool:C1537($Obj_in.configurator)
+					$success:=Bool:C1537($in.configurator)
 					
-					If ($Boo_OK)
+					If ($success)
 						
 						// Verify that at least one device is plugged
-						$Boo_OK:=device(New object:C1471("action"; "plugged")).success
+						$success:=device(New object:C1471("action"; "plugged")).success
 						
-						If (Not:C34($Boo_OK))
+						If (Not:C34($success))
 							
 							// Ask for a device
 							$Obj_ok:=New object:C1471(\
 								"action"; "build_deviceOnline"; \
-								"build"; $Obj_in)
+								"build"; $in)
 							
 							$Obj_cancel:=New object:C1471(\
 								"action"; "build_manualInstallation"; \
-								"build"; $Obj_in)
+								"build"; $in)
 							
 							POST_MESSAGE(New object:C1471(\
-								"target"; $Win_target; \
+								"target"; $target; \
 								"action"; "show"; \
 								"type"; "confirm"; \
 								"title"; Get localized string:C991("noDeviceFound"); \
@@ -376,16 +381,16 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 						// Ask for installation
 						$Obj_ok:=New object:C1471(\
 							"action"; "build_waitingForConfigurator"; \
-							"build"; $Obj_in)
+							"build"; $in)
 						
 						$Obj_cancel:=New object:C1471(\
 							"action"; "build_manualInstallation"; \
-							"build"; $Obj_in)
+							"build"; $in)
 						
 						$t:=device(New object:C1471("action"; "appName")).value
 						
 						POST_MESSAGE(New object:C1471(\
-							"target"; $Win_target; \
+							"target"; $target; \
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; New collection:C1472("appIsNotInstalled"; $t); \
@@ -399,9 +404,9 @@ If (Asserted:C1132($Obj_project#Null:C1517))
 			End if 
 		End if 
 		
-		If ($Boo_OK)
+		If ($success)
 			
-			CALL WORKER:C1389("4D Mobile ("+String:C10($Obj_in.caller)+")"; "mobile_Project"; $Obj_in)
+			CALL WORKER:C1389("4D Mobile ("+String:C10($in.caller)+")"; "mobile_Project"; $in)
 			
 		End if 
 	End if 
