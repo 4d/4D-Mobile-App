@@ -74,14 +74,24 @@ Case of
 				
 				OBJECT SET ENABLED:C1123(*; $Obj_form.teamMenu; False:C215)
 				
-				// Launch getting team IDs
-				CALL WORKER:C1389("4D Mobile ("+String:C10($Obj_form.window)+")"; "teamId"; New object:C1471(\
-					"action"; "list"; \
-					"provisioningProfiles"; True:C214; \
-					"certificate"; True:C214; \
-					"caller"; $Obj_form.window; \
-					"callerMethod"; "editor_CALLBACK"; \
-					"callerReturn"; "teamId"))
+				If (Is macOS:C1572)
+					
+					// Launch getting team IDs
+					CALL WORKER:C1389("4D Mobile ("+String:C10($Obj_form.window)+")"; "teamId"; New object:C1471(\
+						"action"; "list"; \
+						"provisioningProfiles"; True:C214; \
+						"certificate"; True:C214; \
+						"caller"; $Obj_form.window; \
+						"callerMethod"; "editor_CALLBACK"; \
+						"callerReturn"; "teamId"))
+					
+					
+				Else 
+					
+					// #TO_DO
+					
+				End if 
+				
 				
 				//______________________________________________________
 		End case 

@@ -64,13 +64,31 @@ End if
 // ================================================================================================================================
 //                                                               LOGGER
 // ================================================================================================================================
+
+
 If (OB Is empty:C1297(RECORD)) | $reset
-	If (DATABASE.macos)
-		RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
-	Else 
-		
-		RECORD:=logger(Folder:C1567(fk database folder:K87:14).name+".log")
-	End if 
+	
+	$o:=Folder:C1567(fk database folder:K87:14; *)
+	
+	Case of 
+			//______________________________________________________
+		: (Is macOS:C1572)
+			
+			RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+			
+			//______________________________________________________
+		: (Is Windows:C1573)
+			
+			RECORD:=logger(Folder:C1567(fk user preferences folder:K87:10).folder($o.name).file(Folder:C1567(fk database folder:K87:14).name+".log"))
+			
+			//______________________________________________________
+		Else 
+			
+			TRACE:C157
+			
+			//______________________________________________________
+	End case 
+	
 	RECORD.verbose:=(DATABASE.isMatrix)
 	$initLog:=True:C214
 	

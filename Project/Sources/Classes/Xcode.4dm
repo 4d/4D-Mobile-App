@@ -357,7 +357,7 @@ Function reveal
 		+" -e ' end tell'"\
 		+" -e 'end tell'"
 	
-	$o:=This:C1470.lep("open "+This:C1470.singleQuoted(This:C1470.application.path))
+	$o:=This:C1470.lep($cmd)
 	
 	If ($o.success)
 		

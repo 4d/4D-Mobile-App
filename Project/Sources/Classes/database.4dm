@@ -21,8 +21,6 @@ Class constructor
 	
 	This:C1470.isRemote:=(Application type:C494=4D Remote mode:K5:5)
 	
-	
-	
 	If (This:C1470.isProject)
 		
 		If (This:C1470.structure.parent.name="Project")

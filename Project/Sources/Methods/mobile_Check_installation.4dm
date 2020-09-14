@@ -31,21 +31,32 @@ If (Count parameters:C259>=1)
 End if 
 
 // ----------------------------------------------------
-If (DATABASE.macos)
-	
-	$out:=Xcode_CheckInstall($in)
-	
-Else 
-	
-	ASSERT:C1129(DATABASE.isMatrix)
-	
-	$out:=New object:C1471(\
-		"platform"; Windows:K25:3; \
-		"XcodeAvailable"; False:C215; \
-		"toolsAvalaible"; False:C215; \
-		"ready"; False:C215)
-	
-End if 
+
+Case of 
+		//______________________________________________________
+	: (Is macOS:C1572)
+		
+		$out:=Xcode_CheckInstall($in)
+		
+		//______________________________________________________
+	: (Is Windows:C1573)
+		
+		ASSERT:C1129(DATABASE.isMatrix)
+		
+		$out:=New object:C1471(\
+			"platform"; Windows:K25:3; \
+			"XcodeAvailable"; False:C215; \
+			"toolsAvalaible"; False:C215; \
+			"ready"; False:C215)
+		
+		//______________________________________________________
+	Else 
+		
+		TRACE:C157
+		
+		//______________________________________________________
+End case 
+
 
 // ----------------------------------------------------
 // Return

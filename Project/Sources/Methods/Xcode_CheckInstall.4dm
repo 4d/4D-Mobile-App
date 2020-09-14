@@ -37,6 +37,7 @@ If (Count parameters:C259>=1)
 End if 
 
 $out:=New object:C1471(\
+"platform"; Mac OS:K25:2; \
 "XcodeAvailable"; False:C215; \
 "toolsAvalaible"; False:C215; \
 "ready"; False:C215)
@@ -56,11 +57,7 @@ If ($out.XcodeAvailable)
 	// Check version
 	$out.ready:=$Xcode.checkVersion(SHARED.xCodeVersion)
 	
-	If ($out.ready)
-		
-		$out.version:=$Xcode.version
-		
-	Else 
+	If (Not:C34($out.ready))
 		
 		// Look for the highest version of Xcode installed
 		$Xcode.path()
@@ -76,15 +73,12 @@ If ($out.XcodeAvailable)
 			// Check version
 			$out.ready:=$Xcode.checkVersion(SHARED.xCodeVersion)
 			
-			If ($out.ready)
-				
-				$out.version:=$Xcode.version
-				
-			End if 
 		End if 
 	End if 
 	
 	If ($out.ready)
+		
+		$out.version:=$Xcode.version
 		
 		// CHECK TOOLS-PATH
 		If ($Xcode.tools.exists)

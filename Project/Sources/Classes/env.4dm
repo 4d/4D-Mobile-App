@@ -1,16 +1,16 @@
 Class constructor
 	
-	This:C1470.macos:=Is macOS:C1572
-	This:C1470.windows:=Is Windows:C1573
-	This:C1470.linux:=Not:C34(This:C1470.macos) & Not:C34(This:C1470.windows)
-	This:C1470.system:=Get system info:C1571
+	This:C1470.isMacOs:=Is macOS:C1572
+	This:C1470.isWindows:=Is Windows:C1573
+	This:C1470.isLinux:=Not:C34(This:C1470.isMacOs) & Not:C34(This:C1470.isWindows)
+	This:C1470.systemInfos:=Get system info:C1571
 	
-	This:C1470.user:=Folder:C1567(fk desktop folder:K87:19).parent
+	This:C1470.homeFolder:=Folder:C1567(fk desktop folder:K87:19).parent
 	
 	This:C1470.update()
 	
 	//===================================================================================
-Function update  // Updating the values that can be modified when the database is open
+Function update  // Updating the values that can be modified after the database is open
 	var $t : Text
 	
 	GET SYSTEM FORMAT:C994(Currency symbol:K60:3; $t)
