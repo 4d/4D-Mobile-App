@@ -68,8 +68,6 @@ End if
 
 If (OB Is empty:C1297(RECORD)) | $reset
 	
-	$o:=Folder:C1567(fk database folder:K87:14; *)
-	
 	Case of 
 			//______________________________________________________
 		: (Is macOS:C1572)
@@ -79,7 +77,7 @@ If (OB Is empty:C1297(RECORD)) | $reset
 			//______________________________________________________
 		: (Is Windows:C1573)
 			
-			RECORD:=logger(Folder:C1567(fk user preferences folder:K87:10).folder($o.name).file(Folder:C1567(fk database folder:K87:14).name+".log"))
+			RECORD:=logger(Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(fk database folder:K87:14; *).name).file(Folder:C1567(fk database folder:K87:14).name+".log"))
 			
 			//______________________________________________________
 		Else 
