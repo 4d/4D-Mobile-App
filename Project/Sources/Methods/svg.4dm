@@ -477,7 +477,10 @@ Else
 							
 							If ($o.success)
 								
-								WRITE PICTURE FILE:C680($file.platformPath; $p; Choose:C955($2.codec#Null:C1517; String:C10($2.codec); $file.extension))
+								var $t; $tt : Text
+								$t:=$file.platformPath
+								$tt:=Choose:C955($2.codec#Null:C1517; String:C10($2.codec); $file.extension)
+								WRITE PICTURE FILE:C680($t; $p; $tt)
 								$o.success:=Bool:C1537(OK)
 								
 							End if 

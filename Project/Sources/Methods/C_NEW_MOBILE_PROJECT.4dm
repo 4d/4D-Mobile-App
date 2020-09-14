@@ -124,6 +124,27 @@ If (Bool:C1537(OK))
 			End if 
 		End if 
 		
+		Case of 
+				
+				//______________________________________________________
+			: (Is macOS:C1572)
+				
+				//
+				
+				//______________________________________________________
+			: (Is Windows:C1573)
+				
+				$project.info.target:="Android"
+				$json:=JSON Stringify:C1217($project; *)
+				
+				//______________________________________________________
+			Else 
+				
+				// A "Case of" statement should never omit "Else"
+				
+				//______________________________________________________
+		End case 
+		
 		$file.setText($json)
 		
 		// Open the project editor
