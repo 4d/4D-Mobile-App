@@ -568,6 +568,7 @@
 			"picture",
 			"scrollable",
 			"static",
+			"webArea",
 			"widget"
 		]
 	},
@@ -764,7 +765,6 @@
 			"svg",
 			"thermometer",
 			"tips",
-			"webArea",
 			"widget",
 			"window"
 		]

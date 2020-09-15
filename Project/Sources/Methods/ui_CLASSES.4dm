@@ -35,5 +35,3 @@ UI.listbox:=Formula:C1597(listbox($1))
 UI.picture:=Formula:C1597(picture($1))
 
 UI.thermometer:=Formula:C1597(thermometer($1))
-
-UI.web:=Formula:C1597(webArea($1))

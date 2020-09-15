@@ -52,11 +52,6 @@ If (False:C215)  // Widgets
 	C_OBJECT:C1216(thermometer; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(webArea; $0)
-	C_TEXT:C284(webArea; $1)
-	C_OBJECT:C1216(webArea; $2)
-	
-	//______________________________________________________
 	C_OBJECT:C1216(widget; $0)
 	C_TEXT:C284(widget; $1)
 	C_OBJECT:C1216(widget; $2)
