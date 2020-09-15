@@ -212,12 +212,16 @@ Case of
 		CALL WORKER:C1389($t; "mobile_Check_installation"; New object:C1471(\
 			"caller"; $form.window))
 		
-		// Launch recovering the list of available simulator devices
-		CALL WORKER:C1389($t; "simulator"; New object:C1471(\
-			"action"; "devices"; \
-			"filter"; "available"; \
-			"minimumVersion"; SHARED.iosDeploymentTarget; \
-			"caller"; $form.window))
+		If (DATABASE.macos)
+			// Launch recovering the list of available simulator devices
+			CALL WORKER:C1389($t; "simulator"; New object:C1471(\
+				"action"; "devices"; \
+				"filter"; "available"; \
+				"minimumVersion"; SHARED.iosDeploymentTarget; \
+				"caller"; $form.window))
+		Else 
+			//
+		End if 
 		
 		//=========================================================
 	Else 

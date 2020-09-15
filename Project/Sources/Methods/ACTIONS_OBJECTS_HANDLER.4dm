@@ -751,7 +751,7 @@ Case of
 				
 			Else 
 				
-				$o:=File:C1566(Get localized document path:C1105("onMobileAppAction.4dm"); fk platform path:K87:2)
+				$o:=File:C1566("/RESOURCES/onMobileAppAction.4dm")
 				
 			End if 
 			
