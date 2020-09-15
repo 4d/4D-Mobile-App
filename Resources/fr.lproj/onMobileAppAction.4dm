@@ -4,8 +4,10 @@
   ARRAY TEXT:C222(tt;0)
   COLLECTION TO ARRAY:C1562($4DEVAL($2);tt)  
 -->
-C_OBJECT:C1216($0;$response)
-C_OBJECT:C1216($1;$request)
+var $0 : Object
+var $1 : Object
+
+var $request; $response : Object
 
 $request:=$1  // Informations fournies par l'application mobile
 $response:=New object:C1471  // Informations retournées à l'application mobile

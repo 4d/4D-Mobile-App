@@ -91,7 +91,7 @@ Function editAuthenticationMethod
 			
 		Else 
 			
-			$file:=File:C1566(Get localized document path:C1105("onMobileAppAuthentication.4dm"); fk platform path:K87:2)
+			$file:=File:C1566("/RESOURCES/onMobileAppAuthentication.4dm")
 			
 		End if 
 		

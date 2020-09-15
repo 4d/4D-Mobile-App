@@ -16,7 +16,7 @@ End if
 
 var $entryPoint; $methodName; $projectName; $t; $worker : Text
 var $window : Integer
-var $formData; $menu; $menuFile; $mobileProjects; $project : Object
+var $formData; $menu; $menuFile; $mobileProjects; $o; $project : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -91,8 +91,9 @@ Case of
 				//______________________________________________________
 			: (Is Windows:C1573)
 				
-				$project.info.target:="Android"
-				$t:=JSON Stringify:C1217($project; *)
+				$o:=JSON Parse:C1218($t)
+				$o.info.target:="Android"
+				$t:=JSON Stringify:C1217($o; *)
 				
 				//______________________________________________________
 			Else 
