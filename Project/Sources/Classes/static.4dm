@@ -21,8 +21,11 @@ associated variables like active objects.
                              ┣━━┫ input ┃
                              ┃  ┗━━━━━━━┛
                              ┃  ┏━━━━━━━━━┓
-                             ┗━━┫ stepper ┃
-                                ┗━━━━━━━━━┛
+                             ┣━━┫ stepper ┃
+                             ┃  ┗━━━━━━━━━┛
+                             ┃  ┏━━━━━━━━━━━━━┓
+                             ┗━━┫ thermometer ┃
+                                ┗━━━━━━━━━━━━━┛
 */
 
 Class constructor

@@ -80,6 +80,28 @@ Case of
 		$project:=Folder:C1567("/RESOURCES/default project").copyTo($mobileProjects; $projectName; fk overwrite:K87:5).file("project.4dmobileapp")
 		$t:=$project.getText()
 		PROCESS 4D TAGS:C816($t; $t)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Is macOS:C1572)
+				
+				//
+				
+				//______________________________________________________
+			: (Is Windows:C1573)
+				
+				$project.info.target:="Android"
+				$t:=JSON Stringify:C1217($project; *)
+				
+				//______________________________________________________
+			Else 
+				
+				// A "Case of" statement should never omit "Else"
+				
+				//______________________________________________________
+		End case 
+		
 		$project.setText($t)
 		
 		// Open the project editor

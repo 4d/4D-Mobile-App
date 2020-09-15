@@ -32,11 +32,10 @@ End if
 
 $formData:=New object:C1471(\
 "web"; cs:C1710.webArea.new("webArea"); \
-"wait"; UI.thermometer("spinner")\
+"wait"; cs:C1710.thermometer.new("spinner")\
 )
 
 // ----------------------------------------------------
-
 Case of 
 		
 		//=========================================================

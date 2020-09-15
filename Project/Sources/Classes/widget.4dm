@@ -122,27 +122,20 @@ Function setValue
 	
 	C_VARIANT:C1683($1)
 	
-	If (This:C1470.assignable)
-		
-		(This:C1470.pointer)->:=$1
-		
-	Else 
-		
-		If (This:C1470.dataSource#Null:C1517)
-			
-			This:C1470.value:=$1
-			
-			If (Value type:C1509(This:C1470.dataSource)=Is object:K8:27)
-				
-				EXECUTE FORMULA:C63(This:C1470.dataSource.source+":=This.value")
-				
-			Else 
-				
-				EXECUTE FORMULA:C63(This:C1470.dataSource+":=This.value")
-				
-			End if 
-		End if 
-	End if 
+	//If (This.assignable)
+	//(This.pointer)->:=$1
+	//Else 
+	//If (This.dataSource#Null)
+	//This.value:=$1
+	//If (Value type(This.dataSource)=Is object)
+	//EXECUTE FORMULA(This.dataSource.source+":=This.value")
+	//Else 
+	//EXECUTE FORMULA(This.dataSource+":=This.value")
+	//End if 
+	//End if 
+	//End if 
+	
+	OBJECT SET VALUE:C1742(This:C1470.name; $1)
 	
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
