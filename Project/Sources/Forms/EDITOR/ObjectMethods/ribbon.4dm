@@ -93,7 +93,7 @@ Case of
 						Form:C1466.build:=True:C214  // Stop reentrance
 						
 						// Autosave
-						project_SAVE
+						_o_project_SAVE
 						
 						$o:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->
 						
@@ -125,7 +125,7 @@ Case of
 					Form:C1466.build:=True:C214
 					
 					// Autosave
-					project_SAVE
+					_o_project_SAVE
 					
 					BUILD(New object:C1471(\
 						"caller"; Current form window:C827; \

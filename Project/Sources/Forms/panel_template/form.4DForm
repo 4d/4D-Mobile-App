@@ -96,25 +96,6 @@
 					"stroke": "#DCDCDC",
 					"strokeWidth": 0.1
 				},
-				"automatic_font": {
-					"type": "input",
-					"top": 1130,
-					"left": 16,
-					"width": 110,
-					"height": 16,
-					"visibility": "hidden",
-					"stroke": "#FF6600",
-					"fill": "transparent",
-					"borderStyle": "dotted",
-					"enterable": false,
-					"hideFocusRing": true,
-					"dragging": "none",
-					"dropping": "none",
-					"method": "ObjectMethods/automatic_font.4dm",
-					"events": [
-						"onLoad"
-					]
-				},
 				"Rectangle": {
 					"type": "rectangle",
 					"top": 22,
@@ -491,5 +472,10 @@
 				}
 			}
 		}
-	]
+	],
+	"geometryStamp": 1,
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

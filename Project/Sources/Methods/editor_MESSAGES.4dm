@@ -117,10 +117,10 @@ Case of
 		Else 
 			
 			// DO_MESSAGE (New object(\
-																								"action";"show";\
-																								"type";"alert";\
-																								"title";"noDevices";\
-																								"additional";""))
+																												"action";"show";\
+																												"type";"alert";\
+																												"title";"noDevices";\
+																												"additional";""))
 			
 		End if 
 		
@@ -292,7 +292,7 @@ Case of
 			
 			// Set the option & save
 			$o.allowStructureAdjustments:=Bool:C1537($oIN.value)
-			project_SAVE(OB Copy:C1225($o))
+			_o_project_SAVE(OB Copy:C1225($o))
 			
 		End if 
 		

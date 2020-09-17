@@ -88,6 +88,8 @@
 			"_o_panel_Form_common",
 			"_o_panel_SET_CONSTRAINTS",
 			"_o_project_CLASSES",
+			"_o_project_Load",
+			"_o_project_SAVE",
 			"_o_project_UI_DEFINITION",
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
@@ -204,11 +206,9 @@
 			"project_Defaults",
 			"project_Fix",
 			"PROJECT_Handler",
-			"project_Load",
 			"project_MESSAGES",
 			"PROJECT_OBJECT_HANDLER",
 			"project_REPAIR",
-			"project_SAVE",
 			"project_SKIN",
 			"project_UI_ALERT",
 			"project_Upgrade"
@@ -233,10 +233,12 @@
 	"02] PRODUCT": {
 		"methods": [
 			"COMPILER_PRODUCT",
-			"PRODUCT_Handler",
-			"PRODUCT_OBJECTS_HANDLER"
+			"PRODUCT"
 		],
 		"forms": [
+			"PRODUCT"
+		],
+		"classes": [
 			"PRODUCT"
 		]
 	},

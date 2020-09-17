@@ -24,8 +24,8 @@ If (False:C215)
 	C_OBJECT:C1216(PROJECT_Handler; $0)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(project_Load; $0)
-	C_TEXT:C284(project_Load; $1)
+	C_OBJECT:C1216(_o_project_Load; $0)
+	C_TEXT:C284(_o_project_Load; $1)
 	
 	// ----------------------------------------------------
 	C_TEXT:C284(project_MESSAGES; $1)
@@ -36,7 +36,7 @@ If (False:C215)
 	C_OBJECT:C1216(project_REPAIR; $1)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(project_SAVE; $1)
+	C_OBJECT:C1216(_o_project_SAVE; $1)
 	
 	// ----------------------------------------------------
 	C_BOOLEAN:C305(project_Upgrade; $0)

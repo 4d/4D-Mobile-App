@@ -15,7 +15,7 @@ C_TEXT:C284($Dir_; $t; $tt)
 C_OBJECT:C1216($o; $Obj_project)
 
 If (False:C215)
-	C_OBJECT:C1216(project_SAVE; $1)
+	C_OBJECT:C1216(_o_project_SAVE; $1)
 End if 
 
 // ----------------------------------------------------

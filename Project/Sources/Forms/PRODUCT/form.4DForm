@@ -17,7 +17,6 @@
 		"onResize",
 		"onBoundVariableChange"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -59,7 +58,7 @@
 						"onDataChange",
 						"onAfterEdit"
 					],
-					"method": "PRODUCT_OBJECTS_HANDLER"
+					"method": "PRODUCT"
 				},
 				"10_name.label": {
 					"type": "text",
@@ -241,7 +240,7 @@
 						"onDrop",
 						"onDragOver"
 					],
-					"method": "PRODUCT_OBJECTS_HANDLER "
+					"method": "ObjectMethods/icon.4dm"
 				},
 				"icon.alert": {
 					"type": "button",
@@ -262,5 +261,13 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"method": "PRODUCT"
 }

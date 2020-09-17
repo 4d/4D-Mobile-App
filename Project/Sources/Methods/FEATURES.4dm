@@ -1,7 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
 // Project method : FEATURES
-// ID[CA478BCE7E114BD7B13F6A623C605879]
 // Created 29-4-2020 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:

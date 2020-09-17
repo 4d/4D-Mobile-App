@@ -64,9 +64,9 @@ Case of
 		
 		If (Shift down:C543)
 			
-			$projectName:=Request:C163(Get localized string:C991("mess_nameoftheproject"); \
+			$projectName:=Request:C163(Get localized string:C991("projectName"); \
 				"test"; \
-				Get localized string:C991("mess_create"))
+				Get localized string:C991("create"))
 			
 			$projectName:=Choose:C955(Length:C16($projectName)=0; "test"; $projectName)
 			
@@ -119,7 +119,6 @@ Case of
 		If (DATABASE.isMatrix)
 			
 			DIALOG:C40("EDITOR"; $formData)
-			
 			CLOSE WINDOW:C154($window)
 			
 		Else 

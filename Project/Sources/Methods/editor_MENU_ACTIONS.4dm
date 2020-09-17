@@ -40,7 +40,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	$Boo_dev:=Macintosh command down:C546 & DATABASE.isMatrix
 	
 	// Autosave
-	project_SAVE
+	_o_project_SAVE
 	
 	$Obj_project:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->
 	
@@ -249,12 +249,12 @@ Case of
 		//______________________________________________________
 	: ($menu.choice="product")
 		
-		SHOW ON DISK:C922($Path_product.platformPath)
+		SHOW ON DISK:C922($Path_product.platformPath; *)
 		
 		//______________________________________________________
 	: ($menu.choice="project")
 		
-		SHOW ON DISK:C922(Form:C1466.root)
+		SHOW ON DISK:C922(Form:C1466.file.parent.platformPath; *)
 		
 		//______________________________________________________
 	: ($menu.choice="xCode")

@@ -40,10 +40,13 @@ End if
 If (Form:C1466#Null:C1517)
 	
 	// Rename cache.json -> catalog.json
-	If (Test path name:C476(Form:C1466.root+"cache.json")=Is a document:K24:1)
+	var $file : 4D:C1709.file
+	$file:=Form:C1466.file.parent.file("cache.json")
+	
+	If ($file.exists)
 		
-		COPY DOCUMENT:C541(Form:C1466.root+"cache.json"; Form:C1466.root; "catalog.json"; *)
-		DELETE DOCUMENT:C159(Form:C1466.root+"cache.json")
+		$file.copyTo(Form:C1466.file.parent; "catalog.json"; fk overwrite:K87:5)
+		$file.delete()
 		
 	End if 
 End if 
@@ -68,7 +71,7 @@ If ($o_project.info.ideVersion=Null:C1517)  // "1720"
 	
 	If (Value type:C1509($o_project.dataModel)=Is object:K8:27)
 		
-		/// Remove first / on icon path #100580
+		// Remove first / on icon path #100580
 		For each ($tTable; $o_project.dataModel)
 			
 			$t:=String:C10($o_project.dataModel[$tTable].icon)

@@ -56,7 +56,9 @@ End if
 
 // ----------------------------------------------------
 // Compare to cached catalog (the last valid)
-$file:=File:C1566($Obj_project.$project.root+"catalog.json"; fk platform path:K87:2)
+//$file:=File($Obj_project.$project.root+"catalog.json"; fk platform path)
+
+$file:=$Obj_project.$project.file.parent.file("catalog.json")
 
 If ($file.exists)
 	
@@ -394,7 +396,7 @@ STRUCTURE_Handler(New object:C1471(\
 "project"; $Obj_project))
 
 // Save project
-CALL FORM:C1391(Current form window:C827; "project_SAVE")
+CALL FORM:C1391(Current form window:C827; "_o_project_SAVE")
 
 // ----------------------------------------------------
 // Return

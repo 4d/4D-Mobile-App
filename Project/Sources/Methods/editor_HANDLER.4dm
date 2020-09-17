@@ -14,7 +14,7 @@ If (False:C215)
 	C_OBJECT:C1216(editor_HANDLER; $1)
 End if 
 
-var $t : Text
+var $worker : Text
 var $bottom; $height; $left; $middle; $right; $top; $width : Integer
 var $e; $form; $IN; $o; $project : Object
 
@@ -68,39 +68,17 @@ Case of
 				(OBJECT Get pointer:C1124(Object named:K67:5; $form.description))->:=Form:C1466.currentPage
 				(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog.EDITOR.ribbon
 				
-				If (Form:C1466.root=Null:C1517)
-					
-					// Keep the project directory
-					Form:C1466.root:=Path to object:C1547(Form:C1466.project).parentFolder
-					
-				End if 
-				
 				// Load the project
-				$project:=project_Load(Form:C1466.project)
+				PROJECT:=cs:C1710.project.new()
+				PROJECT.load(Form:C1466.file)
 				
-				//=====================================
-				//  #TEMPO a lot value are by table
-				// ===================================== [
-				If ($project.ui=Null:C1517)
-					
-					$project.ui:=New object:C1471(\
-						"navigationTransition"; "PresentSlideSegue")
-					
-				End if 
-				// ===================================== ]
-				
-				PROJECT:=cs:C1710.project.new($project)
-				
-				$project.$project:=Form:C1466
-				
-				// Retrieve the project name
-				$project.$project.product:=Path to object:C1547(Form:C1466.root).name
+				PROJECT.$project:=Form:C1466
 				
 				// Set the dialog title
-				SET WINDOW TITLE:C213(Get localized string:C991("4dProductName")+": "+$project.$project.product; $form.window)
+				SET WINDOW TITLE:C213(Get localized string:C991("4dProductName")+": "+Form:C1466.file.parent.fullName; $form.window)
 				
 				// Touch the project subform
-				(OBJECT Get pointer:C1124(Object named:K67:5; $form.project))->:=$project
+				(OBJECT Get pointer:C1124(Object named:K67:5; $form.project))->:=PROJECT
 				
 				// Display the greeting message if any [
 				If (Bool:C1537(editor_Preferences.doNotShowGreetingMessage))
@@ -126,7 +104,7 @@ Case of
 			: ($e.code=On Data Change:K2:15)
 				
 				// Autosave
-				project_SAVE
+				PROJECT.save()
 				
 				//______________________________________________________
 			: ($e.code=On Activate:K2:9)
@@ -206,15 +184,15 @@ Case of
 		// Launch project verifications
 		editor_PROJECT_AUDIT
 		
-		$t:="4D Mobile ("+String:C10($form.window)+")"
+		$worker:="4D Mobile ("+String:C10($form.window)+")"
 		
 		// Launch checking the development environment
-		CALL WORKER:C1389($t; "mobile_Check_installation"; New object:C1471(\
+		CALL WORKER:C1389($worker; "mobile_Check_installation"; New object:C1471(\
 			"caller"; $form.window))
 		
-		If (DATABASE.macos)
+		If (DATABASE.isMacOs)
 			// Launch recovering the list of available simulator devices
-			CALL WORKER:C1389($t; "simulator"; New object:C1471(\
+			CALL WORKER:C1389($worker; "simulator"; New object:C1471(\
 				"action"; "devices"; \
 				"filter"; "available"; \
 				"minimumVersion"; SHARED.iosDeploymentTarget; \

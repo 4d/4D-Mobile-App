@@ -89,6 +89,10 @@ If (Asserted:C1132($Obj_in.project#Null:C1517))
 	
 	$Obj_project:=$Obj_in.project
 	
+	var $productName : Text
+	$productName:=$Obj_project.$project.file.parent.name
+	
+	
 	// Cleanup
 	var $t; $tt : Text
 	
@@ -191,7 +195,7 @@ If ($Obj_in.create)
 	// Create tags object for template {
 	$Obj_tags:=SHARED.tags
 	
-	$Obj_tags.product:=$Obj_project.$project.product
+	$Obj_tags.product:=$productName
 	$Obj_tags.packageName:=$Obj_tags.product
 	
 	// Project file tags
@@ -321,7 +325,7 @@ If ($Obj_in.create)
 	
 	$Obj_template.source:=$Dir_template.platformPath
 	$Obj_template.assets.target:=$Obj_in.path+Convert path POSIX to system:C1107($Obj_template.assets.path)+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
-	$Obj_template.assets.source:=COMPONENT_Pathname("projects").platformPath+$Obj_project.$project.product+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
+	$Obj_template.assets.source:=COMPONENT_Pathname("projects").platformPath+$productName+Folder separator:K24:12+$Obj_template.assets.name+Folder separator:K24:12
 	
 	$Obj_out.sdk:=sdk(New object:C1471(\
 		"action"; "install"; \
@@ -701,7 +705,7 @@ If ($Obj_out.success)
 			
 			$Obj_result_build:=Xcode(New object:C1471(\
 				"action"; "build"; \
-				"scheme"; $Obj_project.$project.product; \
+				"scheme"; $productName; \
 				"destination"; $Obj_in.path; \
 				"sdk"; "iphoneos"; \
 				"verbose"; $isDebug; \
@@ -709,7 +713,7 @@ If ($Obj_out.success)
 				"archive"; True:C214; \
 				"allowProvisioningUpdates"; True:C214; \
 				"allowProvisioningDeviceRegistration"; True:C214; \
-				"archivePath"; Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12+$Obj_project.$project.product+".xcarchive")))
+				"archivePath"; Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12+$productName+".xcarchive")))
 			
 			$Obj_cache.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out); "UTF-8"; Document with LF:K24:22)
 			
@@ -736,7 +740,7 @@ If ($Obj_out.success)
 					"exportArchive"; True:C214; \
 					"teamID"; String:C10($Obj_in.project.organization.teamId); \
 					"exportPath"; Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12); \
-					"archivePath"; Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12+$Obj_project.$project.product+".xcarchive")))
+					"archivePath"; Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12+$productName+".xcarchive")))
 				
 				env_userPathname("cache"; "lastExportArchive.xlog").setText(String:C10($Obj_result_build.out); "UTF-8"; Document with LF:K24:22)
 				
@@ -769,7 +773,7 @@ If ($Obj_out.success)
 			
 			$Obj_result_build:=Xcode(New object:C1471(\
 				"action"; "build"; \
-				"scheme"; $Obj_project.$project.product; \
+				"scheme"; $productName; \
 				"destination"; $Obj_in.path; \
 				"sdk"; $Obj_in.sdk; \
 				"verbose"; $isDebug; \
@@ -783,7 +787,7 @@ If ($Obj_out.success)
 			// Some times Xcode method failed to get app path, maybe if already builded and nothing to do???
 			If ($Obj_result_build.app=Null:C1517)
 				
-				$File_:=$Obj_in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+$Obj_project.$project.product+".app"
+				$File_:=$Obj_in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+$productName+".app"
 				
 				If (Test path name:C476($File_)=Is a folder:K24:2)
 					
@@ -824,7 +828,7 @@ If ($Obj_out.success)
 		// Compute data without building
 		$Obj_result_build:=New object:C1471
 		
-		$File_:=$Obj_in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+$Obj_project.$project.product+".app"
+		$File_:=$Obj_in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+$productName+".app"
 		
 		If (Test path name:C476($File_)=Is a folder:K24:2)
 			
@@ -849,7 +853,7 @@ End if
 If ($Obj_out.success)
 	
 	// Save the signature of the sources folder
-	$Obj_cache.file($Obj_project.$project.product).setText(doc_folderDigest($Obj_in.path+"Sources"+Folder separator:K24:12))
+	$Obj_cache.file($productName).setText(doc_folderDigest($Obj_in.path+"Sources"+Folder separator:K24:12))
 	
 	Case of 
 			
@@ -1073,7 +1077,7 @@ If ($Obj_out.success)
 				// Open xCode devices window
 				OPEN URL:C673("xcdevice://showDevicesWindow"; *)
 				//Xcode(New object(\
-					"action"; "showDevicesWindow"))
+										"action"; "showDevicesWindow"))
 				
 				
 				// Show archive on disk ?

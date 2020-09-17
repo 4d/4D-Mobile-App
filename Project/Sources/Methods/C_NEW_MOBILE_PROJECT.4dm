@@ -13,7 +13,7 @@ var $isEmpty : Boolean
 var $index; $w : Integer
 var $formData; $path; $project : Object
 
-var $folder; $mobileProject : 4D:C1709.Directory
+var $folder; $mobileProjects : 4D:C1709.Directory
 var $file : 4D:C1709.Document
 var $error : cs:C1710.error
 
@@ -30,9 +30,9 @@ OK:=1
 Repeat 
 	
 	$name:=Request:C163(\
-		Get localized string:C991("mess_nameoftheproject"); \
-		Get localized string:C991("mess_newProject"); \
-		Get localized string:C991("mess_create"))
+		Get localized string:C991("projectName"); \
+		Get localized string:C991("newProject"); \
+		Get localized string:C991("create"))
 	
 	$isEmpty:=(Length:C16($name)=0) & Bool:C1537(OK)
 	
@@ -62,18 +62,18 @@ If (Bool:C1537(OK))
 	If (Bool:C1537(OK))
 		
 		// Get the mobile project folder pathname
-		$mobileProject:=Folder:C1567(fk database folder:K87:14; *).folder("Mobile Projects")
-		$mobileProject.create()
+		$mobileProjects:=Folder:C1567(fk database folder:K87:14; *).folder("Mobile Projects")
+		$mobileProjects.create()
 		
-		If ($mobileProject.folder($name).exists)
+		If ($mobileProjects.folder($name).exists)
 			
-			CONFIRM:C162(Get localized string:C991("mess_thisProjectAlreadyExist"))
+			CONFIRM:C162(Get localized string:C991("thisProjectAlreadyExist"))
 			
 		End if 
 		
 	Else 
 		
-		ALERT:C41(".The directory is locked or the disk is full")
+		ALERT:C41(Get localized string:C991("theDirectoryIsLockedOrTheDiskIsFull"))
 		
 	End if 
 End if 
@@ -83,7 +83,7 @@ If (Bool:C1537(OK))
 	$formData:=New object:C1471
 	
 	// Create the project
-	$folder:=Folder:C1567("/RESOURCES/default project").copyTo($mobileProject; $name; fk overwrite:K87:5)
+	$folder:=Folder:C1567("/RESOURCES/default project").copyTo($mobileProjects; $name; fk overwrite:K87:5)
 	
 	// Init default values
 	$file:=$folder.files().query("name = 'project'").pop()

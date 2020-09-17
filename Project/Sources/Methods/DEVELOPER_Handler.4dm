@@ -145,8 +145,7 @@ Case of
 				
 				(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.team))->:=$Obj_context.team[0].menu
 				
-				// Save project
-				UI.saveProject()
+				PROJECT.save()
 				
 			End if 
 			

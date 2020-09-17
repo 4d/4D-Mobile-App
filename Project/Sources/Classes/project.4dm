@@ -1,5 +1,5 @@
 Class constructor
-	var $1: Object
+	var $1 : Object
 	
 	If (Count parameters:C259>=1)
 		
@@ -9,18 +9,83 @@ Class constructor
 	
 	//====================================
 Function init
+	var $1 : Object
 	
-	var $1: Object
-	This:C1470.project:=$1
+	var $key : Text
+	
+	For each ($key; $1)
+		
+		This:C1470[$key]:=$1[$key]
+		
+	End for each 
+	
+	//====================================
+Function load
+	var $1 : Variant
+	
+	var $o; $project : Object
+	
+	var $file : 4D:C1709.File
+	
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($1)=Is text:K8:3)
+			
+			$file:=File:C1566($1; fk platform path:K87:2)
+			
+			//______________________________________________________
+		: (Value type:C1509($1)=Is object:K8:27)
+			
+			If (OB Instance of:C1731($1; 4D:C1709.File))
+				
+				$file:=$1
+				
+			Else 
+				
+				// ERROR
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			// ERROR
+			
+			//______________________________________________________
+	End case 
+	
+	If (Bool:C1537($file.exists))
+		
+		$project:=JSON Parse:C1218($file.getText())
+		
+		If (project_Upgrade($project))
+			
+			// If upgraded, keep a copy of the old project…
+			$o:=$file.parent.folder(Replace string:C233(Get localized string:C991("convertedFiles"); "{stamp}"; str_date("stamp")))
+			$o.create()
+			$file.moveTo($o)
+			
+			//… & immediately save
+			This:C1470.save()
+			
+		End if 
+		
+		This:C1470.init($project)
+		
+	Else 
+		
+		// ERROR
+		
+	End if 
 	
 	//====================================
 Function get
-	var $0: Object
+	var $0 : Object
 	
 	var $t; $tt : Text
 	var $o; $project : Object
 	
-	$project:=OB Copy:C1225(This:C1470.project)
+	$project:=OB Copy:C1225(This:C1470)
 	
 	For each ($t; $project)
 		
@@ -55,8 +120,8 @@ Function get
 	
 	//====================================
 Function cleanup
-	var $0: Object
-	var $1: Object
+	var $0 : Object
+	var $1 : Object
 	
 	var $t : Text
 	var $project : Object
@@ -74,7 +139,7 @@ Function cleanup
 		
 	Else 
 		
-		$project:=OB Copy:C1225(This:C1470.project)
+		$project:=OB Copy:C1225(This:C1470)
 		
 		For each ($t; $project)
 			
@@ -91,11 +156,10 @@ Function cleanup
 	
 	//====================================
 Function save
+	var $t : Text
+	var $o; $project : Object
 	
-	var $project : Object
-	$project:=OB Copy:C1225(This:C1470.project)
-	
-	var $o : Object
+	$project:=OB Copy:C1225(This:C1470)
 	
 	If (Bool:C1537(FEATURE._8858))  // Debug mode
 		
@@ -103,15 +167,14 @@ Function save
 		
 		If ($o.exists)
 			
-			$o.file("project.json").setText(JSON Stringify:C1217(This:C1470.project; *))
+			$o.file("project.json").setText(JSON Stringify:C1217(This:C1470; *))
 			
 		End if 
 	End if 
 	
 	$project:=This:C1470.get()
 	
-	var $t : Text
-	$t:=This:C1470.project.$project.project
+	$t:=This:C1470.$project.project
 	CREATE FOLDER:C475($t; *)
 	
 	TEXT TO DOCUMENT:C1237($t; JSON Stringify:C1217($project; *))
@@ -122,11 +185,11 @@ Function updateActions
 	var $dataModel; $parameter; $table : Object
 	var $actions : Collection
 	
-	$actions:=This:C1470.project.actions
+	$actions:=This:C1470.actions
 	
 	If ($actions#Null:C1517)
 		
-		$dataModel:=This:C1470.project.dataModel
+		$dataModel:=This:C1470.dataModel
 		
 		For each ($table; $actions)
 			
@@ -159,17 +222,19 @@ Function updateActions
 		If ($actions.length=0)
 			
 			// ❌ NO MORE ACTION
-			OB REMOVE:C1226(This:C1470.project; "actions")
+			OB REMOVE:C1226(This:C1470; "actions")
 			
 		End if 
 	End if 
 	
 	//====================================
 Function removeFromMain
+	var $1 : Variant
 	
-	var $1
+	var $l : Integer
 	var $main : Object
-	$main:=This:C1470.project.main
+	
+	$main:=This:C1470.main
 	
 	If ($main.order=Null:C1517)
 		
@@ -177,7 +242,6 @@ Function removeFromMain
 		
 	Else 
 		
-		var $l : Integer
 		$l:=$main.order.indexOf(String:C10($1))
 		
 		If ($l#-1)
@@ -189,10 +253,11 @@ Function removeFromMain
 	
 	//====================================
 Function addToMain
+	var $1 : Variant
 	
-	var $1
 	var $main : Object
-	$main:=This:C1470.project.main
+	
+	$main:=This:C1470.main
 	
 	If ($main.order=Null:C1517)
 		
@@ -210,37 +275,37 @@ Function addToMain
 	//====================================
 Function isField
 	
-	var $0: Boolean
-	var $1: Text
+	var $0 : Boolean
+	var $1 : Text
 	$0:=Match regex:C1019("(?m-si)^\\d+$"; $1; 1; *)
 	
 	//====================================
 Function isRelation
 	
-	var $0: Boolean
-	var $1: Object
+	var $0 : Boolean
+	var $1 : Object
 	$0:=((This:C1470.isRelationToOne($1)) | (This:C1470.isRelationToMany($1)))
 	
 	//====================================
 Function isRelationToOne
 	
-	var $0: Boolean
-	var $1: Object
+	var $0 : Boolean
+	var $1 : Object
 	$0:=($1.relatedDataClass#Null:C1517)
 	
 	//====================================
 Function isRelationToMany
 	
-	var $0: Boolean
-	var $1: Object  // Field
+	var $0 : Boolean
+	var $1 : Object  // Field
 	$0:=(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities"))
 	
 /* ===================================
 Add the table to the data model
 ====================================*/
 Function addTable
-	var $0: Object
-	var $1: Object
+	var $0 : Object
+	var $1 : Object
 	
 	var $o : Object
 	
@@ -257,44 +322,44 @@ Function addTable
 		)
 	
 	// Update dataModel
-	If (This:C1470.project.dataModel=Null:C1517)
+	If (This:C1470.dataModel=Null:C1517)
 		
-		This:C1470.project.dataModel:=New object:C1471
+		This:C1470.dataModel:=New object:C1471
 		
 	End if 
 	
 	// Update main
 	This:C1470.addToMain($1.tableNumber)
 	
-	This:C1470.project.dataModel[String:C10($1.tableNumber)]:=$0
+	This:C1470.dataModel[String:C10($1.tableNumber)]:=$0
 	
 /* ===================================
 Delete the table from the data model
 ====================================*/
 Function removeTable
+	var $0 : Collection
+	var $1 : Variant
 	
-	var $1
-	OB REMOVE:C1226(This:C1470.project.dataModel; String:C10($1))
+	OB REMOVE:C1226(This:C1470.dataModel; String:C10($1))
 	
 	// Update main
 	This:C1470.removeFromMain($1)
 	
 	//====================================
 Function getCatalog
-	
-	var $0: Collection
+	var $0 : Collection
 	
 	Case of 
 			
 			//____________________________________
-		: (This:C1470.project.$project#Null:C1517)
+		: (This:C1470.$project#Null:C1517)
 			
-			$0:=This:C1470.project.$project.$catalog
+			$0:=This:C1470.$project.$catalog
 			
 			//____________________________________
-		: (This:C1470.project.$catalog#Null:C1517)
+		: (This:C1470.$catalog#Null:C1517)
 			
-			$0:=This:C1470.project.$catalog
+			$0:=This:C1470.$catalog
 			
 			//____________________________________
 		Else 
@@ -306,8 +371,8 @@ Function getCatalog
 	
 	//====================================
 Function label  // Format labels
-	var $0: Text
-	var $1: Text
+	var $0 : Text
+	var $1 : Text
 	
 	var $t : Text
 	var $i : Integer
@@ -358,8 +423,8 @@ Function label  // Format labels
 	
 	//====================================
 Function shortLabel  // Format short labels
-	var $0: Text
-	var $1: Text
+	var $0 : Text
+	var $1 : Text
 	
 	$0:=This:C1470.label($1)
 	
@@ -371,15 +436,15 @@ Function shortLabel  // Format short labels
 	
 	//====================================
 Function labelList  // List of x
-	var $0: Text
-	var $1: Text
+	var $0 : Text
+	var $1 : Text
 	
 	$0:=This:C1470.label(Replace string:C233(Get localized string:C991("listOf"); "{values}"; $1))
 	
 	//====================================
 Function isStorage
-	var $0: Boolean
-	var $1: Object
+	var $0 : Boolean
+	var $1 : Object
 	
 	If (String:C10($1.kind)="storage")
 		
@@ -394,8 +459,8 @@ Function isStorage
 	
 	//====================================
 Function getIcon
-	var $0: Picture
-	var $1: Text
+	var $0 : Picture
+	var $1 : Text
 	
 	var $icon : Picture
 	var $file : 4D:C1709.File
@@ -424,8 +489,8 @@ Function getIcon
 	
 	//====================================
 Function isLink
-	var $0: Boolean
-	var $1: Object
+	var $0 : Boolean
+	var $1 : Object
 	
 	var $t : Text
 	

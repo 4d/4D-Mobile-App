@@ -85,7 +85,7 @@
 					"top": 45,
 					"left": 15,
 					"width": 72,
-					"height": 16,
+					"height": 19,
 					"stroke": "#39525E",
 					"text": "Title",
 					"fontSize": 16
@@ -184,5 +184,6 @@
 			"View 1": {}
 		}
 	},
-	"method": "PROJECT_Handler"
+	"method": "PROJECT_Handler",
+	"geometryStamp": 1
 }
