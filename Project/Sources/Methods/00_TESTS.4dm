@@ -17,10 +17,19 @@ End if
 
 COMPILER_COMPONENT
 
-$o:=Folder:C1567("/")
-$o1:=Folder:C1567(fk system folder:K87:13).parent
+If (Is macOS:C1572)
+	$o:=Folder:C1567("/")
+Else 
+	
+End if 
 
 Case of 
+		
+		//________________________________________
+	: (True:C214)
+		
+		$o:=Folder:C1567(System folder:C487(System32 Win:K41:14); fk platform path:K87:2).folder("LogFiles/4dMobile")
+		$o.create()
 		
 		//________________________________________
 	: (True:C214)

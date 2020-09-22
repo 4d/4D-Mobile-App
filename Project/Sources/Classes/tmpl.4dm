@@ -78,7 +78,7 @@ Function load  // Load and update the template if any
 	var $o : Object
 	var $c : Collection
 	
-	ASSERT:C1129(Not:C34(Shift down:C543))
+	//ASSERT(Not(Shift down))
 	
 	If (Num:C11(This:C1470.manifest.renderer)<2)
 		

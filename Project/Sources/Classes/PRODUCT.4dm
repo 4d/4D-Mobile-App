@@ -62,7 +62,34 @@ Function loadIcon
 		
 	Else 
 		
-		ASSERT:C1129(False:C215)
+		// Path is relative to the project file
+		$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+		
+		If (This:C1470.assets=Null:C1517)
+			
+			$folder.create()
+			
+			//**********************************
+			This:C1470.assets:=New object:C1471(\
+				"root"; $folder.platformPath)
+			
+			This:C1470.assets.folder:=$folder
+			
+		End if 
+		
+		If (This:C1470.assets.icons=Null:C1517)\
+			 | (This:C1470.assets.file=Null:C1517)
+			
+			$file:=$folder.file("Contents.json")
+			
+			If (Asserted:C1132($file.exists))
+				
+				This:C1470.assets.icons:=JSON Parse:C1218($file.getText())
+				
+			End if 
+		End if 
+		
+		This:C1470.displayIcon()
 		
 	End if 
 	
@@ -104,7 +131,31 @@ Function displayIcon
 		
 	Else 
 		
-		ASSERT:C1129(False:C215)
+		$o:=This:C1470.assets.icons.images.query("idiom = :1"; "ios-marketing").pop()
+		
+		If ($o#Null:C1517)
+			
+			$file:=This:C1470.assets.folder.file($o.filename)
+			
+			If ($file.exists)
+				
+				READ PICTURE FILE:C678($file.platformPath; $picture)
+				This:C1470.icon.setValue($picture)
+				This:C1470.iconAlert.reset()
+				
+			Else 
+				
+				This:C1470.icon.setValue($picture)
+				This:C1470.iconAlert.alert(".Missing file.")  // #MARK_LOCALIZE
+				
+			End if 
+			
+		Else 
+			
+			This:C1470.icon.setValue($picture)
+			This:C1470.iconAlert.alert(".The icon is mandatory.")  // #MARK_LOCALIZE
+			
+		End if 
 		
 	End if 
 	

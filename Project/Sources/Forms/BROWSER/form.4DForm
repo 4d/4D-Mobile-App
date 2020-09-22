@@ -94,5 +94,12 @@
 	],
 	"method": "browser_HANDLER",
 	"rightMargin": 0,
-	"bottomMargin": 0
+	"bottomMargin": 0,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

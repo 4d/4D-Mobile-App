@@ -52,7 +52,7 @@ Case of
 		//______________________________________________________
 	: ($IN="draw")  // Uppdate preview
 		
-		ASSERT:C1129(Not:C34(Shift down:C543))
+		//ASSERT(Not(Shift down))
 		
 		If (Length:C16($context.tableNum())>0)
 			
@@ -242,7 +242,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-																																										"tips"; $o.label)
+																																																																																				"tips"; $o.label)
 													
 												End if 
 											End if 
@@ -403,7 +403,7 @@ Case of
 							
 							$height:=$height+40
 							
-							ASSERT:C1129(Not:C34(Shift down:C543))
+							//ASSERT(Not(Shift down))
 							
 							If ($context.scrollPosition=Null:C1517)
 								
@@ -760,8 +760,8 @@ Case of
 						
 						If (FEATURE.with("_8858"))
 							
-							$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.png"); True:C214)
 							$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg"); True:C214)
+							$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.png"); True:C214)
 							
 						End if 
 						

@@ -155,7 +155,7 @@ Else
 					: (Value type:C1509($2.destination)=Is object:K8:27)
 						
 						
-						If (OB Instance of:C1731($file; 4D:C1709.Document))
+						If (OB Instance of:C1731($2.destination; 4D:C1709.Document))
 							
 							$file:=$2.destination
 							
