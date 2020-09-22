@@ -193,7 +193,7 @@ Function preview  // Alias show()
 	This:C1470.show()
 	
 /*———————————————————————————————————————————————————————————*/
-Function show  // Show in 4D SVG Viewer
+Function showInViewer  // Show in 4D SVG Viewer
 	var $0 : Object
 	
 	//#TO_DO: Should test if the component is available
@@ -404,16 +404,146 @@ Function dimensions
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function fontSize
+Function font
 	var $0 : Object
-	var $1 : Integer
+	var $1 : Object
+	
+	If ($1.font#Null:C1517)
+		
+		This:C1470.fontFamily($1.font)
+		
+	End if 
+	
+	If ($1.size#Null:C1517)
+		
+		This:C1470.fontSize($1.size)
+		
+	End if 
+	
+	If ($1.color#Null:C1517)
+		
+		This:C1470.fill($1.color)
+		
+	End if 
+	
+	If ($1.style#Null:C1517)
+		
+		This:C1470.fontStyle($1.style)
+		
+	End if 
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function fontFamily
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
 	
 	var $node : Text
 	
-	$node:=This:C1470.__target()
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470.__target($2)
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
+	
+	DOM SET XML ATTRIBUTE:C866($node; \
+		"font-family"; $1)
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function fontSize
+	var $0 : Object
+	var $1 : Integer
+	var $2 : Variant
+	
+	var $node : Text
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470.__target($2)
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
 	
 	DOM SET XML ATTRIBUTE:C866($node; \
 		"font-size"; $1)
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function fontStyle
+	var $0 : Object
+	var $1 : Integer
+	var $2 : Variant
+	
+	var $node : Text
+	var $style : Integer
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470.__target($2)
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
+	
+	$style:=$1
+	
+	If ($style=0)  // Plain
+		
+		DOM SET XML ATTRIBUTE:C866($node; \
+			"text-decoration"; "none"; \
+			"font-style"; "normal"; \
+			"font-weight"; "normal")
+		
+	Else 
+		
+		If ($style>=8)  // Line-through
+			
+			DOM SET XML ATTRIBUTE:C866($node; \
+				"text-decoration"; "line-through")
+			$style:=$style-8
+			
+		End if 
+		
+		If (Bool:C1537(OK))\
+			 & ($style>=4)  // Underline
+			
+			DOM SET XML ATTRIBUTE:C866($node; \
+				"text-decoration"; "underline")
+			$style:=$style-4
+			
+		End if 
+		
+		If (Bool:C1537(OK))\
+			 & ($style>=2)  // Italic
+			
+			DOM SET XML ATTRIBUTE:C866($node; \
+				"font-style"; "italic")
+			$style:=$style-2
+			
+		End if 
+		
+		If (Bool:C1537(OK))\
+			 & ($style=1)  // Bold
+			
+			DOM SET XML ATTRIBUTE:C866($node; \
+				"font-weight"; "bold")
+			
+		End if 
+	End if 
 	
 	$0:=This:C1470
 	
@@ -872,6 +1002,36 @@ Function getPicture
 	End if 
 	
 	$0:=$p
+	
+/*———————————————————————————————————————————————————————————*/
+Function styleSheet
+	var $1 : 4D:C1709.File
+	
+	var $t : Text
+	
+	This:C1470.success:=OB Instance of:C1731($1; 4D:C1709.File)
+	
+	If (This:C1470.success)
+		
+		This:C1470.success:=$1.exists
+		
+		If (This:C1470.success)
+			
+			$t:="xml-stylesheet href=\"file:///"+Convert path system to POSIX:C1106($1.platformPath; *)+"\" type=\"text/css\""
+			$t:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088(This:C1470.root); XML processing instruction:K45:9; $t)
+			This:C1470.success:=Bool:C1537(OK)
+			
+		Else 
+			
+			This:C1470.errors.push("File not found: "+$1.path)
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.errors.push("$1 must be a 4D File")
+		
+	End if 
 	
 /*——————————————————————————
 PRIVATE
