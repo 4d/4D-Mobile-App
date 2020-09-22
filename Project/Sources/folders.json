@@ -421,7 +421,6 @@
 	},
 	"backend": {
 		"groups": [
-			"lib",
 			"templateClass"
 		],
 		"methods": [

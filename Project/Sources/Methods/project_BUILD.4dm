@@ -77,10 +77,8 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		If ($success)
 			
-			
-			//  // Must also close and delete folders if no change and want to recreate.
+			// Must also close and delete folders if no change and want to recreate.
 			// Xcode (New object(\"path";$Obj_in.path))
-			
 			
 		Else 
 			
@@ -183,32 +181,16 @@ If (Asserted:C1132($project#Null:C1517))
 								"build"; $in)
 							
 							// Web server must running to test data synchronization
-							If (False:C215)
-								
-								POST_MESSAGE(New object:C1471(\
-									"target"; $target; \
-									"action"; "show"; \
-									"type"; "confirm"; \
-									"title"; "theWebServerIsNotStarted"; \
-									"additional"; "DoYouWantToStartTheWebServer"; \
-									"okAction"; JSON Stringify:C1217($Obj_ok); \
-									"cancel"; "notNow"; \
-									"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
-								
-							Else 
-								
-								$o:=New object:C1471(\
-									"action"; "show"; \
-									"type"; "confirm"; \
-									"title"; "theWebServerIsNotStarted"; \
-									"additional"; "DoYouWantToStartTheWebServer"; \
-									"cancel"; "notNow"; \
-									"CALLBACK"; "editor_MESSAGE_CALLBACK"; \
-									"build"; $in)
-								
-								$o:=await_MESSAGE($o; "someStructuralAdjustmentsAreNeeded")
-								
-							End if 
+							$o:=New object:C1471(\
+								"action"; "show"; \
+								"type"; "confirm"; \
+								"title"; "theWebServerIsNotStarted"; \
+								"additional"; "DoYouWantToStartTheWebServer"; \
+								"cancel"; "notNow"; \
+								"CALLBACK"; "editor_MESSAGE_CALLBACK"; \
+								"build"; $in)
+							
+							$o:=await_MESSAGE($o; "theWebServerIsNotStarted")
 							
 						End if 
 					End if 
