@@ -578,6 +578,7 @@ If ($Obj_in.create)
 					$associatedDomain:=String:C10($Obj_project.deepLinking.associatedDomain)
 					$associatedDomain:=Replace string:C233($associatedDomain; "https://"; "")
 					$associatedDomain:=Replace string:C233($associatedDomain; "http://"; "")
+					$associatedDomain:="applinks:"+$associatedDomain
 					$Obj_out.computedCapabilities.capabilities.associatedDomains:=New collection:C1472($associatedDomain)
 				End if 
 			End if 
@@ -1077,7 +1078,7 @@ If ($Obj_out.success)
 				// Open xCode devices window
 				OPEN URL:C673("xcdevice://showDevicesWindow"; *)
 				//Xcode(New object(\
-										"action"; "showDevicesWindow"))
+															"action"; "showDevicesWindow"))
 				
 				
 				// Show archive on disk ?
