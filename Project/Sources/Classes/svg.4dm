@@ -188,9 +188,9 @@ Function id
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function preview  // Alias show()
+Function preview  // Alias showInViewer()
 	
-	This:C1470.show()
+	This:C1470.showInViewer()
 	
 /*———————————————————————————————————————————————————————————*/
 Function showInViewer  // Show in 4D SVG Viewer
@@ -407,28 +407,53 @@ Function dimensions
 Function font
 	var $0 : Object
 	var $1 : Object
+	var $2 : Variant
+	
+	var $node : Text
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470.__target($2)
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
 	
 	If ($1.font#Null:C1517)
 		
-		This:C1470.fontFamily($1.font)
+		This:C1470.fontFamily($1.font; $node)
 		
 	End if 
 	
 	If ($1.size#Null:C1517)
 		
-		This:C1470.fontSize($1.size)
+		This:C1470.fontSize($1.size; $node)
 		
 	End if 
 	
 	If ($1.color#Null:C1517)
 		
-		This:C1470.fill($1.color)
+		This:C1470.fill($1.color; $node)
 		
 	End if 
 	
 	If ($1.style#Null:C1517)
 		
-		This:C1470.fontStyle($1.style)
+		This:C1470.fontStyle($1.style; $node)
+		
+	End if 
+	
+	If ($1.alignment#Null:C1517)
+		
+		This:C1470.textAlignment($1.alignment; $node)
+		
+	End if 
+	
+	If ($1.rendering#Null:C1517)
+		
+		This:C1470.textRendering($1.rendering; $node)
 		
 	End if 
 	
@@ -543,6 +568,135 @@ Function fontStyle
 				"font-weight"; "bold")
 			
 		End if 
+	End if 
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function textAlignment
+	var $0 : Object
+	var $1 : Integer
+	var $2 : Variant
+	
+	var $node; $type : Text
+	var $alignment : Integer
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470.__target($2)
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
+	
+	$alignment:=$1
+	
+	DOM GET XML ELEMENT NAME:C730($node; $type)
+	
+	Case of 
+			
+			//…………………………………………………………………………………………
+		: ($alignment=Align center:K42:3)
+			
+			If ($type="textArea")
+				
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"text-align"; "center")
+				
+			Else 
+				
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"text-anchor"; "middle")
+				
+			End if 
+			
+			//…………………………………………………………………………………………
+		: ($alignment=Align right:K42:4)
+			
+			If ($type="textArea")
+				
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"text-align"; "end")
+				
+			Else 
+				
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"text-anchor"; "end")
+				
+			End if 
+			
+			//…………………………………………………………………………………………
+		: ($alignment=Align left:K42:2)\
+			 | ($alignment=Align default:K42:1)
+			
+			If ($type="textArea")
+				
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"text-align"; "start")
+				
+			Else 
+				
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"text-anchor"; "start")
+				
+			End if 
+			
+			//…………………………………………………………………………………………
+		: ($alignment=5)\
+			 & ($type="textArea")
+			
+			DOM SET XML ATTRIBUTE:C866($node; \
+				"text-align"; "justify")
+			
+			//…………………………………………………………………………………………
+		Else 
+			
+			If ($type="textArea")
+				
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"text-align"; "inherit")
+				
+			Else 
+				
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"text-anchor"; "inherit")
+				
+			End if 
+			
+			//…………………………………………………………………………………………
+	End case 
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function textRendering
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
+	
+	var $node : Text
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470.__target($2)
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
+	
+	If (New collection:C1472("auto"; "optimizeSpeed"; "optimizeLegibility"; "geometricPrecision"; "inherit").indexOf($1)#-1)
+		
+		DOM SET XML ATTRIBUTE:C866($node; \
+			"text-rendering"; $1)
+		
+	Else 
+		
+		This:C1470.errors.push("Unknown value ("+$1+") for text-rendering.")
+		
 	End if 
 	
 	$0:=This:C1470
@@ -682,29 +836,6 @@ Function fill
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function stroke
-	var $0 : Object
-	var $1 : Text
-	var $2 : Variant
-	
-	var $node : Text
-	
-	If (Count parameters:C259>=2)
-		
-		$node:=This:C1470.__target($2)
-		
-	Else 
-		
-		$node:=This:C1470.__target()
-		
-	End if 
-	
-	DOM SET XML ATTRIBUTE:C866($node; \
-		"stroke"; $1)
-	
-	$0:=This:C1470
-	
-/*———————————————————————————————————————————————————————————*/
 Function fillOpacity
 	var $0 : Object
 	var $1 : Real
@@ -733,6 +864,52 @@ Function fillOpacity
 			"fill-opacity"; $1)
 		
 	End if 
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function stroke
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
+	
+	var $node : Text
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470.__target($2)
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
+	
+	DOM SET XML ATTRIBUTE:C866($node; \
+		"stroke"; $1)
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function strokeOpacity
+	var $0 : Object
+	var $1 : Real
+	var $2 : Variant
+	
+	var $node : Text
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470.__target($2)
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
+	
+	DOM SET XML ATTRIBUTE:C866($node; \
+		"stroke-opacity"; $1)
 	
 	$0:=This:C1470
 	
@@ -1033,6 +1210,28 @@ Function styleSheet
 		
 	End if 
 	
+/*———————————————————————————————————————————————————————————*/
+Function visible
+	var $0 : Object
+	var $1 : Boolean
+	var $2 : Variant
+	
+	var $node : Text
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470.__target($2)
+		
+		This:C1470.setAttribute("visibility"; Choose:C955($1; "visible"; "hidden"); $2)
+		
+	Else 
+		
+		This:C1470.setAttribute("visibility"; Choose:C955($1; "visible"; "hidden"))
+		
+	End if 
+	
+	$0:=This:C1470
+	
 /*——————————————————————————
 PRIVATE
 ——————————————————————————*/
@@ -1085,6 +1284,11 @@ Function __target
 						$0:=This:C1470.parent(This:C1470.latest)
 						
 					End if 
+					
+					//_______________________________
+				: (This:C1470.__isReference($1))
+					
+					$0:=$1  // The given reference
 					
 					//_______________________________
 				Else 
