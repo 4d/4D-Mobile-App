@@ -989,6 +989,10 @@ Case of
 			
 			$Txt_cmd:=$Txt_cmd+" -sdk "+$Obj_param.sdk
 			
+			If (Position:C15("simulator"; $Obj_param.sdk)>0)
+				$Txt_cmd:=$Txt_cmd+" -arch x86_64"  // TODO APPLE SILICON: according to if silicon or not set good arch for simu
+			End if 
+			
 		End if 
 		
 		If ($Obj_param.configuration#Null:C1517)
