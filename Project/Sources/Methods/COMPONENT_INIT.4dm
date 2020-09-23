@@ -124,14 +124,14 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		"scale"; 64))
 	
 	// minimum requierement
-	SHARED.xCodeVersion:="11.6"
-	SHARED.iosDeploymentTarget:="13.6"
+	SHARED.xCodeVersion:="12.0"
+	SHARED.iosDeploymentTarget:="14.0"
 	
 	SHARED.useXcodeDefaultPath:=True:C214
 	
 	// Project config
 	SHARED.swift:=New object:C1471(\
-		"Version"; "5.1"; \
+		"Version"; "5.3"; \
 		"Flags"; New object:C1471("Debug"; ""; "Release"; ""); \
 		"OptimizationLevel"; New object:C1471(\
 		"Debug"; "-Onone"; \
