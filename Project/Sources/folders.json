@@ -408,15 +408,30 @@
 		]
 	},
 	"android": {
+		"groups": [
+			"androidProcess"
+		],
 		"methods": [
 			"dev_test_android"
 		],
 		"classes": [
+			"externalProcess",
+			"java"
+		]
+	},
+	"androidPlatformTools": {
+		"classes": [
 			"adb",
+			"androidPlatformTools"
+		]
+	},
+	"androidProcess": {
+		"groups": [
+			"androidPlatformTools"
+		],
+		"classes": [
 			"androidEmulator",
-			"androidPlatformTools",
-			"androidProcess",
-			"externalProcess"
+			"androidProcess"
 		]
 	},
 	"backend": {

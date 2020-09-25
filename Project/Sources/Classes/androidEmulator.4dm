@@ -162,5 +162,20 @@ Function list  // List available AVDs
 Function start
 	var $0 : Object
 	var $1 : Text
+	var $2 : Boolean
 	
-	$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-avd"; $1; "-netdelay"; "none"; "-netspeed"; "full"))
+	var $async : Boolean
+	$async:=False:C215
+	If (Count parameters:C259>1)
+		$async:=$2
+	End if 
+	
+	If ($async)
+		$0:=This:C1470.launchAsync(This:C1470.cmd; New collection:C1472("-avd"; $1; "-netdelay"; "none"; "-netspeed"; "full"))
+	Else 
+		$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-avd"; $1; "-netdelay"; "none"; "-netspeed"; "full"))
+	End if 
+	
+Function version
+	var $0 : Object
+	$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-version"))

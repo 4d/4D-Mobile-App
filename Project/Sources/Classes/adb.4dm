@@ -14,4 +14,11 @@ Function adbFile
 Function killServer
 	var $0 : Object
 	
-	$0:=This:C1470.launch(This:C1470.cmd; "kill-server")
+	$0:=This:C1470.launch(This:C1470.cmd; "-kill-server")
+	
+Function kill
+	var $0 : Object
+	var $1 : Text  // name emu
+	
+	$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-s"; $1; "emu"; "kill"))
+	
