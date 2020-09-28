@@ -111,8 +111,12 @@ FEATURE.delivered(107526)  // Push Notifications
 /* _____________
 18R5
 _____________*/
+FEATURE.delivered(117618)  // Deep Linking
+
+/* _____________
+18R6
+_____________*/
 FEATURE.unstable(117601)  // Relation management optimisation
-FEATURE.unstable(117618)  // Deep Linking
 
 /* _____________
 WIP
