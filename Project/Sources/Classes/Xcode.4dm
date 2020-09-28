@@ -21,14 +21,14 @@ Class constructor
 		
 		If (This:C1470.success)
 			
-			This:C1470.version:=This:C1470.version()
+			This:C1470.version:=This:C1470.getVersion()
 			This:C1470.toolsPath()
 			
 		End if 
 		
 	Else 
 		
-		This:C1470.lastError:="Xcode is not available on this platform"
+		This:C1470.lastError:="Xcode is not yet available on this platform"
 		This:C1470.errors.push(This:C1470.lastError)
 		
 	End if 
@@ -134,7 +134,7 @@ Function lastPath
 		
 		For each ($pathname; $c)
 			
-			$version:=This:C1470.version(Folder:C1567($pathname))
+			$version:=This:C1470.getVersion(Folder:C1567($pathname))
 			
 			If (This:C1470.versionCompare($version; $t)>=0)  // Equal or higher
 				
@@ -170,7 +170,7 @@ Function paths
 	End if 
 	
 	//====================================================================
-Function version
+Function getVersion
 	var $0 : Text
 	var $1 : 4D:C1709.Directory
 	
