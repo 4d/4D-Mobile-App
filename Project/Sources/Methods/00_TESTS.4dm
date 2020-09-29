@@ -564,31 +564,6 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$svg:=svg("load"; File:C1566("/RESOURCES/templates/form/list/Vertical Cards/template.svg"))
-		$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/export.png"))
-		
-		//________________________________________
-	: (True:C214)
-		
-		$t:=File:C1566("/RESOURCES/queryWidget.svg").getText()
-		
-		PROCESS 4D TAGS:C816($t; $t; UI.selectedFillColor; Get localized string:C991("fields"); Get localized string:C991("comparators"); Get localized string:C991("operators"); "⬇")
-		
-		$svg:=svg("parse"; New object:C1471("variable"; $t))
-		$svg.showInViewer()
-		$svg.close()
-		
-		//________________________________________
-	: (True:C214)
-		
-		$svg:=svg("load"; File:C1566("/RESOURCES/templates/form/list/Vertical Cards/template.svg"))
-		$t:=$svg.findById("cookery")
-		$svg.showInViewer()
-		$svg.close()
-		
-		//________________________________________
-	: (True:C214)
-		
 		$o:=db.exposedDatastore()
 		$o:=db("object;blob").exposedDatastore()
 		

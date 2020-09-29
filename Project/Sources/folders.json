@@ -594,7 +594,6 @@
 		"methods": [
 			"HTU_logs",
 			"HTU_progress",
-			"HTU_svg",
 			"htuProgressDoSomething"
 		]
 	},
@@ -780,7 +779,6 @@
 			"static",
 			"str",
 			"subform",
-			"svg",
 			"thermometer",
 			"tips",
 			"widget",

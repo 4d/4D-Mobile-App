@@ -183,8 +183,7 @@ Case of
 				
 				PROCESS 4D TAGS:C816($t; $t; UI.selectedFillColor; Get localized string:C991("fields"); Get localized string:C991("comparators"); Get localized string:C991("operators"); "🢓")
 				
-				(OBJECT Get pointer:C1124(Object current:K67:2))->:=svg("parse"; New object:C1471(\
-					"variable"; $t)).getPicture()
+				OBJECT SET VALUE:C1742($event.objectName; cs:C1710.svg.new().parse($t).getPicture())
 				
 				OBJECT SET VISIBLE:C603(*; $event.objectName; False:C215)
 				

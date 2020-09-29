@@ -18,7 +18,7 @@ Function killServer
 	
 Function kill
 	var $0 : Object
-	var $1 : Text  // name emu
+	var $1 : Text  // emu name
 	
 	$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-s"; $1; "emu"; "kill"))
 	

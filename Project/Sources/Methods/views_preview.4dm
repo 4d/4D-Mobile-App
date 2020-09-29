@@ -52,8 +52,6 @@ Case of
 		//______________________________________________________
 	: ($IN="draw")  // Uppdate preview
 		
-		//ASSERT(Not(Shift down))
-		
 		If (Length:C16($context.tableNum())>0)
 			
 			// Form name
@@ -87,9 +85,7 @@ Case of
 						$t:=Replace string:C233($t; "&quot;"; "\"")
 						PROCESS 4D TAGS:C816($t; $t; $template.title; $template.cancel())
 						
-						$svg:=svg("parse"; New object:C1471(\
-							"variable"; $t)).setAttribute("transform"; \
-							"scale(0.97)")
+						$svg:=cs:C1710.svg.new().parse($t).setAttribute("transform"; "scale(0.97)")
 						
 						If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 							
@@ -107,7 +103,7 @@ Case of
 							If ($svg.success)
 								
 								$svg.setAttribute("ios:tips"; Get localized string:C991("searchBoxTips"); $node)
-								DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("fieldToUseForSearch"))
+								$svg.setValue($node; Get localized string:C991("fieldToUseForSearch"))
 								
 							End if 
 							
@@ -116,7 +112,7 @@ Case of
 							If ($svg.success)
 								
 								$svg.setAttribute("ios:tips"; Get localized string:C991("sectionTips"); $node)
-								DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("fieldToUseAsSection"))
+								$svg.setValue($node; Get localized string:C991("fieldToUseAsSection"))
 								
 							End if 
 							
@@ -129,9 +125,7 @@ Case of
 						// Load the template
 						PROCESS 4D TAGS:C816($template.template; $t)
 						
-						$svg:=svg("parse"; New object:C1471(\
-							"variable"; $t)).setAttribute("transform"; \
-							"scale(0.95)")
+						$svg:=cs:C1710.svg.new().parse($t).setAttribute("transform"; "scale(0.95)")
 						
 					End if 
 					
@@ -158,23 +152,22 @@ Case of
 										
 										If ($target.searchableField.length>1)
 											
-											DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("multiCriteriaSearch"))
+											$svg.setValue($node; Get localized string:C991("multiCriteriaSearch"))
 											
 										Else 
 											
-											DOM SET XML ELEMENT VALUE:C868($node; $target.searchableField[0].name)
+											$svg.setValue($node; $target.searchableField[0].name)
 											
 										End if 
 										
 									Else 
 										
-										DOM SET XML ELEMENT VALUE:C868($node; $target.searchableField.name)
+										$svg.setValue($node; $target.searchableField.name)
 										
 									End if 
 									
-									$node:=DOM Get next sibling XML element:C724($node)
-									$svg.setAttribute("stroke-dasharray"; "none"; $node)
-									$svg.setVisible(True:C214; $svg.findById("search.cancel"))
+									$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
+									$svg.visible(True:C214; $svg.findById("search.cancel"))
 									
 								End if 
 							End if 
@@ -187,9 +180,8 @@ Case of
 									
 									DOM SET XML ELEMENT VALUE:C868($node; $target.sectionField.name)
 									
-									$node:=DOM Get next sibling XML element:C724($node)
-									$svg.setAttribute("stroke-dasharray"; "none"; $node)
-									$svg.setVisible(True:C214; $svg.findById("section.cancel"))
+									$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
+									$svg.visible(True:C214; $svg.findById("section.cancel"))
 									
 								End if 
 							End if 
@@ -242,7 +234,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-																																																																																				"tips"; $o.label)
+																																																																																																																"tips"; $o.label)
 													
 												End if 
 											End if 
@@ -303,16 +295,17 @@ Case of
 										
 										If ($svg.success)
 											
-											$attributes:=xml_attributes($node)
+											//$attributes:=xml_attributes($node)
+											$attributes:=$svg.getAttributes($node)
 											
 											// Get the bindind definition
 											If ($attributes["ios:type"]#Null:C1517)
 												
-												$b:=($attributes["ios:type"]="all")
+												$b:=(String:C10($attributes["ios:type"])="all")
 												
 												If (Not:C34($b))
 													
-													$b:=tmpl_compatibleType($attributes["ios:type"]; $o.fieldType)
+													$b:=tmpl_compatibleType(String:C10($attributes["ios:type"]); $o.fieldType)
 													
 												End if 
 												
@@ -343,13 +336,12 @@ Case of
 															
 														End if 
 														
-														DOM SET XML ELEMENT VALUE:C868($node; $buffer)
+														$svg.setValue($node; $buffer)
 														
 														If ($o.fieldType=8858)\
 															 | ($o.fieldType=8859)  // Relation
 															
-															DOM SET XML ATTRIBUTE:C866($node; \
-																"font-style"; "italic")
+															$svg.fontStyle(Italic:K14:3; $node)
 															
 															If (Split string:C1554($o.path; ".").length=1)
 																
@@ -357,27 +349,20 @@ Case of
 																	
 																	If ($relation[$o.name].format=Null:C1517)
 																		
-																		DOM SET XML ATTRIBUTE:C866($node; \
-																			"class"; "label error")
+																		$svg.class("label error"; $node)
 																		
 																	End if 
 																End if 
 																
 															Else 
 																
-																DOM SET XML ATTRIBUTE:C866($node; \
-																	"class"; "label")
-																
-																DOM SET XML ATTRIBUTE:C866($node; \
-																	"tips"; $o.label)
+																$svg.class("label"; $node).setAttribute("tips"; $o.label; $node)
 																
 															End if 
 														End if 
 														
-														//#117302 - [BUG] Fixed dropped field style
-														$node:=DOM Get next sibling XML element:C724($node)
-														$svg.setAttribute("stroke-dasharray"; "none"; $node)
-														$svg.setVisible(True:C214; $svg.findById("f"+$t+".cancel"))
+														$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
+														$svg.visible(True:C214; $svg.findById("f"+$t+".cancel"))
 														
 													Else 
 														
@@ -402,8 +387,6 @@ Case of
 							End for each 
 							
 							$height:=$height+40
-							
-							//ASSERT(Not(Shift down))
 							
 							If ($context.scrollPosition=Null:C1517)
 								
@@ -498,13 +481,13 @@ Case of
 												
 												If ($svg.success)
 													
-													DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("dropAFieldHere"))
+													$svg.setValue($node; Get localized string:C991("dropAFieldHere"))
 													
 												End if 
 											End if 
 											
 											// Get position
-											$node:=DOM Get parent XML element:C923($t)
+											$node:=$svg.parent($t)
 											
 											If (Asserted:C1132(OK=1))
 												
@@ -687,7 +670,7 @@ Case of
 											
 											If ($svg.success)
 												
-												$svg.setVisible(True:C214; $node)
+												$svg.visible(True:C214; $node)
 												
 											End if 
 										End if 
@@ -713,12 +696,12 @@ Case of
 												$first:=True:C214
 												
 												// Make it visible to allow drag and drop
-												$svg.setVisible(True:C214; $tDom_{$i})
+												$svg.visible(True:C214; $tDom_{$i})
 												
 											Else 
 												
 												// Hide the other ones
-												$svg.setVisible(False:C215; $tDom_{$i})
+												$svg.visible(False:C215; $tDom_{$i})
 												
 											End if 
 										End if 
@@ -738,7 +721,7 @@ Case of
 										
 										If ($svg.success)
 											
-											$svg.setVisible(Num:C11($context.tabIndex)=$indx; $node)
+											$svg.visible(Num:C11($context.tabIndex)=$indx; $node)
 											
 										End if 
 										
@@ -754,7 +737,7 @@ Case of
 						
 						If (FEATURE.with("newViewUI"))
 							
-							$svg.setDimensions($form.preview.coordinates.width; $context.previewHeight)
+							$svg.dimensions($form.preview.coordinates.width; $context.previewHeight)
 							
 						End if 
 						
@@ -774,12 +757,10 @@ Case of
 						// Put an error message
 						$form.preview.getCoordinates()
 						
-						OBJECT SET VALUE:C1742("preview"; svg.setDimensions($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
-							.textArea(str("theTemplateIsMissingOrInvalid").localized($template.title); 20; 180)\
-							.setDimensions($form.preview.coordinates.width-20)\
-							.setFill(UI.colors.errorColor.hex)\
-							.setAttributes(New object:C1471("font-size"; 14; "text-align"; "center"))\
-							.textArea(str("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; "")); 20; 180))
+						OBJECT SET VALUE:C1742("preview"; cs:C1710.svg.new()\
+							.dimensions($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
+							.textArea(str("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).dimensions($form.preview.coordinates.width-50)\
+							.position(20; 180).font(New object:C1471("size"; 14; "color"; UI.colors.errorColor.hex; "alignment"; Align center:K42:3)).getPicture())
 						
 						OBJECT SET TITLE:C194(*; "preview.label"; "")
 						

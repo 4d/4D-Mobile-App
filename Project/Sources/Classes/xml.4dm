@@ -19,26 +19,25 @@ Function new
 	var ${1} : Text
 	
 	var $t : Text
-	var $i; $l : Integer
+	var $i; $parameterCount : Integer
 	
-	$l:=Count parameters:C259
+	$parameterCount:=Count parameters:C259
 	
 	OK:=0
 	
-	If ($l>=1)
+	If ($parameterCount>=1)
 		
-		If ($l>=2)
+		If ($parameterCount>=2)
 			
-			If (($l%2)#0)
+			If (($parameterCount%2)#0)
 				
 				This:C1470.errors.push(Current method name:C684+" -  Unbalanced key/value pairs")
-				OK:=0
 				
 			Else 
 				
 				$t:=":C861("
 				
-				For ($i; 1; $l; 2)
+				For ($i; 1; $parameterCount; 2)
 					
 					$t:=$t+(";"*Num:C11($i>1))+"\""+${$i}+"\";\""+${$i+1}+"\""
 					
@@ -120,20 +119,24 @@ Function parse  // Parse a variable (TEXT or BLOB)
 	var $2 : Boolean
 	var $3 : Text
 	
+	var $parameterCount : Integer
+	
+	$parameterCount:=Count parameters:C259
+	
 	Case of 
 			
 			//……………………………………………………………………………………………
-		: (Count parameters:C259=0)
+		: ($parameterCount=0)
 			
 			$0:=This:C1470.load()
 			
 			//……………………………………………………………………………………………
-		: (Count parameters:C259=1)
+		: ($parameterCount=1)
 			
 			$0:=This:C1470.load($1)
 			
 			//……………………………………………………………………………………………
-		: (Count parameters:C259=2)
+		: ($parameterCount=2)
 			
 			$0:=This:C1470.load($1; $2)
 			
@@ -153,16 +156,16 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 	var $3 : Text
 	
 	var $node : Text
-	var $l : Integer
+	var $parameterCount : Integer
 	
 	This:C1470.close()  // Release memory
 	
-	$l:=Count parameters:C259
+	$parameterCount:=Count parameters:C259
 	
 	Case of 
 			
 			//______________________________________________________
-		: ($l=0)
+		: ($parameterCount=0)
 			
 			This:C1470.success:=False:C215
 			This:C1470.errors.push(Current method name:C684+" -  Missing the target to load")
@@ -174,12 +177,12 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 			Case of 
 					
 					//……………………………………………………………………………………………
-				: ($l=1)
+				: ($parameterCount=1)
 					
 					$node:=DOM Parse XML variable:C720($1)
 					
 					//……………………………………………………………………………………………
-				: ($l=2)
+				: ($parameterCount=2)
 					
 					$node:=DOM Parse XML variable:C720($1; $2)
 					
@@ -217,12 +220,12 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 					Case of 
 							
 							//……………………………………………………………………………………………
-						: ($l=1)
+						: ($parameterCount=1)
 							
 							$node:=DOM Parse XML source:C719($1.platformPath)
 							
 							//……………………………………………………………………………………………
-						: ($l=2)
+						: ($parameterCount=2)
 							
 							$node:=DOM Parse XML source:C719($1.platformPath; $2)
 							
@@ -271,13 +274,13 @@ Function save
 	var $1 : Variant
 	var $2 : Boolean
 	
-	var $b : Boolean
-	var $file : Object
+	var $close : Boolean
+	var $file : 4D:C1709.File
 	
 	If (Count parameters:C259>=2)
 		
 		$file:=$1
-		$b:=$2
+		$close:=$2
 		
 	Else 
 		
@@ -290,7 +293,7 @@ Function save
 			Else 
 				
 				$file:=This:C1470.file
-				$b:=Bool:C1537($1)
+				$close:=Bool:C1537($1)
 				
 			End if 
 			
@@ -318,7 +321,7 @@ Function save
 		
 		If (Count parameters:C259>=1)
 			
-			This:C1470.__close($1)
+			This:C1470.__close($close)
 			
 		Else 
 			
@@ -506,29 +509,29 @@ Function findByName
 	
 	If (This:C1470.success)
 		
-		ARRAY TEXT:C222($aT; 0x0000)
+		ARRAY TEXT:C222($nodes; 0x0000)
 		
 		If (Count parameters:C259>=2)
 			
 			If (This:C1470.__isReference($1))
 				
-				$aT{0}:=DOM Find XML element:C864($1; $2; $aT)
+				$nodes{0}:=DOM Find XML element:C864($1; $2; $nodes)
 				
 			Else 
 				
-				$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//"+$1; $aT)
+				$nodes{0}:=DOM Find XML element:C864(This:C1470.root; "//"+$1; $nodes)
 				
 			End if 
 			
 		Else 
 			
-			$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//"+$1; $aT)
+			$nodes{0}:=DOM Find XML element:C864(This:C1470.root; "//"+$1; $nodes)
 			
 		End if 
 		
 		This:C1470.success:=Bool:C1537(OK)
 		$0:=New collection:C1472
-		ARRAY TO COLLECTION:C1563($0; $aT)
+		ARRAY TO COLLECTION:C1563($0; $nodes)
 		
 	Else 
 		
@@ -548,7 +551,7 @@ Function findByAttribute
 	
 	If (This:C1470.success)
 		
-		ARRAY TEXT:C222($aT; 0x0000)
+		ARRAY TEXT:C222($nodes; 0x0000)
 		
 		If (This:C1470.__isReference($1))
 			
@@ -557,17 +560,17 @@ Function findByAttribute
 					//______________________________________________________
 				: (Count parameters:C259=2)  // Elements with the attribute $2
 					
-					$aT{0}:=DOM Find XML element:C864($1; "//@"+$2; $aT)
+					$nodes{0}:=DOM Find XML element:C864($1; "//@"+$2; $nodes)
 					
 					//______________________________________________________
 				: (Count parameters:C259=3)  // Elements with the attribute $2 equal to $3
 					
-					$aT{0}:=DOM Find XML element:C864($1; "//[@"+$2+"=\""+$3+"\"]"; $aT)
+					$nodes{0}:=DOM Find XML element:C864($1; "//[@"+$2+"=\""+$3+"\"]"; $nodes)
 					
 					//______________________________________________________
 				: (Count parameters:C259>=4)  // Elements $2 with the attribute $3 equal to $4
 					
-					$aT{0}:=DOM Find XML element:C864($1; "//"+$2+"[@"+$3+"=\""+$4+"\"]"; $aT)
+					$nodes{0}:=DOM Find XML element:C864($1; "//"+$2+"[@"+$3+"=\""+$4+"\"]"; $nodes)
 					
 					//______________________________________________________
 				Else 
@@ -584,17 +587,17 @@ Function findByAttribute
 					//______________________________________________________
 				: (Count parameters:C259=1)  // Elements with the attribute $1
 					
-					$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//@"+$1; $aT)
+					$nodes{0}:=DOM Find XML element:C864(This:C1470.root; "//@"+$1; $nodes)
 					
 					//______________________________________________________
 				: (Count parameters:C259=2)  // Elements with the attribute $1 equal to $2
 					
-					$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//*[@"+$1+"=\""+$2+"\"]"; $aT)
+					$nodes{0}:=DOM Find XML element:C864(This:C1470.root; "//*[@"+$1+"=\""+$2+"\"]"; $nodes)
 					
 					//______________________________________________________
 				: (Count parameters:C259>=3)  // Elements $2 with the attribute $3 equal to $4
 					
-					$aT{0}:=DOM Find XML element:C864(This:C1470.root; "//"+$1+"[@"+$2+"=\""+$3+"\"]"; $aT)
+					$nodes{0}:=DOM Find XML element:C864(This:C1470.root; "//"+$1+"[@"+$2+"=\""+$3+"\"]"; $nodes)
 					
 					//______________________________________________________
 				Else 
@@ -607,7 +610,7 @@ Function findByAttribute
 		
 		This:C1470.success:=Bool:C1537(OK)
 		$0:=New collection:C1472
-		ARRAY TO COLLECTION:C1563($0; $aT)
+		ARRAY TO COLLECTION:C1563($0; $nodes)
 		
 	Else 
 		
@@ -682,8 +685,8 @@ Function childrens  // Returns the childs of a node
 	
 	$0:=New collection:C1472
 	
-	ARRAY LONGINT:C221($aL; 0x0000)
-	ARRAY TEXT:C222($aT; 0x0000)
+	ARRAY LONGINT:C221($types; 0x0000)
+	ARRAY TEXT:C222($nodes; 0x0000)
 	
 	If (Count parameters:C259>=1)
 		
@@ -691,7 +694,7 @@ Function childrens  // Returns the childs of a node
 		
 		If (This:C1470.success)
 			
-			DOM GET XML CHILD NODES:C1081($1; $aL; $aT)
+			DOM GET XML CHILD NODES:C1081($1; $types; $nodes)
 			
 		Else 
 			
@@ -701,15 +704,15 @@ Function childrens  // Returns the childs of a node
 		
 	Else 
 		
-		DOM GET XML CHILD NODES:C1081(This:C1470.root; $aL; $aT)
+		DOM GET XML CHILD NODES:C1081(This:C1470.root; $types; $nodes)
 		
 	End if 
 	
-	For ($i; 1; Size of array:C274($aL); 1)
+	For ($i; 1; Size of array:C274($types); 1)
 		
-		If ($aL{$i}=XML ELEMENT:K45:20)
+		If ($types{$i}=XML ELEMENT:K45:20)
 			
-			$0.push($aT{$i})
+			$0.push($nodes{$i})
 			
 		End if 
 	End for 
@@ -723,8 +726,8 @@ Function descendants  // Returns the descendants of a node
 	
 	$0:=New collection:C1472
 	
-	ARRAY LONGINT:C221($aL; 0x0000)
-	ARRAY TEXT:C222($aT; 0x0000)
+	ARRAY LONGINT:C221($types; 0x0000)
+	ARRAY TEXT:C222($nodes; 0x0000)
 	
 	If (Count parameters:C259>=1)
 		
@@ -732,7 +735,7 @@ Function descendants  // Returns the descendants of a node
 		
 		If (This:C1470.success)
 			
-			DOM GET XML CHILD NODES:C1081($1; $aL; $aT)
+			DOM GET XML CHILD NODES:C1081($1; $types; $nodes)
 			
 		Else 
 			
@@ -742,19 +745,31 @@ Function descendants  // Returns the descendants of a node
 		
 	Else 
 		
-		DOM GET XML CHILD NODES:C1081(This:C1470.root; $aL; $aT)
+		DOM GET XML CHILD NODES:C1081(This:C1470.root; $types; $nodes)
 		
 	End if 
 	
-	For ($i; 1; Size of array:C274($aL); 1)
+	For ($i; 1; Size of array:C274($types); 1)
 		
-		If ($aL{$i}=XML ELEMENT:K45:20)
+		If ($types{$i}=XML ELEMENT:K45:20)
 			
-			$0.push($aT{$i})
-			$0.combine(This:C1470.descendants($aT{$i}))
+			$0.push($nodes{$i})
+			$0.combine(This:C1470.descendants($nodes{$i}))
 			
 		End if 
 	End for 
+	
+/*———————————————————————————————————————————————————————————*/
+Function nextSibling
+	var $0; $1 : Text
+	
+	$0:=DOM Get next sibling XML element:C724($1)
+	
+/*———————————————————————————————————————————————————————————*/
+Function previousSibling
+	var $0; $1 : Text
+	
+	$0:=DOM Get previous sibling XML element:C924($1)
 	
 /*———————————————————————————————————————————————————————————*/
 Function getName
@@ -952,8 +967,8 @@ Function setAttribute  // Set a node attribute
 	
 	If (This:C1470.success)
 		
-		DOM SET XML ATTRIBUTE:C866($1; \
-			$2; $3)
+		DOM SET XML ATTRIBUTE:C866($1; $2; $3)
+		
 		This:C1470.success:=Bool:C1537(OK)
 		
 	Else 

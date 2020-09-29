@@ -15,15 +15,34 @@ Class constructor
 Function lep
 	var $0 : Object  // {success,out,error}
 	var $1 : Text  // Command
-	var $2 : Text  // In
+	var $2 : Variant  // In
 	
 	var $cmd; $error; $in; $out : Text
 	
-	If (Count parameters:C259>=2)
-		
-		$in:=$2
-		
-	End if 
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259<2)
+			
+			// <NOTHING MORE TO DO>
+			
+			//______________________________________________________
+		: (Value type:C1509($2)=Is text:K8:3)
+			
+			$in:=$2
+			
+			//______________________________________________________
+		: (Value type:C1509($2)=Is collection:K8:32)
+			
+			$in:=$2.join(" ")
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215; "$2 must be a text or a collection")
+			
+			//______________________________________________________
+	End case 
 	
 	$0:=New object:C1471(\
 		"success"; False:C215)

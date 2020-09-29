@@ -1,4 +1,3 @@
-
 Class constructor
 	
 Function homeFolder
@@ -36,16 +35,19 @@ Function launch
 	LAUNCH EXTERNAL PROCESS:C811($cmd; $in; $out; $err)
 	
 	If (Length:C16($err)=0)
+		
 		If (Position:C15("ERROR:"; $out)>0)
+			
 			$err:=$out
 			$out:=""
+			
 		End if 
 	End if 
 	
 	$0:=New object:C1471(\
 		"out"; $out; \
 		"error"; $err; \
-		"success"; (OK=1) & (Length:C16($err)=0))
+		"success"; Bool:C1537(OK) & (Length:C16($err)=0))
 	
 	
 Function launchAsync
@@ -76,11 +78,10 @@ Function launchAsync
 	End case 
 	
 	SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "false")
-	
 	LAUNCH EXTERNAL PROCESS:C811($cmd; $in; $out; $err)
 	
 	$0:=New object:C1471(\
 		"out"; $out; \
 		"error"; $err; \
-		"success"; (OK=1) & (Length:C16($err)=0))
+		"success"; Bool:C1537(OK) & (Length:C16($err)=0))
 	

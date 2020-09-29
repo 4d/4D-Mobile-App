@@ -4,6 +4,7 @@ C_OBJECT:C1216(<>testData)
 C_OBJECT:C1216(object; $0)
 C_VARIANT:C1683(object; $1)
 
+
 C_OBJECT:C1216(removeAllEntities; $1)
 
 //_______________________________________
@@ -27,7 +28,7 @@ C_OBJECT:C1216(_wip_Xcode; $0)
 C_TEXT:C284(_wip_Xcode; $1)
 C_OBJECT:C1216(_wip_Xcode; $2)
 
-C_OBJECT:C1216(INIT; $1)
+C_OBJECT:C1216(Init; $1)
 
 C_OBJECT:C1216(CALL_MAIN_PROCESS; $1)
 C_TEXT:C284(CALL_MAIN_PROCESS; $2)

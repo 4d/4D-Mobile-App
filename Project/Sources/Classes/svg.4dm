@@ -335,6 +335,9 @@ Function dimensions
 	var $3 : Text
 	
 	var $node; $t : Text
+	var $parameterCount : Integer
+	
+	$parameterCount:=Count parameters:C259
 	
 	$node:=This:C1470.__target()
 	DOM GET XML ELEMENT NAME:C730($node; $t)
@@ -344,28 +347,28 @@ Function dimensions
 		Case of 
 				
 				//______________________________________________________
-			: (Count parameters:C259=0)
+			: ($parameterCount=0)
 				
 				DOM SET XML ATTRIBUTE:C866($node; \
 					"width"; "auto"; \
 					"height"; "auto")
 				
 				//______________________________________________________
-			: (Count parameters:C259>=3)
+			: ($parameterCount>=3)
 				
 				DOM SET XML ATTRIBUTE:C866($node; \
 					"width"; Choose:C955($1=Null:C1517; "auto"; String:C10($1; "&xml")+String:C10($3)); \
 					"height"; Choose:C955($2=Null:C1517; "auto"; String:C10($2; "&xml")+String:C10($3)))
 				
 				//______________________________________________________
-			: (Count parameters:C259>=2)
+			: ($parameterCount>=2)
 				
 				DOM SET XML ATTRIBUTE:C866($node; \
 					"width"; Choose:C955($1=Null:C1517; "auto"; String:C10($1; "&xml")); \
 					"height"; Choose:C955($2=Null:C1517; "auto"; String:C10($2; "&xml")))
 				
 				//______________________________________________________
-			: (Count parameters:C259>=1)
+			: ($parameterCount>=1)
 				
 				DOM SET XML ATTRIBUTE:C866($node; \
 					"width"; Choose:C955($1=Null:C1517; "auto"; String:C10($1; "&xml")))
@@ -1108,14 +1111,17 @@ Function textArea
 Function getPicture
 	var $0 : Picture
 	var $1 : Variant
-	var $2 : Boolean
+	var $2 : Boolean  // Don't release memory
 	
 	var $p : Picture
+	var $parameterCount : Integer
+	
+	$parameterCount:=Count parameters:C259
 	
 	Case of 
 			
 			//______________________________________________________
-		: (Count parameters:C259>=2)
+		: ($parameterCount>=2)
 			
 			SVG EXPORT TO PICTURE:C1017(This:C1470.root; $p; Num:C11($1))
 			
@@ -1127,7 +1133,7 @@ Function getPicture
 			End if 
 			
 			//______________________________________________________
-		: (Count parameters:C259>=1)
+		: ($parameterCount>=1)
 			
 			If (Value type:C1509($1)=Is boolean:K8:9)
 				
@@ -1181,6 +1187,40 @@ Function getPicture
 	$0:=$p
 	
 /*———————————————————————————————————————————————————————————*/
+Function saveText
+	var $1 : 4D:C1709.File
+	var $2 : Boolean  // Don't release memory
+	
+	If (Count parameters:C259=2)
+		
+		Super:C1706.save($1; $2)
+		
+	Else 
+		
+		Super:C1706.save($1)
+		
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
+Function savePicture
+	var $1 : 4D:C1709.File
+	var $2 : Boolean  // Don't release memory
+	
+	var $p : Picture
+	
+	If (Count parameters:C259=2)
+		
+		$p:=This:C1470.getPicture($2)
+		
+	Else 
+		
+		$p:=This:C1470.getPicture()
+		
+	End if 
+	
+	WRITE PICTURE FILE:C680($1.platformPath; $p; $1.extension)
+	
+/*———————————————————————————————————————————————————————————*/
 Function styleSheet
 	var $1 : 4D:C1709.File
 	
@@ -1227,6 +1267,24 @@ Function visible
 	Else 
 		
 		This:C1470.setAttribute("visibility"; Choose:C955($1; "visible"; "hidden"))
+		
+	End if 
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function class
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
+	
+	If (Count parameters:C259=2)
+		
+		Super:C1706.setAttribute($2; "class"; $1)
+		
+	Else 
+		
+		Super:C1706.setAttribute(This:C1470.__target(); "class"; $1)
 		
 	End if 
 	
@@ -1331,12 +1389,3 @@ Function __target
 			
 			//______________________________________________________
 	End case 
-	
-/*——————————————————————————
-_DEPRECATED_
-——————————————————————————*/
-Function attributes
-	var $1 : Variant
-	var $2 : Variant
-	
-	This:C1470.setAttributes($1; $2)

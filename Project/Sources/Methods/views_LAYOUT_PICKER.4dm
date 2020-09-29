@@ -8,22 +8,27 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_TEXT:C284($1)
-
-C_BLOB:C604($x)
-C_BOOLEAN:C305($success)
-C_LONGINT:C283($i; $indx)
-C_PICTURE:C286($p)
-C_TEXT:C284($dom; $root; $t; $tDefault)
-C_OBJECT:C1216($archive; $error; $folderComponent; $folderDatabase; $ƒ; $o)
-C_OBJECT:C1216($oManifest; $oPicker; $pathTemplate; $str; $svg)
-C_COLLECTION:C1488($c)
-
-ARRAY TEXT:C222($tTxt_forms; 0)
+var $1 : Text
 
 If (False:C215)
 	C_TEXT:C284(views_LAYOUT_PICKER; $1)
 End if 
+
+var $default; $node; $root; $t : Text
+var $p : Picture
+var $success : Boolean
+var $i; $indx : Integer
+var $x : Blob
+var $error; $ƒ; $manifest; $o; $picker; $str : Object
+var $c : Collection
+
+var $template : 4D:C1709.Document
+var $folder; $internal; $user : 4D:C1709.Folder
+var $file : 4D:C1709.File
+var $archive : 4D:C1709.ZipArchive
+var $svg : cs:C1710.svg
+
+ARRAY TEXT:C222($formsArray; 0)
 
 // ----------------------------------------------------
 // Initialisations
@@ -44,49 +49,49 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$str:=str
 	
 	// Load internal templates
-	$folderComponent:=path[$ƒ.type+"Forms"]()
+	$internal:=path[$ƒ.type+"Forms"]()
 	
 	// Load the global manifest
-	$oManifest:=JSON Parse:C1218($folderComponent.file("manifest.json").getText())
-	$tDefault:=String:C10($oManifest.default)
+	$manifest:=JSON Parse:C1218($internal.file("manifest.json").getText())
+	$default:=String:C10($manifest.default)
 	
-	For each ($o; $folderComponent.folders())
+	For each ($folder; $internal.folders())
 		
 		$success:=True:C214
 		
-		For each ($t; $oManifest.mandatory) While ($success)
+		For each ($t; $manifest.mandatory) While ($success)
 			
-			$success:=$folderComponent.folder($o.name).file($t).exists
+			$success:=$internal.folder($folder.name).file($t).exists
 			
 		End for each 
 		
 		If ($success)
 			
-			$ƒ.forms.push($o.fullName)
+			$ƒ.forms.push($folder.fullName)
 			
 		End if 
 	End for each 
 	
 	// Search for templates into the host database
-	$folderDatabase:=path["host"+$ƒ.type+"Forms"]()
+	$user:=path["host"+$ƒ.type+"Forms"]()
 	
-	If ($folderDatabase.exists)
+	If ($user.exists)
 		
 		$c:=New collection:C1472
 		
-		For each ($o; $folderDatabase.folders())
+		For each ($folder; $user.folders())
 			
 			$success:=True:C214
 			
-			For each ($t; $oManifest.mandatory) While ($success)
+			For each ($t; $manifest.mandatory) While ($success)
 				
-				$success:=$folderDatabase.folder($o.name).file($t).exists
+				$success:=$user.folder($folder.name).file($t).exists
 				
 			End for each 
 			
 			If ($success)
 				
-				$c.push("/"+$o.fullName)
+				$c.push("/"+$folder.fullName)
 				
 			End if 
 		End for each 
@@ -99,7 +104,7 @@ START HIDING ERRORS
 			$error:=err.hide()
 			
 			// Add downloaded templates
-			For each ($o; $folderDatabase.files().query("extension = :1"; SHARED.archiveExtension))
+			For each ($o; $user.files().query("extension = :1"; SHARED.archiveExtension))
 				
 				$archive:=ZIP Read archive:C1637($o)
 				
@@ -107,7 +112,7 @@ START HIDING ERRORS
 					
 					$success:=True:C214
 					
-					For each ($t; $oManifest.mandatory) While ($success)
+					For each ($t; $manifest.mandatory) While ($success)
 						
 						$success:=$archive.root.file($t).exists
 						
@@ -115,8 +120,8 @@ START HIDING ERRORS
 					
 					If ($success)
 						
-						$oManifest:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
-						$success:=($oManifest#Null:C1517)
+						$manifest:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
+						$success:=($manifest#Null:C1517)
 						
 						If ($success)
 							
@@ -146,7 +151,7 @@ STOP HIDING ERRORS
 	// Sorting will put the downloaded models first
 	$ƒ.forms:=$ƒ.forms.orderBy()
 	
-	COLLECTION TO ARRAY:C1562($ƒ.forms; $tTxt_forms)
+	COLLECTION TO ARRAY:C1562($ƒ.forms; $formsArray)
 	
 Else 
 	
@@ -156,10 +161,10 @@ End if
 
 // ----------------------------------------------------
 // Find the default template & keep its index
-$tTxt_forms{0}:=$tDefault
-$tTxt_forms:=Find in array:C230($tTxt_forms; $tTxt_forms{0})
+$formsArray{0}:=$default
+$formsArray:=Find in array:C230($formsArray; $formsArray{0})
 
-$oPicker:=New object:C1471(\
+$picker:=New object:C1471(\
 "action"; "forms"; \
 "pictures"; New collection:C1472; \
 "pathnames"; New collection:C1472; \
@@ -183,34 +188,34 @@ $oPicker:=New object:C1471(\
 If (FEATURE.with("resourcesBrowser"))
 	
 /* Hot zones definition */
-	$oPicker.hotZones:=New collection:C1472
+	$picker.hotZones:=New collection:C1472
 	
 	// github icon
-	$oPicker.hotZones.push(New object:C1471(\
+	$picker.hotZones.push(New object:C1471(\
 		"left"; 8; \
 		"top"; 8; \
 		"width"; 16; \
 		"height"; 16; \
-		"target"; $oPicker.infos; \
+		"target"; $picker.infos; \
 		"formula"; Formula:C1597(tmpl_INFOS); \
 		"cursor"; 9000; \
 		"tips"; "accessTheGithubRepository"))
 	
 /* Contextual menu */
-	$oPicker.contextual:=New object:C1471(\
-		"target"; $oPicker.infos; \
+	$picker.contextual:=New object:C1471(\
+		"target"; $picker.infos; \
 		"formula"; Formula:C1597(tmpl_CONTEXTUAL))
 	
 End if 
 
-$oPicker.vOffset:=155  // Offset of the background button
+$picker.vOffset:=155  // Offset of the background button
 
 // List of forms used in this project
-$oPicker.marked:=New collection:C1472
+$picker.marked:=New collection:C1472
 
 For each ($t; Form:C1466[$ƒ.type])
 	
-	$oPicker.marked.push(Form:C1466[$ƒ.type][$t].form)
+	$picker.marked.push(Form:C1466[$ƒ.type][$t].form)
 	
 End for each 
 
@@ -219,84 +224,82 @@ START HIDING ERRORS
 ***********************/
 $error:=err.hide()
 
-For ($i; 1; Size of array:C274($tTxt_forms); 1)
+For ($i; 1; Size of array:C274($formsArray); 1)
 	
 	CLEAR VARIABLE:C89($p)
 	
-	If ($tTxt_forms{$i}[[1]]="/")
+	If ($formsArray{$i}[[1]]="/")
 		
-		$t:=Delete string:C232($tTxt_forms{$i}; 1; 1)
+		$t:=Delete string:C232($formsArray{$i}; 1; 1)
 		
 		If (FEATURE.with("resourcesBrowser"))
 			
-			If (Path to object:C1547($tTxt_forms{$i}).extension=SHARED.archiveExtension)  // Archive
+			If (Path to object:C1547($formsArray{$i}).extension=SHARED.archiveExtension)  // Archive
 				
 				// Downloaded template
-				$pathTemplate:=$folderDatabase.file($t)
+				$template:=$user.file($t)
 				
 			Else 
 				
 				// Database template
-				$pathTemplate:=$folderDatabase.folder($t)
+				$template:=$user.folder($t)
 				
 			End if 
 			
 		Else 
 			
 			// Database template
-			$pathTemplate:=$folderDatabase.folder($t)
+			$template:=$user.folder($t)
 			
 		End if 
 		
 	Else 
 		
 		// Internal template
-		$pathTemplate:=$folderComponent.folder($tTxt_forms{$i})
+		$template:=$internal.folder($formsArray{$i})
 		
 	End if 
 	
-	If ($pathTemplate.extension=SHARED.archiveExtension)  // Archive
+	If ($template.extension=SHARED.archiveExtension)  // Archive
 		
-		$archive:=ZIP Read archive:C1637($pathTemplate)
+		$archive:=ZIP Read archive:C1637($template)
 		
 		If ($archive#Null:C1517)
 			
 			// Create image
-			$svg:=svg().setDimensions($ƒ.cell.width; $ƒ.cell.height)
-			
-			//$svg.rect(0;0;$ƒ.cell.width;$ƒ.cell.height).setStroke("grey")
+			$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
 			
 			// Put icon
 			$x:=$archive.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x; $p)
 			CLEAR VARIABLE:C89($x)
-			$svg.embedPicture($p; -8)
+			$svg.embedPicture($p; "root").position(-8)
 			
 			// Get the manifest
 			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
 			
 			// Put text
-			$svg.textArea($o.name; 0; $ƒ.cell.height-20)\
-				.setDimensions($ƒ.cell.width)\
-				.setFill("dimgray")\
-				.setAttribute("text-align"; "center")
+			$svg.textArea($o.name; "root").position(0; $ƒ.cell.height-20)\
+				.dimensions($ƒ.cell.width)\
+				.fill("dimgray")\
+				.textAlignment(Align center:K42:3)
 			
 			// Mark if used
-			$o.used:=($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
+			$o.used:=($picker.marked.indexOf($formsArray{$i})#-1)
 			
 			If ($o.used)
 				
-				$svg.setAttribute("font-weight"; "bold")
+				$svg.fontStyle(Bold:K14:2)
 				
 			End if 
 			
 			// Add github icon
-			$svg.embedPicture($ƒ.github; 1; 4)  //.setDimensions(16)
+			$svg.embedPicture($ƒ.github; "root").position(1; 4)
 			
-			$oPicker.pictures.push($svg.getPicture())
-			$oPicker.pathnames.push($tTxt_forms{$i})
-			$oPicker.helpTips.push($str.setText("tipsTemplate").localized(New collection:C1472(String:C10($pathTemplate.fullName); String:C10($o.organization.login); String:C10($o.version))))
-			$oPicker.infos.push($o)
+			$picker.pictures.push($svg.getPicture())
+			$picker.pathnames.push($formsArray{$i})
+			$picker.helpTips.push($str.setText("tipsTemplate").localized(New collection:C1472(String:C10($template.fullName); String:C10($o.organization.login); String:C10($o.version))))
+			$picker.infos.push($o)
 			
 		Else 
 			
@@ -306,23 +309,21 @@ For ($i; 1; Size of array:C274($tTxt_forms); 1)
 		
 	Else 
 		
-		$pathTemplate:=$pathTemplate.file("template.svg")
+		$template:=$template.file("template.svg")
 		
-		If ($pathTemplate.exists)
+		If ($template.exists)
 			
-			If ($pathTemplate.parent.file("layoutIconx2.png").exists)  // Use media
+			If ($template.parent.file("layoutIconx2.png").exists)  // Use media
 				
 				// Create image
-				$svg:=svg.setDimensions($ƒ.cell.width; $ƒ.cell.height)
-				
-				//$svg.rect(0;0;$ƒ.cell.width;$ƒ.cell.height).setStroke("red")
+				$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
 				
 				// Media
-				READ PICTURE FILE:C678($pathTemplate.parent.file("layoutIconx2.png").platformPath; $p)
-				$svg.embedPicture($p; -8; 0)
+				READ PICTURE FILE:C678($template.parent.file("layoutIconx2.png").platformPath; $p)
+				$svg.embedPicture($p; "root").position(-8)
 				
 				// Title
-				$t:=$tTxt_forms{$i}
+				$t:=$formsArray{$i}
 				
 				If ($t[[1]]="/")  // Database template
 					
@@ -331,15 +332,15 @@ For ($i; 1; Size of array:C274($tTxt_forms); 1)
 				End if 
 				
 				// Put text
-				$svg.textArea($pathTemplate.parent.name; 0; $ƒ.cell.height-20)\
-					.setDimensions($ƒ.cell.width)\
-					.setFill("dimgray")\
-					.setAttribute("text-align"; "center")
+				$svg.textArea($template.parent.name; "root").position(0; $ƒ.cell.height-20)\
+					.dimensions($ƒ.cell.width)\
+					.fill("dimgray")\
+					.textAlignment(Align center:K42:3)
 				
 				// Mark if used
-				If ($oPicker.marked.indexOf($tTxt_forms{$i})#-1)
+				If ($picker.marked.indexOf($formsArray{$i})#-1)
 					
-					$svg.setAttribute("font-weight"; "bold")
+					$svg.fontStyle(Bold:K14:2)
 					
 				End if 
 				
@@ -347,44 +348,41 @@ For ($i; 1; Size of array:C274($tTxt_forms); 1)
 				
 			Else   // Create from the template
 				
-				PROCESS 4D TAGS:C816($pathTemplate.getText(); $t)
+				PROCESS 4D TAGS:C816($template.getText(); $t)
 				
-				$root:=DOM Parse XML variable:C720($t)
+				$svg:=cs:C1710.svg.new().parse($t)
 				
-				If (OK=1)
+				If ($svg.success)
 					
 					// Add the css reference
-					If (path.templates().file("template.css").exists)
+					$file:=path.templates().file("template.css")
+					
+					If ($file.exists)
 						
-						//<?xml-stylesheet href="file://localhost/Users/vdl/Desktop/monstyle.css" type="text/css"?>
-						$t:="xml-stylesheet type=\"text/css\" href=\""\
-							+"file://localhost"+Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16); *)+"templates/template.css"\
-							+"\""
-						
-						$dom:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088($root); XML processing instruction:K45:9; $t)
+						$svg.styleSheet($file)
 						
 					End if 
 					
-					SVG EXPORT TO PICTURE:C1017($root; $p; Own XML data source:K45:18)
+					$p:=$svg.getPicture()
 					CREATE THUMBNAIL:C679($p; $p; $ƒ.cell.width; $ƒ.cell.height)
 					
 				End if 
 			End if 
 			
-			If ($i=$tTxt_forms)
+			If ($i=$formsArray)
 				
 				// Put the default template at first position
-				$oPicker.pictures.insert(0; $p)
-				$oPicker.pathnames.insert(0; $tTxt_forms{$i})
-				$oPicker.helpTips.insert(0; Get localized string:C991("defaultTemplate"))
-				$oPicker.infos.insert(0; Null:C1517)
+				$picker.pictures.insert(0; $p)
+				$picker.pathnames.insert(0; $formsArray{$i})
+				$picker.helpTips.insert(0; Get localized string:C991("defaultTemplate"))
+				$picker.infos.insert(0; Null:C1517)
 				
 			Else 
 				
-				$oPicker.pictures.push($p)
-				$oPicker.pathnames.push($tTxt_forms{$i})
-				$oPicker.helpTips.push("")
-				$oPicker.infos.push(Null:C1517)
+				$picker.pictures.push($p)
+				$picker.pathnames.push($formsArray{$i})
+				$picker.helpTips.push("")
+				$picker.infos.push(Null:C1517)
 				
 			End if 
 			
@@ -404,17 +402,17 @@ $error.show()
 If (FEATURE.with("resourcesBrowser"))
 	
 	// Put an "explore" button
-	$svg:=svg.setDimensions($ƒ.cell.width; $ƒ.cell.height)
+	$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
 	
 	// Media
 	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
-	$svg.embedPicture($p; 20; 30).setDimensions(96)
+	$svg.embedPicture($p).position(20; 30).dimensions(96)
 	
 	// Put text
-	//$svg.textArea(Get localized string("explore");0;$ƒ.cell.height-20)\
-																.setDimensions($ƒ.cell.width)\
-																.setFill("dimgray")\
-																.setAttribute("text-align";"center")
+	//$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\
+		.dimensions($ƒ.cell.width)\
+		.fill("dimgray")\
+		.textAlignment(Align center)
 	
 	// Put in second position
 	//$oPicker.pictures.insert(1;$svg.getPicture())
@@ -423,22 +421,19 @@ If (FEATURE.with("resourcesBrowser"))
 	//$oPicker.infos.push(Null)
 	
 	// Put at the end
-	$oPicker.pictures.push($svg.getPicture())
-	$oPicker.pathnames.push(Null:C1517)
-	$oPicker.helpTips.push($str.setText("downloadMoreResources").localized($ƒ.type))
-	$oPicker.infos.push(Null:C1517)
+	$picker.pictures.push($svg.getPicture())
+	$picker.pathnames.push(Null:C1517)
+	$picker.helpTips.push($str.setText("downloadMoreResources").localized($ƒ.type))
+	$picker.infos.push(Null:C1517)
 	
 End if 
 
 // Add 1 because the widget work with arrays
-$indx:=$oPicker.pathnames.indexOf(String:C10(Form:C1466[$ƒ.type][$ƒ.dialog.$.tableNum()].form))+1
-$oPicker.item:=Choose:C955($indx=0; 1; $indx)
+$indx:=$picker.pathnames.indexOf(String:C10(Form:C1466[$ƒ.type][$ƒ.dialog.$.tableNum()].form))+1
+$picker.item:=Choose:C955($indx=0; 1; $indx)
 
 // Display selector
-$ƒ.dialog.form.call(New collection:C1472("pickerShow"; $oPicker))
+$ƒ.dialog.form.call(New collection:C1472("pickerShow"; $picker))
 
-// ----------------------------------------------------
-// Return
-// <NONE>
 // ----------------------------------------------------
 // End
