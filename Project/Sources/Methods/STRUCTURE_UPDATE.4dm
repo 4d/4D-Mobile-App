@@ -29,7 +29,7 @@ Else
 	
 End if 
 
-$dataModel:=PROJECT.project.dataModel
+$dataModel:=PROJECT.dataModel
 
 $context:=$form.form
 $currentTable:=$context.currentTable
