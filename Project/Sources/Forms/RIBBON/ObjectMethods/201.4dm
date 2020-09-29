@@ -93,7 +93,7 @@ Case of
 					//______________________________________________________
 				: ($menu.choice="_showDevicesWindow")
 					
-					OPEN URL:C673("xcdevice://showDevicesWindow"; *)
+					cs:C1710.Xcode.new().showDevicesWindow()
 					
 					//______________________________________________________
 				Else 

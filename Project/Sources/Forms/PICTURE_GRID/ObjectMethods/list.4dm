@@ -139,11 +139,7 @@ Case of
 				
 				If (Form:C1466.pathnames[$index-1]=Null:C1517)
 					
-					If (FEATURE.with("resourcesBrowser"))
-						
-						OBJECT SET HELP TIP:C1181(*; $event.objectName; Get localized string:C991("findAndDownloadMoreResources"))
-						
-					End if 
+					OBJECT SET HELP TIP:C1181(*; $event.objectName; Get localized string:C991("findAndDownloadMoreResources"))
 					
 				Else 
 					

@@ -96,53 +96,50 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			End if 
 		End for each 
 		
-		If (FEATURE.with("resourcesBrowser"))
-			
 /***********************
 START HIDING ERRORS
 ***********************/
-			$error:=err.hide()
+		$error:=err.hide()
+		
+		// Add downloaded templates
+		For each ($o; $user.files().query("extension = :1"; SHARED.archiveExtension))
 			
-			// Add downloaded templates
-			For each ($o; $user.files().query("extension = :1"; SHARED.archiveExtension))
+			$archive:=ZIP Read archive:C1637($o)
+			
+			If ($archive#Null:C1517)
 				
-				$archive:=ZIP Read archive:C1637($o)
+				$success:=True:C214
 				
-				If ($archive#Null:C1517)
+				For each ($t; $manifest.mandatory) While ($success)
 					
-					$success:=True:C214
+					$success:=$archive.root.file($t).exists
 					
-					For each ($t; $manifest.mandatory) While ($success)
-						
-						$success:=$archive.root.file($t).exists
-						
-					End for each 
+				End for each 
+				
+				If ($success)
+					
+					$manifest:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
+					$success:=($manifest#Null:C1517)
 					
 					If ($success)
 						
-						$manifest:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
-						$success:=($manifest#Null:C1517)
+						$success:=String:C10(JSON Parse:C1218($archive.root.file("manifest.json").getText()).type)=($ƒ.type+"form")
 						
 						If ($success)
 							
-							$success:=String:C10(JSON Parse:C1218($archive.root.file("manifest.json").getText()).type)=($ƒ.type+"form")
+							$c.push("/"+$o.fullName)
 							
-							If ($success)
-								
-								$c.push("/"+$o.fullName)
-								
-							End if 
 						End if 
 					End if 
 				End if 
-			End for each 
-			
+			End if 
+		End for each 
+		
 /***********************
 STOP HIDING ERRORS
 ***********************/
-			$error.show()
-			
-		End if 
+		$error.show()
+		
 		
 		$ƒ.forms.combine($c)
 		
@@ -185,28 +182,25 @@ $picker:=New object:C1471(\
 "prompt"; $str.setText("selectAFormTemplateToUseAs").localized($ƒ.type); \
 "selector"; $ƒ.type)
 
-If (FEATURE.with("resourcesBrowser"))
-	
 /* Hot zones definition */
-	$picker.hotZones:=New collection:C1472
-	
-	// github icon
-	$picker.hotZones.push(New object:C1471(\
-		"left"; 8; \
-		"top"; 8; \
-		"width"; 16; \
-		"height"; 16; \
-		"target"; $picker.infos; \
-		"formula"; Formula:C1597(tmpl_INFOS); \
-		"cursor"; 9000; \
-		"tips"; "accessTheGithubRepository"))
-	
+$picker.hotZones:=New collection:C1472
+
+// github icon
+$picker.hotZones.push(New object:C1471(\
+"left"; 8; \
+"top"; 8; \
+"width"; 16; \
+"height"; 16; \
+"target"; $picker.infos; \
+"formula"; Formula:C1597(tmpl_INFOS); \
+"cursor"; 9000; \
+"tips"; "accessTheGithubRepository"))
+
 /* Contextual menu */
-	$picker.contextual:=New object:C1471(\
-		"target"; $picker.infos; \
-		"formula"; Formula:C1597(tmpl_CONTEXTUAL))
-	
-End if 
+$picker.contextual:=New object:C1471(\
+"target"; $picker.infos; \
+"formula"; Formula:C1597(tmpl_CONTEXTUAL))
+
 
 $picker.vOffset:=155  // Offset of the background button
 
@@ -232,19 +226,10 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		
 		$t:=Delete string:C232($formsArray{$i}; 1; 1)
 		
-		If (FEATURE.with("resourcesBrowser"))
+		If (Path to object:C1547($formsArray{$i}).extension=SHARED.archiveExtension)  // Archive
 			
-			If (Path to object:C1547($formsArray{$i}).extension=SHARED.archiveExtension)  // Archive
-				
-				// Downloaded template
-				$template:=$user.file($t)
-				
-			Else 
-				
-				// Database template
-				$template:=$user.folder($t)
-				
-			End if 
+			// Downloaded template
+			$template:=$user.file($t)
 			
 		Else 
 			
@@ -399,34 +384,31 @@ STOP HIDING ERRORS
 ***********************/
 $error.show()
 
-If (FEATURE.with("resourcesBrowser"))
-	
-	// Put an "explore" button
-	$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
-	
-	// Media
-	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
-	$svg.embedPicture($p).position(20; 30).dimensions(96)
-	
-	// Put text
-	//$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\
+// Put an "explore" button
+$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
+
+// Media
+READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
+$svg.embedPicture($p).position(20; 30).dimensions(96)
+
+// Put text
+//$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\
 		.dimensions($ƒ.cell.width)\
 		.fill("dimgray")\
 		.textAlignment(Align center)
-	
-	// Put in second position
-	//$oPicker.pictures.insert(1;$svg.getPicture())
-	//$oPicker.pathnames.insert(1;Null)
-	//$oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($ƒ.type))
-	//$oPicker.infos.push(Null)
-	
-	// Put at the end
-	$picker.pictures.push($svg.getPicture())
-	$picker.pathnames.push(Null:C1517)
-	$picker.helpTips.push($str.setText("downloadMoreResources").localized($ƒ.type))
-	$picker.infos.push(Null:C1517)
-	
-End if 
+
+// Put in second position
+//$oPicker.pictures.insert(1;$svg.getPicture())
+//$oPicker.pathnames.insert(1;Null)
+//$oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($ƒ.type))
+//$oPicker.infos.push(Null)
+
+// Put at the end
+$picker.pictures.push($svg.getPicture())
+$picker.pathnames.push(Null:C1517)
+$picker.helpTips.push($str.setText("downloadMoreResources").localized($ƒ.type))
+$picker.infos.push(Null:C1517)
+
 
 // Add 1 because the widget work with arrays
 $indx:=$picker.pathnames.indexOf(String:C10(Form:C1466[$ƒ.type][$ƒ.dialog.$.tableNum()].form))+1

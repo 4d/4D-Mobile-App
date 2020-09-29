@@ -105,13 +105,13 @@ FEATURE.delivered(112225; 1830)  // Select/install/use custom templates
 /* _____________
 18R4
 _____________*/
-FEATURE.delivered(113016)  // Svg improvement in forms section
-FEATURE.delivered(107526)  // Push Notifications
+FEATURE.delivered(113016; 1840)  // Svg improvement in forms section
+FEATURE.delivered(107526; 1840)  // Push Notifications
 
 /* _____________
 18R5
 _____________*/
-FEATURE.delivered(117618)  // Deep Linking
+FEATURE.delivered(117618; 1850)  // Deep Linking
 
 /* _____________
 18R6
@@ -250,7 +250,6 @@ End if
 ALIAS
 _____________*/
 FEATURE.alias("newViewUI"; 113016)
-FEATURE.alias("resourcesBrowser"; 112225)
 FEATURE.alias("pushNotification"; 107526)
 FEATURE.alias("deepLinking"; 117618)
 FEATURE.alias("moreRelations"; 117601)

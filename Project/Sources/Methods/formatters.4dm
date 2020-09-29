@@ -179,42 +179,39 @@ Case of
 					End if 
 				End for each 
 				
-				If (FEATURE.with("resourcesBrowser"))
+				$errors:=err.hide()
+				
+				For each ($oFormatter; $oResources.files().query("extension = :1"; SHARED.archiveExtension))
 					
-					$errors:=err.hide()
+					$archive:=ZIP Read archive:C1637($oFormatter)
 					
-					For each ($oFormatter; $oResources.files().query("extension = :1"; SHARED.archiveExtension))
+					$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
+					
+					If ($o.type#Null:C1517)
 						
-						$archive:=ZIP Read archive:C1637($oFormatter)
-						
-						$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
-						
-						If ($o.type#Null:C1517)
+						If (Value type:C1509($o.type)=Is collection:K8:32)
 							
-							If (Value type:C1509($o.type)=Is collection:K8:32)
+							If ($o.type.indexOf($c[$oIN.type])#-1)
 								
-								If ($o.type.indexOf($c[$oIN.type])#-1)
-									
-									$oOUT.formatters.push(New object:C1471(\
-										"name"; $oFormatter.name))
-									
-								End if 
+								$oOUT.formatters.push(New object:C1471(\
+									"name"; $oFormatter.name))
 								
-							Else 
+							End if 
+							
+						Else 
+							
+							If ($o.type=$c[$oIN.type])
 								
-								If ($o.type=$c[$oIN.type])
-									
-									$oOUT.formatters.push(New object:C1471(\
-										"name"; $oFormatter.name))
-									
-								End if 
+								$oOUT.formatters.push(New object:C1471(\
+									"name"; $oFormatter.name))
+								
 							End if 
 						End if 
-					End for each 
-					
-					$errors.show()
-					
-				End if 
+					End if 
+				End for each 
+				
+				$errors.show()
+				
 			End if 
 			
 		Else 

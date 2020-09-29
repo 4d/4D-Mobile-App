@@ -705,29 +705,6 @@ Case of
 		VIEWS_Handler(New object:C1471(\
 			"action"; "scroll-table"; \
 			"direction"; Choose:C955($e.objectName=$form.tableButtonPrevious.name; "previous"; "next")))
-		
-		//==================================================
-	: ($e.objectName=$form.resources.name)
-		
-		If (FEATURE.with("resourcesBrowser"))
-			
-			// Show browser
-			$form.form.call(New collection:C1472("initBrowser"; New object:C1471(\
-				"url"; Get localized string:C991("res_"+$context.typeForm()+"Forms"))))
-			
-		Else 
-			
-			If ($context.selector=1)
-				
-				OPEN URL:C673(Get localized string:C991("res_listForms"); *)
-				
-			Else 
-				
-				OPEN URL:C673(Get localized string:C991("res_detailForms"); *)
-				
-			End if 
-		End if 
-		
 		//==================================================
 	: ($e.objectName=$form.scrollBar.name)
 		

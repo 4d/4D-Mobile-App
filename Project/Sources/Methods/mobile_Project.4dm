@@ -44,7 +44,6 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 		$Obj_in:=$1
 		
 		// Add choice lists if any to action parameters
-		
 		actions("addChoiceList"; $Obj_in)
 		
 		If ($isDebug)
@@ -1076,10 +1075,7 @@ If ($Obj_out.success)
 			If ($Obj_in.manualInstallation)
 				
 				// Open xCode devices window
-				OPEN URL:C673("xcdevice://showDevicesWindow"; *)
-				//Xcode(New object(\
-																														"action"; "showDevicesWindow"))
-				
+				cs:C1710.Xcode.new().showDevicesWindow()
 				
 				// Show archive on disk ?
 				POST_MESSAGE(New object:C1471(\

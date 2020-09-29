@@ -53,7 +53,6 @@ If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
 		"selectorList"; UI.button("tab.list"); \
 		"selectorDetail"; UI.button("tab.detail"); \
 		"selectors"; UI.static("tab.@"); \
-		"resources"; UI.button("resources"); \
 		"drag"; Formula:C1597(tmpl_On_drag_over); \
 		"drop"; Formula:C1597(tmpl_ON_DROP); \
 		"cancel"; Formula:C1597(tmpl_REMOVE); \
@@ -137,18 +136,6 @@ Case of
 				$offset:=$form.tablist.bestSize(Align left:K42:2).coordinates.right+10
 				$form.tabdetail.bestSize(Align left:K42:2).setCoordinates($offset)
 				
-				If (FEATURE.with("resourcesBrowser"))
-					
-					$form.resources.hide()
-					
-				Else 
-					
-					// Place the download button
-					$form.resources.setTitle(str("downloadMoreResources").localized("templates"))
-					$form.resources.bestSize(Align right:K42:4)
-					
-				End if 
-				
 				$context.setTab()
 				
 				// Create, if any, & update the list & detail model [
@@ -201,11 +188,10 @@ Case of
 					End if 
 				End if 
 				
-				// List/detail selector [
+				// List/detail selector
 				$context.selector:=Num:C11($context.selector)+Num:C11(Num:C11($context.selector)=0)
 				($form.tablist.pointer())->:=Num:C11($context.selector=1)
 				($form.tabdetail.pointer())->:=Num:C11($context.selector=2)
-				//]
 				
 				// Draw the table list
 				($form.tableWidget.pointer())->:=tables_Widget($datamodel; New object:C1471(\

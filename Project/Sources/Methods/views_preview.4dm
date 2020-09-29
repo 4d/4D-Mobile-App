@@ -200,6 +200,7 @@ Case of
 								$indx:=$indx+1
 								
 								If ($o#Null:C1517)
+									
 									//#117298 - [BUG] Missing relation italic style
 									CLEAR VARIABLE:C89($style)
 									CLEAR VARIABLE:C89($class)
@@ -234,7 +235,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-																																																																																																																"tips"; $o.label)
+																																																																																																																														"tips"; $o.label)
 													
 												End if 
 											End if 
@@ -247,7 +248,7 @@ Case of
 											If ($relation[$o.name].format#Null:C1517)
 												
 												$c:=Split string:C1554($relation[$o.name].format; "%"; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
-												$buffer:=$o.name+" ("+$c[0]+")"
+												$buffer:="➀ "+$o.name+" ("+$c[0]+")"
 												
 											Else 
 												
@@ -257,7 +258,7 @@ Case of
 											
 										Else 
 											
-											$buffer:=$o.name
+											$buffer:="ⓝ "+$o.name
 											
 										End if 
 										

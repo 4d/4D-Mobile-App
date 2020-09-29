@@ -451,131 +451,128 @@ If ($o_project.dataModel#Null:C1517)
 	End for each 
 End if 
 
-If (FEATURE.with("resourcesBrowser"))
+If ($o_project.list#Null:C1517)
 	
-	If ($o_project.list#Null:C1517)
+	RECORD.info("Check list forms")
+	
+	$oInternal:=path.listForms()
+	$oDatabase:=path.hostlistForms()
+	$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).list
+	
+	For each ($tTable; $o_project.list)
 		
-		RECORD.info("Check list forms")
+		$t:=String:C10($o_project.list[$tTable].form)
 		
-		$oInternal:=path.listForms()
-		$oDatabase:=path.hostlistForms()
-		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).list
-		
-		For each ($tTable; $o_project.list)
+		If (Length:C16($t)>0)
 			
-			$t:=String:C10($o_project.list[$tTable].form)
-			
-			If (Length:C16($t)>0)
+			If ($t[[1]]#"/")  // Internal template
 				
-				If ($t[[1]]#"/")  // Internal template
+				If (Not:C34($oInternal.folder($t).exists))
 					
-					If (Not:C34($oInternal.folder($t).exists))
+					RECORD.warning("Missing internal form: "+$t)
+					
+					// Ensure database folder exists
+					$oDatabase.create()
+					
+					$oTemplate:=$c.query("old=:1"; $t).pop()
+					
+					If ($oTemplate#Null:C1517)
 						
-						RECORD.warning("Missing internal form: "+$t)
+						// Copy from tempo folder to database
+						$file:=File:C1566("/RESOURCES/Compatibility/"+$oTemplate.new)
 						
-						// Ensure database folder exists
-						$oDatabase.create()
-						
-						$oTemplate:=$c.query("old=:1"; $t).pop()
-						
-						If ($oTemplate#Null:C1517)
+						If ($file.exists)
 							
-							// Copy from tempo folder to database
-							$file:=File:C1566("/RESOURCES/Compatibility/"+$oTemplate.new)
+							$file:=$file.copyTo($oDatabase; fk overwrite:K87:5)
 							
-							If ($file.exists)
+							If ($file#Null:C1517)
 								
-								$file:=$file.copyTo($oDatabase; fk overwrite:K87:5)
-								
-								If ($file#Null:C1517)
-									
-									$o_project.list[$tTable].form:="/"+$oTemplate.new
-									RECORD.info("Replaced by: "+$o_project.list[$tTable].form)
-									
-								Else 
-									
-									RECORD.error("Error during copy: "+$file.path)
-									
-								End if 
+								$o_project.list[$tTable].form:="/"+$oTemplate.new
+								RECORD.info("Replaced by: "+$o_project.list[$tTable].form)
 								
 							Else 
 								
-								RECORD.error("Missing archive: "+$file.path)
+								RECORD.error("Error during copy: "+$file.path)
 								
 							End if 
 							
 						Else 
 							
-							RECORD.error("Unknown template: "+$t)
+							RECORD.error("Missing archive: "+$file.path)
 							
 						End if 
+						
+					Else 
+						
+						RECORD.error("Unknown template: "+$t)
+						
 					End if 
 				End if 
 			End if 
-		End for each 
-	End if 
+		End if 
+	End for each 
+End if 
+
+If ($o_project.detail#Null:C1517)
 	
-	If ($o_project.detail#Null:C1517)
+	RECORD.info("Check detail forms")
+	
+	$oInternal:=path.detailForms()
+	$oDatabase:=path.hostdetailForms()
+	$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).detail
+	
+	For each ($tTable; $o_project.detail)
 		
-		RECORD.info("Check detail forms")
+		$t:=String:C10($o_project.detail[$tTable].form)
 		
-		$oInternal:=path.detailForms()
-		$oDatabase:=path.hostdetailForms()
-		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).detail
-		
-		For each ($tTable; $o_project.detail)
+		If (Length:C16($t)>0)
 			
-			$t:=String:C10($o_project.detail[$tTable].form)
-			
-			If (Length:C16($t)>0)
+			If ($t[[1]]#"/")  // Internal template
 				
-				If ($t[[1]]#"/")  // Internal template
+				If (Not:C34($oInternal.folder($t).exists))
 					
-					If (Not:C34($oInternal.folder($t).exists))
+					RECORD.warning("Missing internal form: "+$t)
+					
+					// Ensure database folder exists
+					$oDatabase.create()
+					
+					$oTemplate:=$c.query("old=:1"; $t).pop()
+					
+					If ($oTemplate#Null:C1517)
 						
-						RECORD.warning("Missing internal form: "+$t)
+						// Copy from tempo folder to database
+						$file:=File:C1566("/RESOURCES/Compatibility/"+$oTemplate.new)
 						
-						// Ensure database folder exists
-						$oDatabase.create()
-						
-						$oTemplate:=$c.query("old=:1"; $t).pop()
-						
-						If ($oTemplate#Null:C1517)
+						If ($file.exists)
 							
-							// Copy from tempo folder to database
-							$file:=File:C1566("/RESOURCES/Compatibility/"+$oTemplate.new)
+							$file:=$file.copyTo($oDatabase; fk overwrite:K87:5)
 							
-							If ($file.exists)
+							If ($file#Null:C1517)
 								
-								$file:=$file.copyTo($oDatabase; fk overwrite:K87:5)
-								
-								If ($file#Null:C1517)
-									
-									$o_project.detail[$tTable].form:="/"+$oTemplate.new
-									RECORD.info("Replaced by: "+$o_project.detail[$tTable].form)
-									
-								Else 
-									
-									RECORD.error("Error during copy: "+$file.path)
-									
-								End if 
+								$o_project.detail[$tTable].form:="/"+$oTemplate.new
+								RECORD.info("Replaced by: "+$o_project.detail[$tTable].form)
 								
 							Else 
 								
-								RECORD.error("Missing archive: "+$file.path)
+								RECORD.error("Error during copy: "+$file.path)
 								
 							End if 
 							
 						Else 
 							
-							RECORD.error("Unknown template: "+$t)
+							RECORD.error("Missing archive: "+$file.path)
 							
 						End if 
+						
+					Else 
+						
+						RECORD.error("Unknown template: "+$t)
+						
 					End if 
 				End if 
 			End if 
-		End for each 
-	End if 
+		End if 
+	End for each 
 End if 
 
 // Set the current version

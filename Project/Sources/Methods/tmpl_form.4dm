@@ -50,23 +50,15 @@ If ($t_formName[[1]]="/")  // Host database resources
 	
 	$t_formName:=Delete string:C232($t_formName; 1; 1)  // Remove initial slash
 	
-	If (FEATURE.with("resourcesBrowser"))
+	If (Path to object:C1547($t_formName).extension=SHARED.archiveExtension)  // Archive
 		
-		If (Path to object:C1547($t_formName).extension=SHARED.archiveExtension)  // Archive
-			
 /* START HIDING ERRORS */$error:=err.hide()
-			$archive:=ZIP Read archive:C1637(path["host"+$t_typeForm+"Forms"]().file($t_formName))
+		$archive:=ZIP Read archive:C1637(path["host"+$t_typeForm+"Forms"]().file($t_formName))
 /* STOP HIDING ERRORS */$error.show()
+		
+		If ($archive#Null:C1517)
 			
-			If ($archive#Null:C1517)
-				
-				$pathForm:=$archive.root
-				
-			End if 
-			
-		Else 
-			
-			$pathForm:=Folder:C1567(path["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath; fk platform path:K87:2)
+			$pathForm:=$archive.root
 			
 		End if 
 		

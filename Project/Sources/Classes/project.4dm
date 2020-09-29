@@ -156,28 +156,23 @@ Function cleanup
 	
 	//====================================
 Function save
-	var $t : Text
-	var $o; $project : Object
-	
-	$project:=OB Copy:C1225(This:C1470)
+	var $file : 4D:C1709.Document
+	var $folder : 4D:C1709.Folder
 	
 	If (Bool:C1537(FEATURE._8858))  // Debug mode
 		
-		$o:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
+		$folder:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
 		
-		If ($o.exists)
+		If ($folder.exists)
 			
-			$o.file("project.json").setText(JSON Stringify:C1217(This:C1470; *))
+			$folder.file("project.json").setText(JSON Stringify:C1217(This:C1470; *))
 			
 		End if 
 	End if 
 	
-	$project:=This:C1470.get()
-	
-	$t:=This:C1470.$project.project
-	CREATE FOLDER:C475($t; *)
-	
-	TEXT TO DOCUMENT:C1237($t; JSON Stringify:C1217($project; *))
+	$file:=This:C1470.$project.file
+	$file.create()
+	$file.setText(JSON Stringify:C1217(This:C1470.get(); *))
 	
 	//====================================
 Function updateActions

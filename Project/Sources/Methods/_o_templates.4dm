@@ -103,46 +103,18 @@ Case of
 			
 			If (Length:C16($Txt_name)>0)
 				
-				If (FEATURE.with("resourcesBrowser"))
+				$pathForm:=tmpl_form($Txt_name; String:C10($Obj_template.projectTag))
+				
+				If (Path to object:C1547($Txt_name).extension=SHARED.archiveExtension)  // Archive
 					
-					$pathForm:=tmpl_form($Txt_name; String:C10($Obj_template.projectTag))
-					
-					If (Path to object:C1547($Txt_name).extension=SHARED.archiveExtension)  // Archive
-						
-						// Extract
-						$o:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); "template"; fk overwrite:K87:5)
-						$t:=$o.platformPath
-						
-					Else 
-						
-						$t:=$pathForm.platformPath
-						
-					End if 
+					// Extract
+					$o:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); "template"; fk overwrite:K87:5)
+					$t:=$o.platformPath
 					
 				Else 
 					
-					// Check if begin with "/"
-					If (Position:C15("/"; $Txt_name)=1)
-						
-						$folder:=COMPONENT_Pathname("host_"+String:C10($Obj_template.projectTag)+"Forms")
-						
-						$folder:=$folder.folder(Substring:C12($Txt_name; 2; Length:C16($Txt_name)))
-						
-						If ($folder.exists)
-							
-							$t:=$folder.platformPath
-							
-						Else 
-							
-							// Cannot find custom template directory
-							
-						End if 
-						
-					Else 
-						
-						$t:=$Obj_template.source+$Txt_name+Folder separator:K24:12
-						
-					End if 
+					$t:=$pathForm.platformPath
+					
 				End if 
 				
 			Else 
@@ -222,41 +194,32 @@ Case of
 			
 			If ($t[[1]]="/")  // custom form
 				
-				If (FEATURE.with("resourcesBrowser"))
+				$pathForm:=tmpl_form($t; String:C10($Obj_template.userChoiceTag))
+				
+				If (Bool:C1537($pathForm.exists))
 					
-					$pathForm:=tmpl_form($t; String:C10($Obj_template.userChoiceTag))
-					
-					If (Bool:C1537($pathForm.exists))
+					If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
 						
-						If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
-							
-							// Extract
-							$folder:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); "template"; fk overwrite:K87:5)
-							
-						Else 
-							
-							$folder:=$pathForm
-							
-						End if 
+						// Extract
+						$folder:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); "template"; fk overwrite:K87:5)
 						
 					Else 
 						
-						RECORD.error("Invalid path: \""+$pathForm.path+"\"")
-						
-						If ($Obj_out.errors=Null:C1517)
-							
-							$Obj_out.errors:=New collection:C1472
-							
-						End if 
-						
-						$Obj_out.errors.push("Invalid path: "+$pathForm.path)
+						$folder:=$pathForm
 						
 					End if 
 					
 				Else 
 					
-					$t:=Delete string:C232($t; 1; 1)
-					$folder:=COMPONENT_Pathname("host_"+$Obj_template.userChoiceTag+"Forms").folder($t)
+					RECORD.error("Invalid path: \""+$pathForm.path+"\"")
+					
+					If ($Obj_out.errors=Null:C1517)
+						
+						$Obj_out.errors:=New collection:C1472
+						
+					End if 
+					
+					$Obj_out.errors.push("Invalid path: "+$pathForm.path)
 					
 				End if 
 				

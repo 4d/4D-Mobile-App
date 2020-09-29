@@ -124,31 +124,21 @@ If ($dataModel#Null:C1517)
 			End if 
 		End if 
 		
-		If (FEATURE.with("resourcesBrowser"))
+		If ($formRoot.extension=SHARED.archiveExtension)  // Archive
 			
-			If ($formRoot.extension=SHARED.archiveExtension)  // Archive
-				
-				$x:=$file.getContent()
-				BLOB TO PICTURE:C682($x; $picture)
-				CLEAR VARIABLE:C89($x)
-				
-				CREATE THUMBNAIL:C679($picture; $picture; $params.icon.width; $params.icon.width)
-				$svg.embedPicture($picture; $table).position($params.x+18; 5)
-				CLEAR VARIABLE:C89($picture)
-				
-			Else 
-				
-				$svg.image($file; $table)\
-					.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
-					.dimensions($params.icon.width; $params.icon.width)
-				
-			End if 
+			$x:=$file.getContent()
+			BLOB TO PICTURE:C682($x; $picture)
+			CLEAR VARIABLE:C89($x)
+			
+			CREATE THUMBNAIL:C679($picture; $picture; $params.icon.width; $params.icon.width)
+			$svg.embedPicture($picture; $table).position($params.x+18; 5)
+			CLEAR VARIABLE:C89($picture)
 			
 		Else 
 			
 			$svg.image($file; $table)\
 				.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
-				.dimensions($params.icon.width)
+				.dimensions($params.icon.width; $params.icon.width)
 			
 		End if 
 		

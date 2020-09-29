@@ -62,41 +62,32 @@ Function doRun
 		C_OBJECT:C1216($pathForm; $folder; $file)
 		If ($t[[1]]="/")  // custom form
 			
-			If (FEATURE.with("resourcesBrowser"))
+			$pathForm:=tmpl_form($t; String:C10($Obj_template.userChoiceTag))
+			
+			If (Bool:C1537($pathForm.exists))
 				
-				$pathForm:=tmpl_form($t; String:C10($Obj_template.userChoiceTag))
-				
-				If (Bool:C1537($pathForm.exists))
+				If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
 					
-					If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
-						
-						// Extract
-						$folder:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); "template"; fk overwrite:K87:5)
-						
-					Else 
-						
-						$folder:=$pathForm
-						
-					End if 
+					// Extract
+					$folder:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); "template"; fk overwrite:K87:5)
 					
 				Else 
 					
-					RECORD.error("Invalid path: \""+$pathForm.path+"\"")
-					
-					If ($Obj_out.errors=Null:C1517)
-						
-						$Obj_out.errors:=New collection:C1472
-						
-					End if 
-					
-					$Obj_out.errors.push("Invalid path: "+$pathForm.path)
+					$folder:=$pathForm
 					
 				End if 
 				
 			Else 
 				
-				$t:=Delete string:C232($t; 1; 1)
-				$folder:=COMPONENT_Pathname("host_"+$Obj_template.userChoiceTag+"Forms").folder($t)
+				RECORD.error("Invalid path: \""+$pathForm.path+"\"")
+				
+				If ($Obj_out.errors=Null:C1517)
+					
+					$Obj_out.errors:=New collection:C1472
+					
+				End if 
+				
+				$Obj_out.errors.push("Invalid path: "+$pathForm.path)
 				
 			End if 
 			

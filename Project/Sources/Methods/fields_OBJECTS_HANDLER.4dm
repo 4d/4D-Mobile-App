@@ -327,8 +327,7 @@ Case of
 		//==================================================
 	: ($Obj_form.form.current=$Obj_form.resources.name)
 		
-		If (FEATURE.with("resourcesBrowser"))\
-			 & (FEATURE.with("formatMarketPlace"))
+		If (FEATURE.with("formatMarketPlace"))
 			
 			// Show browser
 			$o:=New object:C1471(\

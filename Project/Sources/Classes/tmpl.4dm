@@ -376,23 +376,15 @@ Function path  // Return the path of the file/folder
 		
 		$t:=Delete string:C232($t; 1; 1)  // Remove initial slash
 		
-		If (FEATURE.with("resourcesBrowser"))
+		If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
 			
-			If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
+			$error:=err.hide()
+			$archive:=ZIP Read archive:C1637(path["host"+This:C1470.type+"Forms"]().file($t))
+			$error.show()
+			
+			If ($archive#Null:C1517)
 				
-				$error:=err.hide()
-				$archive:=ZIP Read archive:C1637(path["host"+This:C1470.type+"Forms"]().file($t))
-				$error.show()
-				
-				If ($archive#Null:C1517)
-					
-					$path:=$archive.root
-					
-				End if 
-				
-			Else 
-				
-				$path:=Folder:C1567(path["host"+This:C1470.type+"Forms"]().folder($t).platformPath; fk platform path:K87:2)
+				$path:=$archive.root
 				
 			End if 
 			
