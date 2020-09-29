@@ -162,13 +162,15 @@ Function run
 				End if 
 				$Obj_template.relation.elements:=New collection:C1472()
 				
+				
+				// Find a node to duplicate for relation
 				C_OBJECT:C1216($Folder_relation)
 				$Folder_relation:=COMPONENT_Pathname("templates").folder("relation")
 				
 				C_OBJECT:C1216($Dom_relation)
 				
 				Case of 
-					: (Length:C16(String:C10($Obj_template.relation.xpath))>0)
+					: (Length:C16(String:C10($Obj_template.relation.xpath))>0)  // specified by xpath in current storyboard
 						
 						//%W-533.1
 						If ($Obj_template.relation.xpath[[1]]#"/")
@@ -182,35 +184,25 @@ Function run
 						$Dom_relation.isDefault:=False:C215
 						$Dom_relation.doNotClose:=True:C214
 						
-					: ($Folder_template.file("relationButton.xml").exists)
+					: ($Folder_template.file("relationButton.xml").exists)  // there is 
 						
 						$Dom_relation:=xml("load"; $Folder_template.file("relationButton.xml"))
 						$Dom_relation.isDefault:=False:C215
 						
 					: ($Folder_template.file("relationButton.xib").exists)
 						
-						//$Dom_relation:=xml("load";$Folder_template.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 						$Dom_relation:=xml("load"; $Folder_template.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 						$Dom_relation.isDefault:=False:C215
 						
-					Else 
+					: (let(->$Dom_relation; Formula:C1597($Obj_element.dom.findById("TAG-RL-001")); Formula:C1597($1.success)))  // using tag id injected in storyboard
 						
-						$Dom_relation:=$Obj_element.dom.findById("TAG-RL-001")  // try by tag in storyboard
+						$Dom_relation.isDefault:=False:C215
+						$Dom_relation.doNotClose:=True:C214
 						
-						If (Not:C34($Dom_relation.success))  // else us default one
-							
-							//$Dom_relation:=xml("load";$Folder_relation.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
-							
-							$Dom_relation:=xml("load"; $Folder_relation.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
-							//$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml"))
-							$Dom_relation.isDefault:=True:C214
-							
-						Else 
-							
-							$Dom_relation.isDefault:=False:C215
-							$Dom_relation.doNotClose:=True:C214
-							
-						End if 
+					Else   // else us default one
+						
+						$Dom_relation:=xml("load"; $Folder_relation.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+						$Dom_relation.isDefault:=True:C214
 						
 				End case 
 				
@@ -245,11 +237,11 @@ Function run
 				
 				// 2- scene
 				//$Obj_element:=New object(\
-																									"insertInto";$Dom_root.findByXPath("document/scenes");\
-																									"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																									"idCount";3;\
-																									"tagInterfix";"SN";\
-																									"insertMode";"append")
+																														"insertInto";$Dom_root.findByXPath("document/scenes");\
+																														"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																														"idCount";3;\
+																														"tagInterfix";"SN";\
+																														"insertMode";"append")
 				$Obj_element:=New object:C1471(\
 					"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 					"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \

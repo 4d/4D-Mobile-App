@@ -139,7 +139,7 @@ Function run
 						
 					Else 
 						
-						ob_error_add($Obj_out; "Failed to nsert after processing tags '"+$Txt_buffer+"'")
+						ob_error_add($Obj_out; "Failed to insert after processing tags '"+$Txt_buffer+"'")
 						
 					End if 
 				End for each 

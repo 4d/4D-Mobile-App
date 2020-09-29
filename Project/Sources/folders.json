@@ -597,6 +597,13 @@
 			"htuProgressDoSomething"
 		]
 	},
+	"let": {
+		"methods": [
+			"COMPILER_let",
+			"let",
+			"test_let"
+		]
+	},
 	"lib": {
 		"groups": [
 			"_",
@@ -605,6 +612,7 @@
 			"doc",
 			"env (thread-safe)",
 			"err",
+			"let",
 			"ob",
 			"ob_error",
 			"pic",

@@ -33,6 +33,7 @@ COMPILER_views
 // Language
 COMPILER_ob
 COMPILER_col
+COMPILER_let
 
 // Widgets
 COMPILER_message
