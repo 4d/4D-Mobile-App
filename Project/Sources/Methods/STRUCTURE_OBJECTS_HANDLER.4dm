@@ -379,6 +379,8 @@ Case of
 														
 														$table:=PROJECT.addTable($context.currentTable)
 														
+														//PROJECT.dataModel[String($context.currentTable.tableNumber)]:=$table
+														
 													End if 
 													
 													For each ($o; $relatedCatalog.fields)
@@ -480,7 +482,7 @@ Case of
 																		
 																	Else 
 																		
-																		If ($table[$context.fieldName][$fieldID]#Null:C1517)
+																		If ($table[$context.fieldName][$fieldID].path#Null:C1517)
 																			
 																			If ($table[$context.fieldName][$fieldID].path=$o.path)
 																				
