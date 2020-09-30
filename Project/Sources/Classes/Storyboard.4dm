@@ -542,3 +542,16 @@ Function fixDomChildID($Obj_element : Object)
 	
 	$0:=$Obj_result
 	
+	
+	// MARK : Form (extract to StoryboardForm?)
+	
+Function checkStoryboardPath
+	C_OBJECT:C1216($Obj_template; $1)
+	$Obj_template:=$1
+	If ($Obj_template.storyboard=Null:C1517)  // set default path if not defined
+		
+		$Obj_template.storyboard:=$Obj_template.parent[This:C1470.type].storyboard
+		
+	End if 
+	This:C1470.path:=Folder:C1567($Obj_template.source; fk platform path:K87:2).file(String:C10($Obj_template.storyboard))
+	

@@ -17,15 +17,7 @@ Function run
 	C_OBJECT:C1216($3; $Obj_tags)
 	$Obj_tags:=$3
 	
-	If ($Obj_template.storyboard=Null:C1517)  // set default path if not defined
-		
-		$Obj_template.storyboard:=$Obj_template.parent[This:C1470.type].storyboard
-		
-	End if 
-	
-	C_OBJECT:C1216($Folder_template)
-	$Folder_template:=Folder:C1567($Obj_template.source; fk platform path:K87:2)
-	This:C1470.path:=$Folder_template.file(String:C10($Obj_template.storyboard))
+	This:C1470.checkStoryboardPath($Obj_template)  // set default path if not defined
 	
 	C_OBJECT:C1216($Dom_root; $Dom_child; $Dom_)
 	$Dom_root:=xml("load"; This:C1470.path)
@@ -54,6 +46,9 @@ Function run
 		
 		// create elements if not defined in manifest (if defined, this is an opti)
 		This:C1470.checkTemplateElements($Obj_template; $Txt_buffer; $Dom_root)
+		
+		C_OBJECT:C1216($Folder_template)
+		$Folder_template:=Folder:C1567($Obj_template.source; fk platform path:K87:2)
 		
 		// Try to determine if must duplicate or not element
 		// elements are specified or 0 is set as "infinite" representation or if  max > count or one of them defined to 0
@@ -237,11 +232,11 @@ Function run
 				
 				// 2- scene
 				//$Obj_element:=New object(\
-																														"insertInto";$Dom_root.findByXPath("document/scenes");\
-																														"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																														"idCount";3;\
-																														"tagInterfix";"SN";\
-																														"insertMode";"append")
+																																			"insertInto";$Dom_root.findByXPath("document/scenes");\
+																																			"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																																			"idCount";3;\
+																																			"tagInterfix";"SN";\
+																																			"insertMode";"append")
 				$Obj_element:=New object:C1471(\
 					"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 					"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \

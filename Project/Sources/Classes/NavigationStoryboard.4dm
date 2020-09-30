@@ -17,15 +17,7 @@ Function run
 	C_OBJECT:C1216($3; $Obj_tags)
 	$Obj_tags:=$3
 	
-	$Obj_out.doms:=New collection:C1472()
-	
-	If ($Obj_template.storyboard=Null:C1517)
-		
-		$Obj_template.storyboard:=$Obj_template.parent[This:C1470.type].storyboard
-		
-	End if 
-	
-	This:C1470.path:=Folder:C1567($Obj_template.source; fk platform path:K87:2).file(String:C10($Obj_template.storyboard))
+	This:C1470.checkStoryboardPath($Obj_template)  // set default path if not defined
 	
 	If (This:C1470.path.exists)
 		
