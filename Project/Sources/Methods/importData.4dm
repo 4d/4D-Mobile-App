@@ -31,15 +31,18 @@ End if
 
 C_PICTURE:C286($picture)
 C_BLOB:C604($pictureBlob)
-C_TEXT:C284($pictureURL;$fieldName;$primaryKey)
-C_OBJECT:C1216($e;$s;$field)
-C_LONGINT:C283($i;$j;$max;$maxStr;$hs)
+C_TEXT:C284($pictureURL; $fieldName; $primaryKey)
+C_OBJECT:C1216($e; $s; $field)
+C_LONGINT:C283($i; $j; $max; $maxStr; $hs)
 C_OBJECT:C1216($classStore)
+C_BOOLEAN:C305($withPicture)
+
+$withPicture:=False:C215
 
 If (Shift down:C543)
 	$classStore:=ds:C1482[Request:C163("class store name?")]
 Else 
-	$classStore:=ds:C1482.ALL_TYPES
+	$classStore:=ds:C1482.Employes
 End if 
 
 If ($classStore=Null:C1517)
@@ -47,13 +50,14 @@ If ($classStore=Null:C1517)
 	ABORT:C156
 End if 
 
+
 If (Shift down:C543)
 	$max:=Num:C11(Request:C163("how many?"))
 	If ($max<=0)
-		$max:=1000
+		$max:=10
 	End if 
 Else 
-	$max:=1000
+	$max:=10
 End if 
 
 If (Shift down:C543)
@@ -62,15 +66,15 @@ If (Shift down:C543)
 		$maxStr:=1
 	End if 
 Else 
-	$maxStr:=1000
+	$maxStr:=10
 End if 
 
 $primaryKey:=$classStore.getInfo().primaryKey
 
 $pictureURL:="https://picsum.photos/1000"
-For ($i;1;$max)
+For ($i; 1; $max)
 	$e:=$classStore.new()
-	For each ($fieldName;$classStore)
+	For each ($fieldName; $classStore)
 		If ($fieldName=$primaryKey)
 			// skip
 		Else 
@@ -79,7 +83,7 @@ For ($i;1;$max)
 			Case of 
 				: ($field.type="string")
 					$e[$fieldName]:=""
-					For ($j;1;$maxStr)
+					For ($j; 1; $maxStr)
 						$e[$fieldName]:=$e[$fieldName]+Generate UUID:C1066
 					End for 
 				: ($field.type="number")
@@ -89,11 +93,13 @@ For ($i;1;$max)
 				: ($field.type="date")
 					$e[$fieldName]:=Current date:C33  // add random
 				: ($field.type="object")
-					$e[$fieldName]:=New object:C1471("num";Random:C100;"str";Generate UUID:C1066)
+					$e[$fieldName]:=New object:C1471("num"; Random:C100; "str"; Generate UUID:C1066)
 				: ($field.type="image")
-					$hs:=HTTP Get:C1157($pictureURL;$pictureBlob)
-					BLOB TO PICTURE:C682($pictureBlob;$picture)
-					$e[$fieldName]:=$picture
+					If ($withPicture)
+						$hs:=HTTP Get:C1157($pictureURL; $pictureBlob)
+						BLOB TO PICTURE:C682($pictureBlob; $picture)
+						$e[$fieldName]:=$picture
+					End if 
 				Else 
 					
 			End case 

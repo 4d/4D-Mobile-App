@@ -9,7 +9,7 @@ C_LONGINT:C283($one; $two)
 If (Shift down:C543)
 	$classStore:=ds:C1482[Request:C163("class store name?")]
 Else 
-	$classStore:=ds:C1482.Service
+	$classStore:=ds:C1482.Employes
 End if 
 
 $entities:=$classStore.all()
@@ -32,9 +32,11 @@ $entity[$key]:=$related*/
 			: ($classStore[$key].kind="relatedEntity")
 				
 				$related:=ds:C1482[$classStore[$key].relatedDataClass].all()
-				$one:=Random:C100%$related.length
-				$entity[$key]:=$related[$one]
-				
+				If ($related.length>0)
+					$one:=Random:C100%$related.length
+					$entity[$key]:=$related[$one]
+					// else nothing to add
+				End if 
 			Else 
 				// ignore
 		End case 
