@@ -471,10 +471,12 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$Col_oldStrings.push("___DESTINATION___")
 					
 					Case of 
-						: ($Obj_tags.field.relatedEntities#Null:C1517)  // isToMany ?
-							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedEntities)+"ListForm"))
+						: (($Obj_tags.field.relatedEntities#Null:C1517))  // isToMany ?
+							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedEntities)+"ListForm"))  // CODE REMOVE?
 						: ($Obj_tags.field.relatedEntity#Null:C1517)  //  ??
-							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedEntity)+"DetailsForm"))
+							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedEntity)+"DetailsForm"))  // CODE REMOVE?
+						: (Bool:C1537($Obj_tags.field.isToMany))
+							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedDataClass)+"ListForm"))
 						Else 
 							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedDataClass)+"DetailsForm"))
 					End case 
