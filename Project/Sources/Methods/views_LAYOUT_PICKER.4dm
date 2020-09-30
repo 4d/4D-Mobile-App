@@ -140,7 +140,6 @@ STOP HIDING ERRORS
 ***********************/
 		$error.show()
 		
-		
 		$ƒ.forms.combine($c)
 		
 	End if 
@@ -200,7 +199,6 @@ $picker.hotZones.push(New object:C1471(\
 $picker.contextual:=New object:C1471(\
 "target"; $picker.infos; \
 "formula"; Formula:C1597(tmpl_CONTEXTUAL))
-
 
 $picker.vOffset:=155  // Offset of the background button
 
@@ -331,7 +329,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				$p:=$svg.getPicture()
 				
-			Else   // Create from the template
+			Else   // Create a preview from the template
 				
 				PROCESS 4D TAGS:C816($template.getText(); $t)
 				

@@ -24,13 +24,6 @@ Else
 End if 
 
 Case of 
-		
-		//________________________________________
-	: (True:C214)
-		
-		$o:=Folder:C1567(System folder:C487(System32 Win:K41:14); fk platform path:K87:2).folder("LogFiles/4dMobile")
-		$o.create()
-		
 		//________________________________________
 	: (True:C214)
 		

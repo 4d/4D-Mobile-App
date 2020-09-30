@@ -245,10 +245,13 @@
 	"03] DEVELOPER": {
 		"methods": [
 			"COMPILER_DEVELOPER",
-			"DEVELOPER_Handler",
-			"DEVELOPER_OBJECTS_HANDLER"
+			"DEVELOPER",
+			"DEVELOPER_Handler"
 		],
 		"forms": [
+			"DEVELOPER"
+		],
+		"classes": [
 			"DEVELOPER"
 		]
 	},

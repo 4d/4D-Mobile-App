@@ -96,24 +96,19 @@ Function getValue
 	
 	C_VARIANT:C1683($0)
 	
-	If (This:C1470.assignable)
-		
-		// Use pointer
-		$0:=(This:C1470.pointer)->
-		
-	Else 
-		
-		If (Value type:C1509(This:C1470.dataSource)=Is object:K8:27)
-			
-			$0:=This:C1470.dataSource.call()
-			
-		Else 
-			
-			// Create formula
-			$0:=Formula from string:C1601(String:C10(This:C1470.dataSource)).call()
-			
-		End if 
-	End if 
+	//If (This.assignable)
+	//// Use pointer
+	//$0:=(This.pointer)->
+	//Else 
+	//If (Value type(This.dataSource)=Is object)
+	//$0:=This.dataSource.call()
+	//Else 
+	//// Create formula
+	//$0:=Formula from string(String(This.dataSource)).call()
+	//End if 
+	//End if 
+	
+	$0:=OBJECT Get value:C1743(This:C1470.name)
 	
 /*══════════════════════════
 .setValue(value) -> This

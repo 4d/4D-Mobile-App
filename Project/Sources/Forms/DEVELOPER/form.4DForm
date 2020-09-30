@@ -26,7 +26,8 @@
 					"left": 488,
 					"width": 449,
 					"height": 33,
-					"stroke": "#C4C4C4"
+					"stroke": "#C4C4C4",
+					"class": "border"
 				},
 				"01_name.border": {
 					"type": "rectangle",
@@ -34,7 +35,8 @@
 					"left": 16,
 					"width": 344,
 					"height": 33,
-					"stroke": "#C4C4C4"
+					"stroke": "#C4C4C4",
+					"class": "border"
 				},
 				"01_name.label": {
 					"type": "text",
@@ -44,7 +46,8 @@
 					"height": 17,
 					"stroke": "#808080",
 					"textAlign": "left",
-					"text": ":xliff:name"
+					"text": ":xliff:name",
+					"class": "label"
 				},
 				"01_name": {
 					"type": "input",
@@ -57,7 +60,8 @@
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
-					"dragging": "none"
+					"dragging": "none",
+					"class": "input"
 				},
 				"20_team.label": {
 					"type": "text",
@@ -67,7 +71,8 @@
 					"height": 17,
 					"stroke": "#808080",
 					"textAlign": "left",
-					"text": ":xliff:orgTeam"
+					"text": ":xliff:orgTeam",
+					"class": "label"
 				},
 				"02_team.help": {
 					"type": "button",
@@ -78,10 +83,10 @@
 					"visibility": "hidden",
 					"tooltip": ":xliff:showAccount",
 					"style": "help",
-					"method": "ObjectMethods/02_team.help.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "DEVELOPER"
 				},
 				"02_team": {
 					"type": "input",
@@ -94,9 +99,12 @@
 					"hideFocusRing": true,
 					"placeholder": ":xliff:none",
 					"events": [
+						"onLosingFocus",
+						"onGettingFocus",
 						"onDataChange"
 					],
-					"method": "DEVELOPER_OBJECTS_HANDLER"
+					"method": "DEVELOPER",
+					"class": "input"
 				},
 				"02_team.popup.border": {
 					"type": "rectangle",
@@ -105,7 +113,8 @@
 					"width": 33,
 					"height": 33,
 					"fill": "transparent",
-					"stroke": "#C4C4C4"
+					"stroke": "#C4C4C4",
+					"class": "border"
 				},
 				"teamPopup": {
 					"type": "button",
@@ -119,14 +128,22 @@
 					"events": [
 						"onClick"
 					],
-					"method": "DEVELOPER_OBJECTS_HANDLER"
+					"method": "DEVELOPER"
 				}
 			}
 		}
 	],
-	"method": "DEVELOPER_Handler",
+	"method": "DEVELOPER",
 	"$4d": {
 		"version": "1",
 		"kind": "form"
+	},
+	"geometryStamp": 15,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
 	}
 }

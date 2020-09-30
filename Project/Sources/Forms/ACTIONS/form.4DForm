@@ -3,7 +3,7 @@
 	"memorizeGeometry": true,
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 320,
+	"height": 304,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -28,7 +28,7 @@
 					"top": 33,
 					"left": 16,
 					"width": 922,
-					"height": 242,
+					"height": 226,
 					"fill": "transparent",
 					"stroke": "#AAAAAA"
 				},
@@ -37,7 +37,7 @@
 					"top": 35,
 					"left": 17,
 					"width": 919,
-					"height": 239,
+					"height": 223,
 					"visibility": "visible",
 					"resizingMode": "legacy",
 					"listboxType": "collection",
@@ -258,7 +258,7 @@
 				},
 				"actions.add": {
 					"type": "button",
-					"top": 280,
+					"top": 264,
 					"left": 15,
 					"width": 28,
 					"height": 28,
@@ -275,7 +275,7 @@
 				},
 				"actions.remove": {
 					"type": "button",
-					"top": 280,
+					"top": 264,
 					"left": 42,
 					"width": 28,
 					"height": 28,
@@ -330,7 +330,7 @@
 				},
 				"actionMethod": {
 					"type": "button",
-					"top": 286,
+					"top": 270,
 					"left": 858,
 					"width": 80,
 					"height": 20,
@@ -343,7 +343,7 @@
 				},
 				"actionMethod.label": {
 					"type": "text",
-					"top": 288,
+					"top": 272,
 					"left": 504,
 					"width": 344,
 					"height": 17,
@@ -373,7 +373,7 @@
 				},
 				"iconGrid": {
 					"type": "subform",
-					"top": 287,
+					"top": 271,
 					"left": 107,
 					"width": 95,
 					"height": 14,
@@ -403,5 +403,13 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
+	},
+	"geometryStamp": 34,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
 	}
 }

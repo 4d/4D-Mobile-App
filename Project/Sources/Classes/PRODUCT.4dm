@@ -3,10 +3,9 @@ PRODUCTS pannel Class
 ===============================================*/
 Class constructor
 	
-	var $form : Object
-	$form:=editor_INIT
+	This:C1470.context:=editor_INIT
 	
-	If (OB Is empty:C1297($form)) | Shift down:C543
+	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
 		
 		This:C1470.window:=Current form window:C827
 		
@@ -19,7 +18,7 @@ Class constructor
 		This:C1470.iconAlert:=cs:C1710.attention.new("icon.alert")
 		
 		// Constraints definition
-		ob_createPath($form; "constraints.rules"; Is collection:K8:32)
+		ob_createPath(This:C1470.context; "constraints.rules"; Is collection:K8:32)
 		
 	End if 
 	
