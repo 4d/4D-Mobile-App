@@ -144,7 +144,7 @@ Function run
 			C_BOOLEAN:C305($Boo_hasRelation)
 			$Boo_hasRelation:=False:C215
 			C_OBJECT:C1216($Obj_field)
-			For each ($Obj_field; $Obj_tags.table.detailFields) Until ($Boo_hasRelation)
+			For each ($Obj_field; $Obj_tags.table.fields; Num:C11($Obj_template.fields.count)) Until ($Boo_hasRelation)
 				If (Num:C11($Obj_field.id)=0)  // relation to N field
 					$Boo_hasRelation:=True:C214
 				End if 
@@ -231,12 +231,7 @@ Function run
 				$Obj_template.relation.elements.push($Obj_element)
 				
 				// 2- scene
-				//$Obj_element:=New object(\
-																																			"insertInto";$Dom_root.findByXPath("document/scenes");\
-																																			"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																																			"idCount";3;\
-																																			"tagInterfix";"SN";\
-																																			"insertMode";"append")
+				
 				$Obj_element:=New object:C1471(\
 					"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 					"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
@@ -258,7 +253,6 @@ Function run
 					$Lon_j:=3
 					Repeat 
 						
-						//$Obj_element.insertInto:=$Dom_root.findByXPath("document/scenes/scene["+String($Lon_j)+"]/objects/viewController")
 						$Obj_element.insertInto:=$Dom_root.findByXPath("/document/scenes/scene["+String:C10($Lon_j)+"]/objects/viewController")
 						$Lon_j:=$Lon_j-1
 						
@@ -286,139 +280,21 @@ Function run
 			// ... and fields
 			$Lon_j:=Num:C11($Obj_template.fields.count)  // Start at first element, not in header
 			C_VARIANT:C1683($Var_field)
-			For each ($Var_field; $Obj_tags.table.detailFields; Num:C11($Obj_template.fields.count))
+			For each ($Var_field; $Obj_tags.table.fields; Num:C11($Obj_template.fields.count))
 				
 				Case of 
 					: (Value type:C1509($Var_field)=Is object:K8:27)
 						
-						$Obj_field:=$Var_field
-						
 						$Lon_j:=$Lon_j+1  // pos
-						
-						// Set tags:
-						// - field
-						$Obj_tags.field:=$Obj_field
-						
-						$Obj_tags.storyboardID:=New collection:C1472
-						
-						C_COLLECTION:C1488($Col_elements)
-						If (Num:C11($Obj_field.id)=0)  // relation to N field
-							
-							$Col_elements:=$Obj_template.relation.elements
-							
-						Else 
-							
-							$Col_elements:=$Obj_template.elements
-							
-						End if 
-						
-						// For each element... (scene, cell, ...)
-						For each ($Obj_element; $Col_elements)
-							
-							If ($Obj_element.dom#Null:C1517)  // if valid element
-								
-								// - randoms ids
-								If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
-									
-									$Obj_storyboardID:=New object:C1471(\
-										"tagInterfix"; $Obj_element.tagInterfix; \
-										"storyboardIDs"; This:C1470.randomIDS($Obj_element.idCount))
-									
-									$Obj_tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
-									
-								End if 
-								
-								// Process tags on the element
-								$Txt_buffer:=$Obj_element.dom.export().variable
-								$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("___TABLE___"; "detailform"; "storyboardID"))
-								
-								// Insert node for this element
-								$Dom_:=Null:C1517
-								
-								If (Bool:C1537($Obj_element.insertInto.success))
-									
-									$Dom_:=This:C1470.insertInto($Obj_element; $Txt_buffer; $Lon_j)
-									$Obj_out.doms.push($Dom_)
-									
-								Else 
-									
-									ob_error_add($Obj_out; "Failed to nsert after processing tags '"+$Txt_buffer+"'")
-									
-								End if 
-								
-							End if 
-						End for each 
+						This:C1470.injectElement($Var_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)
 						
 					: (Value type:C1509($Var_field)=Is collection:K8:32)  // #114338 support collection
 						
-						C_COLLECTION:C1488($Col_fields)
-						$Col_fields:=$Var_field
-						
 						$Lon_j:=$Lon_j+1  // pos, used for "insertAt" method, maybe not compatible with rows
 						
-						For each ($Obj_field; $Col_fields)
+						For each ($Obj_field; $Var_field)
 							
-							// Set tags:
-							// - field
-							$Obj_tags.field:=$Obj_field
-							
-							$Obj_tags.storyboardID:=New collection:C1472
-							
-							C_COLLECTION:C1488($Col_elements)
-							If (Num:C11($Obj_field.id)=0)  // relation to N field
-								
-								$Col_elements:=$Obj_template.relation.elements
-								
-							Else 
-								
-								$Col_elements:=$Obj_template.elements
-								
-							End if 
-							
-							// For each element... (scene, cell, ...)
-							For each ($Obj_element; $Col_elements)
-								
-								If ($Obj_element.dom#Null:C1517)  // if valid element
-									
-									/// HEADER for row
-									If ($Obj_element.insertIntoRow=Null:C1517)
-										
-										If ($Obj_element.insertInto.parent().getName().name="stackView")  // only on stack view (suppose only one element has stack view parent..., same as relation)
-											$Txt_buffer:="<stackView opaque=\"NO\" contentMode=\"scaleToFill\" distribution=\"fillEqually\" translatesAutoresizingMaskIntoConstraints=\"NO\" id=\"ROW-SV"+String:C10($Lon_j; "##000")+"\"></stackView>"
-											$Obj_element.insertIntoRow:=$Obj_element.insertInto.append($Txt_buffer)
-											$Txt_buffer:="<rect key=\"frame\" x=\"0.0\" y=\"200\" width=\"375\" height=\"97\"/>"
-											$Dom_:=$Obj_element.insertIntoRow.append($Txt_buffer)
-											$Txt_buffer:="<subviews></subviews>"
-											$Obj_element.insertIntoRow:=$Obj_element.insertIntoRow.append($Txt_buffer)
-										Else 
-											$Obj_element.insertIntoRow:=$Obj_element.insertInto
-										End if 
-									End if 
-									/// END HEADER for row
-									
-									// - randoms ids
-									If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
-										
-										C_OBJECT:C1216($Obj_storyboardID)
-										$Obj_storyboardID:=New object:C1471(\
-											"tagInterfix"; $Obj_element.tagInterfix; \
-											"storyboardIDs"; This:C1470.randomIDS($Obj_element.idCount))
-										
-										$Obj_tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
-										
-									End if 
-									
-									// Process tags on the element
-									$Txt_buffer:=$Obj_element.dom.export().variable
-									$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("___TABLE___"; "detailform"; "storyboardID"))
-									
-									// Insert node for this element
-									$Dom_:=This:C1470.insertInto($Obj_element; $Txt_buffer; $Lon_j)
-									
-									$Obj_out.doms.push($Dom_)
-									
-								End if 
-							End for each 
+							This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; True:C214; $Obj_out)
 							
 						End for each   // $Col_fields
 						
@@ -458,6 +334,37 @@ Function run
 			
 		End if 
 		
+		
+		// Manage relation in header fields (before stack view and diplicated element)
+		$Lon_j:=1
+		For each ($Obj_field; $Obj_tags.table.fields; 0; Num:C11($Obj_template.fields.count))
+			If (Num:C11($Obj_field.id)=0)  // relation to N field
+				$Boo_buffer:=True:C214
+				
+				If (Length:C16(String:C10($Obj_field.bindingType))=0)
+					$Obj_field.bindingType:="relation"  // TODO this must be done before when we are looking for binding
+				End if 
+				// find the element $Lon_j by looking at userDefinedRuntimeAttribute
+				
+				$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
+				If ($Dom_.success)
+					C_OBJECT:C1216($Dom_parent)
+					$Dom_parent:=$Dom_.parent()
+					
+					If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationFormat]").success))
+						$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationFormat\" value=\"___FIELD_"+String:C10($Lon_j)+"_FORMAT___\"/>"
+						$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+					End if 
+					If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationName]").success))
+						$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationName\" value=\"___FIELD_"+String:C10($Lon_j)+"___\"/>"
+						$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+					End if 
+				End if 
+				
+			End if 
+			$Lon_j:=$Lon_j+1
+		End for each 
+		
 		// Save file at destination after replacing tags
 		If ($Boo_buffer)
 			
@@ -487,6 +394,94 @@ Function run
 	End if 
 	
 	$0:=$Obj_out
+	
+Function injectElement
+	C_OBJECT:C1216($Obj_field; $1; $Obj_tags; $2; $Obj_template; $3; $Obj_out; $6)
+	C_LONGINT:C283($Lon_j; $4)
+	C_BOOLEAN:C305($isHorizontal; $5)
+	$Obj_field:=$1
+	$Obj_tags:=$2
+	$Obj_template:=$3
+	$Lon_j:=$4
+	$isHorizontal:=$5
+	$Obj_out:=$6  // result (could be $0 if caller merge result)
+	
+	C_TEXT:C284($Txt_buffer)
+	
+	// Set tags:
+	// - field
+	$Obj_tags.field:=$Obj_field
+	$Obj_tags.storyboardID:=New collection:C1472
+	
+	
+	C_COLLECTION:C1488($Col_elements)
+	If (Num:C11($Obj_field.id)=0)  // relation to N field
+		
+		$Col_elements:=$Obj_template.relation.elements
+		
+	Else 
+		
+		$Col_elements:=$Obj_template.elements
+		
+	End if 
+	
+	// For each element... (scene, cell, ...)
+	C_OBJECT:C1216($Obj_element)
+	For each ($Obj_element; $Col_elements)
+		
+		If ($Obj_element.dom#Null:C1517)  // if valid element
+			
+			If ($isHorizontal)
+				/// HEADER for row
+				If ($Obj_element.insertIntoRow=Null:C1517)
+					
+					If ($Obj_element.insertInto.parent().getName().name="stackView")  // only on stack view (suppose only one element has stack view parent..., same as relation)
+						$Txt_buffer:="<stackView opaque=\"NO\" contentMode=\"scaleToFill\" distribution=\"fillEqually\" translatesAutoresizingMaskIntoConstraints=\"NO\" id=\"ROW-SV"+String:C10($Lon_j; "##000")+"\"></stackView>"
+						$Obj_element.insertIntoRow:=$Obj_element.insertInto.append($Txt_buffer)
+						$Txt_buffer:="<rect key=\"frame\" x=\"0.0\" y=\"200\" width=\"375\" height=\"97\"/>"
+						$Dom_:=$Obj_element.insertIntoRow.append($Txt_buffer)
+						$Txt_buffer:="<subviews></subviews>"
+						$Obj_element.insertIntoRow:=$Obj_element.insertIntoRow.append($Txt_buffer)
+					Else 
+						$Obj_element.insertIntoRow:=$Obj_element.insertInto
+					End if 
+				End if 
+				/// END HEADER for row
+			End if 
+			
+			// - randoms ids
+			If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
+				
+				C_OBJECT:C1216($Obj_storyboardID)
+				$Obj_storyboardID:=New object:C1471(\
+					"tagInterfix"; $Obj_element.tagInterfix; \
+					"storyboardIDs"; This:C1470.randomIDS($Obj_element.idCount))
+				
+				$Obj_tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
+				
+			End if 
+			
+			// Process tags on the element
+			$Txt_buffer:=$Obj_element.dom.export().variable
+			$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("___TABLE___"; "detailform"; "storyboardID"))
+			
+			// Insert node for this element
+			If (Bool:C1537($Obj_element.insertInto.success))
+				
+				C_OBJECT:C1216($Dom_)
+				$Dom_:=This:C1470.insertInto($Obj_element; $Txt_buffer; $Lon_j)
+				$Obj_out.doms.push($Dom_)
+				
+			Else 
+				
+				ob_error_add($Obj_out; "Failed to insert after processing tags '"+$Txt_buffer+"'")
+				
+			End if 
+			
+		End if 
+	End for each 
+	
+	
 	
 Function checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_root : Object/*xml node*/)
 	

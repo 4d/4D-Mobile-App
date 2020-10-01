@@ -10,7 +10,7 @@ Function doRun
 	$Obj_out:=New object:C1471()
 	
 	// modify tags (CHECK why we cannot use fields?)
-	This:C1470.input.tags.table.detailFields:=This:C1470.input.tags.table.fields
+	//This.input.tags.table.detailFields:=This.input.tags.table.fields
 	
 	// Create the icons
 	$Obj_out:=This:C1470.createIconAssets()
@@ -51,11 +51,11 @@ Function createIconAssets
 	
 	C_BOOLEAN:C305($Boo_withIcons)
 	$Boo_withIcons:=Bool:C1537(This:C1470.template.assets.mandatory)\
-		 | (This:C1470.input.tags.table.detailFields.query("icon != ''").length>0)
+		 | (This:C1470.input.tags.table.fields.query("icon != ''").length>0)
 	
 	// Create by field icon alignment or icon name
 	C_OBJECT:C1216($Obj_field)
-	For each ($Obj_field; This:C1470.input.tags.table.detailFields)
+	For each ($Obj_field; This:C1470.input.tags.table.fields)
 		
 		If ($Boo_withIcons)
 			
@@ -92,7 +92,7 @@ Function createIconAssets
 		End if 
 		
 		C_OBJECT:C1216($Obj_metaData)
-		For each ($Obj_metaData; This:C1470.input.tags.table.detailFields)
+		For each ($Obj_metaData; This:C1470.input.tags.table.fields)
 			
 			If (Length:C16(String:C10($Obj_metaData.icon))=0)  // no icon defined
 				
