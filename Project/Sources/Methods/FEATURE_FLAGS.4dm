@@ -117,7 +117,7 @@ FEATURE.delivered(117618; 1850)  // Deep Linking
 18R6
 _____________*/
 FEATURE.unstable(117601)  // Relation management optimisation
-FEATURE.unstable("templateClass")
+//FEATURE.unstable("templateClass")
 
 /* _____________
 WIP
