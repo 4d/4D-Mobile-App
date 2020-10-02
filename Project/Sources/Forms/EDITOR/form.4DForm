@@ -130,7 +130,6 @@
 					"dataSource": "shared.component.version",
 					"stroke": "#FFFFFF",
 					"textAlign": "center",
-					"fontFamily": ".SF NS Text",
 					"fontSize": 9,
 					"focusable": false,
 					"fill": "transparent",
@@ -142,7 +141,8 @@
 					"dropping": "none",
 					"events": [
 						"onClick"
-					]
+					],
+					"fontTheme": "normal"
 				},
 				"debug.localization": {
 					"type": "subform",

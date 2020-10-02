@@ -83,7 +83,6 @@ Else
 End if 
 
 // ----------------------------------------------------
-
 If (Asserted:C1132($Obj_in.project#Null:C1517))
 	
 	$Obj_project:=$Obj_in.project
@@ -127,7 +126,6 @@ If (Asserted:C1132($Obj_in.project#Null:C1517))
 		$productName:=PROJECT.$project.product
 		
 	End if 
-	
 End if 
 
 If ($Obj_in.create=Null:C1517)

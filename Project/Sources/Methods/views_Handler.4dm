@@ -219,7 +219,6 @@ Case of
 			: ($codeEvent=On Timer:K2:25)
 				
 				SET TIMER:C645(0)
-				
 				$typeForm:=$context.typeForm()
 				
 				If ($datamodel=Null:C1517) | OB Is empty:C1297($datamodel)

@@ -459,7 +459,7 @@ Function font
 	
 	If ($1.alignment#Null:C1517)
 		
-		This:C1470.textAlignment($1.alignment; $node)
+		This:C1470.alignment($1.alignment; $node)
 		
 	End if 
 	
@@ -585,7 +585,7 @@ Function fontStyle
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function textAlignment
+Function alignment
 	var $0 : Object
 	var $1 : Integer
 	var $2 : Variant

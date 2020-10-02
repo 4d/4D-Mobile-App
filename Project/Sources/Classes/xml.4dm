@@ -19,17 +19,17 @@ Function new
 	var ${1} : Text
 	
 	var $t : Text
-	var $i; $parameterCount : Integer
+	var $i; $countParam : Integer
 	
-	$parameterCount:=Count parameters:C259
+	$countParam:=Count parameters:C259
 	
 	OK:=0
 	
-	If ($parameterCount>=1)
+	If ($countParam>=1)
 		
-		If ($parameterCount>=2)
+		If ($countParam>=2)
 			
-			If (($parameterCount%2)#0)
+			If (($countParam%2)#0)
 				
 				This:C1470.errors.push(Current method name:C684+" -  Unbalanced key/value pairs")
 				
@@ -37,7 +37,7 @@ Function new
 				
 				$t:=":C861("
 				
-				For ($i; 1; $parameterCount; 2)
+				For ($i; 1; $countParam; 2)
 					
 					$t:=$t+(";"*Num:C11($i>1))+"\""+${$i}+"\";\""+${$i+1}+"\""
 					
@@ -119,24 +119,24 @@ Function parse  // Parse a variable (TEXT or BLOB)
 	var $2 : Boolean
 	var $3 : Text
 	
-	var $parameterCount : Integer
+	var $countParam : Integer
 	
-	$parameterCount:=Count parameters:C259
+	$countParam:=Count parameters:C259
 	
 	Case of 
 			
 			//……………………………………………………………………………………………
-		: ($parameterCount=0)
+		: ($countParam=0)
 			
 			$0:=This:C1470.load()
 			
 			//……………………………………………………………………………………………
-		: ($parameterCount=1)
+		: ($countParam=1)
 			
 			$0:=This:C1470.load($1)
 			
 			//……………………………………………………………………………………………
-		: ($parameterCount=2)
+		: ($countParam=2)
 			
 			$0:=This:C1470.load($1; $2)
 			
@@ -156,16 +156,16 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 	var $3 : Text
 	
 	var $node : Text
-	var $parameterCount : Integer
+	var $countParam : Integer
 	
 	This:C1470.close()  // Release memory
 	
-	$parameterCount:=Count parameters:C259
+	$countParam:=Count parameters:C259
 	
 	Case of 
 			
 			//______________________________________________________
-		: ($parameterCount=0)
+		: ($countParam=0)
 			
 			This:C1470.success:=False:C215
 			This:C1470.errors.push(Current method name:C684+" -  Missing the target to load")
@@ -177,12 +177,12 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 			Case of 
 					
 					//……………………………………………………………………………………………
-				: ($parameterCount=1)
+				: ($countParam=1)
 					
 					$node:=DOM Parse XML variable:C720($1)
 					
 					//……………………………………………………………………………………………
-				: ($parameterCount=2)
+				: ($countParam=2)
 					
 					$node:=DOM Parse XML variable:C720($1; $2)
 					
@@ -220,12 +220,12 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 					Case of 
 							
 							//……………………………………………………………………………………………
-						: ($parameterCount=1)
+						: ($countParam=1)
 							
 							$node:=DOM Parse XML source:C719($1.platformPath)
 							
 							//……………………………………………………………………………………………
-						: ($parameterCount=2)
+						: ($countParam=2)
 							
 							$node:=DOM Parse XML source:C719($1.platformPath; $2)
 							

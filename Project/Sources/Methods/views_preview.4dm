@@ -235,7 +235,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-																																																																																																																														"tips"; $o.label)
+																																																																																																																																												"tips"; $o.label)
 													
 												End if 
 											End if 

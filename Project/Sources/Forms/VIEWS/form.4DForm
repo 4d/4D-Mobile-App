@@ -166,24 +166,6 @@
 					"height": 5,
 					"fill": "#1CA0E6",
 					"stroke": "transparent"
-				},
-				"resources": {
-					"type": "button",
-					"top": 6,
-					"left": 758,
-					"width": 179,
-					"height": 22,
-					"visibility": "visible",
-					"sizingX": "move",
-					"style": "custom",
-					"events": [
-						"onClick"
-					],
-					"focusable": false,
-					"method": "views_OBJECTS_HANDLER",
-					"text": "__XXXX__",
-					"textDecoration": "underline",
-					"stroke": "#1BA1E5"
 				}
 			}
 		},
@@ -325,6 +307,8 @@
 						"onBeginDragOver"
 					],
 					"method": "VIEWS_OBJECTS_HANDLER",
+					"rowHeightAutoMin": "1em",
+					"rowHeightAutoMax": "1600em",
 					"columns": [
 						{
 							"name": "fields",
@@ -338,7 +322,6 @@
 							"stroke": "#FF0000",
 							"textAlign": "left",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 10,
 							"header": {
 								"name": "Header2",
@@ -351,7 +334,8 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"fontTheme": "normal"
 						},
 						{
 							"name": "field_ids",
@@ -365,7 +349,6 @@
 							"stroke": "#FF9300",
 							"textAlign": "left",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 10,
 							"events": [
 								"onDataChange"
@@ -382,7 +365,8 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"fontTheme": "normal"
 						},
 						{
 							"name": "icons",
@@ -491,5 +475,6 @@
 				]
 			}
 		}
-	}
+	},
+	"geometryStamp": 2
 }

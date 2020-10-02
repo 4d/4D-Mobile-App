@@ -265,7 +265,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			$svg.textArea($o.name; "root").position(0; $ƒ.cell.height-20)\
 				.dimensions($ƒ.cell.width)\
 				.fill("dimgray")\
-				.textAlignment(Align center:K42:3)
+				.alignment(Align center:K42:3)
 			
 			// Mark if used
 			$o.used:=($picker.marked.indexOf($formsArray{$i})#-1)
@@ -315,10 +315,11 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				End if 
 				
 				// Put text
-				$svg.textArea($template.parent.name; "root").position(0; $ƒ.cell.height-20)\
+				$svg.textArea($template.parent.name; "root")\
+					.position(0; $ƒ.cell.height-20)\
 					.dimensions($ƒ.cell.width)\
 					.fill("dimgray")\
-					.textAlignment(Align center:K42:3)
+					.alignment(Align center:K42:3)
 				
 				// Mark if used
 				If ($picker.marked.indexOf($formsArray{$i})#-1)

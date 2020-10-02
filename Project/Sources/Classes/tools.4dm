@@ -18,6 +18,7 @@ Function lep
 	var $2 : Variant  // In
 	
 	var $cmd; $error; $in; $out : Text
+	var $len; $pos : Integer
 	
 	Case of 
 			
@@ -50,9 +51,10 @@ Function lep
 	SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
 	LAUNCH EXTERNAL PROCESS:C811($1; $in; $out; $error)
 	
-	If ($out="@\n")  // Remove the last line feed, if any
+	// Remove the last line feed, if any
+	If (Match regex:C1019("^.+$"; $out; 1; $pos; $len))
 		
-		$out:=Delete string:C232($out; Length:C16($out); 1)
+		$out:=Substring:C12($out; $pos; $len)
 		
 	End if 
 	
@@ -67,6 +69,23 @@ Function lep
 		
 		ASSERT:C1129(False:C215; "tools > lep failed: "+$cmd)
 		
+	End if 
+	
+	//====================================================================
+Function escape
+	var $0 : Text
+	var $1 : Text
+	
+	var $t : Text
+	
+	$0:=$1
+	If (Is macOS:C1572)
+		
+		For each ($t; Split string:C1554("\\!\"#$%&'()=~|<>?;*`[] "; ""))
+			
+			$0:=Replace string:C233($0; $t; "\\"+$t; *)
+			
+		End for each 
 	End if 
 	
 	//====================================================================
@@ -239,6 +258,15 @@ Function localized
 			End for 
 		End if 
 	End if 
+	
+	//====================================================================
+	// Returns True if text match given pattern
+Function match
+	var $0 : Boolean
+	var $1 : Text
+	var $2 : Text
+	
+	$0:=Match regex:C1019($1; $2; 1)
 	
 	//====================================================================
 	// Returns a coded string that can be used in multistyles texts

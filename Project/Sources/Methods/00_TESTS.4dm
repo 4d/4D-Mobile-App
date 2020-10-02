@@ -27,7 +27,7 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		ALERT:C41(cs:C1710.tools.new().localized("doYouAllow4dMobileToModifyStructure"; "4dProductName"))
+		$t:=cs:C1710.str.new("____hello world___").trim("_")
 		
 		//________________________________________
 	: (True:C214)
