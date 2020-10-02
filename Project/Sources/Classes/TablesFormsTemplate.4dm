@@ -371,7 +371,8 @@ Function doRun
 						For each ($Obj_field; $Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
 							
 							If (($Obj_field.fieldType#Is picture:K8:10)\
-								 & ($Obj_field.fieldType#-1))  // not image or not defined
+								 & ($Obj_field.fieldType#-1)\
+								 & (Num:C11($Obj_field.id)#0))  // not image or not defined or not relation
 								
 								$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
 								
