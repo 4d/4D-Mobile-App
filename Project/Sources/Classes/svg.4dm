@@ -295,26 +295,35 @@ Function position
 	
 	If (This:C1470.success)
 		
-		If (Value type:C1509($2)=Is text:K8:3)
+		If (Count parameters:C259>=2)
 			
-			DOM SET XML ATTRIBUTE:C866($node; \
-				"x"; String:C10(Num:C11($1); "&xml")+String:C10($2))
-			
-		Else 
-			
-			If (Count parameters:C259>2)
+			If (Value type:C1509($2)=Is text:K8:3)
 				
 				DOM SET XML ATTRIBUTE:C866($node; \
-					"x"; String:C10($1; "&xml")+String:C10($3); \
-					"y"; String:C10(Num:C11($2); "&xml")+String:C10($3))
+					"x"; String:C10(Num:C11($1); "&xml")+String:C10($2))
 				
 			Else 
 				
-				DOM SET XML ATTRIBUTE:C866($node; \
-					"x"; $1; \
-					"y"; Num:C11($2))
-				
+				If (Count parameters:C259>2)
+					
+					DOM SET XML ATTRIBUTE:C866($node; \
+						"x"; String:C10($1; "&xml")+String:C10($3); \
+						"y"; String:C10(Num:C11($2); "&xml")+String:C10($3))
+					
+				Else 
+					
+					DOM SET XML ATTRIBUTE:C866($node; \
+						"x"; $1; \
+						"y"; Num:C11($2))
+					
+				End if 
 			End if 
+			
+		Else 
+			
+			DOM SET XML ATTRIBUTE:C866($node; \
+				"x"; String:C10(Num:C11($1); "&xml"))
+			
 		End if 
 		
 		This:C1470.success:=Bool:C1537(OK)
