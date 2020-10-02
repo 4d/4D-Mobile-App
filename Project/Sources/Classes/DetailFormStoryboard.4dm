@@ -339,7 +339,6 @@ Function run
 		$Lon_j:=1
 		For each ($Obj_field; $Obj_tags.table.fields; 0; Num:C11($Obj_template.fields.count))
 			If (Num:C11($Obj_field.id)=0)  // relation to N field
-				$Boo_buffer:=True:C214
 				
 				If (Length:C16(String:C10($Obj_field.bindingType))=0)
 					$Obj_field.bindingType:="relation"  // TODO this must be done before when we are looking for binding
@@ -359,6 +358,8 @@ Function run
 						$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationName\" value=\"___FIELD_"+String:C10($Lon_j)+"___\"/>"
 						$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
 					End if 
+					
+					$Boo_buffer:=True:C214
 				End if 
 				
 			End if 
@@ -376,7 +377,7 @@ Function run
 			$File_:=$target.file(Process_tags(String:C10($Obj_template.storyboard); $Obj_tags; New collection:C1472("filename")))
 			$File_.setText($Txt_buffer; "UTF-8"; Document with CRLF:K24:20)
 			
-			$Obj_out.format:=This:C1470.format()
+			$Obj_out.format:=This:C1470.format($target)
 			
 		End if 
 		

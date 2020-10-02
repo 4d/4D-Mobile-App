@@ -142,13 +142,14 @@ Function checkInsert  // ($Obj_element : Object; $Obj_tags : Object)
 	// Reformat storyboard document to follow xcode rules (line ending, attributes order, add missing resources)
 Function format  // MAC ONLY
 	var $0 : Object
+	var $1 : Object  // file to format
 	
 	var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
-	var $File_; $Obj_in; $Obj_out : Object
+	var $Obj_in; $Obj_out : Object
 	
 	$Obj_out:=New object:C1471()
 	
-	$Obj_in:=This:C1470
+	$Obj_in:=New object:C1471("path"; $1)
 	If (Value type:C1509($Obj_in.path)=Is text:K8:3)
 		
 		If (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)
@@ -159,83 +160,75 @@ Function format  // MAC ONLY
 		End if 
 	End if 
 	
-	Case of 
+	If ($1.exists)
+		
+		// Use temp file because inplace command do not reformat
+		$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+".storyboard")
+		$Obj_in.path.copyTo($File_.parent; $File_.name+$File_.extension)
+		
+		$Txt_cmd:="ibtool --upgrade "+str_singleQuoted($File_.path)+" --write "+str_singleQuoted($Obj_in.path.path)
+		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
+		
+		If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
 			
-			// ----------------------------------------
-		: ($Obj_in.path=Null:C1517)
+			$Obj_out.success:=True:C214
+			$File_.delete()  // delete temporary file
 			
-			$Obj_out.errors:=New collection:C1472("path not defined")
-			
-			// ----------------------------------------
-		: ($Obj_in.path.exists)
-			
-			// Use temp file because inplace command do not reformat
-			$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+".storyboard")
-			$Obj_in.path.copyTo($File_.parent; $File_.name+$File_.extension)
-			
-			$Txt_cmd:="ibtool --upgrade "+str_singleQuoted($File_.path)+" --write "+str_singleQuoted($Obj_in.path.path)
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
-			
-			If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
+			If (Length:C16($Txt_out)>0)
 				
-				$Obj_out.success:=True:C214
+				$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
+				$File_.setText($Txt_out)
+				$Obj_out:=plist(New object:C1471(\
+					"action"; "object"; \
+					"domain"; $File_.path))
 				$File_.delete()  // delete temporary file
 				
-				If (Length:C16($Txt_out)>0)
+				If (($Obj_out.success)\
+					 & ($Obj_out.value#Null:C1517))
 					
-					$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
-					$File_.setText($Txt_out)
-					$Obj_out:=plist(New object:C1471(\
-						"action"; "object"; \
-						"domain"; $File_.path))
-					$File_.delete()  // delete temporary file
+					// errors
+					Case of 
+							
+							//........................................
+						: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is collection:K8:32)
+							
+							$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.document.errors"]
+							
+							//........................................
+						: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is object:K8:27)
+							
+							$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.document.errors"])
+							
+							//........................................
+						: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is collection:K8:32)
+							
+							$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.errors"]
+							
+							//........................................
+						: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is object:K8:27)
+							
+							$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.errors"])
+							
+							//........................................
+					End case 
 					
-					If (($Obj_out.success)\
-						 & ($Obj_out.value#Null:C1517))
+					If (Value type:C1509($Obj_out.errors)=Is collection:K8:32)
 						
-						// errors
-						Case of 
-								
-								//........................................
-							: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is collection:K8:32)
-								
-								$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.document.errors"]
-								
-								//........................................
-							: (Value type:C1509($Obj_out.value["com.apple.ibtool.document.errors"])=Is object:K8:27)
-								
-								$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.document.errors"])
-								
-								//........................................
-							: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is collection:K8:32)
-								
-								$Obj_out.errors:=$Obj_out.value["com.apple.ibtool.errors"]
-								
-								//........................................
-							: (Value type:C1509($Obj_out.value["com.apple.ibtool.errors"])=Is object:K8:27)
-								
-								$Obj_out.errors:=New collection:C1472($Obj_out.value["com.apple.ibtool.errors"])
-								
-								//........................................
-						End case 
+						$Obj_out.success:=$Obj_out.errors.length=0
 						
-						If (Value type:C1509($Obj_out.errors)=Is collection:K8:32)
-							
-							$Obj_out.success:=$Obj_out.errors.length=0
-							
-						End if 
 					End if 
 				End if 
 			End if 
-			
-			// ----------------------------------------
-		Else 
-			
-			$File_.delete()  // delete temporary file
-			$Obj_out.errors:=New collection:C1472("path do not exist")
-			
-			// ----------------------------------------
-	End case 
+		End if 
+		
+		// ----------------------------------------
+	Else 
+		
+		//$File_.delete()  // delete temporary file
+		$Obj_out.errors:=New collection:C1472("path do not exist")
+		
+		// ----------------------------------------
+	End if 
 	
 	$0:=$Obj_out
 	
