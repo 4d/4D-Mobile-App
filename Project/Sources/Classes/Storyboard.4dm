@@ -1,12 +1,14 @@
 Class constructor
 	var $1 : Object
 	
-	This:C1470.path:=$1
-	
-	If (This:C1470.path#Null:C1517)
+	If (Count parameters:C259>0)
+		This:C1470.path:=$1
 		
-		ASSERT:C1129(OB Instance of:C1731(This:C1470.path; 4D:C1709.File); "storyboard must be a file")
-		
+		If (This:C1470.path#Null:C1517)
+			
+			ASSERT:C1129(OB Instance of:C1731(This:C1470.path; 4D:C1709.File); "storyboard must be a file")
+			
+		End if 
 	End if 
 	
 Function randomID
@@ -142,14 +144,18 @@ Function checkInsert  // ($Obj_element : Object; $Obj_tags : Object)
 	// Reformat storyboard document to follow xcode rules (line ending, attributes order, add missing resources)
 Function format  // MAC ONLY
 	var $0 : Object
-	var $1 : Object  // file to format
+	var $1 : Object  // file to format (if null use This.path)
 	
 	var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
 	var $Obj_in; $Obj_out : Object
 	
 	$Obj_out:=New object:C1471()
 	
-	$Obj_in:=New object:C1471("path"; $1)
+	If (Count parameters:C259>0)
+		$Obj_in:=New object:C1471("path"; $1)
+	Else 
+		$Obj_in:=New object:C1471("path"; This:C1470.path)
+	End if 
 	If (Value type:C1509($Obj_in.path)=Is text:K8:3)
 		
 		If (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)
@@ -160,7 +166,7 @@ Function format  // MAC ONLY
 		End if 
 	End if 
 	
-	If ($1.exists)
+	If ($Obj_in.path.exists)
 		
 		// Use temp file because inplace command do not reformat
 		C_OBJECT:C1216($File_)
@@ -549,3 +555,119 @@ Function checkStoryboardPath
 	End if 
 	This:C1470.path:=Folder:C1567($Obj_template.source; fk platform path:K87:2).file(String:C10($Obj_template.storyboard))
 	
+	
+Function relationSegue($relation : Object)
+	C_TEXT:C284($0; $Txt_buffer)
+	If ($relation.transition=Null:C1517)
+		$relation.transition:=New object:C1471()
+	End if 
+	
+	If (Length:C16(String:C10($relation.transition.kind))=0)
+		$relation.transition.kind:="show"
+		// else check type?
+	End if 
+	
+	$Txt_buffer:="<segue destination=\"TAG-SN-001\""
+	
+	If ($relation.transition.customClass#Null:C1517)
+		$Txt_buffer:=$Txt_buffer+" customClass=\""+String:C10($relation.transition.customClass)+"\""
+	End if 
+	If ($relation.transition.customModule#Null:C1517)
+		$Txt_buffer:=$Txt_buffer+" customModule=\""+String:C10($relation.transition.customModule)+"\""
+	End if 
+	If ($relation.transition.modalPresentationStyle#Null:C1517)
+		$Txt_buffer:=$Txt_buffer+" modalPresentationStyle=\""+String:C10($relation.transition.modalPresentationStyle)+"\""
+	End if 
+	If ($relation.transition.modalTransitionStyle#Null:C1517)
+		$Txt_buffer:=$Txt_buffer+" modalTransitionStyle=\""+String:C10($relation.transition.modalTransitionStyle)+"\""
+	End if 
+	$Txt_buffer:=$Txt_buffer+" kind=\""+String:C10($relation.transition.kind)+"\""
+	$Txt_buffer:=$Txt_buffer+" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"
+	
+	$0:=$Txt_buffer
+	
+Function injectElement
+	C_OBJECT:C1216($Obj_field; $1; $Obj_tags; $2; $Obj_template; $3; $Obj_out; $6)
+	C_LONGINT:C283($Lon_j; $4)
+	C_BOOLEAN:C305($isHorizontal; $5)
+	$Obj_field:=$1
+	$Obj_tags:=$2
+	$Obj_template:=$3
+	$Lon_j:=$4
+	$isHorizontal:=$5
+	$Obj_out:=$6  // result (could be $0 if caller merge result)
+	
+	C_TEXT:C284($Txt_buffer)
+	
+	// Set tags:
+	// - field
+	$Obj_tags.field:=$Obj_field
+	$Obj_tags.storyboardID:=New collection:C1472
+	
+	
+	C_COLLECTION:C1488($Col_elements)
+	If (Num:C11($Obj_field.id)=0)  // relation to N field
+		
+		$Col_elements:=$Obj_template.relation.elements
+		
+	Else 
+		
+		$Col_elements:=$Obj_template.elements
+		
+	End if 
+	
+	// For each element... (scene, cell, ...)
+	C_OBJECT:C1216($Obj_element)
+	For each ($Obj_element; $Col_elements)
+		
+		If ($Obj_element.dom#Null:C1517)  // if valid element
+			
+			If ($isHorizontal)
+				/// HEADER for row
+				If ($Obj_element.insertIntoRow=Null:C1517)
+					
+					If ($Obj_element.insertInto.parent().getName().name="stackView")  // only on stack view (suppose only one element has stack view parent..., same as relation)
+						$Txt_buffer:="<stackView opaque=\"NO\" contentMode=\"scaleToFill\" distribution=\"fillEqually\" translatesAutoresizingMaskIntoConstraints=\"NO\" id=\"ROW-SV"+String:C10($Lon_j; "##000")+"\"></stackView>"
+						$Obj_element.insertIntoRow:=$Obj_element.insertInto.append($Txt_buffer)
+						$Txt_buffer:="<rect key=\"frame\" x=\"0.0\" y=\"200\" width=\"375\" height=\"97\"/>"
+						$Dom_:=$Obj_element.insertIntoRow.append($Txt_buffer)
+						$Txt_buffer:="<subviews></subviews>"
+						$Obj_element.insertIntoRow:=$Obj_element.insertIntoRow.append($Txt_buffer)
+					Else 
+						$Obj_element.insertIntoRow:=$Obj_element.insertInto
+					End if 
+				End if 
+				/// END HEADER for row
+			End if 
+			
+			// - randoms ids
+			If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
+				
+				C_OBJECT:C1216($Obj_storyboardID)
+				$Obj_storyboardID:=New object:C1471(\
+					"tagInterfix"; $Obj_element.tagInterfix; \
+					"storyboardIDs"; This:C1470.randomIDS($Obj_element.idCount))
+				
+				$Obj_tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
+				
+			End if 
+			
+			// Process tags on the element
+			$Txt_buffer:=$Obj_element.dom.export().variable
+			$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("___TABLE___"; "detailform"; "storyboardID"))
+			
+			// Insert node for this element
+			If (Bool:C1537($Obj_element.insertInto.success))
+				
+				C_OBJECT:C1216($Dom_)
+				$Dom_:=This:C1470.insertInto($Obj_element; $Txt_buffer; $Lon_j)
+				$Obj_out.doms.push($Dom_)
+				
+			Else 
+				
+				ob_error_add($Obj_out; "Failed to insert after processing tags '"+$Txt_buffer+"'")
+				
+			End if 
+			
+		End if 
+	End for each 

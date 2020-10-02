@@ -2,7 +2,11 @@ Class extends Storyboard
 
 Class constructor
 	C_OBJECT:C1216($1)
-	Super:C1705($1)
+	If (Count parameters:C259>0)
+		Super:C1705($1)
+	Else 
+		Super:C1705()
+	End if 
 	This:C1470.type:="listform"
 	
 Function run
@@ -95,23 +99,52 @@ Function run
 				End if 
 				$Lon_j:=$Lon_j+1
 			End for each 
-/*
-C_OBJECT($Folder_relation)
-$Folder_relation:=COMPONENT_Pathname("templates").folder("relation")
 			
-For each ($Obj_field; $Obj_tags.table.fields)
-If (Num($Obj_field.id)=0)  // relation to N field
+			// segue and connection (OPTI maybe with do not do another loop)
+			C_OBJECT:C1216($Folder_relation)
+			$Folder_relation:=COMPONENT_Pathname("templates").folder("relation")
 			
-			$Obj_element:=New object(\
-				"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
-				"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
-				"idCount"; 3; \
-				"tagInterfix"; "SN"; \
-				"insertMode"; "append")
+			$Lon_j:=1
+			For each ($Obj_field; $Obj_tags.table.fields)
+				If (Num:C11($Obj_field.id)=0)  // relation to N field
+					
+					$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
+					$Dom_:=$Dom_.parentWithName("scene").firstChild().firstChild()  // objects.XController (table view , view , collection view)
+					
+					If ($Dom_.success)
+						
+						$Obj_template.relation:=New object:C1471("elements"; New collection:C1472())
+						$Obj_element:=New object:C1471(\
+							"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
+							"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
+							"idCount"; 3; \
+							"tagInterfix"; "SN"; \
+							"insertMode"; "append")
+						$Obj_template.relation.elements.push($Obj_element)
+						
+						$Obj_element:=New object:C1471("idCount"; 1; \
+							"insertInto"; $Dom_; \
+							"tagInterfix"; "SG"; \
+							"insertMode"; "append"\
+							)
+						
+						$Txt_buffer:=This:C1470.relationSegue($Obj_template.relation)
+						$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
+						$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
+						$Obj_template.relation.elements.push($Obj_element)
+						
+						This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)
+						
+					Else 
+						
+						// Invalid relation
+						ASSERT:C1129(dev_Matrix; "Cannot add relation on this template. Cannot find viewController: "+JSON Stringify:C1217($Obj_field))
+						
+					End if 
+				End if 
+				$Lon_j:=$Lon_j+1
+			End for each 
 			
-End if 
-End for each 
-*/
 			
 			// Save file at destination after replacing tags
 			If ($Boo_buffer)
@@ -131,7 +164,7 @@ End for each
 			$Dom_root.close()
 		End if 
 		
-		$Obj_out.success:=True:C214
+		$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
 		
 	Else   // Not a document
 		

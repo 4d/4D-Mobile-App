@@ -2,7 +2,11 @@ Class extends Storyboard
 
 Class constructor
 	C_OBJECT:C1216($1)
-	Super:C1705($1)
+	If (Count parameters:C259>0)
+		Super:C1705($1)
+	Else 
+		Super:C1705()
+	End if 
 	This:C1470.type:="detailform"
 	
 Function run
@@ -141,6 +145,10 @@ Function run
 				End if 
 			End for each 
 			
+			// Find a node to duplicate for relation
+			C_OBJECT:C1216($Folder_relation)
+			$Folder_relation:=COMPONENT_Pathname("templates").folder("relation")
+			
 			C_BOOLEAN:C305($Boo_hasRelation)
 			$Boo_hasRelation:=False:C215
 			C_OBJECT:C1216($Obj_field)
@@ -157,10 +165,6 @@ Function run
 				End if 
 				$Obj_template.relation.elements:=New collection:C1472()
 				
-				
-				// Find a node to duplicate for relation
-				C_OBJECT:C1216($Folder_relation)
-				$Folder_relation:=COMPONENT_Pathname("templates").folder("relation")
 				
 				C_OBJECT:C1216($Dom_relation)
 				
@@ -366,6 +370,47 @@ Function run
 			$Lon_j:=$Lon_j+1
 		End for each 
 		
+		$Lon_j:=1
+		For each ($Obj_field; $Obj_tags.table.fields)
+			If (Num:C11($Obj_field.id)=0)  // relation to N field
+				
+				$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
+				$Dom_:=$Dom_.parentWithName("scene").firstChild().firstChild()  // objects.XController (table view , view , collection view)
+				
+				If ($Dom_.success)
+					
+					$Obj_template.relation:=New object:C1471("elements"; New collection:C1472())
+					$Obj_element:=New object:C1471(\
+						"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
+						"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
+						"idCount"; 3; \
+						"tagInterfix"; "SN"; \
+						"insertMode"; "append")
+					$Obj_template.relation.elements.push($Obj_element)
+					
+					$Obj_element:=New object:C1471("idCount"; 1; \
+						"insertInto"; $Dom_; \
+						"tagInterfix"; "SG"; \
+						"insertMode"; "append"\
+						)
+					
+					$Txt_buffer:=This:C1470.relationSegue($Obj_template.relation)
+					$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
+					$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
+					$Obj_template.relation.elements.push($Obj_element)
+					
+					This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)
+					
+				Else 
+					
+					// Invalid relation
+					ASSERT:C1129(dev_Matrix; "Cannot add relation on this template. Cannot find viewController: "+JSON Stringify:C1217($Obj_field))
+					
+				End if 
+			End if 
+			$Lon_j:=$Lon_j+1
+		End for each 
+		
 		// Save file at destination after replacing tags
 		If ($Boo_buffer)
 			
@@ -383,7 +428,7 @@ Function run
 		
 		$Dom_root.close()
 		
-		$Obj_out.success:=True:C214  // XXX maybe better error managing, take into account all "doms"
+		$Obj_out.success:=Not:C34(ob_error_has($Obj_out))  // XXX maybe better error managing, take into account all "doms"
 		
 	Else   // Not a document
 		
@@ -395,93 +440,6 @@ Function run
 	End if 
 	
 	$0:=$Obj_out
-	
-Function injectElement
-	C_OBJECT:C1216($Obj_field; $1; $Obj_tags; $2; $Obj_template; $3; $Obj_out; $6)
-	C_LONGINT:C283($Lon_j; $4)
-	C_BOOLEAN:C305($isHorizontal; $5)
-	$Obj_field:=$1
-	$Obj_tags:=$2
-	$Obj_template:=$3
-	$Lon_j:=$4
-	$isHorizontal:=$5
-	$Obj_out:=$6  // result (could be $0 if caller merge result)
-	
-	C_TEXT:C284($Txt_buffer)
-	
-	// Set tags:
-	// - field
-	$Obj_tags.field:=$Obj_field
-	$Obj_tags.storyboardID:=New collection:C1472
-	
-	
-	C_COLLECTION:C1488($Col_elements)
-	If (Num:C11($Obj_field.id)=0)  // relation to N field
-		
-		$Col_elements:=$Obj_template.relation.elements
-		
-	Else 
-		
-		$Col_elements:=$Obj_template.elements
-		
-	End if 
-	
-	// For each element... (scene, cell, ...)
-	C_OBJECT:C1216($Obj_element)
-	For each ($Obj_element; $Col_elements)
-		
-		If ($Obj_element.dom#Null:C1517)  // if valid element
-			
-			If ($isHorizontal)
-				/// HEADER for row
-				If ($Obj_element.insertIntoRow=Null:C1517)
-					
-					If ($Obj_element.insertInto.parent().getName().name="stackView")  // only on stack view (suppose only one element has stack view parent..., same as relation)
-						$Txt_buffer:="<stackView opaque=\"NO\" contentMode=\"scaleToFill\" distribution=\"fillEqually\" translatesAutoresizingMaskIntoConstraints=\"NO\" id=\"ROW-SV"+String:C10($Lon_j; "##000")+"\"></stackView>"
-						$Obj_element.insertIntoRow:=$Obj_element.insertInto.append($Txt_buffer)
-						$Txt_buffer:="<rect key=\"frame\" x=\"0.0\" y=\"200\" width=\"375\" height=\"97\"/>"
-						$Dom_:=$Obj_element.insertIntoRow.append($Txt_buffer)
-						$Txt_buffer:="<subviews></subviews>"
-						$Obj_element.insertIntoRow:=$Obj_element.insertIntoRow.append($Txt_buffer)
-					Else 
-						$Obj_element.insertIntoRow:=$Obj_element.insertInto
-					End if 
-				End if 
-				/// END HEADER for row
-			End if 
-			
-			// - randoms ids
-			If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
-				
-				C_OBJECT:C1216($Obj_storyboardID)
-				$Obj_storyboardID:=New object:C1471(\
-					"tagInterfix"; $Obj_element.tagInterfix; \
-					"storyboardIDs"; This:C1470.randomIDS($Obj_element.idCount))
-				
-				$Obj_tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
-				
-			End if 
-			
-			// Process tags on the element
-			$Txt_buffer:=$Obj_element.dom.export().variable
-			$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("___TABLE___"; "detailform"; "storyboardID"))
-			
-			// Insert node for this element
-			If (Bool:C1537($Obj_element.insertInto.success))
-				
-				C_OBJECT:C1216($Dom_)
-				$Dom_:=This:C1470.insertInto($Obj_element; $Txt_buffer; $Lon_j)
-				$Obj_out.doms.push($Dom_)
-				
-			Else 
-				
-				ob_error_add($Obj_out; "Failed to insert after processing tags '"+$Txt_buffer+"'")
-				
-			End if 
-			
-		End if 
-	End for each 
-	
 	
 	
 Function checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_root : Object/*xml node*/)
@@ -542,33 +500,3 @@ Function checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_
 	End if 
 	
 	
-	
-Function relationSegue($relation : Object)
-	C_TEXT:C284($0; $Txt_buffer)
-	If ($relation.transition=Null:C1517)
-		$relation.transition:=New object:C1471()
-	End if 
-	
-	If (Length:C16(String:C10($relation.transition.kind))=0)
-		$relation.transition.kind:="show"
-		// else check type?
-	End if 
-	
-	$Txt_buffer:="<segue destination=\"TAG-SN-001\""
-	
-	If ($relation.transition.customClass#Null:C1517)
-		$Txt_buffer:=$Txt_buffer+" customClass=\""+String:C10($relation.transition.customClass)+"\""
-	End if 
-	If ($relation.transition.customModule#Null:C1517)
-		$Txt_buffer:=$Txt_buffer+" customModule=\""+String:C10($relation.transition.customModule)+"\""
-	End if 
-	If ($relation.transition.modalPresentationStyle#Null:C1517)
-		$Txt_buffer:=$Txt_buffer+" modalPresentationStyle=\""+String:C10($relation.transition.modalPresentationStyle)+"\""
-	End if 
-	If ($relation.transition.modalTransitionStyle#Null:C1517)
-		$Txt_buffer:=$Txt_buffer+" modalTransitionStyle=\""+String:C10($relation.transition.modalTransitionStyle)+"\""
-	End if 
-	$Txt_buffer:=$Txt_buffer+" kind=\""+String:C10($relation.transition.kind)+"\""
-	$Txt_buffer:=$Txt_buffer+" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"
-	
-	$0:=$Txt_buffer
