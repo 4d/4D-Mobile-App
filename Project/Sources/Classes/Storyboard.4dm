@@ -163,6 +163,7 @@ Function format  // MAC ONLY
 	If ($1.exists)
 		
 		// Use temp file because inplace command do not reformat
+		C_OBJECT:C1216($File_)
 		$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+".storyboard")
 		$Obj_in.path.copyTo($File_.parent; $File_.name+$File_.extension)
 		

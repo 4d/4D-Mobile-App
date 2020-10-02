@@ -49,6 +49,8 @@ Function run
 		End if 
 		
 		// check if we need to update for relation
+		C_OBJECT:C1216($Obj_field)
+		C_BOOLEAN:C305($Boo_buffer; $Boo_hasRelation)
 		$Boo_buffer:=False:C215
 		// Manage relation field?
 		$Boo_hasRelation:=False:C215
@@ -64,6 +66,7 @@ Function run
 			$Dom_root:=xml("load"; This:C1470.path)
 			
 			// TODO factorize with detailFormStoryboard if possible
+			C_LONGINT:C283($Lon_j)
 			$Lon_j:=1
 			For each ($Obj_field; $Obj_tags.table.fields)
 				If (Num:C11($Obj_field.id)=0)  // relation to N field
@@ -92,6 +95,23 @@ Function run
 				End if 
 				$Lon_j:=$Lon_j+1
 			End for each 
+/*
+C_OBJECT($Folder_relation)
+$Folder_relation:=COMPONENT_Pathname("templates").folder("relation")
+			
+For each ($Obj_field; $Obj_tags.table.fields)
+If (Num($Obj_field.id)=0)  // relation to N field
+			
+			$Obj_element:=New object(\
+				"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
+				"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
+				"idCount"; 3; \
+				"tagInterfix"; "SN"; \
+				"insertMode"; "append")
+			
+End if 
+End for each 
+*/
 			
 			// Save file at destination after replacing tags
 			If ($Boo_buffer)
