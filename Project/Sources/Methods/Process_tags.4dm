@@ -469,17 +469,27 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					
 					// If use field as relation, remove these lines if use ($Obj_tags.relation#Null)
 					$Col_oldStrings.push("___DESTINATION___")
+					C_TEXT:C284($destination)
+					$destination:=""
 					
 					Case of 
 						: (($Obj_tags.field.relatedEntities#Null:C1517))  // isToMany ?
-							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedEntities)+"ListForm"))  // CODE REMOVE?
+							$destination:=String:C10($Obj_tags.field.relatedEntities)+"ListForm"  // CODE REMOVE? No, seems to have different form acording to relation level, find where in calling code?
 						: ($Obj_tags.field.relatedEntity#Null:C1517)  //  ??
-							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedEntity)+"DetailsForm"))  // CODE REMOVE?
+							$destination:=String:C10($Obj_tags.field.relatedEntity)+"DetailsForm"  // CODE REMOVE?
 						: (Bool:C1537($Obj_tags.field.isToMany))
-							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedDataClass)+"ListForm"))
+							$destination:=String:C10($Obj_tags.field.relatedDataClass)+"ListForm"
+						: ($Obj_tags.field.relatedDataClass#Null:C1517)
+							$destination:=String:C10($Obj_tags.field.relatedDataClass)+"DetailsForm"
 						Else 
-							$Col_newStrings.push(formatString("table-name"; String:C10($Obj_tags.field.relatedDataClass)+"DetailsForm"))
+							ASSERT:C1129(dev_Matrix; "There is no information about relation in field but a segue destination is quested")
 					End case 
+					
+					If (Length:C16($destination)>0)
+						$destination:=formatString("table-name"; $destination)
+					End if 
+					
+					$Col_newStrings.push($destination)
 					
 				End if 
 			End if 

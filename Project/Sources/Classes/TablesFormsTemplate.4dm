@@ -267,6 +267,7 @@ Function doRun
 								"bindingType"; "unknown"; \
 								"type"; -1; \
 								"fieldType"; -1; \
+								"id"; -1; \
 								"icon"; "")
 							
 							//……………………………………………………………………………………………………………
@@ -302,6 +303,7 @@ Function doRun
 							"bindingType"; "unknown"; \
 							"type"; -1; \
 							"fieldType"; -1; \
+							"id"; -1; \
 							"icon"; ""))
 						
 					End while 
