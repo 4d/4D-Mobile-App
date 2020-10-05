@@ -93,6 +93,8 @@ Case of
 				
 			End if 
 			
+			C_OPEN_MOBILE_PROJECT($pathName)
+			
 			If ($withDebuglog)
 				
 				SET DATABASE PARAMETER:C642(Debug log recording:K37:34; 0)
