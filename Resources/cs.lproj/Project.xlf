@@ -1242,7 +1242,7 @@ Zabere to několik minut</target>
           <source>Scheme must begin with a letter
 followed by letters, digits, plus ("+"), period ("."), or hyphen ("-")
 and end with "://".</source>
-          <target state="new">Schéma musí začínat písmenem
+          <target>Schéma musí začínat písmenem
 následovaném písmeny, čísly, plusem ("+"), tečkou ("."), nebo pomlčkou ("-")
 a končit "://".</target>
         </trans-unit>
