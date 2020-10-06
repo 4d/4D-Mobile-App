@@ -32,7 +32,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$out:=New object:C1471(\
 		"success"; Form:C1466.dataModel#Null:C1517)
 	
-	$str:=str()
+	$str:=_o_str()
 	
 Else 
 	

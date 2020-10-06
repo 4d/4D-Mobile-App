@@ -64,7 +64,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$params.selectedFill:=UI.colors.backgroundSelectedColor.hex
 	$params.selectedStroke:=UI.colors.strokeColor.hex
 	
-	$str:=str()
+	$str:=_o_str()
 	
 	$svg:=cs:C1710.svg.new()
 	$error:=cs:C1710.error.new()

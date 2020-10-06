@@ -46,7 +46,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	$Obj_project:=ob_createPath($Obj_project; "$dialog")
 	
-	$str:=str()
+	$str:=_o_str()
 	
 Else 
 	

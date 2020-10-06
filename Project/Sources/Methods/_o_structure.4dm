@@ -286,21 +286,34 @@ Case of
 					$OUT.tableNumber:=$tableNumber
 					$OUT.tableName:=Table name:C256($tableNumber)
 					
-					If ($field.type=-2)  //1 to N relation
-						
-						$OUT.fieldType:=8859
-						$OUT.type:=-2
-						$OUT.relatedDataClass:=$field.relatedDataClass
-						$OUT.relatedTableNumber:=$field.relatedTableNumber
-						
-					Else 
-						
-						$OUT.fieldNumber:=$field.fieldNumber
-						$OUT.fieldType:=$field.fieldType
-						$OUT.name:=Field name:C257($tableNumber; $field.fieldNumber)
-						$OUT.type:=_o_tempoFieldType($field.fieldType)
-						
-					End if 
+					Case of 
+							
+							//______________________________________________________
+						: ($field.type=-2)  // 1 to N relation
+							
+							$OUT.fieldType:=8859
+							$OUT.type:=-2
+							$OUT.relatedDataClass:=$field.relatedDataClass
+							$OUT.relatedTableNumber:=$field.relatedTableNumber
+							
+							//______________________________________________________
+						: ($field.type=-1)  // N to 1 relation
+							
+							$OUT.fieldType:=8858
+							$OUT.type:=-1
+							$OUT.relatedDataClass:=$field.relatedDataClass
+							$OUT.relatedTableNumber:=$field.relatedTableNumber
+							
+							//______________________________________________________
+						Else 
+							
+							$OUT.fieldNumber:=$field.fieldNumber
+							$OUT.fieldType:=$field.fieldType
+							$OUT.name:=Field name:C257($tableNumber; $field.fieldNumber)
+							$OUT.type:=_o_tempoFieldType($field.fieldType)
+							
+							//______________________________________________________
+					End case 
 					
 				Else 
 					
@@ -1224,7 +1237,7 @@ Case of
 			
 			If (Bool:C1537(SHARED.stampField.indexed))
 				
-				DOCUMENT:="CREATE INDEX "+String:C10(SHARED.stampField.name)+"_"+str($t).lowerCamelCase()+" ON ["+$t+"] ("+String:C10(SHARED.stampField.name)+");"
+				DOCUMENT:="CREATE INDEX "+String:C10(SHARED.stampField.name)+"_"+_o_str($t).lowerCamelCase()+" ON ["+$t+"] ("+String:C10(SHARED.stampField.name)+");"
 				
 			End if 
 			

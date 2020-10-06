@@ -46,7 +46,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"github"; $p\
 		)
 	
-	$str:=str
+	$str:=_o_str
 	
 	// Load internal templates
 	$internal:=path[$ƒ.type+"Forms"]()

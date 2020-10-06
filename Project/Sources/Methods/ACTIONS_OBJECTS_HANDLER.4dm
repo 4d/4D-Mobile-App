@@ -256,7 +256,7 @@ Case of
 							$o.promptBackColor:=UI.strokeColor
 							$o.hidePromptSeparator:=True:C214
 							$o.forceRedraw:=True:C214
-							$o.prompt:=str.setText("chooseAnIconForTheAction").localized(String:C10($context.current.name))
+							$o.prompt:=_o_str.setText("chooseAnIconForTheAction").localized(String:C10($context.current.name))
 							
 							// Display selector
 							$form.form.call(New object:C1471(\
@@ -477,7 +477,7 @@ Case of
 					$table:=Form:C1466.dataModel[$menu.table]
 					
 					// Generate a unique name
-					$t:=str(formatString("label"; $table[""].name)).uperCamelCase()
+					$t:=_o_str(formatString("label"; $table[""].name)).uperCamelCase()
 					
 					$menu.name:=$menu.prefix+$t
 					
@@ -543,7 +543,7 @@ Case of
 											
 											$oo:=New object:C1471(\
 												"fieldNumber"; $field.fieldNumber; \
-												"name"; str($table[$t].name).uperCamelCase(); \
+												"name"; _o_str($table[$t].name).uperCamelCase(); \
 												"label"; $table[$t].label; \
 												"shortLabel"; $table[$t].shortLabel; \
 												"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))

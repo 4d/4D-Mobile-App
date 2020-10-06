@@ -60,7 +60,6 @@ Case of
 		
 		$o.release()
 		
-		
 		//________________________________________
 	: (True:C214)
 		
@@ -513,14 +512,14 @@ Case of
 		//________________________________________
 	: (False:C215)
 		
-		$t:=str("").shuffle(5)
-		$t:=str("").shuffle(10)
-		$t:=str("").shuffle(15)
-		$t:=str("").shuffle(20)
-		$t:=str("").shuffle(30)
-		$t:=str("").shuffle(40)
-		$t:=str.setText("Hello world").shuffle(100)
-		$t:=str.setText("Note: if a value being appended is a collection, the elements of the collection will be appended.").shuffle(15)
+		$t:=_o_str("").shuffle(5)
+		$t:=_o_str("").shuffle(10)
+		$t:=_o_str("").shuffle(15)
+		$t:=_o_str("").shuffle(20)
+		$t:=_o_str("").shuffle(30)
+		$t:=_o_str("").shuffle(40)
+		$t:=_o_str.setText("Hello world").shuffle(100)
+		$t:=_o_str.setText("Note: if a value being appended is a collection, the elements of the collection will be appended.").shuffle(15)
 		
 		//________________________________________
 	: (False:C215)  // Unsandbox

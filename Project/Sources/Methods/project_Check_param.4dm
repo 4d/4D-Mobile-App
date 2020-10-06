@@ -161,7 +161,7 @@ If ($Obj_out.success & Bool:C1537($Obj_in.build))
 						
 						// Ensure the errors collection exists
 						$Obj_out:=ob_createPath($Obj_out; "errors"; Is collection:K8:32)
-						$Obj_out.errors.push(str("theLinkedTableIsNotPublished").localized($o[$t][$tt].relatedEntities))
+						$Obj_out.errors.push(_o_str("theLinkedTableIsNotPublished").localized($o[$t][$tt].relatedEntities))
 						
 					End if 
 					//………………………………………………………………………………………………………

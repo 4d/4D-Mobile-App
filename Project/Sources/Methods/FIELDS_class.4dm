@@ -88,7 +88,7 @@ Else
 			
 			$Obj_widget:=$Obj_form.fieldList.update()
 			
-			$str:=str()  // init class
+			$str:=_o_str()  // init class
 			
 			// ----------------------------------------------------
 			If ($Obj_widget.row#0)

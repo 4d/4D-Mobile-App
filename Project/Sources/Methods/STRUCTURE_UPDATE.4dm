@@ -183,7 +183,7 @@ Else
 					: ($type=-2)  // 1 -> N relation
 						
 						$table[$field.name]:=New object:C1471(\
-							"label"; formatString("label"; str("listOf").localized($field.name)); \
+							"label"; formatString("label"; _o_str("listOf").localized($field.name)); \
 							"shortLabel"; formatString("label"; $field.name); \
 							"relatedEntities"; $field.relatedDataClass; \
 							"relatedTableNumber"; $field.relatedTableNumber; \

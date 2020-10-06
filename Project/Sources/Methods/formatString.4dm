@@ -51,7 +51,7 @@ Case of
 	: ($t_format="urlScheme")
 		
 		// Replace accented characters with non accented one.
-		$t_formated:=str($t_string).unaccented()
+		$t_formated:=_o_str($t_string).unaccented()
 		
 		// Remove space, other accent, special characters
 		$lError:=Rgx_SubstituteText("[^-+\\.a-zA-Z0-9]"; "-"; ->$t_formated; 0)
@@ -60,7 +60,7 @@ Case of
 	: ($t_format="bundleApp")
 		
 		// Replace accented characters with non accented one.
-		$t_formated:=str($t_string).unaccented()
+		$t_formated:=_o_str($t_string).unaccented()
 		
 		// Remove space, other accent, special characters
 		$lError:=Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "-"; ->$t_formated; 0)
@@ -132,7 +132,7 @@ Case of
 			$t_string:=Replace string:C233($t_string; "."; " ")  // #98373
 			
 			// Replace accented characters with non accented one.
-			$t_string:=str($t_string).unaccented()  // #98381
+			$t_string:=_o_str($t_string).unaccented()  // #98381
 			
 			// Remove space {
 			GET TEXT KEYWORDS:C1141($t_string; $aTxt_words)
@@ -187,7 +187,7 @@ Case of
 				$t_string:=Replace string:C233($t_string; "."; " ")  // #98373
 				
 				// Replace accented characters with non accented one.
-				$t_string:=str($t_string).unaccented()
+				$t_string:=_o_str($t_string).unaccented()
 				
 				$t_string[[1]]:=Lowercase:C14($t_string[[1]])
 				

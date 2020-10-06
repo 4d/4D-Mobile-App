@@ -46,7 +46,7 @@ If (Asserted:C1132($Lon_parameters>=3; "Missing parameter"))
 	
 	$Obj_table:=$Obj_tags.table
 	
-	$o:=str  // Class
+	$o:=_o_str  // Class
 	
 Else 
 	

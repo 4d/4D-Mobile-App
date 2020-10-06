@@ -100,7 +100,7 @@ Case of
 					
 				Else 
 					
-					OBJECT SET TITLE:C194(*; $form.allow; str("allowToMakeTheStructureAdjustments").localized("4dProductName"))
+					OBJECT SET TITLE:C194(*; $form.allow; _o_str("allowToMakeTheStructureAdjustments").localized("4dProductName"))
 					
 				End if 
 				

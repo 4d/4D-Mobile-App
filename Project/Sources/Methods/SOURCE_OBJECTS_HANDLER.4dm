@@ -190,7 +190,7 @@ Case of
 						If (Num:C11($errors.lastError().error)=-1)
 							
 							// Port conflict ?
-							$Obj_server.message:=str("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_server.options.webPortID); String:C10($Obj_server.options.webHTTPSPortID)))
+							$Obj_server.message:=_o_str("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_server.options.webPortID); String:C10($Obj_server.options.webHTTPSPortID)))
 							
 						Else 
 							

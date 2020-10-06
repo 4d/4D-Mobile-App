@@ -97,7 +97,7 @@ Case of
 						$o.promptBackColor:=UI.strokeColor
 						$o.hidePromptSeparator:=True:C214
 						$o.forceRedraw:=True:C214
-						$o.prompt:=str("chooseAnIconForTheField").localized($Obj_field.name)
+						$o.prompt:=_o_str("chooseAnIconForTheField").localized($Obj_field.name)
 						
 						$Obj_context.showPicker($o)
 						
@@ -194,7 +194,7 @@ Case of
 							
 						Else 
 							
-							$Obj_popup.append(str("_"+$t).localized(); $t; $Txt_current=$t)
+							$Obj_popup.append(_o_str("_"+$t).localized(); $t; $Txt_current=$t)
 							
 						End if 
 					End for each 
@@ -229,7 +229,7 @@ Case of
 							
 						Else 
 							
-							$Ptr_me->{$Obj_widget.row}:=str("_"+$Obj_popup.choice).localized()
+							$Ptr_me->{$Obj_widget.row}:=_o_str("_"+$Obj_popup.choice).localized()
 							
 						End if 
 						//%W+533.3

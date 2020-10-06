@@ -5,11 +5,11 @@ C_OBJECT:C1216($o)
 
 TRY
 
-$o:=cs:C1710.str.new()
+$o:=_o_str()
 ASSERT:C1129(Length:C16($o.value)=0)
 ASSERT:C1129($o.length=0)
 
-$o:=cs:C1710.str.new("hello world")
+$o.setText("hello world")
 ASSERT:C1129($o.value="hello world")
 ASSERT:C1129($o.length=11)
 
@@ -362,11 +362,11 @@ $t:="If you pass the optional * parameter, you indicate that the object paramete
 +"Object Properties section."
 
 $tt:=$o.setText($t).replace("the"; "_THE_")
-ASSERT:C1129(cs:C1710.str.new($tt).occurrences("_THE_")=4)
+ASSERT:C1129(_o_str($tt).occurrences("_THE_")=4)
 ASSERT:C1129($tt=$o.replace(New collection:C1472("the"); New collection:C1472("_THE_")))
 
 $tt:=$o.setText("abcaabbcc").replace(New collection:C1472("a"; "c"); New collection:C1472("A"; "©"))
-ASSERT:C1129(cs:C1710.str.new($tt).equal("Ab©AAbb©©"))
+ASSERT:C1129(_o_str($tt).equal("Ab©AAbb©©"))
 
 ASSERT:C1129($o.setText("Hello World").replace("World"; "Vincent")="Hello Vincent")
 ASSERT:C1129($o.setText("Hello World").replace(" World"; Null:C1517)="Hello")
@@ -421,6 +421,21 @@ ASSERT:C1129($o.setText("hello").truncate(5)="hello")
 ASSERT:C1129($o.setText("hello").truncate(10)="hello")
 ASSERT:C1129($o.setText("hello world").truncate(12)="hello world")
 
-FINALLY
+// ============================================
+ASSERT:C1129(str_cmpVersion("9.0"; "9.1.2")=-1)
+ASSERT:C1129(str_cmpVersion("9.1.2"; "9.0")=1)
+ASSERT:C1129(str_cmpVersion("9.1.2"; "9.1.2")=0)
 
-BEEP:C151
+ASSERT:C1129(str_cmpVersion("9"; "9.0")=0)
+ASSERT:C1129(str_cmpVersion("9.0.0"; "9.0")=0)
+ASSERT:C1129(str_cmpVersion("9"; "9.0.0")=0)
+ASSERT:C1129(str_cmpVersion("9.0.0"; "9.0.0")=0)
+
+ASSERT:C1129(str_cmpVersion("9"; "9.0.1")=-1)
+
+ASSERT:C1129(str_cmpVersion("9 0"; "9 1 2"; " ")=-1)
+ASSERT:C1129(str_cmpVersion("9 1 2"; "9 0"; " ")=1)
+ASSERT:C1129(str_cmpVersion("9/1/2"; "9/0"; "/")=1)
+
+
+FINALLY

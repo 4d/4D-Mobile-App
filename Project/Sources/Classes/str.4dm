@@ -11,15 +11,24 @@ Class constructor
 		
 		This:C1470.setText($1)
 		
+	Else 
+		
+		This:C1470.length:=0
+		This:C1470.styled:=False:C215
+		
 	End if 
 	
 	//=======================================================================================================
 	// Defines the contents of the string & returns the updated object string
 Function setText
-	var $1 : Text
+	var $0 : Object
+	var $1 : Variant
 	
-	This:C1470.value:=$1
-	This:C1470.length:=Length:C16($1)
+	This:C1470.value:=String:C10($1)
+	This:C1470.length:=Length:C16(This:C1470.value)
+	This:C1470.styled:=This:C1470.isStyled()
+	
+	$0:=This:C1470
 	
 	//=======================================================================================================
 	// Returns True if the passed text is present in the string (diacritical if $2 is True)
@@ -236,27 +245,28 @@ Function distinctLetters
 Function fixedLength
 	var $0 : Text
 	var $1 : Integer  // Length
-	var $2 : Text  // {Filler}
+	var $2 : Variant  // {Filler}
 	var $3 : Integer  // {Alignment}
 	
 	var $filler : Text
 	var $alignment : Integer
 	
+	$filler:="*"  // Default is star
+	
 	If (Count parameters:C259>=2)
 		
-		$filler:=$2
+		If ($2#Null:C1517)
+			
+			$filler:=String:C10($2)
+			
+		End if 
+		
 		
 		If (Count parameters:C259>=3)
 			
 			$alignment:=$3
 			
 		End if 
-		
-	Else 
-		
-		// Default is space
-		$filler:=" "
-		
 	End if 
 	
 	If ($alignment=Align right:K42:4)
@@ -524,6 +534,21 @@ Function wordWrap
 	$0:=$result
 	
 	//=======================================================================================================
+	// Return extract numeric
+Function toNum
+	var $0 : Real
+	
+	$0:=This:C1470.filter("numeric")
+	
+	//=======================================================================================================
+	// Returns the number of occurennces of $1 into the string
+Function occurrences
+	var $0 : Integer
+	var $1 : Text
+	
+	$0:=Split string:C1554(This:C1470.value; $1; sk trim spaces:K86:2).length-1
+	
+	//=======================================================================================================
 	// Replace accented characters with non accented one
 Function unaccented
 	var $0 : Text
@@ -657,15 +682,36 @@ Function isUrl
 		"}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,}))))(?::\\d{2,5})?(?:/[^\\s]*)?$"; This:C1470.value; 1)
 	
 	//=======================================================================================================
-	// Returns True if text match given pattern
+	// Returns True if the text is a json string
+Function isJson
+	var $0 : Boolean
+	
+	$0:=Match regex:C1019("(?msi)^(?:\\{.*\\})|(?:\\[.*\\])$"; This:C1470.value; 1)
+	
+	//=======================================================================================================
+	// Returns True if the text is a json array string
+Function isJsonArray
+	var $0 : Boolean
+	
+	$0:=Match regex:C1019("(?msi)^\\[.*\\]$"; This:C1470.value; 1)
+	
+	//=======================================================================================================
+	// Returns True if the text is a json object string
+Function isJsonObject
+	var $0 : Boolean
+	
+	$0:=Match regex:C1019("(?msi)^\\{.*\\}$"; This:C1470.value; 1)
+	
+	//=======================================================================================================
+	//  ⚠️ Returns True if text match given pattern
 Function match
 	var $0 : Boolean
 	var $1 : Text
 	
-	$0:=Super:C1706.match(This:C1470.value; $1)
+	$0:=Super:C1706.match($1; This:C1470.value)
 	
 	//=======================================================================================================
-	// Returns the localized string & made replacement if any 
+	//  ⚠️ Returns the localized string & made replacement if any 
 Function localized
 	var $0 : Text
 	var $1 : Variant
@@ -728,6 +774,110 @@ Function concat
 		
 	End if 
 	
+	//=======================================================================================================
+	// Returns the string after replacements
+Function replace
+	var $0 : Text
+	var $1 : Variant  // Old
+	var $2 : Variant  // New
+	
+	var $t : Text
+	var $i : Integer
+	
+	$0:=This:C1470.value
+	
+	If (Value type:C1509($1)=Is collection:K8:32)
+		
+		If ((Value type:C1509($2)=Is collection:K8:32))
+			
+			If (Asserted:C1132($1.length<=$2.length))
+				
+				For each ($t; $1)
+					
+					$0:=Replace string:C233($0; $t; String:C10($2[$i]))
+					$i:=$i+1
+					
+				End for each 
+			End if 
+			
+		Else 
+			
+			If ($2=Null:C1517)
+				
+				$0:=Replace string:C233($0; $t; "")
+				
+			Else 
+				
+				$0:=Replace string:C233($0; $t; String:C10($2))
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		If ($2=Null:C1517)
+			
+			$0:=Replace string:C233($0; String:C10($1); "")
+			
+		Else 
+			
+			$0:=Replace string:C233($0; String:C10($1); String:C10($2))
+			
+		End if 
+	End if 
+	
+	//=======================================================================================================
+	// Returns a XML encoded string
+Function xmlEncode
+	var $0 : Text
+	
+	var $root; $t : Text
+	
+	$0:=This:C1470.value
+	
+	// Use DOM api to encode XML
+	$root:=DOM Create XML Ref:C861("r")
+	
+	If (OK=1)
+		
+		DOM SET XML ATTRIBUTE:C866($root; "v"; $0)
+		
+		If (OK=1)
+			
+			DOM EXPORT TO VAR:C863($root; $t)
+			
+			If (OK=1)  // Extract from result
+				
+				$t:=Substring:C12($t; Position:C15("v=\""; $t)+3)
+				$0:=Substring:C12($t; 1; Length:C16($t)-4)
+				
+			End if 
+		End if 
+		
+		DOM CLOSE XML:C722($root)
+		
+	End if 
+	
+	//=======================================================================================================
+	// Returns True if text is styled
+Function isStyled
+	var $0 : Boolean
+	
+	$0:=Match regex:C1019("(?i-ms)<span [^>]*>"; String:C10(This:C1470.value); 1)
+	
+	//=======================================================================================================
+	// Returns, if any, a truncated string with ellipsis character
+Function truncate
+	var $0 : Text
+	var $1 : Integer  //max char
+	
+	$0:=This:C1470.value
+	
+	If (This:C1470.length>$1)
+		
+		$0:=Substring:C12($0; 1; $1)+"…"
+		
+	End if 
 	
 	//=======================================================================================================
 	// 
@@ -776,9 +926,20 @@ Function filter
 			//…………………………………………………………………………………
 	End case 
 	
+	//=======================================================================================================
+	// ⚠️
+Function versionCompare
+	var $0 : Integer
+	var $1 : Text
+	var $2 : Text
 	
-	
-	
-	
-	
+	If (Count parameters:C259>=2)
+		
+		$0:=Super:C1706.versionCompare(This:C1470.value; $1; $2)
+		
+	Else 
+		
+		$0:=Super:C1706.versionCompare(This:C1470.value; $1)
+		
+	End if 
 	

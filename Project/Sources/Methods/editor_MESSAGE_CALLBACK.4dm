@@ -62,7 +62,7 @@ Case of
 						// Port conflict?
 						If (Num:C11($errors.lastError().error)=-1)
 							
-							$t:=str.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
+							$t:=_o_str.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
 							
 						Else 
 							
@@ -87,7 +87,7 @@ Case of
 							
 							If (Num:C11($errors.lastError().error)=-1)
 								
-								$t:=str.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
+								$t:=_o_str.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
 								
 							Else 
 								

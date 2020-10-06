@@ -36,7 +36,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	GET MOUSE:C468($Lon_x; $Lon_y; $l)
 	LISTBOX GET CELL POSITION:C971(*; $1.target; $Lon_x; $Lon_y; $Lon_column; $Lon_row)
 	
-	$str:=str()  // init class
+	$str:=_o_str()  // init class
 	
 	$Col_catalog:=This:C1470.catalog()
 	

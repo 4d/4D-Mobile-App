@@ -223,7 +223,7 @@ Function checkFirstLaunchStatus
 Function setToolPath
 	var $o : Object
 	
-	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; str.setText("4dMobileWantsToMakeChanges").localized("4dProductName"))
+	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; _o_str.setText("4dMobileWantsToMakeChanges").localized("4dProductName"))
 	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
 	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2).file("sudo-askpass").path)
 	

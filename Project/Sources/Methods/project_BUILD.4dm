@@ -50,7 +50,7 @@ If (Asserted:C1132($project#Null:C1517))
 		EXECUTE METHOD IN SUBFORM:C1085("project"; "views_Handler"; *; New object:C1471(\
 			"action"; "updateForms"))
 		
-		$project.organization.identifier:=$project.organization.id+"."+str($project.product.name).uperCamelCase()
+		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
 		
 		$in.path:=path.products().folder($project.product.name).platformPath

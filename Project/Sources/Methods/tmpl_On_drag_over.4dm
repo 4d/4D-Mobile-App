@@ -93,6 +93,13 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 			$vInsertion:=($dropped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
 			
+			If (Not:C34($vInsertion))
+				
+				// But does not accept drag-and-drop of a 1 to N relation on a static field into a detailed form
+				
+				
+				
+			End if 
 		End if 
 	End if 
 	

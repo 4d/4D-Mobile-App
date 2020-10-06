@@ -76,7 +76,7 @@ Else
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldThatMustBe_"; "theFieldTypeMustBe_")).localized("number")
+						$Txt_tips:=_o_str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldThatMustBe_"; "theFieldTypeMustBe_")).localized("number")
 						
 					Else 
 						
@@ -98,7 +98,7 @@ Else
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldThatMustBe_"; "theFieldTypeMustBe_")).localized("text")
+						$Txt_tips:=_o_str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldThatMustBe_"; "theFieldTypeMustBe_")).localized("text")
 						
 					Else 
 						
@@ -117,7 +117,7 @@ Else
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldThatMustBe_"; "theFieldTypeMustBe_")).localized(UI.typeNames[$Lon_type])
+						$Txt_tips:=_o_str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldThatMustBe_"; "theFieldTypeMustBe_")).localized(UI.typeNames[$Lon_type])
 						
 					Else 
 						
@@ -136,7 +136,7 @@ Else
 					
 					If (Length:C16($Txt_tips)=0)
 						
-						$Txt_tips:=str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldWhoseTypeMustNotBe_"; "theFieldTypeMustNotBe_")).localized(UI.typeNames[$Lon_type])
+						$Txt_tips:=_o_str(Choose:C955(Length:C16($Txt_templateTips)=0; "dropHereAFieldWhoseTypeMustNotBe_"; "theFieldTypeMustNotBe_")).localized(UI.typeNames[$Lon_type])
 						
 					Else 
 						
@@ -224,12 +224,12 @@ If (Length:C16($Txt_tips)=0)
 				
 				If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)
 					
-					$Txt_tips:=UI.alert+str("theLinkedTableIsNotPublished")\
+					$Txt_tips:=UI.alert+_o_str("theLinkedTableIsNotPublished")\
 						.localized($o.relatedEntities)
 					
 				Else 
 					
-					$Txt_tips:=str("thisFieldWillAllowYouToNavigateToListOf")\
+					$Txt_tips:=_o_str("thisFieldWillAllowYouToNavigateToListOf")\
 						.localized($o.relatedEntities)
 					
 				End if 

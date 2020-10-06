@@ -1,49 +1,49 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : project_Audit
-  // ID[93767D0FCF2340DB88335AB3B117AA44]
-  // Created 24-8-2018 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : project_Audit
+// ID[93767D0FCF2340DB88335AB3B117AA44]
+// Created 24-8-2018 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_OK)
-C_TEXT:C284($t;$tFormName;$tTable;$Txt_fieldNumber)
-C_OBJECT:C1216($context;$file;$o;$oDataModel;$oDetail;$oIN)
-C_OBJECT:C1216($oList;$oOUT;$Path_fieldIcons;$Path_formaters;$Path_tableIcons;$pathForm)
+C_TEXT:C284($t; $tFormName; $tTable; $Txt_fieldNumber)
+C_OBJECT:C1216($context; $file; $o; $oDataModel; $oDetail; $oIN)
+C_OBJECT:C1216($oList; $oOUT; $Path_fieldIcons; $Path_formaters; $Path_tableIcons; $pathForm)
 
 If (False:C215)
-	C_OBJECT:C1216(project_Audit ;$0)
-	C_OBJECT:C1216(project_Audit ;$1)
+	C_OBJECT:C1216(project_Audit; $0)
+	C_OBJECT:C1216(project_Audit; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
+// ----------------------------------------------------
+// Initialisations
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$oIN:=$1
 	
-	  // Default values
+	// Default values
 	$oOUT:=New object:C1471(\
-		"success";True:C214;\
-		"errors";New collection:C1472)
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
 	
 	$context:=New object:C1471(\
-		"list";True:C214;\
-		"detail";True:C214;\
-		"icons";True:C214;\
-		"formatters";True:C214;\
-		"filters";True:C214)
+		"list"; True:C214; \
+		"detail"; True:C214; \
+		"icons"; True:C214; \
+		"formatters"; True:C214; \
+		"filters"; True:C214)
 	
-	  // Allow passing value for test purpose. Normal behaviour is form
-	$oDataModel:=Choose:C955(Value type:C1509($oIN.dataModel)=Is object:K8:27;$oIN.dataModel;Form:C1466.dataModel)
-	$oList:=Choose:C955(Value type:C1509($oIN.list)=Is object:K8:27;$oIN.list;Form:C1466.list)
-	$oDetail:=Choose:C955(Value type:C1509($oIN.detail)=Is object:K8:27;$oIN.detail;Form:C1466.detail)
+	// Allow passing value for test purpose. Normal behaviour is form
+	$oDataModel:=Choose:C955(Value type:C1509($oIN.dataModel)=Is object:K8:27; $oIN.dataModel; Form:C1466.dataModel)
+	$oList:=Choose:C955(Value type:C1509($oIN.list)=Is object:K8:27; $oIN.list; Form:C1466.list)
+	$oDetail:=Choose:C955(Value type:C1509($oIN.detail)=Is object:K8:27; $oIN.detail; Form:C1466.detail)
 	
 	If ($oIN.target#Null:C1517)
 		
@@ -61,11 +61,11 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If ($oDataModel#Null:C1517)
 	
-	  // Load manifest values
-	$file:=COMPONENT_Pathname ("listForms").file("manifest.json")
+	// Load manifest values
+	$file:=COMPONENT_Pathname("listForms").file("manifest.json")
 	
 	If ($file.exists)
 		
@@ -73,7 +73,7 @@ If ($oDataModel#Null:C1517)
 		
 	End if 
 	
-	$file:=COMPONENT_Pathname ("detailForms").file("manifest.json")
+	$file:=COMPONENT_Pathname("detailForms").file("manifest.json")
 	
 	If ($file.exists)
 		
@@ -81,11 +81,11 @@ If ($oDataModel#Null:C1517)
 		
 	End if 
 	
-	$Path_tableIcons:=COMPONENT_Pathname ("host_tableIcons")
-	$Path_fieldIcons:=COMPONENT_Pathname ("host_fieldIcons")
-	$Path_formaters:=COMPONENT_Pathname ("host_formatters")
+	$Path_tableIcons:=COMPONENT_Pathname("host_tableIcons")
+	$Path_fieldIcons:=COMPONENT_Pathname("host_fieldIcons")
+	$Path_formaters:=COMPONENT_Pathname("host_formatters")
 	
-	For each ($tTable;$oDataModel)
+	For each ($tTable; $oDataModel)
 		
 		If ($context.list)  // LIST FORM
 			
@@ -94,16 +94,16 @@ If ($oDataModel#Null:C1517)
 			
 			If (Length:C16($tFormName)>0)
 				
-				$pathForm:=tmpl_form ($tFormName;"list")
+				$pathForm:=tmpl_form($tFormName; "list")
 				
 				If (Not:C34($pathForm.exists))
 					
 					$oOUT.success:=False:C215
 					$oOUT.errors.push(New object:C1471(\
-						"type";"template";\
-						"tab";"list";\
-						"message";str ("theTemplateIsMissing").localized($tFormName);\
-						"table";$tTable))
+						"type"; "template"; \
+						"tab"; "list"; \
+						"message"; _o_str("theTemplateIsMissing").localized($tFormName); \
+						"table"; $tTable))
 					
 				End if 
 			End if 
@@ -116,16 +116,16 @@ If ($oDataModel#Null:C1517)
 			
 			If (Length:C16($tFormName)>0)
 				
-				$pathForm:=tmpl_form ($tFormName;"detail")
+				$pathForm:=tmpl_form($tFormName; "detail")
 				
 				If (Not:C34($pathForm.exists))
 					
 					$oOUT.success:=False:C215
 					$oOUT.errors.push(New object:C1471(\
-						"type";"template";\
-						"tab";"list";\
-						"message";str ("theTemplateIsMissing").localized($tFormName);\
-						"table";$tTable))
+						"type"; "template"; \
+						"tab"; "list"; \
+						"message"; _o_str("theTemplateIsMissing").localized($tFormName); \
+						"table"; $tTable))
 					
 				End if 
 			End if 
@@ -135,38 +135,38 @@ If ($oDataModel#Null:C1517)
 			
 			$t:=String:C10($oDataModel[$tTable][""].icon)
 			
-			If (Position:C15("/";$t)=1)  // Host database resources
+			If (Position:C15("/"; $t)=1)  // Host database resources
 				
-				$t:=Delete string:C232($t;1;1)
+				$t:=Delete string:C232($t; 1; 1)
 				
 				$Boo_OK:=$Path_tableIcons.file($t).exists
 				
 				If (Not:C34($Boo_OK))
 					
-					  //======================================================
-					  //                  MISSING TABLE ICON
-					  //======================================================
+					//======================================================
+					//                  MISSING TABLE ICON
+					//======================================================
 					
 					$oOUT.success:=False:C215
 					$oOUT.errors.push(New object:C1471(\
-						"type";"icon";\
-						"panel";"TABLES";\
-						"message";str ("theTableIconIsMissing").localized($t);\
-						"table";$tTable;\
-						"tab";"tableProperties"))
+						"type"; "icon"; \
+						"panel"; "TABLES"; \
+						"message"; _o_str("theTableIconIsMissing").localized($t); \
+						"table"; $tTable; \
+						"tab"; "tableProperties"))
 					
 				End if 
 			End if 
 			
-			For each ($Txt_fieldNumber;$oDataModel[$tTable])
+			For each ($Txt_fieldNumber; $oDataModel[$tTable])
 				
-				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldNumber;1;*))
+				If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))
 					
 					$t:=String:C10($oDataModel[$tTable][$Txt_fieldNumber].icon)
 					
-					If (Position:C15("/";$t)=1)  // Host resources
+					If (Position:C15("/"; $t)=1)  // Host resources
 						
-						$t:=Delete string:C232($t;1;1)
+						$t:=Delete string:C232($t; 1; 1)
 						
 						$Boo_OK:=$Path_fieldIcons.exists
 						
@@ -178,17 +178,17 @@ If ($oDataModel#Null:C1517)
 						
 						If (Not:C34($Boo_OK))
 							
-							  //======================================================
-							  //                  MISSING FIELD ICON
-							  //======================================================
+							//======================================================
+							//                  MISSING FIELD ICON
+							//======================================================
 							
 							$oOUT.success:=False:C215
 							$oOUT.errors.push(New object:C1471(\
-								"type";"icon";\
-								"panel";"TABLES";\
-								"message";str ("theFieldIconIsMissing").localized($t);\
-								"table";$tTable;\
-								"field";$Txt_fieldNumber))
+								"type"; "icon"; \
+								"panel"; "TABLES"; \
+								"message"; _o_str("theFieldIconIsMissing").localized($t); \
+								"table"; $tTable; \
+								"field"; $Txt_fieldNumber))
 							
 						End if 
 					End if 
@@ -198,31 +198,31 @@ If ($oDataModel#Null:C1517)
 		
 		If ($context.formatters)  // FORMATTERS
 			
-			For each ($Txt_fieldNumber;$oDataModel[$tTable])
+			For each ($Txt_fieldNumber; $oDataModel[$tTable])
 				
-				If (Match regex:C1019("(?m-si)^\\d+$";$Txt_fieldNumber;1;*))
+				If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))
 					
 					$t:=String:C10($oDataModel[$tTable][$Txt_fieldNumber].format)
 					
-					If (Position:C15("/";$t)=1)  // Host resources
+					If (Position:C15("/"; $t)=1)  // Host resources
 						
-						$t:=Delete string:C232($t;1;1)
+						$t:=Delete string:C232($t; 1; 1)
 						
 						$Boo_OK:=$Path_formaters.folder($t).file("manifest.json").exists
 						
 						If (Not:C34($Boo_OK))
 							
-							  //======================================================
-							  //              MISSING OR INVALID FORMATTER
-							  //======================================================
+							//======================================================
+							//              MISSING OR INVALID FORMATTER
+							//======================================================
 							
 							$oOUT.success:=False:C215
 							$oOUT.errors.push(New object:C1471(\
-								"type";"formatter";\
-								"panel";"TABLES";\
-								"message";str ("theFormatterIsMissingOrInvalid").localized(Delete string:C232($t;1;1));\
-								"table";$tTable;\
-								"field";$Txt_fieldNumber))
+								"type"; "formatter"; \
+								"panel"; "TABLES"; \
+								"message"; _o_str("theFormatterIsMissingOrInvalid").localized(Delete string:C232($t; 1; 1)); \
+								"table"; $tTable; \
+								"field"; $Txt_fieldNumber))
 							
 						End if 
 					End if 
@@ -238,16 +238,16 @@ If ($oDataModel#Null:C1517)
 				
 				If (Not:C34(Bool:C1537($o.filter.validated)))
 					
-					  //======================================================
-					  //                   INVALID FILTER
-					  //======================================================
+					//======================================================
+					//                   INVALID FILTER
+					//======================================================
 					
 					$oOUT.success:=False:C215
 					$oOUT.errors.push(New object:C1471(\
-						"type";"filter";\
-						"panel";"DATA";\
-						"message";str ("theFilterForTheTableIsNotValid").localized(String:C10($o.name));\
-						"table";$tTable))
+						"type"; "filter"; \
+						"panel"; "DATA"; \
+						"message"; _o_str("theFilterForTheTableIsNotValid").localized(String:C10($o.name)); \
+						"table"; $tTable))
 					
 				End if 
 			End if 
@@ -255,12 +255,12 @@ If ($oDataModel#Null:C1517)
 	End for each 
 End if 
 
-CALL FORM:C1391(Current form window:C827;"editor_CALLBACK";"description";New object:C1471(\
-"show";Not:C34($oOUT.success)))
+CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
+"show"; Not:C34($oOUT.success)))
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$oOUT
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

@@ -235,7 +235,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-																																																																																																																																												"tips"; $o.label)
+																																																																																																																																																										"tips"; $o.label)
 													
 												End if 
 											End if 
@@ -760,7 +760,7 @@ Case of
 						
 						OBJECT SET VALUE:C1742("preview"; cs:C1710.svg.new()\
 							.dimensions($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
-							.textArea(str("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).dimensions($form.preview.coordinates.width-50)\
+							.textArea(_o_str("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).dimensions($form.preview.coordinates.width-50)\
 							.position(20; 180).font(New object:C1471("size"; 14; "color"; UI.colors.errorColor.hex; "alignment"; Align center:K42:3)).getPicture())
 						
 						OBJECT SET TITLE:C194(*; "preview.label"; "")

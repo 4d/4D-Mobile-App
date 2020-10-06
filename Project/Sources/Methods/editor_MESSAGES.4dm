@@ -117,10 +117,10 @@ Case of
 		Else 
 			
 			// DO_MESSAGE (New object(\
-																												"action";"show";\
-																												"type";"alert";\
-																												"title";"noDevices";\
-																												"additional";""))
+																																"action";"show";\
+																																"type";"alert";\
+																																"title";"noDevices";\
+																																"additional";""))
 			
 		End if 
 		
@@ -227,12 +227,12 @@ Case of
 					If (Bool:C1537($oIN.param.manualInstallation))
 						
 						DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName"); \
-							str("theApplicationHasBeenSuccessfullyGenerated").localized($oIN.param.project.product.name))
+							_o_str("theApplicationHasBeenSuccessfullyGenerated").localized($oIN.param.project.product.name))
 						
 					Else 
 						
 						DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName"); \
-							str("theApplicationHasBeenSuccessfullyInstalled").localized($oIN.param.project.product.name))
+							_o_str("theApplicationHasBeenSuccessfullyInstalled").localized($oIN.param.project.product.name))
 						
 					End if 
 					
@@ -240,7 +240,7 @@ Case of
 				Else 
 					
 					DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName"); \
-						str("theApplicationHasBeenSuccessfullyGenerated").localized($oIN.param.project.product.name))
+						_o_str("theApplicationHasBeenSuccessfullyGenerated").localized($oIN.param.project.product.name))
 					
 					If (Bool:C1537($oIN.param.create)\
 						 & Not:C34(Bool:C1537($oIN.param.archive))\

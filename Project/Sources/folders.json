@@ -96,11 +96,13 @@
 			"_o_SERVER_OBJECTS_HANDLER",
 			"_o_storyboard",
 			"_o_storyboard_fix_id",
+			"_o_str",
 			"_o_structure",
 			"_o_templates",
 			"_o_tempoFieldType",
 			"_o_unzip",
 			"TEMPO_1",
+			"test_o_str",
 			"TURN_AROUND_Field_name"
 		],
 		"forms": [
@@ -789,7 +791,6 @@
 			"process",
 			"progress",
 			"static",
-			"str",
 			"subform",
 			"thermometer",
 			"tips",

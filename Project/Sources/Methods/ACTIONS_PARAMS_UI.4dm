@@ -163,7 +163,7 @@ Case of
 												
 												// Should accept "today", "yesterday", "tomorrow"
 												GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
-												$o.default.setFilter("&\"0-9;"+$t+";-;/;"+str("todayyesterdaytomorrow").distinctLetters(";")+"\"")
+												$o.default.setFilter("&\"0-9;"+$t+";-;/;"+_o_str("todayyesterdaytomorrow").distinctLetters(";")+"\"")
 												
 												If (Position:C15(String:C10($o.default.value()); "todayyesterdaytomorrow")=0)
 													
@@ -203,7 +203,7 @@ Case of
 													End if 
 													
 													// Should accept "checked", "unchecked", 0 or 1
-													$o.default.setFilter("&\"0;1;"+str("unchecked").distinctLetters(";")+"\"")
+													$o.default.setFilter("&\"0;1;"+_o_str("unchecked").distinctLetters(";")+"\"")
 													
 												Else 
 													
@@ -217,7 +217,7 @@ Case of
 													End if 
 													
 													// Should accept "true", "false", 0 or 1
-													$o.default.setFilter("&\"0;1;"+str("truefalse").distinctLetters(";")+"\"")
+													$o.default.setFilter("&\"0;1;"+_o_str("truefalse").distinctLetters(";")+"\"")
 													
 												End if 
 												
