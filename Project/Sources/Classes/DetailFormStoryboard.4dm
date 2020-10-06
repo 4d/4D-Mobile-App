@@ -371,7 +371,7 @@ Function run
 		End for each 
 		
 		$Lon_j:=1
-		For each ($Obj_field; $Obj_tags.table.fields)
+		For each ($Obj_field; $Obj_tags.table.fields; 0; Num:C11($Obj_template.fields.count))
 			If (Num:C11($Obj_field.id)=0)  // relation to N field
 				
 				$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
@@ -398,6 +398,10 @@ Function run
 					$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
 					$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
 					$Obj_template.relation.elements.push($Obj_element)
+					
+/*If (Length(String($Obj_field.format))=0)
+$Obj_field.format:=$Obj_field.shortLabel  // replaced in mobile app // a little dirty if not configurable
+End if */
 					
 					This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)
 					

@@ -133,6 +133,10 @@ Function run
 						$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
 						$Obj_template.relation.elements.push($Obj_element)
 						
+						If (Length:C16(String:C10($Obj_field.format))=0)
+							$Obj_field.format:=$Obj_field.shortLabel  // TODO #117601 check si ob copy? not edit project ?
+						End if 
+						
 						This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)
 						
 					Else 
