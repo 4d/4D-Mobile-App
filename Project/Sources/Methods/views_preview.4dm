@@ -103,7 +103,7 @@ Case of
 							If ($svg.success)
 								
 								$svg.setAttribute("ios:tips"; Get localized string:C991("searchBoxTips"); $node)
-								$svg.setValue($node; Get localized string:C991("fieldToUseForSearch"))
+								$svg.setValue(Get localized string:C991("fieldToUseForSearch"); $node)
 								
 							End if 
 							
@@ -112,7 +112,7 @@ Case of
 							If ($svg.success)
 								
 								$svg.setAttribute("ios:tips"; Get localized string:C991("sectionTips"); $node)
-								$svg.setValue($node; Get localized string:C991("fieldToUseAsSection"))
+								$svg.setValue(Get localized string:C991("fieldToUseAsSection"); $node)
 								
 							End if 
 							
@@ -152,17 +152,17 @@ Case of
 										
 										If ($target.searchableField.length>1)
 											
-											$svg.setValue($node; Get localized string:C991("multiCriteriaSearch"))
+											$svg.setValue(Get localized string:C991("multiCriteriaSearch"); $node)
 											
 										Else 
 											
-											$svg.setValue($node; $target.searchableField[0].name)
+											$svg.setValue($target.searchableField[0].name; $node)
 											
 										End if 
 										
 									Else 
 										
-										$svg.setValue($node; $target.searchableField.name)
+										$svg.setValue($target.searchableField.name; $node)
 										
 									End if 
 									
@@ -194,6 +194,20 @@ Case of
 							$widgetField:=File:C1566("/RESOURCES/templates/form/objects/oneField/widget.svg").getText()
 							
 							$count:=Num:C11($manifest.fields.count)
+							
+							// Mark static fields
+							For ($i; 1; $count; 1)
+								
+								$t:=String:C10($i)
+								
+								$node:=$svg.findById("f"+$t)
+								
+								If ($svg.success)
+									
+									$svg.addClass("static"; $node)
+									
+								End if 
+							End for 
 							
 							For each ($o; $target.fields)
 								
@@ -235,7 +249,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-																																																																																																																																																										"tips"; $o.label)
+																																																																																																																																																																																						"tips"; $o.label)
 													
 												End if 
 											End if 
@@ -337,7 +351,7 @@ Case of
 															
 														End if 
 														
-														$svg.setValue($node; $buffer)
+														$svg.setValue($buffer; $node)
 														
 														If ($o.fieldType=8858)\
 															 | ($o.fieldType=8859)  // Relation
@@ -482,7 +496,7 @@ Case of
 												
 												If ($svg.success)
 													
-													$svg.setValue($node; Get localized string:C991("dropAFieldHere"))
+													$svg.setValue(Get localized string:C991("dropAFieldHere"); $node)
 													
 												End if 
 											End if 

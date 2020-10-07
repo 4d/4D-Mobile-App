@@ -14,7 +14,7 @@ If (False:C215)
 	C_LONGINT:C283(tmpl_On_drag_over; $0)  // -1 = deny; 0 = accept
 End if 
 
-var $cible; $ObjectName; $t : Text
+var $cible; $widget; $t : Text
 var $background; $droppable; $highlight; $vInsertion : Boolean
 var $x : Blob
 var $dropped : Object
@@ -24,11 +24,11 @@ var $types : Collection
 // Initialisations
 $0:=-1  // Deny
 
-$ObjectName:=This:C1470.preview.name
+$widget:=This:C1470.preview.name
 
 If (This:C1470.$.vInsert#Null:C1517)
 	
-	SVG SET ATTRIBUTE:C1055(*; $ObjectName; This:C1470.$.vInsert; \
+	SVG SET ATTRIBUTE:C1055(*; $widget; This:C1470.$.vInsert; \
 		"fill-opacity"; "0.01")
 	
 End if 
@@ -75,7 +75,7 @@ If (Length:C16(This:C1470.$.current)>0)
 			 & (This:C1470.$.template.type="detail")  // Not for list
 			
 			// Accept dropping on the background
-			SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "4D-isOfClass-background"; $t)
+			SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "4D-isOfClass-background"; $t)
 			$background:=JSON Parse:C1218($t; Is boolean:K8:9)
 			
 		End if 
@@ -86,7 +86,7 @@ If (Length:C16(This:C1470.$.current)>0)
 	If (Not:C34($background))
 		
 		// Accept drag if the object is dropable
-		SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "4D-isOfClass-droppable"; $t)
+		SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "4D-isOfClass-droppable"; $t)
 		$droppable:=JSON Parse:C1218($t; Is boolean:K8:9)
 		
 		If ($droppable)
@@ -95,10 +95,14 @@ If (Length:C16(This:C1470.$.current)>0)
 			
 			If (Not:C34($vInsertion))
 				
-				// But does not accept drag-and-drop of a 1 to N relation on a static field into a detailed form
-				
-				
-				
+				// Does not accept drag-and-drop of a 1 to N relation on a static field into a detailed form
+				If ($dropped.fieldType=8859)\
+					 & (This:C1470.$.template.type="detail")
+					
+					SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "4D-isOfClass-static"; $t)
+					$droppable:=Not:C34(JSON Parse:C1218($t; Is boolean:K8:9))
+					
+				End if 
 			End if 
 		End if 
 	End if 
@@ -119,12 +123,12 @@ If (Length:C16(This:C1470.$.current)>0)
 					
 					If ($highlight)
 						
-						SVG SET ATTRIBUTE:C1055(*; $ObjectName; $cible; \
+						SVG SET ATTRIBUTE:C1055(*; $widget; $cible; \
 							"fill-opacity"; 1)
 						
 					Else 
 						
-						SVG SET ATTRIBUTE:C1055(*; $ObjectName; $cible; \
+						SVG SET ATTRIBUTE:C1055(*; $widget; $cible; \
 							"fill-opacity"; 0.3)
 						
 					End if 
@@ -137,7 +141,7 @@ If (Length:C16(This:C1470.$.current)>0)
 				If (FEATURE.with("moreRelations"))  // Accept 1-N relation
 					
 					// Accept drag if the type match with the source
-					SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:type"; $t)
+					SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "ios:type"; $t)
 					
 					If ($t="all")
 						
@@ -162,7 +166,7 @@ If (Length:C16(This:C1470.$.current)>0)
 					If ($dropped.fieldType#8859)  // Not 1-N relation
 						
 						// Accept drag if the type match with the source
-						SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:type"; $t)
+						SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "ios:type"; $t)
 						
 						If ($t="all")
 							
@@ -182,7 +186,7 @@ If (Length:C16(This:C1470.$.current)>0)
 					Else 
 						
 						// Accept only on multi-valued fields
-						SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "4D-isOfClass-multivalued"; $t)
+						SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "4D-isOfClass-multivalued"; $t)
 						
 						If (JSON Parse:C1218($t; Is boolean:K8:9))
 							

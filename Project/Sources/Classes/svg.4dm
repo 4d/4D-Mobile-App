@@ -816,6 +816,56 @@ Function setAttributes
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
+	// ⚠️ Overrides the method of the inherited class
+Function setValue
+	var $0 : Object
+	var $1 : Text
+	var $2 : Variant
+	var $3 : Boolean
+	
+	var $node : Text
+	var $isCDATA : Boolean
+	
+	If (Count parameters:C259>=2)
+		
+		If (Count parameters:C259>=3)
+			
+			$isCDATA:=$3
+			$node:=This:C1470.__target(String:C10($2))
+			
+		Else 
+			
+			If (Value type:C1509($2)=Is text:K8:3)
+				
+				$node:=This:C1470.__target($2)
+				
+			Else 
+				
+				$node:=This:C1470.__target()
+				$isCDATA:=Bool:C1537($2)
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
+	
+	If ($isCDATA)
+		
+		Super:C1706.setValue($node; $1; True:C214)
+		
+	Else 
+		
+		Super:C1706.setValue($node; $1)
+		
+	End if 
+	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
 Function fill
 	var $0 : Object
 	var $1 : Text
@@ -1270,8 +1320,7 @@ Function visible
 	If (Count parameters:C259>=2)
 		
 		$node:=This:C1470.__target($2)
-		
-		This:C1470.setAttribute("visibility"; Choose:C955($1; "visible"; "hidden"); $2)
+		This:C1470.setAttribute("visibility"; Choose:C955($1; "visible"; "hidden"); $node)
 		
 	Else 
 		
@@ -1282,7 +1331,7 @@ Function visible
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function class
+Function class  // Set the node class 
 	var $0 : Object
 	var $1 : Text
 	var $2 : Variant
@@ -1298,6 +1347,37 @@ Function class
 	End if 
 	
 	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function addClass  // Add a value to the node class 
+	var $1 : Text
+	var $2 : Text
+	
+	var $node; $t : Text
+	
+	If (Count parameters:C259=2)
+		
+		$node:=$2
+		
+	Else 
+		
+		$node:=This:C1470.__target()
+		
+	End if 
+	
+	$t:=String:C10(Super:C1706.getAttribute($node; "class"))
+	
+	If (Length:C16($t)>0)
+		
+		$t:=$t+" "+$1
+		
+	Else 
+		
+		$t:=$1
+		
+	End if 
+	
+	Super:C1706.setAttribute($node; "class"; $t)
 	
 /*——————————————————————————
 PRIVATE
