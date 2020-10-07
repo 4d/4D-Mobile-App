@@ -28,75 +28,67 @@ Function loadIcon
 	var $file : 4D:C1709.File
 	var $folder : 4D:C1709.Folder
 	
-	If (This:C1470.assets.icons#Null:C1517)
+	If (Is macOS:C1572)
 		
-		If (Is macOS:C1572)
+		// Path is relative to the project file
+		$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+		
+		If (This:C1470.assets=Null:C1517)
 			
-			// Path is relative to the project file
-			$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+			$folder.create()
 			
-			If (This:C1470.assets=Null:C1517)
-				
-				$folder.create()
-				
-				//**********************************
-				This:C1470.assets:=New object:C1471(\
-					"root"; $folder.platformPath)
-				
-				This:C1470.assets.folder:=$folder
-				
-			End if 
+			//**********************************
+			This:C1470.assets:=New object:C1471(\
+				"root"; $folder.platformPath)
 			
-			If (This:C1470.assets.icons=Null:C1517)\
-				 | (This:C1470.assets.file=Null:C1517)
-				
-				$file:=$folder.file("Contents.json")
-				
-				If (Asserted:C1132($file.exists))
-					
-					This:C1470.assets.icons:=JSON Parse:C1218($file.getText())
-					
-				End if 
-			End if 
-			
-			This:C1470.displayIcon()
-			
-		Else 
-			
-			// Path is relative to the project file
-			$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
-			
-			If (This:C1470.assets=Null:C1517)
-				
-				$folder.create()
-				
-				//**********************************
-				This:C1470.assets:=New object:C1471(\
-					"root"; $folder.platformPath)
-				
-				This:C1470.assets.folder:=$folder
-				
-			End if 
-			
-			If (This:C1470.assets.icons=Null:C1517)\
-				 | (This:C1470.assets.file=Null:C1517)
-				
-				$file:=$folder.file("Contents.json")
-				
-				If (Asserted:C1132($file.exists))
-					
-					This:C1470.assets.icons:=JSON Parse:C1218($file.getText())
-					
-				End if 
-			End if 
-			
-			This:C1470.displayIcon()
+			This:C1470.assets.folder:=$folder
 			
 		End if 
 		
+		If (This:C1470.assets.icons=Null:C1517)\
+			 | (This:C1470.assets.file=Null:C1517)
+			
+			$file:=$folder.file("Contents.json")
+			
+			If ($file.exists)
+				
+				This:C1470.assets.icons:=JSON Parse:C1218($file.getText())
+				
+			End if 
+		End if 
+		
+		This:C1470.displayIcon()
+		
 	Else 
 		
-		// #TO_DO: NO ASSETS
+		// Path is relative to the project file
+		$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+		
+		If (This:C1470.assets=Null:C1517)
+			
+			$folder.create()
+			
+			//**********************************
+			This:C1470.assets:=New object:C1471(\
+				"root"; $folder.platformPath)
+			
+			This:C1470.assets.folder:=$folder
+			
+		End if 
+		
+		If (This:C1470.assets.icons=Null:C1517)\
+			 | (This:C1470.assets.file=Null:C1517)
+			
+			$file:=$folder.file("Contents.json")
+			
+			If (Asserted:C1132($file.exists))
+				
+				This:C1470.assets.icons:=JSON Parse:C1218($file.getText())
+				
+			End if 
+		End if 
+		
+		This:C1470.displayIcon()
 		
 	End if 
 	
@@ -169,7 +161,9 @@ Function displayIcon
 		
 	Else 
 		
-		// #TO_DO: NO ASSETS
+		
+		READ PICTURE FILE:C678(UI.errorIcon; $picture)
+		This:C1470.icon.setValue($picture)
 		
 	End if 
 	
@@ -349,6 +343,12 @@ Function setIcon
 			
 		End if 
 	End for each 
+	
+	If (This:C1470.assets.icons=Null:C1517)
+		
+		This:C1470.assets.icons:=New object:C1471
+		
+	End if 
 	
 	This:C1470.assets.icons.images:=$content.images
 	

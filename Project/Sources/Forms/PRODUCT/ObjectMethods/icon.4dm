@@ -22,7 +22,7 @@ Case of
 		$menu.line()
 		$menu.append("browse"; "browseIcon")
 		$menu.line()
-		$menu.append("showIconsFolder"; "openIconFolder")
+		$menu.append("showIconsFolder"; "openIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
 		
 		$menu.popup()
 		
