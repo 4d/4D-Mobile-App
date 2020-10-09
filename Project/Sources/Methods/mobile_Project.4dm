@@ -221,6 +221,8 @@ If ($Obj_in.create)
 	
 	If (Length:C16($Obj_tags.prodUrl)>0)
 		
+		$Obj_tags.prodUrl:=Replace string:C233($Obj_tags.prodUrl; "localhost"; "127.0.0.1")
+		
 		If (Not:C34(Match regex:C1019("(?i-ms)http[s]?://"; $Obj_tags.prodUrl; 1)))
 			
 			// Default to http
