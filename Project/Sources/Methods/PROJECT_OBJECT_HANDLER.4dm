@@ -34,11 +34,12 @@ Case of
 		
 		If ($index>0)
 			
-			OBJECT GET SUBFORM:C1139(*; $widgets{$index}; $ptr; $e.objectName)
+			$t:=$e.objectName
+			OBJECT GET SUBFORM:C1139(*; $widgets{$index}; $ptr; $t)
 			
-			If (Form:C1466.$dialog[$e.objectName].help#Null:C1517)
+			If (Form:C1466.$dialog[$t].help#Null:C1517)
 				
-				OPEN URL:C673(String:C10(Form:C1466.$dialog[$e.objectName].help); *)
+				OPEN URL:C673(String:C10(Form:C1466.$dialog[$t].help); *)
 				
 			Else 
 				
