@@ -108,9 +108,9 @@ Function toolsPath
 	
 	This:C1470.success:=$o.success
 	
-	If (This:C1470.success)
+	If (This:C1470.success)\
+		 & (Length:C16($o.out)>0)
 		
-		//This.tools:=Folder(Replace string($o.out; "\n"; ""))
 		This:C1470.tools:=Folder:C1567($o.out)
 		This:C1470.success:=This:C1470.tools.exists
 		

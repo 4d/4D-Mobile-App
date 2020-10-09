@@ -292,13 +292,13 @@ Case of
 								
 							Else 
 								
-								$o.tables[$Lon_index].dumpSize:=Choose:C955($Lon_size>0; "< "+doc_bytesToString($Lon_size); "#na")
+								$o.tables[$Lon_index].dumpSize:=Choose:C955($Lon_size>0; "< "+doc_bytesToString($Lon_size); Get localized string:C991("notAvailable"))
 								
 							End if 
 							
 						Else 
 							
-							$o.tables[$Lon_index].dumpSize:="#na"
+							$o.tables[$Lon_index].dumpSize:=Get localized string:C991("notAvailable")
 							
 						End if 
 						
@@ -331,7 +331,7 @@ Case of
 							
 						Else 
 							
-							$o.tables[$Lon_index].dumpSize:="#na"
+							$o.tables[$Lon_index].dumpSize:=Get localized string:C991("notAvailable")
 							
 						End if 
 					End if 
@@ -351,12 +351,16 @@ Case of
 				$Lon_row:=Choose:C955($Lon_row>$o.tables.length; 1; $Lon_row)
 				LISTBOX SELECT ROW:C912(*; $Obj_form.list; $Lon_row; lk replace selection:K53:1)
 				
+				OBJECT SET VISIBLE:C603(*; "01_tables.embeddedLabel"; $o.tables.query("embedded=:1"; True:C214).length>0)
+				
 			Else 
 				
 				$Obj_context.lastIndex:=0
 				
 				OBJECT SET VISIBLE:C603(*; $Obj_form.list; False:C215)
 				OBJECT SET VISIBLE:C603(*; "noPublishedTable"; True:C214)
+				
+				OBJECT SET VISIBLE:C603(*; "01_tables.embeddedLabel"; False:C215)
 				
 			End if 
 			
@@ -366,6 +370,8 @@ Case of
 			
 			OBJECT SET VISIBLE:C603(*; $Obj_form.list; False:C215)
 			OBJECT SET VISIBLE:C603(*; "noPublishedTable"; True:C214)
+			
+			OBJECT SET VISIBLE:C603(*; "01_tables.embeddedLabel"; False:C215)
 			
 		End if 
 		

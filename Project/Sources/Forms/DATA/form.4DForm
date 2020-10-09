@@ -106,7 +106,7 @@
 						{
 							"name": "table_names",
 							"dataSource": "This:C1470.name",
-							"width": 300,
+							"width": 250,
 							"minWidth": 10,
 							"maxWidth": 420,
 							"enterable": false,
@@ -129,7 +129,7 @@
 						{
 							"name": "Column2",
 							"dataSource": "This:C1470.dumpSize",
-							"width": 100,
+							"width": 160,
 							"minWidth": 10,
 							"maxWidth": 32000,
 							"enterable": false,
@@ -298,12 +298,12 @@
 					],
 					"method": "DATA_OBJECTS_HANDLER"
 				},
-				"01_tables.label1": {
+				"01_tables.embeddedLabel": {
 					"type": "text",
 					"top": 5,
-					"left": 319,
-					"width": 124,
-					"height": 17,
+					"left": 268,
+					"width": 185,
+					"height": 16,
 					"stroke": "#696969",
 					"textAlign": "left",
 					"text": ":xliff:dataSize"
@@ -315,5 +315,13 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "DATA_Handler"
+	"method": "DATA_Handler",
+	"geometryStamp": 23,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

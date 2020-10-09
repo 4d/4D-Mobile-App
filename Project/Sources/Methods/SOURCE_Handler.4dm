@@ -297,6 +297,14 @@ Case of
 							If ($regex.match[1].data="127.0.0.1")\
 								 | ($regex.match[1].data="localhost")
 								
+/*
+WARNING: "localhost" may not find the server if the computer is connected to a network.
+127.0.0.1, on the other hand, will connect directly without going out to the network.
+								
+$regex.match[1].data:="127.0.0.1"
+								
+*/
+								
 								// Check the port
 								If ($regex.match.length>=2)
 									
@@ -330,7 +338,6 @@ Case of
 									
 								End if 
 							End if 
-							
 							
 						Else 
 							
