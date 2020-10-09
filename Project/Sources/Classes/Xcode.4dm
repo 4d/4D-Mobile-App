@@ -110,7 +110,8 @@ Function toolsPath
 	
 	If (This:C1470.success)
 		
-		This:C1470.tools:=Folder:C1567(Replace string:C233($o.out; "\n"; ""))
+		//This.tools:=Folder(Replace string($o.out; "\n"; ""))
+		This:C1470.tools:=Folder:C1567($o.out)
 		This:C1470.success:=This:C1470.tools.exists
 		
 	Else 
