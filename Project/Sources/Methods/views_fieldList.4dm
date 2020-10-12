@@ -86,39 +86,42 @@ If ($out.success)
 					
 					If (FEATURE.with("moreRelations"))
 						
-						If ($table[$key].label=Null:C1517)
+						
+						If (Form:C1466.dataModel[$table[$key].relatedTableNumber]#Null:C1517)
 							
-							$table[$key].label:=PROJECT.label($key)
+							If ($table[$key].label=Null:C1517)
+								
+								$table[$key].label:=PROJECT.label($key)
+								
+							End if 
+							
+							If ($table[$key].shortLabel=Null:C1517)
+								
+								$table[$key].shortLabel:=PROJECT.shortLabel($key)
+								
+							End if 
+							
+							$o:=New object:C1471(\
+								"name"; $key; \
+								"path"; $key; \
+								"fieldType"; 8858; \
+								"relatedDataClass"; $table[$key].relatedDataclass; \
+								"inverseName"; $table[$key].inverseName; \
+								"label"; $table[$key].label; \
+								"shortlabel"; $table[$key].$t.shortLabel; \
+								"relatedTableNumber"; $table[$key].relatedTableNumber; \
+								"$added"; True:C214)
+							
+							// #TEMPO [
+							$o.id:=0
+							//]
+							
+							$out.fields.push($o)
 							
 						End if 
-						
-						If ($table[$key].shortLabel=Null:C1517)
-							
-							$table[$key].shortLabel:=PROJECT.shortLabel($key)
-							
-						End if 
-						
-						$o:=New object:C1471(\
-							"name"; $key; \
-							"path"; $key; \
-							"fieldType"; 8858; \
-							"relatedDataClass"; $table[$key].relatedDataclass; \
-							"inverseName"; $table[$key].inverseName; \
-							"label"; $table[$key].label; \
-							"shortlabel"; $table[$key].$t.shortLabel; \
-							"relatedTableNumber"; $table[$key].relatedTableNumber; \
-							"$added"; True:C214)
-						
-						// #TEMPO [
-						$o.id:=0
-						//]
-						
-						$out.fields.push($o)
-						
 					End if 
 					
 					For each ($attribute; $table[$key])
-						
 						
 						Case of 
 								
