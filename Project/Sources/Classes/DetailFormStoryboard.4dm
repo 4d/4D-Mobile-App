@@ -9,6 +9,8 @@ Class constructor
 	End if 
 	This:C1470.type:="detailform"
 	
+	This:C1470.relationFolder:=COMPONENT_Pathname("templates").folder("relation")
+	
 Function run
 	C_OBJECT:C1216($0; $Obj_out)
 	$Obj_out:=New object:C1471()
@@ -146,8 +148,6 @@ Function run
 			End for each 
 			
 			// Find a node to duplicate for relation
-			C_OBJECT:C1216($Folder_relation)
-			$Folder_relation:=COMPONENT_Pathname("templates").folder("relation")
 			
 			C_BOOLEAN:C305($Boo_hasRelation)
 			$Boo_hasRelation:=False:C215
@@ -200,7 +200,7 @@ Function run
 						
 					Else   // else us default one
 						
-						$Dom_relation:=xml("load"; $Folder_relation.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+						$Dom_relation:=xml("load"; This:C1470.relationFolder.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 						$Dom_relation.isDefault:=True:C214
 						
 				End case 
@@ -238,7 +238,7 @@ Function run
 				
 				$Obj_element:=New object:C1471(\
 					"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
-					"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
+					"dom"; xml("load"; This:C1470.relationFolder.file("storyboardScene.xml")); \
 					"idCount"; 3; \
 					"tagInterfix"; "SN"; \
 					"insertMode"; "append")
@@ -338,12 +338,13 @@ Function run
 			
 		End if 
 		
+		C_COLLECTION:C1488($Col_fields)
+		$Col_fields:=$Obj_tags.table.fields.slice(0; Num:C11($Obj_template.fields.count))
 		
 		// Manage relation in header fields (before stack view and diplicated element)
 		$Lon_j:=1
-		For each ($Obj_field; $Obj_tags.table.fields; 0; Num:C11($Obj_template.fields.count))
+		For each ($Obj_field; $Col_fields)
 			If (Num:C11($Obj_field.id)=0)  // relation to N field
-				
 				
 				If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root).success)
 					$Boo_buffer:=True:C214  // we make modification
@@ -354,50 +355,15 @@ Function run
 		End for each 
 		
 		$Lon_j:=1
-		For each ($Obj_field; $Obj_tags.table.fields; 0; Num:C11($Obj_template.fields.count))
+		For each ($Obj_field; $Col_fields)
 			If (Num:C11($Obj_field.id)=0)  // relation to N field
 				
 /*If (Length(String($Obj_field.format))=0)
 $Obj_field.format:=$Obj_field.shortLabel  // replaced in mobile app // a little dirty if not configurable
 End if */
 				
-				If (Length:C16(String:C10($Obj_field.bindingType))=0)
-					$Obj_field.bindingType:="relation"  // TODO this must be done before when we are looking for binding
-				End if 
+				This:C1470.injectSegue($Lon_j; $Dom_root; $Obj_field; $Obj_tags; $Obj_template; $Obj_out)
 				
-				$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
-				$Dom_:=$Dom_.parentWithName("scene").firstChild().firstChild()  // objects.XController (table view , view , collection view)
-				
-				If ($Dom_.success)
-					
-					$Obj_template.relation:=New object:C1471("elements"; New collection:C1472())
-					$Obj_element:=New object:C1471(\
-						"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
-						"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
-						"idCount"; 3; \
-						"tagInterfix"; "SN"; \
-						"insertMode"; "append")
-					$Obj_template.relation.elements.push($Obj_element)
-					
-					$Obj_element:=New object:C1471("idCount"; 1; \
-						"insertInto"; $Dom_; \
-						"tagInterfix"; "SG"; \
-						"insertMode"; "append"\
-						)
-					
-					$Txt_buffer:=This:C1470.relationSegue($Obj_template.relation)
-					$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
-					$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
-					$Obj_template.relation.elements.push($Obj_element)
-					
-					This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)
-					
-				Else 
-					
-					// Invalid relation
-					ASSERT:C1129(dev_Matrix; "Cannot add relation on this template. Cannot find viewController: "+JSON Stringify:C1217($Obj_field))
-					
-				End if 
 			End if 
 			$Lon_j:=$Lon_j+1
 		End for each 

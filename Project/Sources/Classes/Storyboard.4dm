@@ -680,7 +680,6 @@ Function xmlAppendRelationAttributeForField
 	$Dom_root:=$2
 	C_OBJECT:C1216($Dom_; $0)
 	
-	C_TEXT:C284($Txt_buffer)
 	
 	// find the element $Lon_j by looking at userDefinedRuntimeAttribute
 	$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
@@ -688,6 +687,7 @@ Function xmlAppendRelationAttributeForField
 		C_OBJECT:C1216($Dom_parent)
 		$Dom_parent:=$Dom_.parent()
 		
+		C_TEXT:C284($Txt_buffer)
 		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationFormat]").success))
 			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationFormat\" value=\"___FIELD_"+String:C10($Lon_j)+"_FORMAT___\"/>"
 			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
@@ -700,6 +700,63 @@ Function xmlAppendRelationAttributeForField
 	End if 
 	
 	$0:=$Dom_
+	
+Function injectSegue
+	C_LONGINT:C283($Lon_j; $1)
+	$Lon_j:=$1
+	C_OBJECT:C1216($Dom_root; $2)
+	$Dom_root:=$2
+	C_OBJECT:C1216($3; $Obj_field)
+	$Obj_field:=$3
+	C_OBJECT:C1216($4; $Obj_tags)
+	$Obj_tags:=$4
+	C_OBJECT:C1216($5; $Obj_template)
+	$Obj_template:=$5
+	C_OBJECT:C1216($6; $Obj_out)
+	$Obj_out:=$6  // result (could be $0 if caller merge result)
+	
+	If (Length:C16(String:C10($Obj_field.bindingType))=0)
+		$Obj_field.bindingType:="relation"  // TODO this must be done before when we are looking for binding
+	End if 
+	
+	C_OBJECT:C1216($Dom_)
+	$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
+	$Dom_:=$Dom_.parentWithName("scene").firstChild().firstChild()  // objects.XController (table view , view , collection view)
+	
+	If ($Dom_.success)
+		
+		$Obj_template.relation:=New object:C1471("elements"; New collection:C1472())
+		
+		//ASSERT(This.relationFolder#Null)
+		C_OBJECT:C1216($Obj_element)
+		$Obj_element:=New object:C1471(\
+			"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
+			"dom"; xml("load"; This:C1470.relationFolder.file("storyboardScene.xml")); \
+			"idCount"; 3; \
+			"tagInterfix"; "SN"; \
+			"insertMode"; "append")
+		$Obj_template.relation.elements.push($Obj_element)
+		
+		$Obj_element:=New object:C1471("idCount"; 1; \
+			"insertInto"; $Dom_; \
+			"tagInterfix"; "SG"; \
+			"insertMode"; "append"\
+			)
+		
+		C_TEXT:C284($Txt_buffer)
+		$Txt_buffer:=This:C1470.relationSegue($Obj_template.relation)
+		$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
+		$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
+		$Obj_template.relation.elements.push($Obj_element)
+		
+		This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)
+		
+	Else 
+		
+		// Invalid relation
+		ASSERT:C1129(dev_Matrix; "Cannot add relation on this template. Cannot find viewController: "+JSON Stringify:C1217($Obj_field))
+		
+	End if 
 	
 Function exportDom
 	C_OBJECT:C1216($1; $Obj_template)
