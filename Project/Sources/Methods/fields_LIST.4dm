@@ -228,19 +228,17 @@ If ($out.success)
 								Else 
 									
 									//**************************************************************************
-									$out.formatColors.push(Foreground color:K23:1)
-									$out.nameColors.push(Foreground color:K23:1)
-									
-									$field:=$table[$key][$subKey]
-									
-									$out.ids.push(0)
-									$out.names.push($field.name)
-									$out.paths.push($field.path)
-									$out.types.push(Choose:C955(Bool:C1537($field.isToMany); 8859; 8858))
-									$out.labels.push($field.label)
-									$out.shortLabels.push($field.shortLabel)
-									$out.iconPaths.push(String:C10($field.icon))
-									$out.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+									//$out.formatColors.push(Foreground color)
+									//$out.nameColors.push(Foreground color)
+									//$field:=$table[$key][$subKey]
+									//$out.ids.push(0)
+									//$out.names.push($field.name)
+									//$out.paths.push($field.path)
+									//$out.types.push(Choose(Bool($field.isToMany); 8859; 8858))
+									//$out.labels.push($field.label)
+									//$out.shortLabels.push($field.shortLabel)
+									//$out.iconPaths.push(String($field.icon))
+									//$out.icons.push(PROJECT.getIcon(String($field.icon)))
 									//**************************************************************************
 									
 									//______________________________________________________
