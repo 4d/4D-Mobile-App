@@ -56,6 +56,7 @@ Function run
 		C_OBJECT:C1216($Obj_field)
 		C_BOOLEAN:C305($Boo_buffer; $Boo_hasRelation)
 		$Boo_buffer:=False:C215
+		
 		// Manage relation field?
 		$Boo_hasRelation:=False:C215
 		For each ($Obj_field; $Obj_tags.table.fields) Until ($Boo_hasRelation)
@@ -69,31 +70,14 @@ Function run
 			C_OBJECT:C1216($Dom_root; $Dom_child; $Dom_)
 			$Dom_root:=xml("load"; This:C1470.path)
 			
-			// TODO factorize with detailFormStoryboard if possible
+			//
 			C_LONGINT:C283($Lon_j)
 			$Lon_j:=1
 			For each ($Obj_field; $Obj_tags.table.fields)
 				If (Num:C11($Obj_field.id)=0)  // relation to N field
 					
-					If (Length:C16(String:C10($Obj_field.bindingType))=0)
-						$Obj_field.bindingType:="relation"  // TODO this must be done before when we are looking for binding
-					End if 
-					// find the element $Lon_j by looking at userDefinedRuntimeAttribute
-					
-					$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
-					If ($Dom_.success)
-						C_OBJECT:C1216($Dom_parent)
-						$Dom_parent:=$Dom_.parent()
-						
-						If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationFormat]").success))
-							$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationFormat\" value=\"___FIELD_"+String:C10($Lon_j)+"_FORMAT___\"/>"
-							$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
-						End if 
-						If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationName]").success))
-							$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationName\" value=\"___FIELD_"+String:C10($Lon_j)+"___\"/>"
-							$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
-						End if 
-						$Boo_buffer:=True:C214
+					If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root).success)
+						$Boo_buffer:=True:C214  // we make modification
 					End if 
 					
 				End if 
@@ -107,6 +91,14 @@ Function run
 			$Lon_j:=1
 			For each ($Obj_field; $Obj_tags.table.fields)
 				If (Num:C11($Obj_field.id)=0)  // relation to N field
+					
+					If (Length:C16(String:C10($Obj_field.format))=0)
+						$Obj_field.format:=$Obj_field.shortLabel  // TODO #117601 check si ob copy? not edit project ?
+					End if 
+					
+					If (Length:C16(String:C10($Obj_field.bindingType))=0)
+						$Obj_field.bindingType:="relation"  // TODO this must be done before when we are looking for binding
+					End if 
 					
 					$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
 					$Dom_:=$Dom_.parentWithName("scene").firstChild().firstChild()  // objects.XController (table view , view , collection view)
@@ -133,10 +125,6 @@ Function run
 						$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
 						$Obj_template.relation.elements.push($Obj_element)
 						
-						If (Length:C16(String:C10($Obj_field.format))=0)
-							$Obj_field.format:=$Obj_field.shortLabel  // TODO #117601 check si ob copy? not edit project ?
-						End if 
-						
 						This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)
 						
 					Else 
@@ -146,6 +134,7 @@ Function run
 						
 					End if 
 				End if 
+				
 				$Lon_j:=$Lon_j+1
 			End for each 
 			
@@ -153,19 +142,13 @@ Function run
 			// Save file at destination after replacing tags
 			If ($Boo_buffer)
 				
-				$Txt_buffer:=$Dom_root.export().variable
-				$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("storyboard"; "___TABLE___"))
-				$Txt_buffer:=Replace string:C233($Txt_buffer; "<userDefinedRuntimeAttribute type=\"image\" keyPath=\"image\"/>"; "")  // Remove useless empty image
-				
-				C_OBJECT:C1216($File_)
-				$File_:=$target.file(Process_tags(String:C10($Obj_template.storyboard); $Obj_tags; New collection:C1472("filename")))
-				$File_.setText($Txt_buffer; "UTF-8"; Document with CRLF:K24:20)
-				
-				$Obj_out.format:=This:C1470.format($target)
+				This:C1470.exportDom($Obj_template; $target; $Obj_tags; $Dom_root)
 				
 			End if 
 			
 			$Dom_root.close()
+			
+			// Else, no relation, currently no storyboard dynamic edition, only tag replacement done before
 		End if 
 		
 		$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
@@ -175,3 +158,4 @@ Function run
 		ASSERT:C1129(dev_Matrix; "Missing "+This:C1470.type+" storyboard")
 		
 	End if 
+	

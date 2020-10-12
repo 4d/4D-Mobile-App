@@ -671,3 +671,53 @@ Function injectElement
 			
 		End if 
 	End for each 
+	
+	
+Function xmlAppendRelationAttributeForField
+	C_LONGINT:C283($Lon_j; $1)
+	$Lon_j:=$1
+	C_OBJECT:C1216($Dom_root; $2)
+	$Dom_root:=$2
+	C_OBJECT:C1216($Dom_; $0)
+	
+	C_TEXT:C284($Txt_buffer)
+	
+	// find the element $Lon_j by looking at userDefinedRuntimeAttribute
+	$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
+	If ($Dom_.success)
+		C_OBJECT:C1216($Dom_parent)
+		$Dom_parent:=$Dom_.parent()
+		
+		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationFormat]").success))
+			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationFormat\" value=\"___FIELD_"+String:C10($Lon_j)+"_FORMAT___\"/>"
+			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+		End if 
+		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationName]").success))
+			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationName\" value=\"___FIELD_"+String:C10($Lon_j)+"___\"/>"
+			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+		End if 
+		
+	End if 
+	
+	$0:=$Dom_
+	
+Function exportDom
+	C_OBJECT:C1216($1; $Obj_template)
+	$Obj_template:=$1
+	C_OBJECT:C1216($2; $target)
+	$target:=$2
+	C_OBJECT:C1216($3; $Obj_tags)
+	$Obj_tags:=$3
+	C_OBJECT:C1216($4; $Dom_root)
+	$Dom_root:=$4
+	
+	C_TEXT:C284($Txt_buffer)
+	$Txt_buffer:=$Dom_root.export().variable
+	$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("storyboard"; "___TABLE___"))
+	$Txt_buffer:=Replace string:C233($Txt_buffer; "<userDefinedRuntimeAttribute type=\"image\" keyPath=\"image\"/>"; "")  // Remove useless empty image
+	
+	C_OBJECT:C1216($File_)
+	$File_:=$target.file(Process_tags(String:C10($Obj_template.storyboard); $Obj_tags; New collection:C1472("filename")))
+	$File_.setText($Txt_buffer; "UTF-8"; Document with CRLF:K24:20)
+	
+	This:C1470.format($target)

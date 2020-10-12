@@ -40,7 +40,7 @@ Function run
 				
 				If (Position:C15($Txt_cmd; $Txt_buffer)=0)
 					
-					ob_warning_add($Obj_out; "Detail template storyboard '"+$File_.path+"'do not countains action tag "+$Txt_cmd)
+					ob_warning_add($Obj_out; "Detail template storyboard '"+This:C1470.path+"'do not countains action tag "+$Txt_cmd)
 					
 					// XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
 					
@@ -97,7 +97,7 @@ Function run
 						Else 
 							
 							$Obj_element.dom:=Null:C1517
-							ASSERT:C1129(False:C215; "Invalid xpath "+$Obj_element.xpath+" for file "+$File_.path)
+							ASSERT:C1129(False:C215; "Invalid xpath "+$Obj_element.xpath+" for file "+This:C1470.path)
 							
 						End if 
 						
@@ -117,7 +117,7 @@ Function run
 								If (Not:C34($Obj_element.dom.success))
 									
 									$Obj_element.dom:=Null:C1517
-									ASSERT:C1129(False:C215; "Root element with id 'TAG-"+String:C10($Obj_element.tagInterfix)+"-001' not found for file "+$File_.path)
+									ASSERT:C1129(False:C215; "Root element with id 'TAG-"+String:C10($Obj_element.tagInterfix)+"-001' not found for file "+This:C1470.path)
 									
 								End if 
 								
@@ -131,7 +131,7 @@ Function run
 								// ----------------------------------------
 							Else 
 								
-								ASSERT:C1129(False:C215; "No tag interfix defined for element "+JSON Stringify:C1217($Obj_element)+" (TAG->tagInterfix>-001). Alternatively you can defined node xpath for template file "+$File_.path+" to find the xml element in storyboard.")
+								ASSERT:C1129(False:C215; "No tag interfix defined for element "+JSON Stringify:C1217($Obj_element)+" (TAG->tagInterfix>-001). Alternatively you can defined node xpath for template file "+This:C1470.path+" to find the xml element in storyboard.")
 								
 								// ----------------------------------------
 						End case 
@@ -344,26 +344,9 @@ Function run
 		For each ($Obj_field; $Obj_tags.table.fields; 0; Num:C11($Obj_template.fields.count))
 			If (Num:C11($Obj_field.id)=0)  // relation to N field
 				
-				If (Length:C16(String:C10($Obj_field.bindingType))=0)
-					$Obj_field.bindingType:="relation"  // TODO this must be done before when we are looking for binding
-				End if 
-				// find the element $Lon_j by looking at userDefinedRuntimeAttribute
 				
-				$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
-				If ($Dom_.success)
-					C_OBJECT:C1216($Dom_parent)
-					$Dom_parent:=$Dom_.parent()
-					
-					If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationFormat]").success))
-						$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationFormat\" value=\"___FIELD_"+String:C10($Lon_j)+"_FORMAT___\"/>"
-						$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
-					End if 
-					If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationName]").success))
-						$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationName\" value=\"___FIELD_"+String:C10($Lon_j)+"___\"/>"
-						$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
-					End if 
-					
-					$Boo_buffer:=True:C214
+				If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root).success)
+					$Boo_buffer:=True:C214  // we make modification
 				End if 
 				
 			End if 
@@ -373,6 +356,14 @@ Function run
 		$Lon_j:=1
 		For each ($Obj_field; $Obj_tags.table.fields; 0; Num:C11($Obj_template.fields.count))
 			If (Num:C11($Obj_field.id)=0)  // relation to N field
+				
+/*If (Length(String($Obj_field.format))=0)
+$Obj_field.format:=$Obj_field.shortLabel  // replaced in mobile app // a little dirty if not configurable
+End if */
+				
+				If (Length:C16(String:C10($Obj_field.bindingType))=0)
+					$Obj_field.bindingType:="relation"  // TODO this must be done before when we are looking for binding
+				End if 
 				
 				$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
 				$Dom_:=$Dom_.parentWithName("scene").firstChild().firstChild()  // objects.XController (table view , view , collection view)
@@ -399,10 +390,6 @@ Function run
 					$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
 					$Obj_template.relation.elements.push($Obj_element)
 					
-/*If (Length(String($Obj_field.format))=0)
-$Obj_field.format:=$Obj_field.shortLabel  // replaced in mobile app // a little dirty if not configurable
-End if */
-					
 					This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)
 					
 				Else 
@@ -418,15 +405,7 @@ End if */
 		// Save file at destination after replacing tags
 		If ($Boo_buffer)
 			
-			$Txt_buffer:=$Dom_root.export().variable
-			$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("storyboard"; "___TABLE___"))
-			$Txt_buffer:=Replace string:C233($Txt_buffer; "<userDefinedRuntimeAttribute type=\"image\" keyPath=\"image\"/>"; "")  // Remove useless empty image
-			
-			C_OBJECT:C1216($File_)
-			$File_:=$target.file(Process_tags(String:C10($Obj_template.storyboard); $Obj_tags; New collection:C1472("filename")))
-			$File_.setText($Txt_buffer; "UTF-8"; Document with CRLF:K24:20)
-			
-			$Obj_out.format:=This:C1470.format($target)
+			This:C1470.exportDom($Obj_template; $target; $Obj_tags; $Dom_root)
 			
 		End if 
 		
@@ -502,5 +481,7 @@ Function checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_
 		End case 
 		
 	End if 
+	
+	
 	
 	
