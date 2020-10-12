@@ -163,6 +163,7 @@ If ($out.success)
 						For each ($subKey; $table[$key])
 							
 							Case of 
+									
 									//______________________________________________________
 								: (Value type:C1509($table[$key][$subKey])#Is object:K8:27)
 									
@@ -227,19 +228,17 @@ If ($out.success)
 									//______________________________________________________
 								Else 
 									
-									//**************************************************************************
-									//$out.formatColors.push(Foreground color)
-									//$out.nameColors.push(Foreground color)
-									//$field:=$table[$key][$subKey]
-									//$out.ids.push(0)
-									//$out.names.push($field.name)
-									//$out.paths.push($field.path)
-									//$out.types.push(Choose(Bool($field.isToMany); 8859; 8858))
-									//$out.labels.push($field.label)
-									//$out.shortLabels.push($field.shortLabel)
-									//$out.iconPaths.push(String($field.icon))
-									//$out.icons.push(PROJECT.getIcon(String($field.icon)))
-									//**************************************************************************
+									$field:=$table[$key][$subKey]
+									
+									If (Bool:C1537($field.isToMany))
+										
+										
+										
+									Else 
+										
+										// A "If" statement should never omit "Else" 
+										
+									End if 
 									
 									//______________________________________________________
 							End case 

@@ -249,7 +249,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-																																																																																																																																																																																						"tips"; $o.label)
+																																																																																																																																																																																																				"tips"; $o.label)
 													
 												End if 
 											End if 
@@ -266,13 +266,13 @@ Case of
 												
 											Else 
 												
-												$buffer:=$o.name
+												$buffer:="➀ "+$o.name
 												
 											End if 
 											
 										Else 
 											
-											$buffer:="ⓝ "+$o.name
+											$buffer:=Choose:C955(Bool:C1537($o.isToMany); "ⓝ "; "")+$o.name
 											
 										End if 
 										
@@ -310,7 +310,6 @@ Case of
 										
 										If ($svg.success)
 											
-											//$attributes:=xml_attributes($node)
 											$attributes:=$svg.getAttributes($node)
 											
 											// Get the bindind definition
@@ -337,7 +336,7 @@ Case of
 															If ($relation[$o.name].format#Null:C1517)
 																
 																$c:=Split string:C1554($relation[$o.name].format; "%"; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
-																$buffer:=$o.name+" ("+$c[0]+")"
+																$buffer:="➀ "+$o.name+" ("+$c[0]+")"
 																
 															Else 
 																
@@ -347,7 +346,7 @@ Case of
 															
 														Else 
 															
-															$buffer:=$o.name
+															$buffer:=Choose:C955(Bool:C1537($o.isToMany); "ⓝ "; "")+$o.name
 															
 														End if 
 														
@@ -774,7 +773,7 @@ Case of
 						
 						OBJECT SET VALUE:C1742("preview"; cs:C1710.svg.new()\
 							.dimensions($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
-							.textArea(_o_str("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).dimensions($form.preview.coordinates.width-50)\
+							.textArea(cs:C1710.str.new("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).dimensions($form.preview.coordinates.width-50)\
 							.position(20; 180).font(New object:C1471("size"; 14; "color"; UI.colors.errorColor.hex; "alignment"; Align center:K42:3)).getPicture())
 						
 						OBJECT SET TITLE:C194(*; "preview.label"; "")

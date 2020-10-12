@@ -347,7 +347,9 @@ Case of
 				APPEND TO ARRAY:C911(($Obj_in.icons)->; UI.fieldIcons[8858])
 				APPEND TO ARRAY:C911(($Obj_in.fields)->; $Obj_in.field.name)
 				
-				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; Size of array:C274(($Obj_in.fields)->); Underline:K14:4)
+				$l:=Size of array:C274(($Obj_in.fields)->)
+				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; $l; Underline:K14:4)
+				LISTBOX SET ROW COLOR:C1270(*; "fields"; $l; UI.selectedColor; lk font color:K53:24)
 				
 				//…………………………………………………………………………………………………
 			: ($Obj_in.field.type=-2)  // 1 -> N relation

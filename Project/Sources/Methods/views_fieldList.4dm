@@ -87,7 +87,7 @@ If ($out.success)
 					If (FEATURE.with("moreRelations"))
 						
 						
-						If (Form:C1466.dataModel[$table[$key].relatedTableNumber]#Null:C1517)
+						If (Form:C1466.dataModel[String:C10($table[$key].relatedTableNumber)]#Null:C1517)
 							
 							If ($table[$key].label=Null:C1517)
 								
