@@ -16,9 +16,8 @@ var $initLog; $reset : Boolean
 var $l : Integer
 var $o; $pref : Object
 
-var $folder : 4D:C1709.Directory
-var $file : 4D:C1709.Document
-var $signal : 4D:C1709.signal
+var $folder : 4D:C1709.Folder
+var $file : 4D:C1709.File
 var $process : cs:C1710.process
 
 var SHARED : Object  // Common values
@@ -176,13 +175,16 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	
 	If (SHARED.component.build#Num:C11($pref.lastBuild)) | $reset
 		
-		// Invalid the cache
-		$folder:=sdk(New object:C1471("action"; "cacheFolder"))
-		
-		If ($folder.exists)
+		If (Is macOS:C1572)
 			
-			$folder.delete(Delete with contents:K24:24)
+			// Invalid the cache
+			$folder:=sdk(New object:C1471("action"; "cacheFolder"))
 			
+			If ($folder.exists)
+				
+				$folder.delete(Delete with contents:K24:24)
+				
+			End if 
 		End if 
 		
 		// Save the preferences
