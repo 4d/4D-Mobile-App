@@ -70,7 +70,35 @@ Case of
 						$Obj_widget.cellCoordinates()
 						
 						// Get the field definition
-						$Obj_field:=$Obj_context.field($Obj_widget.row)
+						If (FEATURE.with("moreRelations"))
+							
+							If (Num:C11($Obj_context.selector)=1)
+								
+								//%W-533.3
+								$c:=Split string:C1554(($Obj_widget.columns["fields"].pointer)->{$Obj_widget.row}; ".")
+								//%W+533.3
+								
+								If ($c.length>1)
+									
+									// 1 -> 1 -> N
+									$Obj_field:=Form:C1466.dataModel[String:C10($Obj_context.tableNumber)][String:C10($c[0])][String:C10($c[1])]
+									
+								Else 
+									
+									$Obj_field:=OB Copy:C1225($Obj_context.field($Obj_widget.row))
+									
+									//%W-533.3
+									$Obj_field.path:=($Obj_widget.columns["fields"].pointer)->{$Obj_widget.row}
+									//%W+533.3
+									
+								End if 
+								
+							Else 
+								
+								$Obj_field:=$Obj_context.field($Obj_widget.row)
+								
+							End if 
+						End if 
 						
 						// Display the picker
 						$o:=$Obj_form.picker.pointer()->
@@ -97,7 +125,7 @@ Case of
 						$o.promptBackColor:=UI.strokeColor
 						$o.hidePromptSeparator:=True:C214
 						$o.forceRedraw:=True:C214
-						$o.prompt:=cs:C1710.str.new("chooseAnIconForTheField").localized($Obj_field.name)
+						$o.prompt:=cs:C1710.str.new("chooseAnIconForTheField").localized($Obj_field.path)
 						
 						$Obj_context.showPicker($o)
 						
