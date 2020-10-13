@@ -20,8 +20,8 @@ If (False:C215)
 	C_OBJECT:C1216(Xcode_CheckInstall; $1)
 End if 
 
+var $t : Text
 var $in; $out; $signal : Object
-
 var $Xcode : cs:C1710.Xcode
 
 // ----------------------------------------------------
@@ -100,7 +100,9 @@ If ($out.XcodeAvailable)
 			
 			If ($signal.validate)
 				
-				$Xcode.setToolPath()
+				$t:=Get localized string:C991("4dMobileWantsToMakeChanges")
+				$t:=Replace string:C233($t; "{poduct}"; Get localized string:C991("4dProductName"))
+				$Xcode.setToolPath($t)
 				
 				If ($Xcode.success)
 					
@@ -136,7 +138,15 @@ If ($out.XcodeAvailable)
 		$out.xcode:=$Xcode.application
 		$out.tools:=$Xcode.tools
 		
-		// CHECK LICENCE AGREEMENT
+		// CHECK FIRST INSTALL
+		If (Not:C34($Xcode.checkFirstLaunchStatus()))
+			
+			$t:=Get localized string:C991("4dMobileWantsToMakeChanges")
+			$t:=Replace string:C233($t; "{poduct}"; Get localized string:C991("4dProductName"))
+			$Xcode.setToolPath($t)
+			
+		End if 
+		
 		If (Not:C34($Xcode.checkFirstLaunchStatus()))
 			
 			$signal:=await_MESSAGE(New object:C1471(\

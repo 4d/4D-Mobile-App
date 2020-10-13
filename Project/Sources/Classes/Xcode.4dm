@@ -22,7 +22,6 @@ Class constructor
 		If (This:C1470.success)
 			
 			This:C1470.version:=This:C1470.getVersion()
-			This:C1470.toolsPath()
 			
 		End if 
 		
@@ -80,17 +79,12 @@ Function path
 	If (Not:C34($found))
 		
 		This:C1470.toolsPath()
+		$found:=This:C1470.success
 		
-		If (This:C1470.success)
+		If ($found)
 			
-			$folder:=This:C1470.tools.parent.parent
+			This:C1470.application:=This:C1470.tools.parent.parent
 			
-			If (This:C1470.application.path=$folder.path)
-				
-				This:C1470.application:=$folder
-				$found:=True:C214
-				
-			End if 
 		End if 
 	End if 
 	
@@ -98,6 +92,12 @@ Function path
 		
 		This:C1470.lastPath()
 		
+		If (This:C1470.success)
+			
+			This:C1470.tools:=This:C1470.application.folder("Contents/Developer")
+			
+			
+		End if 
 	End if 
 	
 	//====================================================================
@@ -222,9 +222,16 @@ Function checkFirstLaunchStatus
 	
 	//====================================================================
 Function setToolPath
+	var $1 : Text
+	
 	var $o : Object
 	
-	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; _o_str.setText("4dMobileWantsToMakeChanges").localized("4dProductName"))
+	If (Count parameters:C259>=1)
+		
+		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; $1)
+		
+	End if 
+	
 	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
 	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2).file("sudo-askpass").path)
 	
@@ -244,6 +251,28 @@ Function setToolPath
 			This:C1470.toolsPath()
 			
 		End if 
+	End if 
+	
+	//====================================================================
+Function installTools
+	var $0 : Boolean
+	
+	var $pid : Text
+	var $o : Object
+	
+	$o:=This:C1470.lepPid("xcode-select --install")
+	
+	If ($o.success)  // wait for end of process
+		
+		//get the pid
+		$o:=This:C1470.lep("ps -A -x -c | grep "+This:C1470.singleQuoted("Install Command Line Developer Tools"))
+		
+		$pid:=Split string:C1554($o.out; "\t")[0]
+		
+		$o:=This:C1470.lep("ps "+String:C10($pid))
+		
+		//$0:=This.checkFirstLaunchStatus()
+		
 	End if 
 	
 	//====================================================================

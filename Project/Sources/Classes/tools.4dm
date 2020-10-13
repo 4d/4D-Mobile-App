@@ -18,7 +18,7 @@ Function lep
 	var $2 : Variant  // In
 	
 	var $cmd; $error; $in; $out : Text
-	var $len; $pos : Integer
+	var $len; $pid; $pos : Integer
 	
 	Case of 
 			
@@ -49,7 +49,9 @@ Function lep
 		"success"; False:C215)
 	
 	SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
-	LAUNCH EXTERNAL PROCESS:C811($1; $in; $out; $error)
+	LAUNCH EXTERNAL PROCESS:C811($1; $in; $out; $error; $pid)
+	
+	$0.pid:=$pid
 	
 	// Remove the last line feed, if any
 	If (Match regex:C1019("^.+$"; $out; 1; $pos; $len))
