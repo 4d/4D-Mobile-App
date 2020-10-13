@@ -287,6 +287,34 @@ If ($out.success)
 								
 								// N -> 1 -> N relation
 								
+								For each ($subKey; $table[$key])
+									
+									If (Value type:C1509($table[$key][$subKey])=Is object:K8:27)
+										If (Bool:C1537($table[$key][$subKey].isToMany))
+											
+											$field:=$table[$key][$subKey]
+											
+											$out.formatColors.push(Foreground color:K23:1)
+											$out.nameColors.push(Foreground color:K23:1)
+											
+											$out.tableNumbers.push(Num:C11($tableID))
+											
+											$out.ids.push(Null:C1517)
+											$out.names.push($field.path)
+											$out.paths.push($field.path)
+											$out.types.push(-1)
+											
+											$out.labels.push($field.label)
+											$out.shortLabels.push($field.shortLabel)
+											$out.iconPaths.push(String:C10($field.icon))
+											$out.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+											
+											$out.formats.push($field.format)
+											
+										End if 
+									End if 
+								End for each 
+								
 							Else 
 								
 								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)

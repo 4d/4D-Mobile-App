@@ -90,7 +90,41 @@ Case of
 			 & ($Obj_in.item<=$Obj_in.pathnames.length)
 			
 			// Update data model
-			$ƒ.field($Obj_in.row).icon:=$Obj_in.pathnames[$Obj_in.item-1]
+			If (FEATURE.with("moreRelations"))
+				
+				var $c : Collection
+				var $o : Object
+				
+				If (Num:C11($ƒ.selector)=1)
+					
+					//%W-533.3
+					$c:=Split string:C1554(($Obj_form.fieldList.update().columns["fields"].pointer)->{$Obj_in.row}; ".")
+					//%W+533.3
+					
+					If ($c.length>1)
+						
+						// 1 -> 1 -> N
+						$o:=Form:C1466.dataModel[String:C10($ƒ.tableNumber)][String:C10($c[0])][String:C10($c[1])]
+						
+					Else 
+						
+						$o:=$ƒ.field($Obj_in.row)
+						
+					End if 
+					
+				Else 
+					
+					$o:=$ƒ.field($Obj_in.row)
+					
+				End if 
+				
+				$o.icon:=$Obj_in.pathnames[$Obj_in.item-1]
+				
+			Else 
+				
+				$ƒ.field($Obj_in.row).icon:=$Obj_in.pathnames[$Obj_in.item-1]
+				
+			End if 
 			
 			// Update UI
 			If ($Obj_in.pictures[$Obj_in.item-1]#Null:C1517)

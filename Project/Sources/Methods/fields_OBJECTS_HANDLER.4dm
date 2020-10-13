@@ -97,7 +97,7 @@ Case of
 						$o.promptBackColor:=UI.strokeColor
 						$o.hidePromptSeparator:=True:C214
 						$o.forceRedraw:=True:C214
-						$o.prompt:=_o_str("chooseAnIconForTheField").localized($Obj_field.name)
+						$o.prompt:=cs:C1710.str.new("chooseAnIconForTheField").localized($Obj_field.name)
 						
 						$Obj_context.showPicker($o)
 						
@@ -194,7 +194,7 @@ Case of
 							
 						Else 
 							
-							$Obj_popup.append(_o_str("_"+$t).localized(); $t; $Txt_current=$t)
+							$Obj_popup.append(cs:C1710.str.new("_"+$t).localized(); $t; $Txt_current=$t)
 							
 						End if 
 					End for each 
@@ -229,7 +229,7 @@ Case of
 							
 						Else 
 							
-							$Ptr_me->{$Obj_widget.row}:=_o_str("_"+$Obj_popup.choice).localized()
+							$Ptr_me->{$Obj_widget.row}:=cs:C1710.str.new("_"+$Obj_popup.choice).localized()
 							
 						End if 
 						//%W+533.3
@@ -251,7 +251,36 @@ Case of
 			: ($Obj_form.form.eventCode=On Data Change:K2:15)
 				
 				// Get the edited field definition
-				$Obj_field:=$Obj_context.field($Obj_context.inEdition.row)
+				If (FEATURE.with("moreRelations"))
+					
+					If (Num:C11($Obj_context.selector)=1)
+						
+						//%W-533.3
+						$c:=Split string:C1554(($Obj_widget.columns["fields"].pointer)->{$Obj_context.inEdition.row}; ".")
+						//%W+533.3
+						
+						If ($c.length>1)
+							
+							// 1 -> 1 -> N
+							$Obj_field:=Form:C1466.dataModel[String:C10($Obj_context.tableNumber)][String:C10($c[0])][String:C10($c[1])]
+							
+						Else 
+							
+							$Obj_field:=$Obj_context.field($Obj_context.inEdition.row)
+							
+						End if 
+						
+					Else 
+						
+						$Obj_field:=$Obj_context.field($Obj_context.inEdition.row)
+						
+					End if 
+					
+				Else 
+					
+					$Obj_field:=$Obj_context.field($Obj_context.inEdition.row)
+					
+				End if 
 				
 				// Update data model
 				Case of 
