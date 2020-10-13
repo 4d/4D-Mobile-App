@@ -137,9 +137,7 @@ If ($out.XcodeAvailable)
 		$out.tools:=$Xcode.tools
 		
 		// CHECK LICENCE AGREEMENT
-		$Xcode.checkFirstLaunchStatus()
-		
-		If (Not:C34($Xcode.success))
+		If (Not:C34($Xcode.checkFirstLaunchStatus()))
 			
 			$signal:=await_MESSAGE(New object:C1471(\
 				"target"; $in.caller; \
