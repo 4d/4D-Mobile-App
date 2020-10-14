@@ -21,7 +21,7 @@ SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current+".label
 
 If (Length:C16($Txt_tips)#0)
 	
-	$Txt_tips:="\""+$Txt_tips+"\""
+	//$Txt_tips:="\""+$Txt_tips+"\""
 	
 Else 
 	

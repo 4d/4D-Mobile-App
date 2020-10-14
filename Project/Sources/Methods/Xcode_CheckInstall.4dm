@@ -137,6 +137,12 @@ If ($out.XcodeAvailable)
 	
 	If ($out.ready)
 		
+		If ($Xcode.tools=Null:C1517)
+			
+			$Xcode.toolsPath()
+			
+		End if 
+		
 		$out.xcode:=$Xcode.application
 		$out.tools:=$Xcode.tools
 		

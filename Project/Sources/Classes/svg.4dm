@@ -1350,6 +1350,7 @@ Function class  // Set the node class
 	
 /*———————————————————————————————————————————————————————————*/
 Function addClass  // Add a value to the node class 
+	var $0 : Object
 	var $1 : Text
 	var $2 : Text
 	
@@ -1378,6 +1379,8 @@ Function addClass  // Add a value to the node class
 	End if 
 	
 	Super:C1706.setAttribute($node; "class"; $t)
+	
+	$0:=This:C1470
 	
 /*——————————————————————————
 PRIVATE

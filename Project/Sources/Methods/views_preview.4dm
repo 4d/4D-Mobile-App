@@ -18,12 +18,15 @@ If (False:C215)
 	C_OBJECT:C1216(views_preview; $2)
 End if 
 
-var $buffer; $class; $container; $domField; $domTemplate; $domUse; $formName; $formType; $IN; $name : Text
-var $new; $node; $OUT; $root; $style; $t; $index; $widgetField : Text
-var $b; $first; $multivalued : Boolean
-var $count; $height; $i; $indx; $dy; $width; $y : Integer
-var $context; $form; $manifest; $o; $attributes; $widgetManifest; $relation; $svg; $target; $template : Object
+var $buffer; $class; $container; $domField; $domTemplate; $domUse; $formName; $formType; $IN; $index : Text
+var $key; $name; $new; $node; $OUT; $root; $style; $t; $widgetField : Text
+var $b; $first; $found; $multivalued : Boolean
+var $count; $dy; $height; $i; $indx; $width; $y : Integer
+var $attributes; $context; $form; $manifest; $o; $relation; $target; $widgetManifest : Object
 var $c : Collection
+
+var $svg : cs:C1710.svg
+var $template : cs:C1710.Template
 
 // ----------------------------------------------------
 // Initialisations
@@ -249,7 +252,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-																																																																																																																																																																																																																		"tips"; $o.label)
+														"tips"; $o.label)
 													
 												End if 
 											End if 
@@ -262,11 +265,11 @@ Case of
 											If ($relation[$o.name].format#Null:C1517)
 												
 												$c:=Split string:C1554($relation[$o.name].format; "%"; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
-												$buffer:="➀ "+$o.name+" ("+$c[0]+")"
+												$buffer:="① "+$o.name+" ("+$c[0]+")"
 												
 											Else 
 												
-												$buffer:="➀ "+$o.name
+												$buffer:="① "+$o.name
 												
 											End if 
 											
@@ -331,27 +334,14 @@ Case of
 														
 														If ($o.fieldType=8858)
 															
+															$buffer:="① "+$o.name
+															
 															$relation:=Form:C1466.dataModel[$context.tableNumber]
 															
-															If ($relation[$o.name].format#Null:C1517)
+															If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$o.name].format); 1))
 																
-																$c:=Split string:C1554($relation[$o.name].format; "%"; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
-																
-																If ($c.length>0)
-																	
-																	$buffer:="➀ "+$o.name+" ("+$c[0]+")"
-																	
-																	//#TO_DO - CHECK THAT THE DISCRIMINANT FIELD IS PUBLISHED -> error
-																	
-																Else 
-																	
-																	$buffer:="➀ "+$o.name
-																	
-																End if 
-																
-															Else 
-																
-																$buffer:="➀ "+$o.name
+																$name:=Substring:C12($relation[$o.name].format; 2; Length:C16($relation[$o.name].format)-2)
+																$buffer:=$buffer+" ("+$name+")"
 																
 															End if 
 															
@@ -374,15 +364,44 @@ Case of
 																	
 																	If ($relation[$o.name].format=Null:C1517)
 																		
-																		$svg.class("label error"; $node)
+																		$svg.class("label error"; $node)\
+																			.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$o.name].relatedEntities)); $node)
 																		
 																	End if 
 																End if 
 																
 															Else 
 																
-																$svg.class("label"; $node).setAttribute("tips"; $o.label; $node)
+																$svg.class("label"; $node)\
+																	.setAttribute("tips"; $o.label; $node)
 																
+															End if 
+															
+															If ($o.fieldType=8858)
+																
+																If (Length:C16($name)>0)
+																	
+																	// Check that the discriminant field is published
+																	
+																	For each ($key; $relation[$o.name]) Until $found
+																		
+																		If (Not:C34($found))
+																			
+																			If (Value type:C1509($relation[$o.name][$key])=Is object:K8:27)
+																				
+																				$found:=String:C10($relation[$o.name][$key].name)=$name
+																				
+																			End if 
+																		End if 
+																	End for each 
+																	
+																	If (Not:C34($found))
+																		
+																		$svg.addClass("error"; $node)\
+																			.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name)); $node)
+																		
+																	End if 
+																End if 
 															End if 
 														End if 
 														
