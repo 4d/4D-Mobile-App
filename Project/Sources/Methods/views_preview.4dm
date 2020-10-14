@@ -249,7 +249,7 @@ Case of
 												Else 
 													
 													//DOM SET XML ATTRIBUTE($node; \
-																																																																																																																																																																																																				"tips"; $o.label)
+																																																																																																																																																																																																																		"tips"; $o.label)
 													
 												End if 
 											End if 
@@ -336,11 +336,22 @@ Case of
 															If ($relation[$o.name].format#Null:C1517)
 																
 																$c:=Split string:C1554($relation[$o.name].format; "%"; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
-																$buffer:="➀ "+$o.name+" ("+$c[0]+")"
+																
+																If ($c.length>0)
+																	
+																	$buffer:="➀ "+$o.name+" ("+$c[0]+")"
+																	
+																	//#TO_DO - CHECK THAT THE DISCRIMINANT FIELD IS PUBLISHED -> error
+																	
+																Else 
+																	
+																	$buffer:="➀ "+$o.name
+																	
+																End if 
 																
 															Else 
 																
-																$buffer:=$o.name
+																$buffer:="➀ "+$o.name
 																
 															End if 
 															
