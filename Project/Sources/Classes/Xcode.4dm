@@ -264,7 +264,7 @@ Function installTools
 	
 	If ($o.success)  // wait for end of process
 		
-		//get the pid
+		// Get the pid
 		$o:=This:C1470.lep("ps -A -x -c | grep "+This:C1470.singleQuoted("Install Command Line Developer Tools"))
 		
 		$pid:=Split string:C1554($o.out; "\t")[0]
