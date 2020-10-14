@@ -81,6 +81,8 @@ If ($out.XcodeAvailable)
 		$out.version:=$Xcode.version
 		
 		// CHECK TOOLS-PATH
+		$Xcode.toolsPath()
+		
 		If ($Xcode.tools.exists)
 			
 			$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
@@ -101,7 +103,7 @@ If ($out.XcodeAvailable)
 			If ($signal.validate)
 				
 				$t:=Get localized string:C991("4dMobileWantsToMakeChanges")
-				$t:=Replace string:C233($t; "{poduct}"; Get localized string:C991("4dProductName"))
+				$t:=Replace string:C233($t; "{product}"; Get localized string:C991("4dProductName"))
 				$Xcode.setToolPath($t)
 				
 				If ($Xcode.success)
@@ -142,7 +144,7 @@ If ($out.XcodeAvailable)
 		If (Not:C34($Xcode.checkFirstLaunchStatus()))
 			
 			$t:=Get localized string:C991("4dMobileWantsToMakeChanges")
-			$t:=Replace string:C233($t; "{poduct}"; Get localized string:C991("4dProductName"))
+			$t:=Replace string:C233($t; "{product}"; Get localized string:C991("4dProductName"))
 			$Xcode.setToolPath($t)
 			
 		End if 
