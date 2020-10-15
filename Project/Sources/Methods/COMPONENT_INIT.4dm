@@ -397,6 +397,9 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		UI.alert:="🚫"
 		UI.warning:="❗"
 		
+		UI.toOne:="⑴"
+		UI.toMany:="⒩"
+		
 		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/user.png").platformPath; $icon)
 		UI.user:=$icon
 		

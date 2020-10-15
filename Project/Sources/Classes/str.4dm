@@ -859,6 +859,18 @@ Function xmlEncode
 	End if 
 	
 	//=======================================================================================================
+	// Removing characters that could be wrongfully interpreted as markup
+Function xmlSafe
+	var $0 : Text
+	
+	$0:=This:C1470.value
+	$0:=Replace string:C233($0; "&"; "&amp;")
+	$0:=Replace string:C233($0; "'"; "&apos;")
+	$0:=Replace string:C233($0; "\""; "&quot;")
+	$0:=Replace string:C233($0; "<"; "&lt;")
+	$0:=Replace string:C233($0; ">"; "&gt;")
+	
+	//=======================================================================================================
 	// Returns True if text is styled
 Function isStyled
 	var $0 : Boolean

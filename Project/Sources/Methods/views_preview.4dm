@@ -18,15 +18,16 @@ If (False:C215)
 	C_OBJECT:C1216(views_preview; $2)
 End if 
 
-var $buffer; $class; $container; $domField; $domTemplate; $domUse; $formName; $formType; $IN; $index : Text
-var $key; $name; $new; $node; $OUT; $root; $style; $t; $widgetField : Text
-var $b; $first; $found; $multivalued : Boolean
-var $count; $dy; $height; $i; $indx; $width; $y : Integer
+var $buffer; $class; $container; $dialog; $domField; $domTemplate; $domUse; $formName; $formType; $IN : Text
+var $index; $key; $name; $new; $node; $OUT; $searchableFieldName; $style; $t; $tips : Text
+var $widgetField : Text
+var $b; $first; $found; $isToMany; $isToOne; $multivalued : Boolean
+var $count; $dy; $height; $i; $id; $indx; $width; $y : Integer
 var $attributes; $context; $form; $manifest; $o; $relation; $target; $widgetManifest : Object
 var $c : Collection
-
 var $svg : cs:C1710.svg
 var $template : cs:C1710.Template
+var $xml : cs:C1710.xml
 
 // ----------------------------------------------------
 // Initialisations
@@ -63,71 +64,60 @@ Case of
 			
 			If (Length:C16($formName)>0)
 				
-				If (String:C10(Form:C1466.$dialog.VIEWS.template.name)#$formName)
+				$dialog:=Choose:C955(FEATURE.with("newViewUI"); "VIEWS"; "_o_VIEWS")
+				
+				If (String:C10(Form:C1466.$dialog[$dialog].template.name)#$formName)
 					
-					If (FEATURE.with("newViewUI"))
-						
-						Form:C1466.$dialog.VIEWS.template:=cs:C1710.tmpl.new($formName; $formType)
-						
-					Else 
-						
-						Form:C1466.$dialog._o_VIEWS.template:=cs:C1710.tmpl.new($formName; $formType)
-						
-					End if 
+					Form:C1466.$dialog[$dialog].template:=cs:C1710.tmpl.new($formName; $formType)
+					
 				End if 
 				
-				$template:=Form:C1466.$dialog.VIEWS.template
-				$manifest:=$template.manifest
+				$template:=Form:C1466.$dialog[$dialog].template
 				
 				If ($template.path.exists)
 					
+					$manifest:=$template.manifest
+					
+					// Load the template
 					If (FEATURE.with("newViewUI"))
 						
-						// Load the template
 						$t:=$template.load().template
 						$t:=Replace string:C233($t; "&quot;"; "\"")
 						PROCESS 4D TAGS:C816($t; $t; $template.title; $template.cancel())
-						
 						$svg:=cs:C1710.svg.new().parse($t).setAttribute("transform"; "scale(0.97)")
 						
 						If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 							
-							$node:=$svg.findById("cancel")
-							
-							If ($svg.success)
+							// Define the deletion image
+							If (let(->$node; Formula:C1597($svg.findById("cancel")); Formula:C1597($svg.success)))
 								
-								$node:=DOM Find XML element:C864($node; "image")
-								$svg.setAttribute("xlink:href"; $template.cancel(); $node)
+								$svg.setAttribute("xlink:href"; $template.cancel(); DOM Find XML element:C864($node; "image"))
 								
 							End if 
 							
-							$node:=$svg.findById("search.label")
-							
-							If ($svg.success)
+							// Update the search widget label & tips, if any
+							If (let(->$node; Formula:C1597($svg.findById("search.label")); Formula:C1597($svg.success)))
 								
 								$svg.setAttribute("ios:tips"; Get localized string:C991("searchBoxTips"); $node)
 								$svg.setValue(Get localized string:C991("fieldToUseForSearch"); $node)
 								
 							End if 
 							
-							$node:=$svg.findById("section.label")
-							
-							If ($svg.success)
+							// Update the section widget label & tips, if any
+							If (let(->$node; Formula:C1597($svg.findById("section.label")); Formula:C1597($svg.success)))
 								
 								$svg.setAttribute("ios:tips"; Get localized string:C991("sectionTips"); $node)
 								$svg.setValue(Get localized string:C991("fieldToUseAsSection"); $node)
 								
 							End if 
 							
-							$svg.success:=True:C214
+							$svg.success:=True:C214  // Don't forget to put "success" back to true if any
 							
 						End if 
 						
 					Else 
 						
-						// Load the template
 						PROCESS 4D TAGS:C816($template.template; $t)
-						
 						$svg:=cs:C1710.svg.new().parse($t).setAttribute("transform"; "scale(0.95)")
 						
 					End if 
@@ -139,17 +129,17 @@ Case of
 						// Add the style sheet
 						$svg.styleSheet($template.css())
 						
-						$target:=Choose:C955(Form:C1466[$formType][$context.tableNumber]=Null:C1517; New object:C1471; Form:C1466[$formType][$context.tableNumber])
+						// Get the definition or create it
+						$target:=Choose:C955(Form:C1466[$formType][$context.tableNumber]=Null:C1517; Formula:C1597(New object:C1471); Formula:C1597(Form:C1466[$formType][$context.tableNumber])).call()
 						
 						$form.preview.getCoordinates()
 						
 						If (Num:C11($manifest.renderer)>=2)
 							
+							// UPDATE THE SEARCH WIDGET
 							If ($target.searchableField#Null:C1517)
 								
-								$node:=$svg.findById("search.label")
-								
-								If ($svg.success)
+								If (let(->$node; Formula:C1597($svg.findById("search.label")); Formula:C1597($svg.success)))
 									
 									If (Value type:C1509($target.searchableField)=Is collection:K8:32)
 										
@@ -157,16 +147,40 @@ Case of
 											
 											$svg.setValue(Get localized string:C991("multiCriteriaSearch"); $node)
 											
+											For each ($o; $target.searchableField)
+												
+												If (Form:C1466.dataModel[$context.tableNumber][String:C10($o.id)]=Null:C1517)
+													
+													$svg.addClass("error"; $node)\
+														.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("oneOrMoreFieldsAreNoLongerPublished").localized()); $node)
+													
+												End if 
+											End for each 
+											
 										Else 
 											
-											$svg.setValue($target.searchableField[0].name; $node)
+											$searchableFieldName:=$target.searchableField[0].name
+											$id:=$target.searchableField[0].id
 											
 										End if 
 										
 									Else 
 										
-										$svg.setValue($target.searchableField.name; $node)
+										$searchableFieldName:=$target.searchableField.name
+										$id:=$target.searchableField.id
 										
+									End if 
+									
+									If (Length:C16($searchableFieldName)>0)
+										
+										$svg.setValue($searchableFieldName; $node)
+										
+										If (Form:C1466.dataModel[$context.tableNumber][String:C10($id)]=Null:C1517)
+											
+											$svg.addClass("error"; $node)\
+												.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($searchableFieldName)); $node)
+											
+										End if 
 									End if 
 									
 									$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
@@ -175,42 +189,77 @@ Case of
 								End if 
 							End if 
 							
+							// UPDATE THE SECTION WIDGET
 							If ($target.sectionField#Null:C1517)
 								
-								$node:=$svg.findById("section.label")
-								
-								If ($svg.success)
+								If (let(->$node; Formula:C1597($svg.findById("section.label")); Formula:C1597($svg.success)))
 									
-									DOM SET XML ELEMENT VALUE:C868($node; $target.sectionField.name)
-									
+									$svg.setValue($target.sectionField.name; $node)
 									$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
 									$svg.visible(True:C214; $svg.findById("section.cancel"))
 									
+									If (Form:C1466.dataModel[$context.tableNumber][String:C10($target.sectionField.id)]=Null:C1517)
+										
+										$svg.addClass("error"; $node)\
+											.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($target.sectionField.name)); $node)
+										
+									End if 
 								End if 
 							End if 
 							
-							$container:=$svg.findById("background")
-							
-							$height:=Num:C11($manifest.hOffset)
-							
+							// UPDATE FIELDS
 							$widgetManifest:=JSON Parse:C1218(File:C1566("/RESOURCES/templates/form/objects/oneField/manifest.json").getText())
 							$widgetField:=File:C1566("/RESOURCES/templates/form/objects/oneField/widget.svg").getText()
 							
 							$count:=Num:C11($manifest.fields.count)
 							
-							// Mark static fields
-							For ($i; 1; $count; 1)
+							// Mark static fields & refuse 1 to N relation into static field for detail forms
+							If (FEATURE.with("moreRelations"))
 								
-								$t:=String:C10($i)
-								
-								$node:=$svg.findById("f"+$t)
-								
-								If ($svg.success)
+								For ($i; 1; $count; 1)
 									
-									$svg.addClass("static"; $node)
-									
-								End if 
-							End for 
+									If (let(->$node; Formula:C1597($svg.findById("f"+String:C10($i))); Formula:C1597($svg.success)))
+										
+										$svg.addClass("static"; $node)
+										
+										If ($formType="detail")
+											
+											$attributes:=$svg.getAttributes($node)
+											
+											If ($attributes["ios:type"]#Null:C1517)
+												
+												If (String:C10($attributes["ios:type"])="all")
+													
+													$svg.setAttribute("ios:type"; "-8859"; $node)
+													
+												Else 
+													
+													$c:=Split string:C1554(String:C10($attributes["ios:type"]); ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+													
+													If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value<0))))
+														
+														$c.push(-8859)
+														$svg.setAttribute("ios:type"; $c.join(","); $node)
+														
+													Else 
+														
+														// <NOTHING MORE TO DO>
+														
+													End if 
+												End if 
+												
+											Else 
+												
+												$svg.setAttribute("ios:type"; "-8859"; $node)
+												
+											End if 
+										End if 
+									End if 
+								End for 
+							End if 
+							
+							$container:=$svg.findById("background")
+							$height:=Num:C11($manifest.hOffset)
 							
 							For each ($o; $target.fields)
 								
@@ -218,104 +267,109 @@ Case of
 								
 								If ($o#Null:C1517)
 									
-									//#117298 - [BUG] Missing relation italic style
 									CLEAR VARIABLE:C89($style)
 									CLEAR VARIABLE:C89($class)
+									CLEAR VARIABLE:C89($found)
+									CLEAR VARIABLE:C89($tips)
+									
+									$isToOne:=($o.fieldType=8858)
+									$isToMany:=($o.fieldType=8859)
 									
 									If ($indx>$count)  // Dynamic
 										
-										If ($o.fieldType=8858)\
-											 | ($o.fieldType=8859)  // Relation
+										If ($isToOne | $isToMany)  // Relation
 											
 											$style:="italic"
 											
-											If ($o.fieldType=8858)  // Relation
+										End if 
+										
+										Case of 
+												
+												//______________________________________________________
+											: ($isToOne)
+												
+												$tips:=Form:C1466.dataModel[$context.tableNum()][$o.name].label
 												
 												$relation:=Form:C1466.dataModel[$context.tableNumber]
 												
 												If ($relation[$o.name].format=Null:C1517)
 													
-													$class:=" error"
-													
-												End if 
-												
-											Else 
-												
-												If (Split string:C1554($o.path; ".").length=1)
-													
-													If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
-														
-														$class:=" error"
-														
-													End if 
+													$buffer:=$o.name
 													
 												Else 
 													
-													//DOM SET XML ATTRIBUTE($node; \
-														"tips"; $o.label)
+													If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$o.name].format); 1))
+														
+														$name:=Substring:C12($relation[$o.name].format; 2; Length:C16($relation[$o.name].format)-2)
+														$buffer:=$o.name+" ("+$name+")"
+														
+													End if 
 													
+													// Check that the discriminant field is published
+													For each ($key; $relation[$o.name]) Until ($found)
+														
+														If (Value type:C1509($relation[$o.name][$key])=Is object:K8:27)
+															
+															$found:=String:C10($relation[$o.name][$key].name)=$name
+															
+														End if 
+													End for each 
+													
+													If (Not:C34($found))
+														
+														$class:="error"
+														$tips:=cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+														
+													End if 
 												End if 
-											End if 
-										End if 
-										
-										If ($o.fieldType=8858)
-											
-											$relation:=Form:C1466.dataModel[$context.tableNumber]
-											
-											If ($relation[$o.name].format#Null:C1517)
 												
-												$c:=Split string:C1554($relation[$o.name].format; "%"; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
-												$buffer:="① "+$o.name+" ("+$c[0]+")"
+												$buffer:=cs:C1710.str.new(UI.toOne).concat($buffer)
 												
+												//______________________________________________________
+											: ($isToMany)
+												
+												$tips:=$o.label
+												$buffer:=cs:C1710.str.new(UI.toMany).concat($o.name)
+												
+												//______________________________________________________
 											Else 
 												
-												$buffer:="① "+$o.name
+												$buffer:=$o.name
 												
-											End if 
-											
-										Else 
-											
-											$buffer:=Choose:C955(Bool:C1537($o.isToMany); "ⓝ "; "")+$o.name
-											
-										End if 
+												//______________________________________________________
+										End case 
 										
 										// Set ids, label & position
 										PROCESS 4D TAGS:C816($widgetField; $t; New object:C1471(\
 											"index"; $indx; \
-											"name"; $buffer; \
+											"name"; cs:C1710.str.new($buffer).xmlSafe(); \
 											"offset"; 5+$height; \
 											"style"; $style; \
-											"class"; $class))
+											"class"; $class; \
+											"tips"; cs:C1710.str.new($tips).xmlSafe()))
 										
-										$root:=DOM Parse XML variable:C720($t)
+										// Append the widget
+										$xml:=cs:C1710.xml.new($t)
 										
-										If (Bool:C1537(OK))
+										If (let(->$node; Formula:C1597($xml.findByXPath("/svg/g")); Formula:C1597($xml.success)))
 											
-											$node:=DOM Find XML element:C864($root; "/svg/g")
-											
-											If (Bool:C1537(OK))
-												
-												$node:=DOM Append XML element:C1082($container; $node)
-												$height:=$height+Num:C11($widgetManifest.height)
-												
-											End if 
-											
-											DOM CLOSE XML:C722($root)
+											$node:=DOM Append XML element:C1082($container; $node)
+											$height:=$height+Num:C11($widgetManifest.height)
 											
 										End if 
+										
+										$xml.close()
 										
 									Else   // Static
 										
 										$t:=String:C10($indx)
+										$class:="label"
 										
 										// Get the bindind definition
-										$node:=$svg.findById("f"+$t)
-										
-										If ($svg.success)
+										If (let(->$node; Formula:C1597($svg.findById("f"+$t)); Formula:C1597($svg.success)))
 											
 											$attributes:=$svg.getAttributes($node)
 											
-											// Get the bindind definition
 											If ($attributes["ios:type"]#Null:C1517)
 												
 												$b:=(String:C10($attributes["ios:type"])="all")
@@ -328,35 +382,68 @@ Case of
 												
 												If ($b)
 													
-													$node:=$svg.findById("f"+$t+".label")
-													
-													If ($svg.success)
+													If (let(->$node; Formula:C1597($svg.findById("f"+$t+".label")); Formula:C1597($svg.success)))
 														
-														If ($o.fieldType=8858)
+														If ($isToOne | $isToMany)  // Relation
 															
-															$buffer:="① "+$o.name
-															
-															$relation:=Form:C1466.dataModel[$context.tableNumber]
-															
-															If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$o.name].format); 1))
-																
-																$name:=Substring:C12($relation[$o.name].format; 2; Length:C16($relation[$o.name].format)-2)
-																$buffer:=$buffer+" ("+$name+")"
-																
-															End if 
-															
-														Else 
-															
-															$buffer:=Choose:C955(Bool:C1537($o.isToMany); "ⓝ "; "")+$o.name
+															$svg.fontStyle(Italic:K14:3; $node)
 															
 														End if 
 														
+														Case of 
+																
+																//______________________________________________________
+															: ($isToOne)
+																
+																$tips:=Form:C1466.dataModel[$context.tableNum()][$o.name].label
+																$buffer:=cs:C1710.str.new(UI.toOne).concat($o.name)
+																
+																$relation:=Form:C1466.dataModel[$context.tableNumber]
+																
+																If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$o.name].format); 1))
+																	
+																	$name:=Substring:C12($relation[$o.name].format; 2; Length:C16($relation[$o.name].format)-2)
+																	$buffer:=$buffer+" ("+$name+")"
+																	
+																End if 
+																
+																If (Length:C16($name)>0)
+																	
+																	// Check that the discriminant field is published
+																	For each ($key; $relation[$o.name]) Until ($found)
+																		
+																		If (Value type:C1509($relation[$o.name][$key])=Is object:K8:27)
+																			
+																			$found:=String:C10($relation[$o.name][$key].name)=$name
+																			
+																		End if 
+																	End for each 
+																	
+																	If (Not:C34($found))
+																		
+																		$svg.addClass("error"; $node)
+																		$tips:=cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+																		
+																	End if 
+																End if 
+																
+																//______________________________________________________
+															: ($isToMany)  // Only available on list form
+																
+																$tips:=$o.label
+																$buffer:=cs:C1710.str.new(UI.toMany).concat($o.name)
+																
+																//______________________________________________________
+															Else 
+																
+																$buffer:=$o.name
+																
+																//______________________________________________________
+														End case 
+														
 														$svg.setValue($buffer; $node)
 														
-														If ($o.fieldType=8858)\
-															 | ($o.fieldType=8859)  // Relation
-															
-															$svg.fontStyle(Italic:K14:3; $node)
+														If ($isToOne | $isToMany)  // Relation
 															
 															If (Split string:C1554($o.path; ".").length=1)
 																
@@ -364,48 +451,19 @@ Case of
 																	
 																	If ($relation[$o.name].format=Null:C1517)
 																		
-																		$svg.class("label error"; $node)\
-																			.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$o.name].relatedEntities)); $node)
-																		
-																	End if 
-																End if 
-																
-															Else 
-																
-																$svg.class("label"; $node)\
-																	.setAttribute("tips"; $o.label; $node)
-																
-															End if 
-															
-															If ($o.fieldType=8858)
-																
-																If (Length:C16($name)>0)
-																	
-																	// Check that the discriminant field is published
-																	
-																	For each ($key; $relation[$o.name]) Until $found
-																		
-																		If (Not:C34($found))
-																			
-																			If (Value type:C1509($relation[$o.name][$key])=Is object:K8:27)
-																				
-																				$found:=String:C10($relation[$o.name][$key].name)=$name
-																				
-																			End if 
-																		End if 
-																	End for each 
-																	
-																	If (Not:C34($found))
-																		
-																		$svg.addClass("error"; $node)\
-																			.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name)); $node)
+																		$class:="label error"
+																		$tips:=cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$o.name].relatedEntities))
 																		
 																	End if 
 																End if 
 															End if 
 														End if 
 														
+														$svg.class($class; $node)\
+															.setAttribute("tips"; $tips; $node)
+														
 														$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
+														
 														$svg.visible(True:C214; $svg.findById("f"+$t+".cancel"))
 														
 													Else 
@@ -654,7 +712,6 @@ Case of
 													If (Num:C11($o.fieldType)=8859)  // 1-N relation
 														
 														$node:=$svg.findById($t+".label")
-														
 														$svg.setAttribute("font-style"; "italic"; $node)
 														
 														If (Form:C1466.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
@@ -804,7 +861,10 @@ Case of
 						OBJECT SET VALUE:C1742("preview"; cs:C1710.svg.new()\
 							.dimensions($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
 							.textArea(cs:C1710.str.new("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).dimensions($form.preview.coordinates.width-50)\
-							.position(20; 180).font(New object:C1471("size"; 14; "color"; UI.colors.errorColor.hex; "alignment"; Align center:K42:3)).getPicture())
+							.position(20; 180).font(New object:C1471(\
+							"size"; 14; \
+							"color"; UI.colors.errorColor.hex; \
+							"alignment"; Align center:K42:3)).getPicture())
 						
 						OBJECT SET TITLE:C194(*; "preview.label"; "")
 						

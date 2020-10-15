@@ -27,7 +27,36 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=cs:C1710.str.new("____hello world___")
+		var $t : Text
+		var $found : Boolean
+		var $i : Integer
+		
+		For each ($i; New collection:C1472(1; 2; 3; 4; 5; 6)) Until $found
+			
+			$t:=String:C10($i)
+			
+			If ($i=4)
+				
+				$found:=True:C214
+				
+			End if 
+		End for each 
+		
+		//-> $t = 6
+		
+		For each ($i; New collection:C1472(1; 2; 3; 4; 5; 6)) Until ($found)
+			
+			$t:=String:C10($i)
+			
+			If ($i=4)
+				
+				$found:=True:C214
+				
+			End if 
+		End for each 
+		
+		//-> $t = 4
+		
 		
 		//________________________________________
 	: (True:C214)
