@@ -66,13 +66,14 @@ Case of
 				
 				$currentForm:=Current form name:C1298
 				
-				If (String:C10(Form:C1466.$dialog[$currentForm].template.name)#$formName)
+				$template:=Form:C1466.$dialog[$currentForm].template
+				
+				If (String:C10($template.name)#$formName)
 					
 					Form:C1466.$dialog[$currentForm].template:=cs:C1710.tmpl.new($formName; $formType)
+					$template:=Form:C1466.$dialog[$currentForm].template
 					
 				End if 
-				
-				$template:=Form:C1466.$dialog[$currentForm].template
 				
 				If ($template.path.exists)
 					
@@ -84,6 +85,7 @@ Case of
 						$t:=$template.load().template
 						$t:=Replace string:C233($t; "&quot;"; "\"")
 						PROCESS 4D TAGS:C816($t; $t; $template.title; $template.cancel())
+						
 						$svg:=cs:C1710.svg.new().parse($t).setAttribute("transform"; "scale(0.97)")
 						
 						If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
@@ -115,7 +117,7 @@ Case of
 							
 						Else 
 							
-							RECORD.log("Failed to parse template \""+$template.name+"\"")
+							RECORD.error("Failed to parse template \""+$template.name+"\"")
 							
 						End if 
 						
