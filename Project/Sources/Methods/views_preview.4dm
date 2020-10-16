@@ -18,10 +18,10 @@ If (False:C215)
 	C_OBJECT:C1216(views_preview; $2)
 End if 
 
-var $buffer; $class; $container; $dialog; $domField; $domTemplate; $domUse; $formName; $formType; $IN : Text
+var $buffer; $class; $container; $currentForm; $domField; $domTemplate; $domUse; $formName; $formType; $IN : Text
 var $index; $key; $name; $new; $node; $OUT; $searchableFieldName; $style; $t; $tips : Text
 var $widgetField : Text
-var $b; $first; $found; $isToMany; $isToOne; $multivalued : Boolean
+var $first; $found; $isToMany; $isToOne; $multivalued : Boolean
 var $count; $dy; $height; $i; $id; $indx; $width; $y : Integer
 var $attributes; $context; $form; $manifest; $o; $relation; $target; $widgetManifest : Object
 var $c : Collection
@@ -56,7 +56,7 @@ Case of
 		//______________________________________________________
 	: ($IN="draw")  // Uppdate preview
 		
-		If (Length:C16($context.tableNum())>0)
+		If (Num:C11($context.tableNum())>0)
 			
 			// Form name
 			$formType:=$context.typeForm()
@@ -64,15 +64,15 @@ Case of
 			
 			If (Length:C16($formName)>0)
 				
-				$dialog:=Choose:C955(FEATURE.with("newViewUI"); "VIEWS"; "_o_VIEWS")
+				$currentForm:=Current form name:C1298
 				
-				If (String:C10(Form:C1466.$dialog[$dialog].template.name)#$formName)
+				If (String:C10(Form:C1466.$dialog[$currentForm].template.name)#$formName)
 					
-					Form:C1466.$dialog[$dialog].template:=cs:C1710.tmpl.new($formName; $formType)
+					Form:C1466.$dialog[$currentForm].template:=cs:C1710.tmpl.new($formName; $formType)
 					
 				End if 
 				
-				$template:=Form:C1466.$dialog[$dialog].template
+				$template:=Form:C1466.$dialog[$currentForm].template
 				
 				If ($template.path.exists)
 					
@@ -113,6 +113,10 @@ Case of
 							
 							$svg.success:=True:C214  // Don't forget to put "success" back to true if any
 							
+						Else 
+							
+							RECORD.log("Failed to parse template \""+$template.name+"\"")
+							
 						End if 
 						
 					Else 
@@ -130,7 +134,8 @@ Case of
 						$svg.styleSheet($template.css())
 						
 						// Get the definition or create it
-						$target:=Choose:C955(Form:C1466[$formType][$context.tableNumber]=Null:C1517; Formula:C1597(New object:C1471); Formula:C1597(Form:C1466[$formType][$context.tableNumber])).call()
+						$o:=Form:C1466[$formType][$context.tableNumber]
+						$target:=Choose:C955($o=Null:C1517; Formula:C1597(New object:C1471); Formula:C1597($o)).call()
 						
 						$form.preview.getCoordinates()
 						
@@ -372,15 +377,7 @@ Case of
 											
 											If ($attributes["ios:type"]#Null:C1517)
 												
-												$b:=(String:C10($attributes["ios:type"])="all")
-												
-												If (Not:C34($b))
-													
-													$b:=tmpl_compatibleType(String:C10($attributes["ios:type"]); $o.fieldType)
-													
-												End if 
-												
-												If ($b)
+												If ($template.isTypeAccepted(String:C10($attributes["ios:type"]); $o.fieldType))
 													
 													If (let(->$node; Formula:C1597($svg.findById("f"+$t+".label")); Formula:C1597($svg.success)))
 														
@@ -459,32 +456,26 @@ Case of
 															End if 
 														End if 
 														
+														// Set class & tips
 														$svg.class($class; $node)\
 															.setAttribute("tips"; $tips; $node)
 														
+														// Remove dotted lines
 														$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
 														
+														// Show delete button
 														$svg.visible(True:C214; $svg.findById("f"+$t+".cancel"))
-														
-													Else 
-														
-														// ERROR
 														
 													End if 
 												End if 
-												
-											Else 
-												
-												// ERROR
-												
 											End if 
-											
-										Else 
-											
-											// ERROR
-											
 										End if 
 									End if 
+									
+								Else 
+									
+									// <NOTHING MORE TO DO>
+									
 								End if 
 							End for each 
 							

@@ -8,18 +8,18 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $buffer; $cible; $ObjectName; $t; $tableIdentifier : Text
-var $success : Boolean
+var $bind; $buffer; $cible; $currentForm; $preview; $t; $tableNumber : Text
+var $isToMany; $isToOne : Boolean
 var $fixed; $indx : Integer
 var $x : Blob
 var $current; $dropped; $relation; $table; $target : Object
-var $c; $cCurrent; $cDroped : Collection
+var $cCurrent; $cDroped : Collection
 
 // ----------------------------------------------------
 // Initialisations
 $cible:=This:C1470.$.current
-$tableIdentifier:=This:C1470.$.tableNumber
-$ObjectName:=This:C1470.preview.name
+$tableNumber:=This:C1470.$.tableNumber
+$preview:=This:C1470.preview.name
 
 // ----------------------------------------------------
 If (Length:C16($cible)>0)
@@ -35,27 +35,17 @@ If (Length:C16($cible)>0)
 		PROJECT.cleanup($dropped)
 		
 		// Check the match of the type with the source
-		SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:type"; $t)
+		SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:type"; $bind)
 		
-		If ($t="all")
-			
-			$success:=True:C214
-			
-		Else 
-			
-			// Check the type compatibility
-			$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
-			$success:=tmpl_compatibleType($c; $dropped.fieldType)
-			
-		End if 
+		$currentForm:=Current form name:C1298
 		
-		If ($success)
+		If (Form:C1466.$dialog[$currentForm].template.isTypeAccepted($bind; $dropped.fieldType))
 			
-			$target:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2; "detail"; "list")][$tableIdentifier]
-			
+			$target:=Form:C1466[This:C1470.$.typeForm()][$tableNumber]
 			$dropped.name:=$dropped.path
 			
-			SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "ios:bind"; $t)
+			SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $t)
+			
 			ARRAY TEXT:C222($tMatches; 0x0000)
 			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $t; ->$tMatches)
 			
@@ -89,14 +79,15 @@ If (Length:C16($cible)>0)
 					$cDroped:=Split string:C1554($dropped.path; ".")
 					
 					// Get current table
-					$table:=Form:C1466.dataModel[$tableIdentifier]
+					$table:=Form:C1466.dataModel[$tableNumber]
+					
+					$isToOne:=($dropped.fieldType=8858)
+					$isToMany:=($dropped.fieldType=8859)
 					
 					Case of 
 							
 							//______________________________________________________
-						: ($dropped.fieldType=8858)  // N -> 1 relation
-							
-							//OB REMOVE($dropped; "id")
+						: ($isToOne)  // N -> 1 relation
 							
 							If ($cCurrent.length=2)\
 								 & ($cDroped.length=1)  // Drop a relation on a field
@@ -111,9 +102,9 @@ If (Length:C16($cible)>0)
 							End if 
 							
 							//______________________________________________________
-						: ($dropped.fieldType=8859)  // 1 -> N relation
+						: ($isToMany)  // 1 -> N relation
 							
-							//OB REMOVE($dropped; "id")
+							//
 							
 							//______________________________________________________
 						: ($current=Null:C1517)  // Add
@@ -124,7 +115,6 @@ If (Length:C16($cible)>0)
 						Else 
 							
 							// Check for the same root
-							
 							Case of 
 									
 									//……………………………………………………………………………………………………
@@ -168,7 +158,7 @@ If (Length:C16($cible)>0)
 				
 			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				
-				SVG GET ATTRIBUTE:C1056(*; $ObjectName; $cible; "4D-isOfClass-multi-criteria"; $buffer)
+				SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "4D-isOfClass-multi-criteria"; $buffer)
 				
 				If (JSON Parse:C1218($buffer; Is boolean:K8:9))  // Search on several fields - append to the field list if any
 					
@@ -209,7 +199,7 @@ If (Length:C16($cible)>0)
 								
 							End if 
 							
-							$fixed:=Form:C1466.$dialog.VIEWS.template.manifest.fields.count
+							$fixed:=Form:C1466.$dialog[$currentForm].template.manifest.fields.count
 							$indx:=$target.fields.indexOf(Null:C1517; $fixed)
 							
 							If ($indx=-1)
@@ -260,7 +250,7 @@ If (Length:C16($cible)>0)
 			
 			If (FEATURE.with("newViewUI"))
 				
-				OB REMOVE:C1226(Form:C1466.$dialog.VIEWS; "scroll")
+				OB REMOVE:C1226(Form:C1466.$dialog[$currentForm]; "scroll")
 				
 			End if 
 			
@@ -269,9 +259,20 @@ If (Length:C16($cible)>0)
 			// Update preview
 			views_preview("draw"; This:C1470)
 			
+		Else 
+			
+			// SHOULD NOT: incompatible type
+			
 		End if 
+		
+	Else 
+		
+		// NOT AUTHORIZED DROP
+		
 	End if 
+	
+Else 
+	
+	// SHOULD NOT
+	
 End if 
-
-// ----------------------------------------------------
-// End

@@ -470,3 +470,55 @@ Function label
 	$0:=Get localized string:C991($1)
 	
 /* ============================================================================*/
+Function isTypeAccepted  // Check that a field type is validated against the bind attribute
+	var $0 : Boolean
+	var $1 : Variant  // Constraint
+	var $2 : Integer  // Type to test
+	
+	var $c : Collection
+	
+	If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
+		
+		Case of 
+				
+				//___________________________
+			: (Value type:C1509($1)=Is text:K8:3)
+				
+				If ($1="all")
+					
+					$0:=True:C214
+					
+				Else 
+					
+					$c:=Split string:C1554($1; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+					
+				End if 
+				
+				//___________________________
+			: (Value type:C1509($1)=Is collection:K8:32)
+				
+				$c:=$1
+				
+				//___________________________
+			Else 
+				
+				ASSERT:C1129(False:C215; "$1 must be a text or a collection")
+				
+				//___________________________
+		End case 
+		
+		If ($c#Null:C1517)
+			
+			If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value>=0))))
+				
+				// One of them
+				$0:=($c.indexOf(Num:C11($2))#-1)
+				
+			Else 
+				
+				// None of them
+				$0:=($c.filter("col_formula"; Formula:C1597($1.result:=($1.value=-Num:C11($2)))).length=0)
+				
+			End if 
+		End if 
+	End if 

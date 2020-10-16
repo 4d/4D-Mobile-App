@@ -2,7 +2,7 @@
 var $Num_; $r : Real
 var $Dir_root; $node; $pattern; $root; $t; $tt; $Txt_in; $Txt_ormula; $Txt_result : Text
 var $b; $Boo_reset; $ok : Boolean
-var $i; $index; $l; $Lon_build; $Lon_error; $Lon_result; $Lon_type; $Lon_value; $Lon_x : Integer
+var $i; $index; $l; $Lon_build; $Lon_error; $Lon_result; $Lon_type; $Lon_value; $Lon_x; $w : Integer
 var $Gmt_timeGMT : Time
 var $null : Variant
 var $file; $folder; $o; $o1; $o2; $Obj_formula; $Obj_new; $Obj_result; $Obj_target; $Obj_template : Object
@@ -24,39 +24,6 @@ Else
 End if 
 
 Case of 
-		//________________________________________
-	: (True:C214)
-		
-		var $t : Text
-		var $found : Boolean
-		var $i : Integer
-		
-		For each ($i; New collection:C1472(1; 2; 3; 4; 5; 6)) Until $found
-			
-			$t:=String:C10($i)
-			
-			If ($i=4)
-				
-				$found:=True:C214
-				
-			End if 
-		End for each 
-		
-		//-> $t = 6
-		
-		For each ($i; New collection:C1472(1; 2; 3; 4; 5; 6)) Until ($found)
-			
-			$t:=String:C10($i)
-			
-			If ($i=4)
-				
-				$found:=True:C214
-				
-			End if 
-		End for each 
-		
-		//-> $t = 4
-		
 		
 		//________________________________________
 	: (True:C214)
