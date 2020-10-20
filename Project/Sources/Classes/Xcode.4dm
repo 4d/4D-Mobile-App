@@ -200,11 +200,6 @@ Function getVersion
 			$0:=$o.out
 			
 		End if 
-		
-	Else 
-		
-		$0:=New object:C1471("success"; False:C215)
-		
 	End if 
 	
 	//====================================================================
