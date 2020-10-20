@@ -9,10 +9,17 @@
 // Ie. remove from forms, the fields that are no more published
 // ----------------------------------------------------
 // Declarations
-#DECLARE ($formType : Text)
+//#DECLARE ($formType : Text)
+var $1 : Text
+
+If (False:C215)
+	C_TEXT:C284(views_UPDATE; $1)
+End if 
 
 var $formType; $tableID : Text
 var $field; $target : Object
+
+$formType:=$1
 
 // ----------------------------------------------------
 If (Count parameters:C259=0)
