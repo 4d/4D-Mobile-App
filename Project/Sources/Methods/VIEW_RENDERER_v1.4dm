@@ -1,12 +1,22 @@
 //%attributes = {"invisible":true}
-#DECLARE ($svg : cs:C1710.svg; $context : Object)
+//#DECLARE ($svg : cs.svg; $context : Object)
+var $1 : cs:C1710.svg
+var $2 : Object
+
+If (False:C215)
+	C_OBJECT:C1216(VIEW_RENDERER_v1; $1)
+	C_OBJECT:C1216(VIEW_RENDERER_v1; $2)
+End if 
 
 var $container; $domField; $domTemplate; $domUse; $index; $name; $new; $node; $t; $widgetField : Text
-
 var $first; $multivalued : Boolean
 var $dy; $i; $indx; $width; $y : Integer
-var $o; $target : Object
+var $context; $o; $target : Object
 var $c : Collection
+var $svg : cs:C1710.svg
+
+$svg:=$1
+$context:=$2
 
 // Update values if any
 $t:=$svg.findById("cookery")
