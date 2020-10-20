@@ -96,7 +96,6 @@ Function path
 			
 			This:C1470.tools:=This:C1470.application.folder("Contents/Developer")
 			
-			
 		End if 
 	End if 
 	
@@ -176,7 +175,7 @@ Function getVersion
 	var $1 : 4D:C1709.Directory
 	
 	var $o : Object
-	
+	var $file : 4D:C1709.File
 	var $directory : 4D:C1709.Directory
 	
 	If (Count parameters:C259>=1)
@@ -189,11 +188,22 @@ Function getVersion
 		
 	End if 
 	
-	$o:=This:C1470.lep("defaults read"+" '"+$directory.file("Contents/Info.plist").path+"' CFBundleShortVersionString")
+	$file:=$directory.file("Contents/Info.plist")
+	This:C1470.success:=$file.exists
 	
-	If ($o.success)
+	If (This:C1470.success)
 		
-		$0:=$o.out
+		$o:=This:C1470.lep("defaults read"+" '"+$file.path+"' CFBundleShortVersionString")
+		
+		If ($o.success)
+			
+			$0:=$o.out
+			
+		End if 
+		
+	Else 
+		
+		$0:=New object:C1471("success"; False:C215)
 		
 	End if 
 	
