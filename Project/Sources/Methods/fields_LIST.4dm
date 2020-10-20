@@ -333,7 +333,7 @@ If ($out.success)
 				: (Num:C11(This:C1470.selector)=0)
 					
 					//……………………………………………………………………………………………………………
-				: (PROJECT.isRelationToMany($table[$key]))  //&(Num(This.selector)=1)
+				: (PROJECT.isRelationToMany($table[$key]))
 					
 					$out.formatColors.push(Foreground color:K23:1)
 					$out.nameColors.push(Foreground color:K23:1)

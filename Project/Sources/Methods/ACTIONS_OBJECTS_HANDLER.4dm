@@ -543,7 +543,7 @@ Case of
 											
 											$oo:=New object:C1471(\
 												"fieldNumber"; $field.fieldNumber; \
-												"name"; _o_str($table[$t].name).uperCamelCase(); \
+												"name"; _o_str($table[$t].name).lowerCamelCase(); \
 												"label"; $table[$t].label; \
 												"shortLabel"; $table[$t].shortLabel; \
 												"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))

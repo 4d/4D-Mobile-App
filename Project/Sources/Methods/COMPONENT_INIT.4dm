@@ -36,7 +36,7 @@ $reset:=Macintosh option down:C545
 
 PROJECT:=cs:C1710.project.new()
 DATABASE:=cs:C1710.database.new()
-DATABASE.projects:=Folder:C1567("/PACKAGE/Mobile Projects")
+DATABASE.projects:=DATABASE.root.folder("Mobile Projects")
 DATABASE.projects.create()  // Make sure the directory exists
 DATABASE.products:=DATABASE.root.parent.folder(DATABASE.structure.name+" - Mobile")
 

@@ -54,8 +54,6 @@
 			"dev_test_data",
 			"importData",
 			"importRelationRandomly",
-			"INIT_AUTO_COMPLETION",
-			"ON_STARTUP",
 			"populateCommands",
 			"removeAllEntities",
 			"removeRelations",
@@ -133,7 +131,6 @@
 		"methods": [
 			"BUILD",
 			"COMPILER_COMPONENT",
-			"COMPONENT_DEFINE_TOOLS",
 			"COMPONENT_Infos",
 			"COMPONENT_INIT",
 			"COMPONENT_Pathname",
@@ -359,6 +356,7 @@
 		"methods": [
 			"COMPILER_views",
 			"tables_Widget",
+			"VIEW_RENDERER_v1",
 			"views_fieldList",
 			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",

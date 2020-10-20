@@ -1,13 +1,13 @@
 /* ============================================================================*/
-Class constructor
-	var $1 : Text
-	var $2 : Text
+Class constructor(\
+$name : Text; \
+$type : Text)
 	
 	var $file : Object
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.name:=$1
+		This:C1470.name:=$name
 		This:C1470.title:=This:C1470.name
 		This:C1470.type:=Null:C1517
 		
@@ -26,7 +26,7 @@ Class constructor
 		
 		If (Count parameters:C259>=2)
 			
-			This:C1470.type:=$2
+			This:C1470.type:=$type
 			
 			This:C1470.path:=This:C1470.path()
 			
@@ -68,6 +68,10 @@ Class constructor
 		End if 
 	End if 
 	
+	This:C1470.oneField:=New object:C1471(\
+		"manifest"; JSON Parse:C1218(File:C1566("/RESOURCES/templates/form/objects/oneField/manifest.json").getText()); \
+		"definition"; File:C1566("/RESOURCES/templates/form/objects/oneField/widget.svg").getText())
+	
 /* ============================================================================*/
 Function load  // Load and update the template if any
 	var $0 : Object
@@ -77,8 +81,6 @@ Function load  // Load and update the template if any
 	var $count; $i : Integer
 	var $o : Object
 	var $c : Collection
-	
-	//ASSERT(Not(Shift down))
 	
 	If (Num:C11(This:C1470.manifest.renderer)<2)
 		
@@ -469,12 +471,10 @@ Function label
 	
 	$0:=Get localized string:C991($1)
 	
-/* ============================================================================*/
-Function isTypeAccepted  // Check that a field type is validated against the bind attribute
-	var $0 : Boolean
-	var $1 : Variant  // Constraint
-	var $2 : Integer  // Type to test
-	
+	//============================================================================
+	// Check that a field type is validated against the bind attribute
+Function isTypeAccepted($constraint : Variant)->$accepted : Boolean
+	var $2 : Integer
 	var $c : Collection
 	
 	If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
@@ -482,22 +482,22 @@ Function isTypeAccepted  // Check that a field type is validated against the bin
 		Case of 
 				
 				//___________________________
-			: (Value type:C1509($1)=Is text:K8:3)
+			: (Value type:C1509($constraint)=Is text:K8:3)
 				
-				If ($1="all")
+				If ($constraint="all")
 					
-					$0:=True:C214
+					$accepted:=True:C214
 					
 				Else 
 					
-					$c:=Split string:C1554($1; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+					$c:=Split string:C1554($constraint; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
 					
 				End if 
 				
 				//___________________________
-			: (Value type:C1509($1)=Is collection:K8:32)
+			: (Value type:C1509($constraint)=Is collection:K8:32)
 				
-				$c:=$1
+				$c:=$constraint
 				
 				//___________________________
 			Else 
@@ -512,13 +512,110 @@ Function isTypeAccepted  // Check that a field type is validated against the bin
 			If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value>=0))))
 				
 				// One of them
-				$0:=($c.indexOf(Num:C11($2))#-1)
+				$accepted:=($c.indexOf(Num:C11($2))#-1)
 				
 			Else 
 				
 				// None of them
-				$0:=($c.filter("col_formula"; Formula:C1597($1.result:=($1.value=-Num:C11($2)))).length=0)
+				$accepted:=($c.filter("col_formula"; Formula:C1597($1.result:=($1.value=-Num:C11($2)))).length=0)
 				
 			End if 
 		End if 
 	End if 
+	
+	//============================================================================
+	// Add a "one field" widget to the template
+Function appendOneField($index : Integer; $field : Object; $context : Object; $background : Text; $offset : Integer)->$height
+	
+	var $class; $key; $label; $name; $node; $style; $t; $tips : Text
+	var $found; $isToMany; $isToOne : Boolean
+	var $relation : Object
+	var $xml : cs:C1710.xml
+	
+	$isToOne:=($field.fieldType=8858)
+	$isToMany:=($field.fieldType=8859)
+	
+	If ($isToOne | $isToMany)  // Relation
+		
+		$style:="italic"
+		
+	End if 
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($isToOne)
+			
+			$tips:=Form:C1466.dataModel[$context.tableNum()][$field.name].label
+			
+			$relation:=Form:C1466.dataModel[$context.tableNumber]
+			
+			If ($relation[$field.name].format=Null:C1517)
+				
+				$label:=$field.name
+				
+			Else 
+				
+				If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$field.name].format); 1))
+					
+					$name:=Substring:C12($relation[$field.name].format; 2; Length:C16($relation[$field.name].format)-2)
+					$label:=$field.name+" ("+$name+")"
+					
+				End if 
+				
+				// Check that the discriminant field is published
+				For each ($key; $relation[$field.name]) Until ($found)
+					
+					If (Value type:C1509($relation[$field.name][$key])=Is object:K8:27)
+						
+						$found:=String:C10($relation[$field.name][$key].name)=$name
+						
+					End if 
+				End for each 
+				
+				If (Not:C34($found))
+					
+					$class:="error"
+					$tips:=cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					
+				End if 
+			End if 
+			
+			$label:=cs:C1710.str.new(UI.toOne).concat($label)
+			
+			//______________________________________________________
+		: ($isToMany)
+			
+			$tips:=$field.label
+			$label:=cs:C1710.str.new(UI.toMany).concat($field.name)
+			
+			//______________________________________________________
+		Else 
+			
+			$label:=$field.name
+			
+			//______________________________________________________
+	End case 
+	
+	// Set ids, label & position
+	PROCESS 4D TAGS:C816(This:C1470.oneField.definition; $t; New object:C1471(\
+		"index"; $index; \
+		"name"; cs:C1710.str.new($label).xmlSafe(); \
+		"offset"; 5+$offset; \
+		"style"; $style; \
+		"class"; $class; \
+		"tips"; cs:C1710.str.new($tips).xmlSafe()))
+	
+	// Append the widget
+	$xml:=cs:C1710.xml.new($t)
+	
+	If (let(->$node; Formula:C1597($xml.findByXPath("/svg/g")); Formula:C1597($xml.success)))
+		
+		$node:=DOM Append XML element:C1082($background; $node)
+		
+	End if 
+	
+	$xml.close()
+	
+	$height:=Num:C11(This:C1470.oneField.manifest.height)  // Returns the widget height
+	

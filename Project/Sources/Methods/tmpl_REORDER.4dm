@@ -10,10 +10,10 @@
 // Declarations
 C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($bMultiCriteria; $Boo_accepted)
+C_BOOLEAN:C305($isMultiCriteria; $isCompatible)
 C_LONGINT:C283($indx; $Lon_keyType)
 C_TEXT:C284($dom; $Dom_field; $root; $t; $Txt_bind)
-C_OBJECT:C1216($o; $oAttributes; $oCache; $oField; $oIN; $pathTemplate)
+C_OBJECT:C1216($o; $oAttributes; $cache; $oField; $oIN; $pathTemplate)
 C_COLLECTION:C1488($c; $Col_affected; $Col_bind; $Col_catalog)
 
 If (False:C215)
@@ -53,7 +53,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 		
 		If (Bool:C1537(OK))
 			
-			$oCache:=Form:C1466[$oIN.selector][$oIN.tableNumber]
+			$cache:=Form:C1466[$oIN.selector][$oIN.tableNumber]
 			
 			$Col_bind:=Split string:C1554($oAttributes["ios:values"]; ","; sk trim spaces:K86:2)
 			
@@ -77,7 +77,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 			// Reorganize the binded fields
 			For each ($Txt_bind; $Col_bind)
 				
-				CLEAR VARIABLE:C89($Boo_accepted)
+				CLEAR VARIABLE:C89($isCompatible)
 				CLEAR VARIABLE:C89($oField)
 				
 				// Find the binded element
@@ -105,7 +105,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 					
 					If ($oAttributes["ios:type"]="all")
 						
-						$Boo_accepted:=True:C214
+						$isCompatible:=True:C214
 						
 					Else 
 						
@@ -114,7 +114,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 						
 						If ($oIN.target.fields#Null:C1517)
 							
-							For each ($oField; $oIN.target.fields) Until ($Boo_accepted)
+							For each ($oField; $oIN.target.fields) Until ($isCompatible)
 								
 								If ($oField#Null:C1517)
 									
@@ -128,11 +128,11 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 										
 										If ($o.type=-2)  // 1-N relation
 											
-											$Boo_accepted:=Split string:C1554(String:C10($oAttributes.class); " ").indexOf("multivalued")#-1
+											$isCompatible:=Split string:C1554(String:C10($oAttributes.class); " ").indexOf("multivalued")#-1
 											
 										Else 
 											
-											$Boo_accepted:=tmpl_compatibleType($c; $o.fieldType)
+											$isCompatible:=tmpl_compatibleType($c; $o.fieldType)
 											
 										End if 
 									End if 
@@ -141,7 +141,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 						End if 
 					End if 
 					
-					If ($Boo_accepted)\
+					If ($isCompatible)\
 						 & ($oField#Null:C1517)
 						
 						// Keep the field…
@@ -163,7 +163,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 							//______________________________________________________
 						: ($oAttributes["ios:bind"]="searchableField")
 							
-							$bMultiCriteria:=(Split string:C1554($oAttributes.class; " ").indexOf("multi-criteria")#-1)
+							$isMultiCriteria:=(Split string:C1554($oAttributes.class; " ").indexOf("multi-criteria")#-1)
 							
 							$Lon_keyType:=Value type:C1509($oIN.target.searchableField)
 							
@@ -176,7 +176,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 									
 									If ($oIN.target.searchableField.length>0)
 										
-										If ($bMultiCriteria)
+										If ($isMultiCriteria)
 											
 											// Target is multi-criteria
 											
@@ -187,12 +187,12 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 												
 											End for each 
 											
-											$oCache.searchableField:=$oIN.target.searchableField
+											$cache.searchableField:=$oIN.target.searchableField
 											
 										Else 
 											
 											// Target is mono value -> keep the first compatible type
-											$oCache.searchableField:=$oIN.target.searchableField[0]
+											$cache.searchableField:=$oIN.target.searchableField[0]
 											
 										End if 
 									End if 
@@ -201,21 +201,21 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 									
 									// SOURCE IS MONO VALUE
 									
-									If ($bMultiCriteria)
+									If ($isMultiCriteria)
 										
 										// Target is multi-criteria -> don't modify if exist
 										If ($Lon_keyType=Is null:K8:31)
 											
 											// #MARK_TODO Verify the type
 											
-											$oCache.searchableField:=$oIN.target.searchableField
+											$cache.searchableField:=$oIN.target.searchableField
 											
 										End if 
 										
 									Else 
 										
 										// Target is mono value
-										$oCache.searchableField:=$oIN.target.searchableField
+										$cache.searchableField:=$oIN.target.searchableField
 										
 									End if 
 								End if 
@@ -226,7 +226,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 							
 							If ($oIN.target.sectionField#Null:C1517)
 								
-								$oCache.sectionField:=$oIN.target.sectionField
+								$cache.sectionField:=$oIN.target.sectionField
 								
 							End if 
 							
@@ -252,7 +252,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 			End if 
 			
 			// Keep the field binding definition
-			$oCache.fields:=$Col_affected
+			$cache.fields:=$Col_affected
 			
 		End if 
 	End if 

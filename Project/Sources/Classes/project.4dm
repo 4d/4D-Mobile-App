@@ -1,21 +1,19 @@
-Class constructor
-	var $1 : Object
+Class constructor($project : Object)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.init($1)
+		This:C1470.init($project)
 		
 	End if 
 	
 	//====================================
-Function init
-	var $1 : Object
+Function init($project : Object)
 	
 	var $key : Text
 	
-	For each ($key; $1)
+	For each ($key; $project)
 		
-		This:C1470[$key]:=$1[$key]
+		This:C1470[$key]:=$project[$key]
 		
 	End for each 
 	
@@ -494,3 +492,60 @@ Function isLink
 		$0:=Value type:C1509($1[$t])=Is object:K8:27
 		
 	End for each 
+	
+	//================================================================================
+	// Check if a field is still available in the catalog
+Function fieldAvailable($field : Object; $tableID : Variant)->$available : Boolean
+	
+	var $relatedTableNumber : Integer
+	var $o; $relatedCatalog; $tableCatalog : Object
+	var $c : Collection
+	var $fieldID : Text
+	
+	// Accept num or string
+	$tableID:=String:C10($tableID)
+	$fieldID:=String:C10($field.id)
+	
+	$c:=Split string:C1554($field.name; ".")
+	
+	If ($c.length=1)
+		
+		// Check the data class
+		If ($field.relatedTableNumber#Null:C1517)
+			
+			// Use name
+			$available:=(This:C1470.dataModel[$tableID][$field.name]#Null:C1517)
+			
+		Else 
+			
+			$available:=(This:C1470.dataModel[$tableID][$fieldID]#Null:C1517)
+			
+		End if 
+		
+	Else 
+		
+		// Check the related data class
+		$tableCatalog:=This:C1470.$project.$catalog.query("tableNumber = :1"; Num:C11($tableID)).pop()
+		
+		If ($tableCatalog#Null:C1517)  // The table exists
+			
+			$relatedTableNumber:=Num:C11($tableCatalog.field.query("name= :1"; $c[0]).pop().relatedTableNumber)
+			
+			If ($relatedTableNumber>0)
+				
+				$relatedCatalog:=This:C1470.$project.$catalog.query("tableNumber = :1"; $relatedTableNumber).pop()
+				
+				If ($relatedCatalog#Null:C1517)  // The linked table exists
+					
+					If (This:C1470.dataModel[$tableID][$c[0]]#Null:C1517)  // The relation is published
+						
+						If ($relatedCatalog.field.query("id = :1"; Num:C11($fieldID)).pop()#Null:C1517)
+							
+							$available:=(This:C1470.dataModel[$tableID][$c[0]][$fieldID]#Null:C1517)
+							
+						End if 
+					End if 
+				End if 
+			End if 
+		End if 
+	End if 

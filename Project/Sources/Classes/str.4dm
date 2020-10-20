@@ -1,7 +1,6 @@
 Class extends tools
 
-Class constructor
-	var $1 : Text
+Class constructor($string : Variant)
 	
 	Super:C1705()
 	
@@ -9,7 +8,7 @@ Class constructor
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.setText($1)
+		This:C1470.setText($string)
 		
 	Else 
 		

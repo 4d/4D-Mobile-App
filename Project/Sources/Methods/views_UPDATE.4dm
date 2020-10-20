@@ -6,23 +6,13 @@
 // ----------------------------------------------------
 // Description:
 // Update all form definition according to the datamodel
-// ie. remove from forms, the fields that are no more published
+// Ie. remove from forms, the fields that are no more published
 // ----------------------------------------------------
 // Declarations
-C_TEXT:C284($1)
+#DECLARE ($formType : Text)
 
-C_BOOLEAN:C305($found)
-C_LONGINT:C283($index)
-C_TEXT:C284($Txt_formFamilly; $Txt_table)
-C_OBJECT:C1216($o; $Obj_field; $Obj_target)
-C_COLLECTION:C1488($c; $Col_catalog; $Col_fields)
-
-If (False:C215)
-	C_TEXT:C284(views_UPDATE; $1)
-End if 
-
-// ----------------------------------------------------
-// Initialisations
+var $formType; $tableID : Text
+var $field; $target : Object
 
 // ----------------------------------------------------
 If (Count parameters:C259=0)
@@ -32,346 +22,78 @@ If (Count parameters:C259=0)
 	
 Else 
 	
-	$Txt_formFamilly:=$1
-	
-	If (Form:C1466[$Txt_formFamilly]#Null:C1517)
+	If (Form:C1466[$formType]#Null:C1517)
 		
-		$Col_catalog:=editor_Catalog
-		
-		For each ($Txt_table; Form:C1466[$Txt_formFamilly])
+		For each ($tableID; Form:C1466[$formType])
 			
-			If (Form:C1466.dataModel[$Txt_table]#Null:C1517)
+			If (PROJECT.dataModel[$tableID]#Null:C1517)
 				
-				$Obj_target:=Form:C1466[$Txt_formFamilly][$Txt_table]
+				$target:=Form:C1466[$formType][$tableID]
 				
-				If ($Obj_target.fields#Null:C1517)
+				If ($target.fields#Null:C1517)
 					
-					For each ($Obj_field; $Obj_target.fields)
+					// FIELDS ---------------------------------------------------------------------
+					For each ($field; $target.fields)
 						
-						If ($Obj_field#Null:C1517)
+						If ($field#Null:C1517)
 							
-							$c:=Split string:C1554($Obj_field.name; ".")
-							
-							If ($c.length=1)
+							If (Not:C34(PROJECT.fieldAvailable($field; $tableID)))
 								
-								If (Num:C11($Obj_field.id)=0)  // 1 - N relation
-									
-									If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.name)]=Null:C1517)
-										
-										$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-										
-									End if 
-									
-								Else 
-									
-									If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
-										
-										$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-										
-									End if 
-								End if 
+								$target.fields[$target.fields.indexOf($field)]:=Null:C1517
 								
-							Else 
-								
-								// Get the related data class
-								$index:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
-								
-								If ($index>=0)
-									
-									$Col_fields:=$Col_catalog[$index].field
-									$index:=$Col_fields.extract("name").indexOf($c[0])
-									
-									If ($index>=0)
-										
-										$index:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$index].relatedTableNumber)
-										
-									End if 
-									
-									If ($index>=0)
-										
-										$Col_fields:=$Col_catalog[$index].field
-										
-										If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
-											
-											CLEAR VARIABLE:C89($found)
-											
-											For each ($o; $Col_fields) Until ($found)
-												
-												If ($o.id#Null:C1517)
-													
-													$found:=($o.id=$Obj_field.id)
-													
-													If ($found)
-														
-														If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
-															
-															$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-															
-														End if 
-													End if 
-													
-												Else 
-													
-													// Link ?
-													
-												End if 
-											End for each 
-											
-										Else 
-											
-											$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-											
-										End if 
-										
-									Else 
-										
-										$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-										
-									End if 
-									
-								Else 
-									
-									$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-									
-								End if 
 							End if 
 						End if 
 					End for each 
 				End if 
 				
-				If ($Txt_formFamilly="list")
+				If ($formType="list")
 					
-					If ($Obj_target.searchableField#Null:C1517)
+					// SEARCH WIDGET --------------------------------------------------------------
+					If ($target.searchableField#Null:C1517)
 						
-						If (Value type:C1509($Obj_target.searchableField)=Is collection:K8:32)
+						If (Value type:C1509($target.searchableField)=Is collection:K8:32)
 							
-							For each ($Obj_field; $Obj_target.searchableField)
+							For each ($field; $target.searchableField)
 								
-								$c:=Split string:C1554($Obj_field.name; ".")
-								
-								If ($c.length=1)
+								If (Not:C34(PROJECT.fieldAvailable($field; $tableID)))
 									
-									If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
-										
-										$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-										
-									End if 
+									$target.searchableField.remove($target.searchableField.indexOf($field))
 									
-								Else 
-									
-									// Get the related data class
-									$index:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
-									
-									If ($index>=0)
-										
-										$Col_fields:=$Col_catalog[$index].field
-										$index:=$Col_fields.extract("name").indexOf($c[0])
-										$index:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$index].relatedTableNumber)
-										
-										If ($index>=0)
-											
-											$Col_fields:=$Col_catalog[$index].field
-											
-											If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
-												
-												CLEAR VARIABLE:C89($found)
-												
-												For each ($o; $Col_fields) Until ($found)
-													
-													If ($o.id#Null:C1517)
-														
-														$found:=($o.id=$Obj_field.id)
-														
-														If ($found)
-															
-															If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
-																
-																$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-																
-															End if 
-														End if 
-														
-													Else 
-														
-														// Link ?
-														
-													End if 
-												End for each 
-												
-											Else 
-												
-												$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-												
-											End if 
-											
-										Else 
-											
-											$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-											
-										End if 
-										
-									Else 
-										
-										$Obj_target.searchableField.remove($Obj_target.searchableField.indexOf($Obj_field))
-										
-									End if 
 								End if 
 							End for each 
 							
 							Case of 
 									
 									//…………………………………………………………………………………………………
-								: ($Obj_target.searchableField.length=0)
+								: ($target.searchableField.length=0)  // There are no more
 									
-									OB REMOVE:C1226($Obj_target; "searchableField")
+									OB REMOVE:C1226($target; "searchableField")
 									
 									//…………………………………………………………………………………………………
-								: ($Obj_target.searchableField.length=1)
+								: ($target.searchableField.length=1)  // Convert to object
 									
-									// Convert to object
-									$Obj_target.searchableField:=$Obj_target.searchableField[0]
+									$target.searchableField:=$target.searchableField[0]
 									
 									//…………………………………………………………………………………………………
 							End case 
 							
 						Else 
 							
-							$Obj_field:=$Obj_target.searchableField
-							
-							If ($Obj_field#Null:C1517)
+							If (Not:C34(PROJECT.fieldAvailable($target.searchableField; $tableID)))
 								
-								$c:=Split string:C1554($Obj_field.name; ".")
+								OB REMOVE:C1226($target; "searchableField")
 								
-								If ($c.length=1)
-									
-									If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
-										
-										$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-										
-									End if 
-									
-								Else 
-									
-									// Get the related data class
-									$index:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
-									
-									If ($index>=0)
-										
-										$Col_fields:=$Col_catalog[$index].field
-										$index:=$Col_fields.extract("name").indexOf($c[0])
-										$index:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$index].relatedTableNumber)
-										
-										If ($index>=0)
-											
-											$Col_fields:=$Col_catalog[$index].field
-											
-											If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
-												
-												CLEAR VARIABLE:C89($found)
-												
-												For each ($o; $Col_fields) Until ($found)
-													
-													If ($o.id#Null:C1517)
-														
-														$found:=($o.id=$Obj_field.id)
-														
-														If ($found)
-															
-															If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
-																
-																OB REMOVE:C1226($Obj_target; "searchableField")
-																
-															End if 
-														End if 
-													End if 
-												End for each 
-												
-											Else 
-												
-												OB REMOVE:C1226($Obj_target; "searchableField")
-												
-											End if 
-											
-										Else 
-											
-											OB REMOVE:C1226($Obj_target; "searchableField")
-											
-										End if 
-										
-									Else 
-										
-										OB REMOVE:C1226($Obj_target; "searchableField")
-										
-									End if 
-								End if 
 							End if 
 						End if 
 					End if 
 					
-					$Obj_field:=$Obj_target.sectionField
-					
-					If ($Obj_field#Null:C1517)
+					// SECTION WIDGET -------------------------------------------------------------
+					If ($target.sectionField#Null:C1517)
 						
-						$c:=Split string:C1554($Obj_field.name; ".")
-						
-						If ($c.length=1)
+						If (Not:C34(PROJECT.fieldAvailable($target.sectionField; $tableID)))
 							
-							If (Form:C1466.dataModel[$Txt_table][String:C10($Obj_field.id)]=Null:C1517)
-								
-								$Obj_target.fields[$Obj_target.fields.indexOf($Obj_field)]:=Null:C1517
-								
-							End if 
+							OB REMOVE:C1226($target; "sectionField")
 							
-						Else 
-							
-							// Get the related data class
-							$index:=$Col_catalog.extract("tableNumber").indexOf(Num:C11($Txt_table))
-							
-							If ($index>=0)
-								
-								$Col_fields:=$Col_catalog[$index].field
-								$index:=$Col_fields.extract("name").indexOf($c[0])
-								$index:=$Col_catalog.extract("tableNumber").indexOf($Col_fields[$index].relatedTableNumber)
-								
-								If ($index>=0)
-									
-									$Col_fields:=$Col_catalog[$index].field
-									
-									If (Form:C1466.dataModel[$Txt_table][$c[0]]#Null:C1517)
-										
-										CLEAR VARIABLE:C89($found)
-										
-										For each ($o; $Col_fields) Until ($found)
-											
-											$found:=($o.id=$Obj_field.id)
-											
-											If ($found)
-												
-												If (Form:C1466.dataModel[$Txt_table][$c[0]][String:C10($Obj_field.id)]=Null:C1517)
-													
-													OB REMOVE:C1226($Obj_target; "sectionField")
-													
-												End if 
-											End if 
-										End for each 
-										
-									Else 
-										
-										OB REMOVE:C1226($Obj_target; "sectionField")
-										
-									End if 
-									
-								Else 
-									
-									OB REMOVE:C1226($Obj_target; "sectionField")
-									
-								End if 
-								
-							Else 
-								
-								OB REMOVE:C1226($Obj_target; "sectionField")
-								
-							End if 
 						End if 
 					End if 
 				End if 
@@ -379,9 +101,3 @@ Else
 		End for each 
 	End if 
 End if 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End
