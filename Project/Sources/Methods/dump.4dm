@@ -11,23 +11,23 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_i;$Lon_parameters)
-C_TEXT:C284($File_name;$File_output;$Txt_buffer;$Txt_handler;$Txt_id;$Txt_onError)
-C_TEXT:C284($Txt_tableNumber;$Txt_url;$Txt_version)
-C_OBJECT:C1216($o;$Obj_buffer;$Obj_dataModel;$Obj_field;$Obj_in;$Obj_out)
-C_OBJECT:C1216($Obj_query;$Obj_record;$Obj_rest;$Obj_result;$Obj_table)
+C_LONGINT:C283($Lon_i; $Lon_parameters)
+C_TEXT:C284($File_name; $File_output; $Txt_buffer; $Txt_handler; $Txt_id; $Txt_onError)
+C_TEXT:C284($Txt_tableNumber; $Txt_url; $Txt_version)
+C_OBJECT:C1216($o; $Obj_buffer; $Obj_dataModel; $Obj_field; $Obj_in; $Obj_out)
+C_OBJECT:C1216($Obj_query; $Obj_record; $Obj_rest; $Obj_result; $Obj_table)
 C_COLLECTION:C1488($Col_pictureFields)
 
 If (False:C215)
-	C_OBJECT:C1216(dump;$0)
-	C_OBJECT:C1216(dump;$1)
+	C_OBJECT:C1216(dump; $0)
+	C_OBJECT:C1216(dump; $1)
 End if 
 
 // ----------------------------------------------------
 // Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
 	// Required parameters
 	$Obj_in:=$1
@@ -40,7 +40,7 @@ If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
 	End if 
 	
 	$Obj_out:=New object:C1471(\
-		"success";False:C215)
+		"success"; False:C215)
 	
 Else 
 	
@@ -59,7 +59,7 @@ Else
 	
 	If (Test path name:C476($Obj_in.output)#Is a folder:K24:2)
 		
-		CREATE FOLDER:C475($Obj_in.output;*)
+		CREATE FOLDER:C475($Obj_in.output; *)
 		
 	End if 
 End if 
@@ -74,7 +74,7 @@ If ($Obj_dataModel=Null:C1517)
 End if 
 
 // ----------------------------------------------------
-If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
+If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 	
 	Case of 
 			
@@ -92,17 +92,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			$Obj_result:=New object:C1471
 			
 			// For each table
-			For each ($Txt_tableNumber;$Obj_dataModel)
+			For each ($Txt_tableNumber; $Obj_dataModel)
 				
 				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 				
 				$o:=$Obj_table[""]
 				
 				$Obj_rest:=Rest(New object:C1471(\
-					"action";"table";\
-					"url";$Obj_in.url;\
-					"headers";$Obj_in.headers;\
-					"table";$o.name))
+					"action"; "table"; \
+					"url"; $Obj_in.url; \
+					"headers"; $Obj_in.headers; \
+					"table"; $o.name))
 				
 				If (Value type:C1509($Obj_rest.headers)=Is object:K8:27)
 					
@@ -126,17 +126,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					$File_output:=$File_output+".catalog.json"
 					
 					// Make sure the folder exist
-					CREATE FOLDER:C475($File_output;*)
+					CREATE FOLDER:C475($File_output; *)
 					
 					If (Bool:C1537($Obj_in.dataSet))
 						
-						asset(New object:C1471("action";"create";\
-							"type";"dataset";\
-							"target";$Obj_in.output;\
-							"tags";New object:C1471(\
-							"name";$o.name+".catalog";\
-							"fileName";$o.name+".catalog.json";\
-							"uti";"public.json")))
+						asset(New object:C1471("action"; "create"; \
+							"type"; "dataset"; \
+							"target"; $Obj_in.output; \
+							"tags"; New object:C1471(\
+							"name"; $o.name+".catalog"; \
+							"fileName"; $o.name+".catalog.json"; \
+							"uti"; "public.json")))
 						
 					End if 
 					
@@ -144,7 +144,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					ob_Lon_Error:=0
 					ON ERR CALL:C155("ob_noError")  // CLEAN use another handler?
 					
-					TEXT TO DOCUMENT:C1237($File_output;JSON Stringify:C1217($Obj_rest.response;*))
+					TEXT TO DOCUMENT:C1237($File_output; JSON Stringify:C1217($Obj_rest.response; *))
 					
 					ON ERR CALL:C155($Txt_onError)
 					
@@ -164,7 +164,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 				
 				$Obj_result[$o.name]:=$Obj_rest
 				
-				ob_error_combine($Obj_out;$Obj_rest)
+				ob_error_combine($Obj_out; $Obj_rest)
 				
 			End for each 
 			
@@ -178,13 +178,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			$Obj_result:=New object:C1471
 			
 			// for each table in model
-			For each ($Txt_tableNumber;$Obj_dataModel)
+			For each ($Txt_tableNumber; $Obj_dataModel)
 				
 				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 				
 				// Create the query string for rest
 				$Obj_query:=New object:C1471(\
-					"$limit";String:C10(SHARED.data.dump.limit))
+					"$limit"; String:C10(SHARED.data.dump.limit))
 				
 				$o:=$Obj_table[""]
 				
@@ -230,8 +230,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					
 					// get field list name
 					$Obj_buffer:=dataModel(New object:C1471(\
-						"action";"fieldNames";\
-						"table";$Obj_table))
+						"action"; "fieldNames"; \
+						"table"; $Obj_table))
 					
 					If (Bool:C1537($Obj_in.expand))  // if we want to use old way to do it, not optimized $expand
 						If ($Obj_buffer.expand.length>0)
@@ -242,7 +242,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 					End if 
 					
 					// For each page (if page allowed)
-					For ($Lon_i;1;SHARED.data.dump.page;1)
+					For ($Lon_i; 1; SHARED.data.dump.page; 1)
 						
 						If ($Lon_i>1)
 							
@@ -252,13 +252,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 						// Do the rest request
 						$Obj_rest:=Rest(New object:C1471(\
-							"action";"records";\
-							"url";$Obj_in.url;\
-							"headers";$Obj_in.headers;\
-							"table";$o.name;\
-							"fields";$Obj_buffer.fields;\
-							"queryEncode";True:C214;\
-							"query";$Obj_query))
+							"action"; "records"; \
+							"url"; $Obj_in.url; \
+							"headers"; $Obj_in.headers; \
+							"table"; $o.name; \
+							"fields"; $Obj_buffer.fields; \
+							"queryEncode"; True:C214; \
+							"query"; $Obj_query))
 						
 						If (Value type:C1509($Obj_rest.response)=Is object:K8:27)
 							
@@ -268,7 +268,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 						
 						$Obj_result[$o.name]:=$Obj_rest
 						
-						ob_error_combine($Obj_out;$Obj_rest)
+						ob_error_combine($Obj_out; $Obj_rest)
 						
 						If ($Obj_rest.success)
 							
@@ -289,21 +289,21 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							$File_output:=$File_output+".data.json"
 							
 							// Make sure the folder exist
-							CREATE FOLDER:C475($File_output;*)
+							CREATE FOLDER:C475($File_output; *)
 							
 							If (Bool:C1537($Obj_in.dataSet))
 								
-								asset(New object:C1471("action";"create";"type";"dataset";\
-									"target";$Obj_in.output;\
-									"tags";New object:C1471(\
-									"name";$o.name;\
-									"fileName";$o.name+".data.json";\
-									"uti";"public.json")))
+								asset(New object:C1471("action"; "create"; "type"; "dataset"; \
+									"target"; $Obj_in.output; \
+									"tags"; New object:C1471(\
+									"name"; $o.name; \
+									"fileName"; $o.name+".data.json"; \
+									"uti"; "public.json")))
 								
 							End if 
 							
-							$Obj_rest.write:=ob_writeToDocument($Obj_rest.response;$File_output;True:C214)
-							ob_error_combine($Obj_out;$Obj_rest.write)
+							$Obj_rest.write:=ob_writeToDocument($Obj_rest.response; $File_output; True:C214)
+							ob_error_combine($Obj_out; $Obj_rest.write)
 							If (Not:C34($Obj_rest.write.success))
 								
 								$Obj_rest.success:=False:C215
@@ -330,7 +330,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			
 			If ($Obj_in.format=Null:C1517)
 				
-				$Obj_in.format:=".png"
+				$Obj_in.format:="best"
 				
 			End if 
 			
@@ -339,15 +339,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			$Obj_out.results:=New object:C1471()
 			
 			// For each table
-			For each ($Txt_tableNumber;$Obj_dataModel)
+			For each ($Txt_tableNumber; $Obj_dataModel)
 				
 				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 				
 				$o:=$Obj_table[""]
 				
 				$Obj_buffer:=dataModel(New object:C1471(\
-					"action";"pictureFields";\
-					"table";$Obj_table))
+					"action"; "pictureFields"; \
+					"table"; $Obj_table))
 				
 				// Check if there is image (XXX use some extract/filter function)
 				$Col_pictureFields:=$Obj_buffer.fields
@@ -387,7 +387,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							
 							// No more supported, data file must be passed
 							$Obj_rest:=New object:C1471(\
-								"success";False:C215)
+								"success"; False:C215)
 							
 						End if 
 						
@@ -407,20 +407,20 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 							//$Txt_handler:=Choose(Bool(featuresFlags._102457);"mobileapp/";"rest/")
 							$Txt_handler:="mobileapp/"
 							
-							If (Position:C15($Txt_handler;$Obj_result.url)=0)
+							If (Position:C15($Txt_handler; $Obj_result.url)=0)
 								
 								$Obj_result.url:=$Obj_result.url+$Txt_handler
-								ASSERT:C1129(False:C215;"URL must contains "+$Txt_handler)
+								ASSERT:C1129(False:C215; "URL must contains "+$Txt_handler)
 								
 							End if 
 							
 							If (Value type:C1509($Obj_rest.response.__ENTITIES)=Is collection:K8:32)
 								
 								// For each records
-								For each ($Obj_record;$Obj_rest.response.__ENTITIES)
+								For each ($Obj_record; $Obj_rest.response.__ENTITIES)
 									
 									// ... look for images
-									For each ($Obj_field;$Col_pictureFields)
+									For each ($Obj_field; $Col_pictureFields)
 										
 										$Obj_buffer:=Null:C1517
 										$Txt_id:=$Obj_record.__KEY
@@ -461,9 +461,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 												
 												//If (Bool(featuresFlags._102457))
 												
-												If (Position:C15("/mobileapp/";$Txt_url)>0)
+												If (Position:C15("/mobileapp/"; $Txt_url)>0)
 													
-													$Txt_url:=Substring:C12($Txt_url;12)  // remove /mobileapp/
+													$Txt_url:=Substring:C12($Txt_url; 12)  // remove /mobileapp/
 													
 												End if 
 												
@@ -474,17 +474,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 												//End if
 												
 												If (Length:C16(String:C10($Obj_in.format))#0)
-													
-													$Txt_buffer:=Replace string:C233($Txt_buffer;"imageformat=best";"imageformat="+$Obj_in.format)
-													
+													If ($Obj_in.format#"best")
+														$Txt_url:=Replace string:C233($Txt_url; "imageformat=best"; "imageformat="+$Obj_in.format)
+													End if 
 												End if 
 												
 												$Txt_url:=$Obj_result.url+$Txt_url
-												$Txt_version:=Substring:C12($Txt_url;Position:C15("$version=";$Txt_url)+Length:C16("$version="))
+												$Txt_version:=Substring:C12($Txt_url; Position:C15("$version="; $Txt_url)+Length:C16("$version="))
 												
-												If (Position:C15("&";$Txt_version)>0)
+												If (Position:C15("&"; $Txt_version)>0)
 													
-													$Txt_version:=Substring:C12($Txt_version;1;Position:C15("&";$Txt_version)-1)
+													$Txt_version:=Substring:C12($Txt_version; 1; Position:C15("&"; $Txt_version)-1)
 													
 												End if 
 												
@@ -501,7 +501,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 															
 														End if 
 														
-														$File_name:=$Obj_field.relatedDataClass+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+$Obj_in.format
+														$File_name:=$Obj_field.relatedDataClass+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version
 														
 														//----------------------------------------
 													: ($Obj_field.relatedField#Null:C1517)  // want to dump in current table as related field
@@ -512,7 +512,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 															
 														End if 
 														
-														$File_name:=$o.name+"("+$Txt_id+")"+"_"+$Obj_field.relatedField+"."+$Obj_field.name+"_"+$Txt_version+$Obj_in.format
+														$File_name:=$o.name+"("+$Txt_id+")"+"_"+$Obj_field.relatedField+"."+$Obj_field.name+"_"+$Txt_version
 														
 														//----------------------------------------
 													Else 
@@ -523,35 +523,48 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 															
 														End if 
 														
-														$File_name:=$o.name+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+$Obj_in.format
+														$File_name:=$o.name+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version
 														
 														//----------------------------------------
 												End case 
 												
-												CREATE FOLDER:C475($File_output+$File_name;*)
+												C_TEXT:C284($format)
+												$format:=$Obj_in.format
 												
-												If (Test path name:C476($File_output+$File_name)#Is a document:K24:1)
+												CREATE FOLDER:C475($File_output+$File_name+$format; *)
+												
+												If ((Test path name:C476($File_output+$File_name+$format)#Is a document:K24:1) | ($format="best"))  // OPTI: we cannot presume file name with best by maybe we could find files (network or file access? coose)
 													
-													$Obj_rest:=Rest(New object:C1471("action";"image";\
-														"headers";$Obj_in.headers;\
-														"url";$Txt_url;\
-														"target";$File_output+$File_name\
+													$Obj_rest:=Rest(New object:C1471("action"; "image"; \
+														"headers"; $Obj_in.headers; \
+														"url"; $Txt_url; \
+														"target"; $File_output+$File_name+$format\
 														))
-													ob_error_combine($Obj_out;$Obj_rest)
+													ob_error_combine($Obj_out; $Obj_rest)
 													
 												Else 
 													
 													// No need to dump. File already dumped.
-													$Obj_rest:=New object:C1471("success";False:C215)
+													$Obj_rest:=New object:C1471("success"; False:C215)
 													
 												End if 
 												
 												If ($Obj_rest.success)
+													If ($format="best")
+														If ($Obj_rest.headers["Content-Type"]#Null:C1517)
+															If (Position:C15("image/"; $Obj_rest.headers["Content-Type"])=1)
+																$format:="."+Replace string:C233($Obj_rest.headers["Content-Type"]; "image/"; "")
+															End if 
+														End if 
+														Folder:C1567($File_output; fk platform path:K87:2).file($File_name+"best").rename($File_name+$format)
+													End if 
+													
+													$File_name:=$File_name+$format
 													
 													If (Bool:C1537($Obj_in.debug))
 														$Obj_result.files.push(New object:C1471(\
-															"path";$File_output+$File_name;\
-															"contentSize";Num:C11($Obj_rest.contentSize)))
+															"path"; $File_output+$File_name; \
+															"contentSize"; Num:C11($Obj_rest.contentSize)))
 													End if 
 													
 													$Obj_result.contentSize:=$Obj_result.contentSize+Num:C11($Obj_rest.contentSize)
@@ -559,15 +572,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 													
 													If (Bool:C1537($Obj_in.dataSet))
 														
-														TEXT TO DOCUMENT:C1237($File_output+"Contents.json";\
+														TEXT TO DOCUMENT:C1237($File_output+"Contents.json"; \
 															JSON Stringify:C1217(New object:C1471(\
-															"info";New object:C1471(\
-															"version";1;\
-															"author";"xcode"\
-															);\
-															"images";New collection:C1472(New object:C1471(\
-															"idiom";"universal";\
-															"filename";$File_name)))))
+															"info"; New object:C1471(\
+															"version"; 1; \
+															"author"; "xcode"\
+															); \
+															"images"; New collection:C1472(New object:C1471(\
+															"idiom"; "universal"; \
+															"filename"; $File_name)))))
 														
 													End if 
 													
@@ -598,10 +611,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 								
 								$File_output:=$Obj_in.output+$o.name+Folder separator:K24:12
 								$File_output:=$File_output+"manifest.json"
-								TEXT TO DOCUMENT:C1237($File_output;\
+								TEXT TO DOCUMENT:C1237($File_output; \
 									JSON Stringify:C1217(New object:C1471(\
-									"contentSize";Num:C11($Obj_result.contentSize);\
-									"count";Num:C11($Obj_result.count))))
+									"contentSize"; Num:C11($Obj_result.contentSize); \
+									"count"; Num:C11($Obj_result.count))))
 								
 							End if 
 							
@@ -620,7 +633,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing tag \"action\""))
 			//________________________________________
 		Else 
 			
-			ASSERT:C1129(False:C215;"Unknown entry point: \""+$Obj_in.action+"\"")
+			ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
 			
 			//________________________________________
 	End case 
