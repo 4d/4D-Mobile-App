@@ -19,8 +19,6 @@ End if
 var $formType; $tableID : Text
 var $field; $target : Object
 
-$formType:=$1
-
 // ----------------------------------------------------
 If (Count parameters:C259=0)
 	
@@ -28,6 +26,8 @@ If (Count parameters:C259=0)
 	views_UPDATE("detail")
 	
 Else 
+	
+	$formType:=$1
 	
 	If (Form:C1466[$formType]#Null:C1517)
 		
