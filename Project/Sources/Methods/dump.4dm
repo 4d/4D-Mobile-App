@@ -550,11 +550,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 												End if 
 												
 												If ($Obj_rest.success)
+													
 													If ($format="best")
+														// find extension according to content type
 														If ($Obj_rest.headers["Content-Type"]#Null:C1517)
 															If (Position:C15("image/"; $Obj_rest.headers["Content-Type"])=1)
 																$format:="."+Replace string:C233($Obj_rest.headers["Content-Type"]; "image/"; "")
 															End if 
+														End if 
+														var $destinationFile : 4D:C1709.File
+														$destinationFile:=Folder:C1567($File_output; fk platform path:K87:2).parent.file($File_name+$format)
+														If ($destinationFile.exists)
+															$destinationFile.delete()
 														End if 
 														Folder:C1567($File_output; fk platform path:K87:2).file($File_name+"best").rename($File_name+$format)
 													End if 
