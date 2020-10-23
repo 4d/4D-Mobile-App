@@ -1,6 +1,6 @@
 {
-	"formats" : {
-		"string" : [
+	"formats": {
+		"string": [
 			"email",
 			"phone",
 			"account",
@@ -10,23 +10,25 @@
 			"textArea",
 			"barcode"
 		],
-		"number" : [
+		"number": [
 			"integer",
 			"scientific",
 			"percent",
 			"spellOut"
-			],
-		"date" : [
+		],
+		"date": [
 			"shortDate",
 			"longDate",
 			"fullDate"
 		],
-		"time" : [
+		"time": [
 			"duration"
 		],
-		"bool" : [
+		"bool": [
 			"check"
 		],
-		"image" : []
+		"image": [
+			"signature"
+		]
 	}
 }
