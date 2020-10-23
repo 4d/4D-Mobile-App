@@ -70,6 +70,12 @@ Case of
 							$Boo_hasImage:=True:C214
 							
 						End if 
+						If (String:C10($Obj_parameters.format)="barcode")
+							
+							$Boo_hasImage:=True:C214  // maybe separate and want only camera and not photo...
+							
+						End if 
+						
 					End for each 
 				End if 
 			End for each 

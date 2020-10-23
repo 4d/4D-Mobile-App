@@ -7,7 +7,8 @@
 			"password",
 			"url",
 			"zipCode",
-			"textArea"
+			"textArea",
+			"barcode"
 		],
 		"number" : [
 			"integer",
