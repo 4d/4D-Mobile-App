@@ -96,7 +96,7 @@ Function run
 			For each ($Obj_field; $Col_fields)
 				If (Num:C11($Obj_field.id)=0)  // relation to N field
 					
-					If (Length:C16(String:C10($Obj_field.format))=0)
+					If ((Length:C16(String:C10($Obj_field.format))=0) | Bool:C1537($Obj_field.isToMany))
 						$Obj_field.format:=$Obj_field.shortLabel  // TODO #117601 check si ob copy? not edit project ?
 					End if 
 					
