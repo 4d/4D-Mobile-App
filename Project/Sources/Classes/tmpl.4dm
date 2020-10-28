@@ -539,7 +539,20 @@ Function label
 	
 	//============================================================================
 	// Check that a field type is validated against the bind attribute
-Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boolean
+	//Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boolean
+Function isTypeAccepted
+	
+	//*****************************************
+	//*****************************************
+	var $constraint; $1 : Variant
+	var $type; $2 : Integer
+	var $accepted; $0 : Boolean
+	
+	$constraint:=$1
+	$type:=$2
+	//*****************************************
+	//*****************************************
+	
 	var $c : Collection
 	
 	If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
@@ -587,6 +600,12 @@ Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boo
 			End if 
 		End if 
 	End if 
+	
+	//*****************************************
+	//*****************************************
+	$0:=$accepted
+	//*****************************************
+	//*****************************************
 	
 	//============================================================================
 	// Add a "one field" widget to the template
