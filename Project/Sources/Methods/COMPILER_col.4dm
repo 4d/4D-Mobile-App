@@ -14,7 +14,7 @@ If (False:C215)
 	C_VARIANT:C1683(col_formula; $2)
 	
 	//__________________________________________________
-	C_OBJECT:C1216(col_notNull; $1)
+	//C_OBJECT(col_notNull; $1)
 	
 	//__________________________________________________
 	C_OBJECT:C1216(col_replaceString; $1)

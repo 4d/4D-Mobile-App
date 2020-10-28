@@ -14,7 +14,7 @@ C_BOOLEAN:C305($isMultiCriteria; $isCompatible)
 C_LONGINT:C283($indx; $Lon_keyType)
 C_TEXT:C284($dom; $Dom_field; $root; $t; $Txt_bind)
 C_OBJECT:C1216($o; $oAttributes; $cache; $oField; $oIN; $pathTemplate)
-C_COLLECTION:C1488($c; $Col_affected; $Col_bind; $Col_catalog)
+C_COLLECTION:C1488($c; $Col_affected; $Col_bind)
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_REORDER; $1)
@@ -25,19 +25,27 @@ End if
 $oIN:=$1
 
 // Load template
-$pathTemplate:=tmpl_form($oIN.form; $oIN.selector)
+//$pathTemplate:=tmpl_form($oIN.form; $oIN.selector)
 
-If ($pathTemplate.extension=SHARED.archiveExtension)  // Archive
-	
-	// Get from archive
-	$t:=$pathTemplate.file("template.svg").getText()
-	$root:=DOM Parse XML variable:C720($t)
-	
-Else 
-	
-	$root:=DOM Parse XML source:C719($pathTemplate.file("template.svg").platformPath)
-	
-End if 
+//If ($pathTemplate.extension=SHARED.archiveExtension)  // Archive
+
+//// Get from archive
+//$t:=$pathTemplate.file("template.svg").getText()
+//$root:=DOM Parse XML variable($t)
+
+//Else 
+
+//$root:=DOM Parse XML source($pathTemplate.file("template.svg").platformPath)
+
+//End if 
+
+var $template : Object
+$template:=$oIN.template
+
+$t:=$template.svg
+
+
+$root:=DOM Parse XML variable:C720($t)
 
 If (Asserted:C1132(OK=1; "Invalid template"))
 	
@@ -72,8 +80,6 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 				
 			End if 
 			
-			$Col_catalog:=editor_Catalog
-			
 			// Reorganize the binded fields
 			For each ($Txt_bind; $Col_bind)
 				
@@ -95,11 +101,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 					
 				End if 
 				
-				$o:=Rgx_match(New object:C1471(\
-					"pattern"; "(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; \
-					"target"; $oAttributes["ios:bind"]))
-				
-				If ($o.success)
+				If (Match regex:C1019("(?m-si)^([^\\[\\n]+)\\[(\\d+)]\\s*$"; $oAttributes["ios:bind"]; 1))
 					
 					// LIST OF FIELDS
 					
@@ -114,7 +116,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 						
 						If ($oIN.target.fields#Null:C1517)
 							
-							For each ($oField; $oIN.target.fields) Until ($isCompatible)
+							For each ($oField; $oIN.target.fields.filter("col_formula"; Formula:C1597($1.result:=($1.value#Null:C1517)))) Until ($isCompatible)
 								
 								If ($oField#Null:C1517)
 									
@@ -122,7 +124,7 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 										"action"; "fieldDefinition"; \
 										"path"; $oField.name; \
 										"tableNumber"; Num:C11($oIN.tableNumber); \
-										"catalog"; $Col_catalog))
+										"catalog"; PROJECT.$project.$catalog))
 									
 									If ($o.success)
 										
@@ -132,7 +134,8 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 											
 										Else 
 											
-											$isCompatible:=tmpl_compatibleType($c; $o.fieldType)
+											//$isCompatible:=tmpl_compatibleType($c; $o.fieldType)
+											$isCompatible:=$template.isTypeAccepted($c; $o.fieldType)
 											
 										End if 
 									End if 

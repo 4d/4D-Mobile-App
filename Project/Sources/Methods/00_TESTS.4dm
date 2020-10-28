@@ -28,10 +28,24 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=cs:C1710.Xcode.new()
-		$o.open()
+		$t:=Folder:C1567(fk desktop folder:K87:19).folder("DEV").platformPath
 		
-		$o.close()
+		$o:=New object:C1471
+		
+		$o.sdk:=sdk(New object:C1471(\
+			"action"; "install"; \
+			"file"; path.sdk().platformPath+"1.0.zip"; \
+			"target"; "Macintosh HD:Users:vdl:Sources_4D:depot:4eDimension:main:4DComponents:Internal User Components:4D Mobile App - Mobile:My App:"))
+		
+		//;"cache"; sdk(New object("action"; "cacheFolder")).platformPath
+		
+		
+		If ($o.sdk.success)
+			
+			
+			
+			
+		End if 
 		
 		
 		//________________________________________

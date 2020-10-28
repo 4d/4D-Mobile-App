@@ -1366,11 +1366,15 @@ Function addClass  // Add a value to the node class
 		
 	End if 
 	
-	$t:=String:C10(Super:C1706.getAttribute($node; "class"))
+	$t:=String:C10(This:C1470.getAttribute($node; "class"))
 	
 	If (Length:C16($t)>0)
 		
-		$t:=$t+" "+$1
+		If (Split string:C1554($t; " ").indexOf($1)=-1)
+			
+			$t:=$t+" "+$1
+			
+		End if 
 		
 	Else 
 		
@@ -1381,6 +1385,22 @@ Function addClass  // Add a value to the node class
 	Super:C1706.setAttribute($node; "class"; $t)
 	
 	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function isOfClass($class : Text; $node : Text)->$isOfclass : Boolean
+	var $target : Text
+	
+	If (Count parameters:C259=2)
+		
+		$target:=$node
+		
+	Else 
+		
+		$target:=This:C1470.__target()
+		
+	End if 
+	
+	$isOfclass:=(Position:C15($class; String:C10(This:C1470.getAttribute($target; "class")))#0)
 	
 /*——————————————————————————
 PRIVATE

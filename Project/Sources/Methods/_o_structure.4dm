@@ -247,8 +247,8 @@ Case of
 		//______________________________________________________
 	: ($IN.action="fieldDefinition")  // Returns the field definition from the starting table number and its path
 		
-		ASSERT:C1129(($IN.tableNumber#Null:C1517) | ($IN.tableNamer#Null:C1517))
-		ASSERT:C1129(($IN.path#Null:C1517) | ($IN.fieldNumber#Null:C1517))
+		ASSERT:C1129($IN.tableNumber#Null:C1517)
+		ASSERT:C1129($IN.path#Null:C1517)
 		
 		If ($IN.catalog=Null:C1517)
 			
@@ -268,19 +268,15 @@ Case of
 		
 		If ($c.length=1)
 			
-			$indx:=$catalog.extract("tableNumber").indexOf($tableNumber)
+			$table:=$catalog.query("tableNumber = :1"; $tableNumber).pop()
 			
-			If ($indx#-1)
+			If ($table#Null:C1517)
 				
-				$fields:=$catalog[$indx].field
+				$field:=$table.field.query("name = :1"; $IN.path).pop()
 				
-				$indx:=$fields.extract("name").indexOf($c[0])
-				
-				If ($indx#-1)
+				If ($field#Null:C1517)
 					
 					$OUT.success:=True:C214
-					
-					$field:=$fields[$indx]
 					
 					$OUT.path:=$IN.path
 					$OUT.tableNumber:=$tableNumber
@@ -547,7 +543,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-								
+																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

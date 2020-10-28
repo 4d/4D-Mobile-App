@@ -111,7 +111,7 @@ End if
 PROJECT.save()
 
 // Update preview
-views_preview("draw"; This:C1470)
+VIEWS_DRAW_FORM(This:C1470)
 
 // ----------------------------------------------------
 // End

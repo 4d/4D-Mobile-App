@@ -11,104 +11,101 @@
 var $0 : Object
 var $1 : Object
 
-var $currentForm; $formName; $selector; $t; $tableIdentifier; $typeForm : Text
-var $update : Boolean
+If (False:C215)
+	C_OBJECT:C1216(VIEWS_Handler; $0)
+	C_OBJECT:C1216(VIEWS_Handler; $1)
+End if 
+
+var $formName; $t; $tableID; $typeForm : Text
 var $codeEvent; $i; $l; $offset : Integer
-var $context; $datamodel; $form; $IN; $manifest; $o; $o1; $OUT; $target; $template : Object
+var $context; $datamodel; $form; $IN; $o; $o1; $OUT : Object
 var $c : Collection
 
 // ----------------------------------------------------
 // Initialisations
-If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
+
+// NO PARAMETERS REQUIRED
+
+// Optional parameters
+If (Count parameters:C259>=1)
 	
-	// NO PARAMETERS REQUIRED
+	$IN:=$1
 	
-	// Optional parameters
-	If (Count parameters:C259>=1)
-		
-		$IN:=$1
-		
-	End if 
+End if 
+
+$form:=New object:C1471(\
+"$"; editor_INIT; \
+"form"; UI.form("editor_CALLBACK").get(); \
+"tableWidget"; UI.picture("tables"); \
+"tableNext"; UI.static("next@"); \
+"tablePrevious"; UI.static("previous@"); \
+"tableButtonNext"; UI.button("next"); \
+"tableButtonPrevious"; UI.button("previous"); \
+"tablist"; UI.button("tab.list"); \
+"tabdetail"; UI.button("tab.detail"); \
+"tabSelector"; UI.widget("tab.selector"); \
+"noPublishedTable"; UI.widget("noPublishedTable"); \
+"fieldList"; UI.listbox("01_fields"); \
+"fieldGroup"; UI.static("01_fields@"); \
+"preview"; UI.picture("preview"); \
+"previewGroup"; UI.static("preview@"); \
+"fields"; UI.widget("fields"); \
+"ids"; UI.widget("field_ids"); \
+"icons"; UI.widget("icons"); \
+"names"; UI.widget("names"); \
+"selectorList"; UI.button("tab.list"); \
+"selectorDetail"; UI.button("tab.detail"); \
+"selectors"; UI.static("tab.@"); \
+"drag"; Formula:C1597(tmpl_On_drag_over); \
+"drop"; Formula:C1597(tmpl_ON_DROP); \
+"cancel"; Formula:C1597(tmpl_REMOVE); \
+"tips"; Formula:C1597(tmpl_TIPS); \
+"scrollBar"; UI.thermometer("preview.scrollBar"))
+
+$context:=$form.$
+
+If (OB Is empty:C1297($context))  // First load
 	
-	$form:=New object:C1471(\
-		"$"; editor_INIT; \
-		"form"; UI.form("editor_CALLBACK").get(); \
-		"tableWidget"; UI.picture("tables"); \
-		"tableNext"; UI.static("next@"); \
-		"tablePrevious"; UI.static("previous@"); \
-		"tableButtonNext"; UI.button("next"); \
-		"tableButtonPrevious"; UI.button("previous"); \
-		"tablist"; UI.button("tab.list"); \
-		"tabdetail"; UI.button("tab.detail"); \
-		"tabSelector"; UI.widget("tab.selector"); \
-		"noPublishedTable"; UI.widget("noPublishedTable"); \
-		"fieldList"; UI.listbox("01_fields"); \
-		"fieldGroup"; UI.static("01_fields@"); \
-		"preview"; UI.picture("preview"); \
-		"previewGroup"; UI.static("preview@"); \
-		"fields"; UI.widget("fields"); \
-		"ids"; UI.widget("field_ids"); \
-		"icons"; UI.widget("icons"); \
-		"names"; UI.widget("names"); \
-		"selectorList"; UI.button("tab.list"); \
-		"selectorDetail"; UI.button("tab.detail"); \
-		"selectors"; UI.static("tab.@"); \
-		"drag"; Formula:C1597(tmpl_On_drag_over); \
-		"drop"; Formula:C1597(tmpl_ON_DROP); \
-		"cancel"; Formula:C1597(tmpl_REMOVE); \
-		"tips"; Formula:C1597(tmpl_TIPS); \
-		"scrollBar"; UI.thermometer("preview.scrollBar"))
+	// § DEFINE UI CONSTRAINTS §
+	$c:=New collection:C1472
 	
-	$context:=$form.$
+	$c.push(New object:C1471(\
+		"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
+		"action"; "geometry")))))
 	
-	If (OB Is empty:C1297($context))  // First load
-		
-		// § DEFINE UI CONSTRAINTS §
-		$c:=New collection:C1472
+	If (FEATURE.with("newViewUI"))
 		
 		$c.push(New object:C1471(\
-			"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
-			"action"; "geometry")))))
+			"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
+			"reference"; "viewport.preview"; \
+			"type"; "horizontal alignment"; \
+			"value"; "center"))
 		
-		If (FEATURE.with("newViewUI"))
-			
-			$c.push(New object:C1471(\
-				"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
-				"reference"; "viewport.preview"; \
-				"type"; "horizontal alignment"; \
-				"value"; "center"))
-			
-			$c.push(New object:C1471(\
-				"object"; "preview.scrollBar"; \
-				"reference"; "preview"; \
-				"type"; "margin-left"; \
-				"value"; 20))
-			
-		End if 
-		
-		$context:=ob.set($context).createPath("constraints.rules"; Is collection:K8:32; $c).contents
-		
-		// § DEFINE FORM MEMBER METHODS §
-		
-		// Selected table ID as string, empty if none
-		$context.tableNum:=Formula:C1597(String:C10(This:C1470.tableNumber))
-		
-		// The form type according to the selected tab
-		$context.typeForm:=Formula:C1597(Choose:C955(Num:C11(This:C1470.selector)=2; "detail"; "list"))
-		
-		// Update selected tab
-		$context.setTab:=Formula:C1597(VIEWS_Handler(New object:C1471(\
-			"action"; "setTab")))
-		
-		// Update geometry
-		$context.setGeometry:=Formula:C1597(VIEWS_Handler(New object:C1471(\
-			"action"; "geometry")))
+		$c.push(New object:C1471(\
+			"object"; "preview.scrollBar"; \
+			"reference"; "preview"; \
+			"type"; "margin-left"; \
+			"value"; 20))
 		
 	End if 
 	
-Else 
+	$context:=ob.set($context).createPath("constraints.rules"; Is collection:K8:32; $c).contents
 	
-	ABORT:C156
+	// § DEFINE FORM MEMBER METHODS §
+	
+	// Selected table ID as string, empty if none
+	$context.tableNum:=Formula:C1597(String:C10(This:C1470.tableNumber))
+	
+	// The form type according to the selected tab
+	$context.typeForm:=Formula:C1597(Choose:C955(Num:C11(This:C1470.selector)=2; "detail"; "list"))
+	
+	// Update selected tab
+	$context.setTab:=Formula:C1597(VIEWS_Handler(New object:C1471(\
+		"action"; "setTab")))
+	
+	// Update geometry
+	$context.setGeometry:=Formula:C1597(VIEWS_Handler(New object:C1471(\
+		"action"; "geometry")))
 	
 End if 
 
@@ -144,10 +141,10 @@ Case of
 				
 				If ($datamodel#Null:C1517)
 					
-					For each ($tableIdentifier; $datamodel)
+					For each ($tableID; $datamodel)
 						
-						Form:C1466.list:=ob_createPath(Form:C1466.list; $tableIdentifier)
-						Form:C1466.detail:=ob_createPath(Form:C1466.detail; $tableIdentifier)
+						Form:C1466.list:=ob_createPath(Form:C1466.list; $tableID)
+						Form:C1466.detail:=ob_createPath(Form:C1466.detail; $tableID)
 						
 					End for each 
 				End if 
@@ -197,7 +194,7 @@ Case of
 				($form.tableWidget.pointer())->:=tables_Widget($datamodel; New object:C1471(\
 					"tableNumber"; $context.tableNum()))
 				
-				views_UPDATE
+				PROJECT.updateFormDefinitions()
 				
 				// Update geometry
 				$context.setGeometry()
@@ -248,7 +245,7 @@ Case of
 						$form.previewGroup.setVisible(Length:C16($context.tableNum())>0)
 						
 						// Uppdate preview
-						views_preview("draw"; $form)
+						VIEWS_DRAW_FORM($form)
 						
 						If (FEATURE.with("withWidgetActions"))
 							
@@ -330,13 +327,24 @@ Case of
 			
 			OB REMOVE:C1226($context; "update")
 			
-			$o:=views_fieldList($context.tableNum())
+			If (DATABASE.isMatrix)
+				
+				$o:=cs:C1710.VIEWS.new().fieldList($context.tableNum())
+				
+			Else 
+				
+				$o:=views_fieldList($context.tableNum())
+				
+			End if 
 			
 			If ($o.success)
 				
 				COLLECTION TO ARRAY:C1562($o.fields; ($form.fields.pointer())->)
 				COLLECTION TO ARRAY:C1562($o.fields.extract("id"); ($form.ids.pointer())->)
 				COLLECTION TO ARRAY:C1562($o.fields.extract("path"); ($form.names.pointer())->)
+				
+				ASSERT:C1129($o.fields.length=Size of array:C274(($form.ids.pointer())->))
+				ASSERT:C1129($o.fields.length=Size of array:C274(($form.names.pointer())->))
 				
 				$c:=New collection:C1472
 				
@@ -449,171 +457,9 @@ Case of
 		//=========================================================
 	: ($IN.action="forms")  // Call back from widget
 		
-		$form.fieldGroup.show()
-		$form.previewGroup.show()
-		$form.scrollBar.hide()
-		
-		If ($IN.form#Null:C1517)  // Browser auto close
-			
-			$formName:=$IN.form
-			$update:=True:C214
-			
-		Else 
-			
-			If ($IN.item>0)\
-				 & ($IN.item<=$IN.pathnames.length)
-				
-				If ($IN.pathnames[$IN.item-1]#Null:C1517)
-					
-					// The selected form
-					$formName:=$IN.pathnames[$IN.item-1]
-					$update:=True:C214
-					
-				Else 
-					
-					// Show browser
-					$o:=New object:C1471(\
-						"url"; Get localized string:C991("res_"+$context.typeForm()+"Forms"))
-					
-					$form.form.call(New collection:C1472("initBrowser"; $o))
-					
-				End if 
-			End if 
-		End if 
-		
-		If ($update)
-			
-			// Table number as string
-			$tableIdentifier:=$context.tableNum()
-			
-			// Current selector (list | detail)
-			$selector:=$IN.selector
-			
-			// The current table form
-			$currentForm:=String:C10(Form:C1466[$selector][$tableIdentifier].form)
-			
-			If ($formName#$currentForm)
-				
-				$target:=Form:C1466[$selector][$context.tableNumber]
-				
-				$IN.target:=OB Copy:C1225($target)
-				OB REMOVE:C1226($IN.target; "form")
-				
-				If (Length:C16($currentForm)#0)
-					
-					// Save a snapshot of the current form definition
-					Case of 
-							
-							//______________________________________________________
-						: ($context[$tableIdentifier]=Null:C1517)
-							
-							$context[$tableIdentifier]:=New object:C1471(\
-								$selector; New object:C1471($currentForm; \
-								$IN.target))
-							
-							//______________________________________________________
-						: ($context[$tableIdentifier][$selector]=Null:C1517)
-							
-							$context[$tableIdentifier][$selector]:=New object:C1471(\
-								$currentForm; $IN.target)
-							
-							//______________________________________________________
-						Else 
-							
-							$context[$tableIdentifier][$selector][$currentForm]:=$IN.target
-							
-							//______________________________________________________
-					End case 
-				End if 
-				
-				// Update project & save
-				$target.form:=$formName
-				OB REMOVE:C1226($context; "manifest")
-				PROJECT.save()
-				
-				If (ob_testPath(Form:C1466.$project; "status"; "project"))
-					
-					If (Not:C34(Form:C1466.$project.status.project))
-						
-						// Launch project verifications
-						$form.form.call("projectAudit")
-						
-					End if 
-				End if 
-				
-				If ($context[$tableIdentifier][$selector][$formName]=Null:C1517)
-					
-					If ($target.fields=Null:C1517)
-						
-						$target.fields:=New collection:C1472
-						
-					End if 
-					
-					// Create a new binding
-					$c:=$target.fields.copy()
-					
-					If ($context[$tableIdentifier]#Null:C1517)
-						
-						If ($context[$tableIdentifier][$selector]#Null:C1517)
-							
-							// Enrich with the fields already used during the session
-							For each ($typeForm; $context[$tableIdentifier][$selector])
-								
-								For each ($o; $context[$tableIdentifier][$selector][$typeForm].fields.filter("col_notNull"))
-									
-									If ($c.query("name = :1"; $o.name).pop()=Null:C1517)
-										
-										$c.push($o)
-										
-									End if 
-								End for each 
-							End for each 
-						End if 
-					End if 
-					
-				Else 
-					
-					// Reuse the last snapshot
-					$c:=$context[$tableIdentifier][$selector][$formName].fields
-					
-					// Enrich the last snapshot with the fields already used during the session
-					For each ($typeForm; $context[$tableIdentifier][$selector])
-						
-						If ($typeForm#$formName)
-							
-							For each ($o; $context[$tableIdentifier][$selector][$typeForm].fields.filter("col_notNull"))
-								
-								If ($c.extract("name").indexOf($o.name)=-1)
-									
-									$c.push($o)
-									
-								End if 
-							End for each 
-						End if 
-					End for each 
-				End if 
-				
-				$IN.form:=$formName
-				$IN.tableNumber:=$tableIdentifier
-				
-				$template:=cs:C1710.tmpl.new($formName; $selector)
-				$manifest:=$template.manifest
-				
-				If (FEATURE.with("newViewUI"))
-					
-					$IN.manifest:=$manifest
-					
-				End if 
-				
-				tmpl_REORDER($IN)
-				
-			End if 
-			
-			// Redraw
-			$context.draw:=True:C214
-			$form.form.refresh()
-			
-		End if 
+		// quand la class VIEWS sera complète il n'y aura plus besoin de $form
+		// et cet appel pourra être directement fait depuis project_MESSAGES ?
+		cs:C1710.VIEWS.new().setTemplate($IN; $form)
 		
 		//=========================================================
 	: ($IN.action="show")
@@ -704,7 +550,7 @@ Case of
 		//=========================================================
 	: ($IN.action="updateForms")
 		
-		views_UPDATE
+		PROJECT.updateFormDefinitions()
 		
 		//=========================================================
 	Else 

@@ -236,7 +236,7 @@ Case of
 							$oTarget.fields.push($o)
 							
 							// Update preview
-							views_preview("draw"; $form)
+							VIEWS_DRAW_FORM($form)
 							
 							// Save project
 							PROJECT.save()
@@ -350,7 +350,7 @@ Case of
 								End case 
 								
 								// Update preview
-								views_preview("draw"; $form)
+								VIEWS_DRAW_FORM($form)
 								
 								// Save project
 								PROJECT.save()
@@ -509,7 +509,7 @@ Case of
 						$context.tabIndex:=Replace string:C233($context.current; "tab_"; "")
 						
 						// Update preview
-						views_preview("draw"; $form)
+						VIEWS_DRAW_FORM($form)
 						
 						//………………………………………………………………………………………………………………
 					: ($context.current="@.cancel")

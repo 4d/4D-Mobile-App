@@ -1,17 +1,11 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-C_BOOLEAN:C305($0)
-C_OBJECT:C1216(${1})
-
-C_LONGINT:C283($i)
-
-If (False:C215)
-	C_BOOLEAN:C305(_and;$0)
-	C_OBJECT:C1216(_and;${1})
-End if 
+var $0 : Boolean
+var ${1} : Object
+var $i : Integer
 
 $0:=True:C214
 
-For ($i;1;Count parameters:C259;1)
+For ($i; 1; Count parameters:C259; 1)
 	
 	$0:=${$i}.call()
 	

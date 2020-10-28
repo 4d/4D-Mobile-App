@@ -383,8 +383,7 @@
 					"events": [
 						"onClick",
 						"onMouseEnter",
-						"onMouseLeave",
-						"onLongClick"
+						"onMouseLeave"
 					]
 				}
 			}

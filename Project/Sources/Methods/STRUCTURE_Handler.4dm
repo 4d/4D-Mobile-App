@@ -11,7 +11,7 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($l; $Lon_formEvent; $Lon_parameters; $Lon_published; $Lon_shift)
+C_LONGINT:C283($l; $Lon_formEvent; $Lon_parameters; $Lon_published; $Lon_shift; $row)
 C_TEXT:C284($t)
 C_OBJECT:C1216($o; $context; $Obj_dataModel; $Obj_field; $form; $Obj_in)
 C_OBJECT:C1216($Obj_out; $Obj_table)
@@ -315,6 +315,13 @@ Case of
 		
 		Case of 
 				
+			: (False:C215)
+				
+				var $structure : cs:C1710.structure
+				$structure:=cs:C1710.structure.new()
+				
+				$structure.addField($Obj_in.table; $Obj_in.field)
+				
 				//…………………………………………………………………………………………………
 			: ($Obj_in.field.type=-1)  // N -> 1 relation
 				
@@ -324,21 +331,45 @@ Case of
 					
 					$Lon_published:=1  // All related fields are published
 					
-					//#MARK_TO_OPTIMIZE
-					$o:=_o_structure(New object:C1471(\
-						"action"; "relatedCatalog"; \
-						"table"; $Obj_in.table.name; \
-						"relatedEntity"; $Obj_in.field.name))
+					var $structure : cs:C1710.structure
+					var $relatedCatalog : Object
+					$structure:=cs:C1710.structure.new()
+					$relatedCatalog:=$structure.relatedCatalog($Obj_in.table.name; $Obj_in.field.name; True:C214)
 					
-					If ($o.success)
+					If ($relatedCatalog.success)
 						
-						For each ($Obj_field; $o.fields)
+						For each ($Obj_field; $relatedCatalog.fields)
 							
-							If ($Obj_dataModel[String:C10($Obj_field.fieldNumber)]=Null:C1517)
-								
-								$Lon_published:=$Lon_published+1  // Mixed
-								
-							End if 
+							Case of 
+									//______________________________________________________
+								: ($Obj_field.fieldType=8859)
+									
+									$Lon_published:=$Lon_published+Num:C11($Obj_dataModel[String:C10($Obj_field.name)]=Null:C1517)
+									
+									//______________________________________________________
+								: ($Obj_field.fieldType=8858)
+									
+									$Lon_published:=$Lon_published+Num:C11($Obj_dataModel[String:C10($Obj_field.name)]=Null:C1517)
+									
+									//______________________________________________________
+								Else 
+									
+									$c:=Split string:C1554($Obj_field.path; "."; sk ignore empty strings:K86:1)
+									
+									If ($c.length=1)
+										
+										// Field
+										$Lon_published:=$Lon_published+Num:C11($Obj_dataModel[String:C10($Obj_field.fieldNumber)]=Null:C1517)
+										
+									Else 
+										
+										// Link
+										$Lon_published:=$Lon_published+Num:C11($Obj_dataModel[$c[0]][String:C10($Obj_field.fieldNumber)]=Null:C1517)
+										
+									End if 
+									
+									//______________________________________________________
+							End case 
 						End for each 
 					End if 
 				End if 
@@ -347,9 +378,10 @@ Case of
 				APPEND TO ARRAY:C911(($Obj_in.icons)->; UI.fieldIcons[8858])
 				APPEND TO ARRAY:C911(($Obj_in.fields)->; $Obj_in.field.name)
 				
-				$l:=Size of array:C274(($Obj_in.fields)->)
-				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; $l; Underline:K14:4)
-				LISTBOX SET ROW COLOR:C1270(*; "fields"; $l; UI.selectedColor; lk font color:K53:24)
+				
+				$row:=Size of array:C274(($Obj_in.fields)->)
+				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; $row; Underline:K14:4)
+				LISTBOX SET ROW COLOR:C1270(*; "fields"; $row; UI.selectedColor; lk font color:K53:24)
 				
 				//…………………………………………………………………………………………………
 			: ($Obj_in.field.type=-2)  // 1 -> N relation
@@ -367,6 +399,9 @@ Case of
 				APPEND TO ARRAY:C911(($Obj_in.icons)->; UI.fieldIcons[8859])
 				APPEND TO ARRAY:C911(($Obj_in.fields)->; $Obj_in.field.name)
 				
+				$row:=Size of array:C274(($Obj_in.fields)->)
+				LISTBOX SET ROW COLOR:C1270(*; "fields"; $row; Foreground color:K23:1; lk font color:K53:24)
+				
 				//…………………………………………………………………………………………………
 			Else 
 				
@@ -381,6 +416,9 @@ Case of
 				End if 
 				
 				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; Size of array:C274(($Obj_in.fields)->); Plain:K14:1)
+				
+				$row:=Size of array:C274(($Obj_in.fields)->)
+				LISTBOX SET ROW COLOR:C1270(*; "fields"; $row; Foreground color:K23:1; lk font color:K53:24)
 				
 				//…………………………………………………………………………………………………
 		End case 

@@ -14,6 +14,7 @@ var $fixed; $indx : Integer
 var $x : Blob
 var $current; $dropped; $relation; $table; $target : Object
 var $cCurrent; $cDroped : Collection
+var $template : cs:C1710.tmpl
 
 // ----------------------------------------------------
 // Initialisations
@@ -38,8 +39,9 @@ If (Length:C16($cible)>0)
 		SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:type"; $bind)
 		
 		$currentForm:=Current form name:C1298
+		$template:=Form:C1466.$dialog[$currentForm].template
 		
-		If (Form:C1466.$dialog[$currentForm].template.isTypeAccepted($bind; $dropped.fieldType))
+		If ($template.isTypeAccepted($bind; $dropped.fieldType))
 			
 			$target:=Form:C1466[This:C1470.$.typeForm()][$tableNumber]
 			$dropped.name:=$dropped.path
@@ -199,7 +201,7 @@ If (Length:C16($cible)>0)
 								
 							End if 
 							
-							$fixed:=Form:C1466.$dialog[$currentForm].template.manifest.fields.count
+							$fixed:=$template.manifest.fields.count
 							$indx:=$target.fields.indexOf(Null:C1517; $fixed)
 							
 							If ($indx=-1)
@@ -257,7 +259,7 @@ If (Length:C16($cible)>0)
 			PROJECT.save()
 			
 			// Update preview
-			views_preview("draw"; This:C1470)
+			VIEWS_DRAW_FORM(This:C1470)
 			
 		Else 
 			

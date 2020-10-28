@@ -13,7 +13,7 @@ var $b : Boolean
 var $bottom; $column; $count; $height; $i; $indx; $l; $left; $Lon_button; $Lon_targetBottom : Integer
 var $Lon_targetTop; $Lon_unpublished; $Lon_vOffset; $right; $row; $top; $width; $Win_hdl : Integer
 var $Ptr_; $Ptr_me; $Ptr_published : Pointer
-var $context; $dataModel; $e; $form; $menu; $o; $relatedCatalog; $table : Object
+var $context; $linkDataModel; $e; $form; $menu; $o; $relatedCatalog; $tableDataModel : Object
 var $c : Collection
 
 var $structure : cs:C1710.structure
@@ -322,6 +322,7 @@ Case of
 									If (Not:C34(editor_Locked))
 										
 										$structure:=cs:C1710.structure.new()
+										
 										$relatedCatalog:=$structure.relatedCatalog($context.currentTable.name; $context.fieldName; True:C214)
 										
 										If ($relatedCatalog.success)  // Open field picker
@@ -332,14 +333,14 @@ Case of
 												
 											End if 
 											
-											$table:=Form:C1466.dataModel[String:C10($context.currentTable.tableNumber)]
-											$dataModel:=$table[$relatedCatalog.relatedEntity]
+											$tableDataModel:=Form:C1466.dataModel[String:C10($context.currentTable.tableNumber)]
+											$linkDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
 											
 											For each ($o; $relatedCatalog.fields)
 												
 												If (Bool:C1537($o.isToMany))  //1 -> N
 													
-													$o.published:=($table[$o.inverseName][$o.name]#Null:C1517)
+													$o.published:=($linkDataModel[$o.name]#Null:C1517)
 													
 												Else 
 													
@@ -348,16 +349,14 @@ Case of
 													
 													If ($c.length=1)
 														
-														$o.published:=($dataModel[$fieldID]#Null:C1517)
+														$o.published:=($linkDataModel[$fieldID]#Null:C1517)
 														
 													Else 
 														
 														// Enhance_relation
-														$o.published:=($dataModel[$c[0]][$fieldID]#Null:C1517)
+														$o.published:=($linkDataModel[$c[0]][$fieldID]#Null:C1517)
 														
 													End if 
-													
-													
 												End if 
 												
 												$o.icon:=UI.fieldIcons[$o.fieldType]
@@ -374,12 +373,10 @@ Case of
 												
 												If ($count>0)  // At least one related field is published
 													
-													If ($table=Null:C1517)\
-														 | OB Is empty:C1297($table)
+													If ($tableDataModel=Null:C1517)\
+														 | OB Is empty:C1297($tableDataModel)
 														
-														$table:=PROJECT.addTable($context.currentTable)
-														
-														//PROJECT.dataModel[String($context.currentTable.tableNumber)]:=$table
+														$tableDataModel:=PROJECT.addTable($context.currentTable)
 														
 													End if 
 													
@@ -390,10 +387,10 @@ Case of
 														
 														If ($o.published)
 															
-															If ($table[$context.fieldName]=Null:C1517)
+															If ($tableDataModel[$context.fieldName]=Null:C1517)
 																
 																// Create the relation
-																$table[$context.fieldName]:=New object:C1471(\
+																$tableDataModel[$context.fieldName]:=New object:C1471(\
 																	"relatedDataClass"; $relatedCatalog.relatedDataClass; \
 																	"inverseName"; $relatedCatalog.inverseName; \
 																	"relatedTableNumber"; $relatedCatalog.relatedTableNumber)
@@ -403,18 +400,18 @@ Case of
 															// Create the field, if any
 															If ($c.length>1)
 																
-																If ($table[$context.fieldName][$c[0]]=Null:C1517)
+																If ($tableDataModel[$context.fieldName][$c[0]]=Null:C1517)
 																	
-																	$table[$context.fieldName][$c[0]]:=New object:C1471(\
+																	$tableDataModel[$context.fieldName][$c[0]]:=New object:C1471(\
 																		"relatedDataClass"; $o.tableName; \
 																		"inverseName"; $context.currentTable.field.query("name=:1"; $context.fieldName).pop().inverseName; \
 																		"relatedTableNumber"; $o.tableNumber)
 																	
 																End if 
 																
-																If ($table[$context.fieldName][$c[0]][$fieldID]=Null:C1517)
+																If ($tableDataModel[$context.fieldName][$c[0]][$fieldID]=Null:C1517)
 																	
-																	$table[$context.fieldName][$c[0]][$fieldID]:=New object:C1471(\
+																	$tableDataModel[$context.fieldName][$c[0]][$fieldID]:=New object:C1471(\
 																		"name"; $o.name; \
 																		"path"; $o.path; \
 																		"label"; PROJECT.label($o.name); \
@@ -428,9 +425,9 @@ Case of
 																
 																If (Bool:C1537($o.isToMany))
 																	
-																	If ($table[$context.fieldName][$o.name]=Null:C1517)
+																	If ($tableDataModel[$context.fieldName][$o.name]=Null:C1517)
 																		
-																		$table[$context.fieldName][$o.name]:=New object:C1471(\
+																		$tableDataModel[$context.fieldName][$o.name]:=New object:C1471(\
 																			"name"; $o.name; \
 																			"relatedDataClass"; $o.relatedDataClass; \
 																			"path"; $context.fieldName+"."+$o.path; \
@@ -443,9 +440,9 @@ Case of
 																	
 																Else 
 																	
-																	If ($table[$context.fieldName][$fieldID]=Null:C1517)
+																	If ($tableDataModel[$context.fieldName][$fieldID]=Null:C1517)
 																		
-																		$table[$context.fieldName][$fieldID]:=New object:C1471(\
+																		$tableDataModel[$context.fieldName][$fieldID]:=New object:C1471(\
 																			"name"; $o.name; \
 																			"path"; $o.path; \
 																			"label"; PROJECT.label($o.name); \
@@ -462,31 +459,31 @@ Case of
 															// Remove the field, if any
 															If (Bool:C1537($o.isToMany))
 																
-																If ($table[$o.inverseName][$o.name]#Null:C1517)
+																If ($linkDataModel[$o.name]#Null:C1517)
 																	
-																	OB REMOVE:C1226($table[$o.inverseName]; $o.name)
+																	OB REMOVE:C1226($linkDataModel; $o.name)
 																	
 																End if 
 																
 															Else 
 																
-																If ($table[$context.fieldName]#Null:C1517)
+																If ($tableDataModel[$context.fieldName]#Null:C1517)
 																	
 																	If ($c.length>1)
 																		
-																		If ($table[$context.fieldName][$o.path]#Null:C1517)
+																		If ($tableDataModel[$context.fieldName][$c[0]][String:C10($o.fieldNumber)]#Null:C1517)
 																			
-																			OB REMOVE:C1226($table[$context.fieldName]; $o.path)
+																			OB REMOVE:C1226($tableDataModel[$context.fieldName][$c[0]]; String:C10($o.fieldNumber))
 																			
 																		End if 
 																		
 																	Else 
 																		
-																		If ($table[$context.fieldName][$fieldID].path#Null:C1517)
+																		If ($tableDataModel[$context.fieldName][$fieldID].path#Null:C1517)
 																			
-																			If ($table[$context.fieldName][$fieldID].path=$o.path)
+																			If ($tableDataModel[$context.fieldName][$fieldID].path=$o.path)
 																				
-																				OB REMOVE:C1226($table[$context.fieldName]; $fieldID)
+																				OB REMOVE:C1226($tableDataModel[$context.fieldName]; $fieldID)
 																				
 																			End if 
 																		End if 

@@ -357,14 +357,16 @@
 			"COMPILER_views",
 			"tables_Widget",
 			"VIEW_RENDERER_v1",
+			"VIEWS_DRAW_FORM",
 			"views_fieldList",
 			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",
-			"VIEWS_OBJECTS_HANDLER",
-			"views_preview",
-			"views_UPDATE"
+			"VIEWS_OBJECTS_HANDLER"
 		],
 		"forms": [
+			"VIEWS"
+		],
+		"classes": [
 			"VIEWS"
 		]
 	},
@@ -490,7 +492,6 @@
 			"col_distinctObject",
 			"col_findObject",
 			"col_formula",
-			"col_notNull",
 			"col_replaceString",
 			"col_valueToObject",
 			"COMPILER_col",

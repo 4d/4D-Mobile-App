@@ -494,8 +494,8 @@ Function isLink
 	End for each 
 	
 	//================================================================================
-	// Check if a field is still available in the catalog
-Function fieldAvailable($field : Object; $tableID : Variant)->$available : Boolean
+	// Check if a field is still available in the table catalog
+Function fieldAvailable($tableID : Variant; $field : Object)->$available : Boolean
 	
 	var $relatedTableNumber : Integer
 	var $o; $relatedCatalog; $tableCatalog : Object
@@ -513,11 +513,12 @@ Function fieldAvailable($field : Object; $tableID : Variant)->$available : Boole
 		// Check the data class
 		If ($field.relatedTableNumber#Null:C1517)
 			
-			// Use name
+			// Relation = use name
 			$available:=(This:C1470.dataModel[$tableID][$field.name]#Null:C1517)
 			
 		Else 
 			
+			// Field = use id
 			$available:=(This:C1470.dataModel[$tableID][$fieldID]#Null:C1517)
 			
 		End if 
@@ -549,3 +550,96 @@ Function fieldAvailable($field : Object; $tableID : Variant)->$available : Boole
 			End if 
 		End if 
 	End if 
+	
+	//============================================================================
+	// Update all form definition according to the datamodel
+	// Ie. remove from forms, the fields that are no more published
+Function updateFormDefinitions
+	var $formType; $tableID : Text
+	var $field; $target : Object
+	
+	For each ($formType; New collection:C1472("list"; "detail"))
+		
+		If (Form:C1466[$formType]#Null:C1517)
+			
+			For each ($tableID; This:C1470[$formType])
+				
+				If (This:C1470.dataModel[$tableID]#Null:C1517)
+					
+					$target:=Form:C1466[$formType][$tableID]
+					
+					If ($target.fields#Null:C1517)
+						
+						// FIELDS ---------------------------------------------------------------------
+						For each ($field; $target.fields)
+							
+							If ($field#Null:C1517)
+								
+								If (Not:C34(This:C1470.fieldAvailable($tableID; $field)))
+									
+									$target.fields[$target.fields.indexOf($field)]:=Null:C1517
+									
+								End if 
+							End if 
+						End for each 
+					End if 
+					
+					If ($formType="list")
+						
+						// SEARCH WIDGET --------------------------------------------------------------
+						If ($target.searchableField#Null:C1517)
+							
+							If (Value type:C1509($target.searchableField)=Is collection:K8:32)
+								
+								For each ($field; $target.searchableField)
+									
+									If (Not:C34(This:C1470.fieldAvailable($tableID; $field)))
+										
+										$target.searchableField.remove($target.searchableField.indexOf($field))
+										
+									End if 
+								End for each 
+								
+								Case of 
+										
+										//…………………………………………………………………………………………………
+									: ($target.searchableField.length=0)  // There are no more
+										
+										OB REMOVE:C1226($target; "searchableField")
+										
+										//…………………………………………………………………………………………………
+									: ($target.searchableField.length=1)  // Convert to object
+										
+										$target.searchableField:=$target.searchableField[0]
+										
+										//…………………………………………………………………………………………………
+								End case 
+								
+							Else 
+								
+								If (Not:C34(This:C1470.fieldAvailable($tableID; $target.searchableField)))
+									
+									OB REMOVE:C1226($target; "searchableField")
+									
+								End if 
+							End if 
+						End if 
+						
+						// SECTION WIDGET -------------------------------------------------------------
+						If ($target.sectionField#Null:C1517)
+							
+							If (Not:C34(This:C1470.fieldAvailable($tableID; $target.sectionField)))
+								
+								OB REMOVE:C1226($target; "sectionField")
+								
+							End if 
+						End if 
+					End if 
+				End if 
+			End for each 
+		End if 
+	End for each 
+	
+	
+Function fieldDefinition
+	

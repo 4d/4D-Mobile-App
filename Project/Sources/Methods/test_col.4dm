@@ -15,10 +15,10 @@ $c:=$c.map("col_formula"; Formula:C1597($1.result:=Convert path system to POSIX:
 ASSERT:C1129($c[0]=Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16)))
 ASSERT:C1129($c[1]=Convert path system to POSIX:C1106(Get 4D folder:C485(Database folder:K5:14)))
 
-// Col_notNull
+// _o_Col_notNull
 $c:=New collection:C1472(Null:C1517; 1; Null:C1517; 2)
 $c[10]:=10
-$c:=$c.filter("col_notNull")
+$c:=$c.filter("col_formula"; Formula:C1597($1.result:=($1.value#Null:C1517)))
 ASSERT:C1129($c.length=3)
 ASSERT:C1129($c[0]=1)
 ASSERT:C1129($c[1]=2)

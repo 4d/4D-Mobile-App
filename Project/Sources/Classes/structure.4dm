@@ -378,7 +378,8 @@ Function fieldDefinition
 	End if 
 	
 	//==================================================================
-Function relatedCatalog  // Return related entity catalog
+	// Return related entity catalog
+Function relatedCatalog
 	var $0 : Object
 	var $1 : Text  // Table name
 	var $2 : Text  // RelatedEntity
@@ -494,6 +495,12 @@ Function relatedCatalog  // Return related entity catalog
 	End case 
 	
 	//==================================================================
+	// Return a table catalog
+Function tableCatalog($name : Text)->$tableCatalog : Object
+	
+	$tableCatalog:=This:C1470.catalog[This:C1470.catalog.indices("name = :1"; $name)[0]]
+	
+	//==================================================================
 Function tableNumber  // Table number from name
 	var $1 : Text
 	var $0 : Integer
@@ -503,6 +510,144 @@ Function tableNumber  // Table number from name
 	If (This:C1470.success)
 		
 		$0:=This:C1470.datastore[$1].getInfo().tableNumber
+		
+	End if 
+	
+	//==================================================================
+	// Adding a field to a table data model
+Function addField($table : Object; $field : Object)
+	var $fieldID : Text
+	var $type : Integer
+	var $relatedCatalog; $relatedField : Object
+	var $c : Collection
+	
+	$type:=Num:C11($field.type)
+	
+	Case of 
+			
+			//………………………………………………………………………………………………………
+		: ($type=-1)  // N -> 1 relation
+			
+			// Add all related fields
+			$relatedCatalog:=This:C1470.relatedCatalog($table[""].name; $field.name; True:C214)
+			
+			$table[$field.name]:=New object:C1471(\
+				"relatedDataClass"; $relatedCatalog.relatedDataClass; \
+				"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
+				"inverseName"; $relatedCatalog.inverseName)
+			
+			For each ($relatedField; $relatedCatalog.fields)
+				
+				$fieldID:=String:C10($relatedField.fieldNumber)
+				$c:=Split string:C1554($relatedField.path; ".")
+				
+				// Create the field, if any
+				If ($c.length>1)
+					
+					If ($table[$field.name][$c[0]]=Null:C1517)
+						
+						$table[$field.name][$c[0]]:=New object:C1471(\
+							"relatedDataClass"; $relatedField.tableName; \
+							"relatedTableNumber"; $relatedField.tableNumber; \
+							"inverseName"; This:C1470.tableCatalog($table[""].name).field.query("name=:1"; $field.name).pop().inverseName)
+						
+					End if 
+					
+					If ($table[$field.name][$c[0]][$fieldID]=Null:C1517)
+						
+						$table[$field.name][$c[0]][$fieldID]:=New object:C1471(\
+							"name"; $relatedField.name; \
+							"path"; $relatedField.path; \
+							"label"; PROJECT.label($relatedField.name); \
+							"shortLabel"; PROJECT.shortLabel($relatedField.name); \
+							"type"; $relatedField.type; \
+							"fieldType"; $relatedField.fieldType)
+						
+					End if 
+					
+				Else 
+					
+					If (Bool:C1537($relatedField.isToMany))
+						
+						If ($table[$field.name][$relatedField.name]=Null:C1517)
+							
+							$table[$field.name][$relatedField.name]:=New object:C1471(\
+								"name"; $relatedField.name; \
+								"relatedDataClass"; $relatedField.relatedDataClass; \
+								"path"; $field.name+"."+$relatedField.path; \
+								"label"; PROJECT.labelList($relatedField.name); \
+								"shortLabel"; PROJECT.label($relatedField.name); \
+								"inverseName"; $relatedField.inverseName; \
+								"isToMany"; True:C214)
+							
+						End if 
+						
+					Else 
+						
+						If ($table[$field.name][$fieldID]=Null:C1517)
+							
+							$table[$field.name][$fieldID]:=New object:C1471(\
+								"name"; $relatedField.name; \
+								"path"; $relatedField.path; \
+								"label"; PROJECT.label($relatedField.name); \
+								"shortLabel"; PROJECT.shortLabel($relatedField.name); \
+								"type"; $relatedField.type; \
+								"fieldType"; $relatedField.fieldType)
+							
+						End if 
+					End if 
+				End if 
+			End for each 
+			
+			//………………………………………………………………………………………………………
+		: ($type=-2)  // 1 -> N relation
+			
+			$table[$field.name]:=New object:C1471(\
+				"label"; PROJECT.label(cs:C1710.str.new("listOf").localized($field.name)); \
+				"shortLabel"; PROJECT.label($field.name); \
+				"relatedEntities"; $field.relatedDataClass; \
+				"relatedTableNumber"; $field.relatedTableNumber; \
+				"inverseName"; $field.inverseName)
+			
+			//………………………………………………………………………………………………………
+		Else 
+			
+			// Add the field to data model
+			$table[String:C10($field.id)]:=New object:C1471(\
+				"name"; $field.name; \
+				"label"; PROJECT.label($field.name); \
+				"shortLabel"; PROJECT.label($field.name); \
+				"fieldType"; $field.fieldType)
+			
+			// #TEMPO
+			$table[String:C10($field.id)].type:=$field.type
+			
+			//………………………………………………………………………………………………………
+	End case 
+	
+	//==================================================================
+	// Removing a field from a table data model
+Function removeField($table : Object; $fieldOrKey : Variant)
+	
+	If (Value type:C1509($fieldOrKey)=Is object:K8:27)
+		
+		If (Num:C11($fieldOrKey.type)<0)  // Relation
+			
+			If ($table[$fieldOrKey.name]#Null:C1517)
+				
+				OB REMOVE:C1226($table; $fieldOrKey.name)
+				
+			End if 
+			
+		Else 
+			
+			OB REMOVE:C1226($table; String:C10($fieldOrKey.id))
+			
+		End if 
+		
+	Else 
+		
+		OB REMOVE:C1226($table; String:C10($fieldOrKey))
 		
 	End if 
 	

@@ -26,12 +26,10 @@ If (False:C215)
 	C_TEXT:C284(views_LAYOUT_PICKER; $1)
 	
 	// ----------------------------------------------------
-	C_TEXT:C284(views_preview; $0)
-	C_TEXT:C284(views_preview; $1)
-	C_OBJECT:C1216(views_preview; $2)
+	C_OBJECT:C1216(VIEWS_DRAW_FORM; $1)
 	
 	// ----------------------------------------------------
-	C_TEXT:C284(views_UPDATE; $1)
+	//C_TEXT(views_UPDATE; $1)
 	
 	// ----------------------------------------------------
 End if 

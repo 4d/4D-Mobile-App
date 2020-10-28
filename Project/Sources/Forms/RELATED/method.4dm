@@ -4,8 +4,7 @@
 // Created 12-12-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-var $row : Integer
-var $e; $o : Object
+var $e : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -23,15 +22,6 @@ Case of
 			"alignment"; Align right:K42:4))
 		
 		OBJECT SET TITLE:C194(*; "title"; Replace string:C233(Get localized string:C991("relatedTable"); "{entity}"; String:C10(Form:C1466.relatedDataClass)))
-		
-		//For each ($o; Form.fields)
-		
-		//$row:=$row+1
-		
-		//$style:=Choose(Position("."; this.path)>0;Italic;Plain)
-		//End for each 
-		
-		
 		
 		SET TIMER:C645(-1)
 		

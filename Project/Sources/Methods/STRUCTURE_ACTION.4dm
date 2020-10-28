@@ -192,7 +192,6 @@ If ($Obj_popup.popup().selected)
 			$Boo_value:=($Obj_popup.choice="publish")
 			
 			// For each selected items
-			
 			Repeat 
 				
 				$Lon_x:=Find in array:C230($Ptr_me->; True:C214; $Lon_x+1)

@@ -96,7 +96,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="5">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="428.92578125" top="680.484375" width="97" height="146.33203125"/>
+				<coordinates left="428.92578125" top="680.484375" width="98.27734375" height="159.0546875"/>
 			</editor_table_info>
 		</table_extra>
 	</table>

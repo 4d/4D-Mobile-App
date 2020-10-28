@@ -10,11 +10,16 @@
 // Declarations
 var $1 : Object
 
+If (False:C215)
+	C_OBJECT:C1216(STRUCTURE_UPDATE; $1)
+End if 
+
 var $t : Text
 var $found : Boolean
-var $indx; $type : Integer
-var $context; $currentTable; $dataModel; $field; $form; $o; $oo; $table : Object
+var $indx : Integer
+var $context; $currentTable; $dataModel; $field; $form; $o; $table : Object
 var $published : Collection
+var $structure : cs:C1710.structure
 
 // ----------------------------------------------------
 // Initialisations
@@ -33,10 +38,12 @@ $dataModel:=PROJECT.dataModel
 
 $context:=$form.form
 $currentTable:=$context.currentTable
+
+$structure:=cs:C1710.structure.new()
+
 $published:=New collection:C1472
 
 // ----------------------------------------------------
-
 // GET THE PUBLISHED FIELD NAMES LIST
 ARRAY TO COLLECTION:C1563($published; ($form.publishedPtr)->; "published"; (UI.pointer($form.fields))->; "name")
 
@@ -58,7 +65,7 @@ Else
 	
 	If ($table=Null:C1517)
 		
-		// ADD TABLE
+		// Add the table to the data model
 		$table:=PROJECT.addTable($currentTable)
 		
 		// UI - Emphasize the table name
@@ -67,11 +74,11 @@ Else
 		
 	End if 
 	
-	// For each published field
+	// For each item into the list
 	For each ($o; $published)
 		
-		// Find if the field exists in the data model [
-		CLEAR VARIABLE:C89($found)
+		// Search if the item exists in the data model
+		$found:=False:C215
 		
 		For each ($t; $table) Until ($found)
 			
@@ -123,7 +130,6 @@ Else
 					//………………………………………………………………………………………………………
 			End case 
 		End for each 
-		//]
 		
 		If (Not:C34($found))
 			
@@ -132,113 +138,17 @@ Else
 			
 		End if 
 		
-		$type:=Num:C11($field.type)
-		
 		Case of 
 				
 				//_____________________________________________________
-			: (Num:C11($o.published)=1)\
-				 & (Not:C34($found))  // ADDED
+			: (Num:C11($o.published)=1) & Not:C34($found)  // ADDED
 				
-				Case of 
-						
-						//………………………………………………………………………………………………………
-					: ($type=-1)  // N -> 1 relation
-						
-						// 🕛 #MARK_TO_OPTIMIZE
-						
-						// Add all related fields
-						$o:=_o_structure(New object:C1471(\
-							"action"; "relatedCatalog"; \
-							"table"; $table[""].name; \
-							"relatedEntity"; $o.name))
-						
-						If (Asserted:C1132($o.success))
-							
-							$table[$field.name]:=New object:C1471(\
-								"relatedDataClass"; $field.relatedDataClass; \
-								"relatedTableNumber"; $o.relatedTableNumber; \
-								"inverseName"; $o.inverseName)
-							
-							For each ($oo; $o.fields)
-								
-								If ($oo.fieldType>=0)
-									
-									$table[$field.name][String:C10($oo.fieldNumber)]:=New object:C1471(\
-										"name"; $oo.name; \
-										"label"; formatString("label"; $oo.name); \
-										"shortLabel"; formatString("label"; $oo.name); \
-										"fieldType"; $oo.fieldType; \
-										"relatedTableNumber"; $o.relatedTableNumber)
-									
-									// #TEMPO [
-									$table[$field.name][String:C10($oo.fieldNumber)].type:=$oo.type
-									//]
-									
-								End if 
-							End for each 
-						End if 
-						
-						//………………………………………………………………………………………………………
-					: ($type=-2)  // 1 -> N relation
-						
-						$table[$field.name]:=New object:C1471(\
-							"label"; formatString("label"; _o_str("listOf").localized($field.name)); \
-							"shortLabel"; formatString("label"; $field.name); \
-							"relatedEntities"; $field.relatedDataClass; \
-							"relatedTableNumber"; $field.relatedTableNumber; \
-							"inverseName"; $field.inverseName)
-						
-						//………………………………………………………………………………………………………
-					Else 
-						
-						// Add the field to data model
-						$table[String:C10($field.id)]:=New object:C1471(\
-							"name"; $field.name; \
-							"label"; formatString("label"; $field.name); \
-							"shortLabel"; formatString("label"; $field.name); \
-							"fieldType"; $field.fieldType)
-						
-						// #TEMPO [
-						$table[String:C10($field.id)].type:=$field.type
-						//]
-						
-						//………………………………………………………………………………………………………
-				End case 
+				$structure.addField($table; $field)
 				
 				//_____________________________________________________
-			: (Num:C11($o.published)=0)\
-				 & ($found)  // REMOVED
+			: (Num:C11($o.published)=0) & $found  // REMOVED
 				
-				Case of 
-						
-						//………………………………………………………………………………………………………
-					: ($type=-1)  // N -> 1 relation
-						
-						// Remove all related fields
-						If ($table[$o.name]#Null:C1517)
-							
-							OB REMOVE:C1226($table; $o.name)
-							
-						End if 
-						
-						//………………………………………………………………………………………………………
-					: ($type=-2)  // 1 -> N relation
-						
-						If ($table[$o.name]#Null:C1517)
-							
-							OB REMOVE:C1226($table; $o.name)
-							
-						End if 
-						
-						//………………………………………………………………………………………………………
-					Else 
-						
-						// Remove the field
-						OB REMOVE:C1226($table; String:C10($field.id))
-						
-						//………………………………………………………………………………………………………
-				End case 
+				$structure.removeField($table; Choose:C955(Num:C11($field.type)<0; $o.name; $field.id))
 				
 				//_____________________________________________________
 			: (Num:C11($o.published)=0)
