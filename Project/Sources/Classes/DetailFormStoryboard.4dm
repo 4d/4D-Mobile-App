@@ -346,7 +346,7 @@ Function run
 		For each ($Obj_field; $Col_fields)
 			If (Num:C11($Obj_field.id)=0)  // relation to N field
 				
-				If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root).success)
+				If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root; Bool:C1537($Obj_field.isToMany)).success)
 					$Boo_buffer:=True:C214  // we make modification
 				End if 
 				
@@ -357,10 +357,6 @@ Function run
 		$Lon_j:=1
 		For each ($Obj_field; $Col_fields)
 			If (Num:C11($Obj_field.id)=0)  // relation to N field
-				
-/*If (Length(String($Obj_field.format))=0)
-$Obj_field.format:=$Obj_field.shortLabel  // replaced in mobile app // a little dirty if not configurable
-End if */
 				
 				This:C1470.injectSegue($Lon_j; $Dom_root; $Obj_field; $Obj_tags; $Obj_template; $Obj_out)
 				

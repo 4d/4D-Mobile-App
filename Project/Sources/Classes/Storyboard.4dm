@@ -678,6 +678,8 @@ Function xmlAppendRelationAttributeForField
 	$Lon_j:=$1
 	C_OBJECT:C1216($Dom_root; $2)
 	$Dom_root:=$2
+	C_BOOLEAN:C305($IsToMany; $3)
+	$IsToMany:=$3
 	C_OBJECT:C1216($Dom_; $0)
 	
 	
@@ -694,6 +696,14 @@ Function xmlAppendRelationAttributeForField
 		End if 
 		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationName]").success))
 			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationName\" value=\"___FIELD_"+String:C10($Lon_j)+"___\"/>"
+			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+		End if 
+		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationLabel]").success))
+			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationLabel\" value=\"___FIELD_"+String:C10($Lon_j)+"_LABEL___\"/>"
+			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+		End if 
+		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationIsToMany]").success))
+			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"boolean\" keyPath=\"relationIsToMany\" value=\""+Choose:C955($IsToMany; "YES"; "NO")+"\"/>"
 			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
 		End if 
 		

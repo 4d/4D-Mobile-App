@@ -420,7 +420,8 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 						$t+"_FORMAT___"; \
 						$t+"_BINDING_TYPE___"; \
 						$t+"_ICON___"; \
-						$t+"_LABEL_ALIGNMENT___"\
+						$t+"_LABEL_ALIGNMENT___"; \
+						$t+"_IS_TO_MANY_RELATION___"\
 						))
 					
 					$Col_newStrings.combine(New collection:C1472(\
@@ -431,7 +432,8 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 						$o.setText($Obj_field.format).xmlEncode(); \
 						$Obj_field.bindingType; \
 						$o.setText($Obj_field.detailIcon).xmlEncode(); \
-						$Obj_field.labelAlignment\
+						$Obj_field.labelAlignment; \
+						Choose:C955(Bool:C1537($Obj_field.isToMany); "YES"; "NO")\
 						))
 				End if 
 			End for each 
@@ -451,7 +453,8 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$t+"_FORMAT___"; \
 					$t+"_BINDING_TYPE___"; \
 					$t+"_ICON___"; \
-					$t+"_LABEL_ALIGNMENT___"\
+					$t+"_LABEL_ALIGNMENT___"; \
+					$t+"_IS_TO_MANY_RELATION___"\
 					))
 				
 				$Col_newStrings.combine(New collection:C1472(\
@@ -462,7 +465,8 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$o.setText($Obj_tags.field.format).xmlEncode(); \
 					$Obj_tags.field.bindingType; \
 					$o.setText($Obj_tags.field.detailIcon).xmlEncode(); \
-					$Obj_tags.field.labelAlignment\
+					$Obj_tags.field.labelAlignment; \
+					Choose:C955(Bool:C1537($Obj_tags.field.isToMany); "YES"; "NO")\
 					))
 				
 				If (Num:C11($Obj_tags.field.id)=0)  // isRelation
