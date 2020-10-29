@@ -18,7 +18,7 @@ var $background; $binding; $buffer; $class; $currentForm; $formName; $formType; 
 var $node; $style; $t; $tableID; $tips : Text
 var $found; $isToMany; $isToOne; $stop : Boolean
 var $avalaibleWidth; $count; $height; $indx; $width : Integer
-var $context; $field; $form; $manifest; $o; $relation; $target : Object
+var $context; $field; $font; $form; $manifest; $o; $relation; $target : Object
 var $svg : cs:C1710.svg
 var $template : cs:C1710.Template
 
@@ -298,23 +298,31 @@ If (Num:C11($tableID)>0)
 															//______________________________________________________
 													End case 
 													
-													// Truncate if necessary (#121515)
-													$buffer:=$label
-													$width:=$svg.getTextWidth($buffer)
-													$avalaibleWidth:=$svg.getAttribute(DOM Find XML element:C864($svg.parent($node); "rect"); "width")-34  // 34 is the cancel button width
+													// Get the label width (#121515)
+													$font:=New object:C1471(\
+														"fontFamily"; "sans-serif"; \
+														"size"; 12)
+													$width:=$svg.getTextWidth($label; $font)
+													
+													// Get the width of the container
+													$avalaibleWidth:=$svg.getAttribute($svg.previousSibling($node); "width")-34  // 34 is the grip of the cancel button
 													
 													If ($width>$avalaibleWidth)
+														
+														$buffer:=$label
 														
 														While ($width>$avalaibleWidth)
 															
 															$buffer:=Delete string:C232($buffer; Length:C16($buffer)-1; 2)
-															$width:=$svg.getTextWidth($buffer)
+															$width:=$svg.getTextWidth($buffer; $font)
 															
 														End while 
 														
+														// Add an ellipsis
 														$buffer:=$buffer+"…"
 														$svg.setValue($buffer; $node)
 														
+														// And set the tips
 														$tips:=$label
 														
 													Else 
