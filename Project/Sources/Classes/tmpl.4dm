@@ -375,29 +375,28 @@ Function update  // Load and update the template if any
 						
 						This:C1470.addClass("static"; $node)
 						
-					End if 
-					
-					If (This:C1470.detailform)
-						
-						$t:=This:C1470.getBinding($node)
-						
-						If ($t="all")
+						If (This:C1470.detailform)
 							
-							This:C1470.setAttribute("ios:type"; "-8859"; $node)
+							$t:=This:C1470.getBinding($node)
 							
-						Else 
-							
-							$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
-							
-							If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value<0))))
+							If ($t="all")
 								
-								$c.push(-8859)
-								This:C1470.setAttribute("ios:type"; $c.join(","); $node)
+								This:C1470.setAttribute("ios:type"; "-8859"; $node)
 								
 							Else 
 								
-								// <NOTHING MORE TO DO>
+								$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
 								
+								If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value<0))))
+									
+									$c.push(-8859)
+									This:C1470.setAttribute("ios:type"; $c.join(","); $node)
+									
+								Else 
+									
+									// <NOTHING MORE TO DO>
+									
+								End if 
 							End if 
 						End if 
 					End if 
@@ -539,11 +538,11 @@ Function label
 	
 	//============================================================================
 	// Check that a field type is validated against the bind attribute
-	//Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boolean
-Function isTypeAccepted
 	
 	//*****************************************
 	//*****************************************
+	//Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boolean
+Function isTypeAccepted
 	var $constraint; $1 : Variant
 	var $type; $2 : Integer
 	var $accepted; $0 : Boolean

@@ -1402,6 +1402,30 @@ Function isOfClass($class : Text; $node : Text)->$isOfclass : Boolean
 	
 	$isOfclass:=(Position:C15($class; String:C10(This:C1470.getAttribute($target; "class")))#0)
 	
+	//———————————————————————————————————————————————————————————
+	// Returns the passed text width
+Function getTextWidth($string : Text; $fontAttributes : Object)->$width : Integer
+	
+	var $picture : Picture
+	var $height : Integer
+	var $font : Object
+	
+	If (Count parameters:C259>=2)
+		
+		$font:=$fontAttributes
+		
+	Else 
+		
+		$font:=New object:C1471(\
+			"fontFamily"; "sans-serif"; \
+			"size"; 12)
+		
+	End if 
+	
+	$picture:=cs:C1710.svg.new().textArea($string).font($font).getPicture()
+	
+	PICTURE PROPERTIES:C457($picture; $width; $height)
+	
 /*——————————————————————————
 PRIVATE
 ——————————————————————————*/

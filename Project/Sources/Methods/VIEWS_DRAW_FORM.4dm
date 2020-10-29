@@ -14,10 +14,10 @@ If (False:C215)
 	C_OBJECT:C1216(VIEWS_DRAW_FORM; $1)
 End if 
 
-var $background; $binding; $buffer; $class; $currentForm; $formName; $formType; $key; $name; $node : Text
-var $style; $t; $tableID; $tips : Text
+var $background; $binding; $buffer; $class; $currentForm; $formName; $formType; $key; $label; $name : Text
+var $node; $style; $t; $tableID; $tips : Text
 var $found; $isToMany; $isToOne; $stop : Boolean
-var $count; $height; $indx : Integer
+var $avalaibleWidth; $count; $height; $indx; $width : Integer
 var $context; $field; $form; $manifest; $o; $relation; $target : Object
 var $svg : cs:C1710.svg
 var $template : cs:C1710.Template
@@ -253,14 +253,14 @@ If (Num:C11($tableID)>0)
 														: ($isToOne)
 															
 															$tips:=PROJECT.dataModel[$tableID][$field.name].label
-															$buffer:=cs:C1710.str.new(UI.toOne).concat($field.name)
+															$label:=cs:C1710.str.new(UI.toOne).concat($field.name)
 															
 															$relation:=PROJECT.dataModel[$tableID]
 															
 															If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$field.name].format); 1))
 																
 																$name:=Substring:C12($relation[$field.name].format; 2; Length:C16($relation[$field.name].format)-2)
-																$buffer:=$buffer+" ("+$name+")"
+																$label:=$label+" ("+$name+")"
 																
 															End if 
 															
@@ -288,17 +288,40 @@ If (Num:C11($tableID)>0)
 														: ($isToMany)  // Only available on list form
 															
 															$tips:=$field.label
-															$buffer:=cs:C1710.str.new(UI.toMany).concat($field.name)
+															$label:=cs:C1710.str.new(UI.toMany).concat($field.name)
 															
 															//______________________________________________________
 														Else 
 															
-															$buffer:=$field.name
+															$label:=$field.name
 															
 															//______________________________________________________
 													End case 
 													
-													$svg.setValue($buffer; $node)
+													// Truncate if necessary (#121515)
+													$buffer:=$label
+													$width:=$svg.getTextWidth($buffer)
+													$avalaibleWidth:=$svg.getAttribute(DOM Find XML element:C864($svg.parent($node); "rect"); "width")-34  // 34 is the cancel button width
+													
+													If ($width>$avalaibleWidth)
+														
+														While ($width>$avalaibleWidth)
+															
+															$buffer:=Delete string:C232($buffer; Length:C16($buffer)-1; 2)
+															$width:=$svg.getTextWidth($buffer)
+															
+														End while 
+														
+														$buffer:=$buffer+"…"
+														$svg.setValue($buffer; $node)
+														
+														$tips:=$label
+														
+													Else 
+														
+														$svg.setValue($label; $node)
+														
+													End if 
 													
 													If ($isToOne | $isToMany)  // Relation
 														
