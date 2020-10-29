@@ -539,17 +539,17 @@ Function label
 	
 	//============================================================================
 	// Check that a field type is validated against the bind attribute
-	//Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boolean
-Function isTypeAccepted
+Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boolean
+	//Function isTypeAccepted
 	
 	//*****************************************
 	//*****************************************
-	var $constraint; $1 : Variant
-	var $type; $2 : Integer
-	var $accepted; $0 : Boolean
+	//var $constraint; $1 : Variant
+	//var $type; $2 : Integer
+	//var $accepted; $0 : Boolean
 	
-	$constraint:=$1
-	$type:=$2
+	//$constraint:=$1
+	//$type:=$2
 	//*****************************************
 	//*****************************************
 	
@@ -603,7 +603,7 @@ Function isTypeAccepted
 	
 	//*****************************************
 	//*****************************************
-	$0:=$accepted
+	//$0:=$accepted
 	//*****************************************
 	//*****************************************
 	
