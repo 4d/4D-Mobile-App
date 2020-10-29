@@ -141,8 +141,8 @@ Function fieldList
 										
 										$o:=OB Copy:C1225($table[$key][$attribute])
 										$o.id:=0
-										$o.name:="#"+$attribute
-										$o.path:="#"+$attribute+"."+$key
+										$o.name:=$attribute
+										$o.path:=$key+"."+$attribute
 										$o.fieldType:=Choose:C955(Bool:C1537($o.isToMany); 8859; 8858)
 										$o.$added:=True:C214
 										$0.fields.push($o)
