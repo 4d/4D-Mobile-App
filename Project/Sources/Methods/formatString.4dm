@@ -226,6 +226,51 @@ Case of
 			
 		End if 
 		
+		//______________________________________________________
+	: ($t_format="storyboardProduct")
+		
+		C_LONGINT:C283($l)
+		C_TEXT:C284($t; $tt)
+		// Space and some charaters are replaced by _
+		// Some accuented charactere are replaced by one without accent but with _
+		// japanese, other ss all are not replaced...
+		
+		$t:=$t_string
+		$tt:="abcdefghijklmnopqrstuvwxyz"
+		For ($i; 1; Length:C16($tt); 1)
+			
+			$l:=0
+			
+			Repeat 
+				
+				$l:=Position:C15($tt[[$i]]; $t; $l+1)
+				
+				If ($l>0)
+					
+					If (Position:C15($t[[$l]]; Uppercase:C13($t[[$l]]; *); *)>0)
+						
+						// UPPERCASE
+						$t[[$l]]:=Uppercase:C13($t[[$l]])
+						
+					Else 
+						
+						// lowercase
+						$t[[$l]]:=Lowercase:C14($t[[$l]])
+						
+					End if 
+				End if 
+			Until ($l=0)
+		End for 
+		
+		$t_formated:=""
+		For ($i; 1; Length:C16($t); 1)
+			$t_formated:=$t_formated+$t[[$i]]
+			If (Compare strings:C1756($t[[$i]]; $t_string[[$i]]; 0)#0)
+				$t_formated:=$t_formated+"_"
+			End if 
+		End for 
+		
+		$t_formated:=Replace string:C233($t_formated; " "; "_")
 		
 		//______________________________________________________
 	: ($t_format="coreData")
