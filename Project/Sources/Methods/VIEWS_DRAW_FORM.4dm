@@ -33,7 +33,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$form:=$1
 	
 	$context:=$form.$
-	
 	$tableID:=$context.tableNum()
 	
 End if 
@@ -76,7 +75,7 @@ If (Num:C11($tableID)>0)
 					// Define the remove image
 					If (let(->$node; Formula:C1597($svg.findById("cancel")); Formula:C1597($svg.success)))
 						
-						$svg.setAttribute("xlink:href"; $template.cancel(); DOM Find XML element:C864($node; "image"))
+						$svg.setAttribute("xlink:href"; $template.cancel(); $svg.firstChild($node; "image"))
 						
 					End if 
 					
@@ -301,7 +300,8 @@ If (Num:C11($tableID)>0)
 													// Get the label width (#121515)
 													$font:=New object:C1471(\
 														"fontFamily"; "sans-serif"; \
-														"size"; 12)
+														"size"; 12)  // #TO_DO: Must be recovered from the css file
+													
 													$width:=$svg.getTextWidth($label; $font)
 													
 													// Get the width of the container
@@ -354,7 +354,7 @@ If (Num:C11($tableID)>0)
 													// Remove dotted lines
 													$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
 													
-													// Show delete button
+													// Display delete button
 													$svg.visible(True:C214; $svg.findById("f"+$t+".cancel"))
 													
 												End if 
@@ -430,8 +430,7 @@ If (Num:C11($tableID)>0)
 					
 				Else 
 					
-					// #OLD RENDERER
-					VIEW_RENDERER_v1($svg; $context)
+					VIEW_RENDERER_v1($svg; $context)  // #OLD RENDERER
 					
 					$context.previewHeight:=440
 					

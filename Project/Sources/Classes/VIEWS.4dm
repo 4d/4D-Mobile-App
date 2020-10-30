@@ -9,7 +9,7 @@ Function fieldList
 	var $1 : Variant
 	
 	var $attribute; $key; $tableID : Text
-	var $o; $table : Object
+	var $field; $table : Object
 	
 	ASSERT:C1129(Count parameters:C259>=1; "Missing parameter")
 	
@@ -53,16 +53,16 @@ Function fieldList
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isField($key))
 						
-						$o:=OB Copy:C1225($table[$key])
+						$field:=OB Copy:C1225($table[$key])
 						
 						// #TEMPO [
-						$o.id:=Num:C11($key)
-						$o.fieldNumber:=Num:C11($key)
+						$field.id:=Num:C11($key)
+						$field.fieldNumber:=Num:C11($key)
 						//]
 						
-						$o.path:=$o.name
+						$field.path:=$field.name
 						
-						$0.fields.push($o)
+						$0.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isRelationToOne($table[$key]))
@@ -71,19 +71,14 @@ Function fieldList
 							
 							If (Form:C1466.dataModel[String:C10($table[$key].relatedTableNumber)]#Null:C1517)
 								
-								If ($table[$key].label=Null:C1517)
-									
-									$table[$key].label:=PROJECT.label($key)
-									
-								End if 
+								//If ($table[$key].label=Null)
+								//$table[$key].label:=PROJECT.label($key)
+								//End if 
+								//If ($table[$key].shortLabel=Null)
+								//$table[$key].shortLabel:=PROJECT.shortLabel($key)
+								//End if 
 								
-								If ($table[$key].shortLabel=Null:C1517)
-									
-									$table[$key].shortLabel:=PROJECT.shortLabel($key)
-									
-								End if 
-								
-								$o:=New object:C1471(\
+								$field:=New object:C1471(\
 									"name"; $key; \
 									"path"; $key; \
 									"fieldType"; 8858; \
@@ -95,10 +90,10 @@ Function fieldList
 									"$added"; True:C214)
 								
 								// #TEMPO [
-								$o.id:=0
+								$field.id:=0
 								//]
 								
-								$0.fields.push($o)
+								$0.fields.push($field)
 								
 							End if 
 						End if 
@@ -115,18 +110,18 @@ Function fieldList
 									//______________________________________________________
 								: (PROJECT.isField($attribute))
 									
-									$o:=OB Copy:C1225($table[$key][$attribute])
+									$field:=OB Copy:C1225($table[$key][$attribute])
 									
 									// #TEMPO [
-									$o.id:=Num:C11($attribute)
-									$o.fieldNumber:=Num:C11($attribute)
+									$field.id:=Num:C11($attribute)
+									$field.fieldNumber:=Num:C11($attribute)
 									//]
 									
-									$o.path:=$key+"."+$o.name
+									$field.path:=$key+"."+$field.name
 									
 									//$o.path:="┊"+$o.path
 									
-									$0.fields.push($o)
+									$0.fields.push($field)
 									
 									//______________________________________________________
 								: (Not:C34(FEATURE.with("moreRelations")))
@@ -139,13 +134,13 @@ Function fieldList
 									If ($0.fields.query("path = :1"; $attribute).pop()=Null:C1517)
 										
 										
-										$o:=OB Copy:C1225($table[$key][$attribute])
-										$o.id:=0
-										$o.name:=$attribute
-										$o.path:=$key+"."+$attribute
-										$o.fieldType:=Choose:C955(Bool:C1537($o.isToMany); 8859; 8858)
-										$o.$added:=True:C214
-										$0.fields.push($o)
+										$field:=OB Copy:C1225($table[$key][$attribute])
+										$field.id:=0
+										$field.name:=$attribute
+										$field.path:=$key+"."+$attribute
+										$field.fieldType:=Choose:C955(Bool:C1537($field.isToMany); 8859; 8858)
+										$field.$added:=True:C214
+										$0.fields.push($field)
 										
 									End if 
 									
@@ -159,25 +154,25 @@ Function fieldList
 						
 						If (Form:C1466.$dialog.VIEWS.template.detailform)
 							
-							$o:=OB Copy:C1225($table[$key])
+							$field:=OB Copy:C1225($table[$key])
 							
-							$o.name:=$key
-							$o.fieldType:=8859
+							$field.name:=$key
+							$field.fieldType:=8859
 							
 							// #TEMPO [
-							$o.id:=0
-							$o.fieldNumber:=0
+							$field.id:=0
+							$field.fieldNumber:=0
 							//]
 							
-							$o.path:=$key
+							$field.path:=$key
 							
-							$0.fields.push($o)
+							$0.fields.push($field)
 							
 						Else 
 							
 							If (FEATURE.with("moreRelations"))
 								
-								$o:=New object:C1471(\
+								$field:=New object:C1471(\
 									"name"; $key; \
 									"path"; $key; \
 									"fieldType"; 8859; \
@@ -189,10 +184,10 @@ Function fieldList
 									"relatedTableNumber"; $table[$key].relatedTableNumber)
 								
 								// #TEMPO [
-								$o.id:=0
+								$field.id:=0
 								//]
 								
-								$0.fields.push($o)
+								$0.fields.push($field)
 								
 							End if 
 						End if 

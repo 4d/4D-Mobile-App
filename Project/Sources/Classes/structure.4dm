@@ -534,7 +534,9 @@ Function addField($table : Object; $field : Object)
 			$table[$field.name]:=New object:C1471(\
 				"relatedDataClass"; $relatedCatalog.relatedDataClass; \
 				"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
-				"inverseName"; $relatedCatalog.inverseName)
+				"inverseName"; $relatedCatalog.inverseName; \
+				"label"; PROJECT.label($relatedField.name); \
+				"shortLabel"; PROJECT.shortLabel($relatedField.name))
 			
 			For each ($relatedField; $relatedCatalog.fields)
 				

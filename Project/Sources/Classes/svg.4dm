@@ -180,7 +180,7 @@ Function id
 	
 	var $node : Text
 	
-	$node:=This:C1470.__target()
+	$node:=This:C1470._target()
 	
 	DOM SET XML ATTRIBUTE:C866($node; \
 		"id"; $1)
@@ -222,7 +222,7 @@ Function rect
 			
 			If (Count parameters:C259>=2)
 				
-				$node:=This:C1470.__target($3)
+				$node:=This:C1470._target($3)
 				
 			Else 
 				
@@ -232,7 +232,7 @@ Function rect
 			
 		Else 
 			
-			$node:=This:C1470.__target($3)
+			$node:=This:C1470._target($3)
 			
 		End if 
 	End if 
@@ -264,11 +264,11 @@ Function group
 	
 	If (Count parameters:C259>=1)
 		
-		$node:=This:C1470.__target($1)
+		$node:=This:C1470._target($1)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -290,7 +290,7 @@ Function position
 	
 	var $node : Text
 	
-	$node:=This:C1470.__target()
+	$node:=This:C1470._target()
 	This:C1470.success:=($node#This:C1470.root)
 	
 	If (This:C1470.success)
@@ -348,7 +348,7 @@ Function dimensions
 	
 	$parameterCount:=Count parameters:C259
 	
-	$node:=This:C1470.__target()
+	$node:=This:C1470._target()
 	DOM GET XML ELEMENT NAME:C730($node; $t)
 	
 	If ($t="textArea")
@@ -425,11 +425,11 @@ Function font
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -481,11 +481,11 @@ Function fontFamily
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -504,11 +504,11 @@ Function fontSize
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -528,11 +528,11 @@ Function fontStyle
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -595,11 +595,11 @@ Function alignment
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -692,11 +692,11 @@ Function textRendering
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -727,7 +727,7 @@ Function setAttribute
 		
 	Else 
 		
-		Super:C1706.setAttribute(This:C1470.__target(); $1; $2)
+		Super:C1706.setAttribute(This:C1470._target(); $1; $2)
 		
 	End if 
 	
@@ -752,7 +752,7 @@ Function setAttributes
 			
 			If ($1#Null:C1517)
 				
-				$node:=This:C1470.__target($1)
+				$node:=This:C1470._target($1)
 				
 				$c:=OB Entries:C1720($1)
 				
@@ -773,7 +773,7 @@ Function setAttributes
 			
 			If ($o#Null:C1517)
 				
-				$node:=This:C1470.__target($o.value)
+				$node:=This:C1470._target($o.value)
 				
 			Else 
 				
@@ -831,17 +831,17 @@ Function setValue
 		If (Count parameters:C259>=3)
 			
 			$isCDATA:=$3
-			$node:=This:C1470.__target(String:C10($2))
+			$node:=This:C1470._target(String:C10($2))
 			
 		Else 
 			
 			If (Value type:C1509($2)=Is text:K8:3)
 				
-				$node:=This:C1470.__target($2)
+				$node:=This:C1470._target($2)
 				
 			Else 
 				
-				$node:=This:C1470.__target()
+				$node:=This:C1470._target()
 				$isCDATA:=Bool:C1537($2)
 				
 			End if 
@@ -849,7 +849,7 @@ Function setValue
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -875,11 +875,11 @@ Function fill
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -907,11 +907,11 @@ Function fillOpacity
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -939,11 +939,11 @@ Function stroke
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -962,11 +962,11 @@ Function strokeOpacity
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -987,11 +987,11 @@ Function embedPicture
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -1042,11 +1042,11 @@ Function image
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -1108,11 +1108,11 @@ Function textArea
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -1319,7 +1319,7 @@ Function visible
 	
 	If (Count parameters:C259>=2)
 		
-		$node:=This:C1470.__target($2)
+		$node:=This:C1470._target($2)
 		This:C1470.setAttribute("visibility"; Choose:C955($1; "visible"; "hidden"); $node)
 		
 	Else 
@@ -1342,7 +1342,7 @@ Function class  // Set the node class
 		
 	Else 
 		
-		Super:C1706.setAttribute(This:C1470.__target(); "class"; $1)
+		Super:C1706.setAttribute(This:C1470._target(); "class"; $1)
 		
 	End if 
 	
@@ -1362,7 +1362,7 @@ Function addClass  // Add a value to the node class
 		
 	Else 
 		
-		$node:=This:C1470.__target()
+		$node:=This:C1470._target()
 		
 	End if 
 	
@@ -1396,7 +1396,7 @@ Function isOfClass($class : Text; $node : Text)->$isOfclass : Boolean
 		
 	Else 
 		
-		$target:=This:C1470.__target()
+		$target:=This:C1470._target()
 		
 	End if 
 	
@@ -1408,28 +1408,26 @@ Function getTextWidth($string : Text; $fontAttributes : Object)->$width : Intege
 	
 	var $picture : Picture
 	var $height : Integer
-	var $font : Object
+	var $o : Object
 	
 	If (Count parameters:C259>=2)
 		
-		$font:=$fontAttributes
+		$o:=cs:C1710.svg.new().textArea($string).font($fontAttributes)
 		
 	Else 
 		
-		$font:=New object:C1471(\
-			"fontFamily"; "sans-serif"; \
-			"size"; 12)
+		// Keep the default font that should be: Times New Roman 12 pts.
+		$o:=cs:C1710.svg.new().textArea($string)
 		
 	End if 
 	
-	$picture:=cs:C1710.svg.new().textArea($string).font($font).getPicture()
-	
+	$picture:=$o.getPicture()
 	PICTURE PROPERTIES:C457($picture; $width; $height)
 	
 /*——————————————————————————
 PRIVATE
 ——————————————————————————*/
-Function __target
+Function _target
 	var $0 : Text
 	var $1 : Variant
 	
@@ -1480,7 +1478,7 @@ Function __target
 					End if 
 					
 					//_______________________________
-				: (This:C1470.__isReference($1))
+				: (This:C1470._isReference($1))
 					
 					$0:=$1  // The given reference
 					
@@ -1513,7 +1511,7 @@ Function __target
 				
 			Else 
 				
-				This:C1470.__target("latest")
+				This:C1470._target("latest")
 				
 			End if 
 			
