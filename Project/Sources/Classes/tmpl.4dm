@@ -538,20 +538,7 @@ Function label
 	
 	//============================================================================
 	// Check that a field type is validated against the bind attribute
-	
-	//*****************************************
-	//*****************************************
-Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boolean
-	//Function isTypeAccepted
-	//var $constraint; $1 : Variant
-	//var $type; $2 : Integer
-	//var $accepted; $0 : Boolean
-	
-	//$constraint:=$1
-	//$type:=$2
-	//*****************************************
-	//*****************************************
-	
+Function isTypeAccepted($bind : Variant; $type : Integer)->$accepted : Boolean
 	var $c : Collection
 	
 	If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
@@ -559,22 +546,22 @@ Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boo
 		Case of 
 				
 				//___________________________
-			: (Value type:C1509($constraint)=Is text:K8:3)
+			: (Value type:C1509($bind)=Is text:K8:3)
 				
-				If ($constraint="all")
+				If ($bind="all")
 					
 					$accepted:=True:C214
 					
 				Else 
 					
-					$c:=Split string:C1554($constraint; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+					$c:=Split string:C1554($bind; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
 					
 				End if 
 				
 				//___________________________
-			: (Value type:C1509($constraint)=Is collection:K8:32)
+			: (Value type:C1509($bind)=Is collection:K8:32)
 				
-				$c:=$constraint
+				$c:=$bind
 				
 				//___________________________
 			Else 
@@ -600,15 +587,9 @@ Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boo
 		End if 
 	End if 
 	
-	//*****************************************
-	//*****************************************
-	//$0:=$accepted
-	//*****************************************
-	//*****************************************
-	
 	//============================================================================
 	// Add a "one field" widget to the template
-Function appendOneField($index : Integer; $field : Object; $context : Object; $background : Text; $offset : Integer)->$height
+Function appendOneField($index : Integer; $field : Object; $context : Object; $background : Text; $offset : Integer)->$height : Integer
 	var $class; $key; $label; $name; $node; $style; $t; $tips : Text
 	var $found; $isToMany; $isToOne : Boolean
 	var $relation : Object
