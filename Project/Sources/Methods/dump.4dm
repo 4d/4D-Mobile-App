@@ -556,6 +556,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 														If ($Obj_rest.headers["Content-Type"]#Null:C1517)
 															If (Position:C15("image/"; $Obj_rest.headers["Content-Type"])=1)
 																$format:="."+Replace string:C233($Obj_rest.headers["Content-Type"]; "image/"; "")
+																If (Position:C15("+"; $format)>0)
+																	$format:=Substring:C12($format; 1; Position:C15("+"; $format)-1)
+																End if 
 															End if 
 														End if 
 														var $destinationFile : 4D:C1709.File
