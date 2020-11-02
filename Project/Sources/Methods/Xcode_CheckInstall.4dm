@@ -133,6 +133,21 @@ If ($out.XcodeAvailable)
 				End if 
 			End if 
 		End if 
+		
+	Else 
+		
+		$signal:=await_MESSAGE(New object:C1471(\
+			"target"; $in.caller; \
+			"action"; "show"; \
+			"type"; "confirm"; \
+			"title"; New collection:C1472("obsoleteVersionOfXcode"; "4dProductName"; SHARED.xCodeVersion); \
+			"additional"; New collection:C1472("wouldYouLikeToInstallFromTheAppStoreNow"; "\"Xcode\"")))
+		
+		If ($signal.validate)
+			
+			OPEN URL:C673(Get localized string:C991("appstore_xcode"); *)
+			
+		End if 
 	End if 
 	
 	If ($out.ready)
