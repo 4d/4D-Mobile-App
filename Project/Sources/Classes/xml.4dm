@@ -519,12 +519,8 @@ Function findByName
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
-Function findByAttribute
-	var $0 : Collection
-	var $1 : Text
-	var $2 : Text
-	var $3 : Text
-	var $4 : Text
+Function findByAttribute->$references
+	var ${1} : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -586,9 +582,12 @@ Function findByAttribute
 		End if 
 		
 		This:C1470.success:=Bool:C1537(OK)
-		$0:=New collection:C1472
-		ARRAY TO COLLECTION:C1563($0; $nodes)
-		
+		If (This:C1470.success)
+			
+			$references:=New collection:C1472
+			ARRAY TO COLLECTION:C1563($references; $nodes)
+			
+		End if 
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/

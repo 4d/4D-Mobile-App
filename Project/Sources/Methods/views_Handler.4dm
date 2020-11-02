@@ -327,7 +327,7 @@ Case of
 			
 			OB REMOVE:C1226($context; "update")
 			
-			If (DATABASE.isMatrix)
+			If (DATABASE.isMatrix)  //& False
 				
 				$o:=cs:C1710.VIEWS.new().fieldList($context.tableNum())
 				
@@ -356,6 +356,9 @@ Case of
 				
 				COLLECTION TO ARRAY:C1562($c; ($form.icons.pointer())->)
 				
+				var $structure : cs:C1710.structure
+				$structure:=cs:C1710.structure.new()
+				
 				// Highlight errors
 				For ($i; 1; Size of array:C274(($form.fields.pointer())->); 1)
 					
@@ -368,11 +371,24 @@ Case of
 						
 						If (Not:C34(Bool:C1537($o.$added)))
 							
-							If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
+							If ($o.fieldType=8859)
 								
-								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
+								If ($datamodel[String:C10($structure.tableNumber())]=Null:C1517)
+									
+									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
+									
+								End if 
+								
+							Else 
+								
+								If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
+									
+									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
+									
+								End if 
 								
 							End if 
+							
 						End if 
 					End if 
 				End for 

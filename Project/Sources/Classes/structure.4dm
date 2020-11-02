@@ -472,6 +472,7 @@ Function relatedCatalog
 								"path"; $o.name; \
 								"fieldType"; 8859; \
 								"relatedDataClass"; $o.relatedDataClass; \
+								"relatedTableNumber"; This:C1470.tableNumber($o.relatedDataClass); \
 								"inverseName"; $o.inverseName; \
 								"isToMany"; True:C214))
 							

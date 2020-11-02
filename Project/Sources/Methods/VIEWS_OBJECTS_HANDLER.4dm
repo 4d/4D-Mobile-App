@@ -173,7 +173,7 @@ Case of
 				// Update UI
 				If (Length:C16($tTable)#0)
 					
-					OB REMOVE:C1226($context; "manifest")
+					//OB REMOVE($context; "manifest")
 					
 					// Redraw
 					$form.form.refresh()

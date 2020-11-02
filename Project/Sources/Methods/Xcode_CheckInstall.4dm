@@ -113,23 +113,23 @@ If ($out.XcodeAvailable)
 						$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
 						
 					End if 
-				End if 
-				
-			Else 
-				
-				If (Position:C15("User canceled. (-128)"; $Xcode.lastError)>0)
-					
-					// NOTHING MORE TO DO
 					
 				Else 
 					
-					POST_MESSAGE(New object:C1471(\
-						"target"; $in.caller; \
-						"action"; "show"; \
-						"type"; "alert"; \
-						"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
-						"additional"; "tryDoingThisFromTheXcodeApplication"))
-					
+					If (Position:C15("User canceled. (-128)"; $Xcode.lastError)>0)
+						
+						// NOTHING MORE TO DO
+						
+					Else 
+						
+						POST_MESSAGE(New object:C1471(\
+							"target"; $in.caller; \
+							"action"; "show"; \
+							"type"; "alert"; \
+							"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
+							"additional"; "tryDoingThisFromTheXcodeApplication"))
+						
+					End if 
 				End if 
 			End if 
 		End if 

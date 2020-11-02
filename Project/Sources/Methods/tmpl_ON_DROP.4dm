@@ -91,16 +91,25 @@ If (Length:C16($cible)>0)
 							//______________________________________________________
 						: ($isToOne)  // N -> 1 relation
 							
-							If ($cCurrent.length=2)\
-								 & ($cDroped.length=1)  // Drop a relation on a field
+							If (Bool:C1537($current.isToMany))
 								
-								If ($cCurrent[0]=$cDroped[0])  // Same related table
+								// Replace
+								$relation:=$table[$cDroped[0]]
+								
+							Else 
+								
+								If ($cCurrent.length=2)\
+									 & ($cDroped.length=1)  // Drop a relation on a field
 									
-									// Keep the droped relation & add/update the format
-									$relation:=$table[$cDroped[0]]
-									$relation.format:="%"+$cCurrent[1]+"%"
-									
+									If ($cCurrent[0]=$cDroped[0])  // Same related table
+										
+										// Keep the droped relation & add/update the format
+										$relation:=$table[$cDroped[0]]
+										$relation.format:="%"+$cCurrent[1]+"%"
+										
+									End if 
 								End if 
+								
 							End if 
 							
 							//______________________________________________________
@@ -202,23 +211,32 @@ If (Length:C16($cible)>0)
 							End if 
 							
 							$fixed:=$template.manifest.fields.count
-							$indx:=$target.fields.indexOf(Null:C1517; $fixed)
 							
-							If ($indx=-1)
+							If ($fixed>0)
 								
-								If ($target.fields.length<$fixed)
+								$indx:=$target.fields.indexOf(Null:C1517; $fixed)
+								
+								If ($indx=-1)
 									
-									$target.fields[$fixed]:=$dropped
+									If ($target.fields.length<$fixed)
+										
+										$target.fields[$fixed]:=$dropped
+										
+									Else 
+										
+										$target.fields.push($dropped)
+										
+									End if 
 									
 								Else 
 									
-									$target.fields.push($dropped)
+									$target.fields[$indx]:=$dropped
 									
 								End if 
 								
 							Else 
 								
-								$target.fields[$indx]:=$dropped
+								$target.fields.push($dropped)
 								
 							End if 
 							

@@ -9,7 +9,7 @@ Function fieldList
 	var $1 : Variant
 	
 	var $attribute; $key; $tableID : Text
-	var $field; $table : Object
+	var $field; $tableModel : Object
 	
 	ASSERT:C1129(Count parameters:C259>=1; "Missing parameter")
 	
@@ -28,15 +28,15 @@ Function fieldList
 	
 	If ($0.success)
 		
-		$table:=Form:C1466.dataModel[$tableID]
+		$tableModel:=Form:C1466.dataModel[$tableID]
 		
-		$0.success:=($table#Null:C1517)
+		$0.success:=($tableModel#Null:C1517)
 		
 		If ($0.success)
 			
 			$0.fields:=New collection:C1472
 			
-			For each ($key; $table)
+			For each ($key; $tableModel)
 				
 				Case of 
 						
@@ -46,14 +46,14 @@ Function fieldList
 						// table meta-data
 						
 						//……………………………………………………………………………………………………………
-					: (Value type:C1509($table[$key])#Is object:K8:27)
+					: (Value type:C1509($tableModel[$key])#Is object:K8:27)
 						
 						// <NOTHING MORE TO DO>
 						
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isField($key))
 						
-						$field:=OB Copy:C1225($table[$key])
+						$field:=OB Copy:C1225($tableModel[$key])
 						
 						// #TEMPO [
 						$field.id:=Num:C11($key)
@@ -65,28 +65,21 @@ Function fieldList
 						$0.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
-					: (PROJECT.isRelationToOne($table[$key]))
+					: (PROJECT.isRelationToOne($tableModel[$key]))
 						
 						If (FEATURE.with("moreRelations"))
 							
-							If (Form:C1466.dataModel[String:C10($table[$key].relatedTableNumber)]#Null:C1517)
-								
-								//If ($table[$key].label=Null)
-								//$table[$key].label:=PROJECT.label($key)
-								//End if 
-								//If ($table[$key].shortLabel=Null)
-								//$table[$key].shortLabel:=PROJECT.shortLabel($key)
-								//End if 
+							If (Form:C1466.dataModel[String:C10($tableModel[$key].relatedTableNumber)]#Null:C1517)
 								
 								$field:=New object:C1471(\
 									"name"; $key; \
 									"path"; $key; \
 									"fieldType"; 8858; \
-									"relatedDataClass"; $table[$key].relatedDataclass; \
-									"inverseName"; $table[$key].inverseName; \
-									"label"; $table[$key].label; \
-									"shortlabel"; $table[$key].$t.shortLabel; \
-									"relatedTableNumber"; $table[$key].relatedTableNumber; \
+									"relatedDataClass"; $tableModel[$key].relatedDataclass; \
+									"inverseName"; $tableModel[$key].inverseName; \
+									"label"; $tableModel[$key].label; \
+									"shortlabel"; $tableModel[$key].$t.shortLabel; \
+									"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
 									"$added"; True:C214)
 								
 								// #TEMPO [
@@ -98,19 +91,22 @@ Function fieldList
 							End if 
 						End if 
 						
-						For each ($attribute; $table[$key])
+						
+						ASSERT:C1129(Not:C34(Shift down:C543))
+						
+						For each ($attribute; $tableModel[$key])
 							
 							Case of 
 									
 									//______________________________________________________
-								: (Value type:C1509($table[$key][$attribute])#Is object:K8:27)
+								: (Value type:C1509($tableModel[$key][$attribute])#Is object:K8:27)
 									
 									// <NOTHING MORE TO DO>
 									
 									//______________________________________________________
 								: (PROJECT.isField($attribute))
 									
-									$field:=OB Copy:C1225($table[$key][$attribute])
+									$field:=OB Copy:C1225($tableModel[$key][$attribute])
 									
 									// #TEMPO [
 									$field.id:=Num:C11($attribute)
@@ -133,13 +129,25 @@ Function fieldList
 									
 									If ($0.fields.query("path = :1"; $attribute).pop()=Null:C1517)
 										
-										
-										$field:=OB Copy:C1225($table[$key][$attribute])
+										$field:=OB Copy:C1225($tableModel[$key][$attribute])
 										$field.id:=0
 										$field.name:=$attribute
-										$field.path:=$key+"."+$attribute
-										$field.fieldType:=Choose:C955(Bool:C1537($field.isToMany); 8859; 8858)
+										
+										If (Bool:C1537($field.isToMany))
+											
+											
+											$field.path:=$key+"."+$attribute
+											$field.fieldType:=8859
+											
+										Else 
+											
+											$field.path:=$key+"."+$attribute
+											$field.fieldType:=8858
+											
+										End if 
+										
 										$field.$added:=True:C214
+										
 										$0.fields.push($field)
 										
 									End if 
@@ -150,11 +158,11 @@ Function fieldList
 						End for each 
 						
 						//……………………………………………………………………………………………………………
-					: (PROJECT.isRelationToMany($table[$key]))
+					: (PROJECT.isRelationToMany($tableModel[$key]))
 						
 						If (Form:C1466.$dialog.VIEWS.template.detailform)
 							
-							$field:=OB Copy:C1225($table[$key])
+							$field:=OB Copy:C1225($tableModel[$key])
 							
 							$field.name:=$key
 							$field.fieldType:=8859
@@ -176,12 +184,12 @@ Function fieldList
 									"name"; $key; \
 									"path"; $key; \
 									"fieldType"; 8859; \
-									"relatedDataClass"; $table[$key].relatedDataclass; \
-									"inverseName"; $table[$key].inverseName; \
-									"label"; PROJECT.label($table[$key].label); \
-									"shortlabel"; PROJECT.label($table[$key].$t.shortLabel); \
+									"relatedDataClass"; $tableModel[$key].relatedDataclass; \
+									"inverseName"; $tableModel[$key].inverseName; \
+									"label"; PROJECT.label($tableModel[$key].label); \
+									"shortlabel"; PROJECT.label($tableModel[$key].$t.shortLabel); \
 									"isToMany"; True:C214; \
-									"relatedTableNumber"; $table[$key].relatedTableNumber)
+									"relatedTableNumber"; $tableModel[$key].relatedTableNumber)
 								
 								// #TEMPO [
 								$field.id:=0
@@ -293,7 +301,19 @@ Function setTemplate($browser : Object; $form : Object)
 			
 			// Update project & save
 			$target.form:=$formName
-			OB REMOVE:C1226($context; "manifest")
+			
+			If ($target.fields=Null:C1517)
+				
+				$target.fields:=New collection:C1472
+				
+				If (Num:C11($template.manifest.fields.count)>0)
+					
+					$target.fields.resize($template.manifest.fields.count)
+					
+				End if 
+			End if 
+			
+			//OB REMOVE($context; "manifest")
 			PROJECT.save()
 			
 			If (ob_testPath(Form:C1466.$project; "status"; "project"))
