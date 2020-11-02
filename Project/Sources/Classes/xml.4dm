@@ -967,7 +967,7 @@ Function getAttribute($node : Text; $attribute : Text)->$value
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
 		
-		$o:=OB Entries:C1720(This:C1470.getAttributes($node)).query("key= : 1"; $attribute).pop()
+		$o:=OB Entries:C1720(This:C1470.getAttributes($node)).query("key = :1"; $attribute).pop()
 		This:C1470.success:=($o#Null:C1517)
 		
 		If (This:C1470.success)
