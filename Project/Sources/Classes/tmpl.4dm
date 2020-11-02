@@ -541,14 +541,14 @@ Function label
 	
 	//*****************************************
 	//*****************************************
-	//Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boolean
-Function isTypeAccepted
-	var $constraint; $1 : Variant
-	var $type; $2 : Integer
-	var $accepted; $0 : Boolean
+Function isTypeAccepted($constraint : Variant; $type : Integer)->$accepted : Boolean
+	//Function isTypeAccepted
+	//var $constraint; $1 : Variant
+	//var $type; $2 : Integer
+	//var $accepted; $0 : Boolean
 	
-	$constraint:=$1
-	$type:=$2
+	//$constraint:=$1
+	//$type:=$2
 	//*****************************************
 	//*****************************************
 	
@@ -602,7 +602,7 @@ Function isTypeAccepted
 	
 	//*****************************************
 	//*****************************************
-	$0:=$accepted
+	//$0:=$accepted
 	//*****************************************
 	//*****************************************
 	
