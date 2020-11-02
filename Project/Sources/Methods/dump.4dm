@@ -542,6 +542,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 														))
 													ob_error_combine($Obj_out; $Obj_rest)
 													
+													If ($Obj_rest.success)
+														If (Not:C34(Folder:C1567($File_output; fk platform path:K87:2).file($File_name+$format).exists))
+															$Obj_rest:=New object:C1471("success"; False:C215; "parent"; $Obj_rest)
+															ob_error_add($Obj_rest; "No image dumped into target "+$File_output+$File_name+$format)
+															ob_error_combine($Obj_out; $Obj_rest)
+														End if 
+													End if 
 												Else 
 													
 													// No need to dump. File already dumped.
