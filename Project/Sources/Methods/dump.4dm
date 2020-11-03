@@ -531,9 +531,26 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 												C_TEXT:C284($format)
 												$format:=$Obj_in.format
 												
-												CREATE FOLDER:C475($File_output+$File_name+$format; *)
+												var $ouputFolder : 4D:C1709.Folder
+												$ouputFolder:=Folder:C1567($File_output; fk platform path:K87:2)
+												If (Not:C34($ouputFolder.exists))
+													$ouputFolder.create()
+												End if 
 												
-												If ((Test path name:C476($File_output+$File_name+$format)#Is a document:K24:1) | ($format="best"))  // OPTI: we cannot presume file name with best by maybe we could find files (network or file access? coose)
+												C_BOOLEAN:C305($imageFound)
+												$imageFound:=False:C215
+												If ($format="best")
+													var $file : 4D:C1709.File
+													For each ($file; $ouputFolder.files()) Until ($imageFound)
+														If (Position:C15($File_name; $file.name)=1)
+															$imageFound:=True:C214
+															$File_name:=$file.fullName
+														End if 
+													End for each 
+												Else 
+													$imageFound:=$ouputFolder.file($File_name+$format).exists
+												End if 
+												If (Not:C34($imageFound))
 													
 													$Obj_rest:=Rest(New object:C1471("action"; "image"; \
 														"headers"; $Obj_in.headers; \
@@ -569,11 +586,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 															End if 
 														End if 
 														var $destinationFile : 4D:C1709.File
-														$destinationFile:=Folder:C1567($File_output; fk platform path:K87:2).parent.file($File_name+$format)
+														$destinationFile:=$ouputFolder.file($File_name+$format)
 														If ($destinationFile.exists)
 															$destinationFile.delete()
 														End if 
-														Folder:C1567($File_output; fk platform path:K87:2).file($File_name+"best").rename($File_name+$format)
+														$ouputFolder.file($File_name+"best").rename($File_name+$format)
 													End if 
 													
 													$File_name:=$File_name+$format
