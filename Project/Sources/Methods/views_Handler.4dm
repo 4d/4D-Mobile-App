@@ -371,24 +371,11 @@ Case of
 						
 						If (Not:C34(Bool:C1537($o.$added)))
 							
-							If ($o.fieldType=8859)
+							If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
 								
-								If ($datamodel[String:C10($structure.tableNumber())]=Null:C1517)
-									
-									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
-									
-								End if 
-								
-							Else 
-								
-								If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
-									
-									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
-									
-								End if 
+								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
 								
 							End if 
-							
 						End if 
 					End if 
 				End for 
