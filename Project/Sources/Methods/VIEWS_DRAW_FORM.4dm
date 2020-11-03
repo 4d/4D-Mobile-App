@@ -304,10 +304,42 @@ If (Num:C11($tableID)>0)
 													
 													$width:=$svg.getTextWidth($label; $font)
 													
-													// Get the width of the container
-													$avalaibleWidth:=$svg.getAttribute($svg.previousSibling($node); "width")-34  // 34 is the grip of the cancel button
+													// Try to get the width of the container
+													var $parent; $container : Text
+													$parent:=$svg.parent($node)
 													
-													If ($width>$avalaibleWidth)
+													If ($svg.getName($parent)="g")
+														
+														$container:=DOM Find XML element:C864($parent; "*[contains(@class,'bg field')]")
+														
+														Case of 
+																
+																//______________________________________________________
+															: (Not:C34(Bool:C1537(OK)))
+																
+																// Fails
+																
+																//______________________________________________________
+															: ($svg.getName($container)="rect")
+																
+																$avalaibleWidth:=Num:C11($svg.getAttribute($container; "width"))-38  // 38 for grip of the cancel button
+																
+																//______________________________________________________
+															: ($svg.getName($container)="circle")
+																
+																$avalaibleWidth:=(Num:C11($svg.getAttribute($container; "r"))*2)-10  // 10 is for margins
+																
+																//______________________________________________________
+															Else 
+																
+																// Not yet managed
+																
+																//______________________________________________________
+														End case 
+													End if 
+													
+													If ($avalaibleWidth>0)\
+														 & ($width>$avalaibleWidth)
 														
 														$buffer:=$label
 														
