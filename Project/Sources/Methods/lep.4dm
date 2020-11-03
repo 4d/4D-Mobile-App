@@ -240,7 +240,7 @@ Else
 						
 						If (Length:C16($t)>0)
 							
-							$o.success:=(Match regex:C1019("(?m-si)^(?:\\{.*\\})|(?:^\\[.*\\])$"; $t; 1))
+							$o.success:=(Match regex:C1019("(?ms-i)^(?:\\{.*\\})|(?:^\\[.*\\])$"; $t; 1))
 							
 						End if 
 						
