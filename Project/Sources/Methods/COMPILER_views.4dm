@@ -17,11 +17,6 @@ If (False:C215)
 End if 
 
 If (False:C215)
-	
-	// ----------------------------------------------------
-	C_OBJECT:C1216(views_fieldList; $0)
-	C_VARIANT:C1683(views_fieldList; $1)
-	
 	// ----------------------------------------------------
 	C_TEXT:C284(views_LAYOUT_PICKER; $1)
 	

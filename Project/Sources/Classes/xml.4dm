@@ -485,6 +485,35 @@ Function findByXPath
 	End if 
 	
 /*———————————————————————————————————————————————————————————*/
+Function find($nodeOrQuery : Text; $xPath : Text)->$references
+	
+	$references:=New collection:C1472()
+	ARRAY TEXT:C222($nodes; 0x0000)
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 1))
+		
+		If (This:C1470._isReference($nodeOrQuery))\
+			 & (Count parameters:C259>=2)
+			
+			$nodes{0}:=DOM Find XML element:C864($nodeOrQuery; $xPath; $nodes)
+			
+		Else 
+			
+			// Start at the root
+			$nodes{0}:=DOM Find XML element:C864(This:C1470.root; $nodeOrQuery; $nodes)
+			
+		End if 
+		
+		This:C1470.success:=Bool:C1537(OK)
+		
+		If (This:C1470.success)
+			
+			ARRAY TO COLLECTION:C1563($references; $nodes)
+			
+		End if 
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
 Function findByName
 	var $0 : Collection
 	var $1 : Text

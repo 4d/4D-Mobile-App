@@ -121,31 +121,27 @@ Function cleanup
 	var $0 : Object
 	var $1 : Object
 	
-	var $t : Text
+	var $o : Object
 	var $project : Object
 	
 	If (Count parameters:C259>=1)
 		
-		For each ($t; $1)
+		For each ($o; OB Entries:C1720($1).query("key =:1"; "$@"))
 			
-			If ($t[[1]]="$")
-				
-				OB REMOVE:C1226($1; $t)
-				
-			End if 
+			OB REMOVE:C1226($1; $o.key)
+			
 		End for each 
+		
+		$0:=$1
 		
 	Else 
 		
 		$project:=OB Copy:C1225(This:C1470)
 		
-		For each ($t; $project)
+		For each ($o; OB Entries:C1720($project).query("key =:1"; "$@"))
 			
-			If ($t[[1]]="$")
-				
-				OB REMOVE:C1226($project; $t)
-				
-			End if 
+			OB REMOVE:C1226($project; $o.key)
+			
 		End for each 
 		
 		$0:=$project

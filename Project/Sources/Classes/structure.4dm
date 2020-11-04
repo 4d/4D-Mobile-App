@@ -577,6 +577,7 @@ Function addField($table : Object; $field : Object)
 							$table[$field.name][$relatedField.name]:=New object:C1471(\
 								"name"; $relatedField.name; \
 								"relatedDataClass"; $relatedField.relatedDataClass; \
+								"relatedTableNumber"; This:C1470.tableNumber($relatedField.relatedDataClass); \
 								"path"; $field.name+"."+$relatedField.path; \
 								"label"; PROJECT.labelList($relatedField.name); \
 								"shortLabel"; PROJECT.label($relatedField.name); \

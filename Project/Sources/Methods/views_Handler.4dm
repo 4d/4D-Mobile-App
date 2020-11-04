@@ -327,15 +327,7 @@ Case of
 			
 			OB REMOVE:C1226($context; "update")
 			
-			If (DATABASE.isMatrix)  //& False
-				
-				$o:=cs:C1710.VIEWS.new().fieldList($context.tableNum())
-				
-			Else 
-				
-				$o:=views_fieldList($context.tableNum())
-				
-			End if 
+			$o:=cs:C1710.VIEWS.new($form).fieldList($context.tableNum())
 			
 			If ($o.success)
 				
@@ -462,7 +454,7 @@ Case of
 		
 		// quand la class VIEWS sera complète il n'y aura plus besoin de $form
 		// et cet appel pourra être directement fait depuis project_MESSAGES ?
-		cs:C1710.VIEWS.new().setTemplate($IN; $form)
+		cs:C1710.VIEWS.new($form).setTemplate($IN)
 		
 		//=========================================================
 	: ($IN.action="show")

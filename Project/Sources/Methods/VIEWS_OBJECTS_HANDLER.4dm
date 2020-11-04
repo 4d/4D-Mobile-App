@@ -8,18 +8,20 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($0)
-
-C_BLOB:C604($x)
-C_BOOLEAN:C305($bAvailable; $ok)
-C_LONGINT:C283($count; $i; $indx; $l)
-C_PICTURE:C286($p)
-C_TEXT:C284($tTable; $tTemplate; $tTypeForm)
-C_OBJECT:C1216($context; $e; $form; $menu; $o; $oTarget)
+var $0 : Integer
 
 If (False:C215)
 	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER; $0)
 End if 
+
+var $tTable; $tTemplate; $tTypeForm : Text
+var $p : Picture
+var $bAvailable; $ok : Boolean
+var $count; $i; $indx; $l : Integer
+var $x : Blob
+var $context; $e; $form; $menu; $o : Object
+var $fieldList : Collection
+var $view : cs:C1710.VIEWS
 
 // ----------------------------------------------------
 // Initialisations
@@ -199,6 +201,8 @@ Case of
 		//==================================================
 	: ($e.objectName=$form.fieldList.name)
 		
+		$view:=cs:C1710.VIEWS.new($form)
+		
 		Case of 
 				
 				//______________________________________________________
@@ -216,32 +220,16 @@ Case of
 						// Get the current field
 						//%W-533.3
 						$o:=($form.fields.pointer())->{$form.fieldList.row}
+						$o.name:=$o.path
 						//%W+533.3
 						
-						$ok:=($o.fieldType#8859)  // Not 1-N relation
+						$view.addField($o; Form:C1466[$tTypeForm][$context.tableNumber].fields)
 						
-						If (Not:C34($ok))
-							
-							// 1-N relation with published related data class
-							$ok:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
-							
-						End if 
+						// Update preview
+						$view.draw()
 						
-						If ($ok)
-							
-							// Add the field
-							$oTarget:=Form:C1466[$tTypeForm][$context.tableNumber]
-							
-							$o.name:=$o.path
-							$oTarget.fields.push($o)
-							
-							// Update preview
-							VIEWS_DRAW_FORM($form)
-							
-							// Save project
-							PROJECT.save()
-							
-						End if 
+						// Save project
+						PROJECT.save()
 						
 					Else 
 						
@@ -265,15 +253,15 @@ Case of
 					
 					If (Contextual click:C713) & ($tTypeForm="detail")
 						
-						$oTarget:=Form:C1466[$tTypeForm][$context.tableNumber]
+						$fieldList:=Form:C1466[$tTypeForm][$context.tableNumber].fields
 						
 						$count:=Size of array:C274(($form.fields.pointer())->)
 						
-						If ($count>$oTarget.fields.length)
+						If ($count>$fieldList.length)
 							
 							$menu:=cs:C1710.menu.new()
 							
-							If ($oTarget.fields.length=0)
+							If ($fieldList.length=0)
 								
 								$menu.append("addAllFields"; "all")
 								
@@ -295,23 +283,10 @@ Case of
 										For ($i; 1; $count; 1)
 											
 											$o:=($form.fields.pointer())->{$i}
+											$o.name:=$o.path
 											
-											$ok:=($o.fieldType#8859)  // Not 1-N relation
+											$view.addField($o; $fieldList)
 											
-											If (Not:C34($ok))
-												
-												// 1-N relation with published related data class
-												$ok:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
-												
-											End if 
-											
-											If ($ok)
-												
-												// Add the field
-												$o.name:=$o.path
-												$oTarget.fields.push($o)
-												
-											End if 
 										End for 
 										
 										//______________________________________________________
@@ -321,22 +296,16 @@ Case of
 											
 											$o:=($form.fields.pointer())->{$i}
 											
-											$ok:=($o.fieldType#8859)  // Not 1-N relation
-											
-											If (Not:C34($ok))
+											If ($fieldList.query("path = :1"; $o.path).pop()=Null:C1517)
 												
-												// 1-N relation with published related data class
-												$ok:=(Form:C1466.dataModel[String:C10($o.relatedTableNumber)]#Null:C1517)
-												
-											End if 
-											
-											If ($ok)\
-												 & ($oTarget.fields.query("fieldNumber = :1"; $o.fieldNumber).pop()=Null:C1517)
-												
-												// Add the field
-												$o.name:=$o.path
-												$oTarget.fields.push($o)
-												
+												If (Num:C11($o.fieldNumber)=0)\
+													 | ($fieldList.query("fieldNumber = :1"; Num:C11($o.fieldNumber)).pop()=Null:C1517)
+													
+													// Add the field
+													$o.name:=$o.path
+													$view.addField($o; $fieldList)
+													
+												End if 
 											End if 
 										End for 
 										
@@ -350,7 +319,7 @@ Case of
 								End case 
 								
 								// Update preview
-								VIEWS_DRAW_FORM($form)
+								$view.draw()
 								
 								// Save project
 								PROJECT.save()
@@ -604,7 +573,6 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
 				
-				var $x : Blob
 				GET PASTEBOARD DATA:C401("com.4d.private.ios.field"; $x)
 				
 				If (Bool:C1537(OK))

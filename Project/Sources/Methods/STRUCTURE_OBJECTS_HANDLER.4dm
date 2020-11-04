@@ -430,6 +430,7 @@ Case of
 																		$tableDataModel[$context.fieldName][$o.name]:=New object:C1471(\
 																			"name"; $o.name; \
 																			"relatedDataClass"; $o.relatedDataClass; \
+																			"relatedTableNumber"; $o.relatedTableNumber; \
 																			"path"; $context.fieldName+"."+$o.path; \
 																			"label"; PROJECT.labelList($o.name); \
 																			"shortLabel"; PROJECT.label($o.name); \

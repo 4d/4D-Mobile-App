@@ -15,10 +15,11 @@ If (False:C215)
 End if 
 
 var $background; $binding; $buffer; $class; $currentForm; $formName; $formType; $key; $label; $name : Text
-var $node; $style; $t; $tableID; $tips : Text
+var $node; $parent; $style; $t; $tableID; $tips : Text
 var $found; $isToMany; $isToOne; $stop : Boolean
 var $avalaibleWidth; $count; $height; $indx; $width : Integer
 var $context; $field; $font; $form; $manifest; $o; $relation; $target : Object
+var $nodes : Collection
 var $svg : cs:C1710.svg
 var $template : cs:C1710.Template
 
@@ -305,29 +306,29 @@ If (Num:C11($tableID)>0)
 													$width:=$svg.getTextWidth($label; $font)
 													
 													// Try to get the width of the container
-													var $parent; $container : Text
 													$parent:=$svg.parent($node)
 													
 													If ($svg.getName($parent)="g")
 														
-														$container:=DOM Find XML element:C864($parent; "*[contains(@class,'bg field')]")
+														$nodes:=$svg.find($parent; "*[contains(@class,'bg field')]")
 														
 														Case of 
 																
 																//______________________________________________________
-															: (Not:C34(Bool:C1537(OK)))
+															: (Not:C34(Bool:C1537(OK)))\
+																 | ($nodes.length=0)
 																
 																// Fails
 																
 																//______________________________________________________
-															: ($svg.getName($container)="rect")
+															: ($svg.getName($nodes[0])="rect")
 																
-																$avalaibleWidth:=Num:C11($svg.getAttribute($container; "width"))-38  // 38 for grip of the cancel button
+																$avalaibleWidth:=Num:C11($svg.getAttribute($nodes[0]; "width"))-38  // 38 for grip of the cancel button
 																
 																//______________________________________________________
-															: ($svg.getName($container)="circle")
+															: ($svg.getName($nodes[0])="circle")
 																
-																$avalaibleWidth:=(Num:C11($svg.getAttribute($container; "r"))*2)-10  // 10 is for margins
+																$avalaibleWidth:=(Num:C11($svg.getAttribute($nodes[0]; "r"))*2)-10  // 10 for margins
 																
 																//______________________________________________________
 															Else 
@@ -336,6 +337,11 @@ If (Num:C11($tableID)>0)
 																
 																//______________________________________________________
 														End case 
+														
+													Else 
+														
+														// Unknown structure
+														
 													End if 
 													
 													If ($avalaibleWidth>0)\
