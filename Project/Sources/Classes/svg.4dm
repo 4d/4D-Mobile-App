@@ -439,9 +439,6 @@ Function translate($x : Real; $y : Real; $node : Text)
 	If (Length:C16($t)>0)
 		
 		$c:=Split string:C1554($t; " ")
-		
-		$t:=
-		
 		$indx:=$c.indexOf("scale(@")
 		
 		If ($indx#-1)
@@ -526,9 +523,6 @@ Function scale($x : Real; $node : Text)
 	If (Length:C16($t)>0)
 		
 		$c:=Split string:C1554($t; " ")
-		
-		$t:=
-		
 		$indx:=$c.indexOf("scale(@")
 		
 		If ($indx#-1)
