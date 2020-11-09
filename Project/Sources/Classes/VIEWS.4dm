@@ -2,17 +2,67 @@
 Class constructor
 	var $1 : Object
 	
-	var $currentTemplate : Text
+	This:C1470.context:=editor_INIT
 	
-	$currentTemplate:=Current form name:C1298  // #COMPATIBILITY
-	This:C1470.template:=Form:C1466.$dialog[$currentTemplate].template
-	This:C1470.manifest:=This:C1470.template.manifest
+	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
+		
+		This:C1470.window:=Current form window:C827
+		
+		This:C1470.tableWidget:=cs:C1710.picture.new("tables")
+		
+		
+		This:C1470.tableButtonNext:=cs:C1710.button.new("next")
+		This:C1470.tableButtonPrevious:=cs:C1710.button.new("previous")
+		
+		This:C1470.tableNext:=cs:C1710.static.new("next@")
+		This:C1470.tablePrevious:=cs:C1710.static.new("previous@")
+		
+		This:C1470.tablist:=cs:C1710.button.new("tab.list")
+		This:C1470.tabdetail:=cs:C1710.button.new("tab.detail")
+		This:C1470.tabSelector:=cs:C1710.widget.new("tab.selector")
+		
+		This:C1470.noPublishedTable:=cs:C1710.widget.new("noPublishedTable")
+		
+		This:C1470.fieldList:=cs:C1710.listbox.new("01_fields")
+		
+		// Constraints definition
+		This:C1470.context.constraints:=New object:C1471("rules"; New collection:C1472)
+		This:C1470.context.constraints.push(New object:C1471(\
+			"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
+			"action"; "geometry")))))
+		
+		If (FEATURE.with("newViewUI"))
+			
+			This:C1470.context.constraints.push(New object:C1471(\
+				"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
+				"reference"; "viewport.preview"; \
+				"type"; "horizontal alignment"; \
+				"value"; "center"))
+			
+			This:C1470.context.constraints.push(New object:C1471(\
+				"object"; "preview.scrollBar"; \
+				"reference"; "preview"; \
+				"type"; "margin-left"; \
+				"value"; 20))
+			
+		End if 
+	End if 
+	
+	This:C1470._update()
 	
 	If (Count parameters:C259>=1)
 		
 		This:C1470.form:=$1  //#TEMPO
 		
 	End if 
+	
+	//============================================================================
+Function _update
+	var $t : Text
+	
+	$t:=Current form name:C1298  // #TEMPORARY_COMPATIBILITY
+	This:C1470.template:=Form:C1466.$dialog[$t].template
+	This:C1470.manifest:=This:C1470.template.manifest
 	
 	//============================================================================
 	// Redraw the preview

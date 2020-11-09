@@ -47,7 +47,7 @@ If (Asserted:C1132($project#Null:C1517))
 	If (project_Check_param($in).success)
 		
 		//#99788 ========================================================
-		EXECUTE METHOD IN SUBFORM:C1085("project"; "views_Handler"; *; New object:C1471(\
+		//EXECUTE METHOD IN SUBFORM("project"; "views_Handler"; *; New object(\
 			"action"; "updateForms"))
 		
 		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()

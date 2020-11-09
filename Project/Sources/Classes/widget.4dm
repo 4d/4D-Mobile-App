@@ -51,6 +51,38 @@ Class constructor
 	
 	This:C1470.action:=OBJECT Get action:C1457(*; This:C1470.name)
 	
+	//________________________________________________________________
+Function getCoordinates
+	
+	Super:C1706.getCoordinates()
+	
+	Case of 
+			
+			//…………………………………………………………………………………………………
+		: (This:C1470.type=Object type picture input:K79:5)
+			
+			This:C1470.getScrollPosition()
+			This:C1470.getDimensions()
+			
+			//…………………………………………………………………………………………………
+		: (This:C1470.type=Object type listbox:K79:8)
+			
+			This:C1470.getDefinition()
+			This:C1470.getCell()
+			
+			//…………………………………………………………………………………………………
+		: (This:C1470.type=Object type subform:K79:40)
+			
+			This:C1470.getSubform()
+			
+			//…………………………………………………………………………………………………
+		Else 
+			
+			ASSERT:C1129(False:C215; "Non implemented for: "+String:C10(This:C1470.type))
+			
+			//…………………………………………………………………………………………………
+	End case 
+	
 /*══════════════════════════*/
 Function getEnterable
 	

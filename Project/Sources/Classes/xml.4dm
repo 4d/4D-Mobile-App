@@ -484,8 +484,8 @@ Function findByXPath
 		
 	End if 
 	
-/*———————————————————————————————————————————————————————————*/
-Function find($nodeOrQuery : Text; $xPath : Text)->$references
+	// —————————————————————————————————————————————————————————————————————————————————
+Function find($nodeOrQuery : Text; $xPath : Text)->$references : Collection
 	
 	$references:=New collection:C1472()
 	ARRAY TEXT:C222($nodes; 0x0000)
@@ -513,11 +513,12 @@ Function find($nodeOrQuery : Text; $xPath : Text)->$references
 		End if 
 	End if 
 	
-/*———————————————————————————————————————————————————————————*/
-Function findByName
-	var $0 : Collection
-	var $1 : Text
-	var $2 : Text
+	// —————————————————————————————————————————————————————————————————————————————————
+	// Search for elements by there name
+Function findByName->$references : Collection
+	var ${1} : Text
+	
+	OK:=0
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -527,7 +528,11 @@ Function findByName
 			
 			If (This:C1470._isReference($1))
 				
-				$nodes{0}:=DOM Find XML element:C864($1; $2; $nodes)
+				If (This:C1470._requiredParams(Count parameters:C259; 2))
+					
+					$nodes{0}:=DOM Find XML element:C864($1; $2; $nodes)
+					
+				End if 
 				
 			Else 
 				
@@ -542,13 +547,18 @@ Function findByName
 		End if 
 		
 		This:C1470.success:=Bool:C1537(OK)
-		$0:=New collection:C1472
-		ARRAY TO COLLECTION:C1563($0; $nodes)
 		
+		If (This:C1470.success)
+			
+			$references:=New collection:C1472
+			ARRAY TO COLLECTION:C1563($references; $nodes)
+			
+		End if 
 	End if 
 	
-/*———————————————————————————————————————————————————————————*/
-Function findByAttribute->$references
+	// —————————————————————————————————————————————————————————————————————————————————
+	// Search for elements by there attribute
+Function findByAttribute->$references : Collection
 	var ${1} : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
@@ -619,46 +629,52 @@ Function findByAttribute->$references
 		End if 
 	End if 
 	
-/*———————————————————————————————————————————————————————————*/
-Function findOrCreate
-	var $0 : Text
-	var $1 : Text
-	var $2 : Text
+	// —————————————————————————————————————————————————————————————————————————————————
+	// Search for an element by its name and create it if it is not found
+Function findOrCreate->$reference : Text
+	var ${1} : Text
 	
 	var $c : Collection
 	
-	If (This:C1470._isReference($1))
+	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		$c:=This:C1470.findByName($1; $2)
-		
-		If (This:C1470.success)
+		If (This:C1470._isReference($1))
 			
-			$0:=$c[0]
+			If (This:C1470._requiredParams(Count parameters:C259; 2))
+				
+				$c:=This:C1470.findByName($1; $2)
+				
+				If (This:C1470.success)
+					
+					$reference:=$c[0]
+					
+				Else 
+					
+					// Create
+					$reference:=DOM Create XML element:C865($1; $2)
+					
+				End if 
+			End if 
 			
 		Else 
 			
-			// Create
-			$0:=DOM Create XML element:C865($1; $2)
+			$c:=This:C1470.findByName($1)
 			
+			If (This:C1470.success)
+				
+				$reference:=$c[0]
+				
+			Else 
+				
+				// Create
+				$reference:=DOM Create XML element:C865(This:C1470.root; $1)
+				
+			End if 
 		End if 
 		
-	Else 
+		This:C1470.success:=Bool:C1537(OK)
 		
-		$c:=This:C1470.findByName($1)
-		
-		If (This:C1470.success)
-			
-			$0:=$c[0]
-			
-		Else 
-			
-			// Create
-			$0:=DOM Create XML element:C865(This:C1470.root; $1)
-			
-		End if 
 	End if 
-	
-	This:C1470.success:=Bool:C1537(OK)
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Returns a reference to the parent of a node
@@ -668,7 +684,7 @@ Function parent($node : Text; $name : Text)->$reference : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			$reference:=DOM Get parent XML element:C923($node; $elementName)
 			
@@ -704,7 +720,7 @@ Function firstChild($node : Text; $name : Text)->$reference : Text
 	
 	If (Count parameters:C259>=1)
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			$reference:=DOM Get first child XML element:C723($node; $elementName)
 			This:C1470.success:=Bool:C1537(OK)
@@ -745,7 +761,7 @@ Function lastChild($node : Text; $name : Text)->$reference : Text
 	
 	If (Count parameters:C259>=1)
 		
-		If (This:C1470._isRequiredRef($1))
+		If (This:C1470._requiredRef($1))
 			
 			$reference:=DOM Get last child XML element:C925($node; $elementName)
 			This:C1470.success:=Bool:C1537(OK)
@@ -789,7 +805,7 @@ Function childrens($node : Text)->$childs : Collection
 	
 	If (Count parameters:C259>=1)
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			DOM GET XML CHILD NODES:C1081($node; $types; $nodes)
 			
@@ -822,7 +838,7 @@ Function descendants($node : Text)->$descendants : Collection
 	
 	If (Count parameters:C259>=1)
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			DOM GET XML CHILD NODES:C1081($node; $types; $nodes)
 			
@@ -852,7 +868,7 @@ Function nextSibling($node : Text; $name : Text)->$reference : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			$reference:=DOM Get next sibling XML element:C724($node; $elementName)
 			This:C1470.success:=Bool:C1537(OK)
@@ -886,7 +902,7 @@ Function previousSibling($node : Text; $name : Text)->$reference : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			$reference:=DOM Get previous sibling XML element:C924($node; $elementName)
 			This:C1470.success:=Bool:C1537(OK)
@@ -918,7 +934,7 @@ Function getName($node : Text)->$name : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			DOM GET XML ELEMENT NAME:C730($node; $name)
 			This:C1470.success:=Bool:C1537(OK)
@@ -932,7 +948,7 @@ Function setName($node : Text; $name : Text)
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			DOM SET XML ELEMENT NAME:C867($node; $name)
 			This:C1470.success:=Bool:C1537(OK)
@@ -949,7 +965,7 @@ Function remove($node : Text)
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			DOM REMOVE XML ELEMENT:C869($node)
 			This:C1470.success:=Bool:C1537(OK)
@@ -967,7 +983,7 @@ Function getValue($node : Text)->$value : Variant
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			DOM GET XML ELEMENT VALUE:C731($node; $elementValue; $CDATA)
 			This:C1470.success:=Bool:C1537(OK)
@@ -1017,7 +1033,7 @@ Function getAttributes($node : Text)->$attributes : Object
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			$attributes:=New object:C1471
 			
@@ -1049,7 +1065,7 @@ Function setAttribute($node : Text; $attribute : Text; $value)
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 3))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			DOM SET XML ATTRIBUTE:C866($node; $attribute; $value)
 			This:C1470.success:=Bool:C1537(OK)
@@ -1066,7 +1082,7 @@ Function setAttributes($node : Text; $attribute; $value)
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
 		
-		If (This:C1470._isRequiredRef($node))
+		If (This:C1470._requiredRef($node))
 			
 			Case of 
 					
@@ -1188,7 +1204,7 @@ Function setValue($node : Text; $value : Variant; $inCDATA : Boolean)
 	$0:=This:C1470
 	
 	// —————————————————————————————————————————————————————————————————————————————————
-Function _isRequiredRef($ref : Text)->$isValid : Boolean
+Function _requiredRef($ref : Text)->$isValid : Boolean
 	
 	$isValid:=Match regex:C1019("[[:xdigit:]]{32}"; $ref; 1)
 	

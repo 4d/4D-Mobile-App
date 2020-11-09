@@ -10,7 +10,7 @@ Class constructor
 	
 	If (Count parameters:C259>=2)
 		
-		Super:C1705($1;$2)
+		Super:C1705($1; $2)
 		
 	Else 
 		
@@ -23,32 +23,40 @@ Class constructor
 	This:C1470.fileName:=""
 	This:C1470.size:=0
 	
+/*════════════════════════════════════════════*/
+Function getCoordinates
+	
+	Super:C1706.getCoordinates()
+	This:C1470.getScrollbars()
+	
+	This:C1470.getDimensions()
+	
 Function getDimensions
 	
 	C_OBJECT:C1216($0)
 	C_PICTURE:C286($p)
-	C_LONGINT:C283($width;$height)
+	C_LONGINT:C283($width; $height)
 	
 	$p:=This:C1470.getValue()
 	
-	PICTURE PROPERTIES:C457($p;$width;$height)
+	PICTURE PROPERTIES:C457($p; $width; $height)
 	
 	$0:=New object:C1471(\
-		"width";$width;\
-		"height";$height)
+		"width"; $width; \
+		"height"; $height)
 	
 Function read
 	
 	C_OBJECT:C1216($1)
 	C_PICTURE:C286($p)
 	
-	If (Asserted:C1132(Count parameters:C259>=1;Current method name:C684+".read(): Missing File parameter"))
+	If (Asserted:C1132(Count parameters:C259>=1; Current method name:C684+".read(): Missing File parameter"))
 		
-		If (Asserted:C1132(OB Instance of:C1731($1;4D:C1709.File);Current method name:C684+".read(): The passed parameter is not a File object"))
+		If (Asserted:C1132(OB Instance of:C1731($1; 4D:C1709.File); Current method name:C684+".read(): The passed parameter is not a File object"))
 			
-			If (Asserted:C1132($1.exists;Current method name:C684+".read(): File not found"))
+			If (Asserted:C1132($1.exists; Current method name:C684+".read(): File not found"))
 				
-				READ PICTURE FILE:C678($1.platformPath;$p)
+				READ PICTURE FILE:C678($1.platformPath; $p)
 				
 				If (Bool:C1537(OK))
 					
@@ -66,17 +74,17 @@ Function read
 	
 Function thumbnail
 	
-	C_LONGINT:C283($1;$2;$3)
+	C_LONGINT:C283($1; $2; $3)
 	
 	If (Count parameters:C259>=3)
 		
-		This:C1470.setValue(This:C1470.getThumbnail($1;$2;$3))
+		This:C1470.setValue(This:C1470.getThumbnail($1; $2; $3))
 		
 	Else 
 		
 		If (Count parameters:C259>=2)
 			
-			This:C1470.setValue(This:C1470.getThumbnail($1;$2))
+			This:C1470.setValue(This:C1470.getThumbnail($1; $2))
 			
 		Else 
 			
@@ -97,8 +105,8 @@ Function thumbnail
 	
 Function getThumbnail
 	
-	C_PICTURE:C286($0;$p)
-	C_LONGINT:C283($1;$2;$3;$width;$height;$mode)
+	C_PICTURE:C286($0; $p)
+	C_LONGINT:C283($1; $2; $3; $width; $height; $mode)
 	
 	$p:=This:C1470.getValue()
 	
@@ -122,7 +130,7 @@ Function getThumbnail
 			
 		Else 
 			
-			$height:=$width// Square
+			$height:=$width  // Square
 			$mode:=Scaled to fit prop centered:K6:6
 			
 		End if 
@@ -135,14 +143,14 @@ Function getThumbnail
 		
 	End if 
 	
-	CREATE THUMBNAIL:C679($p;$p;$width;$height;$mode)
+	CREATE THUMBNAIL:C679($p; $p; $width; $height; $mode)
 	$0:=$p
 	
 Function horizontalConcatenation
 	
 	C_OBJECT:C1216($1)
 	
-	This:C1470.setValue(This:C1470.__combine($1;Horizontal concatenation:K61:8))
+	This:C1470.setValue(This:C1470.__combine($1; Horizontal concatenation:K61:8))
 	
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
@@ -151,7 +159,7 @@ Function verticalConcatenation
 	
 	C_OBJECT:C1216($1)
 	
-	This:C1470.setValue(This:C1470.__combine($1;Vertical concatenation:K61:9))
+	This:C1470.setValue(This:C1470.__combine($1; Vertical concatenation:K61:9))
 	
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
@@ -163,17 +171,17 @@ Function superImposition
 	
 	If (Count parameters:C259>=3)
 		
-		This:C1470.setValue(This:C1470.__combine($1;Superimposition:K61:10;$2;$3))
+		This:C1470.setValue(This:C1470.__combine($1; Superimposition:K61:10; $2; $3))
 		
 	Else 
 		
 		If (Count parameters:C259>=2)
 			
-			This:C1470.setValue(This:C1470.__combine($1;Superimposition:K61:10;$2))
+			This:C1470.setValue(This:C1470.__combine($1; Superimposition:K61:10; $2))
 			
 		Else 
 			
-			This:C1470.setValue(This:C1470.__combine($1;Superimposition:K61:10))
+			This:C1470.setValue(This:C1470.__combine($1; Superimposition:K61:10))
 			
 		End if 
 	End if 
@@ -185,15 +193,15 @@ Function __combine
 	
 	C_OBJECT:C1216($1)
 	C_LONGINT:C283(${2})
-	C_PICTURE:C286($0;$p;$pp)
+	C_PICTURE:C286($0; $p; $pp)
 	
-	If (Asserted:C1132(Count parameters:C259>=1;Current method name:C684+".horizontalConcatenation(): Missing File parameter"))
+	If (Asserted:C1132(Count parameters:C259>=1; Current method name:C684+".horizontalConcatenation(): Missing File parameter"))
 		
-		If (Asserted:C1132(OB Instance of:C1731($1;4D:C1709.File);Current method name:C684+".horizontalConcatenation(): The passed parameter is not a File object"))
+		If (Asserted:C1132(OB Instance of:C1731($1; 4D:C1709.File); Current method name:C684+".horizontalConcatenation(): The passed parameter is not a File object"))
 			
-			If (Asserted:C1132($1.exists;Current method name:C684+".horizontalConcatenation(): File not found"))
+			If (Asserted:C1132($1.exists; Current method name:C684+".horizontalConcatenation(): File not found"))
 				
-				READ PICTURE FILE:C678($1.platformPath;$p)
+				READ PICTURE FILE:C678($1.platformPath; $p)
 				
 				If (Bool:C1537(OK))
 					
@@ -201,17 +209,17 @@ Function __combine
 					
 					If (Count parameters:C259>=4)
 						
-						COMBINE PICTURES:C987($p;$pp;$2;$p;$3;$4)
+						COMBINE PICTURES:C987($p; $pp; $2; $p; $3; $4)
 						
 					Else 
 						
 						If (Count parameters:C259>=3)
 							
-							COMBINE PICTURES:C987($p;$pp;$2;$p;$3)
+							COMBINE PICTURES:C987($p; $pp; $2; $p; $3)
 							
 						Else 
 							
-							COMBINE PICTURES:C987($p;$pp;$2;$p)
+							COMBINE PICTURES:C987($p; $pp; $2; $p)
 							
 						End if 
 					End if 

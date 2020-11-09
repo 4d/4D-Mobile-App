@@ -586,6 +586,7 @@
 			"button",
 			"group",
 			"input",
+			"listbox",
 			"picture",
 			"scrollable",
 			"static",

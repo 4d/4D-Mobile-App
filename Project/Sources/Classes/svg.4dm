@@ -196,7 +196,7 @@ Function preview  // Alias showInViewer()
 Function showInViewer  // Show in 4D SVG Viewer
 	var $0 : Object
 	
-	//#TO_DO: Should test if the component is available
+	// #TO_DO: Should test if the component is available
 	EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER"; *; This:C1470.root)
 	
 	$0:=This:C1470
@@ -232,7 +232,7 @@ Function rect
 			
 		Else 
 			
-			$node:=This:C1470._target($3)
+			$node:=This:C1470._target($2)
 			
 		End if 
 	End if 
@@ -276,61 +276,6 @@ Function group
 		
 		This:C1470.latest:=DOM Create XML element:C865($node; "g")
 		This:C1470.success:=Bool:C1537(OK)
-		
-	End if 
-	
-	$0:=This:C1470
-	
-/*———————————————————————————————————————————————————————————*/
-Function position
-	var $0 : Object
-	var $1 : Integer
-	var $2 : Variant
-	var $3 : Text
-	
-	var $node : Text
-	
-	$node:=This:C1470._target()
-	This:C1470.success:=($node#This:C1470.root)
-	
-	If (This:C1470.success)
-		
-		If (Count parameters:C259>=2)
-			
-			If (Value type:C1509($2)=Is text:K8:3)
-				
-				DOM SET XML ATTRIBUTE:C866($node; \
-					"x"; String:C10(Num:C11($1); "&xml")+String:C10($2))
-				
-			Else 
-				
-				If (Count parameters:C259>2)
-					
-					DOM SET XML ATTRIBUTE:C866($node; \
-						"x"; String:C10($1; "&xml")+String:C10($3); \
-						"y"; String:C10(Num:C11($2); "&xml")+String:C10($3))
-					
-				Else 
-					
-					DOM SET XML ATTRIBUTE:C866($node; \
-						"x"; $1; \
-						"y"; Num:C11($2))
-					
-				End if 
-			End if 
-			
-		Else 
-			
-			DOM SET XML ATTRIBUTE:C866($node; \
-				"x"; String:C10(Num:C11($1); "&xml"))
-			
-		End if 
-		
-		This:C1470.success:=Bool:C1537(OK)
-		
-	Else 
-		
-		This:C1470.errors.push("You can't set position for the canvas!")
 		
 	End if 
 	
@@ -413,6 +358,197 @@ Function dimensions
 		End case 
 	End if 
 	
+	$0:=This:C1470
+	
+/*———————————————————————————————————————————————————————————*/
+Function position
+	var $0 : Object
+	var $1 : Integer
+	var $2 : Variant
+	var $3 : Text
+	
+	var $node : Text
+	
+	$node:=This:C1470._target()
+	This:C1470.success:=($node#This:C1470.root)
+	
+	If (This:C1470.success)
+		
+		If (Count parameters:C259>=2)
+			
+			If (Value type:C1509($2)=Is text:K8:3)
+				
+				DOM SET XML ATTRIBUTE:C866($node; \
+					"x"; String:C10(Num:C11($1); "&xml")+String:C10($2))
+				
+			Else 
+				
+				If (Count parameters:C259>2)
+					
+					DOM SET XML ATTRIBUTE:C866($node; \
+						"x"; String:C10($1; "&xml")+String:C10($3); \
+						"y"; String:C10(Num:C11($2); "&xml")+String:C10($3))
+					
+				Else 
+					
+					DOM SET XML ATTRIBUTE:C866($node; \
+						"x"; $1; \
+						"y"; Num:C11($2))
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			DOM SET XML ATTRIBUTE:C866($node; \
+				"x"; String:C10(Num:C11($1); "&xml"))
+			
+		End if 
+		
+		This:C1470.success:=Bool:C1537(OK)
+		
+	Else 
+		
+		This:C1470.errors.push("You can't set position for the canvas!")
+		
+	End if 
+	
+	$0:=This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Translation
+Function translate($x : Real; $y : Real; $node : Text)
+	var $t; $transform : Text
+	var $indx : Integer
+	var $c : Collection
+	
+	If (Count parameters:C259>=3)
+		
+		$node:=This:C1470._target($node)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	$transform:="translate("+String:C10($x; "&xml")+"0,"+String:C10($y; "&xml")+")"
+	
+	$t:=This:C1470.getAttribute($node; "transform")
+	
+	If (Length:C16($t)>0)
+		
+		$c:=Split string:C1554($t; " ")
+		
+		$t:=
+		
+		$indx:=$c.indexOf("scale(@")
+		
+		If ($indx#-1)
+			
+			$c[$indx]:=$transform
+			
+		Else 
+			
+			$c.push($transform)
+			
+		End if 
+		
+		$transform:=$c.join(" ")
+		
+	End if 
+	
+	DOM SET XML ATTRIBUTE:C866($node; "transform"; $transform)
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Horizontal translation
+Function translateHorizontally($x : Real; $node : Text)
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._target($node)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	This:C1470.translate($x; 0; $node)
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Horizontal translation
+Function translateVertically($y : Real; $node : Text)
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._target($node)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	This:C1470.translate(0; $y; $node)
+	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Scale
+Function scale($x : Real; $node : Text)
+	var $t; $transform : Text
+	var $indx : Integer
+	var $c : Collection
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._target($node)
+		
+	Else 
+		
+		$node:=This:C1470._target()
+		
+	End if 
+	
+	//"scale(0.97)"
+	$transform:="scale("+String:C10($x; "&xml")+")"
+	
+	$t:=This:C1470.getAttribute($node; "transform")
+	
+	If (Length:C16($t)>0)
+		
+		$c:=Split string:C1554($t; " ")
+		
+		$t:=
+		
+		$indx:=$c.indexOf("scale(@")
+		
+		If ($indx#-1)
+			
+			$c[$indx]:=$transform
+			
+		Else 
+			
+			$c.push($transform)
+			
+		End if 
+		
+		$transform:=$c.join(" ")
+		
+	End if 
+	
+	DOM SET XML ATTRIBUTE:C866($node; "transform"; $transform)
+	This:C1470.success:=Bool:C1537(OK)
+	
+	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
@@ -714,6 +850,7 @@ Function textRendering
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
+	
 	// ⚠️ Overrides the method of the inherited class
 Function setAttribute
 	var $0 : Object
@@ -734,6 +871,7 @@ Function setAttribute
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
+	
 	// ⚠️ Overrides the method of the inherited class
 Function setAttributes
 	var $0 : Object
@@ -816,6 +954,7 @@ Function setAttributes
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
+	
 	// ⚠️ Overrides the method of the inherited class
 Function setValue
 	var $0 : Object
@@ -1331,7 +1470,7 @@ Function visible
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function class  // Set the node class 
+Function class  // Set the node class
 	var $0 : Object
 	var $1 : Text
 	var $2 : Variant
@@ -1349,7 +1488,7 @@ Function class  // Set the node class
 	$0:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
-Function addClass  // Add a value to the node class 
+Function addClass  // Add a value to the node class
 	var $0 : Object
 	var $1 : Text
 	var $2 : Text
@@ -1390,15 +1529,7 @@ Function addClass  // Add a value to the node class
 Function isOfClass($class : Text; $node : Text)->$isOfclass : Boolean
 	var $target : Text
 	
-	If (Count parameters:C259=2)
-		
-		$target:=$node
-		
-	Else 
-		
-		$target:=This:C1470._target()
-		
-	End if 
+	$target:=Choose:C955(Count parameters:C259=2; $node; This:C1470._target())
 	
 	$isOfclass:=(Position:C15($class; String:C10(This:C1470.getAttribute($target; "class")))#0)
 	
@@ -1423,6 +1554,10 @@ Function getTextWidth($string : Text; $fontAttributes : Object)->$width : Intege
 	
 	$picture:=$o.getPicture()
 	PICTURE PROPERTIES:C457($picture; $width; $height)
+	
+	//———————————————————————————————————————————————————————————
+	// Makes a copy of the given object
+Function copy($source : Text; $target : Text)
 	
 /*——————————————————————————
 PRIVATE

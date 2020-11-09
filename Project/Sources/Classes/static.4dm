@@ -160,7 +160,6 @@ Function getTitle
 	
 	$0:=OBJECT Get title:C1068(*; This:C1470.name)
 	
-	
 /*════════════════════════════════════════════
 .setCoordinates (left;top;right;bottom) -> This
 .setCoordinates (obj) -> This
@@ -436,6 +435,43 @@ Function setDimension
 	This:C1470._updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
 	
 	$0:=This:C1470
+	
+	
+Function setColors($foreground : Variant; $background : Variant; $altBackground : Variant)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259>=3)
+			
+			$foreground:=Choose:C955(Value type:C1509($foreground)=Is text:K8:3; $foreground; Num:C11($foreground))
+			$background:=Choose:C955(Value type:C1509($background)=Is text:K8:3; $background; Num:C11($background))
+			$altBackground:=Choose:C955(Value type:C1509($altBackground)=Is text:K8:3; $altBackground; Num:C11($altBackground))
+			
+			OBJECT SET RGB COLORS:C628(*; This:C1470.name; $foreground; $background; $altBackground)
+			
+			//______________________________________________________
+		: (Count parameters:C259>=2)
+			
+			$foreground:=Choose:C955(Value type:C1509($foreground)=Is text:K8:3; $foreground; Num:C11($foreground))
+			$background:=Choose:C955(Value type:C1509($background)=Is text:K8:3; $background; Num:C11($background))
+			
+			OBJECT SET RGB COLORS:C628(*; This:C1470.name; $foreground; $background)
+			
+			//______________________________________________________
+		: (Count parameters:C259>=1)
+			
+			$foreground:=Choose:C955(Value type:C1509($foreground)=Is text:K8:3; $foreground; Num:C11($foreground))
+			
+			OBJECT SET RGB COLORS:C628(*; This:C1470.name; $foreground)
+			
+			//______________________________________________________
+		Else 
+			
+			// #ERROR
+			
+			//______________________________________________________
+	End case 
 	
 /*════════════════════════════════════════════*/
 Function _updateCoordinates
