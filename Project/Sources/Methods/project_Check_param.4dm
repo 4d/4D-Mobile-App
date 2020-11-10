@@ -12,7 +12,7 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($t; $tt)
+C_TEXT:C284($table; $field)
 C_OBJECT:C1216($o; $Obj_in; $Obj_out)
 
 If (False:C215)
@@ -131,37 +131,37 @@ If ($Obj_out.success & Bool:C1537($Obj_in.build))
 	// CHECK IF THE PROJECT COULD BE BUILD
 	$o:=$Obj_in.project.dataModel
 	
-	For each ($t; $o)
+	For each ($table; $o)
 		
-		For each ($tt; $o[$t])
+		For each ($field; $o[$table])
 			
 			Case of 
 					
 					//………………………………………………………………………………………………………
-				: (PROJECT.isField($tt))
+				: (PROJECT.isField($field))
 					
 					//
 					
 					//………………………………………………………………………………………………………
-				: (Value type:C1509($o[$t][$tt])#Is object:K8:27)
+				: (Value type:C1509($o[$table][$field])#Is object:K8:27)
 					
 					// <NOTHING MORE TO DO>
 					
 					//………………………………………………………………………………………………………
-				: (PROJECT.isRelationToOne($o[$t][$tt]))  // N -> 1 relation
+				: (PROJECT.isRelationToOne($o[$table][$field]))  // N -> 1 relation
 					
 					//
 					
 					//………………………………………………………………………………………………………
-				: (PROJECT.isRelationToMany($o[$t][$tt]))  // 1 -> N relation
+				: (PROJECT.isRelationToMany($o[$table][$field]))  // 1 -> N relation
 					
-					If (Value type:C1509($o[String:C10($o[$t][$tt].relatedTableNumber)])=Is undefined:K8:13)
+					If (Value type:C1509($o[String:C10($o[$table][$field].relatedTableNumber)])=Is undefined:K8:13)
 						
 						$Obj_out.success:=False:C215
 						
 						// Ensure the errors collection exists
 						$Obj_out:=ob_createPath($Obj_out; "errors"; Is collection:K8:32)
-						$Obj_out.errors.push(_o_str("theLinkedTableIsNotPublished").localized($o[$t][$tt].relatedEntities))
+						$Obj_out.errors.push(_o_str("theLinkedTableIsNotPublished").localized($o[$table][$field].relatedEntities))
 						
 					End if 
 					//………………………………………………………………………………………………………

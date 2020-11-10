@@ -14,9 +14,9 @@ If (False:C215)
 	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER; $0)
 End if 
 
-var $tTable; $tTemplate; $tTypeForm : Text
+var $t; $tableID; $template; $typeForm : Text
 var $p : Picture
-var $bAvailable; $ok : Boolean
+var $isAvailable; $ok : Boolean
 var $count; $i; $indx; $l : Integer
 var $x : Blob
 var $context; $e; $form; $menu; $o : Object
@@ -55,7 +55,7 @@ Case of
 		//==================================================
 	: ($e.objectName=$form.tableWidget.name)
 		
-		$tTypeForm:=$context.typeForm()
+		$typeForm:=$context.typeForm()
 		
 		Case of 
 				
@@ -64,19 +64,19 @@ Case of
 				
 				OB REMOVE:C1226($context; "picker")
 				
-				$tTable:=SVG Find element ID by coordinates:C1054(*; $e.objectName; MOUSEX; MOUSEY)
-				$tTemplate:=String:C10(Form:C1466[$tTypeForm][$tTable].form)
+				$tableID:=SVG Find element ID by coordinates:C1054(*; $e.objectName; MOUSEX; MOUSEY)
+				$template:=String:C10(Form:C1466[$typeForm][$tableID].form)
 				
-				If (Length:C16($tTemplate)>0)
+				If (Length:C16($template)>0)
 					
-					If ($tTemplate[[1]]="/")
+					If ($template[[1]]="/")
 						
-						$bAvailable:=path["host"+$tTypeForm+"Forms"]().file(Substring:C12($tTemplate; 2)).exists\
-							 | path["host"+$tTypeForm+"Forms"]().folder(Substring:C12($tTemplate; 2)).exists
+						$isAvailable:=path["host"+$typeForm+"Forms"]().file(Substring:C12($template; 2)).exists\
+							 | path["host"+$typeForm+"Forms"]().folder(Substring:C12($template; 2)).exists
 						
 					Else 
 						
-						$bAvailable:=path[$tTypeForm+"Forms"]().folder($tTemplate).exists
+						$isAvailable:=path[$typeForm+"Forms"]().folder($template).exists
 						
 					End if 
 				End if 
@@ -84,9 +84,9 @@ Case of
 				Case of 
 						
 						//______________________________________________________
-					: (Length:C16($tTable)=0)  // Outside click
+					: (Length:C16($tableID)=0)  // Outside click
 						
-						If (Form:C1466[$tTypeForm][$context.tableNum()].form#Null:C1517)
+						If (Form:C1466[$typeForm][$context.tableNum()].form#Null:C1517)
 							
 							$form.form.call("pickerHide")
 							
@@ -102,11 +102,11 @@ Case of
 						End if 
 						
 						//______________________________________________________
-					: ($tTable=$context.tableNum())
+					: ($tableID=$context.tableNum())
 						
 						If (Bool:C1537(Form:C1466.$dialog.picker))
 							
-							If (Length:C16($tTemplate)#0)
+							If (Length:C16($template)#0)
 								
 								$form.form.call("pickerHide")
 								
@@ -118,18 +118,18 @@ Case of
 							$form.fieldGroup.hide()
 							$form.previewGroup.hide()
 							
-							views_LAYOUT_PICKER($tTypeForm)
+							views_LAYOUT_PICKER($typeForm)
 							
-							CLEAR VARIABLE:C89($tTable)  // To avoid redrawing the preview
+							CLEAR VARIABLE:C89($tableID)  // To avoid redrawing the preview
 							
 						End if 
 						
 						//______________________________________________________
-					: ($tTable#$context.tableNum())\
-						 | (Length:C16($tTemplate)=0)\
-						 | Not:C34($bAvailable)
+					: ($tableID#$context.tableNum())\
+						 | (Length:C16($template)=0)\
+						 | Not:C34($isAvailable)
 						
-						If ($tTable#$context.tableNum()) & $bAvailable
+						If ($tableID#$context.tableNum()) & $isAvailable
 							
 							$form.form.call("pickerHide")
 							
@@ -144,14 +144,14 @@ Case of
 						End if 
 						
 						// Select the item
-						SVG SET ATTRIBUTE:C1055(*; $e.objectName; $tTable; \
+						SVG SET ATTRIBUTE:C1055(*; $e.objectName; $tableID; \
 							"fill"; UI.selectedColorFill)
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
-						$context.picker:=(Length:C16($tTemplate)=0)
+						$context.picker:=(Length:C16($template)=0)
 						
-						$context.tableNumber:=$tTable
+						$context.tableNumber:=$tableID
 						
 						//______________________________________________________
 					Else 
@@ -173,7 +173,7 @@ Case of
 				End case 
 				
 				// Update UI
-				If (Length:C16($tTable)#0)
+				If (Length:C16($tableID)#0)
 					
 					//OB REMOVE($context; "manifest")
 					
@@ -187,6 +187,25 @@ Case of
 				
 				// Update geometry
 				$context.setGeometry()
+				
+				//______________________________________________________
+			: ($e.code=On Mouse Enter:K2:33)
+				
+				UI.tips.enable()
+				UI.tips.setDuration(UI.tips.delay*2)
+				UI.tips.instantly()
+				
+				//______________________________________________________
+			: ($e.code=On Mouse Leave:K2:34)
+				
+				UI.tips.defaultDelay()
+				
+				//______________________________________________________
+			: ($e.code=On Mouse Move:K2:35)
+				
+				$tableID:=SVG Find element ID by coordinates:C1054(*; $e.objectName; MOUSEX; MOUSEY)
+				SVG GET ATTRIBUTE:C1056(*; $e.objectName; $tableID; "tips"; $t)
+				OBJECT SET HELP TIP:C1181(*; $e.objectName; $t)
 				
 				//______________________________________________________
 			Else 
@@ -211,9 +230,9 @@ Case of
 				If (FEATURE.with("newViewUI"))\
 					 & (Num:C11($context.template.manifest.renderer)>=2)
 					
-					$tTypeForm:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
+					$typeForm:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
 					
-					If ($tTypeForm="detail")
+					If ($typeForm="detail")
 						
 						$form.fieldList.cellPosition()
 						
@@ -223,7 +242,7 @@ Case of
 						$o.name:=$o.path
 						//%W+533.3
 						
-						$view.addField($o; Form:C1466[$tTypeForm][$context.tableNumber].fields)
+						$view.addField($o; Form:C1466[$typeForm][$context.tableNumber].fields)
 						
 						// Update preview
 						$view.draw()
@@ -249,11 +268,11 @@ Case of
 				If (FEATURE.with("newViewUI"))\
 					 & (Num:C11($context.template.manifest.renderer)>=2)
 					
-					$tTypeForm:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
+					$typeForm:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
 					
-					If (Contextual click:C713) & ($tTypeForm="detail")
+					If (Contextual click:C713) & ($typeForm="detail")
 						
-						$fieldList:=Form:C1466[$tTypeForm][$context.tableNumber].fields
+						$fieldList:=Form:C1466[$typeForm][$context.tableNumber].fields
 						
 						$count:=Size of array:C274(($form.fields.pointer())->)
 						

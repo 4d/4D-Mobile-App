@@ -385,6 +385,21 @@ Function create
 		
 	End if 
 	
+	//———————————————————————————————————————————————————————————
+	// Makes a copy of the given object
+Function copy($source : Text; $target : Text)->$node : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 2))
+		
+		$node:=DOM Append XML element:C1082($target; $source)
+		
+		If (OK=1)
+			
+			This:C1470.success:=Bool:C1537(OK)
+			
+		End if 
+	End if 
+	
 /*———————————————————————————————————————————————————————————*/
 Function getText  // Return the  XML tree as text
 	var $0 : Text

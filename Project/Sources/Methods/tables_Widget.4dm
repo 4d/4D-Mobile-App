@@ -18,12 +18,12 @@ If (False:C215)
 	C_OBJECT:C1216(tables_Widget; $2)
 End if 
 
-var $fill; $formName; $name; $stroke; $t; $table; $typeForm : Text
+var $buffer; $fill; $formName; $name; $stroke; $table; $tips; $typeForm : Text
 var $picture : Picture
 var $isSelected : Boolean
+var $avalaibleWidth; $width : Integer
 var $x : Blob
-var $dataModel; $params; $str : Object
-
+var $dataModel; $font; $params; $str : Object
 var $formRoot : 4D:C1709.Directory
 var $file : 4D:C1709.Document
 var $error : cs:C1710.error
@@ -59,12 +59,12 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"height"; 110)
 	
 	$params.hOffset:=5
-	$params.maxChar:=18  // Choose(Get database localization="ja";9;18)
+	$params.maxChar:=Choose:C955(Get database localization:C1009="ja"; 7; 15)
 	
 	$params.selectedFill:=UI.colors.backgroundSelectedColor.hex
 	$params.selectedStroke:=UI.colors.strokeColor.hex
 	
-	$str:=_o_str()
+	$str:=cs:C1710.str.new()
 	
 	$svg:=cs:C1710.svg.new()
 	$error:=cs:C1710.error.new()
@@ -91,15 +91,13 @@ If ($dataModel#Null:C1517)
 		$stroke:=Choose:C955($isSelected; $params.selectedStroke; "none")
 		
 		// Create a table group. filled according to selected status
-		$svg.group("root")\
-			.id($table)\
-			.fill($fill)\
-			.push($table)  // Memorize table group address
+		$svg.group($table; "root").fill($fill)
 		
 		// Background
-		$svg.rect($params.cell.width; $params.cell.height; $table)\
+		$svg.rect($params.cell.width; $params.cell.height)\
 			.position($params.x; $params.y)\
-			.stroke($fill)
+			.stroke($fill)\
+			.addTo($table)
 		
 		// Put the icon [
 		If (Form:C1466[$typeForm][$table].form=Null:C1517)
@@ -131,39 +129,41 @@ If ($dataModel#Null:C1517)
 			CLEAR VARIABLE:C89($x)
 			
 			CREATE THUMBNAIL:C679($picture; $picture; $params.icon.width; $params.icon.width)
-			$svg.embedPicture($picture; $table).position($params.x+18; 5)
+			$svg.embedPicture($picture).position($params.x+18; 5).addTo($table)
 			CLEAR VARIABLE:C89($picture)
 			
 		Else 
 			
-			$svg.image($file; $table)\
+			$svg.image($file)\
 				.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
-				.dimensions($params.icon.width; $params.icon.width)
+				.dimensions($params.icon.width; $params.icon.width)\
+				.addTo($table)
 			
 		End if 
 		
 		// Avoid too long name
-		$name:=$dataModel[$table][""].shortLabel
+		$name:=$str.setText($dataModel[$table][""].name).truncate($params.maxChar)
 		
-		If (Length:C16($name)>$params.maxChar)
-			
-			$name:=Substring:C12($name; 1; $params.maxChar)+"..."
-			
-		End if 
-		
-		$t:=$str.setText($name).truncate($params.maxChar)
-		
-		$svg.textArea($t; $table)\
+		$svg.textArea($name)\
 			.position($params.x; $params.cell.height-18)\
 			.dimensions($params.cell.width)\
 			.setAttribute("text-align"; "center")\
-			.fill(Choose:C955($isSelected; "dimgray"; "dimgray"))
+			.fill(Choose:C955($isSelected; "dimgray"; "dimgray"))\
+			.addTo($table)
 		
 		// Border & reactive 'button'
-		$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height); $table)\
+		$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
 			.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\
 			.stroke($stroke)\
-			.fill("white").fillOpacity(0.05)
+			.fill("white").fillOpacity(0.05)\
+			.addTo($table)
+		
+		If ($name#$dataModel[$table][""].name)
+			
+			// Set a tips
+			$svg.setAttribute("tips"; $dataModel[$table][""].name; $svg.fetch($table))
+			
+		End if 
 		
 		$params.x:=$params.x+$params.cell.width+$params.hOffset
 		

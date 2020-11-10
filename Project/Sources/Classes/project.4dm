@@ -536,10 +536,21 @@ Function fieldAvailable($tableID : Variant; $field : Object)->$available : Boole
 					
 					If (This:C1470.dataModel[$tableID][$c[0]]#Null:C1517)  // The relation is published
 						
-						If ($relatedCatalog.field.query("id = :1"; Num:C11($fieldID)).pop()#Null:C1517)
+						If (Num:C11($fieldID)#0)
 							
-							$available:=(This:C1470.dataModel[$tableID][$c[0]][$fieldID]#Null:C1517)
+							If ($relatedCatalog.field.query("id = :1"; Num:C11($fieldID)).pop()#Null:C1517)
+								
+								$available:=(This:C1470.dataModel[$tableID][$c[0]][$fieldID]#Null:C1517)
+								
+							End if 
 							
+						Else 
+							
+							If ($relatedCatalog.field.query("name = :1"; $c[1]).pop()#Null:C1517)
+								
+								$available:=(This:C1470.dataModel[$tableID][$c[0]][$c[1]]#Null:C1517)
+								
+							End if 
 						End if 
 					End if 
 				End if 

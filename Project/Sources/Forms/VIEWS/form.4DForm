@@ -38,6 +38,9 @@
 					"dragging": "none",
 					"events": [
 						"onClick",
+						"onMouseEnter",
+						"onMouseLeave",
+						"onMouseMove",
 						"onScroll"
 					],
 					"method": "views_OBJECTS_HANDLER"
