@@ -84,9 +84,8 @@ Function group($id : Text; $attachTo : Variant)->$this : cs:C1710.svg
 		
 	Else 
 		
-		If (This:C1470._isReference($id))
+		If (This:C1470.isReference($id))
 			
-			// Witjout id
 			This:C1470.latest:=Super:C1706.create(This:C1470._attachTo($id); "g")
 			
 		Else 
@@ -1093,7 +1092,7 @@ Function setAttributes($attributes : Variant; $value : Variant; $target)->$this 
 				
 			Else 
 				
-				If (This:C1470._isReference($attributes))
+				If (This:C1470.isReference($attributes))
 					
 					Super:C1706.setAttributes($attributes; $value)
 					
@@ -1995,7 +1994,7 @@ Function _target($target)->$node : Text
 					End if 
 					
 					//_______________________________
-				: (This:C1470._isReference($target))
+				: (This:C1470.isReference($target))
 					
 					$node:=$target  // The given reference
 					
