@@ -32,39 +32,39 @@ If (True:C214)
 	
 Else 
 	
-	var $root; $background; $foreground; $rect; $circle : Text
+	//var $root; $background; $foreground; $rect; $circle : Text
 	
-	// Create a new canvas
-	$root:=SVG_New
+	//// Create a new canvas
+	//$root:=SVG_New
 	
-	// Create a "background" group, 
-	$background:=SVG_New_group($root)
+	//// Create a "background" group, 
+	//$background:=SVG_New_group($root)
 	
-	// Create a "foreground" group and apply a translation
-	$foreground:=SVG_New_group($root)
-	SVG_SET_TRANSFORM_TRANSLATE($foreground; 45; 45)
+	//// Create a "foreground" group and apply a translation
+	//$foreground:=SVG_New_group($root)
+	//SVG_SET_TRANSFORM_TRANSLATE($foreground; 45; 45)
 	
-	// Create a yellow square
-	$rect:=SVG_New_rect($foreground; 2.5; 2.5; 20; 20)
-	SVG_SET_FILL_BRUSH($rect; "yellow")
-	SVG_SET_STROKE_BRUSH($rect; "yellow")
+	//// Create a yellow square
+	//$rect:=SVG_New_rect($foreground; 2.5; 2.5; 20; 20)
+	//SVG_SET_FILL_BRUSH($rect; "yellow")
+	//SVG_SET_STROKE_BRUSH($rect; "yellow")
 	
-	// Add, into the "background" layer, a blue circle without fill & with a border of 4 pixels
-	$circle:=SVG_New_circle($background; 100; 100; 50)
-	SVG_SET_FILL_BRUSH($circle; "none")
-	SVG_SET_STROKE_BRUSH($circle; "blue")
-	SVG_SET_STROKE_WIDTH($circle; 4)
+	//// Add, into the "background" layer, a blue circle without fill & with a border of 4 pixels
+	//$circle:=SVG_New_circle($background; 100; 100; 50)
+	//SVG_SET_FILL_BRUSH($circle; "none")
+	//SVG_SET_STROKE_BRUSH($circle; "blue")
+	//SVG_SET_STROKE_WIDTH($circle; 4)
 	
-	// Create a yellow square
-	$rect:=SVG_New_rect($background; 10; 10; 100; 100)
-	SVG_SET_FILL_BRUSH($rect; "red")
-	SVG_SET_STROKE_BRUSH($rect; "red")
+	//// Create a yellow square
+	//$rect:=SVG_New_rect($background; 10; 10; 100; 100)
+	//SVG_SET_FILL_BRUSH($rect; "red")
+	//SVG_SET_STROKE_BRUSH($rect; "red")
 	
-	// Show the result into teh SVG viewer
-	SVGTool_SHOW_IN_VIEWER($root)
+	//// Show the result into teh SVG viewer
+	//SVGTool_SHOW_IN_VIEWER($root)
 	
-	// Do not forget to release the memory !
-	SVG_CLEAR($root)
+	//// Do not forget to release the memory !
+	//SVG_CLEAR($root)
 	
 End if 
 
