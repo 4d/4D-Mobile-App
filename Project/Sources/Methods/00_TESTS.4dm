@@ -27,6 +27,26 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		var $svg : cs:C1710.svg
+		
+		$svg:=cs:C1710.svg.new()
+		
+		$svg.group("background")
+		$svg.group("foreground"; "root")
+		
+		$svg.square(100).position(10; 10).color("blue").stroke(New object:C1471("color"; "black"; "width"; 4)).push("original")
+		
+		$svg.clone("original").position(111; 10).fill("red").dimensions(100; 201)
+		
+		$svg.clone("original").fill("yellow").moveVertically(101).attachTo("foreground")
+		
+		$svg.circle(100).color("blue").translate(201; 201).fill(False:C215).stroke(4).attachTo("background")
+		
+		$svg.preview()
+		
+		//________________________________________
+	: (True:C214)
+		
 		$t:=Folder:C1567(fk desktop folder:K87:19).folder("DEV").platformPath
 		
 		$o:=New object:C1471

@@ -2,8 +2,9 @@ Class constructor($variable)
 	
 	This:C1470.root:=Null:C1517
 	This:C1470.autoClose:=True:C214
-	This:C1470.success:=False:C215
 	This:C1470.file:=Null:C1517
+	This:C1470.xml:=Null:C1517
+	This:C1470.success:=False:C215
 	This:C1470.errors:=New collection:C1472
 	
 	If (Count parameters:C259>=1)
@@ -151,48 +152,42 @@ Function parse  // Parse a variable (TEXT or BLOB)
 			//……………………………………………………………………………………………
 	End case 
 	
-/*———————————————————————————————————————————————————————————*/
-Function load  // Load a variable (TEXT or BLOB) or a file
-	var $0 : Object
-	var $1 : Variant
-	var $2 : Boolean
-	var $3 : Text
+	//———————————————————————————————————————————————————————————
+	// Load a variable (TEXT or BLOB) or a file
+Function load($source : Variant; $validate : Boolean; $schema : Text)->$this : cs:C1710.xml
 	
-	var $node : Text
-	var $countParam : Integer
+	var $root : Text
 	
 	This:C1470.close()  // Release memory
-	
-	$countParam:=Count parameters:C259
 	
 	Case of 
 			
 			//______________________________________________________
-		: ($countParam=0)
+		: (Count parameters:C259=0)
 			
 			This:C1470.success:=False:C215
 			This:C1470.errors.push(Current method name:C684+" -  Missing the target to load")
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is text:K8:3)\
-			 | (Value type:C1509($1)=Is BLOB:K8:12)  // Parse a given variable
+		: (Value type:C1509($source)=Is text:K8:3)\
+			 | (Value type:C1509($source)=Is BLOB:K8:12)  // Parse a given variable
 			
 			Case of 
 					
 					//……………………………………………………………………………………………
-				: ($countParam=1)
+				: (Count parameters:C259=1)
 					
-					$node:=DOM Parse XML variable:C720($1)
+					$root:=DOM Parse XML variable:C720($source)
 					
 					//……………………………………………………………………………………………
-				: ($countParam=2)
+				: (Count parameters:C259=2)
 					
-					$node:=DOM Parse XML variable:C720($1; $2)
+					$root:=DOM Parse XML variable:C720($source; $validate)
 					
 					//……………………………………………………………………………………………
 				Else 
 					
-					$node:=DOM Parse XML variable:C720($1; $2; $3)
+					$root:=DOM Parse XML variable:C720($source; $validate; $schema)
 					
 					//……………………………………………………………………………………………
 			End case 
@@ -201,41 +196,41 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 			
 			If (This:C1470.success)
 				
-				This:C1470.root:=$node
+				This:C1470.root:=$root
 				
 			Else 
 				
-				This:C1470.errors.push(Current method name:C684+" -  Failed to parse the "+Choose:C955(Value type:C1509($1)=Is text:K8:3; "text"; "blob")+" variable")
+				This:C1470.errors.push(Current method name:C684+" -  Failed to parse the "+Choose:C955(Value type:C1509($source)=Is text:K8:3; "text"; "blob")+" variable")
 				
 			End if 
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is object:K8:27)  // File to load
+		: (Value type:C1509($source)=Is object:K8:27)  // File to load
 			
-			This:C1470.success:=OB Instance of:C1731($1; 4D:C1709.File)
+			This:C1470.success:=OB Instance of:C1731($source; 4D:C1709.File)
 			
 			If (This:C1470.success)
 				
-				This:C1470.success:=Bool:C1537($1.isFile) & Bool:C1537($1.exists)
+				This:C1470.success:=Bool:C1537($source.isFile) & Bool:C1537($source.exists)
 				
 				If (This:C1470.success)
 					
 					Case of 
 							
 							//……………………………………………………………………………………………
-						: ($countParam=1)
+						: (Count parameters:C259=1)
 							
-							$node:=DOM Parse XML source:C719($1.platformPath)
+							$root:=DOM Parse XML source:C719($source.platformPath)
 							
 							//……………………………………………………………………………………………
-						: ($countParam=2)
+						: (Count parameters:C259=2)
 							
-							$node:=DOM Parse XML source:C719($1.platformPath; $2)
+							$root:=DOM Parse XML source:C719($source.platformPath; $validate)
 							
 							//……………………………………………………………………………………………
 						Else 
 							
-							$node:=DOM Parse XML source:C719($1.platformPath; $2; $3)
+							$root:=DOM Parse XML source:C719($source.platformPath; $validate; $schema)
 							
 							//……………………………………………………………………………………………
 					End case 
@@ -244,14 +239,14 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 					
 					If (This:C1470.success)
 						
-						This:C1470.root:=$node
-						This:C1470.file:=$1
+						This:C1470.root:=$root
+						This:C1470.file:=$source
 						
 					End if 
 					
 				Else 
 					
-					This:C1470.errors.push(Current method name:C684+" -  File not found: "+String:C10($1.platformPath))
+					This:C1470.errors.push(Current method name:C684+" -  File not found: "+String:C10($source.platformPath))
 					
 				End if 
 				
@@ -264,12 +259,12 @@ Function load  // Load a variable (TEXT or BLOB) or a file
 			//______________________________________________________
 		Else 
 			
-			This:C1470.errors.push(Current method name:C684+" -  Unmanaged type: "+String:C10(Value type:C1509($1)))
+			This:C1470.errors.push(Current method name:C684+" -  Unmanaged type: "+String:C10(Value type:C1509($source)))
 			
 			//________________________________________
 	End case 
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function save
@@ -335,9 +330,9 @@ Function save
 	
 	$0:=This:C1470
 	
-/*———————————————————————————————————————————————————————————*/
-Function close  // Close the XML tree
-	var $0 : Object
+	//———————————————————————————————————————————————————————————
+	// Close the XML tree
+Function close->$this : cs:C1710.xml
 	
 	This:C1470.success:=(This:C1470.root#Null:C1517)
 	
@@ -349,7 +344,7 @@ Function close  // Close the XML tree
 		
 	End if 
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
 Function create
@@ -387,7 +382,7 @@ Function create
 	
 	//———————————————————————————————————————————————————————————
 	// Makes a copy of the given object
-Function copy($source : Text; $target : Text)->$node : Text
+Function clone($source : Text; $target : Text)->$node : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
 		
@@ -400,21 +395,20 @@ Function copy($source : Text; $target : Text)->$node : Text
 		End if 
 	End if 
 	
-/*———————————————————————————————————————————————————————————*/
-Function getText  // Return the  XML tree as text
-	var $0 : Text
-	var $1 : Boolean
+	//———————————————————————————————————————————————————————————/
+	// Returns the SVG tree as text
+Function content($keepStructure : Boolean)->$xml : Text
 	
-	var $t : Text
-	
-	DOM EXPORT TO VAR:C863(This:C1470.root; $t)
+	DOM EXPORT TO VAR:C863(This:C1470.root; $xml)
 	This:C1470.success:=Bool:C1537(OK)
 	
 	If (This:C1470.success)
 		
+		This:C1470.xml:=$xml
+		
 		If (Count parameters:C259>=1)
 			
-			This:C1470._close($1)
+			This:C1470._close($keepStructure)
 			
 		Else 
 			
@@ -427,8 +421,6 @@ Function getText  // Return the  XML tree as text
 		This:C1470.errors.push(Current method name:C684+" -  Failed to export XML to text.")
 		
 	End if 
-	
-	$0:=$t
 	
 /*———————————————————————————————————————————————————————————*/
 Function getContent  // Return the  XML tree as BLOB
@@ -500,22 +492,22 @@ Function findByXPath
 	End if 
 	
 	// —————————————————————————————————————————————————————————————————————————————————
-Function find($nodeOrQuery : Text; $xPath : Text)->$references : Collection
+Function find($node : Text; $query : Text)->$references : Collection
 	
 	$references:=New collection:C1472()
 	ARRAY TEXT:C222($nodes; 0x0000)
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		If (This:C1470._isReference($nodeOrQuery))\
+		If (This:C1470._isReference($node))\
 			 & (Count parameters:C259>=2)
 			
-			$nodes{0}:=DOM Find XML element:C864($nodeOrQuery; $xPath; $nodes)
+			$nodes{0}:=DOM Find XML element:C864($node; $query; $nodes)
 			
 		Else 
 			
-			// Start at the root
-			$nodes{0}:=DOM Find XML element:C864(This:C1470.root; $nodeOrQuery; $nodes)
+			// Start at the root, query string is the 1st parameter
+			$nodes{0}:=DOM Find XML element:C864(This:C1470.root; $node; $nodes)
 			
 		End if 
 		

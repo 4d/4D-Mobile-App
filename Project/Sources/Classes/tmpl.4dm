@@ -338,7 +338,7 @@ Function update  // Load and update the template if any
 							This:C1470.manifest.renderer:=2
 							
 							
-							This:C1470.svg:=This:C1470.getText(False:C215)
+							This:C1470.svg:=This:C1470.content(False:C215)
 							
 							// Keep the updated template
 							DOM EXPORT TO VAR:C863($root; $t)
@@ -402,7 +402,7 @@ Function update  // Load and update the template if any
 					End if 
 				End for 
 				
-				This:C1470.svg:=This:C1470.getText()
+				This:C1470.svg:=This:C1470.content()
 				
 			End if 
 		End if 

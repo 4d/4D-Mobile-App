@@ -482,12 +482,12 @@ If (Num:C11($tableID)>0)
 				
 				If (FEATURE.with("_8858"))
 					
-					$svg.saveText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg"); True:C214)
-					$svg.savePicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.png"); True:C214)
+					$svg.exportText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg"); True:C214)
+					$svg.exportPicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.png"); True:C214)
 					
 				End if 
 				
-				OBJECT SET VALUE:C1742("preview"; $svg.getPicture())
+				OBJECT SET VALUE:C1742("preview"; $svg.picture())
 				
 			Else 
 				
@@ -502,7 +502,7 @@ If (Num:C11($tableID)>0)
 					.position(20; 180).font(New object:C1471(\
 					"size"; 14; \
 					"color"; UI.colors.errorColor.hex; \
-					"alignment"; Align center:K42:3)).getPicture())
+					"alignment"; Align center:K42:3)).picture())
 				
 				OBJECT SET TITLE:C194(*; "preview.label"; "")
 				

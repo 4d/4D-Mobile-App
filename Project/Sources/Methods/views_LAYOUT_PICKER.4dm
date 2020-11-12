@@ -256,7 +256,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			$x:=$archive.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x; $p)
 			CLEAR VARIABLE:C89($x)
-			$svg.embedPicture($p; "root").position(-8)
+			$svg.imageEmbedded($p; "root").position(-8)
 			
 			// Get the manifest
 			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
@@ -277,9 +277,9 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			End if 
 			
 			// Add github icon
-			$svg.embedPicture($ƒ.github; "root").position(1; 4)
+			$svg.imageEmbedded($ƒ.github; "root").position(1; 4)
 			
-			$picker.pictures.push($svg.getPicture())
+			$picker.pictures.push($svg.picture())
 			$picker.pathnames.push($formsArray{$i})
 			$picker.helpTips.push($str.setText("tipsTemplate").localized(New collection:C1472(String:C10($template.fullName); String:C10($o.organization.login); String:C10($o.version))))
 			$picker.infos.push($o)
@@ -303,7 +303,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				// Media
 				READ PICTURE FILE:C678($template.parent.file("layoutIconx2.png").platformPath; $p)
-				$svg.embedPicture($p; "root").position(-8)
+				$svg.imageEmbedded($p; "root").position(-8)
 				
 				// Title
 				$t:=$formsArray{$i}
@@ -328,7 +328,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					
 				End if 
 				
-				$p:=$svg.getPicture()
+				$p:=$svg.picture()
 				
 			Else   // Create a preview from the template
 				
@@ -347,7 +347,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 						
 					End if 
 					
-					$p:=$svg.getPicture()
+					$p:=$svg.picture()
 					CREATE THUMBNAIL:C679($p; $p; $ƒ.cell.width; $ƒ.cell.height)
 					
 				End if 
@@ -388,7 +388,7 @@ $svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
 
 // Media
 READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
-$svg.embedPicture($p).position(20; 30).dimensions(96)
+$svg.imageEmbedded($p).position(20; 30).dimensions(96)
 
 // Put text
 //$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\
@@ -397,13 +397,13 @@ $svg.embedPicture($p).position(20; 30).dimensions(96)
 		.textAlignment(Align center)
 
 // Put in second position
-//$oPicker.pictures.insert(1;$svg.getPicture())
+//$oPicker.pictures.insert(1;$svg.picture())
 //$oPicker.pathnames.insert(1;Null)
 //$oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($ƒ.type))
 //$oPicker.infos.push(Null)
 
 // Put at the end
-$picker.pictures.push($svg.getPicture())
+$picker.pictures.push($svg.picture())
 $picker.pathnames.push(Null:C1517)
 $picker.helpTips.push($str.setText("downloadMoreResources").localized($ƒ.type))
 $picker.infos.push(Null:C1517)

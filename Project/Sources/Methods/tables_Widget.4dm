@@ -97,7 +97,7 @@ If ($dataModel#Null:C1517)
 		$svg.rect($params.cell.width; $params.cell.height)\
 			.position($params.x; $params.y)\
 			.stroke($fill)\
-			.addTo($table)
+			.attachTo($table)
 		
 		// Put the icon [
 		If (Form:C1466[$typeForm][$table].form=Null:C1517)
@@ -129,15 +129,15 @@ If ($dataModel#Null:C1517)
 			CLEAR VARIABLE:C89($x)
 			
 			CREATE THUMBNAIL:C679($picture; $picture; $params.icon.width; $params.icon.width)
-			$svg.embedPicture($picture).position($params.x+18; 5).addTo($table)
+			$svg.imageEmbedded($picture).position($params.x+18; 5).attachTo($table)
 			CLEAR VARIABLE:C89($picture)
 			
 		Else 
 			
-			$svg.image($file)\
+			$svg.imageRef($file)\
 				.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
 				.dimensions($params.icon.width; $params.icon.width)\
-				.addTo($table)
+				.attachTo($table)
 			
 		End if 
 		
@@ -149,14 +149,14 @@ If ($dataModel#Null:C1517)
 			.dimensions($params.cell.width)\
 			.setAttribute("text-align"; "center")\
 			.fill(Choose:C955($isSelected; "dimgray"; "dimgray"))\
-			.addTo($table)
+			.attachTo($table)
 		
 		// Border & reactive 'button'
 		$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
 			.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\
 			.stroke($stroke)\
 			.fill("white").fillOpacity(0.05)\
-			.addTo($table)
+			.attachTo($table)
 		
 		If ($name#$dataModel[$table][""].name)
 			
@@ -176,13 +176,13 @@ End if
 
 If (FEATURE.with("debug"))
 	
-	Folder:C1567(fk desktop folder:K87:19).file("DEV/table.svg").setText($svg.getText(True:C214))
+	Folder:C1567(fk desktop folder:K87:19).file("DEV/table.svg").setText($svg.content(True:C214))
 	
 End if 
 
 // ----------------------------------------------------
 // Return
-$0:=$svg.getPicture()
+$0:=$svg.picture()
 
 // ----------------------------------------------------
 // End
