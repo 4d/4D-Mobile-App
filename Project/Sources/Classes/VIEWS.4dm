@@ -238,14 +238,15 @@ Function fieldList($table : Variant)->$result : Object
 									
 									If ($field.relatedTableNumber#Null:C1517)
 										
-										For each ($o; OB Entries:C1720($field))
+										var $oo : Object
+										For each ($oo; OB Entries:C1720($field))
 											
-											If (PROJECT.isField($o.key))
+											If (PROJECT.isField($oo.key))
 												
-												$o:=OB Copy:C1225($o.value)
+												$o:=OB Copy:C1225($oo.value)
 												$o.path:=$key+"."+$o.path
 												
-												$o.id:=0
+												$o.id:=Num:C11($oo.key)
 												$o.$level:=2
 												
 												$c.push($o)
