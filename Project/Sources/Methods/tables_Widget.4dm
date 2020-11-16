@@ -18,12 +18,11 @@ If (False:C215)
 	C_OBJECT:C1216(tables_Widget; $2)
 End if 
 
-var $buffer; $fill; $formName; $name; $stroke; $table; $tips; $typeForm : Text
+var $formName; $name; $table; $typeForm : Text
 var $picture : Picture
 var $isSelected : Boolean
-var $avalaibleWidth; $width : Integer
 var $x : Blob
-var $dataModel; $font; $params; $str : Object
+var $dataModel; $params; $str : Object
 var $formRoot : 4D:C1709.Directory
 var $file : 4D:C1709.Document
 var $error : cs:C1710.error
@@ -65,9 +64,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$params.selectedStroke:=UI.colors.strokeColor.hex
 	
 	$str:=cs:C1710.str.new()
-	
-	$svg:=cs:C1710.svg.new()
 	$error:=cs:C1710.error.new()
+	$svg:=cs:C1710.svg.new()
 	
 Else 
 	
@@ -87,82 +85,87 @@ If ($dataModel#Null:C1517)
 		
 		$isSelected:=($table=String:C10($params.tableNumber))
 		
-		$fill:=Choose:C955($isSelected; $params.selectedFill; "none")
-		$stroke:=Choose:C955($isSelected; $params.selectedStroke; "none")
+		// Create a table group filled according to selected status
+		$svg.layer($table).fill(Choose:C955($isSelected; $params.selectedFill; "none"))
 		
-		// Create a table group. filled according to selected status
-		$svg.group($table; "root").fill($fill)
-		
-		// Background
-		$svg.rect($params.cell.width; $params.cell.height)\
-			.position($params.x; $params.y)\
-			.stroke($fill)\
-			.attachTo($table)
-		
-		// Put the icon [
-		If (Form:C1466[$typeForm][$table].form=Null:C1517)
+		If ($svg.useOf($table))
 			
-			// No form selected
-			$file:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16); fk platform path:K87:2).file("templates/form/"+$typeForm+"/defaultLayoutIcon.png")
+			// Background
+			$svg.rect($params.cell.width; $params.cell.height)\
+				.position($params.x+0.5; $params.y+0.5)\
+				.stroke(Choose:C955($isSelected; $params.selectedStroke; "none"))
 			
-		Else 
-			
-			$formName:=String:C10(Form:C1466[$typeForm][$table].form)
-			$formRoot:=tmpl_form($formName; $typeForm)
-			
-			If ($formRoot.exists)
+			// Put the icon [
+			If (Form:C1466[$typeForm][$table].form=Null:C1517)
 				
-				$file:=$formRoot.file("layoutIconx2.png")
+				// No form selected
+				$file:=File:C1566("/RESOURCES/templates/form/"+$typeForm+"/defaultLayoutIcon.png")
 				
 			Else 
 				
-				// Error
-				$file:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16); fk platform path:K87:2).file("images/errorIcon.svg")
+				$formName:=String:C10(Form:C1466[$typeForm][$table].form)
+				$formRoot:=tmpl_form($formName; $typeForm)
+				
+				If ($formRoot.exists)
+					
+					$file:=$formRoot.file("layoutIconx2.png")
+					
+					If (Not:C34($file.exists))
+						
+						$file:=File:C1566("/RESOURCES/images/noIcon.svg")
+						$svg.setAttribute("tips"; Replace string:C233($formName; "/"; ""); $svg.fetch($table))
+						
+					End if 
+					
+				Else 
+					
+					// Error
+					$file:=File:C1566("/RESOURCES/images/errorIcon.svg")
+					
+				End if 
+			End if 
+			
+			If ($formRoot.extension=SHARED.archiveExtension)  // Archive
+				
+				$x:=$file.getContent()
+				BLOB TO PICTURE:C682($x; $picture)
+				CLEAR VARIABLE:C89($x)
+				
+				CREATE THUMBNAIL:C679($picture; $picture; $params.icon.width; $params.icon.width)
+				$svg.imageEmbedded($picture).position($params.x+18; 5)
+				CLEAR VARIABLE:C89($picture)
+				
+			Else 
+				
+				$svg.imageRef($file)\
+					.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
+					.dimensions($params.icon.width; $params.icon.width)
 				
 			End if 
-		End if 
-		
-		If ($formRoot.extension=SHARED.archiveExtension)  // Archive
 			
-			$x:=$file.getContent()
-			BLOB TO PICTURE:C682($x; $picture)
-			CLEAR VARIABLE:C89($x)
+			// Avoid too long name
+			$name:=$str.setText($dataModel[$table][""].name).truncate($params.maxChar)
 			
-			CREATE THUMBNAIL:C679($picture; $picture; $params.icon.width; $params.icon.width)
-			$svg.imageEmbedded($picture).position($params.x+18; 5).attachTo($table)
-			CLEAR VARIABLE:C89($picture)
+			$svg.textArea($name)\
+				.position($params.x; $params.cell.height-18)\
+				.width($params.cell.width)\
+				.fill(Choose:C955($isSelected; $params.selectedStroke; "dimgray"))\
+				.alignment(Align center:K42:3)\
+				.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 			
-		Else 
+			// Border & reactive 'button'
+			$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
+				.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\
+				.stroke(Choose:C955($isSelected; $params.selectedStroke; "none"))\
+				.fill("white")\
+				.fillOpacity(0.01)
 			
-			$svg.imageRef($file)\
-				.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
-				.dimensions($params.icon.width; $params.icon.width)\
-				.attachTo($table)
-			
-		End if 
-		
-		// Avoid too long name
-		$name:=$str.setText($dataModel[$table][""].name).truncate($params.maxChar)
-		
-		$svg.textArea($name)\
-			.position($params.x; $params.cell.height-18)\
-			.dimensions($params.cell.width)\
-			.setAttribute("text-align"; "center")\
-			.fill(Choose:C955($isSelected; "dimgray"; "dimgray"))\
-			.attachTo($table)
-		
-		// Border & reactive 'button'
-		$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
-			.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\
-			.stroke($stroke)\
-			.fill("white").fillOpacity(0.05)\
-			.attachTo($table)
-		
-		If ($name#$dataModel[$table][""].name)
-			
-			// Set a tips
-			$svg.setAttribute("tips"; $dataModel[$table][""].name; $svg.fetch($table))
-			
+			If ($name#$dataModel[$table][""].name)
+				
+				// Set a tips
+				$svg.setAttribute("tips"; $dataModel[$table][""].name; $svg.fetch($table))
+				
+			End if 
 		End if 
 		
 		$params.x:=$params.x+$params.cell.width+$params.hOffset
@@ -179,6 +182,8 @@ If (FEATURE.with("debug"))
 	Folder:C1567(fk desktop folder:K87:19).file("DEV/table.svg").setText($svg.content(True:C214))
 	
 End if 
+
+
 
 // ----------------------------------------------------
 // Return

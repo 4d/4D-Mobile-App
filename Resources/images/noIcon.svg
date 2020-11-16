@@ -1,1 +1,6 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs id="4D"/><rect fill="none" height="120" rx="20" ry="20" stroke="grey" stroke-dasharray="10,10" stroke-dashoffset="" stroke-width="6" width="120" x="8" y="8"/><text fill="grey" font-family="'Menlo'" font-size="120" font-style="normal" font-weight="normal" text-anchor="inherit" text-decoration="none" x="32" y="110">?</text></svg>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs id="4D"/>
+	<rect fill="white" fill-opacity="0.05" height="120" rx="20" ry="20" stroke="grey" stroke-dasharray="10,10" stroke-dashoffset="" stroke-width="6" width="120" x="8" y="8"/>
+	<text fill="grey" font-family="'Menlo'" font-size="120" font-style="normal" font-weight="normal" text-anchor="inherit" text-decoration="none" x="32" y="110">?</text>
+</svg>

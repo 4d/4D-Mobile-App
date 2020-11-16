@@ -381,22 +381,37 @@ Function create
 	End if 
 	
 	//———————————————————————————————————————————————————————————
+	// Insert a XML element among the child elements of the $target element
+Function insert($target : Text; $source : Text; $index : Integer)->$node : Text
+	
+	var $indx : Integer
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 2))
+		
+		If (Count parameters:C259>=3)
+			
+			$indx:=$index
+			
+		End if 
+		
+		$node:=DOM Insert XML element:C1083($target; $source; $indx)
+		This:C1470.success:=Bool:C1537(OK)
+		
+	End if 
+	
+	//———————————————————————————————————————————————————————————
 	// Makes a copy of the given object
 Function clone($source : Text; $target : Text)->$node : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
 		
 		$node:=DOM Append XML element:C1082($target; $source)
+		This:C1470.success:=Bool:C1537(OK)
 		
-		If (OK=1)
-			
-			This:C1470.success:=Bool:C1537(OK)
-			
-		End if 
 	End if 
 	
 	//———————————————————————————————————————————————————————————/
-	// Returns the SVG tree as text
+	// Returns the XML tree as text
 Function content($keepStructure : Boolean)->$xml : Text
 	
 	DOM EXPORT TO VAR:C863(This:C1470.root; $xml)
@@ -1032,6 +1047,7 @@ Function getValue($node : Text)->$value : Variant
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Returns one node attribute value if exists
 Function getAttribute($node : Text; $attribute : Text)->$value
+	
 	var $o : Object
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
@@ -1046,6 +1062,24 @@ Function getAttribute($node : Text; $attribute : Text)->$value
 		Else 
 			
 			This:C1470.errors.push(Current method name:C684+" -  Attribute \""+$attribute+"\" not found")
+			
+		End if 
+	End if 
+	
+	// —————————————————————————————————————————————————————————————————————————————————
+	// Returns a remove attributes value if exists
+Function attributePop($node : Text; $attribute : Text)->$value
+	
+	var $o : Object
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 2))
+		
+		$o:=OB Entries:C1720(This:C1470.getAttributes($node)).query("key = :1"; $attribute).pop()
+		
+		If ($o#Null:C1517)
+			
+			$value:=$o.value
+			DOM REMOVE XML ATTRIBUTE:C1084($node; $attribute)
 			
 		End if 
 	End if 
@@ -1086,24 +1120,23 @@ Function getAttributesCollection($node : Text)->$attributes : Collection
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Set a node attribute
-Function setAttribute($node : Text; $attribute : Text; $value)
+Function setAttribute($node : Text; $name : Text; $value)->$this : cs:C1710.xml
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 3))
 		
 		If (This:C1470._requiredRef($node))
 			
-			DOM SET XML ATTRIBUTE:C866($node; $attribute; $value)
+			DOM SET XML ATTRIBUTE:C866($node; $name; $value)
 			This:C1470.success:=Bool:C1537(OK)
 			
 		End if 
 	End if 
 	
-	var $0 : Object
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Set a node attributes from an object or a collection (key/value pairs)
-Function setAttributes($node : Text; $attribute; $value)
+Function setAttributes($node : Text; $attributes; $value)->$this : cs:C1710.xml
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
 		
@@ -1112,23 +1145,23 @@ Function setAttributes($node : Text; $attribute; $value)
 			Case of 
 					
 					//______________________________________________________
-				: (Value type:C1509($attribute)=Is text:K8:3)
+				: (Value type:C1509($attributes)=Is text:K8:3)
 					
 					If (This:C1470._requiredParams(Count parameters:C259; 3))
 						
-						This:C1470.setAttribute($node; $attribute; $value)
+						This:C1470.setAttribute($node; $attributes; $value)
 						
 					End if 
 					
 					//______________________________________________________
-				: (Value type:C1509($attribute)=Is object:K8:27)
+				: (Value type:C1509($attributes)=Is object:K8:27)
 					
 					var $t : Text
 					
-					For each ($t; $attribute) While (This:C1470.success)
+					For each ($t; $attributes) While (This:C1470.success)
 						
 						DOM SET XML ATTRIBUTE:C866($node; \
-							$t; $attribute[$t])
+							$t; $attributes[$t])
 						This:C1470.success:=Bool:C1537(OK)
 						
 					End for each 
@@ -1140,11 +1173,11 @@ Function setAttributes($node : Text; $attribute; $value)
 					End if 
 					
 					//______________________________________________________
-				: (Value type:C1509($attribute)=Is collection:K8:32)
+				: (Value type:C1509($attributes)=Is collection:K8:32)
 					
 					var $o : Object
 					
-					For each ($o; $attribute) While (This:C1470.success)
+					For each ($o; $attributes) While (This:C1470.success)
 						
 						DOM SET XML ATTRIBUTE:C866($node; \
 							String:C10($o.key); $o.value)
@@ -1168,8 +1201,7 @@ Function setAttributes($node : Text; $attribute; $value)
 		End if 
 	End if 
 	
-	var $0 : Object
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Removes, if it exists, the attribute designated by $name from the XML $node
@@ -1265,6 +1297,7 @@ Function _requiredParams($count; $number)->$response : Boolean
 	This:C1470.success:=$response
 	
 	// —————————————————————————————————————————————————————————————————————————————————
+	// Tests if the passed text is compliant with a XML reference
 Function isReference($text : Text)->$response : Boolean
 	
 	$response:=Match regex:C1019("[[:xdigit:]]{32}"; $text; 1)
@@ -1327,3 +1360,7 @@ Function _close($keepOpened : Boolean)
 	End if 
 	
 	// —————————————————————————————————————————————————————————————————————————————————
+Function _pushError($desription : Text)
+	
+	This:C1470.success:=False:C215
+	This:C1470.errors.push(Get call chain:C1662[1].name+" - "+$desription)

@@ -11,16 +11,16 @@ Using the 4D SVG component to create and manipulate SVG elements requires knowle
 var $root : Text
 $root:=SVG_New
 	
-// Create a "background" group
+// Create a "background" group at the root level
 var $background : Text 
 $background:=SVG_New_group($root)
 	
-// Create a "foreground" group and apply a translation
+// Create a "foreground" group, at the root level, and apply a translation
 var $foreground : Text
 $foreground:=SVG_New_group($root)
 SVG_SET_TRANSFORM_TRANSLATE($foreground; 45; 45)
 	
-// Create a yellow square
+// Create a yellow square into the "foreground" layer
 var $rect : Text
 $rect:=SVG_New_rect($foreground; 2.5; 2.5; 20; 20)
 SVG_SET_FILL_BRUSH($rect; "yellow")
@@ -33,12 +33,12 @@ SVG_SET_FILL_BRUSH($circle; "none")
 SVG_SET_STROKE_BRUSH($circle; "blue")
 SVG_SET_STROKE_WIDTH($circle; 4)
 	
-// Create a red square
+// Create a red square into the "background" layer
 $rect:=SVG_New_rect($background; 10; 10; 100; 100)
 SVG_SET_FILL_BRUSH($rect; "red")
 SVG_SET_STROKE_BRUSH($rect; "red")
 	
-// Show the result into teh SVG viewer
+// Show the result into the SVG viewer
 SVGTool_SHOW_IN_VIEWER($root)
 	
 // Do not forget to release the memory !
@@ -47,40 +47,15 @@ SVG_CLEAR($root)
 The `svg` class simplifies the creation and manipulation of the SVG elements thanks to a set of simple functions and some automatisms, and decrease the number of variables needed. Here is the equivalent code to get the same result (<mark>only 8 lines of easily understandable code versus 21 complicated lines with the component</mark>):
 
 ```4d
-var $svg : cs.svg
-
-// Create a new canvas
-$svg:=cs.svg.new()
-
-// Create a "background" group, its address is automatically memorized
-// The object will automatically be added to the latest created "container" ("svg")
-// The reference is automatically memorized into the store
-$svg.group("background")
-
-// Create a "foreground" group and apply a translation
-// We must precise the "root" destination else the group will be included into the "background" one
-$svg.group("foreground").translate(45; 45).attachTo("root")
-
-// Create a yellow square & memorize its reference as "original"
-// The object will automatically be added to the latest created "container" ("foreground" layer)
-$svg.square(20).position(2.5; 2.5).color("yellow").push("original")
-
-// Add, into the "background" layer, a blue circle without fill & with a border of 4 pixels
-$svg.circle(50).color("blue").translate(100; 100).fill(False).stroke(4).attachTo("background")
-
-// Clone the "original" square, colore it red, change its dimensions & puts it into the "background" layer
-$svg.clone("original").color("red").position(10; 10).dimensions(100; 100).attachTo("background")
-
-// Show the result into teh SVG viewer
-// The memory is automatically freed
-$svg.preview()
+	var $svg : cs.svg		// Create a new canvas	$svg:=cs.svg.new()		// Create a "background" & '"foreground" group & apply a translation to the last one	// [Layers are automatically created at the root level]	$svg.layer("background"; "foreground").translate(45; 45)		// Create a yellow square & memorize its reference as "original"	// [The object is automatically added to the latest created/used "container" ("foreground")]	$svg.square(20).position(2.5; 2.5).color("yellow").push("original")		// Set "background" layer for the next operations	If ($svg.with("background"))
+			// Add, a blue circle without fill & with a border of 4 pixels		$svg.circle(50).color("blue").position(100; 100).fill(False).stroke(4)				// Clone the "original" square, colore it red, change its dimensions		$svg.clone("original").color("red").position(10; 10).dimensions(100; 100)
+			End if 		// Show the result into the SVG viewer	// [The memory is automatically freed]	$svg.preview()
 ```
 The svg tree created:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" font-family="'lucida grande','segoe UI',sans-serif" font-size="12" preserveAspectRatio="none" shape-rendering="crispEdges" stroke="black" text-rendering="geometricPrecision" viewport-fill="none" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <def/>
   <g id="background">
     <circle cx="0" cy="0" fill="none" r="50" stroke="blue" stroke-width="4" transform="translate(100,100)"/>
     <rect fill="yellow" height="100" stroke="yellow" width="100" x="10" y="10"/>
@@ -139,55 +114,51 @@ The class constructor also accepts an optional parameter, so you can create a sv
 |--------|------|   
 |.**line** (x1 : Real; y1 : Real; x2 : Real; y2 : Real {; attachTo }) → cs.svg | To draw a line  
 |.**rect** (height : Real {; width : Real } {; attachTo}) → cs.svg | To draw a rectangle
-|.**square** (side : Real {; attachTo }) → cs.svg | To draw a square
-|.**circle** (radius : Real; cx : Real; cy : Real {; attachTo }) → cs.svg | To draw a circle
+|.**circle** (radius : Real {; cx : Real {; cy : Real}} {; attachTo }) → cs.svg | To draw a circle
 |.**ellipse** (radiusX : Real; radiusY : Real; cx : Real; cy : Real {; attachTo }) → cs.svg | To draw a circle  
 |.**imageRef** (file : 4D.File {; attachTo }) → cs.svg | To put an image reference (url)        
 |.**imageEmbedded** (picture : Picture {; attachTo }) → cs.svg | To embed a picture variable
+|.**polyline** (points : Text \| Collection {; attachTo }) → cs.svg | To create a polyline
+|.**polygon** (points : Text \| Collection {; attachTo }) → cs.svg | To create a polygon
 |.**textArea** (text : Text {; attachTo }) → cs.svg | To create a text area
-|.**group** ({ id : Text {; attachTo }}) → cs.svg | To define a group
+|.**points** (points : Text \| Collection {; applyTo }) → cs.svg | Sets the "points" property of a polyline/polygon
+|.**M** (points : Text \| Collection {; applyTo }) → cs.svg | Absolute moveTo
+|.**L** (points : Text \| Collection {; applyTo }) → cs.svg | Absolute lineTo
 
 ### Setting functions
 
->* If a setting function is called, without passing the `target` parameter, before the creation of an object in the canvas, the target is canvas itself, otherwise the target is the last created object. If the `target` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"`, `"parent"` or `"append"`).
+>* If a setting function is called, without passing the `applyTo` parameter, before the creation of an object in the canvas, the target is canvas itself, otherwise the target is the last created object. If the `applyTo` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"`, `"parent"`).
 >* Remember that you can still add unmanaged attributes with the functions `.setAttribute()` or `.setAttributes()` 
 >* Remember that you can always use DOM XML commands to manipulate the SVG tree `.root`, object `.latest` or reference retrieved with the `.fetch()` function.
 
 |Function|Action|
 |--------|------|
-|.**id** (id : Text) → cs.svg | Sets the id of the element
-|.**dimensions** ({ width : Real; height : Real {; unit : Text }}) → cs.svg  | Sets the dimensions
-|.**position** (x : Real {; y : Variant }{; unit : Text }) → cs.svg | Sets the position
-|.**translate** (x : Real; y : Real {; target }) → cs.svg | Apply a translation
-|.**moveHorizontally** (x : Real {; target }) → cs.svg | Moves horizontally
-|.**moveVertically** (y : Real {; target }) → cs.svg | Moves vertically
-|.**scale** (x : Real {; target }) → cs.svg | Apply scaling
-|.**color** (color : Text {; target }) → cs.svg | Sets stroke and fill color
-|.**opacity** (opacity : Real {; target }) → cs.svg | Sets opacity of stroke and fill
-|.**fill** (value (Text \| Boolean \| Object) {; target }) → cs.svg | Sets the fill attributes
-|.**fillColor** (color : Text {; target }) → cs.svg | Sets the fill color
-|.**fillOpacity** (opacity : Real {; target }) → cs.svg | Sets the fill opacity
-|.**stroke** (value (Text \| Boolean \| Real \| Object) {; target : Text }) → cs.svg | Sets the stroke attributes
-|.**strokeColor** (color : Text {; target }) → cs.svg | Sets the stroke color
-|.**strokeWidth** (width : Real {; target }) → cs.svg | Sets the stroke width
-|.**strokeOpacity** (opacity : Real {; target }) → cs.svg | Sets the stroke opacity
-|.**font** (attributes : Object {; target }) → cs.svg | Sets the fonts attributes
-|.**fontFamily** (fonts : Text {; target }) → cs.svg | Sets the font family
-|.**fontSize** (size : Integer {; target }) → cs.svg | Sets the font size
-|.**fontStyle** (style : Integer {; target }) → cs.svg | Sets teh font style
-|.**alignment** (alignment : Integer {; target }) → cs.svg | Sets the text alignment
-|.**textRendering** (rendering : Text {; target }) → cs.svg | Fix the text rendering
-|.**setAttribute** (name : Text; value : Variant {; target }) → cs.svg | Sets one attribute
-|.**setAttributes** (attributes : Text \| Collection \| Object; value : Variant {; target}) → cs.svg | Defines multiple attributes
-|.**setValue** (value : Text {; target }{; CDATA : Boolean }) → cs.svg | Sets the element value
-|.**visible** (visible:Boolean {;target }) → cs.svg | Sets object visibility
-|.**rounded** (radius : Integer {; target}) → cs.svg | Fix the radius of a rounded rectangle
-|.**styleSheet** (file : 4D.File) → cs.svg | Attach a style sheet
-|.**class** (class : Text {; target }) → cs.svg | Sets the node class
-|.**addClass** (class : Text {; target}) → cs.svg | Add a value to the node class
+|.**id** (id : Text {; applyTo }) → cs.svg | Sets the id of the element
+|.**x** (x : Real {; applyTo }) → cs.svg | Sets the x
+|.**y** (y : Real {; applyTo }) → cs.svg | Sets the y
+|.**width** (width : Real {; applyTo }) → cs.svg | Sets the width
+|.**height** (height : Real {; applyTo }) → cs.svg | Sets the height
+|.**translate** (x : Real; y : Real {; applyTo }) → cs.svg | Apply a translation
+|.**scale** (x : Real {; applyTo }) → cs.svg | Apply scaling
+|.**rotate** (angle : Integer {; cx : Real ; cy : Real} {; applyTo }) → cs.svg | Apply rotation
+|.**fillColor** (color : Text {; applyTo }) → cs.svg | Sets the fill color
+|.**fillOpacity** (opacity : Real {; applyTo }) → cs.svg | Sets the fill opacity
+|.**strokeColor** (color : Text {; applyTo }) → cs.svg | Sets the stroke color
+|.**strokeWidth** (width : Real {; applyTo }) → cs.svg | Sets the stroke width
+|.**strokeOpacity** (opacity : Real {; applyTo }) → cs.svg | Sets the stroke opacity
+|.**fontFamily** (fonts : Text {; applyTo }) → cs.svg | Sets the font family
+|.**fontSize** (size : Integer {; applyTo }) → cs.svg | Sets the font size
+|.**fontStyle** (style : Integer {; applyTo }) → cs.svg | Sets teh font style
+|.**alignment** (alignment : Integer {; applyTo }) → cs.svg | Sets the text alignment
+|.**textRendering** (rendering : Text {; applyTo }) → cs.svg | Fix the text rendering
+|.**visible** (visible:Boolean {;applyTo }) → cs.svg | Sets object visibility
+|.**class** (class : Text {; applyTo }) → cs.svg | Sets the node class
+|.**preserveAspectRatio** (value : Text {; applyTo}) → cs.svg | Sets the attribute "preserveAspectRatio"
+|.**setAttribute** (name : Text; value : Variant {; applyTo }) → cs.svg | Sets one attribute
+|.**setAttributes** (attributes : Text \| Collection \| Object; value : Variant {; applyTo}) → cs.svg | Defines multiple attributes
 
 
-### Document functions
+### Document & structure functions
 
 |Function|Action|
 |--------|------|
@@ -196,22 +167,44 @@ The class constructor also accepts an optional parameter, so you can create a sv
 |.**content** ({ keepStructure : Boolean }) → Text  | Returns the SVG tree as text & populates the `.xml` property if success.
 |.**exportPicture**(file : 4D.file; keepStructure : Boolean) → cs.svg | Saves the SVG tree as a picture file.
 |.**exportText**(file : 4D.file; keepStructure : Boolean) → cs.svg | Writes the content of the SVG tree into a disk file.
+|.**new**({ attributes : Object }) → cs.svg | Close the current tree if any & create a new svg default structure.
 |.**close** → cs.svg | Frees the memory taken up by the SVG tree \*
 |.**save**({ keepStructure : Boolean }) → cs.svg | Saves the content of the SVG tree into the initially loaded file or the last created file by calling `exportText()`
+|.**group** ({ id : Text {; attachTo }}) → cs.svg | To define a group
+|.**symbol** (name : Text {; applyTo }) → cs.svg | To define a symbol
+|.**use** (symbol : Text {; attachTo }) → cs.svg | To place an occurence of a symbol
+|.**styleSheet** (file : 4D.File) → cs.svg | Attach a style sheet
 
 \* After the execution,`.root`is null but `.image`& `.xml` are always available
 
-
-### Utilities functions
+### Shortcuts &utilities functions
 
 |Function|Action|
 |--------|------|
-|.**new**({ attributes : Object }) → cs.svg | Close the current tree if any & create a new svg default structure.
+|.**square** (side : Real {; attachTo }) → cs.svg | To draw a square
+|.**color** (color : Text {; applyTo }) → cs.svg | Sets stroke and fill color
+|.**opacity** (opacity : Real {; applyTo }) → cs.svg | Sets stroke and fill opacity
+|.**fill** (value (Text \| Boolean \| Object) {; applyTo }) → cs.svg | Sets the fill attributes
+|.**stroke** (value (Text \| Boolean \| Real \| Object) {; applyTo }) → cs.svg | Sets the stroke attributes
+|.**font** (attributes : Object {; applyTo }) → cs.svg | Sets the font attributes
+|.**dimensions** ({ width : Real; height : Real {; unit : Text }}) → cs.svg  | Sets the dimensions
+|.**position** (x : Real {; y : Variant }{; unit : Text }) → cs.svg | Sets the position
+|.**moveH** (x : Real {; applyTo }) → cs.svg | Moves horizontally
+|.**moveV** (y : Real {; applyTo }) → cs.svg | Moves vertically
+|.**radius** (radius : Integer {; applyTo}) → cs.svg | Fix the radius of a circle or a rounded rectangle
+|.**plot** (pointys : Variant {; applyTo}) → cs.svg | Populate the "points" property of a polyline, polygon or the "data" proprety of a path
+|.**show** ({ applyTo }) → cs.svg |  Make visible
+|.**hide** ({ applyTo }) → cs.svg | Make invisible
+|.**setValue** (value : Text {; applyTo }{; CDATA : Boolean }) → cs.svg | Sets the element value
 |.**attachTo**(parent : Variant) → cs.svg | Adds item to parent item
+|.**clone**(source : Text {; attachTo}) → cs.svg |To create a copy of a svg object
+|.**addClass** (class : Text {; applyTo}) → cs.svg | Add a value to the node class
+|.**removeClass** (class : Text {; applyTo}) → cs.svg | Remove a value to the node class
+|.**isOfClass**(class : Text {; applyTo }) → isOfclass : Boolean | Tests if the node belongs to a class
+|.**layer**(name : Text) → cs.svg | Creates one or more group at the root of the SVG structure
+|.**useOf**(name : Text) → Boolean | Defines an element for the next operations
 |.**push**(name : Text) → cs.svg | Keeps the dom reference into the store associated with the given name
 |.**fetch**(name : Text)→dom : Text | Retrieve a stored dom reference associated with the given name
-|.**clone**(source : Text {; attachTo}) → cs.svg |To create a copy of a svg object
-|.**isOfClass**(class : Text {; target }) → isOfclass : Boolean | Tests if the node belongs to a class
 |.**preview**({ keepStructure : Boolean }) | Display the SVG image & tree into the SVG Viewer if the component 4D SVG is available.
 
 ### Inherited functions

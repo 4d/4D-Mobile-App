@@ -14,19 +14,18 @@ If (False:C215)
 	C_TEXT:C284(views_LAYOUT_PICKER; $1)
 End if 
 
-var $default; $node; $root; $t : Text
+var $default; $t : Text
 var $p : Picture
-var $success : Boolean
+var $isSelected; $success : Boolean
 var $i; $indx : Integer
 var $x : Blob
-var $error; $ƒ; $manifest; $o; $picker; $str : Object
+var $error; $ƒ; $manifest; $o; $picker : Object
 var $c : Collection
-
 var $template : 4D:C1709.Document
 var $folder; $internal; $user : 4D:C1709.Folder
-var $file : 4D:C1709.File
 var $archive : 4D:C1709.ZipArchive
 var $svg : cs:C1710.svg
+var $str : cs:C1710.str
 
 ARRAY TEXT:C222($formsArray; 0)
 
@@ -34,8 +33,7 @@ ARRAY TEXT:C222($formsArray; 0)
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	$t:=Folder:C1567(fk resources folder:K87:11).file("images/github.png").platformPath
-	READ PICTURE FILE:C678($t; $p; *)
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/github.png").platformPath; $p; *)
 	
 	$ƒ:=New object:C1471(\
 		"type"; $1; \
@@ -46,7 +44,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"github"; $p\
 		)
 	
-	$str:=_o_str
+	$str:=cs:C1710.str.new()
 	
 	// Load internal templates
 	$internal:=path[$ƒ.type+"Forms"]()
@@ -243,6 +241,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		
 	End if 
 	
+	$isSelected:=(Form:C1466.$dialog.VIEWS.template.path.name=$template.name)
+	
 	If ($template.extension=SHARED.archiveExtension)  // Archive
 		
 		$archive:=ZIP Read archive:C1637($template)
@@ -252,20 +252,31 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			// Create image
 			$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
 			
+			If ($isSelected)  //selected
+				
+				$svg.rect($ƒ.cell.width-6; $ƒ.cell.height-3)\
+					.position(5; 2)\
+					.stroke(UI.colors.strokeColor.hex)\
+					.fill(UI.colors.backgroundSelectedColor.hex)\
+					.radius(10)
+				
+			End if 
+			
 			// Put icon
 			$x:=$archive.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x; $p)
 			CLEAR VARIABLE:C89($x)
-			$svg.imageEmbedded($p; "root").position(-8)
+			$svg.imageEmbedded($p).moveH(-8)
 			
 			// Get the manifest
 			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
 			
 			// Put text
 			$svg.textArea($o.name; "root").position(0; $ƒ.cell.height-20)\
-				.dimensions($ƒ.cell.width)\
+				.width($ƒ.cell.width)\
 				.fill("dimgray")\
-				.alignment(Align center:K42:3)
+				.alignment(Align center:K42:3)\
+				.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 			
 			// Mark if used
 			$o.used:=($picker.marked.indexOf($formsArray{$i})#-1)
@@ -277,7 +288,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			End if 
 			
 			// Add github icon
-			$svg.imageEmbedded($ƒ.github; "root").position(1; 4)
+			$svg.imageEmbedded($ƒ.github)\
+				.position(Choose:C955($picker.selector="list"; 10; 5); Choose:C955($picker.selector="list"; 4; 12))
 			
 			$picker.pictures.push($svg.picture())
 			$picker.pathnames.push($formsArray{$i})
@@ -301,9 +313,19 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				// Create image
 				$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
 				
+				If ($isSelected)  //selected
+					
+					$svg.rect($ƒ.cell.width-6; $ƒ.cell.height-3)\
+						.position(5; 2)\
+						.stroke(UI.colors.strokeColor.hex)\
+						.fill(UI.colors.backgroundSelectedColor.hex)\
+						.radius(10)
+					
+				End if 
+				
 				// Media
 				READ PICTURE FILE:C678($template.parent.file("layoutIconx2.png").platformPath; $p)
-				$svg.imageEmbedded($p; "root").position(-8)
+				$svg.imageEmbedded($p).moveH(-8)
 				
 				// Title
 				$t:=$formsArray{$i}
@@ -319,7 +341,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					.position(0; $ƒ.cell.height-20)\
 					.dimensions($ƒ.cell.width)\
 					.fill("dimgray")\
-					.alignment(Align center:K42:3)
+					.alignment(Align center:K42:3)\
+					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 				
 				// Mark if used
 				If ($picker.marked.indexOf($formsArray{$i})#-1)
@@ -339,16 +362,34 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				If ($svg.success)
 					
 					// Add the css reference
-					$file:=path.templates().file("template.css")
+					$svg.styleSheet(path.templates().file("template.css"))
 					
-					If ($file.exists)
+					$p:=$svg.picture()
+					CREATE THUMBNAIL:C679($p; $p; $ƒ.cell.width; $ƒ.cell.height-40)
+					
+					$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
+					
+					If ($isSelected)  //selected
 						
-						$svg.styleSheet($file)
+						$svg.rect($ƒ.cell.width-6; $ƒ.cell.height-3)\
+							.position(5; 2)\
+							.stroke(UI.colors.strokeColor.hex)\
+							.fill(UI.colors.backgroundSelectedColor.hex)\
+							.radius(10)
 						
 					End if 
 					
+					$svg.imageEmbedded($p).y(10)  //.moveH(-5)
+					
+					// Put text
+					$svg.textArea($template.name; "root")\
+						.position(0; $ƒ.cell.height-20)\
+						.dimensions($ƒ.cell.width)\
+						.fill("dimgray")\
+						.alignment(Align center:K42:3)\
+						.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
+					
 					$p:=$svg.picture()
-					CREATE THUMBNAIL:C679($p; $p; $ƒ.cell.width; $ƒ.cell.height)
 					
 				End if 
 			End if 
@@ -392,9 +433,9 @@ $svg.imageEmbedded($p).position(20; 30).dimensions(96)
 
 // Put text
 //$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\
-		.dimensions($ƒ.cell.width)\
-		.fill("dimgray")\
-		.textAlignment(Align center)
+.dimensions($ƒ.cell.width)\
+.fill("dimgray")\
+.textAlignment(Align center)
 
 // Put in second position
 //$oPicker.pictures.insert(1;$svg.picture())
@@ -408,6 +449,7 @@ $picker.pathnames.push(Null:C1517)
 $picker.helpTips.push($str.setText("downloadMoreResources").localized($ƒ.type))
 $picker.infos.push(Null:C1517)
 
+$picker.hideSelection:=True:C214  // The selected item is already highlighted
 
 // Add 1 because the widget work with arrays
 $indx:=$picker.pathnames.indexOf(String:C10(Form:C1466[$ƒ.type][$ƒ.dialog.$.tableNum()].form))+1

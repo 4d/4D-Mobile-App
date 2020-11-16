@@ -194,6 +194,8 @@ Case of
 				($form.tableWidget.pointer())->:=tables_Widget($datamodel; New object:C1471(\
 					"tableNumber"; $context.tableNum()))
 				
+				SVG SHOW ELEMENT:C1108(*; $form.tableWidget.name; $context.tableNum(); 0)
+				
 				PROJECT.updateFormDefinitions()
 				
 				// Update geometry
@@ -235,6 +237,8 @@ Case of
 				// Draw the table list
 				($form.tableWidget.pointer())->:=tables_Widget($datamodel; New object:C1471(\
 					"tableNumber"; $context.tableNum()))
+				
+				SVG SHOW ELEMENT:C1108(*; $form.tableWidget.name; $context.tableNum(); 0)
 				
 				Case of 
 						

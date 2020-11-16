@@ -218,9 +218,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 				If ($multivalued)
 					
 					// Make it visible & mark as affected
-					$svg.setAttributes(New object:C1471("target"; DOM Get parent XML element:C923($domField); \
-						"visibility"; "visible"; \
-						"class"; "affected"))
+					$svg.setAttributes(New object:C1471("visibility"; "visible"; "class"; "affected"); DOM Get parent XML element:C923($domField))
 					
 				End if 
 				
