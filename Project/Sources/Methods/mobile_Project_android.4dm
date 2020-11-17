@@ -7,8 +7,8 @@ C_OBJECT:C1216($project; $Obj_cache; $Obj_in)
 C_BOOLEAN:C305($isDebug)
 
 If (False:C215)
-	C_OBJECT:C1216(mobile_Project; $0)
-	C_OBJECT:C1216(mobile_Project; $1)
+	C_OBJECT:C1216(mobile_Project_android; $1)
+	C_OBJECT:C1216(mobile_Project_android; $0)
 End if 
 
 

@@ -377,7 +377,7 @@ Case of
 					
 					// Set the drag icon
 					$p:=cs:C1710.svg.new()\
-						.imageEmbedded(UI.fieldIcons[$o.fieldType]).position(2; 2)\
+						.image(UI.fieldIcons[$o.fieldType]).position(2; 2)\
 						.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 						.picture()
 					
@@ -556,7 +556,7 @@ Case of
 						
 						// Create the drag icon
 						$p:=cs:C1710.svg.new()\
-							.imageEmbedded(UI.fieldIcons[$o.fieldType]).position(2; 2)\
+							.image(UI.fieldIcons[$o.fieldType]).position(2; 2)\
 							.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 							.picture()
 						

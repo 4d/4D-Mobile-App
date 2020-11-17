@@ -8,9 +8,6 @@
 // To be use with `.map` or other collection member functions.
 // ----------------------------------------------------
 // Declarations
-var $1 : Object
-var $2 : Variant
-
 If (False:C215)
 	C_OBJECT:C1216(col_formula; $1)
 	C_VARIANT:C1683(col_formula; $2)
@@ -21,7 +18,7 @@ End if
 Case of 
 		
 		//______________________________________________________
-	: (Value type:C1509($2)=Is text:K8:3)
+	: (Value type:C1509($2)=Is text:K8:3)  // Text formula
 		
 		EXECUTE FORMULA:C63($2)
 		

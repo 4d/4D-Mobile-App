@@ -228,7 +228,9 @@ Case of
 		
 		If ($file.exists)
 			
-			$o:=lep("output:object").launch(path.scripts().file("sqlite3_sizes.sh"); $file.path)
+			$o:=cs:C1710.lep.new()\
+				.setOutputType(Is object:K8:27)\
+				.launch(path.scripts().file("sqlite3_sizes.sh"); $file.path)
 			
 			If ($o.success)
 				

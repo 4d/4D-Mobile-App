@@ -22,8 +22,8 @@ C_OBJECT:C1216($Obj_project; $Obj_result_build; $Obj_result_device; $Obj_server;
 C_OBJECT:C1216($Obj_parameters; $Path_manifest; $Folder_destination)
 
 If (False:C215)
-	C_OBJECT:C1216(mobile_Project; $0)
-	C_OBJECT:C1216(mobile_Project; $1)
+	C_OBJECT:C1216(mobile_Project_iOS; $1)
+	C_OBJECT:C1216(mobile_Project_iOS; $0)
 End if 
 
 // ----------------------------------------------------

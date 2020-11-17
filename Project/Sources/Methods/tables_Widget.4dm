@@ -132,12 +132,12 @@ If ($dataModel#Null:C1517)
 				CLEAR VARIABLE:C89($x)
 				
 				CREATE THUMBNAIL:C679($picture; $picture; $params.icon.width; $params.icon.width)
-				$svg.imageEmbedded($picture).position($params.x+18; 5)
+				$svg.image($picture).position($params.x+18; 5)
 				CLEAR VARIABLE:C89($picture)
 				
 			Else 
 				
-				$svg.imageRef($file)\
+				$svg.image($file)\
 					.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
 					.dimensions($params.icon.width; $params.icon.width)
 				

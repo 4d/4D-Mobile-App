@@ -266,7 +266,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			$x:=$archive.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x; $p)
 			CLEAR VARIABLE:C89($x)
-			$svg.imageEmbedded($p).moveH(-8)
+			$svg.image($p).moveH(-8)
 			
 			// Get the manifest
 			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
@@ -288,7 +288,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			End if 
 			
 			// Add github icon
-			$svg.imageEmbedded($ƒ.github)\
+			$svg.image($ƒ.github)\
 				.position(Choose:C955($picker.selector="list"; 10; 5); Choose:C955($picker.selector="list"; 4; 12))
 			
 			$picker.pictures.push($svg.picture())
@@ -325,7 +325,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				// Media
 				READ PICTURE FILE:C678($template.parent.file("layoutIconx2.png").platformPath; $p)
-				$svg.imageEmbedded($p).moveH(-8)
+				$svg.image($p).moveH(-8)
 				
 				// Title
 				$t:=$formsArray{$i}
@@ -379,7 +379,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 						
 					End if 
 					
-					$svg.imageEmbedded($p).y(10)  //.moveH(-5)
+					$svg.image($p).y(10)  //.moveH(-5)
 					
 					// Put text
 					$svg.textArea($template.name; "root")\
@@ -429,7 +429,7 @@ $svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
 
 // Media
 READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
-$svg.imageEmbedded($p).position(20; 30).dimensions(96)
+$svg.image($p).position(20; 30).dimensions(96)
 
 // Put text
 //$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\

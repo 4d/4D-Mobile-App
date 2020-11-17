@@ -38,7 +38,7 @@ If (True:C214)
 	If ($svg.useOf("foreground"))  // Set "foreground" layer for the next operations
 		
 		$svg.ellipse(300; 100; 500)
-		$svg.textArea("Hello\rworld").fontSize(26).translate(3; -3)
+		$svg.textArea("Hello\nworld").translate(3; -3).fontSize(26)
 		
 		If ($svg.useOf("original"))
 			

@@ -122,8 +122,6 @@ Case of
 								: ($menu.choice="publishAll")\
 									 | ($menu.choice="unpublishAll")
 									
-									//#MARK_TODO - management of relatedDataClass
-									
 									$b:=($menu.choice="publishAll")
 									
 									For ($i; 1; Size of array:C274($Ptr_published->); 1)
@@ -476,6 +474,12 @@ Case of
 																			
 																			OB REMOVE:C1226($tableDataModel[$context.fieldName][$c[0]]; String:C10($o.fieldNumber))
 																			
+																			// Remove the link if no more fields are published
+																			If (OB Entries:C1720($tableDataModel[$context.fieldName][$c[0]]).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1))).length=0)
+																				
+																				OB REMOVE:C1226($tableDataModel[$context.fieldName]; $c[0])
+																				
+																			End if 
 																		End if 
 																		
 																	Else 

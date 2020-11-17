@@ -17,7 +17,7 @@ Class constructor($content)
 	End if 
 	
 	This:C1470.latest:=Null:C1517
-	This:C1470.image:=Null:C1517
+	This:C1470.graphic:=Null:C1517
 	This:C1470.store:=New collection:C1472
 	
 	This:C1470._notContainer:=New collection:C1472("rect"; "line"; "image"; "circle"; "ellipse"; "path"; "polygon"; "polyline"; "use"; "textArea")
@@ -91,7 +91,7 @@ Function picture($exportType : Variant; $keepStructure : Boolean)->$picture : Pi
 	
 	If (Picture size:C356($picture)>0)
 		
-		This:C1470.image:=$picture
+		This:C1470.graphic:=$picture
 		
 	Else 
 		
@@ -634,9 +634,10 @@ Function line($x1 : Real; $y1 : Real; $x2 : Real; $y2 : Real; $attachTo)->$this 
 	$this:=This:C1470
 	
 	//———————————————————————————————————————————————————————————
-Function imageEmbedded($picture : Picture; $attachTo)->$this : cs:C1710.svg
+Function image($picture : Variant; $attachTo)->$this : cs:C1710.svg
 	
 	var $node; $t : Text
+	var $p : Picture
 	var $height; $paramNumber; $width : Integer
 	var $x : Blob
 	
@@ -644,107 +645,189 @@ Function imageEmbedded($picture : Picture; $attachTo)->$this : cs:C1710.svg
 	
 	If (This:C1470._requiredParams($paramNumber; 1))
 		
-		If (Picture size:C356($picture)>0)
+		If ($paramNumber=2)
 			
-			// Encode in base64
-			PICTURE TO BLOB:C692($picture; $x; ".png")
-			This:C1470.success:=Bool:C1537(OK)
-			
-			If (This:C1470.success)
-				
-				BASE64 ENCODE:C895($x; $t)
-				CLEAR VARIABLE:C89($x)
-				
-				// Put the encoded image
-				PICTURE PROPERTIES:C457($picture; $width; $height)
-				
-				If ($paramNumber=2)
-					
-					$node:=This:C1470._getContainer($attachTo)
-					
-				Else 
-					
-					// Auto
-					$node:=This:C1470._getContainer()
-					
-				End if 
-				
-				This:C1470.latest:=Super:C1706.create($node; "image"; New object:C1471(\
-					"xlink:href"; "data:;base64,"+$t; \
-					"x"; 0; \
-					"y"; 0; \
-					"width"; $width; \
-					"height"; $height))
-				
-			End if 
+			$node:=This:C1470._getContainer($attachTo)
 			
 		Else 
 			
-			This:C1470._pushError("Given picture is empty")
+			// Auto
+			$node:=This:C1470._getContainer()
 			
 		End if 
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($picture)=Is picture:K8:10)  // Embedded
+				
+				If (Picture size:C356($picture)>0)
+					
+					// Encode in base64
+					PICTURE TO BLOB:C692($picture; $x; ".png")
+					This:C1470.success:=Bool:C1537(OK)
+					
+					If (This:C1470.success)
+						
+						BASE64 ENCODE:C895($x; $t)
+						CLEAR VARIABLE:C89($x)
+						
+						// Put the encoded image
+						PICTURE PROPERTIES:C457($picture; $width; $height)
+						
+						If ($paramNumber=2)
+							
+							$node:=This:C1470._getContainer($attachTo)
+							
+						Else 
+							
+							// Auto
+							$node:=This:C1470._getContainer()
+							
+						End if 
+						
+						This:C1470.latest:=Super:C1706.create($node; "image"; New object:C1471(\
+							"xlink:href"; "data:;base64,"+$t; \
+							"x"; 0; \
+							"y"; 0; \
+							"width"; $width; \
+							"height"; $height))
+						
+					End if 
+					
+				Else 
+					
+					This:C1470._pushError("Given picture is empty")
+					
+				End if 
+				
+				//______________________________________________________
+			: (Value type:C1509($picture)=Is object:K8:27)  // Url
+				
+				If (OB Instance of:C1731($picture; 4D:C1709.File))
+					
+					If (Bool:C1537($picture.exists))
+						
+						// Unsandboxed, if any
+						$picture:=File:C1566(File:C1566($picture.path).platformPath; fk platform path:K87:2)
+						
+						READ PICTURE FILE:C678($picture.platformPath; $p)
+						
+						If (Bool:C1537(OK))
+							
+							PICTURE PROPERTIES:C457($p; $width; $height)
+							CLEAR VARIABLE:C89($p)
+							
+							If ($paramNumber=2)
+								
+								$node:=This:C1470._getContainer($attachTo)
+								
+							Else 
+								
+								// Auto
+								$node:=This:C1470._getContainer()
+								
+							End if 
+							
+							This:C1470.latest:=Super:C1706.create($node; "image"; New object:C1471(\
+								"xlink:href"; "file://"+Choose:C955(Is Windows:C1573; "/"; "")+Replace string:C233($picture.path; " "; "%20"); \
+								"x"; 0; \
+								"y"; 0; \
+								"width"; $width; \
+								"height"; $height))
+							
+							If (Not:C34(This:C1470.success))
+								
+								This:C1470._pushError("Failed to create image \""+String:C10($picture.path)+"\"")
+								
+							End if 
+							
+						Else 
+							
+							This:C1470._pushError("Failed to read image \""+String:C10($picture.path)+"\"")
+							
+						End if 
+						
+					Else 
+						
+						This:C1470._pushError("File not found \""+String:C10($picture.path)+"\"")
+						
+					End if 
+					
+				Else 
+					
+					This:C1470._pushError("Picture must be a picture file.")
+					
+				End if 
+				
+				//______________________________________________________
+			Else 
+				
+				This:C1470._pushError("Picture must be a picture variable ou a picture file.")
+				
+				//______________________________________________________
+		End case 
 	End if 
 	
 	$this:=This:C1470
 	
 	//———————————————————————————————————————————————————————————
-Function imageRef($file : 4D:C1709.File; $attachTo)->$this : cs:C1710.svg
+Function text($text : Text; $attachTo)->$this : cs:C1710.svg
 	
-	var $node : Text
-	var $p : Picture
-	var $height; $width; $paramNumber : Integer
+	var $node; $line : Text
+	var $o : Object
+	var $y : Real
+	var $defaultFontSize : Integer
+	var $c : Collection
 	
-	$paramNumber:=Count parameters:C259
+	$defaultFontSize:=12
 	
-	If (This:C1470._requiredParams($paramNumber; 1))
+	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		If (Bool:C1537($file.exists))
+		If (Count parameters:C259=2)
 			
-			// Unsandboxed, if any
-			$file:=File:C1566(File:C1566($file.path).platformPath; fk platform path:K87:2)
-			
-			READ PICTURE FILE:C678($file.platformPath; $p)
-			
-			If (Bool:C1537(OK))
-				
-				PICTURE PROPERTIES:C457($p; $width; $height)
-				CLEAR VARIABLE:C89($p)
-				
-				If ($paramNumber=2)
-					
-					$node:=This:C1470._getContainer($attachTo)
-					
-				Else 
-					
-					// Auto
-					$node:=This:C1470._getContainer()
-					
-				End if 
-				
-				This:C1470.latest:=Super:C1706.create($node; "image"; New object:C1471(\
-					"xlink:href"; "file://"+Choose:C955(Is Windows:C1573; "/"; "")+Replace string:C233($file.path; " "; "%20"); \
-					"x"; 0; \
-					"y"; 0; \
-					"width"; $width; \
-					"height"; $height))
-				
-				If (Not:C34(This:C1470.success))
-					
-					This:C1470._pushError("Failed to create image \""+String:C10($file.path)+"\"")
-					
-				End if 
-				
-			Else 
-				
-				This:C1470._pushError("Failed to read image \""+String:C10($file.path)+"\"")
-				
-			End if 
+			$node:=This:C1470._getContainer($attachTo)
 			
 		Else 
 			
-			This:C1470._pushError("File not found \""+String:C10($file.path)+"\"")
+			// Auto
+			$node:=This:C1470._getContainer()
 			
 		End if 
+		
+		$y:=$defaultFontSize
+		
+		$o:=New object:C1471(\
+			"x"; 0; \
+			"y"; $y)
+		
+		This:C1470.latest:=Super:C1706.create($node; "text"; $o)
+		
+		If (This:C1470.success)\
+			 & (Length:C16($text)>0)
+			
+			$text:=Replace string:C233($text; "\r\n"; "\n")
+			$text:=Replace string:C233($text; "\n"; "\r")
+			
+			$c:=Split string:C1554($text; "\r")
+			
+			If ($c.length=1)
+				
+				This:C1470.setValue($text)
+				
+			Else 
+				
+				// #WIP
+				For each ($line; $c) While (This:C1470.success)
+					
+					$node:=Super:C1706.create(This:C1470.latest; "tspan"; $o)
+					Super:C1706.setValue($node; $line)
+					$o.y:=$o.y+$defaultFontSize
+					
+				End for each 
+			End if 
+		End if 
+		
 	End if 
 	
 	$this:=This:C1470
@@ -752,8 +835,8 @@ Function imageRef($file : 4D:C1709.File; $attachTo)->$this : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 Function textArea($text : Text; $attachTo)->$this : cs:C1710.svg
 	
-	var $node; $substring; $t : Text
-	var $indx : Integer
+	var $node; $line : Text
+	var $i : Integer
 	var $o : Object
 	var $paramNumber : Integer
 	
@@ -783,47 +866,33 @@ Function textArea($text : Text; $attachTo)->$this : cs:C1710.svg
 		If (This:C1470.success)\
 			 & (Length:C16($text)>0)
 			
-			$t:=Replace string:C233(String:C10($text); "\r\n"; "\r")
+			$text:=Replace string:C233($text; "\r\n"; "\n")
+			$text:=Replace string:C233($text; "\n"; "\r")
 			
-			Repeat 
+			For each ($line; Split string:C1554($text; "\r")) While (This:C1470.success)
 				
-				$indx:=Position:C15("\r"; $t)
-				
-				If ($indx=0)
+				If ($i=0)
 					
-					$indx:=Position:C15("\n"; $t)
-					
-				End if 
-				
-				If ($indx>0)
-					
-					$substring:=Substring:C12($t; 1; $indx-1)
-					
-					If (Length:C16($substring)>0)
-						
-						$node:=DOM Append XML child node:C1080(This:C1470.latest; XML DATA:K45:12; $substring)
-						
-					End if 
-					
-					$node:=DOM Append XML child node:C1080(This:C1470.latest; XML ELEMENT:K45:20; "tbreak")
-					
-					$t:=Delete string:C232($t; 1; Length:C16($substring)+1)
+					This:C1470.setValue($line)
 					
 				Else 
 					
-					If (Length:C16($t)>0)
+					$node:=DOM Create XML element:C865(This:C1470.latest; "tbreak")
+					This:C1470.success:=Bool:C1537(OK)
+					
+					If (This:C1470.success)\
+						 & (Length:C16($line)>0)
 						
-						$node:=DOM Append XML child node:C1080(This:C1470.latest; XML DATA:K45:12; $t)
+						$node:=DOM Append XML child node:C1080(This:C1470.latest; XML DATA:K45:12; $line)
+						This:C1470.success:=Bool:C1537(OK)
 						
 					End if 
 				End if 
-			Until ($indx=0)\
-				 | (OK=0)
-			
-			This:C1470.success:=Bool:C1537(OK)
-			
+				
+				$i:=$i+1
+				
+			End for each 
 		End if 
-		
 	End if 
 	
 	$this:=This:C1470
@@ -1291,24 +1360,67 @@ Function id($id : Text; $applyTo)->$this : cs:C1710.svg
 	$this:=This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Sets the x value
 Function x($x : Real; $applyTo)->$this : cs:C1710.svg
+	
+	
+	var $node; $element : Text
+	var $spans : Collection
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
 		If (Count parameters:C259>=2)
 			
-			Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "x"; $x)
+			$node:=This:C1470._getTarget($applyTo)
 			
 		Else 
 			
-			Super:C1706.setAttribute(This:C1470._getTarget(); "x"; $x)
+			// Auto
+			$node:=This:C1470._getTarget($applyTo)
 			
 		End if 
+		
+		DOM GET XML ELEMENT NAME:C730($node; $element)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($element="text")
+				
+				Super:C1706.setAttribute($node; "x"; $x)
+				
+				// Apply to enclosed spans, if any
+				$spans:=This:C1470.find($node; "./tspan")
+				
+				If ($spans.length>0)
+					
+					For each ($node; $spans)
+						
+						Super:C1706.setAttribute($node; "x"; $x)
+						
+					End for each 
+				End if 
+				
+				//______________________________________________________
+			: ($element="rect")\
+				 | ($element="image")\
+				 | ($element="textArea")
+				
+				Super:C1706.setAttribute($node; "x"; $x)
+				
+				//______________________________________________________
+			Else 
+				
+				This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+				
+				//______________________________________________________
+		End case 
 	End if 
 	
 	$this:=This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Sets the y value
 Function y($y : Real; $applyTo)->$this : cs:C1710.svg
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
@@ -1325,6 +1437,170 @@ Function y($y : Real; $applyTo)->$this : cs:C1710.svg
 	End if 
 	
 	$this:=This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets the radius of a circle
+Function r($r : Real; $applyTo)->$this : cs:C1710.svg
+	
+	var $node; $element : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 1))
+		
+		If (Count parameters:C259>=2)
+			
+			$node:=This:C1470._getTarget($applyTo)
+			
+		Else 
+			
+			// Auto
+			$node:=This:C1470._getTarget($applyTo)
+			
+		End if 
+		
+		DOM GET XML ELEMENT NAME:C730($node; $element)
+		
+		If ($element="circle")
+			
+			Super:C1706.setAttribute($node; "r"; $r)
+			
+		Else 
+			
+			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			
+		End if 
+	End if 
+	
+	//———————————————————————————————————————————————————————————
+	// Sets the rx of a rect or an ellipse
+Function rx($rx : Real; $applyTo)->$this : cs:C1710.svg
+	
+	var $node; $element : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 1))
+		
+		If (Count parameters:C259>=2)
+			
+			$node:=This:C1470._getTarget($applyTo)
+			
+		Else 
+			
+			// Auto
+			$node:=This:C1470._getTarget($applyTo)
+			
+		End if 
+		
+		DOM GET XML ELEMENT NAME:C730($node; $element)
+		
+		If ($element="rect")\
+			 | ($element="ellipse")
+			
+			Super:C1706.setAttribute($node; "rx"; $rx)
+			
+		Else 
+			
+			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			
+		End if 
+	End if 
+	
+	//———————————————————————————————————————————————————————————
+	// Sets the ry of an ellipse
+Function ry($ry : Real; $applyTo)->$this : cs:C1710.svg
+	
+	var $node; $element : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 1))
+		
+		If (Count parameters:C259>=2)
+			
+			$node:=This:C1470._getTarget($applyTo)
+			
+		Else 
+			
+			// Auto
+			$node:=This:C1470._getTarget($applyTo)
+			
+		End if 
+		
+		DOM GET XML ELEMENT NAME:C730($node; $element)
+		
+		If ($element="rect")\
+			 | ($element="ellipse")
+			
+			Super:C1706.setAttribute($node; "ry"; $ry)
+			
+		Else 
+			
+			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			
+		End if 
+	End if 
+	
+	//———————————————————————————————————————————————————————————
+	// Sets the cx of a circle or ellipse
+Function cx($cx : Real; $applyTo)->$this : cs:C1710.svg
+	
+	var $node; $element : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 1))
+		
+		If (Count parameters:C259>=2)
+			
+			$node:=This:C1470._getTarget($applyTo)
+			
+		Else 
+			
+			// Auto
+			$node:=This:C1470._getTarget($applyTo)
+			
+		End if 
+		
+		DOM GET XML ELEMENT NAME:C730($node; $element)
+		
+		If ($element="circle")\
+			 | ($element="ellipse")
+			
+			Super:C1706.setAttribute($node; "cx"; $cx)
+			
+		Else 
+			
+			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			
+		End if 
+	End if 
+	
+	//———————————————————————————————————————————————————————————
+	// Sets the cy of a circle or ellipse
+Function cy($cy : Real; $applyTo)->$this : cs:C1710.svg
+	
+	var $node; $element : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 1))
+		
+		If (Count parameters:C259>=2)
+			
+			$node:=This:C1470._getTarget($applyTo)
+			
+		Else 
+			
+			// Auto
+			$node:=This:C1470._getTarget($applyTo)
+			
+		End if 
+		
+		DOM GET XML ELEMENT NAME:C730($node; $element)
+		
+		If ($element="circle")\
+			 | ($element="ellipse")
+			
+			Super:C1706.setAttribute($node; "cy"; $cy)
+			
+		Else 
+			
+			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			
+		End if 
+	End if 
 	
 	//———————————————————————————————————————————————————————————
 Function width($width : Real; $applyTo)->$this : cs:C1710.svg
@@ -1864,6 +2140,22 @@ Function class($class : Text; $applyTo)->$this : cs:C1710.svg
 	Else 
 		
 		Super:C1706.setAttribute(This:C1470._getTarget(); "class"; $class)
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Assigns an embedded style to an element
+Function style($tyle : Text; $applyTo)->$this : cs:C1710.svg
+	
+	If (Count parameters:C259=2)
+		
+		Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "style"; $tyle)
+		
+	Else 
+		
+		Super:C1706.setAttribute(This:C1470._getTarget(); "style"; $tyle)
 		
 	End if 
 	
@@ -2972,19 +3264,71 @@ Function getTextWidth($string : Text; $fontAttributes : Object)->$width : Intege
 	var $height : Integer
 	var $o : Object
 	
+	$o:=cs:C1710.svg.new().textArea($string)
+	
 	If (Count parameters:C259>=2)
 		
-		$o:=cs:C1710.svg.new().textArea($string).font($fontAttributes)
+		$o.font($fontAttributes)
 		
-	Else 
-		
-		// Keep the default font that should be: Times New Roman 12 pts.
-		$o:=cs:C1710.svg.new().textArea($string)
+		//Else : Keep the default font that should be: Times New Roman 12 pts.
 		
 	End if 
 	
 	$picture:=$o.picture()
 	PICTURE PROPERTIES:C457($picture; $width; $height)
+	
+	//———————————————————————————————————————————————————————————
+	// Returns text height
+Function getTextHeight($string : Text; $fontAttributes : Object)->$height : Integer
+	
+	var $picture : Picture
+	var $width : Integer
+	var $o : Object
+	var $line : Text
+	
+	// 1] Calculate the height of the last line
+	$line:=$string
+	
+	// Keep only the last line
+	ARRAY LONGINT:C221($len; 0x0000)
+	ARRAY LONGINT:C221($pos; 0x0000)
+	If (Match regex:C1019("(?i-ms).*$"; $string; 1; $pos; $len))
+		
+		$line:=Substring:C12($string; $pos{0}; $len{0})
+		
+	End if 
+	
+	$o:=cs:C1710.svg.new().text($line)
+	
+	If (Count parameters:C259>=2)
+		
+		$o.font($fontAttributes)
+		
+	End if 
+	
+	If (Count parameters:C259>=2)
+		
+		$o.font($fontAttributes)
+		
+		//Else : Keep the default font that should be: Times New Roman 12 pts.
+		
+	End if 
+	
+	$picture:=$o.picture()
+	PICTURE PROPERTIES:C457($picture; $width; $height)
+	
+	// 2] Measure the width and height of the text itself.
+	$o.fillOpacity(0)
+	
+	$o.textArea()
+	
+	If (Count parameters:C259>=2)
+		
+		$o.font($fontAttributes)
+		
+	End if 
+	
+	
 	
 	
 /*================================================================

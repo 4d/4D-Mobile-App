@@ -416,7 +416,8 @@
 			"androidProcess"
 		],
 		"methods": [
-			"dev_test_android"
+			"dev_test_android",
+			"mobile_Project_android"
 		],
 		"classes": [
 			"externalProcess",
@@ -477,6 +478,7 @@
 			"doc",
 			"env",
 			"error",
+			"lep",
 			"menu",
 			"process",
 			"str",
@@ -599,6 +601,7 @@
 		"methods": [
 			"HTU_logs",
 			"HTU_progress",
+			"HTU_svg class",
 			"htuProgressDoSomething"
 		]
 	},
@@ -649,6 +652,7 @@
 			"COMPILER_macOS",
 			"device",
 			"git",
+			"mobile_Project_iOS",
 			"plist",
 			"provisioningProfiles",
 			"simulator",
@@ -777,8 +781,6 @@
 			"group",
 			"http",
 			"HTTP ERROR HANDLER",
-			"HTU_svg class",
-			"lep",
 			"listbox",
 			"logger",
 			"new",

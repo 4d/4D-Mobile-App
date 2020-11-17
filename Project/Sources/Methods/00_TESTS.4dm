@@ -24,6 +24,37 @@ Else
 End if 
 
 Case of 
+		
+		//________________________________________
+	: (True:C214)
+		
+		var $o : cs:C1710.lep
+		$o:=cs:C1710.lep.new()
+		$o.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "false")
+		
+		$o.launch("open"; "/Applications/Calculator.app")
+		
+		If (False:C215)
+			
+			$o.launch("kill"; String:C10($o.pid))
+			
+		Else 
+			
+			$o.launch("osascript -e"; "'quit app \"Calculator.app\"'")
+			
+		End if 
+		
+		$o.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "true")
+		$o.launch("/bin/ls -l"; "/Users")
+		$c:=Split string:C1554(String:C10($o.outputStream); "\n")
+		
+		
+		$o.reset()
+		$o.launch("ioreg -n IODisplayWrangler |grep -i IOPowerManagement")
+		$t:=$o.outputStream
+		
+		
+		
 		//________________________________________
 	: (True:C214)
 		
@@ -513,30 +544,6 @@ Case of
 		//  $c:=$o.paths()
 		
 		//$o.openAppStore()
-		
-		//________________________________________
-	: (False:C215)
-		
-		$o:=new("lep")
-		$o1:=$o.constructor()
-		
-		$o:=lep("blocking:false")
-		$o.launch("open"; "/Applications/Calculator.app")
-		
-		If (True:C214)
-			
-			$o.launch("kill"; String:C10($o.pid))
-			
-		Else 
-			
-			$o.launch("osascript -e"; "'quit app \"Calculator.app\"'")
-			
-		End if 
-		
-		$c:=Split string:C1554($o.launch("/bin/ls -l"; "/Users").outputStream; "\n")
-		
-		$o.reset()
-		$t:=$o.launch("ioreg -n IODisplayWrangler |grep -i IOPowerManagement").outputStream
 		
 		//________________________________________
 	: (False:C215)
