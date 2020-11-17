@@ -1,16 +1,18 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_TEXT:C284($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
-C_OBJECT:C1216($project; $Obj_cache; $Obj_in)
-C_BOOLEAN:C305($isDebug)
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(mobile_Project_android; $1)
 	C_OBJECT:C1216(mobile_Project_android; $0)
+	C_OBJECT:C1216(mobile_Project_android; $1)
 End if 
 
+var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
+var $isDebug : Boolean
+var $Obj_cache; $Obj_in; $project : Object
+var $c : Collection
+var $file : 4D:C1709.File
+var $lep : cs:C1710.lep
 
 // NO PARAMETERS REQUIRED
 $isDebug:=DATABASE.isInterpreted
@@ -53,31 +55,65 @@ End if
 
 //Artifactory
 
-SET ENVIRONMENT VARIABLE:C812("ARTIFACTORY_USERNAME"; "admin")
-SET ENVIRONMENT VARIABLE:C812("ARTIFACTORY_PASSWORD"; "password")
-SET ENVIRONMENT VARIABLE:C812("ARTIFACTORY_MACHINE_IP"; "192.168.5.12")
+/*  @Quentin:
 
-$project:=OB Copy:C1225($Obj_in)
-$project.sdk:="/Users/quentinmarciset/Library/Android/sdk"
-$project.path:=Convert path system to POSIX:C1106($project.path)
+Je ne peux pas tester sur ma machine ;-)
+Mais j'ai fais une class "lep" que je te propose d'utiliser en passant le test ci-dessous à True
 
-$0:=New object:C1471("success"; False:C215)
+*/
 
-var $file : 4D:C1709.File
-$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
-
-$file.setText(JSON Stringify:C1217($project))
-
-$Txt_cmd:="/Users/quentinmarciset/Downloads/KotlinScripts/build-and-run.sh '"+$file.path+"'"
-
-LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
-
-//$file.delete()
-SHOW ON DISK:C922($file.platformPath)
-
-$0.out:=$Txt_out
-$0.errors:=Split string:C1554($Txt_error; "\n")
-$0.success:=Length:C16($Txt_error)=0
+If (False:C215)
+	
+	$0:=New object:C1471("success"; False:C215)
+	
+	$project:=OB Copy:C1225($Obj_in)
+	$project.sdk:="/Users/quentinmarciset/Library/Android/sdk"
+	$project.path:=Convert path system to POSIX:C1106($project.path)
+	
+	$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
+	$file.setText(JSON Stringify:C1217($project))
+	
+	$c:=New collection:C1472
+	$c.push(New object:C1471("ARTIFACTORY_USERNAME"; "admin"))
+	$c.push(New object:C1471("ARTIFACTORY_PASSWORD"; "password"))
+	$c.push(New object:C1471("ARTIFACTORY_MACHINE_IP"; "192.168.5.12"))
+	
+	$lep:=cs:C1710.lep.new()\
+		.setEnvironnementVariable($c)\
+		.launch("/Users/quentinmarciset/Downloads/KotlinScripts/build-and-run.sh '"+$file.path+"'")
+	
+	$0.out:=$lep.outputStream
+	$0.errors:=Split string:C1554($lep.errorStream; "\n")
+	$0.success:=$lep.success
+	
+Else 
+	
+	SET ENVIRONMENT VARIABLE:C812("ARTIFACTORY_USERNAME"; "admin")
+	SET ENVIRONMENT VARIABLE:C812("ARTIFACTORY_PASSWORD"; "password")
+	SET ENVIRONMENT VARIABLE:C812("ARTIFACTORY_MACHINE_IP"; "192.168.5.12")
+	
+	$project:=OB Copy:C1225($Obj_in)
+	$project.sdk:="/Users/quentinmarciset/Library/Android/sdk"
+	$project.path:=Convert path system to POSIX:C1106($project.path)
+	
+	$0:=New object:C1471("success"; False:C215)
+	
+	$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
+	
+	$file.setText(JSON Stringify:C1217($project))
+	
+	$Txt_cmd:="/Users/quentinmarciset/Downloads/KotlinScripts/build-and-run.sh '"+$file.path+"'"
+	
+	LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
+	
+	//$file.delete()
+	SHOW ON DISK:C922($file.platformPath)
+	
+	$0.out:=$Txt_out
+	$0.errors:=Split string:C1554($Txt_error; "\n")
+	$0.success:=Length:C16($Txt_error)=0
+	
+End if 
 
 SHOW ON DISK:C922($Obj_in.path)
 

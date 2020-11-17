@@ -2,7 +2,7 @@
 
 Class constructor
 	
-	Super:C1705()
+	//Super()
 	
 	This:C1470.reset()
 	
