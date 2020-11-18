@@ -283,6 +283,7 @@ Function save
 	var $2 : Boolean
 	
 	var $close : Boolean
+	var $t : Text
 	var $file : 4D:C1709.File
 	
 	If (Count parameters:C259>=2)
@@ -316,8 +317,15 @@ Function save
 	
 	If (This:C1470.success)
 		
-		DOM EXPORT TO FILE:C862(This:C1470.root; $file.platformPath)
+		DOM EXPORT TO VAR:C863(This:C1470.root; $t)
 		This:C1470.success:=Bool:C1537(OK)
+		
+		If (This:C1470.success)
+			
+			This:C1470.xml:=$t
+			$file.setText($t)
+			
+		End if 
 		
 	Else 
 		

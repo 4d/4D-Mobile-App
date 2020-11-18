@@ -25,14 +25,14 @@ End if
 
 Case of 
 		
+		
 		//________________________________________
 	: (True:C214)
 		
 		var $o : cs:C1710.lep
 		$o:=cs:C1710.lep.new()
-		$o.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "false")
 		
-		$o.launch("open"; "/Applications/Calculator.app")
+		$o.async().launch("open"; "/Applications/Pages.app")
 		
 		If (False:C215)
 			
@@ -44,7 +44,7 @@ Case of
 			
 		End if 
 		
-		$o.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "true")
+		$o.sync()
 		$o.launch("/bin/ls -l"; "/Users")
 		$c:=Split string:C1554(String:C10($o.outputStream); "\n")
 		

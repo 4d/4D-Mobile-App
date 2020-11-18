@@ -1,19 +1,13 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
+#DECLARE ($in : Object)->$result : Object
 
-If (False:C215)
-	C_OBJECT:C1216(mobile_Project; $0)
-	C_OBJECT:C1216(mobile_Project; $1)
-End if 
-
-If ((String:C10($1.project.buildTarget)="android")\
+If ((String:C10($in.project.buildTarget)="android")\
  | (String:C10(SHARED.buildType)="android"))
 	
-	$0:=mobile_Project_android($1)
+	$result:=mobile_Project_android($in)
 	
 Else 
 	
-	$0:=mobile_Project_iOS($1)
+	$result:=mobile_Project_iOS($in)
 	
 End if 

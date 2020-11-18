@@ -112,54 +112,50 @@ Function createIconAssets
 				If ($Obj_metaData.shortLabel#Null:C1517)
 					
 					// Generate asset using first table letter
-					C_OBJECT:C1216($file)
-					$file:=Folder:C1567(fk resources folder:K87:11).folder("images").file("missingIcon.svg")
+					var $file : 4D:C1709.File
+					$file:=File:C1566("/RESOURCES/Images/missingIcon.svg")
 					
-					If (Asserted:C1132($file.exists; "Missing ressources: "+$file.path))
+					var $svg : cs:C1710.svg
+					$svg:=cs:C1710.svg.new($file)
+					
+					If (Asserted:C1132($svg.success; "Failed to parse: "+$file.path))
 						
-						C_TEXT:C284($Svg_root; $t)
-						$Svg_root:=DOM Parse XML source:C719($file.platformPath)
+						var $t : Text
+						$t:=Choose:C955(Bool:C1537(This:C1470.template.shortLabel); $Obj_metaData.shortLabel; $Obj_metaData.label)
 						
-						If (Asserted:C1132(OK=1; "Failed to parse: "+$file.path))
+						If (Length:C16($t)>0)
 							
-							$t:=Choose:C955(Bool:C1537(This:C1470.template.shortLabel); $Obj_metaData.shortLabel; $Obj_metaData.label)
+							// Take first letter
+							$t:=Uppercase:C13($t[[1]])
 							
-							If (Length:C16($t)>0)
-								
-								// Take first letter
-								$t:=Uppercase:C13($t[[1]])
-								
-							Else 
-								
-								//%W-533.1
-								$t:=Uppercase:C13($Obj_metaData.name[[1]])  // 4D table names are not empty
-								//%W+533.1
-								
-							End if 
+						Else 
 							
-							DOM SET XML ELEMENT VALUE:C868($Svg_root; "/svg/textArea"; $t)
-							
-							$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(This:C1470.input.project.product.bundleIdentifier+".svg")
-							$file.delete()
-							
-							DOM EXPORT TO FILE:C862($Svg_root; $file.platformPath)
-							
-							DOM CLOSE XML:C722($Svg_root)
-							
-							$o:=asset(New object:C1471(\
-								"action"; "create"; \
-								"type"; "imageset"; \
-								"tags"; New object:C1471("name"; "Main"+$Obj_metaData.name); \
-								"source"; $file.platformPath; \
-								"target"; This:C1470.template.parent.assets.target+This:C1470.template.assets.target+Folder separator:K24:12; \
-								"format"; This:C1470.template.assets.format; \
-								"size"; This:C1470.template.assets.size\
-								))
-							
-							$Obj_out.assets.push($o)
-							ob_error_combine($Obj_out; $o)
+							//%W-533.1
+							$t:=Uppercase:C13($Obj_metaData.name[[1]])  // 4D table names are not empty
+							//%W+533.1
 							
 						End if 
+						
+						$svg.setValue($t; $svg.findByXPath("/svg/textArea"))
+						
+						$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(This:C1470.input.project.product.bundleIdentifier+".svg")
+						$file.delete()
+						
+						$svg.exportText($file)
+						
+						$o:=asset(New object:C1471(\
+							"action"; "create"; \
+							"type"; "imageset"; \
+							"tags"; New object:C1471("name"; "Main"+$Obj_metaData.name); \
+							"source"; $file.platformPath; \
+							"target"; This:C1470.template.parent.assets.target+This:C1470.template.assets.target+Folder separator:K24:12; \
+							"format"; This:C1470.template.assets.format; \
+							"size"; This:C1470.template.assets.size\
+							))
+						
+						$Obj_out.assets.push($o)
+						ob_error_combine($Obj_out; $o)
+						
 					End if 
 				End if 
 				
