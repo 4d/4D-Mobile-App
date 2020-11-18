@@ -123,7 +123,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		"scale"; 64))
 	
 	// minimum requierement
-	SHARED.xCodeVersion:="12.1"
+	SHARED.xCodeVersion:="12.2"
 	SHARED.iosDeploymentTarget:="14.1"
 	
 	SHARED.useXcodeDefaultPath:=True:C214
