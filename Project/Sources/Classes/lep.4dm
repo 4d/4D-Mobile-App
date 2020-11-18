@@ -256,7 +256,8 @@ Function setOutputType($outputType : Integer)->$this : cs:C1710.lep
 	//====================================================================
 Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.lep
 	
-	var $v; $value : Variant
+	var $v : Variant
+	var $value : Text
 	var $o : Object
 	
 	Case of 
