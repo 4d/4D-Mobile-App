@@ -4,71 +4,71 @@
 // Created 30-1-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-C_BOOLEAN:C305($Boo_shiftDown)
-C_LONGINT:C283($Lon_bottom; $Lon_formEvent; $Lon_index; $Lon_left; $Lon_offset; $Lon_right)
-C_LONGINT:C283($Lon_top)
-C_POINTER:C301($Ptr_me)
-C_TEXT:C284($Txt_me)
-C_OBJECT:C1216($o)
+var $me : Text
+var $run; $shiftDown : Boolean
+var $bottom; $index; $left; $offset; $right; $top : Integer
+var $ptr : Pointer
+var $e; $o : Object
+var $menu : cs:C1710.menu
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_formEvent:=Form event code:C388
-$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
-$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
-$Boo_shiftDown:=Shift down:C543
+$e:=FORM Event:C1606
+$shiftDown:=Shift down:C543
 
 // ----------------------------------------------------
 Case of 
 		
 		//________________________________________
-	: ($Lon_formEvent<0)  // <SUBFORM EVENTS>
+	: ($e.code<0)  // <SUBFORM EVENTS>
 		
-		$Lon_formEvent:=Abs:C99($Lon_formEvent)
+		$e.code:=Abs:C99($e.code)
 		
 		Case of 
 				
 				//…………………………………………………………………………………………………
-			: ($Lon_formEvent=1)  // Sections
+			: ($e.code=1)  // Hide/show toolbar
 				
-				$Lon_offset:=100
+				$me:=OBJECT Get name:C1087(Object current:K67:2)
+				$o:=OBJECT Get value:C1743($me)
 				
-				If ($Ptr_me->state="open")
+				$offset:=100  // Height offset opened/closed
+				
+				If ($o.state="open")
 					
 					// Close
-					OBJECT GET COORDINATES:C663(*; $Txt_me; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-					OBJECT SET COORDINATES:C1248(*; $Txt_me; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom-$Lon_offset)
-					OBJECT GET COORDINATES:C663(*; "description"; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-					OBJECT SET COORDINATES:C1248(*; "description"; $Lon_left; $Lon_top-$Lon_offset; $Lon_right; $Lon_bottom)
-					OBJECT GET COORDINATES:C663(*; "project"; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-					OBJECT SET COORDINATES:C1248(*; "project"; $Lon_left; $Lon_top-$Lon_offset; $Lon_right; $Lon_bottom)
-					OBJECT GET COORDINATES:C663(*; "browser"; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-					OBJECT SET COORDINATES:C1248(*; "browser"; $Lon_left; $Lon_top-$Lon_offset; $Lon_right; $Lon_bottom)
+					OBJECT GET COORDINATES:C663(*; $me; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; $me; $left; $top; $right; $bottom-$offset)
+					OBJECT GET COORDINATES:C663(*; "description"; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; "description"; $left; $top-$offset; $right; $bottom)
+					OBJECT GET COORDINATES:C663(*; "project"; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; "project"; $left; $top-$offset; $right; $bottom)
+					OBJECT GET COORDINATES:C663(*; "browser"; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; "browser"; $left; $top-$offset; $right; $bottom)
 					
-					$Ptr_me->state:="close"
+					$o.state:="close"
 					
 				Else 
 					
 					// Open
-					OBJECT GET COORDINATES:C663(*; $Txt_me; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-					OBJECT SET COORDINATES:C1248(*; $Txt_me; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom+$Lon_offset)
-					OBJECT GET COORDINATES:C663(*; "description"; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-					OBJECT SET COORDINATES:C1248(*; "description"; $Lon_left; $Lon_top+$Lon_offset; $Lon_right; $Lon_bottom)
-					OBJECT GET COORDINATES:C663(*; "project"; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-					OBJECT SET COORDINATES:C1248(*; "project"; $Lon_left; $Lon_top+$Lon_offset; $Lon_right; $Lon_bottom)
-					OBJECT GET COORDINATES:C663(*; "browser"; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-					OBJECT SET COORDINATES:C1248(*; "browser"; $Lon_left; $Lon_top+$Lon_offset; $Lon_right; $Lon_bottom)
+					OBJECT GET COORDINATES:C663(*; $me; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; $me; $left; $top; $right; $bottom+$offset)
+					OBJECT GET COORDINATES:C663(*; "description"; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; "description"; $left; $top+$offset; $right; $bottom)
+					OBJECT GET COORDINATES:C663(*; "project"; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; "project"; $left; $top+$offset; $right; $bottom)
+					OBJECT GET COORDINATES:C663(*; "browser"; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; "browser"; $left; $top+$offset; $right; $bottom)
 					
-					$Ptr_me->state:="open"
+					$o.state:="open"
 					
 				End if 
 				
 				// Touch
-				$Ptr_me->:=$Ptr_me->
+				OBJECT SET VALUE:C1742($me; $o)
 				
 				//…………………………………………………………………………………………………
-			: ($Lon_formEvent=151)  // Build & Run
-				
+			: ($e.code=151)  // Build & Run
 				
 				Case of 
 						
@@ -90,26 +90,58 @@ Case of
 						//______________________________________________________
 					Else 
 						
-						Form:C1466.build:=True:C214  // Stop reentrance
-						
 						// Autosave
-						_o_project_SAVE
+						PROJECT.save()
 						
-						$o:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->
+						If (FEATURE.with("android"))
+							
+							$run:=Is Windows:C1573
+							
+							If ($run)
+								
+								PROJECT.buildTarget:="android"
+								
+							Else 
+								
+								$menu:=cs:C1710.menu.new()
+								$menu.append(".Build for iOS"; "ios").enable(Bool:C1537(PROJECT.$project.xCode.ready))  //#MARK_LOCALIZE
+								$menu.append(".Build for Android"; "android").enable(True:C214)  //#MARK_TODO
+								$menu.popup()
+								
+								If ($menu.selected)
+									
+									PROJECT.buildTarget:=$menu.choice
+									$run:=True:C214
+									
+								End if 
+							End if 
+							
+						Else 
+							
+							// <NOTHING MORE TO DO>
+							$run:=True:C214
+							
+						End if 
 						
-						BUILD(New object:C1471(\
-							"caller"; Current form window:C827; \
-							"project"; $o; \
-							"create"; True:C214; \
-							"build"; Not:C34($Boo_shiftDown); \
-							"run"; Not:C34($Boo_shiftDown); \
-							"verbose"; Bool:C1537(Form:C1466.verbose)))
+						If ($run)
+							
+							Form:C1466.build:=True:C214  // Stop reentrance
+							
+							BUILD(New object:C1471(\
+								"caller"; Current form window:C827; \
+								"project"; PROJECT; \
+								"create"; True:C214; \
+								"build"; Not:C34($shiftDown); \
+								"run"; Not:C34($shiftDown); \
+								"verbose"; Bool:C1537(Form:C1466.verbose)))
+							
+						End if 
 						
 						//______________________________________________________
 				End case 
 				
 				//…………………………………………………………………………………………………
-			: ($Lon_formEvent=152)  // Project
+			: ($e.code=152)  // Project
 				
 				// Get button coordinates
 				EXECUTE METHOD IN SUBFORM:C1085("ribbon"; "widget"; $o; "152")
@@ -118,38 +150,37 @@ Case of
 					"y"; $o.windowCoordinates.top+$o.coordinates.height))
 				
 				//…………………………………………………………………………………………………
-			: ($Lon_formEvent=153)  // Install
+			: ($e.code=153)  // Install
 				
 				If (Not:C34(Bool:C1537(Form:C1466.build)))
 					
 					Form:C1466.build:=True:C214
 					
 					// Autosave
-					_o_project_SAVE
+					PROJECT.save()
 					
 					BUILD(New object:C1471(\
 						"caller"; Current form window:C827; \
 						"project"; (OBJECT Get pointer:C1124(Object named:K67:5; "project"))->; \
-						"create"; Not:C34($Boo_shiftDown); \
-						"build"; Not:C34($Boo_shiftDown); \
+						"create"; Not:C34($shiftDown); \
+						"build"; Not:C34($shiftDown); \
 						"archive"; True:C214; \
 						"verbose"; Bool:C1537(Form:C1466.verbose)))
 					
 				End if 
 				
 				//…………………………………………………………………………………………………
-			: ($Lon_formEvent>100)  // Section menu
+			: ($e.code>100)  // Section menu
 				
-				$Lon_index:=Form:C1466.$dialog.EDITOR.ribbon.pages.extract("button").indexOf(String:C10($Lon_formEvent))
-				$Ptr_me->page:=Form:C1466.$dialog.EDITOR.ribbon.pages[$Lon_index].name
-				
-				//editor_PAGE($Ptr_me->page)
-				Form:C1466.$dialog.EDITOR.pages.gotoPage($Ptr_me->page)
+				$index:=Form:C1466.$dialog.EDITOR.ribbon.pages.extract("button").indexOf(String:C10($e.code))
+				$o:=OBJECT Get value:C1743(OBJECT Get name:C1087(Object current:K67:2))
+				$o.page:=Form:C1466.$dialog.EDITOR.ribbon.pages[$index].name
+				Form:C1466.$dialog.EDITOR.pages.gotoPage($o.page)
 				
 				//…………………………………………………………………………………………………
 			Else 
 				
-				ASSERT:C1129(False:C215; "Unknown call from subform ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215; "Unknown call from subform ("+String:C10($e.code)+")")
 				
 				//…………………………………………………………………………………………………
 		End case 
@@ -157,7 +188,7 @@ Case of
 		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 		
 		//______________________________________________________
 End case 

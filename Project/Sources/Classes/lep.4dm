@@ -192,6 +192,36 @@ Function reset()->$this : cs:C1710.lep
 	$this:=This:C1470
 	
 	//====================================================================
+Function sync($mode : Boolean)->$this : cs:C1710.lep
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; Choose:C955($mode; "true"; "false"))
+		
+	Else 
+		
+		This:C1470.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "true")
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//====================================================================
+Function async($mode : Boolean)->$this : cs:C1710.lep
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; Choose:C955($mode; "false"; "true"))
+		
+	Else 
+		
+		This:C1470.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "false")
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//====================================================================
 Function setCharSet($charset : Text)->$this : cs:C1710.lep
 	
 	If (Count parameters:C259>=1)
@@ -226,6 +256,7 @@ Function setOutputType($outputType : Integer)->$this : cs:C1710.lep
 	//====================================================================
 Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.lep
 	
+	var $v; $value : Variant
 	var $o : Object
 	
 	Case of 
@@ -265,10 +296,18 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 			//______________________________________________________
 		: (Value type:C1509($variables)=Is collection:K8:32)
 			
-			For each ($o; $variables)
+			For each ($v; $variables)
 				
-				This:C1470.environmentVariables[$o.key]:=$o.value
-				
+				If (Value type:C1509($v)=Is object:K8:27)
+					
+					$o:=OB Entries:C1720($v).pop()
+					This:C1470.environmentVariables[$o.key]:=$o.value
+					
+				Else 
+					
+					// ERROR
+					
+				End if 
 			End for each 
 			
 			//______________________________________________________
@@ -293,6 +332,20 @@ Function escape($text : Text)->$escaped : Text
 		$escaped:=Replace string:C233($escaped; $t; "\\"+$t; *)
 		
 	End for each 
+	
+	//====================================================================
+	// Returns the string between single quotes
+Function singleQuoted($tring : Text)->$quoted : Text
+	
+	If (Match regex:C1019("^'.*'$"; $tring; 1))
+		
+		$quoted:=$tring  // Already done
+		
+	Else 
+		
+		$quoted:="'"+$tring+"'"  // Do it
+		
+	End if 
 	
 	//====================================================================
 Function _pushError($desription : Text)

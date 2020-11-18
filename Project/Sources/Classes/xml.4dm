@@ -1,10 +1,9 @@
 Class constructor($variable)
 	
-	This:C1470.root:=Null:C1517
 	This:C1470.autoClose:=True:C214
 	This:C1470.file:=Null:C1517
 	This:C1470.xml:=Null:C1517
-	This:C1470.success:=False:C215
+	This:C1470.success:=True:C214
 	This:C1470.errors:=New collection:C1472
 	
 	If (Count parameters:C259>=1)
@@ -16,6 +15,17 @@ Class constructor($variable)
 		This:C1470.success:=True:C214
 		
 	End if 
+	
+	//———————————————————————————————————————————————————————————
+Function _reset
+	
+	This:C1470.close()
+	
+	This:C1470.autoClose:=True:C214
+	This:C1470.file:=Null:C1517
+	This:C1470.xml:=Null:C1517
+	This:C1470.success:=True:C214
+	This:C1470.errors:=New collection:C1472
 	
 /*———————————————————————————————————————————————————————————*/
 Function new

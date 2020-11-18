@@ -1,4 +1,3 @@
-
 Class extends xml
 
 Class constructor($content)
@@ -31,6 +30,90 @@ Class constructor($content)
 /*================================================================
                   DOCUMENTS & STRUCTURE
 ================================================================*/
+	
+	//———————————————————————————————————————————————————————————
+	// Close the current tree if any & create a new svg default structure.
+	// ⚠️ Overrides the method of the inherited class
+Function new($attributes : Object)->$this : cs:C1710.svg
+	
+	var $root; $t : Text
+	
+	This:C1470._reset()
+	
+	$root:=DOM Create XML Ref:C861("svg"; "http://www.w3.org/2000/svg")
+	This:C1470.success:=Bool:C1537(OK)
+	
+	If (This:C1470.success)
+		
+		This:C1470.root:=$root
+		
+		DOM SET XML ATTRIBUTE:C866($root; "xmlns:xlink"; "http://www.w3.org/1999/xlink")
+		
+		DOM SET XML DECLARATION:C859($root; "UTF-8"; True:C214)
+		XML SET OPTIONS:C1090($root; XML indentation:K45:34; Choose:C955(Is compiled mode:C492; XML no indentation:K45:36; XML with indentation:K45:35))
+		
+		This:C1470.success:=Bool:C1537(OK)
+		
+		If (This:C1470.success)
+			
+			// Default values
+			DOM SET XML ATTRIBUTE:C866(This:C1470.root; \
+				"viewport-fill"; "none"; \
+				"fill"; "none"; \
+				"stroke"; "black"; \
+				"font-family"; "'lucida grande','segoe UI',sans-serif"; \
+				"font-size"; 12; \
+				"text-rendering"; "geometricPrecision"; \
+				"shape-rendering"; "crispEdges"; \
+				"preserveAspectRatio"; "none")
+			
+		End if 
+	End if 
+	
+	If (Bool:C1537(OK) & (This:C1470.root#Null:C1517))
+		
+		If (Count parameters:C259>=1)
+			
+			If ($attributes#Null:C1517)
+				
+				For each ($t; $attributes)
+					
+					Case of 
+							
+							//_______________________
+						: ($t="keepReference")
+							
+							This:C1470.autoClose:=Bool:C1537($attributes[$t])
+							
+							//_______________________
+						Else 
+							
+							DOM SET XML ATTRIBUTE:C866(This:C1470.root; \
+								$t; $attributes[$t])
+							
+							//______________________
+					End case 
+				End for each 
+				
+			Else 
+				
+				// <NOTHING MORE TO DO>
+				
+			End if 
+			
+		Else 
+			
+			// <NOTHING MORE TO DO>
+			
+		End if 
+		
+	Else 
+		
+		This:C1470._pushError("Failed to create SVG structure.")
+		
+	End if 
+	
+	$this:=This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Returns the picture described by the SVG structure
@@ -135,89 +218,6 @@ Function exportPicture($file : 4D:C1709.file; $keepStructure : Boolean)->$this :
 	If (This:C1470.success)
 		
 		WRITE PICTURE FILE:C680($file.platformPath; $picture; $file.extension)
-		
-	End if 
-	
-	$this:=This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Close the current tree if any & create a new svg default structure.
-Function new($attributes : Object)->$this : cs:C1710.svg
-	
-	var $root; $t : Text
-	
-	This:C1470.close()  // Release memory
-	
-	$root:=DOM Create XML Ref:C861("svg"; "http://www.w3.org/2000/svg")
-	This:C1470.success:=Bool:C1537(OK)
-	
-	If (This:C1470.success)
-		
-		This:C1470.root:=$root
-		
-		DOM SET XML ATTRIBUTE:C866($root; "xmlns:xlink"; "http://www.w3.org/1999/xlink")
-		
-		DOM SET XML DECLARATION:C859($root; "UTF-8"; True:C214)
-		XML SET OPTIONS:C1090($root; XML indentation:K45:34; Choose:C955(Is compiled mode:C492; XML no indentation:K45:36; XML with indentation:K45:35))
-		
-		This:C1470.success:=Bool:C1537(OK)
-		
-		If (This:C1470.success)
-			
-			// Default values
-			DOM SET XML ATTRIBUTE:C866(This:C1470.root; \
-				"viewport-fill"; "none"; \
-				"fill"; "none"; \
-				"stroke"; "black"; \
-				"font-family"; "'lucida grande','segoe UI',sans-serif"; \
-				"font-size"; 12; \
-				"text-rendering"; "geometricPrecision"; \
-				"shape-rendering"; "crispEdges"; \
-				"preserveAspectRatio"; "none")
-			
-		End if 
-	End if 
-	
-	If (Bool:C1537(OK) & (This:C1470.root#Null:C1517))
-		
-		If (Count parameters:C259>=1)
-			
-			If ($attributes#Null:C1517)
-				
-				For each ($t; $attributes)
-					
-					Case of 
-							
-							//_______________________
-						: ($t="keepReference")
-							
-							This:C1470.autoClose:=Bool:C1537($attributes[$t])
-							
-							//_______________________
-						Else 
-							
-							DOM SET XML ATTRIBUTE:C866(This:C1470.root; \
-								$t; $attributes[$t])
-							
-							//______________________
-					End case 
-				End for each 
-				
-			Else 
-				
-				// <NOTHING MORE TO DO>
-				
-			End if 
-			
-		Else 
-			
-			// <NOTHING MORE TO DO>
-			
-		End if 
-		
-	Else 
-		
-		This:C1470._pushError("Failed to create SVG structure.")
 		
 	End if 
 	
@@ -369,7 +369,7 @@ Function styleSheet($file : 4D:C1709.File)->$this : cs:C1710.svg
 	$this:=This:C1470
 	
 /*================================================================
-                       BASICS ELEMENTS
+                       DRAWING
 ================================================================*/
 	
 	//———————————————————————————————————————————————————————————
@@ -965,6 +965,12 @@ Function polygon($points : Variant; $attachTo)->$this : cs:C1710.svg
 	End if 
 	
 	$this:=This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Defines a new path element.
+Function path($data : Variant; $attachTo)->$this : cs:C1710.svg
+	
+	//#TO_DO
 	
 	//———————————————————————————————————————————————————————————
 	// Populate the "points" property of a polyline, polygon
@@ -3278,7 +3284,7 @@ Function getTextWidth($string : Text; $fontAttributes : Object)->$width : Intege
 	PICTURE PROPERTIES:C457($picture; $width; $height)
 	
 	//———————————————————————————————————————————————————————————
-	// Returns text height
+	// Returns text height #WIP
 Function getTextHeight($string : Text; $fontAttributes : Object)->$height : Integer
 	
 	var $picture : Picture
@@ -3329,11 +3335,19 @@ Function getTextHeight($string : Text; $fontAttributes : Object)->$height : Inte
 	End if 
 	
 	
-	
-	
 /*================================================================
                          PRIVATES
 ================================================================*/
+	
+	//———————————————————————————————————————————————————————————
+	// ⚠️ Overrides the method of the inherited class
+Function _reset
+	
+	Super:C1706._reset()
+	
+	This:C1470.latest:=Null:C1517
+	This:C1470.graphic:=Null:C1517
+	This:C1470.store:=New collection:C1472
 	
 	//———————————————————————————————————————————————————————————
 	// Get an available container
@@ -3364,6 +3378,7 @@ Function _getContainer($param)->$container : Text
 	End if 
 	
 	//———————————————————————————————————————————————————————————
+	// Returns the target of the function call
 Function _getTarget($param)->$target : Text
 	
 	var $tryToBeSmart : Boolean

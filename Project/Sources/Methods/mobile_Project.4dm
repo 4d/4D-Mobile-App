@@ -7,7 +7,7 @@ If (False:C215)
 	C_OBJECT:C1216(mobile_Project; $1)
 End if 
 
-If ((String:C10($1.buildType)="android")\
+If ((String:C10($1.project.buildTarget)="android")\
  | (String:C10(SHARED.buildType)="android"))
 	
 	$0:=mobile_Project_android($1)

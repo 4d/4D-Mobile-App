@@ -106,24 +106,21 @@ The class constructor also accepts an optional parameter, so you can create a sv
 
 >* With the exception of functions that return a specific result (getter function), each call returns the original `cs.svg`, and you can include one call after another.
 
-### Drawing functions
+### Basic elements
 
->* When a drawing function is called without passing the `attachTo` parameter, the object is added to the last created structure that can be used to add an object. If the `attachTo` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"`, `"parent"` or `"append"`).
+>* When a element creation function is called without passing the `attachTo` parameter, the object is included to the last created structure that can be used to add an object. If the `attachTo` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"` or `"parent"`).
 
 |Function|Action|
 |--------|------|   
-|.**line** (x1 : Real; y1 : Real; x2 : Real; y2 : Real {; attachTo }) → cs.svg | To draw a line  
 |.**rect** (height : Real {; width : Real } {; attachTo}) → cs.svg | To draw a rectangle
 |.**circle** (radius : Real {; cx : Real {; cy : Real}} {; attachTo }) → cs.svg | To draw a circle
 |.**ellipse** (radiusX : Real; radiusY : Real; cx : Real; cy : Real {; attachTo }) → cs.svg | To draw a circle  
-|.**image** (picture : Picture \| 4D.File {; attachTo }) → cs.svg | To put an image
-|.**polyline** (points : Text \| Collection {; attachTo }) → cs.svg | To create a polyline
-|.**polygon** (points : Text \| Collection {; attachTo }) → cs.svg | To create a polygon
+|.**line** (x1 : Real; y1 : Real; x2 : Real; y2 : Real {; attachTo }) → cs.svg | To draw a line  
+|.**polyline** (points : Text \| Collection {; attachTo }) → cs.svg | To draw a polyline
+|.**polygon** (points : Text \| Collection {; attachTo }) → cs.svg | To draw a polygon
 |.**text** (text : Text {; attachTo }) → cs.svg | To create a text
 |.**textArea** (text : Text {; attachTo }) → cs.svg | To create a text area
-|.**points** (points : Text \| Collection {; applyTo }) → cs.svg | Sets the "points" property of a polyline/polygon
-|.**M** (points : Text \| Collection {; applyTo }) → cs.svg | Absolute moveTo
-|.**L** (points : Text \| Collection {; applyTo }) → cs.svg | Absolute lineTo
+|.**image** (picture : Picture \| 4D.File {; attachTo }) → cs.svg | To put an image
 
 ### Setting functions
 
@@ -160,6 +157,9 @@ The class constructor also accepts an optional parameter, so you can create a sv
 |.**ry** (ry : Real {; applyTo }) → cs.svg | Sets the ry of an ellipse
 |.**cx** (cx : Real {; applyTo }) → cs.svg | Sets the cx of a circle or ellipse
 |.**cy** (cy : Real {; applyTo }) → cs.svg | Sets the cy of a rect or an ellipse
+|.**points** (points : Text \| Collection {; applyTo }) → cs.svg | Sets the "points" property of a polyline/polygon
+|.**M** (points : Text \| Collection {; applyTo }) → cs.svg | Absolute moveTo
+|.**L** (points : Text \| Collection {; applyTo }) → cs.svg | Absolute lineTo
 |.**setAttribute** (name : Text; value : Variant {; applyTo }) → cs.svg | Sets one attribute
 |.**setAttributes** (attributes : Text \| Collection \| Object; value : Variant {; applyTo}) → cs.svg | Defines multiple attributes
 
@@ -194,15 +194,15 @@ The class constructor also accepts an optional parameter, so you can create a sv
 |.**stroke** (value (Text \| Boolean \| Real \| Object) {; applyTo }) → cs.svg | Sets the stroke attributes
 |.**font** (attributes : Object {; applyTo }) → cs.svg | Sets the font attributes
 |.**dimensions** ({ width : Real; height : Real {; unit : Text }}) → cs.svg  | Sets the dimensions
-|.**position** (x : Real {; y : Variant }{; unit : Text }) → cs.svg | Sets the position
+|.**position** (x : Real {; y : Real }{; unit : Text }) → cs.svg | Sets the position
 |.**moveH** (x : Real {; applyTo }) → cs.svg | Moves horizontally
 |.**moveV** (y : Real {; applyTo }) → cs.svg | Moves vertically
 |.**radius** (radius : Integer {; applyTo}) → cs.svg | Fix the radius of a circle or a rounded rectangle
-|.**plot** (pointys : Variant {; applyTo}) → cs.svg | Populate the "points" property of a polyline, polygon or the "data" proprety of a path
+|.**plot** (points : Text \| Collection {; applyTo}) → cs.svg | Populate the "points" property of a polyline, polygon or the "data" proprety of a path
 |.**show** ({ applyTo }) → cs.svg |  Make visible
 |.**hide** ({ applyTo }) → cs.svg | Make invisible
 |.**setValue** (value : Text {; applyTo }{; CDATA : Boolean }) → cs.svg | Sets the element value
-|.**attachTo**(parent : Variant) → cs.svg | Adds item to parent item
+|.**attachTo**(parent : Text) → cs.svg | Adds item to parent item
 |.**clone**(source : Text {; attachTo}) → cs.svg |To create a copy of a svg object
 |.**addClass** (class : Text {; applyTo}) → cs.svg | Add a value to the node class
 |.**removeClass** (class : Text {; applyTo}) → cs.svg | Remove a value to the node class

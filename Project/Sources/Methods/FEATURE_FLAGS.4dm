@@ -123,10 +123,12 @@ FEATURE.unstable("templateClass")
 WIP
 _____________*/
 
+
+// Android support
+FEATURE.wip("android")
+
 // Share action with descrition
 FEATURE.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
-
-// Relation management optimisation using to generate project
 
 // Enable widget actions
 FEATURE.wip("withWidgetActions")
