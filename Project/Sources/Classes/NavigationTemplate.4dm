@@ -83,7 +83,14 @@ Function createIconAssets
 		If ($Boo_withIcons)
 			
 			$Obj_table.labelAlignment:="left"
-			$Obj_table.navigationIcon:="Main"+$Obj_table.name
+			Case of 
+				: (Length:C16(String:C10($Obj_table.originalName)>0))
+					$Obj_table.navigationIcon:="Main"+$Obj_table.originalName
+				: ($Obj_table[""]#Null:C1517)
+					$Obj_table.navigationIcon:="Main"+$Obj_table[""].name
+				Else 
+					$Obj_table.navigationIcon:="Main"+$Obj_table.name
+			End case 
 			
 		Else 
 			
