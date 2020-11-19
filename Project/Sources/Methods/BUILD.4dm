@@ -8,10 +8,7 @@
 // Try to make UI building more fluent
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($Lon_parameters)
-C_OBJECT:C1216($Obj_in)
+#DECLARE ($in : Object)
 
 If (False:C215)
 	C_OBJECT:C1216(BUILD; $1)
@@ -19,19 +16,10 @@ End if
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
-	$Obj_in:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
+	$in:=$1
 	
 Else 
 	
@@ -40,16 +28,13 @@ Else
 End if 
 
 // ----------------------------------------------------
+
+Form:C1466.build:=True:C214  // Stop reentrance
+
 POST_MESSAGE(New object:C1471(\
-"target"; $Obj_in.caller; \
+"target"; $in.caller; \
 "action"; "show"; \
 "type"; "progress"; \
-"title"; New collection:C1472("product"; " - "; $Obj_in.project.product.name); \
+"title"; New collection:C1472("product"; " - "; $in.project.product.name); \
 "additional"; Get localized string:C991("preparations"); \
-"autostart"; New object:C1471("action"; "build_run"; "method"; "EDITOR_RESUME"; "project"; $Obj_in)))
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End
+"autostart"; New object:C1471("action"; "build_run"; "method"; "EDITOR_RESUME"; "project"; $in)))

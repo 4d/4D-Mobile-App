@@ -4,13 +4,12 @@
 // Created 30-1-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($l)
-C_OBJECT:C1216($form; $o)
+var $currentPage : Integer
+var $device; $e; $form; $page; $plist : Object
 
 // ----------------------------------------------------
 // Initialisations
 $form:=New object:C1471(\
-"eventCode"; Form event code:C388; \
 "pages"; New collection:C1472; \
 "switch"; UI.button("switch.button"); \
 "build"; UI.button("151"); \
@@ -56,12 +55,14 @@ $form.pages.push(New object:C1471(\
 $form.sectionButtons:=UI.group("101;102;107;108;103;104;105;106")
 $form.buildButtons:=UI.group("151;201;152;153")
 
+$e:=FORM Event:C1606
+
 // ----------------------------------------------------
 
 Case of 
 		
 		//______________________________________________________
-	: ($form.eventCode=On Load:K2:1)
+	: ($e.code=On Load:K2:1)
 		
 		$form.build.disable()
 		$form.install.disable()
@@ -69,15 +70,21 @@ Case of
 		
 		$form.sectionButtons.distributeHorizontally($form)
 		
+		If (Is macOS:C1572) & FEATURE.with("android")
+			
+			OBJECT SET FORMAT:C236(*; $form.build.name; ";;;;;;;;;;1")
+			
+		End if 
+		
 		SET TIMER:C645(-1)
 		
 		//______________________________________________________
-	: ($form.eventCode=On Unload:K2:2)
+	: ($e.code=On Unload:K2:2)
 		
 		//
 		
 		//______________________________________________________
-	: ($form.eventCode=On Timer:K2:25)
+	: ($e.code=On Timer:K2:25)
 		
 		SET TIMER:C645(0)
 		
@@ -90,23 +97,23 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($form.eventCode=On Page Change:K2:54)
+	: ($e.code=On Page Change:K2:54)
 		
-		$l:=FORM Get current page:C276(*)
+		$currentPage:=FORM Get current page:C276(*)
 		
-		If (Form:C1466.initialized.indexOf($l)=-1)
+		If (Form:C1466.initialized.indexOf($currentPage)=-1)
 			
-			Form:C1466.initialized.push($l)
+			Form:C1466.initialized.push($currentPage)
 			
 			Case of 
 					
 					//………………………………………………………………………………………
-				: ($l=1)
+				: ($currentPage=1)
 					
 					$form.sectionButtons.distributeHorizontally($form)
 					
 					//………………………………………………………………………………………
-				: ($l=2)
+				: ($currentPage=2)
 					
 					$form.buildButtons.distributeHorizontally($form)
 					
@@ -115,13 +122,13 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($form.eventCode=On Bound Variable Change:K2:52)
+	: ($e.code=On Bound Variable Change:K2:52)
 		
 		$form.switch.setFormat(";#images/toolbar/"+Choose:C955(Form:C1466.state="open"; "reduce"; "expand")+".png")
 		
-		For each ($o; $form.pages)
+		For each ($page; $form.pages)
 			
-			(OBJECT Get pointer:C1124(Object named:K67:5; $o.button))->:=Num:C11($o.name=Form:C1466.page)
+			(OBJECT Get pointer:C1124(Object named:K67:5; $page.button))->:=Num:C11($page.name=Form:C1466.page)
 			
 		End for each 
 		
@@ -133,45 +140,45 @@ Case of
 				$form.simulator.enable()
 				
 				// Get the default simulator
-				$o:=env_userPathname("preferences"; "com.apple.iphonesimulator.plist")
+				$plist:=env_userPathname("preferences"; "com.apple.iphonesimulator.plist")
 				
-				If (Not:C34($o.exists))
+				If (Not:C34($plist.exists))
 					
 					simulator(New object:C1471(\
 						"action"; "fixdefault"))
 					
 				End if 
 				
-				If ($o.exists)
+				If ($plist.exists)
 					
-					$o:=plist(New object:C1471(\
+					$plist:=plist(New object:C1471(\
 						"action"; "object"; \
-						"domain"; $o.path))
+						"domain"; $plist.path))
 					
-					If ($o.success)
+					If ($plist.success)
 						
 						// Keep the current device identifier
-						Form:C1466.CurrentDeviceUDID:=$o.value.CurrentDeviceUDID
+						Form:C1466.CurrentDeviceUDID:=$plist.value.CurrentDeviceUDID
 						
 						// Display the current device name
-						$l:=Form:C1466.devices.extract("udid").indexOf(Form:C1466.CurrentDeviceUDID)
+						$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
 						
-						If ($l=-1)
+						If ($device=Null:C1517)
 							
 							simulator(New object:C1471(\
 								"action"; "getdefault"))
 							
-							$l:=Form:C1466.devices.extract("udid").indexOf(Form:C1466.CurrentDeviceUDID)
+							$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
 							
 						End if 
 						
-						If ($l=-1)
+						If ($device=Null:C1517)
 							
 							$form.simulator.setTitle("unknown")
 							
 						Else 
 							
-							$form.simulator.setTitle(Form:C1466.devices[$l].name)
+							$form.simulator.setTitle($device.name)
 							
 						End if 
 					End if 
@@ -185,7 +192,7 @@ Case of
 		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($form.eventCode)+")")
+		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 		
 		//______________________________________________________
 End case 

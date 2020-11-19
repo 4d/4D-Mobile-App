@@ -4,12 +4,9 @@
 // Created 30-1-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-var $me : Text
-var $run; $shiftDown : Boolean
-var $bottom; $index; $left; $offset; $right; $top : Integer
-var $ptr : Pointer
-var $e; $o : Object
-var $menu : cs:C1710.menu
+var $shiftDown : Boolean
+var $bottom; $left; $offset; $right; $top : Integer
+var $button; $e; $ribbon : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -29,132 +26,67 @@ Case of
 				//…………………………………………………………………………………………………
 			: ($e.code=1)  // Hide/show toolbar
 				
-				$me:=OBJECT Get name:C1087(Object current:K67:2)
-				$o:=OBJECT Get value:C1743($me)
+				$ribbon:=OBJECT Get value:C1743($e.objectName)
 				
 				$offset:=100  // Height offset opened/closed
 				
-				If ($o.state="open")
+				If ($ribbon.state="open")
 					
 					// Close
-					OBJECT GET COORDINATES:C663(*; $me; $left; $top; $right; $bottom)
-					OBJECT SET COORDINATES:C1248(*; $me; $left; $top; $right; $bottom-$offset)
+					OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; $e.objectName; $left; $top; $right; $bottom-$offset)
+					
 					OBJECT GET COORDINATES:C663(*; "description"; $left; $top; $right; $bottom)
 					OBJECT SET COORDINATES:C1248(*; "description"; $left; $top-$offset; $right; $bottom)
+					
 					OBJECT GET COORDINATES:C663(*; "project"; $left; $top; $right; $bottom)
 					OBJECT SET COORDINATES:C1248(*; "project"; $left; $top-$offset; $right; $bottom)
+					
 					OBJECT GET COORDINATES:C663(*; "browser"; $left; $top; $right; $bottom)
 					OBJECT SET COORDINATES:C1248(*; "browser"; $left; $top-$offset; $right; $bottom)
 					
-					$o.state:="close"
+					$ribbon.state:="close"
 					
 				Else 
 					
 					// Open
-					OBJECT GET COORDINATES:C663(*; $me; $left; $top; $right; $bottom)
-					OBJECT SET COORDINATES:C1248(*; $me; $left; $top; $right; $bottom+$offset)
+					OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; $e.objectName; $left; $top; $right; $bottom+$offset)
+					
 					OBJECT GET COORDINATES:C663(*; "description"; $left; $top; $right; $bottom)
 					OBJECT SET COORDINATES:C1248(*; "description"; $left; $top+$offset; $right; $bottom)
+					
 					OBJECT GET COORDINATES:C663(*; "project"; $left; $top; $right; $bottom)
 					OBJECT SET COORDINATES:C1248(*; "project"; $left; $top+$offset; $right; $bottom)
+					
 					OBJECT GET COORDINATES:C663(*; "browser"; $left; $top; $right; $bottom)
 					OBJECT SET COORDINATES:C1248(*; "browser"; $left; $top+$offset; $right; $bottom)
 					
-					$o.state:="open"
+					$ribbon.state:="open"
 					
 				End if 
 				
 				// Touch
-				OBJECT SET VALUE:C1742($me; $o)
+				OBJECT SET VALUE:C1742($e.objectName; $ribbon)
 				
 				//…………………………………………………………………………………………………
 			: ($e.code=151)  // Build & Run
 				
-				Case of 
-						
-						//______________________________________________________
-					: (Bool:C1537(Form:C1466.dataSetGeneration))  // A dataset generation is in progress
-						
-						POST_MESSAGE(New object:C1471(\
-							"target"; Current form window:C827; \
-							"action"; "show"; \
-							"type"; "alert"; \
-							"title"; "itIsNotPossibleToBuildTheProject"; \
-							"additional"; "generationOfTheDatasetIsInProgress"))
-						
-						//______________________________________________________
-					: (Bool:C1537(Form:C1466.build))
-						
-						// The build is already underway
-						
-						//______________________________________________________
-					Else 
-						
-						// Autosave
-						PROJECT.save()
-						
-						If (FEATURE.with("android"))
-							
-							$run:=Is Windows:C1573
-							
-							If ($run)
-								
-								PROJECT.buildTarget:="android"
-								
-							Else 
-								
-								$menu:=cs:C1710.menu.new()
-								$menu.append(".Build for iOS"; "ios").enable(Bool:C1537(PROJECT.$project.xCode.ready))  //#MARK_LOCALIZE
-								$menu.append(".Build for Android"; "android").enable(True:C214)  //#MARK_TODO
-								$menu.popup()
-								
-								If ($menu.selected)
-									
-									PROJECT.buildTarget:=$menu.choice
-									$run:=True:C214
-									
-								End if 
-							End if 
-							
-						Else 
-							
-							// <NOTHING MORE TO DO>
-							$run:=True:C214
-							
-						End if 
-						
-						If ($run)
-							
-							Form:C1466.build:=True:C214  // Stop reentrance
-							
-							BUILD(New object:C1471(\
-								"caller"; Current form window:C827; \
-								"project"; PROJECT; \
-								"create"; True:C214; \
-								"build"; Not:C34($shiftDown); \
-								"run"; Not:C34($shiftDown); \
-								"verbose"; Bool:C1537(Form:C1466.verbose)))
-							
-						End if 
-						
-						//______________________________________________________
-				End case 
+				// Autosave
+				PROJECT.save()
 				
-				//…………………………………………………………………………………………………
-			: ($e.code=152)  // Project
-				
-				// Get button coordinates
-				EXECUTE METHOD IN SUBFORM:C1085("ribbon"; "widget"; $o; "152")
-				editor_MENU_ACTIONS(New object:C1471(\
-					"x"; $o.windowCoordinates.left; \
-					"y"; $o.windowCoordinates.top+$o.coordinates.height))
+				BUILD(New object:C1471(\
+					"caller"; Current form window:C827; \
+					"project"; PROJECT; \
+					"create"; True:C214; \
+					"build"; Not:C34($shiftDown); \
+					"run"; Not:C34($shiftDown); \
+					"verbose"; Bool:C1537(Form:C1466.verbose)))
 				
 				//…………………………………………………………………………………………………
 			: ($e.code=153)  // Install
 				
 				If (Not:C34(Bool:C1537(Form:C1466.build)))
-					
-					Form:C1466.build:=True:C214
 					
 					// Autosave
 					PROJECT.save()
@@ -172,10 +104,10 @@ Case of
 				//…………………………………………………………………………………………………
 			: ($e.code>100)  // Section menu
 				
-				$index:=Form:C1466.$dialog.EDITOR.ribbon.pages.extract("button").indexOf(String:C10($e.code))
-				$o:=OBJECT Get value:C1743(OBJECT Get name:C1087(Object current:K67:2))
-				$o.page:=Form:C1466.$dialog.EDITOR.ribbon.pages[$index].name
-				Form:C1466.$dialog.EDITOR.pages.gotoPage($o.page)
+				$ribbon:=OBJECT Get value:C1743($e.objectName)
+				$button:=Form:C1466.$dialog.EDITOR.ribbon.pages.query("button = :1"; String:C10($e.code)).pop()
+				$ribbon.page:=$button.name
+				Form:C1466.$dialog.EDITOR.pages.gotoPage($button.name)
 				
 				//…………………………………………………………………………………………………
 			Else 

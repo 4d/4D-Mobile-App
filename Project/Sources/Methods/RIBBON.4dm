@@ -5,35 +5,26 @@
 // Created 30-1-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-//
+// Main method of toolbar management
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($1)
+var $1 : Integer
 
-C_LONGINT:C283($Lon_bottom; $Lon_button; $Lon_formEvent; $Lon_left; $Lon_parameters; $Lon_right)
-C_LONGINT:C283($Lon_top)
-C_TEXT:C284($Txt_me)
-
-If (False:C215)
-	C_LONGINT:C283(RIBBON; $1)
-End if 
+var $bottom; $button; $left; $right; $top : Integer
+var $e : Object
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-$Lon_formEvent:=Form event code:C388
-
-$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
+$e:=FORM Event:C1606
 
 // Optional parameters
-If ($Lon_parameters>=1)
+If (Count parameters:C259>=1)
 	
-	$Lon_button:=$1
+	$button:=$1
 	
 Else 
 	
-	$Lon_button:=Num:C11($Txt_me)
+	$button:=Num:C11($e.objectName)
 	
 End if 
 
@@ -41,39 +32,39 @@ End if
 Case of 
 		
 		//______________________________________________________
-	: ($Lon_formEvent=On Mouse Enter:K2:33)
+	: ($e.code=On Mouse Enter:K2:33)
 		
-		If ($Lon_button<100)  // Tabs
+		If ($button<100)  // Tabs
 			
-			If (Form:C1466.tab=$Txt_me)
+			If (Form:C1466.tab=$e.objectName)
 				
 				// Highlights
-				OBJECT SET RGB COLORS:C628(*; $Txt_me; UI.selectedColor; Background color none:K23:10)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
 				
 			Else 
 				
-				OBJECT SET RGB COLORS:C628(*; $Txt_me; Foreground color:K23:1; Background color none:K23:10)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1)
 				
 			End if 
 			
 		Else 
 			
-			If (OBJECT Get enabled:C1079(*; $Txt_me))
+			If (OBJECT Get enabled:C1079(*; $e.objectName))
 				
 				// Highlights
-				OBJECT SET RGB COLORS:C628(*; $Txt_me; UI.selectedColor; Background color none:K23:10)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
 				
 				Case of 
 						
 						//__________________________________
-					: ($Txt_me="151")  // Build & run
+					: ($e.objectName="151")  // Build & run
 						
-						OBJECT SET HELP TIP:C1181(*; $Txt_me; Get localized string:C991("bRunTip"))
+						OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("bRunTip"))
 						
 						//__________________________________
-					: ($Txt_me="153")  // Install
+					: ($e.objectName="153")  // Install
 						
-						OBJECT SET HELP TIP:C1181(*; $Txt_me; Get localized string:C991("bInstallTip"))
+						OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("bInstallTip"))
 						
 						//__________________________________
 				End case 
@@ -83,47 +74,47 @@ Case of
 				Case of 
 						
 						//__________________________________
-					: ($Txt_me="151")  // Build & run
+					: ($e.objectName="151")  // Build & run
 						
 						Case of 
 								
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.project)))
 								
-								OBJECT SET HELP TIP:C1181(*; $Txt_me; Get localized string:C991("someResourcesAreMissingOrInvalid"))
+								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("someResourcesAreMissingOrInvalid"))
 								
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.xCode)))
 								
-								OBJECT SET HELP TIP:C1181(*; $Txt_me; Get localized string:C991("youNeedXcodeToPerformThisOperation"))
+								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("youNeedXcodeToPerformThisOperation"))
 								
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.dataModel)))
 								
-								OBJECT SET HELP TIP:C1181(*; $Txt_me; Get localized string:C991("youMustPublishAtLeastOneFieldToPerformThisOperation"))
+								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("youMustPublishAtLeastOneFieldToPerformThisOperation"))
 								
 								//…………………………………………………………………………………
 						End case 
 						
 						//__________________________________
-					: ($Txt_me="153")  // Install
+					: ($e.objectName="153")  // Install
 						
 						Case of 
 								
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.xCode)))
 								
-								OBJECT SET HELP TIP:C1181(*; $Txt_me; Get localized string:C991("youNeedXcodeToPerformThisOperation"))
+								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("youNeedXcodeToPerformThisOperation"))
 								
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.dataModel)))
 								
-								OBJECT SET HELP TIP:C1181(*; $Txt_me; Get localized string:C991("youMustPublishAtLeastOneFieldToPerformThisOperation"))
+								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("youMustPublishAtLeastOneFieldToPerformThisOperation"))
 								
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.teamId)))
 								
-								OBJECT SET HELP TIP:C1181(*; $Txt_me; Get localized string:C991("defineYourYourTeamIdToPerformThisOperation"))
+								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("defineYourYourTeamIdToPerformThisOperation"))
 								
 								//…………………………………………………………………………………
 						End case 
@@ -134,58 +125,58 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($Lon_formEvent=On Mouse Leave:K2:34)
+	: ($e.code=On Mouse Leave:K2:34)
 		
-		If ($Lon_button<100)  // Tabs
+		If ($button<100)  // Tabs
 			
-			If (Form:C1466.tab=$Txt_me)
+			If (Form:C1466.tab=$e.objectName)
 				
-				OBJECT SET RGB COLORS:C628(*; $Txt_me; Foreground color:K23:1; Background color none:K23:10)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1)
 				
 			Else 
 				
 				// Inverts
-				OBJECT SET RGB COLORS:C628(*; $Txt_me; 0x00FFFFFF; Background color none:K23:10)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; 0x00FFFFFF)
 				
 			End if 
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; $Txt_me; 0x00696969; Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*; $e.objectName; 0x00696969)
 			
 		End if 
 		
 		//______________________________________________________
-	: ($Lon_formEvent=On Clicked:K2:4)
+	: ($e.code=On Clicked:K2:4)
 		
 		Case of 
 				
 				//……………………………………………………………………………………………………………………
-			: ($Lon_button=8858)  // Switch
+			: ($button=8858)  // Switch
 				
 				CALL SUBFORM CONTAINER:C1086(-1)
 				
 				//……………………………………………………………………………………………………………………
-			: ($Lon_button<100)  // Tabs
+			: ($button<100)  // Tabs
 				
 				// Move the tab background
-				OBJECT GET COORDINATES:C663(*; $Txt_me; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-				OBJECT SET COORDINATES:C1248(*; "tab"; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
+				OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
+				OBJECT SET COORDINATES:C1248(*; "tab"; $left; $top; $right; $bottom)
 				
 				// Deselects the previous tab
-				OBJECT SET RGB COLORS:C628(*; Form:C1466.tab; 0x00FFFFFF; Background color none:K23:10)
+				OBJECT SET RGB COLORS:C628(*; Form:C1466.tab; 0x00FFFFFF)
 				
 				// Selects the current tab
-				OBJECT SET RGB COLORS:C628(*; $Txt_me; UI.selectedColor; Background color none:K23:10)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
 				
-				If (Form:C1466.tab=$Txt_me)
+				If (Form:C1466.tab=$e.objectName)
 					
 					// Switching
 					CALL SUBFORM CONTAINER:C1086(-1)
 					
 				Else 
 					
-					Form:C1466.tab:=$Txt_me
+					Form:C1466.tab:=$e.objectName
 					
 					If (Form:C1466.state#"open")
 						
@@ -196,13 +187,13 @@ Case of
 				End if 
 				
 				// Display the tab page
-				FORM GOTO PAGE:C247($Lon_button; *)
+				FORM GOTO PAGE:C247($button; *)
 				
 				//……………………………………………………………………………………………………………………
 			Else 
 				
 				// Pass to the parent
-				CALL SUBFORM CONTAINER:C1086(-$Lon_button)
+				CALL SUBFORM CONTAINER:C1086(-$button)
 				
 				//……………………………………………………………………………………………………………………
 		End case 
@@ -210,13 +201,7 @@ Case of
 		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 		
 		//______________________________________________________
 End case 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

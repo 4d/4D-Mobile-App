@@ -78,12 +78,12 @@
 					"fontWeight": "bold",
 					"text": ":xliff:sections",
 					"style": "custom",
-					"method": "ObjectMethods/section.4dm",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"method": "ObjectMethods/section.4dm"
 				},
 				"build": {
 					"type": "button",
@@ -95,12 +95,12 @@
 					"stroke": "#FFFFFF",
 					"text": ":xliff:build",
 					"style": "custom",
-					"method": "ObjectMethods/build.4dm",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"method": "ObjectMethods/build.4dm"
 				},
 				"Line": {
 					"type": "line",
@@ -318,12 +318,12 @@
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
-					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"method": "ObjectMethods/151.4dm"
 				},
 				"152": {
 					"type": "button",
@@ -337,13 +337,13 @@
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
-					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
 					],
-					"popupPlacement": "linked"
+					"popupPlacement": "linked",
+					"method": "ObjectMethods/152.4dm"
 				},
 				"201": {
 					"type": "button",
@@ -392,5 +392,12 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
+	},
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
 	}
 }

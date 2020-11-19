@@ -36,7 +36,7 @@ If (False:C215)
 	C_TEXT:C284(editor_Locked; ${1})
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(editor_MENU_ACTIONS; $1)
+	//C_OBJECT(editor_MENU_ACTIONS; $1)
 	
 	// ----------------------------------------------------
 	C_TEXT:C284(editor_MESSAGES; $1)

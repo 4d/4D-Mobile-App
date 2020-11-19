@@ -1,11 +1,12 @@
 // ----------------------------------------------------
-// Object method : RIBBON.201 - (4D Mobile App)
+// Object method : RIBBON.201 - (Simulator button)
 // ID[6815D0201FC24AF6A6763A5CFDD4B233]
 // Created 31-1-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($bottom; $left; $right; $top)
-C_OBJECT:C1216($e; $menu; $o)
+var $bottom; $left; $right; $top : Integer
+var $device; $e : Object
+var $menu : cs:C1710.menu
 
 // ----------------------------------------------------
 // Initialisations
@@ -17,12 +18,12 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Mouse Enter:K2:33)
 		
-		RIBBON(Num:C11(OBJECT Get name:C1087(Object current:K67:2)))
+		RIBBON(Num:C11($e.objectName))
 		
 		//______________________________________________________
 	: ($e.code=On Mouse Leave:K2:34)
 		
-		RIBBON(Num:C11(OBJECT Get name:C1087(Object current:K67:2)))
+		RIBBON(Num:C11($e.objectName))
 		
 		//______________________________________________________
 	: ($e.code=On Clicked:K2:4)
@@ -31,11 +32,10 @@ Case of
 			
 			$menu:=cs:C1710.menu.new()
 			
-			For each ($o; Form:C1466.devices)
+			For each ($device; Form:C1466.devices)
 				
-				$menu.append($o.name; $o.udid)\
-					.property("name"; $o.name)\
-					.mark($o.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+				$menu.append($device.name; $device.udid)\
+					.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
 				
 			End for each 
 			
@@ -62,31 +62,38 @@ Case of
 					// Nothing selected
 					
 					//______________________________________________________
-				: (Match regex:C1019("(?mi-s)^(?:[[:alnum:]]*-)*[[:alnum:]]*$"; $menu.choice; 1))
+				: (Match regex:C1019("(?mi-s)^(?:[[:alnum:]]*-)*[[:alnum:]]*$"; $menu.choice; 1))  //simulator
 					
 					If ($menu.choice#String:C10(Form:C1466.CurrentDeviceUDID))
 						
-						// Kill booted Simulator if any…
+						$device:=Form:C1466.devices.query("udid = :1"; $menu.choice).pop()
+						
+						// Kill booted Simulator if any
 						If (simulator(New object:C1471(\
 							"action"; "kill")).success)
 							
-							// …Set default simulator
-							$o:=plist(New object:C1471(\
+							If (plist(New object:C1471(\
 								"action"; "write"; \
 								"domain"; env_userPathname("preferences"; "com.apple.iphonesimulator.plist").path; \
 								"key"; "CurrentDeviceUDID"; \
-								"value"; $menu.choice))
-							
-							Form:C1466.CurrentDeviceUDID:=$menu.choice
-							
-							For each ($o; Form:C1466.devices)
+								"value"; $menu.choice)).success)
 								
-								If ($o.udid=Form:C1466.CurrentDeviceUDID)
-									
-									OBJECT SET TITLE:C194(*; "201"; $o.name)
-									
-								End if 
-							End for each 
+								// Set default simulator
+								Form:C1466.CurrentDeviceUDID:=$menu.choice
+								
+								// Set button title
+								OBJECT SET TITLE:C194(*; "201"; $device.name)
+								
+							Else 
+								
+								POST_MESSAGE(New object:C1471(\
+									"target"; Current form window:C827; \
+									"action"; "show"; \
+									"type"; "alert"; \
+									"title"; ".Failed to set the default simulator to: \""+$device.name+"\""; \
+									"additional"; ""))
+								
+							End if 
 						End if 
 					End if 
 					
@@ -109,8 +116,7 @@ Case of
 				"target"; Current form window:C827; \
 				"action"; "show"; \
 				"type"; "alert"; \
-				"title"; "noDevices"; \
-				"additional"; ""))
+				"title"; "noDevices"))
 			
 		End if 
 		

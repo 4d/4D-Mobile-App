@@ -32,7 +32,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	ob_MERGE($in; project_Defaults)
 	
 	$project:=$in.project
-	
 	$target:=Current form window:C827
 	
 Else 
@@ -48,7 +47,7 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		//#99788 ========================================================
 		//EXECUTE METHOD IN SUBFORM("project"; "views_Handler"; *; New object(\
-						"action"; "updateForms"))
+												"action"; "updateForms"))
 		
 		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
