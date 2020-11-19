@@ -84,7 +84,7 @@ Function createIconAssets
 			
 			$Obj_table.labelAlignment:="left"
 			Case of 
-				: (Length:C16(String:C10($Obj_table.originalName)>0))
+				: (Length:C16(String:C10($Obj_table.originalName))>0)
 					$Obj_table.navigationIcon:="Main"+$Obj_table.originalName
 				: ($Obj_table[""]#Null:C1517)
 					$Obj_table.navigationIcon:="Main"+$Obj_table[""].name
