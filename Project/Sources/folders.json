@@ -557,8 +557,7 @@
 		],
 		"methods": [
 			"COMPILER_env",
-			"env_Database_setting",
-			"env_userPathname"
+			"env_Database_setting"
 		]
 	},
 	"err": {

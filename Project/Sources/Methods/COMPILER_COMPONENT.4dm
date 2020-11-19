@@ -10,6 +10,7 @@ var RECORD : Object  // General journal
 
 var PROJECT : cs:C1710.project
 var DATABASE : cs:C1710.database
+var ENV : cs:C1710.env
 
 // INITIALIZATION
 COMPONENT_INIT

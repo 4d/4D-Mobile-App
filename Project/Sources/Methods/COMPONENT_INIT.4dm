@@ -29,11 +29,13 @@ var RECORD : Object  // General journal
 
 var PROJECT : cs:C1710.project
 var DATABASE : cs:C1710.database
+var ENV : cs:C1710.env
 
 // ----------------------------------------------------
 // Initialisations
 $reset:=Macintosh option down:C545
 
+ENV:=cs:C1710.env.new()
 PROJECT:=cs:C1710.project.new()
 DATABASE:=cs:C1710.database.new()
 DATABASE.projects:=DATABASE.root.folder("Mobile Projects")

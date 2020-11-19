@@ -60,3 +60,207 @@ Function update  // Updating the values that can be modified after the database 
 	
 	GET SYSTEM FORMAT:C994(System time short pattern:K60:4; $t)
 	This:C1470.timeShortPattern:=$t
+	
+	//===================================================================================
+Function home($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=This:C1470.homeFolder
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
+	
+	//===================================================================================
+Function library($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=This:C1470.homeFolder.folder("Library/")
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
+	
+	//===================================================================================
+Function preferences($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=This:C1470.homeFolder.folder("Library/Preferences/")
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
+	
+	//===================================================================================
+Function caches($path; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=This:C1470.homeFolder.folder("Library/Caches/")
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
+	
+	//===================================================================================
+Function logs($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=This:C1470.homeFolder.folder("Library/Logs/")
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
+	
+	//===================================================================================
+Function derivedData($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=This:C1470.homeFolder.folder("Library/Developer/Xcode/DerivedData/")
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
+	
+	//===================================================================================
+Function simulators($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=This:C1470.homeFolder.folder("Library/Developer/CoreSimulator/Devices/")
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
+	
+	//===================================================================================
+Function applicationSupport($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=This:C1470.homeFolder.folder("Library/Application Support/")
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
+	
+	//===================================================================================
+Function archives($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=This:C1470.homeFolder.folder("Library/Developer/Xcode/Archives/")
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
+	
+	//===================================================================================
+Function _postProcessing($document : Object; $pathOrCreate : Variant; $create : Boolean)->$return : Object
+	
+	$return:=$document
+	
+	If (Count parameters:C259>=2)
+		
+		If (Value type:C1509($pathOrCreate)=Is boolean:K8:9)
+			
+			If ($pathOrCreate)
+				
+				$document.create()
+				
+			End if 
+			
+		Else 
+			
+			//%W-533.1
+			If ($pathOrCreate[[Length:C16($pathOrCreate)]]="/")
+				//%W+533.1
+				
+				// Append folder
+				$return:=$document.folder($pathOrCreate)
+				
+			Else 
+				
+				// Append file
+				$return:=$document.file($pathOrCreate)
+				
+			End if 
+		End if 
+		
+		If (Count parameters:C259>=3)
+			
+			If ($create)
+				
+				$document.create()
+				
+			End if 
+		End if 
+	End if 

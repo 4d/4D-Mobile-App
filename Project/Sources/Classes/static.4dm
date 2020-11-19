@@ -437,7 +437,7 @@ Function setDimension
 	$0:=This:C1470
 	
 	
-Function setColors($foreground : Variant; $background : Variant; $altBackground : Variant)
+Function setColors($foreground : Variant; $background : Variant; $altBackground : Variant)->$this : cs:C1710.static
 	
 	Case of 
 			
@@ -472,6 +472,8 @@ Function setColors($foreground : Variant; $background : Variant; $altBackground 
 			
 			//______________________________________________________
 	End case 
+	
+	$this:=This:C1470
 	
 /*════════════════════════════════════════════*/
 Function _updateCoordinates

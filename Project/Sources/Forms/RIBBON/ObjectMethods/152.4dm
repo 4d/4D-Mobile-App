@@ -267,12 +267,12 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openDiagnosticReports")
 				
-				SHOW ON DISK:C922(env_userPathname("logs"; "DiagnosticReports").platformPath)
+				SHOW ON DISK:C922(ENV.logs("DiagnosticReports").platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_openLogs")
 				
-				$o:=env_userPathname("logs"; "CoreSimulator/")
+				$o:=ENV.logs("CoreSimulator/")
 				
 				$simulator:=simulator(New object:C1471(\
 					"action"; "default"))
@@ -369,7 +369,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openCache")
 				
-				SHOW ON DISK:C922(env_userPathname("cache").platformPath)
+				SHOW ON DISK:C922(ENV.caches().platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_openSDKCache")
@@ -379,12 +379,12 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_clearCache")
 				
-				env_userPathname("cache").delete(fk recursive:K87:7)
+				ENV.caches().delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_removeSDK")
 				
-				env_userPathname("sdk").delete(fk recursive:K87:7)
+				path.sdk().delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_removeMobilesProjects")
@@ -400,7 +400,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_removeDerivedData")
 				
-				env_userPathname("derivedData").delete(fk recursive:K87:7)
+				ENV.derivedData().delete(fk recursive:K87:7)
 				$build.delete(fk recursive:K87:7)
 				
 				//______________________________________________________

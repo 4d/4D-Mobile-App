@@ -109,6 +109,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
+				ENV.update()
 				EXECUTE METHOD IN SUBFORM:C1085("project"; "EDITOR_ON_ACTIVATE")
 				
 				//______________________________________________________

@@ -1,3 +1,4 @@
+
 Class constructor
 	var $1 : Variant
 	var $2 : Variant

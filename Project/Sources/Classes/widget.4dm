@@ -1,25 +1,9 @@
-/*
-
-Active objects perform a database task or an interface function.
-Active objects — enterable objects (variables), combo boxes, drop-down lists, 
-picture buttons, and so on — store data temporarily in memory 
-or perform some action such as opening a dialog box, printing a report,
-or starting a background process.
-
-I prefer to call them "widgets" to differentiate them from language objects.
-
-*/
-
-/*═══════════════════*/
 Class extends static
-/*═══════════════════*/
 
-Class constructor
+//═════════════════════════════════════════════════
+Class constructor($name : Text; $datasource)
 	
-	C_TEXT:C284($1)
-	C_VARIANT:C1683($2)
-	
-	Super:C1705($1)
+	Super:C1705($name)
 	
 	C_POINTER:C301($p)
 	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
@@ -34,22 +18,69 @@ Class constructor
 		
 		If (Count parameters:C259>=2)
 			
-			This:C1470.dataSource:=$2
+			This:C1470.dataSource:=$datasource
 			
-			If (Value type:C1509($2)=Is object:K8:27)
+			If (Value type:C1509($datasource)=Is object:K8:27)
 				
 				// Formula
 				This:C1470.value:=This:C1470.dataSource.call()
 				
 			Else 
 				
-				This:C1470.value:=Formula from string:C1601($2).call()
+				This:C1470.value:=Formula from string:C1601($datasource).call()
 				
 			End if 
 		End if 
 	End if 
 	
 	This:C1470.action:=OBJECT Get action:C1457(*; This:C1470.name)
+	
+/*═════════════════════════════════════════════════
+sets the display format for the widget
+*/
+Function setFormat($format : Text)->$this : cs:C1710.static
+	
+	OBJECT SET FORMAT:C236(*; This:C1470.name; $format)
+	
+	$this:=This:C1470
+	
+/*═════════════════════════════════════════════════
+Attaches an image to the widget
+	
+   Possible values for proxy values are:
+    • "#{folder/}picturename" or "file:{folder/}picturename" if the picture comes from a file stored in the Resources folder
+    • variable name if the picture comes from a picture variable
+    • number, preceded with a question mark (ex.: “?250”) if the picture comes from a picture library
+*/
+Function setPicture($proxy : Text)->$this : Object
+	
+	Case of 
+			
+			//______________________________________________________
+		: (This:C1470.type=Object type 3D button:K79:17)
+			
+			This:C1470.setFormat(";"+$proxy)
+			
+			//______________________________________________________
+		: (This:C1470.type=Object type picture button:K79:20)\
+			 | (This:C1470.type=Object type picture popup menu:K79:15)
+			
+			This:C1470.setFormat(";;"+$proxy)
+			
+			//______________________________________________________
+		: (This:C1470.type=Object type listbox header:K79:9)
+			
+			This:C1470.setFormat($proxy)
+			
+			//______________________________________________________
+		Else 
+			
+			// #ERROR
+			
+			//______________________________________________________
+	End case 
+	
+	$this:=This:C1470
 	
 	//________________________________________________________________
 Function getCoordinates

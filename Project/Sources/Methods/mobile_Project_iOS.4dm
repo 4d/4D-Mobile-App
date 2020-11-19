@@ -35,8 +35,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	// NO PARAMETERS REQUIRED
 	$isDebug:=DATABASE.isInterpreted
 	
-	$Obj_cache:=env_userPathname("cache")
-	$Obj_cache.create()
+	$Obj_cache:=ENV.caches("com.4d.mobile/"; True:C214)
 	
 	// Optional parameters
 	If ($Lon_parameters>=1)
@@ -750,7 +749,7 @@ If ($Obj_out.success)
 					"exportPath"; Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12); \
 					"archivePath"; Convert path system to POSIX:C1106($Obj_in.path+"archive"+Folder separator:K24:12+$productName+".xcarchive")))
 				
-				env_userPathname("cache"; "lastExportArchive.xlog").setText(String:C10($Obj_result_build.out); "UTF-8"; Document with LF:K24:22)
+				ENV.caches("lastExportArchive.xlog").setText(String:C10($Obj_result_build.out); "UTF-8"; Document with LF:K24:22)
 				
 				ob_error_combine($Obj_out; $Obj_result_build)
 				

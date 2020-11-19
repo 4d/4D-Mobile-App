@@ -74,7 +74,7 @@ Case of
 							
 							If (plist(New object:C1471(\
 								"action"; "write"; \
-								"domain"; env_userPathname("preferences"; "com.apple.iphonesimulator.plist").path; \
+								"domain"; ENV.preferences("com.apple.iphonesimulator.plist").path; \
 								"key"; "CurrentDeviceUDID"; \
 								"value"; $menu.choice)).success)
 								

@@ -11,7 +11,7 @@ var $lep : cs:C1710.lep
 // NO PARAMETERS REQUIRED
 $isDebug:=DATABASE.isInterpreted
 
-$cache:=env_userPathname("cache")
+$cache:=ENV.caches()
 $cache.create()
 
 // Optional parameters

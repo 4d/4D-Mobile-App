@@ -11,11 +11,11 @@ var $device; $e; $form; $page; $plist : Object
 // Initialisations
 $form:=New object:C1471(\
 "pages"; New collection:C1472; \
-"switch"; UI.button("switch.button"); \
-"build"; UI.button("151"); \
-"simulator"; UI.button("201"); \
-"project"; "152"; \
-"install"; UI.button("153"); \
+"switch"; cs:C1710.button.new("switch.button"); \
+"build"; cs:C1710.button.new("151"); \
+"simulator"; cs:C1710.button.new("201"); \
+"project"; cs:C1710.button.new("152"); \
+"install"; cs:C1710.button.new("153"); \
 "start"; 16; \
 "minWidth"; 110; \
 "gap"; 7)
@@ -72,7 +72,7 @@ Case of
 		
 		If (Is macOS:C1572) & FEATURE.with("android")
 			
-			OBJECT SET FORMAT:C236(*; $form.build.name; ";;;;;;;;;;1")
+			$form.build.setPopupMenu("linked")
 			
 		End if 
 		
@@ -124,11 +124,11 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Bound Variable Change:K2:52)
 		
-		$form.switch.setFormat(";#images/toolbar/"+Choose:C955(Form:C1466.state="open"; "reduce"; "expand")+".png")
+		$form.switch.setPicture("#images/toolbar/"+Choose:C955(Form:C1466.state="open"; "reduce"; "expand")+".png")
 		
 		For each ($page; $form.pages)
 			
-			(OBJECT Get pointer:C1124(Object named:K67:5; $page.button))->:=Num:C11($page.name=Form:C1466.page)
+			OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=Form:C1466.page))
 			
 		End for each 
 		
@@ -140,7 +140,7 @@ Case of
 				$form.simulator.enable()
 				
 				// Get the default simulator
-				$plist:=env_userPathname("preferences"; "com.apple.iphonesimulator.plist")
+				$plist:=ENV.preferences("com.apple.iphonesimulator.plist")
 				
 				If (Not:C34($plist.exists))
 					
@@ -186,8 +186,8 @@ Case of
 			End if 
 		End if 
 		
-		$form.build.setEnabled(Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project))
-		$form.install.setEnabled(Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project) & Bool:C1537(Form:C1466.status.teamId))
+		$form.build.enable(Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project))
+		$form.install.enable(Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project) & Bool:C1537(Form:C1466.status.teamId))
 		
 		//______________________________________________________
 	Else 
