@@ -128,16 +128,15 @@ If (Asserted:C1132(OK=1; "Invalid template"))
 									
 									If ($o.success)
 										
-										If ($o.type=-2)  // 1-N relation
-											
-											$isCompatible:=Split string:C1554(String:C10($oAttributes.class); " ").indexOf("multivalued")#-1
-											
-										Else 
-											
-											//$isCompatible:=tmpl_compatibleType($c; $o.fieldType)
-											$isCompatible:=$template.isTypeAccepted($c; $o.fieldType)
-											
-										End if 
+										//If ($o.type=-2)  // 1-N relation
+										
+										//$isCompatible:=Split string(String($oAttributes.class); " ").indexOf("multivalued")#-1
+										
+										//Else 
+										
+										$isCompatible:=$template.isTypeAccepted($c; $o.fieldType)
+										
+										//End if 
 									End if 
 								End if 
 							End for each 
