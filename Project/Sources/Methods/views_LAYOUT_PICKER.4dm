@@ -241,7 +241,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		
 	End if 
 	
-	$isSelected:=(Form:C1466.$dialog.VIEWS.template.path.name=$template.name)
+	$isSelected:=(Form:C1466.$dialog.VIEWS.template.path.fullName=$template.fullName)
 	
 	If ($template.extension=SHARED.archiveExtension)  // Archive
 		
