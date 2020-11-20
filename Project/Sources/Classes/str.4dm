@@ -711,11 +711,17 @@ Function match
 	
 	//=======================================================================================================
 	//  ⚠️ Returns the localized string & made replacement if any 
-Function localized
-	var $0 : Text
-	var $1 : Variant
+Function localized($replacements)->$localizedString : Text
 	
-	$0:=Super:C1706.localized(This:C1470.value; $1)
+	If (Count parameters:C259>=1)
+		
+		$localizedString:=Super:C1706.localized(This:C1470.value; $replacements)
+		
+	Else 
+		
+		$localizedString:=Super:C1706.localized(This:C1470.value)
+		
+	End if 
 	
 	//=======================================================================================================
 	// Concatenates the values ​​given to the original string
