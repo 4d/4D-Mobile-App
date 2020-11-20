@@ -166,6 +166,7 @@ Function fieldList($table : Variant)->$result : Object
 						
 						$result.fields.push($field)
 						
+						$field.label:=$field.path
 						$field.$level:=0
 						
 						//……………………………………………………………………………………………………………
@@ -192,6 +193,7 @@ Function fieldList($table : Variant)->$result : Object
 								
 								$result.fields.push($field)
 								
+								$field.label:=$field.path
 								$field.$level:=1
 								
 							End if 
@@ -216,9 +218,8 @@ Function fieldList($table : Variant)->$result : Object
 									$field.fieldNumber:=Num:C11($attribute)
 									//]
 									
+									$field.label:=" ┊"+$field.name
 									$field.path:=$key+"."+$field.name
-									
-									//$o.path:="┊"+$o.path
 									
 									$result.fields.push($field)
 									
@@ -244,6 +245,7 @@ Function fieldList($table : Variant)->$result : Object
 											If (PROJECT.isField($oo.key))
 												
 												$o:=OB Copy:C1225($oo.value)
+												$o.label:=" ┊"+$o.path
 												$o.path:=$key+"."+$o.path
 												
 												$o.id:=Num:C11($oo.key)
@@ -264,19 +266,9 @@ Function fieldList($table : Variant)->$result : Object
 										
 										$field.id:=0
 										$field.name:=$attribute
-										
-										If (Bool:C1537($field.isToMany))
-											
-											$field.path:=$key+"."+$attribute
-											$field.fieldType:=8859
-											
-										Else 
-											
-											$field.path:=$key+"."+$attribute
-											$field.fieldType:=8858
-											
-										End if 
-										
+										$field.label:=" ┊"+$attribute
+										$field.path:=$key+"."+$attribute
+										$field.fieldType:=Choose:C955(Bool:C1537($field.isToMany); 8859; 8858)
 										$result.fields.push($field)
 										
 										$field.$level:=1
@@ -303,6 +295,7 @@ Function fieldList($table : Variant)->$result : Object
 							//]
 							
 							$field.path:=$key
+							$field.label:=$field.path
 							
 							$result.fields.push($field)
 							
@@ -325,12 +318,14 @@ Function fieldList($table : Variant)->$result : Object
 								$field.id:=0
 								//]
 								
+								$field.label:=$field.path
+								
 								$result.fields.push($field)
 								
 							End if 
 						End if 
 						
-						$field.$level:=3
+						$field.$level:=0
 						
 						//……………………………………………………………………………………………………………
 				End case 

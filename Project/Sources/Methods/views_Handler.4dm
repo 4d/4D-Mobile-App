@@ -336,8 +336,8 @@ Case of
 			If ($o.success)
 				
 				COLLECTION TO ARRAY:C1562($o.fields; ($form.fields.pointer())->)
-				COLLECTION TO ARRAY:C1562($o.fields.extract("id"); ($form.ids.pointer())->)
-				COLLECTION TO ARRAY:C1562($o.fields.extract("path"); ($form.names.pointer())->)
+				COLLECTION TO ARRAY:C1562($o.fields; ($form.ids.pointer())->; "id")
+				COLLECTION TO ARRAY:C1562($o.fields; ($form.names.pointer())->; "label")
 				
 				ASSERT:C1129($o.fields.length=Size of array:C274(($form.ids.pointer())->))
 				ASSERT:C1129($o.fields.length=Size of array:C274(($form.names.pointer())->))
@@ -372,6 +372,11 @@ Case of
 								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
 								
 							End if 
+							
+						Else 
+							
+							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.selectedColor; lk font color:K53:24)
+							
 						End if 
 					End if 
 				End for 
