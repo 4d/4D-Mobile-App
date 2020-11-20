@@ -14,219 +14,213 @@ If (False:C215)
 	C_LONGINT:C283(tmpl_On_drag_over; $0)  // -1 = deny; 0 = accept
 End if 
 
-var $cible; $widget; $t : Text
-var $background; $droppable; $highlight; $vInsertion : Boolean
+var $bind; $cible; $currentForm; $preview; $t : Text
+var $highlightsTheTarget; $isBackground; $isDroppable; $isInsertion : Boolean
 var $x : Blob
 var $dropped : Object
-var $types : Collection
+var $template : cs:C1710.tmpl
 
 // ----------------------------------------------------
 // Initialisations
 $0:=-1  // Deny
 
-$widget:=This:C1470.preview.name
+$preview:=This:C1470.preview.name  //current preview widget
 
 If (This:C1470.$.vInsert#Null:C1517)
 	
-	SVG SET ATTRIBUTE:C1055(*; $widget; This:C1470.$.vInsert; \
+	SVG SET ATTRIBUTE:C1055(*; $preview; This:C1470.$.vInsert; \
 		"fill-opacity"; "0.01")
 	
 End if 
 
 This:C1470.$.current:=SVG Find element ID by coordinates:C1054(*; "preview"; MOUSEX; MOUSEY)
-
-GET PASTEBOARD DATA:C401("com.4d.private.ios.field"; $x)
-
-If (Bool:C1537(OK))
-	
-	BLOB TO VARIABLE:C533($x; $dropped)
-	SET BLOB SIZE:C606($x; 0)
-	
-End if 
+$cible:=This:C1470.$.current
 
 // ----------------------------------------------------
-If (Length:C16(This:C1470.$.current)>0)
+If (Length:C16($cible)>0)
 	
-	$cible:=This:C1470.$.current
+	GET PASTEBOARD DATA:C401("com.4d.private.ios.field"; $x)
 	
-	If (FEATURE.with("newViewUI"))\
-		 & (Num:C11(Form:C1466.$dialog.VIEWS.template.manifest.renderer)>=2)
+	If (Bool:C1537(OK))
 		
-		// Accept insertion
-		$vInsertion:=($cible="@.vInsert")
+		BLOB TO VARIABLE:C533($x; $dropped)
+		SET BLOB SIZE:C606($x; 0)
 		
-		If (FEATURE.with("droppingNext"))
-			
-			$vInsertion:=$vInsertion | ($cible="@.hInsertBefore") | ($cible="@.hInsertAfter")
-			
-		End if 
+		// Check the match of the type with the source
+		SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:type"; $bind)
 		
-		If ($vInsertion)
+		$currentForm:=Current form name:C1298  //
+		$template:=Form:C1466.$dialog[$currentForm].template
+		
+		If ($template.isTypeAccepted($bind; $dropped.fieldType))
 			
-			If ($dropped.fromIndex#Null:C1517)  // Internal D&D
+			If (FEATURE.with("newViewUI"))\
+				 & (Num:C11(Form:C1466.$dialog.VIEWS.template.manifest.renderer)>=2)
 				
-				// Not on me ;-)
-				$vInsertion:=($dropped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
+				// Accept insertion
+				$isInsertion:=($cible="@.vInsert")
 				
-			End if 
-		End if 
-		
-		If (Not:C34($vInsertion))\
-			 & (This:C1470.$.template.type="detail")  // Not for list
-			
-			// Accept dropping on the background
-			SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "4D-isOfClass-background"; $t)
-			$background:=JSON Parse:C1218($t; Is boolean:K8:9)
-			
-		End if 
-	End if 
-	
-	$highlight:=$vInsertion
-	
-	If (Not:C34($background))
-		
-		// Accept drag if the object is dropable
-		SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "4D-isOfClass-droppable"; $t)
-		$droppable:=JSON Parse:C1218($t; Is boolean:K8:9)
-		
-		If ($droppable)
-			
-			$vInsertion:=($dropped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
-			
-			If (Not:C34($vInsertion))
-				
-				// Does not accept drag-and-drop of a 1 to N relation on a static field into a detailed form
-				If ($dropped.fieldType=8859)\
-					 & (This:C1470.$.template.type="detail")
+				If (FEATURE.with("droppingNext"))
 					
-					SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "4D-isOfClass-static"; $t)
-					$droppable:=Not:C34(JSON Parse:C1218($t; Is boolean:K8:9))
+					$isInsertion:=$isInsertion | ($cible="@.hInsertBefore") | ($cible="@.hInsertAfter")
 					
 				End if 
-			End if 
-		End if 
-	End if 
-	
-	Case of 
-			
-			//————————————————————————————————————
-		: ($droppable\
-			 | $background\
-			 | $vInsertion)
-			
-			If ($background\
-				 | $vInsertion)
 				
-				If ($vInsertion)
+				If ($isInsertion)
 					
-					This:C1470.$.vInsert:=$cible
-					
-					If ($highlight)
+					If ($dropped.fromIndex#Null:C1517)  // Internal D&D
 						
-						SVG SET ATTRIBUTE:C1055(*; $widget; $cible; \
-							"fill-opacity"; 1)
-						
-					Else 
-						
-						SVG SET ATTRIBUTE:C1055(*; $widget; $cible; \
-							"fill-opacity"; 0.3)
+						// Not on me ;-)
+						$isInsertion:=($dropped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
 						
 					End if 
 				End if 
 				
-				$0:=0
-				
-			Else 
-				
-				If (FEATURE.with("moreRelations"))  // Accept 1-N relation
+				If (Not:C34($isInsertion))\
+					 & (This:C1470.$.template.type="detail")  // Not for list
 					
-					// Accept drag if the type match with the source
-					SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "ios:type"; $t)
+					// Accept dropping on the background
+					SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "4D-isOfClass-background"; $t)
+					$isBackground:=JSON Parse:C1218($t; Is boolean:K8:9)
 					
-					If ($t="all")
+				End if 
+			End if 
+			
+			$highlightsTheTarget:=$isInsertion
+			
+			If (Not:C34($isBackground))
+				
+				// Accept drag if the object is dropable
+				SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "4D-isOfClass-droppable"; $t)
+				$isDroppable:=JSON Parse:C1218($t; Is boolean:K8:9)
+				
+				If ($isDroppable)
+					
+					$isInsertion:=($dropped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
+					
+					If (Not:C34($isInsertion))
 						
-						//If ($o.fieldType<8858)  // Not relation
-						$0:=0
-						
-						// End if
-						
-					Else 
-						
-						$types:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
-						
-						If (tmpl_compatibleType($types; $dropped.fieldType))
+						// Does not accept drag-and-drop of a 1 to N relation on a static field into a detailed form
+						If ($dropped.fieldType=8859)\
+							 & (This:C1470.$.template.type="detail")
 							
-							$0:=0
+							SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "4D-isOfClass-static"; $t)
+							$isDroppable:=Not:C34(JSON Parse:C1218($t; Is boolean:K8:9))
 							
 						End if 
 					End if 
+				End if 
+			End if 
+			
+			Case of 
 					
-				Else 
+					//————————————————————————————————————
+				: ($isDroppable\
+					 | $isBackground\
+					 | $isInsertion)
 					
-					If ($dropped.fieldType#8859)  // Not 1-N relation
+					If ($isDroppable | $isInsertion)
 						
-						// Accept drag if the type match with the source
-						SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "ios:type"; $t)
+						This:C1470.$.vInsert:=$cible
 						
-						If ($t="all")
+						SVG SET ATTRIBUTE:C1055(*; $preview; $cible; \
+							"fill-opacity"; Choose:C955($isDroppable; 0.7; 1))
+						
+					End if 
+					
+					If ($isBackground\
+						 | $isInsertion)
+						
+						If ($highlightsTheTarget)
+							
+							SVG SET ATTRIBUTE:C1055(*; $preview; $cible; \
+								"fill-opacity"; 1)
+							
+						Else 
+							
+							If ($isInsertion)
+								
+								SVG SET ATTRIBUTE:C1055(*; $preview; $cible; \
+									"fill-opacity"; 0.3)
+								
+							End if 
+						End if 
+						
+						$0:=0
+						
+					Else 
+						
+						If (FEATURE.with("moreRelations"))  // Accept 1-N relation
 							
 							$0:=0
 							
 						Else 
 							
-							$types:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
-							
-							If (tmpl_compatibleType($types; $dropped.fieldType))
+							If ($dropped.fieldType#8859)  // Not 1-N relation
 								
 								$0:=0
 								
+							Else 
+								
+								// Accept only on multi-valued fields
+								SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "4D-isOfClass-multivalued"; $t)
+								
+								If (JSON Parse:C1218($t; Is boolean:K8:9))
+									
+									$0:=0
+									
+								End if 
 							End if 
 						End if 
+					End if 
+					
+					//————————————————————————————————————
+				: (FEATURE.with("withWidgetActions"))  // Action area (WIP)
+					
+					// Accept drag if a widget action is drag over
+					GET PASTEBOARD DATA:C401("com.4d.private.ios.action"; $x)
+					
+					If (Bool:C1537(OK))
 						
-					Else 
+						BLOB TO VARIABLE:C533($x; $dropped)
+						SET BLOB SIZE:C606($x; 0)
 						
-						// Accept only on multi-valued fields
-						SVG GET ATTRIBUTE:C1056(*; $widget; $cible; "4D-isOfClass-multivalued"; $t)
+						// #MARK_TODO - Il doit y avoir des widget action qui ne sont pas compatible avec tous les types
 						
-						If (JSON Parse:C1218($t; Is boolean:K8:9))
+						If (_or(\
+							Formula:C1597($dropped.target=Null:C1517); \
+							Formula:C1597(String:C10($dropped.target)="widget")))
 							
 							$0:=0
 							
 						End if 
 					End if 
-				End if 
-			End if 
-			
-			If ($0=-1)
-				
-				SET CURSOR:C469(9019)
-				
-			End if 
-			
-			//————————————————————————————————————
-		: (FEATURE.with("withWidgetActions"))  // Action area (WIP)
-			
-			// Accept drag if a widget action is drag over
-			GET PASTEBOARD DATA:C401("com.4d.private.ios.action"; $x)
-			
-			If (Bool:C1537(OK))
-				
-				BLOB TO VARIABLE:C533($x; $dropped)
-				SET BLOB SIZE:C606($x; 0)
-				
-				// #MARK_TODO - Il doit y avoir des widget action qui ne sont pas compatible avec tous les types
-				
-				If (_or(\
-					Formula:C1597($dropped.target=Null:C1517); \
-					Formula:C1597(String:C10($dropped.target)="widget")))
 					
-					$0:=0
-					
-				End if 
-			End if 
+					//————————————————————————————————————
+			End case 
 			
-			//————————————————————————————————————
-	End case 
+		Else 
+			
+			// INCOMPATIBLE TYPE
+			
+		End if 
+		
+	Else 
+		
+		// NOT AUTHORIZED DROP
+		
+	End if 
+	
+Else 
+	
+	// <NOTHING MORE TO DO>
+	
+End if 
+
+If ($0=-1)
+	
+	SET CURSOR:C469(9019)
+	
 End if 
 
 // ----------------------------------------------------
