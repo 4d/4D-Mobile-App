@@ -1,22 +1,47 @@
 //%attributes = {"invisible":true}
-var $0 : Object
+#DECLARE ($name : Text)->$formDef : Object
 
-If (False:C215)
-	C_OBJECT:C1216(panel_Definition; $0)
+var $formName : Text
+var $o : Object
+
+If (Count parameters:C259>=1)
+	
+	$formName:=$name
+	
+Else 
+	
+	// Default
+	$formName:=Current form name:C1298
+	
 End if 
 
-var $t : Text
+$o:=Form:C1466.$dialog
 
-$t:=Current form name:C1298
+If ($o=Null:C1517)
+	
+	$o:=New object:C1471(\
+		$formName; New object:C1471)
+	
+Else 
+	
+	If ($o[$formName]=Null:C1517)
+		
+		$o[$formName]:=New object:C1471
+		
+	End if 
+End if 
 
-If (OB Is empty:C1297(editor_INIT))\
+If (OB Is empty:C1297(Form:C1466.$dialog[$formName]))\
  | (Shift down:C543 & Not:C34(Is compiled mode:C492))
 	
-	Form:C1466["$"+$t]:=cs:C1710[$t].new()
+	// Load the class
+	$o[$formName]:=cs:C1710[$formName].new()
+	
+	// Define local functions
+	$o[$formName].refresh:=Formula:C1597(SET TIMER:C645(-1))
 	
 End if 
 
-Form:C1466["$"+$t].event:=FORM Event:C1606
-Form:C1466["$"+$t].refresh:=Formula:C1597(SET TIMER:C645(-1))
+$o[$formName].event:=FORM Event:C1606
 
-$0:=Form:C1466["$"+$t]
+$formDef:=$o[$formName]

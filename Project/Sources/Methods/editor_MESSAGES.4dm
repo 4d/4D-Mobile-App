@@ -116,11 +116,11 @@ Case of
 			
 		Else 
 			
-			// DO_MESSAGE (New object(\
-																																"action";"show";\
-																																"type";"alert";\
-																																"title";"noDevices";\
-																																"additional";""))
+			//DO_MESSAGE(New object(\
+				"action"; "show"; \
+				"type"; "alert"; \
+				"title"; "noDevices"; \
+				"additional"; ""))
 			
 		End if 
 		

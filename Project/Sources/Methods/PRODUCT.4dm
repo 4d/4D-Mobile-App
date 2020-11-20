@@ -59,7 +59,7 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.icon.catch())
 			
-			//
+			// ❗️MANAGED INTO OBJECT METHOD BECAUSE DRAG AND DROP
 			
 			//________________________________________
 	End case 

@@ -103,7 +103,7 @@
 					"width": 369,
 					"height": 22,
 					"detailForm": "PATH PICKER",
-					"dataSource": "Form:C1466.$FEATURES.certificate.picker",
+					"dataSource": "Form:C1466.$dialog.FEATURES.certificate.picker",
 					"events": [
 						"onDataChange"
 					],
@@ -116,7 +116,7 @@
 					"text": ":xliff:certificate",
 					"top": 37,
 					"left": 489,
-					"width": 180,
+					"width": 77,
 					"height": 16,
 					"stroke": "#808080",
 					"visibility": "hidden"
@@ -216,7 +216,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 367,
+	"geometryStamp": 368,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -239,117 +239,90 @@ Function isRelatedEntities
 	$0:=($1.kind="relatedEntities")
 	
 	//==================================================================
-Function fieldDefinition
-	var $0 : Object
-	var $1 : Variant  // Table name/number
-	var $2 : Text  // Field path
-	
-	var $field; $table : Object
-	var $c; $fields : Collection
+Function fieldDefinition($table; $fieldPath : Text)->$field : Object
 	var $tableNumber : Integer
+	var $field; $tableCatalog : Object
+	var $c : Collection
 	
-	If (Value type:C1509($1)=Is longint:K8:6)\
-		 | (Value type:C1509($1)=Is real:K8:4)
+	If (Value type:C1509($table)=Is longint:K8:6)\
+		 | (Value type:C1509($table)=Is real:K8:4)
 		
-		$tableNumber:=$1
+		$tableNumber:=$table
 		
 	Else 
 		
-		$tableNumber:=This:C1470.tableNumber(String:C10($1))
+		$tableNumber:=This:C1470.tableNumber(String:C10($table))
 		
 	End if 
 	
-	$0:=New object:C1471
+	$field:=New object:C1471
 	
-	$c:=Split string:C1554($2; ".")
+	$tableCatalog:=This:C1470.catalog.query("tableNumber=:1"; $tableNumber).pop()
+	This:C1470.success:=($tableCatalog#Null:C1517)
 	
-	If ($c.length=1)
+	If (This:C1470.success)
 		
-		$table:=This:C1470.catalog.query("tableNumber=:1"; $tableNumber).pop()
-		This:C1470.success:=($table#Null:C1517)
+		$c:=Split string:C1554($fieldPath; ".")
+		
+		$field:=$tableCatalog.field.query("name=:1"; $c[0]).pop()
+		This:C1470.success:=($field#Null:C1517)
 		
 		If (This:C1470.success)
 			
-			$fields:=$table.field
-			$field:=$fields.query("name=:1"; $c[0]).pop()
-			This:C1470.success:=($field#Null:C1517)
-			
-			If (This:C1470.success)
+			If ($c.length=1)
 				
-				$0.path:=$2
-				$0.tableNumber:=$tableNumber
-				$0.tableName:=Table name:C256($tableNumber)
+				$field.path:=$fieldPath
+				$field.tableNumber:=$tableNumber
+				$field.tableName:=Table name:C256($tableNumber)
 				
 				If ($field.type=-2)  // 1 to N relation
 					
-					$0.fieldType:=8859
-					$0.type:=-2
-					$0.relatedDataClass:=$field.relatedDataClass
-					$0.relatedTableNumber:=$field.relatedTableNumber
+					$field.fieldType:=8859
+					$field.type:=-2
+					$field.relatedDataClass:=$field.relatedDataClass
+					$field.relatedTableNumber:=$field.relatedTableNumber
 					
 				Else 
 					
-					$0.fieldNumber:=$field.fieldNumber
-					$0.fieldType:=$field.fieldType
-					$0.name:=Field name:C257($tableNumber; $field.fieldNumber)
-					$0.type:=This:C1470.__fielddType($field.fieldType)
+					$field.fieldNumber:=$field.fieldNumber
+					$field.fieldType:=$field.fieldType
+					$field.name:=Field name:C257($tableNumber; $field.fieldNumber)
+					$field.type:=This:C1470.__fielddType($field.fieldType)
 					
 				End if 
 				
 			Else 
 				
-				This:C1470.errors.push("Field not found")
-				
-			End if 
-			
-		Else 
-			
-			This:C1470.errors.push("Table not found #"+String:C10($tableNumber))
-			
-		End if 
-		
-	Else 
-		
-		$table:=This:C1470.catalog.query("tableNumber=:1"; $tableNumber).pop()
-		This:C1470.success:=($table#Null:C1517)
-		
-		If (This:C1470.success)
-			
-			$field:=$table.field.query("name=:1"; $c[0]).pop()
-			This:C1470.success:=($field#Null:C1517)
-			
-			If (This:C1470.success)
-				
 				$tableNumber:=$field.relatedTableNumber
 				
 				If ($c.length>2)
 					
-					$0:=This:C1470.fieldDefinition($tableNumber; $c.copy().remove(0).join("."))
-					$0.path:=$2
+					$field:=This:C1470.fieldDefinition($tableNumber; $c.copy().remove(0).join("."))
+					$field.path:=$fieldPath
 					
 				Else 
 					
-					$table:=This:C1470.catalog.query("tableNumber=:1"; $tableNumber).pop()
-					This:C1470.success:=($table#Null:C1517)
+					$tableCatalog:=This:C1470.catalog.query("tableNumber=:1"; $tableNumber).pop()
+					This:C1470.success:=($tableCatalog#Null:C1517)
 					
 					If (This:C1470.success)
 						
-						$field:=$table.field.query("name=:1"; $c[1]).pop()
+						$field:=$tableCatalog.field.query("name=:1"; $c[1]).pop()
 						This:C1470.success:=($field#Null:C1517)
 						
 						If (This:C1470.success)
 							
-							$0.path:=$2
-							$0.tableName:=Table name:C256($tableNumber)
-							$0.tableNumber:=$tableNumber
-							$0.fieldNumber:=$field.fieldNumber
+							$field.path:=$fieldPath
+							$field.tableName:=Table name:C256($tableNumber)
+							$field.tableNumber:=$tableNumber
+							$field.fieldNumber:=$field.fieldNumber
 							
-							$0.name:=Choose:C955($field.relatedDataClass=Null:C1517; Field name:C257($tableNumber; $field.fieldNumber); $c[0])
+							$field.name:=Choose:C955($field.relatedDataClass=Null:C1517; Field name:C257($tableNumber; $field.fieldNumber); $c[0])
 							
-							$0.fieldType:=$field.fieldType
+							$field.fieldType:=$field.fieldType
 							
-							$0.valueType:=$field.type
-							$0.type:=This:C1470.__fielddType($field.fieldType)
+							$field.valueType:=$field.type
+							$field.type:=This:C1470.__fielddType($field.fieldType)
 							
 						Else 
 							
@@ -359,22 +332,22 @@ Function fieldDefinition
 						
 					Else 
 						
-						This:C1470.errors.push("Table "+String:C10($tableNumber)+" not found")
+						This:C1470.errors.push("Related table not found #"+String:C10($tableNumber))
 						
 					End if 
 				End if 
-				
-			Else 
-				
-				This:C1470.errors.push("Field "+$c[0]+" not found")
-				
 			End if 
 			
 		Else 
 			
-			This:C1470.errors.push("Table "+String:C10($tableNumber)+" not found")
+			This:C1470.errors.push("Field "+$c[0]+" not found")
 			
 		End if 
+		
+	Else 
+		
+		This:C1470.errors.push("Table not found #"+String:C10($tableNumber))
+		
 	End if 
 	
 	//==================================================================

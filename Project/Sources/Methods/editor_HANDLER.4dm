@@ -48,6 +48,8 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Load:K2:1)
 				
+				//#MARK_TODO: keep current 4D/Database tips values
+				
 				OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(DATABASE.isMatrix))
 				
 				$o:=UI.tips
@@ -105,6 +107,14 @@ Case of
 				
 				// Autosave
 				PROJECT.save()
+				
+				//______________________________________________________
+			: ($e.code=On Deactivate:K2:10)
+				
+				// keep current tips values
+				
+				
+				// And restore the 4D values
 				
 				//______________________________________________________
 			: ($e.code=On Activate:K2:9)

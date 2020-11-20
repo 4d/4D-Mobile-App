@@ -699,11 +699,12 @@ Function getCookery->$cookery : Text
 	// Reorder the fields used when the user changes model (alias tmpl_REORDER)
 Function reorder($tableID : Text)  //#WIP
 	
-	var $node; $t; $element : Text
+	var $element; $node; $t : Text
 	var $isCompatible; $isMultiCriteria : Boolean
 	var $indx; $Lon_keyType : Integer
 	var $attributes; $cache; $field; $o; $oIN : Object
 	var $affected; $bind; $c : Collection
+	var $structure : cs:C1710.structure
 	
 	If (This:C1470.root=Null:C1517)
 		
@@ -735,6 +736,9 @@ Function reorder($tableID : Text)  //#WIP
 		
 		//**********************************************************
 		// Reorganize the binded fields
+		
+		$structure:=cs:C1710.structure.new()
+		
 		For each ($element; $bind)
 			
 			CLEAR VARIABLE:C89($isCompatible)
@@ -755,146 +759,123 @@ Function reorder($tableID : Text)  //#WIP
 				
 			End if 
 			
-			If (Match regex:C1019("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $attributes["ios:bind"]; 1))
-				
-				// Recognizes the "field [n]" and not the "searchableField"
-				
-				If ($attributes["ios:type"]="all")
+			Case of 
 					
-					$isCompatible:=True:C214
+					//______________________________________________________
+				: (Match regex:C1019("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $attributes["ios:bind"]; 1))
 					
-				Else 
+					// Recognizes the "field [n]" and not the "searchableField"
 					
-					// Check if the type is compatible
-					$c:=Split string:C1554($attributes["ios:type"]; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
-					
-					If ($oIN.target.fields#Null:C1517)
+					If ($attributes["ios:type"]="all")
 						
-						For each ($field; $oIN.target.fields) Until ($isCompatible)
+						$isCompatible:=True:C214
+						
+					Else 
+						
+						// Check if the type is compatible
+						$c:=Split string:C1554($attributes["ios:type"]; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+						
+						If ($oIN.target.fields#Null:C1517)
 							
-							If ($field#Null:C1517)
+							For each ($field; $oIN.target.fields) Until ($isCompatible)
 								
-								$o:=_o_structure(New object:C1471(\
-									"action"; "fieldDefinition"; \
-									"path"; $field.name; \
-									"tableNumber"; Num:C11($oIN.tableNumber); \
-									"catalog"; PROJECT.$project.$catalog))
-								
-								If ($o.success)
+								If ($field#Null:C1517)
 									
-									If ($o.type=-2)  // 1-N relation
+									$isCompatible:=This:C1470.isTypeAccepted($c; $structure.fieldDefinition(Num:C11($tableID); $field.path).fieldType)
+									
+								End if 
+							End for each 
+						End if 
+					End if 
+					
+					If ($isCompatible)\
+						 & ($field#Null:C1517)
+						
+						// Keep the field…
+						$affected[$indx]:=$field
+						
+						// …& remove it to don't use again
+						$oIN.target.fields.remove($oIN.target.fields.indexOf($field))
+						
+					End if 
+					
+					$indx:=$indx+1
+					
+					//______________________________________________________
+				: ($attributes["ios:bind"]="searchableField")
+					
+					$isMultiCriteria:=(Split string:C1554($attributes.class; " ").indexOf("multi-criteria")#-1)
+					
+					$Lon_keyType:=Value type:C1509($oIN.target.searchableField)
+					
+					If ($Lon_keyType#Is undefined:K8:13)\
+						 & ($Lon_keyType#Is null:K8:31)
+						
+						If ($Lon_keyType=Is collection:K8:32)  // SOURCE IS MULTICRITERIA
+							
+							If ($oIN.target.searchableField.length>0)
+								
+								If ($isMultiCriteria)
+									
+									// Target is multi-criteria
+									
+									// #MARK_TODO Verify the type & remove incompatible if any
+									For each ($o; $oIN.target.searchableField)
 										
-										$isCompatible:=This:C1470.isOfClass("multivalued"; $node)
+										// #MARK_TODO
 										
-									Else 
-										
-										$isCompatible:=This:C1470.isTypeAccepted($c; $o.fieldType)
-										
-									End if 
+									End for each 
+									
+									$cache.searchableField:=$oIN.target.searchableField
+									
+								Else 
+									
+									// Target is mono value -> keep the first compatible type
+									$cache.searchableField:=$oIN.target.searchableField[0]
+									
 								End if 
 							End if 
-						End for each 
-					End if 
-				End if 
-				
-				If ($isCompatible)\
-					 & ($field#Null:C1517)
-					
-					// Keep the field…
-					$affected[$indx]:=$field
-					
-					// …& remove it to don't use again
-					$oIN.target.fields.remove($oIN.target.fields.indexOf($field))
-					
-				End if 
-				
-				$indx:=$indx+1
-				
-			Else 
-				
-				// #SPECIAL FIELD ie 'searchableField' or 'sectionField'
-				
-				Case of 
-						
-						//______________________________________________________
-					: ($attributes["ios:bind"]="searchableField")
-						
-						$isMultiCriteria:=(Split string:C1554($attributes.class; " ").indexOf("multi-criteria")#-1)
-						
-						$Lon_keyType:=Value type:C1509($oIN.target.searchableField)
-						
-						If ($Lon_keyType#Is undefined:K8:13)\
-							 & ($Lon_keyType#Is null:K8:31)
 							
-							If ($Lon_keyType=Is collection:K8:32)
+						Else   // SOURCE IS MONO VALUE
+							
+							If ($isMultiCriteria)
 								
-								// SOURCE IS MULTICRITERIA
-								
-								If ($oIN.target.searchableField.length>0)
+								// Target is multi-criteria -> don't modify if exist
+								If ($Lon_keyType=Is null:K8:31)
 									
-									If ($isMultiCriteria)
-										
-										// Target is multi-criteria
-										
-										//#MARK_TODO Verify the type & remove incompatible if any
-										For each ($o; $oIN.target.searchableField)
-											
-											// #MARK_TODO
-											
-										End for each 
-										
-										$cache.searchableField:=$oIN.target.searchableField
-										
-									Else 
-										
-										// Target is mono value -> keep the first compatible type
-										$cache.searchableField:=$oIN.target.searchableField[0]
-										
-									End if 
+									// #MARK_TODO Verify the type
+									
+									$cache.searchableField:=$oIN.target.searchableField
+									
 								End if 
 								
 							Else 
 								
-								// SOURCE IS MONO VALUE
+								// Target is mono value
+								$cache.searchableField:=$oIN.target.searchableField
 								
-								If ($isMultiCriteria)
-									
-									// Target is multi-criteria -> don't modify if exist
-									If ($Lon_keyType=Is null:K8:31)
-										
-										// #MARK_TODO Verify the type
-										
-										$cache.searchableField:=$oIN.target.searchableField
-										
-									End if 
-									
-								Else 
-									
-									// Target is mono value
-									$cache.searchableField:=$oIN.target.searchableField
-									
-								End if 
 							End if 
 						End if 
+					End if 
+					
+					//______________________________________________________
+				: ($attributes["ios:bind"]="sectionField")
+					
+					If ($oIN.target.sectionField#Null:C1517)
 						
-						//______________________________________________________
-					: ($attributes["ios:bind"]="sectionField")
+						$cache.sectionField:=$oIN.target.sectionField
 						
-						If ($oIN.target.sectionField#Null:C1517)
-							
-							$cache.sectionField:=$oIN.target.sectionField
-							
-						End if 
-						
-						//______________________________________________________
-					Else 
-						
-						// #98417 - Remove in excess item from collection
-						$affected.resize($affected.length-1)
-						
-						//______________________________________________________
-				End case 
-			End if 
+					End if 
+					
+					//______________________________________________________
+				Else 
+					
+					// #98417 - Remove in excess item from collection
+					$affected.resize($affected.length-1)
+					
+					//______________________________________________________
+			End case 
+			
 		End for each 
 		
 		If (FEATURE.with("newViewUI"))\
@@ -913,7 +894,7 @@ Function reorder($tableID : Text)  //#WIP
 		
 	Else 
 		
-		// A "If" statement should never omit "Else"
+		// Not a list form
 		
 	End if 
 	

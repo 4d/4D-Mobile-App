@@ -12,7 +12,6 @@
 		"onUnload",
 		"onTimer"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -72,6 +71,8 @@
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
+						"onLosingFocus",
+						"onGettingFocus",
 						"onDataChange"
 					]
 				},
@@ -89,6 +90,8 @@
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
+						"onLosingFocus",
+						"onGettingFocus",
 						"onDataChange"
 					]
 				},
@@ -100,10 +103,10 @@
 					"height": 22,
 					"visibility": "hidden",
 					"style": "help",
-					"method": "ObjectMethods/10_name.help.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "ORGANIZATION"
 				},
 				"30_identifier.help": {
 					"type": "button",
@@ -113,12 +116,24 @@
 					"height": 22,
 					"visibility": "hidden",
 					"style": "help",
-					"method": "ObjectMethods/30_identifier.help.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"method": "ORGANIZATION"
 				}
 			}
 		}
-	]
+	],
+	"method": "ORGANIZATION",
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

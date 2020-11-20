@@ -17,7 +17,7 @@ var $context; $ƒ; $in; $o; $team : Object
 
 $in:=$1
 
-$ƒ:=Form:C1466.$DEVELOPER
+$ƒ:=panel_Definition("DEVELOPER")
 $context:=$ƒ.context
 
 // ----------------------------------------------------

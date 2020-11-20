@@ -5,66 +5,86 @@ Class constructor
 	This:C1470.isLinux:=Not:C34(This:C1470.isMacOs) & Not:C34(This:C1470.isWindows)
 	This:C1470.systemInfos:=Get system info:C1571
 	
-	This:C1470.homeFolder:=Folder:C1567(fk desktop folder:K87:19).parent
+	//This.home:=Folder(Convert path POSIX to system("/users/"+This.systemInfos.userName+"/"))
+	
+	This:C1470.home:=Folder:C1567(fk desktop folder:K87:19).parent
 	
 	This:C1470.update()
 	
 	//===================================================================================
-Function update  // Updating the values that can be modified after the database is open
-	var $t : Text
+Function update  // Updating values that can be modified after opening the database
+	var $value : Text
 	
-	GET SYSTEM FORMAT:C994(Currency symbol:K60:3; $t)
-	This:C1470.currencySymbol:=$t
+	GET SYSTEM FORMAT:C994(Currency symbol:K60:3; $value)
+	This:C1470.currencySymbol:=$value
 	
-	GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $t)
-	This:C1470.decimalSeparator:=$t
+	GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $value)
+	This:C1470.decimalSeparator:=$value
 	
-	GET SYSTEM FORMAT:C994(Thousand separator:K60:2; $t)
-	This:C1470.thousandSeparator:=$t
+	GET SYSTEM FORMAT:C994(Thousand separator:K60:2; $value)
+	This:C1470.thousandSeparator:=$value
 	
-	GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
-	This:C1470.dateSeparator:=$t
+	GET SYSTEM FORMAT:C994(Date separator:K60:10; $value)
+	This:C1470.dateSeparator:=$value
 	
-	GET SYSTEM FORMAT:C994(Short date day position:K60:12; $t)
-	This:C1470.dateDayPosition:=Num:C11($t)
+	GET SYSTEM FORMAT:C994(Short date day position:K60:12; $value)
+	This:C1470.dateDayPosition:=Num:C11($value)
 	
-	GET SYSTEM FORMAT:C994(Short date month position:K60:13; $t)
-	This:C1470.dateMonthPosition:=Num:C11($t)
+	GET SYSTEM FORMAT:C994(Short date month position:K60:13; $value)
+	This:C1470.dateMonthPosition:=Num:C11($value)
 	
-	GET SYSTEM FORMAT:C994(Short date year position:K60:14; $t)
-	This:C1470.dateYearPosition:=Num:C11($t)
+	GET SYSTEM FORMAT:C994(Short date year position:K60:14; $value)
+	This:C1470.dateYearPosition:=Num:C11($value)
 	
-	GET SYSTEM FORMAT:C994(System date long pattern:K60:9; $t)
-	This:C1470.dateLongPattern:=$t
+	GET SYSTEM FORMAT:C994(System date long pattern:K60:9; $value)
+	This:C1470.dateLongPattern:=$value
 	
-	GET SYSTEM FORMAT:C994(System date medium pattern:K60:8; $t)
-	This:C1470.dateMediumPattern:=$t
+	GET SYSTEM FORMAT:C994(System date medium pattern:K60:8; $value)
+	This:C1470.dateMediumPattern:=$value
 	
-	GET SYSTEM FORMAT:C994(System date short pattern:K60:7; $t)
-	This:C1470.dateShortPattern:=$t
+	GET SYSTEM FORMAT:C994(System date short pattern:K60:7; $value)
+	This:C1470.dateShortPattern:=$value
 	
-	GET SYSTEM FORMAT:C994(Time separator:K60:11; $t)
-	This:C1470.timeSeparator:=$t
+	GET SYSTEM FORMAT:C994(Time separator:K60:11; $value)
+	This:C1470.timeSeparator:=$value
 	
-	GET SYSTEM FORMAT:C994(System time AM label:K60:15; $t)
-	This:C1470.timeAMLabel:=$t
+	GET SYSTEM FORMAT:C994(System time AM label:K60:15; $value)
+	This:C1470.timeAMLabel:=$value
 	
-	GET SYSTEM FORMAT:C994(System time PM label:K60:16; $t)
-	This:C1470.timePMLabel:=$t
+	GET SYSTEM FORMAT:C994(System time PM label:K60:16; $value)
+	This:C1470.timePMLabel:=$value
 	
-	GET SYSTEM FORMAT:C994(System time long pattern:K60:6; $t)
-	This:C1470.timeLongPattern:=$t
+	GET SYSTEM FORMAT:C994(System time long pattern:K60:6; $value)
+	This:C1470.timeLongPattern:=$value
 	
-	GET SYSTEM FORMAT:C994(System time medium pattern:K60:5; $t)
-	This:C1470.timeMediumPattern:=$t
+	GET SYSTEM FORMAT:C994(System time medium pattern:K60:5; $value)
+	This:C1470.timeMediumPattern:=$value
 	
-	GET SYSTEM FORMAT:C994(System time short pattern:K60:4; $t)
-	This:C1470.timeShortPattern:=$t
+	GET SYSTEM FORMAT:C994(System time short pattern:K60:4; $value)
+	This:C1470.timeShortPattern:=$value
+	
+	//===================================================================================
+Function startupDisk($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+	
+	$document:=Folder:C1567("/")
+	
+	If (Count parameters:C259>=2)
+		
+		$document:=This:C1470._postProcessing($document; $path; $create)
+		
+	Else 
+		
+		If (Count parameters:C259>=1)
+			
+			$document:=This:C1470._postProcessing($document; $path)
+			
+		End if 
+	End if 
 	
 	//===================================================================================
 Function home($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	
-	$document:=This:C1470.homeFolder
+	$document:=This:C1470.home
 	
 	If (Count parameters:C259>=2)
 		
@@ -82,7 +102,7 @@ Function home($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	//===================================================================================
 Function library($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	
-	$document:=This:C1470.homeFolder.folder("Library/")
+	$document:=This:C1470.home.folder("Library/")
 	
 	If (Count parameters:C259>=2)
 		
@@ -100,7 +120,7 @@ Function library($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	//===================================================================================
 Function preferences($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	
-	$document:=This:C1470.homeFolder.folder("Library/Preferences/")
+	$document:=This:C1470.home.folder("Library/Preferences/")
 	
 	If (Count parameters:C259>=2)
 		
@@ -118,7 +138,7 @@ Function preferences($path : Text; $create : Boolean)->$document : 4D:C1709.Docu
 	//===================================================================================
 Function caches($path; $create : Boolean)->$document : 4D:C1709.Document
 	
-	$document:=This:C1470.homeFolder.folder("Library/Caches/")
+	$document:=This:C1470.home.folder("Library/Caches/")
 	
 	If (Count parameters:C259>=2)
 		
@@ -136,7 +156,7 @@ Function caches($path; $create : Boolean)->$document : 4D:C1709.Document
 	//===================================================================================
 Function logs($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	
-	$document:=This:C1470.homeFolder.folder("Library/Logs/")
+	$document:=This:C1470.home.folder("Library/Logs/")
 	
 	If (Count parameters:C259>=2)
 		
@@ -154,7 +174,7 @@ Function logs($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	//===================================================================================
 Function derivedData($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	
-	$document:=This:C1470.homeFolder.folder("Library/Developer/Xcode/DerivedData/")
+	$document:=This:C1470.home.folder("Library/Developer/Xcode/DerivedData/")
 	
 	If (Count parameters:C259>=2)
 		
@@ -172,7 +192,7 @@ Function derivedData($path : Text; $create : Boolean)->$document : 4D:C1709.Docu
 	//===================================================================================
 Function simulators($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	
-	$document:=This:C1470.homeFolder.folder("Library/Developer/CoreSimulator/Devices/")
+	$document:=This:C1470.home.folder("Library/Developer/CoreSimulator/Devices/")
 	
 	If (Count parameters:C259>=2)
 		
@@ -190,7 +210,7 @@ Function simulators($path : Text; $create : Boolean)->$document : 4D:C1709.Docum
 	//===================================================================================
 Function applicationSupport($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	
-	$document:=This:C1470.homeFolder.folder("Library/Application Support/")
+	$document:=This:C1470.home.folder("Library/Application Support/")
 	
 	If (Count parameters:C259>=2)
 		
@@ -208,7 +228,7 @@ Function applicationSupport($path : Text; $create : Boolean)->$document : 4D:C17
 	//===================================================================================
 Function archives($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	
-	$document:=This:C1470.homeFolder.folder("Library/Developer/Xcode/Archives/")
+	$document:=This:C1470.home.folder("Library/Developer/Xcode/Archives/")
 	
 	If (Count parameters:C259>=2)
 		

@@ -221,10 +221,12 @@
 	"01] ORGANIZATION": {
 		"methods": [
 			"COMPILER_ORGANIZATION",
-			"ORGANIZATION_Handler",
-			"ORGANIZATION_OBJECTS_HANDLER"
+			"ORGANIZATION"
 		],
 		"forms": [
+			"ORGANIZATION"
+		],
+		"classes": [
 			"ORGANIZATION"
 		]
 	},

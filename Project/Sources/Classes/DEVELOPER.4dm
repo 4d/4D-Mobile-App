@@ -1,8 +1,12 @@
 /*===============================================
 DEVELOPER pannel Class
-===============================================*/
+*/
+
+//Class extends panel
 
 Class constructor
+	
+	//Super()
 	
 	This:C1470.context:=editor_INIT
 	
@@ -21,6 +25,7 @@ Class constructor
 		
 	End if 
 	
+	//====================================================================
 Function setTeamID
 	var $1 : Text
 	var $2 : Text

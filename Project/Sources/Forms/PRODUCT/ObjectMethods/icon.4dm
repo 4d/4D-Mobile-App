@@ -3,8 +3,8 @@ var $0 : Integer
 var $p : Picture
 var $e; $ƒ; $menu : Object
 
-$ƒ:=panel_Definition
-$e:=FORM Event:C1606
+$ƒ:=panel_Definition("PRODUCT")
+$e:=$ƒ.event
 
 $0:=-1
 
@@ -49,21 +49,28 @@ Case of
 		
 		GET PICTURE FROM PASTEBOARD:C522($p)
 		
-		If (Bool:C1537(OK))
-			
-			$0:=0
-			
-		Else 
+		If (Not:C34(Bool:C1537(OK)))
 			
 			// Alllow pictures
 			DOCUMENT:=Get file from pasteboard:C976(1)
 			
-			If (Length:C16(DOCUMENT)>0)\
-				 & (Is picture file:C1113(DOCUMENT))
+			If (Length:C16(DOCUMENT)>0)
 				
-				$0:=0
+				OK:=Num:C11(Is picture file:C1113(DOCUMENT))
 				
+				If (Is macOS:C1572 & (OK=0))
+					
+					// Accept applications
+					OK:=Num:C11(Path to object:C1547(DOCUMENT).extension=".app")
+					
+				End if 
 			End if 
+		End if 
+		
+		If (Bool:C1537(OK))
+			
+			$0:=0
+			
 		End if 
 		
 		//______________________________________________________

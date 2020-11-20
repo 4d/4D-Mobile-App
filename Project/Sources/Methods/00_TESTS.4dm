@@ -19,21 +19,27 @@ COMPILER_COMPONENT
 
 If (Is macOS:C1572)
 	$o:=Folder:C1567("/")
+	
+	
 Else 
 	
 End if 
 
-
 Case of 
-		
-		
 		//________________________________________
 	: (True:C214)
+		
+		$o:=cs:C1710.env.new().startupDisk()
+		
+		$t:=Convert path POSIX to system:C1107("/users/"+Get system info:C1571.userName+"/")
+		
+		//________________________________________
+	: (False:C215)
 		
 		var $o : cs:C1710.lep
 		$o:=cs:C1710.lep.new()
 		
-		$o.async().launch("open"; "/Applications/Pages.app")
+		$o.asynchronous().launch("open"; "/Applications/Pages.app")
 		
 		If (False:C215)
 			

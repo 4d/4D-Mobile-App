@@ -35,8 +35,9 @@ Class constructor($name : Text; $datasource)
 	
 	This:C1470.action:=OBJECT Get action:C1457(*; This:C1470.name)
 	
+	
 /*═════════════════════════════════════════════════
-sets the display format for the widget
+sets the format for the widget
 */
 Function setFormat($format : Text)->$this : cs:C1710.static
 	
@@ -68,7 +69,8 @@ Function setPicture($proxy : Text)->$this : Object
 			This:C1470.setFormat(";;"+$proxy)
 			
 			//______________________________________________________
-		: (This:C1470.type=Object type listbox header:K79:9)
+		: (This:C1470.type=Object type listbox header:K79:9)\
+			 | (This:C1470.type=Object type static picture:K79:3)
 			
 			This:C1470.setFormat($proxy)
 			
@@ -152,51 +154,21 @@ Function notEnterable
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*══════════════════════════
+/*════════════════════════════════════════════════════
 .getValue() -> value
-══════════════════════════*/
-Function getValue
+*/
+Function getValue()->$value
 	
-	C_VARIANT:C1683($0)
+	$value:=OBJECT Get value:C1743(This:C1470.name)
 	
-	//If (This.assignable)
-	//// Use pointer
-	//$0:=(This.pointer)->
-	//Else 
-	//If (Value type(This.dataSource)=Is object)
-	//$0:=This.dataSource.call()
-	//Else 
-	//// Create formula
-	//$0:=Formula from string(String(This.dataSource)).call()
-	//End if 
-	//End if 
-	
-	$0:=OBJECT Get value:C1743(This:C1470.name)
-	
-/*══════════════════════════
+/*════════════════════════════════════════════════════
 .setValue(value) -> This
-══════════════════════════*/
-Function setValue
+*/
+Function setValue($value)->$this : cs:C1710.widget
 	
-	C_VARIANT:C1683($1)
+	OBJECT SET VALUE:C1742(This:C1470.name; $value)
 	
-	//If (This.assignable)
-	//(This.pointer)->:=$1
-	//Else 
-	//If (This.dataSource#Null)
-	//This.value:=$1
-	//If (Value type(This.dataSource)=Is object)
-	//EXECUTE FORMULA(This.dataSource.source+":=This.value")
-	//Else 
-	//EXECUTE FORMULA(This.dataSource+":=This.value")
-	//End if 
-	//End if 
-	//End if 
-	
-	OBJECT SET VALUE:C1742(This:C1470.name; $1)
-	
-	C_OBJECT:C1216($0)
-	$0:=This:C1470
+	$this:=This:C1470
 	
 /*══════════════════════════
 .clear() -> This
@@ -292,8 +264,17 @@ Function touch
 		
 	Else 
 		
-		If (This:C1470.dataSource#Null:C1517)
+		If (This:C1470.dataSource=Null:C1517)
 			
+			If (Value type:C1509(OBJECT Get value:C1743(This:C1470.name))#Is undefined:K8:13)
+				
+				OBJECT SET VALUE:C1742(This:C1470.name; OBJECT Get value:C1743(This:C1470.name))
+				
+			End if 
+			
+		Else 
+			
+			// ⚠️ OBSOLETE: we don't need this trick anymore since "Object get/set value" is now available.
 			C_TEXT:C284($t)
 			$t:=Choose:C955(Value type:C1509(This:C1470.dataSource)=Is object:K8:27; This:C1470.dataSource.source; This:C1470.dataSource)
 			

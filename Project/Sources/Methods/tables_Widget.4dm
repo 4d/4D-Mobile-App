@@ -76,7 +76,7 @@ End if
 // ----------------------------------------------------
 If ($dataModel#Null:C1517)
 	
-	$typeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Choose:C955(FEATURE.with("newViewUI"); "VIEWS"; "_o_VIEWS")].selector)=2; "detail"; "list")
+	$typeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Current form name:C1298].selector)=2; "detail"; "list")
 	
 /* START HIDING ERRORS */
 	$error.hide()

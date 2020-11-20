@@ -14,7 +14,7 @@ If (False:C215)
 	C_OBJECT:C1216(VIEWS_DRAW_FORM; $1)
 End if 
 
-var $background; $binding; $buffer; $class; $currentForm; $formName; $formType; $key; $label; $name : Text
+var $background; $binding; $buffer; $class; $formName; $formType; $key; $label; $name : Text
 var $node; $parent; $style; $t; $tableID; $tips : Text
 var $found; $isToMany; $isToOne; $stop : Boolean
 var $avalaibleWidth; $count; $height; $indx; $width : Integer
@@ -48,13 +48,12 @@ If (Num:C11($tableID)>0)
 	
 	If (Length:C16($formName)>0)
 		
-		$currentForm:=Current form name:C1298
-		$template:=Form:C1466.$dialog[$currentForm].template
+		$template:=Form:C1466.$dialog[Current form name:C1298].template
 		
 		If (String:C10($template.name)#$formName)
 			
 			$template:=cs:C1710.tmpl.new($formName; $formType)
-			Form:C1466.$dialog[$currentForm].template:=$template
+			Form:C1466.$dialog[Current form name:C1298].template:=$template
 			
 		End if 
 		

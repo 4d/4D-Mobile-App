@@ -1,8 +1,8 @@
-//Class extends tools
+// Class extends tools
 
 Class constructor
 	
-	//Super()
+	// Super()
 	
 	This:C1470.reset()
 	
@@ -12,7 +12,6 @@ Function launch($command; $arguments)->$this : cs:C1710.lep
 	var $input; $output : Blob
 	var $error; $t : Text
 	var $len; $pid; $pos : Integer
-	
 	
 	If (Value type:C1509($command)=Is object:K8:27)
 		
@@ -192,30 +191,34 @@ Function reset()->$this : cs:C1710.lep
 	$this:=This:C1470
 	
 	//====================================================================
-Function sync($mode : Boolean)->$this : cs:C1710.lep
+	// Execute the external process in synchronous mode
+	// ⚠️ Must be call before .launch()
+Function synchronous($mode : Boolean)->$this : cs:C1710.lep
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; Choose:C955($mode; "true"; "false"))
+		This:C1470.setEnvironnementVariable("asynchronous"; Choose:C955($mode; "true"; "false"))
 		
 	Else 
 		
-		This:C1470.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "true")
+		This:C1470.setEnvironnementVariable("asynchronous"; "true")
 		
 	End if 
 	
 	$this:=This:C1470
 	
 	//====================================================================
-Function async($mode : Boolean)->$this : cs:C1710.lep
+	// Execute the external process in asynchronous mode
+	// ⚠️ Must be call before .launch()
+Function asynchronous($mode : Boolean)->$this : cs:C1710.lep
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; Choose:C955($mode; "false"; "true"))
+		This:C1470.setEnvironnementVariable("asynchronous"; Choose:C955($mode; "false"; "true"))
 		
 	Else 
 		
-		This:C1470.setEnvironnementVariable("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "false")
+		This:C1470.setEnvironnementVariable("asynchronous"; "false")
 		
 	End if 
 	
@@ -275,13 +278,21 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 			
 			If (Count parameters:C259>=2)
 				
-				This:C1470.environmentVariables[$variables]:=$value
+				This:C1470.environmentVariables[This:C1470._shortcut($variables)]:=$value
 				
 			Else 
 				
 				// Reset
-				This:C1470.environmentVariables[$variables]:=""
-				
+				If (This:C1470._shortcut($variables)="_4D_OPTION_CURRENT_DIRECTORY")
+					
+					//empty string
+					This:C1470.environmentVariables[This:C1470._shortcut($variables)]:=""
+					
+				Else 
+					
+					This:C1470.environmentVariables[This:C1470._shortcut($variables)]:="false"
+					
+				End if 
 			End if 
 			
 			//______________________________________________________
@@ -289,7 +300,7 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 			
 			For each ($o; OB Entries:C1720($variables))
 				
-				This:C1470.environmentVariables[$o.key]:=$o.value
+				This:C1470.environmentVariables[This:C1470._shortcut($o.key)]:=$o.value
 				
 			End for each 
 			
@@ -301,7 +312,7 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 				If (Value type:C1509($v)=Is object:K8:27)
 					
 					$o:=OB Entries:C1720($v).pop()
-					This:C1470.environmentVariables[$o.key]:=$o.value
+					This:C1470.environmentVariables[This:C1470._shortcut($o.key)]:=$o.value
 					
 				Else 
 					
@@ -313,7 +324,7 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 			//______________________________________________________
 		Else 
 			
-			This:C1470._pushError("Waiting for a parameter object or collection")
+			This:C1470._pushError("Waiting for a parameter Text, Object or Collection")
 			
 			//______________________________________________________
 	End case 
@@ -334,18 +345,161 @@ Function escape($text : Text)->$escaped : Text
 	End for each 
 	
 	//====================================================================
-	// Returns the string between single quotes
+	// Enclose, if necessary, the string in single quotation marks
 Function singleQuoted($tring : Text)->$quoted : Text
 	
-	If (Match regex:C1019("^'.*'$"; $tring; 1))
+	$quoted:=Choose:C955(Match regex:C1019("^'.*'$"; $tring; 1); $tring; "'"+$tring+"'")  // Already done // Do it
+	
+	//====================================================================
+	// Write access to a file or a directory with all its subfolders and files
+Function writable($cible : 4D:C1709.Document)->$this : cs:C1710.lep
+	
+	If (Bool:C1537($cible.exists))
 		
-		$quoted:=$tring  // Already done
+		If (Is macOS:C1572)
+			
+/*
+chmod [-fv] [-R [-H | -L | -P]] mode file ...
+chmod [-fv] [-R [-H | -L | -P]] [-a | +a | =a] ACE file ...
+chmod [-fhv] [-R [-H | -L | -P]] [-E] file ...
+chmod [-fhv] [-R [-H | -L | -P]] [-C] file ...
+chmod [-fhv] [-R [-H | -L | -P]] [-N] file ...
+			
+The generic options are as follows:
+     -f      Do not display a diagnostic message if chmod could not modify the
+             mode for file.
+     -H      If the -R option is specified, symbolic links on the command line
+             are followed.  (Symbolic links encountered in the tree traversal
+             are not followed by default.)
+     -h      If the file is a symbolic link, change the mode of the link
+             itself rather than the file that the link points to.
+     -L      If the -R option is specified, all symbolic links are followed.
+     -P      If the -R option is specified, no symbolic links are followed.
+             This is the default.
+     -R      Change the modes of the file hierarchies rooted in the files
+             instead of just the files themselves.
+     -v      Cause chmod to be verbose, showing filenames as the mode is modi-
+             fied.  If the -v flag is specified more than once, the old and
+             new modes of the file will also be printed, in both octal and
+             symbolic notation.
+     The -H, -L and -P options are ignored unless the -R option is specified.
+     In addition, these options override each other and the command's actions
+     are determined by the last one specified.
+*/
+			
+			
+			If ($cible.isFolder)
+				
+				This:C1470.launch("chmod -R u+rwX "+This:C1470.singleQuoted($cible.path))
+				
+			Else 
+				
+				This:C1470.launch("chmod u+rwX "+This:C1470.singleQuoted($cible.path))
+				
+			End if 
+			
+		Else 
+			
+/*
+ATTRIB [+R | -R] [+A | -A ] [+S | -S] [+H | -H] [+I | -I]
+       [drive:][path][filename] [/S [/D] [/L]]
+			
+  +   Sets an attribute.
+  -   Clears an attribute.
+  R   Read-only file attribute.
+  A   Archive file attribute.
+  S   System file attribute.
+  H   Hidden file attribute.
+  I   Not content indexed file attribute.
+      Spécifie un ou plusieurs fichiers à traiter par attrib.
+  /S  Processes matching files in the current folder and all subfolders.
+  /D  Process folders as well.
+  /L  Work on the attributes of the Symbolic Link versus the target of the Symbolic Link
+*/
+			
+			If ($cible.isFolder)
+				
+				This:C1470.setEnvironnementVariable("directory"; $cible.platformPath)
+				This:C1470.launch("attrib.exe -R /D /S")
+				
+			Else 
+				
+				This:C1470.launch("attrib.exe -R "+This:C1470.singleQuoted($cible.path))
+				
+			End if 
+			
+			
+		End if 
 		
 	Else 
 		
-		$quoted:="'"+$tring+"'"  // Do it
+		This:C1470._pushError("Invalid pathname: "+String:C10($cible.path))
 		
 	End if 
+	
+	$this:=This:C1470
+	
+	//====================================================================
+	// Write access to a directory with all its sub-folders and files
+Function unlock($cible : 4D:C1709.Document)->$this : cs:C1710.lep
+	
+	If (Bool:C1537($cible.exists))
+		
+		If ($cible.isFolder)
+			
+			This:C1470.setEnvironnementVariable("directory"; $cible.platformPath)
+			
+			If (Is macOS:C1572)
+				
+				This:C1470.launch("chmod -R u+rwX "+This:C1470.singleQuoted($cible.path))
+				
+			Else 
+				
+				This:C1470.launch("attrib.exe -R /D /S")
+				
+			End if 
+			
+		Else 
+			
+			This:C1470._pushError($cible.path+" is not a directory!")
+			
+		End if 
+		
+	Else 
+		
+		This:C1470._pushError("Invalid pathname: "+String:C10($cible.path))
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//====================================================================
+Function _shortcut($string : Text)->$variable : Text
+	
+	Case of   // Shortcuts
+			
+			//…………………………………………………………………………………………
+		: ($string="currentDirectory")
+			
+			$variable:="_4D_OPTION_CURRENT_DIRECTORY"
+			
+			//…………………………………………………………………………………………
+		: ($string="asynchronous") | ($string="non-blocking")
+			
+			$variable:="_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"
+			
+			//…………………………………………………………………………………………
+		: ($string="console")
+			
+			$variable:="_4D_OPTION_HIDE_CONSOLE"
+			
+			//…………………………………………………………………………………………
+		Else 
+			
+			$variable:=$string
+			
+			//…………………………………………………………………………………………
+	End case 
 	
 	//====================================================================
 Function _pushError($desription : Text)

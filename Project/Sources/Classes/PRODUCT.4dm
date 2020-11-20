@@ -1,6 +1,6 @@
 /*===============================================
 PRODUCTS pannel Class
-===============================================*/
+*/
 Class constructor
 	
 	This:C1470.context:=editor_INIT
@@ -194,8 +194,7 @@ Function browseIcon
 	
 	//=========================================================
 	// Retrieve icon from a pathname
-Function getIcon
-	var $1 : Text
+Function getIcon($pathname : Text)
 	
 	var $t : Text
 	var $icon : Picture
@@ -205,13 +204,13 @@ Function getIcon
 	
 	If (Count parameters:C259>=1)
 		
-		If ($1[[Length:C16($1)]]#Folder separator:K24:12)
+		If ($pathname[[Length:C16($pathname)]]#Folder separator:K24:12)
 			
-			READ PICTURE FILE:C678($1; $icon)
+			READ PICTURE FILE:C678($pathname; $icon)
 			
 		Else 
 			
-			$folder:=Folder:C1567($1; fk platform path:K87:2)
+			$folder:=Folder:C1567($pathname; fk platform path:K87:2)
 			
 			If (Is macOS:C1572)
 				
@@ -426,3 +425,5 @@ Function checkName
 			
 			//______________________________________________________
 	End case 
+	
+	

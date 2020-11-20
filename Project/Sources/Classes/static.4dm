@@ -436,7 +436,6 @@ Function setDimension
 	
 	$0:=This:C1470
 	
-	
 Function setColors($foreground : Variant; $background : Variant; $altBackground : Variant)->$this : cs:C1710.static
 	
 	Case of 

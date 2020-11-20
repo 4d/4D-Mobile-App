@@ -8,263 +8,236 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($1)
-
-C_BOOLEAN:C305($isMultiCriteria; $isCompatible)
-C_LONGINT:C283($indx; $Lon_keyType)
-C_TEXT:C284($dom; $Dom_field; $root; $t; $Txt_bind)
-C_OBJECT:C1216($o; $oAttributes; $cache; $oField; $oIN; $pathTemplate)
-C_COLLECTION:C1488($c; $Col_affected; $Col_bind)
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_REORDER; $1)
 End if 
 
-// ----------------------------------------------------
-// Initialisations
-$oIN:=$1
+var $dom; $Dom_field; $root; $t; $key : Text
+var $isCompatible; $isMultiCriteria : Boolean
+var $indx; $Lon_keyType : Integer
+var $cache; $o; $oAttributes; $oField; $oIN : Object
+var $c; $affected; $binding : Collection
+var $structure : cs:C1710.structure
+var $template : cs:C1710.Template
 
-// Load template
-//$pathTemplate:=tmpl_form($oIN.form; $oIN.selector)
-
-//If ($pathTemplate.extension=SHARED.archiveExtension)  // Archive
-
-//// Get from archive
-//$t:=$pathTemplate.file("template.svg").getText()
-//$root:=DOM Parse XML variable($t)
-
-//Else 
-
-//$root:=DOM Parse XML source($pathTemplate.file("template.svg").platformPath)
-
-//End if 
-
-var $template : Object
 $template:=$oIN.template
 
-$t:=$template.svg
-
-
-$root:=DOM Parse XML variable:C720($t)
-
-If (Asserted:C1132(OK=1; "Invalid template"))
+If (False:C215)  //#WORK_IN_PROGRESS
 	
-	$dom:=DOM Find XML element by ID:C1010($root; "cookery")
-	ASSERT:C1129(OK=1; "Missing 'cookery' element in the template")
+	$template.reorder($oIN.tableNumber)
 	
-	If (Bool:C1537(OK))
+Else 
+	
+	$structure:=cs:C1710.structure.new()
+	
+	$t:=$template.svg
+	$root:=DOM Parse XML variable:C720($t)
+	
+	If (Asserted:C1132(OK=1; "Invalid template"))
 		
-		// Get the bindind definition
-		$oAttributes:=xml_attributes($dom)
-		OK:=Num:C11($oAttributes["ios:values"]#Null:C1517)
-		ASSERT:C1129(OK=1; "Missing 'ios:values' attribute in the template")
+		$dom:=DOM Find XML element by ID:C1010($root; "cookery")
+		ASSERT:C1129(OK=1; "Missing 'cookery' element in the template")
 		
 		If (Bool:C1537(OK))
 			
-			$cache:=Form:C1466[$oIN.selector][$oIN.tableNumber]
+			// Get the bindind definition
+			$oAttributes:=xml_attributes($dom)
+			OK:=Num:C11($oAttributes["ios:values"]#Null:C1517)
+			ASSERT:C1129(OK=1; "Missing 'ios:values' attribute in the template")
 			
-			$Col_bind:=Split string:C1554($oAttributes["ios:values"]; ","; sk trim spaces:K86:2)
-			
-			// Create binding collection sized according to bind attribute length
-			If (FEATURE.with("newViewUI"))\
-				 & ($oIN.selector="detail")
+			If (Bool:C1537(OK))
 				
-				$Col_bind.resize($oIN.manifest.fields.count)
+				$cache:=Form:C1466[$oIN.selector][$oIN.tableNumber]
 				
-				// No limit
-				$Col_affected:=New collection:C1472
+				$binding:=Split string:C1554($oAttributes["ios:values"]; ","; sk trim spaces:K86:2)
 				
-			Else 
-				
-				$Col_affected:=New collection:C1472.resize($Col_bind.length)
-				
-			End if 
-			
-			// Reorganize the binded fields
-			For each ($Txt_bind; $Col_bind)
-				
-				CLEAR VARIABLE:C89($isCompatible)
-				CLEAR VARIABLE:C89($oField)
-				
-				// Find the binded element
-				$Dom_field:=DOM Find XML element by ID:C1010($root; $Txt_bind)
-				
-				If (Bool:C1537(OK))
+				// Create binding collection sized according to bind attribute length
+				If (FEATURE.with("newViewUI"))\
+					 & ($oIN.selector="detail")
 					
-					$oAttributes:=xml_attributes($Dom_field)
-					ASSERT:C1129($oAttributes["ios:bind"]#Null:C1517)
+					$binding.resize($oIN.manifest.fields.count)
+					
+					// No limit
+					$affected:=New collection:C1472
 					
 				Else 
 					
-					// The multivalued fields share the same attributes
-					// as the last field defined in the template
+					$affected:=New collection:C1472.resize($binding.length)
 					
 				End if 
 				
-				If (Match regex:C1019("(?m-si)^([^\\[\\n]+)\\[(\\d+)]\\s*$"; $oAttributes["ios:bind"]; 1))
+				// Reorganize the binded fields
+				For each ($key; $binding)
 					
-					// LIST OF FIELDS
+					CLEAR VARIABLE:C89($isCompatible)
+					CLEAR VARIABLE:C89($oField)
 					
-					If ($oAttributes["ios:type"]="all")
+					// Find the binded element
+					$Dom_field:=DOM Find XML element by ID:C1010($root; $key)
+					
+					If (Bool:C1537(OK))
 						
-						$isCompatible:=True:C214
+						$oAttributes:=xml_attributes($Dom_field)
+						ASSERT:C1129($oAttributes["ios:bind"]#Null:C1517)
 						
 					Else 
 						
-						// Check if the type is compatible
-						$c:=Split string:C1554($oAttributes["ios:type"]; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+						// The multivalued fields share the same attributes
+						// as the last field defined in the template
 						
-						If ($oIN.target.fields#Null:C1517)
+					End if 
+					
+					If (Match regex:C1019("(?m-si)^([^\\[\\n]+)\\[(\\d+)]\\s*$"; $oAttributes["ios:bind"]; 1))
+						
+						// LIST OF FIELDS
+						
+						If ($oAttributes["ios:type"]="all")
 							
-							For each ($oField; $oIN.target.fields.filter("col_formula"; Formula:C1597($1.result:=($1.value#Null:C1517)))) Until ($isCompatible)
+							$isCompatible:=True:C214
+							
+						Else 
+							
+							// Check if the type is compatible
+							$c:=Split string:C1554($oAttributes["ios:type"]; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+							
+							If ($oIN.target.fields#Null:C1517)
 								
-								If ($oField#Null:C1517)
+								For each ($oField; $oIN.target.fields.filter("col_formula"; Formula:C1597($1.result:=($1.value#Null:C1517)))) Until ($isCompatible)
 									
-									$o:=_o_structure(New object:C1471(\
-										"action"; "fieldDefinition"; \
-										"path"; $oField.name; \
-										"tableNumber"; Num:C11($oIN.tableNumber); \
-										"catalog"; PROJECT.$project.$catalog))
-									
-									If ($o.success)
+									If ($oField#Null:C1517)
 										
-										//If ($o.type=-2)  // 1-N relation
-										
-										//$isCompatible:=Split string(String($oAttributes.class); " ").indexOf("multivalued")#-1
-										
-										//Else 
-										
+										$o:=$structure.fieldDefinition(Num:C11($oIN.tableNumber); $oField.path)
 										$isCompatible:=$template.isTypeAccepted($c; $o.fieldType)
 										
-										//End if 
 									End if 
-								End if 
-							End for each 
+								End for each 
+							End if 
 						End if 
-					End if 
-					
-					If ($isCompatible)\
-						 & ($oField#Null:C1517)
 						
-						// Keep the field…
-						$Col_affected[$indx]:=$oField
+						If ($isCompatible)\
+							 & ($oField#Null:C1517)
+							
+							// Keep the field…
+							$affected[$indx]:=$oField
+							
+							// …& remove it to don't use again
+							$oIN.target.fields.remove($oIN.target.fields.indexOf($oField))
+							
+						End if 
 						
-						// …& remove it to don't use again
-						$oIN.target.fields.remove($oIN.target.fields.indexOf($oField))
+						$indx:=$indx+1
 						
-					End if 
-					
-					$indx:=$indx+1
-					
-				Else 
-					
-					// SINGLE VALUE FIELD (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
-					
-					Case of 
-							
-							//______________________________________________________
-						: ($oAttributes["ios:bind"]="searchableField")
-							
-							$isMultiCriteria:=(Split string:C1554($oAttributes.class; " ").indexOf("multi-criteria")#-1)
-							
-							$Lon_keyType:=Value type:C1509($oIN.target.searchableField)
-							
-							If ($Lon_keyType#Is undefined:K8:13)\
-								 & ($Lon_keyType#Is null:K8:31)
+					Else 
+						
+						// SINGLE VALUE FIELD (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
+						
+						Case of 
 								
-								If ($Lon_keyType=Is collection:K8:32)
+								//______________________________________________________
+							: ($oAttributes["ios:bind"]="searchableField")
+								
+								$isMultiCriteria:=(Split string:C1554($oAttributes.class; " ").indexOf("multi-criteria")#-1)
+								
+								$Lon_keyType:=Value type:C1509($oIN.target.searchableField)
+								
+								If ($Lon_keyType#Is undefined:K8:13)\
+									 & ($Lon_keyType#Is null:K8:31)
 									
-									// SOURCE IS MULTICRITERIA
-									
-									If ($oIN.target.searchableField.length>0)
+									If ($Lon_keyType=Is collection:K8:32)
 										
-										If ($isMultiCriteria)
-											
-											// Target is multi-criteria
-											
-											//#MARK_TODO Verify the type & remove incompatible if any
-											For each ($o; $oIN.target.searchableField)
-												
-												// #MARK_TODO
-												
-											End for each 
-											
-											$cache.searchableField:=$oIN.target.searchableField
-											
-										Else 
-											
-											// Target is mono value -> keep the first compatible type
-											$cache.searchableField:=$oIN.target.searchableField[0]
-											
-										End if 
-									End if 
-									
-								Else 
-									
-									// SOURCE IS MONO VALUE
-									
-									If ($isMultiCriteria)
+										// SOURCE IS MULTICRITERIA
 										
-										// Target is multi-criteria -> don't modify if exist
-										If ($Lon_keyType=Is null:K8:31)
+										If ($oIN.target.searchableField.length>0)
 											
-											// #MARK_TODO Verify the type
-											
-											$cache.searchableField:=$oIN.target.searchableField
-											
+											If ($isMultiCriteria)
+												
+												// Target is multi-criteria
+												
+												//#MARK_TODO Verify the type & remove incompatible if any
+												For each ($o; $oIN.target.searchableField)
+													
+													// #MARK_TODO
+													
+												End for each 
+												
+												$cache.searchableField:=$oIN.target.searchableField
+												
+											Else 
+												
+												// Target is mono value -> keep the first compatible type
+												$cache.searchableField:=$oIN.target.searchableField[0]
+												
+											End if 
 										End if 
 										
 									Else 
 										
-										// Target is mono value
-										$cache.searchableField:=$oIN.target.searchableField
+										// SOURCE IS MONO VALUE
 										
+										If ($isMultiCriteria)
+											
+											// Target is multi-criteria -> don't modify if exist
+											If ($Lon_keyType=Is null:K8:31)
+												
+												// #MARK_TODO Verify the type
+												
+												$cache.searchableField:=$oIN.target.searchableField
+												
+											End if 
+											
+										Else 
+											
+											// Target is mono value
+											$cache.searchableField:=$oIN.target.searchableField
+											
+										End if 
 									End if 
 								End if 
-							End if 
-							
-							//______________________________________________________
-						: ($oAttributes["ios:bind"]="sectionField")
-							
-							If ($oIN.target.sectionField#Null:C1517)
 								
-								$cache.sectionField:=$oIN.target.sectionField
+								//______________________________________________________
+							: ($oAttributes["ios:bind"]="sectionField")
 								
-							End if 
-							
-							//______________________________________________________
-						Else 
-							
-							// #98417 - Remove in excess item from collection
-							$Col_affected.resize($Col_affected.length-1)
-							
-							//______________________________________________________
-					End case 
-				End if 
-			End for each 
-			
-			If (FEATURE.with("newViewUI"))\
-				 & ($oIN.manifest#Null:C1517)\
-				 & ($oIN.selector="detail")\
-				 & ($oIN.target.fields#Null:C1517)
+								If ($oIN.target.sectionField#Null:C1517)
+									
+									$cache.sectionField:=$oIN.target.sectionField
+									
+								End if 
+								
+								//______________________________________________________
+							Else 
+								
+								// #98417 - Remove in excess item from collection
+								$affected.resize($affected.length-1)
+								
+								//______________________________________________________
+						End case 
+					End if 
+				End for each 
 				
-				// Append the non affected fields
-				$Col_affected.combine($oIN.target.fields)
+				If (FEATURE.with("newViewUI"))\
+					 & ($oIN.manifest#Null:C1517)\
+					 & ($oIN.selector="detail")\
+					 & ($oIN.target.fields#Null:C1517)
+					
+					// Append the non affected fields
+					$affected.combine($oIN.target.fields)
+					
+				End if 
+				
+				// Keep the field binding definition
+				$cache.fields:=$affected
 				
 			End if 
 			
-			// Keep the field binding definition
-			$cache.fields:=$Col_affected
+		Else 
+			
+			// Not a list form
 			
 		End if 
+		
+		DOM CLOSE XML:C722($root)
+		
 	End if 
-	
-	DOM CLOSE XML:C722($root)
-	
 End if 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End
