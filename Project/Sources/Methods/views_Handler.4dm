@@ -337,7 +337,16 @@ Case of
 				
 				COLLECTION TO ARRAY:C1562($o.fields; ($form.fields.pointer())->)
 				COLLECTION TO ARRAY:C1562($o.fields; ($form.ids.pointer())->; "id")
-				COLLECTION TO ARRAY:C1562($o.fields; ($form.names.pointer())->; "label")
+				
+				If (FEATURE.with("moreRelations"))
+					
+					COLLECTION TO ARRAY:C1562($o.fields; ($form.names.pointer())->; "$label")
+					
+				Else 
+					
+					COLLECTION TO ARRAY:C1562($o.fields; ($form.names.pointer())->; "path")
+					
+				End if 
 				
 				ASSERT:C1129($o.fields.length=Size of array:C274(($form.ids.pointer())->))
 				ASSERT:C1129($o.fields.length=Size of array:C274(($form.names.pointer())->))

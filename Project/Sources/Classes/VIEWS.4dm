@@ -118,8 +118,12 @@ Function addField($field : Object; $fields : Collection)
 	// Construct the table's field list
 Function fieldList($table : Variant)->$result : Object
 	var $attribute; $key; $tableID : Text
-	var $field; $o; $tableModel : Object
+	var $field; $o; $subfield; $tableModel : Object
 	var $c : Collection
+	var $subLevel : Integer
+	var $linkPrefix : Text
+	
+	$linkPrefix:=Choose:C955(Is macOS:C1572; "└ "; "└ ")  //"├ " //" ┊"
 	
 	ASSERT:C1129(Count parameters:C259>=1; "Missing parameter")
 	
@@ -163,40 +167,41 @@ Function fieldList($table : Variant)->$result : Object
 						//]
 						
 						$field.path:=$field.name
+						$field.$label:=$field.path
+						$field.$level:=0
 						
 						$result.fields.push($field)
-						
-						$field.label:=$field.path
-						$field.$level:=0
 						
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isRelationToOne($tableModel[$key]))
 						
 						If (FEATURE.with("moreRelations"))
 							
-							If (Form:C1466.dataModel[String:C10($tableModel[$key].relatedTableNumber)]#Null:C1517)
-								
-								$field:=New object:C1471(\
-									"name"; $key; \
-									"path"; $key; \
-									"fieldType"; 8858; \
-									"relatedDataClass"; $tableModel[$key].relatedDataclass; \
-									"inverseName"; $tableModel[$key].inverseName; \
-									"label"; $tableModel[$key].label; \
-									"shortlabel"; $tableModel[$key].$t.shortLabel; \
-									"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
-									"$added"; True:C214)
-								
-								// #TEMPO [
-								$field.id:=0
-								//]
-								
-								$result.fields.push($field)
-								
-								$field.label:=$field.path
-								$field.$level:=1
-								
-							End if 
+							//If (Form.dataModel[String($tableModel[$key].relatedTableNumber)]#Null)
+							
+							$field:=New object:C1471(\
+								"name"; $key; \
+								"path"; $key; \
+								"fieldType"; 8858; \
+								"relatedDataClass"; $tableModel[$key].relatedDataclass; \
+								"inverseName"; $tableModel[$key].inverseName; \
+								"label"; $tableModel[$key].label; \
+								"shortlabel"; $tableModel[$key].$t.shortLabel; \
+								"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
+								"$added"; True:C214)
+							
+							// #TEMPO [
+							$field.id:=0
+							//]
+							
+							$subLevel:=$subLevel+10
+							
+							$field.$label:=$field.path
+							$field.$level:=$subLevel
+							
+							$result.fields.push($field)
+							
+							//End if 
 						End if 
 						
 						For each ($attribute; $tableModel[$key])
@@ -218,12 +223,11 @@ Function fieldList($table : Variant)->$result : Object
 									$field.fieldNumber:=Num:C11($attribute)
 									//]
 									
-									$field.label:=" ┊"+$field.name
+									$field.$label:=$linkPrefix+$field.name
 									$field.path:=$key+"."+$field.name
+									$field.$level:=$subLevel+1
 									
 									$result.fields.push($field)
-									
-									$field.$level:=1
 									
 									//______________________________________________________
 								: (Not:C34(FEATURE.with("moreRelations")))
@@ -239,21 +243,16 @@ Function fieldList($table : Variant)->$result : Object
 									
 									If ($field.relatedTableNumber#Null:C1517)
 										
-										var $oo : Object
-										For each ($oo; OB Entries:C1720($field))
+										For each ($subfield; OB Entries:C1720($field).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1))))
 											
-											If (PROJECT.isField($oo.key))
-												
-												$o:=OB Copy:C1225($oo.value)
-												$o.label:=" ┊"+$o.path
-												$o.path:=$key+"."+$o.path
-												
-												$o.id:=Num:C11($oo.key)
-												$o.$level:=2
-												
-												$c.push($o)
-												
-											End if 
+											$o:=OB Copy:C1225($subfield.value)
+											$o.$label:=$linkPrefix+$o.path
+											$o.path:=$key+"."+$o.path
+											$o.id:=Num:C11($subfield.key)
+											$o.$level:=$subLevel+2
+											
+											$c.push($o)
+											
 										End for each 
 										
 									End if 
@@ -266,12 +265,11 @@ Function fieldList($table : Variant)->$result : Object
 										
 										$field.id:=0
 										$field.name:=$attribute
-										$field.label:=" ┊"+$attribute
+										$field.$label:=$linkPrefix+$attribute
 										$field.path:=$key+"."+$attribute
 										$field.fieldType:=Choose:C955(Bool:C1537($field.isToMany); 8859; 8858)
 										$result.fields.push($field)
-										
-										$field.$level:=1
+										$field.$level:=$subLevel+2
 										
 									End if 
 									//______________________________________________________
@@ -295,7 +293,7 @@ Function fieldList($table : Variant)->$result : Object
 							//]
 							
 							$field.path:=$key
-							$field.label:=$field.path
+							$field.$label:=$field.path
 							
 							$result.fields.push($field)
 							
@@ -318,7 +316,7 @@ Function fieldList($table : Variant)->$result : Object
 								$field.id:=0
 								//]
 								
-								$field.label:=$field.path
+								$field.$label:=$field.path
 								
 								$result.fields.push($field)
 								
@@ -331,8 +329,15 @@ Function fieldList($table : Variant)->$result : Object
 				End case 
 			End for each 
 			
-			$result.fields:=$result.fields.orderBy("$level, path")
-			
+			If (FEATURE.with("moreRelations"))
+				
+				$result.fields:=$result.fields.orderBy("$level, path")
+				
+			Else 
+				
+				$result.fields:=$result.fields.orderBy("path")
+				
+			End if 
 		End if 
 	End if 
 	

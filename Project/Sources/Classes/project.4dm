@@ -262,6 +262,42 @@ Function addToMain
 	End if 
 	
 	//====================================
+	// Returns the collections of the fields of a table data model
+Function fields($table : Variant)->$fields : Collection
+	
+	var $model : Object
+	
+	If (Count parameters:C259>=1)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($table)=Is object:K8:27)  // Table model
+				
+				$model:=$table
+				
+				//______________________________________________________
+			: (Value type:C1509($table)=Is longint:K8:6)  // Table number
+				
+				$model:=This:C1470.dataModel[String:C10($table)]
+				
+				//______________________________________________________
+			Else   // Table name
+				
+				$model:=This:C1470.dataModel[$table]
+				
+				//______________________________________________________
+		End case 
+		
+		$fields:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=(Length:C16($1.value.key)#0)))
+		
+	Else 
+		
+		// #Error
+		
+	End if 
+	
+	//====================================
 Function isField
 	
 	var $0 : Boolean
