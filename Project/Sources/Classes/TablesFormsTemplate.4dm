@@ -169,21 +169,25 @@ Function doRun
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							$Obj_field.originalName:=$Obj_field.name
 							
-							C_COLLECTION:C1488($Col_path)
-							$Col_path:=Split string:C1554($Obj_field.name; ".")
+							var $keyPath : Text
+							var $tmp : Object
+							var $keyPaths : Collection
 							
-							If ($Col_path.length>1)  // is it a link?
-								
-								$Obj_tableModel:=$Obj_tableModel[$Col_path[0]]  // get sub model if related field
-								
+							$keyPaths:=Split string:C1554($Obj_field.name; ".")
+							$keyPaths.pop()  // we remove field leaf name, because we get info from id, not path
+							
+							$tmp:=$Obj_tableModel
+							If ($keyPaths.length>0)  // is it a link?
+								For each ($keyPath; $keyPaths)
+									$tmp:=$tmp[$keyPath]  // get sub model if related field
+								End for each 
 							End if 
 							
 							// Add info from dataModel
-							If ($Obj_tableModel[String:C10($Obj_field.id)]#Null:C1517)
+							If ($tmp[String:C10($Obj_field.id)]#Null:C1517)
 								
-								$Obj_field:=ob_deepMerge($Obj_field; $Obj_tableModel[String:C10($Obj_field.id)])
+								$Obj_field:=ob_deepMerge($Obj_field; $tmp[String:C10($Obj_field.id)]; False:C215)
 								
-								// TODO instead of deep merge, try to not override left side, add option?
 								
 							End if 
 							
@@ -205,13 +209,6 @@ Function doRun
 							// Set binding type according to field information
 							$Obj_field.bindingType:=This:C1470.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
 							
-							If ($Col_path.length>1)  // is it a link?
-								
-								// restore original table model
-								$Obj_tableModel:=$Obj_dataModel[$Txt_tableNumber]
-								
-							End if 
-							
 							//……………………………………………………………………………………………………………
 						: ($Obj_field.name#Null:C1517)  // ie. relation
 							
@@ -219,9 +216,9 @@ Function doRun
 							
 							$Obj_field.originalName:=$Obj_field.name
 							
-							C_OBJECT:C1216($tmp)
-							C_COLLECTION:C1488($keyPaths)
-							C_TEXT:C284($keyPath)
+							var $tmp : Object
+							var $keyPaths : Collection
+							var $keyPath : Text
 							$tmp:=$Obj_tableModel[$Obj_field.name]
 							If ($tmp=Null:C1517)
 								$keyPaths:=Split string:C1554($Obj_field.name; ".")
@@ -234,7 +231,7 @@ Function doRun
 							End if 
 							
 							If ($tmp#Null:C1517)
-								$Obj_field:=ob_deepMerge($Obj_field; $tmp)
+								$Obj_field:=ob_deepMerge($Obj_field; $tmp; False:C215)
 							End if 
 							
 							// Format name for the tag
