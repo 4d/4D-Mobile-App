@@ -149,7 +149,7 @@ If (Length:C16($cible)>0)
 												"fieldType"; 8858; \
 												"relatedTableNumber"; $relation.relatedTableNumber; \
 												"label"; $relation.label; \
-												"shortlabel"; $relation.shortLabel; \
+												"shortLabel"; $relation.shortLabel; \
 												"path"; $cDroped[0])
 											
 											$relation.format:="%"+$cDroped[1]+"%"

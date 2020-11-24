@@ -186,7 +186,7 @@ Function fieldList($table : Variant)->$result : Object
 								"relatedDataClass"; $tableModel[$key].relatedDataclass; \
 								"inverseName"; $tableModel[$key].inverseName; \
 								"label"; $tableModel[$key].label; \
-								"shortlabel"; $tableModel[$key].$t.shortLabel; \
+								"shortLabel"; $tableModel[$key].$t.shortLabel; \
 								"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
 								"$added"; True:C214)
 							
@@ -309,7 +309,7 @@ Function fieldList($table : Variant)->$result : Object
 									"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
 									"inverseName"; $tableModel[$key].inverseName; \
 									"label"; PROJECT.label($tableModel[$key].label); \
-									"shortlabel"; PROJECT.label($tableModel[$key].$t.shortLabel); \
+									"shortLabel"; PROJECT.label($tableModel[$key].$t.shortLabel); \
 									"isToMany"; True:C214)
 								
 								// #TEMPO [
