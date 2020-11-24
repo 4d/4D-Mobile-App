@@ -11,10 +11,10 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($l; $Lon_formEvent; $Lon_parameters; $Lon_published; $Lon_shift; $row)
+C_LONGINT:C283($index; $Lon_formEvent; $Lon_parameters; $published)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o; $context; $Obj_dataModel; $Obj_field; $form; $Obj_in)
-C_OBJECT:C1216($Obj_out; $Obj_table)
+C_OBJECT:C1216($o; $context; $dataModel; $field; $form; $IN)
+C_OBJECT:C1216($Obj_out)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -33,7 +33,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	// Optional parameters
 	If ($Lon_parameters>=1)
 		
-		$Obj_in:=$1
+		$IN:=$1
 		
 	End if 
 	
@@ -77,7 +77,7 @@ End if
 Case of 
 		
 		//=========================================================
-	: ($Obj_in=Null:C1517)  // Form method
+	: ($IN=Null:C1517)  // Form method
 		
 		$Lon_formEvent:=_o_panel_Form_common(On Load:K2:1; On Timer:K2:25)
 		
@@ -140,23 +140,23 @@ Case of
 		End case 
 		
 		//=========================================================
-	: ($Obj_in.action=Null:C1517)
+	: ($IN.action=Null:C1517)
 		
 		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
 		
 		//=========================================================
-	: ($Obj_in.action="init")
+	: ($IN.action="init")
 		
 		// Return the form objects definition
 		$0:=$form
 		
 		//=========================================================
-	: ($Obj_in.action="tableList")
+	: ($IN.action="tableList")
 		
 		structure_TABLE_LIST($form)
 		
 		//=========================================================
-	: ($Obj_in.action="tableFilter")
+	: ($IN.action="tableFilter")
 		
 		Case of 
 				
@@ -201,7 +201,7 @@ Case of
 		ST SET TEXT:C1115(*; $form.tableFilter; $t; ST Start text:K78:15; ST End text:K78:16)
 		
 		//=========================================================
-	: ($Obj_in.action="fieldList")
+	: ($IN.action="fieldList")
 		
 		$o:=PROJECT.getCatalog().query("name = :1"; String:C10($context.currentTable.name)).pop()
 		
@@ -218,7 +218,7 @@ Case of
 		structure_FIELD_LIST($form)
 		
 		//=========================================================
-	: ($Obj_in.action="fieldFilter")
+	: ($IN.action="fieldFilter")
 		
 		Case of 
 				
@@ -262,28 +262,28 @@ Case of
 		
 		ST SET TEXT:C1115(*; $form.fieldFilter; $t; ST Start text:K78:15; ST End text:K78:16)
 		
-		If (Bool:C1537($Obj_in.showIfNotEmpty))
+		If (Bool:C1537($IN.showIfNotEmpty))
 			
 			OBJECT SET VISIBLE:C603(*; $form.fieldFilter; Length:C16($t)>0)
 			
 		End if 
 		
 		//=========================================================
-	: ($Obj_in.action="addTable")
+	: ($IN.action="addTable")
 		
 		PROJECT.addTable($context.currentTable)
 		
 		// Highlight the table name
-		$l:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
-		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $l; Bold:K14:2)
+		$index:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
+		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $index; Bold:K14:2)
 		
 		//=========================================================
-	: ($Obj_in.action="geometry")
+	: ($IN.action="geometry")
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($Obj_in.target="STRUCTURE")  // Vertical resizing
+			: ($IN.target="STRUCTURE")  // Vertical resizing
 				
 				//OBJECT GET SUBFORM CONTAINER SIZE($Lon_width;$Lon_height)
 				//$Lon_bottom:=$Lon_height-10
@@ -299,19 +299,19 @@ Case of
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215; "Unknown target: \""+$Obj_in.target+"\"")
+				ASSERT:C1129(False:C215; "Unknown target: \""+$IN.target+"\"")
 				
 				//______________________________________________________
 		End case 
 		
 		//=========================================================
-	: ($Obj_in.action="onLosingFocus")
+	: ($IN.action="onLosingFocus")
 		
 		OBJECT SET VISIBLE:C603(*; $form.search; False:C215)
 		OBJECT SET VISIBLE:C603(*; $form.action; False:C215)
 		
 		//=========================================================
-	: ($Obj_in.action="appendField")
+	: ($IN.action="appendField")
 		
 		Case of 
 				
@@ -320,51 +320,51 @@ Case of
 				var $structure : cs:C1710.structure
 				$structure:=cs:C1710.structure.new()
 				
-				$structure.addField($Obj_in.table; $Obj_in.field)
+				$structure.addField($IN.table; $IN.field)
 				
 				//…………………………………………………………………………………………………
-			: ($Obj_in.field.type=-1)  // N -> 1 relation
+			: ($IN.field.type=-1)  // N -> 1 relation
 				
-				$Obj_dataModel:=Form:C1466.dataModel[String:C10($Obj_in.table.tableNumber)][$Obj_in.field.name]
+				$dataModel:=Form:C1466.dataModel[String:C10($IN.table.tableNumber)][$IN.field.name]
 				
-				If ($Obj_dataModel#Null:C1517)
+				If ($dataModel#Null:C1517)
 					
-					$Lon_published:=1  // All related fields are published
+					$published:=1  // All related fields are published
 					
 					var $structure : cs:C1710.structure
 					var $relatedCatalog : Object
 					$structure:=cs:C1710.structure.new()
-					$relatedCatalog:=$structure.relatedCatalog($Obj_in.table.name; $Obj_in.field.name; True:C214)
+					$relatedCatalog:=$structure.relatedCatalog($IN.table.name; $IN.field.name; True:C214)
 					
 					If ($relatedCatalog.success)
 						
-						For each ($Obj_field; $relatedCatalog.fields)
+						For each ($field; $relatedCatalog.fields)
 							
 							Case of 
 									//______________________________________________________
-								: ($Obj_field.fieldType=8859)
+								: ($field.fieldType=8859)
 									
-									$Lon_published:=$Lon_published+Num:C11($Obj_dataModel[String:C10($Obj_field.name)]=Null:C1517)
+									$published:=$published+Num:C11($dataModel[String:C10($field.name)]=Null:C1517)
 									
 									//______________________________________________________
-								: ($Obj_field.fieldType=8858)
+								: ($field.fieldType=8858)
 									
-									$Lon_published:=$Lon_published+Num:C11($Obj_dataModel[String:C10($Obj_field.name)]=Null:C1517)
+									$published:=$published+Num:C11($dataModel[String:C10($field.name)]=Null:C1517)
 									
 									//______________________________________________________
 								Else 
 									
-									$c:=Split string:C1554($Obj_field.path; "."; sk ignore empty strings:K86:1)
+									$c:=Split string:C1554($field.path; "."; sk ignore empty strings:K86:1)
 									
 									If ($c.length=1)
 										
 										// Field
-										$Lon_published:=$Lon_published+Num:C11($Obj_dataModel[String:C10($Obj_field.fieldNumber)]=Null:C1517)
+										$published:=$published+Num:C11($dataModel[String:C10($field.fieldNumber)]=Null:C1517)
 										
 									Else 
 										
 										// Link
-										$Lon_published:=$Lon_published+Num:C11($Obj_dataModel[$c[0]][String:C10($Obj_field.fieldNumber)]=Null:C1517)
+										$published:=$published+Num:C11($dataModel[$c[0]][String:C10($field.fieldNumber)]=Null:C1517)
 										
 									End if 
 									
@@ -374,20 +374,15 @@ Case of
 					End if 
 				End if 
 				
-				APPEND TO ARRAY:C911(($Obj_in.published)->; $Lon_published)
-				APPEND TO ARRAY:C911(($Obj_in.icons)->; UI.fieldIcons[8858])
-				APPEND TO ARRAY:C911(($Obj_in.fields)->; $Obj_in.field.name)
-				
-				
-				$row:=Size of array:C274(($Obj_in.fields)->)
-				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; $row; Underline:K14:4)
-				LISTBOX SET ROW COLOR:C1270(*; "fields"; $row; UI.selectedColor; lk font color:K53:24)
+				APPEND TO ARRAY:C911(($IN.published)->; $published)
+				APPEND TO ARRAY:C911(($IN.icons)->; UI.fieldIcons[8858])
+				APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
 				
 				//…………………………………………………………………………………………………
-			: ($Obj_in.field.type=-2)  // 1 -> N relation
+			: ($IN.field.type=-2)  // 1 -> N relation
 				
 				//*******************************************************************************************
-				$Lon_published:=Num:C11(Form:C1466.dataModel[String:C10($Obj_in.table.tableNumber)][String:C10($Obj_in.field.name)]#Null:C1517)
+				$published:=Num:C11(Form:C1466.dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
 				
 				//
 				// C'EST FAUX SI LE LIEN A ÉTÉ RENOMMÉ
@@ -395,57 +390,44 @@ Case of
 				//
 				//*******************************************************************************************
 				
-				APPEND TO ARRAY:C911(($Obj_in.published)->; $Lon_published)
-				APPEND TO ARRAY:C911(($Obj_in.icons)->; UI.fieldIcons[8859])
-				APPEND TO ARRAY:C911(($Obj_in.fields)->; $Obj_in.field.name)
-				
-				$row:=Size of array:C274(($Obj_in.fields)->)
-				LISTBOX SET ROW COLOR:C1270(*; "fields"; $row; Foreground color:K23:1; lk font color:K53:24)
+				APPEND TO ARRAY:C911(($IN.published)->; $published)
+				APPEND TO ARRAY:C911(($IN.icons)->; UI.fieldIcons[8859])
+				APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
 				
 				//…………………………………………………………………………………………………
 			Else 
 				
-				If ($Obj_in.field.fieldType<=UI.fieldIcons.length)
+				If ($IN.field.fieldType<=UI.fieldIcons.length)
 					
-					$Lon_published:=Num:C11(Form:C1466.dataModel[String:C10($Obj_in.table.tableNumber)][String:C10($Obj_in.field.id)]#Null:C1517)
+					$published:=Num:C11(Form:C1466.dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.id)]#Null:C1517)
 					
-					APPEND TO ARRAY:C911(($Obj_in.published)->; $Lon_published)
-					APPEND TO ARRAY:C911(($Obj_in.icons)->; UI.fieldIcons[$Obj_in.field.fieldType])
-					APPEND TO ARRAY:C911(($Obj_in.fields)->; $Obj_in.field.name)
+					APPEND TO ARRAY:C911(($IN.published)->; $published)
+					APPEND TO ARRAY:C911(($IN.icons)->; UI.fieldIcons[$IN.field.fieldType])
+					APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
 					
 				End if 
 				
-				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; Size of array:C274(($Obj_in.fields)->); Plain:K14:1)
-				
-				$row:=Size of array:C274(($Obj_in.fields)->)
-				LISTBOX SET ROW COLOR:C1270(*; "fields"; $row; Foreground color:K23:1; lk font color:K53:24)
+				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; Size of array:C274(($IN.fields)->); Plain:K14:1)
 				
 				//…………………………………………………………………………………………………
 		End case 
 		
 		//=========================================================
-	: ($Obj_in.action="update")
+	: ($IN.action="update")
 		
 		// Update ribbon
 		CALL FORM:C1391($form.window; $form.callback; "updateRibbon")
 		
 		// Update structure dependencies, if any
-		CALL FORM:C1391($form.window; $form.callback; "tableList"; $Obj_in.project)
-		CALL FORM:C1391($form.window; $form.callback; "fieldList"; $Obj_in.project)
-		CALL FORM:C1391($form.window; $form.callback; "tableProperties"; $Obj_in.project)
+		CALL FORM:C1391($form.window; $form.callback; "tableList"; $IN.project)
+		CALL FORM:C1391($form.window; $form.callback; "fieldList"; $IN.project)
+		CALL FORM:C1391($form.window; $form.callback; "tableProperties"; $IN.project)
 		CALL FORM:C1391($form.window; $form.callback; "mainMenu")
 		
 		//=========================================================
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$IN.action+"\"")
 		
 		//=========================================================
 End case 
-
-// ----------------------------------------------------
-// Return
-//$0:=$Obj_out
-
-// ----------------------------------------------------
-// End

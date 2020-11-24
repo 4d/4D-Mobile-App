@@ -9,33 +9,30 @@
 // with filtering and sort
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($1)
-
-C_BOOLEAN:C305($Boo_error; $Boo_found)
-C_LONGINT:C283($i; $Lon_colum; $Lon_row)
-C_POINTER:C301($Ptr_fields; $Ptr_icons; $Ptr_list; $Ptr_published)
-C_TEXT:C284($t)
-C_OBJECT:C1216($Obj_; $Obj_context; $Obj_dataModel; $Obj_field; $Obj_form)
-C_OBJECT:C1216($Obj_table)
-C_COLLECTION:C1488($Col_desynchronized; $Col_selected)
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(structure_FIELD_LIST; $1)
 End if 
+
+var $item : Text
+var $isFound; $withError : Boolean
+var $color; $column; $i; $row; $style : Integer
+var $Ptr_fields; $Ptr_icons; $Ptr_list; $Ptr_published : Pointer
+var $context; $field; $form; $o; $table : Object
+var $selectedItems; $unsynchronized : Collection
 
 // ----------------------------------------------------
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
-	$Obj_form:=$1
+	$form:=$1
 	
 	// Optional parameters
 	// <NONE>
 	
-	$Obj_context:=$Obj_form.form
-	
-	$Obj_dataModel:=Form:C1466.dataModel
+	$context:=$form.form
 	
 Else 
 	
@@ -44,76 +41,77 @@ Else
 End if 
 
 // ----------------------------------------------------
-$Ptr_fields:=UI.pointer($Obj_form.fields)
-$Col_selected:=New collection:C1472
+$Ptr_fields:=UI.pointer($form.fields)
+$Ptr_icons:=UI.pointer($form.icons)
+$Ptr_published:=UI.pointer($form.published)
+
+// Keep the selected field to restore the selection if necessary
+$selectedItems:=New collection:C1472
 
 If (Size of array:C274($Ptr_fields->)>0)
 	
-	LISTBOX GET CELL POSITION:C971(*; $Obj_form.fieldList; $Lon_colum; $Lon_row)
+	LISTBOX GET CELL POSITION:C971(*; $form.fieldList; $column; $row)
 	
-	// Keep the selected field to restore the selection if necessary
-	$Obj_context.fieldName:=$Ptr_fields->{$Lon_row}
+	$context.fieldName:=$Ptr_fields->{$row}
 	
 	// Keep the selection
-	$Ptr_list:=UI.pointer($Obj_form.fieldList)
+	$Ptr_list:=UI.pointer($form.fieldList)
 	
-	For ($i; 1; LISTBOX Get number of rows:C915(*; $Obj_form.fieldList); 1)
+	For ($i; 1; LISTBOX Get number of rows:C915(*; $form.fieldList); 1)
 		
 		If ($Ptr_list->{$i})
 			
-			$Col_selected.push($Ptr_fields->{$i})
+			$selectedItems.push($Ptr_fields->{$i})
 			
 		End if 
 	End for 
 End if 
 
-LISTBOX GET CELL POSITION:C971(*; $Obj_form.tableList; $Lon_colum; $Lon_row)
-
-$Ptr_icons:=UI.pointer($Obj_form.icons)
-$Ptr_published:=UI.pointer($Obj_form.published)
-
 CLEAR VARIABLE:C89($Ptr_fields->)
 CLEAR VARIABLE:C89($Ptr_published->)
 CLEAR VARIABLE:C89($Ptr_icons->)
 
-If ($Lon_row>0)
+// Is there a selected table?
+LISTBOX GET CELL POSITION:C971(*; $form.tableList; $column; $row)
+
+If ($row>0)
 	
 	// ----------------------
 	//  POPULATE THE LIST
 	// ----------------------
-	$Obj_table:=$Obj_context.currentTable
+	$table:=$context.currentTable
 	
-	If ($Obj_table#Null:C1517)
+	If ($table#Null:C1517)
 		
 		Case of 
 				
 				//______________________________________________________
-			: (Length:C16(String:C10($Obj_context.fieldFilter))>0)\
-				 & (Bool:C1537($Obj_context.fieldFilterPublished))  // Filter by name & only published
+			: (Length:C16(String:C10($context.fieldFilter))>0)\
+				 & (Bool:C1537($context.fieldFilterPublished))  // Filter by name & only published
 				
-				For each ($Obj_field; $Obj_table.field)
+				For each ($field; $table.field)
 					
-					If (Position:C15($Obj_context.fieldFilter; $Obj_field.name)>0)
+					If (Position:C15($context.fieldFilter; $field.name)>0)
 						
-						If (PROJECT.isRelationToOne($Obj_field))
+						If (PROJECT.isRelationToOne($field))
 							
 							//#MARK_TO_OPTIMIZE
-							$Obj_:=_o_structure(New object:C1471(\
+							$o:=_o_structure(New object:C1471(\
 								"action"; "catalog"; \
-								"tableNumber"; $Obj_field.relatedTableNumber))
+								"tableNumber"; $field.relatedTableNumber))
 							
-							If ($Obj_.success)
+							If ($o.success)
 								
-								For each ($Obj_; $Obj_.value[0].field) Until ($Boo_found)
+								For each ($o; $o.value[0].field) Until ($isFound)
 									
-									$Boo_found:=(Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][$Obj_field.name][String:C10($Obj_.id)]#Null:C1517)
+									$isFound:=(Form:C1466.dataModel[String:C10($table.tableNumber)][$field.name][String:C10($o.id)]#Null:C1517)
 									
-									If ($Boo_found)
+									If ($isFound)
 										
 										STRUCTURE_Handler(New object:C1471(\
 											"action"; "appendField"; \
-											"table"; $Obj_table; \
-											"field"; $Obj_field; \
+											"table"; $table; \
+											"field"; $field; \
 											"fields"; $Ptr_fields; \
 											"published"; $Ptr_published; \
 											"icons"; $Ptr_icons))
@@ -124,12 +122,12 @@ If ($Lon_row>0)
 							
 						Else 
 							
-							If (Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][String:C10($Obj_field.id)]#Null:C1517)
+							If (Form:C1466.dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
 								
 								STRUCTURE_Handler(New object:C1471(\
 									"action"; "appendField"; \
-									"table"; $Obj_table; \
-									"field"; $Obj_field; \
+									"table"; $table; \
+									"field"; $field; \
 									"fields"; $Ptr_fields; \
 									"published"; $Ptr_published; \
 									"icons"; $Ptr_icons))
@@ -140,16 +138,16 @@ If ($Lon_row>0)
 				End for each 
 				
 				//______________________________________________________
-			: (Length:C16(String:C10($Obj_context.fieldFilter))>0)  // Filter by name
+			: (Length:C16(String:C10($context.fieldFilter))>0)  // Filter by name
 				
-				For each ($Obj_field; $Obj_table.field)
+				For each ($field; $table.field)
 					
-					If (Position:C15($Obj_context.fieldFilter; $Obj_field.name)>0)
+					If (Position:C15($context.fieldFilter; $field.name)>0)
 						
 						STRUCTURE_Handler(New object:C1471(\
 							"action"; "appendField"; \
-							"table"; $Obj_table; \
-							"field"; $Obj_field; \
+							"table"; $table; \
+							"field"; $field; \
 							"fields"; $Ptr_fields; \
 							"published"; $Ptr_published; \
 							"icons"; $Ptr_icons))
@@ -158,29 +156,29 @@ If ($Lon_row>0)
 				End for each 
 				
 				//______________________________________________________
-			: (Bool:C1537($Obj_context.fieldFilterPublished))  // Only published
+			: (Bool:C1537($context.fieldFilterPublished))  // Only published
 				
-				For each ($Obj_field; $Obj_table.field)
+				For each ($field; $table.field)
 					
-					If (PROJECT.isRelationToOne($Obj_field))
+					If (PROJECT.isRelationToOne($field))
 						
 						//#MARK_TO_OPTIMIZE
-						$Obj_:=_o_structure(New object:C1471(\
+						$o:=_o_structure(New object:C1471(\
 							"action"; "catalog"; \
-							"tableNumber"; $Obj_field.relatedTableNumber))
+							"tableNumber"; $field.relatedTableNumber))
 						
-						If ($Obj_.success)
+						If ($o.success)
 							
-							For each ($Obj_; $Obj_.value[0].field) Until ($Boo_found)
+							For each ($o; $o.value[0].field) Until ($isFound)
 								
-								$Boo_found:=(Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][$Obj_field.name][String:C10($Obj_.id)]#Null:C1517)
+								$isFound:=(Form:C1466.dataModel[String:C10($table.tableNumber)][$field.name][String:C10($o.id)]#Null:C1517)
 								
-								If ($Boo_found)
+								If ($isFound)
 									
 									STRUCTURE_Handler(New object:C1471(\
 										"action"; "appendField"; \
-										"table"; $Obj_table; \
-										"field"; $Obj_field; \
+										"table"; $table; \
+										"field"; $field; \
 										"fields"; $Ptr_fields; \
 										"published"; $Ptr_published; \
 										"icons"; $Ptr_icons))
@@ -191,12 +189,12 @@ If ($Lon_row>0)
 						
 					Else 
 						
-						If (Form:C1466.dataModel[String:C10($Obj_table.tableNumber)][String:C10($Obj_field.id)]#Null:C1517)
+						If (Form:C1466.dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
 							
 							STRUCTURE_Handler(New object:C1471(\
 								"action"; "appendField"; \
-								"table"; $Obj_table; \
-								"field"; $Obj_field; \
+								"table"; $table; \
+								"field"; $field; \
 								"fields"; $Ptr_fields; \
 								"published"; $Ptr_published; \
 								"icons"; $Ptr_icons))
@@ -208,12 +206,12 @@ If ($Lon_row>0)
 				//______________________________________________________
 			Else   // No filter
 				
-				For each ($Obj_field; $Obj_table.field)
+				For each ($field; $table.field)
 					
 					STRUCTURE_Handler(New object:C1471(\
 						"action"; "appendField"; \
-						"table"; $Obj_table; \
-						"field"; $Obj_field; \
+						"table"; $table; \
+						"field"; $field; \
 						"fields"; $Ptr_fields; \
 						"published"; $Ptr_published; \
 						"icons"; $Ptr_icons))
@@ -228,38 +226,76 @@ If ($Lon_row>0)
 		// ----------------------
 		If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
 			
-			If (Form:C1466.$dialog.unsynchronizedTableFields.length>$Obj_table.tableNumber)
+			If (Form:C1466.$dialog.unsynchronizedTableFields.length>$table.tableNumber)
 				
-				$Col_desynchronized:=Form:C1466.$dialog.unsynchronizedTableFields[$Obj_table.tableNumber]
+				$unsynchronized:=Form:C1466.$dialog.unsynchronizedTableFields[$table.tableNumber]
 				
 			End if 
 		End if 
 		
-		$Lon_row:=0
+		CLEAR VARIABLE:C89($row)
 		
-		For each ($Obj_field; $Obj_table.field)
+		For each ($field; $table.field)
 			
-			If (Find in array:C230($Ptr_fields->; $Obj_field.name)>0)  // In list
+			If (Find in array:C230($Ptr_fields->; $field.name)>0)  // In list
 				
-				$Lon_row:=$Lon_row+1
+				$row:=$row+1
 				
-				$Boo_error:=($Col_desynchronized#Null:C1517)
+				$withError:=($unsynchronized#Null:C1517)
 				
-				If ($Boo_error)
+				If ($withError)
 					
-					$Boo_error:=($Col_desynchronized.query("name = :1"; $Obj_field.name).pop()#Null:C1517)\
-						 | ($Col_desynchronized.length=0)
-					
-				End if 
-				
-				LISTBOX SET ROW COLOR:C1270(*; $Obj_form.fieldList; $Lon_row; Choose:C955($Boo_error; UI.errorColor; lk inherited:K53:26); lk font color:K53:24)
-				
-				// Highlight primary key
-				If ($Obj_field.name=$Obj_table.primaryKey)
-					
-					LISTBOX SET ROW FONT STYLE:C1268(*; $Obj_form.fieldList; $Lon_row; Bold:K14:2)
+					$withError:=($unsynchronized.query("name = :1"; $field.name).pop()#Null:C1517)\
+						 | ($unsynchronized.length=0)
 					
 				End if 
+				
+				$style:=Plain:K14:1
+				$color:=lk inherited:K53:26
+				
+				If ($withError)
+					
+					$color:=UI.errorColor
+					
+				Else 
+					
+					Case of 
+							
+							//______________________________________________________
+						: ($field.type=-1)
+							
+							$style:=Underline:K14:4
+							$color:=UI.selectedColor
+							
+							//______________________________________________________
+						: ($field.type=-2)
+							
+							If ($field.relatedTableNumber#$table.tableNumber)  // Not for a recursive relation
+								
+								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
+									
+									$color:=UI.errorColor
+									
+								End if 
+							End if 
+							
+							//______________________________________________________
+						Else 
+							
+							// Highlight primary key
+							If ($field.name=$table.primaryKey)
+								
+								$style:=Bold:K14:2
+								
+							End if 
+							
+							//______________________________________________________
+					End case 
+				End if 
+				
+				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; $row; $style)
+				LISTBOX SET ROW COLOR:C1270(*; $form.fieldList; $row; $color; lk font color:K53:24)
+				
 			End if 
 		End for each 
 	End if 
@@ -269,52 +305,46 @@ End if
 OBJECT SET ENTERABLE:C238($Ptr_published->; Not:C34(editor_Locked))
 
 // Sort if any
-If ($Obj_context.fieldSortByName)
+If ($context.fieldSortByName)
 	
-	LISTBOX SORT COLUMNS:C916(*; $Obj_form.fieldList; 3; >)
+	LISTBOX SORT COLUMNS:C916(*; $form.fieldList; 3; >)
 	
 End if 
 
 // Restore the selection
-LISTBOX SELECT ROW:C912(*; $Obj_form.fieldList; 0; lk remove from selection:K53:3)
+LISTBOX SELECT ROW:C912(*; $form.fieldList; 0; lk remove from selection:K53:3)
 
-If ($Col_selected.length>0)
+If ($selectedItems.length>0)
 	
-	For each ($t; $Col_selected)
+	For each ($item; $selectedItems)
 		
-		$Lon_row:=Find in array:C230($Ptr_fields->; $t)
+		$row:=Find in array:C230($Ptr_fields->; $item)
 		
-		If ($Lon_row>0)
+		If ($row>0)
 			
-			LISTBOX SELECT ROW:C912(*; $Obj_form.fieldList; $Lon_row; lk add to selection:K53:2)
+			LISTBOX SELECT ROW:C912(*; $form.fieldList; $row; lk add to selection:K53:2)
 			
 		End if 
 	End for each 
 	
-	$Lon_row:=Find in array:C230($Ptr_fields->; String:C10($Obj_context.fieldName))
+	$row:=Find in array:C230($Ptr_fields->; String:C10($context.fieldName))
 	
-	If ($Lon_row>0)
+	If ($row>0)
 		
-		OBJECT SET SCROLL POSITION:C906(*; $Obj_form.fieldList; $Lon_row)
+		OBJECT SET SCROLL POSITION:C906(*; $form.fieldList; $row)
 		
 	Else 
 		
-		OBJECT SET SCROLL POSITION:C906(*; $Obj_form.fieldList)
-		OB REMOVE:C1226($Obj_context; "fieldName")
+		OBJECT SET SCROLL POSITION:C906(*; $form.fieldList)
+		OB REMOVE:C1226($context; "fieldName")
 		
 	End if 
 	
 Else 
 	
-	OBJECT SET SCROLL POSITION:C906(*; $Obj_form.fieldList)
-	OB REMOVE:C1226($Obj_context; "fieldName")
+	OBJECT SET SCROLL POSITION:C906(*; $form.fieldList)
+	OB REMOVE:C1226($context; "fieldName")
 	
 End if 
 
 SET TIMER:C645(-1)
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

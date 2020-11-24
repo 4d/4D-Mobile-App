@@ -149,8 +149,9 @@ Function cleanup
 	End if 
 	
 	//====================================
+	// Save the project
 Function save
-	var $file : 4D:C1709.Document
+	
 	var $folder : 4D:C1709.Folder
 	
 	If (Bool:C1537(FEATURE._8858))  // Debug mode
@@ -161,12 +162,29 @@ Function save
 			
 			$folder.file("project.json").setText(JSON Stringify:C1217(This:C1470; *))
 			
+			If (This:C1470.$dialog#Null:C1517)
+				
+				$folder.file("dialog.json").setText(JSON Stringify:C1217(This:C1470.$dialog; *))
+				
+				var $key : Text
+				For each ($key; This:C1470.$dialog)
+					
+					$folder.file($key+".json").setText(JSON Stringify:C1217(This:C1470.$dialog[$key]; *))
+					
+				End for each 
+				
+			End if 
+			
+			If (This:C1470.$project.$catalog#Null:C1517)
+				
+				$folder.file("catalog.json").setText(JSON Stringify:C1217(This:C1470.$project.$catalog; *))
+				
+			End if 
 		End if 
 	End if 
 	
-	$file:=This:C1470.$project.file
-	$file.create()
-	$file.setText(JSON Stringify:C1217(This:C1470.get(); *))
+	This:C1470.$project.file.create()
+	This:C1470.$project.file.setText(JSON Stringify:C1217(This:C1470.get(); *))
 	
 	//====================================
 Function updateActions
@@ -262,7 +280,7 @@ Function addToMain
 	End if 
 	
 	//====================================
-	// Returns the collections of the fields of a table data model
+	// Returns the collection of the fields of a table data model
 Function fields($table : Variant)->$fields : Collection
 	
 	var $model : Object
@@ -298,6 +316,42 @@ Function fields($table : Variant)->$fields : Collection
 	End if 
 	
 	//====================================
+	// Returns the collection of the storage  fields of a table data model
+Function storageFields($table : Variant)->$fields : Collection
+	
+	var $model : Object
+	
+	If (Count parameters:C259>=1)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($table)=Is object:K8:27)  // Table model
+				
+				$model:=$table
+				
+				//______________________________________________________
+			: (Value type:C1509($table)=Is longint:K8:6)  // Table number
+				
+				$model:=This:C1470.dataModel[String:C10($table)]
+				
+				//______________________________________________________
+			Else   // Table name
+				
+				$model:=This:C1470.dataModel[$table]
+				
+				//______________________________________________________
+		End case 
+		
+		$fields:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
+		
+	Else 
+		
+		// #Error
+		
+	End if 
+	
+	//====================================
 Function isField
 	
 	var $0 : Boolean
@@ -324,6 +378,18 @@ Function isRelationToMany
 	var $0 : Boolean
 	var $1 : Object  // Field
 	$0:=(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities"))
+	
+	//================================================================================
+	// Returns True if the 4D Type is a Numeric type
+Function isNumeric($type : Integer)->$isNumeric : Boolean
+	
+	$isNumeric:=(New collection:C1472(Is integer:K8:5; Is longint:K8:6; Is integer 64 bits:K8:25; Is real:K8:4; _o_Is float:K8:26).indexOf($type)#-1)
+	
+	//================================================================================
+	// Returns True if the 4D Type is a String type
+Function isString($type : Integer)->$isNumeric : Boolean
+	
+	$isNumeric:=(New collection:C1472(Is alpha field:K8:1; Is text:K8:3).indexOf($type)#-1)
 	
 /* ===================================
 Add the table to the data model
@@ -519,11 +585,19 @@ Function isLink
 	
 	var $t : Text
 	
-	For each ($t; OB Keys:C1719($1)) Until ($0)
+	If (True:C214)
 		
-		$0:=Value type:C1509($1[$t])=Is object:K8:27
+		For each ($t; OB Keys:C1719($1)) Until ($0)
+			
+			$0:=Value type:C1509($1[$t])=Is object:K8:27
+			
+		End for each 
 		
-	End for each 
+	Else 
+		
+		$0:=OB Entries:C1720($1).filter("col_formula"; Formula:C1597($1.result:=(Value type:C1509($1.value)=Is object:K8:27))).length>0
+		
+	End if 
 	
 	//================================================================================
 	// Check if a field is still available in the table catalog
@@ -683,6 +757,6 @@ Function updateFormDefinitions
 		End if 
 	End for each 
 	
-	
+	//================================================================================
 Function fieldDefinition
 	

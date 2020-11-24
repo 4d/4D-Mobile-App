@@ -6,301 +6,384 @@
 // ----------------------------------------------------
 // Description:
 // Check the structure for the tables and fields used in the data model by
-// comparing to the last valid version of the catalog.
+// Comparing to the last valid version of the catalog.
 // ----------------------------------------------------
-//
+// 
 // EXECUTION SPACE IS THE FORM EDITOR
-//
+// 
 // ----------------------------------------------------
 // Declarations
-C_COLLECTION:C1488($1)
 
-C_BOOLEAN:C305($Boo__unsynchronized; $Boo_unsynchronizedTable)
-C_TEXT:C284($t; $tt; $Txt_table)
-C_OBJECT:C1216($catalog; $file; $o; $Obj_cache; $Obj_dataModel)
-C_OBJECT:C1216($Obj_project; $Obj_structure; $Obj_tableCurrent; $Obj_tableModel; $oo; $str)
-C_COLLECTION:C1488($cc; $Col_cachedCatalog; $Col_currentCatalog; $Col_unsynchronizedFields; $Col_unsynchronizedTableFields)
+#DECLARE ($currentCatalog : Collection)
 
-If (False:C215)
-	C_COLLECTION:C1488(STRUCTURE_CALLBACK; $1)
-End if 
+var $tableID; $key : Text
+var $isTableUnsynchronized; $isUnsynchronized : Boolean
+var $cache; $current; $dataModel; $item; $file; $field; $relatedField; $structure; $related; $tableCatalog; $tableModel : Object
+var $cachedCatalog; $currentCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTableFields : Collection
+var $str : cs:C1710.str
 
 // ----------------------------------------------------
 // Initialisations
-If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
-	
-	// Required parameters
-	$Col_currentCatalog:=$1  // Current catalog
-	
-	// Default values
-	
-	// Optional parameters
-	// <NONE>
-	
-	// First run
-	$o:=Form:C1466
-	$o:=ob_createPath($o; "structure")
-	
-	$Obj_project:=(UI.pointer("project"))->
-	ASSERT:C1129($Obj_project#Null:C1517)
-	
-	$Obj_project:=ob_createPath($Obj_project; "$dialog")
-	
-	$str:=_o_str()
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+
+PROJECT.$dialog:=nul(PROJECT.$dialog; Is object:K8:27)
+
+$str:=cs:C1710.str.new()
 
 // ----------------------------------------------------
 // Compare to cached catalog (the last valid)
-//$file:=File($Obj_project.$project.root+"catalog.json"; fk platform path)
-
-$file:=$Obj_project.$project.file.parent.file("catalog.json")
+$file:=PROJECT.$project.file.parent.file("catalog.json")
 
 If ($file.exists)
 	
-	$Obj_cache:=JSON Parse:C1218($file.getText())
+	$cache:=JSON Parse:C1218($file.getText())
+	$cachedCatalog:=$cache.structure.definition
 	
-	$Col_cachedCatalog:=$Obj_cache.structure.definition
-	
-	// Has the structure been modified ?
-	If (Not:C34($Col_cachedCatalog.equal($Col_currentCatalog)))\
+	// Was the structure changed?
+	If (Not:C34($cachedCatalog.equal($currentCatalog)))\
 		 | (Bool:C1537(FEATURE._8858))
 		
-		$Col_unsynchronizedTableFields:=New collection:C1472
+		$unsynchronizedTableFields:=New collection:C1472
 		
 		// Verify the compliance of the data model with the current catalog
-		If ($Obj_project.dataModel#Null:C1517)
+		If (PROJECT.dataModel#Null:C1517)
 			
-			$Obj_dataModel:=OB Copy:C1225($Obj_project.dataModel)
+			$dataModel:=OB Copy:C1225(PROJECT.dataModel)
 			
 		End if 
 		
-		If ($Obj_dataModel#Null:C1517)
+		If ($dataModel#Null:C1517)
 			
 			// For each TABLE published
-			For each ($Txt_table; $Obj_dataModel)
+			For each ($tableID; $dataModel)
 				
-				$Obj_tableModel:=$Obj_dataModel[$Txt_table]
+				$tableModel:=$dataModel[$tableID]
 				
 				// Reset unsynchronized table flag
-				CLEAR VARIABLE:C89($Boo_unsynchronizedTable)
+				CLEAR VARIABLE:C89($isTableUnsynchronized)
 				
 				// Create unsynchronized fields collection
-				$Col_unsynchronizedFields:=New collection:C1472
+				$unsynchronizedFields:=New collection:C1472
 				
-				$Obj_tableCurrent:=$Col_currentCatalog.query("tableNumber = :1"; Num:C11($Txt_table)).pop()
+				$tableCatalog:=$currentCatalog.query("tableNumber = :1"; Num:C11($tableID)).pop()
 				
-				If ($Obj_tableCurrent=Null:C1517)
+				If ($tableCatalog=Null:C1517)
 					
 					// THE TABLE IS NO LONGER AVAILABLE
-					$Boo_unsynchronizedTable:=True:C214
+					$isTableUnsynchronized:=True:C214
 					
 				Else 
 					
 					// Check TABLE NAME & PRIMARY KEY
-					$Boo_unsynchronizedTable:=($Obj_tableCurrent.name#$Obj_tableModel[""].name)\
-						 | (String:C10($Obj_tableCurrent.primaryKey)#$Obj_tableModel[""].primaryKey)
+					$isTableUnsynchronized:=($tableCatalog.name#$tableModel[""].name)\
+						 | (String:C10($tableCatalog.primaryKey)#$tableModel[""].primaryKey)
 					
-					If (Not:C34($Boo_unsynchronizedTable))
+					If (Not:C34($isTableUnsynchronized))
 						
-						For each ($t; $Obj_tableModel)
+						For each ($item; PROJECT.fields($tableModel))
 							
-							If (Length:C16($t)>0)
-								
-								If (PROJECT.isField($t))
+							Case of 
 									
-									$o:=$Obj_tableModel[$t]
-									$o.fieldNumber:=Num:C11($t)
-									$o.current:=$Obj_tableCurrent.field.query("fieldNumber = :1"; Num:C11($t)).pop()
-									$o.missing:=$o.current=Null:C1517
-									$o.nameMismatch:=$o.name#String:C10($o.current.name)
+									//______________________________________________________
+								: (PROJECT.isField($item.key))
 									
-									If (Not:C34($o.missing))
+									$field:=$tableModel[$item.key]
+									$field.current:=$tableCatalog.field.query("fieldNumber = :1"; Num:C11($item.key)).pop()
+									$field.fieldNumber:=Num:C11($item.key)
+									$field.missing:=$field.current=Null:C1517
+									$field.nameMismatch:=$field.name#String:C10($field.current.name)
+									
+									If (Not:C34($field.missing))
 										
-										If (Value type:C1509($o.type)=Is text:K8:3)
+										If (Value type:C1509($field.type)=Is text:K8:3)
 											
 											// Compare to value Type
-											$o.typeMismatch:=$o.type#$o.current.valueType
+											$field.typeMismatch:=$field.type#$field.current.valueType
 											
 										Else 
 											
-											$o.typeMismatch:=$o.fieldType#$o.current.fieldType
+											$field.typeMismatch:=$field.fieldType#$field.current.fieldType
 											
 										End if 
 									End if 
 									
-									If ($o.missing | $o.nameMismatch | Bool:C1537($o.typeMismatch))
+									If ($field.missing | $field.nameMismatch | Bool:C1537($field.typeMismatch))
 										
 										// THE FIELD IS NO LONGER AVAILABLE
 										// OR THE NAME/TYPE HAS BEEN CHANGED
 										
-										$Boo_unsynchronizedTable:=True:C214
+										$isTableUnsynchronized:=True:C214
+										
+										// #WIP better tips
+										Case of 
+												
+												//______________________________________________________
+											: ($field.missing)
+												
+												$field.tableTips:=$str.setText("theFieldNameIsMissing").localized($field.name)
+												$field.fieldTips:=$str.setText("theFieldIsMissing").localized()
+												
+												//______________________________________________________
+											: ($field.nameMismatch)
+												
+												$field.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($field.name; $field.current.name))
+												$field.fieldTips:=$str.setText("theFieldWasRenamed").localized($field.current.name)
+												
+												//______________________________________________________
+											: (Bool:C1537($field.typeMismatch))
+												
+												$field.tableTips:=$str.setText("theFieldTypeWasModified").localized()
+												$field.fieldTips:=$str.setText("theFieldTypeWasModified").localized()
+												
+												//______________________________________________________
+										End case 
 										
 										// Append faulty field
-										$Col_unsynchronizedFields.push($o)
+										$unsynchronizedFields.push($field)
 										
 									End if 
 									
-								Else 
+									//______________________________________________________
+								: (PROJECT.isRelationToOne($item.value))  // N -> 1 relation
 									
-									If (Value type:C1509($Obj_tableModel[$t])=Is object:K8:27)
+									$field:=$tableModel[$item.key]
+									$current:=$tableCatalog.field.query("name = :1"; $item.key).pop()
+									$field.missing:=$current=Null:C1517
+									
+									If ($field.missing)
 										
-										// RELATION
+										// Check the related dataclass availability
+										$field.missingRelatedDataclass:=$currentCatalog.query("tableNumber = :1"; Num:C11($field.relatedTableNumber)).pop()=Null:C1517
 										
-										$o:=$Obj_tableModel[$t]
-										$o.current:=$Obj_tableCurrent.field.query("name = :1"; $t).pop()
+									Else 
+										
+										// Diacritical equality of the name
+										$field.nameMismatch:=Not:C34($str.setText($item.key).equal($current.name))
+										
+									End if 
+									
+									If ($field.missing | Bool:C1537($field.nameMismatch))
+										
+										// THE RELATION IS NO LONGER AVAILABLE
+										// OR THE NAME HAS BEEN CHANGED
+										
+										$isTableUnsynchronized:=True:C214
+										
+										// Append faulty relation
+										If ($unsynchronizedFields.query("name= :1"; $item.key).length=0)
+											
+											$field.name:=$item.key
+											$unsynchronizedFields.push($field)
+											
+										End if 
+										
+									Else 
+										
+										// Check related table catalog
+										$relatedCatalog:=$currentCatalog.query("tableNumber = :1"; $field.relatedTableNumber).pop().field
+										
+										// Check related data class catalog
+										For each ($key; $field)
+											
+											Case of 
+													
+													//______________________________________________________
+												: (PROJECT.isField($key))
+													
+													$relatedField:=$field[$key]
+													$relatedField.current:=$relatedCatalog.query("fieldNumber = :1"; Num:C11($key)).pop()
+													$relatedField.missing:=$relatedField.current=Null:C1517
+													$relatedField.nameMismatch:=$relatedField.name#String:C10($relatedField.current.name)
+													$relatedField.typeMismatch:=$relatedField.type#Num:C11($relatedField.current.type)
+													
+													If ($relatedField.missing | $relatedField.nameMismatch | $relatedField.typeMismatch)
+														
+														// TRUE IF THE RELATED FIELD IS NO LONGER AVAILABLE
+														// OR IF THE NAME (non diacritical) OR TYPE HAS BEEN CHANGED
+														
+														Case of 
+																
+																//______________________________________________________
+															: ($relatedField.missing)
+																
+																$relatedField.tableTips:=$str.setText("theFieldNameIsMissing").localized($relatedField.name)
+																$relatedField.fieldTips:=$relatedField.tableTips
+																
+																//______________________________________________________
+															: ($relatedField.nameMismatch)
+																
+																$relatedField.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($relatedField.name; $relatedField.current.name))
+																$relatedField.fieldTips:=$relatedField.tableTips
+																
+																//______________________________________________________
+															: (Bool:C1537($relatedField.typeMismatch))
+																
+																$relatedField.tableTips:=$str.setText("theFieldTypeWasModified").localized()
+																$relatedField.fieldTips:=$relatedField.tableTips
+																
+																//______________________________________________________
+														End case 
+														
+														$isTableUnsynchronized:=True:C214
+														$field.unsynchronizedFields:=nul($field.unsynchronizedFields; Is collection:K8:32).push($relatedField)
+														
+														If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
+															
+															$relatedField.name:=$item.key
+															$unsynchronizedFields.push($relatedField)
+															
+														End if 
+													End if 
+													
+													//______________________________________________________
+												: (PROJECT.isRelationToOne($field[$key]))  // N -> 1 relation
+													
+													For each ($related; PROJECT.storageFields($field[$key]))
+														
+														$relatedField:=$related.value
+														$relatedField.current:=$relatedCatalog.query("fieldNumber = :1"; Num:C11($related.key)).pop()
+														$relatedField.missing:=$relatedField.current=Null:C1517
+														$relatedField.nameMismatch:=$relatedField.name#String:C10($relatedField.current.name)
+														$relatedField.typeMismatch:=$relatedField.type#Num:C11($relatedField.current.type)
+														
+														If ($relatedField.missing | $relatedField.nameMismatch | $relatedField.typeMismatch)
+															
+															// TRUE IF THE RELATED FIELD IS NO LONGER AVAILABLE
+															// OR IF THE NAME (non diacritical) OR TYPE HAS BEEN CHANGED
+															
+															Case of 
+																	
+																	//______________________________________________________
+																: ($relatedField.missing)
+																	
+																	$relatedField.tableTips:=$str.setText("theFieldNameIsMissing").localized($relatedField.name)
+																	$relatedField.fieldTips:=$relatedField.tableTips
+																	
+																	//______________________________________________________
+																: ($relatedField.nameMismatch)
+																	
+																	$relatedField.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($relatedField.name; $relatedField.current.name))
+																	$relatedField.fieldTips:=$relatedField.tableTips
+																	
+																	//______________________________________________________
+																: (Bool:C1537($relatedField.typeMismatch))
+																	
+																	$relatedField.tableTips:=$str.setText("theFieldTypeWasModified").localized()
+																	$relatedField.fieldTips:=$relatedField.tableTips
+																	
+																	//______________________________________________________
+															End case 
+															
+															$isTableUnsynchronized:=True:C214
+															$relatedField.name:=$item.key
+															$field.unsynchronizedFields:=nul($field.unsynchronizedFields; Is collection:K8:32).push($relatedField)
+															
+															// Append faulty relation
+															If ($unsynchronizedFields.query("tableTips= :1"; $relatedField.tableTips).length=0)
+																
+																$unsynchronizedFields.push($relatedField)
+																
+															End if 
+														End if 
+													End for each 
+													
+													//______________________________________________________
+												: (PROJECT.isRelationToMany($field[$key]))  // 1 -> N relation
+													
+													// NOT YET MANAGED
+													
+													//______________________________________________________
+												Else 
+													
+													ASSERT:C1129(False:C215; "😰 I wonder why I'm here")
+													
+													//______________________________________________________
+											End case 
+										End for each 
+									End if 
+									
+									$field.current:=$current
+									
+									//______________________________________________________
+								: (PROJECT.isRelationToMany($item.value))  // 1 -> N relation
+									
+									$field:=$tableModel[$item.key]
+									$field.current:=$tableCatalog.field.query("name = :1"; $item.key).pop()
+									$field.missing:=$field.current=Null:C1517
+									
+									If ($field.missing)
+										
+										// Check the related dataclass availability
+										$field.missingRelatedDataclass:=$currentCatalog.query("tableNumber = :1"; Num:C11($field.relatedTableNumber)).pop()=Null:C1517
+										
+									Else 
+										
+										// Diacritical equality of the name
+										$field.nameMismatch:=Not:C34($str.setText($item.key).equal($field.current.name))
+										
+									End if 
+									
+									If ($field.missing | Bool:C1537($field.nameMismatch))
+										
+										// THE RELATION IS NO LONGER AVAILABLE
+										// OR IF THE NAME HAS BEEN CHANGED
 										
 										Case of 
 												
-												//________________________________________
-											: (PROJECT.isRelationToOne($o))  // N -> 1 relation
+												//______________________________________________________
+											: (Bool:C1537($field.missingRelatedDataclass))
 												
-												$o.missing:=$o.current=Null:C1517
+												$field.tableTips:=$str.setText("theRelatedTableIsNoLongerAvailable").localized($field.relatedEntities)
+												$field.fieldTips:=$field.tableTips
 												
-												If ($o.missing)
-													
-													// Check the related dataclass availability
-													$o.missingRelatedDataclass:=$Col_currentCatalog.query("tableNumber = :1"; Num:C11($o.relatedTableNumber)).pop()=Null:C1517
-													
-												Else 
-													
-													// Diacritical equality of the name
-													$o.nameMismatch:=Not:C34($str.setText($t).equal($o.current.name))
-													
-												End if 
+												//______________________________________________________
+											: ($field.missing)
 												
-												If ($o.missing | Bool:C1537($o.nameMismatch))
-													
-													// THE RELATION IS NO LONGER AVAILABLE
-													// OR THE NAME HAS BEEN CHANGED
-													
-													$Boo_unsynchronizedTable:=True:C214
-													
-													// Append faulty relation
-													If ($Col_unsynchronizedFields.query("name= :1"; $t).length=0)
-														
-														$o.name:=$t
-														
-														$Col_unsynchronizedFields.push($o)
-														
-													End if 
-													
-												Else 
-													
-													// Check related table catalog
-													$cc:=$Col_currentCatalog.query("tableNumber = :1"; $o.relatedTableNumber).pop().field
-													
-													// Check related data class catalog
-													For each ($tt; $o)
-														
-														If (PROJECT.isField($tt))
-															
-															$oo:=$o[$tt]
-															$oo.current:=$cc.query("fieldNumber = :1"; Num:C11($tt)).pop()
-															$oo.missing:=$oo.current=Null:C1517
-															$oo.nameMismatch:=$oo.name#String:C10($oo.current.name)
-															$oo.typeMismatch:=$oo.type#Num:C11($oo.current.type)
-															
-															If ($oo.missing | $oo.nameMismatch | $oo.typeMismatch)
-																
-																// TRUE IF THE RELATED FIELD IS NO LONGER AVAILABLE
-																// OR IF THE NAME (non diacritical) OR TYPE HAS BEEN CHANGED
-																
-																$Boo_unsynchronizedTable:=True:C214
-																
-																If ($o.unsynchronizedFields=Null:C1517)
-																	
-																	$o.unsynchronizedFields:=New collection:C1472($oo)
-																	
-																Else 
-																	
-																	$o.unsynchronizedFields.push($oo)
-																	
-																End if 
-																
-																If ($Col_unsynchronizedFields.query("name= :1"; $t).length=0)
-																	
-																	$o.name:=$t
-																	
-																	$Col_unsynchronizedFields.push($o)
-																	
-																End if 
-															End if 
-															
-														Else 
-															
-															// NOT YET MANAGED
-															
-														End if 
-													End for each 
-												End if 
+												$field.tableTips:=$str.setText("theFieldNameIsMissing").localized($item.key)
+												$field.fieldTips:=$field.tableTips
 												
-												//________________________________________
-											: (PROJECT.isRelationToMany($o))  // 1 -> N relation
+												//______________________________________________________
+											: ($field.nameMismatch)
 												
-												$o.current:=$Obj_tableCurrent.field.query("name = :1"; $t).pop()
+												$field.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($field.name; $field.current.name))
+												$field.fieldTips:=$field.tableTips
 												
-												$o.missing:=$o.current=Null:C1517
-												
-												If ($o.missing)
-													
-													// Check the related dataclass availability
-													$o.missingRelatedDataclass:=$Col_currentCatalog.query("tableNumber = :1"; Num:C11($o.relatedTableNumber)).pop()=Null:C1517
-													
-												Else 
-													
-													// Diacritical equality of the name
-													$o.nameMismatch:=Not:C34($str.setText($t).equal($o.current.name))
-													
-												End if 
-												
-												If ($o.missing | Bool:C1537($o.nameMismatch))
-													
-													// THE RELATION IS NO LONGER AVAILABLE
-													// OR IF THE NAME HAS BEEN CHANGED
-													
-													$Boo_unsynchronizedTable:=True:C214
-													
-													// Append faulty relation
-													If ($Col_unsynchronizedFields.query("name= :1"; $t).length=0)
-														
-														$o.name:=$t
-														
-														$Col_unsynchronizedFields.push($o)
-														
-													End if 
-												End if 
-												
-												//________________________________________
+												//______________________________________________________
 										End case 
+										
+										$isTableUnsynchronized:=True:C214
+										
+										// Append faulty relation
+										If ($unsynchronizedFields.query("name= :1"; $item.key).length=0)
+											
+											$field.name:=$item.key
+											$unsynchronizedFields.push($field)
+											
+										End if 
 									End if 
-								End if 
-								
-							Else 
-								
-								// TABLE PROPERTIES
-								
-							End if 
+									
+									//______________________________________________________
+								Else 
+									
+									ASSERT:C1129(False:C215; "😰 I wonder why I'm here")
+									
+									//______________________________________________________
+							End case 
 						End for each 
 					End if 
 				End if 
 				
-				If ($Boo_unsynchronizedTable)
+				If ($isTableUnsynchronized)
 					
-					$Boo__unsynchronized:=True:C214
+					$isUnsynchronized:=True:C214
 					
 					// THE FIELD COLLECTION IS EMPTY IF THE TABLE IS MISSING
-					$Col_unsynchronizedTableFields[Num:C11($Txt_table)]:=$Col_unsynchronizedFields
+					$unsynchronizedTableFields[Num:C11($tableID)]:=$unsynchronizedFields
 					
 				End if 
 			End for each 
 		End if 
 		
-		If ($Boo__unsynchronized)
+		If ($isUnsynchronized)
 			
 			// Display alert only one time
 			If (Not:C34(editor_Locked))
@@ -321,85 +404,64 @@ If ($file.exists)
 		Else 
 			
 			// Keep the current catalog
-			Form:C1466.$catalog:=$Col_currentCatalog
+			Form:C1466.$catalog:=$currentCatalog
 			
 			// The changes has no influence on the data model -> Update the cache
-			$Obj_structure:=Choose:C955($Obj_cache.structure=Null:C1517; New object:C1471; $Obj_cache.structure)
-			
-			$Obj_structure.definition:=$Col_currentCatalog
-			$Obj_structure.digest:=Generate digest:C1147(JSON Stringify:C1217($Col_currentCatalog); SHA1 digest:K66:2)
-			
-			$Obj_cache.structure:=$Obj_structure
-			$file.setText(JSON Stringify:C1217($Obj_cache; *))
+			$structure:=Choose:C955($cache.structure=Null:C1517; New object:C1471; $cache.structure)
+			$structure.definition:=$currentCatalog
+			$structure.digest:=Generate digest:C1147(JSON Stringify:C1217($currentCatalog); SHA1 digest:K66:2)
+			$cache.structure:=$structure
+			$file.setText(JSON Stringify:C1217($cache; *))
 			
 		End if 
 		
 		// Keep state
-		$Obj_project.$dialog.unsynchronizedTableFields:=$Col_unsynchronizedTableFields
+		PROJECT.$dialog.unsynchronizedTableFields:=$unsynchronizedTableFields
 		
 	Else 
 		
 		// Reset
-		$Obj_project.$dialog.unsynchronizedTableFields:=New collection:C1472
+		PROJECT.$dialog.unsynchronizedTableFields:=New collection:C1472
 		
 	End if 
 	
 Else 
 	
 	// Create the cache
-	If ($Col_currentCatalog#Null:C1517)
+	If ($currentCatalog#Null:C1517)
 		
-		$Obj_cache:=New object:C1471(\
+		$cache:=New object:C1471(\
 			"structure"; New object:C1471(\
-			"definition"; $Col_currentCatalog; \
-			"digest"; Generate digest:C1147(JSON Stringify:C1217($Col_currentCatalog); SHA1 digest:K66:2)\
-			))
+			"definition"; $currentCatalog; \
+			"digest"; Generate digest:C1147(JSON Stringify:C1217($currentCatalog); SHA1 digest:K66:2)))
 		
-		$file.setText(JSON Stringify:C1217($Obj_cache; *))
+		$file.setText(JSON Stringify:C1217($cache; *))
 		
 	End if 
 End if 
 
-If (Not:C34($Boo__unsynchronized))\
+If (Not:C34($isUnsynchronized))\
  | (Form:C1466.$catalog=Null:C1517)
 	
 	// Keep the current catalog
-	Form:C1466.$catalog:=$Col_currentCatalog
+	Form:C1466.$catalog:=$currentCatalog
 	
 End if 
 
 // Store the status
-Form:C1466.structure.unsynchronized:=$Boo__unsynchronized
+Form:C1466.structure:=nul(Form:C1466.structure; Is object:K8:27)
+Form:C1466.structure.unsynchronized:=$isUnsynchronized
 
-If (Form:C1466.status=Null:C1517)
-	
-	Form:C1466.status:=New object:C1471(\
-		"dataModel"; Not:C34($Boo__unsynchronized))
-	
-Else 
-	
-	Form:C1466.status.dataModel:=Not:C34($Boo__unsynchronized)
-	
-End if 
+Form:C1466.status:=nul(Form:C1466.status; Is object:K8:27)
+Form:C1466.status.dataModel:=Not:C34($isUnsynchronized)
 
 CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
-"show"; $Boo__unsynchronized))
-
-//If (False)  // SEMBLE NE PAS ETRE COHERENT
-//  //#106068 - [BUG] Delete table when published
-//Form.$catalog:=$Col_currentCatalog
-// End if
+"show"; $isUnsynchronized))
 
 // Refresh UI
 STRUCTURE_Handler(New object:C1471(\
 "action"; "update"; \
-"project"; $Obj_project))
+"project"; PROJECT))
 
 // Save project
-CALL FORM:C1391(Current form window:C827; "_o_project_SAVE")
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End
+PROJECT.save()

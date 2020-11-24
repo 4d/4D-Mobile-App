@@ -427,10 +427,12 @@ Function relatedCatalog
 									
 									$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($o.relatedDataClass); $relatedField.name)
 									
-									$related.path:=$o.name+"."+$related.name
-									
-									$0.fields.push($related)
-									
+									If ($related#Null:C1517)
+										
+										$related.path:=$o.name+"."+$related.name
+										$0.fields.push($related)
+										
+									End if 
 								End if 
 							End for each 
 						End if 
@@ -653,3 +655,9 @@ Function __fielddType  // #TEMPORARY REMAPPING FOR THE FIELD TYPE
 	$c[5]:=10  // ACI0100285
 	
 	$0:=$c[$1]
+	
+Function check
+	
+	//#WIP
+	
+	

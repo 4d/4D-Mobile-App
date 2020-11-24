@@ -47,7 +47,7 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		//#99788 ========================================================
 		//EXECUTE METHOD IN SUBFORM("project"; "views_Handler"; *; New object(\
-												"action"; "updateForms"))
+															"action"; "updateForms"))
 		
 		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
@@ -64,7 +64,7 @@ If (Asserted:C1132($project#Null:C1517))
 				
 				// Check if the project was modified by another application
 				// Compare to the signature of the sources folder
-				$file:=DATABASE.homeFolder.folder("Library/Caches/com.4d.mobile/").file($project.$project.file.parent.fullName)
+				$file:=DATABASE.home.folder("Library/Caches/com.4d.mobile/").file($project.$project.file.parent.fullName)
 				
 				If ($file.exists)
 					

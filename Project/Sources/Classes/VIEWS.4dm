@@ -177,8 +177,6 @@ Function fieldList($table : Variant)->$result : Object
 						
 						If (FEATURE.with("moreRelations"))
 							
-							//If (Form.dataModel[String($tableModel[$key].relatedTableNumber)]#Null)
-							
 							$field:=New object:C1471(\
 								"name"; $key; \
 								"path"; $key; \
@@ -186,7 +184,7 @@ Function fieldList($table : Variant)->$result : Object
 								"relatedDataClass"; $tableModel[$key].relatedDataclass; \
 								"inverseName"; $tableModel[$key].inverseName; \
 								"label"; $tableModel[$key].label; \
-								"shortLabel"; $tableModel[$key].$t.shortLabel; \
+								"shortLabel"; $tableModel[$key].shortLabel; \
 								"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
 								"$added"; True:C214)
 							
@@ -201,7 +199,6 @@ Function fieldList($table : Variant)->$result : Object
 							
 							$result.fields.push($field)
 							
-							//End if 
 						End if 
 						
 						For each ($attribute; $tableModel[$key])
@@ -309,7 +306,7 @@ Function fieldList($table : Variant)->$result : Object
 									"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
 									"inverseName"; $tableModel[$key].inverseName; \
 									"label"; PROJECT.label($tableModel[$key].label); \
-									"shortLabel"; PROJECT.label($tableModel[$key].$t.shortLabel); \
+									"shortLabel"; PROJECT.label($tableModel[$key].shortLabel); \
 									"isToMany"; True:C214)
 								
 								// #TEMPO [
