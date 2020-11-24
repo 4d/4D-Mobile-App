@@ -29,34 +29,13 @@
 	},
 	"_[DEV]": {
 		"groups": [
-			"devMenu"
-		],
-		"tables": [
-			"__DeletedRecords",
-			"ALL_TYPES",
-			"Commands",
-			"Employes",
-			"NAME WITH SPACE",
-			"NO FIELDS",
-			"NOT EXPOSED",
-			"Only primary key",
-			"Service",
-			"Table_1",
-			"Table_2",
-			"Table_3",
-			"Themes",
-			"とてもとても長いフィールド"
+			"devData",
+			"devMenu",
+			"devTable"
 		],
 		"methods": [
 			"_catalog",
 			"01_LASTBUILD",
-			"c_formula",
-			"dev_test_data",
-			"importData",
-			"importRelationRandomly",
-			"populateCommands",
-			"removeAllEntities",
-			"removeRelations",
 			"test_codeRewriting"
 		],
 		"forms": [
@@ -72,9 +51,6 @@
 			"ITUNE",
 			"LAUNCHSCREEN",
 			"NO_PUBLISHED_TABLES"
-		],
-		"classes": [
-			"DevTestData"
 		]
 	},
 	"_o_OBSOLETES": {
@@ -516,6 +492,21 @@
 			"dev_Matrix"
 		]
 	},
+	"devData": {
+		"methods": [
+			"dev_test_data",
+			"getAppiOSSDK",
+			"importData",
+			"importRelationRandomly",
+			"injectComponentToCurrentApp",
+			"populateCommands",
+			"removeAllEntities",
+			"removeRelations"
+		],
+		"classes": [
+			"DevTestData"
+		]
+	},
 	"devMenu": {
 		"methods": [
 			"dev_Menu",
@@ -525,6 +516,25 @@
 			"menu_product",
 			"menu_window",
 			"win_CLOSE"
+		]
+	},
+	"devTable": {
+		"tables": [
+			"__DeletedRecords",
+			"ALL_TYPES",
+			"Commands",
+			"Employes",
+			"NAME WITH SPACE",
+			"NO FIELDS",
+			"NOT EXPOSED",
+			"Only primary key",
+			"race",
+			"Service",
+			"Table_1",
+			"Table_2",
+			"Table_3",
+			"Themes",
+			"とてもとても長いフィールド"
 		]
 	},
 	"doc": {
@@ -588,7 +598,6 @@
 			"button",
 			"group",
 			"input",
-			"listbox",
 			"picture",
 			"scrollable",
 			"static",

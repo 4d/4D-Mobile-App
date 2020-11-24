@@ -1,1 +1,0 @@
-<!----------------------------------------------------c_formula ( Param_1 ; Param_2 ; Param_3 ; … ; N ) -> Param_1 (Object) -> Param_2 (Object) -> Param_3 ; … ; N (Variant)-->c_formula ( Param_1 ; Param_2 )
