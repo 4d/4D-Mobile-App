@@ -8,10 +8,6 @@ C_VARIANT:C1683(nul; $0)
 C_VARIANT:C1683(nul; $1)
 C_LONGINT:C283(nul; $2)
 
-C_OBJECT:C1216(c_formula; $1)
-C_OBJECT:C1216(c_formula; $2)
-C_VARIANT:C1683(c_formula; ${3})
-
 C_OBJECT:C1216(instantiate; $0)
 C_TEXT:C284(instantiate; $1)
 
