@@ -484,7 +484,8 @@ Function _shortcut($string : Text)->$variable : Text
 			$variable:="_4D_OPTION_CURRENT_DIRECTORY"
 			
 			//…………………………………………………………………………………………
-		: ($string="asynchronous") | ($string="non-blocking")
+		: ($string="asynchronous")\
+			 | ($string="non-blocking")
 			
 			$variable:="_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"
 			

@@ -76,6 +76,9 @@ Function load
 		
 	End if 
 	
+	var $0 : cs:C1710.project
+	$0:=This:C1470
+	
 	//====================================
 Function get
 	var $0 : Object
@@ -280,6 +283,13 @@ Function addToMain
 	End if 
 	
 	//====================================
+	// Returns the collection of the tables of the data model
+Function tables($datamodel : Object)->$tables : Collection
+	
+	$tables:=OB Entries:C1720(Choose:C955(Count parameters:C259>=1; $datamodel; This:C1470.dataModel))
+	$tables:=$tables.filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
+	
+	//====================================
 	// Returns the collection of the fields of a table data model
 Function fields($table : Variant)->$fields : Collection
 	
@@ -307,7 +317,8 @@ Function fields($table : Variant)->$fields : Collection
 				//______________________________________________________
 		End case 
 		
-		$fields:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=(Length:C16($1.value.key)#0)))
+		//key # "" et object
+		$fields:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=(Length:C16($1.value.key)#0) & (Value type:C1509($1.value.value)=Is object:K8:27)))
 		
 	Else 
 		
@@ -370,14 +381,14 @@ Function isRelationToOne
 	
 	var $0 : Boolean
 	var $1 : Object
-	$0:=($1.relatedDataClass#Null:C1517)
+	$0:=($1.relatedDataClass#Null:C1517) & (Not:C34(Bool:C1537($1.isToMany)))
 	
 	//====================================
 Function isRelationToMany
 	
 	var $0 : Boolean
 	var $1 : Object  // Field
-	$0:=(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities"))
+	$0:=(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities")) | (Bool:C1537($1.isToMany))
 	
 	//================================================================================
 	// Returns True if the 4D Type is a Numeric type

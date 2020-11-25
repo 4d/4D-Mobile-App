@@ -272,7 +272,8 @@ If ($row>0)
 							
 							If ($field.relatedTableNumber#$table.tableNumber)  // Not for a recursive relation
 								
-								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
+								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
+									 & (Form:C1466.dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
 									
 									$color:=UI.errorColor
 									

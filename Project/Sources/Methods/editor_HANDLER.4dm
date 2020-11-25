@@ -71,16 +71,14 @@ Case of
 				(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog.EDITOR.ribbon
 				
 				// Load the project
-				PROJECT:=cs:C1710.project.new()
-				PROJECT.load(Form:C1466.file)
-				
+				PROJECT:=cs:C1710.project.new().load(Form:C1466.file)
 				PROJECT.$project:=Form:C1466
 				
 				// Set the dialog title
 				SET WINDOW TITLE:C213(Get localized string:C991("4dProductName")+": "+Form:C1466.file.parent.fullName; $form.window)
 				
 				// Touch the project subform
-				(OBJECT Get pointer:C1124(Object named:K67:5; $form.project))->:=PROJECT
+				OBJECT SET VALUE:C1742($form.project; PROJECT)
 				
 				// Display the greeting message if any [
 				If (Bool:C1537(editor_Preferences.doNotShowGreetingMessage))

@@ -15,9 +15,8 @@ If (False:C215)
 End if 
 
 var $tips : Text
-var $l : Integer
-var $dataModel; $e; $field; $o; $str; $table : Object
-var $c; $catalog; $unsynchronizedTableFields : Collection
+var $e; $field; $o; $str; $table : Object
+var $unsynchronizedTableFields : Collection
 
 // ----------------------------------------------------
 // Initialisations
@@ -27,10 +26,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	ASSERT:C1129($1.form#Null:C1517)  //On pourra s'en passer quand le dialogue sera géré avec une class
 	
 	$e:=FORM Event:C1606
-	
 	$str:=cs:C1710.str.new()  // init class
-	
-	$catalog:=This:C1470.catalog()
 	
 	//ASSERT(Not(Shift down))
 	
@@ -46,19 +42,17 @@ If (Num:C11($e.row)>0)
 	If ($e.objectName=$1.form.tableList)
 		
 		//%W-533.3
-		$c:=$catalog.query("name=:1"; (OBJECT Get pointer:C1124(Object named:K67:5; "tables"))->{$e.row})
+		$table:=This:C1470.catalog().query("name=:1"; (OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName))->{$e.row}).pop()
 		//%W+533.3
 		
 	Else 
 		
 		// Get current table
-		$c:=$catalog.query("name=:1"; $1.form.form.currentTable.name)
+		$table:=This:C1470.catalog().query("name=:1"; $1.form.form.currentTable.name).pop()
 		
 	End if 
 	
-	If ($c.length>0)
-		
-		$table:=$c[0]
+	If ($table#Null:C1517)
 		
 		$unsynchronizedTableFields:=Form:C1466.$dialog.unsynchronizedTableFields
 		
@@ -86,98 +80,24 @@ If (Num:C11($e.row)>0)
 							
 							If ($unsynchronizedTableFields.length=1)
 								
-								//$o:=$unsynchronizedTableFields[0]
-								//If ($o.fields#Null)
-								//Case of
-								////_______________________________________
-								//: ($o.fields.length=0)
-								//$tips:=UI.alert+$str.setText("theRelationIsNoLongerAvailable").localized($o.name)
-								////_______________________________________
-								//: ($o.fields.length=1)
-								//$tips:=UI.alert+$str.setText("theRelatedFieldIsMissingOrHasBeenModified").localized($o.fields[0].name)
-								////_______________________________________
-								//Else
-								//$tips:=UI.alert+$str.setText("theRelatedFieldsAreMissingOrWasModified").localized($o.fields.extract("name").join("\", \""))
-								////_______________________________________
-								//End case
-								//Else
-								//Case of
-								////______________________________________________________
-								//: ($o.relatedEntities#Null)
-								//$tips:=UI.alert+$str.setText("theRelationIsNoLongerAvailable").localized($o.name)
-								////______________________________________________________
-								//: ($o.relatedTableNumber#Null)
-								//$tips:=UI.alert+$str.setText("theN1RelationIsNoMoreAvailable").localized($o.name)
-								////______________________________________________________
-								//Else
-								//$tips:=UI.alert+$str.setText("theFieldIsMissingOrWasModified").localized($o.name)
-								////______________________________________________________
-								//End case
-								//End if
-								
-								//#WIP better tips
 								$tips:=UI.alert+" - "+$unsynchronizedTableFields.extract("tableTips").distinct().join("\r       - ")
 								
 							Else 
 								
-								$tips:=UI.alert+" "+$str.setText("someFieldsOrRelationsAreNoLongerAvailableOrWasModified").localized($unsynchronizedTableFields.extract("name").join("\", \""))
+								$tips:=UI.alert+" "+$str.setText("someFieldsOrRelationsAreNoLongerAvailableOrWasModified").localized($unsynchronizedTableFields.extract("name").distinct().join("\", \""))
 								$tips:=$tips+"\r       - "+$unsynchronizedTableFields.extract("tableTips").distinct().join("\r       - ")
 								
 							End if 
 							
-							//$tips:=" - "+$unsynchronizedTableFields.extract("tableTips").distinct().join("\r - ")
-							
 							//______________________________________________________
 						: ($e.objectName=$1.form.fieldList) & ($e.row<=Size of array:C274((UI.pointer($1.form.fields))->))  // FIELD LIST
-							
-							//$o:=$unsynchronizedTableFields.query("name = :1"; (UI.pointer($1.form.fields))->{$Lon_row}).pop()
-							//Case of
-							////………………………………………………………………………………………………………………
-							//: ($o.relatedEntities#Null)  // 1 -> N relation
-							//If ($o.missing)
-							//If ($o.missingRelatedDataclass)
-							//$Txt_tips:=UI.alert+$str.setText("theRelatedTableIsNoLongerAvailable").localized($o.relatedEntities)
-							//Else
-							//$Txt_tips:=UI.alert+$str.setText("the1NRelationIsNoMoreAvailable").localized($o.name)
-							//End if
-							//End if
-							////………………………………………………………………………………………………………………
-							//: ($o.relatedDataClass#Null)  // N -> 1 relation
-							//If ($o.missing)
-							//If ($o.missingRelatedDataclass)
-							//$Txt_tips:=UI.alert+$str.setText("theRelatedTableIsNoLongerAvailable").localized($o.relatedDataClass)
-							//Else
-							//$Txt_tips:=UI.alert+$str.setText("theN1RelationIsNoMoreAvailable").localized($o.name)
-							//End if
-							//Else
-							//// Missing fields
-							//If ($o.unsynchronizedFields.length=1)
-							//$Txt_tips:=UI.alert+$str.setText("theRelatedFieldIsMissingOrHasBeenModified").localized($o.unsynchronizedFields[0].name)
-							//Else
-							//$Txt_tips:=UI.alert+$str.setText("theRelatedFieldsAreMissingOrWasModified").localized($o.unsynchronizedFields.extract("name").join("\", \""))
-							//End if
-							//End if
-							////………………………………………………………………………………………………………………
-							//: (Bool($o.missing))
-							//$Txt_tips:=UI.alert+$str.setText("theFieldIsMissing").localized()
-							////………………………………………………………………………………………………………………
-							//: (Bool($o.nameMismatch))
-							//$Txt_tips:=UI.alert+$str.setText("theFieldWasRenamed").localized($o.current.name)
-							////………………………………………………………………………………………………………………
-							//: (Bool($o.typeMismatch))
-							//$Txt_tips:=UI.alert+$str.setText("theFieldTypeWasModified").localized()
-							////………………………………………………………………………………………………………………
-							//Else
-							//$Txt_tips:=UI.alert+$str.setText("theFieldIsMissingOrWasModified").localized($o.name)
-							////………………………………………………………………………………………………………………
-							//End case
 							
 							// Get the desynchronized item, if applicable
 							//%W-533.3
 							$o:=$unsynchronizedTableFields.query("name = :1"; (UI.pointer($1.form.fields))->{$e.row}).pop()
 							//%W+533.3
 							
-							If ($o#Null:C1517)
+							If (Length:C16(String:C10($o.fieldTips))#0)
 								
 								$tips:=UI.alert+" "+$o.fieldTips
 								
@@ -198,8 +118,6 @@ If (Num:C11($e.row)>0)
 			
 			// NO ERROR - DISPLAY USEFUL INFORMATIONS, IF ANY
 			
-			$dataModel:=Form:C1466.dataModel
-			
 			Case of 
 					
 					//______________________________________________________
@@ -211,12 +129,11 @@ If (Num:C11($e.row)>0)
 				: ($e.objectName=$1.form.fieldList) & ($e.row<=Size of array:C274((UI.pointer($1.form.fields))->))
 					
 					//%W-533.3
-					$l:=$table.field.extract("name").indexOf((UI.pointer($1.form.fields))->{$e.row})
+					$field:=$table.field.query("name = :1"; (UI.pointer($1.form.fields))->{$e.row}).pop()
+					
 					//%W+533.3
 					
-					If ($l#-1)
-						
-						$field:=$table.field[$l]
+					If ($field#Null:C1517)
 						
 						Case of 
 								
@@ -242,7 +159,7 @@ If (Num:C11($e.row)>0)
 								//…………………………………………………………………………………………………
 							: ($field.type=-2)  // 1 -> N relation
 								
-								If ($dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
+								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 									
 									//%W-533.3
 									If (Bool:C1537((UI.pointer($1.form.published))->{$e.row}))

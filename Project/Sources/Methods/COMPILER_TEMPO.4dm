@@ -1,15 +1,17 @@
 //%attributes = {"invisible":true}
 C_LONGINT:C283(vThermo)
 C_OBJECT:C1216(<>testData)
+
+
 C_OBJECT:C1216(object; $0)
 C_VARIANT:C1683(object; $1)
 
-C_VARIANT:C1683(_nul; $0)
-C_VARIANT:C1683(_nul; $1)
-C_LONGINT:C283(_nul; $2)
-
 C_OBJECT:C1216(instantiate; $0)
 C_TEXT:C284(instantiate; $1)
+
+C_VARIANT:C1683(nvl; $0)
+C_VARIANT:C1683(nvl; $1)
+C_LONGINT:C283(nvl; $2)
 
 C_OBJECT:C1216(removeAllEntities; $1)
 

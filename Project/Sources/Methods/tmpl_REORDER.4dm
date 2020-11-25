@@ -254,7 +254,7 @@ Else
 		
 	Else 
 		
-		ASSERT:C1129(Not:C34(DATABASE.isMatrix); "🩹 It's like this the very first time")
+		ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
 		
 	End if 
 End if 

@@ -12,163 +12,247 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($i; $Lon_number2; $Lon_published; $Win_current)
-C_TEXT:C284($t; $tt)
-C_OBJECT:C1216($catalog; $o; $Obj_cache; $Obj_dataModel; $Obj_datastore)
-C_OBJECT:C1216($Obj_field; $Obj_project; $Obj_table; $oo)
-C_COLLECTION:C1488($c; $cc)
+C_LONGINT:C283($tableIndex; $relatedCount; $publishedCount; $Win_current)
+C_TEXT:C284($key; $tt)
+C_OBJECT:C1216($catalog; $field; $cache; $datastore)
+C_OBJECT:C1216($relatedField; $tableModel; $oo)
+C_COLLECTION:C1488($unsynchronizedTableFields; $unsynchronizedFields)
+
+var $file : 4D:C1709.File
+var $backup : 4D:C1709.Folder
 
 // ----------------------------------------------------
 // Initialisations
-
-$Obj_project:=(UI.pointer("project"))->
-ASSERT:C1129($Obj_project#Null:C1517)
-
-$Obj_dataModel:=$Obj_project.dataModel
-$Obj_datastore:=catalog("datastore").datastore
+$datastore:=catalog("datastore").datastore
 
 // ----------------------------------------------------
 // Make a Backup of the project & catalog
-$o:=File:C1566(Form:C1466.project; fk platform path:K87:2)  // Project.4dmobileapp
+$file:=PROJECT.$project.file  // Project.4dmobileapp
 
-$oo:=$o.parent.folder(Replace string:C233(Get localized string:C991("replacedFiles"); "{stamp}"; str_date("stamp")))
-$oo.create()
+$backup:=PROJECT.$project.file.parent.folder(Replace string:C233(Get localized string:C991("replacedFiles"); "{stamp}"; str_date("stamp")))
+$backup.create()
 
-$o.copyTo($oo)
+$file.copyTo($backup)
+$file:=$file.parent.file("catalog.json").copyTo($backup)
 
-$o:=$o.parent.file("catalog.json")
-$o.copyTo($oo)
-
-// tableNumber starts to 1
-For ($i; 1; $Obj_project.$dialog.unsynchronizedTableFields.length-1; 1)
+For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 	
-	$c:=$Obj_project.$dialog.unsynchronizedTableFields[$i]
-	
-	If ($c#Null:C1517)
+	If ($unsynchronizedTableFields#Null:C1517)
 		
-		If ($c.length=0)
+		If ($unsynchronizedTableFields.length=0)
 			
-			// THE TABLE DOESN'T EXIST ANYMORE
-			OB REMOVE:C1226($Obj_dataModel; String:C10($i))
+			// ❌ THE TABLE DOESN'T EXIST ANYMORE
+			OB REMOVE:C1226(PROJECT.dataModel; String:C10($tableIndex))
 			
 		Else 
 			
 			// Check the fields
-			$Obj_table:=$Obj_dataModel[String:C10($i)]
-			$Lon_published:=0
+			$tableModel:=PROJECT.dataModel[String:C10($tableIndex)]
+			$publishedCount:=0
 			
-			For each ($t; $Obj_table)
+			//For each ($key; $tableModel)
+			//Case of 
+			////______________________________________________________
+			//: (Length($key)=0)
+			//// TABLE PROPERTIES
+			////______________________________________________________
+			//: (PROJECT.isField($key))
+			////$field:=$unsynchronizedTableFields.query("fieldNumber = :1"; Num($key)).pop()
+			////If ($field=Null)  // NOT unsynchronized
+			////$publishedCount:=$publishedCount+1
+			////Else 
+			////Case of 
+			//////______________________________________________________
+			////: ($field.missing)
+			////OB REMOVE($tableModel; String($key))
+			//////______________________________________________________
+			////: ($field.typeMismatch)
+			////// Detect compatible types
+			////Case of 
+			//////……………………………………………………………………………………………………………………………………………………………………………
+			////: (($field.fieldType=Is alpha field) & ($field.current.fieldType=Is text)) | (($field.fieldType=Is text) & ($field.current.fieldType=Is alpha field))  // String
+			////$tableModel[$key].fieldType:=$field.current.fieldType
+			////$publishedCount:=$publishedCount+1
+			//////……………………………………………………………………………………………………………………………………………………………………………
+			////: (($field.current.fieldType=Is integer) | ($field.current.fieldType=Is longint) | ($field.current.fieldType=Is integer 64 bits) | ($field.current.fieldType=Is real) | ($field.current.fieldType=_o_Is float)) & (($field.fieldType=Is integer) | ($field.fieldType=Is longint) | ($field.fieldType=Is integer 64 bits) | ($field.fieldType=Is real) | ($field.fieldType=_o_Is float))  // Numeric
+			////$tableModel[$key].fieldType:=$field.current.fieldType
+			////$publishedCount:=$publishedCount+1
+			//////……………………………………………………………………………………………………………………………………………………………………………
+			////Else 
+			////OB REMOVE($tableModel; String($key))
+			//////……………………………………………………………………………………………………………………………………………………………………………
+			////End case 
+			//////______________________________________________________
+			////Else 
+			////// Only name was modified: ACCEPT
+			////$tableModel[$key].name:=$field.current.name
+			////$publishedCount:=$publishedCount+1
+			//////______________________________________________________
+			////End case 
+			////End if 
+			////______________________________________________________
+			//: ((Value type($tableModel[$key])#Is object))
+			//// <NOTHING MORE TO DO>
+			////______________________________________________________
+			//: (PROJECT.isRelationToOne($tableModel[$key]))  // N -> 1 relation
+			//If ($datastore[$tableModel[$key].relatedDataClass]=Null)
+			//// THE RELATED TABLE DOESN'T EXIST ANYMORE
+			//OB REMOVE($tableModel; String($key))
+			//Else 
+			//$relatedCount:=0
+			//For each ($tt; $tableModel[$key])
+			//Case of 
+			////…………………………………………………………………………
+			//: (PROJECT.isField($tt))
+			//$relatedField:=$tableModel[$key][$tt]
+			//$unsynchronizedFields:=$unsynchronizedTableFields.extract("fields")
+			//If ($unsynchronizedFields.length>0)
+			//If ($unsynchronizedFields[0].query("relatedTableNumber = :1 & name = :2"; $relatedField.relatedTableNumber; $relatedField.name).length=1)
+			//OB REMOVE($tableModel[$key]; $tt)
+			//Else 
+			//$relatedCount:=$relatedCount+1
+			//End if 
+			//Else 
+			//$relatedCount:=$relatedCount+1
+			//End if 
+			////…………………………………………………………………………
+			//: ((Value type($tableModel[$key])#Is object))
+			//// <NOTHING MORE TO DO>
+			////…………………………………………………………………………
+			//Else 
+			//// NOT YET MANAGED
+			////…………………………………………………………………………
+			//End case 
+			//End for each 
+			//If ($relatedCount=0)
+			//// NO MORE PUBLISHED FIELDS FROM THE RELATED TABLE
+			//OB REMOVE($tableModel; $key)
+			//Else 
+			//$publishedCount:=$publishedCount+1
+			//End if 
+			//End if 
+			////______________________________________________________
+			//: (PROJECT.isRelationToMany($tableModel[$key]))  // 1 -> N relation
+			////If ($datastore[$tableModel[$key].relatedEntities]=Null)
+			////// THE RELATED TABLE DOESN'T EXIST ANYMORE
+			////OB REMOVE($tableModel; String($key))
+			////Else 
+			////$publishedCount:=$publishedCount+1
+			////End if 
+			////________________________________________
+			//End case 
+			//End for each
+			
+			var $item : Object
+			For each ($item; PROJECT.fields($tableModel))
 				
 				Case of 
 						
 						//______________________________________________________
-					: (Length:C16($t)=0)
+					: (PROJECT.isField($item.key))
 						
-						// TABLE PROPERTIES
+						$field:=$unsynchronizedTableFields.query("fieldNumber = :1"; Num:C11($item.key)).pop()
 						
-						//______________________________________________________
-					: (PROJECT.isField($t))
-						
-						$o:=$c.query("fieldNumber = :1"; Num:C11($t)).pop()
-						
-						If ($o=Null:C1517)  // NOT unsynchronized
+						If ($field=Null:C1517)  // 😇 NOT unsynchronized
 							
-							$Lon_published:=$Lon_published+1
+							$publishedCount:=$publishedCount+1
 							
 						Else 
 							
 							Case of 
 									
 									//______________________________________________________
-								: ($o.missing)
+								: ($field.missing)
 									
-									OB REMOVE:C1226($Obj_table; String:C10($t))
+									// ❌ REMOVE THE MISSING FIELD
+									OB REMOVE:C1226($tableModel; String:C10($item.key))
 									
 									//______________________________________________________
-								: ($o.typeMismatch)
+								: ($field.typeMismatch)  // Search if the new type is compatible
 									
-									// Detect compatible types
 									Case of 
 											
-											//……………………………………………………………………………………………………………………………………………………………………………
-										: (($o.fieldType=Is alpha field:K8:1) & ($o.current.fieldType=Is text:K8:3)) | (($o.fieldType=Is text:K8:3) & ($o.current.fieldType=Is alpha field:K8:1))  // String
+											//………………………………………………………………………………………………………………
+										: (PROJECT.isString($field.fieldType))\
+											 & (PROJECT.isString($field.current.fieldType))
 											
-											$Obj_table[$t].fieldType:=$o.current.fieldType
-											$Lon_published:=$Lon_published+1
+											$tableModel[$item.key].fieldType:=$field.current.fieldType
+											$publishedCount:=$publishedCount+1
 											
-											//……………………………………………………………………………………………………………………………………………………………………………
-										: (($o.current.fieldType=Is integer:K8:5) | ($o.current.fieldType=Is longint:K8:6) | ($o.current.fieldType=Is integer 64 bits:K8:25) | ($o.current.fieldType=Is real:K8:4) | ($o.current.fieldType=_o_Is float:K8:26)) & (($o.fieldType=Is integer:K8:5) | ($o.fieldType=Is longint:K8:6) | ($o.fieldType=Is integer 64 bits:K8:25) | ($o.fieldType=Is real:K8:4) | ($o.fieldType=_o_Is float:K8:26))  // Numeric
+											//………………………………………………………………………………………………………………
+										: (PROJECT.isNumeric($field.fieldType))\
+											 & (PROJECT.isNumeric($field.current.fieldType))
 											
-											$Obj_table[$t].fieldType:=$o.current.fieldType
-											$Lon_published:=$Lon_published+1
+											$tableModel[$item.key].fieldType:=$field.current.fieldType
+											$publishedCount:=$publishedCount+1
 											
-											//……………………………………………………………………………………………………………………………………………………………………………
+											//………………………………………………………………………………………………………………
 										Else 
 											
-											OB REMOVE:C1226($Obj_table; String:C10($t))
+											// ❌ REMOVE THE NON TYPE COMPATIBLE FIELD
+											OB REMOVE:C1226($tableModel; String:C10($item.key))
 											
-											//……………………………………………………………………………………………………………………………………………………………………………
+											//………………………………………………………………………………………………………………
 									End case 
+									
+									//______________________________________________________
+								: ($field.nameMismatch)  // Only the name has been changed
+									
+									$tableModel[$item.key].name:=$field.current.name
+									$publishedCount:=$publishedCount+1
 									
 									//______________________________________________________
 								Else 
 									
-									// Only name was modified: ACCEPT
-									$Obj_table[$t].name:=$o.current.name
-									$Lon_published:=$Lon_published+1
+									ASSERT:C1129(False:C215; "😰 I wonder why I'm here")
 									
 									//______________________________________________________
 							End case 
 						End if 
 						
 						//______________________________________________________
-					: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
+					: (PROJECT.isRelationToOne($item.value))  // N -> 1 relation
 						
-						// <NOTHING MORE TO DO>
-						
-						//______________________________________________________
-					: (PROJECT.isRelationToOne($Obj_table[$t]))  // N -> 1 relation
-						
-						If ($Obj_datastore[$Obj_table[$t].relatedDataClass]=Null:C1517)
+						If ($datastore[$tableModel[$item.key].relatedDataClass]=Null:C1517)
 							
-							// THE RELATED TABLE DOESN'T EXIST ANYMORE
-							OB REMOVE:C1226($Obj_table; String:C10($t))
+							// ❌ THE RELATED TABLE DOESN'T EXIST ANYMORE
+							OB REMOVE:C1226($tableModel; String:C10($item.key))
 							
 						Else 
 							
-							$Lon_number2:=0
+							$relatedCount:=0
 							
-							For each ($tt; $Obj_table[$t])
+							For each ($tt; $tableModel[$item.key])
 								
 								Case of 
 										
 										//…………………………………………………………………………
 									: (PROJECT.isField($tt))
 										
-										$Obj_field:=$Obj_table[$t][$tt]
+										$relatedField:=$tableModel[$item.key][$tt]
 										
-										$cc:=$c.extract("fields")
+										$unsynchronizedFields:=$unsynchronizedTableFields.extract("fields")
 										
-										If ($cc.length>0)
+										If ($unsynchronizedFields.length>0)
 											
-											If ($cc[0].query("relatedTableNumber = :1 & name = :2"; $Obj_field.relatedTableNumber; $Obj_field.name).length=1)
+											If ($unsynchronizedFields[0].query("relatedTableNumber = :1 & name = :2"; $relatedField.relatedTableNumber; $relatedField.name).length=1)
 												
-												OB REMOVE:C1226($Obj_table[$t]; $tt)
+												OB REMOVE:C1226($tableModel[$item.key]; $tt)
 												
 											Else 
 												
-												$Lon_number2:=$Lon_number2+1
+												$relatedCount:=$relatedCount+1
 												
 											End if 
 											
 										Else 
 											
-											$Lon_number2:=$Lon_number2+1
+											$relatedCount:=$relatedCount+1
 											
 										End if 
 										
 										//…………………………………………………………………………
-									: ((Value type:C1509($Obj_table[$t])#Is object:K8:27))
+									: ((Value type:C1509($tableModel[$item.key])#Is object:K8:27))
 										
 										// <NOTHING MORE TO DO>
 										
@@ -181,97 +265,95 @@ For ($i; 1; $Obj_project.$dialog.unsynchronizedTableFields.length-1; 1)
 								End case 
 							End for each 
 							
-							If ($Lon_number2=0)
+							If ($relatedCount=0)
 								
-								// NO MORE PUBLISHED FIELDS FROM THE RELATED TABLE
-								OB REMOVE:C1226($Obj_table; $t)
+								// ❌ NO MORE PUBLISHED FIELDS FROM THE RELATED TABLE
+								OB REMOVE:C1226($tableModel; $item.key)
 								
 							Else 
 								
-								$Lon_published:=$Lon_published+1
+								$publishedCount:=$publishedCount+1
 								
 							End if 
 						End if 
 						
 						//______________________________________________________
-					: (PROJECT.isRelationToMany($Obj_table[$t]))  // 1 -> N relation
+					: (PROJECT.isRelationToMany($item.value))  // 1 -> N relation
 						
-						If ($Obj_datastore[$Obj_table[$t].relatedEntities]=Null:C1517)
+						If ($datastore[$tableModel[$item.key].relatedEntities]=Null:C1517)
 							
-							// THE RELATED TABLE DOESN'T EXIST ANYMORE
-							OB REMOVE:C1226($Obj_table; String:C10($t))
+							// ❌ REMOVE THE MISSING TABLE
+							OB REMOVE:C1226($tableModel; String:C10($item.key))
 							
 						Else 
 							
-							$Lon_published:=$Lon_published+1
+							$publishedCount:=$publishedCount+1
 							
 						End if 
 						
-						//________________________________________
+						//______________________________________________________
+					Else 
+						
+						ASSERT:C1129(False:C215; "😰 I wonder why I'm here")
+						
+						//______________________________________________________
 				End case 
 			End for each 
 			
-			If ($Lon_published=0)
+			If ($publishedCount=0)
 				
-				// NO MORE FIELDS PUBLISHED FOR THIS TABLE
-				OB REMOVE:C1226($Obj_dataModel; String:C10($i))
+				// ❌ NO MORE FIELDS PUBLISHED FOR THIS TABLE
+				OB REMOVE:C1226(PROJECT.dataModel; String:C10($tableIndex))
 				
 			End if 
 		End if 
-		
 	End if 
 	
+	$tableIndex:=$tableIndex+1
 	
-End for 
+End for each 
 
-If (OB Is empty:C1297($Obj_dataModel))
+If (OB Is empty:C1297(PROJECT.dataModel))
 	
-	OB REMOVE:C1226($Obj_project; "dataModel")
+	OB REMOVE:C1226(PROJECT; "dataModel")
 	
 End if 
 
-// Update satus & cache [
-OB REMOVE:C1226($Obj_project.$dialog; "unsynchronizedTableFields")
-OB REMOVE:C1226($Obj_project.$project.structure; "unsynchronized")
+// Update status & cache
+OB REMOVE:C1226(PROJECT.$dialog; "unsynchronizedTableFields")
+OB REMOVE:C1226(PROJECT.$project.structure; "unsynchronized")
 
-$o:=Folder:C1567($Obj_project.$project.root; fk platform path:K87:2).file("catalog.json")
+$file:=PROJECT.$project.file.parent.file("catalog.json")
 
-If ($o.exists)
+If ($file.exists)
 	
-	$Obj_cache:=JSON Parse:C1218($o.getText())
-	ob_createPath($Obj_cache; "structure")
+	$cache:=JSON Parse:C1218($file.getText())
+	cs:C1710.ob.new($cache).createPath("structure")
 	
 Else 
 	
-	$Obj_cache:=New object:C1471("structure"; New object:C1471)
+	$cache:=cs:C1710.ob.new().createPath("structure").content
 	
 End if 
 
 Form:C1466.$catalog:=_o_structure(New object:C1471("action"; "catalog")).value
 
-$Obj_cache.structure.definition:=Form:C1466.$catalog
-$Obj_cache.structure.digest:=Generate digest:C1147(JSON Stringify:C1217(Form:C1466.$catalog); SHA1 digest:K66:2)
+$cache.structure.definition:=Form:C1466.$catalog
+$cache.structure.digest:=Generate digest:C1147(JSON Stringify:C1217(Form:C1466.$catalog); SHA1 digest:K66:2)
 
-$o.setText(JSON Stringify:C1217($Obj_cache; *))
-//]
+$file.setText(JSON Stringify:C1217($cache; *))
 
 // Refresh UI
-STRUCTURE_Handler(New object:C1471("action"; "update"; "project"; $Obj_project))
+STRUCTURE_Handler(New object:C1471("action"; "update"; "project"; PROJECT))
 
-project_REPAIR($Obj_project)
+project_REPAIR(PROJECT)
 
 // Save project
-$Win_current:=Current form window:C827
-CALL FORM:C1391($Win_current; "project_SAVE")
+PROJECT.save()
 
 // Update UI
+$Win_current:=Current form window:C827
 CALL FORM:C1391($Win_current; "editor_CALLBACK"; "updateRibbon")
 CALL FORM:C1391($Win_current; "editor_CALLBACK"; "refreshViews")
 CALL FORM:C1391($Win_current; "editor_CALLBACK"; "pickerHide")
 CALL FORM:C1391($Win_current; "editor_CALLBACK"; "description"; New object:C1471("show"; False:C215))
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

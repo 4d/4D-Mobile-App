@@ -18,6 +18,7 @@
 			"00_TESTS",
 			"COMPILER_TEMPO",
 			"internalTests",
+			"nvl",
 			"object"
 		],
 		"forms": [

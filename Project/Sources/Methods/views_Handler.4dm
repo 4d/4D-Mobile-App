@@ -135,20 +135,19 @@ Case of
 				
 				$context.setTab()
 				
-				// Create, if any, & update the list & detail model [
-				$o:=ob_createPath(Form:C1466; "list")
-				$o:=ob_createPath(Form:C1466; "detail")
+				// Create, if any, & update the list & detail model
+				var $ob : cs:C1710.ob
+				$ob:=cs:C1710.ob.new(Form:C1466)
 				
 				If ($datamodel#Null:C1517)
 					
 					For each ($tableID; $datamodel)
 						
-						Form:C1466.list:=ob_createPath(Form:C1466.list; $tableID)
-						Form:C1466.detail:=ob_createPath(Form:C1466.detail; $tableID)
+						$ob.createPath(New collection:C1472("list"; $tableID))
+						$ob.createPath(New collection:C1472("detail"; $tableID))
 						
 					End for each 
 				End if 
-				//]
 				
 				If (($datamodel=Null:C1517) | OB Is empty:C1297($datamodel))
 					
