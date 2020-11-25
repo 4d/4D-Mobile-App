@@ -183,8 +183,8 @@ Function fieldList($table : Variant)->$result : Object
 								"fieldType"; 8858; \
 								"relatedDataClass"; $tableModel[$key].relatedDataclass; \
 								"inverseName"; $tableModel[$key].inverseName; \
-								"label"; $tableModel[$key].label; \
-								"shortLabel"; $tableModel[$key].shortLabel; \
+								"label"; PROJECT.label($key); \
+								"shortLabel"; PROJECT.shortLabel($key); \
 								"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
 								"$added"; True:C214)
 							
