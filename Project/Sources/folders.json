@@ -495,10 +495,8 @@
 	"devData": {
 		"methods": [
 			"dev_test_data",
-			"getAppiOSSDK",
 			"importData",
 			"importRelationRandomly",
-			"injectComponentToCurrentApp",
 			"populateCommands",
 			"removeAllEntities",
 			"removeRelations"
@@ -511,11 +509,15 @@
 		"methods": [
 			"dev_Menu",
 			"file_Menu",
+			"menu_component",
 			"menu_file",
 			"menu_goToPage",
 			"menu_product",
 			"menu_window",
 			"win_CLOSE"
+		],
+		"classes": [
+			"menu_component_class"
 		]
 	},
 	"devTable": {

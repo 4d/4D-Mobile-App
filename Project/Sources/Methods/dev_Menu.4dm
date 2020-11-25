@@ -61,8 +61,7 @@ $o.append("Generate core data set"; "coreDataSet").method("menu_product")
 $menu.append("Product"; $o)
 
 $o:=cs:C1710.menu.new()
-$o.append("Get app iOS SDK").method("getAppiOSSDK")
-$o.append("Inject component in app").method("injectComponentToCurrentApp")
+cs:C1710.menu_component_class.new().fillMenu($o)
 $menu.append("Component"; $o)
 
 $o:=cs:C1710.menu.new()

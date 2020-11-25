@@ -111,6 +111,12 @@ Case of
 			"caller"; Current form window:C827; \
 			"verbose"; True:C214))
 		
+		SHOW ON DISK:C922($Obj_result.path)
+		
+		If (Not:C34($Obj_result.success))
+			ALERT:C41(JSON Stringify:C1217($Obj_result))
+		End if 
+		
 		//______________________________________________________
 	: ($Mnu_choice="coreDataSet")
 		

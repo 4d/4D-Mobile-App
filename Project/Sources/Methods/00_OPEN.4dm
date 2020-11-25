@@ -107,7 +107,7 @@ Case of
 		//___________________________________________________________
 	: ($entryPoint="_declarations")
 		
-		//COMPILER_COMPONENT
+		COMPILER_COMPONENT
 		
 		//___________________________________________________________
 	: ($entryPoint="_init")
