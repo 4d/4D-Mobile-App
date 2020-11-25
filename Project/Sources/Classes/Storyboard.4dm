@@ -67,6 +67,14 @@ Function insertInto  // ($Obj_element : Object; $text : Text; $at : Integer)
 		: ($Obj_element.insertMode="iteration")
 			
 			$Dom_:=$Obj_element.insertInto.insertAt($text; $at)
+			// ----------------------------------------
+		: ($Obj_element.insertMode="none")
+			
+			// do not insert
+			
+		Else 
+			
+			ASSERT:C1129(False:C215; "Cannot known how to insert XML node. Missing insertMode on element")
 			
 			// ----------------------------------------
 	End case 
@@ -110,16 +118,19 @@ Function checkIDCount  // ($Obj_element : Object)
 	$Obj_element.idCount:=$Lon_ids
 	
 /* If not set, update default parameters for insert mode */
-Function checkInsert  // ($Obj_element : Object; $Obj_tags : Object)
+Function checkInsertInto  // ($Obj_element : Object; $Obj_tags : Object)
 	var $Obj_element; $1 : Object
 	$Obj_element:=$1
-	var $Obj_tags; $2 : Object
-	$Obj_tags:=$2
-	
 	
 	If ($Obj_element.insertInto=Null:C1517)
 		$Obj_element.insertInto:=$Obj_element.dom.parent()
 	End if 
+	
+Function checkInsert
+	var $Obj_element; $1 : Object
+	$Obj_element:=$1
+	var $Obj_tags; $2 : Object
+	$Obj_tags:=$2
 	
 	If (Length:C16(String:C10($Obj_element.insertMode))=0)
 		
@@ -133,7 +144,7 @@ Function checkInsert  // ($Obj_element : Object; $Obj_tags : Object)
 		C_OBJECT:C1216($Obj_tag)
 		For each ($Obj_tag; $Obj_element.tags.mandatories)
 			
-			If (String:C10($Obj_tags[String:C10($Obj_tag.key)])="")  // support not empty rules now
+			If (String:C10(ob_getByPath($Obj_tags; String:C10($Obj_tag.key)).value)="")  // support not empty rules now
 				
 				$Obj_element.insertMode:="none"  // do not insert
 				
@@ -619,6 +630,8 @@ Function injectElement
 	// For each element... (scene, cell, ...)
 	C_OBJECT:C1216($Obj_element)
 	For each ($Obj_element; $Col_elements)
+		
+		This:C1470.checkInsert($Obj_element; $Obj_tags)
 		
 		If ($Obj_element.dom#Null:C1517)  // if valid element
 			

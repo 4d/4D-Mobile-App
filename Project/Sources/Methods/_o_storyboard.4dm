@@ -606,8 +606,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							If (Value type:C1509($Obj_element.tags.mandatories)=Is collection:K8:32)
 								
 								For each ($Obj_tag; $Obj_element.tags.mandatories)
-									
-									If (String:C10($Obj_in.tags[String:C10($Obj_tag.key)])="")  // support not empty rules now
+									If (String:C10(ob_getByPath($Obj_in.tags; String:C10($Obj_tag.key)).value)="")  // support not empty rules now
 										
 										$Obj_element.insertMode:="none"  // do not insert
 										
@@ -730,11 +729,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						// 2- scene
 						//$Obj_element:=New object(\
-																																			"insertInto";$Dom_root.findByXPath("document/scenes");\
-																																			"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																																			"idCount";3;\
-																																			"tagInterfix";"SN";\
-																																			"insertMode";"append")
+																																																	"insertInto";$Dom_root.findByXPath("document/scenes");\
+																																																	"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																																																	"idCount";3;\
+																																																	"tagInterfix";"SN";\
+																																																	"insertMode";"append")
 						$Obj_element:=New object:C1471(\
 							"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 							"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \

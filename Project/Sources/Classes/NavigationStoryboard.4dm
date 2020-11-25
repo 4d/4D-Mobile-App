@@ -86,6 +86,7 @@ Function run
 			
 			If ($Obj_element.dom#Null:C1517)
 				This:C1470.checkIDCount($Obj_element)
+				This:C1470.checkInsertInto($Obj_element)
 				This:C1470.checkInsert($Obj_element; $Obj_tags)
 			End if 
 		End for each 
