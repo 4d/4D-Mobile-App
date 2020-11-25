@@ -25,7 +25,7 @@ var $str : cs:C1710.str
 // ----------------------------------------------------
 // Initialisations
 
-PROJECT.$dialog:=nul(PROJECT.$dialog; Is object:K8:27)
+PROJECT.$dialog:=_nul(PROJECT.$dialog; Is object:K8:27)
 
 $str:=cs:C1710.str.new()
 
@@ -224,7 +224,7 @@ If ($file.exists)
 														End case 
 														
 														$isTableUnsynchronized:=True:C214
-														$field.unsynchronizedFields:=nul($field.unsynchronizedFields; Is collection:K8:32).push($relatedField)
+														$field.unsynchronizedFields:=_nul($field.unsynchronizedFields; Is collection:K8:32).push($relatedField)
 														
 														If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
 															
@@ -275,7 +275,7 @@ If ($file.exists)
 															
 															$isTableUnsynchronized:=True:C214
 															$relatedField.name:=$item.key
-															$field.unsynchronizedFields:=nul($field.unsynchronizedFields; Is collection:K8:32).push($relatedField)
+															$field.unsynchronizedFields:=_nul($field.unsynchronizedFields; Is collection:K8:32).push($relatedField)
 															
 															// Append faulty relation
 															If ($unsynchronizedFields.query("tableTips= :1"; $relatedField.tableTips).length=0)
@@ -449,10 +449,10 @@ If (Not:C34($isUnsynchronized))\
 End if 
 
 // Store the status
-Form:C1466.structure:=nul(Form:C1466.structure; Is object:K8:27)
+Form:C1466.structure:=_nul(Form:C1466.structure; Is object:K8:27)
 Form:C1466.structure.unsynchronized:=$isUnsynchronized
 
-Form:C1466.status:=nul(Form:C1466.status; Is object:K8:27)
+Form:C1466.status:=_nul(Form:C1466.status; Is object:K8:27)
 Form:C1466.status.dataModel:=Not:C34($isUnsynchronized)
 
 CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
