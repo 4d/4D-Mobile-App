@@ -20,9 +20,9 @@ If (False:C215)
 End if 
 
 var $isTableUnsynchronized; $isUnsynchronized : Boolean
-var $cache; $current; $field; $file; $item; $o; $relatedField; $relatedItem; $structure; $table : Object
-var $tableCatalog : Object
-var $cachedCatalog; $currentCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTableFields : Collection
+var $cache; $current; $field; $file; $item; $linkedField; $linkedItem; $o; $relatedField; $relatedItem : Object
+var $structure; $table; $tableCatalog : Object
+var $cachedCatalog; $currentCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTableFields : Collection
 var $str : cs:C1710.str
 
 // ----------------------------------------------------
@@ -107,7 +107,6 @@ If ($file.exists)
 										
 										$isTableUnsynchronized:=True:C214
 										
-										// #WIP better tips
 										Case of 
 												
 												//______________________________________________________
@@ -175,8 +174,8 @@ If ($file.exists)
 												//______________________________________________________
 											: ($field.missing)
 												
-												$field.tableTips:=$str.setText("theFieldNameIsMissing").localized($field.name)
-												$field.fieldTips:=$str.setText("theFieldIsMissing").localized()
+												$field.tableTips:=$str.setText("theRelationIsNoLongerAvailable").localized($item.key)
+												$field.fieldTips:=$field.tableTips
 												
 												//______________________________________________________
 										End case 
@@ -290,7 +289,70 @@ If ($file.exists)
 													//______________________________________________________
 												: (PROJECT.isRelationToOne($relatedField))  // N -> 1 relation
 													
-													// NOT YET MANAGED
+													$linkedCatalog:=$currentCatalog.query("tableNumber = :1"; $relatedField.relatedTableNumber).pop().field
+													For each ($linkedItem; PROJECT.storageFields($relatedField))
+														$linkedField:=$linkedItem.value
+														$linkedField.fieldNumber:=Num:C11($linkedItem.key)
+														$linkedField.current:=$linkedCatalog.query("fieldNumber = :1"; Num:C11($linkedItem.key)).pop()
+														
+														$linkedField.missing:=$linkedField.current=Null:C1517
+														$linkedField.nameMismatch:=$linkedField.name#String:C10($linkedField.current.name)
+														
+														If (Not:C34($linkedField.missing))
+															
+															If (Value type:C1509($linkedField.type)=Is text:K8:3)
+																
+																// Compare to value Type
+																$linkedField.typeMismatch:=$linkedField.type#$linkedField.current.valueType
+																
+															Else 
+																
+																$linkedField.typeMismatch:=$linkedField.fieldType#$linkedField.current.fieldType
+																
+															End if 
+														End if 
+														
+														If ($linkedField.missing | $linkedField.nameMismatch | Bool:C1537($linkedField.typeMismatch))
+															
+															// THE FIELD IS NO LONGER AVAILABLE
+															// OR THE NAME/TYPE HAS BEEN CHANGED
+															
+															$isTableUnsynchronized:=True:C214
+															
+															Case of 
+																	
+																	//______________________________________________________
+																: ($linkedField.missing)
+																	
+																	$linkedField.tableTips:=$str.setText("theFieldNameIsMissing").localized($linkedField.name)
+																	$linkedField.fieldTips:=$linkedField.tableTips
+																	
+																	//______________________________________________________
+																: ($linkedField.nameMismatch)
+																	
+																	$linkedField.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($linkedField.name; $linkedField.current.name))
+																	$linkedField.fieldTips:=$linkedField.tableTips
+																	
+																	//______________________________________________________
+																: (Bool:C1537($linkedField.typeMismatch))
+																	
+																	$linkedField.tableTips:=$str.setText("theFieldTypeWasModified").localized()
+																	$linkedField.fieldTips:=$linkedField.tableTips
+																	
+																	//______________________________________________________
+															End case 
+															
+															$isTableUnsynchronized:=True:C214
+															cs:C1710.ob.new($field).createPath("unsynchronizedFields"; Is collection:K8:32).unsynchronizedFields.push($linkedField)
+															
+															If ($unsynchronizedFields.query("fieldTips= :1"; $linkedField.fieldTips).length=0)
+																
+																$linkedField.name:=$item.key
+																$unsynchronizedFields.push($linkedField)
+																
+															End if 
+														End if 
+													End for each 
 													
 													//______________________________________________________
 												Else 
@@ -453,6 +515,8 @@ End if
 $o:=cs:C1710.ob.new(Form:C1466)
 $o.createPath("structure").structure.unsynchronized:=$isUnsynchronized
 $o.createPath("status").structure.dataModel:=Not:C34($isUnsynchronized)
+
+//cs.ob.new(PROJECT).createPath("$project.$dialog.EDITOR.ribbon.status").dataModel:=Not($isUnsynchronized)
 
 CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
 "show"; $isUnsynchronized))

@@ -186,8 +186,10 @@ Case of
 			End if 
 		End if 
 		
-		$form.build.enable(Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project))
-		$form.install.enable(Bool:C1537(Form:C1466.status.dataModel) & Bool:C1537(Form:C1466.status.xCode) & Bool:C1537(Form:C1466.status.project) & Bool:C1537(Form:C1466.status.teamId))
+		var $o : Object
+		$o:=PROJECT.$project
+		$form.build.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.status.xCode) & Bool:C1537($o.status.project))
+		$form.install.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.status.xCode) & Bool:C1537($o.status.project) & Bool:C1537($o.status.teamId))
 		
 		//______________________________________________________
 	Else 

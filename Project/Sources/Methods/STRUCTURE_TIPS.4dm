@@ -28,8 +28,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$e:=FORM Event:C1606
 	$str:=cs:C1710.str.new()  // init class
 	
-	//ASSERT(Not(Shift down))
-	
 Else 
 	
 	ABORT:C156
@@ -61,7 +59,7 @@ If (Num:C11($e.row)>0)
 			// Restrict to the table
 			$unsynchronizedTableFields:=$unsynchronizedTableFields[$table.tableNumber]
 			
-			If ($unsynchronizedTableFields=Null:C1517)
+			If ($unsynchronizedTableFields#Null:C1517)
 				
 				// TABLE IS OK
 				
@@ -69,7 +67,7 @@ If (Num:C11($e.row)>0)
 				
 				If ($unsynchronizedTableFields.length=0)  // Not found into the current catalog
 					
-					$tips:=UI.alert+" "+$str.setText("theTableIsNoLongerAvailable").localized($table.name)  //
+					$tips:=UI.alert+" "+$str.setText("theTableIsNoLongerAvailable").localized($table.name)
 					
 				Else 
 					
@@ -80,7 +78,7 @@ If (Num:C11($e.row)>0)
 							
 							If ($unsynchronizedTableFields.length=1)
 								
-								$tips:=UI.alert+" - "+$unsynchronizedTableFields.extract("tableTips").distinct().join("\r       - ")
+								$tips:=UI.alert+" "+$unsynchronizedTableFields.extract("tableTips").distinct().join("\r       - ")
 								
 							Else 
 								
@@ -123,7 +121,7 @@ If (Num:C11($e.row)>0)
 					//______________________________________________________
 				: ($e.objectName=$1.form.tableList) & ($e.row<=Size of array:C274((UI.pointer($1.form.tableList))->))
 					
-					//
+					//$tips:=".published fields:\r"+$table.field.extract("name").join("\", \"")
 					
 					//______________________________________________________
 				: ($e.objectName=$1.form.fieldList) & ($e.row<=Size of array:C274((UI.pointer($1.form.fields))->))
@@ -226,7 +224,7 @@ If (Num:C11($e.row)>0)
 		If ($e.row<=Size of array:C274((UI.pointer($1.form.tableList))->))
 			
 			//%W-533.3
-			$tips:=UI.alert+$str.setText("theTableIsNoLongerAvailable").localized((OBJECT Get pointer:C1124(Object named:K67:5; "tables"))->{$e.row})
+			$tips:=UI.alert+" "+$str.setText("theTableIsNoLongerAvailable").localized((OBJECT Get pointer:C1124(Object named:K67:5; "tables"))->{$e.row})
 			//%W+533.3
 			
 		End if 
@@ -245,9 +243,3 @@ Else
 End if 
 
 OBJECT SET HELP TIP:C1181(*; $e.objectName; $tips)
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End
