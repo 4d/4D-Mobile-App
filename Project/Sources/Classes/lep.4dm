@@ -507,3 +507,36 @@ Function _pushError($desription : Text)
 	
 	This:C1470.success:=False:C215
 	This:C1470.errors.push(Get call chain:C1662[1].name+" - "+$desription)
+	
+	//====================================================================
+Function getEnvironnementVariables()->$variables : Collection
+	
+	var $c : Collection
+	var $t : Text
+	
+	This:C1470.launch(Choose:C955(Is macOS:C1572; "/usr/bin/env"; "set"))
+	
+	If (This:C1470.success)
+		
+		$variables:=New collection:C1472
+		
+		For each ($t; Split string:C1554(This:C1470.outputStream; "\n"; sk ignore empty strings:K86:1))
+			
+			$c:=Split string:C1554($t; "=")
+			
+			If ($c.length=2)
+				
+				$variables.push(New object:C1471(\
+					"var"; $c[0]; \
+					"value"; $c[1]))
+				
+			End if 
+		End for each 
+	End if 
+	
+	//====================================================================
+Function getEnvironnementVariable($name : Text)->$value : Text
+	
+	$value:=String:C10(This:C1470.getEnvironnementVariables().query("var = :1"; $name).pop().value)
+	
+	

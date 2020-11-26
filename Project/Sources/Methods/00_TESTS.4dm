@@ -30,6 +30,15 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		
+		$o:=cs:C1710.lep.new()
+		$c:=$o.getEnvironnementVariables()
+		$t:=$o.getEnvironnementVariable("HOME")
+		$t:=$o.getEnvironnementVariable("toto")
+		
+		//________________________________________
+	: (True:C214)
+		
 		$o:=cs:C1710.env.new().startupDisk()
 		
 		$t:=Convert path POSIX to system:C1107("/users/"+Get system info:C1571.userName+"/")
