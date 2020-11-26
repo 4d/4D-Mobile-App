@@ -13,9 +13,8 @@ var $b : Boolean
 var $bottom; $column; $count; $height; $i; $indx; $l; $left; $Lon_button; $Lon_targetBottom : Integer
 var $Lon_targetTop; $Lon_unpublished; $Lon_vOffset; $right; $row; $top; $width; $Win_hdl : Integer
 var $Ptr_; $Ptr_me; $Ptr_published : Pointer
-var $context; $linkDataModel; $e; $form; $menu; $o; $relatedCatalog; $tableDataModel : Object
+var $context; $e; $form; $linkDataModel; $menu; $o; $relatedCatalog; $tableDataModel : Object
 var $c : Collection
-
 var $structure : cs:C1710.structure
 
 // ----------------------------------------------------
@@ -61,8 +60,8 @@ Case of
 				Else 
 					
 					// Keep the current selected table
-					$c:=editor_Catalog
-					$context.currentTable:=$c[$c.indices("name=:1"; (UI.pointer($form.tables))->{$row})[0]]
+					$t:=(UI.pointer($form.tables))->{$row}
+					$context.currentTable:=PROJECT.getCatalog().query("name = :1"; $t).pop()
 					
 				End if 
 				
@@ -82,8 +81,8 @@ Case of
 						
 						LISTBOX SELECT ROW:C912(*; $e.objectName; $row; lk replace selection:K53:1)
 						
-						$c:=editor_Catalog
-						$o:=$c[$c.indices("name=:1"; (UI.pointer($form.tables))->{$row})[0]]
+						$t:=(UI.pointer($form.tables))->{$row}
+						$o:=PROJECT.getCatalog().query("name = :1"; $t).pop()
 						
 						If (Not:C34(ob_equal($o; $context.currentTable)))
 							

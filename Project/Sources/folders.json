@@ -124,7 +124,6 @@
 		"methods": [
 			"COMPILER_editor",
 			"editor_CALLBACK",
-			"editor_Catalog",
 			"editor_description",
 			"editor_HANDLER",
 			"editor_INIT",
@@ -236,7 +235,7 @@
 		"methods": [
 			"COMPILER_STRUCTURES",
 			"STRUCTURE_ACTION",
-			"STRUCTURE_CALLBACK",
+			"STRUCTURE_AUDIT",
 			"structure_FIELD_LIST",
 			"STRUCTURE_Handler",
 			"STRUCTURE_OBJECTS_HANDLER",

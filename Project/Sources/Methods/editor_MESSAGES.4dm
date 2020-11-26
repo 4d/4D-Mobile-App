@@ -94,7 +94,7 @@ Case of
 		
 		If ($oIN.success)
 			
-			STRUCTURE_CALLBACK($oIN.value)
+			STRUCTURE_AUDIT($oIN.value)
 			
 		Else 
 			
@@ -117,10 +117,10 @@ Case of
 		Else 
 			
 			//DO_MESSAGE(New object(\
-				"action"; "show"; \
-				"type"; "alert"; \
-				"title"; "noDevices"; \
-				"additional"; ""))
+								"action"; "show"; \
+								"type"; "alert"; \
+								"title"; "noDevices"; \
+								"additional"; ""))
 			
 		End if 
 		

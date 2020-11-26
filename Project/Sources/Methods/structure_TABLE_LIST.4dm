@@ -43,7 +43,7 @@ End if
 $Ptr_tables:=UI.pointer($Obj_form.tables)
 CLEAR VARIABLE:C89($Ptr_tables->)
 
-$Col_catalog:=$Obj_context.catalog()
+$Col_catalog:=PROJECT.getCatalog()
 
 Case of 
 		

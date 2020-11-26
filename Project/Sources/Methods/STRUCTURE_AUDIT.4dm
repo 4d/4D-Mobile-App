@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : STRUCTURE_CALLBACK
+// Project method : STRUCTURE_AUDIT
 // ID[5CEB938EFFBB4CB9A0436B50327B0EAD]
 // Created 18-1-2019 by Vincent de Lachaux
 // ----------------------------------------------------
@@ -16,7 +16,7 @@
 var $1 : Collection
 
 If (False:C215)
-	C_COLLECTION:C1488(STRUCTURE_CALLBACK; $1)
+	C_COLLECTION:C1488(STRUCTURE_AUDIT; $1)
 End if 
 
 var $isTableUnsynchronized; $isUnsynchronized : Boolean
@@ -28,6 +28,7 @@ var $str : cs:C1710.str
 // ----------------------------------------------------
 // Initialisations
 $currentCatalog:=$1
+
 cs:C1710.ob.new(PROJECT).createPath("$dialog")
 
 $str:=cs:C1710.str.new()
@@ -84,7 +85,7 @@ If ($file.exists)
 									$field.current:=$tableCatalog.field.query("fieldNumber = :1"; Num:C11($item.key)).pop()
 									$field.fieldNumber:=Num:C11($item.key)
 									$field.missing:=$field.current=Null:C1517
-									$field.nameMismatch:=$field.name#String:C10($field.current.name)
+									$field.nameMismatch:=Not:C34($str.setText($field.name).equal($field.current.name))
 									
 									If (Not:C34($field.missing))
 										
@@ -124,7 +125,7 @@ If ($file.exists)
 												//______________________________________________________
 											: (Bool:C1537($field.typeMismatch))
 												
-												$field.tableTips:=$str.setText("theFieldTypeWasModified").localized()
+												$field.tableTips:=$str.setText("theFieldNameTypeWasModified").localized($field.name)
 												$field.fieldTips:=$str.setText("theFieldTypeWasModified").localized()
 												
 												//______________________________________________________
@@ -141,7 +142,7 @@ If ($file.exists)
 									//ASSERT($item.key#"service")
 									
 									$field:=$table.value[$item.key]
-									$current:=$tableCatalog.field.query("name = :1"; $item.key).pop()
+									$current:=$tableCatalog.field.query("name === :1"; $item.key).pop()
 									$field.missing:=$current=Null:C1517
 									
 									If ($field.missing)
@@ -203,8 +204,9 @@ If ($file.exists)
 												: (PROJECT.isField($relatedItem.key))
 													
 													$relatedField.current:=$relatedCatalog.query("fieldNumber = :1"; Num:C11($relatedItem.key)).pop()
+													$relatedField.fieldNumber:=Num:C11($relatedItem.key)
 													$relatedField.missing:=$relatedField.current=Null:C1517
-													$relatedField.nameMismatch:=$relatedField.name#String:C10($relatedField.current.name)
+													$relatedField.nameMismatch:=Not:C34($str.setText($relatedField.name).equal($relatedField.current.name))
 													$relatedField.typeMismatch:=$relatedField.type#Num:C11($relatedField.current.type)
 													
 													If ($relatedField.missing | $relatedField.nameMismatch | $relatedField.typeMismatch)
@@ -229,7 +231,7 @@ If ($file.exists)
 																//______________________________________________________
 															: (Bool:C1537($relatedField.typeMismatch))
 																
-																$relatedField.tableTips:=$str.setText("theFieldTypeWasModified").localized()
+																$relatedField.tableTips:=$str.setText("theFieldNameTypeWasModified").localized()
 																$relatedField.fieldTips:=$relatedField.tableTips
 																
 																//______________________________________________________
@@ -240,7 +242,7 @@ If ($file.exists)
 														
 														If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
 															
-															$relatedField.name:=$item.key
+															$relatedField.parent:=$item.key
 															$unsynchronizedFields.push($relatedField)
 															
 														End if 
@@ -249,9 +251,9 @@ If ($file.exists)
 													//______________________________________________________
 												: (PROJECT.isRelationToMany($relatedField))  // 1 -> N relation
 													
-													$relatedField.current:=$relatedCatalog.query("name = :1"; $relatedItem.key).pop()
+													$relatedField.current:=$relatedCatalog.query("name === :1"; $relatedItem.key).pop()
 													$relatedField.missing:=$relatedField.current=Null:C1517
-													$relatedField.nameMismatch:=$relatedField.name#$relatedItem.key
+													$relatedField.nameMismatch:=Not:C34($str.setText($relatedField.name).equal($relatedItem.key))
 													
 													If ($relatedField.missing | $relatedField.nameMismatch)
 														
@@ -280,7 +282,7 @@ If ($file.exists)
 														
 														If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
 															
-															$relatedField.name:=$item.key
+															$relatedField.parent:=$item.key
 															$unsynchronizedFields.push($relatedField)
 															
 														End if 
@@ -290,13 +292,15 @@ If ($file.exists)
 												: (PROJECT.isRelationToOne($relatedField))  // N -> 1 relation
 													
 													$linkedCatalog:=$currentCatalog.query("tableNumber = :1"; $relatedField.relatedTableNumber).pop().field
+													
 													For each ($linkedItem; PROJECT.storageFields($relatedField))
+														
 														$linkedField:=$linkedItem.value
 														$linkedField.fieldNumber:=Num:C11($linkedItem.key)
 														$linkedField.current:=$linkedCatalog.query("fieldNumber = :1"; Num:C11($linkedItem.key)).pop()
 														
 														$linkedField.missing:=$linkedField.current=Null:C1517
-														$linkedField.nameMismatch:=$linkedField.name#String:C10($linkedField.current.name)
+														$linkedField.nameMismatch:=Not:C34($str.setText($linkedField.name).equal($linkedField.current.name))
 														
 														If (Not:C34($linkedField.missing))
 															
@@ -336,7 +340,7 @@ If ($file.exists)
 																	//______________________________________________________
 																: (Bool:C1537($linkedField.typeMismatch))
 																	
-																	$linkedField.tableTips:=$str.setText("theFieldTypeWasModified").localized()
+																	$linkedField.tableTips:=$str.setText("theFieldNameTypeWasModified").localized()
 																	$linkedField.fieldTips:=$linkedField.tableTips
 																	
 																	//______________________________________________________
@@ -370,7 +374,7 @@ If ($file.exists)
 								: (PROJECT.isRelationToMany($item.value))  // 1 -> N relation
 									
 									$field:=$table.value[$item.key]
-									$field.current:=$tableCatalog.field.query("name = :1"; $item.key).pop()
+									$field.current:=$tableCatalog.field.query("name === :1"; $item.key).pop()
 									$field.missing:=$field.current=Null:C1517
 									
 									If ($field.missing)
@@ -515,8 +519,6 @@ End if
 $o:=cs:C1710.ob.new(Form:C1466)
 $o.createPath("structure").structure.unsynchronized:=$isUnsynchronized
 $o.createPath("status").structure.dataModel:=Not:C34($isUnsynchronized)
-
-//cs.ob.new(PROJECT).createPath("$project.$dialog.EDITOR.ribbon.status").dataModel:=Not($isUnsynchronized)
 
 CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
 "show"; $isUnsynchronized))

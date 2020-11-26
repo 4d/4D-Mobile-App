@@ -12,12 +12,9 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($tableIndex; $relatedCount; $publishedCount; $Win_current)
-C_TEXT:C284($key; $tt)
-C_OBJECT:C1216($catalog; $field; $cache; $datastore)
-C_OBJECT:C1216($relatedField; $tableModel; $oo)
-C_COLLECTION:C1488($unsynchronizedTableFields; $unsynchronizedFields)
-
+var $publishedCount; $relatedCount; $tableIndex; $Win_current : Integer
+var $cache; $currentTable; $datastore; $field; $item; $linkedItem; $relatedField; $relatedItem; $tableModel : Object
+var $unsynchronizedTableFields : Collection
 var $file : 4D:C1709.File
 var $backup : 4D:C1709.Folder
 
@@ -35,13 +32,14 @@ $backup.create()
 $file.copyTo($backup)
 $file:=$file.parent.file("catalog.json").copyTo($backup)
 
+$tableIndex:=0
+
 For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 	
 	If ($unsynchronizedTableFields#Null:C1517)
 		
-		If ($unsynchronizedTableFields.length=0)
+		If ($unsynchronizedTableFields.length=0)  // ❌ THE TABLE DOESN'T EXIST ANYMORE
 			
-			// ❌ THE TABLE DOESN'T EXIST ANYMORE
 			OB REMOVE:C1226(PROJECT.dataModel; String:C10($tableIndex))
 			
 		Else 
@@ -50,101 +48,9 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 			$tableModel:=PROJECT.dataModel[String:C10($tableIndex)]
 			$publishedCount:=0
 			
-			//For each ($key; $tableModel)
-			//Case of 
-			////______________________________________________________
-			//: (Length($key)=0)
-			//// TABLE PROPERTIES
-			////______________________________________________________
-			//: (PROJECT.isField($key))
-			////$field:=$unsynchronizedTableFields.query("fieldNumber = :1"; Num($key)).pop()
-			////If ($field=Null)  // NOT unsynchronized
-			////$publishedCount:=$publishedCount+1
-			////Else 
-			////Case of 
-			//////______________________________________________________
-			////: ($field.missing)
-			////OB REMOVE($tableModel; String($key))
-			//////______________________________________________________
-			////: ($field.typeMismatch)
-			////// Detect compatible types
-			////Case of 
-			//////……………………………………………………………………………………………………………………………………………………………………………
-			////: (($field.fieldType=Is alpha field) & ($field.current.fieldType=Is text)) | (($field.fieldType=Is text) & ($field.current.fieldType=Is alpha field))  // String
-			////$tableModel[$key].fieldType:=$field.current.fieldType
-			////$publishedCount:=$publishedCount+1
-			//////……………………………………………………………………………………………………………………………………………………………………………
-			////: (($field.current.fieldType=Is integer) | ($field.current.fieldType=Is longint) | ($field.current.fieldType=Is integer 64 bits) | ($field.current.fieldType=Is real) | ($field.current.fieldType=_o_Is float)) & (($field.fieldType=Is integer) | ($field.fieldType=Is longint) | ($field.fieldType=Is integer 64 bits) | ($field.fieldType=Is real) | ($field.fieldType=_o_Is float))  // Numeric
-			////$tableModel[$key].fieldType:=$field.current.fieldType
-			////$publishedCount:=$publishedCount+1
-			//////……………………………………………………………………………………………………………………………………………………………………………
-			////Else 
-			////OB REMOVE($tableModel; String($key))
-			//////……………………………………………………………………………………………………………………………………………………………………………
-			////End case 
-			//////______________________________________________________
-			////Else 
-			////// Only name was modified: ACCEPT
-			////$tableModel[$key].name:=$field.current.name
-			////$publishedCount:=$publishedCount+1
-			//////______________________________________________________
-			////End case 
-			////End if 
-			////______________________________________________________
-			//: ((Value type($tableModel[$key])#Is object))
-			//// <NOTHING MORE TO DO>
-			////______________________________________________________
-			//: (PROJECT.isRelationToOne($tableModel[$key]))  // N -> 1 relation
-			//If ($datastore[$tableModel[$key].relatedDataClass]=Null)
-			//// THE RELATED TABLE DOESN'T EXIST ANYMORE
-			//OB REMOVE($tableModel; String($key))
-			//Else 
-			//$relatedCount:=0
-			//For each ($tt; $tableModel[$key])
-			//Case of 
-			////…………………………………………………………………………
-			//: (PROJECT.isField($tt))
-			//$relatedField:=$tableModel[$key][$tt]
-			//$unsynchronizedFields:=$unsynchronizedTableFields.extract("fields")
-			//If ($unsynchronizedFields.length>0)
-			//If ($unsynchronizedFields[0].query("relatedTableNumber = :1 & name = :2"; $relatedField.relatedTableNumber; $relatedField.name).length=1)
-			//OB REMOVE($tableModel[$key]; $tt)
-			//Else 
-			//$relatedCount:=$relatedCount+1
-			//End if 
-			//Else 
-			//$relatedCount:=$relatedCount+1
-			//End if 
-			////…………………………………………………………………………
-			//: ((Value type($tableModel[$key])#Is object))
-			//// <NOTHING MORE TO DO>
-			////…………………………………………………………………………
-			//Else 
-			//// NOT YET MANAGED
-			////…………………………………………………………………………
-			//End case 
-			//End for each 
-			//If ($relatedCount=0)
-			//// NO MORE PUBLISHED FIELDS FROM THE RELATED TABLE
-			//OB REMOVE($tableModel; $key)
-			//Else 
-			//$publishedCount:=$publishedCount+1
-			//End if 
-			//End if 
-			////______________________________________________________
-			//: (PROJECT.isRelationToMany($tableModel[$key]))  // 1 -> N relation
-			////If ($datastore[$tableModel[$key].relatedEntities]=Null)
-			////// THE RELATED TABLE DOESN'T EXIST ANYMORE
-			////OB REMOVE($tableModel; String($key))
-			////Else 
-			////$publishedCount:=$publishedCount+1
-			////End if 
-			////________________________________________
-			//End case 
-			//End for each
-			
-			var $item : Object
 			For each ($item; PROJECT.fields($tableModel))
+				
+				$currentTable:=$tableModel[$item.key]
 				
 				Case of 
 						
@@ -153,115 +59,193 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 						
 						$field:=$unsynchronizedTableFields.query("fieldNumber = :1"; Num:C11($item.key)).pop()
 						
-						If ($field=Null:C1517)  // 😇 NOT unsynchronized
-							
-							$publishedCount:=$publishedCount+1
-							
-						Else 
-							
-							Case of 
-									
-									//______________________________________________________
-								: ($field.missing)
-									
-									// ❌ REMOVE THE MISSING FIELD
-									OB REMOVE:C1226($tableModel; String:C10($item.key))
-									
-									//______________________________________________________
-								: ($field.typeMismatch)  // Search if the new type is compatible
-									
-									Case of 
-											
-											//………………………………………………………………………………………………………………
-										: (PROJECT.isString($field.fieldType))\
-											 & (PROJECT.isString($field.current.fieldType))
-											
-											$tableModel[$item.key].fieldType:=$field.current.fieldType
-											$publishedCount:=$publishedCount+1
-											
-											//………………………………………………………………………………………………………………
-										: (PROJECT.isNumeric($field.fieldType))\
-											 & (PROJECT.isNumeric($field.current.fieldType))
-											
-											$tableModel[$item.key].fieldType:=$field.current.fieldType
-											$publishedCount:=$publishedCount+1
-											
-											//………………………………………………………………………………………………………………
-										Else 
-											
-											// ❌ REMOVE THE NON TYPE COMPATIBLE FIELD
-											OB REMOVE:C1226($tableModel; String:C10($item.key))
-											
-											//………………………………………………………………………………………………………………
-									End case 
-									
-									//______________________________________________________
-								: ($field.nameMismatch)  // Only the name has been changed
-									
-									$tableModel[$item.key].name:=$field.current.name
-									$publishedCount:=$publishedCount+1
-									
-									//______________________________________________________
-								Else 
-									
-									ASSERT:C1129(False:C215; "😰 I wonder why I'm here")
-									
-									//______________________________________________________
-							End case 
-						End if 
+						Case of 
+								
+								//______________________________________________________
+							: ($field=Null:C1517)  // 😇 We can go dancing
+								
+								$publishedCount:=$publishedCount+1
+								
+								//______________________________________________________
+							: ($field.missing)  // ❌ THE FIELD DOESN'T EXIST ANYMORE
+								
+								OB REMOVE:C1226($tableModel; $item.key)
+								
+								//______________________________________________________
+							: ($field.typeMismatch)  // ❓ if the new type is compatible
+								
+								Case of 
+										
+										//………………………………………………………………………………………………………………
+									: (PROJECT.isString($field.fieldType))\
+										 & (PROJECT.isString($field.current.fieldType))  // 🆗
+										
+										$currentTable.fieldType:=$field.current.fieldType
+										$publishedCount:=$publishedCount+1
+										
+										//………………………………………………………………………………………………………………
+									: (PROJECT.isNumeric($field.fieldType))\
+										 & (PROJECT.isNumeric($field.current.fieldType))  // 🆗
+										
+										$currentTable.fieldType:=$field.current.fieldType
+										$publishedCount:=$publishedCount+1
+										
+										//………………………………………………………………………………………………………………
+									Else   // ❌ INCOMPATIBLE TYPE
+										
+										OB REMOVE:C1226($tableModel; $item.key)
+										
+										//………………………………………………………………………………………………………………
+								End case 
+								
+								//______________________________________________________
+							: ($field.nameMismatch)  // 🆗 update the name
+								
+								$currentTable.name:=$field.current.name
+								$publishedCount:=$publishedCount+1
+								
+								//______________________________________________________
+							Else 
+								
+								ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+								
+								//______________________________________________________
+								
+						End case 
 						
 						//______________________________________________________
-					: (PROJECT.isRelationToOne($item.value))  // N -> 1 relation
+					: (PROJECT.isRelationToOne($item.value))
 						
-						If ($datastore[$tableModel[$item.key].relatedDataClass]=Null:C1517)
+						If ($datastore[$currentTable.relatedDataClass]=Null:C1517)  // ❌ THE TABLE DOESN'T EXIST ANYMORE
 							
-							// ❌ THE RELATED TABLE DOESN'T EXIST ANYMORE
 							OB REMOVE:C1226($tableModel; String:C10($item.key))
 							
 						Else 
 							
 							$relatedCount:=0
 							
-							For each ($tt; $tableModel[$item.key])
+							For each ($relatedItem; PROJECT.fields($currentTable[$item.key]))
+								
+								$relatedField:=$relatedItem.value
 								
 								Case of 
 										
 										//…………………………………………………………………………
-									: (PROJECT.isField($tt))
+									: (PROJECT.isField($relatedItem.key))
 										
-										$relatedField:=$tableModel[$item.key][$tt]
+										$field:=$unsynchronizedTableFields.query("fieldNumber = :1"; Num:C11($relatedItem.key)).pop()
 										
-										$unsynchronizedFields:=$unsynchronizedTableFields.extract("fields")
-										
-										If ($unsynchronizedFields.length>0)
-											
-											If ($unsynchronizedFields[0].query("relatedTableNumber = :1 & name = :2"; $relatedField.relatedTableNumber; $relatedField.name).length=1)
+										Case of 
 												
-												OB REMOVE:C1226($tableModel[$item.key]; $tt)
-												
-											Else 
+												//______________________________________________________
+											: ($field=Null:C1517)  // 😇 A last one for the road
 												
 												$relatedCount:=$relatedCount+1
 												
-											End if 
+												//______________________________________________________
+											: ($field.missing)  // ❌ THE FIELD DOESN'T EXIST ANYMORE
+												
+												OB REMOVE:C1226($currentTable[$item.key]; $relatedItem.key)
+												
+												//______________________________________________________
+											: ($field.typeMismatch)  // ❓ if the new type is compatible
+												
+												Case of 
+														
+														//………………………………………………………………………………………………………………
+													: (PROJECT.isString($field.fieldType))\
+														 & (PROJECT.isString($field.current.fieldType))  // 🆗
+														
+														$currentTable[$item.key][$relatedItem.key].fieldType:=$field.current.fieldType
+														$relatedCount:=$relatedCount+1
+														
+														//………………………………………………………………………………………………………………
+													: (PROJECT.isNumeric($field.fieldType))\
+														 & (PROJECT.isNumeric($field.current.fieldType))  // 🆗
+														
+														$currentTable[$item.key][$relatedItem.key].fieldType:=$field.current.fieldType
+														$relatedCount:=$relatedCount+1
+														
+														//………………………………………………………………………………………………………………
+													Else   // ❌ INCOMPATIBLE TYPE
+														
+														OB REMOVE:C1226($currentTable[$item.key]; $relatedItem.key)
+														
+														//………………………………………………………………………………………………………………
+												End case 
+												
+												//______________________________________________________
+											: ($field.nameMismatch)  // 🆗 update the name
+												
+												$currentTable[$item.key][$relatedItem.key].name:=$field.current.name
+												$relatedCount:=$relatedCount+1
+												
+												//______________________________________________________
+											Else 
+												
+												ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+												
+												//______________________________________________________
+												
+										End case 
+										
+										//______________________________________________________
+									: (PROJECT.isRelationToMany($relatedField))
+										
+										$field:=$unsynchronizedTableFields.query("name = :1"; $relatedField.name).pop()
+										
+										Case of 
+												
+												//______________________________________________________
+											: ($field=Null:C1517)  // 😇 Boss, it's for me
+												
+												$relatedCount:=$relatedCount+1
+												
+												//______________________________________________________
+											: ($field.missing)  // ❌ THE RELATION DOESN'T EXIST ANYMORE
+												
+												OB REMOVE:C1226($currentTable; $relatedItem.key)
+												
+												//______________________________________________________
+											Else 
+												
+												ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+												
+												//______________________________________________________
+												
+										End case 
+										
+										//______________________________________________________
+									: (PROJECT.isRelationToOne($relatedField))
+										
+										For each ($linkedItem; PROJECT.storageFields($relatedField))
 											
-										Else 
+											$field:=$unsynchronizedTableFields.query("fieldNumber = :1"; Num:C11($linkedItem.key)).pop()
 											
-											$relatedCount:=$relatedCount+1
+											Case of 
+													
+													//______________________________________________________
+												: ($field=Null:C1517)  // 😇 We're going to end up completely drunk
+													
+													$relatedCount:=$relatedCount+1
+													
+													//______________________________________________________
+												: ($field.missing)  // ❌ THE RELATION DOESN'T EXIST ANYMORE
+													
+													OB REMOVE:C1226($currentTable; $linkedItem.key)
+													
+													//______________________________________________________
+												Else 
+													
+													ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+													
+													//______________________________________________________
+													
+											End case 
 											
-										End if 
+										End for each 
 										
-										//…………………………………………………………………………
-									: ((Value type:C1509($tableModel[$item.key])#Is object:K8:27))
-										
-										// <NOTHING MORE TO DO>
-										
-										//…………………………………………………………………………
-									Else 
-										
-										// NOT YET MANAGED
-										
-										//…………………………………………………………………………
+										//________________________________________
 								End case 
 							End for each 
 							
@@ -294,7 +278,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 						//______________________________________________________
 					Else 
 						
-						ASSERT:C1129(False:C215; "😰 I wonder why I'm here")
+						ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
 						
 						//______________________________________________________
 				End case 
@@ -344,7 +328,8 @@ $cache.structure.digest:=Generate digest:C1147(JSON Stringify:C1217(Form:C1466.$
 $file.setText(JSON Stringify:C1217($cache; *))
 
 // Refresh UI
-STRUCTURE_Handler(New object:C1471("action"; "update"; "project"; PROJECT))
+//STRUCTURE_Handler(New object("action"; "update"; "project"; PROJECT))
+STRUCTURE_Handler(New object:C1471("action"; "update"))
 
 project_REPAIR(PROJECT)
 
@@ -352,8 +337,9 @@ project_REPAIR(PROJECT)
 PROJECT.save()
 
 // Update UI
-$Win_current:=Current form window:C827
-CALL FORM:C1391($Win_current; "editor_CALLBACK"; "updateRibbon")
-CALL FORM:C1391($Win_current; "editor_CALLBACK"; "refreshViews")
-CALL FORM:C1391($Win_current; "editor_CALLBACK"; "pickerHide")
-CALL FORM:C1391($Win_current; "editor_CALLBACK"; "description"; New object:C1471("show"; False:C215))
+CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "updateRibbon")
+CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "refreshViews")
+CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "pickerHide")
+CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471("show"; False:C215))
+
+EXECUTE METHOD IN SUBFORM:C1085("project"; "EDITOR_ON_ACTIVATE")

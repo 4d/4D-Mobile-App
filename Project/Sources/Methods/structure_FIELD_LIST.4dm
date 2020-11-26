@@ -245,7 +245,7 @@ If ($row>0)
 				
 				If ($withError)
 					
-					$withError:=($unsynchronized.query("name = :1"; $field.name).pop()#Null:C1517)\
+					$withError:=($unsynchronized.query("name = :1 OR parent = :1"; $field.name).pop()#Null:C1517)\
 						 | ($unsynchronized.length=0)
 					
 				End if 

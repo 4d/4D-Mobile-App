@@ -126,6 +126,8 @@ Case of
 		
 		$form.switch.setPicture("#images/toolbar/"+Choose:C955(Form:C1466.state="open"; "reduce"; "expand")+".png")
 		
+		ASSERT:C1129(Not:C34(Shift down:C543))
+		
 		For each ($page; $form.pages)
 			
 			OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=Form:C1466.page))
@@ -188,8 +190,8 @@ Case of
 		
 		var $o : Object
 		$o:=PROJECT.$project
-		$form.build.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.status.xCode) & Bool:C1537($o.status.project))
-		$form.install.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.status.xCode) & Bool:C1537($o.status.project) & Bool:C1537($o.status.teamId))
+		$form.build.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project))
+		$form.install.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project) & Bool:C1537($o.status.teamId))
 		
 		//______________________________________________________
 	Else 

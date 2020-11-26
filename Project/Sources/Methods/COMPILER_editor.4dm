@@ -9,8 +9,8 @@ If (False:C215)
 	C_OBJECT:C1216(editor_CALLBACK; $2)
 	
 	// ----------------------------------------------------
-	C_COLLECTION:C1488(editor_Catalog; $0)
-	C_TEXT:C284(editor_Catalog; $1)
+	//C_COLLECTION(_o_editor_Catalog; $0)
+	//C_TEXT(_o_editor_Catalog; $1)
 	
 	// ----------------------------------------------------
 	C_TEXT:C284(editor_RESUME; $1)

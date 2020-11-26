@@ -40,13 +40,13 @@ If (Num:C11($e.row)>0)
 	If ($e.objectName=$1.form.tableList)
 		
 		//%W-533.3
-		$table:=This:C1470.catalog().query("name=:1"; (OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName))->{$e.row}).pop()
+		$table:=PROJECT.getCatalog().query("name=:1"; (OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName))->{$e.row}).pop()
 		//%W+533.3
 		
 	Else 
 		
 		// Get current table
-		$table:=This:C1470.catalog().query("name=:1"; $1.form.form.currentTable.name).pop()
+		$table:=PROJECT.getCatalog().query("name=:1"; $1.form.form.currentTable.name).pop()
 		
 	End if 
 	
@@ -59,7 +59,7 @@ If (Num:C11($e.row)>0)
 			// Restrict to the table
 			$unsynchronizedTableFields:=$unsynchronizedTableFields[$table.tableNumber]
 			
-			If ($unsynchronizedTableFields#Null:C1517)
+			If ($unsynchronizedTableFields=Null:C1517)
 				
 				// TABLE IS OK
 				
@@ -92,7 +92,7 @@ If (Num:C11($e.row)>0)
 							
 							// Get the desynchronized item, if applicable
 							//%W-533.3
-							$o:=$unsynchronizedTableFields.query("name = :1"; (UI.pointer($1.form.fields))->{$e.row}).pop()
+							$o:=$unsynchronizedTableFields.query("name = :1 OR parent = :1"; (UI.pointer($1.form.fields))->{$e.row}).pop()
 							//%W+533.3
 							
 							If (Length:C16(String:C10($o.fieldTips))#0)

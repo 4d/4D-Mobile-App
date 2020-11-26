@@ -121,6 +121,25 @@ If (Num:C11($tableID)>0)
 				$o:=Form:C1466[$formType][$tableID]
 				$target:=Choose:C955($o=Null:C1517; Formula:C1597(New object:C1471); Formula:C1597($o)).call()
 				
+				If ($target.fields#Null:C1517)
+					
+					// Update names if any
+					For each ($o; $target.fields)
+						
+						If ($o#Null:C1517)
+							
+							If ($o.fieldType=8858)\
+								 | ($o.fieldType=8859)
+								
+							Else 
+								
+								$o.name:=Form:C1466.dataModel[$tableID][String:C10($o.fieldNumber)].name
+								
+							End if 
+						End if 
+					End for each 
+				End if 
+				
 				$form.preview.getCoordinates()
 				
 				If (Num:C11($manifest.renderer)>=2)

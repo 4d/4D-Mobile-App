@@ -26,7 +26,7 @@ If (Count parameters:C259>=1)
 	
 Else 
 	
-	$Obj_project:=(UI.pointer("project"))->
+	$Obj_project:=PROJECT  //(UI.pointer("project"))->
 	
 End if 
 
@@ -135,6 +135,16 @@ End if
 |                                        FORMS                                              |
 =============================================================================================
 */
+
+
+
+
+
+
+
+
+
+
 
 For each ($o; Form:C1466.audit.errors)
 	

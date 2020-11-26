@@ -442,7 +442,11 @@ Function removeTable
 	var $0 : Collection
 	var $1 : Variant
 	
-	OB REMOVE:C1226(This:C1470.dataModel; String:C10($1))
+	If (This:C1470.dataModel#Null:C1517)
+		
+		OB REMOVE:C1226(This:C1470.dataModel; String:C10($1))
+		
+	End if 
 	
 	// Update main
 	This:C1470.removeFromMain($1)

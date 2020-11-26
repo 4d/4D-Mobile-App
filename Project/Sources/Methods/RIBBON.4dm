@@ -86,7 +86,17 @@ Case of
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.xCode)))
 								
-								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("youNeedXcodeToPerformThisOperation"))
+								If (Is macOS:C1572)
+									
+									//#MARK_TODO: Il faut soit l'environnement xCode soit l'environnement Android
+									OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("youNeedXcodeToPerformThisOperation"))
+									
+								Else 
+									
+									//#MARK_LOCALIZE
+									OBJECT SET HELP TIP:C1181(*; $e.objectName; ".Android's development environment is not ready.")
+									
+								End if 
 								
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.dataModel)))
@@ -104,7 +114,17 @@ Case of
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.xCode)))
 								
-								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("youNeedXcodeToPerformThisOperation"))
+								If (Is macOS:C1572)
+									
+									//#MARK_TODO: Il faut soit l'environnement xCode soit l'environnement Android
+									OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("youNeedXcodeToPerformThisOperation"))
+									
+								Else 
+									
+									//#MARK_LOCALIZE
+									OBJECT SET HELP TIP:C1181(*; $e.objectName; ".Android's development environment is not ready.")
+									
+								End if 
 								
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.dataModel)))

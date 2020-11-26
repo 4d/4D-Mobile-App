@@ -60,10 +60,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	If (OB Is empty:C1297($context))
 		
 		// Define locales functions
-		$context.catalog:=Formula:C1597(editor_Catalog)
-		$context.setHelpTip:=Formula:C1597(STRUCTURE_TIPS(New object:C1471(\
-			"target"; $1; \
-			"form"; $2)))
+		$context.setHelpTip:=Formula:C1597(STRUCTURE_TIPS(New object:C1471("target"; $1; "form"; $2)))
 		
 	End if 
 	
@@ -100,7 +97,7 @@ Case of
 					
 				Else 
 					
-					OBJECT SET TITLE:C194(*; $form.allow; _o_str("allowToMakeTheStructureAdjustments").localized("4dProductName"))
+					OBJECT SET TITLE:C194(*; $form.allow; cs:C1710.str.new("allowToMakeTheStructureAdjustments").localized("4dProductName"))
 					
 				End if 
 				
@@ -129,6 +126,10 @@ Case of
 				
 				// Align checkbox & help according to the translation
 				widget($form.allowHelp).moveHorizontally(widget($form.allow).bestSize().coordinates.right+5)
+				
+				//#MARK_TODO: Nous devrions trouver un moyen plus élégant!
+				CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
+					"show"; Not:C34(Bool:C1537(Form:C1466.$project.structure.dataModel))))
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
@@ -419,9 +420,9 @@ Case of
 		CALL FORM:C1391($form.window; $form.callback; "updateRibbon")
 		
 		// Update structure dependencies, if any
-		CALL FORM:C1391($form.window; $form.callback; "tableList"; $IN.project)
-		CALL FORM:C1391($form.window; $form.callback; "fieldList"; $IN.project)
-		CALL FORM:C1391($form.window; $form.callback; "tableProperties"; $IN.project)
+		CALL FORM:C1391($form.window; $form.callback; "tableList"; PROJECT)
+		CALL FORM:C1391($form.window; $form.callback; "fieldList"; PROJECT)
+		CALL FORM:C1391($form.window; $form.callback; "tableProperties"; PROJECT)
 		CALL FORM:C1391($form.window; $form.callback; "mainMenu")
 		
 		//=========================================================
