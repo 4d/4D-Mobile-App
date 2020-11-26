@@ -116,9 +116,11 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 						//______________________________________________________
 					: (PROJECT.isRelationToOne($item.value))
 						
-						If ($datastore[$currentTable.relatedDataClass]=Null:C1517)  // ❌ THE TABLE DOESN'T EXIST ANYMORE
+						$field:=$unsynchronizedTableFields.query("name = :1"; $item.key).pop()
+						
+						If ($field.missing)  // ❌ THE RELATION DOESN'T EXIST ANYMORE
 							
-							OB REMOVE:C1226($tableModel; String:C10($item.key))
+							OB REMOVE:C1226($tableModel; $item.key)
 							
 						Else 
 							
@@ -249,9 +251,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 								End case 
 							End for each 
 							
-							If ($relatedCount=0)
-								
-								// ❌ NO MORE PUBLISHED FIELDS FROM THE RELATED TABLE
+							If ($relatedCount=0)  // ❌ NO MORE PUBLISHED FIELDS FROM THE RELATED TABLE
 								OB REMOVE:C1226($tableModel; $item.key)
 								
 							Else 
@@ -264,9 +264,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 						//______________________________________________________
 					: (PROJECT.isRelationToMany($item.value))  // 1 -> N relation
 						
-						If ($datastore[$tableModel[$item.key].relatedEntities]=Null:C1517)
-							
-							// ❌ REMOVE THE MISSING TABLE
+						If ($datastore[$tableModel[$item.key].relatedEntities]=Null:C1517)  // ❌ REMOVE THE MISSING TABLE
 							OB REMOVE:C1226($tableModel; String:C10($item.key))
 							
 						Else 
@@ -284,9 +282,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 				End case 
 			End for each 
 			
-			If ($publishedCount=0)
-				
-				// ❌ NO MORE FIELDS PUBLISHED FOR THIS TABLE
+			If ($publishedCount=0)  // ❌ NO MORE FIELDS PUBLISHED FOR THIS TABLE
 				OB REMOVE:C1226(PROJECT.dataModel; String:C10($tableIndex))
 				
 			End if 

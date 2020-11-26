@@ -137,9 +137,7 @@ If ($file.exists)
 									End if 
 									
 									//______________________________________________________
-								: (PROJECT.isRelationToOne($item.value))  // N -> 1 relation
-									
-									//ASSERT($item.key#"service")
+								: (PROJECT.isRelationToOne($item.value))
 									
 									$field:=$table.value[$item.key]
 									$current:=$tableCatalog.field.query("name === :1"; $item.key).pop()
@@ -203,6 +201,7 @@ If ($file.exists)
 													//______________________________________________________
 												: (PROJECT.isField($relatedItem.key))
 													
+													$relatedField.parent:=$item.key
 													$relatedField.current:=$relatedCatalog.query("fieldNumber = :1"; Num:C11($relatedItem.key)).pop()
 													$relatedField.fieldNumber:=Num:C11($relatedItem.key)
 													$relatedField.missing:=$relatedField.current=Null:C1517
@@ -242,15 +241,15 @@ If ($file.exists)
 														
 														If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
 															
-															$relatedField.parent:=$item.key
 															$unsynchronizedFields.push($relatedField)
 															
 														End if 
 													End if 
 													
 													//______________________________________________________
-												: (PROJECT.isRelationToMany($relatedField))  // 1 -> N relation
+												: (PROJECT.isRelationToMany($relatedField))
 													
+													$relatedField.parent:=$item.key
 													$relatedField.current:=$relatedCatalog.query("name === :1"; $relatedItem.key).pop()
 													$relatedField.missing:=$relatedField.current=Null:C1517
 													$relatedField.nameMismatch:=Not:C34($str.setText($relatedField.name).equal($relatedItem.key))
@@ -282,14 +281,13 @@ If ($file.exists)
 														
 														If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
 															
-															$relatedField.parent:=$item.key
 															$unsynchronizedFields.push($relatedField)
 															
 														End if 
 													End if 
 													
 													//______________________________________________________
-												: (PROJECT.isRelationToOne($relatedField))  // N -> 1 relation
+												: (PROJECT.isRelationToOne($relatedField))
 													
 													$linkedCatalog:=$currentCatalog.query("tableNumber = :1"; $relatedField.relatedTableNumber).pop().field
 													
@@ -371,7 +369,7 @@ If ($file.exists)
 									$field.current:=$current
 									
 									//______________________________________________________
-								: (PROJECT.isRelationToMany($item.value))  // 1 -> N relation
+								: (PROJECT.isRelationToMany($item.value))
 									
 									$field:=$table.value[$item.key]
 									$field.current:=$tableCatalog.field.query("name === :1"; $item.key).pop()
