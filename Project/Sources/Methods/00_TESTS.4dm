@@ -5,7 +5,7 @@ var $b; $Boo_reset; $ok : Boolean
 var $i; $index; $l; $Lon_build; $Lon_error; $Lon_result; $Lon_type; $Lon_value; $Lon_x; $w : Integer
 var $Gmt_timeGMT : Time
 var $null : Variant
-var $file; $folder; $o; $o1; $o2; $Obj_formula; $Obj_new; $Obj_result; $Obj_target; $Obj_template : Object
+var $file; $folder; $o; $o1; $o2; $Obj_formula; $Obj_new; $result; $Obj_target; $Obj_template : Object
 var $svg; $zip : Object
 var $c; $c1; $Col_2; $cUserdCommands : Collection
 
@@ -32,9 +32,30 @@ Case of
 		
 		
 		$o:=cs:C1710.lep.new()
-		$c:=$o.getEnvironnementVariables()
+		ASSERT:C1129($o.success)
+		
+		$result:=$o.getEnvironnementVariables()
+		ASSERT:C1129($o.success)
+		ASSERT:C1129(Not:C34(OB Is empty:C1297($result)))
+		ASSERT:C1129($result._4D_OPTION_CURRENT_DIRECTORY#Null:C1517)
+		ASSERT:C1129($result._4D_OPTION_HIDE_CONSOLE#Null:C1517)
+		ASSERT:C1129($result._4D_OPTION_BLOCKING_EXTERNAL_PROCESS#Null:C1517)
+		ASSERT:C1129($result.HOME#Null:C1517)
+		ASSERT:C1129($result.USER=Get system info:C1571.accountName)
+		
 		$t:=$o.getEnvironnementVariable("HOME")
-		$t:=$o.getEnvironnementVariable("toto")
+		ASSERT:C1129($o.success)
+		
+		ASSERT:C1129(""=$o.getEnvironnementVariable("toto"))
+		ASSERT:C1129(Not:C34($o.success))
+		
+		$folder:=Folder:C1567(fk database folder:K87:14)
+		$o.setDirectory($folder)
+		ASSERT:C1129($o.success)
+		ASSERT:C1129($folder.platformPath=$o.getEnvironnementVariable("currentDirectory"))
+		ASSERT:C1129($o.success)
+		ASSERT:C1129($folder.platformPath=$o.getEnvironnementVariable("directory"))
+		ASSERT:C1129($o.success)
 		
 		//________________________________________
 	: (True:C214)
@@ -181,26 +202,26 @@ Case of
 		// Test response
 		$o:=cs:C1710.source.new("localhost")
 		
-		$Obj_result:=$o.status()
+		$result:=$o.status()
 		
-		SET TEXT TO PASTEBOARD:C523(JSON Stringify:C1217($Obj_result; *))
+		SET TEXT TO PASTEBOARD:C523(JSON Stringify:C1217($result; *))
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($Obj_result.success)
+			: ($result.success)
 				
 				// TVB
 				
 				//______________________________________________________
-			: (Num:C11($Obj_result.httpError)=30)
+			: (Num:C11($result.httpError)=30)
 				
 				ALERT:C41(Get localized string:C991("theServerIsNotReady"))  // Server unavailable/Serveur inaccessible
 				
 				//______________________________________________________
-			: ($Obj_result.code=401)
+			: ($result.code=401)
 				
-				$ok:=($Obj_result.errors.query("errCode=1907").pop()#Null:C1517)
+				$ok:=($result.errors.query("errCode=1907").pop()#Null:C1517)
 				
 				If ($ok)
 					
@@ -414,12 +435,12 @@ Case of
 		
 		$o:=Folder:C1567("/RESOURCES")
 		
-		$Obj_result:=OB Class:C1730($o)
+		$result:=OB Class:C1730($o)
 		
-		$b:=OB Instance of:C1731($o; $Obj_result)
+		$b:=OB Instance of:C1731($o; $result)
 		
 		$o:=cs:C1710.static.new("toto")
-		$Obj_result:=OB Class:C1730($o)
+		$result:=OB Class:C1730($o)
 		$b:=OB Instance of:C1731($o; cs:C1710.static)
 		
 		//________________________________________
@@ -709,7 +730,7 @@ Case of
 				
 				$o1:=ds:C1482.Themes.new()
 				$o1.Name:=$o.themeName
-				$Obj_result:=$o1.save()
+				$result:=$o1.save()
 				
 				$o.themeID:=$o1.ID
 				
@@ -825,30 +846,30 @@ Case of
 		//________________________________________
 	: (False:C215)
 		
-		$Obj_result:=Rest(New object:C1471("action"; "url"; "url"; "http:// Localhost"))
-		$Obj_result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/"))
-		$Obj_result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest"))
-		$Obj_result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest/"))
+		$result:=Rest(New object:C1471("action"; "url"; "url"; "http:// Localhost"))
+		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/"))
+		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest"))
+		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest/"))
 		
 		//________________________________________
 	: (False:C215)
 		
-		$Obj_result:=net(New object:C1471("action"; "resolve"; "url"; "fr.wikipedia.org"))
+		$result:=net(New object:C1471("action"; "resolve"; "url"; "fr.wikipedia.org"))
 		
-		If ($Obj_result.success)
+		If ($result.success)
 			
-			$Obj_result.ping:=net(New object:C1471("action"; "ping"; "url"; $Obj_result.ip))
+			$result.ping:=net(New object:C1471("action"; "ping"; "url"; $result.ip))
 			
 		End if 
 		
-		$Obj_result:=net(New object:C1471("action"; "ping"; "url"; "127.0.0.1:8880"))
+		$result:=net(New object:C1471("action"; "ping"; "url"; "127.0.0.1:8880"))
 		
-		$Obj_result:=net(New object:C1471("action"; "ping"; "url"; "localhost"))
-		$Obj_result:=net(New object:C1471("action"; "resolve"; "url"; "localhost"))
+		$result:=net(New object:C1471("action"; "ping"; "url"; "localhost"))
+		$result:=net(New object:C1471("action"; "resolve"; "url"; "localhost"))
 		
 		//$Obj_result.ping:=server (New object("action";"ping";"url";"www.fr.wikipedia.org"))
 		//$Obj_result.ping:=server (New object("action";"ping";"url";"http://www.fr.wikipedia.org:80/"))
-		$Obj_result.ping:=net(New object:C1471("action"; "ping"; "url"; "testbugs.4d.fr"))
+		$result.ping:=net(New object:C1471("action"; "ping"; "url"; "testbugs.4d.fr"))
 		
 		//________________________________________
 	: (True:C214)

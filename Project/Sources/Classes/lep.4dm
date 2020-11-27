@@ -13,6 +13,10 @@ Function launch($command; $arguments)->$this : cs:C1710.lep
 	var $error; $t : Text
 	var $len; $pid; $pos : Integer
 	
+	This:C1470.outputStream:=Null:C1517
+	This:C1470.errorStream:=Null:C1517
+	This:C1470.pid:=0
+	
 	If (Value type:C1509($command)=Is object:K8:27)
 		
 		This:C1470.command:=This:C1470.escape($command.path)
@@ -174,6 +178,7 @@ Function launch($command; $arguments)->$this : cs:C1710.lep
 	$this:=This:C1470
 	
 	//====================================================================
+	// Restores the initial values of the class
 Function reset()->$this : cs:C1710.lep
 	
 	This:C1470.success:=True:C214
@@ -255,6 +260,97 @@ Function setOutputType($outputType : Integer)->$this : cs:C1710.lep
 	End if 
 	
 	$this:=This:C1470
+	
+	//====================================================================
+Function setDirectory($folder : 4D:C1709.Folder)->$this : cs:C1710.lep
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.environmentVariables["_4D_OPTION_CURRENT_DIRECTORY"]:=$folder.platformPath
+		
+	Else 
+		
+		This:C1470.environmentVariables["_4D_OPTION_CURRENT_DIRECTORY"]:=""
+		
+	End if 
+	
+	This:C1470.success:=True:C214
+	
+	$this:=This:C1470
+	
+	//====================================================================
+	// Returns an object containing all the environment variables
+Function getEnvironnementVariables()->$variables : Object
+	
+	var $c : Collection
+	var $t : Text
+	
+	This:C1470.launch(Choose:C955(Is macOS:C1572; "/usr/bin/env"; "set"))
+	
+	If (This:C1470.success)
+		
+		$variables:=New object:C1471
+		
+		For each ($t; Split string:C1554(This:C1470.outputStream; "\n"; sk ignore empty strings:K86:1))
+			
+			$c:=Split string:C1554($t; "=")
+			
+			If ($c.length=2)
+				
+				$variables[$c[0]]:=$c[1]
+				
+			End if 
+		End for each 
+		
+		// Add the currents variables
+		For each ($t; This:C1470.environmentVariables)
+			
+			If ($variables[$t]=Null:C1517)
+				
+				$variables[$t]:=This:C1470.environmentVariables[$t]
+				
+			End if 
+		End for each 
+	End if 
+	
+	//====================================================================
+	// Returns the content of an environment variable from its name
+Function getEnvironnementVariable($name : Text)->$value : Text
+	
+	var $o : Object
+	var $t : Text
+	
+	This:C1470.success:=Count parameters:C259>=1
+	
+	If (This:C1470.success)
+		
+		$t:=This:C1470._shortcut($name)
+		
+		If (This:C1470.environmentVariables[$t]#Null:C1517)
+			
+			$value:=This:C1470.environmentVariables[$t]
+			
+		Else 
+			
+			$o:=This:C1470.getEnvironnementVariables()
+			This:C1470.success:=$o[$name]#Null:C1517
+			
+			If (This:C1470.success)
+				
+				$value:=$o[$name]
+				
+			Else 
+				
+				This:C1470.errors.push("Variable \""+$name+"\" not found")
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		This:C1470.errors.push("Missing variable name parameter")
+		
+	End if 
 	
 	//====================================================================
 Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.lep
@@ -479,7 +575,8 @@ Function _shortcut($string : Text)->$variable : Text
 	Case of   // Shortcuts
 			
 			//…………………………………………………………………………………………
-		: ($string="currentDirectory")
+		: ($string="directory")\
+			 | ($string="currentDirectory")
 			
 			$variable:="_4D_OPTION_CURRENT_DIRECTORY"
 			
@@ -507,36 +604,4 @@ Function _pushError($desription : Text)
 	
 	This:C1470.success:=False:C215
 	This:C1470.errors.push(Get call chain:C1662[1].name+" - "+$desription)
-	
-	//====================================================================
-Function getEnvironnementVariables()->$variables : Collection
-	
-	var $c : Collection
-	var $t : Text
-	
-	This:C1470.launch(Choose:C955(Is macOS:C1572; "/usr/bin/env"; "set"))
-	
-	If (This:C1470.success)
-		
-		$variables:=New collection:C1472
-		
-		For each ($t; Split string:C1554(This:C1470.outputStream; "\n"; sk ignore empty strings:K86:1))
-			
-			$c:=Split string:C1554($t; "=")
-			
-			If ($c.length=2)
-				
-				$variables.push(New object:C1471(\
-					"var"; $c[0]; \
-					"value"; $c[1]))
-				
-			End if 
-		End for each 
-	End if 
-	
-	//====================================================================
-Function getEnvironnementVariable($name : Text)->$value : Text
-	
-	$value:=String:C10(This:C1470.getEnvironnementVariables().query("var = :1"; $name).pop().value)
-	
 	
