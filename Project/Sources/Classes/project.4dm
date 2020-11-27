@@ -286,7 +286,18 @@ Function addToMain
 	// Returns the collection of the tables of the data model
 Function tables($datamodel : Object)->$tables : Collection
 	
-	$tables:=OB Entries:C1720(Choose:C955(Count parameters:C259>=1; $datamodel; This:C1470.dataModel))
+	
+	If (Count parameters:C259>=1)
+		
+		$tables:=OB Entries:C1720($datamodel)
+		
+	Else 
+		
+		// Use current
+		$tables:=OB Entries:C1720(This:C1470.dataModel)
+		
+	End if 
+	
 	$tables:=$tables.filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
 	
 	//====================================
@@ -305,7 +316,7 @@ Function fields($table : Variant)->$fields : Collection
 				$model:=$table
 				
 				//______________________________________________________
-			: (Value type:C1509($table)=Is longint:K8:6)  // Table number
+			: (Value type:C1509($table)=Is longint:K8:6) | (Value type:C1509($table)=Is real:K8:4)  // Table number
 				
 				$model:=This:C1470.dataModel[String:C10($table)]
 				
@@ -402,19 +413,19 @@ Function isString($type : Integer)->$isNumeric : Boolean
 	
 	$isNumeric:=(New collection:C1472(Is alpha field:K8:1; Is text:K8:3).indexOf($type)#-1)
 	
-/* ===================================
-Add the table to the data model
-====================================*/
-Function addTable
-	var $0 : Object
-	var $1 : Object
+	//================================================================================
+	//Add a table to the data model
+Function addTable($table : Object)->$tableModel : Object
 	
 	var $o : Object
 	
-	$o:=This:C1470.getCatalog().query("tableNumber = :1"; $1.tableNumber).pop()
+	ASSERT:C1129($table.tableNumber#Null:C1517)
+	
+	$o:=This:C1470.getCatalog().query("tableNumber = :1"; $table.tableNumber).pop()
+	ASSERT:C1129($o#Null:C1517)
 	
 	// Put internal properties into a substructure
-	$0:=New object:C1471(\
+	$tableModel:=New object:C1471(\
 		""; New object:C1471(\
 		"name"; $o.name; \
 		"label"; This:C1470.label($o.name); \
@@ -431,9 +442,9 @@ Function addTable
 	End if 
 	
 	// Update main
-	This:C1470.addToMain($1.tableNumber)
+	This:C1470.addToMain($table.tableNumber)
 	
-	This:C1470.dataModel[String:C10($1.tableNumber)]:=$0
+	This:C1470.dataModel[String:C10($table.tableNumber)]:=$tableModel
 	
 /* ===================================
 Delete the table from the data model
@@ -771,6 +782,21 @@ Function updateFormDefinitions
 			End for each 
 		End if 
 	End for each 
+	
+	
+Function audit($audits : Object)->$audit : Object
+	
+	If (Count parameters:C259>=1)
+		
+		$audit:=project_Audit($audits)
+		
+	Else 
+		
+		$audit:=project_Audit
+		
+	End if 
+	
+	cs:C1710.ob.new(This:C1470).createPath("$project.status").$project.status.project:=$audit.success
 	
 	//================================================================================
 Function fieldDefinition

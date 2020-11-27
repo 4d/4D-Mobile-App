@@ -8,8 +8,8 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $0: Object
-var $1: Object
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(PROJECT_Handler; $0)
@@ -94,12 +94,12 @@ Case of
 		If (Num:C11($form.window)#0)
 			
 			// Send result
-			CALL FORM:C1391($form.window; "editor_CALLBACK"; "projectAuditResult"; project_Audit($IN))
+			CALL FORM:C1391($form.window; "editor_CALLBACK"; "projectAuditResult"; PROJECT.audit())
 			
 		Else 
 			
 			// Test purpose - Return result
-			$0:=project_Audit($IN)
+			$0:=PROJECT.audit($IN)
 			
 		End if 
 		
@@ -388,9 +388,3 @@ Case of
 		
 		//=========================================================
 End case 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

@@ -390,7 +390,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="F61E58698B6845B89C562D81E3569E34" name_Nto1="_manager" name_1toN="serviceManaged" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="F61E58698B6845B89C562D81E3569E34" name_Nto1="manager" name_1toN="serviceManaged" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
 		<related_field kind="source">
 			<field_ref uuid="376B869EAC3242CF98A1997FEB3C02C4" name="managerID">
 				<table_ref uuid="A7F05DD39BF141959331A84CAECF5267" name="Service"/>

@@ -62,72 +62,26 @@ End if
 $folder:=COMPONENT_Pathname($Obj_in.target)
 $l:=Length:C16($folder.platformPath)
 
-If (True:C214)
+$Col_pathnames:=$folder.files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
+
+If (Bool:C1537($Obj_in.sort))
 	
-	$Col_pathnames:=$folder.files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
-	
-	If (Bool:C1537($Obj_in.sort))
-		
-		$Col_pathnames:=$Col_pathnames.sort()
-		
-	End if 
-	
-	$Col_pictures:=New collection:C1472.resize($Col_pathnames.length)
-	
-	For each ($t; $Col_pathnames)
-		
-		READ PICTURE FILE:C678($t; $p)
-		CREATE THUMBNAIL:C679($p; $p; $kLon_iconWidth; $kLon_iconWidth; Scaled to fit:K6:2)
-		$Col_pictures[$i]:=$p
-		$Col_pathnames[$i]:=Replace string:C233(Delete string:C232($t; 1; $l); Folder separator:K24:12; "/")  // Keep relative posix path
-		$i:=$i+1
-		
-	End for each 
-	
-Else 
-	
-	//$Col_pathnames:=$folder.files(fk recursive).query("hidden = false & name != '.@'")
-	
-	//  //If (Bool($Obj_in.sort))
-	
-	//  //$Col_pathnames:=$c$Col_pathnamessort()
-	
-	//  //End if
-	
-	//$Col_pictures:=New collection.resize($Col_pathnames.length)
-	
-	//For each ($o;$Col_pathnames)
-	
-	//If ($o.extension=".zip")
-	
-	//For each ($oo;ZIP Read archive($o).root.files())
-	
-	//READ PICTURE FILE($o.platformPath;$p)
-	//CREATE THUMBNAIL($p;$p;$kLon_iconWidth;$kLon_iconWidth;Scaled to fit)
-	//$Col_pictures[$i]:=$p
-	//$Col_pathnames[$i]:=Delete string($oo.path;1;$l)  // Keep relative posix path
-	//$i:=$i+1
-	
-	//End for each
-	
-	//Else
-	
-	//READ PICTURE FILE($t;$p)
-	//CREATE THUMBNAIL($p;$p;$kLon_iconWidth;$kLon_iconWidth;Scaled to fit)
-	//$Col_pictures[$i]:=$p
-	//$Col_pathnames[$i]:=Replace string(Delete string($t;1;$l);Folder separator;"/")  // Keep relative posix path
-	//$i:=$i+1
-	
-	//End if
-	
-	//$i:=$i+1
-	
-	//End for each
-	
-	
-	
+	$Col_pathnames:=$Col_pathnames.sort()
 	
 End if 
+
+$Col_pictures:=New collection:C1472.resize($Col_pathnames.length)
+
+For each ($t; $Col_pathnames)
+	
+	READ PICTURE FILE:C678($t; $p)
+	CREATE THUMBNAIL:C679($p; $p; $kLon_iconWidth; $kLon_iconWidth; Scaled to fit:K6:2)
+	$Col_pictures[$i]:=$p
+	$Col_pathnames[$i]:=Replace string:C233(Delete string:C232($t; 1; $l); Folder separator:K24:12; "/")  // Keep relative posix path
+	$i:=$i+1
+	
+End for each 
+
 
 // ----------------------------------------------------
 //                  USER RESOURCES
@@ -160,7 +114,9 @@ End if
 //                 Insert blank icon
 // ----------------------------------------------------
 READ PICTURE FILE:C678(UI.noIcon; $p)
-CREATE THUMBNAIL:C679($p; $p; $kLon_iconWidth-8; $kLon_iconWidth-8; Scaled to fit:K6:2)
+CREATE THUMBNAIL:C679($p; $p; $kLon_iconWidth; $kLon_iconWidth; Scaled to fit:K6:2)
+TRANSFORM PICTURE:C988($p; Scale:K61:2; 0.8; 0.8)
+TRANSFORM PICTURE:C988($p; Crop:K61:7; 5; 5; 30; 30)
 $Col_pathnames.insert(0; "")
 $Col_pictures.insert(0; $p)
 

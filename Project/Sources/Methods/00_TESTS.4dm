@@ -27,35 +27,6 @@ End if
 
 
 Case of 
-		//________________________________________
-	: (True:C214)
-		
-		
-		$o:=cs:C1710.lep.new()
-		ASSERT:C1129($o.success)
-		
-		$result:=$o.getEnvironnementVariables()
-		ASSERT:C1129($o.success)
-		ASSERT:C1129(Not:C34(OB Is empty:C1297($result)))
-		ASSERT:C1129($result._4D_OPTION_CURRENT_DIRECTORY#Null:C1517)
-		ASSERT:C1129($result._4D_OPTION_HIDE_CONSOLE#Null:C1517)
-		ASSERT:C1129($result._4D_OPTION_BLOCKING_EXTERNAL_PROCESS#Null:C1517)
-		ASSERT:C1129($result.HOME#Null:C1517)
-		ASSERT:C1129($result.USER=Get system info:C1571.accountName)
-		
-		$t:=$o.getEnvironnementVariable("HOME")
-		ASSERT:C1129($o.success)
-		
-		ASSERT:C1129(""=$o.getEnvironnementVariable("toto"))
-		ASSERT:C1129(Not:C34($o.success))
-		
-		$folder:=Folder:C1567(fk database folder:K87:14)
-		$o.setDirectory($folder)
-		ASSERT:C1129($o.success)
-		ASSERT:C1129($folder.platformPath=$o.getEnvironnementVariable("currentDirectory"))
-		ASSERT:C1129($o.success)
-		ASSERT:C1129($folder.platformPath=$o.getEnvironnementVariable("directory"))
-		ASSERT:C1129($o.success)
 		
 		//________________________________________
 	: (True:C214)

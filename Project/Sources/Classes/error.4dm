@@ -111,6 +111,9 @@ Function hide  // Hide errors
 	
 	This:C1470.current:="errors_HIDE"
 	
+	C_OBJECT:C1216($0)
+	$0:=This:C1470
+	
 	//===================================================================================
 Function show  // Removes the hide errors method
 	

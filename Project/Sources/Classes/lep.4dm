@@ -315,33 +315,61 @@ Function getEnvironnementVariables()->$variables : Object
 	
 	//====================================================================
 	// Returns the content of an environment variable from its name
-Function getEnvironnementVariable($name : Text)->$value : Text
+Function getEnvironnementVariable($name : Text; $nonDiacritic : Boolean)->$value : Text
 	
 	var $o : Object
 	var $t : Text
+	var $isDiacritic : Boolean
 	
 	This:C1470.success:=Count parameters:C259>=1
 	
 	If (This:C1470.success)
 		
+		$isDiacritic:=True:C214
+		
+		If (Count parameters:C259>=2)
+			
+			$isDiacritic:=$nonDiacritic
+			
+		End if 
+		
 		$t:=This:C1470._shortcut($name)
 		
-		If (This:C1470.environmentVariables[$t]#Null:C1517)
+		If ($isDiacritic)
 			
-			$value:=This:C1470.environmentVariables[$t]
-			
-		Else 
-			
-			$o:=This:C1470.getEnvironnementVariables()
-			This:C1470.success:=$o[$name]#Null:C1517
-			
-			If (This:C1470.success)
+			If (This:C1470.environmentVariables[$t]#Null:C1517)
 				
-				$value:=$o[$name]
+				$value:=This:C1470.environmentVariables[$t]
 				
 			Else 
 				
-				This:C1470.errors.push("Variable \""+$name+"\" not found")
+				$o:=This:C1470.getEnvironnementVariables()
+				This:C1470.success:=$o[$name]#Null:C1517
+				
+				If (This:C1470.success)
+					
+					$value:=$o[$name]
+					
+				Else 
+					
+					This:C1470.errors.push("Variable \""+$name+"\" not found")
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			$o:=OB Entries:C1720(This:C1470.environmentVariables).query("key = :1"; $t).pop()
+			
+			If ($o=Null:C1517)
+				
+				$o:=OB Entries:C1720(This:C1470.getEnvironnementVariables()).query("key = :1"; $t).pop()
+				
+			End if 
+			
+			If ($o#Null:C1517)
+				
+				$value:=$o.value
 				
 			End if 
 		End if 
@@ -357,6 +385,8 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 	
 	var $v : Variant
 	var $o : Object
+	
+	This:C1470.success:=True:C214
 	
 	Case of 
 			

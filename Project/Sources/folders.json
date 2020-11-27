@@ -897,6 +897,7 @@
 		"methods": [
 			"test_dat",
 			"test_db",
+			"test_lep",
 			"test_ob",
 			"test_str"
 		]

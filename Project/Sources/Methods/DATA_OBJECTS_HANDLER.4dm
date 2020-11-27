@@ -316,8 +316,7 @@ Case of
 						
 						GOTO OBJECT:C206(*; $form.filter)
 						
-						UI.saveProject()
-						
+						PROJECT.save()
 						$context.refresh()
 						
 					End if 
@@ -345,10 +344,10 @@ Case of
 		
 		Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
 		
-		UI.saveProject()
+		PROJECT.save()
 		$context.refresh()
 		
-		Form:C1466.$project.status.project:=project_Audit(New object:C1471("target"; New collection:C1472("filters"))).success
+		PROJECT.audit(New object:C1471("target"; New collection:C1472("filters")))
 		CALL FORM:C1391($form.window; "editor_CALLBACK"; "updateRibbon")
 		
 		//==================================================
@@ -364,7 +363,7 @@ Case of
 			
 		End if 
 		
-		UI.saveProject()
+		PROJECT.save()
 		$context.update()
 		
 		//==================================================
@@ -460,7 +459,7 @@ Case of
 					
 				End if 
 				
-				UI.saveProject()
+				PROJECT.save()
 				$context.refresh()
 				
 				//______________________________________________________
@@ -487,7 +486,7 @@ End case
 
 If (Bool:C1537(FEATURE._8858))
 	
-	UI.saveProject()
+	PROJECT.save()
 	
 End if 
 

@@ -66,9 +66,7 @@ Case of
 				
 				If ($top>=0)
 					
-					var $offset : Integer
-					$offset:=Choose:C955(Form:C1466.selector="list"; 2; 6)
-					OBJECT SET COORDINATES:C1248(*; "selection"; $left+$offset; $top+2; $right; $bottom)
+					OBJECT SET COORDINATES:C1248(*; "selection"; $left+1; $top+1; $right-1; $bottom-1)
 					OBJECT SET VISIBLE:C603(*; "selection"; True:C214)
 					
 				End if 
