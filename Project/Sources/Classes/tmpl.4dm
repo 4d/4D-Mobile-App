@@ -657,7 +657,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 			//______________________________________________________
 		Else 
 			
-			$label:=$field.name
+			$label:=$field.path
 			
 			//______________________________________________________
 	End case 
