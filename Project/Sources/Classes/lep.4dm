@@ -7,7 +7,7 @@ Class constructor
 	This:C1470.reset()
 	
 	//====================================================================
-Function launch($command; $arguments)->$this : cs:C1710.lep
+Function launch($command; $arguments : Text)->$this : cs:C1710.lep
 	
 	var $input; $output : Blob
 	var $error; $t : Text
@@ -144,6 +144,11 @@ Function launch($command; $arguments)->$this : cs:C1710.lep
 					This:C1470.errorStream:=$t
 					
 				End if 
+				
+				//……………………………………………………………………
+			: (This:C1470.outputType=Is collection:K8:32)
+				
+				This:C1470.outputStream:=Split string:C1554($t; "\n")
 				
 				//……………………………………………………………………
 			: (This:C1470.outputType=Is boolean:K8:9)
@@ -426,7 +431,7 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 			
 			For each ($o; OB Entries:C1720($variables))
 				
-				This:C1470.environmentVariables[This:C1470._shortcut($o.key)]:=$o.value
+				This:C1470.environmentVariables[This:C1470._shortcut($o.key)]:=String:C10($o.value)
 				
 			End for each 
 			
@@ -567,7 +572,7 @@ ATTRIB [+R | -R] [+A | -A ] [+S | -S] [+H | -H] [+I | -I]
 	
 	//====================================================================
 	// Write access to a directory with all its sub-folders and files
-Function unlock($cible : 4D:C1709.Document)->$this : cs:C1710.lep
+Function unlock($cible : 4D:C1709.folder)->$this : cs:C1710.lep
 	
 	If (Bool:C1537($cible.exists))
 		
@@ -617,7 +622,8 @@ Function _shortcut($string : Text)->$variable : Text
 			$variable:="_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"
 			
 			//…………………………………………………………………………………………
-		: ($string="console")
+		: ($string="console")\
+			 | ($string="hideConsole")
 			
 			$variable:="_4D_OPTION_HIDE_CONSOLE"
 			
