@@ -3284,7 +3284,7 @@ Function getTextWidth($string : Text; $fontAttributes : Object)->$width : Intege
 	PICTURE PROPERTIES:C457($picture; $width; $height)
 	
 	//———————————————————————————————————————————————————————————
-	// Returns text height #WIP
+	// 🚧 Returns text height #WIP
 Function getTextHeight($string : Text; $fontAttributes : Object)->$height : Integer
 	
 	var $picture : Picture

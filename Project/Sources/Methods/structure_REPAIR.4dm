@@ -324,7 +324,6 @@ $cache.structure.digest:=Generate digest:C1147(JSON Stringify:C1217(Form:C1466.$
 $file.setText(JSON Stringify:C1217($cache; *))
 
 // Refresh UI
-//STRUCTURE_Handler(New object("action"; "update"; "project"; PROJECT))
 STRUCTURE_Handler(New object:C1471("action"; "update"))
 
 project_REPAIR(PROJECT)

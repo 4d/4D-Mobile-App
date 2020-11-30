@@ -216,7 +216,7 @@
 							"method": "FIELDS_OBJECTS_HANDLER"
 						},
 						{
-							"name": "shortLabels",
+							"name": "shortLabel",
 							"width": 215,
 							"minWidth": 215,
 							"maxWidth": 215,
@@ -245,7 +245,7 @@
 							"method": "FIELDS_OBJECTS_HANDLER"
 						},
 						{
-							"name": "labels",
+							"name": "label",
 							"width": 215,
 							"minWidth": 215,
 							"maxWidth": 215,
@@ -255,6 +255,7 @@
 							"verticalAlign": "middle",
 							"events": [
 								"onDoubleClick",
+								"onDataChange",
 								"onBeforeDataEntry"
 							],
 							"header": {
@@ -274,7 +275,7 @@
 							"method": "FIELDS_OBJECTS_HANDLER"
 						},
 						{
-							"name": "formats",
+							"name": "format",
 							"width": 70,
 							"minWidth": 10,
 							"styledText": true,
@@ -285,7 +286,7 @@
 								"onAlternateClick",
 								"onBeforeDataEntry"
 							],
-							"method": "ObjectMethods/formats.4dm",
+							"method": "ObjectMethods/format.4dm",
 							"header": {
 								"name": "Header6",
 								"text": "Header6",
@@ -309,7 +310,7 @@
 								"name": "Header7",
 								"text": "Header7"
 							},
-							"name": "titles",
+							"name": "title",
 							"width": 164,
 							"minWidth": 10,
 							"styledText": false,
@@ -417,5 +418,13 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "FIELDS_Handler"
+	"method": "FIELDS_Handler",
+	"geometryStamp": 4,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

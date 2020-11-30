@@ -67,6 +67,9 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$error:=cs:C1710.error.new()
 	$svg:=cs:C1710.svg.new()
 	
+	var $ƒorm : Object
+	$ƒorm:=Form:C1466.$dialog[Current form name:C1298]
+	
 Else 
 	
 	ABORT:C156
@@ -76,7 +79,7 @@ End if
 // ----------------------------------------------------
 If ($dataModel#Null:C1517)
 	
-	$typeForm:=Choose:C955(Num:C11(Form:C1466.$dialog[Current form name:C1298].selector)=2; "detail"; "list")
+	$typeForm:=$ƒorm.typeForm()
 	
 /* START HIDING ERRORS */
 	$error.hide()

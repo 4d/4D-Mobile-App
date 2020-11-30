@@ -797,6 +797,7 @@ Function audit($audits : Object)->$audit : Object
 	End if 
 	
 	cs:C1710.ob.new(This:C1470).createPath("$project.status").$project.status.project:=$audit.success
+	//cs.ob.new(This).createPath("$project.status").project:=$audit.success
 	
 	//================================================================================
 Function fieldDefinition

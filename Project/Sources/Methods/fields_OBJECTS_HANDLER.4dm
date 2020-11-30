@@ -12,7 +12,7 @@ C_LONGINT:C283($0)
 
 C_POINTER:C301($Ptr_me)
 C_TEXT:C284($t; $Txt_current)
-C_OBJECT:C1216($o; $Obj_context; $Obj_field; $Obj_form; $Obj_popup; $Obj_widget)
+C_OBJECT:C1216($o; $context; $Obj_field; $ƒorm; $Obj_popup; $Obj_widget)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
@@ -26,30 +26,30 @@ End if
 
 $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 
-$Obj_form:=FIELDS_class("editor_CALLBACK")
+$ƒorm:=FIELDS_class("editor_CALLBACK")
 
-$Obj_context:=$Obj_form.$
+$context:=$ƒorm.$
 
 // ----------------------------------------------------
 Case of 
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.fieldList.name)
+	: ($ƒorm.form.current=$ƒorm.fieldList.name)
 		
-		$Obj_widget:=$Obj_form.fieldList.update()
+		$Obj_widget:=$ƒorm.fieldList.update()
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Selection Change:K2:29)\
-				 | ($Obj_form.form.eventCode=On Clicked:K2:4)
+			: ($ƒorm.form.eventCode=On Selection Change:K2:29)\
+				 | ($ƒorm.form.eventCode=On Clicked:K2:4)
 				
 				editor_ui_LISTBOX($Obj_widget.name)
 				
 				Case of 
 						
 						//______________________________________________________
-					: ($Obj_form.form.eventCode=On Selection Change:K2:29)
+					: ($ƒorm.form.eventCode=On Selection Change:K2:29)
 						
 						// <NOTHING MORE TO DO>
 						
@@ -64,7 +64,7 @@ Case of
 						// NO SELECTION
 						
 						//______________________________________________________
-					: ($Obj_widget.column=$Obj_widget.columns[$Obj_form.icons.name].number)  // Open the fields icons picker
+					: ($Obj_widget.column=$Obj_widget.columns[$ƒorm.icons.name].number)  // Open the fields icons picker
 						
 						// Get the current field
 						$Obj_widget.cellCoordinates()
@@ -72,7 +72,7 @@ Case of
 						// Get the field definition
 						If (FEATURE.with("moreRelations"))
 							
-							If (Num:C11($Obj_context.selector)=1)
+							If (Num:C11($context.selector)=1)
 								
 								//%W-533.3
 								$c:=Split string:C1554(($Obj_widget.columns["fields"].pointer)->{$Obj_widget.row}; ".")
@@ -81,11 +81,11 @@ Case of
 								If ($c.length>1)
 									
 									// 1 -> 1 -> N
-									$Obj_field:=Form:C1466.dataModel[String:C10($Obj_context.tableNumber)][String:C10($c[0])][String:C10($c[1])]
+									$Obj_field:=Form:C1466.dataModel[String:C10($context.tableNumber)][String:C10($c[0])][String:C10($c[1])]
 									
 								Else 
 									
-									$Obj_field:=OB Copy:C1225($Obj_context.field($Obj_widget.row))
+									$Obj_field:=OB Copy:C1225($context.field($Obj_widget.row))
 									
 									//%W-533.3
 									$Obj_field.path:=($Obj_widget.columns["fields"].pointer)->{$Obj_widget.row}
@@ -95,13 +95,13 @@ Case of
 								
 							Else 
 								
-								$Obj_field:=$Obj_context.field($Obj_widget.row)
+								$Obj_field:=$context.field($Obj_widget.row)
 								
 							End if 
 						End if 
 						
 						// Display the picker
-						$o:=$Obj_form.picker.pointer()->
+						$o:=$ƒorm.picker.pointer()->
 						
 						// #MARK_TODO WIDGET WORK WITH ARRAY
 						If ($Obj_field.icon#Null:C1517)
@@ -127,35 +127,35 @@ Case of
 						$o.forceRedraw:=True:C214
 						$o.prompt:=cs:C1710.str.new("chooseAnIconForTheField").localized($Obj_field.path)
 						
-						$Obj_context.showPicker($o)
+						$context.showPicker($o)
 						
 						//______________________________________________________
 				End case 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Mouse Enter:K2:33)
+			: ($ƒorm.form.eventCode=On Mouse Enter:K2:33)
 				
 				UI.tips.instantly()
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Mouse Move:K2:35)
+			: ($ƒorm.form.eventCode=On Mouse Move:K2:35)
 				
-				$Obj_context.setHelpTip($Obj_widget.name; $Obj_form)
+				$context.setHelpTip($Obj_widget.name; $ƒorm)
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
+			: ($ƒorm.form.eventCode=On Mouse Leave:K2:34)
 				
 				UI.tips.default()
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Getting Focus:K2:7)
+			: ($ƒorm.form.eventCode=On Getting Focus:K2:7)
 				
 				editor_ui_LISTBOX($Obj_widget.name; True:C214)
 				
-				$Obj_context.setHelpTip($Obj_widget.name; $Obj_form)
+				$context.setHelpTip($Obj_widget.name; $ƒorm)
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Losing Focus:K2:8)
+			: ($ƒorm.form.eventCode=On Losing Focus:K2:8)
 				
 				editor_ui_LISTBOX($Obj_widget.name; False:C215)
 				
@@ -166,27 +166,27 @@ Case of
 				// NOTHING MORE TO DO
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Double Clicked:K2:5)  // Edit current cell if any
+			: ($ƒorm.form.eventCode=On Double Clicked:K2:5)  // Edit current cell if any
 				
 				editor_ui_LISTBOX($Obj_widget.name)
 				
-				If ($Obj_widget.column=$Obj_widget.columns[$Obj_form.labels.name].number)\
-					 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.shortLabels.name].number)\
-					 | ($Obj_widget.column=$Obj_widget.columns[$Obj_form.titles.name].number)
+				If ($Obj_widget.column=$Obj_widget.columns[$ƒorm.labels.name].number)\
+					 | ($Obj_widget.column=$Obj_widget.columns[$ƒorm.shortLabels.name].number)\
+					 | ($Obj_widget.column=$Obj_widget.columns[$ƒorm.titles.name].number)
 					
 					EDIT ITEM:C870($Ptr_me->; $Ptr_me->)
 					
 				End if 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Before Data Entry:K2:39)
+			: ($ƒorm.form.eventCode=On Before Data Entry:K2:39)
 				
-				If ($Obj_widget.column=$Obj_widget.columns[$Obj_form.formats.name].number)
+				If ($Obj_widget.column=$Obj_widget.columns[$ƒorm.formats.name].number)
 					
 					$0:=-1
 					
 					// Get the field definition
-					$Obj_field:=$Obj_context.field($Obj_widget.row)
+					$Obj_field:=$context.field($Obj_widget.row)
 					
 					$Obj_popup:=cs:C1710.menu.new()
 					
@@ -273,123 +273,78 @@ Case of
 					
 				End if 
 				
-				$Obj_context.inEdition:=$Obj_widget
+				$context.inEdition:=$Obj_widget
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Data Change:K2:15)
+			: ($ƒorm.form.eventCode=On Data Change:K2:15)
+				
+				var $e : Object
+				$e:=FORM Event:C1606
 				
 				// Get the edited field definition
-				If (FEATURE.with("moreRelations"))
-					
-					If (Num:C11($Obj_context.selector)=1)
-						
-						//%W-533.3
-						$c:=Split string:C1554(($Obj_widget.columns["fields"].pointer)->{$Obj_context.inEdition.row}; ".")
-						//%W+533.3
-						
-						If ($c.length>1)
-							
-							// 1 -> 1 -> N
-							$Obj_field:=Form:C1466.dataModel[String:C10($Obj_context.tableNumber)][String:C10($c[0])][String:C10($c[1])]
-							
-						Else 
-							
-							$Obj_field:=$Obj_context.field($Obj_context.inEdition.row)
-							
-						End if 
-						
-					Else 
-						
-						$Obj_field:=$Obj_context.field($Obj_context.inEdition.row)
-						
-					End if 
-					
-				Else 
-					
-					$Obj_field:=$Obj_context.field($Obj_context.inEdition.row)
-					
-				End if 
+				var $field : Object
+				$field:=$context.field($e.row)
 				
 				// Update data model
-				Case of 
-						
-						//………………………………………………………………………………………
-					: ($Ptr_me=$Obj_widget.columns[$Obj_form.titles.name].pointer)
-						
-						//%W-533.3
-						$Obj_field.format:=$Ptr_me->{$Obj_context.inEdition.row}
-						//%W+533.3
-						
-						//………………………………………………………………………………………
-					: ($Ptr_me=$Obj_widget.columns[$Obj_form.labels.name].pointer)
-						
-						//%W-533.3
-						$Obj_field.label:=$Ptr_me->{$Obj_context.inEdition.row}
-						//%W+533.3
-						
-						//………………………………………………………………………………………
-					: ($Ptr_me=$Obj_widget.columns[$Obj_form.shortLabels.name].pointer)
-						
-						//%W-533.3
-						$Obj_field.shortLabel:=$Ptr_me->{$Obj_context.inEdition.row}
-						//%W+533.3
-						
-						//______________________________________________________
-				End case 
+				//%W-533.3
+				$field[Choose:C955($e.columnName="title"; "format"; $e.columnName)]:=$Ptr_me->{$e.row}
+				//%W+533.3
 				
-				PROJECT.save()
+				$context.updateForms()
+				
+				//PROJECT IS ALWAYS SAVED ON DATA CHANGE
 				
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($Obj_form.form.eventCode)+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($ƒorm.form.eventCode)+")")
 				
 				//______________________________________________________
 		End case 
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.selectorFields.name)\
-		 | ($Obj_form.form.current=$Obj_form.selectorRelations.name)
+	: ($ƒorm.form.current=$ƒorm.selectorFields.name)\
+		 | ($ƒorm.form.current=$ƒorm.selectorRelations.name)
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Clicked:K2:4)
+			: ($ƒorm.form.eventCode=On Clicked:K2:4)
 				
 				// Update tab
-				$Obj_context.selector:=Num:C11($Obj_form.form.current=$Obj_form.selectorRelations.name)
-				$Obj_context.setTab()
-				$Obj_context.update()
+				$context.selector:=Num:C11($ƒorm.form.current=$ƒorm.selectorRelations.name)
+				$context.setTab()
+				$context.update()
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Mouse Enter:K2:33)
+			: ($ƒorm.form.eventCode=On Mouse Enter:K2:33)
 				
-				If ($Obj_context.selector#(Num:C11($Obj_form.form.current=$Obj_form.selectorRelations.name)))
+				If ($context.selector#(Num:C11($ƒorm.form.current=$ƒorm.selectorRelations.name)))
 					
 					// Highlights
-					$o:=Choose:C955($Obj_form.form.current=$Obj_form.selectorFields.name; $Obj_form.selectorFields; $Obj_form.selectorRelations)
+					$o:=Choose:C955($ƒorm.form.current=$ƒorm.selectorFields.name; $ƒorm.selectorFields; $ƒorm.selectorRelations)
 					$o.setColors(UI.selectedColor; Background color none:K23:10)
 					
 				End if 
 				
 				//______________________________________________________
-			: ($Obj_form.form.eventCode=On Mouse Leave:K2:34)
+			: ($ƒorm.form.eventCode=On Mouse Leave:K2:34)
 				
-				$o:=Choose:C955($Obj_form.form.current=$Obj_form.selectorFields.name; $Obj_form.selectorFields; $Obj_form.selectorRelations)
+				$o:=Choose:C955($ƒorm.form.current=$ƒorm.selectorFields.name; $ƒorm.selectorFields; $ƒorm.selectorRelations)
 				$o.setColors(Foreground color:K23:1; Background color none:K23:10)
 				
 				//______________________________________________________
 		End case 
 		
 		//==================================================
-	: ($Obj_form.form.current=$Obj_form.resources.name)
+	: ($ƒorm.form.current=$ƒorm.resources.name)
 		
 		If (FEATURE.with("formatMarketPlace"))
 			
 			// Show browser
 			$o:=New object:C1471(\
 				"url"; Get localized string:C991("res_formatters"))
-			$Obj_form.form.call(New collection:C1472("initBrowser"; $o))
+			$ƒorm.form.call(New collection:C1472("initBrowser"; $o))
 			
 		Else 
 			
@@ -399,7 +354,7 @@ Case of
 		//==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown object: \""+$Obj_form.form.current+"\"")
+		ASSERT:C1129(False:C215; "Unknown object: \""+$ƒorm.form.current+"\"")
 		
 		//==================================================
 End case 

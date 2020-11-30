@@ -284,6 +284,21 @@ Function setDirectory($folder : 4D:C1709.Folder)->$this : cs:C1710.lep
 	$this:=This:C1470
 	
 	//====================================================================
+Function showConsole()->$this : cs:C1710.lep
+	
+	This:C1470.environmentVariables["_4D_OPTION_HIDE_CONSOLE"]:="false"
+	
+	$this:=This:C1470
+	
+	
+	//====================================================================
+Function hideConsole()->$this : cs:C1710.lep
+	
+	This:C1470.environmentVariables["_4D_OPTION_HIDE_CONSOLE"]:="true"
+	
+	$this:=This:C1470
+	
+	//====================================================================
 	// Returns an object containing all the environment variables
 Function getEnvironnementVariables()->$variables : Object
 	

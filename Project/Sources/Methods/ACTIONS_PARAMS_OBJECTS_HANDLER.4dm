@@ -268,7 +268,7 @@ Case of
 					
 					If ($current.type#$t)  // The type is changed
 						
-						$current.type:=$t
+						//$current.type:=$t
 						OB REMOVE:C1226($current; "default")
 						
 						If ($form.default.focused())

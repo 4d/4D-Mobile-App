@@ -31,6 +31,15 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		var $form; $ƒorm : Object
+		$ƒorm:=New object:C1471("hello"; "world")
+		$form:=New object:C1471("hello"; "monde")
+		
+		ALERT:C41($ƒorm.hello+" "+$form.hello)
+		
+		//________________________________________
+	: (True:C214)
+		
 		$o:=cs:C1710.env.new().startupDisk()
 		
 		$t:=Convert path POSIX to system:C1107("/users/"+Get system info:C1571.userName+"/")

@@ -238,6 +238,7 @@ If ($file.exists)
 														
 														$isTableUnsynchronized:=True:C214
 														cs:C1710.ob.new($field).createPath("unsynchronizedFields"; Is collection:K8:32).unsynchronizedFields.push($relatedField)
+														//cs.ob.new($field).createPath("unsynchronizedFields"; Is collection).push($relatedField)
 														
 														If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
 															
@@ -278,6 +279,7 @@ If ($file.exists)
 														
 														$isTableUnsynchronized:=True:C214
 														cs:C1710.ob.new($field).createPath("unsynchronizedFields"; Is collection:K8:32).unsynchronizedFields.push($relatedField)
+														//cs.ob.new($field).createPath("unsynchronizedFields"; Is collection).push($relatedField)
 														
 														If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
 															
@@ -346,6 +348,7 @@ If ($file.exists)
 															
 															$isTableUnsynchronized:=True:C214
 															cs:C1710.ob.new($field).createPath("unsynchronizedFields"; Is collection:K8:32).unsynchronizedFields.push($linkedField)
+															//cs.ob.new($field).createPath("unsynchronizedFields"; Is collection).push($linkedField)
 															
 															If ($unsynchronizedFields.query("fieldTips= :1"; $linkedField.fieldTips).length=0)
 																
@@ -517,6 +520,8 @@ End if
 $o:=cs:C1710.ob.new(Form:C1466)
 $o.createPath("structure").structure.unsynchronized:=$isUnsynchronized
 $o.createPath("status").structure.dataModel:=Not:C34($isUnsynchronized)
+//$o.createPath("structure").unsynchronized:=$isUnsynchronized
+//$o.createPath("status").dataModel:=Not($isUnsynchronized)
 
 CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
 "show"; $isUnsynchronized))

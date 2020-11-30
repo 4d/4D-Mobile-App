@@ -34,10 +34,10 @@ $Obj_form:=New object:C1471(\
 "ids"; UI.widget("IDs"); \
 "names"; UI.widget("fields"); \
 "icons"; UI.widget("icons"); \
-"labels"; UI.widget("labels"); \
-"shortLabels"; UI.widget("shortLabels"); \
-"formats"; UI.widget("formats"); \
-"titles"; UI.widget("titles"); \
+"labels"; UI.widget("label"); \
+"shortLabels"; UI.widget("shortLabel"); \
+"formats"; UI.widget("format"); \
+"titles"; UI.widget("title"); \
 "formatLabel"; UI.static("format.label"); \
 "picker"; UI.widget("iconGrid"); \
 "tabSelector"; UI.widget("tab.selector"); \
@@ -74,6 +74,8 @@ If (This:C1470=Null:C1517)  // Constructor
 		
 		$ƒ.field:=Formula:C1597(FIELDS_class("field"; New object:C1471(\
 			"row"; $1)))
+		
+		$ƒ.updateForms:=Formula:C1597(FIELDS_class("updateForms"))
 		
 	End if 
 	
@@ -251,6 +253,65 @@ Else
 				$Obj_form.titles.hide()
 				$Obj_form.resources.show()
 				
+			End if 
+			
+			//______________________________________________________
+		: ($1="updateForms")
+			
+			var $e : Object
+			$e:=FORM Event:C1606
+			
+			// Get the edited field definition
+			var $field : Object
+			$field:=$ƒ.field($e.row)
+			
+			// Update forms if any
+			$o:=Form:C1466.detail[String:C10($ƒ.tableNumber)]
+			
+			If ($o#Null:C1517)
+				
+				If ($field.name=Null:C1517)  //relation
+					
+					//%W-533.3
+					$o:=$o.fields.query("name = :1"; ($Obj_form.names.pointer())->{$e.row}).pop()
+					//%W+533.3
+					
+				Else 
+					
+					$o:=$o.fields.query("name = :1"; $field.name).pop()
+					
+				End if 
+				
+				If ($o#Null:C1517)
+					
+					$o.label:=$field.label
+					$o.shortLabel:=$field.shortLabel
+					
+				End if 
+			End if 
+			
+			$o:=Form:C1466.list[String:C10($ƒ.tableNumber)]
+			
+			If ($o#Null:C1517)
+				
+				If ($field.name=Null:C1517)  //relation
+					
+					//%W-533.3
+					$o:=$o.fields.query("name = :1"; ($Obj_form.names.pointer())->{$e.row}).pop()
+					//%W+533.3
+					
+				Else 
+					
+					$o:=$o.fields.query("name = :1"; $field.name).pop()
+					
+				End if 
+				
+				If ($o#Null:C1517)
+					
+					$o.label:=$field.label
+					$o.shortLabel:=$field.shortLabel
+					
+				End if 
 			End if 
 			
 			//______________________________________________________

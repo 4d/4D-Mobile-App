@@ -264,16 +264,14 @@ Case of
 						If (Length:C16($context.tableNum())>0)\
 							 & ($datamodel[$context.tableNum()]#Null:C1517)
 							
-							$formName:=String:C10(Form:C1466[$typeForm][$context.tableNum()].form)
-							$formName:=$formName*Num:C11($formName#"null")  // Reject null value
+							//$formName:=String(Form[$typeForm][$context.tableNum()].form)
+							//$formName:=$formName*Num($formName#"null")  // Reject null value
+							//If (Length($formName)>0)
+							//$o:=tmpl_form($formName; $typeForm)
+							//End if 
+							//If ($o.exists)
 							
-							If (Length:C16($formName)>0)
-								
-								$o:=tmpl_form($formName; $typeForm)
-								
-							End if 
-							
-							If (Bool:C1537($o.exists))
+							If (Bool:C1537($context.template.path.exists))
 								
 								// Update lists
 								$context.update:=True:C214
@@ -286,7 +284,9 @@ Case of
 								
 								If (Bool:C1537(Form:C1466.$dialog.picker))
 									
-									If (Length:C16($formName)>0)
+									//if (Length($formName)>0)
+									
+									If (Length:C16(String:C10($context.template.name))>0)
 										
 										// Hide the template picker
 										$form.form.call("pickerHide")
