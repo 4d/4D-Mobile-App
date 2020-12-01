@@ -399,6 +399,16 @@ Function create
 	End if 
 	
 	//———————————————————————————————————————————————————————————
+	// Append a source element to the target element
+Function append($target : Text; $source : Text)->$node : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 2))
+		
+		$node:=DOM Append XML element:C1082($target; $source)
+		
+	End if 
+	
+	//———————————————————————————————————————————————————————————
 	// Insert a XML element among the child elements of the $target element
 Function insert($target : Text; $source : Text; $index : Integer)->$node : Text
 	

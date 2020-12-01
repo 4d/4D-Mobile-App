@@ -359,11 +359,11 @@ Function update  // Load and update the template if any
 			End if 
 		End if 
 		
-		If (FEATURE.with("moreRelations"))  // Mark static fields & refuse 1 to N relation into static field for detail forms
+		This:C1470.load(This:C1470.svg)
+		
+		If (This:C1470.success)
 			
-			This:C1470.load(This:C1470.svg)
-			
-			If (This:C1470.success)
+			If (FEATURE.with("moreRelations"))  // Mark static fields & refuse 1 to N relation into static field for detail forms
 				
 				$count:=Num:C11(This:C1470.manifest.fields.count)
 				
@@ -401,10 +401,33 @@ Function update  // Load and update the template if any
 						End if 
 					End if 
 				End for 
-				
-				This:C1470.svg:=This:C1470.content()
-				
 			End if 
+			
+			If (This:C1470.listform) & (FEATURE.with("searchWithBarCode"))
+				
+				// Move the magnifying glass to front to allow interaction.
+				
+				$c:=This:C1470.findByAttribute(This:C1470.root; "class"; "magnifyingGlass")
+				
+				If (This:C1470.success)
+					
+					$node:=This:C1470.append(This:C1470.parent($c[0]; "g"); $c[0])
+					
+					If (This:C1470.success)
+						
+						DOM SET XML ATTRIBUTE:C866($node; "id"; "magnifyingGlass")
+						
+						If (Bool:C1537(OK))
+							
+							This:C1470.remove($c[0])
+							
+						End if 
+					End if 
+				End if 
+			End if 
+			
+			This:C1470.svg:=This:C1470.content()
+			
 		End if 
 	End if 
 	

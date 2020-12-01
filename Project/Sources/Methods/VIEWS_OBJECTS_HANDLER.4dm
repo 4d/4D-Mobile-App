@@ -505,6 +505,45 @@ Case of
 						$form.cancel()
 						
 						//………………………………………………………………………………………………………………
+					: ($context.current="magnifyingGlass")
+						
+						$o:=Form:C1466[$context.typeForm()][$context.tableNum()].options
+						
+						var $menu : cs:C1710.menu
+						$menu:=cs:C1710.menu.new()
+						$menu.append("enableBarcodeQrcode"; "barcode")\
+							.mark(Bool:C1537($o.enableBarcode))\
+							.popup()
+						
+						Case of 
+								
+								//______________________________________________________
+							: (Not:C34($menu.selected))
+								
+								// <NOTHING MORE TO DO>
+								
+								//______________________________________________________
+							: ($menu.choice="barcode")
+								
+								If ($o=Null:C1517)
+									
+									Form:C1466[$context.typeForm()][$context.tableNum()].options:=New object:C1471
+									$o:=Form:C1466[$context.typeForm()][$context.tableNum()].options
+									
+								End if 
+								
+								$o.enableBarcode:=Not:C34(Bool:C1537($o.enableBarcode))
+								PROJECT.save()
+								
+								//______________________________________________________
+							Else 
+								
+								// A "Case of" statement should never omit "Else"
+								
+								//______________________________________________________
+						End case 
+						
+						//………………………………………………………………………………………………………………
 					: ($context.current="f@")
 						
 						//
@@ -609,6 +648,16 @@ Case of
 			: ($e.code=On Mouse Move:K2:35)
 				
 				$form.tips()
+				
+				If ($context.current="magnifyingGlass")
+					
+					SET CURSOR:C469(9000)
+					
+				Else 
+					
+					SET CURSOR:C469(0)
+					
+				End if 
 				
 				//______________________________________________________
 			: ($e.code=On Drop:K2:12)

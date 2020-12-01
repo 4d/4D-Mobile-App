@@ -119,11 +119,11 @@ FEATURE.delivered(117618; 1850)  // Deep Linking
 _____________*/
 FEATURE.unstable(117601)  // Relation management optimisation
 FEATURE.unstable("templateClass")
+FEATURE.unstable("searchWithBarCode")
 
 /* _____________
 WIP
 _____________*/
-
 
 // Android support
 FEATURE.wip("android")
