@@ -327,10 +327,15 @@ Function doRun
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is text:K8:3)
 							
-							$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.searchableField))
+							$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField))
 							
 							//……………………………………………………………………………………………………………
 					End case 
+					
+					If ($Obj_tableList.options#Null:C1517)
+						$Obj_table.searchableWithBarcode:=Bool:C1537($Obj_tableList.options.enableBarcode)
+					End if 
+					
 				End if 
 				
 				// ==============================================================

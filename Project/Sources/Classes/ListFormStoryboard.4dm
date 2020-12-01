@@ -48,6 +48,7 @@ Function run
 						
 						// XXX here could fix by dom manipulation instead of warn (some code in #106033) (fix on source or in destination?)
 						// just use code under this one do edit dom
+						// $Boo_mustEdit:=True
 						
 					End if 
 				End if 
@@ -62,6 +63,9 @@ Function run
 		C_COLLECTION:C1488($Col_fields)
 		$Col_fields:=$Obj_tags.table.fields
 		
+		C_BOOLEAN:C305($Boo_enableBarcode)
+		$Boo_enableBarcode:=Bool:C1537($Obj_tags.table.searchableWithBarcode)
+		
 		// Manage relation field?
 		C_BOOLEAN:C305($Boo_hasRelation)
 		$Boo_hasRelation:=False:C215
@@ -71,38 +75,46 @@ Function run
 			End if 
 		End for each 
 		
-		If ($Boo_hasRelation)
+		If ($Boo_hasRelation | $Boo_enableBarcode)
 			
 			C_OBJECT:C1216($Dom_root; $Dom_child; $Dom_)
 			$Dom_root:=xml("load"; This:C1470.path)
 			
-			//
-			C_LONGINT:C283($Lon_j)
-			$Lon_j:=1
-			For each ($Obj_field; $Col_fields)
-				If (Num:C11($Obj_field.id)=0)  // relation to N field
-					
-					If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root; Bool:C1537($Obj_field.isToMany)).success)
-						$Boo_buffer:=True:C214  // we make modification
+			// Edit for relations
+			If ($Boo_hasRelation)
+				C_LONGINT:C283($Lon_j)
+				$Lon_j:=1
+				For each ($Obj_field; $Col_fields)
+					If (Num:C11($Obj_field.id)=0)  // relation to N field
+						
+						If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root; Bool:C1537($Obj_field.isToMany)).success)
+							$Boo_buffer:=True:C214  // we make modification
+						End if 
+						
+					End if 
+					$Lon_j:=$Lon_j+1
+				End for each 
+				
+				// segue and connection (OPTI maybe with do not do another loop)
+				
+				$Lon_j:=1
+				For each ($Obj_field; $Col_fields)
+					If (Num:C11($Obj_field.id)=0)  // relation to N field
+						
+						This:C1470.injectSegue($Lon_j; $Dom_root; $Obj_field; $Obj_tags; $Obj_template; $Obj_out)
+						
 					End if 
 					
-				End if 
-				$Lon_j:=$Lon_j+1
-			End for each 
-			
-			// segue and connection (OPTI maybe with do not do another loop)
-			
-			$Lon_j:=1
-			For each ($Obj_field; $Col_fields)
-				If (Num:C11($Obj_field.id)=0)  // relation to N field
-					
-					This:C1470.injectSegue($Lon_j; $Dom_root; $Obj_field; $Obj_tags; $Obj_template; $Obj_out)
-					
-				End if 
+					$Lon_j:=$Lon_j+1
+				End for each 
 				
-				$Lon_j:=$Lon_j+1
-			End for each 
+			End if 
 			
+			If ($Boo_enableBarcode)
+				If (This:C1470.xmlAppendSearchWithBarCode($Dom_root).success)
+					$Boo_buffer:=True:C214  // we make modification
+				End if 
+			End if 
 			
 			// Save file at destination after replacing tags
 			If ($Boo_buffer)
@@ -123,4 +135,26 @@ Function run
 		ASSERT:C1129(dev_Matrix; "Missing "+This:C1470.type+" storyboard")
 		
 	End if 
+	
+Function xmlAppendSearchWithBarCode
+	C_OBJECT:C1216($Dom_; $0)
+	C_OBJECT:C1216($Dom_root; $1)
+	$Dom_root:=$1
+	
+	$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='searchableField']")
+	If ($Dom_.success)
+		C_OBJECT:C1216($Dom_parent)
+		$Dom_parent:=$Dom_.parent()
+		
+		C_TEXT:C284($Txt_buffer)
+		If (Not:C34($Dom_parent.findByXPath("[@keyPath=searchUsingCodeScanner]").success))
+			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"boolean\" keyPath=\"searchUsingCodeScanner\" value=\"YES\"/>"
+			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+		Else 
+			$Dom_.success:=False:C215  // nothing done , so nothing to do (like write file)
+		End if 
+		
+	End if 
+	
+	$0:=$Dom_
 	
