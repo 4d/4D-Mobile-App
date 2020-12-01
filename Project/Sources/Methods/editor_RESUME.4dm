@@ -94,7 +94,8 @@ Case of
 		//______________________________________________________
 	: ($Txt_selector="build_run")
 		
-		//CALL FORM($Win_me;"project_BUILD";$Obj_in.project)
+		// Restore the project because stringify has deleted the file object
+		$Obj_params.project:=PROJECT
 		CALL FORM:C1391($Win_me; "project_BUILD"; $Obj_params)
 		
 		//______________________________________________________
