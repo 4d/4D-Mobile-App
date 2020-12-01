@@ -1,13 +1,12 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
 #DECLARE ($in : Object)->$result : Object
 
-var $isDebug : Boolean
+var $isDebug; $isOnError : Boolean
 var $cache; $project : Object
 var $artifactoryIds : Collection
-var $file : 4D:C1709.File
 var $lep; $lep2 : cs:C1710.lep
+var $file; $copySrc; $copyDest; $APK : 4D:C1709.File
 var $filesToCopy; $templateFiles; $templateForms : 4D:C1709.Folder
-var $APK : 4D:C1709.File
 var $version; $buildTask; $package; $avdName; $apkLocation; $activity : Text
 
 C_LONGINT:C283($Lon_start)
@@ -52,8 +51,11 @@ End if
 
 $result:=New object:C1471("success"; False:C215)
 
+$isOnError:=False:C215
+
 $project:=OB Copy:C1225($in)
-$project.sdk:="/Users/quentinmarciset/Library/Android/sdk"
+// TODO : get SDK path
+$project.sdk:="/Users/qmarciset/Library/Android/sdk"
 $project.path:=Convert path system to POSIX:C1106($project.path)
 
 $package:=Lowercase:C14(String:C10($project.project.organization.identifier))
@@ -74,199 +76,637 @@ $file.setText(JSON Stringify:C1217($project))
 
 //Parameters
 
-$filesToCopy:=Folder:C1567("/Users/quentinmarciset/Downloads/KotlinScripts/__FILES_TO_COPY__")
+// TODO : get different folder paths
+
+$filesToCopy:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__FILES_TO_COPY__")
 
 If (Not:C34($filesToCopy.exists))
 	ASSERT:C1129(False:C215; "Missing folder at path "+$filesToCopy.path)
 End if 
 
-$templateFiles:=Folder:C1567("/Users/quentinmarciset/Downloads/KotlinScripts/__TEMPLATE_FILES__")
+$templateFiles:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FILES__")
 
 If (Not:C34($templateFiles.exists))
 	ASSERT:C1129(False:C215; "Missing folder at path "+$templateFiles.path)
 End if 
 
-$templateForms:=Folder:C1567("/Users/quentinmarciset/Downloads/KotlinScripts/__TEMPLATE_FORMS__")
+$templateForms:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FORMS__")
 
 If (Not:C34($templateForms.exists))
 	ASSERT:C1129(False:C215; "Missing folder at path "+$templateForms.path)
 End if 
 
 
-// Kscript templating
-
 $lep:=cs:C1710.lep.new()\
-.setEnvironnementVariable("currentDirectory"; path.scripts().platformPath)
+.setDirectory(path.scripts())\
+.setEnvironnementVariable($artifactoryIds)\
+.setEnvironnementVariable("ANDROID_HOME"; $project.sdk)
 
-$lep.launch("androidprojectgenerator"+\
-" --project-editor "+$lep.singleQuoted($file.path)+\
-" --files-to-copy "+$lep.singleQuoted($filesToCopy.path)+\
-" --template-files "+$lep.singleQuoted($templateFiles.path)+\
-" --template-forms "+$lep.singleQuoted($templateForms.path))
-
-$result.out:=$lep.outputStream
-$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
-$result.success:=$lep.success
-
-
-// Build embedded data shared code
-
-$lep.reset()\
-.launch("/usr/local/bin/kotlinc "+$lep.singleQuoted($project.path+"buildSrc/src/main/java/"+$package+".android.build/database/StaticDataInitializer.kt")+" -d "+$lep.singleQuoted($project.path+"buildSrc/libs/prepopulation.jar"))
-
-$result.out:=$lep.outputStream
-$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
-$result.success:=$lep.success
-
-$lep.reset()\
-.launch("cp "+$lep.singleQuoted($project.path+"buildSrc/libs/prepopulation.jar")+" "+$lep.singleQuoted($project.path+"app/libs/prepopulation.jar"))
-
-
-// Build project
-
-// Chmod
-$lep.reset()\
-.launch("chmod +x "+$lep.singleQuoted($project.path+"gradlew"))
 
 // Set JAVA_HOME
-$lep.reset()\
-.launch("/usr/libexec/java_home")
-$lep.setEnvironnementVariable("JAVA_HOME"; $lep.outputStream)
+
+Case of 
+		
+		//______________________________________________________
+	: (Is macOS:C1572)
+		
+		$lep.launch("/usr/libexec/java_home")
+		
+		//______________________________________________________
+	: (Is Windows:C1573)
+		
+		$lep.launch("echo %JAVA_HOME%")
+		
+		//______________________________________________________
+	Else 
+		
+		// A "Case of" statement should never omit "Else"
+		
+		//______________________________________________________
+End case 
 
 
-// Build
-$lep.reset()\
-.setEnvironnementVariable($artifactoryIds)\
-.setEnvironnementVariable("currentDirectory"; $project.path)\
-.launch("gradlew "+$buildTask)
-
-$result.out:=$lep.outputStream
-$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
-$result.success:=$lep.success
-
-// Creating embedded database
-$lep.reset()\
-.setEnvironnementVariable("currentDirectory"; $project.path)\
-.launch("gradlew app:createDataBase")
-
-// Rebuilding project with embedded data
-
-$lep.reset()\
-.setEnvironnementVariable($artifactoryIds)\
-.setEnvironnementVariable("currentDirectory"; $project.path)\
-.launch("gradlew "+$buildTask)
-
-
-// Preparing emulator
-
-// Checking emulator exists
-
-$lep.reset()\
-.setEnvironnementVariable("ANDROID_HOME"; $project.sdk)\
-.launch($lep.singleQuoted($project.sdk+"/tools/bin/avdmanager")+" list avd")
-
-If (Position:C15($avdName; String:C10($lep.errorStream))=0)
+If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
 	
-	// Emulator doesn't exist yet, now creating with name $avdName
-	$lep.reset()\
-		.setEnvironnementVariable("ANDROID_HOME"; $project.sdk)\
-		.launch($lep.singleQuoted($project.sdk+"/tools/bin/avdmanager")+" create avd -n \""+$avdName+"\" -k \"system-images;android-29;google_apis;x86\" --device \"pixel_xl\"")
+	$isOnError:=True:C214
+	
+	// Failed to generate files
+	POST_MESSAGE(New object:C1471(\
+		"type"; "alert"; \
+		"target"; $in.caller; \
+		"additional"; "Failed to get JAVA_HOME"))
 	
 Else 
-	// $avdName emulator already exists
+	$lep.setEnvironnementVariable("JAVA_HOME"; $lep.outputStream)
 End if 
 
-// Checking emulator booted
 
-$lep.reset()\
-.launch("ps aux")
+//____________________________________________________________
+// GENERATE FILES
 
-If (Position:C15($avdName; String:C10($lep.outputStream))=0)
+If ($isOnError=False:C215)
 	
-	// Emulator not booted, now booting
-	$lep.reset()\
-		.setEnvironnementVariable("ANDROID_HOME"; $project.sdk)\
-		.asynchronous()\
-		.launch($lep.singleQuoted($project.sdk+"/emulator/emulator")+" -avd \""+$avdName+"\" -no-boot-anim")
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Generating files"))
+	
+	// Generating files
+	$lep.launch("androidprojectgenerator"+\
+		" --project-editor "+$lep.singleQuoted($file.path)+\
+		" --files-to-copy "+$lep.singleQuoted($filesToCopy.path)+\
+		" --template-files "+$lep.singleQuoted($templateFiles.path)+\
+		" --template-forms "+$lep.singleQuoted($templateForms.path))
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to generate files
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Failed to generate files"))
+		
+	Else 
+		// All ok
+	End if 
 	
 Else 
-	// $avdName emulator already booted
+	// Already on error
 End if 
 
 
-// Wait for boot 
-$lep2:=cs:C1710.lep.new()
+//____________________________________________________________
+// BUILD EMBEDDED DATA LIBRARY
 
-// Wait for a booted simulator
-$Lon_start:=Milliseconds:C459
-
-$lep.reset()\
-.setEnvironnementVariable("ANDROID_HOME"; $project.sdk)\
-.synchronous()
-
-Repeat 
+If ($isOnError=False:C215)
 	
-	IDLE:C311
-	DELAY PROCESS:C323(Current process:C322; 60)
-	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" shell getprop sys.boot_completed")
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Building embedded data library"))
 	
-	$lep2.launch("ps aux")
+	// TODO : know where kotlinc is
 	
-Until (String:C10($lep.outputStream)="1")\
- | (Position:C15($avdName; String:C10($lep2.outputStream))=0)\
- | ((Milliseconds:C459-$Lon_start)>30000)
-
-
-
-// Check application already installed
-
-$lep.reset()\
-.setEnvironnementVariable("ANDROID_HOME"; $project.sdk)\
-.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" shell pm list packages")
-
-If (Position:C15($package; String:C10($lep.outputStream))>0)
+	// Building embedded data library
+	$lep.launch("/usr/local/bin/kotlinc "+$lep.singleQuoted($project.path+"buildSrc/src/main/java/"+$package+".android.build/database/StaticDataInitializer.kt")+" -d "+$lep.singleQuoted($project.path+"buildSrc/libs/prepopulation.jar"))
 	
-	// APK already installed, uninstalling first
-	$lep.reset()\
-		.setEnvironnementVariable("ANDROID_HOME"; $project.sdk)\
-		.launch($lep.singleQuoted($project.sdk+"/emulator/emulator")+" -avd \""+$avdName+"\" -no-boot-anim")
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to build embedded data library
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Failed to build embedded data library"))
+		
+	Else 
+		// All ok
+	End if 
 	
 Else 
-	// APK not installed yet
-End if 
-
-// Check APK exists
-
-$APK:=File:C1566($apkLocation)
-
-If (Not:C34($APK.exists))
-	ASSERT:C1129(False:C215; "Missing APK at path "+$APK.path)
+	// Already on error
 End if 
 
 
-// Installing application on device
+// COPY JAR
 
-$lep.reset()\
-.setEnvironnementVariable("ANDROID_HOME"; $project.sdk)\
-.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" install -t "+$lep.singleQuoted($apkLocation))
+If ($isOnError=False:C215)
+	
+	$copySrc:=File:C1566($project.path+"buildSrc/libs/prepopulation.jar")
+	
+	If ($copySrc.exists)
+		
+		$copyDest:=$copySrc.copyTo(Folder:C1567($project.path+"app/libs"); fk overwrite:K87:5)
+		
+		If (Not:C34($copyDest.exists))
+			
+			// Copy failed
+			$isOnError:=True:C214
+			$result.out:=Null:C1517
+			$result.errors:=New collection:C1472("Could not copy file to destination: "+$copyDest.path)
+			$result.success:=False:C215
+			
+		Else 
+			// All ok
+		End if 
+		
+	Else 
+		
+		// Missing file
+		$isOnError:=True:C214
+		$result.out:=Null:C1517
+		$result.errors:=New collection:C1472("Missing source file for copy: "+$copySrc.path)
+		$result.success:=False:C215
+		
+	End if 
+	
+Else 
+	// Already on error
+End if 
 
-$result.out:=$lep.outputStream
-$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
-$result.success:=$lep.success
+
+//____________________________________________________________
+// GRADLEW ACCESS RIGHTS
+
+If ($isOnError=False:C215)
+	
+	// Chmod
+	$lep.launch("chmod +x "+$lep.singleQuoted($project.path+"gradlew"))
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to change access rights
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Failed chmod command"))
+		
+	Else 
+		// All ok
+	End if 
+	
+Else 
+	// Already on error
+End if 
 
 
-// Starting the app
+//____________________________________________________________
+// BUILD PROJECT
 
-$lep.reset()\
-.setEnvironnementVariable("ANDROID_HOME"; $project.sdk)\
-.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" shell am start -n "+$lep.singleQuoted($package+"/"+$activity))
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Building project"))
+	
+	// Building project
+	$lep.setEnvironnementVariable("currentDirectory"; $project.path)\
+		.launch("gradlew "+$buildTask)
+	
+	$result.out:=$lep.errorStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+Else 
+	// Already on error
+End if 
 
-$result.out:=$lep.outputStream
-$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
-$result.success:=$lep.success
+
+//____________________________________________________________
+// CREATE EMBEDDED DATABASE
+
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Creating embedded database"))
+	
+	// Creating embedded database
+	$lep.launch("gradlew app:createDataBase")
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to create embedded database
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Failed to create embedded database"))
+		
+	Else 
+		// All ok
+	End if 
+	
+Else 
+	// Already on error
+End if 
 
 
-//$lep.launch($lep.singleQuoted(path.scripts().file("build-and-run.sh").path)+" "+$lep.singleQuoted($file.path))
+//____________________________________________________________
+// REBUILD PROJECT WITH EMBEDDED DATA
+
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Rebuilding project"))
+	
+	// Rebuilding project
+	$lep.launch("gradlew "+$buildTask)
+	
+	$result.out:=$lep.errorStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+Else 
+	// Already on error
+End if 
+
+// Check APK is built
+
+If ($isOnError=False:C215)
+	
+	$APK:=File:C1566($apkLocation)
+	
+	// CHECK APK EXISTS
+	
+	If (Not:C34($APK.exists))
+		
+		// Missing file
+		$isOnError:=True:C214
+		
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Build failed. No APK found: "+$APK.path))
+		
+		$result.out:=Null:C1517
+		$result.errors:=New collection:C1472("Missing APK file: "+$APK.path)
+		$result.success:=False:C215
+		
+	Else 
+		// APK exists
+	End if 
+	
+Else 
+	// Already on error
+End if 
+
+
+//____________________________________________________________
+// CHECK IF EMULATOR EXISTS
+
+// TODO: get emulator list beforehand
+
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Preparing emulator"))
+	
+	// List emulators
+	$lep.launch($lep.singleQuoted($project.sdk+"/tools/bin/avdmanager")+" list avd")
+	
+	$result.out:=$lep.errorStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+Else 
+	// Already on error
+End if 
+
+
+If ($isOnError=False:C215)
+	
+	// Create emulator if doesn't exist
+	
+	If (Position:C15($avdName; String:C10($lep.errorStream))=0)
+		
+		POST_MESSAGE(New object:C1471(\
+			"target"; $in.caller; \
+			"additional"; "Creating emulator"))
+		
+		// Emulator doesn't exist yet, now creating with name $avdName
+		$lep.launch($lep.singleQuoted($project.sdk+"/tools/bin/avdmanager")+" create avd -n \""+$avdName+"\" -k \"system-images;android-29;google_apis;x86\" --device \"pixel_xl\"")
+		
+		$result.out:=$lep.errorStream
+		$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+		$result.success:=$lep.success
+		
+	Else 
+		// Emulator already exists
+	End if 
+	
+Else 
+	// Already on error
+End if 
+
+
+//____________________________________________________________
+// CHECK IF EMULATOR STARTED
+
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Preparing emulator"))
+	
+	$lep.launch("ps aux")
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to get process list
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Failed to get process list"))
+		
+	Else 
+		// All ok
+	End if 
+	
+Else 
+	// Already on error
+End if 
+
+
+If ($isOnError=False:C215)
+	
+	// Start emulator if not started yet
+	
+	If (Position:C15($avdName; String:C10($lep.outputStream))=0)
+		
+		POST_MESSAGE(New object:C1471(\
+			"target"; $in.caller; \
+			"additional"; "Starting emulator"))
+		
+		// Emulator not booted, now booting
+		$lep.asynchronous()\
+			.launch($lep.singleQuoted($project.sdk+"/emulator/emulator")+" -avd \""+$avdName+"\" -no-boot-anim")
+		
+		$result.out:=$lep.outputStream
+		$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+		$result.success:=$lep.success
+		
+		If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+			
+			$isOnError:=True:C214
+			
+			// Failed to start emulator
+			POST_MESSAGE(New object:C1471(\
+				"type"; "alert"; \
+				"target"; $in.caller; \
+				"additional"; "Failed to start emulator"))
+			
+		Else 
+			// All ok
+		End if 
+		
+	Else 
+		// Emulator already started
+	End if 
+	
+Else 
+	// Already on error
+End if 
+
+
+If ($isOnError=False:C215)
+	
+	$lep.synchronous()
+	
+	// Wait for emulator boot
+	
+	$lep2:=cs:C1710.lep.new()
+	
+	// Time elapsed
+	$Lon_start:=Milliseconds:C459
+	
+	Repeat 
+		
+		IDLE:C311
+		DELAY PROCESS:C323(Current process:C322; 60)
+		// Get emulator boot status
+		$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" shell getprop sys.boot_completed")
+		
+		$result.out:=$lep.outputStream
+		$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+		$result.success:=$lep.success
+		
+		If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+			
+			$isOnError:=True:C214
+			
+			// Failed to get emulator boot status
+			POST_MESSAGE(New object:C1471(\
+				"type"; "alert"; \
+				"target"; $in.caller; \
+				"additional"; "Failed to get emulator boot status"))
+			
+		Else 
+			// All ok
+		End if 
+		
+		$lep2.launch("ps aux")
+		
+	Until (String:C10($lep.outputStream)="1")\
+		 | (Position:C15($avdName; String:C10($lep2.outputStream))=0)\
+		 | ((Milliseconds:C459-$Lon_start)>30000)
+	
+Else 
+	// Already on error
+End if 
+
+
+//____________________________________________________________
+// CHECK APP ALREADY INSTALLED
+
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Checking package list"))
+	
+	// Get package list
+	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" shell pm list packages")
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to get package list
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Failed to get package list"))
+		
+	Else 
+		// All ok
+	End if 
+	
+Else 
+	// Already on error
+End if 
+
+If ($isOnError=False:C215)
+	
+	// Uninstall app if already in package list
+	
+	If (Position:C15($package; String:C10($lep.outputStream))>0)
+		
+		POST_MESSAGE(New object:C1471(\
+			"target"; $in.caller; \
+			"additional"; "Uninstalling application on device"))
+		
+		// APK already installed, uninstalling first
+		$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" uninstall \""+$package+"\"")
+		
+		$result.out:=$lep.outputStream
+		$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+		$result.success:=$lep.success
+		
+		If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+			
+			$isOnError:=True:C214
+			
+			// Failed to uninstall the app
+			POST_MESSAGE(New object:C1471(\
+				"type"; "alert"; \
+				"target"; $in.caller; \
+				"additional"; "Failed to uninstall the app"))
+			
+		Else 
+			// All ok
+		End if 
+		
+	Else 
+		// APK not installed yet
+	End if 
+Else 
+	// Already on error
+End if 
+
+
+//____________________________________________________________
+// INSTALL APPLICATION ON DEVICE
+
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Installing application on device"))
+	
+	// Installing application on device
+	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" install -t "+$lep.singleQuoted($apkLocation))
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to install the app
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Failed to install the app"))
+		
+	Else 
+		// All ok
+	End if 
+	
+Else 
+	// Already on error
+End if 
+
+
+//____________________________________________________________
+// START APP ON DEVICE
+
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Starting application on device"))
+	
+	// Starting application on device
+	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" shell am start -n "+$lep.singleQuoted($package+"/"+$activity))
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to start the app
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Failed to start the app"))
+		
+	Else 
+		// All ok
+	End if 
+	
+Else 
+	// Already on error
+End if 
+
+
 
 If ($result.success)
 	
@@ -286,7 +726,7 @@ Else
 		"title"; ".Android Buid Failure"; \
 		"additional"; $result.errors.join("\r")))
 	
-	//SHOW ON DISK($file.platformPath)
+	SHOW ON DISK:C922($file.platformPath)
 	
 End if 
 
