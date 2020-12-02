@@ -332,9 +332,7 @@ Function doRun
 							//……………………………………………………………………………………………………………
 					End case 
 					
-					If ($Obj_tableList.options#Null:C1517)
-						$Obj_table.searchableWithBarcode:=Bool:C1537($Obj_tableList.options.enableBarcode)
-					End if 
+					$Obj_table.searchableWithBarcode:=Bool:C1537($Obj_tableList.searchableWithBarcode)
 					
 				End if 
 				

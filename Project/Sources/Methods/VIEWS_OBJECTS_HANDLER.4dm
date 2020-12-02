@@ -507,12 +507,10 @@ Case of
 						//………………………………………………………………………………………………………………
 					: ($context.current="magnifyingGlass")
 						
-						$o:=Form:C1466[$context.typeForm()][$context.tableNum()].options
-						
 						var $menu : cs:C1710.menu
 						$menu:=cs:C1710.menu.new()
 						$menu.append("enableBarcodeQrcode"; "barcode")\
-							.mark(Bool:C1537($o.enableBarcode))\
+							.mark(Bool:C1537(Form:C1466[$context.typeForm()][$context.tableNum()].searchableWithBarcode))\
 							.popup()
 						
 						Case of 
@@ -525,20 +523,13 @@ Case of
 								//______________________________________________________
 							: ($menu.choice="barcode")
 								
-								If ($o=Null:C1517)
-									
-									Form:C1466[$context.typeForm()][$context.tableNum()].options:=New object:C1471
-									$o:=Form:C1466[$context.typeForm()][$context.tableNum()].options
-									
-								End if 
-								
-								$o.enableBarcode:=Not:C34(Bool:C1537($o.enableBarcode))
+								Form:C1466[$context.typeForm()][$context.tableNum()].searchableWithBarcode:=Not:C34(Bool:C1537(Form:C1466[$context.typeForm()][$context.tableNum()].searchableWithBarcode))
 								PROJECT.save()
 								
 								//______________________________________________________
 							Else 
 								
-								// A "Case of" statement should never omit "Else"
+								ASSERT:C1129(Not:C34(DATABASE.isMatrix))
 								
 								//______________________________________________________
 						End case 
