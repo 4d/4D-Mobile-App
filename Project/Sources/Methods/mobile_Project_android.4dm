@@ -3,13 +3,17 @@
 
 var $isDebug; $isOnError : Boolean
 var $cache; $project : Object
-var $artifactoryIds : Collection
-var $lep; $lep2 : cs:C1710.lep
+var $artifactoryIds; $emulatorList; $extractedAvdNameLines : Collection
+var $lep : cs:C1710.lep
 var $file; $copySrc; $copyDest; $APK : 4D:C1709.File
 var $filesToCopy; $templateFiles; $templateForms : 4D:C1709.Folder
-var $version; $buildTask; $package; $avdName; $apkLocation; $activity : Text
+var $version; $buildTask; $package; $avdName; $emulatorLine; $emulatorName; $apkLocation; $activity; $serial : Text
 
-C_LONGINT:C283($Lon_start)
+C_LONGINT:C283($Lon_start; $Lon_step)
+
+// get emulator device list: $ANDROID_HOME/platform-tools/adb devices
+// get avd list: $ANDROID_HOME/emulator/emulator -list-avds
+// delete avd: $ANDROID_HOME/tools/bin/avdmanager delete avd -n TestAndroid29Device5
 
 
 // NO PARAMETERS REQUIRED
@@ -61,7 +65,7 @@ $project.path:=Convert path system to POSIX:C1106($project.path)
 $package:=Lowercase:C14(String:C10($project.project.organization.identifier))
 $version:="debug"
 $buildTask:="assembleDebug"
-$avdName:="TestAndroid29Device"
+$avdName:="TestAndroid29Device4"
 $activity:="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
 $apkLocation:=$project.path+"app/build/outputs/apk/"+$version+"/app-"+$version+".apk"
 
@@ -124,7 +128,6 @@ Case of
 		
 		//______________________________________________________
 End case 
-
 
 If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
 	
@@ -217,7 +220,8 @@ Else
 End if 
 
 
-// COPY JAR
+//____________________________________________________________
+// COPY EMBEDDED DATA LIBRARY
 
 If ($isOnError=False:C215)
 	
@@ -343,15 +347,15 @@ End if
 
 
 //____________________________________________________________
-// REBUILD PROJECT WITH EMBEDDED DATA
+// BUILD PROJECT WITH EMBEDDED DATA
 
 If ($isOnError=False:C215)
 	
 	POST_MESSAGE(New object:C1471(\
 		"target"; $in.caller; \
-		"additional"; "Rebuilding project"))
+		"additional"; "Building project with embedded database"))
 	
-	// Rebuilding project
+	// Building project with embedded database
 	$lep.launch("gradlew "+$buildTask)
 	
 	$result.out:=$lep.errorStream
@@ -362,7 +366,9 @@ Else
 	// Already on error
 End if 
 
-// Check APK is built
+
+//____________________________________________________________
+// CHECK APK IS BUILT
 
 If ($isOnError=False:C215)
 	
@@ -394,9 +400,9 @@ End if
 
 
 //____________________________________________________________
-// CHECK IF EMULATOR EXISTS
+// CHECK IF AVD EXISTS
 
-// TODO: get emulator list beforehand
+// TODO: get avd list beforehand
 
 If ($isOnError=False:C215)
 	
@@ -416,9 +422,12 @@ Else
 End if 
 
 
+//____________________________________________________________
+// CREATE AVD IF DOESN'T EXIST
+
+// TODO : AVD must be created beforehand
+
 If ($isOnError=False:C215)
-	
-	// Create emulator if doesn't exist
 	
 	If (Position:C15($avdName; String:C10($lep.errorStream))=0)
 		
@@ -443,15 +452,15 @@ End if
 
 
 //____________________________________________________________
-// CHECK IF EMULATOR STARTED
+// LIST ADB DEVICES
+
+// If avd is being created just before, it won't be found here yet, because we need to start the device first. 
+// But to wait for the boot, we need its serial. So the creation should be done earlier
 
 If ($isOnError=False:C215)
 	
-	POST_MESSAGE(New object:C1471(\
-		"target"; $in.caller; \
-		"additional"; "Preparing emulator"))
-	
-	$lep.launch("ps aux")
+	// List adb devices
+	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" devices")
 	
 	$result.out:=$lep.outputStream
 	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
@@ -461,11 +470,11 @@ If ($isOnError=False:C215)
 		
 		$isOnError:=True:C214
 		
-		// Failed to get process list
+		// Failed to get adb device list
 		POST_MESSAGE(New object:C1471(\
 			"type"; "alert"; \
 			"target"; $in.caller; \
-			"additional"; "Failed to get process list"))
+			"additional"; "Failed to get adb device list"))
 		
 	Else 
 		// All ok
@@ -476,40 +485,53 @@ Else
 End if 
 
 
+//____________________________________________________________
+// FIND EMULATOR SERIAL
+
 If ($isOnError=False:C215)
 	
-	// Start emulator if not started yet
+	$emulatorList:=Split string:C1554(String:C10($lep.outputStream); "\n")
+	// Removing 'List of devices attached'
+	$emulatorList.shift()
+	// Removing empty entry (last one)
+	$emulatorList.pop()
 	
-	If (Position:C15($avdName; String:C10($lep.outputStream))=0)
+	For each ($emulatorLine; $emulatorList) Until (String:C10($emulatorName)#"")
 		
-		POST_MESSAGE(New object:C1471(\
-			"target"; $in.caller; \
-			"additional"; "Starting emulator"))
+		$serial:=Substring:C12($emulatorLine; 1; (Position:C15("\tdevice"; $emulatorLine)-1))
 		
-		// Emulator not booted, now booting
-		$lep.asynchronous()\
-			.launch($lep.singleQuoted($project.sdk+"/emulator/emulator")+" -avd \""+$avdName+"\" -no-boot-anim")
+		// Get associated avd name
+		$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" -s "+$lep.singleQuoted($serial)+" emu avd name")
 		
-		$result.out:=$lep.outputStream
-		$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
-		$result.success:=$lep.success
-		
-		If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		If (($lep.outputStream#Null:C1517) & (String:C10($lep.outputStream)#""))
 			
-			$isOnError:=True:C214
+			$extractedAvdNameLines:=Split string:C1554(String:C10($lep.outputStream); "\r")
 			
-			// Failed to start emulator
-			POST_MESSAGE(New object:C1471(\
-				"type"; "alert"; \
-				"target"; $in.caller; \
-				"additional"; "Failed to start emulator"))
+			// First line is the avd name
+			If ($extractedAvdNameLines[0]=$avdName)
+				
+				$emulatorName:=$serial
+				
+			Else 
+				// not the associated serial
+			End if 
 			
 		Else 
-			// All ok
+			// $serial name not found
 		End if 
 		
+		
+	End for each 
+	
+	If (String:C10($emulatorName)="")
+		
+		$isOnError:=True:C214
+		$result.out:=Null:C1517
+		$result.errors:=New collection:C1472("Emulator name could not be found")
+		$result.success:=False:C215
+		
 	Else 
-		// Emulator already started
+		// All ok
 	End if 
 	
 Else 
@@ -517,13 +539,48 @@ Else
 End if 
 
 
+//____________________________________________________________
+// START EMULATOR
+
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $in.caller; \
+		"additional"; "Starting emulator"))
+	
+	// Starting emulator
+	$lep.asynchronous()\
+		.launch($lep.singleQuoted($project.sdk+"/emulator/emulator")+" -avd \""+$avdName+"\" -no-boot-anim")
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to start emulator
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $in.caller; \
+			"additional"; "Failed to start emulator"))
+		
+	Else 
+		// All ok
+	End if 
+	
+Else 
+	// Already on error
+End if 
+
+
+//____________________________________________________________
+// WAIT FOR EMULATOR BOOT
+
 If ($isOnError=False:C215)
 	
 	$lep.synchronous()
-	
-	// Wait for emulator boot
-	
-	$lep2:=cs:C1710.lep.new()
 	
 	// Time elapsed
 	$Lon_start:=Milliseconds:C459
@@ -531,33 +588,25 @@ If ($isOnError=False:C215)
 	Repeat 
 		
 		IDLE:C311
-		DELAY PROCESS:C323(Current process:C322; 60)
+		DELAY PROCESS:C323(Current process:C322; 120)
 		// Get emulator boot status
-		$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" shell getprop sys.boot_completed")
+		$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" -s "+$lep.singleQuoted($emulatorName)+" shell getprop sys.boot_completed")
 		
-		$result.out:=$lep.outputStream
-		$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
-		$result.success:=$lep.success
-		
-		If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
-			
-			$isOnError:=True:C214
-			
-			// Failed to get emulator boot status
-			POST_MESSAGE(New object:C1471(\
-				"type"; "alert"; \
-				"target"; $in.caller; \
-				"additional"; "Failed to get emulator boot status"))
-			
-		Else 
-			// All ok
-		End if 
-		
-		$lep2.launch("ps aux")
+		$Lon_step:=Milliseconds:C459-$Lon_start
 		
 	Until (String:C10($lep.outputStream)="1")\
-		 | (Position:C15($avdName; String:C10($lep2.outputStream))=0)\
-		 | ((Milliseconds:C459-$Lon_start)>30000)
+		 | ($Lon_step>30000)
+	
+	// Timeout
+	If ((String:C10($lep.outputStream)#"1")\
+		 & ($Lon_step>30000))
+		
+		$isOnError:=True:C214
+		$result.out:=Null:C1517
+		$result.errors:=New collection:C1472("Timeout when booting emulator.")
+		$result.success:=False:C215
+		
+	End if 
 	
 Else 
 	// Already on error
@@ -574,7 +623,7 @@ If ($isOnError=False:C215)
 		"additional"; "Checking package list"))
 	
 	// Get package list
-	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" shell pm list packages")
+	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" -s "+$lep.singleQuoted($emulatorName)+" shell pm list packages")
 	
 	$result.out:=$lep.outputStream
 	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
@@ -598,10 +647,13 @@ Else
 	// Already on error
 End if 
 
+
+//____________________________________________________________
+// UNINSTALL APP IF ALREADY INSTALLED
+
 If ($isOnError=False:C215)
 	
 	// Uninstall app if already in package list
-	
 	If (Position:C15($package; String:C10($lep.outputStream))>0)
 		
 		POST_MESSAGE(New object:C1471(\
@@ -609,7 +661,7 @@ If ($isOnError=False:C215)
 			"additional"; "Uninstalling application on device"))
 		
 		// APK already installed, uninstalling first
-		$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" uninstall \""+$package+"\"")
+		$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" -s "+$lep.singleQuoted($emulatorName)+" uninstall \""+$package+"\"")
 		
 		$result.out:=$lep.outputStream
 		$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
@@ -647,7 +699,7 @@ If ($isOnError=False:C215)
 		"additional"; "Installing application on device"))
 	
 	// Installing application on device
-	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" install -t "+$lep.singleQuoted($apkLocation))
+	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" -s "+$lep.singleQuoted($emulatorName)+" install -t "+$lep.singleQuoted($apkLocation))
 	
 	$result.out:=$lep.outputStream
 	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
@@ -682,7 +734,7 @@ If ($isOnError=False:C215)
 		"additional"; "Starting application on device"))
 	
 	// Starting application on device
-	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" shell am start -n "+$lep.singleQuoted($package+"/"+$activity))
+	$lep.launch($lep.singleQuoted($project.sdk+"/platform-tools/adb")+" -s "+$lep.singleQuoted($emulatorName)+" shell am start -n "+$lep.singleQuoted($package+"/"+$activity))
 	
 	$result.out:=$lep.outputStream
 	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
@@ -706,7 +758,7 @@ Else
 	// Already on error
 End if 
 
-
+// END OF PROCEDURE
 
 If ($result.success)
 	
