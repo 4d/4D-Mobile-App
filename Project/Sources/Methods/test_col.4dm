@@ -49,4 +49,11 @@ ASSERT:C1129($c.length=3)
 $c:=$c.reduce("col_distinctObject"; New collection:C1472())
 ASSERT:C1129($c.length=2)
 
+$c:=New collection:C1472(True:C214)
+ASSERT:C1129($c.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
+$c:=New collection:C1472(False:C215)
+ASSERT:C1129(Not:C34($c.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value))))
+$c:=New collection:C1472(False:C215; True:C214)
+ASSERT:C1129($c.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
+
 FINALLY

@@ -591,6 +591,15 @@ If ($Obj_in.create)
 			
 		End if 
 		
+		C_OBJECT:C1216($isSearchable)
+		$isSearchable:=ob findPropertyValues($Obj_project; "searchableWithBarcode")
+		If ($isSearchable.success)
+			If ($isSearchable.value.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
+				// XXX could check that we have positive value? $isSearchable
+				$Obj_out.computedCapabilities.capabilities.camera:=True:C214
+			End if 
+		End if 
+		
 		// Manage app capabilities
 		$Obj_out.capabilities:=capabilities(\
 			New object:C1471("action"; "inject"; "target"; $Obj_in.path; "tags"; $Obj_tags; \
