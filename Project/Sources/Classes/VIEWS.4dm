@@ -1,15 +1,19 @@
-// VIEWS pannel Class
+/*===============================================
+VIEWS pannel Class
+===============================================*/
+Class extends form
+
+//________________________________________________________________ 
 Class constructor
 	var $1 : Object
+	
+	Super:C1705("editor_CALLBACK")
 	
 	This:C1470.context:=editor_INIT
 	
 	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
 		
-		This:C1470.window:=Current form window:C827
-		
 		This:C1470.tableWidget:=cs:C1710.picture.new("tables")
-		
 		
 		This:C1470.tableButtonNext:=cs:C1710.button.new("next")
 		This:C1470.tableButtonPrevious:=cs:C1710.button.new("previous")
@@ -191,6 +195,9 @@ Function fieldList($table : Variant)->$result : Object
 							// #TEMPO [
 							$field.id:=0
 							//]
+							
+							//******* Il faut vérifier que la relation existe toujours ******* 
+							
 							
 							$subLevel:=$subLevel+10
 							

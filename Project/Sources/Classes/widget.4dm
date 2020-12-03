@@ -35,6 +35,23 @@ Class constructor($name : Text; $datasource)
 	
 	This:C1470.action:=OBJECT Get action:C1457(*; This:C1470.name)
 	
+	//________________________________________________________________
+	// Update the widget pointer in case of form reload
+Function updatePointer()->$p : Pointer
+	
+	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
+	
+	If (Not:C34(Is nil pointer:C315($p)))
+		
+		This:C1470.pointer:=$p
+		
+	End if 
+	
+	//________________________________________________________________
+	// Return the pointer to the widget
+Function pointer()->$p : Pointer
+	
+	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
 	
 /*═════════════════════════════════════════════════
 sets the format for the widget
@@ -100,7 +117,7 @@ Function getCoordinates
 			//…………………………………………………………………………………………………
 		: (This:C1470.type=Object type listbox:K79:8)
 			
-			This:C1470.getDefinition()
+			This:C1470.updateDefinition()
 			This:C1470.getCell()
 			
 			//…………………………………………………………………………………………………
@@ -111,7 +128,7 @@ Function getCoordinates
 			//…………………………………………………………………………………………………
 		Else 
 			
-			ASSERT:C1129(False:C215; "Non implemented for: "+String:C10(This:C1470.type))
+			//ASSERT(False; "Non implemented for: "+String(This.type))
 			
 			//…………………………………………………………………………………………………
 	End case 

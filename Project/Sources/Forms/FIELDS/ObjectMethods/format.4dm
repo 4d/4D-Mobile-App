@@ -1,2 +1,3 @@
-C_LONGINT:C283($0)
-$0:=FIELDS_OBJECTS_HANDLER 
+$0:=-1  // 💪 We manage data entry
+
+FIELDS

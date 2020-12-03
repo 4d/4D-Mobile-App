@@ -35,7 +35,7 @@
 						"onMouseEnter",
 						"onMouseLeave"
 					],
-					"method": "fields_OBJECTS_HANDLER",
+					"method": "FIELDS",
 					"focusable": false,
 					"fontWeight": "bold"
 				},
@@ -53,7 +53,7 @@
 						"onMouseEnter",
 						"onMouseLeave"
 					],
-					"method": "fields_OBJECTS_HANDLER",
+					"method": "FIELDS",
 					"focusable": false,
 					"fontWeight": "bold"
 				},
@@ -120,7 +120,7 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
-					"method": "FIELDS_OBJECTS_HANDLER",
+					"method": "FIELDS",
 					"hideSystemHighlight": true,
 					"hideFocusRing": true,
 					"scrollbarHorizontal": "hidden",
@@ -213,7 +213,7 @@
 								"textAlign": "left",
 								"verticalAlign": "middle"
 							},
-							"method": "FIELDS_OBJECTS_HANDLER"
+							"method": "FIELDS"
 						},
 						{
 							"name": "shortLabel",
@@ -242,7 +242,7 @@
 								"textAlign": "left",
 								"verticalAlign": "middle"
 							},
-							"method": "FIELDS_OBJECTS_HANDLER"
+							"method": "FIELDS"
 						},
 						{
 							"name": "label",
@@ -272,7 +272,7 @@
 								"textAlign": "left",
 								"verticalAlign": "middle"
 							},
-							"method": "FIELDS_OBJECTS_HANDLER"
+							"method": "FIELDS"
 						},
 						{
 							"name": "format",
@@ -319,7 +319,7 @@
 								"onDoubleClick",
 								"onBeforeDataEntry"
 							],
-							"method": "FIELDS_OBJECTS_HANDLER ",
+							"method": "FIELDS",
 							"footer": {
 								"name": "Footer7"
 							},
@@ -406,7 +406,7 @@
 						"onClick"
 					],
 					"focusable": false,
-					"method": "FIELDS_OBJECTS_HANDLER",
+					"method": "FIELDS",
 					"text": "__XXXX__",
 					"textDecoration": "underline",
 					"stroke": "#1BA1E5"
@@ -418,7 +418,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "FIELDS_Handler",
+	"method": "FIELDS",
 	"geometryStamp": 4,
 	"editor": {
 		"activeView": "View 1",

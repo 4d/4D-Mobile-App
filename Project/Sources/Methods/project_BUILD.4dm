@@ -47,7 +47,7 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		//#99788 ========================================================
 		//EXECUTE METHOD IN SUBFORM("project"; "views_Handler"; *; New object(\
-															"action"; "updateForms"))
+																		"action"; "updateForms"))
 		
 		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
@@ -396,6 +396,8 @@ If (Asserted:C1132($project#Null:C1517))
 				// A "If" statement should never omit "Else" 
 				
 			End if 
+			
+			
 			CALL WORKER:C1389("4D Mobile ("+String:C10($in.caller)+")"; "mobile_Project"; $in)
 			
 		End if 

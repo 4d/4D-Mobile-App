@@ -33,13 +33,45 @@ Function call($params : Variant)
 			
 			If (Value type:C1509($params)=Is collection:K8:32)
 				
-				$t:="CALL FORM:C1391(This:C1470.window; This:C1470.callback"
-				
-				For ($i; 0; $params.length-1; 1)
+				If (False:C215)  // #WIP
 					
-					$t:=$t+"; $params["+String:C10($i)+"]"
+					//$t:="CALL FORM:C1391("+String(This.window)+"; \""+This.callback+"\""
 					
-				End for 
+					//For ($i; 0; $params.length-1; 1)
+					
+					//$var:="v"+String($i)
+					//EXECUTE FORMULA("C_VARIANT("+$var+")")
+					//EXECUTE FORMULA($var+":="+$params[$i])
+					
+					//Case of 
+					
+					////______________________________________________________
+					//: (Value type($param[$i])=Is text)
+					
+					//$t:=$t+"; \""+$var+"\""
+					
+					////______________________________________________________
+					//: (False)
+					
+					////______________________________________________________
+					//Else 
+					
+					//$t:=$t+"; "+$var
+					
+					////______________________________________________________
+					//End case 
+					//End for 
+					
+				Else 
+					
+					$t:="CALL FORM:C1391(This:C1470.window; This:C1470.callback"
+					
+					For ($i; 0; $params.length-1; 1)
+						
+						$t:=$t+"; $params["+String:C10($i)+"]"
+						
+					End for 
+				End if 
 				
 				$t:=$t+")"
 				

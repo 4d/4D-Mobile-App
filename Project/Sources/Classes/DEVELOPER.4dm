@@ -1,18 +1,16 @@
 /*===============================================
 DEVELOPER pannel Class
-*/
+===============================================*/
+Class extends form
 
-//Class extends panel
-
+//________________________________________________________________ 
 Class constructor
 	
-	//Super()
+	Super:C1705("editor_CALLBACK")
 	
 	This:C1470.context:=editor_INIT
 	
 	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
-		
-		This:C1470.window:=Current form window:C827
 		
 		This:C1470.name:=cs:C1710.widget.new("01_name")
 		This:C1470.team:=cs:C1710.widget.new("02_team")

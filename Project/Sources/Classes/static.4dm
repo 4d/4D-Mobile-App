@@ -152,6 +152,21 @@ Function setTitle
 	
 	$0:=This:C1470
 	
+	// ════════════════════════════════════════════
+Function fontStyle($style : Integer)->$this : Object
+	
+	If (Count parameters:C259>=1)
+		
+		OBJECT SET FONT STYLE:C166(*; This:C1470.name; $style)
+		
+	Else 
+		
+		OBJECT SET FONT STYLE:C166(*; This:C1470.name; Plain:K14:1)
+		
+	End if 
+	
+	$this:=This:C1470
+	
 /*════════════════════════════════════════════
 .getTitle() -> text
 ══════════════════════════*/

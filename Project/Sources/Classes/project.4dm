@@ -79,6 +79,36 @@ Function load
 	var $0 : cs:C1710.project
 	$0:=This:C1470
 	
+	//================================================================================
+	// Tests if the project is locked and, if so, makes the provided widgets accessible or not
+Function isLocked()->$isLocked : Boolean
+	C_VARIANT:C1683(${1})
+	
+	//If (This.structure#Null)
+	
+	//$isLocked:=Bool(This.structure.unsynchronized)
+	
+	//Else 
+	
+	//$isLocked:=Bool(This.$project.structure.unsynchronized)
+	
+	//End if 
+	
+	//For ($i; 1; Count parameters; 1)
+	
+	//If ($isLocked)
+	
+	//OBJECT SET ENTERABLE(*; string(${$i}); Not($isLocked))
+	
+	//End if 
+	//End for 
+	
+	
+	
+	
+	
+	
+	
 	//====================================
 Function get
 	var $0 : Object

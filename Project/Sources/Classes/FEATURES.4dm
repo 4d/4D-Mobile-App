@@ -1,13 +1,16 @@
 /*===============================================
 FEATURES pannel Class
 ===============================================*/
+Class extends form
+
+//________________________________________________________________
 Class constructor
+	
+	Super:C1705("editor_CALLBACK")
 	
 	This:C1470.context:=editor_INIT
 	
 	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
-		
-		This:C1470.window:=Current form window:C827
 		
 		This:C1470.loginRequired:=cs:C1710.button.new("01_login")
 		

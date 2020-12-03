@@ -88,6 +88,9 @@ Case of
 				// Preload the icons
 				CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "tableIcons")
 				
+				// Update field properties panel
+				CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "fieldProperties")
+				
 				//______________________________________________________
 		End case 
 		

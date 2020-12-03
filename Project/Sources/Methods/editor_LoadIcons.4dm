@@ -8,45 +8,43 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($i; $kLon_iconWidth; $l; $Lon_parameters)
-C_PICTURE:C286($p)
-C_TEXT:C284($t)
-C_OBJECT:C1216($folder; $o; $Obj_in)
-C_COLLECTION:C1488($Col_hostpathnames; $Col_pathnames; $Col_pictures)
-
-ARRAY TEXT:C222($tFile_icons; 0)
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(editor_LoadIcons; $0)
 	C_OBJECT:C1216(editor_LoadIcons; $1)
 End if 
 
+var $path : Text
+var $p : Picture
+var $i; $iconHeight; $iconWidth; $length : Integer
+var $params : Object
+var $host; $icons; $pathnames : Collection
+var $folder : cs:C1710.path
+
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
-	$Obj_in:=$1
+	$params:=$1
 	
 	// Default values
 	
 	// Optional parameters
-	If ($Lon_parameters>=2)
+	If (Count parameters:C259>=2)
 		
 		// <NONE>
 		
 	End if 
 	
-	$kLon_iconWidth:=50
+	$iconWidth:=50
+	$iconHeight:=50
 	
-	If ($Obj_in.sort=Null:C1517)
+	If ($params.sort=Null:C1517)
 		
-		$Obj_in.sort:=True:C214  // default value if not defined
+		$params.sort:=True:C214  // default value if not defined
 		
 	End if 
 	
@@ -59,53 +57,50 @@ End if
 // ----------------------------------------------------
 //                INTERNAL RESOURCES
 // ----------------------------------------------------
-$folder:=COMPONENT_Pathname($Obj_in.target)
-$l:=Length:C16($folder.platformPath)
+$folder:=cs:C1710.path.new($params.target).target
+$length:=Length:C16($folder.platformPath)
+$pathnames:=$folder.files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
 
-$Col_pathnames:=$folder.files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
-
-If (Bool:C1537($Obj_in.sort))
+If (Bool:C1537($params.sort))
 	
-	$Col_pathnames:=$Col_pathnames.sort()
+	$pathnames:=$pathnames.sort()
 	
 End if 
 
-$Col_pictures:=New collection:C1472.resize($Col_pathnames.length)
+$icons:=New collection:C1472.resize($pathnames.length)
 
-For each ($t; $Col_pathnames)
+For each ($path; $pathnames)
 	
-	READ PICTURE FILE:C678($t; $p)
-	CREATE THUMBNAIL:C679($p; $p; $kLon_iconWidth; $kLon_iconWidth; Scaled to fit:K6:2)
-	$Col_pictures[$i]:=$p
-	$Col_pathnames[$i]:=Replace string:C233(Delete string:C232($t; 1; $l); Folder separator:K24:12; "/")  // Keep relative posix path
+	READ PICTURE FILE:C678($path; $p)
+	CREATE THUMBNAIL:C679($p; $p; $iconWidth; $iconHeight; Scaled to fit:K6:2)
+	$icons[$i]:=$p
+	$pathnames[$i]:=Replace string:C233(Delete string:C232($path; 1; $length); Folder separator:K24:12; "/")  // Keep relative posix path
 	$i:=$i+1
 	
 End for each 
 
-
 // ----------------------------------------------------
 //                  USER RESOURCES
 // ----------------------------------------------------
-$folder:=COMPONENT_Pathname("host_"+$Obj_in.target)
+$folder:=cs:C1710.path.new("hostIcons").target
 
 If ($folder.exists)
 	
-	$l:=Length:C16($folder.platformPath)
+	$length:=Length:C16($folder.platformPath)
+	$host:=$folder.files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
 	
-	$Col_hostpathnames:=$folder.files(fk recursive:K87:7).query("hidden = false & name != '.@'").extract("platformPath")
-	
-	If (Bool:C1537($Obj_in.sort))
+	If (Bool:C1537($params.sort))
 		
-		$Col_hostpathnames:=$Col_hostpathnames.sort()
+		$host:=$host.sort()
 		
 	End if 
 	
-	For each ($t; $Col_hostpathnames)
+	For each ($path; $host)
 		
-		READ PICTURE FILE:C678($t; $p)
-		CREATE THUMBNAIL:C679($p; $p; $kLon_iconWidth; $kLon_iconWidth; Scaled to fit:K6:2)
-		$Col_pictures.push($p)
-		$Col_pathnames.push("/"+Replace string:C233(Delete string:C232($t; 1; $l); Folder separator:K24:12; "/"))  // Keep relative posix path
+		READ PICTURE FILE:C678($path; $p)
+		CREATE THUMBNAIL:C679($p; $p; $iconWidth; $iconHeight; Scaled to fit:K6:2)
+		$icons.push($p)
+		$pathnames.push("/"+Replace string:C233(Delete string:C232($path; 1; $length); Folder separator:K24:12; "/"))  // Keep relative posix path
 		
 	End for each 
 End if 
@@ -114,24 +109,17 @@ End if
 //                 Insert blank icon
 // ----------------------------------------------------
 READ PICTURE FILE:C678(UI.noIcon; $p)
-CREATE THUMBNAIL:C679($p; $p; $kLon_iconWidth; $kLon_iconWidth; Scaled to fit:K6:2)
-TRANSFORM PICTURE:C988($p; Scale:K61:2; 0.8; 0.8)
-TRANSFORM PICTURE:C988($p; Crop:K61:7; 5; 5; 30; 30)
-$Col_pathnames.insert(0; "")
-$Col_pictures.insert(0; $p)
-
-$o:=New object:C1471(\
-"celluleWidth"; $kLon_iconWidth; \
-"maxColumns"; 40; \
-"offset"; 5; \
-"thumbnailWidth"; $kLon_iconWidth; \
-"noPicture"; Get localized string:C991("noMedia"); \
-"pictures"; $Col_pictures; \
-"pathnames"; $Col_pathnames)
+CREATE THUMBNAIL:C679($p; $p; $iconWidth-8; $iconHeight; Scaled to fit prop centered:K6:6)
+$pathnames.insert(0; "")
+$icons.insert(0; $p)
 
 // ----------------------------------------------------
 // Return
-$0:=$o
-
-// ----------------------------------------------------
-// End
+$0:=New object:C1471(\
+"celluleWidth"; $iconWidth; \
+"maxColumns"; 40; \
+"offset"; 4; \
+"thumbnailWidth"; $iconWidth; \
+"noPicture"; Get localized string:C991("noMedia"); \
+"pictures"; $icons; \
+"pathnames"; $pathnames)

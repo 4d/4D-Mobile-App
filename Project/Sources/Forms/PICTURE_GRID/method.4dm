@@ -66,7 +66,7 @@ Case of
 				
 				If ($top>=0)
 					
-					OBJECT SET COORDINATES:C1248(*; "selection"; $left+1; $top+1; $right-1; $bottom-1)
+					OBJECT SET COORDINATES:C1248(*; "selection"; $left+2; $top+1; $right-1; $bottom-1)
 					OBJECT SET VISIBLE:C603(*; "selection"; True:C214)
 					
 				End if 

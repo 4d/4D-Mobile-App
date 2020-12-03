@@ -273,3 +273,27 @@ Function disable
 	End for each 
 	
 /*════════════════════════════════════════════*/
+	
+	// ════════════════════════════════════════════
+Function fontStyle($style : Integer)->$this : Object
+	
+	var $o : Object
+	
+	If (Count parameters:C259>=1)
+		
+		For each ($o; This:C1470.members)
+			
+			$o.fontStyle($1)
+			
+		End for each 
+		
+	Else 
+		
+		For each ($o; This:C1470.members)
+			
+			$o.fontStyle()
+			
+		End for each 
+	End if 
+	
+	$this:=This:C1470

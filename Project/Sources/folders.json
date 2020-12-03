@@ -307,12 +307,13 @@
 	"10] FIELDS": {
 		"methods": [
 			"COMPILER_fields",
-			"FIELDS_class",
-			"FIELDS_Handler",
-			"fields_LIST",
-			"FIELDS_OBJECTS_HANDLER"
+			"FIELDS",
+			"FIELDS_CALLBACK"
 		],
 		"forms": [
+			"FIELDS"
+		],
+		"classes": [
 			"FIELDS"
 		]
 	},
@@ -599,6 +600,7 @@
 			"button",
 			"group",
 			"input",
+			"listbox",
 			"picture",
 			"scrollable",
 			"static",

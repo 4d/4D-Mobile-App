@@ -95,3 +95,9 @@ Function getScrollbars
 	This:C1470.scrollbar:=New object:C1471(\
 		"vertical"; $vertical; \
 		"horizontal"; $horizontal)
+	
+Function setScrollbars($horizontal; $vertical)->$this : Object
+	
+	OBJECT SET SCROLLBAR:C843(*; This:C1470.name; Num:C11($horizontal); Num:C11($vertical))
+	
+	$this:=This:C1470

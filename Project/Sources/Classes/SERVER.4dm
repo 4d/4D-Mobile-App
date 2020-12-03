@@ -1,13 +1,17 @@
 /*===============================================
-           SERVER pannel Class
+SERVER pannel Class
 ===============================================*/
+Class extends form
+
+//________________________________________________________________
 Class constructor
+	
+	Super:C1705("editor_CALLBACK")
 	
 	This:C1470.context:=editor_INIT
 	
-	If (OB Is empty:C1297(This:C1470.context))
+	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
 		
-		This:C1470.window:=Current form window:C827
 		This:C1470.productionURL:=cs:C1710.widget.new("02_prodURL")
 		This:C1470.webSettings:=cs:C1710.button.new("webSettings")
 		This:C1470.webSettingsLabel:=cs:C1710.static.new("webSettings.label")

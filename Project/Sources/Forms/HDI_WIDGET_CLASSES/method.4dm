@@ -1,6 +1,6 @@
 C_LONGINT:C283($l)
 C_PICTURE:C286($p)
-C_OBJECT:C1216($e;$o)
+C_OBJECT:C1216($e; $o)
 C_COLLECTION:C1488($c)
 
 $e:=FORM Event:C1606
@@ -19,7 +19,7 @@ Case of
 		//———————————————————————————————————————————————
 	: ($e.code=On Load:K2:1)
 		
-		Form:C1466.pages:=New collection:C1472.resize(4)// 3 pages + page 0
+		Form:C1466.pages:=New collection:C1472.resize(4)  // 3 pages + page 0
 		
 		//______________________________________________________
 	: ($e.code=On Page Change:K2:54)
@@ -40,7 +40,7 @@ Case of
 		ALERT:C41("You have clicked on "+$e.objectName)
 		
 		//______________________________________________________
-	: (Split string:C1554("execute.reset.trace.next.previous";".").indexOf($e.objectName)#-1)
+	: (Split string:C1554("execute.reset.trace.next.previous"; ".").indexOf($e.objectName)#-1)
 		
 		// Ignore
 		
@@ -75,7 +75,7 @@ If (Form:C1466.pages[$l]=Null:C1517) | Shift down:C543
 				.disable()
 			
 			Form:C1466.close:=cs:C1710.button.new("Check Box1")\
-				.setShortcut("c";Command key mask:K16:1)\
+				.setShortcut("c"; Command key mask:K16:1)\
 				.highlightShortcut()
 			
 			Form:C1466.blackRect:=cs:C1710.static.new("Rectangle2")
@@ -86,18 +86,18 @@ If (Form:C1466.pages[$l]=Null:C1517) | Shift down:C543
 			Form:C1466.grapRect:=cs:C1710.static.new("Rectangle5")
 			
 			$c:=New collection:C1472
-			$c.push(cs:C1710.static.new("Text8").setTitle("CommonMenuFile"))// Set title with a resname
-			$c.push(cs:C1710.button.new("Button4").setTitle("Hello"))// Set title with a string
+			$c.push(cs:C1710.static.new("Text8").setTitle("CommonMenuFile"))  // Set title with a resname
+			$c.push(cs:C1710.button.new("Button4").setTitle("Hello"))  // Set title with a string
 			$c.push(cs:C1710.button.new("Button5").disable())
 			Form:C1466.group1:=cs:C1710.group.new($c)
 			
 			// If uncommented, must generate an assert
 			// Form.Input:=cs.widget.new("objectThatDoesNotExist")
 			
-			cs:C1710.group.new("execute,reset").distributeHorizontally()
+			$o:=cs:C1710.group.new("execute,reset").fontStyle(Bold:K14:2).distributeHorizontally()
 			
 			Form:C1466.clickMe:=cs:C1710.button.new("Button1")\
-				.setShortcut("m";Command key mask:K16:1)\
+				.setShortcut("m"; Command key mask:K16:1)\
 				.highlightShortcut()\
 				.disable()\
 				.setHelpTip("Click on \"Execute\" to activate me")\
@@ -117,7 +117,7 @@ If (Form:C1466.pages[$l]=Null:C1517) | Shift down:C543
 			Form:C1466.grapRect.origin:=Form:C1466.grapRect.coordinates
 			Form:C1466.blueRect.origin:=Form:C1466.blueRect.coordinates
 			
-			For each ($o;Form:C1466.group1.members)
+			For each ($o; Form:C1466.group1.members)
 				
 				$o.origin:=$o.coordinates
 				
@@ -127,13 +127,13 @@ If (Form:C1466.pages[$l]=Null:C1517) | Shift down:C543
 		: ($l=2)
 			
 			Form:C1466.nonAssignable:="Hello"
-			Form:C1466.testDatasource:=cs:C1710.input.new("Input";Formula:C1597(Form:C1466.nonAssignable))
+			Form:C1466.testDatasource:=cs:C1710.input.new("Input"; Formula:C1597(Form:C1466.nonAssignable))
 			Form:C1466.value:=cs:C1710.input.new("Input1")
 			Form:C1466.getValue:=cs:C1710.button.new("Button3").disable()
 			
-			Form:C1466.testPicture:=cs:C1710.picture.new("picture";Formula:C1597(Form:C1466.picture))
+			Form:C1466.testPicture:=cs:C1710.picture.new("picture"; Formula:C1597(Form:C1466.picture))
 			Form:C1466.testPicture.read(File:C1566("/RESOURCES/images/4d.png")).thumbnail(100)\
-				.superImposition(File:C1566("/RESOURCES/images/light_on.png");5;5)
+				.superImposition(File:C1566("/RESOURCES/images/light_on.png"); 5; 5)
 			
 			//______________________________________________________
 		: ($l=3)

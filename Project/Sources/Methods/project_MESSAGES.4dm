@@ -234,7 +234,7 @@ Case of
 					//……………………………………………………………………………………………
 				: ($form.currentForm=$form.fieldProperties)
 					
-					FIELDS_Handler($oIN)
+					FIELDS_CALLBACK($oIN)
 					
 					//……………………………………………………………………………………………
 				: ($form.currentForm=$form.views)
@@ -339,32 +339,10 @@ Case of
 			
 		Else 
 			
-			FIELDS_Handler(New object:C1471(\
+			FIELDS_CALLBACK(New object:C1471(\
 				"action"; "update"))
 			
 		End if 
-		
-		//______________________________________________________
-	: ($tSelector="fieldIcons")  // Preload the field icons
-		
-		If ($form.currentForm=$form.project)
-			
-			// Pass to target panel
-			$tPanel:=panel_Find_by_name($form.fieldProperties)
-			
-			If (Length:C16($tPanel)>0)
-				
-				EXECUTE METHOD IN SUBFORM:C1085($tPanel; $form.callback; *; $tSelector; $oIN)
-				
-			End if 
-			
-		Else 
-			
-			FIELDS_Handler(New object:C1471(\
-				"action"; "icons"))
-			
-		End if 
-		
 		//______________________________________________________
 	: ($tSelector="actionIcons")  // Preload the actions icons
 		
@@ -568,7 +546,7 @@ Case of
 							If ($oIN.field#Null:C1517)  // Select field
 								
 								// Set the selected field
-								FIELDS_Handler(New object:C1471(\
+								FIELDS_CALLBACK(New object:C1471(\
 									"action"; "select"; \
 									"fieldNumber"; Num:C11($oIN.field)))
 								
