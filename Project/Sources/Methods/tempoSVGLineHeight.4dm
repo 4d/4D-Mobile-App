@@ -1,4 +1,4 @@
-//%attributes = {}
+//%attributes = {"invisible":true}
 //var $1 : Text  // text
 //var $2 : Text  // font-family
 //var $3 : Real  // font-size

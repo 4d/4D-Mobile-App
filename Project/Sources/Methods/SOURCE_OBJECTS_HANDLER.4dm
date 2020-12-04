@@ -102,7 +102,7 @@ Case of
 	: ($Txt_me=$Obj_form.doNotGenerate)\
 		 | ($Txt_me=$Obj_form.doNotExportImages)
 		
-		UI.saveProject()
+		PROJECT.save()
 		UI.refresh()
 		
 		//==================================================
@@ -110,7 +110,7 @@ Case of
 		
 		Form:C1466.dataSource.source:="local"
 		
-		UI.saveProject()
+		PROJECT.save()
 		$Obj_context.testServer()
 		
 		//==================================================
@@ -118,7 +118,7 @@ Case of
 		
 		Form:C1466.dataSource.source:="server"
 		
-		UI.saveProject()
+		PROJECT.save()
 		
 		//#ACI0100687
 		If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
@@ -159,7 +159,7 @@ Case of
 							
 						End if 
 						
-						UI.saveProject()
+						PROJECT.save()
 						$Obj_context.testServer()
 						
 					End if 

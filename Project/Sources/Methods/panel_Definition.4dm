@@ -42,7 +42,7 @@ If (OB Is empty:C1297(Form:C1466.$dialog[$formName]))\
 	
 	// Define local functions
 	$o[$formName].refresh:=Formula:C1597(SET TIMER:C645(-1))
-	$o[$formName].call:=Formula:C1597(CALL FORM:C1391(This:C1470.window; "editor_CALLBACK"; $1; $2))
+	//$o[$formName].call:=Formula(CALL FORM(This.window; "editor_CALLBACK"; $1; $2))
 	
 End if 
 

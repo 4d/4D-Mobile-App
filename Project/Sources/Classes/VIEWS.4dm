@@ -3,7 +3,7 @@ VIEWS pannel Class
 ===============================================*/
 Class extends form
 
-//________________________________________________________________ 
+//________________________________________________________________
 Class constructor
 	var $1 : Object
 	
@@ -72,7 +72,7 @@ Function _update
 	// Redraw the preview
 Function draw
 	
-	VIEWS_DRAW_FORM(This:C1470.form)
+	tmpl_DRAW(This:C1470.form)
 	
 	//============================================================================
 	// Define a field in the form
@@ -196,7 +196,7 @@ Function fieldList($table : Variant)->$result : Object
 							$field.id:=0
 							//]
 							
-							//******* Il faut vérifier que la relation existe toujours ******* 
+							//******* Il faut vérifier que la relation existe toujours *******
 							
 							
 							$subLevel:=$subLevel+10
@@ -520,3 +520,8 @@ Function setTemplate($browser : Object)
 		
 	End if 
 	
+	//============================================================================
+	// Open the template selector
+Function templatePicker($formType : Text)
+	
+	views_LAYOUT_PICKER($formType)

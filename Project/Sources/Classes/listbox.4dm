@@ -26,41 +26,58 @@ Function getCoordinates
 	This:C1470.getCell()
 	
 	//________________________________________________________________
-	// Select a row #TO_DO: use a collection for multiple selection
+	// Select row(s)
 Function select($row : Integer)->$this : cs:C1710.listbox
 	
-	LISTBOX SELECT ROW:C912(*; This:C1470.name; $row; lk replace selection:K53:1)
+	If (Count parameters:C259=0)
+		
+		// Select all rows
+		LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk replace selection:K53:1)
+		
+	Else 
+		
+		// #TO_DO: use a collection for multiple selection
+		LISTBOX SELECT ROW:C912(*; This:C1470.name; $row; lk replace selection:K53:1)
+		
+	End if 
 	
 	$this:=This:C1470
 	
 	//________________________________________________________________
-	// Select all rows
-Function selectAll()->$this : cs:C1710.listbox
+	// Unselect row(s)
+Function unselect($row : Integer)->$this : cs:C1710.listbox
 	
-	LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk replace selection:K53:1)
+	If (Count parameters:C259=0)
+		
+		// Unselect all rows
+		LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk remove from selection:K53:3)
+		
+	Else 
+		
+		// #TO_DO: use a collection for multiple selection
+		LISTBOX SELECT ROW:C912(*; This:C1470.name; $row; lk remove from selection:K53:3)
+		
+	End if 
 	
 	$this:=This:C1470
 	
 	//________________________________________________________________
-	// Deselect all items
-Function deselect()->$this : cs:C1710.listbox
-	
-	LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk remove from selection:K53:3)
-	
-	$this:=This:C1470
-	
-	//________________________________________________________________
+	// Gives the number of selected rows
 Function selectedNumber()->$count : Integer
 	
 	$count:=Count in array:C907((This:C1470.pointer())->; True:C214)
 	
 	//________________________________________________________________
+	// Gives the number of columns
+Function columnsNumber()->$count : Integer
+	
+	$count:=LISTBOX Get number of columns:C831(*; This:C1470.name)
+	
+	//________________________________________________________________
+	// Gives the number of rows
 Function rowsNumber()->$count : Integer
 	
 	$count:=LISTBOX Get number of rows:C915(*; This:C1470.name)
-	
-	//________________________________________________________________
-Function 
 	
 	//________________________________________________________________
 	// Reveal the row
@@ -241,21 +258,77 @@ Function clear()->$this : cs:C1710.listbox
 	//________________________________________________________________
 Function deleteRow($row : Integer)->$this : cs:C1710.listbox
 	
-	LISTBOX DELETE ROWS:C914(*; This:C1470.name; $row; 1)
+	
+	If (Count parameters:C259=0)
+		
+		// Delete all rowsLISTBOX DELETE ROWS(*; This.name; 1; This.rowsNumber())
+		LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk remove from selection:K53:3)
+		
+	Else 
+		
+		// #TO_DO: use a collection for multiple delrtion
+		LISTBOX DELETE ROWS:C914(*; This:C1470.name; $row; 1)
+		
+	End if 
 	
 	$this:=This:C1470
 	
 	//________________________________________________________________
-Function deleteAllRows()->$this : cs:C1710.listbox
+	// Returns all properties of the column or listbox
+Function getProperties($column : Text)->$properties : Object
 	
-	LISTBOX DELETE ROWS:C914(*; This:C1470.name; 1; This:C1470.rowsNumber())
+	var $target : Text
 	
-	$this:=This:C1470
+	If (Count parameters:C259>=1)
+		
+		$target:=$column
+		
+	Else 
+		
+		$target:=This:C1470.name
+		
+	End if 
+	
+	$properties:=New object:C1471(\
+		"allowWordwrap"; LISTBOX Get property:C917(*; $target; lk allow wordwrap:K53:39); \
+		"autoRowHeight"; LISTBOX Get property:C917(*; $target; lk auto row height:K53:72); \
+		"backgroundColorExpression"; LISTBOX Get property:C917(*; $target; lk background color expression:K53:47); \
+		"columnMinWidth"; LISTBOX Get property:C917(*; $target; lk column min width:K53:50); \
+		"columnResizable"; LISTBOX Get property:C917(*; $target; lk column resizable:K53:40); \
+		"detailFormName"; LISTBOX Get property:C917(*; $target; lk detail form name:K53:44); \
+		"displayFooter"; LISTBOX Get property:C917(*; $target; lk display footer:K53:20); \
+		"displayHeader"; LISTBOX Get property:C917(*; $target; lk display header:K53:4); \
+		"displayType"; LISTBOX Get property:C917(*; $target; lk display type:K53:46); \
+		"doubleClickOnRow"; LISTBOX Get property:C917(*; $target; lk double click on row:K53:43); \
+		"extraRows"; LISTBOX Get property:C917(*; $target; lk extra rows:K53:38); \
+		"fontColorExpression"; LISTBOX Get property:C917(*; $target; lk font color expression:K53:48); \
+		"fontStyleExpression"; LISTBOX Get property:C917(*; $target; lk font style expression:K53:49); \
+		"hideSelectionHighlight"; LISTBOX Get property:C917(*; $target; lk hide selection highlight:K53:41); \
+		"highlightSet"; LISTBOX Get property:C917(*; $target; lk highlight set:K53:66); \
+		"horScrollbarHeight"; LISTBOX Get property:C917(*; $target; lk hor scrollbar height:K53:7); \
+		"multiStyle"; LISTBOX Get property:C917(*; $target; lk multi style:K53:71); \
+		"namedSelection"; LISTBOX Get property:C917(*; $target; lk named selection:K53:67); \
+		"resizingMode"; LISTBOX Get property:C917(*; $target; lk resizing mode:K53:36); \
+		"rowHeightUnit"; LISTBOX Get property:C917(*; $target; lk row height unit:K53:42); \
+		"selectionMode"; LISTBOX Get property:C917(*; $target; lk selection mode:K53:35); \
+		"singleClickEdit"; LISTBOX Get property:C917(*; $target; lk single click edit:K53:70); \
+		"sortable"; LISTBOX Get property:C917(*; $target; lk sortable:K53:45); \
+		"truncate"; LISTBOX Get property:C917(*; $target; lk truncate:K53:37); \
+		"verScrollbarWidth"; LISTBOX Get property:C917(*; $target; lk ver scrollbar width:K53:9)\
+		)
 	
 	//________________________________________________________________
-Function getProperty($property : Integer)->$value : Variant
+Function getProperty($property : Integer; $column : Text)->$value : Variant
 	
-	$value:=LISTBOX Get property:C917(*; This:C1470.name; $property)
+	If (Count parameters:C259=0)
+		
+		$value:=LISTBOX Get property:C917(*; This:C1470.name; $property)
+		
+	Else 
+		
+		$value:=LISTBOX Get property:C917(*; $column; $property)
+		
+	End if 
 	
 	//________________________________________________________________
 Function setProperty($property : Integer; $value)->$this : cs:C1710.listbox

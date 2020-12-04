@@ -248,7 +248,7 @@ Case of
 						$form.previewGroup.setVisible(Length:C16($context.tableNum())>0)
 						
 						// Uppdate preview
-						VIEWS_DRAW_FORM($form)
+						tmpl_DRAW($form)
 						
 						If (FEATURE.with("withWidgetActions"))
 							

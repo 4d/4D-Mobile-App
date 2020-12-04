@@ -2,9 +2,10 @@ Class constructor($method : Text)
 	
 	This:C1470.name:=Current form name:C1298
 	This:C1470.window:=Current form window:C827
+	This:C1470.callback:=Null:C1517
+	
 	This:C1470.focused:=Null:C1517
 	This:C1470.current:=Null:C1517
-	This:C1470.callback:=""
 	
 	If (Count parameters:C259>=1)
 		
@@ -13,17 +14,25 @@ Class constructor($method : Text)
 	End if 
 	
 	//______________________________________________________
+	// Defines the name of the callback method
 Function setCallBack($method : Text)
 	
 	This:C1470.callback:=$method
 	
 	//______________________________________________________
-Function call($params : Variant)
+	// Generates a CALL FORM using the current form
+	// .call()
+	// .call( param : Collection )
+	// .call( param1, param2, …, paramN )
+Function call
+	
+	C_VARIANT:C1683(${1})
 	
 	var $t : Text
 	var $i : Integer
+	var $c : Collection
 	
-	If (Length:C16(This:C1470.callback)#0)
+	If (Length:C16(String:C10(This:C1470.callback))#0)
 		
 		If (Count parameters:C259=0)
 			
@@ -31,57 +40,35 @@ Function call($params : Variant)
 			
 		Else 
 			
-			If (Value type:C1509($params)=Is collection:K8:32)
+			$t:="<!--#4DCODE CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+This:C1470.callback+"\""
+			
+			If (Value type:C1509($1)=Is collection:K8:32)
 				
-				If (False:C215)  // #WIP
-					
-					//$t:="CALL FORM:C1391("+String(This.window)+"; \""+This.callback+"\""
-					
-					//For ($i; 0; $params.length-1; 1)
-					
-					//$var:="v"+String($i)
-					//EXECUTE FORMULA("C_VARIANT("+$var+")")
-					//EXECUTE FORMULA($var+":="+$params[$i])
-					
-					//Case of 
-					
-					////______________________________________________________
-					//: (Value type($param[$i])=Is text)
-					
-					//$t:=$t+"; \""+$var+"\""
-					
-					////______________________________________________________
-					//: (False)
-					
-					////______________________________________________________
-					//Else 
-					
-					//$t:=$t+"; "+$var
-					
-					////______________________________________________________
-					//End case 
-					//End for 
-					
-				Else 
-					
-					$t:="CALL FORM:C1391(This:C1470.window; This:C1470.callback"
-					
-					For ($i; 0; $params.length-1; 1)
-						
-						$t:=$t+"; $params["+String:C10($i)+"]"
-						
-					End for 
-				End if 
+				$c:=$1
 				
-				$t:=$t+")"
-				
-				Formula from string:C1601($t).call()
+				For ($i; 0; $c.length-1; 1)
+					
+					$t:=$t+"; $1["+String:C10($i)+"]"
+					
+				End for 
 				
 			Else 
 				
-				CALL FORM:C1391(This:C1470.window; This:C1470.callback; $params)
+				$c:=New collection:C1472
 				
+				For ($i; 1; Count parameters:C259; 1)
+					
+					$c.push(${$i})
+					
+					$t:=$t+"; $1["+String:C10($i-1)+"]"
+					
+				End for 
 			End if 
+			
+			$t:=$t+")-->"
+			
+			PROCESS 4D TAGS:C816($t; $t; $c)
+			
 		End if 
 		
 	Else 

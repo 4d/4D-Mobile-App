@@ -82,32 +82,23 @@ Function load
 	//================================================================================
 	// Tests if the project is locked and, if so, makes the provided widgets accessible or not
 Function isLocked()->$isLocked : Boolean
+	
+	If (This:C1470.structure#Null:C1517)
+		
+		$isLocked:=Bool:C1537(This:C1470.structure.unsynchronized)
+		
+	Else 
+		
+		$isLocked:=Bool:C1537(This:C1470.$project.structure.unsynchronized)
+		
+	End if 
+	
 	C_VARIANT:C1683(${1})
-	
-	//If (This.structure#Null)
-	
-	//$isLocked:=Bool(This.structure.unsynchronized)
-	
-	//Else 
-	
-	//$isLocked:=Bool(This.$project.structure.unsynchronized)
-	
-	//End if 
-	
 	//For ($i; 1; Count parameters; 1)
-	
 	//If ($isLocked)
-	
 	//OBJECT SET ENTERABLE(*; string(${$i}); Not($isLocked))
-	
 	//End if 
 	//End for 
-	
-	
-	
-	
-	
-	
 	
 	//====================================
 Function get

@@ -32,7 +32,7 @@ Class constructor
 		This:C1470.empty:=cs:C1710.static.new("empty")
 		This:C1470.resources:=cs:C1710.button.new("resources")
 		
-		This:C1470.form:=Form:C1466.$dialog[Current form name:C1298]
+		This:C1470.form:=Form:C1466.$dialog[This:C1470.name]
 		
 		// Constraints definition
 		cs:C1710.ob.new(This:C1470.context).createPath("constraints.rules"; Is collection:K8:32)
@@ -436,7 +436,7 @@ Function updateFieldList
 	
 	editor_Locked(This:C1470.labels.name; This:C1470.shortLabels.name; This:C1470.formats.name; This:C1470.titles.name)
 	
-	This:C1470.fieldList.deselect()
+	This:C1470.fieldList.unselect()
 	
 	editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
@@ -489,8 +489,6 @@ Function field($row : Integer)->$field : Object
 	If (FEATURE.with("moreRelations"))
 		
 		If (Num:C11(This:C1470.selector)=1)
-			
-			//This.fieldList.update()
 			
 			//%W-533.3
 			$c:=Split string:C1554((This:C1470.fieldList.columns["fields"].pointer)->{$row}; ".")
@@ -694,7 +692,7 @@ Function iconPicker($e : Object)
 	
 	//________________________________________________________________
 	// Manage the format menu according to the field type
-Function format($e : Object)
+Function formatMenu($e : Object)
 	
 	var $format; $t : Text
 	var $field; $o : Object

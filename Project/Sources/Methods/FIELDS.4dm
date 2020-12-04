@@ -103,7 +103,8 @@ Else   // <== WIDGETS METHOD
 					editor_ui_LISTBOX($e.name; False:C215)
 					
 					//_______________________________
-				: (editor_Locked)
+					//: (editor_Locked)
+				: (PROJECT.isLocked())
 					
 					// <NOTHING MORE TO DO>
 					
@@ -159,7 +160,7 @@ Else   // <== WIDGETS METHOD
 					
 					If ($e.columnName=$ƒ.formats.name)
 						
-						$ƒ.format($e)
+						$ƒ.formatMenu($e)
 						
 					End if 
 					
@@ -211,9 +212,6 @@ Else   // <== WIDGETS METHOD
 				// Show browser
 				$ƒ.call("initBrowser"; New object:C1471(\
 					"url"; Get localized string:C991("res_formatters")))
-				
-				//$ƒ.call(New collection("initBrowser"; New object(\
-					"url"; Get localized string("res_formatters"))))
 				
 			Else 
 				

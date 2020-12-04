@@ -21,7 +21,7 @@ If (False:C215)
 	C_TEXT:C284(views_LAYOUT_PICKER; $1)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(VIEWS_DRAW_FORM; $1)
+	C_OBJECT:C1216(tmpl_DRAW; $1)
 	
 	// ----------------------------------------------------
 	//C_TEXT(views_UPDATE; $1)
@@ -32,8 +32,8 @@ End if
 If (False:C215)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(VIEW_RENDERER_v1; $1)
-	C_OBJECT:C1216(VIEW_RENDERER_v1; $2)
+	C_OBJECT:C1216(tmpl_RENDERER_v1; $1)
+	C_OBJECT:C1216(tmpl_RENDERER_v1; $2)
 	
 	// ----------------------------------------------------
 End if 

@@ -277,7 +277,7 @@ If (Length:C16($cible)>0)
 			PROJECT.save()
 			
 			// Update preview
-			VIEWS_DRAW_FORM(This:C1470)
+			tmpl_DRAW(This:C1470)
 			
 		Else 
 			

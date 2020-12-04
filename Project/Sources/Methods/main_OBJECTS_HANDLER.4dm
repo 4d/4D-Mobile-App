@@ -275,7 +275,7 @@ End case
 
 If (Bool:C1537(FEATURE._8858))
 	
-	UI.saveProject()
+	PROJECT.save()
 	
 End if 
 

@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : VIEWS_DRAW_FORM (alias views_preview)
+// Project method : tmpl_DRAW
 // ID[C76CC05CD44641EC92AE0C413664247C]
 // Created 5-12-2017 by Vincent de Lachaux
 // ----------------------------------------------------
@@ -11,14 +11,14 @@
 var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(VIEWS_DRAW_FORM; $1)
+	C_OBJECT:C1216(tmpl_DRAW; $1)
 End if 
 
-var $background; $binding; $buffer; $class; $formName; $formType; $key; $label; $name : Text
-var $node; $parent; $style; $t; $tableID; $tips : Text
+var $background; $binding; $class; $formName; $formType; $key; $label; $name; $node; $parent : Text
+var $style; $t; $tableID; $tips : Text
 var $found; $isToMany; $isToOne; $stop : Boolean
-var $avalaibleWidth; $count; $height; $indx; $width : Integer
-var $context; $field; $font; $form; $manifest; $o; $relation; $target : Object
+var $avalaibleWidth; $count; $height; $indx : Integer
+var $context; $field; $form; $manifest; $o; $relation; $target : Object
 var $nodes : Collection
 var $svg : cs:C1710.svg
 var $template : cs:C1710.Template
@@ -121,26 +121,19 @@ If (Num:C11($tableID)>0)
 				$o:=Form:C1466[$formType][$tableID]
 				$target:=Choose:C955($o=Null:C1517; Formula:C1597(New object:C1471); Formula:C1597($o)).call()
 				
-				If ($target.fields#Null:C1517)
-					
-					// Update names if any
-					For each ($o; $target.fields)
-						
-						If ($o#Null:C1517)
-							
-							If ($o.fieldType=8858)\
-								 | ($o.fieldType=8859)
-								
-								// ❓
-								
-							Else 
-								
-								$o.name:=Form:C1466.dataModel[$tableID][String:C10($o.fieldNumber)].name
-								
-							End if 
-						End if 
-					End for each 
-				End if 
+				//If ($target.fields#Null)
+				//// Update names if any
+				//For each ($o; $target.fields)
+				//If ($o#Null)
+				//If ($o.fieldType=8858)\
+					| ($o.fieldType=8859)
+				//// ❓
+				//Else
+				//$o.name:=Form.dataModel[$tableID][String($o.fieldNumber)].name
+				//End if
+				//End if
+				//End for each
+				//End if
 				
 				$form.preview.getCoordinates()
 				
@@ -318,14 +311,9 @@ If (Num:C11($tableID)>0)
 															//______________________________________________________
 													End case 
 													
-													// Get the label width (#121515)
-													$font:=New object:C1471(\
-														"fontFamily"; "sans-serif"; \
-														"size"; 12)  // #TO_DO: Must be recovered from the css file
+													// Try to get the width of the container (#121515)
+													$avalaibleWidth:=200
 													
-													$width:=$svg.getTextWidth($label; $font)
-													
-													// Try to get the width of the container
 													$parent:=$svg.parent($node)
 													
 													If ($svg.getName($parent)="g")
@@ -364,30 +352,16 @@ If (Num:C11($tableID)>0)
 														
 													End if 
 													
-													If ($avalaibleWidth>0)\
-														 & ($width>$avalaibleWidth)
-														
-														$buffer:=$label
-														
-														While ($width>$avalaibleWidth)
-															
-															$buffer:=Delete string:C232($buffer; Length:C16($buffer)-1; 2)
-															$width:=$svg.getTextWidth($buffer; $font)
-															
-														End while 
-														
-														// Add an ellipsis
-														$buffer:=$buffer+"…"
-														$svg.setValue($buffer; $node)
-														
-														// And set the tips
-														$tips:=$label
-														
-													Else 
-														
-														$svg.setValue($label; $node)
-														
-													End if 
+													$o:=New object:C1471(\
+														"label"; $label; \
+														"avalaibleWidth"; $avalaibleWidth)
+													
+													$template.truncateLabelIfTooBig($o)
+													
+													$label:=$o.label
+													$tips:=$o.tips
+													
+													$svg.setValue($label; $node)
 													
 													If ($isToOne | $isToMany)  // Relation
 														
@@ -488,7 +462,7 @@ If (Num:C11($tableID)>0)
 					
 				Else 
 					
-					VIEW_RENDERER_v1($svg; $context)  // #OLD RENDERER
+					tmpl_RENDERER_v1($svg; $context)  // #OLD RENDERER
 					
 					$context.previewHeight:=440
 					

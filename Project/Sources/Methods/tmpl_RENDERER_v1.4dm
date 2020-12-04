@@ -4,8 +4,8 @@ var $1 : cs:C1710.svg
 var $2 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(VIEW_RENDERER_v1; $1)
-	C_OBJECT:C1216(VIEW_RENDERER_v1; $2)
+	C_OBJECT:C1216(tmpl_RENDERER_v1; $1)
+	C_OBJECT:C1216(tmpl_RENDERER_v1; $2)
 End if 
 
 var $container; $domField; $domTemplate; $domUse; $index; $name; $new; $node; $t; $widgetField : Text

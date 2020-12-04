@@ -54,7 +54,7 @@ Case of
 				
 				// Verify the web server configuration
 				CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "checkingServerConfiguration")
-				UI.saveProject()
+				PROJECT.save()
 				
 				//______________________________________________________
 			Else 
@@ -78,7 +78,7 @@ Case of
 			: ($Lon_formEvent=On Clicked:K2:4)
 				
 				Form:C1466.server.authentication.email:=Bool:C1537($Ptr_me->)
-				UI.saveProject()
+				PROJECT.save()
 				
 				//______________________________________________________
 			Else 
@@ -108,7 +108,7 @@ Case of
 			: ($Lon_formEvent=On Clicked:K2:4)
 				
 				Form:C1466.server.pushNotification:=Bool:C1537($Ptr_me->)
-				UI.saveProject()
+				PROJECT.save()
 				
 				//______________________________________________________
 			Else 

@@ -134,8 +134,8 @@
 		<field name="ID" uuid="0A26D100922E475A92C49657B6C02271" type="4" unique="true" autosequence="true" not_null="true" id="1">
 			<field_extra position="1"/>
 		</field>
-		<field name="Name" uuid="2DB718A64ACF4C41803A142CF8DB2493" type="10" never_null="true" id="2">
-			<field_extra position="3"/>
+		<field name="Employe Name" uuid="2DB718A64ACF4C41803A142CF8DB2493" type="10" never_null="true" id="2">
+			<field_extra position="3" multi_line="true"/>
 		</field>
 		<field name="ServiceID" uuid="88C84BC7D870430DB278E8BA49A8EB9D" type="4" never_null="true" id="3">
 			<field_extra position="4"/>
@@ -163,7 +163,7 @@
 		<field name="ID" uuid="12D6937F179B4449895346EC8BC3C3B2" type="4" unique="true" autosequence="true" not_null="true" id="1">
 			<field_extra position="3"/>
 		</field>
-		<field name="Name" uuid="6E2B9BA4BCE040D995CC8C180A4D7B59" type="10" limiting_length="255" never_null="true" id="2">
+		<field name="Service Name" uuid="6E2B9BA4BCE040D995CC8C180A4D7B59" type="10" limiting_length="255" never_null="true" id="2">
 			<field_extra position="1"/>
 		</field>
 		<field name="managerID" uuid="376B869EAC3242CF98A1997FEB3C02C4" type="4" never_null="true" id="3">
@@ -590,8 +590,8 @@
 			<table_ref uuid="E0EF4D9E925848A8893B9926694CF58E" name="Table_2"/>
 		</field_ref>
 	</index>
-	<index kind="regular" uuid="2DD65906C15E40EDA51221B1A42BA2A7" type="7">
-		<field_ref uuid="2DB718A64ACF4C41803A142CF8DB2493" name="Name">
+	<index kind="regular" uuid="35932768CD364B9ABE48F3D4CF97C24A" type="7">
+		<field_ref uuid="2DB718A64ACF4C41803A142CF8DB2493" name="Employe Name">
 			<table_ref uuid="F199D0D03F864B939EF3CD9CF9BC0F24" name="Employes"/>
 		</field_ref>
 	</index>

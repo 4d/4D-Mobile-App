@@ -54,7 +54,7 @@ Else   // <== Widgets method
 					//_____________________________________
 				: ($e.code=On Data Change:K2:15)
 					
-					UI.saveProject()
+					PROJECT.save()
 					
 					// Verify the web server configuration
 					CALL FORM:C1391($f.window; "editor_CALLBACK"; "checkingServerConfiguration")

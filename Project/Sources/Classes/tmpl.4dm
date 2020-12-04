@@ -438,8 +438,9 @@ Function getBinding($node : Text)->$binding : Text
 	
 	$binding:=String:C10(This:C1470.getAttribute($node; "ios:type"))
 	
-/* ============================================================================*/
-Function cancel  // Return the embedded cancel button used into the templates
+	//============================================================================
+	// Return the embedded cancel button used into the templates
+Function cancel
 	var $0 : Text
 	
 	$0:="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAuJJREFUSA3tlEtoU1EQhptHI4lp8FUMlIIPpH"+\
@@ -452,8 +453,9 @@ Function cancel  // Return the embedded cancel button used into the templates
 		"ZtlozCgaD26lAnsJ2Al8l8CO32/0pFosVIZNO7OWTHEfvwe4kLRZbw1UXsUTwer0tdrv9KMRCYEMqgpPEqkD4iv2lycnJjOC1Vt3EWiBJgO/Yw5PYRhLNkM1D+p7WftZsGrrRgUYH/"+\
 		"mkHfgG6PCOSHCtXRwAAAABJRU5ErkJggg=="
 	
-/* ============================================================================*/
-Function path($name : Text; $type : Text)->$template : 4D:C1709.folder  // Return the path of the file/folder
+	//============================================================================
+	// Return the path of the file/folder
+Function path($name : Text; $type : Text)->$template : 4D:C1709.folder
 	
 	var $formName; $formType; $item : Text
 	var $success : Boolean
@@ -548,11 +550,11 @@ Function path($name : Text; $type : Text)->$template : 4D:C1709.folder  // Retur
 		
 	End if 
 	
-/* ============================================================================*/
-Function css
-	var $0 : Object
+	//============================================================================
+	// Gives the path to the css file
+Function css()->$file : 4D:C1709.File
 	
-	$0:=path.templates().file("template.css")
+	$file:=cs:C1710.path.new().templates().file("template.css")
 	
 /* ============================================================================*/
 Function label
@@ -613,11 +615,48 @@ Function isTypeAccepted($bind : Variant; $type : Integer)->$accepted : Boolean
 	End if 
 	
 	//============================================================================
+Function truncateLabelIfTooBig($o : Object)
+	
+	var $buffer : Text
+	var $width : Integer
+	var $font : Object
+	var $svg : cs:C1710.svg
+	
+	$font:=New object:C1471(\
+		"fontFamily"; "sans-serif"; \
+		"size"; 12)  // #TO_DO: Must be recovered from the css file
+	
+	$svg:=cs:C1710.svg.new()
+	
+	$width:=$svg.getTextWidth($o.label; $font)
+	
+	If ($o.avalaibleWidth>0)\
+		 & ($width>$o.avalaibleWidth)
+		
+		$buffer:=$o.label
+		
+		While ($width>$o.avalaibleWidth)
+			
+			$buffer:=Delete string:C232($buffer; Length:C16($buffer)-1; 2)
+			$width:=$svg.getTextWidth($buffer; $font)
+			
+		End while 
+		
+		// Add an ellipsis
+		$buffer:=$buffer+"…"
+		
+		// And set the tips
+		$o.tips:=$o.label
+		$o.label:=$buffer
+		
+	End if 
+	
+	//============================================================================
 	// Add a "one field" widget to the template
 Function appendOneField($index : Integer; $field : Object; $context : Object; $background : Text; $offset : Integer)->$height : Integer
 	var $class; $key; $label; $name; $node; $style; $t; $tips : Text
 	var $found; $isToMany; $isToOne : Boolean
-	var $relation : Object
+	var $o; $relation : Object
 	var $xml : cs:C1710.xml
 	
 	$isToOne:=($field.fieldType=8858)
@@ -685,14 +724,20 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 			//______________________________________________________
 	End case 
 	
+	$o:=New object:C1471(\
+		"label"; $label; \
+		"avalaibleWidth"; 180)
+	
+	This:C1470.truncateLabelIfTooBig($o)
+	
 	// Set ids, label & position
 	PROCESS 4D TAGS:C816(This:C1470.oneField.definition; $t; New object:C1471(\
 		"index"; $index; \
-		"name"; cs:C1710.str.new($label).xmlSafe(); \
+		"name"; cs:C1710.str.new($o.label).xmlSafe(); \
 		"offset"; 5+$offset; \
 		"style"; $style; \
 		"class"; $class; \
-		"tips"; cs:C1710.str.new($tips).xmlSafe()))
+		"tips"; cs:C1710.str.new($o.tips).xmlSafe()))
 	
 	// Append the widget
 	$xml:=cs:C1710.xml.new($t)
@@ -709,7 +754,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 	
 	//============================================================================
 	// 
-Function getCookery->$cookery : Text
+Function getCookery()->$cookery : Text
 	var $node : Text
 	
 	$node:=This:C1470.findById("cookery")

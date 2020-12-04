@@ -58,8 +58,6 @@ Case of
 			: ($Lon_formEvent=On Selection Change:K2:29)\
 				 | ($Lon_formEvent=On Clicked:K2:4)
 				
-				editor_ui_LISTBOX($Txt_me)
-				
 				$Ptr_ids:=UI.pointer($Obj_form.ids)
 				
 				$Obj_context.currentTableNumber:=Num:C11($Ptr_ids->{$Lon_row})
@@ -76,6 +74,19 @@ Case of
 					If ($Lon_row=0)
 						
 						OB REMOVE:C1226($Obj_context; "currentTable")
+						
+						// 🚨 CLICKING ON THE ADDED COLUMN DOES NOT DESELECT THE ROW.
+						LISTBOX SELECT ROW:C912(*; $Txt_me; 0; lk replace selection:K53:1)
+						
+						var $ptr : Pointer
+						$ptr:=OBJECT Get pointer:C1124(Object named:K67:5; $Txt_me)
+						
+						var $i : Integer
+						For ($i; 1; LISTBOX Get number of rows:C915(*; $Txt_me); 1)
+							
+							$ptr->{$i}:=False:C215
+							
+						End for 
 						
 					Else 
 						
@@ -117,6 +128,8 @@ Case of
 					CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "fieldProperties")
 					
 				End if 
+				
+				editor_ui_LISTBOX($Txt_me)
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
@@ -231,7 +244,7 @@ End case
 
 If (Bool:C1537(FEATURE._8858))
 	
-	UI.saveProject()
+	PROJECT.save()
 	
 End if 
 

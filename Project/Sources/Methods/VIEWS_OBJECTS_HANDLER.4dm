@@ -497,7 +497,7 @@ Case of
 						$context.tabIndex:=Replace string:C233($context.current; "tab_"; "")
 						
 						// Update preview
-						VIEWS_DRAW_FORM($form)
+						tmpl_DRAW($form)
 						
 						//………………………………………………………………………………………………………………
 					: ($context.current="@.cancel")

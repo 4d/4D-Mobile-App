@@ -77,7 +77,6 @@
 							"stroke": "#FF9300",
 							"textAlign": "left",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 10,
 							"events": [
 								"onDataChange"
@@ -94,7 +93,8 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"fontTheme": "normal"
 						},
 						{
 							"name": "tables",
@@ -286,5 +286,12 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
+	},
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
 	}
 }
