@@ -264,12 +264,14 @@ Case of
 						If (Length:C16($context.tableNum())>0)\
 							 & ($datamodel[$context.tableNum()]#Null:C1517)
 							
-							//$formName:=String(Form[$typeForm][$context.tableNum()].form)
-							//$formName:=$formName*Num($formName#"null")  // Reject null value
-							//If (Length($formName)>0)
-							//$o:=tmpl_form($formName; $typeForm)
-							//End if 
-							//If ($o.exists)
+							$formName:=String:C10(Form:C1466[$typeForm][$context.tableNum()].form)
+							
+							If (String:C10($context.template.name)#$formName)
+								
+								$context.template:=cs:C1710.tmpl.new($formName; $typeForm)
+								Form:C1466.$dialog[Current form name:C1298].template:=$context.template
+								
+							End if 
 							
 							If (Bool:C1537($context.template.path.exists))
 								
