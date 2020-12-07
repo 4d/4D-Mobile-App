@@ -18,13 +18,17 @@ Class constructor($name : Text; $type : Text)
 		This:C1470.title:=This:C1470.name
 		This:C1470.type:=Null:C1517
 		
-		//%W-533.1
-		If (This:C1470.name[[1]]="/")
+		If (Length:C16(This:C1470.name)>0)
 			
-			This:C1470.title:=Delete string:C232(This:C1470.title; 1; 1)
+			//%W-533.1
+			If (This:C1470.name[[1]]="/")
+				
+				This:C1470.title:=Delete string:C232(This:C1470.title; 1; 1)
+				
+			End if 
+			//%W+533.1
 			
 		End if 
-		//%W+533.1
 		
 		// Set the display name
 		This:C1470.title:=Replace string:C233(This:C1470.title; "form-detail-"; "")

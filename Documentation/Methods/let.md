@@ -1,4 +1,4 @@
-<!-- let(->result; Formula( operation ); Formula($result): Bool) -->
+﻿<!-- let(->result; Formula( operation ); Formula($result): Bool) -->
 # let
 
 Simplify `Case of` complexity by removing one imbrication.

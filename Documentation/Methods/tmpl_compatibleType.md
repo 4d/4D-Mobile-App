@@ -1,1 +1,1 @@
-<!----------------------------------------------------accepted := tmpl_compatibleType ( types ; type ) -> types (Variant) - Collection des types -> type (Long Integer) - type à tester <- accepted (Boolean) - vrai si compatible-->accepted := tmpl_compatibleType ( types ; type )
+﻿<!----------------------------------------------------accepted := tmpl_compatibleType ( types ; type ) -> types (Variant) - Collection des types -> type (Long Integer) - type à tester <- accepted (Boolean) - vrai si compatible-->accepted := tmpl_compatibleType ( types ; type )
