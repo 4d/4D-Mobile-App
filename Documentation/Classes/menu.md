@@ -43,7 +43,7 @@ End if
 \* 🚨 If `.autoRelease` is set to **False** (or if you don't call a function that automatically release the memory), once you no longer need the menu, remember to call the function `.release()` in order to free up the memory.
 
 ## Functions:
-> 📌 With the exception of functions that return a specific result (getter function), each call returns the original `cs.svg` object, and you can include one call after another.
+> 📌 With the exception of functions that return a specific result (getter function), each call returns the original `cs.menu` object, and you can include one call after another.
 
 ```4d
 $m:=cs.menu.new()\

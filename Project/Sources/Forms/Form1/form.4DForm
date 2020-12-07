@@ -32,9 +32,9 @@
 					"top": 14,
 					"left": 19,
 					"width": 398,
-					"height": 276,
+					"height": 380,
 					"resizingMode": "legacy",
-					"rowHeight": "3em",
+					"rowHeight": "2em",
 					"events": [
 						"onClick",
 						"onDataChange",
@@ -44,15 +44,17 @@
 					"movableRows": false,
 					"method": "ObjectMethods/List Box.4dm",
 					"hideSystemHighlight": true,
+					"headerHeight": "17px",
+					"fill": "transparent",
 					"columns": [
 						{
 							"name": "Column1",
 							"dataSourceTypeHint": "number",
-							"width": 120,
+							"width": 40,
 							"minWidth": 10,
 							"maxWidth": 32000,
 							"controlType": "checkbox",
-							"textAlign": "left",
+							"textAlign": "center",
 							"events": [
 								"onClick",
 								"onDataChange"
@@ -65,7 +67,8 @@
 								"name": "Footer1",
 								"timeFormat": "hh_mm_ss"
 							},
-							"enterable": true
+							"enterable": true,
+							"verticalAlign": "middle"
 						},
 						{
 							"name": "Column2",
@@ -86,14 +89,15 @@
 							},
 							"enterable": false,
 							"method": "ObjectMethods/Column2.4dm",
-							"truncateMode": "none"
+							"truncateMode": "none",
+							"verticalAlign": "middle"
 						}
 					]
 				},
 				"Button3": {
 					"type": "button",
-					"top": 333,
-					"left": 180,
+					"top": 499,
+					"left": 28,
 					"width": 136,
 					"height": 42,
 					"text": "Open Popover",
@@ -104,7 +108,7 @@
 				},
 				"Variable2": {
 					"type": "input",
-					"top": 365,
+					"top": 462,
 					"left": 19,
 					"width": 102,
 					"height": 17,
@@ -310,5 +314,12 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 5
+	"geometryStamp": 9,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

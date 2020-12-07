@@ -16,7 +16,7 @@ End if
 
 var $entryPoint; $methodName; $projectName; $t; $worker : Text
 var $window : Integer
-var $formData; $menu; $menuFile; $mobileProjects; $o; $project : Object
+var $formData; $menu; $mobileProjects; $o; $project : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -137,15 +137,11 @@ Case of
 		//___________________________________________________________
 	: ($entryPoint="_init")
 		
-		$menuFile:=cs:C1710.menu.new().file()
-		
-		$menu:=cs:C1710.menu.new()\
-			.append("CommonMenuFile"; $menuFile)\
-			.append("CommonMenuEdit"; cs:C1710.menu.new().edit())
+		$menu:=cs:C1710.menu.new().defaultMinimalMenuBar()
 		
 		If (DATABASE.isMatrix)
 			
-			file_Menu($menuFile)
+			file_Menu($menu.submenus[0])
 			dev_Menu($menu)
 			
 		End if 

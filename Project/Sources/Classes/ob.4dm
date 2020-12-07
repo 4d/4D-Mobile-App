@@ -130,7 +130,8 @@ Function createPath($path : Variant; $type : Integer)->$o : Object
 						$o[$key]:=""
 						
 						//______________________________________________________
-					: ($typeƒ=Is longint:K8:6)
+					: ($typeƒ=Is longint:K8:6)\
+						 | ($typeƒ=Is real:K8:4)
 						
 						$o[$key]:=0
 						

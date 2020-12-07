@@ -1,44 +1,44 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : ob_createPath
-  // ID[DB7D702D7871447A85665BA027992DB3]
-  // Created 14-1-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : ob_createPath
+// ID[DB7D702D7871447A85665BA027992DB3]
+// Created 14-1-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 C_TEXT:C284($2)
 C_LONGINT:C283($3)
 
-C_LONGINT:C283($Lon_parameters;$Lon_type)
+C_LONGINT:C283($Lon_parameters; $Lon_type)
 C_PICTURE:C286($p)
-C_TEXT:C284($t;$Txt_path)
-C_OBJECT:C1216($o;$Obj_in)
+C_TEXT:C284($t; $Txt_path)
+C_OBJECT:C1216($o; $Obj_in)
 C_COLLECTION:C1488($c)
 
 If (False:C215)
-	C_OBJECT:C1216(ob_createPath ;$0)
-	C_OBJECT:C1216(ob_createPath ;$1)
-	C_TEXT:C284(ob_createPath ;$2)
-	C_LONGINT:C283(ob_createPath ;$3)
+	C_OBJECT:C1216(ob_createPath; $0)
+	C_OBJECT:C1216(ob_createPath; $1)
+	C_TEXT:C284(ob_createPath; $2)
+	C_LONGINT:C283(ob_createPath; $3)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=2;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=2; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_in:=$1
 	$Txt_path:=$2
 	
-	  // Default values
+	// Default values
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=3)
 		
 		$Lon_type:=$3
@@ -55,18 +55,18 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 If ($Obj_in=Null:C1517)
 	
 	$Obj_in:=New object:C1471
 	
 End if 
 
-$c:=Split string:C1554($Txt_path;".")
+$c:=Split string:C1554($Txt_path; ".")
 
 $o:=$Obj_in
 
-For each ($t;$c)
+For each ($t; $c)
 	
 	If ($o[$t]=Null:C1517)
 		
@@ -74,52 +74,52 @@ For each ($t;$c)
 			
 			Case of 
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($Lon_type=Is object:K8:27)
 					
 					$o[$t]:=New object:C1471
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($Lon_type=Is collection:K8:32)
 					
 					$o[$t]:=New collection:C1472
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($Lon_type=Is text:K8:3)
 					
 					$o[$t]:=""
 					
-					  //______________________________________________________
-				: ($Lon_type=Is longint:K8:6)
+					//______________________________________________________
+				: ($Lon_type=Is longint:K8:6) | ($Lon_type=Is real:K8:4)
 					
 					$o[$t]:=0
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($Lon_type=Is null:K8:31)
 					
 					$o[$t]:=Null:C1517
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($Lon_type=Is date:K8:7)
 					
 					$o[$t]:=!00-00-00!
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($Lon_type=Is time:K8:8)
 					
 					$o[$t]:=?00:00:00?
 					
-					  //______________________________________________________
+					//______________________________________________________
 				: ($Lon_type=Is picture:K8:10)
 					
 					$o[$t]:=$p
 					
-					  //______________________________________________________
+					//______________________________________________________
 				Else 
 					
 					$o[$t]:=Null:C1517
 					
-					  //______________________________________________________
+					//______________________________________________________
 			End case 
 			
 		Else 
@@ -139,9 +139,9 @@ For each ($t;$c)
 	End if 
 End for each 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_in
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

@@ -8,6 +8,7 @@ Class constructor
 	This:C1470.metacharacters:=False:C215
 	This:C1470.selected:=False:C215
 	This:C1470.choice:=""
+	This:C1470.submenus:=New collection:C1472
 	
 	If (Count parameters:C259>=1)
 		
@@ -19,14 +20,13 @@ Class constructor
 				Case of 
 						
 						//______________________________________________________
-					: ($1="menuBar")
+					: ($1="menuBar")  // Load the current menu bar
 						
 						This:C1470.ref:=Get menu bar reference:C979
 						
 						//______________________________________________________
-					: (Match regex:C1019("(?m-si)\\|MR\\|\\d{12}"; $1; 1))
+					: (Match regex:C1019("(?m-si)\\|MR\\|\\d{12}"; $1; 1))  // Menu reference
 						
-						// Menu reference
 						This:C1470.ref:=$1
 						
 						//______________________________________________________
@@ -55,9 +55,8 @@ Class constructor
 								This:C1470.metacharacters:=True:C214
 								
 								//-----------------
-							Else 
+							Else   // Menu bar name
 								
-								// Menu bar name
 								This:C1470.ref:=Create menu:C408($1)
 								
 								//-----------------
@@ -65,30 +64,29 @@ Class constructor
 						
 						//______________________________________________________
 				End case 
+				//______________________________________________________
+			: (Value type:C1509($1)=Is real:K8:4)\
+				 | (Value type:C1509($1)=Is longint:K8:6)  // Menu bar number
+				
+				This:C1470.ref:=Create menu:C408($1)
 				
 				//______________________________________________________
-			: (Value type:C1509($1)=Is collection:K8:32)
+			: (Value type:C1509($1)=Is collection:K8:32)  // Create from collection
 				
 				This:C1470.ref:=Create menu:C408
 				This:C1470.append($1)
 				
 				//______________________________________________________
-			: (Value type:C1509($1)=Is real:K8:4)
-				
-				// Menu bar number
-				This:C1470.ref:=Create menu:C408($1)
-				
-				//______________________________________________________
 			Else 
 				
-				This:C1470.ref:=Create menu:C408
+				This:C1470.ref:=Create menu:C408  // Just a new menu
 				
 				//______________________________________________________
 		End case 
-		
+		w
 	Else 
 		
-		This:C1470.ref:=Create menu:C408
+		This:C1470.ref:=Create menu:C408  // Just a new menu
 		
 	End if 
 	
@@ -121,19 +119,34 @@ Function append($item : Variant; $param : Variant; $mark : Boolean)->$this : cs:
 		: (Value type:C1509($item)=Is text:K8:3)
 			
 			
-			If (Length:C16($item)>0)
-				//%W-533.1
-				If ($item[[1]]#Char:C90(1))
+			Case of 
+					//______________________________________________________
+				: (Length:C16($item)=0)
+					
+					ASSERT:C1129(Not:C34(Is compiled mode:C492(*)); "❌ It must be an error, because the line will not be created anyway.")
+					
+					//______________________________________________________
+				: (Position:C15(":xliff:"; $item)=1)
+					
+					// 👍 let 4D do the work
+					
+					//______________________________________________________
+					//%W-533.1
+				: ($item[[1]]=Char:C90(1))
+					//%W+533.1
+					
+					// 🤬 4D does not like at all
+					
+					//______________________________________________________
+				Else 
 					
 					$t:=Get localized string:C991($item)
+					ASSERT:C1129(Length:C16($t)=0; "⚠️ An empty item will not be displayed")
 					
-				End if 
-				//%W+533.1
-			End if 
+					//______________________________________________________
+			End case 
 			
 			$t:=Choose:C955(Length:C16($t)>0; $t; $item)
-			
-			//ASSERT(Length($t)>0; Current method name+": An empty item will not be displayed")
 			
 			If (Count parameters:C259>=2)
 				
@@ -150,6 +163,9 @@ Function append($item : Variant; $param : Variant; $mark : Boolean)->$this : cs:
 							APPEND MENU ITEM:C411(This:C1470.ref; $t; $param.ref; *)
 							
 						End if 
+						
+						// Keep the sub-menu structure
+						This:C1470.submenus.push($param)
 						
 						If ($param.autoRelease)
 							
@@ -246,7 +262,7 @@ Function append($item : Variant; $param : Variant; $mark : Boolean)->$this : cs:
 			//______________________________________________________
 		Else 
 			
-			ASSERT:C1129(False:C215; "The 1st parameter, item, must be a Text or a Collection!")
+			ASSERT:C1129(False:C215; "❌ The 1st parameter, item, must be a Text or a Collection!")
 			
 			//______________________________________________________
 	End case 
@@ -725,6 +741,15 @@ Function windows()->$this : cs:C1710.menu
 	$this:=This:C1470
 	
 	// ===============================================
+	// Create a default minimal menu bar
+Function defaultMinimalMenuBar()->$this : cs:C1710.menu
+	
+	This:C1470.append(":xliff:CommonMenuFile"; cs:C1710.menu.new().file())
+	This:C1470.append(":xliff:CommonMenuEdit"; cs:C1710.menu.new().edit())
+	
+	$this:=This:C1470
+	
+	// ===============================================
 	// Returns menu items as collection
 Function items()->$items : Collection
 	
@@ -744,7 +769,7 @@ Function items()->$items : Collection
 		
 	End for 
 	
-/*===============================================*/
+	// ===============================================
 Function getReference
 	
 	C_TEXT:C284($0)
@@ -757,13 +782,15 @@ Function getReference
 	GET MENU ITEMS:C977(This:C1470.ref; $aT_titles; $aT_refs)
 	
 	Case of 
+			
 			//______________________________________________________
 		: (Value type:C1509($1)=Is text:K8:3)
 			
 			$indx:=Find in array:C230($aT_titles; $1)
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is real:K8:4)
+		: (Value type:C1509($1)=Is longint:K8:6)\
+			 | (Value type:C1509($1)=Is real:K8:4)
 			
 			$indx:=$1
 			

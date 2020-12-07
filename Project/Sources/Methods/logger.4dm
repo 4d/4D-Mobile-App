@@ -81,10 +81,12 @@ Else
 			//______________________________________________________
 		: ($1="setDestination")
 			
-			If (Value type:C1509($2.destination)=Is real:K8:4)
+			If (Value type:C1509($2.destination)=Is longint:K8:6)\
+				 | (Value type:C1509($2.destination)=Is real:K8:4)
 				
 				// Restore the previous status, if any
-				If (Value type:C1509($o.destination)=Is real:K8:4)
+				If (Value type:C1509($o.destination)=Is longint:K8:6)\
+					 | (Value type:C1509($o.destination)=Is real:K8:4)
 					
 					PROCESS PROPERTIES:C336(Current process:C322; $t; $l; $l; $l)
 					
@@ -194,7 +196,8 @@ Else
 			//______________________________________________________
 		: ($1="start")
 			
-			If (Value type:C1509($o.destination)=Is real:K8:4)
+			If (Value type:C1509($o.destination)=Is longint:K8:6)\
+				 | (Value type:C1509($o.destination)=Is real:K8:4)
 				
 				PROCESS PROPERTIES:C336(Current process:C322; $t; $l; $l; $l)
 				
@@ -233,7 +236,8 @@ Else
 			//______________________________________________________
 		: ($1="stop")
 			
-			If (Value type:C1509($o.destination)=Is real:K8:4)
+			If (Value type:C1509($o.destination)=Is longint:K8:6)\
+				 | (Value type:C1509($o.destination)=Is real:K8:4)
 				
 				PROCESS PROPERTIES:C336(Current process:C322; $t; $l; $l; $l)
 				
@@ -298,7 +302,8 @@ Else
 						//……………………………………………………………………………………
 				End case 
 				
-				If (Value type:C1509($o.destination)=Is real:K8:4)
+				If (Value type:C1509($o.destination)=Is longint:K8:6)\
+					 | (Value type:C1509($o.destination)=Is real:K8:4)
 					
 					If (($o.destination=6))
 						
@@ -361,7 +366,8 @@ Else
 				End if 
 			End if 
 			
-			If (Value type:C1509($o.destination)=Is real:K8:4)
+			If (Value type:C1509($o.destination)=Is longint:K8:6)\
+				 | (Value type:C1509($o.destination)=Is real:K8:4)
 				
 				LOG EVENT:C667(Num:C11($o.destination); $t; Num:C11($2.level))
 				

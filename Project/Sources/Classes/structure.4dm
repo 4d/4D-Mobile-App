@@ -68,7 +68,8 @@ Build Exposed Datastore:
 							$found:=($tableName=$1)
 							
 							//…………………………………………………………………………………………………
-						: (Value type:C1509($1)=Is longint:K8:6)
+						: (Value type:C1509($1)=Is longint:K8:6)\
+							 | (Value type:C1509($1)=Is real:K8:4)
 							
 							$found:=($table.tableNumber=$1)
 							

@@ -16,7 +16,7 @@ End if
 
 var $directory; $entryPoint; $methodName; $pathName; $projectName; $t : Text
 var $withDebuglog : Boolean
-var $menu; $menuFile : Object
+var $menu : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -93,8 +93,6 @@ Case of
 				
 			End if 
 			
-			C_OPEN_MOBILE_PROJECT($pathName)
-			
 			If ($withDebuglog)
 				
 				SET DATABASE PARAMETER:C642(Debug log recording:K37:34; 0)
@@ -112,15 +110,11 @@ Case of
 		//___________________________________________________________
 	: ($entryPoint="_init")
 		
-		$menuFile:=cs:C1710.menu.new().file()
-		
-		$menu:=cs:C1710.menu.new()\
-			.append("CommonMenuFile"; $menuFile)\
-			.append("CommonMenuEdit"; cs:C1710.menu.new().edit())
+		$menu:=cs:C1710.menu.new().defaultMinimalMenuBar()
 		
 		If (DATABASE.isMatrix)
 			
-			file_Menu($menuFile)
+			file_Menu($menu.submenus[0])
 			dev_Menu($menu)
 			
 		End if 

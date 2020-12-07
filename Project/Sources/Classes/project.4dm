@@ -337,7 +337,8 @@ Function fields($table : Variant)->$fields : Collection
 				$model:=$table
 				
 				//______________________________________________________
-			: (Value type:C1509($table)=Is longint:K8:6) | (Value type:C1509($table)=Is real:K8:4)  // Table number
+			: (Value type:C1509($table)=Is longint:K8:6)\
+				 | (Value type:C1509($table)=Is real:K8:4)  // Table number
 				
 				$model:=This:C1470.dataModel[String:C10($table)]
 				
@@ -374,7 +375,8 @@ Function storageFields($table : Variant)->$fields : Collection
 				$model:=$table
 				
 				//______________________________________________________
-			: (Value type:C1509($table)=Is longint:K8:6)  // Table number
+			: (Value type:C1509($table)=Is longint:K8:6)\
+				 | (Value type:C1509($table)=Is real:K8:4)  // Table number
 				
 				$model:=This:C1470.dataModel[String:C10($table)]
 				

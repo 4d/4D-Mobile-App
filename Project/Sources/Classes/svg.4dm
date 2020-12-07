@@ -478,7 +478,8 @@ Function circle($r : Real; $cx : Real; $cy : Real; $attachTo)->$this : cs:C1710.
 				
 				$x:=$cx
 				
-				If (Value type:C1509($cy)=Is real:K8:4)
+				If (Value type:C1509($cy)=Is real:K8:4)\
+					 | (Value type:C1509($cy)=Is longint:K8:6)
 					
 					$node:=This:C1470._getContainer()
 					$y:=$cy
@@ -549,7 +550,8 @@ Function ellipse($rx : Real; $ry : Real; $cx : Real; $cy : Real; $attachTo)->$th
 				
 				$yR:=$ry
 				
-				If (Value type:C1509($cx)=Is real:K8:4)
+				If (Value type:C1509($cx)=Is real:K8:4)\
+					 | (Value type:C1509($cx)=Is longint:K8:6)
 					
 					$x:=$cx
 					$y:=$cx

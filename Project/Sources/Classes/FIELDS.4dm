@@ -47,7 +47,6 @@ Class constructor
 	// Updates the list of fields/reports according to the selected table
 Function getFieldList()->$result : Object
 	
-	
 	var $subKey; $key; $t; $tableID : Text
 	var $field; $table : Object
 	
@@ -291,6 +290,7 @@ Function getFieldList()->$result : Object
 									For each ($subKey; $table[$key])
 										
 										If (Value type:C1509($table[$key][$subKey])=Is object:K8:27)
+											
 											If (Bool:C1537($table[$key][$subKey].isToMany))
 												
 												$field:=$table[$key][$subKey]

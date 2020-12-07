@@ -2,7 +2,8 @@
 var $0; $1
 var ${2} : Object
 
-If (Value type:C1509($1)=Is real:K8:4)
+If (Value type:C1509($1)=Is real:K8:4)\
+ | (Value type:C1509($1)=Is longint:K8:6)
 	
 	$0:=${Num:C11($1)+2}.call()
 	
