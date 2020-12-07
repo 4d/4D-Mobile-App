@@ -142,54 +142,53 @@ options:
 -help-all                             prints all help content
 */
 
+// https://developer.android.com/studio/run/emulator-commandline
+
 Class extends androidProcess
 
 Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.cmd:=This:C1470.emulatorFile().path  // Fill default emulator command path
+	This:C1470.cmd:=This:C1470.emulatorFile().path
+	
 	
 Function emulatorFile
 	var $0 : 4D:C1709.File
 	
 	$0:=This:C1470.androidSDKFolder().folder("emulator").file("emulator")
 	
-Function list  // List available AVDs
+	
+Function start  // Starts emulator
 	var $0 : Object
+	var $1 : Text  // avd name
 	
-	$0:=This:C1470.launch(This:C1470.cmd; "-list-avds")
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
 	
-	If ($0.success)
-		
-		$0.emulators:=Split string:C1554($0.out; "\n"; sk ignore empty strings:K86:1)
-		
-	End if 
+	This:C1470.asynchronous()\
+		.launch(This:C1470.cmd; "-avd \""+$1+"\" -no-boot-anim")
 	
-Function start
-	var $0 : Object
-	var $1 : Text
-	var $2 : Boolean
+	$0.errors:=Split string:C1554(String:C10(This:C1470.errorStream); "\n")
+	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+	This:C1470.synchronous()  // set back to synchronous mode
 	
-	var $async : Boolean
 	
-	If (Count parameters:C259>1)
-		
-		$async:=$2
-		
-	End if 
+/*Function list  // List available AVDs
+var $0 : Object
 	
-	If ($async)
-		
-		$0:=This:C1470.launchAsync(This:C1470.cmd; New collection:C1472("-avd"; $1; "-netdelay"; "none"; "-netspeed"; "full"))
-		
-	Else 
-		
-		$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-avd"; $1; "-netdelay"; "none"; "-netspeed"; "full"))
-		
-	End if 
+$0:=This.launch(This.cmd; "-list-avds")
 	
-Function version
-	var $0 : Object
+If ($0.success)
 	
-	$0:=This:C1470.launch(This:C1470.cmd; New collection:C1472("-version"))
+$0.emulators:=Split string($0.out; "\n"; sk ignore empty strings)
+	
+End if 
+*/
+	
+/*Function version
+var $0 : Object
+	
+$0:=This.launch(This.cmd; New collection("-version"))
+*/
