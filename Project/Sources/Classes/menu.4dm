@@ -83,7 +83,7 @@ Class constructor
 				
 				//______________________________________________________
 		End case 
-		w
+		
 	Else 
 		
 		This:C1470.ref:=Create menu:C408  // Just a new menu
