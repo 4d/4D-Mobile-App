@@ -25,6 +25,8 @@ Class constructor
 		This:C1470.picker:=cs:C1710.widget.new("iconGrid")
 		
 		This:C1470.tabSelector:=cs:C1710.widget.new("tab.selector")
+		This:C1470.tabSelector.data:=0
+		
 		This:C1470.selectorFields:=cs:C1710.button.new("tab.fields")
 		This:C1470.selectorRelations:=cs:C1710.button.new("tab.relations")
 		This:C1470.selectors:=cs:C1710.group.new(This:C1470.selectorFields; This:C1470.selectorRelations)
@@ -33,6 +35,7 @@ Class constructor
 		This:C1470.resources:=cs:C1710.button.new("resources")
 		
 		This:C1470.form:=Form:C1466.$dialog[This:C1470.name]
+		
 		
 		// Constraints definition
 		cs:C1710.ob.new(This:C1470.context).createPath("constraints.rules"; Is collection:K8:32)
@@ -96,7 +99,7 @@ Function getFieldList()->$result : Object
 						
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isField($key))\
-						 & (Num:C11(This:C1470.selector)=0)
+						 & (Num:C11(This:C1470.tabSelector.data)=0)
 						
 						$result.formatColors.push(Foreground color:K23:1)
 						$result.nameColors.push(Foreground color:K23:1)
@@ -166,7 +169,7 @@ Function getFieldList()->$result : Object
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isRelationToOne($table[$key]))
 						
-						If (Num:C11(This:C1470.selector)=0)
+						If (Num:C11(This:C1470.tabSelector.data)=0)
 							
 							For each ($subKey; $table[$key])
 								
@@ -282,6 +285,7 @@ Function getFieldList()->$result : Object
 								$result.shortLabels.push($field.shortLabel)
 								$result.iconPaths.push(String:C10($field.icon))
 								$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+								$result.formats.push($field.format)
 								
 								If (PROJECT.isLink($table[$key]))
 									
@@ -325,13 +329,11 @@ Function getFieldList()->$result : Object
 									End if 
 								End if 
 								
-								$result.formats.push($field.format)
-								
 							End if 
 						End if 
 						
 						//……………………………………………………………………………………………………………
-					: (Num:C11(This:C1470.selector)=0)
+					: (Num:C11(This:C1470.tabSelector.data)=0)
 						
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isRelationToMany($table[$key]))
@@ -403,7 +405,7 @@ Function updateFieldList
 	
 	If ($o.success)
 		
-		This:C1470.empty.setTitle(Choose:C955(Num:C11(This:C1470.selector); "noFieldPublishedForThisTable"; "noPublishedRelationForThisTable"))
+		This:C1470.empty.setTitle(Choose:C955(Num:C11(This:C1470.tabSelector.data); "noFieldPublishedForThisTable"; "noPublishedRelationForThisTable"))
 		
 		COLLECTION TO ARRAY:C1562($o.ids; This:C1470.ids.pointer->)
 		COLLECTION TO ARRAY:C1562($o.paths; This:C1470.names.pointer->)
@@ -442,7 +444,7 @@ Function updateFieldList
 	
 	//________________________________________________________________
 	// Manages the UI of the tab Fields/Relations
-Function setTab
+Function setTab()
 	
 	var $coordinates; $o : Object
 	
@@ -450,7 +452,7 @@ Function setTab
 	This:C1470.selectors.fontStyle()
 	
 	// Then set bold current one
-	$o:=This:C1470["selector"+Choose:C955(Num:C11(This:C1470.selector); "Fields"; "Relations")]
+	$o:=This:C1470["selector"+Choose:C955(Num:C11(This:C1470.tabSelector.data); "Fields"; "Relations")]
 	$o.fontStyle(Bold:K14:2)
 	
 	// Keep the currents elector name
@@ -460,7 +462,7 @@ Function setTab
 	$coordinates:=This:C1470.tabSelector.coordinates
 	This:C1470.tabSelector.setCoordinates($o.coordinates.left; $coordinates.top; $o.coordinates.right; $coordinates.bottom)
 	
-	If (Num:C11(This:C1470.selector)=1)  // Relations
+	If (Num:C11(This:C1470.tabSelector.data)=1)  // Relations
 		
 		This:C1470.formatLabel.setTitle("titles")
 		This:C1470.formats.hide()
@@ -488,7 +490,7 @@ Function field($row : Integer)->$field : Object
 	
 	If (FEATURE.with("moreRelations"))
 		
-		If (Num:C11(This:C1470.selector)=1)
+		If (Num:C11(This:C1470.tabSelector.data)=1)
 			
 			//%W-533.3
 			$c:=Split string:C1554((This:C1470.fieldList.columns["fields"].pointer)->{$row}; ".")

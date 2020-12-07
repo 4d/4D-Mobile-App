@@ -141,7 +141,7 @@ Function append($item : Variant; $param : Variant; $mark : Boolean)->$this : cs:
 				Else 
 					
 					$t:=Get localized string:C991($item)
-					ASSERT:C1129(Length:C16($t)=0; "⚠️ An empty item will not be displayed")
+					//ASSERT(Length($t)>0; "⚠️ An empty item will not be displayed")
 					
 					//______________________________________________________
 			End case 

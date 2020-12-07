@@ -54,6 +54,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Timer:K2:25)
 			
+			$ƒ.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
 			$ƒ.updateFieldList()
 			
 			//______________________________________________________
@@ -67,6 +68,9 @@ Else   // <== WIDGETS METHOD
 			
 			//==============================================
 		: ($ƒ.fieldList.catch())
+			
+			$ƒ.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
+			$ƒ.fieldList.updateDefinition()
 			
 			Case of 
 					
@@ -178,10 +182,8 @@ Else   // <== WIDGETS METHOD
 					//_______________________________
 				: ($e.code=On Clicked:K2:4)
 					
-					$ƒ.current:=$e.objectName
-					$ƒ.selector:=Num:C11($ƒ.current=$ƒ.selectorRelations.name)
-					
 					// Update
+					$ƒ.tabSelector.data:=Num:C11($e.objectName=$ƒ.selectorRelations.name)
 					$ƒ.setTab()
 					
 					//_______________________________

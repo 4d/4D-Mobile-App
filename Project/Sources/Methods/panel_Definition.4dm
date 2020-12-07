@@ -35,8 +35,8 @@ Else
 End if 
 
 // Instantiate the corresponding class if any
-If (OB Is empty:C1297(Form:C1466.$dialog[$formName]))\
- | (Shift down:C543 & Not:C34(Is compiled mode:C492))
+If (OB Is empty:C1297(Form:C1466.$dialog[$formName]))
+	// | (Shift down & Not(Is compiled mode))
 	
 	$o[$formName]:=cs:C1710[$formName].new()
 	
