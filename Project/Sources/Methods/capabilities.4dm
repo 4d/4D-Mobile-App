@@ -379,19 +379,19 @@ Case of
 					"MKDirectionsApplicationSupportedModes"; $Obj_in.mapModes))
 				
 				//collection(\
-															"MKDirectionsModeBike";\
-															"MKDirectionsModeBus";\
-															"MKDirectionsModeCar";\
-															"MKDirectionsModeFerry";\
-															"MKDirectionsModeOther";\
-															"MKDirectionsModePedestrian";\
-															"MKDirectionsModePlane";\
-															"MKDirectionsModeRideShare";\
-															"MKDirectionsModeStreetCar";\
-															"MKDirectionsModeSubway";\
-															"MKDirectionsModeTaxi";\
-															"MKDirectionsModeTrain"\
-															)
+																				"MKDirectionsModeBike";\
+																				"MKDirectionsModeBus";\
+																				"MKDirectionsModeCar";\
+																				"MKDirectionsModeFerry";\
+																				"MKDirectionsModeOther";\
+																				"MKDirectionsModePedestrian";\
+																				"MKDirectionsModePlane";\
+																				"MKDirectionsModeRideShare";\
+																				"MKDirectionsModeStreetCar";\
+																				"MKDirectionsModeSubway";\
+																				"MKDirectionsModeTaxi";\
+																				"MKDirectionsModeTrain"\
+																				)
 				
 			End if 
 		End if 
@@ -480,6 +480,8 @@ Case of
 			
 			$Obj_out.entitlements.push(New object:C1471(\
 				"com.apple.developer.associated-domains"; $Obj_in.associatedDomains))
+			$Obj_out.info.push(New object:C1471(\
+				"com.apple.developer.associated-domains"; $Obj_in.associatedDomains))  // to get it in iOS runtimes
 			
 		End if 
 		
