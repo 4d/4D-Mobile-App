@@ -244,18 +244,19 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($oIN.action="extract")
+	: ($oIN.action="doExtract")
 		
-		// Extract format from data model
-		$oOUT.formatters:=New collection:C1472()
+		If ($oIN.result=Null:C1517)
+			$oOUT.formatters:=New collection:C1472()
+		Else 
+			$oOUT.formatters:=$oIN.result  // & input pass result to cumulate
+		End if 
 		
-		For each ($tTable; $oIN.dataModel)
-			
-			For each ($tFieldID; $oIN.dataModel[$tTable])
-				
-				If (Match regex:C1019("(?m-si)^\\d+$"; $tFieldID; 1; *))
+		For each ($tFieldID; $oIN.data)
+			Case of 
+				: (Match regex:C1019("(?m-si)^\\d+$"; $tFieldID; 1; *))
 					
-					$oField:=$oIN.dataModel[$tTable][$tFieldID]
+					$oField:=$oIN.data[$tFieldID]
 					
 					Case of 
 							
@@ -297,8 +298,32 @@ Case of
 							
 							//………………………………………………………………………………………………………
 					End case 
-				End if 
-			End for each 
+				: ((Value type:C1509($oIN.data[$tFieldID])=Is object:K8:27))
+					
+					formatters(New object:C1471(\
+						"action"; "doExtract"; \
+						"formatters"; $oIN.formatters; \
+						"dataModel"; $oIN.dataModel; \
+						"data"; $oIN.data[$tFieldID]; \
+						"result"; $oOUT.formatters))
+					
+			End case 
+		End for each 
+		
+		//______________________________________________________
+	: ($oIN.action="extract")  // Extract format from data model
+		
+		$oOUT.formatters:=New collection:C1472()
+		
+		For each ($tTable; $oIN.dataModel)
+			
+			formatters(New object:C1471(\
+				"action"; "doExtract"; \
+				"formatters"; $oIN.formatters; \
+				"dataModel"; $oIN.dataModel; \
+				"data"; $oIN.dataModel[$tTable]; \
+				"result"; $oOUT.formatters))
+			
 		End for each 
 		
 		//______________________________________________________
