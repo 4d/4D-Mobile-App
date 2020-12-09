@@ -134,261 +134,261 @@ Else
 	
 End if 
 
-/*
+
 //____________________________________________________________
 // GENERATE FILES
 
-If ($isOnError=False)
-
-POST_MESSAGE(New object(\
-"target"; $input.caller; \
-"additional"; "Generating files"))
-
-// Generating files
-$lep.launch("androidprojectgenerator"+\
-" --project-editor "+$lep.singleQuoted($file.path)+\
-" --files-to-copy "+$lep.singleQuoted($filesToCopy.path)+\
-" --template-files "+$lep.singleQuoted($templateFiles.path)+\
-" --template-forms "+$lep.singleQuoted($templateForms.path))
-
-$result.out:=$lep.outputStream
-$result.errors:=Split string(String($lep.errorStream); "\n")
-$result.success:=$lep.success
-
-If (($lep.errorStream#Null) & (String($lep.errorStream)#""))
-
-$isOnError:=True
-
-// Failed to generate files
-POST_MESSAGE(New object(\
-"type"; "alert"; \
-"target"; $input.caller; \
-"additional"; "Failed to generate files"))
-
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $input.caller; \
+		"additional"; "Generating files"))
+	
+	// Generating files
+	$lep.launch("androidprojectgenerator"+\
+		" --project-editor "+$lep.singleQuoted($file.path)+\
+		" --files-to-copy "+$lep.singleQuoted($filesToCopy.path)+\
+		" --template-files "+$lep.singleQuoted($templateFiles.path)+\
+		" --template-forms "+$lep.singleQuoted($templateForms.path))
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to generate files
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $input.caller; \
+			"additional"; "Failed to generate files"))
+		
+	Else 
+		// All ok
+	End if 
+	
 Else 
-// All ok
-End if 
-
-Else 
-// Already on error
+	// Already on error
 End if 
 
 
 //____________________________________________________________
 // BUILD EMBEDDED DATA LIBRARY
 
-If ($isOnError=False)
-
-POST_MESSAGE(New object(\
-"target"; $input.caller; \
-"additional"; "Building embedded data library"))
-
-// TODO : know where kotlinc is
-
-// Building embedded data library
-$lep.launch("/usr/local/bin/kotlinc "+$lep.singleQuoted($project.path+"buildSrc/src/main/java/"+$package+".android.build/database/StaticDataInitializer.kt")+" -d "+$lep.singleQuoted($project.path+"buildSrc/libs/prepopulation.jar"))
-
-$result.out:=$lep.outputStream
-$result.errors:=Split string(String($lep.errorStream); "\n")
-$result.success:=$lep.success
-
-If (($lep.errorStream#Null) & (String($lep.errorStream)#""))
-
-$isOnError:=True
-
-// Failed to build embedded data library
-POST_MESSAGE(New object(\
-"type"; "alert"; \
-"target"; $input.caller; \
-"additional"; "Failed to build embedded data library"))
-
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $input.caller; \
+		"additional"; "Building embedded data library"))
+	
+	// TODO : know where kotlinc is
+	
+	// Building embedded data library
+	$lep.launch("/usr/local/bin/kotlinc "+$lep.singleQuoted($project.path+"buildSrc/src/main/java/"+$package+".android.build/database/StaticDataInitializer.kt")+" -d "+$lep.singleQuoted($project.path+"buildSrc/libs/prepopulation.jar"))
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to build embedded data library
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $input.caller; \
+			"additional"; "Failed to build embedded data library"))
+		
+	Else 
+		// All ok
+	End if 
+	
 Else 
-// All ok
-End if 
-
-Else 
-// Already on error
+	// Already on error
 End if 
 
 
 //____________________________________________________________
 // COPY EMBEDDED DATA LIBRARY
 
-If ($isOnError=False)
-
-$copySrc:=File($project.path+"buildSrc/libs/prepopulation.jar")
-
-If ($copySrc.exists)
-
-$copyDest:=$copySrc.copyTo(Folder($project.path+"app/libs"); fk overwrite)
-
-If (Not($copyDest.exists))
-
-// Copy failed
-$isOnError:=True
-$result.out:=Null
-$result.errors:=New collection("Could not copy file to destination: "+$copyDest.path)
-$result.success:=False
-
+If ($isOnError=False:C215)
+	
+	$copySrc:=File:C1566($project.path+"buildSrc/libs/prepopulation.jar")
+	
+	If ($copySrc.exists)
+		
+		$copyDest:=$copySrc.copyTo(Folder:C1567($project.path+"app/libs"); fk overwrite:K87:5)
+		
+		If (Not:C34($copyDest.exists))
+			
+			// Copy failed
+			$isOnError:=True:C214
+			$result.out:=Null:C1517
+			$result.errors:=New collection:C1472("Could not copy file to destination: "+$copyDest.path)
+			$result.success:=False:C215
+			
+		Else 
+			// All ok
+		End if 
+		
+	Else 
+		
+		// Missing file
+		$isOnError:=True:C214
+		$result.out:=Null:C1517
+		$result.errors:=New collection:C1472("Missing source file for copy: "+$copySrc.path)
+		$result.success:=False:C215
+		
+	End if 
+	
 Else 
-// All ok
-End if 
-
-Else 
-
-// Missing file
-$isOnError:=True
-$result.out:=Null
-$result.errors:=New collection("Missing source file for copy: "+$copySrc.path)
-$result.success:=False
-
-End if 
-
-Else 
-// Already on error
+	// Already on error
 End if 
 
 
 //____________________________________________________________
 // GRADLEW ACCESS RIGHTS
 
-If ($isOnError=False)
-
-// Chmod
-$lep.launch("chmod +x "+$lep.singleQuoted($project.path+"gradlew"))
-
-$result.out:=$lep.outputStream
-$result.errors:=Split string(String($lep.errorStream); "\n")
-$result.success:=$lep.success
-
-If (($lep.errorStream#Null) & (String($lep.errorStream)#""))
-
-$isOnError:=True
-
-// Failed to change access rights
-POST_MESSAGE(New object(\
-"type"; "alert"; \
-"target"; $input.caller; \
-"additional"; "Failed chmod command"))
-
+If ($isOnError=False:C215)
+	
+	// Chmod
+	$lep.launch("chmod +x "+$lep.singleQuoted($project.path+"gradlew"))
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to change access rights
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $input.caller; \
+			"additional"; "Failed chmod command"))
+		
+	Else 
+		// All ok
+	End if 
+	
 Else 
-// All ok
-End if 
-
-Else 
-// Already on error
+	// Already on error
 End if 
 
 
 //____________________________________________________________
 // BUILD PROJECT
 
-If ($isOnError=False)
-
-POST_MESSAGE(New object(\
-"target"; $input.caller; \
-"additional"; "Building project"))
-
-// Building project
-$lep.setEnvironnementVariable("currentDirectory"; $project.path)\
-.launch("gradlew "+$buildTask)
-
-$result.out:=$lep.errorStream
-$result.errors:=Split string(String($lep.errorStream); "\n")
-$result.success:=$lep.success
-
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $input.caller; \
+		"additional"; "Building project"))
+	
+	// Building project
+	$lep.setEnvironnementVariable("currentDirectory"; $project.path)\
+		.launch("gradlew "+$buildTask)
+	
+	$result.out:=$lep.errorStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
 Else 
-// Already on error
+	// Already on error
 End if 
 
 
 //____________________________________________________________
 // CREATE EMBEDDED DATABASE
 
-If ($isOnError=False)
-
-POST_MESSAGE(New object(\
-"target"; $input.caller; \
-"additional"; "Creating embedded database"))
-
-// Creating embedded database
-$lep.launch("gradlew app:createDataBase")
-
-$result.out:=$lep.outputStream
-$result.errors:=Split string(String($lep.errorStream); "\n")
-$result.success:=$lep.success
-
-If (($lep.errorStream#Null) & (String($lep.errorStream)#""))
-
-$isOnError:=True
-
-// Failed to create embedded database
-POST_MESSAGE(New object(\
-"type"; "alert"; \
-"target"; $input.caller; \
-"additional"; "Failed to create embedded database"))
-
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $input.caller; \
+		"additional"; "Creating embedded database"))
+	
+	// Creating embedded database
+	$lep.launch("gradlew app:createDataBase")
+	
+	$result.out:=$lep.outputStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
+	If (($lep.errorStream#Null:C1517) & (String:C10($lep.errorStream)#""))
+		
+		$isOnError:=True:C214
+		
+		// Failed to create embedded database
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $input.caller; \
+			"additional"; "Failed to create embedded database"))
+		
+	Else 
+		// All ok
+	End if 
+	
 Else 
-// All ok
-End if 
-
-Else 
-// Already on error
+	// Already on error
 End if 
 
 
 //____________________________________________________________
 // BUILD PROJECT WITH EMBEDDED DATA
 
-If ($isOnError=False)
-
-POST_MESSAGE(New object(\
-"target"; $input.caller; \
-"additional"; "Building project with embedded database"))
-
-// Building project with embedded database
-$lep.launch("gradlew "+$buildTask)
-
-$result.out:=$lep.errorStream
-$result.errors:=Split string(String($lep.errorStream); "\n")
-$result.success:=$lep.success
-
+If ($isOnError=False:C215)
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; $input.caller; \
+		"additional"; "Building project with embedded database"))
+	
+	// Building project with embedded database
+	$lep.launch("gradlew "+$buildTask)
+	
+	$result.out:=$lep.errorStream
+	$result.errors:=Split string:C1554(String:C10($lep.errorStream); "\n")
+	$result.success:=$lep.success
+	
 Else 
-// Already on error
+	// Already on error
 End if 
 
 
 //____________________________________________________________
 // CHECK APK IS BUILT
 
-If ($isOnError=False)
-
-$APK:=File($apkLocation)
-
-// CHECK APK EXISTS
-
-If (Not($APK.exists))
-
-// Missing file
-$isOnError:=True
-
-POST_MESSAGE(New object(\
-"type"; "alert"; \
-"target"; $input.caller; \
-"additional"; "Build failed. No APK found: "+$APK.path))
-
-$result.out:=Null
-$result.errors:=New collection("Missing APK file: "+$APK.path)
-$result.success:=False
-
+If ($isOnError=False:C215)
+	
+	$APK:=File:C1566($apkLocation)
+	
+	// CHECK APK EXISTS
+	
+	If (Not:C34($APK.exists))
+		
+		// Missing file
+		$isOnError:=True:C214
+		
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; $input.caller; \
+			"additional"; "Build failed. No APK found: "+$APK.path))
+		
+		$result.out:=Null:C1517
+		$result.errors:=New collection:C1472("Missing APK file: "+$APK.path)
+		$result.success:=False:C215
+		
+	Else 
+		// APK exists
+	End if 
+	
 Else 
-// APK exists
+	// Already on error
 End if 
 
-Else 
-// Already on error
-End if 
-*/
 
 //____________________________________________________________
 // CHECK IF AVD EXISTS

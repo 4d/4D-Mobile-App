@@ -6,6 +6,7 @@ Class constructor
 	
 	This:C1470.cmd:=This:C1470.adbFile().path
 	
+	
 Function adbFile
 	var $0 : 4D:C1709.File
 	
@@ -42,12 +43,12 @@ Function getAvdName
 	var $1 : Text  // serial
 	var $avdName_Col : Collection
 	
-	This:C1470.launch(This:C1470.cmd; "-s "+This:C1470.singleQuoted($1)+" emu avd name")
-	
 	$0:=New object:C1471(\
 		"avdName"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
+	
+	This:C1470.launch(This:C1470.cmd; "-s "+This:C1470.singleQuoted($1)+" emu avd name")
 	
 	If ((This:C1470.outputStream#Null:C1517) & (String:C10(This:C1470.outputStream)#""))
 		
@@ -82,29 +83,32 @@ Function findSerial
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	For each ($emulatorLine; $1) Until ($0.emulatorName#"")
+	For each ($emulatorLine; $1) Until ($0.serial#"")
 		
 		$serial:=Substring:C12($emulatorLine; 1; (Position:C15("\tdevice"; $emulatorLine)-1))
 		
 		// Get associated avd name
 		$Obj_avdName:=This:C1470.getAvdName($serial)
 		
-		If (($Obj_avdName.success) & ($Obj_avdName.avdName=$2))
-			// found avd name, means that tested serial is correct
-			$0.serial:=$serial
-			$0.success:=True:C214
+		If ($Obj_avdName.success)
+			
+			If ($Obj_avdName.avdName=$2)
+				
+				// found avd name, means that tested serial is correct
+				$0.serial:=$serial
+				$0.success:=True:C214
+				
+			Else 
+				// not the associated serial
+			End if 
 			
 		Else 
-			// not the associated serial
+			// getAvdName failed
+			$0.errors.combine($Obj_avdName.errors)
 		End if 
 		
 	End for each 
 	
-	If ($0.serial="")
-		$0.errors.push("Emulator name could not be found")
-	Else 
-		// Emulator name was found
-	End if 
 	
 	
 Function getSerial
@@ -129,7 +133,7 @@ Function getSerial
 			$0.success:=True:C214
 			
 		Else 
-			$0.errors:=$Obj_serial.errors
+			$0.errors:=$Obj_serial.errors  // This can be empty, therefore no error, just not found
 		End if 
 		
 	Else 
@@ -169,17 +173,28 @@ Function waitForBoot
 		$stepTime:=Milliseconds:C459-$startTime
 		
 	Until (String:C10(This:C1470.outputStream)="1")\
+		 | ((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))\
 		 | ($stepTime>30000)
 	
-	If ((String:C10(This:C1470.outputStream)#"1")\
-		 & ($stepTime>30000))
-		// Timeout
-		$0.errors.push("Timeout when booting emulator")
-		
-	Else 
-		// Booted
-		$0.success:=True:C214
-	End if 
+	Case of 
+			
+		: (String:C10(This:C1470.outputStream)="1")  // Booted
+			
+			$0.success:=True:C214
+			
+		: ((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))  // Command failed
+			
+			$0.errors.push(This:C1470.errorStream)
+			
+		: ($stepTime>30000)  // Timeout
+			
+			$0.errors.push("Timeout when booting emulator")
+			
+		Else 
+			
+			$0.errors.push("An unknown error occurred while booting emulator")
+	End case 
+	
 	
 	
 Function getDevicePackageList

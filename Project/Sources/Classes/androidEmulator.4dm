@@ -170,8 +170,13 @@ Function start  // Starts emulator
 	This:C1470.asynchronous()\
 		.launch(This:C1470.cmd; "-avd \""+$1+"\" -no-boot-anim")
 	
-	$0.errors:=Split string:C1554(String:C10(This:C1470.errorStream); "\n")
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+	If (Not:C34($0.success))
+		$0.errors.push("Failed to start emulator")
+	Else 
+		// All ok
+	End if 
+	$0.errors.combine(Split string:C1554(String:C10(This:C1470.errorStream); "\n"))
 	This:C1470.synchronous()  // set back to synchronous mode
 	
 	
