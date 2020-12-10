@@ -34,6 +34,7 @@ If (False:C215)
 	// ----------------------------------------------------
 	C_OBJECT:C1216(tmpl_RENDERER_v1; $1)
 	C_OBJECT:C1216(tmpl_RENDERER_v1; $2)
+	C_OBJECT:C1216(tmpl_RENDERER_v1; $3)
 	
 	// ----------------------------------------------------
 End if 

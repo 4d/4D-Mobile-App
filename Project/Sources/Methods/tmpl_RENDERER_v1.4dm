@@ -2,10 +2,12 @@
 //#DECLARE ($svg : cs.svg; $context : Object)
 var $1 : cs:C1710.svg
 var $2 : Object
+var $3 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_RENDERER_v1; $1)
 	C_OBJECT:C1216(tmpl_RENDERER_v1; $2)
+	C_OBJECT:C1216(tmpl_RENDERER_v1; $3)
 End if 
 
 var $container; $domField; $domTemplate; $domUse; $index; $name; $new; $node; $t; $widgetField : Text
@@ -17,6 +19,7 @@ var $svg : cs:C1710.svg
 
 $svg:=$1
 $context:=$2
+$target:=$3
 
 // Update values if any
 $t:=$svg.findById("cookery")

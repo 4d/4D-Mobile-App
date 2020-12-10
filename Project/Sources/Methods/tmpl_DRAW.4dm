@@ -126,7 +126,7 @@ If (Num:C11($tableID)>0)
 				//For each ($o; $target.fields)
 				//If ($o#Null)
 				//If ($o.fieldType=8858)\
-					| ($o.fieldType=8859)
+										| ($o.fieldType=8859)
 				//// ❓
 				//Else
 				//$o.name:=Form.dataModel[$tableID][String($o.fieldNumber)].name
@@ -462,7 +462,7 @@ If (Num:C11($tableID)>0)
 					
 				Else 
 					
-					tmpl_RENDERER_v1($svg; $context)  // #OLD RENDERER
+					tmpl_RENDERER_v1($svg; $context; $target)  // #OLD RENDERER
 					
 					$context.previewHeight:=440
 					
