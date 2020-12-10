@@ -27,20 +27,18 @@ Else
 	
 	SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; This:C1470.$.current; "ios:bind"; $Txt_bind)
 	
-	
 	$Obj_target:=Form:C1466[This:C1470.$.typeForm()][This:C1470.$.tableNumber]
 	
-	$o:=Rgx_match(New object:C1471(\
-		"pattern"; "(?mi-s)(\\w+)\\[(\\d+)]"; \
-		"target"; $Txt_bind))
+	var $rgx : cs:C1710.regex
+	$rgx:=cs:C1710.regex.new($Txt_bind; "(?mi-s)(\\w+)\\[(\\d+)]").match()
 	
-	If ($o.success)  // List of fields
+	If ($rgx.success)  // List of fields
 		
-		$b:=(Num:C11($o.match[2].data)>=$Obj_target[$o.match[1].data].length)
+		$b:=(Num:C11($rgx.matches[2].data)>=$Obj_target[$rgx.matches[1].data].length)
 		
 		If (Not:C34($b))
 			
-			$b:=($Obj_target[$o.match[1].data][Num:C11($o.match[2].data)]=Null:C1517)
+			$b:=($Obj_target[$rgx.matches[1].data][Num:C11($rgx.matches[2].data)]=Null:C1517)
 			
 		End if 
 		
@@ -204,7 +202,7 @@ Else
 		
 	Else 
 		
-		
+		//
 		
 	End if 
 End if 

@@ -86,7 +86,8 @@
 					"events": [
 						"onClick"
 					],
-					"method": "DEVELOPER"
+					"method": "DEVELOPER",
+					"focusable": false
 				},
 				"02_team": {
 					"type": "input",
@@ -128,9 +129,14 @@
 					"events": [
 						"onClick"
 					],
-					"method": "DEVELOPER"
+					"method": "DEVELOPER",
+					"focusable": false
 				}
-			}
+			},
+			"entryOrder": [
+				"01_name",
+				"02_team"
+			]
 		}
 	],
 	"method": "DEVELOPER",

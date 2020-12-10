@@ -50,11 +50,12 @@ Class constructor
 	// Updates the list of fields/reports according to the selected table
 Function getFieldList()->$result : Object
 	
-	var $subKey; $key; $t; $tableID : Text
+	var $subKey; $key; $label; $tableID : Text
 	var $field; $table : Object
 	
 	var $str : cs:C1710.str
 	var $formatters : cs:C1710.path
+	var $formater : cs:C1710.formater
 	
 	$result:=New object:C1471(\
 		"success"; Form:C1466.dataModel#Null:C1517)
@@ -133,33 +134,34 @@ Function getFieldList()->$result : Object
 						
 						If ($field.format#Null:C1517)
 							
-							//%W-533.1
-							If ($field.format[[1]]="/")  // User resources
+							$formater:=cs:C1710.formater.new($field.format)
+							
+							If ($formater.host)
 								
-								$t:=Substring:C12($field.format; 2)
-								
-								If (Not:C34(formatters(New object:C1471(\
-									"action"; "isValid"; \
-									"format"; $formatters.folder($t))).success))
+								If (Not:C34($formater.isValid()))
 									
+									$label:=$formater.label
 									$result.formatColors[$result.formats.length]:=UI.errorColor  // Missing or invalid
+									
+								Else 
+									
+									$label:=$formater.source.name
 									
 								End if 
 								
 							Else 
 								
-								$t:=$str.setText("_"+$field.format).localized()
+								$label:=$str.setText("_"+$field.format).localized()
 								
 							End if 
-							//%W+533.1
 							
 						Else 
 							
-							$t:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
+							$label:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
 							
 						End if 
 						
-						$result.formats.push($t)
+						$result.formats.push($label)
 						
 						//……………………………………………………………………………………………………………
 					: (Value type:C1509($table[$key])#Is object:K8:27)
@@ -204,33 +206,34 @@ Function getFieldList()->$result : Object
 										
 										If ($field.format#Null:C1517)
 											
-											//%W-533.1
-											If ($field.format[[1]]="/")  // User resources
+											$formater:=cs:C1710.formater.new($field.format)
+											
+											If ($formater.host)
 												
-												$t:=Substring:C12($field.format; 2)
-												
-												If (Not:C34(formatters(New object:C1471(\
-													"action"; "isValid"; \
-													"format"; $formatters.folder($t))).success))
+												If (Not:C34($formater.isValid()))
 													
+													$label:=$formater.label
 													$result.formatColors[$result.formats.length]:=UI.errorColor  // Missing or invalid
+													
+												Else 
+													
+													$label:=$formater.source.name
 													
 												End if 
 												
 											Else 
 												
-												$t:=$str.setText("_"+$field.format).localized()
+												$label:=$str.setText("_"+$field.format).localized()
 												
 											End if 
-											//%W+533.1
 											
 										Else 
 											
-											$t:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
+											$label:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
 											
 										End if 
 										
-										$result.formats.push($t)
+										$result.formats.push($label)
 										
 										//______________________________________________________
 									Else 
@@ -698,13 +701,17 @@ Function formatMenu($e : Object)
 	
 	var $format; $t : Text
 	var $field; $o : Object
-	var $c : Collection
+	var $formatters : Collection
 	var $menu : cs:C1710.menu
+	var $str : cs:C1710.str
+	var $formatter : cs:C1710.formater
 	
 	// Get the field definition
 	$field:=This:C1470.field($e.row)
 	
 	$menu:=cs:C1710.menu.new()
+	$str:=cs:C1710.str.new()
+	$formatter:=cs:C1710.formater.new()
 	
 	// Get current format
 	If ($field.format=Null:C1517)
@@ -726,9 +733,7 @@ Function formatMenu($e : Object)
 		End if 
 	End if 
 	
-	For each ($o; formatters(New object:C1471(\
-		"action"; "getByType"; \
-		"type"; $field.fieldType)).formatters)
+	For each ($o; $formatter.getByType(Num:C11($field.fieldType)))
 		
 		$t:=String:C10($o.name)
 		
@@ -738,21 +743,21 @@ Function formatMenu($e : Object)
 			
 		Else 
 			
-			$menu.append(cs:C1710.str.new("_"+$t).localized(); $t; $format=$t)
+			$menu.append($str.setText("_"+$t).localized(); $t; $format=$t)
 			
 		End if 
 	End for each 
 	
 	// Append user formatters if any
-	$c:=formatters(New object:C1471("action"; "getByType"; "host"; True:C214; "type"; Num:C11($field.fieldType))).formatters
+	$formatters:=$formatter.getByType(Num:C11($field.fieldType); True:C214)
 	
-	If ($c.length>0)
+	If ($formatters.length>0)
 		
 		$menu.line()
 		
-		For each ($o; $c)
+		For each ($o; $formatters.orderBy("name"))
 			
-			$menu.append($o.name; "/"+$o.name; $format=("/"+$o.name))
+			$menu.append($o.name; $o.source.name; $format=$o.source.name)
 			
 		End for each 
 	End if 
@@ -768,15 +773,19 @@ Function formatMenu($e : Object)
 		If ($menu.choice[[1]]="/")
 			
 			// User resources
-			Self:C308->{$e.row}:=Substring:C12($menu.choice; 2)
+			$o:=$formatters.query("source.name = :1"; $menu.choice).pop()
+			Self:C308->{$e.row}:=$o.source.label
 			
 		Else 
 			
-			Self:C308->{$e.row}:=cs:C1710.str.new("_"+$menu.choice).localized()
+			Self:C308->{$e.row}:=$str.setText("_"+$menu.choice).localized()
 			
 		End if 
 		//%W+533.1
 		//%W+533.3
+		
+		// Remove error color if any
+		LISTBOX SET ROW COLOR:C1270(*; This:C1470.formats.name; $e.row; Foreground color:K23:1; lk font color:K53:24)
 		
 		PROJECT.save()
 		

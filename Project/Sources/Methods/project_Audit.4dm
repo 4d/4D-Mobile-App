@@ -161,30 +161,37 @@ If ($datamodel#Null:C1517)
 					End if 
 				End if 
 				
-				If ($audits.formatters)  // ⑤ CHECK FORMATTERS
+				If ($audits.formatters)  // ⑤ CHECK FORMATERS
 					
 					$name:=String:C10($datamodel[$table.key][$field.key].format)
 					
-					If (Position:C15("/"; $name)=1)  // Host resources
-						
-						$name:=Delete string:C232($name; 1; 1)
-						
-						If (Not:C34($hostFormaters.folder($name).file("manifest.json").exists))  // 👎 MISSING OR INVALID FORMATTER
+					Case of 
+							//______________________________________________________
+						: (Length:C16($name)=0)
 							
-							$errors.push(New object:C1471(\
-								"type"; "formatter"; \
-								"panel"; "TABLES"; \
-								"message"; $str.setText("theFormatterIsMissingOrInvalid").localized($name); \
-								"table"; $table.key; \
-								"field"; $field.key))
+							// Default format
 							
-						End if 
-						
-					Else 
-						
-						// 👅 We assume that built-in formatters are not poxed.
-						
-					End if 
+							//______________________________________________________
+						: (Position:C15("/"; $name)=1)  // Host resources
+							
+							If (Not:C34(cs:C1710.formater.new($name).isValid()))  // 👎 MISSING OR INVALID FORMATTER
+								
+								$errors.push(New object:C1471(\
+									"type"; "formatter"; \
+									"panel"; "TABLES"; \
+									"message"; $str.setText("theFormatterIsMissingOrInvalid").localized($name); \
+									"table"; $table.key; \
+									"field"; $field.key))
+								
+							End if 
+							
+							//______________________________________________________
+						Else 
+							
+							// 👅 We assume that built-in formaters are not poxed.
+							
+							//______________________________________________________
+					End case 
 				End if 
 			End for each 
 		End if 
@@ -224,8 +231,8 @@ End if
 
 If (Form:C1466#Null:C1517)
 	
-	//CALL FORM(Current form window; "editor_CALLBACK"; "description"; New object(\
-		"show"; Not($audit.success)))
+	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
+		"show"; Not:C34($audit.success)))
 	
 End if 
 

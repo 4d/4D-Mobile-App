@@ -85,6 +85,19 @@
 			"_o_VIEWS"
 		]
 	},
+	"_UNUSED": {
+		"methods": [
+			"COMPILER_UNUSED",
+			"net",
+			"tester_net"
+		]
+	},
+	"(androidPlatformTools)": {},
+	"(androidProcess)": {
+		"groups": [
+			"(androidPlatformTools)"
+		]
+	},
 	"[API]": {
 		"methods": [
 			"C_NEW_MOBILE_PROJECT",
@@ -147,7 +160,8 @@
 			"WELCOME"
 		],
 		"classes": [
-			"editor"
+			"editor",
+			"MobileProject"
 		]
 	},
 	"[PANELS]": {
@@ -388,31 +402,20 @@
 		]
 	},
 	"android": {
-		"groups": [
-			"androidProcess"
-		],
 		"methods": [
 			"dev_test_android",
 			"mobile_Project_android"
 		],
 		"classes": [
-			"externalProcess",
-			"java"
-		]
-	},
-	"androidPlatformTools": {
-		"classes": [
 			"adb",
-			"androidPlatformTools"
-		]
-	},
-	"androidProcess": {
-		"groups": [
-			"androidPlatformTools"
-		],
-		"classes": [
 			"androidEmulator",
-			"androidProcess"
+			"androidProcess",
+			"androidprojectgenerator",
+			"avd",
+			"externalProcess",
+			"gradlew",
+			"java",
+			"MobileProjectAndroid"
 		]
 	},
 	"backend": {
@@ -430,7 +433,6 @@
 			"findFirstPathComponentInCatalog",
 			"formatString",
 			"formatters",
-			"net",
 			"plist_toObject",
 			"Process_tags",
 			"Process_tags_on_file",
@@ -439,6 +441,9 @@
 			"template",
 			"unzip",
 			"xloc"
+		],
+		"classes": [
+			"formater"
 		]
 	},
 	"classes": {
@@ -458,6 +463,7 @@
 			"lep",
 			"menu",
 			"process",
+			"regex",
 			"str",
 			"svg",
 			"tools",
@@ -815,13 +821,11 @@
 			"Compiler_Rgx",
 			"Rgx_ExtractText",
 			"Rgx_Get_Pattern",
-			"Rgx_match",
 			"Rgx_MatchText",
 			"rgx_NO_ERROR",
 			"rgx_Options",
 			"Rgx_SplitText",
-			"Rgx_SubstituteText",
-			"test_Rgx"
+			"Rgx_SubstituteText"
 		]
 	},
 	"Search": {
@@ -902,6 +906,7 @@
 			"test_db",
 			"test_lep",
 			"test_ob",
+			"test_regex",
 			"test_str"
 		]
 	},
@@ -943,5 +948,9 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {}
+	"trash": {
+		"groups": [
+			"(androidProcess)"
+		]
+	}
 }

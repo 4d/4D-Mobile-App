@@ -1,45 +1,43 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : net
-  // ID[0FBB3AA4E66B4F849409DB936B205D9D]
-  // Created 17-10-2018 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Txt_cmd;$Txt_error;$Txt_in;$Txt_out;$Txt_outWithError)
-C_OBJECT:C1216($Obj_in;$Obj_out;$Obj_result;$Obj_rgx)
+// ----------------------------------------------------
+// Project method : net
+// ID[0FBB3AA4E66B4F849409DB936B205D9D]
+// Created 17-10-2018 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(net ;$0)
-	C_OBJECT:C1216(net ;$1)
+	C_OBJECT:C1216(net; $0)
+	C_OBJECT:C1216(net; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_parameters:=Count parameters:C259
+var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out; $Txt_outWithError : Text
+var $Obj_in; $Obj_out; $Obj_result : Object
+var $rgx : cs:C1710.regex
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+// ----------------------------------------------------
+// Initialisations
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_in:=$1
 	
-	  // Default values
+	// Default values
 	
-	  // Optional parameters
-	If ($Lon_parameters>=2)
+	// Optional parameters
+	If (Count parameters:C259>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
 	$Obj_out:=New object:C1471(\
-		"success";False:C215)
+		"success"; False:C215)
 	
 Else 
 	
@@ -47,37 +45,35 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action=Null:C1517)
 		
 		TRACE:C157
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.url=Null:C1517)
 		
 		TRACE:C157
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="ping")
 		
 		If (Is macOS:C1572)\
 			 & ($Obj_in.url="@localhost@")
 			
-			  // On macOS, localhost is not resolve
+			// On macOS, localhost is not resolve
 			$Obj_in.url:="127.0.0.1"
 			
 		End if 
 		
-		$Obj_rgx:=Rgx_match (New object:C1471(\
-			"pattern";"(?mi-s)^(:?https?://)?+(:?www\\.)?+([^:]*)(:?[^\\n$]*)$";\
-			"target";$Obj_in.url))
+		$rgx:=cs:C1710.regex.new($Obj_in.url; "(?mi-s)^(:?https?://)?+(:?www\\.)?+([^:]*)(:?[^\\n$]*)$").match()
 		
-		If ($Obj_rgx.success)
+		If ($rgx.success)
 			
-			$Obj_in.url:=$Obj_rgx.match[3].data
+			$Obj_in.url:=$rgx.matches[3].data
 			
 		End if 
 		
@@ -93,8 +89,8 @@ Case of
 			
 		End if 
 		
-		SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE";"True")
-		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+		SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "True")
+		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 		
 		$Obj_out.success:=($Txt_out#$Txt_outWithError)
 		
@@ -108,7 +104,7 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="localhost")
 		
 		If ($Obj_in.url="@localhost@")
@@ -118,16 +114,16 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Obj_in.action="resolve")
 		
 		$Obj_out.ip:=""
 		
 		If (Is macOS:C1572)
 			
-			  // On macOS, localhost is not resolve
+			// On macOS, localhost is not resolve
 			$Obj_in.action:="localhost"
-			$Obj_result:=net ($Obj_in)
+			$Obj_result:=net($Obj_in)
 			
 			$Obj_out.success:=$Obj_result.success
 			
@@ -140,64 +136,59 @@ Case of
 		Else 
 			
 			$Obj_in.action:="ping"
-			$Obj_result:=net ($Obj_in)
+			$Obj_result:=net($Obj_in)
 			
 			If ($Obj_result.success)
 				
 				If (Is macOS:C1572)
 					
-					  // PING fr.wikipedia.org (91.198.174.192): 56 data bytes\n
-					  // 64 bytes from 91.198.174.192: icmp_seq=0 ttl=58 time=96.044 ms\n \n
-					  // --- fr.wikipedia.org ping statistics ---\n
-					  // 1 packets transmitted, 1 packets received, 0.0% packet loss\n
-					  //round-trip min/avg/max/stddev = 96.044/96.044/96.044/0.000 ms\n
+					//PING dyna.wikimedia.org (91.198.174.192): 56 data bytes\n64 bytes from 
+					//91.198.174.192: icmp_seq=0 ttl=53 time=16.989 ms\n\n--- dyna.wikimedia.org ping 
+					//statistics ---\n1 packets transmitted, 1 packets received, 0.0% packet 
+					//loss\nround-trip min/avg/max/stddev = 16.989/16.989/16.989/0.000 ms\n
 					
-					$Obj_rgx:=Rgx_match (New object:C1471(\
-						"pattern";"(?-msi)PING\\s[^(]*\\(([^)]*)";\
-						"target";$Obj_result.response))
+					$rgx:=cs:C1710.regex.new($Obj_result.response; "(?m-si)PING\\s[^(]*\\(([^)]*)").match()
 					
-					$Obj_out.success:=$Obj_rgx.success
+					$Obj_out.success:=$rgx.success
 					
 					If ($Obj_out.success)
 						
-						$Obj_out.ip:=$Obj_rgx.match[1].data
+						$Obj_out.ip:=$rgx.matches[1].data
 						
 					End if 
 					
 				Else 
 					
-					  // \r\n
-					  // Envoi d'une requˆte 'ping' sur fr.wikipedia.org [91.198.174.192] avec 32 octets de donn‚esÿ:\r\n
-					  // R‚ponse de 91.198.174.192ÿ: octets=32 temps=12 ms TTL=58\r\n\r\n
-					  // Statistiques Ping pour 91.198.174.192:\r\n
-					  //    Paquetsÿ: envoy‚s = 1, re‡us = 1, perdus = 0 (perte 0%),\r\n
-					  // Dur‚e approximative des boucles en millisecondes :\r\n
-					  //    Minimum = 12ms, Maximum = 12ms, Moyenne = 12ms\r\n
+					// \r\n
+					// Envoi d'une requˆte 'ping' sur fr.wikipedia.org [91.198.174.192] avec 32 octets de donn‚esÿ:\r\n
+					// R‚ponse de 91.198.174.192ÿ: octets=32 temps=12 ms TTL=58\r\n\r\n
+					// Statistiques Ping pour 91.198.174.192:\r\n
+					//    Paquetsÿ: envoy‚s = 1, re‡us = 1, perdus = 0 (perte 0%),\r\n
+					// Dur‚e approximative des boucles en millisecondes :\r\n
+					//    Minimum = 12ms, Maximum = 12ms, Moyenne = 12ms\r\n
 					
-					$Obj_rgx:=Rgx_match (New object:C1471(\
-						"pattern";"(?i-ms)[^[]*\\[([^\\]]*)\\]";\
-						"target";$Obj_result.response))
+					$rgx:=cs:C1710.regex.new($Obj_result.response; "(?i-ms)[^[]*\\[([^\\]]*)\\]").match()
 					
-					$Obj_out.success:=$Obj_rgx.success
+					$Obj_out.success:=$rgx.success
 					
 					If ($Obj_out.success)
 						
-						$Obj_out.ip:=$Obj_rgx.match[1].data
+						$Obj_out.ip:=$rgx.matches[1].data
 						
 					End if 
 				End if 
 			End if 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_out
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

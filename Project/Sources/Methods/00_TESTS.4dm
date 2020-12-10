@@ -28,40 +28,22 @@ End if
 
 Case of 
 		
+		
 		//________________________________________
 	: (True:C214)
-		
-		//$_svg:=SVG_New
-		////Set the default colors
-		//SVG_SET_DEFAULT_BRUSHES("black"; "white")
-		////4-point thick lines
-		//SVG_SET_STROKE_WIDTH($_svg; 4)
-		//$g:=SVG_New_group($_svg)
-		//SVG_New_rect($g; 2; 2; 40; 40)
-		//SVG_New_rect($g; 2; 45; 40; 100)
-		//SVG_SET_FILL_BRUSH(SVG_New_rect($g; 2; 144; 40; 60); "midnightblue")
-		//SVG_SET_FILL_BRUSH(SVG_New_rect($g; 42; 2; 120; 142); "red")
-		//SVG_New_rect($g; 42; 144; 95; 60)
-		//SVG_New_rect($g; 137; 144; 25; 25)
-		//SVG_SET_FILL_BRUSH(SVG_New_rect($g; 137; 169; 25; 35); "yellow")
-		//SVG_SET_TRANSFORM_TRANSLATE($g; 10; 10)
-		////Caption
-		//SVG_New_text($_svg; "Inspired by Piet Mondrian - 1930,\rComposition II in Red, Blue, and Yellow"; 10; 220; ""; 9)
-		//SVGTool_SHOW_IN_VIEWER($_svg)
-		//SVG_CLEAR($_svg)
 		
 		var $svg : cs:C1710.svg
 		$svg:=cs:C1710.svg.new()
 		$svg.group("main").stroke(4).translate(10; 10).scale(2)
 		$svg.rect(40; 60).position(2; 144).fill("midnightblue")
 		$svg.rect(120; 142).position(42; 2).fill("red")
+		$svg.textArea("Inspired by Piet Mondrian - 1930,\rComposition II in Red, Blue, and Yellow").position(0; 210).fontSize(8).alignment(Align center:K42:3)
 		$svg.group().fill("white")
 		$svg.rect(40; 40).position(2; 2)
 		$svg.rect(40; 100).position(2; 45)
 		$svg.rect(95; 60).position(42; 144)
 		$svg.rect(25; 25).position(137; 144)
 		$svg.rect(25; 35).position(137; 169).fill("yellow")
-		$svg.textArea("Inspired by Piet Mondrian - 1930,\rComposition II in Red, Blue, and Yellow").position(0; 210).fontSize(9).attachTo("main")
 		$svg.preview()
 		
 		//________________________________________
@@ -866,26 +848,6 @@ Case of
 		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/"))
 		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest"))
 		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest/"))
-		
-		//________________________________________
-	: (False:C215)
-		
-		$result:=net(New object:C1471("action"; "resolve"; "url"; "fr.wikipedia.org"))
-		
-		If ($result.success)
-			
-			$result.ping:=net(New object:C1471("action"; "ping"; "url"; $result.ip))
-			
-		End if 
-		
-		$result:=net(New object:C1471("action"; "ping"; "url"; "127.0.0.1:8880"))
-		
-		$result:=net(New object:C1471("action"; "ping"; "url"; "localhost"))
-		$result:=net(New object:C1471("action"; "resolve"; "url"; "localhost"))
-		
-		//$Obj_result.ping:=server (New object("action";"ping";"url";"www.fr.wikipedia.org"))
-		//$Obj_result.ping:=server (New object("action";"ping";"url";"http://www.fr.wikipedia.org:80/"))
-		$result.ping:=net(New object:C1471("action"; "ping"; "url"; "testbugs.4d.fr"))
 		
 		//________________________________________
 	: (True:C214)

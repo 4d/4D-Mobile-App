@@ -39,9 +39,17 @@ If (Num:C11($e.row)>0)
 	
 	If ($e.objectName=$1.form.tableList)
 		
-		//%W-533.3
-		$table:=PROJECT.getCatalog().query("name=:1"; (OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName))->{$e.row}).pop()
-		//%W+533.3
+		If ($e.columnName#Null:C1517)
+			
+			//%W-533.3
+			$table:=PROJECT.getCatalog().query("name=:1"; (OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName))->{$e.row}).pop()
+			//%W+533.3
+			
+		Else 
+			
+			ASSERT:C1129(Not:C34(DATABASE.isMatrix))
+			
+		End if 
 		
 	Else 
 		

@@ -287,15 +287,13 @@ Case of
 						$ok:=(Position:C15("127.0.0.1"; Form:C1466.server.urls.production)=0)\
 							 & (Position:C15("localhost"; Form:C1466.server.urls.production)=0)
 						
-						var $regex : Object
-						$regex:=Rgx_match(New object:C1471(\
-							"pattern"; "(?mi-s)(localhost|(?:(?:\\d+\\.){3}\\d+))(?::(\\d+))?"; \
-							"target"; Form:C1466.server.urls.production))
+						var $regex : cs:C1710.regex
+						$regex:=cs:C1710.regex.new(Form:C1466.server.urls.production; "(?mi-s)(localhost|(?:(?:\\d+\\.){3}\\d+))(?::(\\d+))?").match()
 						
 						If ($regex.success)
 							
-							If ($regex.match[1].data="127.0.0.1")\
-								 | ($regex.match[1].data="localhost")
+							If ($regex.matches[1].data="127.0.0.1")\
+								 | ($regex.matches[1].data="localhost")
 								
 /*
 WARNING: "localhost" may not find the server if the computer is connected to a network.
@@ -306,9 +304,9 @@ $regex.match[1].data:="127.0.0.1"
 */
 								
 								// Check the port
-								If ($regex.match.length>=2)
+								If ($regex.matches.length>=2)
 									
-									$ok:=($oServer.options.webPortID#Num:C11($regex.match[2].data))
+									$ok:=($oServer.options.webPortID#Num:C11($regex.matches[2].data))
 									
 								Else 
 									
@@ -326,7 +324,7 @@ $regex.match[1].data:="127.0.0.1"
 								$oSystem:=Get system info:C1571
 								
 								var $o : Object
-								$o:=$oSystem.networkInterfaces.query("ipAddresses[].ip=:1"; $regex.match[1].data).pop()
+								$o:=$oSystem.networkInterfaces.query("ipAddresses[].ip=:1"; $regex.matches[1].data).pop()
 								
 								If ($o#Null:C1517)
 									

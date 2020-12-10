@@ -18,8 +18,9 @@ End if
 var $t : Text
 var $isFocused; $isMandatory; $withDefault : Boolean
 var $color : Integer
-var $action; $form; $o; $parameter; $rgx : Object
+var $action; $form; $o; $parameter : Object
 var $c : Collection
+var $rgx : cs:C1710.regex
 
 // ----------------------------------------------------
 Case of 
@@ -167,13 +168,11 @@ Case of
 												
 												If (Position:C15(String:C10($o.default.value()); "todayyesterdaytomorrow")=0)
 													
-													$rgx:=Rgx_match(New object:C1471(\
-														"pattern"; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$"; \
-														"target"; $o.default.value()))
+													$rgx:=cs:C1710.regex.new($o.default.value(); "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$").match()
 													
 													If ($rgx.success)
 														
-														$o.default.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.match[3].data); Num:C11($rgx.match[2].data); Num:C11($rgx.match[1].data))))
+														$o.default.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.matches[3].data); Num:C11($rgx.matches[2].data); Num:C11($rgx.matches[1].data))))
 														
 													End if 
 												End if 

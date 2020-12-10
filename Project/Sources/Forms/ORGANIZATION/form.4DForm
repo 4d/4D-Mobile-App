@@ -106,7 +106,8 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ORGANIZATION"
+					"method": "ORGANIZATION",
+					"focusable": false
 				},
 				"30_identifier.help": {
 					"type": "button",
@@ -119,9 +120,14 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ORGANIZATION"
+					"method": "ORGANIZATION",
+					"focusable": false
 				}
-			}
+			},
+			"entryOrder": [
+				"10_name",
+				"30_identifier"
+			]
 		}
 	],
 	"method": "ORGANIZATION",

@@ -314,25 +314,16 @@ Case of
 			
 			If (Length:C16($Txt_out)>0)
 				
-				//ARRAY TEXT($tTxt_buffer;0x0000)
-				//If (Rgx_MatchText (Get localized string($Obj_param.action);$Txt_out;->$tTxt_buffer)=0)
-				//If (Size of array($tTxt_buffer)>=2)
-				//$Obj_result.success:=True
-				//$Obj_result.version:=$tTxt_buffer{1}
-				//$Obj_result.build:=$tTxt_buffer{2}
-				// End if
+				var $rgx : cs:C1710.regex
+				$rgx:=cs:C1710.regex.new($Txt_out; "(?s-mi)Xcode (\\d{1,}(?:\\.\\d)*).*version\\s*([A-Z0-9]*)").match()
 				
-				$Obj_buffer:=Rgx_match(New object:C1471(\
-					"pattern"; "(?s-mi)Xcode (\\d{1,}(?:\\.\\d)*).*version\\s*([A-Z0-9]*)"; \
-					"target"; $Txt_out))
-				
-				If ($Obj_buffer.success)
+				If ($rgx.success)
 					
-					If ($Obj_buffer.match.length=3)
+					If ($rgx.matches.length=3)
 						
 						$Obj_result.success:=True:C214
-						$Obj_result.version:=$Obj_buffer.match[1].data
-						$Obj_result.build:=$Obj_buffer.match[2].data
+						$Obj_result.version:=$rgx.matches[1].data
+						$Obj_result.build:=$rgx.matches[2].data
 						
 					End if 
 				End if 

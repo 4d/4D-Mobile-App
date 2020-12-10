@@ -307,7 +307,22 @@
 					],
 					"method": "ObjectMethods/Button4.4dm"
 				}
-			}
+			},
+			"entryOrder": [
+				"Button3",
+				"Variable2",
+				"Variable1",
+				"Variable",
+				"Button",
+				"Button1",
+				"tab.list",
+				"tab.detail",
+				"Radio Button",
+				"Radio Button1",
+				"Input",
+				"Button2",
+				"Button4"
+			]
 		}
 	],
 	"$4d": {

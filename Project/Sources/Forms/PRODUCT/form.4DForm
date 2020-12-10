@@ -269,5 +269,6 @@
 			"View 1": {}
 		}
 	},
-	"method": "PRODUCT"
+	"method": "PRODUCT",
+	"geometryStamp": 14
 }
