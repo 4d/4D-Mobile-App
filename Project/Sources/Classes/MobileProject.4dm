@@ -21,27 +21,27 @@ Function main
 			
 			$Obj_result:=This:C1470.build()
 			
-			//If ($Obj_result.success)
-			
-			//If (Bool(This.input.run))
-			
-			//$Obj_result:=This.run()
-			
-			//If ($Obj_result.success)
-			//// Nothing to do
-			//$0.success:=True
-			//Else 
-			//// Error occurred while running project
-			//End if 
-			
-			//Else 
-			//// No run requested
-			//$0.success:=True
-			//End if 
-			
-			//Else 
-			//// Error occurred while building project
-			//End if 
+			If ($Obj_result.success)
+				
+				If (Bool:C1537(This:C1470.input.run))
+					
+					$Obj_result:=This:C1470.run()
+					
+					If ($Obj_result.success)
+						// Nothing to do
+						$0.success:=True:C214
+					Else 
+						// Error occurred while running project
+					End if 
+					
+				Else 
+					// No run requested
+					$0.success:=True:C214
+				End if 
+				
+			Else 
+				// Error occurred while building project
+			End if 
 			
 		Else 
 			// No build requested

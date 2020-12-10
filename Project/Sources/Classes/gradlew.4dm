@@ -19,11 +19,7 @@ Function assembleDebug
 	
 	If (This:C1470.errorStream=Null:C1517)
 		
-		If (This:C1470.ouputStream#Null:C1517)
-			$0.success:=(Position:C15("BUILD SUCCESSFUL"; This:C1470.outputStream)>0)  // Rebuilding project goes here
-		Else 
-			// ouputStream null
-		End if 
+		$0.success:=(This:C1470.outputStream#Null:C1517)
 		
 	Else   // errorStream not null
 		

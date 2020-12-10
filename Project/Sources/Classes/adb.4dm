@@ -21,7 +21,7 @@ Function listBootedDevices  // List booted devices
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd; "devices")
+	This:C1470.launch(This:C1470.cmd+" devices")
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -48,7 +48,7 @@ Function getAvdName
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd; "-s "+This:C1470.singleQuoted($1)+" emu avd name")
+	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" emu avd name")
 	
 	If ((This:C1470.outputStream#Null:C1517) & (String:C10(This:C1470.outputStream)#""))
 		
@@ -66,7 +66,6 @@ Function getAvdName
 		
 	Else 
 		// serial not found
-		$0.errors.push("Can't find an emulator with this serial")
 	End if 
 	
 	
@@ -125,7 +124,7 @@ Function getSerial
 	
 	If ($Obj_bootedDevices.success)
 		
-		$Obj_serial:=This:C1470.findSerial($Obj_bootedDevices.bootedDevices)
+		$Obj_serial:=This:C1470.findSerial($Obj_bootedDevices.bootedDevices; $1)
 		
 		If ($Obj_serial.success)
 			
@@ -161,19 +160,18 @@ Function waitForBoot
 		// Get emulator boot status
 		If (String:C10($1)="")
 			
-			This:C1470.launch(This:C1470.cmd; "shell getprop sys.boot_completed")
+			This:C1470.launch(This:C1470.cmd+" shell getprop sys.boot_completed")
 			
 		Else 
 			// Emulator already started, so we know its serial
 			
-			This:C1470.launch(This:C1470.cmd; "-s "+This:C1470.singleQuoted($1)+" shell getprop sys.boot_completed")
+			This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" shell getprop sys.boot_completed")
 			
 		End if 
 		
 		$stepTime:=Milliseconds:C459-$startTime
 		
 	Until (String:C10(This:C1470.outputStream)="1")\
-		 | ((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))\
 		 | ($stepTime>30000)
 	
 	Case of 
@@ -182,13 +180,17 @@ Function waitForBoot
 			
 			$0.success:=True:C214
 			
-		: ((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))  // Command failed
-			
-			$0.errors.push(This:C1470.errorStream)
-			
 		: ($stepTime>30000)  // Timeout
 			
 			$0.errors.push("Timeout when booting emulator")
+			
+			If ((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))  // Command failed
+				
+				$0.errors.push(This:C1470.errorStream)
+				
+			Else 
+				// No command error, just timeout
+			End if 
 			
 		Else 
 			
@@ -206,7 +208,7 @@ Function getDevicePackageList
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd; "-s "+This:C1470.singleQuoted($1)+" shell pm list packages")
+	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" shell pm list packages")
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -250,7 +252,7 @@ Function uninstallApp
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd; "-s "+This:C1470.singleQuoted($1)+" uninstall \""+$2+"\"")
+	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" uninstall \""+$2+"\"")
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -308,7 +310,7 @@ Function installApp
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd; "-s "+This:C1470.singleQuoted($1)+" install -t "+This:C1470.singleQuoted($2))
+	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" install -t "+This:C1470.singleQuoted($2.path))
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -357,7 +359,7 @@ Function startApp
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd; "-s "+This:C1470.singleQuoted($1)+" shell am start -n "+This:C1470.singleQuoted($2+"/"+$3))
+	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" shell am start -n "+This:C1470.singleQuoted($2+"/"+$3))
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	

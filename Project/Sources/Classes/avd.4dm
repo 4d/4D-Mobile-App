@@ -15,7 +15,7 @@ Function avdmanagerFile
 Function listAvds  // List emulators
 	var $0 : Text  // returns complete output
 	
-	This:C1470.launch(This:C1470.cmd; "list avd")
+	This:C1470.launch(This:C1470.cmd+" list avd")
 	$0:=This:C1470.errorStream
 	
 	
@@ -42,7 +42,7 @@ Function createAvd
 	var $2 : Text  // Package path of the system image for this AVD (e.g. 'system-images;android-29;google_apis;x86'
 	var $3 : Text  // The optional device definition to use. Can be a device index or id
 	
-	This:C1470.launch(This:C1470.cmd; "create avd -n \""+$1+"\" -k \""+$2+"\" --device \""+$3+"\"")
+	This:C1470.launch(This:C1470.cmd+" create avd -n \""+$1+"\" -k \""+$2+"\" --device \""+$3+"\"")
 	
 	$0:=This:C1470.errorStream
 	

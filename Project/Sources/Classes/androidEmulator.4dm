@@ -168,7 +168,7 @@ Function start  // Starts emulator
 		"errors"; New collection:C1472)
 	
 	This:C1470.asynchronous()\
-		.launch(This:C1470.cmd; "-avd \""+$1+"\" -no-boot-anim")
+		.launch(This:C1470.cmd+" -avd \""+$1+"\" -no-boot-anim")
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	If (Not:C34($0.success))

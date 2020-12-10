@@ -37,10 +37,10 @@ Class constructor
 	
 	This:C1470.package:=Lowercase:C14(String:C10(This:C1470.project.project.organization.identifier))
 	This:C1470.version:="debug"
-	//This.apk:=File(This.project.path).folder("app/build/outputs/apk").folder(This.version).file("app-"+This.version+".apk")
+	This:C1470.apk:=Folder:C1567(This:C1470.project.path).folder("app/build/outputs/apk").folder(This:C1470.version).file("app-"+This:C1470.version+".apk")
 	This:C1470.activity:="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
 	
-	This:C1470.avdName:="TestAndroid29Device4"  // Allowed characters are: a-z A-Z 0-9 . _ -
+	This:C1470.avdName:="TestAndroid29Device"  // Allowed characters are: a-z A-Z 0-9 . _ -
 	This:C1470.serial:=""
 	
 	This:C1470.init()
@@ -49,6 +49,15 @@ Class constructor
 Function init
 	This:C1470.setJavaHome()
 	This:C1470.setAndroidHome()
+	
+	If ((Not:C34(This:C1470.filesToCopy.exists))\
+		 | (Not:C34(This:C1470.templateFiles.exists))\
+		 | (Not:C34(This:C1470.templateForms.exists)))
+		This:C1470.postError("Missing directories for project templating")
+		This:C1470.isOnError:=True:C214
+	Else 
+		// All ok
+	End if 
 	
 	
 	//====================================================================
@@ -303,7 +312,6 @@ Function build
 	If (This:C1470.isOnError=False:C215)
 		
 		This:C1470.postStep("Checking APK")
-		This:C1470.apk:=File:C1566(This:C1470.project.path).folder("app/build/outputs/apk").folder(This:C1470.version).file("app-"+This:C1470.version+".apk")
 		$Obj_checkAPK:=This:C1470.gradlew.checkAPKExists(This:C1470.apk)
 		
 		If (Not:C34($Obj_checkAPK.success))
@@ -364,7 +372,6 @@ Function run
 	Else 
 		// Already on error
 	End if 
-	
 	
 	//_____________________________________________________
 	// GET EMULATOR SERIAL
@@ -428,7 +435,7 @@ Function run
 	
 	If (This:C1470.isOnError=False:C215)
 		
-		This:C1470.post("Waiting for emulator boot")
+		This:C1470.postStep("Waiting for emulator boot")
 		
 		$Obj_wait:=This:C1470.adb.waitForBoot(This:C1470.serial)
 		
