@@ -110,7 +110,21 @@ Case of
 			
 			For each ($o; $oResources.folders())
 				
-				$oFormatter:=ob_parseFile($o.file("manifest.json"))
+				var $manifest : Object
+				$manifest:=$o.file("manifest.json")
+				
+				If (False:C215)  // FEATURE.wip("formatMarketPlace")  // Support zip when listing
+					If ($o.extension=SHARED.archiveExtension)
+/* START HIDING ERRORS */$errors:=err.hide()
+						$archive:=ZIP Read archive:C1637($o)
+/* STOP HIDING ERRORS */$errors.show()
+						If ($archive#Null:C1517)
+							$manifest:=$archive.root
+						End if 
+					End if 
+				End if 
+				
+				$oFormatter:=ob_parseFile($manifest)
 				
 				If ($oFormatter.success)
 					
