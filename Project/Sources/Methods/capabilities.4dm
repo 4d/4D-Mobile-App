@@ -476,12 +476,11 @@ Case of
 			
 		End if 
 		
-		If (Value type:C1509($Obj_in.associatedDomains)=Is collection:K8:32)
+		If (Value type:C1509($Obj_in.associatedDomain)=Is text:K8:3)
 			
-			$Obj_out.entitlements.push(New object:C1471(\
-				"com.apple.developer.associated-domains"; $Obj_in.associatedDomains))
-			$Obj_out.info.push(New object:C1471(\
-				"com.apple.developer.associated-domains"; $Obj_in.associatedDomains))  // to get it in iOS runtimes
+			$Obj_out.entitlements.push(New object:C1471("com.apple.developer.associated-domains"; \
+				New collection:C1472("applinks:"+$Obj_in.associatedDomain; "activitycontinuation:"+$Obj_in.associatedDomain)))
+			$Obj_out.settings.push(New object:C1471("entitlements"; New object:C1471("associatedDomain"; $Obj_in.associatedDomain)))  // to get it in iOS runtimes
 			
 		End if 
 		

@@ -25,7 +25,7 @@ If (False:C215)
 	C_OBJECT:C1216(mobile_Project_iOS; $1)
 	C_OBJECT:C1216(mobile_Project_iOS; $0)
 End if 
-
+TRACE:C157
 // ----------------------------------------------------
 // Initialisations
 $Lon_parameters:=Count parameters:C259
@@ -45,12 +45,10 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 		// Add choice lists if any to action parameters
 		actions("addChoiceList"; $Obj_in)
 		
-		If ($isDebug)
-			
-			// Cache the last build for debug purpose
-			ob_writeToFile($Obj_in; $Obj_cache.file("lastBuild.4dmobile"); True:C214)
-			
-		End if 
+		
+		// Cache the last build for debug purpose
+		ob_writeToFile($Obj_in; $Obj_cache.file("lastBuild.4dmobile"); True:C214)
+		
 		
 	Else 
 		
