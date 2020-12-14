@@ -25,7 +25,7 @@ If (False:C215)
 	C_OBJECT:C1216(mobile_Project_iOS; $1)
 	C_OBJECT:C1216(mobile_Project_iOS; $0)
 End if 
-TRACE:C157
+
 // ----------------------------------------------------
 // Initialisations
 $Lon_parameters:=Count parameters:C259
@@ -583,7 +583,7 @@ If ($Obj_in.create)
 					If (($associatedDomain[[Length:C16($associatedDomain)]])="/")  // strip last /
 						$associatedDomain:=Substring:C12($associatedDomain; 1; Length:C16($associatedDomain)-1)
 					End if 
-					$Obj_out.computedCapabilities.capabilities.associatedDomains:=New collection:C1472("applinks:"+$associatedDomain; "activitycontinuation:"+$associatedDomain)
+					$Obj_out.computedCapabilities.capabilities.associatedDomain:=$associatedDomain
 				End if 
 			End if 
 			
