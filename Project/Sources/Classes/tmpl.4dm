@@ -483,75 +483,78 @@ Function path($name : Text; $type : Text)->$template : 4D:C1709.folder
 	
 	$template:=Folder:C1567("😱")
 	
-	If ($formName[[1]]="/")  // Host database resources
+	If (Length:C16($formName)>0)
 		
-		$formName:=Delete string:C232($formName; 1; 1)  // Remove initial slash
-		
-		If (Path to object:C1547($formName).extension=SHARED.archiveExtension)  // Archive
+		If ($formName[[1]]="/")  // Host database resources
 			
-			$error:=cs:C1710.error.new().hide()
-			$archive:=ZIP Read archive:C1637(cs:C1710.path.new()["host"+$formType+"Forms"]().file($formName))
-			$error.show()
+			$formName:=Delete string:C232($formName; 1; 1)  // Remove initial slash
 			
-			If ($archive#Null:C1517)
+			If (Path to object:C1547($formName).extension=SHARED.archiveExtension)  // Archive
 				
-				$template:=$archive.root
+				$error:=cs:C1710.error.new().hide()
+				$archive:=ZIP Read archive:C1637(cs:C1710.path.new()["host"+$formType+"Forms"]().file($formName))
+				$error.show()
 				
-			End if 
-			
-		Else 
-			
-			$template:=Folder:C1567(cs:C1710.path.new()["host"+$formType+"Forms"]().folder($formName).platformPath; fk platform path:K87:2)
-			
-		End if 
-		
-		$success:=Bool:C1537($template.exists)
-		
-		If ($success)
-			
-			// Verify the structure validity
-			$folder:=cs:C1710.path.new()[$formType+"Forms"]()
-			
-			If ($folder#Null:C1517)
-				
-				$manifest:=$folder.file("manifest.json")
-				
-				If ($manifest.exists)
+				If ($archive#Null:C1517)
 					
-					$o:=JSON Parse:C1218($manifest.getText())
-					
-					If ($o.mandatory#Null:C1517)
-						
-						For each ($item; $o.mandatory) While ($success)
-							
-							$success:=$template.file($item).exists
-							
-						End for each 
-						
-					Else 
-						
-						RECORD.warning("No mandatory for: "+$manifest.path)
-						
-					End if 
-					
-				Else 
-					
-					RECORD.error("Missing manifest: "+$manifest.path)
+					$template:=$archive.root
 					
 				End if 
 				
 			Else 
 				
-				RECORD.error("Unmanaged form type: "+$formType)
+				$template:=Folder:C1567(cs:C1710.path.new()["host"+$formType+"Forms"]().folder($formName).platformPath; fk platform path:K87:2)
 				
 			End if 
+			
+			$success:=Bool:C1537($template.exists)
+			
+			If ($success)
+				
+				// Verify the structure validity
+				$folder:=cs:C1710.path.new()[$formType+"Forms"]()
+				
+				If ($folder#Null:C1517)
+					
+					$manifest:=$folder.file("manifest.json")
+					
+					If ($manifest.exists)
+						
+						$o:=JSON Parse:C1218($manifest.getText())
+						
+						If ($o.mandatory#Null:C1517)
+							
+							For each ($item; $o.mandatory) While ($success)
+								
+								$success:=$template.file($item).exists
+								
+							End for each 
+							
+						Else 
+							
+							RECORD.warning("No mandatory for: "+$manifest.path)
+							
+						End if 
+						
+					Else 
+						
+						RECORD.error("Missing manifest: "+$manifest.path)
+						
+					End if 
+					
+				Else 
+					
+					RECORD.error("Unmanaged form type: "+$formType)
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			// 👅 We assume that the integrated templates are well-formed!
+			$template:=Folder:C1567(cs:C1710.path.new()[$formType+"Forms"]().folder($formName).platformPath; fk platform path:K87:2)
+			
 		End if 
-		
-	Else 
-		
-		// 👅 We assume that the integrated templates are well-formed!
-		$template:=Folder:C1567(cs:C1710.path.new()[$formType+"Forms"]().folder($formName).platformPath; fk platform path:K87:2)
-		
 	End if 
 	
 	//============================================================================

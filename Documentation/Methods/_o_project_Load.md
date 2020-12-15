@@ -1,1 +1,0 @@
-﻿<!----------------------------------------------------project := project_Load ( pathname ) -> pathname (Text) -  Project pathname <- project (Object) -  Definition of the project updated if necessary-->project := project_Load ( Param_1 )
