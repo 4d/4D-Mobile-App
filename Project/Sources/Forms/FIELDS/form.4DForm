@@ -225,8 +225,9 @@
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
+								"onClick",
 								"onDoubleClick",
-								"onBeforeDataEntry"
+								"onBeforeKeystroke"
 							],
 							"header": {
 								"name": "Header3",
@@ -254,9 +255,10 @@
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
+								"onClick",
 								"onDoubleClick",
-								"onDataChange",
-								"onBeforeDataEntry"
+								"onBeforeKeystroke",
+								"onDataChange"
 							],
 							"header": {
 								"name": "Header2",
@@ -316,8 +318,7 @@
 							"styledText": false,
 							"contextMenu": "none",
 							"events": [
-								"onDoubleClick",
-								"onBeforeDataEntry"
+								"onDoubleClick"
 							],
 							"method": "FIELDS",
 							"footer": {

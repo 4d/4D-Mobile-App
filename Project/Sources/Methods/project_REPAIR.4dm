@@ -8,31 +8,31 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($Lon_actionIndex; $Lon_parameterIndex; $Lon_type)
-C_OBJECT:C1216($o; $Obj_dataModel; $Obj_project; $oo)
-C_COLLECTION:C1488($c)
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(project_REPAIR; $1)
 End if 
 
+var $actionIndex; $parameterIndex; $type : Integer
+var $dataModel; $o; $param; $project : Object
+var $c : Collection
+
 // ----------------------------------------------------
 // Initialisations
 If (Count parameters:C259>=1)
 	
-	$Obj_project:=$1
+	$project:=$1
 	
 Else 
 	
-	$Obj_project:=PROJECT  //(UI.pointer("project"))->
+	$project:=PROJECT  //(UI.pointer("project"))->
 	
 End if 
 
-ASSERT:C1129($Obj_project#Null:C1517)
+ASSERT:C1129($project#Null:C1517)
 
-$Obj_dataModel:=$Obj_project.dataModel
+$dataModel:=$project.dataModel
 
 /*
 =============================================================================================
@@ -40,7 +40,7 @@ $Obj_dataModel:=$Obj_project.dataModel
 =============================================================================================
 */
 
-If ($Obj_project.actions#Null:C1517)
+If ($project.actions#Null:C1517)
 	
 	$c:=New collection:C1472
 	$c[Is integer 64 bits:K8:25]:="number"
@@ -55,40 +55,40 @@ If ($Obj_project.actions#Null:C1517)
 	$c[Is time:K8:8]:="time"
 	$c[Is date:K8:7]:="date"
 	
-	For each ($o; $Obj_project.actions)
+	For each ($o; $project.actions)
 		
-		$Lon_parameterIndex:=0
+		$parameterIndex:=0
 		
-		If ($Obj_dataModel[String:C10($o.tableNumber)]#Null:C1517)
+		If ($dataModel[String:C10($o.tableNumber)]#Null:C1517)
 			
 			If ($o.parameters#Null:C1517)
 				
-				For each ($oo; $o.parameters)
+				For each ($param; $o.parameters)
 					
-					If ($Obj_dataModel[String:C10($o.tableNumber)][String:C10($oo.fieldNumber)]#Null:C1517)
+					If ($dataModel[String:C10($o.tableNumber)][String:C10($param.fieldNumber)]#Null:C1517)
 						
-						$Lon_type:=$Obj_dataModel[String:C10($o.tableNumber)][String:C10($oo.fieldNumber)].fieldType
+						$type:=$dataModel[String:C10($o.tableNumber)][String:C10($param.fieldNumber)].fieldType
 						
-						If ($c[$Lon_type]#$oo.type)
+						If ($c[$type]#$param.type)
 							
-							$oo.type:=$c[$Lon_type]
+							$param.type:=$c[$type]
 							
 							Case of 
 									
 									//……………………………………………………………………
-								: ($oo.type="date")
+								: ($param.type="date")
 									
-									$oo.format:="mediumDate"
+									$param.format:="mediumDate"
 									
 									//……………………………………………………………………
-								: ($oo.type="time")
+								: ($param.type="time")
 									
-									$oo.format:="hour"
+									$param.format:="hour"
 									
 									//……………………………………………………………………
 								Else 
 									
-									OB REMOVE:C1226($oo; "format")
+									OB REMOVE:C1226($param; "format")
 									
 									//……………………………………………………………………
 							End case 
@@ -102,11 +102,11 @@ If ($Obj_project.actions#Null:C1517)
 					Else 
 						
 						// THE FIELD DOESN'T EXIST ANYMORE
-						$o.parameters.remove($Lon_parameterIndex)
+						$o.parameters.remove($parameterIndex)
 						
 					End if 
 					
-					$Lon_parameterIndex:=$Lon_parameterIndex+1
+					$parameterIndex:=$parameterIndex+1
 					
 				End for each 
 			End if 
@@ -114,18 +114,18 @@ If ($Obj_project.actions#Null:C1517)
 		Else 
 			
 			// THE TABLE DOESN'T EXIST ANYMORE
-			$Obj_project.actions.remove($Lon_actionIndex)
+			$project.actions.remove($actionIndex)
 			
 		End if 
 		
-		$Lon_actionIndex:=$Lon_actionIndex+1
+		$actionIndex:=$actionIndex+1
 		
 	End for each 
 	
-	If ($Obj_project.actions.length=0)
+	If ($project.actions.length=0)
 		
 		// NO MORE ACTION
-		OB REMOVE:C1226($Obj_project; "actions")
+		OB REMOVE:C1226($project; "actions")
 		
 	End if 
 End if 
@@ -138,15 +138,9 @@ End if
 
 For each ($o; Form:C1466.audit.errors)
 	
-	$Obj_project[$o.tab][$o.table]:=New object:C1471
+	$project[$o.tab][$o.table]:=New object:C1471
 	
 End for each 
 
 OB REMOVE:C1226(Form:C1466; "audit")
 Form:C1466.status.project:=True:C214
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

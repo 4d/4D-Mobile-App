@@ -1,84 +1,72 @@
 Class extends widget
 
-Class constructor
-	
-	C_TEXT:C284($1)
-	C_VARIANT:C1683($2)
+Class constructor($name : Text; $datasource : Variant)
 	
 	If (Count parameters:C259>=2)
 		
-		Super:C1705($1; $2)
+		Super:C1705($name; $datasource)
 		
 	Else 
 		
-		Super:C1705($1)
+		Super:C1705($name)
 		
 	End if 
 	
 	//========================================================
-Function asynchronous
-	var $0 : Object
+Function asynchronous()->$this : cs:C1710.thermometer
 	
 	This:C1470.indicatorType(Asynchronous progress bar:K42:36)
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	//========================================================
-Function isAsynchronous
-	var $0 : Boolean
+Function isAsynchronous()->$yes : Boolean
 	
 	var $type : Integer
 	
 	$type:=This:C1470.getIndicatorType()
 	
-	$0:=($type=Asynchronous progress bar:K42:36) | ($type=Barber shop:K42:35)
+	$yes:=($type=Asynchronous progress bar:K42:36) | ($type=Barber shop:K42:35)
 	
 	//========================================================
-Function barber
-	var $0 : Object
+Function barber->$this : cs:C1710.thermometer
 	
 	This:C1470.indicatorType(Barber shop:K42:35)
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	//========================================================
-Function isBarber
-	var $0 : Boolean
+Function isBarber()->$yes : Boolean
 	
-	$0:=(This:C1470.getIndicatorType=Barber shop:K42:35)
+	$yes:=(This:C1470.getIndicatorType=Barber shop:K42:35)
 	
 	//========================================================
-Function progress
-	var $0 : Object
+Function progress->$this : cs:C1710.thermometer
 	
 	This:C1470.indicatorType(Progress bar:K42:34)
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	//========================================================
-Function isProgress
-	var $0 : Boolean
+Function isProgress()->$yes : Boolean
 	
-	$0:=(This:C1470.getIndicatorType=Progress bar:K42:34)
-	
-	//========================================================
-Function indicatorType
-	var $0 : Object
-	var $1 : Integer
-	
-	OBJECT SET INDICATOR TYPE:C1246(*; This:C1470.name; $1)
-	This:C1470.indicatorType:=$1
-	
-	$0:=This:C1470
+	$yes:=(This:C1470.getIndicatorType=Progress bar:K42:34)
 	
 	//========================================================
-Function getIndicatorType
-	var $0 : Integer
+Function indicatorType($type : Integer)->$this : cs:C1710.thermometer
 	
-	$0:=OBJECT Get indicator type:C1247(*; This:C1470.name)
+	OBJECT SET INDICATOR TYPE:C1246(*; This:C1470.name; $type)
+	This:C1470.indicatorType:=$type
+	
+	$this:=This:C1470
 	
 	//========================================================
-Function start
+Function getIndicatorType()->$type : Integer
+	
+	$type:=OBJECT Get indicator type:C1247(*; This:C1470.name)
+	
+	//========================================================
+Function start()->$this : cs:C1710.thermometer
 	
 	If (Asserted:C1132(This:C1470.isAsynchronous()))
 		
@@ -86,11 +74,16 @@ Function start
 		
 	End if 
 	
+	$this:=This:C1470
+	
 	//========================================================
-Function stop
+Function stop()->$this : cs:C1710.thermometer
 	
 	If (Asserted:C1132(This:C1470.isAsynchronous()))
 		
 		This:C1470.setValue(0)
 		
 	End if 
+	
+	$this:=This:C1470
+	

@@ -796,3 +796,61 @@ Function formatMenu($e : Object)
 	
 	editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
+	//________________________________________________________________
+	// Manage the tags menu for label & shortlabel
+Function tagMenu($e : Object; $values : Collection)
+	
+	var $t : Text
+	var $isSelected : Boolean
+	var $end; $start : Integer
+	var $menu : cs:C1710.menu
+	
+	$menu:=cs:C1710.menu.new()
+	
+	For each ($t; $values)
+		
+		$menu.append($t; "%"+$t+"%")
+		
+	End for each 
+	
+	If ($e.code=On Before Keystroke:K2:6)
+		
+		This:C1470.fieldList.popup($menu; $values[0])
+		
+	Else 
+		
+		$menu.popup($values[0])
+		
+	End if 
+	
+	If ($menu.selected)
+		
+		$t:=Get edited text:C655
+		GET HIGHLIGHT:C209(*; $e.columnName; $start; $end)
+		
+		$isSelected:=($end>$start)
+		
+		If ($isSelected)
+			
+			// Replace the selection by the string to be inserted
+			// and select the added chain.
+			$t:=Substring:C12($t; 1; $start-1)+$menu.choice+Substring:C12($t; $end)
+			$end:=$end+Length:C16($menu.choice)
+			HIGHLIGHT TEXT:C210(*; $e.columnName; $start; $end)
+			
+		Else 
+			
+			$t:=Substring:C12($t; 1; $start-1)+$menu.choice+Substring:C12($t; $end)
+			$end:=$start+Length:C16($menu.choice)
+			
+			HIGHLIGHT TEXT:C210(*; $e.columnName; $end; $end)
+			
+		End if 
+		
+		//%W-533.3
+		Self:C308->{Self:C308->}:=$t
+		//%W+533.3
+		
+		This:C1470.field($e.row)[$e.columnName]:=$t
+		
+	End if 

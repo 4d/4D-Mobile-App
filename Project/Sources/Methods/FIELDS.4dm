@@ -128,20 +128,58 @@ Else   // <== WIDGETS METHOD
 					//_______________________________
 				: ($e.code=On Clicked:K2:4)
 					
-					$ƒ.fieldList.updateDefinition()
-					
 					Case of 
 							
-							//______________________________________________________
+							//........................................
 						: ($e.row=Null:C1517)
 							
 							// NO SELECTION
+							
 							//........................................
-						: ($e.columnName=$ƒ.icons.name)  // Open the fields icons picker
+						: ($e.columnName=$ƒ.icons.name)
 							
-							$ƒ.iconPicker($e)
+							$ƒ.iconPicker($e)  // Open the fields icons picker
 							
-							//______________________________________________________
+							//........................................
+						: ($e.columnName=$ƒ.shortLabels.name)\
+							 | ($e.columnName=$ƒ.labels.name)
+							
+							If (Is editing text:C1744)
+								If (Contextual click:C713)  // Propose the tags to be inserted
+									
+									If ($ƒ.popup=Null:C1517)  // Stop re-antrance
+										
+										$ƒ.popup:=True:C214
+										$ƒ.tagMenu($e; New collection:C1472("length"))
+										
+									Else 
+										
+										OB REMOVE:C1226($ƒ; "popup")
+										
+									End if 
+								End if 
+							End if 
+							
+							//........................................
+						: ($e.columnName=$ƒ.titles.name)
+							
+							If (Is editing text:C1744)
+								If (Contextual click:C713)  // Propose the tags to be inserted
+									
+									If ($ƒ.popup=Null:C1517)  // Stop re-antrance
+										
+										$ƒ.popup:=True:C214
+										$ƒ.tagMenu($e; New collection:C1472("name"))
+										
+									Else 
+										
+										OB REMOVE:C1226($ƒ; "popup")
+										
+									End if 
+								End if 
+							End if 
+							
+							//........................................
 					End case 
 					
 					//_______________________________
@@ -169,6 +207,42 @@ Else   // <== WIDGETS METHOD
 					End if 
 					
 					$ƒ.inEdition:=$ƒ.fieldList
+					
+					//_______________________________
+				: ($e.code=On Before Keystroke:K2:6)
+					
+					Case of 
+							
+							//........................................
+						: ($e.row=Null:C1517)
+							
+							// NO SELECTION
+							
+							//........................................
+						: ($e.columnName=$ƒ.shortLabels.name)\
+							 | ($e.columnName=$ƒ.labels.name)
+							
+							If (Keystroke:C390="%")
+								
+								FILTER KEYSTROKE:C389("")
+								
+								$ƒ.tagMenu($e; New collection:C1472("length"))  // Propose the tags to be inserted
+								
+							End if 
+							
+							//........................................
+						: ($e.columnName=$ƒ.titles.name)
+							
+							If (Keystroke:C390="%")
+								
+								FILTER KEYSTROKE:C389("")
+								
+								$ƒ.tagMenu($e; New collection:C1472("name"))  // Propose the tags to be inserted
+								
+							End if 
+							
+							//........................................
+					End case 
 					
 					//_______________________________
 			End case 
