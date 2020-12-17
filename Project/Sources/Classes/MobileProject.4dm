@@ -13,6 +13,10 @@ Function main
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
+	// For debugging
+	This:C1470.input.build:=True:C214
+	This:C1470.input.run:=True:C214
+	
 	$Obj_result:=This:C1470.create()
 	
 	If ($Obj_result.success)

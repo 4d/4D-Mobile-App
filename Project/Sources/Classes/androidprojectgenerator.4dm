@@ -4,9 +4,15 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.androidprojectgeneratorCmd:="androidprojectgenerator"
-	This:C1470.kotlincCmd:=This:C1470.kotlincFile().path
-	This:C1470.chmodCmd:="chmod"
+	If (Is macOS:C1572)
+		This:C1470.androidprojectgeneratorCmd:="androidprojectgenerator"
+		This:C1470.kotlincCmd:="/usr/local/bin/kotlinc"
+		This:C1470.chmodCmd:="chmod"
+	Else 
+		This:C1470.androidprojectgeneratorCmd:="java -jar androidprojectgenerator.jar"
+		This:C1470.kotlincCmd:="C:/Users/Test/kotlinc/bin/kotlinc.bat"
+	End if 
+	
 	
 	
 Function generate
@@ -23,10 +29,11 @@ Function generate
 	This:C1470.setDirectory(path.scripts())
 	
 	This:C1470.launch(This:C1470.androidprojectgeneratorCmd\
-		+" --project-editor "+This:C1470.singleQuoted($1.path)\
-		+" --files-to-copy "+This:C1470.singleQuoted($2.path)\
-		+" --template-files "+This:C1470.singleQuoted($3.path)\
-		+" --template-forms "+This:C1470.singleQuoted($4.path))
+		+" --project-editor \""+$1.path\
+		+"\" --files-to-copy \""+$2.path\
+		+"\" --template-files \""+$3.path\
+		+"\" --template-forms \""+$4.path\
+		+"\"")
 	
 	$0.success:=(This:C1470.errorStream=Null:C1517)
 	
@@ -41,16 +48,29 @@ Function buildEmbeddedDataLib
 	var $0 : Object
 	var $1 : Text  // Project path
 	var $2 : Text  // package name (app name)
+	var $staticDataInitializerFile; $targetFile : 4D:C1709.File
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.kotlincCmd\
-		+" "+This:C1470.singleQuoted($1+"buildSrc/src/main/java/"+$2+".android.build/database/StaticDataInitializer.kt")\
-		+" -d "+This:C1470.singleQuoted($1+"buildSrc/libs/prepopulation.jar"))
+	$staticDataInitializerFile:=File:C1566($1+"buildSrc/src/main/java/"+$2+".android.build/database/StaticDataInitializer.kt")
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+	If ($staticDataInitializerFile.exists)
+		
+		$targetFile:=File:C1566($1+"buildSrc/libs/prepopulation.jar")
+		
+		This:C1470.launch(This:C1470.kotlincCmd\
+			+" -verbose \""+$staticDataInitializerFile.path+"\""\
+			+" -d \""+$targetFile.path+"\"")
+		
+		$0.success:=$targetFile.exists
+		
+	Else 
+		
+		$0.errors.push("Missing file : "+$staticDataInitializerFile.path)
+		
+	End if 
 	
 	If (Not:C34($0.success))
 		$0.errors.push("Failed to build embedded data library")

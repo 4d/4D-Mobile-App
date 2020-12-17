@@ -152,6 +152,11 @@ Class constructor
 	
 	This:C1470.cmd:=This:C1470.emulatorFile().path
 	
+	If (Is Windows:C1573)
+		This:C1470.cmd:=This:C1470.cmd+".exe"
+	Else 
+		// Already set
+	End if 
 	
 Function emulatorFile
 	var $0 : 4D:C1709.File

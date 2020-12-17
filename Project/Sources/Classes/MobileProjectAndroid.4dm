@@ -7,18 +7,15 @@ Class constructor
 	
 	This:C1470.isOnError:=False:C215
 	
-	This:C1470.androidProcess:=cs:C1710.androidProcess.new()
-	This:C1470.androidprojectgenerator:=cs:C1710.androidprojectgenerator.new()
-	This:C1470.gradlew:=cs:C1710.gradlew.new()
-	This:C1470.avd:=cs:C1710.avd.new()
-	This:C1470.emulator:=cs:C1710.androidEmulator.new()
-	This:C1470.adb:=cs:C1710.adb.new()
-	
-	
-	This:C1470.filesToCopy:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__FILES_TO_COPY__")
-	This:C1470.templateFiles:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FILES__")
-	This:C1470.templateForms:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FORMS__")
-	
+	If (Is macOS:C1572)
+		This:C1470.filesToCopy:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__FILES_TO_COPY__")
+		This:C1470.templateFiles:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FILES__")
+		This:C1470.templateForms:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FORMS__")
+	Else 
+		This:C1470.filesToCopy:=Folder:C1567("C:/Users/test/Downloads/__FILES_TO_COPY__")
+		This:C1470.templateFiles:=Folder:C1567("C:/Users/test/Downloads/__TEMPLATE_FILES__")
+		This:C1470.templateForms:=Folder:C1567("C:/Users/test/Downloads/__TEMPLATE_FORMS__")
+	End if 
 	
 	// Artifactory identifiers
 	This:C1470.artifactoryIds:=New collection:C1472
@@ -26,6 +23,7 @@ Class constructor
 	This:C1470.artifactoryIds.push(New object:C1471("ARTIFACTORY_PASSWORD"; "password"))
 	This:C1470.artifactoryIds.push(New object:C1471("ARTIFACTORY_MACHINE_IP"; "192.168.5.12"))
 	
+	This:C1470.androidProcess:=cs:C1710.androidProcess.new()
 	
 	This:C1470.project:=OB Copy:C1225(This:C1470.input)
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
@@ -42,6 +40,13 @@ Class constructor
 	
 	This:C1470.avdName:="TestAndroid29Device"  // Allowed characters are: a-z A-Z 0-9 . _ -
 	This:C1470.serial:=""
+	
+	
+	This:C1470.androidprojectgenerator:=cs:C1710.androidprojectgenerator.new()
+	This:C1470.gradlew:=cs:C1710.gradlew.new(This:C1470.project.path)
+	This:C1470.avd:=cs:C1710.avd.new()
+	This:C1470.emulator:=cs:C1710.androidEmulator.new()
+	This:C1470.adb:=cs:C1710.adb.new()
 	
 	This:C1470.init()
 	
@@ -188,18 +193,24 @@ Function create
 	
 	If (This:C1470.isOnError=False:C215)
 		
-		This:C1470.postStep("Changing gradlew access rights")
-		
-		$Obj_chmod:=This:C1470.androidprojectgenerator.chmodGradlew(This:C1470.project.path)
-		
-		If (Not:C34($Obj_chmod.success))
+		If (Is macOS:C1572)
 			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_chmod.errors.join("\r"))
-			$0.errors.combine($Obj_chmod.errors)
+			This:C1470.postStep("Changing gradlew access rights")
+			
+			$Obj_chmod:=This:C1470.androidprojectgenerator.chmodGradlew(This:C1470.project.path)
+			
+			If (Not:C34($Obj_chmod.success))
+				
+				This:C1470.isOnError:=True:C214
+				This:C1470.postError($Obj_chmod.errors.join("\r"))
+				$0.errors.combine($Obj_chmod.errors)
+				
+			Else 
+				// All ok
+			End if 
 			
 		Else 
-			// All ok
+			// Not need to change permissions on Windows
 		End if 
 		
 	Else 
@@ -312,6 +323,7 @@ Function build
 	If (This:C1470.isOnError=False:C215)
 		
 		This:C1470.postStep("Checking APK")
+		
 		$Obj_checkAPK:=This:C1470.gradlew.checkAPKExists(This:C1470.apk)
 		
 		If (Not:C34($Obj_checkAPK.success))

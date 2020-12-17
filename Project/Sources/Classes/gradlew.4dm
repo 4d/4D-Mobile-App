@@ -1,10 +1,15 @@
 Class extends androidProcess
 
 Class constructor
+	var $1 : Text  // Project path
 	
 	Super:C1705()
 	
-	This:C1470.cmd:="gradlew"
+	If (Is macOS:C1572)
+		This:C1470.cmd:="gradlew"
+	Else 
+		This:C1470.cmd:=Folder:C1567($1).file("gradlew.bat").path
+	End if 
 	
 	
 Function assembleDebug
