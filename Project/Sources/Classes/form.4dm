@@ -1,4 +1,8 @@
+Class extends tools
+
 Class constructor($method : Text)
+	
+	Super:C1705()
 	
 	This:C1470.name:=Current form name:C1298
 	This:C1470.window:=Current form window:C827

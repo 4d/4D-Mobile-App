@@ -420,7 +420,7 @@
 		"kind": "form"
 	},
 	"method": "FIELDS",
-	"geometryStamp": 4,
+	"geometryStamp": 11,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="172">
+﻿<?xml version="1.0" encoding="UTF-8"?><preferences stamp="174">
 	<com.4d>
 		<deployment>
 			<options/>
 		</deployment>
-		<general execute_host_database_event="true"/>
+		<general allow_user_settings="false" execute_host_database_event="true"/>
 		<compiler>
 			<options compilation_path="3" fat_binary="true" symbol_file="true"/>
 			<typage default_for_button="2"/>

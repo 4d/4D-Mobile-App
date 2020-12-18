@@ -279,3 +279,20 @@ Function multistyleCompatibility
 	$0:=Replace string:C233($0; "&"; "&amp;")
 	$0:=Replace string:C233($0; "<"; "&lt;")
 	$0:=Replace string:C233($0; ">"; "&gt;")
+	
+	//====================================================================
+	// Identical to the Choose command
+	// but without error because it does not evaluate all members.
+Function choose($requirement)->$choosed
+	var ${2} : Object
+	
+	If (Value type:C1509($requirement)=Is real:K8:4)\
+		 | (Value type:C1509($requirement)=Is longint:K8:6)
+		
+		$choosed:=${Num:C11($requirement)+2}.call()
+		
+	Else 
+		
+		$choosed:=${3-Num:C11(Bool:C1537($requirement))}.call()
+		
+	End if 

@@ -47,7 +47,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$str:=cs:C1710.str.new()
 	
 	// Load internal templates
-	$internal:=path[$ƒ.type+"Forms"]()
+	$internal:=cs:C1710.path.new()[$ƒ.type+"Forms"]()
 	
 	// Load the global manifest
 	$manifest:=JSON Parse:C1218($internal.file("manifest.json").getText())
@@ -71,7 +71,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	End for each 
 	
 	// Search for templates into the host database
-	$user:=path["host"+$ƒ.type+"Forms"]()
+	$user:=cs:C1710.path.new()["host"+$ƒ.type+"Forms"]()
 	
 	If ($user.exists)
 		
@@ -241,7 +241,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		
 	End if 
 	
-	$isSelected:=(Form:C1466.$dialog.VIEWS.template.path.fullName=$template.fullName)
+	$isSelected:=(String:C10(Form:C1466.$dialog[Current form name:C1298].template.path.fullName)=$template.fullName)
 	
 	If ($template.extension=SHARED.archiveExtension)  // Archive
 		
@@ -362,7 +362,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				If ($svg.success)
 					
 					// Add the css reference
-					$svg.styleSheet(path.templates().file("template.css"))
+					$svg.styleSheet(cs:C1710.path.new().templates().file("template.css"))
 					
 					$p:=$svg.picture()
 					CREATE THUMBNAIL:C679($p; $p; $ƒ.cell.width; $ƒ.cell.height-40)

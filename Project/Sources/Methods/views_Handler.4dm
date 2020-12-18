@@ -109,6 +109,9 @@ If (OB Is empty:C1297($context))  // First load
 	
 End if 
 
+var $view : cs:C1710.VIEWS
+$view:=cs:C1710.VIEWS.new($form)  //#TEMPO
+
 // ----------------------------------------------------
 Case of 
 		
@@ -190,7 +193,7 @@ Case of
 				($form.tabdetail.pointer())->:=Num:C11($context.selector=2)
 				
 				// Draw the table list
-				($form.tableWidget.pointer())->:=tables_Widget($datamodel; New object:C1471(\
+				($form.tableWidget.pointer())->:=$view.buidTableWidget($datamodel; New object:C1471(\
 					"tableNumber"; $context.tableNum()))
 				
 				SVG SHOW ELEMENT:C1108(*; $form.tableWidget.name; $context.tableNum(); 0)
@@ -217,7 +220,7 @@ Case of
 			: ($codeEvent=On Timer:K2:25)
 				
 				SET TIMER:C645(0)
-				$typeForm:=$context.typeForm()
+				$typeForm:=$view.typeForm()
 				
 				If ($datamodel=Null:C1517) | OB Is empty:C1297($datamodel)
 					
@@ -234,7 +237,7 @@ Case of
 				End if 
 				
 				// Draw the table list
-				($form.tableWidget.pointer())->:=tables_Widget($datamodel; New object:C1471(\
+				($form.tableWidget.pointer())->:=$view.buidTableWidget($datamodel; New object:C1471(\
 					"tableNumber"; $context.tableNum()))
 				
 				SVG SHOW ELEMENT:C1108(*; $form.tableWidget.name; $context.tableNum(); 0)
@@ -273,7 +276,7 @@ Case of
 								
 							End if 
 							
-							If (Bool:C1537($context.template.path.exists))
+							If (Bool:C1537($view.template.path.exists))
 								
 								// Update lists
 								$context.update:=True:C214
@@ -285,8 +288,6 @@ Case of
 							Else 
 								
 								If (Bool:C1537(Form:C1466.$dialog.picker))
-									
-									//if (Length($formName)>0)
 									
 									If (Length:C16(String:C10($context.template.name))>0)
 										
@@ -310,7 +311,7 @@ Case of
 										$form.fieldGroup.hide()
 										$form.previewGroup.hide()
 										
-										views_LAYOUT_PICKER($typeForm)
+										$view.templatePicker($typeForm)
 										
 									End if 
 								End if 
@@ -332,7 +333,7 @@ Case of
 			
 			OB REMOVE:C1226($context; "update")
 			
-			$o:=cs:C1710.VIEWS.new($form).fieldList($context.tableNum())
+			$o:=$view.fieldList($context.tableNum())
 			
 			If ($o.success)
 				
@@ -407,12 +408,12 @@ Case of
 			End if 
 		End if 
 		
-		$form.scrollBar.setVisible(($context.typeForm()="detail") & ($form.preview.visible()) & (Num:C11($context.previewHeight)>460))
+		$form.scrollBar.setVisible(($view.typeForm()="detail") & ($form.preview.visible()) & (Num:C11($context.previewHeight)>460))
 		
 		If (Bool:C1537($context.picker))
 			
 			// Display the template picker
-			views_LAYOUT_PICKER($typeForm)
+			$view.templatePicker($typeForm)
 			
 		End if 
 		
@@ -473,7 +474,7 @@ Case of
 		
 		// quand la class VIEWS sera complète il n'y aura plus besoin de $form
 		// et cet appel pourra être directement fait depuis project_MESSAGES ?
-		cs:C1710.VIEWS.new($form).setTemplate($IN)
+		$view.setTemplate($IN)
 		
 		//=========================================================
 	: ($IN.action="show")
@@ -508,7 +509,7 @@ Case of
 		
 		OBJECT SET FONT STYLE:C166(*; $form.selectors.name; Plain:K14:1)
 		
-		$t:="tab."+$context.typeForm()
+		$t:="tab."+$view.typeForm()
 		OBJECT SET FONT STYLE:C166(*; $t; Bold:K14:2)
 		
 		$t:=Replace string:C233($t; "."; "")
@@ -540,7 +541,7 @@ Case of
 				"fill"; UI.selectedColorFill)
 			
 			$context.update:=True:C214
-			$context.picker:=(String:C10(Form:C1466[$context.typeForm()][$context.tableNumber].form)="")
+			$context.picker:=(String:C10(Form:C1466[$view.typeForm()][$context.tableNumber].form)="")
 			
 		End if 
 		

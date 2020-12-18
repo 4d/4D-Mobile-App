@@ -73,8 +73,8 @@ Function scripts  // scripts folder
 	
 	C_OBJECT:C1216($0)
 	
-	  // Unsandboxed for use with LEP
-	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath;fk platform path:K87:2)
+	// Unsandboxed for use with LEP
+	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target
@@ -169,7 +169,7 @@ Function databasePreferences  //  Writable user database preferences folder
 	
 	C_OBJECT:C1216($0)
 	
-	This:C1470.target:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14;*).name)
+	This:C1470.target:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14; *).name)
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target
@@ -180,7 +180,7 @@ Function projects  // Projects folder
 	C_OBJECT:C1216($0)
 	C_BOOLEAN:C305($1)
 	
-	This:C1470.target:=Folder:C1567(fk database folder:K87:14;*).folder("Mobile Projects")
+	This:C1470.target:=Folder:C1567(fk database folder:K87:14; *).folder("Mobile Projects")
 	
 	If (Count parameters:C259>=1)
 		
@@ -201,9 +201,9 @@ Function products  // Products folder
 	C_BOOLEAN:C305($1)
 	C_OBJECT:C1216($o)
 	
-	  //#WARNING - Folder(Database folder;*).parent = Null
-	$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14;*))
-	This:C1470.target:=Folder:C1567($o.parentFolder+$o.name+" - Mobile"+Folder separator:K24:12;fk platform path:K87:2)
+	//#WARNING - Folder(Database folder;*).parent = Null
+	$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14; *))
+	This:C1470.target:=Folder:C1567($o.parentFolder+$o.name+" - Mobile"+Folder separator:K24:12; fk platform path:K87:2)
 	
 	If (Count parameters:C259>=1)
 		
@@ -224,13 +224,13 @@ Function host  // Mobile folder
 	C_BOOLEAN:C305($1)
 	C_OBJECT:C1216($o)
 	
-	$o:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16;*);fk platform path:K87:2)
+	$o:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16; *); fk platform path:K87:2)
 	
 	If ($o.file("mobile").exists)
 		
 		If ($o.file("mobile").original#Null:C1517)
 			
-			  // Could be an alias
+			// Could be an alias
 			This:C1470.target:=$o.file("mobile").original
 			
 		Else 
@@ -304,7 +304,7 @@ Function hostIcons  // Icons folder
 	C_OBJECT:C1216($0)
 	C_BOOLEAN:C305($1)
 	
-	This:C1470.target:=This:C1470.host().folder("medias").folder("icons")
+	This:C1470.target:=This:C1470.host().folder("medias/icons")
 	
 	If (Count parameters:C259>=1)
 		

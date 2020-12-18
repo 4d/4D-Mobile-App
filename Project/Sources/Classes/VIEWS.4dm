@@ -62,11 +62,9 @@ Class constructor
 	
 	//============================================================================
 Function _update
-	var $t : Text
 	
-	$t:=Current form name:C1298  // #TEMPORARY_COMPATIBILITY
-	This:C1470.template:=Form:C1466.$dialog[$t].template
-	This:C1470.manifest:=This:C1470.template.manifest
+	This:C1470.template:=Form:C1466.$dialog[Current form name:C1298].template
+	This:C1470.manifest:=This:C1470.choose(This:C1470.template=Null:C1517; Formula:C1597(Null:C1517); Formula:C1597(This:C1470.template.manifest))
 	
 	//============================================================================
 	// Redraw the preview
@@ -284,7 +282,7 @@ Function fieldList($table : Variant)->$result : Object
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isRelationToMany($tableModel[$key]))
 						
-						If (Form:C1466.$dialog.VIEWS.template.detailform)
+						If (Form:C1466.$dialog[Current form name:C1298].template.detailform)
 							
 							$field:=OB Copy:C1225($tableModel[$key])
 							
@@ -380,7 +378,7 @@ Function setTemplate($browser : Object)
 				
 				// Show browser
 				$o:=New object:C1471(\
-					"url"; Get localized string:C991("res_"+$context.typeForm()+"Forms"))
+					"url"; Get localized string:C991("res_"+This:C1470.typeForm()+"Forms"))
 				
 				This:C1470.form.form.call(New collection:C1472("initBrowser"; $o))
 				
@@ -464,9 +462,9 @@ Function setTemplate($browser : Object)
 			
 			If ($context[$tableID][$selector][$newTemplate]=Null:C1517)
 				
-				// Create a new binding
 				If ($target.fields=Null:C1517)
 					
+					// Create a new binding
 					$c:=New collection:C1472
 					
 				Else 
@@ -525,3 +523,171 @@ Function setTemplate($browser : Object)
 Function templatePicker($formType : Text)
 	
 	views_LAYOUT_PICKER($formType)
+	
+	//============================================================================
+	// Building the table selector
+Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Picture
+	
+	var $formName; $name; $table; $typeForm : Text
+	var $picture : Picture
+	var $isSelected : Boolean
+	var $x : Blob
+	var $params; $str : Object
+	var $formRoot : 4D:C1709.Directory
+	var $file : 4D:C1709.Document
+	var $error : cs:C1710.error
+	var $svg : cs:C1710.svg
+	
+	// Optional parameters
+	If (Count parameters:C259>=2)
+		
+		$params:=$options
+		
+	Else 
+		
+		// No options
+		$params:=New object:C1471
+		
+	End if 
+	
+	$params.x:=0  // Start x
+	$params.y:=0  // Start y
+	
+	$params.cell:=New object:C1471(\
+		"width"; 115; \
+		"height"; 110)
+	
+	$params.icon:=New object:C1471(\
+		"width"; 80; \
+		"height"; 110)
+	
+	$params.hOffset:=5
+	$params.maxChar:=Choose:C955(Get database localization:C1009="ja"; 7; 15)
+	
+	$params.selectedFill:=UI.colors.backgroundSelectedColor.hex
+	$params.selectedStroke:=UI.colors.strokeColor.hex
+	
+	$str:=cs:C1710.str.new()
+	$error:=cs:C1710.error.new()
+	$svg:=cs:C1710.svg.new()
+	
+	//var $formData : Object
+	//$formData:=Form.$dialog[Current form name]
+	
+	If ($dataModel#Null:C1517)
+		
+		$typeForm:=This:C1470.typeForm()
+		
+/* START HIDING ERRORS */
+		$error.hide()
+		
+		For each ($table; $dataModel)
+			
+			$isSelected:=($table=String:C10($params.tableNumber))
+			
+			// Create a table group filled according to selected status
+			$svg.layer($table).fill(Choose:C955($isSelected; $params.selectedFill; "none"))
+			
+			If ($svg.useOf($table))
+				
+				// Background
+				$svg.rect($params.cell.width; $params.cell.height)\
+					.position($params.x+0.5; $params.y+0.5)\
+					.stroke(Choose:C955($isSelected; $params.selectedStroke; "none"))
+				
+				// Put the icon [
+				If (Form:C1466[$typeForm][$table].form=Null:C1517)
+					
+					// No form selected
+					$file:=File:C1566("/RESOURCES/templates/form/"+$typeForm+"/defaultLayoutIcon.png")
+					
+				Else 
+					
+					$formName:=String:C10(Form:C1466[$typeForm][$table].form)
+					$formRoot:=tmpl_form($formName; $typeForm)
+					
+					If ($formRoot.exists)
+						
+						$file:=$formRoot.file("layoutIconx2.png")
+						
+						If (Not:C34($file.exists))
+							
+							$file:=File:C1566("/RESOURCES/images/noIcon.svg")
+							$svg.setAttribute("tips"; Replace string:C233($formName; "/"; ""); $svg.fetch($table))
+							
+						End if 
+						
+					Else 
+						
+						// Error
+						$file:=File:C1566("/RESOURCES/images/errorIcon.svg")
+						
+					End if 
+				End if 
+				
+				If ($formRoot.extension=SHARED.archiveExtension)  // Archive
+					
+					$x:=$file.getContent()
+					BLOB TO PICTURE:C682($x; $picture)
+					CLEAR VARIABLE:C89($x)
+					
+					CREATE THUMBNAIL:C679($picture; $picture; $params.icon.width; $params.icon.width)
+					$svg.image($picture).position($params.x+18; 5)
+					CLEAR VARIABLE:C89($picture)
+					
+				Else 
+					
+					$svg.image($file)\
+						.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
+						.dimensions($params.icon.width; $params.icon.width)
+					
+				End if 
+				
+				// Avoid too long name
+				$name:=$str.setText($dataModel[$table][""].name).truncate($params.maxChar)
+				
+				$svg.textArea($name)\
+					.position($params.x; $params.cell.height-18)\
+					.width($params.cell.width)\
+					.fill(Choose:C955($isSelected; $params.selectedStroke; "dimgray"))\
+					.alignment(Align center:K42:3)\
+					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
+				
+				// Border & reactive 'button'
+				$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
+					.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\
+					.stroke(Choose:C955($isSelected; $params.selectedStroke; "none"))\
+					.fill("white")\
+					.fillOpacity(0.01)
+				
+				If ($name#$dataModel[$table][""].name)  // Set a tips
+					
+					$svg.setAttribute("tips"; $dataModel[$table][""].name; $svg.fetch($table))
+					
+				End if 
+			End if 
+			
+			$params.x:=$params.x+$params.cell.width+$params.hOffset
+			
+		End for each 
+		
+/* STOP HIDING ERRORS */
+		$error.show()
+		
+	End if 
+	
+	If (FEATURE.with("debug"))
+		
+		Folder:C1567(fk desktop folder:K87:19).file("DEV/table.svg").setText($svg.content(True:C214))
+		
+	End if 
+	
+	$widget:=$svg.picture()
+	
+	//============================================================================
+	// Return the selected form type as text ("list" | "detail")
+Function typeForm()->$formType : Text
+	
+	$formType:=Choose:C955(Num:C11(Form:C1466.$dialog[Current form name:C1298].selector)=2; "detail"; "list")
+	
+	

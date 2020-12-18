@@ -14,14 +14,15 @@ If (False:C215)
 	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER; $0)
 End if 
 
-var $t; $tableID; $template; $typeForm : Text
+var $formType; $t; $tableID : Text
 var $p : Picture
-var $isAvailable; $ok : Boolean
+var $exists; $ok : Boolean
 var $count; $i; $indx; $l : Integer
 var $x : Blob
-var $context; $e; $form; $menu; $o : Object
+var $context; $e; $form; $o : Object
 var $fieldList : Collection
-var $view : cs:C1710.VIEWS
+var $menu : cs:C1710.menu
+var $tmpl : cs:C1710.tmpl
 
 // ----------------------------------------------------
 // Initialisations
@@ -41,6 +42,9 @@ If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
 	$form:=VIEWS_Handler(New object:C1471("action"; "init"))
 	$context:=$form.$
 	
+	var $view : cs:C1710.VIEWS
+	$view:=cs:C1710.VIEWS.new($form)  //#TEMPO
+	
 	$0:=-1  // Reject drop
 	
 Else 
@@ -55,7 +59,7 @@ Case of
 		//==================================================
 	: ($e.objectName=$form.tableWidget.name)
 		
-		$typeForm:=$context.typeForm()
+		$formType:=$view.typeForm()
 		
 		Case of 
 				
@@ -65,28 +69,15 @@ Case of
 				OB REMOVE:C1226($context; "picker")
 				
 				$tableID:=SVG Find element ID by coordinates:C1054(*; $e.objectName; MOUSEX; MOUSEY)
-				$template:=String:C10(Form:C1466[$typeForm][$tableID].form)
-				
-				If (Length:C16($template)>0)
-					
-					If ($template[[1]]="/")
-						
-						$isAvailable:=path["host"+$typeForm+"Forms"]().file(Substring:C12($template; 2)).exists\
-							 | path["host"+$typeForm+"Forms"]().folder(Substring:C12($template; 2)).exists
-						
-					Else 
-						
-						$isAvailable:=path[$typeForm+"Forms"]().folder($template).exists
-						
-					End if 
-				End if 
+				$tmpl:=cs:C1710.tmpl.new().path(String:C10(Form:C1466[$formType][$tableID].form); $formType)
+				$exists:=$tmpl.exists
 				
 				Case of 
 						
 						//______________________________________________________
 					: (Length:C16($tableID)=0)  // Outside click
 						
-						If (Form:C1466[$typeForm][$context.tableNum()].form#Null:C1517)
+						If (Form:C1466[$formType][$context.tableNum()].form#Null:C1517)
 							
 							$form.form.call("pickerHide")
 							
@@ -106,7 +97,7 @@ Case of
 						
 						If (Bool:C1537(Form:C1466.$dialog.picker))
 							
-							If (Length:C16($template)#0)
+							If ($tmpl.exists)
 								
 								$form.form.call("pickerHide")
 								
@@ -118,7 +109,7 @@ Case of
 							$form.fieldGroup.hide()
 							$form.previewGroup.hide()
 							
-							views_LAYOUT_PICKER($typeForm)
+							cs:C1710.VIEWS.new().templatePicker($formType)
 							
 							CLEAR VARIABLE:C89($tableID)  // To avoid redrawing the preview
 							
@@ -126,12 +117,16 @@ Case of
 						
 						//______________________________________________________
 					: ($tableID#$context.tableNum())\
-						 | (Length:C16($template)=0)\
-						 | Not:C34($isAvailable)
+						 | Not:C34($tmpl.exists)\
+						 | Not:C34($exists)
 						
-						If ($tableID#$context.tableNum()) & $isAvailable
+						If ($tableID#$context.tableNum()) & $exists
 							
 							$form.form.call("pickerHide")
+							
+						Else 
+							
+							Form:C1466.$dialog[Current form name:C1298].template:=Null:C1517
 							
 						End if 
 						
@@ -149,7 +144,7 @@ Case of
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
-						$context.picker:=(Length:C16($template)=0)
+						$context.picker:=Not:C34($tmpl.exists)
 						
 						$context.tableNumber:=$tableID
 						
@@ -220,8 +215,6 @@ Case of
 		//==================================================
 	: ($e.objectName=$form.fieldList.name)
 		
-		$view:=cs:C1710.VIEWS.new($form)
-		
 		Case of 
 				
 				//______________________________________________________
@@ -230,9 +223,9 @@ Case of
 				If (FEATURE.with("newViewUI"))\
 					 & (Num:C11($context.template.manifest.renderer)>=2)
 					
-					$typeForm:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
+					$formType:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
 					
-					If ($typeForm="detail")
+					If ($formType="detail")
 						
 						$form.fieldList.cellPosition()
 						
@@ -242,7 +235,7 @@ Case of
 						$o.name:=$o.path
 						//%W+533.3
 						
-						$view.addField($o; Form:C1466[$typeForm][$context.tableNumber].fields)
+						$view.addField($o; Form:C1466[$formType][$context.tableNumber].fields)
 						
 						// Update preview
 						$view.draw()
@@ -268,11 +261,11 @@ Case of
 				If (FEATURE.with("newViewUI"))\
 					 & (Num:C11($context.template.manifest.renderer)>=2)
 					
-					$typeForm:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
+					$formType:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
 					
-					If (Contextual click:C713) & ($typeForm="detail")
+					If (Contextual click:C713) & ($formType="detail")
 						
-						$fieldList:=Form:C1466[$typeForm][$context.tableNumber].fields
+						$fieldList:=Form:C1466[$formType][$context.tableNumber].fields
 						
 						$count:=Size of array:C274(($form.fields.pointer())->)
 						
@@ -507,10 +500,9 @@ Case of
 						//………………………………………………………………………………………………………………
 					: ($context.current="magnifyingGlass")
 						
-						var $menu : cs:C1710.menu
 						$menu:=cs:C1710.menu.new()
 						$menu.append("enableBarcodeQrcode"; "barcode")\
-							.mark(Bool:C1537(Form:C1466[$context.typeForm()][$context.tableNum()].searchableWithBarcode))\
+							.mark(Bool:C1537(Form:C1466[$view.typeForm()][$context.tableNum()].searchableWithBarcode))\
 							.popup()
 						
 						Case of 
@@ -523,7 +515,7 @@ Case of
 								//______________________________________________________
 							: ($menu.choice="barcode")
 								
-								Form:C1466[$context.typeForm()][$context.tableNum()].searchableWithBarcode:=Not:C34(Bool:C1537(Form:C1466[$context.typeForm()][$context.tableNum()].searchableWithBarcode))
+								Form:C1466[$view.typeForm()][$context.tableNum()].searchableWithBarcode:=Not:C34(Bool:C1537(Form:C1466[$view.typeForm()][$context.tableNum()].searchableWithBarcode))
 								PROJECT.save()
 								
 								//______________________________________________________

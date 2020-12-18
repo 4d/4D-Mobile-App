@@ -73,6 +73,7 @@
 			"_o_storyboard_fix_id",
 			"_o_str",
 			"_o_structure",
+			"_o_tables_Widget",
 			"_o_templates",
 			"_o_tempoFieldType",
 			"_o_unzip",
@@ -347,7 +348,6 @@
 		],
 		"methods": [
 			"COMPILER_views",
-			"tables_Widget",
 			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",
 			"VIEWS_OBJECTS_HANDLER"
@@ -785,6 +785,11 @@
 			"PICTURE_GRID"
 		]
 	},
+	"Proposals": {
+		"forms": [
+			"PROPOSALS"
+		]
+	},
 	"Pseudo-Class": {
 		"methods": [
 			"button",
@@ -929,6 +934,7 @@
 			"Message",
 			"pathPicker",
 			"Picture grid",
+			"Proposals",
 			"Search"
 		]
 	},
