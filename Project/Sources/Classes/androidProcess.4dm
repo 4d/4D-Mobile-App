@@ -14,7 +14,7 @@ Function androidSDKFolder
 		
 	Else 
 		
-		$0:=This:C1470.homeFolder().folder("C:/Android/sdk")
+		$0:=This:C1470.homeFolder().folder("AppData/Local/Android/Sdk")
 		
 	End if 
 	

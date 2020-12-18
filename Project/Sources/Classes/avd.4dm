@@ -23,10 +23,10 @@ Function listAvds  // List emulators
 	
 	This:C1470.launch(This:C1470.cmd+" list avd")
 	
-	If (Is macOS:C1572)
+	If (This:C1470.errorStream#Null:C1517)
 		$0:=This:C1470.errorStream
 	Else 
-		$0:=This:C1470.outputStream
+		$0:=String:C10(This:C1470.outputStream)
 	End if 
 	
 	
@@ -61,9 +61,9 @@ Function createAvd
 	
 	This:C1470.launch(This:C1470.cmd+" create avd -n \""+$1+"\" -k \""+$2+"\" --device \""+$3+"\"")
 	
-	If (Is macOS:C1572)
+	If (This:C1470.errorStream#Null:C1517)
 		$0:=This:C1470.errorStream
 	Else 
-		$0:=This:C1470.outputStream
+		$0:=String:C10(This:C1470.outputStream)
 	End if 
 	

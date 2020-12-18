@@ -71,6 +71,7 @@ Function init
 Function setEnvVarToAll
 	var $1 : Variant  // Object or Collection of objects
 	
+	This:C1470.androidprojectgenerator.setEnvironnementVariable($1)
 	This:C1470.gradlew.setEnvironnementVariable($1)
 	This:C1470.avd.setEnvironnementVariable($1)
 	This:C1470.emulator.setEnvironnementVariable($1)

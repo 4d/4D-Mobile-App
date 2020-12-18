@@ -12,6 +12,7 @@ Class constructor
 		// Already set
 	End if 
 	
+	This:C1470.adbStartRetried:=False:C215
 	
 Function adbFile
 	var $0 : 4D:C1709.File
@@ -29,19 +30,37 @@ Function listBootedDevices  // List booted devices
 	
 	This:C1470.launch(This:C1470.cmd+" devices")
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
-	
-	If ($0.success)
+	If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)  // adb was not ready, restart command
 		
-		$0.bootedDevices:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
-		$0.bootedDevices.shift().pop()  // removing first and last entries
+		If (Not:C34(This:C1470.adbStartRetried))
+			
+			This:C1470.adbStartRetried:=True:C214
+			
+			$0:=This:C1470.listBootedDevices()
+			
+		Else 
+			
+			$0.success:=False:C215
+			$0.errors.push(This:C1470.errorStream)
+			
+		End if 
 		
-	Else 
+	Else   // No issue with adb started status
 		
-		$0.errors.push("Failed to get adb device list")
+		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		
+		If ($0.success)
+			
+			$0.bootedDevices:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
+			$0.bootedDevices.shift().pop()  // removing first and last entries
+			
+		Else 
+			
+			$0.errors.push("Failed to get adb device list")
+			
+		End if 
 		
 	End if 
-	
 	
 	
 Function getAvdName
