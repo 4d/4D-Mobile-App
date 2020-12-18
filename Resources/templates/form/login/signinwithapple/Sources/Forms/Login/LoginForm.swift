@@ -61,7 +61,7 @@ open class LoginForm: QMobileUI.LoginForm {
 
         setupViewWithTrait(traitCollection: self.traitCollection)
         btnAuthorization.frame = CGRect()
-        btnAuthorization.cornerRadius = loginButton.normalCornerRadius
+        btnAuthorization.cornerRadius = (loginButton as? LoadingButton)?.normalCornerRadius ?? 0
         btnAuthorization.addTarget(self, action: #selector(handleAppleSignInButtonPress(_:)), for: .touchUpInside)
         self.view.addSubview(btnAuthorization)
 
