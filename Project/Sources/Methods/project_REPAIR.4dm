@@ -136,11 +136,18 @@ End if
 =============================================================================================
 */
 
-For each ($o; Form:C1466.audit.errors)
+If (Form:C1466.audit#Null:C1517)
 	
-	$project[$o.tab][$o.table]:=New object:C1471
+	If (Form:C1466.audit.errors#Null:C1517)
+		
+		For each ($o; Form:C1466.audit.errors)
+			
+			$project[$o.tab][$o.table]:=New object:C1471
+			
+		End for each 
+	End if 
 	
-End for each 
+End if 
 
 OB REMOVE:C1226(Form:C1466; "audit")
 Form:C1466.status.project:=True:C214
