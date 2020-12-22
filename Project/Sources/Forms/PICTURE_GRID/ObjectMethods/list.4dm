@@ -24,7 +24,8 @@ Case of
 		
 		$index:=(LISTBOX Get number of columns:C831(*; $event.objectName)*($event.row-1))+$event.column
 		
-		If ($index<=Form:C1466.pictures.length)
+		If ($index>0)\
+			 & ($index<=Form:C1466.pictures.length)
 			
 			If (Contextual click:C713)
 				
