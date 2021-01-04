@@ -67,7 +67,9 @@ Function run
 	// ----------------------------------------------------
 	
 	If (Value type:C1509($Obj_out.template)=Is object:K8:27)
-		$Obj_out.template.capabilities:=This:C1470.input.template.capabilities
+		If (This:C1470.input.template.capabilities#Null:C1517)
+			$Obj_out.template.capabilities:=This:C1470.input.template.capabilities
+		End if 
 	End if 
 	
 	// ----------------------------------------------------
