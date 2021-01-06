@@ -111,7 +111,7 @@ Function setAndroidHome
 Function create
 	var $0 : Object
 	
-	var $Obj_generate; $Obj_buildEmbeddedLib; $Obj_copyEmbeddedLib; $Obj_chmod : Object
+	var $Obj_generate; $Obj_buildEmbeddedLib; $Obj_copyEmbeddedLib; $Obj_copyResources; $Obj_chmod : Object
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
@@ -179,6 +179,30 @@ Function create
 			This:C1470.isOnError:=True:C214
 			This:C1470.postError($Obj_copyEmbeddedLib.errors.join("\r"))
 			$0.errors.combine($Obj_copyEmbeddedLib.errors)
+			
+		Else 
+			// All ok
+		End if 
+		
+	Else 
+		// Already on error
+	End if 
+	
+	
+	//_____________________________________________________
+	// COPY RESOURCES
+	
+	If (This:C1470.isOnError=False:C215)
+		
+		This:C1470.postStep("Copying resources")
+		
+		$Obj_copyResources:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project.$project.file)
+		
+		If (Not:C34($Obj_copyResources.success))
+			
+			This:C1470.isOnError:=True:C214
+			This:C1470.postError($Obj_copyResources.errors.join("\r"))
+			$0.errors.combine($Obj_copyResources.errors)
 			
 		Else 
 			// All ok

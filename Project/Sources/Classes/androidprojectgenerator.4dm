@@ -109,6 +109,51 @@ Function copyEmbeddedDataLib
 	End if 
 	
 	
+	
+Function copyResources
+	var $0 : Object
+	var $1 : Text  // Project path
+	var $2 : 4D:C1709.File  // 4D Mobile Project
+	var $androidAssets; $currentFolder : 4D:C1709.Folder
+	var $currentFile; $copyDest : 4D:C1709.File
+	
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	$androidAssets:=$2.parent.folder("android")
+	
+	$0.success:=True:C214
+	
+	If ($androidAssets.exists)
+		
+		For each ($currentFolder; $androidAssets.folders())
+			
+			For each ($currentFile; $currentFolder.files())
+				
+				$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/"+$currentFolder.name); fk overwrite:K87:5)
+				
+				If (Not:C34($copyDest.exists))
+					// Copy failed
+					$0.success:=False:C215
+					$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+					
+				Else 
+					// All ok
+				End if 
+				
+			End for each 
+			
+		End for each 
+		
+	Else 
+		// Missing file
+		$0.success:=False:C215
+		$0.errors.push("Missing source file for copy: "+$androidAssets.path)
+	End if 
+	
+	
+	
 Function chmodGradlew
 	var $0 : Object
 	var $1 : Text  // Project path
