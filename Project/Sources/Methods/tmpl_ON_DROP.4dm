@@ -268,11 +268,7 @@ If (Length:C16($cible)>0)
 				End if 
 			End if 
 			
-			If (FEATURE.with("newViewUI"))
-				
-				OB REMOVE:C1226(Form:C1466.$dialog[$currentForm]; "scroll")
-				
-			End if 
+			OB REMOVE:C1226(Form:C1466.$dialog[$currentForm]; "scroll")
 			
 			PROJECT.save()
 			

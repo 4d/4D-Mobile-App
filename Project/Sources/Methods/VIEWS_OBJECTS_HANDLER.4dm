@@ -220,8 +220,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Double Clicked:K2:5)
 				
-				If (FEATURE.with("newViewUI"))\
-					 & (Num:C11($context.template.manifest.renderer)>=2)
+				If (Num:C11($context.template.manifest.renderer)>=2)
 					
 					$formType:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
 					
@@ -258,8 +257,7 @@ Case of
 				
 				editor_ui_LISTBOX($e.objectName)
 				
-				If (FEATURE.with("newViewUI"))\
-					 & (Num:C11($context.template.manifest.renderer)>=2)
+				If (Num:C11($context.template.manifest.renderer)>=2)
 					
 					$formType:=Choose:C955(Num:C11($context.selector)=2; "detail"; "list")
 					
@@ -686,12 +684,8 @@ Case of
 				
 				OB REMOVE:C1226($context; "manifest")
 				
-				If (FEATURE.with("newViewUI"))
-					
-					OB REMOVE:C1226($context; "scrollPosition")
-					$context.scroll:=0
-					
-				End if 
+				OB REMOVE:C1226($context; "scrollPosition")
+				$context.scroll:=0
 				
 				// Redraw
 				$context.draw:=True:C214

@@ -797,8 +797,7 @@ Function reorder($tableID : Text)  //#WIP
 		$bind:=Split string:C1554($t; ","; sk trim spaces:K86:2)
 		
 		// Create binding collection sized according to bind attribute length
-		If (FEATURE.with("newViewUI"))\
-			 & (This:C1470.detailform)
+		If (This:C1470.detailform)
 			
 			$bind.resize(This:C1470.manifest.fields.count)
 			
@@ -955,8 +954,7 @@ Function reorder($tableID : Text)  //#WIP
 			
 		End for each 
 		
-		If (FEATURE.with("newViewUI"))\
-			 & (This:C1470.manifest#Null:C1517)\
+		If (This:C1470.manifest#Null:C1517)\
 			 & (This:C1470.type="detail")\
 			 & ($oIN.target.fields#Null:C1517)
 			

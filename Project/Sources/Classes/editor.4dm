@@ -77,21 +77,10 @@ Class constructor
 	
 	$o:=This:C1470.pages.views
 	
-	If (FEATURE.with("newViewUI"))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("forms"); \
-			"form"; "VIEWS"; \
-			"noTitle"; True:C214))
-		
-	Else 
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("forms"); \
-			"form"; "_o_VIEWS"; \
-			"noTitle"; True:C214))
-		
-	End if 
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("forms"); \
+		"form"; "VIEWS"; \
+		"noTitle"; True:C214))
 	
 	$o.action:=New object:C1471(\
 		"title"; ".Repair the project"; \
@@ -112,23 +101,13 @@ Class constructor
 	
 	$o:=This:C1470.pages.deployment
 	
-	If (FEATURE.with("pushNotification"))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("server"); \
-			"form"; "SERVER"))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("features"); \
-			"form"; "FEATURES"))
-		
-	Else 
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("server"); \
-			"form"; "_o_SERVER"))
-		
-	End if 
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("server"); \
+		"form"; "SERVER"))
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("features"); \
+		"form"; "FEATURES"))
 	
 	If (False:C215)
 		

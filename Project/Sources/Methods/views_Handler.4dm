@@ -73,21 +73,17 @@ If (OB Is empty:C1297($context))  // First load
 		"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
 		"action"; "geometry")))))
 	
-	If (FEATURE.with("newViewUI"))
-		
-		$c.push(New object:C1471(\
-			"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
-			"reference"; "viewport.preview"; \
-			"type"; "horizontal alignment"; \
-			"value"; "center"))
-		
-		$c.push(New object:C1471(\
-			"object"; "preview.scrollBar"; \
-			"reference"; "preview"; \
-			"type"; "margin-left"; \
-			"value"; 20))
-		
-	End if 
+	$c.push(New object:C1471(\
+		"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
+		"reference"; "viewport.preview"; \
+		"type"; "horizontal alignment"; \
+		"value"; "center"))
+	
+	$c.push(New object:C1471(\
+		"object"; "preview.scrollBar"; \
+		"reference"; "preview"; \
+		"type"; "margin-left"; \
+		"value"; 20))
 	
 	$context:=ob.set($context).createPath("constraints.rules"; Is collection:K8:32; $c).contents
 	
@@ -209,12 +205,8 @@ Case of
 					
 				End if 
 				
-				If (FEATURE.with("newViewUI"))
-					
-					OB REMOVE:C1226($context; "scrollPosition")
-					$context.scroll:=0
-					
-				End if 
+				OB REMOVE:C1226($context; "scrollPosition")
+				$context.scroll:=0
 				
 				//______________________________________________________
 			: ($codeEvent=On Timer:K2:25)

@@ -548,23 +548,21 @@ If ($Obj_in.create)
 		$Obj_out.computedCapabilities:=New object:C1471(\
 			"capabilities"; New object:C1471())
 		
-		If (FEATURE.with(107526))
+		If (Bool:C1537($Obj_project.server.pushNotification))
 			
-			If (Bool:C1537($Obj_project.server.pushNotification))
-				
-				$Obj_out.computedCapabilities.capabilities.pushNotification:=True:C214
-				
-				If (Length:C16(String:C10($Obj_project.server.pushCertificate))>0)
-					C_OBJECT:C1216($certificateFile)
-					$certificateFile:=cs:C1710.doc.new($Obj_project.server.pushCertificate).target
-					If ($certificateFile.exists)
-						$certificateFile.copyTo($appFolder; fk overwrite:K87:5)
-					Else 
-						ob_warning_add($Obj_out; "Certificate file "+String:C10($Obj_project.server.pushCertificate)+" is missing")
-					End if 
+			$Obj_out.computedCapabilities.capabilities.pushNotification:=True:C214
+			
+			If (Length:C16(String:C10($Obj_project.server.pushCertificate))>0)
+				C_OBJECT:C1216($certificateFile)
+				$certificateFile:=cs:C1710.doc.new($Obj_project.server.pushCertificate).target
+				If ($certificateFile.exists)
+					$certificateFile.copyTo($appFolder; fk overwrite:K87:5)
+				Else 
+					ob_warning_add($Obj_out; "Certificate file "+String:C10($Obj_project.server.pushCertificate)+" is missing")
 				End if 
 			End if 
 		End if 
+		
 		If (FEATURE.with(117618))
 			
 			If (Bool:C1537($Obj_project.deepLinking.enabled))

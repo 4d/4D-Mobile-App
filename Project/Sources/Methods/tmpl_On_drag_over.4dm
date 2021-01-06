@@ -54,8 +54,7 @@ If (Length:C16($cible)>0)
 		
 		If ($template.isTypeAccepted($bind; $dropped.fieldType))
 			
-			If (FEATURE.with("newViewUI"))\
-				 & (Num:C11(Form:C1466.$dialog.VIEWS.template.manifest.renderer)>=2)
+			If (Num:C11(Form:C1466.$dialog.VIEWS.template.manifest.renderer)>=2)
 				
 				// Accept insertion
 				$isInsertion:=($cible="@.vInsert")

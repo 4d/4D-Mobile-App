@@ -80,10 +80,6 @@
 			"TEMPO_1",
 			"test_o_str",
 			"TURN_AROUND_Field_name"
-		],
-		"forms": [
-			"_o_SERVER",
-			"_o_VIEWS"
 		]
 	},
 	"_UNUSED": {

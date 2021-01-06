@@ -8,7 +8,7 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $1: Text
+var $1 : Text
 
 If (False:C215)
 	C_TEXT:C284(editor_PAGE; $1)
@@ -184,21 +184,10 @@ If (Length:C16($page)>0)
 			//………………………………………………………………………………………
 		: ($index=5)
 			
-			If (FEATURE.with("newViewUI"))
-				
-				$o.panels.push(New object:C1471(\
-					"title"; Get localized string:C991("forms"); \
-					"form"; "VIEWS"; \
-					"noTitle"; True:C214))
-				
-			Else 
-				
-				$o.panels.push(New object:C1471(\
-					"title"; Get localized string:C991("forms"); \
-					"form"; "_o_VIEWS"; \
-					"noTitle"; True:C214))
-				
-			End if 
+			$o.panels.push(New object:C1471(\
+				"title"; Get localized string:C991("forms"); \
+				"form"; "VIEWS"; \
+				"noTitle"; True:C214))
 			
 			$o.action:=New object:C1471(\
 				"title"; ".Repair the project"; \
@@ -229,23 +218,13 @@ If (Length:C16($page)>0)
 			//………………………………………………………………………………………
 		: ($index=6)
 			
-			If (FEATURE.with("pushNotification"))
-				
-				$o.panels.push(New object:C1471(\
-					"title"; Get localized string:C991("server"); \
-					"form"; "SERVER"))
-				
-				$o.panels.push(New object:C1471(\
-					"title"; Get localized string:C991("features"); \
-					"form"; "FEATURES"))
-				
-			Else 
-				
-				$o.panels.push(New object:C1471(\
-					"title"; Get localized string:C991("server"); \
-					"form"; "_o_SERVER"))
-				
-			End if 
+			$o.panels.push(New object:C1471(\
+				"title"; Get localized string:C991("server"); \
+				"form"; "SERVER"))
+			
+			$o.panels.push(New object:C1471(\
+				"title"; Get localized string:C991("features"); \
+				"form"; "FEATURES"))
 			
 			If (False:C215)
 				$o.panels.push(New object:C1471(\

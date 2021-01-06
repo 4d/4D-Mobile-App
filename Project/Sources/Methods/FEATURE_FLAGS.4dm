@@ -252,7 +252,5 @@ End if
 /* _____________
 ALIAS
 _____________*/
-FEATURE.alias("newViewUI"; 113016)
-FEATURE.alias("pushNotification"; 107526)
 FEATURE.alias("deepLinking"; 117618)
 FEATURE.alias("moreRelations"; 117601)

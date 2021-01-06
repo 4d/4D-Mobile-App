@@ -198,23 +198,20 @@ Function afterChildren
 	
 	ob_error_combine($Obj_out; $Obj_out.formatters)
 	
-	If (FEATURE.with(107526))
+	If (Bool:C1537($Obj_in.project.server.pushNotification))
 		
-		If (Bool:C1537($Obj_in.project.server.pushNotification))
-			
-			$o:=New object:C1471(\
-				"template"; New object:C1471(\
-				"name"; "pushNotification"; \
-				"inject"; True:C214; \
-				"source"; COMPONENT_Pathname("templates").folder("pushNotification").platformPath; \
-				"parent"; $Obj_template); \
-				"project"; This:C1470.input.project; \
-				"path"; This:C1470.input.path; \
-				"projfile"; This:C1470.input.projfile)
-			
-			$Obj_out["pushNotification"]:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
-			
-		End if 
+		$o:=New object:C1471(\
+			"template"; New object:C1471(\
+			"name"; "pushNotification"; \
+			"inject"; True:C214; \
+			"source"; COMPONENT_Pathname("templates").folder("pushNotification").platformPath; \
+			"parent"; $Obj_template); \
+			"project"; This:C1470.input.project; \
+			"path"; This:C1470.input.path; \
+			"projfile"; This:C1470.input.projfile)
+		
+		$Obj_out["pushNotification"]:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
+		
 	End if 
 	
 	//  Save project file if has been modified

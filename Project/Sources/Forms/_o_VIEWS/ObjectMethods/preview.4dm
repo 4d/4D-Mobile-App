@@ -1,1 +1,0 @@
-$0:=VIEWS_Objects_handler 

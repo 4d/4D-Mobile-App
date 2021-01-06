@@ -60,15 +60,12 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 			
 			If ($svg.success)
 				
-				If (FEATURE.with("newViewUI"))
+				$node:=$svg.findById($widgetField+".label")
+				
+				If ($svg.success)
 					
-					$node:=$svg.findById($widgetField+".label")
+					$svg.setValue(Get localized string:C991("dropAFieldHere"); $node)
 					
-					If ($svg.success)
-						
-						$svg.setValue(Get localized string:C991("dropAFieldHere"); $node)
-						
-					End if 
 				End if 
 				
 				// Get position
@@ -105,16 +102,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 					DOM SET XML ATTRIBUTE:C866($node; \
 						"id"; $widgetField+".label")
 					
-					If (FEATURE.with("newViewUI"))
-						
-						DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("dropAFieldHere"))
-						
-					Else 
-						
-						DOM GET XML ELEMENT VALUE:C731($node; $t)
-						DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991($t)+$index)
-						
-					End if 
+					DOM SET XML ELEMENT VALUE:C868($node; Get localized string:C991("dropAFieldHere"))
 					
 					// Set id, bind & default label
 					$node:=DOM Find XML element by ID:C1010($new; "f")

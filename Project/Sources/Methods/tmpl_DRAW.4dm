@@ -62,51 +62,43 @@ If (Num:C11($tableID)>0)
 			$manifest:=$template.manifest
 			
 			// Load the template
-			If (FEATURE.with("newViewUI"))
+			
+			$t:=$template.update().svg
+			$t:=Replace string:C233($t; "&quot;"; "\"")
+			PROCESS 4D TAGS:C816($t; $t; $template.title; $template.cancel())
+			
+			$svg:=cs:C1710.svg.new().parse($t).scale(0.97)
+			
+			If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 				
-				$t:=$template.update().svg
-				$t:=Replace string:C233($t; "&quot;"; "\"")
-				PROCESS 4D TAGS:C816($t; $t; $template.title; $template.cancel())
-				
-				$svg:=cs:C1710.svg.new().parse($t).scale(0.97)
-				
-				If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
+				// Define the remove image
+				If (let(->$node; Formula:C1597($svg.findById("cancel")); Formula:C1597($svg.success)))
 					
-					// Define the remove image
-					If (let(->$node; Formula:C1597($svg.findById("cancel")); Formula:C1597($svg.success)))
-						
-						$svg.setAttribute("xlink:href"; $template.cancel(); $svg.firstChild($node; "image"))
-						
-					End if 
-					
-					// Update the search widget label & tips, if any
-					If (let(->$node; Formula:C1597($svg.findById("search.label")); Formula:C1597($svg.success)))
-						
-						$svg.setAttribute("ios:tips"; Get localized string:C991("searchBoxTips"); $node)
-						$svg.setValue(Get localized string:C991("fieldToUseForSearch"); $node)
-						
-					End if 
-					
-					// Update the section widget label & tips, if any
-					If (let(->$node; Formula:C1597($svg.findById("section.label")); Formula:C1597($svg.success)))
-						
-						$svg.setAttribute("ios:tips"; Get localized string:C991("sectionTips"); $node)
-						$svg.setValue(Get localized string:C991("fieldToUseAsSection"); $node)
-						
-					End if 
-					
-					$svg.success:=True:C214  // Don't forget to put "success" back to true if any
-					
-				Else 
-					
-					RECORD.error("Failed to parse template \""+$template.name+"\"")
+					$svg.setAttribute("xlink:href"; $template.cancel(); $svg.firstChild($node; "image"))
 					
 				End if 
 				
+				// Update the search widget label & tips, if any
+				If (let(->$node; Formula:C1597($svg.findById("search.label")); Formula:C1597($svg.success)))
+					
+					$svg.setAttribute("ios:tips"; Get localized string:C991("searchBoxTips"); $node)
+					$svg.setValue(Get localized string:C991("fieldToUseForSearch"); $node)
+					
+				End if 
+				
+				// Update the section widget label & tips, if any
+				If (let(->$node; Formula:C1597($svg.findById("section.label")); Formula:C1597($svg.success)))
+					
+					$svg.setAttribute("ios:tips"; Get localized string:C991("sectionTips"); $node)
+					$svg.setValue(Get localized string:C991("fieldToUseAsSection"); $node)
+					
+				End if 
+				
+				$svg.success:=True:C214  // Don't forget to put "success" back to true if any
+				
 			Else 
 				
-				PROCESS 4D TAGS:C816($template.svg; $t)
-				$svg:=cs:C1710.svg.new().parse($t).scale(0.95)
+				RECORD.error("Failed to parse template \""+$template.name+"\"")
 				
 			End if 
 			
@@ -126,7 +118,7 @@ If (Num:C11($tableID)>0)
 				//For each ($o; $target.fields)
 				//If ($o#Null)
 				//If ($o.fieldType=8858)\
-										| ($o.fieldType=8859)
+															| ($o.fieldType=8859)
 				//// ❓
 				//Else
 				//$o.name:=Form.dataModel[$tableID][String($o.fieldNumber)].name
@@ -468,11 +460,7 @@ If (Num:C11($tableID)>0)
 					
 				End if 
 				
-				If (FEATURE.with("newViewUI"))
-					
-					$svg.dimensions($form.preview.coordinates.width; $context.previewHeight)
-					
-				End if 
+				$svg.dimensions($form.preview.coordinates.width; $context.previewHeight)
 				
 				If (FEATURE.with("_8858"))
 					

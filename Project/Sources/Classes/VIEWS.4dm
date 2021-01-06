@@ -35,21 +35,18 @@ Class constructor
 			"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
 			"action"; "geometry")))))
 		
-		If (FEATURE.with("newViewUI"))
-			
-			This:C1470.context.constraints.push(New object:C1471(\
-				"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
-				"reference"; "viewport.preview"; \
-				"type"; "horizontal alignment"; \
-				"value"; "center"))
-			
-			This:C1470.context.constraints.push(New object:C1471(\
-				"object"; "preview.scrollBar"; \
-				"reference"; "preview"; \
-				"type"; "margin-left"; \
-				"value"; 20))
-			
-		End if 
+		This:C1470.context.constraints.push(New object:C1471(\
+			"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
+			"reference"; "viewport.preview"; \
+			"type"; "horizontal alignment"; \
+			"value"; "center"))
+		
+		This:C1470.context.constraints.push(New object:C1471(\
+			"object"; "preview.scrollBar"; \
+			"reference"; "preview"; \
+			"type"; "margin-left"; \
+			"value"; 20))
+		
 	End if 
 	
 	This:C1470._update()
@@ -493,12 +490,7 @@ Function setTemplate($browser : Object)
 			
 			$browser.form:=$newTemplate
 			$browser.tableNumber:=$tableID
-			
-			If (FEATURE.with("newViewUI"))
-				
-				$browser.manifest:=$template.manifest
-				
-			End if 
+			$browser.manifest:=$template.manifest
 			
 			If (False:C215)  //#WIP
 				

@@ -36,49 +36,24 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		
 	End if 
 	
-	If (FEATURE.with("newViewUI"))
-		
-		$form:=New object:C1471(\
-			"window"; Current form window:C827; \
-			"callback"; Current method name:C684; \
-			"currentForm"; Current form name:C1298; \
-			"editor"; "EDITOR"; \
-			"project"; "PROJECT"; \
-			"developer"; "DEVELOPER"; \
-			"structure"; "STRUCTURE"; \
-			"tableProperties"; "TABLES"; \
-			"fieldProperties"; "FIELDS"; \
-			"mainMenu"; "MAIN"; \
-			"views"; "VIEWS"; \
-			"server"; "SERVER"; \
-			"data"; "DATA"; \
-			"dataSource"; "SOURCE"; \
-			"actions"; "ACTIONS"; \
-			"actionParameters"; "ACTIONS_PARAMS"; \
-			"ribbon"; "ribbon")
-		
-	Else 
-		
-		$form:=New object:C1471(\
-			"window"; Current form window:C827; \
-			"callback"; Current method name:C684; \
-			"currentForm"; Current form name:C1298; \
-			"editor"; "EDITOR"; \
-			"project"; "PROJECT"; \
-			"developer"; "DEVELOPER"; \
-			"structure"; "STRUCTURE"; \
-			"tableProperties"; "TABLES"; \
-			"fieldProperties"; "FIELDS"; \
-			"mainMenu"; "MAIN"; \
-			"views"; "_o_VIEWS"; \
-			"server"; "SERVER"; \
-			"data"; "DATA"; \
-			"dataSource"; "SOURCE"; \
-			"actions"; "ACTIONS"; \
-			"actionParameters"; "ACTIONS_PARAMS"; \
-			"ribbon"; "ribbon")
-		
-	End if 
+	$form:=New object:C1471(\
+		"window"; Current form window:C827; \
+		"callback"; Current method name:C684; \
+		"currentForm"; Current form name:C1298; \
+		"editor"; "EDITOR"; \
+		"project"; "PROJECT"; \
+		"developer"; "DEVELOPER"; \
+		"structure"; "STRUCTURE"; \
+		"tableProperties"; "TABLES"; \
+		"fieldProperties"; "FIELDS"; \
+		"mainMenu"; "MAIN"; \
+		"views"; "VIEWS"; \
+		"server"; "SERVER"; \
+		"data"; "DATA"; \
+		"dataSource"; "SOURCE"; \
+		"actions"; "ACTIONS"; \
+		"actionParameters"; "ACTIONS_PARAMS"; \
+		"ribbon"; "ribbon")
 	
 Else 
 	

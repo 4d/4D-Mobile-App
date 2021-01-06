@@ -59,8 +59,7 @@ Else
 						$binding:=Split string:C1554($oAttributes["ios:values"]; ","; sk trim spaces:K86:2)
 						
 						// Create binding collection sized according to bind attribute length
-						If (FEATURE.with("newViewUI"))\
-							 & ($oIN.selector="detail")
+						If ($oIN.selector="detail")
 							
 							$binding.resize($oIN.manifest.fields.count)
 							
@@ -221,8 +220,7 @@ Else
 							End if 
 						End for each 
 						
-						If (FEATURE.with("newViewUI"))\
-							 & ($oIN.manifest#Null:C1517)\
+						If ($oIN.manifest#Null:C1517)\
 							 & ($oIN.selector="detail")\
 							 & ($oIN.target.fields#Null:C1517)
 							
