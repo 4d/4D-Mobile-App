@@ -41,7 +41,7 @@
 		<table_extra input_form="Form1" output_form="Form2">
 			<editor_table_info fields_ordering="2" displayable_fields_count="10">
 				<color red="237" green="211" blue="181" alpha="255"/>
-				<coordinates left="14" top="379.30078125" width="153" height="251.33203125"/>
+				<coordinates left="16.58984375" top="379.1875" width="153" height="251.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>

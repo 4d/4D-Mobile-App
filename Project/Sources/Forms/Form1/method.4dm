@@ -37,4 +37,3 @@ Form:C1466.tablist:=widget("tab.list")
 Form:C1466.tabdetail:=widget("tab.detail")
 
 group("Button;Button1").distributeHorizontally(New object:C1471("start"; 20; "gap"; 10))
-
