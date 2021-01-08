@@ -409,7 +409,7 @@ Case of
 					
 					$o:=New object:C1471(\
 						"fieldNumber"; $c[0].fieldNumber; \
-						"name"; _o_str($c[0].name).uperCamelCase(); \
+						"name"; cs:C1710.str.new($c[0].name).lowerCamelCase(); \
 						"label"; $c[0].label; \
 						"shortLabel"; $c[0].shortLabel; \
 						"defaultField"; formatString("field-name"; $c[0].name))

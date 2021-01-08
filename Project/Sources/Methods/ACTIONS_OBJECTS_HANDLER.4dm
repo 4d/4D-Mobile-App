@@ -477,7 +477,7 @@ Case of
 					$table:=Form:C1466.dataModel[$menu.table]
 					
 					// Generate a unique name
-					$t:=_o_str(formatString("label"; $table[""].name)).uperCamelCase()
+					$t:=cs:C1710.str.new(formatString("label"; $table[""].name)).uperCamelCase()
 					
 					$menu.name:=$menu.prefix+$t
 					
@@ -543,7 +543,7 @@ Case of
 											
 											$oo:=New object:C1471(\
 												"fieldNumber"; $field.fieldNumber; \
-												"name"; _o_str($table[$t].name).lowerCamelCase(); \
+												"name"; cs:C1710.str.new($table[$t].name).lowerCamelCase(); \
 												"label"; $table[$t].label; \
 												"shortLabel"; $table[$t].shortLabel; \
 												"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))
