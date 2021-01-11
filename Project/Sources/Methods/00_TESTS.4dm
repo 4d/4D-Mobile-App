@@ -32,6 +32,26 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		$o:=cs:C1710.avd.new()
+		
+		//$t:=$o.listAvds()
+		//ARRAY LONGINT($pos; 0; 0)
+		//ARRAY LONGINT($length; 0; 0)
+		//$start:=1
+		//While (Match regex("(?m-si)Name:\\s(\\V*)\\s*Path:\\s(\\V*)"; $t; $start; $pos; $length))
+		//$name:=Substring($t; $pos{1}; $length{1})
+		//$path:=Substring($t; $pos{2}; $length{2})
+		//$start:=$pos{2}+$length{2}+1
+		//End while 
+		
+		$c:=$o.devices()
+		
+		
+		
+		
+		//________________________________________
+	: (True:C214)
+		
 		var $svg : cs:C1710.svg
 		$svg:=cs:C1710.svg.new()
 		$svg.group("main").stroke(4).translate(10; 10).scale(2)

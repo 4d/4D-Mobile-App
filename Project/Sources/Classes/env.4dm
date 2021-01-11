@@ -64,7 +64,7 @@ Function update  // Updating values that can be modified after opening the datab
 	This:C1470.timeShortPattern:=$value
 	
 	//===================================================================================
-Function startupDisk($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+Function startupDisk($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=Folder:C1567("/")
 	
@@ -82,7 +82,7 @@ Function startupDisk($path : Text; $create : Boolean)->$document : 4D:C1709.Docu
 	End if 
 	
 	//===================================================================================
-Function home($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+Function home($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home
 	
@@ -100,7 +100,7 @@ Function home($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	End if 
 	
 	//===================================================================================
-Function library($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+Function library($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/")
 	
@@ -118,7 +118,7 @@ Function library($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	End if 
 	
 	//===================================================================================
-Function preferences($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+Function preferences($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/Preferences/")
 	
@@ -136,7 +136,7 @@ Function preferences($path : Text; $create : Boolean)->$document : 4D:C1709.Docu
 	End if 
 	
 	//===================================================================================
-Function caches($path; $create : Boolean)->$document : 4D:C1709.Document
+Function caches($path; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/Caches/")
 	
@@ -154,7 +154,7 @@ Function caches($path; $create : Boolean)->$document : 4D:C1709.Document
 	End if 
 	
 	//===================================================================================
-Function logs($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+Function logs($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/Logs/")
 	
@@ -172,7 +172,7 @@ Function logs($path : Text; $create : Boolean)->$document : 4D:C1709.Document
 	End if 
 	
 	//===================================================================================
-Function derivedData($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+Function derivedData($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/Developer/Xcode/DerivedData/")
 	
@@ -190,7 +190,7 @@ Function derivedData($path : Text; $create : Boolean)->$document : 4D:C1709.Docu
 	End if 
 	
 	//===================================================================================
-Function simulators($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+Function simulators($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/Developer/CoreSimulator/Devices/")
 	
@@ -208,7 +208,7 @@ Function simulators($path : Text; $create : Boolean)->$document : 4D:C1709.Docum
 	End if 
 	
 	//===================================================================================
-Function applicationSupport($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+Function applicationSupport($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/Application Support/")
 	
@@ -226,7 +226,7 @@ Function applicationSupport($path : Text; $create : Boolean)->$document : 4D:C17
 	End if 
 	
 	//===================================================================================
-Function archives($path : Text; $create : Boolean)->$document : 4D:C1709.Document
+Function archives($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/Developer/Xcode/Archives/")
 	

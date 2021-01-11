@@ -200,13 +200,18 @@ Case of
 			"caller"; $form.window))
 		
 		If (DATABASE.isMacOs)
+			
 			// Launch recovering the list of available simulator devices
 			CALL WORKER:C1389($worker; "simulator"; New object:C1471(\
 				"action"; "devices"; \
 				"filter"; "available"; \
 				"minimumVersion"; SHARED.iosDeploymentTarget; \
 				"caller"; $form.window))
+			
 		Else 
+			
+			
+			
 			//
 		End if 
 		

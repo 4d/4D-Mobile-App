@@ -124,11 +124,17 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		"colorjuicer"; New object:C1471(\
 		"scale"; 64))
 	
-	// minimum requierement
+	//***********************
+	// MINIMUM REQUIREMENTS
+	//***********************
+	
+	// 1] iOS
 	SHARED.xCodeVersion:="12.2"
 	SHARED.iosDeploymentTarget:="14.1"
-	
 	SHARED.useXcodeDefaultPath:=True:C214
+	
+	// 1] Android
+	SHARED.studioVersion:="4.1"
 	
 	// Project config
 	SHARED.swift:=New object:C1471(\

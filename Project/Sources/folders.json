@@ -399,6 +399,7 @@
 	},
 	"android": {
 		"methods": [
+			"COMPILER_android",
 			"dev_test_android",
 			"mobile_Project_android"
 		],

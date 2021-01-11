@@ -20,7 +20,7 @@ var $l; $target : Integer
 var $o; $Obj_cancel; $Obj_ok; $in; $project : Object
 var $c : Collection
 
-var $file : 4D:C1709.Document
+var $file : 4D:C1709.File
 
 // ----------------------------------------------------
 // Initialisations
@@ -47,7 +47,7 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		//#99788 ========================================================
 		//EXECUTE METHOD IN SUBFORM("project"; "views_Handler"; *; New object(\
-																		"action"; "updateForms"))
+																					"action"; "updateForms"))
 		
 		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)

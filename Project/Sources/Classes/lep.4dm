@@ -96,7 +96,7 @@ Function launch($command; $arguments : Text)->$this : cs:C1710.lep
 	
 	$t:=Convert to text:C1012($output; This:C1470.charSet)
 	
-	If (Length:C16($error)=0)
+	If (Length:C16($error)=0) & Not:C34(This:C1470.ignoreErrorInOutputStream)
 		
 		// ⚠️ Some commands return the error in the output stream
 		If (Position:C15("ERROR:"; $t)>0)
@@ -193,6 +193,7 @@ Function reset()->$this : cs:C1710.lep
 	This:C1470.outputStream:=Null:C1517
 	This:C1470.errorStream:=Null:C1517
 	This:C1470.pid:=0
+	This:C1470.ignoreErrorInOutputStream:=False:C215
 	
 	This:C1470.setCharSet()
 	This:C1470.setOutputType()
@@ -498,7 +499,7 @@ Function singleQuoted($tring : Text)->$quoted : Text
 	
 	//====================================================================
 	// Write access to a file or a directory with all its subfolders and files
-Function writable($cible : 4D:C1709.Document)->$this : cs:C1710.lep
+Function writable($cible : 4D:C1709.File)->$this : cs:C1710.lep
 	
 	If (Bool:C1537($cible.exists))
 		

@@ -13,8 +13,8 @@ var $isEmpty : Boolean
 var $index; $w : Integer
 var $formData; $path; $project : Object
 
-var $folder; $mobileProjects : 4D:C1709.Directory
-var $file : 4D:C1709.Document
+var $folder; $mobileProjects : 4D:C1709.Folder
+var $file : 4D:C1709.File
 var $error : cs:C1710.error
 
 // ----------------------------------------------------

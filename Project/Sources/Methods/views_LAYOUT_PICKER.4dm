@@ -21,7 +21,7 @@ var $i; $indx : Integer
 var $x : Blob
 var $error; $ƒ; $manifest; $o; $picker : Object
 var $c : Collection
-var $template : 4D:C1709.Document
+var $template : 4D:C1709.File
 var $folder; $internal; $user : 4D:C1709.Folder
 var $archive : 4D:C1709.ZipArchive
 var $svg : cs:C1710.svg

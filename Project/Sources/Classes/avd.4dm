@@ -1,24 +1,68 @@
 Class extends androidProcess
 
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705()
 	
 	This:C1470.cmd:=This:C1470.avdmanagerFile().path
 	
-Function avdmanagerFile
-	var $0 : 4D:C1709.File
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns a collection of available device simulators
+Function devices()->$devices : Collection
 	
-	$0:=This:C1470.androidSDKFolder().folder("tools").folder("bin").file("avdmanager")
+	var $start : Integer
 	
+	$devices:=New collection:C1472
 	
+	This:C1470.ignoreErrorInOutputStream:=True:C214
+	This:C1470.launch(This:C1470.cmd+" list avd")
+	
+	If (This:C1470.success)
+		
+		$start:=1
+		
+		ARRAY LONGINT:C221($pos; 0x0000; 0x0000)
+		ARRAY LONGINT:C221($len; 0x0000; 0x0000)
+		
+		While (Match regex:C1019("(?m-si)Name:\\s(\\V*)\\s*Path:\\s(\\V*)"; This:C1470.outputStream; $start; $pos; $len))
+			
+			$devices.push(New object:C1471(\
+				"name"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
+				"path"; Substring:C12(This:C1470.outputStream; $pos{2}; $len{2})))
+			
+			$start:=$pos{2}+$len{2}+1
+			
+		End while 
+		
+	Else 
+		
+		// A "If" statement should never omit "Else" 
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Tests if a given device name or path is available
+Function isDeviceAvailable($device : Text)->$available : Boolean
+	
+	$available:=This:C1470.devices().query("(name = :1) or (path = :1)"; $device).pop()#Null:C1517
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function avdmanagerFile()->$file : 4D:C1709.File
+	
+	$file:=This:C1470.androidSDKFolder().file("tools/bin/avdmanager")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function listAvds  // List emulators
 	var $0 : Text  // returns complete output
 	
 	This:C1470.launch(This:C1470.cmd+" list avd")
 	$0:=This:C1470.errorStream
 	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function isAvdExisting  // Check if avd already exists
 	var $0 : Boolean
 	var $1 : Text  // avd name
@@ -35,7 +79,8 @@ Function isAvdExisting  // Check if avd already exists
 		$0:=True:C214
 	End if 
 	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function createAvd
 	var $0 : Text  // output
 	var $1 : Text  // avd name

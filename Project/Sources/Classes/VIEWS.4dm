@@ -525,8 +525,8 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 	var $isSelected : Boolean
 	var $x : Blob
 	var $params; $str : Object
-	var $formRoot : 4D:C1709.Directory
-	var $file : 4D:C1709.Document
+	var $formRoot : 4D:C1709.Folder
+	var $file : 4D:C1709.File
 	var $error : cs:C1710.error
 	var $svg : cs:C1710.svg
 	

@@ -1,7 +1,6 @@
 Class extends tools
 
-Class constructor
-	var $1 : Boolean
+Class constructor($useDefaultPath : Boolean)
 	
 	Super:C1705()
 	
@@ -11,7 +10,7 @@ Class constructor
 		
 		If (Count parameters:C259>=1)
 			
-			This:C1470.path($1)
+			This:C1470.path($useDefaultPath)
 			
 		Else 
 			
@@ -34,9 +33,9 @@ Class constructor
 	
 	//====================================================================
 	// Populate Application with the default path
-Function defaultPath
+Function defaultPath()
 	
-	var $folder : 4D:C1709.Directory
+	var $folder : 4D:C1709.Folder
 	
 	$folder:=Folder:C1567("/Applications/Xcode.app")
 	
@@ -50,31 +49,29 @@ Function defaultPath
 	
 	//====================================================================
 	// Test if the current path is the default path
-Function isDefaultPath
-	var $0 : Boolean
+Function isDefaultPath()->$isDefault : Boolean
 	
-	$0:=(This:C1470.application.path=Folder:C1567("/Applications/Xcode.app").path)
+	$isDefault:=(This:C1470.application.path=Folder:C1567("/Applications/Xcode.app").path)
 	
 	//====================================================================
 	// Return by default the default path,
 	// If not exist the tool path,
 	// If not exist one of the path found by spotlight. The last version.
-Function path
-	var $1 : Boolean  // Use default path
+Function path($useDefaultPath : Boolean)
 	
-	var $found; $useDefaultPath : Boolean
+	var $found; $useDefault : Boolean
 	
-	var $folder : 4D:C1709.Directory
+	var $folder : 4D:C1709.Folder
 	
 	If (Count parameters:C259>=1)
 		
-		$useDefaultPath:=$1
+		$useDefault:=$useDefaultPath
 		
 	End if 
 	
 	This:C1470.defaultPath()
 	
-	$found:=(This:C1470.success & $useDefaultPath)
+	$found:=(This:C1470.success & $useDefault)
 	
 	If (Not:C34($found))
 		
@@ -149,8 +146,7 @@ Function lastPath
 	
 	//====================================================================
 	// Get all installed Xcode applications using Spotlight
-Function paths
-	var $0 : Collection
+Function paths()->$instances : Collection
 	
 	var $pos : Integer
 	var $o : Object
@@ -161,7 +157,7 @@ Function paths
 	
 	If (This:C1470.success)
 		
-		$0:=Split string:C1554($o.out; "\n"; sk ignore empty strings:K86:1)
+		$instances:=Split string:C1554($o.out; "\n"; sk ignore empty strings:K86:1)
 		
 	Else 
 		
@@ -170,17 +166,15 @@ Function paths
 	End if 
 	
 	//====================================================================
-Function getVersion
-	var $0 : Text
-	var $1 : 4D:C1709.Directory
+Function getVersion($target : 4D:C1709.Folder)->$version
 	
 	var $o : Object
 	var $file : 4D:C1709.File
-	var $directory : 4D:C1709.Directory
+	var $directory : 4D:C1709.Folder
 	
 	If (Count parameters:C259>=1)
 		
-		$directory:=$1
+		$directory:=$target
 		
 	Else 
 		
@@ -197,18 +191,16 @@ Function getVersion
 		
 		If ($o.success)
 			
-			$0:=$o.out
+			$version:=$o.out
 			
 		End if 
 	End if 
 	
 	//====================================================================
 	// Returns True if the version of Xcode is equal or superior to the desired one
-Function checkVersion
-	var $0 : Boolean
-	var $1 : Text
+Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	
-	$0:=(This:C1470.versionCompare(This:C1470.version; $1)>=0)
+	$ok:=(This:C1470.versionCompare(This:C1470.version; $minimumVersion)>=0)
 	
 	//====================================================================
 	// Check if any First Launch tasks need to be performed.
@@ -282,7 +274,7 @@ Function installTools
 	
 	//====================================================================
 Function open
-	var $1 : 4D:C1709.Directory
+	var $1 : 4D:C1709.Folder
 	
 	var $o : Object
 	
@@ -322,7 +314,7 @@ Function open
 	
 	//====================================================================
 Function close
-	var $1 : 4D:C1709.Directory
+	var $1 : 4D:C1709.Folder
 	
 	var $cmd : Text
 	var $o : Object
