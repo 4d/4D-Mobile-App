@@ -96,13 +96,17 @@ Function launch($command; $arguments : Text)->$this : cs:C1710.lep
 	
 	$t:=Convert to text:C1012($output; This:C1470.charSet)
 	
-	If (Length:C16($error)=0) & Not:C34(This:C1470.ignoreErrorInOutputStream)
+	If (Length:C16($error)=0)
 		
-		// ⚠️ Some commands return the error in the output stream
-		If (Position:C15("ERROR:"; $t)>0)
+		If (Not:C34(This:C1470.ignoreErrorInOutputStream))
 			
-			$error:=$t
+			// ⚠️ Some commands return the error in the output stream
 			
+			If (Position:C15("ERROR:"; $t; *)>0)
+				
+				$error:=$t
+				
+			End if 
 		End if 
 	End if 
 	

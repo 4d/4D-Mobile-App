@@ -1,5 +1,7 @@
 Class extends MobileProject
 
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+//
 Class constructor
 	var $1 : Object
 	
@@ -7,14 +9,22 @@ Class constructor
 	
 	This:C1470.isOnError:=False:C215
 	
+	//*****************************************
+	// Là cela ne marche pas bien chez moi ;-)
+	//*****************************************
+	
 	If (Is macOS:C1572)
+		
 		This:C1470.filesToCopy:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__FILES_TO_COPY__")
 		This:C1470.templateFiles:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FILES__")
 		This:C1470.templateForms:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FORMS__")
+		
 	Else 
+		
 		This:C1470.filesToCopy:=Folder:C1567("C:/Users/test/Downloads/__FILES_TO_COPY__")
 		This:C1470.templateFiles:=Folder:C1567("C:/Users/test/Downloads/__TEMPLATE_FILES__")
 		This:C1470.templateForms:=Folder:C1567("C:/Users/test/Downloads/__TEMPLATE_FORMS__")
+		
 	End if 
 	
 	// Artifactory identifiers
@@ -31,7 +41,12 @@ Class constructor
 	
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
-	SHOW ON DISK:C922(This:C1470.file.platformPath)
+	
+	If (Structure file:C489=Structure file:C489(*))
+		
+		SHOW ON DISK:C922(This:C1470.file.platformPath)
+		
+	End if 
 	
 	This:C1470.package:=Lowercase:C14(String:C10(This:C1470.project.project.organization.identifier))
 	This:C1470.version:="debug"
@@ -50,24 +65,28 @@ Class constructor
 	
 	This:C1470.init()
 	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function init
+	
 	This:C1470.setJavaHome()
 	This:C1470.setAndroidHome()
 	
 	If ((Not:C34(This:C1470.filesToCopy.exists))\
 		 | (Not:C34(This:C1470.templateFiles.exists))\
 		 | (Not:C34(This:C1470.templateForms.exists)))
+		
 		This:C1470.postError("Missing directories for project templating")
 		This:C1470.isOnError:=True:C214
+		
 	Else 
+		
 		// All ok
+		
 	End if 
 	
-	
-	//====================================================================
-	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function setEnvVarToAll
 	var $1 : Variant  // Object or Collection of objects
 	
@@ -77,517 +96,310 @@ Function setEnvVarToAll
 	This:C1470.emulator.setEnvironnementVariable($1)
 	This:C1470.adb.setEnvironnementVariable($1)
 	
-	
-	//====================================================================
-	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function setJavaHome
-	var $Obj_java_home : Object
 	
-	$Obj_java_home:=This:C1470.androidProcess.getJavaHome()
+	var $javaHome : Object
 	
-	If ($Obj_java_home.success)
+	$javaHome:=This:C1470.androidProcess.getJavaHome()
+	
+	If ($javaHome.success)
 		
-		This:C1470.setEnvVarToAll(New object:C1471("JAVA_HOME"; $Obj_java_home.java_home))
+		This:C1470.setEnvVarToAll(New object:C1471("JAVA_HOME"; $javaHome.java_home))
 		
 	Else 
 		
 		This:C1470.isOnError:=True:C214
-		This:C1470.postError($Obj_java_home.errors.join("\r"))
+		This:C1470.postError($javaHome.errors.join("\r"))
 		
 	End if 
 	
-	
-	//====================================================================
-	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function setAndroidHome
+	
 	This:C1470.setEnvVarToAll(New object:C1471("ANDROID_HOME"; This:C1470.project.sdk))
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function create()->$result : Object
 	
-	//====================================================================
+	var $o : Object
 	
-	
-Function create
-	var $0 : Object
-	
-	var $Obj_generate; $Obj_buildEmbeddedLib; $Obj_copyEmbeddedLib; $Obj_copyResources; $Obj_chmod : Object
-	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	//_____________________________________________________
-	// GENERATE PROJECT FILES
-	
-	If (This:C1470.isOnError=False:C215)
+	If (Not:C34(This:C1470.isOnError))
 		
-		This:C1470.postStep("Generating files")
+		// * GENERATE PROJECT FILES
+		This:C1470.postStep("workspaceCreation")
 		
-		$Obj_generate:=This:C1470.androidprojectgenerator.generate(This:C1470.file; This:C1470.filesToCopy; This:C1470.templateFiles; This:C1470.templateForms)
+		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file; This:C1470.filesToCopy; This:C1470.templateFiles; This:C1470.templateForms)
 		
-		If (Not:C34($Obj_generate.success))
+		If ($o.success)
 			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_generate.errors.join("\r"))
-			$0.errors.combine($Obj_generate.errors)
+			// * BUILD EMBEDDED DATA LIBRARY
+			This:C1470.postStep("dataSetGeneration")
 			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// BUILD EMBEDDED DATA LIBRARY
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Building embedded data library")
-		
-		$Obj_buildEmbeddedLib:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.package)
-		
-		If (Not:C34($Obj_buildEmbeddedLib.success))
+			$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.package)
 			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_buildEmbeddedLib.errors.join("\r"))
-			$0.errors.combine($Obj_buildEmbeddedLib.errors)
-			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// COPY EMBEDDED DATA LIBRARY
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Copying embedded data library")
-		
-		$Obj_copyEmbeddedLib:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib(This:C1470.project.path)
-		
-		If (Not:C34($Obj_copyEmbeddedLib.success))
-			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_copyEmbeddedLib.errors.join("\r"))
-			$0.errors.combine($Obj_copyEmbeddedLib.errors)
-			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// COPY RESOURCES
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Copying resources")
-		
-		$Obj_copyResources:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project.$project.file)
-		
-		If (Not:C34($Obj_copyResources.success))
-			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_copyResources.errors.join("\r"))
-			$0.errors.combine($Obj_copyResources.errors)
-			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// GRADLEW ACCESS RIGHTS
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		If (Is macOS:C1572)
-			
-			This:C1470.postStep("Changing gradlew access rights")
-			
-			$Obj_chmod:=This:C1470.androidprojectgenerator.chmodGradlew(This:C1470.project.path)
-			
-			If (Not:C34($Obj_chmod.success))
+			If ($o.success)
 				
-				This:C1470.isOnError:=True:C214
-				This:C1470.postError($Obj_chmod.errors.join("\r"))
-				$0.errors.combine($Obj_chmod.errors)
+				// * COPY EMBEDDED DATA LIBRARY
+				$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib(This:C1470.project.path)
+				
+				If ($o.success)
+					
+					// * COPY RESOURCES
+					This:C1470.postStep(".Copying resources")  //#MARK_LOCALIZE
+					
+					$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project.$project.file)
+					
+					If ($o.success)
+						
+						// * GRADLEW ACCESS RIGHTS
+						If (Is macOS:C1572)  // Not need to change permissions on Windows
+							
+							//This.postStep(".Adjusting access rights")  //#MARK_LOCALIZE
+							$o:=This:C1470.androidprojectgenerator.chmodGradlew(This:C1470.project.path)
+							
+							If (Not:C34($o.success))
+								
+								This:C1470.isOnError:=True:C214
+								
+							End if 
+						End if 
+						
+					Else 
+						
+						This:C1470.isOnError:=True:C214
+						
+					End if 
+					
+				Else 
+					
+					This:C1470.isOnError:=True:C214
+					
+				End if 
 				
 			Else 
-				// All ok
+				
+				This:C1470.isOnError:=True:C214
+				
 			End if 
 			
 		Else 
-			// Not need to change permissions on Windows
+			
+			This:C1470.isOnError:=True:C214
+			
 		End if 
 		
-	Else 
-		// Already on error
+		If (This:C1470.isOnError)
+			
+			$o.errors.insert(".Failure in project creation"; 0)  // #MARK_LOCALIZE
+			
+			This:C1470.postError($o.errors.join("\r"))
+			$result.errors.combine($o.errors)
+			
+		Else 
+			
+			$result.success:=True:C214
+			
+		End if 
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function build()->$result : Object
 	
-	//_____________________________________________________
-	// END OF PROCEDURE
+	var $o : Object
 	
-	If (This:C1470.isOnError=False:C215)
-		$0.success:=True:C214
-	Else 
-		// Error occurred
-		This:C1470.postError("Creating project failed")
-	End if 
-	
-	
-	
-	//====================================================================
-	
-	
-Function build
-	var $0 : Object
-	
-	var $Obj_build; $Obj_createEmbeddedDatabase; $Obj_checkAPK : Object
-	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
 	This:C1470.gradlew.setEnvironnementVariable(This:C1470.artifactoryIds)\
 		.setEnvironnementVariable("currentDirectory"; This:C1470.project.path)
 	
-	//_____________________________________________________
-	// BUILD PROJECT
-	
-	If (This:C1470.isOnError=False:C215)
+	If (Not:C34(This:C1470.isOnError))
 		
-		This:C1470.postStep("Building project")
+		// * BUILD PROJECT
+		This:C1470.postStep("projectBuild")
 		
-		$Obj_build:=This:C1470.gradlew.assembleDebug()
+		$o:=This:C1470.gradlew.assembleDebug()
 		
-		If (Not:C34($Obj_build.success))
+		If ($o.success)
 			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_build.errors.join("\r"))
-			$0.errors.combine($Obj_build.errors)
+			// * CREATE EMBEDDED DATABASE
+			//This.postStep("Creating embedded database")  // #MARK_LOCALIZE
 			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// CREATE EMBEDDED DATABASE
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Creating embedded database")
-		
-		$Obj_createEmbeddedDatabase:=This:C1470.gradlew.createEmbeddedDatabase()
-		
-		If (Not:C34($Obj_createEmbeddedDatabase.success))
+			$o:=This:C1470.gradlew.createEmbeddedDatabase()
 			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_createEmbeddedDatabase.errors.join("\r"))
-			$0.errors.combine($Obj_createEmbeddedDatabase.errors)
-			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// BUILD PROJECT WITH EMBEDDED DATA
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Building project with embedded data")
-		
-		$Obj_build:=This:C1470.gradlew.assembleDebug()
-		
-		If (Not:C34($Obj_build.success))
-			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_build.errors.join("\r"))
-			$0.errors.combine($Obj_build.errors)
-			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// CHECK APK
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Checking APK")
-		
-		$Obj_checkAPK:=This:C1470.gradlew.checkAPKExists(This:C1470.apk)
-		
-		If (Not:C34($Obj_checkAPK.success))
-			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_checkAPK.errors.join("\r"))
-			$0.errors.combine($Obj_checkAPK.errors)
-			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// END OF PROCEDURE
-	
-	If (This:C1470.isOnError=False:C215)
-		$0.success:=True:C214
-	Else 
-		// Error occurred
-		This:C1470.postError("Building project failed")
-	End if 
-	
-	
-	//====================================================================
-	
-	
-Function run
-	var $0 : Object
-	
-	var $Obj_serial; $Obj_start; $Obj_wait; $Obj_install; $Obj_launch : Object
-	
-	$0:=New object:C1471(\
-		"success"; False:C215; \
-		"errors"; New collection:C1472)
-	
-	//_____________________________________________________
-	// CREATE AVD IF DOESN'T EXIST
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Preparing emulator")
-		
-		If (Not:C34(This:C1470.avd.isAvdExisting(This:C1470.avdName)))
-			
-			This:C1470.postStep("Creating emulator")
-			
-			This:C1470.avd.createAvd(This:C1470.avdName; "system-images;android-29;google_apis;x86"; "pixel_xl")
-			
-		Else 
-			// Avd already exists
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	//_____________________________________________________
-	// GET EMULATOR SERIAL
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Retrieving emulator serial")
-		
-		$Obj_serial:=This:C1470.adb.getSerial(This:C1470.avdName)
-		
-		If ($Obj_serial.success)
-			
-			This:C1470.serial:=$Obj_serial.serial
-			
-		Else 
-			
-			If ($Obj_serial.errors.length>0)
+			If ($o.success)
 				
-				// error occurred in getSerial()
-				This:C1470.isOnError:=True:C214
-				This:C1470.postError($Obj_serial.errors.join("\r"))
-				$0.errors.combine($Obj_serial.errors)
+				// * BUILD PROJECT WITH EMBEDDED DATA
+				//This.postStep("Building project with embedded data")  // #MARK_LOCALIZE
 				
-			Else 
-				// Serial not found, but no error
-			End if 
-			
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// START EMULATOR
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Starting emulator")
-		
-		$Obj_start:=This:C1470.emulator.start(This:C1470.avdName)
-		
-		If (Not:C34($Obj_start.success))
-			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_start.errors.join("\r"))
-			$0.errors.combine($Obj_start.errors)
-			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// WAIT FOR EMULATOR BOOT
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Waiting for emulator boot")
-		
-		$Obj_wait:=This:C1470.adb.waitForBoot(This:C1470.serial)
-		
-		If (Not:C34($Obj_wait.success))
-			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_wait.errors.join("\r"))
-			$0.errors.combine($Obj_wait.errors)
-			
-		Else 
-			// All ok
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// GET EMULATOR SERIAL (if emulator was not already booted, it now is)
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		If (This:C1470.serial="")
-			
-			This:C1470.postStep("Retrieving emulator serial")
-			
-			$Obj_serial:=This:C1470.adb.getSerial(This:C1470.avdName)
-			
-			If ($Obj_serial.success)
+				$o:=This:C1470.gradlew.assembleDebug()
 				
-				This:C1470.serial:=$Obj_serial.serial
-				
-			Else 
-				
-				This:C1470.isOnError:=True:C214
-				
-				If ($Obj_serial.errors.length>0)
+				If ($o.success)
 					
-					// error occurred in getSerial()
-					This:C1470.postError($Obj_serial.errors.join("\r"))
-					$0.errors.combine($Obj_serial.errors)
+					// * CHECK APK
+					//This.postStep("Checking APK")  // #MARK_LOCALIZE
+					
+					$o:=This:C1470.gradlew.checkAPKExists(This:C1470.apk)
+					
+					If (Not:C34($o.success))
+						
+						This:C1470.isOnError:=True:C214
+						
+					End if 
 					
 				Else 
 					
-					// Serial not found, but no error in command
-					This:C1470.postError("Could not retrieve emulator serial")
+					This:C1470.isOnError:=True:C214
 					
 				End if 
+				
+			Else 
+				
+				This:C1470.isOnError:=True:C214
 				
 			End if 
 			
 		Else 
-			// serial was already recovered
-		End if 
-		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// INSTALL APP
-	
-	If (This:C1470.isOnError=False:C215)
-		
-		This:C1470.postStep("Installing app")
-		
-		$Obj_install:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.package; This:C1470.apk)
-		
-		If (Not:C34($Obj_install.success))
 			
 			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_install.errors.join("\r"))
-			$0.errors.combine($Obj_install.errors)
 			
-		Else 
-			// All ok
 		End if 
 		
-	Else 
-		// Already on error
+		If (This:C1470.isOnError)
+			
+			$o.errors.insert(".Building project failed"; 0)  // #MARK_LOCALIZE
+			
+			This:C1470.postError($o.errors.join("\r"))
+			$result.errors.combine($o.errors)
+			
+		Else 
+			
+			$result.success:=True:C214
+			
+		End if 
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function run()->$result : Object
 	
-	//_____________________________________________________
-	// LAUNCH APP
+	var $o : Object
 	
-	If (This:C1470.isOnError=False:C215)
+	$result:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	If (Not:C34(This:C1470.isOnError))
 		
-		This:C1470.postStep("Launching app")
+		// * CREATE AVD IF DOESN'T EXIST
+		This:C1470.postStep("launchingTheSimulator")
 		
-		$Obj_launch:=This:C1470.adb.startApp(This:C1470.serial; This:C1470.package; This:C1470.activity)
+		If (Not:C34(This:C1470.avd.isAvdExisting(This:C1470.avdName)))
+			
+			This:C1470.avd.createAvd(This:C1470.avdName; "system-images;android-29;google_apis;x86"; "pixel_xl")
+			
+		End if 
 		
-		If (Not:C34($Obj_launch.success))
+		// * GET EMULATOR SERIAL
+		$o:=This:C1470.adb.getSerial(This:C1470.avdName)
+		
+		If ($o.success)
+			
+			This:C1470.serial:=$o.serial
+			
+		End if 
+		
+		// * START EMULATOR
+		$o:=This:C1470.emulator.start(This:C1470.avdName)
+		
+		If ($o.success)
+			
+			// * WAIT FOR EMULATOR BOOT
+			$o:=This:C1470.adb.waitForBoot(This:C1470.serial)
+			
+			If ($o.success)
+				
+				If (This:C1470.serial="")
+					
+					// * GET EMULATOR SERIAL (if emulator was not already booted, it now is)
+					$o:=This:C1470.adb.getSerial(This:C1470.avdName)
+					
+					If ($o.success)
+						
+						This:C1470.serial:=$o.serial
+						
+					Else 
+						
+						This:C1470.isOnError:=True:C214
+						
+						If ($o.errors.length=0)
+							
+							// Serial not found, but no error in command
+							This:C1470.postError(".Could not retrieve emulator serial")  // #MARK_LOCALIZE
+							
+						End if 
+					End if 
+				End if 
+				
+				If (Not:C34(This:C1470.isOnError))
+					
+					// * INSTALL APP
+					This:C1470.postStep("installingTheApplication")
+					
+					$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.package; This:C1470.apk)
+					
+					If ($o.success)
+						
+						// * LAUNCH APP
+						This:C1470.postStep("launchingTheApplication")
+						
+						$o:=This:C1470.adb.startApp(This:C1470.serial; This:C1470.package; This:C1470.activity)
+						
+						If (Not:C34($o.success))
+							
+							This:C1470.isOnError:=True:C214
+							
+						End if 
+						
+					Else 
+						
+						This:C1470.isOnError:=True:C214
+						
+					End if 
+				End if 
+				
+			Else 
+				
+				This:C1470.isOnError:=True:C214
+				
+			End if 
+			
+		Else 
 			
 			This:C1470.isOnError:=True:C214
-			This:C1470.postError($Obj_launch.errors.join("\r"))
-			$0.errors.combine($Obj_launch.errors)
 			
-		Else 
-			// All ok
 		End if 
 		
-	Else 
-		// Already on error
-	End if 
-	
-	
-	//_____________________________________________________
-	// END OF PROCEDURE
-	
-	If (This:C1470.isOnError=False:C215)
-		$0.success:=True:C214
-	Else 
-		// Error occurred
-		This:C1470.postError("Running project failed")
+		If (This:C1470.isOnError)
+			
+			$o.errors.insert("failedToLaunchTheSimulator"; 0)
+			
+			This:C1470.postError($o.errors.join("\r"))
+			$result.errors.combine($o.errors)
+			
+		Else 
+			
+			$result.success:=True:C214
+			
+		End if 
 	End if 

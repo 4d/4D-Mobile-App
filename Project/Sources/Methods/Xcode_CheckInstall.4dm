@@ -12,8 +12,7 @@
 // - Is the Xcode licence accepted?
 // ----------------------------------------------------
 // Declarations
-var $0 : Object
-var $1 : Object
+#DECLARE($in : Object)->$out : Object
 
 If (False:C215)
 	C_OBJECT:C1216(Xcode_CheckInstall; $0)
@@ -28,6 +27,12 @@ var $Xcode : cs:C1710.Xcode
 // Initialisations
 
 // NO PARAMETERS REQUIRED
+
+If (Value type:C1509(SHARED)=Is undefined:K8:13)  // For testing purposes
+	
+	COMPONENT_INIT
+	
+End if 
 
 // Optional parameters
 If (Count parameters:C259>=1)
@@ -141,7 +146,7 @@ If ($out.XcodeAvailable)
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; New collection:C1472("obsoleteVersionOfXcode"; "4dProductName"; SHARED.xCodeVersion); \
-			"additional"; New collection:C1472("wouldYouLikeToInstallFromTheAppStoreNow"; "\"Xcode\"")))
+			"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "\"Xcode\"")))
 		
 		If ($signal.validate)
 			
@@ -193,8 +198,8 @@ Else
 		"target"; $in.caller; \
 		"action"; "show"; \
 		"type"; "confirm"; \
-		"title"; New collection:C1472("4dMobileRequiresToInstallDeveloperTools"; "4dProductName"); \
-		"additional"; New collection:C1472("wouldYouLikeToInstallFromTheAppStoreNow"; "\"Xcode\"")))
+		"title"; New collection:C1472("4dMobileRequiresXcode"; "4dProductName"); \
+		"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "\"Xcode\"")))
 	
 	If ($signal.validate)
 		

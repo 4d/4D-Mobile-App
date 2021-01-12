@@ -47,7 +47,7 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		//#99788 ========================================================
 		//EXECUTE METHOD IN SUBFORM("project"; "views_Handler"; *; New object(\
-																					"action"; "updateForms"))
+																								"action"; "updateForms"))
 		
 		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
@@ -375,7 +375,7 @@ If (Asserted:C1132($project#Null:C1517))
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; New collection:C1472("appIsNotInstalled"; $t); \
-							"additional"; New collection:C1472("wouldYouLikeToInstallFromTheAppStoreNow"; $t); \
+							"additional"; New collection:C1472("wouldYouLikeToInstallNow"; $t); \
 							"okAction"; JSON Stringify:C1217($Obj_ok); \
 							"cancel"; Get localized string:C991("manualInstallation"); \
 							"cancelAction"; JSON Stringify:C1217($Obj_cancel)))

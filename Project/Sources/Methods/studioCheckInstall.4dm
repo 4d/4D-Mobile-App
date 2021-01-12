@@ -5,7 +5,7 @@
 // Created 11-1-2021 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-// 
+// Checking the installation of Android Studio
 // ----------------------------------------------------
 // Declarations
 #DECLARE($in : Object)->$out : Object
@@ -23,7 +23,7 @@ var $studio : cs:C1710.studio
 
 // NO PARAMETERS REQUIRED
 
-If (Value type:C1509(SHARED)=Is undefined:K8:13)
+If (Value type:C1509(SHARED)=Is undefined:K8:13)  // For testing purposes
 	
 	COMPONENT_INIT
 	
@@ -64,12 +64,12 @@ Else
 			"target"; $inƒ.caller; \
 			"action"; "show"; \
 			"type"; "confirm"; \
-			"title"; New collection:C1472("4dMobileRequiresToInstallDeveloperTools"; "4dProductName"); \
-			"additional"; New collection:C1472("wouldYouLikeToInstallFromTheAppStoreNow"; "\"Android Studio\"")))
+			"title"; New collection:C1472("4dMobileRequiresAndroidStudio"; "4dProductName"); \
+			"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "\"Android Studio\"")))
 		
 		If ($signal.validate)
 			
-			//OPEN URL(Get localized string("appstore_xcode"); *)
+			OPEN URL:C673(Get localized string:C991("androidStudio"); *)
 			
 		End if 
 	End if 

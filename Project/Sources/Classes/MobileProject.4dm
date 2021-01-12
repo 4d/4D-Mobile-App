@@ -4,12 +4,13 @@ Class constructor
 	
 	This:C1470.input:=$1
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function main()->$result : Object
 	
-Function main
-	var $0 : Object
-	var $Obj_result : Object
+	var $o : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -17,46 +18,58 @@ Function main
 	This:C1470.input.build:=True:C214
 	This:C1470.input.run:=True:C214
 	
-	$Obj_result:=This:C1470.create()
+	$o:=This:C1470.create()
 	
-	If ($Obj_result.success)
+	If ($o.success)
 		
 		If (Bool:C1537(This:C1470.input.build))
 			
-			$Obj_result:=This:C1470.build()
+			$o:=This:C1470.build()
 			
-			If ($Obj_result.success)
+			If ($o.success)
 				
 				If (Bool:C1537(This:C1470.input.run))
 					
-					$Obj_result:=This:C1470.run()
+					$o:=This:C1470.run()
 					
-					If ($Obj_result.success)
+					If ($o.success)
+						
 						// Nothing to do
-						$0.success:=True:C214
+						$result.success:=True:C214
+						
 					Else 
+						
 						// Error occurred while running project
+						
 					End if 
 					
 				Else 
+					
 					// No run requested
-					$0.success:=True:C214
+					$result.success:=True:C214
+					
 				End if 
 				
 			Else 
+				
 				// Error occurred while building project
+				
 			End if 
 			
 		Else 
+			
 			// No build requested
-			$0.success:=True:C214
+			$result.success:=True:C214
+			
 		End if 
 		
 	Else 
+		
 		// Error occurred while creating project
+		
 	End if 
 	
-	$0.errors:=$Obj_result.errors
+	$result.errors:=$o.errors
 	
 	POST_MESSAGE(New object:C1471(\
 		"type"; "alert"; \
@@ -65,32 +78,37 @@ Function main
 	
 	SHOW ON DISK:C922(This:C1470.input.path)
 	
-	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function create
+	
 	ASSERT:C1129(False:C215; "must be overriden")
 	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function build
+	
 	ASSERT:C1129(False:C215; "must be overriden")
 	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function run
+	
 	ASSERT:C1129(False:C215; "must be overriden")
 	
-	
-Function postStep
-	var $1 : Text
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function postStep($message : Text)
 	
 	POST_MESSAGE(New object:C1471(\
 		"target"; This:C1470.input.caller; \
-		"additional"; $1))
+		"additional"; $message))
 	
-	
-Function postError
-	var $1 : Text
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function postError($message : Text)
 	
 	POST_MESSAGE(New object:C1471(\
 		"type"; "alert"; \
 		"target"; This:C1470.input.caller; \
-		"additional"; $1))
+		"additional"; $message))

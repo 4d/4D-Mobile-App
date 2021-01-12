@@ -12,6 +12,51 @@ Class constructor
 Function devices()->$devices : Collection
 	
 	var $start : Integer
+	var $o : Object
+	
+	$devices:=New collection:C1472
+	
+	This:C1470.launch(This:C1470.cmd+" list device")
+	
+	If (This:C1470.success)
+		
+		$start:=1
+		
+		ARRAY LONGINT:C221($pos; 0x0000; 0x0000)
+		ARRAY LONGINT:C221($len; 0x0000; 0x0000)
+		
+		While (Match regex:C1019("(?m-si)id:\\s(\\d+)\\sor\\s\"([^\"]*)\"\\s*Name:\\s(\\V*)\\s*OEM\\s*:\\s(\\V*)"; This:C1470.outputStream; $start; $pos; $len))
+			
+			$o:=New object:C1471(\
+				"uid"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
+				"id"; Substring:C12(This:C1470.outputStream; $pos{2}; $len{2}); \
+				"name"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3}); \
+				"OEM"; Substring:C12(This:C1470.outputStream; $pos{4}; $len{4}))
+			
+			$start:=$pos{4}+$len{4}  //+1
+			
+			If (Position:C15("tv_"; $o.id)=0) & (Position:C15("wear_"; $o.id)=0)
+				
+				$devices.push($o)
+				
+			End if 
+		End while 
+		
+	Else 
+		
+		// A "If" statement should never omit "Else" 
+		
+	End if 
+	
+	
+	
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns a collection of available device simulators
+Function _o_devices()->$devices : Collection
+	
+	var $start : Integer
 	
 	$devices:=New collection:C1472
 	

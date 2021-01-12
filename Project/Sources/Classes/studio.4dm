@@ -6,6 +6,7 @@ Class constructor($useDefaultPath : Boolean)
 	
 	This:C1470.macOS:=Is macOS:C1572
 	This:C1470.window:=Is Windows:C1573
+	This:C1470.exe:=Null:C1517
 	
 	If (Count parameters:C259>=1)
 		
@@ -23,55 +24,23 @@ Class constructor($useDefaultPath : Boolean)
 		
 	End if 
 	
-	//====================================================================
-	// Populate Application with the default path
-Function defaultPath()
-	
-	var $folder : 4D:C1709.Folder
-	
-	If (This:C1470.macOS)
-		
-		$folder:=Folder:C1567("/Applications/Android Studio.app")
-		
-	Else 
-		
-		//$folder:=Folder("/Applications/Xcode.app")
-		
-	End if 
-	
-	This:C1470.success:=$folder.exists
-	
-	If (This:C1470.success)
-		
-		This:C1470.application:=$folder
-		
-	End if 
-	
-	//====================================================================
-	// Test if the current path is the default path
-Function isDefaultPath()->$isDefault : Boolean
-	
-	$isDefault:=(This:C1470.application.path=Folder:C1567("/Applications/Xcode.app").path)
-	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Return by default the default path,
-	// If not exist one of the path found by spotlight. The last version.
+	// If not exist one of the path found by spotlight(on macOS). The last version.
 Function path($useDefaultPath : Boolean)
 	
-	var $found; $useDefault : Boolean
+	var $found; $default : Boolean
 	var $folder : 4D:C1709.Folder
 	
 	If (Count parameters:C259>=1)
 		
-		$useDefault:=$1
+		$default:=$1
 		
 	End if 
 	
 	This:C1470.defaultPath()
 	
-	$found:=(This:C1470.success & $useDefault)
-	
-	If (Not:C34($found))
+	If (This:C1470.exe=Null:C1517) & Not:C34($default)
 		
 		This:C1470.lastPath()
 		
@@ -82,7 +51,38 @@ Function path($useDefaultPath : Boolean)
 		End if 
 	End if 
 	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Populate Application with the default path
+Function defaultPath()
+	
+	var $exe : Object
+	
+	This:C1470.exe:=Null:C1517
+	
+	If (This:C1470.macOS)
+		
+		$exe:=Folder:C1567("/Applications/Android Studio.app")
+		
+	Else 
+		
+		$exe:=File:C1566("C:\\Program Files\\Android\\Android Studio\\studio.exe")
+		
+	End if 
+	
+	This:C1470.success:=$exe.exists
+	
+	If (This:C1470.success)
+		
+		This:C1470.exe:=$exe
+		
+	Else 
+		
+		This:C1470.exe:=Null:C1517
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function lastPath
 	var $pathname; $t; $version : Text
 	var $o : Object
@@ -102,15 +102,30 @@ Function lastPath
 				
 				$t:=$version
 				This:C1470.version:=$version
-				This:C1470.application:=Folder:C1567($pathname)
+				This:C1470.exe:=Folder:C1567($pathname)
 				This:C1470.success:=True:C214
 				
 			End if 
 		End for each 
 	End if 
 	
+	
 	//====================================================================
-	// Get all installed Android Studio applications using Spotlight
+	// Test if the current path is the default path
+Function isDefaultPath()->$isDefault : Boolean
+	
+	If (This:C1470.macOS)
+		
+		$isDefault:=(This:C1470.exe.path=Folder:C1567("/Applications/Xcode.app").path)
+		
+	Else 
+		
+		$isDefault:=(This:C1470.exe.path=Folder:C1567("/Applications/Xcode.app").path)
+		
+	End if 
+	
+	//====================================================================
+	// Get all installed Android Studio applications using Spotlight (on macOS)
 Function paths()->$instances : Collection
 	
 	var $pos : Integer
@@ -151,7 +166,7 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 		
 	Else 
 		
-		$directory:=This:C1470.application
+		$directory:=This:C1470.exe
 		
 	End if 
 	
@@ -190,4 +205,8 @@ Function checkVersion($minimumVersion : Text)->$ok : Boolean
 		This:C1470.success:=False:C215
 		
 	End if 
+	
+Function downlod
+	
+	//https://developer.android.com/studio
 	

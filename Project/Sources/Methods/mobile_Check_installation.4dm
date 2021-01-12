@@ -33,21 +33,30 @@ End if
 // ----------------------------------------------------
 
 Case of 
+		
 		//______________________________________________________
 	: (Is macOS:C1572)
 		
-		$out:=Xcode_CheckInstall($in)
+		If (FEATURE.with("android"))
+			
+			$in.silent:=True:C214
+			
+			$out:=New object:C1471(\
+				"xcode"; Xcode_CheckInstall($in); \
+				"studio"; studioCheckInstall($in))
+			
+		Else 
+			
+			$out:=Xcode_CheckInstall($in)
+			
+		End if 
 		
 		//______________________________________________________
 	: (Is Windows:C1573)
 		
 		ASSERT:C1129(DATABASE.isMatrix)
 		
-		$out:=New object:C1471(\
-			"platform"; Windows:K25:3; \
-			"XcodeAvailable"; False:C215; \
-			"toolsAvalaible"; False:C215; \
-			"ready"; False:C215)
+		$out:=studioCheckInstall($in)
 		
 		//______________________________________________________
 	Else 

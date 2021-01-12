@@ -5,7 +5,7 @@ Class constructor
 	Super:C1705()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// Returns the Android SDK folder object
 Function androidSDKFolder()->$folder : 4D:C1709.Folder
 	
 	If (Is macOS:C1572)
@@ -20,9 +20,8 @@ Function androidSDKFolder()->$folder : 4D:C1709.Folder
 	
 	// or find it
 	
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// Returns the User Home folder object
 Function homeFolder()->$folder : 4D:C1709.Folder
 	
 	$folder:=Folder:C1567(fk desktop folder:K87:19).parent  // Maybe there is a better way for all OS

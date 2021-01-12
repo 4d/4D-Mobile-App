@@ -1,18 +1,57 @@
+/*
+Android Debug Bridge (adb) is a versatile command-line tool that lets you 
+communicate with a device. The adb command facilitates a variety of device 
+actions, such as installing and debugging apps, and it provides access to a Unix 
+shell that you can use to run a variety of commands on a device
+
+*/
+
 Class extends androidProcess
 
 Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.cmd:=This:C1470.adbFile().path
+	This:C1470.cmd:=This:C1470.androidSDKFolder().file("platform-tools/adb").path
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function adbFile()->$file : 4D:C1709.File
 	
-Function adbFile
-	var $0 : 4D:C1709.File
+	$file:=This:C1470.androidSDKFolder().file("platform-tools/adb")
 	
-	$0:=This:C1470.androidSDKFolder().folder("platform-tools").file("adb")
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns a collection of booted devices
+Function bootedDevices()->$devices : Collection
 	
+	$devices:=New collection:C1472
 	
+	This:C1470.launch(This:C1470.cmd+" devices")
+	
+	If (This:C1470.success)
+		
+		var $start : Integer
+		$start:=1
+		
+		ARRAY LONGINT:C221($pos; 0)
+		ARRAY LONGINT:C221($len; 0)
+		
+		While (Match regex:C1019("(?m-si)(emulator-\\d*\\tdevice)"; This:C1470.outputStream; $start; $pos; $len))
+			
+			$devices.push(Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}))
+			
+			$start:=$pos{1}+$len{1}
+			
+		End while 
+		
+	Else 
+		
+		This:C1470.errors.push("Failed to get device list")
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function listBootedDevices  // List booted devices
 	var $0 : Object
 	
