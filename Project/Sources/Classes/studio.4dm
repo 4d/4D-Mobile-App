@@ -46,7 +46,7 @@ Function path($useDefaultPath : Boolean)
 		
 		If (This:C1470.success)
 			
-			
+			//verify the tools
 			
 		End if 
 	End if 
@@ -65,7 +65,7 @@ Function defaultPath()
 		
 	Else 
 		
-		$exe:=File:C1566("C:\\Program Files\\Android\\Android Studio\\studio.exe")
+		$exe:=File:C1566("C:\\Program Files\\Android\\Android Studio\\bin\\studio.exe"; fk platform path:K87:2)
 		
 	End if 
 	
@@ -96,19 +96,37 @@ Function lastPath
 		
 		For each ($pathname; $c)
 			
-			$version:=This:C1470.getVersion(Folder:C1567($pathname))
+			If (This:C1470.macOS)
+				
+				//bundle
+				$version:=This:C1470.getVersion(Folder:C1567($pathname))
+				
+			Else 
+				
+				$version:=This:C1470.getVersion(File:C1566($pathname; fk platform path:K87:2))
+				
+			End if 
 			
 			If (This:C1470.versionCompare($version; $t)>=0)  // Equal or higher
 				
 				$t:=$version
 				This:C1470.version:=$version
-				This:C1470.exe:=Folder:C1567($pathname)
+				If (This:C1470.macOS)
+					
+					//bundle
+					This:C1470.exe:=Folder:C1567($pathname)
+					
+				Else 
+					
+					This:C1470.exe:=File:C1566($pathname; fk platform path:K87:2)
+					
+				End if 
+				
 				This:C1470.success:=True:C214
 				
 			End if 
 		End for each 
 	End if 
-	
 	
 	//====================================================================
 	// Test if the current path is the default path
@@ -128,8 +146,9 @@ Function isDefaultPath()->$isDefault : Boolean
 	// Get all installed Android Studio applications using Spotlight (on macOS)
 Function paths()->$instances : Collection
 	
-	var $pos : Integer
 	var $o : Object
+	var $t : Text
+	var $file : 4D:C1709.File
 	
 	If (This:C1470.macOS)
 		
@@ -149,14 +168,40 @@ Function paths()->$instances : Collection
 		
 	Else 
 		
-		This:C1470.success:=False:C215
+		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("Uninstall.txt")
+		$file.delete()
 		
+		$o:=This:C1470.lep("reg export HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall "+$file.platformPath)
+		This:C1470.success:=$o.success
+		
+		If (This:C1470.success)
+			
+			$t:=$file.getText()
+			
+			ARRAY LONGINT:C221($pos; 0x0000)
+			ARRAY LONGINT:C221($len; 0x0000)
+			This:C1470.success:=Match regex:C1019("(?m-si)\"DisplayName\"=\"Android Studio\"\\R\"DisplayVersion\"=\"(4.1)\"(?:\\R\"[^\"]*\"=\"[^\"]*\")*\\R\"DisplayIcon\"=\"([^\"]*)\""; $t; 1; $pos; $len)
+			
+			If (This:C1470.success)
+				
+				$instances:=New collection:C1472(Replace string:C233(Substring:C12($t; $pos{2}; $len{2}); "\\\\"; "\\"))
+				
+			End if 
+		End if 
+		
+		If ($instances=Null:C1517)
+			
+			This:C1470.lastError:=Choose:C955(Length:C16($o.error)=0; "No Android Studio installed"; $o.error)
+			
+		End if 
 	End if 
 	
 	//====================================================================
 Function getVersion($target : 4D:C1709.Folder)->$version
 	
 	var $o : Object
+	var $indx : Integer
+	var $drive; $extension; $name; $path; $t : Text
 	var $file : 4D:C1709.File
 	var $directory : 4D:C1709.Folder
 	
@@ -178,8 +223,9 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 		If (This:C1470.success)
 			
 			$o:=This:C1470.lep("defaults read"+" '"+$file.path+"' CFBundleShortVersionString")
+			This:C1470.success:=$o.success
 			
-			If ($o.success)
+			If (This:C1470.success)
 				
 				$version:=$o.out
 				
@@ -188,25 +234,39 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 		
 	Else 
 		
-		This:C1470.success:=False:C215
+		$indx:=Position:C15(":"; $directory.parent.platformPath)
+		$drive:=Substring:C12($directory.parent.platformPath; 1; $indx)
+		$path:=Replace string:C233(Substring:C12($directory.parent.platformPath; $indx+1); "\\"; "\\\\")
+		$name:=$directory.name
+		$extension:=Replace string:C233($directory.extension; "."; ""; 1)
 		
+		$o:=This:C1470.lep("wmic datafile where \"Drive='"+$drive+"' and Path='"+$path+"' and Filename='"+$name+"' and extension='"+$extension+"'\" get name,version")
+		This:C1470.success:=$o.success
+		
+		If (This:C1470.success)
+			
+			$t:=$o.out
+			
+			ARRAY LONGINT:C221($pos; 0x0000)
+			ARRAY LONGINT:C221($len; 0x0000)
+			This:C1470.success:=Match regex:C1019("(?m-si)\\s(\\d+(?:\\.\\d+)*)\\s"; $t; 1; $pos; $len)
+			
+		End if 
+		
+		If (This:C1470.success)
+			
+			$version:=Substring:C12($t; $pos{1}; $len{1})
+			
+		End if 
 	End if 
 	
 	//====================================================================
 	// Returns True if the version of Xcode is equal or superior to the desired one
 Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	
-	If (This:C1470.macOS)
-		
-		$ok:=(This:C1470.versionCompare(This:C1470.version; $minimumVersion)>=0)
-		
-	Else 
-		
-		This:C1470.success:=False:C215
-		
-	End if 
+	$ok:=(This:C1470.versionCompare(This:C1470.version; $minimumVersion)>=0)
 	
-Function downlod
+Function download
 	
 	//https://developer.android.com/studio
 	

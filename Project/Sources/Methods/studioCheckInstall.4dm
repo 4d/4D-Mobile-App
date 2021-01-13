@@ -43,11 +43,11 @@ $out:=New object:C1471(\
 
 // ----------------------------------------------------
 // Check if Android Studio is available into the "Applications" folder
-$studio:=cs:C1710.studio.new(True:C214)
+$studio:=cs:C1710.studio.new()
 
 If ($studio.success)
 	
-	$out.studioAvailable:=$studio.application.exists
+	$out.studioAvailable:=$studio.exe.exists
 	
 End if 
 
@@ -58,7 +58,7 @@ If ($out.studioAvailable)
 	
 Else 
 	
-	If ($studio.isWindows) | Bool:C1537($inƒ.mandatory)
+	If ($studio.window) | Bool:C1537($inƒ.mandatory)
 		
 		$signal:=await_MESSAGE(New object:C1471(\
 			"target"; $inƒ.caller; \

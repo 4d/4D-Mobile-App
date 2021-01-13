@@ -28,6 +28,32 @@ End if
 
 Case of 
 		
+	: (True:C214)
+		
+		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("Uninstall.txt")
+		$file.delete()
+		
+		$o:=cs:C1710.lep.new()
+		$o.launch("reg export HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall "+$file.platformPath)
+		
+		If ($o.success)
+			
+			$t:=$file.getText()
+			$file.delete()
+			
+			ARRAY LONGINT:C221($pos; 0)
+			ARRAY LONGINT:C221($len; 0)
+			If (Match regex:C1019("(?m-si)\"DisplayName\"=\"Android Studio\"\\r\\n\"DisplayVersion\"=\"(4.1)\"(?:\\r\\n\"[^\"]*\"=\"[^\"]*\")*\\r\\n\"Displ"+\
+				"ayIcon\"=\"([^\"]*)\""; $t; 1; $pos; $len))
+				
+				var $version; $path : Text
+				$version:=Substring:C12($t; $pos{1}; $len{1})
+				$path:=Substring:C12($t; $pos{2}; $len{2})
+				
+				
+			End if 
+		End if 
+		
 		
 		//________________________________________
 	: (True:C214)
