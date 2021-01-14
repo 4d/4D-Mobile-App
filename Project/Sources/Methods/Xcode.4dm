@@ -902,7 +902,7 @@ Case of
 				
 			End if 
 			
-			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; _o_str.setText("4dMobileWantsToMakeChanges").localized("4dProductName"))
+			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; _o_str.setText("4dMobileWantsToMakeChanges").localized("4dForIos"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; COMPONENT_Pathname("scripts").file("sudo-askpass").path)
 			
@@ -1308,7 +1308,7 @@ Case of
 		
 		If (Bool:C1537($Obj_param.sudo))
 			
-			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; _o_str.setText("4dMobileWantsToMakeChanges").localized("4dProductName"))
+			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; _o_str.setText("4dMobileWantsToMakeChanges").localized("4dForIos"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; COMPONENT_Pathname("scripts").file("sudo-askpass").path)
 			

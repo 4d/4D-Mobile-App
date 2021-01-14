@@ -38,14 +38,14 @@ Function devices()->$devices : Collection
 		While (Match regex:C1019("(?m-si)id:\\s(\\d+)\\sor\\s\"([^\"]*)\"\\s*Name:\\s(\\V*)\\s*OEM\\s*:\\s(\\V*)"; This:C1470.outputStream; $start; $pos; $len))
 			
 			$o:=New object:C1471(\
-				"uid"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
-				"id"; Substring:C12(This:C1470.outputStream; $pos{2}; $len{2}); \
+				"id"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
+				"udid"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1})+"."+Replace string:C233(Substring:C12(This:C1470.outputStream; $pos{2}; $len{2}); " "; "_"); \
 				"name"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3}); \
 				"OEM"; Substring:C12(This:C1470.outputStream; $pos{4}; $len{4}))
 			
-			$start:=$pos{4}+$len{4}  //+1
+			$start:=$pos{4}+$len{4}
 			
-			If (Position:C15("tv_"; $o.id)=0) & (Position:C15("wear_"; $o.id)=0)
+			If (Position:C15("tv_"; $o.udid)=0) & (Position:C15("wear_"; $o.udid)=0)
 				
 				$devices.push($o)
 				
@@ -58,9 +58,43 @@ Function devices()->$devices : Collection
 		
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns a collection of available device simulators
+Function availableDevices()->$devices : Collection
 	
+	var $start : Integer
 	
+	$devices:=New collection:C1472
 	
+	This:C1470.ignoreErrorInOutputStream:=True:C214
+	This:C1470.launch(This:C1470.cmd+" list avd")
+	
+	If (This:C1470.success)
+		
+		$start:=1
+		
+		ARRAY LONGINT:C221($pos; 0x0000; 0x0000)
+		ARRAY LONGINT:C221($len; 0x0000; 0x0000)
+		
+		While (Match regex:C1019("(?m-si)Name:\\s(\\V*)\\s*Device:\\s(\\V*)\\s*Path:\\s(\\V*)\\s*Target:\\s(\\V*\\s*\\V*)\\s*Skin:\\s(\\V*)\\s*Sdcard:\\s("+\
+			"\\V*)"; This:C1470.outputStream; $start; $pos; $len))
+			
+			$devices.push(New object:C1471(\
+				"udid"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
+				"name"; Substring:C12(This:C1470.outputStream; $pos{2}; $len{2}); \
+				"path"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3}); \
+				"isAvailable"; True:C214; \
+				"state"; "Shutdown"))
+			
+			$start:=$pos{2}+$len{2}+1
+			
+		End while 
+		
+	Else 
+		
+		// A "If" statement should never omit "Else" 
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a collection of available device simulators

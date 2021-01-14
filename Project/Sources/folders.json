@@ -401,7 +401,8 @@
 		"methods": [
 			"COMPILER_android",
 			"dev_test_android",
-			"mobile_Project_android"
+			"mobile_Project_android",
+			"studioCheckInstall"
 		],
 		"classes": [
 			"adb",
@@ -412,7 +413,8 @@
 			"externalProcess",
 			"gradlew",
 			"java",
-			"MobileProjectAndroid"
+			"MobileProjectAndroid",
+			"studio"
 		]
 	},
 	"backend": {
@@ -464,7 +466,6 @@
 			"str",
 			"svg",
 			"tools",
-			"Xcode",
 			"xml"
 		]
 	},
@@ -678,6 +679,9 @@
 			"Xcode_CheckInstall",
 			"XcodeProj",
 			"XcodeProjInject"
+		],
+		"classes": [
+			"Xcode"
 		]
 	},
 	"Message": {
@@ -695,8 +699,9 @@
 	"mobile": {
 		"methods": [
 			"COMPILER_mobile",
-			"mobile_Check_installation",
-			"mobile_Project"
+			"mobile_Project",
+			"mobileCheckInstallation",
+			"mobileGetDevices"
 		]
 	},
 	"ob": {

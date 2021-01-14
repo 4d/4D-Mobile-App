@@ -75,7 +75,7 @@ Case of
 				PROJECT.$project:=Form:C1466
 				
 				// Set the dialog title
-				SET WINDOW TITLE:C213(Get localized string:C991("4dProductName")+": "+Form:C1466.file.parent.fullName; $form.window)
+				SET WINDOW TITLE:C213(Replace string:C233(Get localized string:C991("editorWindowTitle"); "{name}"; Form:C1466.file.parent.fullName); $form.window)
 				
 				// Touch the project subform
 				OBJECT SET VALUE:C1742($form.project; PROJECT)
@@ -195,11 +195,21 @@ Case of
 		
 		$worker:="4D Mobile ("+String:C10($form.window)+")"
 		
-		// Launch checking the development environment
-		CALL WORKER:C1389($worker; "mobile_Check_installation"; New object:C1471(\
-			"caller"; $form.window))
-		
-		If (DATABASE.isMacOs)
+		If (FEATURE.with("android"))
+			
+			// Launch checking the development environment
+			CALL WORKER:C1389($worker; "mobileCheckInstallation"; New object:C1471(\
+				"caller"; $form.window))
+			
+			// Launch recovering the list of available simulator devices
+			CALL WORKER:C1389($worker; "mobileGetDevices"; New object:C1471(\
+				"caller"; $form.window))
+			
+		Else 
+			
+			// Launch checking the development environment
+			CALL WORKER:C1389($worker; "Xcode_CheckInstall"; New object:C1471(\
+				"caller"; $form.window))
 			
 			// Launch recovering the list of available simulator devices
 			CALL WORKER:C1389($worker; "simulator"; New object:C1471(\
@@ -208,11 +218,6 @@ Case of
 				"minimumVersion"; SHARED.iosDeploymentTarget; \
 				"caller"; $form.window))
 			
-		Else 
-			
-			
-			
-			//
 		End if 
 		
 		//=========================================================

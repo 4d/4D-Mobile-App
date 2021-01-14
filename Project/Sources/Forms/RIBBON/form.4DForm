@@ -321,9 +321,11 @@
 					"events": [
 						"onClick",
 						"onMouseEnter",
-						"onMouseLeave"
+						"onMouseLeave",
+						"onAlternateClick"
 					],
-					"method": "ObjectMethods/151.4dm"
+					"method": "ObjectMethods/151.4dm",
+					"popupPlacement": "none"
 				},
 				"152": {
 					"type": "button",

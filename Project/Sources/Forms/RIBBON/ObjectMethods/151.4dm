@@ -5,7 +5,7 @@
 // ----------------------------------------------------
 // Declarations
 var $bottom; $left; $right; $top : Integer
-var $e : Object
+var $device; $e : Object
 var $menu : cs:C1710.menu
 
 // ----------------------------------------------------
@@ -26,10 +26,7 @@ Case of
 		RIBBON(Num:C11($e.objectName))
 		
 		//______________________________________________________
-	: ($e.code=On Clicked:K2:4)
-		
-		// Autosave
-		PROJECT.save()
+	: ($e.code=On Alternative Click:K2:36)
 		
 		If (FEATURE.with("android"))
 			
@@ -40,13 +37,12 @@ Case of
 				
 			Else 
 				
-				$menu:=cs:C1710.menu.new()
-				
-				$menu.append(cs:C1710.str.new("buildAndRunFor").localized("iOS"); "ios").enable(Bool:C1537(PROJECT.$project.xCode.ready))
-				$menu.append(cs:C1710.str.new("buildAndRunFor").localized("Android"); "android").enable(True:C214)  //#MARK_TODO
-				
 				OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
-				$menu.popup($left; $bottom)
+				
+				$menu:=cs:C1710.menu.new()\
+					.append(cs:C1710.str.new("buildAndRunFor").localized("iOS"); "ios").enable(Bool:C1537(PROJECT.$project.xCode.ready))\
+					.append(cs:C1710.str.new("buildAndRunFor").localized("Android"); "android").enable(Bool:C1537(Form:C1466.status.studio))\
+					.popup($left; $bottom)
 				
 				If ($menu.selected)
 					
@@ -61,7 +57,46 @@ Case of
 			CALL SUBFORM CONTAINER:C1086(-151)
 			
 		End if 
+		
 		//______________________________________________________
+	: ($e.code=On Clicked:K2:4)
+		
+		// Autosave
+		PROJECT.save()
+		
+		If (FEATURE.with("android"))
+			
+			If (Is Windows:C1573)
+				
+				PROJECT.buildTarget:="android"
+				CALL SUBFORM CONTAINER:C1086(-151)
+				
+			Else 
+				
+				$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
+				
+				If ($device=Null:C1517)
+					
+					$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
+					
+				End if 
+				
+				If ($device#Null:C1517)
+					
+					PROJECT.buildTarget:=Choose:C955(String:C10($device.deviceTypeIdentifier)="com.apple@"; "ios"; "android")
+					CALL SUBFORM CONTAINER:C1086(-151)
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			CALL SUBFORM CONTAINER:C1086(-151)
+			
+		End if 
+		
+		//______________________________________________________
+		
 	Else 
 		
 		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")

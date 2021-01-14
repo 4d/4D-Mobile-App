@@ -95,10 +95,6 @@ Case of
 					OBJECT MOVE:C664(*; $form.tableList+"@"; 0; 0; 0; 20)
 					OBJECT MOVE:C664(*; $form.fieldList+"@"; 0; 0; 0; 20)
 					
-				Else 
-					
-					OBJECT SET TITLE:C194(*; $form.allow; cs:C1710.str.new("allowToMakeTheStructureAdjustments").localized("4dProductName"))
-					
 				End if 
 				
 				// This trick remove the horizontal gap

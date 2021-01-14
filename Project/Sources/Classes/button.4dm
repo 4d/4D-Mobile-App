@@ -23,11 +23,11 @@ Function highlightShortcut()->$this : Object
 	C_LONGINT:C283($index; $lModifier)
 	C_TEXT:C284($key; $t)
 	
+	$t:=This:C1470.getTitle()
+	
 	OBJECT GET SHORTCUT:C1186(*; This:C1470.name; $key; $lModifier)
 	
 	If (Length:C16($key)>0)
-		
-		$t:=This:C1470.getTitle()
 		
 		$index:=Position:C15(Uppercase:C13($key); $t; *)
 		
@@ -42,9 +42,31 @@ Function highlightShortcut()->$this : Object
 			This:C1470.setTitle(Substring:C12($t; 1; $index)+Char:C90(0x0332)+Substring:C12($t; $index+1))
 			
 		End if 
+		
+	Else 
+		
+		// Remove if any
+		$t:=Replace string:C233($t; Char:C90(0x0332); "")
+		This:C1470.setTitle($t)
+		
 	End if 
 	
 	$this:=This:C1470
+	
+	//═════════════════════════════════════════════════
+Function setLinkedPopupMenu()->$this : Object
+	
+	$this:=This:C1470.setPopupMenu("linked")
+	
+	//═════════════════════════════════════════════════
+Function setSeparatePopupMenu()->$this : Object
+	
+	$this:=This:C1470.setPopupMenu("separate")
+	
+	//═════════════════════════════════════════════════
+Function setNoPopupMenu()->$this : Object
+	
+	$this:=This:C1470.setPopupMenu("none")
 	
 /*═════════════════════════════════════════════════
 Association of a pop-up menu with a 3D button

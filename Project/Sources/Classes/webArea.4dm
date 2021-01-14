@@ -387,3 +387,54 @@ Function deny
 	var $1 : Variant
 	
 	This:C1470.allow($1; False:C215)
+	
+	//==================================================
+	// Detect which web rendering engine is being used for the Web Area
+	// https://kb.4d.com/assetid=78601
+Function getWebEngine()->$infos : Object
+	
+/*
+An example result:
+{"Browser" : "Chrome",
+"userAgent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"}
+	
+*/
+	
+	var $t : Text
+	
+	$t:=WA Get current URL:C1025(*; This:C1470.name)
+	
+	If (($t=":///")\
+		 | (Length:C16($t)=0))
+		
+		WA OPEN URL:C1020(*; This:C1470.name; "about:blank")
+		
+	End if 
+	
+	$t:="var res={\"userAgent\":navigator.userAgent};"
+	
+	//Chrome
+	$t:=$t+"if(navigator.userAgent.indexOf(\"Chrome\") > -1) "
+	$t:=$t+"{ res.Browser=\"Chrome\"}"
+	
+	//Safari
+	$t:=$t+"else if(navigator.userAgent.indexOf(\"Safari\") > -1)"
+	$t:=$t+" {res.Browser=\"Safari\";}"
+	
+	//Internet Explorer
+	$t:=$t+"else if(navigator.userAgent.indexOf(\"MSIE\") > -1 || "
+	$t:=$t+"navigator.userAgent.indexOf(\"rv:\") > -1)"
+	$t:=$t+" {res.Browser= \"IE\";}"
+	
+	//Firefox
+	$t:=$t+"else if(navigator.userAgent.indexOf(\"Firefox\") > -1)"
+	$t:=$t+" {res.Browser=\"Firefox\";}"
+	
+	//AppleWebKit
+	$t:=$t+"else if(navigator.userAgent.indexOf(\"Macintosh\") > -1)"
+	$t:=$t+" {res.Browser=\"AppleWebKit\";}"
+	
+	$t:=$t+"; res"
+	
+	$infos:=WA Evaluate JavaScript:C1029(*; This:C1470.name; $t; Is object:K8:27)
+	

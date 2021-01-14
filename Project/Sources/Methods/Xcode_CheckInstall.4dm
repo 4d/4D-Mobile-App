@@ -108,7 +108,7 @@ If ($out.XcodeAvailable)
 			If ($signal.validate)
 				
 				$t:=Get localized string:C991("4dMobileWantsToMakeChanges")
-				$t:=Replace string:C233($t; "{product}"; Get localized string:C991("4dProductName"))
+				$t:=Replace string:C233($t; "{product}"; Get localized string:C991("4dForIos"))
 				$Xcode.setToolPath($t)
 				
 				If ($Xcode.success)
@@ -145,8 +145,8 @@ If ($out.XcodeAvailable)
 			"target"; $in.caller; \
 			"action"; "show"; \
 			"type"; "confirm"; \
-			"title"; New collection:C1472("obsoleteVersionOfXcode"; "4dProductName"; SHARED.xCodeVersion); \
-			"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "\"Xcode\"")))
+			"title"; New collection:C1472("obsoleteVersionofApp"; "4dForIos"; SHARED.xCodeVersion; "Xcode"); \
+			"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "xcode")))
 		
 		If ($signal.validate)
 			
@@ -170,7 +170,7 @@ If ($out.XcodeAvailable)
 		If (Not:C34($Xcode.checkFirstLaunchStatus()))
 			
 			$t:=Get localized string:C991("4dMobileWantsToMakeChanges")
-			$t:=Replace string:C233($t; "{product}"; Get localized string:C991("4dProductName"))
+			$t:=Replace string:C233($t; "{product}"; Get localized string:C991("4dForIos"))
 			$Xcode.setToolPath($t)
 			
 		End if 
@@ -198,8 +198,8 @@ Else
 		"target"; $in.caller; \
 		"action"; "show"; \
 		"type"; "confirm"; \
-		"title"; New collection:C1472("4dMobileRequiresXcode"; "4dProductName"); \
-		"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "\"Xcode\"")))
+		"title"; New collection:C1472("4dMobileRequiresXcode"; "4dForIos"); \
+		"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "xcode")))
 	
 	If ($signal.validate)
 		

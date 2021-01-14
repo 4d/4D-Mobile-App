@@ -1,3 +1,8 @@
+/*
+
+Manage the Android Studio installation
+
+*/
 Class extends tools
 
 Class constructor($useDefaultPath : Boolean)
@@ -34,12 +39,11 @@ Class constructor($useDefaultPath : Boolean)
 	// If not exist one of the path found by spotlight(on macOS). The last version.
 Function path($useDefaultPath : Boolean)
 	
-	var $found; $default : Boolean
-	var $folder : 4D:C1709.Folder
+	var $default : Boolean
 	
 	If (Count parameters:C259>=1)
 		
-		$default:=$1
+		$default:=$useDefaultPath
 		
 	End if 
 	
@@ -51,7 +55,7 @@ Function path($useDefaultPath : Boolean)
 		
 		If (This:C1470.success)
 			
-			//verify the tools
+			// Verify the tools
 			
 		End if 
 	End if 
@@ -87,10 +91,10 @@ Function defaultPath()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// Try to find an Android Studio not in default path
 Function lastPath
+	
 	var $pathname; $t; $version : Text
-	var $o : Object
 	var $c : Collection
 	
 	$c:=This:C1470.paths()
@@ -103,7 +107,7 @@ Function lastPath
 			
 			If (This:C1470.macOS)
 				
-				//bundle
+				// Bundle
 				$version:=This:C1470.getVersion(Folder:C1567($pathname))
 				
 			Else 
@@ -116,9 +120,10 @@ Function lastPath
 				
 				$t:=$version
 				This:C1470.version:=$version
+				
 				If (This:C1470.macOS)
 					
-					//bundle
+					// Bundle
 					This:C1470.exe:=Folder:C1567($pathname)
 					
 				Else 
@@ -143,7 +148,7 @@ Function isDefaultPath()->$isDefault : Boolean
 		
 	Else 
 		
-		$isDefault:=(This:C1470.exe.path=Folder:C1567("/Applications/Xcode.app").path)
+		$isDefault:=(This:C1470.exe.path=File:C1566("C:\\Program Files\\Android\\Android Studio\\bin\\studio.exe"; fk platform path:K87:2).path)
 		
 	End if 
 	
@@ -151,8 +156,9 @@ Function isDefaultPath()->$isDefault : Boolean
 	// Get all installed Android Studio applications using Spotlight (on macOS)
 Function paths()->$instances : Collection
 	
-	var $o : Object
 	var $t : Text
+	var $o : Object
+	var $instances : Collection
 	var $file : 4D:C1709.File
 	
 	If (This:C1470.macOS)
@@ -204,21 +210,13 @@ Function paths()->$instances : Collection
 	//====================================================================
 Function getVersion($target : 4D:C1709.Folder)->$version
 	
-	var $o : Object
-	var $indx : Integer
 	var $drive; $extension; $name; $path; $t : Text
+	var $indx : Integer
+	var $o : Object
 	var $file : 4D:C1709.File
 	var $directory : 4D:C1709.Folder
 	
-	If (Count parameters:C259>=1)
-		
-		$directory:=$target
-		
-	Else 
-		
-		$directory:=This:C1470.exe
-		
-	End if 
+	$directory:=Choose:C955(Count parameters:C259>=1; $target; This:C1470.exe)
 	
 	If (This:C1470.macOS)
 		
@@ -271,9 +269,61 @@ Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	
 	$ok:=(This:C1470.versionCompare(This:C1470.version; $minimumVersion)>=0)
 	
-Function download
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the SDK folder object
+Function sdkFolder()->$folder : 4D:C1709.Folder
 	
-	//https://developer.android.com/studio
+	If (Is macOS:C1572)
+		
+		$folder:=This:C1470.homeFolder().folder("Library/Android/sdk")
+		
+	Else 
+		
+		$folder:=This:C1470.homeFolder().folder("AppData/Local/Android/Sdk")
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the SDK folder object
+Function open
+	
+	var $o : Object
+	
+	If (Count parameters:C259>=1)  // Open project
+		
+		//$o:=$1.folders().query("extension = .xcworkspace").pop()
+		//If ($o=Null)
+		//$o:=$1.folders().query("extension = .xcodeproj").pop()
+		// End if
+		//If (Bool($o.exists))
+		//$o:=This.lep("open "+This.singleQuoted($o.path))
+		// End if
+		
+	Else   // Open Studio
+		
+		If (Is macOS:C1572)
+			
+			$o:=This:C1470.lep("open "+This:C1470.singleQuoted(This:C1470.exe.path))
+			
+		Else 
+			
+			// #TO_DO
+			$o:=This:C1470.lep("open "+This:C1470.singleQuoted(This:C1470.exe.path))
+			
+		End if 
+	End if 
+	
+	If (Bool:C1537($o.success))
+		
+		This:C1470.success:=True:C214
+		
+	Else 
+		
+		This:C1470.success:=False:C215
+		This:C1470.lastError:=Choose:C955(Length:C16(String:C10($o.error))>0; String:C10($o.error); "Unknown error")
+		This:C1470.errors.push(This:C1470.lastError)
+		
+	End if 
 	
 	//====================================================================
 	//
@@ -319,7 +369,9 @@ Function getJava
 		End if 
 		
 	Else 
+		
 		// Android Studio was not found
+		
 	End if 
 	
 	//====================================================================
@@ -353,5 +405,7 @@ Function getKotlinc
 		End if 
 		
 	Else 
+		
 		// Android Studio was not found
+		
 	End if 

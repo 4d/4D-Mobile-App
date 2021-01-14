@@ -72,7 +72,7 @@ Case of
 		
 		If (Is macOS:C1572) & FEATURE.with("android")
 			
-			$form.build.setPopupMenu("linked")
+			$form.build.setSeparatePopupMenu()
 			
 		End if 
 		
@@ -136,52 +136,111 @@ Case of
 		
 		If (Form:C1466.devices#Null:C1517)
 			
-			// Update device button
-			If (Form:C1466.devices.length>0)
+			If (FEATURE.with("android"))
 				
 				$form.simulator.enable()
 				
-				// Get the default simulator
-				$plist:=ENV.preferences("com.apple.iphonesimulator.plist")
-				
-				If (Not:C34($plist.exists))
+				If (Form:C1466.devices.apple.length>0)
 					
-					simulator(New object:C1471(\
-						"action"; "fixdefault"))
+					// Get the default simulator
+					$plist:=ENV.preferences("com.apple.iphonesimulator.plist")
+					
+					If (Not:C34($plist.exists))
+						
+						simulator(New object:C1471(\
+							"action"; "fixdefault"))
+						
+					End if 
+					
+					If ($plist.exists)
+						
+						$plist:=plist(New object:C1471(\
+							"action"; "object"; \
+							"domain"; $plist.path))
+						
+						If ($plist.success)
+							
+							// Keep the current device identifier
+							Form:C1466.CurrentDeviceUDID:=$plist.value.CurrentDeviceUDID
+							
+							// Display the current device name
+							$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
+							
+							If ($device=Null:C1517)
+								
+								simulator(New object:C1471(\
+									"action"; "getdefault"))
+								
+								$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
+								
+							End if 
+							
+							If ($device=Null:C1517)
+								
+								$form.simulator.setTitle("unknown")
+								
+							Else 
+								
+								$form.simulator.setTitle($device.name)
+								
+							End if 
+						End if 
+					End if 
+					
+				Else 
+					
 					
 				End if 
 				
-				If ($plist.exists)
+			Else 
+				
+				// Update device button
+				If (Form:C1466.devices.length>0)
 					
-					$plist:=plist(New object:C1471(\
-						"action"; "object"; \
-						"domain"; $plist.path))
+					$form.simulator.enable()
 					
-					If ($plist.success)
+					// Get the default simulator
+					$plist:=ENV.preferences("com.apple.iphonesimulator.plist")
+					
+					If (Not:C34($plist.exists))
 						
-						// Keep the current device identifier
-						Form:C1466.CurrentDeviceUDID:=$plist.value.CurrentDeviceUDID
+						simulator(New object:C1471(\
+							"action"; "fixdefault"))
 						
-						// Display the current device name
-						$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
+					End if 
+					
+					If ($plist.exists)
 						
-						If ($device=Null:C1517)
+						$plist:=plist(New object:C1471(\
+							"action"; "object"; \
+							"domain"; $plist.path))
+						
+						If ($plist.success)
 							
-							simulator(New object:C1471(\
-								"action"; "getdefault"))
+							// Keep the current device identifier
+							Form:C1466.CurrentDeviceUDID:=$plist.value.CurrentDeviceUDID
 							
+							// Display the current device name
 							$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
 							
-						End if 
-						
-						If ($device=Null:C1517)
+							If ($device=Null:C1517)
+								
+								simulator(New object:C1471(\
+									"action"; "getdefault"))
+								
+								$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
+								
+							End if 
 							
-							$form.simulator.setTitle("unknown")
-							
-						Else 
-							
-							$form.simulator.setTitle($device.name)
-							
+							If ($device=Null:C1517)
+								
+								$form.simulator.setTitle("unknown")
+								
+							Else 
+								
+								$form.simulator.setTitle($device.name)
+								
+							End if 
 						End if 
 					End if 
 				End if 

@@ -28,6 +28,14 @@ End if
 
 Case of 
 		
+		
+		//________________________________________
+	: (True:C214)
+		
+		$o:=cs:C1710.avd.new()
+		$c:=$o._o_devices()
+		
+		//________________________________________
 	: (True:C214)
 		
 		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("Uninstall.txt")
@@ -70,7 +78,7 @@ Case of
 		//$start:=$pos{2}+$length{2}+1
 		//End while 
 		
-		$c:=$o.devices()
+		$c:=$o._o_devices()
 		
 		
 		

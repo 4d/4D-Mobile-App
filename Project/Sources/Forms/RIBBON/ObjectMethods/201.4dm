@@ -28,28 +28,87 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Clicked:K2:4)
 		
-		If (Form:C1466.devices.length>0)
+		$menu:=cs:C1710.menu.new()
+		
+		If (FEATURE.with("android"))
 			
-			$menu:=cs:C1710.menu.new()
-			
-			For each ($device; Form:C1466.devices)
+			If (Form:C1466.devices.apple.length>0)
 				
-				$menu.append($device.name; $device.udid)\
-					.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+				For each ($device; Form:C1466.devices.apple)
+					
+					$menu.append($device.name; $device.udid)\
+						.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+					
+				End for each 
 				
-			End for each 
+				If (Form:C1466.devices.android.length>0)
+					
+					$menu.line()
+					
+					For each ($device; Form:C1466.devices.android)
+						
+						$menu.append($device.name; $device.udid)\
+							.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+						
+					End for each 
+				End if 
+				
+			Else 
+				
+				If (Form:C1466.devices.android.length>0)
+					
+					For each ($device; Form:C1466.android.apple)
+						
+						$menu.append($device.name; $device.udid)\
+							.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+						
+					End for each 
+					
+				Else 
+					
+					POST_MESSAGE(New object:C1471(\
+						"target"; Current form window:C827; \
+						"action"; "show"; \
+						"type"; "alert"; \
+						"title"; "noDevices"))
+					
+				End if 
+			End if 
 			
+		Else 
+			
+			If (Form:C1466.devices.length>0)
+				
+				For each ($device; Form:C1466.devices)
+					
+					$menu.append($device.name; $device.udid)\
+						.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+					
+				End for each 
+				
+			Else 
+				
+				POST_MESSAGE(New object:C1471(\
+					"target"; Current form window:C827; \
+					"action"; "show"; \
+					"type"; "alert"; \
+					"title"; "noDevices"))
+				
+			End if 
+		End if 
+		
+		If ($menu.itemCount()>0)
 			// #TEMPO [
 			If (Macintosh option down:C545)
 				
 				If (Not:C34(Is compiled mode:C492))  // This action could be added if there is no simulator
 					
 					$menu.line()\
-						.append(".Show devices window"; "_showDevicesWindow")  //#MARK_LOCALIZE
+						.append(".Show devices window"; "_showDevicesWindow")  // #MARK_LOCALIZE
 					
 				End if 
 			End if 
-			//]
+			// ]
 			
 			OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
 			$menu.popup($left; $bottom)
@@ -62,11 +121,20 @@ Case of
 					// Nothing selected
 					
 					//______________________________________________________
-				: (Match regex:C1019("(?mi-s)^(?:[[:alnum:]]*-)*[[:alnum:]]*$"; $menu.choice; 1))  //simulator
+				: (Match regex:C1019("(?mi-s)^(?:[[:alnum:]]*-)*[[:alnum:]]*$"; $menu.choice; 1))  // ios
 					
 					If ($menu.choice#String:C10(Form:C1466.CurrentDeviceUDID))
 						
-						$device:=Form:C1466.devices.query("udid = :1"; $menu.choice).pop()
+						If (FEATURE.with("android"))
+							
+							$device:=Form:C1466.devices.apple.query("udid = :1"; $menu.choice).pop()
+							
+						Else 
+							
+							//old
+							$device:=Form:C1466.devices.query("udid = :1"; $menu.choice).pop()
+							
+						End if 
 						
 						// Kill booted Simulator if any
 						If (simulator(New object:C1471(\
@@ -105,19 +173,21 @@ Case of
 					//______________________________________________________
 				Else 
 					
-					ASSERT:C1129(False:C215; "Unknown menu action ("+$menu.choice+")")
+					If (FEATURE.with("android"))
+						
+						$device:=Form:C1466.devices.android.query("udid = :1"; $menu.choice).pop()
+						
+						// Set default simulator
+						Form:C1466.CurrentDeviceUDID:=$menu.choice
+						
+						// Set button title
+						OBJECT SET TITLE:C194(*; "201"; $device.name)
+						
+					End if 
+					
 					
 					//______________________________________________________
 			End case 
-			
-		Else 
-			
-			POST_MESSAGE(New object:C1471(\
-				"target"; Current form window:C827; \
-				"action"; "show"; \
-				"type"; "alert"; \
-				"title"; "noDevices"))
-			
 		End if 
 		
 		//______________________________________________________

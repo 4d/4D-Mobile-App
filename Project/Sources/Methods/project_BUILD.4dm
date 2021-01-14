@@ -47,7 +47,7 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		//#99788 ========================================================
 		//EXECUTE METHOD IN SUBFORM("project"; "views_Handler"; *; New object(\
-																								"action"; "updateForms"))
+																											"action"; "updateForms"))
 		
 		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
@@ -144,7 +144,7 @@ If (Asserted:C1132($project#Null:C1517))
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; "someStructuralAdjustmentsAreNeeded"; \
-							"additional"; cs:C1710.tools.new().localized("doYouAllow4dMobileToModifyStructure"; "4dProductName"); \
+							"additional"; cs:C1710.tools.new().localized("doYouAllow4dToModifyStructure"); \
 							"ok"; "allow"; \
 							"option"; New object:C1471("title"; "rememberMyChoice"; "value"; False:C215); \
 							"CALLBACK"; "editor_MESSAGE_CALLBACK")

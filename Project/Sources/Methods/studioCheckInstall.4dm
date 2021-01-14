@@ -56,6 +56,84 @@ If ($out.studioAvailable)
 	// Check version
 	$out.ready:=$studio.checkVersion(SHARED.studioVersion)
 	
+	If ($out.ready)
+		
+		$out.version:=$studio.version
+		
+		// CHECK SDK
+		$out.ready:=cs:C1710.androidProcess.new().androidSDKFolder().exists
+		
+		If ($out.ready)
+			
+			
+			
+		Else 
+			
+			$signal:=await_MESSAGE(New object:C1471(\
+				"target"; $in.caller; \
+				"action"; "show"; \
+				"type"; "confirm"; \
+				"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
+				"additional"; "wantToLaunchAndroidStudio"))
+			
+			If ($signal.validate)
+				
+				$studio.open()
+				
+			End if 
+		End if 
+		
+		//$Xcode.toolsPath()
+		//If ($Xcode.tools.exists)
+		//$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
+		//End if 
+		//If (Not($out.toolsAvalaible))
+		//$out.ready:=False
+		//$signal:=await_MESSAGE(New object(\
+						"target"; $in.caller; \
+						"action"; "show"; \
+						"type"; "confirm"; \
+						"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
+						"additional"; "wantToFixThePath"))
+		//If ($signal.validate)
+		//$t:=Get localized string("4dMobileWantsToMakeChanges")
+		//$t:=Replace string($t; "{product}"; Get localized string("4dProductName"))
+		//$Xcode.setToolPath($t)
+		//If ($Xcode.success)
+		//If ($Xcode.tools.exists)
+		//$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
+		//End if 
+		//Else 
+		//If (Position("User canceled. (-128)"; $Xcode.lastError)>0)
+		//// NOTHING MORE TO DO
+		//Else 
+		//POST_MESSAGE(New object(\
+						"target"; $in.caller; \
+						"action"; "show"; \
+						"type"; "alert"; \
+						"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
+						"additional"; "tryDoingThisFromTheXcodeApplication"))
+		//End if 
+		//End if 
+		//End if 
+		//End if 
+		
+	Else 
+		
+		$signal:=await_MESSAGE(New object:C1471(\
+			"target"; $in.caller; \
+			"action"; "show"; \
+			"type"; "confirm"; \
+			"title"; New collection:C1472("obsoleteVersionofApp"; "4dForAndroid"; SHARED.studioVersion; "androidStudio"); \
+			"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "androidStudio")))
+		
+		If ($signal.validate)
+			
+			OPEN URL:C673(Get localized string:C991("downloadAndroidStudio"); *)
+			
+		End if 
+	End if 
+	
 Else 
 	
 	If ($studio.window) | Bool:C1537($inƒ.mandatory)
@@ -64,12 +142,12 @@ Else
 			"target"; $inƒ.caller; \
 			"action"; "show"; \
 			"type"; "confirm"; \
-			"title"; New collection:C1472("4dMobileRequiresAndroidStudio"; "4dProductName"); \
-			"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "\"Android Studio\"")))
+			"title"; New collection:C1472("4dMobileRequiresAndroidStudio"; "4dForAndroid"); \
+			"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "androidStudio")))
 		
 		If ($signal.validate)
 			
-			OPEN URL:C673(Get localized string:C991("androidStudio"); *)
+			OPEN URL:C673(Get localized string:C991("downloadAndroidStudio"); *)
 			
 		End if 
 	End if 

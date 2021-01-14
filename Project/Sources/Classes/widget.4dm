@@ -487,6 +487,12 @@ Function setShortcut
 		
 	End if 
 	
+	If (OB Instance of:C1731(This:C1470; cs:C1710.button))
+		
+		This:C1470.highlightShortcut()
+		
+	End if 
+	
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	

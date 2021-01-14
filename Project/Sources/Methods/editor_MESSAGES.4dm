@@ -8,13 +8,7 @@
 // Management of messages addressed to the main form
 // ----------------------------------------------------
 // Declarations
-C_TEXT:C284($1)
-C_OBJECT:C1216($2)
-C_OBJECT:C1216($3)
-
-C_POINTER:C301($ptr)
-C_TEXT:C284($t; $tSelector)
-C_OBJECT:C1216($form; $o; $oIN)
+#DECLARE($message : Text; $form : Object; $in : Object)
 
 If (False:C215)
 	C_TEXT:C284(editor_MESSAGES; $1)
@@ -22,79 +16,58 @@ If (False:C215)
 	C_OBJECT:C1216(editor_MESSAGES; $3)
 End if 
 
-// ----------------------------------------------------
-// Initialisations
-If (Asserted:C1132(Count parameters:C259>=3; "Missing parameter"))
-	
-	// Required parameters
-	$tSelector:=$1
-	$form:=$2
-	$oIN:=$3
-	
-	// Default values
-	
-	// Optional parameters
-	If (Count parameters:C259>=4)
-		
-		// <NONE>
-		
-	End if 
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+var $t; $title : Text
+var $form; $o : Object
 
 // ----------------------------------------------------
 Case of 
 		
 		//______________________________________________________
-	: ($tSelector="description")  // Update UI of the TITLE subform
+	: ($message="description")  // Update UI of the TITLE subform
 		
-		EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_description"; *; $oIN)
+		EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_description"; *; $in)
 		
 		//______________________________________________________
-	: ($tSelector="setURL")
+	: ($message="setURL")
 		
 		//record.log("--> setURL")
-		(OBJECT Get pointer:C1124(Object named:K67:5; "browser"))->:=$oIN
+		(OBJECT Get pointer:C1124(Object named:K67:5; "browser"))->:=$in
 		
 		//______________________________________________________
-	: ($tSelector="hideBrowser")
+	: ($message="hideBrowser")
 		
 		//record.log("--> hideBrowser")
 		OBJECT SET SUBFORM:C1138(*; "browser"; "EMPTY")
 		OBJECT SET VISIBLE:C603(*; "browser"; False:C215)
 		
 		//______________________________________________________
-	: ($tSelector="showBrowser")
+	: ($message="showBrowser")
 		
 		//record.log("--> showBrowser")
 		OBJECT SET VISIBLE:C603(*; "browser"; True:C214)
 		
 		//______________________________________________________
-	: ($tSelector="initBrowser")
+	: ($message="initBrowser")
 		
 		//record.log("--> initBrowser")
 		OBJECT SET VISIBLE:C603(*; "browser"; True:C214)
 		OBJECT SET SUBFORM:C1138(*; "browser"; "BROWSER")
 		
-		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "setURL"; $oIN)
+		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "setURL"; $in)
 		
 		//______________________________________________________
-	: ($tSelector="projectAuditResult")
+	: ($message="projectAuditResult")
 		
 		PROJECT_Handler(New object:C1471(\
-			"action"; $tSelector; \
-			"audit"; $oIN))
+			"action"; $message; \
+			"audit"; $in))
 		
 		//______________________________________________________
-	: ($tSelector="structureCheckingResult")  // Callback from 'structure'
+	: ($message="structureCheckingResult")  // Callback from 'structure'
 		
-		If ($oIN.success)
+		If ($in.success)
 			
-			STRUCTURE_AUDIT($oIN.value)
+			STRUCTURE_AUDIT($in.value)
 			
 		Else 
 			
@@ -105,35 +78,45 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($tSelector="simulator")
+	: ($message="simulator")
 		
-		If ($oIN.success)
+		If (FEATURE.with("android"))
 			
-			Form:C1466.$dialog[$form.editor].ribbon.devices:=$oIN.devices
+			Form:C1466.$dialog[$form.editor].ribbon.devices:=$in
 			
-			// Touch the ribbon subform
-			(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog[$form.editor].ribbon
+			// Touch
+			OBJECT SET VALUE:C1742($form.ribbon; OBJECT Get value:C1743($form.ribbon))
 			
 		Else 
 			
-			//DO_MESSAGE(New object(\
-												"action"; "show"; \
-												"type"; "alert"; \
-												"title"; "noDevices"; \
-												"additional"; ""))
-			
+			If ($in.success)
+				
+				Form:C1466.$dialog[$form.editor].ribbon.devices:=$in.devices
+				
+				// Touch the ribbon subform
+				(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog[$form.editor].ribbon
+				
+			Else 
+				
+				//DO_MESSAGE(New object(\
+					"action"; "show"; \
+					"type"; "alert"; \
+					"title"; "noDevices"; \
+					"additional"; ""))
+				
+			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($tSelector="syncDataModel")
+	: ($message="syncDataModel")
 		
 		structure_REPAIR
 		
 		//______________________________________________________
-	: ($tSelector="goToPage")
+	: ($message="goToPage")
 		
 		//editor_PAGE($oIN.page)
-		Form:C1466.$dialog.EDITOR.pages.gotoPage($oIN.page)
+		Form:C1466.$dialog.EDITOR.pages.gotoPage($in.page)
 		
 		Form:C1466.$dialog[$form.editor].ribbon.page:=Form:C1466.currentPage
 		
@@ -143,53 +126,75 @@ Case of
 		Case of 
 				
 				//………………………………………………………………………………
-			: ($oIN.panel#Null:C1517)
+			: ($in.panel#Null:C1517)
 				
-				CALL FORM:C1391($form.window; $form.callback; "goTo"; $oIN)
+				CALL FORM:C1391($form.window; $form.callback; "goTo"; $in)
 				
 				//………………………………………………………………………………
-			: ($oIN.tab#Null:C1517)
+			: ($in.tab#Null:C1517)
 				
-				CALL FORM:C1391($form.window; $form.callback; "selectTab"; $oIN)
+				CALL FORM:C1391($form.window; $form.callback; "selectTab"; $in)
 				
 				//………………………………………………………………………………
 		End case 
 		
 		//______________________________________________________
-	: ($tSelector="checkInstall")
+	: ($message="checkInstall")
 		
-		// Store the result
-		Form:C1466.xCode:=$oIN
-		
-		If (Form:C1466.status=Null:C1517)
+		If (FEATURE.with("android"))
 			
-			Form:C1466.status:=New object:C1471(\
-				"xCode"; $oIN.ready)
+			// Store the result
+			Form:C1466.xCode:=$in.xCode
+			Form:C1466.studio:=$in.studio
+			
+			If (Form:C1466.status=Null:C1517)
+				
+				Form:C1466.status:=New object:C1471(\
+					"xCode"; Form:C1466.xCode.ready; \
+					"studio"; Form:C1466.studio.ready)
+				
+			Else 
+				
+				Form:C1466.status.xCode:=Form:C1466.xCode.ready
+				Form:C1466.status.studio:=Form:C1466.studio.ready
+				
+			End if 
 			
 		Else 
 			
-			Form:C1466.status.xCode:=$oIN.ready
+			// Store the result
+			Form:C1466.xCode:=$in
+			
+			If (Form:C1466.status=Null:C1517)
+				
+				Form:C1466.status:=New object:C1471(\
+					"xCode"; $in.ready)
+				
+			Else 
+				
+				Form:C1466.status.xCode:=$in.ready
+				
+			End if 
 			
 		End if 
 		
 		editor_CALLBACK("updateRibbon")
 		
 		//______________________________________________________
-	: ($tSelector="updateRibbon")
+	: ($message="updateRibbon")
 		
 		// Update teamID status
-		$o:=(OBJECT Get pointer:C1124(Object named:K67:5; $form.project))->
-		Form:C1466.status.teamId:=(Length:C16(String:C10($o.organization.teamId))>0)
+		Form:C1466.status.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
 		
 		// Give status to ribbon
-		$ptr:=OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon)
-		$ptr->status:=Form:C1466.status
+		$o:=OBJECT Get value:C1743($form.ribbon)
+		$o.status:=Form:C1466.status
 		
 		// Touch
-		$ptr->:=$ptr->
+		OBJECT SET VALUE:C1742($form.ribbon; $o)
 		
 		//______________________________________________________
-	: ($tSelector="build@")
+	: ($message="build@")
 		
 		// build = Result of the build/archive action
 		// build_stop =  Cancel build process
@@ -207,12 +212,14 @@ Case of
 			End if 
 		End for each 
 		
-		If ($tSelector="build")
+		If ($message="build")
+			
+			$title:=Get localized string:C991(Choose:C955($in.param.project.buildTarget="ios"; "4dForIos"; "4dForAndroid"))
 			
 			Case of 
 					
 					//…………………………………………………………………………………………………………………………
-				: (Not:C34($oIN.success))
+				: (Not:C34($in.success))
 					
 					// Could show the issue
 					If (Not:C34(Is compiled mode:C492))
@@ -222,30 +229,27 @@ Case of
 					End if 
 					
 					//…………………………………………………………………………………………………………………………
-				: (Bool:C1537($oIN.param.archive))
+				: (Bool:C1537($in.param.archive))
 					
-					If (Bool:C1537($oIN.param.manualInstallation))
+					If (Bool:C1537($in.param.manualInstallation))
 						
-						DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName"); \
-							_o_str("theApplicationHasBeenSuccessfullyGenerated").localized($oIN.param.project.product.name))
+						DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyGenerated").localized($in.param.project.product.name))
 						
 					Else 
 						
-						DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName"); \
-							_o_str("theApplicationHasBeenSuccessfullyInstalled").localized($oIN.param.project.product.name))
+						DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyInstalled").localized($in.param.project.product.name))
 						
 					End if 
 					
 					//…………………………………………………………………………………………………………………………
 				Else 
 					
-					DISPLAY NOTIFICATION:C910(Get localized string:C991("4dProductName"); \
-						_o_str("theApplicationHasBeenSuccessfullyGenerated").localized($oIN.param.project.product.name))
+					DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyGenerated").localized($in.param.project.product.name))
 					
-					If (Bool:C1537($oIN.param.create)\
-						 & Not:C34(Bool:C1537($oIN.param.archive))\
-						 & Not:C34(Bool:C1537($oIN.param.build))\
-						 & Not:C34(Bool:C1537($oIN.param.run)))
+					If (Bool:C1537($in.param.create)\
+						 & Not:C34(Bool:C1537($in.param.archive))\
+						 & Not:C34(Bool:C1537($in.param.build))\
+						 & Not:C34(Bool:C1537($in.param.run)))
 						
 						POST_MESSAGE(New object:C1471(\
 							"target"; Choose:C955((Num:C11(Form:C1466.window)>0); Form:C1466.window; $form.window); \
@@ -253,7 +257,7 @@ Case of
 							"type"; "confirm"; \
 							"title"; "projectCreationSuccessful"; \
 							"additional"; "wouldYouLikeToRevealInFinder"; \
-							"okFormula"; Formula:C1597(SHOW ON DISK:C922(String:C10($oIN.param.path)))))
+							"okFormula"; Formula:C1597(SHOW ON DISK:C922(String:C10($in.param.path)))))
 						
 					End if 
 					
@@ -262,7 +266,7 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($tSelector="ignoreServerStructureAdjustement")
+	: ($message="ignoreServerStructureAdjustement")
 		
 		// Get the project
 		$o:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->
@@ -280,7 +284,7 @@ Case of
 			"verbose"; Bool:C1537(Form:C1466.verbose)))
 		
 		//______________________________________________________
-	: ($tSelector="allowStructureModification")
+	: ($message="allowStructureModification")
 		
 		// Get the project
 		$o:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->
@@ -288,10 +292,10 @@ Case of
 		// Set the temporary authorization
 		$o.$_allowStructureAdjustments:=True:C214
 		
-		If (Bool:C1537($oIN.value))  // Remember my choice
+		If (Bool:C1537($in.value))  // Remember my choice
 			
 			// Set the option & save
-			$o.allowStructureAdjustments:=Bool:C1537($oIN.value)
+			$o.allowStructureAdjustments:=Bool:C1537($in.value)
 			PROJECT.save()
 			
 		End if 
@@ -309,7 +313,7 @@ Case of
 	Else 
 		
 		// Pass to PROJECT subform
-		EXECUTE METHOD IN SUBFORM:C1085($form.project; $form.callback; *; $tSelector; $oIN)
+		EXECUTE METHOD IN SUBFORM:C1085($form.project; $form.callback; *; $message; $in)
 		
 		//______________________________________________________
 End case 
