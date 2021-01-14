@@ -49,6 +49,7 @@ Function buildEmbeddedDataLib
 	var $1 : Text  // Project path
 	var $2 : Text  // package name (app name)
 	var $staticDataInitializerFile; $targetFile : 4D:C1709.File
+	var $libFolder : 4D:C1709.Folder
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
@@ -58,7 +59,10 @@ Function buildEmbeddedDataLib
 	
 	If ($staticDataInitializerFile.exists)
 		
-		$targetFile:=File:C1566($1+"buildSrc/libs/prepopulation.jar")
+		$libFolder:=Folder:C1567($1+"buildSrc/libs")
+		$libFolder.create()
+		
+		$targetFile:=$libFolder.file("prepopulation.jar")
 		
 		This:C1470.launch(This:C1470.kotlincCmd\
 			+" -verbose \""+$staticDataInitializerFile.path+"\""\

@@ -12,7 +12,19 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.cmd:=This:C1470.androidSDKFolder().file("platform-tools/adb").path
+	This:C1470.cmd:=This:C1470.adbFile().path
+	
+	If (Is Windows:C1573)
+		
+		This:C1470.cmd:=This:C1470.cmd+".exe"
+		
+	Else 
+		
+		// Already set
+		
+	End if 
+	
+	This:C1470.adbStartRetried:=False:C215
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -62,20 +74,37 @@ Function listBootedDevices  // List booted devices
 	
 	This:C1470.launch(This:C1470.cmd+" devices")
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
-	
-	If ($0.success)
+	If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)  // adb was not ready, restart command
 		
-		$0.bootedDevices:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
-		$0.bootedDevices.shift().pop()  // removing first and last entries
+		If (Not:C34(This:C1470.adbStartRetried))
+			
+			This:C1470.adbStartRetried:=True:C214
+			
+			$0:=This:C1470.listBootedDevices()
+			
+		Else 
+			
+			$0.success:=False:C215
+			$0.errors.push(This:C1470.errorStream)
+			
+		End if 
 		
-	Else 
+	Else   // No issue with adb started status
 		
-		$0.errors.push("Failed to get adb device list")
+		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		
+		If ($0.success)
+			
+			$0.bootedDevices:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
+			$0.bootedDevices.shift().pop()  // removing first and last entries
+			
+		Else 
+			
+			$0.errors.push("Failed to get adb device list")
+			
+		End if 
 		
 	End if 
-	
-	
 	
 Function getAvdName
 	var $0 : Object
@@ -87,7 +116,7 @@ Function getAvdName
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" emu avd name")
+	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" emu avd name")
 	
 	If ((This:C1470.outputStream#Null:C1517) & (String:C10(This:C1470.outputStream)#""))
 		
@@ -204,18 +233,19 @@ Function waitForBoot
 		Else 
 			// Emulator already started, so we know its serial
 			
-			This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" shell getprop sys.boot_completed")
+			This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell getprop sys.boot_completed")
 			
 		End if 
 		
 		$stepTime:=Milliseconds:C459-$startTime
 		
 	Until (String:C10(This:C1470.outputStream)="1")\
+		 | (String:C10(This:C1470.outputStream)="1\r")\
 		 | ($stepTime>30000)
 	
 	Case of 
 			
-		: (String:C10(This:C1470.outputStream)="1")  // Booted
+		: ((String:C10(This:C1470.outputStream)="1") | (String:C10(This:C1470.outputStream)="1\r"))  // Booted
 			
 			$0.success:=True:C214
 			
@@ -247,7 +277,7 @@ Function getDevicePackageList
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" shell pm list packages")
+	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell pm list packages")
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -291,7 +321,7 @@ Function uninstallApp
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" uninstall \""+$2+"\"")
+	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" uninstall \""+$2+"\"")
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -349,7 +379,7 @@ Function installApp
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" install -t "+This:C1470.singleQuoted($2.path))
+	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" install -t \""+$2.path+"\"")
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -398,7 +428,7 @@ Function startApp
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+This:C1470.singleQuoted($1)+" shell am start -n "+This:C1470.singleQuoted($2+"/"+$3))
+	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell am start -n \""+$2+"/"+$3+"\"")
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
