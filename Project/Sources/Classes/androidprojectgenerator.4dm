@@ -1,18 +1,17 @@
 Class extends androidProcess
 
-Class constructor
+Class constructor($java : 4D:C1709.File; $kotlinc : 4D:C1709.File)
 	
 	Super:C1705()
 	
 	If (Is macOS:C1572)
 		This:C1470.androidprojectgeneratorCmd:="androidprojectgenerator"
-		This:C1470.kotlincCmd:="/usr/local/bin/kotlinc"
-		This:C1470.chmodCmd:="chmod"
 	Else 
-		This:C1470.androidprojectgeneratorCmd:="java -jar androidprojectgenerator.jar"
-		This:C1470.kotlincCmd:="C:/Users/Test/kotlinc/bin/kotlinc.bat"
+		This:C1470.androidprojectgeneratorCmd:="\""+$java.path+"\" -jar androidprojectgenerator.jar"
 	End if 
 	
+	This:C1470.chmodCmd:="chmod"
+	This:C1470.kotlinc:=$kotlinc.path
 	
 	
 Function generate
@@ -64,7 +63,7 @@ Function buildEmbeddedDataLib
 		
 		$targetFile:=$libFolder.file("prepopulation.jar")
 		
-		This:C1470.launch(This:C1470.kotlincCmd\
+		This:C1470.launch("\""+This:C1470.kotlinc+"\""\
 			+" -verbose \""+$staticDataInitializerFile.path+"\""\
 			+" -d \""+$targetFile.path+"\"")
 		
@@ -152,13 +151,15 @@ Function copyResources
 		
 	Else 
 		// Missing file
-		$0.success:=False:C215
-		$0.errors.push("Missing source file for copy: "+$androidAssets.path)
+		
+		// TODO : UNCOMMENT WHEN ANDROID RESOURCES IMPLEMENTED
+		// $0.success:=False
+		// $0.errors.push("Missing source file for copy: "+$androidAssets.path)
 	End if 
 	
 	
 	
-Function chmodGradlew
+Function chmod
 	var $0 : Object
 	var $1 : Text  // Project path
 	
@@ -166,7 +167,7 @@ Function chmodGradlew
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.chmodCmd+" +x "+This:C1470.singleQuoted($1+"gradlew"))
+	This:C1470.launch(This:C1470.chmodCmd+" +x "+This:C1470.singleQuoted($1+"gradlew")+" "+This:C1470.singleQuoted(This:C1470.kotlinc))
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	

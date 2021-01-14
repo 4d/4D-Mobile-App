@@ -1,14 +1,13 @@
 Class extends androidProcess
 
-Class constructor
-	var $1 : Text  // Project path
+Class constructor($projectPath : Text)
 	
 	Super:C1705()
 	
 	If (Is macOS:C1572)
 		This:C1470.cmd:="gradlew"
 	Else 
-		This:C1470.cmd:=Folder:C1567($1).file("gradlew.bat").path
+		This:C1470.cmd:=Folder:C1567($projectPath).file("gradlew.bat").path
 	End if 
 	
 	

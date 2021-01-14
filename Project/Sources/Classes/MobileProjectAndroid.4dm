@@ -34,6 +34,7 @@ Class constructor
 	This:C1470.artifactoryIds.push(New object:C1471("ARTIFACTORY_MACHINE_IP"; "192.168.5.12"))
 	
 	This:C1470.androidProcess:=cs:C1710.androidProcess.new()
+	This:C1470.studio:=cs:C1710.studio.new()
 	
 	This:C1470.project:=OB Copy:C1225(This:C1470.input)
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
@@ -56,9 +57,13 @@ Class constructor
 	This:C1470.avdName:="TestAndroid29Device"  // Allowed characters are: a-z A-Z 0-9 . _ -
 	This:C1470.serial:=""
 	
+	// Class for create()
+	This:C1470.androidprojectgenerator:=cs:C1710.androidprojectgenerator.new(This:C1470.studio.java; This:C1470.studio.kotlinc)
 	
-	This:C1470.androidprojectgenerator:=cs:C1710.androidprojectgenerator.new()
+	// Class for build()
 	This:C1470.gradlew:=cs:C1710.gradlew.new(This:C1470.project.path)
+	
+	// Classes for run()
 	This:C1470.avd:=cs:C1710.avd.new()
 	This:C1470.emulator:=cs:C1710.androidEmulator.new()
 	This:C1470.adb:=cs:C1710.adb.new()
@@ -100,20 +105,7 @@ Function setEnvVarToAll
 	//
 Function setJavaHome
 	
-	var $javaHome : Object
-	
-	$javaHome:=This:C1470.androidProcess.getJavaHome()
-	
-	If ($javaHome.success)
-		
-		This:C1470.setEnvVarToAll(New object:C1471("JAVA_HOME"; $javaHome.java_home))
-		
-	Else 
-		
-		This:C1470.isOnError:=True:C214
-		This:C1470.postError($javaHome.errors.join("\r"))
-		
-	End if 
+	This:C1470.setEnvVarToAll(New object:C1471("JAVA_HOME"; This:C1470.studio.javaHome.path))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -140,36 +132,37 @@ Function create()->$result : Object
 		
 		If ($o.success)
 			
-			// * BUILD EMBEDDED DATA LIBRARY
-			This:C1470.postStep("dataSetGeneration")
-			
-			$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.package)
+			// * GRADLEW ACCESS RIGHTS
+			If (Is macOS:C1572)  // No need to change permissions on Windows
+				
+				//This.postStep(".Adjusting access rights")  //#MARK_LOCALIZE
+				$o:=This:C1470.androidprojectgenerator.chmod(This:C1470.project.path)
+				
+			End if 
 			
 			If ($o.success)
 				
-				// * COPY EMBEDDED DATA LIBRARY
-				$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib(This:C1470.project.path)
+				// * BUILD EMBEDDED DATA LIBRARY
+				This:C1470.postStep("dataSetGeneration")
+				
+				$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.package)
 				
 				If ($o.success)
 					
-					// * COPY RESOURCES
-					This:C1470.postStep(".Copying resources")  //#MARK_LOCALIZE
-					
-					$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project.$project.file)
+					// * COPY EMBEDDED DATA LIBRARY
+					$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib(This:C1470.project.path)
 					
 					If ($o.success)
 						
-						// * GRADLEW ACCESS RIGHTS
-						If (Is macOS:C1572)  // Not need to change permissions on Windows
+						// * COPY RESOURCES
+						This:C1470.postStep(".Copying resources")  //#MARK_LOCALIZE
+						
+						$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project.$project.file)
+						
+						If (Not:C34($o.success))
 							
-							//This.postStep(".Adjusting access rights")  //#MARK_LOCALIZE
-							$o:=This:C1470.androidprojectgenerator.chmodGradlew(This:C1470.project.path)
+							This:C1470.isOnError:=True:C214
 							
-							If (Not:C34($o.success))
-								
-								This:C1470.isOnError:=True:C214
-								
-							End if 
 						End if 
 						
 					Else 

@@ -7,6 +7,9 @@ Class constructor($useDefaultPath : Boolean)
 	This:C1470.macOS:=Is macOS:C1572
 	This:C1470.window:=Is Windows:C1573
 	This:C1470.exe:=Null:C1517
+	This:C1470.javaHome:=Null:C1517
+	This:C1470.java:=Null:C1517
+	This:C1470.kotlinc:=Null:C1517
 	
 	If (Count parameters:C259>=1)
 		
@@ -21,6 +24,8 @@ Class constructor($useDefaultPath : Boolean)
 	If (This:C1470.success)
 		
 		This:C1470.version:=This:C1470.getVersion()
+		This:C1470.getJava()
+		This:C1470.getKotlinc()
 		
 	End if 
 	
@@ -270,3 +275,83 @@ Function download
 	
 	//https://developer.android.com/studio
 	
+	//====================================================================
+	//
+Function getJava
+	
+	var $javaHome; $javaCmd : Object
+	
+	This:C1470.javaHome:=Null:C1517
+	This:C1470.java:=Null:C1517
+	
+	If (This:C1470.exe#Null:C1517)
+		
+		If (This:C1470.macOS)
+			
+			$javaHome:=This:C1470.exe.folder("Contents/jre/jdk/Contents/Home")
+			
+		Else 
+			
+			$javaHome:=This:C1470.exe.parent.parent.folder("jre")
+			
+		End if 
+		
+		If ($javaHome.exists)
+			
+			This:C1470.javaHome:=$javaHome
+			
+			$javaCmd:=This:C1470.javaHome.file("bin/java")
+			
+			If ($javaCmd.exists)
+				
+				This:C1470.java:=$javaCmd
+				
+			Else 
+				
+				// java command was not found
+				
+			End if 
+			
+		Else 
+			
+			// JAVA_HOME was not found
+			
+		End if 
+		
+	Else 
+		// Android Studio was not found
+	End if 
+	
+	//====================================================================
+	//
+Function getKotlinc
+	
+	var $kotlinc : Object
+	
+	This:C1470.kotlinc:=Null:C1517
+	
+	If (This:C1470.exe#Null:C1517)
+		
+		If (This:C1470.macOS)
+			
+			$kotlinc:=This:C1470.exe.file("Contents/plugins/Kotlin/kotlinc/bin/kotlinc")
+			
+		Else 
+			
+			$kotlinc:=This:C1470.exe.file("Contents/plugins/Kotlin/kotlinc/bin/kotlinc.bat")
+			
+		End if 
+		
+		If ($kotlinc.exists)
+			
+			This:C1470.kotlinc:=$kotlinc
+			
+		Else 
+			
+			// kotlinc was not found
+			
+		End if 
+		
+	Else 
+		// Android Studio was not found
+	End if 
