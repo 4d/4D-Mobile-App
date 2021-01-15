@@ -4,14 +4,9 @@ Class constructor($java : 4D:C1709.File; $kotlinc : 4D:C1709.File)
 	
 	Super:C1705()
 	
-	If (Is macOS:C1572)
-		This:C1470.androidprojectgeneratorCmd:="androidprojectgenerator"
-	Else 
-		This:C1470.androidprojectgeneratorCmd:="\""+$java.path+"\" -jar androidprojectgenerator.jar"
-	End if 
-	
-	This:C1470.chmodCmd:="chmod"
+	This:C1470.androidprojectgeneratorCmd:="\""+$java.path+"\" -jar androidprojectgenerator.jar"
 	This:C1470.kotlinc:=$kotlinc.path
+	This:C1470.chmodCmd:="chmod"
 	
 	
 Function generate

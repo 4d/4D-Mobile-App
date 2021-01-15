@@ -350,7 +350,15 @@ Function getJava
 			
 			This:C1470.javaHome:=$javaHome
 			
-			$javaCmd:=This:C1470.javaHome.file("bin/java")
+			If (This:C1470.macOS)
+				
+				$javaCmd:=This:C1470.javaHome.file("bin/java")
+				
+			Else 
+				
+				$javaCmd:=This:C1470.javaHome.file("bin/java.exe")
+				
+			End if 
 			
 			If ($javaCmd.exists)
 				
@@ -390,7 +398,7 @@ Function getKotlinc
 			
 		Else 
 			
-			$kotlinc:=This:C1470.exe.file("Contents/plugins/Kotlin/kotlinc/bin/kotlinc.bat")
+			$kotlinc:=This:C1470.exe.parent.parent.file("plugins/Kotlin/kotlinc/bin/kotlinc.bat")
 			
 		End if 
 		

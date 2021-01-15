@@ -20,7 +20,6 @@ Function assembleDebug
 	
 	This:C1470.launch(This:C1470.cmd+" assembleDebug")
 	
-	
 	If (This:C1470.errorStream=Null:C1517)
 		
 		$0.success:=(This:C1470.outputStream#Null:C1517)
