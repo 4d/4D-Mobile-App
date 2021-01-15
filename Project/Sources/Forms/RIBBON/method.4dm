@@ -138,7 +138,7 @@ Case of
 			
 			If (FEATURE.with("android"))
 				
-				$form.simulator.enable()
+				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0))
 				
 				If (Form:C1466.devices.apple.length>0)
 					
@@ -189,6 +189,7 @@ Case of
 					
 				Else 
 					
+					//
 					
 				End if 
 				

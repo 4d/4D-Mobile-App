@@ -199,11 +199,11 @@ Case of
 			
 			// Launch checking the development environment
 			CALL WORKER:C1389($worker; "mobileCheckInstallation"; New object:C1471(\
-				"caller"; $form.window))
+				"caller"; $form.window; "project"; PROJECT))
 			
 			// Launch recovering the list of available simulator devices
 			CALL WORKER:C1389($worker; "mobileGetDevices"; New object:C1471(\
-				"caller"; $form.window))
+				"caller"; $form.window; "project"; PROJECT))
 			
 		Else 
 			

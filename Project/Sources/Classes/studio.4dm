@@ -29,8 +29,8 @@ Class constructor($useDefaultPath : Boolean)
 	If (This:C1470.success)
 		
 		This:C1470.version:=This:C1470.getVersion()
-		This:C1470.getJava()
-		This:C1470.getKotlinc()
+		This:C1470._getJava()
+		This:C1470._getKotlinc()
 		
 	End if 
 	
@@ -74,7 +74,7 @@ Function defaultPath()
 		
 	Else 
 		
-		$exe:=File:C1566("C:\\Program Files\\Android\\Android Studio\\bin\\studio.exe"; fk platform path:K87:2)
+		$exe:=File:C1566("C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe"; fk platform path:K87:2)
 		
 	End if 
 	
@@ -148,7 +148,7 @@ Function isDefaultPath()->$isDefault : Boolean
 		
 	Else 
 		
-		$isDefault:=(This:C1470.exe.path=File:C1566("C:\\Program Files\\Android\\Android Studio\\bin\\studio.exe"; fk platform path:K87:2).path)
+		$isDefault:=(This:C1470.exe.path=File:C1566("C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe"; fk platform path:K87:2).path)
 		
 	End if 
 	
@@ -214,13 +214,22 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 	var $indx : Integer
 	var $o : Object
 	var $file : 4D:C1709.File
-	var $directory : 4D:C1709.Folder
+	var $targetƒ : 4D:C1709.Folder
 	
-	$directory:=Choose:C955(Count parameters:C259>=1; $target; This:C1470.exe)
+	If (Count parameters:C259>=1)
+		
+		$targetƒ:=$target
+		
+	Else 
+		
+		// Use current
+		$targetƒ:=This:C1470.exe
+		
+	End if 
 	
 	If (This:C1470.macOS)
 		
-		$file:=$directory.file("Contents/Info.plist")
+		$file:=$targetƒ.file("Contents/Info.plist")
 		This:C1470.success:=$file.exists
 		
 		If (This:C1470.success)
@@ -237,11 +246,11 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 		
 	Else 
 		
-		$indx:=Position:C15(":"; $directory.parent.platformPath)
-		$drive:=Substring:C12($directory.parent.platformPath; 1; $indx)
-		$path:=Replace string:C233(Substring:C12($directory.parent.platformPath; $indx+1); "\\"; "\\\\")
-		$name:=$directory.name
-		$extension:=Replace string:C233($directory.extension; "."; ""; 1)
+		$indx:=Position:C15(":"; $targetƒ.parent.platformPath)
+		$drive:=Substring:C12($targetƒ.parent.platformPath; 1; $indx)
+		$path:=Replace string:C233(Substring:C12($targetƒ.parent.platformPath; $indx+1); "\\"; "\\\\")
+		$name:=$targetƒ.name
+		$extension:=Replace string:C233($targetƒ.extension; "."; ""; 1)
 		
 		$o:=This:C1470.lep("wmic datafile where \"Drive='"+$drive+"' and Path='"+$path+"' and Filename='"+$name+"' and extension='"+$extension+"'\" get name,version")
 		This:C1470.success:=$o.success
@@ -258,7 +267,19 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 		
 		If (This:C1470.success)
 			
-			$version:=Substring:C12($t; $pos{1}; $len{1})
+			$t:=Substring:C12($t; $pos{1}; $len{1})
+			
+			// Remove unecessary ".0"
+			var $c : Collection
+			$c:=Split string:C1554($t; ".")
+			
+			While ($c[$c.length-1]="0")
+				
+				$c.remove($c.length-1)
+				
+			End while 
+			
+			$version:=$c.join(".")
 			
 		End if 
 	End if 
@@ -271,6 +292,7 @@ Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the SDK folder object
+	// ⚠️ FAILED IF THE INSTALLATION WAS MADE BY NOT USING THE DEFAULT LOCATION
 Function sdkFolder()->$folder : 4D:C1709.Folder
 	
 	If (Is macOS:C1572)
@@ -284,20 +306,16 @@ Function sdkFolder()->$folder : 4D:C1709.Folder
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the SDK folder object
-Function open
+	// Open the Android Studio application
+Function open()
 	
 	var $o : Object
 	
 	If (Count parameters:C259>=1)  // Open project
 		
-		//$o:=$1.folders().query("extension = .xcworkspace").pop()
-		//If ($o=Null)
-		//$o:=$1.folders().query("extension = .xcodeproj").pop()
-		// End if
-		//If (Bool($o.exists))
-		//$o:=This.lep("open "+This.singleQuoted($o.path))
-		// End if
+		
+		//#TO_DO
+		
 		
 	Else   // Open Studio
 		
@@ -307,8 +325,8 @@ Function open
 			
 		Else 
 			
-			// #TO_DO
-			$o:=This:C1470.lep("open "+This:C1470.singleQuoted(This:C1470.exe.path))
+			SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "false")
+			$o:=This:C1470.lep(This:C1470.exe.path)
 			
 		End if 
 	End if 
@@ -325,11 +343,12 @@ Function open
 		
 	End if 
 	
-	//====================================================================
-	//
-Function getJava
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Populate the javaHome & java properties according to the platform
+Function _getJava()
 	
-	var $javaHome; $javaCmd : Object
+	var $javaHome : 4D:C1709.Folder
+	var $javaCmd : 4D:C1709.File
 	
 	This:C1470.javaHome:=Null:C1517
 	This:C1470.java:=Null:C1517
@@ -382,11 +401,13 @@ Function getJava
 		
 	End if 
 	
-	//====================================================================
-	//
-Function getKotlinc
+	This:C1470.success:=(This:C1470.java#Null:C1517)
 	
-	var $kotlinc : Object
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Populate the kotlink property according to the platform
+Function _getKotlinc()
+	
+	var $kotlinc : 4D:C1709.File
 	
 	This:C1470.kotlinc:=Null:C1517
 	
@@ -417,3 +438,5 @@ Function getKotlinc
 		// Android Studio was not found
 		
 	End if 
+	
+	This:C1470.success:=(This:C1470.kotlinc#Null:C1517)

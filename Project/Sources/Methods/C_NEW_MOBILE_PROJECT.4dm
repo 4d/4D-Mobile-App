@@ -29,10 +29,25 @@ OK:=1
 // ----------------------------------------------------
 Repeat 
 	
-	$name:=Request:C163(\
-		Get localized string:C991("projectName"); \
-		Get localized string:C991("newProject"); \
-		Get localized string:C991("create"))
+	If (Is macOS:C1572) & (FEATURE.with("android"))
+		
+		var $formData : Object
+		$formdata:=New object:C1471("name"; Get localized string:C991("newProject"); "apple"; True:C214; "android"; False:C215)
+		
+		$w:=Open form window:C675("NEW_PROJECT"; Modal form dialog box:K39:7; Horizontally centered:K39:1; Screen height:C188/4)
+		DIALOG:C40("NEW_PROJECT"; $formData)
+		CLOSE WINDOW:C154($w)
+		
+		$name:=$formdata.name
+		
+	Else 
+		
+		$name:=Request:C163(\
+			Get localized string:C991("projectName"); \
+			Get localized string:C991("newProject"); \
+			Get localized string:C991("create"))
+		
+	End if 
 	
 	$isEmpty:=(Length:C16($name)=0) & Bool:C1537(OK)
 	
@@ -80,7 +95,11 @@ End if
 
 If (Bool:C1537(OK))
 	
-	$formData:=New object:C1471
+	If ($formData=Null:C1517)
+		
+		$formData:=New object:C1471
+		
+	End if 
 	
 	// Create the project
 	$folder:=Folder:C1567("/RESOURCES/default project").copyTo($mobileProjects; $name; fk overwrite:K87:5)
@@ -99,6 +118,28 @@ If (Bool:C1537(OK))
 		
 		// Ensure that the name of the application is unique
 		$project:=JSON Parse:C1218($json)
+		
+		If (Is macOS:C1572)
+			
+			If (FEATURE.with("android"))
+				
+				If ($formdata.apple & $formdata.android)
+					
+					$project.info.target:=New collection:C1472("iOS"; "android")
+					
+				Else 
+					
+					// Default is iOS
+					$project.info.target:=Choose:C955($formdata.android; "android"; "iOS")
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			$project.info.target:="android"
+			
+		End if 
 		
 		If ($project.product.name#Null:C1517)
 			

@@ -18,7 +18,7 @@ Class constructor
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a collection of available device simulators
+	// Returns a collection of potential device simulators
 Function devices()->$devices : Collection
 	
 	var $start : Integer
@@ -164,11 +164,7 @@ Function isAvdExisting  // Check if avd already exists
 	
 	$listOutput:=This:C1470.listAvds()
 	
-	If (Is macOS:C1572)
-		$separator:="/"
-	Else 
-		$separator:="\\"
-	End if 
+	$separator:=Choose:C955(Is macOS:C1572; "/"; "\\")
 	
 	// Searching for "/avd_name.avd" expression
 	If (Position:C15($separator+$1+".avd\n"; String:C10($listOutput))=0)
@@ -180,7 +176,9 @@ Function isAvdExisting  // Check if avd already exists
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// Create a new AVD.
+	// You must provide a name for the AVD and specify the ID of the SDK package to use
+	// 
 Function createAvd
 	var $0 : Text  // output
 	var $1 : Text  // avd name

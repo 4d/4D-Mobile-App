@@ -74,7 +74,7 @@ If ($out.studioAvailable)
 				"action"; "show"; \
 				"type"; "confirm"; \
 				"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
-				"additional"; "wantToLaunchAndroidStudio"))
+				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio")))
 			
 			If ($signal.validate)
 				
@@ -90,11 +90,11 @@ If ($out.studioAvailable)
 		//If (Not($out.toolsAvalaible))
 		//$out.ready:=False
 		//$signal:=await_MESSAGE(New object(\
-						"target"; $in.caller; \
-						"action"; "show"; \
-						"type"; "confirm"; \
-						"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
-						"additional"; "wantToFixThePath"))
+			"target"; $in.caller; \
+			"action"; "show"; \
+			"type"; "confirm"; \
+			"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
+			"additional"; "wantToFixThePath"))
 		//If ($signal.validate)
 		//$t:=Get localized string("4dMobileWantsToMakeChanges")
 		//$t:=Replace string($t; "{product}"; Get localized string("4dProductName"))
@@ -108,11 +108,11 @@ If ($out.studioAvailable)
 		//// NOTHING MORE TO DO
 		//Else 
 		//POST_MESSAGE(New object(\
-						"target"; $in.caller; \
-						"action"; "show"; \
-						"type"; "alert"; \
-						"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
-						"additional"; "tryDoingThisFromTheXcodeApplication"))
+			"target"; $in.caller; \
+			"action"; "show"; \
+			"type"; "alert"; \
+			"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
+			"additional"; "tryDoingThisFromTheXcodeApplication"))
 		//End if 
 		//End if 
 		//End if 

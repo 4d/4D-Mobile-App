@@ -5,6 +5,10 @@
 // Created 30-6-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
+// Carries out controls of the development environment
+// according to platform and OS target
+// ----------------------------------------------------
+// Declarations
 var $0 : Object
 var $1 : Object
 
@@ -16,19 +20,8 @@ End if
 var $in; $out; $studio; $xCode : Object
 
 // ----------------------------------------------------
-// Declarations
-
-// ----------------------------------------------------
 // Initialisations
-
-// NO PARAMETERS REQUIRED
-
-// Optional parameters
-If (Count parameters:C259>=1)
-	
-	$in:=$1
-	
-End if 
+$in:=$1
 
 // ----------------------------------------------------
 Case of 
@@ -38,13 +31,29 @@ Case of
 		
 		If (FEATURE.with("android"))
 			
-			$in.silent:=True:C214
+			If (Value type:C1509($in.project.info.target)=Is collection:K8:32)
+				
+				// Silent mode if Android not in the targets
+				$in.silent:=($in.project.info.target.indexOf("android")=-1)
+				
+			Else 
+				
+				// Silent mode if not Android target
+				$in.silent:=(String:C10($in.project.info.target)#"android")
+				
+			End if 
+			
 			$studio:=studioCheckInstall($in)
 			
-			If (Not:C34($studio.studioAvailable))
+			If (Value type:C1509($in.project.info.target)=Is collection:K8:32)
 				
-				//xCode is mandatory
-				$in.silent:=False:C215
+				// Silent mode if iOS not in the targets
+				$in.silent:=($in.project.info.target.indexOf("iOS")=-1)
+				
+			Else 
+				
+				// Silent mode if not iOS target
+				$in.silent:=(String:C10($in.project.info.target)#"iOS")
 				
 			End if 
 			

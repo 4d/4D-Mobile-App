@@ -24,7 +24,7 @@
 					"height": 180,
 					"sizingY": "grow",
 					"fill": "automatic",
-					"stroke": "transparent"
+					"stroke": "#c0c0c0"
 				},
 				"cancel": {
 					"type": "button",
@@ -65,8 +65,8 @@
 					"type": "input",
 					"top": 73,
 					"left": 10,
-					"width": 400,
-					"height": 54,
+					"width": 390,
+					"height": 48,
 					"sizingY": "grow",
 					"textAlign": "center",
 					"fontTheme": "additional",
@@ -81,7 +81,7 @@
 					"top": 20,
 					"left": 10,
 					"width": 390,
-					"height": 33,
+					"height": 44,
 					"textAlign": "center",
 					"fontTheme": "main",
 					"fill": "transparent",
@@ -137,5 +137,13 @@
 		"kind": "form"
 	},
 	"rightMargin": 0,
-	"bottomMargin": 0
+	"bottomMargin": 0,
+	"geometryStamp": 9,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

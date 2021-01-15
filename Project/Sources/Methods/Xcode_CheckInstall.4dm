@@ -19,7 +19,6 @@ If (False:C215)
 	C_OBJECT:C1216(Xcode_CheckInstall; $1)
 End if 
 
-var $t : Text
 var $in; $out; $signal : Object
 var $Xcode : cs:C1710.Xcode
 
@@ -107,9 +106,7 @@ If ($out.XcodeAvailable)
 			
 			If ($signal.validate)
 				
-				$t:=Get localized string:C991("4dMobileWantsToMakeChanges")
-				$t:=Replace string:C233($t; "{product}"; Get localized string:C991("4dForIos"))
-				$Xcode.setToolPath($t)
+				$Xcode.setToolPath(cs:C1710.str.new("4dMobileWantsToMakeChanges").localized("4dForIos"))
 				
 				If ($Xcode.success)
 					
@@ -169,9 +166,7 @@ If ($out.XcodeAvailable)
 		// CHECK FIRST INSTALL
 		If (Not:C34($Xcode.checkFirstLaunchStatus()))
 			
-			$t:=Get localized string:C991("4dMobileWantsToMakeChanges")
-			$t:=Replace string:C233($t; "{product}"; Get localized string:C991("4dForIos"))
-			$Xcode.setToolPath($t)
+			$Xcode.setToolPath(cs:C1710.str.new("4dMobileWantsToMakeChanges").localized("4dForIos"))
 			
 		End if 
 		
@@ -181,8 +176,8 @@ If ($out.XcodeAvailable)
 				"target"; $in.caller; \
 				"action"; "show"; \
 				"type"; "confirm"; \
-				"title"; "youHaveNotYetAcceptedTheXcodeLicense"; \
-				"additional"; "wouldYouLikeToLaunchXcodeNow"))
+				"title"; "xcodeIsNotFullyFunctional"; \
+				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "xcode")))
 			
 			If ($signal.validate)
 				

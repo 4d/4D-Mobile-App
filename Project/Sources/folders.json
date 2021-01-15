@@ -152,6 +152,7 @@
 		],
 		"forms": [
 			"EDITOR",
+			"NEW_PROJECT",
 			"RIBBON",
 			"TITLE",
 			"WELCOME"
