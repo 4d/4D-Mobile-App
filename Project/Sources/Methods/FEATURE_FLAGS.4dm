@@ -122,11 +122,16 @@ FEATURE.unstable("templateClass")
 FEATURE.unstable("searchWithBarCode")
 
 /* _____________
-WIP
+ANDROID
 _____________*/
 
 // Android support
-FEATURE.wip("android")
+FEATURE.unstable("android")
+
+
+/* _____________
+WIP
+_____________*/
 
 // Share action with descrition
 FEATURE.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action

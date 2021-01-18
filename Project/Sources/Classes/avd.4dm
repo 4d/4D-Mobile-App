@@ -32,8 +32,8 @@ Function devices()->$devices : Collection
 		
 		$start:=1
 		
-		ARRAY LONGINT:C221($pos; 0x0000; 0x0000)
-		ARRAY LONGINT:C221($len; 0x0000; 0x0000)
+		ARRAY LONGINT:C221($pos; 0x0000)
+		ARRAY LONGINT:C221($len; 0x0000)
 		
 		While (Match regex:C1019("(?m-si)id:\\s(\\d+)\\sor\\s\"([^\"]*)\"\\s*Name:\\s(\\V*)\\s*OEM\\s*:\\s(\\V*)"; This:C1470.outputStream; $start; $pos; $len))
 			
