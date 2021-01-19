@@ -71,8 +71,8 @@ Function availableDevices()->$devices : Collection
 		
 		$start:=1
 		
-		ARRAY LONGINT:C221($pos; 0x0000; 0x0000)
-		ARRAY LONGINT:C221($len; 0x0000; 0x0000)
+		ARRAY LONGINT:C221($pos; 0x0000)
+		ARRAY LONGINT:C221($len; 0x0000)
 		
 		While (Match regex:C1019("(?m-si)Name:\\s(\\V*)\\s*Device:\\s(\\V*)\\s*Path:\\s(\\V*)\\s*Target:\\s(\\V*\\s*\\V*)\\s*Skin:\\s(\\V*)\\s*Sdcard:\\s("+\
 			"\\V*)"; This:C1470.outputStream; $start; $pos; $len))
@@ -109,8 +109,8 @@ Function _o_devices()->$devices : Collection
 		
 		$start:=1
 		
-		ARRAY LONGINT:C221($pos; 0x0000; 0x0000)
-		ARRAY LONGINT:C221($len; 0x0000; 0x0000)
+		ARRAY LONGINT:C221($pos; 0x0000)
+		ARRAY LONGINT:C221($len; 0x0000)
 		
 		While (Match regex:C1019("(?m-si)Name:\\s(\\V*)\\s*Path:\\s(\\V*)"; This:C1470.outputStream; $start; $pos; $len))
 			
