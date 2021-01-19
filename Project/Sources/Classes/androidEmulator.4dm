@@ -156,9 +156,7 @@ Class constructor
 		
 		This:C1470.cmd:=This:C1470.cmd+".exe"
 		
-	Else 
-		
-		// Already set
+		// Else : already set
 		
 	End if 
 	
@@ -185,9 +183,7 @@ Function start  // Starts emulator
 		
 		$0.errors.push("Failed to start emulator")
 		
-	Else 
-		
-		// All ok
+		// Else : all ok
 		
 	End if 
 	

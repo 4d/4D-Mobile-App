@@ -18,9 +18,7 @@ Class constructor
 		
 		This:C1470.cmd:=This:C1470.cmd+".exe"
 		
-	Else 
-		
-		// Already set
+		// Else : already set
 		
 	End if 
 	
@@ -132,8 +130,7 @@ Function getAvdName
 			$0.errors.push("Can't get avd name for this emulator")
 		End if 
 		
-	Else 
-		// serial not found
+		// Else : serial not found
 	End if 
 	
 	
@@ -165,8 +162,7 @@ Function findSerial
 				$0.serial:=$serial
 				$0.success:=True:C214
 				
-			Else 
-				// not the associated serial
+				// Else : not the associated serial
 			End if 
 			
 		Else 
@@ -257,8 +253,7 @@ Function waitForBoot
 				
 				$0.errors.push(This:C1470.errorStream)
 				
-			Else 
-				// No command error, just timeout
+				// Else : no command error, just timeout
 			End if 
 			
 		Else 
@@ -326,9 +321,10 @@ Function uninstallApp
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
 	If (Not:C34($0.success))
+		
 		$0.errors.push("Failed to uninstall the app")
-	Else 
-		// All ok
+		
+		// Else : all ok
 	End if 
 	
 	
@@ -384,9 +380,10 @@ Function installApp
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
 	If (Not:C34($0.success))
+		
 		$0.errors.push("Failed to install the app")
-	Else 
-		// All ok
+		
+		// Else : all ok
 	End if 
 	
 	
@@ -433,9 +430,10 @@ Function startApp
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
 	If (Not:C34($0.success))
+		
 		$0.errors.push("Failed to start the app")
-	Else 
-		// All ok
+		
+		// Else : all ok
 	End if 
 	
 	

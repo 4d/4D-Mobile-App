@@ -11,9 +11,7 @@ Class constructor
 		
 		This:C1470.cmd:=This:C1470.cmd+".bat"
 		
-	Else 
-		
-		// Already set
+		// Else : already set
 		
 	End if 
 	

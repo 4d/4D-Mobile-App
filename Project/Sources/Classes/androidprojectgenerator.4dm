@@ -32,9 +32,10 @@ Function generate
 	$0.success:=(This:C1470.errorStream=Null:C1517)
 	
 	If (Not:C34($0.success))
+		
 		$0.errors.push("Failed to generate files")
-	Else 
-		// All ok
+		
+		// Else : all ok
 	End if 
 	
 	
@@ -71,9 +72,10 @@ Function buildEmbeddedDataLib
 	End if 
 	
 	If (Not:C34($0.success))
+		
 		$0.errors.push("Failed to build embedded data library")
-	Else 
-		// All ok
+		
+		// Else : all ok
 	End if 
 	
 	
@@ -136,8 +138,7 @@ Function copyResources
 					$0.success:=False:C215
 					$0.errors.push("Could not copy file to destination: "+$copyDest.path)
 					
-				Else 
-					// All ok
+					//Else : all ok
 				End if 
 				
 			End for each 
@@ -167,7 +168,8 @@ Function chmod
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
 	If (Not:C34($0.success))
+		
 		$0.errors.push("Failed chmod command")
-	Else 
-		// All ok
+		
+		// Else : all ok
 	End if 

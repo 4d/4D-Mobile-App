@@ -31,9 +31,10 @@ Function assembleDebug
 	End if 
 	
 	If (Not:C34($0.success))
+		
 		$0.errors.push("Failed to build project with task \"assembleDebug\"")
-	Else 
-		// All ok
+		
+		// Else : all ok
 	End if 
 	
 	
@@ -50,9 +51,10 @@ Function createEmbeddedDatabase
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
 	If (Not:C34($0.success))
+		
 		$0.errors.push("Failed to create embedded database")
-	Else 
-		// All ok
+		
+		// Else : all ok
 	End if 
 	
 	
