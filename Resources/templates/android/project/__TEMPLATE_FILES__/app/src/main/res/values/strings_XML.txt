@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">{{app_name_with_caps}}</string>
+
+    <!--    Bottom Navigation -->
+    <string name="title_table_settings">Settings</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Arcu dictum varius duis at. Sit amet risus nullam eget felis eget. Nisl pretium fusce id velit ut tortor. Quis auctor elit sed vulputate mi sit amet mauris commodo. Tellus integer feugiat scelerisque varius morbi enim.</string>
+</resources>

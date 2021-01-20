@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by {{author}} on {{date_day}}/{{date_month}}/{{date_year}}.
+  ~ {{company_header}}
+  ~ Copyright (c) {{date_year}} {{author}}. All rights reserved.
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/{{tableName_lowercase}}"
+    app:startDestination="@id/{{tableName_lowercase}}List">
+
+    <fragment
+        android:id="@+id/{{tableName_lowercase}}List"
+        android:name="com.qmobile.qmobileui.list.EntityListFragment"
+        android:label="{{tableName}} List"
+        tools:layout="@layout/fragment_list">
+
+        <action
+            android:id="@+id/action_list_to_viewpager"
+            app:destination="@id/{{tableName_lowercase}}ViewPager"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <argument
+            android:name="tableName"
+            android:defaultValue="{{tableName}}"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/{{tableName_lowercase}}ViewPager"
+        android:name="com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragment"
+        android:label="{{tableName}} ViewPager">
+
+        <argument
+            android:name="position"
+            app:argType="integer" />
+
+        <argument
+            android:name="tableName"
+            app:argType="string" />
+
+    </fragment>
+
+</navigation>
