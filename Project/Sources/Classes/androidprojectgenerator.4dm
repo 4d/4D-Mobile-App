@@ -8,34 +8,50 @@ Class constructor($java : 4D:C1709.File; $kotlinc : 4D:C1709.File)
 	This:C1470.kotlinc:=$kotlinc.path
 	This:C1470.chmodCmd:="chmod"
 	
-	
 Function generate
 	var $0 : Object
 	var $1 : 4D:C1709.File  // project editor json
-	var $2 : 4D:C1709.Folder  // files to copy
-	var $3 : 4D:C1709.Folder  // template files
-	var $4 : 4D:C1709.Folder  // template forms
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.setDirectory(path.scripts())
+	This:C1470.path:=cs:C1710.path.new()
 	
-	This:C1470.launch(This:C1470.androidprojectgeneratorCmd\
-		+" --project-editor \""+$1.path\
-		+"\" --files-to-copy \""+$2.path\
-		+"\" --template-files \""+$3.path\
-		+"\" --template-forms \""+$4.path\
-		+"\"")
-	
-	$0.success:=(This:C1470.errorStream=Null:C1517)
-	
-	If (Not:C34($0.success))
+	If ((This:C1470.path.androidProjectFilesToCopy().exists)\
+		 & (This:C1470.path.androidProjectTemplateFiles().exists)\
+		 & (This:C1470.path.androidForms().exists))
 		
-		$0.errors.push("Failed to generate files")
+		If (This:C1470.path.scripts().exists)
+			
+			This:C1470.setDirectory(This:C1470.path.scripts())
+			
+			This:C1470.launch(This:C1470.androidprojectgeneratorCmd\
+				+" --project-editor \""+$1.path\
+				+"\" --files-to-copy \""+This:C1470.path.androidProjectFilesToCopy().path\
+				+"\" --template-files \""+This:C1470.path.androidProjectTemplateFiles().path\
+				+"\" --template-forms \""+This:C1470.path.androidForms().path\
+				+"\"")
+			
+			$0.success:=(This:C1470.errorStream=Null:C1517)
+			
+			If (Not:C34($0.success))
+				
+				$0.errors.push("Failed to generate files")
+				
+				// Else : all ok
+			End if 
+			
+		Else 
+			
+			$0.errors.push("Missing scripts directory")
+			
+		End if 
 		
-		// Else : all ok
+	Else 
+		
+		$0.errors.push("Missing directories for project templating")
+		
 	End if 
 	
 	
