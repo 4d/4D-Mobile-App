@@ -215,16 +215,17 @@ Function androidProjectFilesToCopy  // android project files to copy folder
 	
 	C_OBJECT:C1216($0)
 	
-	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/project/__FILES_TO_COPY__").platformPath; fk platform path:K87:2)
+	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/project/copy").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target
+	
 /*========================================================*/
 Function androidProjectTemplateFiles  // android project template files folder
 	
 	C_OBJECT:C1216($0)
 	
-	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/project/__TEMPLATE_FILES__").platformPath; fk platform path:K87:2)
+	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/project/tpl").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target
