@@ -1,8 +1,0 @@
-import {{prefix}}.{{company}}.{{app_name}}.android.build.CreateDatabaseTask
-
-task createDatabase(type: CreateDatabaseTask) {
-    dbFile = file("$projectDir/src/main/assets/databases/static.db")
-    schema = file("$projectDir/schemas/{{prefix}}.{{company}}.{{app_name}}.data.db.AppDatabase/1.json")
-}
-
-preBuild.mustRunAfter createDatabase

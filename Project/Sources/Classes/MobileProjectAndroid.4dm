@@ -9,6 +9,24 @@ Class constructor
 	
 	This:C1470.isOnError:=False:C215
 	
+	//*****************************************
+	// Là cela ne marche pas bien chez moi ;-)
+	//*****************************************
+	
+	If (Is macOS:C1572)
+		
+		This:C1470.filesToCopy:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__FILES_TO_COPY__")
+		This:C1470.templateFiles:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FILES__")
+		This:C1470.templateForms:=Folder:C1567("/Users/qmarciset/Downloads/KotlinScripts/__TEMPLATE_FORMS__")
+		
+	Else 
+		
+		This:C1470.filesToCopy:=Folder:C1567("C:/Users/test/Downloads/__FILES_TO_COPY__")
+		This:C1470.templateFiles:=Folder:C1567("C:/Users/test/Downloads/__TEMPLATE_FILES__")
+		This:C1470.templateForms:=Folder:C1567("C:/Users/test/Downloads/__TEMPLATE_FORMS__")
+		
+	End if 
+	
 	// Artifactory identifiers
 	This:C1470.artifactoryIds:=New collection:C1472
 	This:C1470.artifactoryIds.push(New object:C1471("ARTIFACTORY_USERNAME"; "admin"))
@@ -59,6 +77,17 @@ Function init
 	This:C1470.setJavaHome()
 	This:C1470.setAndroidHome()
 	
+	If ((Not:C34(This:C1470.filesToCopy.exists))\
+		 | (Not:C34(This:C1470.templateFiles.exists))\
+		 | (Not:C34(This:C1470.templateForms.exists)))
+		
+		This:C1470.postError("Missing directories for project templating")
+		This:C1470.isOnError:=True:C214
+		
+		// Else : all ok
+		
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function setEnvVarToAll
@@ -97,7 +126,7 @@ Function create()->$result : Object
 		// * GENERATE PROJECT FILES
 		This:C1470.postStep("workspaceCreation")
 		
-		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
+		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file; This:C1470.filesToCopy; This:C1470.templateFiles; This:C1470.templateForms)
 		
 		If ($o.success)
 			
