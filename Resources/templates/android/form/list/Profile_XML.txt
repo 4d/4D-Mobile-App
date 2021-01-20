@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by {{author}} on {{date_day}}/{{date_month}}/{{date_year}}.
+  ~ {{company_header}}
+  ~ Copyright (c) {{date_year}} {{author}}. All rights reserved.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.text.TextUtils" />
+
+        <variable
+            name="entityData"
+            type="{{prefix}}.{{company}}.{{app_name}}.data.model.entity.{{tableName}}" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_light">
+
+        <ImageView
+            android:id="@+id/{{tableName_lowercase}}_field_value_1"
+            android:layout_width="69dp"
+            android:layout_height="69dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"            
+            android:layout_marginBottom="8dp"
+            android:contentDescription="Profile Image"
+            {{#field_1_defined}}
+            app:imageUrl="@{entityData.{{field_1_name}}.__deferred.uri}"
+            app:key="@{entityData.__KEY}"
+            app:tableName='@{"{{tableName}}"}'
+            app:fieldName='@{"{{field_1_name}}"}'
+            {{/field_1_defined}}
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/circle"
+            tools:background="@tools:sample/avatars"
+            tools:srcCompat="@drawable/circle" />
+
+        <TextView
+            android:id="@+id/{{tableName_lowercase}}_field_value_2"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:scrollbars="none"
+            {{#field_2_defined}}
+            android:text="@{entityData.{{field_2_name}}.toString()}"
+            {{/field_2_defined}}
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/{{tableName_lowercase}}_field_value_3"
+            app:layout_constraintEnd_toStartOf="@+id/item_arrow"
+            app:layout_constraintStart_toEndOf="@+id/{{tableName_lowercase}}_field_value_1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="field_2" />
+
+        <TextView
+            android:id="@+id/{{tableName_lowercase}}_field_value_3"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:scrollbars="none"
+            {{#field_3_defined}}
+            android:text="@{entityData.{{field_3_name}}.toString()}"
+            {{/field_3_defined}}
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/item_arrow"
+            app:layout_constraintStart_toEndOf="@+id/{{tableName_lowercase}}_field_value_1"
+            app:layout_constraintTop_toBottomOf="@+id/{{tableName_lowercase}}_field_value_2"
+            tools:text="field_3" />
+
+        <ImageView
+            android:id="@+id/item_arrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:imageDrawable="@{@drawable/baseline_chevron_right_24}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
