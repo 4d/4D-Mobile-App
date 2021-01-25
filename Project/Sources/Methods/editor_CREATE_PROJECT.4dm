@@ -32,6 +32,7 @@ If (Bool:C1537(OK))
 		
 		PROCESS 4D TAGS:C816($json; $json)
 		
+		$data.folder:=$folder
 		$data.file:=$file
 		$data.project:=$file.platformPath
 		

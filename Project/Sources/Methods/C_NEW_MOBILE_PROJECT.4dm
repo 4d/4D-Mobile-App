@@ -38,8 +38,6 @@ If (FEATURE.with("wizards"))
 		
 		If (Bool:C1537($data.file.exists))
 			
-			OB REMOVE:C1226($data; "list")
-			OB REMOVE:C1226($data; "name")
 			For each ($key; $data)
 				
 				If ($key[[1]]="_")

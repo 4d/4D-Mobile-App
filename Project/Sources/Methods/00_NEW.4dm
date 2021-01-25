@@ -14,9 +14,9 @@ If (False:C215)
 	C_TEXT:C284(00_NEW; $1)
 End if 
 
-var $entryPoint; $methodName; $projectName; $t; $worker : Text
-var $window : Integer
-var $formData; $menu; $mobileProjects; $o; $project : Object
+var $entryPoint; $methodName : Text
+var $data : Object
+var $menu : cs:C1710.menu
 
 // ----------------------------------------------------
 // Initialisations
@@ -27,136 +27,75 @@ If (Count parameters:C259>=1)
 End if 
 
 // ----------------------------------------------------
-Case of 
+If (Length:C16($entryPoint)=0)
+	
+	$methodName:=Current method name:C684
+	
+	Case of 
+			
+			//……………………………………………………………………
+		: (Method called on error:C704=$methodName)
+			
+			// Error handling manager
+			
+			//……………………………………………………………………
+		Else 
+			
+			// This method must be executed in a unique new process
+			BRING TO FRONT:C326(New process:C317($methodName; 0; "$"+$methodName; "*"; *))
+			
+			//……………………………………………………………………
+	End case 
+	
+Else 
+	
+	// First launch of this method executed in a new process
+	COMPILER_COMPONENT
+	
+	$menu:=cs:C1710.menu.new().defaultMinimalMenuBar()
+	
+	If (DATABASE.isMatrix)
 		
-		//___________________________________________________________
-	: (Length:C16($entryPoint)=0)
+		file_Menu($menu.submenus[0])
+		dev_Menu($menu)
 		
-		$methodName:=Current method name:C684
-		
-		Case of 
-				
-				//……………………………………………………………………
-			: (Method called on error:C704=$methodName)
-				
-				// Error handling manager
-				
-				//……………………………………………………………………
-			Else 
-				
-				// This method must be executed in a unique new process
-				BRING TO FRONT:C326(New process:C317($methodName; 0; "$"+$methodName; "_run"; *))
-				
-				//……………………………………………………………………
-		End case 
-		
-		//___________________________________________________________
-	: ($entryPoint="_run")
-		
-		// First launch of this method executed in a new process
-		00_NEW("_declarations")
-		00_NEW("_init")
+	End if 
+	
+	$menu.setBar()
+	
+	If (Shift down:C543)
 		
 		// C_NEW_MOBILE_PROJECT
+		EXECUTE METHOD:C1007("C_NEW_MOBILE_PROJECT")
 		
-		$mobileProjects:=Folder:C1567("/PACKAGE/Mobile Projects")
-		$mobileProjects.create()
-		
-		If (Shift down:C543)
-			
-			$projectName:=Request:C163(Get localized string:C991("projectName"); \
-				"test"; \
-				Get localized string:C991("create"))
-			
-			$projectName:=Choose:C955(Length:C16($projectName)=0; "test"; $projectName)
-			
-		Else 
-			
-			$projectName:="test"
-			
-		End if 
-		
-		// Create the project {
-		$project:=Folder:C1567("/RESOURCES/default project").copyTo($mobileProjects; $projectName; fk overwrite:K87:5).file("project.4dmobileapp")
-		$t:=$project.getText()
-		PROCESS 4D TAGS:C816($t; $t)
-		
-		Case of 
-				
-				//______________________________________________________
-			: (Is macOS:C1572)
-				
-				//
-				
-				//______________________________________________________
-			: (Is Windows:C1573)
-				
-				$o:=JSON Parse:C1218($t)
-				$o.info.target:="Android"
-				$t:=JSON Stringify:C1217($o; *)
-				
-				//______________________________________________________
-			Else 
-				
-				// A "Case of" statement should never omit "Else"
-				
-				//______________________________________________________
-		End case 
-		
-		$project.setText($t)
-		
-		// Open the project editor
-		$window:=Open form window:C675("EDITOR"; Plain form window:K39:10; *)
-		
-		$worker:="4D Mobile ("+String:C10($window)+")"
-		CALL WORKER:C1389($worker; "COMPILER_COMPONENT")
-		
-		$formData:=New object:C1471(\
-			"$worker"; $worker; \
-			"project"; $project.platformPath; \
-			"file"; $project)
-		
-		If (DATABASE.isMatrix)
-			
-			DIALOG:C40("EDITOR"; $formData)
-			CLOSE WINDOW:C154($window)
-			
-		Else 
-			
-			DIALOG:C40("EDITOR"; $formData; *)
-			
-		End if 
-		
-		00_NEW("_deinit")
-		
-		//___________________________________________________________
-	: ($entryPoint="_declarations")
-		
-		COMPILER_COMPONENT
-		
-		//___________________________________________________________
-	: ($entryPoint="_init")
-		
-		$menu:=cs:C1710.menu.new().defaultMinimalMenuBar()
-		
-		If (DATABASE.isMatrix)
-			
-			file_Menu($menu.submenus[0])
-			dev_Menu($menu)
-			
-		End if 
-		
-		$menu.setBar()
-		
-		//___________________________________________________________
-	: ($entryPoint="_deinit")
-		
-		//
-		
-		//___________________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point ("+$entryPoint+")")
+		$data:=New object:C1471(\
+			"$name"; Get localized string:C991("newProject"); \
+			"$apple"; Is macOS:C1572; \
+			"$android"; FEATURE.with("android"); \
+			"$callback"; "editor_CALLBACK"; \
+			"$mainWindow"; Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
 		
-		//___________________________________________________________
-End case 
+		editor_CREATE_PROJECT($data)
+		
+		If (Bool:C1537($data.file.exists))
+			
+			// Open the project editor
+			If (DATABASE.isMatrix)
+				
+				DIALOG:C40("EDITOR"; $data)
+				
+			Else 
+				
+				DIALOG:C40("EDITOR"; $data; *)
+				
+			End if 
+			
+		Else 
+			
+			CLOSE WINDOW:C154($data.$mainWindow)
+			
+		End if 
+	End if 
+End if 

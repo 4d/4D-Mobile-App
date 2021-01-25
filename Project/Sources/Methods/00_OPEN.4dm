@@ -5,7 +5,7 @@
 // Created 11-5-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description
-//
+// 
 // ----------------------------------------------------
 // Declarations
 var $1 : Text
@@ -14,9 +14,10 @@ If (False:C215)
 	C_TEXT:C284(00_OPEN; $1)
 End if 
 
-var $directory; $entryPoint; $methodName; $pathName; $projectName; $t : Text
+var $entryPoint; $methodName; $t : Text
 var $withDebuglog : Boolean
-var $menu : Object
+var $file : 4D:C1709.File
+var $menu : cs:C1710.menu
 
 // ----------------------------------------------------
 // Initialisations
@@ -29,56 +30,52 @@ End if
 $withDebuglog:=True:C214  // Activate or not debug log for performance tests
 
 // ----------------------------------------------------
-Case of 
-		
-		//___________________________________________________________
-	: (Length:C16($entryPoint)=0)
-		
-		$methodName:=Current method name:C684
-		
-		Case of 
-				
-				//……………………………………………………………………
-			: (Method called on error:C704=$methodName)
-				
-				// Error handling manager
-				
-				//……………………………………………………………………
-			Else 
-				
-				// This method must be executed in a unique new process
-				BRING TO FRONT:C326(New process:C317($methodName; 0; "$"+$methodName; "_run"; *))
-				
-				//……………………………………………………………………
-		End case 
-		
-		//___________________________________________________________
-	: ($entryPoint="_run")
-		
-		// First launch of this method executed in a new process
-		00_OPEN("_declarations")
-		00_OPEN("_init")
-		
-		If (Shift down:C543)  // Select project
+If (Length:C16($entryPoint)=0)
+	
+	$methodName:=Current method name:C684
+	
+	Case of 
 			
-			$directory:=Folder:C1567("/PACKAGE/Mobile Projects").platformPath
-			$entryPoint:=Select document:C905($directory; ".4dmobileapp"; ""; Package open:K24:8+Alias selection:K24:10)
+			//……………………………………………………………………
+		: (Method called on error:C704=$methodName)
 			
-			If (Bool:C1537(OK))
-				
-				$pathName:=DOCUMENT
-				RESOLVE ALIAS:C695($pathName; $pathName)
-				
-			End if 
+			// Error handling manager
 			
-		Else   // Open project created by 00_New
+			//……………………………………………………………………
+		Else 
 			
-			$projectName:=Choose:C955(Macintosh option down:C545; "test"; "New Project")
-			$pathName:=Folder:C1567("/PACKAGE/Mobile Projects").platformPath+Convert path POSIX to system:C1107($projectName+"/project.4dmobileapp")
+			// This method must be executed in a unique new process
+			BRING TO FRONT:C326(New process:C317($methodName; 0; "$"+$methodName; "*"; *))
 			
-		End if 
+			//……………………………………………………………………
+	End case 
+	
+Else 
+	
+	// First launch of this method executed in a new process
+	COMPILER_COMPONENT
+	
+	$menu:=cs:C1710.menu.new().defaultMinimalMenuBar()
+	
+	If (DATABASE.isMatrix)
 		
-		If (Length:C16($pathName)>0)
+		file_Menu($menu.submenus[0])
+		dev_Menu($menu)
+		
+	End if 
+	
+	$menu.setBar()
+	
+	If (Shift down:C543)  // Select project
+		
+		// C_OPEN_MOBILE_PROJECT
+		EXECUTE METHOD:C1007("C_OPEN_MOBILE_PROJECT")
+		
+	Else   // Open project created by 00_New
+		
+		$file:=cs:C1710.path.new().projects().folder(Choose:C955(Macintosh option down:C545; "test"; "New Project")).file("project.4dmobileapp")
+		
+		If (Asserted:C1132($file.exists; "File not found"))
 			
 			If ($withDebuglog)
 				
@@ -93,43 +90,14 @@ Case of
 				
 			End if 
 			
+			//C_OPEN_MOBILE_PROJECT($file.platformPath)
+			EXECUTE METHOD:C1007("C_OPEN_MOBILE_PROJECT"; *; $file.platformPath)
+			
 			If ($withDebuglog)
 				
 				SET DATABASE PARAMETER:C642(Debug log recording:K37:34; 0)
 				
 			End if 
 		End if 
-		
-		00_OPEN("_deinit")
-		
-		//___________________________________________________________
-	: ($entryPoint="_declarations")
-		
-		COMPILER_COMPONENT
-		
-		//___________________________________________________________
-	: ($entryPoint="_init")
-		
-		$menu:=cs:C1710.menu.new().defaultMinimalMenuBar()
-		
-		If (DATABASE.isMatrix)
-			
-			file_Menu($menu.submenus[0])
-			dev_Menu($menu)
-			
-		End if 
-		
-		$menu.setBar()
-		
-		//___________________________________________________________
-	: ($entryPoint="_deinit")
-		
-		//
-		
-		//___________________________________________________________
-	Else 
-		
-		ASSERT:C1129(False:C215; "Unknown entry point ("+$entryPoint+")")
-		
-		//___________________________________________________________
-End case 
+	End if 
+End if 
