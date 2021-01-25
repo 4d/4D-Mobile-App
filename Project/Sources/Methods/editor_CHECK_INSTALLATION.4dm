@@ -31,33 +31,29 @@ Case of
 		
 		If (FEATURE.with("android"))  //🚧
 			
-			If (Value type:C1509($in.project.info.target)=Is collection:K8:32)
+			If (Bool:C1537($in.project.$studio.ready))
 				
-				// Silent mode if Android not in the targets
-				$in.silent:=($in.project.info.target.indexOf("android")=-1)
+				$androidStudio:=$in.project.$studio
 				
 			Else 
 				
 				// Silent mode if not Android target
-				$in.silent:=(String:C10($in.project.info.target)#"android")
+				$in.silent:=Not:C34(Bool:C1537($in.project.$android))
+				$androidStudio:=studioCheckInstall($in)
 				
 			End if 
 			
-			$androidStudio:=studioCheckInstall($in)
 			
-			If (Value type:C1509($in.project.info.target)=Is collection:K8:32)
+			If (Bool:C1537($in.project.$xCode.ready))
 				
-				// Silent mode if iOS not in the targets
-				$in.silent:=($in.project.info.target.indexOf("iOS")=-1)
+				$xCode:=$in.project.$xCode
 				
 			Else 
 				
-				// Silent mode if not iOS target
-				$in.silent:=(String:C10($in.project.info.target)#"iOS")
+				$in.silent:=Not:C34(Bool:C1537($in.project.$apple))
+				$xCode:=Xcode_CheckInstall($in)
 				
 			End if 
-			
-			$xCode:=Xcode_CheckInstall($in)
 			
 			$out:=New object:C1471(\
 				"xCode"; $xCode; \

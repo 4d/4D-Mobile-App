@@ -17,14 +17,7 @@ End if
 
 COMPILER_COMPONENT
 
-If (Is macOS:C1572)
-	$o:=Folder:C1567("/")
-	
-	
-Else 
-	
-End if 
-
+$b:=_4D With feature:C1524("WITH_THROW_ERROR")
 
 Case of 
 		

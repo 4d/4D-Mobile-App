@@ -495,3 +495,11 @@ Function setTarget
 	
 	This:C1470.displayTarget()
 	
+	If ($apple & Is macOS:C1572 & Not:C34(Bool:C1537(Form:C1466.$project.$xCode.ready)))\
+		 | ($android & Not:C34(Bool:C1537(Form:C1466.$project.$studio.ready)))
+		
+		// Launch the verification of the development tools
+		CALL WORKER:C1389(Form:C1466.$project.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
+			"caller"; Form:C1466.$project.$mainWindow; "project"; Form:C1466.$project))
+		
+	End if 
