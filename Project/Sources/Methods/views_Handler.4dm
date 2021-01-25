@@ -264,11 +264,10 @@ Case of
 							If (String:C10($context.template.name)#$formName)
 								
 								$context.template:=cs:C1710.tmpl.new($formName; $typeForm)
-								Form:C1466.$dialog[Current form name:C1298].template:=$context.template
 								
 							End if 
 							
-							If (Bool:C1537($view.template.path.exists))
+							If (Bool:C1537($context.template.path.exists))
 								
 								// Update lists
 								$context.update:=True:C214
