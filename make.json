@@ -1,8 +1,5 @@
 {
   "components": [
     	"4D Progress"
-	],
-  "postBuild": {
-		"InfoPlist": true
-  }
+	]
 }
