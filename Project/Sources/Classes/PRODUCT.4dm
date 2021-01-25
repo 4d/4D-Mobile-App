@@ -295,8 +295,9 @@ Function setIcon
 	var $pixels : Real
 	var $decimalSeparator; $t : Text
 	var $blank; $icon; $picture : Picture
-	var $height; $pos; $size; $width : Integer
+	var $height; $pos; $width : Integer
 	var $content; $o : Object
+	var $size : Real
 	
 	var $file : 4D:C1709.File
 	
