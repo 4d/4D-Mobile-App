@@ -69,7 +69,11 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Bound Variable Change:K2:52)
 				
-				Form:C1466.$worker:=Form:C1466.$project.$worker
+				If (Not:C34(FEATURE.with("wizards")))
+					
+					Form:C1466.$worker:=Form:C1466.$project.$worker
+					
+				End if 
 				
 				// Update panels
 				panel_TOUCH

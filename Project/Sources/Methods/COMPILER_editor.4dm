@@ -1,6 +1,10 @@
 //%attributes = {"invisible":true}
 If (False:C215)
 	
+	
+	// ----------------------------------------------------
+	C_OBJECT:C1216(editor_CREATE_PROJECT; $1)
+	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(editor_MESSAGE_CALLBACK; $1)
 	
@@ -39,9 +43,9 @@ If (False:C215)
 	//C_OBJECT(editor_MENU_ACTIONS; $1)
 	
 	// ----------------------------------------------------
-	C_TEXT:C284(editor_MESSAGES; $1)
-	C_OBJECT:C1216(editor_MESSAGES; $2)
-	C_OBJECT:C1216(editor_MESSAGES; $3)
+	C_TEXT:C284(editor_PROCESS_MESSAGES; $1)
+	C_OBJECT:C1216(editor_PROCESS_MESSAGES; $2)
+	C_OBJECT:C1216(editor_PROCESS_MESSAGES; $3)
 	
 	// ----------------------------------------------------
 	C_TEXT:C284(_o_editor_MENU_BUILD; $1)

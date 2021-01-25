@@ -1,4 +1,4 @@
-﻿{
+{
 	"$4d": {
 		"version": "1",
 		"kind": "form"
@@ -9,24 +9,9 @@
 	"windowMinHeight": 0,
 	"windowMaxWidth": 32767,
 	"windowMaxHeight": 32767,
-	"rightMargin": 20,
-	"bottomMargin": 20,
 	"events": [
 		"onLoad",
-		"onPageChange",
-		"onValidate",
-		"onClick",
-		"onDoubleClick",
-		"onOutsideCall",
-		"onBeginDragOver",
-		"onDragOver",
-		"onDrop",
-		"onAfterKeystroke",
-		"onMenuSelect",
-		"onPluginArea",
-		"onAfterEdit",
-		"onTimer",
-		"onBoundVariableChange"
+		"onActivate"
 	],
 	"windowTitle": "",
 	"destination": "detailScreen",
@@ -36,89 +21,94 @@
 		},
 		{
 			"objects": {
+				"apple": {
+					"type": "checkbox",
+					"text": "iOS",
+					"top": 71,
+					"left": 260,
+					"width": 83,
+					"height": 85,
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					],
+					"style": "custom",
+					"icon": "/RESOURCES/images/apple.png",
+					"dataSource": "Form:C1466.$apple",
+					"dataSourceTypeHint": "boolean",
+					"focusable": true,
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"method": "ObjectMethods/apple.4dm"
+				},
 				"name.label": {
 					"type": "text",
 					"text": ":xliff:projectName",
-					"top": 20,
-					"left": 20,
-					"width": 123,
+					"top": 34,
+					"left": 28,
+					"width": 109,
 					"height": 16,
-					"fontWeight": "bold"
+					"fontWeight": "bold",
+					"textAlign": "right"
 				},
-				"Input": {
+				"name": {
 					"type": "input",
-					"left": 20,
-					"top": 44,
-					"width": 257,
+					"left": 157,
+					"top": 34,
+					"width": 186,
 					"height": 17,
-					"dataSource": "Form:C1466.name",
+					"dataSource": "Form:C1466.$name",
 					"hideFocusRing": true
-				},
-				"cancel": {
-					"type": "button",
-					"text": ":xliff:cancel",
-					"top": 201,
-					"left": 55,
-					"width": 83,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
-					"action": "cancel"
-				},
-				"Button1": {
-					"type": "button",
-					"text": ":xliff:create",
-					"top": 201,
-					"left": 158,
-					"width": 83,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
-					"defaultButton": true,
-					"action": "accept"
 				},
 				"android": {
 					"type": "checkbox",
 					"text": "Android",
-					"top": 81,
-					"left": 158,
+					"top": 71,
+					"left": 157,
 					"width": 83,
 					"height": 85,
 					"events": [
-						"onClick"
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
 					],
-					"style": "toolbar",
+					"style": "custom",
 					"icon": "/RESOURCES/images/android.png",
-					"dataSource": "Form:C1466.android",
-					"dataSourceTypeHint": "boolean"
-				},
-				"apple": {
-					"type": "checkbox",
-					"text": "iOS",
-					"top": 81,
-					"left": 55,
-					"width": 83,
-					"height": 85,
-					"events": [
-						"onClick"
-					],
-					"style": "toolbar",
-					"icon": "/RESOURCES/images/apple.png",
-					"dataSource": "Form:C1466.apple",
+					"dataSource": "Form:C1466.$android",
 					"dataSourceTypeHint": "boolean",
-					"focusable": true
+					"method": "ObjectMethods/android.4dm",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg"
+				},
+				"name.label1": {
+					"type": "text",
+					"text": ":xliff:targetOs",
+					"top": 105,
+					"left": 28,
+					"width": 109,
+					"height": 16,
+					"fontWeight": "bold",
+					"textAlign": "right"
+				},
+				"Line": {
+					"type": "line",
+					"top": 0,
+					"left": 0,
+					"width": 402,
+					"height": 1,
+					"stroke": "#c0c0c0"
 				}
 			}
 		}
 	],
-	"geometryStamp": 329,
+	"geometryStamp": 373,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"method": "method.4dm",
+	"width": 400,
+	"height": 180
 }

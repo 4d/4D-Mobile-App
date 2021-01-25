@@ -80,6 +80,9 @@
 			"TEMPO_1",
 			"test_o_str",
 			"TURN_AROUND_Field_name"
+		],
+		"forms": [
+			"WELCOME"
 		]
 	},
 	"_UNUSED": {
@@ -134,17 +137,21 @@
 		"methods": [
 			"COMPILER_editor",
 			"editor_CALLBACK",
+			"editor_CHECK_INSTALLATION",
+			"editor_CREATE_PROJECT",
 			"editor_description",
+			"editor_GET_DEVICES",
 			"editor_HANDLER",
 			"editor_INIT",
 			"editor_LoadIcons",
 			"editor_Locked",
 			"editor_MESSAGE_CALLBACK",
-			"editor_MESSAGES",
 			"editor_OBJECTS_HANDLER",
 			"EDITOR_ON_ACTIVATE",
+			"editor_OPEN_PROJECT",
 			"editor_PAGE",
 			"editor_Preferences",
+			"editor_PROCESS_MESSAGES",
 			"editor_PROJECT_AUDIT",
 			"editor_RESUME",
 			"editor_ui_LISTBOX",
@@ -155,7 +162,8 @@
 			"NEW_PROJECT",
 			"RIBBON",
 			"TITLE",
-			"WELCOME"
+			"WIZARD_NEW_PROJECT",
+			"WIZARD_OPEN_PROJECT"
 		],
 		"classes": [
 			"editor",
@@ -192,8 +200,8 @@
 			"project_Defaults",
 			"project_Fix",
 			"PROJECT_Handler",
-			"project_MESSAGES",
 			"PROJECT_OBJECT_HANDLER",
+			"project_PROCESS_MESSAGES",
 			"project_REPAIR",
 			"project_SKIN",
 			"project_UI_ALERT",
@@ -700,9 +708,7 @@
 	"mobile": {
 		"methods": [
 			"COMPILER_mobile",
-			"mobile_Project",
-			"mobileCheckInstallation",
-			"mobileGetDevices"
+			"mobile_Project"
 		]
 	},
 	"ob": {
@@ -914,7 +920,6 @@
 			"test_db",
 			"test_lep",
 			"test_ob",
-			"test_regex",
 			"test_str"
 		]
 	},

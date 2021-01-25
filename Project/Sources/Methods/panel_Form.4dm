@@ -67,15 +67,15 @@ Case of
 		FORM SET ENTRY ORDER:C1468($entryOrder)
 		
 		// ACTIVATE ESSENTIAL EVENTS TO THE FORM
-		ARRAY LONGINT:C221($tLon_events; 0x0000)
-		APPEND TO ARRAY:C911($tLon_events; On Load:K2:1)
-		APPEND TO ARRAY:C911($tLon_events; On Unload:K2:2)
-		APPEND TO ARRAY:C911($tLon_events; On Timer:K2:25)
-		APPEND TO ARRAY:C911($tLon_events; On Activate:K2:9)
-		APPEND TO ARRAY:C911($tLon_events; On Getting Focus:K2:7)
-		APPEND TO ARRAY:C911($tLon_events; On Losing Focus:K2:8)
+		ARRAY LONGINT:C221($events; 0x0000)
+		APPEND TO ARRAY:C911($events; On Load:K2:1)
+		APPEND TO ARRAY:C911($events; On Unload:K2:2)
+		APPEND TO ARRAY:C911($events; On Timer:K2:25)
+		APPEND TO ARRAY:C911($events; On Activate:K2:9)
+		APPEND TO ARRAY:C911($events; On Getting Focus:K2:7)
+		APPEND TO ARRAY:C911($events; On Losing Focus:K2:8)
 		
-		OBJECT SET EVENTS:C1239(*; ""; $tLon_events; Enable events others unchanged:K42:38)
+		OBJECT SET EVENTS:C1239(*; ""; $events; Enable events others unchanged:K42:38)
 		
 		// POST-LOADING PROCESSING
 		CALL SUBFORM CONTAINER:C1086(-On Load:K2:1)

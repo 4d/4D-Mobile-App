@@ -22,7 +22,40 @@ Case of
 		$menu.line()
 		$menu.append("browse"; "browseIcon")
 		$menu.line()
-		$menu.append("showIconsFolder"; "openIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
+		
+		If (FEATURE.with("android"))  //🚧
+			
+			If (Is macOS:C1572)
+				
+				If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
+					
+					$menu.append("showiOSIconsFolder"; "openAppleIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
+					$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
+					
+				Else 
+					
+					If (String:C10(Form:C1466.info.target)="iOS")
+						
+						$menu.append("showIconsFolder"; "openAppleIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
+						
+					Else 
+						
+						$menu.append("showIconsFolder"; "openAndroidIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
+						
+					End if 
+				End if 
+				
+			Else 
+				
+				$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
+				
+			End if 
+			
+		Else 
+			
+			$menu.append("showIconsFolder"; "openAppleIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
+			
+		End if 
 		
 		$menu.popup()
 		

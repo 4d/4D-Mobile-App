@@ -102,7 +102,6 @@
 					"width": 245,
 					"height": 14,
 					"dataSource": "OBJECT Get name:C1087(Object with focus:K67:3)",
-					"stroke": "#FFFFFF",
 					"textAlign": "right",
 					"fontFamily": "Monaco",
 					"fontSize": 9,
@@ -117,7 +116,8 @@
 					"events": [
 						"onDataChange"
 					],
-					"sizingX": "move"
+					"sizingX": "move",
+					"stroke": "#ff0000"
 				},
 				"debug.buildNumber": {
 					"type": "input",
@@ -128,7 +128,6 @@
 					"visibility": "hidden",
 					"sizingX": "move",
 					"dataSource": "shared.component.version",
-					"stroke": "#FFFFFF",
 					"textAlign": "center",
 					"fontSize": 9,
 					"focusable": false,
@@ -142,7 +141,8 @@
 					"events": [
 						"onClick"
 					],
-					"fontTheme": "normal"
+					"fontTheme": "normal",
+					"stroke": "#ff0000"
 				},
 				"debug.localization": {
 					"type": "subform",
@@ -240,7 +240,7 @@
 					"height": 875,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"dataSourceTypeHint": "number",
+					"dataSourceTypeHint": "object",
 					"detailForm": "WELCOME",
 					"focusable": false,
 					"deletableInList": false,
@@ -248,13 +248,14 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"borderStyle": "sunken",
-					"method": "ObjectMethods/welcome.4dm"
+					"method": "ObjectMethods/welcome.4dm",
+					"dataSource": "Form:C1466.$meta"
 				}
 			}
 		}
 	],
 	"editor": {
-		"activeView": "Project",
+		"activeView": "default",
 		"defaultView": "default",
 		"views": {
 			"default": {},
@@ -267,6 +268,7 @@
 				]
 			},
 			"Project": {
+				"visible": false,
 				"objects": [
 					"project"
 				]
@@ -284,11 +286,19 @@
 					"debug.localization"
 				]
 			},
-			"View 5": {},
-			"View 6": {},
-			"View 7": {},
-			"View 8": {}
+			"View 5": {
+				"visible": false
+			},
+			"View 6": {
+				"visible": false
+			},
+			"View 7": {
+				"visible": false
+			},
+			"View 8": {
+				"visible": false
+			}
 		}
 	},
-	"geometryStamp": 14
+	"geometryStamp": 16
 }

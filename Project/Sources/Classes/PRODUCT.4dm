@@ -20,6 +20,11 @@ Class constructor
 		This:C1470.icon:=cs:C1710.widget.new("icon")
 		This:C1470.iconAlert:=cs:C1710.attention.new("icon.alert")
 		
+		// TARGET
+		This:C1470.target:=cs:C1710.static.new("target.label")
+		This:C1470.apple:=cs:C1710.button.new("ios")
+		This:C1470.android:=cs:C1710.button.new("android")
+		
 		// Constraints definition
 		ob_createPath(This:C1470.context; "constraints.rules"; Is collection:K8:32)
 		
@@ -33,8 +38,16 @@ Function loadIcon
 	
 	If (Is macOS:C1572)
 		
-		// Path is relative to the project file
-		$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+		If (FEATURE.with("wizards"))
+			
+			$folder:=PROJECT.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+			
+		Else 
+			
+			// A "If" statement should never omit "Else" 
+			$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+			
+		End if 
 		
 		If (This:C1470.assets=Null:C1517)
 			
@@ -362,10 +375,16 @@ Function setIcon
 	This:C1470.displayIcon()
 	
 	//=========================================================
-	// Open the product icons folder
-Function openIconFolder
+	// Open the iOS icons folder
+Function openAppleIconFolder
 	
 	SHOW ON DISK:C922(This:C1470.assets.folder.platformPath; *)
+	
+	//=========================================================
+	// Open the iOS icons folder
+Function openAndroidIconFolder
+	
+	ALERT:C41("We are going to doux 🤣")
 	
 	//=========================================================
 	// Check the product name constraints
@@ -429,4 +448,50 @@ Function checkName
 			//______________________________________________________
 	End case 
 	
+	//=========================================================
+	// Manage UI for the target
+Function displayTarget
+	
+	If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
+		
+		This:C1470.apple.setValue(Form:C1466.info.target.indexOf("iOS")#-1)
+		This:C1470.android.setValue(Form:C1466.info.target.indexOf("android")#-1)
+		
+	Else 
+		
+		This:C1470.apple.setValue(String:C10(Form:C1466.info.target)="iOS")
+		This:C1470.android.setValue(String:C10(Form:C1466.info.target)="android")
+		
+	End if 
+	
+	//=========================================================
+	// Populate the target value into te project
+Function setTarget
+	
+	var $android; $apple : Boolean
+	
+	$apple:=This:C1470.apple.getValue()
+	$android:=This:C1470.android.getValue()
+	
+	If ($apple & $android)
+		
+		Form:C1466.info.target:=New collection:C1472("iOS"; "android")
+		
+	Else 
+		
+		If (Not:C34($android))
+			
+			// According to platform
+			Form:C1466.info.target:=Choose:C955(Is macOS:C1572; "iOS"; "android")
+			
+		Else 
+			
+			Form:C1466.info.target:=Choose:C955($android; "android"; "iOS")
+			
+		End if 
+	End if 
+	
+	PROJECT.save()
+	
+	This:C1470.displayTarget()
 	

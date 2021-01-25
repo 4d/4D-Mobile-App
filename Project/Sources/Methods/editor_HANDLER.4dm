@@ -14,9 +14,8 @@ If (False:C215)
 	C_OBJECT:C1216(editor_HANDLER; $1)
 End if 
 
-var $worker : Text
 var $bottom; $height; $left; $middle; $right; $top; $width : Integer
-var $e; $form; $IN; $o; $project : Object
+var $e; $form; $IN; $o : Object
 
 // NO PARAMETERS REQUIRED
 
@@ -45,11 +44,17 @@ Case of
 		$e:=FORM Event:C1606
 		
 		Case of 
+				
 				//______________________________________________________
 			: ($e.code=On Load:K2:1)
 				
 				//#MARK_TODO: keep current 4D/Database tips values
 				
+				// Launch the worker
+				Form:C1466.$worker:="4D Mobile ("+String:C10(Form:C1466.$mainWindow)+")"
+				CALL WORKER:C1389(String:C10(Form:C1466.$worker); "COMPILER_COMPONENT")
+				
+				// DEV items
 				OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(DATABASE.isMatrix))
 				
 				$o:=UI.tips
@@ -57,41 +62,60 @@ Case of
 				$o.defaultDelay()
 				$o.defaultDuration()
 				
-				//editor_PAGE("general")
 				Form:C1466.$dialog.EDITOR.pages:=cs:C1710.editor.new()
 				Form:C1466.$dialog.EDITOR.pages.gotoPage("general")
 				
-				// Set ribbon and description
-				$form.form.ribbon:=New object:C1471(\
-					"state"; "open"; \
-					"tab"; "section"; \
-					"page"; Form:C1466.currentPage)
-				
-				(OBJECT Get pointer:C1124(Object named:K67:5; $form.description))->:=Form:C1466.currentPage
-				(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog.EDITOR.ribbon
+				If (FEATURE.with("wizards"))
+					
+					// Set the dialog title
+					SET WINDOW TITLE:C213(cs:C1710.str.new("editorWindowTitle").localized(Form:C1466.folder.name); Form:C1466.$mainWindow)
+					
+					// Update the ribbon
+					$form.form.ribbon:=New object:C1471(\
+						"state"; "open"; \
+						"tab"; "section"; \
+						"page"; Form:C1466.$currentPage; \
+						"editor"; Form:C1466)
+					
+					OBJECT SET VALUE:C1742($form.ribbon; Form:C1466.$dialog.EDITOR.ribbon)
+					
+					// Update the description
+					OBJECT SET VALUE:C1742($form.description; Form:C1466.$currentPage)
+					
+				Else 
+					
+					// Set the dialog title
+					SET WINDOW TITLE:C213(cs:C1710.str.new("editorWindowTitle").localized(Form:C1466.file.parent.fullName); $form.window)
+					
+					// Set ribbon and description
+					$form.form.ribbon:=New object:C1471(\
+						"state"; "open"; \
+						"tab"; "section"; \
+						"page"; Form:C1466.$currentPage)
+					
+					(OBJECT Get pointer:C1124(Object named:K67:5; $form.description))->:=Form:C1466.$currentPage
+					(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog.EDITOR.ribbon
+					
+				End if 
 				
 				// Load the project
 				PROJECT:=cs:C1710.project.new().load(Form:C1466.file)
 				PROJECT.$project:=Form:C1466
 				
-				// Set the dialog title
-				SET WINDOW TITLE:C213(Replace string:C233(Get localized string:C991("editorWindowTitle"); "{name}"; Form:C1466.file.parent.fullName); $form.window)
-				
 				// Touch the project subform
 				OBJECT SET VALUE:C1742($form.project; PROJECT)
 				
-				// Display the greeting message if any [
-				If (Bool:C1537(editor_Preferences.doNotShowGreetingMessage))
+				// Display the greeting message if any
+				If (Bool:C1537(editor_Preferences.doNotShowGreetingMessage))\
+					 | (FEATURE.with("wizards"))
 					
-					editor_HANDLER(New object:C1471(\
-						"action"; "open"))
+					editor_OPEN_PROJECT
 					
 				Else 
 					
 					FORM GOTO PAGE:C247(2)
 					
 				End if 
-				//]
 				
 				SET TIMER:C645(-1)
 				
@@ -103,14 +127,17 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Data Change:K2:15)
 				
-				// Autosave
-				PROJECT.save()
+				If (Not:C34(OB Is empty:C1297(PROJECT)))
+					
+					// Autosave
+					PROJECT.save()
+					
+				End if 
 				
 				//______________________________________________________
 			: ($e.code=On Deactivate:K2:10)
 				
 				// keep current tips values
-				
 				
 				// And restore the 4D values
 				
@@ -123,15 +150,22 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Unload:K2:2)
 				
-				CALL WORKER:C1389("4D Mobile ("+String:C10($form.window)+")"; "killWorker")
+				CALL WORKER:C1389(Form:C1466.$worker; "killWorker")
 				
 				//______________________________________________________
 			: ($e.code=On Resize:K2:27)
 				
 				If (OBJECT Get visible:C1075(*; "picker"))
 					
-					CALL FORM:C1391($form.window; "editor_CALLBACK"; "pickerHide")
-					
+					If (FEATURE.with("wizards"))
+						
+						CALL FORM:C1391(Form:C1466.$mainWindow; Form:C1466.$callback; "pickerHide")
+						
+					Else 
+						
+						CALL FORM:C1391($form.window; "editor_CALLBACK"; "pickerHide")
+						
+					End if 
 				End if 
 				
 				// Mask picker during resizing
@@ -155,7 +189,7 @@ Case of
 				OBJECT SET COORDINATES:C1248(*; $form.message; $left; $top; $right; $bottom)
 				
 				// Center the greeting screen
-				(OBJECT Get pointer:C1124(Object named:K67:5; $form.greeting))->:=1+(OBJECT Get pointer:C1124(Object named:K67:5; $form.greeting))->
+				//(OBJECT Get pointer(Object named; $form.greeting))->:=1+(OBJECT Get pointer(Object named; $form.greeting))->
 				
 				//______________________________________________________
 			: ($e.code=On Timer:K2:25)
@@ -180,45 +214,6 @@ Case of
 	: ($IN.action=Null:C1517)
 		
 		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
-		
-		//=========================================================
-	: ($IN.action="open")
-		
-		//editor_PAGE("general")
-		Form:C1466.$dialog.EDITOR.pages.gotoPage("general")
-		
-		OBJECT SET VISIBLE:C603(*; $form.ribbon; True:C214)
-		OBJECT SET VISIBLE:C603(*; $form.description; True:C214)
-		
-		// Launch project verifications
-		editor_PROJECT_AUDIT
-		
-		$worker:="4D Mobile ("+String:C10($form.window)+")"
-		
-		If (FEATURE.with("android"))
-			
-			// Launch checking the development environment
-			CALL WORKER:C1389($worker; "mobileCheckInstallation"; New object:C1471(\
-				"caller"; $form.window; "project"; PROJECT))
-			
-			// Launch recovering the list of available simulator devices
-			CALL WORKER:C1389($worker; "mobileGetDevices"; New object:C1471(\
-				"caller"; $form.window; "project"; PROJECT))
-			
-		Else 
-			
-			// Launch checking the development environment
-			CALL WORKER:C1389($worker; "Xcode_CheckInstall"; New object:C1471(\
-				"caller"; $form.window))
-			
-			// Launch recovering the list of available simulator devices
-			CALL WORKER:C1389($worker; "simulator"; New object:C1471(\
-				"action"; "devices"; \
-				"filter"; "available"; \
-				"minimumVersion"; SHARED.iosDeploymentTarget; \
-				"caller"; $form.window))
-			
-		End if 
 		
 		//=========================================================
 	Else 

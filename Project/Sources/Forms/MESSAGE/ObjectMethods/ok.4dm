@@ -1,3 +1,5 @@
+Form:C1466.accept:=(Form:C1466.type#"alert")
+
 If (Form:C1466.signal#Null:C1517)
 	
 	Use (Form:C1466.signal)

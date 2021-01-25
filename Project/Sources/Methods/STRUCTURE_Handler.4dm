@@ -13,7 +13,7 @@ C_OBJECT:C1216($1)
 
 C_LONGINT:C283($index; $Lon_formEvent; $Lon_parameters; $published)
 C_TEXT:C284($t)
-C_OBJECT:C1216($o; $context; $dataModel; $field; $form; $IN)
+C_OBJECT:C1216($o; $context; $fieldModel; $field; $form; $IN)
 C_OBJECT:C1216($Obj_out)
 C_COLLECTION:C1488($c)
 
@@ -83,11 +83,22 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Load:K2:1)
 				
+				//If (FEATURE.with("android"))
+				
+				//If (PROJECT.dataModel=Null)
+				
+				//PROJECT.dataModel:=New object
+				
+				//End if 
+				
+				//Else 
+				
 				If (Form:C1466.dataModel=Null:C1517)
 					
 					Form:C1466.dataModel:=New object:C1471
 					
 				End if 
+				//End if 
 				
 				If (Bool:C1537(Form:C1466.allowStructureAdjustments))
 					
@@ -310,6 +321,21 @@ Case of
 		//=========================================================
 	: ($IN.action="appendField")
 		
+		//If (FEATURE.with("android"))
+		
+		//var $dataModel : Object
+		//$dataModel:=PROJECT.dataModel
+		
+		//Else 
+		
+		var $dataModel : Object
+		$dataModel:=Form:C1466.dataModel
+		
+		//End if 
+		
+		var $dataModel : Object
+		$dataModel:=PROJECT.dataModel
+		
 		Case of 
 				
 			: (False:C215)
@@ -322,9 +348,9 @@ Case of
 				//…………………………………………………………………………………………………
 			: ($IN.field.type=-1)  // N -> 1 relation
 				
-				$dataModel:=Form:C1466.dataModel[String:C10($IN.table.tableNumber)][$IN.field.name]
+				$fieldModel:=$dataModel[String:C10($IN.table.tableNumber)][$IN.field.name]
 				
-				If ($dataModel#Null:C1517)
+				If ($fieldModel#Null:C1517)
 					
 					$published:=1  // All related fields are published
 					
@@ -341,12 +367,12 @@ Case of
 									//______________________________________________________
 								: ($field.fieldType=8859)
 									
-									$published:=$published+Num:C11($dataModel[String:C10($field.name)]=Null:C1517)
+									$published:=$published+Num:C11($fieldModel[String:C10($field.name)]=Null:C1517)
 									
 									//______________________________________________________
 								: ($field.fieldType=8858)
 									
-									$published:=$published+Num:C11($dataModel[String:C10($field.name)]=Null:C1517)
+									$published:=$published+Num:C11($fieldModel[String:C10($field.name)]=Null:C1517)
 									
 									//______________________________________________________
 								Else 
@@ -356,12 +382,12 @@ Case of
 									If ($c.length=1)
 										
 										// Field
-										$published:=$published+Num:C11($dataModel[String:C10($field.fieldNumber)]=Null:C1517)
+										$published:=$published+Num:C11($fieldModel[String:C10($field.fieldNumber)]=Null:C1517)
 										
 									Else 
 										
 										// Link
-										$published:=$published+Num:C11($dataModel[$c[0]][String:C10($field.fieldNumber)]=Null:C1517)
+										$published:=$published+Num:C11($fieldModel[$c[0]][String:C10($field.fieldNumber)]=Null:C1517)
 										
 									End if 
 									
@@ -379,8 +405,7 @@ Case of
 			: ($IN.field.type=-2)  // 1 -> N relation
 				
 				//*******************************************************************************************
-				$published:=Num:C11(Form:C1466.dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
-				
+				$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
 				//
 				// C'EST FAUX SI LE LIEN A ÉTÉ RENOMMÉ
 				// REGARDER DANS : Form.$dialog.unsynchronizedTableFields[String($Obj_in.table.tableNumber)]
@@ -396,7 +421,7 @@ Case of
 				
 				If ($IN.field.fieldType<=UI.fieldIcons.length)
 					
-					$published:=Num:C11(Form:C1466.dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.id)]#Null:C1517)
+					$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.id)]#Null:C1517)
 					
 					APPEND TO ARRAY:C911(($IN.published)->; $published)
 					APPEND TO ARRAY:C911(($IN.icons)->; UI.fieldIcons[$IN.field.fieldType])
@@ -412,14 +437,31 @@ Case of
 		//=========================================================
 	: ($IN.action="update")
 		
-		// Update ribbon
-		CALL FORM:C1391($form.window; $form.callback; "updateRibbon")
-		
-		// Update structure dependencies, if any
-		CALL FORM:C1391($form.window; $form.callback; "tableList"; PROJECT)
-		CALL FORM:C1391($form.window; $form.callback; "fieldList"; PROJECT)
-		CALL FORM:C1391($form.window; $form.callback; "tableProperties"; PROJECT)
-		CALL FORM:C1391($form.window; $form.callback; "mainMenu")
+		If (FEATURE.with("wizards"))
+			
+			$o:=Form:C1466
+			
+			// Update ribbon
+			CALL FORM:C1391($o.$mainWindow; $o.$callback; "updateRibbon")
+			
+			// Update structure dependencies, if any
+			CALL FORM:C1391($o.$mainWindow; $o.$callback; "tableList"; PROJECT)
+			CALL FORM:C1391($o.$mainWindow; $o.$callback; "fieldList"; PROJECT)
+			CALL FORM:C1391($o.$mainWindow; $o.$callback; "tableProperties"; PROJECT)
+			CALL FORM:C1391($o.$mainWindow; $o.$callback; "mainMenu")
+			
+		Else 
+			
+			// Update ribbon
+			CALL FORM:C1391($form.window; $form.callback; "updateRibbon")
+			
+			// Update structure dependencies, if any
+			CALL FORM:C1391($form.window; $form.callback; "tableList"; PROJECT)
+			CALL FORM:C1391($form.window; $form.callback; "fieldList"; PROJECT)
+			CALL FORM:C1391($form.window; $form.callback; "tableProperties"; PROJECT)
+			CALL FORM:C1391($form.window; $form.callback; "mainMenu")
+			
+		End if 
 		
 		//=========================================================
 	Else 

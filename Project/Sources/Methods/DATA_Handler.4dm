@@ -221,8 +221,20 @@ Case of
 		
 		$Obj_context.sqlite:=Null:C1517
 		
+		
+		//If (FEATURE.with("android"))
+		
+		//$Dir_root:=dataSet(New object("action"; "path"; \
+			"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+		
+		//Else 
+		
 		$Dir_root:=dataSet(New object:C1471("action"; "path"; \
 			"project"; New object:C1471("product"; Form:C1466.product; "$project"; Form:C1466.$project))).path
+		
+		//End if 
+		
+		
 		
 		$file:=Folder:C1567($Dir_root; fk platform path:K87:2).file("Resources/Structures.sqlite")
 		

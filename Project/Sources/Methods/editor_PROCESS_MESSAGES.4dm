@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : editor_MESSAGES
+// Project method : editor_PROCESS_MESSAGES
 // ID[FBCD164D418F4DC18E4AEE9871391F89]
 // Created 10-1-2019 by Vincent de Lachaux
 // ----------------------------------------------------
@@ -10,14 +10,8 @@
 // Declarations
 #DECLARE($message : Text; $form : Object; $in : Object)
 
-If (False:C215)
-	C_TEXT:C284(editor_MESSAGES; $1)
-	C_OBJECT:C1216(editor_MESSAGES; $2)
-	C_OBJECT:C1216(editor_MESSAGES; $3)
-End if 
-
 var $t; $title : Text
-var $form; $o : Object
+var $o : Object
 
 // ----------------------------------------------------
 Case of 
@@ -80,7 +74,7 @@ Case of
 		//______________________________________________________
 	: ($message="simulator")
 		
-		If (FEATURE.with("android"))
+		If (FEATURE.with("android"))  //🚧
 			
 			Form:C1466.$dialog[$form.editor].ribbon.devices:=$in
 			
@@ -98,11 +92,13 @@ Case of
 				
 			Else 
 				
-				//DO_MESSAGE(New object(\
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; "noDevices"; \
-					"additional"; ""))
+/*
+																DO_MESSAGE(New object(\
+																				"action"; "show"; \
+																				"type"; "alert"; \
+																				"title"; "noDevices"; \
+																				"additional"; ""))
+*/
 				
 			End if 
 		End if 
@@ -115,10 +111,9 @@ Case of
 		//______________________________________________________
 	: ($message="goToPage")
 		
-		//editor_PAGE($oIN.page)
 		Form:C1466.$dialog.EDITOR.pages.gotoPage($in.page)
 		
-		Form:C1466.$dialog[$form.editor].ribbon.page:=Form:C1466.currentPage
+		Form:C1466.$dialog[$form.editor].ribbon.page:=Form:C1466.$currentPage
 		
 		// Touch the ribbon subform
 		(OBJECT Get pointer:C1124(Object named:K67:5; "ribbon"))->:=Form:C1466.$dialog[$form.editor].ribbon
@@ -141,24 +136,14 @@ Case of
 		//______________________________________________________
 	: ($message="checkInstall")
 		
-		If (FEATURE.with("android"))
+		If (FEATURE.with("android"))  //🚧
 			
 			// Store the result
-			Form:C1466.xCode:=$in.xCode
-			Form:C1466.studio:=$in.studio
+			Form:C1466.$xCode:=$in.xCode
+			Form:C1466.$studio:=$in.studio
 			
-			If (Form:C1466.status=Null:C1517)
-				
-				Form:C1466.status:=New object:C1471(\
-					"xCode"; Form:C1466.xCode.ready; \
-					"studio"; Form:C1466.studio.ready)
-				
-			Else 
-				
-				Form:C1466.status.xCode:=Form:C1466.xCode.ready
-				Form:C1466.status.studio:=Form:C1466.studio.ready
-				
-			End if 
+			Form:C1466.$status.xCode:=$in.xCode.ready
+			Form:C1466.$status.studio:=$in.studio.ready
 			
 		Else 
 			
@@ -175,7 +160,6 @@ Case of
 				Form:C1466.status.xCode:=$in.ready
 				
 			End if 
-			
 		End if 
 		
 		editor_CALLBACK("updateRibbon")
@@ -183,12 +167,20 @@ Case of
 		//______________________________________________________
 	: ($message="updateRibbon")
 		
-		// Update teamID status
-		Form:C1466.status.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
+		If (FEATURE.with("android"))  //🚧
+			
+			Form:C1466.$status.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
+			
+		Else 
+			
+			// Old
+			Form:C1466.status.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
+			
+		End if 
 		
 		// Give status to ribbon
 		$o:=OBJECT Get value:C1743($form.ribbon)
-		$o.status:=Form:C1466.status
+		$o.status:=Form:C1466.$status
 		
 		// Touch
 		OBJECT SET VALUE:C1742($form.ribbon; $o)

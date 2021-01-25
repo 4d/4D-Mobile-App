@@ -32,7 +32,7 @@ $sections{6}:="deployment"
 $sections{7}:="data"
 $sections{8}:="actions"
 
-$sections{0}:=String:C10(Form:C1466.currentPage)
+$sections{0}:=String:C10(Form:C1466.$currentPage)
 
 $w:=Current form window:C827
 
@@ -276,9 +276,9 @@ If (Length:C16($page)>0)
 	
 	If ($index>0)
 		
-		Form:C1466.currentPage:=$sections{$index}
+		Form:C1466.$currentPage:=$sections{$index}
 		
-		(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=Form:C1466.currentPage
+		(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=Form:C1466.$currentPage
 		
 	End if 
 	

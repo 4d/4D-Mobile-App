@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : project_MESSAGES
+// Project method : project_PROCESS_MESSAGES
 // ID[289212F4F0EE41A1BA699256DA276FD1]
 // Created 10-1-2019 by Vincent de Lachaux
 // ----------------------------------------------------
@@ -19,9 +19,9 @@ C_TEXT:C284($t; $tPanel; $tSelector)
 C_OBJECT:C1216($form; $oIN)
 
 If (False:C215)
-	C_TEXT:C284(project_MESSAGES; $1)
-	C_OBJECT:C1216(project_MESSAGES; $2)
-	C_OBJECT:C1216(project_MESSAGES; $3)
+	C_TEXT:C284(project_PROCESS_MESSAGES; $1)
+	C_OBJECT:C1216(project_PROCESS_MESSAGES; $2)
+	C_OBJECT:C1216(project_PROCESS_MESSAGES; $3)
 End if 
 
 // ----------------------------------------------------

@@ -8,46 +8,46 @@
 // Launch project verifications
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($Lon_parameters; $Win_hdl)
-C_TEXT:C284($Txt_worker)
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
+If (FEATURE.with("wizards"))
 	
-	// <NO PARAMETERS REQUIRED>
-	
-	// Optional parameters
-	If ($Lon_parameters>=1)
+	If (Form:C1466.$worker#Null:C1517)
 		
-		// <NONE>
+		var $o : Object
+		$o:=Form:C1466
+		
+	Else 
+		
+		$o:=Form:C1466.$project
 		
 	End if 
 	
-	$Win_hdl:=Current form window:C827
+	// Launch checking the structure
+	CALL WORKER:C1389($o.$worker; "_o_structure"; New object:C1471(\
+		"action"; "catalog"; \
+		"caller"; $o.$mainWindow))
 	
-	$Txt_worker:="4D Mobile ("+String:C10($Win_hdl)+")"
+	// Launch project verifications
+	CALL FORM:C1391($o.$mainWindow; "editor_CALLBACK"; "projectAudit")
 	
 Else 
 	
-	ABORT:C156
+	var $worker : Text
+	var $window : Integer
+	$window:=Current form window:C827
+	$worker:="4D Mobile ("+String:C10($window)+")"
+	
+	// Launch checking the structure
+	CALL WORKER:C1389($worker; "_o_structure"; New object:C1471(\
+		"action"; "catalog"; \
+		"caller"; $window))
+	
+	// Launch project verifications
+	CALL FORM:C1391($window; "editor_CALLBACK"; "projectAudit")
 	
 End if 
 
-// ----------------------------------------------------
-// Launch checking the structure
-CALL WORKER:C1389($Txt_worker; "_o_structure"; New object:C1471(\
-"action"; "catalog"; \
-"caller"; $Win_hdl))
-
-// Launch project verifications
-CALL FORM:C1391($Win_hdl; "editor_CALLBACK"; "projectAudit")
-
-
-// ----------------------------------------------------
-// Return
-// <NONE>
 // ----------------------------------------------------
 // End

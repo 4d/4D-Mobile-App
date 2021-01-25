@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : mobileCheckInstallation
+// Project method : editor_CHECK_INSTALLATION
 // ID[684C0081C1734937A99F71EC2516C9F8]
 // Created 30-6-2017 by Vincent de Lachaux
 // ----------------------------------------------------
@@ -13,11 +13,11 @@ var $0 : Object
 var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(mobileCheckInstallation; $0)
-	C_OBJECT:C1216(mobileCheckInstallation; $1)
+	C_OBJECT:C1216(editor_CHECK_INSTALLATION; $0)
+	C_OBJECT:C1216(editor_CHECK_INSTALLATION; $1)
 End if 
 
-var $in; $out; $studio; $xCode : Object
+var $in; $out; $androidStudio; $xCode : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -29,7 +29,7 @@ Case of
 		//______________________________________________________
 	: (Is macOS:C1572)
 		
-		If (FEATURE.with("android"))
+		If (FEATURE.with("android"))  //🚧
 			
 			If (Value type:C1509($in.project.info.target)=Is collection:K8:32)
 				
@@ -43,7 +43,7 @@ Case of
 				
 			End if 
 			
-			$studio:=studioCheckInstall($in)
+			$androidStudio:=studioCheckInstall($in)
 			
 			If (Value type:C1509($in.project.info.target)=Is collection:K8:32)
 				
@@ -61,7 +61,7 @@ Case of
 			
 			$out:=New object:C1471(\
 				"xCode"; $xCode; \
-				"studio"; $studio)
+				"studio"; $androidStudio)
 			
 		Else 
 			

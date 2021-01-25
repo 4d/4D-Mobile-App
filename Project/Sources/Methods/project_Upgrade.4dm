@@ -41,12 +41,28 @@ If (Form:C1466#Null:C1517)
 	
 	// Rename cache.json -> catalog.json
 	var $file : 4D:C1709.file
-	$file:=Form:C1466.file.parent.file("cache.json")
 	
-	If ($file.exists)
+	If (FEATURE.with("wizards"))
 		
-		$file.copyTo(Form:C1466.file.parent; "catalog.json"; fk overwrite:K87:5)
-		$file.delete()
+		$file:=Form:C1466.folder.file("cache.json")
+		
+		If ($file.exists)
+			
+			$file.copyTo(Form:C1466.folder; "catalog.json"; fk overwrite:K87:5)
+			$file.delete()
+			
+		End if 
+		
+	Else 
+		
+		$file:=Form:C1466.file.parent.file("cache.json")
+		
+		If ($file.exists)
+			
+			$file.copyTo(Form:C1466.file.parent; "catalog.json"; fk overwrite:K87:5)
+			$file.delete()
+			
+		End if 
 		
 	End if 
 End if 

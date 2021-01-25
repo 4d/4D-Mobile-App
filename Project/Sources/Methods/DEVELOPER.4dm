@@ -28,9 +28,9 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			$ƒ.team.setValue(String:C10(Form:C1466.organization.teamId))
 			
-			$ƒ.teamMenu.disable()
-			
 			If (Is macOS:C1572)
+				
+				$ƒ.teamMenu.disable()
 				
 				// Launch getting team IDs
 				CALL WORKER:C1389("4D Mobile ("+String:C10($ƒ.window)+")"; "teamId"; New object:C1471(\

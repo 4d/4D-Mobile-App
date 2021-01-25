@@ -8,30 +8,30 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($l; $Lon_row)
-C_POINTER:C301($Ptr_tables)
-C_OBJECT:C1216($Obj_context; $Obj_dataModel; $Obj_form; $Obj_table)
-C_COLLECTION:C1488($c; $Col_catalog)
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(structure_TABLE_LIST; $1)
 End if 
+
+var $index; $row : Integer
+var $tablesPtr : Pointer
+var $ƒ; $dataModel; $form; $table : Object
+var $c; $catalog : Collection
 
 // ----------------------------------------------------
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
-	$Obj_form:=$1
+	$form:=$1
 	
 	// Optional parameters
 	// <NONE>
 	
-	$Obj_context:=$Obj_form.form
+	$ƒ:=$form.form
 	
-	$Obj_dataModel:=Form:C1466.dataModel
+	$dataModel:=Form:C1466.dataModel
 	
 Else 
 	
@@ -40,52 +40,52 @@ Else
 End if 
 
 // ----------------------------------------------------
-$Ptr_tables:=UI.pointer($Obj_form.tables)
-CLEAR VARIABLE:C89($Ptr_tables->)
+$tablesPtr:=UI.pointer($form.tables)
+CLEAR VARIABLE:C89($tablesPtr->)
 
-$Col_catalog:=PROJECT.getCatalog()
+$catalog:=PROJECT.getCatalog()
 
 Case of 
 		
 		//________________________________________
-	: ($Col_catalog=Null:C1517)
+	: ($catalog=Null:C1517)
 		
 		// NOTHING MORE TO DO
 		
 		//______________________________________________________
-	: (Length:C16(String:C10($Obj_context.tableFilter))>0)\
-		 & (Bool:C1537($Obj_context.tableFilterPublished))
+	: (Length:C16(String:C10($ƒ.tableFilter))>0)\
+		 & (Bool:C1537($ƒ.tableFilterPublished))
 		
-		For each ($Obj_table; $Col_catalog)
+		For each ($table; $catalog)
 			
-			If (Position:C15($Obj_context.tableFilter; $Obj_table.name)>0)\
-				 & ($Obj_dataModel[String:C10($Obj_table.tableNumber)]#Null:C1517)
+			If (Position:C15($ƒ.tableFilter; $table.name)>0)\
+				 & ($dataModel[String:C10($table.tableNumber)]#Null:C1517)
 				
-				APPEND TO ARRAY:C911($Ptr_tables->; $Obj_table.name)
+				APPEND TO ARRAY:C911($tablesPtr->; $table.name)
 				
 			End if 
 		End for each 
 		
 		//______________________________________________________
-	: (Length:C16(String:C10($Obj_context.tableFilter))>0)  // Filter by name
+	: (Length:C16(String:C10($ƒ.tableFilter))>0)  // Filter by name
 		
-		For each ($Obj_table; $Col_catalog)
+		For each ($table; $catalog)
 			
-			If (Position:C15($Obj_context.tableFilter; $Obj_table.name)>0)
+			If (Position:C15($ƒ.tableFilter; $table.name)>0)
 				
-				APPEND TO ARRAY:C911($Ptr_tables->; $Obj_table.name)
+				APPEND TO ARRAY:C911($tablesPtr->; $table.name)
 				
 			End if 
 		End for each 
 		
 		//______________________________________________________
-	: (Bool:C1537($Obj_context.tableFilterPublished))  // Filter published
+	: (Bool:C1537($ƒ.tableFilterPublished))  // Filter published
 		
-		For each ($Obj_table; $Col_catalog)
+		For each ($table; $catalog)
 			
-			If ($Obj_dataModel[String:C10($Obj_table.tableNumber)]#Null:C1517)
+			If ($dataModel[String:C10($table.tableNumber)]#Null:C1517)
 				
-				APPEND TO ARRAY:C911($Ptr_tables->; $Obj_table.name)
+				APPEND TO ARRAY:C911($tablesPtr->; $table.name)
 				
 			End if 
 		End for each 
@@ -93,7 +93,7 @@ Case of
 		//______________________________________________________
 	Else   // No filter
 		
-		COLLECTION TO ARRAY:C1562($Col_catalog; $Ptr_tables->; "name")
+		COLLECTION TO ARRAY:C1562($catalog; $tablesPtr->; "name")
 		
 		//______________________________________________________
 End case 
@@ -103,84 +103,81 @@ End case
 // ----------------------
 $c:=Form:C1466.$dialog.unsynchronizedTableFields
 
-$Lon_row:=0
-
-For each ($Obj_table; $Col_catalog)
+For each ($table; $catalog)
 	
-	If (Find in array:C230($Ptr_tables->; $Obj_table.name)>0)
+	If (Find in array:C230($tablesPtr->; $table.name)>0)
 		
-		$Lon_row:=$Lon_row+1
+		$row:=$row+1
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($c.length<=$Obj_table.tableNumber)
+			: ($c.length<=$table.tableNumber)
 				
-				LISTBOX SET ROW COLOR:C1270(*; $Obj_form.tableList; $Lon_row; lk inherited:K53:26; lk font color:K53:24)
+				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; lk inherited:K53:26; lk font color:K53:24)
 				
 				//______________________________________________________
-			: ($c[$Obj_table.tableNumber]#Null:C1517)
+			: ($c[$table.tableNumber]#Null:C1517)
 				
-				LISTBOX SET ROW COLOR:C1270(*; $Obj_form.tableList; $Lon_row; UI.errorColor; lk font color:K53:24)
+				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; UI.errorColor; lk font color:K53:24)
 				
 				//______________________________________________________
 			Else 
 				
-				LISTBOX SET ROW COLOR:C1270(*; $Obj_form.tableList; $Lon_row; lk inherited:K53:26; lk font color:K53:24)
+				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; lk inherited:K53:26; lk font color:K53:24)
 				
 				//______________________________________________________
 		End case 
 		
 		// Highlight published table name
-		LISTBOX SET ROW FONT STYLE:C1268(*; $Obj_form.tableList; $Lon_row; Choose:C955($Obj_dataModel[String:C10($Obj_table.tableNumber)]=Null:C1517; Plain:K14:1; Bold:K14:2))
+		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $row; Choose:C955($dataModel[String:C10($table.tableNumber)]=Null:C1517; Plain:K14:1; Bold:K14:2))
 		
 	End if 
 End for each 
 
 // Sort if any
-If (Bool:C1537($Obj_context.tableSortByName))
+If (Bool:C1537($ƒ.tableSortByName))
 	
-	LISTBOX SORT COLUMNS:C916(*; $Obj_form.tableList; 1; >)
+	LISTBOX SORT COLUMNS:C916(*; $form.tableList; 1; >)
 	
 End if 
 
 // Select the first table if any [
-If ($Obj_context.currentTable=Null:C1517)
+If ($ƒ.currentTable=Null:C1517)
 	
-	GOTO OBJECT:C206(*; $Obj_form.tableList)
+	GOTO OBJECT:C206(*; $form.tableList)
 	
-	If (Size of array:C274($Ptr_tables->)>0)
+	If (Size of array:C274($tablesPtr->)>0)
 		
-		$l:=$Col_catalog.extract("name").indexOf($Ptr_tables->{1})
-		$Obj_context.currentTable:=$Col_catalog[$l]
+		$index:=$catalog.extract("name").indexOf($tablesPtr->{1})
+		$ƒ.currentTable:=$catalog[$index]
 		
 	End if 
 	
 Else 
 	
-	GOTO OBJECT:C206(*; $Obj_context.focus)
+	GOTO OBJECT:C206(*; $ƒ.focus)
 	
 End if 
-//]
 
 // Get the current table & update the field list
-$l:=Find in array:C230($Ptr_tables->; String:C10($Obj_context.currentTable.name))
+$index:=Find in array:C230($tablesPtr->; String:C10($ƒ.currentTable.name))
 
-If ($l>0)
+If ($index>0)
 	
-	LISTBOX SELECT ROW:C912(*; $Obj_form.tableList; $l; lk replace selection:K53:1)
-	OBJECT SET SCROLL POSITION:C906(*; $Obj_form.tableList; $l)
+	LISTBOX SELECT ROW:C912(*; $form.tableList; $index; lk replace selection:K53:1)
+	OBJECT SET SCROLL POSITION:C906(*; $form.tableList; $index)
 	
-	structure_FIELD_LIST($Obj_form)
+	structure_FIELD_LIST($form)
 	
 Else 
 	
-	LISTBOX SELECT ROW:C912(*; $Obj_form.tableList; 0; lk remove from selection:K53:3)
-	OBJECT SET SCROLL POSITION:C906(*; $Obj_form.tableList)
+	LISTBOX SELECT ROW:C912(*; $form.tableList; 0; lk remove from selection:K53:3)
+	OBJECT SET SCROLL POSITION:C906(*; $form.tableList)
 	
-	OB REMOVE:C1226($Obj_context; "currentTable")
+	OB REMOVE:C1226($ƒ; "currentTable")
 	
-	CLEAR VARIABLE:C89((UI.pointer($Obj_form.fields))->)
+	CLEAR VARIABLE:C89((UI.pointer($form.fields))->)
 	
 	SET TIMER:C645(-1)
 	

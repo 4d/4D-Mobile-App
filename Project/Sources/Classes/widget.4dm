@@ -353,7 +353,7 @@ Function catch
 	
 	C_BOOLEAN:C305($0)
 	C_VARIANT:C1683($1)
-	C_LONGINT:C283($2)
+	C_VARIANT:C1683($2)
 	
 	If (Asserted:C1132(This:C1470.type#-1; "Does not apply to a group"))
 		
@@ -367,8 +367,18 @@ Function catch
 				
 				If (Count parameters:C259>=2)
 					
-					$0:=(This:C1470.name=String:C10($1.objectName))\
-						 & ($1.code=$2)
+					If ((This:C1470.name=String:C10($1.objectName)))
+						
+						If (Value type:C1509($2)=Is collection:K8:32)
+							
+							$0:=($2.indexOf($1.code)#-1)
+							
+						Else 
+							
+							$0:=($1.code=Num:C11($2))
+							
+						End if 
+					End if 
 					
 				Else 
 					

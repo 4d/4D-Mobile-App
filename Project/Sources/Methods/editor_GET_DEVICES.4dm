@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : mobileGetDevices
+// Project method : editor_GET_DEVICES
 // ID[738D4FF89D414DF286DAB9CACD196B02]
 // Created 14-1-2021 by Vincent de Lachaux
 // ----------------------------------------------------
@@ -24,7 +24,7 @@ Case of
 		//______________________________________________________
 	: (DATABASE.isMacOs)
 		
-		If (FEATURE.with("android"))
+		If (FEATURE.with("android"))  //🚧
 			
 			$out:=New object:C1471(\
 				"android"; cs:C1710.avd.new().availableDevices(); \

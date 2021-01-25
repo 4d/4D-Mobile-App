@@ -25,9 +25,9 @@
 					"left": 0,
 					"width": 39,
 					"height": 18,
-					"fontFamily": ".SF NS Text",
+					"fontFamily": "System Font Regular",
 					"fontSize": 10,
-					"stroke": "#FFFFFF",
+					"stroke": "#ff0000",
 					"text": "en",
 					"popupPlacement": "linked",
 					"style": "custom",
@@ -40,5 +40,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

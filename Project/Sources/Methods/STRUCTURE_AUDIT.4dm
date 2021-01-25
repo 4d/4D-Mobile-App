@@ -35,7 +35,15 @@ $str:=cs:C1710.str.new()
 
 // ----------------------------------------------------
 // Compare to cached catalog (the last valid)
-$file:=PROJECT.$project.file.parent.file("catalog.json")
+If (FEATURE.with("wizards"))
+	
+	$file:=Form:C1466.folder.file("catalog.json")
+	
+Else 
+	
+	$file:=PROJECT.$project.file.parent.file("catalog.json")
+	
+End if 
 
 If ($file.exists)
 	

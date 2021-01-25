@@ -199,6 +199,47 @@ Function distributeHorizontally
 	End for each 
 	
 /*════════════════════════════════════════════
+Performs a horizontal distribution, from left to right,
+of the elements according to their best size
+	
+.distributeHorizontally({obj})
+	
+The optional object type parameter allow to specify:
+- The starting point x in pixels in the form (start)
+- The spacing in pixels to respect between the elements (spacing)
+- The minimum width to respect in pixels (minWidth)
+- The maximum width to respect in pixels (maxWidth)
+	
+══════════════════════════*/
+Function centerVertically($reference : Text)
+	
+	var $bottom; $height; $left; $middle; $right; $top; $width : Integer
+	var $o : Object
+	
+	If (Count parameters:C259>=1)
+		
+		OBJECT GET COORDINATES:C663(*; $reference; $left; $top; $right; $bottom)
+		$middle:=($right-$left)\2
+		
+	Else 
+		
+		OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+		$middle:=$width\2
+		
+	End if 
+	
+	For each ($o; This:C1470.members)
+		
+		OBJECT GET COORDINATES:C663(*; $o.name; $left; $top; $right; $bottom)
+		$width:=$right-$left
+		$left:=$middle-($width\2)
+		$right:=$left+$width
+		OBJECT SET COORDINATES:C1248(*; $o.name; $left; $top; $right; $bottom)
+		
+	End for each 
+	
+	
+/*════════════════════════════════════════════
 .show()
 .show(bool)
 ══════════════════════════*/

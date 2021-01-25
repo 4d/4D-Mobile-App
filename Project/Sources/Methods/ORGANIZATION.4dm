@@ -26,21 +26,19 @@ Else   // <== WIDGETS METHOD
 			
 			//==============================================
 		: ($ƒ.name.catch())
-			
 			$ƒ.nameHelp.show($e.code=On Getting Focus:K2:7)
 			
 			//==============================================
-		: ($ƒ.nameHelp.catch())
+		: ($ƒ.nameHelp.catch($e; On Clicked:K2:4))
 			
 			OPEN URL:C673(Get localized string:C991("doc_orgName"); *)
 			
 			//==============================================
 		: ($ƒ.identifier.catch())
-			
 			$ƒ.identifierHelp.show($e.code=On Getting Focus:K2:7)
 			
 			//==============================================
-		: ($ƒ.identifierHelp.catch())
+		: ($ƒ.identifierHelp.catch($e; On Clicked:K2:4))
 			
 			OPEN URL:C673(Get localized string:C991("doc_orgIdentifier"); *)
 			

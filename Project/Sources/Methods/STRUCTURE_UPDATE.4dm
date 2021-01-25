@@ -34,7 +34,16 @@ Else
 	
 End if 
 
+//If (FEATURE.with("android"))
+
+$dataModel:=Form:C1466.dataModel
+
+//Else 
+
+//// old
 $dataModel:=PROJECT.dataModel
+
+//End if 
 
 $context:=$form.form
 $currentTable:=$context.currentTable

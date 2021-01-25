@@ -8,21 +8,20 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($bottom; $height; $left; $right; $top; $width)
-C_POINTER:C301($ptr)
-C_OBJECT:C1216($event; $o)
+var $bottom; $height; $left; $right; $top; $width : Integer
+var $e; $o : Object
 
 // ----------------------------------------------------
 // Initialisations
-$event:=FORM Event:C1606
+$e:=FORM Event:C1606
 
 // ----------------------------------------------------
 Case of 
 		
-		//==================================================
-	: ($event.objectName="browser")
+		//=============================================================================
+	: ($e.objectName="browser")
 		
-		If ($event.code=-1)  // Hide
+		If ($e.code=-1)  // Hide
 			
 			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "hideBrowser")
 			
@@ -59,32 +58,31 @@ Case of
 			End if 
 		End if 
 		
-		//==================================================
-	: ($event.objectName="message")
+		//=============================================================================
+	: ($e.objectName="message")
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($event.code<0)  // <SUBFORM EVENTS>
+			: ($e.code<0)  // <SUBFORM EVENTS>
 				
-				$ptr:=OBJECT Get pointer:C1124(Object current:K67:2)
+				$o:=Self:C308->
 				
 				Case of 
 						
 						//…………………………………………………………………………………………………
-					: ($event.code=-2)\
-						 | ($event.code=-1)  // Close
+					: ($e.code=-2)\
+						 | ($e.code=-1)  // Close
 						
-						If ($ptr->tips.enabled)
+						If ($o.tips.enabled)
 							
 							// Restore help tips status
-							$o:=UI.tips
-							$o.enable()
-							$o.setDuration($ptr->tips.delay)
+							$o.tips.enable()
+							$o.tips.setDuration($o.tips.delay)
 							
 						End if 
 						
-						$ptr->:=New object:C1471
+						Self:C308->:=New object:C1471
 						
 						OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
 						
@@ -92,9 +90,9 @@ Case of
 					Else 
 						
 						// Resizing
-						OBJECT GET COORDINATES:C663(*; $event.objectName; $left; $top; $right; $bottom)
+						OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
 						
-						$bottom:=$top+Abs:C99($event.code)
+						$bottom:=$top+Abs:C99($e.code)
 						
 						// Limit to the window's height [
 						OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
@@ -103,13 +101,14 @@ Case of
 							
 							$bottom:=$height-20
 							
-							$ptr->scrollbar:=True:C214
-							$ptr->:=$ptr->  // Touch
+							$o.scrollbar:=True:C214
+							Self:C308->:=Self:C308->  // Touch
 							
 						End if 
-						//]
 						
-						OBJECT SET COORDINATES:C1248(*; $event.objectName; $left; $top; $right; $bottom)
+						// ]
+						
+						OBJECT SET COORDINATES:C1248(*; $e.objectName; $left; $top; $right; $bottom)
 						
 						//…………………………………………………………………………………………………
 				End case 
@@ -117,21 +116,18 @@ Case of
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$event.description+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 				
 				//______________________________________________________
 		End case 
 		
-		//==================================================
+		//=============================================================================
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown object: \""+$event.objectName+"\"")
+		ASSERT:C1129(False:C215; "Unknown object: \""+$e.objectName+"\"")
 		
-		//==================================================
+		//=============================================================================
 End case 
 
-// ----------------------------------------------------
-// Return
-// <NONE>
 // ----------------------------------------------------
 // End

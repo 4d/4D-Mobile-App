@@ -127,11 +127,14 @@ _____________*/
 
 // Android support
 FEATURE.unstable("android")
+FEATURE.unstable("wizards")  // Use a wizard instead of standard dialogs to create r open a project
 
 
 /* _____________
 WIP
 _____________*/
+
+FEATURE.wip("openWizard")  // Use a wizard instead of standard dialogs to open a project
 
 // Share action with descrition
 FEATURE.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action

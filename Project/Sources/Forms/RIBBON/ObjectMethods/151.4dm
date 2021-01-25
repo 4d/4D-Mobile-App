@@ -28,7 +28,7 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Alternative Click:K2:36)
 		
-		If (FEATURE.with("android"))
+		If (FEATURE.with("android"))  //🚧
 			
 			If (Is Windows:C1573)
 				
@@ -40,7 +40,7 @@ Case of
 				OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
 				
 				$menu:=cs:C1710.menu.new()\
-					.append(cs:C1710.str.new("buildAndRunFor").localized("iOS"); "ios").enable(Bool:C1537(PROJECT.$project.xCode.ready))\
+					.append(cs:C1710.str.new("buildAndRunFor").localized("iOS"); "ios").enable(Bool:C1537(Form:C1466.status.xCode))\
 					.append(cs:C1710.str.new("buildAndRunFor").localized("Android"); "android").enable(Bool:C1537(Form:C1466.status.studio))\
 					.popup($left; $bottom)
 				

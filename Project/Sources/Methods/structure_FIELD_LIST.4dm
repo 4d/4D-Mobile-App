@@ -45,6 +45,18 @@ $Ptr_fields:=UI.pointer($form.fields)
 $Ptr_icons:=UI.pointer($form.icons)
 $Ptr_published:=UI.pointer($form.published)
 
+//If (FEATURE.with("android"))
+
+//var $dataModel : Object
+//$dataModel:=PROJECT.dataModel
+
+//Else 
+
+var $dataModel : Object
+$dataModel:=Form:C1466.dataModel
+
+//End if 
+
 // Keep the selected field to restore the selection if necessary
 $selectedItems:=New collection:C1472
 
@@ -104,7 +116,7 @@ If ($row>0)
 								
 								For each ($o; $o.value[0].field) Until ($isFound)
 									
-									$isFound:=(Form:C1466.dataModel[String:C10($table.tableNumber)][$field.name][String:C10($o.id)]#Null:C1517)
+									$isFound:=($dataModel[String:C10($table.tableNumber)][$field.name][String:C10($o.id)]#Null:C1517)
 									
 									If ($isFound)
 										
@@ -122,7 +134,7 @@ If ($row>0)
 							
 						Else 
 							
-							If (Form:C1466.dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
+							If ($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
 								
 								STRUCTURE_Handler(New object:C1471(\
 									"action"; "appendField"; \
@@ -171,7 +183,7 @@ If ($row>0)
 							
 							For each ($o; $o.value[0].field) Until ($isFound)
 								
-								$isFound:=(Form:C1466.dataModel[String:C10($table.tableNumber)][$field.name][String:C10($o.id)]#Null:C1517)
+								$isFound:=($dataModel[String:C10($table.tableNumber)][$field.name][String:C10($o.id)]#Null:C1517)
 								
 								If ($isFound)
 									
@@ -189,7 +201,7 @@ If ($row>0)
 						
 					Else 
 						
-						If (Form:C1466.dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
+						If ($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
 							
 							STRUCTURE_Handler(New object:C1471(\
 								"action"; "appendField"; \
@@ -272,8 +284,8 @@ If ($row>0)
 							
 							If ($field.relatedTableNumber#$table.tableNumber)  // Not for a recursive relation
 								
-								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
-									 & (Form:C1466.dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
+								If ($dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
+									 & ($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
 									
 									$color:=UI.errorColor
 									

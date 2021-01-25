@@ -19,7 +19,6 @@
 		"paperHeight": "595pt"
 	},
 	"pages": [
-		null,
 		{
 			"objects": {
 				"background": {
@@ -30,8 +29,13 @@
 					"height": 875,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"stroke": "transparent"
-				},
+					"stroke": "transparent",
+					"fill": "#FFFFFF"
+				}
+			}
+		},
+		{
+			"objects": {
 				"continue": {
 					"type": "button",
 					"top": 727,
@@ -121,22 +125,22 @@
 							"pictureFormat": "truncatedCenter",
 							"truncateMode": "none",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 14,
 							"header": {
 								"name": "Header1",
 								"text": "Header1",
 								"verticalAlign": "middle",
-								"fontFamily": ".SF NS Text",
-								"fontSize": 14
+								"fontSize": 14,
+								"fontTheme": "normal"
 							},
 							"footer": {
 								"name": "Footer1",
 								"timeFormat": "hh_mm_ss",
 								"verticalAlign": "middle",
-								"fontFamily": ".SF NS Text",
-								"fontSize": 14
-							}
+								"fontSize": 14,
+								"fontTheme": "normal"
+							},
+							"fontTheme": "normal"
 						},
 						{
 							"name": "texts",
@@ -155,15 +159,15 @@
 								"name": "Header2",
 								"text": "Header2",
 								"verticalAlign": "middle",
-								"fontFamily": ".SF NS Text",
-								"fontSize": 14
+								"fontSize": 14,
+								"fontTheme": "normal"
 							},
 							"footer": {
 								"name": "Footer2",
 								"timeFormat": "hh_mm_ss",
 								"verticalAlign": "middle",
-								"fontFamily": ".SF NS Text",
-								"fontSize": 14
+								"fontSize": 14,
+								"fontTheme": "normal"
 							}
 						}
 					]
@@ -174,5 +178,6 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
-	}
+	},
+	"geometryStamp": 2
 }

@@ -1,0 +1,244 @@
+﻿{
+	"destination": "detailScreen",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onTimer",
+		"onResize"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "842pt",
+		"paperHeight": "595pt"
+	},
+	"pages": [
+		{
+			"objects": {
+				"background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"stroke": "transparent",
+					"fill": "automatic"
+				}
+			}
+		},
+		{
+			"objects": {
+				"list": {
+					"type": "listbox",
+					"top": 205,
+					"left": 284,
+					"width": 402,
+					"height": 370,
+					"focusable": false,
+					"rowHeight": "5em",
+					"showHeaders": false,
+					"scrollbarHorizontal": "hidden",
+					"scrollbarVertical": "hidden",
+					"horizontalLineStroke": "transparent",
+					"verticalLineStroke": "transparent",
+					"fill": "transparent",
+					"verticalAlign": "middle",
+					"movableRows": false,
+					"sortable": false,
+					"selectionMode": "none",
+					"resizingMode": "legacy",
+					"visibility": "visible",
+					"fontSize": 14,
+					"dataSource": "Form:C1466._list",
+					"listboxType": "collection",
+					"borderStyle": "none",
+					"columns": [
+						{
+							"name": "icons1",
+							"width": 80,
+							"minWidth": 80,
+							"maxWidth": 80,
+							"resizable": false,
+							"enterable": false,
+							"verticalAlign": "middle",
+							"fontSize": 14,
+							"header": {
+								"name": "Header3",
+								"text": "Header1",
+								"verticalAlign": "middle",
+								"fontSize": 14,
+								"fontTheme": "normal"
+							},
+							"footer": {
+								"name": "Footer3",
+								"timeFormat": "hh_mm_ss",
+								"verticalAlign": "middle",
+								"fontSize": 14,
+								"fontTheme": "normal"
+							},
+							"fontTheme": "normal",
+							"dataSourceTypeHint": "picture",
+							"dataSource": "This:C1470.icon",
+							"pictureFormat": "truncatedCenter"
+						},
+						{
+							"name": "texts1",
+							"width": 10,
+							"minWidth": 10,
+							"maxWidth": 10,
+							"resizable": false,
+							"enterable": false,
+							"verticalAlign": "middle",
+							"fontSize": 14,
+							"header": {
+								"name": "Header4",
+								"text": "Header2",
+								"verticalAlign": "middle",
+								"fontSize": 14,
+								"fontTheme": "normal"
+							},
+							"footer": {
+								"name": "Footer4",
+								"timeFormat": "hh_mm_ss",
+								"verticalAlign": "middle",
+								"fontSize": 14,
+								"fontTheme": "normal"
+							},
+							"styledText": true,
+							"dataSource": "This:C1470.text",
+							"contextMenu": "none",
+							"truncateMode": "none",
+							"textAlign": "left",
+							"wordwrap": "normal"
+						}
+					]
+				},
+				"continue": {
+					"type": "button",
+					"top": 786,
+					"left": 395,
+					"width": 160,
+					"height": 22,
+					"text": ":xliff:continue",
+					"defaultButton": true,
+					"method": "ObjectMethods/continue.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"title": {
+					"type": "text",
+					"top": 56,
+					"left": 0,
+					"width": 970,
+					"height": 46,
+					"sizingX": "grow",
+					"stroke": "#808080",
+					"textAlign": "center",
+					"text": ":xliff:goMobileWith4d",
+					"fontTheme": "normal",
+					"fontSize": 48
+				},
+				"subtitle": {
+					"type": "text",
+					"top": 132,
+					"left": 0,
+					"width": 970,
+					"height": 62,
+					"sizingX": "grow",
+					"stroke": "#808080",
+					"textAlign": "center",
+					"text": ":xliff:goMobileSubTitle",
+					"fontTheme": "normal",
+					"fontSize": 14
+				},
+				"newProject": {
+					"type": "subform",
+					"left": 284,
+					"top": 577,
+					"width": 400,
+					"height": 180,
+					"detailForm": "NEW_PROJECT",
+					"events": [
+						"onGettingFocus"
+					],
+					"dataSource": ""
+				},
+				"message.back": {
+					"type": "picture",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"pictureFormat": "tiled",
+					"picture": "/RESOURCES/images/common/background.png"
+				},
+				"message.button": {
+					"type": "button",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"display": false
+				},
+				"message": {
+					"type": "subform",
+					"top": 205,
+					"left": 280,
+					"width": 410,
+					"height": 180,
+					"visibility": "hidden",
+					"detailForm": "MESSAGE",
+					"focusable": false,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
+					"method": "ObjectMethods/message.4dm"
+				}
+			},
+			"entryOrder": [
+				"continue",
+				"newProject",
+				"message.button",
+				"message",
+				"list"
+			]
+		}
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"geometryStamp": 259,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {},
+			"message": {
+				"visible": false,
+				"objects": [
+					"message.back",
+					"message.button",
+					"message"
+				]
+			}
+		}
+	},
+	"windowMinWidth": 970,
+	"windowMinHeight": 860
+}

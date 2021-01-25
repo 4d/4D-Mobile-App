@@ -9,9 +9,11 @@
 // ----------------------------------------------------
 // Declarations
 var $1 : Object
+var $2 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(panel_INIT; $1)
+	C_OBJECT:C1216(panel_INIT; $2)
 End if 
 
 var $help; $key; $panel; $t; $title : Text
@@ -151,6 +153,13 @@ For each ($o; $definition.panels)
 		//OBJECT SET RESIZING OPTIONS(*;$Txt_panel;Resize horizontal none;Resize vertical grow)
 		
 	End if 
+	
+	If (FEATURE.with("wizards"))
+		
+		OBJECT SET VALUE:C1742($panel; $2)
+		
+	End if 
+	
 End for each 
 
 CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; $definition)

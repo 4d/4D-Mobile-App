@@ -148,7 +148,7 @@ Class constructor
 		"form"; "ACTIONS_PARAMS"))
 	
 	//_____________________________________________________________________
-	This:C1470.currentPage:=""
+	This:C1470.$currentPage:=""
 	
 	//===================================================================================
 Function gotoPage
@@ -193,13 +193,21 @@ Function gotoPage
 	
 	If ($o#Null:C1517)
 		
-		Form:C1466.currentPage:=$page
+		Form:C1466.$currentPage:=$page
 		
-		(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=Form:C1466.currentPage
+		(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=Form:C1466.$currentPage
 		
 		Form:C1466.$page:=$o
 		
-		EXECUTE METHOD IN SUBFORM:C1085("PROJECT"; "panel_INIT"; *; $o)
+		If (FEATURE.with("wizards"))
+			
+			EXECUTE METHOD IN SUBFORM:C1085("PROJECT"; "panel_INIT"; *; $o; PROJECT)
+			
+		Else 
+			
+			EXECUTE METHOD IN SUBFORM:C1085("PROJECT"; "panel_INIT"; *; $o)
+			
+		End if 
 		
 		SET TIMER:C645(-1)  // Set geometry
 		

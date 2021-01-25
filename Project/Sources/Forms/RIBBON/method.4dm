@@ -53,7 +53,16 @@ $form.pages.push(New object:C1471(\
 "button"; "108"))
 
 $form.sectionButtons:=UI.group("101;102;107;108;103;104;105;106")
-$form.buildButtons:=UI.group("151;201;152;153")
+
+If (FEATURE.with("android"))  //🚧
+	
+	$form.buildButtons:=UI.group("201;151;152;153")
+	
+Else 
+	
+	$form.buildButtons:=UI.group("151;201;152;153")
+	
+End if 
 
 $e:=FORM Event:C1606
 
@@ -70,9 +79,10 @@ Case of
 		
 		$form.sectionButtons.distributeHorizontally($form)
 		
-		If (Is macOS:C1572) & FEATURE.with("android")
+		If (Is macOS:C1572 & FEATURE.with("android"))  //🚧
 			
-			$form.build.setSeparatePopupMenu()
+			//$form.build.setSeparatePopupMenu()
+			$form.install.setSeparatePopupMenu()
 			
 		End if 
 		
@@ -126,17 +136,22 @@ Case of
 		
 		$form.switch.setPicture("#images/toolbar/"+Choose:C955(Form:C1466.state="open"; "reduce"; "expand")+".png")
 		
-		ASSERT:C1129(Not:C34(Shift down:C543))
-		
 		For each ($page; $form.pages)
 			
-			OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=Form:C1466.page))
-			
+			If (FEATURE.with("wizards"))
+				
+				OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=Form:C1466.editor.$currentPage))
+				
+			Else 
+				
+				OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=Form:C1466.page))
+				
+			End if 
 		End for each 
 		
 		If (Form:C1466.devices#Null:C1517)
 			
-			If (FEATURE.with("android"))
+			If (FEATURE.with("android"))  //🚧
 				
 				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0))
 				
@@ -189,7 +204,7 @@ Case of
 					
 				Else 
 					
-					//
+					//#TO_DO - Select the last used simulator or the more relevant if none
 					
 				End if 
 				
@@ -248,10 +263,26 @@ Case of
 			End if 
 		End if 
 		
-		var $o : Object
-		$o:=PROJECT.$project
-		$form.build.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project))
-		$form.install.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project) & Bool:C1537($o.status.teamId))
+		If (FEATURE.with("android"))  //🚧
+			
+			var $isDevToolAvailable; $isProjectOK; $withTeamID : Boolean
+			
+			$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode) | Bool:C1537(Form:C1466.status.studio)
+			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
+			$withTeamID:=Bool:C1537(Form:C1466.status.teamId) | Is Windows:C1573
+			
+			$form.build.enable($isDevToolAvailable & $isProjectOK)
+			$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID)
+			
+		Else 
+			
+			var $o : Object
+			$o:=PROJECT.$project
+			$form.build.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project))
+			$form.install.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project) & Bool:C1537($o.status.teamId))
+			
+		End if 
+		
 		
 		//______________________________________________________
 	Else 

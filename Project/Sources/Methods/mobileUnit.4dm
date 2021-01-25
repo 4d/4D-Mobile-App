@@ -111,15 +111,13 @@ Case of
 		//______________________________________________________
 	: ($Txt_in="checkInstall")
 		
-		If (FEATURE.with("android"))
-			
-			EXECUTE METHOD:C1007("mobileCheckInstallation"; $Obj_out)
-			
-		Else 
-			
-			EXECUTE METHOD:C1007("Xcode_CheckInstall"; $Obj_out)
-			
-		End if 
+		//If (FEATURE.with("android"))
+		//EXECUTE METHOD("editor_CHECK_INSTALLATION"; $Obj_out)
+		//Else 
+		
+		EXECUTE METHOD:C1007("Xcode_CheckInstall"; $Obj_out)
+		
+		//End if 
 		
 		//________________________________________
 	: (Not:C34(Asserted:C1132($Lon_parameters=2; "Expected object parameter")))

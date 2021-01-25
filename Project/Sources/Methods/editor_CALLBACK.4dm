@@ -64,11 +64,11 @@ End if
 // ----------------------------------------------------
 If ($form.currentForm=$form.editor)
 	
-	editor_MESSAGES($tSelector; $form; $oIN)
+	editor_PROCESS_MESSAGES($tSelector; $form; $oIN)
 	
 Else 
 	
-	project_MESSAGES($tSelector; $form; $oIN)
+	project_PROCESS_MESSAGES($tSelector; $form; $oIN)
 	
 End if 
 

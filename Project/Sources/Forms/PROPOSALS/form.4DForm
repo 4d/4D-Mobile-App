@@ -1,0 +1,112 @@
+﻿{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"events": [],
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"List Box": {
+					"type": "listbox",
+					"left": 0,
+					"top": 0,
+					"width": 284,
+					"height": 18,
+					"events": [
+						"onLoad"
+					],
+					"showHeaders": false,
+					"focusable": false,
+					"horizontalLineStroke": "transparent",
+					"verticalLineStroke": "transparent",
+					"listboxType": "collection",
+					"scrollbarHorizontal": "hidden",
+					"scrollbarVertical": "automatic",
+					"resizingMode": "legacy",
+					"sortable": false,
+					"borderStyle": "none",
+					"selectionMode": "single",
+					"currentItemSource": "Form:C1466.current",
+					"currentItemPositionSource": "Form:C1466.index",
+					"dataSource": "Form:C1466.proposals",
+					"rowHeight": "1em",
+					"sizingY": "grow",
+					"columns": [
+						{
+							"header": {
+								"text": "Header1",
+								"name": "Header1"
+							},
+							"name": "Column1",
+							"footer": {
+								"name": "Footer1"
+							},
+							"dataSource": "This:C1470.label"
+						}
+					]
+				},
+				"upArrow": {
+					"type": "button",
+					"text": "🠕",
+					"top": 0,
+					"left": 304,
+					"width": 30,
+					"height": 30,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"shortcutKey": "[up arrow]",
+					"style": "flat",
+					"stroke": "#ff6347",
+					"fontSize": 18,
+					"sizingY": "move"
+				},
+				"downArrow": {
+					"type": "button",
+					"text": "🠧",
+					"top": 0,
+					"left": 337,
+					"width": 30,
+					"height": 30,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"shortcutKey": "[down arrow]",
+					"style": "flat",
+					"stroke": "#ff6347",
+					"fontSize": 18,
+					"sizingY": "move"
+				}
+			}
+		}
+	],
+	"geometryStamp": 32,
+	"windowSizingX": "fixed",
+	"windowSizingY": "fixed",
+	"rightMargin": 0,
+	"bottomMargin": 0,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"formSizeAnchor": "List Box",
+	"method": "method.4dm"
+}

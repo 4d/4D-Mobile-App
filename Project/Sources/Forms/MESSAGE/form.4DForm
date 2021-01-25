@@ -24,7 +24,8 @@
 					"height": 180,
 					"sizingY": "grow",
 					"fill": "automatic",
-					"stroke": "#c0c0c0"
+					"stroke": "#c0c0c0",
+					"borderRadius": 10
 				},
 				"cancel": {
 					"type": "button",

@@ -13,8 +13,11 @@ Function init($project : Object)
 	
 	For each ($key; $project)
 		
-		This:C1470[$key]:=$project[$key]
-		
+		If ($key[[1]]#"$")
+			
+			This:C1470[$key]:=$project[$key]
+			
+		End if 
 	End for each 
 	
 	//====================================
@@ -111,31 +114,43 @@ Function get
 	
 	For each ($t; $project)
 		
-		If ($t[[1]]="$")
-			
-			OB REMOVE:C1226($project; $t)
-			
-		Else 
-			
-			Case of 
-					
-					//______________________________________________________
-				: (Value type:C1509($project[$t])=Is object:K8:27)
-					
-					This:C1470.cleanup($project[$t])
-					
-					//______________________________________________________
-				: (Value type:C1509($project[$t])=Is collection:K8:32)
-					
-					For each ($o; $project[$t])
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Length:C16($t)=0)
+				
+				OB REMOVE:C1226($project; $t)
+				
+				//______________________________________________________
+			: ($t[[1]]="$")
+				
+				OB REMOVE:C1226($project; $t)
+				
+				//______________________________________________________
+			Else 
+				
+				Case of 
 						
-						This:C1470.cleanup($o)
+						//…………………………………………………………………………………………………
+					: (Value type:C1509($project[$t])=Is object:K8:27)
 						
-					End for each 
-					
-					//______________________________________________________
-			End case 
-		End if 
+						This:C1470.cleanup($project[$t])
+						
+						//…………………………………………………………………………………………………
+					: (Value type:C1509($project[$t])=Is collection:K8:32)
+						
+						For each ($o; $project[$t])
+							
+							This:C1470.cleanup($o)
+							
+						End for each 
+						
+						//…………………………………………………………………………………………………
+				End case 
+				
+				//______________________________________________________
+		End case 
 	End for each 
 	
 	$0:=$project
@@ -176,32 +191,34 @@ Function cleanup
 	// Save the project
 Function save
 	
-	var $folder : 4D:C1709.Folder
-	
 	If (Bool:C1537(FEATURE._8858))  // Debug mode
 		
+		var $folder : 4D:C1709.Folder
 		$folder:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
 		
 		If ($folder.exists)
 			
-			$folder.file("project.json").setText(JSON Stringify:C1217(This:C1470; *))
-			
-			If (This:C1470.$dialog#Null:C1517)
+			If (PROJECT.$dialog#Null:C1517)
 				
-				$folder.file("dialog.json").setText(JSON Stringify:C1217(This:C1470.$dialog; *))
+				$folder.file("dialog.json").setText(JSON Stringify:C1217(PROJECT.$dialog; *))
 				
 				var $key : Text
-				For each ($key; This:C1470.$dialog)
+				For each ($key; PROJECT.$dialog)
 					
-					$folder.file($key+".json").setText(JSON Stringify:C1217(This:C1470.$dialog[$key]; *))
+					$folder.file($key+".json").setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *))
 					
 				End for each 
-				
 			End if 
 			
-			If (This:C1470.$project.$catalog#Null:C1517)
+			// Remove circular references
+			var $o : Object
+			$o:=OB Copy:C1225(PROJECT)
+			OB REMOVE:C1226($o.$project; "$dialog")
+			$folder.file("project.json").setText(JSON Stringify:C1217($o; *))
+			
+			If (PROJECT.$project.$catalog#Null:C1517)
 				
-				$folder.file("catalog.json").setText(JSON Stringify:C1217(This:C1470.$project.$catalog; *))
+				$folder.file("catalog.json").setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *))
 				
 			End if 
 		End if 
@@ -209,6 +226,11 @@ Function save
 	
 	This:C1470.$project.file.create()
 	This:C1470.$project.file.setText(JSON Stringify:C1217(This:C1470.get(); *))
+	
+	//====================================
+Function meta()->$meta : Object
+	
+	$meta:=This:C1470[""]
 	
 	//====================================
 Function updateActions
@@ -490,6 +512,11 @@ Function getCatalog
 	var $0 : Collection
 	
 	Case of 
+			
+			//____________________________________
+			//: (FEATURE.with("android"))
+			
+			//$0:=Form.$catalog
 			
 			//____________________________________
 		: (This:C1470.$project#Null:C1517)

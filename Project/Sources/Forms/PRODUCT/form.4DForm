@@ -9,6 +9,7 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onClick",
 		"onDoubleClick",
 		"onLosingFocus",
 		"onGettingFocus",
@@ -254,6 +255,56 @@
 					"events": [
 						"onClick"
 					]
+				},
+				"android": {
+					"type": "checkbox",
+					"text": "Android",
+					"top": 29,
+					"left": 695,
+					"width": 81,
+					"height": 84,
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					],
+					"style": "toolbar",
+					"dataSource": "Form:C1466.$android",
+					"dataSourceTypeHint": "boolean",
+					"visibility": "visible",
+					"focusable": false,
+					"icon": "/RESOURCES/images/android.png",
+					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg"
+				},
+				"ios": {
+					"type": "checkbox",
+					"text": "iOS",
+					"top": 29,
+					"left": 796,
+					"width": 81,
+					"height": 84,
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					],
+					"style": "toolbar",
+					"icon": "/RESOURCES/images/apple.png",
+					"dataSource": "Form:C1466.$apple",
+					"dataSourceTypeHint": "boolean",
+					"visibility": "visible",
+					"focusable": false
+				},
+				"target.label": {
+					"type": "text",
+					"top": 5,
+					"left": 695,
+					"width": 89,
+					"height": 16,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:targetOs",
+					"visibility": "visible"
 				}
 			}
 		}
@@ -270,5 +321,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 14
+	"geometryStamp": 58
 }

@@ -41,7 +41,26 @@ Function select($row : Integer)->$this : cs:C1710.listbox
 		
 	End if 
 	
+	OBJECT SET SCROLL POSITION:C906(*; This:C1470.name; $row)
+	
 	$this:=This:C1470
+	
+	//________________________________________________________________
+	// Returns a row coordinates
+Function getRowCoordinates($row : Integer)->$coordinates : Object
+	
+	var $l; $bottom; $left; $right; $top : Integer
+	
+	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; 1; $row; $left; $top; $l; $l)
+	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; This:C1470.columnsNumber(); $row; $l; $l; $right; $bottom)
+	
+	// #TO_DO - Manage the visible area
+	
+	$coordinates:=New object:C1471(\
+		"left"; $left; \
+		"top"; $top; \
+		"right"; $right; \
+		"bottom"; $bottom)
 	
 	//________________________________________________________________
 	// Unselect row(s)

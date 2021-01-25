@@ -1,3 +1,5 @@
+Form:C1466.accept:=False:C215
+
 If (Form:C1466.signal#Null:C1517)
 	
 	Form:C1466.signal.trigger()

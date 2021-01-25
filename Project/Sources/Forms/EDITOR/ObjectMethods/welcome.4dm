@@ -1,50 +1,40 @@
-  // ----------------------------------------------------
-  // Object method : EDITOR.Subform - (4D Mobile App)
-  // ID[B259C0E7CB8C44798B0168C4A59E531B]
-  // Created 2-3-2018 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Declarations
-C_LONGINT:C283($Lon_formEvent)
-C_POINTER:C301($Ptr_me)
-C_TEXT:C284($Txt_me)
+// ----------------------------------------------------
+// Object method : EDITOR.Subform - (4D Mobile App)
+// ID[B259C0E7CB8C44798B0168C4A59E531B]
+// Created 2-3-2018 by Vincent de Lachaux
+// ----------------------------------------------------
+// Declarations
+var $e : Object
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_formEvent:=Form event code:C388
-$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
-$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
+// ----------------------------------------------------
+// Initialisations
+$e:=FORM Event:C1606
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //________________________________________
-	: ($Lon_formEvent<0)  // <SUBFORM EVENTS>
+		//________________________________________
+	: ($e.code<0)  // <SUBFORM EVENTS>
 		
 		Case of 
 				
-				  //…………………………………………………………………………………………………
-			: ($Lon_formEvent=-1)
+				//…………………………………………………………………………………………………
+			: ($e.code=-1)
 				
-				editor_HANDLER (New object:C1471(\
-					"action";"open"))
+				editor_OPEN_PROJECT
 				
-				FORM GOTO PAGE:C247(1)
-				
-				  //…………………………………………………………………………………………………
-			: (False:C215)
-				
-				  //…………………………………………………………………………………………………
+				//…………………………………………………………………………………………………
 			Else 
 				
-				ASSERT:C1129(False:C215;"Unknown call from subform ("+String:C10($Lon_formEvent)+")")
+				ASSERT:C1129(False:C215; "Unknown call from subform ("+$e.description+")")
 				
-				  //…………………………………………………………………………………………………
+				//…………………………………………………………………………………………………
 		End case 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
