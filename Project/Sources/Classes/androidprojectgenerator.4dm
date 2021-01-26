@@ -31,6 +31,7 @@ Function generate
 				+"\" --files-to-copy \""+This:C1470.path.androidProjectFilesToCopy().path\
 				+"\" --template-files \""+This:C1470.path.androidProjectTemplateFiles().path\
 				+"\" --template-forms \""+This:C1470.path.androidForms().path\
+				+"\" --host-db \""+This:C1470.path.host().path\
 				+"\"")
 			
 			$0.success:=(This:C1470.errorStream=Null:C1517)
