@@ -1,38 +1,38 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : COMPONENT_Infos
-  // ID[75F81CD689A34E77A474AA215699B738]
-  // Created 5-4-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
-C_TEXT:C284($0)
-C_TEXT:C284($1)
-
-C_LONGINT:C283($l)
-C_TEXT:C284($t;$t_info;$t_selector)
-C_OBJECT:C1216($o)
+// ----------------------------------------------------
+// Project method : COMPONENT_Infos
+// ID[75F81CD689A34E77A474AA215699B738]
+// Created 5-4-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
+var $0 : Text
+var $1 : Text
 
 If (False:C215)
-	C_TEXT:C284(COMPONENT_Infos ;$0)
-	C_TEXT:C284(COMPONENT_Infos ;$1)
+	C_TEXT:C284(COMPONENT_Infos; $0)
+	C_TEXT:C284(COMPONENT_Infos; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
+var $t; $info; $selector : Text
+var $l : Integer
+var $o : Object
+
+// ----------------------------------------------------
+// Initialisations
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	  // Required parameters
-	$t_selector:=$1
+	// Required parameters
+	$selector:=$1
 	
-	  // Default values
+	// Default values
 	
-	  // Optional parameters
+	// Optional parameters
 	If (Count parameters:C259>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
@@ -42,43 +42,60 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
+// ----------------------------------------------------
 Case of 
 		
-		  //______________________________________________________
-	: ($t_selector="ideVersion")
+		//______________________________________________________
+	: ($selector="ideVersion")
 		
-		$t_info:=Application version:C493
+		$info:=Application version:C493
 		
-		  //______________________________________________________
-	: ($t_selector="ideBuildVersion")
+		//______________________________________________________
+	: ($selector="ideBuildVersion")
 		
 		$t:=Application version:C493($l)
-		$t_info:=String:C10($l)
+		$info:=String:C10($l)
 		
-		  //______________________________________________________
-	: ($t_selector="componentBuild")
+		//______________________________________________________
+	: ($selector="componentBuild")
 		
-		$t_info:=plist_toObject (File:C1566("/PACKAGE/Info.plist").getText()).CFBundleVersion.string
+		If (File:C1566("/PACKAGE/Info.plist").exists)
+			
+			$o:=plist_toObject(File:C1566("/PACKAGE/Info.plist").getText())
+			$info:=$o.CFBundleVersion.string
+			
+		Else 
+			
+			$info:=COMPONENT_Infos("ideBuildVersion")
+			
+		End if 
 		
-		  //______________________________________________________
-	: ($t_selector="componentVersion")
+		//______________________________________________________
+	: ($selector="componentVersion")
 		
-		$o:=plist_toObject (File:C1566("/PACKAGE/Info.plist").getText())
+		If (File:C1566("/PACKAGE/Info.plist").exists)
+			
+			$o:=plist_toObject(File:C1566("/PACKAGE/Info.plist").getText())
+			
+			$info:=$o.CFBundleShortVersionString.string+" ("+$o.CFBundleVersion.string+")"
+			
+		Else 
+			
+			$info:=COMPONENT_Infos("ideVersion")+" ("+COMPONENT_Infos("ideBuildVersion")+")"
+			
+		End if 
 		
-		$t_info:=$o.CFBundleShortVersionString.string+" ("+$o.CFBundleVersion.string+")"
-		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown entry point: \""+$t_selector+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$selector+"\"")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
 
-  // ----------------------------------------------------
-  // Return
-$0:=$t_info
+// ----------------------------------------------------
+// Return
+$0:=$info
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End
