@@ -30,163 +30,116 @@ Class constructor
 		
 	End if 
 	
-	//=========================================================
-	// Load the appiconset contents
-Function loadIcon
-	var $file : 4D:C1709.File
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Display the App icon
+Function displayIcon
+	
+	var $picture : Picture
 	var $folder : 4D:C1709.Folder
 	
-	If (Is macOS:C1572)
+	If (FEATURE.with("android"))
 		
-		If (FEATURE.with("wizards"))
+		$folder:=Form:C1466.$project.folder.folder("Assets.xcassets/AppIcon.appiconset")
+		
+		If ($folder.exists)
 			
-			$folder:=PROJECT.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+			READ PICTURE FILE:C678($folder.file("ios-marketing1024.png").platformPath; $picture)
 			
 		Else 
 			
-			// A "If" statement should never omit "Else" 
-			$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+			$folder:=Form:C1466.$project.folder.folder("Android")
 			
-		End if 
-		
-		If (This:C1470.assets=Null:C1517)
-			
-			$folder.create()
-			
-			//**********************************
-			This:C1470.assets:=New object:C1471(\
-				"root"; $folder.platformPath)
-			
-			This:C1470.assets.folder:=$folder
-			
-		End if 
-		
-		If (This:C1470.assets.icons=Null:C1517)\
-			 | (This:C1470.assets.file=Null:C1517)
-			
-			$file:=$folder.file("Contents.json")
-			
-			If ($file.exists)
+			If ($folder.exists)
 				
-				This:C1470.assets.icons:=JSON Parse:C1218($file.getText())
-				
-			End if 
-		End if 
-		
-		This:C1470.displayIcon()
-		
-	Else 
-		
-		// Path is relative to the project file
-		$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
-		
-		If (This:C1470.assets=Null:C1517)
-			
-			$folder.create()
-			
-			//**********************************
-			This:C1470.assets:=New object:C1471(\
-				"root"; $folder.platformPath)
-			
-			This:C1470.assets.folder:=$folder
-			
-		End if 
-		
-		If (This:C1470.assets.icons=Null:C1517)\
-			 | (This:C1470.assets.file=Null:C1517)
-			
-			$file:=$folder.file("Contents.json")
-			
-			If (Asserted:C1132($file.exists))
-				
-				This:C1470.assets.icons:=JSON Parse:C1218($file.getText())
-				
-			End if 
-		End if 
-		
-		This:C1470.displayIcon()
-		
-	End if 
-	
-	//=========================================================
-	// Display the selected icon
-Function displayIcon
-	var $picture : Picture
-	var $o : Object
-	
-	var $file : 4D:C1709.File
-	
-	If (This:C1470.assets.icons#Null:C1517)
-		
-		If (Is macOS:C1572)
-			
-			$o:=This:C1470.assets.icons.images.query("idiom = :1"; "ios-marketing").pop()
-			
-			If ($o#Null:C1517)
-				
-				$file:=This:C1470.assets.folder.file($o.filename)
-				
-				If ($file.exists)
-					
-					READ PICTURE FILE:C678($file.platformPath; $picture)
-					This:C1470.icon.setValue($picture)
-					This:C1470.iconAlert.reset()
-					
-				Else 
-					
-					This:C1470.icon.setValue($picture)
-					This:C1470.iconAlert.alert(".Missing file.")  // #MARK_LOCALIZE
-					
-				End if 
+				READ PICTURE FILE:C678($folder.file("main/android-marketing512.png").platformPath; $picture)
 				
 			Else 
 				
-				This:C1470.icon.setValue($picture)
-				This:C1470.iconAlert.alert(".The icon is mandatory.")  // #MARK_LOCALIZE
-				
-			End if 
-			
-		Else 
-			
-			$o:=This:C1470.assets.icons.images.query("idiom = :1"; "ios-marketing").pop()
-			
-			If ($o#Null:C1517)
-				
-				$file:=This:C1470.assets.folder.file($o.filename)
-				
-				If ($file.exists)
-					
-					READ PICTURE FILE:C678($file.platformPath; $picture)
-					This:C1470.icon.setValue($picture)
-					This:C1470.iconAlert.reset()
-					
-				Else 
-					
-					This:C1470.icon.setValue($picture)
-					This:C1470.iconAlert.alert(".Missing file.")  // #MARK_LOCALIZE
-					
-				End if 
-				
-			Else 
-				
-				This:C1470.icon.setValue($picture)
-				This:C1470.iconAlert.alert(".The icon is mandatory.")  // #MARK_LOCALIZE
+				READ PICTURE FILE:C678(UI.errorIcon; $picture)
 				
 			End if 
 		End if 
 		
-	Else 
-		
-		
-		READ PICTURE FILE:C678(UI.errorIcon; $picture)
 		This:C1470.icon.setValue($picture)
 		
+	Else 
+		
+		var $o : Object
+		var $file : 4D:C1709.File
+		
+		If (This:C1470.assets.icons#Null:C1517)
+			
+			If (Is macOS:C1572)
+				
+				$o:=This:C1470.assets.icons.images.query("idiom = :1"; "ios-marketing").pop()
+				
+				If ($o#Null:C1517)
+					
+					$file:=This:C1470.assets.folder.file($o.filename)
+					
+					If ($file.exists)
+						
+						READ PICTURE FILE:C678($file.platformPath; $picture)
+						This:C1470.icon.setValue($picture)
+						This:C1470.iconAlert.reset()
+						
+					Else 
+						
+						This:C1470.icon.setValue($picture)
+						This:C1470.iconAlert.alert(".Missing file.")  // #MARK_LOCALIZE
+						
+					End if 
+					
+				Else 
+					
+					This:C1470.icon.setValue($picture)
+					This:C1470.iconAlert.alert(".The icon is mandatory.")  // #MARK_LOCALIZE
+					
+				End if 
+				
+			Else 
+				
+				$o:=This:C1470.assets.icons.images.query("idiom = :1"; "ios-marketing").pop()
+				
+				If ($o#Null:C1517)
+					
+					$file:=This:C1470.assets.folder.file($o.filename)
+					
+					If ($file.exists)
+						
+						READ PICTURE FILE:C678($file.platformPath; $picture)
+						This:C1470.icon.setValue($picture)
+						This:C1470.iconAlert.reset()
+						
+					Else 
+						
+						This:C1470.icon.setValue($picture)
+						This:C1470.iconAlert.alert(".Missing file.")  // #MARK_LOCALIZE
+						
+					End if 
+					
+				Else 
+					
+					This:C1470.icon.setValue($picture)
+					This:C1470.iconAlert.alert(".The icon is mandatory.")  // #MARK_LOCALIZE
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			
+			READ PICTURE FILE:C678(UI.errorIcon; $picture)
+			This:C1470.icon.setValue($picture)
+			
+		End if 
 	End if 
 	
-	//=========================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Choose an icon file
 Function browseIcon
-	var $filter; $name : Text
+	
+	var $filter; $fileName : Text
 	
 	If (Is macOS:C1572)
 		
@@ -200,7 +153,7 @@ Function browseIcon
 		
 	End if 
 	
-	$name:=Select document:C905(8858; $filter; Get localized string:C991("selectAPictureOrAnApplication"); Use sheet window:K24:11)
+	$fileName:=Select document:C905(8858; $filter; Get localized string:C991("selectAPictureOrAnApplication"); Use sheet window:K24:11)
 	
 	If (Bool:C1537(OK))
 		
@@ -209,7 +162,7 @@ Function browseIcon
 	End if 
 	
 	//=========================================================
-	// Retrieve icon from a pathname
+	// Retrieve icon from a platform pathname
 Function getIcon($pathname : Text)
 	
 	var $t : Text
@@ -228,7 +181,7 @@ Function getIcon($pathname : Text)
 			
 			$folder:=Folder:C1567($pathname; fk platform path:K87:2)
 			
-			If (Is macOS:C1572)
+			If ($folder.isPackage)  // For macOS, try to get the app icon
 				
 				$folder:=$folder.folder("Contents")
 				
@@ -268,11 +221,6 @@ Function getIcon($pathname : Text)
 						End if 
 					End if 
 				End if 
-				
-			Else 
-				
-				ASSERT:C1129(False:C215)
-				
 			End if 
 		End if 
 	End if 
@@ -287,23 +235,13 @@ Function getIcon($pathname : Text)
 		
 	End if 
 	
-	//=========================================================
-	// Update asset & the form object
-Function setIcon
-	var $1 : Picture
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Update assets according to the target systems 
+Function setIcon($picture : Picture)
 	
-	var $pixels : Real
-	var $decimalSeparator; $t : Text
-	var $blank; $icon; $picture : Picture
-	var $height; $pos; $width : Integer
-	var $content; $o : Object
-	var $size : Real
+	var $blank : Picture
+	var $height; $width : Integer
 	
-	var $file : 4D:C1709.File
-	
-	$picture:=$1
-	
-	// Check size
 	PICTURE PROPERTIES:C457($picture; $width; $height)
 	
 	If ($width>1024)\
@@ -314,80 +252,57 @@ Function setIcon
 		
 	End if 
 	
-	// #96701 - Add a blank background
+	// Add a blank background
 	READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/blanck.png").platformPath; $blank)
 	COMBINE PICTURES:C987($picture; $blank; Superimposition:K61:10; $picture; (1024-$width)\2; (1024-$height)\2)
 	
-	$file:=This:C1470.assets.folder.file("Contents.json")
-	
-	// Create all sizes of icons & Update contents.json
-	If (Not:C34($file.exists))
+	If (FEATURE.with("android"))
 		
-		File:C1566("/RESOURCES/default project/Assets.xcassets/AppIcon.appiconset/Contents.json").copyTo(This:C1470.assets.folder)
-		
-	End if 
-	
-	$content:=JSON Parse:C1218($file.getText())
-	
-	GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $decimalSeparator)
-	
-	For each ($o; $content.images)
-		
-		$t:=$o.size
-		$pos:=Position:C15("x"; $o.size)
-		
-		If ($pos>0)
+		If (Is macOS:C1572)
 			
-			$size:=Num:C11(Replace string:C233(Substring:C12($t; 1; $pos-1); "."; $decimalSeparator))
-			$pixels:=$size*Num:C11($o.scale)
-			
-			CREATE THUMBNAIL:C679($picture; $icon; $pixels; $pixels; Scaled to fit prop centered:K6:6)
-			
-			$t:=$o.idiom+Replace string:C233(String:C10($size); $decimalSeparator; "")
-			
-			If ($o.scale#"1x")
+			If (Form:C1466.$project.$apple)
 				
-				//%W-533.1
-				$t:=$t+"@"+$o.scale[[1]]
-				//%W+533.1
+				PROJECT.AppIconSet($picture; Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset"))
 				
 			End if 
 			
-			$t:=$t+".png"
+			If (Form:C1466.$project.$android)
+				
+				PROJECT.AndroidIconSet($picture; Form:C1466.$project.folder.folder("android"))
+				
+			End if 
 			
-			WRITE PICTURE FILE:C680(This:C1470.assets.root+$t; $icon; ".png")
+		Else 
+			
+			PROJECT.AndroidIconSet($picture; Form:C1466.$project.folder.folder("android"))
 			
 		End if 
-	End for each 
-	
-	If (This:C1470.assets.icons=Null:C1517)
 		
-		This:C1470.assets.icons:=New object:C1471
+	Else 
+		
+		PROJECT.AppIconSet($picture; Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset"))
 		
 	End if 
 	
-	This:C1470.assets.icons.images:=$content.images
-	
-	TEXT TO DOCUMENT:C1237(This:C1470.assets.root+"Contents.json"; JSON Stringify:C1217($content; *))
-	
-	// Update form picture
-	This:C1470.icon.setValue($picture)
-	
 	This:C1470.displayIcon()
 	
-	//=========================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Open the iOS icons folder
 Function openAppleIconFolder
 	
-	SHOW ON DISK:C922(This:C1470.assets.folder.platformPath; *)
+	SHOW ON DISK:C922(Form:C1466.$project.folder.folder("Assets.xcassets/AppIcon.appiconset").platformPath; *)
 	
-	//=========================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Open the iOS icons folder
 Function openAndroidIconFolder
 	
-	ALERT:C41("We are going to doux 🤣")
+	If (Asserted:C1132(Form:C1466.$project.folder.folder("Android").exists))
+		
+		SHOW ON DISK:C922(Form:C1466.$project.folder.folder("Android").platformPath; *)
+		
+	End if 
 	
-	//=========================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Check the product name constraints
 Function checkName
 	var $1 : Text
@@ -449,7 +364,7 @@ Function checkName
 			//______________________________________________________
 	End case 
 	
-	//=========================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Manage UI for the target
 Function displayTarget
 	
@@ -465,7 +380,7 @@ Function displayTarget
 		
 	End if 
 	
-	//=========================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Populate the target value into te project
 Function setTarget
 	
@@ -494,13 +409,56 @@ Function setTarget
 	
 	PROJECT.save()
 	
+	// Update UI
 	This:C1470.displayTarget()
 	
+	// Update the project folder
+	PROJECT.prepare()
+	
+	// Launch the verification of the development tools, if any
 	If ($apple & Is macOS:C1572 & Not:C34(Bool:C1537(Form:C1466.$project.$xCode.ready)))\
 		 | ($android & Not:C34(Bool:C1537(Form:C1466.$project.$studio.ready)))
 		
-		// Launch the verification of the development tools
 		CALL WORKER:C1389(Form:C1466.$project.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
 			"caller"; Form:C1466.$project.$mainWindow; "project"; Form:C1466.$project))
 		
 	End if 
+	
+	//=========================================================
+	//=                      OBSOLETE                         =
+	//=========================================================
+Function loadIcon
+	
+	If (Not:C34(FEATURE.with("android")))
+		
+		var $folder : 4D:C1709.Folder
+		$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+		
+		If (This:C1470.assets=Null:C1517)
+			
+			$folder.create()
+			
+			This:C1470.assets:=New object:C1471(\
+				"root"; $folder.platformPath)
+			
+			This:C1470.assets.folder:=$folder
+			
+		End if 
+		
+		If (This:C1470.assets.icons=Null:C1517)\
+			 | (This:C1470.assets.file=Null:C1517)
+			
+			var $file : 4D:C1709.File
+			$file:=$folder.file("Contents.json")
+			
+			If ($file.exists)
+				
+				This:C1470.assets.icons:=JSON Parse:C1218($file.getText())
+				
+			End if 
+		End if 
+		
+		This:C1470.displayIcon()
+		
+	End if 
+	

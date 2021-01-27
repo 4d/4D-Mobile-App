@@ -29,25 +29,18 @@ Case of
 				
 				If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
 					
-					$menu.append("showiOSIconsFolder"; "openAppleIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
-					$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
+					$menu.append("showiOSIconsFolder"; "openAppleIconFolder")
+					$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder")
 					
 				Else 
 					
-					If (String:C10(Form:C1466.info.target)="iOS")
-						
-						$menu.append("showIconsFolder"; "openAppleIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
-						
-					Else 
-						
-						$menu.append("showIconsFolder"; "openAndroidIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
-						
-					End if 
+					$menu.append("showIconsFolder"; Choose:C955(String:C10(Form:C1466.info.target)="iOS"; "openAppleIconFolder"; "openAndroidIconFolder"))
+					
 				End if 
 				
 			Else 
 				
-				$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
+				$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder")
 				
 			End if 
 			

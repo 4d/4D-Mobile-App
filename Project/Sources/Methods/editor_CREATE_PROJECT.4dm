@@ -43,14 +43,14 @@ If (Bool:C1537(OK))
 			
 			If (FEATURE.with("android"))  //🚧
 				
-				If ($data.$apple & $data.$android)
+				If (Bool:C1537($data.$apple) & Bool:C1537($data.$android))
 					
 					$project.info.target:=New collection:C1472("iOS"; "android")
 					
 				Else 
 					
 					// Default is iOS
-					$project.info.target:=Choose:C955($data.$android; "android"; "iOS")
+					$project.info.target:=Choose:C955(Bool:C1537($data.$android); "android"; "iOS")
 					
 				End if 
 			End if 

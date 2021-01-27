@@ -8,8 +8,7 @@
 // 
 // ----------------------------------------------------
 // Declarations
-var $data : Object
-var $key : Text
+var $data; $o : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -23,7 +22,6 @@ If (FEATURE.with("wizards"))
 	
 	// Display the wizard
 	$data:=New object:C1471(\
-		"name"; Get localized string:C991("newProject"); \
 		"$name"; Get localized string:C991("newProject"); \
 		"$apple"; Is macOS:C1572; \
 		"$android"; Is Windows:C1573; \
@@ -38,13 +36,11 @@ If (FEATURE.with("wizards"))
 		
 		If (Bool:C1537($data.file.exists))
 			
-			For each ($key; $data)
+			// Cleaning inner objects
+			For each ($o; OB Entries:C1720($data).query("key =:1"; "_@"))
 				
-				If ($key[[1]]="_")
-					
-					OB REMOVE:C1226($data; $key)
-					
-				End if 
+				OB REMOVE:C1226($data; $o.key)
+				
 			End for each 
 			
 			// Open the project editor

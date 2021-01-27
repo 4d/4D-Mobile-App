@@ -1,0 +1,28 @@
+{
+    "images": [
+        {
+            "file": "mipmap-mdpi/ic_launcher.png",
+            "size": "48x48"
+        },
+        {
+            "file": "mipmap-hdpi/ic_launcher.png",
+            "size": "72x72"
+        },
+        {
+            "file": "mipmap-xhdpi/ic_launcher.png",
+            "size": "96x96"
+        },
+        {
+            "file": "mipmap-xxhdpi/ic_launcher.png",
+            "size": "144x144"
+        },
+        {
+            "file": "mipmap-xxxhdpi/ic_launcher.png",
+            "size": "192x192"
+        },
+        {
+            "file": "main/android-marketing512.png",
+            "size": "512x512"
+        }
+    ]
+}

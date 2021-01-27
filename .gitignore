@@ -1,4 +1,4 @@
-#--------------------------------
+﻿#--------------------------------
 # Ignore invisible files/folders
 #--------------------------------
 .*
@@ -56,3 +56,6 @@ Resources/mobile
 xcuserdata/
 *.bbprojectd/
 Resources/sdk/Versions/1.0.zip
+
+Libraries/
+Resources/templates.zip

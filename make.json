@@ -1,5 +1,10 @@
 {
-  "components": [
-    	"4D Progress"
-	]
+    "components": [
+        "4D Progress"
+    ],
+    "postBuild": {
+        "copy": [
+            "4D Mobile App.htm"
+        ]
+    }
 }

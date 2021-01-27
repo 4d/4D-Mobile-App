@@ -421,6 +421,28 @@ ASSERT:C1129($o.setText("hello").truncate(5)="hello")
 ASSERT:C1129($o.setText("hello").truncate(10)="hello")
 ASSERT:C1129($o.setText("hello world").truncate(12)="hello world")
 
+// ============================================
+// lastOccurrence()
+$t:="hello world hello world hello world"
+$o.setText($t)
+ASSERT:C1129($o.lastOccurrence("hello")=25)
+ASSERT:C1129($o.lastOccurrence("world")=31)
+ASSERT:C1129($o.lastOccurrence("w")=31)
+ASSERT:C1129($o.lastOccurrence("hello world")=25)
+
+ASSERT:C1129($o.lastOccurrence("")=0)
+ASSERT:C1129($o.lastOccurrence("z")=0)
+ASSERT:C1129($o.lastOccurrence("toto")=0)
+
+$t:="The Split string command returns a collection of strings, created by splitting stringToSplit into substrings at the boundaries specified by the separator parameter."
+ASSERT:C1129($o.setText($t).lastOccurrence("string")=102)
+
+$t:="hello world"
+$o.setText($t)
+ASSERT:C1129($o.lastOccurrence("hello")=1)
+ASSERT:C1129($o.lastOccurrence("world")=7)
+
+
 FINALLY
 
 BEEP:C151

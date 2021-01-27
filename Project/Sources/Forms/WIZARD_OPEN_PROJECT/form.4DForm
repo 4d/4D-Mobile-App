@@ -80,7 +80,6 @@
 					"rowHeight": "5em",
 					"showHeaders": false,
 					"scrollbarHorizontal": "hidden",
-					"scrollbarVertical": "hidden",
 					"horizontalLineStroke": "transparent",
 					"verticalLineStroke": "transparent",
 					"fill": "transparent",
@@ -101,6 +100,7 @@
 					"currentItemSource": "Form:C1466._current",
 					"currentItemPositionSource": "Form:C1466._index",
 					"hideSystemHighlight": true,
+					"scrollbarVertical": "automatic",
 					"columns": [
 						{
 							"header": {

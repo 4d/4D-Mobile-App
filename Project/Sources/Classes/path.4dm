@@ -63,7 +63,25 @@ Function templates  // templates folder
 	
 	C_OBJECT:C1216($0)
 	
-	This:C1470.target:=Folder:C1567("/RESOURCES/templates")
+	If (FEATURE.with("compressionOfTemplates"))
+		
+		If (DATABASE.isMatrix) & Not:C34(FEATURE.with("testCompression"))
+			
+			// Use uncompressed resources
+			This:C1470.target:=Folder:C1567("/RESOURCES/templates")
+			
+		Else 
+			
+			This:C1470.target:=ZIP Read archive:C1637(File:C1566("/RESOURCES/templates.zip")).root
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.target:=Folder:C1567("/RESOURCES/templates")
+		
+	End if 
+	
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target

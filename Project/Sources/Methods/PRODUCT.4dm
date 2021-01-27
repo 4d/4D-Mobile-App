@@ -25,6 +25,9 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			If (FEATURE.with("android"))  //🚧
 				
+				$ƒ.android.setValue(Form:C1466.$project.$android)
+				$ƒ.apple.setValue(Form:C1466.$project.$apple)
+				
 				If (Is Windows:C1573)
 					
 					$ƒ.android.disable()
@@ -32,7 +35,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 					
 				End if 
 				
-				$ƒ.displayTarget()
+				$ƒ.setTarget()
 				
 			Else 
 				
@@ -46,7 +49,17 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 		: ($e.code=On Timer:K2:25)
 			
 			$ƒ.checkName(Form:C1466.product.name)
-			$ƒ.loadIcon()
+			
+			If (FEATURE.with("android"))
+				
+				$ƒ.displayIcon()
+				
+			Else 
+				
+				// Obsolete
+				$ƒ.loadIcon()
+				
+			End if 
 			
 			//______________________________________________________
 		: ($e.code=On Bound Variable Change:K2:52)

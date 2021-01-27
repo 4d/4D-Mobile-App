@@ -1,4 +1,4 @@
-{
+﻿{
 	"$4d": {
 		"version": "1",
 		"kind": "form"
@@ -21,6 +21,15 @@
 		},
 		{
 			"objects": {
+				"10_name.border": {
+					"type": "rectangle",
+					"top": 26,
+					"left": 157,
+					"width": 186,
+					"height": 33,
+					"stroke": "#c0c0c0",
+					"fill": "automatic"
+				},
 				"apple": {
 					"type": "checkbox",
 					"text": "iOS",
@@ -53,12 +62,13 @@
 				},
 				"name": {
 					"type": "input",
-					"left": 157,
+					"left": 162,
 					"top": 34,
-					"width": 186,
+					"width": 175,
 					"height": 17,
 					"dataSource": "Form:C1466.$name",
-					"hideFocusRing": true
+					"hideFocusRing": true,
+					"borderStyle": "none"
 				},
 				"android": {
 					"type": "checkbox",
@@ -100,7 +110,7 @@
 			}
 		}
 	],
-	"geometryStamp": 373,
+	"geometryStamp": 380,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

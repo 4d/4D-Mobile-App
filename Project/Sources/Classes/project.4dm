@@ -72,6 +72,7 @@ Function load
 		End if 
 		
 		This:C1470.init($project)
+		This:C1470.prepare()
 		
 	Else 
 		
@@ -81,6 +82,190 @@ Function load
 	
 	var $0 : cs:C1710.project
 	$0:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Prepare the project folder according to the target systems
+Function prepare($icon : Picture)
+	
+	var $iconƒ : Picture
+	var $AndroidFolder; $AppleFolder : 4D:C1709.Folder
+	
+	If (Form:C1466.folder#Null:C1517)
+		
+		$AppleFolder:=Form:C1466.folder.folder("Assets.xcassets/AppIcon.appiconset")
+		$AndroidFolder:=Form:C1466.folder.folder("Android")
+		
+	Else 
+		
+		$AppleFolder:=Form:C1466.$project.folder.folder("Assets.xcassets/AppIcon.appiconset")
+		$AndroidFolder:=Form:C1466.$project.folder.folder("Android")
+		
+	End if 
+	
+	If (FEATURE.with("android"))
+		
+		If (Count parameters:C259>=1)
+			
+			$iconƒ:=$icon
+			
+		Else 
+			
+			If ($AndroidFolder.file("main/android-marketing512.png").exists)
+				
+				// Get the picture as default
+				// ⚠️ the picture size is 512x512 instead of 1024x1024
+				READ PICTURE FILE:C678($AndroidFolder.file("main/android-marketing512.png").platformPath; $iconƒ)
+				TRANSFORM PICTURE:C988($iconƒ; Scale:K61:2; 2; 2)
+				
+			End if 
+		End if 
+		
+		If (Picture size:C356($iconƒ)=0)
+			
+			// Get the default icon
+			READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/4d.png").platformPath; $iconƒ)
+			
+		End if 
+		
+		If (Form:C1466.$apple)
+			
+			If (Not:C34($AppleFolder.exists))  // Create & populate
+				
+				This:C1470.AppIconSet($iconƒ; $AppleFolder)
+				
+			End if 
+			
+			// Keep the picture for Android
+			READ PICTURE FILE:C678($AppleFolder.file("ios-marketing1024.png").platformPath; $iconƒ)
+			
+		Else 
+			
+			If ($AppleFolder.exists)  // Delete
+				
+				$AppleFolder.parent.delete(Delete with contents:K24:24)
+				
+			End if 
+			
+		End if 
+		
+		If (Form:C1466.$android)
+			
+			If (Not:C34($AndroidFolder.exists))  // Create & populate
+				
+				This:C1470.AndroidIconSet($iconƒ; $AndroidFolder)
+				
+			End if 
+			
+		Else 
+			
+			If ($AndroidFolder.exists)  // Delete
+				
+				$AndroidFolder.delete(Delete with contents:K24:24)
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		If (Not:C34($AppleFolder.exists))
+			
+			// Get the default icon
+			READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/4d.png").platformPath; $iconƒ)
+			
+			This:C1470.AppIconSet($iconƒ; $AppleFolder)
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Create the "Assets.xcassets/AppIcon.appiconset" resources
+Function AppIconSet($icon : Picture; $folder : 4D:C1709.folder)
+	
+	var $pixels : Real
+	var $decimalSeparator; $fileName; $t : Text
+	var $size : Real
+	var $picture : Picture
+	var $pos : Integer
+	var $o : Object
+	
+	var $file : 4D:C1709.File
+	
+	$folder.create()
+	
+	$file:=$folder.file("Contents.json")
+	
+	If (Not:C34($file.exists))
+		
+		$file:=File:C1566("/RESOURCES/iOS.json")
+		$file.copyTo($folder; "Contents.json")
+		
+	End if 
+	
+	GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $decimalSeparator)
+	
+	For each ($o; JSON Parse:C1218($file.getText()).images)
+		
+		$t:=$o.size
+		$pos:=Position:C15("x"; $o.size)
+		
+		If ($pos>0)
+			
+			$size:=Num:C11(Replace string:C233(Substring:C12($t; 1; $pos-1); "."; $decimalSeparator))
+			$pixels:=$size*Num:C11($o.scale)
+			
+			CREATE THUMBNAIL:C679($icon; $picture; $pixels; $pixels; Scaled to fit prop centered:K6:6)
+			
+			$fileName:=$o.idiom+Replace string:C233(String:C10($size); $decimalSeparator; "")
+			
+			If ($o.scale#"1x")
+				
+				//%W-533.1
+				$fileName:=$fileName+"@"+$o.scale[[1]]
+				//%W+533.1
+				
+			End if 
+			
+			$fileName:=$fileName+".png"
+			
+			WRITE PICTURE FILE:C680($folder.file($fileName).platformPath; $picture; ".png")
+			
+		End if 
+	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Create the "Android" resources
+Function AndroidIconSet($icon : Picture; $folder : 4D:C1709.folder)
+	
+	var $pixels : Real
+	var $t : Text
+	var $picture : Picture
+	var $pos : Integer
+	var $file; $o : Object
+	
+	$folder.create()
+	
+	$file:=File:C1566("/RESOURCES/android.json")
+	
+	For each ($o; JSON Parse:C1218($file.getText()).images)
+		
+		$file:=$folder.file($o.file)
+		
+		$t:=$o.size
+		$pos:=Position:C15("x"; $o.size)
+		
+		If ($pos>0)
+			
+			$pixels:=Num:C11(Substring:C12($t; 1; $pos-1))
+			
+			CREATE THUMBNAIL:C679($icon; $picture; $pixels; $pixels; Scaled to fit prop centered:K6:6)
+			
+			$file:=$folder.file($o.file)
+			$file.parent.create()
+			
+			WRITE PICTURE FILE:C680($file.platformPath; $picture; ".png")
+			
+		End if 
+	End for each 
 	
 	//================================================================================
 	// Tests if the project is locked and, if so, makes the provided widgets accessible or not
@@ -95,13 +280,6 @@ Function isLocked()->$isLocked : Boolean
 		$isLocked:=Bool:C1537(This:C1470.$project.structure.unsynchronized)
 		
 	End if 
-	
-	C_VARIANT:C1683(${1})
-	//For ($i; 1; Count parameters; 1)
-	//If ($isLocked)
-	//OBJECT SET ENTERABLE(*; string(${$i}); Not($isLocked))
-	//End if 
-	//End for 
 	
 	//====================================
 Function get
@@ -226,11 +404,6 @@ Function save
 	
 	This:C1470.$project.file.create()
 	This:C1470.$project.file.setText(JSON Stringify:C1217(This:C1470.get(); *))
-	
-	//====================================
-Function meta()->$meta : Object
-	
-	$meta:=This:C1470[""]
 	
 	//====================================
 Function updateActions

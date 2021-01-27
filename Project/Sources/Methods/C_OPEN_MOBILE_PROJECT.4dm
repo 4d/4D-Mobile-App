@@ -118,6 +118,7 @@ If (FEATURE.with("wizards"))
 			
 		End if 
 		
+		// Cleaning inner objects
 		For each ($o; OB Entries:C1720($data).query("key =:1"; "_@"))
 			
 			OB REMOVE:C1226($data; $o.key)

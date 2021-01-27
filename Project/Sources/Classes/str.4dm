@@ -1,6 +1,6 @@
 Class extends tools
 
-Class constructor($string : Variant)
+Class constructor($content : Variant)
 	
 	Super:C1705()
 	
@@ -8,7 +8,7 @@ Class constructor($string : Variant)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.setText($string)
+		This:C1470.setText($content)
 		
 	Else 
 		
@@ -19,38 +19,84 @@ Class constructor($string : Variant)
 	
 	//=======================================================================================================
 	// Defines the contents of the string & returns the updated object string
-Function setText
-	var $0 : Object
-	var $1 : Variant
+Function setText($content : Variant)->$this : cs:C1710.str
 	
-	This:C1470.value:=String:C10($1)
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($content)=Is text:K8:3)
+			
+			This:C1470.value:=$content
+			
+			//______________________________________________________
+		: (Value type:C1509($content)=Is object:K8:27)\
+			 | (Value type:C1509($content)=Is collection:K8:32)
+			
+			This:C1470.value:=JSON Stringify:C1217($content)
+			
+			//______________________________________________________
+		: (Value type:C1509($content)=Is time:K8:8)
+			
+			This:C1470.value:=Time string:C180($content)
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470.value:=String:C10($content)
+			
+			//______________________________________________________
+	End case 
+	
 	This:C1470.length:=Length:C16(This:C1470.value)
 	This:C1470.styled:=This:C1470.isStyled()
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	//=======================================================================================================
-	// Returns True if the passed text is present in the string (diacritical if $2 is True)
-Function contains
-	var $0 : Boolean
-	var $1 : Text
-	var $2 : Boolean
-	var $isDiacritical : Boolean
+	// Returns True if the $toFind text is present in the string (diacritical if $2 is True)
+Function contains($toFind : Text; $diacritical : Boolean)->$contains : Boolean
 	
 	If (Count parameters:C259>=2)
 		
-		$isDiacritical:=$2
-		
-	End if 
-	
-	If ($isDiacritical)
-		
-		$0:=(Position:C15($1; This:C1470.value; *)#0)
+		If ($diacritical)
+			
+			// Evaluation based on character codes
+			$contains:=(Position:C15($toFind; This:C1470.value; *)#0)
+			
+		Else 
+			
+			$contains:=(Position:C15($toFind; This:C1470.value)#0)
+			
+		End if 
 		
 	Else 
 		
-		$0:=(Position:C15($1; This:C1470.value)#0)
+		$contains:=(Position:C15($toFind; This:C1470.value)#0)
 		
+	End if 
+	
+	//=======================================================================================================
+	// Returns the position of the last occurence of a string
+Function lastOccurrence($toFind : Text)->$position : Integer
+	
+	var $toFind : Text
+	var $pos; $start : Integer
+	
+	If (Length:C16($toFind)>0)
+		
+		$start:=1
+		
+		Repeat 
+			
+			$pos:=Position:C15($toFind; This:C1470.value; $start)
+			
+			If ($pos>0)
+				
+				$position:=$pos
+				$start:=$pos+Length:C16($toFind)
+				
+			End if 
+		Until ($pos=0)
 	End if 
 	
 	//=======================================================================================================
@@ -103,40 +149,41 @@ Function shuffle
 	
 	//=======================================================================================================
 	// Returns a base64 encoded UTF-8 string
-Function base64
-	var $0 : Text
-	var $1 : Boolean
+Function base64($encoded : Boolean)->$base64 : Text
 	
-	var $encoded : Boolean
 	var $x : Blob
-	
-	If (Count parameters:C259>=1)
-		$encoded:=$1
-	End if 
 	
 	CONVERT FROM TEXT:C1011(This:C1470.value; "utf-8"; $x)
 	
-	If ($encoded)
+	If (Count parameters:C259>=1)
 		
-		BASE64 ENCODE:C895($x; $0; *)
+		If ($encoded)
+			
+			// Encode in Base64URL format
+			BASE64 ENCODE:C895($x; $base64; *)
+			
+		Else 
+			
+			BASE64 ENCODE:C895($x; $base64)
+			
+		End if 
 		
 	Else 
 		
-		BASE64 ENCODE:C895($x; $0)
+		BASE64 ENCODE:C895($x; $base64)
 		
 	End if 
 	
 	//=======================================================================================================
 	// Returns an URL-safe base64url encoded UTF-8 string
-Function urlBase64Encode
-	var $0 : Text
+Function urlBase64Encode()->$base64url : Text
 	
 	//$0:=This.base64()
 	//$0:=Replace string($0; "+"; "-"; *)
 	//$0:=Replace string($0; "/"; "_"; *)
 	//$0:=Replace string($0; "="; ""; *)
 	
-	$0:=This:C1470.base64(True:C214)
+	$base64url:=This:C1470.base64(True:C214)
 	
 	//=======================================================================================================
 	// Returns an URL encoded string
