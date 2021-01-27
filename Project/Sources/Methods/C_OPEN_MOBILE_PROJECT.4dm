@@ -12,7 +12,8 @@ var $1 : Text
 
 var $key : Text
 var $android; $blank; $icon; $iOS : Picture
-var $data; $manifest : Object
+var $data; $o; $manifest : Object
+var $c : Collection
 var $file : 4D:C1709.File
 var $folder : 4D:C1709.Folder
 var $projects : cs:C1710.path
@@ -53,6 +54,7 @@ If (FEATURE.with("wizards"))
 		
 	Else 
 		
+		// Prepare the project list
 		$template:=cs:C1710.str.new("<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"\
 			+"{title}"\
 			+"</span>"\
@@ -68,11 +70,15 @@ If (FEATURE.with("wizards"))
 		
 		$data._projects:=New collection:C1472
 		
-		$projects:=cs:C1710.path.new().projects()
+		$c:=New collection:C1472
 		
-		For each ($folder; $projects.folders().orderBy("name"))
+		For each ($folder; cs:C1710.path.new().projects().folders())
 			
-			$file:=$projects.folder($folder.name).file("project.4dmobileapp")
+			$c.push($folder.file("project.4dmobileapp"))
+			
+		End for each 
+		
+		For each ($file; $c.orderBy("modificationDate desc, modificationTime desc"))
 			
 			If ($file.exists)
 				
@@ -90,7 +96,7 @@ If (FEATURE.with("wizards"))
 				
 				$data._projects.push(New object:C1471(\
 					"icon"; $icon; \
-					"project"; $template.localized(New collection:C1472($folder.name; $manifest.product.name+" - v"+$manifest.product.version)); \
+					"project"; $template.localized(New collection:C1472($file.parent.name; $manifest.product.name+" - v"+$manifest.product.version)); \
 					"file"; $file))
 				
 			End if 
@@ -112,13 +118,10 @@ If (FEATURE.with("wizards"))
 			
 		End if 
 		
-		For each ($key; $data)
+		For each ($o; OB Entries:C1720($data).query("key =:1"; "_@"))
 			
-			If ($key[[1]]="_")
-				
-				OB REMOVE:C1226($data; $key)
-				
-			End if 
+			OB REMOVE:C1226($data; $o.key)
+			
 		End for each 
 		
 		// Open the project editor
