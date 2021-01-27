@@ -561,7 +561,7 @@ Function path($name : Text; $type : Text)->$template : 4D:C1709.folder
 	// Gives the path to the css file
 Function css()->$file : 4D:C1709.File
 	
-	$file:=cs:C1710.path.new().templates().file("template.css")
+	$file:=File:C1566("/RESOURCES/template.css")
 	
 /* ============================================================================*/
 Function label

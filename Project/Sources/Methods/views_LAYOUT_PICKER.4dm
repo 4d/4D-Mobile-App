@@ -362,7 +362,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				If ($svg.success)
 					
 					// Add the css reference
-					$svg.styleSheet(cs:C1710.path.new().templates().file("template.css"))
+					$svg.styleSheet(File:C1566("/RESOURCES/template.css"))
 					
 					$p:=$svg.picture()
 					CREATE THUMBNAIL:C679($p; $p; $ƒ.cell.width; $ƒ.cell.height-40)
