@@ -84,6 +84,17 @@ If (Asserted:C1132($Obj_in.project#Null:C1517))
 	
 	$Obj_project:=$Obj_in.project
 	
+	If ($Obj_project.$project.folder#Null:C1517)
+		
+		var $productName : Text
+		$productName:=$Obj_project.$project.folder.name
+		
+	Else 
+		
+		$productName:=$Obj_project.$project.product
+		
+	End if 
+	
 	// Cleanup
 	var $t; $tt : Text
 	
@@ -112,17 +123,6 @@ If (Asserted:C1132($Obj_in.project#Null:C1517))
 	
 	PROJECT:=cs:C1710.project.new($Obj_project)
 	
-	var $productName : Text
-	
-	If (PROJECT.$project.file#Null:C1517)
-		
-		$productName:=PROJECT.$project.file.parent.name
-		
-	Else 
-		
-		$productName:=PROJECT.$project.product
-		
-	End if 
 End if 
 
 If ($Obj_in.create=Null:C1517)
