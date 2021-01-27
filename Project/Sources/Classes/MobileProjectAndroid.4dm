@@ -19,6 +19,13 @@ Class constructor
 	This:C1470.studio:=cs:C1710.studio.new()
 	
 	This:C1470.project:=OB Copy:C1225(This:C1470.input)
+	
+	// Cleaning inner $objects
+	var $o : Object
+	For each ($o; OB Entries:C1720(This:C1470.project.project).query("key=:1"; "$@"))
+		OB REMOVE:C1226(This:C1470.project.project; $o.key)
+	End for each 
+	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
 	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
 	
