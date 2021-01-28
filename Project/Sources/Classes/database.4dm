@@ -6,42 +6,34 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.structure:=File:C1566(Structure file:C489(*); fk platform path:K87:2)
-	This:C1470.data:=File:C1566(Data file:C490; fk platform path:K87:2)
-	This:C1470.preferences:=Folder:C1567(fk user preferences folder:K87:10).folder(This:C1470.structure.name)
+	This:C1470.structureFile:=File:C1566(Structure file:C489(*); fk platform path:K87:2)
+	This:C1470.dataFile:=File:C1566(Data file:C490; fk platform path:K87:2)
 	
-	This:C1470.isCompiled:=Is compiled mode:C492(*)
-	This:C1470.isInterpreted:=Not:C34(This:C1470.isCompiled)
-	This:C1470.locked:=Is data file locked:C716
+	This:C1470.name:=This:C1470.structureFile.name
+	
+	This:C1470.databaseFolder:=Folder:C1567(Folder:C1567(fk database folder:K87:14; *).platformPath; fk platform path:K87:2)
+	This:C1470.preferencesFolder:=Folder:C1567(fk user preferences folder:K87:10).folder(This:C1470.name)
 	
 	This:C1470.isProject:=Bool:C1537(Get database parameter:C643(Is host database a project:K37:99))
 	This:C1470.isBinary:=Not:C34(This:C1470.isProject)
 	
+	This:C1470.isCompiled:=Is compiled mode:C492(*)
+	This:C1470.isInterpreted:=Not:C34(This:C1470.isCompiled)
+	
 	This:C1470.isMatrix:=(Structure file:C489=Structure file:C489(*))
+	This:C1470.isComponent:=Not:C34(This:C1470.isMatrix)
+	
+	This:C1470.isLocked:=Is data file locked:C716
 	
 	This:C1470.isRemote:=(Application type:C494=4D Remote mode:K5:5)
 	
-	If (This:C1470.isProject)
-		
-		If (This:C1470.structure.parent.name="Project")
-			
-			// Up one level
-			This:C1470.root:=This:C1470.structure.parent.parent
-			
-		Else 
-			
-			This:C1470.root:=This:C1470.structure.parent
-			
-		End if 
-		
-	Else 
-		
-		If (Not:C34(This:C1470.isRemote))
-			
-			This:C1470.root:=This:C1470.structure.parent
-			
-		End if 
-	End if 
+	//******************************************
+	// old as alias
+	This:C1470.root:=This:C1470.databaseFolder
+	This:C1470.structure:=This:C1470.structureFile
+	This:C1470.data:=This:C1470.dataFile
+	This:C1470.preferences:=This:C1470.preferencesFolder
+	//******************************************
 	
 	This:C1470.components:=New collection:C1472
 	ARRAY TEXT:C222($textArray; 0x0000)
@@ -129,3 +121,17 @@ Function isPluginAvailable
 		$0:=(This:C1470.plugins.indexOf($1)#-1)
 		
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === ===
+	// Check if the database folder is writable
+Function isWritable()->$writable : Boolean
+	
+	var $methodCalledOnError : Text
+	var $file : 4D:C1709.File
+	
+	$methodCalledOnError:=Method called on error:C704
+	ON ERR CALL:C155("noError")
+	$file:=This:C1470.databaseFolder.file("._")
+	$writable:=$file.create()
+	$file.delete()
+	ON ERR CALL:C155($methodCalledOnError)

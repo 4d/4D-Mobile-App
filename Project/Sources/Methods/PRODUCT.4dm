@@ -25,8 +25,17 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			If (FEATURE.with("android"))  //🚧
 				
-				$ƒ.android.setValue(Form:C1466.$project.$android)
-				$ƒ.apple.setValue(Form:C1466.$project.$apple)
+				If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
+					
+					$ƒ.android.setValue(True:C214)
+					$ƒ.apple.setValue(True:C214)
+					
+				Else 
+					
+					$ƒ.android.setValue(Form:C1466.info.target="android")
+					$ƒ.apple.setValue(Form:C1466.info.target="iOS")
+					
+				End if 
 				
 				If (Is Windows:C1573)
 					

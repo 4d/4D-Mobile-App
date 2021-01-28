@@ -6,16 +6,8 @@ var $index : Integer
 var $data; $project : Object
 var $file : 4D:C1709.File
 var $folder; $mobileProjects : 4D:C1709.Folder
-var $error : cs:C1710.error
 
-// Check if the database folder is writable
-$error:=cs:C1710.error.new().hide()/* START HIDING ERRORS */
-$file:=Folder:C1567(Database folder:K5:14; *).file("._")
-OK:=Num:C11($file.create())
-$file.delete()
-$error.show()/* STOP HIDING ERRORS */
-
-If (Bool:C1537(OK))
+If (DATABASE.isWritable())
 	
 	// Get the folder "Mobile Projects" and make sure it exists
 	$mobileProjects:=cs:C1710.path.new().projects(True:C214)
@@ -34,6 +26,7 @@ If (Bool:C1537(OK))
 		
 		$data.folder:=$folder
 		$data.file:=$file
+		
 		$data.project:=$file.platformPath
 		
 		// Ensure that the name of the application is unique
@@ -88,7 +81,7 @@ If (Bool:C1537(OK))
 		
 	Else 
 		
-		ASSERT:C1129(DATABASE.isMatrix; "The default project content is not the expected one")
+		ASSERT:C1129(DATABASE.isComponent; "The default project content is not the expected one")
 		
 	End if 
 	

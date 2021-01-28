@@ -214,7 +214,7 @@ Else
 			
 		Else 
 			
-			ASSERT:C1129(DATABASE.isMatrix; "The default project content is not the expected one")
+			ASSERT:C1129(DATABASE.isComponent; "The default project content is not the expected one")
 			
 		End if 
 	End if 

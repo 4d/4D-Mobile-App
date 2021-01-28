@@ -268,22 +268,50 @@ Function AndroidIconSet($icon : Picture; $folder : 4D:C1709.folder)
 	End for each 
 	
 	//================================================================================
-	// Tests if the project is locked and, if so, makes the provided widgets accessible or not
-Function isLocked()->$isLocked : Boolean
+	// Save the project
+Function save()
 	
-	If (This:C1470.structure#Null:C1517)
+	var $key : Text
+	var $o : Object
+	var $folder : 4D:C1709.Folder
+	
+	If (Bool:C1537(FEATURE._8858))  // Debug mode
 		
-		$isLocked:=Bool:C1537(This:C1470.structure.unsynchronized)
+		$folder:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
 		
-	Else 
-		
-		$isLocked:=Bool:C1537(This:C1470.$project.structure.unsynchronized)
-		
+		If ($folder.exists)
+			
+			If (PROJECT.$dialog#Null:C1517)
+				
+				$folder.file("dialog.json").setText(JSON Stringify:C1217(PROJECT.$dialog; *))
+				
+				For each ($key; PROJECT.$dialog)
+					
+					$folder.file($key+".json").setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *))
+					
+				End for each 
+			End if 
+			
+			// Remove circular references
+			
+			$o:=OB Copy:C1225(PROJECT)
+			OB REMOVE:C1226($o.$project; "$dialog")
+			$folder.file("project.json").setText(JSON Stringify:C1217($o; *))
+			
+			If (PROJECT.$project.$catalog#Null:C1517)
+				
+				$folder.file("catalog.json").setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *))
+				
+			End if 
+		End if 
 	End if 
 	
-	//====================================
-Function get
-	var $0 : Object
+	This:C1470.$project.file.create()
+	This:C1470.$project.file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
+	
+	//================================================================================
+	// Returns a cleaned project
+Function cleaned()->$project : Object
 	
 	var $t; $tt : Text
 	var $o; $project : Object
@@ -331,79 +359,61 @@ Function get
 		End case 
 	End for each 
 	
-	$0:=$project
-	
-	//====================================
-Function cleanup
-	var $0 : Object
-	var $1 : Object
-	
-	var $o : Object
-	var $project : Object
-	
-	If (Count parameters:C259>=1)
+	If (Bool:C1537(FEATURE._8858))  // Debug mode
 		
-		For each ($o; OB Entries:C1720($1).query("key =:1"; "$@"))
-			
-			OB REMOVE:C1226($1; $o.key)
-			
-		End for each 
-		
-		$0:=$1
+		//
 		
 	Else 
 		
-		$project:=OB Copy:C1225(This:C1470)
-		
-		For each ($o; OB Entries:C1720($project).query("key =:1"; "$@"))
+		// Cleaning inner objects
+		For each ($o; OB Entries:C1720($project).query("key =:1"; "_@"))
 			
 			OB REMOVE:C1226($project; $o.key)
 			
 		End for each 
+	End if 
+	
+	//================================================================================
+	// Cleaning inner objects
+Function cleanup($dirtyObject : Object)->$cleanObject : Object
+	
+	var $o : Object
+	
+	If (Count parameters:C259>=1)
 		
-		$0:=$project
+		$cleanObject:=$dirtyObject
+		
+		For each ($o; OB Entries:C1720($cleanObject).query("key =:1"; "$@"))
+			
+			OB REMOVE:C1226($cleanObject; $o.key)
+			
+		End for each 
+		
+	Else 
+		
+		$cleanObject:=OB Copy:C1225(This:C1470)
+		
+		For each ($o; OB Entries:C1720($cleanObject).query("key =:1"; "$@"))
+			
+			OB REMOVE:C1226($cleanObject; $o.key)
+			
+		End for each 
 		
 	End if 
 	
-	//====================================
-	// Save the project
-Function save
+	//================================================================================
+	// Tests if the project is locked and, if so, makes the provided widgets accessible or not
+Function isLocked()->$isLocked : Boolean
 	
-	If (Bool:C1537(FEATURE._8858))  // Debug mode
+	If (This:C1470.structure#Null:C1517)
 		
-		var $folder : 4D:C1709.Folder
-		$folder:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
+		$isLocked:=Bool:C1537(This:C1470.structure.unsynchronized)
 		
-		If ($folder.exists)
-			
-			If (PROJECT.$dialog#Null:C1517)
-				
-				$folder.file("dialog.json").setText(JSON Stringify:C1217(PROJECT.$dialog; *))
-				
-				var $key : Text
-				For each ($key; PROJECT.$dialog)
-					
-					$folder.file($key+".json").setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *))
-					
-				End for each 
-			End if 
-			
-			// Remove circular references
-			var $o : Object
-			$o:=OB Copy:C1225(PROJECT)
-			OB REMOVE:C1226($o.$project; "$dialog")
-			$folder.file("project.json").setText(JSON Stringify:C1217($o; *))
-			
-			If (PROJECT.$project.$catalog#Null:C1517)
-				
-				$folder.file("catalog.json").setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *))
-				
-			End if 
-		End if 
+	Else 
+		
+		$isLocked:=Bool:C1537(This:C1470.$project.structure.unsynchronized)
+		
 	End if 
-	
-	This:C1470.$project.file.create()
-	This:C1470.$project.file.setText(JSON Stringify:C1217(This:C1470.get(); *))
 	
 	//====================================
 Function updateActions

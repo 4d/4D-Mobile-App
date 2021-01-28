@@ -100,6 +100,9 @@ Case of
 				
 				// Load the project
 				PROJECT:=cs:C1710.project.new().load(Form:C1466.file)
+				PROJECT._folder:=Form:C1466.folder
+				
+				
 				PROJECT.$project:=Form:C1466
 				
 				// Touch the project subform
