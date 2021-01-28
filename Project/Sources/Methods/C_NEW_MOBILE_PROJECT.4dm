@@ -23,7 +23,7 @@ If (FEATURE.with("wizards"))
 	// Display the wizard
 	$data:=New object:C1471(\
 		"$name"; Get localized string:C991("newProject"); \
-		"$apple"; Is macOS:C1572; \
+		"$ios"; Is macOS:C1572; \
 		"$android"; Is Windows:C1573; \
 		"$callback"; "editor_CALLBACK"; \
 		"$mainWindow"; Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
@@ -154,7 +154,7 @@ Else
 				
 				If (FEATURE.with("android"))  //🚧
 					
-					If ($formdata.$apple & $formdata.$android)
+					If ($formdata.$ios & $formdata.$android)
 						
 						$project.info.target:=New collection:C1472("iOS"; "android")
 						

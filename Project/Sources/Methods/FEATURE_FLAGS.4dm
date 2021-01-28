@@ -136,7 +136,7 @@ WIP
 _____________*/
 
 FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component 
-FEATURE.vdl("testCompression")
+//FEATURE.vdl("testCompression")
 
 // Share action with descrition
 FEATURE.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action

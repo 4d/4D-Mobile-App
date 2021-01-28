@@ -1,27 +1,27 @@
 {
     "images": [
         {
-            "file": "mipmap-mdpi/ic_launcher.png",
+            "file": "mipmap-mdpi/ic_launcher_foreground.png",
             "size": "48x48"
         },
         {
-            "file": "mipmap-hdpi/ic_launcher.png",
+            "file": "mipmap-hdpi/ic_launcher_foreground.png",
             "size": "72x72"
         },
         {
-            "file": "mipmap-xhdpi/ic_launcher.png",
+            "file": "mipmap-xhdpi/ic_launcher_foreground.png",
             "size": "96x96"
         },
         {
-            "file": "mipmap-xxhdpi/ic_launcher.png",
+            "file": "mipmap-xxhdpi/ic_launcher_foreground.png",
             "size": "144x144"
         },
         {
-            "file": "mipmap-xxxhdpi/ic_launcher.png",
+            "file": "mipmap-xxxhdpi/ic_launcher_foreground.png",
             "size": "192x192"
         },
         {
-            "file": "main/android-marketing512.png",
+            "file": "main/ic_launcher-playstore.png",
             "size": "512x512"
         }
     ]

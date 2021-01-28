@@ -6,7 +6,7 @@ Class constructor($project : Object)
 		
 	End if 
 	
-	//====================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 Function init($project : Object)
 	
 	var $key : Text
@@ -20,7 +20,7 @@ Function init($project : Object)
 		End if 
 	End for each 
 	
-	//====================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 Function load
 	var $1 : Variant
 	
@@ -57,6 +57,7 @@ Function load
 	
 	If (Bool:C1537($file.exists))
 		
+		
 		$project:=JSON Parse:C1218($file.getText())
 		
 		If (project_Upgrade($project))
@@ -72,6 +73,32 @@ Function load
 		End if 
 		
 		This:C1470.init($project)
+		
+/* 
+		
+SHORTCUTS
+		
+*/
+		
+		This:C1470._folder:=$file.parent
+		This:C1470._name:=This:C1470._folder.fullName
+		
+		If (Value type:C1509($project.info.target)=Is collection:K8:32)
+			
+			This:C1470.$android:=($project.info.target.indexOf("android")#-1)
+			This:C1470.$ios:=($project.info.target.indexOf("android")#-1)
+			
+		Else 
+			
+			This:C1470.$android:=($project.info.target="android")
+			This:C1470.$ios:=($project.info.target="iOS")
+			
+		End if 
+		
+		This:C1470.$worker:=Form:C1466.$worker
+		This:C1470.$mainWindow:=Form:C1466.$mainWindow
+		This:C1470.$project:=Form:C1466
+		
 		This:C1470.prepare()
 		
 	Else 
@@ -88,19 +115,10 @@ Function load
 Function prepare($icon : Picture)
 	
 	var $iconƒ : Picture
-	var $AndroidFolder; $AppleFolder : 4D:C1709.Folder
+	var $AndroidFolder; $iosFolder : 4D:C1709.Folder
 	
-	If (Form:C1466.folder#Null:C1517)
-		
-		$AppleFolder:=Form:C1466.folder.folder("Assets.xcassets/AppIcon.appiconset")
-		$AndroidFolder:=Form:C1466.folder.folder("Android")
-		
-	Else 
-		
-		$AppleFolder:=Form:C1466.$project.folder.folder("Assets.xcassets/AppIcon.appiconset")
-		$AndroidFolder:=Form:C1466.$project.folder.folder("Android")
-		
-	End if 
+	$iosFolder:=This:C1470._folder.folder("Assets.xcassets/AppIcon.appiconset")
+	$AndroidFolder:=This:C1470._folder.folder("Android")
 	
 	If (FEATURE.with("android"))
 		
@@ -110,11 +128,12 @@ Function prepare($icon : Picture)
 			
 		Else 
 			
-			If ($AndroidFolder.file("main/android-marketing512.png").exists)
+			If ($AndroidFolder.file("main/ic_launcher-playstore.png").exists)
 				
 				// Get the picture as default
+				READ PICTURE FILE:C678($AndroidFolder.file("main/ic_launcher-playstore.png").platformPath; $iconƒ)
+				
 				// ⚠️ the picture size is 512x512 instead of 1024x1024
-				READ PICTURE FILE:C678($AndroidFolder.file("main/android-marketing512.png").platformPath; $iconƒ)
 				TRANSFORM PICTURE:C988($iconƒ; Scale:K61:2; 2; 2)
 				
 			End if 
@@ -127,32 +146,32 @@ Function prepare($icon : Picture)
 			
 		End if 
 		
-		If (Form:C1466.$apple)
+		If (This:C1470.$ios) | (Is macOS:C1572 & Not:C34(This:C1470.$android))  // On macOS default is iOS
 			
-			If (Not:C34($AppleFolder.exists))  // Create & populate
+			If (Not:C34($iosFolder.exists))  // Create & populate
 				
-				This:C1470.AppIconSet($iconƒ; $AppleFolder)
+				This:C1470.AppIconSet($iconƒ)
 				
 			End if 
 			
 			// Keep the picture for Android
-			READ PICTURE FILE:C678($AppleFolder.file("ios-marketing1024.png").platformPath; $iconƒ)
+			READ PICTURE FILE:C678($iosFolder.file("ios-marketing1024.png").platformPath; $iconƒ)
 			
 		Else 
 			
-			If ($AppleFolder.exists)  // Delete
+			If ($iosFolder.exists)  // Delete
 				
-				$AppleFolder.parent.delete(Delete with contents:K24:24)
+				$iosFolder.parent.delete(Delete with contents:K24:24)
 				
 			End if 
 			
 		End if 
 		
-		If (Form:C1466.$android)
+		If (This:C1470.$android)
 			
 			If (Not:C34($AndroidFolder.exists))  // Create & populate
 				
-				This:C1470.AndroidIconSet($iconƒ; $AndroidFolder)
+				This:C1470.AndroidIconSet($iconƒ)
 				
 			End if 
 			
@@ -167,29 +186,56 @@ Function prepare($icon : Picture)
 		
 	Else 
 		
-		If (Not:C34($AppleFolder.exists))
+		If (Not:C34($iosFolder.exists))
 			
 			// Get the default icon
 			READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/4d.png").platformPath; $iconƒ)
 			
-			This:C1470.AppIconSet($iconƒ; $AppleFolder)
+			This:C1470.AppIconSet($iconƒ)
 			
 		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Create the "Assets.xcassets/AppIcon.appiconset" resources
-Function AppIconSet($icon : Picture; $folder : 4D:C1709.folder)
+Function AppIconSet($icon : Picture)
 	
 	var $pixels : Real
 	var $decimalSeparator; $fileName; $t : Text
 	var $size : Real
-	var $picture : Picture
-	var $pos : Integer
+	var $blank; $picture : Picture
+	var $height; $pos; $width : Integer
+	var $heightFactor; $widthFactor : Real
 	var $o : Object
-	
+	var $folder : 4D:C1709.file
 	var $file : 4D:C1709.File
 	
+	PICTURE PROPERTIES:C457($icon; $width; $height)
+	
+	If ($width>1024)\
+		 | ($height>1024)
+		
+		CREATE THUMBNAIL:C679($icon; $icon; 1024; 1024; Scaled to fit prop centered:K6:6)
+		PICTURE PROPERTIES:C457($icon; $width; $height)
+		
+	Else 
+		
+		$widthFactor:=1024/$width
+		$heightFactor:=1024/$height
+		
+		If ($widthFactor#1) | ($heightFactor#1)
+			
+			TRANSFORM PICTURE:C988($icon; Scale:K61:2; $widthFactor; $heightFactor)
+			PICTURE PROPERTIES:C457($icon; $width; $height)
+			
+		End if 
+	End if 
+	
+	// Add a blank background
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/blanck.png").platformPath; $blank)
+	COMBINE PICTURES:C987($icon; $blank; Superimposition:K61:10; $icon; (1024-$width)\2; (1024-$height)\2)
+	
+	$folder:=This:C1470._folder.folder("Assets.xcassets/AppIcon.appiconset")
 	$folder.create()
 	
 	$file:=$folder.file("Contents.json")
@@ -234,14 +280,37 @@ Function AppIconSet($icon : Picture; $folder : 4D:C1709.folder)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Create the "Android" resources
-Function AndroidIconSet($icon : Picture; $folder : 4D:C1709.folder)
+Function AndroidIconSet($icon : Picture)
 	
 	var $pixels : Real
 	var $t : Text
-	var $picture : Picture
-	var $pos : Integer
-	var $file; $o : Object
+	var $blank; $picture : Picture
+	var $height; $pos; $width : Integer
+	var $heightFactor; $widthFactor : Real
+	var $o : Object
+	var $folder : 4D:C1709.file
+	var $file : 4D:C1709.File
 	
+	PICTURE PROPERTIES:C457($icon; $width; $height)
+	
+	If ($width>512)\
+		 | ($height>512)
+		
+		CREATE THUMBNAIL:C679($icon; $icon; 512; 512; Scaled to fit prop centered:K6:6)
+		
+	Else 
+		
+		$widthFactor:=512/$width
+		$heightFactor:=512/$height
+		
+		If ($widthFactor#1) | ($heightFactor#1)
+			
+			TRANSFORM PICTURE:C988($icon; Scale:K61:2; $widthFactor; $heightFactor)
+			
+		End if 
+	End if 
+	
+	$folder:=This:C1470._folder.folder("android")
 	$folder.create()
 	
 	$file:=File:C1566("/RESOURCES/android.json")
@@ -274,6 +343,7 @@ Function save()
 	var $key : Text
 	var $o : Object
 	var $folder : 4D:C1709.Folder
+	var $file : 4D:C1709.File
 	
 	If (Bool:C1537(FEATURE._8858))  // Debug mode
 		
@@ -306,8 +376,9 @@ Function save()
 		End if 
 	End if 
 	
-	This:C1470.$project.file.create()
-	This:C1470.$project.file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
+	$file:=This:C1470._folder.file("project.4dmobileapp")
+	$file.create()
+	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
 	//================================================================================
 	// Returns a cleaned project
@@ -359,19 +430,12 @@ Function cleaned()->$project : Object
 		End case 
 	End for each 
 	
-	If (Bool:C1537(FEATURE._8858))  // Debug mode
+	// Cleaning inner objects
+	For each ($o; OB Entries:C1720($project).query("key =:1"; "_@"))
 		
-		//
+		OB REMOVE:C1226($project; $o.key)
 		
-	Else 
-		
-		// Cleaning inner objects
-		For each ($o; OB Entries:C1720($project).query("key =:1"; "_@"))
-			
-			OB REMOVE:C1226($project; $o.key)
-			
-		End for each 
-	End if 
+	End for each 
 	
 	//================================================================================
 	// Cleaning inner objects

@@ -20,7 +20,7 @@ If (False:C215)
 End if 
 
 var $isTableUnsynchronized; $isUnsynchronized : Boolean
-var $cache; $current; $field; $file; $item; $linkedField; $linkedItem; $o; $relatedField; $relatedItem : Object
+var $cache; $current; $field; $cacheFile; $item; $linkedField; $linkedItem; $o; $relatedField; $relatedItem : Object
 var $structure; $table; $tableCatalog : Object
 var $cachedCatalog; $currentCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTableFields : Collection
 var $str : cs:C1710.str
@@ -35,19 +35,11 @@ $str:=cs:C1710.str.new()
 
 // ----------------------------------------------------
 // Compare to cached catalog (the last valid)
-If (FEATURE.with("wizards"))
-	
-	$file:=Form:C1466.folder.file("catalog.json")
-	
-Else 
-	
-	$file:=PROJECT.$project.file.parent.file("catalog.json")
-	
-End if 
+$cacheFile:=PROJECT._folder.file("catalog.json")
 
-If ($file.exists)
+If ($cacheFile.exists)
 	
-	$cache:=JSON Parse:C1218($file.getText())
+	$cache:=JSON Parse:C1218($cacheFile.getText())
 	$cachedCatalog:=$cache.structure.definition
 	
 	// Was the structure changed?
@@ -487,7 +479,7 @@ If ($file.exists)
 			$structure.definition:=$currentCatalog
 			$structure.digest:=Generate digest:C1147(JSON Stringify:C1217($currentCatalog); SHA1 digest:K66:2)
 			$cache.structure:=$structure
-			$file.setText(JSON Stringify:C1217($cache; *))
+			$cacheFile.setText(JSON Stringify:C1217($cache; *))
 			
 		End if 
 		
@@ -511,7 +503,7 @@ Else
 			"definition"; $currentCatalog; \
 			"digest"; Generate digest:C1147(JSON Stringify:C1217($currentCatalog); SHA1 digest:K66:2)))
 		
-		$file.setText(JSON Stringify:C1217($cache; *))
+		$cacheFile.setText(JSON Stringify:C1217($cache; *))
 		
 	End if 
 End if 
@@ -528,8 +520,6 @@ End if
 $o:=cs:C1710.ob.new(Form:C1466)
 $o.createPath("structure").structure.unsynchronized:=$isUnsynchronized
 $o.createPath("status").structure.dataModel:=Not:C34($isUnsynchronized)
-//$o.createPath("structure").unsynchronized:=$isUnsynchronized
-//$o.createPath("status").dataModel:=Not($isUnsynchronized)
 
 CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
 "show"; $isUnsynchronized))

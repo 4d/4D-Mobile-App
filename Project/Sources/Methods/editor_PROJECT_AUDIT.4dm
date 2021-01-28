@@ -13,24 +13,13 @@
 // Initialisations
 If (FEATURE.with("wizards"))
 	
-	If (Form:C1466.$worker#Null:C1517)
-		
-		var $o : Object
-		$o:=Form:C1466
-		
-	Else 
-		
-		$o:=Form:C1466.$project
-		
-	End if 
-	
 	// Launch checking the structure
-	CALL WORKER:C1389($o.$worker; "_o_structure"; New object:C1471(\
+	CALL WORKER:C1389(Form:C1466.$worker; "_o_structure"; New object:C1471(\
 		"action"; "catalog"; \
-		"caller"; $o.$mainWindow))
+		"caller"; Form:C1466.$mainWindow))
 	
 	// Launch project verifications
-	CALL FORM:C1391($o.$mainWindow; "editor_CALLBACK"; "projectAudit")
+	CALL FORM:C1391(Form:C1466.$mainWindow; "editor_CALLBACK"; "projectAudit")
 	
 Else 
 	

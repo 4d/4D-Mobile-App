@@ -72,7 +72,7 @@ Else
 		
 		$data:=New object:C1471(\
 			"$name"; Get localized string:C991("newProject"); \
-			"$apple"; Is macOS:C1572; \
+			"$ios"; Is macOS:C1572; \
 			"$android"; FEATURE.with("android"); \
 			"$callback"; "editor_CALLBACK"; \
 			"$mainWindow"; Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))

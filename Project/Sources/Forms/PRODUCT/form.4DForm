@@ -290,7 +290,7 @@
 					],
 					"style": "toolbar",
 					"icon": "/RESOURCES/images/apple.png",
-					"dataSource": "Form:C1466.$apple",
+					"dataSource": "Form:C1466.$ios",
 					"dataSourceTypeHint": "boolean",
 					"visibility": "visible",
 					"focusable": false

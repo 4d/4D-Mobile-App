@@ -65,10 +65,13 @@ Case of
 				Form:C1466.$dialog.EDITOR.pages:=cs:C1710.editor.new()
 				Form:C1466.$dialog.EDITOR.pages.gotoPage("general")
 				
+				// Load the project
+				PROJECT:=cs:C1710.project.new().load(Form:C1466.file)
+				
 				If (FEATURE.with("wizards"))
 					
 					// Set the dialog title
-					SET WINDOW TITLE:C213(cs:C1710.str.new("editorWindowTitle").localized(Form:C1466.folder.name); Form:C1466.$mainWindow)
+					SET WINDOW TITLE:C213(cs:C1710.str.new("editorWindowTitle").localized(PROJECT._name); Form:C1466.$mainWindow)
 					
 					// Update the ribbon
 					$form.form.ribbon:=New object:C1471(\
@@ -98,12 +101,12 @@ Case of
 					
 				End if 
 				
-				// Load the project
-				PROJECT:=cs:C1710.project.new().load(Form:C1466.file)
-				PROJECT._folder:=Form:C1466.folder
 				
-				
+				//************************************************
+				PROJECT.$worker:=Form:C1466.$worker
+				PROJECT.$mainWindow:=Form:C1466.$mainWindow
 				PROJECT.$project:=Form:C1466
+				//************************************************
 				
 				// Touch the project subform
 				OBJECT SET VALUE:C1742($form.project; PROJECT)

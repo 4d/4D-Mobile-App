@@ -8,7 +8,7 @@ Case of
 	: ($e.code=On Clicked:K2:4)\
 		 & (Not:C34(Form:C1466.$android))
 		
-		Form:C1466.$apple:=Is macOS:C1572
+		Form:C1466.$ios:=Is macOS:C1572
 		Form:C1466.$android:=Is Windows:C1573
 		
 		//______________________________________________________

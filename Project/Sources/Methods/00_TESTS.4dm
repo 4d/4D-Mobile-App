@@ -25,8 +25,7 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=cs:C1710.database.new()
-		$b:=$o.isWritable()
+		$o:=cs:C1710.path.new().listForms()
 		
 		
 		

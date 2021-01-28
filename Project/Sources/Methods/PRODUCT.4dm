@@ -25,31 +25,27 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			If (FEATURE.with("android"))  //🚧
 				
-				If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
-					
-					$ƒ.android.setValue(True:C214)
-					$ƒ.apple.setValue(True:C214)
-					
-				Else 
-					
-					$ƒ.android.setValue(Form:C1466.info.target="android")
-					$ƒ.apple.setValue(Form:C1466.info.target="iOS")
-					
-				End if 
+				//If (Value type(Form.info.target)=Is collection)
+				//$ƒ.android.setValue(True)
+				//$ƒ.apple.setValue(True)
+				//Else 
+				//$ƒ.android.setValue(Form.info.target="android")
+				//$ƒ.apple.setValue(Form.info.target="iOS")
+				//End if 
 				
 				If (Is Windows:C1573)
 					
 					$ƒ.android.disable()
-					$ƒ.apple.disable()
+					$ƒ.ios.disable()
 					
 				End if 
 				
-				$ƒ.setTarget()
+				//$ƒ.setTarget()
 				
 			Else 
 				
 				$ƒ.target.hide()
-				$ƒ.apple.hide()
+				$ƒ.ios.hide()
 				$ƒ.android.hide()
 				
 			End if 
@@ -72,6 +68,8 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			//______________________________________________________
 		: ($e.code=On Bound Variable Change:K2:52)
+			
+			$ƒ.setTarget()
 			
 			SET TIMER:C645(-1)
 			
@@ -103,7 +101,7 @@ Else   // <== WIDGETS METHOD
 			// ❗️MANAGED INTO OBJECT METHOD BECAUSE OF THE DRAG AND DROP
 			
 			//==============================================
-		: ($ƒ.apple.catch())\
+		: ($ƒ.ios.catch())\
 			 | ($ƒ.android.catch())
 			
 			Case of 

@@ -24,9 +24,9 @@ $datastore:=catalog("datastore").datastore
 
 // ----------------------------------------------------
 // Make a Backup of the project & catalog
-$file:=PROJECT.$project.file  // Project.4dmobileapp
+$file:=PROJECT._folder.file("project.4dmobileapp")
 
-$backup:=PROJECT.$project.file.parent.folder(Replace string:C233(Get localized string:C991("replacedFiles"); "{stamp}"; str_date("stamp")))
+$backup:=PROJECT._folder.folder(Replace string:C233(Get localized string:C991("replacedFiles"); "{stamp}"; str_date("stamp")))
 $backup.create()
 
 $file.copyTo($backup)
@@ -303,7 +303,7 @@ End if
 OB REMOVE:C1226(PROJECT.$dialog; "unsynchronizedTableFields")
 OB REMOVE:C1226(PROJECT.$project.structure; "unsynchronized")
 
-$file:=PROJECT.$project.file.parent.file("catalog.json")
+$file:=PROJECT._folder.file("catalog.json")
 
 If ($file.exists)
 	

@@ -214,7 +214,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="project")
 				
-				SHOW ON DISK:C922(PROJECT.$project.file.parent.platformPath; *)
+				SHOW ON DISK:C922(PROJECT._folder.platformPath; *)
 				
 				//______________________________________________________
 			: ($menu.choice="xCode")

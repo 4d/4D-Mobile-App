@@ -151,7 +151,7 @@ Case of
 					"title"; "We are going tout doux 🤣"))
 				
 				//______________________________________________________
-			: (Match regex:C1019("(?mi-s)^(?:[[:alnum:]]*-)*[[:alnum:]]*$"; $menu.choice; 1))  // Ios
+			: (Match regex:C1019("(?mi-s)^(?:[[:alnum:]]*-)*[[:alnum:]]*$"; $menu.choice; 1))  // iOS
 				
 				If ($menu.choice#String:C10(Form:C1466.CurrentDeviceUDID))
 					

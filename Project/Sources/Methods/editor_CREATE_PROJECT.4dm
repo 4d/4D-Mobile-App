@@ -36,7 +36,7 @@ If (DATABASE.isWritable())
 			
 			If (FEATURE.with("android"))  //🚧
 				
-				If (Bool:C1537($data.$apple) & Bool:C1537($data.$android))
+				If (Bool:C1537($data.$ios) & Bool:C1537($data.$android))
 					
 					$project.info.target:=New collection:C1472("iOS"; "android")
 					

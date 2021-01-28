@@ -83,8 +83,8 @@ Case of
 		
 		If (FEATURE.with("wizards"))
 			
-			CALL WORKER:C1389(Form:C1466.$project.$worker; "dataSet"; New object:C1471(\
-				"caller"; Form:C1466.$project.$mainWindow; \
+			CALL WORKER:C1389(Form:C1466.$worker; "dataSet"; New object:C1471(\
+				"caller"; Form:C1466.$mainWindow; \
 				"action"; "create"; \
 				"eraseIfExists"; True:C214; \
 				"project"; PROJECT; \
@@ -103,7 +103,7 @@ Case of
 			$Obj_project.server:=Form:C1466.server
 			
 			CALL WORKER:C1389(Form:C1466.$worker; "dataSet"; New object:C1471(\
-				"caller"; $Obj_form.window; \
+				"caller"; Form:C1466.$mainWindow; \
 				"action"; "create"; \
 				"eraseIfExists"; True:C214; \
 				"project"; $Obj_project; \

@@ -44,7 +44,7 @@
 					],
 					"style": "custom",
 					"icon": "/RESOURCES/images/apple.png",
-					"dataSource": "Form:C1466.$apple",
+					"dataSource": "Form:C1466.$ios",
 					"dataSourceTypeHint": "boolean",
 					"focusable": true,
 					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",

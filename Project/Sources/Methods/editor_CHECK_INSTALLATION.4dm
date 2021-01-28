@@ -50,7 +50,7 @@ Case of
 				
 			Else 
 				
-				$in.silent:=Not:C34(Bool:C1537($in.project.$apple))
+				$in.silent:=Not:C34(Bool:C1537($in.project.$ios))
 				$xCode:=Xcode_CheckInstall($in)
 				
 			End if 

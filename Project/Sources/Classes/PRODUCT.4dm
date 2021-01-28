@@ -22,7 +22,7 @@ Class constructor
 		
 		// TARGET
 		This:C1470.target:=cs:C1710.static.new("target.label")
-		This:C1470.apple:=cs:C1710.button.new("ios")
+		This:C1470.ios:=cs:C1710.button.new("ios")
 		This:C1470.android:=cs:C1710.button.new("android")
 		
 		// Constraints definition
@@ -39,7 +39,7 @@ Function displayIcon
 	
 	If (FEATURE.with("android"))
 		
-		$folder:=Form:C1466.$project.folder.folder("Assets.xcassets/AppIcon.appiconset")
+		$folder:=Form:C1466._folder.folder("Assets.xcassets/AppIcon.appiconset")
 		
 		If ($folder.exists)
 			
@@ -47,11 +47,11 @@ Function displayIcon
 			
 		Else 
 			
-			$folder:=Form:C1466.$project.folder.folder("Android")
+			$folder:=Form:C1466._folder.folder("Android")
 			
 			If ($folder.exists)
 				
-				READ PICTURE FILE:C678($folder.file("main/android-marketing512.png").platformPath; $picture)
+				READ PICTURE FILE:C678($folder.file("main/ic_launcher-playstore.png").platformPath; $picture)
 				
 			Else 
 				
@@ -239,48 +239,31 @@ Function getIcon($pathname : Text)
 	// Update assets according to the target systems 
 Function setIcon($picture : Picture)
 	
-	var $blank : Picture
-	var $height; $width : Integer
-	
-	PICTURE PROPERTIES:C457($picture; $width; $height)
-	
-	If ($width>1024)\
-		 | ($height>1024)
-		
-		CREATE THUMBNAIL:C679($picture; $picture; 1024; 1024; Scaled to fit prop centered:K6:6)
-		PICTURE PROPERTIES:C457($picture; $width; $height)
-		
-	End if 
-	
-	// Add a blank background
-	READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/blanck.png").platformPath; $blank)
-	COMBINE PICTURES:C987($picture; $blank; Superimposition:K61:10; $picture; (1024-$width)\2; (1024-$height)\2)
-	
 	If (FEATURE.with("android"))
 		
 		If (Is macOS:C1572)
 			
-			If (Form:C1466.$project.$apple)
+			If (Form:C1466.$ios)
 				
-				PROJECT.AppIconSet($picture; Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset"))
+				PROJECT.AppIconSet($picture)
 				
 			End if 
 			
-			If (Form:C1466.$project.$android)
+			If (Form:C1466.$android)
 				
-				PROJECT.AndroidIconSet($picture; Form:C1466.$project.folder.folder("android"))
+				PROJECT.AndroidIconSet($picture)
 				
 			End if 
 			
 		Else 
 			
-			PROJECT.AndroidIconSet($picture; Form:C1466.$project.folder.folder("android"))
+			PROJECT.AndroidIconSet($picture)
 			
 		End if 
 		
 	Else 
 		
-		PROJECT.AppIconSet($picture; Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset"))
+		PROJECT.AppIconSet($picture)
 		
 	End if 
 	
@@ -370,12 +353,12 @@ Function displayTarget
 	
 	If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
 		
-		This:C1470.apple.setValue(Form:C1466.info.target.indexOf("iOS")#-1)
+		This:C1470.ios.setValue(Form:C1466.info.target.indexOf("iOS")#-1)
 		This:C1470.android.setValue(Form:C1466.info.target.indexOf("android")#-1)
 		
 	Else 
 		
-		This:C1470.apple.setValue(String:C10(Form:C1466.info.target)="iOS")
+		This:C1470.ios.setValue(String:C10(Form:C1466.info.target)="iOS")
 		This:C1470.android.setValue(String:C10(Form:C1466.info.target)="android")
 		
 	End if 
@@ -384,43 +367,39 @@ Function displayTarget
 	// Populate the target value into te project
 Function setTarget
 	
-	var $android; $apple : Boolean
-	
-	$apple:=This:C1470.apple.getValue()
-	$android:=This:C1470.android.getValue()
-	
-	If ($apple & $android)
+	If (Form:C1466.$ios & Form:C1466.$android)
 		
 		Form:C1466.info.target:=New collection:C1472("iOS"; "android")
 		
 	Else 
 		
-		If (Not:C34($android))
+		If (Not:C34(Form:C1466.$android))
 			
 			// According to platform
 			Form:C1466.info.target:=Choose:C955(Is macOS:C1572; "iOS"; "android")
 			
 		Else 
 			
-			Form:C1466.info.target:=Choose:C955($android; "android"; "iOS")
+			Form:C1466.info.target:=Choose:C955(Form:C1466.$android; "android"; "iOS")
 			
 		End if 
 	End if 
 	
 	PROJECT.save()
 	
-	// Update UI
-	This:C1470.displayTarget()
-	
 	// Update the project folder
 	PROJECT.prepare()
 	
+	// Update UI
+	This:C1470.displayTarget()
+	This:C1470.displayIcon()
+	
 	// Launch the verification of the development tools, if any
-	If ($apple & Is macOS:C1572 & Not:C34(Bool:C1537(Form:C1466.$project.$xCode.ready)))\
-		 | ($android & Not:C34(Bool:C1537(Form:C1466.$project.$studio.ready)))
+	If (Form:C1466.$ios & Is macOS:C1572 & Not:C34(Bool:C1537(Form:C1466.$project.$xCode.ready)))\
+		 | (Form:C1466.$android & Not:C34(Bool:C1537(Form:C1466.$project.$studio.ready)))
 		
-		CALL WORKER:C1389(Form:C1466.$project.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-			"caller"; Form:C1466.$project.$mainWindow; "project"; Form:C1466.$project))
+		CALL WORKER:C1389(Form:C1466.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
+			"caller"; Form:C1466.$mainWindow; "project"; Form:C1466.$project))
 		
 	End if 
 	
@@ -432,7 +411,7 @@ Function loadIcon
 	If (Not:C34(FEATURE.with("android")))
 		
 		var $folder : 4D:C1709.Folder
-		$folder:=Form:C1466.$project.file.parent.folder("Assets.xcassets/AppIcon.appiconset")
+		$folder:=Form:C1466._folder.folder("Assets.xcassets/AppIcon.appiconset")
 		
 		If (This:C1470.assets=Null:C1517)
 			
