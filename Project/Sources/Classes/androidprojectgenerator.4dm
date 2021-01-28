@@ -138,17 +138,25 @@ Function copyResources
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$androidAssets:=$2.parent.folder("android")
-	
-	$0.success:=True:C214
+	$androidAssets:=$2.folder("Android")
 	
 	If ($androidAssets.exists)
+		
+		$0.success:=True:C214
 		
 		For each ($currentFolder; $androidAssets.folders())
 			
 			For each ($currentFile; $currentFolder.files())
 				
-				$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/"+$currentFolder.name); fk overwrite:K87:5)
+				If ($currentFolder.name="main")  // playstore image
+					
+					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main"); fk overwrite:K87:5)
+					
+				Else 
+					
+					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/"+$currentFolder.name); fk overwrite:K87:5)
+					
+				End if 
 				
 				If (Not:C34($copyDest.exists))
 					// Copy failed
@@ -163,11 +171,8 @@ Function copyResources
 		End for each 
 		
 	Else 
-		// Missing file
-		
-		// TODO : UNCOMMENT WHEN ANDROID RESOURCES IMPLEMENTED
-		// $0.success:=False
-		// $0.errors.push("Missing source file for copy: "+$androidAssets.path)
+		// Missing Android folder
+		$0.errors.push("Missing source file for copy: "+$androidAssets.path)
 	End if 
 	
 	

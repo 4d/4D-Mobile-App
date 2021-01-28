@@ -133,7 +133,7 @@ Function create()->$result : Object
 						// * COPY RESOURCES
 						This:C1470.postStep(".Copying resources")  //#MARK_LOCALIZE
 						
-						$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project.$project.file)
+						$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
 						
 						If (Not:C34($o.success))
 							
