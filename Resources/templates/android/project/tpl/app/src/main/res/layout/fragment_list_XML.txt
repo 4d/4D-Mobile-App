@@ -70,7 +70,7 @@
             android:layout_marginTop="@dimen/list_margin_medium"
             android:text="@string/no_data_to_display"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/colorPrimaryLight"
+            android:textColor="?colorPrimary"
             android:visibility="@{safeUnbox(viewModel.entityList.size()) > 0 ? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

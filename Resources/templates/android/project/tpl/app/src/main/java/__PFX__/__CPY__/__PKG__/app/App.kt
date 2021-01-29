@@ -31,7 +31,7 @@ class App : BaseApp() {
         super.onCreate()
 
         // Sets the drawable resource id for login page logo
-        loginLogoDrawable = R.drawable.logo_4d
+        loginLogoDrawable = R.mipmap.ic_launcher_foreground
 
         // Sets the menu resource id for bottom navigation
         bottomNavigationMenu = R.menu.bottom_nav

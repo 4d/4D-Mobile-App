@@ -32,7 +32,7 @@
             {{#field_1_defined}}
             android:text="@{entityData.{{field_1_name}}.toString()}"
             {{/field_1_defined}}
-            android:textColor="@color/colorPrimary"
+            android:textColor="?colorPrimary"
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/{{tableName_lowercase}}_specific_field_value_2"
@@ -53,7 +53,7 @@
             {{#field_2_defined}}
             android:text="@{entityData.{{field_2_name}}.toString()}"
             {{/field_2_defined}}
-            android:textColor="@color/colorPrimary"
+            android:textColor="?colorPrimary"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_arrow"

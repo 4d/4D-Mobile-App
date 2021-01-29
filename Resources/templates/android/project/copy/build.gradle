@@ -9,6 +9,7 @@ buildscript {
         // in the individual module build.gradle files
     }
     repositories {
+        maven { url file('dependencies') }
         google()
         jcenter()
     }
@@ -22,6 +23,7 @@ allprojects {
     apply plugin: 'maven-publish'
     apply plugin: "com.jfrog.artifactory"
     repositories {
+        maven { url file('dependencies') }
         maven {
             def machineIP = System.getenv('ARTIFACTORY_MACHINE_IP')
             def contextUrl = "http://${machineIP}:8081/artifactory"
@@ -51,7 +53,6 @@ subprojects {
                 defaultConfig {
                     minSdkVersion Config.minSdk
                     targetSdkVersion Config.targetSdk
-                    multiDexEnabled true
                     versionCode 1
                     versionName "1.0"
                     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
