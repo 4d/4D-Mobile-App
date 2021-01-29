@@ -24,37 +24,39 @@
 				"10_name.border": {
 					"type": "rectangle",
 					"top": 26,
-					"left": 157,
-					"width": 186,
+					"left": 125,
+					"width": 266,
 					"height": 33,
 					"stroke": "#c0c0c0",
 					"fill": "automatic"
 				},
-				"apple": {
+				"ios": {
 					"type": "checkbox",
 					"text": "iOS",
-					"top": 71,
-					"left": 260,
-					"width": 83,
-					"height": 85,
+					"top": 73,
+					"left": 210,
+					"width": 65,
+					"height": 80,
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
 					],
 					"style": "custom",
-					"icon": "/RESOURCES/images/apple.png",
+					"icon": "/RESOURCES/images/os/iOS-32.png",
 					"dataSource": "Form:C1466.$ios",
 					"dataSourceTypeHint": "boolean",
-					"focusable": true,
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
-					"method": "ObjectMethods/apple.4dm"
+					"focusable": false,
+					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
+					"method": "ObjectMethods/ios.4dm",
+					"iconFrames": 4,
+					"stroke": "automatic"
 				},
 				"name.label": {
 					"type": "text",
 					"text": ":xliff:projectName",
 					"top": 34,
-					"left": 28,
+					"left": 3,
 					"width": 109,
 					"height": 16,
 					"fontWeight": "bold",
@@ -62,9 +64,9 @@
 				},
 				"name": {
 					"type": "input",
-					"left": 162,
+					"left": 130,
 					"top": 34,
-					"width": 175,
+					"width": 255,
 					"height": 17,
 					"dataSource": "Form:C1466.$name",
 					"hideFocusRing": true,
@@ -73,27 +75,31 @@
 				"android": {
 					"type": "checkbox",
 					"text": "Android",
-					"top": 71,
-					"left": 157,
-					"width": 83,
-					"height": 85,
+					"top": 73,
+					"left": 125,
+					"width": 65,
+					"height": 80,
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
 					],
 					"style": "custom",
-					"icon": "/RESOURCES/images/android.png",
+					"icon": "/RESOURCES/images/os/Android-32.png",
 					"dataSource": "Form:C1466.$android",
 					"dataSourceTypeHint": "boolean",
 					"method": "ObjectMethods/android.4dm",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg"
+					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
+					"iconFrames": 4,
+					"focusable": false,
+					"textPlacement": "bottom",
+					"stroke": "automatic"
 				},
 				"name.label1": {
 					"type": "text",
 					"text": ":xliff:targetOs",
 					"top": 105,
-					"left": 28,
+					"left": 3,
 					"width": 109,
 					"height": 16,
 					"fontWeight": "bold",
@@ -106,11 +112,19 @@
 					"width": 402,
 					"height": 1,
 					"stroke": "#c0c0c0"
+				},
+				"Line1": {
+					"type": "line",
+					"top": 180,
+					"left": 0,
+					"width": 402,
+					"height": 1,
+					"stroke": "#c0c0c0"
 				}
 			}
 		}
 	],
-	"geometryStamp": 380,
+	"geometryStamp": 433,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

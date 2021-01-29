@@ -8,8 +8,7 @@ Case of
 		
 		If (Is Windows:C1573)
 			
-			cs:C1710.button.new("apple").hide()
-			cs:C1710.button.new("android").disable()
+			cs:C1710.button.new("ios").hide()
 			
 		End if 
 		
@@ -17,6 +16,12 @@ Case of
 	: ($e.code=On Activate:K2:9)
 		
 		GOTO OBJECT:C206(*; "name")
+		
+		If (Is Windows:C1573)
+			
+			Form:C1466.$android:=True:C214
+			
+		End if 
 		
 		//______________________________________________________
 End case 

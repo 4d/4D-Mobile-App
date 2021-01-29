@@ -39,7 +39,7 @@ Case of
 				
 				If (Form:C1466.status.xCode)
 					
-					$menu.append("iOS").disable()
+					$menu.append("iOS").icon("images/os/iOS.png").disable()
 					
 					If (Form:C1466.devices.apple.length>0)
 						
@@ -61,7 +61,7 @@ Case of
 					
 					$menu.line()
 					
-					$menu.append("Android").disable()
+					$menu.append("Android").icon("images/os/android.png").disable()
 					
 					If (Form:C1466.devices.android.length>0)
 						
@@ -182,6 +182,9 @@ Case of
 							// Set button title
 							OBJECT SET TITLE:C194(*; "201"; $device.name)
 							
+							// Adapt button width
+							SET TIMER:C645(-1)
+							
 						Else 
 							
 							POST_MESSAGE(New object:C1471(\
@@ -207,6 +210,9 @@ Case of
 					
 					// Set button title
 					OBJECT SET TITLE:C194(*; "201"; $device.name)
+					
+					// Adapt button width
+					SET TIMER:C645(-1)
 					
 				End if 
 				

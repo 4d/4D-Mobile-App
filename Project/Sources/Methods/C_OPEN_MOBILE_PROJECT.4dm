@@ -8,7 +8,7 @@
 // OPEN A PROJECT
 // ----------------------------------------------------
 // Declarations
-var $1 : Text
+#DECLARE($platformPath : Text)
 
 var $key : Text
 var $android; $blank; $icon; $iOS : Picture
@@ -40,7 +40,7 @@ If (FEATURE.with("wizards"))
 	
 	If (Count parameters:C259>=1)
 		
-		$file:=File:C1566($1; fk platform path:K87:2)
+		$file:=File:C1566($platformPath; fk platform path:K87:2)
 		OK:=Num:C11($file.exists)
 		
 		If (Bool:C1537(OK))
@@ -48,7 +48,7 @@ If (FEATURE.with("wizards"))
 			$data.file:=$file
 			$data.folder:=$data.file.parent
 			
-			$data.project:=$1
+			$data.project:=$platformPath
 			
 		End if 
 		
@@ -63,10 +63,12 @@ If (FEATURE.with("wizards"))
 			+"{description}"\
 			+"</span></span>")
 		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/apple.png").platformPath; $iOS)
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/android.png").platformPath; $android)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/os/iOS-32.png").platformPath; $iOS)
+		TRANSFORM PICTURE:C988($iOS; Crop:K61:7; 0; 32; 32; 32)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/os/Android-32.png").platformPath; $android)
+		TRANSFORM PICTURE:C988($android; Crop:K61:7; 0; 32; 32; 32)
 		
-		CREATE THUMBNAIL:C679($blank; $blank; 60; 60)
+		CREATE THUMBNAIL:C679($blank; $blank; 32; 32)
 		
 		$data._projects:=New collection:C1472
 		
@@ -108,7 +110,7 @@ If (FEATURE.with("wizards"))
 	
 	If (Bool:C1537(OK))
 		
-		If ($data.folder=Null:C1517)  //double clic or shortcut
+		If ($data.folder=Null:C1517)  // Double clic or shortcut
 			
 			$data.file:=$data._current.file
 			$data.folder:=$data.file.parent

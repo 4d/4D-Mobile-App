@@ -24,8 +24,4 @@ Case of
 		OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1)
 		
 		//______________________________________________________
-	Else 
-		
-		// A "Case of" statement should never omit "Else"
-		//______________________________________________________
 End case 

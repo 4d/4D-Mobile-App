@@ -16,6 +16,8 @@
 		"onUnload",
 		"onTimer",
 		"onResize",
+		"onMouseEnter",
+		"onMouseLeave",
 		"onBoundVariableChange"
 	],
 	"pageFormat": {
@@ -256,45 +258,6 @@
 						"onClick"
 					]
 				},
-				"android": {
-					"type": "checkbox",
-					"text": "Android",
-					"top": 29,
-					"left": 695,
-					"width": 81,
-					"height": 84,
-					"events": [
-						"onClick",
-						"onMouseEnter",
-						"onMouseLeave"
-					],
-					"style": "toolbar",
-					"dataSource": "Form:C1466.$android",
-					"dataSourceTypeHint": "boolean",
-					"visibility": "visible",
-					"focusable": false,
-					"icon": "/RESOURCES/images/android.png",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg"
-				},
-				"ios": {
-					"type": "checkbox",
-					"text": "iOS",
-					"top": 29,
-					"left": 796,
-					"width": 81,
-					"height": 84,
-					"events": [
-						"onClick",
-						"onMouseEnter",
-						"onMouseLeave"
-					],
-					"style": "toolbar",
-					"icon": "/RESOURCES/images/apple.png",
-					"dataSource": "Form:C1466.$ios",
-					"dataSourceTypeHint": "boolean",
-					"visibility": "visible",
-					"focusable": false
-				},
 				"target.label": {
 					"type": "text",
 					"top": 5,
@@ -305,6 +268,49 @@
 					"textAlign": "left",
 					"text": ":xliff:targetOs",
 					"visibility": "visible"
+				},
+				"ios": {
+					"type": "checkbox",
+					"text": "iOS",
+					"top": 29,
+					"left": 780,
+					"width": 65,
+					"height": 80,
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					],
+					"style": "custom",
+					"icon": "/RESOURCES/images/os/iOS-32.png",
+					"dataSource": "Form:C1466.$ios",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false,
+					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
+					"iconFrames": 4,
+					"stroke": "automatic"
+				},
+				"android": {
+					"type": "checkbox",
+					"text": "Android",
+					"top": 29,
+					"left": 695,
+					"width": 65,
+					"height": 80,
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					],
+					"style": "custom",
+					"icon": "/RESOURCES/images/os/Android-32.png",
+					"dataSource": "Form:C1466.$android",
+					"dataSourceTypeHint": "boolean",
+					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
+					"iconFrames": 4,
+					"focusable": false,
+					"textPlacement": "bottom",
+					"stroke": "automatic"
 				}
 			}
 		}
@@ -321,5 +327,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 58
+	"geometryStamp": 62
 }

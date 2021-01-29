@@ -106,6 +106,12 @@ Case of
 			
 		End if 
 		
+		If (FORM Get current page:C276(*)=2)
+			
+			$form.buildButtons.distributeHorizontally($form)
+			
+		End if 
+		
 		//______________________________________________________
 	: ($e.code=On Page Change:K2:54)
 		

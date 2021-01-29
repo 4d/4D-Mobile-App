@@ -43,7 +43,6 @@ Case of
 				
 			End if 
 			
-			
 			If (Bool:C1537($in.project.$xCode.ready))
 				
 				$xCode:=$in.project.$xCode

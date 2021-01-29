@@ -151,7 +151,7 @@
 					"icon": "/RESOURCES/images/toolbar/general-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"radioGroup": "Group15",
 					"method": "RIBBON",
 					"events": [
@@ -171,7 +171,7 @@
 					"icon": "/RESOURCES/images/toolbar/structure-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"radioGroup": "Group15",
 					"method": "RIBBON",
 					"events": [
@@ -191,7 +191,7 @@
 					"icon": "/RESOURCES/images/toolbar/main-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"radioGroup": "Group15",
 					"method": "RIBBON",
 					"events": [
@@ -211,7 +211,7 @@
 					"icon": "/RESOURCES/images/toolbar/views-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"radioGroup": "Group15",
 					"method": "RIBBON",
 					"events": [
@@ -231,7 +231,7 @@
 					"icon": "/RESOURCES/images/toolbar/properties-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"radioGroup": "Group15",
 					"method": "RIBBON",
 					"events": [
@@ -251,7 +251,7 @@
 					"icon": "/RESOURCES/images/toolbar/deployment-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"radioGroup": "Group15",
 					"method": "RIBBON",
 					"events": [
@@ -271,7 +271,7 @@
 					"icon": "/RESOURCES/images/toolbar/Data-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"radioGroup": "Group15",
 					"method": "RIBBON",
 					"events": [
@@ -292,7 +292,7 @@
 					"icon": "/RESOURCES/images/toolbar/actions-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"radioGroup": "Group15",
 					"method": "RIBBON",
 					"events": [
@@ -317,7 +317,7 @@
 					"icon": "/RESOURCES/images/toolbar/generate-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -338,7 +338,7 @@
 					"icon": "/RESOURCES/images/toolbar/project-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -359,7 +359,7 @@
 					"icon": "/RESOURCES/images/toolbar/test-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"method": "ObjectMethods/201.4dm",
 					"events": [
 						"onClick",
@@ -380,7 +380,7 @@
 					"icon": "/RESOURCES/images/toolbar/install-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"customBackgroundPicture": "/RESOURCES/images/toolbar/radio-back.svg",
+					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
 					"method": "RIBBON",
 					"events": [
 						"onClick",

@@ -37,10 +37,10 @@
 			"objects": {
 				"list": {
 					"type": "listbox",
-					"top": 205,
+					"top": 190,
 					"left": 284,
 					"width": 402,
-					"height": 370,
+					"height": 385,
 					"focusable": false,
 					"rowHeight": "5em",
 					"showHeaders": false,
@@ -157,14 +157,14 @@
 					"textAlign": "center",
 					"text": ":xliff:goMobileSubTitle",
 					"fontTheme": "normal",
-					"fontSize": 14
+					"fontSize": 18
 				},
 				"newProject": {
 					"type": "subform",
 					"left": 284,
 					"top": 577,
 					"width": 400,
-					"height": 180,
+					"height": 181,
 					"detailForm": "NEW_PROJECT",
 					"events": [
 						"onGettingFocus"
@@ -223,7 +223,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 266,
+	"geometryStamp": 270,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

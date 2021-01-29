@@ -96,19 +96,25 @@ Function launch($command; $arguments : Text)->$this : cs:C1710.lep
 	
 	$t:=Convert to text:C1012($output; This:C1470.charSet)
 	
+	If ($t[[1]]="\n")
+		
+		$t:=Substring:C12($t; 2)
+		
+	End if 
+	
 	If (Length:C16($error)=0)
 		
-		If (Not:C34(This:C1470.ignoreErrorInOutputStream))
+		//If (Not(This.ignoreErrorInOutputStream))
+		
+		// ⚠️ Some commands return the error in the output stream
+		
+		If (Position:C15("ERROR:"; $t; *)=1)
 			
-			// ⚠️ Some commands return the error in the output stream
+			$error:=$t
 			
-			If (Position:C15("ERROR:"; $t; *)>0)
-				
-				$error:=$t
-				
-			End if 
 		End if 
 	End if 
+	//End if 
 	
 	This:C1470.success:=Bool:C1537(OK) & (Length:C16($error)=0)
 	
@@ -197,7 +203,7 @@ Function reset()->$this : cs:C1710.lep
 	This:C1470.outputStream:=Null:C1517
 	This:C1470.errorStream:=Null:C1517
 	This:C1470.pid:=0
-	This:C1470.ignoreErrorInOutputStream:=False:C215
+	//This.ignoreErrorInOutputStream:=False
 	
 	This:C1470.setCharSet()
 	This:C1470.setOutputType()

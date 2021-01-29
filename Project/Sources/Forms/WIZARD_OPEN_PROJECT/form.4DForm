@@ -113,7 +113,7 @@
 								"name": "Footer1"
 							},
 							"pictureFormat": "truncatedCenter",
-							"width": 150
+							"width": 100
 						},
 						{
 							"name": "texts",

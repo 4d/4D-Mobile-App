@@ -3,7 +3,7 @@ PRODUCTS pannel Class
 ===============================================*/
 Class extends form
 
-//________________________________________________________________
+//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
@@ -14,13 +14,16 @@ Class constructor
 		
 		This:C1470.productName:=cs:C1710.widget.new("10_name")
 		This:C1470.productNameAlert:=cs:C1710.attention.new("name.alert")
+		
 		This:C1470.productVersion:=cs:C1710.widget.new("11_version")
+		
 		This:C1470.productID:=cs:C1710.widget.new("id")
+		
 		This:C1470.productCopyright:=cs:C1710.widget.new("30_copyright")
+		
 		This:C1470.icon:=cs:C1710.widget.new("icon")
 		This:C1470.iconAlert:=cs:C1710.attention.new("icon.alert")
 		
-		// TARGET
 		This:C1470.target:=cs:C1710.static.new("target.label")
 		This:C1470.ios:=cs:C1710.button.new("ios")
 		This:C1470.android:=cs:C1710.button.new("android")
@@ -279,21 +282,16 @@ Function openAppleIconFolder
 	// Open the iOS icons folder
 Function openAndroidIconFolder
 	
-	If (Asserted:C1132(Form:C1466.$project.folder.folder("Android").exists))
-		
-		SHOW ON DISK:C922(Form:C1466.$project.folder.folder("Android").platformPath; *)
-		
-	End if 
+	SHOW ON DISK:C922(Form:C1466.$project.folder.folder("Android").platformPath; *)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Check the product name constraints
-Function checkName
-	var $1 : Text
+Function checkName($name : Text)
 	
 	var $length : Integer
 	var $e : Object
 	
-	$length:=Length:C16($1)
+	$length:=Length:C16($name)
 	$e:=FORM Event:C1606
 	
 	Case of 
@@ -311,7 +309,7 @@ Function checkName
 			
 			//%W-533.1
 			//______________________________________________________
-		: (Position:C15($1[[1]]; "\\!@#$%^&*-+=123456789")>0)
+		: (Position:C15($name[[1]]; "\\!@#$%^&*-+=123456789")>0)
 			//%W+533.1
 			
 			This:C1470.productNameAlert.alert("numbersOrSpecialCharactersAreNotAllowedInTheFirstPosition")
@@ -365,7 +363,7 @@ Function displayTarget
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Populate the target value into te project
-Function setTarget
+Function setTarget($check : Boolean)
 	
 	If (Form:C1466.$ios & Form:C1466.$android)
 		
@@ -394,13 +392,19 @@ Function setTarget
 	This:C1470.displayTarget()
 	This:C1470.displayIcon()
 	
-	// Launch the verification of the development tools, if any
-	If (Form:C1466.$ios & Is macOS:C1572 & Not:C34(Bool:C1537(Form:C1466.$project.$xCode.ready)))\
-		 | (Form:C1466.$android & Not:C34(Bool:C1537(Form:C1466.$project.$studio.ready)))
+	If (Count parameters:C259>=1)
 		
-		CALL WORKER:C1389(Form:C1466.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-			"caller"; Form:C1466.$mainWindow; "project"; Form:C1466.$project))
-		
+		If ($check)
+			
+			// Launch the verification of the development tools, if any
+			If (Form:C1466.$ios & Is macOS:C1572 & Not:C34(Bool:C1537(Form:C1466.$project.$xCode.ready)))\
+				 | (Form:C1466.$android & Not:C34(Bool:C1537(Form:C1466.$project.$studio.ready)))
+				
+				CALL WORKER:C1389(Form:C1466.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
+					"caller"; Form:C1466.$mainWindow; "project"; Form:C1466.$project))
+				
+			End if 
+		End if 
 	End if 
 	
 	//=========================================================

@@ -25,22 +25,12 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			If (FEATURE.with("android"))  //🚧
 				
-				//If (Value type(Form.info.target)=Is collection)
-				//$ƒ.android.setValue(True)
-				//$ƒ.apple.setValue(True)
-				//Else 
-				//$ƒ.android.setValue(Form.info.target="android")
-				//$ƒ.apple.setValue(Form.info.target="iOS")
-				//End if 
-				
 				If (Is Windows:C1573)
 					
 					$ƒ.android.disable()
 					$ƒ.ios.disable()
 					
 				End if 
-				
-				//$ƒ.setTarget()
 				
 			Else 
 				
@@ -109,7 +99,7 @@ Else   // <== WIDGETS METHOD
 					//______________________________________________________
 				: ($e.code=On Clicked:K2:4)
 					
-					$ƒ.setTarget()
+					$ƒ.setTarget(True:C214)
 					
 					//______________________________________________________
 				: ($e.code=On Mouse Enter:K2:33)

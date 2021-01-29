@@ -1,8 +1,25 @@
+/*
+
+*/
 Class extends lep
 
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705()
+	
+	// Set JAVA_HOME
+	This:C1470.getJavaHome()
+	
+	If (This:C1470.success)
+		
+		This:C1470.setEnvironnementVariable("JAVA_HOME"; This:C1470.java_home)
+		
+	Else 
+		
+		//#ERROR
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the Android SDK folder object
@@ -18,7 +35,15 @@ Function androidSDKFolder()->$folder : 4D:C1709.Folder
 		
 	End if 
 	
-	// or find it
+	If ($folder.exists)
+		
+		// <NOTHING MORE TO DO>
+		
+	Else 
+		
+		// #TO_DO : or find it
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the User Home folder object
@@ -28,12 +53,7 @@ Function homeFolder()->$folder : 4D:C1709.Folder
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function getJavaHome()->$java : Object
-	
-	$java:=New object:C1471(\
-		"java_home"; ""; \
-		"success"; False:C215; \
-		"errors"; New collection:C1472)
+Function getJavaHome()
 	
 	If (Is macOS:C1572)
 		
@@ -45,15 +65,13 @@ Function getJavaHome()->$java : Object
 		
 	End if 
 	
-	$java.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
-	
-	If ($java.success)
+	If (This:C1470.success)
 		
-		$java.java_home:=This:C1470.outputStream
+		This:C1470.java_home:=This:C1470.outputStream
 		
 	Else 
 		
-		$java.errors.push("Failed to get JAVA_HOME")
+		This:C1470.errors.push("Failed to get JAVA_HOME")
 		
 	End if 
 	

@@ -64,7 +64,7 @@ Function availableDevices()->$devices : Collection
 	
 	$devices:=New collection:C1472
 	
-	This:C1470.ignoreErrorInOutputStream:=True:C214
+	//This.ignoreErrorInOutputStream:=True
 	This:C1470.launch(This:C1470.cmd+" list avd")
 	
 	If (This:C1470.success)
@@ -90,7 +90,7 @@ Function availableDevices()->$devices : Collection
 		
 	Else 
 		
-		// A "If" statement should never omit "Else" 
+		//
 		
 	End if 
 	
@@ -102,7 +102,7 @@ Function _o_devices()->$devices : Collection
 	
 	$devices:=New collection:C1472
 	
-	This:C1470.ignoreErrorInOutputStream:=True:C214
+	//This.ignoreErrorInOutputStream:=True
 	This:C1470.launch(This:C1470.cmd+" list avd")
 	
 	If (This:C1470.success)

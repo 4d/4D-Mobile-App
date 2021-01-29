@@ -231,7 +231,7 @@ Function AppIconSet($icon : Picture)
 		End if 
 	End if 
 	
-	// Add a blank background
+	// Transparency is not allowed, so we add a white background.
 	READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/blanck.png").platformPath; $blank)
 	COMBINE PICTURES:C987($icon; $blank; Superimposition:K61:10; $icon; (1024-$width)\2; (1024-$height)\2)
 	
@@ -336,7 +336,7 @@ Function AndroidIconSet($icon : Picture)
 		End if 
 	End for each 
 	
-	//================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Save the project
 Function save()
 	
@@ -380,7 +380,7 @@ Function save()
 	$file.create()
 	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
-	//================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Returns a cleaned project
 Function cleaned()->$project : Object
 	
@@ -437,7 +437,7 @@ Function cleaned()->$project : Object
 		
 	End for each 
 	
-	//================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Cleaning inner objects
 Function cleanup($dirtyObject : Object)->$cleanObject : Object
 	

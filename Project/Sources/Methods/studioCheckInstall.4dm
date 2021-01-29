@@ -65,6 +65,9 @@ If ($out.studioAvailable)
 		
 		If ($out.ready)
 			
+			// CHECK JAVA
+			
+			
 			
 			
 		Else 
@@ -90,11 +93,11 @@ If ($out.studioAvailable)
 		//If (Not($out.toolsAvalaible))
 		//$out.ready:=False
 		//$signal:=await_MESSAGE(New object(\
-									"target"; $in.caller; \
-									"action"; "show"; \
-									"type"; "confirm"; \
-									"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
-									"additional"; "wantToFixThePath"))
+															"target"; $in.caller; \
+															"action"; "show"; \
+															"type"; "confirm"; \
+															"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
+															"additional"; "wantToFixThePath"))
 		//If ($signal.validate)
 		//$t:=Get localized string("4dMobileWantsToMakeChanges")
 		//$t:=Replace string($t; "{product}"; Get localized string("4dProductName"))
@@ -108,11 +111,11 @@ If ($out.studioAvailable)
 		//// NOTHING MORE TO DO
 		//Else 
 		//POST_MESSAGE(New object(\
-									"target"; $in.caller; \
-									"action"; "show"; \
-									"type"; "alert"; \
-									"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
-									"additional"; "tryDoingThisFromTheXcodeApplication"))
+															"target"; $in.caller; \
+															"action"; "show"; \
+															"type"; "alert"; \
+															"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
+															"additional"; "tryDoingThisFromTheXcodeApplication"))
 		//End if 
 		//End if 
 		//End if 
@@ -136,7 +139,7 @@ If ($out.studioAvailable)
 	
 Else 
 	
-	If ($studio.window) | Bool:C1537($inƒ.mandatory)
+	If ($studio.window) | Not:C34(Bool:C1537($inƒ.silent))
 		
 		$signal:=await_MESSAGE(New object:C1471(\
 			"target"; $inƒ.caller; \
