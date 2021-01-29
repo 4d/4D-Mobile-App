@@ -96,11 +96,15 @@ Function launch($command; $arguments : Text)->$this : cs:C1710.lep
 	
 	$t:=Convert to text:C1012($output; This:C1470.charSet)
 	
-	If ($t[[1]]="\n")
+	If (Length:C16($t)>0)
 		
-		$t:=Substring:C12($t; 2)
-		
+		If ($t[[1]]="\n")
+			
+			$t:=Substring:C12($t; 2)
+			
+		End if 
 	End if 
+	
 	
 	If (Length:C16($error)=0)
 		
