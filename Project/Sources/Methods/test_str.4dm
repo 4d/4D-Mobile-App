@@ -442,6 +442,10 @@ $o.setText($t)
 ASSERT:C1129($o.lastOccurrence("hello")=1)
 ASSERT:C1129($o.lastOccurrence("world")=7)
 
+$t:="Champs-Élysées"
+$o.setText($t)
+ASSERT:C1129($o.lastOccurrence("é")=13)
+ASSERT:C1129($o.lastOccurrence("é"; True:C214)=12)
 
 FINALLY
 

@@ -68,7 +68,7 @@ Case of
 						For each ($device; Form:C1466.devices.android)
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+								.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID)).enable(Not:C34($device.missingSystemImage))
 							
 						End for each 
 						

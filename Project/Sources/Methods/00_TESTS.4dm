@@ -21,15 +21,6 @@ $b:=_4D With feature:C1524("WITH_THROW_ERROR")
 
 Case of 
 		
-		
-		//________________________________________
-	: (True:C214)
-		
-		$o:=cs:C1710.path.new().listForms()
-		
-		
-		
-		
 		//________________________________________
 	: (True:C214)
 		
@@ -45,7 +36,10 @@ Case of
 		//$start:=$pos{2}+$length{2}+1
 		//End while 
 		
-		$c:=$o._o_devices()
+		//$c:=$o._o_devices()
+		//$c1:=$o.devices()
+		$c:=$o.availableDevices()
+		$t:=$o.listAvds()
 		
 		
 		//________________________________________

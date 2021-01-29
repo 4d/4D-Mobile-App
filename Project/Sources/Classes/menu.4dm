@@ -94,7 +94,7 @@ Class constructor
 	// Removes the menu from memory
 Function release()
 	
-	If (This:C1470.__isMenu())
+	If (This:C1470._isMenu())
 		
 		RELEASE MENU:C978(This:C1470.ref)
 		This:C1470.ref:=Null:C1517
@@ -111,7 +111,7 @@ Function append($item : Variant; $param : Variant; $mark : Boolean)->$this : cs:
 	Case of 
 			
 			//______________________________________________________
-		: (Not:C34(This:C1470.__isMenu()))
+		: (Not:C34(This:C1470._isMenu()))
 			
 			// <NOTHING MORE TO DO>
 			
@@ -514,7 +514,7 @@ Function icon($icon : Text; $index : Integer)->$this : cs:C1710.menu
 	// Replaces the current menu bar with the current menu
 Function setBar()
 	
-	This:C1470.__cleanup()
+	This:C1470._cleanup()
 	
 	SET MENU BAR:C67(This:C1470.ref)
 	
@@ -532,7 +532,7 @@ Function popup($where : Variant; $x : Variant; $y : Integer)->$this : cs:C1710.m
 	C_VARIANT:C1683($2)
 	C_LONGINT:C283($3)
 	
-	This:C1470.__cleanup()
+	This:C1470._cleanup()
 	
 	Case of 
 			
@@ -810,7 +810,7 @@ Function getReference
 	
 	// ===============================================
 	// Remove duplicates (lines or items)
-Function __cleanup()
+Function _cleanup()
 	
 	var $t : Text
 	var $b : Boolean
@@ -871,7 +871,7 @@ Function __cleanup()
 	End for 
 	
 	// ===============================================
-Function __isMenu()->$isMenu : Boolean
+Function _isMenu()->$isMenu : Boolean
 	
 	If (Asserted:C1132(This:C1470.ref#Null:C1517; Current method name:C684+": The menu reference is null"))
 		

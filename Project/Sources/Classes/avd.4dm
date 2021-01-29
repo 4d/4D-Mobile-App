@@ -52,7 +52,7 @@ Function devices()->$devices : Collection
 		
 	Else 
 		
-		// A "If" statement should never omit "Else" 
+		//#ERROR
 		
 	End if 
 	
@@ -60,11 +60,12 @@ Function devices()->$devices : Collection
 	// Returns a collection of available device simulators
 Function availableDevices()->$devices : Collection
 	
-	var $start : Integer
+	var $t : Text
+	var $index; $start : Integer
+	var $o : Object
 	
 	$devices:=New collection:C1472
 	
-	//This.ignoreErrorInOutputStream:=True
 	This:C1470.launch(This:C1470.cmd+" list avd")
 	
 	If (This:C1470.success)
@@ -74,23 +75,156 @@ Function availableDevices()->$devices : Collection
 		ARRAY LONGINT:C221($pos; 0x0000)
 		ARRAY LONGINT:C221($len; 0x0000)
 		
-		While (Match regex:C1019("(?m-si)Name:\\s(\\V*)\\s*Device:\\s(\\V*)\\s*Path:\\s(\\V*)\\s*Target:\\s(\\V*\\s*\\V*)\\s*Skin:\\s(\\V*)\\s*Sdcard:\\s("+\
-			"\\V*)"; This:C1470.outputStream; $start; $pos; $len))
+		While (Match regex:C1019("(?m-si)Name:\\s(\\V*)(?:\\s*Device:\\s(\\V*))?\\s*Path:\\s(\\V*)(?:\\s*Target:\\s(\\V*\\s*\\V*))?(?:\\s*Skin:\\s(\\V*))?"+\
+			"(?:\\s*Sdcard:\\s(\\V*))?(?:\\s*Error:\\s(\\V*))?"; This:C1470.outputStream; $start; $pos; $len))
 			
-			$devices.push(New object:C1471(\
+			$o:=New object:C1471(\
 				"udid"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
-				"name"; Substring:C12(This:C1470.outputStream; $pos{2}; $len{2}); \
-				"path"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3}); \
-				"isAvailable"; True:C214; \
-				"state"; "Shutdown"))
+				"name"; ""; \
+				"device"; ""; \
+				"path"; ""; \
+				"target"; ""; \
+				"skin"; ""; \
+				"Sdcard"; ""; \
+				"error"; ""; \
+				"isAvailable"; False:C215; \
+				"missingSystemImage"; False:C215; \
+				"isOutDated"; False:C215)
 			
-			$start:=$pos{2}+$len{2}+1
+			$index:=2
+			
+			If ($pos{$index}#-1)
+				
+				$o.device:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
+				
+			Else 
+				
+				Repeat 
+					
+					$index:=$index-1
+					
+					If ($pos{$index}#-1)
+						
+						$start:=$pos{$index}+$len{$index}+1
+						
+					End if 
+				Until ($pos{$index}#-1)
+			End if 
+			
+			$index:=3
+			
+			If ($pos{$index}#-1)
+				
+				$o.path:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
+				
+			Else 
+				
+				Repeat 
+					
+					$index:=$index-1
+					
+					If ($pos{$index}#-1)
+						
+						$start:=$pos{$index}+$len{$index}+1
+						
+					End if 
+				Until ($pos{$index}#-1)
+			End if 
+			
+			$index:=4
+			
+			If ($pos{$index}#-1)
+				
+				$o.target:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
+				
+			Else 
+				
+				Repeat 
+					
+					$index:=$index-1
+					
+					If ($pos{$index}#-1)
+						
+						$start:=$pos{$index}+$len{$index}+1
+						
+					End if 
+				Until ($pos{$index}#-1)
+			End if 
+			
+			$index:=5
+			
+			If ($pos{$index}#-1)
+				
+				$o.skin:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
+				
+			Else 
+				
+				Repeat 
+					
+					$index:=$index-1
+					
+					If ($pos{$index}#-1)
+						
+						$start:=$pos{$index}+$len{$index}+1
+						
+					End if 
+				Until ($pos{$index}#-1)
+			End if 
+			
+			$index:=6
+			
+			If ($pos{$index}#-1)
+				
+				$o.Sdcard:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
+				
+			Else 
+				
+				Repeat 
+					
+					$index:=$index-1
+					
+					If ($pos{$index}#-1)
+						
+						$start:=$pos{$index}+$len{$index}+1
+						
+					End if 
+				Until ($pos{$index}#-1)
+			End if 
+			
+			$index:=7
+			
+			If ($pos{$index}#-1)
+				
+				$o.error:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
+				
+			Else 
+				
+				Repeat 
+					
+					$index:=$index-1
+					
+					If ($pos{$index}#-1)
+						
+						$start:=$pos{$index}+$len{$index}+1
+						
+					End if 
+				Until ($pos{$index}#-1)
+			End if 
+			
+			$o.name:=Replace string:C233($o.udid; "_"; " ")
+			
+			$t:=String:C10($o.error)
+			$o.isAvailable:=(Length:C16($t)=0)
+			$o.missingSystemImage:=(Position:C15("Missing system image"; $t)>0)
+			$o.isOutDated:=(Position:C15("no longer exists as a device"; $t)>0)
+			
+			$devices.push($o)
 			
 		End while 
 		
 	Else 
 		
-		//
+		//#ERROR
 		
 	End if 
 	
@@ -124,7 +258,7 @@ Function _o_devices()->$devices : Collection
 		
 	Else 
 		
-		// A "If" statement should never omit "Else" 
+		//#ERROR
 		
 	End if 
 	

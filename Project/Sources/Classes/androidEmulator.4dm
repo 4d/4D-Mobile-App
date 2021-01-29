@@ -191,17 +191,17 @@ Function start  // Starts emulator
 	This:C1470.synchronous()  // Set back to synchronous mode
 	
 	
-/*Function list  // List available AVDs
-var $0 : Object
+Function list  // List available AVDs
+	var $0 : Object
 	
-$0:=This.launch(This.cmd; "-list-avds")
+	$0:=This:C1470.launch(This:C1470.cmd; "-list-avds")
 	
-If ($0.success)
+	If ($0.success)
+		
+		$0.emulators:=Split string:C1554($0.outputStream; "\n"; sk ignore empty strings:K86:1)
+		
+	End if 
 	
-$0.emulators:=Split string($0.out; "\n"; sk ignore empty strings)
-	
-End if 
-*/
 	
 /*Function version
 var $0 : Object

@@ -919,6 +919,7 @@
 			"test_db",
 			"test_lep",
 			"test_ob",
+			"test_regex",
 			"test_str"
 		]
 	},

@@ -77,26 +77,50 @@ Function contains($toFind : Text; $diacritical : Boolean)->$contains : Boolean
 	
 	//=======================================================================================================
 	// Returns the position of the last occurence of a string
-Function lastOccurrence($toFind : Text)->$position : Integer
+Function lastOccurrence($toFind : Text; $diacritic : Boolean)->$position : Integer
 	
 	var $toFind : Text
 	var $pos; $start : Integer
+	var $isDiacritic : Boolean
 	
 	If (Length:C16($toFind)>0)
 		
 		$start:=1
 		
-		Repeat 
+		If (Count parameters:C259>=1)
 			
-			$pos:=Position:C15($toFind; This:C1470.value; $start)
+			$isDiacritic:=$diacritic
 			
-			If ($pos>0)
+		End if 
+		
+		If ($isDiacritic)
+			
+			Repeat 
 				
-				$position:=$pos
-				$start:=$pos+Length:C16($toFind)
+				$pos:=Position:C15($toFind; This:C1470.value; $start; *)
 				
-			End if 
-		Until ($pos=0)
+				If ($pos>0)
+					
+					$position:=$pos
+					$start:=$pos+Length:C16($toFind)
+					
+				End if 
+			Until ($pos=0)
+			
+		Else 
+			
+			Repeat 
+				
+				$pos:=Position:C15($toFind; This:C1470.value; $start)
+				
+				If ($pos>0)
+					
+					$position:=$pos
+					$start:=$pos+Length:C16($toFind)
+					
+				End if 
+			Until ($pos=0)
+		End if 
 	End if 
 	
 	//=======================================================================================================
