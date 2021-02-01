@@ -253,11 +253,20 @@ Function androidProjectTemplateFiles  // android project template files folder
                   USER DATABASE
 	
 ========================================================*/
-Function databasePreferences  //  Writable user database preferences folder
+Function databasePreferences($fileName : Text)  //  Writable user database preferences folder
 	
 	C_OBJECT:C1216($0)
 	
-	This:C1470.target:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14; *).name)
+	If (Count parameters:C259>=1)
+		
+		This:C1470.target:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14; *).name).file($fileName)
+		
+	Else 
+		
+		This:C1470.target:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14; *).name)
+		
+	End if 
+	
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target

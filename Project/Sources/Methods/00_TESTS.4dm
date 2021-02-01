@@ -24,7 +24,8 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=cs:C1710.avd.new()
+		
+		$b:=cs:C1710.preferences.new().user("4D Mobile App.preferences").get("doNotShowGreetingMessage")
 		
 		//$t:=$o.listAvds()
 		//ARRAY LONGINT($pos; 0; 0)
@@ -38,8 +39,18 @@ Case of
 		
 		//$c:=$o._o_devices()
 		//$c1:=$o.devices()
-		$c:=$o.availableDevices()
-		$t:=$o.listAvds()
+		//$c:=$o.availableDevices()
+		//$t:=$o.listAvds()
+		
+		//$o:=cs.avd.new()
+		//$o.launch($o.cmd+" list target")
+		//$o.launch($o.cmd+" list device")
+		//$o.launch($o.cmd+" list avd")
+		
+		$o:=cs:C1710.androidEmulator.new()
+		$c:=$o.avalaible()
+		
+		//$o2:=$o.version()
 		
 		
 		//________________________________________

@@ -76,7 +76,11 @@ Function main()->$result : Object
 		"target"; This:C1470.input.caller; \
 		"additional"; "Procedure complete"))
 	
-	SHOW ON DISK:C922(This:C1470.input.path)
+	If (DATABASE.isMatrix)
+		
+		SHOW ON DISK:C922(This:C1470.input.path)
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//

@@ -72,7 +72,7 @@ Case of
 				If ($o.success)
 					
 					$Obj_out.success:=True:C214
-					$Obj_out.udid:=$o.value.CurrentDeviceUDID
+					$Obj_out.udid:=$o.value.currentDevice
 					
 				End if 
 				

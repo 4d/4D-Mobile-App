@@ -1,16 +1,17 @@
 
 Class extends externalProcess
 
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705()
 	
 	This:C1470.cmd:="java"  // TODO : find java? in config or JAVA_HOME or ? or which java on unix
 	
-	This:C1470.version:=""
-	This:C1470.javaVersion()
+	This:C1470._version()
 	
-Function javaVersion
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _version
 	
 	var $o : Object
 	

@@ -21,7 +21,7 @@ options:
 -no-cache                              disable the cache partition
 -nocache                               same as -no-cache
 -sdcard <file>                         SD card image (default <datadir>/sdcard.img
--quit-after-boot <timeout>             qeuit emulator after guest boots completely, or after timeout in seconds
+-quit-after-boot <timeout>             quit emulator after guest boots completely, or after timeout in seconds
 -snapstorage <file>                    file that contains all state snapshots (default <datadir>/snapshots.img)
 -no-snapstorage                        do not mount a snapshot storage file (this disables all snapshot functionality)
 -snapshot <name>                       name of snapshot within storage file for auto-start and auto-save (default 'default-boot')
@@ -146,11 +146,12 @@ options:
 
 Class extends androidProcess
 
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.cmd:=This:C1470.emulatorFile().path
+	This:C1470.cmd:=This:C1470._exe().path
 	
 	If (Is Windows:C1573)
 		
@@ -160,12 +161,43 @@ Class constructor
 		
 	End if 
 	
-Function emulatorFile
-	var $0 : 4D:C1709.File
+	This:C1470._version()
 	
-	$0:=This:C1470.androidSDKFolder().folder("emulator").file("emulator")
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _exe()->$file : 4D:C1709.File
+	
+	$file:=This:C1470.androidSDKFolder().file("emulator/emulator")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _version()
+	
+	This:C1470.launch(This:C1470.cmd; "-version")
+	
+	ARRAY LONGINT:C221($pos; 0x0000)
+	ARRAY LONGINT:C221($len; 0x0000)
+	
+	If (Match regex:C1019("(?m-si)\\sversion\\s([\\d\\.]+)\\s\\(build_id\\s(\\d+)"; This:C1470.outputStream; 1; $pos; $len))
+		
+		This:C1470.version:=Substring:C12(This:C1470.outputStream; $pos{1}; $len{1})
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the list of available emulators names
+Function avalaible()->$emulators : Collection
+	
+	If (This:C1470.launch(This:C1470.cmd; "-list-avds").success)
+		
+		$emulators:=Split string:C1554(This:C1470.outputStream; "\n"; sk ignore empty strings:K86:1)
+		
+	End if 
 	
 	
+	
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Starting the emulator
 Function start  // Starts emulator
 	var $0 : Object
 	var $1 : Text  // Avd name
@@ -203,8 +235,4 @@ Function list  // List available AVDs
 	End if 
 	
 	
-/*Function version
-var $0 : Object
 	
-$0:=This.launch(This.cmd; New collection("-version"))
-*/

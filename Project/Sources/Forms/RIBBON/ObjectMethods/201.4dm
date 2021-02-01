@@ -32,6 +32,12 @@ Case of
 		
 		If (FEATURE.with("android"))  // 🚧
 			
+			var $pref : cs:C1710.preferences
+			$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
+			
+			var $current : Text
+			$current:=String:C10($pref.get("simulator"))
+			
 			var $tab : Text
 			$tab:="   "
 			
@@ -46,7 +52,7 @@ Case of
 						For each ($device; Form:C1466.devices.apple)
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+								.mark($device.udid=$current)
 							
 						End for each 
 					End if 
@@ -68,7 +74,7 @@ Case of
 						For each ($device; Form:C1466.devices.android)
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID)).enable(Not:C34($device.missingSystemImage))
+								.mark($device.udid=$current).enable(Not:C34($device.missingSystemImage))
 							
 						End for each 
 						
@@ -86,7 +92,7 @@ Case of
 					For each ($device; Form:C1466.devices.android)
 						
 						$menu.append($device.name; $device.udid)\
-							.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+							.mark($device.udid=String:C10(Form:C1466.currentDevice))
 						
 					End for each 
 					
@@ -105,7 +111,7 @@ Case of
 				For each ($device; Form:C1466.devices)
 					
 					$menu.append($device.name; $device.udid)\
-						.mark($device.udid=String:C10(Form:C1466.CurrentDeviceUDID))
+						.mark($device.udid=String:C10(Form:C1466.currentDevice))
 					
 				End for each 
 				
@@ -151,20 +157,46 @@ Case of
 					"title"; "We are going tout doux 🤣"))
 				
 				//______________________________________________________
-			: (Match regex:C1019("(?mi-s)^(?:[[:alnum:]]*-)*[[:alnum:]]*$"; $menu.choice; 1))  // iOS
+			: (FEATURE.with("android"))  // 🚧
 				
-				If ($menu.choice#String:C10(Form:C1466.CurrentDeviceUDID))
+				CLEAR VARIABLE:C89($device)
+				
+				If (Is macOS:C1572)
 					
-					If (FEATURE.with("android"))  // 🚧
+					$device:=Form:C1466.devices.apple.query("udid = :1"; $menu.choice).pop()
+					
+				End if 
+				
+				If ($device#Null:C1517)
+					
+					Form:C1466.currentDevice:=$menu.choice
+					OBJECT SET TITLE:C194(*; "201"; $device.name)
+					
+				Else 
+					
+					$device:=Form:C1466.devices.android.query("udid = :1"; $menu.choice).pop()
+					
+					If ($device#Null:C1517)
 						
-						$device:=Form:C1466.devices.apple.query("udid = :1"; $menu.choice).pop()
+						Form:C1466.currentDevice:=$menu.choice
+						OBJECT SET TITLE:C194(*; "201"; $device.name)
 						
 					Else 
 						
-						// Old
-						$device:=Form:C1466.devices.query("udid = :1"; $menu.choice).pop()
+						ASSERT:C1129(Not:C34(DATABASE.isMatrix); "Should not, since we have selected one!")
 						
 					End if 
+				End if 
+				
+				// Adapt button width
+				SET TIMER:C645(-1)
+				
+				//______________________________________________________
+			: (Match regex:C1019("(?mi-s)^(?:[[:alnum:]]*-)*[[:alnum:]]*$"; $menu.choice; 1))  // iOS
+				
+				If ($menu.choice#String:C10(Form:C1466.currentDevice))
+					
+					$device:=Form:C1466.devices.query("udid = :1"; $menu.choice).pop()
 					
 					// Kill booted Simulator if any
 					If (simulator(New object:C1471(\
@@ -177,7 +209,7 @@ Case of
 							"value"; $menu.choice)).success)
 							
 							// Set default simulator
-							Form:C1466.CurrentDeviceUDID:=$menu.choice
+							Form:C1466.currentDevice:=$menu.choice
 							
 							// Set button title
 							OBJECT SET TITLE:C194(*; "201"; $device.name)
@@ -201,23 +233,20 @@ Case of
 				//______________________________________________________
 			Else 
 				
-				If (FEATURE.with("android"))  // 🚧
-					
-					$device:=Form:C1466.devices.android.query("udid = :1"; $menu.choice).pop()
-					
-					// Set default simulator
-					Form:C1466.CurrentDeviceUDID:=$menu.choice
-					
-					// Set button title
-					OBJECT SET TITLE:C194(*; "201"; $device.name)
-					
-					// Adapt button width
-					SET TIMER:C645(-1)
-					
-				End if 
+				ASSERT:C1129(Not:C34(DATABASE.isMatrix))
 				
 				//______________________________________________________
 		End case 
+		
+		var $pref : cs:C1710.preferences
+		$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
+		
+		If (Form:C1466.currentDevice#$current)
+			
+			// Keep
+			$pref.set("simulator"; Form:C1466.currentDevice)
+			
+		End if 
 		
 		//______________________________________________________
 	Else 

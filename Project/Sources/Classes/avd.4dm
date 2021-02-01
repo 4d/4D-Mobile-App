@@ -5,7 +5,7 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.cmd:=This:C1470.avdmanagerFile().path
+	This:C1470.cmd:=This:C1470._exe().path
 	
 	If (Is Windows:C1573)
 		
@@ -14,6 +14,11 @@ Class constructor
 		// Else : already set
 		
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _exe()->$file : 4D:C1709.File
+	
+	$file:=This:C1470.androidSDKFolder().file("tools/bin/avdmanager")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a collection of potential device simulators
@@ -135,6 +140,9 @@ Function availableDevices()->$devices : Collection
 			
 			If ($pos{$index}#-1)
 				
+				$t:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
+				
+				
 				$o.target:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
 				
 			Else 
@@ -224,7 +232,9 @@ Function availableDevices()->$devices : Collection
 		
 	Else 
 		
-		//#ERROR
+		RECORD.error("availableDevices() failed")
+		RECORD.log("availableDevices() failed")
+		RECORD.open(This:C1470.errors.join("\r"))
 		
 	End if 
 	
@@ -268,11 +278,6 @@ Function isDeviceAvailable($device : Text)->$available : Boolean
 	
 	$available:=This:C1470.devices().query("(name = :1) or (path = :1)"; $device).pop()#Null:C1517
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function avdmanagerFile()->$file : 4D:C1709.File
-	
-	$file:=This:C1470.androidSDKFolder().file("tools/bin/avdmanager")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//

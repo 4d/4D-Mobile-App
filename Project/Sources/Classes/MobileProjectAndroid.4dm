@@ -22,8 +22,11 @@ Class constructor
 	
 	// Cleaning inner $objects
 	var $o : Object
+	
 	For each ($o; OB Entries:C1720(This:C1470.project.project).query("key=:1"; "$@"))
+		
 		OB REMOVE:C1226(This:C1470.project.project; $o.key)
+		
 	End for each 
 	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
@@ -32,13 +35,14 @@ Class constructor
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
 	
-	If (Structure file:C489=Structure file:C489(*))
+	If (DATABASE.isMatrix)
 		
 		SHOW ON DISK:C922(This:C1470.file.platformPath)
 		
 	End if 
 	
 	This:C1470.package:=Lowercase:C14(String:C10(This:C1470.project.project.organization.identifier))
+	
 	This:C1470.version:="debug"
 	This:C1470.apk:=Folder:C1567(This:C1470.project.path).folder("app/build/outputs/apk").folder(This:C1470.version).file("app-"+This:C1470.version+".apk")
 	This:C1470.activity:="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"

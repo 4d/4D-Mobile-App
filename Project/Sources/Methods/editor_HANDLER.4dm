@@ -111,8 +111,11 @@ Case of
 				// Touch the project subform
 				OBJECT SET VALUE:C1742($form.project; PROJECT)
 				
+				var $pref : cs:C1710.preferences
+				$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
+				
 				// Display the greeting message if any
-				If (Bool:C1537(editor_Preferences.doNotShowGreetingMessage))\
+				If (Bool:C1537(cs:C1710.preferences.new().user("4D Mobile App.preferences").get("doNotShowGreetingMessage")))\
 					 | (FEATURE.with("wizards"))
 					
 					editor_OPEN_PROJECT

@@ -125,9 +125,7 @@ FEATURE.unstable("searchWithBarCode")
 /* _____________
 ANDROID
 _____________*/
-
-// Android support
-FEATURE.unstable("android")
+FEATURE.unstable("android")  // Android support global flag
 FEATURE.unstable("wizards")  // Use a wizard instead of standard dialogs to create or open a project
 
 

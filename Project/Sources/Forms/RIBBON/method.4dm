@@ -161,57 +161,95 @@ Case of
 				
 				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0))
 				
-				If (Form:C1466.devices.apple.length>0)
+				// Get the last simulator used, if known
+				var $pref : cs:C1710.preferences
+				$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
+				
+				var $simulator : Text
+				$simulator:=String:C10($pref.get("simulator"))
+				
+				If (Length:C16($simulator)>0)
 					
-					// Get the default simulator
-					$plist:=ENV.preferences("com.apple.iphonesimulator.plist")
+					$device:=Form:C1466.devices.apple.query("udid = :1"; $simulator).pop()
 					
-					If (Not:C34($plist.exists))
+					If ($device#Null:C1517)
 						
-						simulator(New object:C1471(\
-							"action"; "fixdefault"))
+						$form.simulator.setTitle($device.name)
 						
-					End if 
-					
-					If ($plist.exists)
+					Else 
 						
-						$plist:=plist(New object:C1471(\
-							"action"; "object"; \
-							"domain"; $plist.path))
+						$device:=Form:C1466.devices.android.query("udid = :1"; $simulator).pop()
 						
-						If ($plist.success)
+						If ($device#Null:C1517)
 							
-							// Keep the current device identifier
-							Form:C1466.CurrentDeviceUDID:=$plist.value.CurrentDeviceUDID
+							$form.simulator.setTitle($device.name)
 							
-							// Display the current device name
-							$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
+						Else 
 							
-							If ($device=Null:C1517)
-								
-								simulator(New object:C1471(\
-									"action"; "getdefault"))
-								
-								$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
-								
-							End if 
+							$form.simulator.setTitle("unknown")
 							
-							If ($device=Null:C1517)
-								
-								$form.simulator.setTitle("unknown")
-								
-							Else 
-								
-								$form.simulator.setTitle($device.name)
-								
-							End if 
 						End if 
 					End if 
 					
 				Else 
 					
-					//#TO_DO - Select the last used simulator or the more relevant if none
-					
+					If (Is macOS:C1572)\
+						 & (Bool:C1537(Form:C1466.editor.$ios))\
+						 & (Form:C1466.devices.apple.length>0)
+						
+						// Get the default simulator
+						$plist:=ENV.preferences("com.apple.iphonesimulator.plist")
+						
+						If (Not:C34($plist.exists))
+							
+							simulator(New object:C1471(\
+								"action"; "fixdefault"))
+							
+						End if 
+						
+						If ($plist.exists)
+							
+							$plist:=plist(New object:C1471(\
+								"action"; "object"; \
+								"domain"; $plist.path))
+							
+							If ($plist.success)
+								
+								// Keep the current device identifier
+								Form:C1466.currentDevice:=$plist.value.currentDevice
+								
+								// Display the current device name
+								$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
+								
+								If ($device=Null:C1517)
+									
+									simulator(New object:C1471(\
+										"action"; "getdefault"))
+									
+									$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
+									
+								End if 
+								
+								If ($device=Null:C1517)
+									
+									$form.simulator.setTitle("unknown")
+									
+								Else 
+									
+									$form.simulator.setTitle($device.name)
+									
+									// Keep
+									$pref.set("simulator"; $device.udid)
+									
+								End if 
+							End if 
+						End if 
+						
+					Else 
+						
+						$form.simulator.setTitle("unknown")
+						
+					End if 
 				End if 
 				
 			Else 
@@ -240,17 +278,17 @@ Case of
 						If ($plist.success)
 							
 							// Keep the current device identifier
-							Form:C1466.CurrentDeviceUDID:=$plist.value.CurrentDeviceUDID
+							Form:C1466.currentDevice:=$plist.value.currentDevice
 							
 							// Display the current device name
-							$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
+							$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.currentDevice).pop()
 							
 							If ($device=Null:C1517)
 								
 								simulator(New object:C1471(\
 									"action"; "getdefault"))
 								
-								$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
+								$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.currentDevice).pop()
 								
 							End if 
 							

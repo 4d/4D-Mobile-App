@@ -1,13 +1,158 @@
 // Class extends tools
 
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	// Super()
 	
 	This:C1470.reset()
 	
-	//====================================================================
-Function launch($command; $arguments : Text)->$this : cs:C1710.lep
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Restores the initial values of the class
+Function reset()->$this : cs:C1710.lep
+	
+	This:C1470.success:=True:C214
+	This:C1470.errors:=New collection:C1472
+	This:C1470.command:=Null:C1517
+	This:C1470.inputStream:=Null:C1517
+	This:C1470.outputStream:=Null:C1517
+	This:C1470.errorStream:=Null:C1517
+	This:C1470.pid:=0
+	This:C1470.resultInErrorStream:=False:C215
+	
+	This:C1470.setCharSet()
+	This:C1470.setOutputType()
+	This:C1470.setEnvironnementVariable()
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function setCharSet($charset : Text)->$this : cs:C1710.lep
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.charSet:=$charset
+		
+	Else 
+		
+		// Reset
+		This:C1470.charSet:="UTF-8"
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function setOutputType($outputType : Integer)->$this : cs:C1710.lep
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.outputType:=$outputType
+		
+	Else 
+		
+		// Reset
+		This:C1470.outputType:=Is text:K8:3
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.lep
+	
+	var $v : Variant
+	var $o : Object
+	
+	This:C1470.success:=True:C214
+	
+	Case of 
+			
+			//……………………………………………………………………
+		: (Count parameters:C259=0)  // Reset to default
+			
+			This:C1470.environmentVariables:=New object:C1471(\
+				"_4D_OPTION_CURRENT_DIRECTORY"; ""; \
+				"_4D_OPTION_HIDE_CONSOLE"; "true"; \
+				"_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "true"\
+				)
+			
+			//______________________________________________________
+		: (Value type:C1509($variables)=Is text:K8:3)
+			
+			If (Count parameters:C259>=2)
+				
+				This:C1470.environmentVariables[This:C1470._shortcut($variables)]:=$value
+				
+			Else 
+				
+				// Reset
+				If (This:C1470._shortcut($variables)="_4D_OPTION_CURRENT_DIRECTORY")
+					
+					//empty string
+					This:C1470.environmentVariables[This:C1470._shortcut($variables)]:=""
+					
+				Else 
+					
+					This:C1470.environmentVariables[This:C1470._shortcut($variables)]:="false"
+					
+				End if 
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($variables)=Is object:K8:27)
+			
+			For each ($o; OB Entries:C1720($variables))
+				
+				If ($o.key#Null:C1517)
+					
+					This:C1470.environmentVariables[This:C1470._shortcut($o.key)]:=String:C10($o.value)
+					
+				Else 
+					
+					This:C1470._pushError("Missig key properties")
+					
+				End if 
+			End for each 
+			
+			//______________________________________________________
+		: (Value type:C1509($variables)=Is collection:K8:32)
+			
+			For each ($v; $variables)
+				
+				If (Value type:C1509($v)=Is object:K8:27)
+					
+					$o:=OB Entries:C1720($v).pop()
+					
+					If ($o.key#Null:C1517)
+						
+						This:C1470.environmentVariables[This:C1470._shortcut($o.key)]:=String:C10($o.value)
+						
+					Else 
+						
+						This:C1470._pushError("Missig key properties")
+						
+					End if 
+					
+				Else 
+					
+					This:C1470._pushError("Waiting for a collection of objects")
+					
+				End if 
+			End for each 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError("Waiting for a parameter Text, Object or Collection")
+			
+			//______________________________________________________
+	End case 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 	
 	var $input; $output : Blob
 	var $error; $t : Text
@@ -48,8 +193,26 @@ Function launch($command; $arguments : Text)->$this : cs:C1710.lep
 	
 	If (Count parameters:C259>=2)
 		
-		This:C1470.command:=This:C1470.command+" "+This:C1470.escape($arguments)
-		
+		//This.command:=This.command+" "+This.escape($arguments)
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($arguments)=Is text:K8:3)
+				
+				This:C1470.command:=This:C1470.command+" "+$arguments
+				
+				//______________________________________________________
+			: (Value type:C1509($arguments)=Is collection:K8:32)
+				
+				This:C1470.command:=This:C1470.command+$arguments.join(" ")
+				
+				//______________________________________________________
+			Else 
+				
+				ASSERT:C1129(False:C215; "$2 must be a text or a collection")
+				
+				//______________________________________________________
+		End case 
 	End if 
 	
 	For each ($t; This:C1470.environmentVariables)
@@ -98,6 +261,7 @@ Function launch($command; $arguments : Text)->$this : cs:C1710.lep
 	
 	If (Length:C16($t)>0)
 		
+		// Remove the 1st line feed, if any
 		If ($t[[1]]="\n")
 			
 			$t:=Substring:C12($t; 2)
@@ -125,11 +289,14 @@ Function launch($command; $arguments : Text)->$this : cs:C1710.lep
 		
 		This:C1470.pid:=$pid
 		
-		// Remove the last line feed, if any
-		If ($t[[Length:C16($t)]]="\n")
+		If (Length:C16($t)>0)
 			
-			$t:=Substring:C12($t; 1; Length:C16($t)-1)
-			
+			// Remove the last line feed, if any
+			If ($t[[Length:C16($t)]]="\n")
+				
+				$t:=Substring:C12($t; 1; Length:C16($t)-1)
+				
+			End if 
 		End if 
 		
 		Case of 
@@ -195,26 +362,7 @@ Function launch($command; $arguments : Text)->$this : cs:C1710.lep
 	
 	$this:=This:C1470
 	
-	//====================================================================
-	// Restores the initial values of the class
-Function reset()->$this : cs:C1710.lep
-	
-	This:C1470.success:=True:C214
-	This:C1470.errors:=New collection:C1472
-	This:C1470.command:=Null:C1517
-	This:C1470.inputStream:=Null:C1517
-	This:C1470.outputStream:=Null:C1517
-	This:C1470.errorStream:=Null:C1517
-	This:C1470.pid:=0
-	This:C1470.resultInErrorStream:=False:C215
-	
-	This:C1470.setCharSet()
-	This:C1470.setOutputType()
-	This:C1470.setEnvironnementVariable()
-	
-	$this:=This:C1470
-	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Execute the external process in synchronous mode
 	// ⚠️ Must be call before .launch()
 Function synchronous($mode : Boolean)->$this : cs:C1710.lep
@@ -231,7 +379,7 @@ Function synchronous($mode : Boolean)->$this : cs:C1710.lep
 	
 	$this:=This:C1470
 	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Execute the external process in asynchronous mode
 	// ⚠️ Must be call before .launch()
 Function asynchronous($mode : Boolean)->$this : cs:C1710.lep
@@ -248,39 +396,8 @@ Function asynchronous($mode : Boolean)->$this : cs:C1710.lep
 	
 	$this:=This:C1470
 	
-	//====================================================================
-Function setCharSet($charset : Text)->$this : cs:C1710.lep
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.charSet:=$charset
-		
-	Else 
-		
-		// Reset
-		This:C1470.charSet:="UTF-8"
-		
-	End if 
-	
-	$this:=This:C1470
-	
-	//====================================================================
-Function setOutputType($outputType : Integer)->$this : cs:C1710.lep
-	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.outputType:=$outputType
-		
-	Else 
-		
-		// Reset
-		This:C1470.outputType:=Is text:K8:3
-		
-	End if 
-	
-	$this:=This:C1470
-	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setDirectory($folder : 4D:C1709.Folder)->$this : cs:C1710.lep
 	
 	If (Count parameters:C259>=1)
@@ -297,22 +414,21 @@ Function setDirectory($folder : 4D:C1709.Folder)->$this : cs:C1710.lep
 	
 	$this:=This:C1470
 	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function showConsole()->$this : cs:C1710.lep
 	
 	This:C1470.environmentVariables["_4D_OPTION_HIDE_CONSOLE"]:="false"
 	
 	$this:=This:C1470
 	
-	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function hideConsole()->$this : cs:C1710.lep
 	
 	This:C1470.environmentVariables["_4D_OPTION_HIDE_CONSOLE"]:="true"
 	
 	$this:=This:C1470
 	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns an object containing all the environment variables
 Function getEnvironnementVariables()->$variables : Object
 	
@@ -347,7 +463,7 @@ Function getEnvironnementVariables()->$variables : Object
 		End for each 
 	End if 
 	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the content of an environment variable from its name
 Function getEnvironnementVariable($name : Text; $nonDiacritic : Boolean)->$value : Text
 	
@@ -414,84 +530,8 @@ Function getEnvironnementVariable($name : Text; $nonDiacritic : Boolean)->$value
 		
 	End if 
 	
-	//====================================================================
-Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.lep
-	
-	var $v : Variant
-	var $o : Object
-	
-	This:C1470.success:=True:C214
-	
-	Case of 
-			
-			//……………………………………………………………………
-		: (Count parameters:C259=0)
-			
-			This:C1470.environmentVariables:=New object:C1471(\
-				"_4D_OPTION_CURRENT_DIRECTORY"; ""; \
-				"_4D_OPTION_HIDE_CONSOLE"; "true"; \
-				"_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "true"\
-				)
-			
-			//______________________________________________________
-		: (Value type:C1509($variables)=Is text:K8:3)
-			
-			If (Count parameters:C259>=2)
-				
-				This:C1470.environmentVariables[This:C1470._shortcut($variables)]:=$value
-				
-			Else 
-				
-				// Reset
-				If (This:C1470._shortcut($variables)="_4D_OPTION_CURRENT_DIRECTORY")
-					
-					//empty string
-					This:C1470.environmentVariables[This:C1470._shortcut($variables)]:=""
-					
-				Else 
-					
-					This:C1470.environmentVariables[This:C1470._shortcut($variables)]:="false"
-					
-				End if 
-			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($variables)=Is object:K8:27)
-			
-			For each ($o; OB Entries:C1720($variables))
-				
-				This:C1470.environmentVariables[This:C1470._shortcut($o.key)]:=String:C10($o.value)
-				
-			End for each 
-			
-			//______________________________________________________
-		: (Value type:C1509($variables)=Is collection:K8:32)
-			
-			For each ($v; $variables)
-				
-				If (Value type:C1509($v)=Is object:K8:27)
-					
-					$o:=OB Entries:C1720($v).pop()
-					This:C1470.environmentVariables[This:C1470._shortcut($o.key)]:=$o.value
-					
-				Else 
-					
-					// ERROR
-					
-				End if 
-			End for each 
-			
-			//______________________________________________________
-		Else 
-			
-			This:C1470._pushError("Waiting for a parameter Text, Object or Collection")
-			
-			//______________________________________________________
-	End case 
-	
-	$this:=This:C1470
-	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//escape special caracters for lep commands
 Function escape($text : Text)->$escaped : Text
 	
 	var $t : Text
@@ -504,15 +544,15 @@ Function escape($text : Text)->$escaped : Text
 		
 	End for each 
 	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Enclose, if necessary, the string in single quotation marks
 Function singleQuoted($tring : Text)->$quoted : Text
 	
 	$quoted:=Choose:C955(Match regex:C1019("^'.*'$"; $tring; 1); $tring; "'"+$tring+"'")  // Already done // Do it
 	
-	//====================================================================
-	// Write access to a file or a directory with all its subfolders and files
-Function writable($cible : 4D:C1709.File)->$this : cs:C1710.lep
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Set write accesses to a file or a directory with all its subfolders and files
+Function makeWritable($cible : 4D:C1709.File)->$this : cs:C1710.lep
 	
 	If (Bool:C1537($cible.exists))
 		
@@ -599,9 +639,9 @@ ATTRIB [+R | -R] [+A | -A ] [+S | -S] [+H | -H] [+I | -I]
 	
 	$this:=This:C1470
 	
-	//====================================================================
-	// Write access to a directory with all its sub-folders and files
-Function unlock($cible : 4D:C1709.folder)->$this : cs:C1710.lep
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//Set write accesses to a directory with all its sub-folders and files
+Function unlockDirectory($cible : 4D:C1709.folder)->$this : cs:C1710.lep
 	
 	If (Bool:C1537($cible.exists))
 		
@@ -633,7 +673,7 @@ Function unlock($cible : 4D:C1709.folder)->$this : cs:C1710.lep
 	
 	$this:=This:C1470
 	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _shortcut($string : Text)->$variable : Text
 	
 	Case of   // Shortcuts
@@ -664,7 +704,7 @@ Function _shortcut($string : Text)->$variable : Text
 			//…………………………………………………………………………………………
 	End case 
 	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _pushError($desription : Text)
 	
 	This:C1470.success:=False:C215

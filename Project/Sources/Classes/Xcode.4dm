@@ -402,4 +402,5 @@ Function reveal
 	// Open xCode devices window
 Function showDevicesWindow
 	
-	OPEN URL:C673("xcdevice://showDevicesWindow"; *)
+	//OPEN URL("xcdevice://showDevicesWindow"; *)
+	OPEN URL:C673("xcdevice://showSimulatorsWindow"; *)

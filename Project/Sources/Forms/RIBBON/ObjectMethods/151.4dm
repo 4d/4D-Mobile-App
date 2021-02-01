@@ -28,35 +28,24 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Alternative Click:K2:36)
 		
-		If (FEATURE.with("android"))  //🚧
-			
-			If (Is Windows:C1573)
-				
-				PROJECT.buildTarget:="android"
-				CALL SUBFORM CONTAINER:C1086(-151)
-				
-			Else 
-				
-				OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
-				
-				$menu:=cs:C1710.menu.new()\
-					.append(cs:C1710.str.new("buildAndRunFor").localized("iOS"); "ios").enable(Bool:C1537(Form:C1466.status.xCode))\
-					.append(cs:C1710.str.new("buildAndRunFor").localized("Android"); "android").enable(Bool:C1537(Form:C1466.status.studio))\
-					.popup($left; $bottom)
-				
-				If ($menu.selected)
-					
-					PROJECT.buildTarget:=$menu.choice
-					CALL SUBFORM CONTAINER:C1086(-151)
-					
-				End if 
-			End if 
-			
-		Else 
-			
-			CALL SUBFORM CONTAINER:C1086(-151)
-			
-		End if 
+		//If (FEATURE.with("android"))  //🚧
+		//If (Is Windows)
+		//PROJECT._buildTarget:="android"
+		//CALL SUBFORM CONTAINER(-151)
+		//Else 
+		//OBJECT GET COORDINATES(*; $e.objectName; $left; $top; $right; $bottom)
+		//$menu:=cs.menu.new()\
+			.append(cs.str.new("buildAndRunFor").localized("iOS"); "ios").enable(Bool(Form.status.xCode))\
+			.append(cs.str.new("buildAndRunFor").localized("Android"); "android").enable(Bool(Form.status.studio))\
+			.popup($left; $bottom)
+		//If ($menu.selected)
+		//PROJECT._buildTarget:=$menu.choice
+		//CALL SUBFORM CONTAINER(-151)
+		//End if 
+		//End if 
+		//Else 
+		//CALL SUBFORM CONTAINER(-151)
+		//End if 
 		
 		//______________________________________________________
 	: ($e.code=On Clicked:K2:4)
@@ -68,24 +57,37 @@ Case of
 			
 			If (Is Windows:C1573)
 				
-				PROJECT.buildTarget:="android"
-				CALL SUBFORM CONTAINER:C1086(-151)
-				
-			Else 
-				
-				$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
-				
-				If ($device=Null:C1517)
-					
-					$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.CurrentDeviceUDID).pop()
-					
-				End if 
+				$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
 				
 				If ($device#Null:C1517)
 					
-					PROJECT.buildTarget:=Choose:C955(String:C10($device.deviceTypeIdentifier)="com.apple@"; "ios"; "android")
+					PROJECT._simulator:=$device.udid
+					PROJECT._buildTarget:="android"
 					CALL SUBFORM CONTAINER:C1086(-151)
 					
+				End if 
+				
+			Else 
+				
+				$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
+				
+				If ($device#Null:C1517)
+					
+					PROJECT._simulator:=$device.udid
+					PROJECT._buildTarget:="ios"
+					CALL SUBFORM CONTAINER:C1086(-151)
+					
+				Else 
+					
+					$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
+					
+					If ($device#Null:C1517)
+						
+						PROJECT._simulator:=$device.udid
+						PROJECT._buildTarget:="android"
+						CALL SUBFORM CONTAINER:C1086(-151)
+						
+					End if 
 				End if 
 			End if 
 			

@@ -10,6 +10,12 @@ Class constructor
 	This:C1470.lastError:=""
 	This:C1470.errors:=New collection:C1472
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _pushError($desription : Text)
+	
+	This:C1470.success:=False:C215
+	This:C1470.errors.push(Get call chain:C1662[1].name+" - "+$desription)
+	
 	//====================================================================
 	// Simple execution of LAUNCH EXTERNAL PROCESS
 Function lep
@@ -157,20 +163,10 @@ Function versionCompare
 	End for 
 	
 	//====================================================================
-	// Returns the string between single quotes
-Function singleQuoted
-	var $0 : Text
-	var $1 : Text
+	// Enclose, if necessary, the string in single quotation marks
+Function singleQuoted($tring : Text)->$quoted : Text
 	
-	If (Match regex:C1019("^'.*'$"; $1; 1))
-		
-		$0:=$1  // Already done
-		
-	Else 
-		
-		$0:="'"+$1+"'"  // Do it
-		
-	End if 
+	$quoted:=Choose:C955(Match regex:C1019("^'.*'$"; $tring; 1); $tring; "'"+$tring+"'")  // Already done // Do it
 	
 	//====================================================================
 	// Returns the string between quotes

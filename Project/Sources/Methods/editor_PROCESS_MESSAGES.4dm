@@ -93,11 +93,11 @@ Case of
 			Else 
 				
 /*
-																DO_MESSAGE(New object(\
-																				"action"; "show"; \
-																				"type"; "alert"; \
-																				"title"; "noDevices"; \
-																				"additional"; ""))
+				DO_MESSAGE(New object(\
+																									"action"; "show"; \
+																									"type"; "alert"; \
+																									"title"; "noDevices"; \
+																									"additional"; ""))
 */
 				
 			End if 
@@ -206,7 +206,7 @@ Case of
 		
 		If ($message="build")
 			
-			$title:=Get localized string:C991(Choose:C955($in.param.project.buildTarget="ios"; "4dForIos"; "4dForAndroid"))
+			$title:=Get localized string:C991(Choose:C955($in.param.project._buildTarget="ios"; "4dForIos"; "4dForAndroid"))
 			
 			Case of 
 					
