@@ -24,34 +24,52 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		var $o : cs:C1710.simulator
+		$o:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget)
+		$c:=$o.availableDevices()  //.query("name = :1"; "iPhone SE (2nd generation)")
 		
-		$b:=cs:C1710.preferences.new().user("4D Mobile App.preferences").get("doNotShowGreetingMessage")
 		
-		//$t:=$o.listAvds()
-		//ARRAY LONGINT($pos; 0; 0)
-		//ARRAY LONGINT($length; 0; 0)
-		//$start:=1
-		//While (Match regex("(?m-si)Name:\\s(\\V*)\\s*Path:\\s(\\V*)"; $t; $start; $pos; $length))
-		//$name:=Substring($t; $pos{1}; $length{1})
-		//$path:=Substring($t; $pos{2}; $length{2})
-		//$start:=$pos{2}+$length{2}+1
-		//End while 
+		//$o1:=_o_simulator(New object("action"; "default"))
+		////$o.getdefault()
 		
-		//$c:=$o._o_devices()
-		//$c1:=$o.devices()
-		//$c:=$o.availableDevices()
-		//$t:=$o.listAvds()
+		$b:=$o.isLaunched()
 		
-		//$o:=cs.avd.new()
-		//$o.launch($o.cmd+" list target")
-		//$o.launch($o.cmd+" list device")
-		//$o.launch($o.cmd+" list avd")
+		var $device : Object
+		$device:=$c.query("name = :1"; "iPhone 12 Pro Max").pop()
+		$o2:=$o.device($device.udid)
+		$b:=$o.isBooted($device.udid)
 		
-		$o:=cs:C1710.androidEmulator.new()
-		$c:=$o.avalaible()
+		$folder:=$o.deviceFolder($device.udid)
 		
-		//$o2:=$o.version()
+		If ($b)
+			
+			$o.kill($device.udid)
+			
+			Repeat 
+				
+				IDLE:C311
+				
+			Until (String:C10($o.device($device.udid).state)="Shutdown")
+			
+			$o.open($device.udid)
+			
+		Else 
+			
+			// A "If" statement should never omit "Else" 
+			
+		End if 
 		
+		//$t:=$o.default()
+		
+		
+		
+		//$result:=_o_simulator(New object(\
+			"action"; "isBooted"; \
+			"device"; "43C75F1A-6021-480D-A38C-A0C0B0EA0E22"))
+		
+		
+		//$c:=$o.deviceTypes("iPhone")
+		//$c:=$o.deviceTypes("iPad")
 		
 		//________________________________________
 	: (True:C214)
@@ -217,14 +235,6 @@ Case of
 		
 		
 		$o.release()
-		
-		//________________________________________
-	: (True:C214)
-		
-		$o:=simulator(New object:C1471(\
-			"action"; "open"; \
-			"editorToFront"; False:C215; \
-			"bringToFront"; True:C214))
 		
 		//________________________________________
 	: (True:C214)

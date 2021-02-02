@@ -4,6 +4,7 @@ Common tools to have at hand
 
 */
 
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	This:C1470.success:=False:C215

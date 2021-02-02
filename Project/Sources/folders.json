@@ -68,6 +68,7 @@
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
 			"_o_SERVER_OBJECTS_HANDLER",
+			"_o_simulator",
 			"_o_storyboard",
 			"_o_storyboard_fix_id",
 			"_o_str",
@@ -468,6 +469,7 @@
 			"form",
 			"lep",
 			"menu",
+			"preferences",
 			"process",
 			"regex",
 			"str",
@@ -677,7 +679,6 @@
 			"mobile_Project_iOS",
 			"plist",
 			"provisioningProfiles",
-			"simulator",
 			"swiftPM",
 			"teamId",
 			"test_capabilities",
@@ -688,6 +689,7 @@
 			"XcodeProjInject"
 		],
 		"classes": [
+			"simulator",
 			"Xcode"
 		]
 	},

@@ -208,6 +208,27 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"method": "ObjectMethods/message.4dm"
+				},
+				"down1": {
+					"type": "button",
+					"text": "🠧",
+					"top": 848,
+					"left": 8,
+					"width": 20,
+					"height": 20,
+					"events": [
+						"onClick"
+					],
+					"style": "flat",
+					"stroke": "#1e90ff",
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutShift": false,
+					"shortcutAlt": false,
+					"shortcutKey": "[Esc]",
+					"display": false,
+					"sizingY": "move",
+					"action": "cancel"
 				}
 			},
 			"entryOrder": [
@@ -215,7 +236,8 @@
 				"newProject",
 				"message.button",
 				"message",
-				"list"
+				"list",
+				"down1"
 			]
 		}
 	],
@@ -223,7 +245,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 270,
+	"geometryStamp": 272,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

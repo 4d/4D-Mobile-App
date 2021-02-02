@@ -18,14 +18,15 @@ Case of
 		
 		Form:C1466._browse:=cs:C1710.button.new("browse").bestSize(Align left:K42:2)
 		Form:C1466._open:=cs:C1710.button.new("open").bestSize(Align right:K42:4).disable()
-		Form:C1466._centered:=cs:C1710.group.new("list,open,message")
-		Form:C1466._buttons:=cs:C1710.group.new("open,browse")
-		Form:C1466._focus:=cs:C1710.static.new("focus")
+		Form:C1466._selection:=cs:C1710.static.new("focus")
+		
+		Form:C1466._centered:=cs:C1710.group.new("list,open,message,separator")
+		Form:C1466._leftAlign:=cs:C1710.group.new("list,browse")
 		
 		Form:C1466._centered.centerVertically()
-		Form:C1466._buttons.distributeHorizontally()
+		Form:C1466._leftAlign.alignLeft()
 		
-		Form:C1466._list:=cs:C1710.listbox.new("list")
+		Form:C1466._list:=cs:C1710.listbox.new("list").setScrollbars(0; 2)
 		
 		If (Form:C1466._projects.length=0)
 			
@@ -44,12 +45,12 @@ Case of
 	: ($e.code=On Resize:K2:27)
 		
 		Form:C1466._centered.centerVertically()
-		Form:C1466._buttons.distributeHorizontally()
+		Form:C1466._leftAlign.alignLeft()
 		
 		If (Form:C1466._index#0)
 			
 			$o:=Form:C1466._list.getRowCoordinates(Form:C1466._index)
-			Form:C1466._focus.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
+			Form:C1466._selection.setCoordinates($o).show()
 			
 		End if 
 		
@@ -61,6 +62,11 @@ Case of
 			ACCEPT:C269
 			
 		End if 
+		
+		//__________________________________________________________________________________________
+	: ($e.code=On Scroll:K2:57)
+		
+		// ⚠️ Not generated for the form, must be managed into the object method
 		
 		//__________________________________________________________________________________________
 	: ($e.code=On Clicked:K2:4)
@@ -75,14 +81,13 @@ Case of
 		If (Form:C1466._index#0)
 			
 			$o:=Form:C1466._list.getRowCoordinates(Form:C1466._index)
-			Form:C1466._focus.setCoordinates($o.left; $o.top; $o.right; $o.bottom).show()
-			
+			Form:C1466._selection.setCoordinates($o).show()
 			Form:C1466._open.enable()
 			
 		Else 
 			
+			Form:C1466._selection.hide()
 			Form:C1466._open.disable()
-			Form:C1466._focus.hide()
 			
 		End if 
 		

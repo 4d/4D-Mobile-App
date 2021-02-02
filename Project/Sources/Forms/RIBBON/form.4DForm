@@ -321,11 +321,9 @@
 					"events": [
 						"onClick",
 						"onMouseEnter",
-						"onMouseLeave",
-						"onAlternateClick"
+						"onMouseLeave"
 					],
-					"method": "ObjectMethods/151.4dm",
-					"popupPlacement": "none"
+					"method": "ObjectMethods/151.4dm"
 				},
 				"152": {
 					"type": "button",
@@ -402,5 +400,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 3
+	"geometryStamp": 5
 }

@@ -5,6 +5,8 @@ Class constructor
 	
 	// Super()
 	
+	This:C1470.home:=Folder:C1567(fk desktop folder:K87:19).parent
+	
 	This:C1470.reset()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

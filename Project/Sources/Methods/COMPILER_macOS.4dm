@@ -22,8 +22,8 @@ If (False:C215)
 	C_OBJECT:C1216(plist; $1)
 	
 	//__________________________________________________
-	C_OBJECT:C1216(simulator; $0)
-	C_OBJECT:C1216(simulator; $1)
+	C_OBJECT:C1216(_o_simulator; $0)
+	C_OBJECT:C1216(_o_simulator; $1)
 	
 	//__________________________________________________
 	C_OBJECT:C1216(provisioningProfiles; $0)

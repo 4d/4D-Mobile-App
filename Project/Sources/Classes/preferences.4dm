@@ -5,11 +5,14 @@ Class constructor()
 	This:C1470._user:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14; *).name)
 	This:C1470._database:=Folder:C1567(fk database folder:K87:14).folder("Preferences")
 	This:C1470.sessionRoot:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Library/Preferences/")
+	This:C1470.target:=Null:C1517
+	This:C1470.content:=Null:C1517
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function user($path)->$this : cs:C1710.preferences
 	
 	This:C1470.target:=This:C1470._user.file($path)
+	This:C1470.load()
 	
 	$this:=This:C1470
 	
@@ -17,6 +20,7 @@ Function user($path)->$this : cs:C1710.preferences
 Function database($path)->$this : cs:C1710.preferences
 	
 	This:C1470.target:=This:C1470._database.file($path)
+	This:C1470.load()
 	
 	$this:=This:C1470
 	
@@ -24,6 +28,7 @@ Function database($path)->$this : cs:C1710.preferences
 Function session($path)->$this : cs:C1710.preferences
 	
 	This:C1470.target:=This:C1470._session.file($path)
+	This:C1470.load()
 	
 	$this:=This:C1470
 	
@@ -33,11 +38,7 @@ Function get($key : Text; $target : Text)->$value : Variant
 	var $o : Object
 	var $file : 4D:C1709.File
 	
-	If (Bool:C1537(This:C1470.target.exists))
-		
-		$value:=JSON Parse:C1218(This:C1470.target.getText())[$key]
-		
-	End if 
+	$value:=This:C1470.content[$key]
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function set($key : Text; $value : Variant; $target : Text)
@@ -45,26 +46,42 @@ Function set($key : Text; $value : Variant; $target : Text)
 	var $o : Object
 	var $file : 4D:C1709.File
 	
-	If (Bool:C1537(This:C1470.target.exists))
-		
-		$o:=JSON Parse:C1218(This:C1470.target.getText())
-		
-	Else 
-		
-		// Create
-		$o:=New object:C1471
-		
-	End if 
-	
 	If (Count parameters:C259>=2)
 		
-		$o[$key]:=$value
+		This:C1470.content[$key]:=$value
 		
 	Else 
 		
 		// Remove
-		OB REMOVE:C1226($o; $key)
+		OB REMOVE:C1226(This:C1470.content; $key)
 		
 	End if 
 	
-	This:C1470.target.setText(JSON Stringify:C1217($o; *))
+	// Save immediately
+	This:C1470.save()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function load()
+	
+	If (Asserted:C1132(This:C1470.target#Null:C1517; "target is null"))
+		
+		If (This:C1470.target.exists)
+			
+			This:C1470.content:=JSON Parse:C1218(This:C1470.target.getText())
+			
+		Else 
+			
+			// Create
+			This:C1470.content:=New object:C1471
+			
+		End if 
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function save()
+	
+	If (Asserted:C1132(This:C1470.target#Null:C1517; "content is null"))
+		
+		This:C1470.target.setText(JSON Stringify:C1217(This:C1470.content; *))
+		
+	End if 

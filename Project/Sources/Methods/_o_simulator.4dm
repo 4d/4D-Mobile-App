@@ -17,8 +17,8 @@ C_OBJECT:C1216($file; $o; $Obj_device; $Obj_in; $Obj_out; $Obj_runtime)
 C_COLLECTION:C1488($Col_runtimes)
 
 If (False:C215)
-	C_OBJECT:C1216(simulator; $0)
-	C_OBJECT:C1216(simulator; $1)
+	C_OBJECT:C1216(_o_simulator; $0)
+	C_OBJECT:C1216(_o_simulator; $1)
 End if 
 
 // ----------------------------------------------------
@@ -72,19 +72,19 @@ Case of
 				If ($o.success)
 					
 					$Obj_out.success:=True:C214
-					$Obj_out.udid:=$o.value.currentDevice
+					$Obj_out.udid:=$o.value.CurrentDeviceUDID
 					
 				End if 
 				
 				//----------------------------------------
 			: (Bool:C1537($Obj_in.fix))
 				
-				$Obj_out:=simulator(New object:C1471(\
+				$Obj_out:=_o_simulator(New object:C1471(\
 					"action"; "fixdefault"))
 				
 				If ($Obj_out.success)
 					
-					$Obj_out:=simulator(New object:C1471(\
+					$Obj_out:=_o_simulator(New object:C1471(\
 						"action"; "default"))
 					
 				End if 
@@ -95,7 +95,7 @@ Case of
 		//______________________________________________________
 	: ($Obj_in.action="getdefault")
 		
-		$Obj_out:=simulator(New object:C1471(\
+		$Obj_out:=_o_simulator(New object:C1471(\
 			"action"; "devices"; \
 			"filter"; "available"))
 		
@@ -147,7 +147,7 @@ Case of
 		
 		If (Not:C34($Obj_out.success))
 			
-			$Obj_out:=simulator(New object:C1471(\
+			$Obj_out:=_o_simulator(New object:C1471(\
 				"action"; "devices"; \
 				"filter"; "available"))
 			
@@ -232,7 +232,7 @@ Case of
 		
 		If ($Obj_in.device=Null:C1517)
 			// use default if no device
-			$Obj_in.device:=simulator(New object:C1471("action"; "default"; "fix"; True:C214)).udid
+			$Obj_in.device:=_o_simulator(New object:C1471("action"; "default"; "fix"; True:C214)).udid
 			
 		End if 
 		
@@ -247,7 +247,7 @@ Case of
 		End if 
 		
 		// launch process if not already launched
-		$Obj_runtime:=simulator(New object:C1471("action"; "isLaunched"))
+		$Obj_runtime:=_o_simulator(New object:C1471("action"; "isLaunched"))
 		If (Not:C34($Obj_runtime.value))
 			
 			$Txt_cmd:="open -a "+str_singleQuoted($Obj_runtime.posix)
@@ -337,7 +337,7 @@ Case of
 		//______________________________________________________
 	: ($Obj_in.action="isBooted")
 		
-		$Obj_out:=simulator(New object:C1471(\
+		$Obj_out:=_o_simulator(New object:C1471(\
 			"action"; "devices"; \
 			"filter"; "booted"))
 		
@@ -361,7 +361,7 @@ Case of
 		
 		If (String:C10($Obj_in.udid)#"")
 			
-			$Obj_out:=simulator(New object:C1471(\
+			$Obj_out:=_o_simulator(New object:C1471(\
 				"action"; "devices"; \
 				"filter"; "available"))
 			
@@ -396,7 +396,7 @@ Case of
 			$Txt_cmd:="xcrun simctl shutdown all"
 			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 			
-			If (simulator(New object:C1471("action"; "isLaunched")).value)
+			If (_o_simulator(New object:C1471("action"; "isLaunched")).value)
 				
 				// use applescript because kill will not remove all subprocess
 				$Txt_cmd:="osascript -e 'tell app \"Simulator\" to quit'"
@@ -735,7 +735,7 @@ Case of
 							//………………………………………………………………………………………
 						: ($Obj_in.filter="available")
 							
-							$Col_runtimes:=simulator(New object:C1471("action"; "runtimes")).runtimes  // XXX could speed up by asking runtimes only time before and filter here
+							$Col_runtimes:=_o_simulator(New object:C1471("action"; "runtimes")).runtimes  // XXX could speed up by asking runtimes only time before and filter here
 							
 							$Obj_out.devices:=New collection:C1472
 							

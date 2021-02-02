@@ -239,6 +239,54 @@ Function centerVertically($reference : Text)
 	End for each 
 	
 	
+Function alignLeft($reference)
+	
+	var $left : Integer
+	var $o : Object
+	
+	If (Count parameters:C259>=1)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($reference)=Is object:K8:27)
+				
+				// We assume it is from the static class (or extend)
+				// #TO_DO: test the class
+				$left:=$reference._updateCoordinates().coordinates.left
+				
+				//______________________________________________________
+			: (Value type:C1509($reference)=Is integer:K8:5)\
+				 | (Value type:C1509($reference)=Is real:K8:4)
+				
+				$left:=$reference
+				
+				//______________________________________________________
+			: (Value type:C1509($reference)=Is text:K8:3)
+				
+				$left:=cs:C1710.static.new($reference).coordinates.left
+				
+				//______________________________________________________
+			Else 
+				
+				// #ERROR
+				
+				//______________________________________________________
+		End case 
+		
+	Else 
+		
+		// Default reference is the first member of the group
+		$left:=This:C1470.members[0]._updateCoordinates().coordinates.left
+		
+	End if 
+	
+	For each ($o; This:C1470.members)
+		
+		$o.moveHorizontally($left-$o.coordinates.left)
+		
+	End for each 
+	
 /*════════════════════════════════════════════
 .show()
 .show(bool)

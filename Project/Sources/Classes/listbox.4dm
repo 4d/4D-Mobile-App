@@ -1,6 +1,6 @@
 Class extends scrollable
 
-//________________________________________________________________
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	C_TEXT:C284($1)
 	C_VARIANT:C1683($2)
@@ -17,15 +17,7 @@ Class constructor
 	
 	ASSERT:C1129(This:C1470.type=Object type listbox:K79:8)
 	
-	//________________________________________________________________
-Function getCoordinates
-	
-	Super:C1706.getCoordinates()
-	This:C1470.getScrollbars()
-	This:C1470.updateDefinition()
-	This:C1470.getCell()
-	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Select row(s)
 Function select($row : Integer)->$this : cs:C1710.listbox
 	
@@ -45,16 +37,36 @@ Function select($row : Integer)->$this : cs:C1710.listbox
 	
 	$this:=This:C1470
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a row coordinates
 Function getRowCoordinates($row : Integer)->$coordinates : Object
 	
-	var $l; $bottom; $left; $right; $top : Integer
+	var $l; $bottom; $left; $right; $top; $width : Integer
+	var $horizontal; $vertical : Boolean
+	
+	This:C1470.getCoordinates()
 	
 	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; 1; $row; $left; $top; $l; $l)
 	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; This:C1470.columnsNumber(); $row; $l; $l; $right; $bottom)
 	
-	// #TO_DO - Manage the visible area
+	// Adjust according to the visible part
+	$left:=Choose:C955($left<This:C1470.coordinates.left; This:C1470.coordinates.left; $left)
+	$top:=Choose:C955($top<This:C1470.coordinates.top; This:C1470.coordinates.top; $top)
+	
+	OBJECT GET SCROLLBAR:C1076(*; This:C1470.name; $horizontal; $vertical)
+	
+	If ($vertical)
+		
+		$width:=LISTBOX Get property:C917(*; This:C1470.name; lk ver scrollbar width:K53:9)
+		$right:=Choose:C955($right>(This:C1470.coordinates.right-$width); This:C1470.coordinates.right-$width; $right)
+		
+	Else 
+		
+		$right:=Choose:C955($right>This:C1470.coordinates.right; This:C1470.coordinates.right; $right)
+		
+	End if 
+	
+	$bottom:=Choose:C955($bottom>This:C1470.coordinates.bottom; This:C1470.coordinates.bottom; $bottom)
 	
 	$coordinates:=New object:C1471(\
 		"left"; $left; \
@@ -62,7 +74,7 @@ Function getRowCoordinates($row : Integer)->$coordinates : Object
 		"right"; $right; \
 		"bottom"; $bottom)
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Unselect row(s)
 Function unselect($row : Integer)->$this : cs:C1710.listbox
 	
@@ -80,25 +92,25 @@ Function unselect($row : Integer)->$this : cs:C1710.listbox
 	
 	$this:=This:C1470
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of selected rows
 Function selectedNumber()->$count : Integer
 	
 	$count:=Count in array:C907((This:C1470.pointer())->; True:C214)
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of columns
 Function columnsNumber()->$count : Integer
 	
 	$count:=LISTBOX Get number of columns:C831(*; This:C1470.name)
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of rows
 Function rowsNumber()->$count : Integer
 	
 	$count:=LISTBOX Get number of rows:C915(*; This:C1470.name)
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Reveal the row
 Function reveal($row : Integer)->$this : cs:C1710.listbox
 	
@@ -107,7 +119,7 @@ Function reveal($row : Integer)->$this : cs:C1710.listbox
 	
 	$this:=This:C1470
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Update the listbox columns/rows definition
 Function updateDefinition()->$this : cs:C1710.listbox
 	
@@ -150,8 +162,8 @@ Function updateDefinition()->$this : cs:C1710.listbox
 	
 	$this:=This:C1470
 	
-	//________________________________________________________________
-	// Update the current cell ondexes and coordinates
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Update the current cell indexes and coordinates
 Function updateCell()->$this : cs:C1710.listbox
 	
 	This:C1470.cellPosition()
@@ -159,7 +171,7 @@ Function updateCell()->$this : cs:C1710.listbox
 	
 	$this:=This:C1470
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Current cell indexes {column,row}
 Function cellPosition($event : Object)->$position : Object
 	
@@ -184,7 +196,7 @@ Function cellPosition($event : Object)->$position : Object
 		"column"; $column; \
 		"row"; $row)
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function cellCoordinates($column : Integer; $row : Integer)->$coordinates : Object
 	
 	var $bottom; $left; $right; $top : Integer
@@ -234,7 +246,7 @@ Function cellCoordinates($column : Integer; $row : Integer)->$coordinates : Obje
 	
 	$coordinates:=This:C1470.cellBox
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Displays a cs.menu at the bottom left of the current cell
 Function popup($menu : cs:C1710.menu; $default : Text)->$choice : cs:C1710.menu
 	
@@ -259,7 +271,7 @@ Function popup($menu : cs:C1710.menu; $default : Text)->$choice : cs:C1710.menu
 	
 	$choice:=$menu
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function clear()->$this : cs:C1710.listbox
 	
 	var $o : Object
@@ -274,7 +286,7 @@ Function clear()->$this : cs:C1710.listbox
 	
 	$this:=This:C1470
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function deleteRow($row : Integer)->$this : cs:C1710.listbox
 	
 	
@@ -292,7 +304,7 @@ Function deleteRow($row : Integer)->$this : cs:C1710.listbox
 	
 	$this:=This:C1470
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns all properties of the column or listbox
 Function getProperties($column : Text)->$properties : Object
 	
@@ -336,7 +348,7 @@ Function getProperties($column : Text)->$properties : Object
 		"verScrollbarWidth"; LISTBOX Get property:C917(*; $target; lk ver scrollbar width:K53:9)\
 		)
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function getProperty($property : Integer; $column : Text)->$value : Variant
 	
 	If (Count parameters:C259=0)
@@ -349,7 +361,7 @@ Function getProperty($property : Integer; $column : Text)->$value : Variant
 		
 	End if 
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setProperty($property : Integer; $value)->$this : cs:C1710.listbox
 	
 	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; $property; $value)

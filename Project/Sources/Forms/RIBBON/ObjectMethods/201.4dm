@@ -157,7 +157,7 @@ Case of
 					"title"; "We are going tout doux 🤣"))
 				
 				//______________________________________________________
-			: (FEATURE.with("android"))  // 🚧
+			: (FEATURE.with("android")) & False:C215  // 🚧
 				
 				CLEAR VARIABLE:C89($device)
 				
@@ -198,36 +198,38 @@ Case of
 					
 					$device:=Form:C1466.devices.query("udid = :1"; $menu.choice).pop()
 					
-					// Kill booted Simulator if any
-					If (simulator(New object:C1471(\
-						"action"; "kill")).success)
+					var $o : cs:C1710.simulator
+					$o:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget)
+					
+					// Kill all Simulators if any
+					$o.kill()
+					
+					If (plist(New object:C1471(\
+						"action"; "write"; \
+						"domain"; $o.plist().path; \
+						"key"; "CurrentDeviceUDID"; \
+						"value"; $menu.choice)).success)
 						
-						If (plist(New object:C1471(\
-							"action"; "write"; \
-							"domain"; ENV.preferences("com.apple.iphonesimulator.plist").path; \
-							"key"; "CurrentDeviceUDID"; \
-							"value"; $menu.choice)).success)
-							
-							// Set default simulator
-							Form:C1466.currentDevice:=$menu.choice
-							
-							// Set button title
-							OBJECT SET TITLE:C194(*; "201"; $device.name)
-							
-							// Adapt button width
-							SET TIMER:C645(-1)
-							
-						Else 
-							
-							POST_MESSAGE(New object:C1471(\
-								"target"; Current form window:C827; \
-								"action"; "show"; \
-								"type"; "alert"; \
-								"title"; ".Failed to set the default simulator to: \""+$device.name+"\""; \
-								"additional"; ""))
-							
-						End if 
+						// Set default simulator
+						Form:C1466.currentDevice:=$menu.choice
+						
+						// Set button title
+						OBJECT SET TITLE:C194(*; "201"; $device.name)
+						
+						// Adapt button width
+						SET TIMER:C645(-1)
+						
+					Else 
+						
+						POST_MESSAGE(New object:C1471(\
+							"target"; Current form window:C827; \
+							"action"; "show"; \
+							"type"; "alert"; \
+							"title"; ".Failed to set the default simulator to: \""+$device.name+"\""; \
+							"additional"; ""))
+						
 					End if 
+					
 				End if 
 				
 				//______________________________________________________
@@ -241,9 +243,8 @@ Case of
 		var $pref : cs:C1710.preferences
 		$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
 		
-		If (Form:C1466.currentDevice#$current)
+		If ($current#String:C10(Form:C1466.currentDevice))  // Keep
 			
-			// Keep
 			$pref.set("simulator"; Form:C1466.currentDevice)
 			
 		End if 

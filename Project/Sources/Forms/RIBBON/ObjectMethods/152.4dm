@@ -80,8 +80,7 @@ Case of
 				$menu.append("openSimulatorLogs"; "_openLogs")\
 					.append("openSimulatorDiagnosticReports"; "_openDiagnosticReports")
 				
-				$UDID:=String:C10(simulator(New object:C1471(\
-					"action"; "default")).udid)
+				$UDID:=String:C10(String:C10(cs:C1710.simulator.new(SHARED.iosDeploymentTarget).default()))
 				
 				If (Length:C16($UDID)#0)
 					
@@ -94,7 +93,7 @@ Case of
 						
 					End if 
 					
-					$simulator:=simulator(\
+					$simulator:=_o_simulator(\
 						New object:C1471("action"; "deviceApp"; \
 						"device"; $UDID; \
 						"data"; True:C214))
@@ -272,14 +271,11 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openLogs")
 				
-				$o:=ENV.logs("CoreSimulator/")
-				
-				$simulator:=simulator(New object:C1471(\
-					"action"; "default"))
+				$simulator:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget).default()
 				
 				If (String:C10($simulator.udid)#"")
 					
-					$o:=$o.folder($simulator.udid)
+					$o:=ENV.logs("CoreSimulator/").folder($simulator.udid)
 					
 				End if 
 				
@@ -292,18 +288,17 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openSimuPath")
 				
-				$simulator:=simulator(New object:C1471(\
-					"action"; "default"))
+				var $o : cs:C1710.simulator
+				$o:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget)
+				$simulator:=$o.default()
 				
 				If (String:C10($simulator.udid)#"")
 					
-					$result:=simulator(New object:C1471(\
-						"action"; "devicePath"; \
-						"device"; $simulator.udid))
+					$o:=$o.deviceFolder($simulator.udid)
 					
-					If (String:C10($result.path)#"")
+					If ($o.exists)
 						
-						SHOW ON DISK:C922($result.path)
+						SHOW ON DISK:C922($o.platformPath)
 						
 					End if 
 				End if 
@@ -311,57 +306,36 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_killSimulators")
 				
-				$result:=simulator(New object:C1471(\
-					"action"; "kill"))
+				cs:C1710.simulator.new(SHARED.iosDeploymentTarget).kill()
 				
 				//______________________________________________________
 			: ($menu.choice="_eraseCurrentSimulator")
 				
-				$simulator:=simulator(New object:C1471(\
-					"action"; "default"))
+				var $o : cs:C1710.simulator
+				$o:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget)
 				
-				If (String:C10($simulator.udid)#"")
+				$simulator:=$o.default()
+				
+				If ($simulator#Null:C1517)
 					
-					$result:=simulator(New object:C1471(\
-						"action"; "isBooted"; \
-						"device"; $simulator.udid))
-					
-					$isBooted:=Bool:C1537($result.booted)
+					$isBooted:=$o.isBooted($simulator.udid)
 					
 					If ($isBooted)
 						
-						If (simulator(New object:C1471(\
-							"action"; "kill")).success)
+						$o.kill($simulator.udid)
+						
+						Repeat 
 							
-							Repeat 
-								
-								$result:=simulator(New object:C1471(\
-									"action"; "device"; \
-									"udid"; $simulator.udid))
-								
-								$success:=$result.success
-								
-								If ($success)
-									
-									$success:=(String:C10($result.device.state)#"Shutdown")
-									
-								End if 
-								
-								IDLE:C311
-								
-							Until (Not:C34($success))
-						End if 
+							IDLE:C311
+							
+						Until (String:C10($o.device($simulator.udid).state)="Shutdown")
 					End if 
 					
-					$result:=simulator(New object:C1471(\
-						"action"; "erase"; \
-						"device"; $simulator.udid))
+					$o.erase($simulator.udid)
 					
 					If ($isBooted)  // relaunch
 						
-						$result:=simulator(New object:C1471(\
-							"action"; "open"; \
-							"device"; $simulator.udid))
+						$o.open($simulator.udid)
 						
 					End if 
 				End if 

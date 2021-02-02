@@ -175,6 +175,7 @@ Case of
 					If ($device#Null:C1517)
 						
 						$form.simulator.setTitle($device.name)
+						Form:C1466.currentDevice:=$simulator
 						
 					Else 
 						
@@ -183,6 +184,7 @@ Case of
 						If ($device#Null:C1517)
 							
 							$form.simulator.setTitle($device.name)
+							Form:C1466.currentDevice:=$simulator
 							
 						Else 
 							
@@ -197,52 +199,34 @@ Case of
 						 & (Bool:C1537(Form:C1466.editor.$ios))\
 						 & (Form:C1466.devices.apple.length>0)
 						
-						// Get the default simulator
-						$plist:=ENV.preferences("com.apple.iphonesimulator.plist")
+						// Get a default device identifier
+						$simulator:=String:C10(cs:C1710.simulator.new(SHARED.iosDeploymentTarget).default())
 						
-						If (Not:C34($plist.exists))
+						If (Length:C16($simulator)>0)
 							
-							simulator(New object:C1471(\
-								"action"; "fixdefault"))
+							$device:=Form:C1466.devices.apple.query("udid = :1"; $simulator).pop()
+							$form.simulator.setTitle($device.name)
 							
-						End if 
-						
-						If ($plist.exists)
 							
-							$plist:=plist(New object:C1471(\
-								"action"; "object"; \
-								"domain"; $plist.path))
-							
-							If ($plist.success)
+							If ($device#Null:C1517)
 								
-								// Keep the current device identifier
-								Form:C1466.currentDevice:=$plist.value.currentDevice
+								Form:C1466.currentDevice:=$simulator
 								
-								// Display the current device name
-								$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
+								// Keep
+								$pref.set("simulator"; $device.udid)
 								
-								If ($device=Null:C1517)
-									
-									simulator(New object:C1471(\
-										"action"; "getdefault"))
-									
-									$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
-									
-								End if 
+								$form.simulator.setTitle($device.name)
 								
-								If ($device=Null:C1517)
-									
-									$form.simulator.setTitle("unknown")
-									
-								Else 
-									
-									$form.simulator.setTitle($device.name)
-									
-									// Keep
-									$pref.set("simulator"; $device.udid)
-									
-								End if 
+							Else 
+								
+								$form.simulator.setTitle("unknown")
+								
 							End if 
+							
+						Else 
+							
+							$form.simulator.setTitle("unknown")
+							
 						End if 
 						
 					Else 
@@ -264,7 +248,7 @@ Case of
 					
 					If (Not:C34($plist.exists))
 						
-						simulator(New object:C1471(\
+						_o_simulator(New object:C1471(\
 							"action"; "fixdefault"))
 						
 					End if 
@@ -285,7 +269,7 @@ Case of
 							
 							If ($device=Null:C1517)
 								
-								simulator(New object:C1471(\
+								_o_simulator(New object:C1471(\
 									"action"; "getdefault"))
 								
 								$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.currentDevice).pop()
@@ -305,6 +289,10 @@ Case of
 					End if 
 				End if 
 			End if 
+			
+			// Adapt button width
+			SET TIMER:C645(-1)
+			
 		End if 
 		
 		If (FEATURE.with("android"))  //🚧

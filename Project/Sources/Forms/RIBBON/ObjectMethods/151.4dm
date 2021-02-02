@@ -26,28 +26,6 @@ Case of
 		RIBBON(Num:C11($e.objectName))
 		
 		//______________________________________________________
-	: ($e.code=On Alternative Click:K2:36)
-		
-		//If (FEATURE.with("android"))  //🚧
-		//If (Is Windows)
-		//PROJECT._buildTarget:="android"
-		//CALL SUBFORM CONTAINER(-151)
-		//Else 
-		//OBJECT GET COORDINATES(*; $e.objectName; $left; $top; $right; $bottom)
-		//$menu:=cs.menu.new()\
-			.append(cs.str.new("buildAndRunFor").localized("iOS"); "ios").enable(Bool(Form.status.xCode))\
-			.append(cs.str.new("buildAndRunFor").localized("Android"); "android").enable(Bool(Form.status.studio))\
-			.popup($left; $bottom)
-		//If ($menu.selected)
-		//PROJECT._buildTarget:=$menu.choice
-		//CALL SUBFORM CONTAINER(-151)
-		//End if 
-		//End if 
-		//Else 
-		//CALL SUBFORM CONTAINER(-151)
-		//End if 
-		
-		//______________________________________________________
 	: ($e.code=On Clicked:K2:4)
 		
 		// Autosave
@@ -57,7 +35,11 @@ Case of
 			
 			If (Is Windows:C1573)
 				
-				$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
+				If (Form:C1466.currentDevice#Null:C1517)
+					
+					$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
+					
+				End if 
 				
 				If ($device#Null:C1517)
 					
@@ -65,11 +47,23 @@ Case of
 					PROJECT._buildTarget:="android"
 					CALL SUBFORM CONTAINER:C1086(-151)
 					
+				Else 
+					
+					POST_MESSAGE(New object:C1471(\
+						"target"; Form:C1466.editor.$mainWindow; \
+						"action"; "show"; \
+						"type"; "alert"; \
+						"title"; "youMustFirstSelectASimulator"))
+					
 				End if 
 				
 			Else 
 				
-				$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
+				If (Form:C1466.currentDevice#Null:C1517)
+					
+					$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
+					
+				End if 
 				
 				If ($device#Null:C1517)
 					
@@ -79,13 +73,25 @@ Case of
 					
 				Else 
 					
-					$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
+					If (Form:C1466.currentDevice#Null:C1517)
+						
+						$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
+						
+					End if 
 					
 					If ($device#Null:C1517)
 						
 						PROJECT._simulator:=$device.udid
 						PROJECT._buildTarget:="android"
 						CALL SUBFORM CONTAINER:C1086(-151)
+						
+					Else 
+						
+						POST_MESSAGE(New object:C1471(\
+							"target"; Form:C1466.editor.$mainWindow; \
+							"action"; "show"; \
+							"type"; "alert"; \
+							"title"; "youMustFirstSelectASimulator"))
 						
 					End if 
 				End if 

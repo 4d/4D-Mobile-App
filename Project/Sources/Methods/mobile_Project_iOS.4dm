@@ -886,7 +886,7 @@ If ($Obj_out.success)
 				
 			End if 
 			
-			If (simulator(New object:C1471(\
+			If (_o_simulator(New object:C1471(\
 				"action"; "open"; \
 				"editorToFront"; Bool:C1537($Obj_in.testing); \
 				"bringToFront"; Not:C34(Bool:C1537($Obj_in.testing)))).success)
@@ -898,7 +898,7 @@ If ($Obj_out.success)
 					
 					IDLE:C311
 					DELAY PROCESS:C323(Current process:C322; 60)
-					$Obj_result_device:=simulator(New object:C1471(\
+					$Obj_result_device:=_o_simulator(New object:C1471(\
 						"action"; "devices"; \
 						"filter"; "booted"))
 					
@@ -928,7 +928,7 @@ If ($Obj_out.success)
 					End if 
 					
 					// Quit app
-					$Obj_out.simulator:=simulator(New object:C1471(\
+					$Obj_out.simulator:=_o_simulator(New object:C1471(\
 						"action"; "terminate"; \
 						"identifier"; $Obj_project.product.bundleIdentifier))
 					
@@ -936,7 +936,7 @@ If ($Obj_out.success)
 					DELAY PROCESS:C323(Current process:C322; 10)
 					
 					// Uninstall app
-					$Obj_out.simulator:=simulator(New object:C1471(\
+					$Obj_out.simulator:=_o_simulator(New object:C1471(\
 						"action"; "uninstall"; \
 						"identifier"; $Obj_project.product.bundleIdentifier))
 					
@@ -951,7 +951,7 @@ If ($Obj_out.success)
 						End if 
 						
 						// Install app
-						$Obj_out.simulator:=simulator(New object:C1471(\
+						$Obj_out.simulator:=_o_simulator(New object:C1471(\
 							"action"; "install"; \
 							"identifier"; $Obj_in.product))
 						
@@ -962,7 +962,7 @@ If ($Obj_out.success)
 								
 								If (Position:C15("MIInstallerErrorDomain, code=35"; String:C10($Obj_out.simulator.errors[0]))>0)
 									
-									$Obj_out.simulator:=simulator(New object:C1471(\
+									$Obj_out.simulator:=_o_simulator(New object:C1471(\
 										"action"; "install"; \
 										"identifier"; $Obj_in.product))
 									
@@ -985,7 +985,7 @@ If ($Obj_out.success)
 							End if 
 							
 							// Launch app
-							$Obj_out.simulator:=simulator(New object:C1471(\
+							$Obj_out.simulator:=_o_simulator(New object:C1471(\
 								"action"; "launch"; \
 								"identifier"; $Obj_project.product.bundleIdentifier))
 							

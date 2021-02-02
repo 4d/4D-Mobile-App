@@ -91,17 +91,19 @@ Function setPopupMenu($value : Variant)->$this : Object
 					: ($value="none")
 						
 						This:C1470.setFormat(";;;;;;;;;;0")
+						This:C1470.removeEvent(On Alternative Click:K2:36)
 						
 						//______________________________________________________
 					: ($value="linked")
 						
 						This:C1470.setFormat(";;;;;;;;;;1")
+						This:C1470.removeEvent(On Alternative Click:K2:36)
 						
 						//______________________________________________________
 					: ($value="separate")
 						
 						This:C1470.setFormat(";;;;;;;;;;2")
-						
+						This:C1470.addEvent(On Alternative Click:K2:36)
 						
 						//______________________________________________________
 					Else 
@@ -114,12 +116,14 @@ Function setPopupMenu($value : Variant)->$this : Object
 			Else 
 				
 				This:C1470.setFormat(";;;;;;;;;;"+String:C10(Num:C11($value)))
+				This:C1470[Choose:C955(Num:C11($value)=2; "addEvent"; "removeEvent")](On Alternative Click:K2:36)
 				
 			End if 
 			
 		Else 
 			
 			This:C1470.setFormat(";;;;;;;;;;0")
+			This:C1470.removeEvent(On Alternative Click:K2:36)
 			
 		End if 
 		

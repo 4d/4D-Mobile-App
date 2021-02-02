@@ -117,8 +117,10 @@ Function getCoordinates
 			//…………………………………………………………………………………………………
 		: (This:C1470.type=Object type listbox:K79:8)
 			
+			This:C1470.getScrollPosition()
+			This:C1470.getScrollbars()
 			This:C1470.updateDefinition()
-			This:C1470.getCell()
+			This:C1470.updateCell()
 			
 			//…………………………………………………………………………………………………
 		: (This:C1470.type=Object type subform:K79:40)
@@ -516,4 +518,62 @@ Function focus
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
+/*════════════════════════════════════════════════════
+.addEvent(collection | longint))-> This
+*/
+Function addEvent($event)->$this : cs:C1710.widget
 	
+	ARRAY LONGINT:C221($eventArray; 0x0000)
+	
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($event)=Is collection:K8:32)
+			
+			COLLECTION TO ARRAY:C1562($event; $eventArray)
+			OBJECT SET EVENTS:C1239(*; This:C1470.name; $eventArray; Enable events others unchanged:K42:38)
+			
+			//______________________________________________________
+		: (Value type:C1509($event)=Is object:K8:27)
+			
+			//#TO_DO
+			
+			//______________________________________________________
+		Else 
+			
+			APPEND TO ARRAY:C911($eventArray; Num:C11($event))
+			OBJECT SET EVENTS:C1239(*; This:C1470.name; $eventArray; Enable events others unchanged:K42:38)
+			
+			//______________________________________________________
+	End case 
+	
+	$this:=This:C1470
+	
+/*════════════════════════════════════════════════════
+.removeEvent(collection | longint) -> This
+*/
+Function removeEvent($event)->$this : cs:C1710.widget
+	
+	ARRAY LONGINT:C221($eventArray; 0x0000)
+	
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($event)=Is collection:K8:32)
+			
+			COLLECTION TO ARRAY:C1562($event; $eventArray)
+			OBJECT SET EVENTS:C1239(*; This:C1470.name; $eventArray; Disable events others unchanged:K42:39)
+			
+			//______________________________________________________
+		: (Value type:C1509($event)=Is object:K8:27)
+			
+			//#TO_DO
+			
+			//______________________________________________________
+		Else 
+			
+			APPEND TO ARRAY:C911($eventArray; Num:C11($event))
+			OBJECT SET EVENTS:C1239(*; This:C1470.name; $eventArray; Disable events others unchanged:K42:39)
+			
+			//______________________________________________________
+	End case 
+	
+	$this:=This:C1470

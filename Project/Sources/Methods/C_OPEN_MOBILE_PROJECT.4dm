@@ -56,17 +56,15 @@ If (FEATURE.with("wizards"))
 		
 		// Prepare the project list
 		$template:=cs:C1710.str.new("<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"\
-			+"{title}"\
-			+"</span>"\
-			+"<br/>"\
+			+"  {title}</span><br/>"\
 			+"<span style='font-size: 13pt;font-weight: normal'>"\
-			+"{description}"\
-			+"</span></span>")
+			+"  {description}</span></span>")
 		
 		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/os/iOS-32.png").platformPath; $iOS)
-		TRANSFORM PICTURE:C988($iOS; Crop:K61:7; 0; 32; 32; 32)
+		TRANSFORM PICTURE:C988($iOS; Crop:K61:7; 0; 0; 32; 32)  // Keep the grey one
+		
 		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/os/Android-32.png").platformPath; $android)
-		TRANSFORM PICTURE:C988($android; Crop:K61:7; 0; 32; 32; 32)
+		TRANSFORM PICTURE:C988($android; Crop:K61:7; 0; 32; 32; 32)  // Keep the blue one
 		
 		CREATE THUMBNAIL:C679($blank; $blank; 32; 32)
 		
@@ -88,7 +86,7 @@ If (FEATURE.with("wizards"))
 				
 				If (Value type:C1509($manifest.info.target)=Is collection:K8:32)
 					
-					COMBINE PICTURES:C987($icon; $iOS; Horizontal concatenation:K61:8; $android)
+					COMBINE PICTURES:C987($icon; $android; Horizontal concatenation:K61:8; $iOS)
 					
 				Else 
 					

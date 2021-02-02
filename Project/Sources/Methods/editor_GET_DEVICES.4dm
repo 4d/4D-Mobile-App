@@ -28,17 +28,11 @@ Case of
 			
 			$out:=New object:C1471(\
 				"android"; cs:C1710.avd.new().availableDevices(); \
-				"apple"; simulator(New object:C1471(\
-				"action"; "devices"; \
-				"filter"; "available"; \
-				"minimumVersion"; SHARED.iosDeploymentTarget)).devices)
+				"apple"; cs:C1710.simulator.new(SHARED.iosDeploymentTarget).availableDevices())
 			
 		Else 
 			
-			$out:=simulator(New object:C1471(\
-				"action"; "devices"; \
-				"filter"; "available"; \
-				"minimumVersion"; SHARED.iosDeploymentTarget))
+			$out:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget).availableDevices()
 			
 		End if 
 		
