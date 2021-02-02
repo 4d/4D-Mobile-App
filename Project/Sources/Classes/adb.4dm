@@ -207,10 +207,11 @@ Function getSerial
 	
 Function waitForBoot
 	var $0 : Object
-	var $1 : Text  // emulator serial
+	var $1 : Text  // avd name
 	var $startTime; $stepTime : Integer
 	
 	$0:=New object:C1471(\
+		"serial"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -221,46 +222,21 @@ Function waitForBoot
 		
 		IDLE:C311
 		DELAY PROCESS:C323(Current process:C322; 120)
-		// Get emulator boot status
-		If (String:C10($1)="")
-			
-			This:C1470.launch(This:C1470.cmd+" shell getprop sys.boot_completed")
-			
-		Else 
-			// Emulator already started, so we know its serial
-			
-			This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell getprop sys.boot_completed")
-			
-		End if 
+		
+		$0:=This:C1470.getSerial($1)
 		
 		$stepTime:=Milliseconds:C459-$startTime
 		
-	Until (String:C10(This:C1470.outputStream)="1")\
-		 | (String:C10(This:C1470.outputStream)="1\r")\
+	Until (($0.success=True:C214) & ($0.serial#""))\
+		 | ($0.errors.length>0)\
 		 | ($stepTime>30000)
 	
-	Case of 
-			
-		: ((String:C10(This:C1470.outputStream)="1") | (String:C10(This:C1470.outputStream)="1\r"))  // Booted
-			
-			$0.success:=True:C214
-			
-		: ($stepTime>30000)  // Timeout
-			
-			$0.errors.push("Timeout when booting emulator")
-			
-			If ((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))  // Command failed
-				
-				$0.errors.push(This:C1470.errorStream)
-				
-				// Else : no command error, just timeout
-			End if 
-			
-		Else 
-			
-			$0.errors.push("An unknown error occurred while booting emulator")
-	End case 
-	
+	If ($stepTime>30000)  // Timeout
+		
+		$0.errors.push("Timeout when booting emulator")
+		
+		// Else : all ok 
+	End if 
 	
 	
 Function getDevicePackageList

@@ -319,8 +319,8 @@ Function isAvdExisting  // Check if avd already exists
 Function createAvd
 	var $0 : Text  // output
 	var $1 : Text  // avd name
-	var $2 : Text  // Package path of the system image for this AVD (e.g. 'system-images;android-29;google_apis;x86'
-	var $3 : Text  // The optional device definition to use. Can be a device index or id
+	var $2 : Text  // Package path of the system image for this AVD (e.g. 'system-images;android-30;google_apis;x86')
+	var $3 : Text  // The optional device definition to use. Can be a device index or id (e.g. 'pixel_xl')
 	
 	This:C1470.launch(This:C1470.cmd+" create avd -n \""+$1+"\" -k \""+$2+"\" --device \""+$3+"\"")
 	

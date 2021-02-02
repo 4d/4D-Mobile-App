@@ -277,79 +277,42 @@ Function run()->$result : Object
 		// * CREATE AVD IF DOESN'T EXIST
 		This:C1470.postStep("launchingTheSimulator")
 		
-		If (Not:C34(This:C1470.avd.isAvdExisting(This:C1470.avdName)))
-			
-			This:C1470.avd.createAvd(This:C1470.avdName; "system-images;android-30;google_apis;x86"; "pixel_xl")
-			
-		End if 
-		
-		// * GET EMULATOR SERIAL
-		$o:=This:C1470.adb.getSerial(This:C1470.avdName)
-		
-		If ($o.success)
-			
-			This:C1470.serial:=$o.serial
-			
-		End if 
-		
 		// * START EMULATOR
 		$o:=This:C1470.emulator.start(This:C1470.avdName)
 		
 		If ($o.success)
 			
-			// * WAIT FOR EMULATOR BOOT
-			$o:=This:C1470.adb.waitForBoot(This:C1470.serial)
+			// * WAIT FOR EMULATOR BOOT (AND GET EMULATOR SERIAL)
+			$o:=This:C1470.adb.waitForBoot(This:C1470.avdName)
 			
 			If ($o.success)
 				
-				If (This:C1470.serial="")
-					
-					// * GET EMULATOR SERIAL (if emulator was not already booted, it now is)
-					$o:=This:C1470.adb.getSerial(This:C1470.avdName)
-					
-					If ($o.success)
-						
-						This:C1470.serial:=$o.serial
-						
-					Else 
-						
-						This:C1470.isOnError:=True:C214
-						
-						If ($o.errors.length=0)
-							
-							// Serial not found, but no error in command
-							This:C1470.postError(".Could not retrieve emulator serial")  // #MARK_LOCALIZE
-							
-						End if 
-					End if 
-				End if 
+				This:C1470.serial:=$o.serial
 				
-				If (Not:C34(This:C1470.isOnError))
+				// * INSTALL APP
+				This:C1470.postStep("installingTheApplication")
+				
+				$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.package; This:C1470.apk)
+				
+				If ($o.success)
 					
-					// * INSTALL APP
-					This:C1470.postStep("installingTheApplication")
+					// * LAUNCH APP
+					This:C1470.postStep("launchingTheApplication")
 					
-					$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.package; This:C1470.apk)
+					$o:=This:C1470.adb.startApp(This:C1470.serial; This:C1470.package; This:C1470.activity)
 					
-					If ($o.success)
-						
-						// * LAUNCH APP
-						This:C1470.postStep("launchingTheApplication")
-						
-						$o:=This:C1470.adb.startApp(This:C1470.serial; This:C1470.package; This:C1470.activity)
-						
-						If (Not:C34($o.success))
-							
-							This:C1470.isOnError:=True:C214
-							
-						End if 
-						
-					Else 
+					If (Not:C34($o.success))
 						
 						This:C1470.isOnError:=True:C214
 						
 					End if 
+					
+				Else 
+					
+					This:C1470.isOnError:=True:C214
+					
 				End if 
+				//End if 
 				
 			Else 
 				
