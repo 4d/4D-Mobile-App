@@ -16,6 +16,8 @@
             type="{{prefix}}.{{company}}.{{app_name}}.viewmodel.entity.EntityViewModel{{tableName}}" />
     </data>
 
+    <!-- Generated with template named "Blank Form" -->
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +26,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#4A6572"
             android:orientation="vertical">
 
             {{#form_fields}}
@@ -66,7 +67,7 @@
                         android:layout_marginBottom="16dp"
                         android:scrollbars="none"
                         android:text="{{label}}"
-                        android:textColor="?colorPrimary"
+                        android:textColor="?colorOnBackground"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +106,7 @@
                         android:text="@{viewModel.entity.{{name}}.toString()}"
                         android:textAlignment="textStart"
                         android:textAllCaps="false"
-                        android:textColor="?colorPrimary"
+                        android:textColor="?colorOnBackground"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

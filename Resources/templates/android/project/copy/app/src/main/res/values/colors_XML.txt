@@ -7,4 +7,22 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--  Other sets of colors for another theme  -->
+    <color name="pink_light">#FFFA5788</color>
+    <color name="pink_700">#FFC2185B</color>
+    <color name="pink_dark">#FF8C0032</color>
+
+    <color name="amber_light">#FFFFD149</color>
+    <color name="amber_700">#FFFFA000</color>
+    <color name="amber_dark">#FFC67100</color>
+
+    <color name="cyan_light">#FF428E92</color>
+    <color name="cyan_900">#FF006064</color>
+    <color name="cyan_dark">#FF00363A</color>
+
+    <color name="brown_light">#FF8B6B61</color>
+    <color name="brown_700">#FF5D4037</color>
+    <color name="brown_dark">#FF321911</color>
+
 </resources>

@@ -17,10 +17,12 @@
             type="{{prefix}}.{{company}}.{{app_name}}.data.model.entity.{{tableName}}" />
     </data>
 
+    <!-- Generated with template named "Profile" -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/background_light">
+        android:background="?colorSurface">
 
         <ImageView
             android:id="@+id/{{tableName_lowercase}}_field_value_1"
@@ -30,12 +32,16 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"            
             android:layout_marginBottom="8dp"
-            android:contentDescription="Profile Image"
+            android:contentDescription="Image"
             {{#field_1_defined}}
             app:imageUrl="@{entityData.{{field_1_name}}.__deferred.uri}"
             app:key="@{entityData.__KEY}"
             app:tableName='@{"{{tableName}}"}'
             app:fieldName='@{"{{field_1_name}}"}'
+            app:transform='@{"CircleCrop"}'
+            {{/field_1_defined}}
+            {{^field_1_defined}}
+            app:imageDrawable="@{R.drawable.ic_placeholder}"
             {{/field_1_defined}}
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +62,7 @@
             {{#field_2_defined}}
             android:text="@{entityData.{{field_2_name}}.toString()}"
             {{/field_2_defined}}
-            android:textColor="?colorPrimary"
+            android:textColor="?colorOnSurface"
             android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/{{tableName_lowercase}}_field_value_3"
@@ -77,7 +83,7 @@
             {{#field_3_defined}}
             android:text="@{entityData.{{field_3_name}}.toString()}"
             {{/field_3_defined}}
-            android:textColor="?colorPrimary"
+            android:textColor="?colorOnSurface"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_arrow"
@@ -93,6 +99,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:contentDescription="Arrow Image"
             app:imageDrawable="@{@drawable/baseline_chevron_right_24}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
