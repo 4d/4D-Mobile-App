@@ -47,7 +47,7 @@ Class constructor
 	This:C1470.apk:=Folder:C1567(This:C1470.project.path).folder("app/build/outputs/apk").folder(This:C1470.version).file("app-"+This:C1470.version+".apk")
 	This:C1470.activity:="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
 	
-	This:C1470.avdName:="TestAndroid30Device"  // Allowed characters are: a-z A-Z 0-9 . _ -
+	This:C1470.avdName:=This:C1470.project.project._simulator
 	This:C1470.serial:=""
 	
 	// Class for create()
