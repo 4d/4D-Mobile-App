@@ -17,7 +17,7 @@ Subcmds:
   pair                Create a new watch and phone pair.
   unpair              Unpair a watch and phone pair.
   pair_activate       Set a given pair as active.
-  erase               Erase a device's contents and settings.
+• erase               Erase a device's contents and settings.
 • boot                Boot a device.
 • shutdown            Shutdown a device.
   rename              Rename a device.
@@ -54,8 +54,8 @@ Class constructor($iosDeploymentTarget : Text)
 	
 	Super:C1705()
 	
-	This:C1470.cmd:="xcrun simctl"
 	This:C1470.simulatorTimeout:=10000
+	This:C1470.minimumVersion:=""
 	
 	If (Count parameters:C259>=1)
 		
@@ -130,6 +130,48 @@ Function setDefaultDevice($udid : Text)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// List available devices
+Function devices()->$devices : Object
+	
+	// Usage: simctl list [-j | --json] [-v] [devices|devicetypes|runtimes|pairs]
+	This:C1470.launch("xcrun simctl"; "list devices --json devices")
+	
+	If (This:C1470.success)
+		
+		$devices:=JSON Parse:C1218(This:C1470.outputStream).devices
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// List Simulator Runtimes
+Function runtimes()->$runtimes : Collection
+	
+	This:C1470.launch("xcrun simctl"; "list runtimes --json")
+	
+	If (This:C1470.success)
+		
+		$runtimes:=JSON Parse:C1218(This:C1470.outputStream).runtimes
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// List Device Types
+Function deviceTypes($type : Text)->$devices : Collection
+	
+	This:C1470.launch("xcrun simctl"; "list devicetypes --json")
+	
+	If (This:C1470.success)
+		
+		$devices:=JSON Parse:C1218(This:C1470.outputStream).devicetypes
+		
+		If (Count parameters:C259>=1)
+			
+			$devices:=$devices.query("productFamily = :1"; $type)
+			
+		End if 
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// List available devices (iPhone & iPad) according to the minimum iOS version target
 Function availableDevices($iosDeploymentTarget : Text)->$availableDevices : Collection
 	
@@ -194,45 +236,32 @@ Function availableDevices($iosDeploymentTarget : Text)->$availableDevices : Coll
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// List available devices
-Function devices()->$devices : Object
+	// List of booted devices
+Function bootedDevices()->$bootedDevices : Collection
 	
-	// Usage: simctl list [-j | --json] [-v] [devices|devicetypes|runtimes|pairs]
-	This:C1470.launch(This:C1470.cmd; "list devices --json devices")
+	var $key : Text
+	var $device; $devices : Object
 	
-	If (This:C1470.success)
-		
-		$devices:=JSON Parse:C1218(This:C1470.outputStream).devices
-		
-	End if 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// List Simulator Runtimes
-Function runtimes()->$runtimes : Collection
-	
-	This:C1470.launch(This:C1470.cmd; "list runtimes --json")
+	$devices:=This:C1470.devices()
 	
 	If (This:C1470.success)
 		
-		$runtimes:=JSON Parse:C1218(This:C1470.outputStream).runtimes
+		$bootedDevices:=New collection:C1472
 		
-	End if 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// List Device Types
-Function deviceTypes($type : Text)->$devices : Collection
-	
-	This:C1470.launch(This:C1470.cmd; "list devicetypes --json")
-	
-	If (This:C1470.success)
-		
-		$devices:=JSON Parse:C1218(This:C1470.outputStream).devicetypes
-		
-		If (Count parameters:C259>=1)
+		For each ($key; $devices)
 			
-			$devices:=$devices.query("productFamily = :1"; $type)
-			
-		End if 
+			If (Value type:C1509($devices[$key])=Is collection:K8:32)
+				
+				For each ($device; $devices[$key])
+					
+					If (String:C10($device.state)="Booted")
+						
+						$bootedDevices.push($device)
+						
+					End if 
+				End for each 
+			End if 
+		End for each 
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -261,15 +290,44 @@ Function device($simulator : Text)->$device : Object
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the device (data) folder from its UDID or name
+Function deviceFolder($simulator : Text; $data : Boolean)->$folder : 4D:C1709.Folder
+	
+	var $device : Object
+	$device:=This:C1470.device($simulator)
+	
+	If ($device#Null:C1517)
+		
+		$folder:=This:C1470.home.folder("Library/Developer/CoreSimulator/Devices/").folder($device.udid)
+		
+		If (Count parameters:C259>=1)
+			
+			If ($data)
+				
+				$folder:=$folder.folder("data")
+				
+			End if 
+		End if 
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function deviceLog($simulator : Text)->$log : 4D:C1709.File
+	
+	var $device : Object
+	$device:=This:C1470.device($simulator)
+	
+	If ($device#Null:C1517)
+		
+		$log:=This:C1470.home.folder("Library/Logs/"+$device.udid)
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Boot a device from its UDID or name
 Function bootDevice($simulator : Text; $wait : Boolean)
 	
 	// Ensure the Simulator App is launched
-	If (Not:C34(This:C1470.isSimulatorAppLaunched()))
-		
-		This:C1470.launch("open -a "+This:C1470.singleQuoted(cs:C1710.Xcode.new().tools.file("Applications/Simulator.app").path))
-		
-	End if 
+	This:C1470.openSimulatorApp()
 	
 	var $device : Object
 	If (Count parameters:C259>=1)
@@ -284,12 +342,12 @@ Function bootDevice($simulator : Text; $wait : Boolean)
 	
 	If ($device#Null:C1517)
 		
-		If (This:C1470.isShutdown($device.udid))
+		If (This:C1470.isDeviceShutdown($device.udid))
 			
 			// Boot the device
-			This:C1470.launch(This:C1470.cmd; "boot "+$device.udid)
+			This:C1470.launch("xcrun simctl"; "boot "+$device.udid)
 			
-			If (Count parameters:C259>=1)
+			If (Count parameters:C259>=2)
 				
 				If ($wait)
 					
@@ -300,7 +358,7 @@ Function bootDevice($simulator : Text; $wait : Boolean)
 						
 						IDLE:C311
 						
-					Until (This:C1470.isBooted($device.udid)\
+					Until (This:C1470.isDeviceBooted($device.udid)\
 						 | ((Milliseconds:C459-$start)>This:C1470.simulatorTimeout))
 				End if 
 			End if 
@@ -309,7 +367,7 @@ Function bootDevice($simulator : Text; $wait : Boolean)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns true if a device is booted from its UDID or name
-Function isBooted($simulator : Text)->$booted : Boolean
+Function isDeviceBooted($simulator : Text)->$booted : Boolean
 	
 	ASSERT:C1129(Count parameters:C259>=1)
 	
@@ -340,11 +398,11 @@ Function shutdownDevice($simulator : Text; $wait : Boolean)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns true if a device is shutdown from its UDID or name
-Function isShutdown($simulator : Text)->$shutdown : Boolean
+Function isDeviceShutdown($simulator : Text)->$shutdown : Boolean
 	
 	ASSERT:C1129(Count parameters:C259>=1)
 	
-	$shutdown:=Not:C34(This:C1470.isBooted($simulator))
+	$shutdown:=Not:C34(This:C1470.isDeviceBooted($simulator))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Kills all devices
@@ -358,7 +416,7 @@ Function deleteDevice($simulator : Text)
 	
 	If (Count parameters:C259=0)  // All
 		
-		This:C1470.launch(This:C1470.cmd; "delete all")
+		This:C1470.launch("xcrun simctl"; "delete all")
 		
 	Else 
 		
@@ -367,7 +425,7 @@ Function deleteDevice($simulator : Text)
 		
 		If ($device#Null:C1517)
 			
-			This:C1470.launch(This:C1470.cmd; "delete "+$device.udid)
+			This:C1470.launch("xcrun simctl"; "delete "+$device.udid)
 			
 		End if 
 	End if 
@@ -383,36 +441,42 @@ Function eraseDevice($simulator : Text)
 	
 	If ($device#Null:C1517)
 		
-		This:C1470.launch(This:C1470.cmd; "erase "+$device.udid)
+		This:C1470.launch("xcrun simctl"; "erase "+$device.udid)
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Terminate an application by identifier on a device.
-Function terminateApp($identifier : Text; $simulator : Text)
+	// Launch the Simulator App
+Function openSimulatorApp()
 	
-	var $cmd : Text
-	var $device : Object
-	
-	If (Asserted:C1132(Count parameters:C259>=1))
+	If (Not:C34(This:C1470.isSimulatorAppLaunched()))
 		
-		$cmd:="xcrun simctl terminate"
-		
-		If (Count parameters:C259>=2)
-			
-			$device:=This:C1470.device($simulator)
-			$cmd:=$cmd+" "+$device.udid+" "
-			
-		Else 
-			
-			// Use the current device
-			$cmd:=$cmd+" booted "
-			
-		End if 
-		
-		This:C1470.launch($cmd+This:C1470.singleQuoted($identifier))
+		This:C1470.launch("open -a "+This:C1470.singleQuoted(cs:C1710.Xcode.new().tools.file("Applications/Simulator.app").path))
 		
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Quit the Simulator App
+Function quitSimulatorApp()
+	
+	If (This:C1470.isSimulatorAppLaunched())
+		
+		This:C1470.launch("osascript -e 'quit app \"Simulator\"'")
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Bringing the Simulator App to the forefront
+Function bringSimulatorAppToFront()
+	
+	This:C1470.launch("osascript -e 'tell app \"Simulator\" to activate'")
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns true if the Simulator App is launched
+Function isSimulatorAppLaunched()->$launched : Boolean
+	
+	This:C1470.launch("ps -e")
+	$launched:=(Position:C15(cs:C1710.Xcode.new().tools.file("Applications/Simulator.app").path; This:C1470.outputStream)>0)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Install an app by identifier on a device.
@@ -496,37 +560,30 @@ Function launchApp($identifier : Text; $simulator : Text)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns true if the Simulator App is launched
-Function isSimulatorAppLaunched()->$launched : Boolean
+	// Terminate an application by identifier on a device.
+Function terminateApp($identifier : Text; $simulator : Text)
 	
-	This:C1470.launch("ps -e")
-	$launched:=(Position:C15(cs:C1710.Xcode.new().tools.file("Applications/Simulator.app").path; This:C1470.outputStream)>0)
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Bringing the Simulator App to the forefront
-Function bringSimulatorAppToFront()
-	
-	This:C1470.launch("osascript -e 'tell app \"Simulator\" to activate'")
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the device (data) folder from its UDID or name
-Function deviceFolder($simulator : Text; $data : Boolean)->$folder : 4D:C1709.Folder
-	
+	var $cmd : Text
 	var $device : Object
-	$device:=This:C1470.device($simulator)
 	
-	If ($device#Null:C1517)
+	If (Asserted:C1132(Count parameters:C259>=1))
 		
-		$folder:=This:C1470.home.folder("Library/Developer/CoreSimulator/Devices/").folder($device.udid)
+		$cmd:="xcrun simctl terminate"
 		
-		If (Count parameters:C259>=1)
+		If (Count parameters:C259>=2)
 			
-			If ($data)
-				
-				$folder:=$folder.folder("data")
-				
-			End if 
+			$device:=This:C1470.device($simulator)
+			$cmd:=$cmd+" "+$device.udid+" "
+			
+		Else 
+			
+			// Use the current device
+			$cmd:=$cmd+" booted "
+			
 		End if 
+		
+		This:C1470.launch($cmd+This:C1470.singleQuoted($identifier))
+		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -535,24 +592,12 @@ Function plist()->$file : 4D:C1709.File
 	$file:=This:C1470.home.file("Library/Preferences/com.apple.iphonesimulator.plist")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function deviceLog($simulator : Text)->$log : 4D:C1709.File
-	
-	var $device : Object
-	$device:=This:C1470.device($simulator)
-	
-	If ($device#Null:C1517)
-		
-		$log:=This:C1470.home.folder("Library/Logs/"+$device.udid)
-		
-	End if 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Kills all devices or a device from its UDID or name
 Function _kill($simulator : Text; $wait : Boolean)
 	
 	If (Count parameters:C259=0)  // Kill all
 		
-		This:C1470.launch(This:C1470.cmd; "shutdown all")
+		This:C1470.launch("xcrun simctl"; "shutdown all")
 		
 	Else 
 		
@@ -561,7 +606,7 @@ Function _kill($simulator : Text; $wait : Boolean)
 		
 		If ($device#Null:C1517)
 			
-			This:C1470.launch(This:C1470.cmd; "shutdown "+$device.udid)
+			This:C1470.launch("xcrun simctl"; "shutdown "+$device.udid)
 			
 			If (Count parameters:C259>=1)
 				
@@ -574,7 +619,7 @@ Function _kill($simulator : Text; $wait : Boolean)
 						
 						IDLE:C311
 						
-					Until (This:C1470.isBooted($device.udid)\
+					Until (This:C1470.isDeviceBooted($device.udid)\
 						 | ((Milliseconds:C459-$start)>This:C1470.simulatorTimeout))
 				End if 
 			End if 

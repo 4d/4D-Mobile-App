@@ -43,32 +43,65 @@ Case of
 		$could:=New object:C1471(\
 			"openProductFolder"; ($product.exists & (Length:C16(PROJECT.product.name)#0)))
 		
-		$could.openWithXcode:=$could.openProductFolder & Bool:C1537(PROJECT.$project.xCode.XcodeAvailable)
-		
-		If ($could.openWithXcode)
+		If (FEATURE.with("android"))  //& False
 			
-			$could.openWithXcode:=Xcode(New object:C1471(\
-				"action"; "couldOpen"; \
-				"path"; $product.platformPath)).success
+			$could.openWithXcode:=$could.openProductFolder & Bool:C1537(Form:C1466.editor.$xCode.XcodeAvailable)
+			
+			If ($could.openWithXcode)
+				
+				$could.openWithXcode:=Xcode(New object:C1471(\
+					"action"; "couldOpen"; \
+					"path"; $product.platformPath)).success
+				
+			End if 
+			
+			$menu:=cs:C1710.menu.new()
+			
+			If (editor_Locked)
+				
+				$menu.append("syncDataModel"; "syncDataModel").line()
+				
+			End if 
+			
+			// Project folder
+			$menu.append("mnuProjectFolder"; "project").line()
+			
+			// Product folder, disabled if the product folder doesn't exist
+			$menu.append("mnuProductFolder"; "product").enable($could.openProductFolder)
+			
+			// Open project, disabled if Xcode isn't installed
+			$menu.append("mnuOpenTheProjectWithXcode"; "xCode").enable($could.openWithXcode)
+			
+		Else 
+			
+			$could.openWithXcode:=$could.openProductFolder & Bool:C1537(PROJECT.$project.xCode.XcodeAvailable)
+			
+			If ($could.openWithXcode)
+				
+				$could.openWithXcode:=Xcode(New object:C1471(\
+					"action"; "couldOpen"; \
+					"path"; $product.platformPath)).success
+				
+			End if 
+			
+			$menu:=cs:C1710.menu.new()
+			
+			If (editor_Locked)
+				
+				$menu.append("syncDataModel"; "syncDataModel").line()
+				
+			End if 
+			
+			// Project folder
+			$menu.append("mnuProjectFolder"; "project").line()
+			
+			// Product folder, disabled if the product folder doesn't exist
+			$menu.append("mnuProductFolder"; "product").enable($could.openProductFolder)
+			
+			// Open project, disabled if Xcode isn't installed
+			$menu.append("mnuOpenTheProjectWithXcode"; "xCode").enable($could.openWithXcode)
 			
 		End if 
-		
-		$menu:=cs:C1710.menu.new()
-		
-		If (editor_Locked)
-			
-			$menu.append("syncDataModel"; "syncDataModel").line()
-			
-		End if 
-		
-		// Project folder
-		$menu.append("mnuProjectFolder"; "project").line()
-		
-		// Product folder, disabled if the product folder doesn't exist
-		$menu.append("mnuProductFolder"; "product").enable($could.openProductFolder)
-		
-		// Open project, disabled if Xcode isn't installed
-		$menu.append("mnuOpenTheProjectWithXcode"; "xCode").enable($could.openWithXcode)
 		
 		// =================== DEVELOPMENT ITEMS ===================== [
 		If ($withMoreItems)
@@ -309,7 +342,7 @@ Case of
 				
 				If ($device#Null:C1517)
 					
-					$isBooted:=$o.isBooted($device.udid)
+					$isBooted:=$o.isDeviceBooted($device.udid)
 					
 					If ($isBooted)
 						

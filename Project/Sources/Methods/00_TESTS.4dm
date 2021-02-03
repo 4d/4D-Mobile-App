@@ -28,28 +28,34 @@ Case of
 		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 		$c:=$simctl.availableDevices()
 		
-		$simctl:=cs:C1710.simctl.new()
-		$c:=$simctl.availableDevices()
+		//$simctl:=cs.simctl.new()
+		//$c:=$simctl.availableDevices()
 		
+		$c:=$simctl.bootedDevices()
 		
-		$simctl.bootDevice("iPhone 12 Pro Max")
+		If ($c.query("name = :1"; "iPhone 12 Pro Max").pop()=Null:C1517)
+			
+			$simctl.bootDevice("iPhone 12 Pro Max")
+			
+		End if 
 		
-		
-		$folder:=$simctl.deviceFolder("iPhone 12 Pro Max")
+		//$folder:=$simctl.deviceFolder("iPhone 12 Pro Max")
 		
 		var $device : Object
 		$device:=$simctl.device("iPhone 12 Pro Max")
-		$folder:=$simctl.deviceFolder($device.udid; True:C214)
+		//$folder:=$simctl.deviceFolder($device.udid; True)
 		
-		If ($simctl.isBooted($device.udid))
+		If ($simctl.isDeviceBooted($device.udid))
 			
-			$simctl.shutdownDevice($device.udid; True:C214)
+			//$simctl.shutdownDevice($device.udid; True)
 			
-			$simctl.bootDevice($device.udid; True:C214)
+			//$simctl.bootDevice($device.udid; True)
 			
-		Else 
+			$simctl.launchApp("com.myCompany.My-App-9"; $device.udid)
 			
-			// A "If" statement should never omit "Else" 
+			DELAY PROCESS:C323(Current process:C322; 60*5)
+			
+			$simctl.terminateApp("com.myCompany.My-App-9"; $device.udid)
 			
 		End if 
 		

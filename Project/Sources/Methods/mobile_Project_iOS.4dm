@@ -901,7 +901,7 @@ If ($Obj_out.success)
 						
 					End if 
 					
-					If ($simctl.isBooted($Obj_out.device.udid))
+					If ($simctl.isDeviceBooted($Obj_out.device.udid))
 						
 						POST_MESSAGE(New object:C1471(\
 							"target"; $Obj_in.caller; \
