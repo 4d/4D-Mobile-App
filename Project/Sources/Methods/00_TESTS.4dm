@@ -24,34 +24,28 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		var $o : cs:C1710.simulator
-		$o:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget)
-		$c:=$o.availableDevices()  //.query("name = :1"; "iPhone SE (2nd generation)")
+		var $simctl : cs:C1710.simctl
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+		$c:=$simctl.availableDevices()
+		
+		$simctl:=cs:C1710.simctl.new()
+		$c:=$simctl.availableDevices()
 		
 		
-		//$o1:=_o_simulator(New object("action"; "default"))
-		////$o.getdefault()
+		$simctl.bootDevice("iPhone 12 Pro Max")
 		
-		$b:=$o.isLaunched()
+		
+		$folder:=$simctl.deviceFolder("iPhone 12 Pro Max")
 		
 		var $device : Object
-		$device:=$c.query("name = :1"; "iPhone 12 Pro Max").pop()
-		$o2:=$o.device($device.udid)
-		$b:=$o.isBooted($device.udid)
+		$device:=$simctl.device("iPhone 12 Pro Max")
+		$folder:=$simctl.deviceFolder($device.udid; True:C214)
 		
-		$folder:=$o.deviceFolder($device.udid)
-		
-		If ($b)
+		If ($simctl.isBooted($device.udid))
 			
-			$o.kill($device.udid)
+			$simctl.shutdownDevice($device.udid; True:C214)
 			
-			Repeat 
-				
-				IDLE:C311
-				
-			Until (String:C10($o.device($device.udid).state)="Shutdown")
-			
-			$o.open($device.udid)
+			$simctl.bootDevice($device.udid; True:C214)
 			
 		Else 
 			
@@ -59,17 +53,11 @@ Case of
 			
 		End if 
 		
-		//$t:=$o.default()
+		$device:=$simctl.defaultDevice()
 		
 		
-		
-		//$result:=_o_simulator(New object(\
-			"action"; "isBooted"; \
-			"device"; "43C75F1A-6021-480D-A38C-A0C0B0EA0E22"))
-		
-		
-		//$c:=$o.deviceTypes("iPhone")
-		//$c:=$o.deviceTypes("iPad")
+		//$c:=$simctl.deviceTypes("iPhone")
+		//$c:=$simctl.deviceTypes("iPad")
 		
 		//________________________________________
 	: (True:C214)

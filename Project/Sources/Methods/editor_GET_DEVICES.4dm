@@ -28,11 +28,11 @@ Case of
 			
 			$out:=New object:C1471(\
 				"android"; cs:C1710.avd.new().availableDevices(); \
-				"apple"; cs:C1710.simulator.new(SHARED.iosDeploymentTarget).availableDevices())
+				"apple"; cs:C1710.simctl.new(SHARED.iosDeploymentTarget).availableDevices())
 			
 		Else 
 			
-			$out:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget).availableDevices()
+			$out:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget).availableDevices()
 			
 		End if 
 		

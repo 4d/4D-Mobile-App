@@ -689,7 +689,7 @@
 			"XcodeProjInject"
 		],
 		"classes": [
-			"simulator",
+			"simctl",
 			"Xcode"
 		]
 	},

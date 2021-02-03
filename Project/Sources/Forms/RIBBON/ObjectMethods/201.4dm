@@ -157,11 +157,14 @@ Case of
 					"title"; "We are going tout doux 🤣"))
 				
 				//______________________________________________________
-			: (FEATURE.with("android")) & False:C215  // 🚧
+			: (FEATURE.with("android"))  // 🚧
 				
 				CLEAR VARIABLE:C89($device)
 				
 				If (Is macOS:C1572)
+					
+					var $simctl : cs:C1710.simctl
+					$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 					
 					$device:=Form:C1466.devices.apple.query("udid = :1"; $menu.choice).pop()
 					
@@ -169,8 +172,19 @@ Case of
 				
 				If ($device#Null:C1517)
 					
+					// Set default simulator
 					Form:C1466.currentDevice:=$menu.choice
 					OBJECT SET TITLE:C194(*; "201"; $device.name)
+					
+					// #TO_OPTMIZE : deport to worker [
+					
+					// Kill all Simulators if any
+					$simctl.killAllDevices()
+					
+					// And fix default
+					$simctl.setDefaultDevice($menu.choice)
+					
+					// ]
 					
 				Else 
 					
@@ -196,40 +210,28 @@ Case of
 				
 				If ($menu.choice#String:C10(Form:C1466.currentDevice))
 					
+					// Set default simulator
+					Form:C1466.currentDevice:=$menu.choice
+					
+					// Set button title
 					$device:=Form:C1466.devices.query("udid = :1"; $menu.choice).pop()
+					OBJECT SET TITLE:C194(*; "201"; $device.name)
 					
-					var $o : cs:C1710.simulator
-					$o:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget)
+					// Adapt button width
+					SET TIMER:C645(-1)
 					
-					// Kill all Simulators if any
-					$o.kill()
-					
-					If (plist(New object:C1471(\
-						"action"; "write"; \
-						"domain"; $o.plist().path; \
-						"key"; "CurrentDeviceUDID"; \
-						"value"; $menu.choice)).success)
+					If (Is macOS:C1572)
 						
-						// Set default simulator
-						Form:C1466.currentDevice:=$menu.choice
+						var $simctl : cs:C1710.simctl
+						$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 						
-						// Set button title
-						OBJECT SET TITLE:C194(*; "201"; $device.name)
+						// Kill all Simulators if any
+						$simctl.killAllDevices()
 						
-						// Adapt button width
-						SET TIMER:C645(-1)
-						
-					Else 
-						
-						POST_MESSAGE(New object:C1471(\
-							"target"; Current form window:C827; \
-							"action"; "show"; \
-							"type"; "alert"; \
-							"title"; ".Failed to set the default simulator to: \""+$device.name+"\""; \
-							"additional"; ""))
+						// And fix default
+						$simctl.setDefaultDevice($menu.choice)
 						
 					End if 
-					
 				End if 
 				
 				//______________________________________________________

@@ -157,6 +157,7 @@ Case of
 		
 		If (Form:C1466.devices#Null:C1517)
 			
+			// Update device button
 			If (FEATURE.with("android"))  //🚧
 				
 				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0))
@@ -200,7 +201,7 @@ Case of
 						 & (Form:C1466.devices.apple.length>0)
 						
 						// Get a default device identifier
-						$simulator:=String:C10(cs:C1710.simulator.new(SHARED.iosDeploymentTarget).default())
+						$simulator:=String:C10(cs:C1710.simctl.new(SHARED.iosDeploymentTarget).defaultDevice().udid)
 						
 						If (Length:C16($simulator)>0)
 							
@@ -238,7 +239,6 @@ Case of
 				
 			Else 
 				
-				// Update device button
 				If (Form:C1466.devices.length>0)
 					
 					$form.simulator.enable()

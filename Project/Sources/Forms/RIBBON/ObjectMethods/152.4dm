@@ -4,10 +4,10 @@
 // Created 19-11-2020 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-var $path; $t; $UDID : Text
+var $path; $t : Text
 var $isBooted; $isDebug; $success; $withMoreItems : Boolean
 var $bottom; $left; $right; $top : Integer
-var $could; $e; $menu; $menuApp; $o; $project; $result; $simulator : Object
+var $could; $e; $menu; $menuApp; $o; $project; $result; $device : Object
 var $build; $product : 4D:C1709.Folder
 var $Xcode : cs:C1710.Xcode
 
@@ -73,16 +73,20 @@ Case of
 		// =================== DEVELOPMENT ITEMS ===================== [
 		If ($withMoreItems)
 			
-			If (Num:C11(PROJECT.$project.xCode.platform)=Mac OS:K25:2)
+			If (Is macOS:C1572)
 				
-				$menu.line()
+				var $simctl : cs:C1710.simctl
+				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 				
-				$menu.append("openSimulatorLogs"; "_openLogs")\
-					.append("openSimulatorDiagnosticReports"; "_openDiagnosticReports")
+				var $device : Object
+				$device:=$simctl.device(Form:C1466.currentDevice)
 				
-				$UDID:=String:C10(String:C10(cs:C1710.simulator.new(SHARED.iosDeploymentTarget).default()))
-				
-				If (Length:C16($UDID)#0)
+				If ($device#Null:C1517)  // Else android device
+					
+					$menu.line()
+					
+					$menu.append("openSimulatorLogs"; "_openLogs")\
+						.append("openSimulatorDiagnosticReports"; "_openDiagnosticReports")
 					
 					$menu.append("openCurrentSimulatorFolder"; "_openSimuPath")
 					
@@ -93,16 +97,16 @@ Case of
 						
 					End if 
 					
-					$simulator:=_o_simulator(\
+					$device:=_o_simulator(\
 						New object:C1471("action"; "deviceApp"; \
-						"device"; $UDID; \
+						"device"; Form:C1466.currentDevice; \
 						"data"; True:C214))
 					
-					If ($simulator.success)
+					If ($device.success)
 						
 						$menuApp:=cs:C1710.menu.new()
 						
-						For each ($o; $simulator.apps)
+						For each ($o; $device.apps)
 							
 							If (String:C10($o.metaData.path)#"")
 								
@@ -271,13 +275,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openLogs")
 				
-				$simulator:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget).default()
-				
-				If (String:C10($simulator.udid)#"")
-					
-					$o:=ENV.logs("CoreSimulator/").folder($simulator.udid)
-					
-				End if 
+				$o:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget).deviceLog(Form:C1466.currentDevice)
 				
 				If ($o.exists)
 					
@@ -288,54 +286,42 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openSimuPath")
 				
-				var $o : cs:C1710.simulator
-				$o:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget)
-				$simulator:=$o.default()
+				$o:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget).deviceFolder(Form:C1466.currentDevice)
 				
-				If (String:C10($simulator.udid)#"")
+				If ($o.exists)
 					
-					$o:=$o.deviceFolder($simulator.udid)
+					SHOW ON DISK:C922($o.platformPath)
 					
-					If ($o.exists)
-						
-						SHOW ON DISK:C922($o.platformPath)
-						
-					End if 
 				End if 
 				
 				//______________________________________________________
 			: ($menu.choice="_killSimulators")
 				
-				cs:C1710.simulator.new(SHARED.iosDeploymentTarget).kill()
+				cs:C1710.simctl.new(SHARED.iosDeploymentTarget).killAllDevices()
 				
 				//______________________________________________________
 			: ($menu.choice="_eraseCurrentSimulator")
 				
-				var $o : cs:C1710.simulator
-				$o:=cs:C1710.simulator.new(SHARED.iosDeploymentTarget)
+				var $o : cs:C1710.simctl
+				$o:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 				
-				$simulator:=$o.default()
+				$device:=$o.defaultDevice()
 				
-				If ($simulator#Null:C1517)
+				If ($device#Null:C1517)
 					
-					$isBooted:=$o.isBooted($simulator.udid)
+					$isBooted:=$o.isBooted($device.udid)
 					
 					If ($isBooted)
 						
-						$o.kill($simulator.udid)
+						$o.shutdownDevice($device.udid; True:C214)
 						
-						Repeat 
-							
-							IDLE:C311
-							
-						Until (String:C10($o.device($simulator.udid).state)="Shutdown")
 					End if 
 					
-					$o.erase($simulator.udid)
+					$o.eraseDevice($device.udid)
 					
 					If ($isBooted)  // relaunch
 						
-						$o.open($simulator.udid)
+						$o.bootDevice($device.udid)
 						
 					End if 
 				End if 
@@ -343,7 +329,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openCache")
 				
-				SHOW ON DISK:C922(ENV.caches().platformPath)
+				SHOW ON DISK:C922(ENV.caches().folder("com.4d.mobile").platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_openSDKCache")

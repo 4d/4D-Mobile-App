@@ -450,7 +450,7 @@ Case of
 		End if 
 		
 		//________________________________________
-	: ($Obj_in.action="devicePath")
+	: ($Obj_in.action="devicePath")  // SEAMS UNUSED
 		
 		If ($Obj_in.device#Null:C1517)
 			

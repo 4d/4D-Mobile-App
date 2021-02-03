@@ -15,6 +15,7 @@ Function reset()->$this : cs:C1710.lep
 	
 	This:C1470.success:=True:C214
 	This:C1470.errors:=New collection:C1472
+	This:C1470.lastError:=""
 	This:C1470.command:=Null:C1517
 	This:C1470.inputStream:=Null:C1517
 	This:C1470.outputStream:=Null:C1517
@@ -164,7 +165,7 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 	This:C1470.errorStream:=Null:C1517
 	This:C1470.pid:=0
 	
-	If (Value type:C1509($command)=Is object:K8:27)
+	If (Value type:C1509($command)=Is object:K8:27)  // File script
 		
 		This:C1470.command:=This:C1470.escape($command.path)
 		
@@ -185,10 +186,6 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 				
 				This:C1470.command:="cmd.exe /C start /B"
 				
-				//______________________________________________________
-			Else 
-				
-				// A "Case of" statement should never omit "Else"
 				//______________________________________________________
 		End case 
 	End if 
@@ -710,5 +707,6 @@ Function _shortcut($string : Text)->$variable : Text
 Function _pushError($desription : Text)
 	
 	This:C1470.success:=False:C215
-	This:C1470.errors.push(Get call chain:C1662[1].name+" - "+$desription)
+	This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$desription
+	This:C1470.errors.push(This:C1470.lastError)
 	
