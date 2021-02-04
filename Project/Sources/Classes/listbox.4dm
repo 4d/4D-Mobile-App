@@ -178,7 +178,16 @@ Function cellPosition($event : Object)->$position : Object
 	var $_; $column; $row; $x; $y : Integer
 	var $e; $event : Object
 	
-	$e:=Choose:C955(Count parameters:C259>=1; $event; FORM Event:C1606)
+	If (Count parameters:C259>=1)
+		
+		// Event is provided
+		$e:=$event
+		
+	Else 
+		
+		$e:=FORM Event:C1606
+		
+	End if 
 	
 	If ($e.code=On Clicked:K2:4)\
 		 | ($e.code=On Double Clicked:K2:5)
