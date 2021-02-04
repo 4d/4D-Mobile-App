@@ -43,15 +43,15 @@
                     android:contentDescription="Image"
                     android:elevation="4dp"
                     {{#field_1_defined}}
+                    app:imageFieldName='@{"{{field_1_name}}"}'
+                    app:imageKey="@{viewModel.entity.__KEY}"
+                    app:imageTableName='@{"{{tableName}}"}'
                     app:imageUrl="@{viewModel.entity.{{field_1_name}}.__deferred.uri}"
-                    app:key="@{viewModel.entity.__KEY}"
-                    app:tableName='@{"{{tableName}}"}'
-                    app:fieldName='@{"{{field_1_name}}"}'
-                    app:transform='@{"CircleCrop"}'
                     {{/field_1_defined}}
                     {{^field_1_defined}}
                     app:imageDrawable="@{R.drawable.ic_placeholder}"
                     {{/field_1_defined}}
+                    app:imageTransform='@{"CircleCrop"}'
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -77,18 +77,18 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
+                    android:elevation="4dp"
                     android:scrollbars="none"
                     {{#field_2_defined}}
                     android:text="@{viewModel.entity.{{field_2_name}}.toString()}"
                     {{/field_2_defined}}
-                    android:elevation="4dp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="@+id/custom_card_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/custom_card_view"
                     tools:text="specific_field_2" />
 
                 <TextView
@@ -99,19 +99,19 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
+                    android:elevation="4dp"
                     android:paddingBottom="16dp"
                     android:scrollbars="none"
                     {{#field_3_defined}}
                     android:text="@{viewModel.entity.{{field_3_name}}.toString()}"
                     {{/field_3_defined}}
-                    android:elevation="4dp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@+id/{{tableName_lowercase}}_specific_field_value_2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/{{tableName_lowercase}}_specific_field_value_2"
                     tools:text="specific_field_3" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -123,6 +123,7 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="4dp"
                 android:layout_marginVertical="2dp"
+                android:backgroundTint="?colorPrimaryVariant"
                 card_view:cardCornerRadius="4dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -131,6 +132,7 @@
 
                     {{#isRelation}}
                     <Button
+                        android:id="@+id/{{tableName_lowercase}}_field_button_{{viewId}}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -173,10 +175,11 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
+                        android:contentDescription="Image"
+                        app:imageFieldName='@{"{{name}}"}'
+                        app:imageKey="@{viewModel.entity.__KEY}"
+                        app:imageTableName='@{"{{tableName}}"}'
                         app:imageUrl="@{viewModel.entity.{{name}}.__deferred.uri}"
-                        app:key="@{viewModel.entity.__KEY}"
-                        app:tableName='@{"{{tableName}}"}'
-                        app:fieldName='@{"{{name}}"}'
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -208,6 +211,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
+
             {{/form_fields}}
 
         </LinearLayout>

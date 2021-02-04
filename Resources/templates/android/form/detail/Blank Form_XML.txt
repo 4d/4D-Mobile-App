@@ -43,6 +43,7 @@
 
                     {{#isRelation}}
                     <Button
+                        android:id="@+id/{{tableName_lowercase}}_field_button_{{viewId}}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -50,10 +51,10 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
                         android:text="{{label}}"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         tools:text="relation_{{viewId}}" />
                     {{/isRelation}}
                     {{^isRelation}}
@@ -70,10 +71,10 @@
                         android:textColor="?colorOnBackground"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/{{tableName_lowercase}}_field_value_{{viewId}}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/{{tableName_lowercase}}_field_value_{{viewId}}"
                         tools:text="field_{{viewId}}_label" />
 
                     {{#isImage}}
@@ -85,10 +86,11 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
+                        android:contentDescription="Image"
+                        app:imageFieldName='@{"{{name}}"}'
+                        app:imageKey="@{viewModel.entity.__KEY}"
+                        app:imageTableName='@{"{{tableName}}"}'
                         app:imageUrl="@{viewModel.entity.{{name}}.__deferred.uri}"
-                        app:key="@{viewModel.entity.__KEY}"
-                        app:tableName='@{"{{tableName}}"}'
-                        app:fieldName='@{"{{name}}"}'
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -120,6 +122,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
+            
             {{/form_fields}}
 
         </LinearLayout>

@@ -10,8 +10,6 @@
 
     <data>
 
-        <import type="android.text.TextUtils" />
-
         <variable
             name="entityData"
             type="{{prefix}}.{{company}}.{{app_name}}.data.model.entity.{{tableName}}" />
@@ -34,15 +32,15 @@
             android:layout_marginBottom="8dp"
             android:contentDescription="Image"
             {{#field_1_defined}}
+            app:imageFieldName='@{"{{field_1_name}}"}'
+            app:imageKey="@{entityData.__KEY}"
+            app:imageTableName='@{"{{tableName}}"}'
             app:imageUrl="@{entityData.{{field_1_name}}.__deferred.uri}"
-            app:key="@{entityData.__KEY}"
-            app:tableName='@{"{{tableName}}"}'
-            app:fieldName='@{"{{field_1_name}}"}'
-            app:transform='@{"CircleCrop"}'
             {{/field_1_defined}}
             {{^field_1_defined}}
             app:imageDrawable="@{R.drawable.ic_placeholder}"
             {{/field_1_defined}}
+            app:imageTransform='@{"CircleCrop"}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
