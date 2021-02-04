@@ -37,6 +37,10 @@ Case of
 		// Autosave
 		PROJECT.save()
 		
+		var $simctl : cs:C1710.simctl
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+		
+		
 		$product:=path.products().folder(PROJECT.product.name)
 		$build:=$product.folder("build")
 		
@@ -107,9 +111,6 @@ Case of
 		If ($withMoreItems)
 			
 			If (Is macOS:C1572)
-				
-				var $simctl : cs:C1710.simctl
-				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 				
 				var $device : Object
 				$device:=$simctl.device(Form:C1466.currentDevice)
@@ -308,18 +309,12 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openLogs")
 				
-				$o:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget).deviceLog(Form:C1466.currentDevice)
-				
-				If ($o.exists)
-					
-					SHOW ON DISK:C922($o.platformPath)
-					
-				End if 
+				$simctl.showDeviceLog(Form:C1466.currentDevice)
 				
 				//______________________________________________________
 			: ($menu.choice="_openSimuPath")
 				
-				$o:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget).deviceFolder(Form:C1466.currentDevice)
+				$o:=$simctl.deviceFolder(Form:C1466.currentDevice)
 				
 				If ($o.exists)
 					
@@ -330,34 +325,12 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_killSimulators")
 				
-				cs:C1710.simctl.new(SHARED.iosDeploymentTarget).killAllDevices()
+				$simctl.shutdownAllDevices()
 				
 				//______________________________________________________
 			: ($menu.choice="_eraseCurrentSimulator")
 				
-				var $o : cs:C1710.simctl
-				$o:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
-				
-				$device:=$o.defaultDevice()
-				
-				If ($device#Null:C1517)
-					
-					$isBooted:=$o.isDeviceBooted($device.udid)
-					
-					If ($isBooted)
-						
-						$o.shutdownDevice($device.udid; True:C214)
-						
-					End if 
-					
-					$o.eraseDevice($device.udid)
-					
-					If ($isBooted)  // relaunch
-						
-						$o.bootDevice($device.udid)
-						
-					End if 
-				End if 
+				$simctl.eraseDevice(Form:C1466.currentDevice)
 				
 				//______________________________________________________
 			: ($menu.choice="_openCache")

@@ -179,7 +179,7 @@ Case of
 					// #TO_OPTMIZE : deport to worker [
 					
 					// Kill all Simulators if any
-					$simctl.killAllDevices()
+					$simctl.shutdownAllDevices()
 					
 					// And fix default
 					$simctl.setDefaultDevice($menu.choice)
@@ -226,7 +226,7 @@ Case of
 						$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 						
 						// Kill all Simulators if any
-						$simctl.killAllDevices()
+						$simctl.shutdownAllDevices()
 						
 						// And fix default
 						$simctl.setDefaultDevice($menu.choice)
