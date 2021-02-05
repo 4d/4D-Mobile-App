@@ -256,7 +256,16 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 	
 	LAUNCH EXTERNAL PROCESS:C811(This:C1470.command; $input; $output; $error; $pid)
 	
-	$t:=Convert to text:C1012($output; This:C1470.charSet)
+	If (This:C1470.resultInErrorStream)
+		
+		$t:=$error
+		CLEAR VARIABLE:C89($error)
+		
+	Else 
+		
+		$t:=Convert to text:C1012($output; This:C1470.charSet)
+		
+	End if 
 	
 	If (Length:C16($t)>0)
 		

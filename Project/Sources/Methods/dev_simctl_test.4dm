@@ -13,6 +13,19 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		var $cfgutil : cs:C1710.cfgutil
+		$cfgutil:=cs:C1710.cfgutil.new()
+		
+		var $pluggedDevices : Collection
+		$pluggedDevices:=$cfgutil.plugged()
+		
+		//$device:=device(New object("action"; "plugged"))
+		
+		
+		
+		//______________________________________________________
+	: (True:C214)
+		
 		$simctl.bootDevice("iPhone 12 Pro Max")
 		
 		If (Shift down:C543)
