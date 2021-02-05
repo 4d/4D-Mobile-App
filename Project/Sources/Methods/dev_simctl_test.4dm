@@ -13,6 +13,12 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		$simctl.bootDevice("iPhone 12 Pro Max")
+		$simctl.openUrlScheme("maps://?s=Apple+Park")
+		
+		//______________________________________________________
+	: (True:C214)
+		
 		If ($simctl.bootedDevices().query("name = :1"; "iPhone 12 Pro Max").pop()=Null:C1517)
 			
 			$simctl.bootDevice("iPhone 12 Pro Max")

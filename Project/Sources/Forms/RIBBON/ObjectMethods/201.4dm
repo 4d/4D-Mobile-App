@@ -157,82 +157,29 @@ Case of
 					"title"; "We are going tout doux 🤣"))
 				
 				//______________________________________________________
-			: (FEATURE.with("android"))  // 🚧
+			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-(?:[[:xdigit:]]{4}-){3}[[:xdigit:]]{12}"; $menu.choice; 1))
 				
-				CLEAR VARIABLE:C89($device)
+				$device:=Form:C1466.devices.apple.query("udid = :1"; $menu.choice).pop()
 				
-				If (Is macOS:C1572)
-					
-					var $simctl : cs:C1710.simctl
-					$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
-					
-					$device:=Form:C1466.devices.apple.query("udid = :1"; $menu.choice).pop()
-					
-				End if 
+				// Set default simulator
+				Form:C1466.currentDevice:=$menu.choice
+				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
-				If ($device#Null:C1517)
-					
-					// Set default simulator
-					Form:C1466.currentDevice:=$menu.choice
-					OBJECT SET TITLE:C194(*; "201"; $device.name)
-					
-					// #TO_OPTMIZE : deport to worker [
-					
-					// Kill all Simulators if any
-					$simctl.shutdownAllDevices()
-					
-					// And fix default
-					$simctl.setDefaultDevice($menu.choice)
-					
-					// ]
-					
-				Else 
-					
-					$device:=Form:C1466.devices.android.query("udid = :1"; $menu.choice).pop()
-					
-					If ($device#Null:C1517)
-						
-						Form:C1466.currentDevice:=$menu.choice
-						OBJECT SET TITLE:C194(*; "201"; $device.name)
-						
-					Else 
-						
-						ASSERT:C1129(Not:C34(DATABASE.isMatrix); "Should not, since we have selected one!")
-						
-					End if 
-				End if 
+				// #TO_OPTMIZE : deport to worker
 				
-				// Adapt button width
-				SET TIMER:C645(-1)
+				// Kill all booted devices, if any, & fix default
+				var $simctl : cs:C1710.simctl
+				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+				$simctl.shutdownAllDevices()
+				$simctl.setDefaultDevice($menu.choice)
 				
 				//______________________________________________________
-			: (Match regex:C1019("(?mi-s)^(?:[[:alnum:]]*-)*[[:alnum:]]*$"; $menu.choice; 1))  // iOS
+			: (FEATURE.with("android"))  // 🚧
 				
-				If ($menu.choice#String:C10(Form:C1466.currentDevice))
-					
-					// Set default simulator
-					Form:C1466.currentDevice:=$menu.choice
-					
-					// Set button title
-					$device:=Form:C1466.devices.query("udid = :1"; $menu.choice).pop()
-					OBJECT SET TITLE:C194(*; "201"; $device.name)
-					
-					// Adapt button width
-					SET TIMER:C645(-1)
-					
-					If (Is macOS:C1572)
-						
-						var $simctl : cs:C1710.simctl
-						$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
-						
-						// Kill all Simulators if any
-						$simctl.shutdownAllDevices()
-						
-						// And fix default
-						$simctl.setDefaultDevice($menu.choice)
-						
-					End if 
-				End if 
+				$device:=Form:C1466.devices.android.query("udid = :1"; $menu.choice).pop()
+				
+				Form:C1466.currentDevice:=$menu.choice
+				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
 				//______________________________________________________
 			Else 

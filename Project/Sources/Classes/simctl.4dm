@@ -64,6 +64,8 @@ Class constructor($iosDeploymentTarget : Text)
 		
 	End if 
 	
+	This:C1470._cleanup()
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns (and set if any) the default device
 Function defaultDevice()->$device : Object
@@ -291,6 +293,7 @@ Function deviceFolder($simulator : Text; $data : Boolean)->$folder : 4D:C1709.Fo
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the device log file from its UDID or name
 Function deviceLog($simulator : Text)->$log : 4D:C1709.File
 	
 	var $device : Object
@@ -381,10 +384,16 @@ Function bootDevice($simulator : Text; $wait : Boolean)
 	// Returns true if a device is booted from its UDID or name
 Function isDeviceBooted($simulator : Text)->$isBooted : Boolean
 	
-	ASSERT:C1129(Count parameters:C259>=1)
-	
 	var $device : Object
-	$device:=This:C1470.device($simulator)
+	If (Count parameters:C259>=1)
+		
+		$device:=This:C1470.device($simulator)
+		
+	Else 
+		
+		$device:=This:C1470.defaultDevice()
+		
+	End if 
 	
 	If ($device#Null:C1517)
 		
@@ -396,17 +405,26 @@ Function isDeviceBooted($simulator : Text)->$isBooted : Boolean
 	// Shutdown a device from its UDID or name
 Function shutdownDevice($simulator : Text; $wait : Boolean)
 	
-	ASSERT:C1129(Count parameters:C259>=1)
+	var $device : Object
+	If (Count parameters:C259>=1)
+		
+		$device:=This:C1470.device($simulator)
+		
+	Else 
+		
+		$device:=This:C1470.defaultDevice()
+		
+	End if 
 	
-	If (This:C1470.isDeviceBooted($simulator))
+	If (This:C1470.isDeviceBooted($device.udid))
 		
 		If (Count parameters:C259>=2)
 			
-			This:C1470._kill($simulator; $wait)
+			This:C1470._kill($device.udid; $wait)
 			
 		Else 
 			
-			This:C1470._kill($simulator)
+			This:C1470._kill($device.udid)
 			
 		End if 
 	End if 
@@ -415,9 +433,18 @@ Function shutdownDevice($simulator : Text; $wait : Boolean)
 	// Returns true if a device is shutdown from its UDID or name
 Function isDeviceShutdown($simulator : Text)->$shutdown : Boolean
 	
-	ASSERT:C1129(Count parameters:C259>=1)
+	var $device : Object
+	If (Count parameters:C259>=1)
+		
+		$device:=This:C1470.device($simulator)
+		
+	Else 
+		
+		$device:=This:C1470.defaultDevice()
+		
+	End if 
 	
-	$shutdown:=Not:C34(This:C1470.isDeviceBooted($simulator))
+	$shutdown:=Not:C34(This:C1470.isDeviceBooted($device.udid))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Shutdowns all devices
@@ -426,7 +453,7 @@ Function shutdownAllDevices()
 	This:C1470._kill()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Delete specified device from its UDID or name, or all devices.
+	// Delete a device or all the devices if no parameter
 Function deleteDevice($simulator : Text)
 	
 	If (Count parameters:C259=0)  // All
@@ -525,7 +552,7 @@ Function isSimulatorAppLaunched()->$launched : Boolean
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Install an app by identifier on a device.
-Function installApp($identifier : Text; $simulator : Text)
+Function installApp($bundleID : Text; $simulator : Text)
 	
 	var $cmd : Text
 	var $device : Object
@@ -546,13 +573,13 @@ Function installApp($identifier : Text; $simulator : Text)
 			
 		End if 
 		
-		This:C1470.launch($cmd+This:C1470.singleQuoted($identifier))
+		This:C1470.launch($cmd+This:C1470.singleQuoted($bundleID))
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Uninstall an app by identifier from a device
-Function uninstallApp($identifier : Text; $simulator : Text)
+Function uninstallApp($bundleID : Text; $simulator : Text)
 	
 	var $cmd : Text
 	var $device : Object
@@ -573,13 +600,13 @@ Function uninstallApp($identifier : Text; $simulator : Text)
 			
 		End if 
 		
-		This:C1470.launch($cmd+This:C1470.singleQuoted($identifier))
+		This:C1470.launch($cmd+This:C1470.singleQuoted($bundleID))
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Launch an application by identifier on a device
-Function launchApp($identifier : Text; $simulator : Text)
+Function launchApp($bundleID : Text; $simulator : Text)
 	
 	var $cmd : Text
 	var $device : Object
@@ -600,13 +627,13 @@ Function launchApp($identifier : Text; $simulator : Text)
 			
 		End if 
 		
-		This:C1470.launch($cmd+This:C1470.singleQuoted($identifier))
+		This:C1470.launch($cmd+This:C1470.singleQuoted($bundleID))
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Terminate an application by identifier on a device.
-Function terminateApp($identifier : Text; $simulator : Text)
+	// Terminate an application by identifier on a device
+Function terminateApp($bundleID : Text; $simulator : Text)
 	
 	var $cmd : Text
 	var $device : Object
@@ -627,7 +654,34 @@ Function terminateApp($identifier : Text; $simulator : Text)
 			
 		End if 
 		
-		This:C1470.launch($cmd+This:C1470.singleQuoted($identifier))
+		This:C1470.launch($cmd+This:C1470.singleQuoted($bundleID))
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Open up a custom scheme associated with an app
+Function openUrlScheme($url : Text; $simulator : Text)
+	
+	var $cmd : Text
+	var $device : Object
+	
+	If (Asserted:C1132(Count parameters:C259>=1))
+		
+		$cmd:="xcrun simctl openurl"
+		
+		If (Count parameters:C259>=2)
+			
+			$device:=This:C1470.device($simulator)
+			$cmd:=$cmd+" "+$device.udid+" "
+			
+		Else 
+			
+			// Use the current device
+			$cmd:=$cmd+" booted "
+			
+		End if 
+		
+		This:C1470.launch($cmd+$url)
 		
 	End if 
 	
@@ -671,3 +725,8 @@ Function _kill($simulator : Text; $wait : Boolean)
 		End if 
 	End if 
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Delete accumulated a sizable cache of old devices
+Function _cleanup()
+	
+	This:C1470.launch("xcrun simctl delete unavailable")

@@ -17,6 +17,7 @@ The `lep` class is designed to manage external process tasks performed with the 
 |**.environmentVariables**|Collection|The table of environment variables that will be used for each next .launch() call.|cf. *infra*|
 |**.success**|Integer|The status of the last launched command|**Null**|
 |**.errors**|Collection|The stack of errors encountered since the initialization of the class or the last `.reset()` call|**Null**|
+|**.resultInErrorStream**|Boolean| Indicates whether the result is expected in the output stream|**False**|
 
 \* These values are reset before each execution
 

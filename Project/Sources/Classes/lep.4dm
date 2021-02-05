@@ -395,7 +395,6 @@ Function asynchronous($mode : Boolean)->$this : cs:C1710.lep
 	
 	$this:=This:C1470
 	
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setDirectory($folder : 4D:C1709.Folder)->$this : cs:C1710.lep
 	
