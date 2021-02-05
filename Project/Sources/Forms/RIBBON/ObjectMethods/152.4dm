@@ -231,6 +231,13 @@ Case of
 			$menu.line()
 			$menu.append("verbose"; "_verbose").mark(PROJECT.$project.verbose)
 			
+			
+			If (FEATURE.with("android"))
+				
+				$menu.line()
+				$menu.append(".Download Android SDK"; "_downloadAndroidSdk")
+				
+			End if 
 		End if 
 		
 		OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
@@ -242,6 +249,28 @@ Case of
 			: (Not:C34($menu.selected))
 				
 				// <NOTHING MORE TO DO>
+				
+				//______________________________________________________
+			: ($menu.choice="_downloadAndroidSdk")
+				
+				var $archive : 4D:C1709.ZipFile
+				$archive:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Downloads").file("androidSDK.zip")
+				
+				If ($archive.exists)
+					
+					$archive.delete()
+					
+				End if 
+				
+				var $progress : Object
+				$progress:=progress("downloadInProgress").showStop()  // ------ ->
+				
+				$progress.setMessage(".Downloading Android SDK").bringToFront()
+				
+				var $http : Object
+				$http:=http("http://vincent.dl:T3JtR_.KZg9@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/dependencies.zip").get(Is a document:K24:1; False:C215; $archive)
+				
+				$progress.close()  // ------------------------------------------ <-
 				
 				//______________________________________________________
 			: ($menu.choice="product")

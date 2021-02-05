@@ -14,7 +14,16 @@ Case of
 	: (True:C214)
 		
 		$simctl.bootDevice("iPhone 12 Pro Max")
-		$simctl.openUrlScheme("maps://?s=Apple+Park")
+		
+		If (Shift down:C543)
+			
+			$simctl.openUrl("https://4D.com")
+			
+		Else 
+			
+			$simctl.openUrlScheme("maps://?s=Apple+Park")
+			
+		End if 
 		
 		//______________________________________________________
 	: (True:C214)

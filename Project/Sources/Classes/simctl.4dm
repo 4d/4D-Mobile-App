@@ -22,7 +22,7 @@ Subcmds:
 • shutdown            Shutdown a device.
   rename              Rename a device.
   getenv              Print an environment variable from a running device.
-  openurl             Open a URL in a device.
+• openurl             Open a URL in a device.
   addmedia            Add photos, live photos, videos, or contacts to the library of a device.
 • install             Install an app on a device.
 • uninstall           Uninstall an app from a device.
@@ -659,8 +659,8 @@ Function terminateApp($bundleID : Text; $simulator : Text)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Open up a custom scheme associated with an app
-Function openUrlScheme($url : Text; $simulator : Text)
+	// Open up the specified URL on a device
+Function openUrl($url : Text; $simulator : Text)
 	
 	var $cmd : Text
 	var $device : Object
@@ -681,8 +681,26 @@ Function openUrlScheme($url : Text; $simulator : Text)
 			
 		End if 
 		
-		This:C1470.launch($cmd+$url)
+		This:C1470.launch($cmd+This:C1470.singleQuoted($url))
 		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Open up a custom scheme associated with an app
+Function openUrlScheme($scheme : Text; $simulator : Text)
+	
+	
+	If (Asserted:C1132(Count parameters:C259>=1))
+		
+		If (Count parameters:C259>=2)
+			
+			This:C1470.openUrl($scheme; $simulator)
+			
+		Else 
+			
+			This:C1470.openUrl($scheme)
+			
+		End if 
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
