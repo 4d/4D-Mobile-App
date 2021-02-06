@@ -253,24 +253,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_downloadAndroidSdk")
 				
-				var $archive : 4D:C1709.ZipFile
-				$archive:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Downloads").file("androidSDK.zip")
-				
-				If ($archive.exists)
-					
-					$archive.delete()
-					
-				End if 
-				
-				var $progress : Object
-				$progress:=progress("downloadInProgress").showStop()  // ------ ->
-				
-				$progress.setMessage(".Downloading Android SDK").bringToFront()
-				
-				var $http : Object
-				$http:=http("http://vincent.dl:T3JtR_.KZg9@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/dependencies.zip").get(Is a document:K24:1; False:C215; $archive)
-				
-				$progress.close()  // ------------------------------------------ <-
+				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadAndroidSDK"; False:C215; Macintosh option down:C545)
 				
 				//______________________________________________________
 			: ($menu.choice="product")

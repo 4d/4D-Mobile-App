@@ -9,13 +9,14 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_TEXT:C284($t; $tForm; $tURL)
-C_OBJECT:C1216($archive; $event; $folderDestination; $form; $http; $oProgress)
-C_COLLECTION:C1488($c)
+var $formName; $url : Text
+var $archive; $e; $folderDestination; $form; $progress : Object
+var $c : Collection
+var $http : cs:C1710.http
 
 // ----------------------------------------------------
 // Initialisations
-$event:=FORM Event:C1606
+$e:=FORM Event:C1606
 
 //record.info(Current form name+"."+$event.objectName+": "+$event.description)
 
@@ -23,7 +24,7 @@ $event:=FORM Event:C1606
 Case of 
 		
 		//______________________________________________________
-	: ($event.objectName="webarea")
+	: ($e.objectName="webarea")
 		
 		$form:=BROWSER_Handler(New object:C1471(\
 			"action"; "init"))
@@ -31,40 +32,40 @@ Case of
 		Case of 
 				
 				//………………………………………………………………………………………………………………
-			: ($event.code=On Load:K2:1)
+			: ($e.code=On Load:K2:1)
 				
 				//………………………………………………………………………………………………………………
-			: ($event.code=On Unload:K2:2)
+			: ($e.code=On Unload:K2:2)
 				
 				//………………………………………………………………………………………………………………
-			: ($event.code=On Begin URL Loading:K2:45)
+			: ($e.code=On Begin URL Loading:K2:45)
 				
 				//
 				
 				//………………………………………………………………………………………………………………
-			: ($event.code=On URL Resource Loading:K2:46)
+			: ($e.code=On URL Resource Loading:K2:46)
 				
 				//
 				
 				//………………………………………………………………………………………………………………
-			: ($event.code=On End URL Loading:K2:47)
+			: ($e.code=On End URL Loading:K2:47)
 				
 				// Mask the spinner
 				$form.wait.hide()
 				
 				//………………………………………………………………………………………………………………
-			: ($event.code=On URL Loading Error:K2:48)
+			: ($e.code=On URL Loading Error:K2:48)
 				
 				//
 				
 				//………………………………………………………………………………………………………………
-			: ($event.code=On URL Filtering:K2:49)\
-				 | ($event.code=On URL Loading Error:K2:48)\
-				 | ($event.code=On Window Opening Denied:K2:51)
+			: ($e.code=On URL Filtering:K2:49)\
+				 | ($e.code=On URL Loading Error:K2:48)\
+				 | ($e.code=On Window Opening Denied:K2:51)
 				
-				$tURL:=$form.web.lastFiltered()
+				$url:=$form.web.lastFiltered()
 				
-				$c:=Split string:C1554($tURL; "/")
+				$c:=Split string:C1554($url; "/")
 				
 				Case of 
 						
@@ -73,23 +74,23 @@ Case of
 						
 						//https://github.com/4d-for-ios/form-detail-SimpleHeader/releases/download/0.0.1/form-detail-SimpleHeader.zip
 						
-						$tForm:=$c.pop()  // Name of the archive
+						$formName:=$c.pop()  // Name of the archive
 						
 						// Create destination folder if any
 						Case of 
 								
 								//……………………………………………………………………………………
-							: ($tForm="form-list@")
+							: ($formName="form-list@")
 								
 								$folderDestination:=path.hostlistForms(True:C214)
 								
 								//……………………………………………………………………………………
-							: ($tForm="form-detail@")
+							: ($formName="form-detail@")
 								
 								$folderDestination:=path.hostdetailForms(True:C214)
 								
 								//……………………………………………………………………………………
-							: ($tForm="formatter-@")
+							: ($formName="formatter-@")
 								
 								$folderDestination:=path.hostFormatters(True:C214)
 								
@@ -105,9 +106,9 @@ Case of
 							
 							$c:=Split string:C1554(Form:C1466.url; "/")
 							
-							If (Not:C34($folderDestination.file($tForm).exists))  // Download
+							If (Not:C34($folderDestination.file($formName).exists))  // Download
 								
-								$archive:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file($tForm)
+								$archive:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file($formName)
 								
 								If ($archive.exists)
 									
@@ -115,22 +116,29 @@ Case of
 									
 								End if 
 								
-								$oProgress:=progress("downloadInProgress").showStop()  // ------ ->
+								$progress:=progress("downloadInProgress").showStop()  // ------ ->
 								
-								$oProgress.setMessage($tForm).bringToFront()
+								$progress.setMessage($formName).bringToFront()
 								
-								$http:=http($tURL).get(Is a document:K24:1; False:C215; $archive)
+								$http:=cs:C1710.http.new($url)
+								$http.setResponseType(Is a document:K24:1; $archive)
 								
-								$oProgress.close()  // ------------------------------------------ <-
+								If (Not:C34($progress.isStopped()))
+									
+									$http.get()
+									
+								End if 
 								
-								If (Not:C34($oProgress.stopped))
+								$progress.close()  // ------------------------------------------ <-
+								
+								If (Not:C34($progress.stopped))
 									
 									If ($http.success)
 										
 										$folderDestination:=$archive.copyTo($folderDestination; fk overwrite:K87:5)
 										
 										Form:C1466.selector:=$c[$c.length-3]
-										Form:C1466.form:="/"+$tForm
+										Form:C1466.form:="/"+$formName
 										
 										CALL SUBFORM CONTAINER:C1086(-1)
 										
@@ -154,7 +162,7 @@ Case of
 							Else 
 								
 								Form:C1466.selector:=$c[$c.length-3]
-								Form:C1466.form:="/"+$tForm
+								Form:C1466.form:="/"+$formName
 								
 								CALL SUBFORM CONTAINER:C1086(-1)
 								
@@ -191,31 +199,31 @@ Case of
 						//______________________________________________________
 					Else 
 						
-						OPEN URL:C673($tURL; *)
+						OPEN URL:C673($url; *)
 						
 						//______________________________________________________
 				End case 
 				
 				//………………………………………………………………………………………………………………
-			: ($event.code=On Open External Link:K2:50)
+			: ($e.code=On Open External Link:K2:50)
 				
 				//
 				
 				//………………………………………………………………………………………………………………
-			: ($event.code=On Window Opening Denied:K2:51)
+			: ($e.code=On Window Opening Denied:K2:51)
 				
 				//
 				
 				//………………………………………………………………………………………………………………
 			Else 
 				
-				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$event.description+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 				
 				//………………………………………………………………………………………………………………
 		End case 
 		
 		//______________________________________________________
-	: ($event.objectName="close")
+	: ($e.objectName="close")
 		
 		CALL SUBFORM CONTAINER:C1086(-1)
 		

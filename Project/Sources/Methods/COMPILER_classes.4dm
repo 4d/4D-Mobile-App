@@ -113,9 +113,9 @@ If (False:C215)  // Tools
 	
 	//______________________________________________________
 	C_LONGINT:C283(httpError)
-	C_OBJECT:C1216(http; $0)
-	C_TEXT:C284(http; $1)
-	C_OBJECT:C1216(http; $2)
+	C_OBJECT:C1216(_o_http; $0)
+	C_TEXT:C284(_o_http; $1)
+	C_OBJECT:C1216(_o_http; $2)
 	
 	//______________________________________________________
 	//C_OBJECT(_o_lep; $0)

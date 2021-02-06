@@ -39,7 +39,27 @@ Function create
                     INTERNAL
 	
 ========================================================*/
-Function sdk  // sdk folder
+Function cacheSdkApple()
+	var $0 : 4D:C1709.File
+	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
+	
+/*========================================================*/
+Function cacheSdkAndroid()
+	var $0 : 4D:C1709.File
+	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip")
+	
+/*========================================================*/
+Function cacheSDK()
+	var $0 : 4D:C1709.Folder
+	$0:=This:C1470.cache().folder("sdk")
+	
+/*========================================================*/
+Function cache()  // 4D Mobile cache folder
+	var $0 : 4D:C1709.Folder
+	$0:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Library/Caches/com.4d.mobile")
+	
+/*========================================================*/
+Function sdk  // sdk folder ||||||||||| OBSOLETE ||||||||||||
 	
 	C_OBJECT:C1216($0)
 	
