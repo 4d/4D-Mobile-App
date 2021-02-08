@@ -51,12 +51,22 @@ Function cacheSdkAndroid()
 /*========================================================*/
 Function cacheSDK()
 	var $0 : 4D:C1709.Folder
+	
 	$0:=This:C1470.cache().folder("sdk")
 	
 /*========================================================*/
 Function cache()  // 4D Mobile cache folder
 	var $0 : 4D:C1709.Folder
-	$0:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Library/Caches/com.4d.mobile")
+	
+	If (Is macOS:C1572)
+		
+		$0:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Library/Caches/com.4d.mobile")
+		
+	Else 
+		
+		$0:=Folder:C1567(fk licenses folder:K87:16).parent.parent.folder("com.4d.mobile")
+		
+	End if 
 	
 /*========================================================*/
 Function sdk  // sdk folder ||||||||||| OBSOLETE ||||||||||||
