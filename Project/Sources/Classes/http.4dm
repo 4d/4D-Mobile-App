@@ -36,7 +36,7 @@ Function reset($url)
 	This:C1470.lastError:=""
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function setURL($url)
+Function setURL($url)->$this : cs:C1710.http
 	
 	If (Count parameters:C259>=1)
 		
@@ -48,8 +48,10 @@ Function setURL($url)
 		
 	End if 
 	
+	$this:=This:C1470
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function setResponseType($type : Integer; $file : 4D:C1709.file)
+Function setResponseType($type : Integer; $file : 4D:C1709.file)->$this : cs:C1710.http
 	
 	This:C1470.responseType:=$type
 	
@@ -69,86 +71,143 @@ Function setResponseType($type : Integer; $file : 4D:C1709.file)
 		End if 
 	End if 
 	
+	$this:=This:C1470
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get($url; $type; $keepAlive : Boolean)
+Function setHeaders($headers : Collection)->$this : cs:C1710.http
+	
+	This:C1470.success:=False:C215
+	
+	If (Asserted:C1132(Count parameters:C259>=1; "Missing parameters"))
+		
+		If (Asserted:C1132($headers.extract("name").length=$headers.extract("value").length; "Unpaired name/value keys"))
+			
+			This:C1470.success:=True:C214
+			This:C1470.headers:=$headers
+			
+		End if 
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function delete($body)->$this : cs:C1710.http
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.request(HTTP DELETE method:K71:5; $body)
+		
+	Else 
+		
+		This:C1470.request(HTTP DELETE method:K71:5)
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function head($body)->$this : cs:C1710.http
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.request(HTTP HEAD method:K71:3; $body)
+		
+	Else 
+		
+		This:C1470.request(HTTP HEAD method:K71:3)
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function options($body)->$this : cs:C1710.http
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.request(HTTP OPTIONS method:K71:7; $body)
+		
+	Else 
+		
+		This:C1470.request(HTTP OPTIONS method:K71:7)
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function post($body)->$this : cs:C1710.http
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.request(HTTP POST method:K71:2; $body)
+		
+	Else 
+		
+		This:C1470.request(HTTP POST method:K71:2)
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function put($body)->$this : cs:C1710.http
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.request(HTTP PUT method:K71:6; $body)
+		
+	Else 
+		
+		This:C1470.request(HTTP PUT method:K71:6)
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function trace($body)->$this : cs:C1710.http
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.request(HTTP TRACE method:K71:4; $body)
+		
+	Else 
+		
+		This:C1470.request(HTTP TRACE method:K71:4)
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get($url; $type; $keepAlive : Boolean)->$this : cs:C1710.http
+	
+	C_VARIANT:C1683(${4})
 	
 	var $onErrCallMethod; $t : Text
 	var $code; $i; $indx : Integer
 	var $ptr : Pointer
 	var $x : Blob
 	var $p : Picture
-	
-	ARRAY TEXT:C222($headerNames; 0x0000)
-	ARRAY TEXT:C222($headerValues; 0x0000)
+	var $params : Object
 	
 	This:C1470.response:=Null:C1517
-	This:C1470.headers:=New collection:C1472
 	This:C1470.success:=False:C215
-	This:C1470.errors:=New collection:C1472
 	
-	Case of 
+	If (Count parameters:C259>0)
+		
+		$params:=New object:C1471
+		
+		For ($i; 1; Count parameters:C259; 1)
 			
-			//______________________________________________________
-		: (Count parameters:C259=0)
+			$params[String:C10($i)]:=${$i}
 			
-			// <NOTHING MORE TO DO>
-			
-			//______________________________________________________
-		: (Value type:C1509($url)=Is text:K8:3)  // Url {type {keepAlive}} | {keepAlive}
-			
-			This:C1470.url:=$url
-			
-			Case of 
-					
-					//______________________________________________________
-				: (Count parameters:C259=1)
-					
-					// <NOTHING MORE TO DO>
-					
-					//______________________________________________________
-				: (Value type:C1509($type)=Is boolean:K8:9)  // Keep-alive
-					
-					This:C1470.keepAlive:=$type
-					
-					//______________________________________________________
-				: (Value type:C1509($type)=Is real:K8:4)\
-					 | (Value type:C1509($type)=Is longint:K8:6)
-					
-					This:C1470.responseType:=$type
-					
-					If (Count parameters:C259>=3)
-						
-						This:C1470.keepAlive:=$keepAlive
-						
-					End if 
-					
-					//______________________________________________________
-			End case 
-			
-			//______________________________________________________
-		: (Value type:C1509($url)=Is real:K8:4)\
-			 | (Value type:C1509($url)=Is longint:K8:6)  // type {keepAlive}
-			
-			This:C1470.responseType:=Num:C11($url)
-			
-			If (Count parameters:C259>=2)
-				
-				This:C1470.keepAlive:=Bool:C1537($type)
-				
-			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($url)=Is boolean:K8:9)  // Keep-alive
-			
-			This:C1470.keepAlive:=$url
-			
-			//______________________________________________________
-		Else 
-			
-			// #ERROR
-			
-			//______________________________________________________
-	End case 
+		End for 
+		
+		This:C1470._computeParameters($params)
+		
+	End if 
 	
 	If (Length:C16(This:C1470.url)>0)
 		
@@ -175,6 +234,17 @@ Function get($url; $type; $keepAlive : Boolean)
 				//…………………………………………………………
 		End case 
 		
+		ARRAY TEXT:C222($headerNames; 0x0000)
+		ARRAY TEXT:C222($headerValues; 0x0000)
+		
+		If (This:C1470.headers.length>0)
+			
+			COLLECTION TO ARRAY:C1562(This:C1470.headers; \
+				$headerNames; "name"; \
+				$headerValues; "value")
+			
+		End if 
+		
 		$onErrCallMethod:=Method called on error:C704
 		httpError:=0
 		ON ERR CALL:C155("HTTP ERROR HANDLER")
@@ -190,108 +260,158 @@ Function get($url; $type; $keepAlive : Boolean)
 			
 		End if 
 		
+		ON ERR CALL:C155($onErrCallMethod)
+		
 		This:C1470.success:=($code=200) & (httpError=0)
 		
 		If (This:C1470.success)
 			
-			Case of 
-					
-					//…………………………………………………………
-				: (This:C1470.responseType=Is object:K8:27)
-					
-					This:C1470.response:=JSON Parse:C1218($t; Is object:K8:27)
-					
-					//…………………………………………………………
-				: (This:C1470.responseType=Is collection:K8:32)
-					
-					This:C1470.response:=JSON Parse:C1218($t; Is collection:K8:32)
-					
-					//…………………………………………………………
-				: (This:C1470.responseType=Is picture:K8:10)
-					
-					$indx:=Find in array:C230($headerNames; "Content-Type")
-					
-					If ($indx>0)
-						
-						BLOB TO PICTURE:C682($x; $p; $headerValues{$indx})
-						
-					Else 
-						
-						BLOB TO PICTURE:C682($x; $p)
-						
-					End if 
-					
-					This:C1470.response:=$p
-					
-					//…………………………………………………………
-				: (This:C1470.responseType=Is a document:K24:1)
-					
-					If (This:C1470.targetFile#Null:C1517)
-						
-						$indx:=Find in array:C230($headerNames; "Content-Type")
-						
-						Case of 
-								
-								//______________________________________________________
-							: ($indx=-1)
-								
-								This:C1470.targetFile.setContent($x)
-								
-								//______________________________________________________
-							: ($headerValues{$indx}="image@")  // #Is it necessary?
-								
-								CREATE FOLDER:C475(This:C1470.targetFile.platformPath; *)
-								BLOB TO PICTURE:C682($x; $p)
-								WRITE PICTURE FILE:C680(This:C1470.targetFile.platformPath; $p)
-								
-								//______________________________________________________
-							Else 
-								
-								This:C1470.targetFile.setContent($x)
-								
-								//______________________________________________________
-						End case 
-						
-					Else 
-						
-						This:C1470._pushError("Missing target file")
-						
-					End if 
-					
-					//…………………………………………………………
-				Else 
-					
-					This:C1470.response:=$t
-					
-					//…………………………………………………………
-			End case 
+			ARRAY TO COLLECTION:C1563(This:C1470.headers; \
+				$headerNames; "name"; \
+				$headerValues; "value")
+			
+			This:C1470._response($t; $x)
 			
 		Else 
 			
 			If (httpError#0)
 				
-				This:C1470._pushError(This:C1470.errorCodeMessage(httpError))
+				This:C1470._pushError(This:C1470._errorCodeMessage(httpError))
 				
 			Else 
 				
-				This:C1470._pushError(This:C1470.statusCodeMessage($code))
+				This:C1470._pushError(This:C1470._statusCodeMessage($code))
 				
 			End if 
 		End if 
 		
+	Else 
+		
+		This:C1470._pushError("THE URL IS EMPTY")
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function request($method : Text; $body)->$this : cs:C1710.http
+	
+	var $onErrCallMethod; $t : Text
+	var $code; $indx : Integer
+	var $ptr : Pointer
+	var $bodyƒ; $x : Blob
+	var $p : Picture
+	
+	This:C1470.response:=Null:C1517
+	This:C1470.success:=False:C215
+	
+	If (Length:C16(This:C1470.url)>0)
+		
+		Case of 
+				
+				//…………………………………………………………
+			: (This:C1470.responseType=Is text:K8:3)\
+				 | (This:C1470.responseType=Is object:K8:27)\
+				 | (This:C1470.responseType=Is collection:K8:32)
+				
+				$ptr:=->$t
+				
+				//…………………………………………………………
+			: (This:C1470.responseType=Is picture:K8:10)\
+				 | (This:C1470.responseType=Is a document:K24:1)
+				
+				$ptr:=->$x
+				
+				//…………………………………………………………
+			Else 
+				
+				$ptr:=->$t
+				
+				//…………………………………………………………
+		End case 
+		
+		ARRAY TEXT:C222($headerNames; 0x0000)
+		ARRAY TEXT:C222($headerValues; 0x0000)
+		
+		If (This:C1470.headers.length>0)
+			
+			COLLECTION TO ARRAY:C1562(This:C1470.headers; \
+				$headerNames; "name"; \
+				$headerValues; "value")
+			
+		End if 
+		
+		$onErrCallMethod:=Method called on error:C704
+		httpError:=0
+		ON ERR CALL:C155("HTTP ERROR HANDLER")
+		
+		If (This:C1470.keepAlive)
+			
+			// Enables the keep-alive mechanism for the server connection
+			$code:=HTTP Request:C1158($method; This:C1470.url; $bodyƒ; $ptr->; $headerNames; $headerValues; *)
+			
+		Else 
+			
+			$code:=HTTP Request:C1158($method; This:C1470.url; $bodyƒ; $ptr->; $headerNames; $headerValues)
+			
+		End if 
+		
 		ON ERR CALL:C155($onErrCallMethod)
 		
-		For ($i; 1; Size of array:C274($headerNames); 1)
+		This:C1470.success:=($code=200) & (httpError=0)
+		
+		If (This:C1470.success)
 			
-			This:C1470.headers.push(New object:C1471(\
-				"name"; $headerNames{$i}; \
-				"value"; $headerValues{$i}))
+			ARRAY TO COLLECTION:C1563(This:C1470.headers; \
+				$headerNames; "name"; \
+				$headerValues; "value")
 			
-		End for 
+			If ($method#HTTP HEAD method:K71:3)
+				
+				This:C1470._response($t; $x)
+				
+			End if 
+			
+		Else 
+			
+			If (httpError#0)
+				
+				This:C1470._pushError(This:C1470._errorCodeMessage(httpError))
+				
+			Else 
+				
+				This:C1470._pushError(This:C1470._statusCodeMessage($code))
+				
+			End if 
+		End if 
 		
 	Else 
 		
-		This:C1470._pushError("The URL is empty")
+		This:C1470._pushError("THE URL IS EMPTY")
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function decodeDateTime($dateTime : Text)
+	
+	var $date : Date
+	var $day; $month; $year : Integer
+	var $time : Time
+	
+	ARRAY LONGINT:C221($pos; 0x0000)
+	ARRAY LONGINT:C221($len; 0x0000)
+	
+	If (Match regex:C1019("(?m-si)(\\d{2})\\s([^\\s]*)\\s(\\d{4})\\s(\\d{2}(?::\\d{2}){2})"; $dateTime; 1; $pos; $len))
+		
+		
+		$day:=Num:C11(Substring:C12($dateTime; $pos{1}; $len{1}))
+		$month:=New collection:C1472(""; "jan"; "feb"; "mar"; "apr"; "may"; "jun"; "jul"; "aug"; "sep"; "oct"; "nov"; "dec").indexOf(Substring:C12($dateTime; $pos{2}; $len{2}))
+		$year:=Num:C11(Substring:C12($dateTime; $pos{3}; $len{3}))
+		
+		$date:=Add to date:C393(!00-00-00!; $year; $month; $day)
+		$time:=Time:C179(Substring:C12($dateTime; $pos{4}; $len{4}))
 		
 	End if 
 	
@@ -317,11 +437,11 @@ Function myIP()->$IP : Text
 		
 		If (httpError#0)
 			
-			This:C1470.errors.push(This:C1470.errorCodeMessage(httpError))
+			This:C1470.errors.push(This:C1470._errorCodeMessage(httpError))
 			
 		Else 
 			
-			This:C1470.errors.push(This:C1470.statusCodeMessage($code))
+			This:C1470.errors.push(This:C1470._statusCodeMessage($code))
 			
 		End if 
 		
@@ -330,7 +450,152 @@ Function myIP()->$IP : Text
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function errorCodeMessage($errorCode : Integer)->$message : Text
+Function _response($text : Text; $blob : Blob)
+	
+	var $o : Object
+	var $p : Picture
+	
+	Case of 
+			
+			//…………………………………………………………
+		: (This:C1470.responseType=Is object:K8:27)
+			
+			This:C1470.response:=JSON Parse:C1218($text; Is object:K8:27)
+			
+			//…………………………………………………………
+		: (This:C1470.responseType=Is collection:K8:32)
+			
+			This:C1470.response:=JSON Parse:C1218($text; Is collection:K8:32)
+			
+			//…………………………………………………………
+		: (This:C1470.responseType=Is picture:K8:10)
+			
+			$o:=This:C1470.headers.query("name = 'Content-Type'").pop()
+			
+			If ($o#Null:C1517)
+				
+				BLOB TO PICTURE:C682($blob; $p; $o.value)
+				
+			Else 
+				
+				BLOB TO PICTURE:C682($blob; $p)
+				
+			End if 
+			
+			This:C1470.response:=$p
+			
+			//…………………………………………………………
+		: (This:C1470.responseType=Is a document:K24:1)
+			
+			If (This:C1470.targetFile#Null:C1517)
+				
+				$o:=This:C1470.headers.query("name = 'Content-Type'").pop()
+				
+				Case of 
+						
+						//______________________________________________________
+					: ($o=Null:C1517)
+						
+						This:C1470.targetFile.setContent($blob)
+						
+						//______________________________________________________
+					: ($o.value="image@")  // #Is it necessary?
+						
+						CREATE FOLDER:C475(This:C1470.targetFile.platformPath; *)
+						BLOB TO PICTURE:C682($blob; $p)
+						WRITE PICTURE FILE:C680(This:C1470.targetFile.platformPath; $p)
+						
+						//______________________________________________________
+					Else 
+						
+						This:C1470.targetFile.setContent($blob)
+						
+						//______________________________________________________
+				End case 
+				
+			Else 
+				
+				This:C1470._pushError("Missing target file")
+				
+			End if 
+			
+			//…………………………………………………………
+		Else 
+			
+			This:C1470.response:=$text
+			
+			//…………………………………………………………
+	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _computeParameters($params)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			// <NOTHING MORE TO DO>
+			
+			//______________________________________________________
+		: (Value type:C1509($params["1"])=Is text:K8:3)  // Url {type {keepAlive}} | {keepAlive}
+			
+			This:C1470.url:=$params["1"]
+			
+			Case of 
+					
+					//______________________________________________________
+				: (Count parameters:C259=1)
+					
+					// <NOTHING MORE TO DO>
+					
+					//______________________________________________________
+				: (Value type:C1509($params["2"])=Is boolean:K8:9)  // Keep-alive
+					
+					This:C1470.keepAlive:=$params["2"]
+					
+					//______________________________________________________
+				: (Value type:C1509($params["2"])=Is real:K8:4)\
+					 | (Value type:C1509($params["2"])=Is longint:K8:6)
+					
+					This:C1470.responseType:=$params["2"]
+					
+					If (Count parameters:C259>=3)
+						
+						This:C1470.keepAlive:=$params["3"]
+						
+					End if 
+					
+					//______________________________________________________
+			End case 
+			
+			//______________________________________________________
+		: (Value type:C1509($params["1"])=Is real:K8:4)\
+			 | (Value type:C1509($params["1"])=Is longint:K8:6)  // type {keepAlive}
+			
+			This:C1470.responseType:=Num:C11($params["1"])
+			
+			If (Count parameters:C259>=2)
+				
+				This:C1470.keepAlive:=Bool:C1537($params["2"])
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($params["1"])=Is boolean:K8:9)  // Keep-alive
+			
+			This:C1470.keepAlive:=$params["1"]
+			
+			//______________________________________________________
+		Else 
+			
+			// #ERROR
+			
+			//______________________________________________________
+	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _errorCodeMessage($errorCode : Integer)->$message : Text
 	
 	If (This:C1470.errorMessages=Null:C1517)  // First call
 		
@@ -368,7 +633,7 @@ Function errorCodeMessage($errorCode : Integer)->$message : Text
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function statusCodeMessage($statusCode : Integer)->$message : Text
+Function _statusCodeMessage($statusCode : Integer)->$message : Text
 	
 	If (This:C1470.statusMessages=Null:C1517)  // First call
 		

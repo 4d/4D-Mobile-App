@@ -3,80 +3,52 @@
 // -> force   =   Force the download even if the file is up to date (see verification code)
 #DECLARE($silent : Boolean; $force : Boolean)
 
-var $run; $withUI : Boolean
-var $o; $progress : Object
 var $url : Text
+var $run; $silent; $withUI : Boolean
+var $o; $progress : Object
+var $manifest; $preferences : 4D:C1709.File
 var $sdk : 4D:C1709.ZipFile
-var $preferences : 4D:C1709.File
 var $http : cs:C1710.http
 
 $sdk:=cs:C1710.path.new().cacheSdkAndroid()
 
-If ($sdk.exists)
-	
-	// Verify…
-	// (not downloaded today for the momemnt)
-	$run:=($sdk.modificationDate<Current date:C33)
-	
-	If (Count parameters:C259>=2)
-		
-		$run:=$run | $force
-		
-	End if 
-	
-Else 
-	
-	$run:=True:C214
-	
-End if 
+$manifest:=$sdk.parent.file("manifest.json")
 
-If ($run)
+$preferences:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+
+If ($preferences.exists)
 	
-	$withUI:=True:C214
+	$o:=JSON Parse:C1218($preferences.getText())
 	
-	If (Count parameters:C259>=1)
+	If ($o.tc#Null:C1517)
 		
-		$withUI:=Not:C34($silent)
+		$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/dependencies.zip"
 		
-	End if 
-	
-	$preferences:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
-	
-	If ($preferences.exists)
+		$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
 		
-		$o:=JSON Parse:C1218($preferences.getText())
-		
-		If ($o.tc#Null:C1517)
+		If ($manifest.exists)
 			
-			If ($withUI)
+			$http.head()
+			
+			If ($http.success)
 				
-				$progress:=progress("downloadInProgress").setMessage("downloadingAndroidSdk").bringToFront()
+				// The ETag HTTP response header is an identifier for a specific version of a
+				// Resource. It lets caches be more efficient and save bandwidth, as a web server
+				// Does not need to resend a full response if the content has not changed.
 				
-			End if 
-			
-			$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/dependencies.zip"
-			
-			$http:=cs:C1710.http.new($url)
-			$http.setResponseType(Is a document:K24:1; $sdk)
-			
-			$http.get()
-			
-			If ($withUI)
-				
-				$progress.close()
-				
-			End if 
-			
-			If (DATABASE.isMatrix)
-				
-				ASSERT:C1129($http.success)
+				$run:=(Replace string:C233(String:C10($http.headers.query("name = 'ETag'").pop().value); "\""; "")#String:C10(JSON Parse:C1218($manifest.getText()).etag))
 				
 			End if 
 			
 		Else 
 			
-			ALERT:C41("You must add tc with user:pass in 4d.mobile")
-			SHOW ON DISK:C922($preferences.platformPath)
+			$run:=True:C214
+			
+		End if 
+		
+		If (Count parameters:C259>=2)
+			
+			$run:=$run | $force
 			
 		End if 
 		
@@ -84,6 +56,64 @@ If ($run)
 		
 		ALERT:C41("You must add tc with user:pass in 4d.mobile")
 		SHOW ON DISK:C922($preferences.platformPath)
+		
+	End if 
+	
+Else 
+	
+	ALERT:C41("You must add tc with user:pass in 4d.mobile")
+	SHOW ON DISK:C922($preferences.platformPath)
+	
+End if 
+
+$withUI:=True:C214
+
+If (Count parameters:C259>=1)
+	
+	$withUI:=Not:C34($silent)
+	
+End if 
+
+If ($run)
+	
+	If ($withUI)
+		
+		$progress:=progress("downloadInProgress").setMessage("downloadingAndroidSdk").bringToFront()
+		
+	End if 
+	
+	$http.get()
+	
+	If ($http.success)
+		
+		$o:=New object:C1471
+		$o.etag:=Replace string:C233(String:C10($http.headers.query("name = 'ETag'").pop().value); "\""; "")
+		$o.lastModification:=String:C10($http.headers.query("name = 'Last-Modified'").pop().value)
+		$manifest.setText(JSON Stringify:C1217($o; *))
+		
+	Else 
+		
+		// A "If" statement should never omit "Else"
+		
+	End if 
+	
+	If ($withUI)
+		
+		$progress.close()
+		
+	End if 
+	
+	If (DATABASE.isMatrix)
+		
+		ASSERT:C1129($http.success)
+		
+	End if 
+	
+Else 
+	
+	If ($withUI)
+		
+		ALERT:C41(".Your SDK version is currently the newest version available.")
 		
 	End if 
 End if 
