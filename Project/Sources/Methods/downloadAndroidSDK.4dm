@@ -74,7 +74,30 @@ If (Count parameters:C259>=1)
 	
 End if 
 
+Case of 
+		//______________________________________________________
+	: (Is macOS:C1572)
+		
+		RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+		
+		//______________________________________________________
+	: (Is Windows:C1573)
+		
+		RECORD:=logger(Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(fk database folder:K87:14; *).name).file(Folder:C1567(fk database folder:K87:14).name+".log"))
+		
+		//______________________________________________________
+	Else 
+		
+		TRACE:C157
+		
+		//______________________________________________________
+End case 
+
+RECORD.verbose:=True:C214
+
 If ($run)
+	
+	RECORD.info("Update the 4D Mobile Android SDK")
 	
 	If ($withUI)
 		
@@ -114,6 +137,10 @@ Else
 	If ($withUI)
 		
 		ALERT:C41(".Your SDK version is currently the newest version available.")
+		
+	Else 
+		
+		RECORD.info("The 4D Mobile Android SDK is up to date")
 		
 	End if 
 End if 

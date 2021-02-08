@@ -41,6 +41,12 @@ Case of
 				$in.silent:=Not:C34(Bool:C1537($in.project.$android))
 				$androidStudio:=studioCheckInstall($in)
 				
+				If (Bool:C1537($in.project.$android))
+					
+					// Get the last 4D Mobile Android SDK, if any
+					CALL WORKER:C1389(1; "downloadAndroidSDK"; True:C214; False:C215)
+					
+				End if 
 			End if 
 			
 			If (Bool:C1537($in.project.$xCode.ready))

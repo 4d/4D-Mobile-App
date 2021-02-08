@@ -187,14 +187,17 @@ Case of
 					End if 
 				End if 
 				
-				If ($isDebug)
+				If (Is macOS:C1572)
 					
-					$menu.append(".Clear Xcode Build And Derived Data"; "_removeDerivedData")
-					
-				Else 
-					
-					$menu.append("clearXcodeBuild"; "_removeBuild").enable($build.exists)
-					
+					If ($isDebug)
+						
+						$menu.append(".Clear Xcode Build And Derived Data"; "_removeDerivedData")
+						
+					Else 
+						
+						$menu.append("clearXcodeBuild"; "_removeBuild").enable($build.exists)
+						
+					End if 
 				End if 
 				
 				$menu.line()
@@ -231,11 +234,10 @@ Case of
 			$menu.line()
 			$menu.append("verbose"; "_verbose").mark(PROJECT.$project.verbose)
 			
-			
 			If (FEATURE.with("android"))
 				
 				$menu.line()
-				$menu.append(".Download Android SDK"; "_downloadAndroidSdk")
+				$menu.append("downloadThe4dForAndroidSdk"; "_downloadAndroidSdk")
 				
 			End if 
 		End if 
@@ -253,7 +255,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_downloadAndroidSdk")
 				
-				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadAndroidSDK"; False:C215; Macintosh option down:C545)
+				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadAndroidSDK"; False:C215; Shift down:C543)
 				
 				//______________________________________________________
 			: ($menu.choice="product")
