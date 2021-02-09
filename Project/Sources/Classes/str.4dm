@@ -1016,18 +1016,15 @@ Function filter
 	
 	//=======================================================================================================
 	// ⚠️
-Function versionCompare
-	var $0 : Integer
-	var $1 : Text
-	var $2 : Text
+Function versionCompare($with : Text; $separator : Text)->$result : Integer
 	
 	If (Count parameters:C259>=2)
 		
-		$0:=Super:C1706.versionCompare(This:C1470.value; $1; $2)
+		$result:=Super:C1706.versionCompare(This:C1470.value; $with; $separator)
 		
 	Else 
 		
-		$0:=Super:C1706.versionCompare(This:C1470.value; $1)
+		$result:=Super:C1706.versionCompare(This:C1470.value; $with)
 		
 	End if 
 	

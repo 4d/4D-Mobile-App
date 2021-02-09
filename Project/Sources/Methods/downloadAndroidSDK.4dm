@@ -10,6 +10,27 @@ var $manifest; $preferences : 4D:C1709.File
 var $sdk : 4D:C1709.ZipFile
 var $http : cs:C1710.http
 
+Case of 
+		//______________________________________________________
+	: (Is macOS:C1572)
+		
+		RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
+		
+		//______________________________________________________
+	: (Is Windows:C1573)
+		
+		RECORD:=logger(Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(fk database folder:K87:14; *).name).file(Folder:C1567(fk database folder:K87:14).name+".log"))
+		
+		//______________________________________________________
+	Else 
+		
+		TRACE:C157
+		
+		//______________________________________________________
+End case 
+
+RECORD.verbose:=True:C214
+
 $sdk:=cs:C1710.path.new().cacheSdkAndroid()
 
 $manifest:=$sdk.parent.file("manifest.json")
@@ -32,23 +53,24 @@ If ($preferences.exists)
 			
 			If ($http.success)
 				
-				// The ETag HTTP response header is an identifier for a specific version of a
-				// Resource. It lets caches be more efficient and save bandwidth, as a web server
-				// Does not need to resend a full response if the content has not changed.
+				$o:=JSON Parse:C1218($manifest.getText())
+				$run:=$http.newerRelease(String:C10($o.etag); String:C10($o.lastModification))
 				
-				$run:=(Replace string:C233(String:C10($http.headers.query("name = 'ETag'").pop().value); "\""; "")#String:C10(JSON Parse:C1218($manifest.getText()).etag))
+			Else 
+				
+				RECORD.warning($http.errors.join("\r"))
+				
+			End if 
+			
+			If (Count parameters:C259>=2)
+				
+				$run:=$run | $force
 				
 			End if 
 			
 		Else 
 			
 			$run:=True:C214
-			
-		End if 
-		
-		If (Count parameters:C259>=2)
-			
-			$run:=$run | $force
 			
 		End if 
 		
@@ -74,27 +96,6 @@ If (Count parameters:C259>=1)
 	
 End if 
 
-Case of 
-		//______________________________________________________
-	: (Is macOS:C1572)
-		
-		RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
-		
-		//______________________________________________________
-	: (Is Windows:C1573)
-		
-		RECORD:=logger(Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(fk database folder:K87:14; *).name).file(Folder:C1567(fk database folder:K87:14).name+".log"))
-		
-		//______________________________________________________
-	Else 
-		
-		TRACE:C157
-		
-		//______________________________________________________
-End case 
-
-RECORD.verbose:=True:C214
-
 If ($run)
 	
 	RECORD.info("Update the 4D Mobile Android SDK")
@@ -110,13 +111,13 @@ If ($run)
 	If ($http.success)
 		
 		$o:=New object:C1471
-		$o.etag:=Replace string:C233(String:C10($http.headers.query("name = 'ETag'").pop().value); "\""; "")
+		$o.etag:=String:C10($http.headers.query("name = 'ETag'").pop().value)
 		$o.lastModification:=String:C10($http.headers.query("name = 'Last-Modified'").pop().value)
 		$manifest.setText(JSON Stringify:C1217($o; *))
 		
 	Else 
 		
-		// A "If" statement should never omit "Else"
+		RECORD.error($http.errors.join("\r"))
 		
 	End if 
 	

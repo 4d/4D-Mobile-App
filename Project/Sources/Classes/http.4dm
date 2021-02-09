@@ -13,6 +13,8 @@ Class constructor($url)
 	
 	var httpError : Integer
 	
+	This:C1470.onErrorCallMethod:="HTTP ERROR HANDLER"
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function reset($url)
 	
@@ -106,7 +108,7 @@ Function ping($url : Text)->$reachable : Boolean
 	
 	$onErrCallMethod:=Method called on error:C704
 	httpError:=0
-	ON ERR CALL:C155("HTTP ERROR HANDLER")
+	ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 	
 	If (Count parameters:C259>=1)
 		
@@ -159,7 +161,7 @@ Function allow($url : Text)->$allowed : Collection
 	
 	$onErrCallMethod:=Method called on error:C704
 	httpError:=0
-	ON ERR CALL:C155("HTTP ERROR HANDLER")
+	ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 	
 	If (Count parameters:C259>=1)
 		
@@ -373,7 +375,7 @@ Function get()->$this : cs:C1710.http
 		
 		$onErrCallMethod:=Method called on error:C704
 		httpError:=0
-		ON ERR CALL:C155("HTTP ERROR HANDLER")
+		ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 		
 		If (This:C1470.keepAlive)
 			
@@ -480,7 +482,7 @@ Function request($method : Text; $body)->$this : cs:C1710.http
 		
 		$onErrCallMethod:=Method called on error:C704
 		httpError:=0
-		ON ERR CALL:C155("HTTP ERROR HANDLER")
+		ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 		
 		If (This:C1470.keepAlive)
 			
@@ -531,25 +533,72 @@ Function request($method : Text; $body)->$this : cs:C1710.http
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function decodeDateTime($dateTimeString : Text)->$dateTime : Object
+	// Test if a newer version of a resource is available
+Function newerRelease($ETag : Text; $lastModified : Text)->$newer : Boolean
 	
-	var $d; $m; $y : Integer
+	This:C1470.request(HTTP HEAD method:K71:3)
+	
+	If (This:C1470.success)
+		
+		// The ETag HTTP response header is an identifier for a specific version of a
+		// Resource. It lets caches be more efficient and save bandwidth, as a web server
+		// Does not need to resend a full response if the content has not changed.
+		
+		var $o : Object
+		$o:=This:C1470.headers.query("name = 'ETag'").pop()
+		
+		If ($o#Null:C1517)
+			
+			$newer:=(String:C10($o.value)#$ETag)
+			
+		End if 
+		
+		If (Not:C34($newer))\
+			 & (Count parameters:C259>=2)  // ⚠️ Don't pass the second parameter to ignore the fallback
+			
+			// The Last-Modified response HTTP header contains the date and time at which the
+			// Origin server believes the resource was last modified. It is used as a validator
+			// To determine if a resource received or stored is the same.
+			// Less accurate than an ETag header, it is a fallback mechanism.
+			
+			$o:=This:C1470.headers.query("name = 'Last-Modified'").pop()
+			
+			If ($o#Null:C1517)
+				
+				var $server; $local : Object
+				$server:=This:C1470.decodeDateTime(String:C10($o.value))
+				$local:=This:C1470.decodeDateTime($lastModified)
+				
+				$newer:=($server.date>$local.date) | (($server.date=$local.date) & ($server.time>$local.time))
+				
+			End if 
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Convert a date-time string (<day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT) as object
+Function decodeDateTime($dateTimeString : Text)->$dateTime : Object
 	
 	ARRAY LONGINT:C221($pos; 0x0000)
 	ARRAY LONGINT:C221($len; 0x0000)
 	
+	$dateTime:=New object:C1471(\
+		"date"; !00-00-00!; \
+		"time"; ?00:00:00?)
+	
 	If (Match regex:C1019("(?m-si)(\\d{2})\\s([^\\s]*)\\s(\\d{4})\\s(\\d{2}(?::\\d{2}){2})"; $dateTimeString; 1; $pos; $len))
 		
-		$dateTime:=New object:C1471(\
-			"date"; Add to date:C393(!00-00-00!; \
+		$dateTime.date:=Add to date:C393(!00-00-00!; \
 			Num:C11(Substring:C12($dateTimeString; $pos{3}; $len{3})); \
 			New collection:C1472(""; "jan"; "feb"; "mar"; "apr"; "may"; "jun"; "jul"; "aug"; "sep"; "oct"; "nov"; "dec").indexOf(Substring:C12($dateTimeString; $pos{2}; $len{2})); \
-			Num:C11(Substring:C12($dateTimeString; $pos{1}; $len{1}))); \
-			"time"; Time:C179(Substring:C12($dateTimeString; $pos{4}; $len{4})))
+			Num:C11(Substring:C12($dateTimeString; $pos{1}; $len{1})))
+		
+		$dateTime.time:=Time:C179(Substring:C12($dateTimeString; $pos{4}; $len{4}))
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns public IP
 Function myIP()->$IP : Text
 	
 	var $onErrCallMethod; $t : Text
@@ -557,7 +606,7 @@ Function myIP()->$IP : Text
 	
 	$onErrCallMethod:=Method called on error:C704
 	httpError:=0
-	ON ERR CALL:C155("HTTP ERROR HANDLER")
+	ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 	$code:=HTTP Get:C1157("http://api.ipify.org"; $t)
 	ON ERR CALL:C155($onErrCallMethod)
 	

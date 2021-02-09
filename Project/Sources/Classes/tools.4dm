@@ -12,6 +12,54 @@ Class constructor
 	This:C1470.errors:=New collection:C1472
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function first($c : Collection)->$result : Variant
+	
+	// Null by default
+	var $o : Object
+	$result:=$o
+	
+	If ($c#Null:C1517)
+		
+		If ($c.length>0)
+			
+			$result:=$c[0]
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function last($c : Collection)->$result : Variant
+	
+	// Null by default
+	var $o : Object
+	$result:=$o
+	
+	If ($c#Null:C1517)
+		
+		If ($c.length>0)
+			
+			$result:=$c[$c.length-1]
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function next($c : Collection; $current : Integer)->$result : Variant
+	
+	// Null by default
+	var $o : Object
+	$result:=$o
+	
+	If ($c#Null:C1517)
+		
+		If ($c.length>$current)
+			
+			$result:=$c[$current+1]
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _pushError($desription : Text)
 	
 	This:C1470.success:=False:C215

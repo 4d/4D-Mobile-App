@@ -1,5 +1,5 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-#DECLARE ($input : Object)->$result : Object
+#DECLARE($input : Object)->$result : Object
 
 var $isDebug; $isOnError : Boolean
 var $cache; $project : Object
@@ -100,9 +100,10 @@ If (Not:C34($templateForms.exists))
 	ASSERT:C1129(False:C215; "Missing folder at path "+$templateForms.path)
 End if 
 
+cs:C1710.path.new()
 
 $lep:=cs:C1710.lep.new()\
-.setDirectory(path.scripts())\
+.setDirectory(cs:C1710.path.new().scripts())\
 .setEnvironnementVariable($artifactoryIds)\
 .setEnvironnementVariable("ANDROID_HOME"; $project.sdk)
 
