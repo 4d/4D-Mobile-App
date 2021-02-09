@@ -87,7 +87,7 @@ Function lastOccurrence($toFind : Text; $diacritic : Boolean)->$position : Integ
 		
 		$start:=1
 		
-		If (Count parameters:C259>=1)
+		If (Count parameters:C259>=2)
 			
 			$isDiacritic:=$diacritic
 			
