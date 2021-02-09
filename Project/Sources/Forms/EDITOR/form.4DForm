@@ -300,5 +300,6 @@
 			}
 		}
 	},
-	"geometryStamp": 16
+	"geometryStamp": 16,
+	"colorScheme": "light"
 }
