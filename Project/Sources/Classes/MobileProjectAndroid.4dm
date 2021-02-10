@@ -9,12 +9,6 @@ Class constructor
 	
 	This:C1470.isOnError:=False:C215
 	
-	// Artifactory identifiers
-	This:C1470.artifactoryIds:=New collection:C1472
-	This:C1470.artifactoryIds.push(New object:C1471("ARTIFACTORY_USERNAME"; "admin"))
-	This:C1470.artifactoryIds.push(New object:C1471("ARTIFACTORY_PASSWORD"; "password"))
-	This:C1470.artifactoryIds.push(New object:C1471("ARTIFACTORY_MACHINE_IP"; "192.168.5.12"))
-	
 	This:C1470.androidProcess:=cs:C1710.androidProcess.new()
 	This:C1470.studio:=cs:C1710.studio.new()
 	This:C1470.path:=cs:C1710.path.new()
@@ -208,8 +202,7 @@ Function build()->$result : Object
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.gradlew.setEnvironnementVariable(This:C1470.artifactoryIds)\
-		.setEnvironnementVariable("currentDirectory"; This:C1470.project.path)
+	This:C1470.gradlew.setEnvironnementVariable("currentDirectory"; This:C1470.project.path)
 	
 	If (Not:C34(This:C1470.isOnError))
 		

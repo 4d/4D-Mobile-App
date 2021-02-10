@@ -5,7 +5,6 @@ buildscript {
         classpath Tools.gradle
         classpath Tools.kotlin_gradle_plugin
         classpath Tools.navigation_safe_args_gradle_plugin
-        classpath Tools.artifactory
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -16,24 +15,8 @@ buildscript {
     }
 }
 
-plugins {
-    id "com.github.ben-manes.versions" version "0.36.0"
-}
-
 allprojects {
-    apply plugin: 'maven-publish'
-    apply plugin: "com.jfrog.artifactory"
     repositories {
-        maven {
-            def machineIP = System.getenv('ARTIFACTORY_MACHINE_IP')
-            def contextUrl = "http://${machineIP}:8081/artifactory"
-            def repoKey = "libs-release-local"
-            url "${contextUrl}/${repoKey}"
-            credentials {
-                username = System.getenv('ARTIFACTORY_USERNAME')
-                password = System.getenv('ARTIFACTORY_PASSWORD')
-            }
-        }
         google()
         jcenter()
         maven { url file(project.sdkPath) }

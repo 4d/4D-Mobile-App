@@ -287,7 +287,6 @@ Function isAppAlreadyInstalled
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	//$Obj_packageList:=This.getDevicePackageList($1)
 	$Obj_packageList:=This:C1470.waitForDevicePackageList($1)
 	
 	If ($Obj_packageList.success)
@@ -351,7 +350,6 @@ Function uninstallAppIfInstalled
 		
 		If ($Obj_isInstalled.isInstalled)
 			
-			//$Obj_uninstall:=This.uninstallApp($1; $2)
 			$Obj_uninstall:=This:C1470.waitUninstallApp($1; $2)
 			
 			If ($Obj_uninstall.success)
@@ -424,7 +422,6 @@ Function forceInstallApp
 	
 	If ($Obj_uninstallAppIfInstalled.success)
 		
-		//$Obj_install:=This.installApp($1; $3)
 		$Obj_install:=This:C1470.waitInstallApp($1; $3)
 		
 		If ($Obj_install.success)
