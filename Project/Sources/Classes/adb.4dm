@@ -23,6 +23,7 @@ Class constructor
 	End if 
 	
 	This:C1470.adbStartRetried:=False:C215
+	This:C1470.timeOut:=30000
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -229,35 +230,50 @@ Function waitForBoot
 		
 	Until (($0.success=True:C214) & ($0.serial#""))\
 		 | ($0.errors.length>0)\
-		 | ($stepTime>30000)
+		 | ($stepTime>This:C1470.timeOut)
 	
-	If ($stepTime>30000)  // Timeout
+	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
 		$0.errors.push("Timeout when booting emulator")
 		
 		// Else : all ok 
 	End if 
 	
-	
-Function getDevicePackageList
+Function waitForDevicePackageList
 	var $0 : Object
 	var $1 : Text  // emulator serial
+	var $startTime; $stepTime : Integer
 	
 	$0:=New object:C1471(\
 		"packageList"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell pm list packages")
+	// Time elapsed
+	$startTime:=Milliseconds:C459
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
-	
-	If ($0.success)
+	Repeat 
+		
+		IDLE:C311
+		DELAY PROCESS:C323(Current process:C322; 120)
+		
+		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell pm list packages")
+		
+		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		
 		$0.packageList:=This:C1470.outputStream
-	Else 
-		$0.errors.push("Failed to get package list")
-	End if 
+		
+		$stepTime:=Milliseconds:C459-$startTime
+		
+	Until (($0.success=True:C214) & ($0.packageList#""))\
+		 | ($stepTime>This:C1470.timeOut)
 	
+	If ($stepTime>This:C1470.timeOut)  // Timeout
+		
+		$0.errors.push("Timeout when getting package list")
+		
+		// Else : all ok 
+	End if 
 	
 	
 Function isAppAlreadyInstalled
@@ -271,7 +287,8 @@ Function isAppAlreadyInstalled
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$Obj_packageList:=This:C1470.getDevicePackageList($1)
+	//$Obj_packageList:=This.getDevicePackageList($1)
+	$Obj_packageList:=This:C1470.waitForDevicePackageList($1)
 	
 	If ($Obj_packageList.success)
 		
@@ -283,24 +300,38 @@ Function isAppAlreadyInstalled
 	End if 
 	
 	
-Function uninstallApp
+Function waitUninstallApp
 	var $0 : Object
 	var $1 : Text  // emulator serial
 	var $2 : Text  // package name (app name)
+	var $startTime; $stepTime : Integer
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" uninstall \""+$2+"\"")
+	// Time elapsed
+	$startTime:=Milliseconds:C459
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+	Repeat 
+		
+		IDLE:C311
+		DELAY PROCESS:C323(Current process:C322; 120)
+		
+		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" uninstall \""+$2+"\"")
+		
+		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		
+		$stepTime:=Milliseconds:C459-$startTime
+		
+	Until ($0.success=True:C214)\
+		 | ($stepTime>This:C1470.timeOut)
 	
-	If (Not:C34($0.success))
+	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
-		$0.errors.push("Failed to uninstall the app")
+		$0.errors.push("Timeout when uninstalling the app")
 		
-		// Else : all ok
+		// Else : all ok 
 	End if 
 	
 	
@@ -320,7 +351,8 @@ Function uninstallAppIfInstalled
 		
 		If ($Obj_isInstalled.isInstalled)
 			
-			$Obj_uninstall:=This:C1470.uninstallApp($1; $2)
+			//$Obj_uninstall:=This.uninstallApp($1; $2)
+			$Obj_uninstall:=This:C1470.waitUninstallApp($1; $2)
 			
 			If ($Obj_uninstall.success)
 				
@@ -342,24 +374,38 @@ Function uninstallAppIfInstalled
 	End if 
 	
 	
-Function installApp
+Function waitInstallApp
 	var $0 : Object
 	var $1 : Text  // emulator serial
 	var $2 : 4D:C1709.File  // apk
+	var $startTime; $stepTime : Integer
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" install -t \""+$2.path+"\"")
+	// Time elapsed
+	$startTime:=Milliseconds:C459
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+	Repeat 
+		
+		IDLE:C311
+		DELAY PROCESS:C323(Current process:C322; 120)
+		
+		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" install -t \""+$2.path+"\"")
+		
+		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		
+		$stepTime:=Milliseconds:C459-$startTime
+		
+	Until ($0.success=True:C214)\
+		 | ($stepTime>This:C1470.timeOut)
 	
-	If (Not:C34($0.success))
+	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
-		$0.errors.push("Failed to install the app")
+		$0.errors.push("Timeout when installing the app")
 		
-		// Else : all ok
+		// Else : all ok 
 	End if 
 	
 	
@@ -378,7 +424,8 @@ Function forceInstallApp
 	
 	If ($Obj_uninstallAppIfInstalled.success)
 		
-		$Obj_install:=This:C1470.installApp($1; $3)
+		//$Obj_install:=This.installApp($1; $3)
+		$Obj_install:=This:C1470.waitInstallApp($1; $3)
 		
 		If ($Obj_install.success)
 			$0.success:=True:C214
@@ -391,25 +438,39 @@ Function forceInstallApp
 	End if 
 	
 	
-Function startApp
+Function waitStartApp
 	var $0 : Object
 	var $1 : Text  // emulator serial
 	var $2 : Text  // package name (app name)
 	var $3 : Text  // activity name (com.qmobile.qmobileui.activity.loginactivity.LoginActivity)
+	var $startTime; $stepTime : Integer
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell am start -n \""+$2+"/"+$3+"\"")
+	// Time elapsed
+	$startTime:=Milliseconds:C459
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+	Repeat 
+		
+		IDLE:C311
+		DELAY PROCESS:C323(Current process:C322; 120)
+		
+		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell am start -n \""+$2+"/"+$3+"\"")
+		
+		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		
+		$stepTime:=Milliseconds:C459-$startTime
+		
+	Until ($0.success=True:C214)\
+		 | ($stepTime>This:C1470.timeOut)
 	
-	If (Not:C34($0.success))
+	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
-		$0.errors.push("Failed to start the app")
+		$0.errors.push("Timeout when starting the app")
 		
-		// Else : all ok
+		// Else : all ok 
 	End if 
 	
 	

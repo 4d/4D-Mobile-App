@@ -32,7 +32,6 @@ Class constructor
 	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
 	This:C1470.project.cache_4d_sdk:=This:C1470.path.cacheSdkAndroidUnzipped().path
-	
 	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
 	
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
@@ -315,7 +314,7 @@ Function run()->$result : Object
 					// * LAUNCH APP
 					This:C1470.postStep("launchingTheApplication")
 					
-					$o:=This:C1470.adb.startApp(This:C1470.serial; This:C1470.package; This:C1470.activity)
+					$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.package; This:C1470.activity)
 					
 					If (Not:C34($o.success))
 						
