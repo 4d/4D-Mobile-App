@@ -1,5 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    project.ext.set("sdkPath", "{{cache_4d_sdk_path}}")
     dependencies {
         classpath Tools.gradle
         classpath Tools.kotlin_gradle_plugin
@@ -9,9 +10,9 @@ buildscript {
         // in the individual module build.gradle files
     }
     repositories {
-        maven { url file('dependencies') }
         google()
         jcenter()
+        maven { url file(project.sdkPath) }
     }
 }
 
@@ -23,7 +24,6 @@ allprojects {
     apply plugin: 'maven-publish'
     apply plugin: "com.jfrog.artifactory"
     repositories {
-        maven { url file('dependencies') }
         maven {
             def machineIP = System.getenv('ARTIFACTORY_MACHINE_IP')
             def contextUrl = "http://${machineIP}:8081/artifactory"
@@ -36,6 +36,7 @@ allprojects {
         }
         google()
         jcenter()
+        maven { url file(project.sdkPath) }
     }
 }
 

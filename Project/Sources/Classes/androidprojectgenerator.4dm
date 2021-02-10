@@ -8,6 +8,8 @@ Class constructor($java : 4D:C1709.File; $kotlinc : 4D:C1709.File)
 	This:C1470.kotlinc:=$kotlinc.path
 	This:C1470.chmodCmd:="chmod"
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function generate
 	var $0 : Object
 	var $1 : 4D:C1709.File  // project editor json
@@ -55,7 +57,8 @@ Function generate
 		
 	End if 
 	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function buildEmbeddedDataLib
 	var $0 : Object
 	var $1 : Text  // Project path
@@ -95,7 +98,8 @@ Function buildEmbeddedDataLib
 		// Else : all ok
 	End if 
 	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function copyEmbeddedDataLib
 	var $0 : Object
 	var $1 : Text  // Project path
@@ -125,8 +129,8 @@ Function copyEmbeddedDataLib
 		$0.errors.push("Missing source file for copy: "+$copySrc.path)
 	End if 
 	
-	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function copyResources
 	var $0 : Object
 	var $1 : Text  // Project path
@@ -175,8 +179,8 @@ Function copyResources
 		$0.errors.push("Missing source file for copy: "+$androidAssets.path)
 	End if 
 	
-	
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function chmod
 	var $0 : Object
 	var $1 : Text  // Project path
@@ -194,4 +198,39 @@ Function chmod
 		$0.errors.push("Failed chmod command")
 		
 		// Else : all ok
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function unzipSdk
+	var $0 : Object
+	var $cacheSdkAndroid : 4D:C1709.File
+	var $archive : 4D:C1709.ZipArchive
+	var $unzipDest : 4D:C1709.Folder
+	
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	$cacheSdkAndroid:=This:C1470.path.cacheSdkAndroid()
+	
+	If ($cacheSdkAndroid.exists)
+		
+		$0.success:=True:C214
+		
+		$archive:=ZIP Read archive:C1637($cacheSdkAndroid)
+		
+		$unzipDest:=$archive.root.copyTo($cacheSdkAndroid.parent; fk overwrite:K87:5)
+		
+		If (Not:C34($unzipDest.exists))
+			
+			$0.success:=False:C215
+			$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+			
+			// Else : all ok
+		End if 
+		
+	Else 
+		// Missing sdk archive
+		$0.errors.push("Missing 4D Mobile SDK archive: "+$cacheSdkAndroid.path)
 	End if 

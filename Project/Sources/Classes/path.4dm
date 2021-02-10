@@ -49,6 +49,11 @@ Function cacheSdkAndroid()
 	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip")
 	
 /*========================================================*/
+Function cacheSdkAndroidUnzipped()
+	var $0 : 4D:C1709.Folder
+	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/sdk")
+	
+/*========================================================*/
 Function cacheSDK()
 	var $0 : 4D:C1709.Folder
 	

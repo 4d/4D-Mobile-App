@@ -17,6 +17,7 @@ Class constructor
 	
 	This:C1470.androidProcess:=cs:C1710.androidProcess.new()
 	This:C1470.studio:=cs:C1710.studio.new()
+	This:C1470.path:=cs:C1710.path.new()
 	
 	This:C1470.project:=OB Copy:C1225(This:C1470.input)
 	
@@ -30,6 +31,8 @@ Class constructor
 	End for each 
 	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
+	This:C1470.project.cache_4d_sdk:=This:C1470.path.cacheSdkAndroidUnzipped().path
+	
 	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
 	
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
@@ -139,7 +142,20 @@ Function create()->$result : Object
 						
 						$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
 						
-						If (Not:C34($o.success))
+						If ($o.success)
+							
+							// * UNZIP 4D MOBILE SDK
+							This:C1470.postStep("decompressionOfTheSdk")
+							
+							$o:=This:C1470.androidprojectgenerator.unzipSdk()
+							
+							If (Not:C34($o.success))
+								
+								This:C1470.isOnError:=True:C214
+								
+							End if 
+							
+						Else 
 							
 							This:C1470.isOnError:=True:C214
 							
