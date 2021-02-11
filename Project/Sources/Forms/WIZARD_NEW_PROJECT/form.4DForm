@@ -262,5 +262,6 @@
 		}
 	},
 	"windowMinWidth": 970,
-	"windowMinHeight": 860
+	"windowMinHeight": 860,
+	"colorScheme": "light"
 }

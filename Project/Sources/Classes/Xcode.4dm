@@ -76,7 +76,11 @@ Function path($useDefaultPath : Boolean)
 	If (Not:C34($found))
 		
 		This:C1470.toolsPath()
-		$found:=This:C1470.success
+		
+		// ⚠️ The tools are not necessarily in the XCode package
+		$found:=This:C1470.success\
+			 & (This:C1470.tools.parent.parent.extension=".app")\
+			 & (This:C1470.tools.parent.parent.isPackage)
 		
 		If ($found)
 			

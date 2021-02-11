@@ -194,13 +194,13 @@ Function availableDevices($iosDeploymentTarget : Text)->$availableDevices : Coll
 		
 	End if 
 	
+	$availableDevices:=New collection:C1472
+	
 	This:C1470.launch("xcrun simctl"; "list devices --json devices")
 	
 	If (This:C1470.success)
 		
 		$str:=cs:C1710.str.new()
-		
-		$availableDevices:=New collection:C1472
 		
 		$devices:=JSON Parse:C1218(This:C1470.outputStream).devices
 		

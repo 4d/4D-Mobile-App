@@ -334,5 +334,6 @@
 	},
 	"windowMinWidth": 970,
 	"windowMinHeight": 860,
-	"windowTitle": ":xliff:4dProductName"
+	"windowTitle": ":xliff:4dProductName",
+	"colorScheme": "light"
 }
