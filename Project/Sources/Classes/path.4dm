@@ -69,7 +69,7 @@ Function cache()  // 4D Mobile cache folder
 		
 	Else 
 		
-		$0:=Folder:C1567(fk desktop folder:K87:19).parent.folder("AppData/Roaming/4DMobile")
+		$0:=Folder:C1567(fk system folder:K87:13).parent.folder("ProgramData/4D Mobile")
 		
 	End if 
 	
