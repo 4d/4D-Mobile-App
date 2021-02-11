@@ -13,9 +13,9 @@ Class constructor
 	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
 		
 		This:C1470.name:=cs:C1710.widget.new("01_name")
-		This:C1470.team:=cs:C1710.widget.new("02_team")
+		This:C1470.team:=cs:C1710.widget.new("02_team").enable(Is macOS:C1572)
 		This:C1470.teamBorder:=cs:C1710.static.new("02_team.border")
-		This:C1470.teamMenu:=cs:C1710.button.new("teamPopup")
+		This:C1470.teamMenu:=cs:C1710.button.new("teamPopup").enable(Is macOS:C1572)
 		This:C1470.teamHelp:=cs:C1710.button.new("02_team.help")
 		
 		// Constraints definition
