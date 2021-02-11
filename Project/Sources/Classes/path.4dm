@@ -65,7 +65,7 @@ Function cache()  // 4D Mobile cache folder
 	
 	If (Is macOS:C1572)
 		
-		$0:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Library/Caches/com.4d.mobile")
+		$0:=Folder:C1567("/Library/Caches/com.4d.mobile")
 		
 	Else 
 		
