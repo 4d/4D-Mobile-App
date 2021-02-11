@@ -74,12 +74,14 @@ Case of
 	: (Is Windows:C1573)
 		
 		$out:=New object:C1471(\
-			"xCode"; New object:C1471(\
-			"platform"; Windows:K25:3; \
+			"xCode"; New object:C1471("platform"; Windows:K25:3; \
 			"XcodeAvailable"; False:C215; \
 			"toolsAvalaible"; False:C215; \
 			"ready"; False:C215); \
 			"studio"; studioCheckInstall($in))
+		
+		// Get the last 4D Mobile Android SDK, if any
+		CALL WORKER:C1389(1; "downloadAndroidSDK"; True:C214; False:C215)
 		
 		//______________________________________________________
 	Else 
