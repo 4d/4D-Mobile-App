@@ -31,16 +31,15 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Clicked:K2:4)
 		
-		$withMoreItems:=Macintosh option down:C545
-		$isDebug:=Macintosh command down:C546 & DATABASE.isMatrix
+		$withMoreItems:=Macintosh option down:C545 | Windows Alt down:C563
+		$isDebug:=(Macintosh command down:C546 | Windows Ctrl down:C562) & DATABASE.isMatrix
 		
 		// Autosave
 		PROJECT.save()
 		
-		If (Is macOS:C1572)
-			var $simctl : cs:C1710.simctl
-			$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
-		End if 
+		var $simctl : cs:C1710.simctl
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+		
 		
 		$product:=path.products().folder(PROJECT.product.name)
 		$build:=$product.folder("build")
@@ -188,17 +187,14 @@ Case of
 					End if 
 				End if 
 				
-				If (Is macOS:C1572)
+				If ($isDebug)
 					
-					If ($isDebug)
-						
-						$menu.append(".Clear Xcode Build And Derived Data"; "_removeDerivedData")
-						
-					Else 
-						
-						$menu.append("clearXcodeBuild"; "_removeBuild").enable($build.exists)
-						
-					End if 
+					$menu.append(".Clear Xcode Build And Derived Data"; "_removeDerivedData")
+					
+				Else 
+					
+					$menu.append("clearXcodeBuild"; "_removeBuild").enable($build.exists)
+					
 				End if 
 				
 				$menu.line()
@@ -206,7 +202,7 @@ Case of
 				
 				If ($isDebug)
 					
-					$menu.append(". Open the SDK Cache Folder"; "_openSDKCache")
+					$menu.append(".Open the SDK Cache Folder"; "_openSDKCache")
 					
 					$menu.append(".🗑 Clear Cache folder"; "_clearCache")
 					
@@ -230,10 +226,12 @@ Case of
 					$menu.append(".Open Component Log"; "_openCompoentLog")
 					
 				End if 
+				
+			Else 
+				
+				
+				
 			End if 
-			
-			$menu.line()
-			$menu.append("verbose"; "_verbose").mark(PROJECT.$project.verbose)
 			
 			If (FEATURE.with("android"))
 				
@@ -241,6 +239,10 @@ Case of
 				$menu.append("downloadThe4dForAndroidSdk"; "_downloadAndroidSdk")
 				
 			End if 
+			
+			$menu.line()
+			$menu.append("verbose"; "_verbose").mark(PROJECT.$project.verbose)
+			
 		End if 
 		
 		OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)

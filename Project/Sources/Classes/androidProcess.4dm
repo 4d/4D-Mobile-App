@@ -9,17 +9,17 @@ Class constructor
 	Super:C1705()
 	
 	// Set JAVA_HOME
-	This:C1470.getJavaHome()
+	//This.getJavaHome()
 	
-	If (This:C1470.success)
-		
-		This:C1470.setEnvironnementVariable("JAVA_HOME"; This:C1470.java_home)
-		
-	Else 
-		
-		//#ERROR
-		
-	End if 
+	//If (This.success)
+	
+	//This.setEnvironnementVariable("JAVA_HOME"; This.java_home)
+	
+	//Else 
+	
+	////#ERROR
+	
+	//End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the Android SDK folder object
@@ -59,19 +59,31 @@ Function getJavaHome()
 		
 		This:C1470.launch("/usr/libexec/java_home")
 		
+		If (This:C1470.success)
+			
+			This:C1470.java_home:=This:C1470.outputStream
+			
+		Else 
+			
+			This:C1470.errors.push("Failed to get JAVA_HOME")
+			
+		End if 
+		
 	Else 
 		
-		This:C1470.launch("where java")
+		This:C1470.launch("echo %JAVA_HOME%")
 		
-	End if 
-	
-	If (This:C1470.success)
+		If (This:C1470.success)
+			
+			This:C1470.java_home:=This:C1470.outputStream
+			
+		Else 
+			
+			This:C1470.errors.push("Failed to get JAVA_HOME")
+			
+		End if 
 		
-		This:C1470.java_home:=This:C1470.outputStream
-		
-	Else 
-		
-		This:C1470.errors.push("Failed to get JAVA_HOME")
+		//This.java_home:="'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath'"
 		
 	End if 
 	

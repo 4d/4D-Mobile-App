@@ -139,9 +139,8 @@ Else
 		
 		ALERT:C41(".Your SDK version is currently the newest version available.")
 		
-	Else 
-		
-		RECORD.info("The 4D Mobile Android SDK is up to date")
-		
 	End if 
+	
+	RECORD.info("The 4D Mobile Android SDK is up to date")
+	
 End if 

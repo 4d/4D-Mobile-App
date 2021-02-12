@@ -133,6 +133,7 @@ Function lastPath
 		
 		This:C1470.success:=False:C215
 		
+		// Get the highest version available
 		For each ($pathname; $c)
 			
 			$version:=This:C1470.getVersion(Folder:C1567($pathname))

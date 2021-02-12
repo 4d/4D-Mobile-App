@@ -115,6 +115,7 @@ If (Is macOS:C1572)
 	$lep.launch("/usr/libexec/java_home")
 	
 Else 
+	
 	$lep.launch("echo %JAVA_HOME%")
 	
 End if 

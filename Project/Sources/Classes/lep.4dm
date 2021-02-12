@@ -267,6 +267,8 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		
 	End if 
 	
+	$t:=Replace string:C233($t; "\r\n"; "\n")
+	
 	If (Length:C16($t)>0)
 		
 		// Remove the 1st line feed, if any
@@ -364,7 +366,9 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		This:C1470.pid:=0
 		This:C1470.outputStream:=Null:C1517
 		This:C1470.errorStream:=$error
-		This:C1470.errors.push($error)
+		//this.lastError:=$error
+		//This.errors.push($error)
+		This:C1470._pushError($error)
 		
 	End if 
 	

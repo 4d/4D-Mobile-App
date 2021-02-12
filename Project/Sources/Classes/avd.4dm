@@ -233,9 +233,13 @@ Function availableDevices()->$devices : Collection
 	Else 
 		
 		RECORD.error("availableDevices() failed")
-		RECORD.log("availableDevices() failed")
-		RECORD.open(This:C1470.errors.join("\r"))
+		RECORD.log(This:C1470.errors.join("\r"))
 		
+		If (Structure file:C489=Structure file:C489(*))
+			
+			RECORD.open()
+			
+		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

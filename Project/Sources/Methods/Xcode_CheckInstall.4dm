@@ -97,40 +97,43 @@ If ($out.XcodeAvailable)
 			
 			$out.ready:=False:C215
 			
-			$signal:=await_MESSAGE(New object:C1471(\
-				"target"; $in.caller; \
-				"action"; "show"; \
-				"type"; "confirm"; \
-				"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
-				"additional"; "wantToFixThePath"))
-			
-			If ($signal.validate)
+			If (Not:C34($in.silent))
 				
-				$Xcode.setToolPath(cs:C1710.str.new("4dMobileWantsToMakeChanges").localized("4dForIos"))
+				$signal:=await_MESSAGE(New object:C1471(\
+					"target"; $in.caller; \
+					"action"; "show"; \
+					"type"; "confirm"; \
+					"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
+					"additional"; "wantToFixThePath"))
 				
-				If ($Xcode.success)
+				If ($signal.validate)
 					
-					If ($Xcode.tools.exists)
-						
-						$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
-						
-					End if 
+					$Xcode.setToolPath(cs:C1710.str.new("4dMobileWantsToMakeChanges").localized("4dForIos"))
 					
-				Else 
-					
-					If (Position:C15("User canceled. (-128)"; $Xcode.lastError)>0)
+					If ($Xcode.success)
 						
-						// NOTHING MORE TO DO
+						If ($Xcode.tools.exists)
+							
+							$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
+							
+						End if 
 						
 					Else 
 						
-						POST_MESSAGE(New object:C1471(\
-							"target"; $in.caller; \
-							"action"; "show"; \
-							"type"; "alert"; \
-							"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
-							"additional"; "tryDoingThisFromTheXcodeApplication"))
-						
+						If (Position:C15("User canceled. (-128)"; $Xcode.lastError)>0)
+							
+							// NOTHING MORE TO DO
+							
+						Else 
+							
+							POST_MESSAGE(New object:C1471(\
+								"target"; $in.caller; \
+								"action"; "show"; \
+								"type"; "alert"; \
+								"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
+								"additional"; "tryDoingThisFromTheXcodeApplication"))
+							
+						End if 
 					End if 
 				End if 
 			End if 
@@ -138,17 +141,20 @@ If ($out.XcodeAvailable)
 		
 	Else 
 		
-		$signal:=await_MESSAGE(New object:C1471(\
-			"target"; $in.caller; \
-			"action"; "show"; \
-			"type"; "confirm"; \
-			"title"; New collection:C1472("obsoleteVersionofApp"; "4dForIos"; SHARED.xCodeVersion; "Xcode"); \
-			"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "xcode")))
-		
-		If ($signal.validate)
+		If (Not:C34($in.silent))
 			
-			OPEN URL:C673(Get localized string:C991("appstore_xcode"); *)
+			$signal:=await_MESSAGE(New object:C1471(\
+				"target"; $in.caller; \
+				"action"; "show"; \
+				"type"; "confirm"; \
+				"title"; New collection:C1472("obsoleteVersionofApp"; "4dForIos"; SHARED.xCodeVersion; "Xcode"); \
+				"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "xcode")))
 			
+			If ($signal.validate)
+				
+				OPEN URL:C673(Get localized string:C991("appstore_xcode"); *)
+				
+			End if 
 		End if 
 	End if 
 	
@@ -172,34 +178,40 @@ If ($out.XcodeAvailable)
 		
 		If (Not:C34($Xcode.checkFirstLaunchStatus()))
 			
-			$signal:=await_MESSAGE(New object:C1471(\
-				"target"; $in.caller; \
-				"action"; "show"; \
-				"type"; "confirm"; \
-				"title"; "xcodeIsNotFullyFunctional"; \
-				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "xcode")))
-			
-			If ($signal.validate)
+			If (Not:C34($in.silent))
 				
-				$Xcode.open()
+				$signal:=await_MESSAGE(New object:C1471(\
+					"target"; $in.caller; \
+					"action"; "show"; \
+					"type"; "confirm"; \
+					"title"; "xcodeIsNotFullyFunctional"; \
+					"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "xcode")))
 				
+				If ($signal.validate)
+					
+					$Xcode.open()
+					
+				End if 
 			End if 
 		End if 
 	End if 
 	
 Else 
 	
-	$signal:=await_MESSAGE(New object:C1471(\
-		"target"; $in.caller; \
-		"action"; "show"; \
-		"type"; "confirm"; \
-		"title"; New collection:C1472("4dMobileRequiresXcode"; "4dForIos"); \
-		"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "xcode")))
-	
-	If ($signal.validate)
+	If (Not:C34($in.silent))
 		
-		OPEN URL:C673(Get localized string:C991("appstore_xcode"); *)
+		$signal:=await_MESSAGE(New object:C1471(\
+			"target"; $in.caller; \
+			"action"; "show"; \
+			"type"; "confirm"; \
+			"title"; New collection:C1472("4dMobileRequiresXcode"; "4dForIos"); \
+			"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "xcode")))
 		
+		If ($signal.validate)
+			
+			OPEN URL:C673(Get localized string:C991("appstore_xcode"); *)
+			
+		End if 
 	End if 
 End if 
 
