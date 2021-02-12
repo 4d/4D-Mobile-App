@@ -140,7 +140,7 @@ Case of
 						
 						$Txt_format:=Replace string:C233($Txt_format; "{picture}"; "#images/light_on.png")
 						$Txt_format:=Replace string:C233($Txt_format; "{horMargin}"; "0")
-						$Txt_format:=Replace string:C233($Txt_format; "{title}"; " "+Get localized string:C991(Choose:C955($Obj_form.ui.remote(); "serverIsOnline"; "theWebServerIsRunning")))
+						$Txt_format:=Replace string:C233($Txt_format; "{title}"; Get localized string:C991(Choose:C955($Obj_form.ui.remote(); "serverIsOnline"; "theWebServerIsRunning")))
 						
 						OBJECT SET HELP TIP:C1181(*; $Obj_form.serverStatus; "")
 						
@@ -155,12 +155,12 @@ Case of
 						
 						If (Length:C16(String:C10($Obj_form.ui.serverStatus.title))>0)
 							
-							$Txt_format:=Replace string:C233($Txt_format; "{title}"; " "+$Obj_form.ui.serverStatus.title)
+							$Txt_format:=Replace string:C233($Txt_format; "{title}"; $Obj_form.ui.serverStatus.title)
 							
 						Else 
 							
 							// Generic message
-							$Txt_format:=Replace string:C233($Txt_format; "{title}"; " "+Get localized string:C991("theServerIsNotReady"))
+							$Txt_format:=Replace string:C233($Txt_format; "{title}"; Get localized string:C991("theServerIsNotReady"))
 							
 						End if 
 						
