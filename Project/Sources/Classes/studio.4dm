@@ -170,23 +170,12 @@ Function paths()->$instances : Collection
 			
 		End if 
 		
-		//$o:=This.lep("mdfind \"kMDItemCFBundleIdentifier == 'com.google.android.studio'\"")
-		//This.success:=$o.success
-		//If (This.success)
-		//$instances:=Split string($o.out; "\n"; sk ignore empty strings)
-		//Else 
-		//This.lastError:=Choose(Length($o.error)=0; "No Android Studio installed"; $o.error)
-		//End if 
-		
 	Else 
 		
 		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("Uninstall.txt")
 		$file.delete()
 		
 		This:C1470.launch("reg export HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall "+$file.platformPath)
-		
-		//$o:=This.lep("reg export HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall "+$file.platformPath)
-		//This.success:=$o.success
 		
 		If (This:C1470.success)
 			
@@ -244,12 +233,6 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 				
 			End if 
 			
-			//$o:=This.lep("defaults read"+" '"+$file.path+"' CFBundleShortVersionString")
-			//This.success:=$o.success
-			//If (This.success)
-			//$version:=$o.out
-			//End if 
-			
 		End if 
 		
 	Else 
@@ -272,15 +255,6 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 			This:C1470.success:=Match regex:C1019("(?m-si)\\s(\\d+(?:\\.\\d+)*)\\s"; $t; 1; $pos; $len)
 			
 		End if 
-		
-		//$o:=This.lep("wmic datafile where \"Drive='"+$drive+"' and Path='"+$path+"' and Filename='"+$name+"' and extension='"+$extension+"'\" get name,version")
-		//This.success:=$o.success
-		//If (This.success)
-		//$t:=$o.out
-		//ARRAY LONGINT($pos; 0x0000)
-		//ARRAY LONGINT($len; 0x0000)
-		//This.success:=Match regex("(?m-si)\\s(\\d+(?:\\.\\d+)*)\\s"; $t; 1; $pos; $len)
-		//End if 
 		
 		If (This:C1470.success)
 			
@@ -342,25 +316,15 @@ Function open()
 		
 		If (Is macOS:C1572)
 			
-			//$o:=This.lep("open "+This.singleQuoted(This.exe.path))
 			This:C1470.launch("open "+This:C1470.singleQuoted(This:C1470.exe.path))
 			
 		Else 
 			
 			SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "false")
-			//$o:=This.lep(This.exe.path)
 			This:C1470.launch(This:C1470.exe.path)
 			
 		End if 
 	End if 
-	
-	//If (Bool($o.success))
-	//This.success:=True
-	//Else 
-	//This.success:=False
-	//This.lastError:=Choose(Length(String($o.error))>0; String($o.error); "Unknown error")
-	//This.errors.push(This.lastError)
-	//End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Populate the javaHome & java properties according to the platform

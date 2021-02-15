@@ -89,6 +89,8 @@ Case of
 				
 				If (Form:C1466.devices.android.length>0)
 					
+					$menu.append("androidSimulators").icon("images/os/android.png").disable()
+					
 					For each ($device; Form:C1466.devices.android)
 						
 						$menu.append($device.name; $device.udid)\
