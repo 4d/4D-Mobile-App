@@ -3,7 +3,7 @@
 Manage the Android Studio installation
 
 */
-Class extends tools
+Class extends lep
 
 Class constructor($useDefaultPath : Boolean)
 	
@@ -157,33 +157,36 @@ Function isDefaultPath()->$isDefault : Boolean
 Function paths()->$instances : Collection
 	
 	var $t : Text
-	var $o : Object
 	var $instances : Collection
 	var $file : 4D:C1709.File
 	
 	If (This:C1470.macOS)
 		
-		$o:=This:C1470.lep("mdfind \"kMDItemCFBundleIdentifier == 'com.google.android.studio'\"")
-		
-		This:C1470.success:=$o.success
+		This:C1470.launch("mdfind \"kMDItemCFBundleIdentifier == 'com.google.android.studio'\"")
 		
 		If (This:C1470.success)
 			
-			$instances:=Split string:C1554($o.out; "\n"; sk ignore empty strings:K86:1)
-			
-		Else 
-			
-			This:C1470.lastError:=Choose:C955(Length:C16($o.error)=0; "No Android Studio installed"; $o.error)
+			$instances:=Split string:C1554(This:C1470.outputStream; "\n"; sk ignore empty strings:K86:1)
 			
 		End if 
+		
+		//$o:=This.lep("mdfind \"kMDItemCFBundleIdentifier == 'com.google.android.studio'\"")
+		//This.success:=$o.success
+		//If (This.success)
+		//$instances:=Split string($o.out; "\n"; sk ignore empty strings)
+		//Else 
+		//This.lastError:=Choose(Length($o.error)=0; "No Android Studio installed"; $o.error)
+		//End if 
 		
 	Else 
 		
 		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("Uninstall.txt")
 		$file.delete()
 		
-		$o:=This:C1470.lep("reg export HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall "+$file.platformPath)
-		This:C1470.success:=$o.success
+		This:C1470.launch("reg export HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall "+$file.platformPath)
+		
+		//$o:=This.lep("reg export HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall "+$file.platformPath)
+		//This.success:=$o.success
 		
 		If (This:C1470.success)
 			
@@ -202,7 +205,7 @@ Function paths()->$instances : Collection
 		
 		If ($instances=Null:C1517)
 			
-			This:C1470.lastError:=Choose:C955(Length:C16($o.error)=0; "No Android Studio installed"; $o.error)
+			This:C1470.lastError:="No Android Studio installed"
 			
 		End if 
 	End if 
@@ -212,7 +215,6 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 	
 	var $drive; $extension; $name; $path; $t : Text
 	var $indx : Integer
-	var $o : Object
 	var $file : 4D:C1709.File
 	var $targetƒ : 4D:C1709.Folder
 	
@@ -234,14 +236,20 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 		
 		If (This:C1470.success)
 			
-			$o:=This:C1470.lep("defaults read"+" '"+$file.path+"' CFBundleShortVersionString")
-			This:C1470.success:=$o.success
+			This:C1470.launch("defaults read"+" '"+$file.path+"' CFBundleShortVersionString")
 			
 			If (This:C1470.success)
 				
-				$version:=$o.out
+				$version:=This:C1470.outputStream
 				
 			End if 
+			
+			//$o:=This.lep("defaults read"+" '"+$file.path+"' CFBundleShortVersionString")
+			//This.success:=$o.success
+			//If (This.success)
+			//$version:=$o.out
+			//End if 
+			
 		End if 
 		
 	Else 
@@ -252,18 +260,27 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 		$name:=$targetƒ.name
 		$extension:=Replace string:C233($targetƒ.extension; "."; ""; 1)
 		
-		$o:=This:C1470.lep("wmic datafile where \"Drive='"+$drive+"' and Path='"+$path+"' and Filename='"+$name+"' and extension='"+$extension+"'\" get name,version")
-		This:C1470.success:=$o.success
+		
+		This:C1470.launch("wmic datafile where \"Drive='"+$drive+"' and Path='"+$path+"' and Filename='"+$name+"' and extension='"+$extension+"'\" get name,version")
 		
 		If (This:C1470.success)
 			
-			$t:=$o.out
+			$t:=This:C1470.outputStream
 			
 			ARRAY LONGINT:C221($pos; 0x0000)
 			ARRAY LONGINT:C221($len; 0x0000)
 			This:C1470.success:=Match regex:C1019("(?m-si)\\s(\\d+(?:\\.\\d+)*)\\s"; $t; 1; $pos; $len)
 			
 		End if 
+		
+		//$o:=This.lep("wmic datafile where \"Drive='"+$drive+"' and Path='"+$path+"' and Filename='"+$name+"' and extension='"+$extension+"'\" get name,version")
+		//This.success:=$o.success
+		//If (This.success)
+		//$t:=$o.out
+		//ARRAY LONGINT($pos; 0x0000)
+		//ARRAY LONGINT($len; 0x0000)
+		//This.success:=Match regex("(?m-si)\\s(\\d+(?:\\.\\d+)*)\\s"; $t; 1; $pos; $len)
+		//End if 
 		
 		If (This:C1470.success)
 			
@@ -291,6 +308,12 @@ Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	$ok:=(This:C1470.versionCompare(This:C1470.version; $minimumVersion)>=0)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the User Home folder object
+Function homeFolder()->$folder : 4D:C1709.Folder
+	
+	$folder:=Folder:C1567(fk desktop folder:K87:19).parent  // Maybe there is a better way for all OS
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the SDK folder object
 	// ⚠️ FAILED IF THE INSTALLATION WAS MADE BY NOT USING THE DEFAULT LOCATION
 Function sdkFolder()->$folder : 4D:C1709.Folder
@@ -309,8 +332,6 @@ Function sdkFolder()->$folder : 4D:C1709.Folder
 	// Open the Android Studio application
 Function open()
 	
-	var $o : Object
-	
 	If (Count parameters:C259>=1)  // Open project
 		
 		
@@ -321,27 +342,25 @@ Function open()
 		
 		If (Is macOS:C1572)
 			
-			$o:=This:C1470.lep("open "+This:C1470.singleQuoted(This:C1470.exe.path))
+			//$o:=This.lep("open "+This.singleQuoted(This.exe.path))
+			This:C1470.launch("open "+This:C1470.singleQuoted(This:C1470.exe.path))
 			
 		Else 
 			
 			SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"; "false")
-			$o:=This:C1470.lep(This:C1470.exe.path)
+			//$o:=This.lep(This.exe.path)
+			This:C1470.launch(This:C1470.exe.path)
 			
 		End if 
 	End if 
 	
-	If (Bool:C1537($o.success))
-		
-		This:C1470.success:=True:C214
-		
-	Else 
-		
-		This:C1470.success:=False:C215
-		This:C1470.lastError:=Choose:C955(Length:C16(String:C10($o.error))>0; String:C10($o.error); "Unknown error")
-		This:C1470.errors.push(This:C1470.lastError)
-		
-	End if 
+	//If (Bool($o.success))
+	//This.success:=True
+	//Else 
+	//This.success:=False
+	//This.lastError:=Choose(Length(String($o.error))>0; String($o.error); "Unknown error")
+	//This.errors.push(This.lastError)
+	//End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Populate the javaHome & java properties according to the platform

@@ -45,7 +45,7 @@ Case of
 				
 				If (Form:C1466.status.xCode)
 					
-					$menu.append("iOS").icon("images/os/iOS.png").disable()
+					$menu.append("iosSimulators").icon("images/os/iOS.png").disable()
 					
 					If (Form:C1466.devices.apple.length>0)
 						
@@ -63,11 +63,11 @@ Case of
 				
 				$menu.append($tab+Get localized string:C991("openTheXcodeSimulatorsManager"); "XcodeDeviceManager").enable((Form:C1466.status.xCode))
 				
+				$menu.line()
+				
+				$menu.append("androidSimulators").icon("images/os/android.png").disable()
+				
 				If (Form:C1466.status.studio)
-					
-					$menu.line()
-					
-					$menu.append("Android").icon("images/os/android.png").disable()
 					
 					If (Form:C1466.devices.android.length>0)
 						
@@ -150,11 +150,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="avdManager")
 				
-				POST_MESSAGE(New object:C1471(\
-					"target"; Current form window:C827; \
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; "We are going tout doux 🤣"))
+				cs:C1710.studio.new().open()
 				
 				//______________________________________________________
 			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-(?:[[:xdigit:]]{4}-){3}[[:xdigit:]]{12}"; $menu.choice; 1))
@@ -173,6 +169,9 @@ Case of
 				$simctl.shutdownAllDevices()
 				$simctl.setDefaultDevice($menu.choice)
 				
+				PROJECT.$ios:=True:C214
+				PROJECT.setTarget(True:C214)
+				
 				//______________________________________________________
 			: (FEATURE.with("android"))  // 🚧
 				
@@ -180,6 +179,9 @@ Case of
 				
 				Form:C1466.currentDevice:=$menu.choice
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
+				
+				PROJECT.$android:=True:C214
+				PROJECT.setTarget(True:C214)
 				
 				//______________________________________________________
 			Else 

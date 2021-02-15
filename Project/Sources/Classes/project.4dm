@@ -381,6 +381,48 @@ Function save()
 	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Populate the target value into te project
+Function setTarget($check : Boolean)
+	
+	If (This:C1470.$ios & This:C1470.$android)
+		
+		This:C1470.info.target:=New collection:C1472("iOS"; "android")
+		
+	Else 
+		
+		If (Not:C34(This:C1470.$android))
+			
+			// According to platform
+			This:C1470.info.target:=Choose:C955(Is macOS:C1572; "iOS"; "android")
+			
+		Else 
+			
+			This:C1470.info.target:=Choose:C955(This:C1470.$android; "android"; "iOS")
+			
+		End if 
+	End if 
+	
+	PROJECT.save()
+	
+	// Update the project folder
+	PROJECT.prepare()
+	
+	If (Count parameters:C259>=1)
+		
+		If ($check)
+			
+			// Launch the verification of the development tools, if any
+			If (This:C1470.$ios & Is macOS:C1572 & Not:C34(Bool:C1537(This:C1470.$project.$xCode.ready)))\
+				 | (This:C1470.$android & Not:C34(Bool:C1537(This:C1470.$project.$studio.ready)))
+				
+				CALL WORKER:C1389(This:C1470.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
+					"caller"; This:C1470.$mainWindow; "project"; This:C1470.$project))
+				
+			End if 
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Returns a cleaned project
 Function cleaned()->$project : Object
 	

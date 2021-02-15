@@ -365,6 +365,8 @@ Function displayTarget
 	// Populate the target value into te project
 Function setTarget($check : Boolean)
 	
+	ASSERT:C1129(False:C215; "SHOULD BE OBSOLETE")
+	
 	If (Form:C1466.$ios & Form:C1466.$android)
 		
 		Form:C1466.info.target:=New collection:C1472("iOS"; "android")

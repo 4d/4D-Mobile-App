@@ -59,7 +59,11 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Bound Variable Change:K2:52)
 			
-			$ƒ.setTarget()
+			PROJECT.setTarget()
+			
+			// Update UI
+			$ƒ.displayTarget()
+			$ƒ.displayIcon()
 			
 			SET TIMER:C645(-1)
 			
@@ -99,7 +103,11 @@ Else   // <== WIDGETS METHOD
 					//______________________________________________________
 				: ($e.code=On Clicked:K2:4)
 					
-					$ƒ.setTarget(True:C214)
+					PROJECT.setTarget(True:C214)
+					
+					// Update UI
+					$ƒ.displayTarget()
+					$ƒ.displayIcon()
 					
 					//______________________________________________________
 				: ($e.code=On Mouse Enter:K2:33)

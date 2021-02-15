@@ -61,14 +61,29 @@ If ($out.studioAvailable)
 		$out.version:=$studio.version
 		
 		// CHECK SDK
-		$out.ready:=cs:C1710.androidProcess.new().androidSDKFolder().exists
+		$out.ready:=$studio.sdkFolder().exists
 		
 		If ($out.ready)
 			
 			// CHECK JAVA
+			$out.ready:=$studio.java.exists
 			
-			
-			
+			If ($out.ready)
+				
+				// CHECK KOTLINC
+				$out.ready:=$studio.kotlinc.exists
+				
+				If (Not:C34($out.ready))
+					
+					//#ERROR - kotlinc not found
+					
+				End if 
+				
+			Else 
+				
+				//#ERROR - java not found
+				
+			End if 
 			
 		Else 
 			
@@ -85,41 +100,6 @@ If ($out.studioAvailable)
 				
 			End if 
 		End if 
-		
-		//$Xcode.toolsPath()
-		//If ($Xcode.tools.exists)
-		//$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
-		//End if 
-		//If (Not($out.toolsAvalaible))
-		//$out.ready:=False
-		//$signal:=await_MESSAGE(New object(\
-															"target"; $in.caller; \
-															"action"; "show"; \
-															"type"; "confirm"; \
-															"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
-															"additional"; "wantToFixThePath"))
-		//If ($signal.validate)
-		//$t:=Get localized string("4dMobileWantsToMakeChanges")
-		//$t:=Replace string($t; "{product}"; Get localized string("4dProductName"))
-		//$Xcode.setToolPath($t)
-		//If ($Xcode.success)
-		//If ($Xcode.tools.exists)
-		//$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
-		//End if 
-		//Else 
-		//If (Position("User canceled. (-128)"; $Xcode.lastError)>0)
-		//// NOTHING MORE TO DO
-		//Else 
-		//POST_MESSAGE(New object(\
-															"target"; $in.caller; \
-															"action"; "show"; \
-															"type"; "alert"; \
-															"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
-															"additional"; "tryDoingThisFromTheXcodeApplication"))
-		//End if 
-		//End if 
-		//End if 
-		//End if 
 		
 	Else 
 		

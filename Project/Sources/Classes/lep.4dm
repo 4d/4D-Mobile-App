@@ -1,9 +1,9 @@
-// Class extends tools
+Class extends tools
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
-	// Super()
+	Super:C1705()
 	
 	This:C1470.home:=Folder:C1567(fk desktop folder:K87:19).parent
 	

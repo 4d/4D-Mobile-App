@@ -8,18 +8,6 @@ Class constructor
 	
 	Super:C1705()
 	
-	// Set JAVA_HOME
-	//This.getJavaHome()
-	
-	//If (This.success)
-	
-	//This.setEnvironnementVariable("JAVA_HOME"; This.java_home)
-	
-	//Else 
-	
-	////#ERROR
-	
-	//End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the Android SDK folder object

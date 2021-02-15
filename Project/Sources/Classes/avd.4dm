@@ -15,6 +15,18 @@ Class constructor
 		
 	End if 
 	
+	var $studio : cs:C1710.studio
+	$studio:=cs:C1710.studio.new()
+	
+	If ($studio.success)
+		
+		If (Bool:C1537($studio.javaHome.exists))
+			
+			This:C1470.setEnvironnementVariable("JAVA_HOME"; $studio.javaHome.path)
+			
+		End if 
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _exe()->$file : 4D:C1709.File
 	
