@@ -106,11 +106,7 @@ Case of
 			
 		End if 
 		
-		If (FORM Get current page:C276(*)=2)
-			
-			$form.buildButtons.distributeHorizontally($form)
-			
-		End if 
+		$form.buildButtons.distributeHorizontally($form)
 		
 		//______________________________________________________
 	: ($e.code=On Page Change:K2:54)
@@ -155,6 +151,8 @@ Case of
 			End if 
 		End for each 
 		
+		$form.simulator.setColors("dimgray")
+		
 		If (Form:C1466.devices#Null:C1517)
 			
 			// Update device button
@@ -175,8 +173,16 @@ Case of
 					
 					If ($device#Null:C1517)
 						
-						$form.simulator.setTitle($device.name)
-						Form:C1466.currentDevice:=$simulator
+						If (PROJECT.$ios)
+							
+							$form.simulator.setTitle($device.name)
+							Form:C1466.currentDevice:=$simulator
+							
+						Else 
+							
+							$form.simulator.setTitle("select").setColors("red")
+							
+						End if 
 						
 					Else 
 						
@@ -184,8 +190,16 @@ Case of
 						
 						If ($device#Null:C1517)
 							
-							$form.simulator.setTitle($device.name)
-							Form:C1466.currentDevice:=$simulator
+							If (PROJECT.$android)
+								
+								$form.simulator.setTitle($device.name)
+								Form:C1466.currentDevice:=$simulator
+								
+							Else 
+								
+								$form.simulator.setTitle("select").setColors("red")
+								
+							End if 
 							
 						Else 
 							
@@ -315,6 +329,8 @@ Case of
 			
 		End if 
 		
+		//SET TIMER(-1)
+		$form.buildButtons.distributeHorizontally($form)
 		
 		//______________________________________________________
 	Else 

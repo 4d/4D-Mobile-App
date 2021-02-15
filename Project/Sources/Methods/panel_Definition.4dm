@@ -39,6 +39,8 @@ If (OB Is empty:C1297(Form:C1466.$dialog[$name]))\
 	// Define local functions
 	Form:C1466.$dialog[$name].refresh:=Formula:C1597(SET TIMER:C645(-1))
 	
+	Form:C1466.$dialog[$name].call:=Formula:C1597(CALL FORM:C1391(Form:C1466.$dialog[$name].window; Form:C1466.$dialog[$name].callback; $1))
+	
 End if 
 
 // Always return the current event

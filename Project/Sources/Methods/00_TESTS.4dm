@@ -68,14 +68,6 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=cs:C1710.androidProcess.new()
-		$folder:=$o.androidSDKFolder()
-		SHOW ON DISK:C922($folder.platformPath)
-		
-		
-		//________________________________________
-	: (True:C214)
-		
 		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("Uninstall.txt")
 		$file.delete()
 		

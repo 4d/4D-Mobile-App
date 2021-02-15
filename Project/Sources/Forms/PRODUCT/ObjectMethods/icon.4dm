@@ -1,7 +1,7 @@
 var $0 : Integer
 
 var $p : Picture
-var $e; $ƒ; $menu : Object
+var $e; $ƒ : Object
 
 $ƒ:=panel_Definition("PRODUCT")
 $e:=$ƒ.event
@@ -11,59 +11,22 @@ $0:=-1
 Case of 
 		
 		//______________________________________________________
-	: ($e.code=On Clicked:K2:4)
+	: ($e.code=On Getting Focus:K2:7)\
+		 & (FEATURE.with("iconActionMenu"))
 		
-		$menu:=cs:C1710.menu.new()
+		$ƒ.iconAction.show()
 		
-		$menu.append("CommonMenuItemPaste"; "setIcon")
-		GET PICTURE FROM PASTEBOARD:C522($p)
-		$menu.enable(Bool:C1537(OK))
+		//______________________________________________________
+	: ($e.code=On Losing Focus:K2:8)\
+		 & (FEATURE.with("iconActionMenu"))
 		
-		$menu.line()
-		$menu.append("browse"; "browseIcon")
-		$menu.line()
+		$ƒ.iconAction.hide()
 		
-		If (FEATURE.with("android"))  //🚧
-			
-			If (Is macOS:C1572)
-				
-				If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
-					
-					$menu.append("showiOSIconsFolder"; "openAppleIconFolder")
-					$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder")
-					
-				Else 
-					
-					$menu.append("showIconsFolder"; Choose:C955(String:C10(Form:C1466.info.target)="iOS"; "openAppleIconFolder"; "openAndroidIconFolder"))
-					
-				End if 
-				
-			Else 
-				
-				$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder")
-				
-			End if 
-			
-		Else 
-			
-			$menu.append("showIconsFolder"; "openAppleIconFolder").enable(Bool:C1537($ƒ.assets.folder.exists))
-			
-		End if 
+		//______________________________________________________
+	: ($e.code=On Clicked:K2:4)\
+		 & (Not:C34(FEATURE.with("iconActionMenu")))
 		
-		$menu.popup()
-		
-		If ($menu.selected)
-			
-			If ($menu.choice="setIcon")
-				
-				$ƒ.setIcon($p)
-				
-			Else 
-				
-				$ƒ[$menu.choice]()
-				
-			End if 
-		End if 
+		$ƒ.iconMenu()
 		
 		//______________________________________________________
 	: ($e.code=On Double Clicked:K2:5)

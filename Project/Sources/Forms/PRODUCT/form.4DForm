@@ -240,6 +240,8 @@
 					"events": [
 						"onClick",
 						"onDoubleClick",
+						"onLosingFocus",
+						"onGettingFocus",
 						"onDrop",
 						"onDragOver"
 					],
@@ -248,7 +250,7 @@
 				"icon.alert": {
 					"type": "button",
 					"top": 5,
-					"left": 629,
+					"left": 606,
 					"width": 20,
 					"height": 20,
 					"iconFrames": 4,
@@ -311,8 +313,36 @@
 					"focusable": false,
 					"textPlacement": "bottom",
 					"stroke": "automatic"
+				},
+				"icon.action": {
+					"type": "button",
+					"text": "",
+					"top": 7,
+					"left": 633,
+					"width": 16,
+					"height": 16,
+					"events": [
+						"onClick"
+					],
+					"style": "custom",
+					"icon": "/RESOURCES/images/action.png",
+					"iconFrames": 4,
+					"visibility": "hidden",
+					"focusable": false
 				}
-			}
+			},
+			"entryOrder": [
+				"name.alert",
+				"10_name",
+				"11_version",
+				"icon",
+				"id",
+				"30_copyright",
+				"android",
+				"ios",
+				"icon.alert",
+				"icon.action"
+			]
 		}
 	],
 	"$4d": {
@@ -327,5 +357,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 62
+	"geometryStamp": 78
 }

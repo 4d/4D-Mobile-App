@@ -202,6 +202,10 @@ Case of
 			
 		End if 
 		
+		// Adapt button width
+		//$form.buildButtons.distributeHorizontally($form)
+		SET TIMER:C645(-1)
+		
 		//______________________________________________________
 	Else 
 		

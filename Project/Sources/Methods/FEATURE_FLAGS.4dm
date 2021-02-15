@@ -133,6 +133,8 @@ FEATURE.unstable("wizards")  // Use a wizard instead of standard dialogs to crea
 WIP
 _____________*/
 
+FEATURE.wip("iconActionMenu")  //use action button for icon on product panel
+
 FEATURE.wip("withSimulatorClass")  //use simctl intead of _o_simulator
 
 FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component 

@@ -23,6 +23,7 @@ Class constructor
 		
 		This:C1470.icon:=cs:C1710.widget.new("icon")
 		This:C1470.iconAlert:=cs:C1710.attention.new("icon.alert")
+		This:C1470.iconAction:=cs:C1710.attention.new("icon.action")
 		
 		This:C1470.target:=cs:C1710.static.new("target.label")
 		This:C1470.ios:=cs:C1710.button.new("ios")
@@ -32,6 +33,67 @@ Class constructor
 		ob_createPath(This:C1470.context; "constraints.rules"; Is collection:K8:32)
 		
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Manage the icon's action button
+Function iconMenu()
+	
+	var $p : Picture
+	var $menu : Object
+	
+	
+	$menu:=cs:C1710.menu.new()
+	
+	$menu.append("CommonMenuItemPaste"; "setIcon")
+	GET PICTURE FROM PASTEBOARD:C522($p)
+	$menu.enable(Bool:C1537(OK))
+	
+	$menu.line()
+	$menu.append("browse"; "browseIcon")
+	$menu.line()
+	
+	If (FEATURE.with("android"))  //🚧
+		
+		If (Is macOS:C1572)
+			
+			If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
+				
+				$menu.append("showiOSIconsFolder"; "openAppleIconFolder")
+				$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder")
+				
+			Else 
+				
+				$menu.append("showIconsFolder"; Choose:C955(String:C10(Form:C1466.info.target)="iOS"; "openAppleIconFolder"; "openAndroidIconFolder"))
+				
+			End if 
+			
+		Else 
+			
+			$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder")
+			
+		End if 
+		
+	Else 
+		
+		$menu.append("showIconsFolder"; "openAppleIconFolder").enable(Bool:C1537(This:C1470.assets.folder.exists))
+		
+	End if 
+	
+	$menu.popup()
+	
+	If ($menu.selected)
+		
+		If ($menu.choice="setIcon")
+			
+			This:C1470.setIcon($p)
+			
+		Else 
+			
+			This:C1470[$menu.choice]()
+			
+		End if 
+	End if 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Display the App icon

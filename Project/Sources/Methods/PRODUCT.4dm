@@ -23,7 +23,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			If (FEATURE.with("android"))  //🚧
+			If (FEATURE.with("android"))  // 🚧
 				
 				If (Is Windows:C1573)
 					
@@ -95,6 +95,12 @@ Else   // <== WIDGETS METHOD
 			// ❗️MANAGED INTO OBJECT METHOD BECAUSE OF THE DRAG AND DROP
 			
 			//==============================================
+		: ($ƒ.iconAction.catch($e; On Clicked:K2:4))\
+			 & (FEATURE.with("iconActionMenu"))
+			
+			$ƒ.iconMenu()
+			
+			//==============================================
 		: ($ƒ.ios.catch())\
 			 | ($ƒ.android.catch())
 			
@@ -107,7 +113,8 @@ Else   // <== WIDGETS METHOD
 					
 					// Update UI
 					$ƒ.displayTarget()
-					$ƒ.displayIcon()
+					$ƒ.displayIcon()					
+					$ƒ.call("updateRibbon")
 					
 					//______________________________________________________
 				: ($e.code=On Mouse Enter:K2:33)
