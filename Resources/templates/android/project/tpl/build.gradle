@@ -23,6 +23,14 @@ allprojects {
     }
 }
 
+ext {
+    masterBranch = "master"
+    QMobileAPI = QMobileLibs.qmobileapi + '-' + masterBranch
+    QMobileDataStore = QMobileLibs.qmobiledatastore + '-' + masterBranch
+    QMobileDataSync = QMobileLibs.qmobiledatasync + '-' + masterBranch
+    QMobileUI = QMobileLibs.qmobileui + '-' + masterBranch
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

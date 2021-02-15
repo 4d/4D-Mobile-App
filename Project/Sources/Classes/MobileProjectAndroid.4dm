@@ -53,7 +53,6 @@ Class constructor
 	This:C1470.gradlew:=cs:C1710.gradlew.new(This:C1470.project.path)
 	
 	// Classes for run()
-	This:C1470.avd:=cs:C1710.avd.new()
 	This:C1470.emulator:=cs:C1710.androidEmulator.new()
 	This:C1470.adb:=cs:C1710.adb.new()
 	
@@ -73,7 +72,6 @@ Function setEnvVarToAll
 	
 	This:C1470.androidprojectgenerator.setEnvironnementVariable($1)
 	This:C1470.gradlew.setEnvironnementVariable($1)
-	This:C1470.avd.setEnvironnementVariable($1)
 	This:C1470.emulator.setEnvironnementVariable($1)
 	This:C1470.adb.setEnvironnementVariable($1)
 	

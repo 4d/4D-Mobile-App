@@ -13,10 +13,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // QMobile libraries
-    implementation(QMobileLibs.qmobileapi) { changing = true }
-    implementation(QMobileLibs.qmobiledatastore) { changing = true }
-    implementation(QMobileLibs.qmobiledatasync) { changing = true }
-    implementation(QMobileLibs.qmobileui) { changing = true }
+    implementation(QMobileAPI) { changing = true }
+    implementation(QMobileDataStore) { changing = true }
+    implementation(QMobileDataSync) { changing = true }
+    implementation(QMobileUI) { changing = true }
+
 
     // Common
     implementation Libs.androidx_constraintlayout
