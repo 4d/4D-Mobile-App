@@ -83,7 +83,7 @@
 					"type": "button",
 					"top": 62,
 					"left": 77,
-					"width": 207,
+					"width": 247,
 					"height": 22,
 					"visibility": "hidden",
 					"stroke": "#808080",
@@ -99,7 +99,7 @@
 				},
 				"serverInTest": {
 					"type": "spinner",
-					"top": 64,
+					"top": 84,
 					"left": 72,
 					"width": 25,
 					"height": 19,
@@ -107,7 +107,7 @@
 				},
 				"serverInTest.label": {
 					"type": "text",
-					"top": 65,
+					"top": 85,
 					"left": 91,
 					"width": 337,
 					"height": 17,
@@ -165,5 +165,6 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "SOURCE_Handler"
+	"method": "SOURCE_Handler",
+	"geometryStamp": 6
 }

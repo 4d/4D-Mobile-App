@@ -37,9 +37,12 @@ Case of
 		// Autosave
 		PROJECT.save()
 		
-		var $simctl : cs:C1710.simctl
-		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
-		
+		If (Is macOS:C1572)
+			
+			var $simctl : cs:C1710.simctl
+			$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+			
+		End if 
 		
 		$product:=path.products().folder(PROJECT.product.name)
 		$build:=$product.folder("build")
