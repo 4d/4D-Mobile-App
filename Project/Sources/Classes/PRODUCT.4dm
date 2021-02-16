@@ -423,54 +423,6 @@ Function displayTarget
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
-	// Populate the target value into te project
-Function setTarget($check : Boolean)
-	
-	ASSERT:C1129(False:C215; "SHOULD BE OBSOLETE")
-	
-	If (Form:C1466.$ios & Form:C1466.$android)
-		
-		Form:C1466.info.target:=New collection:C1472("iOS"; "android")
-		
-	Else 
-		
-		If (Not:C34(Form:C1466.$android))
-			
-			// According to platform
-			Form:C1466.info.target:=Choose:C955(Is macOS:C1572; "iOS"; "android")
-			
-		Else 
-			
-			Form:C1466.info.target:=Choose:C955(Form:C1466.$android; "android"; "iOS")
-			
-		End if 
-	End if 
-	
-	PROJECT.save()
-	
-	// Update the project folder
-	PROJECT.prepare()
-	
-	// Update UI
-	This:C1470.displayTarget()
-	This:C1470.displayIcon()
-	
-	If (Count parameters:C259>=1)
-		
-		If ($check)
-			
-			// Launch the verification of the development tools, if any
-			If (Form:C1466.$ios & Is macOS:C1572 & Not:C34(Bool:C1537(Form:C1466.$project.$xCode.ready)))\
-				 | (Form:C1466.$android & Not:C34(Bool:C1537(Form:C1466.$project.$studio.ready)))
-				
-				CALL WORKER:C1389(Form:C1466.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-					"caller"; Form:C1466.$mainWindow; "project"; Form:C1466.$project))
-				
-			End if 
-		End if 
-	End if 
-	
 	//=========================================================
 	//=                      OBSOLETE                         =
 	//=========================================================

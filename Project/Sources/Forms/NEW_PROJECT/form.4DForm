@@ -43,7 +43,7 @@
 						"onMouseLeave"
 					],
 					"style": "custom",
-					"icon": "/RESOURCES/images/os/iOS-32.png",
+					"icon": "/RESOURCES/images/os/iOS.png",
 					"dataSource": "Form:C1466.$ios",
 					"dataSourceTypeHint": "boolean",
 					"focusable": false,
@@ -85,7 +85,7 @@
 						"onMouseLeave"
 					],
 					"style": "custom",
-					"icon": "/RESOURCES/images/os/Android-32.png",
+					"icon": "/RESOURCES/images/os/Android.png",
 					"dataSource": "Form:C1466.$android",
 					"dataSourceTypeHint": "boolean",
 					"method": "ObjectMethods/android.4dm",

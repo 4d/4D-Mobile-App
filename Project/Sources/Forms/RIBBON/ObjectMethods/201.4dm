@@ -45,7 +45,7 @@ Case of
 				
 				If (Form:C1466.status.xCode)
 					
-					$menu.append("iosSimulators").icon("images/os/iOS.png").disable()
+					$menu.append("iosSimulators").icon("images/os/iOS-24.png").disable()
 					
 					If (Form:C1466.devices.apple.length>0)
 						
@@ -65,7 +65,7 @@ Case of
 				
 				$menu.line()
 				
-				$menu.append("androidSimulators").icon("images/os/android.png").disable()
+				$menu.append("androidSimulators").icon("images/os/android-24.png").disable()
 				
 				If (Form:C1466.status.studio)
 					

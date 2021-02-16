@@ -68,14 +68,16 @@ Attaches an image to the widget
    Possible values for proxy values are:
     • "#{folder/}picturename" or "file:{folder/}picturename" if the picture comes from a file stored in the Resources folder
     • variable name if the picture comes from a picture variable
-    • number, preceded with a question mark (ex.: “?250”) if the picture comes from a picture library
+    • number, preceded with a question mark (ex.: “?250”) if the picture comes from a picture library (OBSOLETE)
 */
 Function setPicture($proxy : Text)->$this : Object
 	
 	Case of 
 			
 			//______________________________________________________
-		: (This:C1470.type=Object type 3D button:K79:17)
+		: (This:C1470.type=Object type 3D button:K79:17)\
+			 | (This:C1470.type=Object type 3D checkbox:K79:27)\
+			 | (This:C1470.type=Object type 3D radio button:K79:24)
 			
 			This:C1470.setFormat(";"+$proxy)
 			

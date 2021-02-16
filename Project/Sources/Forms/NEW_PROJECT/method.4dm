@@ -6,9 +6,9 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Load:K2:1)
 		
-		If (Is Windows:C1573)
+		If (Is Windows:C1573)  //| True
 			
-			cs:C1710.button.new("ios").hide()
+			cs:C1710.button.new("ios").disable()
 			
 		End if 
 		
@@ -17,9 +17,14 @@ Case of
 		
 		GOTO OBJECT:C206(*; "name")
 		
-		If (Is Windows:C1573)
+		If (Is Windows:C1573)  //| True
 			
 			Form:C1466.$android:=True:C214
+			Form:C1466.$ios:=False:C215
+			
+		Else 
+			
+			Form:C1466.$ios:=True:C214
 			
 		End if 
 		

@@ -8,8 +8,12 @@ Case of
 	: ($e.code=On Clicked:K2:4)\
 		 & (Not:C34(Form:C1466.$android))
 		
-		Form:C1466.$ios:=Is macOS:C1572 & False:C215
-		Form:C1466.$android:=Is Windows:C1573
+		If (Is Windows:C1573)
+			
+			// Force Android
+			Form:C1466.$android:=True:C214
+			
+		End if 
 		
 		//______________________________________________________
 	: ($e.code=On Mouse Enter:K2:33)

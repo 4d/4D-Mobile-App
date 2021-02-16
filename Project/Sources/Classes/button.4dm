@@ -135,6 +135,100 @@ Function setPopupMenu($value : Variant)->$this : Object
 	
 	$this:=This:C1470
 	
+	//═════════════════════════════════════════════════
+	// Picture linked to a button
+Function setPicture($proxy : Text)->$this : cs:C1710.button
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			// Remove picture
+			Super:C1706.setFormat(";#")
+			
+			//______________________________________________________
+		: (Position:C15("path:"; $proxy)=1)\
+			 | (Position:C15("file:"; $proxy)=1)
+			
+			Super:C1706.setPicture($proxy)
+			
+			//______________________________________________________
+		: (Position:C15("#"; $proxy)=1)  // Shortcut for Resources folder
+			
+			Super:C1706.setPicture("path:/RESOURCES/"+Replace string:C233($proxy; "#"; ""))
+			
+			//______________________________________________________
+		: (Position:C15("/"; $proxy)=1)
+			
+			Super:C1706.setPicture("path:/RESOURCES"+$proxy)
+			
+			//______________________________________________________
+		Else 
+			
+			Super:C1706.setPicture("path:/RESOURCES/"+$proxy)
+			
+			//______________________________________________________
+	End case 
+	
+	$this:=This:C1470
+	
+	//═════════════════════════════════════════════════
+	// Background picture linked to a button (Custom style)
+Function setBackgroundPicture($proxy : Text)->$this : cs:C1710.button
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			// Remove background picture
+			This:C1470.setFormat(";;#")
+			
+			//______________________________________________________
+		: (Position:C15("path:"; $proxy)=1)\
+			 | (Position:C15("file:"; $proxy)=1)
+			
+			This:C1470.setFormat(";;"+$proxy)
+			
+			//______________________________________________________
+		: (Position:C15("#"; $proxy)=1)  // Shortcut for Resources folder
+			
+			This:C1470.setFormat(";;path:/RESOURCES/"+Replace string:C233($proxy; "#"; ""))
+			
+			//______________________________________________________
+		: (Position:C15("/"; $proxy)=1)
+			
+			This:C1470.setFormat(";;path:/RESOURCES"+$proxy)
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470.setFormat(";;path:/RESOURCES/"+$proxy)
+			
+			//______________________________________________________
+	End case 
+	
+	$this:=This:C1470
+	
+	//═════════════════════════════════════════════════
+	// Number of states present in picture used as icon for the 3D button, and which 
+	// will be used by 4D to represent the standard button states (from 0 to 4)
+Function setNumStates($states : Integer)->$this : cs:C1710.button
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.setFormat(";;;;;;;;;;;;"+String:C10($states))
+		
+	Else 
+		
+		// Default is 4
+		This:C1470.setFormat(";;;;;;;;;;;;4")
+		
+	End if 
+	
+	$this:=This:C1470
+	
 /*═════════════════════════════════════════════════
 A hack to force a button to be boolean type
 	

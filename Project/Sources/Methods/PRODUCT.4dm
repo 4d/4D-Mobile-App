@@ -27,9 +27,15 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				If (Is Windows:C1573)
 					
-					$ƒ.android.disable()
 					$ƒ.ios.disable()
 					
+					If (Form:C1466.$ios)
+						
+						$ƒ.ios.setPicture("#images/os/iOS-32.png")\
+							.setBackgroundPicture()\
+							.setNumStates(1)
+						
+					End if 
 				End if 
 				
 			Else 
@@ -113,7 +119,7 @@ Else   // <== WIDGETS METHOD
 					
 					// Update UI
 					$ƒ.displayTarget()
-					$ƒ.displayIcon()					
+					$ƒ.displayIcon()
 					$ƒ.call("updateRibbon")
 					
 					//______________________________________________________

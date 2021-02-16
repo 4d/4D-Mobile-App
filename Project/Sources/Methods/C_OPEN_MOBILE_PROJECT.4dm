@@ -60,11 +60,10 @@ If (FEATURE.with("wizards"))
 			+"<span style='font-size: 13pt;font-weight: normal'>"\
 			+"  {description}</span></span>")
 		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/os/iOS-32.png").platformPath; $iOS)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/os/iOS.png").platformPath; $iOS)
 		TRANSFORM PICTURE:C988($iOS; Crop:K61:7; 0; 0; 32; 32)  // Keep the grey one
 		
 		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/os/Android-32.png").platformPath; $android)
-		TRANSFORM PICTURE:C988($android; Crop:K61:7; 0; 32; 32; 32)  // Keep the blue one
 		
 		CREATE THUMBNAIL:C679($blank; $blank; 32; 32)
 		
