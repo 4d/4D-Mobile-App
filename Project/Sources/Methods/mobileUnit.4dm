@@ -111,10 +111,12 @@ Case of
 		//______________________________________________________
 	: ($Txt_in="checkInstall")
 		
+		// Check without message
+		$Obj_out.silent:=True:C214
+		
 		//If (FEATURE.with("android"))
 		//EXECUTE METHOD("editor_CHECK_INSTALLATION"; $Obj_out)
 		//Else 
-		
 		EXECUTE METHOD:C1007("Xcode_CheckInstall"; $Obj_out)
 		
 		//End if 
