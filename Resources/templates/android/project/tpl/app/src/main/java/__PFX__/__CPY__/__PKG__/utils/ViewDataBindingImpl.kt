@@ -12,7 +12,7 @@ import com.qmobile.qmobiledatasync.utils.ViewDataBindingInterface
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 {{#tableNames_navigation}}
-import {{prefix}}.{{company}}.{{app_name}}.databinding.FragmentDetail{{name}}Binding
+import {{prefix}}.{{company}}.{{app_name}}.databinding.FragmentDetail{{nameCamelCase}}Binding
 {{/tableNames_navigation}}
 import {{prefix}}.{{company}}.{{app_name}}.databinding.FragmentListBinding
 {{#tableNames}}
@@ -47,7 +47,7 @@ class ViewDataBindingImpl :
     ) {
         when (viewDataBinding) {
             {{#tableNames_navigation}}
-            is FragmentDetail{{name}}Binding -> viewDataBinding.viewModel = entityViewModel as EntityViewModel{{name}}
+            is FragmentDetail{{nameCamelCase}}Binding -> viewDataBinding.viewModel = entityViewModel as EntityViewModel{{name}}
             {{/tableNames_navigation}}
             else -> throw java.lang.IllegalArgumentException()
         }
