@@ -209,7 +209,7 @@ Function start  // Starts emulator
 	If ($1="Pixel_4")
 		
 		This:C1470.asynchronous()\
-			.launch(This:C1470.cmd+" -avd \""+$1+"\" -skin pixel_4 -skindir \""+This:C1470.androidSDKFolder().folder("skins").path+"\" -no-boot-anim")
+			.launch(This:C1470.cmd+" -avd \""+$1+"\" -skin pixel_4 -skindir \""+This:C1470.androidSDKFolder().folder("skins").path+"\" -memory 512 -no-boot-anim")
 		
 	Else 
 		

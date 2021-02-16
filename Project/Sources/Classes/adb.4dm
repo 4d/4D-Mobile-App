@@ -119,7 +119,7 @@ Function getAvdName
 	
 	If ((This:C1470.outputStream#Null:C1517) & (String:C10(This:C1470.outputStream)#""))
 		
-		$avdName_Col:=Split string:C1554(String:C10(This:C1470.outputStream); "\r")
+		$avdName_Col:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
 		
 		If ($avdName_Col.length>1)
 			// First line is the avd name
