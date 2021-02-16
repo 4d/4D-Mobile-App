@@ -9,29 +9,29 @@ or the special "booted" string which will cause simctl to pick a booted device.
 If multiple devices are booted when the "booted" device is selected, simctl
 will choose one of them.
 
-Subcmds:
+Subcmds (those used are preceded by a dash):
   create              Create a new device.
   clone               Clone an existing device.
   upgrade             Upgrade a device to a newer runtime.
-• delete              Delete spcified devices, unavailable devices, or all devices.
+- delete              Delete spcified devices, unavailable devices, or all devices.
   pair                Create a new watch and phone pair.
   unpair              Unpair a watch and phone pair.
   pair_activate       Set a given pair as active.
-• erase               Erase a device's contents and settings.
-• boot                Boot a device.
-• shutdown            Shutdown a device.
+- erase               Erase a device's contents and settings.
+- boot                Boot a device.
+- shutdown            Shutdown a device.
   rename              Rename a device.
   getenv              Print an environment variable from a running device.
-• openurl             Open a URL in a device.
+- openurl             Open a URL in a device.
   addmedia            Add photos, live photos, videos, or contacts to the library of a device.
-• install             Install an app on a device.
-• uninstall           Uninstall an app from a device.
-  get_app_container   Print the path of the installed app's container
+- install             Install an app on a device.
+- uninstall           Uninstall an app from a device.
+- get_app_container   Print the path of the installed app's container
   install_app_data    Install an xcappdata package to a device, replacing the current contents of the container.
-• launch              Launch an application by identifier on a device.
-• terminate           Terminate an application by identifier on a device.
+- launch              Launch an application by identifier on a device.
+- terminate           Terminate an application by identifier on a device.
   spawn               Spawn a process by executing a given executable on a device.
-• list                List available devices, device types, runtimes, or device pairs.
+- list                List available devices, device types, runtimes, or device pairs.
   icloud_sync         Trigger iCloud sync on a device.
   pbsync              Sync the pasteboard content from one pasteboard to another.
   pbcopy              Copy standard input onto the device pasteboard.
@@ -64,7 +64,7 @@ Class constructor($iosDeploymentTarget : Text)
 		
 	End if 
 	
-	This:C1470._cleanup()
+	This:C1470._cleanupOldDevices()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns (and set if any) the default device
@@ -551,6 +551,31 @@ Function isSimulatorAppLaunched()->$launched : Boolean
 	$launched:=(Position:C15(This:C1470.simulatorApp.path; This:C1470.outputStream)>0)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Test if an app is installed on a device
+Function isAppInstalled($bundleID : Text; $simulator : Text)->$installed : Boolean
+	
+	var $cmd : Text
+	var $device : Object
+	
+	$cmd:="xcrun simctl get_app_container"
+	
+	If (Count parameters:C259>=2)
+		
+		$device:=This:C1470.device($simulator)
+		$cmd:=$cmd+" "+$device.udid+" "
+		
+	Else 
+		
+		// Use the current device
+		$cmd:=$cmd+" booted "
+		
+	End if 
+	
+	This:C1470.launch($cmd+This:C1470.singleQuoted($bundleID))
+	
+	$installed:=This:C1470.success
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Install an app by identifier on a device.
 Function installApp($bundleID : Text; $simulator : Text)
 	
@@ -745,6 +770,6 @@ Function _kill($simulator : Text; $wait : Boolean)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Delete accumulated a sizable cache of old devices
-Function _cleanup()
+Function _cleanupOldDevices()
 	
 	This:C1470.launch("xcrun simctl delete unavailable")

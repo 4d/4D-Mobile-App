@@ -44,6 +44,11 @@ Function cacheSdkApple()
 	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
 	
 /*========================================================*/
+Function cacheSdkAppleUnzipped()
+	var $0 : 4D:C1709.Folder
+	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/sdk")
+	
+/*========================================================*/
 Function cacheSdkAndroid()
 	var $0 : 4D:C1709.File
 	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip")
@@ -57,10 +62,10 @@ Function cacheSdkAndroidUnzipped()
 Function cacheSDK()
 	var $0 : 4D:C1709.Folder
 	
-	$0:=This:C1470.cache().folder("sdk")
+	$0:=This:C1470.systemCaches().folder("sdk")
 	
 /*========================================================*/
-Function cache()  // 4D Mobile cache folder
+Function systemCaches()  // 4D Mobile cache folder
 	var $0 : 4D:C1709.Folder
 	
 	If (Is macOS:C1572)

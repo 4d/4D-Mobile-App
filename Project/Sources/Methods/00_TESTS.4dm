@@ -803,17 +803,6 @@ Case of
 		//________________________________________
 	: (False:C215)
 		
-		$o1:=Folder:C1567(_o_env_System_path("caches"); fk platform path:K87:2).folder("com.4d.mobile").folder("sdk")
-		$o:=sdk(New object:C1471("action"; "cacheFolder"))
-		ASSERT:C1129($o1.platformPath=$o.platformPath)
-		
-		$t:=Convert path POSIX to system:C1107(_o_env_System_path("caches"; True:C214)+"com.4d.mobile/sdk/")
-		$tt:=sdk(New object:C1471("action"; "cacheFolder")).platformPath
-		ASSERT:C1129($t=$tt)
-		
-		//________________________________________
-	: (False:C215)
-		
 		GET FIELD PROPERTIES:C258(5; 11; $Lon_type)
 		ASSERT:C1129($Lon_type=_o_Is float:K8:26)
 		

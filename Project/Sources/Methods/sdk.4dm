@@ -56,7 +56,8 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			//______________________________________________________
 		: ($Obj_param.action="cacheFolder")
 			
-			$Obj_result:=Folder:C1567("/Library/Caches/com.4d.mobile/sdk")
+			//$Obj_result:=Folder("/Library/Caches/com.4d.mobile/sdk")
+			$Obj_result:=cs:C1710.path.new().cacheSdkAppleUnzipped()
 			
 			//______________________________________________________
 		: ($Obj_param.action="install")

@@ -329,9 +329,6 @@ Case of
 			
 		End if 
 		
-		//SET TIMER(-1)
-		$form.buildButtons.distributeHorizontally($form)
-		
 		//______________________________________________________
 	Else 
 		

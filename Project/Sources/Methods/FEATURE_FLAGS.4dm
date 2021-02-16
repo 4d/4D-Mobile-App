@@ -123,19 +123,18 @@ FEATURE.unstable("templateClass")
 FEATURE.unstable("searchWithBarCode")
 
 /* _____________
-ANDROID
+19
 _____________*/
+FEATURE.unstable("withSimulatorClass")  //use simctl intead of _o_simulator
+
 FEATURE.unstable("android")  // Android support global flag
 FEATURE.unstable("wizards")  // Use a wizard instead of standard dialogs to create or open a project
-
 
 /* _____________
 WIP
 _____________*/
 
 FEATURE.wip("iconActionMenu")  //use action button for icon on product panel
-
-FEATURE.wip("withSimulatorClass")  //use simctl intead of _o_simulator
 
 FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component 
 //FEATURE.vdl("testCompression")

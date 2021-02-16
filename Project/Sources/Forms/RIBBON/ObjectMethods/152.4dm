@@ -37,14 +37,7 @@ Case of
 		// Autosave
 		PROJECT.save()
 		
-		If (Is macOS:C1572)
-			
-			var $simctl : cs:C1710.simctl
-			$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
-			
-		End if 
-		
-		$product:=path.products().folder(PROJECT.product.name)
+		$product:=cs:C1710.path.new().products().folder(PROJECT.product.name)
 		$build:=$product.folder("build")
 		
 		$could:=New object:C1471(\
@@ -116,6 +109,9 @@ Case of
 			If (Is macOS:C1572)
 				
 				var $device : Object
+				var $simctl : cs:C1710.simctl
+				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+				
 				$device:=$simctl.device(Form:C1466.currentDevice)
 				
 				If ($device#Null:C1517)  // Else android device

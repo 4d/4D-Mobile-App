@@ -273,13 +273,20 @@ If ($Obj_in.create)
 	$appManifest.id:=String:C10($appManifest.team.id)+"."+$appManifest.application.id
 	
 	If (FEATURE.with(117618))
+		
 		If (Bool:C1537($Obj_project.deepLinking.enabled))
+			
 			If (Length:C16(String:C10($Obj_project.deepLinking.urlScheme))>0)
+				
 				$appManifest.urlScheme:=String:C10($Obj_project.deepLinking.urlScheme)
 				$appManifest.urlScheme:=Replace string:C233($appManifest.urlScheme; "://"; "")
+				
 			End if 
+			
 			If (Length:C16(String:C10($Obj_project.deepLinking.associatedDomain))>0)
+				
 				$appManifest.associatedDomain:=String:C10($Obj_project.deepLinking.associatedDomain)
+				
 			End if 
 		End if 
 	End if 
@@ -341,21 +348,26 @@ If ($Obj_in.create)
 		$Obj_out.formatters:=formatters(New object:C1471("action"; "getByName")).formatters
 		
 		// Duplicate the template {
-		If (FEATURE.with("templateClass"))  // add feature flag if test not possible with new code
+		If (FEATURE.with("templateClass"))  // Add feature flag if test not possible with new code
+			
 			$Obj_out.template:=cs:C1710.MainTemplate.new(New object:C1471(\
 				"template"; $Obj_template; \
 				"path"; $Obj_in.path; \
 				"tags"; $Obj_tags; \
 				"formatters"; $Obj_out.formatters; \
 				"project"; $Obj_project)).run()
+			
 		Else 
+			
 			$Obj_out.template:=_o_templates(New object:C1471(\
 				"template"; $Obj_template; \
 				"path"; $Obj_in.path; \
 				"tags"; $Obj_tags; \
 				"formatters"; $Obj_out.formatters; \
 				"project"; $Obj_project))
+			
 		End if 
+		
 		ob_error_combine($Obj_out; $Obj_out.template)
 		
 		$Obj_out.projfile:=$Obj_out.template.projfile
@@ -543,12 +555,18 @@ If ($Obj_in.create)
 			$Obj_out.computedCapabilities.capabilities.pushNotification:=True:C214
 			
 			If (Length:C16(String:C10($Obj_project.server.pushCertificate))>0)
+				
 				C_OBJECT:C1216($certificateFile)
 				$certificateFile:=cs:C1710.doc.new($Obj_project.server.pushCertificate).target
+				
 				If ($certificateFile.exists)
+					
 					$certificateFile.copyTo($appFolder; fk overwrite:K87:5)
+					
 				Else 
+					
 					ob_warning_add($Obj_out; "Certificate file "+String:C10($Obj_project.server.pushCertificate)+" is missing")
+					
 				End if 
 			End if 
 		End if 
@@ -556,22 +574,31 @@ If ($Obj_in.create)
 		If (FEATURE.with(117618))
 			
 			If (Bool:C1537($Obj_project.deepLinking.enabled))
+				
 				If (Length:C16(String:C10($Obj_project.deepLinking.urlScheme))>0)
+					
 					C_TEXT:C284($urlScheme)
 					$urlScheme:=String:C10($Obj_project.deepLinking.urlScheme)
 					$urlScheme:=Replace string:C233($urlScheme; "://"; "")
 					$Obj_out.computedCapabilities.capabilities.urlSchemes:=New collection:C1472($urlScheme)
+					
 				End if 
 				
 				If (Length:C16(String:C10($Obj_project.deepLinking.associatedDomain))>0)
+					
 					C_TEXT:C284($associatedDomain)
 					$associatedDomain:=String:C10($Obj_project.deepLinking.associatedDomain)
 					$associatedDomain:=Replace string:C233($associatedDomain; "https://"; "")
 					$associatedDomain:=Replace string:C233($associatedDomain; "http://"; "")
-					If (($associatedDomain[[Length:C16($associatedDomain)]])="/")  // strip last /
+					
+					If (($associatedDomain[[Length:C16($associatedDomain)]])="/")  // Strip last /
+						
 						$associatedDomain:=Substring:C12($associatedDomain; 1; Length:C16($associatedDomain)-1)
+						
 					End if 
+					
 					$Obj_out.computedCapabilities.capabilities.associatedDomain:=$associatedDomain
+					
 				End if 
 			End if 
 			
@@ -579,10 +606,14 @@ If ($Obj_in.create)
 		
 		C_OBJECT:C1216($isSearchable)
 		$isSearchable:=ob findPropertyValues($Obj_project; "searchableWithBarcode")
+		
 		If ($isSearchable.success)
+			
 			If ($isSearchable.value.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
+				
 				// XXX could check that we have positive value? $isSearchable
 				$Obj_out.computedCapabilities.capabilities.camera:=True:C214
+				
 			End if 
 		End if 
 		
@@ -877,9 +908,7 @@ If ($Obj_out.success)
 			If (FEATURE.with("withSimulatorClass"))
 				
 				var $log : Object
-				$log:=Formula:C1597(CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
-					"message"; $1; \
-					"importance"; $2)))
+				$log:=Formula:C1597(CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471("message"; $1; "importance"; $2)))
 				
 				var $simctl : cs:C1710.simctl
 				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
@@ -888,18 +917,17 @@ If ($Obj_out.success)
 				
 				If ($Obj_out.device#Null:C1517)
 					
-					$simctl.bootDevice($Obj_out.device.udid; True:C214)
-					
-					If (Bool:C1537($Obj_in.testing))
+					If (Not:C34($simctl.isDeviceBooted($Obj_out.device.udid)))
 						
+						$simctl.bootDevice($Obj_out.device.udid; True:C214)
 						$simctl.bringSimulatorAppToFront()
-						
-					Else 
 						
 						DELAY PROCESS:C323(Current process:C322; 60*5)
 						LAUNCH EXTERNAL PROCESS:C811("osascript -e 'tell app \"4D\" to activate'")
 						
 					End if 
+					
+					$simctl.bringSimulatorAppToFront()
 					
 					If ($simctl.isDeviceBooted($Obj_out.device.udid))
 						
@@ -907,75 +935,66 @@ If ($Obj_out.success)
 							"target"; $Obj_in.caller; \
 							"additional"; "installingTheApplication"))
 						
-						If ($verbose)
-							
-							$log.call(Null:C1517; "Uninstall the App"; Information message:K38:1)
-							
-						End if 
-						
-						// Quit App
-						$simctl.terminateApp($Obj_project.product.bundleIdentifier; $Obj_out.device.udid)
-						
-						// Better user impression because the simulator display the installation
-						DELAY PROCESS:C323(Current process:C322; 10)
-						
-						// Uninstall App
-						$simctl.uninstallApp($Obj_project.product.bundleIdentifier; $Obj_out.device.udid)
-						
-						If ($simctl.success)
+						If ($simctl.isAppInstalled($Obj_project.product.bundleIdentifier; $Obj_out.device.udid))
 							
 							If ($verbose)
 								
-								$log.call(Null:C1517; "Install the App"; Information message:K38:1)
+								$log.call(Null:C1517; "Uninstall the App"; Information message:K38:1)
 								
 							End if 
 							
-							// Install App
-							$simctl.installApp($Obj_in.product; $Obj_out.device.udid)
+							// Quit App
+							$simctl.terminateApp($Obj_project.product.bundleIdentifier; $Obj_out.device.udid)
 							
-							If (Not:C34($simctl.success))
+							// Better user impression because the simulator display the installation
+							DELAY PROCESS:C323(Current process:C322; 10)
+							
+							// Uninstall App
+							$simctl.uninstallApp($Obj_project.product.bundleIdentifier; $Obj_out.device.udid)
+							
+						End if 
+						
+						If ($verbose)
+							
+							$log.call(Null:C1517; "Install the App"; Information message:K38:1)
+							
+						End if 
+						
+						// Install App
+						$simctl.installApp($Obj_in.product; $Obj_out.device.udid)
+						
+						If (Not:C34($simctl.success))
+							
+							// Redmine #102346: RETRY, if any
+							If (Position:C15("MIInstallerErrorDomain, code=35"; $simctl.lastError)>0)
 								
-								// redmine #102346: RETRY, if any
-								If (Position:C15("MIInstallerErrorDomain, code=35"; $simctl.lastError)>0)
-									
-									$simctl.installApp($Obj_in.product; $Obj_out.device.udid)
-									
-								End if 
+								$simctl.installApp($Obj_in.product; $Obj_out.device.udid)
+								
 							End if 
+						End if 
+						
+						If ($simctl.success)
+							
+							POST_MESSAGE(New object:C1471(\
+								"target"; $Obj_in.caller; \
+								"additional"; "launchingTheApplication"))
+							
+							If ($verbose)
+								
+								$log.call(Null:C1517; "Launching the App"; Information message:K38:1)
+								
+							End if 
+							
+							// Launch App
+							$simctl.launchApp($Obj_project.product.bundleIdentifier; $Obj_out.device.udid)
 							
 							If ($simctl.success)
 								
-								POST_MESSAGE(New object:C1471(\
-									"target"; $Obj_in.caller; \
-									"additional"; "launchingTheApplication"))
-								
-								If ($verbose)
-									
-									$log.call(Null:C1517; "Launching the App"; Information message:K38:1)
-									
-								End if 
-								
-								// Launch App
-								$simctl.launchApp($Obj_project.product.bundleIdentifier; $Obj_out.device.udid)
-								
-								If (Not:C34($simctl.success))
-									
-									// Failed to launch App
-									POST_MESSAGE(New object:C1471(\
-										"type"; "alert"; \
-										"target"; $Obj_in.caller; \
-										"additional"; $simctl.lastError))
-									
-									If ($verbose)
-										
-										$log.call(Null:C1517; "Failed to launch the App ("+$simctl.lastError+")"; Information message:K38:1)
-										
-									End if 
-								End if 
+								$simctl.bringSimulatorAppToFront()
 								
 							Else 
 								
-								// Failed to install App
+								// Failed to launch App
 								POST_MESSAGE(New object:C1471(\
 									"type"; "alert"; \
 									"target"; $Obj_in.caller; \
@@ -983,13 +1002,14 @@ If ($Obj_out.success)
 								
 								If ($verbose)
 									
-									$log.call(Null:C1517; "Failed to install the App ("+$simctl.lastError+")"; Error message:K38:3)
+									$log.call(Null:C1517; "Failed to launch the App ("+$simctl.lastError+")"; Information message:K38:1)
 									
 								End if 
 							End if 
 							
 						Else 
 							
+							// Failed to install App
 							POST_MESSAGE(New object:C1471(\
 								"type"; "alert"; \
 								"target"; $Obj_in.caller; \
@@ -997,7 +1017,7 @@ If ($Obj_out.success)
 							
 							If ($verbose)
 								
-								$log.call(Null:C1517; "Failed to uninstall the App ("+$simctl.lastError+")"; Error message:K38:3)
+								$log.call(Null:C1517; "Failed to install the App ("+$simctl.lastError+")"; Error message:K38:3)
 								
 							End if 
 						End if 
@@ -1015,7 +1035,6 @@ If ($Obj_out.success)
 							$log.call(Null:C1517; "device not booted"; Error message:K38:3)
 							
 						End if 
-						
 					End if 
 					
 				Else 
@@ -1033,196 +1052,140 @@ If ($Obj_out.success)
 					End if 
 				End if 
 				
-				
 			Else 
 				
 				If (_o_simulator(New object:C1471(\
 					"action"; "open"; \
 					"editorToFront"; Bool:C1537($Obj_in.testing); \
 					"bringToFront"; Not:C34(Bool:C1537($Obj_in.testing)))).success)
-					
 					// Wait for a booted simulator
 					$Lon_start:=Milliseconds:C459
-					
 					Repeat 
-						
 						IDLE:C311
 						DELAY PROCESS:C323(Current process:C322; 60)
 						$Obj_result_device:=_o_simulator(New object:C1471(\
 							"action"; "devices"; \
 							"filter"; "booted"))
-						
 						$Obj_out.device:=$Obj_result_device
-						
 						If ($Obj_result_device.success)
-							
 							$Boo_OK:=($Obj_result_device.devices.length>0)
-							
 						End if 
 					Until ($Boo_OK)\
 						 | (Not:C34($Obj_result_device.success))\
 						 | ((Milliseconds:C459-$Lon_start)>SHARED.simulatorTimeout)
-					
 					If ($Boo_OK)
-						
 						POST_MESSAGE(New object:C1471(\
 							"target"; $Obj_in.caller; \
 							"additional"; "installingTheApplication"))
-						
 						If ($verbose)
-							
 							CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
 								"message"; "Uninstall the App"; \
 								"importance"; Information message:K38:1))
-							
 						End if 
-						
 						// Quit app
 						$Obj_out.simulator:=_o_simulator(New object:C1471(\
 							"action"; "terminate"; \
 							"identifier"; $Obj_project.product.bundleIdentifier))
-						
 						// Better user impression because the simulator display the installation
 						DELAY PROCESS:C323(Current process:C322; 10)
-						
 						// Uninstall app
 						$Obj_out.simulator:=_o_simulator(New object:C1471(\
 							"action"; "uninstall"; \
 							"identifier"; $Obj_project.product.bundleIdentifier))
-						
 						If ($Obj_out.simulator.success)
-							
 							If ($verbose)
-								
 								CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
 									"message"; "Install the App"; \
 									"importance"; Information message:K38:1))
-								
 							End if 
-							
 							// Install app
 							$Obj_out.simulator:=_o_simulator(New object:C1471(\
 								"action"; "install"; \
 								"identifier"; $Obj_in.product))
-							
 							If (Not:C34($Obj_out.simulator.success))
-								
 								// redmine #102346
 								If (Value type:C1509($Obj_out.simulator.errors)=Is collection:K8:32)
-									
 									If (Position:C15("MIInstallerErrorDomain, code=35"; String:C10($Obj_out.simulator.errors[0]))>0)
-										
 										$Obj_out.simulator:=_o_simulator(New object:C1471(\
 											"action"; "install"; \
 											"identifier"; $Obj_in.product))
-										
 									End if 
 								End if 
 							End if 
-							
 							If ($Obj_out.simulator.success)
-								
 								POST_MESSAGE(New object:C1471(\
 									"target"; $Obj_in.caller; \
 									"additional"; "launchingTheApplication"))
-								
 								If ($verbose)
-									
 									CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
 										"message"; "Launching the App"; \
 										"importance"; Information message:K38:1))
-									
 								End if 
-								
 								// Launch app
 								$Obj_out.simulator:=_o_simulator(New object:C1471(\
 									"action"; "launch"; \
 									"identifier"; $Obj_project.product.bundleIdentifier))
-								
 								If (Not:C34($Obj_out.simulator.success))
-									
 									// Failed to launch app
 									POST_MESSAGE(New object:C1471(\
 										"type"; "alert"; \
 										"target"; $Obj_in.caller; \
 										"additional"; String:C10($Obj_out.simulator.error)))
-									
 									If ($verbose)
-										
 										CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
 											"message"; "Failed to launch the App ("+$Obj_out.simulator.error+")"; \
 											"importance"; Error message:K38:3))
-										
 									End if 
 								End if 
-								
 							Else 
-								
 								// Failed to install app
 								POST_MESSAGE(New object:C1471(\
 									"type"; "alert"; \
 									"target"; $Obj_in.caller; \
 									"additional"; String:C10($Obj_out.simulator.error)))
-								
 								If ($verbose)
-									
 									CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
 										"message"; "Failed to install the App ("+$Obj_out.simulator.error+")"; \
 										"importance"; Error message:K38:3))
-									
 								End if 
 							End if 
-							
 						Else 
-							
 							// Failed to uninstall app
 							POST_MESSAGE(New object:C1471(\
 								"type"; "alert"; \
 								"target"; $Obj_in.caller; \
 								"additional"; String:C10($Obj_out.simulator.error)))
-							
 							If ($verbose)
-								
 								CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
 									"message"; "Failed to uninstall the App ("+$Obj_out.simulator.error+")"; \
 									"importance"; Error message:K38:3))
-								
 							End if 
 						End if 
-						
 					Else 
-						
 						// Failed to launch device
 						POST_MESSAGE(New object:C1471(\
 							"type"; "alert"; \
 							"target"; $Obj_in.caller; \
 							"additional"; "failedToLaunchTheSimulator"))
-						
 						If ($verbose)
-							
 							CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
 								"message"; "Failed to launch simulator"; \
 								"importance"; Error message:K38:3))
-							
 						End if 
 					End if 
-					
 				Else 
-					
 					// Failed to open simulator
 					POST_MESSAGE(New object:C1471(\
 						"type"; "alert"; \
 						"target"; $Obj_in.caller; \
 						"additional"; "failedToOpenSimulator"))
-					
 					If ($verbose)
-						
 						CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
 							"message"; "Failed to open the Simulator"; \
 							"importance"; Error message:K38:3))
-						
 					End if 
 				End if 
+				
 			End if 
 			
 			//______________________________________________________

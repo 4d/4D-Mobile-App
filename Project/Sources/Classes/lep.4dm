@@ -263,21 +263,18 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		
 	Else 
 		
-		$t:=Convert to text:C1012($output; This:C1470.charSet)
-		
-	End if 
-	
-	$t:=Replace string:C233($t; "\r\n"; "\n")
-	
-	If (Length:C16($t)>0)
-		
-		// Remove the 1st line feed, if any
-		If ($t[[1]]="\n")
+		If (BLOB size:C605($output)>0)  // Else OK is reset to 0
 			
-			$t:=Substring:C12($t; 2)
+			$t:=Convert to text:C1012($output; This:C1470.charSet)
+			
+		Else 
+			
+			CLEAR VARIABLE:C89($t)
 			
 		End if 
 	End if 
+	
+	$t:=This:C1470._cleanupStream($t)
 	
 	If (Length:C16($error)=0)
 		
@@ -285,7 +282,8 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 			
 			// ⚠️ Some commands return the error in the output stream
 			
-			If (Position:C15("ERROR:"; $t; *)=1)
+			If (Position:C15("ERROR:"; $t; *)=1)\
+				 | (Position:C15("FAILED:"; $t; *)=1)
 				
 				$error:=$t
 				
@@ -298,16 +296,6 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 	If (This:C1470.success)
 		
 		This:C1470.pid:=$pid
-		
-		If (Length:C16($t)>0)
-			
-			// Remove the last line feed, if any
-			If ($t[[Length:C16($t)]]="\n")
-				
-				$t:=Substring:C12($t; 1; Length:C16($t)-1)
-				
-			End if 
-		End if 
 		
 		Case of 
 				
@@ -365,14 +353,58 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		
 		This:C1470.pid:=0
 		This:C1470.outputStream:=Null:C1517
-		This:C1470.errorStream:=$error
-		//this.lastError:=$error
-		//This.errors.push($error)
-		This:C1470._pushError($error)
+		This:C1470.errorStream:=This:C1470._cleanupStream($error)
+		This:C1470._pushError(This:C1470.errorStream)
 		
 	End if 
 	
 	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Remove unnecessary carriage returns and line breaks from the error/output stream
+Function _cleanupStream($textToCleanUp : Text)->$cleaned : Text
+	
+	var $stop : Boolean
+	
+	$cleaned:=$textToCleanUp
+	
+	If (Length:C16($cleaned)>0)
+		
+		$cleaned:=Replace string:C233($cleaned; "\r\n"; "\n")
+		
+		// Remove the 1st line feeds, if any
+		Repeat 
+			
+			If (Length:C16($cleaned)>0)
+				
+				If ($cleaned[[1]]="\n")
+					
+					$cleaned:=Substring:C12($cleaned; 2)
+					
+				Else 
+					
+					$stop:=True:C214
+					
+				End if 
+				
+			Else 
+				
+				$stop:=True:C214
+				
+			End if 
+			
+		Until ($stop)
+		
+		If (Length:C16($cleaned)>0)
+			
+			// Remove the last line feed, if any
+			If ($cleaned[[Length:C16($cleaned)]]="\n")
+				
+				$cleaned:=Substring:C12($cleaned; 1; Length:C16($cleaned)-1)
+				
+			End if 
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Execute the external process in synchronous mode
@@ -718,7 +750,10 @@ Function _shortcut($string : Text)->$variable : Text
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _pushError($desription : Text)
 	
-	This:C1470.success:=False:C215
-	This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$desription
-	This:C1470.errors.push(This:C1470.lastError)
-	
+	If (Length:C16($desription)>0)
+		
+		This:C1470.success:=False:C215
+		This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$desription
+		This:C1470.errors.push(This:C1470.lastError)
+		
+	End if 

@@ -4,13 +4,10 @@
 If ((String:C10($in.project._buildTarget)="android")\
  | (String:C10(SHARED.buildType)="android"))
 	
-	var $mobileProjectAndroid : Object
+	var $mobileProjectAndroid : cs:C1710.MobileProjectAndroid
 	$mobileProjectAndroid:=cs:C1710.MobileProjectAndroid.new($in)
 	
 	$result:=$mobileProjectAndroid.main()
-	
-	//$result:=mobile_Project_android($in)
-	
 Else 
 	
 	$result:=mobile_Project_iOS($in)
