@@ -264,7 +264,7 @@ If ($in.create)
 	$tags.launchScreenBackgroundColor:=SHARED.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
 	
 	// setting
-	$tags.hasAction:=actions("hasAction"; $in).value
+	$tags.hasAction:=Choose:C955(Bool:C1537(actions("hasAction"; $in).value); "true"; "false")  // plist bool format
 	
 	// App manifest =================================================
 	C_OBJECT:C1216($appManifest)
