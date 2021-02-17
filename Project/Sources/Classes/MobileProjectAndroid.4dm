@@ -178,7 +178,7 @@ Function create()->$result : Object
 		
 		If (This:C1470.isOnError)
 			
-			$o.errors.insert(".Failure in project creation"; 0)  // #MARK_LOCALIZE
+			$o.errors.insert(0; ".Failure in project creation")  // #MARK_LOCALIZE
 			
 			This:C1470.postError($o.errors.join("\r"))
 			$result.errors.combine($o.errors)
@@ -256,7 +256,7 @@ Function build()->$result : Object
 		
 		If (This:C1470.isOnError)
 			
-			$o.errors.insert(".Building project failed"; 0)  // #MARK_LOCALIZE
+			$o.errors.insert(0; ".Building project failed")  // #MARK_LOCALIZE
 			
 			This:C1470.postError($o.errors.join("\r"))
 			$result.errors.combine($o.errors)
@@ -334,7 +334,7 @@ Function run()->$result : Object
 		
 		If (This:C1470.isOnError)
 			
-			$o.errors.insert("failedToLaunchTheSimulator"; 0)
+			$o.errors.insert(0; "failedToLaunchTheSimulator")
 			
 			This:C1470.postError($o.errors.join("\r"))
 			$result.errors.combine($o.errors)

@@ -150,7 +150,15 @@ Function findSerial
 	
 	For each ($emulatorLine; $1) Until ($0.serial#"")
 		
-		$serial:=Substring:C12($emulatorLine; 1; (Position:C15("\tdevice"; $emulatorLine)-1))
+		If (Position:C15("\tdevice"; $emulatorLine)>0)
+			
+			$serial:=Substring:C12($emulatorLine; 1; (Position:C15("\tdevice"; $emulatorLine)-1))
+			
+		Else 
+			
+			$serial:=Substring:C12($emulatorLine; 1; (Position:C15("\toffline"; $emulatorLine)-1))
+			
+		End if 
 		
 		// Get associated avd name
 		$Obj_avdName:=This:C1470.getAvdName($serial)
