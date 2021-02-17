@@ -97,7 +97,7 @@ If ($out.XcodeAvailable)
 			
 			$out.ready:=False:C215
 			
-			If (Not:C34($in.silent))
+			If (Not:C34(Bool:C1537($in.silent)))
 				
 				$signal:=await_MESSAGE(New object:C1471(\
 					"target"; $in.caller; \
@@ -141,7 +141,7 @@ If ($out.XcodeAvailable)
 		
 	Else 
 		
-		If (Not:C34($in.silent))
+		If (Not:C34(Bool:C1537($in.silent)))
 			
 			$signal:=await_MESSAGE(New object:C1471(\
 				"target"; $in.caller; \
@@ -178,7 +178,7 @@ If ($out.XcodeAvailable)
 		
 		If (Not:C34($Xcode.checkFirstLaunchStatus()))
 			
-			If (Not:C34($in.silent))
+			If (Not:C34(Bool:C1537($in.silent)))
 				
 				$signal:=await_MESSAGE(New object:C1471(\
 					"target"; $in.caller; \
@@ -198,7 +198,7 @@ If ($out.XcodeAvailable)
 	
 Else 
 	
-	If (Not:C34($in.silent))
+	If (Not:C34(Bool:C1537($in.silent)))
 		
 		$signal:=await_MESSAGE(New object:C1471(\
 			"target"; $in.caller; \

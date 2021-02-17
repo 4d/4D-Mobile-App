@@ -536,3 +536,7 @@ Function hostNavigationForms  // form/navigation folder
 	$0:=This:C1470.target
 	
 /*========================================================*/
+Function key()->$file : 4D:C1709.file
+	
+	$file:=Folder:C1567(MobileApps folder:K5:47; *).file("key.mobileapp")
+	

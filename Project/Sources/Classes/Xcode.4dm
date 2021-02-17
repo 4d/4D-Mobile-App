@@ -318,8 +318,7 @@ Function open
 	End if 
 	
 	//====================================================================
-Function close
-	var $1 : 4D:C1709.Folder
+Function close($target : 4D:C1709.Folder)
 	
 	var $cmd : Text
 	var $o : Object
@@ -330,11 +329,11 @@ Function close
 	
 	If (Count parameters:C259>=1)  // Close workspace or project
 		
-		$o:=$1.folders().query("extension = .xcworkspace").pop()
+		$o:=$target.folders().query("extension = .xcworkspace").pop()
 		
 		If ($o=Null:C1517)
 			
-			$o:=$1.folders().query("extension = .xcodeproj").pop()
+			$o:=$target.folders().query("extension = .xcodeproj").pop()
 			
 		End if 
 		

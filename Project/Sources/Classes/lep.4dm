@@ -750,10 +750,7 @@ Function _shortcut($string : Text)->$variable : Text
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _pushError($desription : Text)
 	
-	If (Length:C16($desription)>0)
-		
-		This:C1470.success:=False:C215
-		This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$desription
-		This:C1470.errors.push(This:C1470.lastError)
-		
-	End if 
+	This:C1470.success:=False:C215
+	This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$desription
+	This:C1470.errors.push(This:C1470.lastError)
+	

@@ -66,7 +66,7 @@ Function _pushError($desription : Text)
 	This:C1470.errors.push(Get call chain:C1662[1].name+" - "+$desription)
 	
 	//====================================================================
-	// Simple execution of LAUNCH EXTERNAL PROCESS
+	// A very simple execution of LAUNCH EXTERNAL PROCESS
 Function lep
 	var $0 : Object  // {success,out,error}
 	var $1 : Text  // Command
