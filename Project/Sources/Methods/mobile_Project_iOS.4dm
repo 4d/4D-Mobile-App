@@ -11,22 +11,23 @@
 // Manage creation, build and test run of a (iOS) project
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_BOOLEAN:C305($isDebug; $Boo_OK; $verbose)
-C_LONGINT:C283($Lon_parameters; $Lon_start)
-C_TEXT:C284($pathname; $t; $Txt_buffer)
-C_OBJECT:C1216($Obj_action; $Dir_template; $cacheFolder; $Obj_dataModel; $in; $Obj_manifest; $out)
-C_OBJECT:C1216($project; $Obj_result_build; $Obj_result_device; $server; $tags; $template)
-C_OBJECT:C1216($Obj_parameters; $Path_manifest; $Folder_destination)
+#DECLARE($in : Object)->$out : Object
 
 If (False:C215)
-	C_OBJECT:C1216(mobile_Project_iOS; $1)
 	C_OBJECT:C1216(mobile_Project_iOS; $0)
+	C_OBJECT:C1216(mobile_Project_iOS; $1)
 End if 
-// ----------------------------------------------------
-// Initialisations
+
+var $associatedDomain; $pathname; $productName; $t; $tt; $urlScheme : Text
+var $isDebug; $success; $verbose : Boolean
+var $start : Integer
+var $appManifest; $Dir_template; $fixes; $in; $isSearchable; $log; $Obj_result_build; $Obj_result_device; $out; $project : Object
+var $server; $tags; $template; $ui : Object
+var $appFolder; $cacheFolder; $destinationFolder : 4D:C1709.Folder
+var $debugLog : cs:C1710.debugLog
+var $certificateFile : cs:C1710.doc
+var $path : cs:C1710.path
+var $simctl : cs:C1710.simctl
 
 // NO PARAMETERS REQUIRED
 $isDebug:=DATABASE.isInterpreted
@@ -34,8 +35,6 @@ $cacheFolder:=ENV.caches("com.4d.mobile/"; True:C214)
 
 // Optional parameters
 If (Count parameters:C259>=1)
-	
-	$in:=$1
 	
 	// Add choice lists if any to action parameters
 	actions("addChoiceList"; $in)
@@ -70,7 +69,6 @@ If (Asserted:C1132($in.project#Null:C1517))
 	
 	If ($project.$project.folder#Null:C1517)
 		
-		var $productName : Text
 		$productName:=$project.$project.folder.name
 		
 	Else 
@@ -80,7 +78,6 @@ If (Asserted:C1132($in.project#Null:C1517))
 	End if 
 	
 	// Cleanup
-	var $t; $tt : Text
 	
 	For each ($t; $project)
 		
@@ -111,19 +108,23 @@ End if
 
 $verbose:=Bool:C1537($in.verbose) & Bool:C1537($in.caller)
 
-var $log : Object
-$log:=Choose:C955($verbose; Formula:C1597(CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471("message"; $1; "importance"; $2))); Formula:C1597(IDLE:C311))
+$verbose:=False:C215
 
-var $ui : Object
+$log:=New object:C1471(\
+"information"; Choose:C955($verbose; Formula:C1597(CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471("message"; $1; "importance"; Information message:K38:1))); Formula:C1597(IDLE:C311)); \
+"error"; Choose:C955($verbose; Formula:C1597(CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471("message"; $1; "importance"; Error message:K38:3))); Formula:C1597(IDLE:C311))\
+)
+
 $ui:=New object:C1471(\
-"withUI"; ($in.caller#Null:C1517); \
+"with"; ($in.caller#Null:C1517); \
 "show"; Choose:C955($in.caller#Null:C1517; Formula:C1597(POST_MESSAGE(New object:C1471("target"; $in.caller; "action"; "show"; "type"; "progress"; "title"; $1))); Formula:C1597(IDLE:C311)); \
 "close"; Choose:C955($in.caller#Null:C1517; Formula:C1597(POST_MESSAGE(New object:C1471("target"; $in.caller; "action"; "hide"))); Formula:C1597(IDLE:C311)); \
 "step"; Choose:C955($in.caller#Null:C1517; Formula:C1597(POST_MESSAGE(New object:C1471("target"; $in.caller; "additional"; $1))); Formula:C1597(IDLE:C311)); \
 "alert"; Choose:C955($in.caller#Null:C1517; Formula:C1597(POST_MESSAGE(New object:C1471("type"; "alert"; "target"; $in.caller; "additional"; $1))); Formula:C1597(IDLE:C311)))
 
-var $simctl : cs:C1710.simctl
 $simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+
+$path:=cs:C1710.path.new()
 
 // ----------------------------------------------------
 If ($in.create=Null:C1517)
@@ -144,7 +145,7 @@ If ($in.create)
 		"action"; "safeDelete"; \
 		"path"; $in.path))
 	
-	$log.call(Null:C1517; "Create project"; Information message:K38:1)
+	$log.information("Create project")
 	
 	// We need to reload data after login?
 	If ($project.server.authentication=Null:C1517)
@@ -156,11 +157,11 @@ If ($in.create)
 	$project.server.authentication.reloadData:=False:C215
 	
 	// If there is filter with parameters reload data after auth
-	For each ($Txt_buffer; $project.dataModel)
+	For each ($t; $project.dataModel)
 		
-		If (Value type:C1509($project.dataModel[$Txt_buffer][""].filter)=Is object:K8:27)
+		If (Value type:C1509($project.dataModel[$t][""].filter)=Is object:K8:27)
 			
-			If (Bool:C1537($project.dataModel[$Txt_buffer][""].filter.parameters))
+			If (Bool:C1537($project.dataModel[$t][""].filter.parameters))
 				
 				$project.server.authentication.reloadData:=True:C214
 				
@@ -171,9 +172,9 @@ If ($in.create)
 	// Other criteria like there is no embedded for one table ?
 	If (Not:C34($project.server.authentication.reloadData))
 		
-		For each ($Txt_buffer; $project.dataModel)
+		For each ($t; $project.dataModel)
 			
-			If (Not:C34(Bool:C1537($project.dataModel[$Txt_buffer][""].embedded)))
+			If (Not:C34(Bool:C1537($project.dataModel[$t][""].embedded)))
 				
 				$project.server.authentication.reloadData:=True:C214
 				
@@ -182,7 +183,6 @@ If ($in.create)
 	End if 
 	
 	//===============================================================
-	
 	// Create tags object for template {
 	$tags:=SHARED.tags
 	
@@ -267,7 +267,6 @@ If ($in.create)
 	$tags.hasAction:=Choose:C955(Bool:C1537(actions("hasAction"; $in).value); "true"; "false")  // plist bool format
 	
 	// App manifest =================================================
-	C_OBJECT:C1216($appManifest)
 	$appManifest:=New object:C1471(\
 		"application"; New object:C1471("id"; $project.product.bundleIdentifier; "name"; $project.product.name); \
 		"team"; New object:C1471("id"; $project.organization.teamId); \
@@ -294,7 +293,6 @@ If ($in.create)
 	End if 
 	
 	//#ACI0100704
-	var $appFolder : 4D:C1709.Folder
 	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18; *).folder($appManifest.id)
 	
 	If (Not:C34($appFolder.exists))
@@ -310,12 +308,12 @@ If ($in.create)
 	
 	// Target folder
 	$out.path:=$in.path
-	$Folder_destination:=Folder:C1567($in.path; fk platform path:K87:2)
-	$Folder_destination.create()
+	$destinationFolder:=Folder:C1567($in.path; fk platform path:K87:2)
+	$destinationFolder.create()
 	
-	ob_writeToFile($in; $Folder_destination.file("project.4dmobile"); True:C214)
+	ob_writeToFile($in; $destinationFolder.file("project.4dmobile"); True:C214)
 	
-	$Dir_template:=COMPONENT_Pathname("templates").folder($in.template)
+	$Dir_template:=$path.templates().folder($in.template)
 	
 	If (Asserted:C1132($Dir_template.file("manifest.json").exists))
 		
@@ -328,11 +326,11 @@ If ($in.create)
 	
 	$template.source:=$Dir_template.platformPath
 	$template.assets.target:=$in.path+Convert path POSIX to system:C1107($template.assets.path)+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
-	$template.assets.source:=COMPONENT_Pathname("projects").platformPath+$productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+	$template.assets.source:=$path.projects().platformPath+$productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
 	
 	$out.sdk:=sdk(New object:C1471(\
 		"action"; "install"; \
-		"file"; COMPONENT_Pathname("sdk").platformPath+$template.sdk.version+".zip"; \
+		"file"; $path.sdk().platformPath+$template.sdk.version+".zip"; \
 		"target"; $in.path; \
 		"cache"; sdk(New object:C1471("action"; "cacheFolder")).platformPath))
 	
@@ -375,7 +373,6 @@ If ($in.create)
 		ob_removeProperty($out.template; "projfile")  // redundant information
 		
 		// Add some asset fix (could optimize by merging fix)
-		C_OBJECT:C1216($fixes)
 		$fixes:=cs:C1710.Storyboards.new(Folder:C1567($in.path+"Sources"+Folder separator:K24:12+"Forms"; fk platform path:K87:2))
 		$out.colorAssetFix:=$fixes.colorAssetFix($out.template.theme)
 		ob_error_combine($out; $out.colorAssetFix)
@@ -383,11 +380,8 @@ If ($in.create)
 		$out.imageAssetFix:=$fixes.imageAssetFix()
 		ob_error_combine($out; $out.imageAssetFix)
 		
-		//}
-		
 		// Set writable target directory with all its subfolders and files
-		doc_UNLOCK_DIRECTORY(New object:C1471(\
-			"path"; $in.path))
+		doc_UNLOCK_DIRECTORY(New object:C1471("path"; $in.path))
 		
 		// ----------------------------------------------------
 		// STRUCTURE & DATA
@@ -437,13 +431,11 @@ If ($in.create)
 			
 			If (String:C10($in.dataSource.source)="server")
 				
-				//ACI0100868
-				//$File_:=Choose(Length(String($Obj_in.dataSource.keyPath))>0;doc_Absolute_path ($Obj_in.dataSource.keyPath;Get 4D folder(MobileApps folder;*));Null)
-				$pathname:=Choose:C955(Length:C16(String:C10($in.dataSource.keyPath))>0; doc_Absolute_path($in.dataSource.keyPath); Null:C1517)
+				// <NOTHING MORE TO DO>
 				
 			Else 
 				
-				$pathname:=COMPONENT_Pathname("key").platformPath
+				$pathname:=$path.key().platformPath
 				
 				If (Test path name:C476($pathname)#Is a document:K24:1)
 					
@@ -498,7 +490,7 @@ If ($in.create)
 			
 		End if 
 		
-		If ($Folder_destination.folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
+		If ($destinationFolder.folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
 			
 			$out.coreDataSet:=dataSet(New object:C1471(\
 				"action"; "coreData"; \
@@ -531,7 +523,6 @@ If ($in.create)
 		// Others (maybe move to templates, main management
 		// ----------------------------------------------------
 		
-		var $debugLog : cs:C1710.debugLog
 		$debugLog:=cs:C1710.debugLog.new(SHARED.debugLog)
 		
 		$debugLog.start()
@@ -555,7 +546,6 @@ If ($in.create)
 			
 			If (Length:C16(String:C10($project.server.pushCertificate))>0)
 				
-				var $certificateFile : cs:C1710.doc
 				$certificateFile:=cs:C1710.doc.new($project.server.pushCertificate).target
 				
 				If ($certificateFile.exists)
@@ -576,7 +566,6 @@ If ($in.create)
 				
 				If (Length:C16(String:C10($project.deepLinking.urlScheme))>0)
 					
-					C_TEXT:C284($urlScheme)
 					$urlScheme:=String:C10($project.deepLinking.urlScheme)
 					$urlScheme:=Replace string:C233($urlScheme; "://"; "")
 					$out.computedCapabilities.capabilities.urlSchemes:=New collection:C1472($urlScheme)
@@ -585,7 +574,6 @@ If ($in.create)
 				
 				If (Length:C16(String:C10($project.deepLinking.associatedDomain))>0)
 					
-					C_TEXT:C284($associatedDomain)
 					$associatedDomain:=String:C10($project.deepLinking.associatedDomain)
 					$associatedDomain:=Replace string:C233($associatedDomain; "https://"; "")
 					$associatedDomain:=Replace string:C233($associatedDomain; "http://"; "")
@@ -603,7 +591,6 @@ If ($in.create)
 			
 		End if 
 		
-		C_OBJECT:C1216($isSearchable)
 		$isSearchable:=ob findPropertyValues($project; "searchableWithBarcode")
 		
 		If ($isSearchable.success)
@@ -654,21 +641,15 @@ If ($in.create)
 				"action"; "init"; \
 				"path"; $in.path))
 			
-			//ob_error_combine ($Obj_out;$Obj_out.git) //  XXX cannot combine until there is warning not in errors
-			
 			If ($out.git.success)
 				
 				$out.git:=git(New object:C1471(\
 					"action"; "add -A"; \
 					"path"; $in.path))
 				
-				//ob_error_combine ($Obj_out;$Obj_out.git) //  XXX cannot combine until there is warning not in errors
-				
 				$out.git:=git(New object:C1471(\
 					"action"; "commit -m initial"; \
 					"path"; $in.path))
-				
-				//ob_error_combine ($Obj_out;$Obj_out.git) //  XXX cannot combine until there is warning not in errors
 				
 			End if 
 		End if 
@@ -692,7 +673,7 @@ If ($in.create)
 		
 		// Failed to unzip sdk
 		$ui.alert("failedDecompressTheSdk")
-		$log.call(Null:C1517; "Failed to unzip sdk"; Error message:K38:3)
+		$log.error("Failed to unzip sdk")
 		
 	End if 
 	
@@ -712,7 +693,7 @@ If ($out.success)
 			
 			// Archive
 			$ui.step("projectArchive")
-			$log.call(Null:C1517; "Archiving project"; Information message:K38:1)
+			$log.information("Archiving project")
 			
 			$Obj_result_build:=Xcode(New object:C1471(\
 				"action"; "build"; \
@@ -734,7 +715,7 @@ If ($out.success)
 				
 				// And export
 				$ui.step("projectArchiveExport")
-				$log.call(Null:C1517; "Exporting project archive"; Information message:K38:1)
+				$log.information("Exporting project archive")
 				
 				$Obj_result_build:=Xcode(New object:C1471(\
 					"action"; "build"; \
@@ -759,7 +740,7 @@ If ($out.success)
 			
 			// Build application
 			$ui.step("projectBuild")
-			$log.call(Null:C1517; "Building project"; Information message:K38:1)
+			$log.information("Building project")
 			
 			$Obj_result_build:=Xcode(New object:C1471(\
 				"action"; "build"; \
@@ -790,13 +771,13 @@ If ($out.success)
 		If (Not:C34($Obj_result_build.success))
 			
 			$ui.alert(String:C10($Obj_result_build.error))
-			$log.call(Null:C1517; "Build Failed ("+$Obj_result_build.error+")"; Error message:K38:3)
+			$log.error("Build Failed")
 			
 		End if 
 		
 	Else 
 		
-		$log.call(Null:C1517; "Compute data without building"; Information message:K38:1)
+		$log.information("Compute data without building")
 		
 		// Compute data without building
 		$Obj_result_build:=New object:C1471
@@ -826,7 +807,6 @@ End if
 If ($out.success)
 	
 	// Save the signature of the sources folder
-	$cacheFolder.file($productName).setText(doc_folderDigest($in.path+"Sources"+Folder separator:K24:12))
 	
 	Case of 
 			
@@ -836,7 +816,7 @@ If ($out.success)
 			$in.product:=$out.build.app
 			
 			$ui.step("launchingTheSimulator")
-			$log.call(Null:C1517; "Launching the Simulator"; Information message:K38:1)
+			$log.information("Launching the Simulator")
 			
 			If (FEATURE.with("withSimulatorClass"))
 				
@@ -862,7 +842,7 @@ If ($out.success)
 						
 						If ($simctl.isAppInstalled($project.product.bundleIdentifier; $out.device.udid))
 							
-							$log.call(Null:C1517; "Uninstall the App"; Information message:K38:1)
+							$log.information("Uninstall the App")
 							
 							// Quit App
 							$simctl.terminateApp($project.product.bundleIdentifier; $out.device.udid)
@@ -875,7 +855,7 @@ If ($out.success)
 							
 						End if 
 						
-						$log.call(Null:C1517; "Install the App"; Information message:K38:1)
+						$log.information("Install the App")
 						
 						// Install App
 						$simctl.installApp($in.product; $out.device.udid)
@@ -892,10 +872,10 @@ If ($out.success)
 						
 						If ($simctl.success)
 							
-							$ui.step("launchingTheApplication")
-							$log.call(Null:C1517; "Launching the App"; Information message:K38:1)
-							
 							// Launch App
+							$ui.step("launchingTheApplication")
+							$log.information("Launching the App")
+							
 							$simctl.launchApp($project.product.bundleIdentifier; $out.device.udid)
 							
 							If ($simctl.success)
@@ -904,33 +884,29 @@ If ($out.success)
 								
 							Else 
 								
-								// Failed to launch App
 								$ui.alert($simctl.lastError)
-								$log.call(Null:C1517; "Failed to launch the App ("+$simctl.lastError+")"; Information message:K38:1)
+								$log.information("Failed to launch the App ("+$simctl.lastError+")")
 								
 							End if 
 							
 						Else 
 							
-							// Failed to install App
 							$ui.alert($simctl.lastError)
-							$log.call(Null:C1517; "Failed to install the App ("+$simctl.lastError+")"; Error message:K38:3)
+							$log.error("Failed to install the App ("+$simctl.lastError+")")
 							
 						End if 
 						
 					Else 
 						
-						// Failed to open simulator
 						$ui.alert("failedToOpenSimulator")
-						$log.call(Null:C1517; "device not booted"; Error message:K38:3)
+						$log.error("device not booted")
 						
 					End if 
 					
 				Else 
 					
-					// Failed to open simulator
 					$ui.alert("failedToOpenSimulator")
-					$log.call(Null:C1517; "device not found"; Error message:K38:3)
+					$log.error("device not found")
 					
 				End if 
 				
@@ -941,7 +917,7 @@ If ($out.success)
 					"editorToFront"; Bool:C1537($in.testing); \
 					"bringToFront"; Not:C34(Bool:C1537($in.testing)))).success)
 					// Wait for a booted simulator
-					$Lon_start:=Milliseconds:C459
+					$start:=Milliseconds:C459
 					Repeat 
 						IDLE:C311
 						DELAY PROCESS:C323(Current process:C322; 60)
@@ -950,12 +926,12 @@ If ($out.success)
 							"filter"; "booted"))
 						$out.device:=$Obj_result_device
 						If ($Obj_result_device.success)
-							$Boo_OK:=($Obj_result_device.devices.length>0)
+							$success:=($Obj_result_device.devices.length>0)
 						End if 
-					Until ($Boo_OK)\
+					Until ($success)\
 						 | (Not:C34($Obj_result_device.success))\
-						 | ((Milliseconds:C459-$Lon_start)>SHARED.simulatorTimeout)
-					If ($Boo_OK)
+						 | ((Milliseconds:C459-$start)>SHARED.simulatorTimeout)
+					If ($success)
 						POST_MESSAGE(New object:C1471(\
 							"target"; $in.caller; \
 							"additional"; "installingTheApplication"))
@@ -1122,17 +1098,9 @@ ob_writeToDocument($out; $cacheFolder.file("lastBuild.json").platformPath; True:
 $out.param:=$in
 
 // ----------------------------------------------------
-If ($ui.withUI)
+If ($ui.with)
 	
 	// Send result
 	CALL FORM:C1391($in.caller; "EDITOR_CALLBACK"; "build"; $out)
 	
-Else 
-	
-	// Return result
-	$0:=$out
-	
 End if 
-
-// ----------------------------------------------------
-// End

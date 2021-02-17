@@ -209,8 +209,7 @@ Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	
 	//====================================================================
 	// Check if any First Launch tasks need to be performed.
-Function checkFirstLaunchStatus
-	var $0 : Boolean
+Function checkFirstLaunchStatus()->$status : Boolean
 	
 	var $o : Object
 	
@@ -218,19 +217,18 @@ Function checkFirstLaunchStatus
 	
 	If ($o.success)
 		
-		$0:=($o.out="0")  // Success even if there is some error logs. Only check status.
+		$status:=($o.out="0")  // Success even if there is some error logs. Only check status.
 		
 	End if 
 	
 	//====================================================================
-Function setToolPath
-	var $1 : Text
+Function setToolPath($title : Text)
 	
 	var $o : Object
 	
 	If (Count parameters:C259>=1)
 		
-		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; $1)
+		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; $title)
 		
 	End if 
 	
@@ -257,7 +255,6 @@ Function setToolPath
 	
 	//====================================================================
 Function installTools
-	var $0 : Boolean
 	
 	var $pid : Text
 	var $o : Object
@@ -273,23 +270,20 @@ Function installTools
 		
 		$o:=This:C1470.lep("ps "+String:C10($pid))
 		
-		//$0:=This.checkFirstLaunchStatus()
-		
 	End if 
 	
 	//====================================================================
-Function open
-	var $1 : 4D:C1709.Folder
+Function open($target : 4D:C1709.Folder)
 	
 	var $o : Object
 	
 	If (Count parameters:C259>=1)  // Open workspace or project
 		
-		$o:=$1.folders().query("extension = .xcworkspace").pop()
+		$o:=$target.folders().query("extension = .xcworkspace").pop()
 		
 		If ($o=Null:C1517)
 			
-			$o:=$1.folders().query("extension = .xcodeproj").pop()
+			$o:=$target.folders().query("extension = .xcodeproj").pop()
 			
 		End if 
 		
@@ -356,8 +350,7 @@ Function close($target : 4D:C1709.Folder)
 	$o:=This:C1470.lep($cmd)
 	
 	//====================================================================
-Function reveal
-	var $1 : Text
+Function reveal($path : Text)
 	
 	var $cmd : Text
 	var $o : Object
@@ -369,7 +362,7 @@ Function reveal
 	
 	If (Count parameters:C259>=1)
 		
-		$cmd:=$cmd+" -e '  open file \""+$1+"\"'"
+		$cmd:=$cmd+" -e '  open file \""+$path+"\"'"
 		
 	End if 
 	

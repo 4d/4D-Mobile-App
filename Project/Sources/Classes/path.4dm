@@ -39,42 +39,40 @@ Function create
                     INTERNAL
 	
 ========================================================*/
-Function cacheSdkApple()
-	var $0 : 4D:C1709.File
-	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
+Function cacheSdkApple()->$zip : 4D:C1709.File
+	$zip:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
 	
 /*========================================================*/
-Function cacheSdkAppleUnzipped()
-	var $0 : 4D:C1709.Folder
-	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/sdk")
+Function cacheSdkAppleUnzipped()->$folder : 4D:C1709.Folder
+	
+	$folder:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/sdk")
 	
 /*========================================================*/
-Function cacheSdkAndroid()
-	var $0 : 4D:C1709.File
-	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip")
+Function cacheSdkAndroid()->$zip : 4D:C1709.File
+	
+	$zip:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip")
 	
 /*========================================================*/
-Function cacheSdkAndroidUnzipped()
-	var $0 : 4D:C1709.Folder
-	$0:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/sdk")
+Function cacheSdkAndroidUnzipped()->$folder : 4D:C1709.Folder
+	
+	$folder:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/sdk")
 	
 /*========================================================*/
-Function cacheSDK()
-	var $0 : 4D:C1709.Folder
+Function cacheSDK()->$folder : 4D:C1709.Folder
 	
-	$0:=This:C1470.systemCaches().folder("sdk")
+	$folder:=This:C1470.systemCaches().folder("sdk")
 	
 /*========================================================*/
-Function systemCaches()  // 4D Mobile cache folder
-	var $0 : 4D:C1709.Folder
+Function systemCaches()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 	
 	If (Is macOS:C1572)
 		
-		$0:=Folder:C1567("/Library/Caches/com.4d.mobile")
+		$folder:=Folder:C1567("/Library/Caches/com.4d.mobile")
 		
 	Else 
 		
-		$0:=Folder:C1567(fk system folder:K87:13).parent.folder("ProgramData/4D Mobile")
+		// Use ProgramData
+		$folder:=Folder:C1567(fk system folder:K87:13).parent.folder("ProgramData/4D Mobile")
 		
 	End if 
 	
@@ -89,17 +87,23 @@ Function sdk  // sdk folder ||||||||||| OBSOLETE ||||||||||||
 	$0:=This:C1470.target
 	
 /*========================================================*/
-Function project  // project folder
-	
-	C_OBJECT:C1216($0)
+Function defaultroject()->$folder : 4D:C1709.Folder  // project folder
 	
 	This:C1470.target:=Folder:C1567("/RESOURCES/default project")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function templates  // templates folder
+Function project()->$folder : 4D:C1709.Folder  // project folder
+	
+	This:C1470.target:=Folder:C1567("/RESOURCES/default project")
+	This:C1470.exists:=This:C1470.target.exists
+	
+	$folder:=This:C1470.target
+	
+/*========================================================*/
+Function templates()->$folder : 4D:C1709.Folder  // templates folder
 	
 	C_OBJECT:C1216($0)
 	
@@ -124,18 +128,16 @@ Function templates  // templates folder
 	
 	This:C1470.exists:=This:C1470.target.exists
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function scripts  // scripts folder
-	
-	C_OBJECT:C1216($0)
+Function scripts()->$folder : 4D:C1709.Folder  // scripts folder
 	
 	// Unsandboxed for use with LEP
 	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
 Function _icons  // icons folder
