@@ -16,6 +16,8 @@
 	<___SERVER_AUTHENTIFICATION_EMAIL___/>
 	<key>auth.reloadData</key>
 	<___SERVER_AUTHENTIFICATION_RELOAD_DATA___/>
+	<key>action</key>
+	<___HAS_ACTION___/>
 	<key>server.trust</key>
 	<true/>
 	<key>log.writeToFile</key>

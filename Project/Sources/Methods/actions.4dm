@@ -336,6 +336,16 @@ Case of
 		End if 
 		
 		//______________________________________________________
+	: ($Txt_action="hasAction")
+		
+		If ($Obj_in.project.actions#Null:C1517)
+			$Obj_out.value:=$Obj_in.project.actions.length>0
+		Else 
+			$Obj_out.value:=False:C215
+		End if 
+		$Obj_out.success:=True:C214
+		
+		//______________________________________________________
 	Else 
 		
 		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Txt_action+"\"")

@@ -93,12 +93,6 @@
 			"tester_net"
 		]
 	},
-	"(androidPlatformTools)": {},
-	"(androidProcess)": {
-		"groups": [
-			"(androidPlatformTools)"
-		]
-	},
 	"[API]": {
 		"methods": [
 			"C_NEW_MOBILE_PROJECT",
@@ -966,9 +960,5 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(androidProcess)"
-		]
-	}
+	"trash": {}
 }

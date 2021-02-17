@@ -264,6 +264,9 @@ If ($Obj_in.create)
 	// Launchscreen
 	$Obj_tags.launchScreenBackgroundColor:=SHARED.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
 	
+	// setting
+	$Obj_tags.hasAction:=actions("hasAction"; $Obj_in).value
+	
 	// App manifest =================================================
 	C_OBJECT:C1216($appManifest; $appFolder)
 	$appManifest:=New object:C1471(\

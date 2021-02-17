@@ -118,6 +118,7 @@ Case of   // According to type replace the tag
 			"___SERVER_URLS___"; \
 			"___SERVER_AUTHENTIFICATION_EMAIL___"; \
 			"___SERVER_AUTHENTIFICATION_RELOAD_DATA___"; \
+			"___HAS_ACTION___"; \
 			"___SETTING_UUID___"\
 			)
 		
@@ -129,6 +130,7 @@ Case of   // According to type replace the tag
 			$Obj_tags.serverUrls; \
 			$Obj_tags.serverAuthenticationEmail; \
 			$Obj_tags.serverAuthenticationReloadData; \
+			$Obj_tags.hasAction; \
 			Generate UUID:C1066\
 			)
 		
