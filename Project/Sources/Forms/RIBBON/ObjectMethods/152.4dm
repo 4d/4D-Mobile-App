@@ -92,7 +92,7 @@ Case of
 			End if 
 			
 			// Project folder
-			$menu.append("mnuProjectFolder"; "openProjectFolder").line()
+			$menu.append("mnuProjectFolder"; "openProjectFolder")  //.line()
 			
 			// Product folder, disabled if the product folder doesn't exist
 			$menu.append("mnuProductFolder"; "openProductFolder").enable($could.openProductFolder).line()
