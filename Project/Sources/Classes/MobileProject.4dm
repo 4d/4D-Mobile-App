@@ -71,10 +71,7 @@ Function main()->$result : Object
 	
 	$result.errors:=$o.errors
 	
-	POST_MESSAGE(New object:C1471(\
-		"type"; "alert"; \
-		"target"; This:C1470.input.caller; \
-		"additional"; "Procedure complete"))
+	POST_MESSAGE(New object:C1471("target"; This:C1470.input.caller; "action"; "hide"))
 	
 	If (DATABASE.isMatrix)
 		
