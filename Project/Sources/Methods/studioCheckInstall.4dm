@@ -47,11 +47,11 @@ $studio:=cs:C1710.studio.new()
 
 If ($studio.success)
 	
-	$out.studioAvailable:=$studio.exe.exists
+	$out.applicationAvailable:=$studio.exe.exists
 	
 End if 
 
-If ($out.studioAvailable)
+If ($out.applicationAvailable)
 	
 	// Check version
 	$out.ready:=$studio.checkVersion(SHARED.studioVersion)
@@ -65,24 +65,45 @@ If ($out.studioAvailable)
 		
 		If ($out.ready)
 			
-			// CHECK JAVA
-			$out.ready:=$studio.java.exists
+			// CHECK LICENCES
+			$out.ready:=cs:C1710.sdkmanager.new().success
 			
 			If ($out.ready)
 				
-				// CHECK KOTLINC
-				$out.ready:=$studio.kotlinc.exists
+				// CHECK JAVA
+				$out.ready:=$studio.java.exists
 				
-				If (Not:C34($out.ready))
+				If ($out.ready)
 					
-					//#ERROR - kotlinc not found
+					// CHECK KOTLINC
+					$out.ready:=$studio.kotlinc.exists
+					
+					If (Not:C34($out.ready))
+						
+						//#ERROR - kotlinc not found
+						
+					End if 
+					
+				Else 
+					
+					//#ERROR - java not found
 					
 				End if 
 				
 			Else 
 				
-				//#ERROR - java not found
+				$signal:=await_MESSAGE(New object:C1471(\
+					"target"; $in.caller; \
+					"action"; "show"; \
+					"type"; "confirm"; \
+					"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
+					"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio")))
 				
+				If ($signal.validate)
+					
+					$studio.open()
+					
+				End if 
 			End if 
 			
 		Else 
@@ -91,8 +112,8 @@ If ($out.studioAvailable)
 				"target"; $in.caller; \
 				"action"; "show"; \
 				"type"; "confirm"; \
-				"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
-				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio")))
+				"title"; ".You must accept Android Studio Tools licences"; \
+				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio")))  //#MARK_LOCALIZE
 			
 			If ($signal.validate)
 				

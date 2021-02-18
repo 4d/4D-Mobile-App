@@ -60,7 +60,7 @@ If (Asserted:C1132($project#Null:C1517))
 				
 				// Check if the project was modified by another application
 				// Compare to the signature of the sources folder
-				$file:=DATABASE.home.folder("Library/Caches/com.4d.mobile/").file($project._name)
+				$file:=DATABASE.home.folder("Library/Caches/com.4D.mobile/").file($project._name)
 				
 				If ($file.exists)
 					

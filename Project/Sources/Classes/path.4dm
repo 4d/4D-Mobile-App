@@ -67,7 +67,7 @@ Function systemCaches()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 	
 	If (Is macOS:C1572)
 		
-		$folder:=Folder:C1567("/Library/Caches/com.4d.mobile")
+		$folder:=Folder:C1567("/Library/Caches/com.4D.mobile")
 		
 	Else 
 		

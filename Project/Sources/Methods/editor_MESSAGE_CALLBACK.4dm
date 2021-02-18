@@ -18,7 +18,7 @@ var $description; $t : Text
 var $validated : Boolean
 var $http; $https : Integer
 var $o : Object
-var $c; $errors : Collection
+var $c : Collection
 
 var $error : cs:C1710.error
 
@@ -40,7 +40,7 @@ Case of
 			
 			WEB START SERVER:C617
 			
-			$errors.release()
+			$error.release()
 /* STOP TRAPPING ERRORS */
 			
 			If (Bool:C1537(OK))
@@ -60,14 +60,14 @@ Case of
 					: (Bool:C1537($http))
 						
 						// Port conflict?
-						If (Num:C11($errors.lastError().error)=-1)
+						If (Num:C11($error.lastError().error)=-1)
 							
-							$t:=_o_str.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
+							$t:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
 							
 						Else 
 							
 							// Display error number
-							$t:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
+							$t:=Get localized string:C991("error:")+String:C10($error.lastError().error)
 							
 						End if 
 						
@@ -85,14 +85,14 @@ Case of
 							
 						Else 
 							
-							If (Num:C11($errors.lastError().error)=-1)
+							If (Num:C11($error.lastError().error)=-1)
 								
-								$t:=_o_str.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
+								$t:=cs:C1710.str.new.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
 								
 							Else 
 								
 								// Display error number
-								$t:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
+								$t:=Get localized string:C991("error:")+String:C10($error.lastError().error)
 								
 							End if 
 						End if 

@@ -52,11 +52,11 @@ $Xcode:=cs:C1710.Xcode.new(True:C214)
 
 If ($Xcode.success)
 	
-	$out.XcodeAvailable:=$Xcode.application.exists
+	$out.applicationAvailable:=$Xcode.application.exists
 	
 End if 
 
-If ($out.XcodeAvailable)
+If ($out.applicationAvailable)
 	
 	// Check version
 	$out.ready:=$Xcode.checkVersion(SHARED.xCodeVersion)
@@ -68,11 +68,11 @@ If ($out.XcodeAvailable)
 		
 		If ($Xcode.success)
 			
-			$out.XcodeAvailable:=$Xcode.application.exists
+			$out.applicationAvailable:=$Xcode.application.exists
 			
 		End if 
 		
-		If ($out.XcodeAvailable)
+		If ($out.applicationAvailable)
 			
 			// Check version
 			$out.ready:=$Xcode.checkVersion(SHARED.xCodeVersion)

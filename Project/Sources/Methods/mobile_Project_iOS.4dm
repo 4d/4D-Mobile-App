@@ -31,7 +31,7 @@ var $simctl : cs:C1710.simctl
 
 // NO PARAMETERS REQUIRED
 $isDebug:=DATABASE.isInterpreted
-$cacheFolder:=ENV.caches("com.4d.mobile/"; True:C214)
+$cacheFolder:=ENV.caches("com.4D.mobile/"; True:C214)
 
 // Optional parameters
 If (Count parameters:C259>=1)

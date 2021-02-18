@@ -56,7 +56,6 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			//______________________________________________________
 		: ($Obj_param.action="cacheFolder")
 			
-			//$Obj_result:=Folder("/Library/Caches/com.4d.mobile/sdk")
 			$Obj_result:=cs:C1710.path.new().cacheSdkAppleUnzipped()
 			
 			//______________________________________________________
@@ -153,13 +152,8 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 					If (Not:C34($Obj_result.success))
 						
 						// Unzip the SDK
-						
-						//#ACI0098572 [
-						//$Obj_param.cache:=env_userPath ("cacheSdk")  //   Just copy if cache exist, else unzip
-						//$Obj_param.cache:=Convert path POSIX to system(env_System_path ("caches";True)+"com.4d.mobile/sdk/")  //   Just copy if cache exist, else unzip
 						$Obj_param.cacheFolder:=sdk(New object:C1471("action"; "cacheFolder"))
 						$Obj_param.cache:=$Obj_param.cacheFolder.platformPath  // Just copy if cache exist, else unzip
-						//]
 						
 						If ($Obj_param.cacheFolder.exists)
 							

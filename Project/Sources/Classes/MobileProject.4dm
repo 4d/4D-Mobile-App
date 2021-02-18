@@ -73,12 +73,6 @@ Function main()->$result : Object
 	
 	POST_MESSAGE(New object:C1471("target"; This:C1470.input.caller; "action"; "hide"))
 	
-	If (DATABASE.isMatrix)
-		
-		SHOW ON DISK:C922(This:C1470.input.path)
-		
-	End if 
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function create

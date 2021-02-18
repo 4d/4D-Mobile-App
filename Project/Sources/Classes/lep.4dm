@@ -352,7 +352,7 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 	Else 
 		
 		This:C1470.pid:=0
-		This:C1470.outputStream:=Null:C1517
+		This:C1470.outputStream:=$t
 		This:C1470.errorStream:=This:C1470._cleanupStream($error)
 		This:C1470._pushError(This:C1470.errorStream)
 		
@@ -751,6 +751,18 @@ Function _shortcut($string : Text)->$variable : Text
 Function _pushError($desription : Text)
 	
 	This:C1470.success:=False:C215
-	This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$desription
+	
+	If (Length:C16($desription)>0)
+		
+		This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$desription
+		
+	Else 
+		
+		// Unknown error
+		This:C1470.lastError:=Get call chain:C1662[1].name+" - unknown error"
+		
+	End if 
+	
 	This:C1470.errors.push(This:C1470.lastError)
+	
 	

@@ -1,7 +1,6 @@
 Class extends MobileProject
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-//
 Class constructor
 	var $1 : Object
 	
@@ -17,7 +16,6 @@ Class constructor
 	
 	// Cleaning inner $objects
 	var $o : Object
-	
 	For each ($o; OB Entries:C1720(This:C1470.project.project).query("key=:1"; "$@"))
 		
 		OB REMOVE:C1226(This:C1470.project.project; $o.key)
@@ -31,12 +29,6 @@ Class constructor
 	
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
-	
-	If (DATABASE.isMatrix)
-		
-		SHOW ON DISK:C922(This:C1470.file.platformPath)
-		
-	End if 
 	
 	This:C1470.package:=Lowercase:C14(String:C10(This:C1470.project.project.organization.identifier))
 	
@@ -213,22 +205,16 @@ Function build()->$result : Object
 		If ($o.success)
 			
 			// * CREATE EMBEDDED DATABASE
-			//This.postStep("Creating embedded database")  // #MARK_LOCALIZE
-			
 			$o:=This:C1470.gradlew.createEmbeddedDatabase()
 			
 			If ($o.success)
 				
 				// * BUILD PROJECT WITH EMBEDDED DATA
-				//This.postStep("Building project with embedded data")  // #MARK_LOCALIZE
-				
 				$o:=This:C1470.gradlew.assembleDebug()
 				
 				If ($o.success)
 					
 					// * CHECK APK
-					//This.postStep("Checking APK")  // #MARK_LOCALIZE
-					
 					$o:=This:C1470.gradlew.checkAPKExists(This:C1470.apk)
 					
 					If (Not:C34($o.success))
@@ -257,7 +243,7 @@ Function build()->$result : Object
 		
 		If (This:C1470.isOnError)
 			
-			$o.errors.insert(0; ".Building project failed")  // #MARK_LOCALIZE
+			$o.errors.insert(0; "projectBuildFailure")
 			
 			This:C1470.postError($o.errors.join("\r"))
 			$result.errors.combine($o.errors)

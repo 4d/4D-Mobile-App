@@ -4,7 +4,6 @@ C_OBJECT:C1216($Obj_framework; $Obj_in; $Obj_out; $Obj_target; $Obj_targetPath)
 TRY
 //_____________________________________________________________
 
-//$Obj_framework:=Folder("/Library/Caches/com.4d.mobile/sdk")
 $Obj_framework:=cs:C1710.path.new().cacheSdkApple().parent.folder("sdk")
 
 If ($Obj_framework.exists)

@@ -16,8 +16,8 @@ If (False:C215)
 	C_OBJECT:C1216(mobile_Project_iOS; $1)
 	C_OBJECT:C1216(mobile_Project_iOS; $0)
 	
-	C_OBJECT:C1216(mobile_Project_android; $1)
-	C_OBJECT:C1216(mobile_Project_android; $0)
+	C_OBJECT:C1216(_o_mobile_Project_android; $1)
+	C_OBJECT:C1216(_o_mobile_Project_android; $0)
 	
 	// ----------------------------------------------------
 End if 

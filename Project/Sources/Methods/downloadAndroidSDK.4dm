@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true}
 // -> silent  =   No interface for progression
 // -> force   =   Force the download even if the file is up to date (see verification code)
-#DECLARE($silent : Boolean; $force : Boolean)
+#DECLARE($silent : Boolean; $caller : Integer; $force : Boolean)
 
 var $url : Text
 var $run; $silent; $withUI : Boolean
@@ -62,7 +62,7 @@ If ($preferences.exists)
 				
 			End if 
 			
-			If (Count parameters:C259>=2)
+			If (Count parameters:C259>=3)
 				
 				$run:=$run | $force
 				
@@ -137,8 +137,19 @@ Else
 	
 	If ($withUI)
 		
-		ALERT:C41(".Your SDK version is currently the newest version available.")
-		
+		If (Count parameters:C259>=2)
+			
+			POST_MESSAGE(New object:C1471(\
+				"action"; "show"; \
+				"target"; $caller; \
+				"type"; "alert"; \
+				"additional"; "yourVersionOf4dMobileSdkForAndroidIsUpToDate"))
+			
+		Else 
+			
+			ALERT:C41(Get localized string:C991("yourVersionOf4dMobileSdkForAndroidIsUpToDate"))
+			
+		End if 
 	End if 
 	
 	RECORD.info("The 4D Mobile Android SDK is up to date")

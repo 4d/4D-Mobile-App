@@ -9,7 +9,8 @@ If (False:C215)
 	
 	// ----------------------------------------------------
 	C_BOOLEAN:C305(downloadAndroidSDK; $1)
-	C_BOOLEAN:C305(downloadAndroidSDK; $2)
+	C_LONGINT:C283(downloadAndroidSDK; $2)
+	C_BOOLEAN:C305(downloadAndroidSDK; $3)
 	
 	// ----------------------------------------------------
 End if 
