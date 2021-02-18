@@ -27,6 +27,7 @@ Class constructor
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
 	This:C1470.project.cache_4d_sdk:=This:C1470.path.cacheSdkAndroidUnzipped().path
 	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
+	This:C1470.project.remote_url:=This:C1470.remoteUrl()
 	
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
@@ -345,3 +346,18 @@ Function run()->$result : Object
 			
 		End if 
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function remoteUrl()->$result : Text
+	
+	var $info : Object
+	var $http; $host; $port : Text
+	
+	$info:=WEB Get server info:C1531()
+	$http:=Choose:C955($info.security.HTTPSEnabled; "https"; "http")
+	$host:=$info.options.webIPAddressToListen[0]
+	$port:=String:C10(Choose:C955($info.security.HTTPSEnabled; $info.options.webHTTPSPortID; $info.options.webPortID))
+	
+	$result:=$http+"://"+$host+":"+$port
+	
