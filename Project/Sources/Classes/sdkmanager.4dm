@@ -1,4 +1,4 @@
-Class extends lep
+Class extends androidProcess
 
 /*
 Usage:
@@ -70,6 +70,18 @@ Class constructor
 	
 	If (This:C1470.success)
 		
+		var $studio : cs:C1710.studio
+		$studio:=cs:C1710.studio.new()
+		
+		If ($studio.success)
+			
+			If (Bool:C1537($studio.javaHome.exists))
+				
+				This:C1470.setEnvironnementVariable("JAVA_HOME"; $studio.javaHome.path)
+				
+			End if 
+		End if 
+		
 		This:C1470.cmd:=This:C1470.exe.path
 		
 		This:C1470.success:=This:C1470.isReady()
@@ -96,3 +108,9 @@ Function acceptLicences()->$ready : Boolean
 	This:C1470.launch("sh -c \"y | "+This:C1470.cmd+" --licenses\"")
 	
 	$ready:=This:C1470.isReady()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// List installed and available packages
+Function installedPackages()->$packages : Collection
+	
+	This:C1470.launch(This:C1470.cmd; "--list")
