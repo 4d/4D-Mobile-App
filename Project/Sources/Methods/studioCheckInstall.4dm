@@ -66,45 +66,45 @@ If ($out.applicationAvailable)
 		If ($out.ready)
 			
 			// CHECK LICENCES
-			$out.ready:=cs:C1710.sdkmanager.new().success
+			//$out.ready:=cs.sdkmanager.new().success
+			
+			//If ($out.ready)
+			
+			// CHECK JAVA
+			$out.ready:=$studio.java.exists
 			
 			If ($out.ready)
 				
-				// CHECK JAVA
-				$out.ready:=$studio.java.exists
+				// CHECK KOTLINC
+				$out.ready:=$studio.kotlinc.exists
 				
-				If ($out.ready)
+				If (Not:C34($out.ready))
 					
-					// CHECK KOTLINC
-					$out.ready:=$studio.kotlinc.exists
-					
-					If (Not:C34($out.ready))
-						
-						//#ERROR - kotlinc not found
-						
-					End if 
-					
-				Else 
-					
-					//#ERROR - java not found
+					//#ERROR - kotlinc not found
 					
 				End if 
 				
 			Else 
 				
-				$signal:=await_MESSAGE(New object:C1471(\
-					"target"; $in.caller; \
-					"action"; "show"; \
-					"type"; "confirm"; \
-					"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
-					"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio")))
+				//#ERROR - java not found
 				
-				If ($signal.validate)
-					
-					$studio.open()
-					
-				End if 
 			End if 
+			
+			//Else 
+			
+			//$signal:=await_MESSAGE(New object(\
+				"target"; $in.caller; \
+				"action"; "show"; \
+				"type"; "confirm"; \
+				"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
+				"additional"; New collection("wouldYouLikeToLaunchAppNow"; "androidStudio")))
+			
+			//If ($signal.validate)
+			
+			//$studio.open()
+			
+			//End if 
+			//End if 
 			
 		Else 
 			

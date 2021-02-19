@@ -63,7 +63,11 @@ Class constructor
 		This:C1470.home.file("Library/Android/sdk/tools/bin/sdkmanager"); \
 		This:C1470.home.file("AppData/Local/Android/sdk/tools/bin/sdkmanager.bat"))
 	
-	This:C1470.success:=This:C1470.exe.exists
+	If (This:C1470.exe.exists)
+		
+		This:C1470.cmd:=This:C1470.exe.path
+		
+	End if 
 	
 	If (This:C1470.success)
 		
@@ -81,15 +85,16 @@ Class constructor
 			End if 
 		End if 
 		
-		This:C1470.cmd:=This:C1470.exe.path
-		
-		This:C1470.success:=This:C1470.isReady()
-		
-		If (Not:C34(This:C1470.success))
+		//This.success:=This.isReady()
+		If (Not:C34(This:C1470.isReady()))
 			
-			This:C1470.success:=This:C1470.acceptLicences()
+			//This.success:=This.acceptLicences()
+			This:C1470.acceptLicences()
 			
 		End if 
+		
+		This:C1470.success:=This:C1470.exe.exists
+		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
