@@ -71,7 +71,7 @@ Case of
 					
 					If (Form:C1466.devices.android.length>0)
 						
-						For each ($device; Form:C1466.devices.android)
+						For each ($device; Form:C1466.devices.android.orderBy("name"))
 							
 							$menu.append($tab+$device.name; $device.udid)\
 								.mark($device.udid=$current).enable(Not:C34($device.missingSystemImage))
@@ -79,6 +79,10 @@ Case of
 						End for each 
 						
 						$menu.line()
+						
+					Else 
+						
+						$menu.append($tab+Get localized string:C991("createASimulator"); "createAVD").line()
 						
 					End if 
 				End if 
@@ -150,6 +154,58 @@ Case of
 				cs:C1710.Xcode.new().showDevicesWindow()
 				
 				//______________________________________________________
+			: ($menu.choice="createAVD")
+				
+				var $success : Boolean
+				var $default : Object
+				var $progress : Object
+				var $sdk : cs:C1710.sdkmanager
+				var $package : 4D:C1709.Folder
+				
+				$default:=JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).device
+				
+				// * CHECK IF THE SYSTEM IMAGE IS AVAILABLE
+				$sdk:=cs:C1710.sdkmanager.new()
+				
+				$package:=$sdk.exe.parent.parent.parent.folder(Split string:C1554($default.image; ";").join("/"))
+				
+				If ($default#Null:C1517)
+					
+					$success:=$package.exists
+					
+					If (Not:C34($success))
+						
+						// * DOWNLOAD SYTEM IMAGE
+						$progress:=progress("creatingADefaultDevice").setMessage("downloadInProgress").bringToFront()
+						$success:=$sdk.install($default.image)
+						
+					End if 
+					
+					If (cs:C1710.avd.new().createAvd($default).success)
+						
+						// * UPDATE DEVICE LIST
+						CALL WORKER:C1389(Form:C1466.editor.$worker; "editor_GET_DEVICES"; New object:C1471(\
+							"caller"; Form:C1466.editor.$mainWindow; "project"; PROJECT))
+						
+					Else 
+						
+						RECORD.error("Failed to create a default simulator")
+						
+					End if 
+					
+					If ($progress#Null:C1517)
+						
+						$progress.close()
+						
+					End if 
+					
+				Else 
+					
+					RECORD.error("missing default avd definition")
+					
+				End if 
+				
+				//______________________________________________________
 			: ($menu.choice="avdManager")
 				
 				cs:C1710.studio.new().open()
@@ -168,7 +224,7 @@ Case of
 				// Kill all booted devices, if any, & fix default
 				var $simctl : cs:C1710.simctl
 				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
-				$simctl.shutdownAllDevices()
+				//$simctl.shutdownAllDevices()
 				$simctl.setDefaultDevice($menu.choice)
 				
 				PROJECT.$ios:=True:C214

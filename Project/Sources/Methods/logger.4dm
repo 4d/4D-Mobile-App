@@ -346,6 +346,12 @@ Else
 					$o.destination.setText($o.destination.getText()+$t+String:C10($2.message)+"\n")
 					
 				End if 
+				
+				If (($2.level=Error message:K38:3)) & (Structure file:C489=Structure file:C489(*))
+					
+					$o.open()
+					
+				End if 
 			End if 
 			
 			//______________________________________________________

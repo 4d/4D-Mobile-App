@@ -5,13 +5,12 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.cmd:=This:C1470._exe().path
+	This:C1470.exe:=This:C1470._exe()
+	This:C1470.cmd:=This:C1470.exe.path
 	
 	If (Is Windows:C1573)
 		
 		This:C1470.cmd:=This:C1470.cmd+".bat"
-		
-		// Else : already set
 		
 	End if 
 	
@@ -153,8 +152,6 @@ Function availableDevices()->$devices : Collection
 			If ($pos{$index}#-1)
 				
 				$t:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
-				
-				
 				$o.target:=Substring:C12(This:C1470.outputStream; $pos{$index}; $len{$index})
 				
 			Else 
@@ -238,8 +235,12 @@ Function availableDevices()->$devices : Collection
 			$o.missingSystemImage:=(Position:C15("Missing system image"; $t)>0)
 			$o.isOutDated:=(Position:C15("no longer exists as a device"; $t)>0)
 			
-			$devices.push($o)
-			
+			If ($o.isAvailable)\
+				 & (Not:C34($o.missingSystemImage) & Not:C34($o.isOutDated))
+				
+				$devices.push($o)
+				
+			End if 
 		End while 
 		
 	Else 
@@ -247,11 +248,6 @@ Function availableDevices()->$devices : Collection
 		RECORD.error("availableDevices() failed")
 		RECORD.log(This:C1470.errors.join("\r"))
 		
-		If (Structure file:C489=Structure file:C489(*))
-			
-			RECORD.open()
-			
-		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -294,7 +290,6 @@ Function isDeviceAvailable($device : Text)->$available : Boolean
 	
 	$available:=This:C1470.devices().query("(name = :1) or (path = :1)"; $device).pop()#Null:C1517
 	
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function listAvds  // List emulators
@@ -331,18 +326,21 @@ Function isAvdExisting  // Check if avd already exists
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Create a new AVD.
 	// You must provide a name for the AVD and specify the ID of the SDK package to use
-	// 
-Function createAvd
-	var $0 : Text  // output
-	var $1 : Text  // avd name
-	var $2 : Text  // Package path of the system image for this AVD (e.g. 'system-images;android-30;google_apis;x86')
-	var $3 : Text  // The optional device definition to use. Can be a device index or id (e.g. 'pixel_xl')
+Function createAvd($avd : Object)->$this : cs:C1710.avd
 	
-	This:C1470.launch(This:C1470.cmd+" create avd -n \""+$1+"\" -k \""+$2+"\" --device \""+$3+"\"")
+	var $command : Text
 	
-	If (This:C1470.errorStream#Null:C1517)
-		$0:=This:C1470.errorStream
-	Else 
-		$0:=String:C10(This:C1470.outputStream)
+	ASSERT:C1129($avd.name#Null:C1517)
+	ASSERT:C1129($avd.image#Null:C1517)
+	
+	$command:=This:C1470.cmd+" create avd --force -n "+This:C1470.quoted($avd.name)+" -k "+This:C1470.quoted($avd.image)
+	
+	If ($avd.definition#Null:C1517)
+		
+		$command:=$command+" --device "+This:C1470.quoted($avd.definition)
+		
 	End if 
 	
+	This:C1470.launch($command)
+	
+	$this:=This:C1470

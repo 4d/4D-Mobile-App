@@ -1,4 +1,9 @@
 {
+    "device": {
+        "definition": "pixel_xl",
+        "image": "system-images;android-30;google_apis;x86",
+        "name": "Pixel_4"
+    },
     "images": [
         {
             "file": "mipmap-mdpi/ic_launcher_foreground.png",

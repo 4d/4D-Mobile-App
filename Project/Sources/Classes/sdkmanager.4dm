@@ -30,9 +30,7 @@ available packages that have not already been accepted.
 With --version, prints the current version of sdkmanager.
 
 Common Arguments:
-
 --sdk_root=<sdkRootPath>: Use the specified SDK root instead of the SDK
-
 containing this tool
 
 --channel=<channelId>: Include packages in channels up to <channelId>.
@@ -54,7 +52,6 @@ packages as well as non-obsolete.
 --verbose: Enable verbose output.
 
 * If the env var REPO_OS_OVERRIDE is set to "windows",
-
 "macosx", or "linux", packages will be downloaded for that OS.
 */
 
@@ -69,6 +66,8 @@ Class constructor
 	This:C1470.success:=This:C1470.exe.exists
 	
 	If (This:C1470.success)
+		
+		This:C1470.version:=This:C1470.getVersion()
 		
 		var $studio : cs:C1710.studio
 		$studio:=cs:C1710.studio.new()
@@ -94,6 +93,12 @@ Class constructor
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Get the current version of sdkmanager
+Function getVersion()
+	
+	This:C1470.launch(This:C1470.cmd; "--version")
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Check if all licenses have been accepted, return True if yes, False if not
 Function isReady()->$ready : Boolean
 	
@@ -110,7 +115,14 @@ Function acceptLicences()->$ready : Boolean
 	$ready:=This:C1470.isReady()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Install package(s)
+Function install($package : Text)->$success : Boolean
+	
+	This:C1470.launch(This:C1470.cmd; This:C1470.quoted($package))
+	$success:=(Position:C15("100% Unzipping"; This:C1470.outputStream)>0)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// List installed and available packages
 Function installedPackages()->$packages : Collection
 	
-	This:C1470.launch(This:C1470.cmd; "--list")
+	This:C1470.launch(This:C1470.cmd; "--list --channel=0")

@@ -398,11 +398,29 @@ Function _cleanupStream($textToCleanUp : Text)->$cleaned : Text
 		If (Length:C16($cleaned)>0)
 			
 			// Remove the last line feed, if any
-			If ($cleaned[[Length:C16($cleaned)]]="\n")
+			$stop:=False:C215
+			
+			Repeat 
 				
-				$cleaned:=Substring:C12($cleaned; 1; Length:C16($cleaned)-1)
+				If (Length:C16($cleaned)>0)
+					
+					If ($cleaned[[Length:C16($cleaned)]]="\n")
+						
+						$cleaned:=Substring:C12($cleaned; 1; Length:C16($cleaned)-1)
+						
+					Else 
+						
+						$stop:=True:C214
+						
+					End if 
+					
+				Else 
+					
+					$stop:=True:C214
+					
+				End if 
 				
-			End if 
+			Until ($stop)
 		End if 
 	End if 
 	
