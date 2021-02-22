@@ -9,11 +9,7 @@ package {{prefix}}.{{company}}.{{app_name}}.app
 import com.qmobile.qmobileapi.auth.AuthInfoHelper
 import com.qmobile.qmobiledatastore.db.AppDatabaseFactory
 import com.qmobile.qmobiledatasync.app.BaseApp
-import com.qmobile.qmobileui.utils.ApplicationUtils
-import com.qmobile.qmobileui.utils.DeviceUtils
-import com.qmobile.qmobileui.utils.FileUtils
-import com.qmobile.qmobileui.utils.FileUtils.EMBEDDED_PICTURES
-import com.qmobile.qmobileui.utils.FileUtils.EMBEDDED_PICTURES_PARENT
+import com.qmobile.qmobileui.model.QMobileUiConstants
 import com.qmobile.qmobileui.utils.LogController
 import {{prefix}}.{{company}}.{{app_name}}.BuildConfig
 import {{prefix}}.{{company}}.{{app_name}}.R
@@ -29,6 +25,9 @@ class App : BaseApp() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // QMobileUtil init
+        QMobileUiUtil.builder(context = this)
 
         // Sets the drawable resource id for login page logo
         loginLogoDrawable = R.mipmap.ic_launcher_foreground
@@ -56,47 +55,38 @@ class App : BaseApp() {
 
         // As a first step, we gather information about the app and build information
         saveEnvironmentInfo()
-        saveTableQueries()
+        AuthInfoHelper.getInstance(this).setQueries(QMobileUiUtil.appUtilities.queryJson)
         saveTableProperties()
 
         // Get list of embedded images
-        embeddedFiles = getEmbeddedImages()
+        embeddedFiles =
+            QMobileUiUtil.listAllFilesInAsset(QMobileUiConstants.EMBEDDED_PICTURES_PARENT
+                    + File.separator + QMobileUiConstants.EMBEDDED_PICTURES)
+                .filter { !it.endsWith(QMobileUiConstants.JSON_EXT) }
     }
 
     /**
      * Gets information on the app, device, team etc, and fills it in SharedPreferences
      */
     private fun saveEnvironmentInfo() {
-        val manifest = ApplicationUtils.getManifest(this)
+
         AuthInfoHelper.getInstance(this).apply {
-            appInfo = getAppInfo()
-            device = DeviceUtils.getDeviceInfo(this@App)
-            team = ApplicationUtils.getTeamInfo(manifest)
-            language = DeviceUtils.getLanguageInfo()
-            guestLogin = ApplicationUtils.getGuestLogin(manifest)
-            remoteUrl = ApplicationUtils.getRemoteUrl(manifest)
-            embeddedData = ApplicationUtils.getEmbeddedData(manifest)
-            globalStamp = ApplicationUtils.getInitialGlobalStamp(manifest)
+            appInfo = JSONObject().apply {
+                put(
+                    "id",
+                    BuildConfig.APPLICATION_ID
+                ) // com.qmobile.sample4dapp
+                put("name", BuildConfig.VERSION_NAME) // 1.0
+                put("version", BuildConfig.VERSION_CODE) // 1
+            }
+            device = QMobileUiUtil.deviceUtility.deviceInfo
+            team = QMobileUiUtil.appUtilities.teams
+            language = QMobileUiUtil.deviceUtility.language
+            guestLogin = QMobileUiUtil.appUtilities.guestLogin
+            remoteUrl = QMobileUiUtil.appUtilities.remoteUrl
+            embeddedData = QMobileUiUtil.appUtilities.embeddedData
+            globalStamp = QMobileUiUtil.appUtilities.globalStamp
         }
-    }
-
-    /**
-     * Gets app info from BuildConfig
-     */
-    private fun getAppInfo(): JSONObject {
-        return JSONObject().apply {
-            put(
-                ApplicationUtils.APPLICATION_ID,
-                BuildConfig.APPLICATION_ID
-            ) // com.qmobile.sample4dapp
-            put(ApplicationUtils.APPLICATION_NAME, BuildConfig.VERSION_NAME) // 1.0
-            put(ApplicationUtils.APPLICATION_VERSION, BuildConfig.VERSION_CODE) // 1
-        }
-    }
-
-    private fun saveTableQueries() {
-        val queriesJson = ApplicationUtils.getQueries(this)
-        AuthInfoHelper.getInstance(this).setQueries(queriesJson)
     }
 
     private fun saveTableProperties() {
@@ -105,11 +95,4 @@ class App : BaseApp() {
             AuthInfoHelper.getInstance(this).setProperties(tableName, properties)
         }
     }
-
-    private fun getEmbeddedImages(): List<String> =
-        FileUtils.listAssetFiles(
-            EMBEDDED_PICTURES_PARENT + File.separator + EMBEDDED_PICTURES,
-            this
-        )
-            .filter { !it.endsWith(FileUtils.JSON_EXT) }
 }

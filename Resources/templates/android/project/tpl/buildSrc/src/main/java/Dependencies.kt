@@ -38,6 +38,7 @@ object Versions {
     val runner = "1.3.0"
     val rx_android = "2.1.1"
     val rxjava2 = "2.2.20"
+    val sqlite = "2.1.0"
     val support = "1.2.0"
     val swiperefreshlayout = "1.1.0"
     val timber = "4.7.1"

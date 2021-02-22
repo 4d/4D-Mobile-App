@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.qmobile.qmobileui.settings.SettingsFragment"
-        android:label="Settings Fragment"
+        android:label="Settings"
         tools:layout="@xml/preferences" />
 
 </navigation>

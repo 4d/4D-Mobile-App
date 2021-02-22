@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/{{tableName_lowercase}}List"
         android:name="com.qmobile.qmobileui.list.EntityListFragment"
-        android:label="{{tableName}} List"
+        android:label="{{tableName}}"
         tools:layout="@layout/fragment_list">
 
         <action
@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/{{tableName_lowercase}}ViewPager"
         android:name="com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragment"
-        android:label="{{tableName}} ViewPager">
+        android:label="{{tableName}}">
 
         <argument
             android:name="position"

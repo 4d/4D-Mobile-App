@@ -9,6 +9,8 @@ package {{prefix}}.{{company}}.{{app_name}}.data.dao.entity
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.RawQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.qmobile.qmobiledatastore.dao.BaseDao
 import {{prefix}}.{{company}}.{{app_name}}.data.model.entity.{{tableName}}
 
@@ -29,4 +31,11 @@ abstract class {{tableName}}Dao :
 
     @Query("DELETE FROM {{tableName}}")
     abstract override suspend fun deleteAll()
+
+    @Query("SELECT * FROM {{tableName}} WHERE {{first_field}} LIKE :search")
+    abstract override fun getAllSearchData(search: String): LiveData<List<{{tableName}}>>
+
+    @RawQuery(observedEntities = [{{tableName}}::class])
+    abstract override fun getAllDynamicQuery(sqLiteQuery: SupportSQLiteQuery): LiveData<List<{{tableName}}>>
+
 }
