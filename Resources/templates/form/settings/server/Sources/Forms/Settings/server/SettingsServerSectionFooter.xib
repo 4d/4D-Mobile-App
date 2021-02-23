@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,11 +12,11 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N48-IT-9vb" customClass="AnimatableView" customModule="IBAnimatable">
-                    <rect key="frame" x="16" y="8" width="18" height="18"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N48-IT-9vb" customClass="UILabel">
+                    <rect key="frame" x="16" y="8" width="20" height="20"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G0Y-q3-uWV" customClass="ServerStatusView" customModule="QMobileUI">
-                            <rect key="frame" x="0.0" y="0.0" width="18" height="18"/>
+                            <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="_animationType" value="semiCircleSpin"/>
@@ -30,23 +27,17 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.49186444282531738" green="0.82299047708511353" blue="0.14593762159347534" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="G0Y-q3-uWV" firstAttribute="top" secondItem="N48-IT-9vb" secondAttribute="top" id="1Pm-kc-45d"/>
                         <constraint firstAttribute="bottom" secondItem="G0Y-q3-uWV" secondAttribute="bottom" id="83j-2z-LBk"/>
-                        <constraint firstAttribute="width" constant="18" id="LN9-TJ-SDb"/>
-                        <constraint firstAttribute="height" constant="18" id="pAg-gx-uEK"/>
+                        <constraint firstAttribute="width" constant="20" id="LN9-TJ-SDb"/>
+                        <constraint firstAttribute="height" constant="20" id="pAg-gx-uEK"/>
                         <constraint firstAttribute="trailing" secondItem="G0Y-q3-uWV" secondAttribute="trailing" id="uXp-AU-78j"/>
                         <constraint firstItem="G0Y-q3-uWV" firstAttribute="leading" secondItem="N48-IT-9vb" secondAttribute="leading" id="yAC-0M-ra7"/>
                     </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                            <real key="value" value="10"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="server status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rWy-yI-9ou">
-                    <rect key="frame" x="42" y="0.0" width="333" height="32"/>
+                    <rect key="frame" x="44" y="0.0" width="331" height="32"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="pJB-V1-iHJ"/>
                     </constraints>
@@ -55,7 +46,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pUu-St-FIN">
-                    <rect key="frame" x="42" y="32" width="317" height="0.0"/>
+                    <rect key="frame" x="44" y="32" width="315" height="0.0"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <color key="textColor" red="0.48618203401565552" green="0.48608440160751343" blue="0.49845379590988159" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
