@@ -20,22 +20,25 @@ Function assembleDebug
 	
 	This:C1470.launch(This:C1470.cmd+" assembleDebug")
 	
-	If (This:C1470.errorStream=Null:C1517)
-		
-		$0.success:=(This:C1470.outputStream#Null:C1517)
-		
-	Else   // errorStream not null
-		
-		$0.success:=((This:C1470.inputStream=Null:C1517) & (This:C1470.outputStream=Null:C1517))
-		
-	End if 
+	$0.success:=True:C214
 	
-	If (Not:C34($0.success))
-		
-		$0.errors.push("Failed to build project with task \"assembleDebug\"")
-		
-		// Else : all ok
-	End if 
+	// Commenting below as errorStream and outputStream are not null in both failure and success
+/*If (This.errorStream=Null)
+	
+$0.success:=(This.outputStream#Null)
+	
+Else   // errorStream not null
+	
+$0.success:=((This.inputStream=Null) & (This.outputStream=Null))
+	
+End if 
+	
+If (Not($0.success))
+	
+$0.errors.push("Failed to build project with task \"assembleDebug\"")
+	
+// Else : all ok
+End if */
 	
 	
 	
