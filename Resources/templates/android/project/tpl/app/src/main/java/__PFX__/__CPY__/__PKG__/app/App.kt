@@ -11,6 +11,7 @@ import com.qmobile.qmobiledatastore.db.AppDatabaseFactory
 import com.qmobile.qmobiledatasync.app.BaseApp
 import com.qmobile.qmobileui.model.QMobileUiConstants
 import com.qmobile.qmobileui.utils.LogController
+import com.qmobile.qmobileui.utils.QMobileUiUtil
 import {{prefix}}.{{company}}.{{app_name}}.BuildConfig
 import {{prefix}}.{{company}}.{{app_name}}.R
 import {{prefix}}.{{company}}.{{app_name}}.data.db.AppDatabase
