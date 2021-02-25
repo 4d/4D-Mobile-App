@@ -123,7 +123,8 @@ Function getAvdName
 		
 		If ($avdName_Col.length>1)
 			// First line is the avd name
-			$0.avdName:=$avdName_Col[0]
+			// Warning : on Windows, it is avd name + "\r"
+			$0.avdName:=Replace string:C233($avdName_Col[0]; "\r"; "")
 			$0.success:=True:C214
 			
 		Else 
