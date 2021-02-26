@@ -16,11 +16,15 @@ Function assembleDebug
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
+		"outputStream"; ""; \
+		"errorStream"; ""; \
 		"errors"; New collection:C1472)
 	
 	This:C1470.launch(This:C1470.cmd+" assembleDebug")
 	
 	$0.success:=True:C214
+	$0.outputStream:=This:C1470.outputStream
+	$0.errorStream:=This:C1470.errorStream
 	
 	// Commenting below as errorStream and outputStream are not null in both failure and success
 /*If (This.errorStream=Null)

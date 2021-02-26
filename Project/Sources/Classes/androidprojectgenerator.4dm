@@ -16,6 +16,8 @@ Function generate
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
+		"outputStream"; ""; \
+		"errorStream"; ""; \
 		"errors"; New collection:C1472)
 	
 	This:C1470.path:=cs:C1710.path.new()
@@ -37,6 +39,8 @@ Function generate
 				+"\"")
 			
 			$0.success:=(This:C1470.errorStream=Null:C1517)
+			$0.outputStream:=This:C1470.outputStream
+			$0.errorStream:=This:C1470.errorStream
 			
 			If (Not:C34($0.success))
 				
