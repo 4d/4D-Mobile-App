@@ -1501,7 +1501,8 @@ Case of
 		//______________________________________________________
 	: ($Obj_param.action="showDevicesWindow")
 		
-		OPEN URL:C673("xcdevice://ShowDevicesWindow")
+		OPEN URL:C673("xcdevice://ShowDevicesWindow"; *)
+		// LAUNCH EXTERNAL PROCESS("open xcdevice://showDevicesWindow")
 		$Obj_result.success:=True:C214
 		
 		//______________________________________________________

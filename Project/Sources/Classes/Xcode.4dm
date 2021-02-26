@@ -399,5 +399,8 @@ Function reveal($path : Text)
 	// Open xCode devices window
 Function showDevicesWindow
 	
-	//OPEN URL("xcdevice://showDevicesWindow"; *)
-	OPEN URL:C673("xcdevice://showSimulatorsWindow"; *)
+	// OPEN URL("xcdevice://showDevicesWindow"; *)
+	// OPEN URL("xcdevice://showSimulatorsWindow"; *) // ??? Where did you find that?
+	
+	LAUNCH EXTERNAL PROCESS:C811("open xcdevice://showDevicesWindow")
+	
