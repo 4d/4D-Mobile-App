@@ -26,6 +26,11 @@ Class constructor
 		End if 
 	End if 
 	
+	// In case of fail with android cmd, we could try this env var
+	// This:C1470.setEnvironnementVariable("ANDROID_HOME"; This:C1470.androidSDKFolder().path)
+	// This:C1470.setEnvironnementVariable("ANDROID_SDK_ROOT"; This:C1470.androidSDKFolder().path)
+	// This:C1470.setEnvironnementVariable("ANDROID_AVD_HOME"; This:C1470.androidSDKFolder().path+".android/avd")
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _exe()->$file : 4D:C1709.File
 	
