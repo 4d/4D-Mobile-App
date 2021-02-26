@@ -162,12 +162,11 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	
 	// Info.plist
 	SHARED.infoPlist:=New object:C1471(\
-		"build"; "1.0.0"; \
 		"developmentRegion"; "en"; \
 		"storyboard"; New object:C1471(\
 		"LaunchScreen"; "LaunchScreen"; \
 		"Main"; "Main"; \
-		"backgroundColor"; "white"))
+		"backgroundColor"; "white"))  // TODO check backgroundColor used?
 	
 	// Exclude some file from copy
 	SHARED.template:=New object:C1471(\

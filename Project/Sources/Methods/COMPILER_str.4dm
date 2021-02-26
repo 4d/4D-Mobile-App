@@ -7,6 +7,10 @@ If (False:C215)
 	C_TEXT:C284(str_cmpVersion; $3)
 	
 	//_____________________________
+	C_TEXT:C284(str_fullVersion; $0)
+	C_TEXT:C284(str_fullVersion; $1)
+	
+	//_____________________________
 	C_TEXT:C284(str_date; $0)
 	C_TEXT:C284(str_date; $1)
 	C_DATE:C307(str_date; $2)

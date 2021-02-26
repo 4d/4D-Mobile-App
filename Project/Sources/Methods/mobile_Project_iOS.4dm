@@ -202,6 +202,7 @@ If ($in.create)
 	// Info plist tags
 	$tags.displayName:=$project.product.name
 	$tags.version:=$project.product.version
+	$tags.build:=str_fullVersion($tags.version)
 	
 	$tags.prodUrl:=$project.server.urls.production
 	

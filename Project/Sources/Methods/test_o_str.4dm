@@ -437,5 +437,17 @@ ASSERT:C1129(str_cmpVersion("9 0"; "9 1 2"; " ")=-1)
 ASSERT:C1129(str_cmpVersion("9 1 2"; "9 0"; " ")=1)
 ASSERT:C1129(str_cmpVersion("9/1/2"; "9/0"; "/")=1)
 
+// ============================================
+
+ASSERT:C1129(str_fullVersion("")="0.0.0")
+ASSERT:C1129(str_fullVersion(".")="0.0.0")
+ASSERT:C1129(str_fullVersion("..")="0.0.0")
+ASSERT:C1129(str_fullVersion("...")="0.0.0")
+ASSERT:C1129(str_fullVersion("0")="0.0.0")
+ASSERT:C1129(str_fullVersion("9")="9.0.0")
+ASSERT:C1129(str_fullVersion("9.8")="9.8.0")
+ASSERT:C1129(str_fullVersion("9.8.7")="9.8.7")
+ASSERT:C1129(str_fullVersion("9.8.7-stable")="9.8.7")
+ASSERT:C1129(str_fullVersion("9.test.7")="9.0.7")
 
 FINALLY

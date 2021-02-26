@@ -703,9 +703,6 @@
 		],
 		"forms": [
 			"MESSAGE"
-		],
-		"classes": [
-			"message"
 		]
 	},
 	"mobile": {
@@ -868,6 +865,7 @@
 			"str_cmpVersion",
 			"str_date",
 			"str_equal",
+			"str_fullVersion",
 			"str_singleQuoted",
 			"str_URLEncode"
 		]
