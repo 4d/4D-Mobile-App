@@ -353,12 +353,18 @@ Function save()
 			
 			If (PROJECT.$dialog#Null:C1517)
 				
-				$folder.file("dialog.json").setText(JSON Stringify:C1217(PROJECT.$dialog; *))
-				
+				$file:=$folder.file("dialog.json")
+				If ($file.isWritable)
+					$file.setText(JSON Stringify:C1217(PROJECT.$dialog; *))
+					// else log?
+				End if 
 				For each ($key; PROJECT.$dialog)
 					
-					$folder.file($key+".json").setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *))
-					
+					$file:=$folder.file($key+".json")
+					If ($file.isWritable)
+						$file.setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *))
+						// else log?
+					End if 
 				End for each 
 			End if 
 			
@@ -366,12 +372,20 @@ Function save()
 			
 			$o:=OB Copy:C1225(PROJECT)
 			OB REMOVE:C1226($o.$project; "$dialog")
-			$folder.file("project.json").setText(JSON Stringify:C1217($o; *))
+			
+			$file:=$folder.file("project.json")
+			If ($file.isWritable)
+				$file.setText(JSON Stringify:C1217($o; *))
+				// Else log?
+			End if 
 			
 			If (PROJECT.$project.$catalog#Null:C1517)
 				
-				$folder.file("catalog.json").setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *))
-				
+				$file:=$folder.file("catalog.json")
+				If ($file.isWritable)
+					$file.setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *))
+					// Else log?
+				End if 
 			End if 
 		End if 
 	End if 
