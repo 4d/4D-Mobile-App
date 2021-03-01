@@ -40,7 +40,12 @@ If (Count parameters:C259>=1)
 	actions("addChoiceList"; $in)
 	
 	// Cache the last build for debug purpose
-	ob_writeToFile($in; $cacheFolder.file("lastBuild.4dmobile"); True:C214)
+	
+	// Remove circular references
+	var $o : Object
+	$o:=OB Copy:C1225($in)
+	OB REMOVE:C1226($o.project.$project; "$dialog")
+	ob_writeToFile($o; $cacheFolder.file("lastBuild.4dmobile"); True:C214)
 	
 Else 
 	
@@ -312,6 +317,7 @@ If ($in.create)
 	$destinationFolder:=Folder:C1567($in.path; fk platform path:K87:2)
 	$destinationFolder.create()
 	
+	// Cache the last build for debug purpose
 	ob_writeToFile($in; $destinationFolder.file("project.4dmobile"); True:C214)
 	
 	$Dir_template:=$path.templates().folder($in.template)
