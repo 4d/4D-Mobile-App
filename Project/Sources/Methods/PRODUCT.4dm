@@ -27,6 +27,10 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				If (Is Windows:C1573)
 					
+					$ƒ.android.setPicture("#images/os/Android-32.png")\
+						.setBackgroundPicture()\
+						.setNumStates(1)
+					
 					$ƒ.ios.disable()
 					
 					If (Form:C1466.$ios)
@@ -115,12 +119,20 @@ Else   // <== WIDGETS METHOD
 					//______________________________________________________
 				: ($e.code=On Clicked:K2:4)
 					
-					PROJECT.setTarget(True:C214)
-					
-					// Update UI
-					$ƒ.displayTarget()
-					$ƒ.displayIcon()
-					$ƒ.call("updateRibbon")
+					If (Is macOS:C1572)
+						
+						PROJECT.setTarget(True:C214)
+						
+						// Update UI
+						$ƒ.displayTarget()
+						$ƒ.displayIcon()
+						$ƒ.call("updateRibbon")
+						
+					Else 
+						
+						Form:C1466.$android:=True:C214
+						
+					End if 
 					
 					//______________________________________________________
 				: ($e.code=On Mouse Enter:K2:33)

@@ -69,7 +69,7 @@ Function iconMenu()
 			
 		Else 
 			
-			$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder")
+			$menu.append("showIconsFolder"; "openAndroidIconFolder")
 			
 		End if 
 		
