@@ -28,7 +28,7 @@ Class constructor($useDefaultPath : Boolean)
 	
 	If (This:C1470.success)
 		
-		This:C1470.version:=This:C1470.getVersion()
+		This:C1470.version:=This:C1470._getVersion()
 		This:C1470._getJava()
 		This:C1470._getKotlinc()
 		
@@ -108,11 +108,11 @@ Function lastPath
 			If (This:C1470.macOS)
 				
 				// Bundle
-				$version:=This:C1470.getVersion(Folder:C1567($pathname))
+				$version:=This:C1470._getVersion(Folder:C1567($pathname))
 				
 			Else 
 				
-				$version:=This:C1470.getVersion(File:C1566($pathname; fk platform path:K87:2))
+				$version:=This:C1470._getVersion(File:C1566($pathname; fk platform path:K87:2))
 				
 			End if 
 			
@@ -200,7 +200,7 @@ Function paths()->$instances : Collection
 	End if 
 	
 	//====================================================================
-Function getVersion($target : 4D:C1709.Folder)->$version
+Function _getVersion($target : 4D:C1709.Folder)->$version
 	
 	var $drive; $extension; $name; $path; $t : Text
 	var $indx : Integer

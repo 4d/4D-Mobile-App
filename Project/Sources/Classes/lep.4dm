@@ -92,11 +92,12 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 				// Reset
 				If (This:C1470._shortcut($variables)="_4D_OPTION_CURRENT_DIRECTORY")
 					
-					//empty string
+					// Empty string
 					This:C1470.environmentVariables[This:C1470._shortcut($variables)]:=""
 					
 				Else 
 					
+					// False is default
 					This:C1470.environmentVariables[This:C1470._shortcut($variables)]:="false"
 					
 				End if 
@@ -153,6 +154,23 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 	End case 
 	
 	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function launchAsync($command; $arguments : Variant)->$this : cs:C1710.lep
+	
+	This:C1470.asynchronous()
+	
+	If (Count parameters:C259>=2)
+		
+		$this:=This:C1470.launch($command; $arguments)
+		
+	Else 
+		
+		$this:=This:C1470.launch($command)
+		
+	End if 
+	
+	This:C1470.synchronous()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
