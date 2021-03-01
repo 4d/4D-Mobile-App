@@ -82,7 +82,7 @@ Function devices()->$devices : Collection
 Function availableDevices()->$devices : Collection
 	
 	var $t : Text
-	var $index; $start : Integer
+	var $index; $length; $start : Integer
 	var $o : Object
 	
 	$devices:=New collection:C1472
@@ -95,6 +95,8 @@ Function availableDevices()->$devices : Collection
 		
 		ARRAY LONGINT:C221($pos; 0x0000)
 		ARRAY LONGINT:C221($len; 0x0000)
+		
+		$length:=Length:C16(This:C1470.outputStream)
 		
 		While (Match regex:C1019("(?m-si)Name:\\s(\\V*)(?:\\s*Device:\\s(\\V*))?\\s*Path:\\s(\\V*)(?:\\s*Target:\\s(\\V*\\s*\\V*))?(?:\\s*Skin:\\s(\\V*))?"+\
 			"(?:\\s*Sdcard:\\s(\\V*))?(?:\\s*Error:\\s(\\V*))?"; This:C1470.outputStream; $start; $pos; $len))
@@ -244,6 +246,12 @@ Function availableDevices()->$devices : Collection
 				 & (Not:C34($o.missingSystemImage) & Not:C34($o.isOutDated))
 				
 				$devices.push($o)
+				
+			End if 
+			
+			If ($start>$length)
+				
+				$start:=$length
 				
 			End if 
 		End while 
