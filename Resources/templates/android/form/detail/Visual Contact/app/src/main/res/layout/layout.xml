@@ -11,7 +11,7 @@
         <!--ENTITY_VARIABLE-->
     </data>
 
-    <!-- Generated with detail form template named "My Custom Detail" -->
+    <!-- Generated with detail form template named "Visual Contact" -->
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -23,41 +23,38 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!-- START EDITING HERE -->
+        <!-- START EDITING HERE -->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/__SPECIFIC_ID_1__"
-                    android:layout_width="240dp"
-                    android:layout_height="240dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="192dp"
                     android:contentDescription="Image"
-                    android:elevation="4dp"
+                    android:scaleType="fitXY"
                     app:imageUrl="__IMAGE_1__"
-                    app:imageTransform='@{"CircleCrop"}'
+                    app:imageTransform='@{"Blur"}'
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:background="@tools:sample/avatars" />
 
-                <View
-                    android:id="@+id/custom_card_view"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/rounded_rect"
-                    android:backgroundTint="?colorPrimaryVariant"
+                <ImageView
+                    android:id="@+id/__SPECIFIC_ID_1__"
+                    android:layout_width="74dp"
+                    android:layout_height="74dp"
+                    android:layout_marginTop="18dp"
+                    android:contentDescription="Image"
                     android:elevation="4dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:imageUrl="__IMAGE_1__"
+                    app:imageTransform='@{"CropCircleWithBorder"}'
+                    app:layout_constraintBottom_toTopOf="@+id/__SPECIFIC_ID_2__"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_1__" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:background="@tools:sample/avatars" />
 
                 <TextView
                     android:id="@+id/__SPECIFIC_ID_2__"
@@ -69,14 +66,15 @@
                     android:layout_marginBottom="8dp"
                     android:elevation="4dp"
                     android:scrollbars="none"
+                    android:singleLine="true"
                     android:text="__TEXT_2__"
                     android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                     android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/__SPECIFIC_ID_3__"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/custom_card_view"
+                    app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_1__"
                     tools:text="My field 2" />
 
                 <TextView
@@ -86,15 +84,13 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
                     android:elevation="4dp"
-                    android:paddingBottom="16dp"
                     android:scrollbars="none"
+                    android:singleLine="true"
                     android:text="__TEXT_3__"
                     android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                     android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_2__"
@@ -116,7 +112,6 @@
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginVertical="2dp"
-                    android:backgroundTint="?colorPrimaryVariant"
                     card_view:cardCornerRadius="4dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -129,11 +124,12 @@
                                 android:id="@+id/__BUTTON_ID__"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginTop="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginBottom="16dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="8dp"
                                 android:text="__BUTTON__"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -147,15 +143,14 @@
                                 android:id="@+id/__LABEL_ID__"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginTop="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginBottom="16dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
                                 android:scrollbars="none"
+                                android:singleLine="true"
                                 android:text="__LABEL__"
-                                android:textColor="@color/white"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                                android:textColor="?colorPrimary"
                                 app:layout_constraintBottom_toTopOf="@+id/__VALUE_ID__"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -168,10 +163,10 @@
                                     android:id="@+id/__VALUE_ID__"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="16dp"
-                                    android:layout_marginTop="16dp"
-                                    android:layout_marginEnd="16dp"
-                                    android:layout_marginBottom="16dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginBottom="8dp"
                                     android:contentDescription="Image"
                                     app:imageUrl="__IMAGE__"
                                     app:layout_constraintBottom_toBottomOf="parent"
@@ -185,15 +180,16 @@
                                     android:id="@+id/__VALUE_ID__"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="16dp"
-                                    android:layout_marginEnd="16dp"
-                                    android:layout_marginBottom="16dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginBottom="8dp"
                                     android:scrollbars="none"
+                                    android:singleLine="true"
                                     android:text="__TEXT__"
                                     android:textAlignment="textStart"
                                     android:textAllCaps="false"
-                                    android:textColor="@color/white"
-                                    android:textSize="16sp"
+                                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                                    android:textColor="?colorOnSurface"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
