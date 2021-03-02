@@ -604,6 +604,7 @@ Function updateForms($field : Object; $row : Integer)
 			
 			$o.label:=$field.label
 			$o.shortLabel:=$field.shortLabel
+			$o.format:=$field.format
 			
 		End if 
 	End if 
@@ -628,6 +629,7 @@ Function updateForms($field : Object; $row : Integer)
 			
 			$o.label:=$field.label
 			$o.shortLabel:=$field.shortLabel
+			$o.format:=$field.format
 			
 		End if 
 	End if 
@@ -783,6 +785,8 @@ Function formatMenu($e : Object)
 		End if 
 		//%W+533.1
 		//%W+533.3
+		
+		This:C1470.updateForms($field; $e.row)
 		
 		// Remove error color if any
 		LISTBOX SET ROW COLOR:C1270(*; This:C1470.formats.name; $e.row; Foreground color:K23:1; lk font color:K53:24)
