@@ -22,6 +22,7 @@ object Versions {
     val espresso = "3.2.0"
     val espresso_contrib = "3.0.2"
     val glide = "4.12.0"
+    val glide_transformations = "4.3.0"
     val junit = "4.13.1"
     val kotlin = "1.4.10"
     val leakcanary = "2.0"
@@ -96,6 +97,8 @@ object Libs {
     // Glide
     val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     val glide_compiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
+    val glide_transformations = "jp.wasabeef:glide-transformations:${Versions.glide_transformations}"
+
 
     // Lifecycle
     val lifecycle_compiler = "androidx.lifecycle:lifecycle-compiler:${Versions.lifecycle}"

@@ -15,9 +15,9 @@ import com.qmobile.qmobileui.utils.QMobileUiUtil
 import {{prefix}}.{{company}}.{{app_name}}.BuildConfig
 import {{prefix}}.{{company}}.{{app_name}}.R
 import {{prefix}}.{{company}}.{{app_name}}.data.db.AppDatabase
+import {{prefix}}.{{company}}.{{app_name}}.utils.FragmentUtilImpl
 import {{prefix}}.{{company}}.{{app_name}}.utils.FromTableForViewModelImpl
 import {{prefix}}.{{company}}.{{app_name}}.utils.NavigationImpl
-import {{prefix}}.{{company}}.{{app_name}}.utils.ViewDataBindingImpl
 import {{prefix}}.{{company}}.{{app_name}}.utils.getPropertyListFromTable
 import org.json.JSONObject
 import java.io.File
@@ -49,7 +49,7 @@ class App : BaseApp() {
             AppDatabaseFactory.getAppDatabase(applicationContext, AppDatabase::class.java)
         fromTableForViewModel = FromTableForViewModelImpl()
         navigationInterface = NavigationImpl()
-        viewDataBindingInterface = ViewDataBindingImpl()
+        fragmentUtil = FragmentUtilImpl()
 
         // Setup logging
         LogController.initialize(this)

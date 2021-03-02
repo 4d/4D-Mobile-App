@@ -39,6 +39,7 @@ dependencies {
     kapt Libs.glide_compiler
 
     // Utils
+    implementation Libs.material
     implementation Libs.multidex
     implementation Libs.retrofit_converter_gson
     implementation Libs.timber
