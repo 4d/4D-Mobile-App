@@ -206,6 +206,14 @@ Case of
 					End if 
 				End if 
 				
+				If ($button=2)
+					
+					// * UPDATE DEVICE LIST
+					CALL WORKER:C1389(Form:C1466.editor.$worker; "editor_GET_DEVICES"; New object:C1471(\
+						"caller"; Form:C1466.editor.$mainWindow; "project"; PROJECT))
+					
+				End if 
+				
 				// Display the tab page
 				FORM GOTO PAGE:C247($button; *)
 				

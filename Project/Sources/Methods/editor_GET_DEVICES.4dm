@@ -26,13 +26,29 @@ Case of
 		
 		If (FEATURE.with("android"))  //🚧
 			
-			$out:=New object:C1471(\
-				"android"; cs:C1710.avd.new().availableDevices(); \
-				"apple"; cs:C1710.simctl.new(SHARED.iosDeploymentTarget).availableDevices())
+			var $avd : cs:C1710.avd
+			$avd:=cs:C1710.avd.new()
 			
-			//$out.connected:=New object(\
-				"android"; New collection; \
-				"apple"; cs.simctl.new(SHARED.iosDeploymentTarget).pluggedDevices())
+			var $simctl : cs:C1710.simctl
+			$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+			
+			$out:=New object:C1471(\
+				"android"; $avd.availableDevices(); \
+				"apple"; $simctl.availableDevices())
+			
+			If (FEATURE.with("ConnectedDevices"))
+				
+				$out.connected:=New object:C1471(\
+					"android"; New collection:C1472; \
+					"apple"; $simctl.pluggedDevices())
+				
+			Else 
+				
+				$out.connected:=New object:C1471(\
+					"android"; New collection:C1472; \
+					"apple"; New collection:C1472)
+				
+			End if 
 			
 		Else 
 			

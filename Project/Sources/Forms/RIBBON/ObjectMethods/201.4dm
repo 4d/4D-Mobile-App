@@ -39,13 +39,27 @@ Case of
 			$current:=String:C10($pref.get("simulator"))
 			
 			var $tab : Text
-			$tab:="   "
+			$tab:="       "
 			
 			If (Is macOS:C1572)
 				
 				If (Form:C1466.status.xCode)
 					
-					$menu.append("iosSimulators").icon("images/os/iOS-24.png").disable()
+					$menu.append("iOS").icon("images/os/iOS-24.png").disable()
+					
+					If (Form:C1466.devices.connected.apple.length>0)
+						
+						$menu.line()
+						
+						For each ($device; Form:C1466.devices.connected.apple)
+							
+							$menu.append($tab+$device.name; $device.udid)\
+								.mark($device.udid=$current)
+							
+						End for each 
+					End if 
+					
+					$menu.line()
 					
 					If (Form:C1466.devices.apple.length>0)
 						
@@ -65,7 +79,7 @@ Case of
 				
 				$menu.line()
 				
-				$menu.append("androidSimulators").icon("images/os/android-24.png").disable()
+				$menu.append("Android").icon("images/os/android-24.png").disable()
 				
 				If (Form:C1466.status.studio)
 					
@@ -213,7 +227,7 @@ Case of
 				cs:C1710.studio.new().open()
 				
 				//______________________________________________________
-			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-(?:[[:xdigit:]]{4}-){3}[[:xdigit:]]{12}"; $menu.choice; 1))
+			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-(?:[[:xdigit:]]{4}-){3}[[:xdigit:]]{12}"; $menu.choice; 1))  // iOS Simulator
 				
 				$device:=Form:C1466.devices.apple.query("udid = :1"; $menu.choice).pop()
 				
@@ -228,6 +242,18 @@ Case of
 				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 				//$simctl.shutdownAllDevices()
 				$simctl.setDefaultDevice($menu.choice)
+				
+				PROJECT.$ios:=True:C214
+				PROJECT.setTarget(True:C214)
+				
+				//______________________________________________________
+			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-[[:xdigit:]]{16}"; $menu.choice; 1))  // iOS Connected Device
+				
+				$device:=Form:C1466.devices.connected.apple.query("udid = :1"; $menu.choice).pop()
+				
+				// Set default simulator
+				Form:C1466.currentDevice:=$menu.choice
+				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
 				PROJECT.$ios:=True:C214
 				PROJECT.setTarget(True:C214)

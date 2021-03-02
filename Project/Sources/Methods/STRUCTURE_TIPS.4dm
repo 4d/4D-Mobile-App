@@ -54,8 +54,11 @@ If (Num:C11($e.row)>0)
 	Else 
 		
 		// Get current table
-		$table:=PROJECT.getCatalog().query("name=:1"; $1.form.form.currentTable.name).pop()
-		
+		If ($1.form.form.currentTable.name#Null:C1517)
+			
+			$table:=PROJECT.getCatalog().query("name=:1"; $1.form.form.currentTable.name).pop()
+			
+		End if 
 	End if 
 	
 	If ($table#Null:C1517)

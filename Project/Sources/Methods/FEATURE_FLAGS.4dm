@@ -138,7 +138,9 @@ FEATURE.unstable("androidBeta")  // Android support during beta phase
 WIP
 _____________*/
 
-FEATURE.wip("iconActionMenu")  //use action button for icon on product panel
+FEATURE.wip("ConnectedDevices")  // Add connected devices to the simulator tool
+
+FEATURE.wip("iconActionMenu")  // Use action button for icon on product panel
 
 FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component 
 //FEATURE.vdl("testCompression")

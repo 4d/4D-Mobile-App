@@ -218,7 +218,7 @@ Function pluggedDevices($iosDeploymentTarget : Text)->$plugged : Collection
 			
 			If ($str.setText(Substring:C12(This:C1470.outputStream; $pos{2}; $len{2})).versionCompare($minVers)>=0)
 				
-				$plugged.push(New object:C1471("name"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); "uid"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3})))
+				$plugged.push(New object:C1471("name"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); "udid"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3})))
 				
 			End if 
 			

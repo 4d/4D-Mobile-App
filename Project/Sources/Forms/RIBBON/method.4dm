@@ -171,6 +171,12 @@ Case of
 					
 					$device:=Form:C1466.devices.apple.query("udid = :1"; $simulator).pop()
 					
+					If ($device=Null:C1517) & (Form:C1466.devices.connected.apple#Null:C1517)
+						
+						$device:=Form:C1466.devices.connected.apple.query("udid = :1"; $simulator).pop()
+						
+					End if 
+					
 					If ($device#Null:C1517)
 						
 						If (PROJECT.$ios)

@@ -282,23 +282,17 @@ Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	$ok:=(This:C1470.versionCompare(This:C1470.version; $minimumVersion)>=0)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the User Home folder object
-Function homeFolder()->$folder : 4D:C1709.Folder
-	
-	$folder:=Folder:C1567(fk desktop folder:K87:19).parent  // Maybe there is a better way for all OS
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the SDK folder object
 	// ⚠️ FAILED IF THE INSTALLATION WAS MADE BY NOT USING THE DEFAULT LOCATION
 Function sdkFolder()->$folder : 4D:C1709.Folder
 	
 	If (Is macOS:C1572)
 		
-		$folder:=This:C1470.homeFolder().folder("Library/Android/sdk")
+		$folder:=This:C1470.home.folder("Library/Android/sdk")
 		
 	Else 
 		
-		$folder:=This:C1470.homeFolder().folder("AppData/Local/Android/Sdk")
+		$folder:=This:C1470.home.folder("AppData/Local/Android/Sdk")
 		
 	End if 
 	
