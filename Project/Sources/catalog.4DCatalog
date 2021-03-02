@@ -326,7 +326,13 @@
 		</table_extra>
 	</table>
 	<table name="__DeletedRecords" uuid="EF6C85E841E14777A16BC7CB97DA5B12" id="18" leave_tag_on_delete="true" prevent_journaling="true">
-		<field name="ID" uuid="F571BF97D0374372AFF27AF54428C96E" type="5" unique="true" autosequence="true" id="1"/>
+		<field name="ID" uuid="F571BF97D0374372AFF27AF54428C96E" type="5" unique="true" autosequence="true" id="1">
+			<field_extra>
+				<editor_field_info>
+					<color red="255" green="255" blue="255" alpha="0"/>
+				</editor_field_info>
+			</field_extra>
+		</field>
 		<field name="__Stamp" uuid="2D42B6C1A6634F08B5C80E4779C5E190" type="5" id="2"/>
 		<field name="__TableNumber" uuid="0A75FA85EC854F5F8A7080B3E730B8B1" type="4" id="3"/>
 		<field name="__TableName" uuid="A1FA7A56768246448C4E7DE5B375C389" type="10" limiting_length="255" id="4"/>

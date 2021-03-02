@@ -33,6 +33,9 @@ var $simctl : cs:C1710.simctl
 $isDebug:=DATABASE.isInterpreted
 $cacheFolder:=ENV.caches("com.4D.mobile/"; True:C214)
 
+$out:=New object:C1471(\
+"success"; True:C214)
+
 // Optional parameters
 If (Count parameters:C259>=1)
 	
@@ -64,9 +67,6 @@ Else
 		
 	End if 
 End if 
-
-$out:=New object:C1471(\
-"success"; True:C214)
 
 If (Asserted:C1132($in.project#Null:C1517))
 	

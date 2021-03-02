@@ -23,7 +23,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			If (FEATURE.with("android"))  // 🚧
+			If (FEATURE.with("androidBeta"))  // 🚧
 				
 				If (Is Windows:C1573)
 					

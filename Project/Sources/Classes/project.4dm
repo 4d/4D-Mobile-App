@@ -369,7 +369,6 @@ Function save()
 			End if 
 			
 			// Remove circular references
-			
 			$o:=OB Copy:C1225(PROJECT)
 			OB REMOVE:C1226($o.$project; "$dialog")
 			

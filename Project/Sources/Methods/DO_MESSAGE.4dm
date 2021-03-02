@@ -71,7 +71,7 @@ Else
 				OBJECT SET VISIBLE:C603(*; "message@"; True:C214)
 				
 				//______________________________________________________
-			: ($in.action="hide")
+			: ($in.action="hide") | ($in.action="close")
 				
 				// Don't dismiss an alert or confirmation
 				If (New collection:C1472("alert"; "confirm").indexOf(String:C10($message.type))=-1)

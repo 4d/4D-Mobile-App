@@ -30,6 +30,10 @@ Case of
 				"android"; cs:C1710.avd.new().availableDevices(); \
 				"apple"; cs:C1710.simctl.new(SHARED.iosDeploymentTarget).availableDevices())
 			
+			//$out.connected:=New object(\
+				"android"; New collection; \
+				"apple"; cs.simctl.new(SHARED.iosDeploymentTarget).pluggedDevices())
+			
 		Else 
 			
 			$out:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget).availableDevices()

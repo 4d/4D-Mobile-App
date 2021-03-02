@@ -98,8 +98,8 @@ Function availableDevices()->$devices : Collection
 		
 		$length:=Length:C16(This:C1470.outputStream)
 		
-		While (Match regex:C1019("(?m-si)Name:\\s(\\V*)(?:\\s*Device:\\s(\\V*))?\\s*Path:\\s(\\V*)(?:\\s*Target:\\s(\\V*\\s*\\V*))?(?:\\s*Skin:\\s(\\V*))?"+\
-			"(?:\\s*Sdcard:\\s(\\V*))?(?:\\s*Error:\\s(\\V*))?"; This:C1470.outputStream; $start; $pos; $len))
+		While (Match regex:C1019("(?m-si)Name:\\s(\\S*)(?:\\s*Device:\\s([^\\n]*))?\\s*Path:\\s(\\S*)(?:\\s*Target:\\s([^\\n]*\\R*[^\\n]*))?(?:\\s*Skin:"+\
+			"\\s(\\S*))?(?:\\s*Sdcard:\\s(\\S*))?(?:\\s*Error:\\s([^\\n]*))?"; This:C1470.outputStream; $start; $pos; $len))
 			
 			$o:=New object:C1471(\
 				"udid"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \

@@ -42,6 +42,7 @@ Case of
 				$androidStudio:=studioCheckInstall($in)
 				
 				If ($androidStudio.ready)
+					
 					If (Bool:C1537($in.project.$android))
 						
 						// Get the last 4D Mobile Android SDK, if any

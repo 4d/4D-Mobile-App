@@ -125,10 +125,14 @@ FEATURE.unstable("searchWithBarCode")
 /* _____________
 19
 _____________*/
-FEATURE.unstable("withSimulatorClass")  //use simctl intead of _o_simulator
-
+FEATURE.unstable("withSimulatorClass")  // Use simctl intead of _o_simulator
 FEATURE.unstable("android")  // Android support global flag
 FEATURE.unstable("wizards")  // Use a wizard instead of standard dialogs to create or open a project
+
+/* _____________
+19 BETA
+_____________*/
+FEATURE.unstable("androidBeta")  // Android support during beta phase
 
 /* _____________
 WIP

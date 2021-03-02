@@ -174,8 +174,62 @@ Function deviceTypes($type : Text)->$devices : Collection
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// List Plugged Devices
+Function pluggedDevices($iosDeploymentTarget : Text)->$plugged : Collection
+	
+	$plugged:=New collection:C1472
+	
+	var $minVers : Text
+	var $index; $start : Integer
+	var $str : cs:C1710.str
+	
+	ARRAY LONGINT:C221($len; 0)
+	ARRAY LONGINT:C221($pos; 0)
+	
+	This:C1470.resultInErrorStream:=True:C214
+	This:C1470.launch("xcrun"; "xctrace list devices")
+	This:C1470.resultInErrorStream:=False:C215
+	
+	If (This:C1470.success)
+		
+		$str:=cs:C1710.str.new()
+		
+		$index:=Position:C15("== Simulators =="; This:C1470.outputStream)
+		
+		If ($index>0)
+			
+			This:C1470.outputStream:=Substring:C12(This:C1470.outputStream; 1; $index-1)
+			
+		End if 
+		
+		If (Count parameters:C259>=1)
+			
+			$minVers:=$iosDeploymentTarget
+			
+		Else 
+			
+			$minVers:=String:C10(This:C1470.minimumVersion)
+			
+		End if 
+		
+		$start:=1
+		
+		While (Match regex:C1019("(?-msi)((?:iPhone|iPad)\\s[^(]*)\\(([^)]*)\\)\\s\\(([^)]*)\\)"; This:C1470.outputStream; $start; $pos; $len))
+			
+			If ($str.setText(Substring:C12(This:C1470.outputStream; $pos{2}; $len{2})).versionCompare($minVers)>=0)
+				
+				$plugged.push(New object:C1471("name"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); "uid"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3})))
+				
+			End if 
+			
+			$start:=$pos{3}+$len{3}
+			
+		End while 
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// List available devices (iPhone & iPad) according to the minimum iOS version target
-Function availableDevices($iosDeploymentTarget : Text)->$availableDevices : Collection
+Function availableDevices($iosDeploymentTarget : Text)->$availables : Collection
 	
 	var $key; $minVers : Text
 	var $devices : Object
@@ -194,7 +248,7 @@ Function availableDevices($iosDeploymentTarget : Text)->$availableDevices : Coll
 		
 	End if 
 	
-	$availableDevices:=New collection:C1472
+	$availables:=New collection:C1472
 	
 	This:C1470.launch("xcrun simctl"; "list devices --json devices")
 	
@@ -204,13 +258,13 @@ Function availableDevices($iosDeploymentTarget : Text)->$availableDevices : Coll
 		
 		$devices:=JSON Parse:C1218(This:C1470.outputStream).devices
 		
-		For each ($key; $devices) While ($availableDevices.length=0)
+		For each ($key; $devices) While ($availables.length=0)
 			
 			If (Match regex:C1019("(?m-si)(?:\\.iOS-(\\d+)-(\\d+))+"; $key; 1; $pos; $len))
 				
 				If ($str.setText(Substring:C12($key; $pos{1}; $len{1})+"."+Substring:C12($key; $pos{2}; $len{2})).versionCompare($minVers)>=0)
 					
-					$availableDevices:=$devices[$key].query("isAvailable = :1 AND name IN :2"; True:C214; New collection:C1472("iPad@"; "iPhone@"))
+					$availables:=$devices[$key].query("isAvailable = :1 AND name IN :2"; True:C214; New collection:C1472("iPad@"; "iPhone@"))
 					
 				End if 
 			End if 

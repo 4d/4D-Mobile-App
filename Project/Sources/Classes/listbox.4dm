@@ -376,3 +376,19 @@ Function setProperty($property : Integer; $value)->$this : cs:C1710.listbox
 	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; $property; $value)
 	
 	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function setRowsHeight($height : Integer; $unit : Integer)->$this : cs:C1710.listbox
+	
+	If (Count parameters:C259>=2)
+		
+		LISTBOX SET ROWS HEIGHT:C835(*; This:C1470.name; $height; $unit)
+		
+	Else 
+		
+		LISTBOX SET ROWS HEIGHT:C835(*; This:C1470.name; $height)
+		
+	End if 
+	
+	$this:=This:C1470
+	
