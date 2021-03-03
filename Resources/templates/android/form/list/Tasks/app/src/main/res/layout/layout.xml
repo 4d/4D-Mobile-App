@@ -19,22 +19,54 @@
         <!-- START EDITING HERE -->
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/__SPECIFIC_ID_1__"
-            style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:progress="80"
+            android:progress="100"
+            app:indicatorColor="#DDD"
+            app:indicatorSize="75dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackThickness="8dp" />
+
+        <!--suppress AndroidDomInspection -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/__SPECIFIC_ID_4__"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:progress="__PROGRESS_4__"
+            app:indicatorSize="75dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackThickness="8dp" />
 
         <TextView
-            android:id="@+id/__SPECIFIC_ID_2__"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:scrollbars="none"
+            android:singleLine="true"
+            android:text="__TEXT_4__"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="?colorOnSurface"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/__SPECIFIC_ID_4__"
+            app:layout_constraintEnd_toEndOf="@id/__SPECIFIC_ID_4__"
+            app:layout_constraintStart_toStartOf="@+id/__SPECIFIC_ID_4__"
+            app:layout_constraintTop_toTopOf="@+id/__SPECIFIC_ID_4__"
+            tools:text="4" />
+
+        <TextView
+            android:id="@+id/__SPECIFIC_ID_1__"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -43,17 +75,17 @@
             android:gravity="bottom"
             android:scrollbars="none"
             android:singleLine="true"
-            android:text="__TEXT_2__"
+            android:text="__TEXT_1__"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="?colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/__SPECIFIC_ID_3__"
+            app:layout_constraintBottom_toTopOf="@+id/__SPECIFIC_ID_2__"
             app:layout_constraintEnd_toStartOf="@id/item_arrow"
-            app:layout_constraintStart_toEndOf="@+id/__SPECIFIC_ID_1__"
+            app:layout_constraintStart_toEndOf="@+id/__SPECIFIC_ID_4__"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="My field 2" />
+            tools:text="My field 1" />
 
         <TextView
-            android:id="@+id/__SPECIFIC_ID_3__"
+            android:id="@+id/__SPECIFIC_ID_2__"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -61,30 +93,32 @@
             android:layout_marginBottom="8dp"
             android:scrollbars="none"
             android:singleLine="true"
-            android:text="__TEXT_3__"
+            android:text="__TEXT_2__"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="?colorOnSurface"
             app:layout_constraintEnd_toStartOf="@id/item_arrow"
-            app:layout_constraintStart_toEndOf="@+id/__SPECIFIC_ID_1__"
-            app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_2__"
-            tools:text="My field 3" />
+            app:layout_constraintStart_toEndOf="@+id/__SPECIFIC_ID_4__"
+            app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_1__"
+            tools:text="My field 2" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/__SPECIFIC_ID_4__"
+            android:id="@+id/__SPECIFIC_ID_3__"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:clickable="false"
+            android:enabled="false"
             android:scrollbars="none"
             android:singleLine="true"
-            android:text="__TEXT_4__"
+            android:text="__TEXT_3__"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="?colorOnSurface"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/__SPECIFIC_ID_1__"
-            app:layout_constraintTop_toBottomOf="@id/__SPECIFIC_ID_3__"
+            app:layout_constraintStart_toEndOf="@+id/__SPECIFIC_ID_4__"
+            app:layout_constraintTop_toBottomOf="@id/__SPECIFIC_ID_2__"
             tools:text="My field 3" />
 
         <ImageView

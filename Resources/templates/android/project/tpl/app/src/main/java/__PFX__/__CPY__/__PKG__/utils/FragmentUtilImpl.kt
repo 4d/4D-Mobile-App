@@ -57,9 +57,9 @@ class FragmentUtilImpl :
      * Provides the list form type
      */
     override fun layoutType(tableName: String): String = when (tableName) {
-        {{#tableNames_navigation}}
+        {{#tableNames_layout}}
         "{{name}}" -> "{{layout_manager_type}}"
-        {{/tableNames_navigation}}
+        {{/tableNames_layout}}
         else -> "LINEAR"
     }
 }
