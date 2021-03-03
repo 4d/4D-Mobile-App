@@ -145,31 +145,29 @@ Function escape
 		End for each 
 	End if 
 	
-	//====================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Compare two string version
 	// -  0 if the version and the reference are equal
 	// -  1 if the version is higher than the reference
 	// - -1 if the version is lower than the reference
-Function versionCompare
-	var $0 : Integer  // 0, 1 or -1
-	var $1 : Text  // Version to test
-	var $2 : Text  // Reference
-	var $3 : Text  // Separator (optional - "." if omitted)
+Function versionCompare($version : Text; $reference : Text; $separator : Text)->$result : Integer
 	
-	var $separator : Text
+	var $sep : Text
 	var $i : Integer
 	var $c1; $c2 : Collection
 	
-	$separator:="."
+	ASSERT:C1129(Count parameters:C259>=2)
+	
+	$sep:="."  // Default separator
 	
 	If (Count parameters:C259>=3)
 		
-		$separator:=$3
+		$sep:=$separator
 		
 	End if 
 	
-	$c1:=Split string:C1554($1; $separator)
-	$c2:=Split string:C1554($2; $separator)
+	$c1:=Split string:C1554($version; $sep)
+	$c2:=Split string:C1554($reference; $sep)
 	
 	Case of 
 			
@@ -193,14 +191,14 @@ Function versionCompare
 				//______________________________________________________
 			: (Num:C11($c1[$i])>Num:C11($c2[$i]))
 				
-				$0:=1
-				$i:=MAXLONG:K35:2-1
+				$result:=1
+				$i:=MAXLONG:K35:2-1  // Break
 				
 				//______________________________________________________
 			: (Num:C11($c1[$i])<Num:C11($c2[$i]))
 				
-				$0:=-1
-				$i:=MAXLONG:K35:2-1
+				$result:=-1
+				$i:=MAXLONG:K35:2-1  // Break
 				
 				//______________________________________________________
 			Else 
@@ -234,7 +232,7 @@ Function quoted
 	End if 
 	
 	//====================================================================
-	// Returns the localized string corresponding to the $1 resname & made replacement if any
+	// ⛔️ Returns the localized string corresponding to the $1 resname & made replacement if any
 Function localized
 	var $0 : Text
 	var $1 : Text
@@ -273,7 +271,7 @@ Function localized
 						
 						If (Position:C15("</span>"; $0)>0)  // Multistyle
 							
-							$t:=This:C1470.multistyleCompatibility($t)
+							$t:=This:C1470.multistyleCompatible($t)
 							
 						End if 
 						
@@ -295,7 +293,7 @@ Function localized
 					
 					If (Position:C15("</span>"; $0)>0)  // Multistyle
 						
-						$t:=This:C1470.multistyleCompatibility($t)
+						$t:=This:C1470.multistyleCompatible($t)
 						
 					End if 
 					
@@ -316,8 +314,8 @@ Function match
 	$0:=Match regex:C1019($1; $2; 1)
 	
 	//====================================================================
-	// Returns a coded string that can be used in multistyles texts
-Function multistyleCompatibility
+	// ⛔️ Returns a coded string that can be used in multistyles texts
+Function multistyleCompatible
 	var $0; $1 : Text
 	
 	$0:=$1

@@ -953,6 +953,23 @@ Function isStyled
 	
 	$0:=Match regex:C1019("(?i-ms)<span [^>]*>"; String:C10(This:C1470.value); 1)
 	
+	//====================================================================
+	// Returns a string that can be used in multistyles texts
+	// ⚠️
+Function multistyleCompatible($src : Text)->$tgt : Text
+	
+	$tgt:=This:C1470.value
+	
+	If (Count parameters:C259>=1)
+		
+		$tgt:=$src
+		
+	End if 
+	
+	$tgt:=Replace string:C233($tgt; "&"; "&amp;")
+	$tgt:=Replace string:C233($tgt; "<"; "&lt;")
+	$tgt:=Replace string:C233($tgt; ">"; "&gt;")
+	
 	//=======================================================================================================
 	// Returns, if any, a truncated string with ellipsis character
 Function truncate

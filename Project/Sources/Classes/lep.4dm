@@ -1,4 +1,4 @@
-Class extends tools
+//Class extends tools
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
@@ -156,6 +156,7 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Execute the external process in asynchronous mode then restore the default synchronous mode
 Function launchAsync($command; $arguments : Variant)->$this : cs:C1710.lep
 	
 	This:C1470.asynchronous()
@@ -630,6 +631,84 @@ Function singleQuoted($tring : Text)->$quoted : Text
 	$quoted:=Choose:C955(Match regex:C1019("^'.*'$"; $tring; 1); $tring; "'"+$tring+"'")  // Already done // Do it
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the string between quotes
+Function quoted($tring : Text)->$quoted : Text
+	
+	If (Match regex:C1019("^\".*\"$"; $tring; 1))
+		
+		$quoted:=$tring  // Already done
+		
+	Else 
+		
+		$quoted:="\""+$tring+"\""  // Do it
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Compare two string version
+	// -  0 if the version and the reference are equal
+	// -  1 if the version is higher than the reference
+	// - -1 if the version is lower than the reference
+Function versionCompare($current : Text; $reference : Text; $separator : Text)->$result : Integer
+	
+	var $sep : Text
+	var $i : Integer
+	var $c1; $c2 : Collection
+	
+	ASSERT:C1129(Count parameters:C259>=2)
+	
+	$sep:="."  // Default separator
+	
+	If (Count parameters:C259>=3)
+		
+		$sep:=$separator
+		
+	End if 
+	
+	$c1:=Split string:C1554($current; $sep)
+	$c2:=Split string:C1554($reference; $sep)
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($c1.length>$c2.length)
+			
+			$c2.resize($c1.length; "0")
+			
+			//______________________________________________________
+		: ($c2.length>$c1.length)
+			
+			$c1.resize($c2.length; "0")
+			
+			//______________________________________________________
+	End case 
+	
+	For ($i; 0; $c2.length-1; 1)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Num:C11($c1[$i])>Num:C11($c2[$i]))
+				
+				$result:=1
+				$i:=MAXLONG:K35:2-1  // Break
+				
+				//______________________________________________________
+			: (Num:C11($c1[$i])<Num:C11($c2[$i]))
+				
+				$result:=-1
+				$i:=MAXLONG:K35:2-1  // Break
+				
+				//______________________________________________________
+			Else 
+				
+				// Go on
+				
+				//______________________________________________________
+		End case 
+	End for 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Set write accesses to a file or a directory with all its subfolders and files
 Function makeWritable($cible : 4D:C1709.File)->$this : cs:C1710.lep
 	
@@ -838,5 +917,3 @@ Function _pushError($message : Text)
 	End if 
 	
 	This:C1470.errors.push(This:C1470.lastError)
-	
-	

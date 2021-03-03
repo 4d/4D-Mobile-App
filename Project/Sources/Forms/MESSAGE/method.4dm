@@ -54,7 +54,8 @@ Case of
 		OBJECT SET VISIBLE:C603(*; "option"; False:C215)
 		OBJECT SET VISIBLE:C603(*; "help"; False:C215)
 		//}
-		$str:=_o_str
+		
+		$str:=cs:C1710.str.new()
 		
 		For each ($Txt_key; Form:C1466)
 			
@@ -66,11 +67,11 @@ Case of
 					If (Value type:C1509(Form:C1466.title)=Is collection:K8:32)
 						
 						$c:=Form:C1466.title.copy()
-						(OBJECT Get pointer:C1124(Object named:K67:5; "title"))->:=_o_str.setText($c.shift()).localized($c)
+						(OBJECT Get pointer:C1124(Object named:K67:5; "title"))->:=$str.setText($c.shift()).localized($c)
 						
 					Else 
 						
-						(OBJECT Get pointer:C1124(Object named:K67:5; "title"))->:=_o_str.setText(Form:C1466.title).localized()
+						(OBJECT Get pointer:C1124(Object named:K67:5; "title"))->:=$str.setText(Form:C1466.title).localized()
 						
 					End if 
 					
@@ -80,11 +81,11 @@ Case of
 					If (Value type:C1509(Form:C1466.additional)=Is collection:K8:32)
 						
 						$c:=Form:C1466.additional.copy()
-						(OBJECT Get pointer:C1124(Object named:K67:5; "additional"))->:=_o_str.setText($c.shift()).localized($c)
+						(OBJECT Get pointer:C1124(Object named:K67:5; "additional"))->:=$str.setText($c.shift()).localized($c)
 						
 					Else 
 						
-						(OBJECT Get pointer:C1124(Object named:K67:5; "additional"))->:=_o_str.setText(Form:C1466.additional).localized()
+						(OBJECT Get pointer:C1124(Object named:K67:5; "additional"))->:=$str.setText(Form:C1466.additional).localized()
 						
 					End if 
 					
@@ -136,7 +137,7 @@ Case of
 					//……………………………………………………………………………………………………………………
 				: ($Txt_key="option")
 					
-					OBJECT SET TITLE:C194(*; "option"; _o_str.setText(Form:C1466.option.title).localized())
+					OBJECT SET TITLE:C194(*; "option"; $str.setText(Form:C1466.option.title).localized())
 					OBJECT SET VISIBLE:C603(*; "option"; True:C214)
 					
 					//……………………………………………………………………………………………………………………
@@ -148,14 +149,14 @@ Case of
 				: ($Txt_key="ok")
 					
 					//OBJECT SET TITLE(*;"ok";str_localized (New collection(Form.ok)))
-					OBJECT SET TITLE:C194(*; "ok"; _o_str.setText(Form:C1466.ok).localized())
+					OBJECT SET TITLE:C194(*; "ok"; $str.setText(Form:C1466.ok).localized())
 					OBJECT SET VISIBLE:C603(*; "ok"; True:C214)
 					
 					//……………………………………………………………………………………………………………………
 				: ($Txt_key="cancel")
 					
 					//OBJECT SET TITLE(*;"cancel";str_localized (New collection(Form.cancel)))
-					OBJECT SET TITLE:C194(*; "cancel"; _o_str.setText(Form:C1466.cancel).localized())
+					OBJECT SET TITLE:C194(*; "cancel"; $str.setText(Form:C1466.cancel).localized())
 					OBJECT SET VISIBLE:C603(*; "cancel"; True:C214)
 					
 					//……………………………………………………………………………………………………………………

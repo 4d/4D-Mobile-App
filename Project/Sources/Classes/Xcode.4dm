@@ -126,10 +126,13 @@ Function lastPath
 	var $pathname; $t; $version : Text
 	var $o : Object
 	var $c : Collection
+	var $str : cs:C1710.str
 	
 	$c:=This:C1470.paths()
 	
 	If (This:C1470.success)
+		
+		$str:=cs:C1710.str.new()
 		
 		This:C1470.success:=False:C215
 		
@@ -138,7 +141,7 @@ Function lastPath
 			
 			$version:=This:C1470.getVersion(Folder:C1567($pathname))
 			
-			If (This:C1470.versionCompare($version; $t)>=0)  // Equal or higher
+			If ($str.setText($version).versionCompare($t)>=0)  // Equal or higher
 				
 				$t:=$version
 				This:C1470.version:=$version
@@ -205,7 +208,7 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 	// Returns True if the version of Xcode is equal or superior to the desired one
 Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	
-	$ok:=(This:C1470.versionCompare(This:C1470.version; $minimumVersion)>=0)
+	$ok:=(cs:C1710.str.new(This:C1470.version).versionCompare($minimumVersion)>=0)
 	
 	//====================================================================
 	// Check if any First Launch tasks need to be performed.

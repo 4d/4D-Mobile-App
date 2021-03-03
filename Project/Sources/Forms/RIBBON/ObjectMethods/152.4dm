@@ -8,7 +8,7 @@ var $path; $t : Text
 var $isBooted; $isDebug; $success; $withMoreItems : Boolean
 var $bottom; $left; $right; $top : Integer
 var $could; $e; $menu; $menuApp; $o; $project; $result; $device : Object
-var $build; $product : 4D:C1709.Folder
+var $build; $product; $folder : 4D:C1709.Folder
 var $Xcode : cs:C1710.Xcode
 
 // ----------------------------------------------------
@@ -261,6 +261,9 @@ Case of
 					
 					If (Not:C34(Is compiled mode:C492))
 						
+						$menu.append("🔑 Install certificates"; "_installCertificats")\
+							.line()
+						
 						$menu.append("💣 Remove SDK"; "_removeSDK")\
 							.line()\
 							.append("💣 Clear Mobiles projects"; "_removeMobilesProjects")\
@@ -392,10 +395,11 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_installCertificats")
 				
-				$t:=HTTP Get certificates folder:C1307
-				CREATE FOLDER:C475($t; *)
-				COPY DOCUMENT:C541(Get 4D folder:C485(-1)+"cert.pem"; $t+"cert.pem"; *)
-				COPY DOCUMENT:C541(Get 4D folder:C485(-1)+"key.pem"; $t+"key.pem"; *)
+				$folder:=Folder:C1567(HTTP Get certificates folder:C1307; fk platform path:K87:2)
+				$folder.create()
+				
+				Folder:C1567(Get 4D folder:C485(-1); fk platform path:K87:2).file("cert.pem").copyTo($folder; fk overwrite:K87:5)
+				Folder:C1567(Get 4D folder:C485(-1); fk platform path:K87:2).file("key.pem").copyTo($folder; fk overwrite:K87:5)
 				
 				// Verify the web server configuration
 				CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "checkingServerConfiguration")

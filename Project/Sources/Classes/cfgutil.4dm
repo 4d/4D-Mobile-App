@@ -49,7 +49,8 @@ Function getExe($bundleName : Text)->$exe : 4D:C1709.File
 		// Last try, by watching at path
 		This:C1470.launch("which cfgutil")
 		
-		If (This:C1470.success)
+		If (This:C1470.success)\
+			 & (Length:C16(This:C1470.outputStream)>0)
 			
 			$exe:=File:C1566(This:C1470.outputStream)
 			
@@ -65,11 +66,11 @@ Function plugged()->$devices : Collection
 	
 	var $ecid : Text
 	var $o : Object
-	var $start : Integer
+	var $index; $start : Integer
 	
 	$devices:=New collection:C1472
 	
-	If (Bool:C1537(This:C1470.exe.exists))
+	If (Bool:C1537(This:C1470.exe))
 		
 		// ⚠️ Ne semble plus fonctionner depuis la màj de Xcode 12.4
 		This:C1470.launch(This:C1470.singleQuoted(This:C1470.exe.path)+" --format JSON list")
@@ -98,12 +99,21 @@ Function plugged()->$devices : Collection
 		
 		If (This:C1470.success)
 			
+			$index:=Position:C15("== Simulators =="; This:C1470.outputStream)
+			
+			If ($index>0)
+				
+				This:C1470.outputStream:=Substring:C12(This:C1470.outputStream; 1; $index-1)
+				
+			End if 
+			
 			ARRAY LONGINT:C221($pos; 0)
 			ARRAY LONGINT:C221($len; 0)
 			
 			$start:=1
 			
-			While (Match regex:C1019("(?m-si)^([^(]*)\\s\\(([0-9\\.]+\\)\\s\\(([[:xdigit:]]{8}-[[:xdigit:]]{16}))\\)$"; This:C1470.outputStream; $start; $pos; $len))
+			//While (Match regex("(?m-si)^([^(]*)\\s\\(([0-9\\.]+\\)\\s\\(([[:xdigit:]]{8}-[[:xdigit:]]{16}))\\)$"; This.outputStream; $start; $pos; $len))
+			While (Match regex:C1019("(?-msi)((?:iPhone|iPad)\\s[^(]*)\\(([^)]*)\\)\\s\\(([^)]*)\\)"; This:C1470.outputStream; $start; $pos; $len))
 				
 				$devices.push(New object:C1471(\
 					"name"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
