@@ -43,7 +43,7 @@ If ($preferences.exists)
 	
 	If ($o.tc#Null:C1517)
 		
-		$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/dependencies.zip"
+		$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip"
 		
 		$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
 		
