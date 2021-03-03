@@ -13,15 +13,17 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		var $pluggedDevices : Collection
+		$pluggedDevices:=$simctl.plugged()
+		
+		//______________________________________________________
+	: (True:C214)
+		
 		var $cfgutil : cs:C1710.cfgutil
 		$cfgutil:=cs:C1710.cfgutil.new()
 		
 		var $pluggedDevices : Collection
 		$pluggedDevices:=$cfgutil.plugged()
-		
-		//$device:=device(New object("action"; "plugged"))
-		
-		
 		
 		//______________________________________________________
 	: (True:C214)

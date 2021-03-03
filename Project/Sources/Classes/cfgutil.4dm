@@ -1,5 +1,13 @@
 Class extends lep
 
+/*
+cfgutil performs various management tasks on one or more attached iOS
+devices. It can be used manually and as part of automated workflows.
+
+⚠️ Apple Configurator 2.app must be installed ?
+
+*/
+
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
@@ -63,6 +71,7 @@ Function plugged()->$devices : Collection
 	
 	If (Bool:C1537(This:C1470.exe.exists))
 		
+		// ⚠️ Ne semble plus fonctionner depuis la màj de Xcode 12.4
 		This:C1470.launch(This:C1470.singleQuoted(This:C1470.exe.path)+" --format JSON list")
 		
 		If (This:C1470.success)

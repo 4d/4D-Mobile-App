@@ -21,7 +21,7 @@ Function reset()->$this : cs:C1710.lep
 	This:C1470.outputStream:=Null:C1517
 	This:C1470.errorStream:=Null:C1517
 	This:C1470.pid:=0
-	This:C1470.resultInErrorStream:=False:C215
+	This:C1470.resultInErrorStream:=False:C215  // Allows, if True, to reroutes stderr message to stdout
 	
 	This:C1470.setCharSet()
 	This:C1470.setOutputType()
@@ -784,19 +784,57 @@ Function _shortcut($string : Text)->$variable : Text
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _pushError($desription : Text)
+Function _pushError($message : Text)
 	
 	This:C1470.success:=False:C215
 	
-	If (Length:C16($desription)>0)
+	var $c : Collection
+	$c:=Get call chain:C1662
+	
+	var $current; $o : Object
+	
+	For each ($o; $c) While ($current=Null:C1517)
 		
-		This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$desription
+		If (Position:C15("lep."; $o.name)#1)
+			
+			$current:=$o
+			
+		End if 
+	End for each 
+	
+	If ($current#Null:C1517)
+		
+		If (Length:C16($message)>0)
+			
+			This:C1470.lastError:=$current.name+" - "+$message
+			
+		Else 
+			
+			// Unknown error
+			This:C1470.lastError:=$current.name+" - Unknown error at line "+String:C10($current.line)
+			
+		End if 
 		
 	Else 
 		
-		// Unknown error
-		This:C1470.lastError:=Get call chain:C1662[1].name+" - unknown error"
-		
+		If ($c.length>0)
+			
+			If (Length:C16($message)>0)
+				
+				This:C1470.lastError:=$c[1].name+" - "+$message
+				
+			Else 
+				
+				// Unknown error
+				This:C1470.lastError:=$c[1].name+" - Unknown error at line "+String:C10($c[1].line)
+				
+			End if 
+			
+		Else 
+			
+			This:C1470.lastError:="Unknown but annoying error"
+			
+		End if 
 	End if 
 	
 	This:C1470.errors.push(This:C1470.lastError)

@@ -40,7 +40,7 @@ Case of
 				
 				$out.connected:=New object:C1471(\
 					"android"; New collection:C1472; \
-					"apple"; $simctl.pluggedDevices())
+					"apple"; $simctl.plugged())
 				
 			Else 
 				

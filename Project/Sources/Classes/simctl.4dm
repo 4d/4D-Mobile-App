@@ -174,8 +174,8 @@ Function deviceTypes($type : Text)->$devices : Collection
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// List Plugged Devices
-Function pluggedDevices($iosDeploymentTarget : Text)->$plugged : Collection
+	// List of connected devices
+Function plugged($iosDeploymentTarget : Text)->$plugged : Collection
 	
 	$plugged:=New collection:C1472
 	

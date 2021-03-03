@@ -6,6 +6,15 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		var $avd : cs:C1710.avd
+		$avd:=cs:C1710.avd.new()
+		
+		var $c : Collection
+		$c:=$avd.availableDevices()
+		
+		//______________________________________________________
+	: (True:C214)
+		
 		var $emu : cs:C1710.androidEmulator
 		$emu:=cs:C1710.androidEmulator.new()
 		
