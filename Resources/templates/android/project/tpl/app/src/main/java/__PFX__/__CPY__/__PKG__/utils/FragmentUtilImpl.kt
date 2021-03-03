@@ -9,7 +9,6 @@ package {{prefix}}.{{company}}.{{app_name}}.utils
 import androidx.databinding.ViewDataBinding
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobiledatasync.utils.FragmentUtil
-import com.qmobile.qmobiledatasync.utils.ViewDataBindingInterface
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 {{#tableNames_navigation}}
@@ -58,9 +57,9 @@ class FragmentUtilImpl :
      * Provides the list form type
      */
     override fun layoutType(tableName: String): String = when (tableName) {
-        {{#tableNames}}
-        "{{name}}" -> {{layout_manager_type}}
-        {{/tableNames}}
+        {{#tableNames_navigation}}
+        "{{name}}" -> "{{layout_manager_type}}"
+        {{/tableNames_navigation}}
         else -> "LINEAR"
     }
 }
