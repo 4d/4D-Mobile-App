@@ -180,12 +180,12 @@ Case of
 				
 				$default:=JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).device
 				
-				// * CHECK IF THE SYSTEM IMAGE IS AVAILABLE
-				$sdk:=cs:C1710.sdkmanager.new()
-				
-				$package:=$sdk.exe.parent.parent.parent.folder(Split string:C1554($default.image; ";").join("/"))
-				
 				If ($default#Null:C1517)
+					
+					// * CHECK IF THE SYSTEM IMAGE IS AVAILABLE
+					$sdk:=cs:C1710.sdkmanager.new()
+					
+					$package:=$sdk.exe.parent.parent.parent.folder(Split string:C1554($default.image; ";").join("/"))
 					
 					$success:=$package.exists
 					
@@ -198,6 +198,8 @@ Case of
 					End if 
 					
 					If (cs:C1710.avd.new().createAvd($default).success)
+						
+						OBJECT SET ENABLED:C1123(*; $e.objectName; False:C215)
 						
 						// * UPDATE DEVICE LIST
 						CALL WORKER:C1389(Form:C1466.editor.$worker; "editor_GET_DEVICES"; New object:C1471(\
@@ -223,6 +225,10 @@ Case of
 				
 				//______________________________________________________
 			: ($menu.choice="avdManager")
+				
+				// https://android.stackexchange.com/questions/182920/launch-avd-manager-from-command-line
+				// There is no way to launch AVD manager from cmdline (It is deprecated)
+				// So we opens the Abdroid Studio Application
 				
 				cs:C1710.studio.new().open()
 				
