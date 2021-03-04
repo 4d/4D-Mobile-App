@@ -309,12 +309,11 @@ Function open($target : 4D:C1709.Folder)
 		
 		If (Is macOS:C1572)
 			
-			This:C1470.launch("open -a "+This:C1470.singleQuoted(This:C1470.exe.path)+" "+This:C1470.singleQuoted($target.path))
+			This:C1470.launchAsync("open -a "+This:C1470.singleQuoted(This:C1470.exe.path)+" "+This:C1470.singleQuoted($target.path))
 			
 		Else 
 			
-			//$start "" "C:\Program Files\Android\Android Studio\bin\studio64.exe" "X:\path\to\my_android_project"
-			This:C1470.launch("start \"\" \""+This:C1470.exe.path+"\" \"X:"+$target.path+"\"")
+			This:C1470.launchAsync(This:C1470.quoted(This:C1470.exe.path)+" "+This:C1470.quoted($target.path))
 			
 		End if 
 		
@@ -322,11 +321,11 @@ Function open($target : 4D:C1709.Folder)
 		
 		If (Is macOS:C1572)
 			
-			This:C1470.launch("open "+This:C1470.singleQuoted(This:C1470.exe.path))
+			This:C1470.launchAsync("open "+This:C1470.singleQuoted(This:C1470.exe.path))
 			
 		Else 
 			
-			This:C1470.launch(This:C1470.exe.path)
+			This:C1470.launchAsync(This:C1470.exe.path)
 			
 		End if 
 	End if 
