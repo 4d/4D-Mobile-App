@@ -14,7 +14,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:layout_margin="4dp">
 
         <!-- START EDITING HERE -->
 
@@ -39,6 +40,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="bottom"
+            android:maxLines="2"
             android:scrollbars="none"
             android:text="__TEXT_2__"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
@@ -55,8 +57,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:maxLines="2"
             android:scrollbars="none"
-            android:singleLine="true"
             android:text="__TEXT_3__"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/white"

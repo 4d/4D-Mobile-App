@@ -11,7 +11,7 @@
         <!--ENTITY_VARIABLE-->
     </data>
 
-    <!-- Generated with detail form template named "Visual Contact" -->
+    <!-- Generated with detail form template named "Cards" -->
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -27,74 +27,47 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="280dp"
+                android:background="?colorPrimary">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="192dp"
-                    android:contentDescription="Image"
-                    android:scaleType="fitXY"
-                    app:imageTransform='@{"Blur"}'
-                    app:imageUrl="__IMAGE_1__"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:background="@tools:sample/avatars" />
-
-                <ImageView
+                <TextView
                     android:id="@+id/__SPECIFIC_ID_1__"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
-                    android:layout_marginTop="18dp"
-                    android:contentDescription="Image"
-                    android:elevation="4dp"
-                    app:imageTransform='@{"CropCircleWithBorder"}'
-                    app:imageUrl="__IMAGE_1__"
-                    app:layout_constraintBottom_toTopOf="@+id/__SPECIFIC_ID_2__"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:maxLines="2"
+                    android:scrollbars="none"
+                    android:text="__TEXT_1__"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                    android:textColor="?colorOnPrimary"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:background="@tools:sample/avatars" />
+                    tools:text="My field 1" />
 
                 <TextView
                     android:id="@+id/__SPECIFIC_ID_2__"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:elevation="4dp"
                     android:maxLines="2"
                     android:scrollbars="none"
                     android:text="__TEXT_2__"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/__SPECIFIC_ID_3__"
+                    android:textColor="?colorOnPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_1__"
                     tools:text="My field 2" />
-
-                <TextView
-                    android:id="@+id/__SPECIFIC_ID_3__"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:elevation="4dp"
-                    android:maxLines="2"
-                    android:scrollbars="none"
-                    android:text="__TEXT_3__"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_2__"
-                    tools:text="My field 3" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -106,13 +79,15 @@
             <!--FOR_EACH_FIELD-->
             <!-- EVERYTHING BELOW WILL BE DUPLICATED FOR EACH FIELD YOU DROP AT THE BOTTOM OF THE
                  TEMPLATE IN THE PROJECT EDITOR -->
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="4dp"
-                android:layout_marginVertical="2dp"
-                card_view:cardCornerRadius="4dp">
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="8dp"
+                android:translationY="-48dp"
+                card_view:cardCornerRadius="12dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -146,16 +121,31 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:alpha="0.6"
                         android:scrollbars="none"
                         android:text="__LABEL__"
+                        android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                        android:textColor="?colorPrimary"
+                        android:textColor="?colorOnSurface"
                         app:layout_constraintBottom_toTopOf="@+id/__VALUE_ID__"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="My label" />
 
+                    <View
+                        android:id="@+id/separator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="12dp"
+                        app:layout_constraintBottom_toTopOf="@id/__VALUE_ID__"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/__LABEL_ID__" />
                     <!--IF_IS_IMAGE-->
                     <!-- IF THE DROPPED FIELD IS AN IMAGE -->
                     <ImageView
@@ -171,7 +161,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/__LABEL_ID__" />
+                        app:layout_constraintTop_toBottomOf="@+id/separator" />
                     <!--END_IF_IS_IMAGE-->
                     <!--IF_IS_NOT_IMAGE-->
                     <!-- IF THE DROPPED FIELD IS NOT AN IMAGE, THEN IT WILL BE A TEXT VIEW -->
@@ -191,7 +181,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/__LABEL_ID__"
+                        app:layout_constraintTop_toBottomOf="@+id/separator"
                         tools:text="My field" />
                     <!--END_IF_IS_NOT_IMAGE-->
 
