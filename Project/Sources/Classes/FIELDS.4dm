@@ -579,7 +579,7 @@ Function setHelpTip($e : Object)
 	This:C1470.fieldList.setHelpTip($t)
 	
 	//________________________________________________________________
-	// Update forms labels
+	// Update forms
 Function updateForms($field : Object; $row : Integer)
 	
 	// Update forms if any
