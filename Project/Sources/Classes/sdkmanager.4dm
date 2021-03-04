@@ -59,6 +59,8 @@ Class constructor
 	
 	Super:C1705()
 	
+	This:C1470.setCharSet("US-ASCII")
+	
 	This:C1470.exe:=Choose:C955(Is macOS:C1572; \
 		This:C1470.home.file("Library/Android/sdk/tools/bin/sdkmanager"); \
 		This:C1470.home.file("AppData/Local/Android/sdk/tools/bin/sdkmanager.bat"))
@@ -99,15 +101,39 @@ Class constructor
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Get the current version of sdkmanager
-Function getVersion()
+Function getVersion()->$version : Text
 	
-	This:C1470.launch(This:C1470.cmd; "--version")
+	If (This:C1470.success)
+		
+		$version:=This:C1470.outputStream
+		
+	Else 
+		
+		//#ERROR
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Update de SDKs
+Function update()
+	
+	This:C1470.launch(This:C1470.cmd; "--update")  //--no-ui --update
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Check if all licenses have been accepted, return True if yes, False if not
 Function isReady()->$ready : Boolean
 	
-	This:C1470.launch(This:C1470.cmd; "--licenses")
+	If (Is macOS:C1572)
+		
+		This:C1470.launch(This:C1470.quoted(This:C1470.cmd); "--licenses")
+		
+	Else 
+		
+		This:C1470.inputStream:="echo n | "
+		This:C1470.launch(This:C1470.quoted(This:C1470.cmd); " --licenses")
+		This:C1470.inputStream:=""
+		
+	End if 
 	
 	$ready:=Match regex:C1019("(?mi-s)All SDK package licenses accepted"; This:C1470.outputStream; 1)
 	
@@ -115,7 +141,17 @@ Function isReady()->$ready : Boolean
 	// Try to accept the licenses
 Function acceptLicences()->$ready : Boolean
 	
-	This:C1470.launch("sh -c \"y | "+This:C1470.cmd+" --licenses\"")
+	If (Is macOS:C1572)
+		
+		This:C1470.launch("sh -c \"y | "+This:C1470.cmd+" --licenses\"")
+		
+	Else 
+		
+		This:C1470.inputStream:="cmd /c echo y | & "
+		This:C1470.launch(This:C1470.quoted(This:C1470.cmd); " --licenses")
+		This:C1470.inputStream:=""
+		
+	End if 
 	
 	$ready:=This:C1470.isReady()
 	

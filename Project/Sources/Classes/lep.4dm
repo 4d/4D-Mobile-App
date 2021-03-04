@@ -176,8 +176,8 @@ Function launchAsync($command; $arguments : Variant)->$this : cs:C1710.lep
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 	
-	var $input; $output : Blob
-	var $error; $t : Text
+	var $inputStream; $outputStream : Blob
+	var $errorStream; $t : Text
 	var $len; $pid; $pos : Integer
 	
 	This:C1470.outputStream:=Null:C1517
@@ -250,12 +250,12 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		: (Value type:C1509(This:C1470.inputStream)=Is text:K8:3)\
 			 | (Value type:C1509(This:C1470.inputStream)=Is alpha field:K8:1)
 			
-			CONVERT FROM TEXT:C1011(This:C1470.inputStream; This:C1470.charSet; $input)
+			CONVERT FROM TEXT:C1011(This:C1470.inputStream; This:C1470.charSet; $inputStream)
 			
 			//……………………………………………………………………
 		: (Value type:C1509(This:C1470.inputStream)=Is boolean:K8:9)
 			
-			CONVERT FROM TEXT:C1011(Choose:C955(This:C1470.inputStream; "true"; "false"); This:C1470.charSet; $input)
+			CONVERT FROM TEXT:C1011(Choose:C955(This:C1470.inputStream; "true"; "false"); This:C1470.charSet; $inputStream)
 			
 			//……………………………………………………………………
 		: (Value type:C1509(This:C1470.inputStream)=Is longint:K8:6)\
@@ -263,28 +263,31 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 			 | (Value type:C1509(This:C1470.inputStream)=Is integer 64 bits:K8:25)\
 			 | (Value type:C1509(This:C1470.inputStream)=Is real:K8:4)
 			
-			CONVERT FROM TEXT:C1011(String:C10(This:C1470.inputStream; "&xml"); This:C1470.charSet; $input)
+			CONVERT FROM TEXT:C1011(String:C10(This:C1470.inputStream; "&xml"); This:C1470.charSet; $inputStream)
 			
 			//……………………………………………………………………
 		Else 
 			
-			$output:=This:C1470.inputStream  // Blob
+			$outputStream:=This:C1470.inputStream  // Blob
 			
 			//……………………………………………………………………
 	End case 
 	
-	LAUNCH EXTERNAL PROCESS:C811(This:C1470.command; $input; $output; $error; $pid)
+	LAUNCH EXTERNAL PROCESS:C811(This:C1470.command; $inputStream; $outputStream; $errorStream; $pid)
+	
+	This:C1470.success:=Bool:C1537(OK)
 	
 	If (This:C1470.resultInErrorStream)
 		
-		$t:=$error
-		CLEAR VARIABLE:C89($error)
+		$t:=$errorStream
+		CLEAR VARIABLE:C89($errorStream)
+		This:C1470.success:=False:C215
 		
 	Else 
 		
-		If (BLOB size:C605($output)>0)  // Else OK is reset to 0
+		If (BLOB size:C605($outputStream)>0)  // Else OK is reset to 0
 			
-			$t:=Convert to text:C1012($output; This:C1470.charSet)
+			$t:=Convert to text:C1012($outputStream; This:C1470.charSet)
 			
 		Else 
 			
@@ -295,7 +298,7 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 	
 	$t:=This:C1470._cleanupStream($t)
 	
-	If (Length:C16($error)=0)
+	If (Length:C16($errorStream)=0)
 		
 		If (Not:C34(This:C1470.resultInErrorStream))
 			
@@ -304,13 +307,16 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 			If (Position:C15("ERROR:"; $t; *)=1)\
 				 | (Position:C15("FAILED:"; $t; *)=1)
 				
-				$error:=$t
+				$errorStream:=$t
 				
 			End if 
 		End if 
+		
+	Else 
+		
+		// ??
+		
 	End if 
-	
-	This:C1470.success:=Bool:C1537(OK) & (Length:C16($error)=0)
 	
 	If (This:C1470.success)
 		
@@ -363,7 +369,7 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 				//……………………………………………………………………
 			Else 
 				
-				This:C1470.outputStream:=$output  // Blob
+				This:C1470.outputStream:=$outputStream  // Blob
 				
 				//……………………………………………………………………
 		End case 
@@ -372,7 +378,7 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		
 		This:C1470.pid:=0
 		This:C1470.outputStream:=$t
-		This:C1470.errorStream:=This:C1470._cleanupStream($error)
+		This:C1470.errorStream:=This:C1470._cleanupStream($errorStream)
 		This:C1470._pushError(This:C1470.errorStream)
 		
 	End if 

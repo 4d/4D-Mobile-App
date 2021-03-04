@@ -6,6 +6,26 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		var $sdk : cs:C1710.sdkmanager
+		$sdk:=cs:C1710.sdkmanager.new()
+		
+		var $ready : Boolean
+		$ready:=$sdk.isReady()
+		
+		If (Not:C34($ready))
+			
+			//$ready:=$sdk.update()
+			
+			$sdk.acceptLicences()
+			
+			
+			$ready:=$sdk.isReady()
+			
+		End if 
+		
+		//______________________________________________________
+	: (True:C214)
+		
 		var $avd : cs:C1710.avd
 		$avd:=cs:C1710.avd.new()
 		
