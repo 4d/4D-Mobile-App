@@ -71,7 +71,7 @@
             android:text="@string/no_data_to_display"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="?colorOnBackground"
-            android:visibility="@{safeUnbox(viewModel.entityListSize.size()) > 0 ? View.GONE : View.VISIBLE}"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment_list_guideline" />
