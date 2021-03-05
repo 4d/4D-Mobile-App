@@ -12,16 +12,16 @@ Case of
 		var $ready : Boolean
 		$ready:=$sdk.isReady()
 		
-		If (Not:C34($ready))
-			
-			//$ready:=$sdk.update()
-			
-			$sdk.acceptLicences()
-			
-			
-			$ready:=$sdk.isReady()
-			
-		End if 
+		//If (Not($ready))
+		
+		////$ready:=$sdk.update()
+		
+		//$sdk.acceptLicences()
+		
+		
+		//$ready:=$sdk.isReady()
+		
+		//End if 
 		
 		//______________________________________________________
 	: (True:C214)

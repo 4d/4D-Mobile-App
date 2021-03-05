@@ -87,21 +87,22 @@ Class constructor
 			End if 
 		End if 
 		
-		//This.success:=This.isReady()
-		If (Not:C34(This:C1470.isReady()))
+		This:C1470.success:=This:C1470.isReady()
+		If (Not:C34(This:C1470.success))
 			
-			//This.success:=This.acceptLicences()
-			This:C1470.acceptLicences()
+			This:C1470.success:=This:C1470.acceptLicences()
 			
 		End if 
 		
-		This:C1470.success:=This:C1470.exe.exists
+		//This.success:=This.exe.exists
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Get the current version of sdkmanager
 Function getVersion()->$version : Text
+	
+	This:C1470.launch(This:C1470.cmd; "--version")
 	
 	If (This:C1470.success)
 		
@@ -141,17 +142,35 @@ Function isReady()->$ready : Boolean
 	// Try to accept the licenses
 Function acceptLicences()->$ready : Boolean
 	
-	If (Is macOS:C1572)
+	//If (Is macOS)
+	//This.launch("sh -c \"y | "+This.cmd+" --licenses\"")
+	////This.launch("yes | sudo "+This.cmd+" --licenses")
+	//Else 
+	//This.inputStream:="cmd /c echo y | & "
+	//This.launch(This.quoted(This.cmd); " --licenses")
+	//This.inputStream:=""
+	//End if 
+	
+	var $o : Object
+	var $file : 4D:C1709.File
+	
+	For each ($o; JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).licences)
 		
-		This:C1470.launch("sh -c \"y | "+This:C1470.cmd+" --licenses\"")
+		If (Is macOS:C1572)
+			
+			// ~/Users/{user}/Library/Android/sdk/licenses/
+			$file:=File:C1566(This:C1470.home.path+"Library/Android/sdk/licenses/"+$o.file)
+			
+		Else 
+			
+			// ~/Users/{user}/AppData/Local/Android/sdk/licenses/
+			$file:=File:C1566(This:C1470.home.path+"AppData/Local/Android/sdk/licenses/"+$o.file)
+			
+		End if 
 		
-	Else 
+		$file.setText("\n"+$o.value)
 		
-		This:C1470.inputStream:="cmd /c echo y | & "
-		This:C1470.launch(This:C1470.quoted(This:C1470.cmd); " --licenses")
-		This:C1470.inputStream:=""
-		
-	End if 
+	End for each 
 	
 	$ready:=This:C1470.isReady()
 	
