@@ -199,16 +199,12 @@ Function distributeHorizontally
 	End for each 
 	
 /*════════════════════════════════════════════
-Performs a horizontal distribution, from left to right,
-of the elements according to their best size
+Performs a centered alignment of the elements according to their best size
 	
-.distributeHorizontally({obj})
+.centerVertically({obj})
 	
-The optional object type parameter allow to specify:
-- The starting point x in pixels in the form (start)
-- The spacing in pixels to respect between the elements (spacing)
-- The minimum width to respect in pixels (minWidth)
-- The maximum width to respect in pixels (maxWidth)
+The optional widget name parameter allow to specify the reference
+If ommited, the distribution is relative to the form
 	
 ══════════════════════════*/
 Function centerVertically($reference : Text)
@@ -286,6 +282,55 @@ Function alignLeft($reference)
 		$o.moveHorizontally($left-$o.coordinates.left)
 		
 	End for each 
+	
+Function alignRight($reference)
+	
+	var $right : Integer
+	var $o : Object
+	
+	If (Count parameters:C259>=1)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($reference)=Is object:K8:27)
+				
+				// We assume it is from the static class (or extend)
+				// #TO_DO: test the class
+				$right:=$reference._updateCoordinates().coordinates.right
+				
+				//______________________________________________________
+			: (Value type:C1509($reference)=Is integer:K8:5)\
+				 | (Value type:C1509($reference)=Is real:K8:4)
+				
+				$right:=$reference
+				
+				//______________________________________________________
+			: (Value type:C1509($reference)=Is text:K8:3)
+				
+				$right:=cs:C1710.static.new($reference).coordinates.right
+				
+				//______________________________________________________
+			Else 
+				
+				// #ERROR
+				
+				//______________________________________________________
+		End case 
+		
+	Else 
+		
+		// Default reference is the first member of the group
+		$right:=This:C1470.members[0]._updateCoordinates().coordinates.right
+		
+	End if 
+	
+	For each ($o; This:C1470.members)
+		
+		$o.moveHorizontally($right-$o.coordinates.right)
+		
+	End for each 
+	
 	
 /*════════════════════════════════════════════
 .show()

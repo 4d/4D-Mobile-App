@@ -93,11 +93,11 @@ Case of
 			Else 
 				
 /*
-				DO_MESSAGE(New object(\
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; "noDevices"; \
-					"additional"; ""))
+								DO_MESSAGE(New object(\
+										"action"; "show"; \
+										"type"; "alert"; \
+										"title"; "noDevices"; \
+										"additional"; ""))
 */
 				
 			End if 
@@ -237,6 +237,29 @@ Case of
 				Else 
 					
 					DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyGenerated").localized($in.param.project.product.name))
+					
+					var $file : 4D:C1709.File
+					
+					If ($in.param.project._buildTarget="iOS")
+						
+						$file:=ENV.caches("com.4D.mobile/").file($in.param.project._name+"_ios")
+						
+						var $sources : 4D:C1709.Folder
+						$sources:=$in.param.appFolder.folder("Sources")
+						
+						If ($sources.exists)
+							
+							$file.setText(doc_folderDigest($sources.platformPath))
+							
+						End if 
+						
+					Else 
+						
+						$file:=ENV.caches("com.4D.mobile/").file($in.param.project._name+"_android")
+						
+						//#MARK_TODO
+						
+					End if 
 					
 					If (Bool:C1537($in.param.create)\
 						 & Not:C34(Bool:C1537($in.param.archive))\

@@ -323,7 +323,7 @@ Case of
 			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
 			$withTeamID:=Bool:C1537(Form:C1466.status.teamId) | Is Windows:C1573
 			
-			$form.build.enable($isDevToolAvailable & $isProjectOK)
+			$form.build.enable($isDevToolAvailable & $isProjectOK & (Form:C1466.currentDevice#Null:C1517))
 			$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID)
 			
 		Else 

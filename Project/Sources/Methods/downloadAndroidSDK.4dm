@@ -115,6 +115,15 @@ If ($run)
 		$o.lastModification:=String:C10($http.headers.query("name = 'Last-Modified'").pop().value)
 		$manifest.setText(JSON Stringify:C1217($o; *))
 		
+		// Delete the old SDK folder if any
+		$o:=$sdk.parent.folder("sdk")
+		
+		If ($o.exists)
+			
+			$o.delete(Delete with contents:K24:24)
+			
+		End if 
+		
 	Else 
 		
 		RECORD.error($http.errors.join("\r"))

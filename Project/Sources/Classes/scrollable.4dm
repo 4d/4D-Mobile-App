@@ -21,7 +21,8 @@ Class constructor
 		Object type subform:K79:40; \
 		Object type listbox:K79:8; \
 		Object type picture input:K79:5; \
-		Object type hierarchical list:K79:7).indexOf(This:C1470.type)#-1)
+		Object type hierarchical list:K79:7; \
+		Object type text input:K79:4).indexOf(This:C1470.type)#-1)
 	
 /*════════════════════════════════════════════*/
 Function getCoordinates

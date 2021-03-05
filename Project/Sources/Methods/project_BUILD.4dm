@@ -16,7 +16,7 @@ End if
 
 var $t; $tt : Text
 var $b; $success : Boolean
-var $l; $target : Integer
+var $l; $window : Integer
 var $o; $Obj_cancel; $Obj_ok; $in; $project : Object
 var $c : Collection
 
@@ -32,7 +32,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	ob_MERGE($in; project_Defaults)
 	
 	$project:=$in.project
-	$target:=Current form window:C827
+	$window:=Current form window:C827
 	
 Else 
 	
@@ -48,25 +48,102 @@ If (Asserted:C1132($project#Null:C1517))
 		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
 		
-		$in.path:=path.products().folder($project.product.name).platformPath
+		$in.appFolder:=cs:C1710.path.new().products().folder($project.product.name)
+		
+		If ($in.path=Null:C1517)
+			
+			If (FEATURE.with("android"))
+				
+				If ($in.appFolder.exists)
+					
+					//#ASCENDING_COMPATIBILITY
+					$c:=$in.appFolder.folders()
+					
+					If ($c.query("name=iOS").pop()#Null:C1517)\
+						 | ($c.query("name=Android").pop()#Null:C1517)
+						
+						// <NOTHING MORE TO DO>
+						
+					Else 
+						
+						$o:=$in.appFolder.moveTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); Generate UUID:C1066)
+						$in.appFolder.create()
+						
+						If ($o.folder(".gradle").exists)
+							
+							// Move to Android subfolder
+							$success:=$o.moveTo($in.appFolder; "Android").exists
+							
+						Else 
+							
+							// Move to iOS subfolder
+							$success:=$o.moveTo($in.appFolder; "iOS").exists
+							
+						End if 
+					End if 
+				End if 
+				
+				// According to the target
+				$in.appFolder:=$in.appFolder.folder(Choose:C955($project._buildTarget="iOS"; "iOS"; "Android"))
+				
+			End if 
+			
+			$in.path:=$in.appFolder.platformPath
+			
+		Else 
+			
+			Folder:C1567($in.path; fk platform path:K87:2).create()
+			
+		End if 
 		
 		$success:=Not:C34($in.create)
 		
 		If (Not:C34($success))
 			
-			$success:=(Test path name:C476($in.path+"Sources"+Folder separator:K24:12)=-43)
-			
-			If (Not:C34($success))
+			If ($project._buildTarget="iOS")
 				
-				// Check if the project was modified by another application
-				// Compare to the signature of the sources folder
-				$file:=DATABASE.home.folder("Library/Caches/com.4D.mobile/").file($project._name)
+				var $sources : 4D:C1709.Folder
+				$sources:=$in.appFolder.folder("Sources")
 				
-				If ($file.exists)
+				If ($sources.exists)
 					
-					$success:=(doc_folderDigest($in.path+"Sources"+Folder separator:K24:12)=$file.getText())
+					// Check if the project was modified by another application
+					// Compare to the signature of the sources folder
+					$file:=ENV.caches("com.4D.mobile/").file($project._name)
+					
+					If (FEATURE.with("android"))
+						
+						If ($file.exists)
+							
+							//#ASCENDING_COMPATIBILITY
+							$file:=$file.rename($project._name+"ios")
+							
+						Else 
+							
+							$file:=ENV.caches("com.4D.mobile/").file($project._name+"_ios")
+							
+						End if 
+					End if 
+					
+					If ($file.exists)
+						
+						$success:=(doc_folderDigest($sources.platformPath)=$file.getText())
+						
+					End if 
+					
+				Else 
+					
+					$success:=True:C214
 					
 				End if 
+				
+			Else 
+				
+				$file:=ENV.caches("com.4D.mobile/").file($project._name+"_android")
+				
+				//#MARK_TODO
+				$success:=True:C214
+				
 			End if 
 		End if 
 		
@@ -250,20 +327,20 @@ If (Asserted:C1132($project#Null:C1517))
 							If (True:C214)
 								
 								POST_MESSAGE(New object:C1471(\
-									"target"; $target; \
+									"target"; $window; \
 									"action"; "show"; \
 									"type"; "confirm"; \
 									"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
 									"additional"; "youMustUpdateTheStructureOfTheProductionServer"; \
 									"help"; Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment"); *)); \
-									"cancelFormula"; Formula:C1597(CALL FORM:C1391($target; "editor_CALLBACK"; "build_stop")); \
+									"cancelFormula"; Formula:C1597(CALL FORM:C1391($window; "editor_CALLBACK"; "build_stop")); \
 									"ok"; Get localized string:C991("continue"); \
-									"okFormula"; Formula:C1597(CALL FORM:C1391($target; "editor_CALLBACK"; "ignoreServerStructureAdjustement"))))
+									"okFormula"; Formula:C1597(CALL FORM:C1391($window; "editor_CALLBACK"; "ignoreServerStructureAdjustement"))))
 								
 							Else 
 								
 								$o:=New object:C1471(\
-									"target"; $target; \
+									"target"; $window; \
 									"action"; "show"; \
 									"type"; "confirm"; \
 									"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
@@ -294,7 +371,7 @@ If (Asserted:C1132($project#Null:C1517))
 					If (Not:C34($success))
 						
 						POST_MESSAGE(New object:C1471(\
-							"target"; $target; \
+							"target"; $window; \
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; "theProductionServerIsNotAvailable"; \
@@ -341,7 +418,7 @@ If (Asserted:C1132($project#Null:C1517))
 								"build"; $in)
 							
 							POST_MESSAGE(New object:C1471(\
-								"target"; $target; \
+								"target"; $window; \
 								"action"; "show"; \
 								"type"; "confirm"; \
 								"title"; Get localized string:C991("noDeviceFound"); \
@@ -367,7 +444,7 @@ If (Asserted:C1132($project#Null:C1517))
 						$t:=device(New object:C1471("action"; "appName")).value
 						
 						POST_MESSAGE(New object:C1471(\
-							"target"; $target; \
+							"target"; $window; \
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; New collection:C1472("appIsNotInstalled"; $t); \

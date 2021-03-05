@@ -4,160 +4,158 @@
 // Created 30-6-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($Lon_bottom; $Lon_formEvent; $Lon_height; $Lon_left; $Lon_right; $Lon_top)
-C_LONGINT:C283($Lon_vOffset; $Lon_width)
-C_TEXT:C284($Txt_key)
-C_OBJECT:C1216($str)
-C_COLLECTION:C1488($c)
+var $key : Text
+var $bottom; $height; $left; $right; $top; $vOffset; $width : Integer
+var $e : Object
+var $c : Collection
+var $str : cs:C1710.str
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_formEvent:=Form event code:C388
+$e:=FORM Event:C1606
 
 // ----------------------------------------------------
 
 Case of 
 		
 		//______________________________________________________
-	: ($Lon_formEvent=On Load:K2:1)
+	: ($e.code=On Load:K2:1)
 		
 		SET TIMER:C645(-1)
 		
 		//______________________________________________________
-	: ($Lon_formEvent=On Unload:K2:2)
+	: ($e.code=On Unload:K2:2)
 		
 		//
 		
 		//______________________________________________________
-	: ($Lon_formEvent=On Timer:K2:25)
+	: ($e.code=On Timer:K2:25)
 		
 		SET TIMER:C645(0)
 		
 		//______________________________________________________
-	: ($Lon_formEvent=On Bound Variable Change:K2:52)
+	: ($e.code=On Bound Variable Change:K2:52)
 		
-		// Reset {
-		(OBJECT Get pointer:C1124(Object named:K67:5; "progress"))->:=0
-		OBJECT SET VISIBLE:C603(*; "progress"; False:C215)
+		If (Form:C1466.ƒ=Null:C1517)
+			
+			Form:C1466.ƒ:=New object:C1471
+			Form:C1466.ƒ.progress:=cs:C1710.thermometer.new("progress").asynchronous()
+			Form:C1466.ƒ.cancel:=cs:C1710.button.new("cancel")
+			Form:C1466.ƒ.ok:=cs:C1710.button.new("ok")
+			Form:C1466.ƒ.title:=cs:C1710.widget.new("title")
+			Form:C1466.ƒ.additional:=cs:C1710.scrollable.new("additional")
+			Form:C1466.ƒ.option:=cs:C1710.button.new("option")
+			Form:C1466.ƒ.help:=cs:C1710.button.new("help")
+			
+			Form:C1466.ƒ.buttonGroup:=cs:C1710.group.new(Form:C1466.ƒ.ok; Form:C1466.ƒ.cancel)
+			
+		End if 
 		
-		OBJECT SET TITLE:C194(*; "cancel"; Get localized string:C991("cancel"))
-		OBJECT SET VISIBLE:C603(*; "cancel"; False:C215)
-		
-		OBJECT SET TITLE:C194(*; "ok"; Get localized string:C991("ok"))
-		OBJECT SET VISIBLE:C603(*; "ok"; False:C215)
-		
-		(OBJECT Get pointer:C1124(Object named:K67:5; "title"))->:=""
-		(OBJECT Get pointer:C1124(Object named:K67:5; "additional"))->:=""
-		
-		OBJECT SET SCROLLBAR:C843(*; "additional"; False:C215; False:C215)
-		
-		OBJECT SET VISIBLE:C603(*; "option"; False:C215)
-		OBJECT SET VISIBLE:C603(*; "help"; False:C215)
-		//}
+		// Reset
+		Form:C1466.ƒ.progress.hide().stop()
+		Form:C1466.ƒ.cancel.setTitle("cancel").hide()
+		Form:C1466.ƒ.ok.setTitle("ok").hide()
+		Form:C1466.ƒ.title.setValue("")
+		Form:C1466.ƒ.additional.setScrollbars(False:C215; False:C215).setValue("")
+		Form:C1466.ƒ.option.hide()
+		Form:C1466.ƒ.help.hide()
 		
 		$str:=cs:C1710.str.new()
 		
-		For each ($Txt_key; Form:C1466)
+		For each ($key; Form:C1466)
 			
 			Case of 
 					
 					//……………………………………………………………………………………………………………………
-				: ($Txt_key="title")
+				: ($key="title")
 					
 					If (Value type:C1509(Form:C1466.title)=Is collection:K8:32)
 						
 						$c:=Form:C1466.title.copy()
-						(OBJECT Get pointer:C1124(Object named:K67:5; "title"))->:=$str.setText($c.shift()).localized($c)
+						Form:C1466.ƒ.title.setValue($str.setText($c.shift()).localized($c))
 						
 					Else 
 						
-						(OBJECT Get pointer:C1124(Object named:K67:5; "title"))->:=$str.setText(Form:C1466.title).localized()
+						Form:C1466.ƒ.title.setValue($str.setText(Form:C1466.title).localized())
 						
 					End if 
 					
 					//……………………………………………………………………………………………………………………
-				: ($Txt_key="additional")
+				: ($key="additional")
 					
 					If (Value type:C1509(Form:C1466.additional)=Is collection:K8:32)
 						
 						$c:=Form:C1466.additional.copy()
-						(OBJECT Get pointer:C1124(Object named:K67:5; "additional"))->:=$str.setText($c.shift()).localized($c)
+						Form:C1466.ƒ.additional.setValue($str.setText($c.shift()).localized($c))
 						
 					Else 
 						
-						(OBJECT Get pointer:C1124(Object named:K67:5; "additional"))->:=$str.setText(Form:C1466.additional).localized()
+						Form:C1466.ƒ.additional.setValue($str.setText(Form:C1466.additional).localized())
 						
 					End if 
 					
-					// Resize the message according to the additional text length [
-					OBJECT GET BEST SIZE:C717(*; "additional"; $Lon_width; $Lon_height; 393)
-					OBJECT GET COORDINATES:C663(*; "additional"; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
-					$Lon_vOffset:=Choose:C955($Lon_height<54; 54; $Lon_height)-($Lon_bottom-$Lon_top)
+					// Resize the message according to the additional text length
+					OBJECT GET BEST SIZE:C717(*; "additional"; $width; $height; 393)
+					OBJECT GET COORDINATES:C663(*; "additional"; $left; $top; $right; $bottom)
+					$vOffset:=Choose:C955($height<54; 54; $height)-($bottom-$top)
 					
-					If ($Lon_vOffset#0)
+					If ($vOffset#0)
 						
-						OBJECT GET SUBFORM CONTAINER SIZE:C1148($Lon_width; $Lon_height)
-						$Lon_height:=$Lon_height+$Lon_vOffset
+						OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+						$height:=$height+$vOffset
 						
-						CALL SUBFORM CONTAINER:C1086(-$Lon_height)
+						CALL SUBFORM CONTAINER:C1086(-$height)
 						
 					End if 
-					//]
 					
 					//……………………………………………………………………………………………………………………
-				: ($Txt_key="scrollbar")
+				: ($key="scrollbar")
 					
-					OBJECT SET SCROLLBAR:C843(*; "additional"; False:C215; Bool:C1537(Form:C1466[$Txt_key]))
+					Form:C1466.ƒ.additional.setScrollbars(False:C215; Bool:C1537(Form:C1466[$key]))
 					
 					//……………………………………………………………………………………………………………………
-				: ($Txt_key="type")
+				: ($key="type")
 					
 					Case of 
 							
 							// ---------------------------------------
-						: (Form:C1466[$Txt_key]="progress")
+						: (Form:C1466[$key]="progress")
 							
-							OBJECT SET VISIBLE:C603(*; "progress"; True:C214)
-							(OBJECT Get pointer:C1124(Object named:K67:5; "progress"))->:=1
-							
-							// ---------------------------------------
-						: (Form:C1466[$Txt_key]="alert")
-							
-							OBJECT SET VISIBLE:C603(*; "ok"; True:C214)
+							Form:C1466.ƒ.progress.show().start()
 							
 							// ---------------------------------------
-						: (Form:C1466[$Txt_key]="confirm")
+						: (Form:C1466[$key]="alert")
 							
-							OBJECT SET VISIBLE:C603(*; "ok"; True:C214)
-							OBJECT SET VISIBLE:C603(*; "cancel"; True:C214)
+							Form:C1466.ƒ.ok.show()
+							
+							// ---------------------------------------
+						: (Form:C1466[$key]="confirm")
+							
+							Form:C1466.ƒ.ok.show()
+							Form:C1466.ƒ.cancel.show()
 							
 							// ---------------------------------------
 					End case 
 					
 					//……………………………………………………………………………………………………………………
-				: ($Txt_key="option")
+				: ($key="option")
 					
-					OBJECT SET TITLE:C194(*; "option"; $str.setText(Form:C1466.option.title).localized())
-					OBJECT SET VISIBLE:C603(*; "option"; True:C214)
-					
-					//……………………………………………………………………………………………………………………
-				: ($Txt_key="help")
-					
-					OBJECT SET VISIBLE:C603(*; "help"; True:C214)
+					Form:C1466.ƒ.option.setTitle($str.setText(Form:C1466.option.title).localized()).show()
 					
 					//……………………………………………………………………………………………………………………
-				: ($Txt_key="ok")
+				: ($key="help")
 					
-					//OBJECT SET TITLE(*;"ok";str_localized (New collection(Form.ok)))
-					OBJECT SET TITLE:C194(*; "ok"; $str.setText(Form:C1466.ok).localized())
-					OBJECT SET VISIBLE:C603(*; "ok"; True:C214)
+					Form:C1466.ƒ.help.show()
 					
 					//……………………………………………………………………………………………………………………
-				: ($Txt_key="cancel")
+				: ($key="ok")
 					
-					//OBJECT SET TITLE(*;"cancel";str_localized (New collection(Form.cancel)))
-					OBJECT SET TITLE:C194(*; "cancel"; $str.setText(Form:C1466.cancel).localized())
-					OBJECT SET VISIBLE:C603(*; "cancel"; True:C214)
+					Form:C1466.ƒ.ok.setTitle($str.setText(Form:C1466.ok).localized()).show()
+					
+					//……………………………………………………………………………………………………………………
+				: ($key="cancel")
+					
+					Form:C1466.ƒ.cancel.setTitle($str.setText(Form:C1466.cancel).localized()).show()
 					
 					//……………………………………………………………………………………………………………………
 			End case 
@@ -167,10 +165,12 @@ Case of
 			"widgets"; New collection:C1472("ok"; "cancel"); \
 			"alignment"; Align right:K42:4))
 		
-		If (Form:C1466.autostart#Null:C1517)  // Auto-launch
+		//Form.ƒ.buttonGroup.alignRight()
+		
+		// Auto-launch
+		If (Form:C1466.autostart#Null:C1517)
 			
 			CALL FORM:C1391(Current form window:C827; Form:C1466.autostart.method; Form:C1466.autostart.action; Form:C1466.autostart.project)
-			
 			OB REMOVE:C1226(Form:C1466; "autostart")
 			
 		End if 
@@ -178,7 +178,7 @@ Case of
 		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+String:C10($Lon_formEvent)+")")
+		ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 		
 		//______________________________________________________
 End case 
