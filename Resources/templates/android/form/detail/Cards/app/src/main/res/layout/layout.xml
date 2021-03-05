@@ -28,7 +28,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="280dp"
-                android:background="?colorPrimary">
+                android:background="?colorPrimaryVariant">
 
                 <TextView
                     android:id="@+id/__SPECIFIC_ID_1__"
@@ -135,13 +135,13 @@
                         tools:text="My label" />
 
                     <View
-                        android:id="@+id/separator"
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_marginLeft="30dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginRight="30dp"
                         android:layout_marginBottom="12dp"
+                        android:background="#DDD"
                         app:layout_constraintBottom_toTopOf="@id/__VALUE_ID__"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -161,7 +161,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/separator" />
+                        app:layout_constraintTop_toBottomOf="@+id/__LABEL_ID__" />
                     <!--END_IF_IS_IMAGE-->
                     <!--IF_IS_NOT_IMAGE-->
                     <!-- IF THE DROPPED FIELD IS NOT AN IMAGE, THEN IT WILL BE A TEXT VIEW -->
@@ -181,7 +181,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/separator"
+                        app:layout_constraintTop_toBottomOf="@+id/__LABEL_ID__"
                         tools:text="My field" />
                     <!--END_IF_IS_NOT_IMAGE-->
 
