@@ -60,14 +60,14 @@ Case of
 						
 					End if 
 				End if 
+			End if 
+			
+			If ($could.studioAvailable)
 				
-				If ($could.studioAvailable)
+				If ($could.androidFolder.exists)
 					
-					If ($could.androidFolder.exists)
-						
-						$could.openWithStudio:=(($could.androidFolder.files().query("fullName :1"; "gradle.properties")).pop()#Null:C1517)
-						
-					End if 
+					$could.openWithStudio:=(($could.androidFolder.files().query("fullName :1"; "gradle.properties")).pop()#Null:C1517)
+					
 				End if 
 			End if 
 		End if 
