@@ -4,10 +4,11 @@
 // Created 19-11-2020 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-var $path; $t : Text
+var $pathName; $t : Text
 var $bottom; $left; $right; $top : Integer
 var $could; $device; $e; $menu; $menuApp; $o; $project : Object
 var $folder; $sdkCacheFolder : 4D:C1709.Folder
+var $path : cs:C1710.path
 var $simctl : cs:C1710.simctl
 var $Xcode : cs:C1710.Xcode
 
@@ -34,7 +35,9 @@ Case of
 		// Autosave
 		PROJECT.save()
 		
-		$folder:=cs:C1710.path.new().products().folder(PROJECT.product.name)
+		$path:=cs:C1710.path.new()
+		
+		$folder:=$path.products().folder(PROJECT.product.name)
 		
 		$could:=New object:C1471(\
 			"isDebug"; DATABASE.isMatrix; \
@@ -108,8 +111,8 @@ Case of
 					
 				End if 
 				
-				$menu.append("openSimulatorLogs"; "_openLogs").enable($simctl.deviceLog(Form:C1466.currentDevice).exists)\
-					.append("showCurrentSimulatorFolder"; "_openSimuPath").enable($could.xCodeAvailable)\
+				$menu.append("showCurrentSimulatorFolder"; "_openSimuPath").enable($could.xCodeAvailable)\
+					.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable($simctl.deviceLog(Form:C1466.currentDevice).exists)\
 					.line()
 				
 				If ($could.isDebug)
@@ -155,12 +158,12 @@ Case of
 			End if 
 		End if 
 		
-		$menu.append("mnuOpenTheProjectWithAndroidStudio"; "openWithStudio").enable($could.openWithStudio)
-		
-		// MORE ITEMS FOR ANDROID STUDIO
-		If ($could.withMoreItems)
+		If ($could.studioAvailable)
 			
-			If ($could.studioAvailable)
+			$menu.append("mnuOpenTheProjectWithAndroidStudio"; "openWithStudio").enable($could.openWithStudio)
+			
+			// MORE ITEMS FOR ANDROID STUDIO
+			If ($could.withMoreItems)
 				
 				$menu.line()
 				$menu.append("downloadThe4dForAndroidSdk"; "downloadAndroidSdk")
@@ -171,7 +174,7 @@ Case of
 		// =================== DEVELOPMENT ITEMS ===================== [
 		If ($could.withMoreItems)
 			
-			$sdkCacheFolder:=cs:C1710.path.new().cacheSDK().folder(Application version:C493)
+			$sdkCacheFolder:=$path.cacheSDK().folder(Application version:C493)
 			
 			$menu.line()
 			$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable(ENV.caches().folder("com.4D.mobile").exists)
@@ -282,7 +285,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="showTheSdkCacheFolder")
 				
-				SHOW ON DISK:C922(cs:C1710.path.new().cacheSDK().folder(Application version:C493).platformPath)
+				SHOW ON DISK:C922($path.cacheSDK().folder(Application version:C493).platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="syncDataModel")
@@ -357,13 +360,13 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_removeSDK")
 				
-				path.sdk().delete(fk recursive:K87:7)
+				$path.sdk().delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_removeMobilesProjects")
 				
-				path.projects().delete(fk recursive:K87:7)
-				path.products().delete(fk recursive:K87:7)
+				$path.projects().delete(fk recursive:K87:7)
+				$path.products().delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_removeDerivedData")
@@ -383,7 +386,7 @@ Case of
 				$project.product:=PROJECT.product
 				$project.dataModel:=PROJECT.dataModel
 				
-				$path:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
+				$pathName:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 				
 				dataModel(New object:C1471(\
 					"action"; "xcdatamodel"; \
@@ -391,9 +394,9 @@ Case of
 					"flat"; False:C215; \
 					"relationship"; True:C214; \
 					"dataSet"; dataSet(New object:C1471("action"; "readCatalog"; "project"; $project)).catalog; \
-					"path"; $path))
+					"path"; $pathName))
 				
-				SHOW ON DISK:C922($path)
+				SHOW ON DISK:C922($pathName)
 				
 				//______________________________________________________
 			: ($menu.choice="_addSources")
@@ -410,7 +413,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openHostFormFolder")
 				
-				SHOW ON DISK:C922(cs:C1710.path.new().hostForms().platformPath)
+				SHOW ON DISK:C922($path.hostForms().platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_verbose")

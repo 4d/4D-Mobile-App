@@ -364,7 +364,7 @@ Function deviceLog($simulator : Text)->$log : 4D:C1709.File
 	
 	If ($device#Null:C1517)
 		
-		$log:=This:C1470.home.folder("Library/Logs/"+$device.udid)
+		$log:=This:C1470.home.folder("Library/Logs/CoreSimulator/"+$device.udid).file("system.log")
 		
 	End if 
 	
