@@ -47,7 +47,7 @@ $form:=New object:C1471(\
 "mandatory"; UI.button("02_property_mandatory"); \
 "min"; UI.button("09_property_constraint_number_min"); \
 "max"; UI.button("10_property_constraint_number_max"); \
-"default"; UI.widget("07_variable_default"); \
+"defaultValue"; UI.widget("07_variable_default"); \
 "withDefault"; UI.group("@_default@"); \
 "dropCursor"; UI.static("dropCursor"); \
 "placeholder"; UI.widget("@_placeholder@"); \

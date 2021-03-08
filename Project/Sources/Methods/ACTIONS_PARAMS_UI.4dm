@@ -132,7 +132,7 @@ Case of
 										
 										$o.withDefault.show()
 										
-										$o.default.setValue(String:C10($parameter.default))
+										$o.defaultValue.setValue(String:C10($parameter.default))
 										
 										Case of 
 												
@@ -144,17 +144,17 @@ Case of
 														//________________________________________
 													: (String:C10($parameter.format)="integer")
 														
-														$o.default.setFilter(Is integer:K8:5)
+														$o.defaultValue.setFilter(Is integer:K8:5)
 														
 														//________________________________________
 													: (String:C10($parameter.format)="spellOut")
 														
-														$o.default.setFilter(Is integer:K8:5)
+														$o.defaultValue.setFilter(Is integer:K8:5)
 														
 														//________________________________________
 													Else 
 														
-														$o.default.setFilter(Is real:K8:4)
+														$o.defaultValue.setFilter(Is real:K8:4)
 														
 														//________________________________________
 												End case 
@@ -164,15 +164,15 @@ Case of
 												
 												// Should accept "today", "yesterday", "tomorrow"
 												GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
-												$o.default.setFilter("&\"0-9;"+$t+";-;/;"+_o_str("todayyesterdaytomorrow").distinctLetters(";")+"\"")
+												$o.defaultValue.setFilter("&\"0-9;"+$t+";-;/;"+_o_str("todayyesterdaytomorrow").distinctLetters(";")+"\"")
 												
-												If (Position:C15(String:C10($o.default.value()); "todayyesterdaytomorrow")=0)
+												If (Position:C15(String:C10($o.defaultValue.value()); "todayyesterdaytomorrow")=0)
 													
-													$rgx:=cs:C1710.regex.new($o.default.value(); "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$").match()
+													$rgx:=cs:C1710.regex.new($o.defaultValue.value(); "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$").match()
 													
 													If ($rgx.success)
 														
-														$o.default.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.matches[3].data); Num:C11($rgx.matches[2].data); Num:C11($rgx.matches[1].data))))
+														$o.defaultValue.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.matches[3].data); Num:C11($rgx.matches[2].data); Num:C11($rgx.matches[1].data))))
 														
 													End if 
 												End if 
@@ -180,12 +180,12 @@ Case of
 												//…………………………………………………………………………………………………………………………………………
 											: ($parameter.type="time")
 												
-												$o.default.setFilter(Is time:K8:8)
+												$o.defaultValue.setFilter(Is time:K8:8)
 												
 												//…………………………………………………………………………………………………………………………………………
 											: ($parameter.type="string")
 												
-												$o.default.setFilter(Is text:K8:3)
+												$o.defaultValue.setFilter(Is text:K8:3)
 												
 												//…………………………………………………………………………………………………………………………………………
 											: ($parameter.type="bool")
@@ -196,13 +196,13 @@ Case of
 														
 														If (Value type:C1509($parameter.default)=Is boolean:K8:9)
 															
-															$o.default.setValue(Choose:C955($parameter.default; "checked"; "unchecked"))
+															$o.defaultValue.setValue(Choose:C955($parameter.default; "checked"; "unchecked"))
 															
 														End if 
 													End if 
 													
 													// Should accept "checked", "unchecked", 0 or 1
-													$o.default.setFilter("&\"0;1;"+_o_str("unchecked").distinctLetters(";")+"\"")
+													$o.defaultValue.setFilter("&\"0;1;"+_o_str("unchecked").distinctLetters(";")+"\"")
 													
 												Else 
 													
@@ -210,13 +210,13 @@ Case of
 														
 														If (Value type:C1509($parameter.default)=Is boolean:K8:9)
 															
-															$o.default.setValue(Choose:C955($parameter.default; "true"; "false"))
+															$o.defaultValue.setValue(Choose:C955($parameter.default; "true"; "false"))
 															
 														End if 
 													End if 
 													
 													// Should accept "true", "false", 0 or 1
-													$o.default.setFilter("&\"0;1;"+_o_str("truefalse").distinctLetters(";")+"\"")
+													$o.defaultValue.setFilter("&\"0;1;"+_o_str("truefalse").distinctLetters(";")+"\"")
 													
 												End if 
 												

@@ -268,10 +268,10 @@ Case of
 					
 					If ($current.type#$t)  // The type is changed
 						
-						//$current.type:=$t
+						$current.type:=$t
 						OB REMOVE:C1226($current; "default")
 						
-						If ($form.default.focused())
+						If ($form.defaultValue.focused())
 							
 							GOTO OBJECT:C206(*; "")
 							
@@ -588,7 +588,7 @@ Case of
 		PROJECT.save()
 		
 		//==================================================
-	: ($form.form.current=$form.default.name)  // Default value
+	: ($form.form.current=$form.defaultValue.name)  // Default value
 		
 		$o:=$ƒ.parameter
 		
@@ -606,7 +606,7 @@ Case of
 				//______________________________________________________
 			: ($form.form.eventCode=On Data Change:K2:15)
 				
-				$t:=$form.default.value()
+				$t:=$form.defaultValue.value()
 				
 				If (Length:C16(String:C10($t))>0)
 					
@@ -636,7 +636,7 @@ Case of
 									
 									BEEP:C151
 									OB REMOVE:C1226($o; "default")
-									$form.default.focus()
+									$form.defaultValue.focus()
 									
 								End if 
 							End if 
@@ -660,7 +660,7 @@ Case of
 										
 										BEEP:C151
 										OB REMOVE:C1226($o; "default")
-										$form.default.focus()
+										$form.defaultValue.focus()
 										
 									End if 
 								End if 
@@ -681,7 +681,7 @@ Case of
 										
 										BEEP:C151
 										OB REMOVE:C1226($o; "default")
-										$form.default.focus()
+										$form.defaultValue.focus()
 										
 									End if 
 								End if 
