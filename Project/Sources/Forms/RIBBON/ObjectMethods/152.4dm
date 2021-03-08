@@ -5,10 +5,10 @@
 // ----------------------------------------------------
 // Declarations
 var $path; $t : Text
-var $isBooted; $isDebug; $success; $withMoreItems : Boolean
 var $bottom; $left; $right; $top : Integer
-var $could; $e; $menu; $menuApp; $o; $project; $result; $device : Object
-var $build; $product; $folder : 4D:C1709.Folder
+var $could; $device; $e; $menu; $menuApp; $o; $project : Object
+var $folder; $sdkCacheFolder : 4D:C1709.Folder
+var $simctl : cs:C1710.simctl
 var $Xcode : cs:C1710.Xcode
 
 // ----------------------------------------------------
@@ -31,160 +31,95 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Clicked:K2:4)
 		
-		$withMoreItems:=Macintosh option down:C545 | Windows Alt down:C563
-		$isDebug:=(Macintosh command down:C546 | Windows Ctrl down:C562) & DATABASE.isMatrix
-		
 		// Autosave
 		PROJECT.save()
 		
-		$product:=cs:C1710.path.new().products().folder(PROJECT.product.name)
-		$build:=$product.folder("build")
+		$folder:=cs:C1710.path.new().products().folder(PROJECT.product.name)
 		
 		$could:=New object:C1471(\
-			"openProductFolder"; ($product.exists & (Length:C16(PROJECT.product.name)#0)))
+			"isDebug"; DATABASE.isMatrix; \
+			"withMoreItems"; Macintosh option down:C545 | Windows Alt down:C563; \
+			"productFolder"; $folder; \
+			"xCodeAvailable"; Bool:C1537(Form:C1466.editor.$xCode.applicationAvailable); \
+			"studioAvailable"; Bool:C1537(Form:C1466.editor.$studio.applicationAvailable); \
+			"iOSFolder"; $folder.folder("iOS"); \
+			"androidFolder"; $folder.folder("android"); \
+			"isLocked"; editor_Locked; \
+			"openWithXcode"; False:C215; \
+			"openWithStudio"; False:C215)
 		
-		If (FEATURE.with("android"))
-			
-			$could.openWithXcode:=False:C215
-			$could.openWithStudio:=False:C215
-			
-			// #TEMPO : Les dossiers devront êtres séparés
-			If ($could.openProductFolder)
-				
-				If (Is macOS:C1572)
-					
-					If (Bool:C1537(Form:C1466.editor.$xCode.applicationAvailable))
-						
-						If ($product.folder(".gradle").exists)
-							
-							// Last build was done for Android
-							
-						Else 
-							
-							$could.openWithXcode:=Xcode(New object:C1471(\
-								"action"; "couldOpen"; \
-								"path"; $product.platformPath)).success
-							
-						End if 
-					End if 
-				End if 
-				
-				If (Bool:C1537(Form:C1466.editor.$studio.applicationAvailable))
-					
-					If ($product.folder("gradle").exists)
-						
-						$could.openWithStudio:=True:C214
-						
-					Else 
-						
-						// Last build was done for iOS
-						
-					End if 
-				End if 
-			End if 
-			
-			$menu:=cs:C1710.menu.new()
-			
-			If (editor_Locked)
-				
-				$menu.append("syncDataModel"; "syncDataModel").line()
-				
-			End if 
-			
-			// Project folder
-			$menu.append("mnuProjectFolder"; "openProjectFolder")  //.line()
-			
-			// Product folder, disabled if the product folder doesn't exist
-			$menu.append("mnuProductFolder"; "openProductFolder").enable($could.openProductFolder).line()
-			
-			// Open project
-			If (Is macOS:C1572)\
-				 & ($could.openWithXcode)
-				
-				$menu.append("mnuOpenTheProjectWithXcode"; "openWithXcode")
-				
-				If ($withMoreItems)
-					
-					If ($isDebug)
-						
-						$menu.append("🗑 Clear Xcode Build And Derived Data"; "_removeDerivedData")
-						
-					Else 
-						
-						$menu.append("clearXcodeBuild"; "clearXcodeBuild").enable($build.exists)
-						
-					End if 
-				End if 
-				
-				If ($could.openWithStudio)
-					
-					$menu.append("mnuOpenTheProjectWithAndroidStudio"; "openWithStudio")
-					
-				End if 
-				
-			Else 
-				
-				$menu.append("mnuOpenTheProjectWithAndroidStudio"; "openWithStudio").enable($could.openWithStudio)
-				
-			End if 
-			
-		Else 
-			
-			$could.openWithXcode:=$could.openProductFolder & Bool:C1537(PROJECT.$project.xCode.applicationAvailable)
-			
-			If ($could.openWithXcode)
-				
-				$could.openWithXcode:=Xcode(New object:C1471(\
-					"action"; "couldOpen"; \
-					"path"; $product.platformPath)).success
-				
-			End if 
-			
-			$menu:=cs:C1710.menu.new()
-			
-			If (editor_Locked)
-				
-				$menu.append("syncDataModel"; "syncDataModel").line()
-				
-			End if 
-			
-			// Project folder
-			$menu.append("mnuProjectFolder"; "openProjectFolder").line()
-			
-			// Product folder, disabled if the product folder doesn't exist
-			$menu.append("mnuProductFolder"; "openProductFolder").enable($could.openProductFolder)
-			
-			// Open project, disabled if Xcode isn't installed
-			$menu.append("mnuOpenTheProjectWithXcode"; "openWithXcode").enable($could.openWithXcode)
-			
-		End if 
-		
-		// =================== DEVELOPMENT ITEMS ===================== [
-		If ($withMoreItems)
+		If ($could.productFolder.exists)
 			
 			If (Is macOS:C1572)
 				
-				var $device : Object
-				var $simctl : cs:C1710.simctl
-				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
-				
-				$device:=$simctl.device(Form:C1466.currentDevice)
-				
-				If ($device#Null:C1517)  // Else android device
+				If ($could.xCodeAvailable)
 					
-					$menu.line()
-					
-					$menu.append("openSimulatorLogs"; "_openLogs")\
-						.append("openSimulatorDiagnosticReports"; "_openDiagnosticReports")
-					
-					$menu.append("openCurrentSimulatorFolder"; "_openSimuPath")
-					
-					If ($isDebug)
+					If ($could.iOSFolder.exists)
 						
-						$menu.append(".Close simulators"; "_killSimulators")\
-							.append(".Erase Current Simulator"; "_eraseCurrentSimulator")
+						$could.openWithXcode:=(($could.iOSFolder.folders().query("extension IN :1"; New collection:C1472(".xcworkspace"; ".xcodeproj"))).length>0)
 						
 					End if 
+				End if 
+				
+				If ($could.studioAvailable)
+					
+					If ($could.androidFolder.exists)
+						
+						$could.openWithStudio:=(($could.androidFolder.files().query("fullName :1"; "gradle.properties")).pop()#Null:C1517)
+						
+					End if 
+				End if 
+			End if 
+		End if 
+		
+		$menu:=cs:C1710.menu.new()
+		
+		If ($could.isLocked)
+			
+			$menu.append("syncDataModel"; "syncDataModel").line()
+			
+		End if 
+		
+		// PROJECT FOLDER
+		$menu.append("mnuProjectFolder"; "openProjectFolder")
+		
+		// PRODUCT FOLDER: disabled if the product folder doesn't exist
+		$menu.append("mnuProductFolder"; "openProductFolder").enable($could.productFolder.exists).line()
+		
+		// OPEN PROJECT WITH…
+		If (Is macOS:C1572)
+			
+			$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+			
+			$menu.append("mnuOpenTheProjectWithXcode"; "openWithXcode").enable($could.openWithXcode)
+			
+			// MORE ITEMS FOR XCODE
+			If ($could.withMoreItems)
+				
+				$menu.line()
+				
+				If ($could.isDebug)
+					
+					$menu.append("🗑 Clear Xcode Build And Derived Data"; "_removeDerivedData").enable($could.xCodeAvailable)
+					
+				Else 
+					
+					$menu.append("clearXcodeBuild"; "clearXcodeBuild").enable($could.iOSFolder.folder("build").exists).enable($could.xCodeAvailable)
+					
+				End if 
+				
+				$menu.append("openSimulatorLogs"; "_openLogs").enable($simctl.deviceLog(Form:C1466.currentDevice).exists)\
+					.append("showCurrentSimulatorFolder"; "_openSimuPath").enable($could.xCodeAvailable)\
+					.line()
+				
+				If ($could.isDebug)
+					
+					$device:=$simctl.device(Form:C1466.currentDevice)
+					
+					$menu.append("showDiagnosticReportsFolder"; "_openDiagnosticReports")
+					
+					$menu.append("❌ Close simulators"; "_killSimulators")\
+						.append("🗑 Erase Current Simulator"; "_eraseCurrentSimulator")
 					
 					$device:=_o_simulator(\
 						New object:C1471("action"; "deviceApp"; \
@@ -209,52 +144,43 @@ Case of
 								
 								$menuApp.append($t; "_app"+JSON Stringify:C1217($o))
 								
-								// If (DATABASE.isMatrix) & False
-								//// Provoque une erreur si mobile est un alias
-								//// XXX Could not do that in real app, resource folder must not be modified
-								//// ASK for SET MENU ITEM ICON with absolute path
-								//$t:="mobile"+Folder separator+"cache"+Folder separator+"icon"+Folder separator
-								//If (Length(String($o.AppIdentifierPrefix))>0)
-								//$t:=$t+$o.AppIdentifierPrefix+Folder separator
-								// End if
-								//$t:=$t+$o.CFBundleIdentifier+".png"
-								//$path:=Get 4D folder(Current resources folder; *)+$t  // Copy into resource folder, because menu item allow only iconRef from here
-								//CREATE FOLDER($path; *)
-								//$path:=$o.appPath+Folder separator+$o.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles[0]+"@2x.png"
-								//If (Test path name($path)=Is a document)
-								//READ PICTURE FILE($path; $p)
-								// If (OK=1)
-								//CREATE THUMBNAIL($p; $p; 48; 48; Scaled to fit)
-								// If (OK=1)
-								//WRITE PICTURE FILE(Get 4D folder(Current resources folder; *)+$t; $p; ".png")
-								//$menuApp.icon("File:"+Convert path system to POSIX($t))
-								// End if
-								// End if
-								// End if
-								// End if
-								
 							End if 
 						End for each 
 						
-						$menu.append("openApplicationSimulatorFolder"; $menuApp)\
+						$menu.append("showApplicationSimulatorFolder"; $menuApp)\
 							.line()
 						
 					End if 
-					
-				Else 
-					
-					//#TO_DO
-					
 				End if 
+			End if 
+		End if 
+		
+		$menu.append("mnuOpenTheProjectWithAndroidStudio"; "openWithStudio").enable($could.openWithStudio)
+		
+		// MORE ITEMS FOR ANDROID STUDIO
+		If ($could.withMoreItems)
+			
+			If ($could.studioAvailable)
 				
 				$menu.line()
-				$menu.append("openTheCacheFolder"; "openUserCacheFolder").enable(ENV.caches().folder("com.4D.mobile").exists)
+				$menu.append("downloadThe4dForAndroidSdk"; "downloadAndroidSdk")
 				
-				var $sdkCacheFolder : 4D:C1709.Folder
-				$sdkCacheFolder:=cs:C1710.path.new().cacheSDK().folder(Application version:C493)
-				$menu.append("openTheSdkCacheFolder"; "openTheSdkCacheFolder").enable($sdkCacheFolder.exists)
+			End if 
+		End if 
+		
+		// =================== DEVELOPMENT ITEMS ===================== [
+		If ($could.withMoreItems)
+			
+			$sdkCacheFolder:=cs:C1710.path.new().cacheSDK().folder(Application version:C493)
+			
+			$menu.line()
+			$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable(ENV.caches().folder("com.4D.mobile").exists)
+			
+			$menu.append("showTheSdkCacheFolder"; "showTheSdkCacheFolder").enable($sdkCacheFolder.exists)
+			
+			If (Is macOS:C1572)
 				
-				If ($isDebug) & (Bool:C1537(Form:C1466.editor.$xCode.applicationAvailable))
+				If ($could.isDebug)
 					
 					$menu.line()
 					$menu.append("🗑 Clear Cache folder"; "_clearCache")
@@ -272,37 +198,25 @@ Case of
 							.append("➕ Add sources to Xcode Project"; "_addSources")\
 							.line()
 						
-						$menu.append("👀 Reveal 4D template folder"; "_openTemplateFolder")\
-							.append("🚧 Reveal custom form folder"; "_openHostFormFolder")\
+						$menu.append("👀 Show 4D template folder"; "_openTemplateFolder")\
+							.append("🚧 Show custom form folder"; "_openHostFormFolder")\
 							.append("🍪 Generate data model"; "_generateDataModel")
 						
 					End if 
 					
 					$menu.line()
-					$menu.append("openThe4dMobileAppJournal"; "openThe4dMobileAppJournal")
+					$menu.append("openThe4dMobileAppLog"; "openThe4dMobileAppLog")
 					
 				End if 
 				
 			Else 
 				
-				$menu.line()
-				$menu.append("openTheCacheFolder"; "openUserCacheFolder").enable(ENV.caches().folder("com.4D.mobile").exists)
-				
-				var $sdkCacheFolder : 4D:C1709.Folder
-				$sdkCacheFolder:=cs:C1710.path.new().cacheSDK().folder(Application version:C493)
-				$menu.append("openTheSdkCacheFolder"; "openTheSdkCacheFolder").enable($sdkCacheFolder.exists)
+				//#TO_DO ?
 				
 			End if 
 			
-			If (FEATURE.with("android"))
-				
-				$menu.line()
-				$menu.append("downloadThe4dForAndroidSdk"; "downloadAndroidSdk")
-				
-			End if 
-			
-			$menu.line()
-			$menu.append("verbose"; "_verbose").mark(PROJECT.$project.verbose)
+			$menu.line()\
+				.append("verbose"; "_verbose").mark(PROJECT.$project.verbose)
 			
 		End if 
 		
@@ -317,25 +231,25 @@ Case of
 				// <NOTHING MORE TO DO>
 				
 				//______________________________________________________
+			: ($menu.choice="openProductFolder")
+				
+				SHOW ON DISK:C922($could.productFolder.platformPath)
+				
+				//______________________________________________________
+			: ($menu.choice="openProjectFolder")
+				
+				SHOW ON DISK:C922(PROJECT._folder.platformPath)
+				
+				//______________________________________________________
 			: ($menu.choice="downloadAndroidSdk")
 				
 				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadAndroidSDK"; False:C215; Form:C1466.editor.$mainWindow; Shift down:C543)
 				
 				//______________________________________________________
-			: ($menu.choice="openProductFolder")
-				
-				SHOW ON DISK:C922($product.platformPath; *)
-				
-				//______________________________________________________
-			: ($menu.choice="openProjectFolder")
-				
-				SHOW ON DISK:C922(PROJECT._folder.platformPath; *)
-				
-				//______________________________________________________
 			: ($menu.choice="openWithXcode")  // Open a file of project in xcode
 				
 				$Xcode:=cs:C1710.Xcode.new()
-				$Xcode.open($product)
+				$Xcode.open($could.iOSFolder)
 				
 				If ($Xcode.success)
 					
@@ -344,7 +258,7 @@ Case of
 						IDLE:C311
 						DELAY PROCESS:C323(Current process:C322; 60*3)  // Wait xcode open
 						
-						$Xcode.reveal($product.platformPath+Convert path POSIX to system:C1107(SHARED.xCode.fileFocus))
+						$Xcode.reveal($could.iOSFolder.platformPath+Convert path POSIX to system:C1107(SHARED.xCode.fileFocus))
 						
 					End if 
 					
@@ -358,17 +272,17 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="openWithStudio")
 				
-				cs:C1710.studio.new().open($product)
+				cs:C1710.studio.new().open($could.androidFolder)
 				
 				//______________________________________________________
-			: ($menu.choice="openUserCacheFolder")
+			: ($menu.choice="showTheCacheFolder")
 				
-				SHOW ON DISK:C922(ENV.caches().folder("com.4D.mobile").platformPath; *)
+				SHOW ON DISK:C922(ENV.caches().folder("com.4D.mobile").platformPath)
 				
 				//______________________________________________________
-			: ($menu.choice="openTheSdkCacheFolder")
+			: ($menu.choice="showTheSdkCacheFolder")
 				
-				SHOW ON DISK:C922(cs:C1710.path.new().cacheSDK().folder(Application version:C493).platformPath; *)
+				SHOW ON DISK:C922(cs:C1710.path.new().cacheSDK().folder(Application version:C493).platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="syncDataModel")
@@ -383,14 +297,14 @@ Case of
 					"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "syncDataModel"))))
 				
 				//______________________________________________________
-			: ($menu.choice="openThe4dMobileAppJournal")
+			: ($menu.choice="openThe4dMobileAppLog")
 				
 				RECORD.open()
 				
 				//______________________________________________________
 			: ($menu.choice="clearXcodeBuild")
 				
-				$build.delete(fk recursive:K87:7)
+				$could.iOSFolder.folder("build").delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_installCertificats")
@@ -455,7 +369,7 @@ Case of
 			: ($menu.choice="_removeDerivedData")
 				
 				ENV.derivedData().delete(fk recursive:K87:7)
-				$build.delete(fk recursive:K87:7)
+				$could.iOSFolder.folder("build").delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_showConfigFile")
@@ -486,7 +400,7 @@ Case of
 				
 				Xcode(New object:C1471(\
 					"action"; "workspace-addsources"; \
-					"path"; $product.platformPath))
+					"path"; $could.iOSFolder.platformPath))
 				
 				//______________________________________________________
 			: ($menu.choice="_openTemplateFolder")
@@ -496,9 +410,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openHostFormFolder")
 				
-				$o:=path.hostlistForms(True:C214)
-				$o:=path.hostdetailForms(True:C214)
-				SHOW ON DISK:C922(path.hostForms().platformPath)
+				SHOW ON DISK:C922(cs:C1710.path.new().hostForms().platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_verbose")
