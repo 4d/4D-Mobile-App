@@ -16,7 +16,7 @@ C_TEXT:C284($Txt_widget)
 C_OBJECT:C1216($Obj_in; $Obj_values)
 
 If (False:C215)
-	C_OBJECT:C1216(ui_BEST_SIZE; $1)
+	C_OBJECT:C1216(_o_ui_BEST_SIZE; $1)
 End if 
 
 // ----------------------------------------------------

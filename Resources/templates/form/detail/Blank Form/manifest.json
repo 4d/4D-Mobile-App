@@ -1,6 +1,18 @@
 {
 	"type": "detailform",
 	"name": "Blank Form",
+	"target": [
+		{
+			"iOS": [
+				"sources/"
+			]
+		},
+		{
+			"android": [
+				"app/"
+			]
+		}
+	],
 	"renderer":2,
 	"hOffset":0,
 	"fields": 

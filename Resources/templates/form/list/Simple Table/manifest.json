@@ -1,6 +1,18 @@
 {
     "name": "Simple Table",
     "type": "listform",
+		"target": [
+			{
+				"iOS": [
+					"sources/"
+				]
+			},
+			{
+				"android": [
+					"app/"
+				]
+			}
+		],
     "fields": {
         "count": 2
     },

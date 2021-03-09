@@ -28,7 +28,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			$ƒ.fieldList.setScrollbars(False:C215; 2)
 			
 			// Place the tabs according to the localization
-			$ƒ.selectors.distributeHorizontally()
+			$ƒ.selectors.distributeLeftToRight()
 			
 			// Place the download button
 			$ƒ.resources.setTitle(cs:C1710.str.new("downloadMoreResources").localized(Lowercase:C14(Get localized string:C991("formatters"))))

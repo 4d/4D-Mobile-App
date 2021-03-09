@@ -1,6 +1,18 @@
 {
 	"type": "detailform",
 	"name": "Cards Detail",
+	"target": [
+		{
+			"iOS": [
+				"sources/"
+			]
+		},
+		{
+			"android": [
+				"app/"
+			]
+		}
+	],
 	"renderer":2,
 	"hOffset":91,
 	"fields": 

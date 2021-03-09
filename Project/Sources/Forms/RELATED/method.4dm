@@ -17,7 +17,7 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Load:K2:1)
 		
-		ui_BEST_SIZE(New object:C1471(\
+		_o_ui_BEST_SIZE(New object:C1471(\
 			"widgets"; New collection:C1472("ok"; "cancel"); \
 			"alignment"; Align right:K42:4))
 		

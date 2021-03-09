@@ -79,18 +79,18 @@ Case of
 				// Constraints definition
 				$Obj_form.ui.constraints:=New object:C1471
 				
-				ui_BEST_SIZE(New object:C1471(\
+				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($Obj_form.generate; "dataGeneration"; "dataGeneration.label"); \
 					"alignment"; Align left:K42:2; \
 					"factor"; 1.15))
 				
-				ui_BEST_SIZE(New object:C1471(\
+				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($Obj_form.local)))
 				
-				ui_BEST_SIZE(New object:C1471(\
+				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($Obj_form.server)))
 				
-				ui_BEST_SIZE(New object:C1471(\
+				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($Obj_form.doNotGenerate)))
 				
 				// Declare check box as boolean (NO MORE NECESSARY IN JSON FORM)
@@ -178,7 +178,7 @@ Case of
 					$Txt_format:=Replace string:C233($Txt_format; "{style}"; String:C10($Obj_form.ui.serverStatus.type))
 					OBJECT SET FORMAT:C236(*; $Obj_form.serverStatus; $Txt_format)
 					
-					ui_BEST_SIZE(New object:C1471(\
+					_o_ui_BEST_SIZE(New object:C1471(\
 						"widgets"; New collection:C1472($Obj_form.serverStatus); \
 						"alignment"; Align left:K42:2; \
 						"factor"; Choose:C955(Num:C11($Obj_form.ui.serverStatus.type)=0; 1; 1.05)))

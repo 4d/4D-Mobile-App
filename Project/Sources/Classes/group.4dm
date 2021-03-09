@@ -63,14 +63,14 @@ Class constructor
 /*════════════════════════════════════════════
 Returns True if the passed object or object name is part of the group
 	
-.include(obj) --> bool
+.included(obj) --> bool
 	
 or
 	
-.include("name") --> bool
+.included("name") --> bool
 	
 ══════════════════════════*/
-Function include
+Function included
 	
 	C_BOOLEAN:C305($0)
 	C_VARIANT:C1683($1)
@@ -99,7 +99,7 @@ Function include
 Performs a horizontal distribution, from left to right,
 of the elements according to their best size
 	
-.distributeHorizontally({obj})
+.distributeLeftToRight({obj})
 	
 The optional object type parameter allow to specify:
 - The starting point x in pixels in the form (start)
@@ -108,61 +108,33 @@ The optional object type parameter allow to specify:
 - The maximum width to respect in pixels (maxWidth)
 	
 ══════════════════════════*/
-Function distributeHorizontally
+Function distributeLeftToRight($params : Object)
 	
-	C_OBJECT:C1216($1; $o; $e)
+	var $e; $o : Object
+	var $key : Text
 	
 	$e:=New object:C1471(\
 		"start"; 0; \
 		"spacing"; 0; \
 		"minWidth"; 0; \
-		"maxWidth"; 0)
+		"maxWidth"; 0; \
+		"alignment"; Align left:K42:2)
 	
 	If (Count parameters:C259>=1)
 		
-		If ($1.start#Null:C1517)
+		For each ($key; $params)
 			
-			$e.start:=Num:C11($1.start)
-			
-		End if 
-		
-		If ($1.spacing#Null:C1517)
-			
-			$e.spacing:=Num:C11($1.spacing)
-			
-		End if 
+			If ($params[$key]#Null:C1517)
+				
+				$e[$key]:=$params[$key]
+				
+			End if 
+		End for each 
 	End if 
 	
 	For each ($o; This:C1470.members)
 		
-		
-		Case of 
-				
-				//_______________________________
-			: ($o.type=Object type subform:K79:40)
-				
-				// Maintain dimensions
-				
-				//_______________________________
-			: ($o.type=Object type text input:K79:4)
-				
-				// Maintain dimensions
-				
-				//_______________________________
-			Else 
-				
-				If (Count parameters:C259>=1)
-					
-					$o.bestSize($1)
-					
-				Else 
-					
-					$o.bestSize()
-					
-				End if 
-				
-				//_______________________________
-		End case 
+		$o.bestSize($e)
 		
 		If ($e.start#0)
 			
@@ -181,9 +153,6 @@ Function distributeHorizontally
 					$e.start:=$o.coordinates.right+Choose:C955(Is macOS:C1572; 20; 20)
 					
 					//_______________________________
-				: (False:C215)
-					
-					//_______________________________
 				Else 
 					
 					$e.start:=$o.coordinates.right
@@ -194,6 +163,78 @@ Function distributeHorizontally
 		Else 
 			
 			$e.start:=$o.coordinates.right+$e.spacing
+			
+		End if 
+	End for each 
+	
+/*════════════════════════════════════════════
+Performs a horizontal distribution, from right to left,
+of the elements according to their best size
+	
+.distributeRigthToLeft({obj})
+	
+The optional object type parameter allow to specify:
+- The starting point x in pixels in the form (start)
+- The spacing in pixels to respect between the elements (spacing)
+- The minimum width to respect in pixels (minWidth)
+- The maximum width to respect in pixels (maxWidth)
+	
+══════════════════════════*/
+Function distributeRigthToLeft($params : Object)
+	
+	var $e; $o : Object
+	var $key : Text
+	
+	$e:=New object:C1471(\
+		"start"; 0; \
+		"spacing"; 0; \
+		"minWidth"; 0; \
+		"maxWidth"; 0; \
+		"alignment"; Align right:K42:4)
+	
+	If (Count parameters:C259>=1)
+		
+		For each ($key; $params)
+			
+			If ($params[$key]#Null:C1517)
+				
+				$e[$key]:=$params[$key]
+				
+			End if 
+		End for each 
+	End if 
+	
+	For each ($o; This:C1470.members)
+		
+		$o.bestSize($e)
+		
+		If ($e.start#0)
+			
+			$o.moveHorizontally($e.start-$o.coordinates.right)
+			
+		End if 
+		
+		// Calculate the cumulative shift
+		If ($e.spacing=0)
+			
+			Case of 
+					
+					//_______________________________
+				: ($o.type=Object type push button:K79:16)
+					
+					$e.start:=$o.coordinates.left-Choose:C955(Is macOS:C1572; 20; 20)
+					
+					//_______________________________
+				Else 
+					
+					$e.start:=$o.coordinates.left
+					
+					//_______________________________
+			End case 
+			
+		Else 
+			
+			$e.start:=$o.coordinates.left+$e.spacing
 			
 		End if 
 	End for each 
@@ -234,7 +275,7 @@ Function centerVertically($reference : Text)
 		
 	End for each 
 	
-	
+	//════════════════════════════════════════════
 Function alignLeft($reference)
 	
 	var $left : Integer
@@ -283,6 +324,7 @@ Function alignLeft($reference)
 		
 	End for each 
 	
+	//════════════════════════════════════════════
 Function alignRight($reference)
 	
 	var $right : Integer

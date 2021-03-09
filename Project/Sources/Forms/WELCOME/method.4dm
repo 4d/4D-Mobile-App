@@ -46,10 +46,10 @@ Case of
 		COPY ARRAY:C226($tTxt_; (OBJECT Get pointer:C1124(Object named:K67:5; "texts"))->)
 		//%W+518.1
 		
-		ui_BEST_SIZE(New object:C1471(\
+		_o_ui_BEST_SIZE(New object:C1471(\
 			"widgets"; New collection:C1472("doNotShowAgain")))
 		
-		ui_BEST_SIZE(New object:C1471(\
+		_o_ui_BEST_SIZE(New object:C1471(\
 			"widgets"; New collection:C1472("continue"); \
 			"alignment"; Align center:K42:3))
 		

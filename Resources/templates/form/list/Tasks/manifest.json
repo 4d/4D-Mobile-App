@@ -1,6 +1,18 @@
 {
     "name": "Tasks List",
     "type": "listform",
+		"target": [
+			{
+				"iOS": [
+					"sources/"
+				]
+			},
+			{
+				"android": [
+					"app/"
+				]
+			}
+		],
     "fields": {
         "count": 4
     },

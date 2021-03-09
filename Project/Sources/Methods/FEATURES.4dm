@@ -24,11 +24,11 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 		: ($e.code=On Load:K2:1)
 			
 			$ƒ.loginRequired.bestSize()
-			$ƒ.authenticationGroup.distributeHorizontally()\
+			$ƒ.authenticationGroup.distributeLeftToRight()\
 				.show(Form:C1466.server.authentication.email)
 			
 			$ƒ.pushNotification.bestSize()
-			$ƒ.certificateGroup.distributeHorizontally()\
+			$ƒ.certificateGroup.distributeLeftToRight()\
 				.show(Form:C1466.server.pushNotification)
 			
 			$ƒ.deepLinking.bestSize()

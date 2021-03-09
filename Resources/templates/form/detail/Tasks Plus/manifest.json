@@ -1,6 +1,18 @@
 {
   "type": "detailform",
   "name": "Tasks Detail Plus",
+	"target": [
+		{
+			"iOS": [
+				"sources/"
+			]
+		},
+		{
+			"android": [
+				"app/"
+			]
+		}
+	],
   "renderer":2,
   "hOffset":208,
   "fields": {

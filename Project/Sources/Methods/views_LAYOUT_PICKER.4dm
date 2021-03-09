@@ -55,19 +55,10 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	For each ($folder; $internal.folders())
 		
-		$success:=True:C214
+		// 👀 We assume that our templates are well-formed
 		
-		For each ($t; $manifest.mandatory) While ($success)
-			
-			$success:=$internal.folder($folder.name).file($t).exists
-			
-		End for each 
+		$ƒ.forms.push($folder.fullName)
 		
-		If ($success)
-			
-			$ƒ.forms.push($folder.fullName)
-			
-		End if 
 	End for each 
 	
 	// Search for templates into the host database

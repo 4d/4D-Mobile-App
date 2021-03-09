@@ -28,7 +28,7 @@ If ($e.objectName=Null:C1517)  // <== Form method
 		: ($e.code=On Load:K2:1)
 			
 			$f.webSettings.bestSize()
-			$f.webSettingsGroup.distributeHorizontally()
+			$f.webSettingsGroup.distributeLeftToRight()
 			
 			$o:=New object:C1471(\
 				"buffer"; New object:C1471(\

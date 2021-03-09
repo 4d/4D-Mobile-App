@@ -1,6 +1,18 @@
 {
     "name": "Vertical Cards",
     "type": "listform",
+		"target": [
+			{
+				"iOS": [
+					"sources/"
+				]
+			},
+			{
+				"android": [
+					"app/"
+				]
+			}
+		],
     "fields": {
         "count": 3
     },

@@ -1,6 +1,18 @@
 {
 	"type": "detailform",
 	"name": "Visual Contact",
+	"target": [
+		{
+			"iOS": [
+				"sources/"
+			]
+		},
+		{
+			"android": [
+				"app/"
+			]
+		}
+	],
 	"renderer":2,
 	"hOffset":161,
 	"fields": 

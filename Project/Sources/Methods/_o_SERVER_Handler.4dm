@@ -71,10 +71,10 @@ Case of
 				// Constraints definition
 				$Obj_form.form.constraints:=New object:C1471
 				
-				ui_BEST_SIZE(New object:C1471(\
+				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($Obj_form.webSettings)))
 				
-				ui_BEST_SIZE(New object:C1471(\
+				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($Obj_form.email)))
 				
 				$Obj_in:=New object:C1471
@@ -117,7 +117,7 @@ Case of
 			
 		End if 
 		
-		ui_BEST_SIZE(New object:C1471(\
+		_o_ui_BEST_SIZE(New object:C1471(\
 			"widgets"; New collection:C1472($Obj_form.method)))
 		
 		OBJECT SET VISIBLE:C603(*; $Obj_form.method; True:C214)

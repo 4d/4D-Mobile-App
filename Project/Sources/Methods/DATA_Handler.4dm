@@ -103,15 +103,15 @@ Case of
 				// Constraints definition
 				$Obj_context.constraints:=New object:C1471
 				
-				ui_BEST_SIZE(New object:C1471(\
+				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($Obj_form.embedded); \
 					"factor"; 1))
 				
-				ui_BEST_SIZE(New object:C1471(\
+				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($Obj_form.method); \
 					"factor"; 1))
 				
-				ui_BEST_SIZE(New object:C1471(\
+				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($Obj_form.validate); \
 					"alignment"; Align right:K42:4; \
 					"factor"; 1))
@@ -225,14 +225,14 @@ Case of
 		//If (FEATURE.with("android"))
 		
 		//$Dir_root:=dataSet(New object("action"; "path"; \
-			"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+						"project"; New object("product"; Form.product; "$project"; PROJECT))).path
 		
-		//Else 
+		//Else
 		
 		$Dir_root:=dataSet(New object:C1471("action"; "path"; \
 			"project"; New object:C1471("product"; Form:C1466.product; "$project"; Form:C1466.$project))).path
 		
-		//End if 
+		//End if
 		
 		
 		

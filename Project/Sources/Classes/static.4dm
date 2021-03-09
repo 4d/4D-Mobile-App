@@ -262,11 +262,11 @@ Function bestSize
 			
 			If (Count parameters:C259>=2)
 				
-				$o.min:=$2
+				$o.minWidth:=$2
 				
 				If (Count parameters:C259>=3)
 					
-					$o.max:=$3
+					$o.maxWidth:=$3
 					
 				End if 
 			End if 
@@ -281,62 +281,79 @@ Function bestSize
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
-	If ($o.max#Null:C1517)
+	If (New collection:C1472(\
+		Object type 3D button:K79:17; \
+		Object type 3D checkbox:K79:27; \
+		Object type 3D radio button:K79:24; \
+		Object type checkbox:K79:26; \
+		Object type listbox column:K79:10; \
+		Object type picture button:K79:20; \
+		Object type picture radio button:K79:25; \
+		Object type push button:K79:16; \
+		Object type radio button:K79:23; \
+		Object type static picture:K79:3; \
+		Object type static text:K79:2; \
+		Object type listbox:K79:8).indexOf(This:C1470.type)#-1)
 		
-		OBJECT GET BEST SIZE:C717(*; This:C1470.name; $width; $height; $o.max)
-		
-	Else 
-		
-		OBJECT GET BEST SIZE:C717(*; This:C1470.name; $width; $height)
-		
-	End if 
-	
-	Case of 
+		If ($o.maxWidth#Null:C1517)
 			
-			//______________________________
-		: (This:C1470.type=Object type static text:K79:2)\
-			 | (This:C1470.type=Object type checkbox:K79:26)
+			OBJECT GET BEST SIZE:C717(*; This:C1470.name; $width; $height; $o.maxWidth)
 			
-			If (Num:C11($o.alignment)=Align left:K42:2)
+		Else 
+			
+			OBJECT GET BEST SIZE:C717(*; This:C1470.name; $width; $height)
+			
+		End if 
+		
+		Case of 
+				
+				//______________________________
+			: (This:C1470.type=Object type static text:K79:2)\
+				 | (This:C1470.type=Object type checkbox:K79:26)
+				
+				If (Num:C11($o.alignment)=Align left:K42:2)
+					
+					// Add 10 pixels
+					$width:=$width+10
+					
+				End if 
+				
+				//______________________________
+			: (This:C1470.type=Object type push button:K79:16)
+				
+				// Add 10% for margins
+				$width:=Round:C94($width*1.1; 0)
+				
+				//______________________________
+			Else 
 				
 				// Add 10 pixels
 				$width:=$width+10
 				
-			End if 
+				//______________________________
+		End case 
+		
+		If ($o.minWidth#Null:C1517)
 			
-			//______________________________
-		: (This:C1470.type=Object type push button:K79:16)
+			$width:=Choose:C955($width<$o.minWidth; $o.minWidth; $width)
 			
-			// Add 10% for margins
-			$width:=Round:C94($width*1.1; 0)
+		End if 
+		
+		If ($o.alignment=Align right:K42:4)
 			
-			//______________________________
+			$left:=$right-$width
+			
 		Else 
 			
-			// Add 10 pixels
-			$width:=$width+10
+			// Default is Align left
+			$right:=$left+$width
 			
-			//______________________________
-	End case 
-	
-	If ($o.min#Null:C1517)
+		End if 
 		
-		$width:=Choose:C955($width<$o.min; $o.min; $width)
+		OBJECT SET COORDINATES:C1248(*; This:C1470.name; $left; $top; $right; $bottom)
 		
 	End if 
 	
-	If ($o.alignment=Align right:K42:4)
-		
-		$left:=$right-$width
-		
-	Else 
-		
-		// Default is Align left
-		$right:=$left+$width
-		
-	End if 
-	
-	OBJECT SET COORDINATES:C1248(*; This:C1470.name; $left; $top; $right; $bottom)
 	This:C1470._updateCoordinates($left; $top; $right; $bottom)
 	
 	$0:=This:C1470

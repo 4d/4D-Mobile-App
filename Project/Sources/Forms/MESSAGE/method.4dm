@@ -161,11 +161,7 @@ Case of
 			End case 
 		End for each 
 		
-		ui_BEST_SIZE(New object:C1471(\
-			"widgets"; New collection:C1472("ok"; "cancel"); \
-			"alignment"; Align right:K42:4))
-		
-		//Form.ƒ.buttonGroup.alignRight()
+		Form:C1466.ƒ.buttonGroup.distributeRigthToLeft()
 		
 		// Auto-launch
 		If (Form:C1466.autostart#Null:C1517)

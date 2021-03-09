@@ -4,8 +4,11 @@
 // Created 30-1-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
+var $simulator : Text
+var $isDevToolAvailable; $isProjectOK; $withTeamID : Boolean
 var $currentPage : Integer
-var $device; $e; $form; $page; $plist : Object
+var $constraints; $device; $e; $form; $o; $page; $plist : Object
+var $pref : cs:C1710.preferences
 
 // ----------------------------------------------------
 // Initialisations
@@ -15,10 +18,8 @@ $form:=New object:C1471(\
 "build"; cs:C1710.button.new("151"); \
 "simulator"; cs:C1710.button.new("201"); \
 "project"; cs:C1710.button.new("152"); \
-"install"; cs:C1710.button.new("153"); \
-"start"; 16; \
-"minWidth"; 110; \
-"gap"; 7)
+"install"; cs:C1710.button.new("153")\
+)
 
 $form.pages.push(New object:C1471(\
 "name"; "general"; \
@@ -52,17 +53,22 @@ $form.pages.push(New object:C1471(\
 "name"; "actions"; \
 "button"; "108"))
 
-$form.sectionButtons:=UI.group("101;102;107;108;103;104;105;106")
+$form.sectionButtons:=cs:C1710.group.new("101,102,107,108,103,104,105,106")
 
 If (FEATURE.with("android"))  //🚧
 	
-	$form.buildButtons:=UI.group("201;151;152;153")
+	$form.buildButtons:=cs:C1710.group.new("201,151,152,153")
 	
 Else 
 	
-	$form.buildButtons:=UI.group("151;201;152;153")
+	$form.buildButtons:=cs:C1710.group.new("151,201,152,153")
 	
 End if 
+
+$constraints:=New object:C1471(\
+"start"; 16/* left margin */; \
+"minWidth"; 110/* minimum button width */; \
+"spacing"; 7/* button spacing */)
 
 $e:=FORM Event:C1606
 
@@ -77,11 +83,10 @@ Case of
 		$form.install.disable()
 		$form.simulator.disable()
 		
-		$form.sectionButtons.distributeHorizontally($form)
+		$form.sectionButtons.distributeLeftToRight($constraints)
 		
 		If (Is macOS:C1572 & FEATURE.with("android"))  //🚧
 			
-			//$form.build.setSeparatePopupMenu()
 			$form.install.setSeparatePopupMenu()
 			
 		End if 
@@ -106,7 +111,7 @@ Case of
 			
 		End if 
 		
-		$form.buildButtons.distributeHorizontally($form)
+		$form.buildButtons.distributeLeftToRight($constraints)
 		
 		//______________________________________________________
 	: ($e.code=On Page Change:K2:54)
@@ -122,12 +127,12 @@ Case of
 					//………………………………………………………………………………………
 				: ($currentPage=1)
 					
-					$form.sectionButtons.distributeHorizontally($form)
+					$form.sectionButtons.distributeLeftToRight($constraints)
 					
 					//………………………………………………………………………………………
 				: ($currentPage=2)
 					
-					$form.buildButtons.distributeHorizontally($form)
+					$form.buildButtons.distributeLeftToRight($constraints)
 					
 					//………………………………………………………………………………………
 			End case 
@@ -161,10 +166,8 @@ Case of
 				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0) | Is Windows:C1573)
 				
 				// Get the last simulator used, if known
-				var $pref : cs:C1710.preferences
 				$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
 				
-				var $simulator : Text
 				$simulator:=String:C10($pref.get("simulator"))
 				
 				If (Length:C16($simulator)>0)
@@ -227,7 +230,6 @@ Case of
 							
 							$device:=Form:C1466.devices.apple.query("udid = :1"; $simulator).pop()
 							$form.simulator.setTitle($device.name)
-							
 							
 							If ($device#Null:C1517)
 								
@@ -317,8 +319,6 @@ Case of
 		
 		If (FEATURE.with("android"))  //🚧
 			
-			var $isDevToolAvailable; $isProjectOK; $withTeamID : Boolean
-			
 			$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode) | Bool:C1537(Form:C1466.status.studio)
 			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
 			$withTeamID:=Bool:C1537(Form:C1466.status.teamId) | Is Windows:C1573
@@ -328,7 +328,6 @@ Case of
 			
 		Else 
 			
-			var $o : Object
 			$o:=PROJECT.$project
 			$form.build.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project))
 			$form.install.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project) & Bool:C1537($o.status.teamId))

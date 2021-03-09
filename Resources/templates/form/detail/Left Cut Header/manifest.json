@@ -1,6 +1,18 @@
 {
   "type": "detailform",
   "name": "Left Cut Header",
+	"target": [
+		{
+			"iOS": [
+				"sources/"
+			]
+		},
+		{
+			"android": [
+				"app/"
+			]
+		}
+	],
   "renderer":2,
   "hOffset":183,
   "fields": {
