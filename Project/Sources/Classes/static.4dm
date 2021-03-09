@@ -1,39 +1,13 @@
 /*
-
-Static objects are generally used for setting the appearance of the form and its 
-labels as well as for the graphic interface.Static objects do not have 
-associated variables like active objects.
-
-            ╔══════════════════════════════════════════════╗
-            ║ This is the parent class of all form objects ║
-            ╚══════════════════════════════════════════════╝
-
-                                ┏━━━━━━━━┓           ┏━━━━━━━━━┓
-                             ┏━━┫ button ┃        ┏━━┫ picture ┃
-                             ┃  ┗━━━━━━━━┛        ┃  ┗━━━━━━━━━┛
-┏━━━━━━━━┓⁢⁢⁢⁢⁣     ┏━━━━━━━━┓    ┃  ┏━━━━━━━━━━━━┓    ┃  ┏━━━━━━━━━┓
-┃ static ┣━━┳━━┫ widget ┣━━━━╋━━┫ scrollable ┣━━━━╋━━┫ listbox ┃
-┗━━━━━━━━┛  ┃  ┗━━━━━━━━┛    ┃  ┗━━━━━━━━━━━━┛    ┃  ┗━━━━━━━━━┛
-            ┃  ┏━━━━━━━━━┓   ┃  ┏━━━━━━━━━━┓      ┃  ┏━━━━━━━━━┓
-            ┗━━┫ webArea ┃   ┣━━┫ progress ┃      ┗━━┫ subform ┃
-               ┗━━━━━━━━━┛   ┃  ┗━━━━━━━━━━┛         ┗━━━━━━━━━┛
-                             ┃  ┏━━━━━━━┓
-                             ┣━━┫ input ┃
-                             ┃  ┗━━━━━━━┛
-                             ┃  ┏━━━━━━━━━┓
-                             ┣━━┫ stepper ┃
-                             ┃  ┗━━━━━━━━━┛
-                             ┃  ┏━━━━━━━━━━━━━┓
-                             ┗━━┫ thermometer ┃
-                                ┗━━━━━━━━━━━━━┛
+This class is the parent class of all form objects classes
 */
 
-Class constructor
-	var $1 : Text
+//=== === === === === === === === === === === === === === === === === === ===
+Class constructor($objectName : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.name:=$1
+		This:C1470.name:=$objectName
 		
 	Else 
 		
@@ -50,35 +24,19 @@ Class constructor
 		
 	End if 
 	
-/*════════════════════════════════════════════
-.hide() -> This
-══════════════════════════*/
-Function hide
-	var $0 : Object
+	//=== === === === === === === === === === === === === === === === === === ===
+Function hide()->$this : cs:C1710.static
 	
 	OBJECT SET VISIBLE:C603(*; This:C1470.name; False:C215)
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.show() -> This
-.show(bool) -> This
-══════════════════════════*/
-Function show
-	var $0 : Object
-	var $1 : Boolean
+	//=== === === === === === === === === === === === === === === === === === ===
+Function show($state : Boolean)->$this : cs:C1710.static
 	
 	If (Count parameters:C259>=1)
 		
-		If ($1)
-			
-			OBJECT SET VISIBLE:C603(*; This:C1470.name; True:C214)
-			
-		Else 
-			
-			OBJECT SET VISIBLE:C603(*; This:C1470.name; False:C215)
-			
-		End if 
+		OBJECT SET VISIBLE:C603(*; This:C1470.name; $state)
 		
 	Else 
 		
@@ -86,33 +44,19 @@ Function show
 		
 	End if 
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════*/
-Function getVisible
-	var $0 : Boolean
+	//=== === === === === === === === === === === === === === === === === === ===
+Function getVisible()->$visible : Boolean
 	
-	$0:=OBJECT Get visible:C1075(*; This:C1470.name)
+	$visible:=OBJECT Get visible:C1075(*; This:C1470.name)
 	
-/*════════════════════════════════════════════
-.enable() -> This
-.enable(bool) -> This
-══════════════════════════*/
-Function enable
-	var $0 : Object
-	var $1 : Boolean
+	//=== === === === === === === === === === === === === === === === === === ===
+Function enable($state : Boolean)->$this : cs:C1710.static
 	
 	If (Count parameters:C259>=1)
 		
-		If ($1)
-			
-			OBJECT SET ENABLED:C1123(*; This:C1470.name; True:C214)
-			
-		Else 
-			
-			OBJECT SET ENABLED:C1123(*; This:C1470.name; False:C215)
-			
-		End if 
+		OBJECT SET ENABLED:C1123(*; This:C1470.name; $state)
 		
 	Else 
 		
@@ -120,40 +64,38 @@ Function enable
 		
 	End if 
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.disable() -> This
-══════════════════════════*/
-Function disable
-	var $0 : Object
+	//=== === === === === === === === === === === === === === === === === === ===
+Function disable()->$this : cs:C1710.static
 	
 	OBJECT SET ENABLED:C1123(*; This:C1470.name; False:C215)
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.setTitle(text) -> This
-══════════════════════════*/
-Function setTitle
-	var $0 : Object
-	var $1 : Text
+	//=== === === === === === === === === === === === === === === === === === ===
+Function setTitle($title : Text)->$this : cs:C1710.static
 	
 	var $t : Text
 	
 	If (Count parameters:C259>=1)
 		
-		$t:=Get localized string:C991($1)
-		$t:=Choose:C955(Length:C16($t)>0; $t; $1)  // Revert if no localization
+		$t:=Get localized string:C991($title)
+		$t:=Choose:C955(Length:C16($t)>0; $t; $title)  // Revert if no localization
 		
 	End if 
 	
 	OBJECT SET TITLE:C194(*; This:C1470.name; $t)
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-	// ════════════════════════════════════════════
-Function fontStyle($style : Integer)->$this : Object
+	//=== === === === === === === === === === === === === === === === === === ===
+Function getTitle()->$tithle : Text
+	
+	$tithle:=OBJECT Get title:C1068(*; This:C1470.name)
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function fontStyle($style : Integer)->$this : cs:C1710.static
 	
 	If (Count parameters:C259>=1)
 		
@@ -167,86 +109,78 @@ Function fontStyle($style : Integer)->$this : Object
 	
 	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.getTitle() -> text
-══════════════════════════*/
-Function getTitle
-	var $0 : Text
-	
-	$0:=OBJECT Get title:C1068(*; This:C1470.name)
-	
-/*════════════════════════════════════════════
-.setCoordinates (left;top;right;bottom) -> This
-.setCoordinates (obj) -> This
-  obj = {"left":int,"top":int,"right":int,"bottom":int}
-══════════════════════════*/
-Function setCoordinates
-	var $0 : Object
-	var $1 : Variant
-	var $2 : Integer
-	var $3 : Integer
-	var $4 : Integer
+	//=== === === === === === === === === === === === === === === === === === ===
+Function setCoordinates($left; $top : Integer; $right : Integer; $bottom : Integer)->$this : cs:C1710.static
 	
 	var $o : Object
 	
-	If (Value type:C1509($1)=Is object:K8:27)
+	If (Value type:C1509($left)=Is object:K8:27)
 		
 		$o:=New object:C1471(\
-			"left"; Num:C11($1.left); \
-			"top"; Num:C11($1.top); \
-			"right"; Num:C11($1.right); \
-			"bottom"; Num:C11($1.bottom))
+			"left"; Num:C11($left.left); \
+			"top"; Num:C11($left.top))
+		
+		If ($left.right#Null:C1517)
+			
+			$o.right:=Num:C11($left.right)
+			
+		End if 
+		
+		If ($left.right#Null:C1517)
+			
+			$o.bottom:=Num:C11($left.bottom)
+			
+		End if 
 		
 	Else 
 		
 		$o:=New object:C1471(\
-			"left"; Num:C11($1); \
-			"top"; Num:C11($2); \
-			"right"; Num:C11($3); \
-			"bottom"; Num:C11($4))
+			"left"; Num:C11($left); \
+			"top"; Num:C11($top))
+		
+		If (Count parameters:C259>=3)
+			
+			$o.right:=Num:C11($right)
+			$o.bottom:=Num:C11($bottom)
+			
+		End if 
+	End if 
+	
+	If (Count parameters:C259>=3)
+		
+		OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
+		
+	Else 
+		
+		OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top)
 		
 	End if 
 	
-	OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
-	
 	This:C1470._updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.getCoordinates() -> obj 
-  obj = {"left":int,"top":int,"right":int,"bottom":int})
-══════════════════════════*/
-Function getCoordinates
-	var $0 : Object
+	//=== === === === === === === === === === === === === === === === === === ===
+Function getCoordinates()->$coordinates : Object
 	
 	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	This:C1470._updateCoordinates($left; $top; $right; $bottom)
 	
-	$0:=This:C1470.coordinates
+	$coordinates:=This:C1470.coordinates
 	
-/*════════════════════════════════════════════
-.bestSize(obj) -> This
-  obj = {"alignment":int,"min":int,"max:int}}
-	
-.bestSize({alignment{;min{;max}}}) -> This
-══════════════════════════*/
-Function bestSize
-	var $0 : Object
-	var $1 : Variant
-	var $2 : Integer
-	var $3 : Integer
+	//=== === === === === === === === === === === === === === === === === === ===
+Function bestSize($alignment; $minWidth : Integer; $maxWidth : Integer)->$this : cs:C1710.static
 	
 	var $bottom; $height; $left; $right; $top; $width : Integer
 	var $o : Object
 	
 	If (Count parameters:C259>=1)
 		
-		If (Value type:C1509($1)=Is object:K8:27)
+		If (Value type:C1509($alignment)=Is object:K8:27)
 			
-			$o:=$1
+			$o:=$alignment
 			
 			If ($o.alignment=Null:C1517)
 				
@@ -256,17 +190,16 @@ Function bestSize
 			
 		Else 
 			
-			$o:=New object:C1471
-			
-			$o.alignment:=$1
+			$o:=New object:C1471(\
+				"alignment"; $alignment)
 			
 			If (Count parameters:C259>=2)
 				
-				$o.minWidth:=$2
+				$o.minWidth:=$minWidth
 				
 				If (Count parameters:C259>=3)
 					
-					$o.maxWidth:=$3
+					$o.maxWidth:=$maxWidth
 					
 				End if 
 			End if 
@@ -356,21 +289,17 @@ Function bestSize
 	
 	This:C1470._updateCoordinates($left; $top; $right; $bottom)
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.moveHorizontally(int) -> This
-══════════════════════════*/
-Function moveHorizontally
-	var $0 : Object
-	var $1 : Integer
+	//=== === === === === === === === === === === === === === === === === === ===
+Function moveHorizontally($offset : Integer)->$this : cs:C1710.static
 	
 	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
-	$left:=$left+$1
-	$right:=$right+$1
+	$left:=$left+$offset
+	$right:=$right+$offset
 	
 	This:C1470.setCoordinates(New object:C1471(\
 		"left"; $left; \
@@ -378,21 +307,17 @@ Function moveHorizontally
 		"right"; $right; \
 		"bottom"; $bottom))
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.moveVertically(int) -> This
-══════════════════════════*/
-Function moveVertically
-	var $0 : Object
-	var $1 : Integer
+	//=== === === === === === === === === === === === === === === === === === ===
+Function moveVertically($offset : Integer)->$this : cs:C1710.static
 	
 	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
-	$top:=$top+$1
-	$bottom:=$bottom+$1
+	$top:=$top+$offset
+	$bottom:=$bottom+$offset
 	
 	This:C1470.setCoordinates(New object:C1471(\
 		"left"; $left; \
@@ -400,20 +325,16 @@ Function moveVertically
 		"right"; $right; \
 		"bottom"; $bottom))
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.resizeHorizontally(int) -> This
-══════════════════════════*/
-Function resizeHorizontally
-	var $0 : Object
-	var $1 : Integer
+	//=== === === === === === === === === === === === === === === === === === ===
+Function resizeHorizontally($offset : Integer)->$this : cs:C1710.static
 	
 	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
-	$right:=$right+$1
+	$right:=$right+$offset
 	
 	This:C1470.setCoordinates(New object:C1471(\
 		"left"; $left; \
@@ -421,20 +342,16 @@ Function resizeHorizontally
 		"right"; $right; \
 		"bottom"; $bottom))
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.resizeVertically(int) -> This
-══════════════════════════*/
-Function resizeVertically
-	var $0 : Object
-	var $1 : Integer
+	//=== === === === === === === === === === === === === === === === === === ===
+Function resizeVertically($offset : Integer)->$this : cs:C1710.static
 	
 	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
-	$bottom:=$bottom+$1
+	$bottom:=$bottom+$offset
 	
 	This:C1470.setCoordinates(New object:C1471(\
 		"left"; $left; \
@@ -442,31 +359,26 @@ Function resizeVertically
 		"right"; $right; \
 		"bottom"; $bottom))
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.setDimension(width {; height}) -> This
-══════════════════════════*/
-Function setDimension
-	var $0 : Object
-	var $1 : Integer
-	var $2 : Integer
+	//=== === === === === === === === === === === === === === === === === === ===
+Function setDimension($width : Integer; $height : Integer)->$this : cs:C1710.static
 	
 	var $o : Object
 	
 	$o:=This:C1470.getCoordinates()
-	$o.right:=$o.left+$1
+	$o.right:=$o.left+$width
 	
 	If (Count parameters:C259>=2)
 		
-		$o.bottom:=$o.top+$2
+		$o.bottom:=$o.top+$height
 		
 	End if 
 	
 	OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
 	This:C1470._updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
 Function setColors($foreground : Variant; $background : Variant; $altBackground : Variant)->$this : cs:C1710.static
 	
@@ -506,48 +418,39 @@ Function setColors($foreground : Variant; $background : Variant; $altBackground 
 	
 	$this:=This:C1470
 	
-/*════════════════════════════════════════════*/
-Function _updateCoordinates
-	var $0 : Object
-	var $1 : Integer
-	var $2 : Integer
-	var $3 : Integer
-	var $4 : Integer
+	//=== === === === === === === === === === === === === === === === === === ===
+Function _updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer)
 	
-	var $bottom; $left; $right; $top : Integer
+	var $bottomƒ; $leftƒ; $rightƒ; $topƒ : Integer
 	
 	If (Count parameters:C259>=4)
 		
-		$left:=$1
-		$top:=$2
-		$right:=$3
-		$bottom:=$4
+		$leftƒ:=$left
+		$topƒ:=$top
+		$rightƒ:=$right
+		$bottomƒ:=$bottom
 		
 	Else 
 		
-		OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
+		OBJECT GET COORDINATES:C663(*; This:C1470.name; $leftƒ; $topƒ; $rightƒ; $bottomƒ)
 		
 	End if 
 	
 	This:C1470.coordinates:=New object:C1471(\
-		"left"; $left; \
-		"top"; $top; \
-		"right"; $right; \
-		"bottom"; $bottom)
+		"left"; $leftƒ; \
+		"top"; $topƒ; \
+		"right"; $rightƒ; \
+		"bottom"; $bottomƒ)
 	
 	This:C1470.dimensions:=New object:C1471(\
-		"width"; $right-$left; \
-		"height"; $bottom-$top)
+		"width"; $rightƒ-$leftƒ; \
+		"height"; $bottomƒ-$topƒ)
 	
-	CONVERT COORDINATES:C1365($left; $top; XY Current form:K27:5; XY Current window:K27:6)
-	CONVERT COORDINATES:C1365($right; $bottom; XY Current form:K27:5; XY Current window:K27:6)
+	CONVERT COORDINATES:C1365($leftƒ; $topƒ; XY Current form:K27:5; XY Current window:K27:6)
+	CONVERT COORDINATES:C1365($rightƒ; $bottomƒ; XY Current form:K27:5; XY Current window:K27:6)
 	
 	This:C1470.windowCoordinates:=New object:C1471(\
-		"left"; $left; \
-		"top"; $top; \
-		"right"; $right; \
-		"bottom"; $bottom)
-	
-	$0:=This:C1470
-	
-/*════════════════════════════════════════════*/
+		"left"; $leftƒ; \
+		"top"; $topƒ; \
+		"right"; $rightƒ; \
+		"bottom"; $bottomƒ)
