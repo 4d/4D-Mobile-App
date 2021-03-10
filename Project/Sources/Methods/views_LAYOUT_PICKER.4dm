@@ -14,20 +14,22 @@ If (False:C215)
 	C_TEXT:C284(views_LAYOUT_PICKER; $1)
 End if 
 
-var $default; $t : Text
+var $default; $fileName; $t : Text
 var $p : Picture
-var $isSelected; $success : Boolean
+var $forAndroidOnly; $forIosOnly; $isSelected; $success : Boolean
 var $i; $indx : Integer
 var $x : Blob
-var $error; $ƒ; $manifest; $o; $picker : Object
+var $data; $manifest; $o; $picker : Object
 var $c : Collection
+var $error : cs:C1710.error
 var $template : 4D:C1709.File
-var $folder; $internal; $user : 4D:C1709.Folder
-var $archive : 4D:C1709.ZipArchive
-var $svg : cs:C1710.svg
+var $folder; $internal; $userTemplates : 4D:C1709.Folder
+var $zip : 4D:C1709.ZipArchive
 var $str : cs:C1710.str
+var $svg : cs:C1710.svg
+var $tmpl : cs:C1710.tmpl
 
-ARRAY TEXT:C222($formsArray; 0)
+ARRAY TEXT:C222($formsArray; 0x0000)
 
 // ----------------------------------------------------
 // Initialisations
@@ -35,7 +37,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/github.png").platformPath; $p; *)
 	
-	$ƒ:=New object:C1471(\
+	$data:=New object:C1471(\
 		"type"; $1; \
 		"cell"; New object:C1471("width"; 140; "height"; 180); \
 		"icon"; New object:C1471("width"; 300; "height"; 300); \
@@ -45,38 +47,108 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		)
 	
 	$str:=cs:C1710.str.new()
+	$error:=cs:C1710.error.new()
 	
 	// Load internal templates
-	$internal:=cs:C1710.path.new()[$ƒ.type+"Forms"]()
+	$internal:=cs:C1710.path.new()[$data.type+"Forms"]()
 	
 	// Load the global manifest
 	$manifest:=JSON Parse:C1218($internal.file("manifest.json").getText())
 	$default:=String:C10($manifest.default)
 	
-	For each ($folder; $internal.folders())
+	// 👀 We assume that our templates are well-formed
+	
+	If (FEATURE.with("android"))
 		
-		// 👀 We assume that our templates are well-formed
+		$forIosOnly:=Not:C34(Form:C1466.$android)
+		$forAndroidOnly:=Not:C34(Form:C1466.$ios)
 		
-		$ƒ.forms.push($folder.fullName)
+		For each ($folder; $internal.folders())
+			
+			$tmpl:=cs:C1710.tmpl.new($folder.fullName; $data.type)
+			
+			Case of 
+					//______________________________________________________
+				: ($forIosOnly & $tmpl.iOS)
+					
+					$data.forms.push($folder.fullName)
+					
+					//______________________________________________________
+				: ($forAndroidOnly & $tmpl.android)
+					
+					$data.forms.push($folder.fullName)
+					
+					//______________________________________________________
+				: ($tmpl.iOS & $tmpl.android)
+					
+					$data.forms.push($folder.fullName)
+					
+					//______________________________________________________
+			End case 
+		End for each 
 		
-	End for each 
+	Else 
+		
+		For each ($folder; $internal.folders())
+			
+			$data.forms.push($folder.fullName)
+			
+		End for each 
+	End if 
 	
 	// Search for templates into the host database
-	$user:=cs:C1710.path.new()["host"+$ƒ.type+"Forms"]()
+	$userTemplates:=cs:C1710.path.new()["host"+$data.type+"Forms"]()
 	
-	If ($user.exists)
+	If ($userTemplates.exists)
 		
 		$c:=New collection:C1472
 		
-		For each ($folder; $user.folders())
+		For each ($folder; $userTemplates.folders())
 			
-			$success:=True:C214
-			
-			For each ($t; $manifest.mandatory) While ($success)
+			If (FEATURE.with("android"))
 				
-				$success:=$user.folder($folder.name).file($t).exists
+				$success:=True:C214
 				
-			End for each 
+				$tmpl:=cs:C1710.tmpl.new("/"+$folder.fullName; $data.type)
+				
+				Case of 
+						
+						//______________________________________________________
+					: ($forIosOnly & $tmpl.iOS)
+						
+						For each ($fileName; $manifest.mandatory) While ($success)
+							
+							$success:=$userTemplates.folder($folder.name).file($fileName).exists
+							
+						End for each 
+						
+						//______________________________________________________
+					: ($forAndroidOnly & $tmpl.android)
+						
+						//#TO_DO: VERIFY IF ANDROID TEMPLATE IS WELL-FORMED
+						
+						//______________________________________________________
+					: ($tmpl.iOS & $tmpl.android)
+						
+						For each ($fileName; $manifest.mandatory) While ($success)
+							
+							$success:=$userTemplates.folder($folder.name).file($fileName).exists
+							
+						End for each 
+						
+						//#TO_DO: VERIFY IF ANDROID TEMPLATE IS WELL-FORMED
+						
+						//______________________________________________________
+				End case 
+				
+			Else 
+				
+				For each ($fileName; $manifest.mandatory) While ($success)
+					
+					$success:=$userTemplates.folder($folder.name).file($fileName).exists
+					
+				End for each 
+			End if 
 			
 			If ($success)
 				
@@ -85,58 +157,94 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			End if 
 		End for each 
 		
-/***********************
-START HIDING ERRORS
-***********************/
-		$error:=err.hide()
+		$error.hide()  // <- START HIDING ERRORS
 		
 		// Add downloaded templates
-		For each ($o; $user.files().query("extension = :1"; SHARED.archiveExtension))
+		For each ($template; $userTemplates.files().query("extension = :1"; SHARED.archiveExtension))
 			
-			$archive:=ZIP Read archive:C1637($o)
+			$zip:=ZIP Read archive:C1637($template)
 			
-			If ($archive#Null:C1517)
+			If ($zip#Null:C1517)
 				
-				$success:=True:C214
-				
-				For each ($t; $manifest.mandatory) While ($success)
+				If (FEATURE.with("android"))
 					
-					$success:=$archive.root.file($t).exists
+					$success:=True:C214
 					
-				End for each 
-				
-				If ($success)
+					$tmpl:=cs:C1710.tmpl.new("/"+$zip.root.name+".zip"; $data.type)
 					
-					$manifest:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
-					$success:=($manifest#Null:C1517)
+					Case of 
+							//______________________________________________________
+						: ($forIosOnly & $tmpl.iOS)
+							
+							For each ($t; $manifest.mandatory) While ($success)
+								
+								$success:=$zip.root.file($t).exists
+								
+							End for each 
+							
+							//______________________________________________________
+						: ($forAndroidOnly & $tmpl.android)
+							
+							//#TO_DO: VERIFY IF ANDROID TEMPLATE IS WELL-FORMED
+							
+							//______________________________________________________
+						: ($tmpl.iOS & $tmpl.android)
+							
+							For each ($t; $manifest.mandatory) While ($success)
+								
+								$success:=$zip.root.file($t).exists
+								
+							End for each 
+							
+							//#TO_DO: VERIFY IF ANDROID TEMPLATE IS WELL-FORMED
+							
+							//______________________________________________________
+					End case 
 					
 					If ($success)
 						
-						$success:=String:C10(JSON Parse:C1218($archive.root.file("manifest.json").getText()).type)=($ƒ.type+"form")
+						$c.push("/"+$template.fullName)
+						
+					End if 
+					
+				Else 
+					
+					For each ($t; $manifest.mandatory) While ($success)
+						
+						$success:=$zip.root.file($t).exists
+						
+					End for each 
+					
+					If ($success)
+						
+						$manifest:=JSON Parse:C1218($zip.root.file("manifest.json").getText())
+						$success:=($manifest#Null:C1517)
 						
 						If ($success)
 							
-							$c.push("/"+$o.fullName)
+							$success:=String:C10(JSON Parse:C1218($zip.root.file("manifest.json").getText()).type)=($data.type+"form")
 							
+							If ($success)
+								
+								$c.push("/"+$template.fullName)
+								
+							End if 
 						End if 
 					End if 
 				End if 
 			End if 
 		End for each 
 		
-/***********************
-STOP HIDING ERRORS
-***********************/
-		$error.show()
+		$error.show()  // <- STOP HIDING ERRORS
 		
-		$ƒ.forms.combine($c)
+		$data.forms.combine($c)
 		
 	End if 
 	
 	// Sorting will put the downloaded models first
-	$ƒ.forms:=$ƒ.forms.orderBy()
+	$data.forms:=$data.forms.orderBy()
 	
-	COLLECTION TO ARRAY:C1562($ƒ.forms; $formsArray)
+	COLLECTION TO ARRAY:C1562($data.forms; $formsArray)
 	
 Else 
 	
@@ -155,10 +263,10 @@ $picker:=New object:C1471(\
 "pathnames"; New collection:C1472; \
 "helpTips"; New collection:C1472; \
 "infos"; New collection:C1472; \
-"celluleWidth"; $ƒ.cell.width; \
-"celluleHeight"; $ƒ.cell.height; \
+"celluleWidth"; $data.cell.width; \
+"celluleHeight"; $data.cell.height; \
 "offset"; 10; \
-"thumbnailWidth"; $ƒ.icon.width; \
+"thumbnailWidth"; $data.icon.width; \
 "noPicture"; Get localized string:C991("noMedia"); \
 "tips"; True:C214; \
 "background"; 0x00FFFFFF; \
@@ -167,8 +275,8 @@ $picker:=New object:C1471(\
 "promptBackColor"; UI.strokeColor; \
 "hidePromptSeparator"; True:C214; \
 "forceRedraw"; True:C214; \
-"prompt"; $str.setText("selectAFormTemplateToUseAs").localized($ƒ.type); \
-"selector"; $ƒ.type)
+"prompt"; $str.setText("selectAFormTemplateToUseAs").localized($data.type); \
+"selector"; $data.type)
 
 /* Hot zones definition */
 $picker.hotZones:=New collection:C1472
@@ -194,16 +302,13 @@ $picker.vOffset:=155  // Offset of the background button
 // List of forms used in this project
 $picker.marked:=New collection:C1472
 
-For each ($t; Form:C1466[$ƒ.type])
+For each ($t; Form:C1466[$data.type])
 	
-	$picker.marked.push(Form:C1466[$ƒ.type][$t].form)
+	$picker.marked.push(Form:C1466[$data.type][$t].form)
 	
 End for each 
 
-/***********************
-START HIDING ERRORS
-***********************/
-$error:=err.hide()
+$error.hide()  // <- START HIDING ERRORS
 
 For ($i; 1; Size of array:C274($formsArray); 1)
 	
@@ -216,12 +321,12 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		If (Path to object:C1547($formsArray{$i}).extension=SHARED.archiveExtension)  // Archive
 			
 			// Downloaded template
-			$template:=$user.file($t)
+			$template:=$userTemplates.file($t)
 			
 		Else 
 			
 			// Database template
-			$template:=$user.folder($t)
+			$template:=$userTemplates.folder($t)
 			
 		End if 
 		
@@ -236,16 +341,16 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 	
 	If ($template.extension=SHARED.archiveExtension)  // Archive
 		
-		$archive:=ZIP Read archive:C1637($template)
+		$zip:=ZIP Read archive:C1637($template)
 		
-		If ($archive#Null:C1517)
+		If ($zip#Null:C1517)
 			
 			// Create image
-			$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
+			$svg:=cs:C1710.svg.new().dimensions($data.cell.width; $data.cell.height)
 			
 			If ($isSelected)  //selected
 				
-				$svg.rect($ƒ.cell.width-6; $ƒ.cell.height-3)\
+				$svg.rect($data.cell.width-6; $data.cell.height-3)\
 					.position(5; 2)\
 					.stroke(UI.colors.strokeColor.hex)\
 					.fill(UI.colors.backgroundSelectedColor.hex)\
@@ -254,17 +359,18 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			End if 
 			
 			// Put icon
-			$x:=$archive.root.file("layoutIconx2.png").getContent()
+			$x:=$zip.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x; $p)
 			CLEAR VARIABLE:C89($x)
 			$svg.image($p).moveH(-8)
 			
 			// Get the manifest
-			$o:=JSON Parse:C1218($archive.root.file("manifest.json").getText())
+			$o:=JSON Parse:C1218($zip.root.file("manifest.json").getText())
 			
 			// Put text
-			$svg.textArea($o.name; "root").position(0; $ƒ.cell.height-20)\
-				.width($ƒ.cell.width)\
+			$svg.textArea($o.name; "root")\
+				.position(0; $data.cell.height-20)\
+				.width($data.cell.width)\
 				.fill("dimgray")\
 				.alignment(Align center:K42:3)\
 				.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
@@ -279,7 +385,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			End if 
 			
 			// Add github icon
-			$svg.image($ƒ.github)\
+			$svg.image($data.github)\
 				.position(Choose:C955($picker.selector="list"; 10; 5); Choose:C955($picker.selector="list"; 4; 12))
 			
 			$picker.pictures.push($svg.picture())
@@ -302,11 +408,11 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			If ($template.parent.file("layoutIconx2.png").exists)  // Use media
 				
 				// Create image
-				$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
+				$svg:=cs:C1710.svg.new().dimensions($data.cell.width; $data.cell.height)
 				
 				If ($isSelected)  //selected
 					
-					$svg.rect($ƒ.cell.width-6; $ƒ.cell.height-3)\
+					$svg.rect($data.cell.width-6; $data.cell.height-3)\
 						.position(5; 2)\
 						.stroke(UI.colors.strokeColor.hex)\
 						.fill(UI.colors.backgroundSelectedColor.hex)\
@@ -329,8 +435,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				// Put text
 				$svg.textArea($template.parent.name; "root")\
-					.position(0; $ƒ.cell.height-20)\
-					.dimensions($ƒ.cell.width)\
+					.position(0; $data.cell.height-20)\
+					.dimensions($data.cell.width)\
 					.fill("dimgray")\
 					.alignment(Align center:K42:3)\
 					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
@@ -356,13 +462,13 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					$svg.styleSheet(File:C1566("/RESOURCES/template.css"))
 					
 					$p:=$svg.picture()
-					CREATE THUMBNAIL:C679($p; $p; $ƒ.cell.width; $ƒ.cell.height-40)
+					CREATE THUMBNAIL:C679($p; $p; $data.cell.width; $data.cell.height-40)
 					
-					$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
+					$svg:=cs:C1710.svg.new().dimensions($data.cell.width; $data.cell.height)
 					
 					If ($isSelected)  //selected
 						
-						$svg.rect($ƒ.cell.width-6; $ƒ.cell.height-3)\
+						$svg.rect($data.cell.width-6; $data.cell.height-3)\
 							.position(5; 2)\
 							.stroke(UI.colors.strokeColor.hex)\
 							.fill(UI.colors.backgroundSelectedColor.hex)\
@@ -374,8 +480,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					
 					// Put text
 					$svg.textArea($template.name; "root")\
-						.position(0; $ƒ.cell.height-20)\
-						.dimensions($ƒ.cell.width)\
+						.position(0; $data.cell.height-20)\
+						.dimensions($data.cell.width)\
 						.fill("dimgray")\
 						.alignment(Align center:K42:3)\
 						.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
@@ -410,13 +516,10 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 	End if 
 End for 
 
-/***********************
-STOP HIDING ERRORS
-***********************/
-$error.show()
+$error.show()  // <- STOP HIDING ERRORS
 
 // Put an "explore" button
-$svg:=cs:C1710.svg.new().dimensions($ƒ.cell.width; $ƒ.cell.height)
+$svg:=cs:C1710.svg.new().dimensions($data.cell.width; $data.cell.height)
 
 // Media
 READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
@@ -424,7 +527,7 @@ $svg.image($p).position(20; 30).dimensions(96)
 
 // Put text
 //$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\
-.dimensions($ƒ.cell.width)\
+.dimensions($data.cell.width)\
 .fill("dimgray")\
 .textAlignment(Align center)
 
@@ -437,17 +540,17 @@ $svg.image($p).position(20; 30).dimensions(96)
 // Put at the end
 $picker.pictures.push($svg.picture())
 $picker.pathnames.push(Null:C1517)
-$picker.helpTips.push($str.setText("downloadMoreResources").localized($ƒ.type))
+$picker.helpTips.push($str.setText("downloadMoreResources").localized($data.type))
 $picker.infos.push(Null:C1517)
 
 $picker.hideSelection:=True:C214  // The selected item is already highlighted
 
 // Add 1 because the widget work with arrays
-$indx:=$picker.pathnames.indexOf(String:C10(Form:C1466[$ƒ.type][$ƒ.dialog.$.tableNum()].form))+1
+$indx:=$picker.pathnames.indexOf(String:C10(Form:C1466[$data.type][$data.dialog.$.tableNum()].form))+1
 $picker.item:=Choose:C955($indx=0; 1; $indx)
 
 // Display selector
-$ƒ.dialog.form.call(New collection:C1472("pickerShow"; $picker))
+$data.dialog.form.call(New collection:C1472("pickerShow"; $picker))
 
 // ----------------------------------------------------
 // End

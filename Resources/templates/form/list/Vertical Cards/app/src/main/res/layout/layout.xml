@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
+
+    <data>
+
+        <!--ENTITY_VARIABLE-->
+    </data>
+
+    <!-- Generated with list form template named "Vertical Cards" -->
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        card_view:cardCornerRadius="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/__SPECIFIC_ID_1__"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="Image"
+                android:elevation="4dp"
+                android:scaleType="centerCrop"
+                app:imageUrl="__IMAGE_1__"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/__SPECIFIC_ID_2__"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:elevation="4dp"
+                android:maxLines="2"
+                android:scrollbars="none"
+                android:text="__TEXT_2__"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@id/__SPECIFIC_ID_3__"
+                app:layout_constraintEnd_toEndOf="@+id/__SPECIFIC_ID_1__"
+                app:layout_constraintStart_toStartOf="@+id/__SPECIFIC_ID_1__"
+                app:layout_constraintTop_toTopOf="@+id/__SPECIFIC_ID_1__"
+                tools:text="My field 2" />
+
+            <TextView
+                android:id="@+id/__SPECIFIC_ID_3__"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:elevation="4dp"
+                android:maxLines="2"
+                android:scrollbars="none"
+                android:text="__TEXT_3__"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/__SPECIFIC_ID_1__"
+                app:layout_constraintStart_toStartOf="@+id/__SPECIFIC_ID_1__"
+                app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_2__"
+                tools:text="My field 3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

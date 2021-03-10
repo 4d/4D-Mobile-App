@@ -235,7 +235,8 @@ Function androidForms  // android forms folder
 	
 	C_OBJECT:C1216($0)
 	
-	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/form").platformPath; fk platform path:K87:2)
+	//This.target:=Folder(Folder("/RESOURCES/templates/android/form").platformPath; fk platform path)
+	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/form").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target
@@ -245,7 +246,8 @@ Function androidListForms  // android list forms folder
 	
 	C_OBJECT:C1216($0)
 	
-	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/form/list").platformPath; fk platform path:K87:2)
+	//This.target:=Folder(Folder("/RESOURCES/templates/android/form/list").platformPath; fk platform path)
+	This:C1470.target:=This:C1470.androidForms().folder("list")
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target
@@ -255,7 +257,8 @@ Function androidDetailForms  // android detail forms folder
 	
 	C_OBJECT:C1216($0)
 	
-	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/form/detail").platformPath; fk platform path:K87:2)
+	//This.target:=Folder(Folder("/RESOURCES/templates/android/form/detail").platformPath; fk platform path)
+	This:C1470.target:=This:C1470.androidForms().folder("detail")
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target

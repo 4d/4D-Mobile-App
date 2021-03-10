@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"windowMinWidth": 970,
 	"windowMinHeight": 860,
@@ -260,6 +260,7 @@
 		"views": {
 			"default": {},
 			"message": {
+				"visible": false,
 				"objects": [
 					"message.back",
 					"message.button",

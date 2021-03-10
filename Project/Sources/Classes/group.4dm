@@ -95,6 +95,35 @@ Function included
 			//______________________________________________________
 	End case 
 	
+	//════════════════════════════════════════════
+	// Returns the coordinates of the rectangle enclosing the group.
+Function coordinates()->$coordinates : Object
+	
+	var $left; $top; $right; $bottom : Integer
+	var $o : Object
+	
+	For each ($o; This:C1470.members)
+		
+		OBJECT GET COORDINATES:C663(*; $o.name; $left; $top; $right; $bottom)
+		
+		If ($coordinates=Null:C1517)
+			
+			$coordinates:=New object:C1471(\
+				"left"; $left; \
+				"top"; $top; \
+				"right"; $right; \
+				"bottom"; $bottom)
+			
+		Else 
+			
+			$coordinates.left:=Choose:C955($left<$coordinates.left; $left; $coordinates.left)
+			$coordinates.top:=Choose:C955($top<$coordinates.top; $top; $coordinates.top)
+			$coordinates.right:=Choose:C955($right>$coordinates.right; $right; $coordinates.right)
+			$coordinates.bottom:=Choose:C955($bottom>$coordinates.bottom; $bottom; $coordinates.bottom)
+			
+		End if 
+	End for each 
+	
 /*════════════════════════════════════════════
 Performs a horizontal distribution, from left to right,
 of the elements according to their best size
@@ -108,7 +137,7 @@ The optional object type parameter allow to specify:
 - The maximum width to respect in pixels (maxWidth)
 	
 ══════════════════════════*/
-Function distributeLeftToRight($params : Object)
+Function distributeLeftToRight($params : Object)->$this : cs:C1710.group
 	
 	var $e; $o : Object
 	var $key : Text
@@ -167,6 +196,8 @@ Function distributeLeftToRight($params : Object)
 		End if 
 	End for each 
 	
+	$this:=This:C1470
+	
 /*════════════════════════════════════════════
 Performs a horizontal distribution, from right to left,
 of the elements according to their best size
@@ -180,7 +211,7 @@ The optional object type parameter allow to specify:
 - The maximum width to respect in pixels (maxWidth)
 	
 ══════════════════════════*/
-Function distributeRigthToLeft($params : Object)
+Function distributeRigthToLeft($params : Object)->$this : cs:C1710.group
 	
 	var $e; $o : Object
 	var $key : Text
@@ -239,16 +270,18 @@ Function distributeRigthToLeft($params : Object)
 		End if 
 	End for each 
 	
-/*════════════════════════════════════════════
+	$this:=This:C1470
+	
+	//════════════════════════════════════════════
+/*
 Performs a centered alignment of the elements according to their best size
 	
 .centerVertically({obj})
 	
 The optional widget name parameter allow to specify the reference
 If ommited, the distribution is relative to the form
-	
-══════════════════════════*/
-Function centerVertically($reference : Text)
+*/
+Function centerVertically($reference : Text)->$this : cs:C1710.group
 	
 	var $bottom; $height; $left; $middle; $right; $top; $width : Integer
 	var $o : Object
@@ -275,8 +308,10 @@ Function centerVertically($reference : Text)
 		
 	End for each 
 	
+	$this:=This:C1470
+	
 	//════════════════════════════════════════════
-Function alignLeft($reference)
+Function alignLeft($reference)->$this : cs:C1710.group
 	
 	var $left : Integer
 	var $o : Object
@@ -324,8 +359,10 @@ Function alignLeft($reference)
 		
 	End for each 
 	
+	$this:=This:C1470
+	
 	//════════════════════════════════════════════
-Function alignRight($reference)
+Function alignRight($reference)->$this : cs:C1710.group
 	
 	var $right : Integer
 	var $o : Object
@@ -373,21 +410,18 @@ Function alignRight($reference)
 		
 	End for each 
 	
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.show()
-.show(bool)
-══════════════════════════*/
-Function show
+	//════════════════════════════════════════════
+Function show($visible : Boolean)->$this : Object
 	
-	C_BOOLEAN:C305($1)
-	C_OBJECT:C1216($o)
+	var $o : Object
 	
 	If (Count parameters:C259>=1)
 		
 		For each ($o; This:C1470.members)
 			
-			$o.show($1)
+			$o.show($visible)
 			
 		End for each 
 		
@@ -400,10 +434,12 @@ Function show
 		End for each 
 	End if 
 	
-/*════════════════════════════════════════════*/
-Function hide
+	$this:=This:C1470
 	
-	C_OBJECT:C1216($o)
+	//════════════════════════════════════════════
+Function hide->$this : Object
+	
+	var $o : Object
 	
 	For each ($o; This:C1470.members)
 		
@@ -411,20 +447,18 @@ Function hide
 		
 	End for each 
 	
-/*════════════════════════════════════════════
-.enable()
-.enable(bool)
-══════════════════════════*/
-Function enable
+	$this:=This:C1470
 	
-	C_BOOLEAN:C305($1)
-	C_OBJECT:C1216($o)
+	//════════════════════════════════════════════
+Function enable($enabled : Boolean)->$this : Object
+	
+	var $o : Object
 	
 	If (Count parameters:C259>=1)
 		
 		For each ($o; This:C1470.members)
 			
-			$o.enable($1)
+			$o.enable($enabled)
 			
 		End for each 
 		
@@ -437,10 +471,12 @@ Function enable
 		End for each 
 	End if 
 	
-/*════════════════════════════════════════════*/
-Function disable
+	$this:=This:C1470
 	
-	C_OBJECT:C1216($o)
+	//════════════════════════════════════════════
+Function disable->$this : Object
+	
+	var $o : Object
 	
 	For each ($o; This:C1470.members)
 		
@@ -448,9 +484,9 @@ Function disable
 		
 	End for each 
 	
-/*════════════════════════════════════════════*/
+	$this:=This:C1470
 	
-	// ════════════════════════════════════════════
+	//════════════════════════════════════════════
 Function fontStyle($style : Integer)->$this : Object
 	
 	var $o : Object
@@ -459,7 +495,7 @@ Function fontStyle($style : Integer)->$this : Object
 		
 		For each ($o; This:C1470.members)
 			
-			$o.fontStyle($1)
+			$o.fontStyle($style)
 			
 		End for each 
 		

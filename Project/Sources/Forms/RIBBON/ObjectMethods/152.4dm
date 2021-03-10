@@ -360,7 +360,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_removeSDK")
 				
-				$path.sdk().delete(fk recursive:K87:7)
+				Folder:C1567("/RESOURCES/sdk/Versions").delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_removeMobilesProjects")

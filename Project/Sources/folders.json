@@ -130,6 +130,9 @@
 		]
 	},
 	"[EDITOR]": {
+		"groups": [
+			"RIBON"
+		],
 		"methods": [
 			"COMPILER_editor",
 			"editor_CALLBACK",
@@ -149,13 +152,11 @@
 			"editor_PROCESS_MESSAGES",
 			"editor_PROJECT_AUDIT",
 			"editor_RESUME",
-			"editor_ui_LISTBOX",
-			"RIBBON"
+			"editor_ui_LISTBOX"
 		],
 		"forms": [
 			"EDITOR",
 			"NEW_PROJECT",
-			"RIBBON",
 			"TITLE",
 			"WIZARD_NEW_PROJECT",
 			"WIZARD_OPEN_PROJECT"
@@ -836,6 +837,17 @@
 			"rgx_Options",
 			"Rgx_SplitText",
 			"Rgx_SubstituteText"
+		]
+	},
+	"RIBON": {
+		"methods": [
+			"RIBBON"
+		],
+		"forms": [
+			"RIBBON"
+		],
+		"classes": [
+			"RIBBON"
 		]
 	},
 	"Search": {

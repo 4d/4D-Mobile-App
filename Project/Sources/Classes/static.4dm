@@ -90,9 +90,9 @@ Function setTitle($title : Text)->$this : cs:C1710.static
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function getTitle()->$tithle : Text
+Function getTitle()->$title : Text
 	
-	$tithle:=OBJECT Get title:C1068(*; This:C1470.name)
+	$title:=OBJECT Get title:C1068(*; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function fontStyle($style : Integer)->$this : cs:C1710.static
@@ -126,7 +126,7 @@ Function setCoordinates($left; $top : Integer; $right : Integer; $bottom : Integ
 			
 		End if 
 		
-		If ($left.right#Null:C1517)
+		If ($left.bottom#Null:C1517)
 			
 			$o.bottom:=Num:C11($left.bottom)
 			
@@ -146,7 +146,7 @@ Function setCoordinates($left; $top : Integer; $right : Integer; $bottom : Integ
 		End if 
 	End if 
 	
-	If (Count parameters:C259>=3)
+	If ($o.right#Null:C1517)
 		
 		OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
 		
@@ -419,7 +419,7 @@ Function setColors($foreground : Variant; $background : Variant; $altBackground 
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function _updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer)
+Function _updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer)->$this : cs:C1710.static
 	
 	var $bottomƒ; $leftƒ; $rightƒ; $topƒ : Integer
 	
@@ -454,3 +454,5 @@ Function _updateCoordinates($left : Integer; $top : Integer; $right : Integer; $
 		"top"; $topƒ; \
 		"right"; $rightƒ; \
 		"bottom"; $bottomƒ)
+	
+	$this:=This:C1470

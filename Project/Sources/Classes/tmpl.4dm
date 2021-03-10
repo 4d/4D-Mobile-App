@@ -9,8 +9,9 @@ Class constructor($name : Text; $type : Text)
 	
 	var $file : Object
 	
-	
 	This:C1470.upToDate:=False:C215
+	This:C1470.android:=False:C215
+	This:C1470.iOS:=False:C215
 	
 	If (Count parameters:C259>=1)
 		
@@ -39,7 +40,7 @@ Class constructor($name : Text; $type : Text)
 			
 			This:C1470.type:=$type
 			
-			This:C1470.path:=This:C1470.path()
+			This:C1470.path:=This:C1470._path()
 			
 			If (Bool:C1537(This:C1470.path.exists))
 				
@@ -51,6 +52,20 @@ Class constructor($name : Text; $type : Text)
 					This:C1470.manifest:=JSON Parse:C1218($file.getText())
 					This:C1470.listform:=(String:C10(This:C1470.manifest.type)="listform")
 					This:C1470.detailform:=(String:C10(This:C1470.manifest.type)="detailform")
+					
+					If (This:C1470.manifest.target#Null:C1517)
+						
+						This:C1470.iOS:=(This:C1470.manifest.target.query("iOS != null").pop()#Null:C1517)
+						This:C1470.android:=(This:C1470.manifest.target.query("android != null").pop()#Null:C1517)
+						
+					Else 
+						
+						// Check the folder structure to identify an iOS or Android template
+						
+						This:C1470.iOS:=This:C1470.path.folder("Sources").exists
+						This:C1470.android:=This:C1470.path.folder("app").exists
+						
+					End if 
 					
 				Else 
 					
@@ -459,7 +474,7 @@ Function cancel
 	
 	//============================================================================
 	// Return the path of the file/folder
-Function path($name : Text; $type : Text)->$template : 4D:C1709.folder
+Function _path($name : Text; $type : Text)->$template : 4D:C1709.folder
 	
 	var $formName; $formType; $item : Text
 	var $success : Boolean

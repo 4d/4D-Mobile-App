@@ -109,6 +109,10 @@ Class constructor
 	End if 
 	
 /*======================================================================*/
+	//Function digest()->$digest : Text
+	
+	
+/*======================================================================*/
 Function __defaultReference
 	
 	If (This:C1470.reference=Null:C1517)
