@@ -89,15 +89,24 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.productName.catch())
 			
-			If ($e.code=On After Edit:K2:43)
-				
-				$ƒ.checkName(Get edited text:C655)
-				
-			Else 
-				
-				$ƒ.checkName(Form:C1466.product.name)
-				
-			End if 
+			Case of 
+					
+					//______________________________________________________
+				: ($e.code=On After Edit:K2:43)
+					
+					$ƒ.checkName(Get edited text:C655)
+					
+					//______________________________________________________
+				: ($e.code=On Data Change:K2:15)
+					
+					$ƒ.checkName(Form:C1466.product.name)
+					
+					// Update bundleIdentifier & navigationTitle
+					Form:C1466.product.bundleIdentifier:=Form:C1466.organization.id+"."+formatString("bundleApp"; Form:C1466.product.name)
+					Form:C1466.main.navigationTitle:=Form:C1466.product.name
+					
+					//______________________________________________________
+			End case 
 			
 			//==============================================
 		: ($ƒ.icon.catch())

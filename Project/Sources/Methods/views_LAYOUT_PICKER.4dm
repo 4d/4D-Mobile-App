@@ -125,7 +125,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 						//______________________________________________________
 					: ($forAndroidOnly & $tmpl.android)
 						
-						//#TO_DO: VERIFY IF ANDROID TEMPLATE IS WELL-FORMED
+						$success:=$userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists
 						
 						//______________________________________________________
 					: ($tmpl.iOS & $tmpl.android)
@@ -136,7 +136,12 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 							
 						End for each 
 						
-						//#TO_DO: VERIFY IF ANDROID TEMPLATE IS WELL-FORMED
+						$success:=$success & $userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists
+						
+						//______________________________________________________
+					Else 
+						
+						$success:=False:C215
 						
 						//______________________________________________________
 				End case 
@@ -185,7 +190,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 							//______________________________________________________
 						: ($forAndroidOnly & $tmpl.android)
 							
-							//#TO_DO: VERIFY IF ANDROID TEMPLATE IS WELL-FORMED
+							$success:=$zip.root.file("app/src/main/res/layout/layout.xml").exists
 							
 							//______________________________________________________
 						: ($tmpl.iOS & $tmpl.android)
@@ -196,7 +201,12 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 								
 							End for each 
 							
-							//#TO_DO: VERIFY IF ANDROID TEMPLATE IS WELL-FORMED
+							$success:=$success & $zip.root.file("app/src/main/res/layout/layout.xml").exists
+							
+							//______________________________________________________
+						Else 
+							
+							$success:=False:C215
 							
 							//______________________________________________________
 					End case 

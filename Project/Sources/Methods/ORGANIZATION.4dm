@@ -26,6 +26,7 @@ Else   // <== WIDGETS METHOD
 			
 			//==============================================
 		: ($ƒ.name.catch())
+			
 			$ƒ.nameHelp.show($e.code=On Getting Focus:K2:7)
 			
 			//==============================================
@@ -35,6 +36,27 @@ Else   // <== WIDGETS METHOD
 			
 			//==============================================
 		: ($ƒ.identifier.catch())
+			
+			Case of 
+					//______________________________________________________
+				: ($e.code=On Getting Focus:K2:7)
+					
+					$ƒ.identifierHelp.show()
+					
+					//______________________________________________________
+				: ($e.code=On Losing Focus:K2:8)
+					
+					$ƒ.identifierHelp.hide()
+					
+					//______________________________________________________
+				: ($e.code=On Data Change:K2:15)
+					
+					// Update bundleIdentifier
+					Form:C1466.product.bundleIdentifier:=Form:C1466.organization.id+"."+formatString("bundleApp"; Form:C1466.product.name)
+					
+					//______________________________________________________
+			End case 
+			
 			$ƒ.identifierHelp.show($e.code=On Getting Focus:K2:7)
 			
 			//==============================================

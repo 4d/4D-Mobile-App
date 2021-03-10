@@ -520,14 +520,15 @@ Function templatePicker($formType : Text)
 	// Building the table selector
 Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	
-	var $formName; $name; $table; $typeForm : Text
+	var $name; $table; $typeForm : Text
 	var $picture : Picture
 	var $isSelected : Boolean
 	var $x : Blob
 	var $params; $str : Object
-	var $formRoot : 4D:C1709.Folder
-	var $file : 4D:C1709.File
+	var $color : Variant
+	var $icon : 4D:C1709.File
 	var $error : cs:C1710.error
+	var $tmpl : cs:C1710.tmpl
 	var $svg : cs:C1710.svg
 	
 	// Optional parameters
@@ -563,15 +564,11 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 	$error:=cs:C1710.error.new()
 	$svg:=cs:C1710.svg.new()
 	
-	//var $formData : Object
-	//$formData:=Form.$dialog[Current form name]
-	
 	If ($dataModel#Null:C1517)
 		
 		$typeForm:=This:C1470.typeForm()
 		
-/* START HIDING ERRORS */
-		$error.hide()
+		$error.hide()  // START HIDING ERRORS
 		
 		For each ($table; $dataModel)
 			
@@ -591,35 +588,63 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 				If (Form:C1466[$typeForm][$table].form=Null:C1517)
 					
 					// No form selected
-					$file:=File:C1566("/RESOURCES/templates/form/"+$typeForm+"/defaultLayoutIcon.png")
+					$icon:=File:C1566("/RESOURCES/templates/form/"+$typeForm+"/defaultLayoutIcon.png")
 					
 				Else 
 					
-					$formName:=String:C10(Form:C1466[$typeForm][$table].form)
-					$formRoot:=tmpl_form($formName; $typeForm)
+					$tmpl:=cs:C1710.tmpl.new(String:C10(Form:C1466[$typeForm][$table].form); $typeForm)
 					
-					If ($formRoot.exists)
+					If ($tmpl.path.exists)
 						
-						$file:=$formRoot.file("layoutIconx2.png")
+						$icon:=$tmpl.path.file("layoutIconx2.png")
 						
-						If (Not:C34($file.exists))
+						If ($icon.exists)
 							
-							$file:=File:C1566("/RESOURCES/images/noIcon.svg")
-							$svg.setAttribute("tips"; Replace string:C233($formName; "/"; ""); $svg.fetch($table))
+							Case of 
+									
+									//______________________________________________________
+								: (Form:C1466.$android & Not:C34($tmpl.android))
+									
+									$color:="red"
+									$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("thisModelIsNotApplicableForthisPlatform"); "{platform}"; "Android"); $svg.fetch($table))
+									
+									//______________________________________________________
+								: (Form:C1466.$ios & Not:C34($tmpl.iOS))
+									
+									$color:="red"
+									$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("thisModelIsNotApplicableForthisPlatform"); "{platform}"; "iOS"); $svg.fetch($table))
+									
+									//________________________________________
+								Else 
+									
+									$color:=Choose:C955($isSelected; $params.selectedStroke; "dimgray")
+									
+									//______________________________________________________
+							End case 
+							
+						Else 
+							
+							$icon:=File:C1566("/RESOURCES/images/noIcon.svg")
+							
+							$color:=Choose:C955($isSelected; $params.selectedStroke; "dimgray")
+							$svg.setAttribute("tips"; Replace string:C233($tmpl.name; "/"; ""); $svg.fetch($table))
 							
 						End if 
 						
 					Else 
 						
 						// Error
-						$file:=File:C1566("/RESOURCES/images/errorIcon.svg")
+						$icon:=File:C1566("/RESOURCES/images/errorIcon.svg")
+						
+						$color:="red"
+						$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("theModelIsNoLongerAvailable"); "{model}"; $tmpl.name); $svg.fetch($table))
 						
 					End if 
 				End if 
 				
-				If ($formRoot.extension=SHARED.archiveExtension)  // Archive
+				If ($tmpl.path.extension=SHARED.archiveExtension)  // Archive
 					
-					$x:=$file.getContent()
+					$x:=$icon.getContent()
 					BLOB TO PICTURE:C682($x; $picture)
 					CLEAR VARIABLE:C89($x)
 					
@@ -629,7 +654,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 					
 				Else 
 					
-					$svg.image($file)\
+					$svg.image($icon)\
 						.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
 						.dimensions($params.icon.width; $params.icon.width)
 					
@@ -641,7 +666,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 				$svg.textArea($name)\
 					.position($params.x; $params.cell.height-18)\
 					.width($params.cell.width)\
-					.fill(Choose:C955($isSelected; $params.selectedStroke; "dimgray"))\
+					.fill($color)\
 					.alignment(Align center:K42:3)\
 					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 				
@@ -663,8 +688,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 			
 		End for each 
 		
-/* STOP HIDING ERRORS */
-		$error.show()
+		$error.show()  // STOP HIDING ERRORS
 		
 	End if 
 	

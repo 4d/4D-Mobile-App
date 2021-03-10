@@ -102,7 +102,9 @@ If (Num:C11($tableID)>0)
 				
 			End if 
 			
-			OBJECT SET TITLE:C194(*; "preview.label"; String:C10($template.title))
+			cs:C1710.static.new("preview.label")\
+				.setTitle(String:C10($template.title))\
+				.setColors(Choose:C955((Form:C1466.$android & Not:C34($template.android)) | (Form:C1466.$ios & Not:C34($template.iOS)); "red"; UI.selectedColor))
 			
 			If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 				
@@ -112,20 +114,6 @@ If (Num:C11($tableID)>0)
 				// Get the definition or create it
 				$o:=Form:C1466[$formType][$tableID]
 				$target:=Choose:C955($o=Null:C1517; Formula:C1597(New object:C1471); Formula:C1597($o)).call()
-				
-				//If ($target.fields#Null)
-				//// Update names if any
-				//For each ($o; $target.fields)
-				//If ($o#Null)
-				//If ($o.fieldType=8858)\
-															| ($o.fieldType=8859)
-				//// ❓
-				//Else
-				//$o.name:=Form.dataModel[$tableID][String($o.fieldNumber)].name
-				//End if
-				//End if
-				//End for each
-				//End if
 				
 				$form.preview.getCoordinates()
 				
