@@ -40,12 +40,12 @@ Class constructor($name : Text; $type : Text)
 			
 			This:C1470.type:=$type
 			
-			This:C1470.path:=This:C1470._path()
+			This:C1470.container:=This:C1470._path()
 			
-			If (Bool:C1537(This:C1470.path.exists))
+			If (Bool:C1537(This:C1470.container.exists))
 				
 				// Load the manifest
-				$file:=This:C1470.path.file("manifest.json")
+				$file:=This:C1470.container.file("manifest.json")
 				
 				If ($file.exists)
 					
@@ -62,8 +62,8 @@ Class constructor($name : Text; $type : Text)
 						
 						// Check the folder structure to identify an iOS or Android template
 						
-						This:C1470.iOS:=This:C1470.path.folder("Sources").exists
-						This:C1470.android:=This:C1470.path.folder("app").exists
+						This:C1470.iOS:=This:C1470.container.folder("Sources").exists
+						This:C1470.android:=This:C1470.container.folder("app").exists
 						
 					End if 
 					
@@ -74,7 +74,7 @@ Class constructor($name : Text; $type : Text)
 				End if 
 				
 				// Load the svg template
-				$file:=This:C1470.path.file("template.svg")
+				$file:=This:C1470.container.file("template.svg")
 				
 				If ($file.exists)
 					

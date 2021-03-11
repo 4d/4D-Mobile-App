@@ -124,6 +124,10 @@
 			"killWorker",
 			"path"
 		],
+		"forms": [
+			"WIZARD_NEW_PROJECT",
+			"WIZARD_OPEN_PROJECT"
+		],
 		"classes": [
 			"path",
 			"structure"
@@ -157,9 +161,7 @@
 		"forms": [
 			"EDITOR",
 			"NEW_PROJECT",
-			"TITLE",
-			"WIZARD_NEW_PROJECT",
-			"WIZARD_OPEN_PROJECT"
+			"TITLE"
 		],
 		"classes": [
 			"editor",

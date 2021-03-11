@@ -55,7 +55,7 @@ Case of
 			
 		End for each 
 		
-		Form:C1466._continue:=cs:C1710.button.new("continue").bestSize(Align center:K42:3)
+		Form:C1466._continue:=cs:C1710.button.new("continue").bestSize(Align center:K42:3; 70)
 		Form:C1466._new:=cs:C1710.widget.new("newProject").setValue(Form:C1466)  // Pass the baby 🤣
 		
 		Form:C1466._centered:=cs:C1710.group.new("list,continue,newProject,message")

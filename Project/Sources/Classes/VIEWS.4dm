@@ -594,9 +594,9 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 					
 					$tmpl:=cs:C1710.tmpl.new(String:C10(Form:C1466[$typeForm][$table].form); $typeForm)
 					
-					If ($tmpl.path.exists)
+					If ($tmpl.container.exists)
 						
-						$icon:=$tmpl.path.file("layoutIconx2.png")
+						$icon:=$tmpl.container.file("layoutIconx2.png")
 						
 						If ($icon.exists)
 							
@@ -642,7 +642,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 					End if 
 				End if 
 				
-				If ($tmpl.path.extension=SHARED.archiveExtension)  // Archive
+				If ($tmpl.container.extension=SHARED.archiveExtension)  // Archive
 					
 					$x:=$icon.getContent()
 					BLOB TO PICTURE:C682($x; $picture)

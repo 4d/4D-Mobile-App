@@ -69,8 +69,8 @@ Case of
 				OB REMOVE:C1226($context; "picker")
 				
 				$tableID:=SVG Find element ID by coordinates:C1054(*; $e.objectName; MOUSEX; MOUSEY)
-				$tmpl:=cs:C1710.tmpl.new().path(String:C10(Form:C1466[$formType][$tableID].form); $formType)
-				$exists:=$tmpl.exists
+				$tmpl:=cs:C1710.tmpl.new(String:C10(Form:C1466[$formType][$tableID].form); $formType)
+				$exists:=$tmpl.container.exists
 				
 				Case of 
 						
@@ -97,7 +97,7 @@ Case of
 						
 						If (Bool:C1537(Form:C1466.$dialog.picker))
 							
-							If ($tmpl.exists)
+							If ($exists)
 								
 								$form.form.call("pickerHide")
 								
@@ -117,7 +117,6 @@ Case of
 						
 						//______________________________________________________
 					: ($tableID#$context.tableNum())\
-						 | Not:C34($tmpl.exists)\
 						 | Not:C34($exists)
 						
 						If ($tableID#$context.tableNum()) & $exists
@@ -144,7 +143,7 @@ Case of
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
-						$context.picker:=Not:C34($tmpl.exists)
+						$context.picker:=Not:C34($exists)
 						
 						$context.tableNumber:=$tableID
 						

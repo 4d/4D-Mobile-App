@@ -1,19 +1,12 @@
-﻿{
+{
 	"$4d": {
 		"version": "1",
 		"kind": "form"
 	},
-	"windowSizingX": "variable",
-	"windowSizingY": "variable",
-	"windowMinWidth": 0,
-	"windowMinHeight": 0,
-	"windowMaxWidth": 32767,
-	"windowMaxHeight": 32767,
 	"events": [
 		"onLoad",
 		"onActivate"
 	],
-	"windowTitle": "",
 	"destination": "detailScreen",
 	"pages": [
 		{
@@ -27,7 +20,6 @@
 					"left": 125,
 					"width": 266,
 					"height": 33,
-					"stroke": "#c0c0c0",
 					"fill": "automatic"
 				},
 				"ios": {
@@ -49,8 +41,7 @@
 					"focusable": false,
 					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
 					"method": "ObjectMethods/ios.4dm",
-					"iconFrames": 4,
-					"stroke": "automatic"
+					"iconFrames": 4
 				},
 				"name.label": {
 					"type": "text",
@@ -69,7 +60,6 @@
 					"width": 255,
 					"height": 17,
 					"dataSource": "Form:C1466.$name",
-					"hideFocusRing": true,
 					"borderStyle": "none"
 				},
 				"android": {
@@ -92,8 +82,7 @@
 					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
 					"iconFrames": 4,
 					"focusable": false,
-					"textPlacement": "bottom",
-					"stroke": "automatic"
+					"textPlacement": "bottom"
 				},
 				"name.label1": {
 					"type": "text",
@@ -109,22 +98,20 @@
 					"type": "line",
 					"top": 0,
 					"left": 0,
-					"width": 402,
-					"height": 1,
-					"stroke": "#c0c0c0"
+					"width": 400,
+					"height": 1
 				},
 				"Line1": {
 					"type": "line",
 					"top": 180,
 					"left": 0,
-					"width": 402,
-					"height": 1,
-					"stroke": "#c0c0c0"
+					"width": 400,
+					"height": 1
 				}
 			}
 		}
 	],
-	"geometryStamp": 433,
+	"geometryStamp": 443,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -17,6 +17,16 @@
 		"paperWidth": "842pt",
 		"paperHeight": "595pt"
 	},
+	"css": [
+		{
+			"path": "/RESOURCES/css/wizard.css",
+			"media": "mac"
+		},
+		{
+			"path": "/RESOURCES/css/wizard.css",
+			"media": "windows"
+		}
+	],
 	"pages": [
 		{
 			"objects": {
@@ -41,24 +51,14 @@
 					"left": 284,
 					"width": 402,
 					"height": 385,
-					"focusable": false,
 					"rowHeight": "5em",
-					"showHeaders": false,
-					"scrollbarHorizontal": "hidden",
-					"scrollbarVertical": "hidden",
-					"horizontalLineStroke": "transparent",
-					"verticalLineStroke": "transparent",
-					"fill": "transparent",
-					"verticalAlign": "middle",
 					"movableRows": false,
-					"sortable": false,
 					"selectionMode": "none",
-					"resizingMode": "legacy",
 					"visibility": "visible",
-					"fontSize": 14,
 					"dataSource": "Form:C1466._list",
 					"listboxType": "collection",
-					"borderStyle": "none",
+					"scrollbarVertical": "hidden",
+					"resizingMode": "legacy",
 					"columns": [
 						{
 							"name": "icons1",
@@ -140,11 +140,7 @@
 					"width": 970,
 					"height": 46,
 					"sizingX": "grow",
-					"stroke": "#808080",
-					"textAlign": "center",
-					"text": ":xliff:goMobileWith4d",
-					"fontTheme": "normal",
-					"fontSize": 48
+					"text": ":xliff:goMobileWith4d"
 				},
 				"subtitle": {
 					"type": "text",
@@ -153,11 +149,7 @@
 					"width": 970,
 					"height": 62,
 					"sizingX": "grow",
-					"stroke": "#808080",
-					"textAlign": "center",
-					"text": ":xliff:goMobileSubTitle",
-					"fontTheme": "normal",
-					"fontSize": 18
+					"text": ":xliff:goMobileSubTitle"
 				},
 				"newProject": {
 					"type": "subform",
@@ -209,9 +201,8 @@
 					"printFrame": "variable",
 					"method": "ObjectMethods/message.4dm"
 				},
-				"down1": {
+				"escape": {
 					"type": "button",
-					"text": "🠧",
 					"top": 848,
 					"left": 8,
 					"width": 20,
@@ -219,16 +210,13 @@
 					"events": [
 						"onClick"
 					],
-					"style": "flat",
-					"stroke": "#1e90ff",
+					"sizingY": "move",
+					"action": "cancel",
 					"shortcutAccel": false,
 					"shortcutControl": false,
 					"shortcutShift": false,
 					"shortcutAlt": false,
-					"shortcutKey": "[Esc]",
-					"display": false,
-					"sizingY": "move",
-					"action": "cancel"
+					"shortcutKey": "[Esc]"
 				}
 			},
 			"entryOrder": [
@@ -237,7 +225,7 @@
 				"message.button",
 				"message",
 				"list",
-				"down1"
+				"escape"
 			]
 		}
 	],
@@ -245,7 +233,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 273,
+	"geometryStamp": 303,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

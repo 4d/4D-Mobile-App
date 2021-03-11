@@ -1,0 +1,30 @@
+#title, 
+#subtitle {
+	text-align: center;
+}
+
+#title {
+	font-size: 48;
+}
+
+#subtitle {
+	font-size: 18;
+}
+
+listbox	 {
+	font-size: 14;
+	fill: transparent;
+	focusable: false;
+	borderStyle: none;
+	hideSystemHighlight: true;
+	horizontalLineStroke: transparent;
+	verticalLineStroke: transparent;
+	sortable: false;
+	verticalAlign: middle;
+}
+
+button#escape,
+button#up,
+button#down {
+	display: false;
+}

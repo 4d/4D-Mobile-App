@@ -21,7 +21,7 @@ var $avalaibleWidth; $count; $height; $indx : Integer
 var $context; $field; $form; $manifest; $o; $relation; $target : Object
 var $nodes : Collection
 var $svg : cs:C1710.svg
-var $template : cs:C1710.Template
+var $tmpl : cs:C1710.Template
 
 // ----------------------------------------------------
 // Initialisations
@@ -48,24 +48,24 @@ If (Num:C11($tableID)>0)
 	
 	If (Length:C16($formName)>0)
 		
-		$template:=Form:C1466.$dialog[Current form name:C1298].template
+		$tmpl:=Form:C1466.$dialog[Current form name:C1298].template
 		
-		If (String:C10($template.name)#$formName)
+		If (String:C10($tmpl.name)#$formName)
 			
-			$template:=cs:C1710.tmpl.new($formName; $formType)
-			Form:C1466.$dialog[Current form name:C1298].template:=$template
+			$tmpl:=cs:C1710.tmpl.new($formName; $formType)
+			Form:C1466.$dialog[Current form name:C1298].template:=$tmpl
 			
 		End if 
 		
-		If ($template.path.exists)
+		If ($tmpl.container.exists)
 			
-			$manifest:=$template.manifest
+			$manifest:=$tmpl.manifest
 			
 			// Load the template
 			
-			$t:=$template.update().svg
+			$t:=$tmpl.update().svg
 			$t:=Replace string:C233($t; "&quot;"; "\"")
-			PROCESS 4D TAGS:C816($t; $t; $template.title; $template.cancel())
+			PROCESS 4D TAGS:C816($t; $t; $tmpl.title; $tmpl.cancel())
 			
 			$svg:=cs:C1710.svg.new().parse($t).scale(0.97)
 			
@@ -74,7 +74,7 @@ If (Num:C11($tableID)>0)
 				// Define the remove image
 				If (let(->$node; Formula:C1597($svg.findById("cancel")); Formula:C1597($svg.success)))
 					
-					$svg.setAttribute("xlink:href"; $template.cancel(); $svg.firstChild($node; "image"))
+					$svg.setAttribute("xlink:href"; $tmpl.cancel(); $svg.firstChild($node; "image"))
 					
 				End if 
 				
@@ -98,18 +98,18 @@ If (Num:C11($tableID)>0)
 				
 			Else 
 				
-				RECORD.error("Failed to parse template \""+$template.name+"\"")
+				RECORD.error("Failed to parse template \""+$tmpl.name+"\"")
 				
 			End if 
 			
 			cs:C1710.static.new("preview.label")\
-				.setTitle(String:C10($template.title))\
-				.setColors(Choose:C955((Form:C1466.$android & Not:C34($template.android)) | (Form:C1466.$ios & Not:C34($template.iOS)); "red"; UI.selectedColor))
+				.setTitle(String:C10($tmpl.title))\
+				.setColors(Choose:C955((Form:C1466.$android & Not:C34($tmpl.android)) | (Form:C1466.$ios & Not:C34($tmpl.iOS)); "red"; UI.selectedColor))
 			
 			If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 				
 				// Add the style sheet
-				$svg.styleSheet($template.css())
+				$svg.styleSheet($tmpl.css())
 				
 				// Get the definition or create it
 				$o:=Form:C1466[$formType][$tableID]
@@ -215,7 +215,7 @@ If (Num:C11($tableID)>0)
 								If ($indx>$count)
 									
 									// Dynamic
-									$height:=$height+$template.appendOneField($indx; $field; $context; $background; $height)
+									$height:=$height+$tmpl.appendOneField($indx; $field; $context; $background; $height)
 									
 								Else 
 									
@@ -226,11 +226,11 @@ If (Num:C11($tableID)>0)
 									// Get the bindind definition
 									If (let(->$node; Formula:C1597($svg.findById("f"+$t)); Formula:C1597($svg.success)))
 										
-										$binding:=$template.getBinding($node)
+										$binding:=$tmpl.getBinding($node)
 										
 										If (Length:C16($binding)>0)
 											
-											If ($template.isTypeAccepted($binding; $field.fieldType))
+											If ($tmpl.isTypeAccepted($binding; $field.fieldType))
 												
 												If (let(->$node; Formula:C1597($svg.findById("f"+$t+".label")); Formula:C1597($svg.success)))
 													
@@ -336,7 +336,7 @@ If (Num:C11($tableID)>0)
 														"label"; $label; \
 														"avalaibleWidth"; $avalaibleWidth)
 													
-													$template.truncateLabelIfTooBig($o)
+													$tmpl.truncateLabelIfTooBig($o)
 													
 													$label:=$o.label
 													$tips:=$o.tips
@@ -374,7 +374,7 @@ If (Num:C11($tableID)>0)
 											Else 
 												
 												// For a detail form, treat as as a dynamic field ?
-												$height:=$height+$template.appendOneField($indx; $field; $context; $background; $height)
+												$height:=$height+$tmpl.appendOneField($indx; $field; $context; $background; $height)
 												
 											End if 
 										End if 

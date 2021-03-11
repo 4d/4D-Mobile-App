@@ -1,0 +1,74 @@
+ /* =====================================================
+                    MAIN COLORS 
+  =====================================================*/
+text, 
+line, 
+rectangle, 
+listbox {
+	stroke: #808080;
+}
+
+.highlight, 
+.selected, 
+#focus, 
+[class|="link"] { /* highlight color */
+	stroke: #03A9F4;
+}
+
+#focus { 
+	fill: transparent;
+}
+
+.background {
+	fill: white;
+	stroke: transparent;
+}
+
+ /* =====================================================
+                        BUTTONS 
+  =====================================================*/
+/* 
+[defaultButton] {
+	shortcutKey:[Return]
+}
+ */
+
+button#escape {
+	/* shortcutKey: [Esc]; */
+	focusable: false;
+}
+
+/* 
+button#up {
+	shortcutKey: [up arrow];
+}
+ */
+
+/* 
+button#down {
+	shortcutKey: [down arrow];
+}
+ */
+
+.link {
+	text-decoration: underline;
+	style: custom;
+	cursor: pointer;
+}
+
+
+ /* =====================================================
+                       LISTBOX 
+  =====================================================*/
+listbox {
+	scrollbarHorizontal: hidden;
+	showHeaders: false;
+}
+
+
+ /* =====================================================
+                       OTHERS	
+  =====================================================*/
+input {
+	hideFocusRing: true;
+}

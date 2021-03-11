@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -19,6 +19,16 @@
 		"paperWidth": "842pt",
 		"paperHeight": "595pt"
 	},
+	"css": [
+		{
+			"path": "/RESOURCES/css/wizard.css",
+			"media": "mac"
+		},
+		{
+			"path": "/RESOURCES/css/wizard.css",
+			"media": "windows"
+		}
+	],
 	"pages": [
 		{
 			"objects": {
@@ -30,8 +40,7 @@
 					"height": 875,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"stroke": "transparent",
-					"fill": "automatic"
+					"class": "background"
 				}
 			}
 		},
@@ -50,12 +59,7 @@
 					],
 					"sizingX": "move",
 					"sizingY": "move",
-					"action": "accept",
-					"shortcutAccel": false,
-					"shortcutControl": false,
-					"shortcutShift": false,
-					"shortcutAlt": false,
-					"shortcutKey": "[Return]"
+					"action": "accept"
 				},
 				"title": {
 					"type": "text",
@@ -64,11 +68,8 @@
 					"width": 970,
 					"height": 46,
 					"sizingX": "grow",
-					"stroke": "#808080",
 					"textAlign": "center",
-					"text": ":xliff:selectTheProjectToOpen",
-					"fontTheme": "normal",
-					"fontSize": 48
+					"text": ":xliff:selectTheProjectToOpen"
 				},
 				"list": {
 					"type": "listbox",
@@ -76,18 +77,9 @@
 					"left": 284,
 					"width": 387,
 					"height": 539,
-					"focusable": false,
 					"rowHeight": "5em",
-					"scrollbarHorizontal": "hidden",
-					"horizontalLineStroke": "transparent",
-					"fill": "transparent",
-					"verticalAlign": "middle",
 					"movableRows": false,
-					"sortable": false,
 					"selectionMode": "single",
-					"visibility": "visible",
-					"fontSize": 14,
-					"borderStyle": "none",
 					"dataSource": "Form:C1466._projects",
 					"listboxType": "collection",
 					"events": [
@@ -97,13 +89,11 @@
 					],
 					"currentItemSource": "Form:C1466._current",
 					"currentItemPositionSource": "Form:C1466._index",
-					"hideSystemHighlight": true,
 					"scrollbarVertical": "visible",
-					"showHeaders": false,
-					"verticalLineStroke": "transparent",
 					"hideExtraBlankRows": true,
 					"sizingY": "grow",
 					"method": "ObjectMethods/list.4dm",
+					"class": "",
 					"columns": [
 						{
 							"name": "texts",
@@ -112,7 +102,6 @@
 							"maxWidth": 250,
 							"resizable": false,
 							"enterable": false,
-							"verticalAlign": "middle",
 							"fontSize": 14,
 							"header": {
 								"name": "Header2",
@@ -206,14 +195,12 @@
 					"sizingY": "move",
 					"focusable": false,
 					"method": "ObjectMethods/browse.4dm",
-					"style": "custom",
-					"stroke": "#1BA1E5",
-					"textDecoration": "underline",
 					"shortcutAccel": true,
 					"shortcutControl": false,
 					"shortcutShift": false,
 					"shortcutAlt": false,
-					"shortcutKey": "o"
+					"shortcutKey": "o",
+					"class": "link"
 				},
 				"focus": {
 					"type": "rectangle",
@@ -221,14 +208,11 @@
 					"left": 48,
 					"width": 20,
 					"height": 20,
-					"fill": "transparent",
-					"stroke": "#1BA1E5",
 					"visibility": "hidden",
 					"borderRadius": 0
 				},
 				"up": {
 					"type": "button",
-					"text": "🠕",
 					"top": 848,
 					"left": 88,
 					"width": 20,
@@ -236,20 +220,17 @@
 					"events": [
 						"onClick"
 					],
-					"style": "flat",
 					"stroke": "automatic",
+					"method": "ObjectMethods/up.4dm",
+					"sizingY": "move",
 					"shortcutAccel": false,
 					"shortcutControl": false,
 					"shortcutShift": false,
 					"shortcutAlt": false,
-					"shortcutKey": "[up arrow]",
-					"method": "ObjectMethods/up.4dm",
-					"display": false,
-					"sizingY": "move"
+					"shortcutKey": "[up arrow]"
 				},
 				"down": {
 					"type": "button",
-					"text": "🠧",
 					"top": 848,
 					"left": 128,
 					"width": 20,
@@ -257,20 +238,17 @@
 					"events": [
 						"onClick"
 					],
-					"style": "flat",
 					"stroke": "automatic",
+					"method": "ObjectMethods/down.4dm",
+					"sizingY": "move",
 					"shortcutAccel": false,
 					"shortcutControl": false,
 					"shortcutShift": false,
 					"shortcutAlt": false,
-					"shortcutKey": "[down arrow]",
-					"method": "ObjectMethods/down.4dm",
-					"display": false,
-					"sizingY": "move"
+					"shortcutKey": "[down arrow]"
 				},
 				"escape": {
 					"type": "button",
-					"text": "Esc",
 					"top": 848,
 					"left": 8,
 					"width": 20,
@@ -278,17 +256,14 @@
 					"events": [
 						"onClick"
 					],
-					"style": "flat",
 					"stroke": "automatic",
+					"sizingY": "move",
+					"action": "cancel",
 					"shortcutAccel": false,
 					"shortcutControl": false,
 					"shortcutShift": false,
 					"shortcutAlt": false,
-					"shortcutKey": "[Esc]",
-					"display": false,
-					"sizingY": "move",
-					"action": "cancel",
-					"focusable": true
+					"shortcutKey": "[Esc]"
 				},
 				"separator": {
 					"type": "line",
@@ -296,7 +271,6 @@
 					"left": 284,
 					"width": 387,
 					"height": 1,
-					"stroke": "#c0c0c0",
 					"sizingY": "move"
 				}
 			},
@@ -316,7 +290,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 411,
+	"geometryStamp": 469,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

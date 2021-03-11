@@ -267,7 +267,7 @@ Case of
 								
 							End if 
 							
-							If (Bool:C1537($context.template.path.exists))
+							If (Bool:C1537($context.template.container.exists))
 								
 								// Update lists
 								$context.update:=True:C214

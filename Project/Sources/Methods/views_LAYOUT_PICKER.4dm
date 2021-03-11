@@ -347,7 +347,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		
 	End if 
 	
-	$isSelected:=(String:C10(Form:C1466.$dialog[Current form name:C1298].template.path.fullName)=$template.fullName)
+	$isSelected:=(String:C10(Form:C1466.$dialog[Current form name:C1298].template.container.fullName)=$template.fullName)
 	
 	If ($template.extension=SHARED.archiveExtension)  // Archive
 		

@@ -18,7 +18,7 @@ var $bind; $cible; $currentForm; $preview; $t : Text
 var $highlightsTheTarget; $isBackground; $isDroppable; $isInsertion : Boolean
 var $x : Blob
 var $dropped : Object
-var $template : cs:C1710.tmpl
+var $tmpl : cs:C1710.tmpl
 
 // ----------------------------------------------------
 // Initialisations
@@ -50,9 +50,9 @@ If (Length:C16($cible)>0)
 		SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:type"; $bind)
 		
 		$currentForm:=Current form name:C1298  //
-		$template:=Form:C1466.$dialog[$currentForm].template
+		$tmpl:=Form:C1466.$dialog[$currentForm].template
 		
-		If ($template.isTypeAccepted($bind; $dropped.fieldType))
+		If ($tmpl.isTypeAccepted($bind; $dropped.fieldType))
 			
 			If (Num:C11(Form:C1466.$dialog.VIEWS.template.manifest.renderer)>=2)
 				

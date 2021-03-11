@@ -14,7 +14,7 @@ var $fixed; $indx : Integer
 var $x : Blob
 var $current; $dropped; $relation; $table; $target : Object
 var $cCurrent; $cDroped : Collection
-var $template : cs:C1710.tmpl
+var $tmpl : cs:C1710.tmpl
 
 // ----------------------------------------------------
 // Initialisations
@@ -39,9 +39,9 @@ If (Length:C16($cible)>0)
 		SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:type"; $bind)
 		
 		$currentForm:=Current form name:C1298
-		$template:=Form:C1466.$dialog[$currentForm].template
+		$tmpl:=Form:C1466.$dialog[$currentForm].template
 		
-		If ($template.isTypeAccepted($bind; $dropped.fieldType))
+		If ($tmpl.isTypeAccepted($bind; $dropped.fieldType))
 			
 			$target:=Form:C1466[This:C1470.$.typeForm()][$tableNumber]
 			$dropped.name:=$dropped.path
@@ -210,7 +210,7 @@ If (Length:C16($cible)>0)
 								
 							End if 
 							
-							$fixed:=$template.manifest.fields.count
+							$fixed:=$tmpl.manifest.fields.count
 							
 							If ($fixed>0)
 								
