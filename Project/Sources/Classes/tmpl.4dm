@@ -62,8 +62,8 @@ Class constructor($name : Text; $type : Text)
 						
 						// Check the folder structure to identify an iOS or Android template
 						
-						This:C1470.iOS:=This:C1470.container.folder("Sources").exists
-						This:C1470.android:=This:C1470.container.folder("app").exists
+						This:C1470.iOS:=This:C1470.container.folder("Sources").exists | This:C1470.container.folder("ios").exists
+						This:C1470.android:=This:C1470.container.folder("app").exists | This:C1470.container.folder("android").exists
 						
 					End if 
 					

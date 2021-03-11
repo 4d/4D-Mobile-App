@@ -331,7 +331,11 @@ If ($in.create)
 	ASSERT:C1129($template.assets.path#Null:C1517)
 	ASSERT:C1129($template.sdk.version#Null:C1517)
 	
-	$template.source:=$Dir_template.platformPath
+	If ($Dir_template.folder("ios").exists)  // or manifest design path of all sources of templates for ios target
+		$template.source:=$Dir_template.folder("ios").platformPath
+	Else 
+		$template.source:=$Dir_template.platformPath
+	End if 
 	$template.assets.target:=$in.path+Convert path POSIX to system:C1107($template.assets.path)+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
 	$template.assets.source:=$path.projects().platformPath+$productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
 	
