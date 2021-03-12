@@ -8,6 +8,8 @@ Class constructor($java : 4D:C1709.File; $kotlinc : 4D:C1709.File)
 	This:C1470.kotlinc:=$kotlinc.path
 	This:C1470.chmodCmd:="chmod"
 	
+	This:C1470.path:=cs:C1710.path.new()
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function generate
@@ -20,7 +22,6 @@ Function generate
 		"errorStream"; ""; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.path:=cs:C1710.path.new()
 	
 	If ((This:C1470.path.androidProjectFilesToCopy().exists)\
 		 & (This:C1470.path.androidProjectTemplateFiles().exists)\
@@ -182,6 +183,72 @@ Function copyResources
 		// Missing Android folder
 		$0.errors.push("Missing source file for copy: "+$androidAssets.path)
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyIcons
+	var $0 : Object
+	var $1 : Text  // Project path
+	var $2 : Object  // Datamodel object
+	
+	var $tableIcons : 4D:C1709.Folder
+	var $currentFile; $copyDest : 4D:C1709.File
+	var $iconPath; $newName : Text
+	
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	$tableIcons:=This:C1470.path.tableIcons()
+	
+	If ($tableIcons.exists)
+		
+		$0.success:=True:C214
+		
+		var $dataModel : Object
+		For each ($dataModel; OB Entries:C1720($2))
+			
+			If (OB Is defined:C1231($dataModel.value[""]; "icon"))
+				
+				$iconPath:=$dataModel.value[""].icon
+				
+				$currentFile:=$tableIcons.file($iconPath)
+				
+				If (Not:C34($currentFile.exists))
+					
+					$currentFile:=$tableIcons.parent.file("missingIcon.svg")
+					
+					// else : file exists
+				End if 
+				
+				$newName:=Lowercase:C14($currentFile.name)
+				Rgx_SubstituteText("[^a-z0-9_]"; "_"; ->$newName; 0)
+				$newName:=$newName+$currentFile.extension
+				
+				$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/drawable"); $newName; fk overwrite:K87:5)
+				
+				If (Not:C34($copyDest.exists))
+					// Copy failed
+					$0.success:=False:C215
+					$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+					
+					//Else : all ok
+				End if 
+				
+			End if 
+			
+		End for each 
+		
+	Else 
+		// Missing icons folder
+		$0.errors.push("Missing icons folder : "+$tableIcons.path)
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+/*Function convertIconsToXml
+	
+*/
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
