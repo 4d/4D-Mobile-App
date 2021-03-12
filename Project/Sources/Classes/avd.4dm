@@ -34,7 +34,10 @@ Class constructor
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _exe()->$file : 4D:C1709.File
 	
-	$file:=This:C1470.androidSDKFolder().file("tools/bin/avdmanager")
+	$file:=This:C1470.androidSDKFolder().file("cmdline-tools/latest/bin/avdmanager")
+	If (Not:C34($file.exists))
+		$file:=This:C1470.androidSDKFolder().file("tools/bin/avdmanager")
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a collection of potential device simulators
