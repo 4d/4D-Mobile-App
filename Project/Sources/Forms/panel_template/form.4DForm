@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -93,7 +93,6 @@
 					"left": 16,
 					"width": 70,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC",
 					"strokeWidth": 0.1
 				},
 				"Rectangle": {

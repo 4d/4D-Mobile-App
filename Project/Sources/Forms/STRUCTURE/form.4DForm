@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"memorizeGeometry": true,
 	"inheritedForm": "panel_template",
@@ -77,18 +77,9 @@
 					"left": 17,
 					"width": 449,
 					"height": 551,
-					"resizingMode": "legacy",
-					"hideFocusRing": true,
-					"sortable": false,
-					"movableRows": false,
 					"hideSystemHighlight": true,
 					"rowHeight": "32px",
-					"showHeaders": false,
 					"selectionMode": "single",
-					"scrollbarHorizontal": "hidden",
-					"horizontalLineStroke": "transparent",
-					"verticalLineStroke": "transparent",
-					"borderStyle": "none",
 					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick",
@@ -99,8 +90,6 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
-					"dragging": "none",
-					"dropping": "none",
 					"columns": [
 						{
 							"name": "tables",
@@ -109,8 +98,6 @@
 							"maxWidth": 32000,
 							"resizable": false,
 							"enterable": false,
-							"textAlign": "left",
-							"verticalAlign": "middle",
 							"events": [
 								"onClick",
 								"onDataChange"
@@ -175,12 +162,8 @@
 					"left": 489,
 					"width": 448,
 					"height": 551,
-					"hideFocusRing": true,
 					"hideSystemHighlight": true,
 					"rowHeight": "32px",
-					"showHeaders": false,
-					"scrollbarHorizontal": "hidden",
-					"borderStyle": "none",
 					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick",
@@ -191,10 +174,9 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
-					"horizontalLineStroke": "transparent",
-					"verticalLineStroke": "transparent",
-					"movableRows": false,
 					"fill": "automatic",
+					"rowHeightAutoMin": "1em",
+					"rowHeightAutoMax": "1600em",
 					"columns": [
 						{
 							"name": "published",
@@ -205,8 +187,6 @@
 							"resizable": false,
 							"controlType": "checkbox",
 							"truncateMode": "none",
-							"textAlign": "center",
-							"verticalAlign": "middle",
 							"events": [
 								"onDataChange"
 							],
@@ -217,7 +197,8 @@
 							"footer": {
 								"name": "Footer1",
 								"timeFormat": "hh_mm_ss"
-							}
+							},
+							"textAlign": "center"
 						},
 						{
 							"name": "icons",
@@ -246,8 +227,6 @@
 							"maxWidth": 1000,
 							"resizable": false,
 							"enterable": false,
-							"textAlign": "left",
-							"verticalAlign": "middle",
 							"events": [
 								"onClick",
 								"onDataChange"
@@ -268,10 +247,9 @@
 					"left": 17,
 					"width": 68,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:tables",
-					"borderStyle": "none"
+					"borderStyle": "none",
+					"class": "label"
 				},
 				"02_fields.label": {
 					"type": "text",
@@ -279,10 +257,9 @@
 					"left": 492,
 					"width": 72,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:fields",
-					"borderStyle": "none"
+					"borderStyle": "none",
+					"class": "label"
 				},
 				"tables.filter": {
 					"type": "input",
@@ -338,7 +315,6 @@
 					"height": 17,
 					"dataSource": "Form:C1466.allowStructureAdjustments",
 					"text": ":xliff:allowToMakeTheStructureAdjustments",
-					"stroke": "#696969",
 					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
@@ -362,5 +338,13 @@
 	"$4d": {
 		"version": "1",
 		"kind": "form"
+	},
+	"geometryStamp": 4,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
 	}
 }

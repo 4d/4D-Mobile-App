@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"memorizeGeometry": true,
 	"rightMargin": 0,
@@ -48,15 +48,15 @@
 						"onClick"
 					]
 				},
-				"_background": {
+				"background": {
 					"type": "rectangle",
 					"top": 0,
 					"left": 0,
 					"width": 970,
 					"height": 190,
-					"sizingX": "grow",
-					"fill": "#F4F4F6",
-					"stroke": "transparent"
+					"class": "background",
+					"sizingY": "fixed",
+					"fill": "#F4F4F6"
 				},
 				"panel.1": {
 					"type": "subform",
@@ -86,7 +86,6 @@
 					"left": 15,
 					"width": 72,
 					"height": 19,
-					"stroke": "#39525E",
 					"text": "Title",
 					"fontSize": 16
 				},
@@ -185,5 +184,5 @@
 		}
 	},
 	"method": "PROJECT_Handler",
-	"geometryStamp": 1
+	"geometryStamp": 8
 }

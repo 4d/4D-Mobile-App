@@ -2,7 +2,7 @@
 	"destination": "detailScreen",
 	"windowMinWidth": 970,
 	"windowMinHeight": 860,
-	"formSizeAnchor": "__background",
+	"formSizeAnchor": "background",
 	"rightMargin": 0,
 	"bottomMargin": 0,
 	"markerHeader": 15,
@@ -31,16 +31,14 @@
 	"pages": [
 		{
 			"objects": {
-				"__background": {
+				"background": {
 					"type": "rectangle",
 					"top": 0,
 					"left": 0,
 					"width": 970,
 					"height": 875,
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"fill": "#F4F4F6",
-					"stroke": "transparent"
+					"class": "background",
+					"fill": "#F4F4F6"
 				},
 				"ribbon": {
 					"type": "subform",
@@ -300,6 +298,6 @@
 			}
 		}
 	},
-	"geometryStamp": 16,
+	"geometryStamp": 23,
 	"colorScheme": "light"
 }

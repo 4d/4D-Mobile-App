@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -37,8 +37,6 @@
 					"width": 193,
 					"height": 21,
 					"sizingX": "grow",
-					"fill": "transparent",
-					"stroke": "#CCCCCC",
 					"borderRadius": 5
 				},
 				"box": {
@@ -47,9 +45,6 @@
 					"left": 85,
 					"width": 105,
 					"height": 17,
-					"borderStyle": "none",
-					"hideFocusRing": true,
-					"contextMenu": "none",
 					"dragging": "none",
 					"events": [
 						"onLoad",
@@ -58,7 +53,8 @@
 						"onUnload",
 						"onAfterEdit"
 					],
-					"method": "Search_OBJECTS_HANDLER"
+					"method": "Search_OBJECTS_HANDLER",
+					"borderStyle": "none"
 				},
 				"glass": {
 					"type": "picture",
@@ -91,14 +87,14 @@
 					"width": 90,
 					"height": 17,
 					"visibility": "hidden",
-					"stroke": "#FF0000",
 					"focusable": false,
-					"fill": "transparent",
 					"borderStyle": "dotted",
 					"enterable": false,
 					"hideFocusRing": true,
 					"contextMenu": "none",
-					"dragging": "none"
+					"dragging": "none",
+					"stroke": "#FF0000",
+					"fill": "transparent"
 				}
 			}
 		}
@@ -108,5 +104,12 @@
 		"kind": "form"
 	},
 	"method": "search_HANDLER",
-	"geometryStamp": 4
+	"geometryStamp": 4,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

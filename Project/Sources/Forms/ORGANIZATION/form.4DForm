@@ -28,7 +28,8 @@
 					"left": 488,
 					"width": 450,
 					"height": 33,
-					"stroke": "#C4C4C4"
+					"stroke": "#c0c0c0",
+					"class": "border"
 				},
 				"10_name.border": {
 					"type": "rectangle",
@@ -36,7 +37,7 @@
 					"left": 16,
 					"width": 451,
 					"height": 33,
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"10_name.label": {
 					"type": "text",
@@ -44,9 +45,8 @@
 					"left": 16,
 					"width": 90,
 					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:name"
+					"text": ":xliff:name",
+					"class": "label"
 				},
 				"30_identifier.label": {
 					"type": "text",
@@ -54,9 +54,8 @@
 					"left": 488,
 					"width": 190,
 					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:orgIdentifier"
+					"text": ":xliff:orgIdentifier",
+					"class": "label"
 				},
 				"10_name": {
 					"type": "input",
@@ -67,8 +66,6 @@
 					"dataSource": "Form:C1466.organization.name",
 					"tooltip": ":xliff:orgNameTip",
 					"fill": "transparent",
-					"borderStyle": "none",
-					"hideFocusRing": true,
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -86,8 +83,6 @@
 					"dataSource": "Form:C1466.organization.id",
 					"tooltip": ":xliff:appBundleIDTip",
 					"fill": "transparent",
-					"borderStyle": "none",
-					"hideFocusRing": true,
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -142,5 +137,6 @@
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"geometryStamp": 13
 }

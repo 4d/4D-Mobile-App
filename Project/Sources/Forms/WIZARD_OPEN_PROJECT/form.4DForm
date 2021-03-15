@@ -38,9 +38,8 @@
 					"left": 0,
 					"width": 970,
 					"height": 875,
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"class": "background"
+					"class": "background",
+					"fill": "automatic"
 				}
 			}
 		},
@@ -290,7 +289,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 469,
+	"geometryStamp": 471,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -308,6 +307,5 @@
 	},
 	"windowMinWidth": 970,
 	"windowMinHeight": 860,
-	"windowTitle": ":xliff:4dProductName",
-	"colorScheme": "light"
+	"windowTitle": ":xliff:4dProductName"
 }

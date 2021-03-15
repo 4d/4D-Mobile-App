@@ -2,17 +2,59 @@
                     MAIN COLORS 
   =====================================================*/
 text, 
-line, 
-rectangle, 
+radio,
+checkbox,
 listbox {
 	stroke: #808080;
 }
 
+			@media (prefers-color-scheme: dark) {
+				text, 
+				radio,
+				checkbox,
+				listbox {
+					stroke: white;
+				}
+			}
+
+line, 
+rectangle {
+	stroke: #C0C0C0;
+}
+
+			@media (prefers-color-scheme: dark) {
+				line, 
+				rectangle {
+					stroke: white;
+				}
+			}
+
+.toolbarButtons {
+	stroke: #808080;
+}
+
+			@media (prefers-color-scheme: dark) {
+				.toolbarButtons {
+					stroke: #808080;
+				}
+			}
+
+.border {
+	fill: white;
+}
+
+			@media (prefers-color-scheme: dark) {
+				.border {
+					fill: #3A3A3A;
+				}
+			}
+
+/* highlight color */
 .highlight, 
 .selected, 
-#focus, 
-[class|="link"] { /* highlight color */
-	stroke: #03A9F4;
+.link, 
+#focus { 
+	stroke: #03A9F4 !important;
 }
 
 #focus { 
@@ -20,18 +62,46 @@ listbox {
 }
 
 .background {
-	fill: white;
+	fill: inherit;
 	stroke: transparent;
+	sizingX: grow;
+	sizingY: grow;
 }
+
+.label {
+	text-align: left;
+}
+
+			@media (prefers-color-scheme: dark) {
+				text, 
+				radio,
+				checkbox,
+				listbox {
+					stroke: white;
+				}
+
+				line, 
+				rectangle {
+					stroke: white;
+				}
+
+				.toolbarButtons {
+					stroke: #808080;
+				}
+
+			  .border {
+					fill: #3A3A3A;
+				}
+			}
 
  /* =====================================================
                         BUTTONS 
   =====================================================*/
-/* 
 [defaultButton] {
-	shortcutKey:[Return]
+	stroke: inherit;
+	shortcutKey:[Return];
 }
- */
+
 
 button#escape {
 	/* shortcutKey: [Esc]; */
@@ -61,14 +131,29 @@ button#down {
                        LISTBOX 
   =====================================================*/
 listbox {
+	borderStyle: none;
 	scrollbarHorizontal: hidden;
 	showHeaders: false;
+	resizingMode: legacy;
+	horizontalLineStroke: transparent;
+	verticalLineStroke: transparent;
+	dragging: none;
+	dropping: none;
+	sortable: false;
+	movableRows: false;
+	verticalAlign: middle;
 }
 
 
  /* =====================================================
                        OTHERS	
   =====================================================*/
+
 input {
+	borderStyle: none;
+	contextMenu: automatic
+}
+
+input, listbox {
 	hideFocusRing: true;
 }

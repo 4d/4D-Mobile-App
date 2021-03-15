@@ -19,7 +19,7 @@ Function reset()->$this : cs:C1710.lep
 	This:C1470.command:=Null:C1517
 	This:C1470.inputStream:=Null:C1517
 	This:C1470.outputStream:=Null:C1517
-	This:C1470.errorStream:=Null:C1517
+	This:C1470.errorStream:=""
 	This:C1470.pid:=0
 	This:C1470.resultInErrorStream:=False:C215  // Allows, if True, to reroutes stderr message to stdout
 	
@@ -181,7 +181,7 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 	var $len; $pid; $pos : Integer
 	
 	This:C1470.outputStream:=Null:C1517
-	This:C1470.errorStream:=Null:C1517
+	This:C1470.errorStream:=""
 	This:C1470.pid:=0
 	
 	If (Value type:C1509($command)=Is object:K8:27)  // File script
@@ -268,7 +268,7 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 			//……………………………………………………………………
 		Else 
 			
-			$outputStream:=This:C1470.inputStream  // Blob
+			$inputStream:=This:C1470.inputStream  // Blob
 			
 			//……………………………………………………………………
 	End case 

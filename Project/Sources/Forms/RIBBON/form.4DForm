@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -28,8 +28,8 @@
 					"left": 0,
 					"width": 970,
 					"height": 99,
-					"sizingX": "grow",
-					"stroke": "transparent"
+					"class": "background",
+					"sizingX": "grow"
 				},
 				"top": {
 					"type": "line",
@@ -37,19 +37,19 @@
 					"left": 0,
 					"width": 970,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC",
 					"height": 0,
 					"startPoint": "topLeft"
 				},
 				"toolbar.background": {
 					"type": "rectangle",
-					"top": 0,
+					"top": 1,
 					"left": 0,
 					"width": 970,
 					"height": 39,
-					"sizingX": "grow",
 					"fill": "#1BA1E5",
-					"stroke": "transparent"
+					"class": "background",
+					"sizingY": "fixed",
+					"sizingX": "grow"
 				},
 				"tab": {
 					"type": "rectangle",
@@ -57,7 +57,8 @@
 					"left": 0,
 					"width": 100,
 					"height": 41,
-					"stroke": "transparent"
+					"class": "background",
+					"sizingX": "fixed"
 				},
 				"bottom": {
 					"type": "line",
@@ -65,7 +66,6 @@
 					"left": 0,
 					"width": 970,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC",
 					"height": 0,
 					"startPoint": "topLeft"
 				},
@@ -146,19 +146,19 @@
 					"left": 16,
 					"width": 91,
 					"height": 72,
-					"stroke": "#696969",
-					"text": ":xliff:page_general",
 					"icon": "/RESOURCES/images/toolbar/general-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
-					"radioGroup": "Group15",
+					"radioGroup": "sections",
 					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"text": ":xliff:page_general",
+					"class": "toolbarButtons"
 				},
 				"102": {
 					"type": "radio",
@@ -166,19 +166,19 @@
 					"left": 114,
 					"width": 91,
 					"height": 72,
-					"stroke": "#696969",
-					"text": ":xliff:page_structure",
 					"icon": "/RESOURCES/images/toolbar/structure-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
-					"radioGroup": "Group15",
+					"radioGroup": "sections",
 					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"text": ":xliff:page_structure",
+					"class": "toolbarButtons"
 				},
 				"104": {
 					"type": "radio",
@@ -186,19 +186,19 @@
 					"left": 332,
 					"width": 91,
 					"height": 72,
-					"stroke": "#696969",
-					"text": ":xliff:page_main",
 					"icon": "/RESOURCES/images/toolbar/main-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
-					"radioGroup": "Group15",
+					"radioGroup": "sections",
 					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"text": ":xliff:page_main",
+					"class": "toolbarButtons"
 				},
 				"105": {
 					"type": "radio",
@@ -206,19 +206,19 @@
 					"left": 431,
 					"width": 91,
 					"height": 72,
-					"stroke": "#696969",
-					"text": ":xliff:page_views",
 					"icon": "/RESOURCES/images/toolbar/views-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
-					"radioGroup": "Group15",
+					"radioGroup": "sections",
 					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"text": ":xliff:page_views",
+					"class": "toolbarButtons"
 				},
 				"103": {
 					"type": "radio",
@@ -226,19 +226,19 @@
 					"left": 213,
 					"width": 111,
 					"height": 72,
-					"stroke": "#696969",
-					"text": ":xliff:page_properties",
 					"icon": "/RESOURCES/images/toolbar/properties-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
-					"radioGroup": "Group15",
+					"radioGroup": "sections",
 					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"text": ":xliff:page_properties",
+					"class": "toolbarButtons"
 				},
 				"106": {
 					"type": "radio",
@@ -246,19 +246,19 @@
 					"left": 530,
 					"width": 91,
 					"height": 72,
-					"stroke": "#696969",
-					"text": ":xliff:page_deployment",
 					"icon": "/RESOURCES/images/toolbar/deployment-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
-					"radioGroup": "Group15",
+					"radioGroup": "sections",
 					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"text": ":xliff:page_deployment",
+					"class": "toolbarButtons"
 				},
 				"107": {
 					"type": "radio",
@@ -266,19 +266,19 @@
 					"left": 629,
 					"width": 91,
 					"height": 72,
-					"stroke": "#696969",
-					"text": ":xliff:page_data",
 					"icon": "/RESOURCES/images/toolbar/Data-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
-					"radioGroup": "Group15",
+					"radioGroup": "sections",
 					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"text": ":xliff:page_data",
+					"class": "toolbarButtons"
 				},
 				"108": {
 					"type": "radio",
@@ -287,19 +287,19 @@
 					"width": 91,
 					"height": 72,
 					"visibility": "visible",
-					"stroke": "#696969",
-					"text": ":xliff:page_actions",
 					"icon": "/RESOURCES/images/toolbar/actions-white-32.png",
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
-					"radioGroup": "Group15",
+					"radioGroup": "sections",
 					"method": "RIBBON",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"text": ":xliff:page_actions",
+					"class": "toolbarButtons"
 				}
 			}
 		},
@@ -312,7 +312,6 @@
 					"width": 111,
 					"height": 72,
 					"tooltip": ":xliff:bRunTip",
-					"stroke": "#696969",
 					"text": ":xliff:mnuBuild",
 					"icon": "/RESOURCES/images/toolbar/generate-white-32.png",
 					"iconFrames": 4,
@@ -323,7 +322,8 @@
 						"onMouseEnter",
 						"onMouseLeave"
 					],
-					"method": "ObjectMethods/151.4dm"
+					"method": "ObjectMethods/151.4dm",
+					"class": "toolbarButtons"
 				},
 				"152": {
 					"type": "button",
@@ -331,7 +331,6 @@
 					"left": 252,
 					"width": 111,
 					"height": 72,
-					"stroke": "#696969",
 					"text": ":xliff:project",
 					"icon": "/RESOURCES/images/toolbar/project-white-32.png",
 					"iconFrames": 4,
@@ -343,7 +342,8 @@
 						"onMouseLeave"
 					],
 					"popupPlacement": "linked",
-					"method": "ObjectMethods/152.4dm"
+					"method": "ObjectMethods/152.4dm",
+					"class": "toolbarButtons"
 				},
 				"201": {
 					"type": "button",
@@ -352,7 +352,6 @@
 					"width": 111,
 					"height": 72,
 					"tooltip": ":xliff:deviceList",
-					"stroke": "#696969",
 					"text": ":xliff:unknown",
 					"icon": "/RESOURCES/images/toolbar/test-white-32.png",
 					"iconFrames": 4,
@@ -364,7 +363,8 @@
 						"onMouseEnter",
 						"onMouseLeave"
 					],
-					"popupPlacement": "linked"
+					"popupPlacement": "linked",
+					"class": "toolbarButtons"
 				},
 				"153": {
 					"type": "button",
@@ -373,7 +373,6 @@
 					"width": 111,
 					"height": 72,
 					"tooltip": ":xliff:bInstallTip",
-					"stroke": "#696969",
 					"text": ":xliff:install",
 					"icon": "/RESOURCES/images/toolbar/install-white-32.png",
 					"iconFrames": 4,
@@ -384,7 +383,8 @@
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"class": "toolbarButtons"
 				}
 			}
 		}
@@ -400,5 +400,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 5
+	"geometryStamp": 49
 }

@@ -15,10 +15,7 @@ listbox	 {
 	font-size: 14;
 	fill: transparent;
 	focusable: false;
-	borderStyle: none;
 	hideSystemHighlight: true;
-	horizontalLineStroke: transparent;
-	verticalLineStroke: transparent;
 	sortable: false;
 	verticalAlign: middle;
 }

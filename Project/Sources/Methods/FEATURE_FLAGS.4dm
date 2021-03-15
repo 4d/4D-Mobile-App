@@ -43,7 +43,7 @@ FEATURE.alias("debug"; 8858)
 //featuresFlags._677:=True // Format fields when dumping data from rest (userless if iOS app could translate)
 
 /* _____________
-17R2
+17R2 - REMOVED
 _____________*/
 FEATURE.delivered(89556; 1720)  // Reload embedded data from iOS application
 FEATURE.delivered(92293; 1720)  // Support user defined tables
@@ -52,14 +52,14 @@ FEATURE.delivered(8122017; 1720)  // Turn around bug close window
 FEATURE.delivered(96674; 1720)  // Archive app
 
 /* _____________
-17R3
+17R3 - REMOVED
 _____________*/
 FEATURE.delivered(100157; 1730)  // Template creation
 FEATURE.delivered(100353; 1730)  // Template creation: inject any sources
 FEATURE.delivered(100191; 1730)  // Data Formatter
 
 /* _____________
-17R4
+17R4 - REMOVED
 _____________*/
 FEATURE.delivered(98105; 1740)  // Multi-criteria Search
 FEATURE.delivered(100990; 1740)  // Custom Data Formatter
@@ -69,7 +69,7 @@ FEATURE.delivered(103112; 1740)  // Restricted queries: Move dataSet into databa
 FEATURE.delivered(102457; 1740)  // Data file access with /mobileapp key
 
 /* _____________
-17R5
+17R5 - REMOVED
 _____________*/
 FEATURE.delivered(101637; 1750)  // Display n-1 relations
 FEATURE.delivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
@@ -80,38 +80,38 @@ FEATURE.delivered("withRecursiveLink"; 1750)  // Enable recursive link managemen
 FEATURE.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
 
 /* _____________
-17R6
+17R6 - REMOVED
 _____________*/
 FEATURE.delivered(105413; 1760)  // [MOBILE] Actions with parameters
 FEATURE.delivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
 FEATURE.delivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
 
 /* _____________
-18
+1800 - REMOVED
 _____________*/
 FEATURE.delivered(105431; 1800)  // Display 1-n relations
 FEATURE.delivered(110882; 1800)  // Dump data into core data SQLLite database
 FEATURE.delivered("newDataModel"; 1800)
 
 /* _____________
-18R2
+18R2 - REMOVED
 _____________*/
 FEATURE.delivered("repairStructureMoreVisible"; 1820)
 FEATURE.delivered(113164; 1820)  // Enable/disable image dump
 
 /* _____________
-18R3
+18R3 - REMOVED
 _____________*/
 FEATURE.delivered(112225; 1830)  // Select/install/use custom templates
 
 /* _____________
-18R4
+18R4 - REMOVED
 _____________*/
 FEATURE.delivered(113016; 1840)  // Svg improvement in forms section
 FEATURE.delivered(107526; 1840)  // Push Notifications
 
 /* _____________
-18R5
+18R5 - REMOVED
 _____________*/
 FEATURE.delivered(117618; 1850)  // Deep Linking
 
@@ -123,14 +123,14 @@ FEATURE.unstable("templateClass")
 FEATURE.unstable("searchWithBarCode")
 
 /* _____________
-19
+1900
 _____________*/
 FEATURE.unstable("withSimulatorClass")  // Use simctl intead of _o_simulator
 FEATURE.unstable("android")  // Android support global flag
 FEATURE.unstable("wizards")  // Use a wizard instead of standard dialogs to create or open a project
 
 /* _____________
-19 BETA
+1900 BETA
 _____________*/
 FEATURE.unstable("androidBeta")  // Android support during beta phase
 

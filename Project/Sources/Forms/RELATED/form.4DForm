@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"windowSizingX": "fixed",
 	"windowMinHeight": 200,
@@ -28,10 +28,7 @@
 					"left": 0,
 					"width": 450,
 					"height": 383,
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"fill": "automatic",
-					"stroke": "transparent"
+					"class": "background"
 				},
 				"fields": {
 					"type": "listbox",
@@ -41,24 +38,17 @@
 					"height": 347,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"resizingMode": "legacy",
 					"listboxType": "collection",
 					"hideFocusRing": true,
 					"movableRows": false,
 					"rowHeight": "20px",
-					"showHeaders": false,
 					"dataSource": "Form:C1466.fields",
 					"currentItemSource": "Form:C1466.current",
 					"currentItemPositionSource": "Form:C1466.position",
 					"selectedItemsSource": "Form:C1466.selected",
 					"selectionMode": "none",
-					"scrollbarHorizontal": "hidden",
 					"scrollbarVertical": "automatic",
-					"horizontalLineStroke": "transparent",
-					"verticalLineStroke": "transparent",
-					"borderStyle": "none",
 					"events": [],
-					"sortable": false,
 					"focusable": false,
 					"rowStyleSource": "Choose:C955(Position:C15(\".\"; This:C1470.path)>0; Italic:K14:3; Plain:K14:1)",
 					"columns": [
@@ -187,8 +177,7 @@
 					"left": 0,
 					"width": 450,
 					"sizingX": "grow",
-					"sizingY": "move",
-					"stroke": "#DCDCDC"
+					"sizingY": "move"
 				},
 				"title": {
 					"type": "text",
@@ -196,15 +185,15 @@
 					"left": 14,
 					"width": 358,
 					"height": 17,
-					"text": ":xliff:relatedTable"
+					"text": ":xliff:relatedTable",
+					"class": "label"
 				},
 				"_topLine": {
 					"type": "line",
 					"top": 34,
 					"left": 0,
 					"width": 450,
-					"sizingX": "grow",
-					"stroke": "#DCDCDC"
+					"sizingX": "grow"
 				}
 			}
 		}
@@ -220,5 +209,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 1
+	"geometryStamp": 7
 }

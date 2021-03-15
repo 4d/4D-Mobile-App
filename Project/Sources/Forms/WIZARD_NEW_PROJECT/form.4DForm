@@ -36,9 +36,8 @@
 					"left": 0,
 					"width": 970,
 					"height": 875,
-					"sizingX": "grow",
-					"sizingY": "grow",
 					"stroke": "transparent",
+					"class": "background",
 					"fill": "automatic"
 				}
 			}
@@ -233,7 +232,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 303,
+	"geometryStamp": 310,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -250,6 +249,5 @@
 		}
 	},
 	"windowMinWidth": 970,
-	"windowMinHeight": 860,
-	"colorScheme": "light"
+	"windowMinHeight": 860
 }

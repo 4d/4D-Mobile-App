@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -27,8 +27,8 @@
 					"left": 0,
 					"width": 970,
 					"height": 49,
-					"sizingX": "grow",
-					"stroke": "transparent"
+					"class": "background",
+					"sizingY": "fixed"
 				},
 				"_bottom": {
 					"type": "line",
@@ -36,7 +36,6 @@
 					"left": 0,
 					"width": 970,
 					"sizingX": "grow",
-					"stroke": "#DCDCDC",
 					"height": 0,
 					"startPoint": "topLeft"
 				}
@@ -59,11 +58,11 @@
 					"left": 52,
 					"width": 89,
 					"height": 24,
-					"stroke": "#1EAAF1",
 					"fontWeight": "bold",
 					"text": ":xliff:page_general",
 					"fontTheme": "normal",
-					"fontSize": 20
+					"fontSize": 20,
+					"class": "label highlight"
 				},
 				"comment": {
 					"type": "text",
@@ -72,8 +71,8 @@
 					"width": 810,
 					"height": 17,
 					"sizingX": "grow",
-					"stroke": "#696969",
-					"text": "Lorem ipsum"
+					"text": "Lorem ipsum",
+					"class": "label"
 				},
 				"Line": {
 					"type": "line",
@@ -110,5 +109,12 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 2
+	"geometryStamp": 12,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

@@ -144,7 +144,6 @@ Function create()->$result : Object
 						If ($o.success)
 							
 							// * COPY ICONS
-							
 							$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.path; This:C1470.project.project.dataModel)
 							
 							If ($o.success)

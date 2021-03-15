@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
@@ -21,6 +21,26 @@
 		null,
 		{
 			"objects": {
+				"noPublishedTable": {
+					"type": "button",
+					"top": 35,
+					"left": 30,
+					"width": 412,
+					"height": 19,
+					"visibility": "hidden",
+					"text": ":xliff:noPublishedTable",
+					"textPlacement": "center",
+					"style": "custom",
+					"method": "ObjectMethods/noPublishedTable.4dm",
+					"events": [
+						"onLoad",
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave",
+						"onMouseMove"
+					],
+					"class": "link"
+				},
 				"authenticationMethod.options": {
 					"type": "button",
 					"top": 104,
@@ -44,54 +64,23 @@
 					"fill": "transparent",
 					"stroke": "#AAAAAA"
 				},
-				"noPublishedTable": {
-					"type": "button",
-					"top": 35,
-					"left": 30,
-					"width": 412,
-					"height": 19,
-					"visibility": "hidden",
-					"stroke": "#1AA1E5",
-					"text": ":xliff:noPublishedTable",
-					"textPlacement": "center",
-					"style": "custom",
-					"method": "ObjectMethods/noPublishedTable.4dm",
-					"events": [
-						"onLoad",
-						"onClick",
-						"onMouseEnter",
-						"onMouseLeave",
-						"onMouseMove"
-					]
-				},
 				"01_tables": {
 					"type": "listbox",
 					"top": 28,
 					"left": 17,
 					"width": 436,
 					"height": 311,
-					"resizingMode": "legacy",
 					"listboxType": "collection",
-					"hideFocusRing": true,
-					"sortable": false,
 					"movableRows": false,
-					"dragging": "custom",
-					"hideSystemHighlight": true,
 					"rowHeight": "32px",
-					"showHeaders": false,
 					"dataSource": "Form:C1466.$dialog.DATA.tables",
 					"currentItemSource": "Form:C1466.$dialog.DATA.current",
 					"currentItemPositionSource": "Form:C1466.$dialog.DATA.index",
 					"selectedItemsSource": "Form:C1466.$dialog.DATA.selected",
 					"metaSource": "Form:C1466.$dialog.DATA.text.call()",
 					"selectionMode": "single",
-					"scrollbarHorizontal": "hidden",
 					"scrollbarVertical": "visible",
-					"horizontalLineStroke": "transparent",
-					"verticalLineStroke": "transparent",
 					"rowFillSource": "Form:C1466.$dialog.DATA.listBackground(This:C1470).color",
-					"verticalAlign": "middle",
-					"borderStyle": "none",
 					"events": [
 						"onLosingFocus",
 						"onGettingFocus",
@@ -101,7 +90,7 @@
 						"onMouseMove"
 					],
 					"method": "DATA_OBJECTS_HANDLER",
-					"fill": "#FFFFFF",
+					"hideSystemHighlight": true,
 					"columns": [
 						{
 							"name": "table_names",
@@ -110,8 +99,6 @@
 							"minWidth": 10,
 							"maxWidth": 420,
 							"enterable": false,
-							"textAlign": "left",
-							"verticalAlign": "middle",
 							"header": {
 								"name": "Header5",
 								"text": ".Tables",
@@ -134,7 +121,6 @@
 							"maxWidth": 32000,
 							"enterable": false,
 							"textAlign": "left",
-							"verticalAlign": "middle",
 							"events": [
 								"onClick",
 								"onDataChange"
@@ -202,9 +188,8 @@
 					"left": 17,
 					"width": 289,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:tables"
+					"text": ":xliff:tables",
+					"class": "label"
 				},
 				"02_filter.border.options": {
 					"type": "rectangle",
@@ -264,9 +249,8 @@
 					"width": 124,
 					"height": 17,
 					"visibility": "hidden",
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:queryFilter"
+					"text": ":xliff:queryFilter",
+					"class": "label"
 				},
 				"validate.options": {
 					"type": "button",
@@ -281,8 +265,7 @@
 					],
 					"method": "DATA_OBJECTS_HANDLER",
 					"focusable": false,
-					"style": "regular",
-					"stroke": "automatic"
+					"style": "regular"
 				},
 				"enter.options": {
 					"type": "button",
@@ -291,12 +274,12 @@
 					"width": 103,
 					"height": 20,
 					"shortcutKey": "[Enter]",
-					"text": "Enter",
 					"focusable": false,
 					"events": [
 						"onClick"
 					],
-					"method": "DATA_OBJECTS_HANDLER"
+					"method": "DATA_OBJECTS_HANDLER",
+					"display": false
 				},
 				"01_tables.embeddedLabel": {
 					"type": "text",
@@ -304,9 +287,8 @@
 					"left": 268,
 					"width": 185,
 					"height": 16,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:dataSize"
+					"text": ":xliff:dataSize",
+					"class": "label"
 				}
 			}
 		}
@@ -316,7 +298,7 @@
 		"kind": "form"
 	},
 	"method": "DATA_Handler",
-	"geometryStamp": 23,
+	"geometryStamp": 31,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

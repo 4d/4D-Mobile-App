@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
@@ -34,16 +34,14 @@
 					"top": 28,
 					"left": 381,
 					"width": 86,
-					"height": 33,
-					"stroke": "#C4C4C4"
+					"height": 33
 				},
 				"10_name.border": {
 					"type": "rectangle",
 					"top": 28,
 					"left": 16,
 					"width": 344,
-					"height": 33,
-					"stroke": "#C4C4C4"
+					"height": 33
 				},
 				"10_name": {
 					"type": "input",
@@ -55,7 +53,6 @@
 					"tooltip": ":xliff:appNameTip",
 					"fill": "transparent",
 					"borderStyle": "none",
-					"hideFocusRing": true,
 					"dragging": "none",
 					"events": [
 						"onDataChange",
@@ -69,9 +66,8 @@
 					"left": 16,
 					"width": 90,
 					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:name"
+					"text": ":xliff:name",
+					"class": "label"
 				},
 				"11_version": {
 					"type": "input",
@@ -82,7 +78,6 @@
 					"dataSource": "Form:C1466.product.version",
 					"fill": "transparent",
 					"borderStyle": "none",
-					"hideFocusRing": true,
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -95,9 +90,8 @@
 					"left": 381,
 					"width": 84,
 					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:appVersion"
+					"text": ":xliff:appVersion",
+					"class": "label"
 				},
 				"name.alert": {
 					"type": "button",
@@ -118,8 +112,8 @@
 					"height": 216,
 					"visibility": "hidden",
 					"fill": "transparent",
-					"stroke": "#B1C4DD",
-					"strokeDashArray": "1 1"
+					"strokeDashArray": "1 1",
+					"stroke": "#B1C4DD"
 				},
 				"10_name.border2": {
 					"type": "rectangle",
@@ -136,7 +130,7 @@
 					"left": 23,
 					"width": 437,
 					"height": 17,
-					"dataSource": "formatString (\"bundleApp\";Form:C1466.organization.id+\".\"+Form:C1466.product.name)",
+					"dataSource": "formatString(\"bundleApp\"; Form:C1466.organization.id+\".\"+Form:C1466.product.name)",
 					"stroke": "#808080",
 					"tooltip": ":xliff:appBundleIDTip",
 					"fill": "transparent",
@@ -155,17 +149,15 @@
 					"left": 16,
 					"width": 90,
 					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:appBundleID"
+					"text": ":xliff:appBundleID",
+					"class": "label"
 				},
 				"10_name.border1": {
 					"type": "rectangle",
 					"top": 157,
 					"left": 16,
 					"width": 451,
-					"height": 33,
-					"stroke": "#C4C4C4"
+					"height": 33
 				},
 				"30_copyright": {
 					"type": "input",
@@ -176,7 +168,6 @@
 					"dataSource": "Form:C1466.product.copyright",
 					"fill": "transparent",
 					"borderStyle": "none",
-					"hideFocusRing": true,
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -189,9 +180,8 @@
 					"left": 16,
 					"width": 90,
 					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:appCopyright"
+					"text": ":xliff:appCopyright",
+					"class": "label"
 				},
 				"icon.background": {
 					"type": "picture",
@@ -208,9 +198,8 @@
 					"left": 488,
 					"width": 56,
 					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:appIcons"
+					"text": ":xliff:appIcons",
+					"class": "label"
 				},
 				"icon.border": {
 					"type": "rectangle",
@@ -218,8 +207,7 @@
 					"left": 488,
 					"width": 162,
 					"height": 162,
-					"fill": "transparent",
-					"stroke": "#AAAAAA"
+					"fill": "transparent"
 				},
 				"icon": {
 					"type": "input",
@@ -232,7 +220,6 @@
 					"fill": "transparent",
 					"borderStyle": "none",
 					"enterable": false,
-					"hideFocusRing": true,
 					"contextMenu": "none",
 					"pictureFormat": "proportionalCenter",
 					"dragging": "none",
@@ -266,10 +253,9 @@
 					"left": 695,
 					"width": 89,
 					"height": 16,
-					"stroke": "#808080",
-					"textAlign": "left",
 					"text": ":xliff:targetOs",
-					"visibility": "visible"
+					"visibility": "visible",
+					"class": "label"
 				},
 				"ios": {
 					"type": "checkbox",
@@ -289,8 +275,7 @@
 					"dataSourceTypeHint": "boolean",
 					"focusable": false,
 					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
-					"iconFrames": 4,
-					"stroke": "automatic"
+					"iconFrames": 4
 				},
 				"android": {
 					"type": "checkbox",
@@ -311,8 +296,7 @@
 					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
 					"iconFrames": 4,
 					"focusable": false,
-					"textPlacement": "bottom",
-					"stroke": "automatic"
+					"textPlacement": "bottom"
 				},
 				"icon.action": {
 					"type": "button",
@@ -357,5 +341,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 84
+	"geometryStamp": 96
 }

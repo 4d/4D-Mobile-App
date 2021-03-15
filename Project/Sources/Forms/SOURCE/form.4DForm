@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
@@ -86,7 +86,6 @@
 					"width": 247,
 					"height": 22,
 					"visibility": "hidden",
-					"stroke": "#808080",
 					"text": ":xliff:theWebServerIsRunning",
 					"icon": "/RESOURCES/images/light_on.png",
 					"textPlacement": "right",
@@ -112,9 +111,8 @@
 					"width": 337,
 					"height": 17,
 					"visibility": "hidden",
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:checkingServerAvailability"
+					"text": ":xliff:checkingServerAvailability",
+					"class": "label"
 				},
 				"dataGeneration": {
 					"type": "spinner",
@@ -131,9 +129,8 @@
 					"width": 258,
 					"height": 46,
 					"visibility": "hidden",
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:dataSetGeneration"
+					"text": ":xliff:dataSetGeneration",
+					"class": "label"
 				},
 				"doNotExportImages": {
 					"type": "checkbox",
@@ -166,5 +163,12 @@
 		"kind": "form"
 	},
 	"method": "SOURCE_Handler",
-	"geometryStamp": 6
+	"geometryStamp": 10,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

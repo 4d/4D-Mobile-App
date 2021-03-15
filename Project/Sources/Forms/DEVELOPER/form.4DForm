@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
@@ -38,17 +38,6 @@
 					"stroke": "#C4C4C4",
 					"class": "border"
 				},
-				"01_name.label": {
-					"type": "text",
-					"top": 5,
-					"left": 16,
-					"width": 90,
-					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:name",
-					"class": "label"
-				},
 				"01_name": {
 					"type": "input",
 					"top": 36,
@@ -62,17 +51,6 @@
 					"hideFocusRing": true,
 					"dragging": "none",
 					"class": "input"
-				},
-				"20_team.label": {
-					"type": "text",
-					"top": 5,
-					"left": 488,
-					"width": 90,
-					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:orgTeam",
-					"class": "label"
 				},
 				"02_team.help": {
 					"type": "button",
@@ -131,6 +109,24 @@
 					],
 					"method": "DEVELOPER",
 					"focusable": false
+				},
+				"01_name.label": {
+					"type": "text",
+					"top": 5,
+					"left": 16,
+					"width": 90,
+					"height": 17,
+					"text": ":xliff:name",
+					"class": "label"
+				},
+				"20_team.label": {
+					"type": "text",
+					"top": 5,
+					"left": 488,
+					"width": 90,
+					"height": 17,
+					"text": ":xliff:orgTeam",
+					"class": "label"
 				}
 			},
 			"entryOrder": [

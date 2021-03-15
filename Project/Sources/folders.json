@@ -125,6 +125,7 @@
 			"path"
 		],
 		"forms": [
+			"NEW_PROJECT",
 			"WIZARD_NEW_PROJECT",
 			"WIZARD_OPEN_PROJECT"
 		],
@@ -160,7 +161,6 @@
 		],
 		"forms": [
 			"EDITOR",
-			"NEW_PROJECT",
 			"TITLE"
 		],
 		"classes": [
