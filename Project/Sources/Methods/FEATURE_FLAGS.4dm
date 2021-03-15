@@ -269,5 +269,4 @@ End if
 /* _____________
 ALIAS
 _____________*/
-FEATURE.alias("deepLinking"; 117618)
 FEATURE.alias("moreRelations"; 117601)

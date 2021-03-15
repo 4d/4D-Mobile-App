@@ -279,22 +279,20 @@ If ($in.create)
 		"info"; $project.info)
 	$appManifest.id:=String:C10($appManifest.team.id)+"."+$appManifest.application.id
 	
-	If (FEATURE.with(117618))
+	// Deep linking
+	If (Bool:C1537($project.deepLinking.enabled))
 		
-		If (Bool:C1537($project.deepLinking.enabled))
+		If (Length:C16(String:C10($project.deepLinking.urlScheme))>0)
 			
-			If (Length:C16(String:C10($project.deepLinking.urlScheme))>0)
-				
-				$appManifest.urlScheme:=String:C10($project.deepLinking.urlScheme)
-				$appManifest.urlScheme:=Replace string:C233($appManifest.urlScheme; "://"; "")
-				
-			End if 
+			$appManifest.urlScheme:=String:C10($project.deepLinking.urlScheme)
+			$appManifest.urlScheme:=Replace string:C233($appManifest.urlScheme; "://"; "")
 			
-			If (Length:C16(String:C10($project.deepLinking.associatedDomain))>0)
-				
-				$appManifest.associatedDomain:=String:C10($project.deepLinking.associatedDomain)
-				
-			End if 
+		End if 
+		
+		If (Length:C16(String:C10($project.deepLinking.associatedDomain))>0)
+			
+			$appManifest.associatedDomain:=String:C10($project.deepLinking.associatedDomain)
+			
 		End if 
 	End if 
 	
@@ -571,35 +569,31 @@ If ($in.create)
 			End if 
 		End if 
 		
-		If (FEATURE.with(117618))
+		If (Bool:C1537($project.deepLinking.enabled))
 			
-			If (Bool:C1537($project.deepLinking.enabled))
+			If (Length:C16(String:C10($project.deepLinking.urlScheme))>0)
 				
-				If (Length:C16(String:C10($project.deepLinking.urlScheme))>0)
-					
-					$urlScheme:=String:C10($project.deepLinking.urlScheme)
-					$urlScheme:=Replace string:C233($urlScheme; "://"; "")
-					$out.computedCapabilities.capabilities.urlSchemes:=New collection:C1472($urlScheme)
-					
-				End if 
+				$urlScheme:=String:C10($project.deepLinking.urlScheme)
+				$urlScheme:=Replace string:C233($urlScheme; "://"; "")
+				$out.computedCapabilities.capabilities.urlSchemes:=New collection:C1472($urlScheme)
 				
-				If (Length:C16(String:C10($project.deepLinking.associatedDomain))>0)
-					
-					$associatedDomain:=String:C10($project.deepLinking.associatedDomain)
-					$associatedDomain:=Replace string:C233($associatedDomain; "https://"; "")
-					$associatedDomain:=Replace string:C233($associatedDomain; "http://"; "")
-					
-					If (($associatedDomain[[Length:C16($associatedDomain)]])="/")  // Strip last /
-						
-						$associatedDomain:=Substring:C12($associatedDomain; 1; Length:C16($associatedDomain)-1)
-						
-					End if 
-					
-					$out.computedCapabilities.capabilities.associatedDomain:=$associatedDomain
-					
-				End if 
 			End if 
 			
+			If (Length:C16(String:C10($project.deepLinking.associatedDomain))>0)
+				
+				$associatedDomain:=String:C10($project.deepLinking.associatedDomain)
+				$associatedDomain:=Replace string:C233($associatedDomain; "https://"; "")
+				$associatedDomain:=Replace string:C233($associatedDomain; "http://"; "")
+				
+				If (($associatedDomain[[Length:C16($associatedDomain)]])="/")  // Strip last /
+					
+					$associatedDomain:=Substring:C12($associatedDomain; 1; Length:C16($associatedDomain)-1)
+					
+				End if 
+				
+				$out.computedCapabilities.capabilities.associatedDomain:=$associatedDomain
+				
+			End if 
 		End if 
 		
 		$isSearchable:=ob findPropertyValues($project; "searchableWithBarcode")

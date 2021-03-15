@@ -374,24 +374,16 @@ Case of
 			$deleteMenu:=cs:C1710.menu.new()
 			$menu.append(":xliff:deleteActionFor"; $deleteMenu)
 			
-			If (FEATURE.with(117618))
-				
-				$shareMenu:=cs:C1710.menu.new()
-				$menu.append(":xliff:shareActionFor"; $shareMenu)
-				
-			End if 
+			$shareMenu:=cs:C1710.menu.new()
+			$menu.append(":xliff:shareActionFor"; $shareMenu)
 			
 			For each ($t; Form:C1466.dataModel)
 				
 				$addMenu.append(Form:C1466.dataModel[$t][""].name; "add_"+$t)
 				$editMenu.append(Form:C1466.dataModel[$t][""].name; "edit_"+$t)
 				$deleteMenu.append(Form:C1466.dataModel[$t][""].name; "delete_"+$t)
+				$shareMenu.append(Form:C1466.dataModel[$t][""].name; "share_"+$t)
 				
-				If (FEATURE.with(117618))
-					
-					$shareMenu.append(Form:C1466.dataModel[$t][""].name; "share_"+$t)
-					
-				End if 
 			End for each 
 			
 			$menu.popup(""; $form.add.getCoordinates())
