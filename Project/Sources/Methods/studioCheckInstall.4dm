@@ -53,29 +53,24 @@ End if
 
 If ($out.applicationAvailable)
 	
-	// Check version
+	// *CHECK VERSION
 	$out.ready:=$studio.checkVersion(SHARED.studioVersion)
 	
 	If ($out.ready)
 		
 		$out.version:=$studio.version
 		
-		// CHECK SDK
+		// *CHECK SDK
 		$out.ready:=$studio.sdkFolder().exists
 		
 		If ($out.ready)
 			
-			// CHECK LICENCES
-			//$out.ready:=cs.sdkmanager.new().success
-			
-			//If ($out.ready)
-			
-			// CHECK JAVA
+			// *CHECK JAVA
 			$out.ready:=$studio.java.exists
 			
 			If ($out.ready)
 				
-				// CHECK KOTLINC
+				// *CHECK KOTLINC
 				$out.ready:=$studio.kotlinc.exists
 				
 				If (Not:C34($out.ready))
@@ -90,22 +85,6 @@ If ($out.applicationAvailable)
 				
 			End if 
 			
-			//Else 
-			
-			//$signal:=await_MESSAGE(New object(\
-								"target"; $in.caller; \
-								"action"; "show"; \
-								"type"; "confirm"; \
-								"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
-								"additional"; New collection("wouldYouLikeToLaunchAppNow"; "androidStudio")))
-			
-			//If ($signal.validate)
-			
-			//$studio.open()
-			
-			//End if 
-			//End if 
-			
 		Else 
 			
 			$signal:=await_MESSAGE(New object:C1471(\
@@ -113,7 +92,7 @@ If ($out.applicationAvailable)
 				"action"; "show"; \
 				"type"; "confirm"; \
 				"title"; ".You must accept Android Studio Tools licences"; \
-				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio")))  //#MARK_LOCALIZE
+				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio")))
 			
 			If ($signal.validate)
 				

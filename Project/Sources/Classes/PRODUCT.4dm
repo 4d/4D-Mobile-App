@@ -151,14 +151,14 @@ Function displayIcon
 					Else 
 						
 						This:C1470.icon.setValue($picture)
-						This:C1470.iconAlert.alert(".Missing file.")  // #MARK_LOCALIZE
+						This:C1470.iconAlert.alert(Replace string:C233(Get localized string:C991("missingFile"); "{file}"; $file.name))
 						
 					End if 
 					
 				Else 
 					
 					This:C1470.icon.setValue($picture)
-					This:C1470.iconAlert.alert(".The icon is mandatory.")  // #MARK_LOCALIZE
+					This:C1470.iconAlert.alert("theIconIsMandatory")
 					
 				End if 
 				
@@ -179,14 +179,14 @@ Function displayIcon
 					Else 
 						
 						This:C1470.icon.setValue($picture)
-						This:C1470.iconAlert.alert(".Missing file.")  // #MARK_LOCALIZE
+						This:C1470.iconAlert.alert(Replace string:C233(Get localized string:C991("missingFile"); "{file}"; $file.name))
 						
 					End if 
 					
 				Else 
 					
 					This:C1470.icon.setValue($picture)
-					This:C1470.iconAlert.alert(".The icon is mandatory.")  // #MARK_LOCALIZE
+					This:C1470.iconAlert.alert("theIconIsMandatory")
 					
 				End if 
 			End if 
