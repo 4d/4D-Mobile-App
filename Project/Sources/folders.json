@@ -419,7 +419,8 @@
 			"gradlew",
 			"MobileProjectAndroid",
 			"sdkmanager",
-			"studio"
+			"studio",
+			"vdtool"
 		]
 	},
 	"backend": {
@@ -846,9 +847,6 @@
 			"RIBBON"
 		],
 		"forms": [
-			"RIBBON"
-		],
-		"classes": [
 			"RIBBON"
 		]
 	},
