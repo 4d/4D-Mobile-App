@@ -40,12 +40,12 @@ Class constructor($name : Text; $type : Text)
 			
 			This:C1470.type:=$type
 			
-			This:C1470.container:=This:C1470._path()
+			This:C1470.sources:=This:C1470.getSources()
 			
-			If (Bool:C1537(This:C1470.container.exists))
+			If (Bool:C1537(This:C1470.sources.exists))
 				
 				// Load the manifest
-				$file:=This:C1470.container.file("manifest.json")
+				$file:=This:C1470.sources.file("manifest.json")
 				
 				If ($file.exists)
 					
@@ -61,9 +61,8 @@ Class constructor($name : Text; $type : Text)
 					Else 
 						
 						// Check the folder structure to identify an iOS or Android template
-						
-						This:C1470.iOS:=This:C1470.container.folder("Sources").exists | This:C1470.container.folder("ios").exists
-						This:C1470.android:=This:C1470.container.folder("app").exists | This:C1470.container.folder("android").exists
+						This:C1470.iOS:=This:C1470.sources.folder("Sources").exists | This:C1470.sources.folder("ios").exists
+						This:C1470.android:=This:C1470.sources.folder("app").exists | This:C1470.sources.folder("android").exists
 						
 					End if 
 					
@@ -74,7 +73,7 @@ Class constructor($name : Text; $type : Text)
 				End if 
 				
 				// Load the svg template
-				$file:=This:C1470.container.file("template.svg")
+				$file:=This:C1470.sources.file("template.svg")
 				
 				If ($file.exists)
 					
@@ -101,8 +100,8 @@ Class constructor($name : Text; $type : Text)
 	End if 
 	
 /* ============================================================================*/
-	//Function load  // Load and update the template if any
-Function update  // Load and update the template if any
+	// Update the template if any
+Function update
 	var $0 : Object
 	
 	var $dom; $node; $root; $t : Text
@@ -473,8 +472,8 @@ Function cancel
 		"mkHfgG6PCOSHCtXRwAAAABJRU5ErkJggg=="
 	
 	//============================================================================
-	// Return the path of the file/folder
-Function _path($name : Text; $type : Text)->$template : 4D:C1709.folder
+	// Return the source folder of the template (could be a zip)
+Function getSources($name : Text; $type : Text)->$template : 4D:C1709.folder
 	
 	var $formName; $formType; $item : Text
 	var $success : Boolean

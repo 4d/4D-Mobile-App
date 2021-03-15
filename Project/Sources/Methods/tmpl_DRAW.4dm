@@ -57,7 +57,7 @@ If (Num:C11($tableID)>0)
 			
 		End if 
 		
-		If ($tmpl.container.exists)
+		If ($tmpl.sources.exists)
 			
 			$manifest:=$tmpl.manifest
 			

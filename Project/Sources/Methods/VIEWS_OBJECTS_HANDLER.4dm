@@ -70,7 +70,7 @@ Case of
 				
 				$tableID:=SVG Find element ID by coordinates:C1054(*; $e.objectName; MOUSEX; MOUSEY)
 				$tmpl:=cs:C1710.tmpl.new(String:C10(Form:C1466[$formType][$tableID].form); $formType)
-				$exists:=$tmpl.container.exists
+				$exists:=$tmpl.sources.exists
 				
 				Case of 
 						

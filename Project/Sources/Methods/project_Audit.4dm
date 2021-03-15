@@ -78,7 +78,7 @@ If ($datamodel#Null:C1517)
 				
 				$name:=String:C10($list[$table.key].form)
 				
-				If (Not:C34($tmpl.path($name; "list").exists))  // 👎 MISSING OR INVALID LIST FORM
+				If (Not:C34($tmpl.getSources($name; "list").exists))  // 👎 MISSING OR INVALID LIST FORM
 					
 					$errors.push(New object:C1471(\
 						"type"; "template"; \
@@ -97,7 +97,7 @@ If ($datamodel#Null:C1517)
 			
 			If (Length:C16($name)>0)
 				
-				If (Not:C34($tmpl.path($name; "detail").exists))  // 👎 MISSING OR INVALID DETAIL FORM
+				If (Not:C34($tmpl.getSources($name; "detail").exists))  // 👎 MISSING OR INVALID DETAIL FORM
 					
 					$errors.push(New object:C1471(\
 						"type"; "template"; \
