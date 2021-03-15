@@ -44,6 +44,13 @@ class FromTableForViewModelImpl : FromTableForViewModel {
         {{/tableNames}}
     }
 
+    override fun originalTableName(tableName: String): String = when (tableName) {
+        {{#tableNames}}
+        "{{name}}" -> "{{name_original}}"
+        {{/tableNames}}
+        else -> throw IllegalArgumentException()
+    }
+
     /**
      * Provides the appropriate Entity
      */

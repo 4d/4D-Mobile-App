@@ -19,7 +19,8 @@ import java.io.File
 
 open class CreateDatabaseTask : DefaultTask() {
 
-    private val tableNames = arrayOf({{#tableNames}}"{{name}}"{{^-last}}, {{/-last}}{{/tableNames}})
+    private val tableNames = 
+        mapOf({{#tableNames}}"{{name}}" to "{{name_original}}"{{^-last}}, {{/-last}}{{/tableNames}})
 
     private var initialGlobalStamp = 0
 
@@ -33,7 +34,7 @@ open class CreateDatabaseTask : DefaultTask() {
     fun update() {
         dbFile.delete()
 
-        StaticDatabase.initialize(dbFile, schema, logger, tableNames).useInTransaction { database ->
+        StaticDatabase.initialize(dbFile, schema, logger, tableNames.keys.toTypedArray()).useInTransaction { database ->
 
             val staticDataInitializer = StaticDataInitializer()
 
@@ -45,11 +46,12 @@ open class CreateDatabaseTask : DefaultTask() {
 
     private fun getSqlQueries(staticDataInitializer: StaticDataInitializer): List<SqlQuery> {
         val queryList = mutableListOf<SqlQuery>()
-        for (tableName in tableNames) {
-            getCatalog(tableName)?.let { dataClass ->
+        for ((tableName, tableNameOriginal) in tableNames) {
+            getCatalog(tableNameOriginal)?.let { dataClass ->
 
                 getSqlQueriesForTable(
                     tableName,
+                    tableNameOriginal,
                     dataClass.fields,
                     staticDataInitializer
                 )?.let { sqlQuery ->
@@ -62,11 +64,12 @@ open class CreateDatabaseTask : DefaultTask() {
 
     private fun getSqlQueriesForTable(
         tableName: String,
+        tableNameOriginal: String,
         fields: List<Field>,
         staticDataInitializer: StaticDataInitializer
     ): SqlQuery? {
 
-        val filePath = getDataPath(tableName)
+        val filePath = getDataPath(tableNameOriginal)
 
         println("[$tableName] Reading data at path $filePath")
 
