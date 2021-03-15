@@ -117,7 +117,6 @@ Function create()->$result : Object
 			// * GRADLEW ACCESS RIGHTS
 			If (Is macOS:C1572)  // No need to change permissions on Windows
 				
-				//This.postStep(".Adjusting access rights")  //#MARK_LOCALIZE
 				$o:=This:C1470.androidprojectgenerator.chmod(This:C1470.project.path)
 				
 			End if 
@@ -137,7 +136,7 @@ Function create()->$result : Object
 					If ($o.success)
 						
 						// * COPY RESOURCES
-						This:C1470.postStep(".Copying resources")  //#MARK_LOCALIZE
+						This:C1470.postStep("copyingResources")
 						
 						$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
 						
@@ -197,7 +196,7 @@ Function create()->$result : Object
 		
 		If (This:C1470.isOnError)
 			
-			$o.errors.insert(0; ".Failure in project creation")  // #MARK_LOCALIZE
+			$o.errors.insert(0; Get localized string:C991("failedToCreateTheProject"))
 			
 			This:C1470.postError($o.errors.join("\r"))
 			$result.errors.combine($o.errors)

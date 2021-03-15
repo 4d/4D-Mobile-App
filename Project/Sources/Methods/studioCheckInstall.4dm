@@ -93,11 +93,11 @@ If ($out.applicationAvailable)
 			//Else 
 			
 			//$signal:=await_MESSAGE(New object(\
-				"target"; $in.caller; \
-				"action"; "show"; \
-				"type"; "confirm"; \
-				"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
-				"additional"; New collection("wouldYouLikeToLaunchAppNow"; "androidStudio")))
+								"target"; $in.caller; \
+								"action"; "show"; \
+								"type"; "confirm"; \
+								"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
+								"additional"; New collection("wouldYouLikeToLaunchAppNow"; "androidStudio")))
 			
 			//If ($signal.validate)
 			
