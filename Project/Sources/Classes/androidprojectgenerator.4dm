@@ -39,7 +39,7 @@ Function generate
 				+"\" --host-db \""+This:C1470.path.host().path\
 				+"\"")
 			
-			$0.success:=(This:C1470.errorStream=Null:C1517)
+			$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 			$0.outputStream:=This:C1470.outputStream
 			$0.errorStream:=This:C1470.errorStream
 			
