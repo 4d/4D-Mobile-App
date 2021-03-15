@@ -314,7 +314,8 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		
 	Else 
 		
-		// ??
+		This:C1470.errorStream:=This:C1470._cleanupStream($errorStream)
+		This:C1470._pushError(This:C1470.errorStream)
 		
 	End if 
 	
