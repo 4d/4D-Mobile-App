@@ -113,6 +113,17 @@ Case of
 		
 		$form.buildButtons.distributeLeftToRight($constraints)
 		
+		If (FEATURE.with("android"))  //🚧
+			
+			$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode) | Bool:C1537(Form:C1466.status.studio)
+			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
+			$form.build.enable($isDevToolAvailable & $isProjectOK & (Form:C1466.currentDevice#Null:C1517))
+			
+			$withTeamID:=Bool:C1537(Form:C1466.status.teamId) | Is Windows:C1573
+			$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID)
+			
+		End if 
+		
 		//______________________________________________________
 	: ($e.code=On Page Change:K2:54)
 		
@@ -319,12 +330,7 @@ Case of
 		
 		If (FEATURE.with("android"))  //🚧
 			
-			$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode) | Bool:C1537(Form:C1466.status.studio)
-			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
-			$withTeamID:=Bool:C1537(Form:C1466.status.teamId) | Is Windows:C1573
-			
-			$form.build.enable($isDevToolAvailable & $isProjectOK & (Form:C1466.currentDevice#Null:C1517))
-			$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID)
+			SET TIMER:C645(-1)
 			
 		Else 
 			
