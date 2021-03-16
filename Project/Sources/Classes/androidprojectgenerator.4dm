@@ -214,28 +214,35 @@ Function copyIcons
 				
 				$iconPath:=$dataModel.value[""].icon
 				
-				$currentFile:=$tableIcons.file($iconPath)
-				
-				If (Not:C34($currentFile.exists))
+				If ($iconPath#"")
 					
-					$currentFile:=$tableIcons.parent.file("missingIcon.svg")
+					$currentFile:=$tableIcons.file($iconPath)
 					
-					// else : file exists
+					If (Not:C34($currentFile.exists))
+						
+						$currentFile:=$tableIcons.parent.file("missingIcon.svg")
+						
+						// else : file exists
+					End if 
+					
+					$newName:=Lowercase:C14($currentFile.name)
+					Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$newName; 0)
+					$newName:=$newName+$currentFile.extension
+					
+					$copyDest:=$currentFile.copyTo($drawableFolder; $newName; fk overwrite:K87:5)
+					
+					If (Not:C34($copyDest.exists))  // Copy failed
+						
+						$0.success:=False:C215
+						$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+						
+						//Else : all ok
+					End if 
+					
+					// Else: no icon defined
 				End if 
 				
-				$newName:=Lowercase:C14($currentFile.name)
-				Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$newName; 0)
-				$newName:=$newName+$currentFile.extension
-				
-				$copyDest:=$currentFile.copyTo($drawableFolder; $newName; fk overwrite:K87:5)
-				
-				If (Not:C34($copyDest.exists))  // Copy failed
-					
-					$0.success:=False:C215
-					$0.errors.push("Could not copy file to destination: "+$copyDest.path)
-					
-					//Else : all ok
-				End if 
+				// Else: no icon defined
 				
 			End if 
 			
