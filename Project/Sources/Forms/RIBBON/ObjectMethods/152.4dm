@@ -176,6 +176,8 @@ Case of
 			
 			$sdkCacheFolder:=$path.cacheSDK().folder(Application version:C493)
 			
+			$menu.append("🛒 Download the Android SDK from TeamCity"; "downloadAndroidSdkFromTeamCity")
+			
 			$menu.line()
 			$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable(ENV.caches().folder("com.4D.mobile").exists)
 			
@@ -236,7 +238,25 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="openProductFolder")
 				
-				SHOW ON DISK:C922($could.productFolder.platformPath)
+				Case of 
+						
+						//……………………………………………………………………………
+					: (PROJECT._buildTarget="ios")
+						
+						SHOW ON DISK:C922($could.productFolder.folder("ios").platformPath)
+						
+						//……………………………………………………………………………
+					: (PROJECT._buildTarget="android")
+						
+						SHOW ON DISK:C922($could.productFolder.folder("android").platformPath)
+						
+						//……………………………………………………………………………
+					Else 
+						
+						SHOW ON DISK:C922($could.productFolder.platformPath)
+						
+						//……………………………………………………………………………
+				End case 
 				
 				//______________________________________________________
 			: ($menu.choice="openProjectFolder")
@@ -246,7 +266,13 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="downloadAndroidSdk")
 				
+				//#MARK_TODO : from new location
 				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadAndroidSDK"; False:C215; Form:C1466.editor.$mainWindow; Shift down:C543)
+				
+				//______________________________________________________
+			: ($menu.choice="downloadAndroidSdkFromTeamCity")
+				
+				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadAndroidSDK"; False:C215; Form:C1466.editor.$mainWindow; True:C214)
 				
 				//______________________________________________________
 			: ($menu.choice="openWithXcode")  // Open a file of project in xcode

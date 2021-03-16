@@ -49,8 +49,8 @@ SVG_CLEAR($root)
 The `svg` class simplifies the creation and manipulation of the SVG elements thanks to a set of simple functions and some automatisms, and decrease the number of variables needed. Here is the equivalent code to get the same result (<mark>only 8 lines of easily understandable code versus 21 complicated lines with the component</mark>):
 
 ```4d
-var $svg : cs.svg	// Create a new canvas$svg:=cs.svg.new()	// Create a "background" & '"foreground" group & apply a translation to the last one// [Layers are automatically created at the root level]$svg.layer("background"; "foreground").translate(45; 45)	// Create a yellow square & memorize its reference as "original"// [The object is automatically added to the latest created/used "container" ("foreground")]$svg.square(20).position(2.5; 2.5).color("yellow").push("original")	// Set "background" layer for the next operationsIf ($svg.useOf("background"))
-		// Add, a blue circle without fill & with a border of 4 pixels	$svg.circle(50).color("blue").position(100; 100).fill(False).stroke(4)			// Clone the "original" square, colore it red, change its dimensions	$svg.clone("original").color("red").position(10; 10).dimensions(100; 100)
+var $svg : cs.svg	// Create a new canvas$svg:=cs.svg.new()	// Create a "background" & '"foreground" group & apply a translation to the last one// [Layers are automatically created at the root level]$svg.layer("background"; "foreground").translate(45; 45)	// Create a yellow square & memorize its reference as "original"// [The object is automatically added to the latest created/used "container" ("foreground")]$svg.square(20).position(2.5; 2.5).color("yellow").push("original")	// Set "background" layer for the next operationsIf ($svg.with("background"))
+		// Add, a blue circle without fill & with a border of 4 pixels	$svg.circle(50).color("blue").position(100; 100).fill(False).stroke(4)			// Clone the "original" square, colore it red, change its dimensions	$svg.clone("original").color("red").position(10; 10).size(100; 100)
 		End if 	// Show the result into the SVG viewer// [The memory is automatically freed]$svg.preview()
 ```
 The svg tree created:
@@ -183,10 +183,10 @@ The result image:
 |.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` | Sets the fill attributes
 |.**stroke** ( value `Text` \| `Boolean` \| `Real` \| `Object` {; applyTo } ) → `cs.svg` | Sets the stroke attributes
 |.**font** ( attributes : `Object` {; applyTo } ) → `cs.svg` | Sets the font attributes
-|.**dimensions** ( { width : `Real`; height : `Real` {; unit : `Text` }} ) → `cs.svg` | Sets the dimensions
+|.**sizes** ( { width : `Real`; height : `Real` {; unit : `Text` }} ) → `cs.svg` | Sets the dimensions
 |.**position** ( x : `Real` {; y : `Real` }{; unit : `Text` } ) → `cs.svg` | Sets the position
-|.**moveH** ( x : `Real` {; applyTo } ) → `cs.svg` | Moves horizontally
-|.**moveV** ( y : `Real` {; applyTo } ) → `cs.svg` | Moves vertically
+|.**moveHorizontally** ( x : `Real` {; applyTo } ) → `cs.svg` | Moves horizontally
+|.**moveVertically** ( y : `Real` {; applyTo } ) → `cs.svg` | Moves vertically
 |.**radius** ( radius : `Integer` {; applyTo} ) → `cs.svg` | Fix the radius of a circle or a rounded rectangle
 |.**plot** ( points : `Text` \| `Collection` {; applyTo} ) → `cs.svg` | Populate the "points" property of a polyline, polygon or the "data" proprety of a path
 |.**show** ( { applyTo } ) → `cs.svg` | Make visible

@@ -32,9 +32,9 @@ If (False:C215)  // Widgets
 	C_OBJECT:C1216(picture; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(progress; $0)
-	C_TEXT:C284(progress; $1)
-	C_OBJECT:C1216(progress; $2)
+	C_OBJECT:C1216(_o_progress; $0)
+	C_TEXT:C284(_o_progress; $1)
+	C_OBJECT:C1216(_o_progress; $2)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(static; $0)

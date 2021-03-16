@@ -10,9 +10,10 @@
 // ----------------------------------------------------
 // Declarations
 var $formName; $url : Text
-var $archive; $e; $folderDestination; $form; $progress : Object
+var $archive; $e; $folderDestination; $form : Object
 var $c : Collection
 var $http : cs:C1710.http
+var $progress : cs:C1710.progress
 
 // ----------------------------------------------------
 // Initialisations
@@ -116,7 +117,7 @@ Case of
 									
 								End if 
 								
-								$progress:=progress("downloadInProgress").showStop()  // ------ ->
+								$progress:=cs:C1710.progress.new("downloadInProgress").showStop()  // ------ ->
 								
 								$progress.setMessage($formName).bringToFront()
 								

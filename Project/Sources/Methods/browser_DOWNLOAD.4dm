@@ -7,8 +7,9 @@ If (False:C215)
 	C_OBJECT:C1216(browser_DOWNLOAD; $1)
 End if 
 
-var $archive; $in; $out; $progress : Object
+var $archive; $in; $out : Object
 var $http : cs:C1710.http
+var $progress : cs:C1710.progress
 
 $out:=New object:C1471(\
 "success"; False:C215; \
@@ -58,8 +59,10 @@ If ($out.folder.exists)
 			
 		End if 
 		
-		$progress:=progress("downloadInProgress").showStop()  // ------ ->
-		$progress.setMessage($out.form).bringToFront()
+		$progress:=cs:C1710.progress.new("downloadInProgress")\
+			.showStop()\
+			.setMessage($out.form)\
+			.bringToFront()  // ------ ->
 		
 		$http:=cs:C1710.http.new($in.url)
 		$http.setResponseType(Is a document:K24:1; $archive)

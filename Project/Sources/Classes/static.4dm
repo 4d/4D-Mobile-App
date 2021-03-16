@@ -20,7 +20,7 @@ Class constructor($objectName : Text)
 	
 	If (Asserted:C1132(This:C1470.type#0; Current method name:C684+": No objects found named \""+This:C1470.name+"\""))
 		
-		This:C1470._updateCoordinates()
+		This:C1470.updateCoordinates()
 		
 	End if 
 	
@@ -156,7 +156,7 @@ Function setCoordinates($left; $top : Integer; $right : Integer; $bottom : Integ
 		
 	End if 
 	
-	This:C1470._updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
+	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
 	
 	$this:=This:C1470
 	
@@ -166,7 +166,7 @@ Function getCoordinates()->$coordinates : Object
 	var $bottom; $left; $right; $top : Integer
 	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
-	This:C1470._updateCoordinates($left; $top; $right; $bottom)
+	This:C1470.updateCoordinates($left; $top; $right; $bottom)
 	
 	$coordinates:=This:C1470.coordinates
 	
@@ -287,7 +287,7 @@ Function bestSize($alignment; $minWidth : Integer; $maxWidth : Integer)->$this :
 		
 	End if 
 	
-	This:C1470._updateCoordinates($left; $top; $right; $bottom)
+	This:C1470.updateCoordinates($left; $top; $right; $bottom)
 	
 	$this:=This:C1470
 	
@@ -376,7 +376,7 @@ Function setDimension($width : Integer; $height : Integer)->$this : cs:C1710.sta
 	End if 
 	
 	OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
-	This:C1470._updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
+	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
 	
 	$this:=This:C1470
 	
@@ -419,7 +419,7 @@ Function setColors($foreground : Variant; $background : Variant; $altBackground 
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function _updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer)->$this : cs:C1710.static
+Function updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer)->$this : cs:C1710.static
 	
 	var $bottomƒ; $leftƒ; $rightƒ; $topƒ : Integer
 	

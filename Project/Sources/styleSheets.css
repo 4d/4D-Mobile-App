@@ -72,28 +72,6 @@ rectangle {
 	text-align: left;
 }
 
-			@media (prefers-color-scheme: dark) {
-				text, 
-				radio,
-				checkbox,
-				listbox {
-					stroke: white;
-				}
-
-				line, 
-				rectangle {
-					stroke: white;
-				}
-
-				.toolbarButtons {
-					stroke: #808080;
-				}
-
-			  .border {
-					fill: #3A3A3A;
-				}
-			}
-
  /* =====================================================
                         BUTTONS 
   =====================================================*/

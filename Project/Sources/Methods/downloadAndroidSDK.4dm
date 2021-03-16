@@ -5,10 +5,11 @@
 
 var $url : Text
 var $run; $silent; $withUI : Boolean
-var $o; $progress : Object
+var $o : Object
 var $manifest; $preferences : 4D:C1709.File
 var $sdk : 4D:C1709.ZipFile
 var $http : cs:C1710.http
+var $progress : cs:C1710.progress
 
 Case of 
 		//______________________________________________________
@@ -102,7 +103,8 @@ If ($run)
 	
 	If ($withUI)
 		
-		$progress:=progress("downloadInProgress").setMessage("downloadingAndroidSdk").bringToFront()
+		$progress:=cs:C1710.progress.new("downloadInProgress")\
+			.setMessage("downloadingAndroidSdk").bringToFront()
 		
 	End if 
 	

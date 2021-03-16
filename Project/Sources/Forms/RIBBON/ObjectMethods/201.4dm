@@ -174,7 +174,7 @@ Case of
 				
 				var $success : Boolean
 				var $default : Object
-				var $progress : Object
+				var $progress : cs:C1710.progress
 				var $sdk : cs:C1710.sdkmanager
 				var $package : 4D:C1709.Folder
 				
@@ -192,7 +192,10 @@ Case of
 					If (Not:C34($success))
 						
 						// * DOWNLOAD SYTEM IMAGE
-						$progress:=progress("creatingADefaultDevice").setMessage("downloadInProgress").bringToFront()
+						$progress:=cs:C1710.progress.new("creatingADefaultDevice")\
+							.setMessage("downloadInProgress")\
+							.bringToFront()
+						
 						$success:=$sdk.install($default.image)
 						
 					End if 

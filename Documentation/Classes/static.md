@@ -35,16 +35,16 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 |.**setCoordinates** ( left :`Integer ` ; top :`Integer` ; { right :`Integer` ; bottom :`Integer` }})  → `cs.static` | To modifies the coordinates and, optionally, the size of the object \* |
 |.**setCoordinates** ( coordinates :`Object`)  → `cs.static` | "left", "top" {, "right", "bottom"} \*|
 |.**getCoordinates** ()  → `Object` | Returns the updated coordinates object\* |
-|.**bestSize** ( alignement :`Integer` { ; minWidth :`Integer` { ; maxWidth :`Integer`}} )  → `cs.static` | Set the coordinates of the object to its best size according to its content (e.g. a localized string) \* |
+|.**bestSize** ( alignement :`Integer` { ; minWidth :`Integer` { ; maxWidth :`Integer`}} )  → `cs.static` | Set the size of the object to its best size according to its content (e.g. a localized string) \* |
 |.**bestSize** ({options : `Object`})  → `cs.static` | {"alignement"} {, "minWidth"}  {, "maxWidth"} \*  |
 |.**moveHorizontally** ( offset : `Integer`)  → `cs.static` | To move the object horizontally \*  |
 |.**moveVertically** ( offset : `Integer`)  → `cs.static` | To move the object vertically \*  |
 |.**resizeHorizontally** ( offset : `Integer`)  → `cs.static` | To resize the object horizontally \*  |
 |.**resizeVertically** ( offset : `Integer`)  → `cs.static` | To resize the object vertically \*  |
-|.**setDimension** ( width : `Integer` ; { height : `Integer`})  → `cs.static` | To modify the object dimensions \*  |
+|.**setDimension** ( width : `Integer` ; { height : `Integer`})  → `cs.static` | To modify the object width & height \*  |
 |.**setTitle** ( title : `Text`)  → `cs.static` | To change the title of the object (if the title is a `resname`, the localization is performed) \** |
 |.**getTitle** ( )  → `Text` | Returns the title of the object \** |
-|.**fontStyle** ( {style : `Integer`})  → `cs.static` | To set the style of the title (use the 4D constants _Bold_, _Italic_, _Plain_, _Underline_) Default = _Plain_ \** |
+|.**setFontStyle** ( {style : `Integer`})  → `cs.static` | To set the style of the title (use the 4D constants _Bold_, _Italic_, _Plain_, _Underline_) Default = _Plain_ \** |
     
 \* Automatically update the `coordinates`, `dimensions` and `windowCoordinates` properties.    
 \** Can be applied to a static text and will be avalaible for the inherited classes (buttons, check boxes, radio buttons, …)

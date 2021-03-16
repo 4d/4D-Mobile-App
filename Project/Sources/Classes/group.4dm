@@ -321,7 +321,7 @@ Function alignLeft($reference)->$this : cs:C1710.group
 				
 				// We assume it is from the static class (or extend)
 				// #TO_DO: test the class
-				$left:=$reference._updateCoordinates().coordinates.left
+				$left:=$reference.updateCoordinates().coordinates.left
 				
 				//______________________________________________________
 			: (Value type:C1509($reference)=Is integer:K8:5)\
@@ -345,7 +345,7 @@ Function alignLeft($reference)->$this : cs:C1710.group
 	Else 
 		
 		// Default reference is the first member of the group
-		$left:=This:C1470.members[0]._updateCoordinates().coordinates.left
+		$left:=This:C1470.members[0].updateCoordinates().coordinates.left
 		
 	End if 
 	
@@ -372,7 +372,7 @@ Function alignRight($reference)->$this : cs:C1710.group
 				
 				// We assume it is from the static class (or extend)
 				// #TO_DO: test the class
-				$right:=$reference._updateCoordinates().coordinates.right
+				$right:=$reference.updateCoordinates().coordinates.right
 				
 				//______________________________________________________
 			: (Value type:C1509($reference)=Is integer:K8:5)\
@@ -396,7 +396,7 @@ Function alignRight($reference)->$this : cs:C1710.group
 	Else 
 		
 		// Default reference is the first member of the group
-		$right:=This:C1470.members[0]._updateCoordinates().coordinates.right
+		$right:=This:C1470.members[0].updateCoordinates().coordinates.right
 		
 	End if 
 	
