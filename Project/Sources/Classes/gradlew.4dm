@@ -22,28 +22,19 @@ Function assembleDebug
 	
 	This:C1470.launch(This:C1470.cmd+" assembleDebug")
 	
-	$0.success:=True:C214
 	$0.outputStream:=This:C1470.outputStream
 	$0.errorStream:=This:C1470.errorStream
 	
-	// Commenting below as errorStream and outputStream are not null in both failure and success
-/*If (This.errorStream=Null)
-	
-$0.success:=(This.outputStream#Null)
-	
-Else   // errorStream not null
-	
-$0.success:=((This.inputStream=Null) & (This.outputStream=Null))
-	
-End if 
-	
-If (Not($0.success))
-	
-$0.errors.push("Failed to build project with task \"assembleDebug\"")
-	
-// Else : all ok
-End if */
-	
+	If (Position:C15("BUILD FAILED"; This:C1470.errorStream)=0)
+		
+		$0.success:=True:C214
+		
+	Else 
+		
+		$0.errors.push("Failed to build project with task \"assembleDebug\"")
+		$0.errors.push(This:C1470.errorStream)
+		
+	End if 
 	
 	
 Function createEmbeddedDatabase

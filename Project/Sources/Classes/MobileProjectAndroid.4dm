@@ -35,13 +35,25 @@ Class constructor
 	
 	This:C1470.project.remote_url:=This:C1470.remoteUrl()
 	
+	var $reformatedPackage : Text
+	
+	$reformatedPackage:=This:C1470.project.project.product.bundleIdentifier
+	
+	Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "_"; ->$reformatedPackage; 0)
+	
+	$reformatedPackage:=Replace string:C233($reformatedPackage; ".."; ".")
+	$reformatedPackage:=Lowercase:C14($reformatedPackage)
+	
+	This:C1470.project.package:=$reformatedPackage
+	
+	This:C1470.checkPackage()
+	
+	
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
 	
 	This:C1470.logFolder:=ENV.caches("com.4D.mobile/"; True:C214)
 	This:C1470.file.copyTo(This:C1470.logFolder; "lastAndroidBuild.4dmobile"; fk overwrite:K87:5)
-	
-	This:C1470.package:=Lowercase:C14(String:C10(This:C1470.project.project.organization.identifier))
 	
 	This:C1470.version:="debug"
 	This:C1470.apk:=Folder:C1567(This:C1470.project.path).folder("app/build/outputs/apk").folder(This:C1470.version).file("app-"+This:C1470.version+".apk")
@@ -126,7 +138,7 @@ Function create()->$result : Object
 				// * BUILD EMBEDDED DATA LIBRARY
 				This:C1470.postStep("dataSetGeneration")
 				
-				$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.package)
+				$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.project.package)
 				
 				If ($o.success)
 					
@@ -314,14 +326,14 @@ Function run()->$result : Object
 				// * INSTALL APP
 				This:C1470.postStep("installingTheApplication")
 				
-				$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.package; This:C1470.apk)
+				$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.project.package; This:C1470.apk)
 				
 				If ($o.success)
 					
 					// * LAUNCH APP
 					This:C1470.postStep("launchingTheApplication")
 					
-					$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.package; This:C1470.activity)
+					$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.project.package; This:C1470.activity)
 					
 					If (Not:C34($o.success))
 						
@@ -376,3 +388,47 @@ Function remoteUrl()->$result : Text
 	
 	$result:=$http+"://"+$host+":"+$port
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function checkPackage()
+	
+	If (Position:C15("."; This:C1470.project.package)=0)
+		
+		This:C1470.isOnError:=True:C214
+		This:C1470.postError("The package must have at least one '.' separator ("+This:C1470.project.package+")")
+		
+		// Else : all ok
+	End if 
+	
+	If (Match regex:C1019("^[\\._0-9]"; This:C1470.project.package; 1))
+		
+		This:C1470.isOnError:=True:C214
+		This:C1470.postError("The package name must begin with a letter ("+This:C1470.project.package+")")
+		
+		// Else : all ok
+	End if 
+	
+	If (Match regex:C1019("[\\.]$"; This:C1470.project.package; 1))
+		
+		This:C1470.isOnError:=True:C214
+		This:C1470.postError("The package name must not end with a separator ("+This:C1470.project.package+")")
+		
+		// Else : all ok
+	End if 
+	
+	var $packageParts : Collection
+	$packageParts:=Split string:C1554(This:C1470.project.package; ".")
+	
+	var $part : Text
+	
+	For each ($part; $packageParts)
+		
+		If (Match regex:C1019("^[\\._0-9]"; $part; 1))
+			
+			This:C1470.isOnError:=True:C214
+			This:C1470.postError("A package segment must begin with a letter ("+This:C1470.project.package+")")
+			
+			// Else : all ok 
+		End if 
+		
+	End for each 
