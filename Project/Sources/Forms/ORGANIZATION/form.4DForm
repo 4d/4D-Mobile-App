@@ -1,5 +1,4 @@
 {
-	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
 	"height": 81,
@@ -13,11 +12,6 @@
 		"onUnload",
 		"onTimer"
 	],
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "595pt",
-		"paperHeight": "842pt"
-	},
 	"pages": [
 		null,
 		{
@@ -28,7 +22,6 @@
 					"left": 488,
 					"width": 450,
 					"height": 33,
-					"stroke": "#c0c0c0",
 					"class": "border"
 				},
 				"10_name.border": {
@@ -65,7 +58,6 @@
 					"height": 17,
 					"dataSource": "Form:C1466.organization.name",
 					"tooltip": ":xliff:orgNameTip",
-					"fill": "transparent",
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -82,7 +74,6 @@
 					"height": 17,
 					"dataSource": "Form:C1466.organization.id",
 					"tooltip": ":xliff:appBundleIDTip",
-					"fill": "transparent",
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [

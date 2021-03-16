@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
@@ -31,7 +31,7 @@
 					"left": 38,
 					"width": 320,
 					"height": 33,
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"urlScheme.border": {
 					"type": "rectangle",
@@ -39,8 +39,8 @@
 					"left": 38,
 					"width": 320,
 					"height": 33,
-					"stroke": "#C4C4C4",
-					"right": 358
+					"right": 358,
+					"class": "border"
 				},
 				"01_login": {
 					"type": "checkbox",
@@ -77,9 +77,9 @@
 					"left": 38,
 					"width": 180,
 					"height": 17,
-					"stroke": "#808080",
 					"text": ":xliff:authenticationMethod",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"02_pushNotification": {
 					"type": "checkbox",
@@ -118,8 +118,8 @@
 					"left": 489,
 					"width": 77,
 					"height": 16,
-					"stroke": "#808080",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"03_deepLinking": {
 					"type": "checkbox",
@@ -143,8 +143,8 @@
 					"left": 38,
 					"width": 118,
 					"height": 16,
-					"stroke": "#808080",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"03_urlScheme.input": {
 					"type": "input",
@@ -169,8 +169,8 @@
 					"left": 38,
 					"width": 118,
 					"height": 16,
-					"stroke": "#808080",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"04_associatedDomain.input": {
 					"type": "input",
@@ -216,7 +216,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 368,
+	"geometryStamp": 380,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

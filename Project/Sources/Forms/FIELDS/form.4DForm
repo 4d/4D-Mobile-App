@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
@@ -100,16 +100,9 @@
 					"height": 288,
 					"visibility": "hidden",
 					"sizingY": "grow",
-					"resizingMode": "legacy",
-					"sortable": false,
-					"movableRows": false,
 					"rowHeight": "32px",
-					"showHeaders": false,
 					"selectionMode": "single",
-					"horizontalLineStroke": "transparent",
-					"verticalLineStroke": "#DBDBDB",
-					"fill": "#FFFFFF",
-					"borderStyle": "none",
+					"verticalLineStroke": "#c0c0c0",
 					"events": [
 						"onClick",
 						"onLosingFocus",
@@ -122,8 +115,8 @@
 					],
 					"method": "FIELDS",
 					"hideSystemHighlight": true,
-					"hideFocusRing": true,
-					"scrollbarHorizontal": "hidden",
+					"fill": "automatic",
+					"hideExtraBlankRows": false,
 					"columns": [
 						{
 							"name": "IDs",
@@ -135,7 +128,6 @@
 							"visibility": "hidden",
 							"truncateMode": "none",
 							"stroke": "#FF9300",
-							"fill": "#FFFFFF",
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"fontSize": 10,
@@ -163,7 +155,6 @@
 							"minWidth": 250,
 							"maxWidth": 250,
 							"enterable": false,
-							"fill": "#FFFFFF",
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
@@ -193,7 +184,6 @@
 							"resizable": false,
 							"enterable": false,
 							"pictureFormat": "truncatedCenter",
-							"fill": "#FFFFFF",
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
@@ -221,7 +211,6 @@
 							"minWidth": 215,
 							"maxWidth": 215,
 							"resizable": false,
-							"fill": "#FFFFFF",
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
@@ -251,7 +240,6 @@
 							"minWidth": 215,
 							"maxWidth": 215,
 							"resizable": false,
-							"fill": "#FFFFFF",
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
@@ -420,7 +408,7 @@
 		"kind": "form"
 	},
 	"method": "FIELDS",
-	"geometryStamp": 11,
+	"geometryStamp": 14,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

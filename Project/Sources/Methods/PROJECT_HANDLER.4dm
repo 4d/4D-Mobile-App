@@ -46,6 +46,8 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Load:K2:1)
 				
+				OBJECT SET VISIBLE:C603(*; "background"; False:C215)
+				
 				SET TIMER:C645(-1)
 				
 				//______________________________________________________
@@ -74,6 +76,11 @@ Case of
 					Form:C1466.$worker:=Form:C1466.$project.$worker
 					
 				End if 
+				
+				var $height; $width : Integer
+				
+				OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+				OBJECT SET COORDINATES:C1248(*; "background"; 0; 0; $width; $height)
 				
 				// Update panels
 				panel_TOUCH

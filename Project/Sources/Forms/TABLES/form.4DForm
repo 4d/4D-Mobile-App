@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"memorizeGeometry": true,
 	"inheritedForm": "panel_template",
@@ -40,19 +40,9 @@
 					"width": 919,
 					"height": 160,
 					"visibility": "hidden",
-					"hideFocusRing": true,
-					"sortable": false,
-					"movableRows": false,
-					"hideSystemHighlight": true,
 					"rowHeight": "32px",
-					"showHeaders": false,
 					"selectionMode": "single",
-					"scrollbarHorizontal": "hidden",
-					"horizontalLineStroke": "transparent",
-					"verticalLineStroke": "#DBDBDB",
-					"textAlign": "left",
-					"verticalAlign": "middle",
-					"borderStyle": "none",
+					"verticalLineStroke": "#c0c0c0",
 					"method": "ObjectMethods/01_tables.4dm",
 					"events": [
 						"onClick",
@@ -64,6 +54,8 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
+					"hideExtraBlankRows": false,
+					"hideSystemHighlight": true,
 					"columns": [
 						{
 							"name": "IDs",

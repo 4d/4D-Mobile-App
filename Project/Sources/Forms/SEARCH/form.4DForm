@@ -37,7 +37,9 @@
 					"width": 193,
 					"height": 21,
 					"sizingX": "grow",
-					"borderRadius": 5
+					"borderRadius": 5,
+					"class": "border",
+					"fill": "transparent"
 				},
 				"box": {
 					"type": "input",
@@ -54,7 +56,7 @@
 						"onAfterEdit"
 					],
 					"method": "Search_OBJECTS_HANDLER",
-					"borderStyle": "none"
+					"fill": "transparent"
 				},
 				"glass": {
 					"type": "picture",
@@ -88,7 +90,6 @@
 					"height": 17,
 					"visibility": "hidden",
 					"focusable": false,
-					"borderStyle": "dotted",
 					"enterable": false,
 					"hideFocusRing": true,
 					"contextMenu": "none",
@@ -104,7 +105,7 @@
 		"kind": "form"
 	},
 	"method": "search_HANDLER",
-	"geometryStamp": 4,
+	"geometryStamp": 6,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

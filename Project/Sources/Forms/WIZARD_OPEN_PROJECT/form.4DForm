@@ -38,8 +38,7 @@
 					"left": 0,
 					"width": 970,
 					"height": 875,
-					"class": "background",
-					"fill": "automatic"
+					"class": "background"
 				}
 			}
 		},

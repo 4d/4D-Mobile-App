@@ -37,8 +37,7 @@
 					"left": 0,
 					"width": 970,
 					"height": 875,
-					"class": "background",
-					"fill": "#F4F4F6"
+					"class": "background"
 				},
 				"ribbon": {
 					"type": "subform",
@@ -298,6 +297,5 @@
 			}
 		}
 	},
-	"geometryStamp": 23,
-	"colorScheme": "light"
+	"geometryStamp": 23
 }

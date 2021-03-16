@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
@@ -28,9 +28,8 @@
 					"left": 16,
 					"width": 344,
 					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:productionUrl"
+					"text": ":xliff:productionUrl",
+					"class": "label"
 				},
 				"02_prodURL.border": {
 					"type": "rectangle",
@@ -38,7 +37,7 @@
 					"left": 16,
 					"width": 344,
 					"height": 33,
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"02_prodURL": {
 					"type": "input",
@@ -48,8 +47,6 @@
 					"height": 17,
 					"dataSource": "Form:C1466.server.urls.production",
 					"tooltip": ":xliff:productionURLTip",
-					"borderStyle": "none",
-					"hideFocusRing": true,
 					"placeholder": "https://mycompany.com/mobile",
 					"dragging": "none",
 					"events": [
@@ -76,9 +73,8 @@
 					"left": 487,
 					"width": 204,
 					"height": 17,
-					"stroke": "#808080",
-					"textAlign": "left",
-					"text": ":xliff:webServerSettings"
+					"text": ":xliff:webServerSettings",
+					"class": "label"
 				},
 				"prodURL.alert": {
 					"type": "button",
@@ -107,5 +103,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 1
+	"geometryStamp": 7
 }

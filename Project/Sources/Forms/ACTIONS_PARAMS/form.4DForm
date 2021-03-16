@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"memorizeGeometry": true,
 	"inheritedForm": "panel_template",
@@ -69,7 +69,7 @@
 					"width": 204,
 					"height": 33,
 					"visibility": "hidden",
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"05_property_type.popup.border": {
 					"type": "rectangle",
@@ -77,9 +77,8 @@
 					"left": 488,
 					"width": 33,
 					"height": 33,
-					"fill": "transparent",
-					"stroke": "#C4C4C4",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "border"
 				},
 				"01_Parameters.border": {
 					"type": "rectangle",
@@ -88,8 +87,7 @@
 					"width": 451,
 					"height": 251,
 					"visibility": "hidden",
-					"fill": "transparent",
-					"stroke": "#AAAAAA"
+					"class": "border"
 				},
 				"02_property_name.border": {
 					"type": "rectangle",
@@ -98,7 +96,7 @@
 					"width": 204,
 					"height": 33,
 					"visibility": "hidden",
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"02_property_name": {
 					"type": "input",
@@ -108,8 +106,6 @@
 					"height": 17,
 					"visibility": "hidden",
 					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.name",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"hideFocusRing": true,
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
@@ -124,21 +120,15 @@
 					"width": 448,
 					"height": 248,
 					"visibility": "hidden",
-					"resizingMode": "legacy",
 					"listboxType": "collection",
-					"hideFocusRing": true,
 					"movableRows": false,
-					"hideSystemHighlight": true,
 					"rowHeight": "20px",
-					"showHeaders": false,
 					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.action.parameters",
 					"currentItemSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter",
 					"currentItemPositionSource": "Form:C1466.$dialog.ACTIONS_PARAMS.index",
 					"selectedItemsSource": "Form:C1466.$dialog.ACTIONS_PARAMS.selected",
 					"metaSource": "Form:C1466.$dialog.ACTIONS_PARAMS.metaInfo(This:C1470)",
 					"selectionMode": "single",
-					"scrollbarHorizontal": "hidden",
-					"horizontalLineStroke": "transparent",
 					"rowFillSource": "Form:C1466.$dialog.ACTIONS_PARAMS.backgroundColor(This:C1470)",
 					"textAlign": "left",
 					"verticalAlign": "middle",
@@ -153,10 +143,10 @@
 						"onBeginDragOver"
 					],
 					"focusable": true,
-					"borderStyle": "none",
 					"sortable": false,
 					"dragging": "custom",
 					"dropping": "custom",
+					"hideSystemHighlight": true,
 					"columns": [
 						{
 							"name": "names",
@@ -226,7 +216,7 @@
 					"width": 204,
 					"height": 33,
 					"visibility": "hidden",
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"03_property_label": {
 					"type": "input",
@@ -236,8 +226,6 @@
 					"height": 17,
 					"visibility": "hidden",
 					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.label",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"hideFocusRing": true,
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
@@ -252,7 +240,7 @@
 					"width": 204,
 					"height": 33,
 					"visibility": "hidden",
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"04_property_shortLabel": {
 					"type": "input",
@@ -262,8 +250,6 @@
 					"height": 17,
 					"visibility": "hidden",
 					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.shortLabel",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"hideFocusRing": true,
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
@@ -279,13 +265,11 @@
 					"height": 17,
 					"visibility": "hidden",
 					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.formatLabel()",
-					"focusable": false,
-					"fill": "transparent",
-					"borderStyle": "none",
-					"enterable": false,
 					"hideFocusRing": true,
-					"contextMenu": "none",
-					"dragging": "none"
+					"dragging": "none",
+					"enterable": false,
+					"focusable": false,
+					"class": "input"
 				},
 				"02_property_name.label": {
 					"type": "text",
@@ -293,10 +277,9 @@
 					"left": 488,
 					"width": 140,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:name",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"03_property_label.label": {
 					"type": "text",
@@ -304,10 +287,9 @@
 					"left": 488,
 					"width": 140,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:label",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"04_property_shortLabel.label": {
 					"type": "text",
@@ -315,10 +297,9 @@
 					"left": 734,
 					"width": 140,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:shortLabel",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"05_property_type.label": {
 					"type": "text",
@@ -326,10 +307,9 @@
 					"left": 488,
 					"width": 140,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:format",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"05_property_type.popup": {
 					"type": "button",
@@ -353,7 +333,7 @@
 					"width": 204,
 					"height": 33,
 					"visibility": "hidden",
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"07_variable_default": {
 					"type": "input",
@@ -363,8 +343,6 @@
 					"height": 17,
 					"visibility": "hidden",
 					"dataSource": "",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"hideFocusRing": true,
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
@@ -380,10 +358,9 @@
 					"left": 488,
 					"width": 140,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:defaultValue",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"noTable": {
 					"type": "text",
@@ -393,9 +370,8 @@
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"stroke": "#ff0000",
-					"textAlign": "left",
-					"text": "No target table defined"
+					"text": "No target table defined",
+					"class": "label"
 				},
 				"02_property_mandatory": {
 					"type": "checkbox",
@@ -420,7 +396,7 @@
 					"width": 204,
 					"height": 33,
 					"visibility": "hidden",
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"06_property_placeholder": {
 					"type": "input",
@@ -430,8 +406,6 @@
 					"height": 17,
 					"visibility": "hidden",
 					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.placeholder",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"hideFocusRing": true,
 					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
@@ -445,10 +419,9 @@
 					"left": 734,
 					"width": 140,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:placeholder",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"09_property_constraint_number_min.border": {
 					"type": "rectangle",
@@ -457,7 +430,7 @@
 					"width": 93,
 					"height": 33,
 					"visibility": "hidden",
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"09_property_constraint_number_min": {
 					"type": "input",
@@ -467,8 +440,6 @@
 					"height": 17,
 					"visibility": "hidden",
 					"dataSource": "",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"hideFocusRing": true,
 					"dragging": "none",
 					"entryFilter": "&\"0-9;.;,;-\"",
@@ -484,10 +455,9 @@
 					"left": 734,
 					"width": 93,
 					"height": 16,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:minimum",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"10_property_constraint_number_max.border": {
 					"type": "rectangle",
@@ -496,7 +466,7 @@
 					"width": 93,
 					"height": 33,
 					"visibility": "hidden",
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"10_property_constraint_number_max": {
 					"type": "input",
@@ -506,8 +476,6 @@
 					"height": 17,
 					"visibility": "hidden",
 					"dataSource": "",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"hideFocusRing": true,
 					"dragging": "none",
 					"entryFilter": "&\"0-9;.;,;-\"",
@@ -523,10 +491,9 @@
 					"left": 845,
 					"width": 93,
 					"height": 16,
-					"stroke": "#696969",
-					"textAlign": "left",
 					"text": ":xliff:maximum",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"class": "label"
 				},
 				"00_field_comment": {
 					"type": "input",
@@ -619,7 +586,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 43,
+	"geometryStamp": 87,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

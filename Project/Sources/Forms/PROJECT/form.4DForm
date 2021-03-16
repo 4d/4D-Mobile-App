@@ -55,8 +55,7 @@
 					"width": 970,
 					"height": 190,
 					"class": "background",
-					"sizingY": "fixed",
-					"fill": "#F4F4F6"
+					"sizingY": "fixed"
 				},
 				"panel.1": {
 					"type": "subform",
@@ -184,5 +183,5 @@
 		}
 	},
 	"method": "PROJECT_Handler",
-	"geometryStamp": 8
+	"geometryStamp": 9
 }

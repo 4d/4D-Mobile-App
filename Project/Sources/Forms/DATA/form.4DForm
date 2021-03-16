@@ -61,8 +61,7 @@
 					"left": 16,
 					"width": 439,
 					"height": 314,
-					"fill": "transparent",
-					"stroke": "#AAAAAA"
+					"class": "border"
 				},
 				"01_tables": {
 					"type": "listbox",
@@ -198,7 +197,7 @@
 					"width": 450,
 					"height": 67,
 					"visibility": "hidden",
-					"stroke": "#C4C4C4"
+					"class": "border"
 				},
 				"02_filter.options": {
 					"type": "input",
@@ -208,9 +207,6 @@
 					"height": 49,
 					"visibility": "hidden",
 					"dataSource": "Form:C1466.$dialog.DATA.current.filter.string",
-					"borderStyle": "none",
-					"hideFocusRing": true,
-					"contextMenu": "none",
 					"placeholder": ":xliff:leaveBlankToNotFilterData",
 					"dragging": "none",
 					"dropping": "none",
@@ -298,7 +294,7 @@
 		"kind": "form"
 	},
 	"method": "DATA_Handler",
-	"geometryStamp": 31,
+	"geometryStamp": 35,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -90,19 +90,19 @@ Case of
 		If ($form.form.focusedWidget=$form.actions.name) & (Form event code:C388=On Getting Focus:K2:7)
 			
 			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.selectedColor; Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.selectedColor)  //; Background color none)
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.backgroundUnselectedColor; Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1)  //; 0x00FFFFFF; 0x00FFFFFF)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.backgroundUnselectedColor)  //; Background color none)
 			
 		End if 
 		
 		//______________________________________________________
 	: ($1="backgroundColor")  // <Background Color Expression>
 		
-		$o:=New object:C1471("color"; 0x00FFFFFF)
+		$o:=New object:C1471("color"; "transparent")  //0x00FFFFFF)
 		
 		If (Num:C11(This:C1470.index)#0)
 			
@@ -117,7 +117,7 @@ Case of
 			Else 
 				
 				$l:=Choose:C955($b; UI.highlightColor; UI.highlightColorNoFocus)
-				$o.color:=Choose:C955($b; $l; 0x00FFFFFF)
+				$o.color:=Choose:C955($b; $l; "transparent")  //0x00FFFFFF)
 				
 			End if 
 		End if 
@@ -126,7 +126,9 @@ Case of
 	: ($1="metaInfo")  // <Meta info expression>
 		
 		// Default values
-		$o:=New object:C1471("stroke"; "black"; "fontWeight"; "normal")
+		$o:=New object:C1471(\
+			"stroke"; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"); \
+			"fontWeight"; "normal")
 		
 		// Mark not or missing assigned table
 		ob_createPath($o; "cell.tables")
@@ -139,13 +141,13 @@ Case of
 		Else 
 			
 			// Not assigned table
-			$o.cell.tables.stroke:=Choose:C955(Num:C11($2.tableNumber)=0; UI.errorRGB; "black")
+			$o.cell.tables.stroke:=Choose:C955(Num:C11($2.tableNumber)=0; UI.errorRGB; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"))
 			
 		End if 
 		
 		// Mark duplicate names
 		ob_createPath($o; "cell.names")
-		$o.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $2.name).length>1; UI.errorRGB; "black")
+		$o.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $2.name).length>1; UI.errorRGB; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"))
 		
 		//______________________________________________________
 	Else 

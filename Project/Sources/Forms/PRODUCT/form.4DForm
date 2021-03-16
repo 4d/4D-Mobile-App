@@ -1,5 +1,4 @@
 {
-	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
 	"height": 210,
@@ -34,14 +33,16 @@
 					"top": 28,
 					"left": 381,
 					"width": 86,
-					"height": 33
+					"height": 33,
+					"class": "border"
 				},
 				"10_name.border": {
 					"type": "rectangle",
 					"top": 28,
 					"left": 16,
 					"width": 344,
-					"height": 33
+					"height": 33,
+					"class": "border"
 				},
 				"10_name": {
 					"type": "input",
@@ -52,7 +53,6 @@
 					"dataSource": "Form:C1466.product.name",
 					"tooltip": ":xliff:appNameTip",
 					"fill": "transparent",
-					"borderStyle": "none",
 					"dragging": "none",
 					"events": [
 						"onDataChange",
@@ -77,7 +77,6 @@
 					"height": 17,
 					"dataSource": "Form:C1466.product.version",
 					"fill": "transparent",
-					"borderStyle": "none",
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -121,8 +120,7 @@
 					"left": 16,
 					"width": 451,
 					"height": 33,
-					"fill": "#F1F1F2",
-					"stroke": "#FFFFFF"
+					"class": "border"
 				},
 				"id": {
 					"type": "input",
@@ -131,12 +129,10 @@
 					"width": 437,
 					"height": 17,
 					"dataSource": "formatString(\"bundleApp\"; Form:C1466.organization.id+\".\"+Form:C1466.product.name)",
-					"stroke": "#808080",
 					"tooltip": ":xliff:appBundleIDTip",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"enterable": false,
-					"hideFocusRing": true,
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -157,7 +153,8 @@
 					"top": 157,
 					"left": 16,
 					"width": 451,
-					"height": 33
+					"height": 33,
+					"class": "border"
 				},
 				"30_copyright": {
 					"type": "input",
@@ -167,7 +164,6 @@
 					"height": 17,
 					"dataSource": "Form:C1466.product.copyright",
 					"fill": "transparent",
-					"borderStyle": "none",
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -207,7 +203,7 @@
 					"left": 488,
 					"width": 162,
 					"height": 162,
-					"fill": "transparent"
+					"class": "border"
 				},
 				"icon": {
 					"type": "input",
@@ -217,10 +213,7 @@
 					"height": 160,
 					"dataSourceTypeHint": "picture",
 					"tooltip": ":xliff:appIconsTip",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"enterable": false,
-					"contextMenu": "none",
 					"pictureFormat": "proportionalCenter",
 					"dragging": "none",
 					"dropping": "custom",
@@ -232,7 +225,9 @@
 						"onDrop",
 						"onDragOver"
 					],
-					"method": "ObjectMethods/icon.4dm"
+					"method": "ObjectMethods/icon.4dm",
+					"contextMenu": "none",
+					"fill": "transparent"
 				},
 				"icon.alert": {
 					"type": "button",
@@ -341,5 +336,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 96
+	"geometryStamp": 106
 }

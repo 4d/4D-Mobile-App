@@ -37,8 +37,7 @@
 					"width": 970,
 					"height": 875,
 					"stroke": "transparent",
-					"class": "background",
-					"fill": "automatic"
+					"class": "background"
 				}
 			}
 		},

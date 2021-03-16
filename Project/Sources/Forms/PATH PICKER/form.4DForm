@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"windowMinHeight": 30,
 	"rightMargin": 0,
@@ -30,7 +30,9 @@
 					"left": 1,
 					"width": 322,
 					"height": 20,
-					"sizingX": "grow"
+					"sizingX": "grow",
+					"class": "border",
+					"fill": "automatic"
 				},
 				"_airbag": {
 					"type": "button",
@@ -50,14 +52,13 @@
 					"left": 18,
 					"width": 302,
 					"height": 18,
-					"fill": "transparent",
-					"borderStyle": "none",
 					"enterable": false,
 					"hideFocusRing": true,
 					"sizingX": "grow",
 					"focusable": false,
 					"dataSource": "Form:C1466.label",
-					"events": []
+					"events": [],
+					"class": "label"
 				},
 				"browse": {
 					"type": "button",
@@ -78,14 +79,14 @@
 					"bottom": 22,
 					"method": "PATH_PICKER"
 				},
-				"menu": {
+				"menu1": {
 					"type": "button",
 					"top": 3,
 					"left": 1,
 					"width": 16,
 					"height": 16,
 					"visibility": "hidden",
-					"icon": "Images/down.png",
+					"icon": "/RESOURCES/images/common/down.png",
 					"iconFrames": 4,
 					"textPlacement": "top",
 					"style": "custom",
@@ -127,5 +128,12 @@
 		"kind": "form"
 	},
 	"method": "PATH_PICKER",
-	"geometryStamp": 33
+	"geometryStamp": 56,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

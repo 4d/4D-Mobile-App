@@ -84,8 +84,7 @@
 					"width": 960,
 					"height": 1160,
 					"visibility": "hidden",
-					"fill": "transparent",
-					"stroke": "transparent"
+					"class": "background"
 				},
 				"bottom.line": {
 					"type": "line",
@@ -472,7 +471,7 @@
 			}
 		}
 	],
-	"geometryStamp": 1,
+	"geometryStamp": 3,
 	"$4d": {
 		"version": "1",
 		"kind": "form"

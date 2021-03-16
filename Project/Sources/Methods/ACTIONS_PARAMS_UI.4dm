@@ -330,13 +330,13 @@ Case of
 		If ($form.form.focusedWidget=$form.parameters.name)\
 			 & (Form event code:C388=On Getting Focus:K2:7)
 			
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.selectedColor; Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1)  //; UI.highlightColor)  //; UI.highlightColor)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.selectedColor)  //; Background color none)
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.backgroundUnselectedColor; Background color none:K23:10)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1)  //; 0x00FFFFFF)  //; 0x00FFFFFF)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.backgroundUnselectedColor)  //; Background color none)
 			
 		End if 
 		
@@ -344,7 +344,7 @@ Case of
 	: ($1="backgroundColor")  // <Background Color Expression>
 		
 		$o:=New object:C1471(\
-			"color"; 0x00FFFFFF)  // Default is white
+			"color"; "transparent")  //0x00FFFFFF)  // Default is white
 		
 		If (Num:C11(This:C1470.index)#0)
 			
@@ -360,7 +360,7 @@ Case of
 			Else 
 				
 				$color:=Choose:C955($isFocused; UI.highlightColor; UI.highlightColorNoFocus)
-				$o.color:=Choose:C955($isFocused; $color; 0x00FFFFFF)
+				$o.color:=Choose:C955($isFocused; $color; "transparent")  //0x00FFFFFF)
 				
 			End if 
 		End if 
@@ -370,12 +370,12 @@ Case of
 		
 		// Default values
 		$o:=New object:C1471(\
-			"stroke"; "black"; \
+			"stroke"; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"); \
 			"fontWeight"; "normal")
 		
 		// Mark duplicate names
 		ob_createPath($o; "cell.names")
-		$o.cell.names.stroke:=Choose:C955(This:C1470.action.parameters.indices("name = :1"; $2.name).length>1; UI.errorRGB; "black")
+		$o.cell.names.stroke:=Choose:C955(This:C1470.action.parameters.indices("name = :1"; $2.name).length>1; UI.errorRGB; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"))
 		
 		//______________________________________________________
 	Else 

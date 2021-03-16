@@ -17,6 +17,17 @@ listbox {
 				}
 			}
 
+input {
+	fill: white;
+}
+
+			@media (prefers-color-scheme: dark) {
+				input {
+					fill: #3A3A3A;
+				}
+			}
+
+
 line, 
 rectangle {
 	stroke: #C0C0C0;
@@ -62,11 +73,17 @@ rectangle {
 }
 
 .background {
-	fill: inherit;
+	fill: white;
 	stroke: transparent;
 	sizingX: grow;
 	sizingY: grow;
 }
+
+			@media (prefers-color-scheme: dark) {
+				.background {
+					fill: black;
+				}
+			}
 
 .label {
 	text-align: left;
@@ -120,6 +137,7 @@ listbox {
 	sortable: false;
 	movableRows: false;
 	verticalAlign: middle;
+	hideExtraBlankRows: true;
 }
 
 

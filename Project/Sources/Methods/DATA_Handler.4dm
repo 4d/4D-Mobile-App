@@ -225,7 +225,7 @@ Case of
 		//If (FEATURE.with("android"))
 		
 		//$Dir_root:=dataSet(New object("action"; "path"; \
-						"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+									"project"; New object("product"; Form.product; "$project"; PROJECT))).path
 		
 		//Else
 		
@@ -400,7 +400,7 @@ Case of
 	: ($Obj_in.action="background")
 		
 		$Obj_out:=New object:C1471(\
-			"color"; 0x00FFFFFF)
+			"color"; "transparent")  //0x00FFFFFF)
 		
 		If (Num:C11($Obj_context.index)#0)
 			
@@ -413,7 +413,7 @@ Case of
 			Else 
 				
 				$Lon_backgroundColor:=Choose:C955($b; UI.highlightColor; UI.highlightColorNoFocus)
-				$Obj_out.color:=Choose:C955($b; $Lon_backgroundColor; 0x00FFFFFF)
+				$Obj_out.color:=Choose:C955($b; $Lon_backgroundColor; "transparent")  //0x00FFFFFF)
 				
 			End if 
 		End if 
@@ -423,7 +423,7 @@ Case of
 		
 		$Obj_out:=New object:C1471
 		
-		$Obj_out.stroke:="black"  // Default
+		$Obj_out.stroke:=Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white")  // Default
 		$Obj_out.fontWeight:="normal"
 		
 		If (Bool:C1537(This:C1470.embedded))
