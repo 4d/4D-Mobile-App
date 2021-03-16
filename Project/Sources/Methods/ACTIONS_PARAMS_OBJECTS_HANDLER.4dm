@@ -718,7 +718,7 @@ Case of
 		PROJECT.save()
 		
 		//==================================================
-	: ($form.linked.included($form.form.current))  // Linked widgets
+	: ($form.linked.belongsTo($form.form.current))  // Linked widgets
 		
 		PROJECT.save()
 		

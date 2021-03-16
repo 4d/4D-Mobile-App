@@ -356,7 +356,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		If ($zip#Null:C1517)
 			
 			// Create image
-			$svg:=cs:C1710.svg.new().dimensions($data.cell.width; $data.cell.height)
+			$svg:=cs:C1710.svg.new().size($data.cell.width; $data.cell.height)
 			
 			If ($isSelected)  //selected
 				
@@ -372,7 +372,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			$x:=$zip.root.file("layoutIconx2.png").getContent()
 			BLOB TO PICTURE:C682($x; $p)
 			CLEAR VARIABLE:C89($x)
-			$svg.image($p).moveH(-8)
+			$svg.image($p).moveHorizontally(-8)
 			
 			// Get the manifest
 			$o:=JSON Parse:C1218($zip.root.file("manifest.json").getText())
@@ -418,7 +418,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			If ($template.parent.file("layoutIconx2.png").exists)  // Use media
 				
 				// Create image
-				$svg:=cs:C1710.svg.new().dimensions($data.cell.width; $data.cell.height)
+				$svg:=cs:C1710.svg.new().size($data.cell.width; $data.cell.height)
 				
 				If ($isSelected)  //selected
 					
@@ -432,7 +432,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				// Media
 				READ PICTURE FILE:C678($template.parent.file("layoutIconx2.png").platformPath; $p)
-				$svg.image($p).moveH(-8)
+				$svg.image($p).moveHorizontally(-8)
 				
 				// Title
 				$t:=$formsArray{$i}
@@ -446,7 +446,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				// Put text
 				$svg.textArea($template.parent.name; "root")\
 					.position(0; $data.cell.height-20)\
-					.dimensions($data.cell.width)\
+					.size($data.cell.width)\
 					.fill("dimgray")\
 					.alignment(Align center:K42:3)\
 					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
@@ -474,7 +474,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					$p:=$svg.picture()
 					CREATE THUMBNAIL:C679($p; $p; $data.cell.width; $data.cell.height-40)
 					
-					$svg:=cs:C1710.svg.new().dimensions($data.cell.width; $data.cell.height)
+					$svg:=cs:C1710.svg.new().size($data.cell.width; $data.cell.height)
 					
 					If ($isSelected)  //selected
 						
@@ -491,7 +491,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					// Put text
 					$svg.textArea($template.name; "root")\
 						.position(0; $data.cell.height-20)\
-						.dimensions($data.cell.width)\
+						.size($data.cell.width)\
 						.fill("dimgray")\
 						.alignment(Align center:K42:3)\
 						.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
@@ -529,11 +529,11 @@ End for
 $error.show()  // <- STOP HIDING ERRORS
 
 // Put an "explore" button
-$svg:=cs:C1710.svg.new().dimensions($data.cell.width; $data.cell.height)
+$svg:=cs:C1710.svg.new().size($data.cell.width; $data.cell.height)
 
 // Media
 READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
-$svg.image($p).position(20; 30).dimensions(96)
+$svg.image($p).position(20; 30).size(96)
 
 // Put text
 //$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\

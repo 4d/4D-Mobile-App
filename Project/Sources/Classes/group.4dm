@@ -12,9 +12,7 @@ or a comma separated list of object names
 in this case, all named objects are initialized with widget class
 
 ——————————————————————————*/
-Class constructor
-	
-	C_VARIANT:C1683($1)
+Class constructor($members : Variant)
 	C_OBJECT:C1216(${2})
 	
 	C_LONGINT:C283($i)
@@ -25,12 +23,12 @@ Class constructor
 		Case of 
 				
 				//___________________________
-			: (Value type:C1509($1)=Is collection:K8:32)
+			: (Value type:C1509($members)=Is collection:K8:32)
 				
-				This:C1470.members:=$1
+				This:C1470.members:=$members
 				
 				//___________________________
-			: (Value type:C1509($1)=Is object:K8:27)  // 1 to n objects
+			: (Value type:C1509($members)=Is object:K8:27)  // 1 to n objects
 				
 				This:C1470.members:=New collection:C1472
 				
@@ -41,11 +39,11 @@ Class constructor
 				End for 
 				
 				//___________________________
-			: (Value type:C1509($1)=Is text:K8:3)  // Comma separated list of object names
+			: (Value type:C1509($members)=Is text:K8:3)  // Comma separated list of object names
 				
 				This:C1470.members:=New collection:C1472
 				
-				For each ($t; Split string:C1554($1; ","))
+				For each ($t; Split string:C1554($members; ","))
 					
 					This:C1470.members.push(cs:C1710.widget.new($t))  // Widget by default
 					
@@ -63,29 +61,27 @@ Class constructor
 /*════════════════════════════════════════════
 Returns True if the passed object or object name is part of the group
 	
-.included(obj) --> bool
+.belongsTo(obj) --> bool
 	
 or
 	
-.included("name") --> bool
+.belongsTo("name") --> bool
 	
 ══════════════════════════*/
-Function included
-	
-	C_BOOLEAN:C305($0)
+Function belongsTo($formObject : Variant)->$yes : Boolean
 	C_VARIANT:C1683($1)
 	
 	Case of 
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is object:K8:27)
+		: (Value type:C1509($formObject)=Is object:K8:27)
 			
-			$0:=(This:C1470.members.indexOf($1)#-1)
+			$yes:=(This:C1470.members.indexOf($formObject)#-1)
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is text:K8:3)
+		: (Value type:C1509($formObject)=Is text:K8:3)
 			
-			$0:=(This:C1470.members.query("name=:1"; $1).pop()#Null:C1517)
+			$yes:=(This:C1470.members.query("name=:1"; $formObject).pop()#Null:C1517)
 			
 			//______________________________________________________
 		Else 
@@ -97,7 +93,7 @@ Function included
 	
 	//════════════════════════════════════════════
 	// Returns the coordinates of the rectangle enclosing the group.
-Function coordinates()->$coordinates : Object
+Function getCoordinates()->$coordinates : Object
 	
 	var $left; $top; $right; $bottom : Integer
 	var $o : Object
@@ -487,7 +483,7 @@ Function disable->$this : Object
 	$this:=This:C1470
 	
 	//════════════════════════════════════════════
-Function fontStyle($style : Integer)->$this : Object
+Function setFontStyle($style : Integer)->$this : Object
 	
 	var $o : Object
 	
@@ -495,7 +491,7 @@ Function fontStyle($style : Integer)->$this : Object
 		
 		For each ($o; This:C1470.members)
 			
-			$o.fontStyle($style)
+			$o.setFontStyle($style)
 			
 		End for each 
 		
@@ -503,7 +499,7 @@ Function fontStyle($style : Integer)->$this : Object
 		
 		For each ($o; This:C1470.members)
 			
-			$o.fontStyle()
+			$o.setFontStyle()
 			
 		End for each 
 	End if 

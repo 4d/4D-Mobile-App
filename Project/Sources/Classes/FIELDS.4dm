@@ -246,7 +246,7 @@ Function getFieldList()->$result : Object
 											
 										Else 
 											
-											// A "If" statement should never omit "Else" 
+											// A "If" statement should never omit "Else"
 											
 										End if 
 										
@@ -452,11 +452,11 @@ Function setTab()
 	var $coordinates; $o : Object
 	
 	// Set style normal for all selectors
-	This:C1470.selectors.fontStyle()
+	This:C1470.selectors.setFontStyle()
 	
 	// Then set bold current one
 	$o:=This:C1470["selector"+Choose:C955(Num:C11(This:C1470.tabSelector.data); "Fields"; "Relations")]
-	$o.fontStyle(Bold:K14:2)
+	$o.setFontStyle(Bold:K14:2)
 	
 	// Keep the currents elector name
 	This:C1470.current:=$o.name

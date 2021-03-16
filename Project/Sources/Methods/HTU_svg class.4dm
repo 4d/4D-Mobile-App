@@ -21,9 +21,9 @@ If (True:C214)
 	
 	// Clone the "original" square, colore it red, change its dimensions
 	// Automatically created into the last container ("background")
-	$svg.clone("original").color("red").position(10; 10).dimensions(130; 130)
+	$svg.clone("original").color("red").position(10; 10).size(130; 130)
 	
-	If ($svg.useOf("foreground"))
+	If ($svg.with("foreground"))
 		
 		$svg.use("square").scale(2).translate(80; 80).id("use1")
 		
@@ -35,20 +35,20 @@ If (True:C214)
 	// Drawing a star red with a blue border 10 pixels width
 	$svg.polygon().points(JSON Parse:C1218("[[350,75],[379,161],[469,161],[397,215],[423,301],[350,250],[277,301],[303,215],[231,161],[321,161]]")).fill("red").stroke("blue").stroke(10).translate(0; -40).attachTo("background")
 	
-	If ($svg.useOf("foreground"))  // Set "foreground" layer for the next operations
+	If ($svg.with("foreground"))  // Set "foreground" layer for the next operations
 		
 		$svg.ellipse(300; 100; 500)
 		$svg.textArea("Hello\nworld").translate(3; -3).fontSize(26)
 		
-		If ($svg.useOf("original"))
+		If ($svg.with("original"))
 			
-			$svg.moveH(1)
+			$svg.moveHorizontally(1)
 			$svg.width(18)
 			
 		End if 
 	End if 
 	
-	If ($svg.useOf("background"))  // Set "background" layer for the next operations
+	If ($svg.with("background"))  // Set "background" layer for the next operations
 		
 		// Drawing a green hexagon with a blue border 10 pixels width
 		$svg.polygon()\
@@ -82,13 +82,13 @@ Else
 	$svg.square(20).position(2.5; 2.5).color("yellow").push("original")
 	
 	// Set "background" layer for the next operations
-	If ($svg.useOf("background"))
+	If ($svg.with("background"))
 		
 		// Add, a blue circle without fill & with a border of 4 pixels
 		$svg.circle(50).color("blue").position(100; 100).fill(False:C215).stroke(4)
 		
 		// Clone the "original" square, colore it red, change its dimensions
-		$svg.clone("original").color("red").position(10; 10).dimensions(100; 100)
+		$svg.clone("original").color("red").position(10; 10).size(100; 100)
 		
 	End if 
 	

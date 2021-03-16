@@ -95,7 +95,7 @@ Function getTitle()->$title : Text
 	$title:=OBJECT Get title:C1068(*; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function fontStyle($style : Integer)->$this : cs:C1710.static
+Function setFontStyle($style : Integer)->$this : cs:C1710.static
 	
 	If (Count parameters:C259>=1)
 		

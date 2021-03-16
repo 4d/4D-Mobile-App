@@ -577,7 +577,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 			// Create a table group filled according to selected status
 			$svg.layer($table).fill(Choose:C955($isSelected; $params.selectedFill; "none"))
 			
-			If ($svg.useOf($table))
+			If ($svg.with($table))
 				
 				// Background
 				$svg.rect($params.cell.width; $params.cell.height)\
@@ -656,7 +656,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 					
 					$svg.image($icon)\
 						.position($params.x+($params.cell.width/2)-($params.icon.width/2); $params.y+5)\
-						.dimensions($params.icon.width; $params.icon.width)
+						.size($params.icon.width; $params.icon.width)
 					
 				End if 
 				

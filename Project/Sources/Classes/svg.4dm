@@ -28,7 +28,7 @@ Class constructor($content)
 	This:C1470._reservedNames:=This:C1470._reservedNames.combine(This:C1470._textRenderingValue)
 	
 /*================================================================
-                  DOCUMENTS & STRUCTURE
+DOCUMENTS & STRUCTURE
 ================================================================*/
 	
 	//———————————————————————————————————————————————————————————
@@ -369,7 +369,7 @@ Function styleSheet($file : 4D:C1709.File)->$this : cs:C1710.svg
 	$this:=This:C1470
 	
 /*================================================================
-                       DRAWING
+DRAWING
 ================================================================*/
 	
 	//———————————————————————————————————————————————————————————
@@ -1232,7 +1232,7 @@ Function d($data : Variant; $applyTo)->$this : cs:C1710.svg
 	//#TO_DO
 	
 /*================================================================
-                        ATTRIBUTES
+ATTRIBUTES
 ================================================================*/
 	
 	//———————————————————————————————————————————————————————————
@@ -2202,7 +2202,7 @@ Function preserveAspectRatio($value : Text; $applyTo)->$this : cs:C1710.svg
 	End if 
 	
 /*================================================================
-                     SHORTCUTS & UTILITIES
+SHORTCUTS & UTILITIES
 ================================================================*/
 	
 	//———————————————————————————————————————————————————————————
@@ -2287,7 +2287,7 @@ Function layer($name : Text)->$this : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	//  Define an element for the next operations
-Function useOf($name : Text)->$ok : Boolean
+Function with($name : Text)->$ok : Boolean
 	
 	var $o : Object
 	
@@ -2855,7 +2855,7 @@ Function position($x : Real; $y : Variant; $unit : Text)->$this : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	// Set the dimensions of an object
-Function dimensions($width : Real; $height : Real; $unit : Text)->$this : cs:C1710.svg
+Function size($width : Real; $height : Real; $unit : Text)->$this : cs:C1710.svg
 	
 	var $node; $element : Text
 	
@@ -2945,7 +2945,7 @@ Function dimensions($width : Real; $height : Real; $unit : Text)->$this : cs:C17
 	
 	//———————————————————————————————————————————————————————————
 	// Horizontal shift
-Function moveH($x : Real; $applyTo)->$this : cs:C1710.svg
+Function moveHorizontally($x : Real; $applyTo)->$this : cs:C1710.svg
 	
 	If (Count parameters:C259>=2)
 		
@@ -2962,7 +2962,7 @@ Function moveH($x : Real; $applyTo)->$this : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	// Vertical shift
-Function moveV($y : Real; $applyTo)->$this : cs:C1710.svg
+Function moveVertically($y : Real; $applyTo)->$this : cs:C1710.svg
 	
 	If (Count parameters:C259>=2)
 		
@@ -3338,7 +3338,7 @@ Function getTextHeight($string : Text; $fontAttributes : Object)->$height : Inte
 	
 	
 /*================================================================
-                         PRIVATES
+PRIVATES
 ================================================================*/
 	
 	//———————————————————————————————————————————————————————————

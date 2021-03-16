@@ -94,7 +94,7 @@ If (Form:C1466.pages[$l]=Null:C1517) | Shift down:C543
 			// If uncommented, must generate an assert
 			// Form.Input:=cs.widget.new("objectThatDoesNotExist")
 			
-			$o:=cs:C1710.group.new("execute,reset").fontStyle(Bold:K14:2).distributeLeftToRight()
+			$o:=cs:C1710.group.new("execute,reset").setFontStyle(Bold:K14:2).distributeLeftToRight()
 			
 			Form:C1466.clickMe:=cs:C1710.button.new("Button1")\
 				.setShortcut("m"; Command key mask:K16:1)\

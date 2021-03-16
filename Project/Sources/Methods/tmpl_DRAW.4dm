@@ -448,7 +448,7 @@ If (Num:C11($tableID)>0)
 					
 				End if 
 				
-				$svg.dimensions($form.preview.coordinates.width; $context.previewHeight)
+				$svg.size($form.preview.coordinates.width; $context.previewHeight)
 				
 				If (FEATURE.with("_8858"))
 					
@@ -467,8 +467,8 @@ If (Num:C11($tableID)>0)
 				$form.preview.getCoordinates()
 				
 				OBJECT SET VALUE:C1742("preview"; cs:C1710.svg.new()\
-					.dimensions($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
-					.textArea(cs:C1710.str.new("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).dimensions($form.preview.coordinates.width-50)\
+					.size($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
+					.textArea(cs:C1710.str.new("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).size($form.preview.coordinates.width-50)\
 					.position(20; 180).font(New object:C1471(\
 					"size"; 14; \
 					"color"; UI.colors.errorColor.hex; \
