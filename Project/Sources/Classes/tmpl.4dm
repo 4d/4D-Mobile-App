@@ -577,11 +577,11 @@ Function css()->$file : 4D:C1709.File
 	
 	If (FORM Get color scheme:C1761="dark")
 		
-		$file:=File:C1566("/RESOURCES/template_dark.css")
+		$file:=File:C1566("/RESOURCES/css/template_dark.css")
 		
 	Else 
 		
-		$file:=File:C1566("/RESOURCES/template.css")
+		$file:=File:C1566("/RESOURCES/css/template.css")
 		
 	End if 
 	
