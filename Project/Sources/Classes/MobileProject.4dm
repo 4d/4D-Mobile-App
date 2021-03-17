@@ -112,6 +112,63 @@ Function postError($message : Text)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 	
+Function themeImageFile()->$theme : 4D:C1709.File
+	ASSERT:C1129(False:C215; "must be overriden")
+	
+Function themeFromImageFile()->$theme : Object
+	$theme:=New object:C1471("success"; False:C215)
+	
+	var $file : 4D:C1709.File
+	$file:=This:C1470.themeImageFile()
+	
+	// to have better result scale image
+	var $l : Integer
+	$l:=SHARED.theme.colorjuicer.scale
+	
+	var $mustScal : Boolean
+	$mustScal:=($l#1024) & ($l>0)
+	
+	If ($mustScal)
+		var $Pic_file; $Pic_scaled : Picture
+		READ PICTURE FILE:C678($file.platformPath; $Pic_file)
+		CREATE THUMBNAIL:C679($Pic_file; $Pic_scaled; $l; $l)  // This change result of algo..., let tools scale using argument
+		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066)
+		WRITE PICTURE FILE:C680($file.platformPath; $Pic_scaled; ".png")
+	End if 
+	
+	var $Obj_color : Object
+	$Obj_color:=colors(New object:C1471(\
+		"action"; "juicer"; \
+		"posix"; $file.path))
+	
+	If ($Obj_color.success)
+		
+		$theme.BackgroundColor:=$Obj_color.value
+		$theme.BackgroundColor.name:="BackgroundColor"
+		
+		$Obj_color:=colors(New object:C1471(\
+			"action"; "contrast"; \
+			"color"; $theme.BackgroundColor))
+		
+		If ($Obj_color.success)
+			
+			$theme.ForegroundColor:=$Obj_color.value
+			$theme.ForegroundColor.name:="ForegroundColor"
+			
+			$theme.success:=True:C214
+			
+		End if 
+	End if 
+	
+	If ($mustScal)
+		
+		$file.delete()  // delete scaled files
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+	
 Function dataSet()->$dump : Object
 	// code copyed from iOS to dump with REST
 	

@@ -451,3 +451,8 @@ Function checkPackage()
 		End if 
 		
 	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function themeImageFile()->$file : 4D:C1709.File
+	$file:=This:C1470.input.project._folder.file("android/main/ic_launcher-playstore.png")
