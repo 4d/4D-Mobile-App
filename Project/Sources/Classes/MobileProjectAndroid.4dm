@@ -10,7 +10,6 @@ Class constructor
 	
 	This:C1470.androidProcess:=cs:C1710.androidProcess.new()
 	This:C1470.studio:=cs:C1710.studio.new()
-	This:C1470.path:=cs:C1710.path.new()
 	
 	This:C1470.project:=OB Copy:C1225(This:C1470.input)
 	
@@ -246,7 +245,27 @@ Function build()->$result : Object
 		If ($o.success)
 			
 			// * CREATE EMBEDDED DATABASE
-			$o:=This:C1470.gradlew.createEmbeddedDatabase()
+			// TODO move to create phrase, not build... (if we do not build, we need data) and maybe its the step This.postStep("dataSetGeneration")
+			// but maybe issue if we need to assembleDebug before?
+			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+				
+				// Do a rest dump
+				//var $dump : Object
+				//$dump:=This.dataSet()
+				
+				// XXX could check if success here
+				
+				// If want to copy somewhere
+				// Not working because  This.project.project.$project do not exist...
+/*var $dumpCopy : Object
+				$dumpCopy:=dataSet(New object(\
+					"action"; "copy"; \
+					"project"; This.project.project; \
+					"target"; This.input.path))*/
+				
+				$o:=This:C1470.gradlew.createEmbeddedDatabase()
+				
+			End if 
 			
 			If ($o.success)
 				
