@@ -47,6 +47,7 @@ Function generate
 			If (Not:C34($0.success))
 				
 				$0.errors.push("Failed to generate files")
+				$0.errors.push(This:C1470.errorStream)
 				
 				// Else : all ok
 			End if 
