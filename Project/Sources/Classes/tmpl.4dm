@@ -575,7 +575,15 @@ Function getSources($name : Text; $type : Text)->$template : 4D:C1709.folder
 	// Gives the path to the css file
 Function css()->$file : 4D:C1709.File
 	
-	$file:=File:C1566("/RESOURCES/template.css")
+	If (FORM Get color scheme:C1761="dark")
+		
+		$file:=File:C1566("/RESOURCES/template_dark.css")
+		
+	Else 
+		
+		$file:=File:C1566("/RESOURCES/template.css")
+		
+	End if 
 	
 /* ============================================================================*/
 Function label

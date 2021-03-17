@@ -6,13 +6,14 @@ Class constructor($object : Object)
 		
 	Else 
 		
+		// Create an empty object
 		This:C1470.content:=New object:C1471
 		
 	End if 
 	
 	//================================================================================
 	// Set the object content
-Function setContent($content)
+Function setContent($content : Object)->$this : cs:C1710.ob
 	
 	If (Count parameters:C259>=1)
 		

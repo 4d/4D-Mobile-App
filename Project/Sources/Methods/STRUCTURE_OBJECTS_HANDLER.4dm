@@ -612,7 +612,7 @@ Case of
 					End if 
 				End if 
 				
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; EDITOR.highlightColor; EDITOR.highlightColor)
 				
 				// Move search & action [
 				ui_MOVE($form.search; $e.objectName; Align right:K42:4; 30)

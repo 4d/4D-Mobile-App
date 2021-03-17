@@ -26,32 +26,16 @@ var $tmpl : cs:C1710.tmpl
 
 // ----------------------------------------------------
 // Initialisations
-If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
-	
-	// NO PARAMETERS REQUIRED
-	
-	// Optional parameters
-	If (Count parameters:C259>=1)
-		
-		// <NONE>
-		
-	End if 
-	
-	$e:=FORM Event:C1606
-	
-	$form:=VIEWS_Handler(New object:C1471("action"; "init"))
-	$context:=$form.$
-	
-	var $view : cs:C1710.VIEWS
-	$view:=cs:C1710.VIEWS.new($form)  //#TEMPO
-	
-	$0:=-1  // Reject drop
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$e:=FORM Event:C1606
+
+$form:=VIEWS_Handler(New object:C1471("action"; "init"))
+$context:=$form.$
+
+var $view : cs:C1710.VIEWS
+$view:=cs:C1710.VIEWS.new($form)  //#TEMPO
+
+$0:=-1  // Reject drop
+
 
 // ----------------------------------------------------
 Case of 
@@ -139,7 +123,7 @@ Case of
 						
 						// Select the item
 						SVG SET ATTRIBUTE:C1055(*; $e.objectName; $tableID; \
-							"fill"; EDITOR.selectedFillColor)
+							"fill"; Choose:C955(EDITOR.colorScheme="dark"; "slategray"; EDITOR.selectedFillColor))
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -366,10 +350,21 @@ Case of
 					SET BLOB SIZE:C606($x; 0)
 					
 					// Set the drag icon
-					$p:=cs:C1710.svg.new()\
-						.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
-						.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
-						.picture()
+					If (EDITOR.colorScheme="dark")
+						
+						$p:=cs:C1710.svg.new().fillColor("slategray").fillOpacity(1).height(23)\
+							.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
+							.textArea($o.path+" "; "append").fontSize(13).position(20; 2).color("white")\
+							.picture()
+						
+					Else 
+						
+						$p:=cs:C1710.svg.new()\
+							.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
+							.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
+							.picture()
+						
+					End if 
 					
 					SET DRAG ICON:C1272($p)
 					
@@ -397,76 +392,79 @@ Case of
 				//______________________________________________________
 		End case 
 		
-		//==================================================
-		//: ($Obj_form.form.currentWidget=$Obj_form.actionList)
-		// Case of
-		//  //______________________________________________________
-		//: ($Obj_form.form.eventCode=On Begin Drag Over)
-		//$o:=$Obj_context.currentAction
-		//  // Put into the conatianer
-		//VARIABLE TO BLOB($o;$x)
-		//APPEND DATA TO PASTEBOARD("com.4d.private.ios.action";$x)
-		//SET BLOB SIZE($x;0)
-		//  // Create the drag icon
-		// SVG_SET_OPTIONS (SVG_Get_options  ?+ 12)
-		//$t:=SVG_New
-		//SVG_SET_TEXT_RENDERING ($t;"geometricPrecision")
-		//SVG_SET_SHAPE_RENDERING ($t;"crispEdges")
-		//SVG_SET_VIEWPORT_FILL ($t;SVG_Color_RGB_from_long (EDITOR.backgroundSelectedColor))
-		//SVG_New_rect ($t;0.5;0;20;20;0;0;"none";SVG_Color_RGB_from_long (EDITOR.backgroundSelectedColor))
-		//SVG_New_embedded_image ($t;$o.$icon;2;2)
-		//SVG_New_text ($t;$o.name+" ";26;4;"Sans-serif";13)
-		//SVG EXPORT TO PICTURE($t;$p;Own XML data source)
-		//SET DRAG ICON($p)
-		// Else
-		//ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventCode)+")")
-		//  //______________________________________________________
-		// End case
-		//==================================================
-		//: ($Obj_form.form.currentWidget=$Obj_form.actionDrop)
-		// Case of
-		//  //______________________________________________________
-		//: ($Obj_form.form.eventCode=On Drag Over)
-		//  // Accept drag if a field is drag over
-		//GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
-		// If (Bool(OK))
-		//BLOB TO VARIABLE($x;$o)
-		//SET BLOB SIZE($x;0)
-		//If (String($o.target)#"widget")
-		//$Obj_target:=Form[$Obj_context.typeForm()][$Obj_context.tableNum()]
-		//If (_or (New formula($Obj_target.actions=Null);New formula($Obj_target.actions.extract("name").indexOf(String($o.name))=-1)))
-		//$0:=0  //    Accept drop
-		// End if
-		// End if
-		// End if
-		//  //______________________________________________________
-		//: ($Obj_form.form.eventCode=On Drop)
-		//  // Get the pastboard
-		//GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
-		// If (Bool(OK))
-		//BLOB TO VARIABLE($x;$o)
-		//SET BLOB SIZE($x;0)
-		//$Obj_target:=Form[$Obj_context.typeForm()][$Obj_context.tableNum()]
-		//ob_createPath (Form[$Obj_context.typeForm()][$Obj_context.tableNum()];"actions";Is collection)
-		//If ($Obj_target.actions.extract("name").indexOf(String($o.name))=-1)  //    Don't add action twice
-		//$Ptr_me:=OBJECT Get pointer(Object current)
-		//$Ptr_me->:=$Ptr_me->+$o.$icon
-		//  // Update project
-		//OB REMOVE($o;"target")
-		//For each ($t;$o)
-		//If ($t[[1]]="$")
-		//OB REMOVE($o;$t)
-		// End if
-		// End for each
-		//$Obj_target.actions.push($o)
-		// End if
-		//  // Save project
-		// project.save()
-		// End if
-		// Else
-		//ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventCode)+")")
-		//  //______________________________________________________
-		// End case
+/*
+//==================================================
+		
+: ($Obj_form.form.currentWidget=$Obj_form.actionList)
+ Case of
+  //______________________________________________________
+: ($Obj_form.form.eventCode=On Begin Drag Over)
+$o:=$Obj_context.currentAction
+  // Put into the conatianer
+VARIABLE TO BLOB($o;$x)
+APPEND DATA TO PASTEBOARD("com.4d.private.ios.action";$x)
+SET BLOB SIZE($x;0)
+  // Create the drag icon
+ SVG_SET_OPTIONS (SVG_Get_options  ?+ 12)
+$t:=SVG_New
+SVG_SET_TEXT_RENDERING ($t;"geometricPrecision")
+SVG_SET_SHAPE_RENDERING ($t;"crispEdges")
+SVG_SET_VIEWPORT_FILL ($t;SVG_Color_RGB_from_long (EDITOR.backgroundSelectedColor))
+SVG_New_rect ($t;0.5;0;20;20;0;0;"none";SVG_Color_RGB_from_long (EDITOR.backgroundSelectedColor))
+SVG_New_embedded_image ($t;$o.$icon;2;2)
+SVG_New_text ($t;$o.name+" ";26;4;"Sans-serif";13)
+SVG EXPORT TO PICTURE($t;$p;Own XML data source)
+SET DRAG ICON($p)
+ Else
+ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventCode)+")")
+  //______________________________________________________
+ End case
+==================================================
+: ($Obj_form.form.currentWidget=$Obj_form.actionDrop)
+ Case of
+  //______________________________________________________
+: ($Obj_form.form.eventCode=On Drag Over)
+  // Accept drag if a field is drag over
+GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
+ If (Bool(OK))
+BLOB TO VARIABLE($x;$o)
+SET BLOB SIZE($x;0)
+If (String($o.target)#"widget")
+$Obj_target:=Form[$Obj_context.typeForm()][$Obj_context.tableNum()]
+If (_or (New formula($Obj_target.actions=Null);New formula($Obj_target.actions.extract("name").indexOf(String($o.name))=-1)))
+$0:=0  //    Accept drop
+ End if
+ End if
+ End if
+  //______________________________________________________
+: ($Obj_form.form.eventCode=On Drop)
+  // Get the pastboard
+GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
+ If (Bool(OK))
+BLOB TO VARIABLE($x;$o)
+SET BLOB SIZE($x;0)
+$Obj_target:=Form[$Obj_context.typeForm()][$Obj_context.tableNum()]
+ob_createPath (Form[$Obj_context.typeForm()][$Obj_context.tableNum()];"actions";Is collection)
+If ($Obj_target.actions.extract("name").indexOf(String($o.name))=-1)  //    Don't add action twice
+$Ptr_me:=OBJECT Get pointer(Object current)
+$Ptr_me->:=$Ptr_me->+$o.$icon
+  // Update project
+OB REMOVE($o;"target")
+For each ($t;$o)
+If ($t[[1]]="$")
+OB REMOVE($o;$t)
+ End if
+ End for each
+$Obj_target.actions.push($o)
+ End if
+  // Save project
+ project.save()
+ End if
+ Else
+ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventCode)+")")
+  //______________________________________________________
+ End case
+*/
 		
 		//==================================================
 	: ($e.objectName=$form.preview.name)
@@ -574,10 +572,21 @@ Case of
 						SET BLOB SIZE:C606($x; 0)
 						
 						// Create the drag icon
-						$p:=cs:C1710.svg.new()\
-							.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
-							.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
-							.picture()
+						If (EDITOR.colorScheme="dark")
+							
+							$p:=cs:C1710.svg.new().fillColor("slategray").fillOpacity(1).height(23)\
+								.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
+								.textArea($o.path+" "; "append").fontSize(13).position(20; 2).color("white")\
+								.picture()
+							
+						Else 
+							
+							$p:=cs:C1710.svg.new()\
+								.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
+								.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
+								.picture()
+							
+						End if 
 						
 						SET DRAG ICON:C1272($p)
 						

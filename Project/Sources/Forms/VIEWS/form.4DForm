@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
@@ -193,11 +193,11 @@
 					"width": 284,
 					"height": 468,
 					"borderRadius": 20,
-					"fill": "#FFFFFF",
 					"sizingY": "fixed",
 					"visibility": "hidden",
-					"stroke": "#696969",
-					"sizingX": "move"
+					"sizingX": "move",
+					"class": "backgound",
+					"fill": "transparent"
 				},
 				"preview.label": {
 					"type": "text",
@@ -479,5 +479,5 @@
 			}
 		}
 	},
-	"geometryStamp": 8
+	"geometryStamp": 11
 }

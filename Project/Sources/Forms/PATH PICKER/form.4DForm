@@ -1,5 +1,4 @@
 {
-	"destination": "detailScreen",
 	"windowMinHeight": 30,
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -24,6 +23,18 @@
 		},
 		{
 			"objects": {
+				"_airbag": {
+					"type": "button",
+					"top": 2,
+					"left": 1,
+					"width": 264,
+					"height": 18,
+					"sizingX": "move",
+					"display": false,
+					"events": [
+						"onClick"
+					]
+				},
 				"border": {
 					"type": "rectangle",
 					"top": 1,
@@ -32,23 +43,11 @@
 					"height": 20,
 					"sizingX": "grow",
 					"class": "border",
-					"fill": "automatic"
+					"fill": "transparent"
 				},
-				"_airbag": {
-					"type": "button",
-					"top": 17,
-					"left": 0,
-					"width": 264,
-					"height": 4,
-					"sizingX": "move",
-					"display": false,
-					"events": [
-						"onClick"
-					]
-				},
-				"label": {
+				"text": {
 					"type": "input",
-					"top": 3,
+					"top": 2,
 					"left": 18,
 					"width": 302,
 					"height": 18,
@@ -58,7 +57,8 @@
 					"focusable": false,
 					"dataSource": "Form:C1466.label",
 					"events": [],
-					"class": "label"
+					"class": "label",
+					"fill": "transparent"
 				},
 				"browse": {
 					"type": "button",
@@ -103,10 +103,6 @@
 					"width": 304,
 					"height": 20,
 					"visibility": "hidden",
-					"icon": "",
-					"iconFrames": 4,
-					"textPlacement": "top",
-					"style": "regular",
 					"events": [
 						"onClick",
 						"onDrop",
@@ -128,7 +124,7 @@
 		"kind": "form"
 	},
 	"method": "PATH_PICKER",
-	"geometryStamp": 56,
+	"geometryStamp": 201,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

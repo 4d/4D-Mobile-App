@@ -21,7 +21,7 @@ var $avalaibleWidth; $count; $height; $indx : Integer
 var $context; $field; $form; $manifest; $o; $relation; $target : Object
 var $nodes : Collection
 var $svg : cs:C1710.svg
-var $tmpl : cs:C1710.Template
+var $tmpl : cs:C1710.tmpl
 
 // ----------------------------------------------------
 // Initialisations

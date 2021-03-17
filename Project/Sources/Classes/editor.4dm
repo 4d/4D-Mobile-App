@@ -248,7 +248,7 @@ Function init()
 		This:C1470.highlightColor:=Background color:K23:2
 		This:C1470.highlightColorNoFocus:=Background color:K23:2
 		
-		This:C1470.selectedColor:=0x00034B6D
+		This:C1470.selectedColor:=0x0003A9F4  //0x0001A9F4  //0x00034B6D
 		This:C1470.alternateSelectedColor:=0x00C1C1FF
 		This:C1470.backgroundSelectedColor:=Highlight text background color:K23:5
 		This:C1470.backgroundUnselectedColor:=Highlight text background color:K23:5

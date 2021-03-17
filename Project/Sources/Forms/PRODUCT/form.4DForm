@@ -1,7 +1,7 @@
 {
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 210,
+	"height": 205,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -25,7 +25,9 @@
 		"paperHeight": "842pt"
 	},
 	"pages": [
-		null,
+		{
+			"objects": {}
+		},
 		{
 			"objects": {
 				"11_version.border": {
@@ -52,7 +54,6 @@
 					"height": 17,
 					"dataSource": "Form:C1466.product.name",
 					"tooltip": ":xliff:appNameTip",
-					"fill": "transparent",
 					"dragging": "none",
 					"events": [
 						"onDataChange",
@@ -76,7 +77,6 @@
 					"width": 72,
 					"height": 17,
 					"dataSource": "Form:C1466.product.version",
-					"fill": "transparent",
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -103,17 +103,6 @@
 						"onClick"
 					]
 				},
-				"Rectangle": {
-					"type": "rectangle",
-					"top": 5,
-					"left": 359,
-					"width": 23,
-					"height": 216,
-					"visibility": "hidden",
-					"fill": "transparent",
-					"strokeDashArray": "1 1",
-					"stroke": "#B1C4DD"
-				},
 				"10_name.border2": {
 					"type": "rectangle",
 					"top": 90,
@@ -130,8 +119,6 @@
 					"height": 17,
 					"dataSource": "formatString(\"bundleApp\"; Form:C1466.organization.id+\".\"+Form:C1466.product.name)",
 					"tooltip": ":xliff:appBundleIDTip",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"enterable": false,
 					"dragging": "none",
 					"dropping": "custom",
@@ -141,7 +128,7 @@
 				},
 				"id.label": {
 					"type": "text",
-					"top": 70,
+					"top": 68,
 					"left": 16,
 					"width": 90,
 					"height": 17,
@@ -150,7 +137,7 @@
 				},
 				"10_name.border1": {
 					"type": "rectangle",
-					"top": 157,
+					"top": 152,
 					"left": 16,
 					"width": 451,
 					"height": 33,
@@ -158,12 +145,11 @@
 				},
 				"30_copyright": {
 					"type": "input",
-					"top": 165,
+					"top": 160,
 					"left": 23,
 					"width": 437,
 					"height": 17,
 					"dataSource": "Form:C1466.product.copyright",
-					"fill": "transparent",
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
@@ -172,7 +158,7 @@
 				},
 				"30_copyright.label": {
 					"type": "text",
-					"top": 137,
+					"top": 130,
 					"left": 16,
 					"width": 90,
 					"height": 17,
@@ -181,10 +167,10 @@
 				},
 				"icon.background": {
 					"type": "picture",
-					"top": 29,
+					"top": 30,
 					"left": 489,
-					"width": 160,
-					"height": 161,
+					"width": 154,
+					"height": 154,
 					"pictureFormat": "tiled",
 					"picture": "/RESOURCES/images/alpha-checker.png"
 				},
@@ -201,16 +187,16 @@
 					"type": "rectangle",
 					"top": 28,
 					"left": 488,
-					"width": 162,
-					"height": 162,
+					"width": 157,
+					"height": 157,
 					"class": "border"
 				},
 				"icon": {
 					"type": "input",
-					"top": 29,
+					"top": 30,
 					"left": 489,
-					"width": 160,
-					"height": 160,
+					"width": 154,
+					"height": 154,
 					"dataSourceTypeHint": "picture",
 					"tooltip": ":xliff:appIconsTip",
 					"enterable": false,
@@ -245,7 +231,7 @@
 				"target.label": {
 					"type": "text",
 					"top": 5,
-					"left": 695,
+					"left": 666,
 					"width": 89,
 					"height": 16,
 					"text": ":xliff:targetOs",
@@ -255,8 +241,8 @@
 				"ios": {
 					"type": "checkbox",
 					"text": "iOS",
-					"top": 29,
-					"left": 780,
+					"top": 27,
+					"left": 752,
 					"width": 65,
 					"height": 80,
 					"events": [
@@ -275,8 +261,8 @@
 				"android": {
 					"type": "checkbox",
 					"text": "Android",
-					"top": 29,
-					"left": 695,
+					"top": 27,
+					"left": 666,
 					"width": 65,
 					"height": 80,
 					"events": [
@@ -336,5 +322,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 106
+	"geometryStamp": 342
 }

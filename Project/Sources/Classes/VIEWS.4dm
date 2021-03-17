@@ -575,7 +575,16 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 			$isSelected:=($table=String:C10($params.tableNumber))
 			
 			// Create a table group filled according to selected status
-			$svg.layer($table).fill(Choose:C955($isSelected; $params.selectedFill; "none"))
+			
+			If (EDITOR.colorScheme="dark")
+				
+				$svg.layer($table).fill(Choose:C955($isSelected; "slategray"; "none"))
+				
+			Else 
+				
+				$svg.layer($table).fill(Choose:C955($isSelected; $params.selectedFill; "none"))
+				
+			End if 
 			
 			If ($svg.with($table))
 				
@@ -589,6 +598,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 					
 					// No form selected
 					$icon:=File:C1566("/RESOURCES/templates/form/"+$typeForm+"/defaultLayoutIcon.png")
+					$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.colorScheme="dark"; "white"; "dimgray"))
 					
 				Else 
 					
@@ -617,7 +627,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 									//________________________________________
 								Else 
 									
-									$color:=Choose:C955($isSelected; $params.selectedStroke; "dimgray")
+									$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.colorScheme="dark"; "white"; "dimgray"))
 									
 									//______________________________________________________
 							End case 
@@ -625,8 +635,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 						Else 
 							
 							$icon:=File:C1566("/RESOURCES/images/noIcon.svg")
-							
-							$color:=Choose:C955($isSelected; $params.selectedStroke; "dimgray")
+							$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.colorScheme="dark"; "white"; "dimgray"))
 							$svg.setAttribute("tips"; Replace string:C233($tmpl.name; "/"; ""); $svg.fetch($table))
 							
 						End if 
@@ -671,11 +680,23 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 				
 				// Border & reactive 'button'
-				$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
-					.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\
-					.stroke(Choose:C955($isSelected; $params.selectedStroke; "none"))\
-					.fill("white")\
-					.fillOpacity(0.01)
+				If (EDITOR.colorScheme="dark")
+					
+					$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
+						.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\
+						.stroke(Choose:C955($isSelected; "slategray"; "none"))\
+						.fill("white")\
+						.fillOpacity(0.01)
+					
+				Else 
+					
+					$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
+						.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\
+						.stroke(Choose:C955($isSelected; $params.selectedStroke; "none"))\
+						.fill("white")\
+						.fillOpacity(0.01)
+					
+				End if 
 				
 				If ($name#$dataModel[$table][""].name)  // Set a tips
 					

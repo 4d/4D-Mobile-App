@@ -96,7 +96,7 @@ Function setPlaceholder
 	If (Count parameters:C259>=1)
 		
 		This:C1470.placeHolder:=$1
-		OBJECT SET PLACEHOLDER:C1295(*; "label"; This:C1470.placeHolder)
+		OBJECT SET PLACEHOLDER:C1295(*; "text"; This:C1470.placeHolder)
 		
 	Else 
 		
@@ -477,7 +477,7 @@ Function __updateLabel
 			"\""+$c[$c.length-1]+"\"")
 		
 		OBJECT SET VISIBLE:C603(*; "menu@"; True:C214)
-		OBJECT SET RGB COLORS:C628(*; "label"; Choose:C955(Bool:C1537(This:C1470.target.exists); Foreground color:K23:1; EDITOR.errorRGB))
+		OBJECT SET RGB COLORS:C628(*; "text"; Choose:C955(Bool:C1537(This:C1470.target.exists); Foreground color:K23:1; "red"))
 		
 	Else 
 		
@@ -511,8 +511,8 @@ Function __geometry
 	OBJECT SET COORDINATES:C1248(*; "browse"; $left+$offset; $top; $right+$offset; $bottom)
 	
 	$right:=$left+$offset-5
-	OBJECT GET COORDINATES:C663(*; "label"; $left; $top; $l; $bottom)
-	OBJECT SET COORDINATES:C1248(*; "label"; $left; $top; $right; $bottom)
+	OBJECT GET COORDINATES:C663(*; "text"; $left; $top; $l; $bottom)
+	OBJECT SET COORDINATES:C1248(*; "text"; $left; $top; $right; $bottom)
 	OBJECT GET COORDINATES:C663(*; "menu.expand"; $left; $top; $l; $bottom)
 	OBJECT SET COORDINATES:C1248(*; "menu.expand"; $left; $top; $right; $bottom)
 	OBJECT GET COORDINATES:C663(*; "border"; $left; $top; $l; $bottom)
@@ -532,8 +532,8 @@ Function __ui
 			OBJECT GET COORDINATES:C663(*; "browse"; $left; $top; $right; $bottom)
 			
 			$right:=$left-5
-			OBJECT GET COORDINATES:C663(*; "label"; $left; $top; $l; $bottom)
-			OBJECT SET COORDINATES:C1248(*; "label"; $left; $top; $right; $bottom)
+			OBJECT GET COORDINATES:C663(*; "text"; $left; $top; $l; $bottom)
+			OBJECT SET COORDINATES:C1248(*; "text"; $left; $top; $right; $bottom)
 			OBJECT GET COORDINATES:C663(*; "menu.expand"; $left; $top; $l; $bottom)
 			OBJECT SET COORDINATES:C1248(*; "menu.expand"; $left; $top; $right; $bottom)
 			OBJECT GET COORDINATES:C663(*; "border"; $left; $top; $l; $bottom)
@@ -547,8 +547,8 @@ Function __ui
 			
 			OBJECT SET VISIBLE:C603(*; "browse"; False:C215)
 			OBJECT GET COORDINATES:C663(*; "browse"; $left; $top; $right; $bottom)
-			OBJECT GET COORDINATES:C663(*; "label"; $left; $top; $l; $bottom)
-			OBJECT SET COORDINATES:C1248(*; "label"; $left; $top; $right; $bottom)
+			OBJECT GET COORDINATES:C663(*; "text"; $left; $top; $l; $bottom)
+			OBJECT SET COORDINATES:C1248(*; "text"; $left; $top; $right; $bottom)
 			OBJECT GET COORDINATES:C663(*; "menu.expand"; $left; $top; $l; $bottom)
 			OBJECT SET COORDINATES:C1248(*; "menu.expand"; $left; $top; $right; $bottom)
 			OBJECT GET COORDINATES:C663(*; "border"; $left; $top; $l; $bottom)
@@ -558,17 +558,17 @@ Function __ui
 	End if 
 	
 	OBJECT SET VISIBLE:C603(*; "menu@"; Length:C16(This:C1470.label)>0)
-	OBJECT SET PLACEHOLDER:C1295(*; "label"; This:C1470.placeHolder)
+	OBJECT SET PLACEHOLDER:C1295(*; "text"; This:C1470.placeHolder)
 	
 	If (This:C1470.target#Null:C1517)
 		
 		If (Bool:C1537(This:C1470.target.exists))
 			
-			OBJECT SET RGB COLORS:C628(*; "label"; Foreground color:K23:1)
+			OBJECT SET RGB COLORS:C628(*; "text"; Foreground color:K23:1)
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; "label"; EDITOR.errorRGB)
+			OBJECT SET RGB COLORS:C628(*; "text"; "red")
 			
 		End if 
 	End if 
