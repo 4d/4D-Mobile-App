@@ -23,7 +23,8 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			If (FEATURE.with("androidBeta"))  // 🚧
+			If (FEATURE.with("androidBeta"))\
+				 | (Bool:C1537(PROJECT.$android))  // 🚧
 				
 				If (Is Windows:C1573)
 					
@@ -147,7 +148,7 @@ Else   // <== WIDGETS METHOD
 				: ($e.code=On Mouse Enter:K2:33)
 					
 					// Highlights
-					OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
+					OBJECT SET RGB COLORS:C628(*; $e.objectName; EDITOR.selectedColor)
 					
 					//______________________________________________________
 				: ($e.code=On Mouse Leave:K2:34)

@@ -724,18 +724,18 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 				If (Not:C34($found))
 					
 					$class:="error"
-					$tips:=cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
 					
 				End if 
 			End if 
 			
-			$label:=cs:C1710.str.new(UI.toOne).concat($label)
+			$label:=cs:C1710.str.new(EDITOR.toOne).concat($label)
 			
 			//______________________________________________________
 		: ($isToMany)
 			
 			$tips:=$field.label
-			$label:=cs:C1710.str.new(UI.toMany).concat($field.name)
+			$label:=cs:C1710.str.new(EDITOR.toMany).concat($field.name)
 			
 			//______________________________________________________
 		Else 

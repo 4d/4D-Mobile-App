@@ -133,13 +133,13 @@ Case of
 							
 							// Restore current selected background
 							SVG SET ATTRIBUTE:C1055(*; $e.objectName; $context.tableNumber; \
-								"fill"; UI.unselectedFillColor)
+								"fill"; EDITOR.unselectedFillColor)
 							
 						End if 
 						
 						// Select the item
 						SVG SET ATTRIBUTE:C1055(*; $e.objectName; $tableID; \
-							"fill"; UI.selectedColorFill)
+							"fill"; EDITOR.selectedFillColor)
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -157,7 +157,7 @@ Case of
 							
 							// Unselect
 							SVG SET ATTRIBUTE:C1055(*; $e.objectName; $context.tableNumber; \
-								"fill"; UI.unselectedFillColor)
+								"fill"; EDITOR.unselectedFillColor)
 							
 						End if 
 						
@@ -367,7 +367,7 @@ Case of
 					
 					// Set the drag icon
 					$p:=cs:C1710.svg.new()\
-						.image(UI.fieldIcons[$o.fieldType]).position(2; 2)\
+						.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
 						.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 						.picture()
 					
@@ -412,8 +412,8 @@ Case of
 		//$t:=SVG_New
 		//SVG_SET_TEXT_RENDERING ($t;"geometricPrecision")
 		//SVG_SET_SHAPE_RENDERING ($t;"crispEdges")
-		//SVG_SET_VIEWPORT_FILL ($t;SVG_Color_RGB_from_long (UI.backgroundSelectedColor))
-		//SVG_New_rect ($t;0.5;0;20;20;0;0;"none";SVG_Color_RGB_from_long (UI.backgroundSelectedColor))
+		//SVG_SET_VIEWPORT_FILL ($t;SVG_Color_RGB_from_long (EDITOR.backgroundSelectedColor))
+		//SVG_New_rect ($t;0.5;0;20;20;0;0;"none";SVG_Color_RGB_from_long (EDITOR.backgroundSelectedColor))
 		//SVG_New_embedded_image ($t;$o.$icon;2;2)
 		//SVG_New_text ($t;$o.name+" ";26;4;"Sans-serif";13)
 		//SVG EXPORT TO PICTURE($t;$p;Own XML data source)
@@ -575,7 +575,7 @@ Case of
 						
 						// Create the drag icon
 						$p:=cs:C1710.svg.new()\
-							.image(UI.fieldIcons[$o.fieldType]).position(2; 2)\
+							.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
 							.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 							.picture()
 						
@@ -697,7 +697,7 @@ Case of
 					
 					// Highlights
 					$o:=Choose:C955($e.objectName=$form.selectorList.name; $form.selectorList; $form.selectorDetail)
-					$o.setColors(UI.selectedColor; Background color none:K23:10)
+					$o.setColors(EDITOR.selectedColor; Background color none:K23:10)
 					
 				End if 
 				

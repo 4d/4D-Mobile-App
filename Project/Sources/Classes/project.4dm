@@ -941,7 +941,7 @@ Function getIcon
 	
 	If (Length:C16($1)=0)
 		
-		$file:=File:C1566(UI.noIcon; fk platform path:K87:2)
+		$file:=File:C1566(EDITOR.noIcon; fk platform path:K87:2)
 		
 	Else 
 		
@@ -949,7 +949,7 @@ Function getIcon
 		
 		If (Not:C34($file.exists))
 			
-			$file:=File:C1566(UI.errorIcon; fk platform path:K87:2)
+			$file:=File:C1566(EDITOR.errorIcon; fk platform path:K87:2)
 			
 		End if 
 	End if 

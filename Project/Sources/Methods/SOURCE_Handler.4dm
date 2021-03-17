@@ -412,7 +412,7 @@ $regex.match[1].data:="127.0.0.1"
 							"target"; Current form window:C827; \
 							"action"; "show"; \
 							"type"; "confirm"; \
-							"title"; UI.alert+" "+Get localized string:C991("theLocalWebServerIsStarted"); \
+							"title"; EDITOR.alert+" "+Get localized string:C991("theLocalWebServerIsStarted"); \
 							"additional"; "youNeedToShutDownTheLocalWebServer"; \
 							"okAction"; "stopWebServer"; \
 							"ok"; "stopTheLocalServer"))
@@ -584,7 +584,7 @@ $regex.match[1].data:="127.0.0.1"
 							"target"; Current form window:C827; \
 							"action"; "show"; \
 							"type"; "confirm"; \
-							"title"; UI.alert+" "+Get localized string:C991("theLocalWebServerIsStarted"); \
+							"title"; EDITOR.alert+" "+Get localized string:C991("theLocalWebServerIsStarted"); \
 							"additional"; "youNeedToShutDownTheLocalWebServer"; \
 							"okAction"; "stopWebServer"; \
 							"ok"; "stopTheLocalServer"))

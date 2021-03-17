@@ -36,7 +36,6 @@
 					"left": 0,
 					"width": 970,
 					"height": 875,
-					"stroke": "transparent",
 					"class": "background"
 				}
 			}
@@ -56,7 +55,6 @@
 					"dataSource": "Form:C1466._list",
 					"listboxType": "collection",
 					"scrollbarVertical": "hidden",
-					"resizingMode": "legacy",
 					"columns": [
 						{
 							"name": "icons1",
@@ -69,15 +67,11 @@
 							"fontSize": 14,
 							"header": {
 								"name": "Header3",
-								"text": "Header1",
-								"verticalAlign": "middle",
-								"fontSize": 14,
-								"fontTheme": "normal"
+								"text": "Header1"
 							},
 							"footer": {
 								"name": "Footer3",
 								"timeFormat": "hh_mm_ss",
-								"verticalAlign": "middle",
 								"fontSize": 14,
 								"fontTheme": "normal"
 							},
@@ -93,19 +87,14 @@
 							"maxWidth": 10,
 							"resizable": false,
 							"enterable": false,
-							"verticalAlign": "middle",
 							"fontSize": 14,
 							"header": {
 								"name": "Header4",
-								"text": "Header2",
-								"verticalAlign": "middle",
-								"fontSize": 14,
-								"fontTheme": "normal"
+								"text": "Header2"
 							},
 							"footer": {
 								"name": "Footer4",
 								"timeFormat": "hh_mm_ss",
-								"verticalAlign": "middle",
 								"fontSize": 14,
 								"fontTheme": "normal"
 							},
@@ -113,7 +102,6 @@
 							"dataSource": "This:C1470.text",
 							"contextMenu": "none",
 							"truncateMode": "none",
-							"textAlign": "left",
 							"wordwrap": "normal"
 						}
 					]

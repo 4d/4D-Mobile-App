@@ -143,7 +143,7 @@ Case of
 					
 					If (Length:C16(String:C10($Obj_context.current.filter.string))>0)
 						
-						$Obj_context.current.filterIcon:=UI.filter
+						$Obj_context.current.filterIcon:=EDITOR.filterIcon
 						
 						If (Bool:C1537($Obj_context.current.filter.validated))
 							
@@ -160,13 +160,13 @@ Case of
 								OBJECT SET VISIBLE:C603(*; $Obj_form.method; True:C214)
 								
 								// Populate user icon
-								$Obj_context.current.filterIcon:=UI.user
+								$Obj_context.current.filterIcon:=EDITOR.userIcon
 								
 							End if 
 							
 						Else 
 							
-							OBJECT SET RGB COLORS:C628(*; $Obj_form.filter; UI.errorColor; Background color none:K23:10)
+							OBJECT SET RGB COLORS:C628(*; $Obj_form.filter; EDITOR.errorColor; Background color none:K23:10)
 							
 							If (Length:C16(String:C10($Obj_context.current.filter.error))>0)
 								
@@ -225,7 +225,7 @@ Case of
 		//If (FEATURE.with("android"))
 		
 		//$Dir_root:=dataSet(New object("action"; "path"; \
-									"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+																														"project"; New object("product"; Form.product; "$project"; PROJECT))).path
 		
 		//Else
 		
@@ -274,7 +274,7 @@ Case of
 				
 				If (Length:C16(String:C10($Obj_table.filter.string))>0)
 					
-					$o.tables[$Lon_index].filterIcon:=Choose:C955(Bool:C1537($Obj_table.filter.parameters); UI.user; UI.filter)
+					$o.tables[$Lon_index].filterIcon:=Choose:C955(Bool:C1537($Obj_table.filter.parameters); EDITOR.userIcon; EDITOR.filterIcon)
 					
 				End if 
 				
@@ -408,11 +408,11 @@ Case of
 			
 			If ($Obj_context.current.name=$Obj_in.this.name)
 				
-				$Obj_out.color:=Choose:C955($b; UI.backgroundSelectedColor; UI.alternateSelectedColor)
+				$Obj_out.color:=Choose:C955($b; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
 				
 			Else 
 				
-				$Lon_backgroundColor:=Choose:C955($b; UI.highlightColor; UI.highlightColorNoFocus)
+				$Lon_backgroundColor:=Choose:C955($b; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
 				$Obj_out.color:=Choose:C955($b; $Lon_backgroundColor; "transparent")  //0x00FFFFFF)
 				
 			End if 
@@ -440,7 +440,7 @@ Case of
 					
 					If (Not:C34(Bool:C1537(This:C1470.filter.validated)))
 						
-						$Obj_out.stroke:=UI.errorRGB
+						$Obj_out.stroke:=EDITOR.errorRGB
 						
 					End if 
 				End if 
@@ -450,15 +450,15 @@ Case of
 		//=========================================================
 	: ($Obj_in.action="listboxUI")
 		
-		If ($Obj_form.focus=$Obj_form.list)  // & (Form event code=On Getting Focus)
+		If ($Obj_form.focus=$Obj_form.list)
 			
-			OBJECT SET RGB COLORS:C628(*; $Obj_form.list; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
-			OBJECT SET RGB COLORS:C628(*; $Obj_form.list+".border"; UI.selectedColor)  // ;Background color none)
+			OBJECT SET RGB COLORS:C628(*; $Obj_form.list; Foreground color:K23:1; EDITOR.highlightColor; EDITOR.highlightColor)
+			OBJECT SET RGB COLORS:C628(*; $Obj_form.list+".border"; EDITOR.selectedColor)
 			
 		Else 
 			
 			OBJECT SET RGB COLORS:C628(*; $Obj_form.list; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*; $Obj_form.list+".border"; UI.backgroundUnselectedColor)  // ;Background color none)
+			OBJECT SET RGB COLORS:C628(*; $Obj_form.list+".border"; EDITOR.backgroundUnselectedColor)
 			
 		End if 
 		

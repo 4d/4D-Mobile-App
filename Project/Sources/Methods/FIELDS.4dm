@@ -267,7 +267,7 @@ Else   // <== WIDGETS METHOD
 						
 						// Highlights
 						Choose:C955($e.objectName=$ƒ.selectorFields.name; $ƒ.selectorFields; $ƒ.selectorRelations)\
-							.setColors(UI.selectedColor; Background color none:K23:10)
+							.setColors(EDITOR.selectedColor; Background color none:K23:10)
 						
 					End if 
 					

@@ -78,7 +78,7 @@ If (Num:C11($e.row)>0)
 				
 				If ($unsynchronizedTableFields.length=0)  // Not found into the current catalog
 					
-					$tips:=UI.alert+" "+$str.setText("theTableIsNoLongerAvailable").localized($table.name)
+					$tips:=EDITOR.alert+" "+$str.setText("theTableIsNoLongerAvailable").localized($table.name)
 					
 				Else 
 					
@@ -89,11 +89,11 @@ If (Num:C11($e.row)>0)
 							
 							If ($unsynchronizedTableFields.length=1)
 								
-								$tips:=UI.alert+" "+$unsynchronizedTableFields.extract("tableTips").distinct().join("\r       - ")
+								$tips:=EDITOR.alert+" "+$unsynchronizedTableFields.extract("tableTips").distinct().join("\r       - ")
 								
 							Else 
 								
-								$tips:=UI.alert+" "+$str.setText("someFieldsOrRelationsAreNoLongerAvailableOrWasModified").localized($unsynchronizedTableFields.extract("name").distinct().join("\", \""))
+								$tips:=EDITOR.alert+" "+$str.setText("someFieldsOrRelationsAreNoLongerAvailableOrWasModified").localized($unsynchronizedTableFields.extract("name").distinct().join("\", \""))
 								$tips:=$tips+"\r       - "+$unsynchronizedTableFields.extract("tableTips").distinct().join("\r       - ")
 								
 							End if 
@@ -108,7 +108,7 @@ If (Num:C11($e.row)>0)
 							
 							If (Length:C16(String:C10($o.fieldTips))#0)
 								
-								$tips:=UI.alert+" "+$o.fieldTips
+								$tips:=EDITOR.alert+" "+$o.fieldTips
 								
 							End if 
 							
@@ -175,7 +175,7 @@ If (Num:C11($e.row)>0)
 										//%W+533.3
 										
 										// Error
-										$tips:=UI.alert+" "+$str.setText("theLinkedTableIsNotPublished").localized($field.relatedDataClass)
+										$tips:=EDITOR.alert+" "+$str.setText("theLinkedTableIsNotPublished").localized($field.relatedDataClass)
 										
 									Else 
 										
@@ -235,7 +235,7 @@ If (Num:C11($e.row)>0)
 		If ($e.row<=Size of array:C274((UI.pointer($1.form.tableList))->))
 			
 			//%W-533.3
-			$tips:=UI.alert+" "+$str.setText("theTableIsNoLongerAvailable").localized((OBJECT Get pointer:C1124(Object named:K67:5; "tables"))->{$e.row})
+			$tips:=EDITOR.alert+" "+$str.setText("theTableIsNoLongerAvailable").localized((OBJECT Get pointer:C1124(Object named:K67:5; "tables"))->{$e.row})
 			//%W+533.3
 			
 		End if 

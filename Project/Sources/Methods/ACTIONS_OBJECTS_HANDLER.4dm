@@ -251,9 +251,9 @@ Case of
 							$o.action:="actionIcons"
 							
 							$o.background:=0x00FFFFFF
-							$o.backgroundStroke:=UI.strokeColor
+							$o.backgroundStroke:=EDITOR.strokeColor
 							$o.promptColor:=0x00FFFFFF
-							$o.promptBackColor:=UI.strokeColor
+							$o.promptBackColor:=EDITOR.strokeColor
 							$o.hidePromptSeparator:=True:C214
 							$o.forceRedraw:=True:C214
 							$o.prompt:=_o_str.setText("chooseAnIconForTheAction").localized(String:C10($context.current.name))
@@ -600,7 +600,7 @@ Case of
 		
 		If ($form.form.eventCode=On Clicked:K2:4)
 			
-			READ PICTURE FILE:C678(UI.noIcon; $icon)
+			READ PICTURE FILE:C678(EDITOR.noIcon; $icon)
 			CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
 			
 			$t:="action_"+String:C10($index)

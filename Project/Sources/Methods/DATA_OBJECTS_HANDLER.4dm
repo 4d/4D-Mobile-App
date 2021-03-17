@@ -181,7 +181,7 @@ Case of
 				
 				$t:=Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"queryWidget.svg")
 				
-				PROCESS 4D TAGS:C816($t; $t; UI.selectedFillColor; Get localized string:C991("fields"); Get localized string:C991("comparators"); Get localized string:C991("operators"); "🢓")
+				PROCESS 4D TAGS:C816($t; $t; EDITOR.selectedFillColor; Get localized string:C991("fields"); Get localized string:C991("comparators"); Get localized string:C991("operators"); "🢓")
 				
 				OBJECT SET VALUE:C1742($event.objectName; cs:C1710.svg.new().parse($t).picture())
 				
@@ -220,8 +220,15 @@ Case of
 										
 									End if 
 									
-									$menu.icon("Images/fieldsIcons/field_"+String:C10($o.typeLegacy; "00")+".png")
-									
+									If (EDITOR.colorScheme="dark")
+										
+										$menu.icon("Images/dark/fieldsIcons/field_"+String:C10($o.typeLegacy; "00")+".png")
+										
+									Else 
+										
+										$menu.icon("Images/fieldsIcons/field_"+String:C10($o.typeLegacy; "00")+".png")
+										
+									End if 
 								End for each 
 							End if 
 							

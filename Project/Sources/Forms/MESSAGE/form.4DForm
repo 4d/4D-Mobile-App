@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"markerBreak": 180,
 	"markerFooter": 180,
@@ -23,9 +23,9 @@
 					"width": 410,
 					"height": 180,
 					"sizingY": "grow",
-					"fill": "automatic",
 					"stroke": "#c0c0c0",
-					"borderRadius": 10
+					"borderRadius": 10,
+					"class": "background"
 				},
 				"cancel": {
 					"type": "button",
@@ -71,11 +71,9 @@
 					"sizingY": "grow",
 					"textAlign": "center",
 					"fontTheme": "additional",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"enterable": false,
-					"hideFocusRing": true,
-					"showSelection": true
+					"showSelection": true,
+					"fill": "transparent"
 				},
 				"title": {
 					"type": "input",
@@ -85,13 +83,11 @@
 					"height": 44,
 					"textAlign": "center",
 					"fontTheme": "main",
-					"fill": "transparent",
-					"borderStyle": "none",
 					"enterable": false,
-					"hideFocusRing": true,
 					"dragging": "none",
 					"dropping": "none",
-					"showSelection": true
+					"showSelection": true,
+					"fill": "transparent"
 				},
 				"progress": {
 					"type": "spinner",
@@ -139,7 +135,7 @@
 	},
 	"rightMargin": 0,
 	"bottomMargin": 0,
-	"geometryStamp": 9,
+	"geometryStamp": 11,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

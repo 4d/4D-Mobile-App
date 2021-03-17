@@ -48,6 +48,12 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Load:K2:1)
 				
+				If (EDITOR=Null:C1517)  // Direct open not after the wizard
+					
+					EDITOR:=cs:C1710.editor.new()
+					
+				End if 
+				
 				//#MARK_TODO: keep current 4D/Database tips values
 				
 				// Launch the worker
@@ -62,8 +68,7 @@ Case of
 				$o.defaultDelay()
 				$o.defaultDuration()
 				
-				Form:C1466.$dialog.EDITOR.pages:=cs:C1710.editor.new()
-				Form:C1466.$dialog.EDITOR.pages.gotoPage("general")
+				EDITOR.gotoPage("general")
 				
 				// Load the project
 				PROJECT:=cs:C1710.project.new().load(Form:C1466.file)

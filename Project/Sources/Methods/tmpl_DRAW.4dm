@@ -104,7 +104,7 @@ If (Num:C11($tableID)>0)
 			
 			cs:C1710.static.new("preview.label")\
 				.setTitle(String:C10($tmpl.title))\
-				.setColors(Choose:C955((Form:C1466.$android & Not:C34($tmpl.android)) | (Form:C1466.$ios & Not:C34($tmpl.iOS)); "red"; UI.selectedColor))
+				.setColors(Choose:C955((Form:C1466.$android & Not:C34($tmpl.android)) | (Form:C1466.$ios & Not:C34($tmpl.iOS)); EDITOR.errorRGB; EDITOR.selectedColor))
 			
 			If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 				
@@ -137,7 +137,7 @@ If (Num:C11($tableID)>0)
 										If ($stop)
 											
 											$svg.addClass("error"; $node)\
-												.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("oneOrMoreFieldsAreNoLongerPublished").localized()); $node)
+												.setAttribute("tips"; cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("oneOrMoreFieldsAreNoLongerPublished").localized()); $node)
 											
 										End if 
 									End for each 
@@ -161,7 +161,7 @@ If (Num:C11($tableID)>0)
 								If (Not:C34(PROJECT.fieldAvailable($tableID; $field)))
 									
 									$svg.addClass("error"; $node)\
-										.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name)); $node)
+										.setAttribute("tips"; cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name)); $node)
 									
 								End if 
 							End if 
@@ -184,7 +184,7 @@ If (Num:C11($tableID)>0)
 							If (Not:C34(PROJECT.fieldAvailable($tableID; $target.sectionField)))
 								
 								$svg.addClass("error"; $node)\
-									.setAttribute("tips"; cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($target.sectionField.name)); $node)
+									.setAttribute("tips"; cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($target.sectionField.name)); $node)
 								
 							End if 
 						End if 
@@ -246,7 +246,7 @@ If (Num:C11($tableID)>0)
 														: ($isToOne)
 															
 															$tips:=PROJECT.dataModel[$tableID][$field.name].label
-															$label:=cs:C1710.str.new(UI.toOne).concat($field.name)
+															$label:=cs:C1710.str.new(EDITOR.toOne).concat($field.name)
 															
 															$relation:=PROJECT.dataModel[$tableID]
 															
@@ -272,7 +272,7 @@ If (Num:C11($tableID)>0)
 																If (Not:C34($found))
 																	
 																	$svg.addClass("error"; $node)
-																	$tips:=cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
 																	
 																End if 
 															End if 
@@ -281,7 +281,7 @@ If (Num:C11($tableID)>0)
 														: ($isToMany)  // Only available on list form
 															
 															$tips:=$field.label
-															$label:=cs:C1710.str.new(UI.toMany).concat($field.name)
+															$label:=cs:C1710.str.new(EDITOR.toMany).concat($field.name)
 															
 															//______________________________________________________
 														Else 
@@ -352,7 +352,7 @@ If (Num:C11($tableID)>0)
 																If ($relation[$field.name].format=Null:C1517)
 																	
 																	$class:="label error"
-																	$tips:=cs:C1710.str.new(ui.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
+																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
 																	
 																End if 
 															End if 
@@ -471,7 +471,7 @@ If (Num:C11($tableID)>0)
 					.textArea(cs:C1710.str.new("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).size($form.preview.coordinates.width-50)\
 					.position(20; 180).font(New object:C1471(\
 					"size"; 14; \
-					"color"; UI.colors.errorColor.hex; \
+					"color"; EDITOR.colors.errorColor.hex; \
 					"alignment"; Align center:K42:3)).picture())
 				
 				OBJECT SET TITLE:C194(*; "preview.label"; "")

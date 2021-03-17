@@ -257,7 +257,6 @@
 		"views": {
 			"default": {},
 			"message": {
-				"visible": false,
 				"objects": [
 					"message.back",
 					"message.button",
@@ -265,13 +264,11 @@
 				]
 			},
 			"Project": {
-				"visible": false,
 				"objects": [
 					"project"
 				]
 			},
 			"Browser": {
-				"visible": false,
 				"objects": [
 					"browser"
 				]

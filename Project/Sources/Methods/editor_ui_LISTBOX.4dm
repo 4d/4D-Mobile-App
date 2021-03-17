@@ -41,7 +41,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		
 	End if 
 	
-	$backgroundColor:=Choose:C955($focused; UI.highlightColor; UI.highlightColorNoFocus)
+	$backgroundColor:=Choose:C955($focused; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
 	
 Else 
 	
@@ -53,13 +53,13 @@ End if
 // WARNING: This method can't apply to a selection or collection listbox
 
 OBJECT SET RGB COLORS:C628(*; $listbox; Foreground color:K23:1)
-OBJECT SET RGB COLORS:C628(*; $listbox+".border"; Choose:C955($focused; UI.selectedColor; UI.backgroundUnselectedColor))
+OBJECT SET RGB COLORS:C628(*; $listbox+".border"; Choose:C955($focused; EDITOR.selectedColor; EDITOR.backgroundUnselectedColor))
 
 For ($i; 1; LISTBOX Get number of rows:C915(*; $listbox); 1)
 	
 	If ($me->{$i})
 		
-		LISTBOX SET ROW COLOR:C1270(*; $listbox; $i; Choose:C955($focused; UI.backgroundSelectedColor; UI.alternateSelectedColor); lk background color:K53:25)
+		LISTBOX SET ROW COLOR:C1270(*; $listbox; $i; Choose:C955($focused; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor); lk background color:K53:25)
 		
 	Else 
 		

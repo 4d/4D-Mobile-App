@@ -200,7 +200,7 @@ Case of
 							
 						Else 
 							
-							$form.simulator.setTitle("select").setColors("red")
+							$form.simulator.setTitle("select").setColors(EDITOR.errorRGB)
 							
 						End if 
 						
@@ -217,7 +217,7 @@ Case of
 								
 							Else 
 								
-								$form.simulator.setTitle("select").setColors("red")
+								$form.simulator.setTitle("select").setColors(EDITOR.errorRGB)
 								
 							End if 
 							

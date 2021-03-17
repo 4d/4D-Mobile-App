@@ -119,7 +119,7 @@ For each ($table; $catalog)
 				//______________________________________________________
 			: ($c[$table.tableNumber]#Null:C1517)
 				
-				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; UI.errorColor; lk font color:K53:24)
+				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; EDITOR.errorColor; lk font color:K53:24)
 				
 				//______________________________________________________
 			Else 

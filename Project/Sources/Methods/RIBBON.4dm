@@ -39,7 +39,7 @@ Case of
 			If (Form:C1466.tab=$e.objectName)
 				
 				// Highlights
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; EDITOR.selectedColor)
 				
 			Else 
 				
@@ -52,7 +52,7 @@ Case of
 			If (OBJECT Get enabled:C1079(*; $e.objectName))
 				
 				// Highlights
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; EDITOR.selectedColor)
 				
 				Case of 
 						
@@ -187,7 +187,7 @@ Case of
 				OBJECT SET RGB COLORS:C628(*; Form:C1466.tab; 0x00FFFFFF)
 				
 				// Selects the current tab
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; EDITOR.selectedColor)
 				
 				If (Form:C1466.tab=$e.objectName)
 					

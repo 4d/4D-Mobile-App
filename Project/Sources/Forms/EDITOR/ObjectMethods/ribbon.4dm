@@ -107,7 +107,7 @@ Case of
 				$ribbon:=OBJECT Get value:C1743($e.objectName)
 				$button:=Form:C1466.$dialog.EDITOR.ribbon.pages.query("button = :1"; String:C10($e.code)).pop()
 				$ribbon.page:=$button.name
-				Form:C1466.$dialog.EDITOR.pages.gotoPage($button.name)
+				EDITOR.gotoPage($button.name)
 				
 				//…………………………………………………………………………………………………
 			Else 

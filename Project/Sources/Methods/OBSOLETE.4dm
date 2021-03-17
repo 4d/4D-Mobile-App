@@ -1,12 +1,6 @@
-//%attributes = {"invisible":true}
-// ----------------------------------------------------
-// Project method : ui_CLASSES
-// ID[6EFB59D3FBE54A3D86C077D7582997C8]
-// Created 27-9-2018 by Vincent de Lachaux
-// ----------------------------------------------------
-// Description:
-// Definition of UI Classes
-// ----------------------------------------------------
+//%attributes = {}
+// Define classes & methods
+UI:=New object:C1471
 
 // ••••••••••• OBSOLETE OR NOT IN THE RIGHT PLACE •••••••••••
 UI.pointer:=Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5; $1))

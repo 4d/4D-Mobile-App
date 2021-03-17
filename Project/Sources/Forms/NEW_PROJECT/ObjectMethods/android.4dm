@@ -19,7 +19,7 @@ Case of
 	: ($e.code=On Mouse Enter:K2:33)
 		
 		// Highlights
-		OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
+		OBJECT SET RGB COLORS:C628(*; $e.objectName; EDITOR.selectedColor)
 		
 		//______________________________________________________
 	: ($e.code=On Mouse Leave:K2:34)

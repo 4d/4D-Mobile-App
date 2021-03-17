@@ -141,7 +141,7 @@ Function getFieldList()->$result : Object
 								If (Not:C34($formater.isValid()))
 									
 									$label:=$formater.label
-									$result.formatColors[$result.formats.length]:=UI.errorColor  // Missing or invalid
+									$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
 									
 								Else 
 									
@@ -213,7 +213,7 @@ Function getFieldList()->$result : Object
 												If (Not:C34($formater.isValid()))
 													
 													$label:=$formater.label
-													$result.formatColors[$result.formats.length]:=UI.errorColor  // Missing or invalid
+													$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
 													
 												Else 
 													
@@ -327,7 +327,7 @@ Function getFieldList()->$result : Object
 									
 									If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 										
-										$result.nameColors[$result.names.length-1]:=UI.errorColor  // Missing or invalid
+										$result.nameColors[$result.names.length-1]:=EDITOR.errorColor  // Missing or invalid
 										
 									End if 
 								End if 
@@ -373,7 +373,7 @@ Function getFieldList()->$result : Object
 						
 						If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 							
-							$result.nameColors[$result.names.length-1]:=UI.errorColor  // Missing or invalid
+							$result.nameColors[$result.names.length-1]:=EDITOR.errorColor  // Missing or invalid
 							
 						End if 
 						
@@ -679,9 +679,9 @@ Function iconPicker($e : Object)
 		$o.top:=-56
 		$o.action:="fieldIcons"
 		$o.background:=0x00FFFFFF
-		$o.backgroundStroke:=UI.strokeColor
+		$o.backgroundStroke:=EDITOR.strokeColor
 		$o.promptColor:=0x00FFFFFF
-		$o.promptBackColor:=UI.strokeColor
+		$o.promptBackColor:=EDITOR.strokeColor
 		$o.hidePromptSeparator:=True:C214
 		$o.forceRedraw:=True:C214
 		//%W-533.3

@@ -27,7 +27,7 @@ If (False:C215)
 	C_OBJECT:C1216(ui_TOOLBAR_ALIGN; $1)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(ui_colorScheme; $0)
+	//C_OBJECT(ui_colorScheme; $0)
 	
 	//______________________________________________________
 End if 

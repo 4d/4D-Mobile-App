@@ -120,7 +120,7 @@ Function displayIcon
 				
 			Else 
 				
-				READ PICTURE FILE:C678(UI.errorIcon; $picture)
+				READ PICTURE FILE:C678(EDITOR.errorIcon; $picture)
 				
 			End if 
 		End if 
@@ -194,7 +194,7 @@ Function displayIcon
 		Else 
 			
 			
-			READ PICTURE FILE:C678(UI.errorIcon; $picture)
+			READ PICTURE FILE:C678(EDITOR.errorIcon; $picture)
 			This:C1470.icon.setValue($picture)
 			
 		End if 

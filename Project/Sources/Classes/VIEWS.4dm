@@ -557,8 +557,8 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 	$params.hOffset:=5
 	$params.maxChar:=Choose:C955(Get database localization:C1009="ja"; 7; 15)
 	
-	$params.selectedFill:=UI.colors.backgroundSelectedColor.hex
-	$params.selectedStroke:=UI.colors.strokeColor.hex
+	$params.selectedFill:=EDITOR.colors.backgroundSelectedColor.hex
+	$params.selectedStroke:=EDITOR.colors.strokeColor.hex
 	
 	$str:=cs:C1710.str.new()
 	$error:=cs:C1710.error.new()
@@ -605,13 +605,13 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 									//______________________________________________________
 								: (Form:C1466.$android & Not:C34($tmpl.android))
 									
-									$color:="red"
+									$color:=EDITOR.colors.warningColor.hex
 									$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("thisModelIsNotApplicableForthisPlatform"); "{platform}"; "Android"); $svg.fetch($table))
 									
 									//______________________________________________________
 								: (Form:C1466.$ios & Not:C34($tmpl.iOS))
 									
-									$color:="red"
+									$color:=EDITOR.colors.warningColor.hex
 									$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("thisModelIsNotApplicableForthisPlatform"); "{platform}"; "iOS"); $svg.fetch($table))
 									
 									//________________________________________
@@ -636,7 +636,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 						// Error
 						$icon:=File:C1566("/RESOURCES/images/errorIcon.svg")
 						
-						$color:="red"
+						$color:=EDITOR.errorRGB
 						$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("theModelIsNoLongerAvailable"); "{model}"; $tmpl.name); $svg.fetch($table))
 						
 					End if 

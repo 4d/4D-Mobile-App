@@ -150,6 +150,8 @@ Class constructor
 	//_____________________________________________________________________
 	This:C1470.$currentPage:=""
 	
+	This:C1470.init()
+	
 	//===================================================================================
 Function gotoPage
 	var $1 : Text
@@ -214,4 +216,123 @@ Function gotoPage
 		EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_description"; *; $o)
 		
 	End if 
+	
+	//===================================================================================
+Function init()
+	
+	var $icon : Picture
+	var $file : 4D:C1709.File
+	
+	This:C1470.colorScheme:=FORM Get color scheme:C1761
+	
+	This:C1470.fieldIcons:=New collection:C1472
+	
+	If (This:C1470.colorScheme="dark")
+		
+		// * PRELOAD ICONS FOR FIELD TYPES
+		For each ($file; Folder:C1567("/RESOURCES/images/dark/fieldsIcons").files(Ignore invisible:K24:16))
+			
+			READ PICTURE FILE:C678($file.platformPath; $icon)
+			This:C1470.fieldIcons[Num:C11(Replace string:C233($file.name; "field_"; ""))]:=$icon
+			
+		End for each 
+		
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/dark/user.png").platformPath; $icon)
+		This:C1470.userIcon:=$icon
+		
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/dark/filter.png").platformPath; $icon)
+		This:C1470.filterIcon:=$icon
+		
+		// * DEFINE COLORS
+		This:C1470.strokeColor:=0x00083C56
+		This:C1470.highlightColor:=Background color:K23:2
+		This:C1470.highlightColorNoFocus:=Background color:K23:2
+		
+		This:C1470.selectedColor:=0x00034B6D
+		This:C1470.alternateSelectedColor:=0x00C1C1FF
+		This:C1470.backgroundSelectedColor:=Highlight text background color:K23:5
+		This:C1470.backgroundUnselectedColor:=Highlight text background color:K23:5
+		
+		This:C1470.selectedFillColor:="darkgray"
+		This:C1470.unselectedFillColor:="black"
+		
+		This:C1470.errorColor:=0x00F28585
+		This:C1470.warningColor:=0x00F2B174
+		
+		This:C1470.errorRGB:="red"
+		This:C1470.warningRGB:="orange"
+		
+	Else 
+		
+		// * PRELOAD ICONS FOR FIELD TYPES
+		For each ($file; Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))
+			
+			READ PICTURE FILE:C678($file.platformPath; $icon)
+			This:C1470.fieldIcons[Num:C11(Replace string:C233($file.name; "field_"; ""))]:=$icon
+			
+		End for each 
+		
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/light/user.png").platformPath; $icon)
+		This:C1470.userIcon:=$icon
+		
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/light/filter.png").platformPath; $icon)
+		This:C1470.filterIcon:=$icon
+		
+		// * DEFINE COLORS
+		This:C1470.strokeColor:=0x001AA1E5
+		This:C1470.highlightColor:=0x00FFFFFF
+		This:C1470.highlightColorNoFocus:=0x00FFFFFF
+		
+		This:C1470.selectedColor:=0x0003A9F4
+		This:C1470.alternateSelectedColor:=0x00F4F4F6
+		This:C1470.backgroundSelectedColor:=0x00E7F8FF
+		This:C1470.backgroundUnselectedColor:=0x00C9C9C9
+		
+		This:C1470.selectedFillColor:="gray"
+		This:C1470.unselectedFillColor:="white"
+		
+		This:C1470.errorColor:=0x00FF0000
+		This:C1470.warningColor:=0x00F19135
+		
+		This:C1470.errorRGB:="red"
+		This:C1470.warningRGB:="darkorange"
+		
+	End if 
+	
+	// COLORS
+	This:C1470.colors:=New object:C1471
+	This:C1470.colors.strokeColor:=color("4dColor"; New object:C1471("value"; This:C1470.strokeColor))
+	This:C1470.colors.highlightColor:=color("4dColor"; New object:C1471("value"; This:C1470.highlightColor))
+	This:C1470.colors.highlightColorNoFocus:=color("4dColor"; New object:C1471("value"; This:C1470.highlightColorNoFocus))
+	This:C1470.colors.selectedColor:=color("4dColor"; New object:C1471("value"; This:C1470.selectedColor))
+	This:C1470.colors.alternateSelectedColor:=color("4dColor"; New object:C1471("value"; This:C1470.alternateSelectedColor))
+	This:C1470.colors.backgroundSelectedColor:=color("4dColor"; New object:C1471("value"; This:C1470.backgroundSelectedColor))
+	This:C1470.colors.backgroundUnselectedColor:=color("4dColor"; New object:C1471("value"; This:C1470.backgroundUnselectedColor))
+	This:C1470.colors.errorColor:=color("4dColor"; New object:C1471("value"; This:C1470.errorColor))
+	This:C1470.colors.warningColor:=color("4dColor"; New object:C1471("value"; This:C1470.warningColor))
+	
+	// FIELD TYPE NAMES
+	This:C1470.typeNames:=New collection:C1472
+	This:C1470.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
+	This:C1470.typeNames[Is integer:K8:5]:=Get localized string:C991("integer")
+	This:C1470.typeNames[Is longint:K8:6]:=Get localized string:C991("longInteger")
+	This:C1470.typeNames[Is integer 64 bits:K8:25]:=Get localized string:C991("integer64Bits")
+	This:C1470.typeNames[Is real:K8:4]:=Get localized string:C991("real")
+	This:C1470.typeNames[_o_Is float:K8:26]:=Get localized string:C991("float")
+	This:C1470.typeNames[Is boolean:K8:9]:=Get localized string:C991("boolean")
+	This:C1470.typeNames[Is time:K8:8]:=Get localized string:C991("time")
+	This:C1470.typeNames[Is date:K8:7]:=Get localized string:C991("date")
+	This:C1470.typeNames[Is text:K8:3]:=Get localized string:C991("text")
+	This:C1470.typeNames[Is picture:K8:10]:=Get localized string:C991("picture")
+	
+	This:C1470.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
+	This:C1470.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath
+	
+	This:C1470.alert:="🚫"
+	This:C1470.warning:="❗"
+	
+	This:C1470.toOne:="⑴"
+	This:C1470.toMany:="⒩"
+	
+	OBSOLETE
 	

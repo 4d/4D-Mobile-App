@@ -60,8 +60,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$params.hOffset:=5
 	$params.maxChar:=Choose:C955(Get database localization:C1009="ja"; 7; 15)
 	
-	$params.selectedFill:=UI.colors.backgroundSelectedColor.hex
-	$params.selectedStroke:=UI.colors.strokeColor.hex
+	$params.selectedFill:=EDITOR.colors.backgroundSelectedColor.hex
+	$params.selectedStroke:=EDITOR.colors.strokeColor.hex
 	
 	$str:=cs:C1710.str.new()
 	$error:=cs:C1710.error.new()

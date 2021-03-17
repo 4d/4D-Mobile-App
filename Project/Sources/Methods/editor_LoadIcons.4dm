@@ -108,7 +108,7 @@ End if
 // ----------------------------------------------------
 //                 Insert blank icon
 // ----------------------------------------------------
-READ PICTURE FILE:C678(UI.noIcon; $p)
+READ PICTURE FILE:C678(EDITOR.noIcon; $p)
 CREATE THUMBNAIL:C679($p; $p; $iconWidth-8; $iconHeight; Scaled to fit prop centered:K6:6)
 $pathnames.insert(0; "")
 $icons.insert(0; $p)

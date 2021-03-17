@@ -267,7 +267,7 @@ If ($row>0)
 				
 				If ($withError)
 					
-					$color:=UI.errorColor
+					$color:=EDITOR.errorColor
 					
 				Else 
 					
@@ -277,7 +277,7 @@ If ($row>0)
 						: ($field.type=-1)
 							
 							$style:=Underline:K14:4
-							$color:=UI.selectedColor
+							$color:=EDITOR.selectedColor
 							
 							//______________________________________________________
 						: ($field.type=-2)
@@ -287,7 +287,7 @@ If ($row>0)
 								If ($dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
 									 & ($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
 									
-									$color:=UI.errorColor
+									$color:=EDITOR.errorColor
 									
 								End if 
 							End if 

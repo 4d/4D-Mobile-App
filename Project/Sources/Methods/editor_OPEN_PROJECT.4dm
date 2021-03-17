@@ -2,7 +2,7 @@
 OBJECT SET VISIBLE:C603(*; "ribbon"; True:C214)
 OBJECT SET VISIBLE:C603(*; "description"; True:C214)
 
-Form:C1466.$dialog.EDITOR.pages.gotoPage("general")
+EDITOR.gotoPage("general")
 
 If (FEATURE.with("wizards"))
 	

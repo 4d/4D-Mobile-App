@@ -477,7 +477,7 @@ Function __updateLabel
 			"\""+$c[$c.length-1]+"\"")
 		
 		OBJECT SET VISIBLE:C603(*; "menu@"; True:C214)
-		OBJECT SET RGB COLORS:C628(*; "label"; Choose:C955(Bool:C1537(This:C1470.target.exists); Foreground color:K23:1; "red"))
+		OBJECT SET RGB COLORS:C628(*; "label"; Choose:C955(Bool:C1537(This:C1470.target.exists); Foreground color:K23:1; EDITOR.errorRGB))
 		
 	Else 
 		
@@ -568,7 +568,7 @@ Function __ui
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; "label"; "red")
+			OBJECT SET RGB COLORS:C628(*; "label"; EDITOR.errorRGB)
 			
 		End if 
 	End if 

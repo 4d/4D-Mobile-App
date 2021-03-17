@@ -173,7 +173,7 @@ Case of
 					End if 
 				End if 
 				
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; EDITOR.highlightColor; EDITOR.highlightColor)
 				
 				structure_FIELD_LIST($form)
 				
@@ -368,7 +368,7 @@ Case of
 													End if 
 												End if 
 												
-												$o.icon:=UI.fieldIcons[$o.fieldType]
+												$o.icon:=EDITOR.fieldIcons[$o.fieldType]
 												
 											End for each 
 											

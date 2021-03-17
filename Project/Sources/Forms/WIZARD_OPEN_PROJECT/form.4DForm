@@ -88,7 +88,6 @@
 					"currentItemSource": "Form:C1466._current",
 					"currentItemPositionSource": "Form:C1466._index",
 					"scrollbarVertical": "visible",
-					"hideExtraBlankRows": true,
 					"sizingY": "grow",
 					"method": "ObjectMethods/list.4dm",
 					"class": "",
@@ -103,22 +102,15 @@
 							"fontSize": 14,
 							"header": {
 								"name": "Header2",
-								"text": "Header2",
-								"verticalAlign": "middle",
-								"fontSize": 14,
-								"fontTheme": "normal"
+								"text": "Header2"
 							},
 							"footer": {
 								"name": "Footer2",
-								"timeFormat": "hh_mm_ss",
-								"verticalAlign": "middle",
-								"fontSize": 14,
-								"fontTheme": "normal"
+								"timeFormat": "hh_mm_ss"
 							},
 							"dataSource": "This:C1470.project",
 							"styledText": true,
-							"contextMenu": "none",
-							"textAlign": "left"
+							"contextMenu": "none"
 						},
 						{
 							"header": {
@@ -236,7 +228,6 @@
 					"events": [
 						"onClick"
 					],
-					"stroke": "automatic",
 					"method": "ObjectMethods/down.4dm",
 					"sizingY": "move",
 					"shortcutAccel": false,

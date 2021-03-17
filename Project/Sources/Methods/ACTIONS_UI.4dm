@@ -40,7 +40,7 @@ Case of
 				
 				If (Length:C16(String:C10($o.icon))=0)
 					
-					READ PICTURE FILE:C678(UI.noIcon; $p)
+					READ PICTURE FILE:C678(EDITOR.noIcon; $p)
 					
 				Else 
 					
@@ -52,7 +52,7 @@ Case of
 						
 					Else 
 						
-						READ PICTURE FILE:C678(UI.errorIcon; $p)
+						READ PICTURE FILE:C678(EDITOR.errorIcon; $p)
 						
 					End if 
 				End if 
@@ -89,20 +89,20 @@ Case of
 		
 		If ($form.form.focusedWidget=$form.actions.name) & (Form event code:C388=On Getting Focus:K2:7)
 			
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.selectedColor)  //; Background color none)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; EDITOR.selectedColor)
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1)  //; 0x00FFFFFF; 0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; UI.backgroundUnselectedColor)  //; Background color none)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1)
+			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; EDITOR.backgroundUnselectedColor)
 			
 		End if 
 		
 		//______________________________________________________
 	: ($1="backgroundColor")  // <Background Color Expression>
 		
-		$o:=New object:C1471("color"; "transparent")  //0x00FFFFFF)
+		$o:=New object:C1471("color"; "transparent")
 		
 		If (Num:C11(This:C1470.index)#0)
 			
@@ -112,12 +112,12 @@ Case of
 			
 			If (ob_equal(This:C1470.current; $2))  // Selected row
 				
-				$o.color:=Choose:C955($b; UI.backgroundSelectedColor; UI.alternateSelectedColor)
+				$o.color:=Choose:C955($b; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
 				
 			Else 
 				
-				$l:=Choose:C955($b; UI.highlightColor; UI.highlightColorNoFocus)
-				$o.color:=Choose:C955($b; $l; "transparent")  //0x00FFFFFF)
+				$l:=Choose:C955($b; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
+				$o.color:=Choose:C955($b; $l; "transparent")
 				
 			End if 
 		End if 
@@ -136,18 +136,18 @@ Case of
 		If (Form:C1466.dataModel[String:C10($2.tableNumber)]=Null:C1517)
 			
 			// Not published table
-			$o.cell.tables.stroke:=UI.errorRGB
+			$o.cell.tables.stroke:=EDITOR.errorRGB
 			
 		Else 
 			
 			// Not assigned table
-			$o.cell.tables.stroke:=Choose:C955(Num:C11($2.tableNumber)=0; UI.errorRGB; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"))
+			$o.cell.tables.stroke:=Choose:C955(Num:C11($2.tableNumber)=0; EDITOR.errorRGB; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"))
 			
 		End if 
 		
 		// Mark duplicate names
 		ob_createPath($o; "cell.names")
-		$o.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $2.name).length>1; UI.errorRGB; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"))
+		$o.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $2.name).length>1; EDITOR.errorRGB; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"))
 		
 		//______________________________________________________
 	Else 

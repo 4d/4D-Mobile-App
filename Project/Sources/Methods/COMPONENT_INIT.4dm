@@ -87,6 +87,12 @@ If (OB Is empty:C1297(RECORD)) | $reset
 			//______________________________________________________
 	End case 
 	
+	If (Not:C34($process.worker))
+		
+		RECORD.reset()
+		
+	End if 
+	
 	RECORD.verbose:=(DATABASE.isMatrix)
 	$initLog:=True:C214
 	
@@ -304,125 +310,11 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		
 	End if 
 	
-	// ================================================================================================================================
-	//                                                           ONLY UI PROCESS
-	// ================================================================================================================================
-	If ($process.cooperative)  // Not preemptive mode (always false in dev mode!)
-		
-		If (Not:C34($process.worker))
-			
-			RECORD.reset()
-			
-		End if 
-		
-		UI:=New object:C1471
-		
-		// PRELOAD ICONS FOR FIELD TYPES
-		UI.fieldIcons:=New collection:C1472
-		
-		For each ($file; Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))
-			
-			READ PICTURE FILE:C678($file.platformPath; $icon)
-			UI.fieldIcons[Num:C11(Replace string:C233($file.name; "field_"; ""))]:=$icon
-			
-		End for each 
-		
-		// FIELD TYPE NAMES
-		UI.typeNames:=New collection:C1472
-		UI.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
-		UI.typeNames[Is integer:K8:5]:=Get localized string:C991("integer")
-		UI.typeNames[Is longint:K8:6]:=Get localized string:C991("longInteger")
-		UI.typeNames[Is integer 64 bits:K8:25]:=Get localized string:C991("integer64Bits")
-		UI.typeNames[Is real:K8:4]:=Get localized string:C991("real")
-		UI.typeNames[_o_Is float:K8:26]:=Get localized string:C991("float")
-		UI.typeNames[Is boolean:K8:9]:=Get localized string:C991("boolean")
-		UI.typeNames[Is time:K8:8]:=Get localized string:C991("time")
-		UI.typeNames[Is date:K8:7]:=Get localized string:C991("date")
-		UI.typeNames[Is text:K8:3]:=Get localized string:C991("text")
-		UI.typeNames[Is picture:K8:10]:=Get localized string:C991("picture")
-		
-		// COLORS
-		UI.colorScheme:=ui_colorScheme
-		
-		If (UI.colorScheme.isDarkStyle)
-			
-			UI.strokeColor:=0x00083C56
-			UI.highlightColor:=Background color:K23:2  // 0x00111111  // 0x00E6F8FF
-			UI.highlightColorNoFocus:=Background color:K23:2  // 0x00111111
-			
-			UI.selectedColor:=0x00034B6D
-			UI.alternateSelectedColor:=0x00C1C1FF  // 0x00E7F8FF
-			UI.backgroundSelectedColor:=Highlight text background color:K23:5  // 0x004BA6F8
-			UI.backgroundUnselectedColor:=Highlight text background color:K23:5  // 0x005A5A5A
-			
-			UI.selectedFillColor:="darkgray"
-			UI.unselectedFillColor:="black"
-			
-			UI.errorColor:=0x00F28585
-			UI.warningColor:=0x00F2B174
-			
-			UI.errorRGB:="red"
-			UI.warningRGB:="orange"
-			
-		Else 
-			
-			UI.strokeColor:=0x001AA1E5
-			UI.highlightColor:=0x00FFFFFF  // 0x00E6F8FF
-			UI.highlightColorNoFocus:=0x00FFFFFF  // XXXX change name
-			
-			UI.selectedColor:=0x0003A9F4
-			UI.alternateSelectedColor:=0x00F4F4F6  // 0x00E7F8FF
-			UI.backgroundSelectedColor:=0x00E7F8FF
-			UI.backgroundUnselectedColor:=0x00C9C9C9
-			
-			UI.selectedFillColor:="gray"  // "dodgerblue"
-			UI.unselectedFillColor:="white"
-			
-			UI.errorColor:=0x00FF0000
-			UI.warningColor:=0x00F19135
-			
-			UI.errorRGB:="red"
-			UI.warningRGB:="darkorange"
-			
-		End if 
-		
-		UI.colors:=New object:C1471
-		UI.colors.strokeColor:=color("4dColor"; New object:C1471("value"; UI.strokeColor))
-		UI.colors.highlightColor:=color("4dColor"; New object:C1471("value"; UI.highlightColor))
-		UI.colors.highlightColorNoFocus:=color("4dColor"; New object:C1471("value"; UI.highlightColorNoFocus))
-		UI.colors.selectedColor:=color("4dColor"; New object:C1471("value"; UI.selectedColor))
-		UI.colors.alternateSelectedColor:=color("4dColor"; New object:C1471("value"; UI.alternateSelectedColor))
-		UI.colors.backgroundSelectedColor:=color("4dColor"; New object:C1471("value"; UI.backgroundSelectedColor))
-		UI.colors.backgroundUnselectedColor:=color("4dColor"; New object:C1471("value"; UI.backgroundUnselectedColor))
-		UI.colors.errorColor:=color("4dColor"; New object:C1471("value"; UI.errorColor))
-		UI.colors.warningColor:=color("4dColor"; New object:C1471("value"; UI.warningColor))
-		
-		UI.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
-		UI.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath
-		
-		UI.alert:="🚫"
-		UI.warning:="❗"
-		
-		UI.toOne:="⑴"
-		UI.toMany:="⒩"
-		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/user.png").platformPath; $icon)
-		UI.user:=$icon
-		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/filter.png").platformPath; $icon)
-		UI.filter:=$icon
-		
-	End if 
-	
 	If (DATABASE.isMatrix)
 		
 		Folder:C1567(fk desktop folder:K87:19).folder("DEV").create()
 		
 	End if 
-	
-	// Define classes & methods
-	EXECUTE METHOD:C1007("ui_CLASSES")
-	
 End if 
 
 /*================================================================================================================================
@@ -461,11 +353,10 @@ AFTER FLAGS
 ================================================================================================================================*/
 If (FEATURE.with("accentColors"))
 	
-	// ui.selectedColor:=Highlight menu background color
-	// ui.highlightColor:=Highlight menu background color
-	
-	// ui.backgroundSelectedColor:=Highlight menu background color // 0x004BA6F8
-	// ui.backgroundUnselectedColor:=Background color none // 0x005A5A5A
+	// EDITOR.selectedColor:=Highlight menu background color
+	// EDITOR.highlightColor:=Highlight menu background color
+	// EDITOR.backgroundSelectedColor:=Highlight menu background color // 0x004BA6F8
+	// EDITOR.backgroundUnselectedColor:=Background color none // 0x005A5A5A
 	
 End if 
 

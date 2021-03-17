@@ -280,9 +280,9 @@ $picker:=New object:C1471(\
 "noPicture"; Get localized string:C991("noMedia"); \
 "tips"; True:C214; \
 "background"; 0x00FFFFFF; \
-"backgroundStroke"; UI.strokeColor; \
+"backgroundStroke"; EDITOR.strokeColor; \
 "promptColor"; 0x00FFFFFF; \
-"promptBackColor"; UI.strokeColor; \
+"promptBackColor"; EDITOR.strokeColor; \
 "hidePromptSeparator"; True:C214; \
 "forceRedraw"; True:C214; \
 "prompt"; $str.setText("selectAFormTemplateToUseAs").localized($data.type); \
@@ -362,8 +362,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				$svg.rect($data.cell.width-6; $data.cell.height-3)\
 					.position(5; 2)\
-					.stroke(UI.colors.strokeColor.hex)\
-					.fill(UI.colors.backgroundSelectedColor.hex)\
+					.stroke(EDITOR.colors.strokeColor.hex)\
+					.fill(EDITOR.colors.backgroundSelectedColor.hex)\
 					.radius(10)
 				
 			End if 
@@ -424,8 +424,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					
 					$svg.rect($data.cell.width-6; $data.cell.height-3)\
 						.position(5; 2)\
-						.stroke(UI.colors.strokeColor.hex)\
-						.fill(UI.colors.backgroundSelectedColor.hex)\
+						.stroke(EDITOR.colors.strokeColor.hex)\
+						.fill(EDITOR.colors.backgroundSelectedColor.hex)\
 						.radius(10)
 					
 				End if 
@@ -480,8 +480,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 						
 						$svg.rect($data.cell.width-6; $data.cell.height-3)\
 							.position(5; 2)\
-							.stroke(UI.colors.strokeColor.hex)\
-							.fill(UI.colors.backgroundSelectedColor.hex)\
+							.stroke(EDITOR.colors.strokeColor.hex)\
+							.fill(EDITOR.colors.backgroundSelectedColor.hex)\
 							.radius(10)
 						
 					End if 

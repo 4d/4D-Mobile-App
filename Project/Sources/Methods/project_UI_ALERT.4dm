@@ -52,17 +52,17 @@ Else
 			//______________________________________________________
 		: ($Obj_ui.type="alert")
 			
-			OBJECT SET TITLE:C194(*; $Obj_ui.target; UI.alert)
+			OBJECT SET TITLE:C194(*; $Obj_ui.target; EDITOR.alert)
 			
 			//______________________________________________________
 		: ($Obj_ui.type="warning")
 			
-			OBJECT SET TITLE:C194(*; $Obj_ui.target; UI.warning)
+			OBJECT SET TITLE:C194(*; $Obj_ui.target; EDITOR.warning)
 			
 			//______________________________________________________
 		Else 
 			
-			OBJECT SET TITLE:C194(*; $Obj_ui.target; UI.alert)
+			OBJECT SET TITLE:C194(*; $Obj_ui.target; EDITOR.alert)
 			
 			//______________________________________________________
 	End case 

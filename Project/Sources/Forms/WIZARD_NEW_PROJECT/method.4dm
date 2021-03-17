@@ -21,6 +21,9 @@ Case of
 		//__________________________________________________________________________________________
 	: ($e.code=On Load:K2:1)
 		
+		var EDITOR : cs:C1710.editor
+		EDITOR:=cs:C1710.editor.new()
+		
 		// Populate the message list
 		$template:=cs:C1710.str.new("<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"\
 			+"{title}"\

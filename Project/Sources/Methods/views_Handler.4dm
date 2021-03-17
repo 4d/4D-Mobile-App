@@ -348,7 +348,7 @@ Case of
 				
 				For each ($i; $o.fields.extract("fieldType"))
 					
-					$c.push(UI.fieldIcons[$i])
+					$c.push(EDITOR.fieldIcons[$i])
 					
 				End for each 
 				
@@ -371,13 +371,13 @@ Case of
 							
 							If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
 								
-								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
+								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
 								
 							End if 
 							
 						Else 
 							
-							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.selectedColor; lk font color:K53:24)
+							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.selectedColor; lk font color:K53:24)
 							
 						End if 
 					End if 
@@ -521,7 +521,7 @@ Case of
 				
 				// Restore current selected background
 				SVG SET ATTRIBUTE:C1055(*; $form.tableWidget.name; $context.tableNumber; \
-					"fill"; UI.unselectedFillColor)
+					"fill"; EDITOR.unselectedFillColor)
 				
 			End if 
 			
@@ -529,7 +529,7 @@ Case of
 			
 			// Select the item
 			SVG SET ATTRIBUTE:C1055(*; $form.tableWidget.name; $context.tableNumber; \
-				"fill"; UI.selectedColorFill)
+				"fill"; EDITOR.selectedFillColor)
 			
 			$context.update:=True:C214
 			$context.picker:=(String:C10(Form:C1466[$view.typeForm()][$context.tableNumber].form)="")

@@ -54,7 +54,7 @@ Case of
 		DO_MESSAGE(New object:C1471(\
 			"action"; "show"; \
 			"type"; "alert"; \
-			"title"; UI.alert+" "+Get localized string:C991("theProductNameIsMandatory"); \
+			"title"; EDITOR.alert+" "+Get localized string:C991("theProductNameIsMandatory"); \
 			"additional"; "pleaseGiveNameToYourProduct"; \
 			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
 		
@@ -68,7 +68,7 @@ Case of
 		DO_MESSAGE(New object:C1471(\
 			"action"; "show"; \
 			"type"; "alert"; \
-			"title"; UI.alert+" "+Get localized string:C991("noPublishedTable"); \
+			"title"; EDITOR.alert+" "+Get localized string:C991("noPublishedTable"); \
 			"additional"; "youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication"; \
 			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
 		
@@ -82,7 +82,7 @@ Case of
 		DO_MESSAGE(New object:C1471(\
 			"action"; "show"; \
 			"type"; "alert"; \
-			"title"; UI.alert+" "+Get localized string:C991("noTableDefinedInTheMainMenu"); \
+			"title"; EDITOR.alert+" "+Get localized string:C991("noTableDefinedInTheMainMenu"); \
 			"additional"; "youMustSetAtLeastOneTableIntoTheMainMenu"; \
 			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
 		
@@ -108,7 +108,7 @@ redmine:#117188
 		DO_MESSAGE(New object:C1471(\
 			"action"; "show"; \
 			"type"; "alert"; \
-			"title"; UI.alert+" "+Get localized string:C991("unableToGenerateApp"); \
+			"title"; EDITOR.alert+" "+Get localized string:C991("unableToGenerateApp"); \
 			"additional"; Get localized string:C991("theprojectmustbelocatedrinthemobileprojectsfolder"); \
 			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "build_stop"))\
 			))
@@ -171,7 +171,7 @@ If ($result.success & Bool:C1537($in.build))
 		DO_MESSAGE(New object:C1471(\
 			"action"; "show"; \
 			"type"; "alert"; \
-			"title"; UI.alert+" "+Get localized string:C991("theDefinitionOfTheStructureIsInconsistent"); \
+			"title"; EDITOR.alert+" "+Get localized string:C991("theDefinitionOfTheStructureIsInconsistent"); \
 			"additional"; "- "+$result.errors.join("\r- ")+"\r\r\r"+Get localized string:C991("youMustFixItBeforeBuildingTheApplication"); \
 			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
 		

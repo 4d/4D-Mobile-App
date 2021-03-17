@@ -111,9 +111,9 @@ Case of
 							
 							$Obj_picker.action:="tableIcons"
 							$Obj_picker.background:=0x00FFFFFF
-							$Obj_picker.backgroundStroke:=UI.strokeColor
+							$Obj_picker.backgroundStroke:=EDITOR.strokeColor
 							$Obj_picker.promptColor:=0x00FFFFFF
-							$Obj_picker.promptBackColor:=UI.strokeColor
+							$Obj_picker.promptBackColor:=EDITOR.strokeColor
 							$Obj_picker.hidePromptSeparator:=True:C214
 							$Obj_picker.forceRedraw:=True:C214
 							$Obj_picker.prompt:=_o_str.setText("chooseAnIconForTheTable").localized((UI.pointer($Obj_form.tables))->{$Lon_row})
