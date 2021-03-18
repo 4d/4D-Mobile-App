@@ -178,7 +178,7 @@
         <scene sceneID="p4y-sx-BTI">
             <objects>
                 <hostingController id="K6F-0y-N5L" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" title="Requests log" id="HZn-sK-HhS"/>
+                    <navigationItem key="navigationItem" title="Tasks" id="HZn-sK-HhS"/>
                 </hostingController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IRQ-UT-27o" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
