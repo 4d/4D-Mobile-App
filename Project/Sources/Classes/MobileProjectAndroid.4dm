@@ -21,21 +21,7 @@ Class constructor
 		
 	End for each 
 	
-	var $theme; $color : Object
-	
-	$theme:=This:C1470.themeFromImageFile()
-	
-	If ($theme.success)
-		
-		$color:=$theme.BackgroundColor
-		
-		This:C1470.project.backgroundColor:="#"\
-			+Replace string:C233(String:C10($color.red; "&x"); "0x00"; "")\
-			+Replace string:C233(String:C10($color.green; "&x"); "0x00"; "")\
-			+Replace string:C233(String:C10($color.blue; "&x"); "0x00"; "")
-		
-		// Else : could not retrieve a theme color from logo image
-	End if 
+	This:C1470.setTheme()
 	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
 	This:C1470.project.cache_4d_sdk:=This:C1470.path.cacheSdkAndroidUnzipped().path
@@ -484,3 +470,25 @@ Function checkPackage()
 	//
 Function themeImageFile()->$file : 4D:C1709.File
 	$file:=This:C1470.input.project._folder.file("android/main/ic_launcher-playstore.png")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function setTheme()
+	var $theme : Object
+	
+	$theme:=This:C1470.themeFromImageFile()
+	
+	If ($theme.success)
+		
+		This:C1470.project.colors:=New object:C1471
+		
+		This:C1470.project.colors.backgroundColor:="#"\
+			+Replace string:C233(String:C10($theme.BackgroundColor.red; "&x"); "0x00"; "")\
+			+Replace string:C233(String:C10($theme.BackgroundColor.green; "&x"); "0x00"; "")\
+			+Replace string:C233(String:C10($theme.BackgroundColor.blue; "&x"); "0x00"; "")
+		
+		This:C1470.project.colors.foregroundColor:="#"\
+			+Replace string:C233(String:C10($theme.ForegroundColor.white; "&x"); "0x00"; "")
+		
+		// Else : could not retrieve a theme color from logo image
+	End if 
