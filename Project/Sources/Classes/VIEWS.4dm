@@ -374,8 +374,39 @@ Function setTemplate($browser : Object)
 			Else 
 				
 				// Show browser
-				$o:=New object:C1471(\
-					"url"; Get localized string:C991("res_"+This:C1470.typeForm()+"Forms"))
+				
+				If (FEATURE.with("android"))
+					
+					var $url : Text
+					
+					Case of 
+							//______________________________________________________
+						: (PROJECT.$android & PROJECT.$ios)
+							
+							$url:="https://4d-for-mobile.github.io/gallery/#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios,android"
+							
+							//______________________________________________________
+						: (PROJECT.$android)
+							
+							$url:="https://4d-for-mobile.github.io/gallery/#/type/form-"+This:C1470.typeForm()+"/picker/1/target/android"
+							
+							//______________________________________________________
+						: (PROJECT.$ios)
+							
+							$url:="https://4d-for-mobile.github.io/gallery/#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios"
+							
+							//______________________________________________________
+					End case 
+					
+					$o:=New object:C1471(\
+						"url"; $url)
+					
+				Else 
+					
+					$o:=New object:C1471(\
+						"url"; Get localized string:C991("res_"+This:C1470.typeForm()+"Forms"))
+					
+				End if 
 				
 				This:C1470.form.form.call(New collection:C1472("initBrowser"; $o))
 				

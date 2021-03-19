@@ -267,6 +267,9 @@ End if
 $formsArray{0}:=$default
 $formsArray:=Find in array:C230($formsArray; $formsArray{0})
 
+var $isDark : Boolean
+$isDark:=EDITOR.colorScheme="dark"
+
 $picker:=New object:C1471(\
 "action"; "forms"; \
 "pictures"; New collection:C1472; \
@@ -279,7 +282,7 @@ $picker:=New object:C1471(\
 "thumbnailWidth"; $data.icon.width; \
 "noPicture"; Get localized string:C991("noMedia"); \
 "tips"; True:C214; \
-"background"; 0x00FFFFFF; \
+"background"; Choose:C955($isDark; 0x0000; 0x00FFFFFF); \
 "backgroundStroke"; EDITOR.strokeColor; \
 "promptColor"; 0x00FFFFFF; \
 "promptBackColor"; EDITOR.strokeColor; \
@@ -381,7 +384,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			$svg.textArea($o.name; "root")\
 				.position(0; $data.cell.height-20)\
 				.width($data.cell.width)\
-				.fill("dimgray")\
+				.fill(Choose:C955($isDark; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
 				.alignment(Align center:K42:3)\
 				.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 			
@@ -447,7 +450,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				$svg.textArea($template.parent.name; "root")\
 					.position(0; $data.cell.height-20)\
 					.size($data.cell.width)\
-					.fill("dimgray")\
+					.fill(Choose:C955($isDark; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
 					.alignment(Align center:K42:3)\
 					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 				
@@ -469,7 +472,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				If ($svg.success)
 					
 					// Add the css reference
-					$svg.styleSheet(File:C1566("/RESOURCES/template.css"))
+					$svg.styleSheet(Choose:C955($isDark; File:C1566("/RESOURCES/css/template_dark.css"); File:C1566("/RESOURCES/css/template.css")))
 					
 					$p:=$svg.picture()
 					CREATE THUMBNAIL:C679($p; $p; $data.cell.width; $data.cell.height-40)
@@ -492,7 +495,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					$svg.textArea($template.name; "root")\
 						.position(0; $data.cell.height-20)\
 						.size($data.cell.width)\
-						.fill("dimgray")\
+						.fill(Choose:C955($isDark; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
 						.alignment(Align center:K42:3)\
 						.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 					

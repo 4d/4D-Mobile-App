@@ -1,7 +1,7 @@
 {
 	"destination": "detailScreen",
 	"windowMinWidth": 970,
-	"windowMinHeight": 860,
+	"windowMinHeight": 870,
 	"formSizeAnchor": "background",
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -36,7 +36,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 875,
+					"height": 870,
 					"class": "background"
 				},
 				"ribbon": {
@@ -80,7 +80,7 @@
 					"top": 190,
 					"left": 0,
 					"width": 954,
-					"height": 685,
+					"height": 680,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -90,7 +90,8 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"scrollbarHorizontal": "hidden"
+					"scrollbarHorizontal": "hidden",
+					"bottom": 870
 				},
 				"debug.focus": {
 					"type": "input",
@@ -179,20 +180,21 @@
 					"left": 0,
 					"top": 190,
 					"width": 970,
-					"height": 685,
+					"height": 680,
 					"detailForm": "",
 					"borderStyle": "none",
 					"sizingX": "grow",
 					"sizingY": "grow",
 					"visibility": "hidden",
-					"method": "editor_OBJECTS_HANDLER"
+					"method": "editor_OBJECTS_HANDLER",
+					"bottom": 870
 				},
 				"message.back": {
 					"type": "picture",
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 875,
+					"height": 870,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -204,7 +206,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 875,
+					"height": 870,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -234,7 +236,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 875,
+					"height": 870,
 					"sizingX": "grow",
 					"sizingY": "grow",
 					"dataSourceTypeHint": "object",
@@ -246,7 +248,8 @@
 					"printFrame": "variable",
 					"borderStyle": "sunken",
 					"method": "ObjectMethods/welcome.4dm",
-					"dataSource": "Form:C1466.$meta"
+					"dataSource": "Form:C1466.$meta",
+					"bottom": 870
 				}
 			}
 		}
@@ -257,6 +260,7 @@
 		"views": {
 			"default": {},
 			"message": {
+				"visible": false,
 				"objects": [
 					"message.back",
 					"message.button",
@@ -269,6 +273,7 @@
 				]
 			},
 			"Browser": {
+				"visible": false,
 				"objects": [
 					"browser"
 				]
@@ -294,5 +299,5 @@
 			}
 		}
 	},
-	"geometryStamp": 23
+	"geometryStamp": 32
 }

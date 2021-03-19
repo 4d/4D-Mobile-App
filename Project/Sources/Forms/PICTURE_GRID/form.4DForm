@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -41,10 +41,7 @@
 					"left": 0,
 					"width": 200,
 					"height": 100,
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"stroke": "#FFFFFF",
-					"fill": "automatic"
+					"class": "background"
 				},
 				"prompt.background": {
 					"type": "rectangle",
@@ -145,5 +142,12 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 1
+	"geometryStamp": 5,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }
