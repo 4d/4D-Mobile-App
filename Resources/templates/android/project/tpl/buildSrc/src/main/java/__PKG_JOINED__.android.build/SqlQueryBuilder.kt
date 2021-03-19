@@ -7,6 +7,7 @@
 package {{package}}.android.build
 
 import {{package}}.android.build.model.Field
+import {{package}}.android.build.utils.condenseSpaces
 import {{package}}.android.build.utils.getSafeString
 import org.json.JSONArray
 import org.json.JSONObject
@@ -20,7 +21,7 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
 
         val sampleEntity = inputEntities.getJSONObject(0)
         sampleEntity.keys().forEach { key ->
-            propertyNameList.add(key)
+            propertyNameList.add(key.condenseSpaces())
         }
 
         for (i in 0 until inputEntities.length()) {
@@ -29,7 +30,7 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
 
             propertyNameList.clear()
             inputEntity.keys().forEach { key ->
-                propertyNameList.add(key)
+                propertyNameList.add(key.condenseSpaces())
             }
 
             val outputEntity = extractEntity(inputEntity)
@@ -44,7 +45,6 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
 
         var j = 0
         inputEntity.keys().forEach { key ->
-
             outputEntity[j] = inputEntity[key]
 
             fields.find { it.name == key }?.let { field ->
@@ -57,7 +57,7 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
                         // Replacing relation propertyName by __relationKey
                         // This is required in Room to perform relation queries
                         val index = propertyNameList.indexOf(key)
-                        propertyNameList[index] = "__${key}Key"
+                        propertyNameList[index] = "__${key.condenseSpaces()}Key"
                         associationMap["__${key}Key"] = index
                     }
                     field.isOneToManyRelation -> {

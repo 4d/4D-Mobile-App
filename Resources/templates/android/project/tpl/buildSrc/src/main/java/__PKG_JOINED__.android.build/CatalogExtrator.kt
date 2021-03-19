@@ -8,6 +8,7 @@ package {{package}}.android.build
 
 import {{package}}.android.build.model.DataClass
 import {{package}}.android.build.model.Field
+import {{package}}.android.build.utils.condenseSpaces
 import {{package}}.android.build.utils.getCatalogPath
 import {{package}}.android.build.utils.getSafeArray
 import {{package}}.android.build.utils.getSafeString
@@ -40,7 +41,7 @@ fun getCatalog(tableName: String): DataClass? {
                             val attribute = attributes.getJSONObject(i)
 
                             attribute.getSafeString("name")?.let { fieldName ->
-                                val field = Field(fieldName)
+                                val field = Field(fieldName.condenseSpaces())
                                 attribute.getSafeString("type")
                                     ?.let { type -> field.isImage = type == "image" }
                                 attribute.getSafeString("kind")?.let { kind ->

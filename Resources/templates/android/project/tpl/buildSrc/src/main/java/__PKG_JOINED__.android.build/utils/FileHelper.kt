@@ -34,3 +34,5 @@ fun getDataPath(tableName: String): String = assetsPath() + File.separator + XCA
         "$tableName.$DATA_JSON_SUFFIX"
 
 fun getAppinfoPath(): String = assetsPath() + File.separator + APPINFO_FILENAME
+
+fun String.condenseSpaces() = this.replace("\\s".toRegex(), "")
