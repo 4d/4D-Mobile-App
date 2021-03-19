@@ -21,6 +21,22 @@ Class constructor
 		
 	End for each 
 	
+	var $theme; $color : Object
+	
+	$theme:=This:C1470.themeFromImageFile()
+	
+	If ($theme.success)
+		
+		$color:=$theme.BackgroundColor
+		
+		This:C1470.project.backgroundColor:="#"\
+			+Replace string:C233(String:C10($color.red; "&x"); "0x00"; "")\
+			+Replace string:C233(String:C10($color.green; "&x"); "0x00"; "")\
+			+Replace string:C233(String:C10($color.blue; "&x"); "0x00"; "")
+		
+		// Else : could not retrieve a theme color from logo image
+	End if 
+	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
 	This:C1470.project.cache_4d_sdk:=This:C1470.path.cacheSdkAndroidUnzipped().path
 	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
