@@ -146,24 +146,56 @@ Function create()->$result : Object
 					
 					If ($o.success)
 						
-						// * COPY RESOURCES
-						This:C1470.postStep("copyingResources")
+						// * CREATE DATASET
 						
-						$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
+						If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+							
+							$o:=This:C1470.dataSet()
+							
+							// Else: asked to not generate data at each build
+						End if 
 						
 						If ($o.success)
 							
-							// * COPY ICONS
-							$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.path; This:C1470.project.project.dataModel)
+							// * COPY RESOURCES
+							This:C1470.postStep("copyingResources")
+							
+							$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
 							
 							If ($o.success)
 								
-								// * UNZIP 4D MOBILE SDK
-								This:C1470.postStep("decompressionOfTheSdk")
+								// * COPY ICONS
+								$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.path; This:C1470.project.project.dataModel)
 								
-								$o:=This:C1470.androidprojectgenerator.unzipSdk()
-								
-								If (Not:C34($o.success))
+								If ($o.success)
+									
+									If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+										
+										$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.path; This:C1470.project.project._folder)
+										
+										// Else: asked to not generate data at each build
+									End if 
+									
+									If ($o.success)
+										
+										// * UNZIP 4D MOBILE SDK
+										This:C1470.postStep("decompressionOfTheSdk")
+										
+										$o:=This:C1470.androidprojectgenerator.unzipSdk()
+										
+										If (Not:C34($o.success))
+											
+											This:C1470.isOnError:=True:C214
+											
+										End if 
+										
+									Else 
+										
+										This:C1470.isOnError:=True:C214
+										
+									End if 
+									
+								Else 
 									
 									This:C1470.isOnError:=True:C214
 									
@@ -245,27 +277,7 @@ Function build()->$result : Object
 		If ($o.success)
 			
 			// * CREATE EMBEDDED DATABASE
-			// TODO move to create phrase, not build... (if we do not build, we need data) and maybe its the step This.postStep("dataSetGeneration")
-			// but maybe issue if we need to assembleDebug before?
-			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
-				
-				// Do a rest dump
-				//var $dump : Object
-				//$dump:=This.dataSet()
-				
-				// XXX could check if success here
-				
-				// If want to copy somewhere
-				// Not working because  This.project.project.$project do not exist...
-/*var $dumpCopy : Object
-				$dumpCopy:=dataSet(New object(\
-					"action"; "copy"; \
-					"project"; This.project.project; \
-					"target"; This.input.path))*/
-				
-				$o:=This:C1470.gradlew.createEmbeddedDatabase()
-				
-			End if 
+			$o:=This:C1470.gradlew.createEmbeddedDatabase()
 			
 			If ($o.success)
 				

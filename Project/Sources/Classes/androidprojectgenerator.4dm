@@ -149,7 +149,8 @@ Function copyResources
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$androidAssets:=$2.folder("Android")
+	// Copy "android" resources
+	$androidAssets:=$2.folder("android")
 	
 	If ($androidAssets.exists)
 		
@@ -184,6 +185,41 @@ Function copyResources
 	Else 
 		// Missing Android folder
 		$0.errors.push("Missing source file for copy: "+$androidAssets.path)
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyDataSet
+	var $0 : Object
+	var $1 : Text  // Project path
+	var $2 : 4D:C1709.File  // 4D Mobile Project
+	var $xcassets; $copyDest : 4D:C1709.Folder
+	
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	// Copy dataSet resources
+	$xcassets:=$2.folder("project.dataSet/Resources/Assets.xcassets")
+	
+	If ($xcassets.exists)
+		
+		$copyDest:=$xcassets.copyTo(Folder:C1567($1+"app/src/main/assets"); fk overwrite:K87:5)
+		
+		If ($copyDest.exists)
+			
+			$0.success:=True:C214
+			
+		Else 
+			// Copy failed
+			$0.success:=False:C215
+			$0.errors.push("Could not copy directory to destination: "+$copyDest.path)
+			
+		End if 
+		
+	Else 
+		// Missing Assets.xcassets folder
+		$0.errors.push("Missing source directory for copy: "+$xcassets.path)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
