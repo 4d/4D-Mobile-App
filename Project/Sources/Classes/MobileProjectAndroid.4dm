@@ -173,7 +173,7 @@ Function create()->$result : Object
 									
 									If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
 										
-										$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.path; This:C1470.project.project._folder)
+										//$o:=This.androidprojectgenerator.copyDataSet(This.project.path; This.project.project._folder)
 										
 										// Else: asked to not generate data at each build
 									End if 
