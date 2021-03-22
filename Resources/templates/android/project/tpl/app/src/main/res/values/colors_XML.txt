@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    {{#logo_colors_defined}}
+    <color name="primary_neutral">{{color_primary_neutral}}</color>
+    <color name="primary_darker_1">{{color_primary_darker_08}}</color>
+    <color name="primary_darker_2">{{color_primary_darker_06}}</color>
+    <color name="primary_darker_3">{{color_primary_darker_04}}</color>
+    <color name="primary_lighter_1">{{color_primary_lighter_12}}</color>
+    <color name="primary_lighter_2">{{color_primary_lighter_14}}</color>
+    <color name="primary_lighter_3">{{color_primary_lighter_16}}</color>
+    {{/logo_colors_defined}}
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
