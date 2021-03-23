@@ -88,11 +88,13 @@ open class CreateDatabaseTask : DefaultTask() {
                 entities?.let {
                     val sqlQueryBuilder = SqlQueryBuilder(it, fields)
 
+                    val propertyList = sqlQueryBuilder.hashMap.toSortedMap().keys.toList()
+
                     println("[$tableName] ${sqlQueryBuilder.outputEntities.size} entities extracted")
 
                     return staticDataInitializer.getQuery(
                         tableName,
-                        sqlQueryBuilder.propertyNameList,
+                        propertyList,
                         sqlQueryBuilder.outputEntities
                     )
                 }

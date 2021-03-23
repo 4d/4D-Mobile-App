@@ -15,24 +15,21 @@ import org.json.JSONObject
 class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>) {
 
     val outputEntities = arrayListOf<Array<Any?>>()
-    val propertyNameList = mutableListOf<String>()
+    val hashMap = mutableMapOf<String, Any?>()
 
     init {
-
-        val sampleEntity = inputEntities.getJSONObject(0)
-        sampleEntity.keys().forEach { key ->
-            propertyNameList.add(key.condenseSpaces())
+        hashMap["__KEY"] = null
+        hashMap["__TIMESTAMP"] = null
+        hashMap["__STAMP"] = null
+        fields.forEach { field ->
+            hashMap[field.name.condenseSpaces()] = null
+            if (field.isManyToOneRelation)
+                hashMap["__${field.name.condenseSpaces()}Key"] = null
         }
 
         for (i in 0 until inputEntities.length()) {
 
             val inputEntity = inputEntities.getJSONObject(i)
-
-            propertyNameList.clear()
-            inputEntity.keys().forEach { key ->
-                propertyNameList.add(key.condenseSpaces())
-            }
-
             val outputEntity = extractEntity(inputEntity)
             outputEntities.add(outputEntity)
         }
@@ -40,25 +37,22 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
 
     private fun extractEntity(inputEntity: JSONObject): Array<Any?> {
 
-        val outputEntity = arrayOfNulls<Any>(propertyNameList.size)
-        val associationMap = mutableMapOf<String, Int>() // <propertyName, index>
+        val outputEntity = arrayOfNulls<Any>(hashMap.keys.size)
 
         var j = 0
         inputEntity.keys().forEach { key ->
-            outputEntity[j] = inputEntity[key]
+            hashMap[key.condenseSpaces()] = inputEntity[key]
 
             fields.find { it.name == key }?.let { field ->
                 when {
                     field.isImage -> {
-                        outputEntity[j] = null
+                        hashMap[key.condenseSpaces()] = null
                     }
                     field.isManyToOneRelation -> {
-
-                        // Replacing relation propertyName by __relationKey
-                        // This is required in Room to perform relation queries
-                        val index = propertyNameList.indexOf(key)
-                        propertyNameList[index] = "__${key.condenseSpaces()}Key"
-                        associationMap["__${key}Key"] = index
+                        val neededObject = hashMap[key.condenseSpaces()]
+                        if (neededObject is JSONObject) {
+                            hashMap["__${key.condenseSpaces()}Key"] = neededObject.getSafeString("__KEY")
+                        }
                     }
                     field.isOneToManyRelation -> {
                         // TODO
@@ -68,21 +62,14 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
             j++
         }
 
-        // iterate over found relations, and add values
-        for (property in propertyNameList) {
-            if (property.startsWith("__") && property.endsWith("Key")) {
-
-                // Adding __KEY in relation
-
-                val neededObject = inputEntity[property.removePrefix("__").removeSuffix("Key")]
-                if (neededObject is JSONObject) {
-                    val neededKey = neededObject.getSafeString("__KEY")
-                    associationMap[property]?.let { index ->
-                        outputEntity[index] = neededKey
-                    }
-                }
-            }
+        val sortedMap = hashMap.toSortedMap()
+        var k = 0
+        for ((key, value) in sortedMap) {
+            println("[key = $key] value = $value")
+            outputEntity[k] = value
+            k++
         }
+
         return outputEntity
     }
 }
