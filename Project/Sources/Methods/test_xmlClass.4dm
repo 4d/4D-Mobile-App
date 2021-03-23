@@ -271,5 +271,3 @@ ASSERT:C1129($xml.success; ".setAttribute()")
 ASSERT:C1129($t="him"; ".getAttribute()")
 
 FINALLY
-
-BEEP:C151

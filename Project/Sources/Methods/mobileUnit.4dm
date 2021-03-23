@@ -112,7 +112,15 @@ Case of
 	: ($Txt_in="checkInstall")
 		
 		// Check without message
-		$Obj_out.silent:=True:C214
+		If ($Obj_out=Null:C1517)
+			
+			$Obj_out:=New object:C1471("silent"; True:C214)
+			
+		Else 
+			
+			$Obj_out.silent:=True:C214
+			
+		End if 
 		
 		//If (FEATURE.with("android"))
 		//EXECUTE METHOD("editor_CHECK_INSTALLATION"; $Obj_out)
@@ -201,6 +209,12 @@ Case of
 		 | ($Txt_in="teamId")\
 		 | ($Txt_in="swiftPM")\
 		 | ($Txt_in="certificate")
+		
+		If ($Txt_in="simulator")
+			
+			$Txt_in:="_o_simulator"
+			
+		End if 
 		
 		EXECUTE METHOD:C1007($Txt_in; $Obj_out; $Obj_in)
 		

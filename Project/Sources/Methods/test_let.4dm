@@ -29,4 +29,3 @@ ASSERT:C1129($integer=6)
 
 FINALLY
 
-BEEP:C151

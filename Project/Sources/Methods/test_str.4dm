@@ -448,5 +448,3 @@ ASSERT:C1129($o.lastOccurrence("é")=13)
 ASSERT:C1129($o.lastOccurrence("é"; True:C214)=12)
 
 FINALLY
-
-BEEP:C151

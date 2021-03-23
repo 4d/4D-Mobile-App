@@ -101,7 +101,7 @@ If ($datamodel#Null:C1517)
 					
 					$errors.push(New object:C1471(\
 						"type"; "template"; \
-						"tab"; "list"; \
+						"tab"; "detail"; \
 						"message"; $str.setText("theTemplateIsMissing").localized($name); \
 						"table"; $table.key))
 					
