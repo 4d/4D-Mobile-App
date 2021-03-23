@@ -586,11 +586,9 @@ Function css()->$file : 4D:C1709.File
 	End if 
 	
 /* ============================================================================*/
-Function label
-	var $0 : Text
-	var $1 : Text
+Function label($resname : Text)->$localized : Text
 	
-	$0:=Get localized string:C991($1)
+	$localized:=Get localized string:C991($resname)
 	
 	//============================================================================
 	// Check that a field type is validated against the bind attribute

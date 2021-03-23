@@ -93,7 +93,6 @@ rectangle {
                         BUTTONS 
   =====================================================*/
 [defaultButton] {
-	stroke: inherit;
 	shortcutKey:[Return];
 }
 

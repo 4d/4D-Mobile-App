@@ -633,6 +633,23 @@ Function myIP()->$IP : Text
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Converts a string IP address into its integer equivalent
+Function ipToInteger($IP : Text)->$integer : Integer
+	
+	var $t : Text
+	var $exponent : Integer
+	
+	$integer:=0
+	$exponent:=3
+	
+	For each ($t; Split string:C1554($IP; "."))
+		
+		$integer:=$integer+(Num:C11($t)*(256^$exponent))
+		$exponent:=$exponent-1
+		
+	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _response($text : Text; $blob : Blob)
 	
 	var $o : Object

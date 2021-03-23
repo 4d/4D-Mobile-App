@@ -99,8 +99,21 @@ Function setTitle($title : Text)->$this : cs:C1710.progress
 	
 	If (Count parameters:C259>=1)
 		
-		$t:=Get localized string:C991($title)
-		$t:=Choose:C955(Length:C16($t)>0; $t; $title)  // Revert if no localization
+		$t:=$title
+		
+		If (Length:C16($title)>0)\
+			 & (Length:C16($title)<=255)
+			
+			//%W-533.1
+			If ($title[[1]]#Char:C90(1))
+				
+				$t:=Get localized string:C991($title)
+				$t:=Choose:C955(Length:C16($t)>0; $t; $title)  // Revert if no localization
+				
+			End if 
+			//%W+533.1
+			
+		End if 
 		
 	End if 
 	
@@ -118,8 +131,21 @@ Function setMessage($message : Text; $foreground : Boolean)->$this : cs:C1710.pr
 	
 	If (Count parameters:C259>=1)
 		
-		$t:=Get localized string:C991($message)
-		$t:=Choose:C955(Length:C16($t)>0; $t; $message)  // Revert if no localization
+		$t:=$message
+		
+		If (Length:C16($message)>0)\
+			 & (Length:C16($message)<=255)
+			
+			//%W-533.1
+			If ($message[[1]]#Char:C90(1))
+				
+				$t:=Get localized string:C991($message)
+				$t:=Choose:C955(Length:C16($t)>0; $t; $message)  // Revert if no localization
+				
+			End if 
+			//%W+533.1
+			
+		End if 
 		
 		If (Count parameters:C259>=2)
 			
@@ -129,7 +155,6 @@ Function setMessage($message : Text; $foreground : Boolean)->$this : cs:C1710.pr
 	End if 
 	
 	This:C1470.message:=$t
-	
 	Progress SET MESSAGE(This:C1470.id; This:C1470.message; This:C1470.isForeground)
 	
 	This:C1470.isStopped()

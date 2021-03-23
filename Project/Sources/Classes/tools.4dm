@@ -243,31 +243,62 @@ Function localized
 	var $b : Boolean
 	var $i; $length; $position : Integer
 	
-	//%W-533.1
-	If ($1[[1]]#Char:C90(1))
+	If (Count parameters:C259>=1)
 		
-		$t:=Get localized string:C991($1)
-		$0:=Choose:C955(OK=1; $t; $1)  // Revert if no localization
+		$t:=$1
 		
-	End if 
-	//%W+533.1
-	
-	If (Count parameters:C259>=2)
-		
-		If (Value type:C1509($2)=Is collection:K8:32)
+		If (Length:C16($1)>0)\
+			 & (Length:C16($1)<=255)
 			
-			Repeat 
+			//%W-533.1
+			If ($1[[1]]#Char:C90(1))
 				
-				$b:=$i<$2.length
+				$t:=Get localized string:C991($1)
+				$0:=Choose:C955(Length:C16($t)>0; $t; $1)  // Revert if no localization
 				
-				If ($b)
+			End if 
+			//%W+533.1
+			
+		End if 
+		
+		If (Count parameters:C259>=2)
+			
+			If (Value type:C1509($2)=Is collection:K8:32)
+				
+				Repeat 
 					
-					$b:=Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})"; $0; 1; $position; $length)
+					$b:=$i<$2.length
 					
 					If ($b)
 						
-						$t:=Get localized string:C991($2[$i])
-						$t:=Choose:C955(OK=1; $t; $2[$i])
+						$b:=Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})"; $0; 1; $position; $length)
+						
+						If ($b)
+							
+							$t:=Get localized string:C991($2[$i])
+							$t:=Choose:C955(Length:C16($t)>0; $t; $2[$i])
+							
+							If (Position:C15("</span>"; $0)>0)  // Multistyle
+								
+								$t:=This:C1470.multistyleCompatible($t)
+								
+							End if 
+							
+							$0:=Replace string:C233($0; Substring:C12($0; $position; $length); $t)
+							$i:=$i+1
+							
+						End if 
+					End if 
+				Until (Not:C34($b))
+				
+			Else 
+				
+				For ($i; 2; Count parameters:C259; 1)
+					
+					If (Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})"; $0; 1; $position; $length))
+						
+						$t:=Get localized string:C991(String:C10($2))
+						$t:=Choose:C955(Length:C16($t)>0; $t; String:C10($2))
 						
 						If (Position:C15("</span>"; $0)>0)  // Multistyle
 							
@@ -276,31 +307,10 @@ Function localized
 						End if 
 						
 						$0:=Replace string:C233($0; Substring:C12($0; $position; $length); $t)
-						$i:=$i+1
 						
 					End if 
-				End if 
-			Until (Not:C34($b))
-			
-		Else 
-			
-			For ($i; 2; Count parameters:C259; 1)
-				
-				If (Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})"; $0; 1; $position; $length))
-					
-					$t:=Get localized string:C991(String:C10($2))
-					$t:=Choose:C955(OK=1; $t; String:C10($2))
-					
-					If (Position:C15("</span>"; $0)>0)  // Multistyle
-						
-						$t:=This:C1470.multistyleCompatible($t)
-						
-					End if 
-					
-					$0:=Replace string:C233($0; Substring:C12($0; $position; $length); $t)
-					
-				End if 
-			End for 
+				End for 
+			End if 
 		End if 
 	End if 
 	

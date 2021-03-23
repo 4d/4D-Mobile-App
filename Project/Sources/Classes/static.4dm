@@ -80,9 +80,21 @@ Function setTitle($title : Text)->$this : cs:C1710.static
 	
 	If (Count parameters:C259>=1)
 		
-		$t:=Get localized string:C991($title)
-		$t:=Choose:C955(Length:C16($t)>0; $t; $title)  // Revert if no localization
+		$t:=$title
 		
+		If (Length:C16($title)>0)\
+			 & (Length:C16($title)<=255)
+			
+			//%W-533.1
+			If ($title[[1]]#Char:C90(1))
+				
+				$t:=Get localized string:C991($title)
+				$t:=Choose:C955(Length:C16($t)>0; $t; $title)  // Revert if no localization
+				
+			End if 
+			//%W+533.1
+			
+		End if 
 	End if 
 	
 	OBJECT SET TITLE:C194(*; This:C1470.name; $t)

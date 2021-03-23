@@ -820,8 +820,19 @@ Function concat
 		
 		For each ($t; $1)
 			
-			$text:=Get localized string:C991($t)
-			$text:=Choose:C955(OK=1; $text; $t)
+			If (Length:C16($t)>0)\
+				 & (Length:C16($t)<=255)
+				
+				//%W-533.1
+				If ($t[[1]]#Char:C90(1))
+					
+					$text:=Get localized string:C991($t)
+					$text:=Choose:C955(Length:C16($text)>0; $text; $t)  // Revert if no localization
+					
+				End if 
+				//%W+533.1
+				
+			End if 
 			
 			If (Position:C15($tSeparator; $text)#1)\
 				 & (Position:C15($tSeparator; $0)#Length:C16($0))
@@ -837,7 +848,7 @@ Function concat
 	Else 
 		
 		$text:=Get localized string:C991($1)
-		$text:=Choose:C955(OK=1; $text; $1)
+		$text:=Choose:C955(Length:C16($text)>0; $text; $1)
 		
 		If (Position:C15($tSeparator; $text)#1)\
 			 & (Position:C15($tSeparator; $0)#Length:C16($0))
