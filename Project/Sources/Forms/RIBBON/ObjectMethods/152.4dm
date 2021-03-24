@@ -386,7 +386,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_removeSDK")
 				
-				Folder:C1567("/RESOURCES/sdk/Versions").delete(fk recursive:K87:7)
+				Folder:C1567("/RESOURCES/sdk/").file("ios.zip").delete()
 				
 				//______________________________________________________
 			: ($menu.choice="_removeMobilesProjects")
