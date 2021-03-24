@@ -71,7 +71,7 @@ Case of
 		
 		sdk(New object:C1471(\
 			"action"; "install"; \
-			"file"; path.sdk().platformPath+"1.0.zip"; \
+			"file"; path.sdk().platformPath+"ios.zip"; \
 			"target"; $product.platformPath))
 		
 		SHOW ON DISK:C922($product.folder("Carthage").platformPath)

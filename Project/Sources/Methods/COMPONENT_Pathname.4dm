@@ -1,47 +1,47 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : COMPONENT_Pathname
-  // ID[269E96575CA2421F8830076D2FFD841D]
-  // Created 20-3-2019 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Project method : COMPONENT_Pathname
+// ID[269E96575CA2421F8830076D2FFD841D]
+// Created 20-3-2019 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 
 C_BOOLEAN:C305($Boo_treated)
 C_LONGINT:C283($Lon_parameters)
 C_TEXT:C284($Txt_target)
-C_OBJECT:C1216($o;$Obj_path)
+C_OBJECT:C1216($o; $Obj_path)
 
 If (False:C215)
-	C_OBJECT:C1216(COMPONENT_Pathname ;$0)
-	C_TEXT:C284(COMPONENT_Pathname ;$1)
+	C_OBJECT:C1216(COMPONENT_Pathname; $0)
+	C_TEXT:C284(COMPONENT_Pathname; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Txt_target:=$1
 	
-	  // Default values
+	// Default values
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
 	$Obj_path:=New object:C1471(\
-		"exists";False:C215;\
-		"platformPath";"")
+		"exists"; False:C215; \
+		"platformPath"; "")
 	
 	$Boo_treated:=True:C214
 	
@@ -56,27 +56,27 @@ End if
 ----------------------------------------------------*/
 Case of 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="databasePreferences")  //  Writable user database preferences folder
 		
-		$Obj_path:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14;*).name)
+		$Obj_path:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14; *).name)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="projects")  // 'Mobile Projects' folder
 		
-		$Obj_path:=Folder:C1567(fk database folder:K87:14;*).folder("Mobile Projects")
+		$Obj_path:=Folder:C1567(fk database folder:K87:14; *).folder("Mobile Projects")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="products")  // Products folder
 		
-		  //#WARNING - Folder(Database folder;*).parent = Null
-		$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14;*))
-		$Obj_path:=Folder:C1567($o.parentFolder+$o.name+" - Mobile"+Folder separator:K24:12;fk platform path:K87:2)
+		//#WARNING - Folder(Database folder;*).parent = Null
+		$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14; *))
+		$Obj_path:=Folder:C1567($o.parentFolder+$o.name+" - Mobile"+Folder separator:K24:12; fk platform path:K87:2)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="host")  // 'mobile' folder
 		
-		$Obj_path:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16;*);fk platform path:K87:2)
+		$Obj_path:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16; *); fk platform path:K87:2)
 		
 		If ($Obj_path.file("mobile").exists)  // Could be an alias
 			
@@ -86,7 +86,7 @@ Case of
 				
 			Else 
 				
-				  // Can't resolve original
+				// Can't resolve original
 				
 			End if 
 			
@@ -99,10 +99,10 @@ Case of
 			End if 
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="host_forms")
 		
-		$Obj_path:=COMPONENT_Pathname ("host")
+		$Obj_path:=COMPONENT_Pathname("host")
 		
 		If ($Obj_path.exists)
 			
@@ -110,10 +110,10 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="host_listForms")
 		
-		$Obj_path:=COMPONENT_Pathname ("host_forms")
+		$Obj_path:=COMPONENT_Pathname("host_forms")
 		
 		If ($Obj_path.exists)
 			
@@ -121,10 +121,10 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="host_detailForms")
 		
-		$Obj_path:=COMPONENT_Pathname ("host_forms")
+		$Obj_path:=COMPONENT_Pathname("host_forms")
 		
 		If ($Obj_path.exists)
 			
@@ -132,10 +132,10 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="host_loginForms")
 		
-		$Obj_path:=COMPONENT_Pathname ("host_forms")
+		$Obj_path:=COMPONENT_Pathname("host_forms")
 		
 		If ($Obj_path.exists)
 			
@@ -143,12 +143,12 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="host_tableIcons")\
 		 | ($Txt_target="host_fieldIcons")\
 		 | ($Txt_target="host_actionIcons")
 		
-		$Obj_path:=COMPONENT_Pathname ("host")
+		$Obj_path:=COMPONENT_Pathname("host")
 		
 		If ($Obj_path.exists)
 			
@@ -156,10 +156,10 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="host_formatters")
 		
-		$Obj_path:=COMPONENT_Pathname ("host")
+		$Obj_path:=COMPONENT_Pathname("host")
 		
 		If ($Obj_path.exists)
 			
@@ -167,17 +167,17 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="key")  // key file
 		
-		$Obj_path:=Folder:C1567(MobileApps folder:K5:47;*).file("key.mobileapp")
+		$Obj_path:=Folder:C1567(MobileApps folder:K5:47; *).file("key.mobileapp")
 		
-		  //________________________________________
+		//________________________________________
 	Else 
 		
 		$Boo_treated:=False:C215
 		
-		  //________________________________________
+		//________________________________________
 End case 
 
 /* ----------------------------------------------------
@@ -186,70 +186,70 @@ End case
 
 Case of 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Boo_treated)
 		
-		  // <NOTHING MORE TO DO>
+		// <NOTHING MORE TO DO>
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="project")
 		
 		$Obj_path:=Folder:C1567("/RESOURCES/default project")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="sdk")
 		
-		$Obj_path:=Folder:C1567("/RESOURCES/sdk/Versions")
+		$Obj_path:=Folder:C1567("/RESOURCES/sdk")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="templates")
 		
 		$Obj_path:=Folder:C1567("/RESOURCES/templates")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="scripts")
 		
-		  // Unsandboxed for use with LEP
-		$Obj_path:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath;fk platform path:K87:2)
+		// Unsandboxed for use with LEP
+		$Obj_path:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="tableIcons")\
 		 | ($Txt_target="fieldIcons")\
 		 | ($Txt_target="actionIcons")
 		
 		$Obj_path:=Folder:C1567("/RESOURCES/images/tableIcons")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="forms")
 		
 		$Obj_path:=Folder:C1567("/RESOURCES/templates/form")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="listForms")
 		
 		$Obj_path:=Folder:C1567("/RESOURCES/templates/form/list")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="detailForms")
 		
 		$Obj_path:=Folder:C1567("/RESOURCES/templates/form/detail")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Txt_target="navigationForms")
 		
 		$Obj_path:=Folder:C1567("/RESOURCES/templates/form/navigation")
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown entry point: \""+$Txt_target+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Txt_target+"\"")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_path
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

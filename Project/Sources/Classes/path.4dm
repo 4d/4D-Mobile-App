@@ -81,7 +81,7 @@ Function sdk  // sdk folder ||||||||||| OBSOLETE ||||||||||||
 	
 	C_OBJECT:C1216($0)
 	
-	This:C1470.target:=Folder:C1567("/RESOURCES/sdk/Versions")
+	This:C1470.target:=Folder:C1567("/RESOURCES/sdk")
 	This:C1470.exists:=This:C1470.target.exists
 	
 	$0:=This:C1470.target

@@ -36,10 +36,10 @@ Function getAppiOSSDK
 	$app:=Folder:C1567(Application file:C491; fk platform path:K87:2)
 	
 	var $sdk : 4D:C1709.File
-	$sdk:=$app.file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/sdk/Versions/1.0.zip")
+	$sdk:=$app.file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/sdk/ios.zip")
 	
 	var $component : 4D:C1709.Folder
-	$component:=Folder:C1567(fk resources folder:K87:11).folder("sdk/Versions")
+	$component:=Folder:C1567(fk resources folder:K87:11).folder("sdk")
 	
 	// Do the job
 	var $result : 4D:C1709.File
@@ -56,7 +56,7 @@ Function getTCiOSSDK
 	If ($credential.exists)
 		
 		var $url : Text
-		$url:="http://"+String:C10(JSON Parse:C1218($credential.getText()).tc)+"@srv-build:8111/repository/download/id4dmobile_4dIOSSdk_Build/.lastSuccessful/1.0.zip"
+		$url:="http://"+String:C10(JSON Parse:C1218($credential.getText()).tc)+"@srv-build:8111/repository/download/id4dmobile_4dIOSSdk_Build/.lastSuccessful/ios.zip"
 		
 		var $content : Blob
 		var $code : Integer
@@ -64,7 +64,7 @@ Function getTCiOSSDK
 		If ($code=200)
 			
 			var $sdk : 4D:C1709.File
-			$sdk:=Folder:C1567(fk resources folder:K87:11).file("sdk/Versions/1.0.zip")
+			$sdk:=Folder:C1567(fk resources folder:K87:11).file("sdk/ios.zip")
 			
 			$sdk.setContent($content)
 			
