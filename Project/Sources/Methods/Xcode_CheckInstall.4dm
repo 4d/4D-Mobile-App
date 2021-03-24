@@ -38,6 +38,10 @@ If (Count parameters:C259>=1)
 	
 	$in:=$1
 	
+Else 
+	
+	$in:=New object:C1471
+	
 End if 
 
 $out:=New object:C1471(\
