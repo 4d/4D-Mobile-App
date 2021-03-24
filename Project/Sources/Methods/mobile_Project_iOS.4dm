@@ -31,7 +31,7 @@ var $simctl : cs:C1710.simctl
 
 // NO PARAMETERS REQUIRED
 $isDebug:=DATABASE.isInterpreted
-$cacheFolder:=ENV.caches("com.4D.mobile/"; True:C214)
+$cacheFolder:=cs:C1710.path.new().userCache().create()  //ENV.caches("com.4D.mobile/"; True)
 
 $out:=New object:C1471(\
 "success"; True:C214)

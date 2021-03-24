@@ -634,18 +634,15 @@ Function myIP()->$IP : Text
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Converts a string IP address into its integer equivalent
-Function ipToInteger($IP : Text)->$integer : Integer
+Function ipToInteger($IP : Text)->$result : Integer
 	
 	var $t : Text
-	var $exponent : Integer
 	
-	$integer:=0
-	$exponent:=3
+	$result:=0
 	
 	For each ($t; Split string:C1554($IP; "."))
 		
-		$integer:=$integer+(Num:C11($t)*(256^$exponent))
-		$exponent:=$exponent-1
+		$result:=$result << 8+Num:C11($t)
 		
 	End for each 
 	

@@ -23,6 +23,16 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		var $plist : cs:C1710.plist
+		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Library/Preferences/com.apple.iphonesimulator.plist"))
+		
+		//OB REMOVE($plist.content; "Test")
+		$plist.write()
+		
+		
+		//________________________________________
+	: (True:C214)
+		
 		var $svg : cs:C1710.svg
 		$svg:=cs:C1710.svg.new()
 		$svg.group("main").stroke(4).translate(10; 10).scale(2)

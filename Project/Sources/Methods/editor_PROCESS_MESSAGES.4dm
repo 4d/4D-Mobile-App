@@ -93,11 +93,11 @@ Case of
 			Else 
 				
 /*
-												DO_MESSAGE(New object(\
-															"action"; "show"; \
-															"type"; "alert"; \
-															"title"; "noDevices"; \
-															"additional"; ""))
+																DO_MESSAGE(New object(\
+																				"action"; "show"; \
+																				"type"; "alert"; \
+																				"title"; "noDevices"; \
+																				"additional"; ""))
 */
 				
 			End if 
@@ -242,7 +242,7 @@ Case of
 					
 					If ($in.param.project._buildTarget="iOS")
 						
-						$file:=ENV.caches("com.4D.mobile/").file($in.param.project._name+"_ios")
+						$file:=cs:C1710.path.new().userCache().file($in.param.project._name+"_ios")
 						
 						var $sources : 4D:C1709.Folder
 						$sources:=$in.param.appFolder.folder("Sources")
@@ -255,7 +255,7 @@ Case of
 						
 					Else 
 						
-						$file:=ENV.caches("com.4D.mobile/").file($in.param.project._name+"_android")
+						$file:=cs:C1710.path.new().userCache().file($in.param.project._name+"_android")
 						
 						//#MARK_TODO
 						

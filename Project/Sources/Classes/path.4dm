@@ -36,10 +36,29 @@ Function create
 	
 /*========================================================
 	
+                    USER
+	
+========================================================*/
+Function userCache()->$folder : 4D:C1709.Folder
+	
+	If (Is macOS:C1572)
+		
+		$folder:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Library/Caches/com.4d.mobile")
+		
+	Else 
+		
+		ASSERT:C1129(False:C215; "TODO")
+		// Use ProgramData
+		//$folder:=Folder(fk system folder).parent.folder("ProgramData/4D Mobile")
+		
+	End if 
+	
+/*========================================================
+	
                     INTERNAL
 	
 ========================================================*/
-Function cacheSdkApple()->$zip : 4D:C1709.File
+Function cacheSdkApple()->$zip : 4D:C1709.ZipArchive
 	$zip:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
 	
 /*========================================================*/
@@ -48,7 +67,7 @@ Function cacheSdkAppleUnzipped()->$folder : 4D:C1709.Folder
 	$folder:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/sdk")
 	
 /*========================================================*/
-Function cacheSdkAndroid()->$zip : 4D:C1709.File
+Function cacheSdkAndroid()->$zip : 4D:C1709.ZipArchive
 	
 	$zip:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip")
 	
@@ -60,10 +79,10 @@ Function cacheSdkAndroidUnzipped()->$folder : 4D:C1709.Folder
 /*========================================================*/
 Function cacheSDK()->$folder : 4D:C1709.Folder
 	
-	$folder:=This:C1470.systemCaches().folder("sdk")
+	$folder:=This:C1470.systemCache().folder("sdk")
 	
 /*========================================================*/
-Function systemCaches()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
+Function systemCache()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 	
 	If (Is macOS:C1572)
 		
@@ -104,8 +123,6 @@ Function project()->$folder : 4D:C1709.Folder  // project folder
 	
 /*========================================================*/
 Function templates()->$folder : 4D:C1709.Folder  // templates folder
-	
-	C_OBJECT:C1216($0)
 	
 	If (FEATURE.with("compressionOfTemplates"))
 		

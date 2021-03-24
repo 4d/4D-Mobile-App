@@ -633,21 +633,21 @@ Function escape($text : Text)->$escaped : Text
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Enclose, if necessary, the string in single quotation marks
-Function singleQuoted($tring : Text)->$quoted : Text
+Function singleQuoted($string : Text)->$quoted : Text
 	
-	$quoted:=Choose:C955(Match regex:C1019("^'.*'$"; $tring; 1); $tring; "'"+$tring+"'")  // Already done // Do it
+	$quoted:=Choose:C955(Match regex:C1019("^'.*'$"; $string; 1); $string; "'"+$string+"'")  // Already done // Do it
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the string between quotes
-Function quoted($tring : Text)->$quoted : Text
+Function quoted($string : Text)->$quoted : Text
 	
-	If (Match regex:C1019("^\".*\"$"; $tring; 1))
+	If (Match regex:C1019("^\".*\"$"; $string; 1))
 		
-		$quoted:=$tring  // Already done
+		$quoted:=$string  // Already done
 		
 	Else 
 		
-		$quoted:="\""+$tring+"\""  // Do it
+		$quoted:="\""+$string+"\""  // Do it
 		
 	End if 
 	

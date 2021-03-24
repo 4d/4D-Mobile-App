@@ -162,13 +162,25 @@ Case of
 			
 			$menu.append("mnuOpenTheProjectWithAndroidStudio"; "openWithStudio").enable($could.openWithStudio)
 			
-			// MORE ITEMS FOR ANDROID STUDIO
-			If ($could.withMoreItems)
+		End if 
+		
+		// MORE ITEMS FOR ANDROID STUDIO
+		If ($could.withMoreItems)
+			
+			$menu.line()
+			
+			If ($could.studioAvailable)
 				
-				$menu.line()
-				$menu.append("downloadThe4dForAndroidSdk"; "downloadAndroidSdk")
+				$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "Android"); "downloadAndroidSdk")
 				
 			End if 
+			
+			If (Is macOS:C1572)
+				
+				$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "iOS"); "downloadIosSdk")
+				
+			End if 
+			
 		End if 
 		
 		// =================== DEVELOPMENT ITEMS ===================== [
@@ -176,10 +188,16 @@ Case of
 			
 			$sdkCacheFolder:=$path.cacheSDK().folder(Application version:C493)
 			
-			$menu.append("🛒 Download the Android SDK from TeamCity"; "downloadAndroidSdkFromTeamCity")
+			If ($could.isDebug)
+				
+				$menu.append("🛒 Download the Android SDK from TeamCity"; "downloadAndroidSdkFromTeamCity")
+				$menu.append("🛒 Download the iOS SDK from TeamCity"; "downloadIosSdkFromTeamCity")
+				
+			End if 
 			
 			$menu.line()
-			$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable(ENV.caches().folder("com.4D.mobile").exists)
+			//$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable(ENV.caches().folder("com.4D.mobile").exists)
+			$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable($path.userCache().exists)
 			
 			$menu.append("showTheSdkCacheFolder"; "showTheSdkCacheFolder").enable($sdkCacheFolder.exists)
 			
@@ -267,12 +285,18 @@ Case of
 			: ($menu.choice="downloadAndroidSdk")
 				
 				//#MARK_TODO : from new location
-				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadAndroidSDK"; False:C215; Form:C1466.editor.$mainWindow; Shift down:C543)
+				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; "android"; False:C215; Form:C1466.editor.$mainWindow; Shift down:C543)
+				
+				//______________________________________________________
+			: ($menu.choice="downloadIosSdk")
+				
+				//#MARK_TODO : from new location
+				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; "ios"; False:C215; Form:C1466.editor.$mainWindow; Shift down:C543)
 				
 				//______________________________________________________
 			: ($menu.choice="downloadAndroidSdkFromTeamCity")
 				
-				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadAndroidSDK"; False:C215; Form:C1466.editor.$mainWindow; True:C214)
+				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDKFromTeamCity"; "android"; False:C215; Form:C1466.editor.$mainWindow; True:C214)
 				
 				//______________________________________________________
 			: ($menu.choice="openWithXcode")  // Open a file of project in xcode
@@ -306,7 +330,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="showTheCacheFolder")
 				
-				SHOW ON DISK:C922(ENV.caches().folder("com.4D.mobile").platformPath)
+				SHOW ON DISK:C922($path.userCache().platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="showTheSdkCacheFolder")
@@ -381,7 +405,8 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_clearCache")
 				
-				ENV.caches().delete(fk recursive:K87:7)
+				$path.cacheSdkAppleUnzipped().delete(fk recursive:K87:7)
+				$path.cacheSdkAndroidUnzipped().delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_removeSDK")

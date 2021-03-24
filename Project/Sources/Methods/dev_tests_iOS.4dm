@@ -13,6 +13,13 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		//$device:=$simctl.defaultDevice()
+		var $plist : cs:C1710.plist
+		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Desktop/DEV/com.apple.iphonesimulator.plist"))
+		
+		//______________________________________________________
+	: (True:C214)
+		
 		var $cfgutil : cs:C1710.cfgutil
 		$cfgutil:=cs:C1710.cfgutil.new()
 		
@@ -101,11 +108,6 @@ Case of
 		$folder:=$simctl.deviceFolder("iPhone 12 Pro Max")
 		$device:=$simctl.device("iPhone 12 Pro Max")
 		ASSERT:C1129($simctl.deviceFolder($device.udid; True:C214).path=$folder.path)
-		
-		//______________________________________________________
-	: (True:C214)
-		
-		$device:=$simctl.defaultDevice()
 		
 		//______________________________________________________
 	: (True:C214)

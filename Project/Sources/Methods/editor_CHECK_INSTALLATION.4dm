@@ -45,8 +45,8 @@ Case of
 					
 					If (Bool:C1537($in.project.$android))
 						
-						// Get the last 4D Mobile Android SDK, if any
-						CALL WORKER:C1389($in.project.$worker; "downloadAndroidSDK"; True:C214)
+						// Get the last 4D Mobile Android SDK
+						CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "android"; True:C214)
 						
 					End if 
 				End if 
@@ -83,8 +83,8 @@ Case of
 			"ready"; False:C215); \
 			"studio"; studioCheckInstall($in))
 		
-		// Get the last 4D Mobile Android SDK, if any
-		CALL WORKER:C1389($in.project.$worker; "downloadAndroidSDK"; True:C214)
+		// Get the last 4D Mobile Android SDK
+		CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "android"; True:C214)
 		
 		//______________________________________________________
 	Else 

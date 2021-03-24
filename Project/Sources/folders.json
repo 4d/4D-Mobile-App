@@ -140,6 +140,8 @@
 		],
 		"methods": [
 			"COMPILER_editor",
+			"downloadSDK",
+			"downloadSDKFromTeamCity",
 			"editor_CALLBACK",
 			"editor_CHECK_INSTALLATION",
 			"editor_CREATE_PROJECT",
@@ -395,6 +397,7 @@
 			"mobileUnit4D",
 			"test__catalog",
 			"test_catalog",
+			"test_ob_class",
 			"test_reconcile",
 			"test_storyboard",
 			"test_structure",
@@ -407,7 +410,6 @@
 	"android": {
 		"methods": [
 			"COMPILER_android",
-			"downloadAndroidSDK",
 			"studioCheckInstall"
 		],
 		"classes": [
@@ -692,6 +694,7 @@
 			"XcodeProjInject"
 		],
 		"classes": [
+			"cfgutil",
 			"simctl",
 			"Xcode"
 		]
@@ -939,8 +942,7 @@
 			"ui_ALIGN_ON_BEST_SIZE",
 			"ui_MOVE",
 			"ui_SET_ENABLED",
-			"ui_SET_GEOMETRY",
-			"ui_TOOLBAR_ALIGN"
+			"ui_SET_GEOMETRY"
 		]
 	},
 	"widgets": {

@@ -5,8 +5,6 @@ Class constructor
 	This:C1470.isLinux:=Not:C34(This:C1470.isMacOs) & Not:C34(This:C1470.isWindows)
 	This:C1470.systemInfos:=Get system info:C1571
 	
-	//This.home:=Folder(Convert path POSIX to system("/users/"+This.systemInfos.userName+"/"))
-	
 	This:C1470.home:=Folder:C1567(fk desktop folder:K87:19).parent
 	
 	This:C1470.update()
@@ -67,24 +65,6 @@ Function update  // Updating values that can be modified after opening the datab
 Function startupDisk($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=Folder:C1567("/")
-	
-	If (Count parameters:C259>=2)
-		
-		$document:=This:C1470._postProcessing($document; $path; $create)
-		
-	Else 
-		
-		If (Count parameters:C259>=1)
-			
-			$document:=This:C1470._postProcessing($document; $path)
-			
-		End if 
-	End if 
-	
-	//===================================================================================
-Function home($path : Text; $create : Boolean)->$document : 4D:C1709.File
-	
-	$document:=This:C1470.home
 	
 	If (Count parameters:C259>=2)
 		

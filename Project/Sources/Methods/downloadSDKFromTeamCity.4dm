@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true}
 // -> silent  =   No interface for progression
 // -> force   =   Force the download even if the file is up to date (see verification code)
-#DECLARE($silent : Boolean; $caller : Integer; $force : Boolean)
+#DECLARE($target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)
 
 var $url : Text
 var $run; $silent; $withUI : Boolean
@@ -30,11 +30,7 @@ Case of
 		//______________________________________________________
 End case 
 
-RECORD.verbose:=True:C214
-
-$sdk:=cs:C1710.path.new().cacheSdkAndroid()
-
-$manifest:=$sdk.parent.file("manifest.json")
+RECORD.verbose:=DATABASE.isMatrix
 
 $preferences:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
 
@@ -44,9 +40,31 @@ If ($preferences.exists)
 	
 	If ($o.tc#Null:C1517)
 		
-		$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip"
+		Case of 
+				
+				//______________________________________________________
+			: ($target="android")
+				
+				$sdk:=cs:C1710.path.new().cacheSdkAndroid()
+				$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip"
+				
+				//______________________________________________________
+			: ($target="ios")
+				
+				$sdk:=cs:C1710.path.new().cacheSdkApple()
+				$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_iOS_Sdk_Build/.lastSuccessful/iOS.zip"
+				
+				//______________________________________________________
+			Else 
+				
+				RECORD.error("Uknown SDK target")
+				
+				//______________________________________________________
+		End case 
 		
 		$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
+		
+		$manifest:=$sdk.parent.file("manifest.json")
 		
 		If ($manifest.exists)
 			
@@ -99,12 +117,12 @@ End if
 
 If ($run)
 	
-	RECORD.info("Update the 4D Mobile Android SDK")
+	RECORD.info("Update the 4D Mobile "+$target+" SDK")
 	
 	If ($withUI)
 		
 		$progress:=cs:C1710.progress.new("downloadInProgress")\
-			.setMessage("downloadingAndroidSdk").bringToFront()
+			.setMessage(Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; Choose:C955($target="android"; "Android"; "iOS"))).bringToFront()
 		
 	End if 
 	
@@ -125,6 +143,9 @@ If ($run)
 			$o.delete(Delete with contents:K24:24)
 			
 		End if 
+		
+		// Extract all files
+		$o:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
 		
 	Else 
 		
@@ -154,15 +175,15 @@ Else
 				"action"; "show"; \
 				"target"; $caller; \
 				"type"; "alert"; \
-				"additional"; "yourVersionOf4dMobileSdkForAndroidIsUpToDate"))
+				"additional"; Replace string:C233(Get localized string:C991("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose:C955($target="android"; "Android"; "iOS"))))
 			
 		Else 
 			
-			ALERT:C41(Get localized string:C991("yourVersionOf4dMobileSdkForAndroidIsUpToDate"))
+			ALERT:C41(Replace string:C233(Get localized string:C991("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose:C955($target="android"; "Android"; "iOS")))
 			
 		End if 
 	End if 
 	
-	RECORD.info("The 4D Mobile Android SDK is up to date")
+	RECORD.info("The 4D Mobile "+$target+" SDK is up to date")
 	
 End if 
