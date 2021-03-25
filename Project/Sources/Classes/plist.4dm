@@ -55,7 +55,7 @@ Function read($file : 4D:C1709.file)->$this : cs:C1710.plist
 		
 		If (Is macOS:C1572)
 			
-			// *TEST THE HEADER: Should be for a binary plist "bplist"+2 digits for the version (00)
+			// *TEST THE HEADER: Should be for a binary plist "bplist" followed by two bytes indicating the version of the format.
 			$x:=This:C1470.file.getContent()
 			
 			This:C1470.isBinary:=($x{0}=0x0062)\
