@@ -5,7 +5,7 @@
 // ----------------------------------------------------
 // Declarations
 var $simulator : Text
-var $isDevToolAvailable; $isProjectOK; $withTeamID : Boolean
+var $isDeviceSelected; $isDevToolAvailable; $isProjectOK; $withTeamID : Boolean
 var $currentPage : Integer
 var $constraints; $device; $e; $form; $o; $page; $plist : Object
 var $pref : cs:C1710.preferences
@@ -115,11 +115,43 @@ Case of
 		
 		If (FEATURE.with("android"))  //🚧
 			
-			$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode) | Bool:C1537(Form:C1466.status.studio)
 			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
-			$form.build.enable($isDevToolAvailable & $isProjectOK & (Form:C1466.currentDevice#Null:C1517))
 			
-			$withTeamID:=Bool:C1537(Form:C1466.status.teamId) | Is Windows:C1573
+			Case of 
+					//______________________________________________________
+				: (Bool:C1537(PROJECT.$android)) & (Bool:C1537(PROJECT.$ios))
+					
+					$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode) | Bool:C1537(Form:C1466.status.studio)
+					$isDeviceSelected:=(Form:C1466.currentDevice#Null:C1517)
+					
+					//______________________________________________________
+				: (Bool:C1537(PROJECT.$ios))
+					
+					$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode)
+					
+					If (Form:C1466.currentDevice#Null:C1517)
+						
+						$isDeviceSelected:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()#Null:C1517
+						
+					End if 
+					
+					//______________________________________________________
+				: (Bool:C1537(PROJECT.$android))
+					
+					$isDevToolAvailable:=Bool:C1537(Form:C1466.status.studio)
+					
+					If (Form:C1466.currentDevice#Null:C1517)
+						
+						$isDeviceSelected:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()#Null:C1517
+						
+					End if 
+					
+					//______________________________________________________
+			End case 
+			
+			$withTeamID:=Choose:C955(Is macOS:C1572; Bool:C1537(Form:C1466.status.teamId); True:C214)
+			
+			$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected)
 			$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID)
 			
 		End if 

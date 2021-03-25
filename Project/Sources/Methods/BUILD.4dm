@@ -35,6 +35,6 @@ POST_MESSAGE(New object:C1471(\
 "target"; $in.caller; \
 "action"; "show"; \
 "type"; "progress"; \
-"title"; Get localized string:C991("product")+" - "+PROJECT.product.name; \
+"title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+Choose:C955(PROJECT._buildTarget="android"; "Android"; "iOS")+"]"; \
 "additional"; Get localized string:C991("preparations"); \
 "autostart"; New object:C1471("action"; "build_run"; "method"; "EDITOR_RESUME"; "project"; $in)))

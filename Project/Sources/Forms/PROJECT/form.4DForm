@@ -98,7 +98,6 @@
 					"dataSourceTypeHint": "object",
 					"stroke": "#FF0000",
 					"focusable": false,
-					"fill": "transparent",
 					"borderStyle": "dotted",
 					"enterable": false,
 					"hideFocusRing": true,
@@ -106,7 +105,8 @@
 					"dragging": "none",
 					"dropping": "none",
 					"fontTheme": "normal",
-					"fontSize": 11
+					"fontSize": 11,
+					"fill": "transparent"
 				},
 				"Line": {
 					"type": "line",

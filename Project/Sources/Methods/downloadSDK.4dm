@@ -59,20 +59,20 @@ $manifest:=$sdk.parent.file("manifest.json")
 
 $version:=Application version:C493($buildNumber; *)
 
-If (DATABASE.isMatrix)/* TO REMOVE: TEST PURPOSE*/
-	
-	$buildNumber:=262682
-	
-End if 
+//If (DATABASE.isMatrix)/* TO REMOVE: TEST PURPOSE*/
+//$buildNumber:=262682
+//End if 
+
+$url:="https://preprod-resources-download.4d.com/sdk/"
 
 If ($version="A@")  //main
 	
-	$url:="https://preprod-resources-download.4d.com/sdk/main/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
+	$url:=$url+"main/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
 	
 Else 
 	
 	$version:=applicationVersion
-	$url:="https://preprod-resources-download.4d.com/sdk/"+$version+"/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
+	$url:=$url+$version+"/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
 	
 End if 
 
@@ -145,12 +145,21 @@ If ($run)
 		End if 
 		
 		// Extract all files
+		If ($withUI)
+			
+			$progress.setMessage("unzipping")
+			
+		End if 
+		
 		$o:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
 		
 	Else 
 		
-		RECORD.error($http.url+": "+$http.errors.join("\r"))
-		
+		If (Not:C34(DATABASE.isMatrix))
+			
+			RECORD.error($http.url+": "+$http.errors.join("\r"))
+			
+		End if 
 	End if 
 	
 	If ($withUI)

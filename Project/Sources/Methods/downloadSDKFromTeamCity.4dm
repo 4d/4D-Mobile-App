@@ -145,6 +145,12 @@ If ($run)
 		End if 
 		
 		// Extract all files
+		If ($withUI)
+			
+			$progress.setMessage("unzipping")
+			
+		End if 
+		
 		$o:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
 		
 	Else 

@@ -43,6 +43,8 @@ Case of
 				
 				If ($androidStudio.ready)
 					
+					//launch the
+					
 					If (Bool:C1537($in.project.$android))
 						
 						// Get the last 4D Mobile Android SDK

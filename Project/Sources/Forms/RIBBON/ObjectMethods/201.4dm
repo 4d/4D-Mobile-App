@@ -43,13 +43,13 @@ Case of
 			
 			If (Is macOS:C1572)
 				
+				$menu.append("iOS").icon("images/os/iOS-24.png").disable()
+				
 				If (Form:C1466.status.xCode)
-					
-					$menu.append("iOS").icon("images/os/iOS-24.png").disable()
 					
 					If (Form:C1466.devices.connected.apple.length>0)
 						
-						$menu.line()
+						//$menu.line()
 						
 						For each ($device; Form:C1466.devices.connected.apple)
 							
@@ -57,9 +57,10 @@ Case of
 								.mark($device.udid=$current)
 							
 						End for each 
+						
+						$menu.line()
+						
 					End if 
-					
-					$menu.line()
 					
 					If (Form:C1466.devices.apple.length>0)
 						
@@ -73,9 +74,13 @@ Case of
 					
 					$menu.line()
 					
+					$menu.append($tab+Get localized string:C991("openTheXcodeSimulatorsManager"); "XcodeDeviceManager")  //.enable((Form.status.xCode))
+					
+				Else 
+					
+					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Xcode"); "checkInstallation")
+					
 				End if 
-				
-				$menu.append($tab+Get localized string:C991("openTheXcodeSimulatorsManager"); "XcodeDeviceManager").enable((Form:C1466.status.xCode))
 				
 				$menu.line()
 				
@@ -99,31 +104,43 @@ Case of
 						$menu.append($tab+Get localized string:C991("createASimulator"); "createAVD").line()
 						
 					End if 
-				End if 
-				
-				$menu.append($tab+Get localized string:C991("openTheAvdManager"); "avdManager").enable((Form:C1466.status.studio))
-				
-			Else 
-				
-				If (Form:C1466.devices.android.length>0)
 					
-					For each ($device; Form:C1466.devices.android)
-						
-						$menu.append($device.name; $device.udid)\
-							.mark($device.udid=String:C10(Form:C1466.currentDevice))
-						
-					End for each 
-					
-					$menu.line()
+					$menu.append($tab+Get localized string:C991("openTheAvdManager"); "avdManager")  //.enable((Form.status.studio))
 					
 				Else 
 					
-					$menu.append("createASimulator"; "createAVD").line()
+					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkInstallation")
 					
 				End if 
 				
-				$menu.append("openTheAvdManager"; "avdManager")
+			Else 
 				
+				If (Form:C1466.status.studio)
+					
+					If (Form:C1466.devices.android.length>0)
+						
+						For each ($device; Form:C1466.devices.android)
+							
+							$menu.append($device.name; $device.udid)\
+								.mark($device.udid=String:C10(Form:C1466.currentDevice))
+							
+						End for each 
+						
+						$menu.line()
+						
+					Else 
+						
+						$menu.append("createASimulator"; "createAVD").line()
+						
+					End if 
+					
+					$menu.append("openTheAvdManager"; "avdManager")
+					
+				Else 
+					
+					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkInstallation")
+					
+				End if 
 			End if 
 			
 		Else 
@@ -163,6 +180,13 @@ Case of
 			: (Not:C34($menu.selected))
 				
 				// Nothing selected
+				
+				//______________________________________________________
+			: ($menu.choice="checkInstallation")
+				
+				// Launch checking the development environment
+				CALL WORKER:C1389(Form:C1466.editor.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
+					"caller"; Form:C1466.editor.$mainWindow; "project"; PROJECT))
 				
 				//______________________________________________________
 			: ($menu.choice="XcodeDeviceManager")

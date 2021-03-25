@@ -311,6 +311,16 @@ Function localized
 					End if 
 				End for 
 			End if 
+			
+		Else 
+			
+			If (Length:C16($0)=0)
+				
+				$0:=$1
+				
+			End if 
+			
+			
 		End if 
 	End if 
 	

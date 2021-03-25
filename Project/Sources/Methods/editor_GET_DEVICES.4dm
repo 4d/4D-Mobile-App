@@ -18,13 +18,16 @@ If (Value type:C1509(SHARED)=Is undefined:K8:13)  // For testing purposes
 	
 End if 
 
+var $status : Object
+$status:=$in.project.$project.$status
+
 // ----------------------------------------------------
 Case of 
 		
 		//______________________________________________________
 	: (DATABASE.isMacOs)
 		
-		If (FEATURE.with("android"))  //🚧
+		If (FEATURE.with("android"))  // 🚧
 			
 			var $avd : cs:C1710.avd
 			$avd:=cs:C1710.avd.new()
@@ -32,11 +35,40 @@ Case of
 			var $simctl : cs:C1710.simctl
 			$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 			
-			$out:=New object:C1471(\
-				"android"; $avd.availableDevices(); \
-				"apple"; $simctl.availableDevices())
+			Case of 
+					
+					//______________________________________________________
+				: (Bool:C1537($status.studio) & Bool:C1537($status.xCode))
+					
+					$out:=New object:C1471(\
+						"android"; $avd.availableDevices(); \
+						"apple"; $simctl.availableDevices())
+					
+					//______________________________________________________
+				: (Bool:C1537($status.studio))
+					
+					$out:=New object:C1471(\
+						"android"; $avd.availableDevices(); \
+						"apple"; New collection:C1472)
+					
+					//______________________________________________________
+				: (Bool:C1537($status.xCode))
+					
+					$out:=New object:C1471(\
+						"android"; New collection:C1472; \
+						"apple"; $simctl.availableDevices())
+					
+					//______________________________________________________
+				Else 
+					
+					$out:=New object:C1471(\
+						"android"; New collection:C1472; \
+						"apple"; New collection:C1472)
+					
+					//______________________________________________________
+			End case 
 			
-			If (FEATURE.with("ConnectedDevices"))
+			If (FEATURE.with("ConnectedDevices")) & Bool:C1537($status.xCode)
 				
 				$out.connected:=New object:C1471(\
 					"android"; New collection:C1472; \
@@ -59,9 +91,19 @@ Case of
 		//______________________________________________________
 	: (DATABASE.isWindows)
 		
-		$out:=New object:C1471(\
-			"android"; cs:C1710.avd.new().availableDevices(); \
-			"apple"; New collection:C1472)
+		If (Bool:C1537($status.studio))
+			
+			$out:=New object:C1471(\
+				"android"; cs:C1710.avd.new().availableDevices(); \
+				"apple"; New collection:C1472)
+			
+		Else 
+			
+			$out:=New object:C1471(\
+				"android"; New collection:C1472; \
+				"apple"; New collection:C1472)
+			
+		End if 
 		
 		//______________________________________________________
 	Else 

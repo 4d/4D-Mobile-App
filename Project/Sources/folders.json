@@ -94,6 +94,55 @@
 			"tester_net"
 		]
 	},
+	"[ android ]": {
+		"methods": [
+			"COMPILER_android",
+			"resetAndroidStudio",
+			"studioCheckInstall"
+		],
+		"classes": [
+			"adb",
+			"androidEmulator",
+			"androidProcess",
+			"androidprojectgenerator",
+			"avd",
+			"gradlew",
+			"MobileProjectAndroid",
+			"sdkmanager",
+			"studio",
+			"vdtool"
+		]
+	},
+	"[ macOS ]": {
+		"groups": [
+			"storyboardClass"
+		],
+		"methods": [
+			"asset",
+			"capabilities",
+			"certificate",
+			"colors",
+			"COMPILER_macOS",
+			"device",
+			"git",
+			"mobile_Project_iOS",
+			"plist",
+			"provisioningProfiles",
+			"swiftPM",
+			"teamId",
+			"test_capabilities",
+			"test_swiftPM",
+			"Xcode",
+			"Xcode_CheckInstall",
+			"XcodeProj",
+			"XcodeProjInject"
+		],
+		"classes": [
+			"cfgutil",
+			"simctl",
+			"Xcode"
+		]
+	},
 	"[API]": {
 		"methods": [
 			"C_NEW_MOBILE_PROJECT",
@@ -140,8 +189,6 @@
 		],
 		"methods": [
 			"COMPILER_editor",
-			"downloadSDK",
-			"downloadSDKFromTeamCity",
 			"editor_CALLBACK",
 			"editor_CHECK_INSTALLATION",
 			"editor_CREATE_PROJECT",
@@ -407,24 +454,6 @@
 			"unitTestSuites"
 		]
 	},
-	"android": {
-		"methods": [
-			"COMPILER_android",
-			"studioCheckInstall"
-		],
-		"classes": [
-			"adb",
-			"androidEmulator",
-			"androidProcess",
-			"androidprojectgenerator",
-			"avd",
-			"gradlew",
-			"MobileProjectAndroid",
-			"sdkmanager",
-			"studio",
-			"vdtool"
-		]
-	},
 	"backend": {
 		"groups": [
 			"templateClass"
@@ -436,6 +465,8 @@
 			"COMPILER_backend",
 			"dataModel",
 			"dataSet",
+			"downloadSDK",
+			"downloadSDKFromTeamCity",
 			"dump",
 			"findFirstPathComponentInCatalog",
 			"formatString",
@@ -667,36 +698,6 @@
 	"Localization": {
 		"forms": [
 			"LOCALIZATION"
-		]
-	},
-	"macOS": {
-		"groups": [
-			"storyboardClass"
-		],
-		"methods": [
-			"asset",
-			"capabilities",
-			"certificate",
-			"colors",
-			"COMPILER_macOS",
-			"device",
-			"git",
-			"mobile_Project_iOS",
-			"plist",
-			"provisioningProfiles",
-			"swiftPM",
-			"teamId",
-			"test_capabilities",
-			"test_swiftPM",
-			"Xcode",
-			"Xcode_CheckInstall",
-			"XcodeProj",
-			"XcodeProjInject"
-		],
-		"classes": [
-			"cfgutil",
-			"simctl",
-			"Xcode"
 		]
 	},
 	"Message": {

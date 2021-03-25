@@ -118,14 +118,13 @@
 					"top": 0,
 					"left": 948,
 					"width": 22,
-					"height": 40,
-					"sizingX": "move",
-					"stroke": "transparent"
+					"height": 60,
+					"class": "background"
 				},
 				"switch.button": {
 					"type": "button",
 					"top": 0,
-					"left": 948,
+					"left": 946,
 					"width": 22,
 					"height": 40,
 					"sizingX": "move",
@@ -400,5 +399,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 49
+	"geometryStamp": 73
 }

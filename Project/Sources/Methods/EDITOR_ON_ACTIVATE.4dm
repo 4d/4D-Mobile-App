@@ -25,7 +25,11 @@ If (FORM Get current page:C276=1)
 	CALL FORM:C1391(Form:C1466.$mainWindow; "editor_CALLBACK"; "checkingServerConfiguration")
 	CALL FORM:C1391(Form:C1466.$mainWindow; "editor_CALLBACK"; "refreshServer")
 	
-	// Launch recovering the list of available simulator devices
+	// Audit of development tools
+	CALL WORKER:C1389(Form:C1466.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
+		"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
+	
+	// Recovering the list of available devices
 	CALL WORKER:C1389(Form:C1466.$worker; "editor_GET_DEVICES"; New object:C1471(\
 		"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
 	

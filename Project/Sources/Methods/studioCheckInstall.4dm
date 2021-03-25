@@ -91,7 +91,7 @@ If ($out.applicationAvailable)
 				"target"; $in.caller; \
 				"action"; "show"; \
 				"type"; "confirm"; \
-				"title"; ".You must accept Android Studio Tools licences"; \
+				"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
 				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio")))
 			
 			If ($signal.validate)
