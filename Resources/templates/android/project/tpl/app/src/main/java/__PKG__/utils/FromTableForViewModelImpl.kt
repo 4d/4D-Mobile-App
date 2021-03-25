@@ -140,7 +140,7 @@ class FromTableForViewModelImpl : FromTableForViewModel {
     ): EntityListViewModel<*> =
         when (tableName) {
             {{#tableNames}}
-            "{{name}}" -> EntityListViewModel<{{name}}>(tableName, apiService)
+            "{{name}}" -> EntityListViewModel{{name}}(tableName, apiService)
             {{/tableNames}}
             else -> throw IllegalArgumentException()
         }

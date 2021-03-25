@@ -55,7 +55,7 @@ class EntityViewModel{{tableName}}(
         if (entity is {{tableName}}) {
             {{#relations}}
             entity.__{{relation_name}}Key?.let {
-                Timber.e("__{{relation_name}}Key retrieved is = $it")
+                Timber.d("[$originalAssociatedTableName] __{{relation_name}}Key retrieved is = $it")
                 map.put(
                     "{{relation_name}}",
                     {{relation_name}}{{relation_source}}Has{{relation_target}}RelationDao.getManyToOneRelation(relationId = it)
