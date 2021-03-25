@@ -503,7 +503,11 @@ Function doRun
 				$Obj_in.tags.table:=$Obj_table
 				
 				// Process the template
-				$o.template.source:=$folder.platformPath
+				If ($folder.folder("ios").exists)
+					$o.template.source:=$folder.folder("ios").platformPath
+				Else 
+					$o.template.source:=$folder.platformPath
+				End if 
 				$o.template.parent:=$Obj_template.parent  // or $Obj_template?
 				$o.tags:=$Obj_in.tags  // has been modifyed since clone
 				$o.projfile:=$Obj_in.projfile  // do not want a copy
