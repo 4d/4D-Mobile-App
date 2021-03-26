@@ -16,6 +16,10 @@ import {{package}}.android.build.utils.readFile
 import {{package}}.android.build.utils.retrieveJSONObject
 import java.io.File
 
+{{#tableNames}}
+val fields{{name}} = listOf({{{concat_fields}}})
+{{/tableNames}}
+
 fun getCatalog(tableName: String): DataClass? {
 
     val filePath = getCatalogPath(tableName)
@@ -32,6 +36,8 @@ fun getCatalog(tableName: String): DataClass? {
             val dataClasses = jsonObj.getSafeArray("dataClasses")
             dataClasses?.getJSONObject(0)?.let { jsonDataClass ->
                 jsonDataClass.getSafeString("name")?.let { dataClassName ->
+                    println("dataClassName = $dataClassName")
+
                     jsonDataClass.getSafeArray("attributes")?.let { attributes ->
 
                         val fields = mutableListOf<Field>()
@@ -41,16 +47,22 @@ fun getCatalog(tableName: String): DataClass? {
                             val attribute = attributes.getJSONObject(i)
 
                             attribute.getSafeString("name")?.let { fieldName ->
-                                val field = Field(fieldName.condenseSpaces())
-                                attribute.getSafeString("type")
-                                    ?.let { type -> field.isImage = type == "image" }
-                                attribute.getSafeString("kind")?.let { kind ->
-                                    when (kind) {
-                                        "relatedEntity" -> field.isManyToOneRelation = true
-                                        "relatedEntities" -> field.isOneToManyRelation = true
+
+                                if (isFieldDefined(dataClassName, fieldName)) {
+
+                                    val field = Field(fieldName.condenseSpaces())
+                                    attribute.getSafeString("type")
+                                        ?.let { type -> field.isImage = type == "image" }
+                                    attribute.getSafeString("kind")?.let { kind ->
+                                        when (kind) {
+                                            "relatedEntity" -> field.isManyToOneRelation = true
+                                            "relatedEntities" -> field.isOneToManyRelation = true
+                                        }
                                     }
+                                    fields.add(field)
+                                } else {
+                                    println("Field is not defined : $fieldName")
                                 }
-                                fields.add(field)
                             }
                         }
 
@@ -67,4 +79,13 @@ fun getCatalog(tableName: String): DataClass? {
         println("[$tableName] No catalog file found")
     }
     return null
+}
+
+fun isFieldDefined(tableName: String, fieldName: String): Boolean {
+    return when (tableName) {
+        {{#tableNames}}
+        "{{name}}" -> fields{{name}}.contains(fieldName)
+        {{/tableNames}}
+        else -> false
+    }
 }

@@ -12,13 +12,13 @@ import com.qmobile.qmobiledatasync.utils.FragmentUtil
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 import com.qmobile.qmobileui.BR
-{{#tableNames_navigation}}
+{{#tableNames}}
 import {{package}}.databinding.FragmentDetail{{nameCamelCase}}Binding
-{{/tableNames_navigation}}
+{{/tableNames}}
 import {{package}}.databinding.FragmentListBinding
-{{#tableNames_navigation}}
+{{#tableNames}}
 import {{package}}.databinding.RecyclerviewItem{{nameCamelCase}}Binding
-{{/tableNames_navigation}}
+{{/tableNames}}
 {{#tableNames}}
 import {{package}}.viewmodel.entity.EntityViewModel{{name}}
 {{/tableNames}}

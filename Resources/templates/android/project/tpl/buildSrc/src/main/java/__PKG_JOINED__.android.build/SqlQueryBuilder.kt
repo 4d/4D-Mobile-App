@@ -39,27 +39,27 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
 
         val outputEntity = arrayOfNulls<Any>(hashMap.keys.size)
 
-        var j = 0
         inputEntity.keys().forEach { key ->
-            hashMap[key.condenseSpaces()] = inputEntity[key]
+            if (hashMap.containsKey(key.condenseSpaces())) {
+                hashMap[key.condenseSpaces()] = inputEntity[key]
 
-            fields.find { it.name == key }?.let { field ->
-                when {
-                    field.isImage -> {
-                        hashMap[key.condenseSpaces()] = null
-                    }
-                    field.isManyToOneRelation -> {
-                        val neededObject = hashMap[key.condenseSpaces()]
-                        if (neededObject is JSONObject) {
-                            hashMap["__${key.condenseSpaces()}Key"] = neededObject.getSafeString("__KEY")
+                fields.find { it.name == key }?.let { field ->
+                    when {
+                        field.isImage -> {
+                            hashMap[key.condenseSpaces()] = null
                         }
-                    }
-                    field.isOneToManyRelation -> {
-                        // TODO
+                        field.isManyToOneRelation -> {
+                            val neededObject = hashMap[key.condenseSpaces()]
+                            if (neededObject is JSONObject) {
+                                hashMap["__${key.condenseSpaces()}Key"] = neededObject.getSafeString("__KEY")
+                            }
+                        }
+                        field.isOneToManyRelation -> {
+                            // TODO
+                        }
                     }
                 }
             }
-            j++
         }
 
         val sortedMap = hashMap.toSortedMap()
