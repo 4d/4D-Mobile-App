@@ -342,9 +342,10 @@ Function chmod
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function unzipSdk
+Function prepareSdk
 	var $0 : Object
-	var $cacheSdkAndroid : 4D:C1709.File
+	var $1 : Text  // Project path
+	var $cacheSdkAndroid; $sdkVersion; $copyDest : 4D:C1709.File
 	var $archive : 4D:C1709.ZipArchive
 	var $unzipDest : 4D:C1709.Folder
 	
@@ -362,12 +363,34 @@ Function unzipSdk
 		
 		$unzipDest:=$archive.root.copyTo($cacheSdkAndroid.parent; fk overwrite:K87:5)
 		
-		If (Not:C34($unzipDest.exists))
+		If ($unzipDest.exists)
+			
+			$sdkVersion:=$unzipDest.file("sdkVersion")
+			
+			If ($sdkVersion.exists)
+				
+				$copyDest:=$sdkVersion.copyTo(Folder:C1567($1+"app/src/main/assets"); fk overwrite:K87:5)
+				
+				If (Not:C34($copyDest.exists))
+					// Copy failed
+					$0.success:=False:C215
+					$0.errors.push("Could not copy sdkVersion file to destination: "+$copyDest.path)
+					
+					//Else : all ok
+				End if 
+				
+			Else 
+				
+				$0.success:=False:C215
+				$0.errors.push("Could not find sdkVersion file at destination: "+$sdkVersion.path)
+				
+			End if 
+			
+		Else 
 			
 			$0.success:=False:C215
 			$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
 			
-			// Else : all ok
 		End if 
 		
 	Else 

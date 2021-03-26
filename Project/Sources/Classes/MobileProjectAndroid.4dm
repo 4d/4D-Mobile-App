@@ -183,7 +183,7 @@ Function create()->$result : Object
 										// * UNZIP 4D MOBILE SDK
 										This:C1470.postStep("decompressionOfTheSdk")
 										
-										$o:=This:C1470.androidprojectgenerator.unzipSdk()
+										$o:=This:C1470.androidprojectgenerator.prepareSdk(This:C1470.project.path)
 										
 										If (Not:C34($o.success))
 											
