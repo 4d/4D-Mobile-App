@@ -87,6 +87,7 @@ class App : BaseApp() {
             remoteUrl = QMobileUiUtil.appUtilities.remoteUrl
             embeddedData = QMobileUiUtil.appUtilities.embeddedData
             globalStamp = QMobileUiUtil.appUtilities.globalStamp
+            sdkVersion = QMobileUiUtil.appUtilities.sdkVersion
         }
     }
 
