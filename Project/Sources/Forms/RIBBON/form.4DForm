@@ -42,14 +42,14 @@
 				},
 				"toolbar.background": {
 					"type": "rectangle",
-					"top": 1,
+					"top": 0,
 					"left": 0,
-					"width": 970,
-					"height": 39,
+					"width": 948,
+					"height": 40,
 					"fill": "#1BA1E5",
-					"class": "background",
-					"sizingY": "fixed",
-					"sizingX": "grow"
+					"class": "",
+					"sizingX": "grow",
+					"stroke": "transparent"
 				},
 				"tab": {
 					"type": "rectangle",
@@ -118,15 +118,17 @@
 					"top": 0,
 					"left": 948,
 					"width": 22,
-					"height": 60,
-					"class": "background"
+					"height": 41,
+					"class": "background",
+					"sizingX": "move",
+					"sizingY": "fixed"
 				},
 				"switch.button": {
 					"type": "button",
 					"top": 0,
-					"left": 946,
+					"left": 948,
 					"width": 22,
-					"height": 40,
+					"height": 41,
 					"sizingX": "move",
 					"icon": "/RESOURCES/images/toolbar/reduce.png",
 					"style": "custom",
@@ -399,5 +401,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 73
+	"geometryStamp": 132
 }

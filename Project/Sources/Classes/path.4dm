@@ -47,11 +47,11 @@ Function userCache()->$folder : 4D:C1709.Folder
 		
 	Else 
 		
-		ASSERT:C1129(False:C215; "TODO")
-		// Use ProgramData
-		//$folder:=Folder(fk system folder).parent.folder("ProgramData/4D Mobile")
+		$folder:=Folder:C1567(fk system folder:K87:13).parent.folder("AppData/Local/4D Mobile")
 		
 	End if 
+	
+	$folder.create()
 	
 /*========================================================
 	
@@ -94,6 +94,8 @@ Function systemCache()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 		$folder:=Folder:C1567(fk system folder:K87:13).parent.folder("ProgramData/4D Mobile")
 		
 	End if 
+	
+	$folder.create()
 	
 /*========================================================*/
 Function sdk  // sdk folder ||||||||||| OBSOLETE ||||||||||||

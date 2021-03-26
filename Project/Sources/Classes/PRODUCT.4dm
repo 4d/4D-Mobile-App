@@ -28,6 +28,7 @@ Class constructor
 		This:C1470.target:=cs:C1710.static.new("target.label")
 		This:C1470.ios:=cs:C1710.button.new("ios")
 		This:C1470.android:=cs:C1710.button.new("android")
+		This:C1470.os:=cs:C1710.group.new(This:C1470.target; This:C1470.ios; This:C1470.android)
 		
 		// Constraints definition
 		ob_createPath(This:C1470.context; "constraints.rules"; Is collection:K8:32)

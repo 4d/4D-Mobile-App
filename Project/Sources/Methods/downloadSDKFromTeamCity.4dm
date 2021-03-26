@@ -165,12 +165,6 @@ If ($run)
 		
 	End if 
 	
-	If (DATABASE.isMatrix)
-		
-		ASSERT:C1129($http.success)
-		
-	End if 
-	
 Else 
 	
 	If ($withUI)

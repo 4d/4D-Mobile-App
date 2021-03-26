@@ -93,11 +93,11 @@ Case of
 			Else 
 				
 /*
-				DO_MESSAGE(New object(\
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; "noDevices"; \
-					"additional"; ""))																
+								DO_MESSAGE(New object(\
+										"action"; "show"; \
+										"type"; "alert"; \
+										"title"; "noDevices"; \
+										"additional"; ""))																
 */
 				
 			End if 
@@ -142,8 +142,9 @@ Case of
 			Form:C1466.$xCode:=$in.xCode
 			Form:C1466.$studio:=$in.studio
 			
-			Form:C1466.$status.xCode:=$in.xCode.ready
-			Form:C1466.$status.studio:=$in.studio.ready
+			Form:C1466.$status.xCode:=Form:C1466.$xCode.ready
+			Form:C1466.$status.studio:=Form:C1466.$studio.ready
+			
 		Else 
 			
 			// Store the result

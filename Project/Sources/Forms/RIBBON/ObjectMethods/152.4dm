@@ -115,11 +115,12 @@ Case of
 					.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable($simctl.deviceLog(Form:C1466.currentDevice).exists)\
 					.line()
 				
+				$menu.append("showDiagnosticReportsFolder"; "_openDiagnosticReports")
+				
 				If ($could.isDebug)
 					
 					$device:=$simctl.device(Form:C1466.currentDevice)
 					
-					$menu.append("showDiagnosticReportsFolder"; "_openDiagnosticReports")
 					
 					$menu.append("❌ Close simulators"; "_killSimulators")\
 						.append("🗑 Erase Current Simulator"; "_eraseCurrentSimulator")
@@ -190,15 +191,12 @@ Case of
 			
 			If ($could.isDebug)
 				
-				$menu.append("🛒 Download the Android SDK from TeamCity"; "downloadAndroidSdkFromTeamCity")
-				$menu.append("🛒 Download the iOS SDK from TeamCity"; "downloadIosSdkFromTeamCity")
+				//
 				
 			End if 
 			
 			$menu.line()
-			//$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable(ENV.caches().folder("com.4D.mobile").exists)
 			$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable($path.userCache().exists)
-			
 			$menu.append("showTheSdkCacheFolder"; "showTheSdkCacheFolder").enable($sdkCacheFolder.exists)
 			
 			If (Is macOS:C1572)
@@ -226,21 +224,24 @@ Case of
 							.append("🍪 Generate data model"; "_generateDataModel")
 						
 					End if 
-					
-					$menu.line()
-					$menu.append("openThe4dMobileAppLog"; "openThe4dMobileAppLog")
-					
 				End if 
 				
 			Else 
 				
-				//#TO_DO ?
+				//
 				
 			End if 
 			
 			$menu.line()\
+				.append("openThe4dMobileAppLog"; "openThe4dMobileAppLog")\
 				.append("verbose"; "_verbose").mark(PROJECT.$project.verbose)
 			
+			If ($could.isDebug)
+				
+				$menu.line()
+				$menu.append("❌ Uninstall Android Studio"; "_removeAndoidStudio")
+				
+			End if 
 		End if 
 		
 		OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
@@ -282,16 +283,20 @@ Case of
 				SHOW ON DISK:C922(PROJECT._folder.platformPath)
 				
 				//______________________________________________________
-			: ($menu.choice="downloadAndroidSdk")
+			: ($menu.choice="downloadAndroidSdk")\
+				 | ($menu.choice="downloadIosSdk")
 				
-				//#MARK_TODO : from new location
-				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; "android"; False:C215; Form:C1466.editor.$mainWindow; Shift down:C543)
+				$t:=Choose:C955($menu.choice="downloadAndroidSdk"; "android"; "ios")
 				
-				//______________________________________________________
-			: ($menu.choice="downloadIosSdk")
-				
-				//#MARK_TODO : from new location
-				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; "ios"; False:C215; Form:C1466.editor.$mainWindow; Shift down:C543)
+				If ((Application version:C493(*)="A@") & Shift down:C543)
+					
+					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDKFromTeamCity"; $t; False:C215; Form:C1466.editor.$mainWindow; True:C214)
+					
+				Else 
+					
+					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; $t; False:C215; Form:C1466.editor.$mainWindow; Shift down:C543)
+					
+				End if 
 				
 				//______________________________________________________
 			: ($menu.choice="downloadAndroidSdkFromTeamCity")
@@ -470,6 +475,12 @@ Case of
 			: ($menu.choice="_verbose")
 				
 				PROJECT.$project.verbose:=Not:C34(Bool:C1537(PROJECT.$project.verbose))
+				
+				//______________________________________________________
+			: ($menu.choice="_removeAndoidStudio")
+				
+				resetAndroidStudio
+				ALERT:C41("Android Studio has been removed")
 				
 				//______________________________________________________
 			: (Position:C15("_app{"; $menu.choice)=1)

@@ -74,11 +74,11 @@ Case of
 					
 					$menu.line()
 					
-					$menu.append($tab+Get localized string:C991("openTheXcodeSimulatorsManager"); "XcodeDeviceManager")  //.enable((Form.status.xCode))
+					$menu.append($tab+Get localized string:C991("openTheXcodeSimulatorsManager"); "XcodeDeviceManager")
 					
 				Else 
 					
-					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Xcode"); "checkInstallation")
+					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Xcode"); "checkXcodeInstallation")
 					
 				End if 
 				
@@ -105,11 +105,11 @@ Case of
 						
 					End if 
 					
-					$menu.append($tab+Get localized string:C991("openTheAvdManager"); "avdManager")  //.enable((Form.status.studio))
+					$menu.append($tab+Get localized string:C991("openTheAvdManager"); "avdManager")
 					
 				Else 
 					
-					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkInstallation")
+					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkAndroidInstallation")
 					
 				End if 
 				
@@ -138,7 +138,7 @@ Case of
 					
 				Else 
 					
-					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkInstallation")
+					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkAndroidInstallation")
 					
 				End if 
 			End if 
@@ -182,7 +182,18 @@ Case of
 				// Nothing selected
 				
 				//______________________________________________________
-			: ($menu.choice="checkInstallation")
+			: ($menu.choice="checkAndroidInstallation")\
+				 | ($menu.choice="checkXcodeInstallation")
+				
+				If ($menu.choice="checkAndroidInstallation")
+					
+					Form:C1466.editor.$studio.canceled:=False:C215
+					
+				Else 
+					
+					Form:C1466.editor.$xCode.canceled:=False:C215
+					
+				End if 
 				
 				// Launch checking the development environment
 				CALL WORKER:C1389(Form:C1466.editor.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
@@ -277,10 +288,12 @@ Case of
 				$simctl.setDefaultDevice($menu.choice)
 				
 				PROJECT.$ios:=True:C214
-				PROJECT.setTarget(True:C214)
+				PROJECT.setTarget(True:C214; "ios")
 				
 				//______________________________________________________
 			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-[[:xdigit:]]{16}"; $menu.choice; 1))  // iOS Connected Device
+				
+				Form:C1466.editor.$xCode.canceled:=False:C215
 				
 				$device:=Form:C1466.devices.connected.apple.query("udid = :1"; $menu.choice).pop()
 				
@@ -289,10 +302,12 @@ Case of
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
 				PROJECT.$ios:=True:C214
-				PROJECT.setTarget(True:C214)
+				PROJECT.setTarget(True:C214; "ios")
 				
 				//______________________________________________________
 			: (FEATURE.with("android"))  // 🚧
+				
+				Form:C1466.editor.$studio.canceled:=False:C215
 				
 				$device:=Form:C1466.devices.android.query("udid = :1"; $menu.choice).pop()
 				
@@ -300,7 +315,7 @@ Case of
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
 				PROJECT.$android:=True:C214
-				PROJECT.setTarget(True:C214)
+				PROJECT.setTarget(True:C214; "android")
 				
 				//______________________________________________________
 			Else 

@@ -75,13 +75,13 @@ If ($out.applicationAvailable)
 				
 				If (Not:C34($out.ready))
 					
-					//#ERROR - kotlinc not found
+					// #ERROR - kotlinc not found
 					
 				End if 
 				
 			Else 
 				
-				//#ERROR - java not found
+				// #ERROR - java not found
 				
 			End if 
 			
@@ -92,11 +92,16 @@ If ($out.applicationAvailable)
 				"action"; "show"; \
 				"type"; "confirm"; \
 				"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
-				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio")))
+				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio"); \
+				"cancel"; "later"))
 			
 			If ($signal.validate)
 				
 				$studio.open()
+				
+			Else 
+				
+				$out.canceled:=True:C214  // Remember this so as not to ask again
 				
 			End if 
 		End if 
@@ -108,11 +113,16 @@ If ($out.applicationAvailable)
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; New collection:C1472("obsoleteVersionofApp"; "4dForAndroid"; SHARED.studioVersion; "androidStudio"); \
-			"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "androidStudio")))
+			"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "androidStudio"); \
+			"cancel"; "later"))
 		
 		If ($signal.validate)
 			
 			OPEN URL:C673(Get localized string:C991("downloadAndroidStudio"); *)
+			
+		Else 
+			
+			$out.canceled:=True:C214  // Remember this so as not to ask again
 			
 		End if 
 	End if 
@@ -126,15 +136,17 @@ Else
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; New collection:C1472("4dMobileRequiresAndroidStudio"; "4dForAndroid"); \
-			"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "androidStudio")))
+			"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "androidStudio"); \
+			"cancel"; "later"))
 		
 		If ($signal.validate)
 			
 			OPEN URL:C673(Get localized string:C991("downloadAndroidStudio"); *)
 			
+		Else 
+			
+			$out.canceled:=True:C214  // Remember this so as not to ask again
+			
 		End if 
 	End if 
 End if 
-
-// ----------------------------------------------------
-// End

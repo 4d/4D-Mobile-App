@@ -60,12 +60,12 @@
 				},
 				"glass": {
 					"type": "picture",
-					"top": 3,
-					"left": 70,
-					"width": 14,
-					"height": 14,
+					"top": 2,
+					"left": 74,
+					"width": 16,
+					"height": 16,
 					"pictureFormat": "truncatedTopLeft",
-					"picture": "/RESOURCES/Images/glass.png"
+					"picture": "/RESOURCES/Images/widgets/search/magnifying.png"
 				},
 				"close": {
 					"type": "button",
@@ -84,7 +84,7 @@
 				},
 				"placeholder": {
 					"type": "input",
-					"top": 37,
+					"top": 23,
 					"left": 0,
 					"width": 90,
 					"height": 17,
@@ -105,7 +105,7 @@
 		"kind": "form"
 	},
 	"method": "search_HANDLER",
-	"geometryStamp": 6,
+	"geometryStamp": 13,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

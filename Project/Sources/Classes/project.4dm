@@ -354,16 +354,25 @@ Function save()
 			If (PROJECT.$dialog#Null:C1517)
 				
 				$file:=$folder.file("dialog.json")
+				
 				If ($file.isWritable)
+					
 					$file.setText(JSON Stringify:C1217(PROJECT.$dialog; *))
-					// else log?
+					
+					// Else log?
+					
 				End if 
+				
 				For each ($key; PROJECT.$dialog)
 					
 					$file:=$folder.file($key+".json")
+					
 					If ($file.isWritable)
+						
 						$file.setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *))
-						// else log?
+						
+						// Else log?
+						
 					End if 
 				End for each 
 			End if 
@@ -373,17 +382,25 @@ Function save()
 			OB REMOVE:C1226($o.$project; "$dialog")
 			
 			$file:=$folder.file("project.json")
+			
 			If ($file.isWritable)
+				
 				$file.setText(JSON Stringify:C1217($o; *))
+				
 				// Else log?
+				
 			End if 
 			
 			If (PROJECT.$project.$catalog#Null:C1517)
 				
 				$file:=$folder.file("catalog.json")
+				
 				If ($file.isWritable)
+					
 					$file.setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *))
+					
 					// Else log?
+					
 				End if 
 			End if 
 		End if 
@@ -395,7 +412,7 @@ Function save()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Populate the target value into te project
-Function setTarget($check : Boolean)
+Function setTarget($check : Boolean; $target : Text)
 	
 	If (This:C1470.$ios & This:C1470.$android)
 		
@@ -420,19 +437,30 @@ Function setTarget($check : Boolean)
 	// Update the project folder
 	PROJECT.prepare()
 	
-	If (Count parameters:C259>=1)
+	If (Count parameters:C259>=2)
 		
 		If ($check)
 			
 			// Launch the verification of the development tools, if any
-			If (This:C1470.$ios & Is macOS:C1572 & Not:C34(Bool:C1537(This:C1470.$project.$xCode.ready)))\
-				 | (This:C1470.$android & Not:C34(Bool:C1537(This:C1470.$project.$studio.ready)))
+			If (($target="ios") & Is macOS:C1572)  // & Not(Bool(This.$project.$xCode.ready))
+				
+				This:C1470.$project.$xCode.canceled:=False:C215
 				
 				CALL WORKER:C1389(This:C1470.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-					"caller"; This:C1470.$mainWindow; "project"; This:C1470.$project))
+					"caller"; This:C1470.$mainWindow; "project"; PROJECT))
+				
+			End if 
+			
+			If (($target="android"))  // & Not(Bool(This.$project.$studio.ready))
+				
+				This:C1470.$project.$studio.canceled:=False:C215
+				
+				CALL WORKER:C1389(This:C1470.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
+					"caller"; This:C1470.$mainWindow; "project"; PROJECT))
 				
 			End if 
 		End if 
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 

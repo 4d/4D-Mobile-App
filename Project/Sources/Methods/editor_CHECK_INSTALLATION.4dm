@@ -6,22 +6,22 @@
 // ----------------------------------------------------
 // Description:
 // Carries out controls of the development environment
-// according to platform and OS target
+// According to platform and OS target
 // ----------------------------------------------------
 // Declarations
-var $0 : Object
-var $1 : Object
+#DECLARE($in : Object)->$out : Object
 
 If (False:C215)
 	C_OBJECT:C1216(editor_CHECK_INSTALLATION; $0)
 	C_OBJECT:C1216(editor_CHECK_INSTALLATION; $1)
 End if 
 
-var $in; $out; $androidStudio; $xCode : Object
+//var $in; $out; $studio; $xCode : Object
+var $studio; $xCode : Object
 
 // ----------------------------------------------------
 // Initialisations
-$in:=$1
+//$in:=$1
 
 // ----------------------------------------------------
 Case of 
@@ -29,21 +29,33 @@ Case of
 		//______________________________________________________
 	: (Is macOS:C1572)
 		
-		If (FEATURE.with("android"))  //🚧
+		If (FEATURE.with("android"))  // 🚧
 			
-			If (Bool:C1537($in.project.$studio.ready))
+			If ($in.project.$project#Null:C1517)
 				
-				$androidStudio:=$in.project.$studio
+				// From Ribbon
+				$studio:=$in.project.$project.$studio
+				$xCode:=$in.project.$project.$xCode
 				
 			Else 
 				
-				// Silent mode if not Android target
-				$in.silent:=Not:C34(Bool:C1537($in.project.$android))
-				$androidStudio:=studioCheckInstall($in)
+				// From Product panel
+				$studio:=$in.project.$studio
+				$xCode:=$in.project.$xCode
 				
-				If ($androidStudio.ready)
+			End if 
+			
+			If (Not:C34(Bool:C1537($studio.ready)))
+				
+				If (Not:C34(Bool:C1537($studio.canceled)))
 					
-					//launch the
+					// Silent mode if not Android target
+					$in.silent:=Not:C34(Bool:C1537($in.project.$android))
+					$studio:=studioCheckInstall($in)
+					
+				End if 
+				
+				If ($studio.ready)
 					
 					If (Bool:C1537($in.project.$android))
 						
@@ -51,23 +63,37 @@ Case of
 						CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "android"; True:C214)
 						
 					End if 
+					
+				Else 
+					
+					$studio.canceled:=Bool:C1537($studio.canceled)
+					
 				End if 
 			End if 
 			
-			If (Bool:C1537($in.project.$xCode.ready))
+			If (Not:C34(Bool:C1537($xCode.ready)))
 				
-				$xCode:=$in.project.$xCode
+				If (Not:C34(Bool:C1537($xCode.canceled)))
+					
+					$in.silent:=Not:C34(Bool:C1537($in.project.$ios))
+					$xCode:=Xcode_CheckInstall($in)
+					
+				End if 
 				
-			Else 
-				
-				$in.silent:=Not:C34(Bool:C1537($in.project.$ios))
-				$xCode:=Xcode_CheckInstall($in)
-				
+				If ($xCode.ready)
+					
+					// 
+					
+				Else 
+					
+					$xCode.canceled:=Bool:C1537($xCode.canceled)
+					
+				End if 
 			End if 
 			
 			$out:=New object:C1471(\
 				"xCode"; $xCode; \
-				"studio"; $androidStudio)
+				"studio"; $studio)
 			
 		Else 
 			
@@ -78,15 +104,24 @@ Case of
 		//______________________________________________________
 	: (Is Windows:C1573)
 		
-		$out:=New object:C1471(\
-			"xCode"; New object:C1471("platform"; Windows:K25:3; \
-			"XcodeAvailable"; False:C215; \
-			"toolsAvalaible"; False:C215; \
-			"ready"; False:C215); \
-			"studio"; studioCheckInstall($in))
+		$studio:=$in.project.$project.$studio
 		
-		// Get the last 4D Mobile Android SDK
-		CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "android"; True:C214)
+		If (Not:C34(Bool:C1537($studio.canceled)))
+			
+			$out:=New object:C1471(\
+				"xCode"; New object:C1471("platform"; Windows:K25:3; \
+				"XcodeAvailable"; False:C215; \
+				"toolsAvalaible"; False:C215; \
+				"ready"; False:C215); \
+				"studio"; studioCheckInstall($in))
+			
+			If (Bool:C1537($out.studio.ready))
+				
+				// Get the last 4D Mobile Android SDK
+				CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "android"; True:C214)
+				
+			End if 
+		End if 
 		
 		//______________________________________________________
 	Else 
@@ -104,7 +139,7 @@ If (Bool:C1537($in.caller))
 	
 Else 
 	
-	$0:=$out
+	//$0:=$out
 	
 End if 
 

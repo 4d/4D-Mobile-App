@@ -95,7 +95,7 @@ Case of
 						
 						$bottom:=$top+Abs:C99($e.code)
 						
-						// Limit to the window's height [
+						// Limit to the window's height
 						OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
 						
 						If ($bottom>($height-20))
@@ -106,8 +106,6 @@ Case of
 							Self:C308->:=Self:C308->  // Touch
 							
 						End if 
-						
-						// ]
 						
 						OBJECT SET COORDINATES:C1248(*; $e.objectName; $left; $top; $right; $bottom)
 						
