@@ -290,7 +290,7 @@ Case of
 				
 				If ((Application version:C493(*)="A@") & Shift down:C543)
 					
-					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDKFromTeamCity"; $t; False:C215; Form:C1466.editor.$mainWindow; True:C214)
+					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDKFromTeamCity"; $t; False:C215; Form:C1466.editor.$mainWindow)  //; True)
 					
 				Else 
 					

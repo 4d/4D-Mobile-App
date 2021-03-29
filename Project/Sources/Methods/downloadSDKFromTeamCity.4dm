@@ -52,7 +52,7 @@ If ($preferences.exists)
 			: ($target="ios")
 				
 				$sdk:=cs:C1710.path.new().cacheSdkApple()
-				$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_iOS_Sdk_Build/.lastSuccessful/iOS.zip"
+				$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_iOS_Sdk_Build/.lastSuccessful/ios.zip"
 				
 				//______________________________________________________
 			Else 
@@ -77,11 +77,11 @@ If ($preferences.exists)
 				
 			Else 
 				
-				RECORD.warning($http.errors.join("\r"))
+				RECORD.warning($http.url+" - "+$http.errors.join("\r"))
 				
 			End if 
 			
-			If (Count parameters:C259>=3)
+			If (Count parameters:C259>=4)
 				
 				$run:=$run | $force
 				
@@ -155,7 +155,7 @@ If ($run)
 		
 	Else 
 		
-		RECORD.error($http.errors.join("\r"))
+		RECORD.error($http.url+" - "+$http.errors.join("\r"))
 		
 	End if 
 	
