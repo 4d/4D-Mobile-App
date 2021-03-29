@@ -202,7 +202,6 @@
 			"editor_OBJECTS_HANDLER",
 			"EDITOR_ON_ACTIVATE",
 			"editor_OPEN_PROJECT",
-			"editor_PAGE",
 			"editor_PROCESS_MESSAGES",
 			"editor_PROJECT_AUDIT",
 			"editor_RESUME",

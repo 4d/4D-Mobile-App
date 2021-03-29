@@ -20,7 +20,22 @@
 		"paperHeight": "842pt"
 	},
 	"pages": [
-		null,
+		{
+			"objects": {
+				"actionsAreComingSoonForAndroid": {
+					"type": "text",
+					"top": 6,
+					"left": 16,
+					"width": 449,
+					"height": 16,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"textAlign": "left",
+					"text": "Actions are coming soon for Android",
+					"fontStyle": "italic"
+				}
+			}
+		},
 		{
 			"objects": {
 				"actions.border": {
@@ -397,7 +412,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 34,
+	"geometryStamp": 44,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

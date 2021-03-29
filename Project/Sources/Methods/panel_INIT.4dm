@@ -72,6 +72,8 @@ OBJECT SET VISIBLE:C603(*; "title.@"; False:C215)
 OBJECT SET VISIBLE:C603(*; "panel.@"; False:C215)
 OBJECT SET VISIBLE:C603(*; "help.@"; False:C215)
 
+ARRAY TEXT:C222($objectNames; 0x0000)
+
 For each ($o; $definition.panels)
 	
 	$index:=$index+1
@@ -160,7 +162,11 @@ For each ($o; $definition.panels)
 		
 	End if 
 	
+	APPEND TO ARRAY:C911($objectNames; $panel)
+	
 End for each 
+
+FORM SET ENTRY ORDER:C1468($objectNames)
 
 CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; $definition)
 
@@ -169,3 +175,5 @@ OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
 OBJECT SET COORDINATES:C1248(*; "_background"; 0; 0; $width; $bottom)
 
 CALL FORM:C1391(Current form window:C827; "project_SKIN"; $definition)
+
+GOTO OBJECT:C206(*; $objectNames{1})

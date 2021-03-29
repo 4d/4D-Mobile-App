@@ -119,12 +119,12 @@
 					"height": 17,
 					"dataSource": "formatString(\"bundleApp\"; Form:C1466.organization.id+\".\"+Form:C1466.product.name)",
 					"tooltip": ":xliff:appBundleIDTip",
-					"enterable": false,
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"class": "infos"
 				},
 				"id.label": {
 					"type": "text",
@@ -322,5 +322,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 342
+	"geometryStamp": 346
 }

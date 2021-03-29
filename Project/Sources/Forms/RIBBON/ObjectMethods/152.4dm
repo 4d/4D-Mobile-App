@@ -41,6 +41,7 @@ Case of
 		
 		$could:=New object:C1471(\
 			"isDebug"; DATABASE.isMatrix; \
+			"isMain"; (Application version:C493(*)="A@"); \
 			"withMoreItems"; Macintosh option down:C545 | Windows Alt down:C563; \
 			"productFolder"; $folder; \
 			"xCodeAvailable"; Bool:C1537(Form:C1466.editor.$xCode.applicationAvailable); \
@@ -165,21 +166,19 @@ Case of
 			
 		End if 
 		
-		// MORE ITEMS FOR ANDROID STUDIO
 		If ($could.withMoreItems)
 			
 			$menu.line()
 			
-			If ($could.studioAvailable)
+			If ($could.isMain)
 				
 				$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "Android"); "downloadAndroidSdk")
 				
-			End if 
-			
-			If (Is macOS:C1572)
-				
-				$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "iOS"); "downloadIosSdk")
-				
+				If (Is macOS:C1572)
+					
+					$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "iOS"); "downloadIosSdk")
+					
+				End if 
 			End if 
 			
 		End if 

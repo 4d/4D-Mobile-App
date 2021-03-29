@@ -48,7 +48,7 @@ If (False:C215)
 	C_OBJECT:C1216(editor_PROCESS_MESSAGES; $3)
 	
 	// ----------------------------------------------------
-	C_TEXT:C284(editor_PAGE; $1)
+	//C_TEXT(editor_PAGE; $1)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(editor_description; $1)

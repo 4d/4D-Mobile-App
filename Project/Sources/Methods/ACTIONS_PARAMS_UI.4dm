@@ -30,6 +30,7 @@ Case of
 		
 		$o:=$2  // The form definition
 		
+		
 		$o.noSelection.hide()
 		$o.noTable.hide()
 		$o.withSelection.hide()
@@ -241,6 +242,18 @@ Case of
 				End case 
 			End if 
 		End if 
+		
+		
+		//If (FEATURE.with("android"))
+		
+		//If (Is Windows | True)
+		
+		//OBJECT SET VISIBLE(*; "@"; False)
+		
+		
+		
+		//End if 
+		//End if 
 		
 		//______________________________________________________
 	: ($1="min")\

@@ -9,6 +9,7 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onGettingFocus",
 		"onTimer",
 		"onBoundVariableChange"
 	],
@@ -71,7 +72,8 @@
 					"printFrame": "variable",
 					"events": [
 						"onLoad",
-						"onLosingFocus"
+						"onLosingFocus",
+						"onGettingFocus"
 					],
 					"method": "PROJECT_OBJECT_HANDLER"
 				}

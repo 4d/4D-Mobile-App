@@ -143,9 +143,27 @@ Class constructor
 		"form"; "ACTIONS"; \
 		"noTitle"; True:C214))
 	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("page_action_params"); \
-		"form"; "ACTIONS_PARAMS"))
+	If (FEATURE.with("android"))
+		
+		If (Is Windows:C1573)
+			
+			// Actions are coming soon for Android
+			
+		Else 
+			
+			$o.panels.push(New object:C1471(\
+				"title"; Get localized string:C991("page_action_params"); \
+				"form"; "ACTIONS_PARAMS"))
+			
+		End if 
+		
+	Else 
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("page_action_params"); \
+			"form"; "ACTIONS_PARAMS"))
+		
+	End if 
 	
 	//_____________________________________________________________________
 	This:C1470.$currentPage:=""
@@ -214,6 +232,8 @@ Function gotoPage
 		SET TIMER:C645(-1)  // Set geometry
 		
 		EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_description"; *; $o)
+		
+		GOTO OBJECT:C206(*; "PROJECT")
 		
 	End if 
 	

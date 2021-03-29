@@ -30,7 +30,6 @@
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"stroke": "#808080",
 					"textAlign": "left",
 					"text": ":xliff:selectAnActionToDisplayItsParameters"
 				},
@@ -42,7 +41,6 @@
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"stroke": "#808080",
 					"textAlign": "left",
 					"text": ":xliff:createAnActionToBeAbleToAddParameters"
 				},
@@ -54,7 +52,6 @@
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"stroke": "#808080",
 					"textAlign": "left",
 					"text": ":xliff:thisActionDoesNotUseParameter"
 				}
@@ -501,17 +498,11 @@
 					"top": 268,
 					"width": 379,
 					"height": 17,
-					"enterable": true,
 					"focusable": false,
-					"contextMenu": "automatic",
-					"fill": "transparent",
-					"stroke": "#808080",
-					"borderStyle": "none",
 					"visibility": "hidden",
 					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.comment()",
 					"textAlign": "right",
-					"hideFocusRing": true,
-					"fontStyle": "normal"
+					"class": "comment"
 				},
 				"dropCursor": {
 					"type": "line",
@@ -586,7 +577,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 87,
+	"geometryStamp": 122,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

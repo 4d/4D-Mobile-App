@@ -1,77 +1,4 @@
 {
-    "coreDataForbiddenNames": [
-        "objectID",
-        "entity",
-        "isDeleted",
-        "isUpdated",
-        "isInserted",
-        "hasChanges",
-        "hasPersistentChangedValues",
-        "isFault",
-        "description",
-        "shortDescription",
-        "private",
-        "public",
-        "init"
-    ],
-    "definitions": {
-        "falseOrTrue": {
-            "binding": "localizedText",
-            "choiceList": [
-                "False",
-                "True"
-            ],
-            "name": "falseOrTrue",
-            "type": "boolean"
-        },
-        "noOrYes": {
-            "binding": "localizedText",
-            "choiceList": [
-                "No",
-                "Yes"
-            ],
-            "name": "noOrYes",
-            "type": "boolean"
-        },
-        "numberBinding": [
-            {
-                "name": "integer"
-            },
-            {
-                "name": "decimal"
-            },
-            {
-                "name": "real"
-            },
-            {
-                "name": "-"
-            },
-            {
-                "name": "percent"
-            },
-            {
-                "name": "ordinal"
-            },
-            {
-                "name": "-"
-            },
-            {
-                "name": "currencyDollar"
-            },
-            {
-                "name": "currencyEuro"
-            },
-            {
-                "name": "currencyYen"
-            },
-            {
-                "name": "-"
-            },
-            {
-                "name": "spellOut"
-            }
-        ]
-    },
     "_o_fieldBindingTypes": [
         null,
         [
@@ -147,6 +74,79 @@
             }
         ]
     ],
+    "coreDataForbiddenNames": [
+        "objectID",
+        "entity",
+        "isDeleted",
+        "isUpdated",
+        "isInserted",
+        "hasChanges",
+        "hasPersistentChangedValues",
+        "isFault",
+        "description",
+        "shortDescription",
+        "private",
+        "public",
+        "init"
+    ],
+    "definitions": {
+        "falseOrTrue": {
+            "binding": "localizedText",
+            "choiceList": [
+                "False",
+                "True"
+            ],
+            "name": "falseOrTrue",
+            "type": "boolean"
+        },
+        "noOrYes": {
+            "binding": "localizedText",
+            "choiceList": [
+                "No",
+                "Yes"
+            ],
+            "name": "noOrYes",
+            "type": "boolean"
+        },
+        "numberBinding": [
+            {
+                "name": "integer"
+            },
+            {
+                "name": "decimal"
+            },
+            {
+                "name": "real"
+            },
+            {
+                "name": "-"
+            },
+            {
+                "name": "percent"
+            },
+            {
+                "name": "ordinal"
+            },
+            {
+                "name": "-"
+            },
+            {
+                "name": "currencyDollar"
+            },
+            {
+                "name": "currencyEuro"
+            },
+            {
+                "name": "currencyYen"
+            },
+            {
+                "name": "-"
+            },
+            {
+                "name": "spellOut"
+            }
+        ]
+    },
     "fieldBindingTypes": [
         [
             {
@@ -161,12 +161,12 @@
                 "name": "text"
             }
         ],
-       	[
+        [
             {
                 "name": "restImage"
             }
         ],
-       	[
+        [
             {
                 "name": "mediumDate"
             },
@@ -220,11 +220,31 @@
                 "name": "integer"
             }
         ],
-        null,null,null,null,null,null,null,null,null,null,null,null,null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         {
             "$ref": "#/definitions/numberBinding"
         },
-        null,null,null,null,null,null,null,null,null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         {
             "$ref": "#/definitions/numberBinding"
         }
@@ -264,5 +284,8 @@
         "PresentFoldSegue",
         "PresentNatGeoSegue",
         "PresentOverCurrentContextSegue"
-    ]
+    ],
+    "sdk": {
+        "android": 262682
+    }
 }

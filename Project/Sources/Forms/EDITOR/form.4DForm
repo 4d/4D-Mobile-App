@@ -91,7 +91,10 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"scrollbarHorizontal": "hidden",
-					"bottom": 870
+					"bottom": 870,
+					"events": [
+						"onGettingFocus"
+					]
 				},
 				"debug.focus": {
 					"type": "input",

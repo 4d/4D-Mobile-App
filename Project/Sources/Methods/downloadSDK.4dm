@@ -7,7 +7,6 @@ var $url; $version : Text
 var $run; $silent; $withUI : Boolean
 var $buildNumber : Integer
 var $o : Object
-var $manifest : 4D:C1709.File
 var $sdk : 4D:C1709.ZipFile
 var $http : cs:C1710.http
 var $progress : cs:C1710.progress
@@ -55,13 +54,9 @@ Case of
 		//______________________________________________________
 End case 
 
-$manifest:=$sdk.parent.file("manifest.json")
+$buildNumber:=Num:C11(JSON Parse:C1218(File:C1566("/RESOURCES/resources.json").getText()).sdk[$target])
 
-$version:=Application version:C493($buildNumber; *)
-
-//If (DATABASE.isMatrix)/* TO REMOVE: TEST PURPOSE*/
-//$buildNumber:=262682
-//End if 
+$version:=Application version:C493(*)
 
 $url:="https://preprod-resources-download.4d.com/sdk/"
 
@@ -78,34 +73,7 @@ End if
 
 $http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
 
-If ($manifest.exists) & False:C215
-	
-/*  HEAD ISN'T AVAILABLE WITH S3 */
-	
-	$http.head()
-	
-	If ($http.success)
-		
-		$o:=JSON Parse:C1218($manifest.getText())
-		$run:=$http.newerRelease(String:C10($o.etag); String:C10($o.lastModification))
-		
-	Else 
-		
-		RECORD.warning($http.errors.join("\r"))
-		
-	End if 
-	
-	If (Count parameters:C259>=4)
-		
-		$run:=$run | $force
-		
-	End if 
-	
-Else 
-	
-	$run:=True:C214
-	
-End if 
+$run:=True:C214
 
 $withUI:=True:C214
 
@@ -130,11 +98,6 @@ If ($run)
 	
 	If ($http.success)
 		
-		$o:=New object:C1471
-		$o.etag:=String:C10($http.headers.query("name = 'ETag'").pop().value)
-		$o.lastModification:=String:C10($http.headers.query("name = 'Date'").pop().value)
-		$manifest.setText(JSON Stringify:C1217($o; *))
-		
 		// Delete the old SDK folder, if any
 		$o:=$sdk.parent.folder("sdk")
 		
@@ -155,11 +118,8 @@ If ($run)
 		
 	Else 
 		
-		If (Not:C34(DATABASE.isMatrix))
-			
-			RECORD.error($http.url+": "+$http.errors.join("\r"))
-			
-		End if 
+		RECORD.error($http.url+": "+$http.errors.join("\r"))
+		
 	End if 
 	
 	If ($withUI)

@@ -56,6 +56,21 @@ Case of
 				//
 				
 				//______________________________________________________
+			: ($e.code=On Getting Focus:K2:7)
+				
+				ARRAY TEXT:C222($order; 0x0000)
+				FORM GET ENTRY ORDER:C1469($order; 1)
+				GOTO OBJECT:C206($order{1})
+				
+				//______________________________________________________
+			: ($e.code=On Activate:K2:9)
+				
+				//BEEP
+				//ARRAY TEXT($order; 0x0000)
+				//FORM GET ENTRY ORDER($order; 1)
+				//GOTO OBJECT($order{1})
+				
+				//______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
 				SET TIMER:C645(0)

@@ -4,7 +4,8 @@
 text, 
 radio,
 checkbox,
-listbox {
+listbox,
+.comment {
 	stroke: #808080;
 }
 
@@ -18,16 +19,24 @@ listbox {
 			}
 
 input {
-	fill: white;
+	fill: automatic;
 }
 
-			@media (prefers-color-scheme: dark) {
-				input {
-					fill: #3A3A3A;
+.comment,
+.infos {
+	enterable: false;
+}
+
+.infos {
+	fill: automatic;
+}
+	
+		@media (prefers-color-scheme: dark) {
+				.infos {
+				fill: #3A3A3A;
 				}
 			}
-
-
+ 
 line, 
 rectangle {
 	stroke: #C0C0C0;
@@ -51,7 +60,7 @@ rectangle {
 			}
 
 .border {
-	fill: white;
+	fill: automatic;
 }
 
 			@media (prefers-color-scheme: dark) {
@@ -73,17 +82,11 @@ rectangle {
 }
 
 .background {
-	fill: white;
+	fill: automatic;
 	stroke: transparent;
 	sizingX: grow;
 	sizingY: grow;
 }
-
-			@media (prefers-color-scheme: dark) {
-				.background {
-					fill: black;
-				}
-			}
 
 .label {
 	text-align: left;

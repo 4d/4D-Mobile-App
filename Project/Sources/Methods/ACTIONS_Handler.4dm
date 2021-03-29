@@ -77,6 +77,16 @@ Case of
 				//______________________________________________________
 			: ($eventCode=On Load:K2:1)
 				
+				If (FEATURE.with("android"))
+					
+					If (Is Windows:C1573)
+						
+						OBJECT SET VISIBLE:C603(*; "@"; False:C215)
+						OBJECT SET VISIBLE:C603(*; "actionsAreComingSoonForAndroid"; True:C214)
+						
+					End if 
+				End if 
+				
 				// This trick remove the horizontal gap
 				$form.actions.setScrollbar(0; 2)
 				
@@ -135,8 +145,12 @@ Case of
 			: ($eventCode=On Timer:K2:25)  // Refresh UI
 				
 				// Update parameters panel if any
-				Form:C1466.$dialog.ACTIONS_PARAMS.action:=$context.current
-				$form.form.call("refreshParameters")
+				If (Form:C1466.$dialog.ACTIONS_PARAMS#Null:C1517)
+					
+					Form:C1466.$dialog.ACTIONS_PARAMS.action:=$context.current
+					$form.form.call("refreshParameters")
+					
+				End if 
 				
 				$form.remove.setEnabled(_and(\
 					Formula:C1597($context.index#Null:C1517); \
