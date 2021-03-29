@@ -224,6 +224,22 @@ Function bestSize($alignment; $minWidth : Integer; $maxWidth : Integer)->$this :
 		
 	End if 
 	
+	// Automatic adjustments according to the type of widget, if any
+	Case of 
+			
+			//______________________________________________________
+		: (Num:C11($o.minWidth)#0)
+			
+			// <NOTHING MORE TO DO>
+			
+			//______________________________________________________
+		: (This:C1470.type=Object type push button:K79:16)
+			
+			$o.minWidth:=60
+			
+			//______________________________________________________
+	End case 
+	
 	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
 	
 	If (New collection:C1472(\

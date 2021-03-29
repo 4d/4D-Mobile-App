@@ -47,7 +47,7 @@ Case of
 			Form:C1466.ƒ.option:=cs:C1710.button.new("option")
 			Form:C1466.ƒ.help:=cs:C1710.button.new("help")
 			
-			Form:C1466.ƒ.buttonGroup:=cs:C1710.group.new(Form:C1466.ƒ.ok; Form:C1466.ƒ.cancel)
+			Form:C1466.ƒ.buttonGroup:=cs:C1710.group.new(Form:C1466.ƒ.ok; Form:C1466.ƒ.cancel).distributeRigthToLeft()
 			
 		End if 
 		
