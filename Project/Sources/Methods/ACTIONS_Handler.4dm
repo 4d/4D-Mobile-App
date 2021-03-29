@@ -77,16 +77,6 @@ Case of
 				//______________________________________________________
 			: ($eventCode=On Load:K2:1)
 				
-				If (FEATURE.with("android"))
-					
-					If (Is Windows:C1573)
-						
-						OBJECT SET VISIBLE:C603(*; "@"; False:C215)
-						OBJECT SET VISIBLE:C603(*; "actionsAreComingSoonForAndroid"; True:C214)
-						
-					End if 
-				End if 
-				
 				// This trick remove the horizontal gap
 				$form.actions.setScrollbar(0; 2)
 				
@@ -141,6 +131,26 @@ Case of
 				// Give the focus to the actions listbox
 				$form.actions.focus()
 				
+				If (FEATURE.with("android"))
+					
+					If (PROJECT.$ios)
+						
+						OBJECT SET ENABLED:C1123(*; "@"; Is macOS:C1572)
+						
+					Else 
+						
+						OBJECT SET VISIBLE:C603(*; "@"; False:C215)
+						OBJECT SET COORDINATES:C1248(*; "areComingSoonForAndroid"; 17; 11)
+						
+					End if 
+					
+					If (PROJECT.$android)
+						
+						OBJECT SET VISIBLE:C603(*; "areComingSoonForAndroid"; True:C214)
+						
+					End if 
+				End if 
+				
 				//______________________________________________________
 			: ($eventCode=On Timer:K2:25)  // Refresh UI
 				
@@ -162,6 +172,27 @@ Case of
 				$form.databaseMethod.setTitle(Choose:C955($b; "edit..."; "create..."))
 				$form.databaseMethod.setEnabled($b | _and(Formula:C1597(Form:C1466.actions#Null:C1517); Formula:C1597(Form:C1466.actions.length>0)))
 				ui_ALIGN_ON_BEST_SIZE(Align right:K42:4; $form.databaseMethod.name; "actionMethod.label")
+				
+				
+				If (FEATURE.with("android"))
+					
+					If (PROJECT.$ios)
+						
+						OBJECT SET ENABLED:C1123(*; "@"; Is macOS:C1572)
+						
+					Else 
+						
+						OBJECT SET VISIBLE:C603(*; "@"; False:C215)
+						OBJECT SET COORDINATES:C1248(*; "areComingSoonForAndroid"; 17; 11)
+						
+					End if 
+					
+					If (PROJECT.$android)
+						
+						OBJECT SET VISIBLE:C603(*; "areComingSoonForAndroid"; True:C214)
+						
+					End if 
+				End if 
 				
 				//______________________________________________________
 		End case 

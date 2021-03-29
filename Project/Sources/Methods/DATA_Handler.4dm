@@ -127,6 +127,12 @@ Case of
 				
 				UI.tips.enable()
 				
+				If (FEATURE.with("android"))
+					
+					OBJECT SET VISIBLE:C603(*; "areComingSoonForAndroid"; False:C215)
+					
+				End if 
+				
 				If ($Obj_context.current#Null:C1517)
 					
 					OBJECT SET VISIBLE:C603(*; "@.options"; True:C214)
@@ -162,6 +168,14 @@ Case of
 								// Populate user icon
 								$Obj_context.current.filterIcon:=EDITOR.userIcon
 								
+								If (FEATURE.with("android"))
+									
+									If (PROJECT.$android)
+										
+										OBJECT SET VISIBLE:C603(*; "areComingSoonForAndroid"; True:C214)
+										
+									End if 
+								End if 
 							End if 
 							
 						Else 
@@ -225,7 +239,7 @@ Case of
 		//If (FEATURE.with("android"))
 		
 		//$Dir_root:=dataSet(New object("action"; "path"; \
-																														"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+																																	"project"; New object("product"; Form.product; "$project"; PROJECT))).path
 		
 		//Else
 		

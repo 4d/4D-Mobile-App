@@ -243,18 +243,6 @@ Case of
 			End if 
 		End if 
 		
-		
-		//If (FEATURE.with("android"))
-		
-		//If (Is Windows | True)
-		
-		//OBJECT SET VISIBLE(*; "@"; False)
-		
-		
-		
-		//End if 
-		//End if 
-		
 		//______________________________________________________
 	: ($1="min")\
 		 | ($1="max")  // Return the min or max rule value as string

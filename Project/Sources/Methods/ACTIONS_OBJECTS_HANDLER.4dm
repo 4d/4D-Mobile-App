@@ -67,7 +67,12 @@ Case of
 				$context.$current:=$context.current
 				
 				// Update parameters panel if any
-				Form:C1466.$dialog.ACTIONS_PARAMS.action:=$context.$current
+				If (Form:C1466.$dialog.ACTIONS_PARAMS#Null:C1517)
+					
+					Form:C1466.$dialog.ACTIONS_PARAMS.action:=$context.$current
+					
+				End if 
+				
 				$form.form.call("selectParameters")
 				
 				$form.form.refresh()

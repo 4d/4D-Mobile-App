@@ -21,20 +21,7 @@
 	},
 	"pages": [
 		{
-			"objects": {
-				"actionsAreComingSoonForAndroid": {
-					"type": "text",
-					"top": 6,
-					"left": 16,
-					"width": 449,
-					"height": 16,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"textAlign": "left",
-					"text": "Actions are coming soon for Android",
-					"fontStyle": "italic"
-				}
-			}
+			"objects": {}
 		},
 		{
 			"objects": {
@@ -381,8 +368,8 @@
 				},
 				"iconGrid": {
 					"type": "subform",
-					"top": 271,
-					"left": 107,
+					"top": 319,
+					"left": 17,
 					"width": 95,
 					"height": 14,
 					"visibility": "hidden",
@@ -404,6 +391,19 @@
 					"stroke": "#ff0000",
 					"visibility": "hidden",
 					"startPoint": "topLeft"
+				},
+				"areComingSoonForAndroid": {
+					"type": "text",
+					"top": 270,
+					"left": 84,
+					"width": 302,
+					"height": 16,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"textAlign": "left",
+					"text": "Actions are coming soon for Android",
+					"fontStyle": "italic",
+					"stroke": "#ff0000"
 				}
 			}
 		}
@@ -412,7 +412,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 44,
+	"geometryStamp": 50,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

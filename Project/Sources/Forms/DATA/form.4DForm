@@ -285,6 +285,19 @@
 					"height": 16,
 					"text": ":xliff:dataSize",
 					"class": "label"
+				},
+				"areComingSoonForAndroid": {
+					"type": "text",
+					"top": 131,
+					"left": 489,
+					"width": 449,
+					"height": 16,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"textAlign": "left",
+					"text": "User information queries are coming soon for Android",
+					"fontStyle": "italic",
+					"stroke": "#ff0000"
 				}
 			}
 		}
@@ -294,7 +307,7 @@
 		"kind": "form"
 	},
 	"method": "DATA_Handler",
-	"geometryStamp": 35,
+	"geometryStamp": 42,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
