@@ -12,13 +12,13 @@ import com.qmobile.qmobiledatasync.utils.FragmentUtil
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 import com.qmobile.qmobileui.BR
-{{#tableNames}}
+{{#tableNames_navigation}}
 import {{package}}.databinding.FragmentDetail{{nameCamelCase}}Binding
-{{/tableNames}}
+{{/tableNames_navigation}}
 import {{package}}.databinding.FragmentListBinding
-{{#tableNames}}
+{{#tableNames_navigation}}
 import {{package}}.databinding.RecyclerviewItem{{nameCamelCase}}Binding
-{{/tableNames}}
+{{/tableNames_navigation}}
 {{#tableNames}}
 import {{package}}.viewmodel.entity.EntityViewModel{{name}}
 {{/tableNames}}
@@ -75,12 +75,12 @@ class FragmentUtilImpl :
         relationName: String,
         relatedEntity: Any
     ) {
-        {{#tableNames_relations}}
+        {{#tableNames_layout_relations}}
         if (viewDataBinding is RecyclerviewItem{{relation_source}}Binding) {
             if (relationName == "{{relation_name}}") {
                 viewDataBinding.setVariable(BR.{{relation_name}}, relatedEntity)
             }
         }
-        {{/tableNames_relations}}
+        {{/tableNames_layout_relations}}
     }
 }
