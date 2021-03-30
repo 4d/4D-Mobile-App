@@ -12,15 +12,18 @@ Class constructor()
 	If ($studio.success)
 		
 		var $androidStudio : Text
-		$androidStudio:=$studio.exe.path
+		
 		If (Is macOS:C1572)
-			$androidStudio:=$androidStudio+"Contents"
+			
+			$androidStudio:=Folder:C1567($studio.exe.path+"Contents").path
+			This:C1470.classPath:=This:C1470.classPath+":"+$androidStudio+"/lib/*:"+$androidStudio+"/plugins/android/lib/*:"+$androidStudio+"/plugins/android-layoutlib/lib/*"
+			
 		Else 
-			ASSERT:C1129(False:C215; "Not yet implemented")
+			
+			$androidStudio:=Folder:C1567($studio.exe.platformPath; fk platform path:K87:2).parent.parent.platformPath
+			This:C1470.classPath:=This:C1470.classPath+";"+$androidStudio+"lib\\*:"+$androidStudio+"plugins\\android\\lib\\*:"+$androidStudio+"plugins\\android-layoutlib\\lib\\*"
+			
 		End if 
-		
-		This:C1470.classPath:=This:C1470.classPath+":"+$androidStudio+"/lib/*:"+$androidStudio+"/plugins/android/lib/*:"+$androidStudio+"/plugins/android-layoutlib/lib/*"
-		
 		
 		If (Bool:C1537($studio.javaHome.exists))
 			
@@ -42,8 +45,13 @@ Function convert($source : Object/*File or Folder*/; $destination : 4D:C1709.Fol
 	ASSERT:C1129(Value type:C1509($source.path)=Is text:K8:3; "$source to convert svg must be a file or a folder")
 	
 	var $cmd : Text
-	$cmd:="'"+This:C1470.javaExe+"' -Djava.awt.headless=true -classpath \""+This:C1470.classPath+"\" com.android.ide.common.vectordrawable.VdCommandLineTool"
-	$cmd:=$cmd+" -c -in '"+$source.path+"' -out '"+$destination.path+"'"
+	$cmd:="\""+This:C1470.javaExe+"\" -Djava.awt.headless=true -classpath \""+This:C1470.classPath+"\" com.android.ide.common.vectordrawable.VdCommandLineTool"
+	
+	If (Is macOS:C1572)
+		$cmd:=$cmd+" -c -in \""+$source.path+"\" -out \""+$destination.path+"\""
+	Else 
+		$cmd:=$cmd+" -c -in \""+$source.parent.platformPath+$source.name+"\" -out \""+$destination.parent.platformPath+$destination.name+"\""
+	End if 
 	
 	This:C1470.launch($cmd)
 	
