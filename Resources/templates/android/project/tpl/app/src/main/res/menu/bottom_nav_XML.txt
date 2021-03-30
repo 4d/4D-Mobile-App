@@ -13,7 +13,7 @@
         {{#hasIcon}}
         android:icon="@drawable/{{icon}}"
         {{/hasIcon}}
-        android:title="{{name_original}}" />
+        android:title="{{label}}" />
 
 {{/tableNames_navigation}}
     <item
