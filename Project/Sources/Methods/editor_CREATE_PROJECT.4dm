@@ -72,11 +72,11 @@ If (DATABASE.isWritable())
 			If ($t#$name)
 				
 				$project.product.name:=$t
-				$json:=JSON Stringify:C1217($project; *)
 				
 			End if 
 		End if 
 		
+		$json:=JSON Stringify:C1217($project; *)
 		$file.setText($json)
 		
 	Else 
