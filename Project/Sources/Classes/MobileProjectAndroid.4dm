@@ -21,7 +21,10 @@ Class constructor
 		
 	End for each 
 	
-	This:C1470.setTheme()
+	If (Is macOS:C1572)
+		This:C1470.setTheme()
+		// Else : not implemented for Windows (Objective-c code)
+	End if 
 	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
 	This:C1470.project.cache_4d_sdk:=This:C1470.path.cacheSdkAndroidUnzipped().path
