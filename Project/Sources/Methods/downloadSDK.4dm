@@ -6,7 +6,8 @@
 var $url; $version : Text
 var $run; $silent; $withUI : Boolean
 var $buildNumber : Integer
-var $o : Object
+var $o; $manifest : Object
+var $fileManifest : 4D:C1709.File
 var $sdk : 4D:C1709.ZipFile
 var $http : cs:C1710.http
 var $progress : cs:C1710.progress
@@ -56,24 +57,24 @@ End case
 
 $buildNumber:=Num:C11(JSON Parse:C1218(File:C1566("/RESOURCES/resources.json").getText()).sdk[$target])
 
-$version:=Application version:C493(*)
+$fileManifest:=$sdk.parent.file("manifest.json")
 
-$url:="https://preprod-resources-download.4d.com/sdk/"
-
-If ($version="A@")  //main
+If ($fileManifest.exists)
 	
-	$url:=$url+"main/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
+	$manifest:=JSON Parse:C1218($fileManifest.getText())
+	$run:=(Num:C11($manifest.buildNumber)<$buildNumber)
+	
+	If (Count parameters:C259>=4)
+		
+		$run:=$run | $force
+		
+	End if 
 	
 Else 
 	
-	$version:=applicationVersion
-	$url:=$url+$version+"/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
+	$run:=True:C214
 	
 End if 
-
-$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
-
-$run:=True:C214
 
 $withUI:=True:C214
 
@@ -86,6 +87,20 @@ End if
 If ($run)
 	
 	RECORD.info("Update the 4D Mobile "+$target+" SDK")
+	
+	$url:="https://preprod-resources-download.4d.com/sdk/"
+	
+	If (Application version:C493(*)="A@")  //main
+		
+		$url:=$url+"main/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
+		
+	Else 
+		
+		$url:=$url+applicationVersion+"/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
+		
+	End if 
+	
+	$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
 	
 	If ($withUI)
 		
@@ -115,6 +130,17 @@ If ($run)
 		End if 
 		
 		$o:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
+		
+		If ($o.exists)
+			
+			$manifest.buildNumber:=$buildNumber
+			$fileManifest.setText(JSON Stringify:C1217($manifest; *))
+			
+		Else 
+			
+			// A "If" statement should never omit "Else" 
+			
+		End if 
 		
 	Else 
 		

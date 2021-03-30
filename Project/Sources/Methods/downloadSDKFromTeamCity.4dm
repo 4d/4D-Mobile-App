@@ -1,6 +1,8 @@
 //%attributes = {"invisible":true}
-// -> silent  =   No interface for progression
-// -> force   =   Force the download even if the file is up to date (see verification code)
+/*
+» silent  =   No interface for progression
+» force   =   Force the download even if the file is up to date (see verification code)
+*/
 #DECLARE($target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)
 
 var $url : Text

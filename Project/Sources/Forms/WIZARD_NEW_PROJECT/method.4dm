@@ -63,7 +63,6 @@ Case of
 		
 		Form:C1466._centered:=cs:C1710.group.new("list,continue,newProject,message")
 		
-		
 		If (Not:C34(FEATURE.with("androidBeta")))
 			
 			Form:C1466._new.resizeVertically(-120).moveVertically(50)
