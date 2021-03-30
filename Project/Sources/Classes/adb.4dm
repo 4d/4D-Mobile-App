@@ -25,6 +25,7 @@ Class constructor
 	This:C1470.adbStartRetried:=False:C215
 	This:C1470.timeOut:=30000  // 30 seconds
 	This:C1470.packageListTimeOut:=240000  // 4 minutes
+	This:C1470.bootTimeOut:=240000  // 4 minutes
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -240,9 +241,9 @@ Function waitForBoot
 		
 	Until (($0.success=True:C214) & ($0.serial#""))\
 		 | ($0.errors.length>0)\
-		 | ($stepTime>This:C1470.timeOut)
+		 | ($stepTime>This:C1470.bootTimeOut)
 	
-	If ($stepTime>This:C1470.timeOut)  // Timeout
+	If ($stepTime>This:C1470.bootTimeOut)  // Timeout
 		
 		$0.errors.push("Timeout when booting emulator")
 		
