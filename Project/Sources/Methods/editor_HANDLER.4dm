@@ -33,7 +33,8 @@ $form:=New object:C1471(\
 "description"; "description"; \
 "project"; "project"; \
 "message"; "message"; \
-"greeting"; "welcome")
+"greeting"; "welcome"; \
+"footer"; "footer")
 
 // ----------------------------------------------------
 Case of 
@@ -192,18 +193,20 @@ Case of
 					"target"; "panel."; \
 					"method"; "UI_SET_GEOMETRY"))
 				
-				// Center message
 				OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
-				$middle:=$width\2
 				
+				// Footer
+				OBJECT GET COORDINATES:C663(*; $form.footer; $left; $top; $right; $bottom)
+				$right:=$left+$width+1
+				OBJECT SET COORDINATES:C1248(*; $form.footer; $left; $top; $right; $bottom)
+				
+				// Center message
+				$middle:=$width\2
 				OBJECT GET COORDINATES:C663(*; $form.message; $left; $top; $right; $bottom)
 				$width:=$right-$left
 				$left:=$middle-($width\2)
 				$right:=$left+$width
 				OBJECT SET COORDINATES:C1248(*; $form.message; $left; $top; $right; $bottom)
-				
-				// Center the greeting screen
-				//(OBJECT Get pointer(Object named; $form.greeting))->:=1+(OBJECT Get pointer(Object named; $form.greeting))->
 				
 				//______________________________________________________
 			: ($e.code=On Timer:K2:25)
@@ -211,6 +214,13 @@ Case of
 				SET TIMER:C645(0)
 				
 				OBJECT SET VISIBLE:C603(*; $form.project; True:C214)
+				
+				OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+				
+				// Footer
+				OBJECT GET COORDINATES:C663(*; $form.footer; $left; $top; $right; $bottom)
+				$right:=$left+$width+1
+				OBJECT SET COORDINATES:C1248(*; $form.footer; $left; $top; $right; $bottom)
 				
 				EXECUTE METHOD IN SUBFORM:C1085($form.project; "call_MESSAGE_DISPATCH"; *; New object:C1471(\
 					"target"; "panel."; \

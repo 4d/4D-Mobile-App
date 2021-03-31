@@ -217,11 +217,106 @@ Case of
 				// Display the tab page
 				FORM GOTO PAGE:C247($button; *)
 				
+				If (FEATURE.with("android"))  // 🚧
+					
+					If ($button=1)
+						
+						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "refresh")
+						
+					End if 
+				End if 
+				
 				//……………………………………………………………………………………………………………………
 			Else 
 				
-				// Pass to the parent
-				CALL SUBFORM CONTAINER:C1086(-$button)
+				If (FEATURE.with("android"))
+					
+					If ($button=153)
+						
+						androidLimitations(False:C215; "")
+						
+						If (Is Windows:C1573)
+							
+							If (Form:C1466.currentDevice#Null:C1517)
+								
+								var $device : Object
+								$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
+								
+							End if 
+							
+							If ($device#Null:C1517)
+								
+								//PROJECT._simulator:=$device.udid
+								//PROJECT._buildTarget:="android"
+								
+								androidLimitations(False:C215; "Installation on a real device is coming soon for Android")
+								
+							Else 
+								
+								POST_MESSAGE(New object:C1471(\
+									"target"; Form:C1466.editor.$mainWindow; \
+									"action"; "show"; \
+									"type"; "alert"; \
+									"title"; "youMustFirstSelectASimulator"))
+								
+							End if 
+							
+						Else 
+							
+							If (Form:C1466.currentDevice#Null:C1517)
+								
+								$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
+								
+							End if 
+							
+							If ($device#Null:C1517) & False:C215
+								
+								PROJECT._simulator:=$device.udid
+								PROJECT._buildTarget:="ios"
+								
+								// Pass to the parent
+								CALL SUBFORM CONTAINER:C1086(-$button)
+								
+							Else 
+								
+								If (Form:C1466.currentDevice#Null:C1517)
+									
+									$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
+									
+								End if 
+								
+								If ($device#Null:C1517) | True:C214
+									
+									//PROJECT._simulator:=$device.udid
+									//PROJECT._buildTarget:="android"
+									
+									androidLimitations(False:C215; "Installation on a real device is coming soon for Android")
+									
+								Else 
+									
+									POST_MESSAGE(New object:C1471(\
+										"target"; Form:C1466.editor.$mainWindow; \
+										"action"; "show"; \
+										"type"; "alert"; \
+										"title"; "youMustFirstSelectASimulator"))
+									
+								End if 
+							End if 
+						End if 
+						
+					Else 
+						
+						// Pass to the parent
+						CALL SUBFORM CONTAINER:C1086(-$button)
+						
+					End if 
+					
+				Else 
+					
+					// Pass to the parent
+					CALL SUBFORM CONTAINER:C1086(-$button)
+					
+				End if 
 				
 				//……………………………………………………………………………………………………………………
 		End case 

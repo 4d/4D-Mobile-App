@@ -131,22 +131,18 @@ Case of
 				// Give the focus to the actions listbox
 				$form.actions.focus()
 				
+				androidLimitations(True:C214; "Actions are coming soon for Android")
+				
 				If (FEATURE.with("android"))
 					
-					If (PROJECT.$ios)
+					If (PROJECT.$ios) & Not:C34(PROJECT.$android)
 						
-						OBJECT SET ENABLED:C1123(*; "@"; Is macOS:C1572)
+						// <NOTHING MORE TO DO>
 						
 					Else 
 						
-						OBJECT SET VISIBLE:C603(*; "@"; False:C215)
-						OBJECT SET COORDINATES:C1248(*; "areComingSoonForAndroid"; 17; 11)
-						
-					End if 
-					
-					If (PROJECT.$android)
-						
-						OBJECT SET VISIBLE:C603(*; "areComingSoonForAndroid"; True:C214)
+						OBJECT SET ENABLED:C1123(*; "@"; Is macOS:C1572)
+						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471("message"; "Actions are coming soon for Android"; "type"; "highlight"))
 						
 					End if 
 				End if 
@@ -173,26 +169,7 @@ Case of
 				$form.databaseMethod.setEnabled($b | _and(Formula:C1597(Form:C1466.actions#Null:C1517); Formula:C1597(Form:C1466.actions.length>0)))
 				ui_ALIGN_ON_BEST_SIZE(Align right:K42:4; $form.databaseMethod.name; "actionMethod.label")
 				
-				
-				If (FEATURE.with("android"))
-					
-					If (PROJECT.$ios)
-						
-						OBJECT SET ENABLED:C1123(*; "@"; Is macOS:C1572)
-						
-					Else 
-						
-						OBJECT SET VISIBLE:C603(*; "@"; False:C215)
-						OBJECT SET COORDINATES:C1248(*; "areComingSoonForAndroid"; 17; 11)
-						
-					End if 
-					
-					If (PROJECT.$android)
-						
-						OBJECT SET VISIBLE:C603(*; "areComingSoonForAndroid"; True:C214)
-						
-					End if 
-				End if 
+				androidLimitations(True:C214)
 				
 				//______________________________________________________
 		End case 

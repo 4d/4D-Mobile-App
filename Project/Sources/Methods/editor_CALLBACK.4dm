@@ -11,28 +11,28 @@
 // otherwise nothing more is do.
 // ----------------------------------------------------
 // Declarations
-C_TEXT:C284($1)
-C_OBJECT:C1216($2)
-
-C_TEXT:C284($tSelector)
-C_OBJECT:C1216($form; $oIN)
+var $1 : Text
+var $2 : Object
 
 If (False:C215)
 	C_TEXT:C284(editor_CALLBACK; $1)
 	C_OBJECT:C1216(editor_CALLBACK; $2)
 End if 
 
+var $selector : Text
+var $form; $in : Object
+
 // ----------------------------------------------------
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
-	$tSelector:=$1
+	$selector:=$1
 	
 	// Optional parameters
 	If (Count parameters:C259>=2)
 		
-		$oIN:=$2
+		$in:=$2
 		
 	End if 
 	
@@ -53,7 +53,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"dataSource"; "SOURCE"; \
 		"actions"; "ACTIONS"; \
 		"actionParameters"; "ACTIONS_PARAMS"; \
-		"ribbon"; "ribbon")
+		"ribbon"; "ribbon"; \
+		"footer"; "footer")
 	
 Else 
 	
@@ -64,16 +65,10 @@ End if
 // ----------------------------------------------------
 If ($form.currentForm=$form.editor)
 	
-	editor_PROCESS_MESSAGES($tSelector; $form; $oIN)
+	editor_PROCESS_MESSAGES($selector; $form; $in)
 	
 Else 
 	
-	project_PROCESS_MESSAGES($tSelector; $form; $oIN)
+	project_PROCESS_MESSAGES($selector; $form; $in)
 	
 End if 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

@@ -1,0 +1,63 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "variable",
+	"windowSizingY": "fixed",
+	"windowMinWidth": 0,
+	"windowMinHeight": 0,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"events": [
+		"onBoundVariableChange"
+	],
+	"windowTitle": "window title",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {
+				"background": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 20,
+					"fill": "#1BA1E5",
+					"class": "background",
+					"sizingY": "move",
+					"stroke": "#1BA1E5"
+				}
+			}
+		},
+		{
+			"objects": {
+				"message": {
+					"type": "input",
+					"left": 8,
+					"top": 2,
+					"width": 954,
+					"height": 17,
+					"enterable": false,
+					"contextMenu": "none",
+					"fill": "transparent",
+					"stroke": "#FFFFFF",
+					"sizingX": "grow",
+					"dataSource": "Form:C1466.message",
+					"textAlign": "center"
+				}
+			}
+		}
+	],
+	"width": 970,
+	"height": 20,
+	"geometryStamp": 46,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"method": "method.4dm"
+}

@@ -143,27 +143,9 @@ Class constructor
 		"form"; "ACTIONS"; \
 		"noTitle"; True:C214))
 	
-	If (FEATURE.with("android"))
-		
-		If (Is Windows:C1573)
-			
-			// Actions are coming soon for Android
-			
-		Else 
-			
-			$o.panels.push(New object:C1471(\
-				"title"; Get localized string:C991("page_action_params"); \
-				"form"; "ACTIONS_PARAMS"))
-			
-		End if 
-		
-	Else 
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("page_action_params"); \
-			"form"; "ACTIONS_PARAMS"))
-		
-	End if 
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("page_action_params"); \
+		"form"; "ACTIONS_PARAMS"))
 	
 	//_____________________________________________________________________
 	This:C1470.$currentPage:=""
@@ -190,6 +172,9 @@ Function gotoPage
 	
 	// Hide broswer if any
 	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "hideBrowser")
+	
+	// Hide footer
+	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471("message"; ""))
 	
 	$o:=This:C1470.pages[$page]
 	

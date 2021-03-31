@@ -83,22 +83,11 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Load:K2:1)
 				
-				//If (FEATURE.with("android"))
-				
-				//If (PROJECT.dataModel=Null)
-				
-				//PROJECT.dataModel:=New object
-				
-				//End if 
-				
-				//Else 
-				
 				If (Form:C1466.dataModel=Null:C1517)
 					
 					Form:C1466.dataModel:=New object:C1471
 					
 				End if 
-				//End if 
 				
 				If (Bool:C1537(Form:C1466.allowStructureAdjustments))
 					
@@ -143,6 +132,12 @@ Case of
 				
 				editor_ui_LISTBOX($form.tableList)
 				editor_ui_LISTBOX($form.fieldList)
+				
+				If (FEATURE.with("android"))
+					
+					tempoDatamodelWith1toNRelation($context.currentTable)
+					
+				End if 
 				
 				//______________________________________________________
 		End case 

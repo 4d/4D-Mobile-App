@@ -98,9 +98,12 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//End if
 			
 			//________________________________________
-		: (Not:C34(Asserted:C1132(Count parameters:C259=2; "Expected object parameter")))
+		: (Not:C34(Count parameters:C259=2))
 			
 			// ALL SUBSEQUENT ENTRY POINTS REQUIRE AT LEAST 2 PARAMETERS
+			$response:=New object:C1471(\
+				"success"; False:C215; \
+				"error"; "Missing object parameter")
 			
 			//______________________________________________________
 		: ($entryPoint="downloadSDK")\
@@ -192,9 +195,12 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			$response.success:=($response.value#Null:C1517)
 			
 			//________________________________________
-		: (Not:C34(Asserted:C1132(Is macOS:C1572; "Command unavailable for this operating system")))
+		: (Not:C34(Is macOS:C1572))
 			
 			// ALL SUBSEQUENT ENTRY POINTS ARE ONLY AVAILABLE ON macOS
+			$response:=New object:C1471(\
+				"success"; False:C215; \
+				"error"; "Command unavailable for this Windows platform")
 			
 			//________________________________________
 		: ($entryPoint="xcode")\

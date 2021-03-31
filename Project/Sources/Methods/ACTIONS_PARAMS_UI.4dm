@@ -243,6 +243,8 @@ Case of
 			End if 
 		End if 
 		
+		androidLimitations(True:C214)
+		
 		//______________________________________________________
 	: ($1="min")\
 		 | ($1="max")  // Return the min or max rule value as string

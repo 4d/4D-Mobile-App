@@ -1,10 +1,7 @@
 {
 	"destination": "detailScreen",
 	"windowMinWidth": 970,
-	"windowMinHeight": 870,
-	"formSizeAnchor": "background",
-	"rightMargin": 0,
-	"bottomMargin": 0,
+	"windowMinHeight": 890,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -36,7 +33,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 870,
+					"height": 890,
 					"class": "background"
 				},
 				"ribbon": {
@@ -80,7 +77,7 @@
 					"top": 190,
 					"left": 0,
 					"width": 954,
-					"height": 680,
+					"height": 700,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -91,7 +88,7 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"scrollbarHorizontal": "hidden",
-					"bottom": 870,
+					"bottom": 890,
 					"events": [
 						"onGettingFocus"
 					]
@@ -197,7 +194,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 870,
+					"height": 890,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -209,7 +206,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 870,
+					"height": 890,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -229,6 +226,19 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"method": "editor_OBJECTS_HANDLER"
+				},
+				"footer": {
+					"type": "subform",
+					"left": 0,
+					"top": 870,
+					"width": 970,
+					"height": 20,
+					"detailForm": "FOOTER",
+					"borderStyle": "none",
+					"focusable": false,
+					"sizingX": "grow",
+					"sizingY": "move",
+					"visibility": "hidden"
 				}
 			}
 		},
@@ -302,5 +312,7 @@
 			}
 		}
 	},
-	"geometryStamp": 32
+	"geometryStamp": 74,
+	"width": 970,
+	"height": 890
 }

@@ -391,19 +391,6 @@
 					"stroke": "#ff0000",
 					"visibility": "hidden",
 					"startPoint": "topLeft"
-				},
-				"areComingSoonForAndroid": {
-					"type": "text",
-					"top": 270,
-					"left": 84,
-					"width": 302,
-					"height": 16,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"textAlign": "left",
-					"text": "Actions are coming soon for Android",
-					"fontStyle": "italic",
-					"stroke": "#ff0000"
 				}
 			}
 		}
@@ -412,7 +399,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 50,
+	"geometryStamp": 51,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

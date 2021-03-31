@@ -85,11 +85,9 @@ Case of
 		
 		$form.sectionButtons.distributeLeftToRight($constraints)
 		
-		If (Is macOS:C1572 & FEATURE.with("android"))  //🚧
-			
-			$form.install.setSeparatePopupMenu()
-			
-		End if 
+		//If (Is macOS & FEATURE.with("android"))  //🚧
+		//$form.install.setSeparatePopupMenu()
+		//End if 
 		
 		SET TIMER:C645(-1)
 		

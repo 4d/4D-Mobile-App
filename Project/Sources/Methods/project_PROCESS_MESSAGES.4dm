@@ -622,6 +622,15 @@ Case of
 		End if 
 		
 		//______________________________________________________
+	: ($tSelector="refresh")  // Refresh displayed panels
+		
+		For each ($panel; panel_Objects)
+			
+			EXECUTE METHOD IN SUBFORM:C1085($panel; "panel_REFRESH")
+			
+		End for each 
+		
+		//______________________________________________________
 	: ($tSelector="refreshViews")  // Update VIEWS panel
 		
 		If ($form.currentForm=$form.project)

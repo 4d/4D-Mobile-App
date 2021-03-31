@@ -314,6 +314,12 @@ If ($row>0)
 	End if 
 End if 
 
+If (FEATURE.with("android"))
+	
+	tempoDatamodelWith1toNRelation($context.currentTable)
+	
+End if 
+
 // Disable field publication if the table is missing
 OBJECT SET ENTERABLE:C238($Ptr_published->; Not:C34(editor_Locked))
 

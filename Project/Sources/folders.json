@@ -16,10 +16,12 @@
 			"00_NEW",
 			"00_OPEN",
 			"00_TESTS",
+			"androidLimitations",
 			"COMPILER_TEMPO",
 			"internalTests",
 			"nvl",
-			"object"
+			"object",
+			"tempoDatamodelWith1toNRelation"
 		],
 		"forms": [
 			"UI"
@@ -209,6 +211,7 @@
 		],
 		"forms": [
 			"EDITOR",
+			"FOOTER",
 			"TITLE"
 		],
 		"classes": [

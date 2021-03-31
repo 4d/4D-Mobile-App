@@ -17,6 +17,31 @@ var $o : Object
 Case of 
 		
 		//______________________________________________________
+	: ($message="footer")
+		
+		var $l; $left; $top; $right; $bottom : Integer
+		OBJECT GET COORDINATES:C663(*; $form.footer; $left; $top; $right; $bottom)
+		
+		If (Length:C16(String:C10($in.message))>0)  // Show
+			
+			$bottom:=$top
+			OBJECT GET COORDINATES:C663(*; "project"; $left; $top; $right; $l)
+			OBJECT SET COORDINATES:C1248(*; "project"; $left; $top; $right; $bottom)
+			
+			OBJECT SET VISIBLE:C603(*; $form.footer; True:C214)
+			
+		Else   // Hide
+			
+			OBJECT GET COORDINATES:C663(*; "project"; $left; $top; $right; $l)
+			OBJECT SET COORDINATES:C1248(*; "project"; $left; $top; $right; $bottom)
+			
+			OBJECT SET VISIBLE:C603(*; $form.footer; False:C215)
+			
+		End if 
+		
+		OBJECT SET VALUE:C1742("footer"; $in)
+		
+		//______________________________________________________
 	: ($message="description")  // Update UI of the TITLE subform
 		
 		EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_description"; *; $in)
@@ -24,26 +49,22 @@ Case of
 		//______________________________________________________
 	: ($message="setURL")
 		
-		//record.log("--> setURL")
 		(OBJECT Get pointer:C1124(Object named:K67:5; "browser"))->:=$in
 		
 		//______________________________________________________
 	: ($message="hideBrowser")
 		
-		//record.log("--> hideBrowser")
 		OBJECT SET SUBFORM:C1138(*; "browser"; "EMPTY")
 		OBJECT SET VISIBLE:C603(*; "browser"; False:C215)
 		
 		//______________________________________________________
 	: ($message="showBrowser")
 		
-		//record.log("--> showBrowser")
 		OBJECT SET VISIBLE:C603(*; "browser"; True:C214)
 		
 		//______________________________________________________
 	: ($message="initBrowser")
 		
-		//record.log("--> initBrowser")
 		OBJECT SET VISIBLE:C603(*; "browser"; True:C214)
 		OBJECT SET SUBFORM:C1138(*; "browser"; "BROWSER")
 		
@@ -97,7 +118,7 @@ Case of
 										"action"; "show"; \
 										"type"; "alert"; \
 										"title"; "noDevices"; \
-										"additional"; ""))																
+										"additional"; ""))
 */
 				
 			End if 
@@ -332,9 +353,3 @@ Case of
 		
 		//______________________________________________________
 End case 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

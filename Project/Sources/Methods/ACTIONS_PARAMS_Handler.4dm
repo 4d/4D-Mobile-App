@@ -96,6 +96,8 @@ Case of
 				// Set colors
 				$form.dropCursor.setColors(Highlight menu background color:K23:7)
 				
+				androidLimitations(True:C214)
+				
 				//______________________________________________________
 			: ($formEvent=On Timer:K2:25)  // Refresh UI
 				
