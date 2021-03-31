@@ -318,17 +318,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 				
 				If (Test path name:C476($Obj_out.path)=Is a folder:K24:2)
 					
-					$cmd:="rm -Rf "+str_singleQuoted(Convert path system to POSIX:C1106($Obj_out.path))
-					LAUNCH EXTERNAL PROCESS:C811($cmd; $Txt_in; $Txt_out; $Txt_error)
-					
-					If (Asserted:C1132(OK=1; "erase path failed: "+$cmd))
-						
-						If (Length:C16($Txt_error)#0)
-							
-							$Obj_out.errors:=New collection:C1472($Txt_error)
-							
-						End if 
-					End if 
+					Folder:C1567($Obj_out.path; fk platform path:K87:2).delete(Delete with contents:K24:24)
 					
 				Else 
 					
@@ -561,18 +551,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 						//If (Bool($Obj_in.picture))
 						//If ($Boo_verbose)
 						//CALL FORM($Obj_in.caller;"LOG_EVENT";New object(\
-																																																	"message";"Dump Pictures";\
-																																																	"importance";Information message))
+																																																								"message";"Dump Pictures";\
+																																																								"importance";Information message))
 						// End if
 						//$Obj_out.picture:=dump (New object(\
-																																																	"action";"pictures";\
-																																																	"url";$Obj_in.url;\
-																																																	"headers";$Obj_headers;\
-																																																	"rest";True;"cache";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
-																																																	"dataSet";$Obj_in.dataSet;\
-																																																	"debug";Bool($Obj_in.debug);\
-																																																	"output";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator+"Pictures");\
-																																																	"dataModel";$Obj_dataModel))
+																																																								"action";"pictures";\
+																																																								"url";$Obj_in.url;\
+																																																								"headers";$Obj_headers;\
+																																																								"rest";True;"cache";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
+																																																								"dataSet";$Obj_in.dataSet;\
+																																																								"debug";Bool($Obj_in.debug);\
+																																																								"output";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator+"Pictures");\
+																																																								"dataModel";$Obj_dataModel))
 						//ob_error_combine ($Obj_out;$Obj_out.picture)
 						//$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
 						// End if
