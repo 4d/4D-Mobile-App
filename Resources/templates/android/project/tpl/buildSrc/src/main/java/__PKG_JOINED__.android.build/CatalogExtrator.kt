@@ -84,7 +84,7 @@ fun getCatalog(tableName: String): DataClass? {
 fun isFieldDefined(tableName: String, fieldName: String): Boolean {
     return when (tableName) {
         {{#tableNames}}
-        "{{name}}" -> fields{{name}}.contains(fieldName)
+        "{{name_original}}" -> fields{{name}}.contains(fieldName)
         {{/tableNames}}
         else -> false
     }

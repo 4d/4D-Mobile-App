@@ -8,6 +8,7 @@ package {{package}}.android.build.utils
 
 import org.json.JSONObject
 import java.io.File
+import java.text.Normalizer
 
 fun addObjectToJsonFile(path: String, name: String, value: Int) {
     val file = File(path)
@@ -35,4 +36,11 @@ fun getDataPath(tableName: String): String = assetsPath() + File.separator + XCA
 
 fun getAppinfoPath(): String = assetsPath() + File.separator + APPINFO_FILENAME
 
-fun String.condenseSpaces() = this.replace("\\s".toRegex(), "")
+fun String.condenseSpaces() = this.replace("\\s".toRegex(), "").unaccent()
+
+private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
+
+fun CharSequence.unaccent(): String {
+    val temp = Normalizer.normalize(this, Normalizer.Form.NFD)
+    return REGEX_UNACCENT.replace(temp, "")
+}
