@@ -220,7 +220,7 @@ Case of
 										
 									End if 
 									
-									If (EDITOR.colorScheme="dark")
+									If (EDITOR.isDark)
 										
 										$menu.icon("Images/dark/fieldsIcons/field_"+String:C10($o.typeLegacy; "00")+".png")
 										

@@ -239,7 +239,7 @@ Case of
 		//If (FEATURE.with("android"))
 		
 		//$Dir_root:=dataSet(New object("action"; "path"; \
-																																	"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+																																				"project"; New object("product"; Form.product; "$project"; PROJECT))).path
 		
 		//Else
 		
@@ -437,7 +437,7 @@ Case of
 		
 		$Obj_out:=New object:C1471
 		
-		$Obj_out.stroke:=Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white")  // Default
+		$Obj_out.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")  // Default
 		$Obj_out.fontWeight:="normal"
 		
 		If (Bool:C1537(This:C1470.embedded))

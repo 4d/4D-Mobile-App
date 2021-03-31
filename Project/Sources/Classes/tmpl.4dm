@@ -575,7 +575,7 @@ Function getSources($name : Text; $type : Text)->$template : 4D:C1709.folder
 	// Gives the path to the css file
 Function css()->$file : 4D:C1709.File
 	
-	If (EDITOR.colorScheme="dark")
+	If (EDITOR.isDark)
 		
 		$file:=File:C1566("/RESOURCES/css/template_dark.css")
 		

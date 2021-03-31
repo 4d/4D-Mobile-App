@@ -607,7 +607,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 			
 			// Create a table group filled according to selected status
 			
-			If (EDITOR.colorScheme="dark")
+			If (EDITOR.isDark)
 				
 				$svg.layer($table).fill(Choose:C955($isSelected; "slategray"; "none"))
 				
@@ -629,7 +629,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 					
 					// No form selected
 					$icon:=File:C1566("/RESOURCES/templates/form/"+$typeForm+"/defaultLayoutIcon.png")
-					$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.colorScheme="dark"; "white"; "dimgray"))
+					$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.isDark; "white"; "dimgray"))
 					
 				Else 
 					
@@ -658,7 +658,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 									//________________________________________
 								Else 
 									
-									$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.colorScheme="dark"; "white"; "dimgray"))
+									$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.isDark; "white"; "dimgray"))
 									
 									//______________________________________________________
 							End case 
@@ -666,7 +666,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 						Else 
 							
 							$icon:=File:C1566("/RESOURCES/images/noIcon.svg")
-							$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.colorScheme="dark"; "white"; "dimgray"))
+							$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.isDark; "white"; "dimgray"))
 							$svg.setAttribute("tips"; Replace string:C233($tmpl.name; "/"; ""); $svg.fetch($table))
 							
 						End if 
@@ -711,7 +711,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 				
 				// Border & reactive 'button'
-				If (EDITOR.colorScheme="dark")
+				If (EDITOR.isDark)
 					
 					$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
 						.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\

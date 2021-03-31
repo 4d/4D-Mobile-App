@@ -127,7 +127,7 @@ Case of
 		
 		// Default values
 		$o:=New object:C1471(\
-			"stroke"; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"); \
+			"stroke"; Choose:C955(EDITOR.isDark; "white"; "black"); \
 			"fontWeight"; "normal")
 		
 		// Mark not or missing assigned table
@@ -141,13 +141,13 @@ Case of
 		Else 
 			
 			// Not assigned table
-			$o.cell.tables.stroke:=Choose:C955(Num:C11($2.tableNumber)=0; EDITOR.errorRGB; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"))
+			$o.cell.tables.stroke:=Choose:C955(Num:C11($2.tableNumber)=0; EDITOR.errorRGB; Choose:C955(EDITOR.isDark; "white"; "black"))
 			
 		End if 
 		
 		// Mark duplicate names
 		ob_createPath($o; "cell.names")
-		$o.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $2.name).length>1; EDITOR.errorRGB; Choose:C955(FORM Get color scheme:C1761="light"; "black"; "white"))
+		$o.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $2.name).length>1; EDITOR.errorRGB; Choose:C955(EDITOR.isDark; "white"; "black"))
 		
 		//______________________________________________________
 	Else 

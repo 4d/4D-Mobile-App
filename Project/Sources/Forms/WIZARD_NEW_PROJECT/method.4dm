@@ -8,6 +8,7 @@ var $item : Text
 var $icon : Picture
 var $i : Integer
 var $e : Object
+var $c : Collection
 var $medias : 4D:C1709.Folder
 var $template : cs:C1710.str
 
@@ -21,7 +22,6 @@ Case of
 		//__________________________________________________________________________________________
 	: ($e.code=On Load:K2:1)
 		
-		var EDITOR : cs:C1710.editor
 		EDITOR:=cs:C1710.editor.new()
 		
 		// Populate the message list
@@ -37,7 +37,17 @@ Case of
 		
 		$medias:=Folder:C1567("/RESOURCES/images/welcome/")
 		
-		For each ($item; New collection:C1472("structure.png"; "design.png"; "generateAndTest.png"; "deploy.png"))
+		If (EDITOR.isDark)
+			
+			$c:=New collection:C1472("structure-dark.png"; "design-dark.png"; "generateAndTest-dark.png"; "deploy-dark.png")
+			
+		Else 
+			
+			$c:=New collection:C1472("structure.png"; "design.png"; "generateAndTest.png"; "deploy.png")
+			
+		End if 
+		
+		For each ($item; $c)
 			
 			$i:=$i+1
 			READ PICTURE FILE:C678($medias.file($item).platformPath; $icon)

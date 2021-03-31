@@ -244,10 +244,11 @@ Function init()
 	var $file : 4D:C1709.File
 	
 	This:C1470.colorScheme:=FORM Get color scheme:C1761
+	This:C1470.isDark:=(FORM Get color scheme:C1761="dark")
 	
 	This:C1470.fieldIcons:=New collection:C1472
 	
-	If (This:C1470.colorScheme="dark")
+	If (This:C1470.isDark)
 		
 		// * PRELOAD ICONS FOR FIELD TYPES
 		For each ($file; Folder:C1567("/RESOURCES/images/dark/fieldsIcons").files(Ignore invisible:K24:16))

@@ -123,7 +123,7 @@ Case of
 						
 						// Select the item
 						SVG SET ATTRIBUTE:C1055(*; $e.objectName; $tableID; \
-							"fill"; Choose:C955(EDITOR.colorScheme="dark"; "slategray"; EDITOR.selectedFillColor))
+							"fill"; Choose:C955(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -350,7 +350,7 @@ Case of
 					SET BLOB SIZE:C606($x; 0)
 					
 					// Set the drag icon
-					If (EDITOR.colorScheme="dark")
+					If (EDITOR.isDark)
 						
 						$p:=cs:C1710.svg.new().fillColor("slategray").fillOpacity(1).height(23)\
 							.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
@@ -572,7 +572,7 @@ ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventC
 						SET BLOB SIZE:C606($x; 0)
 						
 						// Create the drag icon
-						If (EDITOR.colorScheme="dark")
+						If (EDITOR.isDark)
 							
 							$p:=cs:C1710.svg.new().fillColor("slategray").fillOpacity(1).height(23)\
 								.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\

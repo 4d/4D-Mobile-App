@@ -132,10 +132,7 @@ If ($run)
 	
 	If ($http.success)
 		
-		$o:=New object:C1471
-		$o.etag:=String:C10($http.headers.query("name = 'ETag'").pop().value)
-		$o.lastModification:=String:C10($http.headers.query("name = 'Last-Modified'").pop().value)
-		$manifest.setText(JSON Stringify:C1217($o; *))
+		
 		
 		// Delete the old SDK folder if any
 		$o:=$sdk.parent.folder("sdk")
@@ -153,7 +150,20 @@ If ($run)
 			
 		End if 
 		
-		$o:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
+		var $folder : 4D:C1709.Folder
+		$folder:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
+		
+		$o:=New object:C1471
+		$o.etag:=String:C10($http.headers.query("name = 'ETag'").pop().value)
+		$o.lastModification:=String:C10($http.headers.query("name = 'Last-Modified'").pop().value)
+		
+		If ($folder.file("sdkVersion").exists)
+			
+			$o.version:=Replace string:C233($folder.file("sdkVersion").getText(); "\r"; "")
+			
+		End if 
+		
+		$manifest.setText(JSON Stringify:C1217($o; *))
 		
 	Else 
 		

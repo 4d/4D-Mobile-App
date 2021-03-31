@@ -57,7 +57,7 @@
 					"scrollbarVertical": "hidden",
 					"columns": [
 						{
-							"name": "icons1",
+							"name": "icons",
 							"width": 80,
 							"minWidth": 80,
 							"maxWidth": 80,
@@ -81,7 +81,7 @@
 							"pictureFormat": "truncatedCenter"
 						},
 						{
-							"name": "texts1",
+							"name": "texts",
 							"width": 10,
 							"minWidth": 10,
 							"maxWidth": 10,
@@ -219,7 +219,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 310,
+	"geometryStamp": 312,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
