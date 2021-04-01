@@ -55,18 +55,18 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				Case of 
 						
 						//______________________________________________________
-					: (Form:C1466.server.pushNotification)\
-						 & (Form:C1466.deepLinking.enabled)
+					: (Bool:C1537(Form:C1466.server.pushNotification))\
+						 & (Bool:C1537(Form:C1466.deepLinking.enabled))
 						
 						androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
 						
 						//______________________________________________________
-					: (Form:C1466.server.pushNotification)
+					: (Bool:C1537(Form:C1466.server.pushNotification))
 						
 						androidLimitations(False:C215; "Push notifications is coming soon for Android")
 						
 						//______________________________________________________
-					: (Form:C1466.deepLinking.enabled)
+					: (Bool:C1537(Form:C1466.deepLinking.enabled))
 						
 						androidLimitations(False:C215; "Deep Linking is coming soon for Android")
 						
