@@ -80,7 +80,7 @@ Function startupDisk($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	End if 
 	
 	//===================================================================================
-Function library($path : Text; $create : Boolean)->$document : 4D:C1709.File
+Function userLibrary($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/")
 	
@@ -116,7 +116,7 @@ Function preferences($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	End if 
 	
 	//===================================================================================
-Function caches($path; $create : Boolean)->$document : 4D:C1709.File
+Function userCaches($path; $create : Boolean)->$document : 4D:C1709.File
 	
 	$document:=This:C1470.home.folder("Library/Caches/")
 	
@@ -152,22 +152,22 @@ Function logs($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	End if 
 	
 	//===================================================================================
-Function derivedData($path : Text; $create : Boolean)->$document : 4D:C1709.File
+	//Function derivedData($path : Text; $create : Boolean)->$document : 4D.File
 	
-	$document:=This:C1470.home.folder("Library/Developer/Xcode/DerivedData/")
+	//$document:=This.home.folder("Library/Developer/Xcode/DerivedData/")
 	
-	If (Count parameters:C259>=2)
-		
-		$document:=This:C1470._postProcessing($document; $path; $create)
-		
-	Else 
-		
-		If (Count parameters:C259>=1)
-			
-			$document:=This:C1470._postProcessing($document; $path)
-			
-		End if 
-	End if 
+	//If (Count parameters>=2)
+	
+	//$document:=This._postProcessing($document; $path; $create)
+	
+	//Else 
+	
+	//If (Count parameters>=1)
+	
+	//$document:=This._postProcessing($document; $path)
+	
+	//End if 
+	//End if 
 	
 	//===================================================================================
 Function simulators($path : Text; $create : Boolean)->$document : 4D:C1709.File

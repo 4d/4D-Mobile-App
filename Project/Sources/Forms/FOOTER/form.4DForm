@@ -27,6 +27,16 @@
 					"class": "background",
 					"sizingY": "move",
 					"stroke": "#1BA1E5"
+				},
+				"android": {
+					"type": "picture",
+					"top": 2,
+					"left": 4,
+					"width": 16,
+					"height": 16,
+					"picture": "/RESOURCES/images/os/Android-24.png",
+					"pictureFormat": "scaled",
+					"visibility": "hidden"
 				}
 			}
 		},
@@ -51,7 +61,7 @@
 	],
 	"width": 970,
 	"height": 20,
-	"geometryStamp": 46,
+	"geometryStamp": 83,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

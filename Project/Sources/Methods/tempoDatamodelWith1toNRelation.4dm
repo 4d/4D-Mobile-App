@@ -2,49 +2,60 @@
 var $t : Text
 var $b : Boolean
 var $o; $table : Object
-var $c : Collection
 
-If (Value type:C1509($1)=Is object:K8:27)
+If (FEATURE.with("android"))
 	
-	$table:=PROJECT.dataModel[String:C10($1.tableNumber)]
-	
-Else 
-	
-	$table:=PROJECT.dataModel[String:C10($1)]
-	
-End if 
-
-If ($table#Null:C1517)
-	
-	$c:=OB Entries:C1720($table)
-	
-	For each ($o; $c) Until ($b)
+	If (PROJECT.$android)
 		
-		If (Length:C16($o.key)#0)
+		If (Value type:C1509($1)=Is object:K8:27)
 			
-			If (String:C10(Num:C11($o.key))=$o.key)
-				
-				// Field
-				
-			Else 
-				
-				$b:=($o.value.relatedEntities#Null:C1517)
-				
-			End if 
+			$table:=PROJECT.dataModel[String:C10($1.tableNumber)]
+			
+		Else 
+			
+			$table:=PROJECT.dataModel[String:C10($1)]
+			
 		End if 
-	End for each 
-End if 
-
-If ($b)
-	
-	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
-		"message"; "One to Many relations are coming soon for Android"; \
-		"type"; "highlight"))
-	
-Else 
-	
-	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
-		"message"; ""; \
-		"type"; "highlight"))
-	
+		
+		If ($table#Null:C1517)
+			
+			For each ($o; OB Entries:C1720($table)) Until ($b)
+				
+				If (Length:C16($o.key)#0)
+					
+					If (String:C10(Num:C11($o.key))#$o.key)\
+						 & (Value type:C1509($o.value)=Is object:K8:27)
+						
+						$b:=($o.value.relatedEntities#Null:C1517)
+						
+						If (Not:C34($b))
+							
+							For each ($o; OB Entries:C1720($o.value)) Until ($b)
+								
+								If (String:C10(Num:C11($o.key))#$o.key)\
+									 & (Value type:C1509($o.value)=Is object:K8:27)
+									
+									$b:=Bool:C1537($o.value.isToMany)
+									
+								End if 
+							End for each 
+						End if 
+					End if 
+				End if 
+			End for each 
+		End if 
+		
+		If ($b)
+			
+			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
+				"message"; "One to Many relations are coming soon for Android"; \
+				"type"; "android"))
+			
+		Else 
+			
+			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
+				"message"; ""))
+			
+		End if 
+	End if 
 End if 

@@ -23,7 +23,7 @@ Case of
 		//______________________________________________________
 	: (Is Windows:C1573)
 		
-		RECORD:=logger(Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(fk database folder:K87:14; *).name).file(Folder:C1567(fk database folder:K87:14).name+".log"))
+		RECORD:=logger(Folder:C1567(fk desktop folder:K87:19).parent.folder("AppData/LocalLow/Logs").file(Folder:C1567(fk database folder:K87:14).name+".log"))
 		
 		//______________________________________________________
 	Else 

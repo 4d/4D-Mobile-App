@@ -114,11 +114,11 @@ Case of
 			Else 
 				
 /*
-								DO_MESSAGE(New object(\
-										"action"; "show"; \
-										"type"; "alert"; \
-										"title"; "noDevices"; \
-										"additional"; ""))
+												DO_MESSAGE(New object(\
+															"action"; "show"; \
+															"type"; "alert"; \
+															"title"; "noDevices"; \
+															"additional"; ""))
 */
 				
 			End if 
@@ -259,24 +259,22 @@ Case of
 					
 					DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyGenerated").localized($in.param.project.product.name))
 					
+					// Keep a digest of the sources
 					var $file : 4D:C1709.File
 					
 					If ($in.param.project._buildTarget="iOS")
 						
-						$file:=cs:C1710.path.new().userCache().file($in.param.project._name+"_ios")
+						$file:=cs:C1710.path.new().userCache().file($in.param.project._name+".ios.fingerprint")
 						
-						var $sources : 4D:C1709.Folder
-						$sources:=$in.param.appFolder.folder("Sources")
-						
-						If ($sources.exists)
+						If ($in.param.appFolder.folder("iOS/Sources").exists)
 							
-							$file.setText(doc_folderDigest($sources.platformPath))
+							$file.setText(cs:C1710.tools.new().folderDigest($in.param.appFolder.folder("iOS/Sources")))
 							
 						End if 
 						
 					Else 
 						
-						$file:=cs:C1710.path.new().userCache().file($in.param.project._name+"_android")
+						$file:=cs:C1710.path.new().userCache().file($in.param.project._name+".android.fingerprint")
 						
 						//#MARK_TODO
 						

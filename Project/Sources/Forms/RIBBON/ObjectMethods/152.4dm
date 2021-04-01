@@ -58,9 +58,9 @@ Case of
 				
 				If ($could.xCodeAvailable)
 					
-					If ($could.iOSFolder.exists)
+					If ($could.iosFolder.exists)
 						
-						$could.openWithXcode:=(($could.iOSFolder.folders().query("extension IN :1"; New collection:C1472(".xcworkspace"; ".xcodeproj"))).length>0)
+						$could.openWithXcode:=(($could.iosFolder.folders().query("extension IN :1"; New collection:C1472(".xcworkspace"; ".xcodeproj"))).length>0)
 						
 					End if 
 				End if 
@@ -108,7 +108,7 @@ Case of
 					
 				Else 
 					
-					$menu.append("clearXcodeBuild"; "clearXcodeBuild").enable($could.iOSFolder.folder("build").exists).enable($could.xCodeAvailable)
+					$menu.append("clearXcodeBuild"; "clearXcodeBuild").enable($could.iosFolder.folder("build").exists).enable($could.xCodeAvailable)
 					
 				End if 
 				
@@ -306,7 +306,7 @@ Case of
 			: ($menu.choice="openWithXcode")  // Open a file of project in xcode
 				
 				$Xcode:=cs:C1710.Xcode.new()
-				$Xcode.open($could.iOSFolder)
+				$Xcode.open($could.iosFolder)
 				
 				If ($Xcode.success)
 					
@@ -315,7 +315,7 @@ Case of
 						IDLE:C311
 						DELAY PROCESS:C323(Current process:C322; 60*3)  // Wait xcode open
 						
-						$Xcode.reveal($could.iOSFolder.platformPath+Convert path POSIX to system:C1107(SHARED.xCode.fileFocus))
+						$Xcode.reveal($could.iosFolder.platformPath+Convert path POSIX to system:C1107(SHARED.xCode.fileFocus))
 						
 					End if 
 					
@@ -361,7 +361,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="clearXcodeBuild")
 				
-				$could.iOSFolder.folder("build").delete(fk recursive:K87:7)
+				$could.iosFolder.folder("build").delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_installCertificats")
@@ -378,7 +378,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openDiagnosticReports")
 				
-				SHOW ON DISK:C922(ENV.logs("DiagnosticReports").platformPath)
+				SHOW ON DISK:C922($path.userlibrary().folder("Logs").platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_openLogs")
@@ -426,8 +426,8 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_removeDerivedData")
 				
-				ENV.derivedData().delete(fk recursive:K87:7)
-				$could.iOSFolder.folder("build").delete(fk recursive:K87:7)
+				$path.userlibrary().folder("Developer/Xcode/DerivedData").delete(fk recursive:K87:7)
+				$could.iosFolder.folder("build").delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_showConfigFile")
@@ -458,7 +458,7 @@ Case of
 				
 				Xcode(New object:C1471(\
 					"action"; "workspace-addsources"; \
-					"path"; $could.iOSFolder.platformPath))
+					"path"; $could.iosFolder.platformPath))
 				
 				//______________________________________________________
 			: ($menu.choice="_openTemplateFolder")

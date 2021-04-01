@@ -48,7 +48,7 @@ If (Count parameters:C259>=1)
 	var $o : Object
 	$o:=OB Copy:C1225($in)
 	OB REMOVE:C1226($o.project.$project; "$dialog")
-	ob_writeToFile($o; $cacheFolder.file("lastBuild.4dmobile"); True:C214)
+	ob_writeToFile($o; $cacheFolder.file("lastBuild.ios.4dmobile"); True:C214)
 	
 Else 
 	
@@ -63,7 +63,7 @@ Else
 			
 		End if 
 		
-		$in:=ob_parseFile($cacheFolder.file("lastBuild.4dmobile")).value
+		$in:=ob_parseFile($cacheFolder.file("lastBuild.ios.4dmobile")).value
 		
 	End if 
 End if 
@@ -730,7 +730,7 @@ If ($out.success)
 					"exportPath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12); \
 					"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+$productName+".xcarchive")))
 				
-				ENV.caches("lastExportArchive.xlog").setText(String:C10($Obj_result_build.out); "UTF-8"; Document with LF:K24:22)
+				$path.userCache().file("lastExportArchive.xlog").setText(String:C10($Obj_result_build.out); "UTF-8"; Document with LF:K24:22)
 				
 				ob_error_combine($out; $Obj_result_build)
 				
@@ -1098,7 +1098,7 @@ End if
 
 $ui.close()
 
-ob_writeToDocument($out; $cacheFolder.file("lastBuild.json").platformPath; True:C214)
+ob_writeToDocument($out; $cacheFolder.file("lastBuild.ios.json").platformPath; True:C214)
 
 $out.param:=$in
 

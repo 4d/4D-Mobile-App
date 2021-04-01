@@ -26,7 +26,7 @@ $preview:=This:C1470.preview.name
 If (Length:C16($cible)>0)
 	
 	// Get the pastboard
-	GET PASTEBOARD DATA:C401("com.4d.private.ios.field"; $x)
+	GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.field"; $x)
 	
 	If (Bool:C1537(OK))
 		

@@ -39,7 +39,7 @@ $cible:=This:C1470.$.current
 // ----------------------------------------------------
 If (Length:C16($cible)>0)
 	
-	GET PASTEBOARD DATA:C401("com.4d.private.ios.field"; $x)
+	GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.field"; $x)
 	
 	If (Bool:C1537(OK))
 		
@@ -177,7 +177,7 @@ If (Length:C16($cible)>0)
 				: (FEATURE.with("withWidgetActions"))  // Action area (WIP)
 					
 					// Accept drag if a widget action is drag over
-					GET PASTEBOARD DATA:C401("com.4d.private.ios.action"; $x)
+					GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.action"; $x)
 					
 					If (Bool:C1537(OK))
 						

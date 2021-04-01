@@ -17,7 +17,7 @@ If (FEATURE.with("android"))
 				
 				CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
 					"message"; $message; \
-					"type"; "highlight"))
+					"type"; "android"))
 				
 			End if 
 		End if 

@@ -174,7 +174,7 @@ Function gotoPage
 	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "hideBrowser")
 	
 	// Hide footer
-	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471("message"; ""))
+	androidLimitations(False:C215; "")
 	
 	$o:=This:C1470.pages[$page]
 	

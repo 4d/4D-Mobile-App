@@ -281,7 +281,6 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		
 		$t:=$errorStream
 		CLEAR VARIABLE:C89($errorStream)
-		This:C1470.success:=False:C215
 		
 	Else 
 		
@@ -308,6 +307,7 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 				 | (Position:C15("FAILED:"; $t; *)=1)
 				
 				$errorStream:=$t
+				This:C1470.success:=False:C215
 				
 			End if 
 		End if 

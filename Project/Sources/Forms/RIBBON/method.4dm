@@ -85,10 +85,6 @@ Case of
 		
 		$form.sectionButtons.distributeLeftToRight($constraints)
 		
-		//If (Is macOS & FEATURE.with("android"))  //🚧
-		//$form.install.setSeparatePopupMenu()
-		//End if 
-		
 		SET TIMER:C645(-1)
 		
 		//______________________________________________________
@@ -116,6 +112,7 @@ Case of
 			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
 			
 			Case of 
+					
 					//______________________________________________________
 				: (Bool:C1537(PROJECT.$android)) & (Bool:C1537(PROJECT.$ios))
 					
@@ -147,11 +144,20 @@ Case of
 					//______________________________________________________
 			End case 
 			
+			
 			$withTeamID:=Choose:C955(Is macOS:C1572; Bool:C1537(Form:C1466.status.teamId); True:C214)
 			
 			$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected)
-			$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID)
 			
+			If (Is Windows:C1573)
+				
+				$form.install.disable()
+				
+			Else 
+				
+				$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID)
+				
+			End if 
 		End if 
 		
 		//______________________________________________________
@@ -307,7 +313,7 @@ Case of
 					$form.simulator.enable()
 					
 					// Get the default simulator
-					$plist:=ENV.preferences("com.apple.iphonesimulator.plist")
+					$plist:=cs:C1710.path.new().userlibrary().file("Preferences/com.apple.iphonesimulator.plist")
 					
 					If (Not:C34($plist.exists))
 						

@@ -72,14 +72,14 @@ Case of
 				
 				// Put into the container
 				VARIABLE TO BLOB:C532($o; $x)
-				APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.parameter"; $x)
+				APPEND DATA TO PASTEBOARD:C403("com.4d.private.4dmobile.parameter"; $x)
 				SET BLOB SIZE:C606($x; 0)
 				
 				//______________________________________________________
 			: ($form.form.eventCode=On Drag Over:K2:13)  // Manage drag & drop cursor
 				
 				// Get the pastboard
-				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter"; $x)
+				GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.parameter"; $x)
 				
 				If (Bool:C1537(OK))
 					
@@ -140,7 +140,7 @@ Case of
 			: ($form.form.eventCode=On Drop:K2:12)
 				
 				// Get the pastboard
-				GET PASTEBOARD DATA:C401("com.4d.private.ios.parameter"; $x)
+				GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.parameter"; $x)
 				
 				If (Bool:C1537(OK))
 					

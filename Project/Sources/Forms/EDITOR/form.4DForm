@@ -1,7 +1,7 @@
 {
 	"destination": "detailScreen",
 	"windowMinWidth": 970,
-	"windowMinHeight": 890,
+	"windowMinHeight": 870,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -33,7 +33,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 890,
+					"height": 870,
 					"class": "background"
 				},
 				"ribbon": {
@@ -77,7 +77,7 @@
 					"top": 190,
 					"left": 0,
 					"width": 954,
-					"height": 700,
+					"height": 680,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -88,7 +88,7 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"scrollbarHorizontal": "hidden",
-					"bottom": 890,
+					"bottom": 870,
 					"events": [
 						"onGettingFocus"
 					]
@@ -230,7 +230,7 @@
 				"footer": {
 					"type": "subform",
 					"left": 0,
-					"top": 870,
+					"top": 850,
 					"width": 970,
 					"height": 20,
 					"detailForm": "FOOTER",
@@ -312,7 +312,7 @@
 			}
 		}
 	},
-	"geometryStamp": 74,
+	"geometryStamp": 79,
 	"width": 970,
-	"height": 890
+	"height": 870
 }

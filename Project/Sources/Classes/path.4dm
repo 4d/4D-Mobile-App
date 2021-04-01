@@ -22,6 +22,8 @@ Class constructor
 		
 	End if 
 	
+	This:C1470.home:=Folder:C1567(fk desktop folder:K87:19).parent
+	
 /*========================================================*/
 Function create
 	
@@ -43,15 +45,28 @@ Function userCache()->$folder : 4D:C1709.Folder
 	
 	If (Is macOS:C1572)
 		
-		$folder:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Library/Caches/com.4d.mobile")
+		$folder:=This:C1470.home.folder("Library/Caches/com.4d.mobile")
 		
 	Else 
 		
-		$folder:=Folder:C1567(fk system folder:K87:13).parent.folder("AppData/Local/4D Mobile")
+		$folder:=This:C1470.home.folder("AppData/Local/4D Mobile")
 		
 	End if 
 	
 	$folder.create()
+	
+/*========================================================*/
+Function userlibrary()->$folder : 4D:C1709.Folder
+	
+	If (Is macOS:C1572)
+		
+		$folder:=This:C1470.home.folder("Library")
+		
+	Else 
+		
+		$folder:=This:C1470.home.folder("AppData/LocalLow/")
+		
+	End if 
 	
 /*========================================================
 	
@@ -59,6 +74,7 @@ Function userCache()->$folder : 4D:C1709.Folder
 	
 ========================================================*/
 Function cacheSdkApple()->$zip : 4D:C1709.ZipArchive
+	
 	$zip:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
 	
 /*========================================================*/

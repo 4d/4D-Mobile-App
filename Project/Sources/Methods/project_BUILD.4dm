@@ -45,10 +45,13 @@ If (Asserted:C1132($project#Null:C1517))
 	
 	If (project_Check_param($in).success)
 		
+		var $path : cs:C1710.path
+		$path:=cs:C1710.path.new()
+		
 		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
 		
-		$in.appFolder:=cs:C1710.path.new().products().folder($project.product.name)
+		$in.appFolder:=$path.products().folder($project.product.name)
 		
 		If ($in.path=Null:C1517)
 			
@@ -102,32 +105,29 @@ If (Asserted:C1132($project#Null:C1517))
 			
 			If ($project._buildTarget="iOS")
 				
-				var $sources : 4D:C1709.Folder
-				$sources:=$in.appFolder.folder("Sources")
-				
-				If ($sources.exists)
+				If ($in.appFolder.folder("Sources").exists)
 					
 					// Check if the project was modified by another application
 					// Compare to the signature of the sources folder
-					$file:=ENV.caches("com.4D.mobile/").file($project._name)
+					$file:=$path.userCache().file($project._name)
 					
 					If (FEATURE.with("android"))
 						
 						If ($file.exists)
 							
-							//#ASCENDING_COMPATIBILITY
-							$file:=$file.rename($project._name+"ios")
+							// #ASCENDING_COMPATIBILITY
+							$file:=$file.rename($project._name+".ios.fingerprint")
 							
 						Else 
 							
-							$file:=ENV.caches("com.4D.mobile/").file($project._name+"_ios")
+							$file:=$path.userCache().file($project._name+".ios.fingerprint")
 							
 						End if 
 					End if 
 					
 					If ($file.exists)
 						
-						$success:=(doc_folderDigest($sources.platformPath)=$file.getText())
+						$success:=(cs:C1710.tools.new().folderDigest($in.appFolder.folder("Sources"))=$file.getText())
 						
 					End if 
 					
@@ -139,7 +139,7 @@ If (Asserted:C1132($project#Null:C1517))
 				
 			Else 
 				
-				$file:=ENV.caches("com.4D.mobile/").file($project._name+"_android")
+				$file:=$path.userCache().file($project._name+".android.fingerprint")
 				
 				//#MARK_TODO
 				$success:=True:C214

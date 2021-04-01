@@ -133,20 +133,6 @@ Case of
 				
 				androidLimitations(True:C214; "Actions are coming soon for Android")
 				
-				If (FEATURE.with("android"))
-					
-					If (PROJECT.$ios) & Not:C34(PROJECT.$android)
-						
-						// <NOTHING MORE TO DO>
-						
-					Else 
-						
-						OBJECT SET ENABLED:C1123(*; "@"; Is macOS:C1572)
-						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471("message"; "Actions are coming soon for Android"; "type"; "highlight"))
-						
-					End if 
-				End if 
-				
 				//______________________________________________________
 			: ($eventCode=On Timer:K2:25)  // Refresh UI
 				

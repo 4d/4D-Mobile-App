@@ -650,7 +650,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 									$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("thisModelIsNotApplicableForthisPlatform"); "{platform}"; "Android"); $svg.fetch($table))
 									
 									//______________________________________________________
-								: (Form:C1466.$ios & Not:C34($tmpl.iOS))
+								: (Form:C1466.$ios & Not:C34($tmpl.ios))
 									
 									$color:=EDITOR.colors.warningColor.hex
 									$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("thisModelIsNotApplicableForthisPlatform"); "{platform}"; "iOS"); $svg.fetch($table))

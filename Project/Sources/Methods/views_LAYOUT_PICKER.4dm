@@ -69,7 +69,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			Case of 
 					//______________________________________________________
-				: ($forIosOnly & $tmpl.iOS)
+				: ($forIosOnly & $tmpl.ios)
 					
 					$data.forms.push($folder.fullName)
 					
@@ -79,7 +79,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					$data.forms.push($folder.fullName)
 					
 					//______________________________________________________
-				: ($tmpl.iOS & $tmpl.android)
+				: ($tmpl.ios & $tmpl.android)
 					
 					$data.forms.push($folder.fullName)
 					
@@ -114,7 +114,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				Case of 
 						
 						//______________________________________________________
-					: ($forIosOnly & $tmpl.iOS)
+					: ($forIosOnly & $tmpl.ios)
 						
 						For each ($fileName; $manifest.mandatory) While ($success)
 							
@@ -130,7 +130,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 							$userTemplates.folder($folder.name).folder("android").file("app/src/main/res/layout/layout.xml").exists
 						
 						//______________________________________________________
-					: ($tmpl.iOS & $tmpl.android)
+					: ($tmpl.ios & $tmpl.android)
 						
 						For each ($fileName; $manifest.mandatory) While ($success)
 							
@@ -185,7 +185,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					
 					Case of 
 							//______________________________________________________
-						: ($forIosOnly & $tmpl.iOS)
+						: ($forIosOnly & $tmpl.ios)
 							
 							For each ($t; $manifest.mandatory) While ($success)
 								
@@ -201,7 +201,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 								$zip.root.folder("android").file("app/src/main/res/layout/layout.xml").exists
 							
 							//______________________________________________________
-						: ($tmpl.iOS & $tmpl.android)
+						: ($tmpl.ios & $tmpl.android)
 							
 							For each ($t; $manifest.mandatory) While ($success)
 								

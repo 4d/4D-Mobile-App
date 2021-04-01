@@ -2,7 +2,7 @@
 var $content; $o; $result : Object
 
 COMPILER_COMPONENT
-$o:=cs:C1710.path.new().userCache().parent.file("lastBuild.4dmobile")
+$o:=cs:C1710.path.new().userCache().parent.file("lastBuild.ios.4dmobile")
 
 If ($o.exists)
 	

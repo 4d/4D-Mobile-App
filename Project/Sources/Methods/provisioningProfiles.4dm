@@ -66,7 +66,7 @@ Case of
 		$Obj_result.success:=True:C214
 		
 		// An additional separator
-		$Obj_result.posix:=ENV.library("MobileDevice/Provisioning Profiles/").path
+		$Obj_result.posix:=cs:C1710.path.new().userlibrary("MobileDevice/Provisioning Profiles/").path
 		$Obj_result.path:=Convert path POSIX to system:C1107($Obj_result.posix)
 		
 		//______________________________________________________

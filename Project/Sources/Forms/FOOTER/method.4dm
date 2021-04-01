@@ -7,6 +7,8 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Bound Variable Change:K2:52)
 		
+		OBJECT SET VISIBLE:C603(*; "android"; False:C215)
+		
 		If (Length:C16(String:C10(Form:C1466.message))=0)
 			
 			// Reset
@@ -28,9 +30,10 @@ Case of
 					OBJECT SET RGB COLORS:C628(*; "background"; "red"; "red")
 					
 					//______________________________________________________
-				: (Form:C1466.type="highlight")
+				: (Form:C1466.type="android")
 					
-					OBJECT SET RGB COLORS:C628(*; "background"; "green"; "green")
+					OBJECT SET RGB COLORS:C628(*; "background"; 0x004FBB61; 0x004FBB61)
+					OBJECT SET VISIBLE:C603(*; "android"; True:C214)
 					
 					//______________________________________________________
 			End case 

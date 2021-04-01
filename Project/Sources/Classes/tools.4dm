@@ -359,3 +359,29 @@ Function choose($requirement)->$choosed
 		$choosed:=${3-Num:C11(Bool:C1537($requirement))}.call()
 		
 	End if 
+	
+	//====================================================================
+	// Returns a digest signature of the contents of a folder
+Function folderDigest($folder : 4D:C1709.folder)->$digest : Text
+	
+	var $o : Object
+	var $x : Blob
+	var $onErrCallMethod : Text
+	
+	$onErrCallMethod:=Method called on error:C704
+	//====================== [
+	ON ERR CALL:C155("noError")
+	
+	For each ($o; $folder.files(fk recursive:K87:7+fk ignore invisible:K87:22))
+		
+		$x:=$o.getContent()
+		$digest:=$digest+Generate digest:C1147($x; SHA1 digest:K66:2)
+		
+	End for each 
+	
+	ON ERR CALL:C155($onErrCallMethod)
+	//====================== ]
+	
+	$digest:=Generate digest:C1147($digest; SHA1 digest:K66:2)
+	
+	

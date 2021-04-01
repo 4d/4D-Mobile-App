@@ -11,7 +11,7 @@ Class constructor($name : Text; $type : Text)
 	
 	This:C1470.upToDate:=False:C215
 	This:C1470.android:=False:C215
-	This:C1470.iOS:=False:C215
+	This:C1470.ios:=False:C215
 	
 	If (Count parameters:C259>=1)
 		
@@ -55,13 +55,13 @@ Class constructor($name : Text; $type : Text)
 					
 					If (This:C1470.manifest.target#Null:C1517)
 						
-						This:C1470.iOS:=(This:C1470.manifest.target.query("iOS != null").pop()#Null:C1517)
+						This:C1470.ios:=(This:C1470.manifest.target.query("iOS != null").pop()#Null:C1517)
 						This:C1470.android:=(This:C1470.manifest.target.query("android != null").pop()#Null:C1517)
 						
 					Else 
 						
 						// Check the folder structure to identify an iOS or Android template
-						This:C1470.iOS:=This:C1470.sources.folder("Sources").exists | This:C1470.sources.folder("ios").exists
+						This:C1470.ios:=This:C1470.sources.folder("Sources").exists | This:C1470.sources.folder("ios").exists
 						This:C1470.android:=This:C1470.sources.folder("app").exists | This:C1470.sources.folder("android").exists
 						
 					End if 

@@ -187,6 +187,9 @@
 	},
 	"[EDITOR]": {
 		"groups": [
+			"[PANELS]",
+			"[PROJECT]",
+			"FOOTER",
 			"RIBON"
 		],
 		"methods": [
@@ -211,7 +214,6 @@
 		],
 		"forms": [
 			"EDITOR",
-			"FOOTER",
 			"TITLE"
 		],
 		"classes": [
@@ -603,7 +605,6 @@
 			"doc_File",
 			"doc_Folder",
 			"doc_Folder_writable",
-			"doc_folderDigest",
 			"doc_Relative_path",
 			"doc_resolveAlias",
 			"doc_UNLOCK_DIRECTORY",
@@ -639,6 +640,11 @@
 			"test_errors",
 			"THROW",
 			"TRY"
+		]
+	},
+	"FOOTER": {
+		"forms": [
+			"FOOTER"
 		]
 	},
 	"form": {

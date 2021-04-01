@@ -346,7 +346,7 @@ Case of
 					
 					// Put into the container
 					VARIABLE TO BLOB:C532($o; $x)
-					APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field"; $x)
+					APPEND DATA TO PASTEBOARD:C403("com.4d.private.4dmobile.field"; $x)
 					SET BLOB SIZE:C606($x; 0)
 					
 					// Set the drag icon
@@ -402,7 +402,7 @@ Case of
 $o:=$Obj_context.currentAction
   // Put into the conatianer
 VARIABLE TO BLOB($o;$x)
-APPEND DATA TO PASTEBOARD("com.4d.private.ios.action";$x)
+APPEND DATA TO PASTEBOARD("com.4d.private.4dmobile.action";$x)
 SET BLOB SIZE($x;0)
   // Create the drag icon
  SVG_SET_OPTIONS (SVG_Get_options  ?+ 12)
@@ -425,7 +425,7 @@ ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventC
   //______________________________________________________
 : ($Obj_form.form.eventCode=On Drag Over)
   // Accept drag if a field is drag over
-GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
+GET PASTEBOARD DATA("com.4d.private.4dmobile.action";$x)
  If (Bool(OK))
 BLOB TO VARIABLE($x;$o)
 SET BLOB SIZE($x;0)
@@ -439,7 +439,7 @@ $0:=0  //    Accept drop
   //______________________________________________________
 : ($Obj_form.form.eventCode=On Drop)
   // Get the pastboard
-GET PASTEBOARD DATA("com.4d.private.ios.action";$x)
+GET PASTEBOARD DATA("com.4d.private.4dmobile.action";$x)
  If (Bool(OK))
 BLOB TO VARIABLE($x;$o)
 SET BLOB SIZE($x;0)
@@ -568,7 +568,7 @@ ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventC
 						
 						// Put into the container
 						VARIABLE TO BLOB:C532($o; $x)
-						APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.field"; $x)
+						APPEND DATA TO PASTEBOARD:C403("com.4d.private.4dmobile.field"; $x)
 						SET BLOB SIZE:C606($x; 0)
 						
 						// Create the drag icon
@@ -620,7 +620,7 @@ ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventC
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
 				
-				GET PASTEBOARD DATA:C401("com.4d.private.ios.field"; $x)
+				GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.field"; $x)
 				
 				If (Bool:C1537(OK))
 					

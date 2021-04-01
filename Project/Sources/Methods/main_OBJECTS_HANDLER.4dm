@@ -80,7 +80,7 @@ Case of
 				
 				VARIABLE TO BLOB:C532($o; $x)
 				
-				APPEND DATA TO PASTEBOARD:C403("com.4d.private.ios.table"; $x)
+				APPEND DATA TO PASTEBOARD:C403("com.4d.private.4dmobile.table"; $x)
 				
 				//______________________________________________________
 			: ($Obj_form.eventCode=On Getting Focus:K2:7)
@@ -135,7 +135,7 @@ Case of
 				//______________________________________________________
 			: ($Obj_form.eventCode=On Drag Over:K2:13)
 				
-				GET PASTEBOARD DATA:C401("com.4d.private.ios.table"; $x)
+				GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.table"; $x)
 				
 				If (Bool:C1537(OK))
 					
@@ -156,7 +156,7 @@ Case of
 				//______________________________________________________
 			: ($Obj_form.eventCode=On Drop:K2:12)
 				
-				GET PASTEBOARD DATA:C401("com.4d.private.ios.table"; $x)
+				GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.table"; $x)
 				
 				If (Bool:C1537(OK))
 					

@@ -56,8 +56,8 @@ Class constructor
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
 	
-	This:C1470.logFolder:=ENV.caches("com.4D.mobile/"; True:C214)
-	This:C1470.file.copyTo(This:C1470.logFolder; "lastAndroidBuild.4dmobile"; fk overwrite:K87:5)
+	This:C1470.logFolder:=cs:C1710.path.new().userCache()
+	This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
 	
 	This:C1470.version:="debug"
 	This:C1470.apk:=Folder:C1567(This:C1470.project.path).folder("app/build/outputs/apk").folder(This:C1470.version).file("app-"+This:C1470.version+".apk")
@@ -125,8 +125,8 @@ Function create()->$result : Object
 		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
 		
 		// Log outputs
-		This:C1470.logFolder.file("lastAndroidCreate.out.log").setText(String:C10($o.outputStream); "UTF-8"; Document with LF:K24:22)
-		This:C1470.logFolder.file("lastAndroidCreate.err.log").setText(String:C10($o.errorStream); "UTF-8"; Document with LF:K24:22)
+		This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream); "UTF-8"; Document with LF:K24:22)
+		This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream); "UTF-8"; Document with LF:K24:22)
 		
 		If ($o.success)
 			
@@ -276,8 +276,8 @@ Function build()->$result : Object
 		$o:=This:C1470.gradlew.assembleDebug()
 		
 		// Log outputs
-		This:C1470.logFolder.file("lastAndroidBuild.out.log").setText(String:C10($o.outputStream); "UTF-8"; Document with LF:K24:22)
-		This:C1470.logFolder.file("lastAndroidBuild.err.log").setText(String:C10($o.errorStream); "UTF-8"; Document with LF:K24:22)
+		This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream); "UTF-8"; Document with LF:K24:22)
+		This:C1470.logFolder.file("lastBuild.android.err.log").setText(String:C10($o.errorStream); "UTF-8"; Document with LF:K24:22)
 		
 		If ($o.success)
 			
