@@ -43,7 +43,7 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
             if (hashMap.containsKey(key.condenseSpaces())) {
                 hashMap[key.condenseSpaces()] = inputEntity[key]
 
-                fields.find { it.name == key }?.let { field ->
+                fields.find { it.name.condenseSpaces() == key.condenseSpaces() }?.let { field ->
                     when {
                         field.isImage -> {
                             hashMap[key.condenseSpaces()] = null
