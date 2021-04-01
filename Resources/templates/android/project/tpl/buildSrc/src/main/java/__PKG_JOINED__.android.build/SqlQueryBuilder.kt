@@ -7,7 +7,7 @@
 package {{package}}.android.build
 
 import {{package}}.android.build.model.Field
-import {{package}}.android.build.utils.condenseSpaces
+import {{package}}.android.build.utils.fieldAdjustment
 import {{package}}.android.build.utils.getSafeString
 import org.json.JSONArray
 import org.json.JSONObject
@@ -22,9 +22,9 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
         hashMap["__TIMESTAMP"] = null
         hashMap["__STAMP"] = null
         fields.forEach { field ->
-            hashMap[field.name.condenseSpaces()] = null
+            hashMap[field.name.fieldAdjustment()] = null
             if (field.isManyToOneRelation)
-                hashMap["__${field.name.condenseSpaces()}Key"] = null
+                hashMap["__${field.name.fieldAdjustment()}Key"] = null
         }
 
         for (i in 0 until inputEntities.length()) {
@@ -40,18 +40,18 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
         val outputEntity = arrayOfNulls<Any>(hashMap.keys.size)
 
         inputEntity.keys().forEach { key ->
-            if (hashMap.containsKey(key.condenseSpaces())) {
-                hashMap[key.condenseSpaces()] = inputEntity[key]
+            if (hashMap.containsKey(key.fieldAdjustment())) {
+                hashMap[key.fieldAdjustment()] = inputEntity[key]
 
-                fields.find { it.name.condenseSpaces() == key.condenseSpaces() }?.let { field ->
+                fields.find { it.name.fieldAdjustment() == key.fieldAdjustment() }?.let { field ->
                     when {
                         field.isImage -> {
-                            hashMap[key.condenseSpaces()] = null
+                            hashMap[key.fieldAdjustment()] = null
                         }
                         field.isManyToOneRelation -> {
-                            val neededObject = hashMap[key.condenseSpaces()]
+                            val neededObject = hashMap[key.fieldAdjustment()]
                             if (neededObject is JSONObject) {
-                                hashMap["__${key.condenseSpaces()}Key"] = neededObject.getSafeString("__KEY")
+                                hashMap["__${key.fieldAdjustment()}Key"] = neededObject.getSafeString("__KEY")
                             }
                         }
                         field.isOneToManyRelation -> {
