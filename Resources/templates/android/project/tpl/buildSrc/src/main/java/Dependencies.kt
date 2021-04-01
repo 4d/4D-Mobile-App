@@ -93,6 +93,7 @@ object Libs {
     val androidx_room = "androidx.room:room-ktx:${Versions.room}"
     val androidx_room_runtime = "androidx.room:room-runtime:${Versions.room}"
     val androidx_room_compiler = "androidx.room:room-compiler:${Versions.room}"
+    val sqlite = "androidx.sqlite:sqlite-ktx:${Versions.sqlite}"
 
     // Glide
     val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
