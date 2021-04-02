@@ -66,8 +66,10 @@ Case of
 		$Obj_result.success:=True:C214
 		
 		// An additional separator
-		$Obj_result.posix:=cs:C1710.path.new().userlibrary("MobileDevice/Provisioning Profiles/").path
-		$Obj_result.path:=Convert path POSIX to system:C1107($Obj_result.posix)
+		var $folder : 4D:C1709.Folder
+		$folder:=cs:C1710.path.new().userlibrary().folder("MobileDevice/Provisioning Profiles")
+		$Obj_result.posix:=$folder.path
+		$Obj_result.path:=$folder.platformPath
 		
 		//______________________________________________________
 	: ($Obj_param.action="paths")

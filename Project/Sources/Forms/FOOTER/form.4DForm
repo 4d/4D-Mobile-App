@@ -30,11 +30,11 @@
 				},
 				"android": {
 					"type": "picture",
-					"top": 2,
-					"left": 4,
-					"width": 16,
+					"top": 4,
+					"left": 11,
+					"width": 24,
 					"height": 16,
-					"picture": "/RESOURCES/images/os/Android-24.png",
+					"picture": "/RESOURCES/images/os/Android-white.png",
 					"pictureFormat": "scaled",
 					"visibility": "hidden"
 				}
@@ -54,14 +54,15 @@
 					"stroke": "#FFFFFF",
 					"sizingX": "grow",
 					"dataSource": "Form:C1466.message",
-					"textAlign": "center"
+					"textAlign": "center",
+					"focusable": false
 				}
 			}
 		}
 	],
 	"width": 970,
 	"height": 20,
-	"geometryStamp": 83,
+	"geometryStamp": 117,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

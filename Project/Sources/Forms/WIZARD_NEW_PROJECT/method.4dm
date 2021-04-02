@@ -25,13 +25,27 @@ Case of
 		EDITOR:=cs:C1710.editor.new()
 		
 		// Populate the message list
-		$template:=cs:C1710.str.new("<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"\
-			+"{title}"\
-			+"</span>"\
-			+"<br/>"\
-			+"<span style='font-size: 13pt;font-weight: normal'>"\
-			+"{description}"\
-			+"</span></span>")
+		If (Is macOS:C1572)
+			
+			$template:=cs:C1710.str.new("<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"\
+				+"{title}"\
+				+"</span>"\
+				+"<br/>"\
+				+"<span style='font-size: 13pt;font-weight: normal'>"\
+				+"{description}"\
+				+"</span></span>")
+			
+		Else 
+			
+			$template:=cs:C1710.str.new("<span style='color:dimgray'><span style='font-size: 13pt;font-weight: bold'>"\
+				+"{title}"\
+				+"</span>"\
+				+"<br/>"\
+				+"<span style='font-size: 12pt;font-weight: normal'>"\
+				+"{description}"\
+				+"</span></span>")
+			
+		End if 
 		
 		Form:C1466._list:=New collection:C1472
 		
@@ -73,7 +87,7 @@ Case of
 		
 		Form:C1466._centered:=cs:C1710.group.new("list,continue,newProject,message")
 		
-		If (Not:C34(FEATURE.with("androidBeta")))
+		If (Not:C34(FEATURE.with("androidBeta"))) | Is Windows:C1573
 			
 			Form:C1466._new.resizeVertically(-120).moveVertically(50)
 			Form:C1466._listbox:=cs:C1710.listbox.new("list")
