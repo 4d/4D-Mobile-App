@@ -38,8 +38,7 @@
 		],
 		"methods": [
 			"_catalog",
-			"01_LASTBUILD",
-			"test_codeRewriting"
+			"01_LASTBUILD"
 		],
 		"forms": [
 			"_w_VIEWS",
@@ -99,8 +98,8 @@
 	"[ android ]": {
 		"methods": [
 			"COMPILER_android",
-			"resetAndroidStudio",
-			"studioCheckInstall"
+			"studioCheckInstall",
+			"uninstallAndroidStudio"
 		],
 		"classes": [
 			"adb",
@@ -172,8 +171,7 @@
 			"COMPONENT_INIT",
 			"COMPONENT_Pathname",
 			"FEATURE_FLAGS",
-			"killWorker",
-			"path"
+			"killWorker"
 		],
 		"forms": [
 			"NEW_PROJECT",

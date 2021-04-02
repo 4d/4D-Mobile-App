@@ -264,9 +264,8 @@
 					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.formatLabel()",
 					"hideFocusRing": true,
 					"dragging": "none",
-					"enterable": false,
 					"focusable": false,
-					"class": "input"
+					"class": "infos"
 				},
 				"02_property_name.label": {
 					"type": "text",
@@ -577,7 +576,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 122,
+	"geometryStamp": 124,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

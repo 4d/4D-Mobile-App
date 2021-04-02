@@ -54,9 +54,9 @@ Function init
 		
 	End if 
 	
-	WA SET PREFERENCE:C1041(*; This:C1470.name; WA enable Java applets:K62:3; False:C215)
-	WA SET PREFERENCE:C1041(*; This:C1470.name; WA enable JavaScript:K62:4; True:C214)
-	WA SET PREFERENCE:C1041(*; This:C1470.name; WA enable plugins:K62:5; False:C215)
+	WA SET PREFERENCE:C1041(*; This:C1470.name; _o_WA enable Java applets:K62:3; False:C215)
+	WA SET PREFERENCE:C1041(*; This:C1470.name; _o_WA enable JavaScript:K62:4; True:C214)
+	WA SET PREFERENCE:C1041(*; This:C1470.name; _o_WA enable plugins:K62:5; False:C215)
 	
 	// Active the contextual menu in debug mode
 	WA SET PREFERENCE:C1041(*; This:C1470.name; WA enable contextual menu:K62:6; Not:C34(Is compiled mode:C492) | (Structure file:C489=Structure file:C489(*)))
@@ -222,7 +222,7 @@ Function load
 					WA SET URL FILTERS:C1030(*; This:C1470.name; $_filters; $_allowed)
 					
 					$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file($1.fullName)
-					$file.setText($text)
+					$file.setText($text; Document with LF:K24:22)
 					
 					WA OPEN URL:C1020(*; This:C1470.name; $file.platformPath)
 					

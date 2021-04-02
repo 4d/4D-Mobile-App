@@ -18,6 +18,9 @@ var $panel : Text
 // ----------------------------------------------------
 If (FORM Get current page:C276=1)
 	
+	// Update according to the color scheme
+	EDITOR.init()
+	
 	// Launch project verifications
 	editor_PROJECT_AUDIT
 	

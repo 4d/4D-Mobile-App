@@ -30,6 +30,11 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	Case of 
 			
 			//______________________________________________________
+		: ($entryPoint="uninstallAndroidStudio")
+			
+			uninstallAndroidStudio
+			
+			//______________________________________________________
 		: ($entryPoint="testSuites")
 			
 			$response:=New object:C1471

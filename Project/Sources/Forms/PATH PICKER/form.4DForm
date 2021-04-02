@@ -51,14 +51,14 @@
 					"left": 18,
 					"width": 302,
 					"height": 18,
-					"enterable": false,
 					"hideFocusRing": true,
 					"sizingX": "grow",
-					"focusable": false,
 					"dataSource": "Form:C1466.label",
 					"events": [],
 					"class": "label",
-					"fill": "transparent"
+					"fill": "transparent",
+					"focusable": false,
+					"enterable": false
 				},
 				"browse": {
 					"type": "button",
@@ -79,14 +79,14 @@
 					"bottom": 22,
 					"method": "PATH_PICKER"
 				},
-				"menu1": {
+				"menu.icon": {
 					"type": "button",
 					"top": 3,
 					"left": 1,
 					"width": 16,
 					"height": 16,
 					"visibility": "hidden",
-					"icon": "/RESOURCES/images/common/down.png",
+					"icon": "/RESOURCES/pathPicker/down.png",
 					"iconFrames": 4,
 					"textPlacement": "top",
 					"style": "custom",
@@ -124,7 +124,7 @@
 		"kind": "form"
 	},
 	"method": "PATH_PICKER",
-	"geometryStamp": 201,
+	"geometryStamp": 391,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

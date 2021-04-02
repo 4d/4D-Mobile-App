@@ -134,7 +134,7 @@ If ($run)
 		If ($o.exists)
 			
 			$manifest.buildNumber:=$buildNumber
-			$fileManifest.setText(JSON Stringify:C1217($manifest; *))
+			$fileManifest.setText(JSON Stringify:C1217($manifest; *); Document with LF:K24:22)
 			
 		Else 
 			

@@ -163,7 +163,7 @@ If ($run)
 			
 		End if 
 		
-		$manifest.setText(JSON Stringify:C1217($o; *))
+		$manifest.setText(JSON Stringify:C1217($o; *); Document with LF:K24:22)
 		
 	Else 
 		

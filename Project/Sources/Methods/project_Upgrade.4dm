@@ -29,6 +29,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	$o_project:=$1  // Project definition
 	
+	var $path : cs:C1710.path
+	$path:=cs:C1710.path.new()
 	
 Else 
 	
@@ -471,8 +473,8 @@ If ($o_project.list#Null:C1517)
 	
 	RECORD.info("Check list forms")
 	
-	$oInternal:=path.listForms()
-	$oDatabase:=path.hostlistForms()
+	$oInternal:=$path.listForms()
+	$oDatabase:=$path.hostlistForms()
 	$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).list
 	
 	For each ($tTable; $o_project.list)
@@ -533,8 +535,8 @@ If ($o_project.detail#Null:C1517)
 	
 	RECORD.info("Check detail forms")
 	
-	$oInternal:=path.detailForms()
-	$oDatabase:=path.hostdetailForms()
+	$oInternal:=$path.detailForms()
+	$oDatabase:=$path.hostdetailForms()
 	$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).detail
 	
 	For each ($tTable; $o_project.detail)

@@ -245,6 +245,9 @@ Function copyIcons
 		$0.success:=True:C214
 		
 		var $dataModel : Object
+		var $path : cs:C1710.path
+		$path:=cs:C1710.path.new()
+		
 		For each ($dataModel; OB Entries:C1720($2))
 			
 			If (OB Is defined:C1231($dataModel.value[""]; "icon"))
@@ -253,7 +256,7 @@ Function copyIcons
 				
 				If ($iconPath#"")
 					
-					$currentFile:=$tableIcons.file($iconPath)
+					$currentFile:=$path.icon($iconPath)
 					
 					If (Not:C34($currentFile.exists))
 						

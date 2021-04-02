@@ -153,19 +153,12 @@ Function logs($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	
 	//===================================================================================
 	//Function derivedData($path : Text; $create : Boolean)->$document : 4D.File
-	
 	//$document:=This.home.folder("Library/Developer/Xcode/DerivedData/")
-	
 	//If (Count parameters>=2)
-	
 	//$document:=This._postProcessing($document; $path; $create)
-	
 	//Else 
-	
 	//If (Count parameters>=1)
-	
 	//$document:=This._postProcessing($document; $path)
-	
 	//End if 
 	//End if 
 	

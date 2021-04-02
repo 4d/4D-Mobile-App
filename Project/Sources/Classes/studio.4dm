@@ -61,6 +61,44 @@ Function path($useDefaultPath : Boolean)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Download & install the latest command line tools
+Function installLatestCommandLineTools($version)
+	
+	var $file : 4D:C1709.File
+	var $folder : 4D:C1709.Folder
+	var $http : cs:C1710.http
+	
+	$file:=This:C1470.sdkFolder().file(".downloadIntermediates/cmdline-tools.zip")
+	$http:=cs:C1710.http.new("https://dl.google.com/android/repository/commandlinetools-"+Choose:C955(Is macOS:C1572; "mac"; "win")+"-"+String:C10($version)+"_latest.zip")
+	$http.setResponseType(Is a document:K24:1; $file)
+	
+	This:C1470.success:=False:C215
+	
+	$http.get()
+	
+	If ($http.success)
+		
+		$folder:=ZIP Read archive:C1637($file).root.copyTo($file.parent; fk overwrite:K87:5)
+		
+		If ($folder.exists)
+			
+			$folder.folder("cmdline-tools").rename("latest")
+			$folder:=$folder.copyTo(This:C1470.sdkFolder(); fk overwrite:K87:5)
+			
+		End if 
+		
+		This:C1470.success:=($folder.exists)
+		
+		If (This:C1470.success)
+			
+			$folder:=$file.parent
+			$folder.delete(fk recursive:K87:7)
+			$folder.create()
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Populate Application with the default path
 Function defaultPath()
 	

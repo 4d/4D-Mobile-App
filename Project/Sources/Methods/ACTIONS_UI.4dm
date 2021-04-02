@@ -8,15 +8,14 @@
 //
 // ----------------------------------------------------
 // Declarations
-//C_OBJECT($0)
-C_OBJECT:C1216($0)
-C_TEXT:C284($1)
-C_OBJECT:C1216($2)
+#DECLARE($entryPoint : Text; $params : Object)->$result : Object
 
-C_BOOLEAN:C305($b)
-C_LONGINT:C283($l)
-C_PICTURE:C286($p)
-C_OBJECT:C1216($form; $o; $oIcon)
+var $icon : Picture
+var $isFocused : Boolean
+var $color : Integer
+var $formData; $action : Object
+var $file : 4D:C1709.File
+var $path : cs:C1710.path
 
 If (False:C215)
 	C_OBJECT:C1216(ACTIONS_UI; $0)
@@ -31,136 +30,133 @@ End if
 Case of 
 		
 		//______________________________________________________
-	: ($1="load")  // Load project actions
+	: ($entryPoint="load")  // Load project actions
 		
 		If (Form:C1466.actions#Null:C1517)
 			
 			// Compute icons
-			For each ($o; Form:C1466.actions)
+			$path:=cs:C1710.path.new()
+			
+			For each ($action; Form:C1466.actions)
 				
-				If (Length:C16(String:C10($o.icon))=0)
+				If (Length:C16(String:C10($action.icon))=0)
 					
-					READ PICTURE FILE:C678(EDITOR.noIcon; $p)
+					READ PICTURE FILE:C678(EDITOR.noIcon; $icon)
 					
 				Else 
 					
-					$oIcon:=path.icon(String:C10($o.icon))
+					$file:=$path.icon(String:C10($action.icon))
 					
-					If ($oIcon.exists)
+					If ($file.exists)
 						
-						READ PICTURE FILE:C678($oIcon.platformPath; $p)
+						READ PICTURE FILE:C678($file.platformPath; $icon)
 						
 					Else 
 						
-						READ PICTURE FILE:C678(EDITOR.errorIcon; $p)
+						READ PICTURE FILE:C678(EDITOR.errorIcon; $icon)
 						
 					End if 
 				End if 
 				
-				CREATE THUMBNAIL:C679($p; $p; 24; 24; Scaled to fit:K6:2)
-				$o.$icon:=$p
+				CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
+				$action.$icon:=$icon
 				
 			End for each 
 		End if 
 		
 		//______________________________________________________
-	: ($1="tableName")  // Populate the table names' column
+	: ($entryPoint="tableName")  // Populate the table names' column
 		
-		If (Num:C11($2.tableNumber)#0)
+		If (Num:C11($params.tableNumber)#0)
 			
-			$o:=New object:C1471("value"; Table name:C256($2.tableNumber))
+			$result:=New object:C1471("value"; Table name:C256($params.tableNumber))
 			
 		Else 
 			
 			// Invite
-			$o:=New object:C1471("value"; Get localized string:C991("choose..."))
+			$result:=New object:C1471("value"; Get localized string:C991("choose..."))
 			
 		End if 
 		
 		//______________________________________________________
-	: ($1="scopeLabel")  // Populate the scope labels' column
+	: ($entryPoint="scopeLabel")  // Populate the scope labels' column
 		
-		$o:=New object:C1471("value"; Get localized string:C991(String:C10($2.scope)))
+		$result:=New object:C1471("value"; Get localized string:C991(String:C10($params.scope)))
 		
 		//______________________________________________________
-	: ($1="listUI")  // Colors UI according to focus
+	: ($entryPoint="listUI")  // Colors UI according to focus
 		
-		$form:=ACTIONS_Handler(New object:C1471("action"; "init"))
+		$formData:=ACTIONS_Handler(New object:C1471("action"; "init"))
 		
-		If ($form.form.focusedWidget=$form.actions.name) & (Form event code:C388=On Getting Focus:K2:7)
+		If ($formData.form.focusedWidget=$formData.actions.name) & (Form event code:C388=On Getting Focus:K2:7)
 			
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1)
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; EDITOR.selectedColor)
+			OBJECT SET RGB COLORS:C628(*; $formData.form.focusedWidget; Foreground color:K23:1)
+			OBJECT SET RGB COLORS:C628(*; $formData.form.focusedWidget+".border"; EDITOR.selectedColor)
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget; Foreground color:K23:1)
-			OBJECT SET RGB COLORS:C628(*; $form.form.focusedWidget+".border"; EDITOR.backgroundUnselectedColor)
+			OBJECT SET RGB COLORS:C628(*; $formData.form.focusedWidget; Foreground color:K23:1)
+			OBJECT SET RGB COLORS:C628(*; $formData.form.focusedWidget+".border"; EDITOR.backgroundUnselectedColor)
 			
 		End if 
 		
 		//______________________________________________________
-	: ($1="backgroundColor")  // <Background Color Expression>
+	: ($entryPoint="backgroundColor")  // <Background Color Expression>
 		
-		$o:=New object:C1471("color"; "transparent")
+		$result:=New object:C1471("color"; "transparent")
 		
 		If (Num:C11(This:C1470.index)#0)
 			
-			$form:=ACTIONS_Handler(New object:C1471("action"; "init"))
+			$formData:=ACTIONS_Handler(New object:C1471("action"; "init"))
 			
-			$b:=($form.form.focusedWidget=$form.actions.name)
+			$isFocused:=($formData.form.focusedWidget=$formData.actions.name)
 			
-			If (ob_equal(This:C1470.current; $2))  // Selected row
+			If (ob_equal(This:C1470.current; $params))  // Selected row
 				
-				$o.color:=Choose:C955($b; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
+				$result.color:=Choose:C955($isFocused; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
 				
 			Else 
 				
-				$l:=Choose:C955($b; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
-				$o.color:=Choose:C955($b; $l; "transparent")
+				$color:=Choose:C955($isFocused; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
+				$result.color:=Choose:C955($isFocused; $color; "transparent")
 				
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($1="metaInfo")  // <Meta info expression>
+	: ($entryPoint="metaInfo")  // <Meta info expression>
 		
 		// Default values
-		$o:=New object:C1471(\
+		$result:=New object:C1471(\
 			"stroke"; Choose:C955(EDITOR.isDark; "white"; "black"); \
-			"fontWeight"; "normal")
+			"fontWeight"; "normal"; \
+			"cell"; New object:C1471(\
+			"tables"; New object:C1471; \
+			"names"; New object:C1471))
 		
 		// Mark not or missing assigned table
-		ob_createPath($o; "cell.tables")
+		//ob_createPath($result; "cell.tables")
 		
-		If (Form:C1466.dataModel[String:C10($2.tableNumber)]=Null:C1517)
+		If (Form:C1466.dataModel[String:C10($params.tableNumber)]=Null:C1517)
 			
 			// Not published table
-			$o.cell.tables.stroke:=EDITOR.errorRGB
+			$result.cell.tables.stroke:=EDITOR.errorRGB
 			
 		Else 
 			
 			// Not assigned table
-			$o.cell.tables.stroke:=Choose:C955(Num:C11($2.tableNumber)=0; EDITOR.errorRGB; Choose:C955(EDITOR.isDark; "white"; "black"))
+			$result.cell.tables.stroke:=Choose:C955(Num:C11($params.tableNumber)=0; EDITOR.errorRGB; Choose:C955(EDITOR.isDark; "white"; "black"))
 			
 		End if 
 		
 		// Mark duplicate names
-		ob_createPath($o; "cell.names")
-		$o.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $2.name).length>1; EDITOR.errorRGB; Choose:C955(EDITOR.isDark; "white"; "black"))
+		//ob_createPath($result; "cell.names")
+		$result.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $params.name).length>1; EDITOR.errorRGB; Choose:C955(EDITOR.isDark; "white"; "black"))
 		
 		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$1+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$entryPoint+"\"")
 		
 		//______________________________________________________
 End case 
-
-// ----------------------------------------------------
-// Return
-$0:=$o
-
-// ----------------------------------------------------
-// End
-

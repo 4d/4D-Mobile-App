@@ -13,25 +13,22 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
-		//$device:=$simctl.defaultDevice()
-		var $plist : cs:C1710.plist
-		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Desktop/DEV/com.apple.iphonesimulator.plist"))
-		
-		//______________________________________________________
-	: (True:C214)
-		
 		var $cfgutil : cs:C1710.cfgutil
 		$cfgutil:=cs:C1710.cfgutil.new()
 		
 		var $pluggedDevices : Collection
 		$pluggedDevices:=$cfgutil.plugged()
 		
+		var $pluggedDevices : Collection
+		$pluggedDevices:=$simctl.plugged()
 		
 		//______________________________________________________
 	: (True:C214)
 		
-		var $pluggedDevices : Collection
-		$pluggedDevices:=$simctl.plugged()
+		//$device:=$simctl.defaultDevice()
+		var $plist : cs:C1710.plist
+		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Desktop/DEV/com.apple.iphonesimulator.plist"))
+		
 		//______________________________________________________
 	: (True:C214)
 		

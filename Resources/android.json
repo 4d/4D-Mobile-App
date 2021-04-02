@@ -30,6 +30,7 @@
             "size": "512x512"
         }
     ],
+    "latestCommandLineTools": 6858069,
     "licences": [
         {
             "file": "android-googletv-license",

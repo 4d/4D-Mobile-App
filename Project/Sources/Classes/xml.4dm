@@ -339,7 +339,7 @@ Function save($file : Variant; $keepStructure : Boolean)->$this : cs:C1710.xml
 		If (This:C1470.success)
 			
 			This:C1470.xml:=$t
-			$fileƒ.setText($t)
+			$fileƒ.setText($t; Document with LF:K24:22)
 			
 		Else 
 			

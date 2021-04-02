@@ -65,6 +65,13 @@ If ($out.applicationAvailable)
 		
 		If ($out.ready)
 			
+			// *CHECK TOOLS-PATH
+			If (Not:C34($studio.sdkFolder().folder("cmdline-tools/latest").exists))
+				
+				$studio.installLatestCommandLineTools(Num:C11(JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).latestCommandLineTools))
+				
+			End if 
+			
 			// *CHECK JAVA
 			$out.ready:=$studio.java.exists
 			

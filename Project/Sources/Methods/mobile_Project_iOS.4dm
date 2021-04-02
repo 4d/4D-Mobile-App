@@ -305,7 +305,7 @@ If ($in.create)
 		
 	End if 
 	
-	$appFolder.file("manifest.json").setText(JSON Stringify:C1217($appManifest; *))
+	$appFolder.file("manifest.json").setText(JSON Stringify:C1217($appManifest; *); Document with LF:K24:22)
 	
 	//===============================================================
 	$ui.step("decompressionOfTheSdk")

@@ -229,7 +229,7 @@ Case of
 		//If (FEATURE.with("android"))
 		
 		//$Dir_root:=dataSet(New object("action"; "path"; \
-																																										"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+																																													"project"; New object("product"; Form.product; "$project"; PROJECT))).path
 		
 		//Else
 		
@@ -246,7 +246,7 @@ Case of
 			
 			$o:=cs:C1710.lep.new()\
 				.setOutputType(Is object:K8:27)\
-				.launch(path.scripts().file("sqlite3_sizes.sh"); $file.path)
+				.launch(cs:C1710.path.new().scripts().file("sqlite3_sizes.sh"); $file.path)
 			
 			If ($o.success)
 				

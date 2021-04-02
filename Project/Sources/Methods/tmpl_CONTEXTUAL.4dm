@@ -86,12 +86,12 @@ If ($o_infos#Null:C1517)
 					//……………………………………………………………………………………
 				: ($t="form-list@")
 					
-					$file:=path.hostlistForms().file($t)
+					$file:=cs:C1710.path.new().hostlistForms().file($t)
 					
 					//……………………………………………………………………………………
 				: ($t="form-detail@")
 					
-					$file:=path.hostdetailForms().file($t)
+					$file:=cs:C1710.path.new().hostdetailForms().file($t)
 					
 					//……………………………………………………………………………………
 				Else 

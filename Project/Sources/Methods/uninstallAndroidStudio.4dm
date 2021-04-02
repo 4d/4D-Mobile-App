@@ -47,13 +47,19 @@ If (Is macOS:C1572)
 		End if 
 	End for each 
 	
-	$folder:=$home.folder(".android")
+	For each ($path; New collection:C1472(\
+		".android"; \
+		".gradle"))
+		
+		$folder:=$home.folder($path)
+		
+		If ($folder.exists)
+			
+			$folder.delete(fk recursive:K87:7)
+			
+		End if 
+	End for each 
 	
-	If ($folder.exists)
-		
-		$folder.delete(fk recursive:K87:7)
-		
-	End if 
 	
 	// *REMOVE RELATED FILES
 	$file:=$library.file("Preferences/com.google.android.studio.plist")
@@ -81,8 +87,8 @@ If (Is macOS:C1572)
 	
 Else 
 	
-	// #MARK_TODO : If you have the time, do not hesitate...
-	TRACE:C157
+	// #MARK_TODO
+	ASSERT:C1129(False:C215; "If you have the time, do not hesitate...")
 	
 End if 
 

@@ -746,7 +746,7 @@ Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Pict
 	
 	If (FEATURE.with("debug"))
 		
-		Folder:C1567(fk desktop folder:K87:19).file("DEV/table.svg").setText($svg.getText(True:C214))
+		Folder:C1567(fk desktop folder:K87:19).file("DEV/table.svg").setText($svg.getText(True:C214); Document with LF:K24:22)
 		
 	End if 
 	

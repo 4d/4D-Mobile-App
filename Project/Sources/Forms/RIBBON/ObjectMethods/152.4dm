@@ -463,7 +463,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openTemplateFolder")
 				
-				SHOW ON DISK:C922(path.templates().platformPath)
+				SHOW ON DISK:C922(cs:C1710.path.new().templates().platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_openHostFormFolder")
@@ -478,7 +478,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_removeAndoidStudio")
 				
-				resetAndroidStudio
+				uninstallAndroidStudio
 				ALERT:C41("Android Studio has been removed")
 				
 				//______________________________________________________

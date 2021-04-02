@@ -201,7 +201,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		
 		// Save the preferences
 		$pref.lastBuild:=SHARED.component.build
-		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($pref; *))
+		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($pref; *); Document with LF:K24:22)
 		
 	End if 
 	

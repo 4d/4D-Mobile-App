@@ -177,7 +177,7 @@ Else
 				$t:=$project.product.name
 				
 				$path:=New object:C1471(\
-					"parentFolder"; path.products().platformPath; \
+					"parentFolder"; cs:C1710.path.new().products().platformPath; \
 					"isFolder"; True:C214; \
 					"name"; $t)
 				
@@ -196,7 +196,7 @@ Else
 				End if 
 			End if 
 			
-			$file.setText($json)
+			$file.setText($json; Document with LF:K24:22)
 			
 			// Open the project editor
 			$w:=Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)

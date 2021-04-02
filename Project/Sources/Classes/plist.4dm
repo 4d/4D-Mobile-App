@@ -157,7 +157,7 @@ DEV, PO et QA alerted
 		
 		If (This:C1470.isJson)
 			
-			This:C1470.file.setText(JSON Stringify:C1217(This:C1470.content; *))
+			This:C1470.file.setText(JSON Stringify:C1217(This:C1470.content; *); Document with LF:K24:22)
 			
 		Else 
 			

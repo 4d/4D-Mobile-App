@@ -1,7 +1,7 @@
 Class constructor
 	
 	C_TEXT:C284($1)
-	C_BOOLEAN:C305($2)
+	C_VARIANT:C1683($2)
 	
 	If (Count parameters:C259>=1)
 		
@@ -25,11 +25,9 @@ Class constructor
 	This:C1470.home:=Folder:C1567(fk desktop folder:K87:19).parent
 	
 /*========================================================*/
-Function create
+Function create($do : Boolean)
 	
-	C_BOOLEAN:C305($1)
-	
-	If ($1)
+	If ($do)
 		
 		This:C1470.target.create()
 		This:C1470.exists:=This:C1470.target.exists
@@ -114,7 +112,7 @@ Function systemCache()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 	$folder.create()
 	
 /*========================================================*/
-Function sdk  // sdk folder ||||||||||| OBSOLETE ||||||||||||
+Function sdk  // sdk folder ||||||||||| TEST PURPOSE ||||||||||||
 	
 	C_OBJECT:C1216($0)
 	
@@ -333,9 +331,7 @@ Function androidProjectTemplateFiles  // android project template files folder
                   USER DATABASE
 	
 ========================================================*/
-Function databasePreferences($fileName : Text)  //  Writable user database preferences folder
-	
-	C_OBJECT:C1216($0)
+Function databasePreferences($fileName : Text)->$target : Object  //  Writable user database preferences folder
 	
 	If (Count parameters:C259>=1)
 		
@@ -349,19 +345,16 @@ Function databasePreferences($fileName : Text)  //  Writable user database prefe
 	
 	This:C1470.exists:=This:C1470.target.exists
 	
-	$0:=This:C1470.target
+	$target:=This:C1470.target
 	
 /*========================================================*/
-Function projects  // Projects folder
-	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
+Function projects($create : Boolean)->$folder : 4D:C1709.Folder  // Projects folder
 	
 	This:C1470.target:=Folder:C1567(fk database folder:K87:14; *).folder("Mobile Projects")
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($1)
+		This:C1470.create($create)
 		
 	Else 
 		
@@ -369,22 +362,20 @@ Function projects  // Projects folder
 		
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function products  // Products folder
+Function products($create : Boolean)->$folder : 4D:C1709.Folder  // Products folder
 	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
-	C_OBJECT:C1216($o)
+	var $o : Object
 	
 	//#WARNING - Folder(Database folder;*).parent = Null
 	$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14; *))
-	This:C1470.target:=Folder:C1567($o.parentFolder+$o.name+" - Mobile"+Folder separator:K24:12; fk platform path:K87:2)
+	This:C1470.target:=Folder:C1567($o.parentFolder+$o.name+" - Mobile"; fk platform path:K87:2)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($1)
+		This:C1470.create($create)
 		
 	Else 
 		
@@ -392,13 +383,11 @@ Function products  // Products folder
 		
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function host  // Mobile folder
+Function host($create : Boolean)->$folder : 4D:C1709.Folder  // Mobile folder
 	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
 	C_OBJECT:C1216($o)
 	
 	$o:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16; *); fk platform path:K87:2)
@@ -424,7 +413,7 @@ Function host  // Mobile folder
 		
 		If (Count parameters:C259>=1)
 			
-			This:C1470.create($1)
+			This:C1470.create($create)
 			
 		Else 
 			
@@ -433,19 +422,16 @@ Function host  // Mobile folder
 		End if 
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function hostForms  // Form folder
-	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
+Function hostForms($create : Boolean)->$folder : 4D:C1709.Folder  // Form folder
 	
 	This:C1470.target:=This:C1470.host().folder("form")
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($1)
+		This:C1470.create($create)
 		
 	Else 
 		
@@ -453,19 +439,16 @@ Function hostForms  // Form folder
 		
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function hostFormatters  // Formatters folder
-	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
+Function hostFormatters($create : Boolean)->$folder : 4D:C1709.Folder  // Formatters folder
 	
 	This:C1470.target:=This:C1470.host().folder("formatters")
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($1)
+		This:C1470.create($create)
 		
 	Else 
 		
@@ -473,19 +456,16 @@ Function hostFormatters  // Formatters folder
 		
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function hostIcons  // Icons folder
-	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
+Function hostIcons($create : Boolean)->$folder : 4D:C1709.Folder  // Icons folder
 	
 	This:C1470.target:=This:C1470.host().folder("medias/icons")
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($1)
+		This:C1470.create($create)
 		
 	Else 
 		
@@ -493,19 +473,16 @@ Function hostIcons  // Icons folder
 		
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function hostlistForms  // form/list folder
-	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
+Function hostlistForms($create : Boolean)->$folder : 4D:C1709.Folder  // form/list folder
 	
 	This:C1470.target:=This:C1470.hostForms().folder("list")
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($1)
+		This:C1470.create($create)
 		
 	Else 
 		
@@ -513,19 +490,15 @@ Function hostlistForms  // form/list folder
 		
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function hostloginForms  // login folder
+Function hostloginForms($create : Boolean)->$folder : 4D:C1709.Folder  // login folder
 	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
-	
-	This:C1470.target:=This:C1470.hostForms().folder("login")
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($1)
+		This:C1470.create($create)
 		
 	Else 
 		
@@ -533,19 +506,16 @@ Function hostloginForms  // login folder
 		
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function hostdetailForms  // form/detail folder
-	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
+Function hostdetailForms($create : Boolean)->$folder : 4D:C1709.Folder  // form/detail folder
 	
 	This:C1470.target:=This:C1470.hostForms().folder("detail")
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($1)
+		This:C1470.create($create)
 		
 	Else 
 		
@@ -553,19 +523,16 @@ Function hostdetailForms  // form/detail folder
 		
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function hostNavigationForms  // form/navigation folder
-	
-	C_OBJECT:C1216($0)
-	C_BOOLEAN:C305($1)
+Function hostNavigationForms($create : Boolean)->$folder : 4D:C1709.Folder  // form/navigation folder
 	
 	This:C1470.target:=This:C1470.hostForms().folder("navigation")
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($1)
+		This:C1470.create($create)
 		
 	Else 
 		
@@ -573,10 +540,122 @@ Function hostNavigationForms  // form/navigation folder
 		
 	End if 
 	
-	$0:=This:C1470.target
+	$folder:=This:C1470.target
 	
 /*========================================================*/
 Function key()->$file : 4D:C1709.file
 	
 	$file:=Folder:C1567(MobileApps folder:K5:47; *).file("key.mobileapp")
+	
+/*========================================================*/
+Function icon($relativePath : Text)->$file : 4D:C1709.File
+	
+	$file:=This:C1470._getResource($relativePath; "icon")
+	
+/*========================================================*/
+Function list($relativePath : Text)->$file : 4D:C1709.Folder
+	
+	$file:=This:C1470._getResource($relativePath; "list")
+	
+/*========================================================*/
+Function detail($relativePath : Text)->$file : 4D:C1709.Folder
+	
+	$file:=This:C1470._getResource($relativePath; "detail")
+	
+/*========================================================*/
+Function navigation($relativePath : Text)->$file : 4D:C1709.Folder
+	
+	$file:=This:C1470._getResource($relativePath; "navigation")
+	
+/*========================================================*/
+Function _getResource($relativePath : Text; $type : Text)->$target : Object
+	
+	var $error : Object
+	var $folder : 4D:C1709.Folder
+	var $archive : 4D:C1709.ZipArchive
+	var $error : cs:C1710.error
+	
+	If ($relativePath[[1]]="/")
+		
+		$relativePath:=Delete string:C232($relativePath; 1; 1)
+		
+		Case of 
+				
+				//……………………………………………………………………………
+			: ($type="list")
+				
+				$folder:=This:C1470.hostlistForms()
+				
+				//……………………………………………………………………………
+			: ($type="detail")
+				
+				$folder:=This:C1470.hostdetailForms()
+				
+				//……………………………………………………………………………
+			: ($type="login")
+				
+				$folder:=This:C1470.hostloginForms()
+				
+				//……………………………………………………………………………
+			: ($type="navigation")
+				
+				$folder:=This:C1470.hostNavigationForms()
+				
+				//……………………………………………………………………………
+			: ($type="icon")
+				
+				// For the moment, no distinction between table, field or action icons
+				$folder:=This:C1470.hostIcons()
+				
+				//……………………………………………………………………………
+		End case 
+		
+		If (Path to object:C1547($relativePath).extension=SHARED.archiveExtension)
+			
+/* START HIDING ERRORS */
+			$error:=cs:C1710.error.new().hide()
+			$archive:=ZIP Read archive:C1637($folder.file($relativePath))
+			$error.show()
+/* STOP HIDING ERRORS */
+			
+			If ($archive#Null:C1517)
+				
+				$target:=$archive.root
+				
+			End if 
+			
+		Else 
+			
+			$target:=$folder.file($relativePath)
+			
+		End if 
+		
+	Else 
+		
+		Case of 
+				
+				//……………………………………………………………………………
+			: ($type="list")
+				
+				$target:=This:C1470.listForms().folder($relativePath)
+				
+				//……………………………………………………………………………
+			: ($type="detail")
+				
+				$target:=This:C1470.detailForms().folder($relativePath)
+				
+				//……………………………………………………………………………
+			: ($type="navigation")
+				
+				$target:=This:C1470.navigationForms().folder($relativePath)
+				
+				//……………………………………………………………………………
+			: ($type="icon")
+				
+				// For the moment, no distinction between table, field or action icons
+				$target:=This:C1470.tableIcons().file($relativePath)
+				
+				//……………………………………………………………………………
+		End case 
+	End if 
 	

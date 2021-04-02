@@ -56,7 +56,24 @@ Class constructor($iosDeploymentTarget : Text)
 	
 	This:C1470.simulatorTimeout:=10000
 	This:C1470.minimumVersion:=""
-	This:C1470.simulatorApp:=cs:C1710.Xcode.new().tools.file("Applications/Simulator.app")
+	This:C1470.simulatorApp:=Null:C1517
+	
+	var $xcode : cs:C1710.Xcode
+	$xcode:=cs:C1710.Xcode.new()
+	
+	//#MARK_TODO : THIS CLASS MUST INHERITE FROM XCODE AND NOT LEP
+	This:C1470.success:=$xcode.success & Bool:C1537($xcode.tools.exists)
+	
+	If (This:C1470.success)
+		
+		This:C1470.success:=Bool:C1537($xcode.tools.folder("Applications/Simulator.app").exists)
+		
+		If (This:C1470.success)
+			
+			This:C1470.simulatorApp:=$xcode.tools.file("Applications/Simulator.app")
+			
+		End if 
+	End if 
 	
 	If (Count parameters:C259>=1)
 		
@@ -64,7 +81,7 @@ Class constructor($iosDeploymentTarget : Text)
 		
 	End if 
 	
-	This:C1470._cleanupOldDevices()
+	//This._cleanupOldDevices()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns (and set if any) the default device
@@ -565,9 +582,17 @@ Function eraseDevice($simulator : Text)
 	// Open the Simulator App, if any
 Function openSimulatorApp()
 	
-	If (Not:C34(This:C1470.isSimulatorAppLaunched()))
+	If (This:C1470.simulatorApp#Null:C1517)
 		
-		This:C1470.launch("open -a "+This:C1470.singleQuoted(This:C1470.simulatorApp.path))
+		If (Not:C34(This:C1470.isSimulatorAppLaunched()))
+			
+			This:C1470.launch("open -a "+This:C1470.singleQuoted(This:C1470.simulatorApp.path))
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.success:=False:C215
 		
 	End if 
 	
@@ -575,19 +600,27 @@ Function openSimulatorApp()
 	// Quit the Simulator App
 Function quitSimulatorApp($killAll : Boolean)
 	
-	If (This:C1470.isSimulatorAppLaunched())
+	If (This:C1470.simulatorApp#Null:C1517)
 		
-		If (Count parameters:C259>=1)
+		If (This:C1470.isSimulatorAppLaunched())
 			
-			If ($killAll)
+			If (Count parameters:C259>=1)
 				
-				This:C1470.shutdownAllDevices()
+				If ($killAll)
+					
+					This:C1470.shutdownAllDevices()
+					
+				End if 
 				
 			End if 
 			
+			This:C1470.launch("osascript -e 'quit app \"Simulator\"'")
+			
 		End if 
 		
-		This:C1470.launch("osascript -e 'quit app \"Simulator\"'")
+	Else 
+		
+		This:C1470.success:=False:C215
 		
 	End if 
 	

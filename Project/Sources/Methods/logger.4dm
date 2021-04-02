@@ -68,7 +68,7 @@ Else
 				
 				If ($o.destination.exists)
 					
-					$o.destination.setText("")
+					$o.destination.setText(""; Document with LF:K24:22)
 					$o.success:=(Length:C16($o.destination.getText())=0)
 					
 				Else 
@@ -343,7 +343,7 @@ Else
 						+$tProcess+" - "\
 						+Choose:C955(Num:C11($2.level); "info"; "warning"; "error")+": "
 					
-					$o.destination.setText($o.destination.getText()+$t+String:C10($2.message)+"\n")
+					$o.destination.setText($o.destination.getText()+$t+String:C10($2.message)+"\n"; Document with LF:K24:22)
 					
 				End if 
 				
@@ -379,7 +379,7 @@ Else
 				
 			Else 
 				
-				$o.destination.setText($o.destination.getText()+$t+"\n")
+				$o.destination.setText($o.destination.getText()+$t+"\n"; Document with LF:K24:22)
 				
 			End if 
 			

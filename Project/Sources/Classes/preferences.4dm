@@ -82,6 +82,6 @@ Function save()
 	
 	If (Asserted:C1132(This:C1470.target#Null:C1517; "content is null"))
 		
-		This:C1470.target.setText(JSON Stringify:C1217(This:C1470.content; *))
+		This:C1470.target.setText(JSON Stringify:C1217(This:C1470.content; *); Document with LF:K24:22)
 		
 	End if 

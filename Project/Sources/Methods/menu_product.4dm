@@ -59,19 +59,19 @@ Case of
 		//______________________________________________________
 	: ($Mnu_choice="reveal")
 		
-		SHOW ON DISK:C922(path.products().folder($Obj_project.product.name).platformPath)
+		SHOW ON DISK:C922(cs:C1710.path.new().products().folder($Obj_project.product.name).platformPath)
 		
 		//______________________________________________________
 	: ($Mnu_choice="replaceSDK")
 		
 		var $product : 4D:C1709.Folder
-		$product:=path.products().folder($Obj_project.product.name)
+		$product:=cs:C1710.path.new().products().folder($Obj_project.product.name)
 		
 		$product.folder("Carthage").delete(Delete with contents:K24:24)
 		
 		sdk(New object:C1471(\
 			"action"; "install"; \
-			"file"; path.sdk().platformPath+"ios.zip"; \
+			"file"; cs:C1710.path.new().sdk().platformPath+"ios.zip"; \
 			"target"; $product.platformPath))
 		
 		SHOW ON DISK:C922($product.folder("Carthage").platformPath)
@@ -107,7 +107,7 @@ Case of
 			"project"; $Obj_project; \
 			"digest"; True:C214; \
 			"dataSet"; True:C214; \
-			"key"; path.key().platformPath; \
+			"key"; cs:C1710.path.new().key().platformPath; \
 			"caller"; Current form window:C827; \
 			"verbose"; True:C214))
 		
@@ -142,7 +142,7 @@ Case of
 			"digest"; True:C214; \
 			"dataSet"; True:C214; \
 			"path"; $Txt_path; \
-			"key"; path.key().platformPath; \
+			"key"; cs:C1710.path.new().key().platformPath; \
 			"caller"; Current form window:C827; \
 			"verbose"; True:C214))
 		

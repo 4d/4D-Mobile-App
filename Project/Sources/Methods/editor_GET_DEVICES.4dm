@@ -32,8 +32,12 @@ Case of
 			var $avd : cs:C1710.avd
 			$avd:=cs:C1710.avd.new()
 			
-			var $simctl : cs:C1710.simctl
-			$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+			If (Bool:C1537($status.xCode))
+				
+				var $simctl : cs:C1710.simctl
+				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+				
+			End if 
 			
 			Case of 
 					

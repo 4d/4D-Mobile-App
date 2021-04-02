@@ -21,6 +21,12 @@ listbox,
 input {
 	fill: automatic;
 }
+	
+		@media (prefers-color-scheme: dark) {
+				input {
+				fill: #3A3A3A;
+				}
+			}
 
 .comment,
 .infos {

@@ -1,6 +1,6 @@
 * {
 	font-family: sans-serif;
-	font-size: 12
+	font-size: 12;
 }
 
 .container {
@@ -12,7 +12,7 @@
 	ry: 20;
 	fill: #f4f4f6;
 	stroke: dimgray;
-	stroke-width: 2
+	stroke-width: 2;
 }
 
 .bgcontainer {
@@ -22,7 +22,7 @@
 	height: 385;
 	fill: white;
 	stroke: white;
-	stroke-width: 0.5
+	stroke-width: 0.5;
 }
 
 .bgcontainer_v2 {
@@ -32,7 +32,7 @@
 	height: 110%;
 	fill: white;
 	stroke: white;
-	stroke-width: 0.5
+	stroke-width: 0.5;
 }
 
 .title {
@@ -40,12 +40,12 @@
 	font-size: 24;
 	font-weight: bold;
 	text-align: center;
-	height: auto
+	height: auto;
 }
 
 .field {
 	rx: 5;
-	ry: 5
+	ry: 5;
 }
 
 .vInsert {
@@ -58,7 +58,7 @@
 	stroke: #4C9EE0;
 	stroke-width: 0.5;
 	fill-opacity: 0.01;
-	stroke-opacity: 0.01
+	stroke-opacity: 0.01;
 }
 
 .hInsert {
@@ -69,18 +69,18 @@
 	stroke: #4C9EE0;
 	stroke-width: 0.5;
 	fill-opacity: 0.01;
-	stroke-opacity: 0.01
+	stroke-opacity: 0.01;
 }
 
 .droppable {
 	fill: #00b1ff;
 	fill-opacity: 0.01;
 	stroke: #03A9F4;
-	stroke-width: 0.8
+	stroke-width: 0.8;
 }
 
 .multivalued, .optional{
-	stroke: darkgray
+	stroke: darkgray;
 }
 
 .mandatory {
@@ -94,7 +94,7 @@
 }
 
 .error {
-	fill: red
+	fill: red;
 }
 
 .picture {
@@ -117,20 +117,20 @@
 
 .bg {
 	fill: #e4f6ff;
-	fill-opacity: 1
+	fill-opacity: 1;
 }
 
 .bgblue {
 	fill: #c9eeff;
 	fill-opacity: 1;
 	stroke: #03A9F4;
-	stroke-width: 0.5
+	stroke-width: 0.5;
 }
 
 .tabs {
 	fill: white;
 	stroke: #03A9F4;
-	stroke-width: 0.5
+	stroke-width: 0.5;
 }
 
 .tabs-label {

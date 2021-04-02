@@ -54,7 +54,7 @@ Class constructor
 	
 	
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
-	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
+	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project); Document with LF:K24:22)
 	
 	This:C1470.logFolder:=cs:C1710.path.new().userCache()
 	This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)

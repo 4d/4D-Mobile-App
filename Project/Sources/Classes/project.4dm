@@ -357,7 +357,7 @@ Function save()
 				
 				If ($file.isWritable)
 					
-					$file.setText(JSON Stringify:C1217(PROJECT.$dialog; *))
+					$file.setText(JSON Stringify:C1217(PROJECT.$dialog; *); Document with LF:K24:22)
 					
 					// Else log?
 					
@@ -369,7 +369,7 @@ Function save()
 					
 					If ($file.isWritable)
 						
-						$file.setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *))
+						$file.setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *); Document with LF:K24:22)
 						
 						// Else log?
 						
@@ -385,7 +385,7 @@ Function save()
 			
 			If ($file.isWritable)
 				
-				$file.setText(JSON Stringify:C1217($o; *))
+				$file.setText(JSON Stringify:C1217($o; *); Document with LF:K24:22)
 				
 				// Else log?
 				
@@ -397,7 +397,7 @@ Function save()
 				
 				If ($file.isWritable)
 					
-					$file.setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *))
+					$file.setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *); Document with LF:K24:22)
 					
 					// Else log?
 					
@@ -408,7 +408,7 @@ Function save()
 	
 	$file:=This:C1470._folder.file("project.4dmobileapp")
 	$file.create()
-	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
+	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *); Document with LF:K24:22)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Populate the target value into te project
@@ -444,7 +444,11 @@ Function setTarget($check : Boolean; $target : Text)
 			// Launch the verification of the development tools, if any
 			If (($target="ios") & Is macOS:C1572)  // & Not(Bool(This.$project.$xCode.ready))
 				
-				This:C1470.$project.$xCode.canceled:=False:C215
+				If (This:C1470.$project.$xCode#Null:C1517)
+					
+					This:C1470.$project.$xCode.canceled:=False:C215
+					
+				End if 
 				
 				CALL WORKER:C1389(This:C1470.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
 					"caller"; This:C1470.$mainWindow; "project"; PROJECT))
@@ -453,7 +457,11 @@ Function setTarget($check : Boolean; $target : Text)
 			
 			If (($target="android"))  // & Not(Bool(This.$project.$studio.ready))
 				
-				This:C1470.$project.$studio.canceled:=False:C215
+				If (This:C1470.$project.$studio#Null:C1517)
+					
+					This:C1470.$project.$studio.canceled:=False:C215
+					
+				End if 
 				
 				CALL WORKER:C1389(This:C1470.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
 					"caller"; This:C1470.$mainWindow; "project"; PROJECT))
@@ -960,20 +968,17 @@ Function isStorage
 	End if 
 	
 	//====================================
-Function getIcon
-	var $0 : Picture
-	var $1 : Text
+Function getIcon($relativePath : Text)->$icon : Picture
 	
-	var $icon : Picture
 	var $file : 4D:C1709.File
 	
-	If (Length:C16($1)=0)
+	If (Length:C16($relativePath)=0)
 		
 		$file:=File:C1566(EDITOR.noIcon; fk platform path:K87:2)
 		
 	Else 
 		
-		$file:=path.icon($1)
+		$file:=cs:C1710.path.new().icon($relativePath)
 		
 		If (Not:C34($file.exists))
 			
@@ -985,7 +990,7 @@ Function getIcon
 	If ($file.exists)
 		
 		READ PICTURE FILE:C678($file.platformPath; $icon)
-		CREATE THUMBNAIL:C679($icon; $0; 24; 24; Scaled to fit:K6:2)
+		CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
 		
 	End if 
 	

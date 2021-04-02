@@ -39,6 +39,9 @@ If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
 		
 	End if 
 	
+	var $path : cs:C1710.path
+	$path:=cs:C1710.path.new()
+	
 Else 
 	
 	ABORT:C156
@@ -53,7 +56,7 @@ If ($t_formName[[1]]="/")  // Host database resources
 	If (Path to object:C1547($t_formName).extension=SHARED.archiveExtension)  // Archive
 		
 /* START HIDING ERRORS */$error:=err.hide()
-		$archive:=ZIP Read archive:C1637(path["host"+$t_typeForm+"Forms"]().file($t_formName))
+		$archive:=ZIP Read archive:C1637($path["host"+$t_typeForm+"Forms"]().file($t_formName))
 /* STOP HIDING ERRORS */$error.show()
 		
 		If ($archive#Null:C1517)
@@ -64,7 +67,7 @@ If ($t_formName[[1]]="/")  // Host database resources
 		
 	Else 
 		
-		$pathForm:=Folder:C1567(path["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath; fk platform path:K87:2)
+		$pathForm:=Folder:C1567($path["host"+$t_typeForm+"Forms"]().folder($t_formName).platformPath; fk platform path:K87:2)
 		
 	End if 
 	
@@ -73,7 +76,7 @@ If ($t_formName[[1]]="/")  // Host database resources
 	If ($success)
 		
 		// Verify the structure validity
-		$o:=path[$t_typeForm+"Forms"]()
+		$o:=$path[$t_typeForm+"Forms"]()
 		
 		If ($o#Null:C1517)
 			
@@ -112,7 +115,7 @@ If ($t_formName[[1]]="/")  // Host database resources
 	
 Else 
 	
-	$pathForm:=Folder:C1567(path[$t_typeForm+"Forms"]().folder($t_formName).platformPath; fk platform path:K87:2)
+	$pathForm:=Folder:C1567($path[$t_typeForm+"Forms"]().folder($t_formName).platformPath; fk platform path:K87:2)
 	
 	// We assume that our templates are OK!
 	$success:=$pathForm.exists

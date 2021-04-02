@@ -321,7 +321,7 @@ Form:C1466.$catalog:=_o_structure(New object:C1471("action"; "catalog")).value
 $cache.structure.definition:=Form:C1466.$catalog
 $cache.structure.digest:=Generate digest:C1147(JSON Stringify:C1217(Form:C1466.$catalog); SHA1 digest:K66:2)
 
-$file.setText(JSON Stringify:C1217($cache; *))
+$file.setText(JSON Stringify:C1217($cache; *); Document with LF:K24:22)
 
 // Refresh UI
 STRUCTURE_Handler(New object:C1471("action"; "update"))
