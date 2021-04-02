@@ -91,7 +91,7 @@ Case of
 			
 			Form:C1466._new.resizeVertically(-120).moveVertically(50)
 			Form:C1466._listbox:=cs:C1710.listbox.new("list")
-			Form:C1466._listbox.resizeVertically(50).setRowsHeight(6; lk lines:K53:23)
+			Form:C1466._listbox.resizeVertically(50).setRowsHeight(Choose:C955(Is macOS:C1572; 6; 5); lk lines:K53:23)
 			
 		End if 
 		
