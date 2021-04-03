@@ -32,7 +32,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//______________________________________________________
 		: ($entryPoint="uninstallAndroidStudio")
 			
-			uninstallAndroidStudio
+			cs:C1710.studio.new().uninstall()
 			
 			//______________________________________________________
 		: ($entryPoint="testSuites")

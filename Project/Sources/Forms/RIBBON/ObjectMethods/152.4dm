@@ -238,7 +238,7 @@ Case of
 			If ($could.isDebug)
 				
 				$menu.line()
-				$menu.append("❌ Uninstall Android Studio"; "_removeAndoidStudio")
+				$menu.append("❌ Uninstall Android Studio"; "_uninstallAndroidStudio")
 				
 			End if 
 		End if 
@@ -476,9 +476,10 @@ Case of
 				PROJECT.$project.verbose:=Not:C34(Bool:C1537(PROJECT.$project.verbose))
 				
 				//______________________________________________________
-			: ($menu.choice="_removeAndoidStudio")
+			: ($menu.choice="_uninstallAndroidStudio")
 				
-				uninstallAndroidStudio
+				cs:C1710.studio.new().uninstall()
+				
 				ALERT:C41("Android Studio has been removed")
 				
 				//______________________________________________________
