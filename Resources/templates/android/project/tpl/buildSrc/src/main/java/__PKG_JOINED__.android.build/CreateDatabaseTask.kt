@@ -20,7 +20,7 @@ import java.io.File
 open class CreateDatabaseTask : DefaultTask() {
 
     private val tableNames = 
-        mapOf({{#tableNames}}"{{name}}" to "{{name_original}}"{{^-last}}, {{/-last}}{{/tableNames}})
+        mapOf<String, String>({{#tableNames}}"{{name}}" to "{{name_original}}"{{^-last}}, {{/-last}}{{/tableNames}})
 
     private var initialGlobalStamp = 0
 
