@@ -142,7 +142,16 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 				var $file : 4D:C1709.File
 				var $run : Boolean
-				$file:=Folder:C1567(fk desktop folder:K87:19).parent.file("Caches/testSDK")
+				
+				If (Is macOS:C1572)
+					
+					$file:=Folder:C1567(fk desktop folder:K87:19).parent.file("Library/Caches/testSDK")
+					
+				Else 
+					
+					$file:=Folder:C1567(fk desktop folder:K87:19).parent.file("AppData/Local/testSDK")
+					
+				End if 
 				
 				If ($file.exists)
 					
