@@ -3,11 +3,12 @@
 // -> force   =   Force the download even if the file is up to date (see verification code)
 #DECLARE($target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)
 
-var $url; $version : Text
-var $run; $silent; $withUI : Boolean
+var $applicationVersion : Text
+var $run; $withUI : Boolean
 var $buildNumber : Integer
 var $o; $manifest : Object
-var $fileManifest : 4D:C1709.File
+var $file; $fileManifest : 4D:C1709.File
+var $folder : 4D:C1709.Folder
 var $sdk : 4D:C1709.ZipFile
 var $http : cs:C1710.http
 var $progress : cs:C1710.progress
@@ -15,6 +16,7 @@ var $progress : cs:C1710.progress
 ASSERT:C1129(Count parameters:C259>=1)
 
 Case of 
+		
 		//______________________________________________________
 	: (Is macOS:C1572)
 		
@@ -55,14 +57,45 @@ Case of
 		//______________________________________________________
 End case 
 
-$buildNumber:=Num:C11(JSON Parse:C1218(File:C1566("/RESOURCES/resources.json").getText()).sdk[$target])
+$withUI:=True:C214
+
+If (Count parameters:C259>=2)
+	
+	$withUI:=Not:C34($silent)
+	
+End if 
+
+$applicationVersion:=Application version:C493($buildNumber; *)
+
+$http:=cs:C1710.http.new("https://resources-download.4d.com/sdk/"\
++Choose:C955($applicationVersion[[1]]="A"; "main"; Delete string:C232($applicationVersion; 1; 4))+"/"\
++String:C10($buildNumber)+"/"\
++$target+"/"+$target+".zip").setResponseType(Is a document:K24:1; $sdk)
 
 $fileManifest:=$sdk.parent.file("manifest.json")
 
 If ($fileManifest.exists)
 	
 	$manifest:=JSON Parse:C1218($fileManifest.getText())
-	$run:=(Num:C11($manifest.buildNumber)<$buildNumber)
+	
+	$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
+	
+	If ($run)
+		
+		// Verify the SDK version
+		$o:=$http.headers.query("name = 'x-amz-meta-version'").pop()
+		
+		If ($o#Null:C1517)
+			
+			$file:=cs:C1710.path.new().cacheSdkAndroidUnzipped().file("sdkVersion")
+			
+			If ($file.exists)
+				
+				$run:=Split string:C1554($file.getText(); "\r")[0]#$o.value
+				
+			End if 
+		End if 
+	End if 
 	
 	If (Count parameters:C259>=4)
 		
@@ -76,31 +109,7 @@ Else
 	
 End if 
 
-$withUI:=True:C214
-
-If (Count parameters:C259>=2)
-	
-	$withUI:=Not:C34($silent)
-	
-End if 
-
 If ($run)
-	
-	RECORD.info("Update the 4D Mobile "+$target+" SDK")
-	
-	$url:="https://preprod-resources-download.4d.com/sdk/"
-	
-	If (Application version:C493(*)="A@")  //main
-		
-		$url:=$url+"main/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
-		
-	Else 
-		
-		$url:=$url+applicationVersion+"/"+String:C10($buildNumber)+"/"+$target+"/"+$target+".zip"
-		
-	End if 
-	
-	$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
 	
 	If ($withUI)
 		
@@ -129,16 +138,25 @@ If ($run)
 			
 		End if 
 		
-		$o:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
+		$folder:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
 		
-		If ($o.exists)
+		If ($folder.exists)
 			
-			$manifest.buildNumber:=$buildNumber
+			$manifest:=New object:C1471
+			
+			For each ($o; $http.headers)
+				
+				$manifest[$o.name]:=$o.value
+				
+			End for each 
+			
 			$fileManifest.setText(JSON Stringify:C1217($manifest; *); Document with LF:K24:22)
+			
+			RECORD.info("Update the 4D Mobile "+$target+" SDK version "+$manifest["x-amz-meta-version"])
 			
 		Else 
 			
-			// A "If" statement should never omit "Else" 
+			RECORD.warning("Failed to unarchive "+$sdk.path)
 			
 		End if 
 		

@@ -140,13 +140,39 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			If ($response=Null:C1517)  // No error
 				
-				$o.parent.delete(Delete with contents:K24:24)
+				var $file : 4D:C1709.File
+				var $run : Boolean
+				$file:=Folder:C1567(fk desktop folder:K87:19).parent.file("Caches/testSDK")
 				
-				EXECUTE METHOD:C1007($entryPoint; *; $t; True:C214)
+				If ($file.exists)
+					
+					$run:=($file.modificationDate<Current date:C33)
+					
+				Else 
+					
+					// Force
+					$run:=True:C214
+					
+				End if 
 				
-				$response:=New object:C1471(\
-					"success"; $o.exists)
-				
+				If ($run)
+					
+					$o.parent.delete(Delete with contents:K24:24)
+					
+					EXECUTE METHOD:C1007($entryPoint; *; $t; True:C214)
+					
+					$response:=New object:C1471(\
+						"success"; $o.exists)
+					
+					$file.setText(Generate UUID:C1066)
+					
+				Else 
+					
+					// Already done this day
+					$response:=New object:C1471(\
+						"success"; True:C214)
+					
+				End if 
 			End if 
 			
 			//______________________________________________________

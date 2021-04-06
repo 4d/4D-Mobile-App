@@ -47,7 +47,7 @@ Case of
 			"xCodeAvailable"; Bool:C1537(Form:C1466.editor.$xCode.applicationAvailable); \
 			"studioAvailable"; Bool:C1537(Form:C1466.editor.$studio.applicationAvailable); \
 			"iOSFolder"; $folder.folder("iOS"); \
-			"androidFolder"; $folder.folder("android"); \
+			"androidFolder"; $folder.folder("android").folder(PROJECT.product.name); \
 			"isLocked"; editor_Locked; \
 			"openWithXcode"; False:C215; \
 			"openWithStudio"; False:C215)

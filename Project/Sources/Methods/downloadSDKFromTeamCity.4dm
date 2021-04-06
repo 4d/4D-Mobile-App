@@ -111,7 +111,7 @@ End if
 
 $withUI:=True:C214
 
-If (Count parameters:C259>=1)
+If (Count parameters:C259>=2)
 	
 	$withUI:=Not:C34($silent)
 	
@@ -131,8 +131,6 @@ If ($run)
 	$http.get()
 	
 	If ($http.success)
-		
-		
 		
 		// Delete the old SDK folder if any
 		$o:=$sdk.parent.folder("sdk")

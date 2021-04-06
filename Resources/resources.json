@@ -284,8 +284,5 @@
         "PresentFoldSegue",
         "PresentNatGeoSegue",
         "PresentOverCurrentContextSegue"
-    ],
-    "sdk": {
-        "android": 262682
-    }
+    ]
 }

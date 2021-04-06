@@ -53,9 +53,6 @@ COMPILER_err
 If (False:C215)
 	
 	// ----------------------------------------------------
-	C_TEXT:C284(applicationVersion; $0)
-	
-	// ----------------------------------------------------
 	//C_OBJECT(path; $0)
 	//C_TEXT(path; $1)
 	//C_OBJECT(path; $2)
