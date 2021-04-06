@@ -145,11 +145,11 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 				If (Is macOS:C1572)
 					
-					$file:=Folder:C1567(fk desktop folder:K87:19).parent.file("Library/Caches/testSDK")
+					$file:=Folder:C1567(fk desktop folder:K87:19).parent.file("Library/Caches/testSDK"+$t)
 					
 				Else 
 					
-					$file:=Folder:C1567(fk desktop folder:K87:19).parent.file("AppData/Local/testSDK")
+					$file:=Folder:C1567(fk desktop folder:K87:19).parent.file("AppData/Local/testSDK"+$t)
 					
 				End if 
 				
@@ -179,6 +179,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					
 					// Already done this day
 					$response:=New object:C1471(\
+						"skipped"; True:C214; \
 						"success"; True:C214)
 					
 				End if 

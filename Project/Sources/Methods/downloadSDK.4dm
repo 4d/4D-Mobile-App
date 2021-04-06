@@ -10,6 +10,7 @@ var $o; $manifest : Object
 var $file; $fileManifest : 4D:C1709.File
 var $folder : 4D:C1709.Folder
 var $sdk : 4D:C1709.ZipFile
+var $error : cs:C1710.error
 var $http : cs:C1710.http
 var $progress : cs:C1710.progress
 
@@ -138,7 +139,14 @@ If ($run)
 			
 		End if 
 		
+/* START HIDING ERRORS */
+		$error:=cs:C1710.error.new()
+		$error.hide()
+		
 		$folder:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
+		
+/* STOP HIDING ERRORS */
+		$error.show()
 		
 		If ($folder.exists)
 			
