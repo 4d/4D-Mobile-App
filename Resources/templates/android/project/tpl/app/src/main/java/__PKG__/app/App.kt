@@ -10,7 +10,7 @@ import com.qmobile.qmobileapi.auth.AuthInfoHelper
 import com.qmobile.qmobiledatastore.db.AppDatabaseFactory
 import com.qmobile.qmobiledatasync.app.BaseApp
 import com.qmobile.qmobileui.model.QMobileUiConstants
-import com.qmobile.qmobileui.utils.LogController
+import com.qmobile.qmobileui.utils.LogLevelController
 import com.qmobile.qmobileui.utils.QMobileUiUtil
 import {{package}}.BuildConfig
 import {{package}}.R
@@ -20,6 +20,7 @@ import {{package}}.utils.FromTableForViewModelImpl
 import {{package}}.utils.NavigationImpl
 import {{package}}.utils.getPropertyListFromTable
 import org.json.JSONObject
+import timber.log.Timber
 import java.io.File
 
 class App : BaseApp() {
@@ -29,6 +30,12 @@ class App : BaseApp() {
 
         // QMobileUtil init
         QMobileUiUtil.builder(context = this)
+
+       // Setup logging
+        if (BuildConfig.DEBUG) {
+            LogLevelController.initialize(QMobileUiUtil.appUtilities.logLevel)
+            Timber.i("[LOG LEVEL] ${QMobileUiUtil.appUtilities.logLevel}")
+        }
 
         // Sets the drawable resource id for login page logo
         loginLogoDrawable = R.mipmap.ic_launcher_foreground
@@ -50,9 +57,6 @@ class App : BaseApp() {
         fromTableForViewModel = FromTableForViewModelImpl()
         navigationInterface = NavigationImpl()
         fragmentUtil = FragmentUtilImpl()
-
-        // Setup logging
-        LogController.initialize(this)
 
         // As a first step, we gather information about the app and build information
         saveEnvironmentInfo()

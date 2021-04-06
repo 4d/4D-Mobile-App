@@ -30,7 +30,7 @@ class EntityViewModel{{tableName}}(
     EntityViewModel<{{tableName}}>(tableName, id, apiService) {
 
     init {
-        Timber.i("EntityViewModel{{tableName}} initializing...")
+        Timber.v("EntityViewModel{{tableName}} initializing...")
     }
 
     /**

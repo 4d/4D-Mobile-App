@@ -24,7 +24,7 @@ class EntityListViewModel{{tableName}}(
     EntityListViewModel<{{tableName}}>(tableName, apiService) {
 
     init {
-        Timber.i("EntityListViewModel{{tableName}} initializing...")
+        Timber.v("EntityListViewModel{{tableName}} initializing...")
     }
 
     /**
