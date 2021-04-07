@@ -46,7 +46,7 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
                 fields.find { it.name.fieldAdjustment() == key.fieldAdjustment() }?.let { field ->
                     when {
                         field.isImage -> {
-                            hashMap[key.fieldAdjustment()] = null
+                            // Nothing to do
                         }
                         field.isManyToOneRelation -> {
                             val neededObject = hashMap[key.fieldAdjustment()]
@@ -65,7 +65,6 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
         val sortedMap = hashMap.toSortedMap()
         var k = 0
         for ((key, value) in sortedMap) {
-            println("[key = $key] value = $value")
             outputEntity[k] = value
             k++
         }
