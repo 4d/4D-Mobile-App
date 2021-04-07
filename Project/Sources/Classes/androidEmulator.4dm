@@ -206,29 +206,40 @@ Function start  // Starts emulator
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	If ($1="Pixel_4")
+	This:C1470.launch(This:C1470.cmd+" -accel-check")
+	
+	If (Position:C15("HAXM is not installed on this machine"; String:C10(This:C1470.outputStream))>0)  // HAXM required, should install through Android Studio
 		
-		This:C1470.asynchronous()\
-			.launch(This:C1470.cmd+" -avd \""+$1+"\" -skin pixel_4 -skindir \""+This:C1470.androidSDKFolder().folder("skins").path+"\" -memory 512 -no-boot-anim")
+		$0.errors.push("HAXM is not installed on this machine")
+		$0.errors.push("Open Android Studio > Tools > SDK Manager, SDK Tools tab, and install HAXM")
 		
 	Else 
 		
-		This:C1470.asynchronous()\
-			.launch(This:C1470.cmd+" -avd \""+$1+"\" -no-boot-anim")
+		If ($1="Pixel_4")
+			
+			This:C1470.asynchronous()\
+				.launch(This:C1470.cmd+" -avd \""+$1+"\" -skin pixel_4 -skindir \""+This:C1470.androidSDKFolder().folder("skins").path+"\" -memory 512 -no-boot-anim")
+			
+		Else 
+			
+			This:C1470.asynchronous()\
+				.launch(This:C1470.cmd+" -avd \""+$1+"\" -no-boot-anim")
+			
+		End if 
+		
+		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		
+		If (Not:C34($0.success))
+			
+			$0.errors.push("Failed to start emulator")
+			$0.errors.combine(Split string:C1554(String:C10(This:C1470.errorStream); "\n"))
+			
+			// Else : all ok
+			
+		End if 
 		
 	End if 
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
-	
-	If (Not:C34($0.success))
-		
-		$0.errors.push("Failed to start emulator")
-		
-		// Else : all ok
-		
-	End if 
-	
-	$0.errors.combine(Split string:C1554(String:C10(This:C1470.errorStream); "\n"))
 	This:C1470.synchronous()  // Set back to synchronous mode
 	
 	
