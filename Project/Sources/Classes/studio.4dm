@@ -369,6 +369,58 @@ Function open($target : 4D:C1709.Folder)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Install x86 Emulator Accelerator (HAXM ,installer)
+Function installHAXM()
+	
+	var $file : 4D:C1709.File
+	var $folder : 4D:C1709.Folder
+	var $http : cs:C1710.http
+	
+	$file:=This:C1470.sdkFolder().file(".downloadIntermediates/haxm.zip")
+	$http:=cs:C1710.http.new("https://dl.google.com/android/repository/extras/intel/haxm-macosx_v7_6_5.zip")
+	$http.setResponseType(Is a document:K24:1; $file)
+	
+	This:C1470.success:=False:C215
+	
+	$http.get()
+	
+	If ($http.success)
+		
+		$folder:=ZIP Read archive:C1637($file).root.copyTo($file.parent; fk overwrite:K87:5)
+		
+		If ($folder.exists)
+			
+			This:C1470.sdkFolder().folder("extras/intel").create()
+			$folder:=$folder.copyTo(This:C1470.sdkFolder().folder("extras/intel"); "Hardware_Accelerated_Execution_Manager"; fk overwrite:K87:5)
+			
+		End if 
+		
+		This:C1470.success:=($folder.exists)
+		
+		If (This:C1470.success)
+			
+			If (Is macOS:C1572)
+				
+				This:C1470.launch("chmod +x "+This:C1470.singleQuoted($folder.file("HAXM installation").path))
+				This:C1470.launchAsync(This:C1470.singleQuoted($folder.file("HAXM installation").path))
+				
+			Else 
+				
+				This:C1470.launchAsync(This:C1470.singleQuoted($folder.file("HAXM installation").path))
+				
+			End if 
+			
+			If (This:C1470.success)
+				
+				$folder:=This:C1470.sdkFolder().folder(".downloadIntermediates")
+				$folder.delete(fk recursive:K87:7)
+				$folder.create()
+				
+			End if 
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Populate the javaHome & java properties according to the platform
 Function _getJava()
 	

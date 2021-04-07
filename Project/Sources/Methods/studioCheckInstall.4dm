@@ -72,6 +72,24 @@ If ($out.applicationAvailable)
 				
 			End if 
 			
+			// *CHECK HAXM
+			If (Not:C34($studio.sdkFolder().folder("extras/intel/Hardware_Accelerated_Execution_Manager").exists))
+				
+				$signal:=await_MESSAGE(New object:C1471(\
+					"target"; $in.caller; \
+					"action"; "show"; \
+					"type"; "confirm"; \
+					"title"; "4dForAndroidNeedsToInstallHardwareAccelerationTools"; \
+					"additional"; "doYouWantToInstallHaxm"; \
+					"cancel"; "later"))
+				
+				If ($signal.validate)
+					
+					$studio.installHAXM()
+					
+				End if 
+			End if 
+			
 			// *CHECK JAVA
 			$out.ready:=$studio.java.exists
 			

@@ -398,7 +398,7 @@ Function run()->$result : Object
 		
 		If (This:C1470.isOnError)
 			
-			$o.errors.insert(0; "failedToLaunchTheSimulator")
+			$o.errors.insert(0; Get localized string:C991("failedToLaunchTheSimulator"))
 			
 			This:C1470.postError($o.errors.join("\r"))
 			$result.errors.combine($o.errors)
