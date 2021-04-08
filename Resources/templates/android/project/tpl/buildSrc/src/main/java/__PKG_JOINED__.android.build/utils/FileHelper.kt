@@ -42,7 +42,15 @@ fun getAppinfoPath(): String = assetsPath() + File.separator + APPINFO_FILENAME
 
 private fun String.condense() = this.replace("\\s".toRegex(), "")
 
-fun String.fieldAdjustment() = this.condense().unaccent().validateWord()
+fun String.fieldAdjustment() = this.condense().replaceSpecialChars().validateWord()
+
+private fun String.replaceSpecialChars(): String {
+    return if (this.contains("Entities<")) {
+        this.replace("[^a-zA-Z0-9<>]".toRegex(), "_").unaccent()
+    } else {
+        this.replace("[^a-zA-Z0-9]".toRegex(), "_").unaccent()
+    }
+}
 
 private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 
