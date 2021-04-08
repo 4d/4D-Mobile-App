@@ -23,6 +23,28 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		$o:=Get system info:C1571
+		
+		
+		//________________________________________
+	: (True:C214)
+		
+		//OPEN URL("Macintosh HD:System:Library:CoreServices:Installer.app:Contents:MacOS:Installer")
+		
+		var $studio : cs:C1710.studio
+		$studio:=cs:C1710.studio.new()
+		$studio.installHAXM()
+		
+		//________________________________________
+	: (True:C214)
+		
+		
+		var $log : cs:C1710.log
+		$log:=cs:C1710.log.new()
+		
+		//________________________________________
+	: (True:C214)
+		
 		var $plist : cs:C1710.plist
 		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Library/Preferences/com.apple.iphonesimulator.plist"))
 		
@@ -625,18 +647,6 @@ Case of
 		//  $c:=$o.paths()
 		
 		//$o.openAppStore()
-		
-		//________________________________________
-	: (False:C215)
-		
-		$t:=_o_str("").shuffle(5)
-		$t:=_o_str("").shuffle(10)
-		$t:=_o_str("").shuffle(15)
-		$t:=_o_str("").shuffle(20)
-		$t:=_o_str("").shuffle(30)
-		$t:=_o_str("").shuffle(40)
-		$t:=_o_str.setText("Hello world").shuffle(100)
-		$t:=_o_str.setText("Note: if a value being appended is a collection, the elements of the collection will be appended.").shuffle(15)
 		
 		//________________________________________
 	: (False:C215)  // Unsandbox
