@@ -54,7 +54,7 @@ Class constructor
 	
 	
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
-	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project); Document with LF:K24:22)
+	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
 	
 	This:C1470.logFolder:=cs:C1710.path.new().userCache()
 	This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
@@ -125,8 +125,8 @@ Function create()->$result : Object
 		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
 		
 		// Log outputs
-		This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream); "UTF-8"; Document with LF:K24:22)
-		This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream); "UTF-8"; Document with LF:K24:22)
+		This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream))
+		This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream))
 		
 		If ($o.success)
 			
@@ -276,8 +276,8 @@ Function build()->$result : Object
 		$o:=This:C1470.gradlew.assembleDebug()
 		
 		// Log outputs
-		This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream); "UTF-8"; Document with LF:K24:22)
-		This:C1470.logFolder.file("lastBuild.android.err.log").setText(String:C10($o.errorStream); "UTF-8"; Document with LF:K24:22)
+		This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream))
+		This:C1470.logFolder.file("lastBuild.android.err.log").setText(String:C10($o.errorStream))
 		
 		If ($o.success)
 			

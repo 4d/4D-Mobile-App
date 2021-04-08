@@ -77,7 +77,7 @@ If (DATABASE.isWritable())
 		End if 
 		
 		$json:=JSON Stringify:C1217($project; *)
-		$file.setText($json; Document with LF:K24:22)
+		$file.setText($json)
 		
 	Else 
 		

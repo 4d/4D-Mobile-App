@@ -143,6 +143,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				var $file : 4D:C1709.File
 				var $run : Boolean
 				
+				$run:=True:C214
+				
 				If (Is macOS:C1572)
 					
 					$file:=Folder:C1567(fk desktop folder:K87:19).parent.file("Library/Caches/testSDK"+Application version:C493+$t)
@@ -157,11 +159,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					
 					$run:=($file.modificationDate<Current date:C33)
 					
-				Else 
-					
-					// Force
-					$run:=True:C214
-					
 				End if 
 				
 				If ($run)
@@ -170,10 +167,19 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					
 					EXECUTE METHOD:C1007($entryPoint; *; $t; True:C214)
 					
-					$response:=New object:C1471(\
-						"success"; $o.exists)
-					
-					$file.setText(Generate UUID:C1066)
+					If ($o.exists)
+						
+						$file.setText(Generate UUID:C1066)
+						
+						$response:=New object:C1471(\
+							"success"; True:C214)
+						
+					Else 
+						
+						$response:=New object:C1471(\
+							"success"; False:C215)
+						
+					End if 
 					
 				Else 
 					

@@ -305,7 +305,7 @@ If ($in.create)
 		
 	End if 
 	
-	$appFolder.file("manifest.json").setText(JSON Stringify:C1217($appManifest; *); Document with LF:K24:22)
+	$appFolder.file("manifest.json").setText(JSON Stringify:C1217($appManifest; *))
 	
 	//===============================================================
 	$ui.step("decompressionOfTheSdk")
@@ -712,7 +712,7 @@ If ($out.success)
 				"allowProvisioningDeviceRegistration"; True:C214; \
 				"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+$productName+".xcarchive")))
 			
-			$cacheFolder.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out); "UTF-8"; Document with LF:K24:22)
+			$cacheFolder.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out))
 			
 			ob_error_combine($out; $Obj_result_build)
 			
@@ -730,7 +730,7 @@ If ($out.success)
 					"exportPath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12); \
 					"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+$productName+".xcarchive")))
 				
-				$path.userCache().file("lastExportArchive.xlog").setText(String:C10($Obj_result_build.out); "UTF-8"; Document with LF:K24:22)
+				$path.userCache().file("lastExportArchive.xlog").setText(String:C10($Obj_result_build.out))
 				
 				ob_error_combine($out; $Obj_result_build)
 				
@@ -758,7 +758,7 @@ If ($out.success)
 			
 			ob_error_combine($out; $Obj_result_build)
 			
-			$cacheFolder.file("lastBuild.xlog").setText(String:C10($Obj_result_build.out); "UTF-8"; Document with LF:K24:22)
+			$cacheFolder.file("lastBuild.xlog").setText(String:C10($Obj_result_build.out))
 			
 			// Some times Xcode method failed to get app path, maybe if already builded and nothing to do???
 			If ($Obj_result_build.app=Null:C1517)

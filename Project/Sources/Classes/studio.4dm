@@ -377,7 +377,9 @@ Function installHAXM()
 	var $http : cs:C1710.http
 	
 	$file:=This:C1470.sdkFolder().file(".downloadIntermediates/haxm.zip")
-	$http:=cs:C1710.http.new("https://dl.google.com/android/repository/extras/intel/haxm-macosx_v7_6_5.zip")
+	
+	$http:=cs:C1710.http.new("https://dl.google.com/android/repository/extras/intel/haxm-"+Choose:C955(Is macOS:C1572; "macosx"; "windows")+"_v7_6_5.zip")
+	
 	$http.setResponseType(Is a document:K24:1; $file)
 	
 	This:C1470.success:=False:C215

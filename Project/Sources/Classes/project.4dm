@@ -357,7 +357,7 @@ Function save()
 				
 				If ($file.isWritable)
 					
-					$file.setText(JSON Stringify:C1217(PROJECT.$dialog; *); Document with LF:K24:22)
+					$file.setText(JSON Stringify:C1217(PROJECT.$dialog; *))
 					
 					// Else log?
 					
@@ -369,7 +369,7 @@ Function save()
 					
 					If ($file.isWritable)
 						
-						$file.setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *); Document with LF:K24:22)
+						$file.setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *))
 						
 						// Else log?
 						
@@ -385,7 +385,7 @@ Function save()
 			
 			If ($file.isWritable)
 				
-				$file.setText(JSON Stringify:C1217($o; *); Document with LF:K24:22)
+				$file.setText(JSON Stringify:C1217($o; *))
 				
 				// Else log?
 				
@@ -397,7 +397,7 @@ Function save()
 				
 				If ($file.isWritable)
 					
-					$file.setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *); Document with LF:K24:22)
+					$file.setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *))
 					
 					// Else log?
 					
@@ -408,7 +408,7 @@ Function save()
 	
 	$file:=This:C1470._folder.file("project.4dmobileapp")
 	$file.create()
-	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *); Document with LF:K24:22)
+	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Populate the target value into te project

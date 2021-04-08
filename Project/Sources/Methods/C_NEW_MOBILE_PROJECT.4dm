@@ -196,7 +196,7 @@ Else
 				End if 
 			End if 
 			
-			$file.setText($json; Document with LF:K24:22)
+			$file.setText($json)
 			
 			// Open the project editor
 			$w:=Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)

@@ -160,7 +160,7 @@ Else
 					//______________________________________________________
 				: ($1="base64")  // Returns a base64 encoded UTF-8 string
 					
-					CONVERT FROM TEXT:C1011(This:C1470.value; "utf-8"; $x)
+					CONVERT FROM TEXT:C1011(This:C1470.value; "UTF-8"; $x)
 					BASE64 ENCODE:C895($x; $t)
 					
 					$o.value:=$t
@@ -185,7 +185,7 @@ Else
 					If (This:C1470.length>0)
 						
 						// Use the UTF-8 character set for encoding
-						CONVERT FROM TEXT:C1011(This:C1470.value; "utf-8"; $x)
+						CONVERT FROM TEXT:C1011(This:C1470.value; "UTF-8"; $x)
 						
 						// Convert the characters
 						For ($i; 0; BLOB size:C605($x)-1; 1)
@@ -235,7 +235,7 @@ Else
 					
 					// Convert from UTF-8
 					SET BLOB SIZE:C606($x; $length)
-					$o.value:=Convert to text:C1012($x; "utf-8")
+					$o.value:=Convert to text:C1012($x; "UTF-8")
 					
 					//______________________________________________________
 				: ($1="equal")  // Returns True if the string passed is exactly the same as the value.

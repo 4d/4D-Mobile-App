@@ -177,7 +177,7 @@ Function base64($encoded : Boolean)->$base64 : Text
 	
 	var $x : Blob
 	
-	CONVERT FROM TEXT:C1011(This:C1470.value; "utf-8"; $x)
+	CONVERT FROM TEXT:C1011(This:C1470.value; "UTF-8"; $x)
 	
 	If (Count parameters:C259>=1)
 		
@@ -224,7 +224,7 @@ Function urlEncode
 	If (This:C1470.length>0)
 		
 		// Use the UTF-8 character set for encoding
-		CONVERT FROM TEXT:C1011(This:C1470.value; "utf-8"; $x)
+		CONVERT FROM TEXT:C1011(This:C1470.value; "UTF-8"; $x)
 		
 		// Convert the characters
 		For ($i; 0; BLOB size:C605($x)-1; 1)
@@ -280,7 +280,7 @@ Function urlDecode
 	
 	// Convert from UTF-8
 	SET BLOB SIZE:C606($x; $length)
-	$0:=Convert to text:C1012($x; "utf-8")
+	$0:=Convert to text:C1012($x; "UTF-8")
 	
 	//=======================================================================================================
 	// Returns True if the string passed is exactly the same as the value.

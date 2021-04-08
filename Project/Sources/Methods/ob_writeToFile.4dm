@@ -76,7 +76,7 @@ Else
 	
 End if 
 
-$File_output.setText($Txt_buffer; Document with LF:K24:22)
+$File_output.setText($Txt_buffer)
 
 ON ERR CALL:C155($Txt_methodOnErrorCall)
 

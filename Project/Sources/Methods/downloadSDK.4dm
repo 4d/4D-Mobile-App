@@ -158,7 +158,7 @@ If ($run)
 				
 			End for each 
 			
-			$fileManifest.setText(JSON Stringify:C1217($manifest; *); Document with LF:K24:22)
+			$fileManifest.setText(JSON Stringify:C1217($manifest; *))
 			
 			RECORD.info("Update the 4D Mobile "+$target+" SDK version "+$manifest["x-amz-meta-version"])
 			

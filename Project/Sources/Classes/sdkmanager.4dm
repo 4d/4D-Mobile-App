@@ -168,7 +168,7 @@ Function acceptLicences()->$ready : Boolean
 			
 		End if 
 		
-		$file.setText("\n"+$o.value; Document with LF:K24:22)
+		$file.setText("\n"+$o.value)
 		
 	End for each 
 	

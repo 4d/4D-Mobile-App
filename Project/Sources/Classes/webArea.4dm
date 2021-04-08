@@ -222,7 +222,7 @@ Function load
 					WA SET URL FILTERS:C1030(*; This:C1470.name; $_filters; $_allowed)
 					
 					$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file($1.fullName)
-					$file.setText($text; Document with LF:K24:22)
+					$file.setText($text)
 					
 					WA OPEN URL:C1020(*; This:C1470.name; $file.platformPath)
 					

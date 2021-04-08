@@ -114,11 +114,11 @@ Case of
 			Else 
 				
 /*
-																DO_MESSAGE(New object(\
-																				"action"; "show"; \
-																				"type"; "alert"; \
-																				"title"; "noDevices"; \
-																				"additional"; ""))
+																				DO_MESSAGE(New object(\
+																									"action"; "show"; \
+																									"type"; "alert"; \
+																									"title"; "noDevices"; \
+																									"additional"; ""))
 */
 				
 			End if 
@@ -268,7 +268,7 @@ Case of
 						
 						If ($in.param.appFolder.folder("iOS/Sources").exists)
 							
-							$file.setText(cs:C1710.tools.new().folderDigest($in.param.appFolder.folder("iOS/Sources")); Document with LF:K24:22)
+							$file.setText(cs:C1710.tools.new().folderDigest($in.param.appFolder.folder("iOS/Sources")))
 							
 						End if 
 						
