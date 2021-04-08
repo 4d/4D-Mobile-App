@@ -27,7 +27,7 @@ Case of
 		READ PICTURE FILE:C678(Folder:C1567("/RESOURCES/images/welcome/").file("generateAndTest.png").platformPath; $tPic_{3})
 		READ PICTURE FILE:C678(Folder:C1567("/RESOURCES/images/welcome/").file("deploy.png").platformPath; $tPic_{4})
 		
-		$str:=_o_str("<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"\
+		$str:=cs:C1710.str.new("<span style='color:dimgray'><span style='font-size: 14pt;font-weight: bold'>"\
 			+"{title}"\
 			+"</span>"\
 			+"<br/>"\

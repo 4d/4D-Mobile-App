@@ -81,7 +81,8 @@ If ($out.applicationAvailable)
 					"type"; "confirm"; \
 					"title"; "4dForAndroidNeedsToInstallHardwareAccelerationTools"; \
 					"additional"; "doYouWantToInstallHaxm"; \
-					"cancel"; "later"))
+					"cancel"; "later"; \
+					"help"; Formula:C1597(OPEN URL:C673("https://github.com/intel/haxm/blob/master/README.md"; *))))
 				
 				If ($signal.validate)
 					

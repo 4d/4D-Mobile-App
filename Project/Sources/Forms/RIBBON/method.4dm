@@ -149,7 +149,7 @@ Case of
 			
 			$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected)
 			
-			If (Is Windows:C1573)
+			If (Is Windows:C1573) | (Not:C34(PROJECT.$ios))
 				
 				$form.install.disable()
 				

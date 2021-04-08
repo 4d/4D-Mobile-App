@@ -14,7 +14,7 @@ C_OBJECT:C1216($1)
 C_BOOLEAN:C305($Boo_copy; $Boo_processTags)
 C_LONGINT:C283($i; $ii; $Lon_parameters)
 C_TEXT:C284($Dir_tgt; $File_src; $File_tgt; $t; $Txt_fileName; $Txt_folder)
-C_OBJECT:C1216($o; $Obj_input; $Obj_output; $Obj_result; $Obj_tempo; $str)
+C_OBJECT:C1216($o; $Obj_input; $Obj_output; $Obj_result; $Obj_tempo)
 C_COLLECTION:C1488($Col_catalog; $Col_pathComponents; $Col_types)
 
 ARRAY TEXT:C222($tTxt_buffer; 0)
@@ -84,7 +84,8 @@ If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 			//________________________________________
 	End case 
 	
-	$str:=_o_str()  // init class
+	var $str : cs:C1710.str
+	$str:=cs:C1710.str.new()  // init class
 	
 Else 
 	

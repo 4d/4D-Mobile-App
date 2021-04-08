@@ -209,7 +209,7 @@ Case of
 		If (Not:C34($Obj_out.success))
 			
 			// Verify URL grammar
-			$Obj_out.success:=_o_str($Obj_in.url).isUrl()
+			$Obj_out.success:=cs:C1710.str.new($Obj_in.url).isUrl()
 			
 			If ($Obj_out.success)
 				
@@ -311,7 +311,7 @@ Case of
 						If (Num:C11($errors.lastError().error)=-1)
 							
 							// Port conflict ?
-							$Obj_out.configuration.message:=_o_str.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_out.options.webPortID); String:C10($Obj_out.options.webHTTPSPortID)))
+							$Obj_out.configuration.message:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_out.options.webPortID); String:C10($Obj_out.options.webHTTPSPortID)))
 							
 						Else 
 							

@@ -15,7 +15,7 @@ C_COLLECTION:C1488($3)
 
 C_LONGINT:C283($i; $Lon_parameters)
 C_TEXT:C284($t; $Txt_in; $Txt_out)
-C_OBJECT:C1216($o; $Obj_element; $Obj_field; $Obj_table; $Obj_tags)
+C_OBJECT:C1216($Obj_element; $Obj_field; $Obj_table; $Obj_tags)
 C_COLLECTION:C1488($Col_newStrings; $Col_oldStrings; $Col_types)
 C_VARIANT:C1683($Var_field)
 
@@ -46,7 +46,8 @@ If (Asserted:C1132($Lon_parameters>=3; "Missing parameter"))
 	
 	$Obj_table:=$Obj_tags.table
 	
-	$o:=_o_str  // Class
+	var $str : cs:C1710.str
+	$str:=cs:C1710.str.new()  // Class
 	
 Else 
 	
@@ -277,12 +278,12 @@ Case of   // According to type replace the tag
 					//________________________________________
 				: (Value type:C1509($Obj_tags[$t])=Is collection:K8:32)
 					
-					$Col_newStrings.push($o.setText(JSON Stringify:C1217($Obj_tags[$t])).xmlEncode())
+					$Col_newStrings.push($str.setText(JSON Stringify:C1217($Obj_tags[$t])).xmlEncode())
 					
 					//________________________________________
 				: (Value type:C1509($Obj_tags[$t])=Is object:K8:27)
 					
-					$Col_newStrings.push($o.setText(JSON Stringify:C1217($Obj_tags[$t])).xmlEncode())
+					$Col_newStrings.push($str.setText(JSON Stringify:C1217($Obj_tags[$t])).xmlEncode())
 					
 					//________________________________________
 				Else 
@@ -350,12 +351,12 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					
 					$Col_newStrings.combine(New collection:C1472(\
 						$Obj_field.name; \
-						$o.setText($Obj_field.originalName).xmlEncode(); \
-						$o.setText($Obj_field.label).xmlEncode(); \
-						$o.setText($Obj_field.shortLabel).xmlEncode(); \
-						$o.setText($Obj_field.format).xmlEncode(); \
+						$str.setText($Obj_field.originalName).xmlEncode(); \
+						$str.setText($Obj_field.label).xmlEncode(); \
+						$str.setText($Obj_field.shortLabel).xmlEncode(); \
+						$str.setText($Obj_field.format).xmlEncode(); \
 						$Obj_field.bindingType; \
-						$o.setText($Obj_field.detailIcon).xmlEncode(); \
+						$str.setText($Obj_field.detailIcon).xmlEncode(); \
 						$Obj_field.labelAlignment\
 						))
 					
@@ -400,12 +401,12 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 				$Obj_table.sortField; \
 				$Obj_tags.product; \
 				$Obj_table.tableNumber; \
-				$o.setText($Obj_table.originalName).xmlEncode(); \
-				$o.setText($Obj_table.label).xmlEncode(); \
-				$o.setText($Obj_table.shortLabel).xmlEncode(); \
-				$o.setText($Obj_table.navigationIcon).xmlEncode(); \
-				$o.setText($Obj_table.tableActions).xmlEncode(); \
-				$o.setText($Obj_table.recordActions).xmlEncode()\
+				$str.setText($Obj_table.originalName).xmlEncode(); \
+				$str.setText($Obj_table.label).xmlEncode(); \
+				$str.setText($Obj_table.shortLabel).xmlEncode(); \
+				$str.setText($Obj_table.navigationIcon).xmlEncode(); \
+				$str.setText($Obj_table.tableActions).xmlEncode(); \
+				$str.setText($Obj_table.recordActions).xmlEncode()\
 				))
 			
 			For each ($Var_field; $Obj_table.fields)
@@ -428,12 +429,12 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					
 					$Col_newStrings.combine(New collection:C1472(\
 						$Obj_field.name; \
-						$o.setText($Obj_field.originalName).xmlEncode(); \
-						$o.setText($Obj_field.label).xmlEncode(); \
-						$o.setText($Obj_field.shortLabel).xmlEncode(); \
-						$o.setText($Obj_field.format).xmlEncode(); \
+						$str.setText($Obj_field.originalName).xmlEncode(); \
+						$str.setText($Obj_field.label).xmlEncode(); \
+						$str.setText($Obj_field.shortLabel).xmlEncode(); \
+						$str.setText($Obj_field.format).xmlEncode(); \
 						$Obj_field.bindingType; \
-						$o.setText($Obj_field.detailIcon).xmlEncode(); \
+						$str.setText($Obj_field.detailIcon).xmlEncode(); \
 						$Obj_field.labelAlignment; \
 						Choose:C955(Bool:C1537($Obj_field.isToMany); "YES"; "NO")\
 						))
@@ -461,12 +462,12 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 				
 				$Col_newStrings.combine(New collection:C1472(\
 					$Obj_tags.field.name; \
-					$o.setText($Obj_tags.field.originalName).xmlEncode(); \
-					$o.setText($Obj_tags.field.label).xmlEncode(); \
-					$o.setText($Obj_tags.field.shortLabel).xmlEncode(); \
-					$o.setText($Obj_tags.field.format).xmlEncode(); \
+					$str.setText($Obj_tags.field.originalName).xmlEncode(); \
+					$str.setText($Obj_tags.field.label).xmlEncode(); \
+					$str.setText($Obj_tags.field.shortLabel).xmlEncode(); \
+					$str.setText($Obj_tags.field.format).xmlEncode(); \
 					$Obj_tags.field.bindingType; \
-					$o.setText($Obj_tags.field.detailIcon).xmlEncode(); \
+					$str.setText($Obj_tags.field.detailIcon).xmlEncode(); \
 					$Obj_tags.field.labelAlignment; \
 					Choose:C955(Bool:C1537($Obj_tags.field.isToMany); "YES"; "NO")\
 					))
@@ -513,10 +514,10 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 				))
 			
 			$Col_newStrings.combine(New collection:C1472(\
-				$o.setText($Obj_table.originalName).xmlEncode(); \
-				$o.setText($Obj_table.label).xmlEncode(); \
-				$o.setText($Obj_table.shortLabel).xmlEncode(); \
-				$o.setText($Obj_table.navigationIcon).xmlEncode(); \
+				$str.setText($Obj_table.originalName).xmlEncode(); \
+				$str.setText($Obj_table.label).xmlEncode(); \
+				$str.setText($Obj_table.shortLabel).xmlEncode(); \
+				$str.setText($Obj_table.navigationIcon).xmlEncode(); \
 				$Obj_table.labelAlignment; \
 				$Obj_table.segueDestinationId\
 				))
@@ -569,7 +570,7 @@ End if
 ASSERT:C1129($Col_oldStrings.length=$Col_newStrings.length)
 
 // Make replacements
-$Txt_out:=$o.setText($Txt_in).replace($Col_oldStrings; $Col_newStrings)
+$Txt_out:=$str.setText($Txt_in).replace($Col_oldStrings; $Col_newStrings)
 
 // ----------------------------------------------------
 // Return

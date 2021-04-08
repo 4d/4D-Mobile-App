@@ -902,11 +902,11 @@ Case of
 				
 			End if 
 			
-			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; _o_str.setText("4dMobileWantsToMakeChanges").localized("4dForIos"))
+			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; cs:C1710.str.new("4dMobileWantsToMakeChanges").localized("4dForIos"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; COMPONENT_Pathname("scripts").file("sudo-askpass").path)
 			
-			LAUNCH EXTERNAL PROCESS:C811("sudo -A /usr/bin/xcode-select -s "+_o_str($Txt_newPath).singleQuoted(); $Txt_in; $Txt_out; $Txt_error)
+			LAUNCH EXTERNAL PROCESS:C811("sudo -A /usr/bin/xcode-select -s "+cs:C1710.str.new($Txt_newPath).singleQuoted(); $Txt_in; $Txt_out; $Txt_error)
 			
 			If (Asserted:C1132(OK=1; "set-tool-path"))
 				
@@ -1308,7 +1308,7 @@ Case of
 		
 		If (Bool:C1537($Obj_param.sudo))
 			
-			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; _o_str.setText("4dMobileWantsToMakeChanges").localized("4dForIos"))
+			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; cs:C1710.str.new.setText("4dMobileWantsToMakeChanges").localized("4dForIos"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; COMPONENT_Pathname("scripts").file("sudo-askpass").path)
 			

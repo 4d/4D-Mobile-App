@@ -48,7 +48,7 @@ If (Asserted:C1132($project#Null:C1517))
 		var $path : cs:C1710.path
 		$path:=cs:C1710.path.new()
 		
-		$project.organization.identifier:=$project.organization.id+"."+_o_str($project.product.name).uperCamelCase()
+		$project.organization.identifier:=$project.organization.id+"."+cs:C1710.str.new($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
 		
 		$in.appFolder:=$path.products().folder($project.product.name)

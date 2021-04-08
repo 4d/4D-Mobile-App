@@ -303,7 +303,7 @@ Case of
 						
 						$oTable.filter.validated:=False:C215
 						
-						$o:=_o_str(String:C10($oTable.filter.string)).insert($menu.choice; $start; $end)
+						$o:=cs:C1710.str.new(String:C10($oTable.filter.string)).insert($menu.choice; $start; $end)
 						$oTable.filter.string:=$o.value
 						
 						Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter

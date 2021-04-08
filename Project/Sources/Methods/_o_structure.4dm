@@ -543,7 +543,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																
+																								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -1233,7 +1233,7 @@ Case of
 			
 			If (Bool:C1537(SHARED.stampField.indexed))
 				
-				DOCUMENT:="CREATE INDEX "+String:C10(SHARED.stampField.name)+"_"+_o_str($t).lowerCamelCase()+" ON ["+$t+"] ("+String:C10(SHARED.stampField.name)+");"
+				DOCUMENT:="CREATE INDEX "+String:C10(SHARED.stampField.name)+"_"+cs:C1710.str.new($t).lowerCamelCase()+" ON ["+$t+"] ("+String:C10(SHARED.stampField.name)+");"
 				
 			End if 
 			

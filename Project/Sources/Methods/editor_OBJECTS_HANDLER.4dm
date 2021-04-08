@@ -83,9 +83,12 @@ Case of
 							
 						End if 
 						
-						Self:C308->:=New object:C1471
+						//Self->:=New object
 						
 						OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
+						
+						OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
+						OBJECT SET COORDINATES:C1248(*; $e.objectName; $left; $top; $right; $top+410)
 						
 						//…………………………………………………………………………………………………
 					Else 
@@ -101,11 +104,16 @@ Case of
 						If ($bottom>($height-20))
 							
 							$bottom:=$height-20
+							$o.ƒ.geometry.scrollbar:=True:C214
 							
-							$o.scrollbar:=True:C214
-							Self:C308->:=Self:C308->  // Touch
+						Else 
+							
+							$o.ƒ.geometry.scrollbar:=False:C215
 							
 						End if 
+						
+						$o.ƒ.updateGeometry:=True:C214
+						Self:C308->:=$o  // Touch
 						
 						OBJECT SET COORDINATES:C1248(*; $e.objectName; $left; $top; $right; $bottom)
 						
