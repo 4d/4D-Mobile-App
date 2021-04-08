@@ -68,7 +68,7 @@ Function installLatestCommandLineTools($version)
 	var $folder : 4D:C1709.Folder
 	var $http : cs:C1710.http
 	
-	$file:=This:C1470.sdkFolder().file(".downloadIntermediates/cmdline-tools.zip")
+	$file:=This:C1470.sdkFolder().file(Choose:C955(Is macOS:C1572; ".downloadIntermediates"; ".temp")+"/cmdline-tools.zip")
 	$http:=cs:C1710.http.new("https://dl.google.com/android/repository/commandlinetools-"+Choose:C955(Is macOS:C1572; "mac"; "win")+"-"+String:C10($version)+"_latest.zip")
 	$http.setResponseType(Is a document:K24:1; $file)
 	
