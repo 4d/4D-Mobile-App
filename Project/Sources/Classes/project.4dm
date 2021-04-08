@@ -439,6 +439,8 @@ Function setTarget($check : Boolean; $target : Text)
 	
 	If (Count parameters:C259>=2)
 		
+		PROJECT._buildTarget:=$target
+		
 		If ($check)
 			
 			// Launch the verification of the development tools, if any

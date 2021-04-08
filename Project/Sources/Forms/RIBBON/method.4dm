@@ -155,7 +155,7 @@ Case of
 				
 			Else 
 				
-				$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID)
+				$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID & $isDeviceSelected)
 				
 			End if 
 		End if 
@@ -233,10 +233,14 @@ Case of
 							
 							$form.simulator.setTitle($device.name)
 							Form:C1466.currentDevice:=$simulator
+							PROJECT._buildTarget:="ios"
+							PROJECT._simulator:=$device.udid
 							
 						Else 
 							
 							$form.simulator.setTitle("select").setColors(EDITOR.errorRGB)
+							OB REMOVE:C1226(PROJECT; "_buildTarget")
+							OB REMOVE:C1226(PROJECT; "_simulator")
 							
 						End if 
 						
@@ -250,16 +254,22 @@ Case of
 								
 								$form.simulator.setTitle($device.name)
 								Form:C1466.currentDevice:=$simulator
+								PROJECT._buildTarget:="android"
+								PROJECT._simulator:=$device.udid
 								
 							Else 
 								
 								$form.simulator.setTitle("select").setColors(EDITOR.errorRGB)
+								OB REMOVE:C1226(PROJECT; "_buildTarget")
+								OB REMOVE:C1226(PROJECT; "_simulator")
 								
 							End if 
 							
 						Else 
 							
 							$form.simulator.setTitle("unknown")
+							OB REMOVE:C1226(PROJECT; "_buildTarget")
+							OB REMOVE:C1226(PROJECT; "_simulator")
 							
 						End if 
 					End if 

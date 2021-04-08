@@ -46,7 +46,7 @@ Case of
 			"productFolder"; $folder; \
 			"xCodeAvailable"; Bool:C1537(Form:C1466.editor.$xCode.applicationAvailable); \
 			"studioAvailable"; Bool:C1537(Form:C1466.editor.$studio.applicationAvailable); \
-			"iOSFolder"; $folder.folder("iOS"); \
+			"iosFolder"; $folder.folder("iOS"); \
 			"androidFolder"; $folder.folder("android").folder(PROJECT.product.name); \
 			"isLocked"; editor_Locked; \
 			"openWithXcode"; False:C215; \
@@ -256,25 +256,56 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="openProductFolder")
 				
-				Case of 
-						
-						//……………………………………………………………………………
-					: (PROJECT._buildTarget="ios")
-						
-						SHOW ON DISK:C922($could.productFolder.folder("ios").platformPath)
-						
-						//……………………………………………………………………………
-					: (PROJECT._buildTarget="android")
-						
-						SHOW ON DISK:C922($could.productFolder.folder("android").platformPath)
-						
-						//……………………………………………………………………………
-					Else 
-						
-						SHOW ON DISK:C922($could.productFolder.platformPath)
-						
-						//……………………………………………………………………………
-				End case 
+				If (PROJECT.$android)\
+					 & (PROJECT.$ios)
+					
+					Case of 
+							
+							//……………………………………………………………………………
+						: (String:C10(PROJECT._buildTarget)="ios")\
+							 & ($could.iosFolder.exists)
+							
+							SHOW ON DISK:C922($could.iosFolder.platformPath)
+							
+							//……………………………………………………………………………
+						: (String:C10(PROJECT._buildTarget)="android")\
+							 & ($could.androidFolder.exists)
+							
+							SHOW ON DISK:C922($could.androidFolder.platformPath)
+							
+							//……………………………………………………………………………
+						Else 
+							
+							SHOW ON DISK:C922($could.productFolder.platformPath)
+							
+							//……………………………………………………………………………
+					End case 
+					
+				Else 
+					
+					Case of 
+							
+							//______________________________________________________
+						: (PROJECT.$ios)\
+							 & ($could.iosFolder.exists)
+							
+							SHOW ON DISK:C922($could.iosFolder.platformPath)
+							
+							//______________________________________________________
+						: (PROJECT.$android)\
+							 & ($could.androidFolder.exists)
+							
+							SHOW ON DISK:C922($could.androidFolder.platformPath)
+							
+							//______________________________________________________
+						Else 
+							
+							SHOW ON DISK:C922($could.productFolder.platformPath)
+							
+							//______________________________________________________
+					End case 
+				End if 
+				
 				
 				//______________________________________________________
 			: ($menu.choice="openProjectFolder")

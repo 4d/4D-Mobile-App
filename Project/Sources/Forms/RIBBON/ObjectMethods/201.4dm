@@ -288,6 +288,7 @@ Case of
 				$simctl.setDefaultDevice($menu.choice)
 				
 				PROJECT.$ios:=True:C214
+				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
 				
 				//______________________________________________________
@@ -302,6 +303,7 @@ Case of
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
 				PROJECT.$ios:=True:C214
+				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
 				
 				//______________________________________________________
@@ -315,6 +317,7 @@ Case of
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
 				PROJECT.$android:=True:C214
+				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "android")
 				
 				//______________________________________________________

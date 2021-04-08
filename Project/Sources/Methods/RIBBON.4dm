@@ -246,9 +246,6 @@ Case of
 							
 							If ($device#Null:C1517)
 								
-								//PROJECT._simulator:=$device.udid
-								//PROJECT._buildTarget:="android"
-								
 								androidLimitations(False:C215; "Installation on a real device is coming soon for Android")
 								
 							Else 
@@ -285,10 +282,7 @@ Case of
 									
 								End if 
 								
-								If ($device#Null:C1517) | True:C214
-									
-									//PROJECT._simulator:=$device.udid
-									//PROJECT._buildTarget:="android"
+								If ($device#Null:C1517)
 									
 									androidLimitations(False:C215; "Installation on a real device is coming soon for Android")
 									

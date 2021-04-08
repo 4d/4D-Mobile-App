@@ -33,68 +33,18 @@ Case of
 		
 		If (FEATURE.with("android"))
 			
-			If (Is Windows:C1573)
+			If (PROJECT._simulator#Null:C1517) & (PROJECT._buildTarget#Null:C1517)
 				
-				If (Form:C1466.currentDevice#Null:C1517)
-					
-					$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
-					
-				End if 
-				
-				If ($device#Null:C1517)
-					
-					PROJECT._simulator:=$device.udid
-					PROJECT._buildTarget:="android"
-					CALL SUBFORM CONTAINER:C1086(-151)
-					
-				Else 
-					
-					POST_MESSAGE(New object:C1471(\
-						"target"; Form:C1466.editor.$mainWindow; \
-						"action"; "show"; \
-						"type"; "alert"; \
-						"title"; "youMustFirstSelectASimulator"))
-					
-				End if 
+				CALL SUBFORM CONTAINER:C1086(-151)
 				
 			Else 
 				
-				If (Form:C1466.currentDevice#Null:C1517)
-					
-					$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
-					
-				End if 
+				POST_MESSAGE(New object:C1471(\
+					"target"; Form:C1466.editor.$mainWindow; \
+					"action"; "show"; \
+					"type"; "alert"; \
+					"title"; "youMustFirstSelectASimulator"))
 				
-				If ($device#Null:C1517)
-					
-					PROJECT._simulator:=$device.udid
-					PROJECT._buildTarget:="ios"
-					CALL SUBFORM CONTAINER:C1086(-151)
-					
-				Else 
-					
-					If (Form:C1466.currentDevice#Null:C1517)
-						
-						$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
-						
-					End if 
-					
-					If ($device#Null:C1517)
-						
-						PROJECT._simulator:=$device.udid
-						PROJECT._buildTarget:="android"
-						CALL SUBFORM CONTAINER:C1086(-151)
-						
-					Else 
-						
-						POST_MESSAGE(New object:C1471(\
-							"target"; Form:C1466.editor.$mainWindow; \
-							"action"; "show"; \
-							"type"; "alert"; \
-							"title"; "youMustFirstSelectASimulator"))
-						
-					End if 
-				End if 
 			End if 
 			
 		Else 
