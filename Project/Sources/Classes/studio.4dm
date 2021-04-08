@@ -376,7 +376,7 @@ Function installHAXM()
 	var $folder : 4D:C1709.Folder
 	var $http : cs:C1710.http
 	
-	$file:=This:C1470.sdkFolder().file(".downloadIntermediates/haxm.zip")
+	$file:=This:C1470.sdkFolder().file(Choose:C955(Is macOS:C1572; ".downloadIntermediates"; ".temp")+"/haxm.zip")
 	
 	$http:=cs:C1710.http.new("https://dl.google.com/android/repository/extras/intel/haxm-"+Choose:C955(Is macOS:C1572; "macosx"; "windows")+"_v7_6_5.zip")
 	
@@ -408,13 +408,13 @@ Function installHAXM()
 				
 			Else 
 				
-				This:C1470.launchAsync(This:C1470.singleQuoted($folder.file("HAXM installation").path))
+				OPEN URL:C673($folder.file("haxm-7.6.5-setup.exe").platformPath)
 				
 			End if 
 			
 			If (This:C1470.success)
 				
-				$folder:=This:C1470.sdkFolder().folder(".downloadIntermediates")
+				$folder:=This:C1470.sdkFolder().folder(Choose:C955(Is macOS:C1572; ".downloadIntermediates"; ".temp"))
 				$folder.delete(fk recursive:K87:7)
 				$folder.create()
 				
