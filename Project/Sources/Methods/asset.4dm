@@ -391,7 +391,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									var $source : Text
 									$source:=String:C10($Obj_in.source)
 									
-									If (Test path name:C476($source)=Is a document:K24:1)
+									var $sourceFile : 4D:C1709.File
+									$sourceFile:=File:C1566($source; fk platform path:K87:2)
+									
+									If ($sourceFile.exists)
 										
 										READ PICTURE FILE:C678($source; $Pic_buffer)
 										
@@ -489,9 +492,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									End if 
 									
 									// dark ?
-									$source:=Replace string:C233($source; "."+$Obj_in.format; "$dark."+$Obj_in.format)
+									$source:=Replace string:C233($source; $sourceFile.extension; "$dark"+$sourceFile.extension)
+									$sourceFile:=File:C1566($source; fk platform path:K87:2)
 									
-									If (File:C1566(String:C10($source); fk platform path:K87:2).exists)
+									If ($sourceFile.exists)
 										
 										READ PICTURE FILE:C678($source; $Pic_buffer)
 										
