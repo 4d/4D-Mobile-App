@@ -46,9 +46,9 @@ fun String.fieldAdjustment() = this.condense().replaceSpecialChars().validateWor
 
 private fun String.replaceSpecialChars(): String {
     return if (this.contains("Entities<")) {
-        this.replace("[^a-zA-Z0-9<>]".toRegex(), "_").unaccent()
+        this.replace("[^a-zA-Z0-9._<>]".toRegex(), "_").unaccent()
     } else {
-        this.replace("[^a-zA-Z0-9]".toRegex(), "_").unaccent()
+        this.replace("[^a-zA-Z0-9._]".toRegex(), "_").unaccent()
     }
 }
 
