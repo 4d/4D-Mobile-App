@@ -119,74 +119,74 @@ Function create()->$result : Object
 	
 	If (Not:C34(This:C1470.isOnError))
 		
-		// * GENERATE PROJECT FILES
-		This:C1470.postStep("workspaceCreation")
+		// * UNZIP 4D MOBILE SDK
+		This:C1470.postStep("decompressionOfTheSdk")
 		
-		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
-		
-		// Log outputs
-		This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream))
-		This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream))
+		$o:=This:C1470.androidprojectgenerator.prepareSdk(This:C1470.project.path)
 		
 		If ($o.success)
 			
-			// * GRADLEW ACCESS RIGHTS
-			If (Is macOS:C1572)  // No need to change permissions on Windows
-				
-				$o:=This:C1470.androidprojectgenerator.chmod(This:C1470.project.path)
-				
-			End if 
+			// * GENERATE PROJECT FILES
+			This:C1470.postStep("workspaceCreation")
+			
+			$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
+			
+			// Log outputs
+			This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream))
+			This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream))
 			
 			If ($o.success)
 				
-				// * BUILD EMBEDDED DATA LIBRARY
-				This:C1470.postStep("dataSetGeneration")
-				
-				$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.project.package)
+				// * GRADLEW ACCESS RIGHTS
+				If (Is macOS:C1572)  // No need to change permissions on Windows
+					
+					$o:=This:C1470.androidprojectgenerator.chmod(This:C1470.project.path)
+					
+				End if 
 				
 				If ($o.success)
 					
-					// * COPY EMBEDDED DATA LIBRARY
-					$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib(This:C1470.project.path)
+					// * BUILD EMBEDDED DATA LIBRARY
+					This:C1470.postStep("dataSetGeneration")
+					
+					$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.project.package)
 					
 					If ($o.success)
 						
-						// * CREATE DATASET
-						
-						If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
-							
-							$o:=This:C1470.dataSet()
-							
-							// Else: asked to not generate data at each build
-						End if 
+						// * COPY EMBEDDED DATA LIBRARY
+						$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib(This:C1470.project.path)
 						
 						If ($o.success)
 							
-							// * COPY RESOURCES
-							This:C1470.postStep("copyingResources")
+							// * CREATE DATASET
 							
-							$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
+							If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+								
+								$o:=This:C1470.dataSet()
+								
+								// Else: asked to not generate data at each build
+							End if 
 							
 							If ($o.success)
 								
-								// * COPY ICONS
-								$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.path; This:C1470.project.project.dataModel)
+								// * COPY RESOURCES
+								This:C1470.postStep("copyingResources")
+								
+								$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
 								
 								If ($o.success)
 									
-									If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
-										
-										$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.path; This:C1470.project.project._folder)
-										
-										// Else: asked to not generate data at each build
-									End if 
+									// * COPY ICONS
+									$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.path; This:C1470.project.project.dataModel)
 									
 									If ($o.success)
 										
-										// * UNZIP 4D MOBILE SDK
-										This:C1470.postStep("decompressionOfTheSdk")
-										
-										$o:=This:C1470.androidprojectgenerator.prepareSdk(This:C1470.project.path)
+										If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+											
+											$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.path; This:C1470.project.project._folder)
+											
+											// Else: asked to not generate data at each build
+										End if 
 										
 										If (Not:C34($o.success))
 											
