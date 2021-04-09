@@ -536,6 +536,10 @@ Function request($method : Text; $body)->$this : cs:C1710.http
 	// Test if a newer version of a resource is available
 Function newerRelease($ETag : Text; $lastModified : Text)->$newer : Boolean
 	
+	// Keep current headers
+	var $headers : Collection
+	$headers:=This:C1470.headers.copy()
+	
 	This:C1470.request(HTTP HEAD method:K71:3)
 	
 	If (This:C1470.success)
@@ -574,6 +578,10 @@ Function newerRelease($ETag : Text; $lastModified : Text)->$newer : Boolean
 			End if 
 		End if 
 	End if 
+	
+	// Keep response headers & restore prious ones
+	This:C1470.responseHeaders:=This:C1470.headers.copy()
+	This:C1470.headers:=$headers
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Convert a date-time string (<day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT) as object

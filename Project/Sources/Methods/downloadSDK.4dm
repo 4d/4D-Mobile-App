@@ -84,7 +84,7 @@ If ($fileManifest.exists)
 	If ($run)
 		
 		// Verify the SDK version
-		$o:=$http.headers.query("name = 'x-amz-meta-version'").pop()
+		$o:=$http.responseHeaders.query("name = 'x-amz-meta-version'").pop()
 		
 		If ($o#Null:C1517)
 			
