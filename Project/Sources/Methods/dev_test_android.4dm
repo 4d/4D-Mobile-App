@@ -6,14 +6,19 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
-		var $studio : cs:C1710.studio
-		$studio:=cs:C1710.studio.new()
-		$studio.installLatestCommandLineTools()
+		cs:C1710.studio.new().uninstall()
 		
 		//______________________________________________________
 	: (True:C214)
 		
-		downloadSDK("android")
+		downloadSDK("aws"; "android")
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		var $studio : cs:C1710.studio
+		$studio:=cs:C1710.studio.new()
+		$studio.installLatestCommandLineTools()
 		
 		//______________________________________________________
 	: (True:C214)

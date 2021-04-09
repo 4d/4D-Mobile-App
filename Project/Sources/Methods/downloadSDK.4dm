@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true}
 // -> silent  =   No interface for progression
 // -> force   =   Force the download even if the file is up to date (see verification code)
-#DECLARE($target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)
+#DECLARE($server : Text; $target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)
 
 var $applicationVersion : Text
 var $run; $withUI : Boolean
@@ -14,7 +14,7 @@ var $error : cs:C1710.error
 var $http : cs:C1710.http
 var $progress : cs:C1710.progress
 
-ASSERT:C1129(Count parameters:C259>=1)
+ASSERT:C1129(Count parameters:C259>=2)
 
 Case of 
 		
@@ -38,6 +38,16 @@ End case
 
 RECORD.verbose:=DATABASE.isMatrix
 
+$withUI:=True:C214
+
+If (Count parameters:C259>=3)
+	
+	$withUI:=Not:C34($silent)
+	
+End if 
+
+$run:=True:C214
+
 Case of 
 		
 		//______________________________________________________
@@ -53,152 +63,248 @@ Case of
 		//______________________________________________________
 	Else 
 		
-		RECORD.error("Uknown SDK target")
+		$run:=False:C215
+		RECORD.error("Uknown SDK target: "+$target)
 		
 		//______________________________________________________
 End case 
 
-$withUI:=True:C214
-
-If (Count parameters:C259>=2)
-	
-	$withUI:=Not:C34($silent)
-	
-End if 
-
-$applicationVersion:=Application version:C493($buildNumber; *)
-
-$http:=cs:C1710.http.new("https://resources-download.4d.com/sdk/"\
-+Choose:C955($applicationVersion[[1]]="A"; "main"; Delete string:C232($applicationVersion; 1; 4))+"/"\
-+String:C10($buildNumber)+"/"\
-+$target+"/"+$target+".zip").setResponseType(Is a document:K24:1; $sdk)
-
-$fileManifest:=$sdk.parent.file("manifest.json")
-
-If ($fileManifest.exists)
-	
-	$manifest:=JSON Parse:C1218($fileManifest.getText())
-	
-	$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
-	
-	If ($run)
+Case of 
 		
-		// Verify the SDK version
-		$o:=$http.responseHeaders.query("name = 'x-amz-meta-version'").pop()
+		//______________________________________________________
+	: (Not:C34($run))
 		
-		If ($o#Null:C1517)
+		// <NOTHING MORE TO DO>
+		
+		//______________________________________________________
+	: ($server="aws")
+		
+		$applicationVersion:=Application version:C493($buildNumber; *)
+		
+		//$buildNumber:=264302  // Force build number for test purpose
+		
+		var $url : Text
+		$url:="https://resources-download.4d.com/sdk/"\
+			+Choose:C955($applicationVersion[[1]]="A"; "main"; Delete string:C232($applicationVersion; 1; 4))+"/"\
+			+String:C10($buildNumber)+"/"\
+			+$target+"/"+$target+".zip"
+		
+		//______________________________________________________
+	: ($server="TeamCity")
+		
+		var $preferences : 4D:C1709.File
+		$preferences:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+		
+		If ($preferences.exists)
 			
-			$file:=cs:C1710.path.new().cacheSdkAndroidUnzipped().file("sdkVersion")
+			$o:=JSON Parse:C1218($preferences.getText())
 			
-			If ($file.exists)
+			If ($o.tc#Null:C1517)
 				
-				$run:=Split string:C1554($file.getText(); "\r")[0]#$o.value
-				
+				Case of 
+						
+						//______________________________________________________
+					: ($target="android")
+						
+						$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip"
+						
+						//______________________________________________________
+					: ($target="ios")
+						
+						$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_iOS_Sdk_Build/.lastSuccessful/ios.zip"
+						
+						//______________________________________________________
+					Else 
+						
+						$run:=False:C215
+						RECORD.error("Uknown SDK target: "+$target)
+						
+						//______________________________________________________
+				End case 
 			End if 
 		End if 
-	End if 
-	
-	If (Count parameters:C259>=4)
 		
-		$run:=$run | $force
+		//______________________________________________________
+	Else 
 		
-	End if 
-	
-Else 
-	
-	$run:=True:C214
-	
-End if 
+		$run:=False:C215
+		RECORD.error("Unknown server: "+$server)
+		
+		//______________________________________________________
+End case 
 
 If ($run)
 	
-	If ($withUI)
+	$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
+	
+	$fileManifest:=$sdk.parent.file("manifest.json")
+	
+	If ($fileManifest.exists)
 		
-		$progress:=cs:C1710.progress.new("downloadInProgress")\
-			.setMessage(Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; Choose:C955($target="android"; "Android"; "iOS"))).bringToFront()
+		$manifest:=JSON Parse:C1218($fileManifest.getText())
 		
+		$run:=Not:C34(Bool:C1537($manifest.noUpdate))
+		
+		If ($run)
+			
+			$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
+			$run:=$run & ($http.status=200)
+			
+			If ($run)
+				
+				If ($server="aws")
+					
+					// Verify the SDK version
+					$o:=$http.responseHeaders.query("name = 'x-amz-meta-version'").pop()
+					
+					If ($o#Null:C1517)
+						
+						$file:=cs:C1710.path.new().cacheSdkAndroidUnzipped().file("sdkVersion")
+						
+						If ($file.exists)
+							
+							$run:=Split string:C1554($file.getText(); "\r")[0]#$o.value
+							
+						End if 
+					End if 
+				End if 
+			End if 
+			
+			If (Count parameters:C259>=5)
+				
+				$run:=$run | $force
+				
+			End if 
+			
+		Else 
+			
+			$http.status:=8858
+			
+		End if 
 	End if 
 	
-	$http.get()
-	
-	If ($http.success)
-		
-		// Delete the old SDK folder, if any
-		$o:=$sdk.parent.folder("sdk")
-		
-		If ($o.exists)
+	Case of 
 			
-			$o.delete(Delete with contents:K24:24)
+			//______________________________________________________
+		: ($run)
 			
-		End if 
-		
-		// Extract all files
-		If ($withUI)
+			If ($withUI)
+				
+				$progress:=cs:C1710.progress.new("downloadInProgress")\
+					.setMessage(Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; Choose:C955($target="android"; "Android"; "iOS"))).bringToFront()
+				
+			End if 
 			
-			$progress.setMessage("unzipping")
+			$http.get()
 			
-		End if 
-		
+			If ($http.success)
+				
+				// Delete the old SDK folder, if any
+				$o:=$sdk.parent.folder("sdk")
+				
+				If ($o.exists)
+					
+					$o.delete(Delete with contents:K24:24)
+					
+				End if 
+				
+				// Extract all files
+				If ($withUI)
+					
+					$progress.setMessage("unzipping")
+					
+				End if 
+				
 /* START HIDING ERRORS */
-		$error:=cs:C1710.error.new()
-		$error.hide()
-		
-		$folder:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
-		
+				$error:=cs:C1710.error.new()
+				$error.hide()
+				
+				$folder:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
+				
 /* STOP HIDING ERRORS */
-		$error.show()
-		
-		If ($folder.exists)
-			
-			$manifest:=New object:C1471
-			
-			For each ($o; $http.headers)
+				$error.show()
 				
-				$manifest[$o.name]:=$o.value
+				If ($folder.exists)
+					
+					ARRAY LONGINT:C221($pos; 0x0000)
+					ARRAY LONGINT:C221($len; 0x0000)
+					If (Match regex:C1019("(?mi-s)^(https?://)[^@]*@(.*)$"; $http.url; 1; $pos; $len))
+						
+						$http.url:=Substring:C12($http.url; $pos{1}; $len{1})+Substring:C12($http.url; $pos{2}; $len{2})
+						
+					End if 
+					
+					$manifest:=New object:C1471(\
+						"source"; $server; \
+						"url"; $http.url; \
+						"version"; "unknown")
+					
+					If ($folder.file("sdkVersion").exists)
+						
+						$manifest.version:=Replace string:C233($folder.file("sdkVersion").getText(); "\r"; "")
+						
+					End if 
+					
+					For each ($o; $http.headers)
+						
+						$manifest[$o.name]:=$o.value
+						
+					End for each 
+					
+					$fileManifest.setText(JSON Stringify:C1217($manifest; *))
+					
+					RECORD.info("Update the 4D Mobile "+$target+" SDK version "+$manifest.version)
+					
+				Else 
+					
+					RECORD.warning("Failed to unarchive "+$sdk.path)
+					
+				End if 
 				
-			End for each 
+			Else 
+				
+				RECORD.warning($http.url+": "+$http.lastError)
+				
+			End if 
 			
-			$fileManifest.setText(JSON Stringify:C1217($manifest; *))
+			If ($withUI)
+				
+				$progress.close()
+				
+			End if 
 			
-			RECORD.info("Update the 4D Mobile "+$target+" SDK version "+$manifest["x-amz-meta-version"])
+			//______________________________________________________
+		: ($http.status=8858)
 			
+			RECORD.warning("The update of 4D Mobile "+$target+" SDK is locked")
+			
+			//______________________________________________________
+		: ($http.status=200)
+			
+			If ($withUI)
+				
+				If (Count parameters:C259>=4)
+					
+					POST_MESSAGE(New object:C1471(\
+						"action"; "show"; \
+						"target"; $caller; \
+						"type"; "alert"; \
+						"additional"; Replace string:C233(Get localized string:C991("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose:C955($target="android"; "Android"; "iOS"))))
+					
+				Else 
+					
+					ALERT:C41(Replace string:C233(Get localized string:C991("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose:C955($target="android"; "Android"; "iOS")))
+					
+				End if 
+			End if 
+			
+			RECORD.info("The 4D Mobile "+$target+" SDK is up to date")
+			
+			//______________________________________________________
 		Else 
 			
-			RECORD.warning("Failed to unarchive "+$sdk.path)
+			RECORD.error($http.url+": "+$http.lastError)
 			
-		End if 
-		
-	Else 
-		
-		RECORD.warning($http.url+": "+$http.errors.join("\r"))
-		
-	End if 
-	
-	If ($withUI)
-		
-		$progress.close()
-		
-	End if 
-	
-Else 
-	
-	If ($withUI)
-		
-		If (Count parameters:C259>=3)
-			
-			POST_MESSAGE(New object:C1471(\
-				"action"; "show"; \
-				"target"; $caller; \
-				"type"; "alert"; \
-				"additional"; Replace string:C233(Get localized string:C991("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose:C955($target="android"; "Android"; "iOS"))))
-			
-		Else 
-			
-			ALERT:C41(Replace string:C233(Get localized string:C991("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose:C955($target="android"; "Android"; "iOS")))
-			
-		End if 
-	End if 
-	
-	RECORD.info("The 4D Mobile "+$target+" SDK is up to date")
-	
+			//______________________________________________________
+	End case 
 End if 

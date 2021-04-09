@@ -524,24 +524,25 @@ Function _getKotlinc()
 	// Uninstall Android Studio and all associated files and folders (try to virginize the machine)
 Function uninstall()
 	
-	var $cmd; $path : Text
+	var $cmd; $path; $t : Text
+	var $c : Collection
 	var $file : 4D:C1709.File
-	var $folder; $library : 4D:C1709.Folder
+	var $folder; $userLibrary : 4D:C1709.Folder
 	
 	If (Is macOS:C1572)
 		
 		// *QUIT APPLICATION
-		$cmd:="/usr/bin/osascript"
-		$cmd:=$cmd+" -e 'if application \"Android Studio\" is running then'"
-		$cmd:=$cmd+" -e 'tell application \"Android Studio\"'"
-		$cmd:=$cmd+" -e ' activate'"
-		$cmd:=$cmd+" -e 'quit'"
-		$cmd:=$cmd+" -e 'end tell'"
-		$cmd:=$cmd+" -e 'end if'"
+		$cmd:="/usr/bin/osascript"\
+			+" -e 'if application \"Android Studio\" is running then'"\
+			+" -e ' tell application \"Android Studio\"'"\
+			+" -e '  activate'"\
+			+" -e '  quit'"\
+			+" -e ' end tell'"\
+			+" -e 'end if'"
 		
-		LAUNCH EXTERNAL PROCESS:C811($cmd)
+		This:C1470.launch($cmd)
 		
-		$library:=This:C1470.home.folder("Library")
+		$userLibrary:=This:C1470.home.folder("Library")
 		
 		// *REMOVE RELATED FOLDERS
 		For each ($path; New collection:C1472(\
@@ -553,7 +554,12 @@ Function uninstall()
 			
 			If ($path="@*")  // Depends on version
 				
-				For each ($folder; $library.folder(Split string:C1554($path; "/").remove(-1).join("/")).folders().query("name = AndroidStudio@"))
+				$c:=Split string:C1554($path; "/")
+				
+				// Keep the lats item
+				$t:=Replace string:C233($c[$c.length-1]; "*"; "@")
+				
+				For each ($folder; $userLibrary.folder($c.remove(-1).join("/")).folders().query("name = :1"; $t))
 					
 					$folder.delete(fk recursive:K87:7)
 					
@@ -561,7 +567,7 @@ Function uninstall()
 				
 			Else 
 				
-				$folder:=$library.folder($path)
+				$folder:=$userLibrary.folder($path)
 				
 				If ($folder.exists)
 					
@@ -584,15 +590,20 @@ Function uninstall()
 			End if 
 		End for each 
 		
-		
 		// *REMOVE RELATED FILES
-		$file:=$library.file("Preferences/com.google.android.studio.plist")
+		$folder:=$userLibrary.folder("Preferences")
 		
-		If ($file.exists)
+		For each ($path; New collection:C1472("com.google.android.studio.plist"; \
+			"com.android.Emulator.plist"))
 			
-			$file.delete()
+			$file:=$folder.file($path)
 			
-		End if 
+			If ($file.exists)
+				
+				$file.delete()
+				
+			End if 
+		End for each 
 		
 		For each ($file; Folder:C1567("/Library/Logs/DiagnosticReports").files().query("name = studio_@ & extension = .diag"))
 			

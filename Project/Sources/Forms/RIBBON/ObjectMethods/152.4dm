@@ -6,8 +6,9 @@
 // Declarations
 var $pathName; $t : Text
 var $bottom; $left; $right; $top : Integer
-var $could; $device; $e; $menu; $menuApp; $o; $project : Object
+var $could; $device; $e; $menuApp; $o; $project : Object
 var $folder; $sdkCacheFolder : 4D:C1709.Folder
+var $menu : cs:C1710.menu
 var $path : cs:C1710.path
 var $simctl : cs:C1710.simctl
 var $Xcode : cs:C1710.Xcode
@@ -174,10 +175,31 @@ Case of
 				
 				$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "Android"); "downloadAndroidSdk")
 				
+				$o:=cs:C1710.path.new().cacheSdkAndroid().parent.file("manifest.json")
+				
+				If ($o.exists)
+					
+					If (Bool:C1537(JSON Parse:C1218($o.getText()).noUpdate))
+						
+						$menu.icon("Images/light_off.png")
+						
+					End if 
+				End if 
+				
 				If (Is macOS:C1572)
 					
 					$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "iOS"); "downloadIosSdk")
 					
+					$o:=cs:C1710.path.new().cacheSdkApple().parent.file("manifest.json")
+					
+					If ($o.exists)
+						
+						If (Bool:C1537(JSON Parse:C1218($o.getText()).noUpdate))
+							
+							$menu.icon("Images/light_off.png")
+							
+						End if 
+					End if 
 				End if 
 			End if 
 			
@@ -318,20 +340,26 @@ Case of
 				
 				$t:=Choose:C955($menu.choice="downloadAndroidSdk"; "android"; "ios")
 				
-				If ((Application version:C493(*)="A@") & Shift down:C543)
+				var $fromTeamCity : Boolean
+				
+				If (Shift down:C543)
 					
-					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDKFromTeamCity"; $t; False:C215; Form:C1466.editor.$mainWindow)  //; True)
+					If (Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").exists)
+						
+						$fromTeamCity:=(JSON Parse:C1218(Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").getText()).tc#Null:C1517)
+						
+					End if 
+				End if 
+				
+				If ($fromTeamCity)
+					
+					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; "TeamCity"; $t; False:C215; Form:C1466.editor.$mainWindow)
 					
 				Else 
 					
-					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; $t; False:C215; Form:C1466.editor.$mainWindow; Shift down:C543)
+					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; "aws"; $t; False:C215; Form:C1466.editor.$mainWindow)
 					
 				End if 
-				
-				//______________________________________________________
-			: ($menu.choice="downloadAndroidSdkFromTeamCity")
-				
-				CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDKFromTeamCity"; "android"; False:C215; Form:C1466.editor.$mainWindow; True:C214)
 				
 				//______________________________________________________
 			: ($menu.choice="openWithXcode")  // Open a file of project in xcode

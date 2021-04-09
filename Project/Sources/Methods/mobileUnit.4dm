@@ -111,8 +111,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				"error"; "Missing object parameter")
 			
 			//______________________________________________________
-		: ($entryPoint="downloadSDK")\
-			 | ($entryPoint="downloadSDKFromTeamCity")
+		: ($entryPoint="downloadSDK")
 			
 			$t:=String:C10($parameters.target)
 			
@@ -165,7 +164,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					
 					$o.parent.delete(Delete with contents:K24:24)
 					
-					EXECUTE METHOD:C1007($entryPoint; *; $t; True:C214)
+					EXECUTE METHOD:C1007($entryPoint; *; "aws"; $t; True:C214)
 					
 					If ($o.exists)
 						

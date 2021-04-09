@@ -465,7 +465,6 @@
 			"dataModel",
 			"dataSet",
 			"downloadSDK",
-			"downloadSDKFromTeamCity",
 			"dump",
 			"findFirstPathComponentInCatalog",
 			"formatString",
@@ -476,6 +475,7 @@
 			"Rest",
 			"sdk",
 			"template",
+			"unit4D",
 			"unzip",
 			"xloc"
 		],
