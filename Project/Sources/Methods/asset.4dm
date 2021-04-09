@@ -187,6 +187,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							$File_source:=$Dir_source+$Obj_[$Txt_buffer]
 							
+							
+							var $isTemplate : Boolean
+							$isTemplate:=False:C215
+							Case of 
+								: (Value type:C1509($Obj_formatter.assets.template)=Is boolean:K8:9)
+									$isTemplate:=Bool:C1537($Obj_formatter.assets.template)
+								: (Value type:C1509($Obj_formatter.assets.template)=Is collection:K8:32)
+									$isTemplate:=$Obj_formatter.assets.template.indexOf(String:C10($Txt_value))>-1
+							End case 
+							
 							$Obj_buffer:=asset(New object:C1471(\
 								"action"; "create"; \
 								"type"; "imageset"; \
@@ -194,6 +204,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								"tags"; New object:C1471("name"; $Txt_value); \
 								"target"; $Obj_in.target+$Obj_formatter.name+Folder separator:K24:12; \
 								"format"; $Obj_formatter.assets.format; \
+								"template"; $isTemplate; \
 								"size"; $Obj_formatter.assets.size))
 							
 							ob_error_combine($Obj_out; $Obj_buffer)
@@ -358,7 +369,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							$Txt_buffer:=Process_tags($Obj_template.contents; $Obj_in.tags; New collection:C1472("filename"))
 							
-							$Obj_:=ob_parseDocument($Obj_in.target+$Txt_buffer+Folder separator:K24:12+"Contents.json").value
+							var $contentsFile : 4D:C1709.File
+							$contentsFile:=File:C1566($Obj_in.target+$Txt_buffer+Folder separator:K24:12+"Contents.json"; fk platform path:K87:2)
+							$Obj_:=ob_parseFile($contentsFile).value
+							
+							If (Bool:C1537($Obj_in.template))
+								If ($Obj_.properties=Null:C1517)
+									$Obj_.properties:=New object:C1471()
+								End if 
+								$Obj_.properties["template-rendering-intent"]:="template"
+							End if 
 							
 							Case of 
 									
@@ -368,11 +388,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									$Obj_out.errors:=New collection:C1472
 									
 									// Read source file (XXX here source is String; later could have object or collection if image is already scaled)
-									If (Test path name:C476(String:C10($Obj_in.source))=Is a document:K24:1)
+									var $source : Text
+									$source:=String:C10($Obj_in.source)
+									
+									If (Test path name:C476($source)=Is a document:K24:1)
 										
-										READ PICTURE FILE:C678($Obj_in.source; $Pic_buffer)
+										READ PICTURE FILE:C678($source; $Pic_buffer)
 										
-										If ($Obj_in.size=Null:C1517)
+										If ($Obj_in.size=Null:C1517)  // if no size, take from picture
 											
 											PICTURE PROPERTIES:C457($Pic_buffer; $Lon_width; $Lon_height)
 											
@@ -386,6 +409,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 											
 											// Create file for each defined file
 											For each ($Obj_image; $Obj_.images)
+												
+												$Obj_image.filename:=cs:C1710.str.new($Obj_image.filename).unaccented()  // ACI0101846
 												
 												$Lon_scale:=1
 												
@@ -463,6 +488,106 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 										
 									End if 
 									
+									// dark ?
+									$source:=Replace string:C233($source; "."+$Obj_in.format; "$dark."+$Obj_in.format)
+									
+									If (File:C1566(String:C10($source); fk platform path:K87:2).exists)
+										
+										READ PICTURE FILE:C678($source; $Pic_buffer)
+										
+										If ($Obj_in.size=Null:C1517)  // if no size, take from picture
+											
+											PICTURE PROPERTIES:C457($Pic_buffer; $Lon_width; $Lon_height)
+											
+											$Obj_in.size:=New object:C1471(\
+												"width"; $Lon_width; \
+												"height"; $Lon_height)
+											
+										End if 
+										
+										If (OK=1)
+											
+											// Create file for each defined file
+											For each ($Obj_image; $Obj_.images)
+												$Obj_image:=OB Copy:C1225($Obj_image)
+												$Obj_image.filename:=cs:C1710.str.new($Obj_image.filename).unaccented()
+												$Obj_image.filename:=Replace string:C233($Obj_image.filename; "."+$Obj_in.format; "$dark."+$Obj_in.format)
+												$Obj_image.appearances:=New collection:C1472(New object:C1471("appearance"; "luminosity"; "value"; "dark"))
+												
+												$Obj_.images.push($Obj_image)
+												
+												$Lon_scale:=1
+												
+												// Read potential scale factor
+												If (Length:C16(String:C10($Obj_image.scale))#0)
+													
+													$Lon_scale:=Num:C11(String:C10($Obj_image.scale))
+													
+												End if 
+												
+												If (Value type:C1509($Obj_in.size)=Is object:K8:27)
+													
+													$Lon_width:=$Obj_in.size.width
+													$Lon_height:=$Obj_in.size.height
+													
+												Else   // suppose single num
+													
+													$Lon_width:=$Obj_in.size
+													$Lon_height:=$Obj_in.size
+													
+												End if 
+												
+												// Check if there is specific size for idiom, subtype of scale
+												Case of 
+														
+														//…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+													: (Value type:C1509($Obj_in.sizes[$Obj_image.idiom+String:C10($Obj_image.subtype)+$Obj_image.scale])=Is object:K8:27)
+														
+														$Lon_width:=$Obj_in.sizes[$Obj_image.idiom+String:C10($Obj_image.subtype)+$Obj_image.scale].width
+														$Lon_height:=$Obj_in.sizes[$Obj_image.idiom+String:C10($Obj_image.subtype)+$Obj_image.scale].height
+														
+														//…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+													: (Value type:C1509($Obj_in.sizes[$Obj_image.idiom])=Is object:K8:27)
+														
+														$Lon_width:=$Obj_in.sizes[$Obj_image.idiom].width*$Lon_scale
+														$Lon_height:=$Obj_in.sizes[$Obj_image.idiom].height*$Lon_scale
+														
+														//…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+													Else 
+														
+														$Lon_width:=$Lon_width*$Lon_scale
+														$Lon_height:=$Lon_height*$Lon_scale
+														
+														//…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+												End case 
+												
+												CREATE THUMBNAIL:C679($Pic_buffer; $Pic_icon; $Lon_width; $Lon_height; Scaled to fit:K6:2)  // XXX Scaled to fit prop centered?
+												
+												If (OK=1)
+													
+													WRITE PICTURE FILE:C680($Obj_in.target+$Txt_buffer+Folder separator:K24:12+$Obj_image.filename; $Pic_icon; "."+$Obj_in.format)
+													
+													If (OK=0)
+														
+														$Obj_out.errors.push("Failed to write picture "+$Obj_in.target+$Txt_buffer+Folder separator:K24:12+$Obj_image.filename+", created from "+$Obj_in.source+" with format ."+$Obj_in.format)
+														
+													End if 
+													
+												Else 
+													
+													$Obj_out.errors.push("Failed to create thumbnail for "+$Obj_in.source+" with size "+JSON Stringify:C1217($Obj_in.size)+" and scale "+$Lon_scale)
+													
+												End if 
+											End for each 
+											
+										Else 
+											
+											$Obj_out.errors.push("Failed to read picture "+$Obj_in.source)
+											
+										End if 
+										
+									End if 
+									
 									// reset errors if no error
 									If ($Obj_out.errors.length=0)
 										
@@ -473,6 +598,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 										$Obj_out.success:=False:C215
 										
 									End if 
+									
+									$contentsFile.setText(JSON Stringify:C1217($Obj_; *); "UTF-8"; Document with LF:K24:22)
 									
 									//………………………………………………………………………
 								: ($Obj_.colors#Null:C1517)
