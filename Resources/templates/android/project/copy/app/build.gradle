@@ -18,7 +18,6 @@ dependencies {
     implementation(QMobileDataSync) { changing = true }
     implementation(QMobileUI) { changing = true }
 
-
     // Common
     implementation Libs.androidx_constraintlayout
     implementation Libs.kotlin_reflect
