@@ -101,7 +101,7 @@ If (Form:C1466.pages[$l]=Null:C1517) | Shift down:C543
 				.highlightShortcut()\
 				.disable()\
 				.setHelpTip("Click on \"Execute\" to activate me")\
-				.setCallback(Formula:C1597(ALERT:C41("You have clicked on me."+"\rMy name is: "+This:C1470.name+"\rMy title is: "+This:C1470.getTitle()+"\r\rNow, click again to see...")))
+				.setCallback(Formula:C1597(ALERT:C41("You have clicked on me."+"\rMy name is: "+This:C1470.name+"\rMy title is: "+This:C1470.title()+"\r\rNow, click again to see...")))
 			
 			//=========================================
 			//  Keep coordinates for the reset button

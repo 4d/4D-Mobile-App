@@ -121,7 +121,21 @@ Case of
 						
 						//______________________________________________________
 				End case 
+				
+			Else 
+				
+				$run:=False:C215
+				ALERT:C41("You must add \"tc\" key with user:pass in 4d.mobile")
+				SHOW ON DISK:C922($preferences.platformPath)
+				
 			End if 
+			
+		Else 
+			
+			$run:=False:C215
+			ALERT:C41("You must add \"tc\" key with user:pass in 4d.mobile")
+			SHOW ON DISK:C922($preferences.platformPath)
+			
 		End if 
 		
 		//______________________________________________________
@@ -146,6 +160,12 @@ If ($run)
 		$run:=Not:C34(Bool:C1537($manifest.noUpdate))
 		
 		If ($run)
+			
+			If ($run)
+				
+				$run:=Num:C11($manifest.build)<$buildNumber
+				
+			End if 
 			
 			$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
 			$run:=$run & ($http.status=200)
@@ -237,7 +257,8 @@ If ($run)
 					$manifest:=New object:C1471(\
 						"source"; $server; \
 						"url"; $http.url; \
-						"version"; "unknown")
+						"version"; "unknown"; \
+						"build"; 0)
 					
 					If ($folder.file("sdkVersion").exists)
 						
@@ -249,6 +270,11 @@ If ($run)
 						
 						$manifest[$o.name]:=$o.value
 						
+						If ($o.name="x-amz-meta-build")
+							
+							$manifest.build:=Num:C11($o.value)
+							
+						End if 
 					End for each 
 					
 					$fileManifest.setText(JSON Stringify:C1217($manifest; *))

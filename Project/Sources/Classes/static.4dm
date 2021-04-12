@@ -47,7 +47,7 @@ Function show($state : Boolean)->$this : cs:C1710.static
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function getVisible()->$visible : Boolean
+Function isVisible()->$visible : Boolean
 	
 	$visible:=OBJECT Get visible:C1075(*; This:C1470.name)
 	
@@ -72,6 +72,11 @@ Function disable()->$this : cs:C1710.static
 	OBJECT SET ENABLED:C1123(*; This:C1470.name; False:C215)
 	
 	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function isEnabled()->$visible : Boolean
+	
+	$visible:=OBJECT Get enabled:C1079(*; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function setTitle($title : Text)->$this : cs:C1710.static
@@ -102,7 +107,7 @@ Function setTitle($title : Text)->$this : cs:C1710.static
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function getTitle()->$title : Text
+Function title()->$title : Text
 	
 	$title:=OBJECT Get title:C1068(*; This:C1470.name)
 	

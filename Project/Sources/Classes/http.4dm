@@ -802,21 +802,19 @@ Function _computeParameters($params)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _errorCodeMessage($errorCode : Integer)->$message : Text
 	
-	If (This:C1470.errorMessages=Null:C1517)  // First call
-		
-		This:C1470.errorMessages:=New collection:C1472
-		
-		This:C1470.errorMessages[2]:="HTTP server not reachable"
-		This:C1470.errorMessages[17]:="HTTP server not reachable (timeout?)"
-		This:C1470.errorMessages[30]:="HTTP server not reachable"
-		
-	End if 
+	var $errorMessages : Collection
+	$errorMessages:=New collection:C1472
+	
+	$errorMessages[2]:="HTTP server not reachable"
+	$errorMessages[17]:="HTTP server not reachable (timeout?)"
+	$errorMessages[30]:="HTTP server not reachable"
+	
 	
 	If (Count parameters:C259>=1)
 		
-		If ($errorCode<This:C1470.errorMessages.length)
+		If ($errorCode<$errorMessages.length)
 			
-			$message:=String:C10(This:C1470.errorMessages[$errorCode])
+			$message:=String:C10($errorMessages[$errorCode])
 			
 		End if 
 		
@@ -840,90 +838,87 @@ Function _errorCodeMessage($errorCode : Integer)->$message : Text
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _statusCodeMessage($statusCode : Integer)->$message : Text
 	
-	If (This:C1470._statusMessages=Null:C1517)  // First call
-		
-		This:C1470._statusMessages:=New collection:C1472
-		
-		// 1xx Informational response
-		
-		// 2xx Successful
-		This:C1470._statusMessages[200]:="OK"
-		This:C1470._statusMessages[201]:="Created"
-		This:C1470._statusMessages[202]:="Accepted"
-		This:C1470._statusMessages[203]:="Non-Authoritative Information"
-		This:C1470._statusMessages[204]:="No Content"
-		This:C1470._statusMessages[205]:="Reset Content"
-		This:C1470._statusMessages[206]:="Partial Content"
-		This:C1470._statusMessages[207]:="Multi-Status"
-		This:C1470._statusMessages[208]:="Already Reported"
-		
-		This:C1470._statusMessages[226]:="IM Used"
-		
-		// 3xx Redirection
-		
-		// 4xx Client errors
-		This:C1470._statusMessages[400]:="Bad Request"
-		This:C1470._statusMessages[401]:="Unauthorized"
-		This:C1470._statusMessages[402]:="Payment Required"
-		This:C1470._statusMessages[403]:="Forbidden"
-		This:C1470._statusMessages[404]:="Not Found"
-		This:C1470._statusMessages[405]:="Method Not Allowed"
-		This:C1470._statusMessages[406]:="Not Acceptable"
-		This:C1470._statusMessages[407]:="Proxy Authentication Required"
-		This:C1470._statusMessages[408]:="Request Timeout"
-		This:C1470._statusMessages[409]:="Conflict"
-		This:C1470._statusMessages[410]:="Gone"
-		This:C1470._statusMessages[411]:="Length Required"
-		This:C1470._statusMessages[412]:="Precondition Failed"
-		This:C1470._statusMessages[413]:="Payload Too Large"
-		This:C1470._statusMessages[414]:="URI Too Long"
-		This:C1470._statusMessages[415]:="Unsupported Media Type"
-		This:C1470._statusMessages[416]:="Range Not Satisfiable"
-		This:C1470._statusMessages[417]:="Expectation Failed"
-		This:C1470._statusMessages[418]:="I'm a teapot ;-)"
-		
-		This:C1470._statusMessages[421]:="Misdirected Request"
-		This:C1470._statusMessages[422]:="Unprocessable Entity"
-		This:C1470._statusMessages[423]:="Locked"
-		This:C1470._statusMessages[424]:="Method failure"
-		This:C1470._statusMessages[425]:="Unordered Collection"
-		This:C1470._statusMessages[426]:="Upgrade Required"
-		
-		This:C1470._statusMessages[428]:="Precondition Required"
-		This:C1470._statusMessages[429]:="Too Many Requests"
-		
-		This:C1470._statusMessages[431]:="Request Header Fields Too Large"
-		
-		This:C1470._statusMessages[440]:="Login Time-out"
-		
-		This:C1470._statusMessages[449]:="Retry With"
-		This:C1470._statusMessages[450]:="Blocked by Windows Parental Controls"
-		
-		This:C1470._statusMessages[451]:="Unavailable For Legal Reasons"
-		
-		This:C1470._statusMessages[456]:="Unrecoverable Error"
-		
-		// 5xx Server errors
-		This:C1470._statusMessages[500]:="Internal Server Error"
-		This:C1470._statusMessages[501]:="Not Implemented"
-		This:C1470._statusMessages[502]:="Bad Gateway"
-		This:C1470._statusMessages[503]:="Service Unavailable"
-		This:C1470._statusMessages[504]:="Gateway Timeout"
-		This:C1470._statusMessages[505]:="HTTP Version Not Supported"
-		This:C1470._statusMessages[506]:="Variant Also Negotiates"
-		This:C1470._statusMessages[507]:="Insufficient Storage"
-		This:C1470._statusMessages[508]:="Loop Detected"
-		
-		This:C1470._statusMessages[510]:="Not Extended"
-		This:C1470._statusMessages[511]:="Network Authentication Required"
-		
-	End if 
+	var $statusMessages : Collection
+	$statusMessages:=New collection:C1472
+	
+	// 1xx Informational response
+	
+	// 2xx Successful
+	$statusMessages[200]:="OK"
+	$statusMessages[201]:="Created"
+	$statusMessages[202]:="Accepted"
+	$statusMessages[203]:="Non-Authoritative Information"
+	$statusMessages[204]:="No Content"
+	$statusMessages[205]:="Reset Content"
+	$statusMessages[206]:="Partial Content"
+	$statusMessages[207]:="Multi-Status"
+	$statusMessages[208]:="Already Reported"
+	
+	$statusMessages[226]:="IM Used"
+	
+	// 3xx Redirection
+	
+	// 4xx Client errors
+	$statusMessages[400]:="Bad Request"
+	$statusMessages[401]:="Unauthorized"
+	$statusMessages[402]:="Payment Required"
+	$statusMessages[403]:="Forbidden"
+	$statusMessages[404]:="Not Found"
+	$statusMessages[405]:="Method Not Allowed"
+	$statusMessages[406]:="Not Acceptable"
+	$statusMessages[407]:="Proxy Authentication Required"
+	$statusMessages[408]:="Request Timeout"
+	$statusMessages[409]:="Conflict"
+	$statusMessages[410]:="Gone"
+	$statusMessages[411]:="Length Required"
+	$statusMessages[412]:="Precondition Failed"
+	$statusMessages[413]:="Payload Too Large"
+	$statusMessages[414]:="URI Too Long"
+	$statusMessages[415]:="Unsupported Media Type"
+	$statusMessages[416]:="Range Not Satisfiable"
+	$statusMessages[417]:="Expectation Failed"
+	$statusMessages[418]:="I'm a teapot ;-)"
+	
+	$statusMessages[421]:="Misdirected Request"
+	$statusMessages[422]:="Unprocessable Entity"
+	$statusMessages[423]:="Locked"
+	$statusMessages[424]:="Method failure"
+	$statusMessages[425]:="Unordered Collection"
+	$statusMessages[426]:="Upgrade Required"
+	
+	$statusMessages[428]:="Precondition Required"
+	$statusMessages[429]:="Too Many Requests"
+	
+	$statusMessages[431]:="Request Header Fields Too Large"
+	
+	$statusMessages[440]:="Login Time-out"
+	
+	$statusMessages[449]:="Retry With"
+	$statusMessages[450]:="Blocked by Windows Parental Controls"
+	
+	$statusMessages[451]:="Unavailable For Legal Reasons"
+	
+	$statusMessages[456]:="Unrecoverable Error"
+	
+	// 5xx Server errors
+	$statusMessages[500]:="Internal Server Error"
+	$statusMessages[501]:="Not Implemented"
+	$statusMessages[502]:="Bad Gateway"
+	$statusMessages[503]:="Service Unavailable"
+	$statusMessages[504]:="Gateway Timeout"
+	$statusMessages[505]:="HTTP Version Not Supported"
+	$statusMessages[506]:="Variant Also Negotiates"
+	$statusMessages[507]:="Insufficient Storage"
+	$statusMessages[508]:="Loop Detected"
+	
+	$statusMessages[510]:="Not Extended"
+	$statusMessages[511]:="Network Authentication Required"
 	
 	If (Count parameters:C259>=1)
 		
-		If ($statusCode<This:C1470._statusMessages.length)
+		If ($statusCode<$statusMessages.length)
 			
-			$message:=String:C10(This:C1470._statusMessages[$statusCode])
+			$message:=String:C10($statusMessages[$statusCode])
 			
 		End if 
 		

@@ -14,8 +14,8 @@ Class constructor($name : Text; $datasource)
 	End if 
 	
 /*═════════════════════════════════════════════════
-Tryes to underline the first capital letter or, 
-if not found the first letter, corresponding to 
+Tryes to underline the first capital letter or,
+if not found the first letter, corresponding to
 the associated key shortcut
 */
 Function highlightShortcut()->$this : Object
@@ -23,7 +23,7 @@ Function highlightShortcut()->$this : Object
 	C_LONGINT:C283($index; $lModifier)
 	C_TEXT:C284($key; $t)
 	
-	$t:=This:C1470.getTitle()
+	$t:=This:C1470.title()
 	
 	OBJECT GET SHORTCUT:C1186(*; This:C1470.name; $key; $lModifier)
 	
@@ -71,12 +71,12 @@ Function setNoPopupMenu()->$this : Object
 /*═════════════════════════════════════════════════
 Association of a pop-up menu with a 3D button
 	
-If no parameter, the pop menu is removed, if any, 
+If no parameter, the pop menu is removed, if any,
 else, possible values are:
 	
-   • 0 or "none": No pop-up menu
-   • 1 or "linked": With linked pop-up menu
-   • 2 or "separate": With separate pop-up menu
+• 0 or "none": No pop-up menu
+• 1 or "linked": With linked pop-up menu
+• 2 or "separate": With separate pop-up menu
 */
 Function setPopupMenu($value : Variant)->$this : Object
 	
@@ -212,7 +212,7 @@ Function setBackgroundPicture($proxy : Text)->$this : cs:C1710.button
 	$this:=This:C1470
 	
 	//═════════════════════════════════════════════════
-	// Number of states present in picture used as icon for the 3D button, and which 
+	// Number of states present in picture used as icon for the 3D button, and which
 	// will be used by 4D to represent the standard button states (from 0 to 4)
 Function setNumStates($states : Integer)->$this : cs:C1710.button
 	
@@ -232,8 +232,8 @@ Function setNumStates($states : Integer)->$this : cs:C1710.button
 /*═════════════════════════════════════════════════
 A hack to force a button to be boolean type
 	
-⚠️ Obsolete in project mode because you can 
-   choose the type for the checkboxes
+⚠️ Obsolete in project mode because you can
+choose the type for the checkboxes
 */
 Function asBoolean->$this : Object
 	
