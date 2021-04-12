@@ -6,8 +6,14 @@
 
 package {{package}}.android.build.utils
 
+import org.json.JSONArray
+
 fun integrateGlobalStamp(initialGlobalStamp: Int) {
-    val appInfoPath = getAppinfoPath()
     println("Updating initialGlobalStamp value in appinfo.json file with value $initialGlobalStamp")
-    addObjectToJsonFile(appInfoPath, INITIAL_GLOBALSTAMP_KEY, initialGlobalStamp)
+    addToAppinfo(INITIAL_GLOBALSTAMP_KEY, initialGlobalStamp)
+}
+
+fun integrateDumpedTables(tableNames: List<String>) {
+    println("Updating dumpedTables value in appinfo.json file with value ${tableNames.joinToString()}")
+    addToAppinfo(DUMPED_TABLES_KEY, JSONArray(tableNames))
 }

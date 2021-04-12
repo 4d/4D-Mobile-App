@@ -11,6 +11,7 @@ const val SQL_DB_URL_PREFIX = "jdbc:sqlite"
 const val APPINFO_FILENAME = "appinfo.json"
 
 const val INITIAL_GLOBALSTAMP_KEY = "initialGlobalStamp"
+const val DUMPED_TABLES_KEY = "dumpedTables"
 
 /**
  * PATH NAMES

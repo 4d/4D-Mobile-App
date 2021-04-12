@@ -23,6 +23,7 @@ open class CreateDatabaseTask : DefaultTask() {
         mapOf<String, String>({{#tableNames}}"{{name}}" to "{{name_original}}"{{^-last}}, {{/-last}}{{/tableNames}})
 
     private var initialGlobalStamp = 0
+    private val dumpedTables = mutableListOf<String>()
 
     @get:OutputFile
     lateinit var dbFile: File
@@ -41,6 +42,7 @@ open class CreateDatabaseTask : DefaultTask() {
             database.insertAll(getSqlQueries(staticDataInitializer))
             logger.lifecycle("Database updated")
             integrateGlobalStamp(initialGlobalStamp)
+            integrateDumpedTables(dumpedTables)
         }
     }
 
@@ -82,6 +84,7 @@ open class CreateDatabaseTask : DefaultTask() {
                 val jsonObj = retrieveJSONObject(jsonString)
                 val entities = jsonObj.getSafeArray("__ENTITIES")
                 jsonObj.getSafeInt("__GlobalStamp")?.let { globalStamp ->
+                    dumpedTables.add(tableName)
                     if (globalStamp > initialGlobalStamp) initialGlobalStamp = globalStamp
                 }
 

@@ -10,17 +10,15 @@ import org.json.JSONObject
 import java.io.File
 import java.text.Normalizer
 
-fun addObjectToJsonFile(path: String, name: String, value: Int) {
-    val file = File(path)
-    if (file.exists()) {
-        val jsonString = file.readFile()
-        val jsonObj: JSONObject = retrieveJSONObject(jsonString)
-        jsonObj.put(name, value)
+fun addToAppinfo(key: String, value: Any) {
+    getAppinfoFile()?.let { file ->
+        val jsonObj: JSONObject = retrieveJSONObject(file.readFile())
+        jsonObj.put(key, value)
         file.writeText(jsonObj.toString(2))
     }
 }
 
-fun assetsPath(): String =
+private fun assetsPath(): String =
     APP_PATH_KEY + File.separator + SRC_PATH_KEY + File.separator + MAIN_PATH_KEY +
             File.separator + ASSETS_PATH_KEY
 
@@ -34,7 +32,16 @@ fun getDataPath(tableName: String): String = assetsPath() + File.separator + XCA
         "$tableName.$DATA_DATASET_SUFFIX" + File.separator +
         "$tableName.$DATA_JSON_SUFFIX"
 
-fun getAppinfoPath(): String = assetsPath() + File.separator + APPINFO_FILENAME
+private fun getAppinfoPath(): String = assetsPath() + File.separator + APPINFO_FILENAME
+
+private fun getAppinfoFile(): File? {
+    val file = File(getAppinfoPath())
+    if (file.exists()) {
+        return file
+    }
+    println("Appinfo.json file does not exists : ${file.absolutePath}")
+    return null
+}
 
 /**
  * Field / Table name adjustments
@@ -46,9 +53,9 @@ fun String.fieldAdjustment() = this.condense().replaceSpecialChars().validateWor
 
 private fun String.replaceSpecialChars(): String {
     return if (this.contains("Entities<")) {
-        this.replace("[^a-zA-Z0-9._<>]".toRegex(), "_").unaccent()
+        this.unaccent().replace("[^a-zA-Z0-9._<>]".toRegex(), "_")
     } else {
-        this.replace("[^a-zA-Z0-9._]".toRegex(), "_").unaccent()
+        this.unaccent().replace("[^a-zA-Z0-9._]".toRegex(), "_")
     }
 }
 

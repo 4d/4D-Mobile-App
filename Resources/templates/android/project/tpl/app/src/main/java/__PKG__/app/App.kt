@@ -89,16 +89,18 @@ class App : BaseApp() {
             language = QMobileUiUtil.deviceUtility.language
             guestLogin = QMobileUiUtil.appUtilities.guestLogin
             remoteUrl = QMobileUiUtil.appUtilities.remoteUrl
-            embeddedData = QMobileUiUtil.appUtilities.embeddedData
-            globalStamp = QMobileUiUtil.appUtilities.globalStamp
             sdkVersion = QMobileUiUtil.appUtilities.sdkVersion
+            dumpedTables = QMobileUiUtil.appUtilities.dumpedTables
+            initialGlobalStamp = QMobileUiUtil.appUtilities.initialGlobalStamp
         }
     }
 
     private fun saveTableProperties() {
-        for (tableName in fromTableForViewModel.tableNames()) {
-            val properties = getPropertyListFromTable(tableName, this)
-            AuthInfoHelper.getInstance(this).setProperties(tableName, properties)
+        AuthInfoHelper.getInstance(this).apply {
+            for (tableName in fromTableForViewModel.tableNames()) {
+                val properties = getPropertyListFromTable(tableName, this@App)
+                setProperties(tableName, properties)
+            }
         }
     }
 }
