@@ -203,7 +203,7 @@ Function dataSet()->$dump : Object
 	var $pathname : Text
 	If (Not:C34(Bool:C1537(This:C1470.dump.exists)))
 		
-		If (String:C10(This:C1470.input.dataSource.source)="server")
+		If (String:C10(This:C1470.input.project.dataSource.source)="server")
 			
 			// <NOTHING MORE TO DO>
 			
