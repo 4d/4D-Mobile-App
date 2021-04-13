@@ -33,6 +33,7 @@ Function generate
 			This:C1470.setDirectory(This:C1470.path.scripts())
 			
 			This:C1470.launch(This:C1470.androidprojectgeneratorCmd\
+				+" generate"\
 				+" --project-editor \""+$1.path\
 				+"\" --files-to-copy \""+This:C1470.path.androidProjectFilesToCopy().path\
 				+"\" --template-files \""+This:C1470.path.androidProjectTemplateFiles().path\
