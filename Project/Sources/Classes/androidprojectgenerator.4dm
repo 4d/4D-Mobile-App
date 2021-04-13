@@ -347,8 +347,7 @@ Function chmod
 	//
 Function prepareSdk
 	var $0 : Object
-	var $1 : Text  // Project path
-	var $cacheSdkAndroid; $sdkVersion; $copyDest : 4D:C1709.File
+	var $cacheSdkAndroid : 4D:C1709.File
 	var $archive : 4D:C1709.ZipArchive
 	var $unzipDest : 4D:C1709.Folder
 	
@@ -360,38 +359,16 @@ Function prepareSdk
 	
 	If ($cacheSdkAndroid.exists)
 		
-		$0.success:=True:C214
-		
 		$archive:=ZIP Read archive:C1637($cacheSdkAndroid)
 		
 		$unzipDest:=$archive.root.copyTo($cacheSdkAndroid.parent; fk overwrite:K87:5)
 		
 		If ($unzipDest.exists)
 			
-			$sdkVersion:=$unzipDest.file("sdkVersion")
-			
-			If ($sdkVersion.exists)
-				
-				$copyDest:=$sdkVersion.copyTo(Folder:C1567($1+"app/src/main/assets"); fk overwrite:K87:5)
-				
-				If (Not:C34($copyDest.exists))
-					// Copy failed
-					$0.success:=False:C215
-					$0.errors.push("Could not copy sdkVersion file to destination: "+$copyDest.path)
-					
-					//Else : all ok
-				End if 
-				
-			Else 
-				
-				$0.success:=False:C215
-				$0.errors.push("Could not find sdkVersion file at destination: "+$sdkVersion.path)
-				
-			End if 
+			$0.success:=True:C214
 			
 		Else 
 			
-			$0.success:=False:C215
 			$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
 			
 		End if 
@@ -399,4 +376,48 @@ Function prepareSdk
 	Else 
 		// Missing sdk archive
 		$0.errors.push("Missing 4D Mobile SDK archive: "+$cacheSdkAndroid.path)
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copySdkVersion
+	var $0 : Object
+	var $1 : Text  // Project path
+	var $sdkVersion; $copyDest : 4D:C1709.File
+	var $unzippedSdk : 4D:C1709.Folder
+	
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	$unzippedSdk:=This:C1470.path.cacheSdkAndroid().parent.folder("sdk")
+	
+	If ($unzippedSdk.exists)
+		
+		$sdkVersion:=$unzippedSdk.file("sdkVersion")
+		
+		If ($sdkVersion.exists)
+			
+			$copyDest:=$sdkVersion.copyTo(Folder:C1567($1+"app/src/main/assets"); fk overwrite:K87:5)
+			
+			If ($copyDest.exists)
+				
+				$0.success:=True:C214
+				
+			Else 
+				
+				// Copy failed
+				$0.errors.push("Could not copy sdkVersion file to destination: "+$copyDest.path)
+				
+			End if 
+			
+		Else 
+			// Missing sdkVersion file
+			$0.errors.push("Could not find sdkVersion file at destination: "+$sdkVersion.path)
+			
+		End if 
+		
+	Else 
+		// Missing unzipped sdk
+		$0.errors.push("Could not find unzipped sdk folder at destination: "+$unzippedSdk.path)
 	End if 

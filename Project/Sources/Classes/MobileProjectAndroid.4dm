@@ -122,7 +122,7 @@ Function create()->$result : Object
 		// * UNZIP 4D MOBILE SDK
 		This:C1470.postStep("decompressionOfTheSdk")
 		
-		$o:=This:C1470.androidprojectgenerator.prepareSdk(This:C1470.project.path)
+		$o:=This:C1470.androidprojectgenerator.prepareSdk()
 		
 		If ($o.success)
 			
@@ -188,7 +188,17 @@ Function create()->$result : Object
 											// Else: asked to not generate data at each build
 										End if 
 										
-										If (Not:C34($o.success))
+										If ($o.success)
+											
+											$o:=This:C1470.androidprojectgenerator.copySdkVersion(This:C1470.project.path)
+											
+											If (Not:C34($o.success))
+												
+												This:C1470.isOnError:=True:C214
+												
+											End if 
+											
+										Else 
 											
 											This:C1470.isOnError:=True:C214
 											
