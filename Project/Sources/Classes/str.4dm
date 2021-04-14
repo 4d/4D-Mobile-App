@@ -53,6 +53,95 @@ Function setText($content : Variant)->$this : cs:C1710.str
 	$this:=This:C1470
 	
 	//=======================================================================================================
+	// Insertion of the given text into the current string according to the optianal parameters begin & end
+	// Also update the inserted text position into the original string (str.begin & str.end)
+Function insert($text : Text; $begin : Integer; $end : Integer)->$this : cs:C1710.str
+	
+	var $length; $start; $stop : Integer
+	
+	If (Length:C16($text)>0)
+		
+		If (Count parameters:C259>=2)
+			
+			$start:=$begin
+			
+			If (Count parameters:C259>=3)
+				
+				$stop:=$end
+				
+			End if 
+		End if 
+		
+		This:C1470.begin:=$start
+		
+		If ($stop>$start)
+			
+			// Replace the selection with the string to insert
+			This:C1470.value:=Substring:C12(This:C1470.value; 1; $start-1)+$text+Substring:C12(This:C1470.value; $stop)
+			
+			This:C1470.end:=$start+Length:C16($text)-1
+			
+		Else 
+			
+			// Insert the chain at the insertion point
+			$length:=Length:C16(This:C1470.value)  // Keep the current length
+			This:C1470.value:=Insert string:C231(This:C1470.value; $text; $start)
+			
+			If ($start=$length)
+				
+				// We were at the end of the text and we stay
+				This:C1470.end:=Length:C16(This:C1470.value)  //+1
+				
+			Else 
+				
+				// The insertion point is translated from the length of the inserted string
+				This:C1470.end:=$start+Length:C16($text)
+				
+			End if 
+		End if 
+		
+		This:C1470.length:=Length:C16(This:C1470.value)
+		
+	Else 
+		
+		This:C1470.begin:=0
+		This:C1470.end:=0
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=======================================================================================================
+	// Append the given text to the current string according eventualy use the optional separator text
+	// Also update the inserted text position into the original string (str.begin & str.end)
+Function append($text : Text; $separator : Text)->$this : cs:C1710.str
+	
+	var $ƒseparator : Text
+	
+	If (Length:C16($text)>0)
+		
+		If (Count parameters:C259>=2)
+			
+			$ƒseparator:=$separator
+			
+		End if 
+		
+		This:C1470.begin:=Length:C16(This:C1470.value)
+		This:C1470.value:=This:C1470.value+$ƒseparator+$text
+		This:C1470.end:=Length:C16(This:C1470.value)
+		
+		This:C1470.length:=Length:C16(This:C1470.value)
+		
+	Else 
+		
+		This:C1470.begin:=0
+		This:C1470.end:=0
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	//=======================================================================================================
 	// Returns True if the $toFind text is present in the string (diacritical if $2 is True)
 Function contains($toFind : Text; $diacritical : Boolean)->$contains : Boolean
 	
