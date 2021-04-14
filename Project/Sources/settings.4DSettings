@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="183">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="184">
 	<com.4d>
 		<deployment>
 			<options/>
 		</deployment>
 		<general allow_user_settings="false" execute_host_database_event="true"/>
 		<compiler>
-			<options compilation_path="3" fat_binary="true" symbol_file="true" target="all"/>
+			<options compilation_path="3" fat_binary="true" symbol_file="true" target="active"/>
 			<typage default_for_button="2"/>
 			<method_suffix arrays="" interprocess_arrays="" interprocess_variables="" methods="" variables=""/>
 		</compiler>
