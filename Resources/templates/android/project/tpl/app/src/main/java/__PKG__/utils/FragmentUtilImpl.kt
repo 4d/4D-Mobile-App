@@ -83,4 +83,15 @@ class FragmentUtilImpl :
         }
         {{/tableNames_layout_relations}}
     }
+
+    /**
+     * Reset relations as PagedListAdapter generates issue with relations
+     */
+    override fun unsetRelationBinding(viewDataBinding: ViewDataBinding) {
+        {{#tableNames_layout_relations}}
+        if (viewDataBinding is RecyclerviewItem{{relation_source}}Binding) {
+            viewDataBinding.setVariable(BR.{{relation_name}}, null)
+        }
+        {{/tableNames_layout_relations}}
+    }
 }

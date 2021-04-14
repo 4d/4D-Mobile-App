@@ -50,21 +50,6 @@ class EntityViewModel{{tableName}}(
     val {{relation_name}} = MutableLiveData<{{relation_target}}>()
     {{/relations}}
 
-    override fun getManyToOneRelationKeysFromEntity(entity: EntityModel): Map<String, LiveData<RoomRelation>> {
-        val map = mutableMapOf<String, LiveData<RoomRelation>>()
-        if (entity is {{tableName}}) {
-            {{#relations}}
-            entity.__{{relation_name}}Key?.let {
-                Timber.d("[$originalAssociatedTableName] __{{relation_name}}Key retrieved is = $it")
-                map.put(
-                    "{{relation_name}}",
-                    {{relation_name}}{{relation_source}}Has{{relation_target}}RelationDao.getManyToOneRelation(relationId = it)
-                )
-            }
-            {{/relations}}
-        }
-        return map
-    }
     override fun setRelationToLayout(relationName: String, roomRelation: RoomRelation) {
         when (relationName) {
             {{#relations}}
@@ -74,5 +59,17 @@ class EntityViewModel{{tableName}}(
             {{/relations}}
             else -> return
         }
+    }
+
+    override fun getRelationsInfo(
+        entity: EntityModel
+    ): Map<String, LiveData<RoomRelation>> {
+        val map = mutableMapOf<String, LiveData<RoomRelation>>()
+        {{#relations}}
+        (entity as? {{tableName}})?.__{{relation_name}}Key?.let {
+            map["{{relation_name}}"] = {{relation_name}}{{relation_source}}Has{{relation_target}}RelationDao.getManyToOneRelation(relationId = it)
+        }
+        {{/relations}}
+        return map
     }
 }

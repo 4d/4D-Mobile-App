@@ -31,6 +31,7 @@ object Versions {
     val multidex = "2.0.1"
     val navigation = "2.3.0"
     val okhttp = "4.9.0"
+    val paging = "2.1.2"
     val preference = "1.1.1"
     val retrofit = "2.9.0"
     val robolectric = "4.5.1"
@@ -111,6 +112,9 @@ object Libs {
     val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
     val okhttp_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttp}"
     val okhttp_mockwebserver = "com.squareup.okhttp3:mockwebserver:${Versions.okhttp}"
+
+    // Paging
+    val androidx_paging = "androidx.paging:paging-runtime-ktx:${Versions.paging}"
 
     // Retrofit
     val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"

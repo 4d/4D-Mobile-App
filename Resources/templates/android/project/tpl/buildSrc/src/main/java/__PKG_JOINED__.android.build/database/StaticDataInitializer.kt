@@ -15,12 +15,6 @@ class StaticDataInitializer {
         propertyNameList: List<String>,
         results: ArrayList<Array<Any?>>
     ): SqlQuery? {
-        
-        results.forEach { arr ->
-            println("INSERT INTO $tableName (${propertyNameList.joinToString()}) VALUES (${propertyNameList.joinToString { "?" }})")
-            println("> VALUES : ${arr.joinToString()}")
-            println()
-        }
         return SqlQuery(
             "INSERT INTO $tableName (${propertyNameList.joinToString()}) VALUES (${propertyNameList.joinToString { "?" }})",
             results

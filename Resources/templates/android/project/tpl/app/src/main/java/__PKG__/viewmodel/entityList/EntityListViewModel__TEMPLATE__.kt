@@ -36,30 +36,15 @@ class EntityListViewModel{{tableName}}(
         BaseApp.appDatabaseInterface.getRelationDao(tableName, "{{relation_target}}")
     {{/relations}}
 
-    override fun getManyToOneRelationKeysFromEntityList(
-        entityList: List<EntityModel>
-    ): MutableMap<String, MutableMap<String, LiveData<RoomRelation>>> {
-
-        // Map<entityKey, Map<relationName, LiveData<RoomRelation>>>
-        val map = mutableMapOf<String, MutableMap<String, LiveData<RoomRelation>>>()
-        entityList.forEach { entity ->
-            entity.__KEY?.let { key ->
-                map[key] = mutableMapOf()
-                if (entity is {{tableName}}) {
-                    {{#relations}}
-                    entity.__{{relation_name}}Key?.let {
-                        Timber.d("[$originalAssociatedTableName] __{{relation_name}}Key retrieved is = $it")
-                        map[key]?.apply {
-                            put(
-                                "{{relation_name}}",
-                                {{relation_name}}{{relation_source}}Has{{relation_target}}RelationDao.getManyToOneRelation(relationId = it)
-                            )
-                        }
-                    }
-                    {{/relations}}
-                }
-            }
+    override fun getRelationsInfo(
+        entity: EntityModel
+    ): Map<String, LiveData<RoomRelation>> {
+        val map = mutableMapOf<String, LiveData<RoomRelation>>()
+        {{#relations}}
+        (entity as? {{tableName}})?.__{{relation_name}}Key?.let {
+            map["{{relation_name}}"] = {{relation_name}}{{relation_source}}Has{{relation_target}}RelationDao.getManyToOneRelation(relationId = it)
         }
+        {{/relations}}
         return map
     }
 }

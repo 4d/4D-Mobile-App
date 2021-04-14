@@ -18,16 +18,17 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
     val hashMap = mutableMapOf<String, Any?>()
 
     init {
-        hashMap["__KEY"] = null
-        hashMap["__TIMESTAMP"] = null
-        hashMap["__STAMP"] = null
-        fields.forEach { field ->
-            hashMap[field.name.fieldAdjustment()] = null
-            if (field.isManyToOneRelation)
-                hashMap["__${field.name.fieldAdjustment()}Key"] = null
-        }
 
         for (i in 0 until inputEntities.length()) {
+
+            hashMap["__KEY"] = null
+            hashMap["__TIMESTAMP"] = null
+            hashMap["__STAMP"] = null
+            fields.forEach { field ->
+                hashMap[field.name.fieldAdjustment()] = null
+                if (field.isManyToOneRelation)
+                    hashMap["__${field.name.fieldAdjustment()}Key"] = null
+            }
 
             val inputEntity = inputEntities.getJSONObject(i)
             val outputEntity = extractEntity(inputEntity)

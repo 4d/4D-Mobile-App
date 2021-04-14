@@ -29,6 +29,9 @@ dependencies {
     implementation Libs.androidx_room_runtime
     kapt Libs.androidx_room_compiler
 
+    // Paging
+    implementation Libs.androidx_paging
+
     // Navigation
     implementation Libs.androidx_navigation_fragment
     implementation Libs.androidx_navigation_ui
