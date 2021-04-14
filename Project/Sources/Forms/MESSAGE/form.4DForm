@@ -3,7 +3,6 @@
 	"markerBreak": 180,
 	"markerFooter": 180,
 	"events": [
-		"onLoad",
 		"onTimer",
 		"onBoundVariableChange"
 	],
@@ -22,58 +21,9 @@
 					"left": 0,
 					"width": 410,
 					"height": 180,
-					"sizingY": "grow",
-					"stroke": "#c0c0c0",
 					"borderRadius": 10,
-					"class": "background"
-				},
-				"cancel": {
-					"type": "button",
-					"top": 140,
-					"left": 178,
-					"width": 96,
-					"height": 20,
-					"visibility": "hidden",
-					"sizingY": "move",
-					"shortcutKey": "[Esc]",
-					"text": ":xliff:cancel",
-					"method": "ObjectMethods/cancel.4dm",
-					"events": [
-						"onClick"
-					]
-				},
-				"ok": {
-					"type": "button",
-					"top": 140,
-					"left": 294,
-					"width": 96,
-					"height": 20,
-					"visibility": "hidden",
-					"sizingY": "move",
-					"shortcutKey": "[Return]",
-					"text": ":xliff:ok",
-					"defaultButton": true,
-					"method": "ObjectMethods/ok.4dm",
-					"events": [
-						"onClick"
-					]
-				}
-			}
-		},
-		{
-			"objects": {
-				"additional": {
-					"type": "input",
-					"top": 73,
-					"left": 10,
-					"width": 390,
-					"height": 48,
-					"sizingY": "grow",
-					"textAlign": "center",
-					"fontTheme": "additional",
-					"enterable": false,
-					"showSelection": true,
-					"fill": "transparent"
+					"class": "background",
+					"stroke": "#c0c0c0"
 				},
 				"title": {
 					"type": "input",
@@ -86,42 +36,86 @@
 					"enterable": false,
 					"dragging": "none",
 					"dropping": "none",
-					"showSelection": true,
-					"fill": "transparent"
+					"showSelection": true
 				},
+				"additional": {
+					"type": "input",
+					"top": 73,
+					"left": 10,
+					"width": 390,
+					"height": 48,
+					"textAlign": "center",
+					"fontTheme": "additional",
+					"enterable": false,
+					"showSelection": true,
+					"multiline": "yes"
+				}
+			}
+		},
+		{
+			"objects": {
 				"progress": {
 					"type": "spinner",
-					"top": 125,
+					"top": 133,
 					"left": 105,
 					"width": 194,
 					"height": 40,
-					"sizingY": "move"
+					"visibility": "visible"
 				},
-				"option": {
+				"optional": {
 					"type": "checkbox",
-					"top": 143,
+					"top": 146,
 					"left": 22,
 					"width": 140,
 					"height": 15,
-					"visibility": "hidden",
-					"sizingY": "move",
+					"visibility": "visible",
 					"dataSource": "Form:C1466.option.value",
 					"text": "Check Box",
 					"focusable": false,
 					"events": [
 						"onClick"
-					]
+					],
+					"dataSourceTypeHint": "boolean"
 				},
-				"help": {
+				"helper": {
 					"type": "button",
-					"top": 139,
+					"top": 142,
 					"left": 22,
 					"width": 22,
 					"height": 22,
-					"visibility": "hidden",
-					"sizingY": "move",
+					"visibility": "visible",
 					"style": "help",
-					"method": "ObjectMethods/help.4dm",
+					"method": "ObjectMethods/helper.4dm",
+					"events": [
+						"onClick"
+					],
+					"focusable": false
+				},
+				"cancel": {
+					"type": "button",
+					"top": 143,
+					"left": 178,
+					"width": 96,
+					"height": 20,
+					"visibility": "visible",
+					"shortcutKey": "[Esc]",
+					"text": ":xliff:cancel",
+					"method": "ObjectMethods/cancel.4dm",
+					"events": [
+						"onClick"
+					]
+				},
+				"ok": {
+					"type": "button",
+					"top": 143,
+					"left": 294,
+					"width": 96,
+					"height": 20,
+					"visibility": "visible",
+					"shortcutKey": "[Return]",
+					"text": ":xliff:ok",
+					"defaultButton": true,
+					"method": "ObjectMethods/ok.4dm",
 					"events": [
 						"onClick"
 					]
@@ -133,14 +127,14 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"rightMargin": 0,
-	"bottomMargin": 0,
-	"geometryStamp": 18,
+	"geometryStamp": 231,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"width": 410,
+	"height": 180
 }

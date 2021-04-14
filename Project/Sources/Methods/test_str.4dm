@@ -319,13 +319,27 @@ ASSERT:C1129($o.setText("'Command Name' != '_@'").urlEncode()="%27Command%20Name
 ASSERT:C1129($o.setText("%27Command%20Name%27%20%21%3D%20%27_@%27").urlDecode()="'Command Name' != '_@'")
 
 // ============================================
-// contains()
+// containsString()
 $o:=$o.setText("Hello World")
-ASSERT:C1129($o.contains("Hello"))
-ASSERT:C1129($o.contains("WORLD"))
-ASSERT:C1129(Not:C34($o.contains("toto")))
-ASSERT:C1129($o.contains("Hello"; True:C214))
-ASSERT:C1129(Not:C34($o.contains("WORLD"; True:C214)))
+ASSERT:C1129($o.containsString("Hello"))
+ASSERT:C1129($o.containsString("WORLD"))
+ASSERT:C1129(Not:C34($o.containsString("toto")))
+ASSERT:C1129($o.containsString("Hello"; True:C214))
+ASSERT:C1129(Not:C34($o.containsString("WORLD"; True:C214)))
+
+// ============================================
+// contains()
+ASSERT:C1129($o.contains("Hello"; "world"))
+ASSERT:C1129(Not:C34($o.contains("Hello"; "vincent")))
+ASSERT:C1129(Not:C34($o.contains("Hello"; "world"; "vincent")))
+
+ASSERT:C1129($o.contains(New collection:C1472("Hello"; "world")))
+ASSERT:C1129(Not:C34($o.contains(New collection:C1472("Hello"; "vincent"))))
+ASSERT:C1129(Not:C34($o.contains(New collection:C1472("Hello"; "vincent"; "world"))))
+
+$o.append("8858"; " ")
+ASSERT:C1129($o.contains(New collection:C1472(8858; "Hello"; "world")))
+ASSERT:C1129(Not:C34($o.contains(New collection:C1472(88; "Hello"; "world"))))
 
 // ============================================
 // toNum()
@@ -345,13 +359,44 @@ ASSERT:C1129($o.setText("Hello").concat(New collection:C1472("AAA"; "NNN"; "ZZZ"
 ASSERT:C1129($o.setText("Hello").concat(New collection:C1472("AAA"; "NNN"; "ZZZ"); ", ")="Hello, AAA, NNN, ZZZ")
 
 // ============================================
-// occurrences()
+// occurrencesOf()
 $t:="The Split string command returns a collection of strings, created by splitting stringToSplit into substrings at the boundaries specified by the separator parameter."
-ASSERT:C1129($o.setText($t).occurrences("string")=4)
-ASSERT:C1129($o.setText($t).occurrences("s")=14)
-ASSERT:C1129($o.setText($t).occurrences(" ")=22)
-ASSERT:C1129($o.setText($t).occurrences("hello")=0)
-ASSERT:C1129($o.setText($t).occurrences("\r")=0)
+ASSERT:C1129($o.setText($t).occurrencesOf("string")=4)
+ASSERT:C1129($o.setText($t).occurrencesOf("s")=14)
+ASSERT:C1129($o.setText($t).occurrencesOf(" ")=22)
+ASSERT:C1129($o.setText($t).occurrencesOf("hello")=0)
+ASSERT:C1129($o.setText($t).occurrencesOf("\r")=0)
+
+// ============================================
+// insert()
+$o.setText("hello world")
+
+$o.insert(" great"; 6)
+ASSERT:C1129($o.value="hello great world")
+ASSERT:C1129($o.length=17)
+ASSERT:C1129($o.begin=6)
+ASSERT:C1129($o.end=12)
+
+$o.insert("Vincent"; 7; MAXLONG:K35:2)
+ASSERT:C1129($o.value="hello Vincent")
+ASSERT:C1129($o.length=13)
+ASSERT:C1129($o.begin=7)
+ASSERT:C1129($o.end=13)
+
+// ============================================
+// append()
+$o.append("in Paris"; " ")
+ASSERT:C1129($o.value="hello Vincent in Paris")
+ASSERT:C1129($o.length=22)
+ASSERT:C1129($o.begin=13)
+ASSERT:C1129($o.end=22)
+
+$o.setText("hello ")
+$o.append("world")
+ASSERT:C1129($o.value="hello world")
+ASSERT:C1129($o.length=11)
+ASSERT:C1129($o.begin=6)
+ASSERT:C1129($o.end=11)
 
 // ============================================
 // replace()
@@ -362,7 +407,7 @@ $t:="If you pass the optional * parameter, you indicate that the object paramete
 +"Object Properties section."
 
 $tt:=$o.setText($t).replace("the"; "_THE_")
-ASSERT:C1129(cs:C1710.str.new($tt).occurrences("_THE_")=4)
+ASSERT:C1129(cs:C1710.str.new($tt).occurrencesOf("_THE_")=4)
 ASSERT:C1129($tt=$o.replace(New collection:C1472("the"); New collection:C1472("_THE_")))
 
 $tt:=$o.setText("abcaabbcc").replace(New collection:C1472("a"; "c"); New collection:C1472("A"; "©"))
@@ -422,29 +467,29 @@ ASSERT:C1129($o.setText("hello").truncate(10)="hello")
 ASSERT:C1129($o.setText("hello world").truncate(12)="hello world")
 
 // ============================================
-// lastOccurrence()
+// lastOccurrenceOf()
 $t:="hello world hello world hello world"
 $o.setText($t)
-ASSERT:C1129($o.lastOccurrence("hello")=25)
-ASSERT:C1129($o.lastOccurrence("world")=31)
-ASSERT:C1129($o.lastOccurrence("w")=31)
-ASSERT:C1129($o.lastOccurrence("hello world")=25)
+ASSERT:C1129($o.lastOccurrenceOf("hello")=25)
+ASSERT:C1129($o.lastOccurrenceOf("world")=31)
+ASSERT:C1129($o.lastOccurrenceOf("w")=31)
+ASSERT:C1129($o.lastOccurrenceOf("hello world")=25)
 
-ASSERT:C1129($o.lastOccurrence("")=0)
-ASSERT:C1129($o.lastOccurrence("z")=0)
-ASSERT:C1129($o.lastOccurrence("toto")=0)
+ASSERT:C1129($o.lastOccurrenceOf("")=0)
+ASSERT:C1129($o.lastOccurrenceOf("z")=0)
+ASSERT:C1129($o.lastOccurrenceOf("toto")=0)
 
 $t:="The Split string command returns a collection of strings, created by splitting stringToSplit into substrings at the boundaries specified by the separator parameter."
-ASSERT:C1129($o.setText($t).lastOccurrence("string")=102)
+ASSERT:C1129($o.setText($t).lastOccurrenceOf("string")=102)
 
 $t:="hello world"
 $o.setText($t)
-ASSERT:C1129($o.lastOccurrence("hello")=1)
-ASSERT:C1129($o.lastOccurrence("world")=7)
+ASSERT:C1129($o.lastOccurrenceOf("hello")=1)
+ASSERT:C1129($o.lastOccurrenceOf("world")=7)
 
 $t:="Champs-Élysées"
 $o.setText($t)
-ASSERT:C1129($o.lastOccurrence("é")=13)
-ASSERT:C1129($o.lastOccurrence("é"; True:C214)=12)
+ASSERT:C1129($o.lastOccurrenceOf("é")=13)
+ASSERT:C1129($o.lastOccurrenceOf("é"; True:C214)=12)
 
 FINALLY

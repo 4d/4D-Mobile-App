@@ -324,35 +324,17 @@ If (Asserted:C1132($project#Null:C1517))
 						
 						If (Not:C34($success))
 							
-							If (True:C214)
-								
-								POST_MESSAGE(New object:C1471(\
-									"target"; $window; \
-									"action"; "show"; \
-									"type"; "confirm"; \
-									"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
-									"additional"; "youMustUpdateTheStructureOfTheProductionServer"; \
-									"help"; Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment"); *)); \
-									"cancelFormula"; Formula:C1597(CALL FORM:C1391($window; "editor_CALLBACK"; "build_stop")); \
-									"ok"; Get localized string:C991("continue"); \
-									"okFormula"; Formula:C1597(CALL FORM:C1391($window; "editor_CALLBACK"; "ignoreServerStructureAdjustement"))))
-								
-							Else 
-								
-								$o:=New object:C1471(\
-									"target"; $window; \
-									"action"; "show"; \
-									"type"; "confirm"; \
-									"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
-									"additional"; "youMustUpdateTheStructureOfTheProductionServer"; \
-									"help"; Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment"); *)); \
-									"cancelFormula"; Formula:C1597(This:C1470.choice:="cancel"); \
-									"ok"; Get localized string:C991("continue"); \
-									"okFormula"; Formula:C1597(This:C1470.choice:="ignore"))
-								
-								WAIT_MESSAGE($o)
-								
-							End if 
+							POST_MESSAGE(New object:C1471(\
+								"target"; $window; \
+								"action"; "show"; \
+								"type"; "confirm"; \
+								"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
+								"additional"; "youMustUpdateTheStructureOfTheProductionServer"; \
+								"help"; Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment"); *)); \
+								"cancelFormula"; Formula:C1597(CALL FORM:C1391($window; "editor_CALLBACK"; "build_stop")); \
+								"ok"; Get localized string:C991("continue"); \
+								"okFormula"; Formula:C1597(CALL FORM:C1391($window; "editor_CALLBACK"; "ignoreServerStructureAdjustement"))))
+							
 						End if 
 					End if 
 					

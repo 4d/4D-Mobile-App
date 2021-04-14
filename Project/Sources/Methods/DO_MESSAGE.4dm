@@ -5,27 +5,22 @@
 // Created 3-7-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-var $1 : Object
-
-If (False:C215)
-	C_OBJECT:C1216(DO_MESSAGE; $1)
-End if 
-
-var $key : Text
-var $in; $message; $o : Object
-
+// Management of the message widget in the context of the current window
 // ----------------------------------------------------
 // Declarations
+#DECLARE($message : Object)
+
+var $action; $key : Text
+var $data; $display : Object
+var $widget : cs:C1710.widgetMessage
 
 // ----------------------------------------------------
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	// Required parameters
-	$in:=$1
-	
-	// Optional parameters
-	// <NONE>
+	$widget:=Form:C1466.$dialog.EDITOR.message
+	$data:=$widget.getValue()
+	$display:=$data.ƒ
 	
 Else 
 	
@@ -34,92 +29,69 @@ Else
 End if 
 
 // ----------------------------------------------------
-$message:=OBJECT Get value:C1743("message")
-
-If (OBJECT Get visible:C1075(*; "message"))\
- & (New collection:C1472("alert"; "confirm").indexOf(String:C10($message.type))#-1)
+If $widget.isVisible()\
+ & (New collection:C1472("alert"; "confirm").indexOf(String:C10($data.type))#-1)
 	
 	// A message is already displayed: wait
-	CALL FORM:C1391(Current form window:C827; "DO_MESSAGE"; $in)
+	CALL FORM:C1391(Current form window:C827; "DO_MESSAGE"; $message)
 	
 Else 
 	
-	If (String:C10($in.action)="reset")
-		
-		OBJECT SET VALUE:C1742("message"; New object:C1471)
-		
-	Else 
-		
-		Case of 
-				
-				//______________________________________________________
-			: ($in.action=Null:C1517)
-				
-				// NOTHING MORE TO DO
-				
-				//______________________________________________________
-			: ($in.action="show")
-				
-				// Get help tips status
-				$o:=UI.tips
-				
-				$message:=ob_createPath($message; "tips")
-				$message.tips:=$o
-				
-				$o.disable()
-				
-				OBJECT SET VISIBLE:C603(*; "message@"; True:C214)
-				
-				//______________________________________________________
-			: ($in.action="hide") | ($in.action="close")
-				
-				// Don't dismiss an alert or confirmation
-				If (New collection:C1472("alert"; "confirm").indexOf(String:C10($message.type))=-1)
-					
-					OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
-					
-					If ($message.tips.enabled)
-						
-						// Restore help tips status
-						$o:=UI.tips
-						$o.enable()
-						$o.setDuration($message.tips.delay)
-						
-					End if 
-				End if 
-				
-				//______________________________________________________
-			: ($in.action="reset")
-				
-				$in:=New object:C1471
-				
-				//______________________________________________________
-			Else 
-				
-				ASSERT:C1129(False:C215; "Unknown entry point: \""+$in.action+"\"")
-				
-				//______________________________________________________
-		End case 
-		
-		If ($message=Null:C1517)
+	$action:=String:C10($message.action)
+	
+	Case of 
 			
-			$message:=New object:C1471
+			//______________________________________________________
+		: ($action="show")
 			
-		End if 
-		
-		For each ($key; $in)
+			$data:=New object:C1471
 			
-			$message[$key]:=$in[$key]
+			For each ($key; $message)
+				
+				$data[$key]:=$message[$key]
+				
+			End for each 
 			
-		End for each 
-		
-		OBJECT SET VALUE:C1742("message"; $message)
-		
-	End if 
+			$widget.setValue($data)
+			
+			//$widget.show()
+			OBJECT SET VISIBLE:C603(*; "message@"; Not:C34(OB Is empty:C1297($data)))
+			
+			//______________________________________________________
+		: ($action="hide")\
+			 | ($action="close")
+			
+			// Don't dismiss an alert or confirmation
+			If (New collection:C1472("alert"; "confirm").indexOf(String:C10($data.type))=-1)
+				
+				//$widget.hide()
+				OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
+				
+				$display.restore($data)
+				
+				// Restore original size
+				$widget.setDimension($display.width; $display.height)
+				
+			End if 
+			
+			//______________________________________________________
+		: ($action="reset")
+			
+			$data.title:=""
+			$data.additional:=""
+			$widget.setValue($data)
+			
+			//________________________________________
+		Else   // Update
+			
+			For each ($key; $message)
+				
+				$data[$key]:=$message[$key]
+				
+			End for each 
+			
+			$widget.setValue($data)
+			
+			//______________________________________________________
+	End case 
 End if 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

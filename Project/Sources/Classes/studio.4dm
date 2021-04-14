@@ -317,7 +317,7 @@ Function _getVersion($target : 4D:C1709.Folder)->$version
 	End if 
 	
 	//====================================================================
-	// Returns True if the version of Xcode is equal or superior to the desired one
+	// Returns True if the version of Studio is equal or superior to the desired one
 Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	
 	$ok:=(cs:C1710.str.new(This:C1470.version).versionCompare($minimumVersion)>=0)
@@ -421,6 +421,31 @@ Function installHAXM()
 			End if 
 		End if 
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Try to accept the SDK licenses
+Function acceptLicences()->$ready : Boolean
+	
+	var $o : Object
+	var $file : 4D:C1709.File
+	
+	For each ($o; JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).licences)
+		
+		If (Is macOS:C1572)
+			
+			// ~/Users/{user}/Library/Android/sdk/licenses/
+			$file:=File:C1566(This:C1470.home.path+"Library/Android/sdk/licenses/"+$o.file)
+			
+		Else 
+			
+			// ~/Users/{user}/AppData/Local/Android/sdk/licenses/
+			$file:=File:C1566(This:C1470.home.path+"AppData/Local/Android/sdk/licenses/"+$o.file)
+			
+		End if 
+		
+		$file.setText("\n"+$o.value)
+		
+	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Populate the javaHome & java properties according to the platform

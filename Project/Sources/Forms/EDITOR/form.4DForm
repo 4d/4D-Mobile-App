@@ -194,7 +194,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 890,
+					"height": 870,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -206,7 +206,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 970,
-					"height": 890,
+					"height": 870,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -225,7 +225,8 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"method": "editor_OBJECTS_HANDLER"
+					"method": "editor_OBJECTS_HANDLER",
+					"events": []
 				},
 				"footer": {
 					"type": "subform",
@@ -312,7 +313,7 @@
 			}
 		}
 	},
-	"geometryStamp": 79,
+	"geometryStamp": 96,
 	"width": 970,
 	"height": 870
 }

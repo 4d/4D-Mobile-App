@@ -143,7 +143,7 @@ Function append($text : Text; $separator : Text)->$this : cs:C1710.str
 	
 	//=======================================================================================================
 	// Returns True if the $toFind text is present in the string (diacritical if $2 is True)
-Function contains($toFind : Text; $diacritical : Boolean)->$contains : Boolean
+Function containsString($toFind : Text; $diacritical : Boolean)->$contains : Boolean
 	
 	If (Count parameters:C259>=2)
 		
@@ -165,8 +165,54 @@ Function contains($toFind : Text; $diacritical : Boolean)->$contains : Boolean
 	End if 
 	
 	//=======================================================================================================
+	// Returns True if the string contains one or more words passed by a collection or parameters.
+Function contains($words; $word : Text; $word_2 : Text; $word_N : Text)->$contains : Boolean
+	
+	C_TEXT:C284(${2})
+	
+	var $v : Variant
+	var $t : Text
+	var $i : Integer
+	var $formula : Object
+	
+	$t:=This:C1470.value
+	$formula:=Formula:C1597($t%$1)
+	
+	$contains:=True:C214
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($words)=Is collection:K8:32)
+			
+			For each ($v; $words) While ($contains)
+				
+				$contains:=$contains & $formula.call(Null:C1517; String:C10($v))
+				
+			End for each 
+			
+			//______________________________________________________
+		: (Value type:C1509($words)=Is text:K8:3)
+			
+			For ($i; 1; Count parameters:C259; 1)
+				
+				$contains:=$contains & $formula.call(Null:C1517; ${$i})
+				$i:=Choose:C955($contains; $i; MAXLONG:K35:2-1)  // Break if false
+				
+			End for 
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215; "Expected  type:  collection or text")
+			$contains:=False:C215
+			
+			//______________________________________________________
+	End case 
+	
+	//=======================================================================================================
 	// Returns the position of the last occurence of a string
-Function lastOccurrence($toFind : Text; $diacritic : Boolean)->$position : Integer
+Function lastOccurrenceOf($toFind : Text; $diacritic : Boolean)->$position : Integer
 	
 	var $toFind : Text
 	var $pos; $start : Integer
@@ -213,17 +259,16 @@ Function lastOccurrence($toFind : Text; $diacritic : Boolean)->$position : Integ
 	End if 
 	
 	//=======================================================================================================
-Function shuffle
-	var $0 : Text
-	var $1 : Integer
+Function shuffle($length : Integer)->$shuffle : Text
+	
 	var $pattern; $t; $text : Text
-	var $i; $length; $size : Integer
+	var $charNumber; $count; $i; $length; $size : Integer
 	
 	$pattern:="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,?;.:/=+@#&([{§!)]}-_$€*`£"
 	
 	If (Length:C16(This:C1470.value)=0)
 		
-		$text:=$pattern*2
+		$text:=$pattern
 		
 	Else 
 		
@@ -235,28 +280,23 @@ Function shuffle
 				
 			End if 
 		End for each 
-		
-		$text:=$text*2
-		
 	End if 
+	
+	$text:=$text*2
 	
 	If (Count parameters:C259>=1)
 		
-		$size:=$1
-		
-	Else 
-		
-		// A "If" statement should never omit "Else"
+		$size:=$length
 		
 	End if 
 	
-	$length:=Choose:C955($size=0; Choose:C955(10>Length:C16($text); Length:C16($text); 10); Choose:C955($size>Length:C16($text); Length:C16($text); $size))
+	$charNumber:=Length:C16($text)
+	$count:=Choose:C955($size=0; Choose:C955(10>$charNumber; $charNumber; 10); Choose:C955($size>$charNumber; $charNumber; $size))
+	$size:=$charNumber
 	
-	$size:=Length:C16($text)
-	
-	For ($i; 1; $length; 1)
+	For ($i; 1; $count; 1)
 		
-		$0:=$0+$text[[(Random:C100%($size-1+1))+1]]
+		$shuffle:=$shuffle+$text[[(Random:C100%($size-1+1))+1]]
 		
 	End for 
 	
@@ -642,29 +682,28 @@ Function trim
 	
 	//=======================================================================================================
 	// Returns a word wrapped text based on the line length given (default is 80 characters)
-Function wordWrap
-	var $0 : Text
-	var $1 : Integer  // {Line length}
+Function wordWrap($lineLength : Integer)->$wrapped : Text
 	
-	var $pattern; $result; $t : Text
+	var $pattern; $t : Text
 	var $match : Boolean
-	var $l; $length; $position : Integer
+	var $columns; $length; $position : Integer
+	var $c : Collection
 	
 	If (Count parameters:C259>=1)
 		
-		$l:=$1
+		$columns:=$1
 		
 	Else 
 		
-		$l:=79
+		$columns:=79
 		
 	End if 
 	
-	$pattern:="^(.{1,COL}|\\S{COL,})(?:\\s[^\\S\\r\\n]*|\\Z)"
-	$pattern:=Replace string:C233($pattern; "COL"; String:C10($l); 1; *)
-	$pattern:=Replace string:C233($pattern; "COL"; String:C10($l+1); 1; *)
-	
 	$t:=This:C1470.value
+	$wrapped:=$t
+	
+	$pattern:="^(.{1,"+String:C10($columns)+"}|\\S{"+String:C10($columns+1)+",})(?:\\s[^\\S\\r\\n]*|\\Z)"
+	$c:=New collection:C1472
 	
 	Repeat 
 		
@@ -672,40 +711,32 @@ Function wordWrap
 		
 		If ($match)
 			
-			$result:=$result+Substring:C12($t; 1; $length)+"\r"
+			$c.push(Substring:C12($t; 1; $length))
 			$t:=Delete string:C232($t; 1; $length)
 			
 		Else 
 			
 			If (Length:C16($t)>0)
 				
-				$result:=$result+$t
-				
-			Else 
-				
-				// Remove the last carriage return
-				$result:=Delete string:C232($result; Length:C16($result); 1)
+				$c.push($t)
 				
 			End if 
 		End if 
 	Until (Not:C34($match))
 	
-	$0:=$result
+	$wrapped:=$c.join(Choose:C955(Is macOS:C1572; "\r"; "\n"))
 	
 	//=======================================================================================================
 	// Return extract numeric
-Function toNum
-	var $0 : Real
+Function toNum()->$num : Real
 	
-	$0:=This:C1470.filter("numeric")
+	$num:=This:C1470.filter("numeric")
 	
 	//=======================================================================================================
 	// Returns the number of occurennces of $1 into the string
-Function occurrences
-	var $0 : Integer
-	var $1 : Text
+Function occurrencesOf($toFind : Text)->$occurences : Integer
 	
-	$0:=Split string:C1554(This:C1470.value; $1; sk trim spaces:K86:2).length-1
+	$occurences:=Split string:C1554(This:C1470.value; $toFind; sk trim spaces:K86:2).length-1
 	
 	//=======================================================================================================
 	// Replace accented characters with non accented one
@@ -1054,35 +1085,67 @@ Function isStyled
 	$0:=Match regex:C1019("(?i-ms)<span [^>]*>"; String:C10(This:C1470.value); 1)
 	
 	//====================================================================
-	// Returns a string that can be used in multistyles texts
-	// ⚠️
-Function multistyleCompatible($src : Text)->$tgt : Text
+	// ⚠️ Returns a string that can be used in multistyles texts
+Function multistyleCompatible($src : Text)->$text : Text
 	
-	$tgt:=This:C1470.value
+	//$text:=Super.multistyleCompatible(This.value)
+	
+	$text:=This:C1470.value
 	
 	If (Count parameters:C259>=1)
 		
-		$tgt:=$src
+		$text:=$src
 		
 	End if 
 	
-	$tgt:=Replace string:C233($tgt; "&"; "&amp;")
-	$tgt:=Replace string:C233($tgt; "<"; "&lt;")
-	$tgt:=Replace string:C233($tgt; ">"; "&gt;")
+	$text:=Replace string:C233($text; "&"; "&amp;")
+	$text:=Replace string:C233($text; "<"; "&lt;")
+	$text:=Replace string:C233($text; ">"; "&gt;")
 	
 	//=======================================================================================================
 	// Returns, if any, a truncated string with ellipsis character
-Function truncate
-	var $0 : Text
-	var $1 : Integer  //max char
+Function truncate($maxChar : Integer; $position : Integer)->$truncated : Text
 	
-	$0:=This:C1470.value
+	$truncated:=This:C1470.value
 	
-	If (This:C1470.length>$1)
-		
-		$0:=Substring:C12($0; 1; $1)+"…"
-		
-	End if 
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=1)
+			
+			If (This:C1470.length>$maxChar)
+				
+				$truncated:=Substring:C12($truncated; 1; $maxChar)+"…"
+				
+			End if 
+			
+			//______________________________________________________
+		: ($position=Align left:K42:2)
+			
+			If (This:C1470.length>$maxChar)
+				
+				$truncated:=Substring:C12($truncated; 1; $maxChar)+"…"
+				
+			End if 
+			
+			//______________________________________________________
+		: ($position=Align right:K42:4)
+			
+			If (This:C1470.length>$maxChar)
+				
+				$truncated:="…"+Substring:C12($truncated; Length:C16($truncated)-$maxChar)
+				
+			End if 
+			
+			//______________________________________________________
+		: ($position=Align center:K42:3)
+			
+			var $midle : Integer
+			$midle:=$maxChar\2
+			$truncated:=Substring:C12($truncated; 1; $midle)+"…"+Substring:C12($truncated; Length:C16($truncated)-$midle)
+			
+			//______________________________________________________
+	End case 
 	
 	//=======================================================================================================
 	// 
@@ -1132,7 +1195,10 @@ Function filter
 	End case 
 	
 	//=======================================================================================================
-	// ⚠️
+	// ⚠️ Compare two string version
+	// -  0 if the version and the reference are equal
+	// -  1 if the version is higher than the reference
+	// - -1 if the version is lower than the reference
 Function versionCompare($with : Text; $separator : Text)->$result : Integer
 	
 	If (Count parameters:C259>=2)

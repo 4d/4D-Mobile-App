@@ -1,37 +1,23 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
 // ----------------------------------------------------
-// Project method : POST_FORM_MESSAGE
+// Project method : POST_MESSAGE
 // ID[9EA6C0AFDD1E426C86CA28F644F30845]
 // Created 3-7-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // #THREAD-SAFE
 // ----------------------------------------------------
 // Description:
-//
+// Management of the message widget in a target window
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($Lon_parameters)
-C_OBJECT:C1216($Obj_message)
-
-If (False:C215)
-	C_OBJECT:C1216(POST_MESSAGE; $1)
-End if 
+#DECLARE($message : Object)
 
 // ----------------------------------------------------
-// Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	//Required parameters
-	$Obj_message:=$1
-	
-	//Optional parameters
-	If ($Lon_parameters>=2)
+	If (Asserted:C1132(Num:C11(String:C10($message.target))#0; "Missing target window"))
 		
-		// <NONE>
+		CALL FORM:C1391($message.target; "DO_MESSAGE"; $message)
 		
 	End if 
 	
@@ -40,16 +26,3 @@ Else
 	ABORT:C156
 	
 End if 
-
-// ----------------------------------------------------
-If (Bool:C1537(Num:C11(String:C10($Obj_message.target))#0))
-	
-	CALL FORM:C1391($Obj_message.target; "DO_MESSAGE"; $Obj_message)
-	
-End if 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

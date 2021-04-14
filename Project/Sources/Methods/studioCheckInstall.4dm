@@ -65,6 +65,8 @@ If ($out.applicationAvailable)
 		
 		If ($out.ready)
 			
+			$studio.acceptLicences()  // <- To accept licences
+			
 			// *CHECK TOOLS-PATH
 			If (Not:C34($studio.sdkFolder().folder("cmdline-tools/latest").exists))
 				

@@ -8,12 +8,14 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $bottom; $height; $left; $right; $top; $width : Integer
-var $e; $o : Object
+var $offset : Integer
+var $coordinates; $data; $display; $e : Object
+var $widget : cs:C1710.widgetMessage
 
 // ----------------------------------------------------
 // Initialisations
 $e:=FORM Event:C1606
+$widget:=Form:C1466.$dialog.EDITOR[$e.objectName]
 
 // ----------------------------------------------------
 Case of 
@@ -25,27 +27,27 @@ Case of
 			
 			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "hideBrowser")
 			
-			$o:=Self:C308->
+			$widget:=Self:C308->
 			
-			If ($o.form#Null:C1517)
+			If ($widget.form#Null:C1517)
 				
 				Case of 
 						
 						//______________________________________________________
-					: ($o.selector="form-list")\
-						 | ($o.selector="form-detail")  // Forms
+					: ($widget.selector="form-list")\
+						 | ($widget.selector="form-detail")  // Forms
 						
-						$o.action:="forms"
-						$o.selector:=Replace string:C233($o.selector; "form-"; "")
-						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "setForm"; $o)
+						$widget.action:="forms"
+						$widget.selector:=Replace string:C233($widget.selector; "form-"; "")
+						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "setForm"; $widget)
 						
 						//______________________________________________________
-					: ($o.selector="form-formatter")
+					: ($widget.selector="form-formatter")
 						
 						//
 						
 						//______________________________________________________
-					: ($o.selector="form-login")
+					: ($widget.selector="form-login")
 						
 						//
 						
@@ -67,7 +69,8 @@ Case of
 				//______________________________________________________
 			: ($e.code<0)  // <SUBFORM EVENTS>
 				
-				$o:=Self:C308->
+				$data:=$widget.getValue()
+				$display:=$data.ƒ
 				
 				Case of 
 						
@@ -75,39 +78,39 @@ Case of
 					: ($e.code=-2)\
 						 | ($e.code=-1)  // Close
 						
-						If ($o.tips.enabled)
-							
-							// Restore help tips status
-							$o.tips.enable()
-							$o.tips.setDuration($o.tips.delay)
-							
-						End if 
-						
-						Self:C308->:=New object:C1471
-						
+						//$widget.hide()
 						OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
 						
+						$display.restore($data)
+						
+						// Restore original size
+						$widget.setDimension($display.width; $display.height)
+						
 						//…………………………………………………………………………………………………
-					Else 
+					: ($e.code=-8858)  // Resize
 						
-						// Resizing
-						OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
-						
-						$bottom:=$top+Abs:C99($e.code)
+						$coordinates:=$widget.getCoordinates()
+						$coordinates.bottom:=$coordinates.bottom+$display.offset
 						
 						// Limit to the window's height
-						OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+						$offset:=$widget.getParent().dimensions.height-$coordinates.bottom-20
 						
-						If ($bottom>($height-20))
+						If ($offset<0)
 							
-							$bottom:=$height-20
+							$coordinates.bottom:=$coordinates.bottom+$offset
+							$display.background.coordinates.bottom:=$display.background.coordinates.bottom+$offset
+							$display.additional.coordinates.bottom:=$display.additional.coordinates.bottom+$offset
+							$display.offset:=$display.offset+$offset
+							$display.scrollbar:=True:C214
 							
-							$o.scrollbar:=True:C214
-							Self:C308->:=Self:C308->  // Touch
+						Else 
+							
+							$display.scrollbar:=False:C215
 							
 						End if 
 						
-						OBJECT SET COORDINATES:C1248(*; $e.objectName; $left; $top; $right; $bottom)
+						$widget.setCoordinates($coordinates)
+						$display.update($data)
 						
 						//…………………………………………………………………………………………………
 				End case 
@@ -120,7 +123,6 @@ Case of
 				//______________________________________________________
 		End case 
 		
-		
 		//=============================================================================
 	Else 
 		
@@ -128,6 +130,3 @@ Case of
 		
 		//=============================================================================
 End case 
-
-// ----------------------------------------------------
-// End

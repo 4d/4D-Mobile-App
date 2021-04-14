@@ -1,11 +1,19 @@
 Class extends static
 
-//═════════════════════════════════════════════════
+//=== === === === === === === === === === === === === === === === === === ===
 Class constructor($name : Text; $datasource)
 	
-	Super:C1705($name)
+	If (Count parameters:C259>=1)
+		
+		Super:C1705($name)
+		
+	Else 
+		
+		Super:C1705()
+		
+	End if 
 	
-	C_POINTER:C301($p)
+	var $p : Pointer
 	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
 	This:C1470.assignable:=Not:C34(Is nil pointer:C315($p))
 	
@@ -35,8 +43,7 @@ Class constructor($name : Text; $datasource)
 	
 	This:C1470.action:=OBJECT Get action:C1457(*; This:C1470.name)
 	
-	//________________________________________________________________
-	// Update the widget pointer in case of form reload
+	//=== === === === === === === === === === === === === === === === === === ===
 Function updatePointer()->$p : Pointer
 	
 	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
@@ -47,16 +54,13 @@ Function updatePointer()->$p : Pointer
 		
 	End if 
 	
-	//________________________________________________________________
-	// Return the pointer to the widget
+	//=== === === === === === === === === === === === === === === === === === ===
 Function pointer()->$p : Pointer
 	
 	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
 	
-/*═════════════════════════════════════════════════
-sets the format for the widget
-*/
-Function setFormat($format : Text)->$this : cs:C1710.static
+	//=== === === === === === === === === === === === === === === === === === ===
+Function setFormat($format : Text)->$this : cs:C1710.widget
 	
 	OBJECT SET FORMAT:C236(*; This:C1470.name; $format)
 	
@@ -70,43 +74,80 @@ Attaches an image to the widget
     • variable name if the picture comes from a picture variable
     • number, preceded with a question mark (ex.: “?250”) if the picture comes from a picture library (OBSOLETE)
 */
-Function setPicture($proxy : Text)->$this : Object
+Function setPicture($proxy : Text)->$this : cs:C1710.widget
 	
-	Case of 
-			
-			//______________________________________________________
-		: (This:C1470.type=Object type 3D button:K79:17)\
-			 | (This:C1470.type=Object type 3D checkbox:K79:27)\
-			 | (This:C1470.type=Object type 3D radio button:K79:24)
-			
-			This:C1470.setFormat(";"+$proxy)
-			
-			//______________________________________________________
-		: (This:C1470.type=Object type picture button:K79:20)\
-			 | (This:C1470.type=Object type picture popup menu:K79:15)
-			
-			This:C1470.setFormat(";;"+$proxy)
-			
-			//______________________________________________________
-		: (This:C1470.type=Object type listbox header:K79:9)\
-			 | (This:C1470.type=Object type static picture:K79:3)
-			
-			This:C1470.setFormat($proxy)
-			
-			//______________________________________________________
-		Else 
-			
-			// #ERROR
-			
-			//______________________________________________________
-	End case 
+	If (Count parameters:C259>=1)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (This:C1470.type=Object type 3D button:K79:17)\
+				 | (This:C1470.type=Object type 3D checkbox:K79:27)\
+				 | (This:C1470.type=Object type 3D radio button:K79:24)
+				
+				This:C1470.setFormat(";"+$proxy)
+				
+				//______________________________________________________
+			: (This:C1470.type=Object type picture button:K79:20)\
+				 | (This:C1470.type=Object type picture popup menu:K79:15)
+				
+				This:C1470.setFormat(";;"+$proxy)
+				
+				//______________________________________________________
+			: (This:C1470.type=Object type listbox header:K79:9)\
+				 | (This:C1470.type=Object type static picture:K79:3)
+				
+				This:C1470.setFormat($proxy)
+				
+				//______________________________________________________
+			Else 
+				
+				// #ERROR
+				
+				//______________________________________________________
+		End case 
+		
+	Else 
+		
+		// Remove picture
+		
+		Case of 
+				
+				//______________________________________________________
+			: (This:C1470.type=Object type 3D button:K79:17)\
+				 | (This:C1470.type=Object type 3D checkbox:K79:27)\
+				 | (This:C1470.type=Object type 3D radio button:K79:24)
+				
+				This:C1470.setFormat(";\"\"")
+				
+				//______________________________________________________
+			: (This:C1470.type=Object type picture button:K79:20)\
+				 | (This:C1470.type=Object type picture popup menu:K79:15)
+				
+				This:C1470.setFormat(";;\"\"")
+				
+				//______________________________________________________
+			: (This:C1470.type=Object type listbox header:K79:9)\
+				 | (This:C1470.type=Object type static picture:K79:3)
+				
+				This:C1470.setFormat("")
+				
+				//______________________________________________________
+			Else 
+				
+				// #ERROR
+				
+				//______________________________________________________
+		End case 
+	End if 
 	
 	$this:=This:C1470
 	
 	//________________________________________________________________
-Function getCoordinates
+	// ⚠️ 
+Function getCoordinates()->$coordinates : Object
 	
-	Super:C1706.getCoordinates()
+	$coordinates:=Super:C1706.getCoordinates()
 	
 	Case of 
 			
@@ -188,6 +229,7 @@ Function getValue()->$value
 Function setValue($value)->$this : cs:C1710.widget
 	
 	OBJECT SET VALUE:C1742(This:C1470.name; $value)
+	This:C1470.value:=$value
 	
 	$this:=This:C1470
 	
@@ -448,24 +490,33 @@ Function getHelpTip
 	$0:=OBJECT Get help tip:C1182(*; This:C1470.name)
 	
 /*══════════════════════════
-.setHelpTip(text) -> This
+.setHelpTip(text| resname) -> This
 ══════════════════════════*/
-Function setHelpTip
-	
-	C_TEXT:C284($1)  // Text or resname
-	C_TEXT:C284($t)
+Function setHelpTip($helpTip : Text)->$this : cs:C1710.widget
+	var $t : Text
 	
 	If (Count parameters:C259>=1)
 		
-		$t:=Get localized string:C991($1)
-		$t:=Choose:C955(Length:C16($t)>0; $t; $1)  // Revert if no localization
+		$t:=$helpTip
 		
+		If (Length:C16($helpTip)>0)\
+			 & (Length:C16($helpTip)<=255)
+			
+			//%W-533.1
+			If ($helpTip[[1]]#Char:C90(1))
+				
+				$t:=Get localized string:C991($helpTip)
+				$t:=Choose:C955(Length:C16($t)>0; $t; $helpTip)  // Revert if no localization
+				
+			End if 
+			//%W+533.1
+			
+		End if 
 	End if 
 	
 	OBJECT SET HELP TIP:C1181(*; This:C1470.name; $t)
 	
-	C_OBJECT:C1216($0)
-	$0:=This:C1470
+	$this:=This:C1470
 	
 /*══════════════════════════
 .getShortcut() -> object

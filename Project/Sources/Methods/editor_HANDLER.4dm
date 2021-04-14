@@ -55,6 +55,8 @@ Case of
 					
 				End if 
 				
+				Form:C1466.$dialog.EDITOR.message:=cs:C1710.subform.new("message").setValue(New object:C1471)
+				
 				//#MARK_TODO: keep current 4D/Database tips values
 				
 				// Launch the worker
@@ -201,12 +203,7 @@ Case of
 				OBJECT SET COORDINATES:C1248(*; $form.footer; $left; $top; $right; $bottom)
 				
 				// Center message
-				$middle:=$width\2
-				OBJECT GET COORDINATES:C663(*; $form.message; $left; $top; $right; $bottom)
-				$width:=$right-$left
-				$left:=$middle-($width\2)
-				$right:=$left+$width
-				OBJECT SET COORDINATES:C1248(*; $form.message; $left; $top; $right; $bottom)
+				Form:C1466.$dialog.EDITOR.message.alignHorizontally(Align center:K42:3)
 				
 				//______________________________________________________
 			: ($e.code=On Timer:K2:25)

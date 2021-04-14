@@ -655,6 +655,7 @@
 			"picture",
 			"scrollable",
 			"static",
+			"subform",
 			"thermometer",
 			"webArea",
 			"widget"
@@ -708,11 +709,13 @@
 			"await_MESSAGE",
 			"COMPILER_message",
 			"DO_MESSAGE",
-			"POST_MESSAGE",
-			"WAIT_MESSAGE"
+			"POST_MESSAGE"
 		],
 		"forms": [
 			"MESSAGE"
+		],
+		"classes": [
+			"widgetMessage"
 		]
 	},
 	"mobile": {

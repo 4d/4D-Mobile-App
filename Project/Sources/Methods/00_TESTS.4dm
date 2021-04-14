@@ -659,30 +659,6 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		//$c:=New collection(1;2;3;4;5)
-		//$cc:=$c.slice($c.length-1)
-		
-		$o:=new("str"; "test")
-		$o1:=$o.constructor()
-		
-		$c:=$o.distinctLetters()
-		$o.setText("hello world")
-		$t:=$o.lowerCamelCase()
-		
-		$o:=new("svg"; "test")
-		$o1:=$o.constructor()
-		$o.close()
-		
-		$o:=new("str"; "test")
-		$o1:=$o.constructor()
-		
-		$o.setText("Hello world")
-		$t:=$o.insert(" great"; 6).value
-		$o1:=$o.insert("Vincent"; 7; MAXLONG:K35:2)
-		
-		//________________________________________
-	: (True:C214)
-		
 		$o:=db.exposedDatastore()
 		$o:=db("object;blob").exposedDatastore()
 		

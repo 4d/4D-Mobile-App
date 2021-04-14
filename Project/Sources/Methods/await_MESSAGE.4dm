@@ -1,55 +1,62 @@
 //%attributes = {"invisible":true}
-var $0 : Object  // Signal response
-var $1 : Object  // Parameters as an object
-var $2 : Text  // ID {optional}
+// ----------------------------------------------------
+// Project method : await_MESSAGE
+// ID[9B5983900B4F4E13A2A5AD80D245E814]
+// Created 10-9-2020 by Vincent de Lachaux
+// ----------------------------------------------------
+// #THREAD-SAFE
+// ----------------------------------------------------
+// Description:
+// Management of the message widget in a target window
+// ----------------------------------------------------
+// Declarations
+#DECLARE($message : Object; $id : Text)->$response : Object
 
-If (False:C215)
-	C_OBJECT:C1216(await_MESSAGE; $0)  // Signal response
-	C_OBJECT:C1216(await_MESSAGE; $1)  // Parameters as an object
-	C_TEXT:C284(await_MESSAGE; $2)  // ID {optional}
-End if 
+var $name : Text
+var $mode; $state; $winRef : Integer
+var $time : Time
 
-If (Count parameters:C259>=2)
-	
-	$0:=New signal:C1641($2)
-	
-Else 
-	
-	$0:=New signal:C1641
-	
-End if 
+PROCESS PROPERTIES:C336(Current process:C322; $name; $state; $time; $mode)
 
-Use ($0)
-	
-	$0.validate:=False:C215
-	
-End use 
-
-var $window : Integer
-
-If (cs:C1710.process.new().cooperative)
+If (Not:C34(($mode ?? 1)))  // Cooperative
 	
 	//%T-
-	$window:=Current form window:C827
+	$winRef:=Current form window:C827
 	//%T+
 	
 End if 
 
 // Default target is the current windows
-If ($1.target=Null:C1517)
+If ($message.target=Null:C1517)
 	
-	$1.target:=$window
+	$message.target:=$winRef
 	
 End if 
 
-// Add the signal object
-$1.signal:=$0
-
-POST_MESSAGE($1)
-
-If ($1.target#$window)
+If (Count parameters:C259>=2)
 	
-	$0.wait()
+	$response:=New signal:C1641($id)
+	
+Else 
+	
+	$response:=New signal:C1641
+	
+End if 
+
+Use ($response)
+	
+	$response.validate:=False:C215
+	
+End use 
+
+// Add the signal object
+$message.signal:=$response
+
+POST_MESSAGE($message)
+
+If ($message.target#$winRef)
+	
+	$response.wait()
 	
 Else 
 	
