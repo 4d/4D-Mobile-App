@@ -26,7 +26,7 @@ Function isAsynchronous()->$yes : Boolean
 	
 	$type:=This:C1470.getIndicatorType()
 	
-	$yes:=($type=Asynchronous progress bar:K42:36) | ($type=Barber shop:K42:35)
+	$yes:=($type=Asynchronous progress bar:K42:36) | ($type=Barber shop:K42:35) | ($type=0)
 	
 	//========================================================
 Function barber->$this : cs:C1710.thermometer

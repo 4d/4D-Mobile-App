@@ -58,7 +58,8 @@
 					"width": 100,
 					"height": 41,
 					"class": "background",
-					"sizingX": "fixed"
+					"sizingX": "fixed",
+					"sizingY": "fixed"
 				},
 				"bottom": {
 					"type": "line",
@@ -113,7 +114,7 @@
 					"width": 0,
 					"startPoint": "topLeft"
 				},
-				"swith.background": {
+				"switch.background": {
 					"type": "rectangle",
 					"top": 0,
 					"left": 948,
@@ -401,5 +402,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 132
+	"geometryStamp": 156
 }

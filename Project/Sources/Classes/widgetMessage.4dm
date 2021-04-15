@@ -291,6 +291,9 @@ Function update($data : Object)
 	Case of 
 			
 			// ---------------------------------------
+		: ($data.type=Null:C1517)
+			
+			// ---------------------------------------
 		: ($data.type="progress")
 			
 			This:C1470.ok.hide()
