@@ -25,7 +25,8 @@ Class constructor
 	This:C1470.adbStartRetried:=False:C215
 	This:C1470.timeOut:=30000  // 30 seconds
 	This:C1470.packageListTimeOut:=240000  // 4 minutes
-	This:C1470.bootTimeOut:=240000  // 4 minutes
+	This:C1470.bootTimeOut:=240000
+	This:C1470.appStartTimeOut:=240000
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -472,9 +473,9 @@ Function waitStartApp
 		$stepTime:=Milliseconds:C459-$startTime
 		
 	Until ($0.success=True:C214)\
-		 | ($stepTime>This:C1470.timeOut)
+		 | ($stepTime>This:C1470.appStartTimeOut)
 	
-	If ($stepTime>This:C1470.timeOut)  // Timeout
+	If ($stepTime>This:C1470.appStartTimeOut)  // Timeout
 		
 		$0.errors.push("Timeout when starting the app")
 		
