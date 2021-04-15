@@ -92,6 +92,7 @@ class App : BaseApp() {
             sdkVersion = QMobileUiUtil.appUtilities.sdkVersion
             dumpedTables = QMobileUiUtil.appUtilities.dumpedTables
             initialGlobalStamp = QMobileUiUtil.appUtilities.initialGlobalStamp
+            relationAvailable = QMobileUiUtil.appUtilities.relationAvailable
         }
     }
 
