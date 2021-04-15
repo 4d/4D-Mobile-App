@@ -30,7 +30,7 @@
 	"pages": [
 		{
 			"objects": {
-				"background": {
+				"wizard.background": {
 					"type": "rectangle",
 					"top": 0,
 					"left": 0,
@@ -219,7 +219,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 312,
+	"geometryStamp": 313,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

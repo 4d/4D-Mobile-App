@@ -18,7 +18,25 @@ var $widget : cs:C1710.widgetMessage
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	$widget:=Form:C1466.$dialog.EDITOR.message
+	Case of 
+			//______________________________________________________
+		: (Current form name:C1298="EDITOR")
+			
+			$widget:=Form:C1466.$dialog.EDITOR.message
+			
+			//______________________________________________________
+		: (Current form name:C1298="WIZARD_NEW_PROJECT")
+			
+			$widget:=Form:C1466._message
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215; "Unmanaged parent form")
+			
+			//______________________________________________________
+	End case 
+	
 	$data:=$widget.getValue()
 	$display:=$data.ƒ
 	

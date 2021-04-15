@@ -24,6 +24,8 @@ Case of
 		
 		EDITOR:=cs:C1710.editor.new()
 		
+		Form:C1466._message:=cs:C1710.subform.new("message").setValue(New object:C1471)
+		
 		// Populate the message list
 		If (Is macOS:C1572)
 			
