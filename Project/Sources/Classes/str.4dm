@@ -1001,7 +1001,8 @@ Function replace
 				
 				For each ($t; $1)
 					
-					$0:=Replace string:C233($0; $t; String:C10($2[$i]))
+					$0:=Replace string:C233($0; $t; Choose:C955($2[$i]=Null:C1517; ""; String:C10($2[$i])))
+					
 					$i:=$i+1
 					
 				End for each 
@@ -1009,28 +1010,14 @@ Function replace
 			
 		Else 
 			
-			If ($2=Null:C1517)
-				
-				$0:=Replace string:C233($0; $t; "")
-				
-			Else 
-				
-				$0:=Replace string:C233($0; $t; String:C10($2))
-				
-			End if 
+			$0:=Replace string:C233($0; $t; Choose:C955($2=Null:C1517; ""; String:C10($2)))
+			
 		End if 
 		
 	Else 
 		
-		If ($2=Null:C1517)
-			
-			$0:=Replace string:C233($0; String:C10($1); "")
-			
-		Else 
-			
-			$0:=Replace string:C233($0; String:C10($1); String:C10($2))
-			
-		End if 
+		$0:=Replace string:C233($0; String:C10($1); Choose:C955($2=Null:C1517; ""; String:C10($2)))
+		
 	End if 
 	
 	//=======================================================================================================
