@@ -28,7 +28,7 @@
 	"pages": [
 		{
 			"objects": {
-				"background": {
+				"editor.background": {
 					"type": "rectangle",
 					"top": 0,
 					"left": 0,
@@ -313,7 +313,7 @@
 			}
 		}
 	},
-	"geometryStamp": 96,
+	"geometryStamp": 102,
 	"width": 970,
 	"height": 870
 }
