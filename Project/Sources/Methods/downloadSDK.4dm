@@ -111,7 +111,7 @@ Case of
 						//______________________________________________________
 					: ($target="ios")
 						
-						$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_iOS_Sdk_Build/.lastSuccessful/ios.zip"
+						$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_4dIOSSdk_Build/.lastSuccessful/ios.zip"
 						
 						//______________________________________________________
 					Else 
