@@ -3,7 +3,7 @@
 // -> force   =   Force the download even if the file is up to date (see verification code)
 #DECLARE($server : Text; $target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)
 
-var $applicationVersion : Text
+var $applicationVersion; $url : Text
 var $run; $withUI : Boolean
 var $buildNumber : Integer
 var $o; $manifest : Object
@@ -69,6 +69,8 @@ Case of
 		//______________________________________________________
 End case 
 
+$applicationVersion:=Application version:C493($buildNumber; *)
+
 Case of 
 		
 		//______________________________________________________
@@ -79,11 +81,8 @@ Case of
 		//______________________________________________________
 	: ($server="aws")
 		
-		$applicationVersion:=Application version:C493($buildNumber; *)
-		
 		//$buildNumber:=264302  // Force build number for test purpose
 		
-		var $url : Text
 		$url:="https://resources-download.4d.com/sdk/"\
 			+Choose:C955($applicationVersion[[1]]="A"; "main"; Delete string:C232($applicationVersion; 1; 4))+"/"\
 			+String:C10($buildNumber)+"/"\
@@ -101,17 +100,60 @@ Case of
 			
 			If ($o.tc#Null:C1517)
 				
+				$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/"
+				
 				Case of 
 						
 						//______________________________________________________
 					: ($target="android")
 						
-						$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip"
+						If ($applicationVersion[[1]]="A")
+							
+							//http://srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build//855236:id/android.zip
+							$url:=$url+"id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip"
+							
+						Else 
+							
+							$url:=$url+"id4dmobile_QMobile_"+$applicationVersion[[5]]+$applicationVersion[[6]]
+							
+							If ($applicationVersion[[7]]="0")
+								
+								//http://srv-build:8111/repository/download/id4dmobile_QMobile_19x_Android_Sdk_Build/853617:id/android.zip
+								$url:=$url+"x_Android_Sdk_Build/.lastSuccessful/android.zip"
+								
+							Else 
+								
+								//http://srv-build:8111/repository/download/id4dmobile_QMobile_18r6_IOS_Sdk_Build/838082:id/android.zip
+								$url:=$url+"r"+$applicationVersion[[7]]+"_IOS_Sdk_Build/.lastSuccessful/android.zip"
+								
+							End if 
+						End if 
+						
 						
 						//______________________________________________________
 					: ($target="ios")
 						
-						$url:="http://"+String:C10($o.tc)+"@srv-build:8111/repository/download/id4dmobile_4dIOSSdk_Build/.lastSuccessful/ios.zip"
+						If ($applicationVersion[[1]]="A")
+							
+							//http://srv-build:8111/repository/download/id4dmobile_4dIOSSdk_Build/855236:id/ios.zip
+							$url:=$url+"id4dmobile_4dIOSSdk_Build/.lastSuccessful/ios.zip"
+							
+						Else 
+							
+							$url:=$url+"id4dmobile_QMobile_"+$applicationVersion[[5]]+$applicationVersion[[6]]
+							
+							If ($applicationVersion[[7]]="0")
+								
+								//http://srv-build:8111/repository/download/id4dmobile_QMobile_19x_IOS_Sdk_Build/837030:id/ios.zip
+								$url:=$url+"x_IOS_Sdk_Build/.lastSuccessful/ios.zip"
+								
+							Else 
+								
+								//http://srv-build:8111/repository/download/id4dmobile_QMobile_18r6_IOS_Sdk_Build/838082:id/1.0.zip
+								$url:=$url+"r"+$applicationVersion[[7]]+"x_IOS_Sdk_Build/.lastSuccessful/ios.zip"
+								
+							End if 
+						End if 
 						
 						//______________________________________________________
 					Else 
