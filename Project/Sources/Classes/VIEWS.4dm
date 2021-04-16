@@ -549,7 +549,7 @@ Function templatePicker($formType : Text)
 	
 	//============================================================================
 	// Building the table selector
-Function buidTableWidget($dataModel : Object; $options : Object)->$widget : Picture
+Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	
 	var $name; $table; $typeForm : Text
 	var $picture : Picture

@@ -189,7 +189,7 @@ Case of
 				($form.tabdetail.pointer())->:=Num:C11($context.selector=2)
 				
 				// Draw the table list
-				($form.tableWidget.pointer())->:=$view.buidTableWidget($datamodel; New object:C1471(\
+				($form.tableWidget.pointer())->:=$view.tableWidget($datamodel; New object:C1471(\
 					"tableNumber"; $context.tableNum()))
 				
 				SVG SHOW ELEMENT:C1108(*; $form.tableWidget.name; $context.tableNum(); 0)
@@ -229,7 +229,7 @@ Case of
 				End if 
 				
 				// Draw the table list
-				($form.tableWidget.pointer())->:=$view.buidTableWidget($datamodel; New object:C1471(\
+				($form.tableWidget.pointer())->:=$view.tableWidget($datamodel; New object:C1471(\
 					"tableNumber"; $context.tableNum()))
 				
 				SVG SHOW ELEMENT:C1108(*; $form.tableWidget.name; $context.tableNum(); 0)
