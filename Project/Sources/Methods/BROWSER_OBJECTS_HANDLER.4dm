@@ -105,8 +105,6 @@ Case of
 						
 						If ($folderDestination.exists)
 							
-							$c:=Split string:C1554(Form:C1466.url; "/")
-							
 							If (Not:C34($folderDestination.file($formName).exists))  // Download
 								
 								$archive:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file($formName)
@@ -138,7 +136,20 @@ Case of
 										
 										$folderDestination:=$archive.copyTo($folderDestination; fk overwrite:K87:5)
 										
-										Form:C1466.selector:=$c[$c.length-3]
+										$c:=Split string:C1554(Form:C1466.url; "/")
+										
+										If (FEATURE.with("android"))
+											
+											var $index : Integer
+											$index:=$c.indexOf("type")
+											Form:C1466.selector:=$c[$index+1]
+											
+										Else 
+											
+											Form:C1466.selector:=$c[$c.length-3]
+											
+										End if 
+										
 										Form:C1466.form:="/"+$formName
 										
 										CALL SUBFORM CONTAINER:C1086(-1)
