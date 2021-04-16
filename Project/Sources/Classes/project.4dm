@@ -57,13 +57,16 @@ Function load
 	
 	If (Bool:C1537($file.exists))
 		
+		// *SHORTCUTS
+		This:C1470._folder:=$file.parent
+		This:C1470._name:=This:C1470._folder.fullName
 		
 		$project:=JSON Parse:C1218($file.getText())
 		
 		If (project_Upgrade($project))
 			
 			// If upgraded, keep a copy of the old project…
-			$o:=$file.parent.folder(Replace string:C233(Get localized string:C991("convertedFiles"); "{stamp}"; str_date("stamp")))
+			$o:=This:C1470._folder.folder(Replace string:C233(Get localized string:C991("convertedFiles"); "{stamp}"; str_date("stamp")))
 			$o.create()
 			$file.moveTo($o)
 			
@@ -73,15 +76,6 @@ Function load
 		End if 
 		
 		This:C1470.init($project)
-		
-/* 
-		
-SHORTCUTS
-		
-*/
-		
-		This:C1470._folder:=$file.parent
-		This:C1470._name:=This:C1470._folder.fullName
 		
 		If (Value type:C1509($project.info.target)=Is collection:K8:32)
 			
@@ -340,74 +334,48 @@ Function AndroidIconSet($icon : Picture)
 	// Save the project
 Function save()
 	
-	var $key : Text
-	var $o : Object
-	var $folder : 4D:C1709.Folder
 	var $file : 4D:C1709.File
 	
-	If (Bool:C1537(FEATURE._8858))  // Debug mode
-		
-		$folder:=Folder:C1567(fk desktop folder:K87:19).folder("DEV")
-		
-		If ($folder.exists)
-			
-			If (PROJECT.$dialog#Null:C1517)
-				
-				$file:=$folder.file("dialog.json")
-				
-				If ($file.isWritable)
-					
-					$file.setText(JSON Stringify:C1217(PROJECT.$dialog; *))
-					
-					// Else log?
-					
-				End if 
-				
-				For each ($key; PROJECT.$dialog)
-					
-					$file:=$folder.file($key+".json")
-					
-					If ($file.isWritable)
-						
-						$file.setText(JSON Stringify:C1217(PROJECT.$dialog[$key]; *))
-						
-						// Else log?
-						
-					End if 
-				End for each 
-			End if 
-			
-			// Remove circular references
-			$o:=OB Copy:C1225(PROJECT)
-			OB REMOVE:C1226($o.$project; "$dialog")
-			
-			$file:=$folder.file("project.json")
-			
-			If ($file.isWritable)
-				
-				$file.setText(JSON Stringify:C1217($o; *))
-				
-				// Else log?
-				
-			End if 
-			
-			If (PROJECT.$project.$catalog#Null:C1517)
-				
-				$file:=$folder.file("catalog.json")
-				
-				If ($file.isWritable)
-					
-					$file.setText(JSON Stringify:C1217(PROJECT.$project.$catalog; *))
-					
-					// Else log?
-					
-				End if 
-			End if 
-		End if 
-	End if 
+	//var $key : Text
+	//var $o : Object
+	//var $folder : 4D.Folder
+	//If (Bool(FEATURE._8858))  // Debug mode
+	//$folder:=Folder(fk desktop folder).folder("DEV")
+	//If ($folder.exists)
+	//If (PROJECT.$dialog#Null)
+	//$file:=$folder.file("dialog.json")
+	//If ($file.isWritable)
+	//$file.setText(JSON Stringify(PROJECT.$dialog; *))
+	//// Else log?
+	//End if 
+	//For each ($key; PROJECT.$dialog)
+	//$file:=$folder.file($key+".json")
+	//If ($file.isWritable)
+	//$file.setText(JSON Stringify(PROJECT.$dialog[$key]; *))
+	//// Else log?
+	//End if 
+	//End for each 
+	//End if 
+	//// Remove circular references
+	//$o:=OB Copy(PROJECT)
+	//OB REMOVE($o.$project; "$dialog")
+	//OB REMOVE($o.$project; "$project")
+	//$file:=$folder.file("project.json")
+	//If ($file.isWritable)
+	//$file.setText(JSON Stringify($o; *))
+	//// Else log?
+	//End if 
+	//If (PROJECT.$project.$catalog#Null)
+	//$file:=$folder.file("catalog.json")
+	//If ($file.isWritable)
+	//$file.setText(JSON Stringify(PROJECT.$project.$catalog; *))
+	//// Else log?
+	//End if 
+	//End if 
+	//End if 
+	//End if 
 	
 	$file:=This:C1470._folder.file("project.4dmobileapp")
-	$file.create()
 	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
