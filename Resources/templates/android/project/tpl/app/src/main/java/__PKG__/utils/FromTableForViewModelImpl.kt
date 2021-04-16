@@ -72,6 +72,7 @@ class FromTableForViewModelImpl : FromTableForViewModel {
             } else {
                 (entity as {{relation_source}}?)?.__{{relation_name}}Key = entity?.{{relation_name}}?.__KEY
             }
+            (entity as {{relation_source}}?)?.{{relation_name}} = null
         }
         {{/tableNames_relations}}
         {{#tableNames_without_relations}}

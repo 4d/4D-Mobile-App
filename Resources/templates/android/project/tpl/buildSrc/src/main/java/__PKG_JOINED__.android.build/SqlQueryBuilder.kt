@@ -53,6 +53,7 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
                             val neededObject = hashMap[key.fieldAdjustment()]
                             if (neededObject is JSONObject) {
                                 hashMap["__${key.fieldAdjustment()}Key"] = neededObject.getSafeString("__KEY")
+                                hashMap[key.fieldAdjustment()] = null
                             }
                         }
                         field.isOneToManyRelation -> {
