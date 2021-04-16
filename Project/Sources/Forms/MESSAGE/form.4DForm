@@ -36,7 +36,8 @@
 					"enterable": false,
 					"dragging": "none",
 					"dropping": "none",
-					"showSelection": true
+					"showSelection": true,
+					"fill": "transparent"
 				},
 				"additional": {
 					"type": "input",
@@ -48,7 +49,8 @@
 					"fontTheme": "additional",
 					"enterable": false,
 					"showSelection": true,
-					"multiline": "yes"
+					"multiline": "yes",
+					"fill": "transparent"
 				}
 			}
 		},

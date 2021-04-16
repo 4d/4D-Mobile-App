@@ -75,7 +75,8 @@
 						"onDataChange"
 					],
 					"method": "DEVELOPER",
-					"class": "input"
+					"class": "input",
+					"fill": "transparent"
 				},
 				"02_team.popup.border": {
 					"type": "rectangle",

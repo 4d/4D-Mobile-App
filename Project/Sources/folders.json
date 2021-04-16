@@ -182,6 +182,7 @@
 	},
 	"[EDITOR]": {
 		"groups": [
+			"[BROWSER]",
 			"[PANELS]",
 			"[PROJECT]",
 			"FOOTER",
@@ -475,7 +476,6 @@
 			"Rest",
 			"sdk",
 			"template",
-			"unit4D",
 			"unzip",
 			"xloc"
 		],

@@ -124,7 +124,8 @@
 					"events": [
 						"onDataChange"
 					],
-					"class": "infos"
+					"class": "infos",
+					"fill": "transparent"
 				},
 				"id.label": {
 					"type": "text",
