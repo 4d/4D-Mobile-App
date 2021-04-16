@@ -68,8 +68,17 @@ fun CharSequence.unaccent(): String {
 
 private const val prefixReservedKeywords = "qmobile"
 
-fun String.validateWord(): String =
-    if (reservedKeywords.contains(this)) "${prefixReservedKeywords}_$this" else this
+fun String.validateWord(): String  {
+    return if (this.contains(".")) {
+        var newStr = ""
+        for (part in this.split(".")) {
+            newStr += if (reservedKeywords.contains(part)) "${prefixReservedKeywords}_$part" else part
+            newStr += "."
+        }
+        newStr.removeSuffix(".")
+    } else
+        if (reservedKeywords.contains(this)) "${prefixReservedKeywords}_$this" else this
+}
 
 val reservedKeywords = listOf(
     "as",
