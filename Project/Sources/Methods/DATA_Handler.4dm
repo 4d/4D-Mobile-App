@@ -164,8 +164,6 @@ Case of
 								// Populate user icon
 								$Obj_context.current.filterIcon:=EDITOR.userIcon
 								
-								androidLimitations(False:C215; "User information queries are coming soon for Android")
-								
 							End if 
 							
 						Else 
@@ -229,7 +227,7 @@ Case of
 		//If (FEATURE.with("android"))
 		
 		//$Dir_root:=dataSet(New object("action"; "path"; \
-																																													"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+																																																"project"; New object("product"; Form.product; "$project"; PROJECT))).path
 		
 		//Else
 		
