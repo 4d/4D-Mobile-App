@@ -113,9 +113,14 @@ Case of
 					
 				End if 
 				
-				$menu.append("showCurrentSimulatorFolder"; "_openSimuPath").enable($could.xCodeAvailable)\
-					.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable($simctl.deviceLog(Form:C1466.currentDevice).exists)\
-					.line()
+				$menu.append("showCurrentSimulatorFolder"; "_openSimuPath").enable($could.xCodeAvailable)
+				If ($could.xCodeAvailable)
+					$menu.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable($simctl.deviceLog(Form:C1466.currentDevice).exists)  // avoid xcrun if no xcode
+				Else 
+					$menu.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable(False:C215)
+				End if 
+				
+				$menu.line()
 				
 				$menu.append("showDiagnosticReportsFolder"; "_openDiagnosticReports")
 				
