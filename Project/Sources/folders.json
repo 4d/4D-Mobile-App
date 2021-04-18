@@ -38,10 +38,13 @@
 		],
 		"methods": [
 			"_catalog",
-			"01_LASTBUILD"
+			"01_LASTBUILD",
+			"dev_test_android",
+			"dev_tests_iOS",
+			"ON_EVENT_CALL"
 		],
 		"forms": [
-			"_w_VIEWS",
+			"_VIEWS_WITH_actionList",
 			"[ALL_TYPES]Form1",
 			"[Commands]Form1",
 			"[Commands]Form2",
@@ -50,6 +53,7 @@
 			"00_TESTS",
 			"APP_STORE",
 			"Form1",
+			"Form2",
 			"ITUNE",
 			"LAUNCHSCREEN",
 			"NO_PUBLISHED_TABLES"
@@ -57,12 +61,14 @@
 	},
 	"_o_OBSOLETES": {
 		"methods": [
+			"_NEW_MOBILE_PROJECT",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
 			"_o_env_System_path",
 			"_o_http",
 			"_o_panel_Form_common",
 			"_o_panel_SET_CONSTRAINTS",
+			"_o_plist",
 			"_o_progress",
 			"_o_project_CLASSES",
 			"_o_project_Load",
@@ -79,6 +85,8 @@
 			"_o_tempoFieldType",
 			"_o_ui_BEST_SIZE",
 			"_o_unzip",
+			"_OPEN_MOBILE_PROJECT",
+			"OBSOLETE",
 			"TEMPO_1",
 			"TURN_AROUND_Field_name"
 		],
@@ -124,7 +132,6 @@
 			"device",
 			"git",
 			"mobile_Project_iOS",
-			"plist",
 			"provisioningProfiles",
 			"swiftPM",
 			"teamId",

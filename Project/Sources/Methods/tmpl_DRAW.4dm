@@ -208,9 +208,15 @@ If (Num:C11($tableID)>0)
 								CLEAR VARIABLE:C89($class)
 								CLEAR VARIABLE:C89($found)
 								CLEAR VARIABLE:C89($tips)
+								CLEAR VARIABLE:C89($isToOne)
+								CLEAR VARIABLE:C89($isToMany)
 								
-								$isToOne:=($field.fieldType=8858)
-								$isToMany:=($field.fieldType=8859)
+								If ($field.fieldType#Null:C1517)
+									
+									$isToOne:=($field.fieldType=8858)
+									$isToMany:=($field.fieldType=8859)
+									
+								End if 
 								
 								If ($indx>$count)
 									
@@ -286,7 +292,7 @@ If (Num:C11($tableID)>0)
 															//______________________________________________________
 														Else 
 															
-															$label:=$field.path
+															$label:=Choose:C955($field.path#Null:C1517; $field.path; $field.name)
 															
 															//______________________________________________________
 													End case 
@@ -357,6 +363,11 @@ If (Num:C11($tableID)>0)
 																End if 
 															End if 
 														End if 
+														
+													Else 
+														
+														$class:="label"
+														
 													End if 
 													
 													// Set class & tips

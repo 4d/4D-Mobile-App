@@ -67,6 +67,7 @@ If (Length:C16($cible)>0)
 						$indx:=Num:C11(Replace string:C233($cible; "e"; ""))
 						$target.fields.remove($dropped.fromIndex)
 						$indx:=$indx-1-Num:C11($dropped.fromIndex<$indx)
+						OB REMOVE:C1226($dropped; "fromIndex")
 						$target.fields.insert($indx; $dropped)
 						
 					End if 
@@ -265,6 +266,9 @@ If (Length:C16($cible)>0)
 							
 							//______________________________________________________
 					End case 
+					
+					OB REMOVE:C1226($dropped; "fromIndex")
+					
 				End if 
 			End if 
 			
