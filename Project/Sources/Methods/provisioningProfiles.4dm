@@ -14,7 +14,7 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Txt_cmd; $Txt_error; $Txt_in; $Txt_out; $Txt_path; $Txt_plist; $Txt_poxix)
+C_TEXT:C284($Txt_cmd; $Txt_error; $Txt_in; $Txt_out; $Txt_path; $Txt_plist; $Txt_posix)
 C_OBJECT:C1216($Obj_param; $Obj_result)
 C_COLLECTION:C1488($Col_result)
 
@@ -110,7 +110,15 @@ Case of
 					
 					If ($Obj_result.success)
 						
-						$Col_result.push($Obj_result.value)
+						If (FEATURE.with("plistClass")) & False:C215
+							
+							$Col_result.push($Obj_result.content)
+							
+						Else 
+							
+							$Col_result.push($Obj_result.value)
+							
+						End if 
 						
 					End if 
 				End for each 
@@ -122,7 +130,6 @@ Case of
 		Else 
 			
 			// read one provisionning profile
-			$Txt_plist:=Temporary folder:C486+Generate UUID:C1066+"mp.plist"
 			
 			$Txt_cmd:="/usr/bin/security cms -D -i "+str_singleQuoted($Obj_param.path)
 			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
@@ -131,22 +138,31 @@ Case of
 				
 				If (Length:C16($Txt_out)>0)
 					
-					TEXT TO DOCUMENT:C1237($Txt_plist; $Txt_out)
-					
-					$Txt_poxix:=Convert path system to POSIX:C1106($Txt_plist)
-					
-					// Remove data not convertible to JSON https://juzhax.com/2013/12/invalid-object-in-plist-for-destination-format/
-					plist(New object:C1471("action"; "remove"; "domain"; $Txt_poxix; "key"; "ExpirationDate"))
-					
-					plist(New object:C1471("action"; "remove"; "domain"; $Txt_poxix; "key"; "CreationDate"))
-					
-					plist(New object:C1471("action"; "remove"; "domain"; $Txt_poxix; "key"; "DeveloperCertificates"))
-					
-					// Read it and convert it
-					$Obj_result:=plist(New object:C1471("action"; "object"; "domain"; $Txt_poxix))
-					
-					
+					If (FEATURE.with("plistClass")) & False:C215
+						
+						var $file : 4D:C1709.File
+						$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"mp.plist")
+						$file.setText($Txt_out)
+						$Obj_result:=cs:C1710.plist.new($file)
+						$file.delete()
+						
+					Else 
+						
+						$Txt_plist:=Temporary folder:C486+Generate UUID:C1066+"mp.plist"
+						TEXT TO DOCUMENT:C1237($Txt_plist; $Txt_out)
+						$Txt_posix:=Convert path system to POSIX:C1106($Txt_plist)
+						
+						// Remove data not convertible to JSON https://juzhax.com/2013/12/invalid-object-in-plist-for-destination-format/
+						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "ExpirationDate"))
+						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "CreationDate"))
+						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "DeveloperCertificates"))
+						
+						// Read it and convert it
+						$Obj_result:=_o_plist(New object:C1471("action"; "object"; "domain"; $Txt_posix))
+						
+					End if 
 				End if 
+				
 				If (Test path name:C476($Txt_plist)=Is a document:K24:1)
 					DELETE DOCUMENT:C159($Txt_plist)
 				End if 

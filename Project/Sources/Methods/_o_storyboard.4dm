@@ -729,11 +729,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						// 2- scene
 						//$Obj_element:=New object(\
-																																																															"insertInto";$Dom_root.findByXPath("document/scenes");\
-																																																															"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																																																															"idCount";3;\
-																																																															"tagInterfix";"SN";\
-																																																															"insertMode";"append")
+																																																																						"insertInto";$Dom_root.findByXPath("document/scenes");\
+																																																																						"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																																																																						"idCount";3;\
+																																																																						"tagInterfix";"SN";\
+																																																																						"insertMode";"append")
 						$Obj_element:=New object:C1471(\
 							"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 							"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
@@ -1359,7 +1359,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
 							$File_.setText($Txt_out)
-							$Obj_out:=plist(New object:C1471(\
+							$Obj_out:=_o_plist(New object:C1471(\
 								"action"; "object"; \
 								"domain"; $File_.path))
 							$File_.delete()  // delete temporary file
@@ -1426,7 +1426,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					
 					$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
 					$File_.setText($Txt_out)
-					$Obj_out:=plist(New object:C1471(\
+					$Obj_out:=_o_plist(New object:C1471(\
 						"action"; "object"; \
 						"domain"; $File_.path))
 					$File_.delete()

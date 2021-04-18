@@ -196,7 +196,7 @@ Function format  // MAC ONLY
 				
 				$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
 				$File_.setText($Txt_out)
-				$Obj_out:=plist(New object:C1471(\
+				$Obj_out:=_o_plist(New object:C1471(\
 					"action"; "object"; \
 					"domain"; $File_.path))
 				$File_.delete()  // delete temporary file
@@ -265,7 +265,7 @@ Function ibtoolVersion
 			var $File_ : Object
 			$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
 			$File_.setText($Txt_out)
-			$Obj_out:=plist(New object:C1471(\
+			$Obj_out:=_o_plist(New object:C1471(\
 				"action"; "object"; \
 				"domain"; $File_.path))
 			$File_.delete()

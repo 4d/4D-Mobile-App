@@ -28,27 +28,35 @@ Case of
 		
 		$context.team:=New collection:C1472
 		
-		For each ($o; $in.value)
+		If (FEATURE.with("plistClass"))
 			
-			If ($o.id#Null:C1517)\
-				 & ($context.team.query("id = :1"; $o.id).pop()=Null:C1517)
+			
+			
+			
+		Else 
+			
+			For each ($o; $in.value)
 				
-				$team:=New object:C1471(\
-					"id"; $o.id; \
-					"name"; ""; \
-					"menu"; $o.id)
-				
-				If (Length:C16(String:C10($o.name))>0)
+				If ($o.id#Null:C1517)\
+					 & ($context.team.query("id = :1"; $o.id).pop()=Null:C1517)
 					
-					$team.name:=$o.name
-					$team.menu:=$o.name+" ("+$o.id+")"
+					$team:=New object:C1471(\
+						"id"; $o.id; \
+						"name"; ""; \
+						"menu"; $o.id)
+					
+					If (Length:C16(String:C10($o.name))>0)
+						
+						$team.name:=$o.name
+						$team.menu:=$o.name+" ("+$o.id+")"
+						
+					End if 
+					
+					$context.team.push($team)
 					
 				End if 
-				
-				$context.team.push($team)
-				
-			End if 
-		End for each 
+			End for each 
+		End if 
 		
 		If (Length:C16(Form:C1466.organization.teamId)=0)  // No team : Affect the first one if any
 			

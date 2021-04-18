@@ -730,29 +730,45 @@ Function storageFields($table : Variant)->$fields : Collection
 Function isField
 	
 	var $0 : Boolean
-	var $1 : Text
-	$0:=Match regex:C1019("(?m-si)^\\d+$"; $1; 1; *)
+	var $1 : Variant
+	
+	If (Value type:C1509($1)=Is text:K8:3)
+		
+		$0:=Match regex:C1019("(?m-si)^\\d+$"; $1; 1; *)
+		
+	End if 
 	
 	//====================================
 Function isRelation
 	
 	var $0 : Boolean
-	var $1 : Object
+	var $1 : Variant
+	
 	$0:=((This:C1470.isRelationToOne($1)) | (This:C1470.isRelationToMany($1)))
 	
 	//====================================
 Function isRelationToOne
 	
 	var $0 : Boolean
-	var $1 : Object
-	$0:=($1.relatedDataClass#Null:C1517) & (Not:C34(Bool:C1537($1.isToMany)))
+	var $1 : Variant
+	
+	If (Value type:C1509($1)=Is object:K8:27)
+		
+		$0:=($1.relatedDataClass#Null:C1517) & (Not:C34(Bool:C1537($1.isToMany)))
+		
+	End if 
 	
 	//====================================
 Function isRelationToMany
 	
 	var $0 : Boolean
-	var $1 : Object  // Field
-	$0:=(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities")) | (Bool:C1537($1.isToMany))
+	var $1 : Variant  // Field
+	
+	If (Value type:C1509($1)=Is object:K8:27)
+		
+		$0:=(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities")) | (Bool:C1537($1.isToMany))
+		
+	End if 
 	
 	//================================================================================
 	// Returns True if the 4D Type is a Numeric type

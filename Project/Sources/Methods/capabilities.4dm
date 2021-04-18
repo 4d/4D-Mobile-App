@@ -150,7 +150,7 @@ Case of
 				// ----------------------------------------
 			: ($Obj_types[String:C10($Obj_in.type)]#Null:C1517)  // want only a specific types
 				
-				$Obj_out[$Obj_in.type]:=plist(New object:C1471(\
+				$Obj_out[$Obj_in.type]:=_o_plist(New object:C1471(\
 					"action"; "object"; \
 					"path"; $Obj_types[$Obj_in.type]))
 				
@@ -164,7 +164,7 @@ Case of
 				
 				For each ($Txt_fileType; $Obj_types)
 					
-					$Obj_out[$Txt_fileType]:=plist(New object:C1471(\
+					$Obj_out[$Txt_fileType]:=_o_plist(New object:C1471(\
 						"action"; "object"; \
 						"path"; $Obj_types[$Txt_fileType]))
 					ob_error_combine($Obj_out; $Obj_out[$Txt_fileType])
@@ -217,7 +217,7 @@ Case of
 				// write into file
 				If ($Obj_out[$Txt_fileType]#Null:C1517)
 					
-					$Obj_out[$Txt_fileType]:=plist(New object:C1471(\
+					$Obj_out[$Txt_fileType]:=_o_plist(New object:C1471(\
 						"action"; "fromObject"; \
 						"format"; "xml"; \
 						"object"; $Obj_out[$Txt_fileType]; \
@@ -379,19 +379,19 @@ Case of
 					"MKDirectionsApplicationSupportedModes"; $Obj_in.mapModes))
 				
 				//collection(\
-																				"MKDirectionsModeBike";\
-																				"MKDirectionsModeBus";\
-																				"MKDirectionsModeCar";\
-																				"MKDirectionsModeFerry";\
-																				"MKDirectionsModeOther";\
-																				"MKDirectionsModePedestrian";\
-																				"MKDirectionsModePlane";\
-																				"MKDirectionsModeRideShare";\
-																				"MKDirectionsModeStreetCar";\
-																				"MKDirectionsModeSubway";\
-																				"MKDirectionsModeTaxi";\
-																				"MKDirectionsModeTrain"\
-																				)
+																									"MKDirectionsModeBike";\
+																									"MKDirectionsModeBus";\
+																									"MKDirectionsModeCar";\
+																									"MKDirectionsModeFerry";\
+																									"MKDirectionsModeOther";\
+																									"MKDirectionsModePedestrian";\
+																									"MKDirectionsModePlane";\
+																									"MKDirectionsModeRideShare";\
+																									"MKDirectionsModeStreetCar";\
+																									"MKDirectionsModeSubway";\
+																									"MKDirectionsModeTaxi";\
+																									"MKDirectionsModeTrain"\
+																									)
 				
 			End if 
 		End if 

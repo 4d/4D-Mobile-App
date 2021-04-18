@@ -65,7 +65,7 @@ Case of
 				//----------------------------------------
 			: ($file.exists)
 				
-				$o:=plist(New object:C1471(\
+				$o:=_o_plist(New object:C1471(\
 					"action"; "object"; \
 					"domain"; $file.path))
 				
@@ -125,7 +125,7 @@ Case of
 			
 			If ($o#Null:C1517)
 				
-				$Obj_out:=plist(New object:C1471(\
+				$Obj_out:=_o_plist(New object:C1471(\
 					"action"; "write"; \
 					"domain"; ENV.preferences("com.apple.iphonesimulator.plist").path; \
 					"key"; "CurrentDeviceUDID"; \
@@ -179,7 +179,7 @@ Case of
 				
 				If ($o#Null:C1517)
 					
-					$Obj_out:=plist(New object:C1471(\
+					$Obj_out:=_o_plist(New object:C1471(\
 						"action"; "write"; \
 						"domain"; $file.path; \
 						"key"; "CurrentDeviceUDID"; \
@@ -506,7 +506,7 @@ Case of
 								
 								If (Test path name:C476($File_)=Is a document:K24:1)
 									
-									$o:=plist(New object:C1471(\
+									$o:=_o_plist(New object:C1471(\
 										"action"; "object"; \
 										"path"; $File_))
 									
@@ -542,7 +542,7 @@ Case of
 						
 						If (Test path name:C476($File_)=Is a document:K24:1)
 							
-							$o:=plist(New object:C1471(\
+							$o:=_o_plist(New object:C1471(\
 								"action"; "object"; \
 								"path"; $File_))
 							

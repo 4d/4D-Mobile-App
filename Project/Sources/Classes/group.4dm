@@ -69,7 +69,6 @@ or
 	
 ══════════════════════════*/
 Function belongsTo($formObject : Variant)->$yes : Boolean
-	C_VARIANT:C1683($1)
 	
 	Case of 
 			
@@ -93,7 +92,7 @@ Function belongsTo($formObject : Variant)->$yes : Boolean
 	
 	//════════════════════════════════════════════
 	// Returns the coordinates of the rectangle enclosing the group.
-Function getCoordinates()->$coordinates : Object
+Function enclosingRec()->$coordinates : Object
 	
 	var $left; $top; $right; $bottom : Integer
 	var $o : Object

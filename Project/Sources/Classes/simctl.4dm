@@ -87,9 +87,7 @@ Class constructor($iosDeploymentTarget : Text)
 	// Returns (and set if any) the default device
 Function defaultDevice()->$device : Object
 	
-	var $o : Object
 	var $file : 4D:C1709.File
-	
 	$file:=This:C1470.plist()
 	
 	If (Not:C34($file.exists))
@@ -102,15 +100,15 @@ Function defaultDevice()->$device : Object
 	
 	If (This:C1470.success)
 		
-		$o:=plist(New object:C1471(\
-			"action"; "object"; \
-			"domain"; $file.path))
+		var $plist : cs:C1710.plist
+		$plist:=cs:C1710.plist.new($file)
 		
-		This:C1470.success:=($o.success)
+		var $defaultDevice : Text
+		$defaultDevice:=$plist.get("CurrentDeviceUDID")
 		
-		If (This:C1470.success)
+		If ($plist.success)
 			
-			$device:=This:C1470.device($o.value.CurrentDeviceUDID)
+			$device:=This:C1470.device($defaultDevice)
 			
 		End if 
 	End if 
@@ -119,33 +117,27 @@ Function defaultDevice()->$device : Object
 	// Set a default device
 Function setDefaultDevice($udid : Text)
 	
-	var $o : Object
+	var $device : Object
 	var $file : 4D:C1709.File
+	var $plist : cs:C1710.plist
 	
 	$file:=This:C1470.plist()
+	$plist:=cs:C1710.plist.new($file)
 	
 	If (Count parameters:C259=0)
 		
-		$o:=This:C1470.availableDevices().query("name = :1"; "iPhone@").pop()
-		This:C1470.success:=($o#Null:C1517)
+		$device:=This:C1470.availableDevices().query("name = :1"; "iPhone@").pop()
+		This:C1470.success:=($device#Null:C1517)
 		
 		If (This:C1470.success)
 			
-			This:C1470.success:=plist(New object:C1471(\
-				"action"; "write"; \
-				"domain"; $file.path; \
-				"key"; "CurrentDeviceUDID"; \
-				"value"; $o.udid)).success
+			This:C1470.success:=$plist.set("CurrentDeviceUDID"; $device.udid; True:C214).success
 			
 		End if 
 		
 	Else 
 		
-		This:C1470.success:=plist(New object:C1471(\
-			"action"; "write"; \
-			"domain"; $file.path; \
-			"key"; "CurrentDeviceUDID"; \
-			"value"; $udid)).success
+		This:C1470.success:=$plist.set("CurrentDeviceUDID"; $udid; True:C214).success
 		
 	End if 
 	

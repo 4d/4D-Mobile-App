@@ -555,6 +555,7 @@ ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventC
 					: ($context.current="@.cancel")
 						
 						// NOT A DRAGGABLE OBJECT
+						
 						//………………………………………………………………………………………………………………
 					: ($context.current="f@")
 						

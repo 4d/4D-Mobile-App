@@ -334,7 +334,7 @@ Case of
 					
 					If ($plist.exists)
 						
-						$plist:=plist(New object:C1471(\
+						$plist:=_o_plist(New object:C1471(\
 							"action"; "object"; \
 							"domain"; $plist.path))
 						

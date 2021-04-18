@@ -1,13 +1,7 @@
 //%attributes = {"invisible":true}
-var $0 : Object
-var $1 : Object
+#DECLARE($in : Object)->$out : Object
 
-If (False:C215)
-	C_OBJECT:C1216(browser_DOWNLOAD; $0)
-	C_OBJECT:C1216(browser_DOWNLOAD; $1)
-End if 
-
-var $archive; $in; $out : Object
+var $archive : Object
 var $http : cs:C1710.http
 var $progress : cs:C1710.progress
 

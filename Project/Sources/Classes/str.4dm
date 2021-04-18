@@ -302,7 +302,7 @@ Function shuffle($length : Integer)->$shuffle : Text
 	
 	//=======================================================================================================
 	// Returns a base64 encoded UTF-8 string
-Function base64($encoded : Boolean)->$base64 : Text
+Function base64($html : Boolean)->$base64 : Text
 	
 	var $x : Blob
 	
@@ -310,7 +310,7 @@ Function base64($encoded : Boolean)->$base64 : Text
 	
 	If (Count parameters:C259>=1)
 		
-		If ($encoded)
+		If ($html)
 			
 			// Encode in Base64URL format
 			BASE64 ENCODE:C895($x; $base64; *)
@@ -1021,20 +1021,52 @@ Function replace
 	End if 
 	
 	//=======================================================================================================
-	// Returns a XML encoded string
-Function xmlEncode
-	var $0 : Text
+	// Returns a HTML encoded string
+Function htmlEncode()->$html : Text
+	var $code; $i : Integer
+	var $char; $substitute : Text
+	var $o : Object
 	
+	$o:=New object:C1471(\
+		"&"; "&amp;"; \
+		"<"; "&lt;"; \
+		">"; "&gt;"; \
+		"\""; "&quot;"; \
+		"\r"; "<br/>")
+	
+	For ($i; 1; Length:C16(This:C1470.value); 1)
+		
+		$char:=This:C1470.value[[$i]]
+		
+		If ($o[$char]=Null:C1517)
+			
+			$code:=Character code:C91($char)
+			
+			$substitute:=Choose:C955($code<32; "&#"+String:C10($code)+";"; $char)
+			
+		Else 
+			
+			$substitute:=$o[$char]
+			
+		End if 
+		
+		$html:=$html+$substitute
+		
+	End for 
+	
+	//=======================================================================================================
+	// Returns a XML encoded string
+Function xmlEncode()->$xml : Text
 	var $root; $t : Text
 	
-	$0:=This:C1470.value
+	$xml:=This:C1470.value
 	
 	// Use DOM api to encode XML
 	$root:=DOM Create XML Ref:C861("r")
 	
 	If (OK=1)
 		
-		DOM SET XML ATTRIBUTE:C866($root; "v"; $0)
+		DOM SET XML ATTRIBUTE:C866($root; "v"; $xml)
 		
 		If (OK=1)
 			
@@ -1043,7 +1075,7 @@ Function xmlEncode
 			If (OK=1)  // Extract from result
 				
 				$t:=Substring:C12($t; Position:C15("v=\""; $t)+3)
-				$0:=Substring:C12($t; 1; Length:C16($t)-4)
+				$xml:=Substring:C12($t; 1; Length:C16($t)-4)
 				
 			End if 
 		End if 
@@ -1053,16 +1085,16 @@ Function xmlEncode
 	End if 
 	
 	//=======================================================================================================
-	// Removing characters that could be wrongfully interpreted as markup
-Function xmlSafe
-	var $0 : Text
+	// Replacing characters that could be wrongfully interpreted as markup
+Function xmlSafe()->$xml : Text
 	
-	$0:=This:C1470.value
-	$0:=Replace string:C233($0; "&"; "&amp;")
-	$0:=Replace string:C233($0; "'"; "&apos;")
-	$0:=Replace string:C233($0; "\""; "&quot;")
-	$0:=Replace string:C233($0; "<"; "&lt;")
-	$0:=Replace string:C233($0; ">"; "&gt;")
+	$xml:=This:C1470.value
+	
+	$xml:=Replace string:C233($xml; "&"; "&amp;")
+	$xml:=Replace string:C233($xml; "'"; "&apos;")
+	$xml:=Replace string:C233($xml; "\""; "&quot;")
+	$xml:=Replace string:C233($xml; "<"; "&lt;")
+	$xml:=Replace string:C233($xml; ">"; "&gt;")
 	
 	//=======================================================================================================
 	// Returns True if text is styled

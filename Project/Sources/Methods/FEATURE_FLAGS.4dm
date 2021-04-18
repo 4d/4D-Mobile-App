@@ -138,6 +138,8 @@ FEATURE.unstable("androidBeta")  // Android support during beta phase
 WIP
 _____________*/
 
+FEATURE.wip("plistClass")  // Use plist class instead of plist method
+
 FEATURE.wip("ConnectedDevices")  // Add connected devices to the simulator tool
 
 FEATURE.wip("iconActionMenu")  // Use action button for icon on product panel

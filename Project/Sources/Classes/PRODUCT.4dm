@@ -261,7 +261,7 @@ Function getIcon($pathname : Text)
 						
 						If (Bool:C1537($folder.exists))
 							
-							$t:=String:C10(plist_toObject($file.getText()).CFBundleIconFile.string)  // xxxxxx.icns
+							$t:=cs:C1710.plist.new($file).get("CFBundleIconFile")
 							
 							If (Length:C16($t)>0)
 								

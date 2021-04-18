@@ -227,7 +227,7 @@ Case of
 		//If (FEATURE.with("android"))
 		
 		//$Dir_root:=dataSet(New object("action"; "path"; \
-																																																"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+																																																			"project"; New object("product"; Form.product; "$project"; PROJECT))).path
 		
 		//Else
 		

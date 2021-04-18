@@ -220,13 +220,6 @@ Function update
 								
 							End if 
 							
-							
-							
-							
-							
-							
-							
-							
 							//______________________________________________________
 						: (This:C1470.listform) & (FEATURE.with("moreRelations"))
 							

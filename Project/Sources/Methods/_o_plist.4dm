@@ -17,8 +17,8 @@ C_TEXT:C284($format; $Txt_cmd; $Txt_error; $Txt_in; $Txt_out)
 C_OBJECT:C1216($Obj_in; $Obj_out)
 
 If (False:C215)
-	C_OBJECT:C1216(plist; $0)
-	C_OBJECT:C1216(plist; $1)
+	C_OBJECT:C1216(_o_plist; $0)
+	C_OBJECT:C1216(_o_plist; $1)
 End if 
 
 // ----------------------------------------------------
@@ -187,7 +187,7 @@ Case of
 				$Obj_in.format:="xml1"
 				$Obj_in.openstep:=False:C215
 				$Obj_in.output:=$Obj_in.domain  // inline
-				$Obj_out:=plist($Obj_in)
+				$Obj_out:=_o_plist($Obj_in)
 				$Obj_in.openstep:=True:C214
 				
 			End if 
@@ -236,7 +236,7 @@ Case of
 				$Obj_in.format:="xml1"
 				$Obj_in.openstep:=False:C215
 				$Obj_in.output:=$Obj_in.domain  // inline
-				$Obj_out:=plist($Obj_in)
+				$Obj_out:=_o_plist($Obj_in)
 				$Obj_in.openstep:=True:C214
 				
 			End if 
@@ -289,7 +289,7 @@ Case of
 				$Obj_in.format:="xml1"
 				$Obj_in.openstep:=False:C215
 				$Obj_in.output:=$Obj_in.domain  // inline
-				$Obj_out:=plist($Obj_in)
+				$Obj_out:=_o_plist($Obj_in)
 				$Obj_in.openstep:=True:C214
 				
 			End if 
@@ -401,7 +401,7 @@ Case of
 		If ($Obj_in.domain#Null:C1517)
 			
 			// read all as json
-			$Obj_out:=plist(New object:C1471("action"; "convert"; "format"; "json"; "domain"; $Obj_in.domain))
+			$Obj_out:=_o_plist(New object:C1471("action"; "convert"; "format"; "json"; "domain"; $Obj_in.domain))
 			
 			//End if
 			
@@ -448,7 +448,7 @@ Case of
 				
 				$Obj_in.action:="convert"
 				$Obj_in.output:=$Obj_in.domain
-				$Obj_out:=plist($Obj_in)
+				$Obj_out:=_o_plist($Obj_in)
 				
 			Else 
 				
@@ -533,7 +533,7 @@ If (($Obj_in.openstep) & ($Obj_out.success))
 	$Obj_in.action:="convert"
 	$Obj_in.format:="openstep"
 	$Obj_in.openstep:=False:C215
-	$Obj_out:=plist($Obj_in)  // $Obj_result:= ?
+	$Obj_out:=_o_plist($Obj_in)  // $Obj_result:= ?
 	$Obj_in.openstep:=True:C214
 	
 End if 

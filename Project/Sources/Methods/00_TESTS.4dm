@@ -20,6 +20,26 @@ COMPILER_COMPONENT
 $b:=_4D With feature:C1524("WITH_THROW_ERROR")
 
 Case of 
+		
+		//________________________________________
+	: (True:C214)
+		
+		var $plist : cs:C1710.plist
+		$plist:=cs:C1710.plist.new(File:C1566("/PACKAGE/Info.plist"))
+		$plist.get("CFBundleVersion")
+		
+		//________________________________________
+	: (True:C214)
+		
+		var $plist : cs:C1710.plist
+		// Read a binary plist
+		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Library/Preferences/com.apple.iphonesimulator.plist"))
+		
+		//modify…
+		
+		// Then write
+		$plist.write()
+		
 		//________________________________________
 	: (True:C214)
 		
@@ -42,15 +62,6 @@ Case of
 		var $log : cs:C1710.log
 		$log:=cs:C1710.log.new()
 		
-		//________________________________________
-	: (True:C214)
-		
-		var $plist : cs:C1710.plist
-		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Library/Preferences/com.apple.iphonesimulator.plist"))
-		
-		//OB REMOVE($plist.content; "Test")
-		$plist.write()
-		
 		
 		//________________________________________
 	: (True:C214)
@@ -68,50 +79,6 @@ Case of
 		$svg.rect(25; 25).position(137; 144)
 		$svg.rect(25; 35).position(137; 169).fill("yellow")
 		$svg.preview()
-		
-		//________________________________________
-	: (True:C214)
-		
-		var $simctl : cs:C1710.simctl
-		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
-		$c:=$simctl.availableDevices()
-		
-		//$simctl:=cs.simctl.new()
-		//$c:=$simctl.availableDevices()
-		
-		$c:=$simctl.bootedDevices()
-		
-		If ($c.query("name = :1"; "iPhone 12 Pro Max").pop()=Null:C1517)
-			
-			$simctl.bootDevice("iPhone 12 Pro Max")
-			
-		End if 
-		
-		//$folder:=$simctl.deviceFolder("iPhone 12 Pro Max")
-		
-		var $device : Object
-		$device:=$simctl.device("iPhone 12 Pro Max")
-		//$folder:=$simctl.deviceFolder($device.udid; True)
-		
-		If ($simctl.isDeviceBooted($device.udid))
-			
-			//$simctl.shutdownDevice($device.udid; True)
-			
-			//$simctl.bootDevice($device.udid; True)
-			
-			$simctl.launchApp("com.myCompany.My-App-9"; $device.udid)
-			
-			DELAY PROCESS:C323(Current process:C322; 60*5)
-			
-			$simctl.terminateApp("com.myCompany.My-App-9"; $device.udid)
-			
-		End if 
-		
-		$device:=$simctl.defaultDevice()
-		
-		
-		//$c:=$simctl.deviceTypes("iPhone")
-		//$c:=$simctl.deviceTypes("iPad")
 		
 		//________________________________________
 	: (True:C214)

@@ -1,5 +1,5 @@
 //%attributes = {}
-var $device : Object
+var $device; $o : Object
 var $availableDevices; $iPads; $iPhones : Collection
 var $folder : 4D:C1709.Folder
 var $simctl : cs:C1710.simctl
@@ -9,6 +9,18 @@ COMPILER_COMPONENT
 $simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 
 Case of 
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		$device:=$simctl.defaultDevice()
+		$simctl.setDefaultDevice("none")
+		$o:=$simctl.defaultDevice()
+		$simctl.setDefaultDevice($device.udid; True:C214)
+		$o:=$simctl.defaultDevice()
+		
+		
+		
 		
 		//______________________________________________________
 	: (True:C214)
