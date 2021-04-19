@@ -212,6 +212,19 @@ If ($run)
 			$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
 			$run:=$run & ($http.status=200)
 			
+			
+			// ============================== //
+			//  TEMPORARY FALLBACK TO GITHUB  //
+			// ============================== //
+			If ($http.status=404) & ($target="android")
+				
+				$http.setURL("https://github.com/mesopelagique/sdk_docs/releases/download/19.x/android.zip")
+				$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
+				$run:=$run & ($http.status=200)
+				
+			End if 
+			// ============================== //
+			
 			If ($run)
 				
 				If ($server="aws")
