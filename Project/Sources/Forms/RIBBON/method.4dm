@@ -105,8 +105,10 @@ Case of
 			
 		End if 
 		
+		// *ADAPT BUTTONS WIDTH
 		$form.buildButtons.distributeLeftToRight($constraints)
 		
+		// *MANAGE BUILD & INSTALL BUTTONS ACTIVATION
 		If (FEATURE.with("android"))  //🚧
 			
 			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
@@ -144,19 +146,34 @@ Case of
 					//______________________________________________________
 			End case 
 			
-			
 			$withTeamID:=Choose:C955(Is macOS:C1572; Bool:C1537(Form:C1466.status.teamId); True:C214)
+			
+			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID))
+				
+				RECORD.warning("project: "+Choose:C955($isProjectOK; "ok"; "NOT READY")\
+					+" - devTools: "+Choose:C955($isDevToolAvailable; "ready"; "NOT READY")\
+					+" - device: "+Choose:C955($isDeviceSelected; "ok"; "NO DEVICE SELECTED")\
+					+" - teamID: "+Choose:C955($withTeamID; "ok"; "NO TEAM SELECTED"))
+				
+			End if 
 			
 			$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected)
 			
-			If (Is Windows:C1573) | (Not:C34(PROJECT.$ios))
+			If (Is Windows:C1573)
 				
 				$form.install.disable()
 				
 			Else 
 				
-				$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID & $isDeviceSelected)
-				
+				If (Not:C34(PROJECT.$ios))
+					
+					$form.install.disable()
+					
+				Else 
+					
+					$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID & $isDeviceSelected)
+					
+				End if 
 			End if 
 		End if 
 		
@@ -180,6 +197,12 @@ Case of
 				: ($currentPage=2)
 					
 					$form.buildButtons.distributeLeftToRight($constraints)
+					
+					If (FEATURE.with("android"))
+						
+						SET TIMER:C645(-1)  // *UPDATE UI
+						
+					End if 
 					
 					//………………………………………………………………………………………
 			End case 
@@ -207,10 +230,16 @@ Case of
 		
 		If (Form:C1466.devices#Null:C1517)
 			
-			// Update device button
+			// *UPDATE DEVICE BUTTON
 			If (FEATURE.with("android"))  //🚧
 				
-				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0) | Is Windows:C1573)
+				If (Not:C34((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0)))
+					
+					RECORD.warning("SIMULATORS BUTTON IS DISABLED BECAUSE THERE IS NO SIMULATOR AVAILABLE")
+					
+				End if 
+				
+				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0))
 				
 				// Get the last simulator used, if known
 				$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
@@ -369,14 +398,17 @@ Case of
 				End if 
 			End if 
 			
-			// Adapt button width
-			SET TIMER:C645(-1)
+			
+		Else 
+			
+			RECORD.warning("SIMULATORS BUTTON IS DISABLED BECAUSE FORM.DEVICES IS NULL")
+			$form.simulator.disable()
 			
 		End if 
 		
 		If (FEATURE.with("android"))  //🚧
 			
-			SET TIMER:C645(-1)
+			SET TIMER:C645(-1)  // *UPDATE UI
 			
 		Else 
 			
