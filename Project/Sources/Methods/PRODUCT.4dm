@@ -34,6 +34,8 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 							.setBackgroundPicture()\
 							.setNumStates(1)
 						
+						$ƒ.preview.show()
+						
 						$ƒ.ios.disable()
 						
 						$ƒ.ios.setPicture("#images/os/iOS-32.png")\
@@ -44,6 +46,8 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 						
 						$ƒ.os.hide()
 						
+						$ƒ.preview.hide()
+						
 					End if 
 				End if 
 				
@@ -52,6 +56,8 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				$ƒ.target.hide()
 				$ƒ.ios.hide()
 				$ƒ.android.hide()
+				
+				$ƒ.preview.hide()
 				
 			End if 
 			

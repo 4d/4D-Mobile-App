@@ -59,15 +59,15 @@
 					"sizingY": "move",
 					"action": "accept"
 				},
-				"title": {
+				"main.title": {
 					"type": "text",
 					"top": 56,
 					"left": 0,
 					"width": 970,
 					"height": 46,
 					"sizingX": "grow",
-					"textAlign": "center",
-					"text": ":xliff:selectTheProjectToOpen"
+					"text": ":xliff:selectTheProjectToOpen",
+					"class": "title"
 				},
 				"list": {
 					"type": "listbox",
@@ -279,7 +279,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 471,
+	"geometryStamp": 474,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

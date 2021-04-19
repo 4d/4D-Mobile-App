@@ -1,13 +1,13 @@
-#title, 
-#subtitle {
+.title, 
+.subtitle {
 	text-align: center;
 }
 
-#title {
+.title {
 	font-size: 48;
 }
 
-#subtitle {
+.subtitle {
 	font-size: 18;
 }
 

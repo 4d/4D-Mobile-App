@@ -14,6 +14,17 @@
 		},
 		{
 			"objects": {
+				"target.preview": {
+					"type": "text",
+					"text": "Preview",
+					"top": 139,
+					"left": 125,
+					"width": 65,
+					"height": 16,
+					"textAlign": "center",
+					"stroke": "#1BA1E5",
+					"textAngle": 0
+				},
 				"10_name.border": {
 					"type": "rectangle",
 					"top": 26,
@@ -28,7 +39,7 @@
 					"top": 73,
 					"left": 210,
 					"width": 65,
-					"height": 80,
+					"height": 85,
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -68,7 +79,7 @@
 					"top": 73,
 					"left": 125,
 					"width": 65,
-					"height": 80,
+					"height": 85,
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -112,7 +123,7 @@
 			}
 		}
 	],
-	"geometryStamp": 448,
+	"geometryStamp": 479,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

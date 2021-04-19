@@ -1,7 +1,5 @@
 {
 	"destination": "detailScreen",
-	"rightMargin": 0,
-	"bottomMargin": 0,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -119,14 +117,15 @@
 						"onClick"
 					]
 				},
-				"title": {
+				"main.title": {
 					"type": "text",
 					"top": 56,
 					"left": 0,
 					"width": 970,
-					"height": 46,
+					"height": 57,
+					"text": ":xliff:goMobileWith4d",
 					"sizingX": "grow",
-					"text": ":xliff:goMobileWith4d"
+					"class": "title"
 				},
 				"subtitle": {
 					"type": "text",
@@ -134,8 +133,9 @@
 					"left": 0,
 					"width": 970,
 					"height": 62,
+					"text": ":xliff:goMobileSubTitle",
 					"sizingX": "grow",
-					"text": ":xliff:goMobileSubTitle"
+					"class": "subtitle"
 				},
 				"newProject": {
 					"type": "subform",
@@ -219,7 +219,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 313,
+	"geometryStamp": 384,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -236,5 +236,7 @@
 		}
 	},
 	"windowMinWidth": 970,
-	"windowMinHeight": 860
+	"windowMinHeight": 860,
+	"width": 970,
+	"height": 875
 }

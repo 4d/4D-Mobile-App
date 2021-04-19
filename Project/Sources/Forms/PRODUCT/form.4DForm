@@ -295,6 +295,17 @@
 					"iconFrames": 4,
 					"visibility": "hidden",
 					"focusable": false
+				},
+				"target.preview": {
+					"type": "text",
+					"text": "Preview",
+					"top": 107,
+					"left": 666,
+					"width": 65,
+					"height": 16,
+					"textAlign": "center",
+					"stroke": "#1BA1E5",
+					"textAngle": 0
 				}
 			},
 			"entryOrder": [
@@ -323,5 +334,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 346
+	"geometryStamp": 431
 }
