@@ -196,11 +196,13 @@ Case of
 					//………………………………………………………………………………………
 				: ($currentPage=2)
 					
-					$form.buildButtons.distributeLeftToRight($constraints)
-					
 					If (FEATURE.with("android"))
 						
 						SET TIMER:C645(-1)  // *UPDATE UI
+						
+					Else 
+						
+						$form.buildButtons.distributeLeftToRight($constraints)
 						
 					End if 
 					

@@ -99,7 +99,6 @@ Else
 								
 								//%T-
 								SET DATABASE PARAMETER:C642(Debug log recording:K37:34; Num:C11($o.logStatus))
-								
 								//%T+
 								
 							End if 
@@ -111,7 +110,6 @@ Else
 								
 								//%T-
 								SET DATABASE PARAMETER:C642(Diagnostic log recording:K37:69; Num:C11($o.logStatus))
-								
 								//%T+
 								
 							End if 
@@ -155,7 +153,6 @@ Else
 						
 						//______________________________________________________
 					: (Value type:C1509($2.destination)=Is object:K8:27)
-						
 						
 						If (OB Instance of:C1731($2.destination; 4D:C1709.File))
 							

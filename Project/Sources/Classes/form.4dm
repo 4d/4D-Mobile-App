@@ -1,5 +1,7 @@
+//====================================================================
 Class extends tools
 
+//====================================================================
 Class constructor($method : Text)
 	
 	Super:C1705()
@@ -17,13 +19,28 @@ Class constructor($method : Text)
 		
 	End if 
 	
-	//______________________________________________________
+	//====================================================================
 	// Defines the name of the callback method
 Function setCallBack($method : Text)
 	
 	This:C1470.callback:=$method
 	
-	//______________________________________________________
+	//====================================================================
+	// Start a timer to update the user interface
+	// Default delay is ASAP
+Function refresh($delay : Integer)
+	
+	If (Count parameters:C259>=1)
+		
+		SET TIMER:C645($delay)
+		
+	Else 
+		
+		SET TIMER:C645(-1)
+		
+	End if 
+	
+	//====================================================================
 	// Generates a CALL FORM using the current form
 	// .call()
 	// .call( param : Collection )
@@ -32,9 +49,9 @@ Function call
 	
 	C_VARIANT:C1683(${1})
 	
-	var $t : Text
+	var $code : Text
 	var $i : Integer
-	var $c : Collection
+	var $parameters : Collection
 	
 	If (Length:C16(String:C10(This:C1470.callback))#0)
 		
@@ -44,34 +61,34 @@ Function call
 			
 		Else 
 			
-			$t:="<!--#4DCODE CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+This:C1470.callback+"\""
+			$code:="<!--#4DCODE CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+This:C1470.callback+"\""
 			
 			If (Value type:C1509($1)=Is collection:K8:32)
 				
-				$c:=$1
+				$parameters:=$1
 				
-				For ($i; 0; $c.length-1; 1)
+				For ($i; 0; $parameters.length-1; 1)
 					
-					$t:=$t+"; $1["+String:C10($i)+"]"
+					$code:=$code+"; $1["+String:C10($i)+"]"
 					
 				End for 
 				
 			Else 
 				
-				$c:=New collection:C1472
+				$parameters:=New collection:C1472
 				
 				For ($i; 1; Count parameters:C259; 1)
 					
-					$c.push(${$i})
+					$parameters.push(${$i})
 					
-					$t:=$t+"; $1["+String:C10($i-1)+"]"
+					$code:=$code+"; $1["+String:C10($i-1)+"]"
 					
 				End for 
 			End if 
 			
-			$t:=$t+")-->"
+			$code:=$code+")-->"
 			
-			PROCESS 4D TAGS:C816($t; $t; $c)
+			PROCESS 4D TAGS:C816($code; $code; $parameters)
 			
 		End if 
 		
@@ -81,4 +98,3 @@ Function call
 		
 	End if 
 	
-	//______________________________________________________

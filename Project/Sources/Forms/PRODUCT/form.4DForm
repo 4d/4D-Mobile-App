@@ -30,6 +30,17 @@
 		},
 		{
 			"objects": {
+				"target.preview": {
+					"type": "text",
+					"text": "Preview",
+					"top": 93,
+					"left": 666,
+					"width": 65,
+					"height": 16,
+					"textAlign": "center",
+					"stroke": "#1BA1E5",
+					"textAngle": 0
+				},
 				"11_version.border": {
 					"type": "rectangle",
 					"top": 28,
@@ -245,7 +256,7 @@
 					"top": 27,
 					"left": 752,
 					"width": 65,
-					"height": 80,
+					"height": 86,
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -265,7 +276,7 @@
 					"top": 27,
 					"left": 666,
 					"width": 65,
-					"height": 80,
+					"height": 86,
 					"events": [
 						"onClick",
 						"onMouseEnter",
@@ -295,17 +306,6 @@
 					"iconFrames": 4,
 					"visibility": "hidden",
 					"focusable": false
-				},
-				"target.preview": {
-					"type": "text",
-					"text": "Preview",
-					"top": 107,
-					"left": 666,
-					"width": 65,
-					"height": 16,
-					"textAlign": "center",
-					"stroke": "#1BA1E5",
-					"textAngle": 0
 				}
 			},
 			"entryOrder": [
@@ -334,5 +334,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 431
+	"geometryStamp": 452
 }

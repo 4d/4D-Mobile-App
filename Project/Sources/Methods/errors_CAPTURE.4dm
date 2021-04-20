@@ -12,3 +12,5 @@ lastError:=New object:C1471(\
 
 GET LAST ERROR STACK:C1015($codes; $components; $desc)
 ARRAY TO COLLECTION:C1563(lastError.stack; $codes; "code"; $components; "component"; $desc; "desc")
+
+lastError.callChain:=Get call chain:C1662.remove(0)

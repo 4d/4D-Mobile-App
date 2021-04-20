@@ -1,6 +1,8 @@
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($url)
 	
+	This:C1470.onErrorCallMethod:="HTTP ERROR HANDLER"
+	
 	If (Count parameters:C259>=1)
 		
 		This:C1470.reset($url)
@@ -12,8 +14,6 @@ Class constructor($url)
 	End if 
 	
 	var httpError : Integer
-	
-	This:C1470.onErrorCallMethod:="HTTP ERROR HANDLER"
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function reset($url)
@@ -29,7 +29,7 @@ Function reset($url)
 	End if 
 	
 	This:C1470.status:=0
-	This:C1470.success:=True:C214
+	This:C1470.success:=This:C1470.isInternetAvailable()
 	This:C1470.keepAlive:=False:C215
 	This:C1470.response:=Null:C1517
 	This:C1470.responseType:=0
@@ -112,20 +112,20 @@ Function ping($url : Text)->$reachable : Boolean
 	
 	If (Count parameters:C259>=1)
 		
-		$code:=HTTP Request:C1158(HTTP OPTIONS method:K71:7; $url; $body; $response; $headerNames; $headerValues)
+		This:C1470.status:=HTTP Request:C1158(HTTP OPTIONS method:K71:7; $url; $body; $response; $headerNames; $headerValues)
 		
 	Else 
 		
 		If (Match regex:C1019("(?m-si)(https?://[^/]*/)"; This:C1470.url; 1; $pos; $len))
 			
-			$code:=HTTP Request:C1158(HTTP OPTIONS method:K71:7; Substring:C12(This:C1470.url; $pos; $len)+"*"; $body; $response; $headerNames; $headerValues)
+			This:C1470.status:=HTTP Request:C1158(HTTP OPTIONS method:K71:7; Substring:C12(This:C1470.url; $pos; $len)+"*"; $body; $response; $headerNames; $headerValues)
 			
 		End if 
 	End if 
 	
 	ON ERR CALL:C155($onErrCallMethod)
 	
-	This:C1470.success:=($code=200) & (httpError=0)
+	This:C1470.success:=(This:C1470.status=200) & (httpError=0)
 	
 	If (This:C1470.success)
 		
@@ -133,17 +133,7 @@ Function ping($url : Text)->$reachable : Boolean
 		
 	Else 
 		
-		If (httpError#0)
-			
-			This:C1470.errors.push(This:C1470._errorCodeMessage(httpError))
-			
-		Else 
-			
-			This:C1470.errors.push(This:C1470._statusCodeMessage($code))
-			
-		End if 
-		
-		This:C1470.lastError:=This:C1470.errors[This:C1470.errors.length-1]
+		This:C1470._decodeError()
 		
 	End if 
 	
@@ -165,20 +155,20 @@ Function allow($url : Text)->$allowed : Collection
 	
 	If (Count parameters:C259>=1)
 		
-		$code:=HTTP Request:C1158(HTTP OPTIONS method:K71:7; $url; $body; $response; $headerNames; $headerValues)
+		This:C1470.status:=HTTP Request:C1158(HTTP OPTIONS method:K71:7; $url; $body; $response; $headerNames; $headerValues)
 		
 	Else 
 		
 		If (Match regex:C1019("(?m-si)(https?://[^/]*/)"; This:C1470.url; 1; $pos; $len))
 			
-			$code:=HTTP Request:C1158(HTTP OPTIONS method:K71:7; Substring:C12(This:C1470.url; $pos; $len)+"*"; $body; $response; $headerNames; $headerValues)
+			This:C1470.status:=HTTP Request:C1158(HTTP OPTIONS method:K71:7; Substring:C12(This:C1470.url; $pos; $len)+"*"; $body; $response; $headerNames; $headerValues)
 			
 		End if 
 	End if 
 	
 	ON ERR CALL:C155($onErrCallMethod)
 	
-	This:C1470.success:=($code=200) & (httpError=0)
+	This:C1470.success:=(This:C1470.status=200) & (httpError=0)
 	
 	If (This:C1470.success)
 		
@@ -197,17 +187,7 @@ Function allow($url : Text)->$allowed : Collection
 		
 	Else 
 		
-		If (httpError#0)
-			
-			This:C1470.errors.push(This:C1470._errorCodeMessage(httpError))
-			
-		Else 
-			
-			This:C1470.errors.push(This:C1470._statusCodeMessage($code))
-			
-		End if 
-		
-		This:C1470.lastError:=This:C1470.errors[This:C1470.errors.length-1]
+		This:C1470._decodeError()
 		
 	End if 
 	
@@ -402,15 +382,8 @@ Function get()->$this : cs:C1710.http
 			
 		Else 
 			
-			If (httpError#0)
-				
-				This:C1470._pushError(This:C1470._errorCodeMessage(httpError))
-				
-			Else 
-				
-				This:C1470._pushError(This:C1470._statusCodeMessage(This:C1470.status))
-				
-			End if 
+			This:C1470._decodeError()
+			
 		End if 
 		
 	Else 
@@ -513,15 +486,8 @@ Function request($method : Text; $body)->$this : cs:C1710.http
 			
 		Else 
 			
-			If (httpError#0)
-				
-				This:C1470._pushError(This:C1470._errorCodeMessage(httpError))
-				
-			Else 
-				
-				This:C1470._pushError(This:C1470._statusCodeMessage(This:C1470.status))
-				
-			End if 
+			This:C1470._decodeError()
+			
 		End if 
 		
 	Else 
@@ -606,6 +572,12 @@ Function decodeDateTime($dateTimeString : Text)->$dateTime : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns True if internet access is available
+Function isInternetAvailable()->$available : Boolean
+	
+	$available:=(Length:C16(This:C1470.myIP())>0)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns public IP
 Function myIP()->$IP : Text
 	
@@ -615,10 +587,10 @@ Function myIP()->$IP : Text
 	$onErrCallMethod:=Method called on error:C704
 	httpError:=0
 	ON ERR CALL:C155(This:C1470.onErrorCallMethod)
-	$code:=HTTP Get:C1157("http://api.ipify.org"; $t)
+	This:C1470.status:=HTTP Get:C1157("http://api.ipify.org"; $t)
 	ON ERR CALL:C155($onErrCallMethod)
 	
-	This:C1470.success:=($code=200) & (httpError=0)
+	This:C1470.success:=(This:C1470.status=200) & (httpError=0)
 	
 	If (This:C1470.success)
 		
@@ -626,17 +598,7 @@ Function myIP()->$IP : Text
 		
 	Else 
 		
-		If (httpError#0)
-			
-			This:C1470.errors.push(This:C1470._errorCodeMessage(httpError))
-			
-		Else 
-			
-			This:C1470.errors.push(This:C1470._statusCodeMessage($code))
-			
-		End if 
-		
-		This:C1470.lastError:=This:C1470.errors[This:C1470.errors.length-1]
+		This:C1470._decodeError()
 		
 	End if 
 	
@@ -940,10 +902,26 @@ Function _statusCodeMessage($statusCode : Integer)->$message : Text
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _decodeError()
+	
+	If (httpError#0)
+		
+		This:C1470._pushError(This:C1470._errorCodeMessage(httpError))
+		
+	Else 
+		
+		This:C1470._pushError(This:C1470._statusCodeMessage(This:C1470.status))
+		
+	End if 
+	
+	This:C1470.lastError:=This:C1470.errors[This:C1470.errors.length-1]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _pushError($error : Text)
+	var $c : Collection
+	
+	$c:=Get call chain:C1662
 	
 	This:C1470.success:=False:C215
-	This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$error
+	This:C1470.lastError:=Choose:C955($c.length>3; $c[2].name; $c[1].name)+"() - "+$error
 	This:C1470.errors.push(This:C1470.lastError)
-	
-	

@@ -443,7 +443,7 @@ Case of
 			
 			If ($oIN.success)
 				
-				DEVELOPER_Handler(New object:C1471("action"; $tSelector; "value"; $oIN.value))
+				DEVELOPER_CALLBACK(New object:C1471("action"; $tSelector; "value"; $oIN.value))
 				
 			End if 
 		End if 

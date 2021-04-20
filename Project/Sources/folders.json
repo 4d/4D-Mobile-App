@@ -71,8 +71,6 @@
 			"_o_plist",
 			"_o_progress",
 			"_o_project_CLASSES",
-			"_o_project_Load",
-			"_o_project_SAVE",
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
 			"_o_SERVER_OBJECTS_HANDLER",
@@ -296,7 +294,7 @@
 		"methods": [
 			"COMPILER_DEVELOPER",
 			"DEVELOPER",
-			"DEVELOPER_Handler"
+			"DEVELOPER_CALLBACK"
 		],
 		"forms": [
 			"DEVELOPER"

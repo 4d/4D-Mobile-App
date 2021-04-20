@@ -1,5 +1,4 @@
-Class constructor
-	var $1 : Text
+Class constructor($shortcut : Text)
 	
 	var lastError : Object
 	
@@ -9,21 +8,21 @@ Class constructor
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470[$1]()
+		This:C1470[$shortcut]()
 		
 	End if 
 	
 	//===================================================================================
-Function install  // Installs the passed error-handling method
-	var $1 : Text
+	// Installs the passed error-handling method
+Function install($method : Text)
 	
-	This:C1470.__record()
+	This:C1470._record()
 	
-	If ($1#This:C1470.current)
+	If ($method#This:C1470.current)
 		
 		// Install the method
-		ON ERR CALL:C155($1)
-		This:C1470.current:=$1
+		ON ERR CALL:C155($method)
+		This:C1470.current:=$method
 		
 	End if 
 	
@@ -33,7 +32,8 @@ Function install  // Installs the passed error-handling method
 	CLEAR VARIABLE:C89(ERROR FORMULA)
 	
 	//===================================================================================
-Function deinstall  // Deinstalls the last error-handling method and restore the previous one
+	// Deinstalls the last error-handling method and restore the previous one
+Function deinstall
 	var $t : Text
 	
 	If (This:C1470.stack.length>0)
@@ -52,11 +52,12 @@ Function deinstall  // Deinstalls the last error-handling method and restore the
 	ON ERR CALL:C155($t)
 	
 	//===================================================================================
-Function capture  // Installs a local capture of the errors
+	// Installs a local capture of the errors
+Function capture()
 	
 	lastError:=Null:C1517
 	
-	This:C1470.__record()
+	This:C1470._record()
 	
 	// Install the method
 	ON ERR CALL:C155("errors_CAPTURE")
@@ -64,33 +65,16 @@ Function capture  // Installs a local capture of the errors
 	This:C1470.current:="errors_CAPTURE"
 	
 	//===================================================================================
-Function noError  // Returns true if no errors were encountered during a capture phase
+	// Returns true if no errors were encountered during a capture phase
+Function noError()->$noError : Boolean
 	
-	var $0 : Boolean
-	
-	$0:=(lastError=Null:C1517)
+	$noError:=(lastError=Null:C1517)
 	
 	//===================================================================================
-Function lastError  // Returns the last error encountered during a capture phase
-	var $0 : Object
+	// Returns the last error encountered during a capture phase
+Function lastError()->$error : Object
 	
-/*
-{
-"error" : error code,
-"method" : method name
-"line" : line number
-"formula" : line code
-"stack" : [
-{
-"code" : error code,
-"component" : compoinent code,
-"desc" : description
-},
-...
-]
-*/
-	
-	$0:=lastError
+	$error:=lastError
 	
 	//===================================================================================
 Function release
@@ -102,20 +86,21 @@ Function release
 	End if 
 	
 	//===================================================================================
-Function hide  // Hide errors
+	// Hide errors
+Function hide()->$this : cs:C1710.error
 	
-	This:C1470.__record()
+	This:C1470._record()
 	
 	// Install the method
 	ON ERR CALL:C155("errors_HIDE")
 	
 	This:C1470.current:="errors_HIDE"
 	
-	C_OBJECT:C1216($0)
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	//===================================================================================
-Function show  // Removes the hide errors method
+	// Removes the hide errors method
+Function show
 	
 	If (This:C1470.current="errors_HIDE")\
 		 | (This:C1470.current="errors_CAPTURE")
@@ -133,6 +118,6 @@ Function reset  // Reinit the stack & stop the trapping of errors
 	ON ERR CALL:C155("")
 	
 	//===================================================================================
-Function __record  // 🛠 Record the current method called on error
+Function _record  // 🛠 Record the current method called on error
 	
 	This:C1470.stack.unshift(Method called on error:C704)

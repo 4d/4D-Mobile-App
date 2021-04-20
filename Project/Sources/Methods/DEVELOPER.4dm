@@ -7,9 +7,7 @@
 // DEVELOPER pannel management
 // ----------------------------------------------------
 // Declarations
-var $t : Text
 var $e; $ƒ; $o : Object
-
 var $menu : cs:C1710.menu
 
 // ----------------------------------------------------
@@ -32,18 +30,14 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				$ƒ.teamMenu.disable()
 				
-				// Launch getting team IDs
-				CALL WORKER:C1389("4D Mobile ("+String:C10($ƒ.window)+")"; "teamId"; New object:C1471(\
+				// *LAUNCH GETTING TEAM IDS
+				$ƒ.callWorker("teamId"; New object:C1471(\
 					"action"; "list"; \
 					"provisioningProfiles"; True:C214; \
 					"certificate"; True:C214; \
 					"caller"; $ƒ.window; \
-					"callerMethod"; "editor_CALLBACK"; \
+					"callerMethod"; $ƒ.callback; \
 					"callerReturn"; "teamId"))
-				
-			Else 
-				
-				// #TO_DO
 				
 			End if 
 			
@@ -74,9 +68,7 @@ Else   // <== WIDGETS METHOD
 					//______________________________________
 				: ($e.code=On Data Change:K2:15)
 					
-					$t:=$ƒ.team.getValue()
-					Form:C1466.organization.teamId:=$t
-					$ƒ.setTeamID($t; $t)
+					$ƒ.setTeamID($ƒ.team.getValue())
 					
 					//______________________________________
 			End case 
@@ -102,7 +94,7 @@ Else   // <== WIDGETS METHOD
 			
 			If ($menu.selected)
 				
-				$ƒ.setTeamID($menu.choice; "")
+				$ƒ.setTeamID($menu.choice)
 				
 			End if 
 			

@@ -8,20 +8,14 @@
 // Version check & update
 // ----------------------------------------------------
 // Declarations
-var $0 : Boolean
-var $1 : Object
-
-If (False:C215)
-	C_BOOLEAN:C305(project_Upgrade; $0)
-	C_OBJECT:C1216(project_Upgrade; $1)
-End if 
+#DECLARE($project : Object)->$isUpgraded : Boolean
 
 var $fieldID; $relatedID; $t; $tableID : Text
-var $isUpgraded : Boolean
 var $type : Integer
-var $exposedDatastore; $field; $info; $internalFolder; $o; $project; $table; $template; $userFolder : Object
+var $exposedDatastore; $field; $info; $o; $table; $template : Object
 var $c; $catalog; $fieldTypes; $types : Collection
 var $file : 4D:C1709.file
+var $internalFolder; $userFolder : 4D:C1709.Folder
 var $path : cs:C1710.path
 var $plist : cs:C1710.plist
 
@@ -29,9 +23,11 @@ var $plist : cs:C1710.plist
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	$project:=$1  // Project definition
-	
 	$path:=cs:C1710.path.new()
+	
+	$info:=New object:C1471
+	
+	$plist:=cs:C1710.plist.new(File:C1566("/PACKAGE/Info.plist"))
 	
 Else 
 	
@@ -68,10 +64,6 @@ If (Form:C1466#Null:C1517)
 End if 
 
 // Create current information to compare
-$info:=New object:C1471
-
-$plist:=cs:C1710.plist.new(File:C1566("/PACKAGE/Info.plist"))
-
 If ($plist.success)
 	
 	$info.componentBuild:=$plist.get("CFBundleVersion")
@@ -84,7 +76,7 @@ $info.ideBuildVersion:=String:C10(SHARED.ide.build)
 If ($project.info.ideVersion=Null:C1517)  // "1720"
 	
 	// *REMOVE FIRST "/" ON ICON PATH #100580
-	If (Value type:C1509($project.dataModel)=Is object:K8:27)
+	If ($project.dataModel#Null:C1517)
 		
 		For each ($tableID; $project.dataModel)
 			
@@ -123,6 +115,11 @@ If ($project.info.ideVersion=Null:C1517)  // "1720"
 					
 					//______________________________________________________
 				: ($project.detail[$tableID].form=Null:C1517)
+					
+					//______________________________________________________
+				: ($project.detail[$tableID].form="Simple List")  // "Simple List" -> "Blank Form"
+					
+					$project.detail[$tableID].form:="Blank Form"
 					
 					//______________________________________________________
 				: ($project.detail[$tableID].form="Cards Detail")
@@ -263,7 +260,7 @@ End if
 If (Num:C11($project.info.version)<=4)
 	
 	// *REMAP FIELD TYPE TO BE COMPLIANT WITH DS
-	If (Value type:C1509($project.dataModel)=Is object:K8:27)
+	If ($project.dataModel#Null:C1517)
 		
 		$fieldTypes:=New collection:C1472
 		$fieldTypes[0]:=Is alpha field:K8:1
@@ -455,10 +452,11 @@ If (Num:C11($project.info.version)<=4)
 		
 		$isUpgraded:=True:C214
 		
-		$project.info.version:=4
-		RECORD.warning("Upadted to version: "+String:C10($project.info.version))
-		
 	End if 
+	
+	$project.info.version:=4
+	RECORD.warning("Upadted to version: "+String:C10($project.info.version))
+	
 End if 
 
 //=====================================================================
@@ -522,26 +520,11 @@ If (Num:C11($project.info.version)<5)
 End if 
 
 //=====================================================================
-//                     "Simple List" -> "Blank Form"
-//=====================================================================
-If ($project.detail#Null:C1517)
-	
-	For each ($tableID; $project.detail)
-		
-		If (String:C10($project.detail[$tableID].form)="Simple List")
-			
-			$project.detail[$tableID].form:="Blank Form"
-			
-		End if 
-	End for each 
-End if 
-
-//=====================================================================
 //                              MISCELLANEOUS
 //=====================================================================
-
 If ($project.dataModel#Null:C1517)
 	
+	// *REMOVE EMPTY ICONS
 	For each ($tableID; $project.dataModel)
 		
 		For each ($fieldID; $project.dataModel[$tableID])
@@ -558,12 +541,18 @@ If ($project.dataModel#Null:C1517)
 	End for each 
 End if 
 
+//=====================================================================
+//        REPLACE THE OLD INTERNAL FORMS WITH A USER ARCHIVE
+//                 AS IF HE HAD DOWNLOADED IT
+//=====================================================================
 If ($project.list#Null:C1517)
 	
 	RECORD.info("Check list forms")
 	
 	$internalFolder:=$path.listForms()
 	$userFolder:=$path.hostlistForms()
+	$userFolder.create()
+	
 	$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).list
 	
 	For each ($tableID; $project.list)
@@ -577,9 +566,6 @@ If ($project.list#Null:C1517)
 				If (Not:C34($internalFolder.folder($t).exists))
 					
 					RECORD.warning("Missing internal form: "+$t)
-					
-					// Ensure database folder exists
-					$userFolder.create()
 					
 					$template:=$c.query("old=:1"; $t).pop()
 					
@@ -626,6 +612,8 @@ If ($project.detail#Null:C1517)
 	
 	$internalFolder:=$path.detailForms()
 	$userFolder:=$path.hostdetailForms()
+	$userFolder.create()
+	
 	$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).detail
 	
 	For each ($tableID; $project.detail)
@@ -639,9 +627,6 @@ If ($project.detail#Null:C1517)
 				If (Not:C34($internalFolder.folder($t).exists))
 					
 					RECORD.warning("Missing internal form: "+$t)
-					
-					// Ensure database folder exists
-					$userFolder.create()
 					
 					$template:=$c.query("old=:1"; $t).pop()
 					
@@ -686,10 +671,3 @@ End if
 $project.info.componentBuild:=$info.componentBuild
 $project.info.ideVersion:=$info.ideVersion
 $project.info.ideBuildVersion:=$info.ideBuildVersion
-
-// ----------------------------------------------------
-// Return
-$0:=$isUpgraded  // True if project was modified
-
-// ----------------------------------------------------
-// End

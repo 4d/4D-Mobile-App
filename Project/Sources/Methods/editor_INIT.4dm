@@ -5,18 +5,13 @@
 // Created 21-12-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-//
+// 
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_TEXT:C284($1)
+#DECLARE($form : Text)->$value : Object
 
-C_TEXT:C284($form)
-
-If (False:C215)
-	C_OBJECT:C1216(editor_INIT; $0)
-	C_TEXT:C284(editor_INIT; $1)
-End if 
+var $formName : Text
+var $value : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -26,13 +21,13 @@ End if
 // Optional parameters
 If (Count parameters:C259>=1)
 	
-	$form:=$1
+	$formName:=$form
 	
 End if 
 
-If (Length:C16($form)=0)
+If (Length:C16($formName)=0)
 	
-	$form:=Current form name:C1298
+	$formName:=Current form name:C1298
 	
 End if 
 
@@ -40,20 +35,17 @@ End if
 If (Form:C1466.$dialog=Null:C1517)
 	
 	Form:C1466.$dialog:=New object:C1471(\
-		$form; New object:C1471)
+		$formName; New object:C1471)
 	
 Else 
 	
-	If (Form:C1466.$dialog[$form]=Null:C1517)
+	If (Form:C1466.$dialog[$formName]=Null:C1517)
 		
-		Form:C1466.$dialog[$form]:=New object:C1471
+		Form:C1466.$dialog[$formName]:=New object:C1471
 		
 	End if 
 End if 
 
 // ----------------------------------------------------
 // Return
-$0:=Form:C1466.$dialog[$form]
-
-// ----------------------------------------------------
-// End
+$value:=Form:C1466.$dialog[$formName]

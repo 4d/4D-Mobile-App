@@ -10,40 +10,27 @@
 // This file are decodable using security and are in plist format
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Txt_cmd; $Txt_error; $Txt_in; $Txt_out; $Txt_path; $Txt_plist; $Txt_posix)
-C_OBJECT:C1216($Obj_param; $Obj_result)
-C_COLLECTION:C1488($Col_result)
-
-ARRAY TEXT:C222($tTxt_files; 0)
+#DECLARE($params : Object)->$response : Object
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(provisioningProfiles; $0)
 	C_OBJECT:C1216(provisioningProfiles; $1)
 End if 
 
+var $cmd; $errorStream; $inputStream; $outputStream; $pathname : Text
+var $o : Object
+var $c : Collection
+var $file : 4D:C1709.File
+var $folder : 4D:C1709.Folder
+var $plist : cs:C1710.plist
+
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	// Required parameters
-	$Obj_param:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
-	
-	SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "True")
-	
-	$Obj_result:=New object:C1471("success"; False:C215)
+	$response:=New object:C1471("success"; False:C215)
 	
 Else 
 	
@@ -56,185 +43,157 @@ End if
 Case of 
 		
 		//______________________________________________________
-	: ($Obj_param.action=Null:C1517)
+	: ($params.action=Null:C1517)
 		
 		ASSERT:C1129(False:C215)
 		
 		//______________________________________________________
-	: ($Obj_param.action="path")
+	: ($params.action="path")
 		
-		$Obj_result.success:=True:C214
+		$response.success:=True:C214
 		
-		// An additional separator
-		var $folder : 4D:C1709.Folder
 		$folder:=cs:C1710.path.new().userlibrary().folder("MobileDevice/Provisioning Profiles")
-		$Obj_result.posix:=$folder.path
-		$Obj_result.path:=$folder.platformPath
+		$response.posix:=$folder.path
+		$response.path:=$folder.platformPath
 		
 		//______________________________________________________
-	: ($Obj_param.action="paths")
+	: ($params.action="paths")
 		
-		$Obj_result:=provisioningProfiles(New object:C1471("action"; "path"))
+		$response:=provisioningProfiles(New object:C1471(\
+			"action"; "path"))
 		
-		If ($Obj_result.success)
+		If ($response.success)
 			
-			If (Test path name:C476(String:C10($Obj_result.path))=Is a folder:K24:2)
+			$folder:=Folder:C1567($response.posix)
+			
+			If ($folder.exists)
 				
-				DOCUMENT LIST:C474($Obj_result.path; $tTxt_files; Absolute path:K24:14+Posix path:K24:15)
-				
-				$Col_result:=New collection:C1472
-				ARRAY TO COLLECTION:C1563($Col_result; $tTxt_files)
-				$Obj_result.paths:=$Col_result
+				$response.paths:=$folder.files().extract("path")
 				
 			Else 
 				
-				$Obj_result.paths:=New collection:C1472
+				// Empty collection
+				$response.paths:=New collection:C1472
 				
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_param.action="read")
+	: ($params.action="read")
 		
-		If ($Obj_param.path=Null:C1517)
+		If ($params.path=Null:C1517)
 			
-			$Obj_result:=provisioningProfiles(New object:C1471("action"; "paths"))
+			$response:=provisioningProfiles(New object:C1471(\
+				"action"; "paths"))
 			
-			If ($Obj_result.success)
+			If ($response.success)
 				
-				$Col_result:=New collection:C1472
+				$c:=New collection:C1472
 				
-				For each ($Txt_path; $Obj_result.paths)
+				For each ($pathname; $response.paths)
 					
-					$Obj_result:=provisioningProfiles(New object:C1471("action"; "read"; "path"; $Txt_path))
+					$response:=provisioningProfiles(New object:C1471(\
+						"action"; "read"; \
+						"path"; $pathname))
 					
-					If ($Obj_result.success)
+					If ($response.success)
 						
-						If (FEATURE.with("plistClass")) & False:C215
-							
-							$Col_result.push($Obj_result.content)
-							
-						Else 
-							
-							$Col_result.push($Obj_result.value)
-							
-						End if 
+						$c.push($response.value)
 						
 					End if 
 				End for each 
 				
-				$Obj_result:=New object:C1471("success"; True:C214; "value"; $Col_result)
+				$response:=New object:C1471(\
+					"success"; True:C214; \
+					"value"; $c)
 				
 			End if 
 			
 		Else 
 			
-			// read one provisionning profile
+			// Read one provisionning profile
+			$cmd:="/usr/bin/security cms -D -i "+cs:C1710.tools.new($params.path).singleQuoted($params.path)
+			SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "True")
+			LAUNCH EXTERNAL PROCESS:C811($cmd; $inputStream; $outputStream; $errorStream)
 			
-			$Txt_cmd:="/usr/bin/security cms -D -i "+str_singleQuoted($Obj_param.path)
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
-			
-			If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
+			If (Asserted:C1132(OK=1; "LEP failed: "+$cmd))
 				
-				If (Length:C16($Txt_out)>0)
+				If (Length:C16($outputStream)>0)
 					
-					If (FEATURE.with("plistClass")) & False:C215
+					If (FEATURE.with("plistClass"))
 						
-						var $file : 4D:C1709.File
 						$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"mp.plist")
-						$file.setText($Txt_out)
-						$Obj_result:=cs:C1710.plist.new($file)
+						$file.setText($outputStream)
+						$plist:=cs:C1710.plist.new($file)
+						
+						$response:=New object:C1471(\
+							"success"; $plist.succes; \
+							"value"; $plist.content)
+						
+						If ($plist.success)
+							
+							$response.value:=$plist.content
+							
+						End if 
+						
 						$file.delete()
 						
 					Else 
 						
+						var $Txt_plist; $Txt_posix : Text
 						$Txt_plist:=Temporary folder:C486+Generate UUID:C1066+"mp.plist"
-						TEXT TO DOCUMENT:C1237($Txt_plist; $Txt_out)
+						TEXT TO DOCUMENT:C1237($Txt_plist; $outputStream)
 						$Txt_posix:=Convert path system to POSIX:C1106($Txt_plist)
 						
-						// Remove data not convertible to JSON https://juzhax.com/2013/12/invalid-object-in-plist-for-destination-format/
+						// Remove data not convertible to JSON https:// Juzhax.com/2013/12/invalid-object-in-plist-for-destination-format/
 						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "ExpirationDate"))
 						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "CreationDate"))
 						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "DeveloperCertificates"))
 						
 						// Read it and convert it
-						$Obj_result:=_o_plist(New object:C1471("action"; "object"; "domain"; $Txt_posix))
+						$response:=_o_plist(New object:C1471("action"; "object"; "domain"; $Txt_posix))
 						
+						
+						If (Test path name:C476($Txt_plist)=Is a document:K24:1)
+							
+							DELETE DOCUMENT:C159($Txt_plist)
+							
+						End if 
 					End if 
 				End if 
-				
-				If (Test path name:C476($Txt_plist)=Is a document:K24:1)
-					DELETE DOCUMENT:C159($Txt_plist)
-				End if 
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_param.action="clear")
+	: ($params.action="clear")
 		
-		$Obj_result:=provisioningProfiles(New object:C1471("action"; "path"))
+		$response:=provisioningProfiles(New object:C1471("action"; "path"))
 		
-		If ($Obj_result.success)
+		If ($response.success)
 			
-			If (Test path name:C476(String:C10($Obj_result.path))=Is a folder:K24:2)
+			$folder:=Folder:C1567($response.posix)
+			
+			If ($folder.exists)
 				
-				DOCUMENT LIST:C474($Obj_result.path; $tTxt_files; Absolute path:K24:14+Posix path:K24:15)
-				
-				$Col_result:=New collection:C1472
-				ARRAY TO COLLECTION:C1563($Col_result; $tTxt_files)
-				
-				For each ($Txt_path; $Col_result)
+				For each ($o; $folder.files())
 					
-					DELETE DOCUMENT:C159($Txt_path)
+					$o.delete()
 					
 				End for each 
-				
 			End if 
 		End if 
-		
-		//______________________________________________________
-		//: ($Obj_param.action="teamIdentifiers")
-		
-		//$Obj_param.action:="read"
-		
-		//$Obj_result:=provisioningProfiles ($Obj_param)
-		
-		//If ($Obj_result.success)
-		//  // create a new collection with the values of the property "name" in each object of the collection $people
-		//$Col_extract:=$Obj_result.value.extract("TeamIdentifier")
-		
-		//$Col_teamIds:=New collection
-		
-		//For each ($Col_;$Col_extract)
-		
-		//For each ($Txt_reamID;$Col_)
-		
-		//If (Not(collection_containsText ($Col_teamIds;$Txt_reamID)))
-		//$Col_teamIds.push($Txt_reamID)
-		
-		// End if
-		// End for each
-		// End for each
-		
-		//$Obj_result.value:=$Col_teamIds
-		
-		// End if
 		
 		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_param.action+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$params.action+"\"")
 		
 		//______________________________________________________
 End case 
 
-If ($Obj_param.caller#Null:C1517)
+If ($params.caller#Null:C1517)
 	
-	CALL FORM:C1391($Obj_param.caller; "editor_CALLBACK"; "teamId"; $Obj_result)
-	
-Else 
-	
-	$0:=$Obj_result
+	CALL FORM:C1391($params.caller; "editor_CALLBACK"; "teamId"; $response)
 	
 End if 
 

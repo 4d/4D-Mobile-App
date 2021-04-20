@@ -81,8 +81,6 @@ Case of
 		//______________________________________________________
 	: ($server="aws")
 		
-		//$buildNumber:=264302  // Force build number for test purpose
-		
 		$url:="https://resources-download.4d.com/sdk/"\
 			+Choose:C955($applicationVersion[[1]]="A"; "main"; Delete string:C232($applicationVersion; 1; 4))+"/"\
 			+String:C10($buildNumber)+"/"\
@@ -219,7 +217,8 @@ If ($run)
 			If ($http.status=404)\
 				 & ($server="aws")\
 				 & ($target="android")\
-				 & (Application version:C493[[3]]="0")
+				 & (Application version:C493[[3]]="0")\
+				 & (Process number:C372("unit_BATCH_EXECUTE")=0)
 				
 				$http.setURL("https://github.com/mesopelagique/sdk_docs/releases/download/19.x/android.zip")
 				$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
@@ -285,7 +284,9 @@ If ($run)
 			// ============================== //
 			If ($http.status=404)\
 				 & ($server="aws")\
-				 & ($target="android") & (Application version:C493[[3]]="0")
+				 & ($target="android")\
+				 & (Application version:C493[[3]]="0")\
+				 & (Process number:C372("unit_BATCH_EXECUTE")=0)
 				
 				$http.setURL("https://github.com/mesopelagique/sdk_docs/releases/download/19.x/android.zip")
 				$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))

@@ -1,9 +1,7 @@
-/*===============================================
-DEVELOPER pannel Class
-===============================================*/
+//====================================================================
 Class extends form
 
-//________________________________________________________________ 
+//====================================================================
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
@@ -37,10 +35,12 @@ Function setTeamID($id : Text; $item : Text)
 		
 	Else 
 		
+		$teamId:=$id
+		$label:=$id
+		
 		If (Count parameters:C259>=2)
 			
-			$label:=$item
-			$teamId:=$label
+			$teamId:=$item
 			
 		End if 
 	End if 
@@ -50,5 +50,61 @@ Function setTeamID($id : Text; $item : Text)
 	
 	PROJECT.save()
 	
-	// Update UI
-	CALL FORM:C1391(This:C1470.window; "editor_CALLBACK"; "updateRibbon")
+	// *UPDATE RIBBON'S BUTTONS
+	This:C1470.call("updateRibbon")
+	
+	//====================================================================
+	// Call back from provisioningProfiles
+Function updateTeamID($response : Object)
+	var $o; $team : Object
+	
+	This:C1470.context.team:=New collection:C1472
+	
+	If (This:C1470.context.team#Null:C1517)
+		
+		For each ($o; $response.value)
+			
+			If ($o.id#Null:C1517)\
+				 & (This:C1470.context.team.query("id = :1"; String:C10($o.id)).pop()=Null:C1517)
+				
+				$team:=New object:C1471(\
+					"id"; $o.id; \
+					"name"; ""; \
+					"menu"; $o.id)
+				
+				If (Length:C16(String:C10($o.name))>0)
+					
+					$team.name:=$o.name
+					$team.menu:=$o.name+" ("+$o.id+")"
+					
+				End if 
+				
+				This:C1470.context.team.push($team)
+				
+			End if 
+		End for each 
+		
+		If (Length:C16(String:C10(Form:C1466.organization.teamId))=0)
+			
+			// No team: Assign the first one if there is one.
+			
+			If (This:C1470.context.team.length>0)
+				
+				This:C1470.setTeamID(This:C1470.context.team[0].id)
+				
+			End if 
+			
+		Else 
+			
+			This:C1470.setTeamID(Form:C1466.organization.teamId; Form:C1466.organization.teamId)
+			
+		End if 
+		
+		This:C1470.teamMenu.enable(This:C1470.context.team.length>0)
+		
+	Else 
+		
+		This:C1470.teamMenu.disable()
+		
+	End if 
+	

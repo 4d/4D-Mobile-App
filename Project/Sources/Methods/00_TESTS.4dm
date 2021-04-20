@@ -24,21 +24,24 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		var $plist : cs:C1710.plist
-		$plist:=cs:C1710.plist.new(File:C1566("/PACKAGE/Info.plist"))
-		$plist.get("CFBundleVersion")
+		var $error : cs:C1710.error
+		$error:=cs:C1710.error.new("capture")
 		
-		//________________________________________
-	: (True:C214)
+		Formula from string:C1601("$b:=true").call()
 		
-		var $plist : cs:C1710.plist
-		// Read a binary plist
-		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Library/Preferences/com.apple.iphonesimulator.plist"))
+		If ($error.noError())
+			
+			// <NOTHING MORE TO DO>
+			
+		Else 
+			
+			BEEP:C151
+			
+			$o1:=$error.lastError()
+			
+		End if 
 		
-		//modify…
-		
-		// Then write
-		$plist.write()
+		$error.release()
 		
 		//________________________________________
 	: (True:C214)
@@ -49,8 +52,6 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		//OPEN URL("Macintosh HD:System:Library:CoreServices:Installer.app:Contents:MacOS:Installer")
-		
 		var $studio : cs:C1710.studio
 		$studio:=cs:C1710.studio.new()
 		$studio.installHAXM()
@@ -58,10 +59,8 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		
 		var $log : cs:C1710.log
 		$log:=cs:C1710.log.new()
-		
 		
 		//________________________________________
 	: (True:C214)
@@ -107,24 +106,10 @@ Case of
 			End if 
 		End if 
 		
-		
-		
-		
-		
-		//________________________________________
-	: (True:C214)
-		
-		var $form; $ƒorm : Object
-		$ƒorm:=New object:C1471("hello"; "world")
-		$form:=New object:C1471("hello"; "monde")
-		
-		ALERT:C41($ƒorm.hello+" "+$form.hello)
-		
 		//________________________________________
 	: (True:C214)
 		
 		$o:=cs:C1710.env.new().startupDisk()
-		
 		$t:=Convert path POSIX to system:C1107("/users/"+Get system info:C1571.userName+"/")
 		
 		//________________________________________
@@ -160,7 +145,6 @@ Case of
 	: (True:C214)
 		
 		var $svg : cs:C1710.svg
-		
 		$svg:=cs:C1710.svg.new()
 		
 		$svg.group("background")
@@ -175,28 +159,6 @@ Case of
 		$svg.circle(100).color("blue").translate(201; 201).fill(False:C215).stroke(4).attachTo("background")
 		
 		$svg.preview()
-		
-		//________________________________________
-	: (True:C214)
-		
-		$o:=cs:C1710.error.new("capture")
-		
-		Formula from string:C1601("$b:=true").call()
-		
-		If ($o.noError())
-			
-			
-			
-		Else 
-			
-			BEEP:C151
-			
-			$o1:=$o.lastError()
-			
-		End if 
-		
-		
-		$o.release()
 		
 		//________________________________________
 	: (True:C214)
@@ -835,11 +797,6 @@ Case of
 		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/"))
 		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest"))
 		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest/"))
-		
-		//________________________________________
-	: (True:C214)
-		
-		ASSERT:C1129(Xcode(New object:C1471("action"; "xbuild-version")).success)
 		
 		//________________________________________
 	: (True:C214)

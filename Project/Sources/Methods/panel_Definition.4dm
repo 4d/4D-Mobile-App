@@ -37,9 +37,7 @@ If (OB Is empty:C1297(Form:C1466.$dialog[$name]))\
 	Form:C1466.$dialog[$name]:=cs:C1710[$name].new()
 	
 	// Define local functions
-	Form:C1466.$dialog[$name].refresh:=Formula:C1597(SET TIMER:C645(-1))
-	
-	Form:C1466.$dialog[$name].call:=Formula:C1597(CALL FORM:C1391(Form:C1466.$dialog[$name].window; Form:C1466.$dialog[$name].callback; $1))
+	Form:C1466.$dialog[$name].callWorker:=Formula:C1597(CALL WORKER:C1389("4D Mobile ("+String:C10(Form:C1466.$dialog[$name].window)+")"; $1; $2))
 	
 End if 
 

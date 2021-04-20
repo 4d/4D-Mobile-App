@@ -1322,7 +1322,7 @@ Function _requiredRef($reference : Text)->$response : Boolean
 	
 	If (Not:C34($response))
 		
-		This:C1470.errors.push(Get call chain:C1662[1].name+" - Invalid XML element reference")
+		This:C1470._pushError("Invalid XML element reference")
 		
 	End if 
 	
@@ -1335,7 +1335,7 @@ Function _requiredParams($count; $number)->$response : Boolean
 	
 	If (Not:C34($response))
 		
-		This:C1470.errors.push(Get call chain:C1662[1].name+" - Missing one or more parameters")
+		This:C1470._pushError("Missing one or more parameters")
 		
 	End if 
 	
