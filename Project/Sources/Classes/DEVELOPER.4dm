@@ -24,30 +24,28 @@ Class constructor
 	End if 
 	
 	//====================================================================
-Function setTeamID
-	var $1 : Text
-	var $2 : Text
+Function setTeamID($id : Text; $item : Text)
+	var $label; $teamId : Text
+	var $team : Object
 	
-	var $t; $teamId : Text
-	var $o : Object
+	$team:=This:C1470.context.team.query("id = :1"; $id).pop()
 	
-	$o:=This:C1470.context.team.query("id = :1"; $1).pop()
-	
-	If ($o#Null:C1517)
+	If ($team#Null:C1517)
 		
-		$t:=$o.menu
-		$teamId:=$o.id
+		$label:=$team.menu
+		$teamId:=$team.id
 		
 	Else 
 		
 		If (Count parameters:C259>=2)
 			
-			$t:=$2
+			$label:=$item
+			$teamId:=$label
 			
 		End if 
 	End if 
 	
-	This:C1470.team.setValue($t)
+	This:C1470.team.setValue($label)
 	Form:C1466.organization.teamId:=$teamId
 	
 	PROJECT.save()
