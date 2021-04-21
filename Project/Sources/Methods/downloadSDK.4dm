@@ -81,10 +81,10 @@ Case of
 		//______________________________________________________
 	: ($server="aws")
 		
-		$url:="https://resources-download.4d.com/sdk/"\
-			+Choose:C955($applicationVersion[[1]]="A"; "main"; Delete string:C232($applicationVersion; 1; 4))+"/"\
-			+String:C10($buildNumber)+"/"\
-			+$target+"/"+$target+".zip"
+		$url:="https://resources-download.4d.com/sdk/{version}/{build}/{target}/{target}.zip"
+		$url:=Replace string:C233($url; "{version}"; Choose:C955($applicationVersion[[1]]="A"; "main"; $applicationVersion[[5]]+$applicationVersion[[6]]+".x"))
+		$url:=Replace string:C233($url; "{build}"; String:C10($buildNumber))
+		$url:=Replace string:C233($url; "{target}"; $target)
 		
 		//______________________________________________________
 	: ($server="TeamCity")
