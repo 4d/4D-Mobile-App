@@ -19,6 +19,7 @@ object Versions {
     val atsl_junit = "1.1.2"
     val constraint_layout = "2.0.4"
     val design = "1.3.0"
+    val dynamic_toasts = "3.3.1"
     val espresso = "3.2.0"
     val espresso_contrib = "3.0.2"
     val glide = "4.12.0"
@@ -133,6 +134,7 @@ object Libs {
     val androidx_navigation_ui = "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
 
     // Utils
+    val dynamic_toasts = "com.pranavpandey.android:dynamic-toasts:${Versions.dynamic_toasts}"
     val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
     val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
