@@ -24,6 +24,7 @@ object Versions {
     val espresso_contrib = "3.0.2"
     val glide = "4.12.0"
     val glide_transformations = "4.3.0"
+    val jackson = "2.12.3"
     val junit = "4.13.1"
     val kotlin = "1.4.10"
     val leakcanary = "2.0"
@@ -124,6 +125,9 @@ object Libs {
     //    val retrofit_adapter_rxjava2 = "com.squareup.retrofit2:adapter-rxjava3:${Versions.retrofit}"
     val retrofit_converter_gson = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
 
+    // Jackson
+    val jackson = "com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}"
+    
     // Rx
     val rxandroid = "io.reactivex.rxjava2:rxandroid:${Versions.rx_android}"
     val rxjava = "io.reactivex.rxjava2:rxjava:${Versions.rxjava2}"

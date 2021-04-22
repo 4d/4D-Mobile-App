@@ -40,6 +40,9 @@ dependencies {
     implementation Libs.glide
     kapt Libs.glide_compiler
 
+    // Jackson
+    implementation Libs.jackson
+
     // Utils
     implementation Libs.material
     implementation Libs.multidex

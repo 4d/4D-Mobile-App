@@ -8,7 +8,8 @@ package {{package}}.data.model.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.qmobile.qmobileapi.model.entity.Entities
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobileapi.model.entity.ManyToOneRelationMask
@@ -21,7 +22,7 @@ import java.util.Date
 @Entity
 class {{tableName}}(
     {{#fields}}
-    @SerializedName("{{name_original}}") {{variableType}} {{name}}: {{{fieldTypeString}}}? = null,
+    @JsonProperty("{{name_original}}") {{variableType}} {{name}}: {{{fieldTypeString}}}? = null,
     {{/fields}}
     @PrimaryKey
     override val __KEY: String,
@@ -29,14 +30,9 @@ class {{tableName}}(
     override val __GlobalStamp: Int? = null,
     override val __TIMESTAMP: String? = null
 ) : EntityModel, RoomData {
-    companion object {
-        @Suppress("ObjectPropertyName")
-        val __propertyMap = mapOf(
-            {{#fields}}
-            "{{name}}" to "{{name_original}}"{{^-last}}, {{/-last}}
-            {{/fields}}
-        )
-    }
+    
+    @JsonCreator
+    private constructor() : this(__KEY = "")
 }
 
 @Suppress("ConstructorParameterNaming", "LongParameterList")

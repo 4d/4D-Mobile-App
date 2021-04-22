@@ -7,10 +7,12 @@
 package {{package}}.utils
 
 import android.app.Application
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobileapi.network.ApiService
-import com.qmobile.qmobileapi.utils.parseJsonToType
 import com.qmobile.qmobiledatasync.relation.Relation
 import com.qmobile.qmobiledatasync.relation.RelationHelper
 import com.qmobile.qmobiledatasync.relation.RelationTypeEnum
@@ -34,6 +36,10 @@ import kotlin.reflect.full.declaredMemberProperties
  * Provides different elements depending of the generated type
  */
 class FromTableForViewModelImpl : FromTableForViewModel {
+
+    private var mapper: ObjectMapper = ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .registerKotlinModule()
 
     /**
      * Provides the list of table names
@@ -63,22 +69,22 @@ class FromTableForViewModelImpl : FromTableForViewModel {
         {{#tableNames_relations}}
         if (tableName == "{{relation_source}}") {
             if (entity == null) {
-                entity = Gson().parseJsonToType<{{relation_source}}>(jsonString)
+                entity = mapper.readValue<{{relation_source}}>(jsonString)
             }
             if (fetchedFromRelation) {
                 val entityManyToOneRelationMask =
-                    Gson().parseJsonToType<{{relation_source}}ManyToOneRelationMask>(jsonString)
-                (entity as {{relation_source}}?)?.__{{relation_name}}Key = entityManyToOneRelationMask?.{{relation_name}}?.__deferred?.__KEY
+                    mapper.readValue<{{relation_source}}ManyToOneRelationMask>(jsonString)
+                (entity as {{relation_source}}?)?.__{{relation_name}}Key = entityManyToOneRelationMask.{{relation_name}}?.__deferred?.__KEY
             } else {
-                (entity as {{relation_source}}?)?.__{{relation_name}}Key = entity?.{{relation_name}}?.__KEY
+                (entity as {{relation_source}}?)?.__{{relation_name}}Key = entity.{{relation_name}}?.__KEY
             }
-            (entity as {{relation_source}}?)?.{{relation_name}} = null
+            entity.{{relation_name}} = null
         }
         {{/tableNames_relations}}
         {{#tableNames_without_relations}}
         if (tableName == "{{name}}") {
             if (entity == null) {
-                entity = Gson().parseJsonToType<{{name}}>(jsonString)
+                entity = mapper.readValue<{{name}}>(jsonString)
             }
         }
         {{/tableNames_without_relations}}

@@ -9,6 +9,7 @@ package {{package}}.android.build.utils
 import org.json.JSONObject
 import java.io.File
 import java.text.Normalizer
+import java.util.*
 
 fun addToAppinfo(key: String, value: Any) {
     getAppinfoFile()?.let { file ->
@@ -49,7 +50,8 @@ private fun getAppinfoFile(): File? {
 
 private fun String.condense() = this.replace("\\s".toRegex(), "")
 
-fun String.fieldAdjustment() = this.condense().replaceSpecialChars().validateWord()
+fun String.fieldAdjustment() =
+    this.condense().replaceSpecialChars().decapitalizeExceptID().validateWord()
 
 private fun String.replaceSpecialChars(): String {
     return if (this.contains("Entities<")) {
@@ -58,6 +60,9 @@ private fun String.replaceSpecialChars(): String {
         this.unaccent().replace("[^a-zA-Z0-9._]".toRegex(), "_")
     }
 }
+
+private fun String.decapitalizeExceptID() = 
+    if (this == "ID") this.toLowerCase(Locale.getDefault()) else this.decapitalize(Locale.getDefault())
 
 private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 
