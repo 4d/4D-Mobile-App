@@ -235,17 +235,13 @@ Case of
 						
 					End if 
 					
-					If (cs:C1710.avd.new().createAvd($default).success)
+					If ($success)
 						
-						OBJECT SET ENABLED:C1123(*; $e.objectName; False:C215)
+						cs:C1710.avd.new().createAvd($default)
 						
 						// * UPDATE DEVICE LIST
 						CALL WORKER:C1389(Form:C1466.editor.$worker; "editor_GET_DEVICES"; New object:C1471(\
 							"caller"; Form:C1466.editor.$mainWindow; "project"; PROJECT))
-						
-					Else 
-						
-						RECORD.error("Failed to create a default simulator")
 						
 					End if 
 					
