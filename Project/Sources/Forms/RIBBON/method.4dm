@@ -245,7 +245,6 @@ Case of
 				
 				// Get the last simulator used, if known
 				$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
-				
 				$simulator:=String:C10($pref.get("simulator"))
 				
 				If (Length:C16($simulator)>0)
@@ -325,7 +324,6 @@ Case of
 								
 								// Keep
 								$pref.set("simulator"; $device.udid)
-								
 								$form.simulator.setTitle($device.name)
 								
 							Else 
@@ -342,8 +340,19 @@ Case of
 						
 					Else 
 						
-						$form.simulator.setTitle("unknown")
-						
+						If (Form:C1466.devices.android.length>0)
+							
+							// Select the first one
+							$device:=Form:C1466.devices.android[0]
+							$pref.set("simulator"; $device.udid)
+							$form.simulator.setTitle($device.name)
+							SET TIMER:C645(-1)  // *UPDATE UI
+							
+						Else 
+							
+							$form.simulator.setTitle("unknown")
+							
+						End if 
 					End if 
 				End if 
 				
@@ -399,7 +408,6 @@ Case of
 					End if 
 				End if 
 			End if 
-			
 			
 		Else 
 			
