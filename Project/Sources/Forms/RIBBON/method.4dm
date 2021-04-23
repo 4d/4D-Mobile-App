@@ -235,13 +235,13 @@ Case of
 			// *UPDATE DEVICE BUTTON
 			If (FEATURE.with("android"))  //🚧
 				
-				If (Not:C34((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0)))
+				If (Not:C34((Form:C1466.devices.apple.length>0) & (Form:C1466.devices.android.length>0)))
 					
-					RECORD.warning("SIMULATORS BUTTON IS DISABLED BECAUSE THERE IS NO SIMULATOR AVAILABLE")
+					RECORD.warning("NO SIMULATOR AVAILABLE")
 					
 				End if 
 				
-				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Form:C1466.devices.android.length>0))
+				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Is Windows:C1573))
 				
 				// Get the last simulator used, if known
 				$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
