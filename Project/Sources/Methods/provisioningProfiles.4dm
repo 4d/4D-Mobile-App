@@ -112,7 +112,7 @@ Case of
 		Else 
 			
 			// Read one provisionning profile
-			$cmd:="/usr/bin/security cms -D -i "+cs:C1710.tools.new($params.path).singleQuoted($params.path)
+			$cmd:="/usr/bin/security cms -D -i "+cs:C1710.tools.new().singleQuoted($params.path)
 			SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "True")
 			LAUNCH EXTERNAL PROCESS:C811($cmd; $inputStream; $outputStream; $errorStream)
 			
