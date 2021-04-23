@@ -197,19 +197,22 @@ If ($run)
 		
 		$manifest:=JSON Parse:C1218($fileManifest.getText())
 		
-		$run:=Not:C34(Bool:C1537($manifest.noUpdate))
+		$run:=Not:C34(Bool:C1537($manifest.noUpdate))  // Possibility to block the automatic update for the dev
 		
 		If ($run)
 			
-			If ($run)
-				
-				$run:=Num:C11($manifest.build)<$buildNumber
-				
-			End if 
+			$run:=Num:C11($manifest.build)<$buildNumber  // Not for the same build
+			
+		Else 
+			
+			$http.status:=8858
+			
+		End if 
+		
+		If ($run)
 			
 			$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
 			$run:=$run & ($http.status=200)
-			
 			
 			// ============================== //
 			//  TEMPORARY FALLBACK TO GITHUB  //
@@ -241,13 +244,8 @@ If ($run)
 					
 					If ($o#Null:C1517)
 						
-						$file:=cs:C1710.path.new().cacheSdkAndroidUnzipped().file("sdkVersion")
+						$run:=($o.value#$manifest.version)
 						
-						If ($file.exists)
-							
-							$run:=Split string:C1554($file.getText(); "\r")[0]#$o.value
-							
-						End if 
 					End if 
 				End if 
 			End if 
@@ -257,11 +255,6 @@ If ($run)
 				$run:=$run | $force
 				
 			End if 
-			
-		Else 
-			
-			$http.status:=8858
-			
 		End if 
 	End if 
 	
