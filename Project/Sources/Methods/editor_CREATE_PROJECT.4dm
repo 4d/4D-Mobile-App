@@ -9,6 +9,17 @@ var $folder; $mobileProjects : 4D:C1709.Folder
 
 If (DATABASE.isWritable())
 	
+	If ($data.$name="test")
+		
+/*
+Xcode automatically creates a "Test" target for each iOS project.
+So we have to rename the project to avoid any conflict.
+*/
+		
+		$data.$name:=$data.$name+" App"
+		
+	End if 
+	
 	// Get the folder "Mobile Projects" and make sure it exists
 	$mobileProjects:=cs:C1710.path.new().projects(True:C214)
 	
