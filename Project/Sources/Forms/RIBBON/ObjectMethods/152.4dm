@@ -176,11 +176,24 @@ Case of
 			
 			$menu.line()
 			
-			If ($could.isMain)
+			$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "Android"); "downloadAndroidSdk")
+			
+			$o:=cs:C1710.path.new().cacheSdkAndroid().parent.file("manifest.json")
+			
+			If ($o.exists)
 				
-				$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "Android"); "downloadAndroidSdk")
+				If (Bool:C1537(JSON Parse:C1218($o.getText()).noUpdate))
+					
+					$menu.icon("Images/light_off.png")
+					
+				End if 
+			End if 
+			
+			If (Is macOS:C1572)
 				
-				$o:=cs:C1710.path.new().cacheSdkAndroid().parent.file("manifest.json")
+				$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "iOS"); "downloadIosSdk")
+				
+				$o:=cs:C1710.path.new().cacheSdkApple().parent.file("manifest.json")
 				
 				If ($o.exists)
 					
@@ -190,24 +203,7 @@ Case of
 						
 					End if 
 				End if 
-				
-				If (Is macOS:C1572)
-					
-					$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "iOS"); "downloadIosSdk")
-					
-					$o:=cs:C1710.path.new().cacheSdkApple().parent.file("manifest.json")
-					
-					If ($o.exists)
-						
-						If (Bool:C1537(JSON Parse:C1218($o.getText()).noUpdate))
-							
-							$menu.icon("Images/light_off.png")
-							
-						End if 
-					End if 
-				End if 
 			End if 
-			
 		End if 
 		
 		// =================== DEVELOPMENT ITEMS ===================== [

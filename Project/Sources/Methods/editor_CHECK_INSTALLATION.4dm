@@ -54,21 +54,21 @@ Case of
 					$studio:=studioCheckInstall($in)
 					
 				End if 
+			End if 
+			
+			If ($studio.ready)
 				
-				If ($studio.ready)
+				If (Bool:C1537($in.project.$android))
 					
-					If (Bool:C1537($in.project.$android))
-						
-						// Get the last 4D Mobile Android SDK from AWS server
-						CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
-						
-					End if 
-					
-				Else 
-					
-					$studio.canceled:=Bool:C1537($studio.canceled)
+					// Get the last 4D Mobile Android SDK from AWS server if any
+					CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
 					
 				End if 
+				
+			Else 
+				
+				$studio.canceled:=Bool:C1537($studio.canceled)
+				
 			End if 
 			
 			If (Not:C34(Bool:C1537($xCode.ready)))
