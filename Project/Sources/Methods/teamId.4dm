@@ -97,10 +97,9 @@ Case of
 		
 		// Filter distinct
 		$c:=$response.value
-		
 		$response.value:=New collection:C1472()
 		
-		For each ($o; $c)
+		For each ($o; $c.query("id != null"))
 			
 			If ($response.value.query("id = :1"; $o.id).pop()=Null:C1517)
 				
