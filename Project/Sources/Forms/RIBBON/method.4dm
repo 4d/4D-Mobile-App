@@ -146,7 +146,17 @@ Case of
 					//______________________________________________________
 			End case 
 			
-			$withTeamID:=Choose:C955(Is macOS:C1572; Bool:C1537(Form:C1466.status.teamId); True:C214)
+			If (Is macOS:C1572)
+				
+				// True if only android | teamID OK
+				$withTeamID:=Choose:C955(Bool:C1537(PROJECT.$ios); Bool:C1537(Form:C1466.status.teamId); True:C214)
+				
+			Else 
+				
+				// Always true ;-)
+				$withTeamID:=True:C214
+				
+			End if 
 			
 			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID))
 				
