@@ -60,7 +60,7 @@ Case of
 					If (Bool:C1537($in.project.$android))
 						
 						// Get the last 4D Mobile Android SDK from AWS server
-						CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "aws"; "android"; True:C214)
+						CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
 						
 					End if 
 					
@@ -118,7 +118,7 @@ Case of
 			If (Bool:C1537($out.studio.ready))
 				
 				// Get the last 4D Mobile Android SDK
-				CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "aws"; "android"; True:C214)
+				CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
 				
 			End if 
 		End if 
