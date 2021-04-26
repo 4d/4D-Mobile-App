@@ -144,7 +144,18 @@ Else   // <== WIDGETS METHOD
 					//______________________________________________________
 				: ($e.code=On Clicked:K2:4)
 					
-					PROJECT.setTarget(OBJECT Get value:C1743($e.objectName); $e.objectName)
+					If (Is macOS:C1572)\
+						 & ($e.objectName=$ƒ.android.name)\
+						 & Not:C34(Form:C1466.$ios)\
+						 & Not:C34(Form:C1466.$android)
+						
+						PROJECT.setTarget(True:C214; "ios")
+						
+					Else 
+						
+						PROJECT.setTarget(OBJECT Get value:C1743($e.objectName); $e.objectName)
+						
+					End if 
 					
 					// Update UI
 					$ƒ.displayTarget()
