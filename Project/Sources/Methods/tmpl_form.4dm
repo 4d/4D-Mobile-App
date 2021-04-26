@@ -90,7 +90,8 @@ If ($t_formName[[1]]="/")  // Host database resources
 					
 					For each ($t; $o.mandatory) While ($success)
 						
-						$success:=$pathForm.file($t).exists
+						$success:=$pathForm.file($t).exists | \
+							$pathForm.folder("ios").file($t).exists
 						
 					End for each 
 					
