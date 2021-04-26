@@ -533,7 +533,8 @@ Function getSources($name : Text; $type : Text)->$template : 4D:C1709.folder
 							
 							For each ($item; $o.mandatory) While ($success)
 								
-								$success:=$template.file($item).exists
+								$success:=$template.file($item).exists | \
+									$template.folder("ios").file($item).exists  // To support ios/Sources/...
 								
 							End for each 
 							
