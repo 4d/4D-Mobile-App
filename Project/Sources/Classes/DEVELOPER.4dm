@@ -26,7 +26,7 @@ Function setTeamID($id : Text; $item : Text)
 	var $label; $teamId : Text
 	var $team : Object
 	
-	$team:=This:C1470.context.team.query("id = :1"; $id).pop()
+	$team:=EDITOR.teams.query("id = :1"; $id).pop()
 	
 	If ($team#Null:C1517)
 		
@@ -58,14 +58,13 @@ Function setTeamID($id : Text; $item : Text)
 Function updateTeamID($response : Object)
 	var $o; $team : Object
 	
-	This:C1470.context.team:=New collection:C1472
+	EDITOR.teams:=New collection:C1472
 	
-	If (This:C1470.context.team#Null:C1517)
+	If ($response.value#Null:C1517)
 		
-		For each ($o; $response.value)
+		For each ($o; $response.value.query("id != null"))
 			
-			If ($o.id#Null:C1517)\
-				 & (This:C1470.context.team.query("id = :1"; String:C10($o.id)).pop()=Null:C1517)
+			If (EDITOR.teams.query("id = :1"; String:C10($o.id)).pop()=Null:C1517)
 				
 				$team:=New object:C1471(\
 					"id"; $o.id; \
@@ -79,7 +78,7 @@ Function updateTeamID($response : Object)
 					
 				End if 
 				
-				This:C1470.context.team.push($team)
+				EDITOR.teams.push($team)
 				
 			End if 
 		End for each 
@@ -88,9 +87,9 @@ Function updateTeamID($response : Object)
 			
 			// No team: Assign the first one if there is one.
 			
-			If (This:C1470.context.team.length>0)
+			If (EDITOR.teams.length>0)
 				
-				This:C1470.setTeamID(This:C1470.context.team[0].id)
+				This:C1470.setTeamID(EDITOR.teams[0].id)
 				
 			End if 
 			
@@ -100,7 +99,7 @@ Function updateTeamID($response : Object)
 			
 		End if 
 		
-		This:C1470.teamMenu.enable(This:C1470.context.team.length>0)
+		This:C1470.teamMenu.enable(EDITOR.teams.length>0)
 		
 	Else 
 		
@@ -108,3 +107,4 @@ Function updateTeamID($response : Object)
 		
 	End if 
 	
+	//====================================================================

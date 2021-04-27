@@ -400,19 +400,19 @@ Function setTarget($check : Boolean; $target : Text)
 		End if 
 	End if 
 	
-	PROJECT.save()
+	This:C1470.save()
 	
 	// Update the project folder
-	PROJECT.prepare()
+	This:C1470.prepare()
 	
 	If (Count parameters:C259>=2)
 		
-		PROJECT._buildTarget:=$target
+		This:C1470._buildTarget:=$target
 		
 		If ($check)
 			
 			// Launch the verification of the development tools, if any
-			If (($target="ios") & Is macOS:C1572)  // & Not(Bool(This.$project.$xCode.ready))
+			If (($target="ios") & Is macOS:C1572)
 				
 				If (This:C1470.$project.$xCode#Null:C1517)
 					
@@ -425,7 +425,7 @@ Function setTarget($check : Boolean; $target : Text)
 				
 			End if 
 			
-			If (($target="android"))  // & Not(Bool(This.$project.$studio.ready))
+			If (($target="android"))
 				
 				If (This:C1470.$project.$studio#Null:C1517)
 					
@@ -438,7 +438,6 @@ Function setTarget($check : Boolean; $target : Text)
 				
 			End if 
 		End if 
-		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
@@ -1159,7 +1158,7 @@ Function updateFormDefinitions
 		End if 
 	End for each 
 	
-	
+	//============================================================================
 Function audit($audits : Object)->$audit : Object
 	
 	If (Count parameters:C259>=1)
@@ -1172,8 +1171,7 @@ Function audit($audits : Object)->$audit : Object
 		
 	End if 
 	
-	cs:C1710.ob.new(This:C1470).createPath("$project.status").$project.status.project:=$audit.success
-	//cs.ob.new(This).createPath("$project.status").project:=$audit.success
+	cs:C1710.ob.new(This:C1470).set("$project.status.project"; $audit.success)
 	
 	//================================================================================
 Function fieldDefinition

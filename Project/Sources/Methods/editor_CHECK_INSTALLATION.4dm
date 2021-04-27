@@ -61,7 +61,8 @@ Case of
 				If (Bool:C1537($in.project.$android))
 					
 					// Get the last 4D Mobile Android SDK from AWS server if any
-					CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
+					//CALL WORKER($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
+					CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android")  //;True)
 					
 				End if 
 				
@@ -79,16 +80,18 @@ Case of
 					$xCode:=Xcode_CheckInstall($in)
 					
 				End if 
+			End if 
+			
+			If ($xCode.ready)
 				
-				If ($xCode.ready)
-					
-					// 
-					
-				Else 
-					
-					$xCode.canceled:=Bool:C1537($xCode.canceled)
-					
-				End if 
+				// Get the last 4D Mobile iOS SDK from AWS server if any
+				//CALL WORKER($in.project.$worker; "downloadSDK"; "aws"; "ios")  //;True)
+				//CALL WORKER(1; "downloadSDK"; "aws"; "ios")  //;True)
+				
+			Else 
+				
+				$xCode.canceled:=Bool:C1537($xCode.canceled)
+				
 			End if 
 			
 			$out:=New object:C1471(\
@@ -118,7 +121,8 @@ Case of
 			If (Bool:C1537($out.studio.ready))
 				
 				// Get the last 4D Mobile Android SDK
-				CALL WORKER:C1389($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
+				//CALL WORKER($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
+				CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android")  //;True)
 				
 			End if 
 		End if 

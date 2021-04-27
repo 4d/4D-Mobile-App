@@ -120,7 +120,7 @@ Case of
 		If (Num:C11($form.window)#0)
 			
 			// Send result
-			CALL FORM:C1391($form.window; "editor_CALLBACK"; "projectAuditResult"; PROJECT.audit())
+			EDITOR.call("projectAuditResult"; PROJECT.audit())
 			
 		Else 
 			
@@ -150,10 +150,10 @@ Case of
 		Form:C1466.audit:=$IN.audit
 		
 		// Update UI
-		CALL FORM:C1391($form.window; "editor_CALLBACK"; "tableProperties")
-		CALL FORM:C1391($form.window; "editor_CALLBACK"; "fieldProperties")
-		CALL FORM:C1391($form.window; "editor_CALLBACK"; "refreshViews")
-		CALL FORM:C1391($form.window; "editor_CALLBACK"; "update_data")
+		EDITOR.call("tableProperties")
+		EDITOR.call("fieldProperties")
+		EDITOR.call("refreshViews")
+		EDITOR.call("update_data")
 		
 		If ($IN.audit.success)
 			
@@ -163,6 +163,8 @@ Case of
 				OB REMOVE:C1226(Form:C1466.$dialog; "projectInvalid")
 				
 			End if 
+			
+			
 			
 		Else 
 			

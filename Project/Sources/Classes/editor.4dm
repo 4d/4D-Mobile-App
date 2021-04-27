@@ -1,7 +1,21 @@
+/*===============================================
+EDITOR Class
+===============================================*/
+Class extends form
+
 Class constructor
-	var $o : Object
+	
+	Super:C1705("editor_CALLBACK")
 	
 	This:C1470.pages:=New object:C1471
+	This:C1470.pageDefinition()
+	This:C1470.$currentPage:=""
+	
+	This:C1470.init()
+	
+	//===================================================================================
+Function pageDefinition()
+	var $o : Object
 	
 	//_____________________________________________________________________
 	This:C1470.pages.general:=New object:C1471(\
@@ -147,36 +161,38 @@ Class constructor
 		"title"; Get localized string:C991("page_action_params"); \
 		"form"; "ACTIONS_PARAMS"))
 	
-	//_____________________________________________________________________
-	This:C1470.$currentPage:=""
-	
-	This:C1470.init()
-	
 	//===================================================================================
-Function gotoPage
-	var $1 : Text
+Function gotoPage($page : Text)
 	
-	var $page : Text
 	var $o : Object
 	
 	If (Count parameters:C259>=1)
 		
-		$page:=$1
+		$o:=This:C1470.pages[$page]
 		
 	End if 
 	
 	FORM GOTO PAGE:C247(1)
 	
+	If (This:C1470.name="EDITOR")  // First call
+		
+		
+		var $ƒ : Object
+		$ƒ:=Form:C1466.$dialog[This:C1470.name]
+		
+		$ƒ.tasks:=New collection:C1472
+		$ƒ.task:=cs:C1710.thermometer.new("tasks")
+		
+	End if 
+	
 	// Hide picker if any
-	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "pickerHide")
+	This:C1470.post("pickerHide")
 	
 	// Hide broswer if any
-	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "hideBrowser")
+	This:C1470.post("hideBrowser")
 	
 	// Hide footer
 	androidLimitations(False:C215; "")
-	
-	$o:=This:C1470.pages[$page]
 	
 	Case of 
 			
@@ -206,17 +222,17 @@ Function gotoPage
 		
 		If (FEATURE.with("wizards"))
 			
-			EXECUTE METHOD IN SUBFORM:C1085("PROJECT"; "panel_INIT"; *; $o; PROJECT)
+			This:C1470.executeInSubform("PROJECT"; "panel_INIT"; $o; PROJECT)
 			
 		Else 
 			
-			EXECUTE METHOD IN SUBFORM:C1085("PROJECT"; "panel_INIT"; *; $o)
+			This:C1470.executeInSubform("PROJECT"; "panel_INIT"; $o)
 			
 		End if 
 		
 		SET TIMER:C645(-1)  // Set geometry
 		
-		EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_description"; *; $o)
+		This:C1470.executeInSubform("description"; "editor_description"; $o)
 		
 		GOTO OBJECT:C206(*; "PROJECT")
 		

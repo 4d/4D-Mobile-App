@@ -79,11 +79,11 @@ Else   // <== WIDGETS METHOD
 			$menu:=cs:C1710.menu.new()\
 				.append("none"; "none").mark(Length:C16(String:C10(Form:C1466.organization.teamId))=0)
 			
-			If ($ƒ.context.team.length>0)
+			If (EDITOR.teams.length>0)
 				
 				$menu.line()
 				
-				For each ($o; $ƒ.context.team)
+				For each ($o; EDITOR.teams)
 					
 					$menu.append($o.menu; $o.id).mark(Form:C1466.organization.teamId=$o.id)
 					

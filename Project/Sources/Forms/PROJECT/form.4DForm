@@ -33,7 +33,8 @@
 					"focusable": false,
 					"events": [
 						"onClick"
-					]
+					],
+					"display": false
 				},
 				"picker.up": {
 					"type": "button",
@@ -47,7 +48,8 @@
 					"focusable": false,
 					"events": [
 						"onClick"
-					]
+					],
+					"display": false
 				},
 				"background": {
 					"type": "rectangle",

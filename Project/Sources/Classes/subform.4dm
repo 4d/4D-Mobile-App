@@ -114,3 +114,13 @@ Function setSubform($detail : Text; $list : Text; $table : Pointer)->$this : cs:
 			
 			//______________________________________________________
 	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function currentPage()->$page : Integer
+	
+	$page:=FORM Get current page:C276(*)
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function goToPage($page : Integer)
+	
+	FORM GOTO PAGE:C247($page; *)

@@ -29,7 +29,6 @@ Function reset($url)
 	End if 
 	
 	This:C1470.status:=0
-	This:C1470.success:=This:C1470.isInternetAvailable()
 	This:C1470.keepAlive:=False:C215
 	This:C1470.response:=Null:C1517
 	This:C1470.responseType:=0
@@ -37,6 +36,7 @@ Function reset($url)
 	This:C1470.headers:=New collection:C1472
 	This:C1470.errors:=New collection:C1472
 	This:C1470.lastError:=""
+	This:C1470.success:=This:C1470.isInternetAvailable()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// To set the URL

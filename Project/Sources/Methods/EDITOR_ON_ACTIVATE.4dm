@@ -21,9 +21,6 @@ If (FORM Get current page:C276=1)
 	// Update according to the color scheme
 	EDITOR.init()
 	
-	// Launch project verifications
-	editor_PROJECT_AUDIT
-	
 	// Verify the web server configuration
 	CALL FORM:C1391(Form:C1466.$mainWindow; "editor_CALLBACK"; "checkingServerConfiguration")
 	CALL FORM:C1391(Form:C1466.$mainWindow; "editor_CALLBACK"; "refreshServer")
@@ -36,13 +33,13 @@ If (FORM Get current page:C276=1)
 	CALL WORKER:C1389(Form:C1466.$worker; "editor_GET_DEVICES"; New object:C1471(\
 		"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
 	
+	// Launch project verifications
+	editor_PROJECT_AUDIT
+	
 	// Refresh displayed panels
 	For each ($panel; panel_Objects)
 		
-		EXECUTE METHOD IN SUBFORM:C1085($panel; "panel_REFRESH")
+		EDITOR.executeInSubform($panel; "panel_REFRESH")
 		
 	End for each 
 End if 
-
-// ----------------------------------------------------
-// End

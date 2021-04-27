@@ -111,16 +111,6 @@ Case of
 				// Touch the ribbon subform
 				(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog[$form.editor].ribbon
 				
-			Else 
-				
-/*
-																				DO_MESSAGE(New object(\
-																									"action"; "show"; \
-																									"type"; "alert"; \
-																									"title"; "noDevices"; \
-																									"additional"; ""))
-*/
-				
 			End if 
 		End if 
 		

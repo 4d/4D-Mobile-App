@@ -504,7 +504,6 @@
 			"doc",
 			"env",
 			"error",
-			"form",
 			"http",
 			"lep",
 			"menu",
@@ -654,6 +653,7 @@
 		"classes": [
 			"attention",
 			"button",
+			"form",
 			"group",
 			"input",
 			"listbox",

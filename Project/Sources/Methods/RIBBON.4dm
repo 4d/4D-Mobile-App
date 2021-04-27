@@ -134,7 +134,7 @@ Case of
 								//…………………………………………………………………………………
 							: (Not:C34(Bool:C1537(Form:C1466.status.teamId)))
 								
-								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("defineYourYourTeamIdToPerformThisOperation"))
+								OBJECT SET HELP TIP:C1181(*; $e.objectName; Get localized string:C991("defineYourTeamIdToPerformThisOperation"))
 								
 								//…………………………………………………………………………………
 						End case 

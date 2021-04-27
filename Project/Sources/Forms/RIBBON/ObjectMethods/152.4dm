@@ -354,11 +354,13 @@ Case of
 				
 				If ($fromTeamCity)
 					
-					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; "TeamCity"; $t; False:C215; Form:C1466.editor.$mainWindow)
+					//CALL WORKER(Form.editor.$worker; "downloadSDK"; "TeamCity"; $t; False; Form.editor.$mainWindow)
+					CALL WORKER:C1389(1; "downloadSDK"; "TeamCity"; $t; False:C215; Form:C1466.editor.$mainWindow)
 					
 				Else 
 					
-					CALL WORKER:C1389(Form:C1466.editor.$worker; "downloadSDK"; "aws"; $t; False:C215; Form:C1466.editor.$mainWindow)
+					//CALL WORKER(Form.editor.$worker; "downloadSDK"; "aws"; $t; False; Form.editor.$mainWindow)
+					CALL WORKER:C1389(1; "downloadSDK"; "aws"; $t; False:C215; Form:C1466.editor.$mainWindow)
 					
 				End if 
 				

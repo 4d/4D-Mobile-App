@@ -5,7 +5,7 @@
 // ----------------------------------------------------
 // Declarations
 var $simulator : Text
-var $isDeviceSelected; $isDevToolAvailable; $isProjectOK; $withTeamID : Boolean
+var $isDeviceSelected; $isDevToolAvailable; $isProjectOK; $withTeamID; $isSdkAvailable : Boolean
 var $currentPage : Integer
 var $constraints; $device; $e; $form; $o; $page; $plist : Object
 var $pref : cs:C1710.preferences
@@ -118,6 +118,7 @@ Case of
 					
 					$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode) | Bool:C1537(Form:C1466.status.studio)
 					$isDeviceSelected:=(Form:C1466.currentDevice#Null:C1517)
+					$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
 					
 					//______________________________________________________
 				: (Bool:C1537(PROJECT.$ios))
@@ -130,6 +131,8 @@ Case of
 						
 					End if 
 					
+					$isSdkAvailable:=True:C214
+					
 					//______________________________________________________
 				: (Bool:C1537(PROJECT.$android))
 					
@@ -140,6 +143,8 @@ Case of
 						$isDeviceSelected:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()#Null:C1517
 						
 					End if 
+					
+					$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
 					
 					//______________________________________________________
 			End case 
@@ -158,20 +163,23 @@ Case of
 			
 			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
 			
-			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID))
+			
+			
+			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID & $isSdkAvailable))
 				
 				RECORD.warning("project: "+Choose:C955($isProjectOK; "ok"; "NOT READY")\
 					+" - devTools: "+Choose:C955($isDevToolAvailable; "ready"; "NOT READY")\
 					+" - device: "+Choose:C955($isDeviceSelected; "ok"; "NO DEVICE SELECTED")\
-					+" - teamID: "+Choose:C955($withTeamID; "ok"; "NO TEAM SELECTED"))
+					+" - teamID: "+Choose:C955($withTeamID; "ok"; "NO TEAM SELECTED")\
+					+" - sdk: "+Choose:C955($isSdkAvailable; "ok"; "NO SDK"))
 				
 			Else 
 				
-				RECORD.info("project: ok - devTools: ready - device: ok - teamID: ok")
+				RECORD.info("project: ok - devTools: ready - device: ok - teamID: ok - sdk: ok")
 				
 			End if 
 			
-			$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected)
+			$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $isSdkAvailable)
 			
 			// *INSTALL BUTTON ACTIVATION
 			If (Is Windows:C1573)
@@ -468,8 +476,8 @@ Case of
 			
 		Else 
 			
-			RECORD.warning("Simulators button is disabled because form.devices is not yet available")
 			$form.simulator.disable()
+			RECORD.warning("Simulators button is disabled because form.devices is not yet available")
 			
 		End if 
 		

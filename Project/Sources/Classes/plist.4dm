@@ -10,10 +10,10 @@ Documentation:
 
 //#MARK_TODO : manage openstep
 
-// === === === === === === === === === === === === === === === === === === ===
-Class extends lep
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Class extends ob
 
-// === === === === === === === === === === === === === === === === === === ===
+//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($file : 4D:C1709.File)
 	
 	Super:C1705()
@@ -23,7 +23,6 @@ Class constructor($file : 4D:C1709.File)
 	This:C1470.isConverted:=False:C215
 	This:C1470.isBinary:=False:C215
 	This:C1470.isJson:=False:C215
-	This:C1470.content:=Null:C1517
 	
 	If (Count parameters:C259>=1)
 		
@@ -43,10 +42,11 @@ Class constructor($file : 4D:C1709.File)
 		
 	End if 
 	
-	// === === === === === === === === === === === === === === === === === === ===
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function read($file : 4D:C1709.file)->$plist : cs:C1710.plist
+	
+	var $inputStream; $outputStream; $errorStream : Text
 	var $x : Blob
-	var $t : Text
 	
 	If (Count parameters:C259>=1)
 		
@@ -56,7 +56,7 @@ Function read($file : 4D:C1709.file)->$plist : cs:C1710.plist
 	
 	This:C1470.success:=Bool:C1537(This:C1470.file.exists)
 	
-	If (Asserted:C1132(This:C1470.success; "missing file: "+String:C10(This:C1470.file.path)))
+	If (Asserted:C1132(This:C1470.success; "File not found: "+String:C10(This:C1470.file.path)))
 		
 		If (Is macOS:C1572)
 			
@@ -77,12 +77,15 @@ Function read($file : 4D:C1709.file)->$plist : cs:C1710.plist
 				// Convert
 				This:C1470.buffer:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("buffer.plist")
 				This:C1470.buffer.delete()
-				This:C1470.launch("plutil -convert xml1 "+This:C1470.quoted(This:C1470.file.path)+" -o "+This:C1470.quoted(This:C1470.buffer.path))
-				This:C1470.isConverted:=This:C1470.success
+				
+				SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
+				LAUNCH EXTERNAL PROCESS:C811("plutil -convert xml1 \""+This:C1470.file.path+"\" -o \""+This:C1470.buffer.path+"\""; $inputStream; $outputStream; $errorStream)
+				
+				This:C1470.isConverted:=Bool:C1537(OK) & (Length:C16($errorStream)=0)
 				
 				If (This:C1470.isConverted)
 					
-					This:C1470.content:=This:C1470.buffer.getAppInfo()
+					This:C1470.setContent(This:C1470.buffer.getAppInfo())
 					
 				Else 
 					
@@ -93,19 +96,19 @@ Function read($file : 4D:C1709.file)->$plist : cs:C1710.plist
 				
 			Else 
 				
-				$t:=This:C1470.file.getText()
+				$outputStream:=This:C1470.file.getText()
 				
-				If (Length:C16($t)>0)
+				If (Length:C16($outputStream)>0)
 					
-					This:C1470.isJson:=Match regex:C1019("(?mi-s)^\\{.*\\}$"; $t; 1)
+					This:C1470.isJson:=Match regex:C1019("(?mi-s)^\\{.*\\}$"; $outputStream; 1)
 					
 					If (This:C1470.isJson)
 						
-						This:C1470.content:=JSON Parse:C1218($t)
+						This:C1470.setContent(JSON Parse:C1218($outputStream))
 						
 					Else 
 						
-						This:C1470.content:=This:C1470.file.getAppInfo()
+						This:C1470.setContent(This:C1470.file.getAppInfo())
 						
 					End if 
 					
@@ -120,29 +123,36 @@ Function read($file : 4D:C1709.file)->$plist : cs:C1710.plist
 		Else 
 			
 			// *WE ASSUME THAT IT'S A XML FILE
-			This:C1470.content:=This:C1470.file.getAppInfo()
+			This:C1470.setContent(This:C1470.file.getAppInfo())
 			
 		End if 
+		
+	Else 
+		
+		// *ERROR
+		This:C1470._pushError("File not found: "+String:C10(This:C1470.file.path))
+		
 	End if 
 	
 	$plist:=This:C1470
 	
-	// === === === === === === === === === === === === === === === === === === ===
-Function write()
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Saves the current changes not saved into the plist file
+Function save()
+	
+	var $inputStream; $outputStream; $errorStream : Text
 	
 	If (This:C1470.isConverted)
 		
 		If (This:C1470.isBinary)
 			
 			This:C1470.buffer.setAppInfo(This:C1470.content)
-			This:C1470.launch("plutil -convert binary1 "+This:C1470.quoted(This:C1470.buffer.path)+" -o "+This:C1470.quoted(This:C1470.file.path))
-			This:C1470.success:=This:C1470.success & (Position:C15("Property List error:"; This:C1470.outputStream)=0)
 			
-			If (This:C1470.success)
-				
-				
-				
-			Else 
+			SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
+			LAUNCH EXTERNAL PROCESS:C811("plutil -convert binary1 \""+This:C1470.buffer.path+"\" -o \""+This:C1470.file.path+"\""; $inputStream; $outputStream; $errorStream)
+			This:C1470.success:=Bool:C1537(OK) & (Position:C15("Property List error:"; $errorStream)=0)
+			
+			If (Not:C34(This:C1470.success))
 				
 				// *ERROR
 				This:C1470._pushError("Conversion to binary failure: "+This:C1470.file.path)
@@ -163,73 +173,110 @@ Function write()
 		End if 
 	End if 
 	
-	// === === === === === === === === === === === === === === === === === === ===
-Function get($path : Text)->$value : Variant
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Discards the current changes not saved and reloads the last saved version of the plist file
+Function revert()
 	
-	var $member; $v : Variant
+	This:C1470.read(This:C1470.file)
 	
-	var $c : Collection
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Deletes the content of the file
+Function clear($save : Boolean)
 	
-	$c:=Split string:C1554($path; ".")
+	Super:C1706.clear()
 	
-	If ($c.length=1)
+	If (Count parameters:C259>=1)
 		
-		This:C1470.success:=(This:C1470.content[$path]#Null:C1517)
-		$value:=This:C1470.content[$path]  // Null if not exists
-		
-	Else 
-		
-		$v:=This:C1470.content
-		This:C1470.success:=True:C214
-		
-		For each ($member; Split string:C1554($path; ".")) While (This:C1470.success)
+		If ($save)
 			
-			This:C1470.success:=$v[$member]#Null:C1517
-			
-			If (This:C1470.success)
-				
-				$v:=$v[$member]
-				
-			End if 
-		End for each 
-		
-		If (This:C1470.success)
-			
-			$value:=$v
+			This:C1470.save()
 			
 		End if 
 	End if 
 	
-	// === === === === === === === === === === === === === === === === === === ===
-Function set($path : Text; $value : Variant; $save : Boolean)->$plist : cs:C1710.plist
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// *[ALIAS] of .save()
+Function write()
 	
+	This:C1470.save()
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the value of stored at $path entry.
+	// If we don’t specify $path, it returns the entire content
+Function get($path : Text)->$value : Variant
+	
+	var $member; $v : Variant
 	var $c : Collection
 	
-	ASSERT:C1129(Count parameters:C259>=2; "Missing parameters")
-	
-	$c:=Split string:C1554($path; ".")
-	This:C1470.success:=($c.length=1)
-	
-	If (This:C1470.success)
+	If (Count parameters:C259>=1)
 		
-		This:C1470.content[$path]:=$value
+		$c:=Split string:C1554($path; ".")
+		
+		If ($c.length=1)
+			
+			This:C1470.success:=(This:C1470.content[$path]#Null:C1517)
+			$value:=This:C1470.content[$path]  // Null if not exists
+			
+		Else 
+			
+			$v:=This:C1470.content
+			This:C1470.success:=True:C214
+			
+			For each ($member; Split string:C1554($path; ".")) While (This:C1470.success)
+				
+				This:C1470.success:=$v[$member]#Null:C1517
+				
+				If (This:C1470.success)
+					
+					$v:=$v[$member]
+					
+				End if 
+			End for each 
+			
+			If (This:C1470.success)
+				
+				$value:=$v
+				
+			End if 
+		End if 
 		
 	Else 
 		
-		ASSERT:C1129(False:C215; "TODO")
+		$value:=This:C1470.content
 		
 	End if 
 	
-	If (Count parameters:C259=3)
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Defines the $path entry value and returns the plist content object
+Function set($path; $value; $save : Boolean)->$o : Object
+	
+	If (Asserted:C1132(Count parameters:C259>=1; "Missing parameters"))
 		
-		This:C1470.write()
+		If (Count parameters:C259>=2)
+			
+			Super:C1706.set($path; $value)
+			
+		Else 
+			
+			Super:C1706.set($path)
+			
+		End if 
 		
+		If (Count parameters:C259>=3)
+			
+			If ($save)
+				
+				This:C1470.save()
+				
+			End if 
+		End if 
 	End if 
 	
-	$plist:=This:C1470
+	$o:=This:C1470.content
 	
-	// === === === === === === === === === === === === === === === === === === ===
-Function remove($path : Text)->$plist : cs:C1710.plist
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Deletes the $path entry
+Function delete($path : Text; $save : Boolean)->$plist : cs:C1710.plist
 	
 	var $c : Collection
 	
@@ -250,8 +297,28 @@ Function remove($path : Text)->$plist : cs:C1710.plist
 	
 	If (Count parameters:C259=2)
 		
-		This:C1470.write()
-		
+		If ($save)
+			
+			This:C1470.save()
+			
+		End if 
 	End if 
 	
 	$plist:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// *[ALIAS] of .delete()
+Function remove($path : Text; $save : Boolean)->$plist : cs:C1710.plist
+	
+	ASSERT:C1129(Count parameters:C259>=1; "Missing parameters")
+	
+	If (Count parameters:C259=1)
+		
+		$plist:=This:C1470.delete($path)
+		
+	Else 
+		
+		$plist:=This:C1470.delete($path; $save)
+		
+	End if 
+	

@@ -53,6 +53,10 @@ Case of
 					
 					EDITOR:=cs:C1710.editor.new()
 					
+				Else 
+					
+					EDITOR.name:=Current form name:C1298
+					
 				End if 
 				
 				Form:C1466.$dialog.EDITOR.message:=cs:C1710.subform.new("message").setValue(New object:C1471)
@@ -79,7 +83,9 @@ Case of
 				If (FEATURE.with("wizards"))
 					
 					// Set the dialog title
-					SET WINDOW TITLE:C213(cs:C1710.str.new("editorWindowTitle").localized(PROJECT._name); Form:C1466.$mainWindow)
+					//SET WINDOW TITLE(cs.str.new("editorWindowTitle").localized(PROJECT._name); Form.$mainWindow)
+					
+					EDITOR.setTitle(cs:C1710.str.new("editorWindowTitle").localized(PROJECT._name))
 					
 					// Update the ribbon
 					$form.form.ribbon:=New object:C1471(\
@@ -176,7 +182,7 @@ Case of
 					
 					If (FEATURE.with("wizards"))
 						
-						CALL FORM:C1391(Form:C1466.$mainWindow; Form:C1466.$callback; "pickerHide")
+						EDITOR.post("pickerHide")
 						
 					Else 
 						
@@ -186,12 +192,12 @@ Case of
 				End if 
 				
 				// Mask picker during resizing
-				EXECUTE METHOD IN SUBFORM:C1085($form.project; "editor_CALLBACK"; *; "pickerHide"; New object:C1471(\
+				EDITOR.executeInSubform($form.project; EDITOR.callback; "pickerHide"; New object:C1471(\
 					"action"; "forms"; \
 					"onResize"; True:C214))
 				
 				// Execute geometry rules in each loaded pannel
-				EXECUTE METHOD IN SUBFORM:C1085($form.project; "call_MESSAGE_DISPATCH"; *; New object:C1471(\
+				EDITOR.executeInSubform($form.project; "call_MESSAGE_DISPATCH"; New object:C1471(\
 					"target"; "panel."; \
 					"method"; "UI_SET_GEOMETRY"))
 				

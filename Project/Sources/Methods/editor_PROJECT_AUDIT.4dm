@@ -19,7 +19,7 @@ If (FEATURE.with("wizards"))
 		"caller"; Form:C1466.$mainWindow))
 	
 	// Launch project verifications
-	CALL FORM:C1391(Form:C1466.$mainWindow; "editor_CALLBACK"; "projectAudit")
+	EDITOR.call("projectAudit")
 	
 Else 
 	
