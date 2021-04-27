@@ -16,7 +16,13 @@ var $progress : cs:C1710.progress
 
 ASSERT:C1129(Count parameters:C259>=2)
 
+var DATABASE; RECORD : Object
+
 Case of 
+		
+	: (RECORD#Null:C1517)
+		
+		//already initialized
 		
 		//______________________________________________________
 	: (Is macOS:C1572)
@@ -36,7 +42,15 @@ Case of
 		//______________________________________________________
 End case 
 
+If (DATABASE=Null:C1517)
+	
+	DATABASE:=cs:C1710.database.new()
+	
+End if 
+
 RECORD.verbose:=DATABASE.isMatrix
+
+RECORD.info("Verify "+$target+" SDK, Server: "+$server)
 
 $withUI:=True:C214
 
@@ -46,6 +60,7 @@ If (Count parameters:C259>=3)
 	
 End if 
 
+$applicationVersion:=Application version:C493($buildNumber; *)
 $run:=True:C214
 
 Case of 
@@ -69,8 +84,6 @@ Case of
 		//______________________________________________________
 End case 
 
-$applicationVersion:=Application version:C493($buildNumber; *)
-
 Case of 
 		
 		//______________________________________________________
@@ -82,7 +95,26 @@ Case of
 	: ($server="aws")
 		
 		$url:="https://resources-download.4d.com/sdk/{version}/{build}/{target}/{target}.zip"
-		$url:=Replace string:C233($url; "{version}"; Choose:C955($applicationVersion[[1]]="A"; "main"; $applicationVersion[[5]]+$applicationVersion[[6]]+".x"))
+		
+		If ($applicationVersion[[1]]="A")
+			
+			$url:=Replace string:C233($url; "{version}"; "main")
+			
+		Else 
+			
+			If (Num:C11($applicationVersion[[7]])=0)
+				
+				// LTS
+				$url:=Replace string:C233($url; "{version}"; $applicationVersion[[5]]+$applicationVersion[[6]]+".x")
+				
+			Else 
+				
+				// Release
+				$url:=Replace string:C233($url; "{version}"; $applicationVersion[[5]]+$applicationVersion[[6]]+"R"+$applicationVersion[[7]])
+				
+			End if 
+		End if 
+		
 		$url:=Replace string:C233($url; "{build}"; String:C10($buildNumber))
 		$url:=Replace string:C233($url; "{target}"; $target)
 		
@@ -189,6 +221,8 @@ End case
 
 If ($run)
 	
+	RECORD.info("URL: "+$url)
+	
 	$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
 	
 	$fileManifest:=$sdk.parent.file("manifest.json")
@@ -263,6 +297,8 @@ If ($run)
 			//______________________________________________________
 		: ($run)
 			
+			RECORD.info("Downloading: "+$url)
+			
 			If ($withUI)
 				
 				$progress:=cs:C1710.progress.new("downloadInProgress")\
@@ -312,6 +348,8 @@ If ($run)
 					
 				End if 
 				
+				RECORD.info("Unzipping: "+$sdk.path)
+				
 /* START HIDING ERRORS */
 				$error:=cs:C1710.error.new()
 				$error.hide()
@@ -356,7 +394,9 @@ If ($run)
 					
 					$fileManifest.setText(JSON Stringify:C1217($manifest; *))
 					
-					RECORD.info("Update the 4D Mobile "+$target+" SDK version "+$manifest.version)
+					RECORD.info("The 4D Mobile "+$target+" SDK was updated to version "+$manifest.version)
+					
+					//$sdk.delete()
 					
 				Else 
 					
@@ -396,7 +436,7 @@ If ($run)
 					
 				Else 
 					
-					ALERT:C41(Replace string:C233(Get localized string:C991("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose:C955($target="android"; "Android"; "iOS")))
+					//ALERT(Replace string(Get localized string("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose($target="android"; "Android"; "iOS")))
 					
 				End if 
 			End if 
