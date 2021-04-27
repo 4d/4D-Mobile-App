@@ -67,7 +67,7 @@ Case of
 						For each ($device; Form:C1466.devices.apple)
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark($device.udid=$current)
+								.mark(($device.udid=$current) & PROJECT.$ios)
 							
 						End for each 
 					End if 
@@ -93,7 +93,7 @@ Case of
 						For each ($device; Form:C1466.devices.android.orderBy("name"))
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark($device.udid=$current).enable(Not:C34($device.missingSystemImage))
+								.mark(($device.udid=$current) & PROJECT.$android).enable(Not:C34($device.missingSystemImage))
 							
 						End for each 
 						
@@ -180,6 +180,7 @@ Case of
 			: (Not:C34($menu.selected))
 				
 				// Nothing selected
+				$current:=""
 				
 				//______________________________________________________
 			: ($menu.choice="checkAndroidInstallation")\
@@ -327,15 +328,15 @@ Case of
 		var $pref : cs:C1710.preferences
 		$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
 		
-		If ($current#String:C10(Form:C1466.currentDevice))  // Keep
+		If (Length:C16($current)>0)\
+			 & ($current#String:C10(Form:C1466.currentDevice))  // Keep
 			
 			$pref.set("simulator"; Form:C1466.currentDevice)
 			
+			// Adapt button width
+			SET TIMER:C645(-1)
+			
 		End if 
-		
-		// Adapt button width
-		//$form.buildButtons.distributeHorizontally($form)
-		SET TIMER:C645(-1)
 		
 		//______________________________________________________
 	Else 

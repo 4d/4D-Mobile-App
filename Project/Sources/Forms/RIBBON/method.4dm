@@ -108,10 +108,8 @@ Case of
 		// *ADAPT BUTTONS WIDTH
 		$form.buildButtons.distributeLeftToRight($constraints)
 		
-		// *MANAGE BUILD & INSTALL BUTTONS ACTIVATION
+		// *BUILD BUTTON ACTIVATION
 		If (FEATURE.with("android"))  //🚧
-			
-			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
 			
 			Case of 
 					
@@ -153,10 +151,12 @@ Case of
 				
 			Else 
 				
-				// Always true ;-)
+				// No teamID so always true ;-)
 				$withTeamID:=True:C214
 				
 			End if 
+			
+			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
 			
 			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID))
 				
@@ -165,10 +165,15 @@ Case of
 					+" - device: "+Choose:C955($isDeviceSelected; "ok"; "NO DEVICE SELECTED")\
 					+" - teamID: "+Choose:C955($withTeamID; "ok"; "NO TEAM SELECTED"))
 				
+			Else 
+				
+				RECORD.info("project: ok - devTools: ready - device: ok - teamID: ok")
+				
 			End if 
 			
 			$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected)
 			
+			// *INSTALL BUTTON ACTIVATION
 			If (Is Windows:C1573)
 				
 				$form.install.disable()
@@ -245,13 +250,55 @@ Case of
 			// *UPDATE DEVICE BUTTON
 			If (FEATURE.with("android"))  //🚧
 				
-				If (Not:C34((Form:C1466.devices.apple.length>0) & (Form:C1466.devices.android.length>0)))
-					
-					RECORD.warning("NO SIMULATOR AVAILABLE")
-					
-				End if 
+				$form.simulator.enable()
 				
-				$form.simulator.enable((Form:C1466.devices.apple.length>0) | (Is Windows:C1573))
+				Case of 
+						
+						//______________________________________________________
+					: (Is Windows:C1573)
+						
+						If (Form:C1466.devices.android.length=0)
+							
+							RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
+							
+						End if 
+						
+						//______________________________________________________
+					: (PROJECT.$ios) & Not:C34(PROJECT.$android) & (Form:C1466.devices.apple.length=0)
+						
+						RECORD.warning("NO iOS SIMULATOR AVAILABLE")
+						
+						//______________________________________________________
+					: (PROJECT.$ios) & (PROJECT.$android)
+						
+						If (Form:C1466.devices.apple.length=0)\
+							 & (Form:C1466.devices.android.length=0)
+							
+							RECORD.warning("NO SIMULATOR AVAILABLE")
+							
+						Else 
+							
+							If (Form:C1466.devices.apple.length=0)
+								
+								RECORD.warning("NO iOS SIMULATOR AVAILABLE")
+								
+							Else 
+								
+								If (Form:C1466.devices.android.length=0)
+									
+									RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
+									
+								End if 
+							End if 
+						End if 
+						
+						//______________________________________________________
+					: (PROJECT.$android) & (Form:C1466.devices.android.length=0)
+						
+						RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
+						
+						//______________________________________________________
+				End case 
 				
 				// Get the last simulator used, if known
 				$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
@@ -421,7 +468,7 @@ Case of
 			
 		Else 
 			
-			RECORD.warning("SIMULATORS BUTTON IS DISABLED BECAUSE FORM.DEVICES IS NULL")
+			RECORD.warning("Simulators button is disabled because form.devices is not yet available")
 			$form.simulator.disable()
 			
 		End if 
