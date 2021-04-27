@@ -51,7 +51,7 @@ private fun getAppinfoFile(): File? {
 private fun String.condense() = this.replace("\\s".toRegex(), "")
 
 fun String.fieldAdjustment() =
-    this.condense().replaceSpecialChars().decapitalizeExceptID().validateWord()
+    this.condense().replaceSpecialChars().validateWordDecapitalized()
 
 private fun String.replaceSpecialChars(): String {
     return if (this.contains("Entities<")) {
@@ -66,15 +66,15 @@ private fun String.decapitalizeExceptID() =
 
 private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 
-fun CharSequence.unaccent(): String {
+private fun CharSequence.unaccent(): String {
     val temp = Normalizer.normalize(this, Normalizer.Form.NFD)
     return REGEX_UNACCENT.replace(temp, "")
 }
 
 private const val prefixReservedKeywords = "qmobile"
 
-fun String.validateWord(): String {
-    return this.split(".").joinToString(".") {
+private fun String.validateWordDecapitalized(): String {
+    return this.decapitalizeExceptID().split(".").joinToString(".") {
         if (reservedKeywords.contains(it)) "${prefixReservedKeywords}_$it" else it
     }
 }
