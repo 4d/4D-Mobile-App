@@ -157,7 +157,7 @@ Case of
 			EDITOR.xCode:=$in.xCode
 			EDITOR.studio:=$in.studio
 			
-			Else t
+		Else 
 			
 			// Store the result
 			Form:C1466.xCode:=$in
