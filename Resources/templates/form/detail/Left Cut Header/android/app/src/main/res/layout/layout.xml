@@ -29,16 +29,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <com.qmobile.qmobileui.ui.parallax.VerticalScrollParallaxImageView
                     android:id="@+id/__SPECIFIC_ID_1__"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:contentDescription="Image"
+                    android:scaleType="centerCrop"
                     app:imageUrl="__IMAGE_1__"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:background="@tools:sample/avatars" />
+                    tools:background="@tools:sample/avatars"
+                    tools:ignore="MissingClass" />
 
                 <View
                     android:id="@+id/left_cut_header"
@@ -59,7 +61,7 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:text="__TEXT_2__"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                     android:textColor="?colorOnSurface"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/__SPECIFIC_ID_1__"

@@ -30,16 +30,27 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/background_image"
                     android:layout_width="match_parent"
                     android:layout_height="192dp"
                     android:contentDescription="Image"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     app:imageTransform='@{"Blur"}'
                     app:imageUrl="__IMAGE_1__"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:background="@tools:sample/avatars" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/shade_image_surface"
+                    app:layout_constraintBottom_toBottomOf="@+id/background_image"
+                    app:layout_constraintEnd_toEndOf="@+id/background_image"
+                    app:layout_constraintStart_toStartOf="@+id/background_image"
+                    app:layout_constraintTop_toTopOf="@+id/background_image" />
+
 
                 <ImageView
                     android:id="@+id/__SPECIFIC_ID_1__"

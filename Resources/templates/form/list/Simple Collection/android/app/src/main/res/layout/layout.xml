@@ -32,6 +32,15 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:background="@tools:sample/avatars" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_bottom_to_top"
+            app:layout_constraintBottom_toBottomOf="@+id/__SPECIFIC_ID_1__"
+            app:layout_constraintEnd_toEndOf="@+id/__SPECIFIC_ID_1__"
+            app:layout_constraintStart_toStartOf="@+id/__SPECIFIC_ID_1__"
+            app:layout_constraintTop_toTopOf="@+id/__SPECIFIC_ID_1__" />
+
         <TextView
             android:id="@+id/__SPECIFIC_ID_2__"
             android:layout_width="0dp"
