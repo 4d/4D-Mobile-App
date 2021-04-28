@@ -434,16 +434,14 @@ Case of
 		
 		If (FEATURE.with("wizards"))
 			
-			$o:=Form:C1466
-			
 			// Update ribbon
-			CALL FORM:C1391($o.$mainWindow; $o.$callback; "updateRibbon")
+			EDITOR.updateRibbon()
 			
 			// Update structure dependencies, if any
-			CALL FORM:C1391($o.$mainWindow; $o.$callback; "tableList"; PROJECT)
-			CALL FORM:C1391($o.$mainWindow; $o.$callback; "fieldList"; PROJECT)
-			CALL FORM:C1391($o.$mainWindow; $o.$callback; "tableProperties"; PROJECT)
-			CALL FORM:C1391($o.$mainWindow; $o.$callback; "mainMenu")
+			EDITOR.post("tableList")
+			EDITOR.post("fieldList")
+			EDITOR.post("tableProperties")
+			EDITOR.post("mainMenu")
 			
 		Else 
 			

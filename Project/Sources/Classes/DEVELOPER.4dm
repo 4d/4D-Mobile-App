@@ -51,7 +51,7 @@ Function setTeamID($id : Text; $item : Text)
 	PROJECT.save()
 	
 	// *UPDATE RIBBON'S BUTTONS
-	This:C1470.call("updateRibbon")
+	EDITOR.updateRibbon()
 	
 	//====================================================================
 	// Call back from provisioningProfiles

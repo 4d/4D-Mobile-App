@@ -449,7 +449,8 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($tSelector="tableList") | ($tSelector="fieldList")
+	: ($tSelector="tableList")\
+		 | ($tSelector="fieldList")
 		
 		If ($form.currentForm=$form.project)
 			
@@ -458,14 +459,28 @@ Case of
 			
 			If (Length:C16($tPanel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($tPanel; $form.callback; *; $tSelector; $oIN)
-				
+				If (FEATURE.with("wizards"))
+					
+					EDITOR.executeInSubform($tPanel; EDITOR.callback; $tSelector)
+					
+				Else 
+					
+					EXECUTE METHOD IN SUBFORM:C1085($tPanel; $form.callback; *; $tSelector; $oIN)
+					
+				End if 
 			End if 
 			
 		Else 
 			
-			STRUCTURE_Handler(New object:C1471("action"; $tSelector; "value"; $oIN))
-			
+			If (FEATURE.with("wizards"))
+				
+				STRUCTURE_Handler(New object:C1471("action"; $tSelector; "value"; PROJECT))
+				
+			Else 
+				
+				STRUCTURE_Handler(New object:C1471("action"; $tSelector; "value"; $oIN))
+				
+			End if 
 		End if 
 		
 		//______________________________________________________

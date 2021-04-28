@@ -160,7 +160,7 @@ Else   // <== WIDGETS METHOD
 					// Update UI
 					$ƒ.displayTarget()
 					$ƒ.displayIcon()
-					$ƒ.call("updateRibbon")
+					EDITOR.updateRibbon()
 					
 					//______________________________________________________
 				: ($e.code=On Mouse Enter:K2:33)

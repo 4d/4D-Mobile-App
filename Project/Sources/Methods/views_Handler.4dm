@@ -283,7 +283,7 @@ Case of
 									If (Length:C16(String:C10($context.template.name))>0)
 										
 										// Hide the template picker
-										$form.form.call("pickerHide")
+										EDITOR.hidePicker()
 										
 										// Redraw
 										$context.draw:=True:C214

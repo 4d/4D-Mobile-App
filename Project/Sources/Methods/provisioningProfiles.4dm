@@ -120,7 +120,7 @@ Case of
 				
 				If (Length:C16($outputStream)>0)
 					
-					If (FEATURE.with("plistClass"))
+					If (FEATURE.with("plistClass")) & False:C215
 						
 						$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"mp.plist")
 						$file.setText($outputStream)

@@ -16,8 +16,8 @@ Case of
 		//__________________________________________________________________________________________
 	: ($e.code=On Load:K2:1)
 		
-		var EDITOR : cs:C1710.editor
-		EDITOR:=cs:C1710.editor.new()
+		var EDITOR : cs:C1710.EDITOR
+		EDITOR:=cs:C1710.EDITOR.new()
 		
 		Form:C1466._browse:=cs:C1710.button.new("browse").bestSize(Align left:K42:2)
 		Form:C1466._open:=cs:C1710.button.new("open").bestSize(Align right:K42:4; 70).disable()

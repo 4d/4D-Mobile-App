@@ -157,7 +157,7 @@ Case of
 									Else 
 										
 										// ERROR
-										CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "hideBrowser")
+										EDITOR.hideBrowser()
 										
 										POST_MESSAGE(New object:C1471(\
 											"target"; Current form window:C827; \
@@ -183,7 +183,7 @@ Case of
 						Else 
 							
 							// ERROR
-							CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "hideBrowser")
+							EDITOR.hideBrowser()
 							
 							If ($folderDestination=Null:C1517)
 								

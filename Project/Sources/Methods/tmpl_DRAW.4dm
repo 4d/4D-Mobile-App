@@ -472,7 +472,7 @@ If (Num:C11($tableID)>0)
 				
 			Else 
 				
-				$form.form.call("pickerHide")
+				EDITOR.hidePicker()
 				
 				// Put an error message
 				$form.preview.getCoordinates()

@@ -48,7 +48,7 @@ Function refresh($delay : Integer)
 	End if 
 	
 	//===================================================================================
-	// Post a message for the current form (retro-call)
+	// Post a simple action message for the current form (retro-call)
 Function post($action : Text)
 	
 	CALL FORM:C1391(This:C1470.window; This:C1470.callback; $action)

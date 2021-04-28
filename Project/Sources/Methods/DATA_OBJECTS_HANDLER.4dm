@@ -355,7 +355,7 @@ Case of
 		$context.refresh()
 		
 		PROJECT.audit(New object:C1471("target"; New collection:C1472("filters")))
-		CALL FORM:C1391($form.window; "editor_CALLBACK"; "updateRibbon")
+		EDITOR.updateRibbon()
 		
 		//==================================================
 	: ($event.objectName=$form.embedded)

@@ -51,7 +51,7 @@ Case of
 				
 				If (EDITOR=Null:C1517)  // Direct open not after the wizard
 					
-					EDITOR:=cs:C1710.editor.new()
+					EDITOR:=cs:C1710.EDITOR.new()
 					
 				Else 
 					
@@ -180,15 +180,8 @@ Case of
 				
 				If (OBJECT Get visible:C1075(*; "picker"))
 					
-					If (FEATURE.with("wizards"))
-						
-						EDITOR.post("pickerHide")
-						
-					Else 
-						
-						CALL FORM:C1391($form.window; "editor_CALLBACK"; "pickerHide")
-						
-					End if 
+					EDITOR.hidePicker()
+					
 				End if 
 				
 				// Mask picker during resizing

@@ -95,8 +95,8 @@
 				},
 				"debug.focus": {
 					"type": "input",
-					"top": 20,
-					"left": 691,
+					"top": 21,
+					"left": 250,
 					"width": 245,
 					"height": 14,
 					"dataSource": "OBJECT Get name:C1087(Object with focus:K67:3)",
@@ -144,8 +144,8 @@
 				},
 				"debug.localization": {
 					"type": "subform",
-					"top": 4,
-					"left": 822,
+					"top": 2,
+					"left": 303,
 					"width": 45,
 					"height": 20,
 					"sizingX": "move",
@@ -162,7 +162,7 @@
 					"type": "button",
 					"text": "🗔",
 					"top": 2,
-					"left": 773,
+					"left": 250,
 					"width": 45,
 					"height": 20,
 					"events": [
@@ -240,6 +240,16 @@
 					"sizingX": "grow",
 					"sizingY": "move",
 					"visibility": "hidden"
+				},
+				"tasks": {
+					"type": "progress",
+					"left": 840,
+					"top": 7,
+					"width": 101,
+					"height": 16,
+					"labelsPlacement": "none",
+					"visibility": "hidden",
+					"continuousExecution": false
 				}
 			}
 		},
@@ -269,11 +279,12 @@
 		}
 	],
 	"editor": {
-		"activeView": "message",
+		"activeView": "default",
 		"defaultView": "default",
 		"views": {
 			"default": {},
 			"message": {
+				"visible": false,
 				"objects": [
 					"message.back",
 					"message.button",
@@ -312,7 +323,7 @@
 			}
 		}
 	},
-	"geometryStamp": 102,
+	"geometryStamp": 114,
 	"width": 970,
 	"height": 870
 }

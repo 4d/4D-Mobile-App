@@ -25,7 +25,7 @@ Case of
 		
 		If ($e.code=-1)  // Hide
 			
-			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "hideBrowser")
+			EDITOR.hideBrowser()
 			
 			$widget:=Self:C308->
 			
@@ -78,7 +78,6 @@ Case of
 					: ($e.code=-2)\
 						 | ($e.code=-1)  // Close
 						
-						//$widget.hide()
 						OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
 						
 						$display.restore($data)

@@ -332,9 +332,8 @@ project_REPAIR(PROJECT)
 PROJECT.save()
 
 // Update UI
-CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "updateRibbon")
-CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "refreshViews")
-CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "pickerHide")
-CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471("show"; False:C215))
-
-EXECUTE METHOD IN SUBFORM:C1085("project"; "EDITOR_ON_ACTIVATE")
+EDITOR.updateRibbon()
+EDITOR.refreshViews()
+EDITOR.hidePicker()
+EDITOR.call("description"; New object:C1471("show"; False:C215))
+EDITOR.executeInSubform("project"; "EDITOR_ON_ACTIVATE")

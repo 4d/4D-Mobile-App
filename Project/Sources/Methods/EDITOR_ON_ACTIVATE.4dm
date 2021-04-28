@@ -22,15 +22,15 @@ If (FORM Get current page:C276=1)
 	EDITOR.init()
 	
 	// Verify the web server configuration
-	CALL FORM:C1391(Form:C1466.$mainWindow; "editor_CALLBACK"; "checkingServerConfiguration")
-	CALL FORM:C1391(Form:C1466.$mainWindow; "editor_CALLBACK"; "refreshServer")
-	
-	// Audit of development tools
-	CALL WORKER:C1389(Form:C1466.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-		"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
+	EDITOR.post("checkingServerConfiguration")
+	EDITOR.post("refreshServer")
 	
 	// Recovering the list of available devices
 	CALL WORKER:C1389(Form:C1466.$worker; "editor_GET_DEVICES"; New object:C1471(\
+		"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
+	
+	// Audit of development tools
+	CALL WORKER:C1389(Form:C1466.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
 		"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
 	
 	// Launch project verifications

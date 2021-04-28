@@ -185,11 +185,9 @@ Function gotoPage($page : Text)
 		
 	End if 
 	
-	// Hide picker if any
-	This:C1470.post("pickerHide")
-	
-	// Hide broswer if any
-	This:C1470.post("hideBrowser")
+	// Hide picker & browser if any
+	This:C1470.hidePicker()
+	This:C1470.hideBrowser()
 	
 	// Hide footer
 	androidLimitations(False:C215; "")
@@ -358,3 +356,22 @@ Function init()
 	
 	OBSOLETE
 	
+	//===================================================================================
+Function hidePicker()
+	
+	This:C1470.post("pickerHide")
+	
+	//===================================================================================
+Function hideBrowser()
+	
+	This:C1470.post("hideBrowser")
+	
+	//===================================================================================
+Function updateRibbon()
+	
+	This:C1470.post("updateRibbon")
+	
+	//===================================================================================
+Function refreshViews()
+	
+	This:C1470.post("refreshViews")

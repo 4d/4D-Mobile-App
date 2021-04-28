@@ -63,7 +63,7 @@ Case of
 						
 						If (Form:C1466[$formType][$context.tableNum()].form#Null:C1517)
 							
-							$form.form.call("pickerHide")
+							EDITOR.hidePicker()
 							
 							If (Bool:C1537(Form:C1466.$dialog.picker))
 								
@@ -83,7 +83,7 @@ Case of
 							
 							If ($exists)
 								
-								$form.form.call("pickerHide")
+								EDITOR.hidePicker()
 								
 							End if 
 							
@@ -105,7 +105,7 @@ Case of
 						
 						If ($tableID#$context.tableNum()) & $exists
 							
-							$form.form.call("pickerHide")
+							EDITOR.hidePicker()
 							
 						Else 
 							
@@ -134,7 +134,7 @@ Case of
 						//______________________________________________________
 					Else 
 						
-						$form.form.call("pickerHide")
+						EDITOR.hidePicker()
 						
 						// Outside click
 						If (Length:C16($context.tableNum())>0)
@@ -680,7 +680,7 @@ ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventC
 			: ($e.code=On Clicked:K2:4)
 				
 				// Hide picker if any
-				$form.form.call("pickerHide")
+				EDITOR.hidePicker()
 				
 				// Update tab detail/list
 				$context.selector:=1+Num:C11($e.objectName=$form.selectorDetail.name)
