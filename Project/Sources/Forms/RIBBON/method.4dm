@@ -8,7 +8,6 @@ var $simulator : Text
 var $isDeviceSelected; $isDevToolAvailable; $isProjectOK; $withTeamID; $isSdkAvailable : Boolean
 var $currentPage : Integer
 var $constraints; $device; $e; $form; $o; $page; $plist : Object
-var $pref : cs:C1710.preferences
 
 // ----------------------------------------------------
 // Initialisations
@@ -100,7 +99,6 @@ Case of
 		If (Form:C1466.initialized=Null:C1517)
 			
 			Form:C1466.initialized:=New collection:C1472(1)
-			
 			Form:C1466.pages:=$form.pages
 			
 		End if 
@@ -117,7 +115,7 @@ Case of
 				: (Bool:C1537(EDITOR.android)) & (Bool:C1537(EDITOR.ios))
 					
 					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready) | Bool:C1537(EDITOR.studio.ready)
-					$isDeviceSelected:=(Form:C1466.currentDevice#Null:C1517)
+					$isDeviceSelected:=(EDITOR.currentDevice#Null:C1517)
 					$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
 					
 					//______________________________________________________
@@ -125,9 +123,9 @@ Case of
 					
 					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
 					
-					If (Form:C1466.currentDevice#Null:C1517)
+					If (EDITOR.currentDevice#Null:C1517)
 						
-						$isDeviceSelected:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()#Null:C1517
+						$isDeviceSelected:=EDITOR.devices.apple.query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
 						
 					End if 
 					
@@ -138,9 +136,9 @@ Case of
 					
 					$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
 					
-					If (Form:C1466.currentDevice#Null:C1517)
+					If (EDITOR.currentDevice#Null:C1517)
 						
-						$isDeviceSelected:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()#Null:C1517
+						$isDeviceSelected:=EDITOR.devices.android.query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
 						
 					End if 
 					
@@ -231,6 +229,8 @@ Case of
 			End case 
 		End if 
 		
+		SET TIMER:C645(-1)  // *UPDATE UI
+		
 		//______________________________________________________
 	: ($e.code=On Bound Variable Change:K2:52)
 		
@@ -251,46 +251,48 @@ Case of
 		
 		$form.simulator.setColors("dimgray")
 		
-		If (Form:C1466.devices#Null:C1517)
+		ASSERT:C1129(Not:C34(Shift down:C543))
+		
+		If (EDITOR.devices#Null:C1517)
 			
 			// *UPDATE DEVICE BUTTON
 			If (FEATURE.with("android"))  //🚧
 				
 				$form.simulator.enable(EDITOR.devices#Null:C1517)
 				
-				Case of 
+				Case of   //#DEBUG LOG
 						
 						//______________________________________________________
 					: (Is Windows:C1573)
 						
-						If (Form:C1466.devices.android.length=0)
+						If (EDITOR.devices.android.length=0)
 							
 							RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
 							
 						End if 
 						
 						//______________________________________________________
-					: (EDITOR.ios) & Not:C34(EDITOR.android) & (Form:C1466.devices.apple.length=0)
+					: (EDITOR.ios) & Not:C34(EDITOR.android) & (EDITOR.devices.apple.length=0)
 						
 						RECORD.warning("NO iOS SIMULATOR AVAILABLE")
 						
 						//______________________________________________________
 					: (EDITOR.ios) & (EDITOR.android)
 						
-						If (Form:C1466.devices.apple.length=0)\
-							 & (Form:C1466.devices.android.length=0)
+						If (EDITOR.devices.apple.length=0)\
+							 & (EDITOR.devices.android.length=0)
 							
 							RECORD.warning("NO SIMULATOR AVAILABLE")
 							
 						Else 
 							
-							If (Form:C1466.devices.apple.length=0)
+							If (EDITOR.devices.apple.length=0)
 								
 								RECORD.warning("NO iOS SIMULATOR AVAILABLE")
 								
 							Else 
 								
-								If (Form:C1466.devices.android.length=0)
+								If (EDITOR.devices.android.length=0)
 									
 									RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
 									
@@ -299,7 +301,7 @@ Case of
 						End if 
 						
 						//______________________________________________________
-					: (EDITOR.android) & (Form:C1466.devices.android.length=0)
+					: (EDITOR.android) & (EDITOR.devices.android.length=0)
 						
 						RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
 						
@@ -307,25 +309,25 @@ Case of
 				End case 
 				
 				// Get the last simulator used, if known
-				$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
-				$simulator:=String:C10($pref.get("simulator"))
+				$simulator:=String:C10(EDITOR.preferences.get("simulator"))
 				
 				If (Length:C16($simulator)>0)
 					
-					$device:=Form:C1466.devices.apple.query("udid = :1"; $simulator).pop()
+					$device:=EDITOR.devices.apple.query("udid = :1"; $simulator).pop()
 					
-					If ($device=Null:C1517) & (Form:C1466.devices.connected.apple#Null:C1517)
+					If ($device=Null:C1517) & (EDITOR.devices.connected.apple#Null:C1517)
 						
-						$device:=Form:C1466.devices.connected.apple.query("udid = :1"; $simulator).pop()
+						$device:=EDITOR.devices.connected.apple.query("udid = :1"; $simulator).pop()
 						
 					End if 
 					
 					If ($device#Null:C1517)
 						
-						If (PROJECT.$ios)
+						If (EDITOR.ios)
 							
 							$form.simulator.setTitle($device.name)
-							Form:C1466.currentDevice:=$simulator
+							EDITOR.currentDevice:=$simulator
+							
 							PROJECT._buildTarget:="ios"
 							PROJECT._simulator:=$device.udid
 							
@@ -339,14 +341,14 @@ Case of
 						
 					Else 
 						
-						$device:=Form:C1466.devices.android.query("udid = :1"; $simulator).pop()
+						$device:=EDITOR.devices.android.query("udid = :1"; $simulator).pop()
 						
 						If ($device#Null:C1517)
 							
 							If (PROJECT.$android)
 								
 								$form.simulator.setTitle($device.name)
-								Form:C1466.currentDevice:=$simulator
+								EDITOR.currentDevice:=$simulator
 								PROJECT._buildTarget:="android"
 								PROJECT._simulator:=$device.udid
 								
@@ -371,22 +373,22 @@ Case of
 					
 					If (Is macOS:C1572)\
 						 & (Bool:C1537(Form:C1466.editor.$ios))\
-						 & (Form:C1466.devices.apple.length>0)
+						 & (EDITOR.devices.apple.length>0)
 						
 						// Get a default device identifier
 						$simulator:=String:C10(cs:C1710.simctl.new(SHARED.iosDeploymentTarget).defaultDevice().udid)
 						
 						If (Length:C16($simulator)>0)
 							
-							$device:=Form:C1466.devices.apple.query("udid = :1"; $simulator).pop()
+							$device:=EDITOR.devices.apple.query("udid = :1"; $simulator).pop()
 							$form.simulator.setTitle($device.name)
 							
 							If ($device#Null:C1517)
 								
-								Form:C1466.currentDevice:=$simulator
+								EDITOR.currentDevice:=$simulator
 								
 								// Keep
-								$pref.set("simulator"; $device.udid)
+								EDITOR.preferences.set("simulator"; $device.udid)
 								$form.simulator.setTitle($device.name)
 								
 							Else 
@@ -403,11 +405,11 @@ Case of
 						
 					Else 
 						
-						If (Form:C1466.devices.android.length>0)
+						If (EDITOR.devices.android.length>0)
 							
 							// Select the first one
-							$device:=Form:C1466.devices.android[0]
-							$pref.set("simulator"; $device.udid)
+							$device:=EDITOR.devices.android[0]
+							EDITOR.preferences.set("simulator"; $device.udid)
 							$form.simulator.setTitle($device.name)
 							SET TIMER:C645(-1)  // *UPDATE UI
 							
@@ -421,7 +423,7 @@ Case of
 				
 			Else 
 				
-				If (Form:C1466.devices.length>0)
+				If (EDITOR.devices.length>0)
 					
 					$form.simulator.enable()
 					
@@ -444,17 +446,17 @@ Case of
 						If ($plist.success)
 							
 							// Keep the current device identifier
-							Form:C1466.currentDevice:=$plist.value.currentDevice
+							EDITOR.currentDevice:=$plist.value.currentDevice
 							
 							// Display the current device name
-							$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.currentDevice).pop()
+							$device:=EDITOR.devices.query("udid = :1"; EDITOR.currentDevice).pop()
 							
 							If ($device=Null:C1517)
 								
 								_o_simulator(New object:C1471(\
 									"action"; "getdefault"))
 								
-								$device:=Form:C1466.devices.query("udid = :1"; Form:C1466.currentDevice).pop()
+								$device:=EDITOR.devices.query("udid = :1"; EDITOR.currentDevice).pop()
 								
 							End if 
 							
@@ -475,7 +477,7 @@ Case of
 		Else 
 			
 			$form.simulator.disable()
-			RECORD.warning("Simulators button is disabled because form.devices is not yet available")
+			RECORD.warning("Simulators button is disabled because EDITOR.devices is not yet available")
 			
 		End if 
 		

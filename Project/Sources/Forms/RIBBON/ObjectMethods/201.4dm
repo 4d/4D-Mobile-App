@@ -5,6 +5,7 @@
 // ----------------------------------------------------
 // Declarations
 var $bottom; $left; $right; $top : Integer
+var $currentDevice; $tab : Text
 var $device; $e : Object
 var $menu : cs:C1710.menu
 
@@ -32,29 +33,21 @@ Case of
 		
 		If (FEATURE.with("android"))  // 🚧
 			
-			var $pref : cs:C1710.preferences
-			$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
-			
-			var $current : Text
-			$current:=String:C10($pref.get("simulator"))
-			
-			var $tab : Text
+			$currentDevice:=EDITOR.preferences.get("simulator")
 			$tab:="       "
 			
 			If (Is macOS:C1572)
 				
 				$menu.append("iOS").icon("images/os/iOS-24.png").disable()
 				
-				If (Form:C1466.status.xCode)
+				If (EDITOR.xCode.ready)
 					
-					If (Form:C1466.devices.connected.apple.length>0)
+					If (EDITOR.devices.connected.apple.length>0)
 						
-						//$menu.line()
-						
-						For each ($device; Form:C1466.devices.connected.apple)
+						For each ($device; EDITOR.devices.connected.apple)
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark($device.udid=$current)
+								.mark($device.udid=$currentDevice)
 							
 						End for each 
 						
@@ -62,12 +55,12 @@ Case of
 						
 					End if 
 					
-					If (Form:C1466.devices.apple.length>0)
+					If (EDITOR.devices.apple.length>0)
 						
-						For each ($device; Form:C1466.devices.apple)
+						For each ($device; EDITOR.devices.apple)
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark(($device.udid=$current) & PROJECT.$ios)
+								.mark(($device.udid=$currentDevice) & PROJECT.$ios)
 							
 						End for each 
 					End if 
@@ -86,14 +79,14 @@ Case of
 				
 				$menu.append("Android").icon("images/os/android-24.png").disable()
 				
-				If (Form:C1466.status.studio)
+				If (EDITOR.studio.ready)
 					
-					If (Form:C1466.devices.android.length>0)
+					If (EDITOR.devices.android.length>0)
 						
-						For each ($device; Form:C1466.devices.android.orderBy("name"))
+						For each ($device; EDITOR.devices.android.orderBy("name"))
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark(($device.udid=$current) & PROJECT.$android).enable(Not:C34($device.missingSystemImage))
+								.mark(($device.udid=$currentDevice) & PROJECT.$android).enable(Not:C34($device.missingSystemImage))
 							
 						End for each 
 						
@@ -115,14 +108,14 @@ Case of
 				
 			Else 
 				
-				If (Form:C1466.status.studio)
+				If (EDITOR.studio.ready)
 					
-					If (Form:C1466.devices.android.length>0)
+					If (EDITOR.devices.android.length>0)
 						
-						For each ($device; Form:C1466.devices.android)
+						For each ($device; EDITOR.devices.android)
 							
 							$menu.append($device.name; $device.udid)\
-								.mark($device.udid=String:C10(Form:C1466.currentDevice))
+								.mark($device.udid=String:C10(EDITOR.currentDevice))
 							
 						End for each 
 						
@@ -145,12 +138,12 @@ Case of
 			
 		Else 
 			
-			If (Form:C1466.devices.length>0)
+			If (EDITOR.devices.length>0)
 				
-				For each ($device; Form:C1466.devices)
+				For each ($device; EDITOR.devices)
 					
 					$menu.append($device.name; $device.udid)\
-						.mark($device.udid=String:C10(Form:C1466.currentDevice))
+						.mark($device.udid=String:C10(EDITOR.currentDevice))
 					
 				End for each 
 				
@@ -159,15 +152,6 @@ Case of
 					$menu.line().append(Get localized string:C991("openTheAvdManager"); "avdManager")
 					
 				End if 
-				
-			Else 
-				
-				POST_MESSAGE(New object:C1471(\
-					"target"; Current form window:C827; \
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; "noDevices"))
-				
 			End if 
 		End if 
 		
@@ -180,7 +164,7 @@ Case of
 			: (Not:C34($menu.selected))
 				
 				// Nothing selected
-				$current:=""
+				$currentDevice:=""
 				
 				//______________________________________________________
 			: ($menu.choice="checkAndroidInstallation")\
@@ -197,8 +181,7 @@ Case of
 				End if 
 				
 				// Launch checking the development environment
-				CALL WORKER:C1389(Form:C1466.editor.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-					"caller"; Form:C1466.editor.$mainWindow; "project"; PROJECT))
+				EDITOR.checkDevTools()
 				
 				//______________________________________________________
 			: ($menu.choice="XcodeDeviceManager")
@@ -209,20 +192,18 @@ Case of
 			: ($menu.choice="createAVD")
 				
 				var $success : Boolean
-				var $default : Object
+				var $defaultAvd : Object
 				var $progress : cs:C1710.progress
 				var $sdk : cs:C1710.sdkmanager
 				var $package : 4D:C1709.Folder
 				
-				$default:=JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).device
+				$defaultAvd:=JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).device
 				
-				If ($default#Null:C1517)
+				If ($defaultAvd#Null:C1517)
 					
 					// * CHECK IF THE SYSTEM IMAGE IS AVAILABLE
 					$sdk:=cs:C1710.sdkmanager.new()
-					
-					$package:=$sdk.exe.parent.parent.parent.folder(Split string:C1554($default.image; ";").join("/"))
-					
+					$package:=$sdk.exe.parent.parent.parent.folder(Split string:C1554($defaultAvd.image; ";").join("/"))
 					$success:=$package.exists
 					
 					If (Not:C34($success))
@@ -232,17 +213,16 @@ Case of
 							.setMessage("downloadInProgress")\
 							.bringToFront()
 						
-						$success:=$sdk.install($default.image)
+						$success:=$sdk.install($defaultAvd.image)
 						
 					End if 
 					
 					If ($success)
 						
-						cs:C1710.avd.new().createAvd($default)
+						cs:C1710.avd.new().createAvd($defaultAvd)
 						
 						// * UPDATE DEVICE LIST
-						CALL WORKER:C1389(Form:C1466.editor.$worker; "editor_GET_DEVICES"; New object:C1471(\
-							"caller"; Form:C1466.editor.$mainWindow; "project"; PROJECT))
+						EDITOR.getDevices()
 						
 					End if 
 					
@@ -270,10 +250,10 @@ Case of
 				//______________________________________________________
 			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-(?:[[:xdigit:]]{4}-){3}[[:xdigit:]]{12}"; $menu.choice; 1))  // iOS Simulator
 				
-				$device:=Form:C1466.devices.apple.query("udid = :1"; $menu.choice).pop()
+				$device:=EDITOR.devices.apple.query("udid = :1"; $menu.choice).pop()
 				
 				// Set default simulator
-				Form:C1466.currentDevice:=$menu.choice
+				EDITOR.currentDevice:=$menu.choice
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
 				// #TO_OPTMIZE : deport to worker
@@ -284,32 +264,35 @@ Case of
 				//$simctl.shutdownAllDevices()
 				$simctl.setDefaultDevice($menu.choice)
 				
-				PROJECT.$ios:=True:C214
+				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				EDITOR.ios:=True:C214
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
 				
 				//______________________________________________________
 			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-[[:xdigit:]]{16}"; $menu.choice; 1))  // iOS Connected Device
 				
-				$device:=Form:C1466.devices.connected.apple.query("udid = :1"; $menu.choice).pop()
+				$device:=EDITOR.devices.connected.apple.query("udid = :1"; $menu.choice).pop()
 				
 				// Set default simulator
-				Form:C1466.currentDevice:=$menu.choice
+				EDITOR.currentDevice:=$menu.choice
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
-				PROJECT.$ios:=True:C214
+				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				EDITOR.ios:=True:C214
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
 				
 				//______________________________________________________
 			: (FEATURE.with("android"))  // 🚧
 				
-				$device:=Form:C1466.devices.android.query("udid = :1"; $menu.choice).pop()
+				$device:=EDITOR.devices.android.query("udid = :1"; $menu.choice).pop()
 				
-				Form:C1466.currentDevice:=$menu.choice
+				EDITOR.currentDevice:=$menu.choice
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
-				PROJECT.$android:=True:C214
+				PROJECT.$android:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				EDITOR.android:=True:C214
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "android")
 				
@@ -321,13 +304,10 @@ Case of
 				//______________________________________________________
 		End case 
 		
-		var $pref : cs:C1710.preferences
-		$pref:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
-		
-		If (Length:C16($current)>0)\
-			 & ($current#String:C10(Form:C1466.currentDevice))  // Keep
+		If (Length:C16($currentDevice)>0)\
+			 & ($currentDevice#String:C10(EDITOR.currentDevice))  // Keep
 			
-			$pref.set("simulator"; Form:C1466.currentDevice)
+			EDITOR.preferences.set("simulator"; EDITOR.currentDevice)
 			
 			// Adapt button width
 			SET TIMER:C645(-1)

@@ -27,7 +27,6 @@ If (FORM Get current page:C276=1)
 	
 	If (FEATURE.with("android"))
 		
-		// Audit of development tools
 		EDITOR.checkDevTools()
 		
 	Else 

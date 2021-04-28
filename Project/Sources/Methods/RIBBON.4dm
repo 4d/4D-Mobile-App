@@ -206,14 +206,6 @@ Case of
 					End if 
 				End if 
 				
-				If ($button=2)
-					
-					// * UPDATE DEVICE LIST
-					CALL WORKER:C1389(Form:C1466.editor.$worker; "editor_GET_DEVICES"; New object:C1471(\
-						"caller"; Form:C1466.editor.$mainWindow; "project"; PROJECT))
-					
-				End if 
-				
 				// Display the tab page
 				FORM GOTO PAGE:C247($button; *)
 				
@@ -237,10 +229,10 @@ Case of
 						
 						If (Is Windows:C1573)
 							
-							If (Form:C1466.currentDevice#Null:C1517)
+							If (EDITOR.currentDevice#Null:C1517)
 								
 								var $device : Object
-								$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
+								$device:=EDITOR.devices.android.query("udid = :1"; EDITOR.currentDevice).pop()
 								
 							End if 
 							
@@ -260,9 +252,9 @@ Case of
 							
 						Else 
 							
-							If (Form:C1466.currentDevice#Null:C1517)
+							If (EDITOR.currentDevice#Null:C1517)
 								
-								$device:=Form:C1466.devices.apple.query("udid = :1"; Form:C1466.currentDevice).pop()
+								$device:=EDITOR.devices.apple.query("udid = :1"; EDITOR.currentDevice).pop()
 								
 							End if 
 							
@@ -276,9 +268,9 @@ Case of
 								
 							Else 
 								
-								If (Form:C1466.currentDevice#Null:C1517)
+								If (EDITOR.currentDevice#Null:C1517)
 									
-									$device:=Form:C1466.devices.android.query("udid = :1"; Form:C1466.currentDevice).pop()
+									$device:=EDITOR.devices.android.query("udid = :1"; EDITOR.currentDevice).pop()
 									
 								End if 
 								

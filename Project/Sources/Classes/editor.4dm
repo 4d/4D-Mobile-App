@@ -13,6 +13,8 @@ Class constructor
 	
 	This:C1470.worker:="4D Mobile ("+String:C10(This:C1470.window)+")"
 	
+	This:C1470.preferences:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
+	
 	This:C1470.init()
 	
 	//===================================================================================
@@ -373,6 +375,8 @@ Function updateRibbon()
 	
 	This:C1470.post("updateRibbon")
 	
+	RECORD.info("updateRibbon()")
+	
 	//===================================================================================
 Function refreshViews()
 	
@@ -391,6 +395,22 @@ Function checkDevTools()
 	$o.ios:=PROJECT.$ios
 	CALL WORKER:C1389(This:C1470.worker; "editor_CHECK_INSTALLATION"; $o)
 	
+	RECORD.info("checkDevTools()")
+	
+	//===================================================================================
+Function checkProject()
+	
+	var $o : Object
+	
+	// Launch checking the structure
+	$o:=New object:C1471
+	$o.caller:=This:C1470.window
+	$o.action:="catalog"
+	CALL WORKER:C1389(This:C1470.worker; "_o_structure"; $o)
+	
+	// Launch project verifications
+	EDITOR.call("projectAudit")
+	
 	//===================================================================================
 Function getDevices()
 	
@@ -401,6 +421,8 @@ Function getDevices()
 	$o.xCode:=This:C1470.xCode
 	$o.studio:=This:C1470.studio
 	CALL WORKER:C1389(This:C1470.worker; "editor_GET_DEVICES"; $o)
+	
+	RECORD.info("getDevices()")
 	
 	//===================================================================================
 Function setDescription()

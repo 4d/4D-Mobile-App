@@ -7,7 +7,7 @@ EDITOR.gotoPage("general")
 If (FEATURE.with("wizards"))
 	
 	// Launch project verifications
-	editor_PROJECT_AUDIT
+	EDITOR.checkProject()
 	
 	// Audit of development tools
 	EDITOR.checkDevTools()

@@ -115,7 +115,7 @@ Case of
 				
 				$menu.append("showCurrentSimulatorFolder"; "_openSimuPath").enable($could.xCodeAvailable)
 				If ($could.xCodeAvailable)
-					$menu.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable($simctl.deviceLog(Form:C1466.currentDevice).exists)  // avoid xcrun if no xcode
+					$menu.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable($simctl.deviceLog(EDITOR.currentDevice).exists)  // avoid xcrun if no xcode
 				Else 
 					$menu.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable(False:C215)
 				End if 
@@ -126,7 +126,7 @@ Case of
 				
 				If ($could.isDebug)
 					
-					$device:=$simctl.device(Form:C1466.currentDevice)
+					$device:=$simctl.device(EDITOR.currentDevice)
 					
 					
 					$menu.append("❌ Close simulators"; "_killSimulators")\
@@ -134,7 +134,7 @@ Case of
 					
 					$device:=_o_simulator(\
 						New object:C1471("action"; "deviceApp"; \
-						"device"; Form:C1466.currentDevice; \
+						"device"; EDITOR.currentDevice; \
 						"data"; True:C214))
 					
 					If ($device.success)
@@ -435,12 +435,12 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openLogs")
 				
-				$simctl.showDeviceLog(Form:C1466.currentDevice)
+				$simctl.showDeviceLog(EDITOR.currentDevice)
 				
 				//______________________________________________________
 			: ($menu.choice="_openSimuPath")
 				
-				$o:=$simctl.deviceFolder(Form:C1466.currentDevice)
+				$o:=$simctl.deviceFolder(EDITOR.currentDevice)
 				
 				If ($o.exists)
 					
@@ -456,7 +456,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_eraseCurrentSimulator")
 				
-				$simctl.eraseDevice(Form:C1466.currentDevice)
+				$simctl.eraseDevice(EDITOR.currentDevice)
 				
 				//______________________________________________________
 			: ($menu.choice="_clearCache")
