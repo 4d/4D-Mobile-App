@@ -6,7 +6,23 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
-		downloadSDK("aws"; "android")
+		//$sdk:=cs.sdkmanager.new()
+		//$cmd:=$sdk.cmd+" --licenses"
+		//$options:=New object
+		//$options.hideConsole:=True
+		//$options.onMessage:="systemWorkerCallBack"
+		//$options.onError:="systemWorkerCallBack"
+		//$options.onTerminated:="systemWorkerCallBack"
+		//$systemWorker:=4D.SystemWorker.new($cmd; $options)
+		//$systemWorker.wait()
+		//$systemWorker.terminate()
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		//downloadSDK("aws"; "android")
+		CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android")
+		
 		
 		//______________________________________________________
 	: (True:C214)

@@ -18,21 +18,19 @@ If (Value type:C1509(SHARED)=Is undefined:K8:13)  // For testing purposes
 	
 End if 
 
-var $status : Object
-$status:=$in.project.$project.$status
-
 // ----------------------------------------------------
 Case of 
 		
 		//______________________________________________________
-	: (DATABASE.isMacOs)
+	: (Is macOS:C1572)
 		
 		If (FEATURE.with("android"))  // 🚧
 			
-			var $avd : cs:C1710.avd
-			$avd:=cs:C1710.avd.new()
+			var $withStudio; $withXcode : Boolean
+			$withXcode:=Bool:C1537($in.xCode.ready)
+			$withStudio:=Bool:C1537($in.studio.ready)
 			
-			If (Bool:C1537($status.xCode))
+			If ($withXcode)
 				
 				var $simctl : cs:C1710.simctl
 				$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
@@ -42,21 +40,21 @@ Case of
 			Case of 
 					
 					//______________________________________________________
-				: (Bool:C1537($status.studio) & Bool:C1537($status.xCode))
+				: ($withStudio & $withXcode)
 					
 					$out:=New object:C1471(\
-						"android"; $avd.availableDevices(); \
+						"android"; cs:C1710.avd.new().availableDevices(); \
 						"apple"; $simctl.availableDevices())
 					
 					//______________________________________________________
-				: (Bool:C1537($status.studio))
+				: ($withStudio)
 					
 					$out:=New object:C1471(\
-						"android"; $avd.availableDevices(); \
+						"android"; cs:C1710.avd.new().availableDevices(); \
 						"apple"; New collection:C1472)
 					
 					//______________________________________________________
-				: (Bool:C1537($status.xCode))
+				: ($withXcode)
 					
 					$out:=New object:C1471(\
 						"android"; New collection:C1472; \
@@ -72,7 +70,7 @@ Case of
 					//______________________________________________________
 			End case 
 			
-			If (FEATURE.with("ConnectedDevices")) & Bool:C1537($status.xCode)
+			If (FEATURE.with("ConnectedDevices")) & $withXcode
 				
 				$out.connected:=New object:C1471(\
 					"android"; New collection:C1472; \
@@ -93,9 +91,9 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: (DATABASE.isWindows)
+	: (Is Windows:C1573)
 		
-		If (Bool:C1537($status.studio))
+		If ($withStudio)
 			
 			$out:=New object:C1471(\
 				"android"; cs:C1710.avd.new().availableDevices(); \
@@ -123,11 +121,4 @@ If (Bool:C1537($in.caller))
 	
 	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "simulator"; $out)
 	
-Else 
-	
-	$0:=$out
-	
 End if 
-
-// ----------------------------------------------------
-// End

@@ -398,6 +398,12 @@ If ($run)
 					
 					//$sdk.delete()
 					
+					If (Count parameters:C259>=4)
+						
+						CALL FORM:C1391($caller; "editor_CALLBACK"; "updateRibbon")
+						
+					End if 
+					
 				Else 
 					
 					RECORD.warning("Failed to unarchive "+$sdk.path)
@@ -428,11 +434,11 @@ If ($run)
 				
 				If (Count parameters:C259>=4)
 					
-					POST_MESSAGE(New object:C1471(\
+					//POST_MESSAGE(New object(\
 						"action"; "show"; \
 						"target"; $caller; \
 						"type"; "alert"; \
-						"additional"; Replace string:C233(Get localized string:C991("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose:C955($target="android"; "Android"; "iOS"))))
+						"additional"; Replace string(Get localized string("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose($target="android"; "Android"; "iOS"))))
 					
 				Else 
 					

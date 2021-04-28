@@ -188,11 +188,11 @@ Case of
 				
 				If ($menu.choice="checkAndroidInstallation")
 					
-					Form:C1466.editor.$studio.canceled:=False:C215
+					EDITOR.studio.canceled:=False:C215
 					
 				Else 
 					
-					Form:C1466.editor.$xCode.canceled:=False:C215
+					EDITOR.xCode.canceled:=False:C215
 					
 				End if 
 				
@@ -291,8 +291,6 @@ Case of
 				//______________________________________________________
 			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-[[:xdigit:]]{16}"; $menu.choice; 1))  // iOS Connected Device
 				
-				Form:C1466.editor.$xCode.canceled:=False:C215
-				
 				$device:=Form:C1466.devices.connected.apple.query("udid = :1"; $menu.choice).pop()
 				
 				// Set default simulator
@@ -305,8 +303,6 @@ Case of
 				
 				//______________________________________________________
 			: (FEATURE.with("android"))  // 🚧
-				
-				Form:C1466.editor.$studio.canceled:=False:C215
 				
 				$device:=Form:C1466.devices.android.query("udid = :1"; $menu.choice).pop()
 				

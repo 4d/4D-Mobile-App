@@ -14,9 +14,9 @@
 If (FEATURE.with("wizards"))
 	
 	// Launch checking the structure
-	CALL WORKER:C1389(Form:C1466.$worker; "_o_structure"; New object:C1471(\
+	CALL WORKER:C1389(EDITOR.worker; "_o_structure"; New object:C1471(\
 		"action"; "catalog"; \
-		"caller"; Form:C1466.$mainWindow))
+		"caller"; EDITOR.window))
 	
 	// Launch project verifications
 	EDITOR.call("projectAudit")

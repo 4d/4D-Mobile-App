@@ -54,7 +54,7 @@ Function post($action : Text)
 	CALL FORM:C1391(This:C1470.window; This:C1470.callback; $action)
 	
 	//====================================================================
-	// Generates a CALL FORM using the current form
+	// Generates a CALL FORM using the current form (retro-call)
 	// .call()
 	// .call( param : Collection )
 	// .call( param1, param2, …, paramN )
@@ -184,7 +184,7 @@ Function goToPage($page : Integer)
 	FORM GOTO PAGE:C247($page)
 	
 	//====================================================================
-Function currentPage()->$page : Integer
+Function getPage()->$page : Integer
 	
 	$page:=FORM Get current page:C276
 	

@@ -414,17 +414,8 @@ Function checkName($name : Text)
 	// Manage UI for the target
 Function displayTarget
 	
-	If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
-		
-		This:C1470.ios.setValue(Form:C1466.info.target.indexOf("iOS")#-1)
-		This:C1470.android.setValue(Form:C1466.info.target.indexOf("android")#-1)
-		
-	Else 
-		
-		This:C1470.ios.setValue(String:C10(Form:C1466.info.target)="iOS")
-		This:C1470.android.setValue(String:C10(Form:C1466.info.target)="android")
-		
-	End if 
+	This:C1470.ios.setValue(EDITOR.ios)
+	This:C1470.android.setValue(EDITOR.android)
 	
 	//=========================================================
 	//=                      OBSOLETE                         =

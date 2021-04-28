@@ -46,7 +46,7 @@ Function setTeamID($id : Text; $item : Text)
 	End if 
 	
 	This:C1470.team.setValue($label)
-	Form:C1466.organization.teamId:=$teamId
+	PROJECT.organization.teamId:=$teamId
 	
 	PROJECT.save()
 	
@@ -83,7 +83,7 @@ Function updateTeamID($response : Object)
 			End if 
 		End for each 
 		
-		If (Length:C16(String:C10(Form:C1466.organization.teamId))=0)
+		If (Length:C16(String:C10(PROJECT.organization.teamId))=0)
 			
 			// No team: Assign the first one if there is one.
 			
@@ -95,7 +95,7 @@ Function updateTeamID($response : Object)
 			
 		Else 
 			
-			This:C1470.setTeamID(Form:C1466.organization.teamId; Form:C1466.organization.teamId)
+			This:C1470.setTeamID(PROJECT.organization.teamId; PROJECT.organization.teamId)
 			
 		End if 
 		

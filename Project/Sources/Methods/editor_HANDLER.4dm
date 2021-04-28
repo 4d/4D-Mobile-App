@@ -91,13 +91,13 @@ Case of
 					$form.form.ribbon:=New object:C1471(\
 						"state"; "open"; \
 						"tab"; "section"; \
-						"page"; Form:C1466.$currentPage; \
+						"page"; EDITOR.currentPage; \
 						"editor"; Form:C1466)
 					
 					OBJECT SET VALUE:C1742($form.ribbon; Form:C1466.$dialog.EDITOR.ribbon)
 					
 					// Update the description
-					OBJECT SET VALUE:C1742($form.description; Form:C1466.$currentPage)
+					EDITOR.setDescription()
 					
 				Else 
 					
@@ -108,9 +108,9 @@ Case of
 					$form.form.ribbon:=New object:C1471(\
 						"state"; "open"; \
 						"tab"; "section"; \
-						"page"; Form:C1466.$currentPage)
+						"page"; EDITOR.currentPage)
 					
-					(OBJECT Get pointer:C1124(Object named:K67:5; $form.description))->:=Form:C1466.$currentPage
+					(OBJECT Get pointer:C1124(Object named:K67:5; $form.description))->:=EDITOR.currentPage
 					(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog.EDITOR.ribbon
 					
 				End if 

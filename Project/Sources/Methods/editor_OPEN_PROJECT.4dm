@@ -6,21 +6,11 @@ EDITOR.gotoPage("general")
 
 If (FEATURE.with("wizards"))
 	
-	Form:C1466.$status:=New object:C1471(\
-		"teamId"; False:C215; \
-		"xCode"; False:C215; \
-		"studio"; False:C215)
-	
 	// Launch project verifications
 	editor_PROJECT_AUDIT
 	
-	// Launch checking the development environment
-	CALL WORKER:C1389(Form:C1466.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-		"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
-	
-	// Launch recovering the list of available simulator devices
-	CALL WORKER:C1389(Form:C1466.$worker; "editor_GET_DEVICES"; New object:C1471(\
-		"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
+	// Audit of development tools
+	EDITOR.checkDevTools()
 	
 Else 
 	

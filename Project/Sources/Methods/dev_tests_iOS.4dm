@@ -13,6 +13,29 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		//$device:=$simctl.defaultDevice()
+		var $plist : cs:C1710.plist
+		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Desktop/DEV/com.apple.iphonesimulator.plist"))
+		
+		$plist.set("hello"; "world")
+		$plist.set("hello.world"; 10)
+		$plist.set(New collection:C1472("hello"; "world"); 8858)
+		
+		$plist.set("level_1.level_20[]")
+		$plist.set("level_1.level_21"; "A NEW ITEM")
+		
+		$plist.set("level_1.level_2[0]"; "1st element")
+		$plist.set("level_1.level_2[10].test"; "hello")
+		$plist.set("level_1.level_2[10].test"; "world")
+		$plist.set("level_1.level_2[2].test"; "hello")
+		$plist.set("level_1.level_2"; "hello")
+		
+		//var $value
+		//$value:=$plist.get("hello.world")
+		
+		//______________________________________________________
+	: (True:C214)
+		
 		$device:=$simctl.defaultDevice()
 		$simctl.setDefaultDevice("none")
 		$o:=$simctl.defaultDevice()
@@ -33,13 +56,6 @@ Case of
 		
 		var $pluggedDevices : Collection
 		$pluggedDevices:=$simctl.plugged()
-		
-		//______________________________________________________
-	: (True:C214)
-		
-		//$device:=$simctl.defaultDevice()
-		var $plist : cs:C1710.plist
-		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Desktop/DEV/com.apple.iphonesimulator.plist"))
 		
 		//______________________________________________________
 	: (True:C214)

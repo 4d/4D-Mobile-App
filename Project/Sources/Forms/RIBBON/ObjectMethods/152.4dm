@@ -45,8 +45,8 @@ Case of
 			"isMain"; (Application version:C493(*)="A@"); \
 			"withMoreItems"; Macintosh option down:C545 | Windows Alt down:C563; \
 			"productFolder"; $folder; \
-			"xCodeAvailable"; Bool:C1537(Form:C1466.editor.$xCode.applicationAvailable); \
-			"studioAvailable"; Bool:C1537(Form:C1466.editor.$studio.applicationAvailable); \
+			"xCodeAvailable"; Bool:C1537(EDITOR.xCode.applicationAvailable); \
+			"studioAvailable"; Bool:C1537(EDITOR.studio.applicationAvailable); \
 			"iosFolder"; $folder.folder("iOS"); \
 			"androidFolder"; $folder.folder("android").folder(PROJECT.product.name); \
 			"isLocked"; editor_Locked; \
@@ -352,17 +352,7 @@ Case of
 					End if 
 				End if 
 				
-				If ($fromTeamCity)
-					
-					//CALL WORKER(Form.editor.$worker; "downloadSDK"; "TeamCity"; $t; False; Form.editor.$mainWindow)
-					CALL WORKER:C1389(1; "downloadSDK"; "TeamCity"; $t; False:C215; Form:C1466.editor.$mainWindow)
-					
-				Else 
-					
-					//CALL WORKER(Form.editor.$worker; "downloadSDK"; "aws"; $t; False; Form.editor.$mainWindow)
-					CALL WORKER:C1389(1; "downloadSDK"; "aws"; $t; False:C215; Form:C1466.editor.$mainWindow)
-					
-				End if 
+				CALL WORKER:C1389(1; "downloadSDK"; Choose:C955($fromTeamCity; "TeamCity"; "aws"); $t; False:C215; Form:C1466.editor.$mainWindow)
 				
 				//______________________________________________________
 			: ($menu.choice="openWithXcode")  // Open a file of project in xcode

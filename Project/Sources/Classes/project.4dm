@@ -336,51 +336,13 @@ Function save()
 	
 	var $file : 4D:C1709.File
 	
-	//var $key : Text
-	//var $o : Object
-	//var $folder : 4D.Folder
-	//If (Bool(FEATURE._8858))  // Debug mode
-	//$folder:=Folder(fk desktop folder).folder("DEV")
-	//If ($folder.exists)
-	//If (PROJECT.$dialog#Null)
-	//$file:=$folder.file("dialog.json")
-	//If ($file.isWritable)
-	//$file.setText(JSON Stringify(PROJECT.$dialog; *))
-	//// Else log?
-	//End if 
-	//For each ($key; PROJECT.$dialog)
-	//$file:=$folder.file($key+".json")
-	//If ($file.isWritable)
-	//$file.setText(JSON Stringify(PROJECT.$dialog[$key]; *))
-	//// Else log?
-	//End if 
-	//End for each 
-	//End if 
-	//// Remove circular references
-	//$o:=OB Copy(PROJECT)
-	//OB REMOVE($o.$project; "$dialog")
-	//OB REMOVE($o.$project; "$project")
-	//$file:=$folder.file("project.json")
-	//If ($file.isWritable)
-	//$file.setText(JSON Stringify($o; *))
-	//// Else log?
-	//End if 
-	//If (PROJECT.$project.$catalog#Null)
-	//$file:=$folder.file("catalog.json")
-	//If ($file.isWritable)
-	//$file.setText(JSON Stringify(PROJECT.$project.$catalog; *))
-	//// Else log?
-	//End if 
-	//End if 
-	//End if 
-	//End if 
-	
 	$file:=This:C1470._folder.file("project.4dmobileapp")
 	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
-	// Populate the target value into te project
-Function setTarget($check : Boolean; $target : Text)
+	// Populate the target value into the project
+	// #MARK_TODO : SHOULD BE TREATED INTO THE EDITOR CLASS
+Function setTarget($checkDevTools : Boolean; $target : Text)
 	
 	If (This:C1470.$ios & This:C1470.$android)
 		
@@ -400,43 +362,50 @@ Function setTarget($check : Boolean; $target : Text)
 		End if 
 	End if 
 	
-	This:C1470.save()
 	
-	// Update the project folder
+	// Save & update the project folder
+	This:C1470.save()
 	This:C1470.prepare()
 	
-	If (Count parameters:C259>=2)
+	EDITOR.ios:=This:C1470.$ios
+	EDITOR.android:=This:C1470.$android
+	
+	If (Count parameters:C259>=1)
 		
-		This:C1470._buildTarget:=$target
-		
-		If ($check)
+		If ($checkDevTools)  // Audit of development tools
 			
-			// Launch the verification of the development tools, if any
-			If (($target="ios") & Is macOS:C1572)
+			If (Count parameters:C259>=2)  // Set the build target
 				
-				If (This:C1470.$project.$xCode#Null:C1517)
-					
-					This:C1470.$project.$xCode.canceled:=False:C215
-					
-				End if 
-				
-				CALL WORKER:C1389(This:C1470.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-					"caller"; This:C1470.$mainWindow; "project"; PROJECT))
-				
+				Case of 
+						
+						//________________________
+					: ($target="ios") & This:C1470.$ios
+						
+						This:C1470._buildTarget:=$target
+						
+						If (EDITOR.xCode#Null:C1517)
+							
+							EDITOR.xCode.canceled:=False:C215
+							
+						End if 
+						
+						//________________________
+					: ($target="android") & This:C1470.$ios
+						
+						This:C1470._buildTarget:=$target
+						
+						If (EDITOR.studio#Null:C1517)
+							
+							EDITOR.studio.canceled:=False:C215
+							
+						End if 
+						
+						//________________________
+				End case 
 			End if 
 			
-			If (($target="android"))
-				
-				If (This:C1470.$project.$studio#Null:C1517)
-					
-					This:C1470.$project.$studio.canceled:=False:C215
-					
-				End if 
-				
-				CALL WORKER:C1389(This:C1470.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-					"caller"; This:C1470.$mainWindow; "project"; PROJECT))
-				
-			End if 
+			EDITOR.checkDevTools()
+			
 		End if 
 	End if 
 	
@@ -1170,6 +1139,8 @@ Function audit($audits : Object)->$audit : Object
 		$audit:=project_Audit
 		
 	End if 
+	
+	EDITOR.projectAudit:=$audit
 	
 	cs:C1710.ob.new(This:C1470).set("$project.status.project"; $audit.success)
 	

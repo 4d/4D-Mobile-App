@@ -9,7 +9,9 @@ Class constructor
 	
 	This:C1470.pages:=New object:C1471
 	This:C1470.pageDefinition()
-	This:C1470.$currentPage:=""
+	This:C1470.currentPage:=""
+	
+	This:C1470.worker:="4D Mobile ("+String:C10(This:C1470.window)+")"
 	
 	This:C1470.init()
 	
@@ -212,9 +214,9 @@ Function gotoPage($page : Text)
 	
 	If ($o#Null:C1517)
 		
-		Form:C1466.$currentPage:=$page
+		This:C1470.currentPage:=$page
 		
-		(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=Form:C1466.$currentPage
+		(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=$page
 		
 		Form:C1466.$page:=$o
 		
@@ -375,3 +377,33 @@ Function updateRibbon()
 Function refreshViews()
 	
 	This:C1470.post("refreshViews")
+	
+	//===================================================================================
+Function checkDevTools()
+	
+	var $o : Object
+	
+	$o:=New object:C1471
+	$o.caller:=This:C1470.window
+	$o.xCode:=This:C1470.xCode
+	$o.studio:=This:C1470.studio
+	$o.android:=PROJECT.$android
+	$o.ios:=PROJECT.$ios
+	CALL WORKER:C1389(This:C1470.worker; "editor_CHECK_INSTALLATION"; $o)
+	
+	//===================================================================================
+Function getDevices()
+	
+	var $o : Object
+	
+	$o:=New object:C1471
+	$o.caller:=This:C1470.window
+	$o.xCode:=This:C1470.xCode
+	$o.studio:=This:C1470.studio
+	CALL WORKER:C1389(This:C1470.worker; "editor_GET_DEVICES"; $o)
+	
+	//===================================================================================
+Function setDescription()
+	
+	OBJECT SET VALUE:C1742("description"; This:C1470.currentPage)
+	

@@ -149,6 +149,7 @@ Else   // <== WIDGETS METHOD
 						 & Not:C34(Form:C1466.$ios)\
 						 & Not:C34(Form:C1466.$android)
 						
+						// Force iOS
 						PROJECT.setTarget(True:C214; "ios")
 						
 					Else 

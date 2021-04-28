@@ -114,16 +114,16 @@ Case of
 			Case of 
 					
 					//______________________________________________________
-				: (Bool:C1537(PROJECT.$android)) & (Bool:C1537(PROJECT.$ios))
+				: (Bool:C1537(EDITOR.android)) & (Bool:C1537(EDITOR.ios))
 					
-					$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode) | Bool:C1537(Form:C1466.status.studio)
+					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready) | Bool:C1537(EDITOR.studio.ready)
 					$isDeviceSelected:=(Form:C1466.currentDevice#Null:C1517)
 					$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
 					
 					//______________________________________________________
-				: (Bool:C1537(PROJECT.$ios))
+				: (Bool:C1537(EDITOR.ios))
 					
-					$isDevToolAvailable:=Bool:C1537(Form:C1466.status.xCode)
+					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
 					
 					If (Form:C1466.currentDevice#Null:C1517)
 						
@@ -134,9 +134,9 @@ Case of
 					$isSdkAvailable:=True:C214
 					
 					//______________________________________________________
-				: (Bool:C1537(PROJECT.$android))
+				: (Bool:C1537(EDITOR.android))
 					
-					$isDevToolAvailable:=Bool:C1537(Form:C1466.status.studio)
+					$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
 					
 					If (Form:C1466.currentDevice#Null:C1517)
 						
@@ -152,7 +152,7 @@ Case of
 			If (Is macOS:C1572)
 				
 				// True if only android | teamID OK
-				$withTeamID:=Choose:C955(Bool:C1537(PROJECT.$ios); Bool:C1537(Form:C1466.status.teamId); True:C214)
+				$withTeamID:=Choose:C955(Bool:C1537(EDITOR.ios); Bool:C1537(EDITOR.teamId); True:C214)
 				
 			Else 
 				
@@ -161,9 +161,7 @@ Case of
 				
 			End if 
 			
-			$isProjectOK:=Bool:C1537(PROJECT.$project.status.project)
-			
-			
+			$isProjectOK:=Bool:C1537(EDITOR.projectAudit.success)
 			
 			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID & $isSdkAvailable))
 				
@@ -188,7 +186,7 @@ Case of
 				
 			Else 
 				
-				If (Not:C34(PROJECT.$ios))
+				If (Not:C34(Bool:C1537(EDITOR.ios)))
 					
 					$form.install.disable()
 					
@@ -242,7 +240,7 @@ Case of
 			
 			If (FEATURE.with("wizards"))
 				
-				OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=Form:C1466.editor.$currentPage))
+				OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=EDITOR.currentPage))
 				
 			Else 
 				
@@ -258,7 +256,7 @@ Case of
 			// *UPDATE DEVICE BUTTON
 			If (FEATURE.with("android"))  //🚧
 				
-				$form.simulator.enable()
+				$form.simulator.enable(EDITOR.devices#Null:C1517)
 				
 				Case of 
 						
@@ -272,12 +270,12 @@ Case of
 						End if 
 						
 						//______________________________________________________
-					: (PROJECT.$ios) & Not:C34(PROJECT.$android) & (Form:C1466.devices.apple.length=0)
+					: (EDITOR.ios) & Not:C34(EDITOR.android) & (Form:C1466.devices.apple.length=0)
 						
 						RECORD.warning("NO iOS SIMULATOR AVAILABLE")
 						
 						//______________________________________________________
-					: (PROJECT.$ios) & (PROJECT.$android)
+					: (EDITOR.ios) & (EDITOR.android)
 						
 						If (Form:C1466.devices.apple.length=0)\
 							 & (Form:C1466.devices.android.length=0)
@@ -301,7 +299,7 @@ Case of
 						End if 
 						
 						//______________________________________________________
-					: (PROJECT.$android) & (Form:C1466.devices.android.length=0)
+					: (EDITOR.android) & (Form:C1466.devices.android.length=0)
 						
 						RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
 						

@@ -24,7 +24,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			$ƒ.team.setValue(String:C10(Form:C1466.organization.teamId))
+			$ƒ.team.setValue(String:C10(PROJECT.organization.teamId))
 			
 			If (Is macOS:C1572)
 				
@@ -77,7 +77,7 @@ Else   // <== WIDGETS METHOD
 		: ($ƒ.teamMenu.catch())
 			
 			$menu:=cs:C1710.menu.new()\
-				.append("none"; "none").mark(Length:C16(String:C10(Form:C1466.organization.teamId))=0)
+				.append("none"; "none").mark(Length:C16(String:C10(PROJECT.organization.teamId))=0)
 			
 			If (EDITOR.teams.length>0)
 				
@@ -85,7 +85,7 @@ Else   // <== WIDGETS METHOD
 				
 				For each ($o; EDITOR.teams)
 					
-					$menu.append($o.menu; $o.id).mark(Form:C1466.organization.teamId=$o.id)
+					$menu.append($o.menu; $o.id).mark(PROJECT.organization.teamId=$o.id)
 					
 				End for each 
 			End if 

@@ -77,6 +77,8 @@ Case of
 			"action"; $message; \
 			"audit"; $in))
 		
+		EDITOR.projectAudit:=$in
+		
 		//______________________________________________________
 	: ($message="structureCheckingResult")  // Callback from 'structure'
 		
@@ -98,6 +100,8 @@ Case of
 		If (FEATURE.with("android"))  //🚧
 			
 			Form:C1466.$dialog[$form.editor].ribbon.devices:=$in
+			
+			EDITOR.devices:=$in
 			
 			// Touch
 			OBJECT SET VALUE:C1742($form.ribbon; OBJECT Get value:C1743($form.ribbon))
@@ -124,7 +128,7 @@ Case of
 		
 		EDITOR.gotoPage($in.page)
 		
-		Form:C1466.$dialog[$form.editor].ribbon.page:=Form:C1466.$currentPage
+		Form:C1466.$dialog[$form.editor].ribbon.page:=EDITOR.currentPage
 		
 		// Touch the ribbon subform
 		(OBJECT Get pointer:C1124(Object named:K67:5; "ribbon"))->:=Form:C1466.$dialog[$form.editor].ribbon
@@ -150,13 +154,10 @@ Case of
 		If (FEATURE.with("android"))  //🚧
 			
 			// Store the result
-			Form:C1466.$xCode:=$in.xCode
-			Form:C1466.$studio:=$in.studio
+			EDITOR.xCode:=$in.xCode
+			EDITOR.studio:=$in.studio
 			
-			Form:C1466.$status.xCode:=Form:C1466.$xCode.ready
-			Form:C1466.$status.studio:=Form:C1466.$studio.ready
-			
-		Else 
+			Else t
 			
 			// Store the result
 			Form:C1466.xCode:=$in
@@ -173,14 +174,23 @@ Case of
 			End if 
 		End if 
 		
-		editor_CALLBACK("updateRibbon")
+		If (FEATURE.with("android"))
+			
+			EDITOR.getDevices()
+			
+		Else 
+			
+			editor_CALLBACK("updateRibbon")
+			
+		End if 
+		
 		
 		//______________________________________________________
 	: ($message="updateRibbon")
 		
 		If (FEATURE.with("android"))  //🚧
 			
-			Form:C1466.$status.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
+			EDITOR.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
 			
 		Else 
 			

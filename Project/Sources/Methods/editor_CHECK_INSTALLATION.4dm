@@ -11,17 +11,8 @@
 // Declarations
 #DECLARE($in : Object)->$out : Object
 
-If (False:C215)
-	C_OBJECT:C1216(editor_CHECK_INSTALLATION; $0)
-	C_OBJECT:C1216(editor_CHECK_INSTALLATION; $1)
-End if 
-
-//var $in; $out; $studio; $xCode : Object
-var $studio; $xCode : Object
-
-// ----------------------------------------------------
-// Initialisations
-//$in:=$1
+var $android; $ios : Boolean
+var $studio; $xcode : Object
 
 // ----------------------------------------------------
 Case of 
@@ -31,38 +22,27 @@ Case of
 		
 		If (FEATURE.with("android"))  // 🚧
 			
-			If ($in.project.$project#Null:C1517)
-				
-				// From Ribbon
-				$studio:=$in.project.$project.$studio
-				$xCode:=$in.project.$project.$xCode
-				
-			Else 
-				
-				// From Product panel
-				$studio:=$in.project.$studio
-				$xCode:=$in.project.$xCode
-				
-			End if 
+			$studio:=$in.studio
+			$xcode:=$in.xCode
 			
-			If (Not:C34(Bool:C1537($studio.ready)))
+			$android:=Bool:C1537($in.android)
+			$ios:=Bool:C1537($in.ios)
+			
+			If (Not:C34(Bool:C1537($studio.ready)))\
+				 & (Not:C34(Bool:C1537($studio.canceled)))
 				
-				If (Not:C34(Bool:C1537($studio.canceled)))
-					
-					// Silent mode if not Android target
-					$in.silent:=Not:C34(Bool:C1537($in.project.$android))
-					$studio:=studioCheckInstall($in)
-					
-				End if 
+				// Silent mode if not Android target
+				$in.silent:=Not:C34($android)
+				$studio:=studioCheckInstall($in)
+				
 			End if 
 			
 			If ($studio.ready)
 				
-				If (Bool:C1537($in.project.$android))
+				If ($android)
 					
 					// Get the last 4D Mobile Android SDK from AWS server if any
-					//CALL WORKER($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
-					CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android")  //;True)
+					CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
 					
 				End if 
 				
@@ -72,30 +52,33 @@ Case of
 				
 			End if 
 			
-			If (Not:C34(Bool:C1537($xCode.ready)))
+			If (Not:C34(Bool:C1537($xcode.ready)))
 				
-				If (Not:C34(Bool:C1537($xCode.canceled)))
+				If (Not:C34(Bool:C1537($xcode.canceled)))
 					
-					$in.silent:=Not:C34(Bool:C1537($in.project.$ios))
-					$xCode:=Xcode_CheckInstall($in)
+					$in.silent:=Not:C34($ios)
+					$xcode:=Xcode_CheckInstall($in)
 					
 				End if 
 			End if 
 			
-			If ($xCode.ready)
+			If ($xcode.ready)
 				
-				// Get the last 4D Mobile iOS SDK from AWS server if any
-				//CALL WORKER($in.project.$worker; "downloadSDK"; "aws"; "ios")  //;True)
-				//CALL WORKER(1; "downloadSDK"; "aws"; "ios")  //;True)
+				If ($ios)
+					
+					// Get the last 4D Mobile iOS SDK from AWS server if any
+					//CALL WORKER(1; "downloadSDK"; "aws"; "ios"; False; $in.caller)
+					
+				End if 
 				
 			Else 
 				
-				$xCode.canceled:=Bool:C1537($xCode.canceled)
+				$xcode.canceled:=Bool:C1537($xcode.canceled)
 				
 			End if 
 			
 			$out:=New object:C1471(\
-				"xCode"; $xCode; \
+				"xCode"; $xcode; \
 				"studio"; $studio)
 			
 		Else 
@@ -107,7 +90,7 @@ Case of
 		//______________________________________________________
 	: (Is Windows:C1573)
 		
-		$studio:=$in.project.$project.$studio
+		$studio:=$in.studio
 		
 		If (Not:C34(Bool:C1537($studio.canceled)))
 			
@@ -121,8 +104,7 @@ Case of
 			If (Bool:C1537($out.studio.ready))
 				
 				// Get the last 4D Mobile Android SDK
-				//CALL WORKER($in.project.$worker; "downloadSDK"; "aws"; "android")  //;True)
-				CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android")  //;True)
+				CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
 				
 			End if 
 		End if 
@@ -135,17 +117,8 @@ Case of
 		//______________________________________________________
 End case 
 
-// ----------------------------------------------------
-// Return
 If (Bool:C1537($in.caller))
 	
 	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "checkInstall"; $out)
 	
-Else 
-	
-	//$0:=$out
-	
 End if 
-
-// ----------------------------------------------------
-// End
