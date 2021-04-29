@@ -14,6 +14,7 @@ import androidx.room.RawQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.qmobile.qmobiledatastore.dao.BaseDao
 import {{package}}.data.model.entity.{{tableName}}
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class {{tableName}}Dao :
@@ -38,4 +39,7 @@ abstract class {{tableName}}Dao :
 
     @RawQuery(observedEntities = [{{tableName}}::class])
     abstract override fun getAllDynamicQuery(sqLiteQuery: SupportSQLiteQuery): DataSource.Factory<Int, {{tableName}}>
+
+    @RawQuery(observedEntities = [{{tableName}}::class])
+    abstract override fun getAllDynamicQueryFlow(sqLiteQuery: SupportSQLiteQuery): Flow<List<{{tableName}}>>
 }

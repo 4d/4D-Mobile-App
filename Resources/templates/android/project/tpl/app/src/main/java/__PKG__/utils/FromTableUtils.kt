@@ -37,7 +37,8 @@ private fun <T : EntityModel> getPropertyListString(
         {{#tableNames}}
         "{{name}}" -> {
             properties = {{name}}::class.declaredMemberProperties as Collection<KProperty1<T, *>>
-            constructorParameters = {{name}}::class.constructors.find { it.parameters.size > 1 }?.parameters
+            constructorParameters = 
+                {{name}}::class.constructors.find { it.parameters.size > 1 }?.parameters
         }
         {{/tableNames}}
         else -> throw IllegalArgumentException()
@@ -46,7 +47,8 @@ private fun <T : EntityModel> getPropertyListString(
     for (property in properties.toList()) {
         val propertyName: String = property.name
 
-        val serializedName: String? = constructorParameters?.find { it.name == propertyName }?.findAnnotation<JsonProperty>()?.value
+        val serializedName: String? = constructorParameters?.find { it.name == propertyName }
+            ?.findAnnotation<JsonProperty>()?.value
 
         var name: String = serializedName ?: propertyName
 

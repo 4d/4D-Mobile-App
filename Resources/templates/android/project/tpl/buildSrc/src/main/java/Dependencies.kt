@@ -27,6 +27,7 @@ object Versions {
     val jackson = "2.12.3"
     val junit = "4.13.1"
     val kotlin = "1.4.10"
+    val kotlin_corourtines = "1.3.4"
     val leakcanary = "2.0"
     val lifecycle = "2.2.0"
     val mockito = "3.7.7"
@@ -82,6 +83,10 @@ object Libs {
     val androidx_appcompat = "androidx.appcompat:appcompat:${Versions.support}"
     val androidx_preference_ktx = "androidx.preference:preference-ktx:${Versions.preference}"
     val multidex = "androidx.multidex:multidex:${Versions.multidex}"
+    val kotlin_coroutines_android =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlin_corourtines}"
+    val kotlin_coroutines_core =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlin_corourtines}"
     val kotlin_reflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
     val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
 
@@ -101,12 +106,14 @@ object Libs {
     // Glide
     val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     val glide_compiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
-    val glide_transformations = "jp.wasabeef:glide-transformations:${Versions.glide_transformations}"
+    val glide_transformations = 
+        "jp.wasabeef:glide-transformations:${Versions.glide_transformations}"
 
 
     // Lifecycle
     val lifecycle_compiler = "androidx.lifecycle:lifecycle-compiler:${Versions.lifecycle}"
     val lifecycle_extensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycle}"
+    val lifecycle_livedata = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
     val lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime:${Versions.lifecycle}"
     val lifecyle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
 
