@@ -5,9 +5,15 @@ Class extends form
 
 //________________________________________________________________
 Class constructor
-	var $1 : Object
 	
 	Super:C1705("editor_CALLBACK")
+	
+	If (Count parameters:C259>=1)
+		
+		var $1 : Object
+		This:C1470.form:=$1  // #TEMPO
+		
+	End if 
 	
 	This:C1470.context:=editor_INIT
 	
@@ -30,18 +36,19 @@ Class constructor
 		This:C1470.fieldList:=cs:C1710.listbox.new("01_fields")
 		
 		// Constraints definition
-		This:C1470.context.constraints:=New object:C1471("rules"; New collection:C1472)
-		This:C1470.context.constraints.push(New object:C1471(\
+		This:C1470.context.constraints:=New object:C1471
+		This:C1470.context.constraints.rules:=New collection:C1472
+		This:C1470.context.constraints.rules.push(New object:C1471(\
 			"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
 			"action"; "geometry")))))
 		
-		This:C1470.context.constraints.push(New object:C1471(\
+		This:C1470.context.constraints.rules.push(New object:C1471(\
 			"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
 			"reference"; "viewport.preview"; \
 			"type"; "horizontal alignment"; \
 			"value"; "center"))
 		
-		This:C1470.context.constraints.push(New object:C1471(\
+		This:C1470.context.constraints.rules.push(New object:C1471(\
 			"object"; "preview.scrollBar"; \
 			"reference"; "preview"; \
 			"type"; "margin-left"; \
@@ -51,21 +58,15 @@ Class constructor
 	
 	This:C1470._update()
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.form:=$1  //#TEMPO
-		
-	End if 
-	
 	//============================================================================
-Function _update
+Function _update()
 	
 	This:C1470.template:=Form:C1466.$dialog[Current form name:C1298].template
 	This:C1470.manifest:=This:C1470.choose(This:C1470.template=Null:C1517; Formula:C1597(Null:C1517); Formula:C1597(This:C1470.template.manifest))
 	
 	//============================================================================
 	// Redraw the preview
-Function draw
+Function draw()
 	
 	tmpl_DRAW(This:C1470.form)
 	
@@ -427,6 +428,8 @@ Function setTemplate($browser : Object)
 		
 		If ($newTemplate#$currentTemplate)
 			
+			RECORD.info("Selected template: "+$newTemplate)
+			
 			$template:=cs:C1710.tmpl.new($newTemplate; $selector).update()
 			
 			$target:=Form:C1466[$selector][$tableID]
@@ -475,7 +478,6 @@ Function setTemplate($browser : Object)
 				End if 
 			End if 
 			
-			//OB REMOVE($context; "manifest")
 			PROJECT.save()
 			
 			If (ob_testPath(Form:C1466.$project; "status"; "project"))
@@ -537,7 +539,7 @@ Function setTemplate($browser : Object)
 		
 		// Redraw
 		$context.draw:=True:C214
-		This:C1470.form.form.refresh()
+		EDITOR.refresh()
 		
 	End if 
 	
@@ -758,4 +760,37 @@ Function typeForm()->$formType : Text
 	
 	$formType:=Choose:C955(Num:C11(Form:C1466.$dialog[Current form name:C1298].selector)=2; "detail"; "list")
 	
+	//============================================================================
+	// Ensure that there is an entry in "list" and "detail" for each table in the data model
+Function createFormObjects($datamodel : Object)
 	
+	If ($datamodel#Null:C1517)
+		
+		If (PROJECT.list=Null:C1517)
+			
+			PROJECT.list:=New object:C1471
+			
+		End if 
+		
+		If (PROJECT.detail=Null:C1517)
+			
+			PROJECT.detail:=New object:C1471
+			
+		End if 
+		
+		var $tableID : Text
+		For each ($tableID; $datamodel)
+			
+			If (PROJECT.list[$tableID]=Null:C1517)
+				
+				PROJECT.list[$tableID]:=New object:C1471
+				
+			End if 
+			
+			If (PROJECT.detail[$tableID]=Null:C1517)
+				
+				PROJECT.detail[$tableID]:=New object:C1471
+				
+			End if 
+		End for each 
+	End if 

@@ -41,11 +41,11 @@ Else
 	
 	If (Form:C1466.$dialog[$formName]=Null:C1517)
 		
+		RECORD.info("Create context for: "+$formName)
+		
 		Form:C1466.$dialog[$formName]:=New object:C1471
 		
 	End if 
 End if 
 
-// ----------------------------------------------------
-// Return
 $value:=Form:C1466.$dialog[$formName]

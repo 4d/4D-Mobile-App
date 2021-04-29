@@ -16,7 +16,7 @@ var $panel : Text
 // NO PARAMETERS REQUIRED
 
 // ----------------------------------------------------
-If (FORM Get current page:C276=1)
+If (FORM Get current page:C276=1)  // #MARK_OBSOLETE : with the wizards the 2nd page is ne more used
 	
 	// Update according to the color scheme
 	EDITOR.init()
@@ -42,7 +42,7 @@ If (FORM Get current page:C276=1)
 	End if 
 	
 	// Launch project verifications
-	editor_PROJECT_AUDIT
+	_o_editor_PROJECT_AUDIT
 	
 	// Refresh displayed panels
 	For each ($panel; panel_Objects)

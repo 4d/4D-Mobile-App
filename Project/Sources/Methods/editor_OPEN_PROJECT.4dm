@@ -15,7 +15,7 @@ If (FEATURE.with("wizards"))
 Else 
 	
 	// Launch project verifications
-	editor_PROJECT_AUDIT
+	_o_editor_PROJECT_AUDIT
 	
 	var $worker : Text
 	$worker:="4D Mobile ("+String:C10(Current form window:C827)+")"

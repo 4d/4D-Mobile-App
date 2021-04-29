@@ -73,11 +73,17 @@ Case of
 		//______________________________________________________
 	: ($message="projectAuditResult")
 		
-		PROJECT_Handler(New object:C1471(\
-			"action"; $message; \
-			"audit"; $in))
-		
-		EDITOR.projectAudit:=$in
+		If (FEATURE.with("android"))  //🚧
+			
+			//
+			
+		Else 
+			
+			PROJECT_Handler(New object:C1471(\
+				"action"; $message; \
+				"audit"; $in))
+			
+		End if 
 		
 		//______________________________________________________
 	: ($message="structureCheckingResult")  // Callback from 'structure'
@@ -192,19 +198,22 @@ Case of
 			
 			EDITOR.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
 			
+			// Touch
+			OBJECT SET VALUE:C1742($form.ribbon; OBJECT Get value:C1743($form.ribbon))
+			
 		Else 
 			
 			// Old
 			Form:C1466.status.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
 			
+			// Give status to ribbon
+			$o:=OBJECT Get value:C1743($form.ribbon)
+			$o.status:=Form:C1466.$status
+			OBJECT SET VALUE:C1742($form.ribbon; $o)  // Touch
+			
 		End if 
 		
-		// Give status to ribbon
-		$o:=OBJECT Get value:C1743($form.ribbon)
-		$o.status:=Form:C1466.$status
 		
-		// Touch
-		OBJECT SET VALUE:C1742($form.ribbon; $o)
 		
 		//______________________________________________________
 	: ($message="build@")

@@ -124,6 +124,18 @@ If (FEATURE.with("wizards"))
 			
 		End for each 
 		
+		//If (Value type($manifest.info.target)=Is collection)
+		
+		//EDITOR.ios:=$manifest.info.target.indexOf("iOS")#-1
+		//EDITOR.android:=$manifest.info.target.indexOf("android")#-1
+		
+		//Else 
+		
+		//EDITOR.ios:=$manifest.info.target="iOS"
+		//EDITOR.android:=$manifest.info.target="android"
+		
+		//End if 
+		
 		// Open the project editor
 		If (DATABASE.isMatrix)
 			

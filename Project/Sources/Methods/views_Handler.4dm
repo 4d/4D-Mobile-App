@@ -16,7 +16,7 @@ If (False:C215)
 	C_OBJECT:C1216(VIEWS_Handler; $1)
 End if 
 
-var $formName; $t; $tableID; $typeForm : Text
+var $formName; $t; $typeForm : Text
 var $codeEvent; $i; $l; $offset : Integer
 var $context; $datamodel; $form; $IN; $o; $o1; $OUT : Object
 var $c : Collection
@@ -65,6 +65,8 @@ $form:=New object:C1471(\
 $context:=$form.$
 
 If (OB Is empty:C1297($context))  // First load
+	
+	RECORD.info("VIEWS init")
 	
 	// § DEFINE UI CONSTRAINTS §
 	$c:=New collection:C1472
@@ -116,7 +118,7 @@ Case of
 		
 		$codeEvent:=_o_panel_Form_common(On Load:K2:1; On Timer:K2:25)
 		
-		$datamodel:=Form:C1466.dataModel
+		$datamodel:=PROJECT.dataModel
 		
 		Case of 
 				
@@ -134,19 +136,7 @@ Case of
 				
 				$context.setTab()
 				
-				// Create, if any, & update the list & detail model
-				var $ob : cs:C1710.ob
-				$ob:=cs:C1710.ob.new(Form:C1466)
-				
-				If ($datamodel#Null:C1517)
-					
-					For each ($tableID; $datamodel)
-						
-						$ob.createPath(New collection:C1472("list"; $tableID))
-						$ob.createPath(New collection:C1472("detail"; $tableID))
-						
-					End for each 
-				End if 
+				$view.createFormObjects($datamodel)
 				
 				If (($datamodel=Null:C1517) | OB Is empty:C1297($datamodel))
 					
@@ -216,6 +206,8 @@ Case of
 				
 				If ($datamodel=Null:C1517) | OB Is empty:C1297($datamodel)
 					
+					RECORD.warning("DATA MODEL IS EMPTY")
+					
 					// No published table
 					$form.noPublishedTable.show()
 					
@@ -229,8 +221,8 @@ Case of
 				End if 
 				
 				// Draw the table list
-				($form.tableWidget.pointer())->:=$view.tableWidget($datamodel; New object:C1471(\
-					"tableNumber"; $context.tableNum()))
+				OBJECT SET VALUE:C1742($form.tableWidget.name; $view.tableWidget($datamodel; New object:C1471(\
+					"tableNumber"; $context.tableNum())))
 				
 				SVG SHOW ELEMENT:C1108(*; $form.tableWidget.name; $context.tableNum(); 0)
 				
@@ -238,6 +230,8 @@ Case of
 						
 						//………………………………………………………………………………………………………………………………………
 					: (Bool:C1537($context.draw))
+						
+						RECORD.info("Draw template")
 						
 						$form.fieldGroup.setVisible(Length:C16($context.tableNum())>0)
 						$form.previewGroup.setVisible(Length:C16($context.tableNum())>0)
@@ -259,7 +253,9 @@ Case of
 						If (Length:C16($context.tableNum())>0)\
 							 & ($datamodel[$context.tableNum()]#Null:C1517)
 							
-							$formName:=String:C10(Form:C1466[$typeForm][$context.tableNum()].form)
+							$formName:=String:C10(PROJECT[$typeForm][$context.tableNum()].form)
+							
+							RECORD.info("Current template : "+$formName)
 							
 							If (String:C10($context.template.name)#$formName)
 								
@@ -573,6 +569,3 @@ If ($OUT#Null:C1517)
 	$0:=$OUT
 	
 End if 
-
-// ----------------------------------------------------
-// End

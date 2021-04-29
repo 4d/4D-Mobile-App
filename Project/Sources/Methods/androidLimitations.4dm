@@ -3,21 +3,23 @@
 
 If (FEATURE.with("android"))
 	
-	If (PROJECT.$android)
+	If (EDITOR.android)
 		
 		If (Count parameters:C259>=1)
 			
 			If ($disable)
 				
-				OBJECT SET ENABLED:C1123(*; "@"; Is macOS:C1572 & PROJECT.$ios)
+				OBJECT SET ENABLED:C1123(*; "@"; Is macOS:C1572 & EDITOR.ios)
 				
 			End if 
 			
 			If (Count parameters:C259>=2)
 				
-				CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
-					"message"; $message; \
-					"type"; "android"))
+				var $o : Object
+				$o:=New object:C1471
+				$o.message:=$message
+				$o.type:="android"
+				EDITOR.call("footer"; $o)
 				
 			End if 
 		End if 

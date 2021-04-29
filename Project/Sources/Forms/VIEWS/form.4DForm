@@ -393,7 +393,8 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"pictureFormat": "truncatedCenter"
 						},
 						{
 							"name": "names",

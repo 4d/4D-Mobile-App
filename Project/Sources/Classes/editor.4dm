@@ -7,19 +7,31 @@ Class constructor
 	
 	Super:C1705("editor_CALLBACK")
 	
-	This:C1470.pages:=New object:C1471
-	This:C1470.pageDefinition()
-	This:C1470.currentPage:=""
+	This:C1470.setWorker("4D Mobile ("+String:C10(This:C1470.window)+")")
 	
-	This:C1470.worker:="4D Mobile ("+String:C10(This:C1470.window)+")"
+	This:C1470.pagesDefinition()
 	
+	// 
 	This:C1470.preferences:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
 	
 	This:C1470.init()
 	
 	//===================================================================================
-Function pageDefinition()
+Function widgetsDefinition()
+	
+	
+	
+	
+	
+	
+	
+	
+	//===================================================================================
+Function pagesDefinition()
 	var $o : Object
+	
+	This:C1470.pages:=New object:C1471
+	This:C1470.currentPage:=""
 	
 	//_____________________________________________________________________
 	This:C1470.pages.general:=New object:C1471(\
@@ -365,10 +377,14 @@ Function hidePicker()
 	
 	This:C1470.post("pickerHide")
 	
+	RECORD.info("hidePicker()")
+	
 	//===================================================================================
 Function hideBrowser()
 	
 	This:C1470.post("hideBrowser")
+	
+	RECORD.info("hideBrowser()")
 	
 	//===================================================================================
 Function updateRibbon()
@@ -381,6 +397,8 @@ Function updateRibbon()
 Function refreshViews()
 	
 	This:C1470.post("refreshViews")
+	
+	RECORD.info("refreshViews()")
 	
 	//===================================================================================
 Function checkDevTools()
@@ -409,7 +427,9 @@ Function checkProject()
 	CALL WORKER:C1389(This:C1470.worker; "_o_structure"; $o)
 	
 	// Launch project verifications
-	EDITOR.call("projectAudit")
+	This:C1470.call("projectAudit")
+	
+	RECORD.info("checkProject()")
 	
 	//===================================================================================
 Function getDevices()
@@ -425,7 +445,7 @@ Function getDevices()
 	RECORD.info("getDevices()")
 	
 	//===================================================================================
-Function setDescription()
+Function setHeader()
 	
 	OBJECT SET VALUE:C1742("description"; This:C1470.currentPage)
 	

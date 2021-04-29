@@ -21,25 +21,24 @@ Function init($project : Object)
 	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
-Function load
-	var $1 : Variant
+Function load($project)->$this : cs:C1710.project
 	
-	var $o; $project : Object
+	var $o : Object
 	
 	var $file : 4D:C1709.File
 	
 	Case of 
 			//______________________________________________________
-		: (Value type:C1509($1)=Is text:K8:3)
+		: (Value type:C1509($project)=Is text:K8:3)
 			
-			$file:=File:C1566($1; fk platform path:K87:2)
+			$file:=File:C1566($project; fk platform path:K87:2)
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is object:K8:27)
+		: (Value type:C1509($project)=Is object:K8:27)
 			
-			If (OB Instance of:C1731($1; 4D:C1709.File))
+			If (OB Instance of:C1731($project; 4D:C1709.File))
 				
-				$file:=$1
+				$file:=$project
 				
 			Else 
 				
@@ -101,8 +100,7 @@ Function load
 		
 	End if 
 	
-	var $0 : cs:C1710.project
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Prepare the project folder according to the target systems
@@ -340,8 +338,7 @@ Function save()
 	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
-	// Populate the target value into the project
-	// #MARK_TODO : SHOULD BE TREATED INTO THE EDITOR CLASS
+	// Populate the target value into the project                                                                         #MARK_TODO : SHOULD BE TREATED INTO THE EDITOR CLASS
 Function setTarget($checkDevTools : Boolean; $target : Text)
 	
 	If (This:C1470.$ios & This:C1470.$android)
@@ -494,7 +491,7 @@ Function cleanup($dirtyObject : Object)->$cleanObject : Object
 		
 	End if 
 	
-	//================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Tests if the project is locked and, if so, makes the provided widgets accessible or not
 Function isLocked()->$isLocked : Boolean
 	
@@ -601,7 +598,7 @@ Function addToMain
 		End if 
 	End if 
 	
-	//====================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Returns the collection of the tables of the data model
 Function tables($datamodel : Object)->$tables : Collection
 	
@@ -619,7 +616,7 @@ Function tables($datamodel : Object)->$tables : Collection
 	
 	$tables:=$tables.filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
 	
-	//====================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Returns the collection of the fields of a table data model
 Function fields($table : Variant)->$fields : Collection
 	
@@ -657,7 +654,7 @@ Function fields($table : Variant)->$fields : Collection
 		
 	End if 
 	
-	//====================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Returns the collection of the storage  fields of a table data model
 Function storageFields($table : Variant)->$fields : Collection
 	
@@ -738,19 +735,19 @@ Function isRelationToMany
 		
 	End if 
 	
-	//================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Returns True if the 4D Type is a Numeric type
 Function isNumeric($type : Integer)->$isNumeric : Boolean
 	
 	$isNumeric:=(New collection:C1472(Is integer:K8:5; Is longint:K8:6; Is integer 64 bits:K8:25; Is real:K8:4; _o_Is float:K8:26).indexOf($type)#-1)
 	
-	//================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Returns True if the 4D Type is a String type
 Function isString($type : Integer)->$isNumeric : Boolean
 	
 	$isNumeric:=(New collection:C1472(Is alpha field:K8:1; Is text:K8:3).indexOf($type)#-1)
 	
-	//================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	//Add a table to the data model
 Function addTable($table : Object)->$tableModel : Object
 	
@@ -921,7 +918,7 @@ Function isStorage
 		End if 
 	End if 
 	
-	//====================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 Function getIcon($relativePath : Text)->$icon : Picture
 	
 	var $file : 4D:C1709.File
@@ -969,7 +966,7 @@ Function isLink
 		
 	End if 
 	
-	//================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Check if a field is still available in the table catalog
 Function fieldAvailable($tableID : Variant; $field : Object)->$available : Boolean
 	
@@ -1038,12 +1035,14 @@ Function fieldAvailable($tableID : Variant; $field : Object)->$available : Boole
 		End if 
 	End if 
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Update all form definition according to the datamodel
 	// Ie. remove from forms, the fields that are no more published
-Function updateFormDefinitions
+Function updateFormDefinitions()
 	var $formType; $tableID : Text
 	var $field; $target : Object
+	
+	RECORD.info("updateFormDefinitions()")
 	
 	For each ($formType; New collection:C1472("list"; "detail"))
 		
@@ -1127,22 +1126,21 @@ Function updateFormDefinitions
 		End if 
 	End for each 
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//Performs the project audit                                                                                          #MARK_TODO : remove $project.status.project
 Function audit($audits : Object)->$audit : Object
 	
 	If (Count parameters:C259>=1)
 		
-		$audit:=project_Audit($audits)
+		EDITOR.projectAudit:=project_Audit($audits)
 		
 	Else 
 		
-		$audit:=project_Audit
+		EDITOR.projectAudit:=project_Audit
 		
 	End if 
 	
-	EDITOR.projectAudit:=$audit
-	
-	cs:C1710.ob.new(This:C1470).set("$project.status.project"; $audit.success)
+	cs:C1710.ob.new(This:C1470).set("$project.status.project"; EDITOR.projectAudit.success)  //#TO_REMOVE
 	
 	//================================================================================
 Function fieldDefinition

@@ -64,6 +64,7 @@
 			"_NEW_MOBILE_PROJECT",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
+			"_o_editor_PROJECT_AUDIT",
 			"_o_env_System_path",
 			"_o_http",
 			"_o_panel_Form_common",
@@ -209,7 +210,6 @@
 			"EDITOR_ON_ACTIVATE",
 			"editor_OPEN_PROJECT",
 			"editor_PROCESS_MESSAGES",
-			"editor_PROJECT_AUDIT",
 			"editor_RESUME",
 			"editor_ui_LISTBOX"
 		],
@@ -253,6 +253,7 @@
 			"project_Fix",
 			"PROJECT_Handler",
 			"PROJECT_OBJECT_HANDLER",
+			"PROJECT_ON_ACTIVATE",
 			"project_PROCESS_MESSAGES",
 			"project_REPAIR",
 			"project_SKIN",
@@ -861,6 +862,9 @@
 			"RIBBON"
 		],
 		"forms": [
+			"RIBBON"
+		],
+		"classes": [
 			"RIBBON"
 		]
 	},

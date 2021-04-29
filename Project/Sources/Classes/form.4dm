@@ -8,12 +8,13 @@ Class constructor($method : Text)
 	
 	This:C1470.name:=Current form name:C1298
 	This:C1470.window:=Current form window:C827
-	This:C1470.callback:=Null:C1517
 	
+	This:C1470.callback:=Null:C1517
+	This:C1470.worker:=Null:C1517
+	
+	This:C1470.widgets:=New object:C1471
 	This:C1470.focused:=Null:C1517
 	This:C1470.current:=Null:C1517
-	
-	This:C1470.callback:=""
 	
 	If (Count parameters:C259>=1)
 		
@@ -59,6 +60,7 @@ Function post($action : Text)
 	// .call( param : Collection )
 	// .call( param1, param2, …, paramN )
 Function call($param; $param1; $paramN)
+	
 	C_VARIANT:C1683(${1})
 	
 	var $code : Text
@@ -108,6 +110,43 @@ Function call($param; $param1; $paramN)
 		
 		ASSERT:C1129(False:C215; "Callback method is not defined.")
 		
+	End if 
+	
+	//====================================================================
+	// Associate a worker to the current form
+Function setWorker($worker)
+	
+	var $type : Integer
+	$type:=Value type:C1509($worker)
+	
+	If (Asserted:C1132(($type=Is text:K8:3) | ($type=Is real:K8:4) | ($type=Is longint:K8:6); "Wrong parameter type"))
+		
+		This:C1470.worker:=$worker
+		
+	End if 
+	
+	//===================================================================================
+	// Post a simple message for the associated or the given worker reference
+Function callWorker($method : Text; $worker)
+	
+	If (Count parameters:C259>=2)
+		
+		var $type : Integer
+		$type:=Value type:C1509($worker)
+		
+		If (Asserted:C1132(($type=Is text:K8:3) | ($type=Is real:K8:4) | ($type=Is longint:K8:6); "Wrong parameter type"))
+			
+			CALL WORKER:C1389($worker; $method)
+			
+		End if 
+		
+	Else 
+		
+		If (Asserted:C1132(This:C1470.worker#Null:C1517; "No associated worker"))
+			
+			CALL WORKER:C1389(This:C1470.worker; $method)
+			
+		End if 
 	End if 
 	
 	//====================================================================
@@ -164,9 +203,11 @@ Function dimensions()->$dimensions : Object
 	
 	var $height; $width : Integer
 	
-	FORM GET PROPERTIES:C674(String:C10(This:C1470.name); $width; $height)
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
 	
-	$dimensions:=New object:C1471("width"; $width; "height"; $height)
+	$dimensions:=New object:C1471(\
+		"width"; $width; \
+		"height"; $height)
 	
 	//====================================================================
 Function height()->$height : Integer

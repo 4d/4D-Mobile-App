@@ -159,7 +159,11 @@ Case of
 				
 			End if 
 			
-			$isProjectOK:=Bool:C1537(EDITOR.projectAudit.success)
+			If (EDITOR.projectAudit#Null:C1517)
+				
+				$isProjectOK:=Bool:C1537(EDITOR.projectAudit.success)
+				
+			End if 
 			
 			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID & $isSdkAvailable))
 				
@@ -253,7 +257,7 @@ Case of
 		
 		ASSERT:C1129(Not:C34(Shift down:C543))
 		
-		If (EDITOR.devices#Null:C1517)
+		If (EDITOR.devices#Null:C1517) & (EDITOR.ios#Null:C1517) & (EDITOR.android#Null:C1517)
 			
 			// *UPDATE DEVICE BUTTON
 			If (FEATURE.with("android"))  //🚧

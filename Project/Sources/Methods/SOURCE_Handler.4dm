@@ -358,8 +358,8 @@ $regex.match[1].data:="127.0.0.1"
 									
 									$Obj_form.ui.serverInTest:=True:C214
 									
-									CALL WORKER:C1389(Form:C1466.$worker; "Rest"; New object:C1471(\
-										"caller"; $Obj_form.window; \
+									CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
+										"caller"; EDITOR.window; \
 										"action"; "status"; \
 										"handler"; "mobileapp"; \
 										"timeout"; 60; \
@@ -382,8 +382,8 @@ $regex.match[1].data:="127.0.0.1"
 							
 						Else 
 							
-							CALL WORKER:C1389(Form:C1466.$worker; "Rest"; New object:C1471(\
-								"caller"; $Obj_form.window; \
+							CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
+								"caller"; EDITOR.window; \
 								"action"; "status"; \
 								"handler"; "mobileapp"; \
 								"timeout"; 60; \
@@ -524,8 +524,8 @@ $regex.match[1].data:="127.0.0.1"
 									
 									$Obj_form.ui.serverInTest:=True:C214
 									
-									CALL WORKER:C1389(Form:C1466.$worker; "Rest"; New object:C1471(\
-										"caller"; $Obj_form.window; \
+									CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
+										"caller"; EDITOR.window; \
 										"action"; "status"; \
 										"handler"; "mobileapp"; \
 										"timeout"; 60; \
@@ -554,8 +554,8 @@ $regex.match[1].data:="127.0.0.1"
 							
 						Else 
 							
-							CALL WORKER:C1389(Form:C1466.$worker; "Rest"; New object:C1471(\
-								"caller"; $Obj_form.window; \
+							CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
+								"caller"; EDITOR.window; \
 								"action"; "status"; \
 								"handler"; "mobileapp"; \
 								"timeout"; 60; \
