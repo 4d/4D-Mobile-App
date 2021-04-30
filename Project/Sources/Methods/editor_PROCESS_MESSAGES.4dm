@@ -88,6 +88,9 @@ Case of
 		//______________________________________________________
 	: ($message="structureCheckingResult")  // Callback from 'structure'
 		
+		// Update task list
+		EDITOR.removeTask("checkProject")
+		
 		If ($in.success)
 			
 			STRUCTURE_AUDIT($in.value)
@@ -105,8 +108,10 @@ Case of
 		
 		If (FEATURE.with("android"))  //🚧
 			
-			Form:C1466.$dialog[$form.editor].ribbon.devices:=$in
+			// Update task list
+			EDITOR.removeTask("getDevices")
 			
+			// Store the result
 			EDITOR.devices:=$in
 			
 			// Touch
@@ -159,9 +164,15 @@ Case of
 		
 		If (FEATURE.with("android"))  //🚧
 			
+			// Update task list
+			EDITOR.removeTask("checkDevTools")
+			
 			// Store the result
 			EDITOR.xCode:=$in.xCode
 			EDITOR.studio:=$in.studio
+			
+			// Update the device list
+			EDITOR.getDevices()
 			
 		Else 
 			
@@ -178,18 +189,10 @@ Case of
 				Form:C1466.status.xCode:=$in.ready
 				
 			End if 
-		End if 
-		
-		If (FEATURE.with("android"))
-			
-			EDITOR.getDevices()
-			
-		Else 
 			
 			editor_CALLBACK("updateRibbon")
 			
 		End if 
-		
 		
 		//______________________________________________________
 	: ($message="updateRibbon")

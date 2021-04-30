@@ -1,3 +1,4 @@
+//%attributes = {"invisible":true}
 // ----------------------------------------------------
 // Object method : RIBBON.201 - (Simulator button)
 // ID[6815D0201FC24AF6A6763A5CFDD4B233]
@@ -5,7 +6,7 @@
 // ----------------------------------------------------
 // Declarations
 var $bottom; $left; $right; $top : Integer
-var $currentDevice; $tab : Text
+var $lastDevice; $tab : Text
 var $device; $e : Object
 var $menu : cs:C1710.menu
 
@@ -33,7 +34,7 @@ Case of
 		
 		If (FEATURE.with("android"))  // 🚧
 			
-			$currentDevice:=EDITOR.preferences.get("simulator")
+			$lastDevice:=EDITOR.preferences.get("simulator")
 			$tab:="       "
 			
 			If (Is macOS:C1572)
@@ -47,7 +48,7 @@ Case of
 						For each ($device; EDITOR.devices.connected.apple)
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark($device.udid=$currentDevice)
+								.mark($device.udid=$lastDevice)
 							
 						End for each 
 						
@@ -60,7 +61,7 @@ Case of
 						For each ($device; EDITOR.devices.apple)
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark(($device.udid=$currentDevice) & PROJECT.$ios)
+								.mark(($device.udid=$lastDevice) & PROJECT.$ios)
 							
 						End for each 
 					End if 
@@ -86,7 +87,7 @@ Case of
 						For each ($device; EDITOR.devices.android.orderBy("name"))
 							
 							$menu.append($tab+$device.name; $device.udid)\
-								.mark(($device.udid=$currentDevice) & PROJECT.$android).enable(Not:C34($device.missingSystemImage))
+								.mark(($device.udid=$lastDevice) & PROJECT.$android).enable(Not:C34($device.missingSystemImage))
 							
 						End for each 
 						
@@ -164,7 +165,7 @@ Case of
 			: (Not:C34($menu.selected))
 				
 				// Nothing selected
-				$currentDevice:=""
+				$lastDevice:=""
 				
 				//______________________________________________________
 			: ($menu.choice="checkAndroidInstallation")\
@@ -256,6 +257,8 @@ Case of
 				EDITOR.currentDevice:=$menu.choice
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
+				EDITOR.preferences.set("lastIosDevice"; $menu.choice)
+				
 				// #TO_OPTMIZE : deport to worker
 				
 				// Kill all booted devices, if any, & fix default
@@ -278,6 +281,8 @@ Case of
 				EDITOR.currentDevice:=$menu.choice
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
 				
+				EDITOR.preferences.set("lastIosConnected"; $menu.choice)
+				
 				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				EDITOR.ios:=True:C214
 				PROJECT._simulator:=$device.udid
@@ -290,6 +295,8 @@ Case of
 				
 				EDITOR.currentDevice:=$menu.choice
 				OBJECT SET TITLE:C194(*; "201"; $device.name)
+				
+				EDITOR.preferences.set("lastAndroidDevice"; $menu.choice)
 				
 				PROJECT.$android:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				EDITOR.android:=True:C214
@@ -304,8 +311,8 @@ Case of
 				//______________________________________________________
 		End case 
 		
-		If (Length:C16($currentDevice)>0)\
-			 & ($currentDevice#String:C10(EDITOR.currentDevice))  // Keep
+		If (Length:C16($lastDevice)>0)\
+			 & ($lastDevice#String:C10(EDITOR.currentDevice))  // Keep
 			
 			EDITOR.preferences.set("simulator"; EDITOR.currentDevice)
 			

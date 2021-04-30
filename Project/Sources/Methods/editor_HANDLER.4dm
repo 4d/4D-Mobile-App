@@ -172,6 +172,8 @@ Case of
 				
 				ENV.update()
 				
+				EDITOR_ON_ACTIVATE
+				
 				EDITOR.executeInSubform("project"; "PROJECT_ON_ACTIVATE")
 				
 				//______________________________________________________

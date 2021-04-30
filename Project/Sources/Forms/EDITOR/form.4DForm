@@ -50,7 +50,7 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"method": "ObjectMethods/ribbon.4dm"
+					"method": "RIBBON_CONTAINER"
 				},
 				"description": {
 					"type": "subform",

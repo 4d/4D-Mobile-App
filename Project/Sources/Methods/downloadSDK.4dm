@@ -221,8 +221,6 @@ End case
 
 If ($run)
 	
-	RECORD.info("URL: "+$url)
-	
 	$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
 	
 	$fileManifest:=$sdk.parent.file("manifest.json")
@@ -435,10 +433,10 @@ If ($run)
 				If (Count parameters:C259>=4)
 					
 					//POST_MESSAGE(New object(\
-						"action"; "show"; \
-						"target"; $caller; \
-						"type"; "alert"; \
-						"additional"; Replace string(Get localized string("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose($target="android"; "Android"; "iOS"))))
+												"action"; "show"; \
+												"target"; $caller; \
+												"type"; "alert"; \
+												"additional"; Replace string(Get localized string("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose($target="android"; "Android"; "iOS"))))
 					
 				Else 
 					

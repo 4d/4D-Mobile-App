@@ -1,3 +1,4 @@
+//%attributes = {"invisible":true}
 // ----------------------------------------------------
 // Object method : RIBBON.151 (Build & Run button)
 // ID[B7D612925297469AAD7F6709D491ED2E]

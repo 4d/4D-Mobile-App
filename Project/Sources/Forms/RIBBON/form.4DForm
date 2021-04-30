@@ -13,7 +13,6 @@
 		"onBoundVariableChange",
 		"onPageChange"
 	],
-	"method": "method.4dm",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "842pt",
@@ -324,8 +323,8 @@
 						"onMouseEnter",
 						"onMouseLeave"
 					],
-					"method": "ObjectMethods/151.4dm",
-					"class": "toolbarButtons"
+					"class": "toolbarButtons",
+					"method": "RIBBON_BUILD"
 				},
 				"152": {
 					"type": "button",
@@ -344,8 +343,8 @@
 						"onMouseLeave"
 					],
 					"popupPlacement": "linked",
-					"method": "ObjectMethods/152.4dm",
-					"class": "toolbarButtons"
+					"class": "toolbarButtons",
+					"method": "RIBBON_PROJECT"
 				},
 				"201": {
 					"type": "button",
@@ -359,14 +358,14 @@
 					"iconFrames": 4,
 					"style": "custom",
 					"customBackgroundPicture": "/RESOURCES/images/radio-back.svg",
-					"method": "ObjectMethods/201.4dm",
 					"events": [
 						"onClick",
 						"onMouseEnter",
 						"onMouseLeave"
 					],
 					"popupPlacement": "linked",
-					"class": "toolbarButtons"
+					"class": "toolbarButtons",
+					"method": "RIBBON_SIMULATOR"
 				},
 				"153": {
 					"type": "button",
@@ -402,5 +401,6 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 156
+	"geometryStamp": 156,
+	"method": "RIBBON_HANDLER"
 }

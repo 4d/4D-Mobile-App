@@ -1,3 +1,4 @@
+//%attributes = {"invisible":true}
 // ----------------------------------------------------
 // Form method : RIBBON - (4D Mobile App)
 // ID[8B32DFD842F7463C9AE0CFD578EAC514]
@@ -238,8 +239,10 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Bound Variable Change:K2:52)
 		
+		// Set the switch button picture
 		$form.switch.setPicture("#images/toolbar/"+Choose:C955(Form:C1466.state="open"; "reduce"; "expand")+".png")
 		
+		// Update the section buttons
 		For each ($page; $form.pages)
 			
 			If (FEATURE.with("wizards"))
@@ -254,8 +257,6 @@ Case of
 		End for each 
 		
 		$form.simulator.setColors("dimgray")
-		
-		ASSERT:C1129(Not:C34(Shift down:C543))
 		
 		If (EDITOR.devices#Null:C1517) & (EDITOR.ios#Null:C1517) & (EDITOR.android#Null:C1517)
 			
@@ -349,7 +350,7 @@ Case of
 						
 						If ($device#Null:C1517)
 							
-							If (PROJECT.$android)
+							If (EDITOR.android)
 								
 								$form.simulator.setTitle($device.name)
 								EDITOR.currentDevice:=$simulator
@@ -376,7 +377,7 @@ Case of
 				Else 
 					
 					If (Is macOS:C1572)\
-						 & (Bool:C1537(Form:C1466.editor.$ios))\
+						 & (EDITOR.ios)\
 						 & (EDITOR.devices.apple.length>0)
 						
 						// Get a default device identifier

@@ -859,7 +859,12 @@
 	},
 	"RIBON": {
 		"methods": [
-			"RIBBON"
+			"RIBBON",
+			"RIBBON_BUILD",
+			"RIBBON_CONTAINER",
+			"RIBBON_HANDLER",
+			"RIBBON_PROJECT",
+			"RIBBON_SIMULATOR"
 		],
 		"forms": [
 			"RIBBON"

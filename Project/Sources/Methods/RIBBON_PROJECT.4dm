@@ -1,3 +1,4 @@
+//%attributes = {"invisible":true}
 // ----------------------------------------------------
 // Object method : RIBBON.152 (Product button)
 // ID[184E0B1B3EEB4632986423D2310524F0]

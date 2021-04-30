@@ -19,7 +19,7 @@ var $panel : Text
 If (FORM Get current page:C276=1)  // #MARK_OBSOLETE : with the wizards the 2nd page is ne more used
 	
 	// Update according to the color scheme
-	EDITOR.init()
+	EDITOR.updateColorScheme()
 	
 	// Verify the web server configuration
 	EDITOR.post("checkingServerConfiguration")

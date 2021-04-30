@@ -11,20 +11,13 @@ Class constructor
 	
 	This:C1470.pagesDefinition()
 	
-	// 
+	// Load preferences
 	This:C1470.preferences:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
 	
+	This:C1470.updateColorScheme()
 	This:C1470.init()
 	
-	//===================================================================================
-Function widgetsDefinition()
-	
-	
-	
-	
-	
-	
-	
+	This:C1470.tasks:=New collection:C1472
 	
 	//===================================================================================
 Function pagesDefinition()
@@ -178,82 +171,17 @@ Function pagesDefinition()
 		"form"; "ACTIONS_PARAMS"))
 	
 	//===================================================================================
-Function gotoPage($page : Text)
+Function widgetsDefinition()
 	
-	var $o : Object
-	
-	If (Count parameters:C259>=1)
-		
-		$o:=This:C1470.pages[$page]
-		
-	End if 
-	
-	FORM GOTO PAGE:C247(1)
-	
-	If (This:C1470.name="EDITOR")  // First call
-		
-		
-		var $ƒ : Object
-		$ƒ:=Form:C1466.$dialog[This:C1470.name]
-		
-		$ƒ.tasks:=New collection:C1472
-		$ƒ.task:=cs:C1710.thermometer.new("tasks")
-		
-	End if 
-	
-	// Hide picker & browser if any
-	This:C1470.hidePicker()
-	This:C1470.hideBrowser()
-	
-	// Hide footer
-	androidLimitations(False:C215; "")
-	
-	Case of 
-			
-			//_______________________________________________
-		: (Form:C1466.status.dataModel=Null:C1517)
-			
-			//_______________________________________________
-		: ($page="structure")
-			
-			$o.action.show:=Not:C34(Bool:C1537(Form:C1466.status.dataModel))
-			
-			//_______________________________________________
-		: ($page="views")
-			
-			$o.action.show:=Not:C34(Bool:C1537(Form:C1466.status.project))
-			
-			//_______________________________________________
-	End case 
-	
-	If ($o#Null:C1517)
-		
-		This:C1470.currentPage:=$page
-		
-		(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=$page
-		
-		Form:C1466.$page:=$o
-		
-		If (FEATURE.with("wizards"))
-			
-			This:C1470.executeInSubform("PROJECT"; "panel_INIT"; $o; PROJECT)
-			
-		Else 
-			
-			This:C1470.executeInSubform("PROJECT"; "panel_INIT"; $o)
-			
-		End if 
-		
-		SET TIMER:C645(-1)  // Set geometry
-		
-		This:C1470.executeInSubform("description"; "editor_description"; $o)
-		
-		GOTO OBJECT:C206(*; "PROJECT")
-		
-	End if 
+	This:C1470.ribbon:=cs:C1710.subform.new("ribbon")
+	This:C1470.description:=cs:C1710.subform.new("description")
+	This:C1470.project:=cs:C1710.subform.new("project")
+	This:C1470.footer:=cs:C1710.subform.new("footer")
+	This:C1470.message:=cs:C1710.subform.new("message")
 	
 	//===================================================================================
-Function init()
+	// [Warning] Executed every time the editor is activated to adapt UI to the color scheme
+Function updateColorScheme()
 	
 	var $icon : Picture
 	var $file : 4D:C1709.File
@@ -265,7 +193,7 @@ Function init()
 	
 	If (This:C1470.isDark)
 		
-		// * PRELOAD ICONS FOR FIELD TYPES
+		// * PRE-LOADING ICONS FOR FIELD TYPES
 		For each ($file; Folder:C1567("/RESOURCES/images/dark/fieldsIcons").files(Ignore invisible:K24:16))
 			
 			READ PICTURE FILE:C678($file.platformPath; $icon)
@@ -300,7 +228,7 @@ Function init()
 		
 	Else 
 		
-		// * PRELOAD ICONS FOR FIELD TYPES
+		// * PRE-LOADING ICONS FOR FIELD TYPES
 		For each ($file; Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))
 			
 			READ PICTURE FILE:C678($file.platformPath; $icon)
@@ -347,6 +275,10 @@ Function init()
 	This:C1470.colors.errorColor:=color("4dColor"; New object:C1471("value"; This:C1470.errorColor))
 	This:C1470.colors.warningColor:=color("4dColor"; New object:C1471("value"; This:C1470.warningColor))
 	
+	//===================================================================================
+	// Pre-loading of constant resources
+Function init()
+	
 	// FIELD TYPE NAMES
 	This:C1470.typeNames:=New collection:C1472
 	This:C1470.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
@@ -371,6 +303,122 @@ Function init()
 	This:C1470.toMany:="⒩"
 	
 	OBSOLETE
+	
+	//===================================================================================
+Function gotoPage($page : Text)
+	
+	var $o : Object
+	
+	If (Count parameters:C259>=1)
+		
+		$o:=This:C1470.pages[$page]
+		
+	End if 
+	
+	FORM GOTO PAGE:C247(1)
+	
+	If (This:C1470.name="EDITOR")  // First call
+		
+		
+		//var $ƒ : Object
+		//$ƒ:=Form.$dialog[This.name]
+		
+		//$ƒ.tasks:=New collection
+		//$ƒ.task:=cs.thermometer.new("tasks")
+		
+		This:C1470.widgetsDefinition()
+		
+	End if 
+	
+	// Hide picker & browser if any
+	This:C1470.hidePicker()
+	This:C1470.hideBrowser()
+	
+	// Hide footer
+	androidLimitations(False:C215; "")
+	
+	Case of 
+			
+			//_______________________________________________
+		: (Form:C1466.status.dataModel=Null:C1517)
+			
+			//_______________________________________________
+		: ($page="structure")
+			
+			$o.action.show:=Not:C34(Bool:C1537(Form:C1466.status.dataModel))
+			
+			//_______________________________________________
+		: ($page="views")
+			
+			$o.action.show:=Not:C34(Bool:C1537(Form:C1466.status.project))
+			
+			//_______________________________________________
+	End case 
+	
+	If ($o#Null:C1517)
+		
+		This:C1470.currentPage:=$page
+		
+		OBJECT SET VALUE:C1742("description"; $page)
+		
+		Form:C1466.$page:=$o
+		
+		If (FEATURE.with("wizards"))
+			
+			This:C1470.executeInSubform("PROJECT"; "panel_INIT"; $o; PROJECT)
+			
+		Else 
+			
+			This:C1470.executeInSubform("PROJECT"; "panel_INIT"; $o)
+			
+		End if 
+		
+		SET TIMER:C645(-1)  // Set geometry
+		
+		This:C1470.executeInSubform("description"; "editor_description"; $o)
+		
+		GOTO OBJECT:C206(*; "PROJECT")
+		
+	End if 
+	
+	//===================================================================================
+Function addTask($task : Text)
+	
+	ASSERT:C1129(This:C1470.tasks.query("name = :1"; $task).pop()=Null:C1517)
+	
+	RECORD.info("START: "+$task)
+	
+	This:C1470.tasks.push(New object:C1471("name"; $task))
+	
+	//===================================================================================
+Function removeTask($task : Text)
+	
+	var $indx : Integer
+	
+	$indx:=This:C1470.tasks.extract("name").indexOf($task)
+	
+	If ($indx#-1)
+		
+		RECORD.info("END: "+$task)
+		
+		This:C1470.tasks.remove($indx)
+		
+	End if 
+	
+	//===================================================================================
+Function countTasks()->$number : Integer
+	
+	$number:=This:C1470.tasks.length
+	
+	//===================================================================================
+Function taskInProgress($taskID : Text)->$response : Boolean
+	
+	$response:=(This:C1470.tasks.extract("name").indexOf($taskID)#-1)
+	
+	//===================================================================================
+Function taskNotInProgress($taskID : Text)->$response : Boolean
+	
+	$response:=(This:C1470.tasks.extract("name").indexOf($taskID)=-1)
 	
 	//===================================================================================
 Function hidePicker()
@@ -411,9 +459,10 @@ Function checkDevTools()
 	$o.studio:=This:C1470.studio
 	$o.android:=PROJECT.$android
 	$o.ios:=PROJECT.$ios
-	CALL WORKER:C1389(This:C1470.worker; "editor_CHECK_INSTALLATION"; $o)
 	
-	RECORD.info("checkDevTools()")
+	This:C1470.addTask("checkDevTools")
+	
+	CALL WORKER:C1389(This:C1470.worker; "editor_CHECK_INSTALLATION"; $o)
 	
 	//===================================================================================
 Function checkProject()
@@ -424,12 +473,13 @@ Function checkProject()
 	$o:=New object:C1471
 	$o.caller:=This:C1470.window
 	$o.action:="catalog"
+	
+	This:C1470.addTask("checkProject")
+	
 	CALL WORKER:C1389(This:C1470.worker; "_o_structure"; $o)
 	
 	// Launch project verifications
 	This:C1470.call("projectAudit")
-	
-	RECORD.info("checkProject()")
 	
 	//===================================================================================
 Function getDevices()
@@ -440,12 +490,12 @@ Function getDevices()
 	$o.caller:=This:C1470.window
 	$o.xCode:=This:C1470.xCode
 	$o.studio:=This:C1470.studio
-	CALL WORKER:C1389(This:C1470.worker; "editor_GET_DEVICES"; $o)
 	
-	RECORD.info("getDevices()")
+	This:C1470.addTask("getDevices")
+	
+	CALL WORKER:C1389(This:C1470.worker; "editor_GET_DEVICES"; $o)
 	
 	//===================================================================================
 Function setHeader()
 	
-	OBJECT SET VALUE:C1742("description"; This:C1470.currentPage)
-	
+	This:C1470.description.setValue(This:C1470.currentPage)

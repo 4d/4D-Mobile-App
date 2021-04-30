@@ -1,3 +1,4 @@
+//%attributes = {"invisible":true}
 // ----------------------------------------------------
 // Object method : EDITOR.ribbon - (4D Mobile App)
 // ID[9A9D18DB5AF848868EA589C98401AEA2]
