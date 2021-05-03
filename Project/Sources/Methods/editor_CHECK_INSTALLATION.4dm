@@ -13,6 +13,7 @@
 
 var $android; $ios : Boolean
 var $studio; $xcode : Object
+var $fileManifest : 4D:C1709.File
 
 // ----------------------------------------------------
 Case of 
@@ -41,7 +42,6 @@ Case of
 				
 				If ($android)
 					
-					var $fileManifest : 4D:C1709.File
 					$fileManifest:=cs:C1710.path.new().cacheSdkAndroid().parent.file("manifest.json")
 					
 					If (Not:C34($fileManifest.exists))\
@@ -73,9 +73,15 @@ Case of
 				
 				If ($ios)
 					
-					// Get the last 4D Mobile iOS SDK from AWS server if any
-					//CALL WORKER(1; "downloadSDK"; "aws"; "ios"; False; $in.caller)
+					$fileManifest:=cs:C1710.path.new().cacheSdkApple().parent.file("manifest.json")
 					
+					If (Not:C34($fileManifest.exists))\
+						 | ($fileManifest.modificationDate#Current date:C33)
+						
+						// Get the last 4D Mobile Android SDK from AWS server if any
+						//CALL WORKER(1; "downloadSDK"; "aws"; "ios"; False; $in.caller)
+						
+					End if 
 				End if 
 				
 			Else 
@@ -110,9 +116,15 @@ Case of
 			
 			If (Bool:C1537($out.studio.ready))
 				
-				// Get the last 4D Mobile Android SDK
-				CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
+				$fileManifest:=cs:C1710.path.new().cacheSdkAndroid().parent.file("manifest.json")
 				
+				If (Not:C34($fileManifest.exists))\
+					 | ($fileManifest.modificationDate#Current date:C33)
+					
+					// Get the last 4D Mobile Android SDK from AWS server if any
+					CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
+					
+				End if 
 			End if 
 		End if 
 		

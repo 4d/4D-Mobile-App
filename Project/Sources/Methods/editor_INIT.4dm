@@ -34,18 +34,18 @@ End if
 // ----------------------------------------------------
 If (Form:C1466.$dialog=Null:C1517)
 	
-	Form:C1466.$dialog:=New object:C1471(\
-		$formName; New object:C1471)
+	RECORD.info("Create $dialog")
 	
-Else 
+	Form:C1466.$dialog:=New object:C1471
 	
-	If (Form:C1466.$dialog[$formName]=Null:C1517)
-		
-		RECORD.info("Create context for: "+$formName)
-		
-		Form:C1466.$dialog[$formName]:=New object:C1471
-		
-	End if 
+End if 
+
+If (Form:C1466.$dialog[$formName]=Null:C1517)
+	
+	RECORD.info("Create context for: "+$formName)
+	
+	Form:C1466.$dialog[$formName]:=New object:C1471
+	
 End if 
 
 $value:=Form:C1466.$dialog[$formName]

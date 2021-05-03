@@ -29,7 +29,12 @@ var $str : cs:C1710.str
 // Initialisations
 $currentCatalog:=$1
 
-cs:C1710.ob.new(PROJECT).createPath("$dialog")
+//cs.ob.new(PROJECT).createPath("$dialog")
+If (PROJECT.$dialog=Null:C1517)
+	
+	PROJECT.$dialog:=New object:C1471
+	
+End if 
 
 $str:=cs:C1710.str.new()
 
