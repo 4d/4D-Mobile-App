@@ -130,6 +130,9 @@ Case of
 		//______________________________________________________
 	: (Is Windows:C1573)
 		
+		var $withStudio : Boolean
+		$withStudio:=Bool:C1537($in.studio.ready)
+		
 		If ($withStudio)
 			
 			$out:=New object:C1471(\

@@ -167,9 +167,13 @@ Case of
 			// Update task list
 			EDITOR.removeTask("checkDevTools")
 			
-			// Store the result
-			EDITOR.xCode:=$in.xCode
-			EDITOR.studio:=$in.studio
+			If ($in#Null:C1517)
+				
+				// Store the result
+				EDITOR.xCode:=$in.xCode
+				EDITOR.studio:=$in.studio
+				
+			End if 
 			
 			// Update the device list
 			EDITOR.getDevices()

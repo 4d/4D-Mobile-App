@@ -115,14 +115,32 @@ Case of
 					//______________________________________________________
 				: (Bool:C1537(EDITOR.android)) & (Bool:C1537(EDITOR.ios))
 					
-					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready) | Bool:C1537(EDITOR.studio.ready)
+					If (EDITOR.xCode#Null:C1517)
+						
+						$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
+						
+					End if 
+					
+					If (Not:C34($isDevToolAvailable))
+						
+						If (EDITOR.studio#Null:C1517)
+							
+							$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
+							
+						End if 
+					End if 
+					
 					$isDeviceSelected:=(EDITOR.currentDevice#Null:C1517)
 					$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
 					
 					//______________________________________________________
 				: (Bool:C1537(EDITOR.ios))
 					
-					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
+					If (EDITOR.xCode#Null:C1517)
+						
+						$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
+						
+					End if 
 					
 					If (EDITOR.currentDevice#Null:C1517)
 						
@@ -135,7 +153,11 @@ Case of
 					//______________________________________________________
 				: (Bool:C1537(EDITOR.android))
 					
-					$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
+					If (EDITOR.studio#Null:C1517)
+						
+						$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
+						
+					End if 
 					
 					If (EDITOR.currentDevice#Null:C1517)
 						
@@ -351,7 +373,6 @@ Case of
 							EDITOR.currentDevice:=$lastDevice
 							
 							PROJECT._buildTarget:="ios"
-							PROJECT._simulator:=$device.udid
 							
 						Else 
 							
@@ -360,6 +381,8 @@ Case of
 							OB REMOVE:C1226(PROJECT; "_simulator")
 							
 						End if 
+						
+						PROJECT._simulator:=$device.udid
 						
 					Else 
 						
