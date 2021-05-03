@@ -44,6 +44,28 @@ Function _exe()->$file : 4D:C1709.File
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Create a new AVD.
+	// You must provide a name for the AVD and specify the ID of the SDK package to use
+Function createAvd($avd : Object)->$this : cs:C1710.avd
+	
+	var $command : Text
+	
+	ASSERT:C1129($avd.name#Null:C1517)
+	ASSERT:C1129($avd.image#Null:C1517)
+	
+	$command:=This:C1470.cmd+" create avd --force -n "+This:C1470.quoted($avd.name)+" -k "+This:C1470.quoted($avd.image)
+	
+	If ($avd.definition#Null:C1517)
+		
+		$command:=$command+" --device "+This:C1470.quoted($avd.definition)
+		
+	End if 
+	
+	This:C1470.launch($command)
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a collection of potential device simulators
 Function devices()->$devices : Collection
 	
@@ -343,24 +365,3 @@ Function isAvdExisting  // Check if avd already exists
 		$0:=True:C214
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Create a new AVD.
-	// You must provide a name for the AVD and specify the ID of the SDK package to use
-Function createAvd($avd : Object)->$this : cs:C1710.avd
-	
-	var $command : Text
-	
-	ASSERT:C1129($avd.name#Null:C1517)
-	ASSERT:C1129($avd.image#Null:C1517)
-	
-	$command:=This:C1470.cmd+" create avd --force -n "+This:C1470.quoted($avd.name)+" -k "+This:C1470.quoted($avd.image)
-	
-	If ($avd.definition#Null:C1517)
-		
-		$command:=$command+" --device "+This:C1470.quoted($avd.definition)
-		
-	End if 
-	
-	This:C1470.launch($command)
-	
-	$this:=This:C1470

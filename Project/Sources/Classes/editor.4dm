@@ -17,7 +17,7 @@ Class constructor
 	This:C1470.updateColorScheme()
 	This:C1470.init()
 	
-	This:C1470.tasks:=New collection:C1472
+	This:C1470.pendingTasks:=New collection:C1472
 	
 	//===================================================================================
 Function pagesDefinition()
@@ -177,7 +177,12 @@ Function widgetsDefinition()
 	This:C1470.description:=cs:C1710.subform.new("description")
 	This:C1470.project:=cs:C1710.subform.new("project")
 	This:C1470.footer:=cs:C1710.subform.new("footer")
+	This:C1470.taskIndicator:=cs:C1710.thermometer.new("tasks").barber().start()
+	
+	This:C1470.browser:=cs:C1710.subform.new("browser")
+	
 	This:C1470.message:=cs:C1710.subform.new("message")
+	This:C1470.messageObjects:=cs:C1710.group.new("message,message.button,message.back")
 	
 	//===================================================================================
 	// [Warning] Executed every time the editor is activated to adapt UI to the color scheme
@@ -384,44 +389,58 @@ Function gotoPage($page : Text)
 	//===================================================================================
 Function addTask($task : Text)
 	
-	If (This:C1470.tasks.query("name = :1"; $task).pop()=Null:C1517)
+	If (This:C1470.pendingTasks.query("name = :1"; $task).pop()=Null:C1517)
 		
 		RECORD.info("START: "+$task)
 		
-		This:C1470.tasks.push(New object:C1471(\
+		This:C1470.pendingTasks.push(New object:C1471(\
 			"name"; $task))
 		
 	End if 
+	
+	This:C1470.taskIndicator.show()
+	This:C1470.currentTask:=Get localized string:C991($task)
 	
 	//===================================================================================
 Function removeTask($task : Text)
 	
 	var $indx : Integer
 	
-	$indx:=This:C1470.tasks.extract("name").indexOf($task)
+	$indx:=This:C1470.pendingTasks.extract("name").indexOf($task)
 	
 	If ($indx#-1)
 		
 		RECORD.info("END: "+$task)
 		
-		This:C1470.tasks.remove($indx)
+		This:C1470.pendingTasks.remove($indx)
+		
+	End if 
+	
+	If (This:C1470.pendingTasks.length>0)
+		
+		This:C1470.taskIndicator.show()
+		
+	Else 
+		
+		This:C1470.taskIndicator.hide()
+		This:C1470.currentTask:=""
 		
 	End if 
 	
 	//===================================================================================
 Function countTasks()->$number : Integer
 	
-	$number:=This:C1470.tasks.length
+	$number:=This:C1470.pendingTasks.length
 	
 	//===================================================================================
 Function taskInProgress($taskID : Text)->$response : Boolean
 	
-	$response:=(This:C1470.tasks.extract("name").indexOf($taskID)#-1)
+	$response:=(This:C1470.pendingTasks.extract("name").indexOf($taskID)#-1)
 	
 	//===================================================================================
 Function taskNotInProgress($taskID : Text)->$response : Boolean
 	
-	$response:=(This:C1470.tasks.extract("name").indexOf($taskID)=-1)
+	$response:=(This:C1470.pendingTasks.extract("name").indexOf($taskID)=-1)
 	
 	//===================================================================================
 Function hidePicker()

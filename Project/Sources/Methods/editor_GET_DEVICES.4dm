@@ -37,20 +37,27 @@ Case of
 				
 			End if 
 			
+			If ($withStudio)
+				
+				var $avd : cs:C1710.avd
+				$avd:=cs:C1710.avd.new()
+				
+			End if 
+			
 			Case of 
 					
 					//______________________________________________________
 				: ($withStudio & $withXcode)
 					
 					$out:=New object:C1471(\
-						"android"; cs:C1710.avd.new().availableDevices(); \
+						"android"; $avd.availableDevices(); \
 						"apple"; $simctl.availableDevices())
 					
 					//______________________________________________________
 				: ($withStudio)
 					
 					$out:=New object:C1471(\
-						"android"; cs:C1710.avd.new().availableDevices(); \
+						"android"; $avd.availableDevices(); \
 						"apple"; New collection:C1472)
 					
 					//______________________________________________________
@@ -70,11 +77,41 @@ Case of
 					//______________________________________________________
 			End case 
 			
-			If (FEATURE.with("ConnectedDevices")) & $withXcode
+			If (FEATURE.with("ConnectedDevices"))
 				
-				$out.connected:=New object:C1471(\
-					"android"; New collection:C1472; \
-					"apple"; $simctl.plugged())
+				Case of 
+						
+						//______________________________________________________
+					: ($withStudio & $withXcode)
+						
+						$out.connected:=New object:C1471(\
+							"android"; New collection:C1472; \
+							"apple"; $simctl.plugged())
+						
+						
+						//______________________________________________________
+					: ($withStudio)
+						
+						$out.connected:=New object:C1471(\
+							"android"; New collection:C1472; \
+							"apple"; New collection:C1472)
+						
+						//______________________________________________________
+					: ($withXcode)
+						
+						$out.connected:=New object:C1471(\
+							"android"; New collection:C1472; \
+							"apple"; $simctl.plugged())
+						
+						//______________________________________________________
+					Else 
+						
+						$out:=New object:C1471(\
+							"android"; New collection:C1472; \
+							"apple"; New collection:C1472)
+						
+						//______________________________________________________
+				End case 
 				
 			Else 
 				

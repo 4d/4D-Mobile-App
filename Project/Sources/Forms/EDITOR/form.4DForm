@@ -95,8 +95,8 @@
 				},
 				"debug.focus": {
 					"type": "input",
-					"top": 21,
-					"left": 250,
+					"top": 0,
+					"left": 696,
 					"width": 245,
 					"height": 14,
 					"dataSource": "OBJECT Get name:C1087(Object with focus:K67:3)",
@@ -116,64 +116,6 @@
 					],
 					"sizingX": "move",
 					"stroke": "#ff0000"
-				},
-				"debug.buildNumber": {
-					"type": "input",
-					"top": 2,
-					"left": 895,
-					"width": 46,
-					"height": 12,
-					"visibility": "hidden",
-					"sizingX": "move",
-					"dataSource": "shared.component.version",
-					"textAlign": "center",
-					"fontSize": 9,
-					"focusable": false,
-					"fill": "transparent",
-					"borderStyle": "none",
-					"enterable": false,
-					"hideFocusRing": true,
-					"contextMenu": "none",
-					"dragging": "none",
-					"dropping": "none",
-					"events": [
-						"onClick"
-					],
-					"fontTheme": "normal",
-					"stroke": "#ff0000"
-				},
-				"debug.localization": {
-					"type": "subform",
-					"top": 2,
-					"left": 303,
-					"width": 45,
-					"height": 20,
-					"sizingX": "move",
-					"dataSourceTypeHint": "number",
-					"detailForm": "LOCALIZATION",
-					"focusable": false,
-					"hideFocusRing": true,
-					"deletableInList": false,
-					"doubleClickInRowAction": "editSubrecord",
-					"selectionMode": "multiple",
-					"printFrame": "variable"
-				},
-				"debug.windows": {
-					"type": "button",
-					"text": "🗔",
-					"top": 2,
-					"left": 250,
-					"width": 45,
-					"height": 20,
-					"events": [
-						"onClick"
-					],
-					"method": "ObjectMethods/debug.windows.4dm",
-					"style": "custom",
-					"popupPlacement": "linked",
-					"stroke": "#FFFFFF",
-					"sizingX": "move",
-					"focusable": false
 				},
 				"browser": {
 					"type": "subform",
@@ -243,13 +185,34 @@
 				},
 				"tasks": {
 					"type": "progress",
-					"left": 840,
-					"top": 7,
-					"width": 101,
-					"height": 16,
-					"labelsPlacement": "none",
+					"left": 810,
+					"top": 9,
+					"width": 131,
+					"height": 21,
 					"visibility": "hidden",
+					"sizingX": "move",
+					"labelsPlacement": "none",
 					"continuousExecution": false
+				},
+				"taskName": {
+					"type": "input",
+					"top": 26,
+					"left": 810,
+					"width": 131,
+					"height": 12,
+					"sizingX": "move",
+					"dataSource": "EDITOR.currentTask",
+					"focusable": false,
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"dropping": "none",
+					"events": [],
+					"fontSize": 9,
+					"textAlign": "center",
+					"stroke": "#FFFFFF",
+					"dragging": "none",
+					"fill": "transparent"
 				}
 			}
 		},
@@ -304,9 +267,7 @@
 			},
 			"DEBUG": {
 				"objects": [
-					"debug.focus",
-					"debug.buildNumber",
-					"debug.localization"
+					"debug.focus"
 				]
 			},
 			"View 5": {
@@ -323,7 +284,7 @@
 			}
 		}
 	},
-	"geometryStamp": 114,
+	"geometryStamp": 156,
 	"width": 970,
 	"height": 870
 }

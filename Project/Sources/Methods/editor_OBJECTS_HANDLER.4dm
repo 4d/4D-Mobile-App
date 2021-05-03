@@ -9,13 +9,11 @@
 // ----------------------------------------------------
 // Declarations
 var $offset : Integer
-var $coordinates; $data; $display; $e : Object
-var $widget : cs:C1710.widgetMessage
+var $coordinates; $data; $display; $e; $widget : Object
 
 // ----------------------------------------------------
 // Initialisations
 $e:=FORM Event:C1606
-$widget:=Form:C1466.$dialog.EDITOR[$e.objectName]
 
 // ----------------------------------------------------
 Case of 
@@ -27,27 +25,29 @@ Case of
 			
 			EDITOR.hideBrowser()
 			
-			$widget:=Self:C308->
+			$widget:=EDITOR.browser
+			$data:=$widget.getValue()
 			
-			If ($widget.form#Null:C1517)
+			If ($data.form#Null:C1517)
 				
 				Case of 
 						
 						//______________________________________________________
-					: ($widget.selector="form-list")\
-						 | ($widget.selector="form-detail")  // Forms
+					: ($data.selector="form-list")\
+						 | ($data.selector="form-detail")  // Forms
 						
-						$widget.action:="forms"
-						$widget.selector:=Replace string:C233($widget.selector; "form-"; "")
-						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "setForm"; $widget)
+						$data.action:="forms"
+						$data.selector:=Replace string:C233($data.selector; "form-"; "")
+						ASSERT:C1129(($data.selector="detail") | ($data.selector="list"))
+						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "setForm"; $data)
 						
 						//______________________________________________________
-					: ($widget.selector="form-formatter")
+					: ($data.selector="form-formatter")
 						
 						//
 						
 						//______________________________________________________
-					: ($widget.selector="form-login")
+					: ($data.selector="form-login")
 						
 						//
 						
@@ -55,7 +55,6 @@ Case of
 					Else 
 						
 						// A "Case of" statement should never omit "Else"
-						
 						//______________________________________________________
 				End case 
 			End if 
@@ -69,6 +68,7 @@ Case of
 				//______________________________________________________
 			: ($e.code<0)  // <SUBFORM EVENTS>
 				
+				$widget:=EDITOR.message
 				$data:=$widget.getValue()
 				$display:=$data.ƒ
 				
@@ -78,7 +78,7 @@ Case of
 					: ($e.code=-2)\
 						 | ($e.code=-1)  // Close
 						
-						OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
+						EDITOR.messageObjects.hide()
 						
 						$display.restore($data)
 						
