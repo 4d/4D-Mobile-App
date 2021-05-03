@@ -384,11 +384,14 @@ Function gotoPage($page : Text)
 	//===================================================================================
 Function addTask($task : Text)
 	
-	ASSERT:C1129(This:C1470.tasks.query("name = :1"; $task).pop()=Null:C1517)
-	
-	RECORD.info("START: "+$task)
-	
-	This:C1470.tasks.push(New object:C1471("name"; $task))
+	If (This:C1470.tasks.query("name = :1"; $task).pop()=Null:C1517)
+		
+		RECORD.info("START: "+$task)
+		
+		This:C1470.tasks.push(New object:C1471(\
+			"name"; $task))
+		
+	End if 
 	
 	//===================================================================================
 Function removeTask($task : Text)

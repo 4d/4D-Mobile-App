@@ -428,22 +428,8 @@ If ($run)
 			//______________________________________________________
 		: ($http.status=200)
 			
-			If ($withUI)
-				
-				If (Count parameters:C259>=4)
-					
-					//POST_MESSAGE(New object(\
-												"action"; "show"; \
-												"target"; $caller; \
-												"type"; "alert"; \
-												"additional"; Replace string(Get localized string("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose($target="android"; "Android"; "iOS"))))
-					
-				Else 
-					
-					//ALERT(Replace string(Get localized string("yourVersionOf4dMobileSdkUpToDate"); "{os}"; Choose($target="android"; "Android"; "iOS")))
-					
-				End if 
-			End if 
+			// Force manifest modification date to avoid a new execution today
+			$fileManifest.setText($fileManifest.getText())
 			
 			RECORD.info("The 4D Mobile "+$target+" SDK is up to date")
 			
