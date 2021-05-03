@@ -5,7 +5,7 @@
 // Created 30-1-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-var $simulator : Text
+var $lastDevice : Text
 var $isDeviceSelected; $isDevToolAvailable; $isProjectOK; $withTeamID; $isSdkAvailable : Boolean
 var $currentPage : Integer
 var $constraints; $device; $e; $form; $o; $page; $plist : Object
@@ -263,7 +263,7 @@ Case of
 			// *UPDATE DEVICE BUTTON
 			If (FEATURE.with("android"))  //🚧
 				
-				$form.simulator.enable(EDITOR.devices#Null:C1517)
+				$form.simulator.enable(EDITOR.taskNotInProgress("getDevices"))
 				
 				Case of   //#DEBUG LOG
 						
@@ -314,15 +314,32 @@ Case of
 				End case 
 				
 				// Get the last simulator used, if known
-				$simulator:=String:C10(EDITOR.preferences.get("simulator"))
+				Case of 
+						//______________________________________________________
+					: (EDITOR.ios & EDITOR.android)
+						
+						$lastDevice:=String:C10(EDITOR.preferences.get("simulator"))
+						
+						//______________________________________________________
+					: (EDITOR.ios)
+						
+						$lastDevice:=String:C10(EDITOR.preferences.get("lastIosDevice"))
+						
+						//______________________________________________________
+					: (EDITOR.android)
+						
+						$lastDevice:=String:C10(EDITOR.preferences.get("lastAndroidDevice"))
+						
+						//______________________________________________________
+				End case 
 				
-				If (Length:C16($simulator)>0)
+				If (Length:C16($lastDevice)>0)
 					
-					$device:=EDITOR.devices.apple.query("udid = :1"; $simulator).pop()
+					$device:=EDITOR.devices.apple.query("udid = :1"; $lastDevice).pop()
 					
 					If ($device=Null:C1517) & (EDITOR.devices.connected.apple#Null:C1517)
 						
-						$device:=EDITOR.devices.connected.apple.query("udid = :1"; $simulator).pop()
+						$device:=EDITOR.devices.connected.apple.query("udid = :1"; $lastDevice).pop()
 						
 					End if 
 					
@@ -331,7 +348,7 @@ Case of
 						If (EDITOR.ios)
 							
 							$form.simulator.setTitle($device.name)
-							EDITOR.currentDevice:=$simulator
+							EDITOR.currentDevice:=$lastDevice
 							
 							PROJECT._buildTarget:="ios"
 							PROJECT._simulator:=$device.udid
@@ -346,14 +363,14 @@ Case of
 						
 					Else 
 						
-						$device:=EDITOR.devices.android.query("udid = :1"; $simulator).pop()
+						$device:=EDITOR.devices.android.query("udid = :1"; $lastDevice).pop()
 						
 						If ($device#Null:C1517)
 							
 							If (EDITOR.android)
 								
 								$form.simulator.setTitle($device.name)
-								EDITOR.currentDevice:=$simulator
+								EDITOR.currentDevice:=$lastDevice
 								PROJECT._buildTarget:="android"
 								PROJECT._simulator:=$device.udid
 								
@@ -381,16 +398,16 @@ Case of
 						 & (EDITOR.devices.apple.length>0)
 						
 						// Get a default device identifier
-						$simulator:=String:C10(cs:C1710.simctl.new(SHARED.iosDeploymentTarget).defaultDevice().udid)
+						$lastDevice:=String:C10(cs:C1710.simctl.new(SHARED.iosDeploymentTarget).defaultDevice().udid)
 						
-						If (Length:C16($simulator)>0)
+						If (Length:C16($lastDevice)>0)
 							
-							$device:=EDITOR.devices.apple.query("udid = :1"; $simulator).pop()
+							$device:=EDITOR.devices.apple.query("udid = :1"; $lastDevice).pop()
 							$form.simulator.setTitle($device.name)
 							
 							If ($device#Null:C1517)
 								
-								EDITOR.currentDevice:=$simulator
+								EDITOR.currentDevice:=$lastDevice
 								
 								// Keep
 								EDITOR.preferences.set("simulator"; $device.udid)
