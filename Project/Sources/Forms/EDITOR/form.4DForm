@@ -128,7 +128,7 @@
 					"sizingX": "grow",
 					"sizingY": "grow",
 					"visibility": "hidden",
-					"method": "editor_OBJECTS_HANDLER",
+					"method": "BROWSER_CONTAINER",
 					"bottom": 870
 				},
 				"message.back": {
@@ -186,7 +186,7 @@
 				"tasks": {
 					"type": "progress",
 					"left": 810,
-					"top": 15,
+					"top": 10,
 					"width": 131,
 					"height": 9,
 					"visibility": "hidden",
@@ -284,7 +284,7 @@
 			}
 		}
 	},
-	"geometryStamp": 160,
+	"geometryStamp": 167,
 	"width": 970,
 	"height": 870
 }

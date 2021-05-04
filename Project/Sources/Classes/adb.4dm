@@ -12,13 +12,12 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.cmd:=This:C1470.adbFile().path
+	This:C1470.exe:=This:C1470._exe()
+	This:C1470.cmd:=This:C1470.exe.path
 	
 	If (Is Windows:C1573)
 		
 		This:C1470.cmd:=This:C1470.cmd+".exe"
-		
-		// Else : already set
 		
 	End if 
 	
@@ -29,8 +28,7 @@ Class constructor
 	This:C1470.appStartTimeOut:=240000
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function adbFile()->$file : 4D:C1709.File
+Function _exe()->$file : 4D:C1709.File
 	
 	$file:=This:C1470.androidSDKFolder().file("platform-tools/adb")
 	
@@ -105,7 +103,6 @@ Function listBootedDevices  // List booted devices
 			$0.errors.push("Failed to get adb device list")
 			
 		End if 
-		
 	End if 
 	
 Function getAvdName
@@ -137,8 +134,6 @@ Function getAvdName
 		
 		// Else : serial not found
 	End if 
-	
-	
 	
 Function findSerial
 	var $0 : Object
@@ -185,8 +180,6 @@ Function findSerial
 		
 	End for each 
 	
-	
-	
 Function getSerial
 	var $0 : Object
 	var $1 : Text  // searched avd name
@@ -215,8 +208,6 @@ Function getSerial
 	Else 
 		$0.errors:=$Obj_bootedDevices.errors
 	End if 
-	
-	
 	
 Function waitForBoot
 	var $0 : Object
@@ -287,7 +278,6 @@ Function waitForDevicePackageList
 		// Else : all ok 
 	End if 
 	
-	
 Function isAppAlreadyInstalled
 	var $0 : Object
 	var $1 : Text  // emulator serial
@@ -309,7 +299,6 @@ Function isAppAlreadyInstalled
 	Else 
 		$0.errors:=$Obj_packageList.errors
 	End if 
-	
 	
 Function waitUninstallApp
 	var $0 : Object
@@ -344,7 +333,6 @@ Function waitUninstallApp
 		
 		// Else : all ok 
 	End if 
-	
 	
 Function uninstallAppIfInstalled
 	var $0 : Object
@@ -383,7 +371,6 @@ Function uninstallAppIfInstalled
 		$0.errors:=$Obj_isInstalled.errors
 	End if 
 	
-	
 Function waitInstallApp
 	var $0 : Object
 	var $1 : Text  // emulator serial
@@ -418,7 +405,6 @@ Function waitInstallApp
 		// Else : all ok 
 	End if 
 	
-	
 Function forceInstallApp
 	var $0 : Object
 	var $1 : Text  // emulator serial
@@ -445,7 +431,6 @@ Function forceInstallApp
 	Else 
 		$0.errors:=$Obj_uninstallAppIfInstalled.errors
 	End if 
-	
 	
 Function waitStartApp
 	var $0 : Object

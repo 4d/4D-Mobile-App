@@ -146,9 +146,6 @@ Case of
 			
 		End if 
 		
-		//Form.status.project:=Bool($IN.audit.success)
-		//Form.audit:=$IN.audit
-		
 		Form:C1466.status.project:=Bool:C1537(EDITOR.projectAudit.success)
 		Form:C1466.audit:=EDITOR.projectAudit
 		
@@ -158,143 +155,11 @@ Case of
 		EDITOR.call("refreshViews")
 		EDITOR.call("update_data")
 		
-		//If (Bool($IN.audit.success))
-		
 		If (Bool:C1537(EDITOR.projectAudit.success))  // Update status
-			
-			//If (Form.$dialog.projectInvalid#Null)
-			//OB REMOVE(Form.$dialog; "projectInvalid")
-			//End if 
 			
 			OB REMOVE:C1226(EDITOR; "projectInvalid")
 			
 		Else   // Display alert only one time
-			
-			//If (Not(Bool(Form.$dialog.projectInvalid)))
-			//Form.$dialog.projectInvalid:=True
-			//$ok:=New object(\
-				"action"; "projectFixErrors"; \
-				"audit"; $IN.audit)
-			// Try to show message according to errors
-			//If ($IN.audit.errors.length=1)
-			//$title:=$IN.audit.errors[0].message
-			//Case of 
-			////________________________________________
-			//: ($IN.audit.errors[0].type="template")
-			//$additional:="doYouWantToFixYourProjectByUsingTheDefaultTemplates"
-			//$cancel:=New object(\
-				"action"; "page_views"; \
-				"tab"; $IN.audit.errors[0].tab; \
-				"table"; $IN.audit.errors[0].table)
-			////________________________________________
-			//: ($IN.audit.errors[0].type="icon")
-			//$additional:="doYouWantToFixYourProjectByUsingTheDefaultIcons"
-			//$cancel:=New object(\
-				"action"; "page_properties"; \
-				"panel"; $IN.audit.errors[0].panel; \
-				"table"; $IN.audit.errors[0].table; \
-				"field"; Num($IN.audit.errors[0].field))
-			////________________________________________
-			//: ($IN.audit.errors[0].type="formatter")
-			//$additional:="doYouWantToFixYourProjectByUsingTheDefaultFormatter"
-			//$cancel:=New object(\
-				"action"; "page_properties"; \
-				"panel"; $IN.audit.errors[0].panel; \
-				"table"; $IN.audit.errors[0].table; \
-				"field"; Num($IN.audit.errors[0].field))
-			////________________________________________
-			//: ($IN.audit.errors[0].type="filter")
-			//$additional:="wouldYouLikeToRemoveTheFilterToFixYourProject"
-			//$cancel:=New object(\
-				"action"; "page_data"; \
-				"panel"; $IN.audit.errors[0].panel; \
-				"table"; $IN.audit.errors[0].table)
-			////________________________________________
-			//Else 
-			//ASSERT(dev_Matrix; "Unknown project audit error type "+$IN.audit.errors[0].type)
-			////________________________________________
-			//End case 
-			//Else 
-			//$c:=$IN.audit.errors.extract("type").distinct()
-			//If ($c.length=1)
-			//Case of 
-			////________________________________________
-			//: ($c[0]="template")
-			//$title:="someTemplatesAreMissingOrInvalid"
-			//$additional:="doYouWantToFixYourProjectByUsingTheDefaultTemplates"
-			//$cancel:=New object(\
-				"action"; "page_views"; \
-				"tab"; $IN.audit.errors[0].tab; \
-				"table"; $IN.audit.errors[0].table)
-			////________________________________________
-			//: ($c[0]="icon")
-			//$title:="someIconsAreMissingOrInvalid"
-			//$additional:="doYouWantToFixYourProjectByUsingTheDefaultIcons"
-			//$cancel:=New object(\
-				"action"; "page_properties"; \
-				"panel"; $IN.audit.errors[0].panel; \
-				"table"; $IN.audit.errors[0].table; \
-				"field"; Num($IN.audit.errors[0].field))
-			////________________________________________
-			//: ($c[0]="formatter")
-			//$title:="someFormattersAreMissingOrInvalid"
-			//$additional:="doYouWantToFixYourProjectByUsingTheDefaultFormatter"
-			//$cancel:=New object(\
-				"action"; "page_properties"; \
-				"panel"; $IN.audit.errors[0].panel; \
-				"table"; $IN.audit.errors[0].table; \
-				"field"; Num($IN.audit.errors[0].field))
-			////________________________________________
-			//: ($IN.audit.errors[0].type="filter")
-			//$title:="someFiltersAreNotValidatedOrInvalid"
-			//$additional:="wouldYouLikeToRemoveTheInvalidOrNotValidatedFilters"
-			//$cancel:=New object(\
-				"action"; "page_data"; \
-				"panel"; $IN.audit.errors[0].panel; \
-				"table"; $IN.audit.errors[0].table)
-			////________________________________________
-			//Else 
-			//ASSERT(dev_Matrix; "Unknown project audit error type "+$c[0].type)
-			////________________________________________
-			//End case 
-			//Else 
-			//$title:="someResourcesAreMissingOrInvalid"
-			//$additional:="doYouWantToFixYourProjectByUsingTheDefaultResources"
-			//// Load the firts one
-			//Case of 
-			////________________________________________
-			//: ($IN.audit.errors[0].type="template")
-			//$cancel:=New object(\
-				"action"; "page_views"; \
-				"tab"; $IN.audit.errors[0].tab; \
-				"table"; $IN.audit.errors[0].table)
-			////________________________________________
-			//: ($IN.audit.errors[0].type="icon")
-			//$cancel:=New object(\
-				"action"; "page_properties"; \
-				"panel"; $IN.audit.errors[0].panel; \
-				"table"; $IN.audit.errors[0].table; \
-				"field"; Num($IN.audit.errors[0].field))
-			////________________________________________
-			//: ($c[0]="formatter")
-			//$cancel:=New object(\
-				"action"; "page_properties"; \
-				"panel"; $IN.audit.errors[0].panel; \
-				"table"; $IN.audit.errors[0].table; \
-				"field"; Num($IN.audit.errors[0].field))
-			////________________________________________
-			//: ($c[0]="filter")
-			//$cancel:=New object(\
-				"action"; "page_data"; \
-				"panel"; $IN.audit.errors[0].panel; \
-				"table"; $IN.audit.errors[0].table)
-			////________________________________________
-			//Else 
-			//ASSERT(dev_Matrix; "Unknown project audit error type "+$IN.audit.errors[0].type)
-			////________________________________________
-			//End case 
-			//End if 
-			//End if 
 			
 			If (Not:C34(Bool:C1537(EDITOR.projectInvalid)))
 				

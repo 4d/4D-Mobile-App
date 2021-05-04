@@ -310,7 +310,7 @@ Function init()
 	OBSOLETE
 	
 	//===================================================================================
-Function gotoPage($page : Text)
+Function displayPage($page : Text)
 	
 	var $o : Object
 	
@@ -323,13 +323,6 @@ Function gotoPage($page : Text)
 	FORM GOTO PAGE:C247(1)
 	
 	If (This:C1470.name="EDITOR")  // First call
-		
-		
-		//var $ƒ : Object
-		//$ƒ:=Form.$dialog[This.name]
-		
-		//$ƒ.tasks:=New collection
-		//$ƒ.task:=cs.thermometer.new("tasks")
 		
 		This:C1470.widgetsDefinition()
 		
@@ -398,8 +391,15 @@ Function addTask($task : Text)
 		
 	End if 
 	
-	This:C1470.taskIndicator.show()
-	This:C1470.currentTask:=Get localized string:C991($task)
+	If (Num:C11(Application version:C493)>1900)
+		
+		This:C1470.taskIndicator.show()
+		
+		var $t : Text
+		$t:=Get localized string:C991($task)
+		This:C1470.currentTask:=Choose:C955(Length:C16($t)>0; $t; $task)
+		
+	End if 
 	
 	//===================================================================================
 Function removeTask($task : Text)
@@ -416,15 +416,18 @@ Function removeTask($task : Text)
 		
 	End if 
 	
-	If (This:C1470.pendingTasks.length>0)
+	If (Num:C11(Application version:C493)>1900)
 		
-		This:C1470.taskIndicator.show()
-		
-	Else 
-		
-		This:C1470.taskIndicator.hide()
-		This:C1470.currentTask:=""
-		
+		If (This:C1470.pendingTasks.length>0)
+			
+			This:C1470.taskIndicator.show()
+			
+		Else 
+			
+			This:C1470.taskIndicator.hide()
+			This:C1470.currentTask:=""
+			
+		End if 
 	End if 
 	
 	//===================================================================================
@@ -521,3 +524,56 @@ Function getDevices()
 Function setHeader()
 	
 	This:C1470.description.setValue(This:C1470.currentPage)
+	
+	//===================================================================================
+Function doAlert($content; $additional : Text)
+	
+	If (Count parameters:C259>=2)
+		
+		POST_MESSAGE(New object:C1471(\
+			"target"; This:C1470.window; \
+			"action"; "show"; \
+			"type"; "alert"; \
+			"title"; String:C10($content); \
+			"additional"; $additional\
+			))
+		
+	Else 
+		
+		If (Value type:C1509($content)=Is object:K8:27)
+			
+			$content.target:=This:C1470.window
+			$content.action:="show"
+			$content.type:="alert"
+			
+			POST_MESSAGE($content)
+			
+		Else 
+			
+			POST_MESSAGE(New object:C1471(\
+				"target"; This:C1470.window; \
+				"action"; "show"; \
+				"type"; "alert"; \
+				"title"; String:C10($content)\
+				))
+			
+		End if 
+		
+		
+	End if 
+	
+	//===================================================================================
+Function downloadSDK($server : Text; $target : Text; $silent : Boolean)
+	
+	This:C1470.addTask("downloadSDK")
+	
+	If (Count parameters:C259>=3)
+		
+		CALL WORKER:C1389(1; "downloadSDK"; $server; "android"; $silent; This:C1470.window)
+		
+	Else 
+		
+		CALL WORKER:C1389(1; "downloadSDK"; $server; "android"; False:C215; This:C1470.window)
+		
+	End if 
+	

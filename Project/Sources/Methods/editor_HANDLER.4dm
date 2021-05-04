@@ -76,7 +76,7 @@ Case of
 				$o.defaultDelay()
 				$o.defaultDuration()
 				
-				EDITOR.gotoPage("general")
+				EDITOR.displayPage("general")
 				
 				// Load the project
 				PROJECT:=cs:C1710.project.new().load(Form:C1466.file)

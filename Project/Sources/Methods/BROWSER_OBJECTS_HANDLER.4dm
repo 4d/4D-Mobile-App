@@ -1,5 +1,4 @@
 //%attributes = {"invisible":true}
-//%attributes = {"invisible":true}
 // ----------------------------------------------------
 // Project method : BROWSER_OBJECTS_HANDLER
 // ID[5FD48D75EE7A4BF89BFF64B772B9C79B]
@@ -10,8 +9,10 @@
 // ----------------------------------------------------
 // Declarations
 var $formName; $url : Text
-var $archive; $e; $folderDestination; $form : Object
+var $e : Object
 var $c : Collection
+var $destination : 4D:C1709.Folder
+var $archive : 4D:C1709.ZipArchive
 var $http : cs:C1710.http
 var $progress : cs:C1710.progress
 
@@ -27,16 +28,17 @@ Case of
 		//______________________________________________________
 	: ($e.objectName="webarea")
 		
-		$form:=BROWSER_Handler(New object:C1471(\
-			"action"; "init"))
-		
 		Case of 
 				
 				//………………………………………………………………………………………………………………
 			: ($e.code=On Load:K2:1)
 				
+				//
+				
 				//………………………………………………………………………………………………………………
 			: ($e.code=On Unload:K2:2)
+				
+				//
 				
 				//………………………………………………………………………………………………………………
 			: ($e.code=On Begin URL Loading:K2:45)
@@ -52,7 +54,7 @@ Case of
 			: ($e.code=On End URL Loading:K2:47)
 				
 				// Mask the spinner
-				$form.wait.hide()
+				cs:C1710.thermometer.new("spinner").hide()
 				
 				//………………………………………………………………………………………………………………
 			: ($e.code=On URL Loading Error:K2:48)
@@ -64,7 +66,7 @@ Case of
 				 | ($e.code=On URL Loading Error:K2:48)\
 				 | ($e.code=On Window Opening Denied:K2:51)
 				
-				$url:=$form.web.lastFiltered()
+				$url:=cs:C1710.webArea.new("webArea").lastFiltered()
 				
 				$c:=Split string:C1554($url; "/")
 				
@@ -72,8 +74,6 @@ Case of
 						
 						//______________________________________________________
 					: ($c.indexOf("download")#-1)
-						
-						//https://github.com/4d-for-ios/form-detail-SimpleHeader/releases/download/0.0.1/form-detail-SimpleHeader.zip
 						
 						$formName:=$c.pop()  // Name of the archive
 						
@@ -83,17 +83,17 @@ Case of
 								//……………………………………………………………………………………
 							: ($formName="form-list@")
 								
-								$folderDestination:=cs:C1710.path.new().hostlistForms(True:C214)
+								$destination:=cs:C1710.path.new().hostlistForms(True:C214)
 								
 								//……………………………………………………………………………………
 							: ($formName="form-detail@")
 								
-								$folderDestination:=cs:C1710.path.new().hostdetailForms(True:C214)
+								$destination:=cs:C1710.path.new().hostdetailForms(True:C214)
 								
 								//……………………………………………………………………………………
 							: ($formName="formatter-@")
 								
-								$folderDestination:=cs:C1710.path.new().hostFormatters(True:C214)
+								$destination:=cs:C1710.path.new().hostFormatters(True:C214)
 								
 								//……………………………………………………………………………………
 							Else 
@@ -103,9 +103,9 @@ Case of
 								//……………………………………………………………………………………
 						End case 
 						
-						If ($folderDestination.exists)
+						If ($destination.exists)
 							
-							If (Not:C34($folderDestination.file($formName).exists))  // Download
+							If (Not:C34($destination.file($formName).exists))  // Download
 								
 								$archive:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file($formName)
 								
@@ -134,7 +134,7 @@ Case of
 									
 									If ($http.success)
 										
-										$folderDestination:=$archive.copyTo($folderDestination; fk overwrite:K87:5)
+										$destination:=$archive.copyTo($destination; fk overwrite:K87:5)
 										
 										$c:=Split string:C1554(Form:C1466.url; "/")
 										
@@ -173,7 +173,44 @@ Case of
 								
 							Else 
 								
-								Form:C1466.selector:=$c[$c.length-3]
+								If (FEATURE.with("android"))
+									
+									Case of 
+											
+											//______________________________________________________
+										: (Position:C15("form-list"; $formName)=1)
+											
+											Form:C1466.selector:="form-list"
+											
+											//______________________________________________________
+										: (Position:C15("form-detail"; $formName)=1)
+											
+											Form:C1466.selector:="form-detail"
+											
+											//______________________________________________________
+										: (Position:C15("form-formatter"; $formName)=1)
+											
+											Form:C1466.selector:="form-formatter"
+											
+											//______________________________________________________
+										: (Position:C15("form-login"; $formName)=1)
+											
+											Form:C1466.selector:="form-login"
+											
+											//______________________________________________________
+										Else 
+											
+											RECORD.warning("Unknown resource: "+$formName)
+											
+											//______________________________________________________
+									End case 
+									
+								Else 
+									
+									Form:C1466.selector:=$c[$c.length-3]
+									
+								End if 
+								
 								Form:C1466.form:="/"+$formName
 								
 								CALL SUBFORM CONTAINER:C1086(-1)
@@ -185,25 +222,13 @@ Case of
 							// ERROR
 							EDITOR.hideBrowser()
 							
-							If ($folderDestination=Null:C1517)
+							If ($destination=Null:C1517)
 								
-								POST_MESSAGE(New object:C1471(\
-									"target"; Current form window:C827; \
-									"action"; "show"; \
-									"type"; "alert"; \
-									"title"; "fileNotFound"; \
-									"additional"; "theAliasMobileOriginalCan'tBeFound"\
-									))
+								EDITOR.doAlert("fileNotFound"; "theAliasMobileOriginalCan'tBeFound")
 								
 							Else 
 								
-								POST_MESSAGE(New object:C1471(\
-									"target"; Current form window:C827; \
-									"action"; "show"; \
-									"type"; "alert"; \
-									"title"; "fileNotFound"; \
-									"additional"; "fileNotFound"\
-									))
+								EDITOR.doAlert("fileNotFound"; $destination.path)
 								
 							End if 
 						End if 
@@ -246,9 +271,3 @@ Case of
 		
 		//______________________________________________________
 End case 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

@@ -19,48 +19,6 @@ $e:=FORM Event:C1606
 Case of 
 		
 		//=============================================================================
-	: ($e.objectName="browser")
-		
-		If ($e.code=-1)  // Hide
-			
-			EDITOR.hideBrowser()
-			
-			$widget:=EDITOR.browser
-			$data:=$widget.getValue()
-			
-			If ($data.form#Null:C1517)
-				
-				Case of 
-						
-						//______________________________________________________
-					: ($data.selector="form-list")\
-						 | ($data.selector="form-detail")  // Forms
-						
-						$data.action:="forms"
-						$data.selector:=Replace string:C233($data.selector; "form-"; "")
-						ASSERT:C1129(($data.selector="detail") | ($data.selector="list"))
-						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "setForm"; $data)
-						
-						//______________________________________________________
-					: ($data.selector="form-formatter")
-						
-						//
-						
-						//______________________________________________________
-					: ($data.selector="form-login")
-						
-						//
-						
-						//______________________________________________________
-					Else 
-						
-						// A "Case of" statement should never omit "Else"
-						//______________________________________________________
-				End case 
-			End if 
-		End if 
-		
-		//=============================================================================
 	: ($e.objectName="message")
 		
 		Case of 

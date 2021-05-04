@@ -2,7 +2,7 @@
 OBJECT SET VISIBLE:C603(*; "ribbon"; True:C214)
 OBJECT SET VISIBLE:C603(*; "description"; True:C214)
 
-EDITOR.gotoPage("general")
+EDITOR.displayPage("general")
 
 If (FEATURE.with("wizards"))
 	
@@ -25,7 +25,7 @@ Else
 		"caller"; Current form window:C827))
 	
 	// Launch recovering the list of available simulator devices
-	CALL WORKER:C1389($worker; "simulator"; New object:C1471(\
+	CALL WORKER:C1389($worker; "_o_simulator"; New object:C1471(\
 		"action"; "devices"; \
 		"filter"; "available"; \
 		"minimumVersion"; SHARED.iosDeploymentTarget; \

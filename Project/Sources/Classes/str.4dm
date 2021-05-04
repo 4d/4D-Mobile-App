@@ -1036,7 +1036,9 @@ Function htmlEncode()->$html : Text
 	
 	For ($i; 1; Length:C16(This:C1470.value); 1)
 		
+		//%W-533.1
 		$char:=This:C1470.value[[$i]]
+		//%W+533.1
 		
 		If ($o[$char]=Null:C1517)
 			

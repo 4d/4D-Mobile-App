@@ -159,6 +159,6 @@ End case
 // Return
 If (Bool:C1537($in.caller))
 	
-	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "simulator"; $out)
+	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "getDevices"; $out)
 	
 End if 

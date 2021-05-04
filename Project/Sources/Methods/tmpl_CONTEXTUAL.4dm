@@ -1,26 +1,18 @@
 //%attributes = {"invisible":true}
-C_OBJECT:C1216($1)
+#DECLARE($infos : Object)
 
-C_TEXT:C284($t)
-C_OBJECT:C1216($file; $menu; $o; $o_infos)
+var $form : Text
+var $download : Object
+var $file : 4D:C1709.File
+var $menu : cs:C1710.menu
 
-If (False:C215)
-	C_OBJECT:C1216(tmpl_CONTEXTUAL; $1)
-End if 
-
-$o_infos:=$1
-
-If ($o_infos#Null:C1517)
-	
-	//$http:=cs.http.new($o_infos.updateURL)
-	//$http.request(HTTP HEAD method)
-	
+If ($infos#Null:C1517)
 	$menu:=cs:C1710.menu.new()\
 		.append("accessTheGithubRepository"; "show")\
 		.line()\
 		.append("downloadTheLatestRevision"; "update")
 	
-	If (Not:C34($o_infos.used))
+	If (Not:C34($infos.used))
 		
 		$menu\
 			.line()\
@@ -38,40 +30,36 @@ If ($o_infos#Null:C1517)
 			//______________________________________________________
 		: ($menu.choice="show")
 			
-			OPEN URL:C673($o_infos.homepage)
+			OPEN URL:C673($infos.homepage)
 			
 			//______________________________________________________
 		: ($menu.choice="update")
 			
-			//$http:=cs.http.new($o_infos.updateURL)
-			//$http.request(HTTP HEAD method)
-			
-			$o:=browser_DOWNLOAD(New object:C1471(\
-				"url"; $o_infos.updateURL; \
+			$download:=browser_DOWNLOAD(New object:C1471(\
+				"url"; $infos.updateURL; \
 				"overwrite"; True:C214))
 			
 			Case of 
 					
 					//______________________________________________________
-				: ($o.success)
+				: ($download.success) | ($download.error=Null:C1517)
+					
+					// <NOTHING MORE TO DO>
 					
 					//______________________________________________________
-				: ($o.error=Null:C1517)
-					
-					//______________________________________________________
-				: ($o.error="cannotResolveAlias")
+				: ($download.error="cannotResolveAlias")
 					
 					ALERT:C41(Get localized string:C991("theAliasMobileOriginalCan'tBeFound"))
 					
 					//______________________________________________________
-				: ($o.error="fileNotFound")
+				: ($download.error="fileNotFound")
 					
 					ALERT:C41(Get localized string:C991("fileNotFound'tBeFound"))
 					
 					//______________________________________________________
 				Else 
 					
-					ALERT:C41($o.error)
+					ALERT:C41($download.error)
 					
 					//______________________________________________________
 			End case 
@@ -79,19 +67,19 @@ If ($o_infos#Null:C1517)
 			//______________________________________________________
 		: ($menu.choice="forget")
 			
-			$t:=Split string:C1554($o_infos.updateURL; "/").pop()
+			$form:=Split string:C1554($infos.updateURL; "/").pop()
 			
 			Case of 
 					
 					//……………………………………………………………………………………
-				: ($t="form-list@")
+				: ($form="form-list@")
 					
-					$file:=cs:C1710.path.new().hostlistForms().file($t)
+					$file:=cs:C1710.path.new().hostlistForms().file($form)
 					
 					//……………………………………………………………………………………
-				: ($t="form-detail@")
+				: ($form="form-detail@")
 					
-					$file:=cs:C1710.path.new().hostdetailForms().file($t)
+					$file:=cs:C1710.path.new().hostdetailForms().file($form)
 					
 					//……………………………………………………………………………………
 				Else 

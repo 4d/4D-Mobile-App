@@ -86,10 +86,10 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($message="structureCheckingResult")  // Callback from 'structure'
+	: ($message="checkProject")  // Callback from 'structure'
 		
 		// Update task list
-		EDITOR.removeTask("checkProject")
+		EDITOR.removeTask($message)
 		
 		If ($in.success)
 			
@@ -104,12 +104,12 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($message="simulator")
+	: ($message="getDevices")  // Callback from 'editor_GET_DEVICES'
 		
 		If (FEATURE.with("android"))  //🚧
 			
 			// Update task list
-			EDITOR.removeTask("getDevices")
+			EDITOR.removeTask($message)
 			
 			// Store the result
 			EDITOR.devices:=$in
@@ -137,7 +137,7 @@ Case of
 		//______________________________________________________
 	: ($message="goToPage")
 		
-		EDITOR.gotoPage($in.page)
+		EDITOR.displayPage($in.page)
 		
 		Form:C1466.$dialog[$form.editor].ribbon.page:=EDITOR.currentPage
 		
@@ -160,18 +160,30 @@ Case of
 		End case 
 		
 		//______________________________________________________
-	: ($message="checkInstall")
+	: ($message="checkDevTools")  // Callback from 'editor_CHECK_INSTALLATION'
 		
 		If (FEATURE.with("android"))  //🚧
 			
 			// Update task list
-			EDITOR.removeTask("checkDevTools")
+			EDITOR.removeTask($message)
 			
 			If ($in#Null:C1517)
 				
 				// Store the result
-				EDITOR.xCode:=$in.xCode
 				EDITOR.studio:=$in.studio
+				
+				//If (EDITOR.studio.ready)
+				//If (EDITOR.android)
+				//$fileManifest:=cs.path.new().cacheSdkAndroid().parent.file("manifest.json")
+				//If (Not($fileManifest.exists))\
+					 | ($fileManifest.modificationDate#Current date)
+				//// Get the last 4D Mobile Android SDK from AWS server if any
+				//EDITOR.downloadSDK("aws"; "android"; False)
+				//End if 
+				//End if 
+				//End if 
+				
+				EDITOR.xCode:=$in.xCode
 				
 			End if 
 			

@@ -38,6 +38,8 @@ Case of
 		//……………………………………………………………………………………
 End case 
 
+$out.folder.create()
+
 If ($out.folder.exists)
 	
 	$out.file:=$out.folder.file($out.form)
@@ -56,7 +58,7 @@ If ($out.folder.exists)
 		$progress:=cs:C1710.progress.new("downloadInProgress")\
 			.showStop()\
 			.setMessage($out.form)\
-			.bringToFront()  // ------ ->
+			.bringToFront()  // ------------------------------------------ ->
 		
 		$http:=cs:C1710.http.new($in.url)
 		$http.setResponseType(Is a document:K24:1; $archive)
@@ -77,9 +79,6 @@ If ($out.folder.exists)
 				$out.success:=($out.file#Null:C1517)
 				
 				If ($out.success)
-					
-					
-					
 					
 				End if 
 				

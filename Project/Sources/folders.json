@@ -157,6 +157,7 @@
 	},
 	"[BROWSER]": {
 		"methods": [
+			"BROWSER_CONTAINER",
 			"browser_DOWNLOAD",
 			"BROWSER_Handler",
 			"BROWSER_OBJECTS_HANDLER",

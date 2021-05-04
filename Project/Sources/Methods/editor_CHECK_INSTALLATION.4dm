@@ -138,6 +138,6 @@ End case
 
 If (Bool:C1537($in.caller))
 	
-	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "checkInstall"; $out)
+	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "checkDevTools"; $out)
 	
 End if 
