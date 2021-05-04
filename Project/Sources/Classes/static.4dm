@@ -32,6 +32,11 @@ Function hide()->$this : cs:C1710.static
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
+Function isHidden()->$hidden : Boolean
+	
+	$hidden:=Not:C34(OBJECT Get visible:C1075(*; This:C1470.name))
+	
+	//=== === === === === === === === === === === === === === === === === === ===
 Function show($state : Boolean)->$this : cs:C1710.static
 	
 	If (Count parameters:C259>=1)

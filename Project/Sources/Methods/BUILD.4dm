@@ -29,7 +29,7 @@ End if
 
 // ----------------------------------------------------
 
-Form:C1466.build:=True:C214  // Stop reentrance
+EDITOR.build:=True:C214  // Stop reentrance
 
 POST_MESSAGE(New object:C1471(\
 "target"; $in.caller; \

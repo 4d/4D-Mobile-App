@@ -87,7 +87,7 @@ Case of
 				//…………………………………………………………………………………………………
 			: ($e.code=153)  // Install
 				
-				If (Not:C34(Bool:C1537(Form:C1466.build)))
+				If (Not:C34(Bool:C1537(EDITOR.build)))
 					
 					// Autosave
 					PROJECT.save()

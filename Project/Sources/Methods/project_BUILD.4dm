@@ -458,12 +458,6 @@ If (Asserted:C1132($project#Null:C1517))
 		End if 
 	End if 
 	
-	OB REMOVE:C1226(Form:C1466; "build")
+	OB REMOVE:C1226(EDITOR; "build")
 	
 End if 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

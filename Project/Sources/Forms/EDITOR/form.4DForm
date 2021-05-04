@@ -67,6 +67,37 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable"
+				},
+				"tasks": {
+					"type": "progress",
+					"left": 810,
+					"top": 10,
+					"width": 131,
+					"height": 9,
+					"visibility": "hidden",
+					"sizingX": "move",
+					"labelsPlacement": "none",
+					"continuousExecution": false
+				},
+				"taskDescription": {
+					"type": "input",
+					"top": 26,
+					"left": 810,
+					"width": 131,
+					"height": 12,
+					"sizingX": "move",
+					"dataSource": "EDITOR.currentTask",
+					"focusable": false,
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"dropping": "none",
+					"events": [],
+					"fontSize": 9,
+					"textAlign": "center",
+					"stroke": "#FFFFFF",
+					"dragging": "none",
+					"fill": "transparent"
 				}
 			}
 		},
@@ -182,37 +213,6 @@
 					"sizingX": "grow",
 					"sizingY": "move",
 					"visibility": "hidden"
-				},
-				"tasks": {
-					"type": "progress",
-					"left": 810,
-					"top": 10,
-					"width": 131,
-					"height": 9,
-					"visibility": "hidden",
-					"sizingX": "move",
-					"labelsPlacement": "none",
-					"continuousExecution": false
-				},
-				"taskName": {
-					"type": "input",
-					"top": 26,
-					"left": 810,
-					"width": 131,
-					"height": 12,
-					"sizingX": "move",
-					"dataSource": "EDITOR.currentTask",
-					"focusable": false,
-					"enterable": false,
-					"hideFocusRing": true,
-					"contextMenu": "none",
-					"dropping": "none",
-					"events": [],
-					"fontSize": 9,
-					"textAlign": "center",
-					"stroke": "#FFFFFF",
-					"dragging": "none",
-					"fill": "transparent"
 				}
 			}
 		},
@@ -284,7 +284,7 @@
 			}
 		}
 	},
-	"geometryStamp": 167,
+	"geometryStamp": 170,
 	"width": 970,
 	"height": 870
 }

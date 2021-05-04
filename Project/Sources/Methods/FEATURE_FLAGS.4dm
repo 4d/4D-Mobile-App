@@ -119,18 +119,18 @@ FEATURE.delivered(117618; 1850)  // Deep Linking
 18R6
 _____________*/
 FEATURE.unstable(117601)  // Relation management optimisation
-FEATURE.unstable("templateClass")
+FEATURE.unstable("templateClass")  // use MainTemplate class instead of _o_templates
 FEATURE.unstable("searchWithBarCode")
 
 /* _____________
 1900
 _____________*/
-FEATURE.unstable("withSimulatorClass")  // Use simctl intead of _o_simulator
+FEATURE.unstable("withSimulatorClass")  // Use simctl class intead of _o_simulator
 FEATURE.unstable("android")  // Android support global flag
 FEATURE.unstable("wizards")  // Use a wizard instead of standard dialogs to create or open a project
 
 /* _____________
-1900 BETA
+1900 - BETA
 _____________*/
 FEATURE.unstable("androidBeta")  // Android support during beta phase
 

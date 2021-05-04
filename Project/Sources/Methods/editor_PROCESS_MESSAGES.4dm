@@ -176,7 +176,7 @@ Case of
 				//If (EDITOR.android)
 				//$fileManifest:=cs.path.new().cacheSdkAndroid().parent.file("manifest.json")
 				//If (Not($fileManifest.exists))\
-					 | ($fileManifest.modificationDate#Current date)
+															 | ($fileManifest.modificationDate#Current date)
 				//// Get the last 4D Mobile Android SDK from AWS server if any
 				//EDITOR.downloadSDK("aws"; "android"; False)
 				//End if 
@@ -239,16 +239,14 @@ Case of
 		
 		// build = Result of the build/archive action
 		// build_stop =  Cancel build process
-		OB REMOVE:C1226(Form:C1466; "build")
+		OB REMOVE:C1226(EDITOR; "build")
 		
 		// Remove the temporary authorizations, if any
-		$o:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->
-		
-		For each ($t; $o)
+		For each ($t; PROJECT)
 			
 			If ($t="$_@")
 				
-				OB REMOVE:C1226($o; $t)
+				OB REMOVE:C1226(PROJECT; $t)
 				
 			End if 
 		End for each 

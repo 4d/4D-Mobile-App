@@ -177,7 +177,10 @@ Function widgetsDefinition()
 	This:C1470.description:=cs:C1710.subform.new("description")
 	This:C1470.project:=cs:C1710.subform.new("project")
 	This:C1470.footer:=cs:C1710.subform.new("footer")
+	
 	This:C1470.taskIndicator:=cs:C1710.thermometer.new("tasks").barber().start()
+	This:C1470.taskDescription:=cs:C1710.static.new("taskDescription")
+	This:C1470.taskUI:=cs:C1710.group.new(This:C1470.taskIndicator; This:C1470.taskDescription)
 	
 	This:C1470.browser:=cs:C1710.subform.new("browser")
 	
@@ -382,6 +385,8 @@ Function displayPage($page : Text)
 	//===================================================================================
 Function addTask($task : Text)
 	
+	var $t : Text
+	
 	If (This:C1470.pendingTasks.query("name = :1"; $task).pop()=Null:C1517)
 		
 		RECORD.info("START: "+$task)
@@ -391,13 +396,12 @@ Function addTask($task : Text)
 		
 	End if 
 	
-	If (Num:C11(Application version:C493)>1900)
+	If (Num:C11(Application version:C493)>1900)  //🚧
 		
-		This:C1470.taskIndicator.show()
-		
-		var $t : Text
 		$t:=Get localized string:C991($task)
 		This:C1470.currentTask:=Choose:C955(Length:C16($t)>0; $t; $task)
+		
+		This:C1470.taskUI.show(This:C1470.message.isHidden())
 		
 	End if 
 	
@@ -405,6 +409,7 @@ Function addTask($task : Text)
 Function removeTask($task : Text)
 	
 	var $indx : Integer
+	var $t; $task : Text
 	
 	$indx:=This:C1470.pendingTasks.extract("name").indexOf($task)
 	
@@ -416,11 +421,15 @@ Function removeTask($task : Text)
 		
 	End if 
 	
-	If (Num:C11(Application version:C493)>1900)
+	If (Num:C11(Application version:C493)>1900)  // 🚧
 		
 		If (This:C1470.pendingTasks.length>0)
 			
-			This:C1470.taskIndicator.show()
+			$task:=This:C1470.pendingTasks[0].name
+			$t:=Get localized string:C991($task)
+			This:C1470.currentTask:=Choose:C955(Length:C16($t)>0; $t; $task)
+			
+			This:C1470.taskUI.show(This:C1470.message.isHidden())
 			
 		Else 
 			
@@ -558,8 +567,6 @@ Function doAlert($content; $additional : Text)
 				))
 			
 		End if 
-		
-		
 	End if 
 	
 	//===================================================================================
