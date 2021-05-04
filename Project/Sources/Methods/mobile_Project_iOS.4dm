@@ -113,8 +113,6 @@ End if
 
 $verbose:=Bool:C1537($in.verbose) & Bool:C1537($in.caller)
 
-$verbose:=False:C215
-
 $log:=New object:C1471(\
 "information"; Choose:C955($verbose; Formula:C1597(CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471("message"; $1; "importance"; Information message:K38:1))); Formula:C1597(IDLE:C311)); \
 "error"; Choose:C955($verbose; Formula:C1597(CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471("message"; $1; "importance"; Error message:K38:3))); Formula:C1597(IDLE:C311))\
