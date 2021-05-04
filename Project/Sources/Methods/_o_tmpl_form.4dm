@@ -17,9 +17,9 @@ C_TEXT:C284($t; $t_formName; $t_typeForm)
 C_OBJECT:C1216($archive; $error; $fileManifest; $o; $pathForm)
 
 If (False:C215)
-	C_OBJECT:C1216(tmpl_form; $0)
-	C_TEXT:C284(tmpl_form; $1)
-	C_TEXT:C284(tmpl_form; $2)
+	C_OBJECT:C1216(_o_tmpl_form; $0)
+	C_TEXT:C284(_o_tmpl_form; $1)
+	C_TEXT:C284(_o_tmpl_form; $2)
 End if 
 
 // ----------------------------------------------------

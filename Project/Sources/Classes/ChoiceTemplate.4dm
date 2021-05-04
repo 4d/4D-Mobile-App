@@ -44,7 +44,8 @@ Function makeTheChoice
 		
 		If (Length:C16($Txt_name)>0)
 			
-			$pathForm:=tmpl_form($Txt_name; String:C10($Obj_template.projectTag))
+			//$pathForm:=_o_tmpl_form($Txt_name; String($Obj_template.projectTag))
+			$pathForm:=cs:C1710.tmpl.new().getSources($Txt_name; String:C10($Obj_template.projectTag))
 			
 			If (Path to object:C1547($Txt_name).extension=SHARED.archiveExtension)  // Archive
 				

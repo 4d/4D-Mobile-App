@@ -103,7 +103,7 @@ Case of
 			
 			If (Length:C16($Txt_name)>0)
 				
-				$pathForm:=tmpl_form($Txt_name; String:C10($Obj_template.projectTag))
+				$pathForm:=_o_tmpl_form($Txt_name; String:C10($Obj_template.projectTag))
 				
 				If (Path to object:C1547($Txt_name).extension=SHARED.archiveExtension)  // Archive
 					
@@ -194,7 +194,7 @@ Case of
 			
 			If ($t[[1]]="/")  // custom form
 				
-				$pathForm:=tmpl_form($t; String:C10($Obj_template.userChoiceTag))
+				$pathForm:=_o_tmpl_form($t; String:C10($Obj_template.userChoiceTag))
 				
 				If (Bool:C1537($pathForm.exists))
 					

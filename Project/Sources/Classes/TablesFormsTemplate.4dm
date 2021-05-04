@@ -62,7 +62,8 @@ Function doRun
 		C_OBJECT:C1216($pathForm; $folder; $file)
 		If ($t[[1]]="/")  // custom form
 			
-			$pathForm:=tmpl_form($t; String:C10($Obj_template.userChoiceTag))
+			//$pathForm:=_o_tmpl_form($t; String($Obj_template.userChoiceTag))
+			$pathForm:=cs:C1710.tmpl.new().getSources($t; String:C10($Obj_template.userChoiceTag))
 			
 			If (Bool:C1537($pathForm.exists))
 				

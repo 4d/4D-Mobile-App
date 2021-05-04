@@ -7,7 +7,7 @@ Class constructor($name : Text; $type : Text)
 	
 	Super:C1705()
 	
-	var $file : Object
+	var $file : 4D:C1709.File
 	
 	This:C1470.upToDate:=False:C215
 	This:C1470.android:=False:C215

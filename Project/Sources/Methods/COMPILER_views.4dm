@@ -9,11 +9,6 @@ If (False:C215)
 	C_LONGINT:C283(VIEWS_OBJECTS_HANDLER; $0)
 	
 	// ----------------------------------------------------
-	C_PICTURE:C286(_o_tables_Widget; $0)
-	C_OBJECT:C1216(_o_tables_Widget; $1)
-	C_OBJECT:C1216(_o_tables_Widget; $2)
-	
-	// ----------------------------------------------------
 End if 
 
 If (False:C215)
@@ -53,9 +48,9 @@ If (False:C215)
 	C_OBJECT:C1216(tmpl_CONTEXTUAL; $1)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(tmpl_form; $0)
-	C_TEXT:C284(tmpl_form; $1)
-	C_TEXT:C284(tmpl_form; $2)
+	C_OBJECT:C1216(_o_tmpl_form; $0)
+	C_TEXT:C284(_o_tmpl_form; $1)
+	C_TEXT:C284(_o_tmpl_form; $2)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(tmpl_INFOS; $1)
