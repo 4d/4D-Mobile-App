@@ -88,7 +88,8 @@ class App : BaseApp() {
             team = QMobileUiUtil.appUtilities.teams
             language = QMobileUiUtil.deviceUtility.language
             guestLogin = QMobileUiUtil.appUtilities.guestLogin
-            remoteUrl = QMobileUiUtil.appUtilities.remoteUrl
+            if (remoteUrl.isEmpty())
+                remoteUrl = QMobileUiUtil.appUtilities.remoteUrl
             sdkVersion = QMobileUiUtil.appUtilities.sdkVersion
             dumpedTables = QMobileUiUtil.appUtilities.dumpedTables
             initialGlobalStamp = QMobileUiUtil.appUtilities.initialGlobalStamp
