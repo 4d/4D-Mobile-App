@@ -105,6 +105,35 @@ Function postError($message : Text)
 		"target"; This:C1470.input.caller; \
 		"additional"; $message))
 	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function postErrors($errors : Collection)
+	var $message : Text
+	$message:=""
+	var $first : Boolean
+	$first:=True:C214
+	var $error : Variant
+	For each ($error; $errors)
+		If ($first)
+			$first:=False:C215
+		Else 
+			$message:=$message+"\r"
+		End if 
+		Case of 
+			: (Value type:C1509($error)=Is text:K8:3)
+				$message:=$message+$error
+			: (Value type:C1509($error)=Is object:K8:27)
+				$message:=$message+JSON Stringify:C1217($error)  // XXX maybe extract message key, but do we loose info?
+			: (Value type:C1509($error)=Is collection:K8:32)
+				$message:=$message+JSON Stringify:C1217($error)
+			Else 
+				$message:=$message+String:C10($error)
+		End case 
+	End for each 
+	
+	This:C1470.postError($message)
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function themeImageFile()->$theme : 4D:C1709.File

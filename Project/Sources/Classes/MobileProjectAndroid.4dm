@@ -256,7 +256,7 @@ Function create()->$result : Object
 			
 			$o.errors.insert(0; Get localized string:C991("failedToCreateTheProject"))
 			
-			This:C1470.postError($o.errors.join("\r"))
+			This:C1470.postErrors($o.errors)
 			$result.errors.combine($o.errors)
 			
 		Else 
@@ -332,7 +332,7 @@ Function build()->$result : Object
 			
 			$o.errors.insert(0; "projectBuildFailure")
 			
-			This:C1470.postError($o.errors.join("\r"))
+			This:C1470.postErrors($o.errors)
 			$result.errors.combine($o.errors)
 			
 		Else 
@@ -410,7 +410,7 @@ Function run()->$result : Object
 			
 			$o.errors.insert(0; Get localized string:C991("failedToLaunchTheSimulator"))
 			
-			This:C1470.postError($o.errors.join("\r"))
+			This:C1470.postErrors($o.errors)
 			$result.errors.combine($o.errors)
 			
 		Else 
