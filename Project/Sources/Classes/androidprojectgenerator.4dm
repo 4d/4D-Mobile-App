@@ -161,13 +161,28 @@ Function copyResources
 			
 			For each ($currentFile; $currentFolder.files())
 				
-				If ($currentFolder.name="main")  // playstore image
+				If ($currentFolder.name="main")
 					
+					// for Play Store
 					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main"); fk overwrite:K87:5)
 					
 				Else 
 					
+					// for API > 25
 					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/"+$currentFolder.name); fk overwrite:K87:5)
+					
+					// for API 25
+					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/"+$currentFolder.name); "ic_launcher_round.png"; fk overwrite:K87:5)
+					
+					// for API < 25
+					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/"+$currentFolder.name); "ic_launcher.png"; fk overwrite:K87:5)
+					
+					If ($currentFolder.name="mipmap-xxxhdpi")
+						
+						// for login form, splash screen
+						$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/drawable"); "logo.png"; fk overwrite:K87:5)
+						
+					End if 
 					
 				End if 
 				
@@ -251,6 +266,8 @@ Function copyIcons
 		
 		For each ($dataModel; OB Entries:C1720($2))
 			
+			$currentFile:=Null:C1517
+			
 			If (OB Is defined:C1231($dataModel.value[""]; "icon"))
 				
 				$iconPath:=$dataModel.value[""].icon
@@ -259,32 +276,49 @@ Function copyIcons
 					
 					$currentFile:=$path.icon($iconPath)
 					
-					If (Not:C34($currentFile.exists))
-						
-						$currentFile:=$tableIcons.parent.file("missingIcon.svg")
-						
-						// else : file exists
-					End if 
-					
-					$newName:=Lowercase:C14($currentFile.name)
-					Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$newName; 0)
-					$newName:=$newName+$currentFile.extension
-					
-					$copyDest:=$currentFile.copyTo($drawableFolder; $newName; fk overwrite:K87:5)
-					
-					If (Not:C34($copyDest.exists))  // Copy failed
-						
-						$0.success:=False:C215
-						$0.errors.push("Could not copy file to destination: "+$copyDest.path)
-						
-						//Else : all ok
-					End if 
-					
-					// Else: no icon defined
 				End if 
 				
-				// Else: no icon defined
+			End if 
+			
+			
+			If (Not:C34(Bool:C1537($currentFile.exists)))
 				
+				var $Obj_createIcon : Object
+				
+				$Obj_createIcon:=This:C1470.createIconAssets($dataModel.value[""])
+				
+				If ($Obj_createIcon.success)
+					
+					$currentFile:=$Obj_createIcon.icon
+					
+				Else 
+					
+					$0.success:=False:C215
+					$0.errors.combine($Obj_createIcon.errors)
+					
+				End if 
+				
+			End if 
+			
+			If (Bool:C1537($currentFile.exists))
+				
+				$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_nav_icon"; "nav_icon_"+$dataModel.key)
+				
+				$newName:=Lowercase:C14($newName)
+				Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$newName; 0)
+				$newName:=$newName+$currentFile.extension
+				
+				$copyDest:=$currentFile.copyTo($drawableFolder; $newName; fk overwrite:K87:5)
+				
+				If (Not:C34($copyDest.exists))  // Copy failed
+					
+					$0.success:=False:C215
+					$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+					
+					//Else : all ok
+				End if 
+				
+				// Else : already handled
 			End if 
 			
 		End for each 
@@ -322,6 +356,101 @@ Function copyIcons
 		$0.errors.push("Missing icons folder : "+$tableIcons.path)
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function createIconAssets
+	var $0 : Object
+	var $1 : Object  // Table object metadata
+	
+	$0:=New object:C1471(\
+		"icon"; New object:C1471; \
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	// Generate asset using first table letter
+	var $file : 4D:C1709.File
+	$file:=File:C1566("/RESOURCES/Images/missingIcon.svg")
+	
+	var $svg : cs:C1710.svg
+	$svg:=cs:C1710.svg.new($file)
+	
+	If (Asserted:C1132($svg.success; "Failed to parse: "+$file.path))
+		
+		var $t : Text
+		$t:=$1.shortLabel
+		
+		If (Length:C16($t)>0)
+			
+			// Take first letter
+			$t:=Uppercase:C13($t[[1]])
+			
+		Else 
+			
+			//%W-533.1
+			$t:=Uppercase:C13($1.name[[1]])  // 4D table names are not empty
+			//%W+533.1
+			
+		End if 
+		
+		$svg.setValue($t; $svg.findByXPath("/svg/textArea"))
+		
+		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("qmobile_android_missing_nav_icon.svg")
+		$file.delete()
+		
+		$svg.exportText($file)
+		
+		If ($file.exists)
+			
+			var $source : Text
+			$source:=$file.platformPath
+			
+			var $Pic_buffer : Picture
+			READ PICTURE FILE:C678($source; $Pic_buffer)
+			
+			If (OK=1)
+				
+				var $Pic_icon : Picture
+				CREATE THUMBNAIL:C679($Pic_buffer; $Pic_icon; 32; 32; Scaled to fit:K6:2)
+				
+				If (OK=1)
+					
+					var $newFile : 4D:C1709.File
+					$newFile:=$file.parent.file($file.name+".png")
+					$newFile.delete()
+					
+					WRITE PICTURE FILE:C680($newFile.platformPath; $Pic_icon; ".png")
+					
+					If (OK=0)
+						
+						$0.errors.push("Failed to write picture "+$newFile.path)
+						
+					Else 
+						
+						$0.success:=True:C214
+						$0.icon:=$newFile
+						
+					End if 
+					
+				Else 
+					
+					$0.errors.push("Failed to create thumbnail for "+$file.path)
+					
+				End if 
+				
+			Else 
+				
+				$0.errors.push("Failed to read picture : "+$file.path)
+				
+			End if 
+			
+			
+		Else 
+			
+			$0.errors.push("Could not create icon asset : "+$file.path)
+			
+		End if 
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
