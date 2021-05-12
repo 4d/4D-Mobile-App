@@ -135,124 +135,84 @@ Function create()->$result : Object
 			This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream))
 			This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream))
 			
-			If ($o.success)
+		End if 
+		
+		If ($o.success)
+			
+			// * GRADLEW ACCESS RIGHTS
+			If (Is macOS:C1572)  // No need to change permissions on Windows
 				
-				// * GRADLEW ACCESS RIGHTS
-				If (Is macOS:C1572)  // No need to change permissions on Windows
-					
-					$o:=This:C1470.androidprojectgenerator.chmod(This:C1470.project.path)
-					
-				End if 
-				
-				If ($o.success)
-					
-					// * BUILD EMBEDDED DATA LIBRARY
-					This:C1470.postStep("dataSetGeneration")
-					
-					$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.project.package)
-					
-					If ($o.success)
-						
-						// * COPY EMBEDDED DATA LIBRARY
-						$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib(This:C1470.project.path)
-						
-						If ($o.success)
-							
-							// * CREATE DATASET
-							
-							If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
-								
-								$o:=This:C1470.dataSet()
-								
-								// Else: asked to not generate data at each build
-							End if 
-							
-							If ($o.success)
-								
-								// * COPY RESOURCES
-								This:C1470.postStep("copyingResources")
-								
-								$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
-								
-								If ($o.success)
-									
-									// * COPY ICONS
-									$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.path; This:C1470.project.project.dataModel)
-									
-									If ($o.success)
-										
-										If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
-											
-											$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.path; This:C1470.project.project._folder)
-											
-											// Else: asked to not generate data at each build
-										End if 
-										
-										If ($o.success)
-											
-											$o:=This:C1470.androidprojectgenerator.copySdkVersion(This:C1470.project.path)
-											
-											If (Not:C34($o.success))
-												
-												This:C1470.isOnError:=True:C214
-												
-											End if 
-											
-										Else 
-											
-											This:C1470.isOnError:=True:C214
-											
-										End if 
-										
-									Else 
-										
-										This:C1470.isOnError:=True:C214
-										
-									End if 
-									
-								Else 
-									
-									This:C1470.isOnError:=True:C214
-									
-								End if 
-								
-							Else 
-								
-								This:C1470.isOnError:=True:C214
-								
-							End if 
-							
-						Else 
-							
-							This:C1470.isOnError:=True:C214
-							
-						End if 
-						
-					Else 
-						
-						This:C1470.isOnError:=True:C214
-						
-					End if 
-					
-				Else 
-					
-					This:C1470.isOnError:=True:C214
-					
-				End if 
-				
-			Else 
-				
-				This:C1470.isOnError:=True:C214
+				$o:=This:C1470.androidprojectgenerator.chmod(This:C1470.project.path)
 				
 			End if 
 			
-		Else 
+		End if 
+		
+		If ($o.success)
 			
-			This:C1470.isOnError:=True:C214
+			// * BUILD EMBEDDED DATA LIBRARY
+			This:C1470.postStep("dataSetGeneration")
+			
+			$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.project.package)
 			
 		End if 
 		
-		If (This:C1470.isOnError)
+		If ($o.success)
+			
+			// * COPY EMBEDDED DATA LIBRARY
+			$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib(This:C1470.project.path)
+			
+		End if 
+		
+		If ($o.success)
+			
+			// * CREATE DATASET
+			
+			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+				
+				$o:=This:C1470.dataSet()
+				
+				// Else: asked to not generate data at each build
+			End if 
+			
+		End if 
+		
+		If ($o.success)
+			
+			// * COPY RESOURCES
+			This:C1470.postStep("copyingResources")
+			
+			$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
+			
+		End if 
+		
+		If ($o.success)
+			
+			// * COPY ICONS
+			$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.path; This:C1470.project.project.dataModel)
+			
+		End if 
+		
+		If ($o.success)
+			
+			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+				
+				$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.path; This:C1470.project.project._folder)
+				
+				// Else: asked to not generate data at each build
+			End if 
+			
+		End if 
+		
+		If ($o.success)
+			
+			$o:=This:C1470.androidprojectgenerator.copySdkVersion(This:C1470.project.path)
+			
+		End if 
+		
+		If (Not:C34($o.success))
+			
+			This:C1470.isOnError:=True:C214
 			
 			$o.errors.insert(0; Get localized string:C991("failedToCreateTheProject"))
 			
@@ -264,6 +224,7 @@ Function create()->$result : Object
 			$result.success:=True:C214
 			
 		End if 
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -294,41 +255,25 @@ Function build()->$result : Object
 			// * CREATE EMBEDDED DATABASE
 			$o:=This:C1470.gradlew.createEmbeddedDatabase()
 			
-			If ($o.success)
-				
-				// * BUILD PROJECT WITH EMBEDDED DATA
-				$o:=This:C1470.gradlew.assembleDebug()
-				
-				If ($o.success)
-					
-					// * CHECK APK
-					$o:=This:C1470.gradlew.checkAPKExists(This:C1470.apk)
-					
-					If (Not:C34($o.success))
-						
-						This:C1470.isOnError:=True:C214
-						
-					End if 
-					
-				Else 
-					
-					This:C1470.isOnError:=True:C214
-					
-				End if 
-				
-			Else 
-				
-				This:C1470.isOnError:=True:C214
-				
-			End if 
+		End if 
+		
+		If ($o.success)
 			
-		Else 
-			
-			This:C1470.isOnError:=True:C214
+			// * BUILD PROJECT WITH EMBEDDED DATA
+			$o:=This:C1470.gradlew.assembleDebug()
 			
 		End if 
 		
-		If (This:C1470.isOnError)
+		If ($o.success)
+			
+			// * CHECK APK
+			$o:=This:C1470.gradlew.checkAPKExists(This:C1470.apk)
+			
+		End if 
+		
+		If (Not:C34($o.success))
+			
+			This:C1470.isOnError:=True:C214
 			
 			$o.errors.insert(0; "projectBuildFailure")
 			
@@ -340,6 +285,7 @@ Function build()->$result : Object
 			$result.success:=True:C214
 			
 		End if 
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -365,48 +311,31 @@ Function run()->$result : Object
 			// * WAIT FOR EMULATOR BOOT (AND GET EMULATOR SERIAL)
 			$o:=This:C1470.adb.waitForBoot(This:C1470.avdName)
 			
-			If ($o.success)
-				
-				This:C1470.serial:=$o.serial
-				
-				// * INSTALL APP
-				This:C1470.postStep("installingTheApplication")
-				
-				$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.project.package; This:C1470.apk)
-				
-				If ($o.success)
-					
-					// * LAUNCH APP
-					This:C1470.postStep("launchingTheApplication")
-					
-					$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.project.package; This:C1470.activity)
-					
-					If (Not:C34($o.success))
-						
-						This:C1470.isOnError:=True:C214
-						
-					End if 
-					
-				Else 
-					
-					This:C1470.isOnError:=True:C214
-					
-				End if 
-				//End if 
-				
-			Else 
-				
-				This:C1470.isOnError:=True:C214
-				
-			End if 
+		End if 
+		
+		If ($o.success)
 			
-		Else 
+			This:C1470.serial:=$o.serial
 			
-			This:C1470.isOnError:=True:C214
+			// * INSTALL APP
+			This:C1470.postStep("installingTheApplication")
+			
+			$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.project.package; This:C1470.apk)
 			
 		End if 
 		
-		If (This:C1470.isOnError)
+		If ($o.success)
+			
+			// * LAUNCH APP
+			This:C1470.postStep("launchingTheApplication")
+			
+			$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.project.package; This:C1470.activity)
+			
+		End if 
+		
+		If (Not:C34($o.success))
+			
+			This:C1470.isOnError:=True:C214
 			
 			$o.errors.insert(0; Get localized string:C991("failedToLaunchTheSimulator"))
 			
@@ -418,6 +347,7 @@ Function run()->$result : Object
 			$result.success:=True:C214
 			
 		End if 
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
