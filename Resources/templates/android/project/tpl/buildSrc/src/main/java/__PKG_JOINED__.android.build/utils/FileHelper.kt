@@ -51,7 +51,7 @@ private fun getAppinfoFile(): File? {
 private fun String.condense() = this.replace("\\s".toRegex(), "")
 
 fun String.fieldAdjustment() =
-    this.condense().replaceSpecialChars().validateWordDecapitalized()
+    this.condense().replaceSpecialChars().lowerCustomProperties().validateWordDecapitalized()
 
 private fun String.replaceSpecialChars(): String {
     return if (this.contains("Entities<")) {
@@ -60,6 +60,12 @@ private fun String.replaceSpecialChars(): String {
         this.unaccent().replace("[^a-zA-Z0-9._]".toRegex(), "_")
     }
 }
+
+private fun String.lowerCustomProperties() =
+    if (this == "__KEY" || this == "__STAMP" || this == "__GlobalStamp" || this == "__TIMESTAMP")
+        this
+    else
+        this.toLowerCase(Locale.getDefault())
 
 private fun String.decapitalizeExceptID() = 
     if (this == "ID") this.toLowerCase(Locale.getDefault()) else this.decapitalize(Locale.getDefault())
