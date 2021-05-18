@@ -171,6 +171,11 @@ Function create()->$result : Object
 			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
 				
 				$o:=This:C1470.dataSet()
+				If (Not:C34($o.success))
+					If ($o.errors=Null:C1517)
+						$o.push("Failed to dump data")
+					End if 
+				End if 
 				
 				// Else: asked to not generate data at each build
 			End if 

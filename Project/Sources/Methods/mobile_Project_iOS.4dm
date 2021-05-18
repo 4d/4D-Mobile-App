@@ -333,8 +333,14 @@ If ($in.create)
 		$template.source:=$Dir_template.platformPath
 	End if 
 	$template.assets.target:=$in.path+Convert path POSIX to system:C1107($template.assets.path)+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
-	$template.assets.source:=$path.projects().platformPath+$productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
-	
+	If ($project._folder=Null:C1517)
+		$template.assets.source:=$path.projects().platformPath+$productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+	Else 
+		$template.assets.source:=$project._folder.platformPath+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+		If (Not:C34(Test path name:C476($template.assets.source)=Is a folder:K24:2))
+			$template.assets.source:=$path.projects().platformPath+$productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+		End if 
+	End if 
 	$out.sdk:=sdk(New object:C1471(\
 		"action"; "install"; \
 		"file"; $path.sdk().platformPath+"ios.zip"; \
