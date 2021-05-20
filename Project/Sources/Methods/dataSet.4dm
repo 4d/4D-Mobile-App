@@ -88,8 +88,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 					//----------------------------------------
 				: (Value type:C1509($Obj_in.project)=Is object:K8:27)
 					
-					If ($Obj_in.project._folder=Null:C1517)
-						If (Value type:C1509($Obj_in.project.$project)=Is object:K8:27)
+					Case of 
+						: ($Obj_in.project._folder#Null:C1517)
+							
+							$Obj_out.path:=$Obj_in.project._folder.folder("project.dataSet").platformPath
+							$Obj_out.success:=True:C214
+							
+						: (Value type:C1509($Obj_in.project.$project)#Is object:K8:27)
+							
+							$Obj_out.errors:=New collection:C1472("No product path defined to get dataset path")
+							$Obj_out.success:=False:C215
+							
+						Else 
 							
 							// Just in case root not defined, recreate it with project path
 							If ($Obj_in.project.$project.root=Null:C1517)
@@ -113,19 +123,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 								$Obj_out.success:=False:C215
 								
 							End if 
-						Else 
 							
-							$Obj_out.path:=$Obj_in.project._folder.folder("project.dataSet").platformPath
-							$Obj_out.success:=True:C214
-							
-						End if 
-						
-					Else 
-						
-						$Obj_out.errors:=New collection:C1472("No product path defined to get dataset path")
-						$Obj_out.success:=False:C215
-						
-					End if 
+					End case 
 					
 					//----------------------------------------
 				: (Value type:C1509($Obj_in.project)=Is text:K8:3)
@@ -559,18 +558,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 						//If (Bool($Obj_in.picture))
 						//If ($Boo_verbose)
 						//CALL FORM($Obj_in.caller;"LOG_EVENT";New object(\
-																																																																																				"message";"Dump Pictures";\
-																																																																																				"importance";Information message))
+																																																																																											"message";"Dump Pictures";\
+																																																																																											"importance";Information message))
 						// End if
 						//$Obj_out.picture:=dump (New object(\
-																																																																																				"action";"pictures";\
-																																																																																				"url";$Obj_in.url;\
-																																																																																				"headers";$Obj_headers;\
-																																																																																				"rest";True;"cache";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
-																																																																																				"dataSet";$Obj_in.dataSet;\
-																																																																																				"debug";Bool($Obj_in.debug);\
-																																																																																				"output";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator+"Pictures");\
-																																																																																				"dataModel";$Obj_dataModel))
+																																																																																											"action";"pictures";\
+																																																																																											"url";$Obj_in.url;\
+																																																																																											"headers";$Obj_headers;\
+																																																																																											"rest";True;"cache";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Data";"JSON");\
+																																																																																											"dataSet";$Obj_in.dataSet;\
+																																																																																											"debug";Bool($Obj_in.debug);\
+																																																																																											"output";$File_+Choose(Bool($Obj_in.dataSet);$Txt_assets+"Pictures";"Resources"+Folder separator+"Pictures");\
+																																																																																											"dataModel";$Obj_dataModel))
 						//ob_error_combine ($Obj_out;$Obj_out.picture)
 						//$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
 						// End if
