@@ -279,7 +279,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 			End if 
 			
-			If ($entryPoint="simulator")
+			If ($entryPoint="plist")
 				
 				$entryPoint:="_o_plist"
 				
