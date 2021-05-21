@@ -251,7 +251,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//________________________________________
 		: ($entryPoint="xcode")\
 			 | ($entryPoint="xcodeProj")\
-			 | ($entryPoint="plist")\
+			 | ($entryPoint="plist")\ | ($entryPoint="_o_plist")\
 			 | ($entryPoint="asset")\
 			 | ($entryPoint="colors")\
 			 | ($entryPoint="provisioningProfiles")\
@@ -285,6 +285,11 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		: ($entryPoint="project")
 			
 			EXECUTE METHOD:C1007("mobile_Project"; $response; $parameters)
+			
+			//______________________________________________________
+		: ($entryPoint="_internalWebser")
+			
+			$response:=WEB Server:C1674().start($parameters)
 			
 			//______________________________________________________
 		: ($entryPoint="Process_tags")
