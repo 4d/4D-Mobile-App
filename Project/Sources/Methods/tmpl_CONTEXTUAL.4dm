@@ -7,10 +7,19 @@ var $file : 4D:C1709.File
 var $menu : cs:C1710.menu
 
 If ($infos#Null:C1517)
-	$menu:=cs:C1710.menu.new()\
-		.append("accessTheGithubRepository"; "show")\
-		.line()\
-		.append("downloadTheLatestRevision"; "update")
+	$menu:=cs:C1710.menu.new()
+	
+	If ($infos.homepage#Null:C1517)
+		$menu\
+			.append("accessTheGithubRepository"; "show")
+	End if 
+	
+	If ($infos.updateURL#Null:C1517)
+		$menu\
+			.line()\
+			.append("downloadTheLatestRevision"; "update")
+		// XXX Do not add line if no homepage but update URL (but must not occurs); have an appendWithLine that check if first or not will be cool
+	End if 
 	
 	If (Not:C34($infos.used))
 		
@@ -18,6 +27,16 @@ If ($infos#Null:C1517)
 			.line()\
 			.append("forgetThisTemplate"; "forget")
 		
+	End if 
+	
+	If ($infos.file#Null:C1517)
+		If ($infos.file.exists)
+			
+			$menu\
+				.line()\
+				.append("showOnDisk"; "showOnDisk")
+			
+		End if 
 	End if 
 	
 	$menu.popup()
@@ -31,6 +50,11 @@ If ($infos#Null:C1517)
 		: ($menu.choice="show")
 			
 			OPEN URL:C673($infos.homepage)
+			
+			//______________________________________________________
+		: ($menu.choice="showOnDisk")
+			
+			SHOW ON DISK:C922($infos.file.platformPath)
 			
 			//______________________________________________________
 		: ($menu.choice="update")

@@ -386,6 +386,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			
 			// Get the manifest
 			$o:=JSON Parse:C1218($zip.root.file("manifest.json").getText())
+			$o.file:=$template
 			
 			// Put text
 			$svg.textArea($o.name; "root")\
