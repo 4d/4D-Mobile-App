@@ -135,6 +135,13 @@ _____________*/
 FEATURE.unstable("androidBeta")  // Android support during beta phase
 
 /* _____________
+1920
+_____________*/
+
+// Allow to duplicate template in host database and show on disk https://project.4d.com/issues/98054
+FEATURE.unstable("duplicateTemplate")
+
+/* _____________
 WIP
 _____________*/
 
@@ -167,6 +174,7 @@ FEATURE.alias("droppingNext"; 114338)
 
 // Work with Source class to test the data source
 FEATURE.wip("sourceClass")
+
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES

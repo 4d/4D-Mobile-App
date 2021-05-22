@@ -55,7 +55,13 @@ Case of
 							 & ($Lon_y>=($top+$o.top)) & ($Lon_y<=($top+$o.top+$o.height))
 							
 							$bContinue:=False:C215
-							$o.formula.call(Null:C1517; $o.target[$index-1])
+							If (Bool:C1537($o.clickable))
+								If ($o.target[$index-1].formula=Null:C1517)  // default
+									$o.formula.call(Null:C1517; $o.target[$index-1])
+								Else 
+									$o.target[$index-1].formula.call(Null:C1517; $o.target[$index-1])
+								End if 
+							End if 
 							
 						End if 
 					End for each 
@@ -123,8 +129,19 @@ Case of
 						
 						If ($o.target[$index-1]#Null:C1517)
 							
-							OBJECT SET HELP TIP:C1181(*; $event.objectName; Get localized string:C991(String:C10($o.tips)))
-							$lCursor:=Num:C11($o.cursor)
+							var $tips : Text
+							If ($o.target[$index-1].tips#Null:C1517)
+								$tips:=String:C10($o.target[$index-1].tips)
+							Else 
+								$tips:=String:C10($o.tips)
+							End if 
+							If (Length:C16($tips)>0)
+								OBJECT SET HELP TIP:C1181(*; $event.objectName; Get localized string:C991($tips))
+								$lCursor:=Num:C11($o.cursor)
+								$o.clickable:=True:C214  // maybe check clickable before instead of tips
+							Else 
+								$o.clickable:=$o.formula#Null:C1517
+							End if 
 							$bContinue:=False:C215  // Done
 							
 						End if 

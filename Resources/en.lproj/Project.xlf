@@ -890,6 +890,10 @@ Version: {version}</target>
           <source>Show on Disk</source>
           <target>Show on Disk</target>
         </trans-unit>
+        <trans-unit id="4JEYAAhxJwDB8UITGYM0Jk" resname="duplicate">
+          <source>Duplicate</source>
+          <target>Duplicate</target>
+        </trans-unit>
         <trans-unit id="ZxYxVNxb6NTHVXEouCDrMQ" resname="downloadTheLatestRevision">
           <source>Download the latest revision</source>
           <target>Download the latest revision</target>

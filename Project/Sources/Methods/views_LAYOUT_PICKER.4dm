@@ -46,6 +46,9 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"github"; $p\
 		)
 	
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/more.png").platformPath; $p; *)
+	$data.morePicture:=$p
+	
 	$str:=cs:C1710.str.new()
 	$error:=cs:C1710.error.new()
 	
@@ -309,8 +312,7 @@ $picker.hotZones.push(New object:C1471(\
 "height"; 16; \
 "target"; $picker.infos; \
 "formula"; Formula:C1597(tmpl_INFOS); \
-"cursor"; 9000; \
-"tips"; "accessTheGithubRepository"))
+"cursor"; 9000))
 
 /* Contextual menu */
 $picker.contextual:=New object:C1471(\
@@ -386,7 +388,16 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			
 			// Get the manifest
 			$o:=JSON Parse:C1218($zip.root.file("manifest.json").getText())
-			$o.file:=$template
+			If (FEATURE.with("duplicateTemplate"))
+				$o.file:=$template  // will activate menu to show on disk or duplicate
+			End if 
+			
+			If ($o.homepage#Null:C1517)  // see tmpl_INFOS
+				$o.tips:="accessTheGithubRepository"
+				$o.formula:=Formula:C1597(tmpl_INFOS)
+			Else 
+				$o.formula:=Formula:C1597(tmpl_CONTEXTUAL)
+			End if 
 			
 			// Put text
 			$svg.textArea($o.name; "root")\
@@ -422,6 +433,21 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		
 	Else 
 		
+		$o:=Null:C1517  // import to reset to not pass to next template
+		If (FEATURE.with("duplicateTemplate"))
+			If ($template.file("manifest.json").exists)
+				$o:=JSON Parse:C1218($template.file("manifest.json").getText())
+				$o.file:=$template
+				
+				If ($o.homepage#Null:C1517)  // see tmpl_INFOS
+					$o.tips:="accessTheGithubRepository"
+					$o.formula:=Formula:C1597(tmpl_INFOS)
+				Else 
+					$o.formula:=Formula:C1597(tmpl_CONTEXTUAL)
+				End if 
+			End if 
+		End if 
+		
 		$template:=$template.file("template.svg")
 		
 		If ($template.exists)
@@ -451,6 +477,20 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				If ($t[[1]]="/")  // Database template
 					
 					$t:=Delete string:C232($t; 1; 1)
+					
+				End if 
+				
+				If (FEATURE.with("duplicateTemplate"))
+					
+					$o.used:=($picker.marked.indexOf($formsArray{$i})#-1)
+					If ($o.used)
+						
+						$svg.fontStyle(Bold:K14:2)
+						
+					End if 
+					
+					$svg.image($data.morePicture)\
+						.position(Choose:C955($picker.selector="list"; 10; 5); Choose:C955($picker.selector="list"; 4; 12))
 					
 				End if 
 				
@@ -518,14 +558,14 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				$picker.pictures.insert(0; $p)
 				$picker.pathnames.insert(0; $formsArray{$i})
 				$picker.helpTips.insert(0; Get localized string:C991("defaultTemplate"))
-				$picker.infos.insert(0; Null:C1517)
+				$picker.infos.insert(0; $o)
 				
 			Else 
 				
 				$picker.pictures.push($p)
 				$picker.pathnames.push($formsArray{$i})
 				$picker.helpTips.push("")
-				$picker.infos.push(Null:C1517)
+				$picker.infos.push($o)
 				
 			End if 
 			
