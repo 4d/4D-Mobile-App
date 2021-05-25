@@ -141,6 +141,9 @@ _____________*/
 // Allow to duplicate template in host database and show on disk https://project.4d.com/issues/98054
 FEATURE.unstable("duplicateTemplate")
 
+// Mac M1 build for simu using arm64
+FEATURE.unstable("simuARMOnAppleProcessor")
+
 /* _____________
 WIP
 _____________*/
