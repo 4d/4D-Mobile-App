@@ -332,11 +332,12 @@
 					"width": 29,
 					"height": 29,
 					"sizingX": "move",
-					"stroke": "transparent"
+					"stroke": "transparent",
+					"fill": "transparent"
 				},
 				"color.button": {
 					"type": "button",
-					"top": 192,
+					"top": 152,
 					"left": 666,
 					"width": 33,
 					"height": 33,
@@ -374,5 +375,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 551
+	"geometryStamp": 553
 }

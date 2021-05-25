@@ -210,7 +210,7 @@ Function displayIcon
 		End if 
 	End if 
 	
-	If (FEATURE.with("dominantColor")) & (This:C1470.mainColor="")
+	If (FEATURE.with("dominantColor")) & (String:C10(his.mainColor)="")
 		
 		This:C1470.mainColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
 		PROJECT.ui.dominantColor:=This:C1470.mainColor

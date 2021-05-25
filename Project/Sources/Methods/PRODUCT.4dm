@@ -64,7 +64,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				If (PROJECT.ui.dominantColor#Null:C1517)
 					
-					$ƒ.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).main
+					$ƒ.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).css.components
 					
 				End if 
 				
