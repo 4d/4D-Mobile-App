@@ -500,6 +500,8 @@
 			"HTTP ERROR HANDLER"
 		],
 		"classes": [
+			"bmp",
+			"color",
 			"database",
 			"debugLog",
 			"doc",

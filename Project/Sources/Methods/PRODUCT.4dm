@@ -45,7 +45,6 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 					Else 
 						
 						$ƒ.os.hide()
-						
 						$ƒ.preview.hide()
 						
 					End if 
@@ -58,6 +57,20 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				$ƒ.android.hide()
 				
 				$ƒ.preview.hide()
+				
+			End if 
+			
+			If (FEATURE.with("dominantColor"))
+				
+				If (PROJECT.ui.dominantColor#Null:C1517)
+					
+					$ƒ.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).main
+					
+				End if 
+				
+			Else 
+				
+				$ƒ.dominantColor.hide()
 				
 			End if 
 			
@@ -74,6 +87,12 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				// Obsolete
 				$ƒ.loadIcon()
+				
+			End if 
+			
+			If (FEATURE.with("dominantColor"))
+				
+				$ƒ.color.setColors($ƒ.mainColor; $ƒ.mainColor)
 				
 			End if 
 			
@@ -96,6 +115,18 @@ Else   // <== WIDGETS METHOD
 	$e:=$ƒ.event
 	
 	Case of 
+			
+			//==============================================
+		: ($ƒ.colorButton.catch($e; On Clicked:K2:4))
+			
+			var $color : cs:C1710.color
+			$color:=cs:C1710.color.new($ƒ.mainColor)
+			$ƒ.mainColor:=Select RGB color:C956($color.main)
+			
+			PROJECT.ui.dominantColor:=$color.setColor($ƒ.mainColor).css.components
+			PROJECT.save()
+			
+			$ƒ.color.setColors($ƒ.mainColor; $ƒ.mainColor)
 			
 			//==============================================
 		: ($ƒ.productName.catch())

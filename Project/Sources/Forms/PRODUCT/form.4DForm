@@ -306,6 +306,45 @@
 					"iconFrames": 4,
 					"visibility": "hidden",
 					"focusable": false
+				},
+				"color.label": {
+					"type": "text",
+					"top": 130,
+					"left": 666,
+					"width": 129,
+					"height": 17,
+					"text": ":xliff:dominantColor",
+					"visibility": "visible",
+					"class": "label"
+				},
+				"color.border": {
+					"type": "rectangle",
+					"top": 152,
+					"left": 666,
+					"width": 33,
+					"height": 33,
+					"class": "border"
+				},
+				"color": {
+					"type": "rectangle",
+					"top": 154,
+					"left": 668,
+					"width": 29,
+					"height": 29,
+					"sizingX": "move",
+					"stroke": "transparent"
+				},
+				"color.button": {
+					"type": "button",
+					"top": 192,
+					"left": 666,
+					"width": 33,
+					"height": 33,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"style": "toolbar"
 				}
 			},
 			"entryOrder": [
@@ -318,7 +357,8 @@
 				"android",
 				"ios",
 				"icon.alert",
-				"icon.action"
+				"icon.action",
+				"color.button"
 			]
 		}
 	],
@@ -334,5 +374,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 452
+	"geometryStamp": 551
 }

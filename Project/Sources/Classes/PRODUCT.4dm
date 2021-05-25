@@ -23,7 +23,7 @@ Class constructor
 		
 		This:C1470.icon:=cs:C1710.widget.new("icon")
 		This:C1470.iconAlert:=cs:C1710.attention.new("icon.alert")
-		This:C1470.iconAction:=cs:C1710.attention.new("icon.action")
+		This:C1470.iconAction:=cs:C1710.button.new("icon.action")
 		
 		This:C1470.target:=cs:C1710.static.new("target.label")
 		This:C1470.ios:=cs:C1710.button.new("ios")
@@ -31,6 +31,14 @@ Class constructor
 		This:C1470.os:=cs:C1710.group.new(This:C1470.target; This:C1470.ios; This:C1470.android)
 		
 		This:C1470.preview:=cs:C1710.static.new("target.preview")
+		
+		This:C1470.color:=cs:C1710.static.new("color")
+		This:C1470.colorBorder:=cs:C1710.static.new("color.border")
+		This:C1470.colorLabel:=cs:C1710.static.new("color.label")
+		This:C1470.colorButton:=cs:C1710.button.new("color.button")
+		This:C1470.dominantColor:=cs:C1710.group.new(This:C1470.color; This:C1470.colorBorder; This:C1470.colorLabel; This:C1470.colorButton)
+		
+		This:C1470.mainColor:=""
 		
 		// Constraints definition
 		ob_createPath(This:C1470.context; "constraints.rules"; Is collection:K8:32)
@@ -96,7 +104,6 @@ Function iconMenu()
 			
 		End if 
 	End if 
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Display the App icon
@@ -201,6 +208,14 @@ Function displayIcon
 			This:C1470.icon.setValue($picture)
 			
 		End if 
+	End if 
+	
+	If (FEATURE.with("dominantColor")) & (This:C1470.mainColor="")
+		
+		This:C1470.mainColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
+		PROJECT.ui.dominantColor:=This:C1470.mainColor
+		PROJECT.save()
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
@@ -335,7 +350,19 @@ Function setIcon($picture : Picture)
 		
 	End if 
 	
-	This:C1470.displayIcon()
+	If (FEATURE.with("dominantColor"))
+		
+		This:C1470.mainColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
+		PROJECT.ui.dominantColor:=This:C1470.mainColor
+		PROJECT.save()
+		
+		SET TIMER:C645(-1)
+		
+	Else 
+		
+		This:C1470.displayIcon()
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Open the iOS icons folder
