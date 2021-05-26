@@ -25,76 +25,94 @@ Function updateAssets
 		
 		ob_error_combine($Obj_out; $Obj_out.assets)
 		
-		// Temporary or by default take app icon, later could be customizable by UI, and must be managed like AppIcon
-		$Obj_out.theme:=New object:C1471("success"; False:C215)
-		
-		C_OBJECT:C1216($file)
-		$file:=Folder:C1567($Obj_template.assets.source; fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
-		C_LONGINT:C283($l)
-		$l:=SHARED.theme.colorjuicer.scale
-		
-		If ($l#1024)\
-			 & ($l>0)
-			C_PICTURE:C286($Pic_file)
-			C_PICTURE:C286($Pic_scaled)
-			READ PICTURE FILE:C678($file.platformPath; $Pic_file)
-			CREATE THUMBNAIL:C679($Pic_file; $Pic_scaled; $l; $l)  // This change result of algo..., let tools scale using argument
-			$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066)
-			WRITE PICTURE FILE:C680($file.platformPath; $Pic_scaled; ".png")
-			
-		End if 
-		
-		C_OBJECT:C1216($Obj_color)
-		$Obj_color:=colors(New object:C1471(\
-			"action"; "juicer"; \
-			"posix"; $file.path))
-		
-		If ($Obj_color.success)
-			
-			$Obj_out.theme.BackgroundColor:=$Obj_color.value
-			$Obj_out.theme.BackgroundColor.name:="BackgroundColor"
-			
-			$Obj_out.theme.BackgroundColor.asset:=asset(New object:C1471(\
-				"action"; "create"; \
-				"target"; $Obj_template.assets.target+"NavigationBar"+Folder separator:K24:12; \
-				"type"; "colorset"; \
-				"space"; $Obj_out.theme.BackgroundColor.space; \
-				"tags"; $Obj_out.theme.BackgroundColor))
-			
-			$Obj_color:=colors(New object:C1471(\
-				"action"; "contrast"; \
-				"color"; $Obj_out.theme.BackgroundColor))
-			
-			If ($Obj_color.success)
-				
-				$Obj_out.theme.ForegroundColor:=$Obj_color.value
-				$Obj_out.theme.ForegroundColor.name:="ForegroundColor"
-				
-				$Obj_out.theme.ForegroundColor.asset:=asset(New object:C1471(\
-					"action"; "create"; \
-					"target"; $Obj_template.assets.target+"NavigationBar"+Folder separator:K24:12; \
-					"type"; "colorset"; \
-					"space"; $Obj_out.theme.ForegroundColor.space; \
-					"tags"; $Obj_out.theme.ForegroundColor))
-				
-				$Obj_out.theme.success:=True:C214
-				
-			End if 
-		End if 
-		
-		If (($l#1024)\
-			 & ($l>0))
-			
-			$file.delete()  // delete scaled files
-			
-		End if 
-		
-		$Obj_in.theme:=$Obj_out.theme  // to pass to children
-		
 	End if 
+	
+	$Obj_in.theme:=This:C1470.theme()
 	
 	$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
 	$0:=$Obj_out
+	
+Function theme()->$theme : Object
+	$theme:=New object:C1471("success"; False:C215)
+	
+	var $rgb : Object
+	Case of 
+		: (Length:C16(String:C10(This:C1470.input.project.ui.dominantColor))>0)
+			$rgb:=New object:C1471(\
+				"value"; cs:C1710.color.new(This:C1470.input.project.ui.dominantColor).rgb; \
+				"success"; True:C214)
+			$rgb.value.space:="srgb"
+			If (Num:C11($rgb.value.alpha)=0)  // useless alpha, remove it (must not occurs but)
+				OB REMOVE:C1226($rgb.value; "alpha")
+			End if 
+		: (Length:C16(String:C10(This:C1470.template.assets.source))>0)
+			$rgb:=This:C1470._o_rgb()
+		Else 
+			$rgb:=New object:C1471("success"; False:C215)
+	End case 
+	
+	If ($rgb.success)
+		
+		$theme.BackgroundColor:=$rgb.value
+		$theme.BackgroundColor.name:="BackgroundColor"
+		
+		$theme.BackgroundColor.asset:=asset(New object:C1471(\
+			"action"; "create"; \
+			"target"; This:C1470.template.assets.target+"NavigationBar"+Folder separator:K24:12; \
+			"type"; "colorset"; \
+			"space"; $theme.BackgroundColor.space; \
+			"tags"; $theme.BackgroundColor))
+		
+		$rgb:=colors(New object:C1471(\
+			"action"; "contrast"; \
+			"color"; $theme.BackgroundColor))
+		
+		If ($rgb.success)
+			
+			$theme.ForegroundColor:=$rgb.value
+			$theme.ForegroundColor.name:="ForegroundColor"
+			
+			$theme.ForegroundColor.asset:=asset(New object:C1471(\
+				"action"; "create"; \
+				"target"; This:C1470.template.assets.target+"NavigationBar"+Folder separator:K24:12; \
+				"type"; "colorset"; \
+				"space"; $theme.ForegroundColor.space; \
+				"tags"; $theme.ForegroundColor))
+			
+			$theme.success:=True:C214
+			
+		End if 
+	End if 
+	
+	// Temporary or by default take app icon, later could be customizable by UI, and must be managed like AppIcon
+Function _o_rgb()->$rgb
+	ASSERT:C1129(This:C1470.template.assets.source#""; "No assert to compute color")
+	
+	var $file : 4D:C1709.File
+	$file:=Folder:C1567(This:C1470.template.assets.source; fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
+	var $l : Integer
+	$l:=SHARED.theme.colorjuicer.scale
+	
+	If ($l#1024)\
+		 & ($l>0)
+		var $Pic_file; $Pic_scaled : Picture
+		READ PICTURE FILE:C678($file.platformPath; $Pic_file)
+		CREATE THUMBNAIL:C679($Pic_file; $Pic_scaled; $l; $l)  // This change result of algo..., let tools scale using argument
+		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066)
+		WRITE PICTURE FILE:C680($file.platformPath; $Pic_scaled; ".png")
+		
+	End if 
+	
+	$rgb:=colors(New object:C1471(\
+		"action"; "juicer"; \
+		"posix"; $file.path))
+	
+	If (($l#1024)\
+		 & ($l>0))
+		
+		$file.delete()  // delete scaled files
+		
+	End if 
 	
 Function getXcodeProj
 	C_OBJECT:C1216($0)
