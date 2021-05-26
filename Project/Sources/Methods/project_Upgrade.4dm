@@ -8,7 +8,7 @@
 // Version check & update
 // ----------------------------------------------------
 // Declarations
-#DECLARE($project : Object)->$isUpgraded : Boolean
+#DECLARE($project : Object; $folder : 4D:C1709.Folder)->$isUpgraded : Boolean
 
 var $fieldID; $relatedID; $t; $tableID : Text
 var $type : Integer
@@ -520,7 +520,7 @@ If (Num:C11($project.info.version)<5)
 End if 
 
 //=====================================================================
-//                              MISCELLANEOUS
+//                         MISCELLANEOUS
 //=====================================================================
 If ($project.dataModel#Null:C1517)
 	
@@ -665,6 +665,44 @@ If ($project.detail#Null:C1517)
 			End if 
 		End if 
 	End for each 
+End if 
+
+//=====================================================================
+//                        ADD DOMINANT COLOR
+//=====================================================================
+If (FEATURE.with("dominantColor")) & ($project.ui.dominantColor=Null:C1517)
+	
+	//
+	If (Count parameters:C259>=2)
+		
+		
+		var $picture : Picture
+		
+		
+		$folder:=$folder.folder("Assets.xcassets/AppIcon.appiconset")
+		
+		If ($folder.exists)
+			
+			READ PICTURE FILE:C678($folder.file("ios-marketing1024.png").platformPath; $picture)
+			
+		Else 
+			
+			$folder:=$folder.folder("Android")
+			
+			If ($folder.exists)
+				
+				READ PICTURE FILE:C678($folder.file("main/ic_launcher-playstore.png").platformPath; $picture)
+				
+			End if 
+		End if 
+		
+		If (Picture size:C356($picture)>0)
+			
+			$project.ui.dominantColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
+			$isUpgraded:=True:C214
+			
+		End if 
+	End if 
 End if 
 
 // Set the current version

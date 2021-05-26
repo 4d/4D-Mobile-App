@@ -34,6 +34,7 @@ If (False:C215)
 	// ----------------------------------------------------
 	C_BOOLEAN:C305(project_Upgrade; $0)
 	C_OBJECT:C1216(project_Upgrade; $1)
+	C_OBJECT:C1216(project_Upgrade; $2)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(project_UI_ALERT; $1)

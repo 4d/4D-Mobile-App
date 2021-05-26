@@ -178,6 +178,7 @@ Case of
 				Else 
 					
 					EDITOR.xCode.canceled:=False:C215
+					EDITOR.xCode.alreadyNotified:=False:C215
 					
 				End if 
 				

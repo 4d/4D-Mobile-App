@@ -41,7 +41,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			$response.errors:=Formula:C1597(lastError)
 			$response.component:=SHARED.component
 			$response.requirement:=New object:C1471(\
-				"xCodeVersion"; SHARED.xCodeVersion; \
+				"xCodeVersion"; SHARED.xCodeMinVersion; \
 				"iosDeploymentTarget"; SHARED.iosDeploymentTarget)
 			$response.targetedDeviceFamily:=SHARED.targetedDeviceFamily
 			$response.simulatorTimeout:=SHARED.simulatorTimeout

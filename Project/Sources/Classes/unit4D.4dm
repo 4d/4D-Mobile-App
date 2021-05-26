@@ -4,7 +4,7 @@ Class constructor
 	
 	This:C1470.component:=SHARED.component
 	This:C1470.requirement:=New object:C1471(\
-		"xCodeVersion"; SHARED.xCodeVersion; \
+		"xCodeVersion"; SHARED.xCodeMinVersion; \
 		"iosDeploymentTarget"; SHARED.iosDeploymentTarget)
 	This:C1470.targetedDeviceFamily:=SHARED.targetedDeviceFamily
 	This:C1470.simulatorTimeout:=SHARED.simulatorTimeout

@@ -300,7 +300,7 @@ If ($run)
 			If ($withUI)
 				
 				$progress:=cs:C1710.progress.new("downloadInProgress")\
-					.setMessage(Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; Choose:C955($target="android"; "Android"; "iOS"))).bringToFront()
+					.setMessage(Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; Choose:C955($target="android"; "Android"; "iOS")))  //.bringToFront()
 				
 			End if 
 			

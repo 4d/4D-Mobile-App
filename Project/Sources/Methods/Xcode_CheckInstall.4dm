@@ -63,7 +63,7 @@ End if
 If ($out.applicationAvailable)
 	
 	// Check version
-	$out.ready:=$Xcode.checkVersion(SHARED.xCodeVersion)
+	$out.ready:=$Xcode.checkMinimumVersion(SHARED.xCodeMinVersion)
 	
 	If (Not:C34($out.ready))
 		
@@ -79,73 +79,93 @@ If ($out.applicationAvailable)
 		If ($out.applicationAvailable)
 			
 			// Check version
-			$out.ready:=$Xcode.checkVersion(SHARED.xCodeVersion)
+			$out.ready:=$Xcode.checkMinimumVersion(SHARED.xCodeMinVersion)
 			
 		End if 
 	End if 
 	
 	If ($out.ready)
 		
-		$out.version:=$Xcode.version
+		$out.ready:=$Xcode.checkMaximumVersion(SHARED.xCodeMaxVersion)
 		
-		// CHECK TOOLS-PATH
-		$Xcode.toolsPath()
-		
-		If ($Xcode.tools.exists)
+		If ($out.ready)
 			
-			$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
+			$out.version:=$Xcode.version
 			
-		End if 
-		
-		If (Not:C34($out.toolsAvalaible))
+			// CHECK TOOLS-PATH
+			$Xcode.toolsPath()
 			
-			$out.ready:=False:C215
-			
-			If (Not:C34(Bool:C1537($inƒ.silent)))
+			If ($Xcode.tools.exists)
 				
-				$signal:=await_MESSAGE(New object:C1471(\
-					"target"; $inƒ.caller; \
-					"action"; "show"; \
-					"type"; "confirm"; \
-					"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
-					"additional"; "wantToFixThePath"; \
-					"cancel"; "later"))
+				$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
 				
-				If ($signal.validate)
+			End if 
+			
+			If (Not:C34($out.toolsAvalaible))
+				
+				$out.ready:=False:C215
+				
+				If (Not:C34(Bool:C1537($inƒ.silent)))
 					
-					$Xcode.setToolPath(cs:C1710.str.new("4dMobileWantsToMakeChanges").localized("4dForIos"))
+					$signal:=await_MESSAGE(New object:C1471(\
+						"target"; $inƒ.caller; \
+						"action"; "show"; \
+						"type"; "confirm"; \
+						"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
+						"additional"; "wantToFixThePath"; \
+						"cancel"; "later"))
 					
-					If ($Xcode.success)
+					If ($signal.validate)
 						
-						If ($Xcode.tools.exists)
+						$Xcode.setToolPath(cs:C1710.str.new("4dMobileWantsToMakeChanges").localized("4dForIos"))
+						
+						If ($Xcode.success)
 							
-							$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
+							If ($Xcode.tools.exists)
+								
+								$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
+								
+							End if 
 							
+						Else 
+							
+							If (Position:C15("User canceled. (-128)"; $Xcode.lastError)>0)
+								
+								// NOTHING MORE TO DO
+								
+							Else 
+								
+								POST_MESSAGE(New object:C1471(\
+									"target"; $inƒ.caller; \
+									"action"; "show"; \
+									"type"; "alert"; \
+									"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
+									"additional"; "tryDoingThisFromTheXcodeApplication"))
+								
+							End if 
 						End if 
 						
 					Else 
 						
-						If (Position:C15("User canceled. (-128)"; $Xcode.lastError)>0)
-							
-							// NOTHING MORE TO DO
-							
-						Else 
-							
-							POST_MESSAGE(New object:C1471(\
-								"target"; $inƒ.caller; \
-								"action"; "show"; \
-								"type"; "alert"; \
-								"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
-								"additional"; "tryDoingThisFromTheXcodeApplication"))
-							
-						End if 
+						$out.canceled:=True:C214  // Remember this so as not to ask again
+						
 					End if 
-					
-				Else 
-					
-					$out.canceled:=True:C214  // Remember this so as not to ask again
-					
 				End if 
+			End if 
+			
+		Else 
+			
+			If (Not:C34(Bool:C1537($inƒ.silent)))
+				
+				POST_MESSAGE(New object:C1471(\
+					"target"; $inƒ.caller; \
+					"action"; "show"; \
+					"type"; "alert"; \
+					"title"; New collection:C1472("versionNotSupported"; "Xcode"); \
+					"additional"; New collection:C1472("tooRecentVersion"; "4dForIos"; "Xcode"; SHARED.xCodeMaxVersion); \
+					"okFormula"; Formula:C1597(EDITOR.xCode.alreadyNotified:=True:C214)\
+					))
+				
 			End if 
 		End if 
 		
@@ -157,7 +177,7 @@ If ($out.applicationAvailable)
 				"target"; $inƒ.caller; \
 				"action"; "show"; \
 				"type"; "confirm"; \
-				"title"; New collection:C1472("obsoleteVersionofApp"; "4dForIos"; SHARED.xCodeVersion; "Xcode"); \
+				"title"; New collection:C1472("obsoleteVersionofApp"; "4dForIos"; SHARED.xCodeMinVersion; "Xcode"); \
 				"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "xcode"); \
 				"cancel"; "later"))
 			

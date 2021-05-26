@@ -1,0 +1,499 @@
+{
+	"destination": "detailScreen",
+	"rightMargin": 19,
+	"bottomMargin": 20,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onTimer"
+	],
+	"method": "method.4dm",
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "842pt",
+		"paperHeight": "595pt"
+	},
+	"pages": [
+		null,
+		{
+			"objects": {
+				"picture": {
+					"type": "input",
+					"top": 65,
+					"left": 571,
+					"width": 496,
+					"height": 497,
+					"dataSource": "",
+					"dataSourceTypeHint": "picture",
+					"fill": "automatic",
+					"hideFocusRing": true,
+					"scrollbarVertical": "automatic",
+					"scrollbarHorizontal": "automatic",
+					"dragging": "none",
+					"method": "ObjectMethods/picture.4dm",
+					"events": [
+						"onAfterEdit"
+					],
+					"pictureFormat": "proportionalCenter",
+					"borderStyle": "system"
+				},
+				"color_0": {
+					"type": "rectangle",
+					"top": 478,
+					"left": 187,
+					"width": 32,
+					"height": 32,
+					"fill": "transparent",
+					"stroke": "#FFFFFF"
+				},
+				"color_1": {
+					"type": "rectangle",
+					"top": 478,
+					"left": 227,
+					"width": 32,
+					"height": 32,
+					"fill": "transparent",
+					"stroke": "#FFFFFF"
+				},
+				"color_2": {
+					"type": "rectangle",
+					"top": 478,
+					"left": 267,
+					"width": 32,
+					"height": 32,
+					"fill": "transparent",
+					"stroke": "#FFFFFF"
+				},
+				"color_3": {
+					"type": "rectangle",
+					"top": 478,
+					"left": 310,
+					"width": 32,
+					"height": 32,
+					"fill": "transparent",
+					"stroke": "#FFFFFF"
+				},
+				"main": {
+					"type": "rectangle",
+					"top": 20,
+					"left": 172,
+					"width": 195,
+					"height": 32,
+					"fill": "transparent",
+					"stroke": "#FFFFFF"
+				},
+				"complementaryDropdown": {
+					"type": "dropdown",
+					"top": 442,
+					"left": 177,
+					"width": 243,
+					"height": 24,
+					"method": "ObjectMethods/complementaryDropdown.4dm",
+					"events": [
+						"onDataChange"
+					],
+					"focusable": false,
+					"dataSource": "Form:C1466.complementaryDropdown",
+					"dataSourceTypeHint": "object"
+				},
+				"main.label": {
+					"type": "text",
+					"top": 28,
+					"left": 54,
+					"width": 98,
+					"height": 16,
+					"textAlign": "right",
+					"text": "Color",
+					"stroke": "#696969"
+				},
+				"palette.label": {
+					"type": "text",
+					"top": 446,
+					"left": 10,
+					"width": 147,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "Color Harmonies:"
+				},
+				"picker": {
+					"type": "button",
+					"top": 120,
+					"left": 173,
+					"width": 80,
+					"height": 22,
+					"text": "Picker…",
+					"method": "ObjectMethods/picker.4dm",
+					"events": [
+						"onClick"
+					],
+					"focusable": false
+				},
+				"css.component": {
+					"type": "input",
+					"top": 162,
+					"left": 172,
+					"width": 188,
+					"height": 17,
+					"dataSource": "Form:C1466.color.css.components",
+					"textAlign": "center",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 360,
+					"dragging": "custom",
+					"dropping": "none",
+					"events": [
+						"onBeginDragOver"
+					],
+					"fontTheme": "normal",
+					"method": "ObjectMethods/css.component.4dm"
+				},
+				"css.percentage": {
+					"type": "input",
+					"top": 186,
+					"left": 172,
+					"width": 188,
+					"height": 17,
+					"dataSource": "Form:C1466.color.css.percentages",
+					"textAlign": "center",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 360,
+					"dragging": "custom",
+					"dropping": "none",
+					"events": [
+						"onBeginDragOver"
+					],
+					"fontTheme": "normal",
+					"method": "ObjectMethods/css.percentage.4dm"
+				},
+				"css.hex": {
+					"type": "input",
+					"top": 210,
+					"left": 172,
+					"width": 188,
+					"height": 17,
+					"dataSource": "Form:C1466.color.css.hex",
+					"textAlign": "center",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 360,
+					"dragging": "custom",
+					"dropping": "none",
+					"events": [
+						"onBeginDragOver"
+					],
+					"fontTheme": "normal",
+					"method": "ObjectMethods/css.hex.4dm"
+				},
+				"css.hexLong": {
+					"type": "input",
+					"top": 234,
+					"left": 172,
+					"width": 188,
+					"height": 17,
+					"dataSource": "Form:C1466.color.css.hexLong",
+					"textAlign": "center",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 360,
+					"dragging": "custom",
+					"dropping": "none",
+					"events": [
+						"onBeginDragOver"
+					],
+					"fontTheme": "normal",
+					"method": "ObjectMethods/css.hexLong.4dm"
+				},
+				"css.hsl": {
+					"type": "input",
+					"top": 258,
+					"left": 172,
+					"width": 188,
+					"height": 17,
+					"dataSource": "Form:C1466.color.css.hsl",
+					"textAlign": "center",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 360,
+					"dragging": "custom",
+					"dropping": "none",
+					"events": [
+						"onBeginDragOver"
+					],
+					"fontTheme": "normal",
+					"method": "ObjectMethods/css.hsl.4dm"
+				},
+				"css.components.label": {
+					"type": "text",
+					"top": 162,
+					"left": 32,
+					"width": 127,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "css.components:"
+				},
+				"main.css": {
+					"type": "input",
+					"top": 28,
+					"left": 182,
+					"width": 178,
+					"height": 17,
+					"dataSource": "Form:C1466.color.css.components",
+					"textAlign": "center",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 360,
+					"dragging": "none",
+					"dropping": "none",
+					"events": [
+						"onDataChange"
+					],
+					"fontTheme": "normal"
+				},
+				"css.percentages.label": {
+					"type": "text",
+					"top": 186,
+					"left": 32,
+					"width": 127,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "css.percentages:"
+				},
+				"css.hex.label": {
+					"type": "text",
+					"top": 210,
+					"left": 32,
+					"width": 127,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "css.hex:"
+				},
+				"css.hexLong.label": {
+					"type": "text",
+					"top": 234,
+					"left": 32,
+					"width": 127,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "css.hexLong:"
+				},
+				"css.hsl.label": {
+					"type": "text",
+					"top": 258,
+					"left": 32,
+					"width": 127,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "css.hsl:"
+				},
+				"css.name": {
+					"type": "input",
+					"top": 279,
+					"left": 172,
+					"width": 188,
+					"height": 17,
+					"dataSource": "Form:C1466.color.css.name",
+					"textAlign": "center",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 360,
+					"dragging": "custom",
+					"dropping": "none",
+					"events": [
+						"onBeginDragOver"
+					],
+					"fontTheme": "normal",
+					"method": "ObjectMethods/css.name.4dm"
+				},
+				"css.name.label": {
+					"type": "text",
+					"top": 279,
+					"left": 32,
+					"width": 127,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "css.name:"
+				},
+				"4DPalette": {
+					"type": "subform",
+					"left": 386,
+					"top": 106,
+					"width": 165,
+					"height": 176,
+					"detailForm": "COLOR_PALETTE",
+					"method": "ObjectMethods/4DPalette.4dm",
+					"focusable": false
+				},
+				"nammedDropdown": {
+					"type": "dropdown",
+					"left": 173,
+					"top": 78,
+					"width": 169,
+					"height": 22,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.nammedDropdown",
+					"dataSourceTypeHint": "object",
+					"method": "ObjectMethods/nammedDropdown.4dm",
+					"focusable": false
+				},
+				"nammed.label": {
+					"type": "text",
+					"top": 81,
+					"left": 17,
+					"width": 147,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "Nammed colors:"
+				},
+				"hsl": {
+					"type": "subform",
+					"left": 10,
+					"top": 320,
+					"width": 336,
+					"height": 85,
+					"detailForm": "COLOR_HSL",
+					"method": "ObjectMethods/hsl.4dm",
+					"dataSource": "Form:C1466.color.hsl",
+					"focusable": false
+				},
+				"rgb": {
+					"type": "subform",
+					"left": 385,
+					"top": 316,
+					"width": 66,
+					"height": 93,
+					"detailForm": "COLOR_RGB",
+					"method": "ObjectMethods/rgb.4dm",
+					"focusable": false,
+					"dataSource": "Form:C1466.color.rgb"
+				},
+				"picture.label": {
+					"type": "text",
+					"top": 28,
+					"left": 571,
+					"width": 98,
+					"height": 16,
+					"text": "Picture",
+					"stroke": "#696969"
+				},
+				"dominant": {
+					"type": "radio",
+					"text": "Dominant color",
+					"top": 21,
+					"left": 773,
+					"width": 133,
+					"height": 30,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/dominant.4dm",
+					"radioGroup": "dominant_medium"
+				},
+				"medium": {
+					"type": "radio",
+					"text": "Medium color",
+					"top": 21,
+					"left": 935,
+					"width": 133,
+					"height": 30,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/medium.4dm",
+					"radioGroup": "dominant_medium"
+				},
+				"nammed.label1": {
+					"type": "text",
+					"top": 81,
+					"left": 386,
+					"width": 147,
+					"height": 17,
+					"stroke": "#696969",
+					"text": "Indexed colors:"
+				}
+			},
+			"entryOrder": [
+				"picture",
+				"complementaryDropdown",
+				"picker",
+				"main.css",
+				"css.name",
+				"4DPalette",
+				"nammedDropdown",
+				"hsl",
+				"rgb",
+				"dominant",
+				"medium"
+			]
+		}
+	],
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {},
+			"View 2": {},
+			"View 3": {},
+			"View 4": {},
+			"View 5": {},
+			"View 6": {},
+			"View 7": {},
+			"View 8": {},
+			"View 9": {}
+		}
+	},
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"geometryStamp": 396,
+	"windowTitle": "color class"
+}

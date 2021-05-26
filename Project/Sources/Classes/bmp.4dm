@@ -148,10 +148,8 @@ Function getDominantColor($accuracy : Integer)->$color : Integer
 			"green"; 0; \
 			"blue"; 0)
 		
-		$c:=New collection:C1472
-		
 		$pixels:=$map.red.length
-		$c.resize($pixels)
+		$c:=New collection:C1472.resize($pixels)
 		
 		//%R-
 		For ($i; 0; $pixels-1; $_accuracy)

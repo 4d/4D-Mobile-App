@@ -54,7 +54,7 @@ End if
 If ($out.applicationAvailable)
 	
 	// *CHECK VERSION
-	$out.ready:=$studio.checkVersion(SHARED.studioVersion)
+	$out.ready:=$studio.checkVersion(SHARED.studioMinVersion)
 	
 	If ($out.ready)
 		
@@ -140,7 +140,7 @@ If ($out.applicationAvailable)
 			"target"; $in.caller; \
 			"action"; "show"; \
 			"type"; "confirm"; \
-			"title"; New collection:C1472("obsoleteVersionofApp"; "4dForAndroid"; SHARED.studioVersion; "androidStudio"); \
+			"title"; New collection:C1472("obsoleteVersionofApp"; "4dForAndroid"; SHARED.studioMinVersion; "androidStudio"); \
 			"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "androidStudio"); \
 			"cancel"; "later"))
 		

@@ -130,16 +130,20 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		"scale"; 64))
 	
 	//***********************
-	// MINIMUM REQUIREMENTS
+	// REQUIREMENTS
 	//***********************
 	
 	// 1] iOS
-	SHARED.xCodeVersion:="12.5"
+	SHARED.xCodeMinVersion:="12.5"
+	SHARED.xCodeMaxVersion:="12.5"
 	SHARED.iosDeploymentTarget:="14.5"
 	SHARED.useXcodeDefaultPath:=True:C214
 	
+	//SHARED.xCodeMinVersion:="12.4"
+	//SHARED.xCodeMaxVersion:="12.4"
+	
 	// 1] Android
-	SHARED.studioVersion:="4.1"
+	SHARED.studioMinVersion:="4.1"
 	
 	// Project config
 	SHARED.swift:=New object:C1471(\

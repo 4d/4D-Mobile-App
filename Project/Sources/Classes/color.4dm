@@ -60,7 +60,19 @@ Function setColor($color : Integer)->$this : cs:C1710.color
 	This:C1470.main:=$color
 	This:C1470.rgb:=This:C1470.colorToRGB($color)
 	This:C1470.hsl:=This:C1470.colorToHSL($color)
-	This:C1470.css:=This:C1470.colorToCSS($color)  //; This.hsl)
+	This:C1470.css:=This:C1470.colorToCSS($color)
+	
+	$this:=This:C1470
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// 4RGB color from 4DPalette index (1-256)
+Function setColorIndexed($color : Integer)->$this : cs:C1710.color
+	
+	If ($color>=1) & ($color<=256)
+		
+		This:C1470.setCSS(JSON Parse:C1218(File:C1566("/RESOURCES/colors.json").getText()).indexed[$color-1])
+		
+	End if 
 	
 	$this:=This:C1470
 	
@@ -69,10 +81,9 @@ Function setColor($color : Integer)->$this : cs:C1710.color
 Function setRGB($rgb : Object)->$this : cs:C1710.color
 	
 	This:C1470.rgb:=$rgb
-	
-	This:C1470.main:=(Num:C11(This:C1470.rgb.alpha) << 24)+(This:C1470.rgb.red << 16)+(This:C1470.rgb.green << 8)+This:C1470.rgb.blue
+	This:C1470.main:=(This:C1470.rgb.red << 16)+(This:C1470.rgb.green << 8)+This:C1470.rgb.blue
 	This:C1470.hsl:=This:C1470.colorToHSL(This:C1470.main)
-	This:C1470.css:=This:C1470.colorToCSS(This:C1470.main)  //; This.hsl)
+	This:C1470.css:=This:C1470.colorToCSS(This:C1470.main)
 	
 	$this:=This:C1470
 	
@@ -82,14 +93,14 @@ Function setHSL($hsl : Object)->$this : cs:C1710.color
 	
 	This:C1470.hsl:=$hsl
 	This:C1470.rgb:=This:C1470.hslToRGB($hsl)
-	This:C1470.main:=(Num:C11(This:C1470.rgb.alpha) << 24)+(This:C1470.rgb.red << 16)+(This:C1470.rgb.green << 8)+This:C1470.rgb.blue
-	This:C1470.css:=This:C1470.colorToCSS(This:C1470.main)  //; This.hsl)
+	This:C1470.main:=(This:C1470.rgb.red << 16)+(This:C1470.rgb.green << 8)+This:C1470.rgb.blue
+	This:C1470.css:=This:C1470.colorToCSS(This:C1470.main)
 	
 	$this:=This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// HTML Color
-Function setCSS($htmlColor : Text)->$this : cs:C1710.color
+Function setCSS($css : Text)->$this : cs:C1710.color
 	
 	var $lightness; $r1; $r2; $saturation : Real
 	var $t : Text
@@ -99,13 +110,7 @@ Function setCSS($htmlColor : Text)->$this : cs:C1710.color
 	ARRAY LONGINT:C221($len; 0x0000)
 	ARRAY LONGINT:C221($pos; 0x0000)
 	
-	If (This:C1470.namedColors=Null:C1517)
-		
-		This:C1470.namedColors:=JSON Parse:C1218(File:C1566("/RESOURCES/htmlColors.json").getText())
-		
-	End if 
-	
-	$o:=This:C1470.namedColors.query("name = :1"; $htmlColor).pop()
+	$o:=JSON Parse:C1218(File:C1566("/RESOURCES/colors.json").getText()).named.query("name = :1"; $css).pop()
 	
 	Case of 
 			
@@ -115,25 +120,25 @@ Function setCSS($htmlColor : Text)->$this : cs:C1710.color
 			This:C1470.setRGB($o)
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?mi-s)#[0-9abcdef]{6}"; $htmlColor; 1))  // #RRGGBB
+		: (Match regex:C1019("(?mi-s)#[0-9abcdef]{6}"; $css; 1))  // #RRGGBB
 			
-			PROCESS 4D TAGS:C816("<!--#4dtext "+Replace string:C233($htmlColor; "#"; "0x")+"-->"; $t)
+			PROCESS 4D TAGS:C816("<!--#4dtext "+Replace string:C233($css; "#"; "0x")+"-->"; $t)
 			This:C1470.setColor(Num:C11($t))
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-si)rgb\\s*\\(\\s*(\\d*)\\s*,\\s*(\\d*)\\s*,\\s*(\\d*)\\s*\\)"; $htmlColor; 1; $pos; $len))  // rgb(R,G,B)
+		: (Match regex:C1019("(?m-si)rgb\\s*\\(\\s*(\\d*)\\s*,\\s*(\\d*)\\s*,\\s*(\\d*)\\s*\\)"; $css; 1; $pos; $len))  // rgb(R,G,B)
 			
-			$red:=Num:C11(Substring:C12($htmlColor; $pos{1}; $len{1}))
-			$green:=Num:C11(Substring:C12($htmlColor; $pos{2}; $len{2}))
-			$blue:=Num:C11(Substring:C12($htmlColor; $pos{3}; $len{3}))
+			$red:=Num:C11(Substring:C12($css; $pos{1}; $len{1}))
+			$green:=Num:C11(Substring:C12($css; $pos{2}; $len{2}))
+			$blue:=Num:C11(Substring:C12($css; $pos{3}; $len{3}))
 			This:C1470.setColor(($red << 16)+($green << 8)+$blue)
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-si)hsl\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)%\\s*,\\s*(\\d+)%\\s*\\)"; $htmlColor; 1; $pos; $len))  // hsl(hue, saturation, lightness)
+		: (Match regex:C1019("(?m-si)hsl\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)%\\s*,\\s*(\\d+)%\\s*\\)"; $css; 1; $pos; $len))  // hsl(hue, saturation, lightness)
 			
-			$hue:=Num:C11(Substring:C12($htmlColor; $pos{1}; $len{1}))%360  //from 0 to 360°
-			$lightness:=Num:C11(Substring:C12($htmlColor; $pos{2}; $len{2}))/100  //from 0 to 100%
-			$saturation:=Num:C11(Substring:C12($htmlColor; $pos{3}; $len{3}))/100  //from 0 to 100%
+			$hue:=Num:C11(Substring:C12($css; $pos{1}; $len{1}))%360  //from 0 to 360°
+			$lightness:=Num:C11(Substring:C12($css; $pos{2}; $len{2}))/100  //from 0 to 100%
+			$saturation:=Num:C11(Substring:C12($css; $pos{3}; $len{3}))/100  //from 0 to 100%
 			
 			If ($saturation=0)  //HSL from 0 to 1
 				
@@ -226,20 +231,25 @@ Function colorToCSS($color : Integer; $type : Text)->$css
 				$css:="hsl("+String:C10($o.hue)+","+String:C10($o.saturation)+"%,"+String:C10($o.lightness)+"%)"
 				
 				//______________________________________________________
-			Else 
+			: ($type="named")
 				
-				// A "Case of" statement should never omit "Else"
+				$o:=JSON Parse:C1218(File:C1566("/RESOURCES/colors.json").getText()).named.query("red = :1 AND green = :2 AND blue = :3"; $red; $green; $blue).pop()
+				$css:=String:C10($o.name)
+				
 				//______________________________________________________
 		End case 
 		
 	Else 
+		
+		$o:=JSON Parse:C1218(File:C1566("/RESOURCES/colors.json").getText()).named.query("red = :1 AND green = :2 AND blue = :3"; $red; $green; $blue).pop()
 		
 		$css:=New object:C1471(\
 			"components"; This:C1470.colorToCSS($color; "components"); \
 			"percentages"; This:C1470.colorToCSS($color; "percentages"); \
 			"hex"; This:C1470.colorToCSS($color; "hex"); \
 			"hexLong"; This:C1470.colorToCSS($color; "hexLong"); \
-			"hsl"; This:C1470.colorToCSS($color; "hsl")\
+			"hsl"; This:C1470.colorToCSS($color; "hsl"); \
+			"name"; Choose:C955($o=Null:C1517; Null:C1517; $o.name)\
 			)
 		
 	End if 
@@ -282,7 +292,7 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 	Case of 
 			
 			//________________________________________
-		: ($kind=1)  // Complementary color (1)
+		: ($kind=0)  // Complementary color (1)
 			
 			Case of 
 					
@@ -316,7 +326,7 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 			End case 
 			
 			//________________________________________
-		: ($kind=2)  // Complementary colors separated (2)
+		: ($kind=1)  // Complementary colors separated (2)
 			
 			Case of 
 					
@@ -384,7 +394,7 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 			End case 
 			
 			//________________________________________
-		: ($kind=3)  // Triadic complementary colors (2)
+		: ($kind=2)  // Triadic complementary colors (2)
 			
 			Case of 
 					
@@ -444,7 +454,7 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 			End case 
 			
 			//________________________________________
-		: ($kind=4)  // Analogous colors (2)
+		: ($kind=3)  // Analogous colors (2)
 			
 			Case of 
 					
@@ -504,7 +514,7 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 			End case 
 			
 			//________________________________________
-		: ($kind=5)  // Monochromatic colors (3)
+		: ($kind=4)  // Monochromatic colors (3)
 			
 			$palette.push(This:C1470.hslToColor(New object:C1471(\
 				"hue"; This:C1470.hsl.hue; \
@@ -522,7 +532,7 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 				"lightness"; 40)))
 			
 			//________________________________________
-		: ($kind=6)  // Tetradic complementary colors (4)
+		: ($kind=5)  // Tetradic complementary colors (4)
 			
 			Case of 
 					
@@ -669,6 +679,55 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function fontColor($backgroundColor; $green : Integer; $blue : Integer)->$value : Text
+	
+	var $lightness : Real
+	var $rgb : Object
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			$rgb:=This:C1470.rgb
+			
+			//______________________________________________________
+		: (Value type:C1509($backgroundColor)=Is real:K8:4)\
+			 | (Value type:C1509($backgroundColor)=Is longint:K8:6)
+			
+			$rgb:=New object:C1471(\
+				"red"; $backgroundColor; \
+				"green"; 0; \
+				"blue"; 0)
+			
+			If (Count parameters:C259>=2)
+				
+				$rgb.green:=$green
+				
+			End if 
+			
+			If (Count parameters:C259>=3)
+				
+				$rgb.blue:=$blue
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			$rgb:=cs:C1710.color.new($backgroundColor).rgb
+			
+			//______________________________________________________
+	End case 
+	
+	If ($rgb#Null:C1517)
+		
+		$lightness:=1-(((0.299*$rgb.red)+(0.587*$rgb.green)+(0.114*$rgb.blue))/255)
+		$value:=Choose:C955($lightness<0.5; "black"; "white")
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _convertColor($color : Integer; $format : Text)->$value
 	
 	var $alpha; $red; $green; $blue : Integer
@@ -681,7 +740,7 @@ Function _convertColor($color : Integer; $format : Text)->$value
 		
 	End if 
 	
-	$alpha:=($color & 0xFF000000) >> 24
+	$alpha:=255  // No alpha with 4D color
 	$red:=($color & 0x00FF0000) >> 16
 	$green:=($color & 0xFF00) >> 8
 	$blue:=$color & 0x00FF

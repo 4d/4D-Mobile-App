@@ -59,7 +59,7 @@ Case of
 				
 			End if 
 			
-			If (Not:C34(Bool:C1537($xcode.ready)))
+			If (Not:C34(Bool:C1537($xcode.ready))) & (Not:C34(Bool:C1537($xcode.alreadyNotified)))
 				
 				If (Not:C34(Bool:C1537($xcode.canceled)))
 					

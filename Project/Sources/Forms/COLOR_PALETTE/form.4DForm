@@ -1,0 +1,61 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "variable",
+	"windowSizingY": "variable",
+	"windowMinWidth": 0,
+	"windowMinHeight": 0,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"events": [
+		"onLoad"
+	],
+	"windowTitle": "window title",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"colorIndexed": {
+					"type": "input",
+					"top": 0,
+					"left": 0,
+					"width": 165,
+					"height": 176,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"dataSourceTypeHint": "picture",
+					"hideFocusRing": true,
+					"scrollbarVertical": "hidden",
+					"scrollbarHorizontal": "hidden",
+					"dragging": "none",
+					"method": "ObjectMethods/colorIndexed.4dm",
+					"events": [
+						"onClick"
+					],
+					"pictureFormat": "truncatedTopLeft",
+					"enterable": false,
+					"focusable": false,
+					"contextMenu": "none",
+					"fill": "transparent",
+					"borderStyle": "none"
+				}
+			}
+		}
+	],
+	"geometryStamp": 6,
+	"width": 165,
+	"height": 176,
+	"method": "method.4dm",
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
+}

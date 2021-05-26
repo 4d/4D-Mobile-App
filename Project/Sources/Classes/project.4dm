@@ -62,7 +62,7 @@ Function load($project)->$this : cs:C1710.project
 		
 		$project:=JSON Parse:C1218($file.getText())
 		
-		If (project_Upgrade($project))
+		If (project_Upgrade($project; This:C1470._folder))
 			
 			// If upgraded, keep a copy of the old project…
 			$o:=This:C1470._folder.folder(Replace string:C233(Get localized string:C991("convertedFiles"); "{stamp}"; str_date("stamp")))

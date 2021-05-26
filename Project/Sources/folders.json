@@ -669,6 +669,17 @@
 			"widget"
 		]
 	},
+	"HDI_COLOR": {
+		"methods": [
+			"HDI_COLOR"
+		],
+		"forms": [
+			"COLOR_HSL",
+			"COLOR_PALETTE",
+			"COLOR_RGB",
+			"HDI_COLOR"
+		]
+	},
 	"HTUs": {
 		"methods": [
 			"HTU_logs",

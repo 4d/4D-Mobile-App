@@ -1,0 +1,201 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "variable",
+	"windowSizingY": "variable",
+	"windowMinWidth": 0,
+	"windowMinHeight": 0,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"rightMargin": 10,
+	"bottomMargin": 10,
+	"events": [
+		"onDataChange"
+	],
+	"windowTitle": "window title",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"hue.ruler": {
+					"type": "ruler",
+					"top": 11,
+					"left": 78,
+					"width": 200,
+					"height": 12,
+					"sizingX": "move",
+					"dataSource": "Form:C1466.hue",
+					"max": 360,
+					"graduationStep": 360,
+					"focusable": false,
+					"events": [
+						"onClick",
+						"onDataChange"
+					]
+				},
+				"hue.label": {
+					"type": "text",
+					"top": 10,
+					"left": 8,
+					"width": 60,
+					"height": 14,
+					"sizingX": "move",
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "Hue",
+					"fontSize": 11
+				},
+				"saturation.ruler": {
+					"type": "ruler",
+					"top": 38,
+					"left": 78,
+					"width": 200,
+					"height": 12,
+					"sizingX": "move",
+					"dataSource": "Form:C1466.saturation",
+					"max": 100,
+					"graduationStep": 100,
+					"focusable": false,
+					"events": [
+						"onClick",
+						"onDataChange"
+					]
+				},
+				"saturation.label": {
+					"type": "text",
+					"top": 37,
+					"left": 8,
+					"width": 60,
+					"height": 14,
+					"sizingX": "move",
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "Saturation",
+					"fontSize": 11
+				},
+				"lightness.ruler": {
+					"type": "ruler",
+					"top": 65,
+					"left": 78,
+					"width": 200,
+					"height": 12,
+					"sizingX": "move",
+					"dataSource": "Form:C1466.lightness",
+					"max": 100,
+					"graduationStep": 100,
+					"focusable": false,
+					"events": [
+						"onClick",
+						"onDataChange"
+					]
+				},
+				"lightness.label": {
+					"type": "text",
+					"top": 64,
+					"left": 8,
+					"width": 60,
+					"height": 14,
+					"sizingX": "move",
+					"stroke": "#696969",
+					"textAlign": "right",
+					"text": "lightness",
+					"fontSize": 11
+				},
+				"hue.value": {
+					"type": "input",
+					"top": 11,
+					"left": 292,
+					"width": 36,
+					"height": 13,
+					"sizingX": "move",
+					"dataSource": "Form:C1466.hue",
+					"dataSourceTypeHint": "number",
+					"fontFamily": "System Font",
+					"fontSize": 10,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 360,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"saturation.value": {
+					"type": "input",
+					"top": 38,
+					"left": 292,
+					"width": 36,
+					"height": 13,
+					"sizingX": "move",
+					"dataSource": "Form:C1466.saturation",
+					"dataSourceTypeHint": "number",
+					"fontFamily": "System Font",
+					"fontSize": 10,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 100,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"lightness.value": {
+					"type": "input",
+					"top": 65,
+					"left": 292,
+					"width": 36,
+					"height": 13,
+					"sizingX": "move",
+					"dataSource": "Form:C1466.lightness",
+					"dataSourceTypeHint": "number",
+					"fontFamily": "System Font",
+					"fontSize": 10,
+					"hideFocusRing": true,
+					"contextMenu": "none",
+					"min": 0,
+					"max": 100,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				}
+			}
+		}
+	],
+	"geometryStamp": 30,
+	"editor": {
+		"groups": {
+			"Group": [
+				"hue.ruler",
+				"hue.label",
+				"hue.value"
+			],
+			"Group1": [
+				"saturation.ruler",
+				"saturation.label",
+				"saturation.value"
+			],
+			"Group2": [
+				"lightness.ruler",
+				"lightness.label",
+				"lightness.value"
+			]
+		},
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"method": "method.4dm"
+}

@@ -206,9 +206,15 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 	
 	//====================================================================
 	// Returns True if the version of Xcode is equal or superior to the desired one
-Function checkVersion($minimumVersion : Text)->$ok : Boolean
+Function checkMinimumVersion($version : Text)->$ok : Boolean
 	
-	$ok:=(cs:C1710.str.new(This:C1470.version).versionCompare($minimumVersion)>=0)
+	$ok:=(cs:C1710.str.new(This:C1470.version).versionCompare($version)>=0)
+	
+	//====================================================================
+	// Returns True if the version of Xcode is equal or superior to the desired one
+Function checkMaximumVersion($version : Text)->$ok : Boolean
+	
+	$ok:=(cs:C1710.str.new(This:C1470.version).versionCompare($version)#1)
 	
 	//====================================================================
 	// Check if any First Launch tasks need to be performed.
