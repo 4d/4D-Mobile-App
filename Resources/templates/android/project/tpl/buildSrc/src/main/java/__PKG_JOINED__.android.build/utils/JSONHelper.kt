@@ -57,5 +57,13 @@ fun JSONObject.getSafeBoolean(key: String): Boolean? {
     }
 }
 
+fun JSONArray.getSafeString(position: Int): String? {
+    return try {
+        this.getString(position)
+    } catch (e: JSONException) {
+        return null
+    }
+}
+
 fun retrieveJSONObject(jsonString: String): JSONObject =
     JSONObject(jsonString.substring(jsonString.indexOf("{"), jsonString.lastIndexOf("}") + 1))

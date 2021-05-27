@@ -12,6 +12,7 @@ import com.qmobile.qmobiledatasync.utils.FragmentUtil
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 import com.qmobile.qmobileui.BR
+import {{package}}.R
 {{#tableNames_navigation}}
 import {{package}}.databinding.FragmentDetail{{nameCamelCase}}Binding
 {{/tableNames_navigation}}
@@ -93,5 +94,16 @@ class FragmentUtilImpl :
             viewDataBinding.setVariable(BR.{{relation_name}}, null)
         }
         {{/tableNames_layout_relations}}
+    }
+
+     /**
+     * Provides drawable resources for custom formatters
+     */
+    override fun getDrawableForFormatter(formatName: String, imageName: String): Int? {
+        {{#custom_formatter_images}}
+        if (formatName == "{{formatterName}}" && imageName == "{{imageName}}")
+            return R.drawable.{{resourceName}}
+        {{/custom_formatter_images}}
+        return null
     }
 }
