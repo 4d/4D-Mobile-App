@@ -65,7 +65,10 @@ private fun String.lowerCustomProperties() =
     if (this == "__KEY" || this == "__STAMP" || this == "__GlobalStamp" || this == "__TIMESTAMP")
         this
     else
-        this.toLowerCase(Locale.getDefault())
+        if (this.startsWith("__") && this.endsWith("Key"))
+            this.removeSuffix("Key").toLowerCase(Locale.getDefault()) + "Key"
+        else
+            this.toLowerCase(Locale.getDefault())
 
 private fun String.decapitalizeExceptID() = 
     if (this == "ID") this.toLowerCase(Locale.getDefault()) else this.decapitalize(Locale.getDefault())
