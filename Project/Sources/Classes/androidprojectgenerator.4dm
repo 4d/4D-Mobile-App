@@ -260,9 +260,7 @@ Function copyIcons
 		
 		$0.success:=True:C214
 		
-		var $dataModel : Object
-		var $path : cs:C1710.path
-		$path:=cs:C1710.path.new()
+		var $dataModel; $field : Object
 		
 		For each ($dataModel; OB Entries:C1720($2))
 			
@@ -274,7 +272,7 @@ Function copyIcons
 				
 				If ($iconPath#"")
 					
-					$currentFile:=$path.icon($iconPath)
+					$currentFile:=This:C1470.path.icon($iconPath)
 					
 				End if 
 				
@@ -320,6 +318,89 @@ Function copyIcons
 				
 				// Else : already handled
 			End if 
+			
+			var $field : Object
+			
+			// Check for formatter image to copy
+			For each ($field; OB Entries:C1720($dataModel.value))
+				
+				If (OB Is defined:C1231($field.value; "format"))
+					
+					var $format; $formatName : Text
+					
+					$format:=$field.value.format
+					
+					If (Length:C16($format)>0)
+						
+						If (Substring:C12($format; 1; 1)="/")
+							
+							var $formattersFolder; $customFormatterFolder; $imagesFolderInFormatter : 4D:C1709.Folder
+							
+							$formattersFolder:=This:C1470.path.hostFormatters()
+							
+							If ($formattersFolder.exists)
+								
+								$formatName:=Substring:C12($format; 2)
+								
+								$customFormatterFolder:=$formattersFolder.folder($formatName)
+								
+								If ($customFormatterFolder.exists)
+									
+									$imagesFolderInFormatter:=$customFormatterFolder.folder("Images")
+									
+									If ($imagesFolderInFormatter.exists)
+										
+										var $imageFile : 4D:C1709.File
+										
+										For each ($imageFile; $imagesFolderInFormatter.files(fk ignore invisible:K87:22))
+											
+											var $correctedFormatName; $correctedImageName : Text
+											
+											$correctedFormatName:=Lowercase:C14($formatName)
+											Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedFormatName; 0)
+											
+											$correctedImageName:=Lowercase:C14($imageFile.name)
+											Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedImageName; 0)
+											
+											$correctedImageName:=$correctedFormatName+"_"+$correctedImageName+$imageFile.extension
+											
+											$copyDest:=$imageFile.copyTo($drawableFolder; $correctedImageName; fk overwrite:K87:5)
+											
+											If (Not:C34($copyDest.exists))  // Copy failed
+												
+												$0.success:=False:C215
+												$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+												
+												//Else : all ok
+											End if 
+											
+										End for each 
+										
+										// Else : no image to copy
+									End if 
+									
+								Else 
+									
+									// custom folder does not exists
+									$0.success:=False:C215
+									$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
+									
+								End if 
+								
+								// Else : no formatters folder
+							End if 
+							
+							// Else : no custom formatter
+						End if 
+						
+						// Else : format empty
+					End if 
+					
+					// Else : no formatter
+				End if 
+				
+			End for each 
+			
 			
 		End for each 
 		
