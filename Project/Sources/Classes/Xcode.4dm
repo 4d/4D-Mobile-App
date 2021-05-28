@@ -41,40 +41,39 @@ Function getRequirements()
 	
 	$requirement:=cs:C1710.path.new().preferences("requirements.json")
 	
-	If (Not:C34($requirement.exists))
-		
-		File:C1566("/RESOURCES/requirements.json").copyTo(cs:C1710.path.new().preferences())
-		
-	End if 
-	
-	$content:=JSON Parse:C1218($requirement.getText())
-	$run:=True:C214
-	
-	$http:=cs:C1710.http.new("https://4d-for-mobile.github.io/sdk/xcode.json").setResponseType(Is a document:K24:1; $requirement)
-	
 	If ($requirement.exists)
 		
 		$run:=($requirement.modificationDate<Current date:C33)
 		
-		If ($run)
+	Else 
+		
+		File:C1566("/RESOURCES/requirements.json").copyTo(cs:C1710.path.new().preferences())
+		$run:=True:C214
+		
+	End if 
+	
+	$content:=JSON Parse:C1218($requirement.getText())
+	
+	$http:=cs:C1710.http.new("https://4d-for-mobile.github.io/sdk/xcode.json").setResponseType(Is a document:K24:1; $requirement)
+	
+	If ($run)
+		
+		$content:=JSON Parse:C1218($requirement.getText())
+		$ETag:=String:C10($content.Etag)
+		
+		If (Length:C16($ETag)#0)
 			
-			$content:=JSON Parse:C1218($requirement.getText())
-			$ETag:=String:C10($content.Etag)
+			$run:=$http.newerRelease($ETag)
+			$run:=$run & ($http.status=200)
 			
-			If (Length:C16($ETag)#0)
+			If (Not:C34($run))
 				
-				$run:=$http.newerRelease($ETag)
-				$run:=$run & ($http.status=200)
+				// Fix the date of the last check
+				$requirement.setText(JSON Stringify:C1217($content; *))
 				
-				If (Not:C34($run))
-					
-					// Fix the date of the last check
-					$requirement.setText(JSON Stringify:C1217($content; *))
-					
-				End if   //Not($run)
-			End if   //Length($ETag)#0
-		End if   //$run
-	End if   //$requirement.exists
+			End if   //Not($run)
+		End if   //Length($ETag)#0
+	End if   //$run
 	
 	If ($run)
 		
