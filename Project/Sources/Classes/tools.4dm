@@ -63,7 +63,8 @@ Function next($c : Collection; $current : Integer)->$result : Variant
 Function _pushError($desription : Text)
 	
 	This:C1470.success:=False:C215
-	This:C1470.errors.push(Get call chain:C1662[1].name+" - "+$desription)
+	This:C1470.lastError:=Get call chain:C1662[1].name+" - "+$desription
+	This:C1470.errors.push(This:C1470.lastError)
 	
 	//====================================================================
 	// A very simple execution of LAUNCH EXTERNAL PROCESS
@@ -347,7 +348,7 @@ Function multistyleCompatible
 	// Identical to the Choose command
 	// but without error because it does not evaluate all members.
 Function choose($requirement)->$choosed
-	var ${2} : Object
+	var ${2} : 4D:C1709.Function
 	
 	If (Value type:C1509($requirement)=Is real:K8:4)\
 		 | (Value type:C1509($requirement)=Is longint:K8:6)

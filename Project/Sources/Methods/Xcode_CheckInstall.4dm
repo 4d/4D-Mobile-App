@@ -9,6 +9,7 @@
 // - Is Xcode installed?
 // - Is Xcode version ≥ minimum version?
 // - Is development tools installed?
+// - Is the wanted tools are the active developper directory?
 // - Is the Xcode licence accepted?
 // ----------------------------------------------------
 // Declarations
@@ -19,7 +20,8 @@ If (False:C215)
 	C_OBJECT:C1216(Xcode_CheckInstall; $1)
 End if 
 
-var $inƒ; $out; $signal : Object
+var $inƒ; $requirement; $signal : Object
+var $requestedVersion : Text
 var $Xcode : cs:C1710.Xcode
 
 // ----------------------------------------------------
@@ -46,172 +48,52 @@ End if
 
 $out:=New object:C1471(\
 "platform"; Mac OS:K25:2; \
-"XcodeAvailable"; False:C215; \
+"applicationAvailable"; False:C215; \
 "toolsAvalaible"; False:C215; \
 "ready"; False:C215)
 
 // ----------------------------------------------------
-// Check if Xcode is available into the "Applications" folder
+// *CHECK IF XCODE IS AVAILABLE INTO THE "APPLICATIONS" FOLDER
 $Xcode:=cs:C1710.Xcode.new(True:C214)
 
 If ($Xcode.success)
 	
-	$out.applicationAvailable:=$Xcode.application.exists
+	// *CHECK IF MORE THAN ONE INSTANCE OF XCODE IS INSTALLED TO USE THE BEST ONE...
+	$requirement:=JSON Parse:C1218(File:C1566("/RESOURCES/requirements.json").getText())[Application version:C493]
+	$requestedVersion:=$requirement.xcode
 	
-End if 
-
-If ($out.applicationAvailable)
+	// **** POUR LE TEST ****
+	//$requestedVersion:="12.4+"
 	
-	// Check version
-	$out.ready:=$Xcode.checkMinimumVersion(SHARED.xCodeMinVersion)
+	$Xcode.checkRequiredVersion($requestedVersion)
 	
-	If (Not:C34($out.ready))
+	If ($requestedVersion="@+")  // Remove '+' if any
 		
-		// Look for the highest version of Xcode installed
-		$Xcode.path()
+		$requestedVersion:=Delete string:C232($requestedVersion; Length:C16($requestedVersion); 1)
 		
-		If ($Xcode.success)
-			
-			$out.applicationAvailable:=$Xcode.application.exists
-			
-		End if 
-		
-		If ($out.applicationAvailable)
-			
-			// Check version
-			$out.ready:=$Xcode.checkMinimumVersion(SHARED.xCodeMinVersion)
-			
-		End if 
 	End if 
 	
-	If ($out.ready)
+	If ($Xcode.success)
 		
-		$out.ready:=$Xcode.checkMaximumVersion(SHARED.xCodeMaxVersion)
+		$out.applicationAvailable:=$Xcode.application.exists
+		$out.version:=$Xcode.version
 		
-		If ($out.ready)
+		// *CHECK TOOLS-PATH
+		$Xcode.toolsPath()
+		
+		If ($Xcode.tools.exists)
 			
-			$out.version:=$Xcode.version
+			$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
 			
-			// CHECK TOOLS-PATH
-			$Xcode.toolsPath()
+		End if 
+		
+		If ($out.toolsAvalaible)
 			
-			If ($Xcode.tools.exists)
-				
-				$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
-				
-			End if 
-			
-			If (Not:C34($out.toolsAvalaible))
-				
-				$out.ready:=False:C215
-				
-				If (Not:C34(Bool:C1537($inƒ.silent)))
-					
-					$signal:=await_MESSAGE(New object:C1471(\
-						"target"; $inƒ.caller; \
-						"action"; "show"; \
-						"type"; "confirm"; \
-						"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
-						"additional"; "wantToFixThePath"; \
-						"cancel"; "later"))
-					
-					If ($signal.validate)
-						
-						$Xcode.setToolPath(cs:C1710.str.new("4dMobileWantsToMakeChanges").localized("4dForIos"))
-						
-						If ($Xcode.success)
-							
-							If ($Xcode.tools.exists)
-								
-								$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
-								
-							End if 
-							
-						Else 
-							
-							If (Position:C15("User canceled. (-128)"; $Xcode.lastError)>0)
-								
-								// NOTHING MORE TO DO
-								
-							Else 
-								
-								POST_MESSAGE(New object:C1471(\
-									"target"; $inƒ.caller; \
-									"action"; "show"; \
-									"type"; "alert"; \
-									"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
-									"additional"; "tryDoingThisFromTheXcodeApplication"))
-								
-							End if 
-						End if 
-						
-					Else 
-						
-						$out.canceled:=True:C214  // Remember this so as not to ask again
-						
-					End if 
-				End if 
-			End if 
+			$out.ready:=True:C214
 			
 		Else 
 			
-			If (Not:C34(Bool:C1537($inƒ.silent)))
-				
-				POST_MESSAGE(New object:C1471(\
-					"target"; $inƒ.caller; \
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; New collection:C1472("versionNotSupported"; "Xcode"); \
-					"additional"; New collection:C1472("tooRecentVersion"; "4dForIos"; "Xcode"; SHARED.xCodeMaxVersion); \
-					"okFormula"; Formula:C1597(EDITOR.xCode.alreadyNotified:=True:C214)\
-					))
-				
-			End if 
-		End if 
-		
-	Else 
-		
-		If (Not:C34(Bool:C1537($inƒ.silent)))
-			
-			$signal:=await_MESSAGE(New object:C1471(\
-				"target"; $inƒ.caller; \
-				"action"; "show"; \
-				"type"; "confirm"; \
-				"title"; New collection:C1472("obsoleteVersionofApp"; "4dForIos"; SHARED.xCodeMinVersion; "Xcode"); \
-				"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "xcode"); \
-				"cancel"; "later"))
-			
-			If ($signal.validate)
-				
-				OPEN URL:C673(Get localized string:C991("appstore_xcode"); *)
-				
-			Else 
-				
-				$out.canceled:=True:C214  // Remember this so as not to ask again
-				
-			End if 
-		End if 
-	End if 
-	
-	If ($out.ready)
-		
-		If ($Xcode.tools=Null:C1517)
-			
-			$Xcode.toolsPath()
-			
-		End if 
-		
-		$out.xcode:=$Xcode.application
-		$out.tools:=$Xcode.tools
-		
-		// CHECK FIRST INSTALL
-		If (Not:C34($Xcode.checkFirstLaunchStatus()))
-			
-			$Xcode.setToolPath(cs:C1710.str.new("4dMobileWantsToMakeChanges").localized("4dForIos"))
-			
-		End if 
-		
-		If (Not:C34($Xcode.checkFirstLaunchStatus()))
+			// *SETS THE ACTIVE DEVELOPER DIRECTORY
 			
 			If (Not:C34(Bool:C1537($inƒ.silent)))
 				
@@ -219,24 +101,153 @@ If ($out.applicationAvailable)
 					"target"; $inƒ.caller; \
 					"action"; "show"; \
 					"type"; "confirm"; \
-					"title"; "xcodeIsNotFullyFunctional"; \
-					"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "xcode"); \
-					"cancel"; "later"))
+					"title"; New collection:C1472("needsSetXcodeAsActiveVersion"; "4dForIos"; $requestedVersion); \
+					"additional"; "doYouWantToSwitchTheActiveDevelopperDirectory"\
+					))
 				
 				If ($signal.validate)
 					
-					$Xcode.open()
+					$Xcode.switch(cs:C1710.str.new("switchTheActiveDevelopperDirectory").localized("4dForIos"))
+					
+					Case of 
+							
+							//______________________________________________________
+						: ($Xcode.isCancelled())
+							
+							$out.canceled:=True:C214
+							
+							//______________________________________________________
+						: ($Xcode.isWrongPassword())
+							
+							// #WRONG PASSWORD
+							
+							//______________________________________________________
+						Else 
+							
+							// *RECHECK TOOLS-PATH
+							$Xcode.toolsPath()
+							
+							$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
+							
+							If ($out.toolsAvalaible)
+								
+								$out.ready:=True:C214
+								
+							Else 
+								
+								If (Not:C34(Bool:C1537($inƒ.silent)))
+									
+									$signal:=await_MESSAGE(New object:C1471(\
+										"target"; $inƒ.caller; \
+										"action"; "show"; \
+										"type"; "confirm"; \
+										"title"; "theDevelopmentToolsAreNotProperlyInstalled"; \
+										"additional"; "doYouWantToFixTheToolsPath"; \
+										"cancel"; "later"))
+									
+									If ($signal.validate)
+										
+										$Xcode.setToolPath(cs:C1710.str.new("fixThePath").localized("4dForIos"))
+										
+										If ($Xcode.success)
+											
+											If ($Xcode.tools.exists)
+												
+												$out.toolsAvalaible:=($Xcode.tools.parent.parent.path=$Xcode.application.path)
+												$out.ready:=$out.toolsAvalaible
+												
+											End if 
+											
+										Else 
+											
+											Case of 
+													
+													//______________________________________________________
+												: ($Xcode.isCancelled())
+													
+													$out.canceled:=True:C214
+													
+													//______________________________________________________
+												: ($Xcode.isWrongPassword())
+													
+													// #WRONG PASSWORD
+													
+													//______________________________________________________
+												Else 
+													
+													POST_MESSAGE(New object:C1471(\
+														"target"; $inƒ.caller; \
+														"action"; "show"; \
+														"type"; "alert"; \
+														"title"; "failedToRepairThePathOfTheDevelopmentTools"; \
+														"additional"; "tryDoingThisFromTheXcodeApplication"))
+													
+													//----------------------------------------
+											End case 
+										End if 
+										
+									Else 
+										
+										$out.canceled:=True:C214
+										
+									End if   //$signal.validate
+								End if   //Not(Bool($inƒ.silent))
+							End if   //$out.toolsAvalaible
+							
+							//______________________________________________________
+					End case 
 					
 				Else 
 					
-					$out.canceled:=True:C214  // Remember this so as not to ask again
+					$out.canceled:=True:C214
 					
-				End if 
-			End if 
-		End if 
-	End if 
+				End if   //$signal.validate
+			End if   //$signal.validate
+		End if   //$out.toolsAvalaible
+		
+	Else 
+		
+		// #VERSION NOT SUPPORTED
+		
+		If (Not:C34(Bool:C1537($inƒ.silent)))
+			
+			If ($xcode.versionCompare($requestedVersion; $xcode.version)=1)  // # TO OLD VERSION
+				
+				$signal:=await_MESSAGE(New object:C1471(\
+					"target"; $inƒ.caller; \
+					"action"; "show"; \
+					"type"; "confirm"; \
+					"title"; New collection:C1472("tooOldVersion"; "4dForIos"; "Xcode"; $requestedVersion); \
+					"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "xcode"); \
+					"cancel"; "later"\
+					))
+				
+				If ($signal.validate)
+					
+					OPEN URL:C673(Get localized string:C991("appstore_xcode"); *)
+					
+				Else 
+					
+					$out.canceled:=True:C214
+					
+				End if   //$signal.validate
+				
+			Else   // # TO RECENT VERSION
+				
+				POST_MESSAGE(New object:C1471(\
+					"target"; $inƒ.caller; \
+					"action"; "show"; \
+					"type"; "alert"; \
+					"title"; New collection:C1472("versionNotSupported"; "Xcode"); \
+					"additional"; New collection:C1472("tooRecentVersion"; "4dForIos"; "Xcode"; $requestedVersion); \
+					"okFormula"; Formula:C1597(EDITOR.xCode.alreadyNotified:=True:C214)\
+					))
+				
+			End if   //$xcode.versionCompare($version; $xcode.version)=1
+		End if   //Not(Bool($inƒ.silent))
+	End if   //$Xcode.success
 	
-Else 
+Else   // #NO XCODE AVAILABLE
 	
 	If (Not:C34(Bool:C1537($inƒ.silent)))
 		
@@ -246,7 +257,8 @@ Else
 			"type"; "confirm"; \
 			"title"; New collection:C1472("4dMobileRequiresXcode"; "4dForIos"); \
 			"additional"; New collection:C1472("wouldYouLikeToInstallNow"; "xcode"); \
-			"cancel"; "later"))
+			"cancel"; "later"\
+			))
 		
 		If ($signal.validate)
 			
@@ -254,15 +266,8 @@ Else
 			
 		Else 
 			
-			$out.canceled:=True:C214  // Remember this so as not to ask again
+			$out.canceled:=True:C214
 			
-		End if 
-	End if 
-End if 
-
-// ----------------------------------------------------
-// Return
-$0:=$out
-
-// ----------------------------------------------------
-// End
+		End if   //$signal.validate
+	End if   //Not(Bool($inƒ.silent))
+End if   //$Xcode.success

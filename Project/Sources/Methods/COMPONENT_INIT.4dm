@@ -135,7 +135,6 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	
 	// 1] iOS
 	SHARED.xCodeMinVersion:="12.5"
-	SHARED.xCodeMaxVersion:="12.5"
 	SHARED.iosDeploymentTarget:="14.5"
 	SHARED.useXcodeDefaultPath:=True:C214
 	

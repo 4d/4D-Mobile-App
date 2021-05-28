@@ -60,7 +60,6 @@ Function isDefaultPath()->$isDefault : Boolean
 Function path($useDefaultPath : Boolean)
 	
 	var $found; $useDefault : Boolean
-	
 	var $folder : 4D:C1709.Folder
 	
 	If (Count parameters:C259>=1)
@@ -101,6 +100,114 @@ Function path($useDefaultPath : Boolean)
 	End if 
 	
 	//====================================================================
+	// If more than one instance of Xcode is available,
+	// select the best one according to the desired version.
+Function checkRequiredVersion($version : Text)
+	
+	var $isEqualOrHigher : Boolean
+	$isEqualOrHigher:=($version="@+")
+	
+	If ($isEqualOrHigher)
+		
+		$version:=Delete string:C232($version; Length:C16($version); 1)
+		
+	End if 
+	
+	var $instances : Collection
+	$instances:=New collection:C1472
+	
+	var $file : 4D:C1709.File
+	var $pathname; $vers : Text
+	
+	For each ($pathname; This:C1470.paths())
+		
+		$file:=Folder:C1567($pathname).file("Contents/version.plist")
+		
+		If ($file.exists)
+			
+			$vers:=String:C10($file.getAppInfo().CFBundleShortVersionString)
+			
+			If (Length:C16($vers)#0)
+				
+				If ($isEqualOrHigher)
+					
+					If (This:C1470.versionCompare($vers; $version)>=0)
+						
+						$instances.push(New object:C1471(\
+							"version"; $vers; \
+							"pathname"; $pathname))
+						
+					End if 
+					
+				Else 
+					
+					If (This:C1470.versionCompare($vers; $version)=0)
+						
+						$instances.push(New object:C1471(\
+							"version"; $vers; \
+							"pathname"; $pathname))
+						
+					End if 
+				End if 
+			End if 
+		End if 
+	End for each 
+	
+	This:C1470.success:=($instances.length>0)
+	
+	If (This:C1470.success)
+		
+		// Keep the best one
+		$instances:=$instances.orderBy("version desc")
+		This:C1470.setPath($instances[0].pathname; $instances[0].version)
+		
+	End if 
+	
+	//====================================================================
+	// Sets the applicatiion
+	// To the given pathname (POSIX)
+	// & update the version
+Function setPath($pathname : Text; $version : Text)
+	
+	var $folder : 4D:C1709.Folder
+	
+	$folder:=Folder:C1567($pathname)
+	
+	This:C1470.success:=$folder.exists
+	
+	If (This:C1470.success)
+		
+		This:C1470.application:=$folder
+		
+		If (Count parameters:C259>=1)
+			
+			This:C1470.version:=$version
+			
+		Else 
+			
+			This:C1470.version:=This:C1470.getVersion()
+			
+		End if 
+	End if 
+	
+	//====================================================================
+	// Sets the active developer directory
+	// To the given pathname (POSIX)
+	// To "This.application.path" pathname if ommited
+Function switch($title : Text)
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470._sudoAskPass("sudo -A /usr/bin/xcode-select --switch  "+This:C1470.quoted(This:C1470.application.path); $title)
+		
+	Else 
+		
+		This:C1470._sudoAskPass("sudo -A /usr/bin/xcode-select --switch  "+This:C1470.quoted(This:C1470.application.path))
+		
+	End if 
+	
+	//====================================================================
+	// Update the .tools property
 Function toolsPath
 	var $o : Object
 	
@@ -126,13 +233,10 @@ Function lastPath
 	var $pathname; $t; $version : Text
 	var $o : Object
 	var $c : Collection
-	var $str : cs:C1710.str
 	
 	$c:=This:C1470.paths()
 	
 	If (This:C1470.success)
-		
-		$str:=cs:C1710.str.new()
 		
 		This:C1470.success:=False:C215
 		
@@ -141,7 +245,7 @@ Function lastPath
 			
 			$version:=This:C1470.getVersion(Folder:C1567($pathname))
 			
-			If ($str.setText($version).versionCompare($t)>=0)  // Equal or higher
+			If (This:C1470.versionCompare($t)>=0)  // Equal or higher
 				
 				$t:=$version
 				This:C1470.version:=$version
@@ -195,6 +299,8 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 	
 	If (This:C1470.success)
 		
+		//defaults [-currentHost | -host hostname] read [domain [key]]
+		
 		$o:=This:C1470.lep("defaults read"+" '"+$file.path+"' CFBundleShortVersionString")
 		
 		If ($o.success)
@@ -208,13 +314,13 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 	// Returns True if the version of Xcode is equal or superior to the desired one
 Function checkMinimumVersion($version : Text)->$ok : Boolean
 	
-	$ok:=(cs:C1710.str.new(This:C1470.version).versionCompare($version)>=0)
+	$ok:=(This:C1470.versionCompare($version)>=0)
 	
 	//====================================================================
 	// Returns True if the version of Xcode is equal or superior to the desired one
 Function checkMaximumVersion($version : Text)->$ok : Boolean
 	
-	$ok:=(cs:C1710.str.new(This:C1470.version).versionCompare($version)#1)
+	$ok:=(This:C1470.versionCompare($version)#1)
 	
 	//====================================================================
 	// Check if any First Launch tasks need to be performed.
@@ -233,33 +339,20 @@ Function checkFirstLaunchStatus()->$status : Boolean
 	//====================================================================
 Function setToolPath($title : Text)
 	
-	var $o : Object
-	
 	If (Count parameters:C259>=1)
 		
-		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; $title)
+		This:C1470._sudoAskPass("sudo -A /usr/bin/xcode-select -s "+This:C1470.singleQuoted(This:C1470.application.path); $title)
+		
+	Else 
+		
+		This:C1470._sudoAskPass("sudo -A /usr/bin/xcode-select -s "+This:C1470.singleQuoted(This:C1470.application.path))
 		
 	End if 
 	
-	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
-	SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2).file("sudo-askpass").path)
-	
-	$o:=This:C1470.lep("sudo -A /usr/bin/xcode-select -s "+This:C1470.singleQuoted(This:C1470.application.path))
-	
-	If ($o.success)
+	If (This:C1470.success)
 		
-		If (Length:C16($o.error)>0)
-			
-			This:C1470.lastError:=$o.error
-			This:C1470.errors.push(This:C1470.lastError)
-			
-			This:C1470.success:=False:C215
-			
-		Else 
-			
-			This:C1470.toolsPath()
-			
-		End if 
+		This:C1470.toolsPath()
+		
 	End if 
 	
 	//====================================================================
@@ -412,4 +505,52 @@ Function showDevicesWindow
 	// OPEN URL("xcdevice://showSimulatorsWindow"; *) // ??? Where did you find that?
 	
 	LAUNCH EXTERNAL PROCESS:C811("open xcdevice://showDevicesWindow")
+	
+	//====================================================================
+Function isCancelled()->$is : Boolean
+	
+	$is:=(Position:C15("User cancelled. (-128)"; This:C1470.lastError)>0)
+	
+	//====================================================================
+Function isWrongPassword()->$is : Boolean
+	
+	$is:=(Position:C15("incorrect password attempts"; This:C1470.lastError)>0)
+	
+	//====================================================================
+Function _sudoAskPass($cmd : Text; $title : Text)->$result : Object
+	
+	var $script : 4D:C1709.File
+	
+	$script:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2).file("sudo-askpass")
+	
+	If (Asserted:C1132($script.exists; "File not found :"+$script.path))
+		
+		If (Count parameters:C259>=2)
+			
+			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; $title)
+			
+		End if 
+		
+		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
+		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; $script.path)
+		
+		This:C1470.lastError:=""
+		
+		$result:=This:C1470.lep($cmd)
+		This:C1470.success:=$result.success
+		
+		If (This:C1470.success)
+			
+			If (Length:C16($result.error)>0)
+				
+				This:C1470._pushError($result.error)
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		This:C1470._pushError(Choose:C955(String:C10($result.error)=""; "sudo-askpass: Unknown error"; $result.error))
+		
+	End if 
 	

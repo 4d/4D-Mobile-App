@@ -675,10 +675,7 @@ If (FEATURE.with("dominantColor")) & ($project.ui.dominantColor=Null:C1517)
 	//
 	If (Count parameters:C259>=2)
 		
-		
 		var $picture : Picture
-		
-		
 		$folder:=$folder.folder("Assets.xcassets/AppIcon.appiconset")
 		
 		If ($folder.exists)

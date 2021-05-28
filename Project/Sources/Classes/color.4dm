@@ -734,6 +734,8 @@ Function _convertColor($color : Integer; $format : Text)->$value
 	var $to : Text
 	var $rgb : Object
 	
+	$to:="rgb"  // Default is RGB
+	
 	If (Count parameters:C259>=2)
 		
 		$to:=$format
@@ -747,8 +749,8 @@ Function _convertColor($color : Integer; $format : Text)->$value
 	
 	Case of 
 			
-			//______________________________________________________
-		: ($to="rgb") | ($to="")  // Default is RGB
+			//………………………………………………………………………………………………………
+		: ($to="rgb")
 			
 			$value:=New object:C1471(\
 				"alpha"; $alpha; \
@@ -757,26 +759,28 @@ Function _convertColor($color : Integer; $format : Text)->$value
 				"blue"; $blue\
 				)
 			
-			//______________________________________________________
+			//………………………………………………………………………………………………………
 		: ($to="hsl")
 			
 			$value:=This:C1470._rgb2Hsl($red; $green; $blue)
 			
-			//______________________________________________________
+			//………………………………………………………………………………………………………
 		: ($to="css")
 			
 			$value:="rgb("+String:C10($red)+","\
 				+String:C10($green)+","\
 				+String:C10($blue)+")"
 			
-			//______________________________________________________
+			//………………………………………………………………………………………………………
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _convertRgb($color : Object; $format : Text)->$value
 	
-	var $to : Text
 	var $rgb : Object
+	var $to : Text
+	
+	$to:="color"  // Default is 4D color
 	
 	If (Count parameters:C259>=1)
 		
@@ -795,8 +799,9 @@ Function _convertRgb($color : Object; $format : Text)->$value
 	End if 
 	
 	Case of 
+			
 			//………………………………………………………………………………………………………
-		: ($to="color") | ($to="")  // Default is 4D color
+		: ($to="color")
 			
 			$value:=(Num:C11($rgb.alpha) << 24)+(Num:C11($rgb.red) << 16)+(Num:C11($rgb.green) << 8)+Num:C11($rgb.blue)
 			
@@ -810,7 +815,7 @@ Function _convertRgb($color : Object; $format : Text)->$value
 			
 			$value:="rgb("+String:C10(Num:C11($rgb.red))+","+String:C10(Num:C11($rgb.green))+","+String:C10(Num:C11($rgb.blue))+")"
 			
-			//______________________________________________________
+			//………………………………………………………………………………………………………
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -957,6 +962,8 @@ Function _convertHSL($color : Object; $format : Text)->$value
 	var $blue; $green; $hue; $lightness; $max; $min; $offset; $red; $saturation : Integer
 	var $hsl : Object
 	
+	$to:="color"  // Default is 4D color
+	
 	If (Count parameters:C259>=1)
 		
 		$hsl:=$color
@@ -1045,8 +1052,9 @@ Function _convertHSL($color : Object; $format : Text)->$value
 	End if 
 	
 	Case of 
+			
 			//………………………………………………………………………………………………………
-		: ($to="color") | ($to="")  // Default is 4D color
+		: ($to="color")
 			
 			$value:=0+($red << 16)+($green << 8)+$blue
 			
@@ -1065,7 +1073,7 @@ Function _convertHSL($color : Object; $format : Text)->$value
 				+String:C10($hsl.saturation)+"%,"\
 				+String:C10($hsl.lightness)+"%)"
 			
-			//______________________________________________________
+			//………………………………………………………………………………………………………
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
