@@ -26,10 +26,69 @@ Class constructor($useDefaultPath : Boolean)
 		
 	Else 
 		
-		This:C1470.lastError:="Xcode is not yet available on this platform"
-		This:C1470.errors.push(This:C1470.lastError)
+		This:C1470._pushError("Xcode is not yet available on this platform")
 		
 	End if 
+	
+	//====================================================================
+Function getRequirements()
+	
+	var $ETag : Text
+	var $run : Boolean
+	var $content : Object
+	var $requirement : 4D:C1709.File
+	var $http : cs:C1710.http
+	
+	$requirement:=cs:C1710.path.new().preferences("requirements.json")
+	
+	If (Not:C34($requirement.exists))
+		
+		File:C1566("/RESOURCES/requirements.json").copyTo(cs:C1710.path.new().preferences())
+		
+	End if 
+	
+	$content:=JSON Parse:C1218($requirement.getText())
+	$run:=True:C214
+	
+	$http:=cs:C1710.http.new("https://4d-for-mobile.github.io/sdk/xcode.json").setResponseType(Is a document:K24:1; $requirement)
+	
+	If ($requirement.exists)
+		
+		$run:=($requirement.modificationDate<Current date:C33)
+		
+		If ($run)
+			
+			$content:=JSON Parse:C1218($requirement.getText())
+			$ETag:=String:C10($content.Etag)
+			
+			If (Length:C16($ETag)#0)
+				
+				$run:=$http.newerRelease($ETag)
+				$run:=$run & ($http.status=200)
+				
+				If (Not:C34($run))
+					
+					// Fix the date of the last check
+					$requirement.setText(JSON Stringify:C1217($content; *))
+					
+				End if   //Not($run)
+			End if   //Length($ETag)#0
+		End if   //$run
+	End if   //$requirement.exists
+	
+	If ($run)
+		
+		$http.get()
+		
+		If ($http.success)
+			
+			$content.Etag:=String:C10($http.headers.query("name = ETag").pop().value)
+			$requirement.setText(JSON Stringify:C1217($content; *))
+			
+		End if 
+	End if 
+	
+	This:C1470.requirement:=$content[Choose:C955(Application version:C493(*)[[1]]="A"; ""; Application version:C493)].xcode
 	
 	//====================================================================
 	// Populate Application with the default path
@@ -223,8 +282,7 @@ Function toolsPath
 		
 	Else 
 		
-		This:C1470.lastError:=$o.error
-		This:C1470.errors.push($o.error)
+		This:C1470._pushError($o.error)
 		
 	End if 
 	
@@ -273,7 +331,7 @@ Function paths()->$instances : Collection
 		
 	Else 
 		
-		This:C1470.lastError:=Choose:C955(Length:C16($o.error)=0; "No Xcode installed"; $o.error)
+		This:C1470._pushError(Choose:C955(Length:C16($o.error)=0; "No Xcode installed"; $o.error))
 		
 	End if 
 	
@@ -407,9 +465,7 @@ Function open($target : 4D:C1709.Folder)
 		
 	Else 
 		
-		This:C1470.success:=False:C215
-		This:C1470.lastError:=Choose:C955(Length:C16(String:C10($o.error))>0; String:C10($o.error); "Unknown error")
-		This:C1470.errors.push(This:C1470.lastError)
+		This:C1470._pushError(Choose:C955(Length:C16(String:C10($o.error))>0; String:C10($o.error); "Unknown error"))
 		
 	End if 
 	
@@ -491,9 +547,7 @@ Function reveal($path : Text)
 		
 	Else 
 		
-		This:C1470.success:=False:C215
-		This:C1470.lastError:=Choose:C955(Length:C16(String:C10($o.error))>0; String:C10($o.error); "Unknown error")
-		This:C1470.errors.push(This:C1470.lastError)
+		This:C1470._pushError(Choose:C955(Length:C16(String:C10($o.error))>0; String:C10($o.error); "Unknown error"))
 		
 	End if 
 	

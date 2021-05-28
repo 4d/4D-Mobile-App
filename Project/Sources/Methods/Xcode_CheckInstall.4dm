@@ -59,8 +59,8 @@ $Xcode:=cs:C1710.Xcode.new(True:C214)
 If ($Xcode.success)
 	
 	// *CHECK IF MORE THAN ONE INSTANCE OF XCODE IS INSTALLED TO USE THE BEST ONE...
-	$requirement:=JSON Parse:C1218(File:C1566("/RESOURCES/requirements.json").getText())[Application version:C493]
-	$requestedVersion:=$requirement.xcode
+	$Xcode.getRequirements()
+	$requestedVersion:=$Xcode.requirement
 	
 	// **** POUR LE TEST ****
 	//$requestedVersion:="12.4+"

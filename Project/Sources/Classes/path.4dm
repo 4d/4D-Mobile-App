@@ -66,6 +66,23 @@ Function userlibrary()->$folder : 4D:C1709.Folder
 		
 	End if 
 	
+/*========================================================*/
+Function preferences($fileName : Text)->$target : Object
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.target:=Folder:C1567(fk user preferences folder:K87:10).file("4D Mobile App/"+$fileName)
+		
+	Else 
+		
+		This:C1470.target:=Folder:C1567(fk user preferences folder:K87:10).folder("4D Mobile App")
+		
+	End if 
+	
+	This:C1470.exists:=This:C1470.target.exists
+	
+	$target:=This:C1470.target
+	
 /*========================================================
 	
                     INTERNAL
