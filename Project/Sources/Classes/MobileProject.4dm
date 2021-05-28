@@ -136,12 +136,12 @@ Function postErrors($errors : Collection)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function themeImageFile()->$theme : 4D:C1709.File
+Function _o_themeImageFile()->$theme : 4D:C1709.File
 	ASSERT:C1129(False:C215; "must be overriden")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function themeFromImageFile()->$theme : Object
+Function _o_themeFromImageFile()->$theme : Object
 	
 	$theme:=New object:C1471(\
 		"success"; False:C215)

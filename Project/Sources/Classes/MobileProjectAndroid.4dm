@@ -21,9 +21,11 @@ Class constructor
 		
 	End for each 
 	
-	If (Is macOS:C1572)
-		This:C1470.setTheme()
-		// Else : not implemented for Windows (Objective-c code)
+	If (Not:C34(Feature.with("dominantColor")))
+		If (Is macOS:C1572)
+			This:C1470._o_setTheme()
+			// Else : not implemented for Windows (Objective-c code)
+		End if 
 	End if 
 	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
@@ -416,15 +418,15 @@ Function checkPackage()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function themeImageFile()->$file : 4D:C1709.File
+Function _o_themeImageFile()->$file : 4D:C1709.File
 	$file:=This:C1470.input.project._folder.file("android/main/ic_launcher-playstore.png")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function setTheme()
+Function _o_setTheme()
 	var $theme : Object
 	
-	$theme:=This:C1470.themeFromImageFile()
+	$theme:=This:C1470._o_themeFromImageFile()
 	
 	If ($theme.success)
 		
