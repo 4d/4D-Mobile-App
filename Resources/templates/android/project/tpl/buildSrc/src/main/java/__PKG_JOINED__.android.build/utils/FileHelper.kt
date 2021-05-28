@@ -12,7 +12,7 @@ import java.text.Normalizer
 import java.util.*
 
 fun addToAppinfo(key: String, value: Any) {
-    getAppinfoFile()?.let { file ->
+    getAppInfoFile()?.let { file ->
         val jsonObj: JSONObject = retrieveJSONObject(file.readFile())
         jsonObj.put(key, value)
         file.writeText(jsonObj.toString(2))
@@ -33,14 +33,14 @@ fun getDataPath(tableName: String): String = assetsPath() + File.separator + XCA
         "$tableName.$DATA_DATASET_SUFFIX" + File.separator +
         "$tableName.$DATA_JSON_SUFFIX"
 
-private fun getAppinfoPath(): String = assetsPath() + File.separator + APPINFO_FILENAME
+private fun getAppInfoPath(): String = assetsPath() + File.separator + APP_INFO_FILENAME
 
-private fun getAppinfoFile(): File? {
-    val file = File(getAppinfoPath())
+private fun getAppInfoFile(): File? {
+    val file = File(getAppInfoPath())
     if (file.exists()) {
         return file
     }
-    println("Appinfo.json file does not exists : ${file.absolutePath}")
+    println("app_info.json file does not exists : ${file.absolutePath}")
     return null
 }
 

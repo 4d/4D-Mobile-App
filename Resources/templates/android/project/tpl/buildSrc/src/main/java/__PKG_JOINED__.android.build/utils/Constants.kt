@@ -8,7 +8,7 @@ package {{package}}.android.build.utils
 
 const val DRIVER_CLASSNAME = "org.sqlite.JDBC"
 const val SQL_DB_URL_PREFIX = "jdbc:sqlite"
-const val APPINFO_FILENAME = "appinfo.json"
+const val APP_INFO_FILENAME = "app_info.json"
 
 const val INITIAL_GLOBALSTAMP_KEY = "initialGlobalStamp"
 const val DUMPED_TABLES_KEY = "dumpedTables"
