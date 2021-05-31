@@ -142,7 +142,7 @@ _____________*/
 FEATURE.unstable("duplicateTemplate")
 
 // Mac M1 build for simu using arm64
-FEATURE.unstable("simuARMOnAppleProcessor")
+// FEATURE.unstable("simuARMOnAppleProcessor")
 
 FEATURE.unstable("iconActionMenu")  // Use action button for icon on product panel
 FEATURE.unstable("dominantColor")  // Feature #127813: BackgroundColor picker
