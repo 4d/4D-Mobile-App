@@ -58,15 +58,16 @@ If ($infos#Null:C1517)
 		$menu\
 			.line()\
 			.append("duplicate"; "duplicate")
-	End if 
-	
-	
-	If ($infos.file#Null:C1517)
+		
 		If ($infos.file.exists)
 			
 			$menu\
 				.line()\
 				.append("showOnDisk"; "showOnDisk")
+			
+			$menu\
+				.line()\
+				.append("openWithGithubDesktop"; "openWithGithubDesktop")  // or "share"
 			
 		End if 
 	End if 
@@ -87,6 +88,13 @@ If ($infos#Null:C1517)
 		: ($menu.choice="showOnDisk")
 			
 			SHOW ON DISK:C922($infos.file.platformPath)
+			
+			//______________________________________________________
+		: ($menu.choice="openWithGithubDesktop")
+			
+			// XXX there is no CAN OPEN URL for 4d (on mac I known how to implement it!)
+			// or OK=1 if not open to propose to download...
+			OPEN URL:C673("x-github-client://openLocalRepo/"+$infos.file.path)  // to test on window
 			
 			//______________________________________________________
 		: ($menu.choice="duplicate")
