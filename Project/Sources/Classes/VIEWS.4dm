@@ -379,22 +379,25 @@ Function setTemplate($browser : Object)
 				If (FEATURE.with("android"))
 					
 					var $url : Text
-					
+					$url:="https://4d-for-mobile.github.io/gallery/"
+					If (FEATURE.with("devGallery"))
+						$url:="http://localhost:8080/"
+					End if 
 					Case of 
 							//______________________________________________________
 						: (PROJECT.$android & PROJECT.$ios)
 							
-							$url:="https://4d-for-mobile.github.io/gallery/#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios,android"
+							$url:=$url+"#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios,android"
 							
 							//______________________________________________________
 						: (PROJECT.$android)
 							
-							$url:="https://4d-for-mobile.github.io/gallery/#/type/form-"+This:C1470.typeForm()+"/picker/1/target/android"
+							$url:=$url+"#/type/form-"+This:C1470.typeForm()+"/picker/1/target/android"
 							
 							//______________________________________________________
 						: (PROJECT.$ios)
 							
-							$url:="https://4d-for-mobile.github.io/gallery/#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios"
+							$url:=$url+"#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios"
 							
 							//______________________________________________________
 					End case 

@@ -38,6 +38,7 @@ _____________*/
 //featuresFlags._568:=True // use previous project build SDK as new SDK (ie. fast sdk move, bug exists)
 FEATURE.debug(8858)  // Activates a debug mode for UI
 FEATURE.alias("debug"; 8858)
+//FEATURE.wip("devGallery")  // Allow to dev with local http gallery
 
 // Use old behaviour
 //featuresFlags._677:=True // Format fields when dumping data from rest (userless if iOS app could translate)
