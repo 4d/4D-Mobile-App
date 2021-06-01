@@ -232,6 +232,23 @@ Function afterChildren
 		
 	End if 
 	
+	// label and shortlabel as localizable resource
+	$Obj_out.coreDataStrings:=xloc(New object:C1471(\
+		"action"; "dataModel"; \
+		"dataModel"; This:C1470.input.project.dataModel; \
+		"output"; Folder:C1567(This:C1470.input.path; fk platform path:K87:2).folder("Resources").file("StructuresModel.strings")))
+	
+	If ($Obj_out.coreDataStrings.success)
+		$Obj_out.coreDataStrings:=XcodeProjInject(New object:C1471(\
+			"node"; $Obj_out.coreDataStrings; \
+			"mapping"; This:C1470.input.projfile.mapping; \
+			"proj"; This:C1470.input.projfile.value; \
+			"target"; This:C1470.input.path; \
+			"uuid"; This:C1470.input.template.uuid))
+	End if 
+	
+	ob_error_combine($Obj_out; $Obj_out.coreDataStrings)
+	
 	//  Save project file if has been modified
 	$Obj_out.projfile:=This:C1470.getXcodeProj()
 	If (Bool:C1537($Obj_out.projfile.mustSave))
