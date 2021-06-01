@@ -23,41 +23,50 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			If (FEATURE.with("androidBeta"))\
-				 | (Bool:C1537(PROJECT.$android))  // 🚧
+			If (FEATURE.with("targetPannel"))
 				
-				If (Is Windows:C1573)
-					
-					If (Form:C1466.$ios)
-						
-						$ƒ.android.setPicture("#images/os/Android-32.png")\
-							.setBackgroundPicture()\
-							.setNumStates(1)
-						
-						$ƒ.preview.show()
-						
-						$ƒ.ios.disable()
-						
-						$ƒ.ios.setPicture("#images/os/iOS-32.png")\
-							.setBackgroundPicture()\
-							.setNumStates(1)
-						
-					Else 
-						
-						$ƒ.os.hide()
-						$ƒ.preview.hide()
-						
-					End if 
-				End if 
+				$ƒ.os.hide()
+				$ƒ.preview.hide()
+				$ƒ.dominantColor.moveVertically(-125)
 				
 			Else 
 				
-				$ƒ.target.hide()
-				$ƒ.ios.hide()
-				$ƒ.android.hide()
-				
-				$ƒ.preview.hide()
-				
+				If (FEATURE.with("androidBeta"))\
+					 | (Bool:C1537(PROJECT.$android))  // 🚧
+					
+					If (Is Windows:C1573)
+						
+						If (Form:C1466.$ios)
+							
+							$ƒ.android.setPicture("#images/os/Android-32.png")\
+								.setBackgroundPicture()\
+								.setNumStates(1)
+							
+							$ƒ.preview.show()
+							
+							$ƒ.ios.disable()
+							
+							$ƒ.ios.setPicture("#images/os/iOS-32.png")\
+								.setBackgroundPicture()\
+								.setNumStates(1)
+							
+						Else 
+							
+							$ƒ.os.hide()
+							$ƒ.preview.hide()
+							
+						End if 
+					End if 
+					
+				Else 
+					
+					$ƒ.target.hide()
+					$ƒ.ios.hide()
+					$ƒ.android.hide()
+					
+					$ƒ.preview.hide()
+					
+				End if 
 			End if 
 			
 			If (FEATURE.with("dominantColor"))

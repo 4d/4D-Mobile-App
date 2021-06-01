@@ -225,6 +225,7 @@
 	},
 	"[PANELS]": {
 		"groups": [
+			"00] TARGET",
 			"01] ORGANIZATION",
 			"02] PRODUCT",
 			"03] DEVELOPER",
@@ -266,6 +267,17 @@
 		],
 		"classes": [
 			"project"
+		]
+	},
+	"00] TARGET": {
+		"methods": [
+			"TARGET"
+		],
+		"forms": [
+			"TARGET"
+		],
+		"classes": [
+			"TARGET"
 		]
 	},
 	"01] ORGANIZATION": {

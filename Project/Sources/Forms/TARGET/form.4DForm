@@ -1,0 +1,104 @@
+{
+	"inheritedForm": "panel_template",
+	"width": 960,
+	"height": 105,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onClick",
+		"onLosingFocus",
+		"onGettingFocus",
+		"onUnload",
+		"onTimer",
+		"onResize",
+		"onMouseEnter",
+		"onMouseLeave",
+		"onBoundVariableChange"
+	],
+	"pageFormat": {
+		"paperName": "A4",
+		"paperWidth": "595pt",
+		"paperHeight": "842pt"
+	},
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"target.preview": {
+					"type": "text",
+					"text": "Preview",
+					"top": 73,
+					"left": 17,
+					"width": 65,
+					"height": 16,
+					"textAlign": "center",
+					"stroke": "#1BA1E5",
+					"textAngle": 0
+				},
+				"ios": {
+					"type": "checkbox",
+					"text": "iOS",
+					"top": 7,
+					"left": 103,
+					"width": 65,
+					"height": 86,
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					],
+					"style": "custom",
+					"icon": "/RESOURCES/images/os/iOS.png",
+					"dataSource": "Form:C1466.$ios",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false,
+					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
+					"iconFrames": 4
+				},
+				"android": {
+					"type": "checkbox",
+					"text": "Android",
+					"top": 7,
+					"left": 17,
+					"width": 65,
+					"height": 86,
+					"events": [
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave"
+					],
+					"style": "custom",
+					"icon": "/RESOURCES/images/os/Android.png",
+					"dataSource": "Form:C1466.$android",
+					"dataSourceTypeHint": "boolean",
+					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
+					"iconFrames": 4,
+					"focusable": false,
+					"textPlacement": "bottom"
+				}
+			},
+			"entryOrder": [
+				"android",
+				"ios"
+			]
+		}
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"method": "TARGET",
+	"geometryStamp": 567
+}

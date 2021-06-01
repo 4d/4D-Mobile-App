@@ -352,13 +352,15 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 			// According to platform
 			This:C1470.info.target:=Choose:C955(Is macOS:C1572; "iOS"; "android")
 			
+			$target:=This:C1470.info.target
+			This:C1470["$"+Lowercase:C14($target)]:=True:C214
+			
 		Else 
 			
 			This:C1470.info.target:=Choose:C955(This:C1470.$android; "android"; "iOS")
 			
 		End if 
 	End if 
-	
 	
 	// Save & update the project folder
 	This:C1470.save()
@@ -383,6 +385,7 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 						If (EDITOR.xCode#Null:C1517)
 							
 							EDITOR.xCode.canceled:=False:C215
+							EDITOR.xCode.alreadyNotified:=False:C215
 							
 						End if 
 						
@@ -394,6 +397,7 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 						If (EDITOR.studio#Null:C1517)
 							
 							EDITOR.studio.canceled:=False:C215
+							EDITOR.studio.alreadyNotified:=False:C215
 							
 						End if 
 						

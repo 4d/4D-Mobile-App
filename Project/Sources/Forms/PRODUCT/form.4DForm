@@ -331,7 +331,6 @@
 					"left": 668,
 					"width": 29,
 					"height": 29,
-					"sizingX": "move",
 					"stroke": "transparent",
 					"fill": "transparent"
 				},
@@ -375,5 +374,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 553
+	"geometryStamp": 564
 }

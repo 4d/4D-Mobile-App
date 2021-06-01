@@ -119,6 +119,28 @@ Function enclosingRec()->$coordinates : Object
 		End if 
 	End for each 
 	
+	//════════════════════════════════════════════
+Function moveVertically($offset : Integer)
+	
+	var $o : Object
+	
+	For each ($o; This:C1470.members)
+		
+		$o.moveVertically($offset)
+		
+	End for each 
+	
+	//════════════════════════════════════════════
+Function moveHorizontally($offset : Integer)
+	
+	var $o : Object
+	
+	For each ($o; This:C1470.members)
+		
+		$o.moveHorizontally($offset)
+		
+	End for each 
+	
 /*════════════════════════════════════════════
 Performs a horizontal distribution, from left to right,
 of the elements according to their best size

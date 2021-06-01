@@ -256,11 +256,11 @@ Function switch($title : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470._sudoAskPass("sudo -A /usr/bin/xcode-select --switch  "+This:C1470.quoted(This:C1470.application.path); $title)
+		This:C1470._sudoAskPass("/usr/bin/xcode-select --switch  "+This:C1470.quoted(This:C1470.application.path); $title)
 		
 	Else 
 		
-		This:C1470._sudoAskPass("sudo -A /usr/bin/xcode-select --switch  "+This:C1470.quoted(This:C1470.application.path))
+		This:C1470._sudoAskPass("/usr/bin/xcode-select --switch  "+This:C1470.quoted(This:C1470.application.path))
 		
 	End if 
 	
@@ -398,11 +398,11 @@ Function setToolPath($title : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470._sudoAskPass("sudo -A /usr/bin/xcode-select -s "+This:C1470.singleQuoted(This:C1470.application.path); $title)
+		This:C1470._sudoAskPass("/usr/bin/xcode-select -s "+This:C1470.singleQuoted(This:C1470.application.path); $title)
 		
 	Else 
 		
-		This:C1470._sudoAskPass("sudo -A /usr/bin/xcode-select -s "+This:C1470.singleQuoted(This:C1470.application.path))
+		This:C1470._sudoAskPass("/usr/bin/xcode-select -s "+This:C1470.singleQuoted(This:C1470.application.path))
 		
 	End if 
 	
@@ -572,6 +572,19 @@ Function isWrongPassword()->$is : Boolean
 	//====================================================================
 Function _sudoAskPass($cmd : Text; $title : Text)->$result : Object
 	
+/*
+	
+Normally, if sudo requires a password, it will read it from the current terminal.
+	
+If the -A (askpass) option is specified, a (possibly graphical) helper program
+is executed to read the user's password and output the password to the standard output.
+	
+If the SUDO_ASKPASS environment variable is set, it specifies the path to the helper program.
+	
+https://apple.stackexchange.com/questions/23494/what-option-should-i-give-the-sudo-command-to-have-the-password-asked-through-a
+	
+*/
+	
 	var $script : 4D:C1709.File
 	
 	$script:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2).file("sudo-askpass")
@@ -588,6 +601,12 @@ Function _sudoAskPass($cmd : Text; $title : Text)->$result : Object
 		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; $script.path)
 		
 		This:C1470.lastError:=""
+		
+		If ($cmd#"sudo -A @")
+			
+			$cmd:="sudo -A "+$cmd
+			
+		End if 
 		
 		$result:=This:C1470.lep($cmd)
 		This:C1470.success:=$result.success

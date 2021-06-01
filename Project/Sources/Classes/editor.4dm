@@ -32,6 +32,14 @@ Function pagesDefinition()
 	
 	$o:=This:C1470.pages.general
 	
+	If (FEATURE.with("targetPannel"))
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("targetOs"); \
+			"form"; "TARGET"))
+		
+	End if 
+	
 	$o.panels.push(New object:C1471(\
 		"title"; Get localized string:C991("organization"); \
 		"form"; "ORGANIZATION"))
@@ -273,6 +281,7 @@ Function updateColorScheme()
 	
 	// COLORS
 	This:C1470.colors:=New object:C1471
+	
 	This:C1470.colors.strokeColor:=color("4dColor"; New object:C1471("value"; This:C1470.strokeColor))
 	This:C1470.colors.highlightColor:=color("4dColor"; New object:C1471("value"; This:C1470.highlightColor))
 	This:C1470.colors.highlightColorNoFocus:=color("4dColor"; New object:C1471("value"; This:C1470.highlightColorNoFocus))
@@ -282,6 +291,19 @@ Function updateColorScheme()
 	This:C1470.colors.backgroundUnselectedColor:=color("4dColor"; New object:C1471("value"; This:C1470.backgroundUnselectedColor))
 	This:C1470.colors.errorColor:=color("4dColor"; New object:C1471("value"; This:C1470.errorColor))
 	This:C1470.colors.warningColor:=color("4dColor"; New object:C1471("value"; This:C1470.warningColor))
+	
+	//var $color : cs.color
+	//$color:=cs.color.new()
+	//This.colors.strokeColor:=$color.setColor(This.strokeColor)
+	//This.colors.highlightColor:=$color.setColor(This.highlightColor)
+	//This.colors.highlightColorNoFocus:=$color.setColor(This.highlightColorNoFocus)
+	//This.colors.selectedColor:=$color.setColor(This.selectedColor)
+	//This.colors.alternateSelectedColor:=$color.setColor(This.alternateSelectedColor)
+	//This.colors.backgroundSelectedColor:=$color.setColor(This.backgroundSelectedColor)
+	//This.colors.backgroundUnselectedColor:=$color.setColor(This.backgroundUnselectedColor)
+	//This.colors.errorColor:=$color.setColor(This.errorColor)
+	//This.colors.warningColor:=$color.setColor(This.warningColor)
+	
 	
 	//===================================================================================
 	// Pre-loading of constant resources
