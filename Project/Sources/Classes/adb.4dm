@@ -6,6 +6,9 @@ shell that you can use to run a variety of commands on a device
 
 */
 
+
+//[A]ndroid [D]ebug [B]ridge
+
 Class extends androidProcess
 
 Class constructor
@@ -62,6 +65,74 @@ Function bootedDevices()->$devices : Collection
 		
 	End if 
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// List of plugged devices
+Function plugged($iosDeploymentTarget : Text)->$plugged : Collection
+	
+	$plugged:=New collection:C1472
+	
+	This:C1470.launch(This:C1470.cmd+" devices")
+	
+	If (This:C1470.success)
+		
+		If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)  // Adb was not ready, restart command
+			
+			If (Not:C34(This:C1470.adbStartRetried))
+				
+				This:C1470.adbStartRetried:=True:C214
+				
+				$plugged:=This:C1470.plugged()
+				
+			Else 
+				
+				This:C1470.success:=False:C215
+				This:C1470.errors.push(This:C1470.errorStream)
+				
+			End if 
+			
+		Else   // No issue with adb started status
+			
+			var $serial; $t : Text
+			ARRAY LONGINT:C221($len; 0x0000)
+			ARRAY LONGINT:C221($pos; 0x0000)
+			
+			For each ($t; Split string:C1554(String:C10(This:C1470.outputStream); "\n"))
+				
+				If (Match regex:C1019("(?m-si)^([^\\t]*)\tdevice$"; $t; 1; $pos; $len))
+					
+					$serial:=Substring:C12($t; $pos{1}; $len{1})
+					
+					$plugged.push(New object:C1471(\
+						"udid"; $serial; \
+						"name"; This:C1470.getAvdName($serial)))
+					
+				End if 
+				
+			End for each 
+		End if 
+		
+	Else 
+		
+		This:C1470.errors.push("Failed to get adb device list")
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the name from the serial
+Function getAvdName($serial : Text)->$name : Text
+	
+	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell dumpsys bluetooth_manager | \\grep 'name:' | cut -c9-")
+	
+	If (This:C1470.success)
+		
+		$name:=This:C1470.outputStream
+		
+	Else 
+		
+		This:C1470.errors.push("Can't get avd name for the serial "+$serial)
+		
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function listBootedDevices  // List booted devices
@@ -105,7 +176,7 @@ Function listBootedDevices  // List booted devices
 		End if 
 	End if 
 	
-Function getAvdName
+Function _getAvdName
 	var $0 : Object
 	var $1 : Text  // serial
 	var $avdName_Col : Collection

@@ -388,6 +388,12 @@ Case of
 						
 						$device:=EDITOR.devices.android.query("udid = :1"; $lastDevice).pop()
 						
+						If ($device=Null:C1517) & (EDITOR.devices.connected.android#Null:C1517)
+							
+							$device:=EDITOR.devices.connected.android.query("udid = :1"; $lastDevice).pop()
+							
+						End if 
+						
 						If ($device#Null:C1517)
 							
 							If (EDITOR.android)

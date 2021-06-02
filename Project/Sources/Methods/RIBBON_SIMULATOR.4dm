@@ -82,6 +82,19 @@ Case of
 				
 				If (EDITOR.studio.ready)
 					
+					If (EDITOR.devices.connected.android.length>0)
+						
+						For each ($device; EDITOR.devices.connected.android)
+							
+							$menu.append($tab+$device.name; $device.udid)\
+								.mark($device.udid=$lastDevice)
+							
+						End for each 
+						
+						$menu.line()
+						
+					End if 
+					
 					If (EDITOR.devices.android.length>0)
 						
 						For each ($device; EDITOR.devices.android.orderBy("name"))
@@ -293,6 +306,12 @@ Case of
 			: (FEATURE.with("android"))  // 🚧
 				
 				$device:=EDITOR.devices.android.query("udid = :1"; $menu.choice).pop()
+				
+				If ($device=Null:C1517)
+					
+					$device:=EDITOR.devices.connected.android.query("udid = :1"; $menu.choice).pop()
+					
+				End if 
 				
 				EDITOR.currentDevice:=$menu.choice
 				OBJECT SET TITLE:C194(*; "201"; $device.name)

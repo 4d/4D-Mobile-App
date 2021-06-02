@@ -148,12 +148,11 @@ FEATURE.unstable("duplicateTemplate")
 FEATURE.unstable("iconActionMenu")  // Use action button for icon on product panel
 FEATURE.unstable("dominantColor")  // Feature #127813: BackgroundColor picker
 
+FEATURE.unstable("targetPannel")  // Use a separate pannel for the target OS
+
 /* _____________
 WIP
 _____________*/
-
-FEATURE.wip("targetPannel")  // Use a separate pannel for the target OS
-
 FEATURE.wip("plistClass")  // Use plist class instead of plist method
 
 FEATURE.wip("ConnectedDevices")  // Add connected devices to the simulator tool

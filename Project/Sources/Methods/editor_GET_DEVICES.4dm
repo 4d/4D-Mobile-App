@@ -85,7 +85,7 @@ Case of
 					: ($withStudio & $withXcode)
 						
 						$out.connected:=New object:C1471(\
-							"android"; New collection:C1472; \
+							"android"; cs:C1710.adb.new().plugged(); \
 							"apple"; $simctl.plugged())
 						
 						
@@ -93,7 +93,7 @@ Case of
 					: ($withStudio)
 						
 						$out.connected:=New object:C1471(\
-							"android"; New collection:C1472; \
+							"android"; cs:C1710.adb.new().plugged(); \
 							"apple"; New collection:C1472)
 						
 						//______________________________________________________
@@ -145,6 +145,21 @@ Case of
 				"android"; New collection:C1472; \
 				"apple"; New collection:C1472)
 			
+		End if 
+		
+		If (FEATURE.with("ConnectedDevices"))
+			
+			If ($withStudio)
+				
+				$out.connected:=New object:C1471(\
+					"android"; cs:C1710.adb.new().plugged())
+				
+			Else 
+				
+				$out.connected:=New object:C1471(\
+					"android"; New collection:C1472)
+				
+			End if 
 		End if 
 		
 		//______________________________________________________

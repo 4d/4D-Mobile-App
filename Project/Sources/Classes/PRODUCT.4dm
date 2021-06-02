@@ -39,6 +39,7 @@ Class constructor
 		This:C1470.dominantColor:=cs:C1710.group.new(This:C1470.color; This:C1470.colorBorder; This:C1470.colorLabel; This:C1470.colorButton)
 		
 		This:C1470.mainColor:=""
+		This:C1470.iconColor:=Null:C1517
 		
 		// Constraints definition
 		ob_createPath(This:C1470.context; "constraints.rules"; Is collection:K8:32)
@@ -352,11 +353,8 @@ Function setIcon($picture : Picture)
 	
 	If (FEATURE.with("dominantColor"))
 		
-		This:C1470.mainColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
-		PROJECT.ui.dominantColor:=This:C1470.mainColor
-		PROJECT.save()
-		
-		SET TIMER:C645(-1)
+		This:C1470.iconColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
+		This:C1470.refresh()
 		
 	Else 
 		

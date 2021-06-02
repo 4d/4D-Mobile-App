@@ -73,7 +73,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				If (PROJECT.ui.dominantColor#Null:C1517)
 					
-					$ƒ.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).css.components
+					$ƒ.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).main
 					
 				End if 
 				
@@ -112,9 +112,8 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			// Update UI
 			$ƒ.displayTarget()
-			$ƒ.displayIcon()
-			
-			SET TIMER:C645(-1)
+			//$ƒ.displayIcon()
+			$ƒ.refresh()
 			
 			//______________________________________________________
 	End case 
@@ -128,14 +127,40 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.colorButton.catch($e; On Clicked:K2:4))
 			
-			var $color : cs:C1710.color
-			$color:=cs:C1710.color.new($ƒ.mainColor)
-			$ƒ.mainColor:=Select RGB color:C956($color.main)
+			var $menu : cs:C1710.menu
 			
-			PROJECT.ui.dominantColor:=$color.setColor($ƒ.mainColor).css.components
-			PROJECT.save()
+			$menu:=cs:C1710.menu.new()\
+				.append("useTheSystemColorSelector"; "picker")\
+				.append("useTheMainColorOfTheIcon"; "fromIcon").enable($ƒ.mainColor#Num:C11($ƒ.iconColor))\
+				.popup($ƒ.colorButton)
 			
-			$ƒ.color.setColors($ƒ.mainColor; $ƒ.mainColor)
+			If ($menu.selected)
+				
+				var $color : cs:C1710.color
+				
+				Case of 
+						
+						//________________________
+					: ($menu.choice="picker")
+						
+						$color:=cs:C1710.color.new(Select RGB color:C956($ƒ.mainColor))
+						
+						//________________________
+					: ($menu.choice="fromIcon")
+						
+						$color:=cs:C1710.color.new(cs:C1710.bmp.new(OBJECT Get value:C1743("icon")).getDominantColor())
+						$ƒ.iconColor:=$color.main
+						
+						//________________________
+				End case 
+				
+				$ƒ.mainColor:=$color.main
+				PROJECT.ui.dominantColor:=$color.css.components
+				PROJECT.save()
+				
+				$ƒ.color.setColors($ƒ.mainColor; $ƒ.mainColor)
+				
+			End if 
 			
 			//==============================================
 		: ($ƒ.productName.catch())
