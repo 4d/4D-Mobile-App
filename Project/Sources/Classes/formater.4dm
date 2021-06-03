@@ -316,5 +316,19 @@ Function create($type : Variant; $data : Collection)->$manifestFile : 4D:C1709.F
 			This:C1470.sources()
 			
 		End if 
-		
+	End if 
+	
+	//============================================================================
+	// Return toolTip for custom format
+Function toolTip()->$tip
+	$tip:=""
+	//%W-533.1
+	If (This:C1470.name[[1]]="/")
+		//%W+533.1
+		var $manifestFile : 4D:C1709.File
+		$manifestFile:=cs:C1710.path.new().hostFormatters(False:C215).folder(Substring:C12(This:C1470.name; 2)).file("manifest.json")
+		// TODO If zip formatter, fix file path(read in zip SHARED.archiveExtension)
+		If ($manifestFile.exists)
+			$tip:=cs:C1710.str.new(JSON Stringify:C1217(JSON Parse:C1218($manifestFile.getText()).choiceList; *)).jsonSimplify()
+		End if 
 	End if 

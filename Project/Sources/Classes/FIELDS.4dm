@@ -587,16 +587,7 @@ Function setHelpTip($e : Object)
 				$field:=This:C1470.field($e.row)
 				If ($field#Null:C1517)
 					If (Length:C16(String:C10($field.format))#0)
-						
-						//%W-533.1
-						If ($field.format[[1]]="/")
-							//%W+533.1
-							var $manifestFile : 4D:C1709.File
-							$manifestFile:=cs:C1710.path.new().hostFormatters(False:C215).folder(Substring:C12($field.format; 2)).file("manifest.json")
-							
-							$t:=$str.setText(JSON Stringify:C1217(JSON Parse:C1218($manifestFile.getText()).choiceList; *)).jsonSimplify()
-							
-						End if 
+						$t:=cs:C1710.formater.new($field.format).toolTip()
 					End if 
 				End if 
 				
