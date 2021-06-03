@@ -1,13 +1,10 @@
 /*
-Android Debug Bridge (adb) is a versatile command-line tool that lets you 
+[A]ndroid [D]ebug [B]ridge is a versatile command-line tool that lets you 
 communicate with a device. The adb command facilitates a variety of device 
 actions, such as installing and debugging apps, and it provides access to a Unix 
 shell that you can use to run a variety of commands on a device
 
 */
-
-
-//[A]ndroid [D]ebug [B]ridge
 
 Class extends androidProcess
 
@@ -36,7 +33,7 @@ Function _exe()->$file : 4D:C1709.File
 	$file:=This:C1470.androidSDKFolder().file("platform-tools/adb")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a collection of booted devices
+	// Returns a collection of booted emulators & plugged devices
 Function bootedDevices()->$devices : Collection
 	
 	$devices:=New collection:C1472
@@ -51,11 +48,17 @@ Function bootedDevices()->$devices : Collection
 		ARRAY LONGINT:C221($pos; 0)
 		ARRAY LONGINT:C221($len; 0)
 		
-		While (Match regex:C1019("(?m-si)(emulator-\\d*\\tdevice)"; This:C1470.outputStream; $start; $pos; $len))
+/*
+List of devices attached
+ZY22BJDD3Ldevice
+emulator-5554device
+*/
+		
+		While (Match regex:C1019("(?m-si)((?:emulator-\\d*)|[A-Z0-9]*)\\tdevice"; This:C1470.outputStream; $start; $pos; $len))
 			
 			$devices.push(Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}))
 			
-			$start:=$pos{1}+$len{1}
+			$start:=$pos{0}+$len{0}
 			
 		End while 
 		
@@ -104,7 +107,7 @@ Function plugged($iosDeploymentTarget : Text)->$plugged : Collection
 					
 					$plugged.push(New object:C1471(\
 						"udid"; $serial; \
-						"name"; This:C1470.getAvdName($serial)))
+						"name"; This:C1470.getDeviceName($serial)))
 					
 				End if 
 				
@@ -118,9 +121,11 @@ Function plugged($iosDeploymentTarget : Text)->$plugged : Collection
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the name from the serial
-Function getAvdName($serial : Text)->$name : Text
+	// Returns the name of a plugged device from its serial
+	// #TO_DO : Test if it's OK for emulators
+Function getDeviceName($serial : Text)->$name : Text
 	
+	// https://stackoverflow.com/questions/54810404/is-there-a-way-to-get-the-device-name-using-adb-for-example-if-the-device-name
 	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell dumpsys bluetooth_manager | \\grep 'name:' | cut -c9-")
 	
 	If (This:C1470.success)
@@ -129,81 +134,76 @@ Function getAvdName($serial : Text)->$name : Text
 		
 	Else 
 		
-		This:C1470.errors.push("Can't get avd name for the serial "+$serial)
+		This:C1470.errors.push("Can't get name for the device "+$serial)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function listBootedDevices  // List booted devices
+/*=========================================================================== 
+	
+USED for Android build
+	
+===========================================================================*/
+	
+Function waitForBoot
 	var $0 : Object
+	var $1 : Text  // avd name
+	var $startTime; $stepTime : Integer
 	
 	$0:=New object:C1471(\
-		"bootedDevices"; New collection:C1472; \
+		"serial"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" devices")
+	// Time elapsed
+	$startTime:=Milliseconds:C459
 	
-	If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)  // adb was not ready, restart command
+	Repeat 
 		
-		If (Not:C34(This:C1470.adbStartRetried))
-			
-			This:C1470.adbStartRetried:=True:C214
-			
-			$0:=This:C1470.listBootedDevices()
-			
-		Else 
-			
-			$0.success:=False:C215
-			$0.errors.push(This:C1470.errorStream)
-			
-		End if 
+		IDLE:C311
+		DELAY PROCESS:C323(Current process:C322; 120)
 		
-	Else   // No issue with adb started status
+		$0:=This:C1470.getSerial($1)
 		
-		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		$stepTime:=Milliseconds:C459-$startTime
 		
-		If ($0.success)
-			
-			$0.bootedDevices:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
-			$0.bootedDevices.shift().pop()  // removing first and last entries
-			
-		Else 
-			
-			$0.errors.push("Failed to get adb device list")
-			
-		End if 
+	Until (($0.success=True:C214) & ($0.serial#""))\
+		 | ($0.errors.length>0)\
+		 | ($stepTime>This:C1470.bootTimeOut)
+	
+	If ($stepTime>This:C1470.bootTimeOut)  // Timeout
+		
+		$0.errors.push("Timeout when booting emulator")
+		
+		// Else : all ok 
 	End if 
 	
-Function _getAvdName
+Function getSerial
 	var $0 : Object
-	var $1 : Text  // serial
-	var $avdName_Col : Collection
+	var $1 : Text  // searched avd name
+	var $Obj_bootedDevices; $Obj_serial : Object
 	
 	$0:=New object:C1471(\
-		"avdName"; ""; \
+		"serial"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" emu avd name")
+	$Obj_bootedDevices:=This:C1470.listBootedDevices()
 	
-	If ((This:C1470.outputStream#Null:C1517) & (String:C10(This:C1470.outputStream)#""))
+	If ($Obj_bootedDevices.success)
 		
-		$avdName_Col:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
+		$Obj_serial:=This:C1470.findSerial($Obj_bootedDevices.bootedDevices; $1)
 		
-		If ($avdName_Col.length>1)
-			// First line is the avd name
-			// Warning : on Windows, it is avd name + "\r"
-			$0.avdName:=Replace string:C233($avdName_Col[0]; "\r"; "")
+		If ($Obj_serial.success)
+			
+			$0.serial:=$Obj_serial.serial
 			$0.success:=True:C214
 			
 		Else 
-			// can't find avd name
-			$0.errors.push("Can't get avd name for this emulator")
+			$0.errors:=$Obj_serial.errors  // This can be empty, therefore no error, just not found
 		End if 
 		
-		// Else : serial not found
+	Else 
+		$0.errors:=$Obj_bootedDevices.errors
 	End if 
 	
 Function findSerial
@@ -251,42 +251,77 @@ Function findSerial
 		
 	End for each 
 	
-Function getSerial
+Function getAvdName  // #TO_DO : TEST IF WE CAN USE getDeviceName() ELSE MOVE TO avd
 	var $0 : Object
-	var $1 : Text  // searched avd name
-	var $Obj_bootedDevices; $Obj_serial : Object
+	var $1 : Text  // serial
+	var $avdName_Col : Collection
 	
 	$0:=New object:C1471(\
-		"serial"; ""; \
+		"avdName"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$Obj_bootedDevices:=This:C1470.listBootedDevices()
+	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" emu avd name")
 	
-	If ($Obj_bootedDevices.success)
+	If ((This:C1470.outputStream#Null:C1517) & (String:C10(This:C1470.outputStream)#""))
 		
-		$Obj_serial:=This:C1470.findSerial($Obj_bootedDevices.bootedDevices; $1)
+		$avdName_Col:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
 		
-		If ($Obj_serial.success)
-			
-			$0.serial:=$Obj_serial.serial
+		If ($avdName_Col.length>1)
+			// First line is the avd name
+			// Warning : on Windows, it is avd name + "\r"
+			$0.avdName:=Replace string:C233($avdName_Col[0]; "\r"; "")
 			$0.success:=True:C214
 			
 		Else 
-			$0.errors:=$Obj_serial.errors  // This can be empty, therefore no error, just not found
+			// can't find avd name
+			$0.errors.push("Can't get avd name for this emulator")
+		End if 
+		
+		// Else : serial not found
+	End if 
+	
+/*=========================================================================== 
+	
+UNUSED AT THIS TIME
+	
+===========================================================================*/
+	
+Function forceInstallApp
+	var $0 : Object
+	var $1 : Text  // emulator serial
+	var $2 : Text  // package name (app name)
+	var $3 : 4D:C1709.File  // apk
+	var $Obj_uninstallAppIfInstalled; $Obj_install : Object
+	
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	$Obj_uninstallAppIfInstalled:=This:C1470.uninstallAppIfInstalled($1; $2)
+	
+	If ($Obj_uninstallAppIfInstalled.success)
+		
+		$Obj_install:=This:C1470.waitInstallApp($1; $3)
+		
+		If ($Obj_install.success)
+			$0.success:=True:C214
+		Else 
+			$0.errors:=$Obj_install.errors
 		End if 
 		
 	Else 
-		$0.errors:=$Obj_bootedDevices.errors
+		$0.errors:=$Obj_uninstallAppIfInstalled.errors
 	End if 
 	
-Function waitForBoot
+Function waitStartApp
 	var $0 : Object
-	var $1 : Text  // avd name
+	var $1 : Text  // emulator serial
+	var $2 : Text  // package name (app name)
+	var $3 : Text  // activity name (com.qmobile.qmobileui.activity.loginactivity.LoginActivity)
 	var $startTime; $stepTime : Integer
 	
 	$0:=New object:C1471(\
-		"serial"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -298,19 +333,61 @@ Function waitForBoot
 		IDLE:C311
 		DELAY PROCESS:C323(Current process:C322; 120)
 		
-		$0:=This:C1470.getSerial($1)
+		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell am start -n \""+$2+"/"+$3+"\"")
+		
+		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
 		$stepTime:=Milliseconds:C459-$startTime
 		
-	Until (($0.success=True:C214) & ($0.serial#""))\
-		 | ($0.errors.length>0)\
-		 | ($stepTime>This:C1470.bootTimeOut)
+	Until ($0.success=True:C214)\
+		 | ($stepTime>This:C1470.appStartTimeOut)
 	
-	If ($stepTime>This:C1470.bootTimeOut)  // Timeout
+	If ($stepTime>This:C1470.appStartTimeOut)  // Timeout
 		
-		$0.errors.push("Timeout when booting emulator")
+		$0.errors.push("Timeout when starting the app")
 		
 		// Else : all ok 
+	End if 
+	
+Function listBootedDevices  // List booted devices
+	var $0 : Object
+	
+	$0:=New object:C1471(\
+		"bootedDevices"; New collection:C1472; \
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	This:C1470.launch(This:C1470.cmd+" devices")
+	
+	If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)  // adb was not ready, restart command
+		
+		If (Not:C34(This:C1470.adbStartRetried))
+			
+			This:C1470.adbStartRetried:=True:C214
+			
+			$0:=This:C1470.listBootedDevices()
+			
+		Else 
+			
+			$0.success:=False:C215
+			$0.errors.push(This:C1470.errorStream)
+			
+		End if 
+		
+	Else   // No issue with adb started status
+		
+		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		
+		If ($0.success)
+			
+			$0.bootedDevices:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
+			$0.bootedDevices.shift().pop()  // removing first and last entries
+			
+		Else 
+			
+			$0.errors.push("Failed to get adb device list")
+			
+		End if 
 	End if 
 	
 Function waitForDevicePackageList
@@ -476,67 +553,6 @@ Function waitInstallApp
 		// Else : all ok 
 	End if 
 	
-Function forceInstallApp
-	var $0 : Object
-	var $1 : Text  // emulator serial
-	var $2 : Text  // package name (app name)
-	var $3 : 4D:C1709.File  // apk
-	var $Obj_uninstallAppIfInstalled; $Obj_install : Object
-	
-	$0:=New object:C1471(\
-		"success"; False:C215; \
-		"errors"; New collection:C1472)
-	
-	$Obj_uninstallAppIfInstalled:=This:C1470.uninstallAppIfInstalled($1; $2)
-	
-	If ($Obj_uninstallAppIfInstalled.success)
-		
-		$Obj_install:=This:C1470.waitInstallApp($1; $3)
-		
-		If ($Obj_install.success)
-			$0.success:=True:C214
-		Else 
-			$0.errors:=$Obj_install.errors
-		End if 
-		
-	Else 
-		$0.errors:=$Obj_uninstallAppIfInstalled.errors
-	End if 
-	
-Function waitStartApp
-	var $0 : Object
-	var $1 : Text  // emulator serial
-	var $2 : Text  // package name (app name)
-	var $3 : Text  // activity name (com.qmobile.qmobileui.activity.loginactivity.LoginActivity)
-	var $startTime; $stepTime : Integer
-	
-	$0:=New object:C1471(\
-		"success"; False:C215; \
-		"errors"; New collection:C1472)
-	
-	// Time elapsed
-	$startTime:=Milliseconds:C459
-	
-	Repeat 
-		
-		IDLE:C311
-		DELAY PROCESS:C323(Current process:C322; 120)
-		
-		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell am start -n \""+$2+"/"+$3+"\"")
-		
-		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
-		
-		$stepTime:=Milliseconds:C459-$startTime
-		
-	Until ($0.success=True:C214)\
-		 | ($stepTime>This:C1470.appStartTimeOut)
-	
-	If ($stepTime>This:C1470.appStartTimeOut)  // Timeout
-		
-		$0.errors.push("Timeout when starting the app")
-		
-		// Else : all ok 
-	End if 
 	
 	
 /*Function killServer
