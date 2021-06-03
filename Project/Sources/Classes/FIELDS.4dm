@@ -795,34 +795,83 @@ Function formatMenu($e : Object)
 		End for each 
 	End if 
 	
-	If (This:C1470.fieldList.popup($menu).selected)
+	If (FEATURE.with("newFormatterChoiceList"))
 		
-		// Update data model
-		$field.format:=$menu.choice
-		
-		// Update me
-		//%W-533.3
-		//%W-533.1
-		If ($menu.choice[[1]]="/")
+		If (($field.fieldType=Is alpha field:K8:1)\
+			 | ($field.fieldType=Is boolean:K8:9)\
+			 | ($field.fieldType=Is integer:K8:5)\
+			 | ($field.fieldType=Is longint:K8:6)\
+			 | ($field.fieldType=Is integer 64 bits:K8:25)\
+			 | ($field.fieldType=Is real:K8:4)\
+			 | ($field.fieldType=Is text:K8:3)\
+			)
+			$menu.line()
 			
-			// User resources
-			$o:=$formatters.query("source.name = :1"; $menu.choice).pop()
-			Self:C308->{$e.row}:=$o.source.label
-			
-		Else 
-			
-			Self:C308->{$e.row}:=$str.setText("_"+$menu.choice).localized()
+			$menu.append("New choice list ..."/*TODO newFormatterChoiceList localize*/; "$new"; False:C215)
 			
 		End if 
-		//%W+533.1
-		//%W+533.3
 		
-		This:C1470.updateForms($field; $e.row)
+	End if 
+	
+	If (This:C1470.fieldList.popup($menu).selected)
 		
-		// Remove error color if any
-		LISTBOX SET ROW COLOR:C1270(*; This:C1470.formats.name; $e.row; Foreground color:K23:1; lk font color:K53:24)
+		If ($menu.choice="$new")  // FEATURE.with("newFormatterChoiceList")
+			
+			$menu.choice:=Request:C163("Name of the format"/*TODO newFormatterChoiceList localize*/)
+			If (Length:C16($menu.choice)#0)
+				
+				$menu.choice:="/"+$menu.choice
+				$o:=cs:C1710.formater.new($menu.choice)
+				
+				var $table : Object
+				$table:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)]
+				var $data : Collection
+				$data:=ds:C1482[$table[""].name].all().extract($field.name).distinct()  // XXX maybe limit size
+				
+				var $manifestFile : 4D:C1709.File
+				$manifestFile:=$o.create($field.fieldType; $data)
+				
+				$formatters.push(New object:C1471(\
+					"name"; $o.label; \
+					"source"; $o))
+				
+				// Open JSON file, but we could open a custom format editor instead
+				OPEN URL:C673($manifestFile.platformPath)
+				
+			End if 
+			
+		End if 
 		
-		PROJECT.save()
+		If (Length:C16($menu.choice)#0)
+			
+			// Update data model
+			$field.format:=$menu.choice
+			
+			// Update me
+			//%W-533.3
+			//%W-533.1
+			If ($menu.choice[[1]]="/")
+				
+				// User resources
+				$o:=$formatters.query("source.name = :1"; $menu.choice).pop()
+				Self:C308->{$e.row}:=$o.source.label
+				
+			Else 
+				
+				Self:C308->{$e.row}:=$str.setText("_"+$menu.choice).localized()
+				
+			End if 
+			//%W+533.1
+			//%W+533.3
+			
+			This:C1470.updateForms($field; $e.row)
+			
+			// Remove error color if any
+			LISTBOX SET ROW COLOR:C1270(*; This:C1470.formats.name; $e.row; Foreground color:K23:1; lk font color:K53:24)
+			
+			PROJECT.save()
+			
+		End if 
 		
 	End if 
 	

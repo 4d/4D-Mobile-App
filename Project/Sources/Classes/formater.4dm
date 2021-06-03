@@ -235,7 +235,7 @@ Function isValid($format : Variant)->$valid : Boolean
 	
 	//============================================================================
 	// Create a formatter with text choiceList
-Function create($type : Text)->$manifestFile : 4D:C1709.File
+Function create($type : Variant; $data : Collection)->$manifestFile : 4D:C1709.File
 	
 	var $name : Text
 	$name:=This:C1470.name
@@ -245,6 +245,31 @@ Function create($type : Text)->$manifestFile : 4D:C1709.File
 		// Assert?
 		$name:=""
 	End if 
+	
+	var $typeString : Text
+	Case of 
+		: (Value type:C1509($type)=Is real:K8:4)
+			
+			var $c : Collection
+			$c:=New collection:C1472  // CLEAN , factorize this code?
+			$c[Is alpha field:K8:1]:="text"
+			$c[Is boolean:K8:9]:="boolean"
+			$c[Is integer:K8:5]:="integer"
+			$c[Is longint:K8:6]:="integer"
+			$c[Is integer 64 bits:K8:25]:="integer"
+			$c[Is real:K8:4]:="real"
+			$c[_o_Is float:K8:26]:="float"
+			$c[Is date:K8:7]:="date"
+			$c[Is time:K8:8]:="time"
+			$c[Is text:K8:3]:="text"
+			$c[Is picture:K8:10]:="picture"
+			
+			$typeString:=$c[$type]
+		: (Value type:C1509($type)=Is text:K8:3)
+			$typeString:=$type
+		Else 
+			ASSERT:C1129(dev_Matrix; "Unknown type type "+String:C10(Value type:C1509($type)))
+	End case 
 	
 	If (Length:C16($name)>0)
 		
@@ -257,8 +282,6 @@ Function create($type : Text)->$manifestFile : 4D:C1709.File
 			
 			$formatFolder.create()
 			
-			$manifestFile:=$formatFolder.file("manifest.json")
-			
 			var $manifest : Object
 			$manifest:=New object:C1471(\
 				"name"; $name; \
@@ -266,23 +289,31 @@ Function create($type : Text)->$manifestFile : 4D:C1709.File
 				"binding"; "localizedText")
 			
 			Case of 
-				: (($type="bool")/*| ($type="boolean")*/)
+				: (($typeString="bool") | ($typeString="boolean"))
 					$manifest.choiceList:=New object:C1471("0"; "False"; "1"; "True")
-					$manifest.types:=New collection:C1472("boolean")
+					$manifest.type:=New collection:C1472("boolean")
 					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#integer-to-string"
-				: ($type="number"/*| ($type="integer") | ($type="real")*/)
+				: (($typeString="number") | ($typeString="integer") | ($typeString="real"))
 					$manifest.choiceList:=New object:C1471("0"; "zero"; "1"; "the one"; "3"; "san")
-					$manifest.types:=New collection:C1472("real"; "integer")
+					$manifest.type:=New collection:C1472("real"; "integer")
 					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#integer-to-string"
-				: ($type="string"/*| ($type="text") */)
+				: (($typeString="string") | ($typeString="text"))
 					$manifest.choiceList:=New object:C1471("value1"; "Displayed value1"; "value2"; "Displayed value2")
-					$manifest.types:=New collection:C1472("text")
+					$manifest.type:=New collection:C1472("text")
 					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
+					If (Count parameters:C259>1)
+						$manifest.choiceList:=New object:C1471()
+						var $datum : Variant
+						For each ($datum; $data)
+							$manifest.choiceList[String:C10($datum)]:=String:C10($datum)
+						End for each 
+					End if 
 				Else 
-					ASSERT:C1129(dev_Matrix; "Missing binding for type "+$type+" to create formatter")
+					ASSERT:C1129(dev_Matrix; "Missing binding for type "+String:C10($typeString)+" to create formatter")
 			End case 
 			
 			$manifestFile.setText(JSON Stringify:C1217($manifest; *))
+			This:C1470.sources()
 			
 		End if 
 		
