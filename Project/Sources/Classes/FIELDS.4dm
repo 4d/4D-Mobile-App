@@ -722,6 +722,29 @@ Function iconPicker($e : Object)
 	End if 
 	
 	//________________________________________________________________
+	// Show format on disk
+Function formatShowOnDisk($e : Object)
+	var $format : Text
+	var $field; $o : Object
+	
+	$field:=This:C1470.field($e.row)  // Get the field definition
+	
+	// Get current format
+	If ($field.format#Null:C1517)
+		If (Value type:C1509($field.format)=Is object:K8:27)
+			$format:=String:C10($field.format.name)
+		Else 
+			$format:=$field.format
+		End if 
+	End if 
+	
+	// Show on disk if host
+	$o:=cs:C1710.formater.new($format)
+	If (Bool:C1537($o.host))
+		SHOW ON DISK:C922($o.source.platformPath)
+	End if 
+	
+	//________________________________________________________________
 	// Manage the format menu according to the field type
 Function formatMenu($e : Object)
 	

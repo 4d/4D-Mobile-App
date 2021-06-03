@@ -202,7 +202,11 @@ Else   // <== WIDGETS METHOD
 					
 					If ($e.columnName=$ƒ.formats.name)
 						
-						$ƒ.formatMenu($e)
+						If (Shift down:C543)
+							$ƒ.formatShowOnDisk($e)
+						Else 
+							$ƒ.formatMenu($e)
+						End if 
 						
 					End if 
 					
