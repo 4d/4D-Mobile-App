@@ -331,4 +331,15 @@ Function toolTip()->$tip
 		If ($manifestFile.exists)
 			$tip:=cs:C1710.str.new(JSON Stringify:C1217(JSON Parse:C1218($manifestFile.getText()).choiceList; *)).jsonSimplify()
 		End if 
+	Else 
+		// tips: edit resources.json to add "tips" to formatters in fieldBindingTypes
+		If (SHARED.resources.formattersByName=Null:C1517)
+			SHARED.resources.formattersByName:=New object:C1471()
+			var $bind : Object
+			For each ($bind; SHARED.resources.fieldBindingTypes\
+				.reduce("col_formula"; New collection:C1472(); Formula:C1597($1.accumulator.combine(Choose:C955($1.value=Null:C1517; New collection:C1472(); $1.value)))))
+				SHARED.resources.formattersByName[$bind.name]:=$bind
+			End for each 
+		End if 
+		$tip:=String:C10(SHARED.resources.formattersByName[This:C1470.name].tips)
 	End if 
