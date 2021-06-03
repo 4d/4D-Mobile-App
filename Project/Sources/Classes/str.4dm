@@ -1232,3 +1232,13 @@ Function versionCompare($with : Text; $separator : Text)->$result : Integer
 		
 	End if 
 	
+	//=======================================================================================================
+	// Return a user friendly string from json prettified string
+Function jsonSimplify()->$formatted : Text
+	$formatted:=Replace string:C233(This:C1470.value; "{\n"; "")
+	$formatted:=Replace string:C233($formatted; "\n}"; "")
+	$formatted:=Replace string:C233($formatted; ",\n"; "\n")
+	$formatted:=Replace string:C233($formatted; "\t"; "")
+	$formatted:=Replace string:C233($formatted; "[\n"; "")
+	$formatted:=Replace string:C233($formatted; "\n]"; "")
+	

@@ -593,7 +593,9 @@ Function setHelpTip($e : Object)
 							//%W+533.1
 							var $manifestFile : 4D:C1709.File
 							$manifestFile:=cs:C1710.path.new().hostFormatters(False:C215).folder(Substring:C12($field.format; 2)).file("manifest.json")
-							$t:=$str.setText(JSON Stringify:C1217(JSON Parse:C1218($manifestFile.getText()).choiceList; *)).value
+							
+							$t:=$str.setText(JSON Stringify:C1217(JSON Parse:C1218($manifestFile.getText()).choiceList; *)).jsonSimplify()
+							
 						End if 
 					End if 
 				End if 
