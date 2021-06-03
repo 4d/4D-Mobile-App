@@ -232,3 +232,58 @@ Function isValid($format : Variant)->$valid : Boolean
 			
 		End if 
 	End if 
+	
+	//============================================================================
+	// Create a formatter with text choiceList
+Function create($type : Text)->$manifestFile : 4D:C1709.File
+	
+	var $name : Text
+	$name:=This:C1470.name
+	If (Bool:C1537(This:C1470.host))
+		$name:=Substring:C12($name; 2)  // remove slash
+	Else 
+		// Assert?
+		$name:=""
+	End if 
+	
+	If (Length:C16($name)>0)
+		
+		var $formatFolder : 4D:C1709.Folder
+		$formatFolder:=cs:C1710.path.new().hostFormatters(True:C214).folder($name)
+		
+		$manifestFile:=$formatFolder.file("manifest.json")
+		
+		If (Not:C34($manifestFile.exists))  // else could assert if exists but ..
+			
+			$formatFolder.create()
+			
+			$manifestFile:=$formatFolder.file("manifest.json")
+			
+			var $manifest : Object
+			$manifest:=New object:C1471(\
+				"name"; $name; \
+				"$comment"; "Map database values to some display values using choiceList"; \
+				"binding"; "localizedText")
+			
+			Case of 
+				: (($type="bool")/*| ($type="boolean")*/)
+					$manifest.choiceList:=New object:C1471("0"; "False"; "1"; "True")
+					$manifest.types:=New collection:C1472("boolean")
+					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#integer-to-string"
+				: ($type="number"/*| ($type="integer") | ($type="real")*/)
+					$manifest.choiceList:=New object:C1471("0"; "zero"; "1"; "the one"; "3"; "san")
+					$manifest.types:=New collection:C1472("real"; "integer")
+					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#integer-to-string"
+				: ($type="string"/*| ($type="text") */)
+					$manifest.choiceList:=New object:C1471("value1"; "Displayed value1"; "value2"; "Displayed value2")
+					$manifest.types:=New collection:C1472("text")
+					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
+				Else 
+					ASSERT:C1129(dev_Matrix; "Missing binding for type "+$type+" to create formatter")
+			End case 
+			
+			$manifestFile.setText(JSON Stringify:C1217($manifest; *))
+			
+		End if 
+		
+	End if 
