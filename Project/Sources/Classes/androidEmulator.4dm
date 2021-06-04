@@ -197,7 +197,7 @@ Function avalaible()->$emulators : Collection
 	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Starting the emulator
+	// Starting an emulator by name
 Function start  // Starts emulator
 	var $0 : Object
 	var $1 : Text  // Avd name

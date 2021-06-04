@@ -1,21 +1,20 @@
-
 Class extends lep
 
 /*
-
    lep ━ androidProcess ━┳━ adb  
-                          ┣━ androidEmulator 
-                          ┣━ androidProjectGenerator 
-                              ┣━ avd 
-                              ┣━ gradlew  
-                              ┗━ sdkmanager 
-                               
+                         ┣━ androidEmulator 
+                         ┣━ androidProjectGenerator 
+                         ┣━ avd 
+                         ┣━ gradlew  
+                         ┗━ sdkmanager                                
 */
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705()
+	
+	This:C1470.minimumVersion:=10
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the Android SDK folder object
@@ -42,7 +41,6 @@ Function androidSDKFolder()->$folder : 4D:C1709.Folder
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
 Function getJavaHome()
 	
 	If (Is macOS:C1572)
@@ -72,9 +70,5 @@ Function getJavaHome()
 			This:C1470.errors.push("Failed to get JAVA_HOME")
 			
 		End if 
-		
-		//This.java_home:="'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath'"
-		
 	End if 
-	
 	

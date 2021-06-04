@@ -1,10 +1,9 @@
 Class extends MobileProject
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Class constructor
-	var $1 : Object
+Class constructor($project : Object)
 	
-	Super:C1705($1)
+	Super:C1705($project)
 	
 	This:C1470.isOnError:=False:C215
 	
@@ -13,7 +12,7 @@ Class constructor
 	
 	This:C1470.project:=OB Copy:C1225(This:C1470.input)
 	
-	// Cleaning inner $objects
+	// * CLEANING INNER $OBJECTS
 	var $o : Object
 	For each ($o; OB Entries:C1720(This:C1470.project.project).query("key=:1"; "$@"))
 		
@@ -22,9 +21,13 @@ Class constructor
 	End for each 
 	
 	If (Not:C34(Feature.with("dominantColor")))
+		
 		If (Is macOS:C1572)
+			
 			This:C1470._o_setTheme()
-			// Else : not implemented for Windows (Objective-c code)
+			
+			// Else : * NOT IMPLEMENTED FOR WINDOWS (Objective-c code)
+			
 		End if 
 	End if 
 	
@@ -32,40 +35,30 @@ Class constructor
 	This:C1470.project.cache_4d_sdk:=This:C1470.path.cacheSdkAndroidUnzipped().path
 	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
 	
-	var $projectPathFolder : 4D:C1709.Folder
-	
-	$projectPathFolder:=Folder:C1567(This:C1470.project.path)
-	$projectPathFolder:=$projectPathFolder.folder($projectPathFolder.parent.name)
-	$projectPathFolder.create()
-	This:C1470.project.path:=$projectPathFolder.path
+	// * GET THE PROJECT FOLDER
+	var $folder : 4D:C1709.Folder
+	$folder:=Folder:C1567(This:C1470.project.path)
+	$folder:=$folder.folder($folder.parent.name)
+	$folder.create()  // Create, if any
+	This:C1470.project.path:=$folder.path
 	
 	This:C1470.project.remote_url:=This:C1470.remoteUrl()
-	
-	var $reformatedPackage : Text
-	
-	$reformatedPackage:=This:C1470.project.project.product.bundleIdentifier
-	
-	Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "_"; ->$reformatedPackage; 0)
-	
-	$reformatedPackage:=Replace string:C233($reformatedPackage; ".."; ".")
-	$reformatedPackage:=Lowercase:C14($reformatedPackage)
-	
-	This:C1470.project.package:=$reformatedPackage
+	This:C1470.project.package:=This:C1470.project.project.product.bundleIdentifier
 	
 	This:C1470.checkPackage()
-	
 	
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
 	
-	This:C1470.logFolder:=cs:C1710.path.new().userCache()
+	This:C1470.logFolder:=This:C1470.path.userCache()
 	This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
 	
 	This:C1470.version:="debug"
 	This:C1470.apk:=Folder:C1567(This:C1470.project.path).folder("app/build/outputs/apk").folder(This:C1470.version).file("app-"+This:C1470.version+".apk")
 	This:C1470.activity:="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
 	
-	This:C1470.avdName:=This:C1470.project.project._simulator
+	//This.avdName:=This.project.project._simulator
+	This:C1470.avdName:=This:C1470.project.project._device.udid
 	This:C1470.serial:=""
 	
 	// Class for create()
@@ -358,6 +351,37 @@ Function run()->$result : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Installing the APK on a connected device
+Function install()->$result : Object
+	
+	$result:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	var $device : Object
+	$device:=This:C1470.project.project._device
+	
+	If (This:C1470.adb.isDeviceConnected($device.udid))
+		
+		This:C1470.adb.installApp(This:C1470.apk.path; $device.udid)
+		
+		If (This:C1470.adb.success)
+			
+			$result.success:=True:C214
+			
+		Else 
+			
+			This:C1470.postError(This:C1470.adb.installApp(This:C1470.apk.path; $device.udid).lastError)
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.postError("The device \""+$device.name+"\" is not connected")
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function remoteUrl()->$result : Text
 	
@@ -375,46 +399,83 @@ Function remoteUrl()->$result : Text
 	//
 Function checkPackage()
 	
-	If (Position:C15("."; This:C1470.project.package)=0)
-		
-		This:C1470.isOnError:=True:C214
-		This:C1470.postError("The package must have at least one '.' separator ("+This:C1470.project.package+")")
-		
-		// Else : all ok
-	End if 
+	// * FORMAT THE PACKAGE NAME
 	
-	If (Match regex:C1019("^[\\._0-9]"; This:C1470.project.package; 1))
-		
-		This:C1470.isOnError:=True:C214
-		This:C1470.postError("The package name must begin with a letter ("+This:C1470.project.package+")")
-		
-		// Else : all ok
-	End if 
+/*
+@ https://developer.android.com/studio/build/application-id
 	
-	If (Match regex:C1019("[\\.]$"; This:C1470.project.package; 1))
-		
-		This:C1470.isOnError:=True:C214
-		This:C1470.postError("The package name must not end with a separator ("+This:C1470.project.package+")")
-		
-		// Else : all ok
-	End if 
+Every Android app has a unique application ID that looks like
+a Java package name, such as com.example.myapp. 
 	
-	var $packageParts : Collection
-	$packageParts:=Split string:C1554(This:C1470.project.package; ".")
+- All characters must be alphanumeric or an underscore [a-zA-Z0-9_]
+  (preferably in lowercase for use with adb commands)
 	
-	var $part : Text
+- It must have at least two segments (one or more dots)
 	
-	For each ($part; $packageParts)
+- Each segment must start with a letter.
+	
+*/
+	
+	var $t : Text
+	$t:=Lowercase:C14(This:C1470.project.package)
+	
+	ARRAY LONGINT:C221($len; 0x0000)
+	ARRAY LONGINT:C221($pos; 0x0000)
+	
+	While (Match regex:C1019("(?m-si)([^[:alnum:]\\._])"; $t; 1; $pos; $len))
 		
-		If (Match regex:C1019("^[\\._0-9]"; $part; 1))
+		$t:=Replace string:C233($t; Substring:C12($t; $pos{1}; $len{1}); "_")
+		
+	End while 
+	
+	$t:=Replace string:C233($t; ".."; ".")
+	This:C1470.project.package:=$t
+	
+	// * CHECK PACKAGE NAME CONVENTIONS
+	
+	This:C1470.isOnError:=True:C214
+	
+	Case of 
 			
-			This:C1470.isOnError:=True:C214
-			This:C1470.postError("A package segment must begin with a letter ("+This:C1470.project.package+")")
+			//______________________________________________________
+		: (Match regex:C1019("(?m-si)([^[:alnum:]\\._])"; This:C1470.project.package; 1))
 			
-			// Else : all ok 
-		End if 
-		
-	End for each 
+			This:C1470.postError("The package name should use only letters, numbers and underscores ("+This:C1470.project.package+")")
+			
+			//______________________________________________________
+		: (Position:C15("."; This:C1470.project.package)=0)
+			
+			This:C1470.postError("The package name must have at least 2 segments separated by a dot ("+This:C1470.project.package+")")
+			
+			//______________________________________________________
+		: (Match regex:C1019("^[\\._0-9]"; This:C1470.project.package; 1))
+			
+			This:C1470.postError("The package name must begin with a letter ("+This:C1470.project.package+")")
+			
+			//______________________________________________________
+		: (Match regex:C1019("[\\.]$"; This:C1470.project.package; 1))
+			
+			This:C1470.postError("The package name must not end with a dot ("+This:C1470.project.package+")")
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470.isOnError:=False:C215
+			
+			var $t : Text
+			For each ($t; Split string:C1554(This:C1470.project.package; ".")) While (Not:C34(This:C1470.isOnError))
+				
+				If (Match regex:C1019("^[\\._0-9]"; $t; 1))
+					
+					This:C1470.isOnError:=True:C214
+					This:C1470.postError("A package name segment must start with a letter ("+This:C1470.project.package+")")
+					
+				End if 
+			End for each 
+			
+			//______________________________________________________
+	End case 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//

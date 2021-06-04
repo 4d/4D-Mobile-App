@@ -85,15 +85,15 @@ Case of
 					: ($withStudio & $withXcode)
 						
 						$out.connected:=New object:C1471(\
-							"android"; cs:C1710.adb.new().plugged(); \
-							"apple"; $simctl.plugged())
+							"android"; cs:C1710.adb.new().connected(); \
+							"apple"; $simctl.connected())
 						
 						
 						//______________________________________________________
 					: ($withStudio)
 						
 						$out.connected:=New object:C1471(\
-							"android"; cs:C1710.adb.new().plugged(); \
+							"android"; cs:C1710.adb.new().connected(); \
 							"apple"; New collection:C1472)
 						
 						//______________________________________________________
@@ -101,7 +101,7 @@ Case of
 						
 						$out.connected:=New object:C1471(\
 							"android"; New collection:C1472; \
-							"apple"; $simctl.plugged())
+							"apple"; $simctl.connected())
 						
 						//______________________________________________________
 					Else 
@@ -152,7 +152,7 @@ Case of
 			If ($withStudio)
 				
 				$out.connected:=New object:C1471(\
-					"android"; cs:C1710.adb.new().plugged())
+					"android"; cs:C1710.adb.new().connected())
 				
 			Else 
 				

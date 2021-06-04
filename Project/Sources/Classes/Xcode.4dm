@@ -222,6 +222,18 @@ Function checkRequiredVersion($version : Text)
 	End if 
 	
 	//====================================================================
+	// Returns True if the version of Xcode is equal or superior to the desired one
+Function checkMinimumVersion($version : Text)->$ok : Boolean
+	
+	$ok:=(This:C1470.versionCompare($version)>=0)
+	
+	//====================================================================
+	// Returns True if the version of Xcode is equal or superior to the desired one
+Function checkMaximumVersion($version : Text)->$ok : Boolean
+	
+	$ok:=(This:C1470.versionCompare($version)#1)
+	
+	//====================================================================
 	// Sets the applicatiion
 	// To the given pathname (POSIX)
 	// & update the version
@@ -366,18 +378,6 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 			
 		End if 
 	End if 
-	
-	//====================================================================
-	// Returns True if the version of Xcode is equal or superior to the desired one
-Function checkMinimumVersion($version : Text)->$ok : Boolean
-	
-	$ok:=(This:C1470.versionCompare($version)>=0)
-	
-	//====================================================================
-	// Returns True if the version of Xcode is equal or superior to the desired one
-Function checkMaximumVersion($version : Text)->$ok : Boolean
-	
-	$ok:=(This:C1470.versionCompare($version)#1)
 	
 	//====================================================================
 	// Check if any First Launch tasks need to be performed.

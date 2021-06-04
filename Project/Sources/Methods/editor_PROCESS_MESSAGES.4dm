@@ -176,7 +176,7 @@ Case of
 				//If (EDITOR.android)
 				//$fileManifest:=cs.path.new().cacheSdkAndroid().parent.file("manifest.json")
 				//If (Not($fileManifest.exists))\
-															 | ($fileManifest.modificationDate#Current date)
+																				 | ($fileManifest.modificationDate#Current date)
 				//// Get the last 4D Mobile Android SDK from AWS server if any
 				//EDITOR.downloadSDK("aws"; "android"; False)
 				//End if 
@@ -276,7 +276,7 @@ Case of
 						
 					Else 
 						
-						DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyInstalled").localized($in.param.project.product.name))
+						DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyInstalled").localized(New collection:C1472($in.param.project.product.name; $in.param.project._device.name)))
 						
 					End if 
 					

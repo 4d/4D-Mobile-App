@@ -354,7 +354,7 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 			
 			var $t : Text
 			$t:=This:C1470.info.target
-			This:C1470["$"+Lowercase:C14($target)]:=True:C214
+			This:C1470["$"+Lowercase:C14($t)]:=True:C214
 			
 		Else 
 			

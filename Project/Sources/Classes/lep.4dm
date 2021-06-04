@@ -303,8 +303,9 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 			
 			// ⚠️ Some commands return the error in the output stream
 			
-			If (Position:C15("ERROR:"; $t; *)=1)\
-				 | (Position:C15("FAILED:"; $t; *)=1)
+			If (Position:C15("ERROR"; $t; *)=1)\
+				 | (Position:C15("FAILED"; $t; *)=1)\
+				 | (Position:C15("Failure"; $t; *)=1)
 				
 				$errorStream:=$t
 				This:C1470.success:=False:C215

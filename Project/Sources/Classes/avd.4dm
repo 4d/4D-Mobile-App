@@ -1,5 +1,14 @@
 Class extends androidProcess
 
+/*
+   lep ━ androidProcess ━┳━ adb  
+                         ┣━ androidEmulator 
+                         ┣━ androidProjectGenerator 
+                         ┣━ avd 
+                         ┣━ gradlew  
+                         ┗━ sdkmanager                                
+*/
+
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
@@ -46,7 +55,7 @@ Function _exe()->$file : 4D:C1709.File
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Create a new AVD.
 	// You must provide a name for the AVD and specify the ID of the SDK package to use
-Function createAvd($avd : Object)->$this : cs:C1710.avd
+Function createAvd($avd : Object)->$this : cs:C1710.avd  // #TO_DO : 3 parameters: name, image {,definition} to be more clear
 	
 	var $command : Text
 	
@@ -270,6 +279,8 @@ Function availableDevices()->$devices : Collection
 			$o.isAvailable:=(Length:C16($t)=0)
 			$o.missingSystemImage:=(Position:C15("Missing system image"; $t)>0)
 			$o.isOutDated:=(Position:C15("no longer exists as a device"; $t)>0)
+			
+			$o.type:="emulator"
 			
 			If ($o.isAvailable)\
 				 & (Not:C34($o.missingSystemImage) & Not:C34($o.isOutDated))

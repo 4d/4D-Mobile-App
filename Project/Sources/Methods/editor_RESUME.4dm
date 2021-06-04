@@ -92,11 +92,6 @@ Case of
 		CALL FORM:C1391($Win_me; $kTxt_callbackMethod; $Txt_selector)
 		
 		//______________________________________________________
-	: ($Txt_selector="build_run")
-		
-		CALL FORM:C1391($Win_me; "project_BUILD"; $Obj_params)
-		
-		//______________________________________________________
 	: ($Txt_selector="build_deleteProductFolder")  // #MARK_TO_REMOVE
 		
 		If (Asserted:C1132($Obj_in.build#Null:C1517))

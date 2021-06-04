@@ -19,6 +19,10 @@ Class constructor
 	
 	This:C1470.pendingTasks:=New collection:C1472
 	
+	// Initialize tools
+	This:C1470.str:=cs:C1710.str.new()
+	This:C1470.path:=cs:C1710.path.new()
+	
 	//===================================================================================
 Function pagesDefinition()
 	var $o : Object

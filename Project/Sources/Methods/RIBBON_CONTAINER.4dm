@@ -73,7 +73,6 @@ Case of
 				//…………………………………………………………………………………………………
 			: ($e.code=151)  // Build & Run
 				
-				// Autosave
 				PROJECT.save()
 				
 				BUILD(New object:C1471(\
@@ -89,16 +88,18 @@ Case of
 				
 				If (Not:C34(Bool:C1537(EDITOR.build)))
 					
-					// Autosave
 					PROJECT.save()
 					
-					BUILD(New object:C1471(\
-						"caller"; Current form window:C827; \
+					var $o : Object
+					$o:=New object:C1471(\
+						"caller"; EDITOR.window; \
 						"project"; (OBJECT Get pointer:C1124(Object named:K67:5; "project"))->; \
 						"create"; Not:C34($shiftDown); \
 						"build"; Not:C34($shiftDown); \
 						"archive"; True:C214; \
-						"verbose"; Bool:C1537(Form:C1466.verbose)))
+						"verbose"; Bool:C1537(Form:C1466.verbose))
+					
+					BUILD($o)
 					
 				End if 
 				

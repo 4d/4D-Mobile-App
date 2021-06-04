@@ -223,71 +223,62 @@ Case of
 				
 				If (FEATURE.with("android"))
 					
-					If ($button=153)
+					If ($button=153)  // Install
 						
 						androidLimitations(False:C215; "")
 						
-						If (Is Windows:C1573)
+						var $device : Object
+						var $target
+						
+						$target:=Null:C1517
+						
+						Case of 
+								
+								//______________________________________________________
+							: (EDITOR.currentDevice=Null:C1517)
+								
+								// <NOTHING MORE TO DO>
+								
+								//______________________________________________________
+							: (Is Windows:C1573)
+								
+								$device:=EDITOR.devices.connected.android.query("udid = :1"; EDITOR.currentDevice).pop()
+								$target:=Choose:C955($device#Null:C1517; "android"; Null:C1517)
+								
+								//______________________________________________________
+							: (Is macOS:C1572)
+								
+								$device:=EDITOR.devices.connected.apple.query("udid = :1"; EDITOR.currentDevice).pop()
+								$target:=Choose:C955($device#Null:C1517; "ios"; Null:C1517)
+								
+								If ($target=Null:C1517)
+									
+									$device:=EDITOR.devices.connected.android.query("udid = :1"; EDITOR.currentDevice).pop()
+									$target:=Choose:C955($device#Null:C1517; "android"; Null:C1517)
+									
+								End if 
+								
+								//______________________________________________________
+						End case 
+						
+						If ($target=Null:C1517)
 							
-							If (EDITOR.currentDevice#Null:C1517)
-								
-								var $device : Object
-								$device:=EDITOR.devices.android.query("udid = :1"; EDITOR.currentDevice).pop()
-								
-							End if 
-							
-							If ($device#Null:C1517)
-								
-								androidLimitations(False:C215; "Installation on a real device is coming soon for Android")
-								
-							Else 
-								
-								POST_MESSAGE(New object:C1471(\
-									"target"; Form:C1466.editor.$mainWindow; \
-									"action"; "show"; \
-									"type"; "alert"; \
-									"title"; "youMustFirstSelectASimulator"))
-								
-							End if 
+							POST_MESSAGE(New object:C1471(\
+								"target"; Form:C1466.editor.$mainWindow; \
+								"action"; "show"; \
+								"type"; "alert"; \
+								"title"; ".You must first select a connected device"))
 							
 						Else 
 							
-							If (EDITOR.currentDevice#Null:C1517)
-								
-								$device:=EDITOR.devices.apple.query("udid = :1"; EDITOR.currentDevice).pop()
-								
-							End if 
+							PROJECT._device:=$device
 							
-							If ($device#Null:C1517) & False:C215
-								
-								PROJECT._simulator:=$device.udid
-								PROJECT._buildTarget:="ios"
-								
-								// Pass to the parent
-								CALL SUBFORM CONTAINER:C1086(-$button)
-								
-							Else 
-								
-								If (EDITOR.currentDevice#Null:C1517)
-									
-									$device:=EDITOR.devices.android.query("udid = :1"; EDITOR.currentDevice).pop()
-									
-								End if 
-								
-								If ($device#Null:C1517)
-									
-									androidLimitations(False:C215; "Installation on a real device is coming soon for Android")
-									
-								Else 
-									
-									POST_MESSAGE(New object:C1471(\
-										"target"; Form:C1466.editor.$mainWindow; \
-										"action"; "show"; \
-										"type"; "alert"; \
-										"title"; "youMustFirstSelectASimulator"))
-									
-								End if 
-							End if 
+							PROJECT._simulator:=$device.udid
+							PROJECT._buildTarget:=$target
+							
+							// Pass to the parent
+							CALL SUBFORM CONTAINER:C1086(-$button)
+							
 						End if 
 						
 					Else 

@@ -5,36 +5,20 @@
 // Created 27-4-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-// Try to make UI building more fluent
+// Display the message immediately to be more responsive
+// The real build process will autostart at the message is posted
 // ----------------------------------------------------
 // Declarations
-#DECLARE($in : Object)
-
-If (False:C215)
-	C_OBJECT:C1216(BUILD; $1)
-End if 
+#DECLARE($data : Object)
 
 // ----------------------------------------------------
-// Initialisations
-If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
-	
-	// Required parameters
-	$in:=$1
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
-
-// ----------------------------------------------------
-
-EDITOR.build:=True:C214  // Stop reentrance
+// * STOP REENTRANCE
+EDITOR.build:=True:C214
 
 POST_MESSAGE(New object:C1471(\
-"target"; $in.caller; \
+"target"; EDITOR.window; \
 "action"; "show"; \
 "type"; "progress"; \
 "title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+Choose:C955(PROJECT._buildTarget="android"; "Android"; "iOS")+"]"; \
 "additional"; Get localized string:C991("preparations"); \
-"autostart"; New object:C1471("action"; "build_run"; "method"; "EDITOR_RESUME"; "project"; $in)))
+"autostart"; Formula:C1597(CALL FORM:C1391(EDITOR.window; "project_BUILD"; $data))))

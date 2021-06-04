@@ -8,7 +8,7 @@
 // common initializations and confirmations
 // ----------------------------------------------------
 // Declarations
-var $1 : Object
+#DECLARE($data : Object)
 
 If (False:C215)
 	C_OBJECT:C1216(project_BUILD; $1)
@@ -16,8 +16,8 @@ End if
 
 var $t; $tt : Text
 var $b; $success : Boolean
-var $l; $window : Integer
-var $o; $Obj_cancel; $Obj_ok; $in; $project : Object
+var $l : Integer
+var $o; $Obj_cancel; $Obj_ok; $project : Object
 var $c : Collection
 
 var $file : 4D:C1709.File
@@ -26,13 +26,9 @@ var $file : 4D:C1709.File
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	// Required parameters
-	$in:=$1
+	ob_MERGE($data; project_Defaults)
 	
-	ob_MERGE($in; project_Defaults)
-	
-	$project:=$in.project
-	$window:=Current form window:C827
+	$project:=$data.project
 	
 Else 
 	
@@ -43,24 +39,22 @@ End if
 // ----------------------------------------------------
 If (Asserted:C1132($project#Null:C1517))
 	
-	If (project_Check_param($in).success)
-		
-		var $path : cs:C1710.path
-		$path:=cs:C1710.path.new()
+	If (project_Check_param($data).success)
 		
 		$project.organization.identifier:=$project.organization.id+"."+cs:C1710.str.new($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
 		
-		$in.appFolder:=$path.products().folder($project.product.name)
+		//$data.appFolder:=$path.products().folder($project.product.name)
+		$data.appFolder:=EDITOR.path.products().folder($project.product.name)
 		
-		If ($in.path=Null:C1517)
+		If ($data.path=Null:C1517)
 			
 			If (FEATURE.with("android"))
 				
-				If ($in.appFolder.exists)
+				If ($data.appFolder.exists)
 					
 					//#ASCENDING_COMPATIBILITY
-					$c:=$in.appFolder.folders()
+					$c:=$data.appFolder.folders()
 					
 					If ($c.query("name=iOS").pop()#Null:C1517)\
 						 | ($c.query("name=Android").pop()#Null:C1517)
@@ -69,47 +63,48 @@ If (Asserted:C1132($project#Null:C1517))
 						
 					Else 
 						
-						$o:=$in.appFolder.moveTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); Generate UUID:C1066)
-						$in.appFolder.create()
+						$o:=$data.appFolder.moveTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); Generate UUID:C1066)
+						$data.appFolder.create()
 						
 						If ($o.folder(".gradle").exists)
 							
 							// Move to Android subfolder
-							$success:=$o.moveTo($in.appFolder; "Android").exists
+							$success:=$o.moveTo($data.appFolder; "Android").exists
 							
 						Else 
 							
 							// Move to iOS subfolder
-							$success:=$o.moveTo($in.appFolder; "iOS").exists
+							$success:=$o.moveTo($data.appFolder; "iOS").exists
 							
 						End if 
 					End if 
 				End if 
 				
 				// According to the target
-				$in.appFolder:=$in.appFolder.folder(Choose:C955($project._buildTarget="iOS"; "iOS"; "Android"))
+				$data.appFolder:=$data.appFolder.folder(Choose:C955($project._buildTarget="iOS"; "iOS"; "Android"))
 				
 			End if 
 			
-			$in.path:=$in.appFolder.platformPath
+			$data.path:=$data.appFolder.platformPath
 			
 		Else 
 			
-			Folder:C1567($in.path; fk platform path:K87:2).create()
+			Folder:C1567($data.path; fk platform path:K87:2).create()
 			
 		End if 
 		
-		$success:=Not:C34($in.create)
+		$success:=Not:C34($data.create)
 		
 		If (Not:C34($success))
 			
 			If ($project._buildTarget="iOS")
 				
-				If ($in.appFolder.folder("Sources").exists)
+				If ($data.appFolder.folder("Sources").exists)
 					
 					// Check if the project was modified by another application
 					// Compare to the signature of the sources folder
-					$file:=$path.userCache().file($project._name)
+					//$file:=$path.userCache().file($project._name)
+					$file:=EDITOR.path.userCache().file($project._name)
 					
 					If (FEATURE.with("android"))
 						
@@ -120,14 +115,15 @@ If (Asserted:C1132($project#Null:C1517))
 							
 						Else 
 							
-							$file:=$path.userCache().file($project._name+".ios.fingerprint")
+							//$file:=$path.userCache().file($project._name+".ios.fingerprint")
+							$file:=EDITOR.path.userCache().file($project._name+".ios.fingerprint")
 							
 						End if 
 					End if 
 					
 					If ($file.exists)
 						
-						$success:=(cs:C1710.tools.new().folderDigest($in.appFolder.folder("Sources"))=$file.getText())
+						$success:=(cs:C1710.tools.new().folderDigest($data.appFolder.folder("Sources"))=$file.getText())
 						
 					End if 
 					
@@ -139,7 +135,8 @@ If (Asserted:C1132($project#Null:C1517))
 				
 			Else 
 				
-				$file:=$path.userCache().file($project._name+".android.fingerprint")
+				//$file:=$path.userCache().file($project._name+".android.fingerprint")
+				$file:=EDITOR.path.userCache().file($project._name+".android.fingerprint")
 				
 				//#MARK_TODO
 				$success:=True:C214
@@ -161,7 +158,7 @@ If (Asserted:C1132($project#Null:C1517))
 				"title"; "theProductFolderAlreadyExist"; \
 				"additional"; "allContentWillBeReplaced"; \
 				"CALLBACK"; "editor_MESSAGE_CALLBACK"; \
-				"build"; $in)
+				"build"; $data)
 			
 			$o:=await_MESSAGE($o; "productFolderAlreadyExist")
 			
@@ -169,7 +166,7 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		If ($success)
 			
-			// Verify the structure
+			// * VERIFY THE STRUCTURE
 			$c:=New collection:C1472
 			
 			For each ($t; $project.dataModel)
@@ -240,17 +237,17 @@ If (Asserted:C1132($project#Null:C1517))
 					
 					If (Not:C34($success))
 						
-						$success:=WEB Is server running:C1313 | Bool:C1537($in.ignoreServer)
+						$success:=WEB Is server running:C1313 | Bool:C1537($data.ignoreServer)
 						
 						If (Not:C34($success))
 							
 							$Obj_ok:=New object:C1471(\
 								"action"; "build_startWebServer"; \
-								"build"; $in)
+								"build"; $data)
 							
 							$Obj_cancel:=New object:C1471(\
 								"action"; "build_ignoreServer"; \
-								"build"; $in)
+								"build"; $data)
 							
 							// Web server must running to test data synchronization
 							$o:=New object:C1471(\
@@ -260,7 +257,7 @@ If (Asserted:C1132($project#Null:C1517))
 								"additional"; "DoYouWantToStartTheWebServer"; \
 								"cancel"; "notNow"; \
 								"CALLBACK"; "editor_MESSAGE_CALLBACK"; \
-								"build"; $in)
+								"build"; $data)
 							
 							$o:=await_MESSAGE($o; "theWebServerIsNotStarted")
 							
@@ -325,15 +322,15 @@ If (Asserted:C1132($project#Null:C1517))
 						If (Not:C34($success))
 							
 							POST_MESSAGE(New object:C1471(\
-								"target"; $window; \
+								"target"; EDITOR.window; \
 								"action"; "show"; \
 								"type"; "confirm"; \
 								"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
 								"additional"; "youMustUpdateTheStructureOfTheProductionServer"; \
 								"help"; Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment"); *)); \
-								"cancelFormula"; Formula:C1597(CALL FORM:C1391($window; "editor_CALLBACK"; "build_stop")); \
+								"cancelFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; "editor_CALLBACK"; "build_stop")); \
 								"ok"; Get localized string:C991("continue"); \
-								"okFormula"; Formula:C1597(CALL FORM:C1391($window; "editor_CALLBACK"; "ignoreServerStructureAdjustement"))))
+								"okFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; "editor_CALLBACK"; "ignoreServerStructureAdjustement"))))
 							
 						End if 
 					End if 
@@ -353,7 +350,7 @@ If (Asserted:C1132($project#Null:C1517))
 					If (Not:C34($success))
 						
 						POST_MESSAGE(New object:C1471(\
-							"target"; $window; \
+							"target"; EDITOR.window; \
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; "theProductionServerIsNotAvailable"; \
@@ -368,92 +365,98 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		If ($success)
 			
-			If (Bool:C1537($in.archive))
+			If (Bool:C1537($data.archive))
 				
-				$success:=Bool:C1537($in.manualInstallation)
-				
-				If (Not:C34($success))
-					
-					If (Not:C34(Bool:C1537($in.configurator)))
+				Case of 
+						//______________________________________________________
+					: ($project._buildTarget="iOS")
 						
-						// Verify that Apple Configurator 2 application is installed
-						$in.configurator:=device(New object:C1471("action"; "appPath")).success
-						
-					End if 
-					
-					$success:=Bool:C1537($in.configurator)
-					
-					If ($success)
-						
-						// Verify that at least one device is plugged
-						$success:=device(New object:C1471("action"; "plugged")).success
+						$success:=Bool:C1537($data.manualInstallation)
 						
 						If (Not:C34($success))
 							
-							// Ask for a device
-							$Obj_ok:=New object:C1471(\
-								"action"; "build_deviceOnline"; \
-								"build"; $in)
+							If (Not:C34(Bool:C1537($data.configurator)))
+								
+								// Verify that Apple Configurator 2 application is installed
+								$data.configurator:=device(New object:C1471("action"; "appPath")).success
+								
+							End if 
 							
-							$Obj_cancel:=New object:C1471(\
-								"action"; "build_manualInstallation"; \
-								"build"; $in)
+							$success:=Bool:C1537($data.configurator)
 							
-							POST_MESSAGE(New object:C1471(\
-								"target"; $window; \
-								"action"; "show"; \
-								"type"; "confirm"; \
-								"title"; Get localized string:C991("noDeviceFound"); \
-								"additional"; Get localized string:C991("makeSureThatADeviceIsConnected"); \
-								"ok"; Get localized string:C991("continue"); \
-								"okAction"; JSON Stringify:C1217($Obj_ok); \
-								"cancel"; Get localized string:C991("manualInstallation"); \
-								"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
-							
+							If ($success)
+								
+								// Verify that at least one device is plugged
+								$success:=device(New object:C1471("action"; "plugged")).success
+								
+								If (Not:C34($success))
+									
+									// Ask for a device
+									$Obj_ok:=New object:C1471(\
+										"action"; "build_deviceOnline"; \
+										"build"; $data)
+									
+									$Obj_cancel:=New object:C1471(\
+										"action"; "build_manualInstallation"; \
+										"build"; $data)
+									
+									POST_MESSAGE(New object:C1471(\
+										"target"; EDITOR.window; \
+										"action"; "show"; \
+										"type"; "confirm"; \
+										"title"; Get localized string:C991("noDeviceFound"); \
+										"additional"; Get localized string:C991("makeSureThatADeviceIsConnected"); \
+										"ok"; Get localized string:C991("continue"); \
+										"okAction"; JSON Stringify:C1217($Obj_ok); \
+										"cancel"; Get localized string:C991("manualInstallation"); \
+										"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
+									
+								End if 
+								
+							Else 
+								
+								// Ask for installation
+								$Obj_ok:=New object:C1471(\
+									"action"; "build_waitingForConfigurator"; \
+									"build"; $data)
+								
+								$Obj_cancel:=New object:C1471(\
+									"action"; "build_manualInstallation"; \
+									"build"; $data)
+								
+								$t:=device(New object:C1471("action"; "appName")).value
+								
+								POST_MESSAGE(New object:C1471(\
+									"target"; EDITOR.window; \
+									"action"; "show"; \
+									"type"; "confirm"; \
+									"title"; New collection:C1472("appIsNotInstalled"; $t); \
+									"additional"; New collection:C1472("wouldYouLikeToInstallNow"; $t); \
+									"okAction"; JSON Stringify:C1217($Obj_ok); \
+									"cancel"; Get localized string:C991("manualInstallation"); \
+									"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
+								
+							End if 
 						End if 
 						
+						//______________________________________________________
+					: ($project._buildTarget="android")
+						
+						// check if android device plugged
+						
+						//______________________________________________________
 					Else 
 						
-						// Ask for installation
-						$Obj_ok:=New object:C1471(\
-							"action"; "build_waitingForConfigurator"; \
-							"build"; $in)
+						// A "Case of" statement should never omit "Else"
 						
-						$Obj_cancel:=New object:C1471(\
-							"action"; "build_manualInstallation"; \
-							"build"; $in)
-						
-						$t:=device(New object:C1471("action"; "appName")).value
-						
-						POST_MESSAGE(New object:C1471(\
-							"target"; $window; \
-							"action"; "show"; \
-							"type"; "confirm"; \
-							"title"; New collection:C1472("appIsNotInstalled"; $t); \
-							"additional"; New collection:C1472("wouldYouLikeToInstallNow"; $t); \
-							"okAction"; JSON Stringify:C1217($Obj_ok); \
-							"cancel"; Get localized string:C991("manualInstallation"); \
-							"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
-						
-					End if 
-				End if 
+						//______________________________________________________
+				End case 
 			End if 
 		End if 
 		
 		If ($success)
 			
-			If ($in.$buildType)
-				
-				
-				
-			Else 
-				
-				// A "If" statement should never omit "Else" 
-				
-			End if 
-			
-			
-			CALL WORKER:C1389("4D Mobile ("+String:C10($in.caller)+")"; "mobile_Project"; $in)
+			CALL WORKER:C1389(EDITOR.worker; "mobile_Project"; $data)
 			
 		End if 
 	End if 

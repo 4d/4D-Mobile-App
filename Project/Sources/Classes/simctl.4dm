@@ -184,7 +184,7 @@ Function deviceTypes($type : Text)->$devices : Collection
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// List of connected devices
-Function plugged($iosDeploymentTarget : Text)->$plugged : Collection
+Function connected($iosDeploymentTarget : Text)->$plugged : Collection
 	
 	$plugged:=New collection:C1472
 	
@@ -238,10 +238,10 @@ Function plugged($iosDeploymentTarget : Text)->$plugged : Collection
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// List available devices (iPhone & iPad) according to the minimum iOS version target
-Function availableDevices($iosDeploymentTarget : Text)->$availables : Collection
+Function availableDevices($iosDeploymentTarget : Text)->$Devices : Collection
 	
 	var $key; $minVers : Text
-	var $devices : Object
+	var $availables; $device : Object
 	var $str : cs:C1710.str
 	
 	ARRAY LONGINT:C221($pos; 0)
@@ -257,7 +257,7 @@ Function availableDevices($iosDeploymentTarget : Text)->$availables : Collection
 		
 	End if 
 	
-	$availables:=New collection:C1472
+	$Devices:=New collection:C1472
 	
 	This:C1470.launch("xcrun simctl"; "list devices --json devices")
 	
@@ -265,18 +265,24 @@ Function availableDevices($iosDeploymentTarget : Text)->$availables : Collection
 		
 		$str:=cs:C1710.str.new()
 		
-		$devices:=JSON Parse:C1218(This:C1470.outputStream).devices
+		$availables:=JSON Parse:C1218(This:C1470.outputStream).devices
 		
-		For each ($key; $devices) While ($availables.length=0)
+		For each ($key; $availables) While ($Devices.length=0)
 			
 			If (Match regex:C1019("(?m-si)(?:\\.iOS-(\\d+)-(\\d+))+"; $key; 1; $pos; $len))
 				
 				If ($str.setText(Substring:C12($key; $pos{1}; $len{1})+"."+Substring:C12($key; $pos{2}; $len{2})).versionCompare($minVers)>=0)
 					
-					$availables:=$devices[$key].query("isAvailable = :1 AND name IN :2"; True:C214; New collection:C1472("iPad@"; "iPhone@"))
+					$Devices:=$availables[$key].query("isAvailable = :1 AND name IN :2"; True:C214; New collection:C1472("iPad@"; "iPhone@"))
 					
 				End if 
 			End if 
+		End for each 
+		
+		For each ($device; $Devices)
+			
+			$device.type:="emulator"
+			
 		End for each 
 	End if 
 	

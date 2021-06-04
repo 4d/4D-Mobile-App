@@ -1,12 +1,15 @@
-Class constructor
+Class constructor($project : Object)
 	
-	var $1 : Object
+	This:C1470.input:=$project
+	This:C1470.success:=True:C214
+	This:C1470.errors:=New collection:C1472
+	This:C1470.lastError:=""
 	
-	This:C1470.input:=$1
+	This:C1470.withUI:=(This:C1470.input.caller#Null:C1517)
 	This:C1470.path:=cs:C1710.path.new()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// Build and …
 Function main()->$result : Object
 	
 	var $o : Object
@@ -25,31 +28,52 @@ Function main()->$result : Object
 			
 			If ($o.success)
 				
-				If (Bool:C1537(This:C1470.input.run))
-					
-					$o:=This:C1470.run()
-					
-					If ($o.success)
+				
+				Case of 
+						//______________________________________________________
+					: (Bool:C1537(This:C1470.input.run))
 						
-						// Nothing to do
-						$result.success:=True:C214
+						$o:=This:C1470.run()
 						
+						If ($o.success)
+							
+							$result.success:=True:C214
+							This:C1470.notification()
+							
+						Else 
+							
+							// ❌ ERROR OCCURRED WHILE RUNNING PROJECT
+							
+						End if 
+						
+						//______________________________________________________
+					: (Bool:C1537(This:C1470.input.archive))
+						
+						$o:=This:C1470.install()
+						
+						If ($o.success)
+							
+							$result.success:=True:C214
+							This:C1470.notification()
+							
+						Else 
+							
+							// ❌ ERROR OCCURRED WHILE INSTALLING APP
+							
+						End if 
+						
+						//______________________________________________________
 					Else 
 						
-						// Error occurred while running project
+						// * NO EXECUTION OR INSTALLATION HAS BEEN REQUESTED
+						$result.success:=True:C214
 						
-					End if 
-					
-				Else 
-					
-					// No run requested
-					$result.success:=True:C214
-					
-				End if 
+						//______________________________________________________
+				End case 
 				
 			Else 
 				
-				// Error occurred while building project
+				// ❌ ERROR OCCURRED WHILE BUILDING PROJECT
 				
 			End if 
 			
@@ -62,148 +86,143 @@ Function main()->$result : Object
 		
 	Else 
 		
-		// Error occurred while creating project
+		// ❌ ERROR OCCURRED WHILE CREATING PROJECT
 		
 	End if 
 	
 	$result.errors:=$o.errors
 	
-	POST_MESSAGE(New object:C1471("target"; This:C1470.input.caller; "action"; "hide"))
+	If (This:C1470.withUI)
+		
+		POST_MESSAGE(New object:C1471(\
+			"target"; This:C1470.input.caller; \
+			"action"; "hide"))
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function create
+	// ⚠️ MUST BE OVERRIDEN
+Function create()
 	
-	ASSERT:C1129(False:C215; "must be overriden")
+	ASSERT:C1129(False:C215; "👀 Must be overriden")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// ⚠️ MUST BE OVERRIDEN
 Function build
 	
-	ASSERT:C1129(False:C215; "must be overriden")
+	ASSERT:C1129(False:C215; "👀 Must be overriden")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function run
+	// ⚠️ MUST BE OVERRIDEN
+Function run()
 	
-	ASSERT:C1129(False:C215; "must be overriden")
+	ASSERT:C1129(False:C215; "👀 Must be overriden")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// ⚠️ MUST BE OVERRIDEN
+Function install()
+	
+	ASSERT:C1129(False:C215; "👀 Must be overriden")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Display a system notification
+Function notification()
+	
+	If (This:C1470.withUI)
+		
+		// Send result
+		var $param : Object
+		$param:=New object:C1471(\
+			"create"; This:C1470.input.create; \
+			"build"; This:C1470.input.build; \
+			"run"; This:C1470.input.run; \
+			"archive"; This:C1470.input.archive; \
+			"project"; This:C1470.input.project)
+		
+		CALL FORM:C1391(This:C1470.input.caller; "EDITOR_CALLBACK"; "build"; New object:C1471(\
+			"success"; True:C214; \
+			"param"; $param))
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Display a build step message into the editor
 Function postStep($message : Text)
 	
-	POST_MESSAGE(New object:C1471(\
-		"target"; This:C1470.input.caller; \
-		"additional"; $message))
+	If (This:C1470.withUI)
+		
+		POST_MESSAGE(New object:C1471(\
+			"target"; This:C1470.input.caller; \
+			"additional"; $message))
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// Display error message into the editor
 Function postError($message : Text)
 	
-	POST_MESSAGE(New object:C1471(\
-		"type"; "alert"; \
-		"target"; This:C1470.input.caller; \
-		"additional"; $message))
-	
+	If (This:C1470.withUI)
+		
+		POST_MESSAGE(New object:C1471(\
+			"type"; "alert"; \
+			"target"; This:C1470.input.caller; \
+			"additional"; $message))
+		
+	Else 
+		
+		This:C1470.lastError:=$message
+		This:C1470.errors.push(This:C1470.lastError)
+		This:C1470.success:=False:C215
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// Transform a collection of errors (text, number, object or collection) into a formatted text
 Function postErrors($errors : Collection)
-	var $message : Text
-	$message:=""
-	var $first : Boolean
-	$first:=True:C214
+	
 	var $error : Variant
+	var $c : Collection
+	
+	$c:=New collection:C1472
+	
 	For each ($error; $errors)
-		If ($first)
-			$first:=False:C215
-		Else 
-			$message:=$message+"\r"
-		End if 
+		
 		Case of 
+				
+				//________________________________________
 			: (Value type:C1509($error)=Is text:K8:3)
-				$message:=$message+$error
+				
+				$c.push($error)
+				
+				//________________________________________
 			: (Value type:C1509($error)=Is object:K8:27)
-				$message:=$message+JSON Stringify:C1217($error)  // XXX maybe extract message key, but do we loose info?
+				
+				$c.push(JSON Stringify:C1217($error))  // XXX maybe extract message key, but do we loose info?
+				
+				//________________________________________
 			: (Value type:C1509($error)=Is collection:K8:32)
-				$message:=$message+JSON Stringify:C1217($error)
+				
+				$c.push(JSON Stringify:C1217($error))
+				
+				//________________________________________
 			Else 
-				$message:=$message+String:C10($error)
+				
+				$c.push(String:C10($error))
+				
+				//________________________________________
 		End case 
 	End for each 
 	
-	This:C1470.postError($message)
+	This:C1470.postError($c.join("\r"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function _o_themeImageFile()->$theme : 4D:C1709.File
-	ASSERT:C1129(False:C215; "must be overriden")
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function _o_themeFromImageFile()->$theme : Object
-	
-	$theme:=New object:C1471(\
-		"success"; False:C215)
-	
-	var $file : 4D:C1709.File
-	$file:=This:C1470.themeImageFile()
-	
-	// To have better result scale image
-	var $l : Integer
-	$l:=SHARED.theme.colorjuicer.scale
-	
-	var $mustScal : Boolean
-	$mustScal:=($l#1024) & ($l>0)
-	
-	If ($mustScal)
-		
-		var $Pic_file; $Pic_scaled : Picture
-		READ PICTURE FILE:C678($file.platformPath; $Pic_file)
-		CREATE THUMBNAIL:C679($Pic_file; $Pic_scaled; $l; $l)  // This change result of algo..., let tools scale using argument
-		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066)
-		WRITE PICTURE FILE:C680($file.platformPath; $Pic_scaled; ".png")
-		
-	End if 
-	
-	var $Obj_color : Object
-	$Obj_color:=colors(New object:C1471(\
-		"action"; "juicer"; \
-		"posix"; $file.path))
-	
-	If ($Obj_color.success)
-		
-		$theme.BackgroundColor:=$Obj_color.value
-		$theme.BackgroundColor.name:="BackgroundColor"
-		
-		$Obj_color:=colors(New object:C1471(\
-			"action"; "contrast"; \
-			"color"; $theme.BackgroundColor))
-		
-		If ($Obj_color.success)
-			
-			$theme.ForegroundColor:=$Obj_color.value
-			$theme.ForegroundColor.name:="ForegroundColor"
-			
-			$theme.success:=True:C214
-			
-		End if 
-	End if 
-	
-	If ($mustScal)
-		
-		$file.delete()  // Delete scaled files
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	// Returns a dump of the data made with the REST API
 Function dataSet()->$dump : Object
-	// code copyed from iOS to dump with REST
 	
+	var $pathname : Text
 	var $project : Object
-	$project:=This:C1470.input.project  // to check
 	
+	$project:=This:C1470.input.project  // to check
 	
 	// Erase if needed (data has changed, or must be generated at each build)
 	$dump:=dataSet(New object:C1471(\
@@ -222,29 +241,29 @@ Function dataSet()->$dump : Object
 		End if 
 	End if 
 	
-	// recheck to see if dump is here (but we do not check digest)
+	// Recheck to see if dump is here (but we do not check digest)
 	$dump:=dataSet(New object:C1471(\
 		"action"; "check"; \
 		"digest"; False:C215; \
 		"project"; $project))
 	
-	// we will make a dump, but for local dump we need a key, ping the server to ensure the key is created?
-	var $pathname : Text
+	// We will make a dump, but for local dump we need a key
 	If (Not:C34(Bool:C1537(This:C1470.dump.exists)))
 		
 		If (String:C10(This:C1470.input.project.dataSource.source)="server")
 			
-			// <NOTHING MORE TO DO>
+			// Ping the server to ensure the key is created?
 			
 		Else 
-			// if local
 			
 			$pathname:=This:C1470.path.key().platformPath
+			
 			If (Not:C34(This:C1470.path.key().exists))
 				
 				This:C1470.keyPing:=Rest(New object:C1471(\
 					"action"; "status"; \
 					"handler"; "mobileapp"))
+				
 				This:C1470.keyPing.file:=New object:C1471(\
 					"path"; $pathname; \
 					"exists"; This:C1470.path.key().exists)
@@ -268,3 +287,62 @@ Function dataSet()->$dump : Object
 			"verbose"; This:C1470.input.verbose))
 		
 	End if 
+	
+	//_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_
+Function _o_themeImageFile()->$theme : 4D:C1709.File
+	
+	ASSERT:C1129(False:C215; "must be overriden")
+	
+	//_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_
+Function _o_themeFromImageFile()->$theme : Object
+	
+	var $mustScal : Boolean
+	var $l : Integer
+	var $color : Object
+	var $file : 4D:C1709.File
+	
+	$theme:=New object:C1471(\
+		"success"; False:C215)
+	
+	$file:=This:C1470._o_themeFromImageFile()
+	
+	// To have better result scale image
+	$l:=SHARED.theme.colorjuicer.scale
+	
+	$mustScal:=($l#1024) & ($l>0)
+	
+	If ($mustScal)
+		
+		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066)
+		
+	End if 
+	
+	$color:=colors(New object:C1471(\
+		"action"; "juicer"; \
+		"posix"; $file.path))
+	
+	If ($color.success)
+		
+		$theme.BackgroundColor:=$color.value
+		$theme.BackgroundColor.name:="BackgroundColor"
+		
+		$color:=colors(New object:C1471(\
+			"action"; "contrast"; \
+			"color"; $theme.BackgroundColor))
+		
+		If ($color.success)
+			
+			$theme.ForegroundColor:=$color.value
+			$theme.ForegroundColor.name:="ForegroundColor"
+			
+			$theme.success:=True:C214
+			
+		End if 
+	End if 
+	
+	If ($mustScal)
+		
+		$file.delete()  // Delete scaled files
+		
+	End if 
+	
