@@ -99,11 +99,19 @@ class FragmentUtilImpl :
      /**
      * Provides drawable resources for custom formatters
      */
-    override fun getDrawableForFormatter(formatName: String, imageName: String): Int? {
-        {{#custom_formatter_images}}
-        if (formatName == "{{formatterName}}" && imageName == "{{imageName}}")
-            return R.drawable.{{resourceName}}
-        {{/custom_formatter_images}}
-        return null
+    override fun getDrawableForFormatter(formatName: String, imageName: String): Pair<Int, Int>? {
+        return when {
+            {{#custom_formatter_images}}
+            formatName == "{{formatterName}}" && imageName == "{{imageName}}" -> {
+                {{#darkModeExists}}
+                Pair(R.drawable.{{resourceName}}, R.drawable.{{resourceNameDarkMode}})
+                {{/darkModeExists}}
+                {{^darkModeExists}}
+                Pair(R.drawable.{{resourceName}}, 0)
+                {{/darkModeExists}}
+            }
+            {{/custom_formatter_images}}
+            else -> null
+        }
     }
 }
