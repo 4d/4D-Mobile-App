@@ -65,10 +65,14 @@ If ($infos#Null:C1517)
 				.line()\
 				.append("showOnDisk"; "showOnDisk")
 			
-			$menu\
-				.line()\
-				.append("openWithGithubDesktop"; "openWithGithubDesktop")  // or "share"
-			
+			If ($infos.file.isFolder)
+				// XXX work only on macOS if installed here (the best is no known if someone could respond to x-github-client://)
+				If (Folder:C1567("/Applications/Github Desktop.app").exists)
+					$menu\
+						.line()\
+						.append("openWithGithubDesktop"; "openWithGithubDesktop")  // or "share"
+				End if 
+			End if 
 		End if 
 	End if 
 	
@@ -94,7 +98,7 @@ If ($infos#Null:C1517)
 			
 			// XXX there is no CAN OPEN URL for 4d (on mac I known how to implement it!)
 			// or OK=1 if not open to propose to download...
-			OPEN URL:C673("x-github-client://openLocalRepo/"+$infos.file.path)  // to test on window
+			OPEN URL:C673("x-github-client://openLocalRepo/"+Folder:C1567($infos.file.platformPath; fk platform path:K87:2).path)  // to test on window
 			
 			//______________________________________________________
 		: ($menu.choice="duplicate")
