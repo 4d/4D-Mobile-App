@@ -352,7 +352,8 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 			// According to platform
 			This:C1470.info.target:=Choose:C955(Is macOS:C1572; "iOS"; "android")
 			
-			$target:=This:C1470.info.target
+			var $t : Text
+			$t:=This:C1470.info.target
 			This:C1470["$"+Lowercase:C14($target)]:=True:C214
 			
 		Else 
