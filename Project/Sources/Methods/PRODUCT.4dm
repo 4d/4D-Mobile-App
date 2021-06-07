@@ -103,6 +103,11 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				$ƒ.color.setColors($ƒ.mainColor; $ƒ.mainColor)
 				
+				If ($ƒ.iconColor=Null:C1517)
+					
+					$ƒ.iconColor:=cs:C1710.color.new(cs:C1710.bmp.new(OBJECT Get value:C1743("icon")).getDominantColor()).main
+					
+				End if 
 			End if 
 			
 			//______________________________________________________
@@ -112,7 +117,6 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			// Update UI
 			$ƒ.displayTarget()
-			//$ƒ.displayIcon()
 			$ƒ.refresh()
 			
 			//______________________________________________________
