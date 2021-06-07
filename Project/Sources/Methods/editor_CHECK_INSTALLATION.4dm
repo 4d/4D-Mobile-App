@@ -79,7 +79,7 @@ Case of
 						 | ($fileManifest.modificationDate#Current date:C33)
 						
 						// Get the last 4D Mobile Android SDK from AWS server if any
-						//CALL WORKER(1; "downloadSDK"; "aws"; "ios"; False; $in.caller)
+						CALL WORKER:C1389(1; "downloadSDK"; "aws"; "ios"; False:C215; $in.caller)
 						
 					End if 
 				End if 

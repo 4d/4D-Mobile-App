@@ -52,10 +52,10 @@ Case of
 		$cfgutil:=cs:C1710.cfgutil.new()
 		
 		var $pluggedDevices : Collection
-		$pluggedDevices:=$cfgutil.plugged()
+		$pluggedDevices:=$cfgutil.connected()
 		
 		var $pluggedDevices : Collection
-		$pluggedDevices:=$simctl.plugged()
+		$pluggedDevices:=$simctl.connected()
 		
 		//______________________________________________________
 	: (True:C214)

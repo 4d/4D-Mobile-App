@@ -32,7 +32,7 @@ Class constructor($project : Object)
 	End if 
 	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
-	This:C1470.project.cache_4d_sdk:=This:C1470.path.cacheSdkAndroidUnzipped().path
+	This:C1470.project.cache_4d_sdk:=This:C1470.paths.cacheSdkAndroidUnzipped().path
 	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
 	
 	// * GET THE PROJECT FOLDER
@@ -50,7 +50,7 @@ Class constructor($project : Object)
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
 	
-	This:C1470.logFolder:=This:C1470.path.userCache()
+	This:C1470.logFolder:=This:C1470.paths.userCache()
 	This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
 	
 	This:C1470.version:="debug"
@@ -440,22 +440,22 @@ a Java package name, such as com.example.myapp.
 			//______________________________________________________
 		: (Match regex:C1019("(?m-si)([^[:alnum:]\\._])"; This:C1470.project.package; 1))
 			
-			This:C1470.postError("The package name should use only letters, numbers and underscores ("+This:C1470.project.package+")")
+			This:C1470.postError(Replace string:C233(Get localized string:C991("thePackageNameShouldUseOnlyLettersNumbersAndUnderscores"); "{packageName}"; This:C1470.project.package))
 			
 			//______________________________________________________
 		: (Position:C15("."; This:C1470.project.package)=0)
 			
-			This:C1470.postError("The package name must have at least 2 segments separated by a dot ("+This:C1470.project.package+")")
+			This:C1470.postError(Replace string:C233(Get localized string:C991("thePackageNameMustHaveAtLeast2SegmentsSeparatedByADot"); "{packageName}"; This:C1470.project.package))
 			
 			//______________________________________________________
 		: (Match regex:C1019("^[\\._0-9]"; This:C1470.project.package; 1))
 			
-			This:C1470.postError("The package name must begin with a letter ("+This:C1470.project.package+")")
+			This:C1470.postError(Replace string:C233(Get localized string:C991("thePackageNameMustBeginWithALetter"); "{packageName}"; This:C1470.project.package))
 			
 			//______________________________________________________
 		: (Match regex:C1019("[\\.]$"; This:C1470.project.package; 1))
 			
-			This:C1470.postError("The package name must not end with a dot ("+This:C1470.project.package+")")
+			This:C1470.postError(Replace string:C233(Get localized string:C991("thePackageNameMustNotEndWithADot"); "{packageName}"; This:C1470.project.package))
 			
 			//______________________________________________________
 		Else 
@@ -468,14 +468,13 @@ a Java package name, such as com.example.myapp.
 				If (Match regex:C1019("^[\\._0-9]"; $t; 1))
 					
 					This:C1470.isOnError:=True:C214
-					This:C1470.postError("A package name segment must start with a letter ("+This:C1470.project.package+")")
+					This:C1470.postError(Replace string:C233(Get localized string:C991("aPackageNameSegmentMustStartWithALetter"); "{packageName}"; This:C1470.project.package))
 					
 				End if 
 			End for each 
 			
 			//______________________________________________________
 	End case 
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//

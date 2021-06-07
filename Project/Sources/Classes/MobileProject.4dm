@@ -5,8 +5,12 @@ Class constructor($project : Object)
 	This:C1470.errors:=New collection:C1472
 	This:C1470.lastError:=""
 	
-	This:C1470.withUI:=(This:C1470.input.caller#Null:C1517)
-	This:C1470.path:=cs:C1710.path.new()
+	This:C1470.debug:=Not:C34(Is compiled mode:C492)
+	This:C1470.caller:=This:C1470.input.caller
+	This:C1470.withUI:=(This:C1470.caller#Null:C1517)
+	This:C1470.verbose:=Bool:C1537(This:C1470.input.verbose) & This:C1470.withUI
+	
+	This:C1470.paths:=cs:C1710.path.new()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Build and …
@@ -146,6 +150,38 @@ Function notification()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// log info
+Function logInfo($message : Text)
+	
+	If (This:C1470.verbose)
+		
+		CALL FORM:C1391(This:C1470.caller; "LOG_EVENT"; New object:C1471(\
+			"message"; $message; \
+			"importance"; Information message:K38:1))
+		
+	Else 
+		
+		// <NOTHING MORE TO DO>
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// log error
+Function logError($message : Text)
+	
+	If (This:C1470.verbose)
+		
+		CALL FORM:C1391(This:C1470.caller; "LOG_EVENT"; New object:C1471(\
+			"message"; $message; \
+			"importance"; Error message:K38:3))
+		
+	Else 
+		
+		// <NOTHING MORE TO DO>
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Display a build step message into the editor
 Function postStep($message : Text)
 	
@@ -175,6 +211,33 @@ Function postError($message : Text)
 		This:C1470.success:=False:C215
 		
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function fullVersion($wantedVersion : Text)->$fullVersion : Text
+	
+	var $separator : Text
+	var $components; $finalComponents : Collection
+	
+	$separator:="."
+	$components:=Split string:C1554($wantedVersion; $separator)
+	$finalComponents:=New collection:C1472()
+	
+	var $i : Integer
+	
+	For ($i; 0; 2; 1)
+		
+		If ($i<$components.length)
+			
+			$finalComponents.push(Num:C11($components[$i]))  // Only number
+			
+		Else 
+			
+			$finalComponents.push(0)  // Padding with 0
+			
+		End if 
+	End for 
+	
+	$fullVersion:=$finalComponents.join(".")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Transform a collection of errors (text, number, object or collection) into a formatted text
@@ -256,9 +319,9 @@ Function dataSet()->$dump : Object
 			
 		Else 
 			
-			$pathname:=This:C1470.path.key().platformPath
+			$pathname:=This:C1470.paths.key().platformPath
 			
-			If (Not:C34(This:C1470.path.key().exists))
+			If (Not:C34(This:C1470.paths.key().exists))
 				
 				This:C1470.keyPing:=Rest(New object:C1471(\
 					"action"; "status"; \
@@ -266,7 +329,7 @@ Function dataSet()->$dump : Object
 				
 				This:C1470.keyPing.file:=New object:C1471(\
 					"path"; $pathname; \
-					"exists"; This:C1470.path.key().exists)
+					"exists"; This:C1470.paths.key().exists)
 				
 				If (Not:C34(This:C1470.keyPing.file.exists))
 					

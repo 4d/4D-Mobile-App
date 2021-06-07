@@ -17,9 +17,12 @@ End if
 
 COMPILER_COMPONENT
 
-$b:=_4D With feature:C1524("WITH_THROW_ERROR")
-
 Case of 
+		
+		//________________________________________
+	: (True:C214)
+		
+		$o:=cs:C1710.color.new("rgb(212,143,69)").rgb
 		
 		//________________________________________
 	: (True:C214)

@@ -60,8 +60,8 @@ If (Structure file:C489=Structure file:C489(*))  // Ne pas masquer en dev
 	
 Else 
 	
-	ob_Lon_Error:=0
-	ON ERR CALL:C155("ob_noError")  // CLEAN use another handler?
+	ERROR:=0
+	ON ERR CALL:C155("noError")  // CLEAN use another handler?
 	
 End if 
 
@@ -80,10 +80,10 @@ $File_output.setText($Txt_buffer)
 
 ON ERR CALL:C155($Txt_methodOnErrorCall)
 
-If (ob_Lon_Error#0)
+If (ERROR#0)
 	
 	$Obj_out.success:=False:C215
-	$Obj_out.errorCode:=ob_Lon_Error
+	$Obj_out.errorCode:=ERROR
 	ob_error_add($Obj_out; "Failed to write to '"+$Txt_buffer+"'")
 	
 End if 

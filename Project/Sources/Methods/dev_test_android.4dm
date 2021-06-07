@@ -6,6 +6,91 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		var $androidProcess : cs:C1710.androidProcess
+		$androidProcess:=cs:C1710.androidProcess.new()
+		
+		var $folder : 4D:C1709.Folder
+		$folder:=$androidProcess.androidSDKFolder()
+		
+		var $adb : cs:C1710.adb
+		$adb:=cs:C1710.adb.new()
+		
+		var $availableDevices : Collection
+		$availableDevices:=$adb.availableDevices()  // -> Attached devices (plugged devices & booted simulators)
+		
+		$availableDevices:=$adb.availableDevices("9")
+		$availableDevices:=$adb.availableDevices("11")
+		$availableDevices:=$adb.availableDevices("12")
+		
+		var $plugged : Collection
+		$plugged:=$adb.connected()  // -> Plugged devices
+		
+		var $serial : Text
+		If ($plugged.length>0)
+			
+			$serial:=$plugged[0].udid
+			
+		End if 
+		
+		var $t : Text
+		$t:=$adb._packageName("com.myCompany.My-App-4")
+		
+		
+		
+		$plugged:=$adb.connected("10")  // -> Plugged devices
+		$plugged:=$adb.connected("11")  // -> Plugged devices
+		
+		//== Get device android version
+		//adb shell getprop ro.build.version.release
+		//$adb.launch($adb.cmd+" -s "+$plugged[0].udid+" shell getprop ro.build.version.release")
+		
+		$plugged:=$adb.connected()  // -> Plugged devices
+		//$adb.launch($adb.cmd+" -s "+$plugged[0].udid+" shell getprop")
+		
+		var $o : Object
+		$o:=$adb.getProp($serial)
+		$o:=$adb.getProp("emulator-5554")
+		
+		If ($serial#"")
+			
+			$adb.installApp("/Users/vdl/Sources_4D/depot/4eDimension/main/4DComponents/Internal User Components/4D Mobile App - Mobile/My App 4/Android/My App 4/app/build/outputs/apk/debug/app-debug.apk"; $serial)
+			
+			var $packages : Collection
+			$packages:=$adb.packageList($serial)
+			$packages:=$adb.userPackageList($serial)
+			
+			If ($adb.isAppInstalled("com.myCompany.My_App_4"; $serial))
+				
+				//$adb.uninstallApp("com.myCompany.My_App_4"; $serial)
+				
+			Else 
+				// A "If" statement should never omit "Else" 
+				
+				
+			End if 
+			
+		End if 
+		
+		var $listBootedDevices : Object
+		$listBootedDevices:=$adb.listBootedDevices()
+		
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		
+		$c:=$adb.availableDevices()
+		$c:=$adb.listBootedDevices()
+		$c:=$adb.connected()
+		
+		//var $avd : cs.avd
+		//$avd:=cs.avd.new()
+		
+		//$c:=$avd._o_devices()
+		
+		//______________________________________________________
+	: (True:C214)
+		
 		//$sdk:=cs.sdkmanager.new()
 		//$cmd:=$sdk.cmd+" --licenses"
 		//$options:=New object

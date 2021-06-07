@@ -21,7 +21,7 @@ End if
 var $associatedDomain; $pathname; $productName; $t; $tt; $urlScheme : Text
 var $isDebug; $success; $verbose : Boolean
 var $start : Integer
-var $appManifest; $Dir_template; $fixes; $in; $isSearchable; $log; $Obj_result_build; $Obj_result_device; $out; $project : Object
+var $appManifest; $Dir_template; $fixes; $isSearchable; $log; $Obj_result_build; $Obj_result_device; $project : Object
 var $server; $tags; $template; $ui : Object
 var $appFolder; $cacheFolder; $destinationFolder : 4D:C1709.Folder
 var $debugLog : cs:C1710.debugLog
@@ -341,6 +341,7 @@ If ($in.create)
 			$template.assets.source:=$path.projects().platformPath+$productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
 		End if 
 	End if 
+	
 	$out.sdk:=sdk(New object:C1471(\
 		"action"; "install"; \
 		"file"; $path.sdk().platformPath+"ios.zip"; \
