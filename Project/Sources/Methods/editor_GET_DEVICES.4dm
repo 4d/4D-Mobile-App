@@ -152,12 +152,14 @@ Case of
 			If ($withStudio)
 				
 				$out.connected:=New object:C1471(\
-					"android"; cs:C1710.adb.new().connected())
+					"android"; cs:C1710.adb.new().connected(); \
+					"apple"; New collection:C1472)
 				
 			Else 
 				
 				$out.connected:=New object:C1471(\
-					"android"; New collection:C1472)
+					"android"; New collection:C1472; \
+					"apple"; New collection:C1472)
 				
 			End if 
 		End if 

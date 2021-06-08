@@ -19,29 +19,18 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.exe:=This:C1470._exe()
+	This:C1470.exe:=This:C1470.androidSDKFolder().file("platform-tools/adb"+Choose:C955(Is Windows:C1573; ".exe"; ""))
 	This:C1470.cmd:=This:C1470.exe.path
-	
-	If (Is Windows:C1573)
-		
-		This:C1470.cmd:=This:C1470.cmd+".exe"
-		
-	End if 
-	
-	This:C1470.adbStartRetried:=False:C215
 	
 	This:C1470.timeOut:=30000  // 30 seconds
 	This:C1470.packageListTimeOut:=240000  // 4 minutes
 	This:C1470.bootTimeOut:=240000
 	This:C1470.appStartTimeOut:=240000
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _exe()->$file : 4D:C1709.File
-	
-	$file:=This:C1470.androidSDKFolder().file("platform-tools/adb")
+	This:C1470.adbStartRetried:=False:C215
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a collection of attached devices ID (connected devices & booted simulators)
+	// Returns a collection of attached devices ID (connected and authorized devices or booted simulators)
 	// if 'androidDeploymentTarget' is passed, keeps only devices where the version of Android is higher or equal
 Function availableDevices($androidDeploymentTarget : Text)->$devices : Collection
 	
@@ -120,7 +109,7 @@ Function connected($androidDeploymentTarget : Text)->$devices : Collection
 		
 		For each ($t; Split string:C1554(String:C10(This:C1470.outputStream); "\n"))
 			
-			If (Match regex:C1019("(?m-si)^([A-Z0-9]*)\\tdevice$"; $t; 1; $pos; $len))
+			If (Match regex:C1019("(?m-si)^([^\\t]*)\\t(device|unauthorized)$"; $t; 1; $pos; $len))
 				
 				$serial:=Substring:C12($t; $pos{1}; $len{1})
 				$keep:=True:C214
@@ -136,7 +125,8 @@ Function connected($androidDeploymentTarget : Text)->$devices : Collection
 					$device:=New object:C1471(\
 						"udid"; $serial; \
 						"name"; This:C1470.getDeviceName($serial); \
-						"type"; "device")
+						"type"; "device"; \
+						"unauthorized"; Substring:C12($t; $pos{2}; $len{2})="unauthorized")
 					
 					$device.status:=Choose:C955(Length:C16($device.name)=0; "offline"; "online")
 					
@@ -359,7 +349,7 @@ Function userPackageList($serial : Text)->$packages : Collection
 	$packages:=This:C1470._packageList($serial; "-3")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Install an APK on a connected device
+	// Install an APK on a connected device giving its path or File object
 Function installApp($apk; $serial : Text)
 	
 	var $file : 4D:C1709.File
@@ -370,11 +360,19 @@ Function installApp($apk; $serial : Text)
 		: (Value type:C1509($apk)=Is object:K8:27)  // File object
 			
 			$file:=$apk
+			This:C1470.success:=$file.exists
 			
 			//______________________________________________________
-		: (Value type:C1509($apk)=Is text:K8:3)  // Pathname
+		: (Value type:C1509($apk)=Is text:K8:3)  // Path (#TO_DO : Pathname)
 			
-			$file:=File:C1566($apk)
+			This:C1470.success:=Match regex:C1019(Choose:C955(Is Windows:C1573; "(?m-si)^[[:alpha:]]:/.*\\.apk$"; "(?m-si)^/.*\\.apk$"); $apk; 1)
+			
+			If (This:C1470.success)
+				
+				$file:=File:C1566($apk)
+				This:C1470.success:=$file.exists
+				
+			End if 
 			
 			//______________________________________________________
 		Else 
@@ -383,8 +381,6 @@ Function installApp($apk; $serial : Text)
 			
 			//______________________________________________________
 	End case 
-	
-	This:C1470.success:=$file.exists
 	
 	If (This:C1470.success)
 		
@@ -402,8 +398,15 @@ Function installApp($apk; $serial : Text)
 		
 	Else 
 		
-		This:C1470._pushError("File not found:"+$file.path)
-		
+		If (Value type:C1509($apk)=Is object:K8:27)
+			
+			This:C1470._pushError("Not a valid file: "+$file.path)
+			
+		Else 
+			
+			This:C1470._pushError("Not a valid file: "+$apk)
+			
+		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

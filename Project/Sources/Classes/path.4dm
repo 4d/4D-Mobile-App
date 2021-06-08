@@ -22,7 +22,7 @@ Class constructor
 		
 	End if 
 	
-	This:C1470.home:=Folder:C1567(fk desktop folder:K87:19).parent
+	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	
 /*========================================================*/
 Function create($do : Boolean)

@@ -5,7 +5,7 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.home:=Folder:C1567(fk desktop folder:K87:19).parent
+	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	
 	This:C1470.reset()
 	

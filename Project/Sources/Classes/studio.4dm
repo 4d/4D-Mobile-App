@@ -30,6 +30,13 @@ Class constructor($useDefaultPath : Boolean)
 		
 		This:C1470.version:=This:C1470._getVersion()
 		This:C1470._getJava()
+		
+		If (This:C1470.success)
+			
+			This:C1470.setEnvironnementVariable("JAVA_HOME"; This:C1470.javaHome.path)
+			
+		End if 
+		
 		This:C1470._getKotlinc()
 		
 	End if 

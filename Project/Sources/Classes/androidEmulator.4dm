@@ -151,25 +151,12 @@ Class constructor
 	
 	Super:C1705()
 	
+	This:C1470.exe:=This:C1470.androidSDKFolder().file("emulator/emulator"+Choose:C955(Is Windows:C1573; ".exe"; ""))
 	This:C1470.cmd:=This:C1470._exe().path
-	
-	If (Is Windows:C1573)
-		
-		This:C1470.cmd:=This:C1470.cmd+".exe"
-		
-		// Else : already set
-		
-	End if 
-	
-	This:C1470._version()
+	This:C1470.version()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _exe()->$file : 4D:C1709.File
-	
-	$file:=This:C1470.androidSDKFolder().file("emulator/emulator")
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _version()
+Function version()
 	
 	This:C1470.launch(This:C1470.cmd; "-version")
 	
@@ -195,8 +182,13 @@ Function avalaible()->$emulators : Collection
 	
 	
 	
+/*=========================================================================== 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+USED for Android build  
+	
+===========================================================================*/
+	
+	
 	// Starting an emulator by name
 Function start  // Starts emulator
 	var $0 : Object

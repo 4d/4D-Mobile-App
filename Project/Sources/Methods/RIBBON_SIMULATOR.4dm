@@ -34,7 +34,7 @@ Case of
 		
 		If (FEATURE.with("android"))  // 🚧
 			
-			$lastDevice:=EDITOR.preferences.get("simulator")
+			$lastDevice:=EDITOR.preferences.get("lastDevice")
 			$tab:="       "
 			
 			If (Is macOS:C1572)
@@ -123,6 +123,19 @@ Case of
 			Else 
 				
 				If (EDITOR.studio.ready)
+					
+					If (EDITOR.devices.connected.android.length>0)
+						
+						For each ($device; EDITOR.devices.connected.android)
+							
+							$menu.append($device.name; $device.udid)\
+								.mark($device.udid=$lastDevice).enable(Not:C34(Bool:C1537($device.unauthorized)))
+							
+						End for each 
+						
+						$menu.line()
+						
+					End if 
 					
 					If (EDITOR.devices.android.length>0)
 						
@@ -334,7 +347,7 @@ Case of
 		If (Length:C16($lastDevice)>0)\
 			 & ($lastDevice#String:C10(EDITOR.currentDevice))  // Keep
 			
-			EDITOR.preferences.set("simulator"; EDITOR.currentDevice)
+			EDITOR.preferences.set("lastDevice"; EDITOR.currentDevice)
 			
 			// Adapt button width
 			SET TIMER:C645(-1)

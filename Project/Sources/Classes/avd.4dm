@@ -17,12 +17,6 @@ Class constructor
 	This:C1470.exe:=This:C1470._exe()
 	This:C1470.cmd:=This:C1470.exe.path
 	
-	If (Is Windows:C1573)
-		
-		This:C1470.cmd:=This:C1470.cmd+".bat"
-		
-	End if 
-	
 	var $studio : cs:C1710.studio
 	$studio:=cs:C1710.studio.new()
 	
@@ -43,12 +37,12 @@ Class constructor
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _exe()->$file : 4D:C1709.File
 	
-	// Prefer latest
-	$file:=This:C1470.androidSDKFolder().file("cmdline-tools/latest/bin/avdmanager")
+	// * PREFER LATEST
+	$file:=This:C1470.androidSDKFolder().file("cmdline-tools/latest/bin/avdmanager"+Choose:C955(Is Windows:C1573; ".bat"; ""))
 	
 	If (Not:C34($file.exists))
 		
-		$file:=This:C1470.androidSDKFolder().file("tools/bin/avdmanager")
+		$file:=This:C1470.androidSDKFolder().file("tools/bin/avdmanager"+Choose:C955(Is Windows:C1573; ".bat"; ""))
 		
 	End if 
 	
@@ -304,7 +298,7 @@ Function availableDevices()->$devices : Collection
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a collection of available device simulators
+	// Returns a collection of available simulators
 Function _o_devices()->$devices : Collection
 	
 	var $start : Integer

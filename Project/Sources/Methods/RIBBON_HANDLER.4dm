@@ -12,68 +12,71 @@ var $constraints; $device; $e; $form; $o; $page; $plist : Object
 
 // ----------------------------------------------------
 // Initialisations
-$form:=New object:C1471(\
-"pages"; New collection:C1472; \
-"switch"; cs:C1710.button.new("switch.button"); \
-"build"; cs:C1710.button.new("151"); \
-"simulator"; cs:C1710.button.new("201"); \
-"project"; cs:C1710.button.new("152"); \
-"install"; cs:C1710.button.new("153")\
-)
-
-$form.pages.push(New object:C1471(\
-"name"; "general"; \
-"button"; "101"))
-
-$form.pages.push(New object:C1471(\
-"name"; "structure"; \
-"button"; "102"))
-
-$form.pages.push(New object:C1471(\
-"name"; "properties"; \
-"button"; "103"))
-
-$form.pages.push(New object:C1471(\
-"name"; "main"; \
-"button"; "104"))
-
-$form.pages.push(New object:C1471(\
-"name"; "views"; \
-"button"; "105"))
-
-$form.pages.push(New object:C1471(\
-"name"; "deployment"; \
-"button"; "106"))
-
-$form.pages.push(New object:C1471(\
-"name"; "data"; \
-"button"; "107"))
-
-$form.pages.push(New object:C1471(\
-"name"; "actions"; \
-"button"; "108"))
-
-$form.sectionButtons:=cs:C1710.group.new("101,102,107,108,103,104,105,106")
-
-If (FEATURE.with("android"))  //🚧
+If (True:C214)
 	
-	$form.buildButtons:=cs:C1710.group.new("201,151,152,153")
+	$form:=New object:C1471(\
+		"pages"; New collection:C1472; \
+		"switch"; cs:C1710.button.new("switch.button"); \
+		"build"; cs:C1710.button.new("151"); \
+		"simulator"; cs:C1710.button.new("201"); \
+		"project"; cs:C1710.button.new("152"); \
+		"install"; cs:C1710.button.new("153")\
+		)
 	
-Else 
+	$form.pages.push(New object:C1471(\
+		"name"; "general"; \
+		"button"; "101"))
 	
-	$form.buildButtons:=cs:C1710.group.new("151,201,152,153")
+	$form.pages.push(New object:C1471(\
+		"name"; "structure"; \
+		"button"; "102"))
+	
+	$form.pages.push(New object:C1471(\
+		"name"; "properties"; \
+		"button"; "103"))
+	
+	$form.pages.push(New object:C1471(\
+		"name"; "main"; \
+		"button"; "104"))
+	
+	$form.pages.push(New object:C1471(\
+		"name"; "views"; \
+		"button"; "105"))
+	
+	$form.pages.push(New object:C1471(\
+		"name"; "deployment"; \
+		"button"; "106"))
+	
+	$form.pages.push(New object:C1471(\
+		"name"; "data"; \
+		"button"; "107"))
+	
+	$form.pages.push(New object:C1471(\
+		"name"; "actions"; \
+		"button"; "108"))
+	
+	$form.sectionButtons:=cs:C1710.group.new("101,102,107,108,103,104,105,106")
+	
+	If (FEATURE.with("android"))  //🚧
+		
+		$form.buildButtons:=cs:C1710.group.new("201,151,152,153")
+		
+	Else 
+		
+		$form.buildButtons:=cs:C1710.group.new("151,201,152,153")
+		
+	End if 
+	
+	$constraints:=New object:C1471(\
+		"start"; 16/* left margin */; \
+		"minWidth"; 110/* minimum button width */; \
+		"spacing"; 7/* button spacing */)
+	
+	$e:=FORM Event:C1606
 	
 End if 
 
-$constraints:=New object:C1471(\
-"start"; 16/* left margin */; \
-"minWidth"; 110/* minimum button width */; \
-"spacing"; 7/* button spacing */)
-
-$e:=FORM Event:C1606
-
 // ----------------------------------------------------
-
 Case of 
 		
 		//______________________________________________________
@@ -104,10 +107,10 @@ Case of
 			
 		End if 
 		
-		// *ADAPT BUTTONS WIDTH
+		// * ADAPT BUTTONS WIDTH
 		$form.buildButtons.distributeLeftToRight($constraints)
 		
-		// *BUILD BUTTON ACTIVATION
+		// * BUILD & INSTALL BUTTON ACTIVATION
 		If (FEATURE.with("android"))  //🚧
 			
 			Case of 
@@ -144,7 +147,7 @@ Case of
 					
 					If (EDITOR.currentDevice#Null:C1517)
 						
-						$isDeviceSelected:=EDITOR.devices.apple.query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
+						$isDeviceSelected:=EDITOR.devices.apple.copy().combine(EDITOR.devices.connected.apple).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
 						
 					End if 
 					
@@ -161,7 +164,7 @@ Case of
 					
 					If (EDITOR.currentDevice#Null:C1517)
 						
-						$isDeviceSelected:=EDITOR.devices.android.query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
+						$isDeviceSelected:=EDITOR.devices.android.copy().combine(EDITOR.devices.connected.android).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
 						
 					End if 
 					
@@ -188,7 +191,7 @@ Case of
 				
 			End if 
 			
-			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID & $isSdkAvailable))
+			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID & $isSdkAvailable))  //#DEBUG LOG
 				
 				RECORD.warning("project: "+Choose:C955($isProjectOK; "ok"; "NOT READY")\
 					+" - devTools: "+Choose:C955($isDevToolAvailable; "ready"; "NOT READY")\
@@ -196,31 +199,11 @@ Case of
 					+" - teamID: "+Choose:C955($withTeamID; "ok"; "NO TEAM SELECTED")\
 					+" - sdk: "+Choose:C955($isSdkAvailable; "ok"; "NO SDK"))
 				
-			Else 
-				
-				RECORD.info("project: ok - devTools: ready - device: ok - teamID: ok - sdk: ok")
-				
 			End if 
 			
 			$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $isSdkAvailable)
+			$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID & $isDeviceSelected)
 			
-			// *INSTALL BUTTON ACTIVATION
-			If (Is Windows:C1573)
-				
-				$form.install.disable()
-				
-			Else 
-				
-				If (Not:C34(Bool:C1537(EDITOR.ios)))
-					
-					$form.install.disable()
-					
-				Else 
-					
-					$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID & $isDeviceSelected)
-					
-				End if 
-			End if 
 		End if 
 		
 		//______________________________________________________
@@ -261,10 +244,10 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Bound Variable Change:K2:52)
 		
-		// Set the switch button picture
+		// * SET THE SWITCH BUTTON PICTURE
 		$form.switch.setPicture("#images/toolbar/"+Choose:C955(Form:C1466.state="open"; "reduce"; "expand")+".png")
 		
-		// Update the section buttons
+		// * UPDATE THE SECTION BUTTONS
 		For each ($page; $form.pages)
 			
 			If (FEATURE.with("wizards"))
@@ -282,7 +265,7 @@ Case of
 		
 		If (EDITOR.devices#Null:C1517) & (EDITOR.ios#Null:C1517) & (EDITOR.android#Null:C1517)
 			
-			// *UPDATE DEVICE BUTTON
+			// * UPDATE DEVICE BUTTON
 			If (FEATURE.with("android"))  //🚧
 				
 				$form.simulator.enable(EDITOR.taskNotInProgress("getDevices"))
@@ -301,7 +284,7 @@ Case of
 						//______________________________________________________
 					: (EDITOR.ios) & Not:C34(EDITOR.android) & (EDITOR.devices.apple.length=0)
 						
-						RECORD.warning("NO iOS SIMULATOR AVAILABLE")
+						RECORD.warning("NO IOS SIMULATOR AVAILABLE")
 						
 						//______________________________________________________
 					: (EDITOR.ios) & (EDITOR.android)
@@ -315,7 +298,7 @@ Case of
 							
 							If (EDITOR.devices.apple.length=0)
 								
-								RECORD.warning("NO iOS SIMULATOR AVAILABLE")
+								RECORD.warning("NO IOS SIMULATOR AVAILABLE")
 								
 							Else 
 								
@@ -335,12 +318,11 @@ Case of
 						//______________________________________________________
 				End case 
 				
-				// Get the last simulator used, if known
-				Case of 
+				Case of   // * GET THE LAST SIMULATOR USED, IF KNOWN
 						//______________________________________________________
 					: (EDITOR.ios & EDITOR.android)
 						
-						$lastDevice:=String:C10(EDITOR.preferences.get("simulator"))
+						$lastDevice:=String:C10(EDITOR.preferences.get("lastDevice"))
 						
 						//______________________________________________________
 					: (EDITOR.ios)
@@ -355,15 +337,31 @@ Case of
 						//______________________________________________________
 				End case 
 				
-				If (Length:C16($lastDevice)>0)
+				If (Length:C16($lastDevice)=0)  // * GET A DEFAULT IOS DEVICE
 					
-					$device:=EDITOR.devices.apple.query("udid = :1"; $lastDevice).pop()
 					
-					If ($device=Null:C1517) & (EDITOR.devices.connected.apple#Null:C1517)
+					If (Is macOS:C1572)\
+						 & (EDITOR.ios)\
+						 & (EDITOR.devices.apple.length>0)
 						
-						$device:=EDITOR.devices.connected.apple.query("udid = :1"; $lastDevice).pop()
+						$lastDevice:=String:C10(cs:C1710.simctl.new(SHARED.iosDeploymentTarget).defaultDevice().udid)
 						
 					End if 
+				End if 
+				
+				If (Length:C16($lastDevice)=0)  // * GET A DEFAULT ANDROID DEVICE
+					
+					If (EDITOR.devices.android.length>0)
+						
+						// Select the first one
+						$lastDevice:=EDITOR.devices.android[0].udid
+						
+					End if 
+				End if 
+				
+				If (Length:C16($lastDevice)>0)
+					
+					$device:=EDITOR.devices.apple.copy().combine(EDITOR.devices.connected.apple).query("udid = :1"; $lastDevice).pop()
 					
 					If ($device#Null:C1517)
 						
@@ -371,8 +369,8 @@ Case of
 							
 							$form.simulator.setTitle($device.name)
 							EDITOR.currentDevice:=$lastDevice
-							
 							PROJECT._buildTarget:="ios"
+							PROJECT._simulator:=$device.udid
 							
 						Else 
 							
@@ -382,17 +380,9 @@ Case of
 							
 						End if 
 						
-						PROJECT._simulator:=$device.udid
-						
 					Else 
 						
-						$device:=EDITOR.devices.android.query("udid = :1"; $lastDevice).pop()
-						
-						If ($device=Null:C1517) & (EDITOR.devices.connected.android#Null:C1517)
-							
-							$device:=EDITOR.devices.connected.android.query("udid = :1"; $lastDevice).pop()
-							
-						End if 
+						$device:=EDITOR.devices.android.copy().combine(EDITOR.devices.connected.android).query("udid = :1"; $lastDevice).pop()
 						
 						If ($device#Null:C1517)
 							
@@ -422,55 +412,13 @@ Case of
 					
 				Else 
 					
-					If (Is macOS:C1572)\
-						 & (EDITOR.ios)\
-						 & (EDITOR.devices.apple.length>0)
-						
-						// Get a default device identifier
-						$lastDevice:=String:C10(cs:C1710.simctl.new(SHARED.iosDeploymentTarget).defaultDevice().udid)
-						
-						If (Length:C16($lastDevice)>0)
-							
-							$device:=EDITOR.devices.apple.query("udid = :1"; $lastDevice).pop()
-							$form.simulator.setTitle($device.name)
-							
-							If ($device#Null:C1517)
-								
-								EDITOR.currentDevice:=$lastDevice
-								
-								// Keep
-								EDITOR.preferences.set("simulator"; $device.udid)
-								$form.simulator.setTitle($device.name)
-								
-							Else 
-								
-								$form.simulator.setTitle("unknown")
-								
-							End if 
-							
-						Else 
-							
-							$form.simulator.setTitle("unknown")
-							
-						End if 
-						
-					Else 
-						
-						If (EDITOR.devices.android.length>0)
-							
-							// Select the first one
-							$device:=EDITOR.devices.android[0]
-							EDITOR.preferences.set("simulator"; $device.udid)
-							$form.simulator.setTitle($device.name)
-							SET TIMER:C645(-1)  // *UPDATE UI
-							
-						Else 
-							
-							$form.simulator.setTitle("unknown")
-							
-						End if 
-					End if 
+					$form.simulator.setTitle("unknown")
+					OB REMOVE:C1226(PROJECT; "_buildTarget")
+					OB REMOVE:C1226(PROJECT; "_simulator")
+					
 				End if 
+				
+				SET TIMER:C645(-1)
 				
 			Else 
 				

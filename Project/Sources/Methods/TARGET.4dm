@@ -23,45 +23,27 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			If (FEATURE.with("androidBeta"))\
-				 | (Bool:C1537(PROJECT.$android))  // 🚧
+			$ƒ.preview.show(Num:C11(Application version:C493)<1920)
+			
+			If (Is Windows:C1573)
 				
-				If (Is Windows:C1573)
+				$ƒ.android.setPicture("#images/os/Android-32.png")\
+					.setBackgroundPicture()\
+					.setNumStates(1)
+				
+				If (Form:C1466.$ios)
 					
-					If (Form:C1466.$ios)
-						
-						$ƒ.android.setPicture("#images/os/Android-32.png")\
-							.setBackgroundPicture()\
-							.setNumStates(1)
-						
-						$ƒ.preview.show(Num:C11(Application version:C493)<1920)
-						
-						$ƒ.ios.disable()
-						
-						$ƒ.ios.setPicture("#images/os/iOS-32.png")\
-							.setBackgroundPicture()\
-							.setNumStates(1)
-						
-					Else 
-						
-						$ƒ.os.hide()
-						$ƒ.preview.hide()
-						
-					End if 
+					$ƒ.ios.setPicture("#images/os/iOS-32.png")
 					
 				Else 
 					
-					$ƒ.preview.show(Num:C11(Application version:C493)<1920)
+					$ƒ.ios.setPicture("#images/os/iOS-24.png")
 					
 				End if 
 				
-			Else 
-				
-				$ƒ.target.hide()
-				$ƒ.ios.hide()
-				$ƒ.android.hide()
-				
-				$ƒ.preview.hide()
+				$ƒ.ios.disable()\
+					.setBackgroundPicture()\
+					.setNumStates(1)
 				
 			End if 
 			
