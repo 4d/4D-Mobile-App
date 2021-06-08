@@ -191,10 +191,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							var $isTemplate : Boolean
 							$isTemplate:=False:C215
 							Case of 
-								: (Value type:C1509($Obj_formatter.assets.template)=Is boolean:K8:9)
-									$isTemplate:=Bool:C1537($Obj_formatter.assets.template)
-								: (Value type:C1509($Obj_formatter.assets.template)=Is collection:K8:32)
-									$isTemplate:=$Obj_formatter.assets.template.indexOf(String:C10($Txt_value))>-1
+								: (Value type:C1509($Obj_formatter.assets.tintable)=Is boolean:K8:9)
+									$isTemplate:=Bool:C1537($Obj_formatter.assets.tintable)
+								: (Value type:C1509($Obj_formatter.assets.tintables)=Is collection:K8:32)
+									$isTemplate:=$Obj_formatter.assets.tintables.indexOf(String:C10($Txt_value))>-1
 							End case 
 							
 							$Obj_buffer:=asset(New object:C1471(\
@@ -492,7 +492,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									End if 
 									
 									// dark ?
-									$source:=Replace string:C233($source; $sourceFile.extension; "$dark"+$sourceFile.extension)
+									$source:=Replace string:C233($source; $sourceFile.extension; "_dark"+$sourceFile.extension)
 									$sourceFile:=File:C1566($source; fk platform path:K87:2)
 									
 									If ($sourceFile.exists)
@@ -515,7 +515,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 											For each ($Obj_image; $Obj_.images)
 												$Obj_image:=OB Copy:C1225($Obj_image)
 												$Obj_image.filename:=cs:C1710.str.new($Obj_image.filename).unaccented()
-												$Obj_image.filename:=Replace string:C233($Obj_image.filename; "."+$Obj_in.format; "$dark."+$Obj_in.format)
+												$Obj_image.filename:=Replace string:C233($Obj_image.filename; "."+$Obj_in.format; "_dark."+$Obj_in.format)
 												$Obj_image.appearances:=New collection:C1472(New object:C1471("appearance"; "luminosity"; "value"; "dark"))
 												
 												$Obj_.images.push($Obj_image)
