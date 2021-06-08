@@ -560,7 +560,7 @@ Function sortFieldFromAction($table : Object)->$sortFields : Text
 						If (String:C10($parameter.format)="descending")
 							$sortFields:=$sortFields+"!"  // because on iOS sortAscending = true by default so we reverse here
 						End if 
-						$sortFields:=$sortFields+Choose:C955($parameter.defaultField=Null:C1517; formatString("field-name"; String:C10($defaultField.name)); $parameter.defaultField)  // if no defaultField will failed, no linked to db ?? 
+						$sortFields:=$sortFields+Choose:C955($parameter.defaultField=Null:C1517; formatString("field-name"; String:C10($parameter.defaultField)); $parameter.defaultField)  // if no defaultField will failed, no linked to db ?? 
 					End for each 
 				End if 
 			End if 
