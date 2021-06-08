@@ -364,23 +364,26 @@ Function doRun
 					End case 
 					
 				Else 
+					$Obj_table.sortField:=This:C1470.sortFieldFromAction($Obj_table)
 					
-					// take searchable field as sort field if not defined yet
-					$Obj_table.sortField:=$Obj_table.searchableField
-					
-					If (Length:C16(String:C10($Obj_table.sortField))=0)
+					If (Length:C16($Obj_table.sortField)=0)
+						// take searchable field as sort field if not defined yet
+						$Obj_table.sortField:=$Obj_table.searchableField
 						
-						// and if no search field find the first one sortable in diplayed field
-						For each ($Obj_field; $Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
+						If (Length:C16(String:C10($Obj_table.sortField))=0)
 							
-							If (($Obj_field.fieldType#Is picture:K8:10)\
-								 & ($Obj_field.fieldType#-1)\
-								 & (Num:C11($Obj_field.id)#0))  // not image or not defined or not relation
+							// and if no search field find the first one sortable in diplayed field
+							For each ($Obj_field; $Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
 								
-								$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
-								
-							End if 
-						End for each 
+								If (($Obj_field.fieldType#Is picture:K8:10)\
+									 & ($Obj_field.fieldType#-1)\
+									 & (Num:C11($Obj_field.id)#0))  // not image or not defined or not relation
+									
+									$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
+									
+								End if 
+							End for each 
+						End if 
 					End if 
 					
 					// XXX maybe if not in displayable fields, go for not displayable fields?
@@ -540,6 +543,29 @@ Function doRun
 	End for each 
 	$0:=$Obj_out
 	
+	// create a comma separated sort field from first action
+Function sortFieldFromAction($table : Object)->$sortFields : Text
+	$sortFields:=""
+	var $actions : Collection
+	$actions:=This:C1470.input.project.actions
+	If ($actions#Null:C1517)
+		var $action; $parameter : Object
+		For each ($action; $actions) Until (Length:C16($sortFields)>0)
+			If (String:C10($action.preset)="sort")
+				If ($action.tableNumber=Num:C11($table.tableNumber))
+					For each ($parameter; $action.parameters)
+						If (Length:C16($sortFields)#0)
+							$sortFields:=$sortFields+","
+						End if 
+						If (String:C10($parameter.format)="descending")
+							$sortFields:=$sortFields+"!"  // because on iOS sortAscending = true by default so we reverse here
+						End if 
+						$sortFields:=$sortFields+Choose:C955($parameter.defaultField=Null:C1517; formatString("field-name"; String:C10($defaultField.name)); $parameter.defaultField)  // if no defaultField will failed, no linked to db ?? 
+					End for each 
+				End if 
+			End if 
+		End for each 
+	End if 
 	
 Function fieldBinding
 	C_OBJECT:C1216($0; $Obj_out)
