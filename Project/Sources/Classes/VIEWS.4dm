@@ -379,7 +379,7 @@ Function setTemplate($browser : Object)
 				If (FEATURE.with("android"))
 					
 					var $url : Text
-					$url:="https://4d-for-mobile.github.io/gallery/"
+					$url:="https://4d-go-mobile.github.io/gallery/"
 					If (FEATURE.with("devGallery"))
 						$url:="http://localhost:8080/"
 					End if 

@@ -255,7 +255,7 @@ If ($run)
 				 & (Application version:C493[[3]]="0")\
 				 & (Process number:C372("unit_BATCH_EXECUTE")=0)
 				
-				$http.setURL("https://github.com/mesopelagique/sdk_docs/releases/download/19.x/android.zip")
+				$http.setURL("https://github.com/4d-go-mobile/sdk/releases/download/19.x/android.zip")
 				$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
 				$run:=$run & ($http.status=200)
 				
