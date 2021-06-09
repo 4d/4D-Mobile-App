@@ -149,14 +149,76 @@ Class extends androidProcess
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
+	var $o; $options : Object
+	var $c : Collection
+	var $file : 4D:C1709.File
+	
 	Super:C1705()
 	
 	This:C1470.exe:=This:C1470.androidSDKFolder().file("emulator/emulator"+Choose:C955(Is Windows:C1573; ".exe"; ""))
-	This:C1470.cmd:=This:C1470._exe().path
-	This:C1470.version()
+	This:C1470.cmd:=This:C1470.exe.path
+	
+	This:C1470.version:=This:C1470.getVersion()
+	
+	// Search the user's database first
+	$file:=File:C1566("/RESOURCES/android.json"; *)
+	
+	If ($file.exists)
+		
+		$o:=JSON Parse:C1218($file.getText())
+		
+		If ($o.emulatorOptions#Null:C1517)
+			
+			$options:=$o.emulatorOptions
+			
+		End if 
+	End if 
+	
+	If ($options=Null:C1517)
+		
+		// Use defaults from the component
+		$options:=JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).emulatorOptions
+		
+	End if 
+	
+	$c:=New collection:C1472
+	
+	For each ($o; OB Entries:C1720($options))
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($o.value)=Is text:K8:3)
+				
+				$c.push($o.key+" "+$o.value)
+				
+				//______________________________________________________
+			: (Value type:C1509($o.value)=Is boolean:K8:9)
+				
+				If ($o.value)
+					
+					$c.push($o.key)
+					
+				End if 
+				
+				//______________________________________________________
+			Else 
+				
+				$c.push($o.key+" "+String:C10($o.value))
+				
+				//______________________________________________________
+		End case 
+	End for each 
+	
+	This:C1470.options:=" -"+$c.join(" -")
+	
+	This:C1470.bootTimeOut:=6000  // 1 minutes
+	
+	This:C1470.adb:=cs:C1710.adb.new()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function version()
+	// Returns the current version of the emulator tool
+Function getVersion()->$version : Text
 	
 	This:C1470.launch(This:C1470.cmd; "-version")
 	
@@ -165,13 +227,13 @@ Function version()
 	
 	If (Match regex:C1019("(?m-si)\\sversion\\s([\\d\\.]+)\\s\\(build_id\\s(\\d+)"; This:C1470.outputStream; 1; $pos; $len))
 		
-		This:C1470.version:=Substring:C12(This:C1470.outputStream; $pos{1}; $len{1})
+		$version:=Substring:C12(This:C1470.outputStream; $pos{1}; $len{1})
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the list of available emulators names
-Function avalaible()->$emulators : Collection
+	// Returns the list of emulators names available in the "avd manager"
+Function available()->$emulators : Collection
 	
 	If (This:C1470.launch(This:C1470.cmd; "-list-avds").success)
 		
@@ -179,72 +241,83 @@ Function avalaible()->$emulators : Collection
 		
 	End if 
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Start (& wait) an emulator by name
+Function start($avdName : Text; $wait : Boolean)->$result : Object
 	
-	
-	
-/*=========================================================================== 
-	
-USED for Android build  
-	
-===========================================================================*/
-	
-	
-	// Starting an emulator by name
-Function start  // Starts emulator
-	var $0 : Object
-	var $1 : Text  // Avd name
-	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -accel-check")
-	
-	If (Position:C15("HAXM is not installed on this machine"; String:C10(This:C1470.outputStream))>0)  // HAXM required, should install through Android Studio
+	If ($avdName="Pixel_4")  // Default avd
 		
-		$0.errors.push("HAXM is not installed on this machine")
-		$0.errors.push("Open Android Studio > Tools > SDK Manager, SDK Tools tab, and install HAXM")
+		This:C1470.launchAsync(This:C1470.cmd+" -avd "+This:C1470.quoted($avdName)+" -skin pixel_4 -skindir "+This:C1470.quoted(This:C1470.androidSDKFolder().folder("skins").path)+This:C1470.options)
 		
 	Else 
 		
-		If ($1="Pixel_4")
+		This:C1470.launchAsync(This:C1470.cmd+" -avd "+$avdName+" -memory 512 -no-boot-anim")
+		
+	End if 
+	
+	If (This:C1470.success)
+		
+		If (Count parameters:C259>=2)
 			
-			This:C1470.asynchronous()\
-				.launch(This:C1470.cmd+" -avd \""+$1+"\" -skin pixel_4 -skindir \""+This:C1470.androidSDKFolder().folder("skins").path+"\" -memory 512 -no-boot-anim")
+			var $startTime : Integer
+			var $isBooted : Boolean
+			$startTime:=Milliseconds:C459
+			
+			Repeat 
+				
+				$isBooted:=This:C1470.isBooted($avdName)
+				
+				If (Not:C34($isBooted))
+					
+					IDLE:C311
+					DELAY PROCESS:C323(Current process:C322; 120)
+					
+					$isBooted:=This:C1470.isBooted($avdName)
+					
+				End if 
+			Until ($isBooted) | (Milliseconds:C459-$startTime>This:C1470.bootTimeOut)
+			
+			If ($isBooted)
+				
+				$result.success:=True:C214
+				$result.serial:=This:C1470.adb.serialFromName($avdName)
+				
+			Else 
+				
+				// Timeout
+				$result.errors.push("(timeout time reached when starting the emulator)")
+				
+			End if 
+			
+			This:C1470.bringToFront(This:C1470.pid)
 			
 		Else 
 			
-			This:C1470.asynchronous()\
-				.launch(This:C1470.cmd+" -avd \""+$1+"\" -no-boot-anim")
+			$result.success:=True:C214
 			
 		End if 
 		
-		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
-		If (Not:C34($0.success))
-			
-			$0.errors.push("Failed to start emulator")
-			$0.errors.combine(Split string:C1554(String:C10(This:C1470.errorStream); "\n"))
-			
-			// Else : all ok
-			
-		End if 
+	Else 
+		
+		$result.errors.push("Failed to start "+$avdName)
+		$result.errors.combine(Split string:C1554(String:C10(This:C1470.errorStream); "\n"))
 		
 	End if 
 	
-	This:C1470.synchronous()  // Set back to synchronous mode
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns true if the emulator is launched
+Function isBooted($avdName : Text)->$booted : Boolean
 	
+	$booted:=(This:C1470.adb.availableDevices().indexOf($avdName)>=0)
 	
-Function list  // List available AVDs
-	var $0 : Object
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Bringing the Emulator to the forefront
+Function bringToFront()
 	
-	$0:=This:C1470.launch(This:C1470.cmd; "-list-avds")
-	
-	If ($0.success)
-		
-		$0.emulators:=Split string:C1554($0.outputStream; "\n"; sk ignore empty strings:K86:1)
-		
-	End if 
-	
-	
+	//je ne sais pas comment faire pour le moment
 	

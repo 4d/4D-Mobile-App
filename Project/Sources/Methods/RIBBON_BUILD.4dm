@@ -19,7 +19,65 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Mouse Enter:K2:33)
 		
-		RIBBON(Num:C11($e.objectName))
+		If (OBJECT Get enabled:C1079(*; $e.objectName))
+			
+			RIBBON(Num:C11($e.objectName))
+			
+		Else 
+			
+			If (PROJECT._buildTarget#Null:C1517)
+				
+				Case of 
+						//______________________________________________________
+					: ((PROJECT._buildTarget="ios") & Bool:C1537(Not:C34(Bool:C1537(EDITOR.xCode.ready))))
+						
+						SET DATABASE PARAMETER:C642(Tips enabled:K37:79; 1)
+						SET DATABASE PARAMETER:C642(Tips delay:K37:80; 1)
+						OBJECT SET HELP TIP:C1181(*; $e.objectName; ".Xcode is not ready")
+						
+						//______________________________________________________
+					: (False:C215)
+						
+						
+						
+						//______________________________________________________
+					Else 
+						
+						// A "Case of" statement should never omit "Else"
+						
+						//______________________________________________________
+				End case 
+				
+			Else 
+				
+				
+				Case of 
+						//______________________________________________________
+					: (PROJECT.$ios & Bool:C1537(Not:C34(Bool:C1537(EDITOR.xCode.ready))))
+						
+						SET DATABASE PARAMETER:C642(Tips enabled:K37:79; 1)
+						SET DATABASE PARAMETER:C642(Tips delay:K37:80; 1)
+						OBJECT SET HELP TIP:C1181(*; $e.objectName; ".Xcode is not ready")
+						
+						//______________________________________________________
+					: (PROJECT.$android & Bool:C1537(Not:C34(Bool:C1537(EDITOR.studio.ready))))
+						
+						SET DATABASE PARAMETER:C642(Tips enabled:K37:79; 1)
+						SET DATABASE PARAMETER:C642(Tips delay:K37:80; 1)
+						OBJECT SET HELP TIP:C1181(*; $e.objectName; ".Android studio is not ready")
+						
+						//______________________________________________________
+					Else 
+						
+						// A "Case of" statement should never omit "Else"
+						
+						//______________________________________________________
+				End case 
+				
+			End if 
+			
+		End if 
+		
 		
 		//______________________________________________________
 	: ($e.code=On Mouse Leave:K2:34)

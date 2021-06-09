@@ -23,9 +23,9 @@ Class constructor
 	This:C1470.cmd:=This:C1470.exe.path
 	
 	This:C1470.timeOut:=30000  // 30 seconds
-	This:C1470.packageListTimeOut:=240000  // 4 minutes
-	This:C1470.bootTimeOut:=240000
-	This:C1470.appStartTimeOut:=240000
+	This:C1470.bootTimeOut:=6000  // 1 minutes
+	This:C1470.packageListTimeOut:=24000  // 4 minutes
+	This:C1470.appStartTimeOut:=6000
 	
 	This:C1470.adbStartRetried:=False:C215
 	
@@ -82,7 +82,7 @@ Function availableDevices($androidDeploymentTarget : Text)->$devices : Collectio
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// List of connected devices
 	// if 'androidDeploymentTarget' is passed, keeps only devices where the version of Android is higher or equal
-Function connected($androidDeploymentTarget : Text)->$devices : Collection
+Function plugged($androidDeploymentTarget : Text)->$devices : Collection
 	
 	var $minVers; $serial; $t : Text
 	var $keep : Boolean
@@ -534,75 +534,75 @@ Function _devices($firstAttempt : Boolean)
 		
 	End if 
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Wait until the emulator is started
+Function waitForBoot($avdName : Text)->$result : Object
 	
-	
-	
-/*=========================================================================== 
-	
-USED for Android build  
-	
-===========================================================================*/
-	
-Function waitForBoot
-	var $0 : Object
-	var $1 : Text  // avd name
-	var $startTime; $stepTime : Integer
-	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"serial"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	// Time elapsed
+	// To check the timeout
+	var $startTime : Integer
 	$startTime:=Milliseconds:C459
 	
 	Repeat 
 		
-		IDLE:C311
-		DELAY PROCESS:C323(Current process:C322; 120)
+		$result:=This:C1470.getSerial($avdName)
 		
-		$0:=This:C1470.getSerial($1)
+		If (Length:C16($result.serial)=0)
+			
+			IDLE:C311
+			DELAY PROCESS:C323(Current process:C322; 120)
+			
+			$result:=This:C1470.getSerial($avdName)
+			
+		End if 
 		
-		$stepTime:=Milliseconds:C459-$startTime
-		
-	Until (($0.success=True:C214) & ($0.serial#""))\
-		 | ($0.errors.length>0)\
-		 | ($stepTime>This:C1470.bootTimeOut)
+	Until (($result.success=True:C214) & ($result.serial#""))\
+		 | ($result.errors.length>0)\
+		 | (Milliseconds:C459-$startTime>This:C1470.bootTimeOut)
 	
-	If ($stepTime>This:C1470.bootTimeOut)  // Timeout
+	If (Length:C16($result.serial)=0)
 		
-		$0.errors.push("Timeout when booting emulator")
+		// Timeout
+		$result.errors.push("(timeout time reached when starting the emulator)")
 		
-		// Else : all ok 
 	End if 
 	
-Function getSerial
-	var $0 : Object
-	var $1 : Text  // searched avd name
-	var $Obj_bootedDevices; $Obj_serial : Object
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Search a booted avd by name
+Function getSerial($avdName : Text)->$result : Object
 	
-	$0:=New object:C1471(\
+	var $devices; $device : Object
+	
+	$result:=New object:C1471(\
 		"serial"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$Obj_bootedDevices:=This:C1470.listBootedDevices()
+	$devices:=This:C1470.listBootedDevices()
 	
-	If ($Obj_bootedDevices.success)
+	If ($devices.success)
 		
-		$Obj_serial:=This:C1470.findSerial($Obj_bootedDevices.bootedDevices; $1)
+		$device:=This:C1470.findSerial($devices.bootedDevices; $avdName)
 		
-		If ($Obj_serial.success)
+		If ($device.success)
 			
-			$0.serial:=$Obj_serial.serial
-			$0.success:=True:C214
+			$result.serial:=$device.serial
+			$result.success:=True:C214
 			
 		Else 
-			$0.errors:=$Obj_serial.errors  // This can be empty, therefore no error, just not found
+			
+			$result.errors:=$device.errors  // This can be empty, therefore no error, just not found
+			
 		End if 
 		
 	Else 
-		$0.errors:=$Obj_bootedDevices.errors
+		
+		$result.errors:=$devices.errors
+		
 	End if 
 	
 Function listBootedDevices  // List booted devices
@@ -911,7 +911,6 @@ Function waitUninstallApp
 		
 		// Else : all ok 
 	End if 
-	
 	
 Function waitInstallApp
 	var $0 : Object

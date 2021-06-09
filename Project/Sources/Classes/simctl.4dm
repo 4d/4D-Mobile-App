@@ -184,7 +184,7 @@ Function deviceTypes($type : Text)->$devices : Collection
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// List of connected devices
-Function connected($iosDeploymentTarget : Text)->$plugged : Collection
+Function plugged($iosDeploymentTarget : Text)->$plugged : Collection
 	
 	$plugged:=New collection:C1472
 	
@@ -195,21 +195,11 @@ Function connected($iosDeploymentTarget : Text)->$plugged : Collection
 	ARRAY LONGINT:C221($len; 0)
 	ARRAY LONGINT:C221($pos; 0)
 	
-	This:C1470.resultInErrorStream:=True:C214
 	This:C1470.launch("xcrun"; "xctrace list devices")
-	This:C1470.resultInErrorStream:=False:C215
 	
 	If (This:C1470.success)
 		
 		$str:=cs:C1710.str.new()
-		
-		$index:=Position:C15("== Simulators =="; This:C1470.outputStream)
-		
-		If ($index>0)
-			
-			This:C1470.outputStream:=Substring:C12(This:C1470.outputStream; 1; $index-1)
-			
-		End if 
 		
 		If (Count parameters:C259>=1)
 			
@@ -223,15 +213,19 @@ Function connected($iosDeploymentTarget : Text)->$plugged : Collection
 		
 		$start:=1
 		
-		While (Match regex:C1019("(?-msi)((?:iPhone|iPad)\\s[^(]*)\\(([^)]*)\\)\\s\\(([^)]*)\\)"; This:C1470.outputStream; $start; $pos; $len))
+		While (Match regex:C1019("(?m-si)^([^(]*)\\s\\(([^)]*)\\)\\s\\(([[:xdigit:]]{8}-[[:xdigit:]]{16})\\)$"; This:C1470.outputStream; $start; $pos; $len))
 			
 			If ($str.setText(Substring:C12(This:C1470.outputStream; $pos{2}; $len{2})).versionCompare($minVers)>=0)
 				
-				$plugged.push(New object:C1471("name"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); "udid"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3})))
+				$plugged.push(New object:C1471(\
+					"name"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
+					"version"; Substring:C12(This:C1470.outputStream; $pos{2}; $len{2}); \
+					"udid"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3}); \
+					"type"; "device"))
 				
 			End if 
 			
-			$start:=$pos{3}+$len{3}
+			$start:=$pos{0}+$len{0}
 			
 		End while 
 	End if 

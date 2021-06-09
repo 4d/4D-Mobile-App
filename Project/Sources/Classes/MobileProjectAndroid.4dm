@@ -57,8 +57,7 @@ Class constructor($project : Object)
 	This:C1470.apk:=Folder:C1567(This:C1470.project.path).folder("app/build/outputs/apk").folder(This:C1470.version).file("app-"+This:C1470.version+".apk")
 	This:C1470.activity:="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
 	
-	//This.avdName:=This.project.project._simulator
-	This:C1470.avdName:=This:C1470.project.project._device.udid
+	This:C1470.avdName:=$project.project._simulator
 	This:C1470.serial:=""
 	
 	// Class for create()
@@ -101,6 +100,7 @@ Function setJavaHome
 Function setAndroidHome
 	
 	This:C1470.setEnvVarToAll(New object:C1471("ANDROID_HOME"; This:C1470.project.sdk))
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -303,51 +303,51 @@ Function run()->$result : Object
 		// * CREATE AVD IF DOESN'T EXIST
 		This:C1470.postStep("launchingTheSimulator")
 		
-		// * START EMULATOR
+		// * START & WAIT EMULATOR
 		$o:=This:C1470.emulator.start(This:C1470.avdName)
 		
 		If ($o.success)
 			
-			// * WAIT FOR EMULATOR BOOT (AND GET EMULATOR SERIAL)
 			$o:=This:C1470.adb.waitForBoot(This:C1470.avdName)
 			
+			//$o:=This.adb.getSerial(This.avdName)
+			
+			If ($o.success)
+				
+				This:C1470.serial:=$o.serial
+				
+				// * INSTALL APP
+				This:C1470.postStep("installingTheApplication")
+				
+				$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.project.package; This:C1470.apk)
+				
+				If ($o.success)
+					
+					// * LAUNCH APP
+					This:C1470.postStep("launchingTheApplication")
+					
+					$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.project.package; This:C1470.activity)
+					
+				End if 
+			End if 
 		End if 
 		
 		If ($o.success)
-			
-			This:C1470.serial:=$o.serial
-			
-			// * INSTALL APP
-			This:C1470.postStep("installingTheApplication")
-			
-			$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.project.package; This:C1470.apk)
-			
-		End if 
-		
-		If ($o.success)
-			
-			// * LAUNCH APP
-			This:C1470.postStep("launchingTheApplication")
-			
-			$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.project.package; This:C1470.activity)
-			
-		End if 
-		
-		If (Not:C34($o.success))
-			
-			This:C1470.isOnError:=True:C214
-			
-			$o.errors.insert(0; Get localized string:C991("failedToLaunchTheSimulator"))
-			
-			This:C1470.postErrors($o.errors)
-			$result.errors.combine($o.errors)
-			
-		Else 
 			
 			$result.success:=True:C214
 			
+		Else 
+			
+			This:C1470.isOnError:=True:C214
+			
+			$o.errors.insert(0; "")  // Insert a blank line before non localized error descriptions
+			$o.errors.insert(0; Get localized string:C991("failedToLaunchTheSimulator"))
+			
+			This:C1470.postErrors($o.errors)
+			
+			$result.errors.combine($o.errors)
+			
 		End if 
-		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

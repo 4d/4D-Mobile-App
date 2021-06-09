@@ -62,7 +62,7 @@ Function getExe($bundleName : Text)->$exe : 4D:C1709.File
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function connected()->$devices : Collection
+Function plugged()->$devices : Collection
 	
 	var $ecid : Text
 	var $o : Object

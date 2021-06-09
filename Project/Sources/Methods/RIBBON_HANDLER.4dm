@@ -147,7 +147,7 @@ Case of
 					
 					If (EDITOR.currentDevice#Null:C1517)
 						
-						$isDeviceSelected:=EDITOR.devices.apple.copy().combine(EDITOR.devices.connected.apple).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
+						$isDeviceSelected:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
 						
 					End if 
 					
@@ -164,7 +164,7 @@ Case of
 					
 					If (EDITOR.currentDevice#Null:C1517)
 						
-						$isDeviceSelected:=EDITOR.devices.android.copy().combine(EDITOR.devices.connected.android).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
+						$isDeviceSelected:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
 						
 					End if 
 					
@@ -361,7 +361,7 @@ Case of
 				
 				If (Length:C16($lastDevice)>0)
 					
-					$device:=EDITOR.devices.apple.copy().combine(EDITOR.devices.connected.apple).query("udid = :1"; $lastDevice).pop()
+					$device:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; $lastDevice).pop()
 					
 					If ($device#Null:C1517)
 						
@@ -382,7 +382,7 @@ Case of
 						
 					Else 
 						
-						$device:=EDITOR.devices.android.copy().combine(EDITOR.devices.connected.android).query("udid = :1"; $lastDevice).pop()
+						$device:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; $lastDevice).pop()
 						
 						If ($device#Null:C1517)
 							

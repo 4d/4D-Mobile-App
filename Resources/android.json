@@ -60,5 +60,9 @@
             "file": "mips-android-sysimage-license",
             "value": "e9acab5b5fbb560a72cfaecce8946896ff6aab9d"
         }
-    ]
+    ],
+    "emulatorOptions": {
+    	"memory": 512,
+    	"no-boot-anim":true
+    }
 }

@@ -242,18 +242,18 @@ Case of
 								//______________________________________________________
 							: (Is Windows:C1573)
 								
-								$device:=EDITOR.devices.connected.android.query("udid = :1"; EDITOR.currentDevice).pop()
+								$device:=EDITOR.devices.plugged.android.query("udid = :1"; EDITOR.currentDevice).pop()
 								$target:=Choose:C955($device#Null:C1517; "android"; Null:C1517)
 								
 								//______________________________________________________
 							: (Is macOS:C1572)
 								
-								$device:=EDITOR.devices.connected.apple.query("udid = :1"; EDITOR.currentDevice).pop()
+								$device:=EDITOR.devices.plugged.apple.query("udid = :1"; EDITOR.currentDevice).pop()
 								$target:=Choose:C955($device#Null:C1517; "ios"; Null:C1517)
 								
 								If ($target=Null:C1517)
 									
-									$device:=EDITOR.devices.connected.android.query("udid = :1"; EDITOR.currentDevice).pop()
+									$device:=EDITOR.devices.plugged.android.query("udid = :1"; EDITOR.currentDevice).pop()
 									$target:=Choose:C955($device#Null:C1517; "android"; Null:C1517)
 									
 								End if 

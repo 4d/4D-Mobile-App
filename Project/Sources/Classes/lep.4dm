@@ -23,6 +23,8 @@ Function reset()->$this : cs:C1710.lep
 	This:C1470.pid:=0
 	This:C1470.resultInErrorStream:=False:C215  // Allows, if True, to reroutes stderr message to stdout
 	
+	This:C1470.debug:=Not:C34(Is compiled mode:C492)
+	
 	This:C1470.setCharSet()
 	This:C1470.setOutputType()
 	This:C1470.setEnvironnementVariable()
@@ -385,6 +387,12 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		
 	End if 
 	
+	If (This:C1470.debug)
+		
+		This:C1470.log()
+		
+	End if 
+	
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -718,7 +726,7 @@ Function versionCompare($current : Text; $reference : Text; $separator : Text)->
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Set write accesses to a file or a directory with all its subfolders and files
-Function makeWritable($cible : 4D:C1709.File)->$this : cs:C1710.lep
+Function makeWritable($cible : 4D:C1709.Document)->$this : cs:C1710.lep
 	
 	If (Bool:C1537($cible.exists))
 		
@@ -732,25 +740,25 @@ chmod [-fhv] [-R [-H | -L | -P]] [-C] file ...
 chmod [-fhv] [-R [-H | -L | -P]] [-N] file ...
 			
 The generic options are as follows:
-     -f      Do not display a diagnostic message if chmod could not modify the
-             mode for file.
-     -H      If the -R option is specified, symbolic links on the command line
-             are followed.  (Symbolic links encountered in the tree traversal
-             are not followed by default.)
-     -h      If the file is a symbolic link, change the mode of the link
-             itself rather than the file that the link points to.
-     -L      If the -R option is specified, all symbolic links are followed.
-     -P      If the -R option is specified, no symbolic links are followed.
-             This is the default.
-     -R      Change the modes of the file hierarchies rooted in the files
-             instead of just the files themselves.
-     -v      Cause chmod to be verbose, showing filenames as the mode is modi-
-             fied.  If the -v flag is specified more than once, the old and
-             new modes of the file will also be printed, in both octal and
-             symbolic notation.
-     The -H, -L and -P options are ignored unless the -R option is specified.
-     In addition, these options override each other and the command's actions
-     are determined by the last one specified.
+-f      Do not display a diagnostic message if chmod could not modify the
+mode for file.
+-H      If the -R option is specified, symbolic links on the command line
+are followed.  (Symbolic links encountered in the tree traversal
+are not followed by default.)
+-h      If the file is a symbolic link, change the mode of the link
+itself rather than the file that the link points to.
+-L      If the -R option is specified, all symbolic links are followed.
+-P      If the -R option is specified, no symbolic links are followed.
+This is the default.
+-R      Change the modes of the file hierarchies rooted in the files
+instead of just the files themselves.
+-v      Cause chmod to be verbose, showing filenames as the mode is modi-
+fied.  If the -v flag is specified more than once, the old and
+new modes of the file will also be printed, in both octal and
+symbolic notation.
+The -H, -L and -P options are ignored unless the -R option is specified.
+In addition, these options override each other and the command's actions
+are determined by the last one specified.
 */
 			
 			
@@ -925,3 +933,49 @@ Function _pushError($message : Text)
 	End if 
 	
 	This:C1470.errors.push(This:C1470.lastError)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function log()
+	
+	//var $t : Text
+	var $current; $o : Object
+	var $c; $log : Collection
+	
+	$log:=New collection:C1472
+	
+	$c:=Get call chain:C1662
+	
+	For each ($o; $c) While ($current=Null:C1517)
+		
+		If (Position:C15("lep."; $o.name)#1)
+			
+			$current:=$o
+			
+		End if 
+	End for each 
+	
+	If ($current#Null:C1517)
+		
+		$log.push($current.name+"()")
+		$log.push("\r\rCMD:")
+	Else 
+		
+		$log.push("CMD:")
+		
+	End if 
+	
+	$log.push(This:C1470.command)
+	$log.push("\r\rSTATUS:")
+	$log.push(Choose:C955(This:C1470.success; "success"; "failed"))
+	If (Length:C16(This:C1470.outputStream)>0)
+		$log.push("\r\rOUTPUT:")
+		$log.push(This:C1470.outputStream)
+	End if 
+	If (Length:C16(This:C1470.errorStream)>0)
+		$log.push("\r\rERROR:")
+		$log.push(This:C1470.errorStream)
+	End if 
+	//$t:=$log.join(" ")
+	//LOG EVENT(Into 4D debug message; $t; Choose(This.success; Information message; Warning message))
+	
+	LOG EVENT:C667(Into 4D debug message:K38:5; $log.join(" "); Error message:K38:3)

@@ -6,7 +6,7 @@
 // ----------------------------------------------------
 // Declarations
 var $bottom; $left; $right; $top : Integer
-var $lastDevice; $tab : Text
+var $lastDevice; $selectedDevice; $tab : Text
 var $device; $e : Object
 var $menu : cs:C1710.menu
 
@@ -43,9 +43,9 @@ Case of
 				
 				If (EDITOR.xCode.ready)
 					
-					If (EDITOR.devices.connected.apple.length>0)
+					If (EDITOR.devices.plugged.apple.length>0)
 						
-						For each ($device; EDITOR.devices.connected.apple)
+						For each ($device; EDITOR.devices.plugged.apple)
 							
 							$menu.append($tab+$device.name; $device.udid)\
 								.mark($device.udid=$lastDevice)
@@ -82,9 +82,9 @@ Case of
 				
 				If (EDITOR.studio.ready)
 					
-					If (EDITOR.devices.connected.android.length>0)
+					If (EDITOR.devices.plugged.android.length>0)
 						
-						For each ($device; EDITOR.devices.connected.android)
+						For each ($device; EDITOR.devices.plugged.android)
 							
 							$menu.append($tab+$device.name; $device.udid)\
 								.mark($device.udid=$lastDevice)
@@ -124,9 +124,9 @@ Case of
 				
 				If (EDITOR.studio.ready)
 					
-					If (EDITOR.devices.connected.android.length>0)
+					If (EDITOR.devices.plugged.android.length>0)
 						
-						For each ($device; EDITOR.devices.connected.android)
+						For each ($device; EDITOR.devices.plugged.android)
 							
 							$menu.append($device.name; $device.udid)\
 								.mark($device.udid=$lastDevice).enable(Not:C34(Bool:C1537($device.unauthorized)))
@@ -191,7 +191,7 @@ Case of
 			: (Not:C34($menu.selected))
 				
 				// Nothing selected
-				$lastDevice:=""
+				//
 				
 				//______________________________________________________
 			: ($menu.choice="checkAndroidInstallation")\
@@ -280,11 +280,8 @@ Case of
 				
 				$device:=EDITOR.devices.apple.query("udid = :1"; $menu.choice).pop()
 				
-				// Set default simulator
-				EDITOR.currentDevice:=$menu.choice
-				OBJECT SET TITLE:C194(*; "201"; $device.name)
-				
-				EDITOR.preferences.set("lastIosDevice"; $menu.choice)
+				$selectedDevice:=$menu.choice
+				EDITOR.preferences.set("lastIosDevice"; $selectedDevice)  // Last iOS device
 				
 				// #TO_OPTMIZE : deport to worker
 				
@@ -295,22 +292,21 @@ Case of
 				$simctl.setDefaultDevice($menu.choice)
 				
 				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				
 				EDITOR.ios:=True:C214
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
 				
 				//______________________________________________________
-			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-[[:xdigit:]]{16}"; $menu.choice; 1))  // iOS Connected Device
+			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-[[:xdigit:]]{16}"; $menu.choice; 1))  // iOS plugged Device
 				
-				$device:=EDITOR.devices.connected.apple.query("udid = :1"; $menu.choice).pop()
+				$device:=EDITOR.devices.plugged.apple.query("udid = :1"; $menu.choice).pop()
 				
-				// Set default simulator
-				EDITOR.currentDevice:=$menu.choice
-				OBJECT SET TITLE:C194(*; "201"; $device.name)
-				
-				EDITOR.preferences.set("lastIosConnected"; $menu.choice)
+				$selectedDevice:=$menu.choice
+				EDITOR.preferences.set("lastIosConnected"; $selectedDevice)  // Last iOS plugged device
 				
 				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				
 				EDITOR.ios:=True:C214
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
@@ -322,16 +318,15 @@ Case of
 				
 				If ($device=Null:C1517)
 					
-					$device:=EDITOR.devices.connected.android.query("udid = :1"; $menu.choice).pop()
+					$device:=EDITOR.devices.plugged.android.query("udid = :1"; $menu.choice).pop()
 					
 				End if 
 				
-				EDITOR.currentDevice:=$menu.choice
-				OBJECT SET TITLE:C194(*; "201"; $device.name)
-				
-				EDITOR.preferences.set("lastAndroidDevice"; $menu.choice)
+				$selectedDevice:=$menu.choice
+				EDITOR.preferences.set("lastAndroidDevice"; $selectedDevice)  // Last Android device
 				
 				PROJECT.$android:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				
 				EDITOR.android:=True:C214
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "android")
@@ -344,13 +339,16 @@ Case of
 				//______________________________________________________
 		End case 
 		
-		If (Length:C16($lastDevice)>0)\
-			 & ($lastDevice#String:C10(EDITOR.currentDevice))  // Keep
+		If (Length:C16($selectedDevice)>0) & ($selectedDevice#String:C10(EDITOR.currentDevice))
 			
-			EDITOR.preferences.set("lastDevice"; EDITOR.currentDevice)
+			// Set
+			EDITOR.currentDevice:=$selectedDevice
 			
-			// Adapt button width
-			SET TIMER:C645(-1)
+			// Update UI
+			OBJECT SET TITLE:C194(*; "201"; $device.name)
+			SET TIMER:C645(-1)  // Adapt button width
+			
+			EDITOR.preferences.set("lastDevice"; EDITOR.currentDevice)  // Last used device
 			
 		End if 
 		
