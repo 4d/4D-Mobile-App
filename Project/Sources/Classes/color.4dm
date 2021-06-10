@@ -171,7 +171,8 @@ Function setCSS($css : Text)->$this : cs:C1710.color
 			//______________________________________________________
 		Else 
 			
-			ASSERT:C1129(False:C215)
+			ASSERT:C1129(dev_Matrix; "Unknown color format or value: "+String:C10($css))
+			// we have a not valid color (could return null but constructor could not failed and return null)
 			
 			//______________________________________________________
 	End case 
@@ -1118,4 +1119,8 @@ Function _hueToRGB($v1 : Real; $v2 : Real; $vH : Real)->$value : Integer
 			
 			//…………………………………………………………………………………………………
 	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function isValid()->$valid : Boolean
+	$valid:=(This:C1470.rgb#Null:C1517) & (This:C1470.hsl#Null:C1517) & (This:C1470.css#Null:C1517)
 	

@@ -86,6 +86,14 @@ Click to see more options.</target>
           <source>Use the main color of the icon</source>
           <target>Use the main color of the icon</target>
         </trans-unit>
+        <trans-unit id="y58xjw9R0PPAxjw9pFOB0wHLGg" resname="enterAWebColor">
+          <source>Enter a web color</source>
+          <target>Enter a web color</target>
+        </trans-unit>
+        <trans-unit id="y58PPAxjw9pFOB0wxjw9R0HLGg" resname="invalidWebColor">
+          <source>Invalid web color</source>
+          <target>Invalid web color</target>
+        </trans-unit>
       </group>
       <group resname="Images">
         <trans-unit id="Gu+J5EfhnBOH6joEDMgbrg" resname="picSize">
