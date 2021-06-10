@@ -6,9 +6,34 @@ var $simctl : cs:C1710.simctl
 
 COMPILER_COMPONENT
 
-$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+//$simctl:=cs.simctl.new(SHARED.iosDeploymentTarget)
 
 Case of 
+		//______________________________________________________
+	: (True:C214)
+		
+		var $xcode : cs:C1710.Xcode
+		$xcode:=cs:C1710.Xcode.new()
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		var $plist : cs:C1710.plist
+		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Desktop/TO BE TRASHED/test.plist"))
+		
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		//var $cfgutil : cs.cfgutil
+		//$cfgutil:=cs.cfgutil.new()
+		
+		//var $pluggedDevices : Collection
+		//$pluggedDevices:=$cfgutil.plugged()
+		
+		var $pluggedDevices : Collection
+		$pluggedDevices:=$simctl.plugged()
+		$simctl.launch("xcrun simctl list")
 		
 		//______________________________________________________
 	: (True:C214)
@@ -22,7 +47,7 @@ Case of
 		$plist.set(New collection:C1472("hello"; "world"); 8858)
 		
 		$plist.set("level_1.level_20[]")
-		$plist.set("level_1.level_21"; "A NEW ITEM")
+		$plist.set("level_1.level_21"; "A NtEW ITEM")
 		
 		$plist.set("level_1.level_2[0]"; "1st element")
 		$plist.set("level_1.level_2[10].test"; "hello")
@@ -43,19 +68,6 @@ Case of
 		$o:=$simctl.defaultDevice()
 		
 		
-		
-		
-		//______________________________________________________
-	: (True:C214)
-		
-		var $cfgutil : cs:C1710.cfgutil
-		$cfgutil:=cs:C1710.cfgutil.new()
-		
-		var $pluggedDevices : Collection
-		$pluggedDevices:=$cfgutil.connected()
-		
-		var $pluggedDevices : Collection
-		$pluggedDevices:=$simctl.connected()
 		
 		//______________________________________________________
 	: (True:C214)

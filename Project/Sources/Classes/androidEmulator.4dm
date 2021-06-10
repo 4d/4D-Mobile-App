@@ -149,91 +149,19 @@ Class extends androidProcess
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
-	var $o; $options : Object
-	var $c : Collection
-	var $file : 4D:C1709.File
-	
 	Super:C1705()
 	
 	This:C1470.exe:=This:C1470.androidSDKFolder().file("emulator/emulator"+Choose:C955(Is Windows:C1573; ".exe"; ""))
 	This:C1470.cmd:=This:C1470.exe.path
+	This:C1470.version:=This:C1470._version(This:C1470.cmd)
 	
-	This:C1470.version:=This:C1470.getVersion()
-	
-	// Search the user's database first
-	$file:=File:C1566("/RESOURCES/android.json"; *)
-	
-	If ($file.exists)
-		
-		$o:=JSON Parse:C1218($file.getText())
-		
-		If ($o.emulatorOptions#Null:C1517)
-			
-			$options:=$o.emulatorOptions
-			
-		End if 
-	End if 
-	
-	If ($options=Null:C1517)
-		
-		// Use defaults from the component
-		$options:=JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).emulatorOptions
-		
-	End if 
-	
-	$c:=New collection:C1472
-	
-	For each ($o; OB Entries:C1720($options))
-		
-		Case of 
-				
-				//______________________________________________________
-			: (Value type:C1509($o.value)=Is text:K8:3)
-				
-				$c.push($o.key+" "+$o.value)
-				
-				//______________________________________________________
-			: (Value type:C1509($o.value)=Is boolean:K8:9)
-				
-				If ($o.value)
-					
-					$c.push($o.key)
-					
-				End if 
-				
-				//______________________________________________________
-			Else 
-				
-				$c.push($o.key+" "+String:C10($o.value))
-				
-				//______________________________________________________
-		End case 
-	End for each 
-	
-	This:C1470.options:=" -"+$c.join(" -")
-	
-	This:C1470.bootTimeOut:=6000  // 1 minutes
+	This:C1470.options:=This:C1470._options()
 	
 	This:C1470.adb:=cs:C1710.adb.new()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the current version of the emulator tool
-Function getVersion()->$version : Text
-	
-	This:C1470.launch(This:C1470.cmd; "-version")
-	
-	ARRAY LONGINT:C221($pos; 0x0000)
-	ARRAY LONGINT:C221($len; 0x0000)
-	
-	If (Match regex:C1019("(?m-si)\\sversion\\s([\\d\\.]+)\\s\\(build_id\\s(\\d+)"; This:C1470.outputStream; 1; $pos; $len))
-		
-		$version:=Substring:C12(This:C1470.outputStream; $pos{1}; $len{1})
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the list of emulators names available in the "avd manager"
-Function available()->$emulators : Collection
+Function availableSimulators()->$emulators : Collection
 	
 	If (This:C1470.launch(This:C1470.cmd; "-list-avds").success)
 		
@@ -321,3 +249,76 @@ Function bringToFront()
 	
 	//je ne sais pas comment faire pour le moment
 	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// [PRIVATE] Get simulator options
+Function _options()->$result : Text
+	
+	var $o; $options : Object
+	var $c : Collection
+	var $file : 4D:C1709.File
+	
+	$file:=File:C1566("/RESOURCES/android.json"; *)  // Search the user's database first
+	
+	If ($file.exists)
+		
+		$o:=JSON Parse:C1218($file.getText())
+		
+		If ($o.emulatorOptions#Null:C1517)
+			
+			$options:=$o.emulatorOptions
+			
+		End if 
+	End if 
+	
+	If ($options=Null:C1517)  // Use defaults from the component
+		
+		$options:=JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).emulatorOptions
+		
+	End if 
+	
+	$c:=New collection:C1472
+	
+	For each ($o; OB Entries:C1720($options))
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($o.value)=Is text:K8:3)
+				
+				$c.push($o.key+" "+$o.value)
+				
+				//______________________________________________________
+			: (Value type:C1509($o.value)=Is boolean:K8:9)
+				
+				If ($o.value)
+					
+					$c.push($o.key)
+					
+				End if 
+				
+				//______________________________________________________
+			Else 
+				
+				$c.push($o.key+" "+String:C10($o.value))
+				
+				//______________________________________________________
+		End case 
+	End for each 
+	
+	$result:=" -"+$c.join(" -")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// [PRIVATE] Returns the current version of the tool
+Function _version($cmd : Text)->$version : Text
+	
+	This:C1470.launch($cmd; "-version")
+	
+	ARRAY LONGINT:C221($pos; 0x0000)
+	ARRAY LONGINT:C221($len; 0x0000)
+	
+	If (Match regex:C1019("(?m-si)\\sversion\\s([\\d\\.]+)\\s\\(build_id\\s(\\d+)"; This:C1470.outputStream; 1; $pos; $len))
+		
+		$version:=Substring:C12(This:C1470.outputStream; $pos{1}; $len{1})
+		
+	End if 

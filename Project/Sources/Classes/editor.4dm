@@ -349,7 +349,7 @@ Function displayPage($page : Text)
 		
 	End if 
 	
-	FORM GOTO PAGE:C247(1)
+	This:C1470.firstPage()
 	
 	If (This:C1470.name="EDITOR")  // First call
 		
@@ -357,7 +357,6 @@ Function displayPage($page : Text)
 		
 	End if 
 	
-	// Hide picker & browser if any
 	This:C1470.hidePicker()
 	This:C1470.hideBrowser()
 	
@@ -385,8 +384,7 @@ Function displayPage($page : Text)
 	If ($o#Null:C1517)
 		
 		This:C1470.currentPage:=$page
-		
-		OBJECT SET VALUE:C1742("description"; $page)
+		This:C1470.setHeader()
 		
 		Form:C1466.$page:=$o
 		
@@ -400,11 +398,11 @@ Function displayPage($page : Text)
 			
 		End if 
 		
-		SET TIMER:C645(-1)  // Set geometry
+		This:C1470.refresh()  // Update geometry
 		
 		This:C1470.executeInSubform("description"; "editor_description"; $o)
 		
-		GOTO OBJECT:C206(*; "PROJECT")
+		This:C1470.project.focus()
 		
 	End if 
 	
@@ -483,77 +481,65 @@ Function taskNotInProgress($taskID : Text)->$response : Boolean
 	//===================================================================================
 Function hidePicker()
 	
-	This:C1470.post("pickerHide")
+	This:C1470.callMeBack("pickerHide")
 	
 	RECORD.info("hidePicker()")
 	
 	//===================================================================================
 Function hideBrowser()
 	
-	This:C1470.post("hideBrowser")
+	This:C1470.callMeBack("hideBrowser")
 	
 	RECORD.info("hideBrowser()")
 	
 	//===================================================================================
 Function updateRibbon()
 	
-	This:C1470.post("updateRibbon")
+	This:C1470.callMeBack("updateRibbon")
 	
 	RECORD.info("updateRibbon()")
 	
 	//===================================================================================
 Function refreshViews()
 	
-	This:C1470.post("refreshViews")
+	This:C1470.callMeBack("refreshViews")
 	
 	RECORD.info("refreshViews()")
 	
 	//===================================================================================
 Function checkDevTools()
 	
-	var $o : Object
-	
-	$o:=New object:C1471
-	$o.caller:=This:C1470.window
-	$o.xCode:=This:C1470.xCode
-	$o.studio:=This:C1470.studio
-	$o.android:=PROJECT.$android
-	$o.ios:=PROJECT.$ios
-	
 	This:C1470.addTask("checkDevTools")
-	
-	CALL WORKER:C1389(This:C1470.worker; "editor_CHECK_INSTALLATION"; $o)
+	This:C1470.callWorker("editor_CHECK_INSTALLATION"; New object:C1471(\
+		"caller"; This:C1470.window; \
+		"xCode"; This:C1470.xCode; \
+		"studio"; This:C1470.studio; \
+		"android"; PROJECT.$android; \
+		"ios"; PROJECT.$ios\
+		))
 	
 	//===================================================================================
 Function checkProject()
 	
-	var $o : Object
-	
 	// Launch checking the structure
-	$o:=New object:C1471
-	$o.caller:=This:C1470.window
-	$o.action:="catalog"
-	
 	This:C1470.addTask("checkProject")
-	
-	CALL WORKER:C1389(This:C1470.worker; "_o_structure"; $o)
+	This:C1470.callWorker("_o_structure"; New object:C1471(\
+		"caller"; This:C1470.window; \
+		"action"; "catalog"\
+		))
 	
 	// Launch project verifications
-	This:C1470.call("projectAudit")
+	This:C1470.callMeBack("projectAudit")
 	
 	//===================================================================================
 Function getDevices()
 	
-	var $o : Object
-	
-	$o:=New object:C1471
-	$o.caller:=This:C1470.window
-	$o.xCode:=This:C1470.xCode
-	$o.studio:=This:C1470.studio
-	
 	This:C1470.addTask("getDevices")
-	
-	CALL WORKER:C1389(This:C1470.worker; "editor_GET_DEVICES"; $o)
+	This:C1470.callWorker("editor_GET_DEVICES"; New object:C1471(\
+		"caller"; This:C1470.window; \
+		"xCode"; This:C1470.xCode; \
+		"studio"; This:C1470.studio\
+		))
 	
 	//===================================================================================
 Function setHeader()

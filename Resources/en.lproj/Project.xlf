@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!--Translation file.
 This file is distributed under the same license as the product package.-->
 <xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
@@ -241,6 +241,10 @@ For example, the organization name is used in both the source and header.</targe
         <trans-unit id="5A47O+jOjgDWTWgyJyhpQg" resname="checkTheInstallationOf">
           <source>Check the installation of {app}…</source>
           <target>Check the installation of {app}…</target>
+        </trans-unit>
+        <trans-unit id="Xk7mHA/L2ILRc0rMoNWnPQ" resname="updatingTheListOfDevices">
+          <source>Updating the list of devices…</source>
+          <target>Updating the list of devices…</target>
         </trans-unit>
       </group>
       <group resname="Editor">

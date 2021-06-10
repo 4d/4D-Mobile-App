@@ -1,12 +1,108 @@
 Class extends androidProcess
 
 /*
-   lep ━ androidProcess ━┳━ adb  
-                         ┣━ androidEmulator 
-                         ┣━ androidProjectGenerator 
-                         ┣━ avd 
-                         ┣━ gradlew  
-                         ┗━ sdkmanager                                
+Android Debug Bridge version 1.0.41
+Version 31.0.2-7242960
+Installed as /Users/vdl/Library/Android/sdk/platform-tools/adb
+
+global options:
+ -a         listen on all network interfaces, not just localhost
+ -d         use USB device (error if multiple devices connected)
+ -e         use TCP/IP device (error if multiple TCP/IP devices available)
+ -s SERIAL  use device with given serial (overrides $ANDROID_SERIAL)
+ -t ID      use device with given transport id
+ -H         name of adb server host [default=localhost]
+ -P         port of adb server [default=5037]
+ -L SOCKET  listen on given socket for adb server [default=tcp:localhost:5037]
+
+general commands:
+ devices [-l]             list connected devices (-l for long output)
+ help                     show this help message
+ version                  show version num
+
+shell:
+ shell [-e ESCAPE] [-n] [-Tt] [-x] [COMMAND...] run remote shell command (interactive shell if no command given)
+     -e: choose escape character, or "none"; default '~'
+     -n: don't read from stdin
+     -T: disable pty allocation
+     -t: allocate a pty if on a tty (-tt: force pty allocation)
+     -x: disable remote exit codes and stdout/stderr separation
+ emu COMMAND              run emulator console command
+
+app installation (see also `adb shell cmd package help`):
+ install [-lrtsdg] [--instant] PACKAGE push a single package to the device and install it
+     -r: replace existing application
+     -t: allow test packages
+     -d: allow version code downgrade (debuggable packages only)
+     -p: partial application install (install-multiple only)
+     -g: grant all runtime permissions
+     --abi ABI: override platform's default ABI
+     --instant: cause the app to be installed as an ephemeral install app
+     --no-streaming: always push APK to device and invoke Package Manager as separate steps
+     --streaming: force streaming APK directly into Package Manager
+     --fastdeploy: use fast deploy
+     --no-fastdeploy: prevent use of fast deploy
+     --force-agent: force update of deployment agent when using fast deploy
+     --date-check-agent: update deployment agent when local version is newer and using fast deploy
+     --version-check-agent: update deployment agent when local version has different version code and using fast deploy
+     --local-agent: locate agent files from local source build (instead of SDK location)
+     (See also `adb shell pm help` for more options.)
+ uninstall [-k] PACKAGE
+     remove this app package from the device
+     '-k': keep the data and cache directories
+
+debugging:
+ bugreport [PATH]
+     write bugreport to given PATH [default=bugreport.zip];
+     if PATH is a directory, the bug report is saved in that directory.
+     devices that don't support zipped bug reports output to stdout.
+ jdwp                     list pids of processes hosting a JDWP transport
+ logcat                   show device log (logcat --help for more)
+
+security:
+ disable-verity           disable dm-verity checking on userdebug builds
+ enable-verity            re-enable dm-verity checking on userdebug builds
+ keygen FILE
+     generate adb public/private key; private key stored in FILE,
+
+scripting:
+ wait-for[-TRANSPORT]-STATE...
+     wait for device to be in a given state
+     STATE: device, recovery, rescue, sideload, bootloader, or disconnect
+     TRANSPORT: usb, local, or any [default=any]
+ get-state                print offline | bootloader | device
+ get-serialno             print <serial-number>
+ get-devpath              print <device-path>
+ remount [-R]
+      remount partitions read-write. if a reboot is required, -R will
+      will automatically reboot the device.
+ reboot [bootloader|recovery|sideload|sideload-auto-reboot]
+     reboot the device; defaults to booting system image but
+     supports bootloader and recovery too. sideload reboots
+     into recovery and automatically starts sideload mode,
+     sideload-auto-reboot is the same but reboots after sideloading.
+ sideload OTAPACKAGE      sideload the given full OTA package
+ root                     restart adbd with root permissions
+ unroot                   restart adbd without root permissions
+ usb                      restart adbd listening on USB
+ tcpip PORT               restart adbd listening on TCP on PORT
+
+internal debugging:
+ start-server             ensure that there is a server running
+ kill-server              kill the server if it is running
+ reconnect                kick connection from host side to force reconnect
+ reconnect device         kick connection from device side to force reconnect
+ reconnect offline        reset offline/unauthorized devices to force reconnect
+
+environment variables:
+ $ADB_TRACE
+     comma-separated list of debug info to log:
+     all,adb,sockets,packets,rwx,usb,sync,sysdeps,transport,jdwp
+ $ADB_VENDOR_KEYS         colon-separated list of keys (files or directories)
+ $ANDROID_SERIAL          serial number to connect to (see -s)
+ $ANDROID_LOG_TAGS        tags to be used by logcat (see logcat --help)
+ $ADB_LOCAL_TRANSPORT_MAX_PORT max emulator scan port (default 5585, 16 emus)
+ $ADB_MDNS_AUTO_CONNECT   comma-separated list of mdns services to allow auto-connect (default adb-tls-connect)                        
 */
 
 /*
@@ -21,6 +117,7 @@ Class constructor
 	
 	This:C1470.exe:=This:C1470.androidSDKFolder().file("platform-tools/adb"+Choose:C955(Is Windows:C1573; ".exe"; ""))
 	This:C1470.cmd:=This:C1470.exe.path
+	This:C1470.version:=This:C1470._version(This:C1470.cmd)
 	
 	This:C1470.timeOut:=30000  // 30 seconds
 	This:C1470.bootTimeOut:=6000  // 1 minutes
@@ -78,6 +175,23 @@ Function availableDevices($androidDeploymentTarget : Text)->$devices : Collectio
 			End if 
 		End for each 
 	End if 
+	
+	// wait-for-device
+Function waiForDevice()->$pluggedDevice : Boolean
+	
+	Repeat 
+		
+		This:C1470.launch(This:C1470.cmd+" wait-for-device devices")
+		
+		If (Not:C34(This:C1470.success))
+			
+			IDLE:C311
+			DELAY PROCESS:C323(Current process:C322; 120)
+			
+		End if 
+	Until (This:C1470.success | Process aborted:C672)
+	
+	$pluggedDevice:=This:C1470.success
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// List of connected devices
@@ -343,7 +457,7 @@ Function packageList($serial : Text)->$packages : Collection
 	$packages:=This:C1470._packageList($serial)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a collection of third party package names for a connected device
+	// Returns a collection of 3rd party package names for a connected device
 Function userPackageList($serial : Text)->$packages : Collection
 	
 	$packages:=This:C1470._packageList($serial; "-3")
@@ -384,15 +498,21 @@ Function installApp($apk; $serial : Text)
 	
 	If (This:C1470.success)
 		
+		// -r: Replace existing application.
+		
 		If (Count parameters:C259>=1)
 			
 			// -s <serial number>
-			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" install "+This:C1470.quoted($file.path))
+			//This.launch(This.cmd+" -s "+$serial+" install "+This.quoted($file.path))
+			
+			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" install -r "+This:C1470.quoted($file.path))
 			
 		Else 
 			
 			// - directs command to the only connected USB device...
-			This:C1470.launch(This:C1470.cmd+" -d install "+This:C1470.quoted($file.path))
+			//This.launch(This.cmd+" -d install "+This.quoted($file.path))
+			
+			This:C1470.launch(This:C1470.cmd+" -d install -r "+This:C1470.quoted($file.path))
 			
 		End if 
 		
@@ -421,118 +541,13 @@ Function uninstallApp($appName : Text; $serial : Text)
 		
 	End if 
 	
-	//________________________________________________________________________________
-	// [PRIVATE] - Package name formatting
-Function _packageName($appName : Text)->$pakageName : Text
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// list info on one package
+Function getAppProperties($appName : Text; $serial : Text)
 	
-	$pakageName:=Lowercase:C14($appName)
+	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell dump "+This:C1470._packageName($appName))
 	
-	ARRAY LONGINT:C221($len; 0x0000)
-	ARRAY LONGINT:C221($pos; 0x0000)
-	
-	While (Match regex:C1019("(?m-si)([^[:alnum:]\\._])"; $pakageName; 1; $pos; $len))
-		
-		$pakageName:=Replace string:C233($pakageName; Substring:C12($pakageName; $pos{1}; $len{1}); "_")
-		
-	End while 
-	
-	//________________________________________________________________________________
-	// [PRIVATE] - Run shell pm list packages
-Function _packageList($serial : Text; $options)->$packages : Collection
-	
-	var $start; $step : Integer
-	var $success : Boolean
-	var $t : Text
-	
-	$start:=Milliseconds:C459
-	
-	Repeat 
-		
-		If (Count parameters:C259=1)
-			
-			This:C1470.launch(This:C1470.cmd+" -s \""+$serial+"\" shell pm list packages")
-			
-			
-		Else 
-			
-			This:C1470.launch(This:C1470.cmd+" -s \""+$serial+"\" shell pm list packages "+$options)
-			
-		End if 
-		
-		$success:=This:C1470.success & (Length:C16(This:C1470.outputStream)>0)
-		
-		If (Not:C34($success))
-			
-			IDLE:C311
-			DELAY PROCESS:C323(Current process:C322; 60)
-			IDLE:C311
-			
-		End if 
-		
-	Until ($success)\
-		 | ((Milliseconds:C459-$start)>This:C1470.packageListTimeOut)
-	
-	If ($success)
-		
-		$packages:=New collection:C1472
-		
-		For each ($t; Split string:C1554(This:C1470.outputStream; "\n"))
-			
-			$packages.push(Replace string:C233($t; "package:"; ""))
-			
-		End for each 
-		
-	Else 
-		
-		This:C1470._pushError("Timeout when getting package list")
-		
-	End if 
-	
-	// ____________________________________________________________________________________________________________
-	// [PRIVATE] - Run 'adb devices'
-Function _devices($firstAttempt : Boolean)
-	
-	If (Count parameters:C259>=1)
-		
-		This:C1470._adbStartRetried:=False:C215
-		
-	End if 
-	
-	This:C1470.launch(This:C1470.cmd+" devices")
-	
-	If (This:C1470.success)
-		
-		If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)
-			
-			If (Not:C34(This:C1470._adbStartRetried))
-				
-				// Adb was not ready, restart command
-				This:C1470._adbStartRetried:=True:C214
-				This:C1470._devices()
-				
-			Else 
-				
-				This:C1470._pushError(This:C1470.errorStream)
-				
-			End if 
-			
-		Else 
-			
-/* The content of the outputStream looks like this:
-			
-    List of devices attached
-    ZY22BJDD3L\tdevice
-    emulator-5554\tdevice
-			
-*/
-			
-		End if 
-		
-	Else 
-		
-		This:C1470._pushError("(failed to get device list)")
-		
-	End if 
+	//#TO_DO
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Wait until the emulator is started
@@ -947,6 +962,133 @@ Function waitInstallApp
 	End if 
 	
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// [PRIVATE] Returns the current version of the tool
+Function _version($cmd : Text)->$version : Text
+	
+	This:C1470.launch($cmd; "version")
+	
+	ARRAY LONGINT:C221($pos; 0x0000)
+	ARRAY LONGINT:C221($len; 0x0000)
+	
+	If (Match regex:C1019("(?m-si)Version\\s(\\d+\\.\\d+\\.\\d+)"; This:C1470.outputStream; 1; $pos; $len))
+		
+		$version:=Substring:C12(This:C1470.outputStream; $pos{1}; $len{1})
+		
+	End if 
+	
+	//________________________________________________________________________________
+	// [PRIVATE] - Package name formatting
+Function _packageName($appName : Text)->$pakageName : Text
+	
+	$pakageName:=Lowercase:C14($appName)
+	
+	ARRAY LONGINT:C221($len; 0x0000)
+	ARRAY LONGINT:C221($pos; 0x0000)
+	
+	While (Match regex:C1019("(?m-si)([^[:alnum:]\\._])"; $pakageName; 1; $pos; $len))
+		
+		$pakageName:=Replace string:C233($pakageName; Substring:C12($pakageName; $pos{1}; $len{1}); "_")
+		
+	End while 
+	
+	//________________________________________________________________________________
+	// [PRIVATE] - Run shell pm list packages
+Function _packageList($serial : Text; $options)->$packages : Collection
+	
+	var $start; $step : Integer
+	var $success : Boolean
+	var $t : Text
+	
+	$start:=Milliseconds:C459
+	
+	Repeat 
+		
+		If (Count parameters:C259=1)
+			
+			This:C1470.launch(This:C1470.cmd+" -s \""+$serial+"\" shell pm list packages")
+			
+			
+		Else 
+			
+			This:C1470.launch(This:C1470.cmd+" -s \""+$serial+"\" shell pm list packages "+$options)
+			
+		End if 
+		
+		$success:=This:C1470.success & (Length:C16(This:C1470.outputStream)>0)
+		
+		If (Not:C34($success))
+			
+			IDLE:C311
+			DELAY PROCESS:C323(Current process:C322; 60)
+			IDLE:C311
+			
+		End if 
+		
+	Until ($success)\
+		 | ((Milliseconds:C459-$start)>This:C1470.packageListTimeOut)
+	
+	If ($success)
+		
+		$packages:=New collection:C1472
+		
+		For each ($t; Split string:C1554(This:C1470.outputStream; "\n"))
+			
+			$packages.push(Replace string:C233($t; "package:"; ""))
+			
+		End for each 
+		
+	Else 
+		
+		This:C1470._pushError("Timeout when getting package list")
+		
+	End if 
+	
+	// ____________________________________________________________________________________________________________
+	// [PRIVATE] - Run 'adb devices'
+Function _devices($firstAttempt : Boolean)
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470._adbStartRetried:=False:C215
+		
+	End if 
+	
+	This:C1470.launch(This:C1470.cmd+" devices")
+	
+	If (This:C1470.success)
+		
+		If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)
+			
+			If (Not:C34(This:C1470._adbStartRetried))
+				
+				// Adb was not ready, restart command
+				This:C1470._adbStartRetried:=True:C214
+				This:C1470._devices()
+				
+			Else 
+				
+				This:C1470._pushError(This:C1470.errorStream)
+				
+			End if 
+			
+		Else 
+			
+/* The content of the outputStream looks like this:
+			
+    List of devices attached
+    ZY22BJDD3L\tdevice
+    emulator-5554\tdevice
+			
+*/
+			
+		End if 
+		
+	Else 
+		
+		This:C1470._pushError("(failed to get device list)")
+		
+	End if 
 	
 /*Function killServer
 var $0 : Object

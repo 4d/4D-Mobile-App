@@ -117,7 +117,7 @@ Case of
 		Else 
 			
 			// Cancel build process
-			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "build_stop")
+			EDITOR.callMeBack("build_stop")
 			
 		End if 
 		
@@ -126,12 +126,12 @@ Case of
 		
 		If ($validated)
 			
-			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "allowStructureModification"; Form:C1466.option)
+			EDITOR.callMeBack("allowStructureModification"; Form:C1466.option)
 			
 		Else 
 			
 			// Cancel build process
-			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "build_stop")
+			EDITOR.callMeBack("build_stop")
 			
 		End if 
 		
@@ -156,7 +156,7 @@ Case of
 		Else 
 			
 			// Cancel build process
-			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "build_stop")
+			EDITOR.callMeBack("build_stop")
 			
 		End if 
 		

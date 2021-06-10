@@ -17,6 +17,8 @@ Class constructor
 	This:C1470.minAndroidVersion:=10  //to be rename Android version
 	This:C1470.minSdkVersion:=21
 	
+	This:C1470.bootTimeOut:=6000  // 1 minutes
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the Android SDK folder object
 Function androidSDKFolder()->$folder : 4D:C1709.Folder

@@ -438,10 +438,10 @@ Case of
 			EDITOR.updateRibbon()
 			
 			// Update structure dependencies, if any
-			EDITOR.post("tableList")
-			EDITOR.post("fieldList")
-			EDITOR.post("tableProperties")
-			EDITOR.post("mainMenu")
+			EDITOR.callMeBack("tableList")
+			EDITOR.callMeBack("fieldList")
+			EDITOR.callMeBack("tableProperties")
+			EDITOR.callMeBack("mainMenu")
 			
 		Else 
 			

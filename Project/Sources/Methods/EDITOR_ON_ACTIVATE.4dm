@@ -8,7 +8,6 @@
 // Action to performe when the editor is activated
 // ----------------------------------------------------
 // Declarations
-var $panel : Text
 
 // ----------------------------------------------------
 // Initialisations
@@ -22,8 +21,8 @@ If (FORM Get current page:C276=1)  // #MARK_OBSOLETE : with the wizards the 2nd 
 	EDITOR.updateColorScheme()
 	
 	// Verify the web server configuration
-	EDITOR.post("checkingServerConfiguration")
-	EDITOR.post("refreshServer")
+	EDITOR.callMeBack("checkingServerConfiguration")
+	EDITOR.callMeBack("refreshServer")
 	
 	If (FEATURE.with("android"))
 		
@@ -45,6 +44,7 @@ If (FORM Get current page:C276=1)  // #MARK_OBSOLETE : with the wizards the 2nd 
 	_o_editor_PROJECT_AUDIT
 	
 	// Refresh displayed panels
+	var $panel : Text
 	For each ($panel; panel_Objects)
 		
 		EDITOR.executeInSubform($panel; "panel_REFRESH")

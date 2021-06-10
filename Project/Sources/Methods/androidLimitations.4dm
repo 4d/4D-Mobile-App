@@ -15,11 +15,9 @@ If (FEATURE.with("android"))
 			
 			If (Count parameters:C259>=2)
 				
-				var $o : Object
-				$o:=New object:C1471
-				$o.message:=$message
-				$o.type:="android"
-				EDITOR.call("footer"; $o)
+				EDITOR.callMeBack("footer"; New object:C1471(\
+					"message"; $message; \
+					"type"; "android"))
 				
 			End if 
 		End if 

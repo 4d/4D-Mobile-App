@@ -76,20 +76,20 @@ Case of
 			$Obj_in.action:="goToPage"
 			$Obj_in.page:=Delete string:C232($Txt_selector; 1; 5)
 			
-			CALL FORM:C1391($Win_me; $kTxt_callbackMethod; "goToPage"; $Obj_in)
+			EDITOR.callMeBack("goToPage"; $Obj_in)
 			
 		Else 
 			
-			CALL FORM:C1391($Win_me; $kTxt_callbackMethod; "goToPage"; New object:C1471(\
-				"page"; Delete string:C232($Txt_selector; \
-				1; 5)))
+			EDITOR.callMeBack("goToPage"; New object:C1471(\
+				"page"; Delete string:C232($Txt_selector; 1; 5)\
+				))
 			
 		End if 
 		
 		//______________________________________________________
 	: ($Txt_selector="build_stop")  // #MARK_TO_REMOVE
 		
-		CALL FORM:C1391($Win_me; $kTxt_callbackMethod; $Txt_selector)
+		EDITOR.callMeBack($Txt_selector)
 		
 		//______________________________________________________
 	: ($Txt_selector="build_deleteProductFolder")  // #MARK_TO_REMOVE
@@ -223,11 +223,6 @@ Case of
 			"ok"; Get localized string:C991("continue"); \
 			"okAction"; JSON Stringify:C1217($Obj_ok); \
 			"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
-		
-		//______________________________________________________
-	: ($Txt_selector="build_deviceOnline")
-		
-		CALL FORM:C1391($Win_me; "BUILD"; $Obj_in.build)  // Relaunch the build process
 		
 		//______________________________________________________
 	: ($Txt_selector="build_configuratorInstalled")\

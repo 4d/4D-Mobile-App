@@ -57,7 +57,7 @@ Else   // <== Widgets method
 					PROJECT.save()
 					
 					// Verify the web server configuration
-					CALL FORM:C1391($f.window; "editor_CALLBACK"; "checkingServerConfiguration")
+					EDITOR.callMeBack("checkingServerConfiguration")
 					
 					//_____________________________________
 				: ($e.code=On Getting Focus:K2:7)\

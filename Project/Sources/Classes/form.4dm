@@ -1,7 +1,4 @@
-//====================================================================
-Class extends tools
-
-//====================================================================
+//===================================================================================
 Class constructor($method : Text)
 	
 	Super:C1705()
@@ -22,18 +19,18 @@ Class constructor($method : Text)
 		
 	End if 
 	
-	//====================================================================
+	//===================================================================================
 Function setTitle($title : Text)
 	
 	SET WINDOW TITLE:C213($title; This:C1470.window)
 	
-	//====================================================================
+	//===================================================================================
 	// Defines the name of the callback method
 Function setCallBack($method : Text)
 	
 	This:C1470.callback:=$method
 	
-	//====================================================================
+	//===================================================================================
 	// Start a timer to update the user interface
 	// Default delay is ASAP
 Function refresh($delay : Integer)
@@ -49,17 +46,11 @@ Function refresh($delay : Integer)
 	End if 
 	
 	//===================================================================================
-	// Post a simple action message for the current form (retro-call)
-Function post($action : Text)
-	
-	CALL FORM:C1391(This:C1470.window; This:C1470.callback; $action)
-	
-	//====================================================================
-	// Generates a CALL FORM using the current form (retro-call)
-	// .call()
-	// .call( param : Collection )
-	// .call( param1, param2, …, paramN )
-Function call($param; $param1; $paramN)
+	// Creates a CALL FORM of the current form (callback) & with current callback method
+	// .callMeBack ()
+	// .callMeBack ( param : Collection )
+	// .callMeBack ( param1, param2, …, paramN )
+Function callMeBack($param; $param1; $paramN)
 	
 	C_VARIANT:C1683(${1})
 	
@@ -112,7 +103,56 @@ Function call($param; $param1; $paramN)
 		
 	End if 
 	
-	//====================================================================
+	//===================================================================================
+	// Creates a CALL FORM of the current form (callback) with the passed method
+	// .callMe ( method : Text )
+	// .callMe ( method : Text ; param : Collection )
+	// .callMe ( method : Text ; param1, param2, …, paramN )
+Function callMe($method : Text; $param1; $paramN)
+	
+	C_VARIANT:C1683(${2})
+	
+	var $code : Text
+	var $i : Integer
+	var $parameters : Collection
+	
+	If (Count parameters:C259=1)
+		
+		CALL FORM:C1391(This:C1470.window; $method)
+		
+	Else 
+		
+		$code:="<!--#4DCODE CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+$method+"\""
+		
+		If (Value type:C1509($2)=Is collection:K8:32)
+			
+			$parameters:=$2
+			
+			For ($i; 0; $parameters.length-1; 1)
+				
+				$code:=$code+"; $1["+String:C10($i)+"]"
+				
+			End for 
+			
+		Else 
+			
+			$parameters:=New collection:C1472
+			
+			For ($i; 2; Count parameters:C259; 1)
+				
+				$parameters.push(${$i})
+				$code:=$code+"; $1["+String:C10($i-2)+"]"
+				
+			End for 
+		End if 
+		
+		$code:=$code+")-->"
+		
+		PROCESS 4D TAGS:C816($code; $code; $parameters)
+		
+	End if 
+	
+	//===================================================================================
 	// Associate a worker to the current form
 Function setWorker($worker)
 	
@@ -126,35 +166,79 @@ Function setWorker($worker)
 	End if 
 	
 	//===================================================================================
-	// Post a simple message for the associated or the given worker reference
-Function callWorker($method : Text; $worker)
+	// Assigns a task to the associated worker
+	// .callWorker ( method : Text )
+	// .callWorker ( method : Text ; param : Collection )
+	// .callWorker ( method : Text ; param1, param2, …, paramN )
+	// ---------------------------------------------------------------------------------
+	//#TO_DO : Accept an integer as first parameter to allow calling a specific worker.
+	// .callWorker ( process : Integer ; method : Text )
+	// .callWorker ( process : Integer ; method : Text ; param : Collection )
+	// .callWorker ( process : Integer ; method : Text ; param1, param2, …, paramN )
+	// ---------------------------------------------------------------------------------
+Function callWorker($method; $param; $param1; $paramN)
 	
-	If (Count parameters:C259>=2)
+	C_VARIANT:C1683(${2})
+	
+	var $code : Text
+	var $i : Integer
+	var $parameters : Collection
+	
+	If (This:C1470.worker#Null:C1517)
 		
-		var $type : Integer
-		$type:=Value type:C1509($worker)
-		
-		If (Asserted:C1132(($type=Is text:K8:3) | ($type=Is real:K8:4) | ($type=Is longint:K8:6); "Wrong parameter type"))
+		If (Count parameters:C259=1)
 			
-			CALL WORKER:C1389($worker; $method)
+			If (Asserted:C1132(This:C1470.worker#Null:C1517; "No associated worker"))
+				
+				CALL WORKER:C1389(This:C1470.worker; $method)
+				
+			End if 
+			
+		Else 
+			
+			$code:="<!--#4DCODE CALL WORKER:C1389(\""+This:C1470.worker+"\"; \""+$method+"\""
+			
+			If (Value type:C1509($2)=Is collection:K8:32)
+				
+				$parameters:=$2
+				
+				For ($i; 0; $parameters.length-1; 1)
+					
+					$code:=$code+"; $1["+String:C10($i)+"]"
+					
+				End for 
+				
+			Else 
+				
+				$parameters:=New collection:C1472
+				
+				For ($i; 2; Count parameters:C259; 1)
+					
+					$parameters.push(${$i})
+					$code:=$code+"; $1["+String:C10($i-2)+"]"
+					
+				End for 
+			End if 
+			
+			$code:=$code+")-->"
+			
+			PROCESS 4D TAGS:C816($code; $code; $parameters)
 			
 		End if 
 		
 	Else 
 		
-		If (Asserted:C1132(This:C1470.worker#Null:C1517; "No associated worker"))
-			
-			CALL WORKER:C1389(This:C1470.worker; $method)
-			
-		End if 
+		ASSERT:C1129(False:C215; "Worker is not is not defined.")
+		
 	End if 
 	
-	//====================================================================
-	// Execute a project method in the context of a subform (without return value)
-	// .execute( subform : Text ; method : Text )
-	// .execute( subform : Text ; method : Text ; param : Collection )
-	// .execute( subform : Text ; method : Text ; param1, param2, …, paramN )
+	//===================================================================================
+	// Executes a project method in the context of a subform (without returned value)
+	// .executeInSubform ( subform : Text ; method : Text )
+	// .executeInSubform ( subform : Text ; method : Text ; param : Collection )
+	// .executeInSubform ( subform : Text ; method : Text ; param1, param2, …, paramN )
 Function executeInSubform($subform : Text; $method : Text; $param; $param1; $paramN)
+	
 	C_VARIANT:C1683(${3})
 	
 	var $code : Text
@@ -198,7 +282,7 @@ Function executeInSubform($subform : Text; $method : Text; $param; $param1; $par
 		
 	End if 
 	
-	//====================================================================
+	//===================================================================================
 Function dimensions()->$dimensions : Object
 	
 	var $height; $width : Integer
@@ -209,42 +293,42 @@ Function dimensions()->$dimensions : Object
 		"width"; $width; \
 		"height"; $height)
 	
-	//====================================================================
+	//===================================================================================
 Function height()->$height : Integer
 	
 	$height:=This:C1470.dimensions().height
 	
-	//====================================================================
+	//===================================================================================
 Function width()->$width : Integer
 	
 	$width:=This:C1470.dimensions().width
 	
-	//====================================================================
+	//===================================================================================
 Function goToPage($page : Integer)
 	
 	FORM GOTO PAGE:C247($page)
 	
-	//====================================================================
-Function getPage()->$page : Integer
+	//===================================================================================
+Function page()->$page : Integer
 	
 	$page:=FORM Get current page:C276
 	
-	//====================================================================
+	//===================================================================================
 Function firstPage()
 	
 	FORM FIRST PAGE:C250
 	
-	//====================================================================
+	//===================================================================================
 Function lastPage()
 	
 	FORM LAST PAGE:C251
 	
-	//====================================================================
+	//===================================================================================
 Function nextPage()
 	
 	FORM NEXT PAGE:C248
 	
-	//====================================================================
+	//===================================================================================
 Function previousPage()
 	
 	FORM PREVIOUS PAGE:C249

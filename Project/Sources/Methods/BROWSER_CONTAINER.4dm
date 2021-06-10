@@ -21,7 +21,7 @@ If ($e.code=-1)  // Close
 				$data.action:="forms"
 				$data.selector:=Replace string:C233($data.selector; "form-"; "")
 				
-				EDITOR.call("setForm"; $data)
+				EDITOR.callMeBack("setForm"; $data)
 				
 				//______________________________________________________
 			: ($data.selector="form-formatter")

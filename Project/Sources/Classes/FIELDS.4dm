@@ -712,8 +712,7 @@ Function iconPicker($e : Object)
 		$o.prompt:=cs:C1710.str.new("chooseAnIconForTheField").localized((This:C1470.fieldList.columns["fields"].pointer)->{$e.row})
 		//%W+533.3
 		
-		// This.showPicker($o)
-		CALL FORM:C1391(This:C1470.window; "editor_CALLBACK"; "pickerShow"; $o)
+		This:C1470.callMeBack("pickerShow"; $o)
 		
 	Else 
 		

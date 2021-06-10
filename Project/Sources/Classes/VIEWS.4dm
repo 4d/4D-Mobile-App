@@ -491,7 +491,7 @@ Function setTemplate($browser : Object)
 				If (Not:C34(Form:C1466.$project.status.project))
 					
 					// Launch project verifications
-					This:C1470.form.form.call("projectAudit")
+					This:C1470.callMeBack("projectAudit")
 					
 				End if 
 			End if 

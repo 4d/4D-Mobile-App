@@ -120,7 +120,7 @@ Case of
 		If (Num:C11(EDITOR.window)#0)
 			
 			// Send result
-			EDITOR.call("projectAuditResult"; PROJECT.audit())
+			EDITOR.callMeBack("projectAuditResult"; PROJECT.audit())
 			
 		Else 
 			
@@ -150,10 +150,10 @@ Case of
 		Form:C1466.audit:=EDITOR.projectAudit
 		
 		// Update UI
-		EDITOR.call("tableProperties")
-		EDITOR.call("fieldProperties")
-		EDITOR.call("refreshViews")
-		EDITOR.call("update_data")
+		EDITOR.callMeBack("tableProperties")
+		EDITOR.callMeBack("fieldProperties")
+		EDITOR.callMeBack("refreshViews")
+		EDITOR.callMeBack("update_data")
 		
 		If (Bool:C1537(EDITOR.projectAudit.success))  // Update status
 			
@@ -381,15 +381,14 @@ Case of
 				
 			End if 
 			
-			// Update UI [
-			CALL FORM:C1391($form.window; "editor_CALLBACK"; "tableProperties")
-			CALL FORM:C1391($form.window; "editor_CALLBACK"; "fieldProperties")
-			CALL FORM:C1391($form.window; "editor_CALLBACK"; "refreshViews")
-			CALL FORM:C1391($form.window; "editor_CALLBACK"; "update_data")
-			//]
+			// Update UI
+			EDITOR.callMeBack("tableProperties")
+			EDITOR.callMeBack("fieldProperties")
+			EDITOR.callMeBack("refreshViews")
+			EDITOR.callMeBack("update_data")
 			
 			// Relaunch audit
-			CALL FORM:C1391($form.window; "editor_CALLBACK"; "projectAudit")
+			EDITOR.callMeBack("projectAudit")
 			
 			// Save project
 			PROJECT.save()

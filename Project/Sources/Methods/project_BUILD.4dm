@@ -391,14 +391,10 @@ If (Asserted:C1132($project#Null:C1517))
 								
 								If (Not:C34($success))
 									
-									// Ask for a device
-									$Obj_ok:=New object:C1471(\
-										"action"; "build_deviceOnline"; \
-										"build"; $data)
-									
-									$Obj_cancel:=New object:C1471(\
-										"action"; "build_manualInstallation"; \
-										"build"; $data)
+									var $manual : Object
+									$data:=cs:C1710.project.new($data).cleaned()
+									$manual:=OB Copy:C1225($data)
+									$manual.manualInstallation:=True:C214
 									
 									POST_MESSAGE(New object:C1471(\
 										"target"; EDITOR.window; \
@@ -407,13 +403,16 @@ If (Asserted:C1132($project#Null:C1517))
 										"title"; Get localized string:C991("noDeviceFound"); \
 										"additional"; Get localized string:C991("makeSureThatADeviceIsConnected"); \
 										"ok"; Get localized string:C991("continue"); \
-										"okAction"; JSON Stringify:C1217($Obj_ok); \
+										"okFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $data)); \
 										"cancel"; Get localized string:C991("manualInstallation"); \
-										"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
+										"cancelFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $manual))\
+										))
 									
 								End if 
 								
 							Else 
+								
+								$data:=cs:C1710.project.new($data).cleaned()
 								
 								// Ask for installation
 								$Obj_ok:=New object:C1471(\

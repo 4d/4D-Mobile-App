@@ -366,13 +366,13 @@ Function setIcon($picture : Picture)
 	// Open the iOS icons folder
 Function openAppleIconFolder
 	
-	SHOW ON DISK:C922(Form:C1466.$project.folder.folder("Assets.xcassets/AppIcon.appiconset").platformPath; *)
+	SHOW ON DISK:C922(PROJECT._folder.folder("Assets.xcassets/AppIcon.appiconset").platformPath; *)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Open the iOS icons folder
 Function openAndroidIconFolder
 	
-	SHOW ON DISK:C922(Form:C1466.$project.folder.folder("Android").platformPath; *)
+	SHOW ON DISK:C922(PROJECT._folder.folder("Android").platformPath; *)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Check the product name constraints

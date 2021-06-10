@@ -68,7 +68,7 @@ Case of
 		OBJECT SET VISIBLE:C603(*; "browser"; True:C214)
 		OBJECT SET SUBFORM:C1138(*; "browser"; "BROWSER")
 		
-		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "setURL"; $in)
+		EDITOR.callMeBack("setURL"; $in)
 		
 		//______________________________________________________
 	: ($message="projectAuditResult")
@@ -149,12 +149,12 @@ Case of
 				//………………………………………………………………………………
 			: ($in.panel#Null:C1517)
 				
-				CALL FORM:C1391($form.window; $form.callback; "goTo"; $in)
+				EDITOR.callMeBack("goTo"; $in)
 				
 				//………………………………………………………………………………
 			: ($in.tab#Null:C1517)
 				
-				CALL FORM:C1391($form.window; $form.callback; "selectTab"; $in)
+				EDITOR.callMeBack("selectTab"; $in)
 				
 				//………………………………………………………………………………
 		End case 
@@ -176,7 +176,7 @@ Case of
 				//If (EDITOR.android)
 				//$fileManifest:=cs.path.new().cacheSdkAndroid().parent.file("manifest.json")
 				//If (Not($fileManifest.exists))\
-																				 | ($fileManifest.modificationDate#Current date)
+										 | ($fileManifest.modificationDate#Current date)
 				//// Get the last 4D Mobile Android SDK from AWS server if any
 				//EDITOR.downloadSDK("aws"; "android"; False)
 				//End if 
@@ -187,8 +187,11 @@ Case of
 				
 			End if 
 			
-			// Update the device list
-			EDITOR.getDevices()
+			If (EDITOR.devices=Null:C1517)  // First time -> Update the device list
+				
+				EDITOR.getDevices()
+				
+			End if 
 			
 		Else 
 			

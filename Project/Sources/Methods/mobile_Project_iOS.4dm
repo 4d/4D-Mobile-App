@@ -47,7 +47,10 @@ If (Count parameters:C259>=1)
 	// Remove circular references
 	var $o : Object
 	$o:=OB Copy:C1225($in)
-	OB REMOVE:C1226($o.project.$project; "$dialog")
+	If ($o.project.$project#Null:C1517)
+		OB REMOVE:C1226($o.project.$project; "$dialog")
+	End if 
+	
 	ob_writeToFile($o; $cacheFolder.file("lastBuild.ios.4dmobile"); True:C214)
 	
 Else 

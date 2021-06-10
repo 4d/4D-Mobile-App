@@ -404,7 +404,7 @@ Case of
 					"title"; "updateTheProject"; \
 					"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
 					"ok"; "update"; \
-					"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "syncDataModel"))))
+					"okFormula"; Formula:C1597(EDITOR.callMeBack("syncDataModel"))))
 				
 				//______________________________________________________
 			: ($menu.choice="openThe4dMobileAppLog")
@@ -426,7 +426,7 @@ Case of
 				Folder:C1567(Get 4D folder:C485(-1); fk platform path:K87:2).file("key.pem").copyTo($folder; fk overwrite:K87:5)
 				
 				// Verify the web server configuration
-				CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "checkingServerConfiguration")
+				EDITOR.callMeBack("checkingServerConfiguration")
 				
 				//______________________________________________________
 			: ($menu.choice="_openDiagnosticReports")

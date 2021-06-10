@@ -163,6 +163,13 @@ Case of
 				End if 
 			End if 
 			
+			
+			If (EDITOR.xCode.ready) | (EDITOR.studio.ready)
+				
+				$menu.line().append("updatingTheListOfDevices"; "updateTheDeviceList")
+				
+			End if 
+			
 		Else 
 			
 			If (EDITOR.devices.length>0)
@@ -192,6 +199,12 @@ Case of
 				
 				// Nothing selected
 				//
+				
+				//______________________________________________________
+			: ($menu.choice="updateTheDeviceList")
+				
+				EDITOR.getDevices()
+				EDITOR.updateRibbon()
 				
 				//______________________________________________________
 			: ($menu.choice="checkAndroidInstallation")\

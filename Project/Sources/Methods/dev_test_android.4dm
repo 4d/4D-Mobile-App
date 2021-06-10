@@ -2,6 +2,70 @@
 
 
 Case of 
+		//______________________________________________________
+	: (True:C214)
+		
+		//var $emulator : cs.androidEmulator
+		//$emulator:=cs.androidEmulator.new()
+		
+		//var $possibleSimulators : Collection
+		//$possibleSimulators:=$emulator.availableSimulators()
+		
+		var $adb : cs:C1710.adb
+		$adb:=cs:C1710.adb.new()
+		
+		var $plugged : Collection
+		$plugged:=$adb.plugged()  // -> Plugged devices
+		
+		var $serial : Text
+		If ($plugged.length>0)
+			
+			$serial:=$plugged[0].udid
+			
+			$o:=$adb.getDeviceProperties($serial)
+			
+			var $packages : Collection
+			$packages:=$adb.packageList($serial)
+			$packages:=$adb.userPackageList($serial)
+			
+		End if 
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		
+		
+		var $adb : cs:C1710.adb
+		$adb:=cs:C1710.adb.new()
+		
+		$adb.launch($adb.cmd+" --help")
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		
+		var $emulator : cs:C1710.androidEmulator
+		$emulator:=cs:C1710.androidEmulator.new()
+		
+		
+		var $possibleSimulators : Collection
+		$possibleSimulators:=$emulator.availableSimulators()
+		
+		var $adb : cs:C1710.adb
+		$adb:=cs:C1710.adb.new()
+		
+		var $availableDevices : Collection
+		$availableDevices:=$adb.availableDevices()  // -> Attached devices (plugged devices & booted simulators)
+		
+		If ($emulator.isBooted("emulator-5554"))
+			
+			
+		Else 
+			
+			$o:=$emulator.start("emulator-5554"; True:C214)
+			
+		End if 
+		
 		
 		//______________________________________________________
 	: (True:C214)
@@ -23,7 +87,7 @@ Case of
 		$availableDevices:=$adb.availableDevices("12")
 		
 		var $plugged : Collection
-		$plugged:=$adb.connected()  // -> Plugged devices
+		$plugged:=$adb.plugged()  // -> Plugged devices
 		
 		var $serial : Text
 		If ($plugged.length>0)
@@ -37,19 +101,19 @@ Case of
 		
 		
 		
-		$plugged:=$adb.connected("10")  // -> Plugged devices
-		$plugged:=$adb.connected("11")  // -> Plugged devices
+		$plugged:=$adb.plugged("10")  // -> Plugged devices
+		$plugged:=$adb.plugged("11")  // -> Plugged devices
 		
 		//== Get device android version
 		//adb shell getprop ro.build.version.release
 		//$adb.launch($adb.cmd+" -s "+$plugged[0].udid+" shell getprop ro.build.version.release")
 		
-		$plugged:=$adb.connected()  // -> Plugged devices
+		$plugged:=$adb.plugged()  // -> Plugged devices
 		//$adb.launch($adb.cmd+" -s "+$plugged[0].udid+" shell getprop")
 		
 		var $o : Object
-		$o:=$adb.getProp($serial)
-		$o:=$adb.getProp("emulator-5554")
+		$o:=$adb.getDeviceProperties($serial)
+		$o:=$adb.getDeviceProperties("emulator-5554")
 		
 		If ($serial#"")
 			
@@ -64,7 +128,7 @@ Case of
 				//$adb.uninstallApp("com.myCompany.My_App_4"; $serial)
 				
 			Else 
-				// A "If" statement should never omit "Else" 
+				// A "If" statement should never omit "Else"
 				
 				
 			End if 
@@ -81,7 +145,7 @@ Case of
 		
 		$c:=$adb.availableDevices()
 		$c:=$adb.listBootedDevices()
-		$c:=$adb.connected()
+		$c:=$adb.plugged()
 		
 		//var $avd : cs.avd
 		//$avd:=cs.avd.new()
@@ -139,7 +203,7 @@ Case of
 		
 		//$ready:=$sdk.isReady()
 		
-		//End if 
+		//End if
 		
 		//______________________________________________________
 	: (True:C214)

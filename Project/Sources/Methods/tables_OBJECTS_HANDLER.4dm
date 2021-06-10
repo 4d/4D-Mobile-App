@@ -119,7 +119,7 @@ Case of
 							$Obj_picker.prompt:=cs:C1710.str.new("chooseAnIconForTheTable").localized((UI.pointer($Obj_form.tables))->{$Lon_row})
 							
 							// Display selector
-							CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "pickerShow"; $Obj_picker)
+							This:C1470.callMeBack("pickerShow"; $Obj_picker)
 							
 						End if 
 					End if 
