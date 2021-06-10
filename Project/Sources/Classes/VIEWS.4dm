@@ -17,7 +17,7 @@ Class constructor
 	
 	This:C1470.context:=editor_INIT
 	
-	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
+	If (OB Is empty:C1297(This:C1470.context))
 		
 		This:C1470.tableWidget:=cs:C1710.picture.new("tables")
 		
@@ -344,7 +344,8 @@ Function fieldList($table : Variant)->$result : Object
 	//============================================================================
 	// Attach a form (Call back from widget)
 Function setTemplate($browser : Object)
-	var $currentTemplate; $newTemplate; $selector; $tableID : Text
+	
+	var $currentTemplate; $newTemplate; $selector; $tableID; $url : Text
 	var $update : Boolean
 	var $browser; $context; $o; $target : Object
 	var $c : Collection
@@ -374,15 +375,17 @@ Function setTemplate($browser : Object)
 				
 			Else 
 				
-				// Show browser
-				
+				// * SHOW BROWSER
 				If (FEATURE.with("android"))
 					
-					var $url : Text
 					$url:="https://4d-go-mobile.github.io/gallery/"
+					
 					If (FEATURE.with("devGallery"))
+						
 						$url:="http://localhost:8080/"
+						
 					End if 
+					
 					Case of 
 							//______________________________________________________
 						: (PROJECT.$android & PROJECT.$ios)

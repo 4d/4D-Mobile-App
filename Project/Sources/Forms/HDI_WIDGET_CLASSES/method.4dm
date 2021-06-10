@@ -59,7 +59,7 @@ End case
 
 $l:=FORM Get current page:C276
 
-If (Form:C1466.pages[$l]=Null:C1517) | Shift down:C543
+If (Form:C1466.pages[$l]=Null:C1517)
 	
 	Form:C1466.pages[$l]:=True:C214
 	

@@ -135,7 +135,7 @@ Else   // <== WIDGETS METHOD
 			
 			$menu:=cs:C1710.menu.new()\
 				.append("useTheSystemColorSelector"; "picker")\
-				.append("useTheMainColorOfTheIcon"; "fromIcon").enable($ƒ.mainColor#Num:C11($ƒ.iconColor))\
+				.append("useTheMainColorOfTheIcon"; "fromIcon").enable(cs:C1710.color.new($ƒ.mainColor).main#Num:C11($ƒ.iconColor))\
 				.popup($ƒ.colorButton)
 			
 			If ($menu.selected)

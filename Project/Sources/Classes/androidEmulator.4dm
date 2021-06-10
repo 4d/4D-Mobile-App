@@ -289,7 +289,7 @@ Function start($avdName : Text; $wait : Boolean)->$result : Object
 			Else 
 				
 				// Timeout
-				$result.errors.push("(timeout time reached when starting the emulator)")
+				$result.errors.push("(timeout reached when starting the emulator)")
 				
 			End if 
 			

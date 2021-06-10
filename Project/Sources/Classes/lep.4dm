@@ -1,5 +1,3 @@
-//Class extends tools
-
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
@@ -21,8 +19,8 @@ Function reset()->$this : cs:C1710.lep
 	This:C1470.outputStream:=Null:C1517
 	This:C1470.errorStream:=""
 	This:C1470.pid:=0
-	This:C1470.resultInErrorStream:=False:C215  // Allows, if True, to reroutes stderr message to stdout
 	
+	This:C1470.resultInErrorStream:=False:C215  // Allows, if True, to reroutes stderr message to stdout
 	This:C1470.debug:=Not:C34(Is compiled mode:C492)
 	
 	This:C1470.setCharSet()
@@ -40,7 +38,7 @@ Function setCharSet($charset : Text)->$this : cs:C1710.lep
 		
 	Else 
 		
-		// Reset
+		// Default
 		This:C1470.charSet:="UTF-8"
 		
 	End if 
@@ -56,7 +54,7 @@ Function setOutputType($outputType : Integer)->$this : cs:C1710.lep
 		
 	Else 
 		
-		// Reset
+		// Default
 		This:C1470.outputType:=Is text:K8:3
 		
 	End if 
@@ -937,7 +935,6 @@ Function _pushError($message : Text)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function log()
 	
-	//var $t : Text
 	var $current; $o : Object
 	var $c; $log : Collection
 	
@@ -956,8 +953,9 @@ Function log()
 	
 	If ($current#Null:C1517)
 		
-		$log.push($current.name+"()")
+		$log.push($current.name+("()"*Num:C11(Position:C15("."; $current.name)>0)))
 		$log.push("\r\rCMD:")
+		
 	Else 
 		
 		$log.push("CMD:")
@@ -967,15 +965,19 @@ Function log()
 	$log.push(This:C1470.command)
 	$log.push("\r\rSTATUS:")
 	$log.push(Choose:C955(This:C1470.success; "success"; "failed"))
+	
 	If (Length:C16(This:C1470.outputStream)>0)
+		
 		$log.push("\r\rOUTPUT:")
 		$log.push(This:C1470.outputStream)
+		
 	End if 
+	
 	If (Length:C16(This:C1470.errorStream)>0)
+		
 		$log.push("\r\rERROR:")
 		$log.push(This:C1470.errorStream)
+		
 	End if 
-	//$t:=$log.join(" ")
-	//LOG EVENT(Into 4D debug message; $t; Choose(This.success; Information message; Warning message))
 	
 	LOG EVENT:C667(Into 4D debug message:K38:5; $log.join(" "); Error message:K38:3)

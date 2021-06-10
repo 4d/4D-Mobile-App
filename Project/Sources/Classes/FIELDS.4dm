@@ -10,7 +10,7 @@ Class constructor
 	
 	This:C1470.context:=editor_INIT
 	
-	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
+	If (OB Is empty:C1297(This:C1470.context))
 		
 		This:C1470.fieldList:=cs:C1710.listbox.new("01_fields")
 		This:C1470.ids:=cs:C1710.widget.new("IDs")

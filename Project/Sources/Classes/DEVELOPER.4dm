@@ -8,7 +8,7 @@ Class constructor
 	
 	This:C1470.context:=editor_INIT
 	
-	If (OB Is empty:C1297(This:C1470.context)) | Shift down:C543
+	If (OB Is empty:C1297(This:C1470.context))
 		
 		This:C1470.name:=cs:C1710.widget.new("01_name")
 		This:C1470.team:=cs:C1710.widget.new("02_team").enable(Is macOS:C1572)

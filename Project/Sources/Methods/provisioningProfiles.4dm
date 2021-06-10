@@ -147,7 +147,6 @@ Case of
 						// Read it and convert it
 						$response:=_o_plist(New object:C1471("action"; "object"; "domain"; $Txt_posix))
 						
-						
 						If (Test path name:C476($Txt_plist)=Is a document:K24:1)
 							
 							DELETE DOCUMENT:C159($Txt_plist)

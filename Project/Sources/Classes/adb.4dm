@@ -27,7 +27,7 @@ Class constructor
 	This:C1470.packageListTimeOut:=24000  // 4 minutes
 	This:C1470.appStartTimeOut:=6000
 	
-	This:C1470.adbStartRetried:=False:C215
+	This:C1470._adbStartRetried:=False:C215
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a collection of attached devices ID (connected and authorized devices or booted simulators)
@@ -47,7 +47,7 @@ Function availableDevices($androidDeploymentTarget : Text)->$devices : Collectio
 		
 	Else 
 		
-		$minVers:=String:C10(This:C1470.minimumVersion)
+		$minVers:=String:C10(This:C1470.minAndroidVersion)
 		
 	End if 
 	
@@ -66,7 +66,7 @@ Function availableDevices($androidDeploymentTarget : Text)->$devices : Collectio
 				
 				If (Count parameters:C259>=1)
 					
-					$keep:=(This:C1470.versionCompare($minVers; This:C1470.getAndroidVersion($serial))<=0)
+					$keep:=(This:C1470.versionCompare($minVers; This:C1470.getDeviceAndroidVersion($serial))<=0)
 					
 				End if 
 				
@@ -97,7 +97,7 @@ Function plugged($androidDeploymentTarget : Text)->$devices : Collection
 		
 	Else 
 		
-		$minVers:=String:C10(This:C1470.minimumVersion)
+		$minVers:=String:C10(This:C1470.minAndroidVersion)
 		
 	End if 
 	
@@ -116,7 +116,7 @@ Function plugged($androidDeploymentTarget : Text)->$devices : Collection
 				
 				If (Count parameters:C259>=1)
 					
-					$keep:=(This:C1470.versionCompare($minVers; This:C1470.getAndroidVersion($serial))<=0)
+					$keep:=(This:C1470.versionCompare($minVers; This:C1470.getDeviceAndroidVersion($serial))<=0)
 					
 				End if 
 				
@@ -150,8 +150,8 @@ Function isDeviceConnected($serial)->$connected : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the name of a connected device or a booted emulator from its UUID
-Function getAndroidVersion($serial : Text)->$version : Text
+	// Returns the Android version of a connected device or a booted emulator from its UUID
+Function getDeviceAndroidVersion($serial : Text)->$version : Text
 	
 	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell getprop ro.build.version.release")
 	
@@ -167,7 +167,7 @@ Function getAndroidVersion($serial : Text)->$version : Text
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the name of a connected device or a booted emulator from its UUID
-Function getSDKVersion($serial : Text)->$version : Text
+Function getDeviceSDKVersion($serial : Text)->$version : Text
 	
 	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell getprop ro.system.build.version.sdk")
 	
@@ -200,7 +200,7 @@ Function getDeviceName($serial : Text)->$name : Text
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a connected device or emulator properties from its serial
-Function getProp($serial : Text)->$properties : Object
+Function getDeviceProperties($serial : Text)->$properties : Object
 	
 	var $buffer; $key; $subkey; $t : Text
 	var $o : Object
@@ -494,7 +494,7 @@ Function _devices($firstAttempt : Boolean)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.adbStartRetried:=False:C215
+		This:C1470._adbStartRetried:=False:C215
 		
 	End if 
 	
@@ -504,10 +504,10 @@ Function _devices($firstAttempt : Boolean)
 		
 		If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)
 			
-			If (Not:C34(This:C1470.adbStartRetried))
+			If (Not:C34(This:C1470._adbStartRetried))
 				
 				// Adb was not ready, restart command
-				This:C1470.adbStartRetried:=True:C214
+				This:C1470._adbStartRetried:=True:C214
 				This:C1470._devices()
 				
 			Else 
@@ -530,7 +530,7 @@ Function _devices($firstAttempt : Boolean)
 		
 	Else 
 		
-		This:C1470._pushError("Failed to get device list")
+		This:C1470._pushError("(failed to get device list)")
 		
 	End if 
 	
@@ -567,7 +567,7 @@ Function waitForBoot($avdName : Text)->$result : Object
 	If (Length:C16($result.serial)=0)
 		
 		// Timeout
-		$result.errors.push("(timeout time reached when starting the emulator)")
+		$result.errors.push("(timeout reached when starting the emulator)")
 		
 	End if 
 	
@@ -617,9 +617,9 @@ Function listBootedDevices  // List booted devices
 	
 	If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)  // adb was not ready, restart command
 		
-		If (Not:C34(This:C1470.adbStartRetried))
+		If (Not:C34(This:C1470._adbStartRetried))
 			
-			This:C1470.adbStartRetried:=True:C214
+			This:C1470._adbStartRetried:=True:C214
 			
 			$0:=This:C1470.listBootedDevices()
 			
@@ -641,7 +641,7 @@ Function listBootedDevices  // List booted devices
 			
 		Else 
 			
-			$0.errors.push("Failed to get adb device list")
+			$0.errors.push("(failed to get adb device list)")
 			
 		End if 
 	End if 
@@ -715,7 +715,7 @@ Function getAvdName  // #TO_DO : NOT THE SAME AS getDeviceName() -> MOVE TO avd
 			
 		Else 
 			// can't find avd name
-			$0.errors.push("Can't get avd name for this emulator")
+			$0.errors.push("(can't get avd name for this emulator)")
 		End if 
 		
 		// Else : serial not found
@@ -778,7 +778,7 @@ Function waitStartApp
 	
 	If ($stepTime>This:C1470.appStartTimeOut)  // Timeout
 		
-		$0.errors.push("Timeout when starting the app")
+		$0.errors.push("(timeout reached when starting the app)")
 		
 		// Else : all ok 
 	End if 
@@ -851,7 +851,7 @@ Function waitForDevicePackageList
 	
 	If ($stepTime>This:C1470.packageListTimeOut)  // Timeout
 		
-		$0.errors.push("Timeout when getting package list")
+		$0.errors.push("(timeout when getting package list)")
 		
 		// Else : all ok 
 	End if 
@@ -907,7 +907,7 @@ Function waitUninstallApp
 	
 	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
-		$0.errors.push("Timeout when uninstalling the app")
+		$0.errors.push("(timeout when uninstalling the app)")
 		
 		// Else : all ok 
 	End if 
@@ -941,7 +941,7 @@ Function waitInstallApp
 	
 	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
-		$0.errors.push("Timeout when installing the app")
+		$0.errors.push("(timeout when uninstalling the app)")
 		
 		// Else : all ok 
 	End if 

@@ -14,7 +14,8 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.minimumVersion:=10
+	This:C1470.minAndroidVersion:=10  //to be rename Android version
+	This:C1470.minSdkVersion:=21
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the Android SDK folder object

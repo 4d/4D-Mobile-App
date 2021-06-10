@@ -30,8 +30,7 @@ Else
 	End if 
 End if 
 
-If (OB Is empty:C1297(Form:C1466.$dialog[$name]))\
- | (Shift down:C543 & Not:C34(Is compiled mode:C492))
+If (OB Is empty:C1297(Form:C1466.$dialog[$name]))
 	
 	// Instantiate the corresponding dialog class instance
 	Form:C1466.$dialog[$name]:=cs:C1710[$name].new()
