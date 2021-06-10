@@ -120,21 +120,15 @@ Case of
 				
 				If (Length:C16($outputStream)>0)
 					
-					If (FEATURE.with("plistClass")) & False:C215
+					If (FEATURE.with("plistClass"))  // & False
 						
 						$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"mp.plist")
 						$file.setText($outputStream)
 						$plist:=cs:C1710.plist.new($file)
 						
 						$response:=New object:C1471(\
-							"success"; $plist.succes; \
+							"success"; $plist.success; \
 							"value"; $plist.content)
-						
-						If ($plist.success)
-							
-							$response.value:=$plist.content
-							
-						End if 
 						
 						$file.delete()
 						
