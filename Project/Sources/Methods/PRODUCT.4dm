@@ -136,7 +136,6 @@ Else   // <== WIDGETS METHOD
 			$menu:=cs:C1710.menu.new()\
 				.append("useTheSystemColorSelector"; "picker")\
 				.append("useTheMainColorOfTheIcon"; "fromIcon").enable(cs:C1710.color.new($ƒ.mainColor).main#Num:C11($ƒ.iconColor))\
-				.append("enterAWebColor"; "cssColor")\
 				.popup($ƒ.colorButton)
 			
 			If ($menu.selected)
@@ -155,19 +154,23 @@ Else   // <== WIDGETS METHOD
 						
 						$color:=cs:C1710.color.new(cs:C1710.bmp.new(OBJECT Get value:C1743("icon")).getDominantColor())
 						$ƒ.iconColor:=$color.main
-						//________________________
-					: ($menu.choice="cssColor")
 						
-						var $requested : Text
-						$requested:=Request:C163(Get localized string:C991("enterAWebColor"))
-						If (Length:C16($requested)>0)
-							$color:=cs:C1710.color.new($requested)
-							If ($color.isValid())
-								$ƒ.iconColor:=$color.main
-							Else 
-								ALERT:C41(Get localized string:C991("invalidWebColor"))
-							End if 
-						End if 
+/*//________________________
+// not validated by PO because new feature could add a more consequente panel
+// with other ways to enter css color, maybe feature flag for dev, deactivate it
+: ($menu.choice="_o_cssColor")
+						
+var $requested : Text
+$requested:=Request(Get localized string("enterAWebColor"))
+If (Length($requested)>0)
+$color:=cs.color.new($requested)
+If ($color.isValid())
+$ƒ.iconColor:=$color.main
+Else 
+ALERT(Get localized string("invalidWebColor"))
+End if 
+End if 
+*/
 						
 						//________________________
 				End case 
