@@ -137,7 +137,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:scrollbars="none"
-                        android:text="__LABEL__"
+                        android:text="__FIELD_LABEL__"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                         android:textColor="?colorPrimary"
                         app:layout_constraintBottom_toTopOf="@+id/__VALUE_ID__"

@@ -124,7 +124,7 @@
                         android:layout_marginBottom="8dp"
                         android:alpha="0.6"
                         android:scrollbars="none"
-                        android:text="__LABEL__"
+                        android:text="__FIELD_LABEL__"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                         android:textColor="?colorOnSurface"
