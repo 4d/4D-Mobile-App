@@ -10,13 +10,19 @@
 // Declarations
 #DECLARE($IN : Object)
 
-var $e; $o : Object
+var $_in; $e; $o : Object
+
+If (Count parameters:C259>=1)
+	
+	$_in:=$IN
+	
+End if 
 
 // ----------------------------------------------------
 Case of 
 		
 		//=========================================================
-	: ($IN=Null:C1517)  // Form method
+	: ($_in=Null:C1517)  // Form method
 		
 		$e:=FORM Event:C1606
 		
@@ -233,14 +239,14 @@ Case of
 		End case 
 		
 		//=========================================================
-	: ($IN.action=Null:C1517)
+	: ($_in.action=Null:C1517)
 		
 		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
 		
 		//=========================================================
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$IN.action+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$_in.action+"\"")
 		
 		//=========================================================
 End case 
