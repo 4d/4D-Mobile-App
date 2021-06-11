@@ -116,7 +116,7 @@
                     IMAGE VIEW OR A TEXT VIEW, AND IT WILL HAVE A LABEL IN A TEXT VIEW -->
                     <TextView
                         android:id="@+id/__LABEL_ID__"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"

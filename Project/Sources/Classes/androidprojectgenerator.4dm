@@ -1,12 +1,15 @@
 Class extends androidProcess
 
-Class constructor($java : 4D:C1709.File; $kotlinc : 4D:C1709.File)
+Class constructor($java : 4D:C1709.File; $kotlinc : 4D:C1709.File; $projectPath : Text)
 	
 	Super:C1705()
 	
 	This:C1470.androidprojectgeneratorCmd:="\""+$java.path+"\" -jar androidprojectgenerator.jar"
 	This:C1470.kotlinc:=$kotlinc.path
 	This:C1470.chmodCmd:="chmod"
+	
+	This:C1470.projectPath:=$projectPath
+	This:C1470.drawableFolder:=Folder:C1567(This:C1470.projectPath+"app/src/main/res/drawable")
 	
 	This:C1470.path:=cs:C1710.path.new()
 	This:C1470.vdtool:=cs:C1710.vdtool.new()
@@ -69,8 +72,7 @@ Function generate
 	//
 Function buildEmbeddedDataLib
 	var $0 : Object
-	var $1 : Text  // Project path
-	var $2 : Text  // package name (app name)
+	var $1 : Text  // package name (app name)
 	var $staticDataInitializerFile; $targetFile : 4D:C1709.File
 	var $libFolder : 4D:C1709.Folder
 	
@@ -78,11 +80,11 @@ Function buildEmbeddedDataLib
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$staticDataInitializerFile:=File:C1566($1+"buildSrc/src/main/java/"+$2+".android.build/database/StaticDataInitializer.kt")
+	$staticDataInitializerFile:=File:C1566(This:C1470.projectPath+"buildSrc/src/main/java/"+$1+".android.build/database/StaticDataInitializer.kt")
 	
 	If ($staticDataInitializerFile.exists)
 		
-		$libFolder:=Folder:C1567($1+"buildSrc/libs")
+		$libFolder:=Folder:C1567(This:C1470.projectPath+"buildSrc/libs")
 		$libFolder.create()
 		
 		$targetFile:=$libFolder.file("prepopulation.jar")
@@ -110,18 +112,17 @@ Function buildEmbeddedDataLib
 	//
 Function copyEmbeddedDataLib
 	var $0 : Object
-	var $1 : Text  // Project path
 	var $copySrc; $copyDest : 4D:C1709.File
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$copySrc:=File:C1566($1+"buildSrc/libs/prepopulation.jar")
+	$copySrc:=File:C1566(This:C1470.projectPath+"buildSrc/libs/prepopulation.jar")
 	
 	If ($copySrc.exists)
 		
-		$copyDest:=$copySrc.copyTo(Folder:C1567($1+"app/libs"); fk overwrite:K87:5)
+		$copyDest:=$copySrc.copyTo(Folder:C1567(This:C1470.projectPath+"app/libs"); fk overwrite:K87:5)
 		
 		If ($copyDest.exists)
 			
@@ -141,8 +142,7 @@ Function copyEmbeddedDataLib
 	//
 Function copyResources
 	var $0 : Object
-	var $1 : Text  // Project path
-	var $2 : 4D:C1709.File  // 4D Mobile Project
+	var $1 : 4D:C1709.File  // 4D Mobile Project
 	var $androidAssets; $currentFolder : 4D:C1709.Folder
 	var $currentFile; $copyDest : 4D:C1709.File
 	
@@ -151,7 +151,7 @@ Function copyResources
 		"errors"; New collection:C1472)
 	
 	// Copy "android" resources
-	$androidAssets:=$2.folder("android")
+	$androidAssets:=$1.folder("android")
 	
 	If ($androidAssets.exists)
 		
@@ -164,23 +164,23 @@ Function copyResources
 				If ($currentFolder.name="main")
 					
 					// for Play Store
-					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main"); fk overwrite:K87:5)
+					$copyDest:=$currentFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main"); fk overwrite:K87:5)
 					
 				Else 
 					
 					// for API > 25
-					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/"+$currentFolder.name); fk overwrite:K87:5)
+					$copyDest:=$currentFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/res/"+$currentFolder.name); fk overwrite:K87:5)
 					
 					// for API 25
-					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/"+$currentFolder.name); "ic_launcher_round.png"; fk overwrite:K87:5)
+					$copyDest:=$currentFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/res/"+$currentFolder.name); "ic_launcher_round.png"; fk overwrite:K87:5)
 					
 					// for API < 25
-					$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/"+$currentFolder.name); "ic_launcher.png"; fk overwrite:K87:5)
+					$copyDest:=$currentFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/res/"+$currentFolder.name); "ic_launcher.png"; fk overwrite:K87:5)
 					
 					If ($currentFolder.name="mipmap-xxxhdpi")
 						
 						// for login form, splash screen
-						$copyDest:=$currentFile.copyTo(Folder:C1567($1+"app/src/main/res/drawable"); "logo.png"; fk overwrite:K87:5)
+						$copyDest:=$currentFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/res/drawable"); "logo.png"; fk overwrite:K87:5)
 						
 					End if 
 					
@@ -207,8 +207,7 @@ Function copyResources
 	//
 Function copyDataSet
 	var $0 : Object
-	var $1 : Text  // Project path
-	var $2 : 4D:C1709.File  // 4D Mobile Project
+	var $1 : 4D:C1709.File  // 4D Mobile Project
 	var $xcassets; $copyDest : 4D:C1709.Folder
 	
 	$0:=New object:C1471(\
@@ -216,11 +215,11 @@ Function copyDataSet
 		"errors"; New collection:C1472)
 	
 	// Copy dataSet resources
-	$xcassets:=$2.folder("project.dataSet/Resources/Assets.xcassets")
+	$xcassets:=$1.folder("project.dataSet/Resources/Assets.xcassets")
 	
 	If ($xcassets.exists)
 		
-		$copyDest:=$xcassets.copyTo(Folder:C1567($1+"app/src/main/assets"); fk overwrite:K87:5)
+		$copyDest:=$xcassets.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); fk overwrite:K87:5)
 		
 		If ($copyDest.exists)
 			
@@ -242,19 +241,15 @@ Function copyDataSet
 	//
 Function copyIcons
 	var $0 : Object
-	var $1 : Text  // Project path
-	var $2 : Object  // Datamodel object
+	var $1 : Object  // Datamodel object
 	
-	var $tableIcons; $drawableFolder : 4D:C1709.Folder
-	var $currentFile; $copyDest; $drawable : 4D:C1709.File
-	var $iconPath; $newName : Text
+	var $tableIcons : 4D:C1709.Folder
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
 	$tableIcons:=This:C1470.path.tableIcons()
-	$drawableFolder:=Folder:C1567($1+"app/src/main/res/drawable")
 	
 	If ($tableIcons.exists)
 		
@@ -262,150 +257,67 @@ Function copyIcons
 		
 		var $dataModel; $field : Object
 		
-		For each ($dataModel; OB Entries:C1720($2))
+		For each ($dataModel; OB Entries:C1720($1))
 			
-			$currentFile:=Null:C1517
+			// Check for table image
+			var $Obj_handleDataModelIcon : Object
 			
-			If (OB Is defined:C1231($dataModel.value[""]; "icon"))
+			$Obj_handleDataModelIcon:=This:C1470.handleDataModelIcon($dataModel)
+			
+			If (Not:C34($Obj_handleDataModelIcon.success))
 				
-				$iconPath:=$dataModel.value[""].icon
+				$0.success:=False:C215
+				$0.errors.combine($Obj_handleDataModelIcon.errors)
 				
-				If ($iconPath#"")
-					
-					$currentFile:=This:C1470.path.icon($iconPath)
-					
-				End if 
-				
+				// Else : all ok
 			End if 
 			
 			
-			If (Not:C34(Bool:C1537($currentFile.exists)))
-				
-				var $Obj_createIcon : Object
-				
-				$Obj_createIcon:=This:C1470.createIconAssets($dataModel.value[""])
-				
-				If ($Obj_createIcon.success)
-					
-					$currentFile:=$Obj_createIcon.icon
-					
-				Else 
-					
-					$0.success:=False:C215
-					$0.errors.combine($Obj_createIcon.errors)
-					
-				End if 
-				
-			End if 
+			var $shouldCreateMissingIcon : Boolean
 			
-			If (Bool:C1537($currentFile.exists))
-				
-				$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_nav_icon"; "nav_icon_"+$dataModel.key)
-				
-				$newName:=Lowercase:C14($newName)
-				Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$newName; 0)
-				$newName:=$newName+$currentFile.extension
-				
-				$copyDest:=$currentFile.copyTo($drawableFolder; $newName; fk overwrite:K87:5)
-				
-				If (Not:C34($copyDest.exists))  // Copy failed
-					
-					$0.success:=False:C215
-					$0.errors.push("Could not copy file to destination: "+$copyDest.path)
-					
-					//Else : all ok
-				End if 
-				
-				// Else : already handled
-			End if 
+			$shouldCreateMissingIcon:=This:C1470.willRequireFieldIcons($dataModel)
 			
-			var $field : Object
 			
-			// Check for formatter image to copy
-			For each ($field; OB Entries:C1720($dataModel.value))
+			For each ($field; OB Entries:C1720($dataModel.value))  // For each field in dataModel
 				
-				If (OB Is defined:C1231($field.value; "format"))
+				If ($field.key#"")
 					
-					var $format; $formatName : Text
+					// Check for formatter image
+					var $Obj_copyFormatterImage : Object
 					
-					$format:=$field.value.format
+					$Obj_copyFormatterImage:=This:C1470.copyFormatterImage($field)
 					
-					If (Length:C16($format)>0)
+					If (Not:C34($Obj_copyFormatterImage.success))
 						
-						If (Substring:C12($format; 1; 1)="/")
-							
-							var $formattersFolder; $customFormatterFolder; $imagesFolderInFormatter : 4D:C1709.Folder
-							
-							$formattersFolder:=This:C1470.path.hostFormatters()
-							
-							If ($formattersFolder.exists)
-								
-								$formatName:=Substring:C12($format; 2)
-								
-								$customFormatterFolder:=$formattersFolder.folder($formatName)
-								
-								If ($customFormatterFolder.exists)
-									
-									$imagesFolderInFormatter:=$customFormatterFolder.folder("Images")
-									
-									If ($imagesFolderInFormatter.exists)
-										
-										var $imageFile : 4D:C1709.File
-										
-										For each ($imageFile; $imagesFolderInFormatter.files(fk ignore invisible:K87:22))
-											
-											var $correctedFormatName; $correctedImageName : Text
-											
-											$correctedFormatName:=Lowercase:C14($formatName)
-											Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedFormatName; 0)
-											
-											$correctedImageName:=Lowercase:C14($imageFile.name)
-											Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedImageName; 0)
-											
-											$correctedImageName:=$correctedFormatName+"_"+$correctedImageName+$imageFile.extension
-											
-											$copyDest:=$imageFile.copyTo($drawableFolder; $correctedImageName; fk overwrite:K87:5)
-											
-											If (Not:C34($copyDest.exists))  // Copy failed
-												
-												$0.success:=False:C215
-												$0.errors.push("Could not copy file to destination: "+$copyDest.path)
-												
-												//Else : all ok
-											End if 
-											
-										End for each 
-										
-										// Else : no image to copy
-									End if 
-									
-								Else 
-									
-									// custom folder does not exists
-									$0.success:=False:C215
-									$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
-									
-								End if 
-								
-								// Else : no formatters folder
-							End if 
-							
-							// Else : no custom formatter
-						End if 
+						$0.success:=False:C215
+						$0.errors.combine($Obj_copyFormatterImage.errors)
 						
-						// Else : format empty
+						// Else : all ok
 					End if 
 					
-					// Else : no formatter
+					
+					// Check for field icon
+					var $Obj_handleField : Object
+					
+					$Obj_handleField:=This:C1470.handleField($dataModel; $field; $shouldCreateMissingIcon)
+					
+					If (Not:C34($Obj_handleField.success))
+						
+						$0.success:=False:C215
+						$0.errors.combine($Obj_handleField.errors)
+						
+						// Else : all ok
+					End if 
+					
+					// Else : table metadata
 				End if 
 				
 			End for each 
 			
-			
 		End for each 
 		
 		// Convert SVG to XML
-		This:C1470.vdtool.convert($drawableFolder; $drawableFolder)
+		This:C1470.vdtool.convert(This:C1470.drawableFolder; This:C1470.drawableFolder)
 		
 		If (Not:C34(This:C1470.vdtool.success))
 			
@@ -418,7 +330,9 @@ Function copyIcons
 		// Delete SVG files converted
 		If ($0.success)
 			
-			For each ($drawable; $drawableFolder.files())
+			var $drawable : 4D:C1709.File
+			
+			For each ($drawable; This:C1470.drawableFolder.files())
 				
 				If ($drawable.extension=".svg")
 					
@@ -437,11 +351,432 @@ Function copyIcons
 		$0.errors.push("Missing icons folder : "+$tableIcons.path)
 	End if 
 	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function willRequireFieldIcons
+	var $0 : Boolean
+	var $1 : Object  // dataModel key value object
+	var $field : Object
+	
+	$0:=False:C215
+	
+	For each ($field; OB Entries:C1720($1.value))  // For each field in dataModel
+		
+		If ($field.key#"")
+			
+			If ($field.value.icon#Null:C1517)
+				
+				If (Value type:C1509($field.value.icon)=Is text:K8:3)
+					
+					If ($field.value.icon#"")
+						
+						$0:=True:C214
+						
+					End if 
+					
+				End if 
+				
+			End if 
+			
+			// check in related fields
+			If ($field.value.relatedDataClass#Null:C1517)
+				
+				var $relatedField : Object
+				
+				For each ($relatedField; OB Entries:C1720($field.value))  // For each field in related table
+					
+					If (Value type:C1509($relatedField.value)=Is object:K8:27)
+						
+						If ($relatedField.value.icon#Null:C1517)
+							
+							If (Value type:C1509($relatedField.value.icon)=Is text:K8:3)
+								
+								If ($relatedField.value.icon#"")
+									
+									$0:=True:C214
+									
+								End if 
+								
+							End if 
+							
+						End if 
+						
+					End if 
+					
+				End for each 
+				
+			End if 
+			
+			// Else: table metadata
+		End if 
+		
+	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function handleDataModelIcon
+	var $0 : Object
+	var $1 : Object  // dataModel key value object
+	var $currentFile : 4D:C1709.File
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	// Get defined icon
+	If ($1.value[""].icon#Null:C1517)
+		
+		If (Value type:C1509($1.value[""].icon)=Is text:K8:3)
+			
+			var $iconPath : Text
+			
+			$iconPath:=$1.value[""].icon
+			
+			If ($iconPath#"")
+				
+				$currentFile:=This:C1470.path.icon($iconPath)
+				
+				// Else : icon empty
+			End if 
+			
+			// Else : $dataModel.value[""].icon is not Text
+		End if 
+		
+		// Else : no icon
+	End if 
+	
+	
+	// Create icon if missing
+	If (Not:C34(Bool:C1537($currentFile.exists)))
+		
+		var $Obj_createIcon : Object
+		
+		$Obj_createIcon:=This:C1470.createIconAssets($1.value[""])
+		
+		If ($Obj_createIcon.success)
+			
+			$currentFile:=$Obj_createIcon.icon
+			
+		Else 
+			
+			$0.success:=False:C215
+			$0.errors.combine($Obj_createIcon.errors)
+			
+		End if 
+		
+		// Else : already handled
+	End if 
+	
+	
+	// Copy icon
+	If (Bool:C1537($currentFile.exists))
+		
+		var $Obj_copy : Object
+		var $newName : Text
+		
+		$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "nav_icon_"+$1.key)
+		
+		$Obj_copy:=This:C1470.copyIcon($currentFile; $newName)
+		
+		If (Not:C34($Obj_copy.success))
+			
+			$0.success:=False:C215
+			$0.errors.combine($Obj_copy.errors)
+			
+			// Else : all ok
+		End if 
+		
+		// Else : already handled
+	End if 
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function handleField
+	var $0 : Object
+	var $1 : Object  // dataModel key value object
+	var $2 : Object  // field key value object
+	var $3 : Boolean  // if should create icon if missing
+	var $isRelatedField : Boolean
+	var $Obj_handleFieldIcon : Object
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$isRelatedField:=($2.value.relatedDataClass#Null:C1517)
+	
+	If ($isRelatedField)  // related field
+		
+		var $relatedField : Object
+		
+		For each ($relatedField; OB Entries:C1720($2.value))  // For each field in related table
+			
+			If (Value type:C1509($relatedField.value)=Is object:K8:27)
+				
+				If ($relatedField.value.id#Null:C1517)
+					
+					$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $relatedField.value; $3; $2.value.relatedTableNumber)
+					
+					If (Not:C34($Obj_handleFieldIcon.success))
+						
+						$0.success:=False:C215
+						$0.errors.combine($Obj_handleFieldIcon.errors)
+						
+						// Else : all ok
+					End if 
+					
+					// Else : not a sub field (can be inverseName, relatedTableNumber, relatedDataClass, etc)
+				End if 
+				
+			End if 
+			
+		End for each 
+		
+	Else   // direct field
+		
+		$0:=This:C1470.handleFieldIcon($1; $2; $3; -1)
+		
+	End if 
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function handleFieldIcon
+	var $0 : Object
+	var $1 : Object  // dataModel key value object
+	var $2 : Object  // field key value object
+	var $3 : Boolean  // if should create icon if missing
+	var $4 : Integer  // relatedTableNumber if is related field
+	var $currentFile : 4D:C1709.File
+	var $shouldCreateMissingIcon : Boolean
+	var $field : Object
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	
+	$shouldCreateMissingIcon:=$3
+	
+	If ($2.value#Null:C1517)  // direct field
+		
+		$field:=$2.value
+		
+	Else   // related field
+		
+		$field:=$2
+		
+	End if 
+	
+	// Get defined icon
+	If ($field.icon#Null:C1517)
+		
+		If (Value type:C1509($field.icon)=Is text:K8:3)
+			
+			var $iconPath : Text
+			
+			$iconPath:=$field.icon
+			
+			If ($iconPath#"")
+				
+				$currentFile:=This:C1470.path.icon($iconPath)
+				
+				// Else : icon empty
+			End if 
+			
+			// Else : field.icon is not Text
+		End if 
+		
+		// Else : no icon
+	End if 
+	
+	// Create icon if missing
+	If ((Not:C34(Bool:C1537($currentFile.exists))) & ($shouldCreateMissingIcon=True:C214))
+		
+		var $Obj_createIcon : Object
+		
+		$Obj_createIcon:=This:C1470.createIconAssets($field)
+		
+		If ($Obj_createIcon.success)
+			
+			$currentFile:=$Obj_createIcon.icon
+			
+		Else 
+			
+			$0.success:=False:C215
+			$0.errors.combine($Obj_createIcon.errors)
+			
+		End if 
+		
+		// Else : already handled
+	End if 
+	
+	// Copy icon
+	If (Bool:C1537($currentFile.exists))
+		
+		var $Obj_copy : Object
+		var $newName : Text
+		
+		If ($4>0)
+			
+			$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "field_icon_"+$1.key+"_"+String:C10($4)+"_"+String:C10($field.id))
+			
+		Else 
+			
+			$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "field_icon_"+$1.key+"_"+String:C10($field.id))
+			
+		End if 
+		
+		$Obj_copy:=This:C1470.copyIcon($currentFile; $newName)
+		
+		If (Not:C34($Obj_copy.success))
+			
+			$0.success:=False:C215
+			$0.errors.combine($Obj_copy.errors)
+			
+			// Else : all ok
+		End if 
+		
+		// Else : already handled
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyIcon
+	var $0 : Object
+	var $1 : Object  // icon file
+	var $2 : Text  // new icon name
+	var $newName : Text
+	var $copyDest : 4D:C1709.File
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$newName:=This:C1470.adjustIconName($2; $1.extension)
+	
+	$copyDest:=$1.copyTo(This:C1470.drawableFolder; $newName; fk overwrite:K87:5)
+	
+	If (Not:C34($copyDest.exists))  // Copy failed
+		
+		$0.success:=False:C215
+		$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+		
+		// Else : all ok
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyFormatterImage
+	var $0 : Object
+	var $1 : Object  // field key value object
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	// Check for formatter image to copy
+	If ($1.value.format#Null:C1517)
+		
+		var $format; $formatName : Text
+		var $copyDest : 4D:C1709.File
+		
+		If (Value type:C1509($1.value.format)=Is text:K8:3)
+			
+			$format:=$1.value.format
+			
+			If ($format#"")
+				
+				If (Substring:C12($format; 1; 1)="/")
+					
+					var $formattersFolder; $customFormatterFolder; $imagesFolderInFormatter : 4D:C1709.Folder
+					
+					$formattersFolder:=This:C1470.path.hostFormatters()
+					
+					If ($formattersFolder.exists)
+						
+						$formatName:=Substring:C12($format; 2)
+						
+						$customFormatterFolder:=$formattersFolder.folder($formatName)
+						
+						If ($customFormatterFolder.exists)
+							
+							$imagesFolderInFormatter:=$customFormatterFolder.folder("Images")
+							
+							If ($imagesFolderInFormatter.exists)
+								
+								var $imageFile : 4D:C1709.File
+								
+								For each ($imageFile; $imagesFolderInFormatter.files(fk ignore invisible:K87:22))
+									
+									var $correctedFormatName; $correctedImageName : Text
+									
+									$correctedFormatName:=Lowercase:C14($formatName)
+									Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedFormatName; 0)
+									
+									$correctedImageName:=Lowercase:C14($imageFile.name)
+									Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedImageName; 0)
+									
+									$correctedImageName:=$correctedFormatName+"_"+$correctedImageName+$imageFile.extension
+									
+									$copyDest:=$imageFile.copyTo(This:C1470.drawableFolder; $correctedImageName; fk overwrite:K87:5)
+									
+									If (Not:C34($copyDest.exists))  // Copy failed
+										
+										$0.success:=False:C215
+										$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+										
+										//Else : all ok
+									End if 
+									
+								End for each 
+								
+								// Else : no image to copy
+							End if 
+							
+						Else 
+							
+							// custom folder does not exists
+							$0.success:=False:C215
+							$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
+							
+						End if 
+						
+						// Else : no formatters folder
+					End if 
+					
+					// Else : no custom formatter
+				End if 
+				
+				// Else : format empty
+			End if 
+			
+			// Else : field.format is not Text
+		End if 
+		
+		// Else : no formatter
+	End if 
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function adjustIconName
+	var $0 : Text
+	var $1 : Text  // File name
+	var $2 : Text  // File extension
+	var $newName : Text
+	
+	$newName:=Lowercase:C14($1)
+	Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$newName; 0)
+	$0:=$newName+$2
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function createIconAssets
 	var $0 : Object
-	var $1 : Object  // Table object metadata
+	var $1 : Object  // Table or Field object metadata or related field
 	
 	$0:=New object:C1471(\
 		"icon"; New object:C1471; \
@@ -458,24 +793,29 @@ Function createIconAssets
 	If (Asserted:C1132($svg.success; "Failed to parse: "+$file.path))
 		
 		var $t : Text
-		$t:=$1.shortLabel
 		
-		If (Length:C16($t)>0)
-			
-			// Take first letter
-			$t:=Uppercase:C13($t[[1]])
-			
-		Else 
-			
-			//%W-533.1
-			$t:=Uppercase:C13($1.name[[1]])  // 4D table names are not empty
-			//%W+533.1
-			
-		End if 
+		Case of 
+			: ($1.shortLabel#"")
+				
+				$t:=$1.shortLabel
+				
+			: ($1.label#"")
+				
+				$t:=$1.label
+				
+			Else 
+				//%W-533.1
+				$t:=$1.name  // 4D table names are not empty
+				//%W+533.1
+		End case 
+		
+		
+		// Take first letter
+		$t:=Uppercase:C13($t[[1]])
 		
 		$svg.setValue($t; $svg.findByXPath("/svg/textArea"))
 		
-		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("qmobile_android_missing_nav_icon.svg")
+		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("qmobile_android_missing_icon.svg")
 		$file.delete()
 		
 		$svg.exportText($file)
@@ -507,8 +847,16 @@ Function createIconAssets
 						
 					Else 
 						
-						$0.success:=True:C214
-						$0.icon:=$newFile
+						If ($newFile.exists)
+							
+							$0.success:=True:C214
+							$0.icon:=$newFile
+							
+						Else 
+							
+							$0.errors.push("Failed to create file "+$newFile.path)
+							
+						End if 
 						
 					End if 
 					
@@ -524,7 +872,6 @@ Function createIconAssets
 				
 			End if 
 			
-			
 		Else 
 			
 			$0.errors.push("Could not create icon asset : "+$file.path)
@@ -537,13 +884,12 @@ Function createIconAssets
 	//
 Function chmod
 	var $0 : Object
-	var $1 : Text  // Project path
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.chmodCmd+" +x "+This:C1470.singleQuoted($1+"gradlew")+" "+This:C1470.singleQuoted(This:C1470.kotlinc))
+	This:C1470.launch(This:C1470.chmodCmd+" +x "+This:C1470.singleQuoted(This:C1470.projectPath+"gradlew")+" "+This:C1470.singleQuoted(This:C1470.kotlinc))
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -593,7 +939,6 @@ Function prepareSdk
 	//
 Function copySdkVersion
 	var $0 : Object
-	var $1 : Text  // Project path
 	var $sdkVersion; $copyDest : 4D:C1709.File
 	var $unzippedSdk : 4D:C1709.Folder
 	
@@ -609,7 +954,7 @@ Function copySdkVersion
 		
 		If ($sdkVersion.exists)
 			
-			$copyDest:=$sdkVersion.copyTo(Folder:C1567($1+"app/src/main/assets"); fk overwrite:K87:5)
+			$copyDest:=$sdkVersion.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); fk overwrite:K87:5)
 			
 			If ($copyDest.exists)
 				

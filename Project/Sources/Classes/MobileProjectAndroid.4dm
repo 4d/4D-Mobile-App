@@ -61,7 +61,7 @@ Class constructor($project : Object)
 	This:C1470.serial:=""
 	
 	// Class for create()
-	This:C1470.androidprojectgenerator:=cs:C1710.androidprojectgenerator.new(This:C1470.studio.java; This:C1470.studio.kotlinc)
+	This:C1470.androidprojectgenerator:=cs:C1710.androidprojectgenerator.new(This:C1470.studio.java; This:C1470.studio.kotlinc; This:C1470.project.path)
 	
 	// Class for build()
 	This:C1470.gradlew:=cs:C1710.gradlew.new(This:C1470.project.path)
@@ -137,7 +137,7 @@ Function create()->$result : Object
 			// * GRADLEW ACCESS RIGHTS
 			If (Is macOS:C1572)  // No need to change permissions on Windows
 				
-				$o:=This:C1470.androidprojectgenerator.chmod(This:C1470.project.path)
+				$o:=This:C1470.androidprojectgenerator.chmod()
 				
 			End if 
 			
@@ -148,14 +148,14 @@ Function create()->$result : Object
 			// * BUILD EMBEDDED DATA LIBRARY
 			This:C1470.postStep("dataSetGeneration")
 			
-			$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.path; This:C1470.project.package)
+			$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.package)
 			
 		End if 
 		
 		If ($o.success)
 			
 			// * COPY EMBEDDED DATA LIBRARY
-			$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib(This:C1470.project.path)
+			$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib()
 			
 		End if 
 		
@@ -182,14 +182,14 @@ Function create()->$result : Object
 			// * COPY RESOURCES
 			This:C1470.postStep("copyingResources")
 			
-			$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.path; This:C1470.project.project._folder)
+			$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.project._folder)
 			
 		End if 
 		
 		If ($o.success)
 			
 			// * COPY ICONS
-			$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.path; This:C1470.project.project.dataModel)
+			$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.project.dataModel)
 			
 		End if 
 		
@@ -197,7 +197,7 @@ Function create()->$result : Object
 			
 			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
 				
-				$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.path; This:C1470.project.project._folder)
+				$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.project._folder)
 				
 				// Else: asked to not generate data at each build
 			End if 
@@ -206,7 +206,7 @@ Function create()->$result : Object
 		
 		If ($o.success)
 			
-			$o:=This:C1470.androidprojectgenerator.copySdkVersion(This:C1470.project.path)
+			$o:=This:C1470.androidprojectgenerator.copySdkVersion()
 			
 		End if 
 		
