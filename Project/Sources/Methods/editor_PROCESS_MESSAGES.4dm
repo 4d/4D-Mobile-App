@@ -137,7 +137,7 @@ Case of
 		//______________________________________________________
 	: ($message="goToPage")
 		
-		EDITOR.displayPage($in.page)
+		EDITOR.goToPage($in.page)
 		
 		Form:C1466.$dialog[$form.editor].ribbon.page:=EDITOR.currentPage
 		
@@ -176,12 +176,12 @@ Case of
 				//If (EDITOR.android)
 				//$fileManifest:=cs.path.new().cacheSdkAndroid().parent.file("manifest.json")
 				//If (Not($fileManifest.exists))\
-										 | ($fileManifest.modificationDate#Current date)
+															 | ($fileManifest.modificationDate#Current date)
 				//// Get the last 4D Mobile Android SDK from AWS server if any
 				//EDITOR.downloadSDK("aws"; "android"; False)
-				//End if 
-				//End if 
-				//End if 
+				//End if
+				//End if
+				//End if
 				
 				EDITOR.xCode:=$in.xCode
 				

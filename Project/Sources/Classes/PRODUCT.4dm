@@ -1,6 +1,3 @@
-/*===============================================
-PRODUCTS pannel Class
-===============================================*/
 Class extends form
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
@@ -8,45 +5,55 @@ Class constructor
 	
 	Super:C1705("editor_CALLBACK")
 	
-	This:C1470.context:=editor_INIT
+	This:C1470.context:=editor_Panel_init(This:C1470.name)
 	
 	If (OB Is empty:C1297(This:C1470.context))
 		
-		This:C1470.productName:=cs:C1710.widget.new("10_name")
-		This:C1470.productNameAlert:=cs:C1710.attention.new("name.alert")
+		This:C1470.isSubform:=True:C214
 		
-		This:C1470.productVersion:=cs:C1710.widget.new("11_version")
-		
-		This:C1470.productID:=cs:C1710.widget.new("id")
-		
-		This:C1470.productCopyright:=cs:C1710.widget.new("30_copyright")
-		
-		This:C1470.icon:=cs:C1710.widget.new("icon")
-		This:C1470.iconAlert:=cs:C1710.attention.new("icon.alert")
-		This:C1470.iconAction:=cs:C1710.button.new("icon.action")
-		
-		This:C1470.target:=cs:C1710.static.new("target.label")
-		This:C1470.ios:=cs:C1710.button.new("ios")
-		This:C1470.android:=cs:C1710.button.new("android")
-		This:C1470.os:=cs:C1710.group.new(This:C1470.target; This:C1470.ios; This:C1470.android)
-		
-		This:C1470.preview:=cs:C1710.static.new("target.preview")
-		
-		This:C1470.color:=cs:C1710.static.new("color")
-		This:C1470.colorBorder:=cs:C1710.static.new("color.border")
-		This:C1470.colorLabel:=cs:C1710.static.new("color.label")
-		This:C1470.colorButton:=cs:C1710.button.new("color.button")
-		This:C1470.dominantColor:=cs:C1710.group.new(This:C1470.color; This:C1470.colorBorder; This:C1470.colorLabel; This:C1470.colorButton)
-		
-		This:C1470.mainColor:=""
-		This:C1470.iconColor:=Null:C1517
+		This:C1470.init()
 		
 		// Constraints definition
-		ob_createPath(This:C1470.context; "constraints.rules"; Is collection:K8:32)
+		cs:C1710.ob.new(This:C1470.context).createPath("constraints.rules"; Is collection:K8:32)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function init()
+	
+	This:C1470.toBeInitialized:=False:C215
+	
+	// Widgets definition
+	This:C1470.productName:=cs:C1710.widget.new("10_name")
+	This:C1470.productNameAlert:=cs:C1710.attention.new("name.alert")
+	
+	This:C1470.productVersion:=cs:C1710.widget.new("11_version")
+	
+	This:C1470.productID:=cs:C1710.widget.new("id")
+	
+	This:C1470.productCopyright:=cs:C1710.widget.new("30_copyright")
+	
+	This:C1470.icon:=cs:C1710.widget.new("icon")
+	This:C1470.iconAlert:=cs:C1710.attention.new("icon.alert")
+	This:C1470.iconAction:=cs:C1710.button.new("icon.action")
+	
+	This:C1470.target:=cs:C1710.static.new("target.label")
+	This:C1470.ios:=cs:C1710.button.new("ios")
+	This:C1470.android:=cs:C1710.button.new("android")
+	This:C1470.os:=cs:C1710.group.new(This:C1470.target; This:C1470.ios; This:C1470.android)
+	
+	This:C1470.preview:=cs:C1710.static.new("target.preview")
+	
+	This:C1470.color:=cs:C1710.static.new("color")
+	This:C1470.colorBorder:=cs:C1710.static.new("color.border")
+	This:C1470.colorLabel:=cs:C1710.static.new("color.label")
+	This:C1470.colorButton:=cs:C1710.button.new("color.button")
+	This:C1470.dominantColor:=cs:C1710.group.new(This:C1470.color; This:C1470.colorBorder; This:C1470.colorLabel; This:C1470.colorButton)
+	
+	This:C1470.mainColor:=""
+	This:C1470.iconColor:=Null:C1517
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Manage the icon's action button
 Function iconMenu()
 	
@@ -106,7 +113,7 @@ Function iconMenu()
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Display the App icon
 Function displayIcon
 	
@@ -219,7 +226,7 @@ Function displayIcon
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Choose an icon file
 Function browseIcon
 	
@@ -319,7 +326,7 @@ Function getIcon($pathname : Text)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Update assets according to the target systems 
 Function setIcon($picture : Picture)
 	
@@ -362,19 +369,19 @@ Function setIcon($picture : Picture)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Open the iOS icons folder
 Function openAppleIconFolder
 	
 	SHOW ON DISK:C922(PROJECT._folder.folder("Assets.xcassets/AppIcon.appiconset").platformPath; *)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Open the iOS icons folder
 Function openAndroidIconFolder
 	
 	SHOW ON DISK:C922(PROJECT._folder.folder("Android").platformPath; *)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Check the product name constraints
 Function checkName($name : Text)
 	
@@ -435,7 +442,7 @@ Function checkName($name : Text)
 			//______________________________________________________
 	End case 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Manage UI for the target
 Function displayTarget
 	

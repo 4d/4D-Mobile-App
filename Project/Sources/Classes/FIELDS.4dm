@@ -1,52 +1,54 @@
-/*===============================================
-FIELDS pannel Class
-===============================================*/
 Class extends form
 
-//________________________________________________________________
+//=== === === === === === === === === === === === === === === === === === === === === 
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
 	
-	This:C1470.context:=editor_INIT
+	This:C1470.context:=editor_Panel_init(This:C1470.name)
 	
 	If (OB Is empty:C1297(This:C1470.context))
 		
-		This:C1470.fieldList:=cs:C1710.listbox.new("01_fields")
-		This:C1470.ids:=cs:C1710.widget.new("IDs")
-		This:C1470.names:=cs:C1710.widget.new("fields")
-		This:C1470.icons:=cs:C1710.widget.new("icons")
-		This:C1470.labels:=cs:C1710.widget.new("label")
-		This:C1470.shortLabels:=cs:C1710.widget.new("shortLabel")
-		This:C1470.formats:=cs:C1710.widget.new("format")
-		This:C1470.titles:=cs:C1710.widget.new("title")
+		This:C1470.isSubform:=True:C214
 		
-		This:C1470.formatLabel:=cs:C1710.static.new("format.label")
-		This:C1470.picker:=cs:C1710.widget.new("iconGrid")
-		
-		This:C1470.tabSelector:=cs:C1710.widget.new("tab.selector")
-		This:C1470.tabSelector.data:=0
-		
-		This:C1470.selectorFields:=cs:C1710.button.new("tab.fields")
-		This:C1470.selectorRelations:=cs:C1710.button.new("tab.relations")
-		This:C1470.selectors:=cs:C1710.group.new(This:C1470.selectorFields; This:C1470.selectorRelations)
-		
-		This:C1470.empty:=cs:C1710.static.new("empty")
-		This:C1470.resources:=cs:C1710.button.new("resources")
-		
-		This:C1470.form:=Form:C1466.$dialog[This:C1470.name]
-		
+		This:C1470.init()
 		
 		// Constraints definition
 		cs:C1710.ob.new(This:C1470.context).createPath("constraints.rules"; Is collection:K8:32)
 		
-		// Local methods
-		//This.loadIcons:=Formula(CALL FORM(This.window; "editor_CALLBACK"; "fieldIcons"))
-		//This.showPicker:=Formula(CALL FORM(This.window; "editor_CALLBACK"; "pickerShow"; $1))
-		
 	End if 
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function init()
+	
+	This:C1470.toBeInitialized:=False:C215
+	
+	// Widgets definition
+	This:C1470.fieldList:=cs:C1710.listbox.new("01_fields")
+	This:C1470.ids:=cs:C1710.widget.new("IDs")
+	This:C1470.names:=cs:C1710.widget.new("fields")
+	This:C1470.icons:=cs:C1710.widget.new("icons")
+	This:C1470.labels:=cs:C1710.widget.new("label")
+	This:C1470.shortLabels:=cs:C1710.widget.new("shortLabel")
+	This:C1470.formats:=cs:C1710.widget.new("format")
+	This:C1470.titles:=cs:C1710.widget.new("title")
+	
+	This:C1470.formatLabel:=cs:C1710.static.new("format.label")
+	This:C1470.picker:=cs:C1710.widget.new("iconGrid")
+	
+	This:C1470.tabSelector:=cs:C1710.widget.new("tab.selector")
+	This:C1470.tabSelector.data:=0
+	
+	This:C1470.selectorFields:=cs:C1710.button.new("tab.fields")
+	This:C1470.selectorRelations:=cs:C1710.button.new("tab.relations")
+	This:C1470.selectors:=cs:C1710.group.new(This:C1470.selectorFields; This:C1470.selectorRelations)
+	
+	This:C1470.empty:=cs:C1710.static.new("empty")
+	This:C1470.resources:=cs:C1710.button.new("resources")
+	
+	This:C1470.form:=Form:C1466.$dialog[This:C1470.name]  // ????????????????????????????
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Updates the list of fields/reports according to the selected table
 Function getFieldList()->$result : Object
 	
@@ -397,7 +399,7 @@ Function getFieldList()->$result : Object
 		
 	End if 
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Updates the list of fields/relation according to the selected table
 Function updateFieldList
 	
@@ -458,7 +460,7 @@ Function updateFieldList
 		End if 
 	End if 
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Manages the UI of the tab Fields/Relations
 Function setTab()
 	
@@ -497,7 +499,7 @@ Function setTab()
 	// Update field list
 	This:C1470.updateFieldList()
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Returns the field associated with the line
 Function field($row : Integer)->$field : Object
 	
@@ -546,7 +548,7 @@ Function field($row : Integer)->$field : Object
 		End if 
 	End if 
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Display tips on the field list
 Function setHelpTip($e : Object)
 	
@@ -602,7 +604,7 @@ Function setHelpTip($e : Object)
 	
 	This:C1470.fieldList.setHelpTip($t)
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Update forms
 Function updateForms($field : Object; $row : Integer)
 	
@@ -658,7 +660,7 @@ Function updateForms($field : Object; $row : Integer)
 		End if 
 	End if 
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Show the icon picker
 Function iconPicker($e : Object)
 	
@@ -720,9 +722,10 @@ Function iconPicker($e : Object)
 		
 	End if 
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Show format on disk
 Function formatShowOnDisk($e : Object)
+	
 	var $format : Text
 	var $field; $o : Object
 	
@@ -730,20 +733,29 @@ Function formatShowOnDisk($e : Object)
 	
 	// Get current format
 	If ($field.format#Null:C1517)
+		
 		If (Value type:C1509($field.format)=Is object:K8:27)
+			
+			// Get the name
 			$format:=String:C10($field.format.name)
+			
 		Else 
+			
 			$format:=$field.format
+			
 		End if 
 	End if 
 	
 	// Show on disk if host
 	$o:=cs:C1710.formater.new($format)
+	
 	If (Bool:C1537($o.host))
+		
 		SHOW ON DISK:C922($o.source.platformPath)
+		
 	End if 
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Manage the format menu according to the field type
 Function formatMenu($e : Object)
 	
@@ -895,7 +907,7 @@ Function formatMenu($e : Object)
 	
 	editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
-	//________________________________________________________________
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Manage the tags menu for label & shortlabel
 Function tagMenu($e : Object; $values : Collection)
 	

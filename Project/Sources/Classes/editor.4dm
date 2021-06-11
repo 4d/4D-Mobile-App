@@ -1,6 +1,3 @@
-/*===============================================
-EDITOR Class
-===============================================*/
 Class extends form
 
 Class constructor
@@ -9,13 +6,16 @@ Class constructor
 	
 	This:C1470.setWorker("4D Mobile ("+String:C10(This:C1470.window)+")")
 	
-	This:C1470.pagesDefinition()
+	This:C1470.design()
+	
+	// ⚠️ The initialization is done later since the opening/creation wizards are used
+	//This.init()
 	
 	// Load preferences
 	This:C1470.preferences:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
 	
 	This:C1470.updateColorScheme()
-	This:C1470.init()
+	This:C1470.preload()
 	
 	This:C1470.pendingTasks:=New collection:C1472
 	
@@ -23,8 +23,12 @@ Class constructor
 	This:C1470.str:=cs:C1710.str.new()
 	This:C1470.path:=cs:C1710.path.new()
 	
-	//===================================================================================
-Function pagesDefinition()
+	This:C1470.tips:=cs:C1710.tips.new()
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Definition of the editor pages and panels used
+Function design()
+	
 	var $o : Object
 	
 	This:C1470.pages:=New object:C1471
@@ -182,9 +186,12 @@ Function pagesDefinition()
 		"title"; Get localized string:C991("page_action_params"); \
 		"form"; "ACTIONS_PARAMS"))
 	
-	//===================================================================================
-Function widgetsDefinition()
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function init()
 	
+	This:C1470.toBeInitialized:=False:C215
+	
+	// Widgets definition
 	This:C1470.ribbon:=cs:C1710.subform.new("ribbon")
 	This:C1470.description:=cs:C1710.subform.new("description")
 	This:C1470.project:=cs:C1710.subform.new("project")
@@ -199,7 +206,58 @@ Function widgetsDefinition()
 	This:C1470.message:=cs:C1710.subform.new("message")
 	This:C1470.messageObjects:=cs:C1710.group.new("message,message.button,message.back")
 	
-	//===================================================================================
+	// Create the context, id any
+	If (Form:C1466.$dialog=Null:C1517)
+		
+		Form:C1466.$dialog:=New object:C1471
+		
+	End if 
+	
+	If (Form:C1466.$dialog[This:C1470.name]=Null:C1517)
+		
+		RECORD.info("Create context for: "+This:C1470.name)
+		Form:C1466.$dialog[This:C1470.name]:=New object:C1471
+		
+	End if 
+	
+	This:C1470.context:=Form:C1466.$dialog[This:C1470.name]
+	
+	// Initializations
+	This:C1470.message.setValue(New object:C1471)
+	
+	// DEV items
+	OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(DATABASE.isMatrix))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Pre-loading of constant resources
+Function preload()
+	
+	// FIELD TYPE NAMES
+	This:C1470.typeNames:=New collection:C1472
+	This:C1470.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
+	This:C1470.typeNames[Is integer:K8:5]:=Get localized string:C991("integer")
+	This:C1470.typeNames[Is longint:K8:6]:=Get localized string:C991("longInteger")
+	This:C1470.typeNames[Is integer 64 bits:K8:25]:=Get localized string:C991("integer64Bits")
+	This:C1470.typeNames[Is real:K8:4]:=Get localized string:C991("real")
+	This:C1470.typeNames[_o_Is float:K8:26]:=Get localized string:C991("float")
+	This:C1470.typeNames[Is boolean:K8:9]:=Get localized string:C991("boolean")
+	This:C1470.typeNames[Is time:K8:8]:=Get localized string:C991("time")
+	This:C1470.typeNames[Is date:K8:7]:=Get localized string:C991("date")
+	This:C1470.typeNames[Is text:K8:3]:=Get localized string:C991("text")
+	This:C1470.typeNames[Is picture:K8:10]:=Get localized string:C991("picture")
+	
+	This:C1470.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
+	This:C1470.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath
+	
+	This:C1470.alert:="🚫"
+	This:C1470.warning:="❗"
+	
+	This:C1470.toOne:="⑴"
+	This:C1470.toMany:="⒩"
+	
+	OBSOLETE
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// [Warning] Executed every time the editor is activated to adapt UI to the color scheme
 Function updateColorScheme()
 	
@@ -286,15 +344,15 @@ Function updateColorScheme()
 	// COLORS
 	This:C1470.colors:=New object:C1471
 	
-	This:C1470.colors.strokeColor:=color("4dColor"; New object:C1471("value"; This:C1470.strokeColor))
-	This:C1470.colors.highlightColor:=color("4dColor"; New object:C1471("value"; This:C1470.highlightColor))
-	This:C1470.colors.highlightColorNoFocus:=color("4dColor"; New object:C1471("value"; This:C1470.highlightColorNoFocus))
-	This:C1470.colors.selectedColor:=color("4dColor"; New object:C1471("value"; This:C1470.selectedColor))
-	This:C1470.colors.alternateSelectedColor:=color("4dColor"; New object:C1471("value"; This:C1470.alternateSelectedColor))
-	This:C1470.colors.backgroundSelectedColor:=color("4dColor"; New object:C1471("value"; This:C1470.backgroundSelectedColor))
-	This:C1470.colors.backgroundUnselectedColor:=color("4dColor"; New object:C1471("value"; This:C1470.backgroundUnselectedColor))
-	This:C1470.colors.errorColor:=color("4dColor"; New object:C1471("value"; This:C1470.errorColor))
-	This:C1470.colors.warningColor:=color("4dColor"; New object:C1471("value"; This:C1470.warningColor))
+	This:C1470.colors.strokeColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.strokeColor))
+	This:C1470.colors.highlightColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.highlightColor))
+	This:C1470.colors.highlightColorNoFocus:=_o_color("4dColor"; New object:C1471("value"; This:C1470.highlightColorNoFocus))
+	This:C1470.colors.selectedColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.selectedColor))
+	This:C1470.colors.alternateSelectedColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.alternateSelectedColor))
+	This:C1470.colors.backgroundSelectedColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.backgroundSelectedColor))
+	This:C1470.colors.backgroundUnselectedColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.backgroundUnselectedColor))
+	This:C1470.colors.errorColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.errorColor))
+	This:C1470.colors.warningColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.warningColor))
 	
 	//var $color : cs.color
 	//$color:=cs.color.new()
@@ -308,38 +366,8 @@ Function updateColorScheme()
 	//This.colors.errorColor:=$color.setColor(This.errorColor)
 	//This.colors.warningColor:=$color.setColor(This.warningColor)
 	
-	
-	//===================================================================================
-	// Pre-loading of constant resources
-Function init()
-	
-	// FIELD TYPE NAMES
-	This:C1470.typeNames:=New collection:C1472
-	This:C1470.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
-	This:C1470.typeNames[Is integer:K8:5]:=Get localized string:C991("integer")
-	This:C1470.typeNames[Is longint:K8:6]:=Get localized string:C991("longInteger")
-	This:C1470.typeNames[Is integer 64 bits:K8:25]:=Get localized string:C991("integer64Bits")
-	This:C1470.typeNames[Is real:K8:4]:=Get localized string:C991("real")
-	This:C1470.typeNames[_o_Is float:K8:26]:=Get localized string:C991("float")
-	This:C1470.typeNames[Is boolean:K8:9]:=Get localized string:C991("boolean")
-	This:C1470.typeNames[Is time:K8:8]:=Get localized string:C991("time")
-	This:C1470.typeNames[Is date:K8:7]:=Get localized string:C991("date")
-	This:C1470.typeNames[Is text:K8:3]:=Get localized string:C991("text")
-	This:C1470.typeNames[Is picture:K8:10]:=Get localized string:C991("picture")
-	
-	This:C1470.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
-	This:C1470.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath
-	
-	This:C1470.alert:="🚫"
-	This:C1470.warning:="❗"
-	
-	This:C1470.toOne:="⑴"
-	This:C1470.toMany:="⒩"
-	
-	OBSOLETE
-	
-	//===================================================================================
-Function displayPage($page : Text)
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function goToPage($page : Text)
 	
 	var $o : Object
 	
@@ -349,13 +377,7 @@ Function displayPage($page : Text)
 		
 	End if 
 	
-	This:C1470.firstPage()
-	
-	If (This:C1470.name="EDITOR")  // First call
-		
-		This:C1470.widgetsDefinition()
-		
-	End if 
+	This:C1470.firstPage()  // Should be obsolete as opening/creating wizards are used
 	
 	This:C1470.hidePicker()
 	This:C1470.hideBrowser()
@@ -390,23 +412,23 @@ Function displayPage($page : Text)
 		
 		If (FEATURE.with("wizards"))
 			
-			This:C1470.executeInSubform("PROJECT"; "panel_INIT"; $o; PROJECT)
+			This:C1470.callChild("PROJECT"; "panel_INIT"; $o; PROJECT)
 			
 		Else 
 			
-			This:C1470.executeInSubform("PROJECT"; "panel_INIT"; $o)
+			This:C1470.callChild("PROJECT"; "panel_INIT"; $o)
 			
 		End if 
 		
 		This:C1470.refresh()  // Update geometry
 		
-		This:C1470.executeInSubform("description"; "editor_description"; $o)
+		This:C1470.callChild("description"; "editor_description"; $o)
 		
 		This:C1470.project.focus()
 		
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function addTask($task : Text)
 	
 	var $t : Text
@@ -429,7 +451,7 @@ Function addTask($task : Text)
 		
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function removeTask($task : Text)
 	
 	var $indx : Integer
@@ -463,50 +485,50 @@ Function removeTask($task : Text)
 		End if 
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function countTasks()->$number : Integer
 	
 	$number:=This:C1470.pendingTasks.length
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function taskInProgress($taskID : Text)->$response : Boolean
 	
 	$response:=(This:C1470.pendingTasks.extract("name").indexOf($taskID)#-1)
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function taskNotInProgress($taskID : Text)->$response : Boolean
 	
 	$response:=(This:C1470.pendingTasks.extract("name").indexOf($taskID)=-1)
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function hidePicker()
 	
 	This:C1470.callMeBack("pickerHide")
 	
 	RECORD.info("hidePicker()")
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function hideBrowser()
 	
 	This:C1470.callMeBack("hideBrowser")
 	
 	RECORD.info("hideBrowser()")
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function updateRibbon()
 	
 	This:C1470.callMeBack("updateRibbon")
 	
 	RECORD.info("updateRibbon()")
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function refreshViews()
 	
 	This:C1470.callMeBack("refreshViews")
 	
 	RECORD.info("refreshViews()")
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function checkDevTools()
 	
 	This:C1470.addTask("checkDevTools")
@@ -531,7 +553,7 @@ Function checkProject()
 	// Launch project verifications
 	This:C1470.callMeBack("projectAudit")
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function getDevices()
 	
 	This:C1470.addTask("getDevices")
@@ -541,12 +563,24 @@ Function getDevices()
 		"studio"; This:C1470.studio\
 		))
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function setHeader()
 	
 	This:C1470.description.setValue(This:C1470.currentPage)
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Refresh displayed panels
+Function refreshPanels()
+	
+	var $panel : Text
+	
+	For each ($panel; panel_Objects)
+		
+		This:C1470.callChild($panel; "panel_REFRESH")
+		
+	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function doAlert($content; $additional : Text)
 	
 	If (Count parameters:C259>=2)
@@ -581,7 +615,7 @@ Function doAlert($content; $additional : Text)
 		End if 
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function downloadSDK($server : Text; $target : Text; $silent : Boolean)
 	
 	This:C1470.addTask("downloadSDK")

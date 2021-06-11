@@ -87,9 +87,9 @@ End if
 If (False:C215)  // Tools
 	
 	//______________________________________________________
-	C_OBJECT:C1216(color; $0)
-	C_TEXT:C284(color; $1)
-	C_OBJECT:C1216(color; $2)
+	C_OBJECT:C1216(_o_color; $0)
+	C_TEXT:C284(_o_color; $1)
+	C_OBJECT:C1216(_o_color; $2)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(currentForm; $0)

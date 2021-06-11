@@ -35,7 +35,7 @@ End if
 
 $Obj_form:=New object:C1471(\
 "window"; Current form window:C827; \
-"ui"; editor_INIT; \
+"ui"; editor_Panel_init; \
 "eventCode"; Form event code:C388; \
 "currentWidget"; OBJECT Get name:C1087(Object current:K67:2); \
 "focusedWidget"; OBJECT Get name:C1087(Object with focus:K67:3); \

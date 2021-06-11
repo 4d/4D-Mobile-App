@@ -1,4 +1,4 @@
-//===================================================================================
+//=== === === === === === === === === === === === === === === === === === === === === 
 Class constructor($method : Text)
 	
 	Super:C1705()
@@ -6,12 +6,17 @@ Class constructor($method : Text)
 	This:C1470.name:=Current form name:C1298
 	This:C1470.window:=Current form window:C827
 	
+	This:C1470.toBeInitialized:=True:C214
+	
 	This:C1470.callback:=Null:C1517
 	This:C1470.worker:=Null:C1517
 	
-	This:C1470.widgets:=New object:C1471
+	This:C1470.isSubform:=False:C215
+	
 	This:C1470.focused:=Null:C1517
 	This:C1470.current:=Null:C1517
+	
+	This:C1470.widgets:=New object:C1471
 	
 	If (Count parameters:C259>=1)
 		
@@ -19,18 +24,34 @@ Class constructor($method : Text)
 		
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function init()
+	
+	ASSERT:C1129(False:C215; "👀 init() must be overriden by the subclass!")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function saveContext()
+	
+	ASSERT:C1129(False:C215; "👀 saveContext() must overriden done by the subclass!")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function restoreContext()
+	
+	ASSERT:C1129(False:C215; "👀 restore() must be overriden by the subclass!")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Set window title
 Function setTitle($title : Text)
 	
 	SET WINDOW TITLE:C213($title; This:C1470.window)
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Defines the name of the callback method
 Function setCallBack($method : Text)
 	
 	This:C1470.callback:=$method
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Start a timer to update the user interface
 	// Default delay is ASAP
 Function refresh($delay : Integer)
@@ -45,7 +66,7 @@ Function refresh($delay : Integer)
 		
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Creates a CALL FORM of the current form (callback) & with current callback method
 	// .callMeBack ()
 	// .callMeBack ( param : Collection )
@@ -103,7 +124,7 @@ Function callMeBack($param; $param1; $paramN)
 		
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Creates a CALL FORM of the current form (callback) with the passed method
 	// .callMe ( method : Text )
 	// .callMe ( method : Text ; param : Collection )
@@ -152,7 +173,7 @@ Function callMe($method : Text; $param1; $paramN)
 		
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Associate a worker to the current form
 Function setWorker($worker)
 	
@@ -165,7 +186,7 @@ Function setWorker($worker)
 		
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Assigns a task to the associated worker
 	// .callWorker ( method : Text )
 	// .callWorker ( method : Text ; param : Collection )
@@ -232,12 +253,12 @@ Function callWorker($method; $param; $param1; $paramN)
 		
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Executes a project method in the context of a subform (without returned value)
 	// .executeInSubform ( subform : Text ; method : Text )
 	// .executeInSubform ( subform : Text ; method : Text ; param : Collection )
 	// .executeInSubform ( subform : Text ; method : Text ; param1, param2, …, paramN )
-Function executeInSubform($subform : Text; $method : Text; $param; $param1; $paramN)
+Function callChild($subform : Text; $method : Text; $param; $param1; $paramN)
 	
 	C_VARIANT:C1683(${3})
 	
@@ -245,44 +266,65 @@ Function executeInSubform($subform : Text; $method : Text; $param; $param1; $par
 	var $i : Integer
 	var $parameters : Collection
 	
-	If (Count parameters:C259=2)
+	ARRAY TEXT:C222($widgets; 0)
+	FORM GET OBJECTS:C898($widgets; Form all pages:K67:7)
+	
+	If (Find in array:C230($widgets; $subform)>0)
 		
-		EXECUTE METHOD IN SUBFORM:C1085($subform; $method)
-		
-	Else 
-		
-		$code:="<!--#4DCODE EXECUTE METHOD IN SUBFORM:C1085(\""+$subform+"\"; \""+$method+"\";*"
-		
-		If (Value type:C1509($3)=Is collection:K8:32)
+		If (Count parameters:C259=2)
 			
-			$parameters:=$3
-			
-			For ($i; 0; $parameters.length-1; 1)
-				
-				$code:=$code+"; $1["+String:C10($i)+"]"
-				
-			End for 
+			EXECUTE METHOD IN SUBFORM:C1085($subform; $method)
 			
 		Else 
 			
-			$parameters:=New collection:C1472
+			$code:="<!--#4DCODE EXECUTE METHOD IN SUBFORM:C1085(\""+$subform+"\"; \""+$method+"\";*"
 			
-			For ($i; 3; Count parameters:C259; 1)
+			If (Value type:C1509($3)=Is collection:K8:32)
 				
-				$parameters.push(${$i})
+				$parameters:=$3
 				
-				$code:=$code+"; $1["+String:C10($i-3)+"]"
+				For ($i; 0; $parameters.length-1; 1)
+					
+					$code:=$code+"; $1["+String:C10($i)+"]"
+					
+				End for 
 				
-			End for 
+			Else 
+				
+				$parameters:=New collection:C1472
+				
+				For ($i; 3; Count parameters:C259; 1)
+					
+					$parameters.push(${$i})
+					
+					$code:=$code+"; $1["+String:C10($i-3)+"]"
+					
+				End for 
+			End if 
+			
+			$code:=$code+")-->"
+			
+			PROCESS 4D TAGS:C816($code; $code; $parameters)
+			
 		End if 
 		
-		$code:=$code+")-->"
+	Else 
 		
-		PROCESS 4D TAGS:C816($code; $code; $parameters)
+		ASSERT:C1129(Structure file:C489=Structure file:C489(*); "Subform not found: "+$subform)
 		
 	End if 
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Send an event to the subform container
+Function callParent($event : Integer)
+	
+	If (Asserted:C1132(This:C1470.isSubform; "🛑 Only applicable for sub-forms!"))
+		
+		CALL SUBFORM CONTAINER:C1086($event)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function dimensions()->$dimensions : Object
 	
 	var $height; $width : Integer
@@ -293,42 +335,42 @@ Function dimensions()->$dimensions : Object
 		"width"; $width; \
 		"height"; $height)
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function height()->$height : Integer
 	
 	$height:=This:C1470.dimensions().height
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function width()->$width : Integer
 	
 	$width:=This:C1470.dimensions().width
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function goToPage($page : Integer)
 	
 	FORM GOTO PAGE:C247($page)
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function page()->$page : Integer
 	
 	$page:=FORM Get current page:C276
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function firstPage()
 	
 	FORM FIRST PAGE:C250
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function lastPage()
 	
 	FORM LAST PAGE:C251
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function nextPage()
 	
 	FORM NEXT PAGE:C248
 	
-	//===================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function previousPage()
 	
 	FORM PREVIOUS PAGE:C249

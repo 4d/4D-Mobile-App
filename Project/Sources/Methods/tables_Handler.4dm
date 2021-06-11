@@ -38,7 +38,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	
 	$Obj_form:=New object:C1471(\
 		"window"; Current form window:C827; \
-		"form"; editor_INIT; \
+		"form"; editor_Panel_init; \
 		"tableList"; "01_tables"; \
 		"ids"; "IDs"; \
 		"idColumn"; 1; \

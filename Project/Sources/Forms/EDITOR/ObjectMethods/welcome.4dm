@@ -21,7 +21,7 @@ Case of
 				//…………………………………………………………………………………………………
 			: ($e.code=-1)
 				
-				editor_OPEN_PROJECT
+				_o_editor_OPEN_PROJECT
 				
 				//…………………………………………………………………………………………………
 			Else 

@@ -38,7 +38,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	If (Form:C1466#Null:C1517)
 		
 		$Obj_form:=New object:C1471(\
-			"form"; editor_INIT; \
+			"form"; editor_Panel_init; \
 			"window"; Current form window:C827; \
 			"email"; "03_email"; \
 			"method"; "authenticationMethod"; \

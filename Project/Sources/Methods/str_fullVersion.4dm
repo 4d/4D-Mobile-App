@@ -11,11 +11,17 @@ var $finalComponents : Collection
 $finalComponents:=New collection:C1472()
 
 var $index : Integer
+
 For ($index; 0; 2; 1)
+	
 	If ($index<$components.length)
-		$finalComponents.push(Num:C11($components[$index]))  // only number
+		
+		$finalComponents.push(Num:C11($components[$index]))  // Only number
+		
 	Else 
-		$finalComponents.push(0)  // padding with 0
+		
+		$finalComponents.push(0)  // Padding with 0
+		
 	End if 
 End for 
 

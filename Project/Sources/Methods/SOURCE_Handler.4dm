@@ -37,7 +37,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	
 	$Obj_form:=New object:C1471(\
 		"window"; Current form window:C827; \
-		"ui"; editor_INIT; \
+		"ui"; editor_Panel_init; \
 		"local"; "source_local"; \
 		"server"; "source_server"; \
 		"doNotGenerate"; "doNotGenerate"; \

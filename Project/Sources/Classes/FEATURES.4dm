@@ -1,67 +1,74 @@
-/*===============================================
-FEATURES pannel Class
-===============================================*/
 Class extends form
 
-//________________________________________________________________
+//=== === === === === === === === === === === === === === === === === === === === === 
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
 	
-	This:C1470.context:=editor_INIT
+	This:C1470.context:=editor_Panel_init(This:C1470.name)
 	
 	If (OB Is empty:C1297(This:C1470.context))
 		
-		This:C1470.loginRequired:=cs:C1710.button.new("01_login")
+		This:C1470.isSubform:=True:C214
 		
-		This:C1470.authenticationLabel:=cs:C1710.static.new("authentication.label")
-		This:C1470.authenticationButton:=cs:C1710.button.new("authentication")
-		
-		This:C1470.authenticationGroup:=cs:C1710.group.new(\
-			This:C1470.authenticationLabel; \
-			This:C1470.authenticationButton)
-		
-		This:C1470.pushNotification:=cs:C1710.button.new("02_pushNotification")
-		
-		This:C1470.certificate:=cs:C1710.widget.new("certificatePicker")
-		This:C1470.certificate.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.pushCertificate); New object:C1471(\
-			"options"; Package open:K24:8+Use sheet window:K24:11; \
-			"fileTypes"; ".p8"; \
-			"directory"; 8858; \
-			"copyPath"; False:C215; \
-			"openItem"; False:C215; \
-			"message"; Get localized string:C991("selectACertificate"); \
-			"placeHolder"; Get localized string:C991("selectACertificate")+"…"))
-		
-		This:C1470.certificateLabel:=cs:C1710.static.new("certificateLabel")
-		This:C1470.certificateGroup:=cs:C1710.group.new(\
-			This:C1470.certificateLabel; \
-			This:C1470.certificate)
-		
-		This:C1470.deepLinking:=cs:C1710.button.new("03_deepLinking")
-		
-		This:C1470.deepScheme:=cs:C1710.input.new("03_urlScheme.input")
-		This:C1470.deepSchemeLabel:=cs:C1710.static.new("urlScheme.label")
-		This:C1470.deepSchemeAlert:=cs:C1710.attention.new("urlScheme.alert")
-		
-		This:C1470.deepLink:=cs:C1710.input.new("04_associatedDomain.input")
-		This:C1470.deepLinkLabel:=cs:C1710.static.new("associatedDomain.label")
-		
-		This:C1470.deepLinkingGroup:=cs:C1710.group.new(\
-			This:C1470.deepSchemeLabel; \
-			cs:C1710.static.new("urlScheme.border"); \
-			This:C1470.deepScheme; \
-			This:C1470.deepLinkLabel; \
-			This:C1470.deepSchemeAlert; \
-			cs:C1710.static.new("associatedDomain.border"); \
-			This:C1470.deepLink)
+		This:C1470.init()
 		
 		// Constraints definition
-		ob_createPath(This:C1470.context; "constraints.rules"; Is collection:K8:32)
+		cs:C1710.ob.new(This:C1470.context).createPath("constraints.rules"; Is collection:K8:32)
 		
 	End if 
 	
-/*===============================================*/
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function init()
+	
+	This:C1470.toBeInitialized:=False:C215
+	
+	// Widgets definition
+	This:C1470.loginRequired:=cs:C1710.button.new("01_login")
+	
+	This:C1470.authenticationLabel:=cs:C1710.static.new("authentication.label")
+	This:C1470.authenticationButton:=cs:C1710.button.new("authentication")
+	
+	This:C1470.authenticationGroup:=cs:C1710.group.new(\
+		This:C1470.authenticationLabel; \
+		This:C1470.authenticationButton)
+	
+	This:C1470.pushNotification:=cs:C1710.button.new("02_pushNotification")
+	
+	This:C1470.certificate:=cs:C1710.widget.new("certificatePicker")
+	This:C1470.certificate.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.pushCertificate); New object:C1471(\
+		"options"; Package open:K24:8+Use sheet window:K24:11; \
+		"fileTypes"; ".p8"; \
+		"directory"; 8858; \
+		"copyPath"; False:C215; \
+		"openItem"; False:C215; \
+		"message"; Get localized string:C991("selectACertificate"); \
+		"placeHolder"; Get localized string:C991("selectACertificate")+"…"))
+	
+	This:C1470.certificateLabel:=cs:C1710.static.new("certificateLabel")
+	This:C1470.certificateGroup:=cs:C1710.group.new(\
+		This:C1470.certificateLabel; \
+		This:C1470.certificate)
+	
+	This:C1470.deepLinking:=cs:C1710.button.new("03_deepLinking")
+	
+	This:C1470.deepScheme:=cs:C1710.input.new("03_urlScheme.input")
+	This:C1470.deepSchemeLabel:=cs:C1710.static.new("urlScheme.label")
+	This:C1470.deepSchemeAlert:=cs:C1710.attention.new("urlScheme.alert")
+	
+	This:C1470.deepLink:=cs:C1710.input.new("04_associatedDomain.input")
+	This:C1470.deepLinkLabel:=cs:C1710.static.new("associatedDomain.label")
+	
+	This:C1470.deepLinkingGroup:=cs:C1710.group.new(\
+		This:C1470.deepSchemeLabel; \
+		cs:C1710.static.new("urlScheme.border"); \
+		This:C1470.deepScheme; \
+		This:C1470.deepLinkLabel; \
+		This:C1470.deepSchemeAlert; \
+		cs:C1710.static.new("associatedDomain.border"); \
+		This:C1470.deepLink)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function checkAuthenticationMethod
 	
 	ARRAY TEXT:C222($methods; 0x0000)
@@ -73,7 +80,7 @@ Function checkAuthenticationMethod
 		.bestSize()\
 		.show(Form:C1466.server.authentication.email)
 	
-/*===============================================*/
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function editAuthenticationMethod
 	
 	var $file : Object
@@ -110,7 +117,7 @@ Function editAuthenticationMethod
 	
 	This:C1470.checkAuthenticationMethod()
 	
-/*===============================================*/
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function initScheme
 	
 	If (Length:C16(String:C10(Form:C1466.deepLinking.urlScheme))=0)
@@ -119,7 +126,7 @@ Function initScheme
 		
 	End if 
 	
-/*===============================================*/
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function validateScheme
 	var $0 : Boolean
 	

@@ -40,7 +40,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	
 	$Obj_form:=New object:C1471(\
 		"window"; Current form window:C827; \
-		"ui"; editor_INIT; \
+		"ui"; editor_Panel_init; \
 		"list"; "01_tables"; \
 		"filter"; "02_filter.options"; \
 		"queryWidget"; "query.options"; \
@@ -227,7 +227,7 @@ Case of
 		//If (FEATURE.with("android"))
 		
 		//$Dir_root:=dataSet(New object("action"; "path"; \
-																																																			"project"; New object("product"; Form.product; "$project"; PROJECT))).path
+																																																									"project"; New object("product"; Form.product; "$project"; PROJECT))).path
 		
 		//Else
 		

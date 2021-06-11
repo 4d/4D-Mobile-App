@@ -1,9 +1,6 @@
-/*===============================================
-VIEWS pannel Class
-===============================================*/
 Class extends form
 
-//________________________________________________________________
+//=== === === === === === === === === === === === === === === === === === === === === 
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
@@ -15,29 +12,17 @@ Class constructor
 		
 	End if 
 	
-	This:C1470.context:=editor_INIT
+	This:C1470.context:=editor_Panel_init(This:C1470.name)
 	
 	If (OB Is empty:C1297(This:C1470.context))
 		
-		This:C1470.tableWidget:=cs:C1710.picture.new("tables")
+		This:C1470.isSubform:=True:C214
 		
-		This:C1470.tableButtonNext:=cs:C1710.button.new("next")
-		This:C1470.tableButtonPrevious:=cs:C1710.button.new("previous")
-		
-		This:C1470.tableNext:=cs:C1710.static.new("next@")
-		This:C1470.tablePrevious:=cs:C1710.static.new("previous@")
-		
-		This:C1470.tablist:=cs:C1710.button.new("tab.list")
-		This:C1470.tabdetail:=cs:C1710.button.new("tab.detail")
-		This:C1470.tabSelector:=cs:C1710.widget.new("tab.selector")
-		
-		This:C1470.noPublishedTable:=cs:C1710.widget.new("noPublishedTable")
-		
-		This:C1470.fieldList:=cs:C1710.listbox.new("01_fields")
+		This:C1470.init()
 		
 		// Constraints definition
-		This:C1470.context.constraints:=New object:C1471
-		This:C1470.context.constraints.rules:=New collection:C1472
+		cs:C1710.ob.new(This:C1470.context).createPath("constraints.rules"; Is collection:K8:32)
+		
 		This:C1470.context.constraints.rules.push(New object:C1471(\
 			"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
 			"action"; "geometry")))))
@@ -56,21 +41,43 @@ Class constructor
 		
 	End if 
 	
-	This:C1470._update()
+	//This._update()
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function init()
+	
+	This:C1470.toBeInitialized:=False:C215
+	
+	// Widgets definition
+	This:C1470.tableWidget:=cs:C1710.picture.new("tables")
+	
+	This:C1470.tableButtonNext:=cs:C1710.button.new("next")
+	This:C1470.tableButtonPrevious:=cs:C1710.button.new("previous")
+	
+	This:C1470.tableNext:=cs:C1710.static.new("next@")
+	This:C1470.tablePrevious:=cs:C1710.static.new("previous@")
+	
+	This:C1470.tablist:=cs:C1710.button.new("tab.list")
+	This:C1470.tabdetail:=cs:C1710.button.new("tab.detail")
+	This:C1470.tabSelector:=cs:C1710.widget.new("tab.selector")
+	
+	This:C1470.noPublishedTable:=cs:C1710.widget.new("noPublishedTable")
+	
+	This:C1470.fieldList:=cs:C1710.listbox.new("01_fields")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function _update()
 	
 	This:C1470.template:=Form:C1466.$dialog[Current form name:C1298].template
 	This:C1470.manifest:=This:C1470.choose(This:C1470.template=Null:C1517; Formula:C1597(Null:C1517); Formula:C1597(This:C1470.template.manifest))
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Redraw the preview
 Function draw()
 	
 	tmpl_DRAW(This:C1470.form)
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Define a field in the form
 Function addField($field : Object; $fields : Collection)
 	var $index : Integer
@@ -114,7 +121,7 @@ Function addField($field : Object; $fields : Collection)
 		End if 
 	End if 
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Construct the table's field list
 Function fieldList($table : Variant)->$result : Object
 	var $attribute; $key; $tableID : Text
@@ -341,7 +348,7 @@ Function fieldList($table : Variant)->$result : Object
 		End if 
 	End if 
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Attach a form (Call back from widget)
 Function setTemplate($browser : Object)
 	
@@ -549,13 +556,13 @@ Function setTemplate($browser : Object)
 		
 	End if 
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Open the template selector
 Function templatePicker($formType : Text)
 	
 	views_LAYOUT_PICKER($formType)
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Building the table selector
 Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	
@@ -760,13 +767,13 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	
 	$widget:=$svg.picture()
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Return the selected form type as text ("list" | "detail")
 Function typeForm()->$formType : Text
 	
 	$formType:=Choose:C955(Num:C11(Form:C1466.$dialog[Current form name:C1298].selector)=2; "detail"; "list")
 	
-	//============================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Ensure that there is an entry in "list" and "detail" for each table in the data model
 Function createFormObjects($datamodel : Object)
 	

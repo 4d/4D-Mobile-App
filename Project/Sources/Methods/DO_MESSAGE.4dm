@@ -22,7 +22,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//______________________________________________________
 		: (Current form name:C1298="EDITOR")
 			
-			$widget:=Form:C1466.$dialog.EDITOR.message
+			$widget:=EDITOR.message
 			
 			//______________________________________________________
 		: (Current form name:C1298="WIZARD_NEW_PROJECT")
@@ -51,7 +51,7 @@ If $widget.isVisible()\
  & (New collection:C1472("alert"; "confirm").indexOf(String:C10($data.type))#-1)
 	
 	// A message is already displayed: wait
-	CALL FORM:C1391(Current form window:C827; "DO_MESSAGE"; $message)
+	EDITOR.callMe("DO_MESSAGE"; $message)
 	
 Else 
 	
@@ -82,8 +82,19 @@ Else
 			// Don't dismiss an alert or confirmation
 			If (New collection:C1472("alert"; "confirm").indexOf(String:C10($data.type))=-1)
 				
-				//$widget.hide()
-				OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
+				Case of 
+						//______________________________________________________
+					: (Current form name:C1298="EDITOR")
+						
+						EDITOR.messageObjects.hide()
+						
+						//______________________________________________________
+					: (Current form name:C1298="WIZARD_NEW_PROJECT")
+						
+						OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
+						
+						//______________________________________________________
+				End case 
 				
 				$display.restore($data)
 				

@@ -62,8 +62,10 @@
 	"_o_OBSOLETES": {
 		"methods": [
 			"_NEW_MOBILE_PROJECT",
+			"_o_color",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
+			"_o_editor_OPEN_PROJECT",
 			"_o_editor_PROJECT_AUDIT",
 			"_o_env_System_path",
 			"_o_http",
@@ -203,13 +205,12 @@
 			"editor_description",
 			"editor_GET_DEVICES",
 			"editor_HANDLER",
-			"editor_INIT",
 			"editor_LoadIcons",
 			"editor_Locked",
 			"editor_MESSAGE_CALLBACK",
 			"editor_OBJECTS_HANDLER",
 			"EDITOR_ON_ACTIVATE",
-			"editor_OPEN_PROJECT",
+			"editor_Panel_init",
 			"editor_PROCESS_MESSAGES",
 			"editor_RESUME",
 			"editor_ui_LISTBOX"
@@ -522,12 +523,14 @@
 			"http",
 			"lep",
 			"menu",
+			"plist",
 			"preferences",
 			"process",
 			"progress",
 			"regex",
 			"str",
 			"svg",
+			"tips",
 			"tools",
 			"xml"
 		]
@@ -847,7 +850,6 @@
 		"methods": [
 			"button",
 			"CALL_MAIN_PROCESS",
-			"color",
 			"COMPILER_classes",
 			"currentForm",
 			"dat",

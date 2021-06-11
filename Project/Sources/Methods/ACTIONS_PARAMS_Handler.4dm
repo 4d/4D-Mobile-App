@@ -27,7 +27,7 @@ If (Count parameters:C259>=1)
 End if 
 
 $form:=New object:C1471(\
-"$"; editor_INIT; \
+"$"; editor_Panel_init; \
 "form"; UI.form("editor_CALLBACK").get(); \
 "noSelection"; UI.static("empty"); \
 "noAction"; UI.static("noAction"); \

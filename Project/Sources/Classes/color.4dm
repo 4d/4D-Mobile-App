@@ -171,7 +171,7 @@ Function setCSS($css : Text)->$this : cs:C1710.color
 			//______________________________________________________
 		Else 
 			
-			ASSERT:C1129(dev_Matrix; "Unknown color format or value: "+String:C10($css))
+			ASSERT:C1129(Structure file:C489=Structure file:C489(*); "Unknown color format or value: "+String:C10($css))
 			// we have a not valid color (could return null but constructor could not failed and return null)
 			
 			//______________________________________________________

@@ -24,8 +24,8 @@ If (False:C215)
 	C_OBJECT:C1216(editor_HANDLER; $1)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(editor_INIT; $0)
-	C_TEXT:C284(editor_INIT; $1)
+	C_OBJECT:C1216(editor_Panel_init; $0)
+	C_TEXT:C284(editor_Panel_init; $1)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(editor_LoadIcons; $0)

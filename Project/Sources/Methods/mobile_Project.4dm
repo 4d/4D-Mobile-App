@@ -8,6 +8,8 @@ If ((String:C10($data.project._buildTarget)="android")\
 	
 Else 
 	
+	//$result:=cs.MobileProjectIOS.new($data)
+	
 	// iOS
 	$result:=mobile_Project_iOS($data)
 	

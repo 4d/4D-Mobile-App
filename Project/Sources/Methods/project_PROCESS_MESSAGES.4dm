@@ -461,7 +461,7 @@ Case of
 				
 				If (FEATURE.with("wizards"))
 					
-					EDITOR.executeInSubform($tPanel; EDITOR.callback; $tSelector)
+					EDITOR.callChild($tPanel; EDITOR.callback; $tSelector)
 					
 				Else 
 					

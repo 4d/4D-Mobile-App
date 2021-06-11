@@ -2,7 +2,7 @@
 OBJECT SET VISIBLE:C603(*; "ribbon"; True:C214)
 OBJECT SET VISIBLE:C603(*; "description"; True:C214)
 
-EDITOR.displayPage("general")
+EDITOR.goToPage("general")
 
 If (FEATURE.with("wizards"))
 	

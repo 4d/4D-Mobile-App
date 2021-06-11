@@ -5,42 +5,18 @@
 // Created 17-8-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-//
+// EDITOR Form Method
 // ----------------------------------------------------
 // Declarations
-var $1 : Object
+#DECLARE($IN : Object)
 
-If (False:C215)
-	C_OBJECT:C1216(editor_HANDLER; $1)
-End if 
-
-var $bottom; $left; $middle; $right; $top : Integer
-var $e; $form; $IN; $o : Object
-
-// NO PARAMETERS REQUIRED
-
-// Optional parameters
-If (Count parameters:C259>=1)
-	
-	$IN:=$1
-	
-End if 
+var $e; $o : Object
 
 // ----------------------------------------------------
 Case of 
 		
 		//=========================================================
 	: ($IN=Null:C1517)  // Form method
-		
-		$form:=New object:C1471(\
-			"window"; Current form window:C827; \
-			"form"; editor_INIT; \
-			"ribbon"; "ribbon"; \
-			"description"; "description"; \
-			"project"; "project"; \
-			"message"; "message"; \
-			"greeting"; "welcome"; \
-			"footer"; "footer")
 		
 		$e:=FORM Event:C1606
 		
@@ -49,39 +25,33 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Load:K2:1)
 				
-				If (EDITOR=Null:C1517)
+				If (FEATURE.with("wizards"))\
+					 & (EDITOR#Null:C1517)
 					
-					// Direct open not after the wizard
-					EDITOR:=cs:C1710.EDITOR.new()
+					// We come from a wizard,
+					// so we need to update the form name
+					EDITOR.name:=Current form name:C1298
 					
 				Else 
 					
-					// Update the form name
-					EDITOR.name:=Current form name:C1298
+					// Direct open we need to create the EDITOR
+					EDITOR:=cs:C1710.EDITOR.new()
 					
 				End if 
 				
-				Form:C1466.$dialog.EDITOR.message:=cs:C1710.subform.new("message").setValue(New object:C1471)
-				
-				//#MARK_TODO: keep current 4D/Database tips values
+				EDITOR.init()
 				
 				// Launch the worker
 				EDITOR.callWorker("COMPILER_COMPONENT")
 				
-				// DEV items
-				OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(DATABASE.isMatrix))
+				EDITOR.tips.default()
 				
-				$o:=UI.tips
-				$o.enable()
-				$o.defaultDelay()
-				$o.defaultDuration()
-				
-				EDITOR.displayPage("general")
+				EDITOR.goToPage("general")
 				
 				// Load the project
 				PROJECT:=cs:C1710.project.new().load(Form:C1466.file)
 				
-				//************************************************
+				//************************************************ TO BE REMOVED
 				PROJECT.$worker:=EDITOR.worker
 				PROJECT.$mainWindow:=EDITOR.window
 				PROJECT.$project:=Form:C1466
@@ -92,21 +62,35 @@ Case of
 				
 				If (FEATURE.with("wizards"))
 					
-					EDITOR.setTitle(cs:C1710.str.new("editorWindowTitle").localized(PROJECT._name))
+					EDITOR.setTitle(EDITOR.str.setText("editorWindowTitle").localized(PROJECT._name))
 					
-					// Update the ribbon
-					$form.form.ribbon:=New object:C1471(\
+					EDITOR.context.ribbon:=New object:C1471(\
 						"state"; "open"; \
 						"tab"; "section"; \
 						"page"; EDITOR.currentPage; \
 						"editor"; Form:C1466)
 					
-					OBJECT SET VALUE:C1742($form.ribbon; Form:C1466.$dialog.EDITOR.ribbon)
+					EDITOR.ribbon.setValue(EDITOR.context.ribbon)
 					
 					// Update the description
 					EDITOR.setHeader()
 					
+					// Initialize the project subform
+					EDITOR.project.setValue(PROJECT)
+					
 				Else 
+					
+					
+					var $form : Object
+					$form:=New object:C1471(\
+						"window"; Current form window:C827; \
+						"form"; editor_Panel_init; \
+						"ribbon"; "ribbon"; \
+						"description"; "description"; \
+						"project"; "project"; \
+						"message"; "message"; \
+						"greeting"; "welcome"; \
+						"footer"; "footer")
 					
 					// Set the dialog title
 					SET WINDOW TITLE:C213(cs:C1710.str.new("editorWindowTitle").localized(Form:C1466.file.parent.fullName); $form.window)
@@ -117,24 +101,30 @@ Case of
 						"tab"; "section"; \
 						"page"; EDITOR.currentPage)
 					
-					(OBJECT Get pointer:C1124(Object named:K67:5; $form.description))->:=EDITOR.currentPage
-					(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog.EDITOR.ribbon
+					(OBJECT Get pointer:C1124(Object named:K67:5; "description"))->:=EDITOR.currentPage
+					(OBJECT Get pointer:C1124(Object named:K67:5; "ribbon"))->:=Form:C1466.$dialog.EDITOR.ribbon
+					
+					OBJECT SET VALUE:C1742($form.project; PROJECT)
 					
 				End if 
 				
-				// Touch the project subform
-				OBJECT SET VALUE:C1742($form.project; PROJECT)
-				
 				If (FEATURE.with("wizards"))
 					
-					editor_OPEN_PROJECT
+					EDITOR.ribbon.show()
+					EDITOR.description.show()
+					
+					// Launch project verifications
+					EDITOR.checkProject()
+					
+					// Audit of development tools
+					EDITOR.checkDevTools()
 					
 				Else 
 					
 					// Display the greeting message if any
 					If (Bool:C1537(EDITOR.preferences.get("doNotShowGreetingMessage")))
 						
-						editor_OPEN_PROJECT
+						_o_editor_OPEN_PROJECT
 						
 					Else 
 						
@@ -163,60 +153,74 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Deactivate:K2:10)
 				
-				//#MARK_TODO: keep current tips values And restore the 4D values
+				EDITOR.tips.restore()
 				
 				//______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
-				//#MARK_TODO: restore current tips values
-				
 				ENV.update()
 				
-				EDITOR_ON_ACTIVATE
+				EDITOR.tips.set()
 				
-				EDITOR.executeInSubform("project"; "PROJECT_ON_ACTIVATE")
+				If (FEATURE.with("wizards"))
+					
+					EDITOR.updateColorScheme()
+					
+					// Verify the web server configuration
+					EDITOR.callMeBack("checkingServerConfiguration")
+					EDITOR.callMeBack("refreshServer")
+					
+					EDITOR.refreshPanels()
+					
+					// Launch project verifications
+					EDITOR.checkProject()
+					
+				Else 
+					
+					EDITOR_ON_ACTIVATE
+					
+				End if 
+				
+				EDITOR.callChild("project"; "PROJECT_ON_ACTIVATE")
 				
 				//______________________________________________________
 			: ($e.code=On Unload:K2:2)
 				
-				//#MARK_TODO: restore 4D tips values
-				
+				EDITOR.tips.restore()
 				EDITOR.callWorker("killWorker")
 				
 				//______________________________________________________
 			: ($e.code=On Resize:K2:27)
 				
 				// Mask picker during resizing
-				EDITOR.executeInSubform($form.project; EDITOR.callback; "pickerHide"; New object:C1471(\
+				EDITOR.callChild(EDITOR.project.name; EDITOR.callback; "pickerHide"; New object:C1471(\
 					"action"; "forms"; \
 					"onResize"; True:C214))
 				
 				// Execute geometry rules in each loaded pannel
-				EDITOR.executeInSubform($form.project; "call_MESSAGE_DISPATCH"; New object:C1471(\
+				EDITOR.callChild(EDITOR.project.name; "call_MESSAGE_DISPATCH"; New object:C1471(\
 					"target"; "panel."; \
 					"method"; "UI_SET_GEOMETRY"))
 				
 				// Footer
-				OBJECT GET COORDINATES:C663(*; $form.footer; $left; $top; $right; $bottom)
-				$right:=$left+EDITOR.width()+1
-				OBJECT SET COORDINATES:C1248(*; $form.footer; $left; $top; $right; $bottom)
+				$o:=EDITOR.footer.coordinates
+				EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width()+1; $o.bottom)
 				
 				// Center message
-				Form:C1466.$dialog.EDITOR.message.alignHorizontally(Align center:K42:3)
+				EDITOR.message.alignHorizontally(Align center:K42:3)
 				
 				//______________________________________________________
 			: ($e.code=On Timer:K2:25)
 				
 				SET TIMER:C645(0)
 				
-				OBJECT SET VISIBLE:C603(*; $form.project; True:C214)
+				EDITOR.project.show()
 				
 				// Footer
-				OBJECT GET COORDINATES:C663(*; $form.footer; $left; $top; $right; $bottom)
-				$right:=$left+EDITOR.width()+1
-				OBJECT SET COORDINATES:C1248(*; $form.footer; $left; $top; $right; $bottom)
+				$o:=EDITOR.footer.coordinates
+				EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width()+1; $o.bottom)
 				
-				EDITOR.executeInSubform($form.project; "call_MESSAGE_DISPATCH"; New object:C1471(\
+				EDITOR.callChild(EDITOR.project.name; "call_MESSAGE_DISPATCH"; New object:C1471(\
 					"target"; "panel."; \
 					"method"; "UI_SET_GEOMETRY"))
 				

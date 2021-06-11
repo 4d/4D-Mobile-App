@@ -40,7 +40,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	$form:=New object:C1471(\
 		"window"; Current form window:C827; \
 		"callback"; "editor_CALLBACK"; \
-		"form"; editor_INIT; \
+		"form"; editor_Panel_init; \
 		"tableList"; "01_tables"; \
 		"tables"; "tables"; \
 		"tableFilter"; "tables.filter"; \

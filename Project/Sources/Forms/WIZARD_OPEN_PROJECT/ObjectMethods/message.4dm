@@ -25,7 +25,8 @@ Case of
 					
 				End if 
 				
-				OBJECT SET VISIBLE:C603(*; "message@"; False:C215)
+				//OBJECT SET VISIBLE(*; "message@"; False)
+				EDITOR.messageObjects.hide()
 				
 				//…………………………………………………………………………………………………
 		End case 

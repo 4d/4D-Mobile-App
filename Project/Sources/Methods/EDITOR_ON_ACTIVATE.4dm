@@ -47,7 +47,7 @@ If (FORM Get current page:C276=1)  // #MARK_OBSOLETE : with the wizards the 2nd 
 	var $panel : Text
 	For each ($panel; panel_Objects)
 		
-		EDITOR.executeInSubform($panel; "panel_REFRESH")
+		EDITOR.callChild($panel; "panel_REFRESH")
 		
 	End for each 
 End if 
