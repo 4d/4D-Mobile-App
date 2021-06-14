@@ -277,7 +277,6 @@ Function copyIcons
 			
 			$shouldCreateMissingIcon:=This:C1470.willRequireFieldIcons($dataModel)
 			
-			
 			For each ($field; OB Entries:C1720($dataModel.value))  // For each field in dataModel
 				
 				If ($field.key#"")
@@ -299,7 +298,7 @@ Function copyIcons
 					// Check for field icon
 					var $Obj_handleField : Object
 					
-					$Obj_handleField:=This:C1470.handleField($dataModel; $field; $shouldCreateMissingIcon)
+					$Obj_handleField:=This:C1470.handleField($dataModel.key; $field; $shouldCreateMissingIcon)
 					
 					If (Not:C34($Obj_handleField.success))
 						
@@ -371,7 +370,11 @@ Function willRequireFieldIcons
 					
 					If ($field.value.icon#"")
 						
-						$0:=True:C214
+						If ($field.value.inverseName=Null:C1517)  // ignore relations here
+							
+							$0:=True:C214
+							
+						End if 
 						
 					End if 
 					
@@ -394,7 +397,11 @@ Function willRequireFieldIcons
 								
 								If ($relatedField.value.icon#"")
 									
-									$0:=True:C214
+									If ($field.value.inverseName=Null:C1517)  // ignore relations here
+										
+										$0:=True:C214
+										
+									End if 
 									
 								End if 
 								
@@ -495,19 +502,29 @@ Function handleDataModelIcon
 	//
 Function handleField
 	var $0 : Object
-	var $1 : Object  // dataModel key value object
+	var $1 : Text  // dataModel key
 	var $2 : Object  // field key value object
 	var $3 : Boolean  // if should create icon if missing
-	var $isRelatedField : Boolean
+	var $isRelation : Boolean
 	var $Obj_handleFieldIcon : Object
 	
 	$0:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$isRelatedField:=($2.value.relatedDataClass#Null:C1517)
+	$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $2; $3; -1)
 	
-	If ($isRelatedField)  // related field
+	If (Not:C34($Obj_handleFieldIcon.success))
+		
+		$0.success:=False:C215
+		$0.errors:=$Obj_handleFieldIcon.errors
+		
+		// Else : all ok
+	End if 
+	
+	$isRelation:=($2.value.relatedDataClass#Null:C1517)
+	
+	If ($isRelation)  // related field
 		
 		var $relatedField : Object
 		
@@ -515,7 +532,7 @@ Function handleField
 			
 			If (Value type:C1509($relatedField.value)=Is object:K8:27)
 				
-				If ($relatedField.value.id#Null:C1517)
+				If ($relatedField.value.name#Null:C1517)  // can be a sub field or a sub 1->N relation (ignore sub N->1 relation)
 					
 					$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $relatedField.value; $3; $2.value.relatedTableNumber)
 					
@@ -534,10 +551,6 @@ Function handleField
 			
 		End for each 
 		
-	Else   // direct field
-		
-		$0:=This:C1470.handleFieldIcon($1; $2; $3; -1)
-		
 	End if 
 	
 	
@@ -545,7 +558,7 @@ Function handleField
 	//
 Function handleFieldIcon
 	var $0 : Object
-	var $1 : Object  // dataModel key value object
+	var $1 : Text  // dataModel key
 	var $2 : Object  // field key value object
 	var $3 : Boolean  // if should create icon if missing
 	var $4 : Integer  // relatedTableNumber if is related field
@@ -556,7 +569,6 @@ Function handleFieldIcon
 	$0:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
-	
 	
 	$shouldCreateMissingIcon:=$3
 	
@@ -595,19 +607,24 @@ Function handleFieldIcon
 	// Create icon if missing
 	If ((Not:C34(Bool:C1537($currentFile.exists))) & ($shouldCreateMissingIcon=True:C214))
 		
-		var $Obj_createIcon : Object
-		
-		$Obj_createIcon:=This:C1470.createIconAssets($field)
-		
-		If ($Obj_createIcon.success)
+		If ($field.id#Null:C1517)
 			
-			$currentFile:=$Obj_createIcon.icon
+			var $Obj_createIcon : Object
 			
-		Else 
+			$Obj_createIcon:=This:C1470.createIconAssets($field)
 			
-			$0.success:=False:C215
-			$0.errors.combine($Obj_createIcon.errors)
+			If ($Obj_createIcon.success)
+				
+				$currentFile:=$Obj_createIcon.icon
+				
+			Else 
+				
+				$0.success:=False:C215
+				$0.errors.combine($Obj_createIcon.errors)
+				
+			End if 
 			
+			// Else : don't handle missing icon on related field and relation's related field
 		End if 
 		
 		// Else : already handled
@@ -619,14 +636,21 @@ Function handleFieldIcon
 		var $Obj_copy : Object
 		var $newName : Text
 		
-		If ($4>0)
+		$newName:=$currentFile.name
+		
+		If ($field.id#Null:C1517)
 			
-			$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "field_icon_"+$1.key+"_"+String:C10($4)+"_"+String:C10($field.id))
+			If ($4>0)  // related field
+				
+				$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "related_field_icon_"+$1+"_"+String:C10($4)+"_"+String:C10($field.id))
+				
+			Else   // direct field
+				
+				$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "field_icon_"+$1+"_"+String:C10($field.id))
+				
+			End if 
 			
-		Else 
-			
-			$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "field_icon_"+$1.key+"_"+String:C10($field.id))
-			
+			// Else : don't handle missing icon on related field and relation's related field
 		End if 
 		
 		$Obj_copy:=This:C1470.copyIcon($currentFile; $newName)
