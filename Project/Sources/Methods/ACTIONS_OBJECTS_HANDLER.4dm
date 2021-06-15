@@ -330,13 +330,13 @@ Case of
 										
 										//________________________________________
 									: ($i=1)\
-										 & (String:C10($context.current.preset)="suppression")  // Table
+										 & (String:C10($context.current.preset)="delete")  // Table
 										
 										$menu.disable()
 										
 										//________________________________________
 									: ($i=2)\
-										 & (String:C10($context.current.preset)="adding")  // Current entity
+										 & (String:C10($context.current.preset)="add")  // Current entity
 										
 										$menu.disable()
 										
@@ -428,7 +428,7 @@ Case of
 							//……………………………………………………………………
 						: ($menu.edit)
 							
-							$menu.preset:="edition"
+							$menu.preset:="edit"
 							$menu.prefix:="edit"
 							$menu.icon:="actions/Edit.svg"
 							$menu.scope:="currentRecord"
@@ -438,7 +438,7 @@ Case of
 							//……………………………………………………………………
 						: ($menu.add)
 							
-							$menu.preset:="adding"
+							$menu.preset:="add"
 							$menu.prefix:="add"
 							$menu.icon:="actions 2/Add.svg"
 							$menu.scope:="table"
@@ -448,7 +448,7 @@ Case of
 							//……………………………………………………………………
 						: ($menu.delete)
 							
-							$menu.preset:="suppression"
+							$menu.preset:="delete"
 							$menu.prefix:="delete"
 							$menu.icon:="actions/Delete.svg"
 							$menu.scope:="currentRecord"
