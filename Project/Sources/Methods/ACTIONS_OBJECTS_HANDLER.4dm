@@ -382,12 +382,20 @@ Case of
 			$shareMenu:=cs:C1710.menu.new()
 			$menu.append(":xliff:shareActionFor"; $shareMenu)
 			
+			If (FEATURE.with("sortAction"))
+				$sortMenu:=cs:C1710.menu.new()
+				$menu.append(":xliff:sortActionFor"; $sortMenu)
+			End if 
+			
 			For each ($t; Form:C1466.dataModel)
 				
 				$addMenu.append(Form:C1466.dataModel[$t][""].name; "add_"+$t)
 				$editMenu.append(Form:C1466.dataModel[$t][""].name; "edit_"+$t)
 				$deleteMenu.append(Form:C1466.dataModel[$t][""].name; "delete_"+$t)
 				$shareMenu.append(Form:C1466.dataModel[$t][""].name; "share_"+$t)
+				If (FEATURE.with("sortAction"))
+					$sortMenu.append(Form:C1466.dataModel[$t][""].name; "sort_"+$t)
+				End if 
 				
 			End for each 
 			
@@ -414,11 +422,13 @@ Case of
 					$menu.delete:=($t="delete_@")
 					$menu.add:=($t="add_@")
 					$menu.share:=($t="share_@")
+					$menu.sort:=($t="sort_@")
 					
 					$t:=Replace string:C233($t; "edit_"; "")
 					$t:=Replace string:C233($t; "delete_"; "")
 					$t:=Replace string:C233($t; "add_"; "")
 					$t:=Replace string:C233($t; "share_"; "")
+					$t:=Replace string:C233($t; "sort_"; "")
 					
 					$menu.table:=$t
 					$menu.tableNumber:=Num:C11($t)
@@ -464,6 +474,17 @@ Case of
 							$menu.scope:="currentRecord"
 							$menu.label:=Get localized string:C991("share...")
 							READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Send-basic.svg").platformPath; $icon)
+							$menu.description:=""
+							
+							//……………………………………………………………………
+						: ($menu.sort)  // FEATURE.with("sortAction")
+							
+							$menu.preset:="sort"
+							$menu.prefix:="sort"
+							$menu.icon:="actions/Sort.svg"
+							$menu.scope:="table"
+							$menu.label:=Get localized string:C991("sort...")
+							READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Sort.svg").platformPath; $icon)
 							$menu.description:=""
 							
 							//……………………………………………………………………
@@ -514,6 +535,10 @@ Case of
 						: ($menu.share)
 							
 							$o.description:=$menu.description
+							
+							//……………………………………………………………………
+						: ($menu.sort)
+							
 							
 							//……………………………………………………………………
 						Else 

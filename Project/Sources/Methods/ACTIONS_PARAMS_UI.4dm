@@ -61,7 +61,7 @@ Case of
 				
 				Case of 
 						//______________________________________________________
-					: (String:C10($action.preset)="suppression")
+					: (String:C10($action.preset)="delete")
 						
 						FORM GOTO PAGE:C247(1; *)
 						
@@ -125,7 +125,7 @@ Case of
 									
 									If ($parameter.type#"image")
 										
-										$withDefault:=Choose:C955(String:C10($action.preset)#"edition"; True:C214; ($parameter.fieldNumber=Null:C1517))
+										$withDefault:=Choose:C955(String:C10($action.preset)#"edit"; True:C214; ($parameter.fieldNumber=Null:C1517))
 										
 									End if 
 									
@@ -321,8 +321,12 @@ Case of
 			
 		End if 
 		
-		$o:=New object:C1471(\
-			"value"; Get localized string:C991($t))
+		If ($t[[1]]="/")
+			$o:=New object:C1471("value"; Substring:C12($t; 2))
+		Else 
+			$o:=New object:C1471(\
+				"value"; Get localized string:C991($t))
+		End if 
 		
 		//______________________________________________________
 	: ($1="listUI")  // Colors UI according to focus
