@@ -288,20 +288,26 @@ Case of
 		//==================================================
 	: ($form.form.current=$form.add.name)  // Add action button
 		
+		var $isSortAction : Boolean
+		$isSortAction:=String:C10($ƒ.action.preset)="sort"
+		
 		Case of 
 				
 				//______________________________________________________
-			: ($form.form.eventCode=On Clicked:K2:4)  // Add a user parameter
+			: ($form.form.eventCode=On Clicked:K2:4) & Not:C34($isSortAction)  // Add a user parameter
 				
 				$menu:=New object:C1471(\
 					"selected"; True:C214; \
 					"choice"; "new")
 				
 				//______________________________________________________
-			: ($form.form.eventCode=On Alternative Click:K2:36)  // Display
+			: ($form.form.eventCode=On Alternative Click:K2:36) | ($isSortAction & ($form.form.eventCode=On Clicked:K2:4))  // Display
 				
 				$menu:=cs:C1710.menu.new()
-				$menu.append(":xliff:addParameter"; "new")
+				
+				If (Not:C34($isSortAction))
+					$menu.append(":xliff:addParameter"; "new")
+				End if 
 				
 				If ($ƒ.action.tableNumber#Null:C1517)
 					
@@ -313,7 +319,7 @@ Case of
 						
 						For each ($t; $table)
 							
-							If (PROJECT.isField($t))
+							If (PROJECT.isField($t) & (Not:C34($isSortAction) | PROJECT.isSortable($table[$t])))
 								
 								$table[$t].fieldNumber:=Num:C11($t)
 								$c.push($table[$t])
@@ -325,7 +331,7 @@ Case of
 						
 						For each ($t; $table)
 							
-							If (PROJECT.isField($t))
+							If (PROJECT.isField($t) & (Not:C34($isSortAction) | PROJECT.isSortable($table[$t])))
 								
 								If ($ƒ.action.parameters.query("fieldNumber = :1"; Num:C11($t)).length=0)
 									

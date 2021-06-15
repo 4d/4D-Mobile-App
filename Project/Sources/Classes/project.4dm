@@ -923,6 +923,24 @@ Function isStorage
 		End if 
 	End if 
 	
+	
+	//====================================
+Function isSortable
+	var $0 : Boolean
+	var $1 : Object
+	
+	If ($1.fieldType#Null:C1517)
+		
+		If ($1.fieldType#Is object:K8:27)\
+			 & ($1.fieldType#Is BLOB:K8:12)\
+			 & ($1.fieldType#Is picture:K8:10)\
+			 & ($1.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
+			
+			$0:=True:C214
+			
+		End if 
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 Function getIcon($relativePath : Text)->$icon : Picture
 	
