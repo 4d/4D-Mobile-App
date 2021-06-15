@@ -18,7 +18,7 @@ var $x : Blob
 var $context; $current; $field; $form; $o; $oo; $table; $widget : Object
 var $c; $fields : Collection
 
-var $addMenu; $deleteMenu; $editMenu; $menu; $shareMenu : cs:C1710.menu
+var $addMenu; $deleteMenu; $editMenu; $menu; $shareMenu; $sortMenu : cs:C1710.menu
 
 // ----------------------------------------------------
 // Initialisations
