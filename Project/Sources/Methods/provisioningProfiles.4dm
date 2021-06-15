@@ -140,9 +140,10 @@ Case of
 						$Txt_posix:=Convert path system to POSIX:C1106($Txt_plist)
 						
 						// Remove data not convertible to JSON https:// Juzhax.com/2013/12/invalid-object-in-plist-for-destination-format/
-						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "ExpirationDate"))
-						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "CreationDate"))
-						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "DeveloperCertificates"))
+						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "ExpirationDate"))  // date
+						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "CreationDate"))  // date
+						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "DeveloperCertificates"))  // data
+						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "DER-Encoded-Profile"))  // data
 						
 						// Read it and convert it
 						$response:=_o_plist(New object:C1471("action"; "object"; "domain"; $Txt_posix))

@@ -489,7 +489,9 @@ If (Length:C16($Txt_cmd)>0)
 	
 	If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
 		
-		$Bool_errorInOut:=(Position:C15("Error domain"; $Txt_out)>0) | (Position:C15("Permission denied"; $Txt_out)>0)
+		$Bool_errorInOut:=(Position:C15("Error domain"; $Txt_out)>0)\
+			 | (Position:C15("Permission denied"; $Txt_out)>0)\
+			 | (Position:C15("invalid object in plist"; $Txt_out)>0)
 		
 		If (Not:C34($Bool_errorInOut))
 			
