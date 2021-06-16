@@ -1,4 +1,5 @@
 //%attributes = {"invisible":true}
+//%attributes = {"invisible":true}
 var $1 : Integer
 var $2 : Object
 
@@ -145,17 +146,21 @@ FEATURE.unstable("duplicateTemplate")
 // Mac M1 build for simu using arm64
 // FEATURE.unstable("simuARMOnAppleProcessor")
 
+FEATURE.unstable("ConnectedDevices")  // Add connected devices to the simulator tool
+
 FEATURE.unstable("iconActionMenu")  // Use action button for icon on product panel
 FEATURE.unstable("dominantColor")  // Feature #127813: BackgroundColor picker
 
 FEATURE.unstable("targetPannel")  // Use a separate pannel for the target OS
 
+FEATURE.unstable("sortAction")  // https://project.4d.com/issues/117660
+FEATURE.unstable("freeActionName")  // follow https://project.4d.com/issues/117660 but to please LE
+
+FEATURE.unstable("plistClass")  // Use plist class instead of plist method
+
 /* _____________
 WIP
 _____________*/
-FEATURE.wip("plistClass")  // Use plist class instead of plist method
-
-FEATURE.wip("ConnectedDevices")  // Add connected devices to the simulator tool
 
 FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component 
 //FEATURE.vdl("testCompression")
