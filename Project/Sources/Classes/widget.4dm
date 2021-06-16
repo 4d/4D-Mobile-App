@@ -319,35 +319,31 @@ Function clear
 /*══════════════════════════
 .touch() -> This
 ══════════════════════════*/
-Function touch
+Function touch()
 	
-	If (This:C1470.assignable)
+	//If (This.assignable)
+	//This.pointer->:=(This.pointer)->
+	//Else 
+	//If (This.dataSource=Null)
+	//If (Value type(OBJECT Get value(This.name))#Is undefined)
+	//OBJECT SET VALUE(This.name; OBJECT Get value(This.name))
+	//End if 
+	//Else 
+	//// ⚠️ OBSOLETE: we don't need this trick anymore since "Object get/set value" is now available.
+	//C_TEXT($t)
+	//$t:=Choose(Value type(This.dataSource)=Is object; This.dataSource.source; This.dataSource)
+	//EXECUTE FORMULA($t+":="+$t)
+	//End if 
+	//End if 
+	
+	var $v
+	$v:=OBJECT Get value:C1743(This:C1470.name)
+	
+	If (Value type:C1509($v)#Is undefined:K8:13)
 		
-		This:C1470.pointer->:=(This:C1470.pointer)->
+		OBJECT SET VALUE:C1742(This:C1470.name; $v)
 		
-	Else 
-		
-		If (This:C1470.dataSource=Null:C1517)
-			
-			If (Value type:C1509(OBJECT Get value:C1743(This:C1470.name))#Is undefined:K8:13)
-				
-				OBJECT SET VALUE:C1742(This:C1470.name; OBJECT Get value:C1743(This:C1470.name))
-				
-			End if 
-			
-		Else 
-			
-			// ⚠️ OBSOLETE: we don't need this trick anymore since "Object get/set value" is now available.
-			C_TEXT:C284($t)
-			$t:=Choose:C955(Value type:C1509(This:C1470.dataSource)=Is object:K8:27; This:C1470.dataSource.source; This:C1470.dataSource)
-			
-			EXECUTE FORMULA:C63($t+":="+$t)
-			
-		End if 
 	End if 
-	
-	C_OBJECT:C1216($0)
-	$0:=This:C1470
 	
 /*══════════════════════════
 .on(e;callback) -> bool

@@ -28,7 +28,28 @@
 	},
 	"pages": [
 		{
-			"objects": {}
+			"objects": {
+				"noPublishedTable": {
+					"type": "button",
+					"top": 40,
+					"left": 30,
+					"width": 460,
+					"height": 19,
+					"visibility": "hidden",
+					"stroke": "#1AA1E5",
+					"text": ":xliff:noPublishedTable",
+					"textPlacement": "center",
+					"style": "custom",
+					"method": "ObjectMethods/noPublishedTable.4dm",
+					"events": [
+						"onLoad",
+						"onClick",
+						"onMouseEnter",
+						"onMouseLeave",
+						"onMouseMove"
+					]
+				}
+			}
 		},
 		{
 			"objects": {
@@ -308,26 +329,6 @@
 					"textAlign": "left",
 					"text": ":xliff:scope"
 				},
-				"noPublishedTable": {
-					"type": "button",
-					"top": 40,
-					"left": 30,
-					"width": 460,
-					"height": 19,
-					"visibility": "hidden",
-					"stroke": "#1AA1E5",
-					"text": ":xliff:noPublishedTable",
-					"textPlacement": "center",
-					"style": "custom",
-					"method": "ObjectMethods/noPublishedTable.4dm",
-					"events": [
-						"onLoad",
-						"onClick",
-						"onMouseEnter",
-						"onMouseLeave",
-						"onMouseMove"
-					]
-				},
 				"actionMethod": {
 					"type": "button",
 					"top": 270,
@@ -403,7 +404,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 55,
+	"geometryStamp": 57,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
