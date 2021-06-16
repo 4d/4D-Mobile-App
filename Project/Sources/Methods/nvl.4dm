@@ -1,5 +1,5 @@
 //%attributes = {"invisible":true}
-/*  nul (variant{; long}) -> variant
+/*  nvl (variant{; long}) -> variant
 $1: some variable, null or undefined var
 $2: empty var to return
 $0:

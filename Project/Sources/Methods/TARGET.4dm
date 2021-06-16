@@ -16,7 +16,7 @@ $ƒ:=panel_Definition
 // ----------------------------------------------------
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Form(On Load:K2:1; On Timer:K2:25; On Bound Variable Change:K2:52)
+	$e:=panel_Form_common(On Load:K2:1; On Timer:K2:25; On Bound Variable Change:K2:52)
 	
 	Case of 
 			

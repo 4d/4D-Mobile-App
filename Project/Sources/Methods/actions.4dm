@@ -1,361 +1,229 @@
-//%attributes = {"invisible":true,"preemptive":"capable"}
-// ----------------------------------------------------
-// Project method : actions
-// ID[66E9AA75F234494E96C5C0514F05D6C4]
-// Created 7-3-2019 by Vincent de Lachaux
-// ----------------------------------------------------
-// Description:
-//
-// ----------------------------------------------------
-// Declarations
-C_OBJECT:C1216($0)
-C_TEXT:C284($1)
-C_OBJECT:C1216($2)
+//%attributes = {"invisible":true}
+var $e; $ƒ : Object
 
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($t; $Txt_action)
-C_OBJECT:C1216($o; $Obj_action; $Obj_parameters; $Obj_in; $Obj_out)
-C_BOOLEAN:C305($Boo_hasImage)
+$ƒ:=panel_Definition
 
-If (False:C215)
-	C_OBJECT:C1216(actions; $0)
-	C_TEXT:C284(actions; $1)
-	C_OBJECT:C1216(actions; $2)
-End if 
-
-// ----------------------------------------------------
-// Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
+If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	// Required parameters
-	$Txt_action:=$1
+	$e:=panel_Form_common(On Load:K2:1; On Timer:K2:25)
 	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		$Obj_in:=$2
-		
-	End if 
-	
-	$Obj_out:=New object:C1471(\
-		"success"; False:C215)
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
-
-// ----------------------------------------------------
-Case of 
-		
-		//______________________________________________________
-	: ($Txt_action="capabilities")
-		
-		$Obj_out.capabilities:=New object:C1471(\
-			"photo"; False:C215)
-		
-		If (Value type:C1509($Obj_in.project.actions)=Is collection:K8:32)
+	Case of 
 			
-			For each ($Obj_action; $Obj_in.project.actions) Until ($Boo_hasImage)
+			//______________________________________________________
+		: ($e.code=On Load:K2:1)
+			
+			androidLimitations(True:C214; "Actions are coming soon for Android")
+			
+			// This trick remove the horizontal gap
+			$ƒ.actions.setScrollbars(0; 2)
+			
+			// Load project actions
+			$ƒ.load()
+			
+			// Set the initial display
+			If (_and(Formula:C1597(Form:C1466.dataModel#Null:C1517); Formula:C1597(Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))))
 				
-				If (Value type:C1509($Obj_action.parameters)=Is collection:K8:32)
+				$ƒ.actions.show()
+				$ƒ.noPublishedTable.hide()
+				
+				$ƒ.add.enable()
+				$ƒ.databaseMethod.enable()
+				
+				If (_and(Formula:C1597(Form:C1466.actions#Null:C1517); Formula:C1597(Form:C1466.actions.length>0)))
 					
-					For each ($Obj_parameters; $Obj_action.parameters) Until ($Boo_hasImage)
+					// Select last used action (or the first one)
+					If ($ƒ.$current#Null:C1517)
 						
-						If ($Obj_parameters.type="image")
-							
-							$Boo_hasImage:=True:C214
-							
-						End if 
+						var $indx : Integer
+						$indx:=Form:C1466.actions.indexOf($ƒ.$current)
+						$ƒ.actions.select($indx+1)
 						
-						If (String:C10($Obj_parameters.format)="barcode")
-							
-							$Boo_hasImage:=True:C214  // Maybe separate and want only camera and not photo...
-							
-						End if 
-					End for each 
-				End if 
-			End for each 
-		End if 
-		
-		If ($Boo_hasImage)
-			
-			$Obj_out.capabilities.photo:=True:C214
-			$Obj_out.capabilities.camera:=True:C214
-			
-		End if 
-		
-		$Obj_out.success:=True:C214
-		
-		//______________________________________________________
-	: ($Txt_action="form")
-		
-		$Obj_out.success:=True:C214
-		
-		$Obj_out.actions:=actions("filter"; $Obj_in).actions
-		
-		For each ($Obj_action; $Obj_out.actions)
-			
-			For each ($t; $Obj_action)
-				
-				If ($t[[1]]="$")
+					Else 
+						
+						$ƒ.actions.select(1)
+						
+					End if 
 					
-					OB REMOVE:C1226($Obj_action; $t)
 					
-				End if 
-			End for each 
-			
-			If (Length:C16(String:C10($Obj_action.icon))>0)
-				
-				$Obj_action.icon:="action_"+$Obj_action.name
-				
-			End if 
-			
-			If ($Obj_action.label=Null:C1517)
-				
-				$Obj_action.label:=$Obj_action.name
-				
-			End if 
-		End for each 
-		
-		//______________________________________________________
-	: ($Txt_action="filter")
-		
-		If ($Obj_in.project#Null:C1517)  // Could be not(null) for test
-			
-			$Obj_in.actions:=$Obj_in.project.actions
-			
-		End if 
-		
-		$Obj_out.actions:=New collection:C1472()
-		
-		If ($Obj_in.actions#Null:C1517)
-			
-			If (Value type:C1509($Obj_in.actions)=Is collection:K8:32)
-				
-				$Obj_out.actions:=$Obj_in.actions.copy()
-				
-				// Filter empty names
-				$Obj_out.actions:=$Obj_out.actions.query("name !=''")
-				
-				If (Num:C11($Obj_in.tableNumber)#0)  // Filter according to the tableNumber
+					//$ƒ.callMeBack("selectParameters")
 					
-					$Obj_out.actions:=$Obj_out.actions.query("tableNumber = :1"; Num:C11($Obj_in.tableNumber))
+					$ƒ.updateParameters()
 					
 				End if 
 				
-				If (Length:C16($Obj_in.scope)>0)  // Filter according to the scope
-					
-					$Obj_out.actions:=$Obj_out.actions.query("scope = :1"; $Obj_in.scope)
-					
-				End if 
-			End if 
-		End if 
-		
-		//______________________________________________________
-	: ($Txt_action="assets")
-		
-		Case of 
+				$ƒ.actions.focus()
 				
-				//……………………………………………………………………………………………………………
-			: ($Obj_in.target=Null:C1517)
-				
-				ASSERT:C1129(dev_Matrix; "target must be defined for action assets files")
-				
-				//……………………………………………………………………………………………………………
 			Else 
 				
-				If ($Obj_in.project#Null:C1517)
-					
-					$Obj_in.actions:=$Obj_in.project.actions
-					
-				End if 
+				$ƒ.actions.hide()
+				$ƒ.noPublishedTable.show()
 				
-				If (Value type:C1509($Obj_in.actions)=Is collection:K8:32)
-					
-					$Obj_out.results:=New object:C1471
-					
-					$Obj_out.path:=asset(New object:C1471("action"; "path"; "path"; $Obj_in.target)).path+"Actions"+Folder separator:K24:12
-					
-					For each ($Obj_action; $Obj_in.actions)
-						
-						$o:=actions("iconPath"; New object:C1471(\
-							"action"; $Obj_action))
-						
-						Case of 
-								
-								//……………………………………………………
-							: (Bool:C1537($o.exists))
-								
-								$Obj_out.results[$Obj_action.name]:=asset(New object:C1471(\
-									"action"; "create"; \
-									"type"; "imageset"; \
-									"source"; $o.platformPath; \
-									"tags"; New object:C1471("name"; "action_"+$Obj_action.name); \
-									"target"; $Obj_out.path; \
-									"size"; 32))
-								
-								ob_error_combine($Obj_out; $Obj_out.results[$Obj_action.name])
-								
-								//……………………………………………………
-							: ($o.success)
-								
-								// No icon
-								
-								//……………………………………………………
-							Else 
-								
-								// Icon file is missing
-								ob_warning_add($Obj_out; "Missing action icon file: "+String:C10($Obj_in.action.icon))
-								
-								//……………………………………………………
-						End case 
-					End for each 
-					
-					$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
-					
-				End if 
+				$ƒ.add.disable()
+				$ƒ.databaseMethod.disable()
 				
-				//……………………………………………………………………………………………………………
-		End case 
-		
-		//______________________________________________________
-	: ($Txt_action="iconPath")  // RECURSIVE CALL
-		
-		Case of 
-				
-				//……………………………………………………………………………………………………………
-			: ($Obj_in.action=Null:C1517)
-				
-				ASSERT:C1129(dev_Matrix; "action must be defined to get icon path")
-				
-				//……………………………………………………………………………………………………………
-			: (Length:C16(String:C10($Obj_in.action.icon))=0)
-				
-				$Obj_out.success:=True:C214  // No icon but success
-				
-				//……………………………………………………………………………………………………………
-			: (String:C10($Obj_in.action.icon)[[1]]="/")  // host icons
-				
-				$Obj_out:=COMPONENT_Pathname("host_actionIcons").file(Delete string:C232($Obj_in.action.icon; 1; 1))
-				
-				//……………………………………………………………………………………………………………
-			Else 
-				
-				$Obj_out:=COMPONENT_Pathname("actionIcons").file($Obj_in.action.icon)
-				
-				//……………………………………………………………………………………………………………
-		End case 
-		
-		//______________________________________________________
-	: ($Txt_action="addChoiceList")  // RECURSIVE CALL
-		
-		// Add choice lists if any to action parameters
-		If ($Obj_in.project.actions#Null:C1517)
+			End if 
 			
-			C_OBJECT:C1216($Obj_dataModel; $Path_manifest; $Obj_manifest)
-			C_TEXT:C284($t)
-			$Obj_dataModel:=$Obj_in.project.dataModel
+			// Set colors
+			$ƒ.dropCursor.setColors(Highlight menu background color:K23:7)
 			
-			For each ($Obj_action; $Obj_in.project.actions)
-				
-				If ($Obj_action.parameters#Null:C1517)
+			// Preload the icons
+			$ƒ.callMeBack("loadActionIcons")
+			
+			// Give the focus to the actions listbox
+			$ƒ.actions.focus()
+			
+			// Add the events that we cannot select in the form properties 😇
+			$ƒ.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Data Entry:K2:39))
+			
+			//______________________________________________________
+		: ($e.code=On Timer:K2:25)
+			
+			androidLimitations(True:C214)
+			
+			$ƒ.update()
+			
+			//______________________________________________________
+	End case 
+	
+Else   // <== WIDGETS METHOD
+	
+	$e:=$ƒ.event
+	
+	Case of 
+			
+			//==============================================
+		: ($ƒ.actions.catch())
+			
+			Case of 
 					
-					For each ($Obj_parameters; $Obj_action.parameters)
+					//_____________________________________
+				: ($e.code=On Selection Change:K2:29)
+					
+					$ƒ.$current:=$ƒ.current
+					
+					// Update parameters panel
+					$ƒ.updateParameters()
+					
+					// Update UI
+					$ƒ.refresh()
+					
+					//_____________________________________
+				: ($e.code=On Getting Focus:K2:7)
+					
+					$ƒ.actions.setColors(Foreground color:K23:1)
+					$ƒ.actionsBorder.setColors(EDITOR.selectedColor)
+					
+					//_____________________________________
+				: ($e.code=On Losing Focus:K2:8)
+					
+					If (Bool:C1537($ƒ.$edit))  // Focus is lost after editing a cell
 						
-						If ($Obj_parameters.fieldNumber#Null:C1517)  // Linked to a field
+						OB REMOVE:C1226($ƒ; "$edit")
+						
+					Else 
+						
+						$ƒ.actions.setColors(Foreground color:K23:1)
+						$ƒ.actionsBorder.setColors(EDITOR.backgroundUnselectedColor)
+						
+					End if 
+					
+					//_____________________________________
+				: (editor_Locked) | (Num:C11($e.row)=0)
+					
+					// <NOTHING MORE TO DO>
+					
+					//_____________________________________
+				: ($e.code=On Clicked:K2:4)
+					
+					Case of 
 							
-							$t:=String:C10($Obj_dataModel[String:C10($Obj_action.tableNumber)][String:C10($Obj_parameters.fieldNumber)].format)
+							//………………………………………………………………
+						: ($e.columnName="icons")
 							
-							If (Length:C16($t)>0)
-								
-								If ($t[[1]]="/")
-									
-									// User
-									$Path_manifest:=COMPONENT_Pathname("host_formatters").file(Substring:C12($t; 2)+"/manifest.json")
-									
-									If ($Path_manifest.exists)
-										
-										$Obj_manifest:=JSON Parse:C1218($Path_manifest.getText())
-										
-										If ($Obj_manifest.choiceList#Null:C1517)
-											
-											If ($Obj_parameters.type="bool")  // Kep only 2 values
-												
-												Case of 
-														
-														//______________________________________________________
-													: (Value type:C1509($Obj_manifest.choiceList)=Is collection:K8:32)
-														
-														$Obj_manifest.choiceList.resize(2)
-														$Obj_parameters.choiceList:=$Obj_manifest.choiceList
-														
-														//______________________________________________________
-													: (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
-														
-														$Obj_parameters.choiceList:=New collection:C1472($Obj_manifest.choiceList["0"]; $Obj_manifest.choiceList["1"])
-														
-														//______________________________________________________
-													Else 
-														
-														// IGNORE
-														
-														//______________________________________________________
-												End case 
-												
-											Else 
-												
-												If (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
-													$Obj_parameters.choiceList:=OB Entries:C1720($Obj_manifest.choiceList)  // to keep order
-												Else 
-													$Obj_parameters.choiceList:=$Obj_manifest.choiceList
-												End if 
-												
-											End if 
-										End if 
-									End if 
-									
-								Else 
-									
-									$Obj_manifest:=SHARED.resources.definitions
-									
-									If ($Obj_manifest[$t].choiceList#Null:C1517)
-										
-										$Obj_parameters.choiceList:=$Obj_manifest[$t].choiceList
-										
-									End if 
-								End if 
-							End if 
-						End if 
-					End for each 
-				End if 
-			End for each 
-		End if 
-		
-		//______________________________________________________
-	: ($Txt_action="hasAction")
-		
-		If ($Obj_in.project.actions#Null:C1517)
-			$Obj_out.value:=$Obj_in.project.actions.length>0
-		Else 
-			$Obj_out.value:=False:C215
-		End if 
-		$Obj_out.success:=True:C214
-		
-		//______________________________________________________
-	Else 
-		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Txt_action+"\"")
-		
-		//______________________________________________________
-End case 
-
-// ----------------------------------------------------
-// Return
-$0:=$Obj_out
-
-// ----------------------------------------------------
-// End
+							$ƒ.doShowIconPicker()
+							
+							//………………………………………………………………
+					End case 
+					
+					//_____________________________________
+				: ($e.code=On Begin Drag Over:K2:44)
+					
+					$ƒ.doBeginDrag()
+					
+					//_____________________________________
+				: ($e.code=On Drop:K2:12)
+					
+					$ƒ.doOnDrop()
+					
+					//_____________________________________
+				: ($e.code=On Before Data Entry:K2:39)
+					
+					Case of 
+							
+							//………………………………………………………………
+						: (New collection:C1472("names"; "shorts"; "labels").indexOf($e.columnName)#-1)
+							
+							// Set a flag to manage On Losing Focus
+							$ƒ.$edit:=True:C214
+							
+							//………………………………………………………………
+						: ($e.columnName="tables")
+							
+							$ƒ.doTableMenu()
+							
+							//………………………………………………………………
+						: ($e.columnName="scopes")
+							
+							$ƒ.doScopeMenu()
+							
+							//………………………………………………………………
+					End case 
+					
+					//_____________________________________
+				: ($e.code=On Double Clicked:K2:5)
+					
+					If (New collection:C1472("names"; "shorts"; "labels").indexOf($e.columnName)#-1)
+						
+						EDIT ITEM:C870(*; $e.columnName; Num:C11($ƒ.index))
+						
+					End if 
+					
+					//_____________________________________
+				: ($e.code=On Mouse Leave:K2:34)
+					
+					$ƒ.dropCursor.hide()
+					
+					//_____________________________________
+			End case 
+			
+			//==============================================
+		: ($ƒ.add.catch())
+			
+			Case of 
+					
+					//_____________________________
+				: ($e.code=On Alternative Click:K2:36)
+					
+					$ƒ.doAddMenu()
+					
+					//_____________________________
+				: ($e.code=On Clicked:K2:4)
+					
+					$ƒ.doNewAction()
+					
+					//_____________________________
+			End case 
+			
+			//==============================================
+		: ($ƒ.remove.catch())
+			
+			$ƒ.doRemoveAction()
+			
+			//==============================================
+		: ($ƒ.databaseMethod.catch())
+			
+			$ƒ.doOpenDatabaseMethod()
+			
+			//==============================================
+	End case 
+End if 

@@ -273,7 +273,7 @@ Function _createTags()
 	This:C1470.tags.launchScreenBackgroundColor:=SHARED.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
 	
 	// • Setting
-	This:C1470.tags.hasAction:=Choose:C955(Bool:C1537(actions("hasAction"; This:C1470.input).value); "true"; "false")  // plist bool format
+	This:C1470.tags.hasAction:=Choose:C955(Bool:C1537(mobile_actions("hasAction"; This:C1470.input).value); "true"; "false")  // plist bool format
 	
 	// • SDK
 	This:C1470.tags.sdkVersion:=String:C10(This:C1470.sdk.version)

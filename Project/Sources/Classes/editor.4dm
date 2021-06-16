@@ -422,7 +422,7 @@ Function goToPage($page : Text)
 		
 		This:C1470.refresh()  // Update geometry
 		
-		This:C1470.callChild("description"; "editor_description"; $o)
+		This:C1470.callChild("description"; "editor_SET_DESCRIPTION"; $o)
 		
 		This:C1470.project.focus()
 		

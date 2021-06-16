@@ -3,11 +3,11 @@ This class is the parent class of all form objects classes
 */
 
 //=== === === === === === === === === === === === === === === === === === ===
-Class constructor($objectName : Text)
+Class constructor($name : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.name:=$objectName
+		This:C1470.name:=$name
 		
 	Else 
 		
@@ -457,40 +457,40 @@ Function setColors($foreground : Variant; $background : Variant; $altBackground 
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer)->$this : cs:C1710.static
+Function updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer)->$this : Object
 	
-	var $bottomƒ; $leftƒ; $rightƒ; $topƒ : Integer
+	var $_bottom; $_left; $_right; $_top : Integer
 	
 	If (Count parameters:C259>=4)
 		
-		$leftƒ:=$left
-		$topƒ:=$top
-		$rightƒ:=$right
-		$bottomƒ:=$bottom
+		$_left:=$left
+		$_top:=$top
+		$_right:=$right
+		$_bottom:=$bottom
 		
 	Else 
 		
-		OBJECT GET COORDINATES:C663(*; This:C1470.name; $leftƒ; $topƒ; $rightƒ; $bottomƒ)
+		OBJECT GET COORDINATES:C663(*; This:C1470.name; $_left; $_top; $_right; $_bottom)
 		
 	End if 
 	
 	This:C1470.coordinates:=New object:C1471(\
-		"left"; $leftƒ; \
-		"top"; $topƒ; \
-		"right"; $rightƒ; \
-		"bottom"; $bottomƒ)
+		"left"; $_left; \
+		"top"; $_top; \
+		"right"; $_right; \
+		"bottom"; $_bottom)
 	
 	This:C1470.dimensions:=New object:C1471(\
-		"width"; $rightƒ-$leftƒ; \
-		"height"; $bottomƒ-$topƒ)
+		"width"; $_right-$_left; \
+		"height"; $_bottom-$_top)
 	
-	CONVERT COORDINATES:C1365($leftƒ; $topƒ; XY Current form:K27:5; XY Current window:K27:6)
-	CONVERT COORDINATES:C1365($rightƒ; $bottomƒ; XY Current form:K27:5; XY Current window:K27:6)
+	CONVERT COORDINATES:C1365($_left; $_top; XY Current form:K27:5; XY Current window:K27:6)
+	CONVERT COORDINATES:C1365($_right; $_bottom; XY Current form:K27:5; XY Current window:K27:6)
 	
 	This:C1470.windowCoordinates:=New object:C1471(\
-		"left"; $leftƒ; \
-		"top"; $topƒ; \
-		"right"; $rightƒ; \
-		"bottom"; $bottomƒ)
+		"left"; $_left; \
+		"top"; $_top; \
+		"right"; $_right; \
+		"bottom"; $_bottom)
 	
 	$this:=This:C1470

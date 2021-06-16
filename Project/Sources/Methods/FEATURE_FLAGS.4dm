@@ -150,9 +150,6 @@ FEATURE.unstable("dominantColor")  // Feature #127813: BackgroundColor picker
 
 FEATURE.unstable("targetPannel")  // Use a separate pannel for the target OS
 
-FEATURE.unstable("sortAction")  // https://project.4d.com/issues/117660
-FEATURE.unstable("freeActionName")  // follow https://project.4d.com/issues/117660 but to please LE
-
 /* _____________
 WIP
 _____________*/

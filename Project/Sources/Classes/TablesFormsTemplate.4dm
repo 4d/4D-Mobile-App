@@ -427,7 +427,7 @@ Function doRun
 						
 						// get action on table
 						C_COLLECTION:C1488($Col_actions)
-						$Col_actions:=actions("form"; New object:C1471(\
+						$Col_actions:=mobile_actions("form"; New object:C1471(\
 							"project"; $Obj_in.project; \
 							"table"; $Obj_table.originalName; \
 							"tableNumber"; $Obj_table.tableNumber; \
@@ -440,7 +440,7 @@ Function doRun
 							
 						End if 
 						
-						$Col_actions:=actions("form"; New object:C1471(\
+						$Col_actions:=mobile_actions("form"; New object:C1471(\
 							"project"; $Obj_in.project; \
 							"table"; $Obj_table.originalName; \
 							"tableNumber"; $Obj_table.tableNumber; \
@@ -457,7 +457,7 @@ Function doRun
 						//……………………………………………………………………………………………………………
 					: (String:C10($Obj_template.userChoiceTag)="detail")
 						
-						$Col_actions:=actions("form"; New object:C1471(\
+						$Col_actions:=mobile_actions("form"; New object:C1471(\
 							"project"; $Obj_in.project; \
 							"table"; $Obj_table.originalName; \
 							"tableNumber"; $Obj_table.tableNumber; \
@@ -560,7 +560,7 @@ Function sortFieldFromAction($table : Object)->$sortFields : Text
 						If (String:C10($parameter.format)="descending")
 							$sortFields:=$sortFields+"!"  // because on iOS sortAscending = true by default so we reverse here
 						End if 
-						$sortFields:=$sortFields+Choose:C955($parameter.defaultField=Null:C1517; formatString("field-name"; String:C10($parameter.defaultField)); $parameter.defaultField)  // if no defaultField will failed, no linked to db ?? 
+						$sortFields:=$sortFields+Choose:C955($parameter.defaultField=Null:C1517; formatString("field-name"; String:C10($parameter.defaultField)); $parameter.defaultField)  // if no defaultField will failed, no linked to db ??
 					End for each 
 				End if 
 			End if 

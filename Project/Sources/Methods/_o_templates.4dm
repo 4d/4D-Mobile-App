@@ -547,7 +547,7 @@ Case of
 						: (String:C10($Obj_template.userChoiceTag)="list")
 							
 							// get action on table
-							$Col_actions:=actions("form"; New object:C1471(\
+							$Col_actions:=mobile_actions("form"; New object:C1471(\
 								"project"; $Obj_in.project; \
 								"table"; $Obj_table.originalName; \
 								"tableNumber"; $Obj_table.tableNumber; \
@@ -560,7 +560,7 @@ Case of
 								
 							End if 
 							
-							$Col_actions:=actions("form"; New object:C1471(\
+							$Col_actions:=mobile_actions("form"; New object:C1471(\
 								"project"; $Obj_in.project; \
 								"table"; $Obj_table.originalName; \
 								"tableNumber"; $Obj_table.tableNumber; \
@@ -577,7 +577,7 @@ Case of
 							//……………………………………………………………………………………………………………
 						: (String:C10($Obj_template.userChoiceTag)="detail")
 							
-							$Col_actions:=actions("form"; New object:C1471(\
+							$Col_actions:=mobile_actions("form"; New object:C1471(\
 								"project"; $Obj_in.project; \
 								"table"; $Obj_table.originalName; \
 								"tableNumber"; $Obj_table.tableNumber; \

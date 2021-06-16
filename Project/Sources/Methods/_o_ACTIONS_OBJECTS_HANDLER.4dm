@@ -8,7 +8,7 @@
 var $0 : Integer
 
 If (False:C215)
-	C_LONGINT:C283(ACTIONS_OBJECTS_HANDLER; $0)
+	C_LONGINT:C283(_o_ACTIONS_OBJECTS_HANDLER; $0)
 End if 
 
 var $t : Text
@@ -22,7 +22,7 @@ var $addMenu; $deleteMenu; $editMenu; $menu; $shareMenu; $sortMenu : cs:C1710.me
 
 // ----------------------------------------------------
 // Initialisations
-$form:=ACTIONS_Handler(New object:C1471(\
+$form:=_o_ACTIONS_Handler(New object:C1471(\
 "action"; "init"))
 
 $context:=$form[""]

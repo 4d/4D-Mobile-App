@@ -376,11 +376,11 @@ Function action($action : Variant; $index : Integer)->$this : cs:C1710.menu
 	
 	If (Count parameters:C259=1)
 		
-		SET MENU ITEM PROPERTY:C973(This:C1470.ref; -1; Associated standard action:K28:8; $action)
+		SET MENU ITEM PROPERTY:C973(This:C1470.ref; -1; Associated standard action name:K28:8; $action)
 		
 	Else 
 		
-		SET MENU ITEM PROPERTY:C973(This:C1470.ref; $index; Associated standard action:K28:8; $action)
+		SET MENU ITEM PROPERTY:C973(This:C1470.ref; $index; Associated standard action name:K28:8; $action)
 		
 	End if 
 	

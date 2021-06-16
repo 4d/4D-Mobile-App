@@ -16,7 +16,7 @@ $ƒ:=panel_Definition
 // ----------------------------------------------------
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Form(On Load:K2:1; On Timer:K2:25; On Bound Variable Change:K2:52)
+	$e:=panel_Form_common(On Load:K2:1; On Timer:K2:25; On Bound Variable Change:K2:52)
 	
 	Case of 
 			
@@ -136,7 +136,7 @@ Else   // <== WIDGETS METHOD
 			$menu:=cs:C1710.menu.new()\
 				.append("useTheSystemColorSelector"; "picker")\
 				.append("useTheMainColorOfTheIcon"; "fromIcon").enable(cs:C1710.color.new($ƒ.mainColor).main#Num:C11($ƒ.iconColor))\
-				.popup($ƒ.colorButton)
+				.popup($ƒ.colorBorder)
 			
 			If ($menu.selected)
 				
@@ -166,10 +166,10 @@ If (Length($requested)>0)
 $color:=cs.color.new($requested)
 If ($color.isValid())
 $ƒ.iconColor:=$color.main
-Else 
+Else
 ALERT(Get localized string("invalidWebColor"))
-End if 
-End if 
+End if
+End if
 */
 						
 						//________________________

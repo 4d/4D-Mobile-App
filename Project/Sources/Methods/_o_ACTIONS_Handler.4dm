@@ -14,8 +14,8 @@ C_PICTURE:C286($p)
 C_OBJECT:C1216($context; $form; $Obj_in; $Obj_out)
 
 If (False:C215)
-	C_OBJECT:C1216(ACTIONS_Handler; $0)
-	C_OBJECT:C1216(ACTIONS_Handler; $1)
+	C_OBJECT:C1216(_o_ACTIONS_Handler; $0)
+	C_OBJECT:C1216(_o_ACTIONS_Handler; $1)
 End if 
 
 // ----------------------------------------------------
@@ -55,12 +55,12 @@ If (OB Is empty:C1297($context))\
 	ob_createPath($context; "constraints.rules"; Is collection:K8:32)
 	
 	// Define form member methods
-	$context.load:=Formula:C1597(ACTIONS_UI("load"))
-	$context.listUI:=Formula:C1597(ACTIONS_UI("listUI"))
-	$context.tableName:=Formula:C1597(ACTIONS_UI("tableName"; $1).value)
-	$context.scopeLabel:=Formula:C1597(ACTIONS_UI("scopeLabel"; $1).value)
-	$context.backgroundColor:=Formula:C1597(ACTIONS_UI("backgroundColor"; $1).color)
-	$context.metaInfo:=Formula:C1597(ACTIONS_UI("metaInfo"; $1))
+	$context.load:=Formula:C1597(_o_ACTIONS_UI("load"))
+	$context.listUI:=Formula:C1597(_o_ACTIONS_UI("listUI"))
+	$context.tableName:=Formula:C1597(_o_ACTIONS_UI("tableName"; $1).value)
+	$context.scopeLabel:=Formula:C1597(_o_ACTIONS_UI("scopeLabel"; $1).value)
+	$context.backgroundColor:=Formula:C1597(_o_ACTIONS_UI("backgroundColor"; $1).color)
+	$context.metaInfo:=Formula:C1597(_o_ACTIONS_UI("metaInfo"; $1))
 	
 End if 
 

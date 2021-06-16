@@ -157,7 +157,7 @@ For each ($o; $definition.panels)
 		
 	End if 
 	
-	If (FEATURE.with("wizards"))
+	If (Count parameters:C259>=2)
 		
 		OBJECT SET VALUE:C1742($panel; $2)
 		
@@ -168,8 +168,6 @@ For each ($o; $definition.panels)
 End for each 
 
 FORM SET ENTRY ORDER:C1468($objectNames)
-
-CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; $definition)
 
 // Finally place the background
 OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)

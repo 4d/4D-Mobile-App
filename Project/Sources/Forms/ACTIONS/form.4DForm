@@ -10,10 +10,17 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onClick",
+		"onDoubleClick",
+		"onLosingFocus",
+		"onGettingFocus",
+		"onDrop",
 		"onUnload",
-		"onTimer"
+		"onTimer",
+		"onSelectionChange",
+		"onBeginDragOver"
 	],
-	"method": "ACTIONS_Handler",
+	"method": "ACTIONS",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -46,12 +53,12 @@
 					"hideSystemHighlight": true,
 					"rowHeight": "32px",
 					"dataSource": "Form:C1466.actions",
-					"currentItemSource": "Form:C1466.$dialog.ACTIONS.current",
-					"currentItemPositionSource": "Form:C1466.$dialog.ACTIONS.index",
-					"selectedItemsSource": "Form:C1466.$dialog.ACTIONS.selected",
-					"metaSource": "Form:C1466.$dialog.ACTIONS.metaInfo(This:C1470)",
+					"currentItemSource": "panel.current",
+					"currentItemPositionSource": "panel.index",
+					"selectedItemsSource": "panel.selected",
+					"metaSource": "panel.metaInfo(This:C1470)",
 					"selectionMode": "single",
-					"rowFillSource": "Form:C1466.$dialog.ACTIONS.backgroundColor(This:C1470)",
+					"rowFillSource": "panel.backgroundColor(This:C1470)",
 					"method": "ObjectMethods/actions.4dm",
 					"events": [
 						"onClick",
@@ -175,7 +182,7 @@
 						},
 						{
 							"name": "tables",
-							"dataSource": "Form:C1466.$dialog.ACTIONS.tableName(This:C1470)",
+							"dataSource": "panel.tableLabel(This:C1470)",
 							"width": 170,
 							"minWidth": 10,
 							"maxWidth": 420,
@@ -203,7 +210,7 @@
 						},
 						{
 							"name": "scopes",
-							"dataSource": "Form:C1466.$dialog.ACTIONS.scopeLabel(This:C1470)",
+							"dataSource": "panel.scopeLabel(This:C1470)",
 							"width": 10,
 							"minWidth": 10,
 							"maxWidth": 200,
@@ -261,7 +268,6 @@
 					"iconFrames": 4,
 					"popupPlacement": "separated",
 					"style": "bevel",
-					"method": "ACTIONS_OBJECTS_HANDLER",
 					"events": [
 						"onClick",
 						"onAlternateClick"
@@ -277,7 +283,6 @@
 					"icon": "/RESOURCES/images/common/minus.png",
 					"iconFrames": 4,
 					"style": "bevel",
-					"method": "ACTIONS_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					],
@@ -329,17 +334,16 @@
 					"left": 858,
 					"width": 80,
 					"height": 20,
-					"text": ":xliff:edit...",
-					"method": "ACTIONS_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					],
-					"focusable": false
+					"focusable": false,
+					"text": "Create"
 				},
 				"actionMethod.label": {
 					"type": "text",
 					"top": 272,
-					"left": 504,
+					"left": 494,
 					"width": 344,
 					"height": 17,
 					"stroke": "#808080",
@@ -399,7 +403,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 51,
+	"geometryStamp": 55,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

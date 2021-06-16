@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : editor_description
+// Project method : editor_SET_DESCRIPTION
 // ID[52B9CF85751D403F890C4F37EB6E491D]
 // Created 3-12-2019 by Vincent de Lachaux
 // ----------------------------------------------------
@@ -13,7 +13,7 @@ C_OBJECT:C1216($1)
 C_OBJECT:C1216($o)
 
 If (False:C215)
-	C_OBJECT:C1216(editor_description; $1)
+	C_OBJECT:C1216(editor_SET_DESCRIPTION; $1)
 End if 
 
 // ----------------------------------------------------

@@ -20,7 +20,7 @@ $e:=$f.event
 // ----------------------------------------------------
 If ($e.objectName=Null:C1517)  // <== Form method
 	
-	$e:=panel_Form(On Load:K2:1)
+	$e:=panel_Form_common(On Load:K2:1)
 	
 	Case of 
 			

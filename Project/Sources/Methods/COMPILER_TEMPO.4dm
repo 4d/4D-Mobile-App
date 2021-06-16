@@ -30,10 +30,6 @@ C_OBJECT:C1216(_catalog; $0)
 C_TEXT:C284(_catalog; $1)
 C_OBJECT:C1216(_catalog; $2)
 
-C_OBJECT:C1216(_wip_Xcode; $0)
-C_TEXT:C284(_wip_Xcode; $1)
-C_OBJECT:C1216(_wip_Xcode; $2)
-
 //C_OBJECT(Init; $1)
 
 C_OBJECT:C1216(CALL_MAIN_PROCESS; $1)

@@ -12,15 +12,12 @@
 	"__IN WORKS": {
 		"methods": [
 			"_w_actions",
-			"_wip_Xcode",
 			"00_NEW",
 			"00_OPEN",
 			"00_TESTS",
 			"androidLimitations",
 			"COMPILER_TEMPO",
 			"internalTests",
-			"nvl",
-			"object",
 			"tempoDatamodelWith1toNRelation"
 		],
 		"forms": [
@@ -61,6 +58,9 @@
 	"_o_OBSOLETES": {
 		"methods": [
 			"_NEW_MOBILE_PROJECT",
+			"_o_ACTIONS_Handler",
+			"_o_ACTIONS_OBJECTS_HANDLER",
+			"_o_ACTIONS_UI",
 			"_o_color",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
@@ -201,7 +201,6 @@
 			"editor_CALLBACK",
 			"editor_CHECK_INSTALLATION",
 			"editor_CREATE_PROJECT",
-			"editor_description",
 			"editor_GET_DEVICES",
 			"editor_HANDLER",
 			"editor_LoadIcons",
@@ -212,6 +211,7 @@
 			"editor_Panel_init",
 			"editor_PROCESS_MESSAGES",
 			"editor_RESUME",
+			"editor_SET_DESCRIPTION",
 			"editor_ui_LISTBOX"
 		],
 		"forms": [
@@ -360,12 +360,14 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
-			"ACTIONS_Handler",
-			"ACTIONS_OBJECTS_HANDLER",
-			"ACTIONS_UI",
+			"ACTIONS",
+			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],
 		"forms": [
+			"ACTIONS"
+		],
+		"classes": [
 			"ACTIONS"
 		]
 	},
@@ -477,7 +479,6 @@
 			"templateClass"
 		],
 		"methods": [
-			"actions",
 			"catalog",
 			"checkQueryFilter",
 			"COMPILER_backend",
@@ -754,6 +755,7 @@
 	"mobile": {
 		"methods": [
 			"COMPILER_mobile",
+			"mobile_actions",
 			"mobile_Project"
 		]
 	},
@@ -795,11 +797,12 @@
 	"panel": {
 		"methods": [
 			"COMPILER_panel",
+			"panel",
 			"panel_COLLAPSE_EXPAND",
 			"panel_Count",
 			"panel_Definition",
 			"panel_Find_by_name",
-			"panel_Form",
+			"panel_Form_common",
 			"panel_GOTO",
 			"panel_INIT",
 			"panel_LAST",

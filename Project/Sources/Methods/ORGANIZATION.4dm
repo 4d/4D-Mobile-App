@@ -16,7 +16,7 @@ $ƒ:=panel_Definition
 // ----------------------------------------------------
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Form()
+	$e:=panel_Form_common()
 	
 Else   // <== WIDGETS METHOD
 	

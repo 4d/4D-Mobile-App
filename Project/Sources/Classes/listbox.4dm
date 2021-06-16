@@ -1,17 +1,15 @@
 Class extends scrollable
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Class constructor
-	C_TEXT:C284($1)
-	C_VARIANT:C1683($2)
+Class constructor($name : Text; $datasource)
 	
 	If (Count parameters:C259>=2)
 		
-		Super:C1705($1; $2)
+		Super:C1705($name; $datasource)
 		
 	Else 
 		
-		Super:C1705($1)
+		Super:C1705($name)
 		
 	End if 
 	

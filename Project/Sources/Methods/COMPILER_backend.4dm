@@ -3,12 +3,6 @@ C_LONGINT:C283(http_ERROR)
 C_OBJECT:C1216(dump_Headers)
 
 If (False:C215)
-	
-	//__________________________________________________
-	C_OBJECT:C1216(actions; $0)
-	C_TEXT:C284(actions; $1)
-	C_OBJECT:C1216(actions; $2)
-	
 	//__________________________________________________
 	C_OBJECT:C1216(catalog; $0)
 	C_TEXT:C284(catalog; $1)

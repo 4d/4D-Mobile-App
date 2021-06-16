@@ -40,6 +40,74 @@ Function restoreContext()
 	ASSERT:C1129(False:C215; "👀 restore() must be overriden by the subclass!")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+	// 🛠 IN WORKS
+Function getWidgets()
+	
+	var $name : Text
+	var $i; $type : Integer
+	ARRAY TEXT:C222($objects; 0)
+	
+	FORM GET OBJECTS:C898($objects; Form all pages:K67:7)
+	
+	For ($i; 1; Size of array:C274($objects); 1)
+		
+		$name:=$objects{$i}
+		$type:=OBJECT Get type:C1300(*; $name)
+		
+		Case of 
+				//______________________________________________________
+			: ($type=Object type push button:K79:16)\
+				 | ($type=Object type radio button:K79:23)\
+				 | ($type=Object type checkbox:K79:26)\
+				 | ($type=Object type 3D button:K79:17)\
+				 | ($type=Object type 3D checkbox:K79:27)\
+				 | ($type=Object type 3D radio button:K79:24)\
+				 | ($type=Object type picture button:K79:20)
+				
+				This:C1470[$name]:=cs:C1710.button($name)
+				
+				//______________________________________________________
+			: ($type=Object type static text:K79:2)\
+				 | ($type=Object type static picture:K79:3)\
+				 | ($type=Object type line:K79:33)\
+				 | ($type=Object type rectangle:K79:32)\
+				 | ($type=Object type rounded rectangle:K79:34)\
+				 | ($type=Object type oval:K79:35)
+				
+				This:C1470[$name]:=cs:C1710.static($name)
+				
+				//______________________________________________________
+			: (False:C215)
+				
+				//______________________________________________________
+			Else 
+				
+				// A "Case of" statement should never omit "Else"
+				
+				//______________________________________________________
+		End case 
+		
+	End for 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Add form event(s) of the current form
+Function appendEvents($events)
+	
+	This:C1470._setEvents($events; Enable events others unchanged:K42:38)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Remove form event(s) of the current form
+Function removeEvents($events)
+	
+	This:C1470._setEvents($events; Disable events others unchanged:K42:39)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Define the event(s) of the current form
+Function setEvents($events)
+	
+	This:C1470._setEvents($events; Enable events disable others:K42:37)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Set window title
 Function setTitle($title : Text)
 	
@@ -374,5 +442,42 @@ Function nextPage()
 Function previousPage()
 	
 	FORM PREVIOUS PAGE:C249
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Remove any focus in the current form
+Function removeFocus()
+	
+	GOTO OBJECT:C206(*; "")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// [PRIVATE] set form events
+Function _setEvents($events; $mode : Integer)
+	
+	ARRAY LONGINT:C221($codes; 0)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($events)=Is collection:K8:32)
+			
+			COLLECTION TO ARRAY:C1562($events; $codes)
+			
+			//______________________________________________________
+		: (Value type:C1509($events)=Is integer:K8:5)\
+			 | (Value type:C1509($events)=Is longint:K8:6)\
+			 | (Value type:C1509($events)=Is real:K8:4)
+			
+			ARRAY LONGINT:C221($codes; 1)
+			APPEND TO ARRAY:C911($codes; $events)
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215; "The event parameter must be a n integer or a collection")
+			
+			//______________________________________________________
+	End case 
+	
+	OBJECT SET EVENTS:C1239(*; ""; $codes; $mode)
 	
 	

@@ -44,7 +44,7 @@ Case of
 		//______________________________________________________
 	: ($message="description")  // Update UI of the TITLE subform
 		
-		EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_description"; *; $in)
+		EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_SET_DESCRIPTION"; *; $in)
 		
 		//______________________________________________________
 	: ($message="setURL")
@@ -176,7 +176,7 @@ Case of
 				//If (EDITOR.android)
 				//$fileManifest:=cs.path.new().cacheSdkAndroid().parent.file("manifest.json")
 				//If (Not($fileManifest.exists))\
-															 | ($fileManifest.modificationDate#Current date)
+																									 | ($fileManifest.modificationDate#Current date)
 				//// Get the last 4D Mobile Android SDK from AWS server if any
 				//EDITOR.downloadSDK("aws"; "android"; False)
 				//End if

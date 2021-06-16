@@ -282,7 +282,7 @@ Function distributeRigthToLeft($params : Object)->$this : cs:C1710.group
 			
 		Else 
 			
-			$e.start:=$o.coordinates.left+$e.spacing
+			$e.start:=$o.coordinates.left-$e.spacing
 			
 		End if 
 	End for each 

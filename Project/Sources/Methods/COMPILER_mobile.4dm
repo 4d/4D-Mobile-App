@@ -1,18 +1,18 @@
 //%attributes = {"invisible":true}
 If (False:C215)
 	
-	// ----------------------------------------------------
-	C_OBJECT:C1216(editor_CHECK_INSTALLATION; $0)
-	C_OBJECT:C1216(editor_CHECK_INSTALLATION; $1)
 	
-	// ----------------------------------------------------
-	C_OBJECT:C1216(editor_GET_DEVICES; $0)
-	C_OBJECT:C1216(editor_GET_DEVICES; $1)
 	
-	// ----------------------------------------------------
+	//__________________________________________________
+	C_OBJECT:C1216(mobile_actions; $0)
+	C_TEXT:C284(mobile_actions; $1)
+	C_OBJECT:C1216(mobile_actions; $2)
+	
+	//__________________________________________________
 	C_OBJECT:C1216(mobile_Project; $1)
 	C_OBJECT:C1216(mobile_Project; $0)
 	
+	//__________________________________________________
 	C_OBJECT:C1216(mobile_Project_iOS; $1)
 	C_OBJECT:C1216(mobile_Project_iOS; $0)
 	

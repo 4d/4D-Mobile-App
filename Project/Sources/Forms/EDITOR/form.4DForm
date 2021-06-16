@@ -247,7 +247,6 @@
 		"views": {
 			"default": {},
 			"message": {
-				"visible": false,
 				"objects": [
 					"message.back",
 					"message.button",

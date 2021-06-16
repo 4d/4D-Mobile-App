@@ -566,21 +566,6 @@ Case of
 		End for each 
 		
 		//________________________________________
-	: (True:C214)
-		
-		$o:=_wip_Xcode
-		
-		$folder:=$o.defaultPath()
-		
-		$folder:=$o.toolsPath()
-		
-		$folder:=$o.path()
-		
-		//  $c:=$o.paths()
-		
-		//$o.openAppStore()
-		
-		//________________________________________
 	: (False:C215)  // Unsandbox
 		
 		$o:=Folder:C1567(fk database folder:K87:14)

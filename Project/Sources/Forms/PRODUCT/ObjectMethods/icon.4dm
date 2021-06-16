@@ -3,7 +3,7 @@ var $0 : Integer
 var $p : Picture
 var $e; $ƒ : Object
 
-$ƒ:=panel_Definition("PRODUCT")
+$ƒ:=panel_Definition(Current form name:C1298)
 $e:=$ƒ.event
 
 $0:=-1

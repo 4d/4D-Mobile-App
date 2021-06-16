@@ -18,9 +18,9 @@ var $file : 4D:C1709.File
 var $path : cs:C1710.path
 
 If (False:C215)
-	C_OBJECT:C1216(ACTIONS_UI; $0)
-	C_TEXT:C284(ACTIONS_UI; $1)
-	C_OBJECT:C1216(ACTIONS_UI; $2)
+	C_OBJECT:C1216(_o_ACTIONS_UI; $0)
+	C_TEXT:C284(_o_ACTIONS_UI; $1)
+	C_OBJECT:C1216(_o_ACTIONS_UI; $2)
 End if 
 
 // ----------------------------------------------------
@@ -86,7 +86,7 @@ Case of
 		//______________________________________________________
 	: ($entryPoint="listUI")  // Colors UI according to focus
 		
-		$formData:=ACTIONS_Handler(New object:C1471("action"; "init"))
+		$formData:=_o_ACTIONS_Handler(New object:C1471("action"; "init"))
 		
 		If ($formData.form.focusedWidget=$formData.actions.name) & (Form event code:C388=On Getting Focus:K2:7)
 			
@@ -107,7 +107,7 @@ Case of
 		
 		If (Num:C11(This:C1470.index)#0)
 			
-			$formData:=ACTIONS_Handler(New object:C1471("action"; "init"))
+			$formData:=_o_ACTIONS_Handler(New object:C1471("action"; "init"))
 			
 			$isFocused:=($formData.form.focusedWidget=$formData.actions.name)
 			

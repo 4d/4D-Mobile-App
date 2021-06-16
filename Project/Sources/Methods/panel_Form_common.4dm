@@ -9,8 +9,8 @@ var $0 : Object
 var ${1} : Integer
 
 If (False:C215)
-	C_OBJECT:C1216(panel_Form; $0)
-	C_LONGINT:C283(panel_Form; ${1})
+	C_OBJECT:C1216(panel_Form_common; $0)
+	C_LONGINT:C283(panel_Form_common; ${1})
 End if 
 
 var $focused : Text

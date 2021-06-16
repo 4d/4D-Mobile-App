@@ -40,7 +40,7 @@ $out:=New object:C1471(\
 If (Count parameters:C259>=1)
 	
 	// Add choice lists if any to action parameters
-	actions("addChoiceList"; $in)
+	mobile_actions("addChoiceList"; $in)
 	
 	// Cache the last build for debug purpose
 	
@@ -271,7 +271,7 @@ If ($in.create)
 	$tags.launchScreenBackgroundColor:=SHARED.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
 	
 	// setting
-	$tags.hasAction:=Choose:C955(Bool:C1537(actions("hasAction"; $in).value); "true"; "false")  // plist bool format
+	$tags.hasAction:=Choose:C955(Bool:C1537(mobile_actions("hasAction"; $in).value); "true"; "false")  // plist bool format
 	
 	// App manifest =================================================
 	$appManifest:=New object:C1471(\
@@ -545,12 +545,12 @@ If ($in.create)
 		$debugLog.start()
 		
 		// Generate action asset
-		$out.actionAssets:=actions("assets"; New object:C1471(\
+		$out.actionAssets:=mobile_actions("assets"; New object:C1471(\
 			"project"; $project; \
 			"target"; $in.path))
 		ob_error_combine($out; $out.actionAssets)
 		
-		$out.actionCapabilities:=actions("capabilities"; New object:C1471(\
+		$out.actionCapabilities:=mobile_actions("capabilities"; New object:C1471(\
 			"project"; $project; \
 			"target"; $in.path))
 		
