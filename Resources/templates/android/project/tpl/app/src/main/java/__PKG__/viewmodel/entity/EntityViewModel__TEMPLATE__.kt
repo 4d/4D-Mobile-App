@@ -47,7 +47,7 @@ class EntityViewModel{{tableName}}(
      */
 
     {{#relations}}
-    val {{relation_name}} = MutableLiveData<{{relation_target}}>()
+    val {{relation_name}} = MutableLiveData<{{relation_target}}?>()
     {{/relations}}
 
     override fun setRelationToLayout(relationName: String, roomRelation: RoomRelation) {

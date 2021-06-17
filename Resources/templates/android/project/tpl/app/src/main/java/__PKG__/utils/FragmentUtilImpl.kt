@@ -9,14 +9,12 @@ package {{package}}.utils
 import androidx.databinding.ViewDataBinding
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobiledatasync.utils.FragmentUtil
-import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 import com.qmobile.qmobileui.BR
 import {{package}}.R
 {{#tableNames_navigation}}
 import {{package}}.databinding.FragmentDetail{{nameCamelCase}}Binding
 {{/tableNames_navigation}}
-import {{package}}.databinding.FragmentListBinding
 {{#tableNames_navigation}}
 import {{package}}.databinding.RecyclerviewItem{{nameCamelCase}}Binding
 {{/tableNames_navigation}}
@@ -29,18 +27,6 @@ import {{package}}.viewmodel.entity.EntityViewModel{{name}}
  */
 class FragmentUtilImpl :
     FragmentUtil {
-
-    /**
-     * Sets the appropriate EntityListViewModel
-     */
-    @Suppress("UNCHECKED_CAST")
-    override fun setEntityListViewModel(
-        viewDataBinding: ViewDataBinding,
-        entityListViewModel: EntityListViewModel<EntityModel>
-    ) {
-        viewDataBinding as FragmentListBinding
-        viewDataBinding.viewModel = entityListViewModel
-    }
 
     /**
      * Sets the appropriate EntityViewModel

@@ -1,5 +1,5 @@
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 configurations {
@@ -7,7 +7,7 @@ configurations {
 }
 
 dependencies {
-    detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.12.0'
+    detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.17.1'
 }
 
 task detekt(type: JavaExec) {

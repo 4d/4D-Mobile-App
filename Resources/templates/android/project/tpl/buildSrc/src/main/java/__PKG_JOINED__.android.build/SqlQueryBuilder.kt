@@ -66,7 +66,7 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
 
         val sortedMap = hashMap.toSortedMap()
         var k = 0
-        for ((key, value) in sortedMap) {
+        for ((_, value) in sortedMap) {
             outputEntity[k] = value
             k++
         }
