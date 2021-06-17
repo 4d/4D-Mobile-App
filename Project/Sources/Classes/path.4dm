@@ -512,6 +512,7 @@ Function hostlistForms($create : Boolean)->$folder : 4D:C1709.Folder  // form/li
 /*========================================================*/
 Function hostloginForms($create : Boolean)->$folder : 4D:C1709.Folder  // login folder
 	
+	This:C1470.target:=This:C1470.hostForms().folder("login")
 	
 	If (Count parameters:C259>=1)
 		
