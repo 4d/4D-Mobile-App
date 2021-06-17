@@ -15,7 +15,6 @@
 		"onLosingFocus",
 		"onGettingFocus",
 		"onDrop",
-		"onUnload",
 		"onTimer",
 		"onSelectionChange",
 		"onBeginDragOver"
@@ -293,7 +292,7 @@
 						"onClick",
 						"onAlternateClick"
 					],
-					"focusable": true
+					"focusable": false
 				},
 				"actions.remove": {
 					"type": "button",

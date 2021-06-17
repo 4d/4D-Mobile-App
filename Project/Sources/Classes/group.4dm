@@ -13,50 +13,85 @@ in this case, all named objects are initialized with widget class
 
 ——————————————————————————*/
 Class constructor($members : Variant)
+	
 	C_OBJECT:C1216(${2})
 	
 	C_LONGINT:C283($i)
 	C_TEXT:C284($t)
 	
-	If (Asserted:C1132(Count parameters:C259>0; "Missing parameter"))
-		
-		Case of 
+	Case of 
+			
+			//___________________________
+		: (Value type:C1509($members)=Is collection:K8:32)
+			
+			This:C1470.members:=$members
+			
+			//___________________________
+		: (Value type:C1509($members)=Is object:K8:27)  // 1 to n objects
+			
+			This:C1470.members:=New collection:C1472
+			
+			For ($i; 1; Count parameters:C259; 1)
 				
-				//___________________________
-			: (Value type:C1509($members)=Is collection:K8:32)
+				This:C1470.members.push(${$i})
 				
-				This:C1470.members:=$members
+			End for 
+			
+			//___________________________
+		: (Value type:C1509($members)=Is text:K8:3)  // Comma separated list of object names
+			
+			This:C1470.members:=New collection:C1472
+			
+			For each ($t; Split string:C1554($members; ","))
 				
-				//___________________________
-			: (Value type:C1509($members)=Is object:K8:27)  // 1 to n objects
+				This:C1470.members.push(cs:C1710.widget.new($t))  // Widget by default
 				
-				This:C1470.members:=New collection:C1472
+			End for each 
+			
+			//___________________________
+		Else 
+			
+			This:C1470.members:=New collection:C1472
+			
+			//___________________________
+	End case 
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function addMember($member)->$this : cs:C1710.group
+	
+	var $t : Text
+	
+	Case of 
+			
+			//___________________________
+		: (Value type:C1509($member)=Is collection:K8:32)
+			
+			This:C1470.members:=This:C1470.members.combine($member)
+			
+			//___________________________
+		: (Value type:C1509($member)=Is object:K8:27)
+			
+			This:C1470.members.push($member)
+			
+			//___________________________
+		: (Value type:C1509($member)=Is text:K8:3)  // Comma separated list of object names
+			
+			For each ($t; Split string:C1554($member; ","))
 				
-				For ($i; 1; Count parameters:C259; 1)
-					
-					This:C1470.members.push(${$i})
-					
-				End for 
+				This:C1470.members.push(cs:C1710.widget.new($t))  // Widget by default
 				
-				//___________________________
-			: (Value type:C1509($members)=Is text:K8:3)  // Comma separated list of object names
-				
-				This:C1470.members:=New collection:C1472
-				
-				For each ($t; Split string:C1554($members; ","))
-					
-					This:C1470.members.push(cs:C1710.widget.new($t))  // Widget by default
-					
-				End for each 
-				
-				//___________________________
-			Else 
-				
-				ASSERT:C1129(False:C215; "Bad parameter type")
-				
-				//___________________________
-		End case 
-	End if 
+			End for each 
+			
+			//___________________________
+		Else 
+			
+			ASSERT:C1129(False:C215; "Bad parameter type")
+			
+			//___________________________
+	End case 
+	
+	$this:=This:C1470
 	
 /*════════════════════════════════════════════
 Returns True if the passed object or object name is part of the group

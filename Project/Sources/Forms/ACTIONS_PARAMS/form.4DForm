@@ -10,10 +10,18 @@
 	"markerFooter": 270,
 	"events": [
 		"onLoad",
-		"onUnload",
-		"onTimer"
+		"onClick",
+		"onLosingFocus",
+		"onGettingFocus",
+		"onDrop",
+		"onDataChange",
+		"onTimer",
+		"onSelectionChange",
+		"onMouseLeave",
+		"onAfterEdit",
+		"onBeginDragOver"
 	],
-	"method": "ACTIONS_PARAMS_Handler ",
+	"method": "ACTIONS_PARAMS",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -44,7 +52,7 @@
 					"textAlign": "left",
 					"text": ":xliff:createAnActionToBeAbleToAddParameters"
 				},
-				"deleteAction": {
+				"noParameters": {
 					"type": "text",
 					"top": 6,
 					"left": 16,
@@ -102,9 +110,8 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.name",
+					"dataSource": "panel.current.name",
 					"hideFocusRing": true,
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
 					"events": [
 						"onDataChange"
@@ -120,13 +127,13 @@
 					"listboxType": "collection",
 					"movableRows": false,
 					"rowHeight": "20px",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.action.parameters",
-					"currentItemSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter",
-					"currentItemPositionSource": "Form:C1466.$dialog.ACTIONS_PARAMS.index",
-					"selectedItemsSource": "Form:C1466.$dialog.ACTIONS_PARAMS.selected",
-					"metaSource": "Form:C1466.$dialog.ACTIONS_PARAMS.metaInfo(This:C1470)",
+					"dataSource": "panel.action.parameters",
+					"currentItemSource": "panel.current",
+					"currentItemPositionSource": "panel.index",
+					"selectedItemsSource": "panel.selected",
+					"metaSource": "panel.metaInfo(This:C1470)",
 					"selectionMode": "single",
-					"rowFillSource": "Form:C1466.$dialog.ACTIONS_PARAMS.backgroundColor(This:C1470)",
+					"rowFillSource": "panel.backgroundColor(This:C1470)",
 					"textAlign": "left",
 					"verticalAlign": "middle",
 					"method": "ObjectMethods/01_Parameters.4dm",
@@ -183,7 +190,6 @@
 					"icon": "/RESOURCES/images/common/plus.png",
 					"iconFrames": 4,
 					"style": "bevel",
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onClick",
 						"onAlternateClick"
@@ -201,7 +207,6 @@
 					"icon": "/RESOURCES/images/common/minus.png",
 					"iconFrames": 4,
 					"style": "bevel",
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					]
@@ -222,9 +227,8 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.label",
+					"dataSource": "panel.current.label",
 					"hideFocusRing": true,
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
 					"events": [
 						"onDataChange"
@@ -246,9 +250,8 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.shortLabel",
+					"dataSource": "panel.current.shortLabel",
 					"hideFocusRing": true,
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
 					"events": [
 						"onDataChange"
@@ -261,11 +264,12 @@
 					"width": 157,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.formatLabel()",
+					"dataSource": "panel.formatValue()",
 					"hideFocusRing": true,
 					"dragging": "none",
 					"focusable": false,
-					"class": "infos"
+					"class": "infos",
+					"contextMenu": "none"
 				},
 				"02_property_name.label": {
 					"type": "text",
@@ -316,11 +320,11 @@
 					"icon": "/RESOURCES/images/common/down.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
 					],
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"focusable": false
 				},
 				"07_variable_default.border": {
 					"type": "rectangle",
@@ -340,7 +344,6 @@
 					"visibility": "hidden",
 					"dataSource": "",
 					"hideFocusRing": true,
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
 					"events": [
 						"onDataChange",
@@ -380,8 +383,7 @@
 						"onClick"
 					],
 					"dataSource": "",
-					"focusable": true,
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
+					"focusable": false,
 					"visibility": "hidden",
 					"dataSourceTypeHint": "boolean"
 				},
@@ -401,9 +403,8 @@
 					"width": 189,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.parameter.placeholder",
+					"dataSource": "panel.current.placeholder",
 					"hideFocusRing": true,
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
 					"events": [
 						"onDataChange"
@@ -439,7 +440,6 @@
 					"hideFocusRing": true,
 					"dragging": "none",
 					"entryFilter": "&\"0-9;.;,;-\"",
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"events": [
 						"onDataChange"
 					],
@@ -475,7 +475,6 @@
 					"hideFocusRing": true,
 					"dragging": "none",
 					"entryFilter": "&\"0-9;.;,;-\"",
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dataSourceTypeHint": "text",
 					"events": [
 						"onDataChange"
@@ -499,9 +498,10 @@
 					"height": 17,
 					"focusable": false,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.comment()",
+					"dataSource": "panel.commentValue()",
 					"textAlign": "right",
-					"class": "comment"
+					"class": "comment",
+					"contextMenu": "none"
 				},
 				"dropCursor": {
 					"type": "line",
@@ -559,7 +559,7 @@
 					"width": 903,
 					"height": 17,
 					"visibility": "visible",
-					"dataSource": "Form:C1466.$dialog.ACTIONS_PARAMS.action.description",
+					"dataSource": "panel.current.description",
 					"fill": "transparent",
 					"borderStyle": "none",
 					"hideFocusRing": true,
@@ -576,7 +576,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 124,
+	"geometryStamp": 125,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

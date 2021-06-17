@@ -414,34 +414,88 @@ Function width()->$width : Integer
 	$width:=This:C1470.dimensions().width
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function goToPage($page : Integer)
+Function goToPage($page : Integer; $subform : Boolean)
 	
-	FORM GOTO PAGE:C247($page)
+	var $_subform : Boolean
+	
+	If (Count parameters:C259>=2)
+		
+		// User's request
+		$_subform:=$subform
+		
+	Else 
+		
+		$_subform:=This:C1470.isSubform
+		
+	End if 
+	
+	If ($_subform)
+		
+		// Change page of current subform
+		FORM GOTO PAGE:C247($page; *)
+		
+	Else 
+		
+		FORM GOTO PAGE:C247($page)
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function page()->$page : Integer
+Function page($subform : Boolean)->$page : Integer
 	
-	$page:=FORM Get current page:C276
+	var $_subform : Boolean
+	
+	If (Count parameters:C259>=1)
+		
+		// User's request
+		$_subform:=$subform
+		
+	Else 
+		
+		$_subform:=This:C1470.isSubform
+		
+	End if 
+	
+	If ($_subform)
+		
+		// Current subform page
+		$page:=FORM Get current page:C276(*)
+		
+	Else 
+		
+		$page:=FORM Get current page:C276
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+	// ⚠️ No optional parameter to allow the distinction between form and subform
 Function firstPage()
 	
 	FORM FIRST PAGE:C250
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+	// ⚠️ No optional parameter to allow the distinction between form and subform
 Function lastPage()
 	
 	FORM LAST PAGE:C251
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+	// ⚠️ No optional parameter to allow the distinction between form and subform
 Function nextPage()
 	
 	FORM NEXT PAGE:C248
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+	// ⚠️ No optional parameter to allow the distinction between form and subform
 Function previousPage()
 	
 	FORM PREVIOUS PAGE:C249
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Gives the focus to a widget in the current form
+Function goTo($widget : Text)
+	
+	GOTO OBJECT:C206(*; $widget)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Remove any focus in the current form

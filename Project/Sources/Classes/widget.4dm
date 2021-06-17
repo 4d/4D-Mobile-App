@@ -216,16 +216,12 @@ Function notEnterable
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
-/*════════════════════════════════════════════════════
-.getValue() -> value
-*/
+	//=== === === === === === === === === === === === === === === === === === ===
 Function getValue()->$value
 	
 	$value:=OBJECT Get value:C1743(This:C1470.name)
 	
-/*════════════════════════════════════════════════════
-.setValue(value) -> This
-*/
+	//=== === === === === === === === === === === === === === === === === === ===
 Function setValue($value)->$this : cs:C1710.widget
 	
 	OBJECT SET VALUE:C1742(This:C1470.name; $value)
@@ -233,117 +229,73 @@ Function setValue($value)->$this : cs:C1710.widget
 	
 	$this:=This:C1470
 	
-/*══════════════════════════
-.clear() -> This
-══════════════════════════*/
-Function clear
+	//=== === === === === === === === === === === === === === === === === === ===
+Function clear->$this : cs:C1710.widge
 	
-	If (This:C1470.assignable)
-		
-		CLEAR VARIABLE:C89((This:C1470.pointer)->)
-		
-	Else 
-		
-		If (This:C1470.dataSource#Null:C1517)
+	var $type : Integer
+	$type:=Value type:C1509(OBJECT Get value:C1743(This:C1470.name))
+	
+	Case of 
 			
-			C_LONGINT:C283($l)
-			$l:=Value type:C1509(This:C1470.getValue())
+			//______________________________________________________
+		: ($type=Is text:K8:3)
 			
-			C_TEXT:C284($t)
-			If (Value type:C1509(This:C1470.dataSource)=Is object:K8:27)
-				
-				$t:=This:C1470.dataSource.source
-				
-			Else 
-				
-				$t:=This:C1470.dataSource
-				
-			End if 
+			OBJECT SET VALUE:C1742(This:C1470.name; "")
 			
-			Case of 
-					
-					//______________________________________________________
-				: ($l=Is text:K8:3)
-					
-					EXECUTE FORMULA:C63($t+":=\"\"")
-					
-					//______________________________________________________
-				: ($l=Is real:K8:4)\
-					 | ($l=Is longint:K8:6)
-					
-					EXECUTE FORMULA:C63($t+":=0")
-					
-					//______________________________________________________
-				: ($l=Is boolean:K8:9)
-					
-					EXECUTE FORMULA:C63($t+":=")
-					
-					//______________________________________________________
-				: ($l=Is date:K8:7)
-					
-					EXECUTE FORMULA:C63($t+":=(\"\")")
-					
-					//______________________________________________________
-				: ($l=Is time:K8:8)
-					
-					EXECUTE FORMULA:C63($t+":=(0)")
-					
-					//______________________________________________________
-				: ($l=Is object:K8:27)
-					
-					EXECUTE FORMULA:C63($t+":=null")
-					
-					//______________________________________________________
-				: ($l=Is collection:K8:32)
-					
-					EXECUTE FORMULA:C63($t+":=")
-					
-					//______________________________________________________
-				: ($l=Is picture:K8:10)
-					
-					EXECUTE FORMULA:C63($t+":="+$t+"*0")
-					
-					//______________________________________________________
-				Else 
-					
-					EXECUTE FORMULA:C63($t+":=null")
-					
-					//______________________________________________________
-			End case 
-		End if 
+			//______________________________________________________
+		: ($type=Is real:K8:4)\
+			 | ($type=Is longint:K8:6)
+			
+			OBJECT SET VALUE:C1742(This:C1470.name; 0)
+			
+			//______________________________________________________
+		: ($type=Is boolean:K8:9)
+			
+			OBJECT SET VALUE:C1742(This:C1470.name; False:C215)
+			
+			//______________________________________________________
+		: ($type=Is date:K8:7)
+			
+			OBJECT SET VALUE:C1742(This:C1470.name; !00-00-00!)
+			
+			//______________________________________________________
+		: ($type=Is time:K8:8)
+			
+			OBJECT SET VALUE:C1742(This:C1470.name; ?00:00:00?)
+			
+			//______________________________________________________
+		: ($type=Is object:K8:27) | ($type=Is collection:K8:32)
+			
+			OBJECT SET VALUE:C1742(This:C1470.name; Null:C1517)
+			
+			//______________________________________________________
+		: ($type=Is picture:K8:10)
+			
+			OBJECT SET VALUE:C1742(This:C1470.name; OBJECT Get value:C1743(This:C1470.name)*0)
+			
+			//______________________________________________________
+		Else 
+			
+			OBJECT SET VALUE:C1742(This:C1470.name; Null:C1517)
+			
+			//______________________________________________________
+	End case 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function touch()->$this : cs:C1710.widget
+	
+	var $value
+	$value:=OBJECT Get value:C1743(This:C1470.name)
+	
+	If (Value type:C1509($value)#Is undefined:K8:13)
+		
+		OBJECT SET VALUE:C1742(This:C1470.name; $value)
+		
 	End if 
 	
-	C_OBJECT:C1216($0)
-	$0:=This:C1470
-	
-/*══════════════════════════
-.touch() -> This
-══════════════════════════*/
-Function touch()
-	
-	//If (This.assignable)
-	//This.pointer->:=(This.pointer)->
-	//Else 
-	//If (This.dataSource=Null)
-	//If (Value type(OBJECT Get value(This.name))#Is undefined)
-	//OBJECT SET VALUE(This.name; OBJECT Get value(This.name))
-	//End if 
-	//Else 
-	//// ⚠️ OBSOLETE: we don't need this trick anymore since "Object get/set value" is now available.
-	//C_TEXT($t)
-	//$t:=Choose(Value type(This.dataSource)=Is object; This.dataSource.source; This.dataSource)
-	//EXECUTE FORMULA($t+":="+$t)
-	//End if 
-	//End if 
-	
-	var $v
-	$v:=OBJECT Get value:C1743(This:C1470.name)
-	
-	If (Value type:C1509($v)#Is undefined:K8:13)
-		
-		OBJECT SET VALUE:C1742(This:C1470.name; $v)
-		
-	End if 
+	$this:=This:C1470
 	
 /*══════════════════════════
 .on(e;callback) -> bool

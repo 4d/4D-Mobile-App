@@ -35,12 +35,10 @@ Function init()
 	This:C1470.databaseMethodGroup:=cs:C1710.group.new(This:C1470.databaseMethod; This:C1470.databaseMethodLabel)
 	
 	This:C1470.iconPicker:=cs:C1710.widget.new("iconGrid")
-	This:C1470.dropCursor:=cs:C1710.static.new("dropCursor")
+	This:C1470.dropCursor:=cs:C1710.static.new("dropCursor")  //.setColors(Highlight menu background color)
 	
 	// Link to the ACTIONS_PARAMS panel
 	This:C1470.parametersLink:=Formula:C1597(panel("ACTIONS_PARAMS"))
-	
-	Folder:C1567(fk desktop folder:K87:19).file("DEV/listbox.json").setText(JSON Stringify:C1217(This:C1470.actions; *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Load project actions
@@ -191,9 +189,11 @@ Function doAddMenu()
 	var $i : Integer
 	var $action; $field; $parameter; $table : Object
 	var $c; $fields : Collection
-	var $addMenu; $deleteMenu; $editMenu; $menu; $shareMenu : cs:C1710.menu
+	var $addMenu; $deleteMenu; $editMenu; $menu; $shareMenu; $sortMenu : cs:C1710.menu
 	
-	$menu:=cs:C1710.menu.new().append(":xliff:newAction"; "new").line()
+	$menu:=cs:C1710.menu.new()\
+		.append(":xliff:newAction"; "new")\
+		.line()
 	
 	$addMenu:=cs:C1710.menu.new()
 	$menu.append(":xliff:addActionFor"; $addMenu)
@@ -207,6 +207,13 @@ Function doAddMenu()
 	$shareMenu:=cs:C1710.menu.new()
 	$menu.append(":xliff:shareActionFor"; $shareMenu)
 	
+	If (FEATURE.with("sortAction"))
+		
+		$sortMenu:=cs:C1710.menu.new()
+		$menu.append(":xliff:sortActionFor"; $sortMenu)
+		
+	End if 
+	
 	For each ($t; Form:C1466.dataModel)
 		
 		$addMenu.append(Form:C1466.dataModel[$t][""].name; "add_"+$t)
@@ -214,6 +221,11 @@ Function doAddMenu()
 		$deleteMenu.append(Form:C1466.dataModel[$t][""].name; "delete_"+$t)
 		$shareMenu.append(Form:C1466.dataModel[$t][""].name; "share_"+$t)
 		
+		If (FEATURE.with("sortAction"))
+			
+			$sortMenu.append(Form:C1466.dataModel[$t][""].name; "sort_"+$t)
+			
+		End if 
 	End for each 
 	
 	$menu.popup(This:C1470.add)
@@ -236,11 +248,13 @@ Function doAddMenu()
 				$menu.delete:=($t="delete_@")
 				$menu.add:=($t="add_@")
 				$menu.share:=($t="share_@")
+				$menu.sort:=($t="sort_@")
 				
 				$t:=Replace string:C233($t; "edit_"; "")
 				$t:=Replace string:C233($t; "delete_"; "")
 				$t:=Replace string:C233($t; "add_"; "")
 				$t:=Replace string:C233($t; "share_"; "")
+				$t:=Replace string:C233($t; "sort_"; "")
 				
 				$menu.table:=$t
 				$menu.tableNumber:=Num:C11($t)
@@ -250,8 +264,7 @@ Function doAddMenu()
 						//……………………………………………………………………
 					: ($menu.edit)
 						
-						$menu.preset:="edition"
-						$menu.prefix:="edit"
+						$menu.preset:="edit"
 						$menu.icon:="actions/Edit.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("edit...")
@@ -260,8 +273,7 @@ Function doAddMenu()
 						//……………………………………………………………………
 					: ($menu.add)
 						
-						$menu.preset:="adding"
-						$menu.prefix:="add"
+						$menu.preset:="add"
 						$menu.icon:="actions 2/Add.svg"
 						$menu.scope:="table"
 						$menu.label:=Get localized string:C991("add...")
@@ -270,8 +282,7 @@ Function doAddMenu()
 						//……………………………………………………………………
 					: ($menu.delete)
 						
-						$menu.preset:="suppression"
-						$menu.prefix:="delete"
+						$menu.preset:="delete"
 						$menu.icon:="actions/Delete.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("remove")
@@ -281,12 +292,20 @@ Function doAddMenu()
 					: ($menu.share)
 						
 						$menu.preset:="share"
-						$menu.prefix:="share"
 						$menu.icon:="actions/Send-basic.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("share...")
 						READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Send-basic.svg").platformPath; $icon)
 						$menu.description:=""
+						
+						//……………………………………………………………………
+					: ($menu.sort)
+						
+						$menu.preset:="sort"
+						$menu.icon:="actions/Sort.svg"
+						$menu.scope:="table"
+						$menu.label:=Get localized string:C991("sort...")
+						READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Sort.svg").platformPath; $icon)
 						
 						//……………………………………………………………………
 				End case 
@@ -296,9 +315,9 @@ Function doAddMenu()
 				$table:=Form:C1466.dataModel[$menu.table]
 				
 				// Generate a unique name
-				$t:=cs:C1710.str.new(formatString("label"; $table[""].name)).uperCamelCase()
+				$t:=EDITOR.str.setText(formatString("label"; $table[""].name)).uperCamelCase()
 				
-				$menu.name:=$menu.prefix+$t
+				$menu.name:=$menu.preset+$t
 				
 				If (Form:C1466.actions#Null:C1517)
 					
@@ -309,7 +328,7 @@ Function doAddMenu()
 						If ($c.length>0)
 							
 							$i:=$i+1+Num:C11($i=0)
-							$menu.name:=$menu.prefix+$t+String:C10($i)
+							$menu.name:=$menu.preset+$t+String:C10($i)
 							
 						End if 
 					Until ($c.length=0)
@@ -337,6 +356,11 @@ Function doAddMenu()
 						
 						$action.description:=$menu.description
 						
+						//……………………………………………………………………
+					: ($menu.sort)
+						
+						// No predefined parameters
+						
 						//______________________________________________________
 					Else 
 						
@@ -362,7 +386,7 @@ Function doAddMenu()
 										
 										$parameter:=New object:C1471(\
 											"fieldNumber"; $field.fieldNumber; \
-											"name"; cs:C1710.str.new($table[$t].name).lowerCamelCase(); \
+											"name"; EDITOR.str.setText($table[$t].name).lowerCamelCase(); \
 											"label"; $table[$t].label; \
 											"shortLabel"; $table[$t].shortLabel; \
 											"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))
@@ -509,7 +533,7 @@ Function doScopeMenu()
 					
 					//________________________________________
 				: ($i=1)\
-					 & (String:C10(This:C1470.current.preset)="suppression")  // Table
+					 & (String:C10(This:C1470.current.preset)="delete")  // Table
 					
 					$menu.disable()
 					
@@ -722,7 +746,7 @@ Function scopeLabel($data : Object)->$label : Text
 	$label:=Get localized string:C991(String:C10($data.scope))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// <Background Color Expression>
+	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS_PARAMS.backgroundColor() ********************
 Function backgroundColor($current : Object)->$color
 	
 	var $v  // could be an integer or a text
@@ -767,9 +791,26 @@ Function metaInfo($current : Object)->$result
 	Else 
 		
 		// Not assigned table
-		$result.cell.tables.stroke:=Choose:C955(Num:C11($current.tableNumber)=0; EDITOR.errorRGB; Choose:C955(EDITOR.isDark; "white"; "black"))
-		
+		If (Num:C11($current.tableNumber)=0)
+			
+			// Missing table
+			$result.cell.names.stroke:=EDITOR.errorRGB
+			
+		Else 
+			
+			$result.cell.names.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")
+			
+		End if 
 	End if 
 	
 	// Mark duplicate names
-	$result.cell.names.stroke:=Choose:C955(Form:C1466.actions.indices("name = :1"; $current.name).length>1; EDITOR.errorRGB; Choose:C955(EDITOR.isDark; "white"; "black"))
+	If (Form:C1466.actions.indices("name = :1"; $current.name).length>1)
+		
+		// Duplicate
+		$result.cell.names.stroke:=EDITOR.errorRGB
+		
+	Else 
+		
+		$result.cell.names.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")
+		
+	End if 

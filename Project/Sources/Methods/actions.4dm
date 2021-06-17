@@ -63,9 +63,6 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 			End if 
 			
-			// Set colors
-			$ƒ.dropCursor.setColors(Highlight menu background color:K23:7)
-			
 			// Preload the icons
 			$ƒ.callMeBack("loadActionIcons")
 			
@@ -116,9 +113,9 @@ Else   // <== WIDGETS METHOD
 					//_____________________________________
 				: ($e.code=On Losing Focus:K2:8)
 					
-					If (Bool:C1537($ƒ.$edit))  // Focus is lost after editing a cell
+					If (Bool:C1537($ƒ.actions.inEdition))  // Focus is lost after editing a cell
 						
-						OB REMOVE:C1226($ƒ; "$edit")
+						OB REMOVE:C1226($ƒ.actions; "inEdition")
 						
 					Else 
 						
@@ -164,7 +161,7 @@ Else   // <== WIDGETS METHOD
 						: (New collection:C1472("names"; "shorts"; "labels").indexOf($e.columnName)#-1)
 							
 							// Set a flag to manage On Losing Focus
-							$ƒ.$edit:=True:C214
+							$ƒ.actions.inEdition:=True:C214
 							
 							//………………………………………………………………
 						: ($e.columnName="tables")

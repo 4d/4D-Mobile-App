@@ -607,7 +607,6 @@ Function addToMain
 	// Returns the collection of the tables of the data model
 Function tables($datamodel : Object)->$tables : Collection
 	
-	
 	If (Count parameters:C259>=1)
 		
 		$tables:=OB Entries:C1720($datamodel)
@@ -751,6 +750,22 @@ Function isNumeric($type : Integer)->$isNumeric : Boolean
 Function isString($type : Integer)->$isNumeric : Boolean
 	
 	$isNumeric:=(New collection:C1472(Is alpha field:K8:1; Is text:K8:3).indexOf($type)#-1)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Returns True if the field is sortable
+Function isSortable($field : Object)->$sortable : Boolean
+	
+	If ($field.fieldType#Null:C1517)
+		
+		If ($field.fieldType#Is object:K8:27)\
+			 & ($field.fieldType#Is BLOB:K8:12)\
+			 & ($field.fieldType#Is picture:K8:10)\
+			 & ($field.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
+			
+			$sortable:=True:C214
+			
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	//Add a table to the data model

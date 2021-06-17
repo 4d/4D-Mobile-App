@@ -58,9 +58,6 @@
 	"_o_OBSOLETES": {
 		"methods": [
 			"_NEW_MOBILE_PROJECT",
-			"_o_ACTIONS_Handler",
-			"_o_ACTIONS_OBJECTS_HANDLER",
-			"_o_ACTIONS_UI",
 			"_o_color",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
@@ -373,12 +370,13 @@
 	},
 	"08] ACTIONS_PARAMS": {
 		"methods": [
-			"ACTIONS_PARAMS_Handler",
-			"ACTIONS_PARAMS_OBJECTS_HANDLER",
-			"ACTIONS_PARAMS_UI",
+			"ACTIONS_PARAMS",
 			"COMPILER_ACTIONS_PARAMS"
 		],
 		"forms": [
+			"ACTIONS_PARAMS"
+		],
+		"classes": [
 			"ACTIONS_PARAMS"
 		]
 	},
