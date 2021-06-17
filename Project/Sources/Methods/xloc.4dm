@@ -103,15 +103,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						For each ($fieldId; $table)
 							If ($fieldId#"")
-								$field:=$table[$fieldId]
-								
-								$fieldName:=formatString("field-name"; $field.name)
-								
-								If (Length:C16(String:C10($field.shortLabel))>0)
-									$Txt_ouput:=$Txt_ouput+"\"Property/"+$fieldName+"/Entity/"+$tableName+"\" = \""+$field.label+"\";"+$Obj_in.ld
-								End if 
-								If (Length:C16(String:C10($field.shortLabel))>0)
-									$Txt_ouput:=$Txt_ouput+"\"Property/"+$fieldName+"/Entity/"+$tableName+"@short\" = \""+$field.shortLabel+"\";"+$Obj_in.ld
+								If (Value type:C1509($table[$fieldId])=Is object:K8:27)
+									$field:=$table[$fieldId]
+									
+									$fieldName:=formatString("field-name"; $field.name)
+									
+									If (Length:C16(String:C10($field.shortLabel))>0)
+										$Txt_ouput:=$Txt_ouput+"\"Property/"+$fieldName+"/Entity/"+$tableName+"\" = \""+$field.label+"\";"+$Obj_in.ld
+									End if 
+									If (Length:C16(String:C10($field.shortLabel))>0)
+										$Txt_ouput:=$Txt_ouput+"\"Property/"+$fieldName+"/Entity/"+$tableName+"@short\" = \""+$field.shortLabel+"\";"+$Obj_in.ld
+									End if 
 								End if 
 							End if 
 						End for each 
