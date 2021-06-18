@@ -721,6 +721,7 @@
 			"ob_error",
 			"pic",
 			"rgx (thread-safe)",
+			"semver",
 			"str",
 			"ui",
 			"xml (thread-safe)"
@@ -906,6 +907,13 @@
 		],
 		"forms": [
 			"SEARCH"
+		]
+	},
+	"semver": {
+		"classes": [
+			"semver",
+			"semverRange",
+			"version"
 		]
 	},
 	"storyboardClass": {

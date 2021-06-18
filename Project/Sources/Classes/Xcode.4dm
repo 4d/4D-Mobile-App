@@ -5,6 +5,7 @@ Class constructor($useDefaultPath : Boolean)
 	Super:C1705()
 	
 	This:C1470.success:=Is macOS:C1572
+	This:C1470.semver:=cs:C1710.semver.new()
 	
 	If (This:C1470.success)
 		
@@ -81,6 +82,7 @@ Function getRequirements()
 		
 		If ($http.success)
 			
+			$content:=JSON Parse:C1218($requirement.getText())
 			$content.Etag:=String:C10($http.headers.query("name = ETag").pop().value)
 			$requirement.setText(JSON Stringify:C1217($content; *))
 			
@@ -162,14 +164,8 @@ Function path($useDefaultPath : Boolean)
 	// select the best one according to the desired version.
 Function checkRequiredVersion($version : Text)
 	
-	var $isEqualOrHigher : Boolean
-	$isEqualOrHigher:=($version="@+")
-	
-	If ($isEqualOrHigher)
-		
-		$version:=Delete string:C232($version; Length:C16($version); 1)
-		
-	End if 
+	var $range : Object
+	$range:=This:C1470.semver.range($version)
 	
 	var $instances : Collection
 	$instances:=New collection:C1472
@@ -187,25 +183,12 @@ Function checkRequiredVersion($version : Text)
 			
 			If (Length:C16($vers)#0)
 				
-				If ($isEqualOrHigher)
+				If ($range.satisfiedBy($vers))
 					
-					If (This:C1470.versionCompare($vers; $version)>=0)
-						
-						$instances.push(New object:C1471(\
-							"version"; $vers; \
-							"pathname"; $pathname))
-						
-					End if 
+					$instances.push(New object:C1471(\
+						"version"; $vers; \
+						"pathname"; $pathname))
 					
-				Else 
-					
-					If (This:C1470.versionCompare($vers; $version)=0)
-						
-						$instances.push(New object:C1471(\
-							"version"; $vers; \
-							"pathname"; $pathname))
-						
-					End if 
 				End if 
 			End if 
 		End if 
@@ -217,7 +200,20 @@ Function checkRequiredVersion($version : Text)
 		
 		// Keep the best one
 		$instances:=$instances.orderBy("version desc")
-		This:C1470.setPath($instances[0].pathname; $instances[0].version)
+		
+		$pathname:=""
+		If (This:C1470.application#Null:C1517)
+			$pathname:=String:C10(This:C1470.application.path)
+		End if 
+		
+		var $currentInstances : Collection
+		$currentInstances:=$instances.filter("col_formula"; Formula:C1597($1.result:=(($1.value.version=$instances[0].version) & (($1.value.pathname+"/")=$pathname))))
+		If ($currentInstances.length=1)
+			// already a correct version with same value on current path, no need to ask
+			// This could happen if you two instance of macOS installed on two partitions
+		Else 
+			This:C1470.setPath($instances[0].pathname; $instances[0].version)
+		End if 
 		
 	End if 
 	

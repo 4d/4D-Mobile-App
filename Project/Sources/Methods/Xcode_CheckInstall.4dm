@@ -67,9 +67,9 @@ If ($Xcode.success)
 	
 	$Xcode.checkRequiredVersion($requestedVersion)
 	
-	If ($requestedVersion="@+")  // Remove '+' if any
+	If ($requestedVersion="^@")  // Remove '^' if any
 		
-		$requestedVersion:=Delete string:C232($requestedVersion; Length:C16($requestedVersion); 1)
+		$requestedVersion:=Substring:C12($requestedVersion; 2)
 		
 	End if 
 	
