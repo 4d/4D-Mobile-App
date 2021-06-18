@@ -122,7 +122,7 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.add.catch($e; On Clicked:K2:4))
 			
-			$ƒ.doNewParameter()
+			$ƒ.doAddParameter()
 			
 			//==============================================
 		: ($ƒ.add.catch($e; On Alternative Click:K2:36))

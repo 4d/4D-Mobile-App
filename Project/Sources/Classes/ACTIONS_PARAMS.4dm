@@ -430,6 +430,15 @@ Function commentValue()->$value : Text
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Add a user parameter except for sort when adding is not possible
+Function doAddParameter()
+	If (String:C10(This:C1470.action.preset)="sort")
+		This:C1470.doAddParameterMenu()
+	Else 
+		This:C1470.doNewParameter()
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Add a user parameter
 Function doNewParameter()
 	
