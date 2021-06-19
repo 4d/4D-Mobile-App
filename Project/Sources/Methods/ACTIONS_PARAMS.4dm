@@ -22,13 +22,13 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				$ƒ.add.enable()
 				
-				If (_and(Formula:C1597(Form:C1466.actions.parameters#Null:C1517); Formula:C1597(Form:C1466.actions.parameters.length>0)))
+				If (_and(Formula:C1597($ƒ.action.parameters#Null:C1517); Formula:C1597($ƒ.action.parameters.length>0)))
 					
 					// Select last used action (or the first one)
 					If ($ƒ.$current#Null:C1517)
 						
 						var $indx : Integer
-						$indx:=Form:C1466.actions.parameters.indexOf($ƒ.$current)
+						$indx:=$ƒ.action.parameters.indexOf($ƒ.$current)
 						$ƒ.parameters.select($indx+1)
 						
 					Else 
