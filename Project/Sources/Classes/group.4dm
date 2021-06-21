@@ -22,6 +22,11 @@ Class constructor($members : Variant)
 	Case of 
 			
 			//___________________________
+		: (Count parameters:C259=0)
+			
+			This:C1470.members:=New collection:C1472
+			
+			//___________________________
 		: (Value type:C1509($members)=Is collection:K8:32)
 			
 			This:C1470.members:=$members
@@ -55,7 +60,6 @@ Class constructor($members : Variant)
 			
 			//___________________________
 	End case 
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function addMember($member)->$this : cs:C1710.group
