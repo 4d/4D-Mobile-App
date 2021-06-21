@@ -21,7 +21,7 @@ Function generate
 	var $1 : 4D:C1709.File  // project editor json
 	
 	$0:=New object:C1471(\
-		"success"; False:C215; \
+		"success"; True:C214; \
 		"outputStream"; ""; \
 		"errorStream"; ""; \
 		"errors"; New collection:C1472)
@@ -44,7 +44,7 @@ Function generate
 				+"\" --host-db \""+This:C1470.path.host().path\
 				+"\"")
 			
-			$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+			$0.success:=Not:C34(Bool:C1537((Position:C15("Error"; String:C10(This:C1470.errorStream))>0)))
 			$0.outputStream:=This:C1470.outputStream
 			$0.errorStream:=This:C1470.errorStream
 			
