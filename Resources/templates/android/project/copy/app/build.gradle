@@ -39,6 +39,9 @@ dependencies {
     implementation Libs.glide
     kapt Libs.glide_compiler
 
+    // OkHttp
+    implementation Libs.okhttp
+    
     // Jackson
     implementation Libs.jackson
 

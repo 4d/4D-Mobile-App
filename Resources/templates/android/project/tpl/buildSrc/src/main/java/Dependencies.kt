@@ -35,7 +35,7 @@ object Versions {
     const val mockk = "1.11.0"
     const val multidex = "2.0.1"
     const val navigation = "2.3.5"
-    const val okhttp = "4.9.0"
+    const val okhttp = "5.0.0-alpha.2"
     const val paging = "2.1.2"
     const val preference = "1.1.1"
     const val retrofit = "2.9.0"
