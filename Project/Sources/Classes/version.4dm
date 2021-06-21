@@ -4,14 +4,14 @@ Class constructor
 	C_VARIANT:C1683($1; $2; $3)
 	var $counts : Integer
 	$counts:=Count parameters:C259
-	Case of   // fix count parameters from formula
-		: (Undefined:C82($1))
-			$counts:=0
-		: (Undefined:C82($2))
-			$counts:=1
-		: (Undefined:C82($3))
-			$counts:=2
-	End case 
+	//Case of   // fix count parameters from formula
+	//: (Undefined($1))
+	//$counts:=0
+	//: (Undefined($2))
+	//$counts:=1
+	//: (Undefined($3))
+	//$counts:=2
+	//End case 
 	This:C1470.valid:=True:C214
 	Case of 
 		: ($counts=1)
