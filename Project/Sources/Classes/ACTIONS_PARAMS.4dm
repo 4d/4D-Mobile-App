@@ -17,6 +17,8 @@ Class constructor
 		
 	End if 
 	
+	This:C1470.path:=cs:C1710.path.new()
+	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function init()
 	
@@ -403,27 +405,26 @@ Function formatValue()->$value : Text
 	var $current : Object
 	$current:=This:C1470.current
 	
-	If (Length:C16(String:C10($current.format))=0)
-		
-		// Take type
-		$value:=Choose:C955($current.type="string"; "text"; String:C10($current.type))
-		
-	Else 
-		
-		// Prefer format
-		$value:=Choose:C955($current.format#$current.type; "f_"+String:C10($current.format); String:C10($current.type))
-		
-	End if 
-	
-	If ($value[[1]]="/")
-		
-		$value:=Substring:C12($value; 2)
-		
-	Else 
-		
-		$value:=Get localized string:C991($value)
-		
-	End if 
+	Case of 
+		: (Length:C16(String:C10($current.format))=0)
+			
+			// Take type
+			$value:=Choose:C955($current.type="string"; "text"; String:C10($current.type))
+			$value:=Get localized string:C991($value)
+			
+			//%W-533.1
+		: ($current.format[[1]]="/")  // host custom action parameter format
+			//%W+533.1
+			
+			$value:=Substring:C12($current.format; 2)
+			
+		Else 
+			
+			// Prefer format
+			$value:=Choose:C955($current.format#$current.type; "f_"+String:C10($current.format); String:C10($current.type))
+			$value:=Get localized string:C991($value)
+			
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function commentValue()->$value : Text
@@ -731,6 +732,56 @@ Function doMandatory()
 	PROJECT.save()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Format list 
+Function formats($host : Boolean)->$formats : Object
+	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
+	
+	If ($host)
+		var $folder; $formatterFolder : 4D:C1709.Folder
+		var $manifestFile : 4D:C1709.File
+		var $manifestData : Object
+		var $type : Text
+		$folder:=This:C1470.path.hostActionParameterFormatters(False:C215)
+		If ($folder.exists)
+			For each ($formatterFolder; $folder.folders())
+				$manifestFile:=$formatterFolder.file("manifest.json")
+				If ($manifestFile.exists)
+					$manifestData:=JSON Parse:C1218($manifestFile.getText())
+					If (Value type:C1509($manifestData.type)=Is text:K8:3)
+						$manifestData.type:=New collection:C1472($manifestData.type)
+					End if 
+					If (Value type:C1509($manifestData.type)=Is collection:K8:32)
+						For each ($type; $manifestData.type)
+							
+							Case of   // OPTI replace by object map
+								: ($type="text")
+									$type:="string"
+								: ($type="real")
+									$type:="number"
+								: ($type="integer")
+									$type:="number"
+								: ($type="boolean")
+									$type:="bool"
+								: ($type="picture")
+									$type:="image"
+								Else 
+							End case 
+							
+							If ($formats[$type]#Null:C1517)
+								// ENHANCE: could add maybe object instead of string, to add some other info like helptype or custom label
+								If ($formats[$type].indexOf("/"+$formatterFolder.name)<0)
+									$formats[$type].push("/"+$formatterFolder.name)
+								End if 
+							End if 
+						End for each 
+					End if 
+				End if 
+			End for each 
+		End if 
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format choice 
 Function doFormatMenu()
 	
@@ -738,12 +789,15 @@ Function doFormatMenu()
 	var $index : Integer
 	var $current; $form; $formats; $subMenu : Object
 	var $menu : cs:C1710.menu
+	var $hasCustom : Boolean
 	
 	$current:=This:C1470.current
 	$currentFormat:=String:C10($current.format)
-	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
+	$formats:=This:C1470.formats(FEATURE.with("customActionFormatter"))
 	
 	$menu:=cs:C1710.menu.new()
+	
+	$hasCustom:=False:C215
 	
 	If ($current.fieldNumber#Null:C1517)  // Action linked to a field
 		
@@ -751,7 +805,15 @@ Function doFormatMenu()
 		
 		For each ($format; $formats[Choose:C955($current.type="text"; "string"; $current.type)])
 			
-			$menu.append(":xliff:f_"+$format; $format; $currentFormat=$format)
+			If ($format[[1]]="/")
+				If (Not:C34($hasCustom))
+					$menu.line()  // separate custom by a line
+				End if 
+				$hasCustom:=True:C214
+				$menu.append(Substring:C12($format; 2); $format; $currentFormat=$format)
+			Else 
+				$menu.append(":xliff:f_"+$format; $format; $currentFormat=$format)
+			End if 
 			
 		End for each 
 		
@@ -769,7 +831,15 @@ Function doFormatMenu()
 				
 				For each ($format; $formats[$type])
 					
-					$subMenu.append(":xliff:f_"+$format; $format; $currentFormat=$format)
+					If ($format[[1]]="/")
+						If (Not:C34($hasCustom))
+							$subMenu.line()  // separate custom by a line
+						End if 
+						$hasCustom:=True:C214
+						$subMenu.append(Substring:C12($format; 2); $format; $currentFormat=$format)
+					Else 
+						$subMenu.append(":xliff:f_"+$format; $format; $currentFormat=$format)
+					End if 
 					
 				End for each 
 				

@@ -140,12 +140,6 @@ FEATURE.unstable("androidBeta")  // Android support during beta phase
 1920
 _____________*/
 
-// Allow to duplicate template in host database and show on disk https://project.4d.com/issues/98054
-FEATURE.unstable("duplicateTemplate")
-
-// Mac M1 build for simu using arm64
-// FEATURE.unstable("simuARMOnAppleProcessor")
-
 FEATURE.unstable("ConnectedDevices")  // Add connected devices to the simulator tool
 
 FEATURE.unstable("iconActionMenu")  // Use action button for icon on product panel
@@ -157,6 +151,19 @@ FEATURE.unstable("sortAction")  // https://project.4d.com/issues/117660
 FEATURE.unstable("freeActionName")  // follow https://project.4d.com/issues/117660 but to please LE
 
 FEATURE.unstable("plistClass")  // Use plist class instead of plist method
+
+/* _____________
+1930
+_____________*/
+
+FEATURE.unstable("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https://project.4d.com/issues/98054
+
+FEATURE.unstable("customActionFormatter")  // redmine #128195
+FEATURE.unstable("newFormatterChoiceList")  // menu to create formatter choice list directly , from data
+FEATURE.unstable("newActionFormatterChoiceList")  // menu to create action formatter choice list directly
+
+// Mac M1 build for simu using arm64
+// FEATURE.unstable("simuARMOnAppleProcessor")
 
 /* _____________
 WIP

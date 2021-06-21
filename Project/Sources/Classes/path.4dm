@@ -476,6 +476,23 @@ Function hostFormatters($create : Boolean)->$folder : 4D:C1709.Folder  // Format
 	$folder:=This:C1470.target
 	
 /*========================================================*/
+Function hostActionParameterFormatters($create : Boolean)->$folder : 4D:C1709.Folder  // Action Parameter Formatters folder
+	
+	This:C1470.target:=This:C1470.host().folder("actionParameters")
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470.create($create)
+		
+	Else 
+		
+		This:C1470.exists:=This:C1470.target.exists
+		
+	End if 
+	
+	$folder:=This:C1470.target
+	
+/*========================================================*/
 Function hostIcons($create : Boolean)->$folder : 4D:C1709.Folder  // Icons folder
 	
 	This:C1470.target:=This:C1470.host().folder("medias/icons")
