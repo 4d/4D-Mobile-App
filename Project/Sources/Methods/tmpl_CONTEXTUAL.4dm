@@ -7,31 +7,41 @@ var $file : 4D:C1709.File
 var $menu : cs:C1710.menu
 
 If ($infos#Null:C1517)
+	
 	$menu:=cs:C1710.menu.new()
 	
 	If ($infos.homepage#Null:C1517)
+		
 		$menu\
 			.append("accessTheGithubRepository"; "show")
+		
 	End if 
 	
 	If ($infos.file#Null:C1517)
 		
-		If ($infos.file.isFile)  // ie. zip
+		If ($infos.file.isFile)  // Ie. zip
 			
 			If ($infos.updateURL#Null:C1517)
+				
 				$menu\
 					.line()\
 					.append("downloadTheLatestRevision"; "update")
+				
 				// XXX Do not add line if no homepage but update URL (but must not occurs); have an appendWithLine that check if first or not will be cool
+				
 			End if 
-			
 		End if 
+		
 	Else   // old code to remove if "file" validated
+		
 		If ($infos.updateURL#Null:C1517)
+			
 			$menu\
 				.line()\
 				.append("downloadTheLatestRevision"; "update")
+			
 			// XXX Do not add line if no homepage but update URL (but must not occurs); have an appendWithLine that check if first or not will be cool
+			
 		End if 
 	End if 
 	
@@ -48,13 +58,16 @@ If ($infos#Null:C1517)
 			End if 
 			
 		Else   // old code to remove if "file" validated
+			
 			$menu\
 				.line()\
 				.append("forgetThisTemplate"; "forget")
+			
 		End if 
 	End if 
 	
 	If ($infos.file#Null:C1517)
+		
 		$menu\
 			.line()\
 			.append("duplicate"; "duplicate")
@@ -66,11 +79,14 @@ If ($infos#Null:C1517)
 				.append("showOnDisk"; "showOnDisk")
 			
 			If ($infos.file.isFolder)
-				// XXX work only on macOS if installed here (the best is no known if someone could respond to x-github-client://)
+				
+				// XXX work only on macOS if installed here (the best is no known if someone could respond to x-github-client:// )
 				If (Folder:C1567("/Applications/Github Desktop.app").exists)
+					
 					$menu\
 						.line()\
 						.append("openWithGithubDesktop"; "openWithGithubDesktop")  // or "share"
+					
 				End if 
 			End if 
 		End if 

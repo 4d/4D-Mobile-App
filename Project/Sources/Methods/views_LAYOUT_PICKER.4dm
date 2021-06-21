@@ -388,15 +388,22 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			
 			// Get the manifest
 			$o:=JSON Parse:C1218($zip.root.file("manifest.json").getText())
+			
 			If (FEATURE.with("duplicateTemplate"))
-				$o.file:=$template  // will activate menu to show on disk or duplicate
+				
+				$o.file:=$template  // Will activate menu to show on disk or duplicate
+				
 			End if 
 			
-			If ($o.homepage#Null:C1517)  // see tmpl_INFOS
+			If ($o.homepage#Null:C1517)  // See tmpl_INFOS
+				
 				$o.tips:="accessTheGithubRepository"
 				$o.formula:=Formula:C1597(tmpl_INFOS)
+				
 			Else 
+				
 				$o.formula:=Formula:C1597(tmpl_CONTEXTUAL)
+				
 			End if 
 			
 			// Put text

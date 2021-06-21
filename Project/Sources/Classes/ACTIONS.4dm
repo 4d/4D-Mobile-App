@@ -189,7 +189,7 @@ Function doAddMenu()
 	var $i : Integer
 	var $action; $field; $parameter; $table : Object
 	var $c; $fields : Collection
-	var $addMenu; $deleteMenu; $editMenu; $menu; $shareMenu; $sortMenu : cs:C1710.menu
+	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; $shareMenu; $sortMenu : cs:C1710.menu
 	
 	$menu:=cs:C1710.menu.new()\
 		.append(":xliff:newAction"; "new")\
@@ -223,7 +223,15 @@ Function doAddMenu()
 		
 		If (FEATURE.with("sortAction"))
 			
-			$sortMenu.append(Form:C1466.dataModel[$t][""].name; "sort_"+$t)
+			$fieldsMenu:=cs:C1710.menu.new()
+			
+			For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$t]; True:C214))
+				
+				$fieldsMenu.append($field.name; "sort_"+$t+","+String:C10($field.fieldNumber))
+				
+			End for each 
+			
+			$sortMenu.append(Form:C1466.dataModel[$t][""].name; $fieldsMenu)
 			
 		End if 
 	End for each 
@@ -256,8 +264,19 @@ Function doAddMenu()
 				$t:=Replace string:C233($t; "share_"; "")
 				$t:=Replace string:C233($t; "sort_"; "")
 				
-				$menu.table:=$t
-				$menu.tableNumber:=Num:C11($t)
+				If ($menu.sort)
+					
+					$c:=Split string:C1554($t; ",")
+					$menu.table:=$c[0]
+					$menu.fieldNumber:=Num:C11($c[1])
+					
+				Else 
+					
+					$menu.table:=$t
+					
+				End if 
+				
+				$menu.tableNumber:=Num:C11($menu.table)
 				
 				Case of 
 						
@@ -346,22 +365,38 @@ Function doAddMenu()
 				
 				Case of 
 						
-						//______________________________________________________
+						//-------------------------------------------
 					: ($menu.delete)
 						
 						$action.style:="destructive"
 						
-						//______________________________________________________
+						//-------------------------------------------
 					: ($menu.share)
 						
 						$action.description:=$menu.description
 						
-						//……………………………………………………………………
+						//-------------------------------------------
 					: ($menu.sort)
 						
-						// No predefined parameters
+						$action.parameters:=New collection:C1472
 						
-						//______________________________________________________
+						$fields:=catalog("fields"; New object:C1471("tableName"; $table[""].name)).fields
+						$field:=$fields.query("fieldNumber = :1"; $menu.fieldNumber).pop()
+						
+						$t:=String:C10($field.fieldNumber)
+						
+						$parameter:=New object:C1471(\
+							"fieldNumber"; $field.fieldNumber; \
+							"name"; EDITOR.str.setText($table[$t].name).lowerCamelCase(); \
+							"label"; $table[$t].label; \
+							"shortLabel"; $table[$t].shortLabel; \
+							"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))
+						
+						$parameter.defaultField:=formatString("field-name"; $table[$t].name)
+						
+						$action.parameters.push($parameter)
+						
+						//-------------------------------------------
 					Else 
 						
 						$action.parameters:=New collection:C1472
@@ -442,7 +477,7 @@ Function doAddMenu()
 							End case 
 						End for each 
 						
-						//______________________________________________________
+						//-------------------------------------------
 				End case 
 				
 				//______________________________________________________

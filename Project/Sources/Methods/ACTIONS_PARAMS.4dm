@@ -22,27 +22,19 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				$ƒ.add.enable()
 				
-				If (_and(Formula:C1597($ƒ.action.parameters#Null:C1517); Formula:C1597($ƒ.action.parameters.length>0)))
-					
-					// Select last used action (or the first one)
-					If ($ƒ.$current#Null:C1517)
-						
-						var $indx : Integer
-						$indx:=$ƒ.action.parameters.indexOf($ƒ.$current)
-						$ƒ.parameters.select($indx+1)
-						
-					Else 
-						
-						$ƒ.parameters.select(1)
-						
-					End if 
-					
-					//$ƒ.callMeBack("selectParameters")
-					//$ƒ.updateParameters()
-					
-					//$ƒ.actions.focus()
-					
-				End if 
+				//If (_and(Formula($ƒ.action.parameters#Null); Formula($ƒ.action.parameters.length>0)))
+				//// Select last used action (or the first one)
+				//If ($ƒ.$current#Null)
+				//var $indx : Integer
+				//$indx:=$ƒ.action.parameters.indexOf($ƒ.$current)
+				//$ƒ.parameters.select($indx+1)
+				//Else 
+				//$ƒ.parameters.select(1)
+				//End if 
+				////$ƒ.callMeBack("selectParameters")
+				////$ƒ.updateParameters()
+				////$ƒ.actions.focus()
+				//End if 
 				
 			Else 
 				

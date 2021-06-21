@@ -140,6 +140,19 @@ Function update()
 			
 		Else 
 			
+			// Select last used action (or the first one)
+			If ($current#Null:C1517)
+				
+				var $indx : Integer
+				$indx:=This:C1470.action.parameters.indexOf($current)
+				This:C1470.parameters.select($indx+1)
+				
+			Else 
+				
+				This:C1470.parameters.select(1)
+				
+			End if 
+			
 			Case of 
 					
 					//______________________________________________________
@@ -153,6 +166,8 @@ Function update()
 					If (FEATURE.with("sharedActionWithDescription")) & False:C215
 						
 						This:C1470.goToPage(2)
+						This:C1470.description.show()
+						This:C1470.description.focus()
 						
 					Else 
 						
@@ -432,10 +447,15 @@ Function commentValue()->$value : Text
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Add a user parameter except for sort when adding is not possible
 Function doAddParameter()
+	
 	If (String:C10(This:C1470.action.preset)="sort")
+		
 		This:C1470.doAddParameterMenu()
+		
 	Else 
+		
 		This:C1470.doNewParameter()
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 

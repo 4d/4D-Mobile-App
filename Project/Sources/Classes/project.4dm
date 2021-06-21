@@ -768,6 +768,66 @@ Function isSortable($field : Object)->$sortable : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Returns the collection of table's sortable field 
+Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
+	
+	var $field; $model : Object
+	var $c : Collection
+	
+	$fields:=New collection:C1472
+	
+	If (Count parameters:C259>=1)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($table)=Is object:K8:27)  // Table model
+				
+				$model:=$table
+				
+				//______________________________________________________
+			: (Value type:C1509($table)=Is longint:K8:6)\
+				 | (Value type:C1509($table)=Is real:K8:4)  // Table number
+				
+				$model:=This:C1470.dataModel[String:C10($table)]
+				
+				//______________________________________________________
+			Else   // Table name
+				
+				$model:=This:C1470.dataModel[$table]
+				
+				//______________________________________________________
+		End case 
+		
+		$c:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
+		
+		For each ($field; $c)
+			
+			If (This:C1470.isSortable($field.value))
+				
+				$field.value.fieldNumber:=Num:C11($field.key)
+				$fields.push($field.value)
+				
+			End if 
+		End for each 
+		
+		If (Count parameters:C259>=2)
+			
+			If ($ordered)
+				
+				// Sort by name
+				$fields:=$fields.orderBy("name")
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		// #Error
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	//Add a table to the data model
 Function addTable($table : Object)->$tableModel : Object
 	
