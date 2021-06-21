@@ -2,6 +2,7 @@
 Class constructor($url)
 	
 	This:C1470.onErrorCallMethod:="HTTP ERROR HANDLER"
+	This:C1470._trials:=0
 	
 	If (Count parameters:C259>=1)
 		
@@ -30,13 +31,43 @@ Function reset($url)
 	
 	This:C1470.status:=0
 	This:C1470.keepAlive:=False:C215
+	This:C1470.timeout:=120  // Default value = 120 secondes
+	This:C1470.followRedirect:=True:C214
+	This:C1470.AllowCompression:=True:C214
+	This:C1470.AllowDisplayAuthDial:=False:C215
 	This:C1470.response:=Null:C1517
 	This:C1470.responseType:=0
 	This:C1470.targetFile:=Null:C1517
 	This:C1470.headers:=New collection:C1472
 	This:C1470.errors:=New collection:C1472
 	This:C1470.lastError:=""
+	This:C1470.maxRedirect:=2  // Default value
 	This:C1470.success:=This:C1470.isInternetAvailable()
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// To set the display of the authentication dialog box
+Function displayAuthDial($allow : Boolean)
+	
+	This:C1470.AllowDisplayAuthDial:=$allow
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// To set the HTTP client timeout
+Function setTimeout($delay : Integer)
+	
+	This:C1470.timeout:=$delay
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// To set the compression mechanism intended to accelerate exchange
+Function setCompression($allow : Boolean)
+	
+	This:C1470.AllowCompression:=$allow
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// To set the maximum number of redirections accepted
+Function setMaxRedirect($allow : Integer)
+	
+	This:C1470.followRedirect:=($allow>0)
+	This:C1470.maxRedirect:=$allow
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// To set the URL
@@ -51,6 +82,8 @@ Function setURL($url)->$this : cs:C1710.http
 		This:C1470.url:=""
 		
 	End if 
+	
+	This:C1470._trials:=0
 	
 	$this:=This:C1470
 	
@@ -353,6 +386,8 @@ Function get()->$this : cs:C1710.http
 			
 		End if 
 		
+		This:C1470._setOptions()
+		
 		$onErrCallMethod:=Method called on error:C704
 		httpError:=0
 		ON ERR CALL:C155(This:C1470.onErrorCallMethod)
@@ -372,19 +407,53 @@ Function get()->$this : cs:C1710.http
 		
 		This:C1470.success:=(This:C1470.status=200) & (httpError=0)
 		
-		If (This:C1470.success)
-			
-			ARRAY TO COLLECTION:C1563(This:C1470.headers; \
-				$headerNames; "name"; \
-				$headerValues; "value")
-			
-			This:C1470._response($t; $x)
-			
-		Else 
-			
-			This:C1470._decodeError()
-			
-		End if 
+		Case of 
+				
+				//______________________________________________________
+			: (This:C1470.success)
+				
+				ARRAY TO COLLECTION:C1563(This:C1470.headers; \
+					$headerNames; "name"; \
+					$headerValues; "value")
+				
+				This:C1470._response($t; $x)
+				
+				//______________________________________________________
+			: (This:C1470.status=302) & (This:C1470._trials<3)  // Redirection
+				
+				$indx:=Find in array:C230($headerNames; "location")
+				
+				If ($indx>0)
+					
+					// Get the redirected url & retry
+					This:C1470.url:=$headerValues{$indx}
+					
+					This:C1470._trials:=This:C1470._trials+1
+					This:C1470.get()
+					
+				End if 
+				
+				//______________________________________________________
+			Else 
+				
+				This:C1470._decodeError()
+				
+				//______________________________________________________
+		End case 
+		
+		//If (This.success)
+		
+		//ARRAY TO COLLECTION(This.headers; \
+			$headerNames; "name"; \
+			$headerValues; "value")
+		
+		//This._response($t; $x)
+		
+		//Else 
+		
+		//This._decodeError()
+		
+		//End if 
 		
 	Else 
 		
@@ -452,6 +521,8 @@ Function request($method : Text; $body)->$this : cs:C1710.http
 			$bodyƒ:=""
 			
 		End if 
+		
+		This:C1470._setOptions()
 		
 		$onErrCallMethod:=Method called on error:C704
 		httpError:=0
@@ -615,6 +686,15 @@ Function ipToInteger($IP : Text)->$result : Integer
 		$result:=$result << 8+Num:C11($t)
 		
 	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _setOptions()
+	
+	HTTP SET OPTION:C1160(HTTP follow redirect:K71:11; Num:C11(This:C1470.followRedirect))
+	HTTP SET OPTION:C1160(HTTP max redirect:K71:12; Num:C11(This:C1470.maxRedirect))
+	HTTP SET OPTION:C1160(HTTP compression:K71:15; Num:C11(This:C1470.AllowCompression))
+	HTTP SET OPTION:C1160(HTTP timeout:K71:10; Num:C11(This:C1470.timeout))
+	HTTP SET OPTION:C1160(HTTP display auth dial:K71:13; Num:C11(This:C1470.AllowDisplayAuthDial))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _response($text : Text; $blob : Blob)
@@ -819,6 +899,7 @@ Function _statusCodeMessage($statusCode : Integer)->$message : Text
 	$statusMessages[226]:="IM Used"
 	
 	// 3xx Redirection
+	$statusMessages[302]:="Too many redirections"
 	
 	// 4xx Client errors
 	$statusMessages[400]:="Bad Request"

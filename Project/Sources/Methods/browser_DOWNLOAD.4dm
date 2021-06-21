@@ -63,6 +63,9 @@ If ($out.folder.exists)
 		$http:=cs:C1710.http.new($in.url)
 		$http.setResponseType(Is a document:K24:1; $archive)
 		
+		$http.setCompression(True:C214)
+		$http.setTimeout(60)
+		
 		If (Not:C34($progress.isStopped()))
 			
 			$http.get()
