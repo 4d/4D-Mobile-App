@@ -266,70 +266,92 @@ Case of
 					
 					For each ($Obj_parameters; $Obj_action.parameters)
 						
-						If ($Obj_parameters.fieldNumber#Null:C1517)  // Linked to a field
-							
-							$t:=String:C10($Obj_dataModel[String:C10($Obj_action.tableNumber)][String:C10($Obj_parameters.fieldNumber)].format)
-							
-							If (Length:C16($t)>0)
+						Case of 
+								//%W-533.1
+							: (_and(Formula:C1597(FEATURE.with("customActionFormatter")); \
+								Formula:C1597(Length:C16(String:C10($Obj_parameters.format))>0); \
+								Formula:C1597(String:C10($Obj_parameters.format[[1]])="/")))
+								//%W+533.1
 								
-								If ($t[[1]]="/")
+								var $manifestFile : 4D:C1709.File
+								$manifestFile:=cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($Obj_parameters.format; 2)).file("manifest.json")
+								If ($manifestFile.exists)
+									var $manifestData : Object
+									$manifestData:=JSON Parse:C1218($manifestFile.getText())
 									
-									// User
-									$Path_manifest:=COMPONENT_Pathname("host_formatters").file(Substring:C12($t; 2)+"/manifest.json")
-									
-									If ($Path_manifest.exists)
-										
-										$Obj_manifest:=JSON Parse:C1218($Path_manifest.getText())
-										
-										If ($Obj_manifest.choiceList#Null:C1517)
-											
-											If ($Obj_parameters.type="bool")  // Kep only 2 values
-												
-												Case of 
-														
-														//______________________________________________________
-													: (Value type:C1509($Obj_manifest.choiceList)=Is collection:K8:32)
-														
-														$Obj_manifest.choiceList.resize(2)
-														$Obj_parameters.choiceList:=$Obj_manifest.choiceList
-														
-														//______________________________________________________
-													: (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
-														
-														$Obj_parameters.choiceList:=New collection:C1472($Obj_manifest.choiceList["0"]; $Obj_manifest.choiceList["1"])
-														
-														//______________________________________________________
-													Else 
-														
-														// IGNORE
-														
-														//______________________________________________________
-												End case 
-												
-											Else 
-												
-												If (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
-													$Obj_parameters.choiceList:=OB Entries:C1720($Obj_manifest.choiceList)  // to keep order
-												Else 
-													$Obj_parameters.choiceList:=$Obj_manifest.choiceList
-												End if 
-												
-											End if 
+									If ($manifestData.choiceList#Null:C1517)
+										$Obj_parameters.choiceList:=$manifestData.choiceList
+										If ($manifestData.format#Null:C1517)
+											$Obj_parameters.format:=$manifestData.format  // could take from manifest another way to display choice list
 										End if 
 									End if 
+								End if 
+								
+							: ($Obj_parameters.fieldNumber#Null:C1517)  // Linked to a field
+								
+								$t:=String:C10($Obj_dataModel[String:C10($Obj_action.tableNumber)][String:C10($Obj_parameters.fieldNumber)].format)
+								
+								If (Length:C16($t)>0)
 									
-								Else 
-									
-									$Obj_manifest:=SHARED.resources.definitions
-									
-									If ($Obj_manifest[$t].choiceList#Null:C1517)
+									If ($t[[1]]="/")
 										
-										$Obj_parameters.choiceList:=$Obj_manifest[$t].choiceList
+										// User
+										$Path_manifest:=COMPONENT_Pathname("host_formatters").file(Substring:C12($t; 2)+"/manifest.json")
 										
+										If ($Path_manifest.exists)
+											
+											$Obj_manifest:=JSON Parse:C1218($Path_manifest.getText())
+											
+											If ($Obj_manifest.choiceList#Null:C1517)
+												
+												If ($Obj_parameters.type="bool")  // Kep only 2 values
+													
+													Case of 
+															
+															//______________________________________________________
+														: (Value type:C1509($Obj_manifest.choiceList)=Is collection:K8:32)
+															
+															$Obj_manifest.choiceList.resize(2)
+															$Obj_parameters.choiceList:=$Obj_manifest.choiceList
+															
+															//______________________________________________________
+														: (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
+															
+															$Obj_parameters.choiceList:=New collection:C1472($Obj_manifest.choiceList["0"]; $Obj_manifest.choiceList["1"])
+															
+															//______________________________________________________
+														Else 
+															
+															// IGNORE
+															
+															//______________________________________________________
+													End case 
+													
+												Else 
+													
+													If (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
+														$Obj_parameters.choiceList:=OB Entries:C1720($Obj_manifest.choiceList)  // to keep order
+													Else 
+														$Obj_parameters.choiceList:=$Obj_manifest.choiceList
+													End if 
+													
+												End if 
+											End if 
+										End if 
+										
+									Else 
+										
+										$Obj_manifest:=SHARED.resources.definitions
+										
+										If ($Obj_manifest[$t].choiceList#Null:C1517)
+											
+											$Obj_parameters.choiceList:=$Obj_manifest[$t].choiceList
+											
+										End if 
 									End if 
 								End if 
-							End if 
-						End if 
+								
+						End case 
 					End for each 
 				End if 
 			End for each 
